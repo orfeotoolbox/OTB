@@ -92,6 +92,14 @@ ColorSetupController
     SLOT( OnCurrentGrayIndexChanged( int ) )
   );
 
+  QObject::connect(
+    colorSetupWidget,
+    SIGNAL( GrayscaleActivated( bool ) ),
+    // to:
+    this,
+    SLOT( OnGrayscaleActivated( bool ) )
+  );
+
   //
   // Connect controller to model.
   QObject::connect(
@@ -132,6 +140,14 @@ ColorSetupController
     // to:
     this,
     SLOT( OnCurrentGrayIndexChanged( RgbaChannel, int ) )
+  );
+
+  QObject::disconnect(
+    colorSetupWidget,
+    SIGNAL( GrayscaleActivated( bool ) ),
+    // to:
+    this,
+    SLOT( OnGrayscaleActivated( bool ) )
   );
 }
 
@@ -269,6 +285,50 @@ ColorSetupController
   // Signal band-index of gray channel has changed to other
   // controllers.
   emit GrayChannelIndexChanged( index );
+
+  // Signal model has been updated.
+  emit ModelUpdated();
+}
+
+/*******************************************************************************/
+void
+ColorSetupController
+::OnGrayscaleActivated( bool activated )
+{
+  qDebug() << QString( "OnGrayscaleActivated(%1)" ).arg( activated );
+
+  // Access controlled widget.
+  assert( GetWidget()==GetWidget< ColorSetupWidget >() );
+  const ColorSetupWidget* widget = GetWidget< ColorSetupWidget >();
+  assert( widget!=NULL );
+
+  // Get image-model.
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  // Forward indices.
+  if( activated )
+    {
+    int index = widget->GetCurrentGrayIndex();
+
+    // Update channel indices.
+    imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_RED, index );
+    imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_GREEN, index );
+    imageModel->GetSettings().SetRgbChannel( RGBA_CHANNEL_BLUE, index );
+    }
+  else
+    {
+    // Update channel indices.
+    imageModel->GetSettings().SetRgbChannel(
+      RGBA_CHANNEL_RED, widget->GetCurrentRgbIndex( RGBA_CHANNEL_RED )
+    );
+    imageModel->GetSettings().SetRgbChannel(
+      RGBA_CHANNEL_GREEN, widget->GetCurrentRgbIndex( RGBA_CHANNEL_GREEN )
+    );
+    imageModel->GetSettings().SetRgbChannel(
+      RGBA_CHANNEL_BLUE, widget->GetCurrentRgbIndex( RGBA_CHANNEL_BLUE )
+    );
+    }
 
   // Signal model has been updated.
   emit ModelUpdated();

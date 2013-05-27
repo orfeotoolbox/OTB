@@ -143,7 +143,7 @@ public:
    * \return the current (selected) index of a RGB video-channel in
    * the component-name list.
    */
-  int GetCurrentRgbIndex( RgbaChannel channel );
+  int GetCurrentRgbIndex( RgbaChannel channel ) const;
 
   /**
    * \brief Enable/disable the grayscale-mode check-box.
@@ -169,6 +169,12 @@ public:
    * \param index The index in the component-name list.
    */
   void SetCurrentGrayIndex( int index );
+
+  /**
+   * \return the current (selected) index of the white (gray) channel
+   * in the component-name list.
+   */
+  int GetCurrentGrayIndex() const;
 
 //
 // SIGNALS.

@@ -144,7 +144,7 @@ ColorSetupWidget
 /*******************************************************************************/
 int
 ColorSetupWidget
-::GetCurrentRgbIndex( RgbaChannel channel )
+::GetCurrentRgbIndex( RgbaChannel channel ) const
 {
   QComboBox* comboBox = findChild< QComboBox* >( QCOMBOBOX_NAMES[ channel ] );
 
@@ -173,6 +173,14 @@ ColorSetupWidget
 ::SetCurrentGrayIndex( int index )
 {
   m_UI->wComboBox->setCurrentIndex( index );
+}
+
+/*******************************************************************************/
+int
+ColorSetupWidget
+::GetCurrentGrayIndex() const
+{
+  return m_UI->wComboBox->currentIndex();
 }
 
 /*******************************************************************************/

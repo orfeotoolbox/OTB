@@ -185,6 +185,14 @@ private slots:
    */
   void OnCurrentGrayIndexChanged( int index );
 
+  /**
+   * \brief Slot called when the grayscale-mode has been
+   * activated/deactivated.
+   *
+   * \param activated The new activation state.
+   */
+  void OnGrayscaleActivated( bool activated );
+
 };
 
 } // end namespace 'mvd'.
