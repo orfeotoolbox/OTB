@@ -218,12 +218,6 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
   QString cacheDir = app->GetCacheDir().absolutePath();
 
   //
-  // get an unique identifier  and remove braces
-  QString  identifier = QUuid::createUuid().toString();
-  identifier.replace("{", "");
-  identifier.replace("}", "");
-
-  //
   // get the OTB application widget layout
   QLayout * layout = widgets->layout();
 
@@ -240,7 +234,9 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
       // generate a default output fname for the current
       // OutputImageParameter 
       QString outfname = 
-        app->GetResultsDir().absolutePath() + "/"+ m_Application->GetName()+"_"+identifier+".tif";
+        app->GetResultsDir().absolutePath() 
+        + "/"+ m_Application->GetName()
+        +"_"+ GenerateIdentifier() +".tif";
 
       // use it
       outParam->SetFileName(outfname);
@@ -263,7 +259,7 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
           // generate a default output fname for the current
           // OutputImageParameter 
           QString outfname = 
-            app->GetResultsDir().absolutePath() + "/"+ m_Application->GetName()+"_"+identifier+".tif";
+            app->GetResultsDir().absolutePath() + "/"+ m_Application->GetName()+"_"+GenerateIdentifier()+".tif";
 
           // use the outfname
           (*it)->SetFileName(outfname);
@@ -276,6 +272,18 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
 
 }
 
+
+/*******************************************************************************/
+const QString &
+QtWidgetView::GenerateIdentifier()
+{
+  //
+  // get an unique identifier  and remove braces
+  QString  identifier = QUuid::createUuid().toString();
+  identifier.replace("{", "");
+  identifier.replace("}", "");
+
+}
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

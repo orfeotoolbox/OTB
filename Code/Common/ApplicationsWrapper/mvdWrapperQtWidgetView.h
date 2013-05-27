@@ -139,6 +139,9 @@ private:
   // value
   void FillOTBAppDefaultOutputImageParameter(QWidget * widgets);
 
+  // method to generate an unique identifier
+  const QString & GenerateIdentifier();
+
 //
 // Private attributes.
 
