@@ -140,7 +140,7 @@ ImageViewManipulator
     this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
     
     // tell the quicklook renderer to update the red square rendering
-    this->PropagateViewportRegionChanged(currentRegion);  
+    this->PropagateViewportRegionChanged(currentRegion);
     }
 }
 
@@ -285,6 +285,7 @@ ImageViewManipulator
     }
 }
 
+/******************************************************************************/
 void
 ImageViewManipulator
 ::ZoomTo(const double scale)
@@ -544,10 +545,57 @@ ImageViewManipulator
     m_NavigationContext.m_ViewportImageRegion.SetIndex(initIndex);
     this->ResizeRegion(parent_widget->width(), parent_widget->height());
     }
-    
-  // double scale = std::min(factorX, factorY);
-  this->ZoomBy(1.);
 }
+
+/*****************************************************************************/
+void 
+ImageViewManipulator
+::OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
+                            const SpacingType& spacing,
+                            const PointType& origin,
+                            const PointType& centerPoint,
+                            double zoomLevel)
+{
+  // update the spacing
+  SetSpacing(spacing);
+
+  // update the origin
+  SetOrigin(origin);
+
+  // store the native spacing too (for physical coordinate
+  // computations) 
+  m_NativeSpacing = spacing;
+
+  // set back the zoom to 1
+  m_IsotropicZoom = 1.;
+
+  m_PreviousIsotropicZoom = 1.;
+  
+  // store the image largest region
+  m_NavigationContext.m_ModelImageRegion = largestRegion;
+
+  // zoom to scale set in parameters
+  ZoomTo( zoomLevel );
+
+  // Update the navigation context origin
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+    
+  // get the viewport center (from physical point)
+  IndexType   index;
+  index[0] = static_cast<unsigned int>( (centerPoint[0] - GetOrigin()[0] ) / vcl_abs(m_NativeSpacing[0]) ) 
+    - currentRegion.GetSize()[0] / 2 ;
+  index[1] = static_cast<unsigned int>( (centerPoint[1]  - GetOrigin()[1] ) / vcl_abs(m_NativeSpacing[1]) ) 
+    - currentRegion.GetSize()[1] / 2 ;
+  currentRegion.SetIndex(index);
+
+ // get the widget size and use it to resize the Viewport region
+  QWidget* parent_widget = qobject_cast< QWidget* >( parent() );
+
+  if (parent_widget)
+    {
+    this->ResizeRegion(parent_widget->width(), parent_widget->height());
+    }
+ }
 
 /*****************************************************************************/
 void 

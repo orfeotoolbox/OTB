@@ -123,6 +123,12 @@ public slots:
                                  const SpacingType& spacing, 
                                  const PointType& origin );
 
+  void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
+                                 const SpacingType& spacing, 
+                                 const PointType& origin,
+                                 const PointType& centerPoint,
+                                 double zoomLevel);
+
   void OnViewportRegionChanged(double Xpc, double Ypc);
 
   void OnUserScaleEditingFinished(const QString & scale);
@@ -142,6 +148,7 @@ public slots:
 signals:
   void ViewportRegionRepresentationChanged(const PointType&, const PointType&);
   void CurrentScaleUpdated(const QString&);
+  
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
