@@ -748,10 +748,8 @@ VectorImageModel::Settings
 {
   if( IsGrayscaleActivated() )
     {
-    channels.resize( 3 );
-
-    for( CountType i=0; i<channels.size(); ++i )
-      channels[ i ] = m_GrayChannel;
+    channels.resize( m_RgbChannels.size() );
+    std::fill( channels.begin(), channels.end(), m_GrayChannel );
     }
   else
     {

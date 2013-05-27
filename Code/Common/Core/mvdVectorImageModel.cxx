@@ -299,6 +299,13 @@ VectorImageModel
 
   // Store default display settings.
   GetSettings().SetRgbChannels( rgb );
+
+  // Store default grayscale-mode.
+  if( m_Image->GetNumberOfComponentsPerPixel()<3 )
+    {
+    GetSettings().SetGrayscaleActivated( true );
+    GetSettings().SetGrayChannel( rgb[ 0 ] );
+    }
 }
 
 /*******************************************************************************/

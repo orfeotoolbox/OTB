@@ -85,7 +85,7 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   //
   "settings",
   "rgb",
-  "dynamics",
+  "grayscale",
   //
   "view",
   "center",
@@ -177,6 +177,16 @@ DatasetDescriptor
   );
   settingsElement.appendChild( rgbElement );
 
+  // Grayscale
+  QDomElement grayscaleElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_GRAYSCALE ] )
+  );
+  grayscaleElt.setAttribute(
+    "activated", settings->IsGrayscaleActivated()
+  );
+  grayscaleElt.setAttribute( "gray", settings->GetGrayChannel() );
+  settingsElement.appendChild( grayscaleElt );
+
   //
   // Dynamics parameters.
   QDomElement dynamicsElement(
@@ -223,7 +233,7 @@ DatasetDescriptor
     );
     // TODO: Manage XML structure errors.
     assert( !rgbElt.isNull() );
-    
+
     QDomNode node = rgbElt.firstChild();
     // TODO: Manage XML structure errors.
     assert( !node.isNull() );
@@ -239,6 +249,20 @@ DatasetDescriptor
         settings->GetRgbChannels().end()
       )
     );
+  }
+
+  //
+  // Grayscale
+  {
+  // Access element.
+  QDomElement grayscaleElt(
+    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_GRAYSCALE ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !grayscaleElt.isNull() );
+  // Store values.
+  grayscaleElt.setAttribute( "activated", settings->IsGrayscaleActivated() );
+  grayscaleElt.setAttribute( "gray", settings->GetGrayChannel() );
   }
 
   {
@@ -415,6 +439,18 @@ DatasetDescriptor
     ExtractVectorFromElement( rgb, rgbElt );
     assert( rgb.size() == 3 );
     settings->SetRgbChannels( rgb );
+
+    // Grayscale.
+    QDomElement grayscaleElt(
+      settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_GRAYSCALE ] )
+    );
+    // TODO: Manage XML structure errors.
+    assert( !grayscaleElt.isNull() );
+    // Get values.
+    settings->SetGrayscaleActivated(
+      static_cast< bool >( grayscaleElt.attribute( "activated" ).toInt() )
+    );
+    settings->SetGrayChannel( grayscaleElt.attribute( "gray" ).toUInt() );
 
     // Dynamics
     QDomElement dynamicsElt(
