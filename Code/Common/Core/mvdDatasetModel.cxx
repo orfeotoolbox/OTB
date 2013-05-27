@@ -710,6 +710,10 @@ DatasetModel
   // update the descriptor
   m_Descriptor->UpdateViewContext(center, zoom );
 
+  // update the attribute
+  m_LastPhysicalCenter =  center;
+  m_LastIsotropicZoom = zoom;
+
   // write the changes
   Save();
 }
