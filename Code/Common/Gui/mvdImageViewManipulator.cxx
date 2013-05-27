@@ -574,19 +574,12 @@ ImageViewManipulator
   // store the image largest region
   m_NavigationContext.m_ModelImageRegion = largestRegion;
 
-  // zoom to scale set in parameters
-  ZoomTo( zoomLevel );
-
-  // Update the navigation context origin
-  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
-    
-  // get the viewport center (from physical point)
-  IndexType   index;
-  index[0] = static_cast<unsigned int>( (centerPoint[0] - GetOrigin()[0] ) / vcl_abs(m_NativeSpacing[0]) ) 
-    - currentRegion.GetSize()[0] / 2 ;
-  index[1] = static_cast<unsigned int>( (centerPoint[1]  - GetOrigin()[1] ) / vcl_abs(m_NativeSpacing[1]) ) 
-    - currentRegion.GetSize()[1] / 2 ;
-  currentRegion.SetIndex(index);
+  //
+  // From a CenterPoint and a zoom level, we need to compute the
+  // Viewport region.
+  // 1. set the viewport size to be the size of the widget
+  // 2. compute the viewport origin  from the pĥysical centralPoint
+  // 3. zoom to the given scale to be able to show proprely the region
 
  // get the widget size and use it to resize the Viewport region
   QWidget* parent_widget = qobject_cast< QWidget* >( parent() );
@@ -595,7 +588,21 @@ ImageViewManipulator
     {
     this->ResizeRegion(parent_widget->width(), parent_widget->height());
     }
- }
+
+  // Update the navigation context origin
+  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+    
+  // get the viewport origin (from physical center)
+  IndexType   index;
+  index[0] = static_cast<unsigned int>( (centerPoint[0] - GetOrigin()[0] ) / vcl_abs(m_NativeSpacing[0]) ) 
+    - currentRegion.GetSize()[0] / 2 ;
+  index[1] = static_cast<unsigned int>( (centerPoint[1]  - GetOrigin()[1] ) / vcl_abs(m_NativeSpacing[1]) ) 
+    - currentRegion.GetSize()[1] / 2 ;
+  currentRegion.SetIndex(index);
+
+  // zoom to scale set in parameters
+  ZoomTo( zoomLevel );
+}
 
 /*****************************************************************************/
 void 
