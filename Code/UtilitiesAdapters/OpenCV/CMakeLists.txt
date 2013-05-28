@@ -1,5 +1,5 @@
 # Sources of non-templated classes.
-FILE(GLOB OTBMachineLearning_SRCS "*.cxx" )
+FILE(GLOB OTBMachineLearning_SRCS "otbMachineLearningModelFactoryBase.cxx" )
 
 ADD_LIBRARY(OTBMachineLearning ${OTBMachineLearning_SRCS})
 TARGET_LINK_LIBRARIES (OTBMachineLearning OTBCommon OTBLearning ${OpenCV_LIBS})
