@@ -34,6 +34,12 @@ namespace Wrapper
 class QtStringSelectionWidget : public QWidget
 {
   Q_OBJECT
+
+  Q_PROPERTY( QString text READ GetText WRITE SetText RESET ClearText );
+
+signals:
+  void InternalQLineEditEditionFinished();
+
 public:
   QtStringSelectionWidget();
   virtual ~QtStringSelectionWidget();
@@ -48,20 +54,29 @@ public:
     return m_Checkbox->setChecked( val );
   }
 
-  std::string GetStringName()
+  inline const QString GetText() const
+  {
+    return m_Input->text();
+  }
+
+  inline void SetText( const QString& qString)
+  {
+    m_Input->setText(qString);
+  }
+
+  std::string ToStdString()
   {
     return m_Input->text().toAscii().constData();
   }
 
-  void ClearStringName()
+  void ClearText()
   {
     m_Input->clear();
   }
 
-  QLineEdit* GetInput()
-  {
-    return m_Input;
-  }
+
+protected slots:
+   void OnEditionFinished();
 
 private:
   QtStringSelectionWidget(const QtStringSelectionWidget&); //purposely not implemented

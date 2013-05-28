@@ -34,7 +34,6 @@ QtStringSelectionWidget::~QtStringSelectionWidget()
 
 void QtStringSelectionWidget::DoUpdateGUI()
 {
-
 }
 
 void QtStringSelectionWidget::DoCreateWidget()
@@ -46,15 +45,35 @@ void QtStringSelectionWidget::DoCreateWidget()
   m_HLayout->setContentsMargins(sp, sp, sp, sp);
 
   m_Checkbox = new QCheckBox();
+  m_Checkbox->setChecked(true);
   m_HLayout->addWidget(m_Checkbox);
 
   m_Input = new QLineEdit;
+  m_Input->setEnabled( m_Checkbox->isChecked() );
 
   m_HLayout->addWidget(m_Input);
+
+  QObject::connect(
+          m_Checkbox, SIGNAL( toggled( bool ) ),
+          m_Input, SLOT( setEnabled( bool ) )
+  );
+
+  QObject::connect(
+        m_Input,
+        SIGNAL( editingFinished( ) ),
+        this,
+        SLOT( OnEditionFinished() )
+        );
 
   this->setLayout(m_HLayout);
 }
 
+void QtStringSelectionWidget::OnEditionFinished()
+{
+  // used to propagate m_Input (QLineEdit type) editingFinished signal
+  emit InternalQLineEditEditionFinished();
+}
 
 }
+
 }
