@@ -26,7 +26,12 @@ QtWidgetStringListParameter::QtWidgetStringListParameter(StringListParameter* pa
 : QtWidgetParameterBase(param, m),
   m_StringListParam(param)
 {
- connect( this, SIGNAL(Change()), GetModel(), SLOT(NotifyUpdate()) );
+  /*
+ connect( this,
+          SIGNAL(Change()),
+          GetModel(),
+          SLOT(NotifyUpdate()) );
+          */
 }
 
 QtWidgetStringListParameter::~QtWidgetStringListParameter()
@@ -43,13 +48,22 @@ void QtWidgetStringListParameter::DoUpdateGUI()
     {
     QtStringSelectionWidget * stringSelection = new QtStringSelectionWidget();
     stringSelection->setFixedHeight( 30 );
-    QString val(m_StringListParam->GetNthElement(i).c_str());
-    stringSelection->GetInput()->setText( m_StringListParam->GetNthElement(i).c_str() ); //val );
+    stringSelection->SetText( m_StringListParam->GetNthElement(i).c_str() );
     m_StringLayout->addWidget( stringSelection );
     m_LineEditList.push_back(stringSelection);
 
-    connect( stringSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateStringList()) );
-    connect( stringSelection->GetInput(), SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+    connect( stringSelection,
+             SIGNAL( InternalQLineEditEditionFinished() ),
+             this,
+             SLOT( UpdateStringList() )
+             );
+
+   connect( stringSelection,
+             SIGNAL(InternalQLineEditEditionFinished()),
+             GetModel(),
+             SLOT(NotifyUpdate())
+             );
+   std::cout << "NotifyUpdate" << std::endl;
     }
 
   QGroupBox *mainGroup = new QGroupBox();
@@ -158,8 +172,10 @@ QtWidgetStringListParameter::UpdateStringList()
   // save value
   for(unsigned int j=0; j<m_StringListParam->GetValue().size(); j++ )
     {
-      m_StringListParam->SetNthElement(j, m_LineEditList[j]->GetStringName());
+     m_StringListParam->SetNthElement(j, m_LineEditList[j]->ToStdString());
     }
+
+  // notify model text changed
   emit Change();
 }
 
@@ -277,7 +293,7 @@ QtWidgetStringListParameter::UpdateStringList( std::map<unsigned int, unsigned i
 
   this->update();
 
-    // notify of value change
+  // notify of value change
   QString key( m_StringListParam->GetKey() );
   emit ParameterChanged(key);
 }
@@ -308,13 +324,19 @@ QtWidgetStringListParameter::AddString()
   m_StringLayout->addWidget( stringInput );
   m_LineEditList.push_back(stringInput);
   m_StringListParam->AddNullElement();
-  connect( stringInput->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateStringList()));
-  connect( stringInput->GetInput(), SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( stringInput,
+           SIGNAL(InternalQLineEditEditionFinished()),
+           this,
+           SLOT(UpdateStringList()));
+
+  connect( stringInput,
+           SIGNAL(InternalQLineEditEditionFinished()),
+           GetModel(),
+           SLOT(NotifyUpdate()) );
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_StringLayout);
   m_Scroll->setWidget(mainGroup);
-
 
   this->update();
 }
@@ -358,7 +380,10 @@ QtWidgetStringListParameter::EraseString()
   m_StringLayout->addWidget( stringSelection );
   m_LineEditList.push_back(stringSelection);
   m_StringListParam->AddNullElement();
-  connect( stringSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateStringList()) );
+  connect( stringSelection,
+           SIGNAL(InternalQLineEditEditionFinished()),
+           this,
+           SLOT(UpdateStringList()) );
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_StringLayout);
@@ -378,7 +403,7 @@ void QtWidgetStringListParameter::RecreateStringList()
     {
     for(unsigned int j=0; j<m_LineEditList.size(); j++ )
       {
-      m_StringListParam->AddString(m_LineEditList[j]->GetStringName());
+      m_StringListParam->AddString(m_LineEditList[j]->ToStdString());
       }
 
     emit Change();
