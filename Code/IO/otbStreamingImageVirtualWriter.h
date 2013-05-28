@@ -132,6 +132,10 @@ public:
    *   Setting the availableRAM parameter to 0 means that the available RAM
    *   is set from the CMake configuration option */
   void SetAutomaticAdaptativeStreaming(unsigned int availableRAM = 0, double bias = 1.0);
+  
+  /** Override Update() from ProcessObject 
+   *  This filter does not produce an output */
+  virtual void Update();
 
 protected:
   StreamingImageVirtualWriter();

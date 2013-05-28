@@ -146,6 +146,16 @@ StreamingImageVirtualWriter<TInputImage>
   m_StreamingManager = streamingManager;
 }
 
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::Update()
+{
+  InputImagePointer inputPtr = const_cast<InputImageType *>(this->GetInput(0));
+  inputPtr->UpdateOutputInformation();
+  
+  this->GenerateData();
+}
 
 template <class TInputImage>
 void
@@ -231,9 +241,12 @@ StreamingImageVirtualWriter<TInputImage>
     {
     streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
     otbMsgDevMacro(<< "Processing region : " << streamRegion )
-    inputPtr->ReleaseData();
+    //inputPtr->ReleaseData();
+    //inputPtr->SetRequestedRegion(streamRegion);
+    //inputPtr->Update();
     inputPtr->SetRequestedRegion(streamRegion);
-    inputPtr->Update();
+    inputPtr->PropagateRequestedRegion();
+    inputPtr->UpdateOutputData();
     }
 
   /**
