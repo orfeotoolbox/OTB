@@ -319,7 +319,7 @@ DatabaseBrowserController
   assert( GetWidget()==GetWidget< DatabaseBrowserWidget >() );
 
   GetWidget< DatabaseBrowserWidget >()->SetCurrentDataset(
-    datasetModel->GetName()
+    datasetModel->GetAlias()
   );
 }
 
