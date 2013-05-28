@@ -38,11 +38,11 @@ endif()
 
 OTB_CREATE_APPLICATION(NAME         TrainImagesClassifier
                        SOURCES      ${TrainImagesClassifier_SRC}
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;${OTBMachineLearning_LIBRARY})
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
 
 OTB_CREATE_APPLICATION(NAME         ImageClassifier
                        SOURCES      otbImageClassifier.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;${OTBMachineLearning_LIBRARY})
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
 
 
  
