@@ -122,6 +122,15 @@ signals:
    */
   void GrayChannelIndexChanged( int band );
 
+  /**
+   * \brief Signal emitted when the grayscale-mode activation-state
+   * has changed. This signal is used to forward events to other
+   * controllers such as ColorDynamicsController.
+   *
+   * \param activated The new grayscale-mode activation-state.
+   */
+  void GrayscaleActivated( bool activated );
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //

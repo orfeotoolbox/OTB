@@ -140,6 +140,31 @@ MainWindow
 {
   ConnectViewMenu();
 
+  //
+  // CHAIN CONTROLLERS.
+  // Forward model update signals of color-setup controller...
+  QObject::connect(
+    m_ColorSetupDock->findChild< AbstractModelController* >(),
+    SIGNAL( CurrentRgbIndexChanged( RgbaChannel, int ) ),
+    // to: ...color-dynamics controller model update signal.
+    m_ColorDynamicsDock->findChild< AbstractModelController* >(),
+    SLOT( OnCurrentRgbIndexChanged( RgbaChannel, int ) )
+  );
+  QObject::connect(
+    m_ColorSetupDock->findChild< AbstractModelController* >(),
+    SIGNAL( CurrentGrayIndexChanged( int ) ),
+    // to: ...color-dynamics controller model update signal.
+    m_ColorDynamicsDock->findChild< AbstractModelController* >(),
+    SLOT( OnCurrentGrayIndexChanged( int ) )
+  );
+  QObject::connect(
+    m_ColorSetupDock->findChild< AbstractModelController* >(),
+    SIGNAL( GrayscaleActivated( bool ) ),
+    // to: ...color-dynamics controller model update signal.
+    m_ColorDynamicsDock->findChild< AbstractModelController* >(),
+    SLOT( OnGrayscaleActivated( bool ) )
+  );
+
 #ifdef OTB_WRAP_QT
   //
   // Done here cause needed to be done once and only once.
@@ -670,8 +695,6 @@ MainWindow
       tr( "Color dynamics" ),
       Qt::RightDockWidgetArea
     );
-
-  // m_ColorDynamicsDock->setVisible( false );
 
   // Tabify dock-widgets.
   tabifyDockWidget( m_ColorSetupDock, m_ColorDynamicsDock );

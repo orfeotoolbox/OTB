@@ -153,6 +153,7 @@ protected:
    */
   inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
 
+
   //
   // QMainWindow overrides.
 

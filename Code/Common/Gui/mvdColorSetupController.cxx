@@ -222,7 +222,7 @@ ColorSetupController
     );
 
     // Allow user-selectable grayscale-mode.
-    colorSetupWidget->SetGrayscaleEnabled( imageModel->GetNbComponents()>=3  );
+    colorSetupWidget->SetGrayscaleEnabled( imageModel->GetNbComponents()>1 );
 
     // Set current-index of white (gray).
     colorSetupWidget->SetCurrentGrayIndex(
@@ -298,6 +298,10 @@ ColorSetupController
 
   // Change grayscale-mode activation state.
   imageModel->GetSettings().SetGrayscaleActivated( activated );
+
+  // Signal grayscale-mode activation-state has changed to other
+  // controllers.
+  emit GrayscaleActivated( activated );
 
   // Signal model has been updated.
   emit ModelUpdated();

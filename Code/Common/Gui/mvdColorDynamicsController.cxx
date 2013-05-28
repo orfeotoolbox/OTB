@@ -422,16 +422,6 @@ ColorDynamicsController
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
 
-    /*
-    DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.RgbChannel( channel ) ]
-    );
-
-    DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.RgbChannel( channel ) ]
-    );
-    */
-
     ParametersType::ValueType low = settings.GetDynamicsParam( 2 * channel );
     ParametersType::ValueType hi = settings.GetDynamicsParam( 2 * channel + 1 );
 
@@ -482,6 +472,7 @@ ColorDynamicsController
 
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
+
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
     colorBandDynWgt->blockSignals( true );
