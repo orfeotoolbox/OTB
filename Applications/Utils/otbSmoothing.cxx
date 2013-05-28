@@ -84,9 +84,9 @@ private:
 
     AddChoice("type.gaussian", "Gaussian");
 
-    AddParameter(ParameterType_Radius, "type.gaussian.radius", "Radius");
+    AddParameter(ParameterType_Float, "type.gaussian.radius", "Radius");
     SetParameterDescription("type.gaussian.radius", "Gaussian radius (in pixels)");
-    SetDefaultParameterInt("type.gaussian.radius", 2);
+    SetDefaultParameterFloat("type.gaussian.radius", 2.0);
 
     AddChoice("type.anidif",   "Anisotropic Diffusion");
 
@@ -161,8 +161,8 @@ private:
           = PerBandDiscreteGaussianFilterType::New();
         perBand->SetInput(inImage);
 
-        int radius = GetParameterInt("type.gaussian.radius");
-        double variance = static_cast<double>(radius) * radius;
+        double radius = GetParameterFloat("type.gaussian.radius");
+        double variance = radius * radius;
         perBand->GetFilter()->SetVariance(variance);
         perBand->GetFilter()->SetUseImageSpacing(false);
         perBand->UpdateOutputInformation();
