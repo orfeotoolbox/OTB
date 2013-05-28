@@ -146,7 +146,7 @@ int otbConfusionMatrixMeasurementsNew(int argc, char* argv[])
 {
   /*typedef unsigned long                                   ConfusionMatrixEltType;
   typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
-  typedef unsigned char                                   LabelType;*/
+  typedef unsigned char                                   LabelType; */
 
   // filter types
   typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurements2TemplatesType;
@@ -182,7 +182,7 @@ int otbConfusionMatrixMeasurementsTest(int argc, char* argv[])
   typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;
   typedef ConfusionMatrixMeasurementsType::MapOfClassesType MapOfClassesType;
   typedef ConfusionMatrixMeasurementsType::MapOfIndicesType MapOfIndicesType;
-  typedef ConfusionMatrixMeasurementsType::MeasurementType MeasurementType;*/
+  typedef ConfusionMatrixMeasurementsType::MeasurementType MeasurementType; */
 
   // mapOfClasses[label] = index in the rows/columns of the confusion matrix
   MapOfClassesType mapOfClasses;

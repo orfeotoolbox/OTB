@@ -133,7 +133,7 @@ public:
    *   is set from the CMake configuration option */
   void SetAutomaticAdaptativeStreaming(unsigned int availableRAM = 0, double bias = 1.0);
   
-  /** Override Update() from ProcessObject 
+  /** Override Update() from ProcessObject
    *  This filter does not produce an output */
   virtual void Update();
 
