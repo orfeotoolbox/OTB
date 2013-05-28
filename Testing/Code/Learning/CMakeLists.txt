@@ -563,6 +563,15 @@ otbConfusionMatrixMeasurementsNew)
 ADD_TEST(leTvConfusionMatrixMeasurementsTest ${LEARNING_TESTS4}
 otbConfusionMatrixMeasurementsTest)
 
+ADD_TEST(leTvConfusionMatrixConcatenateTest ${LEARNING_TESTS4}
+otbConfusionMatrixConcatenateTest
+ ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+ ${INPUTDATA}/Classification/QB_1_ortho_C6.csv)
+
 
 
 # ShiftScaleSampleListFilter tests ----------
