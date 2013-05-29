@@ -76,7 +76,17 @@ void
 DatasetPropertiesController
 ::Connect( AbstractModel* model )
 {
-  // nothing to do
+  // since in the dataset model, the placename of the image is computed
+  // in a different thread, connect the datasetmodel signal LocationFound() to
+  // refresh this widget when a new location is found
+  DatasetModel* datasetmodel = qobject_cast<DatasetModel* >(model);
+
+  QObject::connect(datasetmodel,
+                   SIGNAL( PlacenameLoaded() ),
+                   this,
+                   SLOT( OnPlacenameLoaded() )
+    );
+
 }
 
 /*******************************************************************************/
@@ -84,7 +94,13 @@ void
 DatasetPropertiesController
 ::Disconnect( AbstractModel* model )
 {
-  // nothing to do 
+  DatasetModel* datasetmodel = qobject_cast<DatasetModel* >(model);
+
+  QObject::disconnect(datasetmodel,
+                   SIGNAL( PlacenameLoaded() ),
+                   this,
+                   SLOT( OnPlacenameLoaded() )
+    );
 }
 
 /*******************************************************************************/
@@ -132,5 +148,11 @@ DatasetPropertiesController
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+DatasetPropertiesController
+::OnPlacenameLoaded()
+{
+  ResetDatasetTree();
+}
 
 } // end namespace 'mvd'

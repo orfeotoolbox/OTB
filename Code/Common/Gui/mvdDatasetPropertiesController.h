@@ -144,6 +144,7 @@ private:
 //
 // Slots.
 private slots:
+  void OnPlacenameLoaded();
 
 };
 
