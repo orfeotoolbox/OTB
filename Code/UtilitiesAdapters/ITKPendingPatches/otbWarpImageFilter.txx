@@ -293,7 +293,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
       {
       const DisplacementType input =
         fieldPtr->GetPixel( neighIndex );
-      for(unsigned int k = 0; k < PixelSizeFinder(input); k++ )
+      for(unsigned int k = 0; k < otb::PixelSizeFinder(input); k++ )
         {
         output[k] += overlap * static_cast<double>( input[k] );
         }
