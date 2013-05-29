@@ -449,14 +449,6 @@ DatasetModel
                  m_LastIsotropicZoom
        );
     }
-
-  // no need à priori
-  //emit ImageViewContextLoaded( center, zoom);
-  
-  // verbosity
-  qDebug() << "::ParseImageViewContext() :"
-           << "\n Center : " << m_LastPhysicalCenter[0] <<","<<m_LastPhysicalCenter[1]
-           << "\n Zoom  : " << m_LastIsotropicZoom;
 }
 
 /*******************************************************************************/
@@ -474,10 +466,6 @@ DatasetModel
                imageElt,
                m_Placename );
     }
-
-  // verbosity
-  qDebug() << "::ParsePlacename:: "
-           << "\n Placename : " << m_Placename;
 }
 
 /*******************************************************************************/
@@ -508,7 +496,6 @@ DatasetModel
       {
       const VectorImageModel* vim =
 	qobject_cast< const VectorImageModel* >( *it );
-      qDebug() << vim->GetFilename() << "is modified.";
 
       return true;
       }
@@ -719,7 +706,6 @@ void
 DatasetModel
 ::LoadImagePlacename()
 {
-  qDebug()<<this << "::LoadImagePlacename ";
   // Important:
   // disconnect previous placename loader if not destroyed
   if (m_PlacenameLoader)
@@ -779,9 +765,6 @@ DatasetModel
                    SLOT(deleteLater())
     );
 
-
-  qDebug()<<this << "::LoadImagePlacename Loading Placename GOGOGOGOO ";
-
   // GO
   thread->start();
 }
@@ -815,9 +798,6 @@ void
 DatasetModel
 ::OnRenderingContextChanged(const PointType& center, double zoom)
 {
-  // 
-  qDebug() <<this <<"::OnRenderingContextChanged to center "<<center[0]<<","<<center[1]<<" zoom: "<< zoom; 
-
   // update the descriptor
   m_Descriptor->UpdateViewContext(center, zoom );
 
@@ -834,9 +814,6 @@ void
 DatasetModel
 ::OnPlacenameLoaded(const QString& placename)
 {
-  // 
-  qDebug() <<this <<"::OnPlacenameLoaded placename "<<placename;
-
   // update the descriptor
   m_Descriptor->UpdateImagePlacename( placename );
 
