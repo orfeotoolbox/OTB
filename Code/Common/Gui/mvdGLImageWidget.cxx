@@ -163,24 +163,6 @@ GLImageWidget
                                      const PointType&) )
   );
 
-  // Connect this model region changed with more information than the
-  // previous signal (to load previous visual context)
-  QObject::connect(
-    this,
-    SIGNAL( ModelImageRegionChanged( const ImageRegionType& , 
-                                     const SpacingType&,
-                                     const PointType&,
-                                     const PointType&,
-                                     double) ),
-    // to:
-    m_ImageViewManipulator,
-    SLOT( OnModelImageRegionChanged( const ImageRegionType&, 
-                                     const SpacingType&,
-                                     const PointType&,
-                                     const PointType&,
-                                     double) )
-  );
-
   // Connect the renderer origin (of extent) changed to the manipulator
   QObject::connect(
     m_ImageModelRenderer,

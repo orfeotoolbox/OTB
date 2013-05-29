@@ -298,6 +298,28 @@ MainWindow
      SLOT( OnImageToImportDropped(const QString & ) )
      );
 
+   // Connect this model region changed with more information than the
+   // previous signal (to load previous visual context)
+   // the slot OnModelImageRegionChanged(...) is not implemented for
+   // QuicklookViewManipulator, connecting it here instead in
+   // mvdGLImageWidget avoid a warning : 
+   // 'No such slot mvd::QuicklookViewManipulator::OnModelImageRegionChanged(...)'
+   QObject::connect(
+     m_ImageView,
+     SIGNAL( ModelImageRegionChanged( const ImageRegionType& , 
+                                      const SpacingType&,
+                                      const PointType&,
+                                      const PointType&,
+                                      double) ),
+     // to:
+     m_ImageView->GetImageViewManipulator(),
+     SLOT( OnModelImageRegionChanged( const ImageRegionType&, 
+                                      const SpacingType&,
+                                      const PointType&,
+                                      const PointType&,
+                                      double) )
+     );
+
    // Connect databasebrowser drop to import new dataset
    // need to get the controller to request the application widget
    DatabaseBrowserController * dbcontroller =
