@@ -132,6 +132,11 @@ IF(OTB_USE_GETTEXT)
   	${GETTEXT_INCLUDE_DIR})
 ENDIF(OTB_USE_GETTEXT)
 
+IF(OTB_USE_OPENCV)
+   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+     ${OpenCV_INCLUDE_DIRS})
+ENDIF()
+
 #-----------------------------------------------------------------------------
 # Include directories from the ITK build tree.
 IF(OTB_USE_EXTERNAL_ITK)
