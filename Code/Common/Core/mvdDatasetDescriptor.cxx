@@ -86,6 +86,7 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   "settings",
   "rgb",
   "grayscale",
+  "dynamics",
   //
   "view",
   "center",
