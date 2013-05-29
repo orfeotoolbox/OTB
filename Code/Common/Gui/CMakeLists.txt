@@ -30,6 +30,7 @@ set( Common_Gui_SOURCES
   mvdDatasetPropertiesWidget.cxx
   mvdDatasetPropertiesController.cxx
   mvdDatasetTreeWidgetItem.cxx
+  mvdImagePlacenameLoader.cxx
 )
 
 #############################################################################
@@ -64,6 +65,7 @@ set( Common_Gui_HEADERS_MOC
   mvdDatasetPropertiesWidget.h
   mvdDatasetPropertiesController.h
   mvdDatasetTreeWidgetItem.h
+  mvdImagePlacenameLoader.h
 )
 
 #############################################################################
