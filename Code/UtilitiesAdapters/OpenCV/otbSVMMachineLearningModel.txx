@@ -64,8 +64,11 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 
   // Train the SVM
   if (!m_ParameterOptimization)
+    {
     m_SVMModel->train(samples, labels, cv::Mat(), cv::Mat(), params);
+    }
   else
+    {
     //Trains SVM with optimal parameters.
     //train_auto(const Mat& trainData, const Mat& responses, const Mat& varIdx, const Mat& sampleIdx,
     //CvSVMParams params, int k_fold=10, CvParamGrid Cgrid=CvSVM::get_default_grid(CvSVM::C),
@@ -75,6 +78,19 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
     //bool balanced=false)
     //We used default parameters grid. If not enough, those grids should be expose to the user.
     m_SVMModel->train_auto(samples, labels, cv::Mat(), cv::Mat(), params);
+    }
+
+  // Export of the SVM parameters into the class SVMMachineLearningModel
+  m_SVMType = m_SVMModel->get_params().svm_type;
+  m_KernelType = m_SVMModel->get_params().kernel_type;
+  m_Degree = m_SVMModel->get_params().degree;
+  m_Gamma = m_SVMModel->get_params().gamma;
+  m_Coef0 = m_SVMModel->get_params().coef0;
+  m_C = m_SVMModel->get_params().C;
+  m_Nu = m_SVMModel->get_params().nu;
+  m_P = m_SVMModel->get_params().p;
+  class_weights = m_SVMModel->get_params().class_weights;
+
 }
 
 template <class TInputValue, class TOutputValue>
