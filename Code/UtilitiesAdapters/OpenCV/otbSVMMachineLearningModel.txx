@@ -81,14 +81,12 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
     }
 
   // Export of the SVM parameters into the class SVMMachineLearningModel
-  m_SVMType = m_SVMModel->get_params().svm_type;
-  m_KernelType = m_SVMModel->get_params().kernel_type;
-  m_Degree = m_SVMModel->get_params().degree;
-  m_Gamma = m_SVMModel->get_params().gamma;
-  m_Coef0 = m_SVMModel->get_params().coef0;
-  m_C = m_SVMModel->get_params().C;
-  m_Nu = m_SVMModel->get_params().nu;
-  m_P = m_SVMModel->get_params().p;
+  m_OutputDegree = m_SVMModel->get_params().degree;
+  m_OutputGamma = m_SVMModel->get_params().gamma;
+  m_OutputCoef0 = m_SVMModel->get_params().coef0;
+  m_OutputC = m_SVMModel->get_params().C;
+  m_OutputNu = m_SVMModel->get_params().nu;
+  m_OutputP = m_SVMModel->get_params().p;
   class_weights = m_SVMModel->get_params().class_weights;
 
 }

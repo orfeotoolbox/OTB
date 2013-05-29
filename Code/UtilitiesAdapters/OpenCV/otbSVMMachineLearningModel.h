@@ -94,26 +94,32 @@ public:
   // for poly
   itkGetMacro(Degree, double);
   itkSetMacro(Degree, double);
+  itkGetMacro(OutputDegree, double);
 
   // for poly/rbf/sigmoid
   itkGetMacro(Gamma, double);
   itkSetMacro(Gamma, double);
+  itkGetMacro(OutputGamma, double);
 
   // for poly/sigmoid
   itkGetMacro(Coef0, double);
   itkSetMacro(Coef0, double);
+  itkGetMacro(OutputCoef0, double);
 
   // for CV_SVM_C_SVC, CV_SVM_EPS_SVR and CV_SVM_NU_SVR
   itkGetMacro(C, double);
   itkSetMacro(C, double);
+  itkGetMacro(OutputC, double);
 
   // for CV_SVM_NU_SVC, CV_SVM_ONE_CLASS, and CV_SVM_NU_SVR
   itkGetMacro(Nu, double);
   itkSetMacro(Nu, double);
+  itkGetMacro(OutputNu, double);
 
   // for CV_SVM_EPS_SVR
   itkGetMacro(P, double);
   itkSetMacro(P, double);
+  itkGetMacro(OutputP, double);
 
   itkGetMacro(ParameterOptimization, bool);
   itkSetMacro(ParameterOptimization, bool);
@@ -144,6 +150,12 @@ private:
   double m_C;
   double m_Nu;
   double m_P;
+  double m_OutputDegree;
+  double m_OutputGamma;
+  double m_OutputCoef0;
+  double m_OutputC;
+  double m_OutputNu;
+  double m_OutputP;
   bool m_ParameterOptimization;
 };
 } // end namespace otb

@@ -137,6 +137,14 @@ namespace Wrapper
     }
     SVMClassifier->Train();
     SVMClassifier->Save(GetParameterString("io.out"));
+
+    // Update the displayed parameters in the GUI after the training process, for further use of them
+    SetParameterFloat("classifier.svm.c", static_cast<float> (SVMClassifier->GetOutputC()));
+    SetParameterFloat("classifier.svm.nu", static_cast<float> (SVMClassifier->GetOutputNu()));
+    //SetParameterFloat("classifier.svm.p", static_cast<float>(SVMClassifier->GetOutputP()));
+    SetParameterFloat("classifier.svm.coef0", static_cast<float> (SVMClassifier->GetOutputCoef0()));
+    SetParameterFloat("classifier.svm.gamma", static_cast<float> (SVMClassifier->GetOutputGamma()));
+    SetParameterFloat("classifier.svm.degree", static_cast<float> (SVMClassifier->GetOutputDegree()));
   }
 
 } //end namespace wrapper
