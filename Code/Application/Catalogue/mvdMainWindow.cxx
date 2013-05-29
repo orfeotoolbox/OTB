@@ -1296,6 +1296,16 @@ MainWindow
     }
 
   //
+  // trigger the placename computation
+  // used by m_DatasetPropertiesDock
+  // Done here to find placename if not computed, everytime this
+  // dataset is loaded
+  if (vectorImageModel!=NULL)
+    {
+    model->LoadImagePlacename();
+    }
+
+  //
   // CONTROLLERS.
   //
 

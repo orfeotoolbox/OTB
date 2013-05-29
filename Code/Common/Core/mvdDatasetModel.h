@@ -62,6 +62,7 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 class DatasetDescriptor;
+class ImagePlacenameLoader;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -225,12 +226,18 @@ public:
 
   inline const double GetLastIsotropicZoom() const ;
 
+  // load placename
+  void LoadImagePlacename();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
+
+  // used to tell the DatasetPropertiesController to refresh
+  // datasetPropertiesWidget
+  void PlacenameLoaded();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -296,9 +303,11 @@ private:
   /** */
   void ParseAlias();
 
-
   /** */
   void ParseImageViewContext();
+
+  /** */
+  void ParsePlacename();
 
   /** */
   void WriteDescriptor() const;
@@ -342,6 +351,15 @@ private:
    */
   double         m_LastIsotropicZoom;
 
+  /**
+   * \brief Image Placename
+   * 
+   */
+  QString         m_Placename;
+
+  QPointer<ImagePlacenameLoader> m_PlacenameLoader;
+  
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -353,6 +371,9 @@ private slots:
 
   /** */
   void OnRenderingContextChanged(const PointType&, double );
+
+  /** */
+  void OnPlacenameLoaded( const QString& placename );
 };
 
 } // end namespace 'mvd'

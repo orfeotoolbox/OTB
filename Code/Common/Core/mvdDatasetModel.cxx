@@ -44,6 +44,9 @@
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
 
+// used to load placename
+#include "Gui/mvdImagePlacenameLoader.h"
+
 namespace mvd
 {
 /*
@@ -83,7 +86,9 @@ DatasetModel
   m_Alias( ),
   m_Directory(),
   m_LastPhysicalCenter(),
-  m_LastIsotropicZoom(1.)
+  m_LastIsotropicZoom(1.),
+  m_Placename( tr("unknown") ),
+  m_PlacenameLoader()
 {
   // need to initialize to LastPhysicalCenter to detect (in
   // MainWindow) if it is the first time this model is loaded. 
@@ -219,6 +224,7 @@ DatasetModel
 	// ...providing newly calculated image-model ID.
 	context.m_Id,
 	context.m_Filename,
+        m_Placename,
 	&vectorImageModel->GetSettings(),
 	GetDirectory().relativeFilePath( context.m_Quicklook ),
 	GetDirectory().relativeFilePath( context.m_Histogram )
@@ -316,6 +322,9 @@ DatasetModel
     
     // Parse center point and zoom level
     ParseImageViewContext();
+
+    // Parse Dataset image placename
+    ParsePlacename();
     }
 }
 
@@ -405,6 +414,9 @@ DatasetModel
     		 );
     }
 
+  // TODO: should be done here ???
+  
+
   // verbosity
   qDebug() << "Input Dataset :"
            << "\n Path : " << dsName
@@ -445,6 +457,27 @@ DatasetModel
   qDebug() << "::ParseImageViewContext() :"
            << "\n Center : " << m_LastPhysicalCenter[0] <<","<<m_LastPhysicalCenter[1]
            << "\n Zoom  : " << m_LastIsotropicZoom;
+}
+
+/*******************************************************************************/
+void
+DatasetModel
+::ParsePlacename()
+{
+  // loop on images elements
+  for( QDomElement imageElt( m_Descriptor->FirstImageElement() );
+       !imageElt.isNull();
+       imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) )
+    {
+    // Read placename stored in descriptor.
+    DatasetDescriptor::GetImagePlacename( 
+               imageElt,
+               m_Placename );
+    }
+
+  // verbosity
+  qDebug() << "::ParsePlacename:: "
+           << "\n Placename : " << m_Placename;
 }
 
 /*******************************************************************************/
@@ -569,6 +602,7 @@ DatasetModel
   PropertyType pspacing;
   PropertyType pnbcomp;
   PropertyType pblocksize;
+  PropertyType pplacename;
 
   //
   pdim.first  = ToStdString ( tr("Dimension") );
@@ -601,12 +635,17 @@ DatasetModel
   pblocksize.first  = ToStdString ( tr("Block size") );
   pblocksize.second = ossBlocksize.str();
 
+  // image placename
+  pplacename.first  =  ToStdString( tr("Placename") );
+  pplacename.second =  ToStdString( m_Placename );
+
   // add those properties to the vector of properties
   vimageinfo.push_back(pdim);
   vimageinfo.push_back(porigin);
   vimageinfo.push_back(pspacing);
   vimageinfo.push_back(pnbcomp);
   vimageinfo.push_back(pblocksize);
+  vimageinfo.push_back(pplacename);
 
   pImageInfoCat.first  = ToStdString ( key2 );
   pImageInfoCat.second = vimageinfo;
@@ -675,6 +714,78 @@ DatasetModel
     }
 }
 
+/*****************************************************************************/
+void
+DatasetModel
+::LoadImagePlacename()
+{
+  qDebug()<<this << "::LoadImagePlacename ";
+  // Important:
+  // disconnect previous placename loader if not destroyed
+  if (m_PlacenameLoader)
+    {
+    // On Successfull title composition, update with the window title
+    QObject::disconnect(m_PlacenameLoader, 
+                        SIGNAL( PlacenameLoaded(const QString &) ), 
+                        this, 
+                        SLOT(OnPlacenameLoaded(const QString & ))
+      );
+    }
+
+   //
+  // get the vector image model
+  VectorImageModel* viModel =
+    qobject_cast< VectorImageModel* >( GetSelectedImageModel() );
+
+  if (!viModel)
+    return;
+
+  //
+  // get placename 
+  QThread* thread = new QThread;
+  m_PlacenameLoader = new ImagePlacenameLoader( viModel );
+  m_PlacenameLoader->moveToThread(thread);
+  
+  // At thread startup, trigger the processing function
+  QObject::connect(thread, 
+                   SIGNAL(started()), 
+                   m_PlacenameLoader, 
+                   SLOT(LoadPlacename())
+    );
+  
+  // On Successfull title composition, update with the window title
+  QObject::connect(m_PlacenameLoader, 
+                   SIGNAL( PlacenameLoaded(const QString &) ), 
+                   this, 
+                   SLOT( OnPlacenameLoaded(const QString &) )
+    );
+
+  // Cleanup
+  //  - quit the thread's event loop, exit cleanly
+  QObject::connect(m_PlacenameLoader, 
+                   SIGNAL(Finished()), 
+                   thread, 
+                   SLOT(quit())
+    );
+  //  - cleanup heap
+  QObject::connect(m_PlacenameLoader, 
+                   SIGNAL(Finished()), 
+                   m_PlacenameLoader, 
+                   SLOT(deleteLater())
+    );
+  QObject::connect(thread, 
+                   SIGNAL(finished()), 
+                   thread, 
+                   SLOT(deleteLater())
+    );
+
+
+  qDebug()<<this << "::LoadImagePlacename Loading Placename GOGOGOGOO ";
+
+  // GO
+  thread->start();
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
@@ -717,5 +828,27 @@ DatasetModel
   // write the changes
   Save();
 }
+
+/*******************************************************************************/
+void
+DatasetModel
+::OnPlacenameLoaded(const QString& placename)
+{
+  // 
+  qDebug() <<this <<"::OnPlacenameLoaded placename "<<placename;
+
+  // update the descriptor
+  m_Descriptor->UpdateImagePlacename( placename );
+
+  // update the attribute
+  m_Placename =  placename;
+
+  // write the changes
+  Save();
+
+  // emit a signal to force datasetProperties widget to refresh
+  emit PlacenameLoaded();
+}
+
 
 } // end namespace 'mvd'

@@ -79,6 +79,7 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   //
   "images",
   "image_information",
+  "image_placename",
   "input_image",
   "ql_input_image",
   "histogram",
@@ -121,6 +122,7 @@ void
 DatasetDescriptor
 ::InsertImageModel( int id,
 		    const QString& imageFilename,
+                    const QString& placename,
 		    void* imageSettings,
 		    const QString& quicklookFilename,
 		    const QString& histogramFilename )
@@ -132,6 +134,13 @@ DatasetDescriptor
   );
   imageInfoElt.setAttribute( "id", QString( "%1" ).arg( id ) );
   m_ImagesGroupElement.appendChild( imageInfoElt );
+
+  // Input Image placename (computed from the image center coordinates)
+  QDomElement placenameElt(
+        CreateTextNode( placename, 
+                        TAG_NAMES[ ELEMENT_IMAGE_PLACENAME ] )
+    );
+  imageInfoElt.appendChild( placenameElt );
 
   // Input image filename.
   QDomElement imageElt(
@@ -377,6 +386,45 @@ DatasetDescriptor
 }
 
 /*******************************************************************************/
+bool
+DatasetDescriptor
+::UpdateImagePlacename( const QString & nplacename )
+{
+  qDebug() << this << "::UpdateImagePlacename(" << nplacename << ")";
+  assert( !nplacename.isEmpty() ); 
+ 
+  // Access dataset group
+  if ( m_ImagesGroupElement.isNull() )
+    return false;
+
+  //
+  // Image information node.
+  QDomElement imageInfoElt(
+    m_ImagesGroupElement.firstChildElement( TAG_NAMES[ ELEMENT_IMAGE_INFORMATION ] )
+    );
+
+  // Access image placename elt
+  QDomElement placenameElt(
+    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_IMAGE_PLACENAME ] )
+    );
+
+  // TODO: Manage XML structure errors.
+  assert( !placenameElt.isNull() );  
+
+  // create a new node
+  QDomElement nPlacenameElt(
+    CreateTextNode( nplacename, 
+                    TAG_NAMES[ ELEMENT_IMAGE_PLACENAME ] )
+    );
+
+  // replace the node
+  imageInfoElt.replaceChild(nPlacenameElt, placenameElt );
+
+  // if everything went ok
+  return true;
+}
+
+/*******************************************************************************/
 void
 DatasetDescriptor
 ::GetImageModel( const QDomElement& imageSibling,
@@ -400,7 +448,7 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !imageElt.isNull() );
   imageFilename = imageElt.attribute( "href" );
-
+  
   // Access quicklook image element.
   QDomElement quicklookElt(
     imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_QUICKLOOK ] )
@@ -532,6 +580,27 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   assert( !zoomElt.isNull() );
   zoom = QVariant( zoomElt.text() ).toReal() ;
+}
+
+/*******************************************************************************/
+void
+DatasetDescriptor
+::GetImagePlacename( const QDomElement& datasetSibling,
+                    QString& placename)
+ {
+  // TODO: Manager XML structure errors.
+  assert( !datasetSibling.isNull() );
+
+  // Alias imageSibling into image-information element.
+  QDomElement imageInfoElt( datasetSibling );
+
+  // Acces dataset name
+  QDomElement placenameElt(
+    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_IMAGE_PLACENAME ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !placenameElt.isNull() );
+  placename = placenameElt.text();
 }
 
 /*******************************************************************************/

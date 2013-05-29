@@ -123,6 +123,7 @@ public:
    */
   void InsertImageModel( int id,
 			 const QString& imageFilename,
+                         const QString& placename,
 			 void* imageSettings,
 			 const QString& quicklookFilename,
 			 const QString& histogramFilename );
@@ -169,11 +170,19 @@ public:
                                        double&  zoom );
   /**
    */
+  static
+    void GetImagePlacename( const QDomElement& datasetSibling,
+                           QString& placename);
+  
+  /**
+   */
   bool SetImageModel( int id, void* settings );
 
   bool UpdateDatasetAlias( const QString& newAlias);
 
   bool UpdateViewContext(const PointType& center, double zoom);
+
+  bool UpdateImagePlacename( const QString & nplacename );
 
   /**
    */
@@ -282,6 +291,7 @@ private:
     //
     ELEMENT_IMAGES_GROUP,
     ELEMENT_IMAGE_INFORMATION,
+    ELEMENT_IMAGE_PLACENAME,
     ELEMENT_IMAGE,
     ELEMENT_QUICKLOOK,
     ELEMENT_HISTOGRAM,
