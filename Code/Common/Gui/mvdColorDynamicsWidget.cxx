@@ -93,6 +93,16 @@ ColorDynamicsWidget
   CountType begin;
   CountType end;
 
+  //
+  // First, force WHITE channel to be invisible.
+  //
+  // Cause: prevent layout re-calculation to be resized taking RGB+W
+  // into account when switching from grayscale-mode activated to
+  // non-activated.
+  GetChannel( RGBW_CHANNEL_WHITE )->setVisible( false );
+
+  //
+  // Then, show/hide relevant components.
   RgbwBounds( begin, end, RGBW_CHANNEL_RGB );
 
   for( CountType i=begin; i<end; ++i )
@@ -104,9 +114,9 @@ ColorDynamicsWidget
 
   GetChannel( RGBW_CHANNEL_WHITE )->setVisible( activated );
 
+  m_UI->bwLine->setVisible( false );
   m_UI->rgLine->setVisible( !activated );
   m_UI->gbLine->setVisible( !activated );
-  m_UI->bwLine->setVisible( false );
 }
 
 /*******************************************************************************/

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>326</width>
-    <height>471</height>
+    <width>94</width>
+    <height>71</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,15 +22,15 @@
      <item row="2" column="0">
       <widget class="ColorBandDynamicsWidget" name="greenWidget" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
         <size>
-         <width>300</width>
-         <height>100</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
       </widget>
@@ -38,15 +38,15 @@
      <item row="4" column="0">
       <widget class="ColorBandDynamicsWidget" name="blueWidget" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
         <size>
-         <width>300</width>
-         <height>100</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
       </widget>
@@ -61,15 +61,15 @@
      <item row="0" column="0">
       <widget class="ColorBandDynamicsWidget" name="redWidget" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
         <size>
-         <width>300</width>
-         <height>100</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
        <property name="baseSize">
@@ -97,15 +97,15 @@
      <item row="6" column="0">
       <widget class="ColorBandDynamicsWidget" name="whiteWidget" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
         <size>
-         <width>300</width>
-         <height>100</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
       </widget>
