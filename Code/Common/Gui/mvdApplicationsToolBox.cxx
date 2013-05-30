@@ -85,6 +85,9 @@ ApplicationsToolBox
                    this,
                    SLOT( OnAlgorithmTreeDoubleClick(QTreeWidgetItem* ,int) )
     );
+
+  // put a place holder text in search area
+  m_UI->m_SearchLine->setPlaceholderText( tr("Search Application ...") );
 }
 
 /*******************************************************************************/
