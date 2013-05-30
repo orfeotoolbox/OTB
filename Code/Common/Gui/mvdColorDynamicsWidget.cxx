@@ -90,9 +90,6 @@ ColorDynamicsWidget
 {
   m_IsGrayscaleActivated = activated;
 
-  CountType begin;
-  CountType end;
-
   //
   // First, force WHITE channel to be invisible.
   //
@@ -106,6 +103,9 @@ ColorDynamicsWidget
 
   //
   // Then, show/hide relevant components.
+  CountType begin;
+  CountType end;
+
   RgbwBounds( begin, end, RGBW_CHANNEL_RGB );
 
   for( CountType i=begin; i<end; ++i )

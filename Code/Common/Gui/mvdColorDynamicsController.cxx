@@ -449,8 +449,8 @@ ColorDynamicsController
 {
   //
   // Calculate loop bounds. Return if nothing to do.
-  CountType begin = 0;
-  CountType end = 0;
+  CountType begin = -1;
+  CountType end = -1;
 
   if( !mvd::RgbBounds( begin, end, channels ) )
     return;
@@ -742,7 +742,11 @@ ColorDynamicsController
     << this
     << "::OnResetIntensityClicked(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
-  ResetIntensities( channel );
+  ResetIntensities(
+    channel==RGBW_CHANNEL_WHITE
+    ? RGBW_CHANNEL_RGB
+    : channel
+  );
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
@@ -757,7 +761,11 @@ ColorDynamicsController
     << this
     << "::OnResetQuantileChanged(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
-  ResetQuantiles( channel );
+  ResetQuantiles(
+    channel==RGBW_CHANNEL_WHITE
+    ? RGBW_CHANNEL_RGB
+    : channel
+  );
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();

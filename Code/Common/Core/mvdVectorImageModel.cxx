@@ -321,8 +321,8 @@ VectorImageModel
   DefaultImageType::PixelType min( histogramModel->GetMinPixel() );
   DefaultImageType::PixelType max( histogramModel->GetMaxPixel() );
 
-  CountType begin;
-  CountType end;
+  CountType begin = -1;
+  CountType end = -1;
 
   RgbBounds( begin, end, RGBW_CHANNEL_RGB );
 
