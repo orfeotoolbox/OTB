@@ -137,13 +137,13 @@ public:
    * list has been set, index 1 set "1: Green" as the current select
    * combo-box item.
    */
-  void SetCurrentRgbIndex( RgbaChannel channel, int index );
+  void SetCurrentRgbIndex( RgbwChannel channel, int index );
 
   /**
    * \return the current (selected) index of a RGB video-channel in
    * the component-name list.
    */
-  int GetCurrentRgbIndex( RgbaChannel channel ) const;
+  int GetCurrentRgbIndex( RgbwChannel channel ) const;
 
   /**
    * \brief Enable/disable the grayscale-mode check-box.
@@ -186,7 +186,7 @@ signals:
    * \param channel The RGB video-channel which has been modified.
    * \param index The curren-index in the component-list.
    */
-  void CurrentRgbIndexChanged( RgbaChannel channel, int index );
+  void CurrentRgbIndexChanged( RgbwChannel channel, int index );
 
   /**
    * \brief Signal emitted when the current-index of the white (gray)
@@ -243,7 +243,7 @@ private slots:
     void
     on_rComboBox_currentIndexChanged( int index )
   {
-    emit CurrentRgbIndexChanged( RGBA_CHANNEL_RED, index );
+    emit CurrentRgbIndexChanged( RGBW_CHANNEL_RED, index );
   }
 
   /**
@@ -256,7 +256,7 @@ private slots:
     void
     on_gComboBox_currentIndexChanged( int index )
   {
-    emit CurrentRgbIndexChanged( RGBA_CHANNEL_GREEN, index );
+    emit CurrentRgbIndexChanged( RGBW_CHANNEL_GREEN, index );
   }
 
   /**
@@ -269,7 +269,7 @@ private slots:
     void
     on_bComboBox_currentIndexChanged( int index )
   {
-    emit CurrentRgbIndexChanged( RGBA_CHANNEL_BLUE, index );
+    emit CurrentRgbIndexChanged( RGBW_CHANNEL_BLUE, index );
   }
 
   /**

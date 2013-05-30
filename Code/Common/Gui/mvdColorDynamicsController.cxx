@@ -78,58 +78,58 @@ ColorDynamicsController
   // Connect GUI to controller.
   QObject::connect(
     colorDynamicsWidget,
-    SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
+    SIGNAL( LowQuantileChanged( RgbwChannel, double ) ),
     // to:
     this,
-    SLOT( OnLowQuantileChanged( RgbaChannel, double ) )
+    SLOT( OnLowQuantileChanged( RgbwChannel, double ) )
   );
 
   QObject::connect(
     colorDynamicsWidget,
-    SIGNAL( HighQuantileChanged( RgbaChannel, double ) ),
+    SIGNAL( HighQuantileChanged( RgbwChannel, double ) ),
     // to:
     this,
-    SLOT( OnHighQuantileChanged( RgbaChannel, double ) )
+    SLOT( OnHighQuantileChanged( RgbwChannel, double ) )
   );
 
   QObject::connect(
     colorDynamicsWidget,
-    SIGNAL( LowIntensityChanged( RgbaChannel, double ) ),
+    SIGNAL( LowIntensityChanged( RgbwChannel, double ) ),
     // to:
     this,
-    SLOT( OnLowIntensityChanged( RgbaChannel, double ) )
+    SLOT( OnLowIntensityChanged( RgbwChannel, double ) )
   );
 
   QObject::connect(
     colorDynamicsWidget,
-    SIGNAL( HighIntensityChanged( RgbaChannel, double ) ),
+    SIGNAL( HighIntensityChanged( RgbwChannel, double ) ),
     // to:
     this,
-    SLOT( OnHighIntensityChanged( RgbaChannel, double ) )
+    SLOT( OnHighIntensityChanged( RgbwChannel, double ) )
   );
 
   QObject::connect(
     colorDynamicsWidget,
-    SIGNAL( ResetQuantileClicked( RgbaChannel ) ),
+    SIGNAL( ResetQuantileClicked( RgbwChannel ) ),
     // to:
     this,
-    SLOT( OnResetQuantileClicked( RgbaChannel ) )
+    SLOT( OnResetQuantileClicked( RgbwChannel ) )
   );
 
   QObject::connect(
     colorDynamicsWidget,
-    SIGNAL( ResetIntensityClicked( RgbaChannel ) ),
+    SIGNAL( ResetIntensityClicked( RgbwChannel ) ),
     // to:
     this,
-    SLOT( OnResetIntensityClicked( RgbaChannel  ) )
+    SLOT( OnResetIntensityClicked( RgbwChannel  ) )
   );
 
   QObject::connect(
     colorDynamicsWidget,
-    SIGNAL( ApplyAllClicked( RgbaChannel, double, double ) ),
+    SIGNAL( ApplyAllClicked( RgbwChannel, double, double ) ),
     // to:
     this,
-    SLOT( OnApplyAllClicked( RgbaChannel, double, double  ) )
+    SLOT( OnApplyAllClicked( RgbwChannel, double, double  ) )
   );
 
 
@@ -149,11 +149,11 @@ ColorDynamicsController
 {
   //
   // Reset color-dynamics widget.
-  ResetIntensityRanges( RGBA_CHANNEL_RGB );
+  ResetIntensityRanges( RGBW_CHANNEL_RGB );
 #if 1
-  SetIntensities( RGBA_CHANNEL_RGB );
+  SetIntensities( RGBW_CHANNEL_RGB );
 #else
-  ResetQuantiles( RGBA_CHANNEL_RGB );
+  ResetQuantiles( RGBW_CHANNEL_RGB );
 #endif
 }
 
@@ -176,58 +176,58 @@ ColorDynamicsController
   // Disconnect GUI from controller.
   QObject::disconnect(
     colorDynamicsWidget,
-    SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
+    SIGNAL( LowQuantileChanged( RgbwChannel, double ) ),
     // from:
     this,
-    SLOT( OnLowQuantileChanged( RgbaChannel, double ) )
+    SLOT( OnLowQuantileChanged( RgbwChannel, double ) )
   );
 
   QObject::disconnect(
     colorDynamicsWidget,
-    SIGNAL( HighQuantileChanged( RgbaChannel, double ) ),
+    SIGNAL( HighQuantileChanged( RgbwChannel, double ) ),
     // from:
     this,
-    SLOT( OnHighQuantileChanged( RgbaChannel, double ) )
+    SLOT( OnHighQuantileChanged( RgbwChannel, double ) )
   );
 
   QObject::disconnect(
     colorDynamicsWidget,
-    SIGNAL( LowIntensityChanged( RgbaChannel, double ) ),
+    SIGNAL( LowIntensityChanged( RgbwChannel, double ) ),
     // from:
     this,
-    SLOT( OnLowIntensityChanged( RgbaChannel, double ) )
+    SLOT( OnLowIntensityChanged( RgbwChannel, double ) )
   );
 
   QObject::disconnect(
     colorDynamicsWidget,
-    SIGNAL( HighIntensityChanged( RgbaChannel, double ) ),
+    SIGNAL( HighIntensityChanged( RgbwChannel, double ) ),
     // from:
     this,
-    SLOT( OnHighIntensityChanged( RgbaChannel, double ) )
+    SLOT( OnHighIntensityChanged( RgbwChannel, double ) )
   );
 
   QObject::disconnect(
     colorDynamicsWidget,
-    SIGNAL( ResetQuantileClicked( RgbaChannel ) ),
+    SIGNAL( ResetQuantileClicked( RgbwChannel ) ),
     // from:
     this,
-    SLOT( OnResetQuantileClicked( RgbaChannel ) )
+    SLOT( OnResetQuantileClicked( RgbwChannel ) )
   );
 
   QObject::disconnect(
     colorDynamicsWidget,
-    SIGNAL( ResetIntensityClicked( RgbaChannel ) ),
+    SIGNAL( ResetIntensityClicked( RgbwChannel ) ),
     // from:
     this,
-    SLOT( OnResetIntensityClicked( RgbaChannel  ) )
+    SLOT( OnResetIntensityClicked( RgbwChannel  ) )
   );
 
   QObject::disconnect(
     colorDynamicsWidget,
-    SIGNAL( ApplyAllClicked( RgbaChannel, double, double ) ),
+    SIGNAL( ApplyAllClicked( RgbwChannel, double, double ) ),
     // from:
     this,
-    SLOT( OnApplyAllClicked( RgbaChannel, double, double  ) )
+    SLOT( OnApplyAllClicked( RgbwChannel, double, double  ) )
   );
 
 }
@@ -235,7 +235,7 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::ResetIntensityRanges( RgbaChannel channels )
+::ResetIntensityRanges( RgbwChannel channels )
 {
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -273,7 +273,7 @@ ColorDynamicsController
   {
   for( CountType i=begin; i<end; ++i )
     {
-    RgbaChannel channel = static_cast< RgbaChannel >( i );
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
 
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
@@ -303,7 +303,7 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::ResetIntensities( RgbaChannel channels )
+::ResetIntensities( RgbwChannel channels )
 {
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -343,7 +343,7 @@ ColorDynamicsController
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
     {
-    RgbaChannel channel = static_cast< RgbaChannel >( i );
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
 
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
@@ -375,7 +375,7 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::SetIntensities( RgbaChannel channels )
+::SetIntensities( RgbwChannel channels )
 {
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -417,7 +417,7 @@ ColorDynamicsController
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
     {
-    RgbaChannel channel = static_cast< RgbaChannel >( i );
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
 
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
@@ -445,7 +445,7 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::ResetQuantiles( RgbaChannel channels )
+::ResetQuantiles( RgbwChannel channels )
 {
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -468,7 +468,7 @@ ColorDynamicsController
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
     {
-    RgbaChannel channel = static_cast< RgbaChannel >( i );
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
 
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
@@ -494,12 +494,12 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::OnRgbChannelIndexChanged( RgbaChannel channel, int band )
+::OnRgbChannelIndexChanged( RgbwChannel channel, int band )
 {
   qDebug()
     << this
     << "::OnRgbChannelIndexChanged("
-    << RGBA_CHANNEL_NAMES[ channel ] << ", " << band <<
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << band <<
     ")";
 
   //
@@ -522,8 +522,8 @@ ColorDynamicsController
 
   //
   // Reset color-dynamics widget.
-  ResetIntensityRanges( RGBA_CHANNEL_RGB );
-  ResetQuantiles( RGBA_CHANNEL_RGB );
+  ResetIntensityRanges( RGBW_CHANNEL_RGB );
+  ResetQuantiles( RGBW_CHANNEL_RGB );
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -539,9 +539,13 @@ ColorDynamicsController
     << "::OnGrayscaleActivated(" << activated << ")";
 
   //
+  // Toggle grayscale-mode activation-state of controlled widget.
+  GetWidget< ColorDynamicsWidget >()->SetGrayscaleActivated( activated );
+
+  //
   // Reset color-dynamics widget.
-  ResetIntensityRanges( RGBA_CHANNEL_RGB );
-  ResetQuantiles( RGBA_CHANNEL_RGB );
+  ResetIntensityRanges( RGBW_CHANNEL_RGB );
+  ResetQuantiles( RGBW_CHANNEL_RGB );
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -550,12 +554,12 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::OnLowQuantileChanged( RgbaChannel channel, double value )
+::OnLowQuantileChanged( RgbwChannel channel, double value )
 {
   qDebug()
     << this
     << "::OnLowQuantileChanged("
-    << RGBA_CHANNEL_NAMES[ channel ] << ", " << value
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
 
   // Get image-model.
@@ -599,12 +603,12 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::OnHighQuantileChanged( RgbaChannel channel, double value )
+::OnHighQuantileChanged( RgbwChannel channel, double value )
 {
   qDebug()
     << this
     << "::OnHighQuantileChanged("
-    << RGBA_CHANNEL_NAMES[ channel ] << ", " << value <<
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value <<
     ")";
 
   // Get image-model.
@@ -648,12 +652,12 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::OnLowIntensityChanged( RgbaChannel channel, double value )
+::OnLowIntensityChanged( RgbwChannel channel, double value )
 {
   qDebug()
     << this
     << "::OnLowIntensityChanged("
-    << RGBA_CHANNEL_NAMES[ channel ] << ", " << value
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
 
   // Get image-model.
@@ -690,12 +694,12 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::OnHighIntensityChanged( RgbaChannel channel, double value )
+::OnHighIntensityChanged( RgbwChannel channel, double value )
 {
   qDebug()
     << this
     << "::OnHighIntensityChanged("
-    << RGBA_CHANNEL_NAMES[ channel ] << ", " << value
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
 
   // Get image-model.
@@ -732,11 +736,11 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::OnResetIntensityClicked( RgbaChannel channel )
+::OnResetIntensityClicked( RgbwChannel channel )
 {
   qDebug()
     << this
-    << "::OnResetIntensityClicked(" << RGBA_CHANNEL_NAMES[ channel ] << ")";
+    << "::OnResetIntensityClicked(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
   ResetIntensities( channel );
 
@@ -747,11 +751,11 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::OnResetQuantileClicked( RgbaChannel channel )
+::OnResetQuantileClicked( RgbwChannel channel )
 {
   qDebug()
     << this
-    << "::OnResetQuantileChanged(" << RGBA_CHANNEL_NAMES[ channel ] << ")";
+    << "::OnResetQuantileChanged(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
   ResetQuantiles( channel );
 
@@ -762,11 +766,11 @@ ColorDynamicsController
 /*******************************************************************************/
 void
 ColorDynamicsController
-::OnApplyAllClicked( RgbaChannel channel, double low, double high )
+::OnApplyAllClicked( RgbwChannel channel, double low, double high )
 {
   qDebug()
     << this
-    << "::OnApplyAllChanged(" << RGBA_CHANNEL_NAMES[ channel ] << ")";
+    << "::OnApplyAllChanged(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -776,9 +780,13 @@ ColorDynamicsController
   // Reference settings.
   VectorImageModel::Settings& settings = imageModel->GetSettings();
 
-  for( int i=0; i<RGBA_CHANNEL_ALPHA; ++i )
-    {
+  CountType begin;
+  CountType end;
 
+  RgbBounds( begin, end, RGBW_CHANNEL_RGB );
+
+  for( CountType i=begin; i<end; ++i )
+    {
     HistogramModel::MeasurementType lintensity =
       imageModel->GetHistogramModel()->Quantile(
         settings.GetChannel( i ),
@@ -802,7 +810,7 @@ ColorDynamicsController
     ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
     assert( colorDynWgt!=NULL );
 
-    ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel(  static_cast< RgbaChannel >(i) );
+    ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel(  static_cast< RgbwChannel >(i) );
     assert( colorBandDynWgt!=NULL );
 
     // Block widget signals to prevent recursive signal/slot loops.

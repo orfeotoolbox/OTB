@@ -111,7 +111,7 @@ signals:
    * \param channel The RGB channel for which the band-index has changed.
    * \param band The new band-index of the RGB channel.
    */
-  void RgbChannelIndexChanged( RgbaChannel channel, int band );
+  void RgbChannelIndexChanged( RgbwChannel channel, int band );
 
   /**
    * \brief Signal emitted when the band-index of a white (gray)
@@ -154,7 +154,7 @@ private:
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.
    */
-  void ResetIndices( RgbaChannel channels );
+  void ResetIndices( RgbwChannel channels );
 
   //
   // AbstractModelController overrides.
@@ -183,7 +183,7 @@ private slots:
    *
    * \param index The new band-index of the RGB video-channel.
    */
-  void OnCurrentRgbIndexChanged( RgbaChannel channel, int index );
+  void OnCurrentRgbIndexChanged( RgbwChannel channel, int index );
 
   /**
    * \brief Slot called when the current index of the white (gray)

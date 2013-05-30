@@ -107,7 +107,7 @@ public slots:
    * \param channel The RGB channel for which the band-index has changed.
    * \param band The new band-index of the RGB channel.
    */
-  void OnRgbChannelIndexChanged( RgbaChannel channel, int band );
+  void OnRgbChannelIndexChanged( RgbwChannel channel, int band );
 
   /**
    * \brief Slot called when the band-index of the white (gray)
@@ -168,7 +168,7 @@ private:
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.
    */
-  void ResetIntensityRanges( RgbaChannel );
+  void ResetIntensityRanges( RgbwChannel );
 
   /**
    * \brief Reset low and high intensities to default values for given
@@ -177,11 +177,11 @@ private:
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.
    */
-  void ResetIntensities( RgbaChannel );
+  void ResetIntensities( RgbwChannel );
 
   /**
    */
-  void SetIntensities( RgbaChannel );
+  void SetIntensities( RgbwChannel );
 
   /**
    * \brief Reset low and high quantiles to default values for given
@@ -190,7 +190,7 @@ private:
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.
    */
-  void ResetQuantiles( RgbaChannel );
+  void ResetQuantiles( RgbwChannel );
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -205,7 +205,7 @@ private slots:
    * changed.
    * \param quantile The new quantile value.
    */
-  void OnLowQuantileChanged( RgbaChannel channel, double quantile );
+  void OnLowQuantileChanged( RgbwChannel channel, double quantile );
 
   /**
    * \brief Slot called when high quantile value of a RGB channel has
@@ -215,7 +215,7 @@ private slots:
    * changed.
    * \param quantile The new quantile value.
    */
-  void OnHighQuantileChanged( RgbaChannel channel, double quantile );
+  void OnHighQuantileChanged( RgbwChannel channel, double quantile );
 
   /**
    * \brief Slot called when low intensity value of a RGB channel has
@@ -225,7 +225,7 @@ private slots:
    * changed.
    * \param intensity The new intensity value.
    */
-  void OnLowIntensityChanged( RgbaChannel channel, double intensity );
+  void OnLowIntensityChanged( RgbwChannel channel, double intensity );
 
   /**
    * \brief Slot called when high intensity value of a RGB channel has
@@ -235,7 +235,7 @@ private slots:
    * changed.
    * \param intensity The new intensity value.
    */
-  void OnHighIntensityChanged( RgbaChannel channel, double intensity );
+  void OnHighIntensityChanged( RgbwChannel channel, double intensity );
 
   /**
    * \brief Slot called when the reset intensities button has been
@@ -244,7 +244,7 @@ private slots:
    * \param channel RGB channel for which to reset low and high
    * intensities.
    */
-  void OnResetIntensityClicked( RgbaChannel channel );
+  void OnResetIntensityClicked( RgbwChannel channel );
 
   /**
    * \brief Slot called when the reset quantiles button has been
@@ -253,7 +253,7 @@ private slots:
    * \param channel RGB channel for which to reset low and high
    * quantiles.
    */
-  void OnResetQuantileClicked( RgbaChannel channel );
+  void OnResetQuantileClicked( RgbwChannel channel );
 
   /**
    * \brief Slot called when the apply all button has been clicked.
@@ -261,7 +261,7 @@ private slots:
    * \param channel RGB channel for which to reset low and high
    * quantiles.
    */
-  void OnApplyAllClicked( RgbaChannel channel, double low, double high );
+  void OnApplyAllClicked( RgbwChannel channel, double low, double high );
 
 };
 

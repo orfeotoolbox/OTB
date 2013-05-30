@@ -326,10 +326,10 @@ MainWindow
   // Forward model update signals of color-setup controller...
   QObject::connect(
     colorSetupCtrl,
-    SIGNAL( RgbChannelIndexChanged( RgbaChannel, int ) ),
+    SIGNAL( RgbChannelIndexChanged( RgbwChannel, int ) ),
     // to: ...color-dynamics controller model update signal.
     colorDynamicsCtrl,
-    SLOT( OnRgbChannelIndexChanged( RgbaChannel, int ) )
+    SLOT( OnRgbChannelIndexChanged( RgbwChannel, int ) )
   );
 
   //

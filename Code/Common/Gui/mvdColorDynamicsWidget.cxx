@@ -49,91 +49,130 @@ const char*
 ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[] = {
   "redWidget",
   "greenWidget",
-  "blueWidget"
+  "blueWidget",
+  "whiteWidget"
 };
 
 /*******************************************************************************/
 ColorDynamicsWidget
 ::ColorDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::Ui::ColorDynamicsWidget() )
+  m_UI( new mvd::Ui::ColorDynamicsWidget() ),
+  m_IsGrayscaleActivated( false )
 {
   m_UI->setupUi( this );
 
-  for( int i=0; i<RGBA_CHANNEL_ALPHA; ++i )
+  CountType begin;
+  CountType end;
+
+  RgbwBounds( begin, end, RGBW_CHANNEL_ALL );
+
+  for( CountType i=begin; i<end; ++i )
     {
-    RgbaChannel channel( static_cast< RgbaChannel >( i ) );
+    RgbwChannel channel( static_cast< RgbwChannel >( i ) );
 
-    ColorBandDynamicsWidget* widget = GetChannel( channel );
-
-    widget->SetChannelLabel( channel );
-
-    //
-    // Concentrate and forward signals of each channels.
-
-    QObject::connect(
-      widget,
-      SIGNAL( LowQuantileChanged( RgbaChannel, double ) ),
-      // TO:
-      this,
-      SIGNAL( LowQuantileChanged( RgbaChannel, double ) )
-    );
-
-    QObject::connect(
-      widget,
-      SIGNAL( HighQuantileChanged( RgbaChannel, double ) ),
-      // TO:
-      this,
-      SIGNAL( HighQuantileChanged( RgbaChannel, double ) )
-    );
-
-    QObject::connect(
-      widget,
-      SIGNAL( LowIntensityChanged( RgbaChannel, double ) ),
-      // TO:
-      this,
-      SIGNAL( LowIntensityChanged( RgbaChannel, double ) )
-    );
-
-    QObject::connect(
-      widget,
-      SIGNAL( HighIntensityChanged( RgbaChannel, double ) ),
-      // TO:
-      this,
-      SIGNAL( HighIntensityChanged( RgbaChannel, double ) )
-    );
-
-    QObject::connect(
-      widget,
-      SIGNAL( ResetQuantileClicked( RgbaChannel ) ),
-      // TO:
-      this,
-      SIGNAL( ResetQuantileClicked( RgbaChannel ) )
-    );
-
-    QObject::connect(
-      widget,
-      SIGNAL( ResetIntensityClicked( RgbaChannel ) ),
-      // TO:
-      this,
-      SIGNAL( ResetIntensityClicked( RgbaChannel  ) )
-    );
-
-    QObject::connect(
-      widget,
-      SIGNAL( ApplyAllClicked( RgbaChannel, double, double ) ),
-      // TO:
-      this,
-      SIGNAL( ApplyAllClicked( RgbaChannel, double, double ) )
-    );
-
+    ConnectChild( GetChannel( channel ), channel );
     }
+
+  SetGrayscaleActivated( false );
 }
 
 /*******************************************************************************/
 ColorDynamicsWidget
 ::~ColorDynamicsWidget()
 {
+}
+
+/*****************************************************************************/
+void
+ColorDynamicsWidget
+::SetGrayscaleActivated( bool activated )
+{
+  m_IsGrayscaleActivated = activated;
+
+  CountType begin;
+  CountType end;
+
+  RgbwBounds( begin, end, RGBW_CHANNEL_RGB );
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbwChannel channel( static_cast< RgbwChannel >( i ) );
+
+    GetChannel( channel )->setVisible( !activated );
+    }
+
+  GetChannel( RGBW_CHANNEL_WHITE )->setVisible( activated );
+
+  m_UI->rgLine->setVisible( !activated );
+  m_UI->gbLine->setVisible( !activated );
+  m_UI->bwLine->setVisible( false );
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsWidget
+::ConnectChild( ColorBandDynamicsWidget* child, RgbwChannel channel )
+{
+  child->SetChannelLabel( channel );
+
+  //
+  // Concentrate and forward signals of each channels.
+  QObject::connect(
+    child,
+    SIGNAL( LowQuantileChanged( RgbwChannel, double ) ),
+    // TO:
+    this,
+    SIGNAL( LowQuantileChanged( RgbwChannel, double ) )
+  );
+
+  QObject::connect(
+    child,
+    SIGNAL( HighQuantileChanged( RgbwChannel, double ) ),
+    // TO:
+    this,
+    SIGNAL( HighQuantileChanged( RgbwChannel, double ) )
+  );
+
+  QObject::connect(
+    child,
+    SIGNAL( LowIntensityChanged( RgbwChannel, double ) ),
+    // TO:
+    this,
+    SIGNAL( LowIntensityChanged( RgbwChannel, double ) )
+  );
+
+  QObject::connect(
+    child,
+    SIGNAL( HighIntensityChanged( RgbwChannel, double ) ),
+    // TO:
+    this,
+    SIGNAL( HighIntensityChanged( RgbwChannel, double ) )
+  );
+
+  QObject::connect(
+    child,
+    SIGNAL( ResetQuantileClicked( RgbwChannel ) ),
+    // TO:
+    this,
+    SIGNAL( ResetQuantileClicked( RgbwChannel ) )
+  );
+
+  QObject::connect(
+    child,
+    SIGNAL( ResetIntensityClicked( RgbwChannel ) ),
+    // TO:
+    this,
+    SIGNAL( ResetIntensityClicked( RgbwChannel  ) )
+  );
+
+  QObject::connect(
+    child,
+    SIGNAL( ApplyAllClicked( RgbwChannel, double, double ) ),
+    // TO:
+    this,
+    SIGNAL( ApplyAllClicked( RgbwChannel, double, double ) )
+  );
 }
 
 /*******************************************************************************/

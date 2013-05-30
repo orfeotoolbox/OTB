@@ -81,7 +81,7 @@ class Monteverdi2_EXPORT ColorBandDynamicsWidget :
   Q_OBJECT;
 
   /** */
-  Q_PROPERTY( RgbaChannel channelLabel
+  Q_PROPERTY( RgbwChannel channelLabel
 	      READ GetChannelLabel
 	      WRITE SetChannelLabel );
 
@@ -128,9 +128,9 @@ public:
   virtual ~ColorBandDynamicsWidget();
 
   /** */
-  RgbaChannel GetChannelLabel() const;
+  RgbwChannel GetChannelLabel() const;
   /** */
-  void SetChannelLabel( RgbaChannel );
+  void SetChannelLabel( RgbwChannel );
 
   /** */
   double GetMinIntensity() const;
@@ -168,20 +168,20 @@ public:
 // Signals.
 signals:
   /** */
-  void LowQuantileChanged( RgbaChannel, double );
+  void LowQuantileChanged( RgbwChannel, double );
   /** */
-  void HighQuantileChanged( RgbaChannel, double );
+  void HighQuantileChanged( RgbwChannel, double );
   /** */
-  void LowIntensityChanged( RgbaChannel, double );
+  void LowIntensityChanged( RgbwChannel, double );
   /** */
-  void HighIntensityChanged( RgbaChannel, double );
+  void HighIntensityChanged( RgbwChannel, double );
 
   /** */
-  void ResetIntensityClicked( RgbaChannel );
+  void ResetIntensityClicked( RgbwChannel );
   /** */
-  void ResetQuantileClicked( RgbaChannel );
+  void ResetQuantileClicked( RgbwChannel );
   /** */
-  void ApplyAllClicked( RgbaChannel, double, double);
+  void ApplyAllClicked( RgbwChannel, double, double);
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -209,7 +209,7 @@ private:
   Ui::ColorBandDynamicsWidget* m_UI;
 
   /** */
-  RgbaChannel m_Channel;
+  RgbwChannel m_Channel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

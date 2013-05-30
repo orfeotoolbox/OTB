@@ -145,17 +145,17 @@ MainWindow
   // Forward model update signals of color-setup controller...
   QObject::connect(
     m_ColorSetupDock->findChild< AbstractModelController* >(),
-    SIGNAL( CurrentRgbIndexChanged( RgbaChannel, int ) ),
+    SIGNAL( RgbChannelIndexChanged( RgbwChannel, int ) ),
     // to: ...color-dynamics controller model update signal.
     m_ColorDynamicsDock->findChild< AbstractModelController* >(),
-    SLOT( OnCurrentRgbIndexChanged( RgbaChannel, int ) )
+    SLOT( OnRgbChannelIndexChanged( RgbwChannel, int ) )
   );
   QObject::connect(
     m_ColorSetupDock->findChild< AbstractModelController* >(),
-    SIGNAL( CurrentGrayIndexChanged( int ) ),
+    SIGNAL( GrayChannelIndexChanged( int ) ),
     // to: ...color-dynamics controller model update signal.
     m_ColorDynamicsDock->findChild< AbstractModelController* >(),
-    SLOT( OnCurrentGrayIndexChanged( int ) )
+    SLOT( OnGrayChannelIndexChanged( int ) )
   );
   QObject::connect(
     m_ColorSetupDock->findChild< AbstractModelController* >(),

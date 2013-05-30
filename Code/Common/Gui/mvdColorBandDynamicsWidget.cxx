@@ -50,7 +50,7 @@ ColorBandDynamicsWidget
 ::ColorBandDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::ColorBandDynamicsWidget() ),
-  m_Channel( RGBA_CHANNEL_RGB )
+  m_Channel( RGBW_CHANNEL_RGB )
 {
   m_UI->setupUi( this );
 }
@@ -163,22 +163,33 @@ ColorBandDynamicsWidget
 /*****************************************************************************/
 void
 ColorBandDynamicsWidget
-::SetChannelLabel( RgbaChannel channel )
+::SetChannelLabel( RgbwChannel channel )
 {
   m_Channel = channel;
   
   m_UI->rLabel->setVisible(
-    channel==RGBA_CHANNEL_RED || channel==RGBA_CHANNEL_ALL );
-  
+    channel==RGBW_CHANNEL_RED ||
+    channel==RGBW_CHANNEL_RGB ||
+    channel==RGBW_CHANNEL_ALL
+  );
+
   m_UI->gLabel->setVisible(
-    channel==RGBA_CHANNEL_GREEN || channel==RGBA_CHANNEL_ALL );
+    channel==RGBW_CHANNEL_GREEN ||
+    channel==RGBW_CHANNEL_RGB ||
+    channel==RGBW_CHANNEL_ALL
+  );
   
   m_UI->bLabel->setVisible(
-    channel==RGBA_CHANNEL_BLUE || channel==RGBA_CHANNEL_ALL );
+    channel==RGBW_CHANNEL_BLUE ||
+    channel==RGBW_CHANNEL_RGB ||
+    channel==RGBW_CHANNEL_ALL
+  );
+
+  m_UI->wLabel->setVisible( channel==RGBW_CHANNEL_WHITE );
 }
 
 /*****************************************************************************/
-RgbaChannel
+RgbwChannel
 ColorBandDynamicsWidget
 ::GetChannelLabel() const
 {

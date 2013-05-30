@@ -78,10 +78,10 @@ ColorSetupController
   // Connect GUI to controller.
   QObject::connect(
     colorSetupWidget,
-    SIGNAL( CurrentRgbIndexChanged( RgbaChannel, int ) ),
+    SIGNAL( CurrentRgbIndexChanged( RgbwChannel, int ) ),
     // to:
     this,
-    SLOT( OnCurrentRgbIndexChanged( RgbaChannel, int ) )
+    SLOT( OnCurrentRgbIndexChanged( RgbwChannel, int ) )
   );
 
   QObject::connect(
@@ -128,10 +128,10 @@ ColorSetupController
   // Disconnect GUI from controller.
   QObject::disconnect(
     colorSetupWidget,
-    SIGNAL( CurrentRgbIndexChanged( RgbaChannel, int ) ),
+    SIGNAL( CurrentRgbIndexChanged( RgbwChannel, int ) ),
     // to:
     this,
-    SLOT( OnCurrentRgbIndexChanged( RgbaChannel, int ) )
+    SLOT( OnCurrentRgbIndexChanged( RgbwChannel, int ) )
   );
 
   QObject::disconnect(
@@ -157,13 +157,13 @@ ColorSetupController
 ::ResetWidget()
 {
   // Reset color-setup widget.
-  ResetIndices( RGBA_CHANNEL_RGB );
+  ResetIndices( RGBW_CHANNEL_RGB );
 }
 
 /*******************************************************************************/
 void
 ColorSetupController
-::ResetIndices( RgbaChannel channels )
+::ResetIndices( RgbwChannel channels )
 {
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -200,7 +200,7 @@ ColorSetupController
   // Reset current-indices of RGB channels widgets.
   for( CountType i=begin; i<end; ++i )
     {
-    RgbaChannel channel = static_cast< RgbaChannel >( i );
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
 
     VectorImageModel::Settings::ChannelVector::value_type band =
       imageModel->GetSettings().GetRgbChannel( i );
@@ -214,7 +214,7 @@ ColorSetupController
 
   //
   // Grayscale-mode.
-  if( channels==RGBA_CHANNEL_RGB )
+  if( channels==RGBW_CHANNEL_RGB )
     {
     // Activated grayscale-mode.
     colorSetupWidget->SetGrayscaleActivated(
@@ -240,12 +240,12 @@ ColorSetupController
 /*******************************************************************************/
 void
 ColorSetupController
-::OnCurrentRgbIndexChanged( RgbaChannel channel, int index )
+::OnCurrentRgbIndexChanged( RgbwChannel channel, int index )
 {
   qDebug()
     << this
     << "::OnCurrentRgbIndexChanged("
-    << RGBA_CHANNEL_NAMES[ channel ] << ", " << index
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << index
     << ")";
 
   // Get image-model.

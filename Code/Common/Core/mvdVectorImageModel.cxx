@@ -321,11 +321,16 @@ VectorImageModel
   DefaultImageType::PixelType min( histogramModel->GetMinPixel() );
   DefaultImageType::PixelType max( histogramModel->GetMaxPixel() );
 
+  CountType begin;
+  CountType end;
+
+  RgbBounds( begin, end, RGBW_CHANNEL_RGB );
+
   // Store min/max intensities of default-display channels.
-  for( CountType i=0; i<RGBA_CHANNEL_ALPHA; ++i )
+  for( CountType i=begin; i<end; ++i )
     {
     Settings::ChannelVector::value_type band =
-      GetSettings().GetChannel( static_cast< RgbaChannel >( i ) );
+      GetSettings().GetChannel( static_cast< RgbwChannel >( i ) );
 
     ParametersType::ValueType index = 2 * i;
 

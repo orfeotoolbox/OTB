@@ -86,16 +86,27 @@ class Monteverdi2_EXPORT ColorDynamicsWidget :
 // Public methods.
 public:
 
-  /** Constructor */
+  /** Constructor. */
   ColorDynamicsWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
 
-  /** Destructor */
+  /** Destructor. */
   virtual ~ColorDynamicsWidget();
 
-  /** */
-  inline const ColorBandDynamicsWidget* GetChannel( RgbaChannel ) const;
-  /** */
-  inline ColorBandDynamicsWidget* GetChannel( RgbaChannel );
+  /**
+   */
+  inline const ColorBandDynamicsWidget* GetChannel( RgbwChannel ) const;
+
+  /**
+   */
+  inline ColorBandDynamicsWidget* GetChannel( RgbwChannel );
+
+  /**
+   */
+  void SetGrayscaleActivated( bool activated );
+
+  /**
+   */
+  inline bool IsGrayscaleActivated() const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -103,19 +114,19 @@ public:
 // Signals.
 signals:
   /** */
-  void LowQuantileChanged( RgbaChannel, double );
+  void LowQuantileChanged( RgbwChannel, double );
   /** */
-  void HighQuantileChanged( RgbaChannel, double );
+  void HighQuantileChanged( RgbwChannel, double );
   /** */
-  void LowIntensityChanged( RgbaChannel, double );
+  void LowIntensityChanged( RgbwChannel, double );
   /** */
-  void HighIntensityChanged( RgbaChannel, double );
+  void HighIntensityChanged( RgbwChannel, double );
   /** */
-  void ResetIntensityClicked( RgbaChannel );
+  void ResetIntensityClicked( RgbwChannel );
   /** */
-  void ResetQuantileClicked( RgbaChannel );
+  void ResetQuantileClicked( RgbwChannel );
   /** */
-  void ApplyAllClicked( RgbaChannel, double, double );
+  void ApplyAllClicked( RgbwChannel, double, double );
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -133,6 +144,14 @@ protected:
 //
 // Private methods.
 private:
+  /**
+   * \brief Connect signals of color-band dynamics child widget to
+   * slots of this widget.
+   *
+   * \param child Color-band dynamics child widget.
+   * \param channel RGBAW channel setup of child widget.
+   */
+  void ConnectChild( ColorBandDynamicsWidget* child, RgbwChannel channel );
 
 //
 // Private attributes.
@@ -144,6 +163,10 @@ private:
    * uic generated.
    */
   Ui::ColorDynamicsWidget* m_UI;
+
+  /**
+   */
+  bool m_IsGrayscaleActivated;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -165,7 +188,7 @@ namespace mvd
 inline
 const ColorBandDynamicsWidget*
 ColorDynamicsWidget
-::GetChannel( RgbaChannel channel ) const
+::GetChannel( RgbwChannel channel ) const
 {
   return findChild< const ColorBandDynamicsWidget* >(
     ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[ channel ]
@@ -176,11 +199,20 @@ ColorDynamicsWidget
 inline
 ColorBandDynamicsWidget*
 ColorDynamicsWidget
-::GetChannel( RgbaChannel channel )
+::GetChannel( RgbwChannel channel )
 {
   return findChild< ColorBandDynamicsWidget* >(
     ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[ channel ]
   );
+}
+
+/*****************************************************************************/
+inline
+bool
+ColorDynamicsWidget
+::IsGrayscaleActivated() const
+{
+  return m_IsGrayscaleActivated;
 }
 
 /*****************************************************************************/

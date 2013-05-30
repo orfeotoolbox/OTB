@@ -72,20 +72,21 @@ namespace mvd
 /**
  * Constants identifying the video-channels.
  */
-enum RgbaChannel
+enum RgbwChannel
 {
-  RGBA_CHANNEL_NONE = -1,
+  RGBW_CHANNEL_NONE = -1,
 
-  RGBA_CHANNEL_RED = 0,
-  RGBA_CHANNEL_GREEN,
-  RGBA_CHANNEL_BLUE,
-  RGBA_CHANNEL_ALPHA,
+  RGBW_CHANNEL_RED = 0,
+  RGBW_CHANNEL_GREEN,
+  RGBW_CHANNEL_BLUE,
 
-  RGBA_CHANNEL_RGB,
+  RGBW_CHANNEL_WHITE,
 
-  RGBA_CHANNEL_ALL,
+  RGBW_CHANNEL_RGB,
 
-  RGBA_CHANNEL_COUNT,
+  RGBW_CHANNEL_ALL,
+
+  RGBW_CHANNEL_COUNT,
 };
 
 /**
@@ -93,7 +94,7 @@ enum RgbaChannel
  */
 extern
 const char*
-RGBA_CHANNEL_NAMES[ RGBA_CHANNEL_COUNT ];
+RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ];
 
 /**
  * \brief Convenience method used to compute integer indices in order
@@ -109,14 +110,14 @@ RGBA_CHANNEL_NAMES[ RGBA_CHANNEL_COUNT ];
  * - RGBA_CHANNEL_RED to select red video-channel;
  * - RGBA_CHANNEL_GREEN to select green video-channel;
  * - RGBA_CHANNEL_BLUE to select blue video-channel;
- * - RGBA_CHANNEL_ALPHA is equivalent to RGBA_CHANNEL_NONE;
+ * - RGBA_CHANNEL_WHITE is equivalent to RGBA_CHANNEL_NONE;
  * - RGBA_CHANNEL_RGB to select all RGB video-channels;
  * - RGBA_CHANNEL_ALL to select all RGB (without the alpha) video-channels.
  *
  * \return true if iteration indices have been set and loop can be
  * processed.
  */
-bool RgbBounds( CountType& begin, CountType& end, RgbaChannel channels );
+bool RgbBounds( CountType& begin, CountType& end, RgbwChannel channels );
 
 /**
  * \brief Convenience method used to compute integer indices in order
@@ -132,14 +133,14 @@ bool RgbBounds( CountType& begin, CountType& end, RgbaChannel channels );
  * - RGBA_CHANNEL_RED to select red video-channel;
  * - RGBA_CHANNEL_GREEN to select green video-channel;
  * - RGBA_CHANNEL_BLUE to select blue video-channel;
- * - RGBA_CHANNEL_ALPHA to select the alpha video-channel;
+ * - RGBA_CHANNEL_WHITE to select the white video-channel;
  * - RGBA_CHANNEL_RGB to select all RGB (without the alpha) video-channels;
  * - RGBA_CHANNEL_ALL to select all RGBA video-channels.
  *
  * \return true if iteration indices have been set and loop can be
  * processed.
  */
-bool RgbaBounds( CountType& begin, CountType& end, RgbaChannel channels );
+bool RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels );
 
 } // end namespace 'mvd'.
 
@@ -151,32 +152,33 @@ namespace mvd
 /*****************************************************************************/
 inline
 bool
-RgbBounds( CountType& begin, CountType& end, RgbaChannel channels )
+RgbBounds( CountType& begin, CountType& end, RgbwChannel channels )
 {
-  assert( channels!=RGBA_CHANNEL_COUNT );
+  assert( channels!=RGBW_CHANNEL_COUNT );
 
   switch( channels )
     {
-    case RGBA_CHANNEL_NONE:
-    case RGBA_CHANNEL_ALPHA:
-      begin = RGBA_CHANNEL_NONE;
-      end = RGBA_CHANNEL_NONE;
+    case RGBW_CHANNEL_NONE:
+    case RGBW_CHANNEL_WHITE:
+      begin = RGBW_CHANNEL_NONE;
+      end = RGBW_CHANNEL_NONE;
       break;
 
-    case RGBA_CHANNEL_RED:
-    case RGBA_CHANNEL_GREEN:
-    case RGBA_CHANNEL_BLUE:
+    case RGBW_CHANNEL_RED:
+    case RGBW_CHANNEL_GREEN:
+    case RGBW_CHANNEL_BLUE:
       begin = channels;
       end = channels + 1;
       break;
 
-    case RGBA_CHANNEL_RGB:
-    case RGBA_CHANNEL_ALL:
-      begin = RGBA_CHANNEL_RED;
-      end = RGBA_CHANNEL_ALPHA;
+    case RGBW_CHANNEL_RGB:
+    case RGBW_CHANNEL_ALL:
+      begin = RGBW_CHANNEL_RED;
+      end = RGBW_CHANNEL_WHITE;
       break;
 
     default:
+      assert( false && "Non-managed RgbwChannel value.!" );
       return false;
       break;
     }
@@ -186,36 +188,37 @@ RgbBounds( CountType& begin, CountType& end, RgbaChannel channels )
 /*****************************************************************************/
 inline
 bool
-RgbaBounds( CountType& begin, CountType& end, RgbaChannel channels )
+RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels )
 {
-  assert( channels!=RGBA_CHANNEL_COUNT );
+  assert( channels!=RGBW_CHANNEL_COUNT );
 
   switch( channels )
     {
-    case RGBA_CHANNEL_NONE:
-      begin = RGBA_CHANNEL_NONE;
-      end = RGBA_CHANNEL_NONE;
+    case RGBW_CHANNEL_NONE:
+      begin = RGBW_CHANNEL_NONE;
+      end = RGBW_CHANNEL_NONE;
       break;
 
-    case RGBA_CHANNEL_RED:
-    case RGBA_CHANNEL_GREEN:
-    case RGBA_CHANNEL_BLUE:
-    case RGBA_CHANNEL_ALPHA:
+    case RGBW_CHANNEL_RED:
+    case RGBW_CHANNEL_GREEN:
+    case RGBW_CHANNEL_BLUE:
+    case RGBW_CHANNEL_WHITE:
       begin = channels;
       end = channels + 1;
       break;
 
-    case RGBA_CHANNEL_RGB:
-      begin = RGBA_CHANNEL_RED;
-      end = RGBA_CHANNEL_ALPHA;
+    case RGBW_CHANNEL_RGB:
+      begin = RGBW_CHANNEL_RED;
+      end = RGBW_CHANNEL_WHITE;
       break;
 
-    case RGBA_CHANNEL_ALL:
-      begin = RGBA_CHANNEL_RED;
-      end = RGBA_CHANNEL_RGB;
+    case RGBW_CHANNEL_ALL:
+      begin = RGBW_CHANNEL_RED;
+      end = RGBW_CHANNEL_RGB;
       break;
 
     default:
+      assert( false && "Non-managed RgbwChannel value.!" );
       return false;
       break;
     }
