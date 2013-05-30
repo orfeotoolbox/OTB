@@ -99,7 +99,10 @@ ColorDynamicsWidget
   // Cause: prevent layout re-calculation to be resized taking RGB+W
   // into account when switching from grayscale-mode activated to
   // non-activated.
-  GetChannel( RGBW_CHANNEL_WHITE )->setVisible( false );
+  if( !activated )
+    {
+    GetChannel( RGBW_CHANNEL_WHITE )->setVisible( false );
+    }
 
   //
   // Then, show/hide relevant components.
