@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>124</width>
-    <height>99</height>
+    <width>260</width>
+    <height>288</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,6 +18,16 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
+    <widget class="QLineEdit" name="m_SearchLine">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
     <widget class="mvd::DatabaseTreeWidget" name="databaseTreeWidget">
      <column>
       <property name="text">

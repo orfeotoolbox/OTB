@@ -125,6 +125,9 @@ public slots:
 
   void OnCurrentSelectedItemDeleted();
 
+  void OnSearchBoxChanged( const QString & search );
+
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -144,8 +147,10 @@ signals:
 //
 // Protected methods.
 protected:
-
-
+  
+  /** Fill the tree using the dataset list */
+  void FillTree();
+  
 //
 // Protected attributes.
 protected:
@@ -183,8 +188,18 @@ private:
   QTreeWidgetItem* m_DatasetRootItem;
 
   /**
+   * \brief Root item of displayed datasets. It is named 'datasets'.
    */
-  QPoint m_StartDragPosition;
+  StringPairListType  m_DatasetList;
+
+  /**
+   */
+  QPoint           m_StartDragPosition;
+
+  /**
+   * \brief text to search in the widget tree
+   */
+  QString                  m_SearchText;  
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
