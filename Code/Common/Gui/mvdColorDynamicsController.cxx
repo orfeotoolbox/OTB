@@ -148,6 +148,16 @@ ColorDynamicsController
 ::ResetWidget()
 {
   //
+  // Reset color-dynamics widget mode (grayscale/RGB).
+  assert( GetModel()!=NULL && GetModel()==GetModel< VectorImageModel >() );
+  const VectorImageModel* model = GetModel< VectorImageModel >();
+
+  assert( GetWidget()!=NULL && GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
+
+  widget->SetGrayscaleActivated( model->GetSettings().IsGrayscaleActivated() );
+
+  //
   // Reset color-dynamics widget.
   ResetIntensityRanges( RGBW_CHANNEL_RGB );
 #if 1
