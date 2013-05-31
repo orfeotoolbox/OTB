@@ -141,9 +141,6 @@ PixelDescriptionWidget
 ::OnCurrentPixelValueUpdated(const VectorImageType::PixelType & currentPixel, 
                              const QStringList& bandNames)
 {
-  // 
-  assert( bandNames.size()==currentPixel.GetSize() );
-
   //
   // remove the previous QTreeWidgetItem  of m_PixelValueRootItem
   while( m_PixelValueRootItem->childCount()>0 )
@@ -162,13 +159,13 @@ PixelDescriptionWidget
     QTreeWidgetItem * iBandItem = new QTreeWidgetItem( m_PixelValueRootItem );
     
     // figure out if a band name is available, if not use Band idx
-    if ( bandNames[idx].isEmpty() )
+    if ( bandNames.size()==currentPixel.GetSize() && !bandNames[idx].isEmpty() )
       {
-      iBandItem->setText(0, QString( tr("Band") )+ QString(" %1").arg(idx) );
+      iBandItem->setText(0, bandNames[ idx ] );
       }
     else
       {
-      iBandItem->setText(0, bandNames[ idx ] );
+      iBandItem->setText(0, QString( tr("Band") )+ QString(" %1").arg(idx) );
       }
     // set the value
     iBandItem->setText(1, QString("%1").arg(currentPixel.GetElement( idx )) );
