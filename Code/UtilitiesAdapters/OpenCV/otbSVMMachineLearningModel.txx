@@ -59,7 +59,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 
   // Set up SVM's parameters
   CvTermCriteria term_crit   = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
-  CvMat* class_weights;
+  //CvMat* class_weights;
   CvSVMParams params( m_SVMType, m_KernelType, m_Degree, m_Gamma, m_Coef0, m_C, m_Nu, m_P, NULL , term_crit );
 
   // Train the SVM
@@ -87,7 +87,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   m_OutputC = m_SVMModel->get_params().C;
   m_OutputNu = m_SVMModel->get_params().nu;
   m_OutputP = m_SVMModel->get_params().p;
-  class_weights = m_SVMModel->get_params().class_weights;
+  //class_weights = m_SVMModel->get_params().class_weights;
 
 }
 

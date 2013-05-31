@@ -42,27 +42,27 @@ namespace Wrapper
     AddChoice("classifier.svm.k.sigmoid", "Sigmoid");
     SetParameterString("classifier.svm.k", "linear");
     SetParameterDescription("classifier.svm.k", "SVM Kernel Type.");
-    AddParameter(ParameterType_Float, "classifier.svm.c", "Cost parameter C");
-    SetParameterFloat("classifier.svm.c", 1.0);
+    AddParameter(ParameterType_Double, "classifier.svm.c", "Cost parameter C");
+    SetParameterDouble("classifier.svm.c", 1.0);
     SetParameterDescription(
         "classifier.svm.c",
         "SVM models have a cost parameter C (1 by default) to control the trade-off between training errors and forcing rigid margins.");
-    AddParameter(ParameterType_Float, "classifier.svm.nu",
+    AddParameter(ParameterType_Double, "classifier.svm.nu",
                  "Parameter nu of a SVM optimization problem (NU_SVC / ONE_CLASS)");
-    SetParameterFloat("classifier.svm.nu", 0.0);
+    SetParameterDouble("classifier.svm.nu", 0.0);
     SetParameterDescription("classifier.svm.nu", "Parameter nu of a SVM optimization problem.");
-    //AddParameter(ParameterType_Float, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR)");
-    //SetParameterFloat("classifier.svm.p", 0.0);
+    //AddParameter(ParameterType_Double, "classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR)");
+    //SetParameterDouble("classifier.svm.p", 0.0);
     //SetParameterDescription("classifier.svm.p", "Parameter epsilon of a SVM optimization problem (EPS_SVR).");
-    AddParameter(ParameterType_Float, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID)");
-    SetParameterFloat("classifier.svm.coef0", 0.0);
+    AddParameter(ParameterType_Double, "classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID)");
+    SetParameterDouble("classifier.svm.coef0", 0.0);
     SetParameterDescription("classifier.svm.coef0", "Parameter coef0 of a kernel function (POLY / SIGMOID).");
-    AddParameter(ParameterType_Float, "classifier.svm.gamma",
+    AddParameter(ParameterType_Double, "classifier.svm.gamma",
                  "Parameter gamma of a kernel function (POLY / RBF / SIGMOID)");
-    SetParameterFloat("classifier.svm.gamma", 1.0);
+    SetParameterDouble("classifier.svm.gamma", 1.0);
     SetParameterDescription("classifier.svm.gamma", "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
-    AddParameter(ParameterType_Float, "classifier.svm.degree", "Parameter degree of a kernel function (POLY)");
-    SetParameterFloat("classifier.svm.degree", 0.0);
+    AddParameter(ParameterType_Double, "classifier.svm.degree", "Parameter degree of a kernel function (POLY)");
+    SetParameterDouble("classifier.svm.degree", 1.0);
     SetParameterDescription("classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
     AddParameter(ParameterType_Empty, "classifier.svm.opt", "Parameters optimization");
     MandatoryOff("classifier.svm.opt");
@@ -125,12 +125,12 @@ namespace Wrapper
         std::cout << "CvSVM::C_SVC = " << CvSVM::C_SVC << std::endl;
         break;
       }
-    SVMClassifier->SetC(GetParameterFloat("classifier.svm.c"));
-    SVMClassifier->SetNu(GetParameterFloat("classifier.svm.nu"));
-    //SVMClassifier->SetP(GetParameterFloat("classifier.svm.p"));
-    SVMClassifier->SetCoef0(GetParameterFloat("classifier.svm.coef0"));
-    SVMClassifier->SetGamma(GetParameterFloat("classifier.svm.gamma"));
-    SVMClassifier->SetDegree(GetParameterFloat("classifier.svm.degree"));
+    SVMClassifier->SetC(GetParameterDouble("classifier.svm.c"));
+    SVMClassifier->SetNu(GetParameterDouble("classifier.svm.nu"));
+    //SVMClassifier->SetP(GetParameterDouble("classifier.svm.p"));
+    SVMClassifier->SetCoef0(GetParameterDouble("classifier.svm.coef0"));
+    SVMClassifier->SetGamma(GetParameterDouble("classifier.svm.gamma"));
+    SVMClassifier->SetDegree(GetParameterDouble("classifier.svm.degree"));
     if (IsParameterEnabled("classifier.svm.opt"))
     {
       SVMClassifier->SetParameterOptimization(true);
@@ -139,12 +139,12 @@ namespace Wrapper
     SVMClassifier->Save(GetParameterString("io.out"));
 
     // Update the displayed parameters in the GUI after the training process, for further use of them
-    SetParameterFloat("classifier.svm.c", static_cast<float> (SVMClassifier->GetOutputC()));
-    SetParameterFloat("classifier.svm.nu", static_cast<float> (SVMClassifier->GetOutputNu()));
-    //SetParameterFloat("classifier.svm.p", static_cast<float>(SVMClassifier->GetOutputP()));
-    SetParameterFloat("classifier.svm.coef0", static_cast<float> (SVMClassifier->GetOutputCoef0()));
-    SetParameterFloat("classifier.svm.gamma", static_cast<float> (SVMClassifier->GetOutputGamma()));
-    SetParameterFloat("classifier.svm.degree", static_cast<float> (SVMClassifier->GetOutputDegree()));
+    SetParameterDouble("classifier.svm.c", SVMClassifier->GetOutputC());
+    SetParameterDouble("classifier.svm.nu", SVMClassifier->GetOutputNu());
+    //SetParameterDouble("classifier.svm.p", SVMClassifier->GetOutputP());
+    SetParameterDouble("classifier.svm.coef0", SVMClassifier->GetOutputCoef0());
+    SetParameterDouble("classifier.svm.gamma", SVMClassifier->GetOutputGamma());
+    SetParameterDouble("classifier.svm.degree", SVMClassifier->GetOutputDegree());
   }
 
 } //end namespace wrapper
