@@ -246,6 +246,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         newParam = FloatParameter::New();
         }
         break;
+      case ParameterType_Double:
+        {
+        newParam = DoubleParameter::New();
+        }
+        break;
       case ParameterType_String:
         {
         newParam = StringParameter::New();

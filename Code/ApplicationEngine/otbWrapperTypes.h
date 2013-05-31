@@ -35,6 +35,7 @@ typedef enum
   ParameterType_Empty,
   ParameterType_Int,
   ParameterType_Float,
+  ParameterType_Double,
   ParameterType_String,
   ParameterType_StringList,
   ParameterType_InputFilename,
