@@ -324,7 +324,7 @@ VectorImageModel
   CountType begin = -1;
   CountType end = -1;
 
-  RgbBounds( begin, end, RGBW_CHANNEL_RGB );
+  mvd::RgbBounds( begin, end, RGBW_CHANNEL_RGB );
 
   // Store min/max intensities of default-display channels.
   for( CountType i=begin; i<end; ++i )

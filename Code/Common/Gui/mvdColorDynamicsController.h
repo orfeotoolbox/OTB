@@ -192,6 +192,34 @@ private:
    */
   void ResetQuantiles( RgbwChannel );
 
+  /**
+   * \brief Convenience method used to compute integer indices in order
+   * to iterate through RGB channels such as, for example:
+   * \code
+   * for( i=begin; i<end; ++i ) {}
+   * \endcode
+   *
+   * \see mvd::RgbwBounds().
+   *
+   * \param begin    The resulting first index where to begin iteration.
+   * \param end      The resulting upper-boundary index of the iteration.
+   * \param channels The channels to be iterated. Valid values are:
+   * _ RGBA_CHANNEL_NONE to select no video-channel at all;
+   * - RGBA_CHANNEL_RED to select red video-channel;
+   * - RGBA_CHANNEL_GREEN to select green video-channel;
+   * - RGBA_CHANNEL_BLUE to select blue video-channel;
+   * - RGBA_CHANNEL_WHITE is equivalent to RGBA_CHANNEL_RGB;
+   * - RGBA_CHANNEL_RGB to select all RGB video-channels;
+   * - RGBA_CHANNEL_ALL to select all RGB (without the alpha) video-channels.
+   *
+   * \return true if iteration indices have been set and loop can be
+   * processed.
+   */
+  inline
+    static bool RgbwBounds( CountType& begin,
+			    CountType& end,
+			    RgbwChannel channels );
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -272,6 +300,21 @@ private slots:
 
 namespace mvd
 {
+
+/*******************************************************************************/
+inline
+bool
+ColorDynamicsController
+::RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels )
+{
+  return mvd::RgbBounds(
+    begin, end,
+    channels==RGBW_CHANNEL_WHITE
+    ? RGBW_CHANNEL_RGB
+    : channels
+  );
+}
+
 } // end namespace 'mvd'
 
 #endif // __mvdColorDynamicsController_h

@@ -579,7 +579,13 @@ ColorDynamicsController
     );
 
   // Update quantile intensity in model.
-  settings.SetDynamicsParam( 2 * channel, intensity );
+  CountType begin = -1;
+  CountType end = -1;
+
+  RgbwBounds( begin, end, channel );
+
+  for( CountType i=begin; i<end; ++i )
+    settings.SetDynamicsParam( 2 * i, intensity );
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -628,7 +634,13 @@ ColorDynamicsController
     );
 
   // Update quantile intensity in model.
-  settings.SetDynamicsParam( 2 * channel + 1, intensity );
+  CountType begin = -1;
+  CountType end = -1;
+
+  RgbwBounds( begin, end, channel );
+
+  for( CountType i=begin; i<end; ++i )
+    settings.SetDynamicsParam( 2 * i + 1, intensity );
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -666,7 +678,13 @@ ColorDynamicsController
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Update parameter value.
-  imageModel->GetSettings().SetDynamicsParam( 2 * channel, value );
+  CountType begin = -1;
+  CountType end = -1;
+
+  RgbwBounds( begin, end, channel );
+
+  for( CountType i=begin; i<end; ++i )
+    imageModel->GetSettings().SetDynamicsParam( 2 * i, value );
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -708,7 +726,13 @@ ColorDynamicsController
   assert( imageModel->GetHistogramModel()!=NULL );
 
   // Update parameter value in model.
-  imageModel->GetSettings().SetDynamicsParam( 2 * channel + 1, value );
+  CountType begin = -1;
+  CountType end = -1;
+
+  RgbwBounds( begin, end, channel );
+
+  for( CountType i=begin; i<end; ++i )
+    imageModel->GetSettings().SetDynamicsParam( 2 * i + 1, value );
 
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
@@ -791,7 +815,7 @@ ColorDynamicsController
   CountType begin;
   CountType end;
 
-  RgbBounds( begin, end, RGBW_CHANNEL_RGB );
+  mvd::RgbBounds( begin, end, RGBW_CHANNEL_RGB );
 
   for( CountType i=begin; i<end; ++i )
     {
