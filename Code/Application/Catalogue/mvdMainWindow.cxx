@@ -451,6 +451,24 @@ MainWindow
   );
 #endif
 
+  // Connect pixel description dock-widget toggle view-action to
+  // menu-item action.
+  assert( m_PixelDescriptionDock!=NULL );
+  QObject::connect(
+    m_PixelDescriptionDock->toggleViewAction(),
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_UI->action_PixelDescription,
+    SLOT( setChecked( bool ) )
+    );
+  // and vice-versa.
+  QObject::connect(
+    m_UI->action_PixelDescription,
+    SIGNAL( toggled( bool ) ),
+    // to:
+    m_PixelDescriptionDock,
+    SLOT( setVisible( bool ) )
+  );
 }
 
 /*****************************************************************************/

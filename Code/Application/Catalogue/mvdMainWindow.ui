@@ -48,6 +48,7 @@
     <addaction name="action_ColorSetup"/>
     <addaction name="action_DatabaseBrowser"/>
     <addaction name="action_DatasetProperties"/>
+    <addaction name="action_PixelDescription"/>
     <addaction name="action_OtbApplicationsBrowser"/>
     <addaction name="action_QuicklookView"/>
     <addaction name="separator"/>
@@ -274,6 +275,17 @@
    </property>
    <property name="text">
     <string>Zoom to full resolution</string>
+   </property>
+  </action>
+  <action name="action_PixelDescription">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Pixel Desription</string>
    </property>
   </action>
  </widget>
