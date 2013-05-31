@@ -81,6 +81,22 @@ I18nApplication
 /*******************************************************************************/
 bool
 I18nApplication
+::IsResultsDirValid( const QString& path )
+{
+  QDir dir( path );
+  QFileInfo fileInfo( path );
+
+  return
+    fileInfo.exists() &&
+    fileInfo.isDir() &&
+    fileInfo.isReadable() &&
+    fileInfo.isWritable() &&
+    dir.dirName()==I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME;
+}
+
+/*******************************************************************************/
+bool
+I18nApplication
 ::MakeDirTree( const QString& path, const QString& tree, QDir* dir )
 {
   QDir pathDir( path );
@@ -295,13 +311,14 @@ I18nApplication
 
   //
   // Remember result-dir
-  StoreSettingsKey( "resultDir", QDir::cleanPath( m_ResultsDir.path() ) );
+  StoreSettingsKey( "resultsDir", QDir::cleanPath( m_ResultsDir.path() ) );
 
   //
   // Result.
   return isNew;
 }
 
+/*******************************************************************************/
 void
 I18nApplication
 ::ElevationSetup()
@@ -511,17 +528,17 @@ I18nApplication
 
   //
   // Restore result directory.
-  QVariant resultDir( RetrieveSettingsKey( "resultDir" ) );
+  QVariant resultDir( RetrieveSettingsKey( "resultsDir" ) );
 
   if( !resultDir.isNull() )
     {
     QString resultPath( resultDir.toString() );
 
-    qDebug() << "Settings/cacheDir:" << resultPath;
+    qDebug() << "Settings/resultsDir:" << resultPath;
 
-    if( I18nApplication::IsCacheDirValid(resultDir  ) )
+    if( I18nApplication::IsResultsDirValid( resultPath  ) )
       {
-      m_ResultsDir.setPath( path );
+      m_ResultsDir.setPath( resultPath );
       }
     }
 }

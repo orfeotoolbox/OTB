@@ -236,6 +236,9 @@ public:
 
   /**
    */
+  static bool IsResultsDirValid( const QString& path );
+  /**
+   */
   static bool IsDirValid( const QString& path );
 
   /**
