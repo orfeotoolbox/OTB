@@ -284,7 +284,7 @@ I18nApplication
   //
   // Remember cache-dir.
   StoreSettingsKey( "cacheDir", QDir::cleanPath( m_CacheDir.path() ) );
-
+  
   //
   // Construct result-dir path.
   I18nApplication::MakeDirTree(
@@ -292,6 +292,10 @@ I18nApplication
     I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME,
     &m_ResultsDir
   );
+
+  //
+  // Remember result-dir
+  StoreSettingsKey( "resultDir", QDir::cleanPath( m_ResultsDir.path() ) );
 
   //
   // Result.
@@ -502,6 +506,22 @@ I18nApplication
     if( I18nApplication::IsCacheDirValid( path ) )
       {
       m_CacheDir.setPath( path );
+      }
+    }
+
+  //
+  // Restore result directory.
+  QVariant resultDir( RetrieveSettingsKey( "resultDir" ) );
+
+  if( !resultDir.isNull() )
+    {
+    QString resultPath( resultDir.toString() );
+
+    qDebug() << "Settings/cacheDir:" << resultPath;
+
+    if( I18nApplication::IsCacheDirValid(resultDir  ) )
+      {
+      m_ResultsDir.setPath( path );
       }
     }
 }
