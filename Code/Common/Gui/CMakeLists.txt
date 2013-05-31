@@ -31,6 +31,7 @@ set( Common_Gui_SOURCES
   mvdDatasetPropertiesController.cxx
   mvdDatasetTreeWidgetItem.cxx
   mvdImagePlacenameLoader.cxx
+  mvdPixelDescriptionWidget.cxx
 )
 
 #############################################################################
@@ -66,6 +67,7 @@ set( Common_Gui_HEADERS_MOC
   mvdDatasetPropertiesController.h
   mvdDatasetTreeWidgetItem.h
   mvdImagePlacenameLoader.h
+  mvdPixelDescriptionWidget.h
 )
 
 #############################################################################
@@ -82,6 +84,7 @@ set( Common_Gui_FORMS
   mvdStatusBarWidget.ui
   mvdVideoColorToolBox.ui
   mvdDatasetPropertiesWidget.ui
+  mvdPixelDescriptionWidget.ui
 )
 
 # Qt resources
