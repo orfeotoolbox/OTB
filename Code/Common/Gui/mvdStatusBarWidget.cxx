@@ -87,22 +87,6 @@ StatusBarWidget
 /*******************************************************************************/
 QLabel *    
 StatusBarWidget
-::GetCurrentPixelPhysicalWidget()
-{
-  return m_UI->m_CurrentPixelPhysical;
-}
-  
-/*******************************************************************************/
-QLabel * 
-StatusBarWidget
-::GetCurrentPixelGeographicWidget()
-{
-  return m_UI->m_CurrentPixelGeographic;
-}
-
-/*******************************************************************************/
-QLabel *    
-StatusBarWidget
 ::GetCurrentPixelRadioWidget()
 {
   return m_UI->m_CurrentPixelRadio;

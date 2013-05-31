@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1344</width>
-    <height>40</height>
+    <width>779</width>
+    <height>41</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -71,57 +71,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="m_CurrentPixelPhysical">
-     <property name="minimumSize">
-      <size>
-       <width>250</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>250</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Physical: [xxx, yyy]</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="Line" name="line_3">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="m_CurrentPixelGeographic">
-     <property name="minimumSize">
-      <size>
-       <width>260</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>260</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>WGS84: [lon, lat]</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="Line" name="line">
      <property name="maximumSize">
       <size>
@@ -149,7 +98,7 @@
       </size>
      </property>
      <property name="text">
-      <string>Radiometry: [0 1 2]</string>
+      <string>Radiometry</string>
      </property>
     </widget>
    </item>

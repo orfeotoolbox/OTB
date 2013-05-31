@@ -98,8 +98,6 @@ public:
     * accessors to statusBar widgets 
     */
   QLineEdit * GetCurrentPixelIndexWidget();
-  QLabel *    GetCurrentPixelPhysicalWidget();
-  QLabel *    GetCurrentPixelGeographicWidget();
   QLabel *    GetCurrentPixelRadioWidget();
   QLineEdit * GetCurrentScaleWidget();
 

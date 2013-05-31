@@ -493,20 +493,6 @@ MainWindow
 
     QObject::connect(
       vectorImageModel,
-      SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
-      m_StatusBarWidget->GetCurrentPixelPhysicalWidget(),
-      SLOT( setText(const QString &) )
-      );
-
-    QObject::connect(
-      vectorImageModel,
-      SIGNAL( CurrentGeographicUpdated(const QString& ) ),
-      m_StatusBarWidget->GetCurrentPixelGeographicWidget(),
-      SLOT( setText(const QString &) )
-      );
-
-    QObject::connect(
-      vectorImageModel,
       SIGNAL( CurrentRadioUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelRadioWidget(),
       SLOT( setText(const QString &) )
@@ -645,20 +631,6 @@ MainWindow
       vectorImageModel,
       SIGNAL( CurrentIndexUpdated(const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelIndexWidget(),
-      SLOT( setText(const QString &) )
-      );
-
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
-      m_StatusBarWidget->GetCurrentPixelPhysicalWidget(),
-      SLOT( setText(const QString &) )
-      );
-
-    QObject::disconnect(
-      vectorImageModel,
-      SIGNAL( CurrentGeographicUpdated(const QString& ) ),
-      m_StatusBarWidget->GetCurrentPixelGeographicWidget(),
       SLOT( setText(const QString &) )
       );
 

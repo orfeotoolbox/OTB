@@ -142,8 +142,6 @@ PixelDescriptionWidget
                              const QStringList& bandNames)
 {
   // 
-  qDebug()<<this<<"::OnCurrentPixelValueUpdated currenPixel size : " <<currentPixel.GetSize()
-          << ", bandName size " << bandNames.size();
   assert( bandNames.size()==currentPixel.GetSize() );
 
   //

@@ -879,7 +879,7 @@ VectorImageModel
     if (!ToImage()->GetProjectionRef().empty())
       {
       ossPhysical.str("");
-      ossPhysical<<ToStdString( tr("Physical") )<<" : [" << Xpc <<","<< Ypc << "]";
+      ossPhysical<<"[" << Xpc <<","<< Ypc << "]";
       }
 
     //
@@ -890,7 +890,7 @@ VectorImageModel
       {
       PointType wgs84;
       wgs84 = GetGenericRSTransform()->TransformPoint(point);
-      ossGeographic <<"WGS84 : [long : "<<wgs84[0] << " , lat : " << wgs84[1];
+      ossGeographic <<"[long : "<<wgs84[0] << " , lat : " << wgs84[1];
 
       double elev = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0],wgs84[1]);
 
@@ -943,7 +943,7 @@ VectorImageModel
         currentPixel = 
           GetQuicklookModel()->ToImage()->GetPixel(currentLodIndex);
 
-        ossRadio <<"Ql "<<ToStdString( tr("Radiometry") )<<" : [ ";
+        ossRadio <<"Ql [ ";
         for (unsigned int idx = 0; idx < rgb.size(); idx++)
           {
           ossRadio <<currentPixel.GetElement(rgb[idx]) << " ";
