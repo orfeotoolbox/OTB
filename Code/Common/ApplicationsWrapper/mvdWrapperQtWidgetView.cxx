@@ -274,7 +274,7 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
 
 
 /*******************************************************************************/
-const QString &
+const QString 
 QtWidgetView::GenerateIdentifier()
 {
   //
@@ -283,6 +283,7 @@ QtWidgetView::GenerateIdentifier()
   identifier.replace("{", "");
   identifier.replace("}", "");
 
+  return identifier;
 }
 
 /*******************************************************************************/
