@@ -235,6 +235,11 @@ private:
   void ConnectStatusBar(DatasetModel * model);
   void DisconnectStatusBar(const DatasetModel * model);
 
+  /**
+   */
+  void ConnectPixelDescriptionWidget(DatasetModel * model);
+  void DisconnectPixelDescriptionWidget(const DatasetModel * model);
+
   //
   // I18nMainWindow overrides.
 
@@ -269,6 +274,12 @@ private:
    * \brief Dataset-properties dock-widget.
    */
   QDockWidget* m_DatasetPropertiesDock;
+
+  /**
+   * \brief Current Pixel Description dock-widget.
+   */
+  QDockWidget* m_PixelDescriptionDock;
+
 
 #ifdef OTB_WRAP_QT
   /**

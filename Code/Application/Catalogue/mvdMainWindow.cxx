@@ -67,6 +67,7 @@
 #include "Gui/mvdQuicklookViewManipulator.h"
 #include "Gui/mvdStatusBarWidget.h"
 #include "Gui/mvdTaskProgressDialog.h"
+#include "Gui/mvdPixelDescriptionWidget.h"
 //
 #include "mvdCatalogueApplication.h"
 #include "mvdPreferencesDialog.h"
@@ -103,6 +104,7 @@ MainWindow
   m_ColorSetupDock( NULL ),
   m_DatabaseBrowserDock( NULL ),
   m_DatasetPropertiesDock(NULL),
+  m_PixelDescriptionDock(NULL),
 #ifdef OTB_WRAP_QT
   m_OtbApplicationsBrowserDock(NULL),
 #endif
@@ -298,8 +300,6 @@ MainWindow
      SLOT( OnImageToImportDropped(const QString & ) )
      );
 
-   // Connect this model region changed with more information than the
-   // previous signal (to load previous visual context)
    // the slot OnModelImageRegionChanged(...) is not implemented for
    // QuicklookViewManipulator, connecting it here instead in
    // mvdGLImageWidget avoid a warning : 
@@ -552,6 +552,67 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
+::ConnectPixelDescriptionWidget( DatasetModel * model)
+{
+  // Access vector-image model.
+  VectorImageModel* vectorImageModel =
+    model->GetSelectedImageModel< VectorImageModel >();
+
+  // get the PixelDescription widget
+  PixelDescriptionWidget * wpixelDescription = 
+    qobject_cast<PixelDescriptionWidget*>(
+      m_PixelDescriptionDock->findChild<PixelDescriptionWidget*>()
+    );
+
+  if ( vectorImageModel && wpixelDescription )
+    {
+
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
+      wpixelDescription,
+      SLOT( OnCurrentPhysicalUpdated(const QString &) )
+      );
+
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( CurrentGeographicUpdated(const QString& ) ),
+      wpixelDescription,
+      SLOT( OnCurrentGeographicUpdated(const QString &) )
+      );
+
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( CurrentPixelValueUpdated(const VectorImageType::PixelType&, 
+                                       const QStringList& ) ),
+      wpixelDescription,
+      SLOT( OnCurrentPixelValueUpdated(const VectorImageType::PixelType&, 
+                                       const QStringList& ) )
+      );
+    }
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::DisconnectPixelDescriptionWidget( const DatasetModel * model)
+{
+  // WIP
+
+  // Access vector-image model.
+  const VectorImageModel* vectorImageModel =
+    model->GetSelectedImageModel< VectorImageModel >();
+
+  // get the PixelDescription widget
+  PixelDescriptionWidget * wpixelDescription = 
+    qobject_cast<PixelDescriptionWidget*>(
+      m_PixelDescriptionDock->findChild<PixelDescriptionWidget*>()
+    );
+}
+
+/*****************************************************************************/
+void
+MainWindow
 ::DisconnectStatusBar( const DatasetModel * model)
 {
   // Access vector-image model.
@@ -684,6 +745,19 @@ MainWindow
 
   tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
 #endif
+
+  // Pixel Description (no controller needed here / direct update of
+  // the pixel description through signals from VectorImageModel)
+  assert( m_PixelDescriptionDock==NULL );
+  m_PixelDescriptionDock =
+    AddDockWidget
+    < PixelDescriptionWidget, QDockWidget >
+    ( "CURRENT_PIXEL_DESCRIPTION",
+      tr( "Pixel Description" ),
+      Qt::LeftDockWidgetArea
+    );
+
+  tabifyDockWidget( m_DatasetPropertiesDock, m_PixelDescriptionDock );
 
   //
   // Right pane.
@@ -1195,6 +1269,9 @@ MainWindow
 
   // Disconnect the signals from the previous dataset model
   DisconnectStatusBar( datasetModel );
+
+  // Disconnect the 
+  DisconnectPixelDescriptionWidget( datasetModel );
 }
 
 /*****************************************************************************/
@@ -1219,7 +1296,9 @@ MainWindow
   // must be done before the SetImageModel (to be able to receive
   // the signal with zoom level)
   ConnectStatusBar( model );
-
+  
+  ConnectPixelDescriptionWidget( model );
+  
   // connect to get the last rendering context (to be written in Descriptor)
   if (vectorImageModel)
     {

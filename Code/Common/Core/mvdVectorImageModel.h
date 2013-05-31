@@ -413,6 +413,8 @@ signals:
   void CurrentPhysicalUpdated(const QString&);
   void CurrentGeographicUpdated(const QString&);
   void CurrentRadioUpdated(const QString&);
+  void CurrentPixelValueUpdated(const VectorImageType::PixelType &, 
+                                const QStringList& );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

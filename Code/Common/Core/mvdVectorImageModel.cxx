@@ -851,6 +851,10 @@ VectorImageModel
   std::ostringstream ossPhysical;
   std::ostringstream ossGeographic;
   std::ostringstream ossRadio;
+
+  // emitted current pixel
+  VectorImageType::PixelType currentPixel;
+  QStringList      bandNames;
   
   // the current physcial point
   PointType point;
@@ -913,7 +917,7 @@ VectorImageModel
       {
       //
       // get the pixel at current index
-      VectorImageType::PixelType currentPixel = ToImage()->GetPixel(currentLodIndex);      
+      currentPixel = ToImage()->GetPixel(currentLodIndex);      
 
       ossRadio <<ToStdString( tr("Radiometry") )<<" : [ ";
       for (unsigned int idx = 0; idx < rgb.size(); idx++)
@@ -936,7 +940,7 @@ VectorImageModel
       // Get the radiometry form the Ql
       if ( GetQuicklookModel()->ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
         {
-        VectorImageType::PixelType currentPixel = 
+        currentPixel = 
           GetQuicklookModel()->ToImage()->GetPixel(currentLodIndex);
 
         ossRadio <<"Ql "<<ToStdString( tr("Radiometry") )<<" : [ ";
@@ -946,8 +950,10 @@ VectorImageModel
           }
         ossRadio <<"]";
         }
-
       }
+
+    // update band name for the current position 
+    bandNames = GetBandNames(true);
     }
 
   // update the status bar
@@ -955,6 +961,7 @@ VectorImageModel
   emit CurrentPhysicalUpdated( QString(ossPhysical.str().c_str()) );
   emit CurrentGeographicUpdated( QString(ossGeographic.str().c_str()) );
   emit CurrentRadioUpdated( QString(ossRadio.str().c_str()) );
+  emit CurrentPixelValueUpdated( currentPixel,  bandNames);
 }
 
 /*******************************************************************************/
