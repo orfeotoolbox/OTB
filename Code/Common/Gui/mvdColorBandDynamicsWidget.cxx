@@ -119,6 +119,8 @@ ColorBandDynamicsWidget
   m_UI->lowIntensityLineEdit->setText(
     QString::number( value, 'g', m_LowIntensityValidator->decimals() )
   );
+
+  m_UI->lowIntensityLineEdit->setCursorPosition( 0 );
 }
 
 /*****************************************************************************/
@@ -137,6 +139,8 @@ ColorBandDynamicsWidget
   m_UI->highIntensityLineEdit->setText(
     QString::number( value, 'g', m_HighIntensityValidator->decimals() )
   );
+
+  m_UI->highIntensityLineEdit->setCursorPosition( 0 );
 }
 
 /*****************************************************************************/
