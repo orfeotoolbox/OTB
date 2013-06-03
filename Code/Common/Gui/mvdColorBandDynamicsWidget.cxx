@@ -50,9 +50,17 @@ ColorBandDynamicsWidget
 ::ColorBandDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::ColorBandDynamicsWidget() ),
+  m_LowIntensityValidator( NULL ),
+  m_HighIntensityValidator( NULL ),
   m_Channel( RGBW_CHANNEL_RGB )
 {
   m_UI->setupUi( this );
+
+  m_LowIntensityValidator = new QDoubleValidator( m_UI->lowIntensityLineEdit );
+  m_UI->lowIntensityLineEdit->setValidator( m_LowIntensityValidator );
+
+  m_HighIntensityValidator = new QDoubleValidator( m_UI->highIntensityLineEdit );
+  m_UI->highIntensityLineEdit->setValidator( m_HighIntensityValidator );
 }
 
 /*******************************************************************************/
@@ -61,13 +69,12 @@ ColorBandDynamicsWidget
 {
 }
 
-
 /*****************************************************************************/
 double
 ColorBandDynamicsWidget
 ::GetMinIntensity() const
 {
-  return m_UI->lowIntensitySpinBox->minimum();
+  return m_UI->lowIntensityLineEdit->text().toDouble();
 }
 
 /*****************************************************************************/
@@ -75,8 +82,8 @@ void
 ColorBandDynamicsWidget
 ::SetMinIntensity( double value )
 {
-  m_UI->lowIntensitySpinBox->setMinimum( value );
-  m_UI->highIntensitySpinBox->setMinimum( value );
+  m_LowIntensityValidator->setBottom( value );
+  m_HighIntensityValidator->setBottom( value );
 }
 
 /*****************************************************************************/
@@ -84,7 +91,7 @@ double
 ColorBandDynamicsWidget
 ::GetMaxIntensity() const
 {
-  return m_UI->highIntensitySpinBox->maximum();
+  return m_LowIntensityValidator->bottom();
 }
 
 /*****************************************************************************/
@@ -92,8 +99,8 @@ void
 ColorBandDynamicsWidget
 ::SetMaxIntensity( double value )
 {
-  m_UI->lowIntensitySpinBox->setMaximum( value );
-  m_UI->highIntensitySpinBox->setMaximum( value );
+  m_LowIntensityValidator->setTop( value );
+  m_HighIntensityValidator->setTop( value );
 }
 
 /*****************************************************************************/
@@ -101,7 +108,7 @@ double
 ColorBandDynamicsWidget
 ::GetLowIntensity() const
 {
-  return m_UI->lowIntensitySpinBox->value();
+  return m_HighIntensityValidator->top();
 }
 
 /*****************************************************************************/
@@ -109,7 +116,9 @@ void
 ColorBandDynamicsWidget
 ::SetLowIntensity( double value )
 {
-  m_UI->lowIntensitySpinBox->setValue( value );
+  m_UI->lowIntensityLineEdit->setText(
+    QString::number( value, 'g', m_LowIntensityValidator->decimals() )
+  );
 }
 
 /*****************************************************************************/
@@ -117,7 +126,7 @@ double
 ColorBandDynamicsWidget
 ::GetHighIntensity() const
 {
-  return m_UI->highIntensitySpinBox->value();
+  return m_UI->highIntensityLineEdit->text().toDouble();
 }
 
 /*****************************************************************************/
@@ -125,7 +134,9 @@ void
 ColorBandDynamicsWidget
 ::SetHighIntensity( double value )
 {
-  m_UI->highIntensitySpinBox->setValue( value );
+  m_UI->highIntensityLineEdit->setText(
+    QString::number( value, 'g', m_HighIntensityValidator->decimals() )
+  );
 }
 
 /*****************************************************************************/

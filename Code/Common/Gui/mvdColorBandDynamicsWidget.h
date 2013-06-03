@@ -129,6 +129,7 @@ public:
 
   /** */
   RgbwChannel GetChannelLabel() const;
+
   /** */
   void SetChannelLabel( RgbwChannel );
 
@@ -207,6 +208,14 @@ private:
    * uic generated.
    */
   Ui::ColorBandDynamicsWidget* m_UI;
+
+  /**
+   */
+  QDoubleValidator* m_LowIntensityValidator;
+
+  /**
+   */
+  QDoubleValidator* m_HighIntensityValidator;
 
   /** */
   RgbwChannel m_Channel;
