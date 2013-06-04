@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Monteverdi2 Catalogue
+Name[fr_FR]=Catalogue Monteverdi2
+GenericName=Image processing
+Comment=Remote sensing image processing application based on OrfeoToolbox
+TryExec=/usr/bin/mvd2-catalogue
+Exec=/usr/bin/mvd2-catalogue %F
+Terminal=false
+StartupNotify=false
+Icon=monteverdi2
+Categories=Education;Science;ImageProcessing;Geography;Qt;
+MimeType=image/tiff;image/jpeg;image/jp2;application/x-esri-shape;
