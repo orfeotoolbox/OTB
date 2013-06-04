@@ -30,7 +30,7 @@ install(FILES Icons/monteverdi2-32x32.xpm
 # -------------------------
 # Install freedesktop entry
 
-install(FILES mvd2-viewer.desktop
+install(FILES mvd2-viewer.desktop mvd2-catalogue.desktop
         DESTINATION share/applications
         COMPONENT Resources)
 
