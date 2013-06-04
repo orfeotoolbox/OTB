@@ -52,7 +52,11 @@ public:
   /** Set the value */
   void SetValue(StringListType sList)
   {
-    m_Value = sList;
+    m_Value.clear();
+    for(unsigned int i=0; i<sList.size(); i++)
+      {
+      m_Value.push_back(sList[i]);
+      }
   }
 
   void AddString(std::string value)

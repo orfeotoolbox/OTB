@@ -38,18 +38,13 @@ public:
   QtWidgetStringListParameter(StringListParameter*, QtWidgetModel*);
   virtual ~QtWidgetStringListParameter();
 
-
 signals:
   void Change();
 
 protected slots:
   void SetString( const QString& value );
-  //virtual void SelectString();
-  virtual void UpString();
-  virtual void DownString();
   virtual void AddString();
   virtual void SupressString();
-  virtual void EraseString();
   virtual void UpdateStringList();
 
 private:
@@ -60,15 +55,12 @@ private:
 
   virtual void DoUpdateGUI();
 
-  void SetValue(const QString& value);
-  void RecreateStringList();
-  void UpdateStringList( std::map<unsigned int, unsigned int> idMap );
-
   StringListParameter::Pointer m_StringListParam;
 
   QHBoxLayout * m_HLayout;
   QVBoxLayout * m_StringLayout;
   QScrollArea * m_Scroll;
+
   std::vector<QtStringSelectionWidget *> m_LineEditList;
 };
 
