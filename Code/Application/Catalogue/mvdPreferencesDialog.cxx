@@ -67,8 +67,6 @@ PreferencesDialog
 ::PreferencesDialog( QWidget* parent, Qt::WindowFlags flags ) :
   QDialog( parent ),
   m_UI( new mvd::Ui::PreferencesDialog() ),
-  m_CacheDirRoot(),
-  m_CacheDirRootModified(false),
   m_ElevationSetupModified(false)
 {
   m_UI->setupUi( this );
@@ -120,44 +118,6 @@ PreferencesDialog
 /*******************************************************************************/
 void
 PreferencesDialog
-::on_cacheDirButton_clicked()
-{ 
-  while (true)
-    {
-    QString cacheDirStr = QFileDialog::getExistingDirectory(
-        this,
-        tr("Select the repository to store the cache repository for Monteverdi2"),
-        QDir::homePath());
-    if (cacheDirStr.isEmpty())
-      { // User push default button => don't modify the value
-      break;
-      }
-    else
-      { // User select something, test if it is correct
-      if ( I18nApplication::Instance()->IsCacheDirValid( cacheDirStr ) )
-        {
-        m_CacheDirRootModified = true;
-        m_CacheDirRoot = cacheDirStr;
-        QDir displayedDir (cacheDirStr);
-        QDir treeDir(
-	  displayedDir.filePath( I18nApplication::DEFAULT_CACHE_DIR_NAME )
-	);
-        m_UI->cacheDirPathLineEdit->setText(treeDir.absolutePath());
-        break;
-        }
-      else
-        {
-        QMessageBox::warning( this,
-            tr("Warning"),
-            tr("This repository '%1' seems incorrect to store the cache directory."
-               "\nPlease choose another one.").arg(cacheDirStr) );
-        }
-      }
-    }
-}
-
-void
-PreferencesDialog
 ::on_buttonBox_accepted()
 {
 //
@@ -192,7 +152,7 @@ PreferencesDialog
   close();
 }
 
-
+/*******************************************************************************/
 void PreferencesDialog
 ::on_srtmCheckbox_clicked()
 {

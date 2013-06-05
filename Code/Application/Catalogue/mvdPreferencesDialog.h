@@ -120,10 +120,6 @@ private:
    */
   Ui::PreferencesDialog* m_UI;
 
-  QString m_CacheDirRoot;
-
-  bool m_CacheDirRootModified;
-
   bool m_ElevationSetupModified;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -131,11 +127,6 @@ private:
 //
 // Slots.
 private slots:
-  /**
-   * \brief Qt auto-connected slot which is called when datasetPathButton menu
-   * action is activated.
-   */
-  void on_cacheDirButton_clicked();
 
   /**
    * \brief Qt auto-connected slot which is called when datasetPathButton menu
