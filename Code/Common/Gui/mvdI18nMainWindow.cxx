@@ -51,6 +51,23 @@ namespace mvd
   Context comment for translator.
 */
 
+
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+namespace
+{
+} // end of anonymous namespace.
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+QDir
+I18nMainWindow::m_LastAcceptedDir( QDir::home().path() );
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+
 /*****************************************************************************/
 I18nMainWindow
 ::I18nMainWindow( QWidget* parent, Qt::WindowFlags flags ) :

@@ -98,6 +98,111 @@ public:
    */
   void SetupCacheDir();
 
+  /**
+   * \brief This is a convenience static method that will return an
+   * existing directory path selected by the user.
+   *
+   * This method stores the last accepted directory for next call.
+   *
+   * \see http://qt-project.org/doc/qt-4.8/qfiledialog.html#getExistingDirectory
+   *
+   * \param parent Parent widget of that QFileDialog.
+   * \param caption Title-bar caption of that QFileDialog.
+   * \param dir Directory location where to pick path.
+   * \param options of that QFileDialog.
+   *
+   * \return The selected path or an null QString if QFileDialog has
+   * been rejected.
+   */
+  static inline
+    QString
+    GetExistingDirectory( QWidget* parent =0,
+			  const QString& caption =QString(),
+			  const QString& dir = QString(),
+			  QFileDialog::Options options =QFileDialog::ShowDirsOnly
+    );
+
+  /**
+   * \brief This is a convenience static method that will return an
+   * existing filename selected by the user.
+   *
+   * This method stores the last accepted directory for next call.
+   *
+   * \see http://qt-project.org/doc/qt-4.8/qfiledialog.html#getOpenFileName
+   *
+   * \param parent Parent widget of that QFileDialog.
+   * \param caption Title-bar caption of that QFileDialog.
+   * \param dir Directory location where to pick path.
+   * \param filter Filename filter (e.g. wildcards).
+   * \param selectedFilter Filter which has been selected by the user.
+   * \param options Options of that QFileDialog.
+   *
+   * \return The selected filename or an null QString if QFileDialog has
+   * been rejected.
+   */
+  static inline
+    QString
+    GetOpenFileName( QWidget* parent =0,
+		     const QString& caption =QString(),
+		     const QString& dir = QString(),
+		     const QString& filter = QString(),
+		     QString* selectedFilter =0,
+		     QFileDialog::Options options =0 );
+
+  /**
+   * \brief This is a convenience static method that will return a
+   * list of existing filenames selected by the user.
+   *
+   * This method stores the last accepted directory for next call.
+   *
+   * \see http://qt-project.org/doc/qt-4.8/qfiledialog.html#getOpenFileNames
+   *
+   * \param parent Parent widget of that QFileDialog.
+   * \param caption Title-bar caption of that QFileDialog.
+   * \param dir Directory location where to pick path.
+   * \param filter Filename filter (e.g. wildcards).
+   * \param selectedFilter Filter which has been selected by the user.
+   * \param options of that QFileDialog.
+   *
+   * \return The selected filename list or an empty QStringLIst if
+   * QFileDialog has been rejected.
+   */
+  static inline
+    QStringList
+    GetOpenFileNames( QWidget* parent =0,
+		      const QString& caption =QString(),
+		      const QString& dir =QString(),
+		      const QString& filter =QString(),
+		      QString* selectedFilter =0,
+		      QFileDialog::Options options =0 );
+
+  /**
+   * \brief This is a convenience static method that will return a
+   * filename selected by the user. This file does not have to exist.
+   *
+   * This method stores the last accepted directory for next call.
+   *
+   * \see http://qt-project.org/doc/qt-4.8/qfiledialog.html#getSaveFileName
+   *
+   * \param parent Parent widget of that QFileDialog.
+   * \param caption Title-bar caption of that QFileDialog.
+   * \param dir Directory location where to pick path.
+   * \param filter Filename filter (e.g. wildcards).
+   * \param selectedFilter Filter which has been selected by the user.
+   * \param options of that QFileDialog.
+   *
+   * \return The selected filename list or an empty QStringLIst if
+   * QFileDialog has been rejected.
+   */
+  static inline
+    QString
+    GetSaveFileName( QWidget* parent =0,
+		     const QString& caption =QString(),
+		     const QString& dir =QString(),
+		     const QString& filter =QString(),
+		     QString* selectedFilter =0,
+		     QFileDialog::Options options =0 );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -203,6 +308,11 @@ private:
 //
 // Private attributes.
 private:
+
+  /**
+   * \brief Holds the last location accepted using QFileDialog.
+   */
+  static QDir m_LastAcceptedDir;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -333,6 +443,98 @@ I18nMainWindow
   );
 
   return dockWidget;
+}
+
+/*****************************************************************************/
+inline
+QString
+I18nMainWindow
+::GetExistingDirectory( QWidget* parent,
+			const QString& caption,
+			const QString& dir,
+			QFileDialog::Options options )
+{
+  QString path(
+    QFileDialog::getExistingDirectory(
+      parent, caption, dir, options
+    )
+  );
+
+  if( !path.isNull() )
+    I18nMainWindow::m_LastAcceptedDir.setPath( path );
+
+  return path;
+}
+
+/*****************************************************************************/
+inline
+QString
+I18nMainWindow
+::GetOpenFileName( QWidget* parent,
+		   const QString& caption,
+		   const QString& dir,
+		   const QString& filter,
+		   QString* selectedFilter,
+		   QFileDialog::Options options )
+{
+  QString filename(
+    QFileDialog::getOpenFileName(
+      parent, caption, dir, filter, selectedFilter, options
+    )
+  );
+
+  if( !filename.isNull() )
+    I18nMainWindow::m_LastAcceptedDir.setPath( QFileInfo( filename ).path() );
+
+  return filename;
+}
+
+/*****************************************************************************/
+inline
+QStringList
+I18nMainWindow
+::GetOpenFileNames( QWidget* parent,
+		    const QString& caption,
+		    const QString& dir,
+		    const QString& filter,
+		    QString* selectedFilter,
+		    QFileDialog::Options options )
+{
+  QStringList filenames(
+    QFileDialog::getOpenFileName(
+      parent, caption, dir, filter, selectedFilter, options
+    )
+  );
+
+  if( !filenames.isEmpty() )
+    I18nMainWindow::m_LastAcceptedDir.setPath(
+      QFileInfo( filenames[ 0 ] ).path()
+    );
+
+  return filenames;
+}
+
+/*****************************************************************************/
+inline
+QString
+I18nMainWindow
+::GetSaveFileName( QWidget* parent,
+		   const QString& caption,
+		   const QString& dir,
+		   const QString& filter,
+		   QString* selectedFilter,
+		   QFileDialog::Options options )
+{
+  QString filename(
+    QFileDialog::getSaveFileName(
+      parent, caption, dir, filter, selectedFilter, options
+    )
+  );
+
+  if( !filename.isNull() )
+    I18nMainWindow::m_LastAcceptedDir.setPath( QFileInfo( filename ).path() );
+
+  return filename;
 }
 
 } // end namespace 'mvd'
