@@ -225,8 +225,8 @@ private:
 //
 // Slots.
 private slots:
-  void on_lowIntensitySpinBox_valueChanged( double );
-  void on_highIntensitySpinBox_valueChanged( double );
+  void on_lowIntensityLineEdit_textChanged( const QString& );
+  void on_highIntensityLineEdit_textChanged( const QString& );
 
   void on_lowQuantileSpinBox_valueChanged( double );
   void on_highQuantileSpinBox_valueChanged( double );

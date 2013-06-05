@@ -307,12 +307,16 @@ bool
 ColorDynamicsController
 ::RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels )
 {
+#if 0
   return mvd::RgbBounds(
     begin, end,
     channels==RGBW_CHANNEL_WHITE
     ? RGBW_CHANNEL_RGB
     : channels
   );
+#else
+  return mvd::RgbwBounds( begin, end, channels );
+#endif
 }
 
 } // end namespace 'mvd'

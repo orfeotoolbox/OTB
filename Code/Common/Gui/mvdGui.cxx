@@ -56,12 +56,12 @@ namespace mvd
 
 const char*
 RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ] = {
-  "RGBA_CHANNEL_RED",
-  "RGBA_CHANNEL_GREEN",
-  "RGBA_CHANNEL_BLUE",
-  "RGBA_CHANNEL_WHITE",
-  "RGBA_CHANNEL_RGB",
-  "RGBA_CHANNEL_ALL"
+  "RGBW_CHANNEL_RED",
+  "RGBW_CHANNEL_GREEN",
+  "RGBW_CHANNEL_BLUE",
+  "RGBW_CHANNEL_WHITE",
+  "RGBW_CHANNEL_RGB",
+  "RGBW_CHANNEL_ALL"
 };
 
 /*******************************************************************************/

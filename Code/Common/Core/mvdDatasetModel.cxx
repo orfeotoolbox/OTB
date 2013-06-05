@@ -430,7 +430,6 @@ DatasetModel
 {
   // local variable
   PointType center;
-  double    zoom;
    
   // loop on dataset elements
   for( QDomElement viewElt( m_Descriptor->FirstImageViewContextElement() );
@@ -494,9 +493,6 @@ DatasetModel
     {
     if( ( *it )->IsModified() )
       {
-      const VectorImageModel* vim =
-	qobject_cast< const VectorImageModel* >( *it );
-
       return true;
       }
     }

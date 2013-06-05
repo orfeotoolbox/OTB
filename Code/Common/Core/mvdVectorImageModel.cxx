@@ -329,18 +329,18 @@ VectorImageModel
   // Store min/max intensities of default-display channels.
   for( CountType i=begin; i<end; ++i )
     {
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
+
     Settings::ChannelVector::value_type band =
-      GetSettings().GetChannel( static_cast< RgbwChannel >( i ) );
+      GetSettings().GetRgbwChannel( channel );
 
-    ParametersType::ValueType index = 2 * i;
-
-    GetSettings().SetDynamicsParam(
-      index,
+    GetSettings().SetLowIntensity(
+      channel,
       histogramModel->Quantile( band , 0.02, BOUND_LOWER )
     );
 
-    GetSettings().SetDynamicsParam(
-      index + 1,
+    GetSettings().SetHighIntensity(
+      channel,
       histogramModel->Quantile( band , 0.02, BOUND_UPPER )
     );
     }
@@ -809,7 +809,7 @@ VectorImageModel
     m_RenderingFilter->GetRenderingFunction();
 
   Settings::ChannelVector rgb;
-  GetSettings().GetChannels( rgb );
+  GetSettings().GetRgbwChannels( rgb );
 
   renderingFunc->SetChannelList( rgb );
   renderingFunc->SetParameters( GetSettings().GetDynamicsParams() );
@@ -911,7 +911,7 @@ VectorImageModel
     //
     // Display the radiometry of the displayed channels
     Settings::ChannelVector rgb;
-    GetSettings().GetChannels( rgb );
+    GetSettings().GetRgbwChannels( rgb );
 
     if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
       {

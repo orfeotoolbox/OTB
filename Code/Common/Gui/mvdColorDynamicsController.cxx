@@ -159,12 +159,14 @@ ColorDynamicsController
 
   //
   // Reset color-dynamics widget.
-  ResetIntensityRanges( RGBW_CHANNEL_RGB );
-#if 1
-  SetIntensities( RGBW_CHANNEL_RGB );
-#else
-  ResetQuantiles( RGBW_CHANNEL_RGB );
-#endif
+
+  // Set intensities based on applied quantiles (restoring
+  // dataset-descriptor settings).
+  SetIntensities(
+    model->GetSettings().IsGrayscaleActivated()
+    ? RGBW_CHANNEL_WHITE
+    : RGBW_CHANNEL_RGB
+  );
 }
 
 /*******************************************************************************/
@@ -252,7 +254,7 @@ ColorDynamicsController
   CountType begin = -1;
   CountType end = -1;
 
-  if( !mvd::RgbBounds( begin, end, channels ) )
+  if( !RgbwBounds( begin, end, channels ) )
     return;
 
   //
@@ -289,11 +291,11 @@ ColorDynamicsController
       colorDynamicsWidget->GetChannel( channel );
 
     DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.GetChannel( channel ) ]
+      minPx[ settings.GetRgbwChannel( channel ) ]
     );
 
     DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.GetChannel( channel ) ]
+      maxPx[ settings.GetRgbwChannel( channel ) ]
     );
 
     // Block widget's signals...
@@ -320,7 +322,7 @@ ColorDynamicsController
   CountType begin = -1;
   CountType end = -1;
 
-  if( !mvd::RgbBounds( begin, end, channels ) )
+  if( !RgbwBounds( begin, end, channels ) )
     return;
 
   //
@@ -359,11 +361,11 @@ ColorDynamicsController
       colorDynamicsWidget->GetChannel( channel );
 
     DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.GetChannel( channel ) ]
+      minPx[ settings.GetRgbwChannel( channel ) ]
     );
 
     DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.GetChannel( channel ) ]
+      maxPx[ settings.GetRgbwChannel( channel ) ]
     );
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
@@ -392,7 +394,7 @@ ColorDynamicsController
   CountType begin = -1;
   CountType end = -1;
 
-  if( !mvd::RgbBounds( begin, end, channels ) )
+  if( !RgbwBounds( begin, end, channels ) )
     return;
 
   //
@@ -403,17 +405,6 @@ ColorDynamicsController
   // Access image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
-
-  /*
-  //
-  // Access histogram from generic image-model.
-  const HistogramModel* histogramModel = imageModel->GetHistogramModel();
-  assert( histogramModel!=NULL );
-
-  // Get min/max pixels.
-  DefaultImageType::PixelType minPx( histogramModel->GetMinPixel() );
-  DefaultImageType::PixelType maxPx( histogramModel->GetMaxPixel() );
-  */
 
   // Get image rengering settings.
   const VectorImageModel::Settings& settings = imageModel->GetSettings();
@@ -432,8 +423,8 @@ ColorDynamicsController
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
 
-    ParametersType::ValueType low = settings.GetDynamicsParam( 2 * channel );
-    ParametersType::ValueType hi = settings.GetDynamicsParam( 2 * channel + 1 );
+    ParametersType::ValueType low = settings.GetLowIntensity( channel );
+    ParametersType::ValueType hi = settings.GetHighIntensity( channel );
 
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
@@ -462,7 +453,7 @@ ColorDynamicsController
   CountType begin = -1;
   CountType end = -1;
 
-  if( !mvd::RgbBounds( begin, end, channels ) )
+  if( !RgbwBounds( begin, end, channels ) )
     return;
 
   //
@@ -514,7 +505,6 @@ ColorDynamicsController
 
   //
   // Reset color-dynamics widget.
-  ResetIntensityRanges( channel );
   ResetQuantiles( channel );
 
   // Signal model has been updated.
@@ -532,8 +522,7 @@ ColorDynamicsController
 
   //
   // Reset color-dynamics widget.
-  ResetIntensityRanges( RGBW_CHANNEL_RGB );
-  ResetQuantiles( RGBW_CHANNEL_RGB );
+  ResetQuantiles( RGBW_CHANNEL_WHITE );
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -554,8 +543,11 @@ ColorDynamicsController
 
   //
   // Reset color-dynamics widget.
-  ResetIntensityRanges( RGBW_CHANNEL_RGB );
-  ResetQuantiles( RGBW_CHANNEL_RGB );
+  ResetQuantiles(
+    activated
+    ? RGBW_CHANNEL_WHITE
+    : RGBW_CHANNEL_RGB
+  );
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -572,6 +564,14 @@ ColorDynamicsController
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
 
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !RgbwBounds( begin, end, channel ) )
+    return;
+
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
@@ -580,37 +580,42 @@ ColorDynamicsController
   // Reference settings.
   VectorImageModel::Settings& settings = imageModel->GetSettings();
 
-  // Calculate quantile intensity.
-  HistogramModel::MeasurementType intensity =
-    imageModel->GetHistogramModel()->Quantile(
-      settings.GetChannel( channel ),
-      0.01 * value,
-      BOUND_LOWER
-    );
-
-  // Update quantile intensity in model.
-  CountType begin = -1;
-  CountType end = -1;
-
-  RgbwBounds( begin, end, channel );
-
-  for( CountType i=begin; i<end; ++i )
-    settings.SetDynamicsParam( 2 * i, intensity );
-
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
   assert( colorDynWgt!=NULL );
 
-  ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel( channel );
-  assert( colorBandDynWgt!=NULL );
+  // Update quantile intensity in model.
+  for( CountType i=begin; i<end; ++i )
+    {
+    // RGB/W Channel.
+    RgbwChannel chan = static_cast< RgbwChannel >( i );
 
-  // Block widget signals to prevent recursive signal/slot loops.
-  colorBandDynWgt->blockSignals( true );
-  {
-  // Refresh low-intensity display.
-  colorBandDynWgt->SetLowIntensity( intensity );
-  }
-  colorBandDynWgt->blockSignals( false );
+    // Calculate quantile intensity.
+    HistogramModel::MeasurementType intensity =
+      imageModel->GetHistogramModel()->Quantile(
+	settings.GetRgbwChannel( chan ),
+	0.01 * value,
+	BOUND_LOWER
+      );
+
+    // Set intensity.
+    settings.SetLowIntensity( chan, intensity );
+
+    // Access color-band widget.
+    ColorBandDynamicsWidget* colorBandDynWgt =
+      colorDynWgt->GetChannel( chan );
+
+    // check pointer.
+    assert( colorBandDynWgt!=NULL );
+
+    // Block widget signals to prevent recursive signal/slot loops.
+    colorBandDynWgt->blockSignals( true );
+    {
+    // Refresh low-intensity display.
+    colorBandDynWgt->SetLowIntensity( intensity );
+    }
+    colorBandDynWgt->blockSignals( false );
+    }
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -624,8 +629,16 @@ ColorDynamicsController
   qDebug()
     << this
     << "::OnHighQuantileChanged("
-    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value <<
-    ")";
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
+    << ")";
+
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !RgbwBounds( begin, end, channel ) )
+    return;
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -635,37 +648,42 @@ ColorDynamicsController
   // Reference settings.
   VectorImageModel::Settings& settings = imageModel->GetSettings();
 
-  // Calculate quantile intensity.
-  HistogramModel::MeasurementType intensity =
-    imageModel->GetHistogramModel()->Quantile(
-      settings.GetChannel( channel ),
-      0.01 * value,
-      BOUND_UPPER
-    );
-
-  // Update quantile intensity in model.
-  CountType begin = -1;
-  CountType end = -1;
-
-  RgbwBounds( begin, end, channel );
-
-  for( CountType i=begin; i<end; ++i )
-    settings.SetDynamicsParam( 2 * i + 1, intensity );
-
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
   assert( colorDynWgt!=NULL );
 
-  ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel( channel );
-  assert( colorBandDynWgt!=NULL );
+  // Update quantile intensity in model.
+  for( CountType i=begin; i<end; ++i )
+    {
+    // RGB/W Channel.
+    RgbwChannel chan = static_cast< RgbwChannel >( i );
 
-  // Block widget signals to prevent recursive signal/slot loops.
-  colorBandDynWgt->blockSignals( true );
-  {
-  // Refresh low-intensity display.
-  colorBandDynWgt->SetHighIntensity( intensity );
-  }
-  colorBandDynWgt->blockSignals( false );
+    // Calculate quantile intensity.
+    HistogramModel::MeasurementType intensity =
+      imageModel->GetHistogramModel()->Quantile(
+	settings.GetRgbwChannel( chan ),
+	0.01 * value,
+	BOUND_UPPER
+      );
+
+    // Set intensity.
+    settings.SetHighIntensity( chan, intensity );
+
+    // Access color-band widget.
+    ColorBandDynamicsWidget* colorBandDynWgt =
+      colorDynWgt->GetChannel( chan );
+
+    // check pointer.
+    assert( colorBandDynWgt!=NULL );
+
+    // Block widget signals to prevent recursive signal/slot loops.
+    colorBandDynWgt->blockSignals( true );
+    {
+    // Refresh high-intensity display.
+    colorBandDynWgt->SetHighIntensity( intensity );
+    }
+    colorBandDynWgt->blockSignals( false );
+    }
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -682,38 +700,46 @@ ColorDynamicsController
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
 
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !RgbwBounds( begin, end, channel ) )
+    return;
+
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
   assert( imageModel->GetHistogramModel()!=NULL );
 
-  // Update parameter value.
-  CountType begin = -1;
-  CountType end = -1;
-
-  RgbwBounds( begin, end, channel );
-
-  for( CountType i=begin; i<end; ++i )
-    imageModel->GetSettings().SetDynamicsParam( 2 * i, value );
-
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
   assert( colorDynWgt );
 
-  ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel( channel );
+  // Update parameter value.
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbwChannel chan = static_cast< RgbwChannel >( i );
 
-  // Block widget signals to prevent recursive signal/slot loops.
-  colorBandDynWgt->blockSignals( true );
-  {
-  // Refresh quantile display.
-  colorBandDynWgt->SetLowQuantile(
-    100.0 * imageModel->GetHistogramModel()->Percentile(
-      imageModel->GetSettings().GetChannel( channel ),
-      value,
-      BOUND_LOWER )
-  );
-  }
-  colorBandDynWgt->blockSignals( false );
+    imageModel->GetSettings().SetLowIntensity( chan, value );
+
+    ColorBandDynamicsWidget* colorBandDynWgt =
+      colorDynWgt->GetChannel( chan );
+
+    // Block widget signals to prevent recursive signal/slot loops.
+    colorBandDynWgt->blockSignals( true );
+    {
+    // Refresh quantile display.
+    colorBandDynWgt->SetLowQuantile(
+      100.0 * imageModel->GetHistogramModel()->Percentile(
+	imageModel->GetSettings().GetRgbwChannel( chan ),
+	value,
+	BOUND_LOWER )
+    );
+    }
+    colorBandDynWgt->blockSignals( false );
+    }
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -730,38 +756,47 @@ ColorDynamicsController
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
 
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !RgbwBounds( begin, end, channel ) )
+    return;
+
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
   assert( imageModel->GetHistogramModel()!=NULL );
 
-  // Update parameter value in model.
-  CountType begin = -1;
-  CountType end = -1;
-
-  RgbwBounds( begin, end, channel );
-
-  for( CountType i=begin; i<end; ++i )
-    imageModel->GetSettings().SetDynamicsParam( 2 * i + 1, value );
-
   // Get color-dynamics widgets.
   ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
   assert( colorDynWgt );
 
-  ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel( channel );
+  // Update parameter value.
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbwChannel chan = static_cast< RgbwChannel >( i );
 
-  // Block widget signals to prevent recursive signal/slot loops.
-  colorBandDynWgt->blockSignals( true );
-  {
-  // Refresh quantile display.
-  colorBandDynWgt->SetHighQuantile(
-    100.0 * imageModel->GetHistogramModel()->Percentile(
-      imageModel->GetSettings().GetChannel( channel ),
-      value,
-      BOUND_UPPER )
-  );
-  }
-  colorBandDynWgt->blockSignals( false );
+    imageModel->GetSettings().SetHighIntensity( chan, value );
+
+    ColorBandDynamicsWidget* colorBandDynWgt =
+      colorDynWgt->GetChannel( chan );
+
+    // Block widget signals to prevent recursive signal/slot loops.
+    colorBandDynWgt->blockSignals( true );
+    {
+    // Refresh quantile display.
+    colorBandDynWgt->SetHighQuantile(
+      100.0 * imageModel->GetHistogramModel()->Percentile(
+	imageModel->GetSettings().GetRgbwChannel( chan ),
+	value,
+	BOUND_UPPER
+      )
+    );
+    }
+    colorBandDynWgt->blockSignals( false );
+    }
 
   // Signal model has been updated.
   emit ModelUpdated();
@@ -776,11 +811,7 @@ ColorDynamicsController
     << this
     << "::OnResetIntensityClicked(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
-  ResetIntensities(
-    channel==RGBW_CHANNEL_WHITE
-    ? RGBW_CHANNEL_RGB
-    : channel
-  );
+  ResetIntensities( channel );
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
@@ -795,11 +826,7 @@ ColorDynamicsController
     << this
     << "::OnResetQuantileChanged(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
-  ResetQuantiles(
-    channel==RGBW_CHANNEL_WHITE
-    ? RGBW_CHANNEL_RGB
-    : channel
-  );
+  ResetQuantiles( channel );
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
@@ -829,9 +856,15 @@ ColorDynamicsController
 
   for( CountType i=begin; i<end; ++i )
     {
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
+
+    VectorImageModel::Settings::ChannelVector::value_type band(
+      settings.GetRgbwChannel( channel )
+    );
+
     HistogramModel::MeasurementType lintensity =
       imageModel->GetHistogramModel()->Quantile(
-        settings.GetChannel( i ),
+        band,
         0.01 * low,
         BOUND_LOWER
     );
@@ -839,14 +872,14 @@ ColorDynamicsController
     // Calculate quantile intensity.
     HistogramModel::MeasurementType uintensity =
       imageModel->GetHistogramModel()->Quantile(
-        settings.GetChannel( i ),
+        band,
         0.01 * high,
         BOUND_UPPER
     );
 
     // Update quantile intensity in model.
-    settings.SetDynamicsParam( 2 * i, lintensity );
-    settings.SetDynamicsParam( 2 * i + 1, uintensity );
+    settings.SetLowIntensity( channel, lintensity );
+    settings.SetHighIntensity( channel, uintensity );
 
     // Get color-dynamics widgets.
     ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();

@@ -603,6 +603,7 @@ MainWindow
 {
   // WIP
 
+#if 0 // Fixed warning (unused variable).
   // Access vector-image model.
   const VectorImageModel* vectorImageModel =
     model->GetSelectedImageModel< VectorImageModel >();
@@ -612,6 +613,7 @@ MainWindow
     qobject_cast<PixelDescriptionWidget*>(
       m_PixelDescriptionDock->findChild<PixelDescriptionWidget*>()
     );
+#endif
 }
 
 /*****************************************************************************/

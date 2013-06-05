@@ -34,6 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -116,9 +117,17 @@ void
 ColorBandDynamicsWidget
 ::SetLowIntensity( double value )
 {
-  m_UI->lowIntensityLineEdit->setText(
+  qDebug() << "ColorBandDynamicsWidget::SetLowIntensity(" << value << ")";
+
+  QString number(
     QString::number( value, 'g', m_LowIntensityValidator->decimals() )
   );
+
+  qDebug() << "=> " << number;
+
+  assert( !number.isEmpty() );
+
+  m_UI->lowIntensityLineEdit->setText( number );
 
   m_UI->lowIntensityLineEdit->setCursorPosition( 0 );
 }
@@ -136,9 +145,17 @@ void
 ColorBandDynamicsWidget
 ::SetHighIntensity( double value )
 {
-  m_UI->highIntensityLineEdit->setText(
+  qDebug() << "ColorBandDynamicsWidget::SetHighIntensity(" << value << ")";
+
+  QString number(
     QString::number( value, 'g', m_HighIntensityValidator->decimals() )
   );
+
+  qDebug() << "=> " << number;
+
+  assert( !number.isEmpty() );
+
+  m_UI->highIntensityLineEdit->setText( number );
 
   m_UI->highIntensityLineEdit->setCursorPosition( 0 );
 }
@@ -218,16 +235,40 @@ ColorBandDynamicsWidget
 /*****************************************************************************/
 void
 ColorBandDynamicsWidget
-::on_lowIntensitySpinBox_valueChanged( double value )
+::on_lowIntensityLineEdit_textChanged( const QString& text )
 {
+  bool isOk = true;
+  double value = text.toDouble( &isOk );
+
+  assert( isOk );
+
+  if( !isOk )
+    {
+    throw std::invalid_argument(
+      ToStdString( tr( "Invalid argument '%1'." ).arg( text ) )
+    );
+    }
+
   emit LowIntensityChanged( m_Channel, value );
 }
 
 /*****************************************************************************/
 void
 ColorBandDynamicsWidget
-::on_highIntensitySpinBox_valueChanged( double value )
+::on_highIntensityLineEdit_textChanged( const QString& text )
 {
+  bool isOk = true;
+  double value = text.toDouble( &isOk );
+
+  assert( isOk );
+
+  if( !isOk )
+    {
+    throw std::invalid_argument(
+      ToStdString( tr( "Invalid argument '%1'." ).arg( text ) )
+    );
+    }
+
   emit HighIntensityChanged( m_Channel, value );
 }
 

@@ -140,16 +140,24 @@ public:
      */
     inline bool IsModified() const;
 
-    /** */
+    /**
+     */
     inline void SetModified();
 
-    /** */
+    /**
+     */
     inline void ClearModified();
 
-    /** */
+    /**
+     */
     inline void SetApplied();
 
-    /** */
+    //
+    // COLOR COMPOSITION.
+    //
+
+    /**
+     */
     inline void SetRgbChannels( const ChannelVector& rgb );
 
     /**
@@ -169,6 +177,24 @@ public:
     GetRgbChannel( ChannelVector::size_type i ) const;
 
     /**
+     * \return the band-index for the given component taking the
+     * grayscale-mode activation state flag into account.
+     */
+    inline
+    ChannelVector::value_type
+    GetRgbwChannel( RgbwChannel channel ) const;
+
+    /**
+     * \return the channels band-index vector taking the
+     * grayscale-mode activation state flag into account.
+     */
+    inline void GetRgbwChannels( ChannelVector& channels ) const;
+
+    //
+    // COLOR DYNAMICS.
+    //
+
+    /**
      */
     inline void SetDynamicsParams( const ParametersType& params );
 
@@ -177,15 +203,42 @@ public:
     inline const ParametersType& GetDynamicsParams() const;
 
     /**
+     * Set low-intensity dynamics parameter for given channel. If
+     * channel is RGBW_CHANNEL_WHITE, this method sets all RGB
+     * channels.
+     *
+     * \param channel The RGB/W channel to set low-intensity dynamics for.
+     * \param intensity low-intensity value.
      */
-    inline
-    const ParametersType::ValueType& GetDynamicsParam( CountType i ) const;
+    inline void SetLowIntensity( RgbwChannel channel,
+				 ParametersType::ValueType intensity );
 
     /**
      */
     inline
-    void SetDynamicsParam( CountType i,
-			   const ParametersType::ValueType& param );
+    ParametersType::ValueType
+    GetLowIntensity( RgbwChannel channel ) const;
+
+    /**
+     * Set high-intensity dynamics parameter for given channel. If
+     * channel is RGBW_CHANNEL_WHITE, this method sets all RGB
+     * channels.
+     *
+     * \param channel The RGB/W channel to set high-intensity dynamics for.
+     * \param intensity high-intensity value.
+     */
+    inline void SetHighIntensity( RgbwChannel channel,
+				 ParametersType::ValueType intensity );
+
+    /**
+     */
+    inline
+    ParametersType::ValueType
+    GetHighIntensity( RgbwChannel channel ) const;
+
+    //
+    // GRAYSCALE MODE.
+    //
 
     /**
      * \brief Set/clear grayscale-mode activation-state flag for image.
@@ -209,19 +262,21 @@ public:
      */
     inline unsigned int GetGrayChannel() const;
 
-    /**
-     * \return the band-index for the given component taking the
-     * grayscale-mode activation state flag into account.
-     */
-    inline
-    unsigned int
-    GetChannel( ChannelVector::size_type i ) const;
+
+    //
+    // Private methods.
+  private:
 
     /**
-     * \return the channels band-index vector taking the
-     * grayscale-mode activation state flag into account.
      */
-    inline void GetChannels( ChannelVector& channels ) const;
+    inline
+    const ParametersType::ValueType& GetDynamicsParam( CountType i ) const;
+
+    /**
+     */
+    inline
+    void SetDynamicsParam( CountType i,
+			   const ParametersType::ValueType& param );
 
     //
     // Private attributes.
@@ -241,7 +296,7 @@ public:
     /**
      * \brief Grayscale-mode band-index.
      */
-    unsigned int m_GrayChannel;
+    ChannelVector::value_type m_GrayChannel;
 
     /**
      * \brief Grayscale-mode activation state.
@@ -746,7 +801,7 @@ VectorImageModel::Settings
 inline
 void
 VectorImageModel::Settings
-::GetChannels( VectorImageModel::Settings::ChannelVector& channels ) const
+::GetRgbwChannels( VectorImageModel::Settings::ChannelVector& channels ) const
 {
   if( IsGrayscaleActivated() )
     {
@@ -787,11 +842,35 @@ VectorImageModel::Settings
 
 /*****************************************************************************/
 inline
-unsigned int
+VectorImageModel::Settings::ChannelVector::value_type
 VectorImageModel::Settings
-::GetChannel( ChannelVector::size_type i ) const
+::GetRgbwChannel( RgbwChannel channel ) const
 {
-  return m_IsGrayscaleActivated ? m_GrayChannel : m_RgbChannels[ i ];
+  if( m_IsGrayscaleActivated )
+    {
+    return m_GrayChannel;
+    }
+  else
+    {
+    switch( channel )
+      {
+      case RGBW_CHANNEL_RED:
+      case RGBW_CHANNEL_GREEN:
+      case RGBW_CHANNEL_BLUE:
+	return m_RgbChannels[ channel ];
+	  break;
+
+      default:
+	throw std::invalid_argument(
+	  ToStdString(
+	    tr( "Invalid argument: %1 ('%2')" )
+	    .arg( channel )
+	    .arg( RGBW_CHANNEL_NAMES[ channel ] )
+	  )
+	);
+	break;
+      }
+    }
 }
 
 /*****************************************************************************/
@@ -821,6 +900,138 @@ VectorImageModel::Settings
 ::GetDynamicsParams() const
 {
   return m_DynamicsParams;
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetLowIntensity( RgbwChannel channel, ParametersType::ValueType intensity )
+{
+  switch( channel )
+    {
+    case RGBW_CHANNEL_RGB:
+    case RGBW_CHANNEL_WHITE:
+      SetDynamicsParam( 2 * RGBW_CHANNEL_RED, intensity );
+      SetDynamicsParam( 2 * RGBW_CHANNEL_GREEN, intensity );
+      SetDynamicsParam( 2 * RGBW_CHANNEL_BLUE, intensity );
+      break;
+
+    case RGBW_CHANNEL_RED:
+    case RGBW_CHANNEL_GREEN:
+    case RGBW_CHANNEL_BLUE:
+      SetDynamicsParam( 2 * channel, intensity );
+      break;
+
+    default:
+      throw std::invalid_argument(
+	ToStdString(
+	  tr( "Invalid argument: %1 ('%2')" )
+	  .arg( channel )
+	  .arg( RGBW_CHANNEL_NAMES[ channel ] )
+	)
+      );
+      break;
+    }
+}
+
+/*****************************************************************************/
+inline
+ParametersType::ValueType
+VectorImageModel::Settings
+::GetLowIntensity( RgbwChannel channel ) const
+{
+  switch( channel )
+    {
+    case RGBW_CHANNEL_RGB:
+    case RGBW_CHANNEL_WHITE:
+      {
+      ParametersType::ValueType r = GetDynamicsParam( 2 * RGBW_CHANNEL_RED );
+      ParametersType::ValueType g = GetDynamicsParam( 2 * RGBW_CHANNEL_GREEN );
+      ParametersType::ValueType b = GetDynamicsParam( 2 * RGBW_CHANNEL_BLUE );
+      return (r + g + b) / 3;
+      }
+      break;
+
+    case RGBW_CHANNEL_RED:
+    case RGBW_CHANNEL_GREEN:
+    case RGBW_CHANNEL_BLUE:
+      return GetDynamicsParam( 2 * channel );
+      break;
+
+    default:
+      throw std::invalid_argument(
+	ToStdString(
+	  tr( "Invalid argument: %1 ('%2')" )
+	  .arg( channel )
+	  .arg( RGBW_CHANNEL_NAMES[ channel ] )
+	)
+      );
+      break;
+    }
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetHighIntensity( RgbwChannel channel, ParametersType::ValueType intensity )
+{
+  switch( channel )
+    {
+    case RGBW_CHANNEL_RGB:
+    case RGBW_CHANNEL_WHITE:
+      SetDynamicsParam( 1 + 2 * RGBW_CHANNEL_RED, intensity );
+      SetDynamicsParam( 1 + 2 * RGBW_CHANNEL_GREEN, intensity );
+      SetDynamicsParam( 1 + 2 * RGBW_CHANNEL_BLUE, intensity );
+      break;
+
+    case RGBW_CHANNEL_RED:
+    case RGBW_CHANNEL_GREEN:
+    case RGBW_CHANNEL_BLUE:
+      SetDynamicsParam( 1 + 2 * channel, intensity );
+      break;
+
+    default:
+      assert( false );
+      break;
+    }
+}
+
+/*****************************************************************************/
+inline
+ParametersType::ValueType
+VectorImageModel::Settings
+::GetHighIntensity( RgbwChannel channel ) const
+{
+  switch( channel )
+    {
+    case RGBW_CHANNEL_RGB:
+    case RGBW_CHANNEL_WHITE:
+      {
+      ParametersType::ValueType r = GetDynamicsParam( 1+ 2*RGBW_CHANNEL_RED );
+      ParametersType::ValueType g = GetDynamicsParam( 1+ 2*RGBW_CHANNEL_GREEN );
+      ParametersType::ValueType b = GetDynamicsParam( 1+ 2*RGBW_CHANNEL_BLUE );
+      return (r + g + b) / 3;
+      }
+      break;
+
+    case RGBW_CHANNEL_RED:
+    case RGBW_CHANNEL_GREEN:
+    case RGBW_CHANNEL_BLUE:
+      return GetDynamicsParam( 1 + 2 * channel );
+      break;
+
+    default:
+      throw std::invalid_argument(
+	ToStdString(
+	  tr( "Invalid argument: %1 ('%2')" )
+	  .arg( channel )
+	  .arg( RGBW_CHANNEL_NAMES[ channel ] )
+	)
+      );
+      break;
+    }
 }
 
 /*****************************************************************************/
