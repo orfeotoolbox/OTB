@@ -54,7 +54,7 @@ void TrainImagesClassifier::InitGradientBoostedTreeParams()
 
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.gbt.max", "Maximum depth of the tree");
-  SetParameterInt("classifier.gbt.max", 65000);
+  SetParameterInt("classifier.gbt.max", 3);
   SetParameterDescription(
         "classifier.gbt.max", "The training algorithm attempts to split each node while its depth is smaller than the maximum "
         "possible depth of the tree. The actual depth may be smaller if the other termination criteria are met, and/or "

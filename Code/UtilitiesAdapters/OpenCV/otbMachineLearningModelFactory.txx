@@ -18,7 +18,7 @@
 #include "otbMachineLearningModelFactory.h"
 
 #ifdef OTB_USE_OPENCV
-//#include "otbKNearestNeighborsMachineLearningModelFactory.h"
+#include "otbKNearestNeighborsMachineLearningModelFactory.h"
 #include "otbRandomForestsMachineLearningModelFactory.h"
 #include "otbSVMMachineLearningModelFactory.h"
 #include "otbBoostMachineLearningModelFactory.h"
@@ -99,6 +99,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
   RegisterFactory(NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
+  RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 #endif
 
 }

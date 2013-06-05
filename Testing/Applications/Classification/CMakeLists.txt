@@ -12,6 +12,77 @@ OTB_TEST_APPLICATION(NAME apTvClComputeImagesStatisticsQB1
 
 
 IF(OTB_USE_OPENCV)
+
+  # Input file types
+  SET(raster_input_format ".tif")
+  SET(vector_input_format ".shp")
+  SET(stat_input_format ".xml")
+  
+  # Input file depending on classifier
+  SET(libsvm_input "")
+  SET(svm_input "")
+  SET(boost_input "Water_Vegetation")
+  SET(dt_input "")
+  SET(gbt_input "")
+  SET(ann_input "")
+  SET(bayes_input "")
+  SET(rf_input "")
+  SET(knn_input "")
+  
+  # Output model type depending on classifier
+  SET(libsvm_output_format ".libsvm")
+  SET(svm_output_format ".svm")
+  SET(boost_output_format ".boost")
+  SET(dt_output_format ".dt")
+  SET(gbt_output_format ".gbt")
+  SET(ann_output_format ".ann")
+  SET(bayes_output_format ".bayes")
+  SET(rf_output_format ".rf")
+  SET(knn_output_format ".knn")
+  
+  # Training algorithms parameters
+  SET(libsvm_parameters "-classifier.libsvm.k linear -classifier.libsvm.opt true")
+  SET(svm_parameters "-classifier.svm.m csvc -classifier.svm.k linear -classifier.svm.opt true")
+  SET(boost_parameters "-classifier.boost.t real -classifier.boost.w 100 -classifier.boost.r 0.95 -classifier.boost.m 1")
+  SET(dt_parameters "-classifier.dt.max 65535 -classifier.dt.min 10 -classifier.dt.ra 0.01 -classifier.dt.cat 10 -classifier.dt.f 10 -classifier.dt.r false -classifier.dt.t false")
+  SET(gbt_parameters "-classifier.gbt.w 200 -classifier.gbt.s 0.8 -classifier.gbt.p 0.01 -classifier.gbt.max 3")
+  SET(ann_parameters "-classifier.ann.t reg -classifier.ann.sizes 10 15 15 11 -classifier.ann.f sig -classifier.ann.a 0 -classifier.ann.b 0 -classifier.ann.bpdw 0.1 -classifier.ann.bpms 0.1 -classifier.ann.rdw 0.1 -classifier.ann.rdwm 1e-07 -classifier.ann.term all -classifier.ann.eps 0.01 -classifier.ann.iter 1000")
+  SET(bayes_parameters "")
+  SET(rf_parameters "-classifier.rf.max 25 -classifier.rf.min 5 -classifier.rf.ra 0 -classifier.rf.cat 15 -classifier.rf.var 4 -classifier.rf.nbtrees 100 -classifier.rf.acc 0.01")
+  SET(knn_parameters "-classifier.knn.k 10")
+  
+  # Validation depending on mode 
+  SET(ascii_comparison --compare-ascii ${NOTOL})
+  
+  # Reference ffiles depending on modes
+  SET(ascii_ref_path ${OTBAPP_BASELINE_FILES})
+  
+  # Loop on classifiers
+  FOREACH(classifier "LIBSVM" "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
+  STRING(TOLOWER ${classifier} lclassifier)
+
+    # Derive output file name
+    SET(OUTFILE cl${classifier}ModelQB1${${lclassifier}_output_format})
+    
+    OTB_TEST_APPLICATION(
+                         NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
+                         APP      TrainImagesClassifier
+                         OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+                                  -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
+                                  -io.imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1${stat_input_format}
+                                  -classifier ${lclassifier}
+                                  ${${lclassifier}_parameters}
+                                  -io.out ${TEMP}/${OUTFILE}
+                                  -rand 121212
+
+                         VALID    ${ascii_comparison}
+                                  ${ascii_ref_path}/${OUTFILE}
+                                  ${TEMP}/${OUTFILE}
+                         )
+
+  ENDFOREACH(classifier)
+
+
   OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1
                        APP  TrainImagesClassifier
                        OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif

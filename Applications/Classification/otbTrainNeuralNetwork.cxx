@@ -141,14 +141,29 @@ void TrainImagesClassifier::TrainNeuralNetwork(ListSampleType::Pointer trainingL
   std::vector<unsigned int> layerSizes;
   std::vector<std::string> sizes = GetParameterStringList("classifier.ann.sizes");
 
-  layerSizes.push_back(trainingListSample->Size());
+
+  unsigned int nbImageBands = trainingListSample->GetMeasurementVectorSize();
+  layerSizes.push_back(nbImageBands);
   for (unsigned int i = 0; i < sizes.size(); i++)
     {
     unsigned int nbNeurons = boost::lexical_cast<unsigned int>(sizes[i]);
     layerSizes.push_back(nbNeurons);
     }
 
-  layerSizes.push_back(trainingLabeledListSample->Size());
+
+  unsigned int nbClasses = 0;
+  LabelType currentLabel = 0, prevLabel = 0;
+  for (unsigned int itLab = 0; itLab < trainingLabeledListSample->Size(); ++itLab)
+    {
+    currentLabel = trainingLabeledListSample->GetMeasurementVector(itLab);
+    if ((currentLabel != prevLabel) || (itLab == 0))
+      {
+      ++nbClasses;
+      }
+    prevLabel = currentLabel;
+    }
+
+  layerSizes.push_back(nbClasses);
   classifier->SetLayerSizes(layerSizes);
 
   switch (GetParameterInt("classifier.ann.f"))
