@@ -39,7 +39,7 @@ set(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi2_SOURCE_DIR}/Copyright.txt")
 # Need to use the CPACK_PACKAGE_EXECUTABLES
 # otherwise the shortcut in the menu will not
 # appear.
-set(CPACK_PACKAGE_EXECUTABLES "monteverdi2" "Monteverdi2")
+#set(CPACK_PACKAGE_EXECUTABLES "monteverdi2" "Monteverdi2")
 
 # Manage dependencies between components
 set(CPACK_COMPONENT_DEVELOPMENT_DEPENDS Runtime)
