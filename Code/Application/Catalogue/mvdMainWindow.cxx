@@ -969,7 +969,7 @@ MainWindow
   // Select filename.
 
   QString filename(
-    QFileDialog::getOpenFileName( this, tr( "Open file..." ) )
+    I18nMainWindow::GetOpenFileName( this, tr( "Open file..." ) )
   );
 
   if( filename.isNull() )

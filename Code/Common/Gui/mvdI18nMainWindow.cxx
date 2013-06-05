@@ -241,7 +241,7 @@ I18nMainWindow
   if( messageBox.exec()==QMessageBox::Yes )
     {
     QString path(
-      QFileDialog::getExistingDirectory(
+      I18nMainWindow::GetExistingDirectory(
 	this,
 	tr(
 	  "Please, select directory where the "

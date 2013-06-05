@@ -39,6 +39,8 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdI18nApplication.h"
+//
+#include "Gui/mvdI18nMainWindow.h"
 
 namespace mvd
 {
@@ -175,10 +177,9 @@ void PreferencesDialog
 {
   while (true)
     {
-    QString srtmDirStr = QFileDialog::getExistingDirectory(
+    QString srtmDirStr = I18nMainWindow::GetExistingDirectory(
         this,
-        tr("Select the directory containing SRTM tiles."),
-        QDir::homePath());
+        tr("Select the directory containing SRTM tiles."));
     if (srtmDirStr.isEmpty())
       { // User push default button => don't modify the value
       break;
@@ -199,10 +200,9 @@ void PreferencesDialog
 {
   while (true)
     {
-    QString geoidStr = QFileDialog::getOpenFileName(
+    QString geoidStr = I18nMainWindow::GetOpenFileName(
         this,
-        tr("Select a geoid file."),
-        QDir::homePath());
+        tr("Select a geoid file."));
     if (geoidStr.isEmpty())
       { // User push default button => don't modify the value
       break;
