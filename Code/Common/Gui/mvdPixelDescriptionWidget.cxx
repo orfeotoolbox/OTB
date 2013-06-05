@@ -157,9 +157,10 @@ PixelDescriptionWidget
   for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
     {
     QTreeWidgetItem * iBandItem = new QTreeWidgetItem( m_PixelValueRootItem );
-    
+
     // figure out if a band name is available, if not use Band idx
-    if ( bandNames.size()==currentPixel.GetSize() && !bandNames[idx].isEmpty() )
+    if( !bandNames[ idx ].isEmpty() &&
+	static_cast< unsigned int >( bandNames.size() )==currentPixel.GetSize() )
       {
       iBandItem->setText(0, bandNames[ idx ] );
       }

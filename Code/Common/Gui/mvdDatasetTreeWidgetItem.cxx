@@ -67,8 +67,8 @@ DatasetTreeWidgetItem
 ::DatasetTreeWidgetItem(const QString & datasetId, 
                         QTreeWidgetItem* parent, 
                         const QStringList & stringList): 
-  m_DatasetId( datasetId ),
-  QTreeWidgetItem( parent, stringList)
+  QTreeWidgetItem( parent, stringList),
+  m_DatasetId( datasetId )
 {
 
 }
