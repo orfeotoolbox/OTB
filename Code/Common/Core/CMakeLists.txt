@@ -84,6 +84,7 @@ target_link_libraries(Monteverdi2_Core
   OTBIO
   Qt4::QtCore
   Qt4::QtXml
+  Qt4::QtGui
 )
 
 #############################################################################
