@@ -45,7 +45,7 @@
 #include "mvdVectorImageModel.h"
 
 // used to load placename
-#include "Gui/mvdImagePlacenameLoader.h"
+#include "mvdImagePlacenameLoader.h"
 
 namespace mvd
 {
