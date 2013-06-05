@@ -87,7 +87,9 @@ ApplicationsToolBox
     );
 
   // put a place holder text in search area
+#if (QT_VERSION >= 0x407000)
   m_UI->m_SearchLine->setPlaceholderText( tr("Search Application ...") );
+#endif
 }
 
 /*******************************************************************************/

@@ -190,7 +190,9 @@ DatabaseBrowserWidget
   m_DatasetRootItem->setExpanded( true );
 
   // set placeholder text
+#if (QT_VERSION >= 0x407000)
   m_UI->m_SearchLine->setPlaceholderText( tr("Search Dataset ...") );
+#endif
 }
 
 /*******************************************************************************/
