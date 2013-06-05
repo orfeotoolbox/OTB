@@ -852,14 +852,23 @@ ColorDynamicsController
   CountType begin;
   CountType end;
 
-  mvd::RgbBounds( begin, end, RGBW_CHANNEL_RGB );
+  if( !RgbBounds(
+	begin, end,
+	settings.IsGrayscaleActivated()
+	? RGBW_CHANNEL_WHITE
+	: RGBW_CHANNEL_RGB ) )
+    return;
+
+  // Get color-dynamics widgets.
+  ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
+  assert( colorDynWgt!=NULL );
 
   for( CountType i=begin; i<end; ++i )
     {
-    RgbwChannel channel = static_cast< RgbwChannel >( i );
+    RgbwChannel chan = static_cast< RgbwChannel >( i );
 
     VectorImageModel::Settings::ChannelVector::value_type band(
-      settings.GetRgbwChannel( channel )
+      settings.GetRgbwChannel( chan )
     );
 
     HistogramModel::MeasurementType lintensity =
@@ -878,33 +887,30 @@ ColorDynamicsController
     );
 
     // Update quantile intensity in model.
-    settings.SetLowIntensity( channel, lintensity );
-    settings.SetHighIntensity( channel, uintensity );
+    settings.SetLowIntensity( chan, lintensity );
+    settings.SetHighIntensity( chan, uintensity );
 
-    // Get color-dynamics widgets.
-    ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
-    assert( colorDynWgt!=NULL );
-
-    ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel(  static_cast< RgbwChannel >(i) );
+    ColorBandDynamicsWidget* colorBandDynWgt = colorDynWgt->GetChannel( chan );
     assert( colorBandDynWgt!=NULL );
 
     // Block widget signals to prevent recursive signal/slot loops.
     colorBandDynWgt->blockSignals( true );
-
-    // Refresh low-intensity display.
+    {
+    // Refresh intensities display.
+    // TODO: Remove SetLow/HighIntensity(): overwrite by SetLow/HighQuantiles().
     colorBandDynWgt->SetHighIntensity( uintensity );
     colorBandDynWgt->SetLowIntensity( lintensity );
+
+    // Regresh quantile display.
     colorBandDynWgt->SetLowQuantile( low );
     colorBandDynWgt->SetHighQuantile( high );
-
+    }
     colorBandDynWgt->blockSignals( false );
     }
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
 }
-
-
 
 /*******************************************************************************/
 

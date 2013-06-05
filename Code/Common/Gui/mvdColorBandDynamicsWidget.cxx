@@ -117,13 +117,9 @@ void
 ColorBandDynamicsWidget
 ::SetLowIntensity( double value )
 {
-  qDebug() << "ColorBandDynamicsWidget::SetLowIntensity(" << value << ")";
-
   QString number(
     QString::number( value, 'g', m_LowIntensityValidator->decimals() )
   );
-
-  qDebug() << "=> " << number;
 
   assert( !number.isEmpty() );
 
@@ -145,13 +141,9 @@ void
 ColorBandDynamicsWidget
 ::SetHighIntensity( double value )
 {
-  qDebug() << "ColorBandDynamicsWidget::SetHighIntensity(" << value << ")";
-
   QString number(
     QString::number( value, 'g', m_HighIntensityValidator->decimals() )
   );
-
-  qDebug() << "=> " << number;
 
   assert( !number.isEmpty() );
 
@@ -218,6 +210,13 @@ ColorBandDynamicsWidget
   );
 
   m_UI->wLabel->setVisible( channel==RGBW_CHANNEL_WHITE );
+
+  m_UI->applyAllButton->setEnabled(
+    channel==RGBW_CHANNEL_RED ||
+    channel==RGBW_CHANNEL_GREEN ||
+    channel==RGBW_CHANNEL_BLUE ||
+    channel==RGBW_CHANNEL_RGB
+  );
 }
 
 /*****************************************************************************/
@@ -309,9 +308,11 @@ void
 ColorBandDynamicsWidget
 ::on_applyAllButton_clicked()
 {
-  emit ApplyAllClicked( m_Channel,
-                        m_UI->lowQuantileSpinBox->value(),
-                        m_UI->highQuantileSpinBox->value());
+  emit ApplyAllClicked(
+    m_Channel,
+    m_UI->lowQuantileSpinBox->value(),
+    m_UI->highQuantileSpinBox->value()
+  );
 }
 
 } // end namespace 'mvd'
