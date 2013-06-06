@@ -353,7 +353,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
     }*/
 
 
-
   for (unsigned int i = 0; i < maximumRegionsNumber; i++)
     {
     //m_ThreadProcessed[i] = 0;
@@ -597,7 +596,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
             default:
 
               itkExceptionMacro(<< "Unexpected value cell fusion mode :"<<this->m_CellFusionMode)
- ;
+;
               break;
             }
           }
@@ -705,7 +704,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::AfterThreaded
            // if ((cellHeight < cellCurrentValue))
               {
              /* if ((cellHeight < this->m_ElevationMin))
-                     cellHeight=this->m_ElevationMin;*/
+                     cellHeight=this->m_ElevationMin; */
               outputDEMIt.Set(cellHeight);
 
               }
@@ -717,7 +716,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::AfterThreaded
             if ((cellHeight > cellCurrentValue) || ((cellCurrentValue == m_NoDataValue) ))
               {
               /*if ((cellHeight > this->m_ElevationMax))
-                cellHeight=this->m_ElevationMax;*/
+                cellHeight=this->m_ElevationMax; */
               outputDEMIt.Set(cellHeight);
               }
             }

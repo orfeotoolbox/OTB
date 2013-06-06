@@ -61,7 +61,6 @@
 
 
 
-
 namespace otb
 {
 namespace Wrapper
@@ -240,7 +239,7 @@ private:
     SetParameterDescription("out","Output elevation image");
     
     /*AddParameter(ParameterType_OutputImage,"out2","Output image");
-        SetParameterDescription("out2","Output elevation image");*/
+        SetParameterDescription("out2","Output elevation image"); */
 
     AddParameter(ParameterType_Float,"above","Maximum altitude offset");
     SetParameterDescription("above","Maximum altitude above the selected elevation source (in m)");
@@ -271,7 +270,7 @@ private:
    /* AddParameter(ParameterType_OutputFilename,"disp","Disparity map output");
     SetParameterDescription("disp","Image filename to store the disparity map (it can improve the processing time)");
     MandatoryOff("disp");
-    DisableParameter("disp");*/
+    DisableParameter("disp"); */
     
     AddRAMParameter();
     

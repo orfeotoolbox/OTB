@@ -276,7 +276,6 @@ private:
    double m_ElevationMax;
 
 
-
   SizeType      m_OutputSize;
   IndexType     m_OutputStartIndex;
   SpacingType   m_OutputSpacing;
