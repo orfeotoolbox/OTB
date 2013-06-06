@@ -200,6 +200,16 @@ public:
 
     itkGetConstReferenceMacro(OutputParametersFrom3DMap, int);
 
+
+    /** Set/Get macro for minimum elevation */
+    itkSetMacro(ElevationMin, double);
+    itkGetConstReferenceMacro(ElevationMin, double);
+
+     /** Set/Get macro for maximum elevation */
+     itkSetMacro(ElevationMax, double);
+     itkGetConstReferenceMacro(ElevationMax, double);
+
+
 protected:
   /** Constructor */
   Multi3DMapToDEMFilter();
@@ -258,6 +268,14 @@ private:
   DEMPixelType              m_NoDataValue;
   int                       m_CellFusionMode;
   std::string               m_ProjectionRef;
+
+  /** Minimum elevation of the DEM in meters */
+   double m_ElevationMin;
+
+   /** Maximum elevation of the DEM in meters */
+   double m_ElevationMax;
+
+
 
   SizeType      m_OutputSize;
   IndexType     m_OutputStartIndex;

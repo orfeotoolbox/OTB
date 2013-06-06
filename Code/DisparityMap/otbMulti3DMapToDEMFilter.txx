@@ -44,6 +44,8 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Multi3DMapToDEMFil
 
   //m_NoDataValue = itk::NumericTraits<DEMPixelType>::NonpositiveMin();
   m_NoDataValue = 0; //TODO replace this value by Max or Min
+  m_ElevationMin = 0;
+  m_ElevationMax = 0;
   m_CellFusionMode = otb::CellFusionMode::MAX;
   m_OutputParametersFrom3DMap = -2;
   m_IsGeographic=true;
@@ -293,7 +295,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     T3DImage *imgPtr = const_cast<T3DImage *> (this->Get3DMapInput(k));
 
     RegionType largest = imgPtr->GetLargestPossibleRegion();
-
     imgPtr->SetRequestedRegionToLargestPossibleRegion();
 
     TMaskImage *mskPtr = const_cast<TMaskImage *> (this->GetMaskInput(k));
@@ -340,6 +341,18 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
   m_TempDEMRegions.clear();
   m_TempDEMAccumulatorRegions.clear();
   //m_ThreadProcessed.resize(maximumRegionsNumber);
+
+  //fill nodata value;
+  /*if(m_CellFusionMode == otb::CellFusionMode::MIN)
+    {
+     this->m_NoDataValue= this->m_ElevationMax;
+    }
+  else
+    {
+    this->m_NoDataValue= this->m_ElevationMin;
+    }*/
+
+
 
   for (unsigned int i = 0; i < maximumRegionsNumber; i++)
     {
@@ -427,7 +440,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
       }
     else
       {
-      std::cout << "not splitted " << std::endl;
+      otbMsgDevMacro( "map " << k << " will not be splitted " );
       return;
       }
 
@@ -635,7 +648,18 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::AfterThreaded
     else
       {
 
-      outputDEMIt.Set(firstDEMIt.Get());
+      DEMPixelType pixelValue = firstDEMIt.Get();
+      //TODO JGT update NoData with Elevation Min or Max
+      /* if ((pixelValue < this->m_ElevationMin))
+        {
+        pixelValue = m_ElevationMin;
+        }
+      if ((pixelValue > this->m_ElevationMax))
+        {
+        pixelValue = m_ElevationMax;
+        }*/
+
+      outputDEMIt.Set(pixelValue);
 
       if ((this->m_CellFusionMode == otb::CellFusionMode::MEAN) && (m_TempDEMRegions.size() == 1))
         {
@@ -678,7 +702,10 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::AfterThreaded
           case otb::CellFusionMode::MIN:
             {
             if ((cellHeight < cellCurrentValue) || (cellCurrentValue == m_NoDataValue))
+           // if ((cellHeight < cellCurrentValue))
               {
+             /* if ((cellHeight < this->m_ElevationMin))
+                     cellHeight=this->m_ElevationMin;*/
               outputDEMIt.Set(cellHeight);
 
               }
@@ -686,8 +713,11 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::AfterThreaded
             break;
           case otb::CellFusionMode::MAX:
             {
-            if ((cellHeight > cellCurrentValue) || (cellCurrentValue == m_NoDataValue))
+            //if ((cellHeight > cellCurrentValue))
+            if ((cellHeight > cellCurrentValue) || ((cellCurrentValue == m_NoDataValue) ))
               {
+              /*if ((cellHeight > this->m_ElevationMax))
+                cellHeight=this->m_ElevationMax;*/
               outputDEMIt.Set(cellHeight);
               }
             }
