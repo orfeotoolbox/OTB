@@ -28,6 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <exception>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -379,7 +380,6 @@ I18nApplication
 
   // Begin from the executable path
   QDir bin_dir( QDir::cleanPath(QCoreApplication::applicationDirPath()) );
-  qDebug() << tr( "Executable dir : %1" ).arg( bin_dir.path() );
   
   // Go up in the directory hierarchy until we have a candidate install prefix
   bool prefixFound = false;
@@ -393,58 +393,59 @@ I18nApplication
       }
     }
   
-  if (prefixFound)
-    {
-    qDebug() << tr( "Candidate install prefix found : %1" ).arg( prefix.path() );
-    }
-  else
-    {
-    QString message( tr( "Unable to locate translation files" ) );
-    qDebug() << message;
-    QMessageBox::critical( NULL, tr( "Critical error" ), message );
-    return;
-    }
-  
-  QDir i18n_dir;
+  if( !prefixFound )
+    throw std::runtime_error(
+      ToStdString(
+	tr( "Failed to locate translation files directory 'i18n' in '%1'." )
+	.arg( prefix.path() )
+      )
+    );
+
+  QDir i18n_dir( prefix );
 
   // At this point the candidate install prefix can also be the build dir root
   if ( prefix.exists( Monteverdi2_CONFIGURE_FILE )
-       && prefix.exists("i18n") )
+       && i18n_dir.cd("i18n") )
     {
     m_IsRunningFromBuildDir = true;
 
     // Report found build dir root
-    qDebug() << tr( "Running from build directory '%1'." ).arg( prefix.path() );
-    
-    // Go into the i18n dir (it exists we just checked for it)
-    i18n_dir = prefix;
-    i18n_dir.cd("i18n");
-    
-    qDebug() << tr( "Using translation dir '%1'." ).arg( i18n_dir.path() );
+    qDebug() <<
+      tr( "Running from build directory '%1'." )
+      .arg( prefix.path() );
+
+    qDebug()
+      << tr( "Loading translation files from directory '%1'." )
+      .arg( i18n_dir.path() );
     }
   else
     {
     m_IsRunningFromBuildDir = false;
     
     // Report found install prefix
-    qDebug() << tr( "Running from install directory '%1'." ).arg( prefix.path() );
+    qDebug()
+      << tr( "Running from install directory '%1'." )
+      .arg( prefix.path() );
 
-    // Go into the i18n dir configured at cmake-time
-    i18n_dir = prefix;
-    
     if (i18n_dir.cd(Monteverdi2_INSTALL_DATA_I18N_DIR))
       {
-      qDebug() << tr( "Using translation dir '%1'." ).arg( i18n_dir.path() );
+      qDebug()
+	<< tr( "Loading translation files from directory '%1'." )
+	.arg( i18n_dir.path() );
       }
     else
       {
-      QString message( tr( "Failed to access translation-files directory '%1'" )
-                       .arg(QDir::cleanPath(prefix.path()
-                             + QDir::separator()
-                             + Monteverdi2_INSTALL_DATA_I18N_DIR)) );
-      qDebug() << message;
-      QMessageBox::critical( NULL, tr( "Critical error" ), message );
-      return;
+      throw std::runtime_error(
+	ToStdString(
+	  tr( "Failed to access translation-files directory '%1'" )
+	  .arg( QDir::cleanPath(
+		  prefix.path()
+		  + QDir::separator()
+		  + Monteverdi2_INSTALL_DATA_I18N_DIR
+		)
+	  )
+	)
+      );
       }
     }
   
@@ -544,12 +545,12 @@ I18nApplication
 }
 
 /*******************************************************************************/
-bool
+void
 I18nApplication
-::LoadAndInstallTranslator(const QString& filename,
-                           const QString& directory,
-                           const QString& searchDelimiters,
-                           const QString& suffix )
+::LoadAndInstallTranslator( const QString& filename,
+			    const QString& directory,
+			    const QString& searchDelimiters,
+			    const QString& suffix )
 {
   QString filename_ext(
     filename +
@@ -563,22 +564,16 @@ I18nApplication
 
   if( !lc_translator->load( filename, directory, searchDelimiters, suffix ) )
     {
-    QString message(
-      tr( "Failed to load '%1' translation file from '%2'." )
-      .arg( filename_ext )
-      .arg( directory )
+    delete lc_translator;
+    lc_translator = NULL;
+
+    throw std::runtime_error(
+      ToStdString(
+	tr( "Failed to load '%1' translation file from '%2'." )
+	.arg( filename_ext )
+	.arg( directory )
+      )
     );
-
-    // TODO: Use log system to trace error while loading locale translation file.
-
-    qWarning() << message;
-
-    // TODO: morph into better HMI design.
-#if defined( _DEBUG )
-    QMessageBox::warning( NULL, tr( "Warning!" ), message );
-#endif
-
-    return false;
     }
 
   // (a) ...because QTranslator needs to be alive during the whole
@@ -594,8 +589,6 @@ I18nApplication
   // TODO: Log locale translation filename used.
 
   qDebug() << message;
-
-  return true;
 }
 
 /*******************************************************************************/
