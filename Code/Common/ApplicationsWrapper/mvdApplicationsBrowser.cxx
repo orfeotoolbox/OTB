@@ -112,7 +112,7 @@ ApplicationsBrowser
 	 it!=appList.end();
 	 ++it )
       {
-      qDebug( "\t%s", it->c_str() );
+      qDebug() << "- " << it->c_str();
       }
     }
 

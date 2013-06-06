@@ -235,7 +235,7 @@ I18nApplication
     // WARNING
     case QtWarningMsg:
 #if ECHO_QWARNING
-      fprintf( stderr, tr( "Warning: %s\n" ).toLatin1().constData(), message );
+      fprintf( stderr, tr( "WARNG> %s\n" ).toLatin1().constData(), message );
 #endif
 #if LOG_QWARNING
       assert( false && "Not yet implemented!" );
@@ -245,7 +245,7 @@ I18nApplication
     // CRITICAL
     case QtCriticalMsg:
 #if ECHO_QCRITICAL
-      fprintf( stderr, tr( "Error: %s\n" ).toLatin1().constData(), message );
+      fprintf( stderr, tr( "ERROR> %s\n" ).toLatin1().constData(), message );
 #endif
 #if LOG_QCRITICAL
       assert( false && "Not yet implemented!" );
@@ -265,7 +265,7 @@ I18nApplication
 #if ECHO_QFATAL
       fprintf(
 	stderr,
-	tr( "Fatal error: %s\n" ).toLatin1().constData(),
+	tr( "FATAL> %s\n" ).toLatin1().constData(),
 	message
       );
 #endif
@@ -280,6 +280,7 @@ I18nApplication
 	)
       );
 #endif
+      abort();
       break;
 
     default:
