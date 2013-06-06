@@ -33,7 +33,10 @@
 #include "otbImageListToVectorImageFilter.h"
 #include "otbVectorImageToImageListFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
+
 #include "itkVectorCastImageFilter.h"
+#include "otbInverseDeformationFieldImageFilter.h"
+
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbStreamingMinMaxImageFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
@@ -41,8 +44,23 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
+#include "otbMultiToMonoChannelExtractROI.h"
+
+#include "otbMultiDisparityMapTo3DFilter.h"
+#include "otbMulti3DMapToDEMFilter.h"
+#include "otbDisparityTranslateFilter.h"
+
+
 #include "otbWrapperElevationParametersHandler.h"
 #include "otbWrapperMapProjectionParametersHandler.h"
+
+
+#include "itkVectorIndexSelectionCastImageFilter.h"
+#include "otbImageList.h"
+#include "otbImageListToVectorImageFilter.h"
+
+
+
 
 namespace otb
 {
@@ -75,7 +93,12 @@ public:
   typedef itk::VectorCastImageFilter
     <FloatVectorImageType,
      DeformationFieldType>                    DeformationFieldCastFilterType;
+
+  typedef otb::InverseDeformationFieldImageFilter
+   <DeformationFieldType,DeformationFieldType> InverseDeformationFieldFilterType;
+
   
+
   typedef otb::StreamingWarpImageFilter
     <FloatImageType,
      FloatImageType,
@@ -145,37 +168,38 @@ public:
     <FloatVectorImageType,
      ImageListType>                           VectorImageToListFilterType;
   
+  typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
+                                         FloatImageType::PixelType>               ExtractROIFilterType;
+
+  typedef otb::MultiDisparityMapTo3DFilter
+    <FloatImageType,
+      FloatVectorImageType,
+      FloatImageType>                              MultiDisparityTo3DFilterType;
+ typedef MultiDisparityTo3DFilterType::Pointer     MultiDisparityTo3DFilterPointerType;
+     typedef otb::Multi3DMapToDEMFilter<FloatVectorImageType,FloatImageType,FloatImageType>                              Multi3DFilterType;
+
+  typedef otb::DisparityTranslateFilter
+    <FloatImageType,
+      DeformationFieldType,
+      FloatImageType,
+      FloatImageType>                              DisparityTranslateFilter;
+
+  typedef itk::VectorIndexSelectionCastImageFilter<DeformationFieldType,
+                                                     FloatImageType> IndexSelectionCastFilterType;
+
+    typedef otb::ImageListToVectorImageFilter<ImageListType,FloatVectorImageType> ImageListFilterType;
+
+    typedef ExtractROIFilterType::Pointer               ExtractROIFilterPointerType;
+    typedef std::vector<ExtractROIFilterPointerType>            ExtractorListType;
+    typedef std::vector<MultiDisparityTo3DFilterPointerType>           MultiDisparityTo3DFilterListType;
+
 private:
   
   StereoFramework()
     {
-    m_LeftInterpolator = InterpolatorType::New();
-    m_RightInterpolator = InterpolatorType::New();
-    
-    m_LeftResampleFilter = ResampleFilterType::New();
-    m_RightResampleFilter = ResampleFilterType::New();
-    
-    m_LBandMathFilter = BandMathFilterType::New();
-    m_RBandMathFilter = BandMathFilterType::New();
-    
-    m_BlockMatcher = BlockMatchingFilterType::New();
-    m_SubPixFilter = SubPixelFilterType::New();
-    
-    m_HMedianFilter = MedianFilterType::New();
-    
-    m_ElevationFilter = DisparityToElevationFilterType::New();
-    
-    m_LeftMaskInterpolator = InterpolatorType::New();
-    m_RightMaskInterpolator = InterpolatorType::New();
-    
-    m_LeftMaskResampleFilter = ResampleFilterType::New();
-    m_RightMaskResampleFilter = ResampleFilterType::New();
-    
-    m_DispMaskFilter = BandMathFilterType::New();
-    
-    m_ReaderTmp = ReaderType::New();
-    
-    m_VectorToList = VectorImageToListFilterType::New();
+
+     m_Interpolator = InterpolatorType::New();
+     m_Multi3DMapToDEMFilter =  Multi3DFilterType::New();
     }
   
   void DoInit()
@@ -203,13 +227,10 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Stereo);
-    
-    AddParameter(ParameterType_InputImage,"inleft","Left input image");
-    SetParameterDescription("inleft", "Left sensor image of the stereo pair");
-    
-    AddParameter(ParameterType_InputImage,"inright","Right input image");
-    SetParameterDescription("inright", "Right sensor image of the stereo pair");
-    
+
+    AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
+    SetParameterDescription("il", "The list of images. First image is used as left sensor image. Other images are used to complete stereo couple.");
+
     ElevationParametersHandler::AddElevationParameters(this, "elev");
     
     AddParameter(ParameterType_Float, "res","Output resolution");
@@ -218,6 +239,9 @@ private:
     AddParameter(ParameterType_OutputImage,"out","Output image");
     SetParameterDescription("out","Output elevation image");
     
+    /*AddParameter(ParameterType_OutputImage,"out2","Output image");
+        SetParameterDescription("out2","Output elevation image");*/
+
     AddParameter(ParameterType_Float,"above","Maximum altitude offset");
     SetParameterDescription("above","Maximum altitude above the selected elevation source (in m)");
     MandatoryOff("above");
@@ -242,15 +266,17 @@ private:
     MandatoryOff("mask.right");
     DisableParameter("mask.right");
     
-    AddParameter(ParameterType_OutputFilename,"disp","Disparity map output");
+    //TODO JGT new framework disparity map handling
+    // is it useful to store disp in epipolar geometry ?
+   /* AddParameter(ParameterType_OutputFilename,"disp","Disparity map output");
     SetParameterDescription("disp","Image filename to store the disparity map (it can improve the processing time)");
     MandatoryOff("disp");
-    DisableParameter("disp");
+    DisableParameter("disp");*/
     
     AddRAMParameter();
     
-    SetDocExampleParameterValue("inleft","sensor_stereo_left.tif");
-    SetDocExampleParameterValue("inright","sensor_stereo_right.tif");
+
+    SetDocExampleParameterValue("il","sensor_stereo_left.tif sensor_stereo_right.tif");
     SetDocExampleParameterValue("res","2.5");
     SetDocExampleParameterValue("out","dem.tif");
     
@@ -264,286 +290,348 @@ private:
   void DoExecute()
   {
     // Setup the DEM Handler
-    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
-    
-    // PIPELINE SETUP
-    FloatImageType::Pointer inleft = this->GetParameterImage<FloatImageType>("inleft");
-    FloatImageType::Pointer inright = this->GetParameterImage<FloatImageType>("inright");
-    
-    DeformationFieldSourceType::Pointer epipolarGridSource = DeformationFieldSourceType::New();
-    epipolarGridSource->SetLeftImage(inleft);
-    epipolarGridSource->SetRightImage(inright);
-    epipolarGridSource->SetGridStep(16);
-    epipolarGridSource->SetScale(1.0);
-    
-    if (otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this,"elev") &&
-        otb::Wrapper::ElevationParametersHandler::IsGeoidUsed(this,"elev"))
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
+
+    m_Filters.clear();
+
+    // Get the input image list
+    FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");
+
+    if (inList->Size() < 2)
       {
-      epipolarGridSource->SetUseDEM(true);
+      itkExceptionMacro("at least two input images must be set...");
+
       }
-    
-    epipolarGridSource->UpdateOutputInformation();
-    // check that deformation grids fit in 1/4 of available RAM
-    double ram = 0.25 * static_cast<double>(this->GetParameterInt("ram"));
-    FloatVectorImageType::SizeType grid_size = epipolarGridSource->GetLeftDeformationFieldOutput()->GetLargestPossibleRegion().GetSize();
-    double storage_size = static_cast<double>(grid_size[0])*static_cast<double>(grid_size[1])*4.0*8.0/1000000.0;
-    if (ram < storage_size)
-    {
-      double newStep = vcl_ceil(vcl_sqrt(storage_size*16.0*16.0/ram));
-      epipolarGridSource->SetGridStep(newStep);
-      otbAppLogINFO(<<"Change grid step to "<<newStep);
-    }
-    
-    AddProcess(epipolarGridSource, "Compute epipolar grids...");
-    epipolarGridSource->Update();
-    
-    FloatImageType::SpacingType epiSpacing;
-    epiSpacing[0] = 0.5 * (vcl_abs(inleft->GetSpacing()[0])+vcl_abs(inleft->GetSpacing()[1]));
-    epiSpacing[1] = 0.5 * (vcl_abs(inleft->GetSpacing()[0])+vcl_abs(inleft->GetSpacing()[1]));
 
-    FloatImageType::SizeType epiSize;
-    epiSize = epipolarGridSource->GetRectifiedImageSize();
+    unsigned int stereoCouples = inList->Size() - 1;
+    otbAppLogINFO(<<stereoCouples<<" stereo Couples will be computed");
+    m_ExtractorList.resize(inList->Size());
+    //TODO JGT check the mutli stereo fusion step
+    //     N MultiDisp which gives N 3D Map Then fuse N 3D Map to DEM
+    // or
+    //     1 MultiDisp which fuse N Disp Couples to 1 3D Map and then convert one 3D Map into DEM
+    m_MultiDisparityTo3DFilterList.resize(stereoCouples);
 
-    FloatImageType::PointType epiOrigin;
-    epiOrigin[0] = 0.0;
-    epiOrigin[1] = 0.0;
-
-    FloatImageType::PixelType defaultValue = 0;
-    
-    double meanBaseline = epipolarGridSource->GetMeanBaselineRatio();
-    
-    // Compute rectification grids.
-    DeformationFieldCastFilterType::Pointer leftGridCaster = DeformationFieldCastFilterType::New();
-    leftGridCaster->SetInput(epipolarGridSource->GetLeftDeformationFieldOutput());
-    leftGridCaster->Update();
-    
-    m_LeftDeformation = leftGridCaster->GetOutput();
-    m_LeftDeformation->DisconnectPipeline();
-    
-    m_LeftInterpolator->SetRadius(2);
-    
-    m_LeftResampleFilter->SetInput(inleft);
-    m_LeftResampleFilter->SetDeformationField(m_LeftDeformation);
-    m_LeftResampleFilter->SetInterpolator(m_LeftInterpolator);
-    m_LeftResampleFilter->SetOutputSize(epiSize);
-    m_LeftResampleFilter->SetOutputSpacing(epiSpacing);
-    m_LeftResampleFilter->SetOutputOrigin(epiOrigin);
-    m_LeftResampleFilter->SetEdgePaddingValue(defaultValue);
-
-    DeformationFieldCastFilterType::Pointer rightGridCaster = DeformationFieldCastFilterType::New();
-    rightGridCaster->SetInput(epipolarGridSource->GetRightDeformationFieldOutput());
-    rightGridCaster->Update();
-    
-    m_RightDeformation = rightGridCaster->GetOutput();
-    m_RightDeformation->DisconnectPipeline();
-    
-    m_RightInterpolator->SetRadius(2);
-    
-    m_RightResampleFilter->SetInput(inright);
-    m_RightResampleFilter->SetDeformationField(m_RightDeformation);
-    m_RightResampleFilter->SetInterpolator(m_RightInterpolator);
-    m_RightResampleFilter->SetOutputSize(epiSize);
-    m_RightResampleFilter->SetOutputSpacing(epiSpacing);
-    m_RightResampleFilter->SetOutputOrigin(epiOrigin);
-    m_RightResampleFilter->SetEdgePaddingValue(defaultValue);
-
-    // Compute masks
-    FloatImageType::Pointer leftmask;
-    FloatImageType::Pointer rightmask;
-    
-    m_LBandMathFilter->SetNthInput(0,m_LeftResampleFilter->GetOutput(),"inleft");
-    std::ostringstream leftFormula;
-    leftFormula<<"if((inleft > 0)";
-    if (IsParameterEnabled("mask.left") && HasValue("mask.left"))
+    for (unsigned int i = 0; i < inList->Size(); i++)
       {
-      leftmask = this->GetParameterFloatImage("mask.left");
-      m_LeftMaskInterpolator->SetRadius(2);
-      
-      m_LeftMaskResampleFilter->SetInput(leftmask);
-      m_LeftMaskResampleFilter->SetDeformationField(m_LeftDeformation);
-      m_LeftMaskResampleFilter->SetInterpolator(m_LeftMaskInterpolator);
-      m_LeftMaskResampleFilter->SetOutputSize(epiSize);
-      m_LeftMaskResampleFilter->SetOutputSpacing(epiSpacing);
-      m_LeftMaskResampleFilter->SetOutputOrigin(epiOrigin);
-      m_LeftMaskResampleFilter->SetEdgePaddingValue(defaultValue);
-      
-      m_LBandMathFilter->SetNthInput(1,m_LeftMaskResampleFilter->GetOutput(),"maskleft");
-      leftFormula << " and (maskleft > 0)";
-      }
-    leftFormula << ",255,0)";
-    m_LBandMathFilter->SetExpression(leftFormula.str());
-    
-    m_RBandMathFilter->SetNthInput(0,m_RightResampleFilter->GetOutput(),"inright");
-    std::ostringstream rightFormula;
-    rightFormula<<"if((inright > 0)";
-    if (IsParameterEnabled("mask.right") && HasValue("mask.right"))
-    {
-      rightmask = this->GetParameterFloatImage("mask.right");
-      m_RightMaskInterpolator->SetRadius(2);
-      
-      m_RightMaskResampleFilter->SetInput(rightmask);
-      m_RightMaskResampleFilter->SetDeformationField(m_RightDeformation);
-      m_RightMaskResampleFilter->SetInterpolator(m_RightMaskInterpolator);
-      m_RightMaskResampleFilter->SetOutputSize(epiSize);
-      m_RightMaskResampleFilter->SetOutputSpacing(epiSpacing);
-      m_RightMaskResampleFilter->SetOutputOrigin(epiOrigin);
-      m_RightMaskResampleFilter->SetEdgePaddingValue(defaultValue);
-      
-      m_RBandMathFilter->SetNthInput(1,m_RightMaskResampleFilter->GetOutput(),"maskright");
-      rightFormula << " and (maskright > 0)";
-    }
-    rightFormula << ",255,0)";
-    m_RBandMathFilter->SetExpression(rightFormula.str());
+      m_ExtractorList[i] = ExtractROIFilterType::New();
+      m_ExtractorList[i]->SetInput(inList->GetNthElement(i));
+      m_ExtractorList[i]->SetChannel(1);
+      m_ExtractorList[i]->UpdateOutputInformation();
 
-    // Compute disparities
-    m_BlockMatcher->SetLeftInput(m_LeftResampleFilter->GetOutput());
-    m_BlockMatcher->SetRightInput(m_RightResampleFilter->GetOutput());
-    m_BlockMatcher->SetLeftMaskInput(m_LBandMathFilter->GetOutput());
-    m_BlockMatcher->SetRightMaskInput(m_RBandMathFilter->GetOutput());
-    m_BlockMatcher->SetRadius(4);
-    m_BlockMatcher->MinimizeOff();
-    
-    m_SubPixFilter->SetInputsFromBlockMatchingFilter(m_BlockMatcher);
-    m_SubPixFilter->SetRefineMethod(SubPixelFilterType::DICHOTOMY);
-    
-    
-    m_HMedianFilter->SetInput(m_SubPixFilter->GetHorizontalDisparityOutput());
-    m_HMedianFilter->SetRadius(2);
-    m_HMedianFilter->SetIncoherenceThreshold(2.0);
-    m_HMedianFilter->SetMaskInput(m_LBandMathFilter->GetOutput());
-    
-    // Compute elevation
-    m_ElevationFilter->SetHorizontalDisparityMapInput(m_HMedianFilter->GetOutput());
-    m_ElevationFilter->SetVerticalDisparityMapInput(m_SubPixFilter->GetVerticalDisparityOutput());
-    m_ElevationFilter->SetLeftInput(inleft);
-    m_ElevationFilter->SetRightInput(inright);
-    m_ElevationFilter->SetLeftEpipolarGridInput(m_LeftDeformation);
-    m_ElevationFilter->SetRightEpipolarGridInput(m_RightDeformation);
-    m_ElevationFilter->SetDEMGridStep(this->GetParameterFloat("res"));
-    m_ElevationFilter->UpdateOutputInformation();
-    
-    // set the EPSG:4326
-    itk::MetaDataDictionary & dict = m_ElevationFilter->GetOutput()->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
-                                           static_cast<std::string>(otb::GeoInformationConversion::ToWKT(4326)));
-    
-    SetParameterOutputImage("out",m_ElevationFilter->GetOutput());
-    
-    // PARAMETER ESTIMATION
-    double underElev = this->GetParameterFloat("below");
-    double overElev = this->GetParameterFloat("above");
-    
-    // Compute min/max elevation on DEM
-    FloatImageType::Pointer elevationOutput = m_ElevationFilter->GetOutput();
-    otbAppLogINFO(<<"Output origin : "<<elevationOutput->GetOrigin());
-    otbAppLogINFO(<<"Output spacing : "<<elevationOutput->GetSpacing());
-    otbAppLogINFO(<<"Output size : "<<elevationOutput->GetLargestPossibleRegion().GetSize());
-    
-    DEMToImageGeneratorType::Pointer demToImageFilter = DEMToImageGeneratorType::New();
-    demToImageFilter->SetOutputOrigin(elevationOutput->GetOrigin());
-    demToImageFilter->SetOutputSpacing(elevationOutput->GetSpacing());
-    demToImageFilter->SetOutputSize(elevationOutput->GetLargestPossibleRegion().GetSize());
-    demToImageFilter->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
-    
-    MinMaxFilterType::Pointer minMaxFilter = MinMaxFilterType::New();
-    minMaxFilter->SetInput(demToImageFilter->GetOutput());
-    minMaxFilter->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
-    
-    AddProcess(minMaxFilter->GetStreamer(), "Estimating min/max elevation...");
-    minMaxFilter->Update();
-    
-    double minElev = minMaxFilter->GetMinimum();
-    double maxElev = minMaxFilter->GetMaximum();
-    otbAppLogINFO(<<"Minimum elevation found : "<<minElev);
-    otbAppLogINFO(<<"Maximum elevation found : "<<maxElev);
-    
-    //fill min/max elevations
-    m_ElevationFilter->SetElevationMin(minElev+underElev);
-    m_ElevationFilter->SetElevationMax(maxElev+overElev);
-    
-    // fill min/max disparities
-    double minDisp = vcl_floor((-1.0)*overElev*meanBaseline/epiSpacing[0]);
-    double maxDisp = vcl_ceil((-1.0)*underElev*meanBaseline/epiSpacing[0]);
-    otbAppLogINFO(<<"Minimum disparity : "<<minDisp);
-    otbAppLogINFO(<<"Maximum disparity : "<<maxDisp);
-    m_BlockMatcher->SetMinimumHorizontalDisparity(minDisp);
-    m_BlockMatcher->SetMaximumHorizontalDisparity(maxDisp);
-    
-    m_BlockMatcher->SetMinimumVerticalDisparity(0);
-    m_BlockMatcher->SetMaximumVerticalDisparity(0);
-    
-    // Compute disparity mask
-    m_DispMaskFilter->SetNthInput(0,m_HMedianFilter->GetOutput(),"hdisp");
-    m_DispMaskFilter->SetNthInput(1,m_SubPixFilter->GetMetricOutput(),"metric");
-    std::ostringstream maskFormula;
-    maskFormula << "if((hdisp > "<<minDisp<<") and (hdisp < "<<maxDisp<<") and (metric > 0.6),255,0)";
-    m_DispMaskFilter->SetExpression(maskFormula.str());
-    m_ElevationFilter->SetDisparityMaskInput(m_DispMaskFilter->GetOutput());
-    
-    // If given, store the disparity map to a file
-    if (IsParameterEnabled("disp") && HasValue("disp"))
-      {
-      ImageListType::Pointer imageList = ImageListType::New();
-      imageList->Clear();
-      imageList->PushBack(m_HMedianFilter->GetOutput());
-      imageList->PushBack(m_SubPixFilter->GetVerticalDisparityOutput());
-      imageList->PushBack(m_SubPixFilter->GetMetricOutput());
-      
-      ImageListToVectorImageFilterType::Pointer listToVector = ImageListToVectorImageFilterType::New();
-      listToVector->SetInput(imageList);
-      
-      WriterType::Pointer writerTmp = WriterType::New();
-      writerTmp->SetInput(listToVector->GetOutput());
-      writerTmp->SetFileName(this->GetParameterString("disp"));
-      writerTmp->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
-      AddProcess(writerTmp, "Compute disparity map...");
-      writerTmp->Update();
-      
-      m_ReaderTmp->SetFileName(this->GetParameterString("disp"));
-      
-      m_VectorToList->SetInput(m_ReaderTmp->GetOutput());
-      m_VectorToList->UpdateOutputInformation();
-      
-      m_ElevationFilter->SetHorizontalDisparityMapInput(m_VectorToList->GetOutput()->GetNthElement(0));
-      m_ElevationFilter->SetVerticalDisparityMapInput(m_VectorToList->GetOutput()->GetNthElement(1));
-      
-      m_DispMaskFilter->SetNthInput(0,m_VectorToList->GetOutput()->GetNthElement(0),"hdisp");
-      m_DispMaskFilter->SetNthInput(1,m_VectorToList->GetOutput()->GetNthElement(2),"metric");
       }
-    
+
+    //create BCO interpolator with radius 2
+    // used by Left and Right Resampler and Left and Right Mask REsampler
+    m_Interpolator->SetRadius(2);
+
+    m_Multi3DMapToDEMFilter->SetNumberOf3DMaps(stereoCouples);
+
+    //create pipeline for each stereo couple
+    for (unsigned int i = 0; i < stereoCouples; i++)
+      {
+
+      FloatImageType::Pointer inleft = m_ExtractorList[0]->GetOutput();
+      FloatImageType::Pointer inright = m_ExtractorList[i + 1]->GetOutput();
+
+      m_MultiDisparityTo3DFilterList[i] = MultiDisparityTo3DFilterType::New();
+      DeformationFieldSourceType::Pointer epipolarGridSource = DeformationFieldSourceType::New();
+      epipolarGridSource->SetLeftImage(inleft);
+      epipolarGridSource->SetRightImage(inright);
+      epipolarGridSource->SetGridStep(16);
+      epipolarGridSource->SetScale(1.0);
+
+      if (otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this, "elev")
+          && otb::Wrapper::ElevationParametersHandler::IsGeoidUsed(this, "elev"))
+        {
+        epipolarGridSource->SetUseDEM(true);
+        }
+
+      epipolarGridSource->UpdateOutputInformation();
+      // check that deformation grids fit in 1/4 of available RAM
+      double ram = 0.25 * static_cast<double> (this->GetParameterInt("ram"));
+      FloatVectorImageType::SizeType
+          grid_size = epipolarGridSource->GetLeftDeformationFieldOutput()->GetLargestPossibleRegion().GetSize();
+      double storage_size = static_cast<double> (grid_size[0]) * static_cast<double> (grid_size[1]) * 4.0 * 8.0
+          / 1000000.0;
+      if (ram < storage_size)
+        {
+        double newStep = vcl_ceil(vcl_sqrt(storage_size * 16.0 * 16.0 / ram));
+        epipolarGridSource->SetGridStep(newStep);
+        otbAppLogINFO(<<"Change grid step to "<<newStep);
+        }
+
+      AddProcess(epipolarGridSource, "Compute epipolar grids...");
+      epipolarGridSource->Update();
+
+      FloatImageType::SpacingType epiSpacing;
+      epiSpacing[0] = 0.5 * (vcl_abs(inleft->GetSpacing()[0]) + vcl_abs(inleft->GetSpacing()[1]));
+      epiSpacing[1] = 0.5 * (vcl_abs(inleft->GetSpacing()[0]) + vcl_abs(inleft->GetSpacing()[1]));
+
+      FloatImageType::SizeType epiSize;
+      epiSize = epipolarGridSource->GetRectifiedImageSize();
+
+      FloatImageType::PointType epiOrigin;
+      epiOrigin[0] = 0.0;
+      epiOrigin[1] = 0.0;
+
+      FloatImageType::PixelType defaultValue = 0;
+
+      double meanBaseline = epipolarGridSource->GetMeanBaselineRatio();
+
+      // Compute rectification grids (lef/right and left inverse (for disparity translate filter)).
+      DeformationFieldCastFilterType::Pointer leftGridCaster = DeformationFieldCastFilterType::New();
+      leftGridCaster->SetInput(epipolarGridSource->GetLeftDeformationFieldOutput());
+      leftGridCaster->Update();
+
+      DeformationFieldType::Pointer leftDeformation;
+      leftDeformation = leftGridCaster->GetOutput();
+      leftDeformation->DisconnectPipeline();
+      m_Filters.push_back(leftDeformation.GetPointer());
+
+      InverseDeformationFieldFilterType::Pointer
+          leftInverseDeformationFieldFilter = InverseDeformationFieldFilterType::New();
+      leftInverseDeformationFieldFilter->SetInput(leftDeformation);
+
+      FloatVectorImageType::PointType lorigin = inleft->GetOrigin();
+      FloatVectorImageType::SpacingType lspacing = inleft->GetSpacing();
+      FloatVectorImageType::SizeType lsize = inleft->GetLargestPossibleRegion().GetSize();
+      double gridStep = epipolarGridSource->GetGridStep();
+      lspacing[0] *= gridStep;
+      lspacing[1] *= gridStep;
+
+      lsize[0] /= gridStep;
+      lsize[1] /= gridStep;
+
+      lsize[0] += 1;
+      lsize[1] += 1;
+
+      leftInverseDeformationFieldFilter->SetOutputOrigin(lorigin);
+      leftInverseDeformationFieldFilter->SetOutputSpacing(lspacing);
+      leftInverseDeformationFieldFilter->SetSize(lsize);
+      // change value
+      leftInverseDeformationFieldFilter->SetSubsamplingFactor(1);
+      AddProcess(leftInverseDeformationFieldFilter, "Inverting left deformation field ...");
+      leftInverseDeformationFieldFilter->Update();
+      DeformationFieldType::Pointer leftInverseDeformation;
+      leftInverseDeformation = leftInverseDeformationFieldFilter->GetOutput();
+      leftInverseDeformation->DisconnectPipeline();
+      m_Filters.push_back(leftInverseDeformation.GetPointer());
+
+      ResampleFilterType::Pointer leftResampleFilter = ResampleFilterType::New();
+      leftResampleFilter->SetInput(inleft);
+      leftResampleFilter->SetDeformationField(leftDeformation);
+      leftResampleFilter->SetInterpolator(m_Interpolator);
+      leftResampleFilter->SetOutputSize(epiSize);
+      leftResampleFilter->SetOutputSpacing(epiSpacing);
+      leftResampleFilter->SetOutputOrigin(epiOrigin);
+      leftResampleFilter->SetEdgePaddingValue(defaultValue);
+      m_Filters.push_back(leftResampleFilter.GetPointer());
+
+      DeformationFieldCastFilterType::Pointer rightGridCaster = DeformationFieldCastFilterType::New();
+      rightGridCaster->SetInput(epipolarGridSource->GetRightDeformationFieldOutput());
+      rightGridCaster->Update();
+
+      DeformationFieldType::Pointer rightDeformation;
+      rightDeformation = rightGridCaster->GetOutput();
+      rightDeformation->DisconnectPipeline();
+      m_Filters.push_back(rightDeformation.GetPointer());
+
+      ResampleFilterType::Pointer rightResampleFilter = ResampleFilterType::New();
+      rightResampleFilter->SetInput(inright);
+      rightResampleFilter->SetDeformationField(rightDeformation);
+      rightResampleFilter->SetInterpolator(m_Interpolator);
+      rightResampleFilter->SetOutputSize(epiSize);
+      rightResampleFilter->SetOutputSpacing(epiSpacing);
+      rightResampleFilter->SetOutputOrigin(epiOrigin);
+      rightResampleFilter->SetEdgePaddingValue(defaultValue);
+      m_Filters.push_back(rightResampleFilter.GetPointer());
+
+      // Compute masks
+      FloatImageType::Pointer leftmask;
+      FloatImageType::Pointer rightmask;
+      BandMathFilterType::Pointer lBandMathFilter = BandMathFilterType::New();
+      BandMathFilterType::Pointer rBandMathFilter = BandMathFilterType::New();
+
+      lBandMathFilter->SetNthInput(0, leftResampleFilter->GetOutput(), "inleft");
+      std::ostringstream leftFormula;
+      leftFormula << "if((inleft > 0)";
+
+      ResampleFilterType::Pointer leftMaskResampleFilter = ResampleFilterType::New();
+
+      if (IsParameterEnabled("mask.left") && HasValue("mask.left"))
+        {
+        leftmask = this->GetParameterFloatImage("mask.left");
+
+        leftMaskResampleFilter->SetInput(leftmask);
+        leftMaskResampleFilter->SetDeformationField(leftDeformation);
+        leftMaskResampleFilter->SetInterpolator(m_Interpolator);
+        leftMaskResampleFilter->SetOutputSize(epiSize);
+        leftMaskResampleFilter->SetOutputSpacing(epiSpacing);
+        leftMaskResampleFilter->SetOutputOrigin(epiOrigin);
+        leftMaskResampleFilter->SetEdgePaddingValue(defaultValue);
+
+        lBandMathFilter->SetNthInput(1, leftMaskResampleFilter->GetOutput(), "maskleft");
+        leftFormula << " and (maskleft > 0)";
+        }
+      leftFormula << ",255,0)";
+      lBandMathFilter->SetExpression(leftFormula.str());
+
+      m_Filters.push_back(leftMaskResampleFilter.GetPointer());
+
+      rBandMathFilter->SetNthInput(0, rightResampleFilter->GetOutput(), "inright");
+
+      std::ostringstream rightFormula;
+      rightFormula << "if((inright > 0)";
+      ResampleFilterType::Pointer rightMaskResampleFilter = ResampleFilterType::New();
+
+      if (IsParameterEnabled("mask.right") && HasValue("mask.right"))
+        {
+        rightmask = this->GetParameterFloatImage("mask.right");
+
+        rightMaskResampleFilter->SetInput(rightmask);
+        rightMaskResampleFilter->SetDeformationField(rightDeformation);
+        rightMaskResampleFilter->SetInterpolator(m_Interpolator);
+        rightMaskResampleFilter->SetOutputSize(epiSize);
+        rightMaskResampleFilter->SetOutputSpacing(epiSpacing);
+        rightMaskResampleFilter->SetOutputOrigin(epiOrigin);
+        rightMaskResampleFilter->SetEdgePaddingValue(defaultValue);
+
+        rBandMathFilter->SetNthInput(1, rightMaskResampleFilter->GetOutput(), "maskright");
+        rightFormula << " and (maskright > 0)";
+        }
+      rightFormula << ",255,0)";
+
+      rBandMathFilter->SetExpression(rightFormula.str());
+
+      m_Filters.push_back(rightMaskResampleFilter.GetPointer());
+      m_Filters.push_back(rBandMathFilter.GetPointer());
+      m_Filters.push_back(lBandMathFilter.GetPointer());
+      // Compute disparities
+      BlockMatchingFilterType::Pointer blockMatcherFilter = BlockMatchingFilterType::New();
+      blockMatcherFilter->SetLeftInput(leftResampleFilter->GetOutput());
+      blockMatcherFilter->SetRightInput(rightResampleFilter->GetOutput());
+      blockMatcherFilter->SetLeftMaskInput(lBandMathFilter->GetOutput());
+      blockMatcherFilter->SetRightMaskInput(rBandMathFilter->GetOutput());
+      blockMatcherFilter->SetRadius(4);
+      blockMatcherFilter->MinimizeOff();
+      m_Filters.push_back(blockMatcherFilter.GetPointer());
+
+      SubPixelFilterType::Pointer subPixelFilter = SubPixelFilterType::New();
+      subPixelFilter = SubPixelFilterType::New();
+      subPixelFilter->SetInputsFromBlockMatchingFilter(blockMatcherFilter);
+      subPixelFilter->SetRefineMethod(SubPixelFilterType::DICHOTOMY);
+      subPixelFilter->UpdateOutputInformation();
+      m_Filters.push_back(subPixelFilter.GetPointer());
+
+      MedianFilterType::Pointer hMedianFilter = MedianFilterType::New();
+      hMedianFilter->SetInput(subPixelFilter->GetHorizontalDisparityOutput());
+      hMedianFilter->SetRadius(2);
+      hMedianFilter->SetIncoherenceThreshold(2.0);
+      hMedianFilter->SetMaskInput(lBandMathFilter->GetOutput());
+      hMedianFilter->UpdateOutputInformation();
+      m_Filters.push_back(hMedianFilter.GetPointer());
+
+      DisparityTranslateFilter::Pointer disparityTranslateFilter = DisparityTranslateFilter::New();
+      disparityTranslateFilter->SetHorizontalDisparityMapInput(hMedianFilter->GetOutput());
+      disparityTranslateFilter->SetVerticalDisparityMapInput(subPixelFilter->GetVerticalDisparityOutput());
+      disparityTranslateFilter->SetInverseEpipolarLeftGrid(leftInverseDeformation);
+      disparityTranslateFilter->SetDirectEpipolarRightGrid(rightDeformation);
+      // disparityTranslateFilter->SetDisparityMaskInput()
+      disparityTranslateFilter->SetLeftSensorImageInput(inleft);
+      disparityTranslateFilter->UpdateOutputInformation();
+      m_Filters.push_back(disparityTranslateFilter.GetPointer());
+      // PARAMETER ESTIMATION
+
+      double underElev = this->GetParameterFloat("below");
+      double overElev = this->GetParameterFloat("above");
+
+      //TODO JGT replace by statistic filter on DEMToImageFilter
+      double minElev = 0;
+      double maxElev = 0;
+      otbAppLogINFO(<<"Minimum elevation found : "<<minElev);
+      otbAppLogINFO(<<"Maximum elevation found : "<<maxElev);
+
+      //check under and over for each couple
+      m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
+      m_Multi3DMapToDEMFilter->SetNoDataValue(minElev + underElev);
+      m_Multi3DMapToDEMFilter->SetElevationMax(maxElev + overElev);
+
+      double minDisp = vcl_floor((-1.0) * overElev * meanBaseline / epiSpacing[0]);
+      double maxDisp = vcl_ceil((-1.0) * underElev * meanBaseline / epiSpacing[0]);
+      otbAppLogINFO(<<"Minimum disparity : "<<minDisp);
+      otbAppLogINFO(<<"Maximum disparity : "<<maxDisp);
+      blockMatcherFilter->SetMinimumHorizontalDisparity(minDisp);
+      blockMatcherFilter->SetMaximumHorizontalDisparity(maxDisp);
+
+      blockMatcherFilter->SetMinimumVerticalDisparity(0);
+      blockMatcherFilter->SetMaximumVerticalDisparity(0);
+
+      // Compute disparity mask
+      BandMathFilterType::Pointer dispMaskFilter = BandMathFilterType::New();
+      dispMaskFilter->SetNthInput(0, hMedianFilter->GetOutput(), "hdisp");
+      dispMaskFilter->SetNthInput(1, subPixelFilter->GetMetricOutput(), "metric");
+      std::ostringstream maskFormula;
+      maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (metric > 0.6),255,0)";
+      dispMaskFilter->SetExpression(maskFormula.str());
+       m_Filters.push_back(dispMaskFilter.GetPointer());
+
+      //TODO to check
+      disparityTranslateFilter->SetDisparityMaskInput(dispMaskFilter->GetOutput());
+
+      MedianFilterType::Pointer hMedianFilter2 = MedianFilterType::New();
+      MedianFilterType::Pointer vMedianFilter2 = MedianFilterType::New();
+
+      //TODO JGT Check if medianfiltering is necessary after disparitytranslate
+      hMedianFilter2->SetInput(disparityTranslateFilter->GetHorizontalDisparityMapOutput());
+      hMedianFilter2->SetRadius(2);
+      hMedianFilter2->SetIncoherenceThreshold(2.0);
+      //hMedianFilter2->SetMaskInput(lBandMathFilter->GetOutput());
+      hMedianFilter2->UpdateOutputInformation();
+      m_Filters.push_back(hMedianFilter2.GetPointer());
+
+      vMedianFilter2->SetInput(disparityTranslateFilter->GetVerticalDisparityMapOutput());
+      vMedianFilter2->SetRadius(2);
+      vMedianFilter2->SetIncoherenceThreshold(2.0);
+      //vMedianFilter2->SetMaskInput(lBandMathFilter->GetOutput());
+      vMedianFilter2->UpdateOutputInformation();
+      m_Filters.push_back(vMedianFilter2.GetPointer());
+
+      // transform disparity into 3D map
+      m_MultiDisparityTo3DFilterList[i]->SetReferenceKeywordList(inleft->GetImageKeywordlist());
+      m_MultiDisparityTo3DFilterList[i]->SetNumberOfMovingImages(1);
+      m_MultiDisparityTo3DFilterList[i]->SetHorizontalDisparityMapInput(0, hMedianFilter2->GetOutput());
+      m_MultiDisparityTo3DFilterList[i]->SetVerticalDisparityMapInput(0, vMedianFilter2->GetOutput());
+      m_MultiDisparityTo3DFilterList[i]->SetMovingKeywordList(0, inright->GetImageKeywordlist());
+      m_MultiDisparityTo3DFilterList[i]->UpdateOutputInformation();
+
+      //TODO check min max for each stereo couple
+      m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
+      m_Multi3DMapToDEMFilter->SetElevationMax(maxElev + overElev);
+      m_Multi3DMapToDEMFilter->Set3DMapInput(i, m_MultiDisparityTo3DFilterList[i]->GetOutput());
+      //TODO JGT Check if mask is necessary
+
+      }
+
+    m_Multi3DMapToDEMFilter->SetOutputParametersFrom3DMap();
+    m_Multi3DMapToDEMFilter->SetDEMGridStep(this->GetParameterFloat("res"));
+    m_Multi3DMapToDEMFilter ->SetCellFusionMode(1); //maxfiltering
+    m_Multi3DMapToDEMFilter->UpdateOutputInformation();
+
+    SetParameterOutputImage("out", m_Multi3DMapToDEMFilter->GetOutput());
+
+
   }
   
   // private filters
-  InterpolatorType::Pointer m_LeftInterpolator;
-  InterpolatorType::Pointer m_RightInterpolator;
+  std::vector<itk::LightObject::Pointer> m_Filters;
+
+  InterpolatorType::Pointer m_Interpolator;
   
-  ResampleFilterType::Pointer m_LeftResampleFilter;
-  ResampleFilterType::Pointer m_RightResampleFilter;
-  
-  BandMathFilterType::Pointer m_LBandMathFilter;
-  BandMathFilterType::Pointer m_RBandMathFilter;
-  
-  BlockMatchingFilterType::Pointer m_BlockMatcher;
-  SubPixelFilterType::Pointer m_SubPixFilter;
-  
-  MedianFilterType::Pointer m_HMedianFilter;
-  
-  DisparityToElevationFilterType::Pointer m_ElevationFilter;
-  
-  InterpolatorType::Pointer m_LeftMaskInterpolator;
-  InterpolatorType::Pointer m_RightMaskInterpolator;
-  
-  ResampleFilterType::Pointer m_LeftMaskResampleFilter;
-  ResampleFilterType::Pointer m_RightMaskResampleFilter;
-  
-  BandMathFilterType::Pointer m_DispMaskFilter;
-  
-  ReaderType::Pointer m_ReaderTmp;
-  
-  VectorImageToListFilterType::Pointer m_VectorToList;
-  // private data
-  DeformationFieldType::Pointer m_LeftDeformation;
-  DeformationFieldType::Pointer m_RightDeformation;
+  MultiDisparityTo3DFilterListType  m_MultiDisparityTo3DFilterList;
+  Multi3DFilterType::Pointer  m_Multi3DMapToDEMFilter;
+
+  ExtractorListType                            m_ExtractorList;
 
 };
 
