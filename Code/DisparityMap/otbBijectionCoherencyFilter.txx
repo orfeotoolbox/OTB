@@ -256,8 +256,8 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
     ul[1] = static_cast<long>(vcl_floor(tmpIndex[1]));
     if (ul[0]<buffered.GetIndex()[0]) ul[0]=buffered.GetIndex()[0];
     if (ul[1]<buffered.GetIndex()[1]) ul[1]=buffered.GetIndex()[1];
-    if (ul[0]>(buffered.GetIndex()[0]+buffered.GetSize()[0]-1)) ul[0]=(buffered.GetIndex()[0]+buffered.GetSize()[0]-1);
-    if (ul[1]>(buffered.GetIndex()[1]+buffered.GetSize()[1]-1)) ul[1]=(buffered.GetIndex()[1]+buffered.GetSize()[1]-1);
+    if (ul[0]>(unsigned int)(buffered.GetIndex()[0]+buffered.GetSize()[0]-1)) ul[0]=(buffered.GetIndex()[0]+buffered.GetSize()[0]-1);
+    if (ul[1]>(unsigned int)(buffered.GetIndex()[1]+buffered.GetSize()[1]-1)) ul[1]=(buffered.GetIndex()[1]+buffered.GetSize()[1]-1);
   
     ur = ul;
     ur[0] += 1;
