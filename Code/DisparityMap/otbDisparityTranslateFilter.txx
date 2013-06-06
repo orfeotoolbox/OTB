@@ -261,8 +261,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     ul[1] = static_cast<long>(vcl_floor(indexGrid[1]));
     if (ul[0]<gridLargest.GetIndex()[0]) ul[0]=gridLargest.GetIndex()[0];
     if (ul[1]<gridLargest.GetIndex()[1]) ul[1]=gridLargest.GetIndex()[1];
-    if (ul[0]>(gridLargest.GetIndex()[0]+gridLargest.GetSize()[0]-2)) ul[0]=(gridLargest.GetIndex()[0]+gridLargest.GetSize()[0]-2);
-    if (ul[1]>(gridLargest.GetIndex()[1]+gridLargest.GetSize()[1]-2)) ul[1]=(gridLargest.GetIndex()[1]+gridLargest.GetSize()[1]-2);
+    if (ul[0]>(unsigned int)(gridLargest.GetIndex()[0]+gridLargest.GetSize()[0]-2)) ul[0]=(gridLargest.GetIndex()[0]+gridLargest.GetSize()[0]-2);
+    if (ul[1]>(unsigned int)(gridLargest.GetIndex()[1]+gridLargest.GetSize()[1]-2)) ul[1]=(gridLargest.GetIndex()[1]+gridLargest.GetSize()[1]-2);
   
     IndexType ur = ul;
     ur[0] += 1;
@@ -356,8 +356,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     ul[1] = static_cast<long>(vcl_floor(indexGrid[1]));
     if (ul[0]<leftLargest.GetIndex()[0]) ul[0]=leftLargest.GetIndex()[0];
     if (ul[1]<leftLargest.GetIndex()[1]) ul[1]=leftLargest.GetIndex()[1];
-    if (ul[0]>(leftLargest.GetIndex()[0]+leftLargest.GetSize()[0]-2)) ul[0]=(leftLargest.GetIndex()[0]+leftLargest.GetSize()[0]-2);
-    if (ul[1]>(leftLargest.GetIndex()[1]+leftLargest.GetSize()[1]-2)) ul[1]=(leftLargest.GetIndex()[1]+leftLargest.GetSize()[1]-2);
+    if (ul[0]>(unsigned int)(leftLargest.GetIndex()[0]+leftLargest.GetSize()[0]-2)) ul[0]=(leftLargest.GetIndex()[0]+leftLargest.GetSize()[0]-2);
+    if (ul[1]>(unsigned int)(leftLargest.GetIndex()[1]+leftLargest.GetSize()[1]-2)) ul[1]=(leftLargest.GetIndex()[1]+leftLargest.GetSize()[1]-2);
   
     IndexType ur = ul;
     ur[0] += 1;
@@ -384,8 +384,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     ul[1] = static_cast<long>(vcl_floor(indexEpi[1]));
     if (ul[0]<buffered.GetIndex()[0]) ul[0]=buffered.GetIndex()[0];
     if (ul[1]<buffered.GetIndex()[1]) ul[1]=buffered.GetIndex()[1];
-    if (ul[0]>(buffered.GetIndex()[0]+buffered.GetSize()[0]-2)) ul[0]=(buffered.GetIndex()[0]+buffered.GetSize()[0]-2);
-    if (ul[1]>(buffered.GetIndex()[1]+buffered.GetSize()[1]-2)) ul[1]=(buffered.GetIndex()[1]+buffered.GetSize()[1]-2);
+    if (ul[0]>(unsigned int)(buffered.GetIndex()[0]+buffered.GetSize()[0]-2)) ul[0]=(buffered.GetIndex()[0]+buffered.GetSize()[0]-2);
+    if (ul[1]>(unsigned int)(buffered.GetIndex()[1]+buffered.GetSize()[1]-2)) ul[1]=(buffered.GetIndex()[1]+buffered.GetSize()[1]-2);
   
     ur = ul;
     ur[0] += 1;
@@ -426,8 +426,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
       ul[1] = static_cast<long>(vcl_floor(indexGridRight[1]));
       if (ul[0]<rightLargest.GetIndex()[0]) ul[0]=rightLargest.GetIndex()[0];
       if (ul[1]<rightLargest.GetIndex()[1]) ul[1]=rightLargest.GetIndex()[1];
-      if (ul[0]>(rightLargest.GetIndex()[0]+rightLargest.GetSize()[0]-2)) ul[0]=(rightLargest.GetIndex()[0]+rightLargest.GetSize()[0]-2);
-      if (ul[1]>(rightLargest.GetIndex()[1]+rightLargest.GetSize()[1]-2)) ul[1]=(rightLargest.GetIndex()[1]+rightLargest.GetSize()[1]-2);
+      if (ul[0]>(unsigned int)(rightLargest.GetIndex()[0]+rightLargest.GetSize()[0]-2)) ul[0]=(rightLargest.GetIndex()[0]+rightLargest.GetSize()[0]-2);
+      if (ul[1]>(unsigned int)(rightLargest.GetIndex()[1]+rightLargest.GetSize()[1]-2)) ul[1]=(rightLargest.GetIndex()[1]+rightLargest.GetSize()[1]-2);
     
       ur = ul;
       ur[0] += 1;
