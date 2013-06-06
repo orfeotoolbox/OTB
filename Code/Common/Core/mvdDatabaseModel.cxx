@@ -319,8 +319,6 @@ DatabaseModel
   // if choice confirmed
   if (ret == QMessageBox::Yes)
     {
-    qDebug() << this << " ::OnDatasetToDeleteSelected -> About to remove : "<< id;
-
     // if current selected item is removed, make the TreeWidget
     // focusing on the root item
     if (model  == GetSelectedDatasetModel() )
@@ -346,7 +344,7 @@ DatabaseModel
     QStringList fileList = datasetQDir.entryList( QDir::NoDotAndDotDot |  QDir::Files );
     for( int i = 0; i < fileList.count(); ++i )
       {
-      qDebug()<< "Removing file "<< fileList.at(i);
+      // qDebug()<< "Removing file "<< fileList.at(i);
       removingFilesStatus &= datasetQDir.remove( fileList.at(i) );
       }
     
@@ -359,9 +357,11 @@ DatabaseModel
     //  - notify change to update the database browser
     if ( removingFilesStatus &&  datasetQDirParent.rmpath( datasetDir ) )
       {
+      /*
       qDebug() << this 
                << " ::OnDatasetToDeleteSelected -> Removing : "
                << datasetQDir.absolutePath();
+      */
       
       // release the model relative to 'id'
       ReleaseDatasetModel( id );
@@ -378,8 +378,11 @@ DatabaseModel
     // TODO : find a better solution to replace this hack
     if (! datasetQDirParent.exists() )
       {
+      /*
       qDebug() << this<< "::OnDatasetToDeleteSelected Making removed dir "
                << datasetQDirParent.absolutePath();
+      */
+
       datasetQDirParent.mkpath( datasetQDirParent.absolutePath() );
       }
     }

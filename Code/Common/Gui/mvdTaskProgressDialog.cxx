@@ -136,8 +136,6 @@ void
 TaskProgressDialog
 ::OnDone( QObject* result )
 {
-  qDebug() << this << "::OnDone(" << result << ")";
-
   m_Object = result;
 
   accept();
@@ -148,8 +146,6 @@ void
 TaskProgressDialog
 ::OnExceptionRaised( const QString& what )
 {
-  qDebug() << this << "::OnExceptionRaised(" << what << ")";
-
   QMessageBox::warning(
     this,
     tr( "%1 - Warning!" ).arg( PROJECT_NAME ),

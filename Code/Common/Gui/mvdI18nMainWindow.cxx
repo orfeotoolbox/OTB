@@ -166,8 +166,6 @@ I18nMainWindow
 {
   assert( event!=NULL );
 
-  qDebug() << "I18nMainWindow::closeEvent(" << event << ")";
-
   // Ensure there is an application instance.
   assert( I18nApplication::ConstInstance()!=NULL );
 

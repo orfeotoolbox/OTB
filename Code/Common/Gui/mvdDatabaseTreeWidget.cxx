@@ -183,8 +183,6 @@ void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
 void 
 DatabaseTreeWidget::dropEvent(QDropEvent *event)
 {
-  qDebug()<<this << " ::dropEvent ";
-  
   QList<QUrl> urls = event->mimeData()->urls();
 
   // cheking
@@ -218,8 +216,6 @@ DatabaseTreeWidget::OnSelectedDatasetFilenameChanged(const QString& filename)
 void
 DatabaseTreeWidget::OnDeleteTriggered( const QString & id)
 {
-  qDebug() << this << " ::OnDeleteTriggered ("<<id<<")";
-
   emit DatasetToDeleteSelected( id );
 }
 

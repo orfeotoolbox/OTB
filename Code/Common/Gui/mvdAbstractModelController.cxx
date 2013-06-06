@@ -173,13 +173,6 @@ void
 AbstractModelController
 ::OnDestroyed( QObject* object )
 {
-  /*
-  qDebug() << object;
-  qDebug() << this;
-  qDebug() << m_Widget;
-  qDebug() << m_Model;
-  */
-
   assert( object!=NULL );
 
   if( object==m_Widget )

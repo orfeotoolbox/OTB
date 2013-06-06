@@ -963,8 +963,6 @@ void
 MainWindow
 ::on_action_OpenImage_triggered()
 {
-  qDebug() << this << "::on_action_OpenImage_triggered()";
-
   //
   // Select filename.
 

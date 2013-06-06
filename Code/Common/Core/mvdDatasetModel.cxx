@@ -154,8 +154,6 @@ void
 DatasetModel
 ::LoadImageModels( int width, int height )
 {
-  qDebug() << this << "::LoadImageModels(" << width << "," << height << ")";
-
   BuildContext context( width, height );
 
   ParseDescriptor( &context );
@@ -333,8 +331,6 @@ void
 DatasetModel
 ::ParseDescriptor( BuildContext* context )
 {
-  qDebug() << this << "::ParseDescriptor(" << context << ")";
-
   assert( context );
   assert( context->m_IsLoadSubModelsEnabled );
 

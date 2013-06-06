@@ -185,8 +185,6 @@ void
 DatabaseBrowserController
 ::ResetWidget()
 {
-  qDebug() << this << "::ResetWidget()";
-
   RefreshWidget();
 }
 

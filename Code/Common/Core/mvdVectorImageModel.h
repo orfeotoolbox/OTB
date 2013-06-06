@@ -354,7 +354,7 @@ public:
     catch(std::exception& exc )
     {
       // TODO manage the message returned by OTB
-      qDebug() << "Error returned by OTB:" << exc.what();
+      qWarning() << "Error returned by OTB:" << exc.what();
       throw std::runtime_error(
           ToStdString(
               tr("OTB can not read this file ('%1').\n"

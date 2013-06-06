@@ -102,12 +102,6 @@ I18nApplication
 {
   QDir pathDir( path );
 
-  /*
-  qDebug() << path;
-  qDebug() << pathDir.currentPath();
-  qDebug() << pathDir.path();
-  */
-
   if( !pathDir.exists() )
     throw SystemError( ToStdString( QString( "('%1')" ).arg( path ) ) );
 
@@ -413,8 +407,8 @@ I18nApplication
       }
     catch(itk::ExceptionObject & err)
       {
-      qDebug() <<tr("An error occured while loading the geoid file, no geoid file will be used.");
-      qDebug()<<tr("Error: ")<<err.what();
+      qWarning() <<tr("An error occured while loading the geoid file, no geoid file will be used.");
+      qWarning()<<err.what();
       }
     }
   if(settings.contains("srtmDirActive") && settings.value("srtmDirActive").toBool())
@@ -426,8 +420,8 @@ I18nApplication
       }
     catch(itk::ExceptionObject & err)
       {
-      qDebug() <<tr("An error occured while loading the DEM directory, no DEM will be used.");
-      qDebug()<<tr("Error: ") << err.what();
+      qWarning() <<tr("An error occured while loading the DEM directory, no DEM will be used.");
+      qWarning()<<err.what();
       }
     }
 }

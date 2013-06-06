@@ -155,7 +155,7 @@ VectorImageModel
 
   // Else:
 
-  qDebug() << tr("The ImageIO used to read this file supports overviews.");
+  qWarning() << tr( "The ImageIO used to read this file supports overviews." );
 
   if( nbOfAvailableOvw>0 )
     {
@@ -166,12 +166,12 @@ VectorImageModel
   // TODO MSD: how to manage case of JPEG2000 with no overviews ? : wait GDAL support OpenJPEG ...
 
   // The current file don't have overviews available
-  qDebug() << tr("The file doesn't have overviews.");
+  qWarning() << tr( "The file doesn't have overviews." );
 
   if( !forceToCacheOvw )
     {
     // the user doesn't want to cache the overviews, GDAL will virtually compute the ovw on demand
-    qDebug() << tr("Letting GDAL decimate the file on-the-fly !");
+    qWarning() << tr("Letting GDAL decimate the file on-the-fly !");
 
     return;
     }
@@ -202,7 +202,7 @@ VectorImageModel
     {
     // The user can continue to use the file so we return a warning message
     // TODO MSD return the message to the log widget
-    qDebug() << tr( "The overviews creation failed.\n"
+    qWarning() << tr( "The overviews creation failed.\n"
 		    "Navigation in resolution will be slower." );
 
     // throw exc;

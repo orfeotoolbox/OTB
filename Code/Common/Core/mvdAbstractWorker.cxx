@@ -82,9 +82,6 @@ void
 AbstractWorker
 ::Do()
 {
-  qDebug() << this << "::Do()";
-  qDebug() << this->thread();
-
   QObject* result = NULL;
 
   try

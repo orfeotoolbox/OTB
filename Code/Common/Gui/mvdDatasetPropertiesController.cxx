@@ -108,8 +108,6 @@ void
 DatasetPropertiesController
 ::ResetWidget()
 {
-  qDebug() << this << "::ResetWidget()";
-
   // Reset widget.
   ResetDatasetTree();
 }

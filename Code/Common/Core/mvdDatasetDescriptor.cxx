@@ -308,7 +308,6 @@ bool
 DatasetDescriptor
 ::UpdateDatasetAlias( const QString & newAlias )
 {
-  qDebug() << this << "::UpdateDatasetAlias(" << newAlias << ")";
   assert( !newAlias.isEmpty() ); 
  
   // Access dataset group
@@ -341,8 +340,6 @@ bool
 DatasetDescriptor
 ::UpdateViewContext(const PointType& center, double zoom)
 {
-  qDebug() << this << "::UpdateViewContext( center: " << center[0]<<","<<center[1]<< " zoom: "<< zoom << ")";
-
   // Create QString from parameters
   QString scenter = QString( "%1 %2" ).arg( center[0] ).arg( center[1] );
   QString szoom   = QString( "%1" ).arg( zoom );
@@ -390,7 +387,6 @@ bool
 DatasetDescriptor
 ::UpdateImagePlacename( const QString & nplacename )
 {
-  qDebug() << this << "::UpdateImagePlacename(" << nplacename << ")";
   assert( !nplacename.isEmpty() ); 
  
   // Access dataset group
@@ -644,14 +640,7 @@ DatasetDescriptor
   m_ImageViewGroupElement =
     rootElt.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_GROUP ] );
 
-#if 0
-  qDebug()
-    << "Read XML descriptor:\n"
-    << m_DomDocument.toByteArray()
-    << "\n.";
-#else
   qDebug() << "XML descriptor has been read.";
-#endif
 }
 
 /*******************************************************************************/
@@ -659,14 +648,7 @@ void
 DatasetDescriptor
 ::virtual_Write( QIODevice& device ) const
 {
-#if 0
-  qDebug()
-    << "Writing  XML descriptor:\n"
-    << m_DomDocument.toByteArray( XML_INDENT )
-    << "\n...";
-#else
   qDebug() << "Writing XML descriptor...";
-#endif
 
   // TODO: Check IO device is formatted to UTF-8 data.
   if( device.write( m_DomDocument.toByteArray( XML_INDENT ) )==-1 )

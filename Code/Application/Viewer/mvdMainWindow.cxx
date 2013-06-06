@@ -388,8 +388,6 @@ MainWindow::closeEvent( QCloseEvent* event )
 {
   assert( event!=NULL );
 
-  qDebug() << "MainWindow::closeEvent(" << event << ")";
-
   // Ensure there is an application instance.
   assert( Application::ConstInstance()!=NULL );
   // Ensure that there is no model or that the existing model is a

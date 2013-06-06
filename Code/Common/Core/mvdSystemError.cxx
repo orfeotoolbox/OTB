@@ -97,6 +97,8 @@ SystemError
   std::runtime_error( SystemError::whatString( errno, message ) ),
   m_ErrorCode( errno )
 {
+  // Do not use qCritial() nor qFatal() here because it will throw an
+  // exception again causing infinite exception loop!
   qDebug() << what();
 }
 
@@ -106,6 +108,8 @@ SystemError
   std::runtime_error( SystemError::whatString( errorCode, message ) ),
   m_ErrorCode( errorCode )
 {
+  // Do not use qCritial() nor qFatal() here because it will throw an
+  // exception again causing infinite exception loop!
   qDebug() << what();
 }
 

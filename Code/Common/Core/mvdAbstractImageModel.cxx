@@ -135,12 +135,6 @@ AbstractImageModel
   // output band name list
   QStringList qBandNames1( QString("") );
 
-  /*
-  qDebug() << "stdBandNames1.size(): " <<  stdBandNames1.size();
-  for( unsigned int i=0; i<stdBandNames1.size(); ++i )
-    qDebug() << i << ": " << QString( stdBandNames1[ i ].c_str() );
-  */
-  
   //
   // PS: need to handle images with extracted channels and a geom file
   // storing the original image band names.
@@ -190,12 +184,6 @@ AbstractImageModel
 	qDebug() << exc.what();
 	}
       }
-
-    /*
-     qDebug() << "stdBandNames2.size(): " <<  stdBandNames2.size();
-     for( unsigned int i=0; i<stdBandNames2.size(); ++i )
-      qDebug() << i << ": " << QString( stdBandNames2[ i ].c_str() );
-    */
 
     assert( stdBandNames2.empty() ||
             stdBandNames2.size()==output->GetNumberOfComponentsPerPixel() );

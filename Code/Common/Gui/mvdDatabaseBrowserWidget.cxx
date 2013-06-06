@@ -97,7 +97,7 @@ void
 DatabaseBrowserWidget
 ::SetDatasetList( const StringPairListType& list )
 {
-  qDebug() << this << "::SetDatasetList(" << list << ")";
+  // qDebug() << this << "::SetDatasetList(" << list << ")";
 
   // remember dataset list
   m_DatasetList = list;
@@ -126,8 +126,6 @@ DatabaseBrowserWidget
   // Remove all previously stored dataset child items.
   while( m_DatasetRootItem->childCount()>0 )
     {
-    // qDebug() << "-" << m_DatasetRootItem->child( 0 )->text( 0 );
-    
     // Remove dataset child item and reference it.
     QTreeWidgetItem* child = m_DatasetRootItem->takeChild( 0 );
 
@@ -235,12 +233,6 @@ DatabaseBrowserWidget
 					    QTreeWidgetItem* previous )
 {
   assert( current!=previous );
-
-  qDebug()
-    << this
-    << "::on_databaseTreeWidget_currentItemChanged("
-    << current << "," << previous
-    << ")";
 
   // if current is root and not NULL get the Id of the
   // corresponding Dataset

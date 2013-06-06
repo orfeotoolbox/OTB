@@ -90,8 +90,6 @@ QObject*
 ImageImporter
 ::virtual_Do()
 {
-  qDebug() << this << "::virtual_Do()";
-
   emit ProgressTextChanged(
     tr( "Importing image '%1' as dataset into cache directory..." )
     .arg( m_Filename )
