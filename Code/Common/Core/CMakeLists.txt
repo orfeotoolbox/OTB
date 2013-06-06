@@ -8,6 +8,7 @@ set( Common_Core_SOURCES
   mvdAbstractWorker.cxx
   mvdAlgorithm.cxx
   mvdBackgroundTask.cxx
+  mvdCore.cxx
   mvdDatasetDescriptor.cxx
   mvdDatabaseModel.cxx
   mvdDatasetModel.cxx
@@ -36,6 +37,7 @@ set( Common_Core_HEADERS_MOC
   mvdAbstractWorker.h
   # mvdAlgorithm.h
   mvdBackgroundTask.h
+  # mvdCore.h
   mvdDatabaseModel.h
   mvdDatasetDescriptor.h
   mvdDatasetModel.h
@@ -84,7 +86,6 @@ target_link_libraries(Monteverdi2_Core
   OTBIO
   Qt4::QtCore
   Qt4::QtXml
-  Qt4::QtGui
 )
 
 #############################################################################

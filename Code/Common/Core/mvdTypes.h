@@ -50,6 +50,11 @@
 #include <otbImageFileWriter.h>
 #include <otbVectorImage.h>
 
+
+////
+//// O T B
+////
+
 // TODO: Contribute to OTB!
 namespace otb
 {
@@ -100,6 +105,11 @@ ConstCast( const itk::SmartPointer< const T1 >& p1 )
 
 } // end of namespace otb.
 
+
+////
+//// M V D 2
+////
+
 //
 // Monteverdi includes (sorted by alphabetic order)
 
@@ -108,70 +118,6 @@ ConstCast( const itk::SmartPointer< const T1 >& p1 )
 namespace
 {
 }
-/*******************************************************************************/
-/* PROTOTYPE                                                                   */
-/*******************************************************************************/
-namespace mvd
-{
-template< typename TValueType, unsigned int VLength >
-class FixedArray :
-    public itk::FixedArray< TValueType, VLength >
-{
-public:
-  /** Standard Self typedef */
-  typedef mvd::FixedArray< TValueType, VLength > Self;
-  typedef itk::FixedArray< TValueType, VLength > Superclass;
-
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
-
-  /** Method for creation through the object factory. */
-  itkNewMacro( Self );
-
-  /** Runtime information support. */
-  itkTypeMacro( mvd::FixedArray, itk::FixedArray );
-
-
-public:
-  FixedArray();
-  void SetSize( unsigned int sz, bool destroyExistingData=true );
-  void Fill( const Self& );
-  void Fill( const TValueType& );
-};
-}
-/*******************************************************************************/
-/*
-namespace itk
-{
-//
-// Instantiate the macros to declare the NumericTraits for the
-// mvd::FixedArray types.
-//
-#ifdef ITK_USE_NUMERIC_TRAITS_PARTIAL_SPECIALIZATION
-itkNumericTraitsGenericArrayScalarsDimensionsMacro( mvd::FixedArray );
-#else // ITK_USE_NUMERIC_TRAITS_PARTIAL_SPECIALIZATION
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, char );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, unsigned char );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, signed char );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, short );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, unsigned short );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, int );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, unsigned int );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, long );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, unsigned long );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, float );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, double );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, long double );
-#ifdef ITK_TYPE_USE_LONG_LONG
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, long long );
-itkNumericTraitsGenericArrayDimensionsMacro( mvd::FixedArray, unsigned long long );
-#endif // ITK_TYPE_USE_LONG_LONG
-#endif // ITK_USE_NUMERIC_TRAITS_PARTIAL_SPECIALIZATION
-}
-*/
-/*******************************************************************************/
-/* PROTOTYPE                                                                   */
-/*******************************************************************************/
 
 //
 // Type definitions.
@@ -199,12 +145,14 @@ BOUND_NAMES[ BOUND_COUNT ];
 
 /*******************************************************************************/
 /* Type definitions of scalar values.                                          */
+
 /**
  */
 typedef unsigned int CountType;
 
 /*******************************************************************************/
 /* Type definitions of STL realization.                                        */
+
 /**
  */
 typedef std::vector< std::string > StringVector;
@@ -223,6 +171,7 @@ typedef itk::Array< double > ParametersType;
 
 /*******************************************************************************/
 /* Type definitions depending on dimension.                                    */
+
 /**
  */
 typedef itk::ImageRegion< Monteverdi2_DIMENSION > ImageRegionType;
@@ -238,6 +187,7 @@ typedef itk::ImageBase< Monteverdi2_DIMENSION > ImageBaseType;
 
 /*******************************************************************************/
 /* Type definitions for scalar/mono-band images.                               */
+
 /**
  */
 typedef
@@ -254,6 +204,7 @@ otb::ImageFileWriter< ScalarImageType > ScalarImageFileWriterType;
 
 /*******************************************************************************/
 /* Type definitions for vector/multi-band images (generic internal data).      */
+
 /**
  */
 typedef
@@ -267,16 +218,17 @@ typedef otb::ImageFileReader< VectorImageType > VectorImageFileReaderType;
 typedef otb::ImageFileWriter< VectorImageType > VectorImageFileWriterType;
 /**
  */
-typedef VectorImageType::SpacingType  SpacingType;
+typedef VectorImageType::SpacingType SpacingType;
 /**
  */
-typedef VectorImageType::SizeType     SizeType;
+typedef VectorImageType::SizeType SizeType;
 /**
  */
-typedef VectorImageType::PointType    PointType;
+typedef VectorImageType::PointType PointType;
 
 /*******************************************************************************/
 /* Type definitions for RGBA images (display).                                 */
+
 /**
  */
 typedef itk::RGBAPixel< unsigned char > RGBAPixelType;
@@ -286,6 +238,7 @@ typedef otb::Image< RGBAPixelType, Monteverdi2_DIMENSION > RGBAImageType;
 
 /*******************************************************************************/
 /* Type definitions for application defaults.                                  */
+
 /**
  */
 typedef mvd::VectorImageType DefaultImageType;
@@ -294,25 +247,43 @@ typedef mvd::VectorImageType DefaultImageType;
 typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
 
 /*******************************************************************************/
-/** Type definitions for wrapped applications
- * 
- */
-typedef std::map< std::string, std::string >         ApplicationDocNameToNameMap;
-typedef std::map< std::string, StringVector >        ApplicationsTagContainer;
+/* Type definitions for wrapped applications                                   */
+
 /**
- *  Type definitions for dataset properties
  */
-typedef std::pair< std::string, std::string >                 PropertyType;
-typedef std::vector< PropertyType >                           PropertiesVector;
-typedef std::pair< std::string, std::vector< PropertyType > > PropertiesVectorByCategory;
-typedef std::map<  std::string, PropertiesVector>             PropertiesContainer;
+typedef std::map< std::string, std::string > ApplicationDocNameToNameMap;
+
+/**
+ */
+typedef std::map< std::string, StringVector > ApplicationsTagContainer;
 
 /*******************************************************************************/
-/** Type definitions for Dataset list
- * 
+/* Type definitions for dataset properties                                     */
+
+/**
  */
-typedef QPair< QString, QString >        StringPairType;
-typedef QList< StringPairType >          StringPairListType; 
+typedef std::pair< std::string, std::string > PropertyType;
+/**
+ */
+typedef std::vector< PropertyType > PropertiesVector;
+/**
+ */
+typedef
+std::pair< std::string, std::vector< PropertyType > > PropertiesVectorByCategory;
+/**
+ */
+typedef std::map<  std::string, PropertiesVector> PropertiesContainer;
+
+/*******************************************************************************/
+/* Type definitions for Dataset list                                           */
+
+/**
+ */
+typedef QPair< QString, QString > StringPairType;
+
+/**
+ */
+typedef QList< StringPairType > StringPairListType; 
 
 /*******************************************************************************/
 } // end namespace 'mvd'

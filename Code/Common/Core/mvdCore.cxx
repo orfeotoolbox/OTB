@@ -5,7 +5,7 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+  See Copyright.txt for details.
 
   Monteverdi2 is distributed under the CeCILL licence version 2. See
   Licence_CeCILL_V2-en.txt or
@@ -17,8 +17,7 @@
 
 =========================================================================*/
 
-#ifndef __mvdGui_h
-#define __mvdGui_h
+#include "mvdCore.h"
 
 //
 // Configuration include.
@@ -44,39 +43,40 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
+
+namespace mvd
+{
+/*
+  TRANSLATOR mvd::Core
+
+  Necessary for lupdate to be aware of C++ namespaces.
+
+  Context comment for translator.
+*/
 
 
 /*****************************************************************************/
-/* PRE-DECLARATION SECTION                                                   */
+/* CONSTANTS                                                                 */
 
-//
-// External classes pre-declaration.
 namespace
 {
-}
+} // end of anonymous namespace.
 
-//
-// Internal classes pre-declaration.
-namespace mvd
-{
+
+const char*
+RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ] = {
+  "RGBW_CHANNEL_RED",
+  "RGBW_CHANNEL_GREEN",
+  "RGBW_CHANNEL_BLUE",
+  "RGBW_CHANNEL_WHITE",
+  "RGBW_CHANNEL_RGB",
+  "RGBW_CHANNEL_ALL"
+};
+
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+/*******************************************************************************/
+
 } // end namespace 'mvd'
-
-
-/*****************************************************************************/
-/* COMMON DECLARATION SECTION                                                */
-
-namespace mvd
-{
-
-} // end namespace 'mvd'.
-
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
-namespace mvd
-{
-
-} // end namespace 'mvd'.
-
-#endif // __mvdGui_h

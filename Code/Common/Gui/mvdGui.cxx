@@ -54,16 +54,19 @@ namespace mvd
   Context comment for translator.
 */
 
-const char*
-RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ] = {
-  "RGBW_CHANNEL_RED",
-  "RGBW_CHANNEL_GREEN",
-  "RGBW_CHANNEL_BLUE",
-  "RGBW_CHANNEL_WHITE",
-  "RGBW_CHANNEL_RGB",
-  "RGBW_CHANNEL_ALL"
-};
 
-/*******************************************************************************/
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+namespace
+{
+} // end of anonymous namespace.
+
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
 
 } // end namespace 'mvd'

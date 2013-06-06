@@ -56,6 +56,7 @@ namespace
 {
 } // end of anonymous namespace.
 
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 

@@ -40,7 +40,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdGui.h"
+#include "Core/mvdCore.h"
 
 //
 // External classes pre-declaration.
