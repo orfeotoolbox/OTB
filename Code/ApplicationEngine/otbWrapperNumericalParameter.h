@@ -139,9 +139,6 @@ private:
 // Helper typedef for float
 typedef NumericalParameter<float> FloatParameter;
 
-// Helper typedef for double
-typedef NumericalParameter<double> DoubleParameter;
-
 // Helper typedef for int
 typedef NumericalParameter<int> IntParameter;
 

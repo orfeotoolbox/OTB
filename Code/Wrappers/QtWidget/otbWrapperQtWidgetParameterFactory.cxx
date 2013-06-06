@@ -25,7 +25,6 @@
 #include "otbWrapperQtWidgetEmptyParameter.h"
 #include "otbWrapperQtWidgetIntParameter.h"
 #include "otbWrapperQtWidgetFloatParameter.h"
-#include "otbWrapperQtWidgetDoubleParameter.h"
 #include "otbWrapperQtWidgetStringParameter.h"
 #include "otbWrapperQtWidgetStringListParameter.h"
 #include "otbWrapperQtWidgetChoiceParameter.h"
@@ -96,7 +95,6 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(EmptyParameter,          QtWidgetEmptyParameter)
   CREATEWIDGET(IntParameter,            QtWidgetIntParameter)
   CREATEWIDGET(FloatParameter,          QtWidgetFloatParameter)
-  CREATEWIDGET(DoubleParameter,         QtWidgetDoubleParameter)
   CREATEWIDGET(InputFilenameParameter,       QtWidgetInputFilenameParameter)
   CREATEWIDGET(OutputFilenameParameter,       QtWidgetOutputFilenameParameter)
   CREATEWIDGET(DirectoryParameter,      QtWidgetDirectoryParameter)

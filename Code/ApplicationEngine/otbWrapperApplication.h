@@ -186,7 +186,6 @@ public:
    * Can be called for types :
    * \li ParameterType_Int
    * \li ParameterType_Float
-   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -199,13 +198,6 @@ public:
    */
   void SetParameterFloat(std::string parameter, float value);
 
-  /* Set a double value
-   *
-   * Can be called for types :
-   * \li ParameterType_Double
-   */
-  void SetParameterDouble(std::string parameter, double value);
-
   /* Set an default integer value, must used in the
    * DoInit when setting a value by default
    * for the parameter
@@ -213,7 +205,6 @@ public:
    * Can be called for types :
    * \li ParameterType_Int
    * \li ParameterType_Float
-   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -227,15 +218,6 @@ public:
    * \li ParameterType_Float
    */
   void SetDefaultParameterFloat(std::string parameter, float value);
-
-  /* Set a default double value, must used in the
-   * DoInit when setting a value by default
-   * for the parameter
-   *
-   * Can be called for types :
-   * \li ParameterType_Double
-   */
-  void SetDefaultParameterDouble(std::string parameter, double value);
 
  /* Set a minimum int value, must used in the
    * DoInit when setting a value by default
@@ -255,7 +237,7 @@ public:
    */
   void SetMaximumParameterIntValue(std::string parameter, int value);
 
- /* Set a minimum floating value, must used in the
+ /* Set a minimum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -264,7 +246,7 @@ public:
    */
   void SetMinimumParameterFloatValue(std::string parameter, float value);
 
- /* Set a maximum floating value, must used in the
+ /* Set a maximum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -272,24 +254,6 @@ public:
    * \li ParameterType_Float
    */
   void SetMaximumParameterFloatValue(std::string parameter, float value);
-
-  /* Set a minimum double value, must used in the
-   * DoInit when setting a value by default
-   * for the parameter
-   *
-   * Can be called for types :
-   * \li ParameterType_Double
-   */
-  void SetMinimumParameterDoubleValue(std::string parameter, double value);
-
- /* Set a maximum double value, must used in the
-   * DoInit when setting a value by default
-   * for the parameter
-   *
-   * Can be called for types :
-   * \li ParameterType_Double
-   */
-  void SetMaximumParameterDoubleValue(std::string parameter, double value);
 
   /* Set a string value
    *
@@ -300,7 +264,6 @@ public:
    * \li ParameterType_Directory
    * \li ParameterType_Choice
    * \li ParameterType_Float
-   * \li ParameterType_Double
    * \li ParameterType_Int
    * \li ParameterType_Radius
    * \li ParameterType_InputImageParameter
@@ -361,7 +324,6 @@ public:
    * Can be called for types :
    * \li ParameterType_Int
    * \li ParameterType_Float
-   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -373,13 +335,6 @@ public:
    * \li ParameterType_Float
    */
   float GetParameterFloat(std::string parameter);
-
-  /* Get a double parameter value
-   *
-   * Can be called for types :
-   * \li ParameterType_Double
-   */
-  double GetParameterDouble(std::string parameter);
 
   /* Get a string parameter value
    *
@@ -504,7 +459,6 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Float
-   * \li ParameterType_Double
    * \li ParameterType_Int
    * \li ParameterType_Choice
    * \li ParameterType_Radius

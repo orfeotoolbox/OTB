@@ -4,7 +4,6 @@ file(GLOB srcs "*.cxx")
 set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetEmptyParameter.h
        otbWrapperQtWidgetFloatParameter.h
-       otbWrapperQtWidgetDoubleParameter.h
        otbWrapperQtWidgetIntParameter.h
        otbWrapperQtWidgetStringParameter.h
        otbWrapperQtWidgetStringListParameter.h

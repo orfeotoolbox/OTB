@@ -355,10 +355,6 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_Float;
     }
-  else if (dynamic_cast<const DoubleParameter*>(param))
-    {
-    type = ParameterType_Double;
-    }
   else if (dynamic_cast<const InputFilenameParameter*>(param))
     {
     type = ParameterType_InputFilename;
@@ -477,11 +473,6 @@ void Application::SetParameterInt(std::string parameter, int value)
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     paramFloat->SetValue(static_cast<float>(value));
     }
-  else if (dynamic_cast<DoubleParameter*>(param))
-    {
-    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*>(param);
-    paramDouble->SetValue(static_cast<double>(value));
-    }
   else if (dynamic_cast<RadiusParameter*>(param))
     {
     RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
@@ -502,17 +493,6 @@ void Application::SetParameterFloat(std::string parameter, float value)
     {
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     paramFloat->SetValue(value);
-    }
-}
-
-void Application::SetParameterDouble(std::string parameter, double value)
-{
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<DoubleParameter*>(param))
-    {
-    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*>(param);
-    paramDouble->SetValue(value);
     }
 }
 
@@ -538,12 +518,6 @@ void Application::SetDefaultParameterInt(std::string parameter, int value)
     paramFloat->SetDefaultValue(static_cast<float>(value));
     paramFloat->SetValue(static_cast<float>(value));
     }
-  else if (dynamic_cast<DoubleParameter*>(param))
-    {
-    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*>(param);
-    paramDouble->SetDefaultValue(static_cast<double>(value));
-    paramDouble->SetValue(static_cast<double>(value));
-    }
   else if (dynamic_cast<RAMParameter*>(param))
     {
     RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
@@ -561,18 +535,6 @@ void Application::SetDefaultParameterFloat(std::string parameter, float value)
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     paramFloat->SetDefaultValue(value);
     paramFloat->SetValue(value);
-    }
-}
-
-void Application::SetDefaultParameterDouble(std::string parameter, double value)
-{
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<DoubleParameter*>(param))
-    {
-    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*>(param);
-    paramDouble->SetDefaultValue(value);
-    paramDouble->SetValue(value);
     }
 }
 
@@ -630,33 +592,6 @@ void Application::SetMaximumParameterFloatValue(std::string parameter, float val
   
 }
 
-void Application::SetMinimumParameterDoubleValue(std::string parameter, double value)
-{
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<DoubleParameter*>(param))
-    {
-    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*>(param);
-    paramDouble->SetMinimumValue(value);
-    }
- else
-    itkExceptionMacro(<<parameter << "parameter can't be casted to double");
-}
-
-void Application::SetMaximumParameterDoubleValue(std::string parameter, double value)
-{
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<DoubleParameter*>(param))
-    {
-    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*>(param);
-    paramDouble->SetMaximumValue(value);
-    }
-  else
-    itkExceptionMacro(<<parameter << "parameter can't be casted to double");
-
-}
-
 
 void Application::SetParameterString(std::string parameter, std::string value)
 {
@@ -697,11 +632,6 @@ void Application::SetParameterString(std::string parameter, std::string value)
     FloatParameter* paramDown = dynamic_cast<FloatParameter*>(param);
     paramDown->SetValue(value);
     }
- else if (dynamic_cast<DoubleParameter*>(param))
-   {
-   DoubleParameter* paramDown = dynamic_cast<DoubleParameter*>(param);
-   paramDown->SetValue(value);
-   }
  else if (dynamic_cast<RadiusParameter*>(param))
     {
     RadiusParameter* paramDown = dynamic_cast<RadiusParameter*>(param);
@@ -874,11 +804,6 @@ int Application::GetParameterInt(std::string parameter)
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     ret = static_cast<int>(paramFloat->GetValue());
     }
-  else if (dynamic_cast<DoubleParameter*>(param))
-    {
-    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*>(param);
-    ret = static_cast<int>(paramDouble->GetValue());
-    }
   else if (dynamic_cast<RadiusParameter*>(param))
     {
     RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
@@ -915,24 +840,6 @@ float Application::GetParameterFloat(std::string parameter)
   else
     {
     itkExceptionMacro(<<parameter << "parameter can't be casted to float");
-    }
-
-  return ret;
-}
-
-double Application::GetParameterDouble(std::string parameter)
-{
-  double ret = 0.0;
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<DoubleParameter*> (param))
-    {
-    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*> (param);
-    ret = paramDouble->GetValue();
-    }
-  else
-    {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to double");
     }
 
   return ret;
@@ -1174,13 +1081,6 @@ std::string Application::GetParameterAsString(std::string paramKey)
       oss << this->GetParameterFloat( paramKey );
       ret = oss.str();
     }
-  else if( type == ParameterType_Double )
-    {
-      std::ostringstream oss;
-      //oss << std::setprecision(10);
-      oss << this->GetParameterDouble( paramKey );
-      ret = oss.str();
-    }
   else if( type == ParameterType_StringList )
     {
       std::ostringstream oss;
@@ -1332,17 +1232,7 @@ Application::GetOutputParametersSumUp()
           }
         else
           {
-          if (type == ParameterType_Double)
-            {
-            std::ostringstream oss;
-            oss << std::setprecision(10);
-            oss << GetParameterDouble(*it);
-            keyVal.second = oss.str();
-            }
-          else
-            {
-            keyVal.second = GetParameterAsString(*it);
-            }
+          keyVal.second = GetParameterAsString(*it);
           }
         res.push_back( keyVal );
         }
