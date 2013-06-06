@@ -41,13 +41,13 @@ void TrainImagesClassifier::InitGradientBoostedTreeParams()
 
   //Shrinkage
   AddParameter(ParameterType_Float, "classifier.gbt.s", "Regularization parameter");
-  SetParameterFloat("classifier.gbt.s", 0.8);
+  SetParameterFloat("classifier.gbt.s", 0.01);
   SetParameterDescription("classifier.gbt.s", "Regularization parameter.");
 
   //SubSamplePortion
   AddParameter(ParameterType_Float, "classifier.gbt.p",
                "Portion of the whole training set used for each algorithm iteration");
-  SetParameterFloat("classifier.gbt.p", 0.01);
+  SetParameterFloat("classifier.gbt.p", 0.8);
   SetParameterDescription(
       "classifier.gbt.p",
       "Portion of the whole training set used for each algorithm iteration. The subset is generated randomly.");
