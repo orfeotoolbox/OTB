@@ -124,7 +124,7 @@ DatasetModel*
 DatabaseModel
 ::SelectDatasetModel( const DatasetId& id )
 {
-  qDebug() << this << "::SelectDatasetModel(" << id << ")";
+  // qDebug() << this << "::SelectDatasetModel(" << id << ")";
 
   // Find dataset model or interrupt by exception.
   DatasetModel* datasetModel = FindDatasetModel( id );

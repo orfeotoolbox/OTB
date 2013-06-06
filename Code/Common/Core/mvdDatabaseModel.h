@@ -342,7 +342,7 @@ const DatasetModel*
 DatabaseModel
 ::FindDatasetModel( const DatasetId& id ) const
 {
-  qDebug() << this << "::FindDatasetModel(" << id << ")";
+  // qDebug() << this << "::FindDatasetModel(" << id << ")";
 
   // Find (key, value) pair.
   DatasetModelMap::const_iterator it( DatasetModelIterator( id ) );
@@ -357,7 +357,7 @@ DatasetModel*
 DatabaseModel
 ::FindDatasetModel( const DatasetId& id )
 {
-  qDebug() << this << "::FindDatasetModel(" << id << ")";
+  // qDebug() << this << "::FindDatasetModel(" << id << ")";
 
   // Find (key, value) pair.
   DatasetModelMap::iterator it( DatasetModelIterator( id ) );
@@ -372,7 +372,7 @@ DatabaseModel::DatasetModelMap::const_iterator
 DatabaseModel
 ::DatasetModelIterator( const QString& id ) const
 {
-  qDebug() << this << "::DatasetModelIterator(" << id << ")";
+  // qDebug() << this << "::DatasetModelIterator(" << id << ")";
 
   // Find (key, value) pair.
   DatasetModelMap::const_iterator it( m_DatasetModels.find( id ) );
@@ -392,7 +392,7 @@ DatabaseModel::DatasetModelMap::iterator
 DatabaseModel
 ::DatasetModelIterator( const QString& id )
 {
-  qDebug() << this << "::DatasetModelIterator(" << id << ")";
+  // qDebug() << this << "::DatasetModelIterator(" << id << ")";
 
   // Find (key, value) pair.
   DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
