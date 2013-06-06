@@ -501,7 +501,7 @@ namespace Wrapper
       outFile << ossHeaderPredLabels.str();
       /////////////////////////////////////
 
-      int indiceLabelValid = 0, indiceLabelPred = 0;
+      unsigned int indiceLabelValid = 0, indiceLabelPred = 0;
 
       for (itMapOfClassesValid = mapOfClassesValid.begin(); itMapOfClassesValid != mapOfClassesValid.end(); ++itMapOfClassesValid)
         {
