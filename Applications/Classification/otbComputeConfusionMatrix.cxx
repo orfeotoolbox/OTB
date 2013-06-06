@@ -391,7 +391,7 @@ private:
     // Formatting m_MatrixLOG from m_Matrix in order to make m_MatrixLOG a square matrix
     // from the reference labels in mapOfClassesRef
     indiceLabelRef = 0;
-    int indiceLabelProd = 0, indiceLabelProdInRef = 0;
+    unsigned int indiceLabelProd = 0, indiceLabelProdInRef = 0;
 
     // Initialization of m_MatrixLOG
     m_MatrixLOG.SetSize(nbClassesRef, nbClassesRef);
