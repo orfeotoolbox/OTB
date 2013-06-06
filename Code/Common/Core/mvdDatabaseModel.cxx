@@ -206,7 +206,7 @@ DatasetModel*
 DatabaseModel
 ::NewDatasetModel( const DatasetId& id )
 {
-  qDebug() << this << "::NewDatasetModel(" << id << ")";
+  // qDebug() << this << "::NewDatasetModel(" << id << ")";
 
   // Find dataset model or interrupt by exception.
   DatasetModel* datasetModel = NULL;

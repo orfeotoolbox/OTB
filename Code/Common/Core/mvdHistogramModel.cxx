@@ -220,7 +220,7 @@ void
 HistogramModel
 ::virtual_Read( QIODevice* device )
 {
-  qDebug() << this << "::virtual_Read(" << device << ")";
+  // qDebug() << this << "::virtual_Read(" << device << ")";
 
   QTextStream stream( device );
 
