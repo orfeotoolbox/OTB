@@ -55,6 +55,76 @@
 #define Monteverdi2_DIMENSION int( 2 )
 
 //
+// Qt Message handling and logging.
+#ifndef NO_QDEBUG
+#define NO_QDEBUG       0
+#endif
+
+#ifndef NO_QWARNING
+#define NO_QWARNING     0
+#endif
+
+#ifndef NO_QCRITICAL
+#define NO_QCRITICAL    0
+#endif
+
+#ifndef NO_QFATAL
+#define NO_QFATAL       0
+#endif
+
+#ifndef NO_QECHO
+#define NO_QECHO        0
+#endif
+
+#ifndef NO_QLOG
+#define NO_QLOG         0
+#endif
+
+#ifndef NO_QTHROW
+#define NO_QTHROW       0
+#endif
+
+#ifndef ECHO_QDEBUG
+#define ECHO_QDEBUG     !NO_QECHO && !NO_QDEBUG && defined( _DEBUG ) && 0
+#endif
+
+#ifndef ECHO_QWARNING
+#define ECHO_QWARNING   !NO_QECHO && !NO_QWARNING && 1
+#endif
+
+#ifndef ECHO_QCRITICAL
+#define ECHO_QCRITICAL  !NO_QECHO && !NO_QCRITICAL && 1
+#endif
+
+#ifndef ECHO_QFATAL
+#define ECHO_QFATAL     !NO_QECHO && !NO_QFATAL && 1
+#endif
+
+#ifndef LOG_QDEBUG
+#define LOG_QDEBUG      !NO_QLOG && !NO_QDEBUG && defined( _DEBUG ) && 0
+#endif
+
+#ifndef LOG_QWARNING
+#define LOG_QWARNING    !NO_QLOG && !NO_QWARNING && 0
+#endif
+
+#ifndef LOG_QCRITICAL
+#define LOG_QCRITICAL   !NO_QLOG && !NO_QCRITICAL && 0
+#endif
+
+#ifndef LOG_QFATAL
+#define LOG_QFATAL      !NO_QLOG && !NO_QFATAL && 0
+#endif
+
+#ifndef THROW_QCRITICAL
+#define THROW_QCRITICAL !NO_QTHROW && !NO_QCRITICAL && 1
+#endif
+
+#ifndef THROW_QFATAL
+#define THROW_QFATAL    !NO_QTHROW && !NO_QFATAL && 1
+#endif
+
+//
 // OTB_WRAP_QT defintion
 #cmakedefine OTB_WRAP_QT "@OTB_WRAP_QT@"
 

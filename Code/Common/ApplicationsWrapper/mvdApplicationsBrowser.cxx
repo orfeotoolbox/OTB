@@ -102,17 +102,20 @@ ApplicationsBrowser
   // TODO : remove this verbosity later
   if ( appList.size() == 0 )
     {
-    std::cerr << "ERROR: Available modules : none." << std::endl;
+    qWarning() << "Available OTB applications: NONE!";
     }
   else
     {
-    std::cout << "--- Available modules :" << std::endl;
-    for (StringVector::const_iterator it = appList.begin(); it != appList.end(); ++it)
+    qDebug() << "Available OTB applications:";
+
+    for( StringVector::const_iterator it( appList.begin() );
+	 it!=appList.end();
+	 ++it )
       {
-      std::cout << "\t" << *it << std::endl;
+      qDebug( "\t%s", it->c_str() );
       }
     }
-    
+
   return appList;
 }
 

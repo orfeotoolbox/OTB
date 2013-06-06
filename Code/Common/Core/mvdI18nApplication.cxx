@@ -215,6 +215,80 @@ I18nApplication
 }
 
 /*****************************************************************************/
+void
+I18nApplication
+::HandleQtMessage( QtMsgType type, const char* message )
+{
+  switch( type )
+    {
+    //
+    // DEBUG
+    case QtDebugMsg:
+#if ECHO_QDEBUG
+      fprintf( stderr, "%s\n", message );
+#endif
+#if LOG_QDEBUG
+      assert( false && "Not yet implemented!" );
+#endif
+      break;
+    //
+    // WARNING
+    case QtWarningMsg:
+#if ECHO_QWARNING
+      fprintf( stderr, tr( "Warning: %s\n" ).toLatin1().constData(), message );
+#endif
+#if LOG_QWARNING
+      assert( false && "Not yet implemented!" );
+#endif
+      break;
+    //
+    // CRITICAL
+    case QtCriticalMsg:
+#if ECHO_QCRITICAL
+      fprintf( stderr, tr( "Error: %s\n" ).toLatin1().constData(), message );
+#endif
+#if LOG_QCRITICAL
+      assert( false && "Not yet implemented!" );
+#endif
+#if THROW_QCRITICAL
+      throw std::runtime_error(
+	ToStdString(
+	  tr( "Error: " )
+	  .arg( message )
+	)
+      );
+#endif
+      break;
+    //
+    // FATAL
+    case QtFatalMsg:
+#if ECHO_QFATAL
+      fprintf(
+	stderr,
+	tr( "Fatal error: %s\n" ).toLatin1().constData(),
+	message
+      );
+#endif
+#if LOG_QFATAL
+      assert( false && "Not yet implemented!" );
+#endif
+#if THROW_QFATAL
+      throw std::runtime_error(
+	ToStdString(
+	  tr( "Fatal error: " )
+	  .arg( message )
+	)
+      );
+#endif
+      break;
+
+    default:
+      assert( false && "Unhandled message QtMsgType!" );
+      break;
+    }
+}
+
+/*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
@@ -226,6 +300,7 @@ I18nApplication
   m_Model( NULL ),
   m_IsRunningFromBuildDir( false )
 {
+  qInstallMsgHandler( I18nApplication::HandleQtMessage );
 }
 
 /*******************************************************************************/

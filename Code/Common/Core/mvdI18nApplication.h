@@ -417,6 +417,22 @@ private:
 				 const QString& searchDelimiters =QString(),
 				 const QString& suffix =QString() );
 
+  //
+  // Static methods.
+  //
+
+  /**
+   * \brief Handles Qt messages thrown by calls to qDebug(),
+   * qWarning(), qCritical(), qFatal().
+   *
+   * This is a callback method registered into Qt message handling
+   * system.
+   *
+   * \param type Type of caught message.
+   * \param message Content of caught message.
+   */
+  static void HandleQtMessage( QtMsgType type, const char* message );
+
 //
 // Private attributes.
 private:
