@@ -60,7 +60,6 @@
 #include "otbImageListToVectorImageFilter.h"
 
 
-
 namespace otb
 {
 namespace Wrapper
