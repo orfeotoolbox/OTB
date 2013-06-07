@@ -148,6 +148,48 @@ DatabaseModel
 }
 
 /*******************************************************************************/
+void
+DatabaseModel
+::RemoveDatasetModel( const DatasetId& id )
+{
+  ReleaseDatasetModel( id, true );
+
+  QFileInfo finfo( I18nApplication::ConstInstance()->GetCacheDir(), id );
+  QDir dir( finfo.filePath() );
+  QFileInfoList fileInfos(
+    dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Files )
+  );
+
+  for( QFileInfoList::const_iterator it( fileInfos.begin() );
+       it!=fileInfos.end();
+       ++it )
+    {
+    if( !dir.remove( it->fileName() ) )
+      throw SystemError(
+	ToStdString(
+	  tr( "Failed to remove file '%1'." ).arg( it->filePath() )
+	)
+      );
+    }
+
+  QDir parentDir( dir );
+
+  if( !parentDir.cdUp() )
+    throw SystemError(
+      ToStdString(
+	tr( "Failed to access parent directory of '%1'." ).arg( dir.path() )
+      )
+    );
+
+  if( !parentDir.rmdir( id  ) )
+    throw SystemError(
+      ToStdString(
+	tr( "Failed to remove dataset directory '%1'." ).arg( dir.path() )
+      )
+    );
+}
+
+/*******************************************************************************/
 DatabaseModel::DatasetId
 DatabaseModel
 ::RegisterDatasetModel( DatasetModel* model )
@@ -189,16 +231,35 @@ DatabaseModel
 /*******************************************************************************/
 void
 DatabaseModel
-::ReleaseDatasetModel( const DatasetId& id )
+::ReleaseDatasetModel( const DatasetId& id, bool remove )
 {
   qDebug() << this << "::ReleaseDatasetModel(" << id << ")";
 
   // Find (key, value) pair.
   DatasetModelMap::iterator it( DatasetModelIterator( id ) );
 
-  // release model
+  // Clear selected dataset-model if it is to be deleted below.
+  if( it.value()==m_SelectedDatasetModel )
+    {
+    SetSelectedDatasetModel( NULL );
+    }
+
+  // Release dataset-model.
   delete it.value();
   it.value() = NULL;
+
+  // Remove dataset-model.
+  if( remove )
+    {
+    // Erase it from registered list.
+    m_DatasetModels.erase( it );
+
+    // Safety reset.
+    it = m_DatasetModels.end();
+
+    // Signal database content has changed.
+    emit DatabaseChanged();
+    }
 }
 
 /*******************************************************************************/
@@ -299,94 +360,6 @@ DatabaseModel
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-DatabaseModel
-::OnDatasetToDeleteSelected( const QString&  id)
-{
-  // get the datasetModel to be deleted
-  DatasetModel * model = FindDatasetModel( id );
-  assert (model!=NULL);
-
-  // pop up a Dialog widget to confirm the user choice
-  QMessageBox msgBox;
-  msgBox.setWindowTitle( tr( "Warning") );
-  msgBox.setText(tr("You are about to remove the dataset : \n %1 \n\n"
-                    " Are your sure ? ").arg( model->GetAlias() ) );
-  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  msgBox.setDefaultButton(QMessageBox::No);
-  int ret = msgBox.exec();
-  
-  // if choice confirmed
-  if (ret == QMessageBox::Yes)
-    {
-    // if current selected item is removed, make the TreeWidget
-    // focusing on the root item
-    if (model  == GetSelectedDatasetModel() )
-      {
-      // set the Tree browser to point on nothing
-      emit CurrentSelectedItemDeleted();
-
-      //
-      SetSelectedDatasetModel( NULL );
-      }
-
-    // get the full path to the dataset dir
-    QDir datasetQDir( 
-      I18nApplication::Instance()->GetCacheDir().absolutePath() + 
-      "/" + 
-      id
-      );
-    QString datasetDir = datasetQDir.absolutePath();
-
-    //
-    // remove the files in this directory
-    bool removingFilesStatus = true;
-    QStringList fileList = datasetQDir.entryList( QDir::NoDotAndDotDot |  QDir::Files );
-    for( int i = 0; i < fileList.count(); ++i )
-      {
-      // qDebug()<< "Removing file "<< fileList.at(i);
-      removingFilesStatus &= datasetQDir.remove( fileList.at(i) );
-      }
-    
-    // go to parent dir
-    QDir datasetQDirParent = datasetQDir;
-    datasetQDirParent.cdUp();
-    
-    // if path removed successfuly : 
-    //  - release dataset model
-    //  - notify change to update the database browser
-    if ( removingFilesStatus &&  datasetQDirParent.rmpath( datasetDir ) )
-      {
-      /*
-      qDebug() << this 
-               << " ::OnDatasetToDeleteSelected -> Removing : "
-               << datasetQDir.absolutePath();
-      */
-      
-      // release the model relative to 'id'
-      ReleaseDatasetModel( id );
-
-      // remove the key from the map
-      m_DatasetModels.remove( id );
-
-      //  notify database changed
-      emit DatabaseChanged();
-      }
-
-    // rmpath() removes the parent directory (i.e mvd2 ) when no files
-    // (datasets ) in it ->  recreate "mvd2" if removed
-    // TODO : find a better solution to replace this hack
-    if (! datasetQDirParent.exists() )
-      {
-      /*
-      qDebug() << this<< "::OnDatasetToDeleteSelected Making removed dir "
-               << datasetQDirParent.absolutePath();
-      */
-
-      datasetQDirParent.mkpath( datasetQDirParent.absolutePath() );
-      }
-    }
-}
 
 /*******************************************************************************/
 void
@@ -394,7 +367,7 @@ DatabaseModel
 ::OnDatasetRenamed( const QString&  alias, const QString & id)
 {
   // get the model relative to the previous key
-  DatasetModel * datasetModel = FindDatasetModel(id);
+  DatasetModel* datasetModel = FindDatasetModel(id);
   
   // update the alias
   datasetModel->SetAlias( alias );

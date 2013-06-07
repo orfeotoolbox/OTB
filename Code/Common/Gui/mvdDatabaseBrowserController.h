@@ -182,6 +182,10 @@ private slots:
    */
   void OnImageDropped( const QString & imagefname );
 
+  /**
+   */
+  void OnDatasetToDeleteSelected( const QString& id );
+
   //
   // AbstractModelController overloads.
 

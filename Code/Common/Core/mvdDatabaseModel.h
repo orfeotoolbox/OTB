@@ -126,6 +126,11 @@ public:
   /**
    */
   inline
+    DatasetModel* FindDatasetModel( const DatasetId& id );
+
+  /**
+   */
+  inline
     DatasetModel* GetSelectedDatasetModel();
 
   /**
@@ -136,6 +141,10 @@ public:
   /**
    */
   DatasetModel* SelectDatasetModel( const DatasetId& id );
+
+  /**
+   */
+  void RemoveDatasetModel( const DatasetId& id );
 
   //
   // AbstractModel overrides.
@@ -170,9 +179,6 @@ signals:
 //
 // Slots.
 public slots:
-  /**
-   */
-  void OnDatasetToDeleteSelected( const QString& id );
 
   /**
    */
@@ -204,7 +210,7 @@ protected:
 private:
   /**
    */
-  typedef QMap< DatasetId, DatasetModel*>  DatasetModelMap;
+  typedef QMap< DatasetId, DatasetModel* > DatasetModelMap;
 
 //
 // Private methods.
@@ -224,11 +230,6 @@ private:
   /**
    */
   inline
-    DatasetModel* FindDatasetModel( const DatasetId& id );
-
-  /**
-   */
-  inline
     DatasetModelMap::const_iterator
     DatasetModelIterator( const DatasetId& id ) const;
 
@@ -239,8 +240,15 @@ private:
     DatasetModelIterator( const DatasetId& id );
 
   /**
+   * \brief Find dataset identified by given key, delete its
+   * instance in memory, keep it in or remove it from list of
+   * registered datasets depending on the remove flag.
+   *
+   * \param id Key identifying dataset.
+   * \param remove true to remove it from list of registered dataset,
+   * false to keep it in.
    */
-  void ReleaseDatasetModel( const DatasetId& id );
+  void ReleaseDatasetModel( const DatasetId& id, bool remove );
 
   /**
    */
@@ -380,7 +388,9 @@ DatabaseModel
   // Should be present because it should have been initialized in
   // InitializeDatasetModels().
   if( it==m_DatasetModels.end() )
-    throw std::out_of_range( ToStdString( id ) );
+    throw std::out_of_range(
+      ToStdString( tr( "Dataset '%1' not found." ).arg( id ) )
+    );
 
   // Return found element.
   return it;
@@ -400,7 +410,9 @@ DatabaseModel
   // Should be present because it should have been initialized in
   // InitializeDatasetModels().
   if( it==m_DatasetModels.end() )
-    throw std::out_of_range( ToStdString( id ) );
+    throw std::out_of_range(
+      ToStdString( tr( "Dataset '%1' not found!" ).arg( id ) )
+    );
 
   // Return found element.
   return it;

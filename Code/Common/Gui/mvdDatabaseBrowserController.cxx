@@ -108,10 +108,10 @@ DatabaseBrowserController
   //
   QObject::connect(
     widget->GetDatabaseTreeWidget(), 
-    SIGNAL( DatasetToDeleteSelected( const QString & )  ),
+    SIGNAL( DatasetToDeleteSelected( const QString& ) ),
     // to:
-    model,
-    SLOT( OnDatasetToDeleteSelected(const QString& ) )
+    this,
+    SLOT( OnDatasetToDeleteSelected( const QString& ) )
     );
 
   //
@@ -175,7 +175,7 @@ DatabaseBrowserController
     widget->GetDatabaseTreeWidget(), 
     SIGNAL( DatasetToDeleteSelected( const QString & )  ),
     // to:
-    qobject_cast< DatabaseModel *>( model ), 
+    this, 
     SLOT( OnDatasetToDeleteSelected(const QString& ) )
     );
 }
@@ -327,6 +327,48 @@ DatabaseBrowserController
 ::OnImageDropped( const QString & imagefname )
 {
   emit ImageToImportDropped( imagefname );
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::OnDatasetToDeleteSelected( const QString& id )
+{
+  // Access database-model.
+  assert( GetModel()==GetModel< DatabaseModel >() );
+  DatabaseModel* databaseModel = GetModel< DatabaseModel >();
+  assert( databaseModel!=NULL );
+
+  // Access selected dataset-model (candidate to deletion).
+  DatasetModel* datasetModel = databaseModel->FindDatasetModel( id );
+  assert( datasetModel!=NULL );
+
+  // Pop confirm delete dialog.
+  QMessageBox::StandardButton button = QMessageBox::warning(
+    GetWidget(),
+    tr( "Warning!" ),
+    tr( "Are you sure you want to delete dataset '%1'?" )
+    .arg( datasetModel->GetAlias() ),
+    QMessageBox::Yes | QMessageBox::No
+  );
+
+  if( button==QMessageBox::No )
+    return;
+
+  /*
+  // if current selected item is removed, make the TreeWidget
+  // focusing on the root item
+  if (model  == GetSelectedDatasetModel() )
+    {
+    // set the Tree browser to point on nothing
+    emit CurrentSelectedItemDeleted();
+
+    //
+    SetSelectedDatasetModel( NULL );
+    }
+  */
+
+  databaseModel->RemoveDatasetModel( id );
 }
 
 } // end namespace 'mvd'

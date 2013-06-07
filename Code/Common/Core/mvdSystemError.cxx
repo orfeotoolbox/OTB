@@ -84,9 +84,10 @@ SystemError::whatString( int err, const std::string& msg )
     << err
     << ": "
     << strerror( err )
-    << ( msg.empty()
-	 ? "."
-	 : " " + msg + "." );
+    << ".";
+
+  if( !msg.empty() )
+    sstream << std::endl << msg;
 
   return sstream.str();
 }
