@@ -540,43 +540,6 @@ private:
       disparityTranslateFilter->SetLeftSensorImageInput(inleft);
       disparityTranslateFilter->UpdateOutputInformation();
       m_Filters.push_back(disparityTranslateFilter.GetPointer());
-      // PARAMETER ESTIMATION
-
-      double underElev = this->GetParameterFloat("below");
-      double overElev = this->GetParameterFloat("above");
-
-      //TODO JGT replace by statistic filter on DEMToImageFilter
-      double minElev = 0;
-      double maxElev = 0;
-      otbAppLogINFO(<<"Minimum elevation found : "<<minElev);
-      otbAppLogINFO(<<"Maximum elevation found : "<<maxElev);
-
-      //check under and over for each couple
-      m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
-      m_Multi3DMapToDEMFilter->SetNoDataValue(minElev + underElev);
-      m_Multi3DMapToDEMFilter->SetElevationMax(maxElev + overElev);
-
-      double minDisp = vcl_floor((-1.0) * overElev * meanBaseline / epiSpacing[0]);
-      double maxDisp = vcl_ceil((-1.0) * underElev * meanBaseline / epiSpacing[0]);
-      otbAppLogINFO(<<"Minimum disparity : "<<minDisp);
-      otbAppLogINFO(<<"Maximum disparity : "<<maxDisp);
-      blockMatcherFilter->SetMinimumHorizontalDisparity(minDisp);
-      blockMatcherFilter->SetMaximumHorizontalDisparity(maxDisp);
-
-      blockMatcherFilter->SetMinimumVerticalDisparity(0);
-      blockMatcherFilter->SetMaximumVerticalDisparity(0);
-
-      // Compute disparity mask
-      BandMathFilterType::Pointer dispMaskFilter = BandMathFilterType::New();
-      dispMaskFilter->SetNthInput(0, hMedianFilter->GetOutput(), "hdisp");
-      dispMaskFilter->SetNthInput(1, subPixelFilter->GetMetricOutput(), "metric");
-      std::ostringstream maskFormula;
-      maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (metric > 0.6),255,0)";
-      dispMaskFilter->SetExpression(maskFormula.str());
-       m_Filters.push_back(dispMaskFilter.GetPointer());
-
-      //TODO to check
-      disparityTranslateFilter->SetDisparityMaskInput(dispMaskFilter->GetOutput());
 
       MedianFilterType::Pointer hMedianFilter2 = MedianFilterType::New();
       MedianFilterType::Pointer vMedianFilter2 = MedianFilterType::New();
@@ -604,9 +567,81 @@ private:
       m_MultiDisparityTo3DFilterList[i]->SetMovingKeywordList(0, inright->GetImageKeywordlist());
       m_MultiDisparityTo3DFilterList[i]->UpdateOutputInformation();
 
-      //TODO check min max for each stereo couple
-      m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
-      m_Multi3DMapToDEMFilter->SetElevationMax(maxElev + overElev);
+      // PARAMETER ESTIMATION
+
+      double underElev = this->GetParameterFloat("below");
+      double overElev = this->GetParameterFloat("above");
+
+      double minElev = 0.0;
+      double maxElev = 0.0;
+
+      // Compute min/max elevation on DEM
+      if (otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this, "elev"))
+        {
+      DEMToImageGeneratorType::Pointer demToImageFilter = DEMToImageGeneratorType::New();
+      demToImageFilter->SetOutputParametersFromImage((m_MultiDisparityTo3DFilterList[i]->GetOutput()));
+      MinMaxFilterType::Pointer minMaxFilter = MinMaxFilterType::New();
+      minMaxFilter->SetInput(demToImageFilter->GetOutput());
+      minMaxFilter->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
+
+      AddProcess(minMaxFilter->GetStreamer(), "Estimating min/max elevation...");
+      minMaxFilter->Update();
+
+      minElev = minMaxFilter->GetMinimum();
+      maxElev = minMaxFilter->GetMaximum();
+      }
+      else
+      {
+        minElev =otb::Wrapper::ElevationParametersHandler::GetDefaultElevation(this, "elev");
+        maxElev =otb::Wrapper::ElevationParametersHandler::GetDefaultElevation(this, "elev");
+        otbAppLogINFO(<<"Default elevation set for Min/Max elevation : "<<minElev);
+      }
+
+      otbAppLogINFO(<<"Minimum elevation found : "<<minElev);
+      otbAppLogINFO(<<"Maximum elevation found : "<<maxElev);
+
+      //check under and over for each couple
+      if(i==0)
+        {
+        m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
+        m_Multi3DMapToDEMFilter->SetNoDataValue(minElev);
+        m_Multi3DMapToDEMFilter->SetElevationMax(maxElev + overElev);
+        }
+      else
+        {
+         if(minElev<(m_Multi3DMapToDEMFilter->GetElevationMin()-underElev))
+           {
+           m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
+           m_Multi3DMapToDEMFilter->SetNoDataValue(minElev);
+           }
+         if(maxElev<(m_Multi3DMapToDEMFilter->GetElevationMax()-overElev))
+          {
+           m_Multi3DMapToDEMFilter->SetElevationMax(maxElev + overElev);
+          }
+        }
+
+      double minDisp = vcl_floor((-1.0) * overElev * meanBaseline / epiSpacing[0]);
+      double maxDisp = vcl_ceil((-1.0) * underElev * meanBaseline / epiSpacing[0]);
+      otbAppLogINFO(<<"Minimum disparity : "<<minDisp);
+      otbAppLogINFO(<<"Maximum disparity : "<<maxDisp);
+      blockMatcherFilter->SetMinimumHorizontalDisparity(minDisp);
+      blockMatcherFilter->SetMaximumHorizontalDisparity(maxDisp);
+
+      blockMatcherFilter->SetMinimumVerticalDisparity(0);
+      blockMatcherFilter->SetMaximumVerticalDisparity(0);
+
+      // Compute disparity mask
+      BandMathFilterType::Pointer dispMaskFilter = BandMathFilterType::New();
+      dispMaskFilter->SetNthInput(0, hMedianFilter->GetOutput(), "hdisp");
+      dispMaskFilter->SetNthInput(1, subPixelFilter->GetMetricOutput(), "metric");
+      std::ostringstream maskFormula;
+      maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (metric > 0.6),255,0)";
+      dispMaskFilter->SetExpression(maskFormula.str());
+      m_Filters.push_back(dispMaskFilter.GetPointer());
+
+      //TODO to check
+      disparityTranslateFilter->SetDisparityMaskInput(dispMaskFilter->GetOutput());
+
       m_Multi3DMapToDEMFilter->Set3DMapInput(i, m_MultiDisparityTo3DFilterList[i]->GetOutput());
       //TODO JGT Check if mask is necessary
 
@@ -618,7 +653,6 @@ private:
     m_Multi3DMapToDEMFilter->UpdateOutputInformation();
 
     SetParameterOutputImage("out", m_Multi3DMapToDEMFilter->GetOutput());
-
 
   }
   
