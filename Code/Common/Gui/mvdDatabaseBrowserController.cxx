@@ -126,14 +126,6 @@ DatabaseBrowserController
   //
   QObject::connect(
     model,
-    SIGNAL( CurrentSelectedItemDeleted() ),
-    widget,
-    SLOT( OnCurrentSelectedItemDeleted() )
-    );
-
-  //
-  QObject::connect(
-    model,
     SIGNAL( DatabaseChanged() ),
     this,
     SLOT( RefreshWidget() )
@@ -354,19 +346,6 @@ DatabaseBrowserController
 
   if( button==QMessageBox::No )
     return;
-
-  /*
-  // if current selected item is removed, make the TreeWidget
-  // focusing on the root item
-  if (model  == GetSelectedDatasetModel() )
-    {
-    // set the Tree browser to point on nothing
-    emit CurrentSelectedItemDeleted();
-
-    //
-    SetSelectedDatasetModel( NULL );
-    }
-  */
 
   databaseModel->RemoveDatasetModel( id );
 }

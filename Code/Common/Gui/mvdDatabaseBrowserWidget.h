@@ -123,8 +123,6 @@ public:
 // Public SLOTS.
 public slots:
 
-  void OnCurrentSelectedItemDeleted();
-
   void OnSearchBoxChanged( const QString & search );
 
 

@@ -251,20 +251,6 @@ DatabaseBrowserWidget
 /*******************************************************************************/
 void
 DatabaseBrowserWidget
-::OnCurrentSelectedItemDeleted()
-{
-  //
-  // when the dataset removed is the current item, change the current
-  // selected item to be the top level item ( equivalent to 
-  // no dataset selected ) 
-  GetDatabaseTreeWidget()->setCurrentItem( 
-    GetDatabaseTreeWidget()->topLevelItem( 0 )
-    );
-}
-
-/*******************************************************************************/
-void
-DatabaseBrowserWidget
 ::OnSearchBoxChanged(const QString & search)
 {
   // 
