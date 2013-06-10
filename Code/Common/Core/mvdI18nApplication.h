@@ -32,7 +32,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtGui>
+#include <QtCore>
 
 //
 // System includes (sorted by alphabetic order)
@@ -73,11 +73,28 @@ class DatasetModel;
 
 /** \class I18nApplication
  *
- * \brief WIP.
+ * \brief The MVD2 core-application (which is different from
+ * QCoreApplication).
+ * 
+ * I18nApplication do not derive from QCoreApplication to
+ * prevent a dread diamong multiple inheritance scheme which could not
+ * be resolved using virtual inheritance (because Qt is not designed
+ * for).
  *
+ * I18nApplication does not derive from QApplication to
+ * prevent package .../Common/Core to depend on QtGui package (which
+ * would have broken the Common/Core-Common/Gui package layout).
+ *
+ * The dread diamond multiple inheritance scheme is solved using
+ * aggregation.
+ *
+ * QCoreApplication is passed as argument of I18nApplication
+ * constructor. So, is user application must derive QApplication (to,
+ * for example, provide sessio management), the specialized instance
+ * can be passed as argument of constructor.
  */
 class Monteverdi2_EXPORT I18nApplication
-  : public QApplication
+  : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -93,10 +110,9 @@ public:
   /**
    * \brief Constructor.
    *
-   * \param argc Command-line argument count in the argv array.
-   * \param argv Array of command-argument (whitespace-separated) strings.
+   * \param qtApp The parent Qt application of this MVD2 application.
    */
-  I18nApplication( int& argc, char** argv );
+  I18nApplication( QCoreApplication* qtApp );
 
   /** \brief Destructor. */
   virtual ~I18nApplication();
@@ -377,14 +393,14 @@ protected:
 
   /**
    */
-  virtual void virtual_InitializeCore() =0;
-
-  /**
-   */
   void InitializeCore( const QString& appName,
 		       const QString& appVersion,
 		       const QString& orgName,
 		       const QString& orgDomain );
+
+  /**
+   */
+  virtual void virtual_InitializeCore() =0;
 
   /**
    */
@@ -438,6 +454,11 @@ private:
 private:
 
   /**
+   * \brief I18nApplication singleton instance.
+   */
+  static I18nApplication* m_Instance;
+
+  /**
   * \brief Directory where all cached files are stored (repository of datasets).
   */
   // TODO: Move I18nApplication::m_CacheDir to private section.
@@ -484,7 +505,7 @@ I18nApplication*
 I18nApplication
 ::Instance()
 {
-  return I18nApplication::Instance< I18nApplication >();
+  return I18nApplication::m_Instance;
 }
 
 /*****************************************************************************/
@@ -492,27 +513,27 @@ const I18nApplication*
 I18nApplication
 ::ConstInstance()
 {
-  return I18nApplication::ConstInstance< I18nApplication >();
+  return I18nApplication::m_Instance;
 }
 
 /*****************************************************************************/
-template< typename TApplication >
+template< typename T >
 inline
-TApplication*
+T*
 I18nApplication
 ::Instance()
 {
-  return qobject_cast< TApplication* >( qApp );
+  return qobject_cast< T* >( I18nApplication::Instance() );
 }
 
 /*****************************************************************************/
-template< typename TApplication >
+template< typename T >
 inline
-const TApplication*
+const T*
 I18nApplication
 ::ConstInstance()
 {
-  return qobject_cast< const TApplication* >( qApp );
+  return qobject_cast< const T* >( I18nApplication::ConstInstance() );
 }
 
 /*****************************************************************************/

@@ -214,7 +214,7 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
   //
   // Get the cache dir
   // get the const instance of the I18nApplication
-  I18nApplication *  app = I18nApplication::Instance< I18nApplication >();
+  I18nApplication *  app = I18nApplication::Instance();
 
   //
   // get the OTB application widget layout

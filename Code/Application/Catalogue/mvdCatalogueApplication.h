@@ -88,10 +88,9 @@ public:
   /**
    * \brief Constructor.
    *
-   * \param argc Command-line argument count in the argv array.
-   * \param argv Array of command-argument (whitespace-separated) strings.
+   * \param qtApp The parent Qt application (\see I18nApplication).
    */
-  CatalogueApplication( int& argc, char** argv );
+  CatalogueApplication( QApplication* qtApp );
 
   /** \brief Destructor. */
   virtual ~CatalogueApplication();

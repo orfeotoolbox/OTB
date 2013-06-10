@@ -97,15 +97,19 @@ I18nMainWindow
   // Connect Appllication and MainWindow when selected model is about
   // to change.
   QObject::connect(
-    qApp, SIGNAL( AboutToChangeModel( const AbstractModel* ) ),
-    this, SLOT( OnAboutToChangeModel( const AbstractModel* ) )
+    I18nApplication::Instance(),
+    SIGNAL( AboutToChangeModel( const AbstractModel* ) ),
+    this,
+    SLOT( OnAboutToChangeModel( const AbstractModel* ) )
   );
 
   // Connect Application and MainWindow when selected model has been
   // changed.
   QObject::connect(
-    qApp, SIGNAL( ModelChanged( AbstractModel* ) ),
-    this, SLOT( OnModelChanged( AbstractModel* ) )
+    I18nApplication::Instance(),
+    SIGNAL( ModelChanged( AbstractModel* ) ),
+    this,
+    SLOT( OnModelChanged( AbstractModel* ) )
   );
 
   virtual_ConnectUI();

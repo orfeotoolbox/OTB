@@ -559,7 +559,7 @@ MainWindow
 
   //
   //
-  const Application* app = Application::ConstInstance();
+  const Application* app = I18nApplication::ConstInstance< Application >();
   assert( app!=NULL );
 
   const DatasetModel* datasetModel = 

@@ -44,7 +44,9 @@
 int
 main( int argc, char* argv[] )
 {
-  mvd::Application application( argc, argv );
+  QApplication qtApp( argc, argv );
+
+  mvd::Application application( &qtApp );
 
   application.Initialize();
 
@@ -109,7 +111,7 @@ main( int argc, char* argv[] )
   // This code is here to propagate events from maximization to child
   // widgets, so that an image loaded from command-line will get the
   // appropriate widget size and occupy as much space as possible on screen.
-  application.processEvents();
+  QCoreApplication::instance()->processEvents();
 
   // TODO: Move into mvd::Application.
   // Handle passing image filename from command-line
@@ -117,8 +119,8 @@ main( int argc, char* argv[] )
     {
     mainWindow.OpenImage( QString(argv[1]) );
     }
-  
-  return application.exec();
+
+  return QCoreApplication::instance()->exec();
 }
 
 //

@@ -90,7 +90,7 @@ AbstractWorker
     result = virtual_Do();
 
     // Access application.
-    const I18nApplication* app = I18nApplication::ConstInstance();
+    const QCoreApplication* app = QCoreApplication::instance();
     assert( app!=NULL );
 
     // Move object into application's main thread.

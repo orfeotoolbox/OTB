@@ -94,7 +94,8 @@ PreferencesDialog
       break;
       }
     else
-      { // User select something, test if it is correct
+      {
+      // User select something, test if it is correct
       if ( Application::Instance()->TestDirExistenceAndWriteAcess(QDir(cacheDirStr)) )
         {
         m_CacheDirRootModified = true;

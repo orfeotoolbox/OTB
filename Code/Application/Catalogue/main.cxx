@@ -54,8 +54,10 @@
 int
 main( int argc, char* argv[] )
 {
+  QApplication qtApp( argc, argv );
+
   // 1. Initialize application and sync settings.
-  mvd::CatalogueApplication application( argc, argv );
+  mvd::CatalogueApplication application( &qtApp );
   application.Initialize();
 
   // 2. Initialize main-window (UI).
@@ -101,7 +103,7 @@ main( int argc, char* argv[] )
 
 
   // 6. Let's go: run the application and return exit code.
-  return application.exec();
+  return QCoreApplication::instance()->exec();
 }
 
 

@@ -67,8 +67,8 @@ namespace mvd
 
 /*******************************************************************************/
 CatalogueApplication
-::CatalogueApplication( int& argc, char** argv ) :
-  I18nApplication( argc, argv ),
+::CatalogueApplication( QApplication* qtApp ) :
+  I18nApplication( qtApp ),
   m_OTBApplicationsModel( NULL )
 {
 }

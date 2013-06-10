@@ -64,8 +64,8 @@ const char* Application::DATASET_EXT = ".ds";
 
 /*******************************************************************************/
 Application
-::Application( int& argc, char** argv ) :
-  I18nApplication( argc, argv )
+::Application( QApplication* qtApp ) :
+  I18nApplication( qtApp )
 {
   QObject::connect(
     this, SIGNAL( aboutToQuit() ),

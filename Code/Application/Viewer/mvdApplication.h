@@ -91,10 +91,9 @@ public:
   /**
    * \brief Constructor.
    *
-   * \param argc Command-line argument count in the argv array.
-   * \param argv Array of command-argument (whitespace-separated) strings.
+   * \param The parent Qt application (\see I18nApplication).
    */
-  Application( int& argc, char** argv );
+  Application( QApplication* qtApp );
 
   /** \brief Destructor. */
   virtual ~Application();
@@ -195,7 +194,7 @@ private slots:
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
-/*****************************************************************************/
+ /*****************************************************************************/
 inline
 Application*
 Application

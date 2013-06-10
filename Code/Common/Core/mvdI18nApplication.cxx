@@ -63,6 +63,8 @@ const char* I18nApplication::DATASET_EXT = ".ds";
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
+I18nApplication* I18nApplication::m_Instance = NULL;
+
 /*******************************************************************************/
 bool
 I18nApplication
@@ -288,14 +290,35 @@ I18nApplication
 
 /*******************************************************************************/
 I18nApplication
-::I18nApplication( int& argc, char** argv ) :
-  QApplication( argc, argv ),
+::I18nApplication( QCoreApplication* qtApp ) :
+  QObject( qtApp ),
   m_CacheDir(),
   m_Settings( NULL ),
   m_Model( NULL ),
   m_IsRunningFromBuildDir( false )
 {
+  if( m_Instance!=NULL )
+    {
+    throw std::runtime_error(
+      ToStdString(
+	"I18nApplication is a singleton class!"
+      )
+    );
+    }
+
+  if( qtApp==NULL )
+    {
+    throw std::invalid_argument(
+      ToStdString(
+	tr( "Class 'I18nApplication' instance must be provided a"
+	    "QCoreApplication' pointer at construction time!" )
+      )
+    );
+    }
+
   qInstallMsgHandler( I18nApplication::HandleQtMessage );
+
+  m_Instance = this;
 }
 
 /*******************************************************************************/
@@ -316,7 +339,7 @@ I18nApplication
   // Force numeric options of locale to "C"
   // See issue #635
   //
-  // TODO: Move into I18nApplication.
+  // TODO: Check it is still needed here!
   setlocale( LC_NUMERIC, "C" );
 
   // Initialize QCoreApplication.
@@ -560,8 +583,10 @@ I18nApplication
   QCoreApplication::setOrganizationName( orgName );
   QCoreApplication::setOrganizationDomain( orgDomain );
 
+#if 0
 #ifndef Q_WS_MAC
     setWindowIcon( QIcon( QLatin1String( ":/images/application_icon" ) ) );
+#endif
 #endif
 }
 
