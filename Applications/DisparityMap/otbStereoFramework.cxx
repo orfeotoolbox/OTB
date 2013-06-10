@@ -374,9 +374,7 @@ private:
     //create pipeline for each stereo couple
 
 
-
     std::vector<std::vector<int> > couples=this->CreateCouplesList(GetParameterString("co"));
-
 
 
     unsigned int stereoCouples = couples.size();
