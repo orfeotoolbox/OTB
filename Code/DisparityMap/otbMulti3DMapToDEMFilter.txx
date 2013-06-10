@@ -43,7 +43,7 @@ Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Multi3DMapToDEMFil
   m_MapSplitterList = SplitterListType::New();
 
   //m_NoDataValue = itk::NumericTraits<DEMPixelType>::NonpositiveMin();
-  m_NoDataValue = 0; //TODO replace this value by Max or Min
+  m_NoDataValue = -32768;
   m_ElevationMin = 0;
   m_ElevationMax = 0;
   m_CellFusionMode = otb::CellFusionMode::MAX;
