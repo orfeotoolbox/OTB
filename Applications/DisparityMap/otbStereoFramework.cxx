@@ -200,6 +200,68 @@ private:
      m_Multi3DMapToDEMFilter =  Multi3DFilterType::New();
     }
   
+  std::vector<std::vector<int> > CreateCouplesList(string couples)
+    {
+    std::vector<std::vector<int> > couplesList;
+
+    FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");
+
+    unsigned int imageListNb = inList->Size();
+
+    if (!couples.empty())
+      {
+
+      unsigned int i;
+      std::vector<int> couple;
+      std::stringstream couplesStream(couples);
+      while (couplesStream >> i)
+        {
+        if (i >= imageListNb)
+          {
+          otbAppLogFATAL(<<i<<" is not a valid image index.");
+          }
+        couple.push_back(i);
+        if (couplesStream.peek() == ',')
+          {
+          couplesStream.ignore();
+          couplesList.push_back(couple);
+          couple.clear();
+          }
+        }
+       if (couplesStream.eof() == 0)
+        {
+        otbAppLogFATAL(<<couplesStream.str()<<" contain non valid character for couples string. (""comma"" and ""spaces"" are only valid delimiters) ");
+        }
+
+       couplesList.push_back(couple);
+
+       otbAppLogINFO(<<couplesList.size()<<"  Stereo couples will be processed");
+
+      }
+    else
+      {
+      if (imageListNb % 2 != 0)
+        {
+        otbAppLogFATAL(<<" input image list number must be even with empty couple string parameter. please add couple string parameter or input image(s).");
+
+        }
+      const unsigned int couplesNb = (imageListNb)/2;
+
+      otbAppLogINFO(<<couplesNb<<"  Stereo couples will be processed");
+
+      for (unsigned int index = 0; index <= couplesNb; index = index + 2)
+        {
+        std::vector<int> couple;
+        couple.push_back(index);
+        couple.push_back(index + 1);
+        couplesList.push_back(couple);
+        }
+      }
+
+    return couplesList;
+  }
+
+
   void DoInit()
   {
     SetName("StereoFramework");
@@ -228,6 +290,14 @@ private:
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
     SetParameterDescription("il", "The list of images. First image is used as left sensor image. Other images are used to complete stereo couple.");
+
+    AddParameter(ParameterType_String, "co", "Couples list");
+    SetParameterDescription("co","list of index of couples. couples must be separated by a comma. (index start at 0). for example : 0 1,1 2. note that images are handled by pairs."
+        " if left empty couples are created from input index (in this case image list must be even).");
+    MandatoryOff("co");
+    SetParameterString("co","");
+    DisableParameter("co");
+
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
     
@@ -285,6 +355,7 @@ private:
     // Nothing to do
   }
   
+
   void DoExecute()
   {
     // Setup the DEM Handler
@@ -298,11 +369,17 @@ private:
     if (inList->Size() < 2)
       {
       itkExceptionMacro("at least two input images must be set...");
-
       }
 
-    unsigned int stereoCouples = inList->Size() - 1;
-    otbAppLogINFO(<<stereoCouples<<" stereo Couples will be computed");
+    //create pipeline for each stereo couple
+
+
+
+    std::vector<std::vector<int> > couples=this->CreateCouplesList(GetParameterString("co"));
+
+
+
+    unsigned int stereoCouples = couples.size();
     m_ExtractorList.resize(inList->Size());
     //TODO JGT check the mutli stereo fusion step
     //     N MultiDisp which gives N 3D Map Then fuse N 3D Map to DEM
@@ -325,12 +402,19 @@ private:
 
     m_Multi3DMapToDEMFilter->SetNumberOf3DMaps(stereoCouples);
 
-    //create pipeline for each stereo couple
+
+    //
     for (unsigned int i = 0; i < stereoCouples; i++)
       {
 
-      FloatImageType::Pointer inleft = m_ExtractorList[0]->GetOutput();
-      FloatImageType::Pointer inright = m_ExtractorList[i + 1]->GetOutput();
+      std::vector<int> couple= couples[i];
+      if(couple.size()>2)
+        {
+        otbAppLogWARNING(<<" current couple contain more than 2 value. only first and second values will be associated to create next couple.");
+        }
+      otbAppLogINFO("\n \n \n /****    process image index "<<couple[0]<<" and "<<couple[1]<<"    ****/ \n \n \n");
+      FloatImageType::Pointer inleft = m_ExtractorList[couple[0]]->GetOutput();
+      FloatImageType::Pointer inright = m_ExtractorList[couple[1]]->GetOutput();
 
       m_MultiDisparityTo3DFilterList[i] = MultiDisparityTo3DFilterType::New();
       DeformationFieldSourceType::Pointer epipolarGridSource = DeformationFieldSourceType::New();
