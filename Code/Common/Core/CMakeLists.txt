@@ -13,7 +13,7 @@ set( Common_Core_SOURCES
   mvdDatabaseModel.cxx
   mvdDatasetModel.cxx
   mvdHistogramModel.cxx
-  mvdI18nApplication.cxx
+  mvdI18nCoreApplication.cxx
   mvdImageImporter.cxx
   mvdImagePlacenameLoader.cxx
   mvdMath.cxx
@@ -42,7 +42,7 @@ set( Common_Core_HEADERS_MOC
   mvdDatasetDescriptor.h
   mvdDatasetModel.h
   mvdHistogramModel.h
-  mvdI18nApplication.h
+  mvdI18nCoreApplication.h
   mvdImageImporter.h
   mvdImagePlacenameLoader.h
   # mvdMath.h

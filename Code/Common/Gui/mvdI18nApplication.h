@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdApplication_h
-#define __mvdApplication_h
+#ifndef __mvdI18nApplication_h
+#define __mvdI18nApplication_h
 
 //
 // Configuration include.
@@ -32,26 +32,28 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdI18nApplication.h"
+#include "Core/mvdI18nCoreApplication.h"
+
+//
+// Macros.
 
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
+
 //
-// External classes pre-declaration.
+// Classes pre-declaration.
 namespace
 {
 }
@@ -59,18 +61,26 @@ namespace
 namespace mvd
 {
 //
-// Class declaration.
-class AbstractModel;
-class DatasetModel;
+// Internal classes pre-declaration.
+
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class Application
+/** \class I18nApplication
  *
+ * \brief The MVD2 application (which is different from
+ * QApplication).
+ * 
+ * I18nApplication do not derive from QApplication to prevent a dread
+ * diamong multiple inheritance scheme which could not be resolved
+ * using virtual inheritance (because Qt is not designed for).
+ *
+ *
+ * \see I18nCoreApplication.
  */
-class Monteverdi2_EXPORT Application
-  : public I18nApplication
+class Monteverdi2_EXPORT I18nApplication
+  : public I18nCoreApplication
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -80,83 +90,51 @@ class Monteverdi2_EXPORT Application
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public constants.
-public:
-  static const char* DATASET_EXT;
-
-//
 // Public methods.
 public:
 
   /**
    * \brief Constructor.
    *
-   * \param The parent Qt application (\see I18nApplication).
+   * \param qtApp The parent Qt application of this MVD2 application.
    */
-  Application( QApplication* qtApp );
+  I18nApplication( QApplication* qtApp );
 
   /** \brief Destructor. */
-  virtual ~Application();
-
-  /**
-   *
-   */
-  bool HasSettingsFile();
-
-  /**
-   *
-   */
-  void ReadCacheDirFromSettings();
-
-  /**
-    *
-    */
-  void WriteCacheDirIntoSettings();
-
-  /**
-   * \brief Check if the cache directory is valid.
-   *
-   * \return true if the cache directory is correct
-   */
-  // TODO: Remove method when class is upgraded to I18nApplication fatorized code.
-  bool CheckCacheDirIsCorrect();
-
-  /**
-   * \brief Test if the application can write in the directory provided.
-   *
-   * \param dir input directory
-   * \return true if the directory can be used
-   */
-  // TODO: Remove method when class is upgraded to I18nApplication fatorized code.
-  bool TestDirExistenceAndWriteAcess( QDir dir);
+  virtual ~I18nApplication();
 
   //
-  // STATIC METHODS.
+  // APPLICATION SINGLETON.
+  //
 
   /**
-   * \brief Get the singleton instance of application as an
-   * Application pointer.
+   * \brief Get the singleton instance of application as a
+   * I18Application pointer.
    *
-   * \return The singleton instance of Application.
+   * \return The singleton instance of I18nApplication.
    */
-  inline static Application* Instance();
+  inline static I18nApplication* Instance();
 
   /**
-   * \brief Get the singleton constant instance of application as an
-   * Application pointer.
+   * \brief Get the singleton constant instance of application as a
+   * I18Application pointer.
    *
    * \return The singleton constant instance of I18nApplication.
    */
-  inline static const Application* ConstInstance();
+  inline static const I18nApplication* ConstInstance();
 
 //
-// PUBLIC SLOTS.
+// Public attributes.
+public:
+
+  /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
+
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
-// Signals.
+// SIGNALS.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -171,6 +149,7 @@ protected:
 // Protected attributes.
 protected:
 
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
@@ -184,36 +163,34 @@ private:
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
-// Slots
+// SLOTS
 private slots:
-
-  /** */
-  void OnAboutToQuit();
 };
+
+} // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
- /*****************************************************************************/
-inline
-Application*
-Application
+namespace mvd
+{
+
+/*****************************************************************************/
+I18nApplication*
+I18nApplication
 ::Instance()
 {
-  return I18nCoreApplication::Instance< Application >();
+  return I18nCoreApplication::Instance< I18nApplication >();
 }
 
 /*****************************************************************************/
-inline
-const Application*
-Application
+const I18nApplication*
+I18nApplication
 ::ConstInstance()
 {
-  return I18nCoreApplication::ConstInstance< Application >();
+  return I18nCoreApplication::ConstInstance< I18nApplication >();
 }
-
-/*****************************************************************************/
 
 } // end namespace 'mvd'
 
-#endif // __Application_h
+#endif // __I18nApplication_h

@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdI18nApplication_h
-#define __mvdI18nApplication_h
+#ifndef __mvdI18nCoreApplication_h
+#define __mvdI18nCoreApplication_h
 
 //
 // Configuration include.
@@ -71,29 +71,29 @@ class DatasetModel;
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class I18nApplication
+/** \class I18nCoreApplication
  *
  * \brief The MVD2 core-application (which is different from
  * QCoreApplication).
  * 
- * I18nApplication do not derive from QCoreApplication to
+ * I18nCoreApplication do not derive from QCoreApplication to
  * prevent a dread diamong multiple inheritance scheme which could not
  * be resolved using virtual inheritance (because Qt is not designed
  * for).
  *
- * I18nApplication does not derive from QApplication to
+ * I18nCoreApplication does not derive from QApplication to
  * prevent package .../Common/Core to depend on QtGui package (which
  * would have broken the Common/Core-Common/Gui package layout).
  *
  * The dread diamond multiple inheritance scheme is solved using
  * aggregation.
  *
- * QCoreApplication is passed as argument of I18nApplication
+ * QCoreApplication is passed as argument of I18nCoreApplication
  * constructor. So, is user application must derive QApplication (to,
  * for example, provide sessio management), the specialized instance
  * can be passed as argument of constructor.
  */
-class Monteverdi2_EXPORT I18nApplication
+class Monteverdi2_EXPORT I18nCoreApplication
   : public QObject
 {
 
@@ -112,10 +112,10 @@ public:
    *
    * \param qtApp The parent Qt application of this MVD2 application.
    */
-  I18nApplication( QCoreApplication* qtApp );
+  I18nCoreApplication( QCoreApplication* qtApp );
 
   /** \brief Destructor. */
-  virtual ~I18nApplication();
+  virtual ~I18nCoreApplication();
 
   /**
    */
@@ -129,37 +129,17 @@ public:
    * \brief Get the singleton instance of application as a
    * I18Application pointer.
    *
-   * \return The singleton instance of I18nApplication.
+   * \return The singleton instance of I18nCoreApplication.
    */
-  inline static I18nApplication* Instance();
+  inline static I18nCoreApplication* Instance();
 
   /**
    * \brief Get the singleton constant instance of application as a
    * I18Application pointer.
    *
-   * \return The singleton constant instance of I18nApplication.
+   * \return The singleton constant instance of I18nCoreApplication.
    */
-  inline static const I18nApplication* ConstInstance();
-
-  /**
-   * \brief Get the singleton instance of application (safe) casted
-   * into the TApplication type.
-   *
-   * \return The singleton instance of application (safely) casted
-   * into TApplication type.
-   */
-  template< typename TApplication >
-    inline static TApplication* Instance();
-
-  /**
-   * \brief Get the constant singleton instance of application (safe)
-   * casted  into the TApplication type.
-   *
-   * \return The constant singleton instance of application (safely)
-   * casted into TApplication type.
-   */
-  template< typename TApplication >
-    inline static const TApplication* ConstInstance();
+  inline static const I18nCoreApplication* ConstInstance();
 
   //
   // APPLICATION MODEL.
@@ -309,7 +289,7 @@ public:
 
   /**
    */
-  // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nApplication.
+  // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nCoreApplication.
   inline QDir& GetCacheDir();
   
   /**
@@ -322,7 +302,7 @@ public:
 
   /**
    */
-  // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nApplication.
+  // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nCoreApplication.
   inline QDir& GetResultsDir();
 
 //
@@ -392,15 +372,35 @@ signals:
 protected:
 
   /**
+   * \brief Get the singleton instance of application (safe) casted
+   * into the TApplication type.
+   *
+   * \return The singleton instance of application (safely) casted
+   * into TApplication type.
+   */
+  template< typename TApplication >
+    inline static TApplication* Instance();
+
+  /**
+   * \brief Get the constant singleton instance of application (safe)
+   * casted  into the TApplication type.
+   *
+   * \return The constant singleton instance of application (safely)
+   * casted into TApplication type.
+   */
+  template< typename TApplication >
+    inline static const TApplication* ConstInstance();
+
+  /**
+   */
+  virtual void virtual_InitializeCore() =0;
+
+  /**
    */
   void InitializeCore( const QString& appName,
 		       const QString& appVersion,
 		       const QString& orgName,
 		       const QString& orgDomain );
-
-  /**
-   */
-  virtual void virtual_InitializeCore() =0;
 
   /**
    */
@@ -454,14 +454,14 @@ private:
 private:
 
   /**
-   * \brief I18nApplication singleton instance.
+   * \brief I18nCoreApplication singleton instance.
    */
-  static I18nApplication* m_Instance;
+  static I18nCoreApplication* m_Instance;
 
   /**
   * \brief Directory where all cached files are stored (repository of datasets).
   */
-  // TODO: Move I18nApplication::m_CacheDir to private section.
+  // TODO: Move I18nCoreApplication::m_CacheDir to private section.
   QDir m_CacheDir;
 
   /**
@@ -501,45 +501,45 @@ namespace mvd
 {
 
 /*****************************************************************************/
-I18nApplication*
-I18nApplication
+I18nCoreApplication*
+I18nCoreApplication
 ::Instance()
 {
-  return I18nApplication::m_Instance;
+  return I18nCoreApplication::m_Instance;
 }
 
 /*****************************************************************************/
-const I18nApplication*
-I18nApplication
+const I18nCoreApplication*
+I18nCoreApplication
 ::ConstInstance()
 {
-  return I18nApplication::m_Instance;
+  return I18nCoreApplication::m_Instance;
 }
 
 /*****************************************************************************/
 template< typename T >
 inline
 T*
-I18nApplication
+I18nCoreApplication
 ::Instance()
 {
-  return qobject_cast< T* >( I18nApplication::Instance() );
+  return qobject_cast< T* >( I18nCoreApplication::Instance() );
 }
 
 /*****************************************************************************/
 template< typename T >
 inline
 const T*
-I18nApplication
+I18nCoreApplication
 ::ConstInstance()
 {
-  return qobject_cast< const T* >( I18nApplication::ConstInstance() );
+  return qobject_cast< const T* >( I18nCoreApplication::ConstInstance() );
 }
 
 /*****************************************************************************/
 inline
 const AbstractModel*
-I18nApplication
+I18nCoreApplication
 ::GetModel() const
 {
   return m_Model;
@@ -548,7 +548,7 @@ I18nApplication
 /*****************************************************************************/
 inline
 AbstractModel*
-I18nApplication
+I18nCoreApplication
 ::GetModel()
 {
   return m_Model;
@@ -558,7 +558,7 @@ I18nApplication
 template< typename TModel >
 inline
 const TModel*
-I18nApplication
+I18nCoreApplication
 ::GetModel() const
 {
   return qobject_cast< const TModel* >( m_Model );
@@ -568,7 +568,7 @@ I18nApplication
 template< typename TModel >
 inline
 TModel*
-I18nApplication
+I18nCoreApplication
 ::GetModel()
 {
   return qobject_cast< TModel* >( m_Model );
@@ -576,7 +576,7 @@ I18nApplication
 
 /*****************************************************************************/
 const QDir&
-I18nApplication
+I18nCoreApplication
 ::GetCacheDir() const
 {
   return m_CacheDir;
@@ -584,7 +584,7 @@ I18nApplication
 
 /*****************************************************************************/
 const QDir&
-I18nApplication
+I18nCoreApplication
 ::GetResultsDir() const
 {
   return m_ResultsDir;
@@ -593,15 +593,15 @@ I18nApplication
 /*****************************************************************************/
 inline
 bool
-I18nApplication
+I18nCoreApplication
 ::IsCacheDirValid() const
 {
-  return I18nApplication::IsCacheDirValid( m_CacheDir.path() );
+  return I18nCoreApplication::IsCacheDirValid( m_CacheDir.path() );
 }
 
 /*****************************************************************************/
 QDir&
-I18nApplication
+I18nCoreApplication
 ::GetCacheDir()
 {
   return m_CacheDir;
@@ -609,7 +609,7 @@ I18nApplication
 
 /*****************************************************************************/
 QDir&
-I18nApplication
+I18nCoreApplication
 ::GetResultsDir()
 {
   return m_ResultsDir;
@@ -618,7 +618,7 @@ I18nApplication
 /*****************************************************************************/
 inline
 bool
-I18nApplication
+I18nCoreApplication
 ::HasSettingsKey( const QString& key )
 {
   assert( m_Settings!=NULL );
@@ -631,7 +631,7 @@ I18nApplication
 /*****************************************************************************/
 inline
 void
-I18nApplication
+I18nCoreApplication
 ::StoreSettingsKey( const QString& key, const QVariant& value )
 {
   assert( m_Settings!=NULL );
@@ -644,7 +644,7 @@ I18nApplication
 /*****************************************************************************/
 inline
 QVariant
-I18nApplication
+I18nCoreApplication
 ::RetrieveSettingsKey( const QString& key )
 {
   assert( m_Settings!=NULL );
@@ -657,7 +657,7 @@ I18nApplication
 /*****************************************************************************/
 inline
 void
-I18nApplication
+I18nCoreApplication
 ::SynchronizeSettings()
 {
   assert( m_Settings!=NULL );
@@ -687,4 +687,4 @@ I18nApplication
 
 } // end namespace 'mvd'
 
-#endif // __I18nApplication_h
+#endif // __I18nCoreApplication_h

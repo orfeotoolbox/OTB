@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdImageImporter.h"
+#include "mvdI18nApplication.h"
 
 
 /*****************************************************************************/
@@ -28,37 +28,25 @@
 
 //
 // System includes (sorted by alphabetic order)
-#include <cassert>
-
-//
-// ITK includes (sorted by alphabetic order)
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdDatasetModel.h"
-//
-#include "Gui/mvdI18nApplication.h"
 
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::ImageImporter
+  TRANSLATOR mvd::I18nApplication
 
   Necessary for lupdate to be aware of C++ namespaces.
 
   Context comment for translator.
 */
 
-
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
-
-namespace
-{
-} // end of anonymous namespace.
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -68,40 +56,26 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-ImageImporter
-::ImageImporter( const QString& filename,
-		 int width,
-		 int height,
-		 QObject* parent ) :
-  AbstractWorker( parent ),
-  m_Filename( filename ),
-  m_Width( width ),
-  m_Height( height )
+I18nApplication
+::I18nApplication( QApplication* qtApp ) :
+  I18nCoreApplication( qtApp )
 {
 }
 
 /*******************************************************************************/
-ImageImporter
-::~ImageImporter()
+I18nApplication
+::~I18nApplication()
 {
 }
 
 /*******************************************************************************/
-QObject*
-ImageImporter
-::virtual_Do()
+void
+I18nApplication
+::virtual_InitializeCore()
 {
-  emit ProgressTextChanged(
-    tr( "Importing image '%1' as dataset into cache directory..." )
-    .arg( m_Filename )
-  );
-
-  emit ProgressValueChanged( -1 );
-
-  emit ProgressRangeChanged( 0, 0 );
-
-  // Load dataset-model.
-  return I18nApplication::LoadDatasetModel( m_Filename, m_Width, m_Height );
+#ifndef Q_WS_MAC
+    qApp->setWindowIcon( QIcon( QLatin1String( ":/images/application_icon" ) ) );
+#endif
 }
 
 /*******************************************************************************/

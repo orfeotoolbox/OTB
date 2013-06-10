@@ -84,6 +84,8 @@ void
 Application
 ::virtual_InitializeCore()
 {
+  I18nApplication::virtual_InitializeCore();
+
   setObjectName( "ViewerApplication" );
 
   InitializeCore(

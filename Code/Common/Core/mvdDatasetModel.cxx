@@ -39,13 +39,13 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdDatasetDescriptor.h"
-#include "mvdI18nApplication.h"
+#include "mvdImagePlacenameLoader.h"
 #include "mvdQuicklookModel.h"
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
+//
+#include "Gui/mvdI18nApplication.h"
 
-// used to load placename
-#include "mvdImagePlacenameLoader.h"
 
 namespace mvd
 {

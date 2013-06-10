@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdI18nApplication.h"
+#include "mvdI18nCoreApplication.h"
 
 
 /*****************************************************************************/
@@ -44,7 +44,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::I18nApplication
+  TRANSLATOR mvd::I18nCoreApplication
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -54,20 +54,20 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-const char* I18nApplication::DEFAULT_CACHE_DIR_NAME = "mvd2";
+const char* I18nCoreApplication::DEFAULT_CACHE_DIR_NAME = "mvd2";
 
-const char* I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME = "result";
+const char* I18nCoreApplication::DEFAULT_CACHE_RESULT_DIR_NAME = "result";
 
-const char* I18nApplication::DATASET_EXT = ".ds";
+const char* I18nCoreApplication::DATASET_EXT = ".ds";
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
-I18nApplication* I18nApplication::m_Instance = NULL;
+I18nCoreApplication* I18nCoreApplication::m_Instance = NULL;
 
 /*******************************************************************************/
 bool
-I18nApplication
+I18nCoreApplication
 ::IsCacheDirValid( const QString& path )
 {
   QDir dir( path );
@@ -78,12 +78,12 @@ I18nApplication
     fileInfo.isDir() &&
     fileInfo.isReadable() &&
     fileInfo.isWritable() &&
-    dir.dirName()==I18nApplication::DEFAULT_CACHE_DIR_NAME;
+    dir.dirName()==I18nCoreApplication::DEFAULT_CACHE_DIR_NAME;
 }
 
 /*******************************************************************************/
 bool
-I18nApplication
+I18nCoreApplication
 ::IsResultsDirValid( const QString& path )
 {
   QDir dir( path );
@@ -94,12 +94,12 @@ I18nApplication
     fileInfo.isDir() &&
     fileInfo.isReadable() &&
     fileInfo.isWritable() &&
-    dir.dirName()==I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME;
+    dir.dirName()==I18nCoreApplication::DEFAULT_CACHE_RESULT_DIR_NAME;
 }
 
 /*******************************************************************************/
 bool
-I18nApplication
+I18nCoreApplication
 ::MakeDirTree( const QString& path, const QString& tree, QDir* dir )
 {
   QDir pathDir( path );
@@ -137,7 +137,7 @@ I18nApplication
 
 /*****************************************************************************/
 void
-I18nApplication
+I18nCoreApplication
 ::DatasetPathName( QString& path,
 		   QString& name,
 		   const QString& imageFilename )
@@ -147,19 +147,19 @@ I18nApplication
 
   // Dataset is stored into application cache-directory.
   // E.g. '$HOME/<CACHE_DIR>'
-  path = I18nApplication::Instance()->GetCacheDir().path();
+  path = I18nCoreApplication::Instance()->GetCacheDir().path();
   
   // get the md5 of the filename
   QByteArray result = QCryptographicHash::hash(fileInfo.absoluteFilePath().toAscii(), 
                                                QCryptographicHash::Md5);
 
   // store the md5 + the dataset extension at the end
-  name = result.toHex() + I18nApplication::DATASET_EXT;
+  name = result.toHex() + I18nCoreApplication::DATASET_EXT;
 }
 
 /*****************************************************************************/
 DatasetModel*
-I18nApplication
+I18nCoreApplication
 ::LoadDatasetModel( const QString& imageFilename,
 		    int width,
 		    int height )
@@ -171,7 +171,7 @@ I18nApplication
   QString path;
   QString name;
 
-  I18nApplication::DatasetPathName( path, name, imageFilename );
+  I18nCoreApplication::DatasetPathName( path, name, imageFilename );
   qDebug() << "Dataset path: " << path;
   qDebug() << "Dataset name: " << name;
 
@@ -212,7 +212,7 @@ I18nApplication
 
 /*****************************************************************************/
 void
-I18nApplication
+I18nCoreApplication
 ::HandleQtMessage( QtMsgType type, const char* message )
 {
   switch( type )
@@ -289,8 +289,8 @@ I18nApplication
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-I18nApplication
-::I18nApplication( QCoreApplication* qtApp ) :
+I18nCoreApplication
+::I18nCoreApplication( QCoreApplication* qtApp ) :
   QObject( qtApp ),
   m_CacheDir(),
   m_Settings( NULL ),
@@ -301,7 +301,7 @@ I18nApplication
     {
     throw std::runtime_error(
       ToStdString(
-	"I18nApplication is a singleton class!"
+	"I18nCoreApplication is a singleton class!"
       )
     );
     }
@@ -310,26 +310,26 @@ I18nApplication
     {
     throw std::invalid_argument(
       ToStdString(
-	tr( "Class 'I18nApplication' instance must be provided a"
+	tr( "Class 'I18nCoreApplication' instance must be provided a"
 	    "QCoreApplication' pointer at construction time!" )
       )
     );
     }
 
-  qInstallMsgHandler( I18nApplication::HandleQtMessage );
+  qInstallMsgHandler( I18nCoreApplication::HandleQtMessage );
 
   m_Instance = this;
 }
 
 /*******************************************************************************/
-I18nApplication
-::~I18nApplication()
+I18nCoreApplication
+::~I18nCoreApplication()
 {
 }
 
 /*******************************************************************************/
 void
-I18nApplication
+I18nCoreApplication
 ::Initialize()
 {
   // Initialize internationlization.
@@ -354,7 +354,7 @@ I18nApplication
 
 /*******************************************************************************/
 void
-I18nApplication
+I18nCoreApplication
 ::SetModel( AbstractModel* model )
 {
   emit AboutToChangeModel( model );
@@ -371,7 +371,7 @@ I18nApplication
 
 /*******************************************************************************/
 bool
-I18nApplication
+I18nCoreApplication
 ::MakeCacheDir( const QString& path )
 {
   qDebug() << this << "::MakeCacheDir(" << path << ")";
@@ -385,9 +385,9 @@ I18nApplication
 
   //
   // Create cache-dir.
-  bool isNew = I18nApplication::MakeDirTree(
+  bool isNew = I18nCoreApplication::MakeDirTree(
     homeDir.path(),
-    I18nApplication::DEFAULT_CACHE_DIR_NAME,
+    I18nCoreApplication::DEFAULT_CACHE_DIR_NAME,
     &m_CacheDir
   );
 
@@ -397,9 +397,9 @@ I18nApplication
   
   //
   // Construct result-dir path.
-  I18nApplication::MakeDirTree(
+  I18nCoreApplication::MakeDirTree(
     m_CacheDir.path(),
-    I18nApplication::DEFAULT_CACHE_RESULT_DIR_NAME,
+    I18nCoreApplication::DEFAULT_CACHE_RESULT_DIR_NAME,
     &m_ResultsDir
   );
 
@@ -414,7 +414,7 @@ I18nApplication
 
 /*******************************************************************************/
 void
-I18nApplication
+I18nCoreApplication
 ::ElevationSetup()
 {
   QSettings settings;
@@ -451,7 +451,7 @@ I18nApplication
 
 /*******************************************************************************/
 void
-I18nApplication
+I18nCoreApplication
 ::InitializeLocale()
 {
   QTextCodec::setCodecForTr( QTextCodec::codecForName( "utf8" ) );
@@ -559,7 +559,7 @@ I18nApplication
 
 /*******************************************************************************/
 void
-I18nApplication
+I18nCoreApplication
 ::InitializeCore( const QString& appName,
 		  const QString& appVersion,
 		  const QString& orgName,
@@ -592,7 +592,7 @@ I18nApplication
 
 /*******************************************************************************/
 void
-I18nApplication
+I18nCoreApplication
 ::InitializeSettings()
 {
   //
@@ -616,7 +616,7 @@ I18nApplication
 
     qDebug() << "Settings/cacheDir:" << path;
 
-    if( I18nApplication::IsCacheDirValid( path ) )
+    if( I18nCoreApplication::IsCacheDirValid( path ) )
       {
       m_CacheDir.setPath( path );
       }
@@ -632,7 +632,7 @@ I18nApplication
 
     qDebug() << "Settings/resultsDir:" << resultPath;
 
-    if( I18nApplication::IsResultsDirValid( resultPath  ) )
+    if( I18nCoreApplication::IsResultsDirValid( resultPath  ) )
       {
       m_ResultsDir.setPath( resultPath );
       }
@@ -641,7 +641,7 @@ I18nApplication
 
 /*******************************************************************************/
 void
-I18nApplication
+I18nCoreApplication
 ::LoadAndInstallTranslator( const QString& filename,
 			    const QString& directory,
 			    const QString& searchDelimiters,

@@ -48,7 +48,8 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdWrapperQtWidgetParameterFactory.h"
-#include "Core/mvdI18nApplication.h"
+//
+#include "Gui/mvdI18nApplication.h"
 
 
 namespace mvd

@@ -107,6 +107,8 @@ void
 CatalogueApplication
 ::virtual_InitializeCore()
 {
+  I18nApplication::virtual_InitializeCore();
+
   setObjectName( "Application" );
 
   InitializeCore(

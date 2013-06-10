@@ -44,8 +44,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdI18nApplication.h"
 #include "Core/mvdAbstractModel.h"
+//
+#include "Gui/mvdI18nApplication.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -189,7 +190,7 @@ const CatalogueApplication*
 CatalogueApplication
 ::ConstInstance()
 {
-  return I18nApplication::ConstInstance< CatalogueApplication >();
+  return I18nCoreApplication::ConstInstance< CatalogueApplication >();
 }
 
 /*****************************************************************************/
@@ -198,7 +199,7 @@ CatalogueApplication*
 CatalogueApplication
 ::Instance()
 {
-  return I18nApplication::Instance< CatalogueApplication >();
+  return I18nCoreApplication::Instance< CatalogueApplication >();
 }
 
 /*****************************************************************************/
