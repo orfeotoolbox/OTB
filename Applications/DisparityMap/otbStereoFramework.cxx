@@ -44,6 +44,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
+
 #include "otbMultiToMonoChannelExtractROI.h"
 
 #include "otbMultiDisparityMapTo3DFilter.h"
@@ -58,7 +59,7 @@
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
-
+#include "otbBijectionCoherencyFilter.h"
 
 namespace otb
 {
@@ -194,6 +195,10 @@ public:
     typedef std::vector<ExtractROIFilterPointerType>            ExtractorListType;
     typedef std::vector<MultiDisparityTo3DFilterPointerType>           MultiDisparityTo3DFilterListType;
 
+    typedef otb::BijectionCoherencyFilter
+      <FloatImageType,
+        FloatImageType>                             BijectionFilterType;
+
 private:
   
   StereoFramework()
@@ -309,13 +314,11 @@ private:
     
     AddParameter(ParameterType_OutputImage,"out","Output image");
     SetParameterDescription("out","Output elevation image");
-    
+
     AddParameter(ParameterType_Int,"step","Step of the deformation grid (in nb. of pixels)");
     SetParameterDescription("step","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommanded to use a coarser grid (higher step value) in case of large images");
     SetDefaultParameterInt("step",16);
     MandatoryOff("step");
-
-
 
     AddParameter(ParameterType_Float,"above","Maximum altitude offset");
     SetParameterDescription("above","Maximum altitude above the selected elevation source (in m)");
@@ -335,7 +338,6 @@ private:
     SetMinimumParameterIntValue("radius",1);
     MandatoryOff("radius");
 
-
     AddParameter(ParameterType_Group,"mask","Masks");
     
     AddParameter(ParameterType_InputImage, "mask.left","Input left mask");
@@ -354,7 +356,10 @@ private:
     SetDefaultParameterFloat("mask.variancet",100.);
     DisableParameter("mask.variancet");
 
-
+    AddParameter(ParameterType_Empty,"bij","Use bijection consistency in block matching strategy");
+    SetParameterDescription("bij","use bijection consistency. Right to Left correlation is computed to validate Left to Right disparities. If bijection is not found pixel is rejected.");
+    MandatoryOff("bij");
+    DisableParameter("bij");
 
     //TODO JGT new framework disparity map handling
     // is it useful to store disp in epipolar geometry ?
@@ -619,7 +624,7 @@ private:
 
         rBandMathFilter->SetNthInput(inputIdRight, rightMaskResampleFilter->GetOutput(), "maskright");
         ++inputIdRight;
-        rightFormula<< " and (maskright > 0)";
+        rightFormula << " and (maskright > 0)";
         }
       if (IsParameterEnabled("mask.variancet"))
         {
@@ -652,18 +657,52 @@ private:
       blockMatcherFilter->MinimizeOff();
       m_Filters.push_back(blockMatcherFilter.GetPointer());
 
+      BandMathFilterType::Pointer finalMaskFilter;
+      BlockMatchingFilterType::Pointer invBlockMatcherFilter;
+      BijectionFilterType::Pointer bijectFilter;
+      if (IsParameterEnabled("bij"))
+        {
+        otbAppLogINFO(<<"Use reverse blockMatcher to validate direct Horizontal disparities ");
+        //Reverse correlation
+        invBlockMatcherFilter = BlockMatchingFilterType::New();
+        invBlockMatcherFilter->SetLeftInput(rightResampleFilter->GetOutput());
+        invBlockMatcherFilter->SetRightInput(leftResampleFilter->GetOutput());
+        invBlockMatcherFilter->SetLeftMaskInput(rBandMathFilter->GetOutput());
+        invBlockMatcherFilter->SetRightMaskInput(lBandMathFilter->GetOutput());
+        invBlockMatcherFilter->SetRadius(this->GetParameterInt("radius"));
+        invBlockMatcherFilter->MinimizeOff();
+        m_Filters.push_back(invBlockMatcherFilter.GetPointer());
+
+        bijectFilter = BijectionFilterType::New();
+        bijectFilter->SetDirectHorizontalDisparityMapInput(blockMatcherFilter->GetHorizontalDisparityOutput());
+        bijectFilter->SetReverseHorizontalDisparityMapInput(invBlockMatcherFilter->GetHorizontalDisparityOutput());
+        m_Filters.push_back(bijectFilter.GetPointer());
+
+        finalMaskFilter = BandMathFilterType::New();
+        finalMaskFilter->SetNthInput(0, lBandMathFilter->GetOutput(), "inmask");
+        finalMaskFilter->SetNthInput(1, bijectFilter->GetOutput(), "lrrl");
+        finalMaskFilter->SetExpression("if(inmask > 0 and lrrl > 0, 255, 0)");
+        m_Filters.push_back(finalMaskFilter.GetPointer());
+        }
+      else
+        {
+        finalMaskFilter = lBandMathFilter;
+        }
+
+      //subPix mask
       SubPixelFilterType::Pointer subPixelFilter = SubPixelFilterType::New();
       subPixelFilter = SubPixelFilterType::New();
       subPixelFilter->SetInputsFromBlockMatchingFilter(blockMatcherFilter);
       subPixelFilter->SetRefineMethod(SubPixelFilterType::DICHOTOMY);
       subPixelFilter->UpdateOutputInformation();
+      subPixelFilter->SetLeftMaskInput(finalMaskFilter->GetOutput());
       m_Filters.push_back(subPixelFilter.GetPointer());
 
       MedianFilterType::Pointer hMedianFilter = MedianFilterType::New();
       hMedianFilter->SetInput(subPixelFilter->GetHorizontalDisparityOutput());
       hMedianFilter->SetRadius(2);
       hMedianFilter->SetIncoherenceThreshold(2.0);
-      hMedianFilter->SetMaskInput(lBandMathFilter->GetOutput());
+      hMedianFilter->SetMaskInput(finalMaskFilter->GetOutput());
       hMedianFilter->UpdateOutputInformation();
       m_Filters.push_back(hMedianFilter.GetPointer());
 
@@ -762,16 +801,29 @@ private:
       otbAppLogINFO(<<"Maximum disparity : "<<maxDisp);
       blockMatcherFilter->SetMinimumHorizontalDisparity(minDisp);
       blockMatcherFilter->SetMaximumHorizontalDisparity(maxDisp);
-
       blockMatcherFilter->SetMinimumVerticalDisparity(0);
       blockMatcherFilter->SetMaximumVerticalDisparity(0);
+
+      if (IsParameterEnabled("bij"))
+             {
+      invBlockMatcherFilter->SetMinimumHorizontalDisparity(-maxDisp);
+      invBlockMatcherFilter->SetMaximumHorizontalDisparity(-minDisp);
+      invBlockMatcherFilter->SetMinimumVerticalDisparity(0);
+      invBlockMatcherFilter->SetMaximumVerticalDisparity(0);
+
+      bijectFilter->SetMinHDisp(minDisp);
+      bijectFilter->SetMaxHDisp(maxDisp);
+      bijectFilter->SetMinVDisp(0);
+      bijectFilter->SetMaxVDisp(0);
+             }
 
       // Compute disparity mask
       BandMathFilterType::Pointer dispMaskFilter = BandMathFilterType::New();
       dispMaskFilter->SetNthInput(0, hMedianFilter->GetOutput(), "hdisp");
       dispMaskFilter->SetNthInput(1, subPixelFilter->GetMetricOutput(), "metric");
+      dispMaskFilter->SetNthInput(2, finalMaskFilter->GetOutput(), "mask");
       std::ostringstream maskFormula;
-      maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (metric > 0.6),255,0)";
+      maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (mask>0) and (metric > 0.6),255,0)";
       dispMaskFilter->SetExpression(maskFormula.str());
       m_Filters.push_back(dispMaskFilter.GetPointer());
 
