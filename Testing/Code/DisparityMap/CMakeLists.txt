@@ -771,6 +771,23 @@ ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMean ${DISPARITYMAP_TESTS4}
 )
  
 
+ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanNoData ${DISPARITYMAP_TESTS4}
+--compare-image ${EPSILON_6}
+     ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanNoData.tif
+     ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanNoData.tif
+         otbMulti3DMapToDEMFilter
+         ${INPUTDATA}/Stadium3DMap.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${INPUTDATA}/Stadium3DMapBis.tif
+         ${INPUTDATA}/Stadium3DMapMask.tif
+         ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanNoData.tif
+		 0.7
+		 2
+		 1
+		 1
+)
+
+
 ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanManual ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
