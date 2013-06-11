@@ -344,6 +344,19 @@ private:
     SetMinimumParameterIntValue("radius",1);
     MandatoryOff("radius");
 
+    AddParameter(ParameterType_Empty,"bij","Use bijection consistency in block matching strategy");
+    SetParameterDescription("bij","use bijection consistency. Right to Left correlation is computed to validate Left to Right disparities. If bijection is not found pixel is rejected.");
+    MandatoryOff("bij");
+    DisableParameter("bij");
+
+
+    AddParameter(ParameterType_Float,"metrict","correlation metric threshold.");
+    SetParameterDescription("metrict","Use block matching metric output to discard pixels with low correlation value.(disabled by default)");
+    MandatoryOff("metrict");
+    SetDefaultParameterFloat("metrict",0.6);
+    DisableParameter("metrict");
+
+
     AddParameter(ParameterType_Group,"mask","Masks");
     
     AddParameter(ParameterType_InputImage, "mask.left","Input left mask");
@@ -362,10 +375,6 @@ private:
     SetDefaultParameterFloat("mask.variancet",100.);
     DisableParameter("mask.variancet");
 
-    AddParameter(ParameterType_Empty,"bij","Use bijection consistency in block matching strategy");
-    SetParameterDescription("bij","use bijection consistency. Right to Left correlation is computed to validate Left to Right disparities. If bijection is not found pixel is rejected.");
-    MandatoryOff("bij");
-    DisableParameter("bij");
 
     //TODO JGT new framework disparity map handling
     // is it useful to store disp in epipolar geometry ?
@@ -826,10 +835,19 @@ private:
       // Compute disparity mask
       BandMathFilterType::Pointer dispMaskFilter = BandMathFilterType::New();
       dispMaskFilter->SetNthInput(0, hMedianFilter->GetOutput(), "hdisp");
-      dispMaskFilter->SetNthInput(1, subPixelFilter->GetMetricOutput(), "metric");
-      dispMaskFilter->SetNthInput(2, finalMaskFilter->GetOutput(), "mask");
+
+      dispMaskFilter->SetNthInput(1, finalMaskFilter->GetOutput(), "mask");
+
+
       std::ostringstream maskFormula;
-      maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (mask>0) and (metric > 0.6),255,0)";
+      maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (mask>0";
+      if (IsParameterEnabled("metrict"))
+      {
+                    dispMaskFilter->SetNthInput(2, subPixelFilter->GetMetricOutput(), "metric");
+                    maskFormula << ") and (metric >"<<this->GetParameterFloat("metrict");
+      }
+      maskFormula << "),255,0)";
+      otbAppLogINFO(<<"disparity mask formula :"<<std::endl<<maskFormula.str());
       dispMaskFilter->SetExpression(maskFormula.str());
       m_Filters.push_back(dispMaskFilter.GetPointer());
 
