@@ -28,19 +28,27 @@ namespace otb
 
 template<class TInputValue, class TOutputValue>
 NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachineLearningModel() :
-  m_TrainMethod(CvANN_MLP_TrainParams::RPROP), m_ActivateFunction(CvANN_MLP::SIGMOID_SYM), m_Alpha(1.), m_Beta(1.),
-      m_BackPropDWScale(0.1), m_BackPropMomentScale(0.1), m_RegPropDW0(0.1), m_RegPropDWMin(FLT_EPSILON),
-      m_TermCriteriaType(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS), m_MaxIter(1000), m_Epsilon(0.01)
+  m_ANNModel (new CvANN_MLP),
+  m_TrainMethod(CvANN_MLP_TrainParams::RPROP),
+  m_ActivateFunction(CvANN_MLP::SIGMOID_SYM),
+  m_Alpha(1.),
+  m_Beta(1.),
+  m_BackPropDWScale(0.1),
+  m_BackPropMomentScale(0.1),
+  m_RegPropDW0(0.1),
+  m_RegPropDWMin(FLT_EPSILON),
+  m_TermCriteriaType(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS),
+  m_MaxIter(1000),
+  m_Epsilon(0.01),
+  m_CvMatOfLabels(0)
 {
-  m_ANNModel = new CvANN_MLP;
-  m_LayerSizes.clear();
-  m_MapOfLabels.clear();
 }
 
 template<class TInputValue, class TOutputValue>
 NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::~NeuralNetworkMachineLearningModel()
 {
   delete m_ANNModel;
+  cvReleaseMat(&m_CvMatOfLabels);
 }
 
 /** Train the machine learning model */
@@ -93,6 +101,10 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
 
       if (itLabel == 0)
         {
+        if (m_CvMatOfLabels)
+          {
+          cvReleaseMat(&m_CvMatOfLabels);
+          }
         m_CvMatOfLabels = cvCreateMat(1, nbClasses, CV_32SC1);
         }
       m_CvMatOfLabels->data.i[itLabel] = classLabel;
@@ -190,8 +202,7 @@ template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string & filename,
                                                                         const std::string & name)
 {
-  //const char* lname = "my_nn";
-  const char* lname = 0;
+  const char* lname = "my_nn";
   if ( !name.empty() )
     lname = name.c_str();
 
@@ -199,7 +210,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
   fs = cvOpenFileStorage(filename.c_str(), 0, CV_STORAGE_WRITE);
   if ( !fs )
     {
-    std::cerr << "Could not open the file storage " << filename << ". Check the path and permissions" << std::endl;
+    itkExceptionMacro("Could not open the file " << filename << " for writing");
     }
 
   m_ANNModel->write(fs, lname);
@@ -221,7 +232,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
   fs = cvOpenFileStorage(filename.c_str(), 0, CV_STORAGE_READ);
   if ( !fs )
     {
-    std::cerr << "Could not load the file storage " << filename << ". Check the path and permissions" << std::endl;
+    itkExceptionMacro("Could not open the file " << filename << " for reading");
     }
 
   if( lname )
@@ -258,7 +269,7 @@ bool NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(c
 
     if (line.find(CV_TYPE_NAME_ML_ANN_MLP) != std::string::npos)
       {
-      std::cout << "Reading a " << CV_TYPE_NAME_ML_ANN_MLP << " model !!!" << std::endl;
+      //std::cout << "Reading a " << CV_TYPE_NAME_ML_ANN_MLP << " model" << std::endl;
       return true;
       }
     }
