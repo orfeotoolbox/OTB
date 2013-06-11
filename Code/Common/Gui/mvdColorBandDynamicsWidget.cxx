@@ -239,13 +239,15 @@ ColorBandDynamicsWidget
   bool isOk = true;
   double value = text.toDouble( &isOk );
 
-  assert( isOk );
-
   if( !isOk )
     {
+#if 0
     throw std::invalid_argument(
       ToStdString( tr( "Invalid argument '%1'." ).arg( text ) )
     );
+#else
+    return;
+#endif
     }
 
   emit LowIntensityChanged( m_Channel, value );
@@ -259,13 +261,15 @@ ColorBandDynamicsWidget
   bool isOk = true;
   double value = text.toDouble( &isOk );
 
-  assert( isOk );
-
   if( !isOk )
     {
+#if 0
     throw std::invalid_argument(
       ToStdString( tr( "Invalid argument '%1'." ).arg( text ) )
     );
+#else
+    return;
+#endif
     }
 
   emit HighIntensityChanged( m_Channel, value );
