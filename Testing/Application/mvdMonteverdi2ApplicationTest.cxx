@@ -33,12 +33,14 @@
 
 int mvdMonteverdi2ApplicationTest(int argc, char* argv[])
 {
-  mvd::Application application( argc, argv );
+  QApplication qtApp( argc, argv );
+
+  mvd::Application application( &qtApp );
   mvd::MainWindow main_window;
 
   main_window.show();
 
   QTimer::singleShot(1000, &application, SLOT(quit()));
 
-  return application.exec();
+  return qtApp.exec();
 }
