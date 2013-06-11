@@ -320,6 +320,12 @@ private:
     SetDefaultParameterInt("step",16);
     MandatoryOff("step");
 
+    AddParameter(ParameterType_Int, "ssfactor", "Sub-sampling rate for inversion");
+    SetParameterDescription("ssfactor","Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows to first sub-sample the field to invert.");
+    SetDefaultParameterInt("ssfactor",1);
+    SetMinimumParameterIntValue("ssfactor",1);
+    MandatoryOff("ssfactor");
+
     AddParameter(ParameterType_Float,"above","Maximum altitude offset");
     SetParameterDescription("above","Maximum altitude above the selected elevation source (in m)");
     MandatoryOff("above");
@@ -426,7 +432,9 @@ private:
 
     m_Multi3DMapToDEMFilter->SetNumberOf3DMaps(stereoCouples);
 
-    //
+    // value of ram used to compute epipolar grid
+    double globalEpiStorageSize=0;
+
     for (unsigned int i = 0; i < stereoCouples; i++)
       {
 
@@ -454,17 +462,17 @@ private:
 
       epipolarGridSource->UpdateOutputInformation();
       // check that deformation grids fit in 1/4 of available RAM
-      double ram = 0.25 * static_cast<double> (this->GetParameterInt("ram"));
       FloatVectorImageType::SizeType
-          grid_size = epipolarGridSource->GetLeftDeformationFieldOutput()->GetLargestPossibleRegion().GetSize();
-      double storage_size = static_cast<double> (grid_size[0]) * static_cast<double> (grid_size[1]) * 4.0 * 8.0
+          gridSize = epipolarGridSource->GetLeftDeformationFieldOutput()->GetLargestPossibleRegion().GetSize();
+      double storageSize = static_cast<double> (gridSize[0]) * static_cast<double> (gridSize[1]) * 4.0 * 8.0
           / 1000000.0;
-      if (ram < storage_size)
-        {
-        double newStep = vcl_ceil(vcl_sqrt(storage_size * 16.0 * 16.0 / ram));
-        epipolarGridSource->SetGridStep(newStep);
-        otbAppLogINFO(<<"Change grid step to "<<newStep);
-        }
+      globalEpiStorageSize+=storageSize;
+      if(globalEpiStorageSize>( static_cast<double>(this->GetParameterInt("ram"))))
+          {
+              otbAppLogINFO(<<"grid step for couple  "<<couple[0]<<" and "<<couple[1]<<" memory usage "<<storageSize<<" MO.");
+              otbAppLogWARNING(<<"Deformation grid step value"<<this->GetParameterInt("step")<<" seems too be to high.");
+          }
+
 
       AddProcess(epipolarGridSource, "Compute epipolar grids...");
       epipolarGridSource->Update();
@@ -475,7 +483,6 @@ private:
 
       FloatImageType::SizeType epiSize;
       epiSize = epipolarGridSource->GetRectifiedImageSize();
-
       FloatImageType::PointType epiOrigin;
       epiOrigin[0] = 0.0;
       epiOrigin[1] = 0.0;
@@ -510,12 +517,11 @@ private:
 
       lsize[0] += 1;
       lsize[1] += 1;
-
       leftInverseDeformationFieldFilter->SetOutputOrigin(lorigin);
       leftInverseDeformationFieldFilter->SetOutputSpacing(lspacing);
       leftInverseDeformationFieldFilter->SetSize(lsize);
       // change value
-      leftInverseDeformationFieldFilter->SetSubsamplingFactor(1);
+      leftInverseDeformationFieldFilter->SetSubsamplingFactor(this->GetParameterInt("ssfactor"));
       AddProcess(leftInverseDeformationFieldFilter, "Inverting left deformation field ...");
       leftInverseDeformationFieldFilter->Update();
       DeformationFieldType::Pointer leftInverseDeformation;
