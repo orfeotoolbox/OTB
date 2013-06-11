@@ -131,6 +131,9 @@ public:
      FloatImageType,
      FloatImageType>                          MedianFilterType;
 
+
+  typedef otb::VarianceImageFilter<FloatImageType,FloatImageType> VarianceFilterType;
+
   typedef otb::DisparityMapToDEMFilter
     <FloatImageType,
      FloatImageType,
@@ -307,8 +310,12 @@ private:
     AddParameter(ParameterType_OutputImage,"out","Output image");
     SetParameterDescription("out","Output elevation image");
     
-    /*AddParameter(ParameterType_OutputImage,"out2","Output image");
-        SetParameterDescription("out2","Output elevation image"); */
+    AddParameter(ParameterType_Int,"step","Step of the deformation grid (in nb. of pixels)");
+    SetParameterDescription("step","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommanded to use a coarser grid (higher step value) in case of large images");
+    SetDefaultParameterInt("step",16);
+    MandatoryOff("step");
+
+
 
     AddParameter(ParameterType_Float,"above","Maximum altitude offset");
     SetParameterDescription("above","Maximum altitude above the selected elevation source (in m)");
@@ -322,6 +329,13 @@ private:
     SetDefaultParameterFloat("below",-20.0);
     DisableParameter("below");
     
+    AddParameter(ParameterType_Int,"radius","Radius of blocks for matching filter");
+    SetParameterDescription("radius","The radius (in pixels) of blocks in Block-Matching");
+    SetDefaultParameterInt("radius",4);
+    SetMinimumParameterIntValue("radius",1);
+    MandatoryOff("radius");
+
+
     AddParameter(ParameterType_Group,"mask","Masks");
     
     AddParameter(ParameterType_InputImage, "mask.left","Input left mask");
@@ -334,6 +348,14 @@ private:
     MandatoryOff("mask.right");
     DisableParameter("mask.right");
     
+    AddParameter(ParameterType_Float,"mask.variancet","Discard pixels with low local variance");
+    SetParameterDescription("mask.variancet","This parameter allows to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
+    MandatoryOff("mask.variancet");
+    SetDefaultParameterFloat("mask.variancet",100.);
+    DisableParameter("mask.variancet");
+
+
+
     //TODO JGT new framework disparity map handling
     // is it useful to store disp in epipolar geometry ?
    /* AddParameter(ParameterType_OutputFilename,"disp","Disparity map output");
@@ -374,8 +396,7 @@ private:
     //create pipeline for each stereo couple
 
 
-    std::vector<std::vector<int> > couples=this->CreateCouplesList(GetParameterString("co"));
-
+    std::vector<std::vector<int> > couples = this->CreateCouplesList(GetParameterString("co"));
 
     unsigned int stereoCouples = couples.size();
     m_ExtractorList.resize(inList->Size());
@@ -400,13 +421,12 @@ private:
 
     m_Multi3DMapToDEMFilter->SetNumberOf3DMaps(stereoCouples);
 
-
     //
     for (unsigned int i = 0; i < stereoCouples; i++)
       {
 
-      std::vector<int> couple= couples[i];
-      if(couple.size()>2)
+      std::vector<int> couple = couples[i];
+      if (couple.size() > 2)
         {
         otbAppLogWARNING(<<" current couple contain more than 2 value. only first and second values will be associated to create next couple.");
         }
@@ -418,7 +438,7 @@ private:
       DeformationFieldSourceType::Pointer epipolarGridSource = DeformationFieldSourceType::New();
       epipolarGridSource->SetLeftImage(inleft);
       epipolarGridSource->SetRightImage(inright);
-      epipolarGridSource->SetGridStep(16);
+      epipolarGridSource->SetGridStep(this->GetParameterInt("step"));
       epipolarGridSource->SetScale(1.0);
 
       if (otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this, "elev")
@@ -532,8 +552,11 @@ private:
       FloatImageType::Pointer rightmask;
       BandMathFilterType::Pointer lBandMathFilter = BandMathFilterType::New();
       BandMathFilterType::Pointer rBandMathFilter = BandMathFilterType::New();
+      unsigned int inputIdLeft = 0;
+      unsigned int inputIdRight = 0;
 
-      lBandMathFilter->SetNthInput(0, leftResampleFilter->GetOutput(), "inleft");
+      lBandMathFilter->SetNthInput(inputIdLeft, leftResampleFilter->GetOutput(), "inleft");
+      ++inputIdLeft;
       std::ostringstream leftFormula;
       leftFormula << "if((inleft > 0)";
 
@@ -551,16 +574,33 @@ private:
         leftMaskResampleFilter->SetOutputOrigin(epiOrigin);
         leftMaskResampleFilter->SetEdgePaddingValue(defaultValue);
 
-        lBandMathFilter->SetNthInput(1, leftMaskResampleFilter->GetOutput(), "maskleft");
+        lBandMathFilter->SetNthInput(inputIdLeft, leftMaskResampleFilter->GetOutput(), "maskleft");
+        ++inputIdLeft;
         leftFormula << " and (maskleft > 0)";
         }
+      // Handle variance threshold if present
+      if (IsParameterEnabled("mask.variancet"))
+        {
+        // Left side
+        VarianceFilterType::Pointer leftVarianceFilter = VarianceFilterType::New();
+        leftVarianceFilter->SetInput(leftResampleFilter->GetOutput());
+        VarianceFilterType::InputSizeType vradius;
+        vradius.Fill(this->GetParameterInt("radius"));
+        leftVarianceFilter->SetRadius(vradius);
+
+        lBandMathFilter->SetNthInput(inputIdLeft, leftVarianceFilter->GetOutput(), "variance");
+        ++inputIdLeft;
+        leftFormula << " and variance > " << GetParameterFloat("mask.variancet");
+        m_Filters.push_back(leftVarianceFilter.GetPointer());
+        }
+
       leftFormula << ",255,0)";
       lBandMathFilter->SetExpression(leftFormula.str());
 
       m_Filters.push_back(leftMaskResampleFilter.GetPointer());
 
-      rBandMathFilter->SetNthInput(0, rightResampleFilter->GetOutput(), "inright");
-
+      rBandMathFilter->SetNthInput(inputIdRight, rightResampleFilter->GetOutput(), "inright");
+      ++inputIdRight;
       std::ostringstream rightFormula;
       rightFormula << "if((inright > 0)";
       ResampleFilterType::Pointer rightMaskResampleFilter = ResampleFilterType::New();
@@ -577,11 +617,26 @@ private:
         rightMaskResampleFilter->SetOutputOrigin(epiOrigin);
         rightMaskResampleFilter->SetEdgePaddingValue(defaultValue);
 
-        rBandMathFilter->SetNthInput(1, rightMaskResampleFilter->GetOutput(), "maskright");
-        rightFormula << " and (maskright > 0)";
+        rBandMathFilter->SetNthInput(inputIdRight, rightMaskResampleFilter->GetOutput(), "maskright");
+        ++inputIdRight;
+        rightFormula<< " and (maskright > 0)";
         }
-      rightFormula << ",255,0)";
+      if (IsParameterEnabled("mask.variancet"))
+        {
+        // right side
+        VarianceFilterType::Pointer rightVarianceFilter = VarianceFilterType::New();
+        rightVarianceFilter->SetInput(rightResampleFilter->GetOutput());
+        VarianceFilterType::InputSizeType vradius;
+        vradius.Fill(this->GetParameterInt("radius"));
+        rightVarianceFilter->SetRadius(vradius);
 
+        rBandMathFilter->SetNthInput(inputIdRight, rightVarianceFilter->GetOutput(), "variance");
+        ++inputIdRight;
+        rightFormula << " and variance > " << GetParameterFloat("mask.variancet");
+        m_Filters.push_back(rightVarianceFilter.GetPointer());
+        }
+
+      rightFormula << ",255,0)";
       rBandMathFilter->SetExpression(rightFormula.str());
 
       m_Filters.push_back(rightMaskResampleFilter.GetPointer());
@@ -593,7 +648,7 @@ private:
       blockMatcherFilter->SetRightInput(rightResampleFilter->GetOutput());
       blockMatcherFilter->SetLeftMaskInput(lBandMathFilter->GetOutput());
       blockMatcherFilter->SetRightMaskInput(rBandMathFilter->GetOutput());
-      blockMatcherFilter->SetRadius(4);
+      blockMatcherFilter->SetRadius(this->GetParameterInt("radius"));
       blockMatcherFilter->MinimizeOff();
       m_Filters.push_back(blockMatcherFilter.GetPointer());
 
@@ -659,30 +714,30 @@ private:
       // Compute min/max elevation on DEM
       if (otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this, "elev"))
         {
-      DEMToImageGeneratorType::Pointer demToImageFilter = DEMToImageGeneratorType::New();
-      demToImageFilter->SetOutputParametersFromImage((m_MultiDisparityTo3DFilterList[i]->GetOutput()));
-      MinMaxFilterType::Pointer minMaxFilter = MinMaxFilterType::New();
-      minMaxFilter->SetInput(demToImageFilter->GetOutput());
-      minMaxFilter->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
+        DEMToImageGeneratorType::Pointer demToImageFilter = DEMToImageGeneratorType::New();
+        demToImageFilter->SetOutputParametersFromImage((m_MultiDisparityTo3DFilterList[i]->GetOutput()));
+        MinMaxFilterType::Pointer minMaxFilter = MinMaxFilterType::New();
+        minMaxFilter->SetInput(demToImageFilter->GetOutput());
+        minMaxFilter->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
 
-      AddProcess(minMaxFilter->GetStreamer(), "Estimating min/max elevation...");
-      minMaxFilter->Update();
+        AddProcess(minMaxFilter->GetStreamer(), "Estimating min/max elevation...");
+        minMaxFilter->Update();
 
-      minElev = minMaxFilter->GetMinimum();
-      maxElev = minMaxFilter->GetMaximum();
-      }
+        minElev = minMaxFilter->GetMinimum();
+        maxElev = minMaxFilter->GetMaximum();
+        }
       else
-      {
-        minElev =otb::Wrapper::ElevationParametersHandler::GetDefaultElevation(this, "elev");
-        maxElev =otb::Wrapper::ElevationParametersHandler::GetDefaultElevation(this, "elev");
+        {
+        minElev = otb::Wrapper::ElevationParametersHandler::GetDefaultElevation(this, "elev");
+        maxElev = otb::Wrapper::ElevationParametersHandler::GetDefaultElevation(this, "elev");
         otbAppLogINFO(<<"Default elevation set for Min/Max elevation : "<<minElev);
-      }
+        }
 
       otbAppLogINFO(<<"Minimum elevation found : "<<minElev);
       otbAppLogINFO(<<"Maximum elevation found : "<<maxElev);
 
       //check under and over for each couple
-      if(i==0)
+      if (i == 0)
         {
         m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
         m_Multi3DMapToDEMFilter->SetNoDataValue(minElev);
@@ -690,14 +745,14 @@ private:
         }
       else
         {
-         if(minElev<(m_Multi3DMapToDEMFilter->GetElevationMin()-underElev))
-           {
-           m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
-           m_Multi3DMapToDEMFilter->SetNoDataValue(minElev);
-           }
-         if(maxElev<(m_Multi3DMapToDEMFilter->GetElevationMax()-overElev))
+        if (minElev < (m_Multi3DMapToDEMFilter->GetElevationMin() - underElev))
           {
-           m_Multi3DMapToDEMFilter->SetElevationMax(maxElev + overElev);
+          m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
+          m_Multi3DMapToDEMFilter->SetNoDataValue(minElev);
+          }
+        if (maxElev < (m_Multi3DMapToDEMFilter->GetElevationMax() - overElev))
+          {
+          m_Multi3DMapToDEMFilter->SetElevationMax(maxElev + overElev);
           }
         }
 
