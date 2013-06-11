@@ -39,8 +39,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdDatasetModel.h"
-//
-#include "Gui/mvdI18nApplication.h"
+#include "mvdI18nCoreApplication.h"
 
 namespace mvd
 {
@@ -101,7 +100,7 @@ ImageImporter
   emit ProgressRangeChanged( 0, 0 );
 
   // Load dataset-model.
-  return I18nApplication::LoadDatasetModel( m_Filename, m_Width, m_Height );
+  return I18nCoreApplication::LoadDatasetModel( m_Filename, m_Width, m_Height );
 }
 
 /*******************************************************************************/

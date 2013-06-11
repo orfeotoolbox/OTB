@@ -39,8 +39,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdDatasetModel.h"
-//
-#include "Gui/mvdI18nApplication.h"
+#include "mvdI18nCoreApplication.h"
 
 namespace mvd
 {
@@ -83,10 +82,10 @@ QStringList
 DatabaseModel
 ::ListAvailableDatasets() const
 {
-  QDir cacheDir( I18nApplication::ConstInstance()->GetCacheDir() );
+  QDir cacheDir( I18nCoreApplication::ConstInstance()->GetCacheDir() );
 
   QStringList nameFilters;
-  nameFilters << QString( "*%1" ).arg( I18nApplication::DATASET_EXT );
+  nameFilters << QString( "*%1" ).arg( I18nCoreApplication::DATASET_EXT );
 
   return cacheDir.entryList(
     nameFilters,
@@ -155,7 +154,7 @@ DatabaseModel
 {
   ReleaseDatasetModel( id, true );
 
-  QFileInfo finfo( I18nApplication::ConstInstance()->GetCacheDir(), id );
+  QFileInfo finfo( I18nCoreApplication::ConstInstance()->GetCacheDir(), id );
   QDir dir( finfo.filePath() );
   QFileInfoList fileInfos(
     dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Files )
@@ -280,10 +279,10 @@ DatabaseModel
     datasetModel = new DatasetModel( this );
 
     // Build dataset model.
-    assert( I18nApplication::ConstInstance() );
+    assert( I18nCoreApplication::ConstInstance() );
 
     DatasetModel::BuildContext context(
-      I18nApplication::ConstInstance()->GetCacheDir().path(),
+      I18nCoreApplication::ConstInstance()->GetCacheDir().path(),
       id,
       id,
       false

@@ -39,12 +39,11 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdDatasetDescriptor.h"
+#include "mvdI18nCoreApplication.h"
 #include "mvdImagePlacenameLoader.h"
 #include "mvdQuicklookModel.h"
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
-//
-#include "Gui/mvdI18nApplication.h"
 
 
 namespace mvd
@@ -267,7 +266,7 @@ DatasetModel
   BuildContext* buildContext = static_cast< BuildContext* >( context );
 
   // Create directory structure, if needed.
-  bool isEmpty = I18nApplication::MakeDirTree(
+  bool isEmpty = I18nCoreApplication::MakeDirTree(
     buildContext->m_Path,
     buildContext->m_Name
   );

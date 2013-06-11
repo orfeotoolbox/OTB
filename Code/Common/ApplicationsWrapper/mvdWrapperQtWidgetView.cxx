@@ -49,8 +49,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdWrapperQtWidgetParameterFactory.h"
 //
-#include "Gui/mvdI18nApplication.h"
-
+#include "Core/mvdI18nCoreApplication.h"
 
 namespace mvd
 {
@@ -214,8 +213,8 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
 {
   //
   // Get the cache dir
-  // get the const instance of the I18nApplication
-  I18nApplication *  app = I18nApplication::Instance();
+  // get the const instance of the application.
+  I18nCoreApplication* app = I18nCoreApplication::Instance();
 
   //
   // get the OTB application widget layout
