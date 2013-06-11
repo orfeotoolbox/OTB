@@ -56,13 +56,13 @@ void TrainImagesClassifier::InitNeuralNetworkParams()
 
   //Alpha
   AddParameter(ParameterType_Float, "classifier.ann.a", "Alpha parameter of the activation function");
-  SetParameterFloat("classifier.ann.a", 0.);
+  SetParameterFloat("classifier.ann.a", 1.);
   SetParameterDescription("classifier.ann.a",
                           "Alpha parameter of the activation function (used only with sigmoid and gaussian functions).");
 
   //Beta
   AddParameter(ParameterType_Float, "classifier.ann.b", "Beta parameter of the activation function");
-  SetParameterFloat("classifier.ann.b", 0.);
+  SetParameterFloat("classifier.ann.b", 1.);
   SetParameterDescription("classifier.ann.b",
                           "Beta parameter of the activation function (used only with sigmoid and gaussian functions).");
 

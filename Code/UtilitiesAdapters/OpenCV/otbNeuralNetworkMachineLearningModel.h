@@ -49,6 +49,8 @@ public:
   typedef itk::FixedArray<TargetValueType,1>              TargetSampleType;
   typedef itk::Statistics::ListSample<TargetSampleType>   TargetListSampleType;
 
+  typedef std::map<TargetValueType, unsigned int>         MapOfLabelsType;
+
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(NeuralNetworkMachineLearningModel, itk::MachineLearningModel);
@@ -200,6 +202,8 @@ private:
   int m_MaxIter;
   double m_Epsilon;
 
+  CvMat*             m_CvMatOfLabels;
+  MapOfLabelsType    m_MapOfLabels;
 
 };
 } // end namespace otb

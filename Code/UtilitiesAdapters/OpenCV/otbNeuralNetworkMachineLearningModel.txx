@@ -1,23 +1,22 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
+ Program:   ORFEO Toolbox
+ Language:  C++
+ Date:      $Date$
+ Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+ =========================================================================*/
 #ifndef __otbNeuralNetworkMachineLearningModel_txx
 #define __otbNeuralNetworkMachineLearningModel_txx
-
 
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
@@ -27,31 +26,26 @@
 namespace otb
 {
 
-template <class TInputValue, class TOutputValue>
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::NeuralNetworkMachineLearningModel() :
- m_TrainMethod(CvANN_MLP_TrainParams::RPROP), m_ActivateFunction(CvANN_MLP::SIGMOID_SYM),
- m_Alpha(0.), m_Beta(0.), m_BackPropDWScale(0.1), m_BackPropMomentScale(0.1),
- m_RegPropDW0(0.1), m_RegPropDWMin(FLT_EPSILON), m_TermCriteriaType(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS),
- m_MaxIter(1000), m_Epsilon(0.01)
+template<class TInputValue, class TOutputValue>
+NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachineLearningModel() :
+  m_TrainMethod(CvANN_MLP_TrainParams::RPROP), m_ActivateFunction(CvANN_MLP::SIGMOID_SYM), m_Alpha(1.), m_Beta(1.),
+      m_BackPropDWScale(0.1), m_BackPropMomentScale(0.1), m_RegPropDW0(0.1), m_RegPropDWMin(FLT_EPSILON),
+      m_TermCriteriaType(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS), m_MaxIter(1000), m_Epsilon(0.01)
 {
   m_ANNModel = new CvANN_MLP;
   m_LayerSizes.clear();
+  m_MapOfLabels.clear();
 }
 
-
-template <class TInputValue, class TOutputValue>
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::~NeuralNetworkMachineLearningModel()
+template<class TInputValue, class TOutputValue>
+NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::~NeuralNetworkMachineLearningModel()
 {
   delete m_ANNModel;
 }
 
 /** Train the machine learning model */
-template <class TInputValue, class TOutputValue>
-void
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::SetLayerSizes(const std::vector<unsigned int> layers)
+template<class TInputValue, class TOutputValue>
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetLayerSizes(const std::vector<unsigned int> layers)
 {
   const unsigned int nbLayers = layers.size();
   if (nbLayers < 3)
@@ -65,78 +59,79 @@ NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
  *  cvReleaseMat function.  A null pointer is resturned in case the
  *  conversion failed.
  */
-template <class TInputValue, class TOutputValue>
-void
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::LabelsToMat(const TargetListSampleType * labels, cv::Mat & output)
+template<class TInputValue, class TOutputValue>
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(const TargetListSampleType * labels,
+                                                                               cv::Mat & output)
 {
-    // Sample index
-    unsigned int sampleIdx = 0;
+  unsigned int nbSamples = labels->Size();
 
-    // Check for valid listSample
-    if(labels != NULL && labels->Size() > 0)
+  // Check for valid listSample
+  if (labels != NULL && nbSamples > 0)
+    {
+    // Build an iterator
+    typename TargetListSampleType::ConstIterator labelSampleIt = labels->Begin();
+
+    TargetValueType classLabel;
+    for (; labelSampleIt != labels->End(); ++labelSampleIt)
       {
-      // Retrieve samples count
-      unsigned int sampleCount = labels->Size();
-
-      std::vector<unsigned int> classes;
-
-      // Build an iterator
-      typename TargetListSampleType::ConstIterator sampleIt = labels->Begin();
-      // Retrieve samples size alike
-      const unsigned int sampleSize = labels->GetMeasurementVectorSize();
-
-      for(; sampleIt!=labels->End(); ++sampleIt,++sampleIdx)
+      // Retrieve labelSample
+      typename TargetListSampleType::MeasurementVectorType labelSample = labelSampleIt.GetMeasurementVector();
+      classLabel = labelSample[0];
+      if (m_MapOfLabels.count(classLabel) == 0)
         {
-        // Retrieve sample
-        typename TargetListSampleType::MeasurementVectorType sample = sampleIt.GetMeasurementVector();
-        // Loop on sample size
-        for(unsigned int i = 0; i < sampleSize; ++i)
-          {
-          classes.push_back(sample[i]);
-          }
-        }
-      std::sort(classes.begin(), classes.end());
-      std::vector<unsigned int>::iterator it = std::unique(classes.begin(), classes.end());
-      classes.resize(std::distance(classes.begin(),it));
-      const unsigned int nbClasses = classes.size();
-
-      // Allocate CvMat
-      sampleIdx = 0;
-      sampleIt = labels->Begin();
-      output.create(sampleCount,nbClasses,CV_32FC1);
-      output.setTo(0);
-      // Fill the cv matrix
-      for(; sampleIt!=labels->End(); ++sampleIt,++sampleIdx)
-        {
-        // Retrieve sample
-        typename TargetListSampleType::MeasurementVectorType sample = sampleIt.GetMeasurementVector();
-
-        // Loop on sample size
-        for(unsigned int i = 0; i < sampleSize; ++i)
-          {
-          output.at<float>(sampleIdx,sample[i]) = 1;
-          }
+        m_MapOfLabels[classLabel] = -1;
         }
       }
+
+    unsigned int nbClasses = m_MapOfLabels.size();
+    typename MapOfLabelsType::iterator itMapOfLabels = m_MapOfLabels.begin();
+    unsigned itLabel = 0;
+    for (; itMapOfLabels != m_MapOfLabels.end(); ++itMapOfLabels)
+      {
+      classLabel = itMapOfLabels->first;
+      m_MapOfLabels[classLabel] = itLabel;
+
+      if (itLabel == 0)
+        {
+        m_CvMatOfLabels = cvCreateMat(1, nbClasses, CV_32SC1);
+        }
+      m_CvMatOfLabels->data.i[itLabel] = classLabel;
+      ++itLabel;
+      }
+
+    // Allocate CvMat
+    // Sample index
+    unsigned int sampleIdx = 0;
+    labelSampleIt = labels->Begin();
+    output.create(nbSamples, nbClasses, CV_32FC1);
+    output.setTo(-m_Beta);
+    // Fill the cv matrix
+    for (; labelSampleIt != labels->End(); ++labelSampleIt, ++sampleIdx)
+      {
+      // Retrieve labelSample
+      typename TargetListSampleType::MeasurementVectorType labelSample = labelSampleIt.GetMeasurementVector();
+      classLabel = labelSample[0];
+      unsigned int indexLabel = m_MapOfLabels[classLabel];
+      output.at<float> (sampleIdx, indexLabel) = m_Beta;
+      }
+    }
 }
 
 /** Train the machine learning model */
-template <class TInputValue, class TOutputValue>
-void
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::Train()
+template<class TInputValue, class TOutputValue>
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Train()
 {
   //Create the neural network
   const unsigned int nbLayers = m_LayerSizes.size();
-  if (nbLayers == 0)
+
+  if ( nbLayers == 0 )
     itkExceptionMacro(<< "Number of layers in the Neural Network must be >= 3")
 
-  cv::Mat layers = cv::Mat(nbLayers,1,CV_32SC1);
-  for (unsigned int i=0; i<nbLayers; i++)
-  {
+  cv::Mat layers = cv::Mat(nbLayers, 1, CV_32SC1);
+  for (unsigned int i = 0; i < nbLayers; i++)
+    {
     layers.row(i) = m_LayerSizes[i];
-  }
+    }
 
   m_ANNModel->create(layers, m_ActivateFunction, m_Alpha, m_Beta);
 
@@ -144,9 +139,8 @@ NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
 
-  cv::Mat labels;
-  LabelsToMat(this->GetTargetListSample(),labels);
-  //otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
+  cv::Mat matOutputANN;
+  LabelsToMat(this->GetTargetListSample(), matOutputANN);
 
   CvANN_MLP_TrainParams params;
   params.train_method = m_TrainMethod;
@@ -154,100 +148,135 @@ NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
   params.bp_moment_scale = m_BackPropMomentScale;
   params.rp_dw0 = m_RegPropDW0;
   params.rp_dw_min = m_RegPropDWMin;
-  CvTermCriteria term_crit   = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
+  CvTermCriteria term_crit = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
   params.term_crit = term_crit;
 
   //train the Neural network model
-  m_ANNModel->train(samples,labels,cv::Mat(),cv::Mat(),params);
+  m_ANNModel->train(samples, matOutputANN, cv::Mat(), cv::Mat(), params);
 }
 
-template <class TInputValue, class TOutputValue>
-typename NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::TargetSampleType
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::Predict(const InputSampleType & input) const
+template<class TInputValue, class TOutputValue>
+typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
+    TInputValue, TOutputValue>::Predict(const InputSampleType & input) const
 {
   //convert listsample to Mat
   cv::Mat sample;
 
-  otb::SampleToMat<InputSampleType>(input,sample);
+  otb::SampleToMat<InputSampleType>(input, sample);
 
-  cv::Mat response(1, 1, CV_32FC1);
-  m_ANNModel->predict(sample,response);
+  cv::Mat response;//(1, 1, CV_32FC1);
+  m_ANNModel->predict(sample, response);
 
   TargetSampleType target;
+  float currentResponse = 0;
+  float maxResponse = response.at<float> (0, 0);
+  target[0] = m_CvMatOfLabels->data.i[0];
 
-  target[0] = static_cast<TOutputValue>(response.at<float>(0,0));
+  unsigned int nbClasses = m_CvMatOfLabels->cols;
+  for (unsigned itLabel = 1; itLabel < nbClasses; ++itLabel)
+    {
+    currentResponse = response.at<float> (0, itLabel);
+    if (currentResponse > maxResponse)
+      {
+      maxResponse = currentResponse;
+      target[0] = m_CvMatOfLabels->data.i[itLabel];
+      }
+    }
 
   return target;
 }
 
-template <class TInputValue, class TOutputValue>
-void
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::Save(const std::string & filename, const std::string & name)
+template<class TInputValue, class TOutputValue>
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string & filename,
+                                                                        const std::string & name)
 {
-  if (name == "")
-    m_ANNModel->save(filename.c_str(), 0);
-  else
-    m_ANNModel->save(filename.c_str(), name.c_str());
+  //const char* lname = "my_nn";
+  const char* lname = 0;
+  if ( !name.empty() )
+    lname = name.c_str();
+
+  CvFileStorage* fs = 0;
+  fs = cvOpenFileStorage(filename.c_str(), 0, CV_STORAGE_WRITE);
+  if ( !fs )
+    {
+    std::cerr << "Could not open the file storage " << filename << ". Check the path and permissions" << std::endl;
+    }
+
+  m_ANNModel->write(fs, lname);
+  cvWrite(fs, "class_labels", m_CvMatOfLabels);
+
+  cvReleaseFileStorage(&fs);
 }
 
-template <class TInputValue, class TOutputValue>
-void
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::Load(const std::string & filename, const std::string & name)
+template<class TInputValue, class TOutputValue>
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string & filename,
+                                                                        const std::string & name)
 {
-  if (name == "")
-    m_ANNModel->load(filename.c_str(), 0);
+  const char* lname = 0;
+  if ( !name.empty() )
+    lname = name.c_str();
+
+  CvFileStorage* fs = 0;
+  CvFileNode* model_node = 0;
+  fs = cvOpenFileStorage(filename.c_str(), 0, CV_STORAGE_READ);
+  if ( !fs )
+    {
+    std::cerr << "Could not load the file storage " << filename << ". Check the path and permissions" << std::endl;
+    }
+
+  if( lname )
+    model_node = cvGetFileNodeByName(fs, 0, lname);
   else
-    m_ANNModel->load(filename.c_str(), name.c_str());
+    {
+    CvFileNode* root = cvGetRootFileNode( fs );
+    if( root->data.seq->total > 0 )
+      model_node = (CvFileNode*)cvGetSeqElem( root->data.seq, 0 );
+    }
+
+  m_ANNModel->read(fs, model_node);
+  m_CvMatOfLabels = (CvMat*)cvReadByName( fs, model_node, "class_labels" );
+
+  cvReleaseFileStorage(&fs);
 }
 
-template <class TInputValue, class TOutputValue>
-bool
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::CanReadFile(const std::string & file)
+template<class TInputValue, class TOutputValue>
+bool NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(const std::string & file)
 {
   std::ifstream ifs;
   ifs.open(file.c_str());
 
-  if(!ifs)
-  {
-    std::cerr<<"Could not read file "<<file<<std::endl;
+  if (!ifs)
+    {
+    std::cerr << "Could not read file " << file << std::endl;
     return false;
-  }
+    }
 
   while (!ifs.eof())
-  {
+    {
     std::string line;
     std::getline(ifs, line);
 
     if (line.find(CV_TYPE_NAME_ML_ANN_MLP) != std::string::npos)
-    {
-       std::cout<<"Reading a "<<CV_TYPE_NAME_ML_ANN_MLP<<" model !!!"<<std::endl;
-       return true;
+      {
+      std::cout << "Reading a " << CV_TYPE_NAME_ML_ANN_MLP << " model !!!" << std::endl;
+      return true;
+      }
     }
-  }
   ifs.close();
   return false;
 }
 
-template <class TInputValue, class TOutputValue>
-bool
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const std::string & file)
+template<class TInputValue, class TOutputValue>
+bool NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CanWriteFile(const std::string & file)
 {
   return false;
 }
 
-template <class TInputValue, class TOutputValue>
-void
-NeuralNetworkMachineLearningModel<TInputValue,TOutputValue>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template<class TInputValue, class TOutputValue>
+void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } //end namespace otb
