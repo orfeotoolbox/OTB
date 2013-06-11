@@ -176,7 +176,7 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
 
   otb::SampleToMat<InputSampleType>(input, sample);
 
-  cv::Mat response;//(1, 1, CV_32FC1);
+  cv::Mat response; //(1, 1, CV_32FC1);
   m_ANNModel->predict(sample, response);
 
   TargetSampleType target;
