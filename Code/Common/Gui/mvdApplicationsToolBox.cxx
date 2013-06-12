@@ -182,6 +182,9 @@ ApplicationsToolBox
       }
 
     }
+
+  //Expand algorithms tree by default
+  this->GetAlgorithmsTree()->expandAll();
 }
 
 /*******************************************************************************/
