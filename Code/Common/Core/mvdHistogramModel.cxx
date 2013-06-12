@@ -94,7 +94,7 @@ HistogramModel
   // Contruct 1D measurement vector.
   Histogram::MeasurementVectorType measurement( 1 );
   measurement[ 0 ] = intensity;
-  
+
   // Due to float/double conversion, it can happen
   // that the minimum or maximum value go slightly outside the histogram
   // Clamping the value solves the issue and avoid RangeError
@@ -197,7 +197,7 @@ HistogramModel
 
     if( buildContext->IsBeingStored() )
       {
-      template_BuildModel_M< VectorImageModel >();
+      template_BuildModel_M< VectorImageModel >( buildContext );
 
       Write( buildContext->m_Filename, SerializableInterface::MODE_TEXT );
       }
@@ -205,7 +205,7 @@ HistogramModel
       {
       if( buildContext->m_Filename.isEmpty() )
 	{
-	template_BuildModel_M< VectorImageModel >();
+	template_BuildModel_M< VectorImageModel >( buildContext );
 	}
       else
 	{

@@ -187,7 +187,9 @@ I18nCoreApplication
     QFileInfo finfo( imageFilename );
 
     // Build model (relink to cached data).
-    DatasetModel::BuildContext context( path, name, finfo.baseName(), width, height );
+    DatasetModel::BuildContext context(
+      path, name, finfo.baseName(), width, height
+    );
     model->BuildModel( &context );
 
     // Load image if DatasetModel is empty.

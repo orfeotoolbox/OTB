@@ -64,7 +64,7 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
-/*******************************************************************************/
+/*****************************************************************************/
 VectorImageModel
 ::VectorImageModel( QObject* parent ) :
   AbstractImageModel( parent ),
@@ -88,14 +88,14 @@ VectorImageModel
     );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 VectorImageModel
 ::~VectorImageModel()
 {
   this->ClearBuffer();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::SetFilename( const QString& filename , int w, int h)
@@ -132,7 +132,7 @@ VectorImageModel
   SetupCurrentLodImage(w, h);
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::BuildGdalOverviews()
@@ -209,7 +209,7 @@ VectorImageModel
     }
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::virtual_BuildModel( void* context )
@@ -258,7 +258,7 @@ VectorImageModel
   InitializeRgbaPipeline();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::InitializeColorSetupSettings()
@@ -308,7 +308,7 @@ VectorImageModel
     }
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::InitializeColorDynamicsSettings()
@@ -346,7 +346,7 @@ VectorImageModel
     }
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::InitializeRgbaPipeline()
@@ -360,7 +360,7 @@ VectorImageModel
   ApplySettings();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::ClearBuffer()
@@ -370,7 +370,7 @@ VectorImageModel
   m_RasterizedBuffer = NULL;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 unsigned char *
 VectorImageModel
 ::RasterizeRegion( const ImageRegionType& region, const double zoomFactor, bool refresh)
@@ -480,7 +480,7 @@ VectorImageModel
   return m_RasterizedBuffer;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::DumpImagePixelsWithinRegionIntoBuffer(const ImageRegionType& region)
@@ -549,7 +549,7 @@ VectorImageModel
     }
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::ComputeRegionsToLoad(const ImageRegionType& region)
@@ -623,7 +623,7 @@ size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0]
     m_RegionsToLoadVector.push_back(rightRegion);
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 CountType
 VectorImageModel::ComputeBestLevelOfDetail(const double zoomFactor)
 {
@@ -632,7 +632,7 @@ VectorImageModel::ComputeBestLevelOfDetail(const double zoomFactor)
   return bestLod;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 unsigned int 
 VectorImageModel::Closest(double invZoomfactor, const std::vector<unsigned int> & res) 
 {
@@ -654,7 +654,7 @@ VectorImageModel::Closest(double invZoomfactor, const std::vector<unsigned int> 
   return closest;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::SetupCurrentLodImage( int width, int height )
@@ -680,7 +680,7 @@ VectorImageModel
   this->SetCurrentLod( bestInitialLod );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 CountType
 VectorImageModel
 ::GetNbLod() const
@@ -688,7 +688,7 @@ VectorImageModel
   return m_AvailableLod.size();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::virtual_SetCurrentLod( CountType lod )
@@ -720,7 +720,7 @@ VectorImageModel
   m_Image = m_ImageFileReader->GetOutput();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 ImageBaseType::ConstPointer
 VectorImageModel
 ::ToImageBase() const
@@ -728,7 +728,7 @@ VectorImageModel
   return ImageBaseType::ConstPointer( m_Image );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 ImageBaseType::Pointer
 VectorImageModel
 ::ToImageBase()
@@ -736,7 +736,7 @@ VectorImageModel
   return ImageBaseType::Pointer( m_Image );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 std::string
 VectorImageModel
 ::GetCenterPixelPlaceName()
@@ -776,7 +776,7 @@ VectorImageModel
   return oss.str();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 bool
 VectorImageModel
 ::IsModified() const
@@ -784,7 +784,7 @@ VectorImageModel
   return GetSettings().IsModified();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 VectorImageModel
 ::ClearModified()
@@ -798,6 +798,7 @@ VectorImageModel
     quicklookModel->ClearModified();
 }
 
+/*****************************************************************************/
 void 
 VectorImageModel
 ::ReleaseMemory()
@@ -816,7 +817,6 @@ VectorImageModel
   SetCurrentLod(GetCurrentLod());
 }
 
-/*******************************************************************************/
 void
 VectorImageModel
 ::ApplySettings()
@@ -843,9 +843,9 @@ VectorImageModel
     }
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 void
 VectorImageModel
 ::OnModelUpdated()
@@ -859,7 +859,7 @@ VectorImageModel
   emit SettingsUpdated( this );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void 
 VectorImageModel
 ::OnPhysicalCursorPositionChanged(double Xpc, double Ypc)
@@ -1007,7 +1007,7 @@ VectorImageModel
   emit CurrentPixelValueUpdated( currentPixel,  bandNames);
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void 
 VectorImageModel
 ::OnUserCoordinatesEditingFinished(const QString& coord)

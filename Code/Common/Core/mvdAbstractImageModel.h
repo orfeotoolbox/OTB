@@ -257,7 +257,7 @@ protected:
   // AbstractModel overrides.
 
   /** */
-  virtual void virtual_BuildModel( void* context );
+  virtual void virtual_BuildModel( void * context );
 
 //
 // Protected attributes.

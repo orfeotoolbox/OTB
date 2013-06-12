@@ -117,8 +117,13 @@ public:
   public:
     /** \brief Constructor. */
     BuildContext( bool isBeingStored,
-		  const QString& filename =QString() ) :
+		  const QString& filename =QString(),
+		  bool noDataFlag =false,
+		  DefaultImageType::InternalPixelType noDataValue
+		  = DefaultImageType::InternalPixelType() ) :
       m_Filename( filename ),
+      m_NoDataFlag( noDataFlag ),
+      m_NoDataValue( noDataValue ),
       m_IsBeingStored( isBeingStored )
     {
     }
@@ -134,6 +139,8 @@ public:
     // Public attributes
   public:
     QString m_Filename;
+    bool m_NoDataFlag;
+    DefaultImageType::InternalPixelType m_NoDataValue;
 
   private:
     bool m_IsBeingStored;
@@ -213,13 +220,15 @@ private:
 private:
   /**
    */
+#if 0
   template< typename TImage >
     void template_BuildModel_I();
+#endif
 
   /**
    */
   template< typename TImageModel >
-    void template_BuildModel_M();
+    void template_BuildModel_M( BuildContext* context =NULL );
 
   //
   // SerializableInterface overrides.
@@ -314,6 +323,7 @@ HistogramModel
 }
 
 /*******************************************************************************/
+#if 0
 template< typename TImage >
 void
 HistogramModel
@@ -414,12 +424,13 @@ HistogramModel
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
     .arg( lMain.elapsed() );
 }
+#endif
 
 /*******************************************************************************/
 template< typename TImageModel >
 void
 HistogramModel
-::template_BuildModel_M()
+::template_BuildModel_M( BuildContext* context )
 {
   QTime lMain;
   QTime lPass1;
@@ -456,7 +467,14 @@ HistogramModel
   typename MinMaxFilter::Pointer filterMinMax( MinMaxFilter::New() );
 
   filterMinMax->SetInput( imageModel->ToImage() );
-  filterMinMax->GetFilter()->SetNoDataFlag(true);
+
+  if( context==NULL )
+    filterMinMax->GetFilter()->SetNoDataFlag( false );
+  else
+    {
+    filterMinMax->GetFilter()->SetNoDataFlag( context->m_NoDataFlag );
+    filterMinMax->GetFilter()->SetNoDataValue( context->m_NoDataValue );
+    }
 
   filterMinMax->Update();
 
@@ -499,7 +517,14 @@ HistogramModel
     HistogramModel::BINS_OVERSAMPLING_RATE * 256
   );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
-  histogramFilter->GetFilter()->SetNoDataFlag(true);
+
+  if( context==NULL )
+    histogramFilter->GetFilter()->SetNoDataFlag( false );
+  else
+    {
+    histogramFilter->GetFilter()->SetNoDataFlag( context->m_NoDataFlag );
+    histogramFilter->GetFilter()->SetNoDataValue( context->m_NoDataValue );
+    }
 
   // Go.
   histogramFilter->Update();
