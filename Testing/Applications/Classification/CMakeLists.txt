@@ -29,6 +29,10 @@ IF(OTB_USE_OPENCV)
   SET(rf_input "")
   SET(knn_input "")
   
+  # Output type
+  SET(raster_output_format ".tif")
+  SET(raster_output_option "uint8")
+  
   # Output model type depending on classifier
   SET(libsvm_output_format ".libsvm")
   SET(svm_output_format ".svm")
@@ -53,16 +57,19 @@ IF(OTB_USE_OPENCV)
   
   # Validation depending on mode 
   SET(ascii_comparison --compare-ascii ${NOTOL})
+  SET(raster_comparison --compare-image ${NOTOL})
   
   # Reference ffiles depending on modes
   SET(ascii_ref_path ${OTBAPP_BASELINE_FILES})
+  SET(raster_ref_path ${OTBAPP_BASELINE})
   
   # Loop on classifiers
   FOREACH(classifier "LIBSVM" "SVM" "BOOST" "DT" "GBT" "ANN" "BAYES" "RF" "KNN")
   STRING(TOLOWER ${classifier} lclassifier)
 
     # Derive output file name
-    SET(OUTFILE cl${classifier}ModelQB1${${lclassifier}_output_format})
+    SET(OUTMODELFILE cl${classifier}ModelQB1${${lclassifier}_output_format})
+    SET(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
     
     OTB_TEST_APPLICATION(
                          NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
@@ -72,13 +79,29 @@ IF(OTB_USE_OPENCV)
                                   -io.imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1${stat_input_format}
                                   -classifier ${lclassifier}
                                   ${${lclassifier}_parameters}
-                                  -io.out ${TEMP}/${OUTFILE}
+                                  -io.out ${TEMP}/${OUTMODELFILE}
                                   -rand 121212
 
                          VALID    ${ascii_comparison}
-                                  ${ascii_ref_path}/${OUTFILE}
-                                  ${TEMP}/${OUTFILE}
+                                  ${ascii_ref_path}/${OUTMODELFILE}
+                                  ${TEMP}/${OUTMODELFILE}
                          )
+
+
+    OTB_TEST_APPLICATION(
+                         NAME     apTvClMethod${classifier}ImageClassifierQB1
+                         APP      ImageClassifier
+                         OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+                                  -model ${TEMP}/${OUTMODELFILE}
+                                  -imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1${stat_input_format}
+                                  -out ${TEMP}/${OUTRASTER} ${raster_output_option}
+
+                         VALID    ${raster_comparison}
+                                  ${raster_ref_path}/${OUTRASTER}
+                                  ${TEMP}/${OUTRASTER}
+                         )
+
+    SET_TESTS_PROPERTIES(apTvClMethod${classifier}ImageClassifierQB1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1)
 
   ENDFOREACH(classifier)
 
