@@ -725,18 +725,17 @@ VectorImageModel
 /*****************************************************************************/
 void
 VectorImageModel
-::virtual_RefreshHistogram( bool noDataFlag,
-			    ComponentType noDataValue )
+::virtual_RefreshHistogram()
 {
   DatasetModel* datasetModel = GetDatasetModel();
   assert( datasetModel!=NULL );
 
+  assert( GetProperties()!=NULL );
+
   HistogramModel::BuildContext context(
     true, // Force writing new histogram-model.
-    datasetModel->HistogramFileInfo( GetFilename() ).filePath(),
-    noDataFlag,
-    noDataValue );
-  
+    datasetModel->HistogramFileInfo( GetFilename() ).filePath() );
+    
   RefreshHistogram( &context );
 }
 

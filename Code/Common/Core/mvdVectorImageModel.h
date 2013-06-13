@@ -606,11 +606,7 @@ private:
 
   virtual void virtual_SetCurrentLod( CountType lod );
 
-  virtual
-    void
-    virtual_RefreshHistogram( bool noDataFlag,
-			      ComponentType noDataValue =ComponentType( 0 ) );
-
+  virtual void virtual_RefreshHistogram();
 
 //
 // Private attributes.

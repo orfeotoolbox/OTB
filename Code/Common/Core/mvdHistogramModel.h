@@ -117,12 +117,8 @@ public:
   public:
     /** \brief Constructor. */
     BuildContext( bool isBeingStored,
-		  const QString& filename =QString(),
-		  bool noDataFlag =false,
-		  ComponentType noDataValue = ComponentType( 0 ) ) :
+		  const QString& filename =QString() ) :
       m_Filename( filename ),
-      m_NoDataFlag( noDataFlag ),
-      m_NoDataValue( noDataValue ),
       m_IsBeingStored( isBeingStored )
     {
     }
@@ -138,8 +134,6 @@ public:
     // Public attributes
   public:
     QString m_Filename;
-    bool m_NoDataFlag;
-    ComponentType m_NoDataValue;
 
   private:
     bool m_IsBeingStored;
@@ -445,6 +439,8 @@ HistogramModel
     qobject_cast< AbstractImageModel* >( parent() );
   assert( parentImageModel!=NULL );
 
+  ImageProperties* imageProperties = parentImageModel->GetProperties();
+  assert( imageProperties!=NULL );
 
   TImageModel* imageModel = parentImageModel->GetQuicklookModel();
   assert( imageModel!=NULL );
@@ -466,14 +462,8 @@ HistogramModel
   typename MinMaxFilter::Pointer filterMinMax( MinMaxFilter::New() );
 
   filterMinMax->SetInput( imageModel->ToImage() );
-
-  if( context==NULL )
-    filterMinMax->GetFilter()->SetNoDataFlag( false );
-  else
-    {
-    filterMinMax->GetFilter()->SetNoDataFlag( context->m_NoDataFlag );
-    filterMinMax->GetFilter()->SetNoDataValue( context->m_NoDataValue );
-    }
+  filterMinMax->GetFilter()->SetNoDataFlag( imageProperties->IsNoDataEnabled() );
+  filterMinMax->GetFilter()->SetNoDataValue( imageProperties->GetNoData() );
 
   filterMinMax->Update();
 
@@ -516,14 +506,9 @@ HistogramModel
     HistogramModel::BINS_OVERSAMPLING_RATE * 256
   );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
-
-  if( context==NULL )
-    histogramFilter->GetFilter()->SetNoDataFlag( false );
-  else
-    {
-    histogramFilter->GetFilter()->SetNoDataFlag( context->m_NoDataFlag );
-    histogramFilter->GetFilter()->SetNoDataValue( context->m_NoDataValue );
-    }
+  histogramFilter->GetFilter()->SetNoDataFlag(
+    imageProperties->IsNoDataEnabled() );
+  histogramFilter->GetFilter()->SetNoDataValue( imageProperties->GetNoData() );
 
   // Go.
   histogramFilter->Update();

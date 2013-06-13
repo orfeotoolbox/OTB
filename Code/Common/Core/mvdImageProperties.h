@@ -78,6 +78,14 @@ class Monteverdi2_EXPORT ImageProperties :
 
   Q_OBJECT;
 
+  Q_PROPERTY( bool isNoDataEnabled
+	      READ IsNoDataEnabled
+	      WRITE SetNoDataEnabled );
+
+  Q_PROPERTY( ComponentType NoData
+	      READ GetNoData
+	      WRITE SetNoData );
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
@@ -90,17 +98,17 @@ public:
   /** \brief Destructor. */
   virtual ~ImageProperties();
 
-  /**
-   */
-  inline void SetNoDataEnabled( bool enabled );
-
   /*
    */
   bool IsNoDataEnabled() const;
 
   /**
    */
-  inline void SetNoData( ComponentType value );
+  inline void SetNoDataEnabled( bool enabled );
+  
+  /**
+   */
+  void SetNoData( ComponentType value = ComponentType( 0 ) );
 
   /**
    */
@@ -117,10 +125,6 @@ public slots:
 //
 // Signals.
 signals:
-
-  /**
-   */
-  void Changed();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -206,20 +210,20 @@ ImageProperties
 
 /*****************************************************************************/
 inline
-bool
-ImageProperties
-::IsNoDataEnabled() const
-{
-  return m_Flags.m_NoData;
-}
-
-/*****************************************************************************/
-inline
 void
 ImageProperties
 ::SetNoData( ComponentType value )
 {
   m_NoData = value;
+}
+
+/*****************************************************************************/
+inline
+bool
+ImageProperties
+::IsNoDataEnabled() const
+{
+  return m_Flags.m_NoData;
 }
 
 /*****************************************************************************/

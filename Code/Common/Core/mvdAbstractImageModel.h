@@ -239,13 +239,9 @@ public:
 public slots:
 
   /**
-   * \brief Refresh histogram-model based on no-data settings.
-   *
-   * \param noDataFlag true to enable no-data pixel filtering.
-   * \param noDataValue Value of each no-data pixel component.
+   * \brief Refresh histogram-model based on no-data properties.
    */
-  inline void RefreshHistogram( bool noDataFlag,
-				ComponentType noDataValue =ComponentType( 0 ) );
+  inline void RefreshHistogram();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -321,14 +317,8 @@ private:
    * Implement this method in subclass to construct a valid
    * HistogramModel::BuildContext and call RefreshHistogram(void*
    * const).
-   *
-   * \param noDataFlag true to enable no-data pixel filtering.
-   * \param noDataValue Value of each no-data pixel component.
    */
-  virtual
-    void
-    virtual_RefreshHistogram( bool noDataFlag,
-			      ComponentType noDataValue =ComponentType( 0 ) ) =0;
+  virtual void virtual_RefreshHistogram() {};
 
 //
 // Private attributes.
@@ -513,9 +503,9 @@ AbstractImageModel
 inline
 void
 AbstractImageModel
-::RefreshHistogram( bool noDataFlag, ComponentType noDataValue )
+::RefreshHistogram()
 {
-  virtual_RefreshHistogram( noDataFlag, noDataValue );
+  virtual_RefreshHistogram();
 }
 
 /*****************************************************************************/
