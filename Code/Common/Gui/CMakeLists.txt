@@ -7,6 +7,7 @@ set( Common_Gui_SOURCES
   mvdAbstractModelController.cxx
   #mvdAbstractModelRenderer.cxx
   mvdAbstractViewManipulator.cxx
+  mvdCheckableLineEdit.cxx
   mvdColorBandDynamicsWidget.cxx
   mvdColorDynamicsController.cxx
   mvdColorDynamicsWidget.cxx
@@ -43,6 +44,7 @@ set( Common_Gui_HEADERS_MOC
   mvdAbstractModelController.h
   mvdAbstractModelRenderer.h
   mvdAbstractViewManipulator.h
+  mvdCheckableLineEdit.h
   mvdColorBandDynamicsWidget.h
   mvdColorDynamicsController.h
   mvdColorDynamicsWidget.h
@@ -75,6 +77,7 @@ set( Common_Gui_HEADERS_MOC
 set( Common_Gui_FORMS
   mvdAboutDialog.ui
   mvdApplicationsToolBox.ui
+  mvdCheckableLineEdit.ui
   mvdColorBandDynamicsWidget.ui
   mvdColorDynamicsWidget.ui
   mvdColorSetupWidget.ui
