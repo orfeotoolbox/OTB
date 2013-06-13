@@ -177,19 +177,19 @@ public:
   /**
    * \return The largest possible region of the current LOD level.
    */
-  inline ImageRegionType GetLodLargestRegion() const;
+  inline const ImageRegionType & GetLodLargestRegion() const;
 
   /**
    * \return The largest possible region of the native image, which
    * is, by default, LOD level zero.
    */
-  inline ImageRegionType GetNativeLargestRegion() const;
+  inline const ImageRegionType & GetNativeLargestRegion() const;
 
   /**
    * \return The spacing of the native image, which
    * is, by default, LOD level zero.
    */
-  inline SpacingType GetNativeSpacing() const;
+  inline const SpacingType & GetNativeSpacing() const;
 
   /** */
   inline CountType GetNbComponents() const;
@@ -215,10 +215,10 @@ public:
   inline CountType GetCurrentLod() const;
 
   /** */
-  inline SpacingType GetSpacing();
+  inline const SpacingType & GetSpacing() const;
 
   /** */
-  inline PointType GetOrigin();
+  inline const PointType & GetOrigin() const;
 
   /** Release as much memory as possible (default implementation does
    *  nothing) */
@@ -373,7 +373,7 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-ImageRegionType
+const ImageRegionType &
 AbstractImageModel
 ::GetLodLargestRegion() const
 {
@@ -382,7 +382,7 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-ImageRegionType
+const ImageRegionType &
 AbstractImageModel
 ::GetNativeLargestRegion() const
 {
@@ -391,7 +391,7 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-SpacingType
+const SpacingType &
 AbstractImageModel
 ::GetNativeSpacing() const
 {
@@ -422,18 +422,18 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-SpacingType 
+const SpacingType &
 AbstractImageModel
-::GetSpacing()
+::GetSpacing() const
 {
   return ToImageBase()->GetSpacing();
 }
 
 /*****************************************************************************/
 inline
-PointType
+const PointType &
 AbstractImageModel
-::GetOrigin()
+::GetOrigin() const
 {
   return ToImageBase()->GetOrigin();
 }
