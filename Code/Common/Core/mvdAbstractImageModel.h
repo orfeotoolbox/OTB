@@ -220,6 +220,10 @@ public:
   /** */
   inline PointType GetOrigin();
 
+  /** Release as much memory as possible (default implementation does
+   *  nothing) */
+  virtual void ReleaseMemory() {};
+
 //
 // Public SLOTS.
 public slots:

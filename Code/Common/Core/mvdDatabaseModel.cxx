@@ -135,6 +135,13 @@ DatabaseModel
     // Load dataset sub-models.
     datasetModel->LoadImageModels( -1, -1 );
 
+    // Release memory from previous model
+    if(m_SelectedDatasetModel)
+      {
+      m_SelectedDatasetModel->GetSelectedImageModel()->ReleaseMemory();
+      
+      }
+
     // If dataset model has been loaded, select it.
     SetSelectedDatasetModel( datasetModel );
     }

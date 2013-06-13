@@ -798,6 +798,24 @@ VectorImageModel
     quicklookModel->ClearModified();
 }
 
+void 
+VectorImageModel
+::ReleaseMemory()
+{
+  // Release Quicklook as well
+  QuicklookModel* quicklookModel = GetQuicklookModel();
+  if(quicklookModel!=NULL)
+    quicklookModel->ReleaseMemory();
+
+  // Initialize the RGBA pipeline
+  InitializeRgbaPipeline();
+
+  // TODO: Do we need to clear the current buffer here ?
+
+  // Clear file reader
+  SetCurrentLod(GetCurrentLod());
+}
+
 /*******************************************************************************/
 void
 VectorImageModel

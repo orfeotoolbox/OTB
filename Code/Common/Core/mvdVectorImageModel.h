@@ -438,6 +438,10 @@ public:
     return m_ImageFileReader->GetImageIO()->GetImageSizeInBytes();
   }
 
+  /** Release as much memory as possible. This implementation will
+  clear the current pipeline and loaded image data */
+  virtual void ReleaseMemory();
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
