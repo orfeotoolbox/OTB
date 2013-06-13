@@ -214,6 +214,8 @@ void
 VectorImageModel
 ::virtual_BuildModel( void* context )
 {
+  SetProperties( new ImageProperties() );
+
    // Get build-context.
   assert( context!=NULL );
   BuildContext* buildContext = static_cast< BuildContext* >( context );

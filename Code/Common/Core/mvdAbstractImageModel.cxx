@@ -91,7 +91,8 @@ AbstractImageModel
   AbstractModel( parent ),
   m_NativeLargestRegion(),
   m_Id( -1 ),
-  m_CurrentLod( 0 )
+  m_CurrentLod( 0 ),
+  m_Properties( NULL )
 {
 }
 

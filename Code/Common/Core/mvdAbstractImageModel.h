@@ -46,6 +46,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdAbstractModel.h"
+#include "mvdImageProperties.h"
 #include "mvdTypes.h"
 
 
@@ -63,6 +64,7 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 class HistogramModel;
+class ImageProperties;
 class QuicklookModel;
 
 
@@ -152,6 +154,14 @@ public:
   /** */
   inline int GetId() const;
 
+  /**
+   */
+  inline const ImageProperties* GetProperties() const;
+
+  /**
+   */
+  inline ImageProperties* GetProperties();
+
   /** */
   const QuicklookModel* GetQuicklookModel() const;
 
@@ -221,8 +231,8 @@ public:
   inline const PointType& GetOrigin() const;
 
   /** Release as much memory as possible (default implementation does
-   *  nothing) */
-  virtual void ReleaseMemory() {};
+   *  nothing). */
+  virtual void ReleaseMemory() =0;
 
 //
 // Public SLOTS.
@@ -253,6 +263,13 @@ protected:
 
   /** Constructor */
   AbstractImageModel( QObject* parent =NULL );
+
+  /**
+   * \brief Set image properties pointer.
+   *
+   * \param properties The new properties instance.
+   */
+  inline void SetProperties( ImageProperties* properties );
 
   /**
    * \brief Refresh histogram-model based on no-data settings.
@@ -324,6 +341,10 @@ private:
    */
   CountType m_CurrentLod;
 
+  /**
+   */
+  ImageProperties* m_Properties;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -355,6 +376,24 @@ AbstractImageModel
 ::GetId() const
 {
   return m_Id;
+}
+
+/*****************************************************************************/
+inline
+const ImageProperties*
+AbstractImageModel
+::GetProperties() const
+{
+  return m_Properties;
+}
+
+/*****************************************************************************/
+inline
+ImageProperties*
+AbstractImageModel
+::GetProperties()
+{
+  return m_Properties;
 }
 
 /*****************************************************************************/
@@ -477,6 +516,20 @@ AbstractImageModel
 ::RefreshHistogram( bool noDataFlag, ComponentType noDataValue )
 {
   virtual_RefreshHistogram( noDataFlag, noDataValue );
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageModel
+::SetProperties( ImageProperties* properties )
+{
+  if( m_Properties==properties )
+    return;
+
+  delete m_Properties;
+
+  m_Properties = properties;
 }
 
 } // end namespace 'mvd'

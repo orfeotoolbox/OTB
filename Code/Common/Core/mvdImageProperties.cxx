@@ -67,7 +67,9 @@ namespace
 /*******************************************************************************/
 ImageProperties
 ::ImageProperties( QObject* parent ) :
-  QObject( parent )
+  QObject( parent ),
+  m_Flags(),
+  m_NoData( ComponentType( 0 ) )
 {
 }
 

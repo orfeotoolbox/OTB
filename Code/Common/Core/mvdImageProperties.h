@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -89,6 +90,22 @@ public:
   /** \brief Destructor. */
   virtual ~ImageProperties();
 
+  /**
+   */
+  inline void SetNoDataEnabled( bool enabled );
+
+  /*
+   */
+  bool IsNoDataEnabled() const;
+
+  /**
+   */
+  inline void SetNoData( ComponentType value );
+
+  /**
+   */
+  inline ComponentType GetNoData() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -100,6 +117,10 @@ public slots:
 //
 // Signals.
 signals:
+
+  /**
+   */
+  void Changed();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -121,6 +142,27 @@ private:
 //
 // Private attributes.
 private:
+
+  //
+  // Group bitfield bool flags together.
+  struct Flags
+  {
+    Flags() :
+      m_NoData( false )
+    {
+    }
+
+  public:
+    bool m_NoData : 1;
+  };
+
+  /**
+   */
+  Flags m_Flags;
+
+  /**
+   */
+  ComponentType m_NoData;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -152,6 +194,43 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+void
+ImageProperties
+::SetNoDataEnabled( bool enabled )
+{
+  m_Flags.m_NoData = enabled;
+}
+
+/*****************************************************************************/
+inline
+bool
+ImageProperties
+::IsNoDataEnabled() const
+{
+  return m_Flags.m_NoData;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageProperties
+::SetNoData( ComponentType value )
+{
+  m_NoData = value;
+}
+
+/*****************************************************************************/
+inline
+ComponentType
+ImageProperties
+::GetNoData() const
+{
+  return m_NoData;
+}
+
 } // end namespace 'mvd'
 
 #endif // __mvdImageProperties_h
