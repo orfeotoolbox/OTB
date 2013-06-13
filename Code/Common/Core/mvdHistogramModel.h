@@ -68,7 +68,7 @@ namespace
 
 //
 // Internal classes pre-declaration.
-
+class AbstractImageModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -119,8 +119,7 @@ public:
     BuildContext( bool isBeingStored,
 		  const QString& filename =QString(),
 		  bool noDataFlag =false,
-		  DefaultImageType::InternalPixelType noDataValue
-		  = DefaultImageType::InternalPixelType() ) :
+		  ComponentType noDataValue = ComponentType( 0 ) ) :
       m_Filename( filename ),
       m_NoDataFlag( noDataFlag ),
       m_NoDataValue( noDataValue ),
@@ -140,7 +139,7 @@ public:
   public:
     QString m_Filename;
     bool m_NoDataFlag;
-    DefaultImageType::InternalPixelType m_NoDataValue;
+    ComponentType m_NoDataValue;
 
   private:
     bool m_IsBeingStored;
@@ -169,10 +168,10 @@ public:
 		Bound bound ) const;
 
   /** */
-  inline DefaultImageType::PixelType GetMinPixel() const;
+  inline VectorPixelType GetMinPixel() const;
 
   /** */
-  inline DefaultImageType::PixelType GetMaxPixel() const;
+  inline VectorPixelType GetMaxPixel() const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

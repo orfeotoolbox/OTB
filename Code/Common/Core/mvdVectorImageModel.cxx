@@ -721,6 +721,24 @@ VectorImageModel
 }
 
 /*****************************************************************************/
+void
+VectorImageModel
+::virtual_RefreshHistogram( bool noDataFlag,
+			    ComponentType noDataValue )
+{
+  DatasetModel* datasetModel = GetDatasetModel();
+  assert( datasetModel!=NULL );
+
+  HistogramModel::BuildContext context(
+    true, // Force writing new histogram-model.
+    datasetModel->HistogramFileInfo( GetFilename() ).filePath(),
+    noDataFlag,
+    noDataValue );
+  
+  RefreshHistogram( &context );
+}
+
+/*****************************************************************************/
 ImageBaseType::ConstPointer
 VectorImageModel
 ::ToImageBase() const

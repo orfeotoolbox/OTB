@@ -177,19 +177,19 @@ public:
   /**
    * \return The largest possible region of the current LOD level.
    */
-  inline const ImageRegionType & GetLodLargestRegion() const;
+  inline const ImageRegionType& GetLodLargestRegion() const;
 
   /**
    * \return The largest possible region of the native image, which
    * is, by default, LOD level zero.
    */
-  inline const ImageRegionType & GetNativeLargestRegion() const;
+  inline const ImageRegionType& GetNativeLargestRegion() const;
 
   /**
    * \return The spacing of the native image, which
    * is, by default, LOD level zero.
    */
-  inline const SpacingType & GetNativeSpacing() const;
+  inline const SpacingType& GetNativeSpacing() const;
 
   /** */
   inline CountType GetNbComponents() const;
@@ -215,10 +215,10 @@ public:
   inline CountType GetCurrentLod() const;
 
   /** */
-  inline const SpacingType & GetSpacing() const;
+  inline const SpacingType& GetSpacing() const;
 
   /** */
-  inline const PointType & GetOrigin() const;
+  inline const PointType& GetOrigin() const;
 
   /** Release as much memory as possible (default implementation does
    *  nothing) */
@@ -227,6 +227,15 @@ public:
 //
 // Public SLOTS.
 public slots:
+
+  /**
+   * \brief Refresh histogram-model based on no-data settings.
+   *
+   * \param noDataFlag true to enable no-data pixel filtering.
+   * \param noDataValue Value of each no-data pixel component.
+   */
+  inline void RefreshHistogram( bool noDataFlag,
+				ComponentType noDataValue =ComponentType( 0 ) );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -245,19 +254,23 @@ protected:
   /** Constructor */
   AbstractImageModel( QObject* parent =NULL );
 
-  /** */
+  /**
+   * \brief Refresh histogram-model based on no-data settings.
+   *
+   * \param context Pointer to a histogram build-context.
+   */
+  void RefreshHistogram( void* const context );
+
+  /**
+   */
   inline
     otb::ImageMetadataInterfaceBase::ConstPointer
     GetMetaDataInterface() const;
 
-  /** */
-  virtual void virtual_SetCurrentLod( CountType lod ) =0;
-
   //
   // AbstractModel overrides.
 
-  /** */
-  virtual void virtual_BuildModel( void * context );
+  virtual void virtual_BuildModel( void* context );
 
 //
 // Protected attributes.
@@ -280,6 +293,25 @@ protected:
 //
 // Private methods.
 private:
+
+  /**
+   */
+  virtual void virtual_SetCurrentLod( CountType lod ) =0;
+
+  /**
+   * \brief Private virtual implementation of RefreshHistogram.
+   *
+   * Implement this method in subclass to construct a valid
+   * HistogramModel::BuildContext and call RefreshHistogram(void*
+   * const).
+   *
+   * \param noDataFlag true to enable no-data pixel filtering.
+   * \param noDataValue Value of each no-data pixel component.
+   */
+  virtual
+    void
+    virtual_RefreshHistogram( bool noDataFlag,
+			      ComponentType noDataValue =ComponentType( 0 ) ) =0;
 
 //
 // Private attributes.
@@ -373,7 +405,7 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-const ImageRegionType &
+const ImageRegionType&
 AbstractImageModel
 ::GetLodLargestRegion() const
 {
@@ -382,7 +414,7 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-const ImageRegionType &
+const ImageRegionType&
 AbstractImageModel
 ::GetNativeLargestRegion() const
 {
@@ -391,7 +423,7 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-const SpacingType &
+const SpacingType&
 AbstractImageModel
 ::GetNativeSpacing() const
 {
@@ -422,7 +454,7 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-const SpacingType &
+const SpacingType&
 AbstractImageModel
 ::GetSpacing() const
 {
@@ -431,11 +463,20 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-const PointType &
+const PointType&
 AbstractImageModel
 ::GetOrigin() const
 {
   return ToImageBase()->GetOrigin();
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageModel
+::RefreshHistogram( bool noDataFlag, ComponentType noDataValue )
+{
+  virtual_RefreshHistogram( noDataFlag, noDataValue );
 }
 
 } // end namespace 'mvd'

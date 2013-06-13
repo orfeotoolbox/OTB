@@ -150,21 +150,36 @@ BOUND_NAMES[ BOUND_COUNT ];
  */
 typedef unsigned int CountType;
 
+/**
+ */
+typedef Monteverdi2_FLOATING_TYPE RealType;
+
+/**
+ */
+typedef RealType ComponentType;
+
+/**
+ */
+typedef itk::VariableLengthVector< RealType > VectorPixelType;
+
 /*******************************************************************************/
 /* Type definitions of STL realization.                                        */
 
 /**
  */
 typedef std::vector< std::string > StringVector;
+
 /**
  */
 typedef std::vector< unsigned int > UIntVector;
+
 /**
  */
 typedef std::list< std::string > StringList;
 
 /*******************************************************************************/
 /* Type definitions of ITK realization.                                        */
+
 /**
  */
 typedef itk::Array< double > ParametersType;
@@ -175,12 +190,15 @@ typedef itk::Array< double > ParametersType;
 /**
  */
 typedef itk::ImageRegion< Monteverdi2_DIMENSION > ImageRegionType;
+
 /**
  */
 typedef itk::Index< Monteverdi2_DIMENSION > IndexType;
+
 /**
  */
 typedef itk::Size< Monteverdi2_DIMENSION > SizeType;
+
 /**
  */
 typedef itk::ImageBase< Monteverdi2_DIMENSION > ImageBaseType;
@@ -191,12 +209,14 @@ typedef itk::ImageBase< Monteverdi2_DIMENSION > ImageBaseType;
 /**
  */
 typedef
-otb::Image< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION >
+otb::Image< ComponentType, Monteverdi2_DIMENSION >
 ScalarImageType;
+
 /**
  */
 typedef
 otb::ImageFileReader< ScalarImageType > ScalarImageFileReaderType;
+
 /**
  */
 typedef
@@ -208,20 +228,25 @@ otb::ImageFileWriter< ScalarImageType > ScalarImageFileWriterType;
 /**
  */
 typedef
-otb::VectorImage< Monteverdi2_FLOATING_TYPE, Monteverdi2_DIMENSION >
+otb::VectorImage< ComponentType, Monteverdi2_DIMENSION >
 VectorImageType;
+
 /**
  */
 typedef otb::ImageFileReader< VectorImageType > VectorImageFileReaderType;
+
 /**
  */
 typedef otb::ImageFileWriter< VectorImageType > VectorImageFileWriterType;
+
 /**
  */
 typedef VectorImageType::SpacingType SpacingType;
+
 /**
  */
 typedef VectorImageType::SizeType SizeType;
+
 /**
  */
 typedef VectorImageType::PointType PointType;
@@ -232,6 +257,7 @@ typedef VectorImageType::PointType PointType;
 /**
  */
 typedef itk::RGBAPixel< unsigned char > RGBAPixelType;
+
 /**
  */
 typedef otb::Image< RGBAPixelType, Monteverdi2_DIMENSION > RGBAImageType;
@@ -242,6 +268,7 @@ typedef otb::Image< RGBAPixelType, Monteverdi2_DIMENSION > RGBAImageType;
 /**
  */
 typedef mvd::VectorImageType DefaultImageType;
+
 /**
  */
 typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
@@ -263,13 +290,16 @@ typedef std::map< std::string, StringVector > ApplicationsTagContainer;
 /**
  */
 typedef std::pair< std::string, std::string > PropertyType;
+
 /**
  */
 typedef std::vector< PropertyType > PropertiesVector;
+
 /**
  */
 typedef
 std::pair< std::string, std::vector< PropertyType > > PropertiesVectorByCategory;
+
 /**
  */
 typedef std::map<  std::string, PropertiesVector> PropertiesContainer;

@@ -492,18 +492,10 @@ protected:
   //
   // AbstractImageModel overrides.
 
-  virtual void virtual_SetCurrentLod( CountType lod );
-
-  /**
-   */
   void InitializeColorSetupSettings();
 
-  /** 
-   */
   void InitializeColorDynamicsSettings();
 
-  /**
-   */
   void InitializeRgbaPipeline();
 
 //
@@ -608,6 +600,17 @@ private:
   /**
    */
   void BuildGdalOverviews();
+
+  //
+  // AbstractImageModel overrides.
+
+  virtual void virtual_SetCurrentLod( CountType lod );
+
+  virtual
+    void
+    virtual_RefreshHistogram( bool noDataFlag,
+			      ComponentType noDataValue =ComponentType( 0 ) );
+
 
 //
 // Private attributes.

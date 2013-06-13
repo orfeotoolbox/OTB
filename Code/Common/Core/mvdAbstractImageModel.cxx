@@ -217,6 +217,31 @@ AbstractImageModel
 /*******************************************************************************/
 void
 AbstractImageModel
+::RefreshHistogram( void* const context )
+{
+  // Remember existing child histogram.
+  HistogramModel* currentHistogramModel = GetHistogramModel();
+
+#if 0
+  // Access histogram-model build-context.
+  HistogramModel::BuildContext* const buildContext =
+    static_cast< HistogramModel::BuildContext* const >( context );
+
+  // Force writing histgram file by setting IsBeingStored flag.
+  buildContext->m_IsBeingStored = true;
+#endif
+
+  // Create new child histogram providing build-context.
+  newChildModel< HistogramModel >( context );
+
+  // Delete (and remove) previous child histogram.
+  delete currentHistogramModel;
+  currentHistogramModel = NULL;
+}
+
+/*******************************************************************************/
+void
+AbstractImageModel
 ::virtual_BuildModel( void* context )
 {
   //
@@ -242,8 +267,6 @@ AbstractImageModel
     buildContext->m_Histogram
   );
 
-  // WIP (crashes on reload because serialization methods are not
-  // fully implemented.
   newChildModel< HistogramModel >( &histogramContext );
 }
 
