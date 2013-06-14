@@ -18,23 +18,23 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QCheckBox" name="noDataCheckBox">
+    <widget class="QCheckBox" name="enabledCheckBox">
      <property name="text">
       <string>Enabled</string>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QLineEdit" name="noDataLineEdit"/>
+    <widget class="QLineEdit" name="textLineEdit"/>
    </item>
   </layout>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>noDataCheckBox</sender>
+   <sender>enabledCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>noDataLineEdit</receiver>
+   <receiver>textLineEdit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
