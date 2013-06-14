@@ -104,7 +104,7 @@ public slots:
 
   void OnCurrentPhysicalUpdated(const QString &);
   
-  void OnCurrentGeographicUpdated(const QString &);
+  void OnCurrentGeographicUpdated(const QStringList& /*currentGeo const QString &*/);
 
   void OnCurrentPixelValueUpdated(const VectorImageType::PixelType &, 
                                   const QStringList& bandNames);

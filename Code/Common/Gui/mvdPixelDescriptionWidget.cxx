@@ -99,8 +99,8 @@ PixelDescriptionWidget
   m_GeographicRootItem->setText(0, tr("Geographic"));
   m_GeographicRootItem->setExpanded(true);
 
-  m_GeographicItem = new QTreeWidgetItem( m_GeographicRootItem );  
-  m_GeographicItem->setText(0, tr("Coordinates"));
+  //m_GeographicItem = new QTreeWidgetItem( m_GeographicRootItem );  
+  //m_GeographicItem->setText(0, tr("Coordinates"));
 
   //
   // Child items will be created + updated in a dedicated slot
@@ -130,11 +130,35 @@ PixelDescriptionWidget
 /*******************************************************************************/
 void
 PixelDescriptionWidget
-::OnCurrentGeographicUpdated(const QString & currentGeo)
+::OnCurrentGeographicUpdated(const QStringList&/*const QString &*/ currentGeo)
 {
-  m_GeographicItem->setText(1, currentGeo);
-}
+  // remove the previous QTreeWidgetItem  of m_GeographicRootItem
+  while( m_GeographicRootItem->childCount()>0 )
+    {
+    // Remove QTreeWidgetItem
+    QTreeWidgetItem* child = m_GeographicRootItem->takeChild( 0 );
 
+    // Delete it from memory.
+    delete child;
+    child = NULL;
+    }
+
+  if (!currentGeo.empty())
+    {
+  // fill with the new values
+  QTreeWidgetItem * iGeoLongItem = new QTreeWidgetItem( m_GeographicRootItem );
+  iGeoLongItem->setText(0,QString( tr("Long") ));
+  iGeoLongItem->setText(1, QString("%1").arg(currentGeo[0] ) );
+
+  QTreeWidgetItem * iGeoLatItem = new QTreeWidgetItem( m_GeographicRootItem );
+  iGeoLatItem->setText(0,QString( tr("Lat") ));
+  iGeoLatItem->setText(1, QString("%1").arg(currentGeo[1] ) );
+
+  QTreeWidgetItem * iGeoElevationItem = new QTreeWidgetItem( m_GeographicRootItem );
+  iGeoElevationItem->setText(0,QString( tr("Elevation") ));
+  iGeoElevationItem->setText(1, QString("%1").arg(currentGeo[2] ) );
+    }
+}                       
 /*******************************************************************************/
 void
 PixelDescriptionWidget

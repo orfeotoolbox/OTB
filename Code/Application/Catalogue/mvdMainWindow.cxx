@@ -580,9 +580,9 @@ MainWindow
 
     QObject::connect(
       vectorImageModel,
-      SIGNAL( CurrentGeographicUpdated(const QString& ) ),
+      SIGNAL( CurrentGeographicUpdated(const QStringList& ) ),
       wpixelDescription,
-      SLOT( OnCurrentGeographicUpdated(const QString &) )
+      SLOT( OnCurrentGeographicUpdated(const QStringList &) )
       );
 
     QObject::connect(

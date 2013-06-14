@@ -867,14 +867,20 @@ VectorImageModel
   // stream to fill
   std::ostringstream ossIndex;
   std::ostringstream ossPhysical;
-  std::ostringstream ossGeographic;
+  std::ostringstream ossGeographicLong;
+  std::ostringstream ossGeographicLat;
+  std::ostringstream ossGeographicElevation;
   std::ostringstream ossRadio;
 
   // emitted current pixel
   VectorImageType::PixelType currentPixel;
   QStringList      bandNames;
-  
-  // the current physcial point
+
+  //emitted current geography
+  StringVector     geoVector;
+  QStringList      geoList;
+
+  // the current physical point
   PointType point;
   point[0] = Xpc;
   point[1] = Ypc;
@@ -900,31 +906,50 @@ VectorImageModel
       ossPhysical<<"[" << Xpc <<","<< Ypc << "]";
       }
 
-    //
-    // get the LatLong
-    // TODO : Is there a better method to detect no geoinfo available ?
-    if ( !ToImage()->GetProjectionRef().empty() || 
-         ToImage()->GetImageKeywordlist().GetSize() != 0 )
-      {
-      PointType wgs84;
-      wgs84 = GetGenericRSTransform()->TransformPoint(point);
-      ossGeographic <<"[long : "<<wgs84[0] << " , lat : " << wgs84[1];
-
-      double elev = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0],wgs84[1]);
-
-      if(elev > -32768)
-        {
-        ossGeographic<<", "<<elev;
-        }
-
-      ossGeographic<<"]";
-      }
-      
-    //
     // index in current Lod image
     IndexType currentLodIndex;
     currentLodIndex[0] = (Xpc - ToImage()->GetOrigin()[0]) / vcl_abs(ToImage()->GetSpacing()[0]);
     currentLodIndex[1] = (Ypc - ToImage()->GetOrigin()[1]) / vcl_abs(ToImage()->GetSpacing()[1]);
+    
+    //
+    // get the LatLong
+    // TODO : Is there a better method to detect no geoinfo available ?
+    if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex))
+      {
+      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0) 
+        {
+        PointType wgs84;
+        wgs84 = GetGenericRSTransform()->TransformPoint(point);
+      
+        ossGeographicLong << wgs84[0];
+        ossGeographicLat << wgs84[1];
+        geoVector.push_back(ossGeographicLong.str());
+        geoVector.push_back(ossGeographicLat.str());
+      
+        double elev = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0],wgs84[1]);
+
+        if(elev > -32768)
+          {
+          ossGeographicElevation << elev;
+          geoVector.push_back(ossGeographicElevation.str());
+          }
+        }
+      else
+        {
+        geoVector.push_back("");
+        geoVector.push_back("");
+        geoVector.push_back("");
+        }
+      }
+    else
+      {
+      //FIXME handle here the case of QL information display. Would be nice to
+      //display geographic info when the user is scrolling over the QL
+      geoVector.push_back("");
+      geoVector.push_back("");
+      geoVector.push_back("");
+      }
+    geoList = ToQStringList( geoVector );
 
     //
     // Display the radiometry of the displayed channels
@@ -977,7 +1002,7 @@ VectorImageModel
   // update the status bar
   emit CurrentIndexUpdated( QString(ossIndex.str().c_str()) );
   emit CurrentPhysicalUpdated( QString(ossPhysical.str().c_str()) );
-  emit CurrentGeographicUpdated( QString(ossGeographic.str().c_str()) );
+  emit CurrentGeographicUpdated( geoList );
   emit CurrentRadioUpdated( QString(ossRadio.str().c_str()) );
   emit CurrentPixelValueUpdated( currentPixel,  bandNames);
 }
