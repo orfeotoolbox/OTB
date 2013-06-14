@@ -96,14 +96,16 @@ void QtWidgetView::CreateGui()
   QTabWidget *tab = new QTabWidget();
   tab->addTab(CreateInputWidgets(), "Parameters");
 
-  //QTextEdit *log = new QTextEdit();
-  //connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), log, SLOT(append(QString) ) );
-  //tab->addTab(log, "Logs");
+   
   //otb::Wrapper::QtWidgetProgressReport* prog =  new otb::Wrapper::QtWidgetProgressReport(m_Model);
   //prog->SetApplication(m_Application);
   //tab->addTab(prog, "Progress");
   tab->addTab(CreateDoc(), "Documentation");
   mainLayout->addWidget(tab);
+
+  QTextEdit *log = new QTextEdit();
+  connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), log, SLOT(append(QString) ) );
+  tab->addTab(log, "Logs");
 
   m_Message = new QLabel("<center><font color=\"#FF0000\">Select parameters</font></center>");
   connect( m_Model, SIGNAL(SetApplicationReady(bool)), this, SLOT(UpdateMessageAfterApplicationReady(bool)) );
