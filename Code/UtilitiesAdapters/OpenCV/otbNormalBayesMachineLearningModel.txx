@@ -122,7 +122,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 
     if (line.find(CV_TYPE_NAME_ML_NBAYES) != std::string::npos)
     {
-       std::cout<<"Reading a "<<CV_TYPE_NAME_ML_NBAYES<<" model !!!"<<std::endl;
+       //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_NBAYES<<" model"<<std::endl;
        return true;
     }
   }

@@ -129,7 +129,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
    //if (line.find(m_SVMModel->getName()) != std::string::npos)
    if (line.find("svm_type") != std::string::npos)
    {
-      std::cout<<"Reading a libSVM model !!!"<<std::endl;
+      //std::cout<<"Reading a libSVM model"<<std::endl;
       return true;
    }
    ifs.close();

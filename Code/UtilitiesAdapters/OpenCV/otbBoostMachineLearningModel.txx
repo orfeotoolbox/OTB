@@ -134,7 +134,7 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
     //if (line.find(m_SVMModel->getName()) != std::string::npos)
     if (line.find(CV_TYPE_NAME_ML_BOOSTING) != std::string::npos)
     {
-       std::cout<<"Reading a "<<CV_TYPE_NAME_ML_BOOSTING<<" model !!!"<<std::endl;
+       //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_BOOSTING<<" model"<<std::endl;
        return true;
     }
   }

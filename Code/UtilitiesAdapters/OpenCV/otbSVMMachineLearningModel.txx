@@ -155,7 +155,7 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
       //if (line.find(m_SVMModel->getName()) != std::string::npos)
       if (line.find(CV_TYPE_NAME_ML_SVM) != std::string::npos)
       {
-         std::cout<<"Reading a "<<CV_TYPE_NAME_ML_SVM<<" model !!!"<<std::endl;
+         //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_SVM<<" model"<<std::endl;
          return true;
       }
    }
