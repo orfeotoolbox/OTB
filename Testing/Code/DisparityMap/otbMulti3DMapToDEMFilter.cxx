@@ -569,7 +569,7 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
   WriterType::Pointer writer = WriterType::New();
 
   multiFilter->SetNumberOfThreads(atoi(argv[argc-2]));
-  multiFilter->Update();
+  //multiFilter->Update();
 
   writer->SetInput(multiFilter->GetOutput());
 
