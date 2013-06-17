@@ -105,7 +105,7 @@ public:
   /**
    */
   inline void SetNoDataEnabled( bool enabled );
-  
+
   /**
    */
   void SetNoData( ComponentType value = ComponentType( 0 ) );

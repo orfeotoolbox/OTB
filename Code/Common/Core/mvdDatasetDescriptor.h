@@ -159,8 +159,8 @@ public:
    */
   static
     void GetDatasetInformation( const QDomElement& datasetSibling,
-              QString& datasetPath,
-              QString& datasetAlias );
+				QString& datasetPath,
+				QString& datasetAlias );
 
   /**
    */
@@ -239,7 +239,7 @@ private:
   static
   void ExtractVectorFromElement( std::vector<T>& vector,
                                  QDomElement& tagName );
-  
+
   /**
    * \brief Deserialize a itk::Array from a QDomElement
    */
@@ -248,7 +248,7 @@ private:
   static
   void ExtractArrayFromElement( itk::Array<T>& array,
                                 QDomElement& tagName );
-  
+
   /**
    */
   inline QDomElement GetImageElement( int id );

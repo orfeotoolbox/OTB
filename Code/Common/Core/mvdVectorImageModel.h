@@ -128,7 +128,7 @@ public:
     /**
      * \brief Assignment operator.
      *
-     * \parapm other
+     * \param other
      */
     Settings& operator=( const Settings& other );
 
