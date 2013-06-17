@@ -29,10 +29,13 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 BoostMachineLearningModel<TInputValue,TOutputValue>
 ::BoostMachineLearningModel() :
- m_BoostType(CvBoost::REAL), m_SplitCrit(CvBoost::DEFAULT), m_WeakCount(100),
- m_WeightTrimRate(0.95), m_MaxDepth(1)
+ m_BoostModel (new CvBoost),
+ m_BoostType(CvBoost::REAL),
+ m_WeakCount(100),
+ m_WeightTrimRate(0.95),
+ m_SplitCrit(CvBoost::DEFAULT),
+ m_MaxDepth(1)
 {
-  m_BoostModel = new CvBoost;
 }
 
 

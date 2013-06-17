@@ -29,11 +29,15 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 ::GradientBoostedTreeMachineLearningModel() :
- m_LossFunctionType(CvGBTrees::DEVIANCE_LOSS), m_WeakCount(200),
- m_Shrinkage(0.01), m_SubSamplePortion(0.8), m_MaxDepth(3),
- m_UseSurrogates(false), m_IsRegression(false)
+ m_GBTreeModel (new CvGBTrees),
+ m_LossFunctionType(CvGBTrees::DEVIANCE_LOSS),//m_LossFunctionType(CvGBTrees::SQUARED_LOSS),
+ m_WeakCount(200),
+ m_Shrinkage(0.01),
+ m_SubSamplePortion(0.8),
+ m_MaxDepth(3),
+ m_UseSurrogates(false),
+ m_IsRegression(false)
 {
-  m_GBTreeModel = new CvGBTrees;
 }
 
 

@@ -45,15 +45,15 @@ IF(OTB_USE_OPENCV)
   SET(knn_output_format ".knn")
   
   # Training algorithms parameters
-  SET(libsvm_parameters "-classifier.libsvm.k linear -classifier.libsvm.opt true")
-  SET(svm_parameters "-classifier.svm.m csvc -classifier.svm.k linear -classifier.svm.opt true")
-  SET(boost_parameters "-classifier.boost.t real -classifier.boost.w 100 -classifier.boost.r 0.95 -classifier.boost.m 1")
-  SET(dt_parameters "-classifier.dt.max 65535 -classifier.dt.min 10 -classifier.dt.ra 0.01 -classifier.dt.cat 10 -classifier.dt.f 10 -classifier.dt.r false -classifier.dt.t false")
-  SET(gbt_parameters "-classifier.gbt.w 200 -classifier.gbt.s 0.01 -classifier.gbt.p 0.8 -classifier.gbt.max 3")
-  SET(ann_parameters "-classifier.ann.t reg -classifier.ann.sizes 100 -classifier.ann.f sig -classifier.ann.a 1 -classifier.ann.b 1 -classifier.ann.bpdw 0.1 -classifier.ann.bpms 0.1 -classifier.ann.rdw 0.1 -classifier.ann.rdwm 1e-07 -classifier.ann.term all -classifier.ann.eps 0.01 -classifier.ann.iter 1000")
+  SET(libsvm_parameters "-classifier.libsvm.opt true")
+  SET(svm_parameters "-classifier.svm.opt true")
+  SET(boost_parameters "")
+  SET(dt_parameters "")
+  SET(gbt_parameters "")
+  SET(ann_parameters "-classifier.ann.sizes 100")
   SET(bayes_parameters "")
-  SET(rf_parameters "-classifier.rf.max 25 -classifier.rf.min 5 -classifier.rf.ra 0 -classifier.rf.cat 15 -classifier.rf.var 4 -classifier.rf.nbtrees 100 -classifier.rf.acc 0.01")
-  SET(knn_parameters "-classifier.knn.k 10")
+  SET(rf_parameters "")
+  SET(knn_parameters "")
   
   # Validation depending on mode 
   SET(ascii_comparison --compare-ascii ${NOTOL})
@@ -76,7 +76,7 @@ IF(OTB_USE_OPENCV)
                          APP      TrainImagesClassifier
                          OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
                                   -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
-                                  -io.imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1${stat_input_format}
+                                  -io.imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
                                   -classifier ${lclassifier}
                                   ${${lclassifier}_parameters}
                                   -io.out ${TEMP}/${OUTMODELFILE}
@@ -92,16 +92,14 @@ IF(OTB_USE_OPENCV)
                          NAME     apTvClMethod${classifier}ImageClassifierQB1
                          APP      ImageClassifier
                          OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-                                  -model ${TEMP}/${OUTMODELFILE}
-                                  -imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1${stat_input_format}
+                                  -model ${ascii_ref_path}/${OUTMODELFILE}
+                                  -imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
                                   -out ${TEMP}/${OUTRASTER} ${raster_output_option}
 
                          VALID    ${raster_comparison}
                                   ${raster_ref_path}/${OUTRASTER}
                                   ${TEMP}/${OUTRASTER}
                          )
-
-    SET_TESTS_PROPERTIES(apTvClMethod${classifier}ImageClassifierQB1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1)
 
   ENDFOREACH(classifier)
 

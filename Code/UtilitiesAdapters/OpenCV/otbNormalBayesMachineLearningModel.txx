@@ -28,9 +28,9 @@ namespace otb
 
 template <class TInputValue, class TOutputValue>
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
-::NormalBayesMachineLearningModel()
+::NormalBayesMachineLearningModel() :
+ m_NormalBayesModel (new CvNormalBayesClassifier)
 {
-  m_NormalBayesModel = new CvNormalBayesClassifier;
 }
 
 

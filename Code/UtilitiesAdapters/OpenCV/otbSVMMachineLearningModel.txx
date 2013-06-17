@@ -29,11 +29,20 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 SVMMachineLearningModel<TInputValue,TOutputValue>
 ::SVMMachineLearningModel() :
- m_SVMType(CvSVM::C_SVC), m_KernelType(CvSVM::LINEAR), m_TermCriteriaType(CV_TERMCRIT_ITER),
- m_MaxIter(100), m_Epsilon(1e-6), m_Degree(0), m_Gamma(1),
- m_Coef0(0), m_C(1), m_Nu(0), m_P(0),m_ParameterOptimization(false)
+ m_SVMModel (new CvSVM),
+ m_SVMType(CvSVM::C_SVC),
+ m_KernelType(CvSVM::RBF),
+ m_Degree(0),
+ m_Gamma(1),
+ m_Coef0(0),
+ m_C(1),
+ m_Nu(0),
+ m_P(0),
+ m_TermCriteriaType(CV_TERMCRIT_ITER),
+ m_MaxIter(1000),
+ m_Epsilon(FLT_EPSILON),
+ m_ParameterOptimization(false)
 {
-  m_SVMModel = new CvSVM;
 }
 
 
@@ -59,7 +68,6 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 
   // Set up SVM's parameters
   CvTermCriteria term_crit   = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
-  //CvMat* class_weights;
   CvSVMParams params( m_SVMType, m_KernelType, m_Degree, m_Gamma, m_Coef0, m_C, m_Nu, m_P, NULL , term_crit );
 
   // Train the SVM
@@ -87,7 +95,6 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
   m_OutputC = m_SVMModel->get_params().C;
   m_OutputNu = m_SVMModel->get_params().nu;
   m_OutputP = m_SVMModel->get_params().p;
-  //class_weights = m_SVMModel->get_params().class_weights;
 
 }
 

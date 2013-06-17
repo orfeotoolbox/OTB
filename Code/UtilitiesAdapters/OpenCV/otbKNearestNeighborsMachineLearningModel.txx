@@ -31,9 +31,10 @@ namespace otb
 template <class TInputValue, class TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 ::KNearestNeighborsMachineLearningModel() :
- m_K(10), m_IsRegression(false)
+ m_KNearestModel (new CvKNearest),
+ m_K(32),
+ m_IsRegression(false)
 {
-  m_KNearestModel = new CvKNearest;
 }
 
 
@@ -55,10 +56,10 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
 
   cv::Mat labels;
-  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
+  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), labels);
 
   //train the KNN model
-  m_KNearestModel->train(samples,labels,cv::Mat(),m_IsRegression, m_K,false);
+  m_KNearestModel->train(samples, labels, cv::Mat(), m_IsRegression, m_K, false);
 }
 
 template <class TInputValue, class TTargetValue>
@@ -69,9 +70,9 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 {
   //convert listsample to Mat
   cv::Mat sample;
-  otb::SampleToMat<InputSampleType>(input,sample);
+  otb::SampleToMat<InputSampleType>(input, sample);
 
-  double result = m_KNearestModel->find_nearest(sample,m_K);
+  double result = m_KNearestModel->find_nearest(sample, m_K);
 
   TargetSampleType target;
 
@@ -90,8 +91,8 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 
   std::ofstream ofs(filename.c_str());
   //Save K parameter and IsRegression flag.
-  ofs << "K="<< m_K <<"\n";
-  ofs << "IsRegression="<<m_IsRegression <<"\n";
+  ofs << "K=" << m_K << "\n";
+  ofs << "IsRegression=" << m_IsRegression << "\n";
 
   //Save the samples. First column is the Label and other columns are the sample data.
   typename InputListSampleType::ConstIterator sampleIt = this->GetInputListSample()->Begin();

@@ -29,7 +29,7 @@ void TrainImagesClassifier::InitRandomForestsParams()
                           "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/random_trees.html}.");
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.rf.max", "Maximum depth of the tree");
-  SetParameterInt("classifier.rf.max", 25);
+  SetParameterInt("classifier.rf.max", 5);
   SetParameterDescription(
       "classifier.rf.max",
       "The depth of the tree. A low value will likely underfit and conversely a high value will likely overfit. "
@@ -37,7 +37,7 @@ void TrainImagesClassifier::InitRandomForestsParams()
 
   //MinSampleCount
   AddParameter(ParameterType_Int, "classifier.rf.min", "Minimum number of samples in each node");
-  SetParameterInt("classifier.rf.min", 5);
+  SetParameterInt("classifier.rf.min", 10);
   SetParameterDescription(
       "classifier.rf.min", "If the number of samples in a node is smaller than this parameter, "
       "then the node will not be split. A reasonable value is a small percentage of the total data e.g. 1 percent.");
@@ -56,7 +56,7 @@ void TrainImagesClassifier::InitRandomForestsParams()
   //MaxNumberOfCategories
   AddParameter(ParameterType_Int, "classifier.rf.cat",
                "Cluster possible values of a categorical variable into K <= cat clusters to find a suboptimal split");
-  SetParameterInt("classifier.rf.cat", 15);
+  SetParameterInt("classifier.rf.cat", 10);
   SetParameterDescription(
       "classifier.rf.cat",
       "Cluster possible values of a categorical variable into K <= cat clusters to find a suboptimal split.");
@@ -68,7 +68,7 @@ void TrainImagesClassifier::InitRandomForestsParams()
   //MaxNumberOfVariables
   AddParameter(ParameterType_Int, "classifier.rf.var",
                "Size of the randomly selected subset of features at each tree node");
-  SetParameterInt("classifier.rf.var", 4);
+  SetParameterInt("classifier.rf.var", 0);
   SetParameterDescription(
       "classifier.rf.var",
       "The size of the subset of features, randomly selected at each tree node, that are used to find the best split(s). "

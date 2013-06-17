@@ -29,11 +29,17 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 ::DecisionTreeMachineLearningModel() :
- m_MaxDepth(INT_MAX), m_MinSampleCount(10), m_RegressionAccuracy(0.01),
- m_UseSurrogates(true), m_MaxCategories(10), m_CVFolds(10),
- m_Use1seRule(true), m_IsRegression(false), m_TruncatePrunedTree(true)
+ m_DTreeModel (new CvDTree),
+ m_MaxDepth(INT_MAX),
+ m_MinSampleCount(10),
+ m_RegressionAccuracy(0.01),
+ m_UseSurrogates(true),
+ m_MaxCategories(10),
+ m_CVFolds(10),
+ m_Use1seRule(true),
+ m_IsRegression(false),
+ m_TruncatePrunedTree(true)
 {
-  m_DTreeModel = new CvDTree;
 }
 
 

@@ -62,7 +62,7 @@ namespace Wrapper
     SetParameterFloat("classifier.svm.gamma", 1.0);
     SetParameterDescription("classifier.svm.gamma", "Parameter gamma of a kernel function (POLY / RBF / SIGMOID).");
     AddParameter(ParameterType_Float, "classifier.svm.degree", "Parameter degree of a kernel function (POLY)");
-    SetParameterFloat("classifier.svm.degree", 0.0);
+    SetParameterFloat("classifier.svm.degree", 1.0);
     SetParameterDescription("classifier.svm.degree", "Parameter degree of a kernel function (POLY).");
     AddParameter(ParameterType_Empty, "classifier.svm.opt", "Parameters optimization");
     MandatoryOff("classifier.svm.opt");

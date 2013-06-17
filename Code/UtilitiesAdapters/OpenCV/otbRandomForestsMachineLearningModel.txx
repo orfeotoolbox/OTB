@@ -29,19 +29,19 @@ namespace otb
 
 template <class TInputValue, class TOutputValue>
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::RandomForestsMachineLearningModel()
+::RandomForestsMachineLearningModel() :
+ m_RFModel (new CvRTrees),
+ m_MaxDepth(5),
+ m_MinSampleCount(10),
+ m_RegressionAccuracy(0),
+ m_ComputeSurrogateSplit(false),
+ m_MaxNumberOfCategories(10),
+ m_CalculateVariableImportance(false),
+ m_MaxNumberOfVariables(0),
+ m_MaxNumberOfTrees(100),
+ m_ForestAccuracy(0.01),
+ m_TerminationCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS)
 {
-  m_RFModel = new CvRTrees;
-  m_MaxDepth = 25;
-  m_MinSampleCount = 5;
-  m_RegressionAccuracy = 0;
-  m_ComputeSurrogateSplit = false;
-  m_MaxNumberOfCategories = 15;
-  m_CalculateVariableImportance = false;
-  m_MaxNumberOfVariables = 4;
-  m_MaxNumberOfTrees = 100;
-  m_ForestAccuracy = 0.01;
-  m_TerminationCriteria = CV_TERMCRIT_ITER | CV_TERMCRIT_EPS;
 }
 
 
@@ -79,18 +79,18 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
   float * priors = m_Priors.empty() ? 0 : &m_Priors.front();
 
-  CvRTParams params = CvRTParams(m_MaxDepth, // max depth
-                                       m_MinSampleCount, // min sample count
-                                       m_RegressionAccuracy, // regression accuracy: N/A here
-                                       m_ComputeSurrogateSplit, // compute surrogate split, no missing data
-                                       m_MaxNumberOfCategories, // max number of categories (use sub-optimal algorithm for larger numbers)
-                                       priors, // the array of priors
-                                       m_CalculateVariableImportance,  // calculate variable importance
-                                       m_MaxNumberOfVariables,       // number of variables randomly selected at node and used to find the best split(s).
-                                   m_MaxNumberOfTrees,        // max number of trees in the forest
-                                       m_ForestAccuracy,                            // forrest accuracy
-                                       m_TerminationCriteria // termination cirteria
-                                      );
+  CvRTParams params = CvRTParams(m_MaxDepth,                    // max depth
+                                 m_MinSampleCount,              // min sample count
+                                 m_RegressionAccuracy,          // regression accuracy: N/A here
+                                 m_ComputeSurrogateSplit,       // compute surrogate split, no missing data
+                                 m_MaxNumberOfCategories,       // max number of categories (use sub-optimal algorithm for larger numbers)
+                                 priors,                        // the array of priors
+                                 m_CalculateVariableImportance, // calculate variable importance
+                                 m_MaxNumberOfVariables,        // number of variables randomly selected at node and used to find the best split(s).
+                                 m_MaxNumberOfTrees,            // max number of trees in the forest
+                                 m_ForestAccuracy,              // forest accuracy
+                                 m_TerminationCriteria          // termination criteria
+                                 );
 
   cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
