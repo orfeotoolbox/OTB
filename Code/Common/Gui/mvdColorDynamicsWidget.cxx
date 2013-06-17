@@ -58,10 +58,15 @@ ColorDynamicsWidget
 ::ColorDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::ColorDynamicsWidget() ),
+  m_NoDataValidator( NULL ),
   m_IsGrayscaleActivated( false )
 {
+  //
+  // Qt setup.
   m_UI->setupUi( this );
 
+  //
+  // Colors.
   CountType begin;
   CountType end;
 
@@ -75,6 +80,12 @@ ColorDynamicsWidget
     }
 
   SetGrayscaleActivated( false );
+
+  //
+  // No-data.
+  m_NoDataValidator = new QDoubleValidator( m_UI->noDataLineEdit );
+
+  m_UI->noDataLineEdit->setValidator( m_NoDataValidator );
 }
 
 /*******************************************************************************/
@@ -120,6 +131,48 @@ ColorDynamicsWidget
   m_UI->bwLine->setVisible( false );
   m_UI->rgLine->setVisible( !activated );
   m_UI->gbLine->setVisible( !activated );
+}
+
+/*******************************************************************************/
+bool
+ColorDynamicsWidget
+::IsNoDataEnabled() const
+{
+  return m_UI->noDataCheckBox->isEnabled();
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsWidget
+::SetNoDataEnabled( bool enabled )
+{
+  m_UI->noDataCheckBox->setEnabled( enabled );
+}
+
+/*******************************************************************************/
+double
+ColorDynamicsWidget
+::GetNoDataValue() const
+{
+  bool isOk = true;
+  double value = m_UI->noDataLineEdit->text().toDouble( &isOk );
+
+  if( !isOk )
+    {
+    }
+
+  return value;
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsWidget
+::SetNoDataValue( double value )
+{
+  QString number(
+    QString::number( value, 'g', m_NoDataValidator->decimals() ) );
+
+  m_UI->noDataLineEdit->setText( number );
 }
 
 /*******************************************************************************/
@@ -190,6 +243,29 @@ ColorDynamicsWidget
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
+/*****************************************************************************/
+void
+ColorDynamicsWidget
+::on_noDataCheckBox_toggled( bool enabled )
+{
+  emit NoDataFlagToggled( enabled );
+}
+
+/*****************************************************************************/
+void
+ColorDynamicsWidget
+::on_noDataLineEdit_textChanged( const QString& text )
+{
+  bool isOk = true;
+  double value = text.toDouble( &isOk );
+
+  if( !isOk )
+    {
+    }
+
+  emit NoDataValueChanged( value );
+}
+
 /*****************************************************************************/
 
 } // end namespace 'mvd'

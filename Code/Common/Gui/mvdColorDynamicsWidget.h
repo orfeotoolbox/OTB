@@ -80,6 +80,14 @@ class Monteverdi2_EXPORT ColorDynamicsWidget :
 
   Q_OBJECT;
 
+  Q_PROPERTY( bool isNoDataEnabled
+	      READ IsNoDataEnabled
+	      WRITE SetNoDataEnabled );
+
+  Q_PROPERTY( double NoDataValue
+	      READ GetNoDataValue
+	      WRITE SetNoDataValue );
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
@@ -106,27 +114,64 @@ public:
 
   /**
    */
-  inline bool IsGrayscaleActivated() const;
+  bool IsGrayscaleActivated() const;
+
+  /**
+   */
+  void SetNoDataEnabled( bool enabled );
+
+  /**
+   */
+  bool IsNoDataEnabled() const;
+
+  /**
+   */
+  void SetNoDataValue( double value );
+
+  /**
+   */
+  double GetNoDataValue() const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  /** */
+  /**
+   */
   void LowQuantileChanged( RgbwChannel, double );
-  /** */
+
+  /**
+   */
   void HighQuantileChanged( RgbwChannel, double );
-  /** */
+
+  /**
+   */
   void LowIntensityChanged( RgbwChannel, double );
-  /** */
+
+  /**
+   */
   void HighIntensityChanged( RgbwChannel, double );
-  /** */
+
+  /**
+   */
   void ResetIntensityClicked( RgbwChannel );
-  /** */
+
+  /**
+   */
   void ResetQuantileClicked( RgbwChannel );
-  /** */
+
+  /**
+   */
   void ApplyAllClicked( RgbwChannel, double, double );
+
+  /**
+   */
+  void NoDataFlagToggled( bool enabled );
+
+  /**
+   */
+  void NoDataValueChanged( double value );
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -166,6 +211,10 @@ private:
 
   /**
    */
+  QDoubleValidator* m_NoDataValidator;
+
+  /**
+   */
   bool m_IsGrayscaleActivated;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -174,6 +223,13 @@ private:
 // Slots.
 private slots:
 
+  /**
+   */
+  void on_noDataLineEdit_textChanged( const QString& text );
+
+  /**
+   */
+  void on_noDataCheckBox_toggled( bool enabled );
 };
 
 } // end namespace 'mvd'.
