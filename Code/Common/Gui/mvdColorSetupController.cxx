@@ -185,14 +185,14 @@ ColorSetupController
   // Block this controller's signals to prevent display refreshes
   // but let let widget(s) signal their changes so linked values
   // will be correctly updated.
-  this->blockSignals( true );
+  bool thisSignalsBlocked = this->blockSignals( true );
   {
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
-  colorSetupWidget->blockSignals( true );
+  bool widgetSignalsBlocked = colorSetupWidget->blockSignals( true );
   {
   // Reset list of component names.
-  colorSetupWidget->SetComponents( imageModel->GetBandNames(true) );
+  colorSetupWidget->SetComponents( imageModel->GetBandNames( true ) );
 
   //
   // RGB-mode.
@@ -230,9 +230,9 @@ ColorSetupController
     );
     }
   }
-  colorSetupWidget->blockSignals( false );
+  colorSetupWidget->blockSignals( widgetSignalsBlocked );
   }
-  this->blockSignals( false );
+  this->blockSignals( thisSignalsBlocked );
 }
 
 /*******************************************************************************/

@@ -126,6 +126,20 @@ public slots:
    */
   void OnGrayscaleActivated( bool activated );
 
+  /**
+   * \brief Slot called when the NoDataFlagToggled() signal of the
+   * controlled widget has been emitted (\see ColorDynamicsWidget).
+   *
+   * \param enabled true when the no-data flag is enabled.
+   */
+  void OnNoDataFlagToggled( bool enabled );
+
+  /**
+   * \brief Slot called when the NoDataValueChanged() signal of the
+   * controlled widget has been emitted (\see ColorDynamicsWidget).
+   */
+  void OnNoDataValueChanged( double value );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -181,8 +195,12 @@ private:
   void ResetIntensities( RgbwChannel );
 
   /**
+   * \brief Set low and high intensitied of controlled widget based on
+   * the values stored in the model settings.
+   *
+   * \param channels RGB/W channels for which to set low and hight intensities.
    */
-  void SetIntensities( RgbwChannel );
+  void SetIntensities( RgbwChannel channels );
 
   /**
    * \brief Reset low and high quantiles to default values for given

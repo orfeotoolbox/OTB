@@ -132,6 +132,21 @@ ColorDynamicsController
     SLOT( OnApplyAllClicked( RgbwChannel, double, double  ) )
   );
 
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL( NoDataFlagToggled( bool ) ),
+    // to:
+    this,
+    SLOT( OnNoDataFlagToggled( bool ) )
+  );
+
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL( NoDataValueChanged( double ) ),
+    // to:
+    this,
+    SLOT( OnNoDataValueChanged( double ) )
+  );
 
   //
   // Connect controller to model.
@@ -242,6 +257,21 @@ ColorDynamicsController
     SLOT( OnApplyAllClicked( RgbwChannel, double, double  ) )
   );
 
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( NoDataFlagToggled( bool ) ),
+    // to:
+    this,
+    SLOT( OnNoDataFlagToggled( bool ) )
+  );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( NoDataValueChanged( double ) ),
+    // to:
+    this,
+    SLOT( OnNoDataValueChanged( double ) )
+  );
 }
 
 /*******************************************************************************/
@@ -281,7 +311,7 @@ ColorDynamicsController
   // Block this controller's signals to prevent display refreshes
   // but let let widget(s) signal their changes so linked values
   // will be correctly updated.
-  this->blockSignals( true );
+  bool thisSignalsBlocked = this->blockSignals( true );
   {
   for( CountType i=begin; i<end; ++i )
     {
@@ -300,16 +330,16 @@ ColorDynamicsController
 
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
-    colorBandDynWgt->blockSignals( true );
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     // Set min/max intensity bounds.
     colorBandDynWgt->SetMinIntensity( min );
     colorBandDynWgt->SetMaxIntensity( max );
     }
-    colorBandDynWgt->blockSignals( false );
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
   }
-  this->blockSignals( true );
+  this->blockSignals( thisSignalsBlocked );
 }
 
 /*******************************************************************************/
@@ -350,7 +380,7 @@ ColorDynamicsController
   // Block this controller's signals to prevent display refreshes
   // but let let widget(s) signal their changes so linked values
   // will be correctly updated.
-  this->blockSignals( true );
+  bool thisSignalsBlocks = this->blockSignals( true );
   {
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
@@ -369,7 +399,7 @@ ColorDynamicsController
     );
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
-    colorBandDynWgt->blockSignals( true );
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     // Set low & high intensities.
     colorBandDynWgt->SetLowIntensity( min );
@@ -378,10 +408,10 @@ ColorDynamicsController
     colorBandDynWgt->SetHighIntensity( max );
     OnHighIntensityChanged( channel, max );
     }
-    colorBandDynWgt->blockSignals( false );
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
   }
-  this->blockSignals( false );
+  this->blockSignals( thisSignalsBlocks );
 }
 
 /*******************************************************************************/
@@ -413,7 +443,7 @@ ColorDynamicsController
   // Block this controller's signals to prevent display refreshes
   // but let let widget(s) signal their changes so linked values
   // will be correctly updated.
-  this->blockSignals( true );
+  bool thisSignalsBlocked = this->blockSignals( true );
   {
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
@@ -428,7 +458,7 @@ ColorDynamicsController
 
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
-    colorBandDynWgt->blockSignals( true );
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     // Set low & high intensities.
     colorBandDynWgt->SetLowIntensity( low );
@@ -437,10 +467,10 @@ ColorDynamicsController
     colorBandDynWgt->SetHighIntensity( hi );
     OnHighIntensityChanged( channel, hi );
     }
-    colorBandDynWgt->blockSignals( false );
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
   }
-  this->blockSignals( false );
+  this->blockSignals( thisSignalsBlocked );
 }
 
 /*******************************************************************************/
@@ -464,7 +494,7 @@ ColorDynamicsController
   // Block this controller's signals to prevent display refreshed
   // but let let widget(s) signal their changes so linked values
   // will be correctly updated.
-  this->blockSignals( true );
+  bool thisSignalsBlocked = this->blockSignals( true );
   {
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
@@ -476,7 +506,7 @@ ColorDynamicsController
 
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
-    colorBandDynWgt->blockSignals( true );
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     colorBandDynWgt->SetLowQuantile( 2.0 );
     OnLowQuantileChanged( channel, 2.0 );
@@ -484,10 +514,10 @@ ColorDynamicsController
     colorBandDynWgt->SetHighQuantile( 2.0 );
     OnHighQuantileChanged( channel, 2.0 );
     }
-    colorBandDynWgt->blockSignals( false );
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
   }
-  this->blockSignals( false );
+  this->blockSignals( thisSignalsBlocked );
 }
 
 /*******************************************************************************/
@@ -609,12 +639,12 @@ ColorDynamicsController
     assert( colorBandDynWgt!=NULL );
 
     // Block widget signals to prevent recursive signal/slot loops.
-    colorBandDynWgt->blockSignals( true );
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     // Refresh low-intensity display.
     colorBandDynWgt->SetLowIntensity( intensity );
     }
-    colorBandDynWgt->blockSignals( false );
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
 
   // Signal model has been updated.
@@ -677,12 +707,12 @@ ColorDynamicsController
     assert( colorBandDynWgt!=NULL );
 
     // Block widget signals to prevent recursive signal/slot loops.
-    colorBandDynWgt->blockSignals( true );
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     // Refresh high-intensity display.
     colorBandDynWgt->SetHighIntensity( intensity );
     }
-    colorBandDynWgt->blockSignals( false );
+    widgetSignalsBlocked = colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
 
   // Signal model has been updated.
@@ -728,7 +758,7 @@ ColorDynamicsController
       colorDynWgt->GetChannel( chan );
 
     // Block widget signals to prevent recursive signal/slot loops.
-    colorBandDynWgt->blockSignals( true );
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     // Refresh quantile display.
     colorBandDynWgt->SetLowQuantile(
@@ -738,7 +768,7 @@ ColorDynamicsController
 	BOUND_LOWER )
     );
     }
-    colorBandDynWgt->blockSignals( false );
+    widgetSignalsBlocked = colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
 
   // Signal model has been updated.
@@ -784,7 +814,7 @@ ColorDynamicsController
       colorDynWgt->GetChannel( chan );
 
     // Block widget signals to prevent recursive signal/slot loops.
-    colorBandDynWgt->blockSignals( true );
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     // Refresh quantile display.
     colorBandDynWgt->SetHighQuantile(
@@ -795,7 +825,7 @@ ColorDynamicsController
       )
     );
     }
-    colorBandDynWgt->blockSignals( false );
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
 
   // Signal model has been updated.
@@ -894,7 +924,7 @@ ColorDynamicsController
     assert( colorBandDynWgt!=NULL );
 
     // Block widget signals to prevent recursive signal/slot loops.
-    colorBandDynWgt->blockSignals( true );
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
     {
     // Refresh intensities display.
     // TODO: Remove SetLow/HighIntensity(): overwrite by SetLow/HighQuantiles().
@@ -905,11 +935,25 @@ ColorDynamicsController
     colorBandDynWgt->SetLowQuantile( low );
     colorBandDynWgt->SetHighQuantile( high );
     }
-    colorBandDynWgt->blockSignals( false );
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsController
+::OnNoDataFlagToggled( bool enabled )
+{
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsController
+::OnNoDataValueChanged( double value )
+{
 }
 
 /*******************************************************************************/
