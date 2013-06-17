@@ -148,12 +148,12 @@ int otbMulti3DMapToDEMFilterEPSG(int argc, char* argv[])
   WriterType::Pointer writer = WriterType::New();
 
   multiFilter->SetNumberOfThreads(atoi(argv[argc-11]));
-  multiFilter->Update();
+  //multiFilter->Update();
 
   writer->SetInput(multiFilter->GetOutput());
 
   writer->SetFileName(argv[argc-14]);
-  writer->SetNumberOfDivisionsStrippedStreaming(atoi(argv[argc-16]));
+  writer->SetNumberOfDivisionsStrippedStreaming(atoi(argv[argc-10]));
   writer->Update();
 
   return EXIT_SUCCESS;
@@ -407,7 +407,7 @@ multiFilter->SetOutputOrigin(origin);
 WriterType::Pointer writer = WriterType::New();
 
 multiFilter->SetNumberOfThreads(atoi(argv[argc-10]));
-multiFilter->Update();
+//multiFilter->Update();
 
 writer->SetInput(multiFilter->GetOutput());
 
