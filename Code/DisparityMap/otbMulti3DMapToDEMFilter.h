@@ -218,7 +218,6 @@ public:
 
 
 
-
 protected:
   /** Constructor */
   Multi3DMapToDEMFilter();
