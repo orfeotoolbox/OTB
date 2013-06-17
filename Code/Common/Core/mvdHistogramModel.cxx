@@ -222,6 +222,14 @@ HistogramModel
 {
   // qDebug() << this << "::virtual_Read(" << device << ")";
 
+  qDebug() <<
+    tr( "%1: Reading histogram..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+
+  QTime time;
+  time.start();
+
+
   QTextStream stream( device );
 
 
@@ -259,6 +267,11 @@ HistogramModel
     }
 
   m_Histograms = histograms;
+
+  qDebug() <<
+    tr( "%1: Histogram read (%2 ms)..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+    .arg( time.elapsed()  );
 }
 
 /*******************************************************************************/
@@ -266,7 +279,14 @@ void
 HistogramModel
 ::virtual_Write( QIODevice& device ) const
 {
-  qDebug() << this << "::virtual_Write(" << &device << ")";
+  // qDebug() << this << "::virtual_Write(" << &device << ")";
+
+  qDebug() <<
+    tr( "%1: Writing histogram..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) );
+
+  QTime time;
+  time.start();
 
 #if 0
   QByteArray byteArray;
@@ -297,6 +317,11 @@ HistogramModel
 
   stream << flush;
   CheckStreamStatus( stream );
+
+  qDebug() <<
+    tr( "%1: Histogram written (%2 ms)..." )
+    .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
+    .arg( time.elapsed()  );
 
 #if 0
   qDebug() << byteArray;

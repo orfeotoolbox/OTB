@@ -734,8 +734,9 @@ VectorImageModel
 
   HistogramModel::BuildContext context(
     true, // Force writing new histogram-model.
-    datasetModel->HistogramFileInfo( GetFilename() ).filePath() );
-    
+    datasetModel->HistogramFileInfo( GetFilename() ).filePath()
+  );
+
   RefreshHistogram( &context );
 }
 

@@ -239,11 +239,19 @@ private:
 			    CountType& end,
 			    RgbwChannel channels );
 
+  /**
+   */
+  void SetNoData();
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
+  /**
+   */
+  void RefreshHistogram();
+
   /**
    * \brief Slot called when low quantile value of a RGB channel has
    * been edited.

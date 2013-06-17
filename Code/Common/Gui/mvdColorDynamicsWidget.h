@@ -80,9 +80,9 @@ class Monteverdi2_EXPORT ColorDynamicsWidget :
 
   Q_OBJECT;
 
-  Q_PROPERTY( bool isNoDataEnabled
-	      READ IsNoDataEnabled
-	      WRITE SetNoDataEnabled );
+  Q_PROPERTY( bool isNoDataChecked
+	      READ IsNoDataChecked
+	      WRITE SetNoDataChecked );
 
   Q_PROPERTY( double NoDataValue
 	      READ GetNoDataValue
@@ -118,11 +118,11 @@ public:
 
   /**
    */
-  void SetNoDataEnabled( bool enabled );
+  void SetNoDataChecked( bool checked );
 
   /**
    */
-  bool IsNoDataEnabled() const;
+  bool IsNoDataChecked() const;
 
   /**
    */
@@ -131,6 +131,14 @@ public:
   /**
    */
   double GetNoDataValue() const;
+
+//
+// Public slots.
+public slots:
+
+  /**
+   */
+  void SetNoDataButtonChecked( bool checked );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -173,6 +181,9 @@ signals:
    */
   void NoDataValueChanged( double value );
 
+  /**
+   */
+  void NoDataButtonPressed();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -230,6 +241,10 @@ private slots:
   /**
    */
   void on_noDataCheckBox_toggled( bool enabled );
+
+  /**
+   */
+  void on_noDataButton_toggled( bool checked );
 };
 
 } // end namespace 'mvd'.
@@ -273,6 +288,7 @@ ColorDynamicsWidget
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
+/*****************************************************************************/
 
 } // end namespace 'mvd'
 

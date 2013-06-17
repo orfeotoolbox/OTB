@@ -136,17 +136,17 @@ ColorDynamicsWidget
 /*******************************************************************************/
 bool
 ColorDynamicsWidget
-::IsNoDataEnabled() const
+::IsNoDataChecked() const
 {
-  return m_UI->noDataCheckBox->isEnabled();
+  return m_UI->noDataCheckBox->isChecked();
 }
 
 /*******************************************************************************/
 void
 ColorDynamicsWidget
-::SetNoDataEnabled( bool enabled )
+::SetNoDataChecked( bool checked )
 {
-  m_UI->noDataCheckBox->setEnabled( enabled );
+  m_UI->noDataCheckBox->setChecked( checked );
 }
 
 /*******************************************************************************/
@@ -241,6 +241,27 @@ ColorDynamicsWidget
   );
 }
 
+/*****************************************************************************/
+/* PUBLIC SLOTS                                                              */
+/*****************************************************************************/
+void
+ColorDynamicsWidget
+::SetNoDataButtonChecked( bool checked )
+{
+  if( checked )
+    {
+    m_UI->noDataButton->setEnabled( false );
+    m_UI->noDataButton->setChecked( true );
+    m_UI->noDataButton->setText( tr( "Done" ) );
+    }
+  else
+    {
+    m_UI->noDataButton->setEnabled( true );
+    m_UI->noDataButton->setChecked( false );
+    m_UI->noDataButton->setText( tr( "GO" ) );
+    }
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*****************************************************************************/
@@ -267,5 +288,24 @@ ColorDynamicsWidget
 }
 
 /*****************************************************************************/
+void
+ColorDynamicsWidget
+::on_noDataButton_toggled( bool checked )
+{
+  bool thisSB = this->blockSignals( true );
+  {
+  bool uiSB = m_UI->noDataButton->blockSignals( true );
+  {
+  SetNoDataButtonChecked( checked ); 
+  }
+  m_UI->noDataButton->blockSignals( uiSB );
+  }
+  this->blockSignals( thisSB );
+
+  if( checked )
+    {
+    emit NoDataButtonPressed();
+    }
+}
 
 } // end namespace 'mvd'

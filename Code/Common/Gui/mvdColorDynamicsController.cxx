@@ -54,20 +54,20 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
-/*******************************************************************************/
+/*****************************************************************************/
 ColorDynamicsController
 ::ColorDynamicsController( ColorDynamicsWidget* widget, QObject* parent ) :
   AbstractModelController( widget, parent )
 {
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 ColorDynamicsController
 ::~ColorDynamicsController()
 {
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::Connect( AbstractModel* model )
@@ -148,6 +148,14 @@ ColorDynamicsController
     SLOT( OnNoDataValueChanged( double ) )
   );
 
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL( NoDataButtonPressed() ),
+    // to:
+    this,
+    SLOT( RefreshHistogram() )
+  );
+
   //
   // Connect controller to model.
   QObject::connect(
@@ -157,7 +165,7 @@ ColorDynamicsController
   );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::ResetWidget()
@@ -167,7 +175,8 @@ ColorDynamicsController
   assert( GetModel()!=NULL && GetModel()==GetModel< VectorImageModel >() );
   const VectorImageModel* model = GetModel< VectorImageModel >();
 
-  assert( GetWidget()!=NULL && GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  assert( GetWidget()!=NULL &&
+	  GetWidget()==GetWidget< ColorDynamicsWidget >() );
   ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
 
   widget->SetGrayscaleActivated( model->GetSettings().IsGrayscaleActivated() );
@@ -182,9 +191,12 @@ ColorDynamicsController
     ? RGBW_CHANNEL_WHITE
     : RGBW_CHANNEL_RGB
   );
+
+  // Setup no-data state.
+  SetNoData();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::Disconnect( AbstractModel* model )
@@ -272,9 +284,17 @@ ColorDynamicsController
     this,
     SLOT( OnNoDataValueChanged( double ) )
   );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( NoDataButtonPressed() ),
+    // to:
+    this,
+    SLOT( RefreshHistogram() )
+  );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::ResetIntensityRanges( RgbwChannel channels )
@@ -342,7 +362,7 @@ ColorDynamicsController
   this->blockSignals( thisSignalsBlocked );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::ResetIntensities( RgbwChannel channels )
@@ -414,7 +434,7 @@ ColorDynamicsController
   this->blockSignals( thisSignalsBlocks );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::SetIntensities( RgbwChannel channels )
@@ -473,7 +493,38 @@ ColorDynamicsController
   this->blockSignals( thisSignalsBlocked );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
+void
+ColorDynamicsController
+::SetNoData()
+{
+  assert( GetModel()==GetModel< VectorImageModel >() );
+  const VectorImageModel* imageModel = GetModel< VectorImageModel >();
+
+  if( imageModel==NULL )
+    return;
+
+  const ImageProperties* imageProperties = imageModel->GetProperties();
+  assert( imageProperties!=NULL );
+
+  assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
+  assert( widget!=NULL );
+
+  bool thisSignalsBlocked = this->blockSignals( true );
+  {
+  bool widgetSignalsBlocked = widget->blockSignals( true );
+  {
+  widget->SetNoDataButtonChecked( true );
+  widget->SetNoDataChecked( imageProperties->IsNoDataEnabled() );
+  widget->SetNoDataValue( imageProperties->GetNoData() );
+  }
+  widget->blockSignals( widgetSignalsBlocked );
+  }
+  this->blockSignals( thisSignalsBlocked );
+}
+
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::ResetQuantiles( RgbwChannel channels )
@@ -520,9 +571,37 @@ ColorDynamicsController
   this->blockSignals( thisSignalsBlocked );
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+void
+ColorDynamicsController
+::RefreshHistogram()
+{
+  // Trace.
+  qDebug()
+    << this
+    << "::RefreshHistogram()";
+
+  // Get image-model.
+  assert( GetModel()==GetModel< VectorImageModel>() );
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  // Refresh histogram-model.
+  imageModel->RefreshHistogram();
+
+  // Refresh color-dynamics.
+  ResetQuantiles(
+    imageModel->GetSettings().IsGrayscaleActivated()
+    ? RGBW_CHANNEL_WHITE
+    : RGBW_CHANNEL_RGB );
+
+  // Signal model has been updated.
+  emit ModelUpdated();
+}
+
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnRgbChannelIndexChanged( RgbwChannel channel, int band )
@@ -541,7 +620,7 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnGrayChannelIndexChanged( int band )
@@ -583,7 +662,7 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnLowQuantileChanged( RgbwChannel channel, double value )
@@ -651,7 +730,7 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnHighQuantileChanged( RgbwChannel channel, double value )
@@ -719,7 +798,7 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnLowIntensityChanged( RgbwChannel channel, double value )
@@ -775,7 +854,7 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnHighIntensityChanged( RgbwChannel channel, double value )
@@ -832,7 +911,7 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnResetIntensityClicked( RgbwChannel channel )
@@ -847,7 +926,7 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnResetQuantileClicked( RgbwChannel channel )
@@ -862,7 +941,7 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnApplyAllClicked( RgbwChannel channel, double low, double high )
@@ -942,20 +1021,66 @@ ColorDynamicsController
   emit ModelUpdated();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnNoDataFlagToggled( bool enabled )
 {
+  // Trace.
+  qDebug()
+    << this
+    << "::OnNoDataFlagToggled(" << enabled << ")";
+
+  // Get image-model.
+  assert( GetModel()==GetModel< VectorImageModel>() );
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  // Reference settings.
+  ImageProperties* properties = imageModel->GetProperties();
+
+  // Get color-dynamics widgets.
+  assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
+  assert( colorDynWgt!=NULL );
+
+  // Store property.
+  properties->SetNoDataEnabled( colorDynWgt->IsNoDataChecked() );
+
+  //
+  colorDynWgt->SetNoDataButtonChecked( false );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 ColorDynamicsController
 ::OnNoDataValueChanged( double value )
 {
+  // Trace.
+  qDebug()
+    << this
+    << "::OnNoDataValueChanged(" << value << ")";
+
+  // Get image-model.
+  assert( GetModel()==GetModel< VectorImageModel>() );
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  // Reference settings.
+  ImageProperties* properties = imageModel->GetProperties();
+
+  // Get color-dynamics widgets.
+  assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  ColorDynamicsWidget* colorDynWgt = GetWidget< ColorDynamicsWidget >();
+  assert( colorDynWgt!=NULL );
+
+  // Store property.
+  properties->SetNoData( colorDynWgt->GetNoDataValue() );
+
+  //
+  colorDynWgt->SetNoDataButtonChecked( false );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 
 } // end namespace 'mvd'
