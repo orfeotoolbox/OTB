@@ -53,7 +53,10 @@ enum CellFusionMode {
  * - 2 MEAN : mean is computed
  * - 3 ACC : returns cell count (useful to create mask from output)
  *
- *  empty cell are filled with the NoDataValue
+ *  empty cell are filled with the NoDataValue (-32768 by default)
+ *
+ *  if 3Map are not in sensor geometry Min and MaxElevation parameters are useless
+ *  otherwise Min and MaxElevation are used to reproject DEM long/lat in sensor geometry to extend area search in input 3Map
  *
  *  DEM parameters are automatically deduced by the union of input extent if SetOutputParametersFrom3DMap is called without parameters. If
  *  an index is given, the 3D corresponding Map is used to deduced Output parameters (expect Spacing which is calculated for DEMGridStep (in meter))
@@ -140,7 +143,6 @@ public:
   /** Set 3D map input at  corresponding 'index' */
   void Set3DMapInput(unsigned int index, const T3DImage * hmap);
   
-
   /** Set mask associated to 3D maps  'index'
    * (optional, pixels with a null mask value are ignored)
    */
@@ -205,9 +207,16 @@ public:
     itkSetMacro(ElevationMin, double);
     itkGetConstReferenceMacro(ElevationMin, double);
 
-     /** Set/Get macro for maximum elevation */
-     itkSetMacro(ElevationMax, double);
-     itkGetConstReferenceMacro(ElevationMax, double);
+    /** Set/Get macro for maximum elevation */
+   itkSetMacro(ElevationMax, double);
+   itkGetConstReferenceMacro(ElevationMax, double);
+
+
+     /** margin for input requested region size  */
+    itkSetMacro(Margin, SizeType);
+    itkGetConstReferenceMacro(Margin, SizeType);
+
+
 
 
 protected:
@@ -281,6 +290,7 @@ private:
   SpacingType   m_OutputSpacing;
   OriginType    m_OutputOrigin;
 
+  SizeType      m_Margin;
 
   int           m_OutputParametersFrom3DMap;
   bool          m_IsGeographic;
