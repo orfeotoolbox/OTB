@@ -1627,12 +1627,10 @@ bool TestHelper::CompareLines(const std::string& strfileref,
           {
           float vRef = atof(strRef.c_str());
           float vTest = atof(strTest.c_str());
-          float vNorm = (vcl_abs(vRef) + vcl_abs(vTest))/2;
           //otbMsgDevMacro(<< "numerical comparison: " <<vRef << " vs " <<vTest << " -> "
           //               << "vNorm= " << vNorm << ", " << vcl_abs(vRef-vTest) << " > "<< epsilon * vNorm
           //               << "? -> " << (vcl_abs(vRef-vTest) > epsilon * vNorm ));
-          if ((vNorm > m_EpsilonBoundaryChecking) //make sure that either the test of the ref are non 0
-              && (vcl_abs(vRef-vTest) > epsilon * vNorm)) //epsilon as relative error
+          if (vcl_abs(vRef-vTest) > epsilon) //epsilon as relative error
             {
             if (m_ReportErrors)
               {
