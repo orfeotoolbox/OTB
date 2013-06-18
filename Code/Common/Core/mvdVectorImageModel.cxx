@@ -941,8 +941,12 @@ VectorImageModel
         PointType wgs84;
         wgs84 = GetGenericRSTransform()->TransformPoint(point);
       
-        ossGeographicLong << wgs84[0];
-        ossGeographicLat << wgs84[1];
+        ossGeographicLong.precision(6);
+        ossGeographicLat.precision(6);
+        
+        ossGeographicLong << std::fixed << wgs84[0];
+        ossGeographicLat << std::fixed << wgs84[1];
+
         geoVector.push_back(ossGeographicLong.str());
         geoVector.push_back(ossGeographicLat.str());
       
