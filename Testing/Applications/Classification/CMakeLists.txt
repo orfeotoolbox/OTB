@@ -68,7 +68,7 @@ IF(OTB_USE_OPENCV)
   STRING(TOLOWER ${classifier} lclassifier)
 
     # Derive output file name
-    SET(OUTMODELFILE cl${classifier}ModelQB1${${lclassifier}_output_format})
+    SET(OUTMODELFILE cl${classifier}_ModelQB1${${lclassifier}_output_format})
     SET(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
     
     OTB_TEST_APPLICATION(
