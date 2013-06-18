@@ -25,6 +25,7 @@
 #include "otbSubPixelDisparityImageFilter.h"
 #include "otbDisparityMapMedianFilter.h"
 #include "otbDisparityMapToDEMFilter.h"
+#include "otbDisparityMapTo3DFilter.h"
 #include "otbDEMToImageGenerator.h"
 
 #include "otbVarianceImageFilter.h"
@@ -106,26 +107,62 @@ public:
   typedef otb::BCOInterpolateImageFunction
     <FloatImageType>                          InterpolatorType;
   
-  typedef otb::Functor::NCCBlockMatching
-    <FloatImageType,
-     FloatImageType>                          NCCBlockMatchingFunctorType;
-  
-  typedef otb::PixelWiseBlockMatchingImageFilter
-    <FloatImageType,
-     FloatImageType,
-     FloatImageType,
-     FloatImageType,
-     NCCBlockMatchingFunctorType>             BlockMatchingFilterType;
+   typedef otb::Functor::SSDBlockMatching<FloatImageType,FloatImageType> SSDBlockMatchingFunctorType;
+   typedef otb::Functor::SSDDivMeanBlockMatching<FloatImageType,FloatImageType> SSDDivMeanBlockMatchingFunctorType;
+
+   typedef otb::Functor::NCCBlockMatching<FloatImageType,FloatImageType> NCCBlockMatchingFunctorType;
+   typedef otb::Functor::LPBlockMatching<FloatImageType,FloatImageType>  LPBlockMatchingFunctorType;
+
+   typedef otb::PixelWiseBlockMatchingImageFilter<FloatImageType,
+                                                              FloatImageType,
+                                                              FloatImageType,
+                                                              FloatImageType,
+                                                              SSDBlockMatchingFunctorType> SSDBlockMatchingFilterType;
+   typedef otb::PixelWiseBlockMatchingImageFilter<FloatImageType,
+                                                                FloatImageType,
+                                                                FloatImageType,
+                                                                FloatImageType,
+                                                                SSDDivMeanBlockMatchingFunctorType> SSDDivMeanBlockMatchingFilterType;
+
+     typedef otb::PixelWiseBlockMatchingImageFilter<FloatImageType,
+                                                              FloatImageType,
+                                                              FloatImageType,
+                                                              FloatImageType,
+                                                              NCCBlockMatchingFunctorType> NCCBlockMatchingFilterType;
+
+     typedef otb::PixelWiseBlockMatchingImageFilter<FloatImageType,
+                                                              FloatImageType,
+                                                              FloatImageType,
+                                                              FloatImageType,
+                                                              LPBlockMatchingFunctorType> LPBlockMatchingFilterType;
 
   typedef otb::BandMathImageFilter
     <FloatImageType>                          BandMathFilterType;
+
+  typedef otb::SubPixelDisparityImageFilter<FloatImageType,
+                                                FloatImageType,
+                                                FloatImageType,
+                                                FloatImageType,
+                                                SSDBlockMatchingFunctorType> SSDSubPixelFilterType;
+
+  typedef otb::SubPixelDisparityImageFilter<FloatImageType,
+                                                  FloatImageType,
+                                                  FloatImageType,
+                                                  FloatImageType,
+                                                  SSDDivMeanBlockMatchingFunctorType> SSDDivMeanSubPixelFilterType;
+
+   typedef otb::SubPixelDisparityImageFilter<FloatImageType,
+                                                FloatImageType,
+                                                FloatImageType,
+                                                FloatImageType,
+                                                LPBlockMatchingFunctorType> LPSubPixelFilterType;
 
   typedef otb::SubPixelDisparityImageFilter
     <FloatImageType,
      FloatImageType,
      FloatImageType,
      FloatImageType,
-     NCCBlockMatchingFunctorType>             SubPixelFilterType;
+     NCCBlockMatchingFunctorType>             NCCSubPixelFilterType;
 
   typedef otb::DisparityMapMedianFilter
     <FloatImageType,
@@ -186,6 +223,10 @@ public:
       FloatImageType,
       FloatImageType>                              DisparityTranslateFilter;
 
+  typedef otb::DisparityMapTo3DFilter
+    <FloatImageType,
+     FloatVectorImageType,DeformationFieldType,FloatImageType>                         DisparityTo3DFilter;
+
   typedef itk::VectorIndexSelectionCastImageFilter<DeformationFieldType,
                                                      FloatImageType> IndexSelectionCastFilterType;
 
@@ -199,6 +240,7 @@ public:
       <FloatImageType,
         FloatImageType>                             BijectionFilterType;
 
+    typedef itk::ImageToImageFilter<FloatImageType,FloatImageType>  FilterType;
 private:
   
   StereoFramework()
@@ -289,7 +331,8 @@ private:
                           "\t- filter disparites based on the correlation score (must be greater than "
                           "0.6) and exploration bounds\n"
                           "\t- project disparities on a regular grid in WGS84, for each cell the "
-                          "maximum elevation is kept\n");
+                          "maximum elevation is kept.\n"
+                          "NoData values are filled with -32768\n");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -315,6 +358,11 @@ private:
     AddParameter(ParameterType_OutputImage,"out","Output image");
     SetParameterDescription("out","Output elevation image");
 
+    //AddParameter(ParameterType_OutputImage,"out2","Output image");
+    //SetParameterDescription("out2","Output elevation image");
+
+
+
     AddParameter(ParameterType_Int,"step","Step of the deformation grid (in nb. of pixels)");
     SetParameterDescription("step","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommanded to use a coarser grid (higher step value) in case of large images");
     SetDefaultParameterInt("step",16);
@@ -338,16 +386,43 @@ private:
     SetDefaultParameterFloat("below",-20.0);
     DisableParameter("below");
     
-    AddParameter(ParameterType_Int,"radius","Radius of blocks for matching filter");
-    SetParameterDescription("radius","The radius (in pixels) of blocks in Block-Matching");
-    SetDefaultParameterInt("radius",4);
-    SetMinimumParameterIntValue("radius",1);
-    MandatoryOff("radius");
+    AddParameter(ParameterType_Group,"bm","Block matching parameters");
+    SetParameterDescription("bm","This group of parameters allow to tune the block-matching behaviour");
+
+     AddParameter(ParameterType_Choice,   "bm.metric", "Block-matching metric");
+     AddChoice("bm.metric.ncc","Normalized Cross-Correlation");
+     SetParameterDescription("bm.metric.ncc","Normalized Cross-Correlation between the left and right windows");
+
+
+     AddChoice("bm.metric.ssd","Sum of Squared Distances");
+     SetParameterDescription("bm.metric.ssd","Sum of squared distances between pixels value in the metric window");
+
+     AddChoice("bm.metric.ssdmean","Sum of Squared Distances divided by mean of block");
+     SetParameterDescription("bm.metric.ssdmean","derived version of Sum of squared distances between pixels value in the metric window (SSD divided by mean over window)");
+
+     AddChoice("bm.metric.lp","Lp pseudo-norm");
+     SetParameterDescription("bm.metric.lp","Lp pseudo-norm between the left and right windows");
+
+     AddParameter(ParameterType_Float,"bm.metric.lp.p","p value" );
+     SetParameterDescription("bm.metric.lp.p", "Value of the p parameter in Lp pseudo-norm (must be positive)");
+     SetDefaultParameterFloat("bm.metric.lp.p", 1.0);
+     SetMinimumParameterFloatValue("bm.metric.lp.p", 0.0);
+
+    AddParameter(ParameterType_Int,"bm.radius","Radius of blocks for matching filter");
+    SetParameterDescription("bm.radius","The radius (in pixels) of blocks in Block-Matching");
+    SetDefaultParameterInt("bm.radius",4);
+    SetMinimumParameterIntValue("bm.radius",1);
+    MandatoryOff("bm.radius");
 
     AddParameter(ParameterType_Empty,"bij","Use bijection consistency in block matching strategy");
     SetParameterDescription("bij","use bijection consistency. Right to Left correlation is computed to validate Left to Right disparities. If bijection is not found pixel is rejected.");
     MandatoryOff("bij");
     DisableParameter("bij");
+
+    AddParameter(ParameterType_Empty,"med","Use median disparities filtering");
+    SetParameterDescription("med","disparities output can be filtered using median post filtering (disabled by default).");
+    MandatoryOff("med");
+    DisableParameter("med");
 
 
     AddParameter(ParameterType_Float,"metrict","correlation metric threshold.");
@@ -398,10 +473,68 @@ private:
   }
   
 
+  template<class TInputImage, class TMetricFunctor>
+    void
+    SetBlockMatchingParameters(otb::PixelWiseBlockMatchingImageFilter<TInputImage,TInputImage,TInputImage,TInputImage,
+                             TMetricFunctor>*blockMatcherFilter, otb::PixelWiseBlockMatchingImageFilter<TInputImage,TInputImage,TInputImage,TInputImage,
+                             TMetricFunctor>*invBlockMatcherFilter,otb::SubPixelDisparityImageFilter<TInputImage,TInputImage,TInputImage,TInputImage,
+                             TMetricFunctor>*subPixelFilter, TInputImage * leftImage, TInputImage * rightImage,TInputImage * leftMask,TInputImage * rightMask,TInputImage * finalMask, const bool minimize,double minDisp,double maxDisp)
+    {
+    typedef TMetricFunctor MetricFunctorType;
+    typedef otb::PixelWiseBlockMatchingImageFilter<TInputImage, TInputImage, TInputImage, TInputImage,
+        MetricFunctorType> BlockMatchingFilterType;
+    typedef otb::SubPixelDisparityImageFilter<TInputImage, TInputImage, TInputImage, TInputImage, MetricFunctorType>
+        SubPixelFilterType;
+
+    blockMatcherFilter->SetLeftInput(leftImage);
+    blockMatcherFilter->SetRightInput(rightImage);
+    blockMatcherFilter->SetLeftMaskInput(leftMask);
+    blockMatcherFilter->SetRightMaskInput(rightMask);
+    blockMatcherFilter->SetRadius(this->GetParameterInt("bm.radius"));
+    blockMatcherFilter->SetMinimumHorizontalDisparity(minDisp);
+    blockMatcherFilter->SetMaximumHorizontalDisparity(maxDisp);
+    blockMatcherFilter->SetMinimumVerticalDisparity(0);
+    blockMatcherFilter->SetMaximumVerticalDisparity(0);
+
+    if (minimize)
+      {
+      blockMatcherFilter->MinimizeOn();
+      }
+    else blockMatcherFilter->MinimizeOff();
+
+    if (IsParameterEnabled("bij"))
+      {
+      invBlockMatcherFilter->SetLeftInput(rightImage);
+      invBlockMatcherFilter->SetRightInput(leftImage);
+      invBlockMatcherFilter->SetLeftMaskInput(rightMask);
+      invBlockMatcherFilter->SetRightMaskInput(leftMask);
+      invBlockMatcherFilter->SetRadius(this->GetParameterInt("bm.radius"));
+      invBlockMatcherFilter->SetMinimumHorizontalDisparity(-maxDisp);
+      invBlockMatcherFilter->SetMaximumHorizontalDisparity(-minDisp);
+      invBlockMatcherFilter->SetMinimumVerticalDisparity(0);
+      invBlockMatcherFilter->SetMaximumVerticalDisparity(0);
+
+      if (minimize)
+        {
+        invBlockMatcherFilter->MinimizeOn();
+        }
+      else invBlockMatcherFilter->MinimizeOff();
+      }
+
+    subPixelFilter->SetInputsFromBlockMatchingFilter(blockMatcherFilter);
+    subPixelFilter->SetRefineMethod(SubPixelFilterType::DICHOTOMY);
+    subPixelFilter->UpdateOutputInformation();
+    subPixelFilter->SetLeftMaskInput(finalMask);
+
+  }
+
+
   void DoExecute()
   {
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
+    double underElev = this->GetParameterFloat("below");
+    double overElev = this->GetParameterFloat("above");
 
     m_Filters.clear();
 
@@ -442,7 +575,7 @@ private:
     m_Multi3DMapToDEMFilter->SetNumberOf3DMaps(stereoCouples);
 
     // value of ram used to compute epipolar grid
-    double globalEpiStorageSize=0;
+    double globalEpiStorageSize = 0;
 
     for (unsigned int i = 0; i < stereoCouples; i++)
       {
@@ -475,13 +608,12 @@ private:
           gridSize = epipolarGridSource->GetLeftDeformationFieldOutput()->GetLargestPossibleRegion().GetSize();
       double storageSize = static_cast<double> (gridSize[0]) * static_cast<double> (gridSize[1]) * 4.0 * 8.0
           / 1000000.0;
-      globalEpiStorageSize+=storageSize;
-      if(globalEpiStorageSize>( static_cast<double>(this->GetParameterInt("ram"))))
-          {
-              otbAppLogINFO(<<"grid step for couple  "<<couple[0]<<" and "<<couple[1]<<" memory usage "<<storageSize<<" MO.");
-              otbAppLogWARNING(<<"Deformation grid step value"<<this->GetParameterInt("step")<<" seems too be to high.");
-          }
-
+      globalEpiStorageSize += storageSize;
+      if (globalEpiStorageSize > (static_cast<double> (this->GetParameterInt("ram"))))
+        {
+        otbAppLogINFO(<<"grid step for couple  "<<couple[0]<<" and "<<couple[1]<<" memory usage "<<storageSize<<" MO.");
+        otbAppLogWARNING(<<"Deformation grid step value"<<this->GetParameterInt("step")<<" seems too be to high.");
+        }
 
       AddProcess(epipolarGridSource, "Compute epipolar grids...");
       epipolarGridSource->Update();
@@ -500,7 +632,12 @@ private:
 
       double meanBaseline = epipolarGridSource->GetMeanBaselineRatio();
 
-      // Compute rectification grids (lef/right and left inverse (for disparity translate filter)).
+      double minDisp = vcl_floor((-1.0) * overElev * meanBaseline / epiSpacing[0]);
+      double maxDisp = vcl_ceil((-1.0) * underElev * meanBaseline / epiSpacing[0]);
+      otbAppLogINFO(<<"Minimum disparity : "<<minDisp);
+      otbAppLogINFO(<<"Maximum disparity : "<<maxDisp);
+
+      // Compute rectification grids (left/right and left inverse (for disparity translate filter)).
       DeformationFieldCastFilterType::Pointer leftGridCaster = DeformationFieldCastFilterType::New();
       leftGridCaster->SetInput(epipolarGridSource->GetLeftDeformationFieldOutput());
       leftGridCaster->Update();
@@ -605,7 +742,7 @@ private:
         VarianceFilterType::Pointer leftVarianceFilter = VarianceFilterType::New();
         leftVarianceFilter->SetInput(leftResampleFilter->GetOutput());
         VarianceFilterType::InputSizeType vradius;
-        vradius.Fill(this->GetParameterInt("radius"));
+        vradius.Fill(this->GetParameterInt("bm.radius"));
         leftVarianceFilter->SetRadius(vradius);
 
         lBandMathFilter->SetNthInput(inputIdLeft, leftVarianceFilter->GetOutput(), "variance");
@@ -647,7 +784,7 @@ private:
         VarianceFilterType::Pointer rightVarianceFilter = VarianceFilterType::New();
         rightVarianceFilter->SetInput(rightResampleFilter->GetOutput());
         VarianceFilterType::InputSizeType vradius;
-        vradius.Fill(this->GetParameterInt("radius"));
+        vradius.Fill(this->GetParameterInt("bm.radius"));
         rightVarianceFilter->SetRadius(vradius);
 
         rBandMathFilter->SetNthInput(inputIdRight, rightVarianceFilter->GetOutput(), "variance");
@@ -662,68 +799,213 @@ private:
       m_Filters.push_back(rightMaskResampleFilter.GetPointer());
       m_Filters.push_back(rBandMathFilter.GetPointer());
       m_Filters.push_back(lBandMathFilter.GetPointer());
-      // Compute disparities
-      BlockMatchingFilterType::Pointer blockMatcherFilter = BlockMatchingFilterType::New();
-      blockMatcherFilter->SetLeftInput(leftResampleFilter->GetOutput());
-      blockMatcherFilter->SetRightInput(rightResampleFilter->GetOutput());
-      blockMatcherFilter->SetLeftMaskInput(lBandMathFilter->GetOutput());
-      blockMatcherFilter->SetRightMaskInput(rBandMathFilter->GetOutput());
-      blockMatcherFilter->SetRadius(this->GetParameterInt("radius"));
-      blockMatcherFilter->MinimizeOff();
-      m_Filters.push_back(blockMatcherFilter.GetPointer());
 
       BandMathFilterType::Pointer finalMaskFilter;
-      BlockMatchingFilterType::Pointer invBlockMatcherFilter;
+      finalMaskFilter = BandMathFilterType::New();
+      m_Filters.push_back(finalMaskFilter.GetPointer());
+
+      // Compute disparities
+      FilterType* blockMatcherFilterPointer;
+      FilterType* invBlockMatcherFilterPointer = NULL;
+      FilterType* subPixelFilterPointer;
       BijectionFilterType::Pointer bijectFilter;
+
+      // pointer
+      bool minimize = false;
+      //switch
+
+      NCCBlockMatchingFilterType::Pointer NCCBlockMatcherFilter;
+      NCCBlockMatchingFilterType::Pointer invNCCBlockMatcherFilter;
+      NCCSubPixelFilterType::Pointer NCCSubPixelFilter;
+
+      SSDBlockMatchingFilterType::Pointer SSDBlockMatcherFilter;
+      SSDBlockMatchingFilterType::Pointer invSSDBlockMatcherFilter;
+      SSDSubPixelFilterType::Pointer SSDSubPixelFilter;
+
+      SSDDivMeanBlockMatchingFilterType::Pointer SSDDivMeanBlockMatcherFilter;
+      SSDDivMeanBlockMatchingFilterType::Pointer invSSDDivMeanBlockMatcherFilter;
+      SSDDivMeanSubPixelFilterType::Pointer SSDDivMeanSubPixelFilter;
+
+      LPBlockMatchingFilterType::Pointer LPBlockMatcherFilter;
+      LPBlockMatchingFilterType::Pointer invLPBlockMatcherFilter;
+      LPSubPixelFilterType::Pointer LPSubPixelFilter;
+
+      switch (GetParameterInt("bm.metric"))
+        {
+        case 0: //NCC
+          otbAppLogINFO(<<"use NCC Metric for BlockMatching.")
+          ;
+          NCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
+          blockMatcherFilterPointer = NCCBlockMatcherFilter.GetPointer();
+          m_Filters.push_back(blockMatcherFilterPointer);
+
+          if (IsParameterEnabled("bij"))
+            {
+            //Reverse correlation
+            invNCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
+            invBlockMatcherFilterPointer = invNCCBlockMatcherFilter.GetPointer();
+            m_Filters.push_back(invBlockMatcherFilterPointer);
+            }
+          NCCSubPixelFilter = NCCSubPixelFilterType::New();
+          subPixelFilterPointer = NCCSubPixelFilter.GetPointer();
+          m_Filters.push_back(NCCSubPixelFilter.GetPointer());
+
+          minimize = false;
+          this->SetBlockMatchingParameters<FloatImageType, NCCBlockMatchingFunctorType> (
+                                                                                         NCCBlockMatcherFilter,
+                                                                                         invNCCBlockMatcherFilter,
+                                                                                         NCCSubPixelFilter,
+                                                                                         leftResampleFilter->GetOutput(),
+                                                                                         rightResampleFilter->GetOutput(),
+                                                                                         lBandMathFilter->GetOutput(),
+                                                                                         rBandMathFilter->GetOutput(),
+                                                                                         finalMaskFilter->GetOutput(),
+                                                                                         minimize, minDisp, maxDisp);
+          break;
+        case 1: //SSD
+          otbAppLogINFO(<<"use SSD Metric for BlockMatching.")
+          ;
+
+          SSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
+          blockMatcherFilterPointer = SSDBlockMatcherFilter.GetPointer();
+          m_Filters.push_back(blockMatcherFilterPointer);
+
+          if (IsParameterEnabled("bij"))
+            {
+            //Reverse correlation
+            invSSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
+            invBlockMatcherFilterPointer = invSSDBlockMatcherFilter.GetPointer();
+            m_Filters.push_back(invBlockMatcherFilterPointer);
+            }
+          SSDSubPixelFilter = SSDSubPixelFilterType::New();
+          subPixelFilterPointer = SSDSubPixelFilter.GetPointer();
+          m_Filters.push_back(SSDSubPixelFilter.GetPointer());
+
+          minimize = true;
+          this->SetBlockMatchingParameters<FloatImageType, SSDBlockMatchingFunctorType> (
+                                                                                         SSDBlockMatcherFilter,
+                                                                                         invSSDBlockMatcherFilter,
+                                                                                         SSDSubPixelFilter,
+                                                                                         leftResampleFilter->GetOutput(),
+                                                                                         rightResampleFilter->GetOutput(),
+                                                                                         lBandMathFilter->GetOutput(),
+                                                                                         rBandMathFilter->GetOutput(),
+                                                                                         finalMaskFilter->GetOutput(),
+                                                                                         minimize, minDisp, maxDisp);
+
+          break;
+        case 2: //SSDDivMean
+          otbAppLogINFO(<<"use robust SSD Metric for BlockMatching.")
+          ;
+
+          SSDDivMeanBlockMatcherFilter = SSDDivMeanBlockMatchingFilterType::New();
+          blockMatcherFilterPointer = SSDDivMeanBlockMatcherFilter.GetPointer();
+          m_Filters.push_back(blockMatcherFilterPointer);
+
+          if (IsParameterEnabled("bij"))
+            {
+            //Reverse correlation
+            invSSDDivMeanBlockMatcherFilter = SSDDivMeanBlockMatchingFilterType::New();
+            invBlockMatcherFilterPointer = invSSDDivMeanBlockMatcherFilter.GetPointer();
+            m_Filters.push_back(invBlockMatcherFilterPointer);
+            }
+          SSDDivMeanSubPixelFilter = SSDDivMeanSubPixelFilterType::New();
+          subPixelFilterPointer = SSDDivMeanSubPixelFilter.GetPointer();
+          m_Filters.push_back(SSDDivMeanSubPixelFilter.GetPointer());
+
+          minimize = true;
+          this->SetBlockMatchingParameters<FloatImageType, SSDDivMeanBlockMatchingFunctorType> (
+                                                                                                SSDDivMeanBlockMatcherFilter,
+                                                                                                invSSDDivMeanBlockMatcherFilter,
+                                                                                                SSDDivMeanSubPixelFilter,
+                                                                                                leftResampleFilter->GetOutput(),
+                                                                                                rightResampleFilter->GetOutput(),
+                                                                                                lBandMathFilter->GetOutput(),
+                                                                                                rBandMathFilter->GetOutput(),
+                                                                                                finalMaskFilter->GetOutput(),
+                                                                                                minimize, minDisp,
+                                                                                                maxDisp);
+
+          break;
+        case 3: //LP
+          otbAppLogINFO(<<"use Lp Metric for BlockMatching.")
+          ;
+
+          LPBlockMatcherFilter = LPBlockMatchingFilterType::New();
+          LPBlockMatcherFilter->GetFunctor().SetP(static_cast<double> (GetParameterFloat("bm.metric.lp.p")));
+
+          blockMatcherFilterPointer = LPBlockMatcherFilter.GetPointer();
+          m_Filters.push_back(blockMatcherFilterPointer);
+
+          if (IsParameterEnabled("bij"))
+            {
+            //Reverse correlation
+            invLPBlockMatcherFilter = LPBlockMatchingFilterType::New();
+            invLPBlockMatcherFilter->GetFunctor().SetP(static_cast<double> (GetParameterFloat("bm.metric.lp.p")));
+            invBlockMatcherFilterPointer = invLPBlockMatcherFilter.GetPointer();
+            m_Filters.push_back(invBlockMatcherFilterPointer);
+            }
+          LPSubPixelFilter = LPSubPixelFilterType::New();
+          subPixelFilterPointer = LPSubPixelFilter.GetPointer();
+          m_Filters.push_back(LPSubPixelFilter.GetPointer());
+
+          minimize = false;
+          this->SetBlockMatchingParameters<FloatImageType, LPBlockMatchingFunctorType> (
+                                                                                        LPBlockMatcherFilter,
+                                                                                        invLPBlockMatcherFilter,
+                                                                                        LPSubPixelFilter,
+                                                                                        leftResampleFilter->GetOutput(),
+                                                                                        rightResampleFilter->GetOutput(),
+                                                                                        lBandMathFilter->GetOutput(),
+                                                                                        rBandMathFilter->GetOutput(),
+                                                                                        finalMaskFilter->GetOutput(),
+                                                                                        minimize, minDisp, maxDisp);
+
+          break;
+        default:
+          break;
+        }
+
       if (IsParameterEnabled("bij"))
         {
         otbAppLogINFO(<<"Use reverse blockMatcher to validate direct Horizontal disparities ");
-        //Reverse correlation
-        invBlockMatcherFilter = BlockMatchingFilterType::New();
-        invBlockMatcherFilter->SetLeftInput(rightResampleFilter->GetOutput());
-        invBlockMatcherFilter->SetRightInput(leftResampleFilter->GetOutput());
-        invBlockMatcherFilter->SetLeftMaskInput(rBandMathFilter->GetOutput());
-        invBlockMatcherFilter->SetRightMaskInput(lBandMathFilter->GetOutput());
-        invBlockMatcherFilter->SetRadius(this->GetParameterInt("radius"));
-        invBlockMatcherFilter->MinimizeOff();
-        m_Filters.push_back(invBlockMatcherFilter.GetPointer());
-
         bijectFilter = BijectionFilterType::New();
-        bijectFilter->SetDirectHorizontalDisparityMapInput(blockMatcherFilter->GetHorizontalDisparityOutput());
-        bijectFilter->SetReverseHorizontalDisparityMapInput(invBlockMatcherFilter->GetHorizontalDisparityOutput());
+        //bijectFilter->SetDirectHorizontalDisparityMapInput(blockMatcherFilter->GetHorizontalDisparityOutput());
+        bijectFilter->SetDirectHorizontalDisparityMapInput(blockMatcherFilterPointer->GetOutput(1));
+        bijectFilter->SetReverseHorizontalDisparityMapInput(invBlockMatcherFilterPointer->GetOutput(1));
+        bijectFilter->SetTolerance(2);
+        bijectFilter->SetMinHDisp(minDisp);
+        bijectFilter->SetMaxHDisp(maxDisp);
+        bijectFilter->SetMinVDisp(0);
+        bijectFilter->SetMaxVDisp(0);
         m_Filters.push_back(bijectFilter.GetPointer());
 
-        finalMaskFilter = BandMathFilterType::New();
         finalMaskFilter->SetNthInput(0, lBandMathFilter->GetOutput(), "inmask");
         finalMaskFilter->SetNthInput(1, bijectFilter->GetOutput(), "lrrl");
         finalMaskFilter->SetExpression("if(inmask > 0 and lrrl > 0, 255, 0)");
-        m_Filters.push_back(finalMaskFilter.GetPointer());
+        //
         }
       else
         {
         finalMaskFilter = lBandMathFilter;
         }
 
-      //subPix mask
-      SubPixelFilterType::Pointer subPixelFilter = SubPixelFilterType::New();
-      subPixelFilter = SubPixelFilterType::New();
-      subPixelFilter->SetInputsFromBlockMatchingFilter(blockMatcherFilter);
-      subPixelFilter->SetRefineMethod(SubPixelFilterType::DICHOTOMY);
-      subPixelFilter->UpdateOutputInformation();
-      subPixelFilter->SetLeftMaskInput(finalMaskFilter->GetOutput());
-      m_Filters.push_back(subPixelFilter.GetPointer());
-
-      MedianFilterType::Pointer hMedianFilter = MedianFilterType::New();
-      hMedianFilter->SetInput(subPixelFilter->GetHorizontalDisparityOutput());
-      hMedianFilter->SetRadius(2);
-      hMedianFilter->SetIncoherenceThreshold(2.0);
-      hMedianFilter->SetMaskInput(finalMaskFilter->GetOutput());
-      hMedianFilter->UpdateOutputInformation();
-      m_Filters.push_back(hMedianFilter.GetPointer());
+      FloatImageType::Pointer hDispOutput = subPixelFilterPointer->GetOutput(0);
+      if (IsParameterEnabled("med"))
+        {
+        MedianFilterType::Pointer hMedianFilter = MedianFilterType::New();
+        hMedianFilter->SetInput(subPixelFilterPointer->GetOutput(0));
+        hMedianFilter->SetRadius(2);
+        hMedianFilter->SetIncoherenceThreshold(2.0);
+        hMedianFilter->SetMaskInput(finalMaskFilter->GetOutput());
+        hMedianFilter->UpdateOutputInformation();
+        hDispOutput = hMedianFilter->GetOutput();
+        m_Filters.push_back(hMedianFilter.GetPointer());
+        }
 
       DisparityTranslateFilter::Pointer disparityTranslateFilter = DisparityTranslateFilter::New();
-      disparityTranslateFilter->SetHorizontalDisparityMapInput(hMedianFilter->GetOutput());
-      disparityTranslateFilter->SetVerticalDisparityMapInput(subPixelFilter->GetVerticalDisparityOutput());
+      disparityTranslateFilter->SetHorizontalDisparityMapInput(hDispOutput);
+      disparityTranslateFilter->SetVerticalDisparityMapInput(subPixelFilterPointer->GetOutput(1));
       disparityTranslateFilter->SetInverseEpipolarLeftGrid(leftInverseDeformation);
       disparityTranslateFilter->SetDirectEpipolarRightGrid(rightDeformation);
       // disparityTranslateFilter->SetDisparityMaskInput()
@@ -731,36 +1013,41 @@ private:
       disparityTranslateFilter->UpdateOutputInformation();
       m_Filters.push_back(disparityTranslateFilter.GetPointer());
 
-      MedianFilterType::Pointer hMedianFilter2 = MedianFilterType::New();
-      MedianFilterType::Pointer vMedianFilter2 = MedianFilterType::New();
+      FloatImageType::Pointer hDispOutput2 = disparityTranslateFilter->GetHorizontalDisparityMapOutput();
+      FloatImageType::Pointer vDispOutput2 = disparityTranslateFilter->GetVerticalDisparityMapOutput();
 
-      //TODO JGT Check if medianfiltering is necessary after disparitytranslate
-      hMedianFilter2->SetInput(disparityTranslateFilter->GetHorizontalDisparityMapOutput());
-      hMedianFilter2->SetRadius(2);
-      hMedianFilter2->SetIncoherenceThreshold(2.0);
-      //hMedianFilter2->SetMaskInput(lBandMathFilter->GetOutput());
-      hMedianFilter2->UpdateOutputInformation();
-      m_Filters.push_back(hMedianFilter2.GetPointer());
+      if (IsParameterEnabled("med"))
+        {
+        MedianFilterType::Pointer hMedianFilter2 = MedianFilterType::New();
+        MedianFilterType::Pointer vMedianFilter2 = MedianFilterType::New();
 
-      vMedianFilter2->SetInput(disparityTranslateFilter->GetVerticalDisparityMapOutput());
-      vMedianFilter2->SetRadius(2);
-      vMedianFilter2->SetIncoherenceThreshold(2.0);
-      //vMedianFilter2->SetMaskInput(lBandMathFilter->GetOutput());
-      vMedianFilter2->UpdateOutputInformation();
-      m_Filters.push_back(vMedianFilter2.GetPointer());
+        //TODO JGT Check if medianfiltering is necessary after disparitytranslate
+        hMedianFilter2->SetInput(disparityTranslateFilter->GetHorizontalDisparityMapOutput());
+        hMedianFilter2->SetRadius(2);
+        hMedianFilter2->SetIncoherenceThreshold(2.0);
+        //hMedianFilter2->SetMaskInput(lBandMathFilter->GetOutput());
+        hMedianFilter2->UpdateOutputInformation();
+        hDispOutput2 = hMedianFilter2->GetOutput();
+        m_Filters.push_back(hMedianFilter2.GetPointer());
 
+        vMedianFilter2->SetInput(disparityTranslateFilter->GetVerticalDisparityMapOutput());
+        vMedianFilter2->SetRadius(2);
+        vMedianFilter2->SetIncoherenceThreshold(2.0);
+        //vMedianFilter2->SetMaskInput(lBandMathFilter->GetOutput());
+        vMedianFilter2->UpdateOutputInformation();
+        vDispOutput2 = vMedianFilter2->GetOutput();
+        m_Filters.push_back(vMedianFilter2.GetPointer());
+        }
       // transform disparity into 3D map
       m_MultiDisparityTo3DFilterList[i]->SetReferenceKeywordList(inleft->GetImageKeywordlist());
       m_MultiDisparityTo3DFilterList[i]->SetNumberOfMovingImages(1);
-      m_MultiDisparityTo3DFilterList[i]->SetHorizontalDisparityMapInput(0, hMedianFilter2->GetOutput());
-      m_MultiDisparityTo3DFilterList[i]->SetVerticalDisparityMapInput(0, vMedianFilter2->GetOutput());
+      m_MultiDisparityTo3DFilterList[i]->SetHorizontalDisparityMapInput(0, hDispOutput2);
+      m_MultiDisparityTo3DFilterList[i]->SetVerticalDisparityMapInput(0, vDispOutput2);
       m_MultiDisparityTo3DFilterList[i]->SetMovingKeywordList(0, inright->GetImageKeywordlist());
       m_MultiDisparityTo3DFilterList[i]->UpdateOutputInformation();
+      //SetParameterOutputImage("out2", m_MultiDisparityTo3DFilterList[i]->GetOutput());
 
       // PARAMETER ESTIMATION
-
-      double underElev = this->GetParameterFloat("below");
-      double overElev = this->GetParameterFloat("above");
 
       double minElev = 0.0;
       double maxElev = 0.0;
@@ -794,7 +1081,7 @@ private:
       if (i == 0)
         {
         m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
-        m_Multi3DMapToDEMFilter->SetNoDataValue(minElev);
+        //m_Multi3DMapToDEMFilter->SetNoDataValue(minElev);
         m_Multi3DMapToDEMFilter->SetElevationMax(maxElev + overElev);
         }
       else
@@ -802,7 +1089,7 @@ private:
         if (minElev < (m_Multi3DMapToDEMFilter->GetElevationMin() - underElev))
           {
           m_Multi3DMapToDEMFilter->SetElevationMin(minElev + underElev);
-          m_Multi3DMapToDEMFilter->SetNoDataValue(minElev);
+          //m_Multi3DMapToDEMFilter->SetNoDataValue(minElev);
           }
         if (maxElev < (m_Multi3DMapToDEMFilter->GetElevationMax() - overElev))
           {
@@ -810,58 +1097,58 @@ private:
           }
         }
 
-      double minDisp = vcl_floor((-1.0) * overElev * meanBaseline / epiSpacing[0]);
-      double maxDisp = vcl_ceil((-1.0) * underElev * meanBaseline / epiSpacing[0]);
-      otbAppLogINFO(<<"Minimum disparity : "<<minDisp);
-      otbAppLogINFO(<<"Maximum disparity : "<<maxDisp);
-      blockMatcherFilter->SetMinimumHorizontalDisparity(minDisp);
-      blockMatcherFilter->SetMaximumHorizontalDisparity(maxDisp);
-      blockMatcherFilter->SetMinimumVerticalDisparity(0);
-      blockMatcherFilter->SetMaximumVerticalDisparity(0);
+      // blockMatcherFilter->SetMinimumHorizontalDisparity(minDisp);
+      // blockMatcherFilter->SetMaximumHorizontalDisparity(maxDisp);
+      // blockMatcherFilter->SetMinimumVerticalDisparity(0);
+      // blockMatcherFilter->SetMaximumVerticalDisparity(0);
 
       if (IsParameterEnabled("bij"))
-             {
-      invBlockMatcherFilter->SetMinimumHorizontalDisparity(-maxDisp);
-      invBlockMatcherFilter->SetMaximumHorizontalDisparity(-minDisp);
-      invBlockMatcherFilter->SetMinimumVerticalDisparity(0);
-      invBlockMatcherFilter->SetMaximumVerticalDisparity(0);
+        {
+        // invBlockMatcherFilter->SetMinimumHorizontalDisparity(-maxDisp);
+        // invBlockMatcherFilter->SetMaximumHorizontalDisparity(-minDisp);
+        //  invBlockMatcherFilter->SetMinimumVerticalDisparity(0);
+        //  invBlockMatcherFilter->SetMaximumVerticalDisparity(0);
 
-      bijectFilter->SetMinHDisp(minDisp);
-      bijectFilter->SetMaxHDisp(maxDisp);
-      bijectFilter->SetMinVDisp(0);
-      bijectFilter->SetMaxVDisp(0);
-             }
+        }
 
       // Compute disparity mask
       BandMathFilterType::Pointer dispMaskFilter = BandMathFilterType::New();
-      dispMaskFilter->SetNthInput(0, hMedianFilter->GetOutput(), "hdisp");
-
+      dispMaskFilter->SetNthInput(0, hDispOutput, "hdisp");
       dispMaskFilter->SetNthInput(1, finalMaskFilter->GetOutput(), "mask");
-
 
       std::ostringstream maskFormula;
       maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (mask>0";
       if (IsParameterEnabled("metrict"))
-      {
-                    dispMaskFilter->SetNthInput(2, subPixelFilter->GetMetricOutput(), "metric");
-                    maskFormula << ") and (metric >"<<this->GetParameterFloat("metrict");
-      }
+        {
+        dispMaskFilter->SetNthInput(2, subPixelFilterPointer->GetOutput(2), "metric");
+        maskFormula << ") and (metric ";
+        if (minimize == true)
+          {
+          maskFormula << " < " << this->GetParameterFloat("metrict");
+          }
+        else
+          {
+          maskFormula << " > " << this->GetParameterFloat("metrict");
+
+          }
+        }
       maskFormula << "),255,0)";
       otbAppLogINFO(<<"disparity mask formula :"<<std::endl<<maskFormula.str());
       dispMaskFilter->SetExpression(maskFormula.str());
       m_Filters.push_back(dispMaskFilter.GetPointer());
-
       //TODO to check
       disparityTranslateFilter->SetDisparityMaskInput(dispMaskFilter->GetOutput());
+      // disparityTo3DFilter->SetDisparityMaskInput(dispMaskFilter->GetOutput());
 
       m_Multi3DMapToDEMFilter->Set3DMapInput(i, m_MultiDisparityTo3DFilterList[i]->GetOutput());
+
       //TODO JGT Check if mask is necessary
 
       }
 
     m_Multi3DMapToDEMFilter->SetOutputParametersFrom3DMap();
     m_Multi3DMapToDEMFilter->SetDEMGridStep(this->GetParameterFloat("res"));
-    m_Multi3DMapToDEMFilter ->SetCellFusionMode(1); //maxfiltering
+    m_Multi3DMapToDEMFilter ->SetCellFusionMode(otb::CellFusionMode::MAX);
     m_Multi3DMapToDEMFilter->UpdateOutputInformation();
 
     SetParameterOutputImage("out", m_Multi3DMapToDEMFilter->GetOutput());
