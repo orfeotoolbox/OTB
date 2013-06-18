@@ -316,7 +316,7 @@ DatasetModel
 
     // Always parse alias
     ParseAlias();
-    
+
     // Parse center point and zoom level
     ParseImageViewContext();
 

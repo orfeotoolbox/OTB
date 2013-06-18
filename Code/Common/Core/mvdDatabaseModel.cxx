@@ -289,11 +289,7 @@ DatabaseModel
     assert( I18nCoreApplication::ConstInstance() );
 
     DatasetModel::BuildContext context(
-      I18nCoreApplication::ConstInstance()->GetCacheDir().path(),
-      id,
-      id,
-      false
-    );
+      I18nCoreApplication::ConstInstance()->GetCacheDir().path(), id );
 
     datasetModel->BuildModel( &context );
     }
@@ -335,6 +331,8 @@ DatabaseModel
     {
     try
       {
+      // DatasetModel::checkVersionCompliance( *it );
+
       DatasetModel* datasetModel = NewDatasetModel( *it );
       assert( datasetModel!=NULL );
 

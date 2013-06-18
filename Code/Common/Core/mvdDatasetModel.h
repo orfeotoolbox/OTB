@@ -97,21 +97,35 @@ public:
     //
     // Public methods.
   public:
+
+    // Constructor used when importing.
     BuildContext( const QString& path,
 		  const QString& name,
-                  const QString& alias,
-		  bool isLoadSubModelsEnabled,
-		  int width =-1,
-		  int height =-1 ) :
+		  const QString& alias,
+		  int width,
+		  int height ) :
       m_Path( path ),
       m_Name( name ),
       m_Alias( alias),
       m_Width( width ),
       m_Height( height ),
-      m_IsLoadSubModelsEnabled( isLoadSubModelsEnabled )
+      m_IsLoadSubModelsEnabled( true )
     {
     }
 
+    // Constructor used when pre-loading.
+    BuildContext( const QString& path,
+		  const QString& name ) :
+      m_Path( path ),
+      m_Name( name ),
+      m_Alias(),
+      m_Width( -1 ),
+      m_Height( -1 ),
+      m_IsLoadSubModelsEnabled( false )
+    {
+    }
+
+    // Constructor used when selecting.
     BuildContext( int width, int height ) :
       m_Path(),
       m_Name(),
