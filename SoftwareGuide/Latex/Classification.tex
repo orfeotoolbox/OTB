@@ -1,4 +1,5 @@
 \chapter{Classification}
+
 \section{Introduction}
 
 In statistical classification, each object is represented by $d$ features (a
@@ -53,14 +54,11 @@ Note that to use these concepts into your own programs, you might have to link
 to other OTB libraries (edit the \code{TARGET\_LINK\_LIBRARIES} to add them),
 for example OTBLearning, OTBMarkov.
 
-\subsection{k-d Tree Based k-Means Clustering}
-\label{sec:KdTreeBasedKMeansClustering}
-\ifitkFullVersion
-\input{KdTreeBasedKMeansClustering.tex}
-\fi
+\section{Unsupervised classification}
 
 \subsection{K-Means Classification}
 \label{sec:KMeansClassifier}
+
 \subsubsection{Simple version}
 \ifitkFullVersion
 \input{ScalarImageKmeansClassifier.tex}
@@ -74,6 +72,33 @@ for example OTBLearning, OTBMarkov.
 \input{KMeansImageClassificationExample.tex}
 \fi
 
+\subsubsection{k-d Tree Based k-Means Clustering}
+\label{sec:KdTreeBasedKMeansClustering}
+\ifitkFullVersion
+\input{KdTreeBasedKMeansClustering.tex}
+\fi
+
+\subsection{Kohonen's Self Organizing Map}
+\label{sec:SOM}
+\input{Kohonen}
+%%%1. Construction SOM
+\subsubsection{Building a color table}
+\label{sec:SOMColorTable}
+\input{SOMExample}
+\subsubsection{SOM Classification}
+\label{sec:SOMClassification}
+\input{SOMClassifierExample}
+
+\subsubsection{Multi-band, streamed classification}
+
+\ifitkFullVersion
+\input{SOMImageClassificationExample.tex}
+\fi
+
+%%%2. Lecture SOM et ensemble de vecteurs autre image pour construire
+%%%ActivationMAP 
+
+%\subsection{Bayesian classification}
 
 \subsection{Bayesian Plug-In Classifier}
 \label{sec:BayesianPluginClassifier}
@@ -89,6 +114,48 @@ for example OTBLearning, OTBMarkov.
 \ifitkFullVersion 
 \input{ExpectationMaximizationMixtureModelEstimator.tex}
 \fi
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Statistical Segmentations}
+\label{sec:StatisticalSegmentations}
+
+%\subsection{Markov Random Fields}
+
+\subsubsection{Stochastic Expectation Maximization}
+\label{sec:SEM}
+
+The Stochastic Expectation Maximization (SEM) approach is a stochastic 
+version of the EM mixture estimation seen on
+section~\ref{sec:ExpectationMaximizationMixtureModelEstimation}. It has been 
+introduced by \cite{CeDi95} to prevent convergence of the EM approach from
+local minima. It avoids the analytical maximization issued by integrating a
+stochastic sampling procedure in the estimation process. It induces an almost
+sure (a.s.) convergence to the algorithm.
+
+From the initial two step formulation of the EM mixture estimation, the SEM
+may be decomposed into 3 steps:
+\begin{enumerate}
+\item \textbf{E-step}, calculates the expected membership values for each 
+measurement vector to each classes.
+\item \textbf{S-step}, performs a stochastic sampling of the membership vector
+to each classes, according to the membership values computed in the E-step.
+\item \textbf{M-step}, updates the parameters of the membership probabilities
+(parameters to be defined through the class
+\subdoxygen{itk}{Statistics}{ModelComponentBase} and its inherited classes).
+\end{enumerate}
+The implementation of the SEM has been turned to a contextual SEM in the sense
+where the evaluation of the membership parameters is conditioned to
+membership values of the spatial neighborhood of each pixels.
+
+\ifitkFullVersion 
+\input{SEMModelEstimatorExample.tex}
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Classification using Markov Random Fields}
 \label{sec:MarkovRandomField}
@@ -148,45 +215,14 @@ own framework.
 \input{MarkovRegularizationExample.tex}
 \fi 
 
+\section{Supervised classification}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Statistical Segmentations}
-\label{sec:StatisticalSegmentations}
-
-%\subsection{Markov Random Fields}
-
-\subsection{Stochastic Expectation Maximization}
-\label{sec:SEM}
-
-The Stochastic Expectation Maximization (SEM) approach is a stochastic 
-version of the EM mixture estimation seen on
-section~\ref{sec:ExpectationMaximizationMixtureModelEstimation}. It has been 
-introduced by \cite{CeDi95} to prevent convergence of the EM approach from
-local minima. It avoids the analytical maximization issued by integrating a
-stochastic sampling procedure in the estimation process. It induces an almost
-sure (a.s.) convergence to the algorithm.
-
-From the initial two step formulation of the EM mixture estimation, the SEM
-may be decomposed into 3 steps:
-\begin{enumerate}
-\item \textbf{E-step}, calculates the expected membership values for each 
-measurement vector to each classes.
-\item \textbf{S-step}, performs a stochastic sampling of the membership vector
-to each classes, according to the membership values computed in the E-step.
-\item \textbf{M-step}, updates the parameters of the membership probabilities
-(parameters to be defined through the class
-\subdoxygen{itk}{Statistics}{ModelComponentBase} and its inherited classes).
-\end{enumerate}
-The implementation of the SEM has been turned to a contextual SEM in the sense
-where the evaluation of the membership parameters is conditioned to
-membership values of the spatial neighborhood of each pixels.
-
-\ifitkFullVersion 
-\input{SEMModelEstimatorExample.tex}
-\fi
+\subsection{Learning from samples}
+todo
+\subsection{Learning from images}
+todo
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Support Vector Machines}
 \label{sec:SupportVectorMachines}
@@ -399,22 +435,4 @@ presented in section \ref{sec:KullbackLeiblerProfile}.
 \fi
 
 
-\section{Kohonen's Self Organizing Map}
-\label{sec:SOM}
-\input{Kohonen}
-%%%1. Construction SOM
-\subsection{Building a color table}
-\label{sec:SOMColorTable}
-\input{SOMExample}
-\subsection{SOM Classification}
-\label{sec:SOMClassification}
-\input{SOMClassifierExample}
 
-\subsection{Multi-band, streamed classification}
-
-\ifitkFullVersion
-\input{SOMImageClassificationExample.tex}
-\fi
-
-%%%2. Lecture SOM et ensemble de vecteurs autre image pour construire
-%%%ActivationMAP 
