@@ -96,9 +96,10 @@ public:
 
   typedef otb::Image<FloatVectorImageType::InternalPixelType, 2> ImageReaderType;
 
-  typedef FloatVectorImageType::PixelType PixelType;
-  typedef FloatVectorImageType VectorImageType;
-  typedef FloatImageType ImageType;
+  typedef FloatVectorImageType::PixelType         PixelType;
+  typedef FloatVectorImageType::InternalPixelType InternalPixelType;
+  typedef FloatVectorImageType                    VectorImageType;
+  typedef FloatImageType                          ImageType;
 
   // Training vectordata
   typedef itk::VariableLengthVector<ImageType::PixelType> MeasurementType;
@@ -119,20 +120,20 @@ public:
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 
   // Machine Learning models
-  typedef otb::MachineLearningModelFactory<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> MachineLearningModelFactoryType;
+  typedef otb::MachineLearningModelFactory<InternalPixelType, ListSampleGeneratorType::ClassLabelType> MachineLearningModelFactoryType;
   typedef MachineLearningModelFactoryType::MachineLearningModelTypePointer ModelPointerType;
   
 #ifdef OTB_USE_OPENCV
-  typedef otb::RandomForestsMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> RandomForestType;
-  typedef otb::KNearestNeighborsMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> KNNType;
-  typedef otb::SVMMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> SVMType;
-  typedef otb::BoostMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> BoostType;
-  typedef otb::DecisionTreeMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> DecisionTreeType;
-  typedef otb::GradientBoostedTreeMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> GradientBoostedTreeType;
-  typedef otb::NeuralNetworkMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> NeuralNetworkType;
-  typedef otb::NormalBayesMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> NormalBayesType;
+  typedef otb::RandomForestsMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> RandomForestType;
+  typedef otb::KNearestNeighborsMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> KNNType;
+  typedef otb::SVMMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> SVMType;
+  typedef otb::BoostMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> BoostType;
+  typedef otb::DecisionTreeMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> DecisionTreeType;
+  typedef otb::GradientBoostedTreeMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> GradientBoostedTreeType;
+  typedef otb::NeuralNetworkMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> NeuralNetworkType;
+  typedef otb::NormalBayesMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> NormalBayesType;
 #endif
-  typedef otb::LibSVMMachineLearningModel<ImageType::PixelType, ListSampleGeneratorType::ClassLabelType> LibSVMType;
+  typedef otb::LibSVMMachineLearningModel<InternalPixelType, ListSampleGeneratorType::ClassLabelType> LibSVMType;
   
   // Estimate performance on validation sample
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType, LabelListSampleType> ConfusionMatrixCalculatorType;
