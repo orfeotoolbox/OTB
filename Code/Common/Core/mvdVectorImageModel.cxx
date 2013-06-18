@@ -49,7 +49,6 @@
 #include "mvdQuicklookModel.h"
 
 
-
 namespace mvd
 {
 /*
@@ -148,7 +147,7 @@ VectorImageModel
     // the current file doesn't have overviews available and the ImageIO doesn't support overviews
     throw std::runtime_error(
       ToStdString(
-	tr( "The ImageIO used to read this file doesn't support Overviews." )
+  tr( "The ImageIO used to read this file doesn't support Overviews." )
       )
     );
     }
@@ -203,7 +202,7 @@ VectorImageModel
     // The user can continue to use the file so we return a warning message
     // TODO MSD return the message to the log widget
     qWarning() << tr( "The overviews creation failed.\n"
-		    "Navigation in resolution will be slower." );
+        "Navigation in resolution will be slower." );
 
     // throw exc;
     }
@@ -274,11 +273,11 @@ VectorImageModel
   assert( metaData->GetDefaultDisplay().size()==3 );
 #if 0
   assert( metaData->GetDefaultDisplay()[ 0 ]
-	  < m_Image->GetNumberOfComponentsPerPixel() );
+    < m_Image->GetNumberOfComponentsPerPixel() );
   assert( metaData->GetDefaultDisplay()[ 1 ]
-	  < m_Image->GetNumberOfComponentsPerPixel() );
+    < m_Image->GetNumberOfComponentsPerPixel() );
   assert( metaData->GetDefaultDisplay()[ 2 ]
-	  < m_Image->GetNumberOfComponentsPerPixel() );
+    < m_Image->GetNumberOfComponentsPerPixel() );
 #endif
 
   // Patch invalid band indices of default-display (see OTB bug).
@@ -400,8 +399,8 @@ VectorImageModel
 
     // if the first time or no pixels in common , reload all
     if ( res &&
-	 m_PreviousRegion!=ImageRegionType() &&
-	 GetSettings().IsApplied() &&
+   m_PreviousRegion!=ImageRegionType() &&
+   GetSettings().IsApplied() &&
          !refresh )
       {
       // Compute loaded region, and the four regions not loaded yet
@@ -984,7 +983,7 @@ VectorImageModel
       {
       //
       // get the pixel at current index
-      currentPixel = ToImage()->GetPixel(currentLodIndex);      
+      currentPixel = ToImage()->GetPixel(currentLodIndex);
 
       ossRadio <<ToStdString( tr("Radiometry") )<<" : [ ";
       for (unsigned int idx = 0; idx < rgb.size(); idx++)
@@ -1065,7 +1064,7 @@ VectorImageModel
     double Xpc = index[0] * vcl_abs( GetNativeSpacing()[0] ) + GetOrigin()[0];
     double Ypc = index[1] * vcl_abs( GetNativeSpacing()[1] ) + GetOrigin()[1];
 
-    emit ViewportRegionChanged( Xpc, Ypc );      
+    emit ViewportRegionChanged( Xpc, Ypc );
     }
 }
 
