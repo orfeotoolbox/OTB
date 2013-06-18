@@ -26,10 +26,10 @@ void TrainImagesClassifier::DoInit()
 {
   SetName("TrainImagesClassifier");
   SetDescription(
-    "Train a classifier (available in OpenCV machine learning) from multiple pairs of images and training vector data.");
+    "Train a classifier from multiple pairs of images and training vector data.");
 
   // Documentation
-  SetDocName("Train an OpenCV classifier from multiple images");
+  SetDocName("Train a classifier from multiple images");
   SetDocLongDescription(
     "This application performs a classifier training from multiple pairs of input images and training vector data. "
     "Samples are composed of pixel values in each band optionally centered and reduced using an XML statistics file produced by "
@@ -40,7 +40,8 @@ void TrainImagesClassifier::DoInit()
     "validation sets per class and per image.\n Several classifier parameters can be set depending on the chosen classifier. In the "
     "validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels. "
     "In the header of the optional confusion matrix output file, the validation (reference) and predicted (produced) class labels"
-    " are ordered according to the rows/columns of the confusion matrix.");
+    " are ordered according to the rows/columns of the confusion matrix.\n This application is based on LibSVM and on OpenCV Machine Learning "
+    "classifiers, and is compatible with OpenCV 2.3.1 and later.");
   SetDocLimitations("None");
   SetDocAuthors("OTB-Team");
   SetDocSeeAlso("OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html ");
@@ -72,14 +73,14 @@ void TrainImagesClassifier::DoInit()
   SetParameterDescription("sample",
                           "This group of parameters allows to set training and validation sample lists parameters.");
 
-  AddParameter(ParameterType_Int, "sample.mt", "Maximum training sample size");
+  AddParameter(ParameterType_Int, "sample.mt", "Maximum training sample size per class");
   //MandatoryOff("mt");
   SetDefaultParameterInt("sample.mt", 1000);
-  SetParameterDescription("sample.mt", "Maximum size of the training sample list (default = 1000) (no limit = -1).");
-  AddParameter(ParameterType_Int, "sample.mv", "Maximum validation sample size");
+  SetParameterDescription("sample.mt", "Maximum size per class (in pixels) of the training sample list (default = 1000) (no limit = -1). If equal to -1, then the maximal size of the available training sample list per class will be equal to the surface area of the smallest class multiplied by the training sample ratio.");
+  AddParameter(ParameterType_Int, "sample.mv", "Maximum validation sample size per class");
   // MandatoryOff("mv");
   SetDefaultParameterInt("sample.mv", 1000);
-  SetParameterDescription("sample.mv", "Maximum size of the validation sample list (default = 1000) (no limit = -1).");
+  SetParameterDescription("sample.mv", "Maximum size per class (in pixels) of the validation sample list (default = 1000) (no limit = -1). If equal to -1, then the maximal size of the available validation sample list per class will be equal to the surface area of the smallest class multiplied by the validation sample ratio.");
 
   AddParameter(ParameterType_Empty, "sample.edg", "On edge pixel inclusion");
   SetParameterDescription("sample.edg",
@@ -436,7 +437,7 @@ void TrainImagesClassifier::DoExecute()
     }
   else
     {
-    otbAppLogWARNING("The validation set is empty!Performance estimation is done using the input training set in this case.");
+    otbAppLogWARNING("The validation set is empty. The performance estimation is done using the input training set in this case.");
     performanceListSample = trainingListSample;
     performanceLabeledListSample = trainingLabeledListSample;
     }
