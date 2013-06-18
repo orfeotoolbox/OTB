@@ -217,7 +217,6 @@ public:
     itkGetConstReferenceMacro(Margin, SizeType);
 
 
-
 protected:
   /** Constructor */
   Multi3DMapToDEMFilter();
