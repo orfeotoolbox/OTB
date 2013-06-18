@@ -121,6 +121,7 @@ private:
   Ui::PreferencesDialog* m_UI;
 
   bool m_ElevationSetupModified;
+  bool m_ResultsDirModified;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -142,6 +143,8 @@ private slots:
   void on_srtmButton_clicked();
 
   void on_geoidButton_clicked();
+
+  void on_resultDirButton_clicked();
 
 
 };

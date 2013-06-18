@@ -93,8 +93,7 @@ I18nCoreApplication
     fileInfo.exists() &&
     fileInfo.isDir() &&
     fileInfo.isReadable() &&
-    fileInfo.isWritable() &&
-    dir.dirName()==I18nCoreApplication::DEFAULT_CACHE_RESULT_DIR_NAME;
+    fileInfo.isWritable();
 }
 
 /*******************************************************************************/

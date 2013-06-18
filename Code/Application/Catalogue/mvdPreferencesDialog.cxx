@@ -68,7 +68,8 @@ PreferencesDialog
 ::PreferencesDialog( QWidget* parent, Qt::WindowFlags flags ) :
   QDialog( parent ),
   m_UI( new mvd::Ui::PreferencesDialog() ),
-  m_ElevationSetupModified(false)
+  m_ElevationSetupModified(false),
+  m_ResultsDirModified(false)
 {
   m_UI->setupUi( this );
   
@@ -77,6 +78,11 @@ PreferencesDialog
     {
     m_UI->cacheDirPathLineEdit->setText( settings.value( "cacheDir" ).toString() );
     }
+  if ( settings.contains("resultsDir") )
+    {
+    m_UI->resultDirPathLineEdit->setText( settings.value( "resultsDir" ).toString() );
+    }
+  
   if(settings.contains("srtmDir"))
     {
     m_UI->srtmLineEdit->setText(settings.value("srtmDir").toString());
@@ -138,6 +144,14 @@ PreferencesDialog
     I18nApplication::Instance()->WriteCacheDirIntoSettings();
     }
 #endif
+
+  if(m_ResultsDirModified)
+    {
+    // Set the result dir
+    I18nApplication::Instance()->StoreSettingsKey("resultsDir",QDir::cleanPath(m_UI->resultDirPathLineEdit->text()));
+    
+    m_ResultsDirModified = false;
+    }
 
   I18nApplication::Instance()->StoreSettingsKey( "srtmDir", QDir::cleanPath( m_UI->srtmLineEdit->text() ) );
   I18nApplication::Instance()->StoreSettingsKey( "geoidPath", m_UI->geoidLineEdit->text() );
@@ -215,6 +229,30 @@ void PreferencesDialog
       }
     }
 }
+
+
+void PreferencesDialog
+::on_resultDirButton_clicked()
+{
+  while (true)
+    {
+    QString resultsDirStr = I18nMainWindow::GetExistingDirectory(
+        this,
+        tr("Select the default directory for results data: "));
+    if (resultsDirStr.isEmpty())
+      { // User push default button => don't modify the value
+      break;
+      }
+    else
+      { // User select something, test if it is correct
+        QDir displayedDir (resultsDirStr);
+        m_UI->resultDirPathLineEdit->setText(displayedDir.absolutePath());
+        m_ResultsDirModified = true;
+        break;
+      }
+    }
+}
+
 
 /*******************************************************************************/
 
