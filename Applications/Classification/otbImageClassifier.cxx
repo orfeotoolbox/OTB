@@ -51,7 +51,7 @@ public:
   typedef itk::VariableLengthVector<FloatVectorImageType::InternalPixelType>            MeasurementType;
   typedef otb::StatisticsXMLFileReader<MeasurementType>                                 StatisticsReader;
   typedef otb::ShiftScaleVectorImageFilter<FloatVectorImageType, FloatVectorImageType>  RescalerType;
-  typedef otb::ImageClassificationFilter<FloatVectorImageType, UInt8ImageType>          ClassificationFilterType;
+  typedef otb::ImageClassificationFilter<FloatVectorImageType, UInt32ImageType>         ClassificationFilterType;
   typedef ClassificationFilterType::Pointer                                             ClassificationFilterPointerType;
   typedef ClassificationFilterType::ModelType                                           ModelType;
   typedef ModelType::Pointer                                                            ModelPointerType;
@@ -158,12 +158,12 @@ private:
       {
       otbAppLogINFO("Using input mask");
       // Load mask image and cast into LabeledImageType
-      UInt8ImageType::Pointer inMask = GetParameterUInt8Image("mask");
+      UInt32ImageType::Pointer inMask = GetParameterUInt32Image("mask");
 
       m_ClassificationFilter->SetInputMask(inMask);
       }
 
-    SetParameterOutputImage<UInt8ImageType>("out", m_ClassificationFilter->GetOutput());
+    SetParameterOutputImage<UInt32ImageType>("out", m_ClassificationFilter->GetOutput());
   }
 
   ClassificationFilterType::Pointer m_ClassificationFilter;
