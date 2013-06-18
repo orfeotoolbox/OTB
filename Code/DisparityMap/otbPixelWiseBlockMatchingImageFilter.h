@@ -60,6 +60,51 @@ public:
     return ssd;
   }
 };
+
+
+/** \class SSDDivMeanBlockMatching
+ *  \brief Functor to perform derived SSD block-matching (SSD divided by mean)
+ *
+ *  This functor is designed to work with the
+ *  PixelWiseBlockMatchingImageFilter. It performs derived
+ *  SSD (Sum of Square Distances) block-matching. The functor is
+ *  templated by the type of inputs images and output metric image,
+ *  and is using two neighborhood iterators as inputs.
+ */
+template <class TInputImage, class TOutputMetricImage>
+ITK_EXPORT class SSDDivMeanBlockMatching
+{
+public:
+  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
+  typedef typename TOutputMetricImage::ValueType      MetricValueType;
+
+  // Implement the SSD DivMean operator
+  inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
+  {
+    MetricValueType ssd = 0;
+    MetricValueType meana = 0;
+    MetricValueType meanb = 0;
+
+    for(unsigned int i = 0; i<a.Size(); ++i)
+      {
+      meana+=a.GetPixel(i);
+      meanb+=b.GetPixel(i);
+      }
+    meana/=a.Size();
+    meanb/=b.Size();
+
+    // For some reason, iterators do not work on neighborhoods
+    for(unsigned int i = 0; i<a.Size(); ++i)
+      {
+      ssd += (a.GetPixel(i)/meana-b.GetPixel(i)/meanb)*(a.GetPixel(i)/meana-b.GetPixel(i)/meanb);
+
+      }
+
+    return ssd;
+  }
+};
+
+
 /** \class NCCBlockMatching
  *  \brief Functor to perform simple NCC block-matching
  *
