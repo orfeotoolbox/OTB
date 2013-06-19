@@ -32,7 +32,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OssimAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/TinyXMLAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OGRAdapters
-  ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OpenCV
+  ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OpenCVAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/ITKPendingPatches
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters
   ${OTB_SOURCE_DIR}/Code/Visu
@@ -289,7 +289,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   UtilitiesAdapters/OssimAdapters
   UtilitiesAdapters/TinyXMLAdapters
   UtilitiesAdapters/OGRAdapters
-  UtilitiesAdapters/OpenCV
+  UtilitiesAdapters/OpenCVAdapters
   UtilitiesAdapters/ITKPendingPatches
   UtilitiesAdapters
   OBIA
