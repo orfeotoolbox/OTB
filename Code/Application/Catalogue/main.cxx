@@ -102,9 +102,9 @@ main( int argc, char* argv[] )
 	),
 	QCoreApplication::translate(
 	  PROJECT_NAME,
-	  "There are %1 outdated dataset(s) in cache-directory. "
+	  "There are %1 outdated dataset(s) in cache-directory.\n\n"
 	  "Please remove cache-directory and restart "
-	  PROJECT_NAME " " Monteverdi2_VERSION_STRING ".\n"
+	  PROJECT_NAME " " Monteverdi2_VERSION_STRING ".\n\n"
 	  "Do you want to quit now ?"
 	).arg( nb ),
 	QMessageBox::Yes | QMessageBox::No,
