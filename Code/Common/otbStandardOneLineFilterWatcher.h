@@ -59,13 +59,7 @@ public:
                         const std::string& comment = "");
 
   /** Default constructor */
-  StandardOneLineFilterWatcher() : m_StarsCount(0) {};
-
-  /** Copy constructor */
-  StandardOneLineFilterWatcher(const StandardOneLineFilterWatcher&);
-
-  /** operator=  */
-  void operator =(const StandardOneLineFilterWatcher&);
+  StandardOneLineFilterWatcher();
 
   /** Get/Set number of stars */
   void SetStars(int count)

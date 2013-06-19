@@ -24,36 +24,28 @@ namespace otb
 {
 
 StandardOneLineFilterWatcher
+::StandardOneLineFilterWatcher()
+  : m_StarsCount(50),
+    m_CurrentNbStars(-1)
+{
+}
+
+StandardOneLineFilterWatcher
 ::StandardOneLineFilterWatcher(itk::ProcessObject* process,
                         const char *comment)
-  : FilterWatcherBase(process, comment)
+  : FilterWatcherBase(process, comment),
+    m_StarsCount(50),
+    m_CurrentNbStars(-1)
 {
-  m_StarsCount = 50;
-  m_CurrentNbStars = -1;
 }
 
 StandardOneLineFilterWatcher
 ::StandardOneLineFilterWatcher(itk::ProcessObject* process,
                         const std::string& comment)
-  : FilterWatcherBase(process, comment.c_str())
+  : FilterWatcherBase(process, comment.c_str()),
+    m_StarsCount(50),
+    m_CurrentNbStars(-1)
 {
-  m_StarsCount = 50;
-}
-
-StandardOneLineFilterWatcher
-::StandardOneLineFilterWatcher(const StandardOneLineFilterWatcher& watch) : FilterWatcherBase(watch)
-{
-  // Initialize state
-  m_StarsCount = watch.m_StarsCount;
-}
-
-void
-StandardOneLineFilterWatcher
-::operator =(const StandardOneLineFilterWatcher& watch)
-{
-  // Initialize state
-  FilterWatcherBase::operator=(watch);
-  m_StarsCount = watch.m_StarsCount;
 }
 
 void
