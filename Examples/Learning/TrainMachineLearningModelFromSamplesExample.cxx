@@ -36,7 +36,7 @@
 #include "otbVectorDataIntoImageProjectionFilter.h"
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {Classification/QB_1_ortho.tif}, {VectorData_QB1.shp}
+//    INPUTS: {Classification/QB_1_ortho.tif}, {Classification/VectorData_QB1.shp}
 //    OUTPUTS: {clLIBSVMModelQB1.libsvm}
 //  Software Guide : EndCommandLineArgs
 
@@ -44,15 +44,13 @@
 // This example illustrates the use of the
 // \doxygen{otb}{MachineLearningModel} class. This class allows the
 // estimation of a classification model (supervised learning) from samples. In this example, we will train an SVM
-// to separate between water and non-water pixels by using the RGB
-// values only. The images used for this example are shown in
-// figure~\ref{fig:SVMROIS}.
+// with 4 classes. The images used for this example are shown in
+// figure~\ref{fig:QB_1_ortho}.
 // \begin{figure}
 // \center
-// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
-// \includegraphics[width=0.45\textwidth]{ROI_mask.eps}
-// \itkcaption[SVM Image Model Estimation]{Images used for the
-// estimation of the SVM model. Left: RGB image. Right: image of labels.}
+// \includegraphics[width=0.45\textwidth]{QB_1_ortho.eps}
+// \itkcaption[SVM Image Model Estimation]{Image used for the
+// estimation of the SVM model. QuickBird image}
 // \label{fig:SVMROIS}
 // \end{figure}
 // The first thing to do is include the header file for the class.
@@ -69,7 +67,6 @@ int main(int argc, char* argv[])
   typedef unsigned int InputPixelType;
   const unsigned int Dimension = 2;
 
-  
 
   typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
   typedef otb::Image<InputImageType::InternalPixelType, 2> ImageType;
