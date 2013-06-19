@@ -373,6 +373,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SEMModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageModelEstimatorExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Visualization/VisuExample1.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ImageToLabelToImage.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ShapeAttributeComputation.cxx
