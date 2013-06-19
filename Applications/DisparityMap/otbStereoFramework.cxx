@@ -522,9 +522,8 @@ private:
 
     subPixelFilter->SetInputsFromBlockMatchingFilter(blockMatcherFilter);
     subPixelFilter->SetRefineMethod(SubPixelFilterType::DICHOTOMY);
-    subPixelFilter->UpdateOutputInformation();
     subPixelFilter->SetLeftMaskInput(finalMask);
-
+    subPixelFilter->UpdateOutputInformation();
   }
 
 
@@ -800,8 +799,14 @@ private:
       m_Filters.push_back(lBandMathFilter.GetPointer());
 
       BandMathFilterType::Pointer finalMaskFilter;
-      finalMaskFilter = BandMathFilterType::New();
-      m_Filters.push_back(finalMaskFilter.GetPointer());
+      if (IsParameterEnabled("bij"))
+        {
+        finalMaskFilter = BandMathFilterType::New();
+        }
+      else
+        {
+        finalMaskFilter = lBandMathFilter;
+        }
 
       // Compute disparities
       FilterType* blockMatcherFilterPointer;
@@ -979,15 +984,15 @@ private:
         bijectFilter->SetMaxVDisp(0);
         m_Filters.push_back(bijectFilter.GetPointer());
 
+        //finalMaskFilter = BandMathFilterType::New();
         finalMaskFilter->SetNthInput(0, lBandMathFilter->GetOutput(), "inmask");
         finalMaskFilter->SetNthInput(1, bijectFilter->GetOutput(), "lrrl");
         finalMaskFilter->SetExpression("if(inmask > 0 and lrrl > 0, 255, 0)");
         //
+        m_Filters.push_back(finalMaskFilter.GetPointer());
+
         }
-      else
-        {
-        finalMaskFilter = lBandMathFilter;
-        }
+
 
       FloatImageType::Pointer hDispOutput = subPixelFilterPointer->GetOutput(0);
       if (IsParameterEnabled("med"))
