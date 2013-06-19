@@ -48,16 +48,18 @@ public:
   itkTypeMacro(ImageClassifier, otb::Application);
 
   /** Filters typedef */
-  typedef itk::VariableLengthVector<FloatVectorImageType::InternalPixelType>            MeasurementType;
-  typedef otb::StatisticsXMLFileReader<MeasurementType>                                 StatisticsReader;
-  typedef otb::ShiftScaleVectorImageFilter<FloatVectorImageType, FloatVectorImageType>  RescalerType;
-  typedef otb::ImageClassificationFilter<FloatVectorImageType, UInt32ImageType>         ClassificationFilterType;
-  typedef ClassificationFilterType::Pointer                                             ClassificationFilterPointerType;
-  typedef ClassificationFilterType::ModelType                                           ModelType;
-  typedef ModelType::Pointer                                                            ModelPointerType;
-  typedef ClassificationFilterType::ValueType ValueType;
-  typedef ClassificationFilterType::LabelType LabelType;
-  typedef otb::MachineLearningModelFactory<ValueType, LabelType> MachineLearningModelFactoryType;
+  typedef UInt16ImageType                                                                      OutputImageType;
+  typedef UInt8ImageType                                                                       MaskImageType;
+  typedef itk::VariableLengthVector<FloatVectorImageType::InternalPixelType>                   MeasurementType;
+  typedef otb::StatisticsXMLFileReader<MeasurementType>                                        StatisticsReader;
+  typedef otb::ShiftScaleVectorImageFilter<FloatVectorImageType, FloatVectorImageType>         RescalerType;
+  typedef otb::ImageClassificationFilter<FloatVectorImageType, OutputImageType, MaskImageType> ClassificationFilterType;
+  typedef ClassificationFilterType::Pointer                                                    ClassificationFilterPointerType;
+  typedef ClassificationFilterType::ModelType                                                  ModelType;
+  typedef ModelType::Pointer                                                                   ModelPointerType;
+  typedef ClassificationFilterType::ValueType                                                  ValueType;
+  typedef ClassificationFilterType::LabelType                                                  LabelType;
+  typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
 
 private:
   void DoInit()
@@ -67,7 +69,7 @@ private:
 
     // Documentation
     SetDocName("Image Classification");
-    SetDocLongDescription("This application performs an image classification based on a model file (*.txt extension) produced by the TrainImagesClassifier application. Pixels of the output image will contain the class label decided by the classifier. The input pixels can be optionnaly centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. The remaining of pixels will be given the label 0 in the output image.");
+    SetDocLongDescription("This application performs an image classification based on a model file produced by the TrainImagesClassifier application. Pixels of the output image will contain the class labels decided by the classifier (maximal class label = 65535). The input pixels can be optionally centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. The remaining of pixels will be given the label 0 in the output image.");
 
     SetDocLimitations("The input image must have the same type, order and number of bands than the images used to produce the statistics file and the SVM model file. If a statistics file was used during training by the TrainImagesClassifier, it is mandatory to use the same statistics file for classification. If an input mask is used, its size must match the input image size.");
     SetDocAuthors("OTB-Team");
@@ -83,7 +85,7 @@ private:
     MandatoryOff("mask");
 
     AddParameter(ParameterType_InputFilename, "model", "Model file");
-    SetParameterDescription("model", "A model file (*.txt extension, produced by TrainImagesClassifier application).");
+    SetParameterDescription("model", "A model file (produced by TrainImagesClassifier application, maximal class label = 65535).");
 
     AddParameter(ParameterType_InputFilename, "imstat", "Statistics file");
     SetParameterDescription("imstat", "A XML file containing mean and standard deviation to center and reduce samples before classification (produced by ComputeImagesStatistics application).");
@@ -158,12 +160,12 @@ private:
       {
       otbAppLogINFO("Using input mask");
       // Load mask image and cast into LabeledImageType
-      UInt32ImageType::Pointer inMask = GetParameterUInt32Image("mask");
+      MaskImageType::Pointer inMask = GetParameterUInt8Image("mask");
 
       m_ClassificationFilter->SetInputMask(inMask);
       }
 
-    SetParameterOutputImage<UInt32ImageType>("out", m_ClassificationFilter->GetOutput());
+    SetParameterOutputImage<OutputImageType>("out", m_ClassificationFilter->GetOutput());
   }
 
   ClassificationFilterType::Pointer m_ClassificationFilter;
