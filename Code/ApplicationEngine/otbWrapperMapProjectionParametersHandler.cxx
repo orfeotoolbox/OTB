@@ -254,6 +254,5 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
 
 
 
-
 }// End namespace Wrapper
 }// End namespace otb

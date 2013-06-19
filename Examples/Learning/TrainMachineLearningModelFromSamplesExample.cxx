@@ -79,11 +79,11 @@ int main(int argc, char* argv[])
 // \subdoxygen{itk}{Statistics}{ListSample}, we use the
 // \doxygen{otb}{ListSampleGenerator class}
 //
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 // VectorData projection filter
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, InputImageType> 
+  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, InputImageType>
                                               VectorDataReprojectionType;
 
   InputReaderType::Pointer    inputReader = InputReaderType::New();
@@ -116,7 +116,6 @@ int main(int argc, char* argv[])
   sampleGenerator->SetClassKey("Class");
 
   sampleGenerator->Update();
-
   // Software Guide : EndCodeSnippet
 
 
@@ -148,8 +147,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-  typedef otb::SVMMachineLearningModel<InputImageType::InternalPixelType, 
+  typedef otb::SVMMachineLearningModel<InputImageType::InternalPixelType,
                                        ListSampleGeneratorType::ClassLabelType> SVMType;
 
   SVMType::Pointer SVMClassifier = SVMType::New();
@@ -158,7 +156,6 @@ int main(int argc, char* argv[])
   SVMClassifier->SetTargetListSample(sampleGenerator->GetTrainingListLabel());
 
   SVMClassifier->SetKernelType(CvSVM::LINEAR);
-
   // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -170,10 +167,8 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   SVMClassifier->Train();
   SVMClassifier->Save(outputModelFileName);
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex

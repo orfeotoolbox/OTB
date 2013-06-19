@@ -838,7 +838,7 @@ private:
         {
         case 0: //NCC
           otbAppLogINFO(<<"use NCC Metric for BlockMatching.")
-         ;
+        ;
           NCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
           blockMatcherFilterPointer = NCCBlockMatcherFilter.GetPointer();
           m_Filters.push_back(blockMatcherFilterPointer);
@@ -868,7 +868,7 @@ private:
           break;
         case 1: //SSD
           otbAppLogINFO(<<"use SSD Metric for BlockMatching.")
-         ;
+        ;
 
           SSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
           blockMatcherFilterPointer = SSDBlockMatcherFilter.GetPointer();
@@ -900,7 +900,7 @@ private:
           break;
         case 2: //SSDDivMean
           otbAppLogINFO(<<"use robust SSD Metric for BlockMatching.")
-         ;
+        ;
 
           SSDDivMeanBlockMatcherFilter = SSDDivMeanBlockMatchingFilterType::New();
           blockMatcherFilterPointer = SSDDivMeanBlockMatcherFilter.GetPointer();
@@ -933,7 +933,7 @@ private:
           break;
         case 3: //LP
           otbAppLogINFO(<<"use Lp Metric for BlockMatching.")
-         ;
+        ;
 
           LPBlockMatcherFilter = LPBlockMatchingFilterType::New();
           LPBlockMatcherFilter->GetFunctor().SetP(static_cast<double> (GetParameterFloat("bm.metric.lp.p")));

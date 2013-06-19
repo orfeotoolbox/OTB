@@ -85,7 +85,7 @@ private:
     
     AddParameter(ParameterType_Int,  "roi.starty", "Start Y");
     SetDefaultParameterInt("roi.starty", 0);
-    SetMinimumParameterIntValue("roi.starty", 0);    
+    SetMinimumParameterIntValue("roi.starty", 0);
     SetParameterDescription("roi.starty", "ROI start y position.");
     
     AddParameter(ParameterType_Int,  "roi.sizex",  "Size X");
