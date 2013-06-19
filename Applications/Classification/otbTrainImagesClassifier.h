@@ -94,18 +94,14 @@ public:
 
   itkTypeMacro(TrainImagesClassifier, otb::Application)
 
-  typedef otb::Image<FloatVectorImageType::InternalPixelType, 2> ImageReaderType;
-
   typedef FloatVectorImageType::PixelType         PixelType;
   typedef FloatVectorImageType::InternalPixelType InternalPixelType;
-  typedef FloatVectorImageType                    VectorImageType;
-  typedef FloatImageType                          ImageType;
 
   // Training vectordata
-  typedef itk::VariableLengthVector<ImageType::PixelType> MeasurementType;
+  typedef itk::VariableLengthVector<InternalPixelType> MeasurementType;
 
   // SampleList manipulation
-  typedef otb::ListSampleGenerator<VectorImageType, VectorDataType> ListSampleGeneratorType;
+  typedef otb::ListSampleGenerator<FloatVectorImageType, VectorDataType> ListSampleGeneratorType;
 
   typedef ListSampleGeneratorType::ListSampleType ListSampleType;
   typedef ListSampleGeneratorType::LabelType LabelType;
@@ -146,7 +142,7 @@ public:
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
 
   // Extract ROI
-  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, VectorImageType> VectorDataReprojectionType;
+  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, FloatVectorImageType> VectorDataReprojectionType;
 
 protected:
   using Superclass::AddParameter;
