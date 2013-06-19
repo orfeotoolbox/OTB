@@ -36,7 +36,7 @@
 #include "otbVectorDataIntoImageProjectionFilter.h"
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {Classification/QB_1_ortho.tif}, {Classification/VectorData_QB1.shp}
+//    INPUTS: {QB_1_ortho.tif}, {VectorData_QB1.shp}
 //    OUTPUTS: {clLIBSVMModelQB1.libsvm}
 //  Software Guide : EndCommandLineArgs
 
@@ -44,16 +44,7 @@
 // This example illustrates the use of the
 // \doxygen{otb}{MachineLearningModel} class. This class allows the
 // estimation of a classification model (supervised learning) from samples. In this example, we will train an SVM
-// with 4 classes. The images used for this example are shown in
-// figure~\ref{fig:QB_1_ortho}.
-// \begin{figure}
-// \center
-// \includegraphics[width=0.45\textwidth]{QB_1_ortho.eps}
-// \itkcaption[SVM Image Model Estimation]{Image used for the
-// estimation of the SVM model. QuickBird image}
-// \label{fig:SVMROIS}
-// \end{figure}
-// The first thing to do is include the header file for the class.
+// with 4 classes.
 //
 //  Software Guide : EndLatex
 
@@ -76,8 +67,24 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileReader<InputImageType>    InputReaderType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
 
-  // VectorData projection filter
-  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, InputImageType> VectorDataReprojectionType;
+// Software Guide : BeginLatex
+//
+// In this framework, we must transformed the input samples store in a vector
+// data into a \subdoxygen{itk}{Statistics}{ListSample} which is the structure
+// compatible with the machine learning classes. We are using feature vectors
+// for the characterisation of the class and on the other hand the class labels
+// are scalar values.  We first re-project the input vector data using the
+// \doxygen{otb}{VectorDataIntoImageProjectionFilter} class.  To convert the
+// input samples store in a vector data into a
+// \subdoxygen{itk}{Statistics}{ListSample}, we use the
+// \doxygen{otb}{ListSampleGenerator class}
+//
+// Software Guide : EndLatex 
+// VectorData projection filter
+
+// Software Guide : BeginCodeSnippet
+  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, InputImageType> 
+                                              VectorDataReprojectionType;
 
   InputReaderType::Pointer    inputReader = InputReaderType::New();
   inputReader->SetFileName(inputImageFileName);
@@ -110,7 +117,10 @@ int main(int argc, char* argv[])
 
   sampleGenerator->Update();
 
-  std::cout << "Number of classes: " << sampleGenerator->GetNumberOfClasses() << std::endl;
+  // Software Guide : EndCodeSnippet
+
+
+  //std::cout << "Number of classes: " << sampleGenerator->GetNumberOfClasses() << std::endl;
 
   // typedef ListSampleGeneratorType::ListSampleType ListSampleType;
   // typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
@@ -122,18 +132,59 @@ int main(int argc, char* argv[])
   // trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
   // trainingShiftScaleFilter->Update();
 
-  ListSampleGeneratorType::ListSamplePointerType samples = sampleGenerator->GetTrainingListSample();
-  ListSampleGeneratorType::ListLabelPointerType  labels = sampleGenerator->GetTrainingListLabel();
+
+// Software Guide : BeginLatex
+//
+// Now, we need to declare the machine learning model which is to be used by the
+// classifier. In this case we train a SVM model, the
+// \doxygen{otb}{SVMMachineLearningModel} class inherates from the pure virtual
+// class \doxygen{otb}{MachineLearningModel} which is templated over the type of
+// value used for the measures and the type of pixel used for the labels.  Most
+// of the classification and regression algorithms available through this
+// interface in OTB is based on the OpenCV library \cite{opencv_library}.  Specific methods
+// allow to set classifier parameters. In the case of SVM, we set here the type
+// of the kernel. Other parameters are let with their default values.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
 
   typedef otb::SVMMachineLearningModel<InputImageType::InternalPixelType, ListSampleGeneratorType::ClassLabelType> SVMType;
 
   SVMType::Pointer SVMClassifier = SVMType::New();
-  SVMClassifier->SetInputListSample(samples);
-  SVMClassifier->SetTargetListSample(labels);
+
+  SVMClassifier->SetInputListSample(sampleGenerator->GetTrainingListSample());
+  SVMClassifier->SetTargetListSample(sampleGenerator->GetTrainingListLabel());
 
   SVMClassifier->SetKernelType(CvSVM::LINEAR);
 
+  // Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// The machine learning interface is generic and give access to We now train the
+// SVM model using the \code{Train} and save the model to a text file using the
+// \code{Save} method.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
+
   SVMClassifier->Train();
   SVMClassifier->Save(outputModelFileName);
+
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+
+// You can now use the \code{Predict} method which takes a
+// \subdoxygen{itk}{Statistics}{ListSample} as input and estimate the label of the
+// input sample using the model. Finallyse the
+// \doxygen{otb}{ImageClassificationModel} which inherates from the
+// \doxygen{itk}{ImageToImageFilter} and allow to classify pixels in the
+// input image and predict their labels using a model.
+//
+// Software Guide : EndLatex
+
 }
 
