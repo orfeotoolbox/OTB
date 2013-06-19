@@ -41,7 +41,13 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
  m_TermCriteriaType(CV_TERMCRIT_ITER),
  m_MaxIter(1000),
  m_Epsilon(FLT_EPSILON),
- m_ParameterOptimization(false)
+ m_ParameterOptimization(false),
+ m_OutputDegree(0),
+ m_OutputGamma(1),
+ m_OutputCoef0(0),
+ m_OutputC(1),
+ m_OutputNu(0),
+ m_OutputP(0)
 {
 }
 
