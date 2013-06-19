@@ -32,7 +32,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OssimAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/TinyXMLAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OGRAdapters
-  ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OpenCVAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/ITKPendingPatches
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters
   ${OTB_SOURCE_DIR}/Code/Visu
@@ -49,6 +48,11 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbedison/edge
   ${OTB_SOURCE_DIR}/Utilities/otbconfigfile
 )
+
+IF(OTB_USE_OPENCV)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+      ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OpenCVAdapters )
+ENDIF()
 
 IF(OTB_WRAP_QT) 
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
@@ -304,6 +308,11 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/otbedison
   Utilities/otbconfigfile
 )
+
+IF(OTB_USE_OPENCV)
+  SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
+      UtilitiesAdapters/OpenCVAdapters )
+ENDIF()
 
 IF(OTB_WRAP_QT) 
   SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
