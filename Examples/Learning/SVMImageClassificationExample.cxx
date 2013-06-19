@@ -49,8 +49,11 @@
 //  Software Guide : EndLatex
 
 #include "itkImageToListAdaptor.h"
+
+// Software Guide : BeginCodeSnippet
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
+// Software Guide : EndCodeSnippet
 
 int main(int argc, char* argv[])
 {
