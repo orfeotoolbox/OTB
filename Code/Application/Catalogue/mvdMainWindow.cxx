@@ -702,6 +702,20 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
+#define ENABLE_QTOOLBAR_TEST 1
+#if ENABLE_QTOOLBAR_TEST
+  // XP: QToolBar test.
+  QDockWidget* dock =
+    AddWidgetToDock(
+      m_UI->m_ToolBar,
+      "TOOL_BAR",
+      tr( "Tool bar" ),
+      Qt::TopDockWidgetArea
+    );
+
+  m_UI->menu_View->addAction( dock->toggleViewAction() );
+#endif
+
   //
   // Left pane.
 
