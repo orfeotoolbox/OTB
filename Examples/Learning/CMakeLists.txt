@@ -45,9 +45,8 @@ ADD_EXECUTABLE(SVMGenericKernelImageClassificationExample SVMGenericKernelImageC
 TARGET_LINK_LIBRARIES(SVMGenericKernelImageClassificationExample OTBLearning OTBCommon OTBIO)
 
 #MachineLearningModel framework example
-ADD_EXECUTABLE(TrainMachineLearningModelFromSamplesExample TrainMachineLearningModelFromSamplesExample.cxx)
-
 IF(OTB_USE_OPENCV)
+  ADD_EXECUTABLE(TrainMachineLearningModelFromSamplesExample TrainMachineLearningModelFromSamplesExample.cxx)
   TARGET_LINK_LIBRARIES(TrainMachineLearningModelFromSamplesExample OTBLearning OTBCommon OTBIO OTBMachineLearning)
 ENDIF(OTB_USE_OPENCV)
 
