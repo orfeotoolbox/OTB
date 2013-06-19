@@ -270,9 +270,30 @@ IsVersionLess( const QString& v0, const QString& v1 )
   assert( V1List.size()>=3 );
 
   return
-    V0List[ 0 ].toInt() < V1List[ 0 ].toInt() &&
-    V0List[ 1 ].toInt() < V1List[ 1 ].toInt() &&
-    V0List[ 2 ].toInt() < V1List[ 2 ].toInt();
+    V0List[ 0 ].toInt() < V1List[ 0 ].toInt() ||
+
+    ( V0List[ 0 ].toInt() == V1List[ 0 ].toInt() &&
+      V0List[ 1 ].toInt() < V1List[ 1 ].toInt() ) ||
+
+    ( V0List[ 1 ].toInt() == V1List[ 1 ].toInt() &&
+      V0List[ 2 ].toInt() < V1List[ 2 ].toInt() );
+}
+
+/*****************************************************************************/
+inline
+bool
+IsVersionEqual( const QString& v0, const QString& v1 )
+{
+  QStringList V0List( v0.split( "." ) );
+  assert( V0List.size()>=3 );
+
+  QStringList V1List( v1.split( "." ) );
+  assert( V1List.size()>=3 );
+
+  return
+    V0List[ 0 ].toInt() == V1List[ 0 ].toInt() &&
+    V0List[ 1 ].toInt() == V1List[ 1 ].toInt() &&
+    V0List[ 2 ].toInt() == V1List[ 2 ].toInt();
 }
 
 /*****************************************************************************/
@@ -280,7 +301,20 @@ inline
 bool
 IsVersionGreaterEqual( const QString& v0, const QString& v1 )
 {
-  return !IsVersionLess( v0, v1 );
+  QStringList V0List( v0.split( "." ) );
+  assert( V0List.size()>=3 );
+
+  QStringList V1List( v1.split( "." ) );
+  assert( V1List.size()>=3 );
+
+  return
+    V0List[ 0 ].toInt() > V1List[ 0 ].toInt() ||
+
+    ( V0List[ 0 ].toInt() == V1List[ 0 ].toInt() &&
+      V0List[ 1 ].toInt() > V1List[ 1 ].toInt() ) ||
+
+    ( V0List[ 1 ].toInt() == V1List[ 1 ].toInt() &&
+      V0List[ 2 ].toInt() >= V1List[ 2 ].toInt() );
 }
 
 } // end namespace 'mvd'.
