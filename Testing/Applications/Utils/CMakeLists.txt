@@ -233,10 +233,19 @@ OTB_TEST_APPLICATION(NAME apTvUtCompareImages
                              -roi.starty 15
                              -roi.sizex 150
                              -roi.sizey 200
-                             TESTENVOPTIONS ${TEMP}/apTvUtCompareImages.txt
+                     TESTENVOPTIONS ${TEMP}/apTvUtCompareImages.txt
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvUtCompareImages.txt
                 	     ${TEMP}/apTvUtCompareImages.txt)
+
+OTB_TEST_APPLICATION(NAME apTvUtCompareImagesNoROI
+                     APP CompareImages
+                     OPTIONS -ref.in ${INPUTDATA}/GomaAvant.png
+                             -meas.in ${INPUTDATA}/GomaApres.png
+                     TESTENVOPTIONS ${TEMP}/apTvUtCompareImagesNoROI.txt
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtCompareImagesNoROI.txt
+                	           ${TEMP}/apTvUtCompareImagesNoROI.txt)
 
 #--- VectorDataSetField ---
 OTB_TEST_APPLICATION(NAME apTvUtVectorDataSetField
