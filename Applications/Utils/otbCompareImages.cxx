@@ -53,7 +53,7 @@ private:
 
     // Documentation
     SetDocName("Images comparaison");
-    SetDocLongDescription("This application computes MSE (Mean Squared Error), MAE (Mean Absolute Error) and PSNR (Peak Signal to Noise Ratio) between the channel of two images (reference and measurement). The user has to set the used channel and can specified an ROI.");
+    SetDocLongDescription("This application computes MSE (Mean Squared Error), MAE (Mean Absolute Error) and PSNR (Peak Signal to Noise Ratio) between the channel of two images (reference and measurement). The user has to set the used channel and can specify a ROI.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath application, ImageStatistics");
@@ -76,26 +76,27 @@ private:
     SetDefaultParameterInt("meas.channel", 1);
     SetMinimumParameterIntValue("meas.channel", 1);
 
-    AddParameter(ParameterType_Group, "roi", "Region Of Interest");
+    AddParameter(ParameterType_Group, "roi", "Region Of Interest (relative to reference image)");
+    
     AddParameter(ParameterType_Int,  "roi.startx", "Start X");
     SetDefaultParameterInt("roi.startx", 0);
     SetMinimumParameterIntValue("roi.startx", 0);
-
     SetParameterDescription("roi.startx", "ROI start x position.");
+    
     AddParameter(ParameterType_Int,  "roi.starty", "Start Y");
     SetDefaultParameterInt("roi.starty", 0);
-    SetMinimumParameterIntValue("roi.starty", 0);
-    
+    SetMinimumParameterIntValue("roi.starty", 0);    
     SetParameterDescription("roi.starty", "ROI start y position.");
+    
     AddParameter(ParameterType_Int,  "roi.sizex",  "Size X");
     SetDefaultParameterInt("roi.sizex",  0);
     SetMinimumParameterIntValue("roi.sizex",  1);
-
-    SetParameterDescription("roi.sizex","size along x in pixels.");
+    SetParameterDescription("roi.sizex","Size along x in pixels.");
+    
     AddParameter(ParameterType_Int,  "roi.sizey",  "Size Y");
-    SetParameterDescription("roi.sizey","size along y in pixels.");
     SetDefaultParameterInt("roi.sizey", 0);
     SetMinimumParameterIntValue("roi.sizey",  1);
+    SetParameterDescription("roi.sizey","Size along y in pixels.");
 
     AddParameter(ParameterType_Float, "mse",  "MSE");
     SetParameterDescription("mse", "Mean Squared Error value");
@@ -133,35 +134,28 @@ private:
       }
 
     // ROI
-    FloatVectorImageType::RegionType region, userRegion;
-    FloatVectorImageType::SizeType size;
-    FloatVectorImageType::IndexType id;
-    id[0] = this->GetParameterInt("roi.startx");
-    id[1] = this->GetParameterInt("roi.starty");
-    size[0] = this->GetParameterInt("roi.sizex");
-    size[1] = this->GetParameterInt("roi.sizey");
-    userRegion.SetSize(size);
-    userRegion.SetIndex(id);
       
-    if ( HasValue("ref.in") &&  HasValue("meas.in") )
+    if ( HasValue("ref.in") )
       {
-      region = this->GetParameterImage("ref.in")->GetLargestPossibleRegion();
-      }
-    else if ( HasValue("ref.in") &&  HasValue("meas.in") )
-      {
-      region = this->GetParameterImage("ref.in")->GetLargestPossibleRegion();
-      }
-    else if ( HasValue("meas.in") )
-      {
-      region = this->GetParameterImage("meas.in")->GetLargestPossibleRegion();
-      }
+      FloatVectorImageType::RegionType largestRegion = this->GetParameterImage("ref.in")->GetLargestPossibleRegion();
+      
+      // Put the limit of the index and the size relative the image
+      SetMinimumParameterIntValue("roi.sizex", 1);
+      SetMaximumParameterIntValue("roi.sizex", largestRegion.GetSize(0));
+      
+      SetMinimumParameterIntValue("roi.sizey", 1);
+      SetMaximumParameterIntValue("roi.sizey", largestRegion.GetSize(1));
 
-    SetMaximumParameterIntValue("roi.startx", region.GetSize()[0]);
-    SetMaximumParameterIntValue("roi.starty", region.GetSize()[1]);
-    SetMaximumParameterIntValue("roi.sizex", region.GetSize()[0]-userRegion.GetIndex()[0]);
-    SetMaximumParameterIntValue("roi.sizey", region.GetSize()[1]-userRegion.GetIndex()[1]);
+      SetMinimumParameterIntValue("roi.startx", 0);
+      SetMaximumParameterIntValue("roi.startx", largestRegion.GetSize(0) - 1);
+      
+      SetMinimumParameterIntValue("roi.starty", 0);
+      SetMaximumParameterIntValue("roi.starty", largestRegion.GetSize(1) - 1);
+
+      }
   }
 
+  
   void DoExecute()
   {
     // Init filters
@@ -175,18 +169,22 @@ private:
 
     // Get the region of interest
     FloatVectorImageType::RegionType region;
-    FloatVectorImageType::SizeType size;
-    FloatVectorImageType::IndexType id;
-    id[0] = this->GetParameterInt("roi.startx");
-    id[1] = this->GetParameterInt("roi.starty");
-    size[0] = this->GetParameterInt("roi.sizex");
-    size[1] = this->GetParameterInt("roi.sizey");
-    region.SetSize(size);
-    region.SetIndex(id);
+    region.SetIndex(0, GetParameterInt("roi.startx"));
+    region.SetIndex(1, GetParameterInt("roi.starty"));
+    region.SetSize(0, GetParameterInt("roi.sizex"));
+    region.SetSize(1, GetParameterInt("roi.sizey"));
+ 
+    if (region.GetNumberOfPixels() == 0)
+      {
+      otbAppLogINFO( << "Using whole reference image since the ROI contains no pixels or is not specified" );
+      region = GetParameterImage("ref.in")->GetLargestPossibleRegion();
+      }
 
+    otbAppLogDEBUG( << "Region of interest used for comparison : " << region );
+    
     if( !region.Crop(refIm->GetLargestPossibleRegion()) || !region.Crop(measIm->GetLargestPossibleRegion()) )
       {
-      otbAppLogFATAL( << "ROI is not contained in the images");
+      otbAppLogFATAL( << "ROI is not contained in the images regions");
       }
 
     m_ExtractRefFilter->SetInput( refIm );
