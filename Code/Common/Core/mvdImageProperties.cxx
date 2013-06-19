@@ -71,6 +71,7 @@ ImageProperties
   m_Flags(),
   m_NoData( ComponentType( 0 ) )
 {
+  m_Flags.m_NoData = true;
 }
 
 /*******************************************************************************/
