@@ -117,7 +117,7 @@ private:
 
   void DoUpdateParameters()
   {
-    // Update the sizes only if the user does not defined a size
+    // Update the sizes only if the user has not defined a size
     if ( HasValue("in") )
       {
       ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
