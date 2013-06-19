@@ -90,7 +90,32 @@ main( int argc, char* argv[] )
     }
 
   // 4. Initialize database.
-  application.OpenDatabase();
+  mvd::CountType nb = application.OpenDatabase();
+  if( nb > 0 )
+    {
+    QMessageBox::StandardButton button =
+      QMessageBox::warning(
+	&mainWindow,
+	QCoreApplication::translate(
+	  PROJECT_NAME,
+	  PROJECT_NAME " " Monteverdi2_VERSION_STRING " - Warning! "
+	),
+	QCoreApplication::translate(
+	  PROJECT_NAME,
+	  "There are %1 outdated dataset(s) in cache-directory. "
+	  "Please remove cache-directory and restart "
+	  PROJECT_NAME " " Monteverdi2_VERSION_STRING ".\n"
+	  "Do you want to quit now ?"
+	).arg( nb ),
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::Yes
+      );
+
+    if( button==QMessageBox::Yes )
+      {
+      return -2;
+      }
+    }
 
   // 5. Show window.
 #if defined( _DEBUG )

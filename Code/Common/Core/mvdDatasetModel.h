@@ -151,6 +151,16 @@ public:
 // Public methods.
 public:
 
+  //
+  // Static methods.
+
+  /**
+   */
+  static bool IsVersionCompliant( const QString& path, const QString& name );
+
+  //
+  // Instance methods.
+
   /** \brief Constructor. */
   DatasetModel( QObject* parent =NULL );
 
@@ -227,13 +237,6 @@ public:
   const PropertiesContainer& QueryDatasetProperties();
 
   //
-  // AbstractModel overrides.
-
-  virtual bool IsModified() const;
-
-  virtual void ClearModified();
-
-  //
   // accessors to last rendering information
 
   inline const PointType& GetLastPhysicalCenter() const ;
@@ -242,6 +245,13 @@ public:
 
   // load placename
   void LoadImagePlacename();
+
+  //
+  // AbstractModel overrides.
+
+  virtual bool IsModified() const;
+
+  virtual void ClearModified();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

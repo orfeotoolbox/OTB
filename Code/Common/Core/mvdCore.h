@@ -126,7 +126,7 @@ namespace mvd
  * \return true if iteration indices have been set and loop can be
  * processed.
  */
-bool RgbBounds( CountType& begin, CountType& end, RgbwChannel channels );
+inline bool RgbBounds( CountType& begin, CountType& end, RgbwChannel channels );
 
 /**
  * \brief Convenience method used to compute integer indices in order
@@ -149,7 +149,28 @@ bool RgbBounds( CountType& begin, CountType& end, RgbwChannel channels );
  * \return true if iteration indices have been set and loop can be
  * processed.
  */
-bool RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels );
+inline bool RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels );
+
+/**
+ * \brief Provide a lexicographical version-string 'M.m.p' less operator.
+ *
+ * \param v0 Left-operand version string.
+ * \param v1 Right-operand version string.
+ *
+ * \return true if left-operand is lesser than right-operand.
+ */
+inline bool IsVersionLess( const QString& v0, const QString& v1 );
+
+/**
+ * \brief Provide a lexicographical version-string 'M.m.p'
+ * greater-or-equal operator.
+ *
+ * \param v0 Left-operand version string.
+ * \param v1 Right-operand version string.
+ *
+ * \return true if left-operand is greater-or-equal than right-operand.
+ */
+inline bool IsVersionGreaterEqual( const QString& v0, const QString& v1 );
 
 } // end namespace 'mvd'.
 
@@ -235,6 +256,31 @@ RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels )
     }
 
   return true;
+}
+
+/*****************************************************************************/
+inline
+bool
+IsVersionLess( const QString& v0, const QString& v1 )
+{
+  QStringList V0List( v0.split( "." ) );
+  assert( V0List.size()>=3 );
+
+  QStringList V1List( v1.split( "." ) );
+  assert( V1List.size()>=3 );
+
+  return
+    V0List[ 0 ].toInt() < V1List[ 0 ].toInt() &&
+    V0List[ 1 ].toInt() < V1List[ 1 ].toInt() &&
+    V0List[ 2 ].toInt() < V1List[ 2 ].toInt();
+}
+
+/*****************************************************************************/
+inline
+bool
+IsVersionGreaterEqual( const QString& v0, const QString& v1 )
+{
+  return !IsVersionLess( v0, v1 );
 }
 
 } // end namespace 'mvd'.

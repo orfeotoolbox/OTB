@@ -38,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdTypes.h"
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
 
@@ -97,27 +98,28 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
-
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
-/*******************************************************************************/
+/*****************************************************************************/
 DatasetDescriptor
 ::DatasetDescriptor( QObject* parent ) :
   AbstractModel( parent ),
   m_DomDocument( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] ),
+  m_RootElement(),
   m_DatasetGroupElement(),
-  m_ImagesGroupElement()
+  m_ImagesGroupElement(),
+  m_ImageViewGroupElement()
 {
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 DatasetDescriptor
 ::~DatasetDescriptor()
 {
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatasetDescriptor
 ::InsertImageModel( int id,
@@ -212,7 +214,7 @@ DatasetDescriptor
   }
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 bool
 DatasetDescriptor
 ::SetImageModel( int id, void* imageSettings )
@@ -303,7 +305,7 @@ DatasetDescriptor
   return true;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 bool
 DatasetDescriptor
 ::UpdateDatasetAlias( const QString & newAlias )
@@ -335,7 +337,7 @@ DatasetDescriptor
   return true;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 bool
 DatasetDescriptor
 ::UpdateViewContext(const PointType& center, double zoom)
@@ -382,7 +384,7 @@ DatasetDescriptor
   return true;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 bool
 DatasetDescriptor
 ::UpdateImagePlacename( const QString & nplacename )
@@ -420,7 +422,7 @@ DatasetDescriptor
   return true;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatasetDescriptor
 ::GetImageModel( const QDomElement& imageSibling,
@@ -510,7 +512,7 @@ DatasetDescriptor
     }
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatasetDescriptor
 ::GetDatasetInformation( const QDomElement& datasetSibling,
@@ -541,7 +543,7 @@ DatasetDescriptor
   datasetAlias = datasetAliasElt.text();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatasetDescriptor
 ::GetRenderingImageInformation( const QDomElement& datasetSibling,
@@ -578,7 +580,7 @@ DatasetDescriptor
   zoom = QVariant( zoomElt.text() ).toReal() ;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatasetDescriptor
 ::GetImagePlacename( const QDomElement& datasetSibling,
@@ -599,7 +601,7 @@ DatasetDescriptor
   placename = placenameElt.text();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatasetDescriptor
 ::virtual_Read( QIODevice* device )
@@ -623,27 +625,16 @@ DatasetDescriptor
   m_DomDocument = domDoc;
 
   // Relink root element.
-  QDomElement rootElt(
-    m_DomDocument.firstChildElement( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] )
-  );
-  assert( !rootElt.isNull() );
+  m_RootElement =
+    m_DomDocument.firstChildElement( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] );
 
-  // Relink image ,
-  m_DatasetGroupElement =
-    rootElt.firstChildElement( TAG_NAMES[ ELEMENT_DATASET_GROUP ] );
-
-  // Relink image-group element.
-  m_ImagesGroupElement =
-    rootElt.firstChildElement( TAG_NAMES[ ELEMENT_IMAGES_GROUP ] );
-
-  // Relink view-group element.
-  m_ImageViewGroupElement =
-    rootElt.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_GROUP ] );
+  if( m_RootElement.isNull() )
+    throw /* XmlError(); */
 
   qDebug() << "XML descriptor has been read.";
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatasetDescriptor
 ::virtual_Write( QIODevice& device ) const
@@ -657,7 +648,7 @@ DatasetDescriptor
   qDebug() << "XML descriptor has been written.";
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatasetDescriptor
 ::virtual_BuildModel( void* context )
@@ -673,10 +664,24 @@ DatasetDescriptor
 
     // Read XML DOM document from file.
     Read( buildContext->m_Filename );
+
+    assert( !m_RootElement.isNull() );
+
+    // Relink image.
+    m_DatasetGroupElement =
+      m_RootElement.firstChildElement( TAG_NAMES[ ELEMENT_DATASET_GROUP ] );
+
+    // Relink image-group element.
+    m_ImagesGroupElement =
+      m_RootElement.firstChildElement( TAG_NAMES[ ELEMENT_IMAGES_GROUP ] );
+
+    // Relink view-group element.
+    m_ImageViewGroupElement =
+      m_RootElement.firstChildElement( TAG_NAMES[ ELEMENT_VIEW_GROUP ] );
     }
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatasetDescriptor
 ::BuildDocument()
@@ -783,10 +788,10 @@ DatasetDescriptor
   m_DomDocument.insertBefore( xmlNode, m_DomDocument.firstChild() );
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 
-/*******************************************************************************/
+/*****************************************************************************/
 
 } // end namespace 'mvd'

@@ -97,8 +97,10 @@ public:
   virtual ~CatalogueApplication();
 
   /**
+   * \return The number of outdated dataset-models present in the
+   * cache-directory.
    */
-  void OpenDatabase();
+  CountType OpenDatabase();
 
   /**
    * \brief Get the OTB application model.

@@ -702,7 +702,7 @@ void
 MainWindow
 ::InitializeDockWidgets()
 {
-#define ENABLE_QTOOLBAR_TEST 1
+#define ENABLE_QTOOLBAR_TEST 0
 #if ENABLE_QTOOLBAR_TEST
   // XP: QToolBar test.
   QDockWidget* dock =

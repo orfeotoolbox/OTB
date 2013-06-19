@@ -45,7 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
+#include "mvdCore.h"
 #include "mvdAbstractModel.h"
 #include "mvdSerializableInterface.h"
 
@@ -113,11 +113,25 @@ public:
 // Public methods.
 public:
 
+  //
+  // Static methods.
+
+  /**
+   */
+  static inline bool IsVersionCompliant( const QString& filename );
+
+  //
+  // Instance methods.
+
   /** \brief Constructor. */
   DatasetDescriptor( QObject* parent =NULL );
 
   /** \brief Destructor. */
   virtual ~DatasetDescriptor();
+
+  /**
+   */
+  inline QString GetVersionString() const;
 
   /**
    */
@@ -318,6 +332,10 @@ private:
 
   /**
    */
+  QDomElement m_RootElement;
+
+  /**
+   */
   QDomElement m_DatasetGroupElement;
 
   /**
@@ -347,6 +365,33 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+bool
+DatasetDescriptor
+::IsVersionCompliant( const QString& filename )
+{
+  DatasetDescriptor descriptor;
+
+  descriptor.Read( filename );
+
+  return
+    IsVersionGreaterEqual(
+      descriptor.GetVersionString(),
+      Monteverdi2_DATA_VERSION_STRING
+    );
+}
+
+/*****************************************************************************/
+inline
+QString
+DatasetDescriptor
+::GetVersionString() const
+{
+  assert( !m_RootElement.isNull() );
+  return m_RootElement.attribute( "version" );
+}
 
 /*****************************************************************************/
 inline

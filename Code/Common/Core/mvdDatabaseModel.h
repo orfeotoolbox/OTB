@@ -95,13 +95,15 @@ public:
     //
     // Public methods.
   public:
-    BuildContext()
+    BuildContext() :
+      m_NbOutdatedDatasetModels( 0 )
     {
     }
 
     //
     // Public attributes
   public:
+    CountType m_NbOutdatedDatasetModels;
   };
 
 //
@@ -213,7 +215,7 @@ private:
 private:
   /**
    */
-  void InitializeDatasetModels();
+  CountType InitializeDatasetModels();
 
   /**
    */

@@ -80,15 +80,18 @@ CatalogueApplication
 }
 
 /*******************************************************************************/
-void
+CountType
 CatalogueApplication
 ::OpenDatabase()
 {
   DatabaseModel* databaseModel = new DatabaseModel( this );
 
-  databaseModel->BuildModel();
+  DatabaseModel::BuildContext context;
+  databaseModel->BuildModel( &context );
 
   SetModel( databaseModel );
+
+  return context.m_NbOutdatedDatasetModels;
 }
 
 /*******************************************************************************/

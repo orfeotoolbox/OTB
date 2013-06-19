@@ -248,6 +248,12 @@ inline
 std::string
 ToStdString( const QString& str );
 
+/**
+ */
+inline
+const char*
+ToString( const QString& str );
+
 
 /**
  * return a std::string form various types
@@ -447,6 +453,14 @@ std::string
 ToStdString( const QString& str )
 {
   return std::string( str.toAscii().constData() );
+}
+
+/*******************************************************************************/
+inline
+const char*
+ToString( const QString& str )
+{
+  return str.toAscii().constData();
 }
 
 /*******************************************************************************/

@@ -313,11 +313,26 @@ void
 DatabaseModel
 ::virtual_BuildModel( void* context )
 {
-  InitializeDatasetModels();
+  CountType nbOutdated = InitializeDatasetModels();
+
+  if( context!=NULL )
+    {
+    BuildContext* buildContext = static_cast< BuildContext* >( context );
+
+    buildContext->m_NbOutdatedDatasetModels = nbOutdated;
+    }
+
+  if( nbOutdated>0 )
+    {
+    qWarning() <<
+      ToString(
+	tr( "%1 outdated datasets. Please clear cache directory." )
+	.arg( nbOutdated ) );
+    }
 }
 
 /*******************************************************************************/
-void
+CountType
 DatabaseModel
 ::InitializeDatasetModels()
 {
@@ -325,25 +340,30 @@ DatabaseModel
 
   ClearDatasetModels();
 
+  CountType nbOutdated = 0;
+
   for( QStringList::const_iterator it( datasets.begin() );
        it!=datasets.end();
        ++it )
     {
-    try
+    if( DatasetModel::IsVersionCompliant(
+	  I18nCoreApplication::ConstInstance()->GetCacheDir().path(), *it ) )
       {
-      // DatasetModel::checkVersionCompliance( *it );
-
       DatasetModel* datasetModel = NewDatasetModel( *it );
       assert( datasetModel!=NULL );
 
       // by default alias == name
       m_DatasetModels.insert( datasetModel->GetName(), datasetModel );
       }
-    catch( std::exception& exc )
+    else
       {
-      throw exc;
+      qWarning() << "Dataset '" << *it << "' is outdated.";
+
+      ++ nbOutdated;
       }
     }
+
+  return nbOutdated;
 }
 
 /*******************************************************************************/
