@@ -149,7 +149,8 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
 
-  typedef otb::SVMMachineLearningModel<InputImageType::InternalPixelType, ListSampleGeneratorType::ClassLabelType> SVMType;
+  typedef otb::SVMMachineLearningModel<InputImageType::InternalPixelType, 
+                                       ListSampleGeneratorType::ClassLabelType> SVMType;
 
   SVMType::Pointer SVMClassifier = SVMType::New();
 
