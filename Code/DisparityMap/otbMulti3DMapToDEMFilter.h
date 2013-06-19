@@ -20,6 +20,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbGenericRSTransform.h"
+#include "otbImageToGenericRSOutputParameters.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageRegionConstIterator.h"
 #include "otbVectorImage.h"
@@ -113,6 +114,8 @@ public:
   typedef double                  PrecisionType;
   typedef otb::GenericRSTransform
     <PrecisionType,3,3>           RSTransformType;
+
+  typedef otb::ImageToGenericRSOutputParameters<OutputImageType> OutputParametersEstimatorType;
 
   // 3D points
   typedef typename RSTransformType::InputPointType  TDPointType;

@@ -220,11 +220,11 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
     box_ymin = std::min(box_ymin, ymin);
     box_ymax = std::max(box_ymax, ymax);
 
-    if (imageKWL.GetSize() > 0)
+   /* if (imageKWL.GetSize() > 0)
       {
       itk::EncapsulateMetaData<ImageKeywordListType>(outputPtr->GetMetaDataDictionary(),
                                                      MetaDataKey::OSSIMKeywordlistKey, imageKWL);
-      }
+      }*/
 
     }
 
@@ -251,6 +251,47 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
   outRegion.SetSize(1, static_cast<unsigned int> ((box_ymax - box_ymin) / vcl_abs(outSpacing[1])));
   outputPtr->SetLargestPossibleRegion(outRegion);
   outputPtr->SetNumberOfComponentsPerPixel(1);
+
+
+  itk::MetaDataDictionary & dictOutput =outputPtr->GetMetaDataDictionary();
+   itk::EncapsulateMetaData<std::string> (dictOutput, MetaDataKey::ProjectionRefKey,
+                                             static_cast<std::string>(otb::GeoInformationConversion::ToWKT(4326)));
+
+  //test if WGS 84 -> true -> nothing to do
+
+  //false project
+
+  bool isWGS84 =!(m_ProjectionRef.compare( static_cast<std::string>(otb::GeoInformationConversion::ToWKT(4326))));
+ if(!m_ProjectionRef.empty() && !isWGS84)
+   {
+
+   typename OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
+
+   genericRSEstimator->SetInput(outputPtr);
+  // genericRSEstimator->SetInputProjectionRef( static_cast<std::string>(otb::GeoInformationConversion::ToWKT(4326)));
+   genericRSEstimator->SetOutputProjectionRef(m_ProjectionRef);
+   genericRSEstimator->Compute();
+   outputPtr->SetSpacing(genericRSEstimator->GetOutputSpacing());
+   outputPtr->SetOrigin(genericRSEstimator->GetOutputOrigin());
+
+    // Compute output size
+   typename TOutputDEMImage::RegionType outRegion;
+     outRegion.SetIndex(0, 0);
+     outRegion.SetIndex(1, 0);
+     outRegion.SetSize(0, genericRSEstimator->GetOutputSize()[0]);
+     //TODO JGT check the size
+     //outRegion.SetSize(1, static_cast<unsigned int> ((box_ymax - box_ymin) / vcl_abs(outSpacing[1])+1));
+     outRegion.SetSize(1, genericRSEstimator->GetOutputSize()[1]);
+     outputPtr->SetLargestPossibleRegion(outRegion);
+     outputPtr->SetNumberOfComponentsPerPixel(1);
+
+
+  itk::MetaDataDictionary & dict =outputPtr->GetMetaDataDictionary();
+
+  itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
+                                             m_ProjectionRef);
+
+   }
   this->Modified();
 }
 
@@ -276,11 +317,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutpu
       // fill up the metadata information for ProjectionRef
       itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, m_ProjectionRef);
-
-      OGRSpatialReference oSRS;
-      char *wkt = const_cast<char *> (m_ProjectionRef.c_str());
-      oSRS.importFromWkt(&wkt);
-      m_IsGeographic = oSRS.IsGeographic(); // TODO check if this test is valid for all projection systems
       }
 
     }
@@ -288,6 +324,16 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutpu
     {
     this->SetOutputParametersFromImage();
     }
+
+  if (!m_ProjectionRef.empty())
+    {
+    OGRSpatialReference oSRS;
+    char *wkt = const_cast<char *> (m_ProjectionRef.c_str());
+    oSRS.importFromWkt(&wkt);
+    m_IsGeographic = oSRS.IsGeographic(); // TODO check if this test is valid for all projection systems
+    }
+
+
 }
 
 template<class T3DImage, class TMaskImage, class TOutputDEMImage>
@@ -341,6 +387,11 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     OriginType inputOrigin = imgPtr->GetOrigin();
 
     RSTransformType::Pointer groundToSensorTransform = RSTransformType::New();
+    //groundToSensorTransform->SetInputKeywordList(outputDEM->GetImageKeywordlist());
+    //groundToSensorTransform->SetInputOrigin(outputDEM->GetOrigin());
+    //groundToSensorTransform->SetInputSpacing(outputDEM->GetSpacing());
+    groundToSensorTransform->SetInputProjectionRef(m_ProjectionRef);
+
     groundToSensorTransform->SetOutputKeywordList(imgPtr->GetImageKeywordlist());
     groundToSensorTransform->SetOutputOrigin(imgPtr->GetOrigin());
     groundToSensorTransform->SetOutputSpacing(imgPtr->GetSpacing());
@@ -518,8 +569,11 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
         {
         groundTransform = RSTransform2DType::New();
         ImageKeywordListType imageKWL = imgPtr->GetImageKeywordlist();
-        groundTransform->SetInputKeywordList(imageKWL);
+        //groundTransform->SetInputKeywordList(imageKWL);
+        groundTransform->SetInputProjectionRef(static_cast<std::string>(otb::GeoInformationConversion::ToWKT(4326)));
         groundTransform->SetOutputProjectionRef(m_ProjectionRef);
+        //groundTransform->SetInputOrigin(origin);
+        //groundTransform->SetInputSpacing(spacing);
         groundTransform->InstanciateTransform();
         }
 
@@ -562,8 +616,10 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
 
         MapPixelType position = mapIt.Get();
 
+        //std::cout<<"position"<<position<<std::endl;
         if (!this->m_IsGeographic)
           {
+          //std::cout<<"is geographic "<<std::endl;
           typename RSTransform2DType::InputPointType tmpPoint;
           tmpPoint[0] = position[0];
           tmpPoint[1] = position[1];
@@ -582,11 +638,12 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
         point2D[1] = position[1];
         itk::ContinuousIndex<double, 2> continuousIndex;
 
+        //std::cout<<"point2D "<<point2D<<std::endl;
         outputPtr->TransformPhysicalPointToContinuousIndex(point2D, continuousIndex);
         typename OutputImageType::IndexType cellIndex;
         cellIndex[0] = static_cast<int> (vcl_floor(continuousIndex[0]));
         cellIndex[1] = static_cast<int> (vcl_floor(continuousIndex[1]));
-
+        //std::cout<<"cellindex "<<cellIndex<<std::endl;
         //index from physical
         typename OutputImageType::IndexType physCellIndex;
         //double CellIndexLong=(position[0]-outOrigin[0])/step[0];
@@ -595,6 +652,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
 
         if (outputRequestedRegion.IsInside(cellIndex))
           {
+          //std::cout<<"is inside "<<std::endl;
           // Add point to its corresponding cell (keep maximum)
           DEMPixelType cellHeight = static_cast<DEMPixelType> (position[2]);
           //if (cellHeight > tmpDEM->GetPixel(cellIndex) && cellHeight < static_cast<DEMPixelType>(m_ElevationMax))
