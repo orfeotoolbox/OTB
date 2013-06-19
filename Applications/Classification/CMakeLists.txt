@@ -24,10 +24,6 @@ OTB_CREATE_APPLICATION(NAME           ClassificationMapRegularization
 
 set( TrainImagesClassifier_SRC otbTrainImagesClassifier.cxx otbTrainLibSVM.cxx )
 if(OTB_USE_OPENCV)
-  # This library is used available only when OpenCV is activated.
-  # Use a cmake variable as proxy, which is empty when OpenCV is deactivated
-  set( OTBMachineLearning_LIBRARY OTBMachineLearning )
-  
   # Add source files with OpenCV dependency
   set( TrainImagesClassifier_SRC ${TrainImagesClassifier_SRC} 
          otbTrainSVM.cxx  otbTrainBoost.cxx 
@@ -38,11 +34,11 @@ endif()
 
 OTB_CREATE_APPLICATION(NAME         TrainImagesClassifier
                        SOURCES      ${TrainImagesClassifier_SRC}
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
 
 OTB_CREATE_APPLICATION(NAME         ImageClassifier
                        SOURCES      otbImageClassifier.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBMachineLearning)
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
 
 
  

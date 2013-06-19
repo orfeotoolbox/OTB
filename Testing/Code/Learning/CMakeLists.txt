@@ -956,7 +956,7 @@ OTB_ADD_EXECUTABLE(otbLearningTests4 "${BasicLearning_SRCS4}" "OTBLearning;OTBIO
 OTB_ADD_EXECUTABLE(otbLearningTests5 "${BasicLearning_SRCS5}" "OTBLearning;OTBIO;OTBTesting")
 
 IF(OTB_USE_OPENCV)
-	OTB_ADD_EXECUTABLE(otbLearningTests6 "${BasicLearning_SRCS6}" "OTBMachineLearning;OTBLearning;OTBIO;OTBTesting")
+	OTB_ADD_EXECUTABLE(otbLearningTests6 "${BasicLearning_SRCS6}" "OTBLearning;OTBIO;OTBTesting")
 ENDIF(OTB_USE_OPENCV)
 
 
