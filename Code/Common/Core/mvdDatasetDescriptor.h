@@ -372,9 +372,15 @@ bool
 DatasetDescriptor
 ::IsVersionCompliant( const QString& filename )
 {
+  // qDebug()
+  //   << "DatasetDescriptor::IsVersionCompliant(" << filename << ")";
+
   DatasetDescriptor descriptor;
 
   descriptor.Read( filename );
+
+  qDebug() <<
+    filename << " version " << descriptor.GetVersionString();
 
   return
     IsVersionGreaterEqual(

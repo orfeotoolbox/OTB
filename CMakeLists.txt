@@ -24,7 +24,7 @@ set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG" )
 # Monteverdi2 version number.  An even minor number corresponds to releases.
 set(Monteverdi2_VERSION_MAJOR "0")
 set(Monteverdi2_VERSION_MINOR "3")
-set(Monteverdi2_VERSION_PATCH "0")
+set(Monteverdi2_VERSION_PATCH "1")
 
 #----------------------------------------------------------------------------
 # Version string should not include patch level.  The major.minor is
