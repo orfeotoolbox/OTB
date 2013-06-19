@@ -230,8 +230,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:TILEMAPIMAGEIOEXAMPLE} shows the output images created from
-  // open street map data and Figure~\ref{fig:TILEMAPIMAGEIOEXAMPLE2} shows the
-  // data retrieved from the NearMap server.
+  // open street map data.
   //
   // \begin{figure}
   // \center
