@@ -131,9 +131,9 @@ private:
 
   CvBoost * m_BoostModel;
   int m_BoostType;
-  int m_SplitCrit;
   int m_WeakCount;
   double m_WeightTrimRate;
+  int m_SplitCrit;
   int m_MaxDepth;
 };
 } // end namespace otb

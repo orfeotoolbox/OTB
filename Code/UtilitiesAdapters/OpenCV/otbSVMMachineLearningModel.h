@@ -52,7 +52,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(SVMMachineLearningModel, itk::MachineLearningModel);
+  itkTypeMacro(SVMMachineLearningModel, MachineLearningModel);
 
   /** Train the machine learning model */
   virtual void Train();
@@ -141,22 +141,23 @@ private:
   CvSVM * m_SVMModel;
   int m_SVMType;
   int m_KernelType;
-  int m_TermCriteriaType;
-  int m_MaxIter;
-  double m_Epsilon;
   double m_Degree;
   double m_Gamma;
   double m_Coef0;
   double m_C;
   double m_Nu;
   double m_P;
+  int m_TermCriteriaType;
+  int m_MaxIter;
+  double m_Epsilon;
+  bool m_ParameterOptimization;
+  //Output parameters
   double m_OutputDegree;
   double m_OutputGamma;
   double m_OutputCoef0;
   double m_OutputC;
   double m_OutputNu;
   double m_OutputP;
-  bool m_ParameterOptimization;
 };
 } // end namespace otb
 
