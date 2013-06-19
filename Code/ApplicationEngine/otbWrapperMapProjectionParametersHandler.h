@@ -41,7 +41,7 @@ enum
  *  \brief This class represent a helper class.
  *
  * This class allow creating a Group with several mapProjection
- * paramaters
+ * parameters
  */
 class MapProjectionParametersHandler
 {
@@ -62,7 +62,7 @@ public:
     
 
   /**
-    * Helper method : Compute the UTM paramaters relative an image
+    * Helper method : Compute the UTM parameters relative an image
     * Note: The key of the image must be set to be able to get the image.
     *       The key must be totally if the InputImageParameter belongs
     *       to a ParamaterGroup, ie set io.in

@@ -20,6 +20,8 @@
 // Needed for methods relative to projections
 #include "otbMapProjections.h"
 #include "otbImageToGenericRSOutputParameters.h"
+#include "otbWrapperInputImageListParameter.h"
+
 
 namespace otb
 {
@@ -29,7 +31,7 @@ namespace Wrapper
 void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Pointer app, const std::string & key)
 {
   app->AddParameter(ParameterType_Choice, key, "Output Cartographic Map Projection");
-  app->SetParameterDescription(key,"Parameters of the ouptut map projection to be used.");
+  app->SetParameterDescription(key,"Parameters of the output map projection to be used.");
     
   // utm
   std::ostringstream oss;
@@ -195,7 +197,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
 }
 
 /**
-    * Helper method : Compute the UTM paramaters relative to an image Origin
+    * Helper method : Compute the UTM parameters relative to an image Origin
     * Note: The key of the image must be set to be able to get the image.
     *       The key must be totally if the InputImageParameter belongs
     *       to a ParamaterGroup, ie set io.in
@@ -206,21 +208,29 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
 {
   // Get the UTM params keys
   std::ostringstream zoneKey;
-  zoneKey << mapKey<<".utm.zone";
+  zoneKey << mapKey << ".utm.zone";
 
   std::ostringstream hemKey;
-  hemKey << mapKey<<".utm.northhem";
-  
+  hemKey << mapKey << ".utm.northhem";
+
   // Compute the zone and the hemisphere if not UserValue defined
-  if(!app->HasUserValue(zoneKey.str())
-     && app->HasValue(imageKey)
-     && !app->HasAutomaticValue(zoneKey.str()))
+  if (!app->HasUserValue(zoneKey.str()) && app->HasValue(imageKey) && !app->HasAutomaticValue(zoneKey.str()))
     {
     // Compute the Origin lat/long coordinate
     typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
     OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
 
-    genericRSEstimator->SetInput(app->GetParameterImage(imageKey));
+    Parameter* param = app->GetParameterByKey(imageKey);
+    if (dynamic_cast<InputImageParameter*> (param))
+      {
+      genericRSEstimator->SetInput(app->GetParameterImage(imageKey));
+      }
+    else
+      if (dynamic_cast<InputImageListParameter*> (param))
+        {
+        genericRSEstimator->SetInput(app->GetParameterImageList(imageKey)->GetNthElement(0));
+        }
+
     genericRSEstimator->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
     genericRSEstimator->Compute();
 
@@ -228,7 +238,7 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
                                                genericRSEstimator->GetOutputOrigin()[1]);
     // Update the UTM Gui fields
     app->SetParameterInt(zoneKey.str(), zone);
-    if(genericRSEstimator->GetOutputOrigin()[1] > 0.)
+    if (genericRSEstimator->GetOutputOrigin()[1] > 0.)
       {
       app->EnableParameter(hemKey.str());
       }
@@ -241,6 +251,9 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
     app->AutomaticValueOn(hemKey.str());
     }
 }
+
+
+
 
 }// End namespace Wrapper
 }// End namespace otb
