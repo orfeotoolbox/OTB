@@ -349,6 +349,8 @@ private:
         }
       }
 
+    otbAppLogINFO(<<"Initial model: "<<initialPosition);
+
     //Cost Function
     //Format Hypothesis
     LabelSetType Bhyp, Phyp;
