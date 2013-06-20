@@ -44,14 +44,6 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <addaction name="action_ColorDynamics"/>
-    <addaction name="action_ColorSetup"/>
-    <addaction name="action_DatabaseBrowser"/>
-    <addaction name="action_DatasetProperties"/>
-    <addaction name="action_PixelDescription"/>
-    <addaction name="action_OtbApplicationsBrowser"/>
-    <addaction name="action_QuicklookView"/>
-    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -136,99 +128,6 @@
     <string>Prefere&amp;nces</string>
    </property>
   </action>
-  <action name="action_QuicklookView">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Quicklook view</string>
-   </property>
-   <property name="toolTip">
-    <string>Show/hide quicklook view.</string>
-   </property>
-  </action>
-  <action name="action_ColorSetup">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Color setup</string>
-   </property>
-   <property name="toolTip">
-    <string>Show/hide color setup.</string>
-   </property>
-  </action>
-  <action name="action_ColorDynamics">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Color dynamics</string>
-   </property>
-   <property name="toolTip">
-    <string>Show/hide color dynamics.</string>
-   </property>
-  </action>
-  <action name="action_DatabaseBrowser">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Database browser</string>
-   </property>
-   <property name="toolTip">
-    <string>Show/hide database browser.</string>
-   </property>
-  </action>
-  <action name="action_DatasetProperties">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Dataset properties</string>
-   </property>
-   <property name="toolTip">
-    <string>Show/hide dataset properties</string>
-   </property>
-  </action>
-  <action name="action_OtbApplicationsBrowser">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>OTB Applications browser</string>
-   </property>
-   <property name="toolTip">
-    <string>Show/hide OTB Applications browser.</string>
-   </property>
-  </action>
   <action name="action_ZoomIn">
    <property name="enabled">
     <bool>false</bool>
@@ -275,17 +174,6 @@
    </property>
    <property name="text">
     <string>Zoom to full resolution</string>
-   </property>
-  </action>
-  <action name="action_PixelDescription">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Pixel Desription</string>
    </property>
   </action>
  </widget>

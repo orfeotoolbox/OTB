@@ -337,6 +337,7 @@ void
 MainWindow
 ::ConnectViewMenu()
 {
+#if 0
   // Connect quicklook-view dock-widget toggle view action to
   // menu-item action.
    QObject::connect(
@@ -468,7 +469,29 @@ MainWindow
     // to:
     m_PixelDescriptionDock,
     SLOT( setVisible( bool ) )
-  );
+
+#else
+
+    m_UI->menu_View->addSeparator();
+
+    m_UI->menu_View->addAction( m_ColorSetupDock->toggleViewAction() );
+    m_UI->menu_View->addAction( m_ColorDynamicsDock->toggleViewAction() );
+
+    m_UI->menu_View->addSeparator();
+
+    m_UI->menu_View->addAction( m_QuicklookViewDock->toggleViewAction() );
+
+    m_UI->menu_View->addSeparator();
+
+    m_UI->menu_View->addAction( m_DatabaseBrowserDock->toggleViewAction() );
+    m_UI->menu_View->addAction( m_DatasetPropertiesDock->toggleViewAction() );
+    m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
+#ifdef OTB_WRAP_QT
+    m_UI->menu_View->addAction(
+      m_OtbApplicationsBrowserDock->toggleViewAction() );
+#endif
+
+#endif
 }
 
 /*****************************************************************************/
