@@ -202,7 +202,7 @@ private:
     //Read the vector datas
     VectorDataType::Pointer psVectorData = GetParameterVectorData("psin");
     psVectorData->Update();
-    VectorDataType::Pointer nsVectorData = GetParameterVectorData("psin");
+    VectorDataType::Pointer nsVectorData = GetParameterVectorData("nsin");
     nsVectorData->Update();
 
     // Load the initial descriptor model
