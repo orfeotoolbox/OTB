@@ -617,7 +617,7 @@ private:
         {
         otbAppLogWARNING(<<" current couple contain more than 2 value. only first and second values will be associated to create next couple.");
         }
-      otbAppLogINFO("\n \n \n /****    process image index "<<couple[0]<<" and "<<couple[1]<<"    ****/ \n \n \n");
+      otbAppLogINFO("\n \n \n /****    process image index "<<couple[0]<<" and "<<couple[1]<<"    ****/ \n \n");
       FloatImageType::Pointer inleft = m_ExtractorList[couple[0]]->GetOutput();
       FloatImageType::Pointer inright = m_ExtractorList[couple[1]]->GetOutput();
 
