@@ -327,8 +327,8 @@ private:
                           " input masks\n"
                           "\t- compute horizontal disparities with a NCC block matching algorithm\n"
                           "\t- refine disparities to sub-pixel precision with a dichotomy algorithm\n"
-                          "\t- apply an optionnal median filter\n"
-                          "\t- filter disparites based on the correlation score (must be greater than "
+                          "\t- apply an optional median filter\n"
+                          "\t- filter disparities based on the correlation score (must be greater than "
                           "0.6) and exploration bounds\n"
                           "\t- project disparities on a regular grid for each cell the "
                           "maximum elevation is kept.\n"
@@ -358,6 +358,8 @@ private:
 
     // Build the Output Map Projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
+
+    SetParameterString("map","wgs");
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
     SetParameterDescription("output.res","Spatial sampling distance of the output elevation (in m)");
@@ -393,10 +395,6 @@ private:
 
     AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y");
     SetParameterDescription("output.mode.user.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
-
-
-    //AddParameter(ParameterType_OutputImage,"out2","Output image");
-    //SetParameterDescription("out2","Output elevation image");
 
 
     AddParameter(ParameterType_Int,"step","Step of the deformation grid (in nb. of pixels)");
@@ -596,8 +594,7 @@ private:
       }
     // Update the UTM zone params
     MapProjectionParametersHandler::InitializeUTMParameters(this, "il", "map");
-
-     // Get the output projection Ref
+    // Get the output projection Ref
     m_OutputProjectionRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map");
 
     //create BCO interpolator with radius 2
@@ -1004,14 +1001,14 @@ private:
           break;
         }
 
-      if (IsParameterEnabled("bij"))
+       if (IsParameterEnabled("bij"))
         {
         otbAppLogINFO(<<"Use reverse blockMatcher to validate direct Horizontal disparities ");
         bijectFilter = BijectionFilterType::New();
         //bijectFilter->SetDirectHorizontalDisparityMapInput(blockMatcherFilter->GetHorizontalDisparityOutput());
         bijectFilter->SetDirectHorizontalDisparityMapInput(blockMatcherFilterPointer->GetOutput(1));
         bijectFilter->SetReverseHorizontalDisparityMapInput(invBlockMatcherFilterPointer->GetOutput(1));
-        bijectFilter->SetTolerance(2);
+        //bijectFilter->SetTolerance(2);
         bijectFilter->SetMinHDisp(minDisp);
         bijectFilter->SetMaxHDisp(maxDisp);
         bijectFilter->SetMinVDisp(0);
@@ -1024,8 +1021,7 @@ private:
         finalMaskFilter->SetExpression("if(inmask > 0 and lrrl > 0, 255, 0)");
         //
         m_Filters.push_back(finalMaskFilter.GetPointer());
-
-        }
+       }
 
 
       FloatImageType::Pointer hDispOutput = subPixelFilterPointer->GetOutput(0);
