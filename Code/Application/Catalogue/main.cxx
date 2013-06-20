@@ -93,7 +93,9 @@ main( int argc, char* argv[] )
   mvd::CountType nb = application.OpenDatabase();
   if( nb > 0 )
     {
+#if defined( _DEBUG )
     QMessageBox::StandardButton button =
+#endif
       QMessageBox::warning(
 	&mainWindow,
 	QCoreApplication::translate(
@@ -117,10 +119,14 @@ main( int argc, char* argv[] )
 #endif
       );
 
-    if( button==QMessageBox::Yes || button==QMessageBox::Ok )
+#if defined( _DEBUG )
+    if( button==QMessageBox::Yes )
       {
       return -2;
       }
+#else
+    return -2;
+#endif
     }
 
   // 5. Show window.
