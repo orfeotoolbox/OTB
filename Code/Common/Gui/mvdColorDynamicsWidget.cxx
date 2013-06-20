@@ -252,13 +252,13 @@ ColorDynamicsWidget
     {
     m_UI->noDataButton->setEnabled( false );
     m_UI->noDataButton->setChecked( true );
-    m_UI->noDataButton->setText( tr( "Done" ) );
+    // m_UI->noDataButton->setText( tr( "Done" ) );
     }
   else
     {
     m_UI->noDataButton->setEnabled( true );
     m_UI->noDataButton->setChecked( false );
-    m_UI->noDataButton->setText( tr( "GO" ) );
+    // m_UI->noDataButton->setText( tr( "GO" ) );
     }
 }
 

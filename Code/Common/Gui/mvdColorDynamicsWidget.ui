@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>362</width>
+    <width>303</width>
     <height>94</height>
    </rect>
   </property>
@@ -61,6 +61,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="noDataCheckBox">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLineEdit" name="noDataLineEdit">
         <property name="enabled">
          <bool>false</bool>
@@ -74,19 +81,12 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="noDataCheckBox">
-        <property name="text">
-         <string>Enabled</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="noDataButton">
         <property name="enabled">
          <bool>true</bool>
         </property>
         <property name="text">
-         <string>Done</string>
+         <string>Apply</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
