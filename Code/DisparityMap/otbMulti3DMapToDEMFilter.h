@@ -163,11 +163,11 @@ public:
    itkSetMacro(DEMGridStep, double);
    itkGetConstReferenceMacro(DEMGridStep, double);
 
-   /** Set/Get macro for DEM grid step */
+   /** Set/Get macro for CellFusionMode */
    itkSetMacro(CellFusionMode, int);
    itkGetConstReferenceMacro(CellFusionMode, int);
 
-   /** Set/Get macro for DEM grid step */
+   /** Set/Get macro for NoDataValue */
    itkSetMacro(NoDataValue, DEMPixelType);
    itkGetConstReferenceMacro(NoDataValue, DEMPixelType);
 
