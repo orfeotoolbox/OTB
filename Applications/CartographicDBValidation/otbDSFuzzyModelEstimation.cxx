@@ -415,8 +415,8 @@ private:
       }
     // get the results
     const unsigned int numberOfIterations = m_Optimizer->GetOptimizer()->get_num_evaluations();
-    otbAppLogFATAL("numberOfIterations : " << numberOfIterations << std::endl);
-    otbAppLogFATAL("Results : " << m_Optimizer->GetCurrentPosition() << std::endl);
+    otbAppLogINFO("numberOfIterations : " << numberOfIterations << std::endl);
+    otbAppLogINFO("Results : " << m_Optimizer->GetCurrentPosition() << std::endl);
 
     for (unsigned int i = 0; i < descList.size(); i++)
       {
