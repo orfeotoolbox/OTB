@@ -476,6 +476,15 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
+  // Since otb::BoostMachineLearningModel ONLY handles 2-class classifications, then the
+  // labels are split into 2 subsets: even (label = 1) and odd (label = 3) labels
+  TargetSampleType currentLabel;
+  for (unsigned itLabel = 0; itLabel < labels->Size(); ++itLabel)
+    {
+    currentLabel = labels->GetMeasurementVector(itLabel);
+    labels->SetMeasurementVector(itLabel, (2 * (currentLabel[0] % 2)) + 1);
+    }
+
   BoostType::Pointer classifier = BoostType::New();
   classifier->SetInputListSample(samples);
   classifier->SetTargetListSample(labels);
