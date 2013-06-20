@@ -404,7 +404,7 @@ private:
     SetDefaultParameterInt("step",16);
     MandatoryOff("step");
 
-    AddParameter(ParameterType_Int, "ssfactor", "Sub-sampling rate for inversion");
+    AddParameter(ParameterType_Int, "ssfactor", "Sub-sampling rate for epipolar grid inversion");
     SetParameterDescription("ssfactor","Grid inversion is an heavy process that implies spline regression on control points. To avoid eating to much memory, this parameter allows to first sub-sample the field to invert.");
     SetDefaultParameterInt("ssfactor",1);
     SetMinimumParameterIntValue("ssfactor",1);
