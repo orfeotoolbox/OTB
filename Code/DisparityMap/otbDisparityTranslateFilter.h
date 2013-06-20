@@ -63,6 +63,7 @@ public:
   typedef TMaskImage       MaskType;
   typedef TSensorImage     SensorType;
   
+  typedef typename DispMapType::PixelType    PixelType;
   typedef typename DispMapType::RegionType   RegionType;
   typedef typename DispMapType::SizeType     SizeType;
   typedef typename DispMapType::IndexType    IndexType;
@@ -71,6 +72,10 @@ public:
   
   typedef typename GridType::RegionType      GridRegionType;
   
+  /** Set/Get macro for NoDataValue */
+  itkSetMacro(NoDataValue, PixelType);
+  itkGetConstReferenceMacro(NoDataValue, PixelType);
+
   /** Set the horizontal disparity map */
   void SetHorizontalDisparityMapInput( const TDisparityImage * hmap );
   
@@ -123,6 +128,7 @@ private:
   DisparityTranslateFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
+  PixelType              m_NoDataValue;
 };
 
 } // end namespace otb

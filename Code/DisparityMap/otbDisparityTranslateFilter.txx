@@ -30,6 +30,7 @@ template <class TDisparityImage, class TGridImage, class TSensorImage, class TMa
 DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 ::DisparityTranslateFilter()
 {
+  m_NoDataValue = -32768;
   // Set the number of inputs (1 moving image by default -> 3 inputs)
   this->SetNumberOfInputs(6);
   this->SetNumberOfRequiredInputs(1);
@@ -452,8 +453,8 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
       }
     else
       {
-      horizIter.Set(0);
-      vertiIter.Set(0);
+      horizIter.Set(m_NoDataValue);
+      vertiIter.Set(m_NoDataValue);
       }
     
     ++horizIter;
