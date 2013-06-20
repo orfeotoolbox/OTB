@@ -64,6 +64,7 @@ namespace mvd
 //
 // Internal classes pre-declaration.
 class AbstractImageModel;
+class ImageProperties;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -138,9 +139,10 @@ public:
   void InsertImageModel( int id,
 			 const QString& imageFilename,
                          const QString& placename,
-			 void* imageSettings,
+			 const void* imageSettings,
 			 const QString& quicklookFilename,
-			 const QString& histogramFilename );
+			 const QString& histogramFilename,
+			 const ImageProperties* properties );
 
   /**
    */
@@ -167,7 +169,8 @@ public:
 			QString& filename,
 			void* settings,
 			QString& quicklookFilename,
-			QString& histogramFilename );
+			QString& histogramFilename,
+			ImageProperties* imageProperties );
 
   /**
    */
@@ -190,7 +193,11 @@ public:
   
   /**
    */
-  bool SetImageModel( int id, void* settings );
+  bool SetImageModelSettings( int id, const void* settings );
+
+  /**
+   */
+  bool SetImageModelProperties( int id, const ImageProperties* properties );
 
   bool UpdateDatasetAlias( const QString& newAlias);
 
@@ -315,6 +322,9 @@ private:
     ELEMENT_GRAYSCALE,
     ELEMENT_DYNAMICS_PARAMETERS,
     //
+    ELEMENT_PROPERTIES_GROUP,
+    ELEMENT_PROPERTIES_NO_DATA,
+    //
     ELEMENT_VIEW_GROUP,
     ELEMENT_VIEW_CENTER,
     ELEMENT_VIEW_ZOOM,
@@ -396,6 +406,7 @@ DatasetDescriptor
 ::GetVersionString() const
 {
   assert( !m_RootElement.isNull() );
+
   return m_RootElement.attribute( "version" );
 }
 
@@ -494,6 +505,7 @@ DatasetDescriptor
 ::CreateTextNode( const QString& text,
                   const QString& tagName )
 {
+  assert( !tagName.isEmpty() );
   QDomElement vectorElement( m_DomDocument.createElement( tagName ) );
   assert( !vectorElement.isNull() );
 

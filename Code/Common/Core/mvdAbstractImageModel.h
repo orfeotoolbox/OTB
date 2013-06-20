@@ -96,31 +96,42 @@ public:
     //
     // Public methods.
   public:
-    /** \brief Constructor. */
-    BuildContext( bool isBeingStored,
-		  void* const settings =NULL,
-		  const QString& filename =QString() ) :
+    /** \brief Contrustor (testing consistency). */
+    BuildContext() :
       m_Id( -1 ),
-      m_Filename( filename ),
+      m_Filename(),
       m_Quicklook(),
       m_Histogram(),
-      m_Settings( settings ),
-      m_IsBeingStored( isBeingStored )
+      m_Settings( NULL ),
+      m_Properties( NULL ),
+      m_IsBeingStored( false )
     {
-      assert( settings!=NULL || !filename.isEmpty() );
     }
 
-    /** \brief Constructor. */
-    BuildContext( bool isBeingStored,
-		  const QString& filename ) :
+    /** \brief Constructor (importing image). */
+    BuildContext( const QString& filename ) :
       m_Id( -1 ),
       m_Filename( filename ),
       m_Quicklook(),
       m_Histogram(),
       m_Settings( NULL ),
-      m_IsBeingStored( isBeingStored )
+      m_Properties( NULL ),
+      m_IsBeingStored( true )
     {
       assert( !filename.isEmpty() );
+    }
+
+    /** \brief Constructor (loading image). */
+    BuildContext( void* const settings,
+		  ImageProperties* const properties ) :
+      m_Id( -1 ),
+      m_Filename(),
+      m_Quicklook(),
+      m_Histogram(),
+      m_Settings( settings ),
+      m_Properties( properties ),
+      m_IsBeingStored( false )
+    {
     }
 
     /**
@@ -138,6 +149,7 @@ public:
     QString m_Quicklook;
     QString m_Histogram;
     void * const m_Settings;
+    ImageProperties * const m_Properties;
 
   private:
     bool m_IsBeingStored;
@@ -155,12 +167,21 @@ public:
   inline int GetId() const;
 
   /**
+   * \return This image properties.
    */
   inline const ImageProperties* GetProperties() const;
 
   /**
+   * \return This image properties.
    */
   inline ImageProperties* GetProperties();
+
+  /**
+   * \brief Copy external properties data to this image properties.
+   *
+   * \param properties External properties.
+   */
+  inline void SetProperties( const ImageProperties& properties );
 
   /** */
   const QuicklookModel* GetQuicklookModel() const;
@@ -384,6 +405,17 @@ AbstractImageModel
 ::GetProperties()
 {
   return m_Properties;
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageModel
+::SetProperties( const ImageProperties& properties )
+{
+  assert( m_Properties!=NULL );
+
+  *m_Properties = properties;
 }
 
 /*****************************************************************************/

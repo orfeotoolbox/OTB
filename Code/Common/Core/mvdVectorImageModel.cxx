@@ -248,12 +248,16 @@ VectorImageModel
   //
   // Step #3: Post-process of the BuildModel() pattern.
 
-  // Store min/max pixel for color-dynamics once histogram has been
+  // Remember min/max pixel for color-dynamics once histogram has been
   // generated.
   if( settings==NULL )
     InitializeColorDynamicsSettings();
   else
     SetSettings( *settings );
+
+  // Remember image properties.
+  if( buildContext->m_Properties!=NULL )
+    SetProperties( *buildContext->m_Properties );
 
   // Initialize RgbaImageModel.
   InitializeRgbaPipeline();
@@ -800,7 +804,9 @@ bool
 VectorImageModel
 ::IsModified() const
 {
-  return GetSettings().IsModified();
+  return
+    GetSettings().IsModified() ||
+    ( GetProperties()!=NULL && GetProperties()->IsModified() );
 }
 
 /*****************************************************************************/
@@ -809,6 +815,9 @@ VectorImageModel
 ::ClearModified()
 {
   GetSettings().ClearModified();
+
+  if( GetProperties()!=NULL )
+    GetProperties()->ClearModified();
 
   // TODO: Remove temporary hack (Quicklook modified flag).
   QuicklookModel* quicklookModel = GetQuicklookModel();

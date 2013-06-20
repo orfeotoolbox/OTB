@@ -90,6 +90,9 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   "grayscale",
   "dynamics",
   //
+  "properties",
+  "no_data",
+  //
   "view",
   "center",
   "zoom"
@@ -125,9 +128,10 @@ DatasetDescriptor
 ::InsertImageModel( int id,
 		    const QString& imageFilename,
                     const QString& placename,
-		    void* imageSettings,
+		    const void* imageSettings,
 		    const QString& quicklookFilename,
-		    const QString& histogramFilename )
+		    const QString& histogramFilename,
+		    const ImageProperties * properties )
 {
   //
   // Image information node.
@@ -136,13 +140,6 @@ DatasetDescriptor
   );
   imageInfoElt.setAttribute( "id", QString( "%1" ).arg( id ) );
   m_ImagesGroupElement.appendChild( imageInfoElt );
-
-  // Input Image placename (computed from the image center coordinates)
-  QDomElement placenameElt(
-        CreateTextNode( placename, 
-                        TAG_NAMES[ ELEMENT_IMAGE_PLACENAME ] )
-    );
-  imageInfoElt.appendChild( placenameElt );
 
   // Input image filename.
   QDomElement imageElt(
@@ -165,6 +162,30 @@ DatasetDescriptor
   histogramElt.setAttribute( "href", histogramFilename );
   imageInfoElt.appendChild( histogramElt );
 
+  // Input Image placename (computed from the image center coordinates)
+  QDomElement placenameElt(
+    CreateTextNode(
+      placename, 
+      TAG_NAMES[ ELEMENT_IMAGE_PLACENAME ] )
+  );
+  imageInfoElt.appendChild( placenameElt );
+
+  //
+  // Properties node.
+  assert( properties!=NULL );
+  QDomElement propertiesElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_PROPERTIES_GROUP ] )
+  );
+  imageInfoElt.appendChild( propertiesElt );
+
+  // No-data
+  QDomElement noDataElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_PROPERTIES_NO_DATA ] )
+  );
+  noDataElt.setAttribute( "flag", properties->IsNoDataEnabled() );
+  noDataElt.setAttribute( "value", properties->GetNoData() );
+  propertiesElt.appendChild( noDataElt );
+
   //
   // Settings node.
   QDomElement settingsElement(
@@ -174,8 +195,8 @@ DatasetDescriptor
 
   // TODO: Generalize code section
   {
-  VectorImageModel::Settings* settings =
-    static_cast< VectorImageModel::Settings* >( imageSettings );
+  const VectorImageModel::Settings* settings =
+    static_cast< const VectorImageModel::Settings* >( imageSettings );
 
   // RGB channels.
   QDomElement rgbElement(
@@ -217,9 +238,9 @@ DatasetDescriptor
 /*****************************************************************************/
 bool
 DatasetDescriptor
-::SetImageModel( int id, void* imageSettings )
+::SetImageModelSettings( int id, const void* imageSettings )
 {
-  qDebug() << "DatasetDescriptor::SetImageModel(" << id << ")";
+  qDebug() << "DatasetDescriptor::SetImageModelSettings(" << id << ")";
 
   assert( imageSettings!=NULL );  
 
@@ -233,10 +254,10 @@ DatasetDescriptor
     imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_SETTINGS_GROUP ] )
   );
   // TODO: Manage XML structure errors.
-  assert( !settingsElt.isNull() );  
+  assert( !settingsElt.isNull() );
 
-  VectorImageModel::Settings* settings =
-    static_cast< VectorImageModel::Settings* >( imageSettings );
+  const VectorImageModel::Settings* settings =
+    static_cast< const VectorImageModel::Settings* >( imageSettings );
   
   {
     // RGB
@@ -301,6 +322,40 @@ DatasetDescriptor
       )
     );
   }
+  // if everything went ok
+  return true;
+}
+
+/*****************************************************************************/
+bool
+DatasetDescriptor
+::SetImageModelProperties( int id, const ImageProperties* imageProperties )
+{
+  qDebug() << "DatasetDescriptor::SetImageModelProperties(" << id << ")";
+
+  assert( imageProperties!=NULL );  
+
+  // Access image information element.
+  QDomElement imageInfoElt( GetImageElement( id ) );
+  if( imageInfoElt.isNull() )
+    return false;
+
+  // Access properties group element.
+  QDomElement propertiesElt(
+    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_GROUP ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !propertiesElt.isNull() );
+
+  // Access no-data.
+  QDomElement noDataElt(
+    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_NO_DATA ] )
+  );
+  assert( !noDataElt.isNull() );
+
+  noDataElt.setAttribute( "flag", imageProperties->IsNoDataEnabled() );
+  noDataElt.setAttribute( "value", imageProperties->GetNoData() );
+
   // if everything went ok
   return true;
 }
@@ -430,7 +485,8 @@ DatasetDescriptor
 		 QString& imageFilename,
 		 void* imageSettings,
 		 QString& quicklookFilename,
-		 QString& histogramFilename )
+		 QString& histogramFilename,
+		 ImageProperties* imageProperties )
 {
   // TODO: Manager XML structure errors.
   assert( !imageSibling.isNull() );
@@ -462,6 +518,30 @@ DatasetDescriptor
   // TODO: Manage XML structure errors.
   //assert( !histogramElt.isNull() );
   histogramFilename = histogramElt.attribute( "href" );
+
+  // Properties.
+  if( imageProperties!=NULL )
+    {
+    QDomElement propertiesElt(
+      imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_GROUP ] )
+    );
+    assert( !propertiesElt.isNull() );
+
+    QDomElement noDataElt(
+      propertiesElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_NO_DATA ] )
+    );
+    assert( !noDataElt.isNull() );
+
+    bool isOk = true;
+
+    imageProperties->SetNoDataEnabled(
+      static_cast< bool >( noDataElt.attribute( "flag" ).toInt( &isOk ) ) );
+    assert( isOk );
+
+    imageProperties->SetNoData(
+      noDataElt.attribute( "value" ).toDouble( &isOk ) );
+    assert( isOk );
+    }
 
   // TODO: Generalize code section.
   if( imageSettings!=NULL )

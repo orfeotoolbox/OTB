@@ -126,24 +126,28 @@ DatasetModel
     {
     // Locals.
     VectorImageModel::Settings settings;
-    AbstractImageModel::BuildContext imageContext( false, &settings );
+    AbstractImageModel::BuildContext imageContext;
 
     // Read image-model descriptor information.
     DatasetDescriptor::GetImageModel(
       imageElt,
       imageContext.m_Id,
       imageContext.m_Filename,
-      imageContext.m_Settings,
+      NULL,
       imageContext.m_Quicklook,
-      imageContext.m_Histogram
+      imageContext.m_Histogram,
+      NULL
     );
 
-    QFileInfo fileInfo( GetDirectory(), imageContext.m_Filename );
+    QFileInfo imgFInfo( GetDirectory(), imageContext.m_Filename );
+    QFileInfo qlFInfo( GetDirectory(), imageContext.m_Quicklook );
+    QFileInfo htgmFInfo( GetDirectory(), imageContext.m_Histogram );
 
     isConsistent =
       isConsistent &&
-      fileInfo.exists() &&
-      fileInfo.isReadable();
+      imgFInfo.exists() && imgFInfo.isReadable() &&
+      qlFInfo.exists() && qlFInfo.isReadable() &&
+      htgmFInfo.exists() && htgmFInfo.isReadable();
     }
 
   return isConsistent;
@@ -154,7 +158,7 @@ void
 DatasetModel
 ::ImportImage( const QString& filename, int width, int height )
 {
-  AbstractImageModel::BuildContext context( true, filename );
+  AbstractImageModel::BuildContext context( filename );
   LoadImage( context, width, height );
 }
 
@@ -234,7 +238,8 @@ DatasetModel
         m_Placename,
 	&vectorImageModel->GetSettings(),
 	GetDirectory().relativeFilePath( context.m_Quicklook ),
-	GetDirectory().relativeFilePath( context.m_Histogram )
+	GetDirectory().relativeFilePath( context.m_Histogram ),
+	vectorImageModel->GetProperties()
       );
 
       //
@@ -355,7 +360,9 @@ DatasetModel
     {
     // Locals.
     VectorImageModel::Settings settings;
-    AbstractImageModel::BuildContext imageContext( false, &settings );
+    ImageProperties properties;
+
+    AbstractImageModel::BuildContext imageContext( &settings, &properties );
 
    // Read image-model descriptor information.
     DatasetDescriptor::GetImageModel(
@@ -364,7 +371,8 @@ DatasetModel
       imageContext.m_Filename,
       imageContext.m_Settings,
       imageContext.m_Quicklook,
-      imageContext.m_Histogram
+      imageContext.m_Histogram,
+      imageContext.m_Properties
     );
 
     // Traces.
@@ -788,7 +796,7 @@ DatasetModel
 
   assert( vectorImageModel!=NULL );
 
-  m_Descriptor->SetImageModel(
+  m_Descriptor->SetImageModelSettings(
     vectorImageModel->GetId(),
     &vectorImageModel->GetSettings()
   );

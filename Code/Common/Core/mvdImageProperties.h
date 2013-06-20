@@ -70,12 +70,16 @@ namespace mvd
  *
  * \brief WIP.
  */
-class Monteverdi2_EXPORT ImageProperties :
-    public QObject
+#define IMAGE_PROPERTIES_IS_QOBJECT 0
+class Monteverdi2_EXPORT ImageProperties
+#if IMAGE_PROPERTIES_IS_QOBJECT
+  : public QObject
+#endif
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
+#if IMAGE_PROPERTIES_IS_QOBJECT
   Q_OBJECT;
 
   Q_PROPERTY( bool isNoDataEnabled
@@ -85,6 +89,7 @@ class Monteverdi2_EXPORT ImageProperties :
   Q_PROPERTY( ComponentType NoData
 	      READ GetNoData
 	      WRITE SetNoData );
+#endif
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -93,10 +98,22 @@ class Monteverdi2_EXPORT ImageProperties :
 public:
 
   /** \brief Constructor. */
+#if IMAGE_PROPERTIES_IS_QOBJECT
   ImageProperties( QObject* parent =NULL );
+#else
+  ImageProperties();
+#endif
 
   /** \brief Destructor. */
   virtual ~ImageProperties();
+
+  /**
+   */
+  inline bool IsModified() const;
+
+  /**
+   */
+  inline void ClearModified();
 
   /*
    */
@@ -141,7 +158,9 @@ protected:
 //
 // Private methods.
 private:
-
+  /**
+   */
+  inline void SetModified();
 
 //
 // Private attributes.
@@ -157,6 +176,7 @@ private:
     }
 
   public:
+    bool m_IsModified : 1;
     bool m_NoData : 1;
   };
 
@@ -201,11 +221,40 @@ namespace mvd
 
 /*****************************************************************************/
 inline
+bool
+ImageProperties
+::IsModified() const
+{
+  return m_Flags.m_IsModified;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageProperties
+::SetModified()
+{
+  m_Flags.m_IsModified = true;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageProperties
+::ClearModified()
+{
+  m_Flags.m_IsModified = false;
+}
+
+/*****************************************************************************/
+inline
 void
 ImageProperties
 ::SetNoDataEnabled( bool enabled )
 {
   m_Flags.m_NoData = enabled;
+
+  SetModified();
 }
 
 /*****************************************************************************/
@@ -215,6 +264,8 @@ ImageProperties
 ::SetNoData( ComponentType value )
 {
   m_NoData = value;
+
+  SetModified();
 }
 
 /*****************************************************************************/

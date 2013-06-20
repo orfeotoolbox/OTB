@@ -100,6 +100,7 @@ AbstractImageModel
 AbstractImageModel
 ::~AbstractImageModel()
 {
+  SetProperties( NULL );
 }
 
 /*****************************************************************************/
