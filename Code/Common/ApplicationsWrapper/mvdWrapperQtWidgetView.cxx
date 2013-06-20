@@ -85,7 +85,8 @@ QtWidgetView::QtWidgetView(otb::Wrapper::Application* app)
 /*******************************************************************************/
 QtWidgetView::~QtWidgetView()
 {
-
+  if(m_Model)
+    delete m_Model;
 }
 
 /*******************************************************************************/
