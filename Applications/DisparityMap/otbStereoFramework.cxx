@@ -1175,7 +1175,7 @@ private:
       //TODO JGT Check if mask is necessary
 
       }
-    m_Multi3DMapToDEMFilter->SetNumberOfThreads(1);
+
     if(GetParameterInt("output.mode")==0)
       {
       otbAppLogINFO(<<"DEM parameters are deduced from sensor input data");
