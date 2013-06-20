@@ -119,14 +119,14 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
     fuzName  = m_DescriptorModels[i].first;
     fuzName_ = m_DescriptorModels[i].first + "_";
 
-    fuz->SetMembership(fuzName,
+    fuz->SetMembership(fuzName_,
                        0.0,
                        0.0,
                        m_DescriptorModels[i].second[0],
                        m_DescriptorModels[i].second[1],
                        0.0,
                        m_DescriptorModels[i].second[3]);
-    fuz->SetMembership(fuzName_,
+    fuz->SetMembership(fuzName,
                        m_DescriptorModels[i].second[1],
                        m_DescriptorModels[i].second[2],
                        1.0,
