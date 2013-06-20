@@ -363,6 +363,12 @@ private:
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
     SetParameterDescription("output.res","Spatial sampling distance of the output elevation (in m)");
+    SetDefaultParameterFloat("output.res",1.);
+
+    AddParameter(ParameterType_Float, "output.nodata","NoData value");
+    SetParameterDescription("output.nodata","DEM empty cells are filled with tihs value (optional -32768 by default)");
+    SetDefaultParameterFloat("output.nodata",-32768);
+    MandatoryOff("output.nodata");
     
     AddParameter(ParameterType_OutputImage,"output.out","Output image");
     SetParameterDescription("output.out","Output elevation image");
@@ -602,6 +608,7 @@ private:
     m_Interpolator->SetRadius(2);
 
     m_Multi3DMapToDEMFilter->SetNumberOf3DMaps(stereoCouples);
+    m_Multi3DMapToDEMFilter->SetNoDataValue(this->GetParameterFloat("output.nodata"));
 
     // value of ram used to compute epipolar grid
     double globalEpiStorageSize = 0;
@@ -1021,7 +1028,7 @@ private:
         finalMaskFilter->SetExpression("if(inmask > 0 and lrrl > 0, 255, 0)");
         //
         m_Filters.push_back(finalMaskFilter.GetPointer());
-       }
+        }
 
 
       FloatImageType::Pointer hDispOutput = subPixelFilterPointer->GetOutput(0);
@@ -1044,8 +1051,17 @@ private:
       disparityTranslateFilter->SetDirectEpipolarRightGrid(rightDeformation);
       // disparityTranslateFilter->SetDisparityMaskInput()
       disparityTranslateFilter->SetLeftSensorImageInput(inleft);
+      disparityTranslateFilter->SetNoDataValue(-32768);
       disparityTranslateFilter->UpdateOutputInformation();
+
       m_Filters.push_back(disparityTranslateFilter.GetPointer());
+
+      BandMathFilterType::Pointer dispTranslateMaskFilter = BandMathFilterType::New();
+      dispTranslateMaskFilter->SetNthInput(0, disparityTranslateFilter->GetHorizontalDisparityMapOutput(), "hdisp");
+      dispTranslateMaskFilter->SetExpression("hdisp!=-32768");
+      m_Filters.push_back(dispTranslateMaskFilter.GetPointer());
+
+
 
       FloatImageType::Pointer hDispOutput2 = disparityTranslateFilter->GetHorizontalDisparityMapOutput();
       FloatImageType::Pointer vDispOutput2 = disparityTranslateFilter->GetVerticalDisparityMapOutput();
@@ -1079,7 +1095,7 @@ private:
       m_MultiDisparityTo3DFilterList[i]->SetVerticalDisparityMapInput(0, vDispOutput2);
       m_MultiDisparityTo3DFilterList[i]->SetMovingKeywordList(0, inright->GetImageKeywordlist());
       m_MultiDisparityTo3DFilterList[i]->UpdateOutputInformation();
-      //SetParameterOutputImage("out2", m_MultiDisparityTo3DFilterList[i]->GetOutput());
+      m_MultiDisparityTo3DFilterList[i]->SetDisparityMaskInput(0,dispTranslateMaskFilter->GetOutput());
 
       // PARAMETER ESTIMATION
 
@@ -1219,9 +1235,9 @@ private:
   InterpolatorType::Pointer m_Interpolator;
   
   MultiDisparityTo3DFilterListType  m_MultiDisparityTo3DFilterList;
-  Multi3DFilterType::Pointer  m_Multi3DMapToDEMFilter;
+  Multi3DFilterType::Pointer        m_Multi3DMapToDEMFilter;
 
-  ExtractorListType                            m_ExtractorList;
+  ExtractorListType               m_ExtractorList;
   std::string                     m_OutputProjectionRef;
 };
 
