@@ -49,7 +49,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    NormalBayesMachineLearningModelFactory::Pointer Factory = NormalBayesMachineLearningModelFactory::New();
+    Pointer Factory = NormalBayesMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(Factory);
   }
 

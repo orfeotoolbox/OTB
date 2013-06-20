@@ -49,7 +49,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    DecisionTreeMachineLearningModelFactory::Pointer Factory = DecisionTreeMachineLearningModelFactory::New();
+    Pointer Factory = DecisionTreeMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(Factory);
   }
 

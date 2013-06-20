@@ -49,7 +49,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    LibSVMMachineLearningModelFactory::Pointer LibSVMFactory = LibSVMMachineLearningModelFactory::New();
+    Pointer LibSVMFactory = LibSVMMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(LibSVMFactory);
   }
 

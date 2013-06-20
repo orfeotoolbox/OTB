@@ -49,7 +49,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    GradientBoostedTreeMachineLearningModelFactory::Pointer Factory = GradientBoostedTreeMachineLearningModelFactory::New();
+    Pointer Factory = GradientBoostedTreeMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(Factory);
   }
 

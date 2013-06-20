@@ -49,7 +49,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    BoostMachineLearningModelFactory::Pointer Factory = BoostMachineLearningModelFactory::New();
+    Pointer Factory = BoostMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(Factory);
   }
 

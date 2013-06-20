@@ -49,7 +49,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    NeuralNetworkMachineLearningModelFactory::Pointer Factory = NeuralNetworkMachineLearningModelFactory::New();
+    Pointer Factory = NeuralNetworkMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(Factory);
   }
 

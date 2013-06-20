@@ -49,7 +49,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    KNearestNeighborsMachineLearningModelFactory::Pointer KNNFactory = KNearestNeighborsMachineLearningModelFactory::New();
+    Pointer KNNFactory = KNearestNeighborsMachineLearningModelFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(KNNFactory);
   }
 
