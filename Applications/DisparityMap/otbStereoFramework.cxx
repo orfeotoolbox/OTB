@@ -320,17 +320,17 @@ private:
     SetDocName("Stereo Framework");
     SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm "
                           "between a stereo pair in sensor geometry. The output is projected in "
-                          "WGS84. The pipeline is made of the following steps:\n"
+                          "desired geographic or cartographic projection (UTM by default). The pipeline is made of the following steps:\n"
                           "\t- compute the epipolar deformation grids from the stereo pair\n"
                           "\t- resample the stereo pair into epipolar images using BCO interpolation\n"
                           "\t- create masks for each epipolar image : remove black borders and resample"
                           " input masks\n"
                           "\t- compute horizontal disparities with a NCC block matching algorithm\n"
                           "\t- refine disparities to sub-pixel precision with a dichotomy algorithm\n"
-                          "\t- apply a median filter\n"
+                          "\t- apply an optionnal median filter\n"
                           "\t- filter disparites based on the correlation score (must be greater than "
                           "0.6) and exploration bounds\n"
-                          "\t- project disparities on a regular grid in WGS84, for each cell the "
+                          "\t- project disparities on a regular grid for each cell the "
                           "maximum elevation is kept.\n"
                           "NoData values are filled with -32768\n");
     SetDocLimitations(" ");
@@ -352,11 +352,48 @@ private:
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
     
-    AddParameter(ParameterType_Float, "res","Output resolution");
-    SetParameterDescription("res","Spatial sampling distance of the output elevation (in m)");
+    // Add the output paramters in a group
+    AddParameter(ParameterType_Group, "output", "Output parameters");
+    SetParameterDescription("output","This group of parameters allows to choose the DEM resolution and projection parameters.");
+
+    // Build the Output Map Projection
+    MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
+
+    AddParameter(ParameterType_Float, "output.res","Output resolution");
+    SetParameterDescription("output.res","Spatial sampling distance of the output elevation (in m)");
     
-    AddParameter(ParameterType_OutputImage,"out","Output image");
-    SetParameterDescription("out","Output elevation image");
+    AddParameter(ParameterType_OutputImage,"output.out","Output image");
+    SetParameterDescription("output.out","Output elevation image");
+
+
+    // UserDefined values
+    AddParameter(ParameterType_Choice, "output.mode", "Parameters estimation modes");
+    AddChoice("output.mode.fit", "Fit to sensor image");
+       SetParameterDescription("output.mode.fit", "Fit the size, origin and spacing to an existing ortho image (uses the value of outputs.ortho)");
+    AddChoice("output.mode.user", "User Defined");
+    SetParameterDescription("output.mode.user","This mode allows you to fully modify default values.");
+    // Upper left point coordinates
+    AddParameter(ParameterType_Float, "output.mode.user.ulx", "Upper Left X");
+    SetParameterDescription("output.mode.user.ulx","Cartographic X coordinate of upper-left corner (meters for cartographic projections, degrees for geographic ones)");
+
+    AddParameter(ParameterType_Float, "output.mode.user.uly", "Upper Left Y");
+    SetParameterDescription("output.mode.user.uly","Cartographic Y coordinate of the upper-left corner (meters for cartographic projections, degrees for geographic ones)");
+
+    // Size of the output image
+    AddParameter(ParameterType_Int, "output.mode.user.sizex", "Size X");
+    SetParameterDescription("output.mode.user.sizex","Size of projected image along X (in pixels)");
+
+    AddParameter(ParameterType_Int, "output.mode.user.sizey", "Size Y");
+    SetParameterDescription("output.mode.user.sizey","Size of projected image along Y (in pixels)");
+
+    // Spacing of the output image
+    AddParameter(ParameterType_Float, "output.mode.user.spacingx", "Pixel Size X");
+    SetParameterDescription("output.mode.user.spacingx","Size of each pixel along X axis (meters for cartographic projections, degrees for geographic ones)");
+
+
+    AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y");
+    SetParameterDescription("output.mode.user.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
+
 
     //AddParameter(ParameterType_OutputImage,"out2","Output image");
     //SetParameterDescription("out2","Output elevation image");
@@ -448,21 +485,13 @@ private:
     MandatoryOff("mask.variancet");
     SetDefaultParameterFloat("mask.variancet",100.);
     DisableParameter("mask.variancet");
-
-
-    //TODO JGT new framework disparity map handling
-    // is it useful to store disp in epipolar geometry ?
-   /* AddParameter(ParameterType_OutputFilename,"disp","Disparity map output");
-    SetParameterDescription("disp","Image filename to store the disparity map (it can improve the processing time)");
-    MandatoryOff("disp");
-    DisableParameter("disp"); */
     
     AddRAMParameter();
     
 
     SetDocExampleParameterValue("il","sensor_stereo_left.tif sensor_stereo_right.tif");
-    SetDocExampleParameterValue("res","2.5");
-    SetDocExampleParameterValue("out","dem.tif");
+    SetDocExampleParameterValue("output.res","2.5");
+    SetDocExampleParameterValue("output.out","dem.tif");
     
   }
   
@@ -565,6 +594,11 @@ private:
       m_ExtractorList[i]->UpdateOutputInformation();
 
       }
+    // Update the UTM zone params
+    MapProjectionParametersHandler::InitializeUTMParameters(this, "il", "map");
+
+     // Get the output projection Ref
+    m_OutputProjectionRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map");
 
     //create BCO interpolator with radius 2
     // used by Left and Right Resampler and Left and Right Mask REsampler
@@ -1106,14 +1140,6 @@ private:
       // blockMatcherFilter->SetMinimumVerticalDisparity(0);
       // blockMatcherFilter->SetMaximumVerticalDisparity(0);
 
-      if (IsParameterEnabled("bij"))
-        {
-        // invBlockMatcherFilter->SetMinimumHorizontalDisparity(-maxDisp);
-        // invBlockMatcherFilter->SetMaximumHorizontalDisparity(-minDisp);
-        //  invBlockMatcherFilter->SetMinimumVerticalDisparity(0);
-        //  invBlockMatcherFilter->SetMaximumVerticalDisparity(0);
-
-        }
 
       // Compute disparity mask
       BandMathFilterType::Pointer dispMaskFilter = BandMathFilterType::New();
@@ -1149,13 +1175,45 @@ private:
       //TODO JGT Check if mask is necessary
 
       }
+    m_Multi3DMapToDEMFilter->SetNumberOfThreads(1);
+    if(GetParameterInt("output.mode")==0)
+      {
+      otbAppLogINFO(<<"DEM parameters are deduced from sensor input data");
 
-    m_Multi3DMapToDEMFilter->SetOutputParametersFrom3DMap();
-    m_Multi3DMapToDEMFilter->SetDEMGridStep(this->GetParameterFloat("res"));
+      m_Multi3DMapToDEMFilter->SetOutputParametersFrom3DMap();
+      }
+    else
+      {
+      otbAppLogINFO(<<"DEM parameters are user defined");
+      FloatVectorImageType::IndexType start;
+      start[0] = 0;
+      start[1] = 0;
+      m_Multi3DMapToDEMFilter->SetOutputStartIndex(start);
+
+      FloatVectorImageType::SizeType size;
+      size[0] = this->GetParameterInt("output.mode.user.sizex"); // X size
+      size[1] = this->GetParameterInt("output.mode.user.sizey"); //Y size
+      m_Multi3DMapToDEMFilter->SetOutputSize(size);
+
+      FloatVectorImageType::SpacingType spacing;
+      spacing[0] = this->GetParameterFloat("output.mode.user.spacingx");
+      spacing[1] = this->GetParameterFloat("output.mode.user.spacingy");
+      m_Multi3DMapToDEMFilter->SetOutputSpacing(spacing);
+
+      FloatVectorImageType::PointType origin;
+      origin[0] = this->GetParameterFloat("output.mode.user.ulx");
+      origin[1] = this->GetParameterFloat("output.mode.user.uly");
+      m_Multi3DMapToDEMFilter->SetOutputOrigin(origin);
+
+      }
+    otbAppLogINFO(<<"DEM OutputProjectionRef :"<<std::endl<<m_OutputProjectionRef);
+    m_Multi3DMapToDEMFilter->SetProjectionRef(m_OutputProjectionRef);
+
+    m_Multi3DMapToDEMFilter->SetDEMGridStep(this->GetParameterFloat("output.res"));
     m_Multi3DMapToDEMFilter ->SetCellFusionMode(otb::CellFusionMode::MAX);
     m_Multi3DMapToDEMFilter->UpdateOutputInformation();
 
-    SetParameterOutputImage("out", m_Multi3DMapToDEMFilter->GetOutput());
+    SetParameterOutputImage("output.out", m_Multi3DMapToDEMFilter->GetOutput());
 
   }
   
@@ -1168,7 +1226,7 @@ private:
   Multi3DFilterType::Pointer  m_Multi3DMapToDEMFilter;
 
   ExtractorListType                            m_ExtractorList;
-
+  std::string                     m_OutputProjectionRef;
 };
 
 }
