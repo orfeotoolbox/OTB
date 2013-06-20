@@ -384,7 +384,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
 
     //set requested to largest and check that mask has the same size
     T3DImage *imgPtr = const_cast<T3DImage *> (this->Get3DMapInput(k));
-    OriginType inputOrigin = imgPtr->GetOrigin();
 
     RSTransformType::Pointer groundToSensorTransform = RSTransformType::New();
     //groundToSensorTransform->SetInputKeywordList(outputDEM->GetImageKeywordlist());
