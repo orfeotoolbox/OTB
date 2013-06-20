@@ -176,7 +176,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrRefineSensorModel
                              -map utm -map.utm.zone 31 -map.utm.northhem 1
                              -elev.dem ${INPUTDATA}/DEM/srtm_directory
                              -elev.geoid ${INPUTDATA}/DEM/egm96.grd
-                     VALID   --compare-ascii 0.01
+                     VALID   --compare-ascii 0.1
                              ${BASELINE_FILES}/apTvPrRefineSensorModelGeomOutput.geom
                              ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom)
 
