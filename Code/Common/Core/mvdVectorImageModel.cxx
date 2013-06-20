@@ -885,6 +885,9 @@ VectorImageModel
 
   // Emit settings update to notify display refresh.
   emit SettingsUpdated( this );
+
+  // Emit properties update.
+  emit PropertiesUpdated( this );
 }
 
 /*****************************************************************************/

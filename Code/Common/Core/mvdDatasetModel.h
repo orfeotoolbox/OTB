@@ -393,6 +393,10 @@ private slots:
    */
   void OnSettingsUpdated( AbstractImageModel* );
 
+  /**
+   */
+  void OnPropertiesUpdated( AbstractImageModel* );
+
   /** */
   void OnRenderingContextChanged(const PointType&, double );
 

@@ -464,6 +464,10 @@ signals:
    */
   void SettingsUpdated( AbstractImageModel* imageModel =NULL );
 
+  /**
+   */
+  void PropertiesUpdated( AbstractImageModel* imageModel =NULL );
+
   /**   */
   void ViewportRegionChanged(double, double);
 

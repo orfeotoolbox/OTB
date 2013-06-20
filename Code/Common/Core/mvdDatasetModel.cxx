@@ -257,6 +257,18 @@ DatasetModel
       this,
       SLOT( OnSettingsUpdated( AbstractImageModel* ) )
     );
+
+    //
+    // 2.6. Connect properties updated of image-model to dataset-model
+    // in order to update XML descriptor.
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( PropertiesUpdated( AbstractImageModel* ) ),
+      // to:
+      this,
+      SLOT( OnPropertiesUpdated( AbstractImageModel* ) )
+    );
+
     }
   catch( std::exception& exc )
     {
@@ -799,6 +811,26 @@ DatasetModel
   m_Descriptor->SetImageModelSettings(
     vectorImageModel->GetId(),
     &vectorImageModel->GetSettings()
+  );
+}
+
+/*****************************************************************************/
+void
+DatasetModel
+::OnPropertiesUpdated( AbstractImageModel* imageModel )
+{
+  assert( imageModel!=NULL );
+
+  qDebug() << "DatasetModel::OnPropertiesUpdated(" << imageModel->GetId() << ")";
+
+  VectorImageModel* vectorImageModel =
+    qobject_cast< VectorImageModel* >( imageModel );
+
+  assert( vectorImageModel!=NULL );
+
+  m_Descriptor->SetImageModelProperties(
+    vectorImageModel->GetId(),
+    vectorImageModel->GetProperties()
   );
 }
 

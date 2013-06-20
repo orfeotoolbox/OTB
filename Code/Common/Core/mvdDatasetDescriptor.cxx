@@ -349,7 +349,7 @@ DatasetDescriptor
 
   // Access no-data.
   QDomElement noDataElt(
-    imageInfoElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_NO_DATA ] )
+    propertiesElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_NO_DATA ] )
   );
   assert( !noDataElt.isNull() );
 
