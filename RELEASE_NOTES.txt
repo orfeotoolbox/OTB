@@ -1,3 +1,109 @@
+OTB-v.3.18 - Changes since version 3.16 (2013/06/21)
+--------------------------------------------------------
+
+Among the classical improvements and bug fixes to exisiting functionnalities, this release provides 
+the following main functionnalities :
+ * Huge improvements in Stereo framework, to compute DEM from stereo pairs :
+   check the StereoFramework application !
+ * Whole new classification framework, with seamless integration of all OpenCV classifiers in addition to the
+   existing SVM classifier, kept for backward compatibility : check the TrainImageClassifier application !
+ * A classifiers fusion framework based on Dempster Shafer theory : check the FusionOfClassifications application !
+
+
+The full list of improvements comes here :
+ 
+* Library
+  * Core and Third Parties
+    * Expose Curl timeout as parameter
+    * OGRLayerStreamStitchingFilter : fix issue #610 'Attempt to delete shape with feature id (405674), but it is marked deleted already.'
+    * Preparation for ITKv4 : got rid of most patches in internal ITK version
+    * Removal of old deprecated methods in all OTB classes
+    * Fix mangling of internal OpenJPEG
+  
+  * Basic filters
+    * Add NoData value and flag for StreamingMinMaxVectorImageFilter
+    * StreamingStatisticsImageFilter & StreamingStatisticsVectorImageFilter : support for skipping Nan and for a background value
+
+  * Stereo
+    * New classes :
+      * DisparityMapTo3DFilter : convert disparity map in epipolar geometry to 3D image in epipolar geometry
+      * MultiDisparityMapTo3DFilter : convert several disparity maps in sensor geometry to a 3D image in sensor geometry
+      * LineOfSightOptimizer : algorithm to fuse several elevation values by line of sight optimisation
+      * BijectionCoherencyFilter : from 2 disparity maps, compute coherency left-right and right-left, and ouput a mask of coherent disparities
+      * Multi3DToDEMFilter : fuse several 3D images to produce an elevation map
+      * DisparityTranslateFilter : filter to translate epipolar disparities into sensor disparities
+    * PixelWiseBlockMatchingImageFilter : fix initialisation of metric and disparities
+    * PixelWiseBlockMatchingImageFilter : supports a shift on the subsampled grid
+    * SubPixelDisparityImageFilter : supports a subsampled grid (with shift)
+    * PixelWiseBlockMatchingImageFilter & SubPixelDisparityImageFilter : subsampled disparities are now consistent with the dispmap index spaces
+
+  * IO
+    * GDALImageIO : support reading overviews. "image.tif?&resol=3" is now supported as file name
+    * Extended file names now supports the "box" key for writing only a subset of the image
+    
+  * Learning
+    * Generic framework of classification filters, integrating OpenCV classifiers and libSVM
+      * New classes
+        * MachineLearningModel
+        * MachineLearningModelFactory
+        * LibSVMMachineLearningModel, based on pre exsiting libsvm functionnalities
+        * OpenCV based classifiers :
+            BoostMachineLearningModel DecisionTreeMachineLearningModel GradientBoostedTreeMachineLearningModel
+            KNearestNeighborsMachineLearningModel NeuralNetworkMachineLearningModel
+            NormalBayesMachineLearningModel RandomForestsMachineLearningModel SVMMachineLearningModel
+        
+    * ConfusionMatrixCalculator : add correspondence between class label and indices
+    * ConfusionMatrixMeasurements : add new class for computation of precision, recall and F-score
+    
+  * Fuzzy
+    * New Dempster Shafer based fusion of classifiers framework
+      * Theory explained in http://wiki.orfeo-toolbox.org/index.php/Information_fusion_framework
+      * New classes : DSFusionOfClassifiersImageFilter, ConfusionMatrixToMassOfBelief
+      
+  * Segmentation
+    * Fix some numerical instabilities in mean shift segmentation filter
+  
+  * Radiometry
+    * Fix spectral sensitivity reading of Pleiades images
+    * Add PHR 1B averaged solar irradiance provided by CNES
+    
+  
+  * Applications
+    * New applications
+      * Added new SRTM tiles downloader (DownloadSRTMTiles)
+      * Added new PLY file generator (GeneratePlyFile)
+      * TrainImageClassifier and ImageClassifier : made TrainSVMImageClassifier & ImageSVMClassifier 
+        more generic and expose OpenCV classifiers.
+        Check the migration guide at : http://wiki.orfeo-toolbox.org/index.php/Classification_OTB_applications
+      
+    * Updated applications
+      * StereoFramework :
+        * Handles several images in input by stereo couples
+        * More robust block matching with coherency checking in both directions
+        * Choice of metric for block matching
+        * Optional median filtering for disparities
+        * Add variance threshold on input images for masking pixels where variance is too low
+        * Add support for final projection of DEM in other SRS than WGS84
+      * ExtractROI : add a mode to fit another reference image
+      * StereoRectificationGridGenerator : disable agvdem by default
+      * BlockMatching : expose step parameter
+      * BlockMatching : supports a shift on the subsampled grid
+      * ColorMapping : remove flooding of logs
+      * TrainImageClassifier & ComputeConfusionMatrix : enhance reporting of confusion matrix by displaying real labels
+      * ReadImageInfo : add index of largest possible region
+      * ComputeImageStatistics : support for background values, add progress reporting
+      * CompareImages : use whole image when no ROI is provided
+        
+      
+    * Core Framework
+      * Manage UTF8 paths in GUI
+      * Fix a crash in string list parameter widget in GUI
+       
+* Monteverdi
+      
+* Bug Fixes
+
+
 OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
 --------------------------------------------------------
 * Library
