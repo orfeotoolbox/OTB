@@ -65,7 +65,7 @@ public:
 
 private:
 
-  bool m_Mode;
+  int m_Mode;
 
   bool SRTMTileExists(const std::string & url) const
   {
