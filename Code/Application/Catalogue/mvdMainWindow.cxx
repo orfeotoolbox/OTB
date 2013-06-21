@@ -337,23 +337,25 @@ void
 MainWindow
 ::ConnectViewMenu()
 {
-    m_UI->menu_View->addSeparator();
+  m_UI->menu_View->addAction( m_UI->m_ToolBar->toggleViewAction() );
+  
+  m_UI->menu_View->addSeparator();
 
-    m_UI->menu_View->addAction( m_ColorSetupDock->toggleViewAction() );
-    m_UI->menu_View->addAction( m_ColorDynamicsDock->toggleViewAction() );
+  m_UI->menu_View->addAction( m_ColorSetupDock->toggleViewAction() );
+  m_UI->menu_View->addAction( m_ColorDynamicsDock->toggleViewAction() );
 
-    m_UI->menu_View->addSeparator();
+  m_UI->menu_View->addSeparator();
 
-    m_UI->menu_View->addAction( m_QuicklookViewDock->toggleViewAction() );
+  m_UI->menu_View->addAction( m_QuicklookViewDock->toggleViewAction() );
 
-    m_UI->menu_View->addSeparator();
+  m_UI->menu_View->addSeparator();
 
-    m_UI->menu_View->addAction( m_DatabaseBrowserDock->toggleViewAction() );
-    m_UI->menu_View->addAction( m_DatasetPropertiesDock->toggleViewAction() );
-    m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
+  m_UI->menu_View->addAction( m_DatabaseBrowserDock->toggleViewAction() );
+  m_UI->menu_View->addAction( m_DatasetPropertiesDock->toggleViewAction() );
+  m_UI->menu_View->addAction( m_PixelDescriptionDock->toggleViewAction() );
 #ifdef OTB_WRAP_QT
-    m_UI->menu_View->addAction(
-      m_OtbApplicationsBrowserDock->toggleViewAction() );
+  m_UI->menu_View->addAction(
+    m_OtbApplicationsBrowserDock->toggleViewAction() );
 #endif
 }
 
