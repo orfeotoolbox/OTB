@@ -82,8 +82,10 @@ private:
       {
       return itksys::SystemTools::FileExists(url.c_str());
       }
+      default :
       break;
       }
+    return false;
   }
   void DoInit()
   {
