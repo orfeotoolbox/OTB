@@ -102,7 +102,56 @@ The full list of improvements comes here :
 * Monteverdi
       
 * Bug Fixes
+  * OTB-lib
+    * 0000707: Memory leaks in ApplicationWrappers
+    * 0000712: weird result of DempsterShaffer fusion of classification
+    * 0000685: UTF-8 paths not managed by Qt GUI in OTB Applications
+    * 0000686: Input file paths are deleted in some input fields of Qt GUIs
+    * 0000684: Impromptu cursor jumps in some input fields of Qt GUIs
 
+  * Documentation
+    * 0000643: Installation documentation is outdated
+    * 0000720: [OTB Wiki] Unable to save an edited page with a hypertext link within it
+
+  * OTB-applications
+    * 0000704: results of otbcli_Segmentation reflexed
+    * 0000711: Segmentation Fault and crash of applications after modifying any input  "ParameterType_StringList" field
+    * 0000709: otbcli_ComputeImagesStatistics includes NaNs and background values
+    * 0000710: otbcli_ComputeImagesStatistics "progress" switch doesn't work
+    * 0000697: ComputeConfusionMatrix
+    * 0000670: Confusion matrix report unclear
+    * 0000723: CompareImage application without ROI parameter results in FATAL error
+
+  * Monteverdi2
+    * 0000632: Monteverdi2 crashes after zooming twice
+    * 0000714: Import existing image in the database leads to a crash
+    * 0000675: Filename too long
+    * 0000708: MVD2 - Cache-dir removed from disk.
+    * 0000664: Very long loading time the second time with TIFF product
+    * 0000655: ProgressDialog does not close if error is displayed.
+    * 0000646: Viewport is black or diminish when maximising or resizing the window before opening image
+    * 0000645: Viewport goes black or diminish when maximising or resizing the window after opening image
+    * 0000639: Using keyboard arrows with Monteverdi2 maximized grabs all keyboards events
+    * 0000653: "monteverdi2 imagepath" creates a dataset model directory even if the image does not exist
+    * 0000699: Datasets loaded through mvd2-viewer command-line are disabled
+    * 0000679: Inconsistency between mouse cursor position and image displacement when dragging
+    * 0000669: The application don't detect the fact that I didn't modify the settings
+    * 0000668: Precision loss when loading/saving/reloading
+    * 0000666: upper quantile is not set to 0.0 on integer image type, when using min/max button
+    * 0000656: Import Windows does not close
+    * 0000659: At first startup, 'mvd2' dir is not created but Monteverdi2 shoudl create it
+    * 0000660: Wrong display settings saved
+    * 0000657: Radiometry values hide WGS84 coordinates in status bar
+    * 0000654: When minimzing the window, all widgets are closed
+    * 0000665: Monteverdi2-0.1 label in Startup menu does not have an icon
+    * 0000644: Make Monteverdi2 window autofit to the screen's size
+    * 0000638: Displacement in the image let a black line of pixels at the top of the full res window
+    * 0000636: Displacement related to keyboard arrows is to small
+    * 0000637: Displacements associated with vertical keyboard arrows are inverted with respect to Monteverdi 1.x
+    * 0000633: Can not edit spinner fields in Video Color Dynamics widget
+    * 0000634: Steps of Quantiles spin-box are to coarse
+    * 0000718: Confirm dialog only displays MD5 name when deleting dataset.
+    * 0000648: Deploy icons for Monteverdi2 in  packages and also for local build if possible
 
 OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
 --------------------------------------------------------
