@@ -176,7 +176,7 @@ PixelDescriptionWidget
     delete child;
     child = NULL;
     }
-  
+
   // fill with the new values
   for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
     {

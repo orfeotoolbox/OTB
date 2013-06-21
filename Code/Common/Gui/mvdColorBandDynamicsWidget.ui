@@ -283,6 +283,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lowQuantileSpinBox</tabstop>
+  <tabstop>highQuantileSpinBox</tabstop>
+  <tabstop>lowIntensityLineEdit</tabstop>
+  <tabstop>highIntensityLineEdit</tabstop>
+  <tabstop>applyAllButton</tabstop>
+  <tabstop>minMaxButton</tabstop>
+  <tabstop>defaultsButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

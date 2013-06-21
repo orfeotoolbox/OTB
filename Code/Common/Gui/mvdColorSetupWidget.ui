@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>169</width>
+    <width>172</width>
     <height>192</height>
    </rect>
   </property>
@@ -306,6 +306,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>rComboBox</tabstop>
+  <tabstop>gComboBox</tabstop>
+  <tabstop>bComboBox</tabstop>
+  <tabstop>wCheckBox</tabstop>
+  <tabstop>wComboBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

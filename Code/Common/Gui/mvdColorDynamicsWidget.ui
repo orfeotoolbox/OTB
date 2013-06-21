@@ -247,6 +247,11 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>noDataCheckBox</tabstop>
+  <tabstop>noDataLineEdit</tabstop>
+  <tabstop>noDataButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
