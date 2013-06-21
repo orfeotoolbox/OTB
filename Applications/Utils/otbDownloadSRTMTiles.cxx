@@ -110,13 +110,13 @@ private:
     AddChoice("mode.download", "Download");
     SetParameterDescription("mode.download","Download corresponding tiles on USGE server.");
 
-    AddParameter(ParameterType_OutputFilename, "mode.download.outdir", "Ouput directory");
+    AddParameter(ParameterType_Directory, "mode.download.outdir", "Output directory");
     SetParameterDescription("mode.download.outdir", "Directory where zipped tiles will be save. You'll need to unzip all tile files before using them in your application.");
 
     AddChoice("mode.list", "List tiles");
     SetParameterDescription("mode.list","List tiles in an existing local directory.");
 
-    AddParameter(ParameterType_OutputFilename, "mode.list.indir", "Input directory");
+    AddParameter(ParameterType_Directory, "mode.list.indir", "Input directory");
     SetParameterDescription("mode.list.indir", "Input directory where SRTM tiles can are located.");
 
     // Doc example parameter settings
