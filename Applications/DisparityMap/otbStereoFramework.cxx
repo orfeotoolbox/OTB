@@ -621,7 +621,7 @@ private:
         {
         otbAppLogWARNING(<<" current couple contain more than 2 value. only first and second values will be associated to create next couple.");
         }
-      otbAppLogINFO("\n \n \n /****    process image index "<<couple[0]<<" and "<<couple[1]<<"    ****/ \n \n");
+      otbAppLogINFO("Processing stereo couple "<<i<<" (images index "<<couple[0]<<" and "<<couple[1]<<")");
       FloatImageType::Pointer inleft = m_ExtractorList[couple[0]]->GetOutput();
       FloatImageType::Pointer inright = m_ExtractorList[couple[1]]->GetOutput();
 
@@ -647,11 +647,11 @@ private:
       globalEpiStorageSize += storageSize;
       if (globalEpiStorageSize > (static_cast<double> (this->GetParameterInt("ram"))))
         {
-        otbAppLogINFO(<<"grid step for couple  "<<couple[0]<<" and "<<couple[1]<<" memory usage "<<storageSize<<" MO.");
-        otbAppLogWARNING(<<"Deformation grid step value"<<this->GetParameterInt("step")<<" seems too be to high.");
+        otbAppLogINFO(<<"Grid step for couple  "<<couple[0]<<" and "<<couple[1]<<" (memory usage: "<<storageSize<<" Mo)");
+        otbAppLogWARNING(<<"Grid step value"<<this->GetParameterInt("step")<<" seems too be to high.");
         }
 
-      AddProcess(epipolarGridSource, "Compute epipolar grids...");
+      AddProcess(epipolarGridSource, "Computing epipolar grids...");
       epipolarGridSource->Update();
 
       FloatImageType::SpacingType epiSpacing;
@@ -875,7 +875,7 @@ private:
       switch (GetParameterInt("bm.metric"))
         {
         case 0: //NCC
-          otbAppLogINFO(<<"use NCC Metric for BlockMatching.")
+          otbAppLogINFO(<<"Using NCC Metric for BlockMatching.")
        ;
           NCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
           blockMatcherFilterPointer = NCCBlockMatcherFilter.GetPointer();
@@ -905,7 +905,7 @@ private:
                                                                                          minimize, minDisp, maxDisp);
           break;
         case 1: //SSD
-          otbAppLogINFO(<<"use SSD Metric for BlockMatching.")
+          otbAppLogINFO(<<"Using SSD Metric for BlockMatching.")
        ;
 
           SSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
@@ -937,7 +937,7 @@ private:
 
           break;
         case 2: //SSDDivMean
-          otbAppLogINFO(<<"use robust SSD Metric for BlockMatching.")
+          otbAppLogINFO(<<"Using robust SSD Metric for BlockMatching.")
        ;
 
           SSDDivMeanBlockMatcherFilter = SSDDivMeanBlockMatchingFilterType::New();
@@ -970,7 +970,7 @@ private:
 
           break;
         case 3: //LP
-          otbAppLogINFO(<<"use Lp Metric for BlockMatching.")
+          otbAppLogINFO(<<"Using Lp Metric for BlockMatching.")
        ;
 
           LPBlockMatcherFilter = LPBlockMatchingFilterType::New();
@@ -1010,7 +1010,7 @@ private:
 
        if (IsParameterEnabled("bij"))
         {
-        otbAppLogINFO(<<"Use reverse blockMatcher to validate direct Horizontal disparities ");
+        otbAppLogINFO(<<"Using reverse block-matching to filter incoherent disparity values.");
         bijectFilter = BijectionFilterType::New();
         //bijectFilter->SetDirectHorizontalDisparityMapInput(blockMatcherFilter->GetHorizontalDisparityOutput());
         bijectFilter->SetDirectHorizontalDisparityMapInput(blockMatcherFilterPointer->GetOutput(1));
@@ -1174,7 +1174,7 @@ private:
           }
         }
       maskFormula << "),255,0)";
-      otbAppLogINFO(<<"disparity mask formula :"<<std::endl<<maskFormula.str());
+      otbAppLogINFO(<<"Disparity mask formula : "<<maskFormula.str());
       dispMaskFilter->SetExpression(maskFormula.str());
       m_Filters.push_back(dispMaskFilter.GetPointer());
       //TODO to check
@@ -1189,13 +1189,13 @@ private:
 
     if(GetParameterInt("output.mode")==0)
       {
-      otbAppLogINFO(<<"DEM parameters are deduced from sensor input data");
+      otbAppLogINFO(<<"Output DEM parameters are estimated from sensor input data.");
 
       m_Multi3DMapToDEMFilter->SetOutputParametersFrom3DMap();
       }
     else
       {
-      otbAppLogINFO(<<"DEM parameters are user defined");
+      otbAppLogINFO(<<"DEM parameters are defined by the user.");
       FloatVectorImageType::IndexType start;
       start[0] = 0;
       start[1] = 0;
@@ -1217,7 +1217,7 @@ private:
       m_Multi3DMapToDEMFilter->SetOutputOrigin(origin);
 
       }
-    otbAppLogINFO(<<"DEM OutputProjectionRef :"<<std::endl<<m_OutputProjectionRef);
+    otbAppLogINFO(<<"Output DEM projection reference: "<<std::endl<<m_OutputProjectionRef);
     m_Multi3DMapToDEMFilter->SetProjectionRef(m_OutputProjectionRef);
 
     m_Multi3DMapToDEMFilter->SetDEMGridStep(this->GetParameterFloat("output.res"));
