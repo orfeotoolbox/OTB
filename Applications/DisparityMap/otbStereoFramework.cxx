@@ -71,7 +71,7 @@ class StereoFramework : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef StereoFramework                  Self;
+  typedef StereoFramework                     Self;
   typedef Application                         Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
@@ -1195,7 +1195,7 @@ private:
 
       }
 
-    if(GetParameterInt("output.mode")==0)
+    if(GetParameterInt("output.mode") == 0)
       {
       otbAppLogINFO(<<"Output DEM parameters are estimated from sensor input data.");
 
