@@ -1188,17 +1188,17 @@ private:
 
       std::ostringstream maskFormula;
       maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (mask>0";
-      if (IsParameterEnabled("metrict"))
+      if (IsParameterEnabled("postproc.metrict"))
         {
         dispMaskFilter->SetNthInput(2, subPixelFilterPointer->GetOutput(2), "metric");
         maskFormula << ") and (metric ";
         if (minimize == true)
           {
-          maskFormula << " < " << this->GetParameterFloat("metrict");
+          maskFormula << " < " << this->GetParameterFloat("postproc.metrict");
           }
         else
           {
-          maskFormula << " > " << this->GetParameterFloat("metrict");
+          maskFormula << " > " << this->GetParameterFloat("postproc.metrict");
 
           }
         }
