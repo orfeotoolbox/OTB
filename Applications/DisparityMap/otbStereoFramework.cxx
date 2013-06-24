@@ -498,7 +498,7 @@ private:
     AddParameter(ParameterType_Float,"mask.variancet","Discard pixels with low local variance");
     SetParameterDescription("mask.variancet","This parameter allows to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
     MandatoryOff("mask.variancet");
-    SetDefaultParameterFloat("mask.variancet",100.);
+    SetDefaultParameterFloat("mask.variancet",50.);
     //DisableParameter("mask.variancet");
     
     AddRAMParameter();
