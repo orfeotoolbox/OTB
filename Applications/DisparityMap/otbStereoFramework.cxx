@@ -332,7 +332,7 @@ private:
                           "\t- filter disparities based on the correlation score  and exploration bounds\n"
                           "\t- translate disparities in sensor geometry\n"
                           "\t  convert disparity to 3D Map.\n"
-                          "Then fuse all 3D maps to produce DEM.");
+                          "Then fuse all 3D maps to produce DSM.");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -363,7 +363,7 @@ private:
     
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "output", "Output parameters");
-    SetParameterDescription("output","This group of parameters allows to choose the DEM resolution and projection parameters.");
+    SetParameterDescription("output","This group of parameters allows to choose the DSM resolution and projection parameters.");
 
     // Build the Output Map Projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
@@ -375,10 +375,18 @@ private:
     SetDefaultParameterFloat("output.res",1.);
 
     AddParameter(ParameterType_Float, "output.nodata","NoData value");
-    SetParameterDescription("output.nodata","DEM empty cells are filled with tihs value (optional -32768 by default)");
+    SetParameterDescription("output.nodata","DSM empty cells are filled with tihs value (optional -32768 by default)");
     SetDefaultParameterFloat("output.nodata",-32768);
     MandatoryOff("output.nodata");
-    
+
+    // UserDefined values
+    AddParameter(ParameterType_Choice, "output.fusionmethod", "Method to fuse measures in each DSM cell");
+    SetParameterDescription("output.fusionmethod","This parameter allows to choose the method used to fuse elevation measurements in each output DSM cell");
+    AddChoice("output.fusionmethod.max", "Value is the maximum elevation measured in the cell.");
+    AddChoice("output.fusionmethod.min", "Value is the minimum elevation measured in the cell.");
+    AddChoice("output.fusionmethod.mean", "Value is the mean elevation measured in the cell.");
+    AddChoice("output.fusionmethod.acc", "Value is the number of measures in the cell (for debugging purposes).");
+
     AddParameter(ParameterType_OutputImage,"output.out","Output image");
     SetParameterDescription("output.out","Output elevation image");
 
@@ -583,7 +591,7 @@ private:
 
   void DoExecute()
   {
-    // Setup the DEM Handler
+    // Setup the DSM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
     double underElev = this->GetParameterFloat("bm.minhoffset");
     double overElev = this->GetParameterFloat("bm.maxhoffset");
@@ -606,9 +614,9 @@ private:
     unsigned int stereoCouples = couples.size();
     m_ExtractorList.resize(inList->Size());
     //TODO JGT check the mutli stereo fusion step
-    //     N MultiDisp which gives N 3D Map Then fuse N 3D Map to DEM
+    //     N MultiDisp which gives N 3D Map Then fuse N 3D Map to DSM
     // or
-    //     1 MultiDisp which fuse N Disp Couples to 1 3D Map and then convert one 3D Map into DEM
+    //     1 MultiDisp which fuse N Disp Couples to 1 3D Map and then convert one 3D Map into DSM
     m_MultiDisparityTo3DFilterList.resize(stereoCouples);
 
     for (unsigned int i = 0; i < inList->Size(); i++)
@@ -1207,13 +1215,13 @@ private:
 
     if(GetParameterInt("output.mode") == 0)
       {
-      otbAppLogINFO(<<"Output DEM parameters are estimated from sensor input data.");
+      otbAppLogINFO(<<"Output DSM parameters are estimated from sensor input data.");
 
       m_Multi3DMapToDEMFilter->SetOutputParametersFrom3DMap();
       }
     else
       {
-      otbAppLogINFO(<<"DEM parameters are defined by the user.");
+      otbAppLogINFO(<<"DSM parameters are defined by the user.");
       FloatVectorImageType::IndexType start;
       start[0] = 0;
       start[1] = 0;
@@ -1235,11 +1243,28 @@ private:
       m_Multi3DMapToDEMFilter->SetOutputOrigin(origin);
 
       }
-    otbAppLogINFO(<<"Output DEM projection reference: "<<std::endl<<m_OutputProjectionRef);
+    otbAppLogINFO(<<"Output DSM projection reference: "<<std::endl<<m_OutputProjectionRef);
     m_Multi3DMapToDEMFilter->SetProjectionRef(m_OutputProjectionRef);
 
     m_Multi3DMapToDEMFilter->SetDEMGridStep(this->GetParameterFloat("output.res"));
-    m_Multi3DMapToDEMFilter ->SetCellFusionMode(otb::CellFusionMode::MAX);
+
+    if(GetParameterString("output.fusionmethod") == "min")
+      {
+      m_Multi3DMapToDEMFilter ->SetCellFusionMode(otb::CellFusionMode::MIN);
+      }
+    else if(GetParameterString("output.fusionmethod") == "mean")
+      {
+      m_Multi3DMapToDEMFilter ->SetCellFusionMode(otb::CellFusionMode::MEAN);
+      }
+    else if(GetParameterString("output.fusionmethod") == "acc")
+      {
+      m_Multi3DMapToDEMFilter ->SetCellFusionMode(otb::CellFusionMode::ACC);
+      }
+    else
+      {
+      m_Multi3DMapToDEMFilter ->SetCellFusionMode(otb::CellFusionMode::MAX);
+      }
+
     m_Multi3DMapToDEMFilter->UpdateOutputInformation();
 
     SetParameterOutputImage("output.out", m_Multi3DMapToDEMFilter->GetOutput());
