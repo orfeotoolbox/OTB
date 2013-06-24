@@ -354,6 +354,10 @@ private:
     SetParameterString("input.co","");
     DisableParameter("input.co");
 
+    AddParameter(ParameterType_Int,  "input.channel",   "Image channel used for the block matching");
+    SetParameterDescription("input.channel", "Used channel for block matching (used for all images)");
+    SetDefaultParameterInt("input.channel", 1);
+    SetMinimumParameterIntValue("input.channel", 1);
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
     
@@ -512,7 +516,14 @@ private:
   
   void DoUpdateParameters()
   {
-    // Nothing to do
+    if( HasValue("input.il") )
+      {
+      // Get the input image list
+      FloatVectorImageListType::Pointer inList = this->GetParameterImageList("input.il");
+    
+      // Set channel interval
+      SetMaximumParameterIntValue("input.channel", inList->GetNthElement(0)->GetNumberOfComponentsPerPixel());
+      }
   }
   
 
@@ -605,7 +616,7 @@ private:
       {
       m_ExtractorList[i] = ExtractROIFilterType::New();
       m_ExtractorList[i]->SetInput(inList->GetNthElement(i));
-      m_ExtractorList[i]->SetChannel(1);
+      m_ExtractorList[i]->SetChannel(this->GetParameterInt("input.channel"));
       m_ExtractorList[i]->UpdateOutputInformation();
 
       }
