@@ -425,18 +425,6 @@ private:
     SetMinimumParameterIntValue("stereorect.invgridssrate",1);
     MandatoryOff("stereorect.invgridssrate");
 
-    AddParameter(ParameterType_Float,"minhoffset","Minimum altitude offset");
-    SetParameterDescription("minhoffset","Minimum altitude below the selected elevation source (in m)");
-    //MandatoryOff("minhoffset");
-    SetDefaultParameterFloat("minhoffset",-20.0);
-    DisableParameter("minhoffset");
-
-    AddParameter(ParameterType_Float,"maxhoffset","Maximum altitude offset");
-    SetParameterDescription("maxhoffset","Maximum altitude above the selected elevation source (in m)");
-    //MandatoryOff("maxhoffset");
-    SetDefaultParameterFloat("maxhoffset",20.0);
-    DisableParameter("maxhoffset");
-    
     AddParameter(ParameterType_Group,"bm","Block matching parameters");
     SetParameterDescription("bm","This group of parameters allow to tune the block-matching behaviour");
 
@@ -465,6 +453,18 @@ private:
     SetDefaultParameterInt("bm.radius",2);
     SetMinimumParameterIntValue("bm.radius",1);
     MandatoryOff("bm.radius");
+
+    AddParameter(ParameterType_Float,"bm.minhoffset","Minimum altitude offset");
+    SetParameterDescription("bm.minhoffset","Minimum altitude below the selected elevation source (in m)");
+    //MandatoryOff("bm.minhoffset");
+    SetDefaultParameterFloat("bm.minhoffset",-20.0);
+    DisableParameter("bm.minhoffset");
+
+    AddParameter(ParameterType_Float,"bm.maxhoffset","Maximum altitude offset");
+    SetParameterDescription("bm.maxhoffset","Maximum altitude above the selected elevation source (in m)");
+    //MandatoryOff("bm.maxhoffset");
+    SetDefaultParameterFloat("bm.maxhoffset",20.0);
+    DisableParameter("bm.maxhoffset");
 
     AddParameter(ParameterType_Group,"postproc","Postprocessing parameters");
     SetParameterDescription("postproc","This group of parameters allow use optional filters.");
@@ -586,8 +586,8 @@ private:
   {
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
-    double underElev = this->GetParameterFloat("minhoffset");
-    double overElev = this->GetParameterFloat("maxhoffset");
+    double underElev = this->GetParameterFloat("bm.minhoffset");
+    double overElev = this->GetParameterFloat("bm.maxhoffset");
 
     m_Filters.clear();
 
