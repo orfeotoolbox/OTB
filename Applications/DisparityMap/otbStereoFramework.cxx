@@ -480,12 +480,11 @@ private:
     DisableParameter("postproc.med");
 
 
-    AddParameter(ParameterType_Float,"metrict","correlation metric threshold.");
-    SetParameterDescription("metrict","Use block matching metric output to discard pixels with low correlation value.(disabled by default)");
-    MandatoryOff("metrict");
-    SetDefaultParameterFloat("metrict",0.6);
-    DisableParameter("metrict");
-
+    AddParameter(ParameterType_Float,"postproc.metrict","correlation metric threshold.");
+    SetParameterDescription("postproc.metrict","Use block matching metric output to discard pixels with low correlation value (disabled by default)");
+    MandatoryOff("postproc.metrict");
+    SetDefaultParameterFloat("postproc.metrict",0.6);
+    DisableParameter("postproc.metrict");
 
     AddParameter(ParameterType_Group,"mask","Masks");
     
