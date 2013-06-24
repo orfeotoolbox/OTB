@@ -414,7 +414,7 @@ private:
     AddParameter(ParameterType_Group, "stereorect", "Stereorectification Grid parameters");
     SetParameterDescription("stereorect","This group of parameters allows to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption .");
 
-    AddParameter(ParameterType_Int,"stereorect.fwdgridstep","Step of the deformation grid (in nb. of pixels)");
+    AddParameter(ParameterType_Int,"stereorect.fwdgridstep","Step of the deformation grid (in pixels)");
     SetParameterDescription("stereorect.fwdgridstep","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommended to use a coarser grid (higher step value) in case of large images");
     SetDefaultParameterInt("stereorect.fwdgridstep",16);
     MandatoryOff("stereorect.fwdgridstep");
@@ -448,20 +448,20 @@ private:
     SetDefaultParameterFloat("bm.metric.lp.p", 1.0);
     SetMinimumParameterFloatValue("bm.metric.lp.p", 0.0);
 
-    AddParameter(ParameterType_Int,"bm.radius","Radius of blocks for matching filter");
-    SetParameterDescription("bm.radius","The radius (in pixels) of blocks in Block-Matching");
+    AddParameter(ParameterType_Int,"bm.radius","Radius of blocks for matching filter (in pixels)");
+    SetParameterDescription("bm.radius","The radius of blocks in Block-Matching (in pixels)");
     SetDefaultParameterInt("bm.radius",2);
     SetMinimumParameterIntValue("bm.radius",1);
     MandatoryOff("bm.radius");
 
-    AddParameter(ParameterType_Float,"bm.minhoffset","Minimum altitude offset");
-    SetParameterDescription("bm.minhoffset","Minimum altitude below the selected elevation source (in m)");
+    AddParameter(ParameterType_Float,"bm.minhoffset","Minimum altitude offset (in meters)");
+    SetParameterDescription("bm.minhoffset","Minimum altitude below the selected elevation source (in meters)");
     //MandatoryOff("bm.minhoffset");
     SetDefaultParameterFloat("bm.minhoffset",-20.0);
     DisableParameter("bm.minhoffset");
 
-    AddParameter(ParameterType_Float,"bm.maxhoffset","Maximum altitude offset");
-    SetParameterDescription("bm.maxhoffset","Maximum altitude above the selected elevation source (in m)");
+    AddParameter(ParameterType_Float,"bm.maxhoffset","Maximum altitude offset (in meters)");
+    SetParameterDescription("bm.maxhoffset","Maximum altitude above the selected elevation source (in meters)");
     //MandatoryOff("bm.maxhoffset");
     SetDefaultParameterFloat("bm.maxhoffset",20.0);
     DisableParameter("bm.maxhoffset");
@@ -480,7 +480,7 @@ private:
     DisableParameter("postproc.med");
 
 
-    AddParameter(ParameterType_Float,"postproc.metrict","correlation metric threshold.");
+    AddParameter(ParameterType_Float,"postproc.metrict","Correlation metric threshold");
     SetParameterDescription("postproc.metrict","Use block matching metric output to discard pixels with low correlation value (disabled by default)");
     MandatoryOff("postproc.metrict");
     SetDefaultParameterFloat("postproc.metrict",0.6);
