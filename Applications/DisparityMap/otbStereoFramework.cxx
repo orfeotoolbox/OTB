@@ -421,46 +421,46 @@ private:
     SetMinimumParameterIntValue("stereorect.invgridssrate",1);
     MandatoryOff("stereorect.invgridssrate");
 
-    AddParameter(ParameterType_Float,"maxhoffset","Maximum altitude offset");
-    SetParameterDescription("maxhoffset","Maximum altitude above the selected elevation source (in m)");
-    MandatoryOff("maxhoffset");
-    SetDefaultParameterFloat("maxhoffset",300.0);
-    DisableParameter("maxhoffset");
-    
     AddParameter(ParameterType_Float,"minhoffset","Minimum altitude offset");
     SetParameterDescription("minhoffset","Minimum altitude below the selected elevation source (in m)");
-    MandatoryOff("minhoffset");
+    //MandatoryOff("minhoffset");
     SetDefaultParameterFloat("minhoffset",-20.0);
     DisableParameter("minhoffset");
+
+    AddParameter(ParameterType_Float,"maxhoffset","Maximum altitude offset");
+    SetParameterDescription("maxhoffset","Maximum altitude above the selected elevation source (in m)");
+    //MandatoryOff("maxhoffset");
+    SetDefaultParameterFloat("maxhoffset",20.0);
+    DisableParameter("maxhoffset");
     
     AddParameter(ParameterType_Group,"bm","Block matching parameters");
     SetParameterDescription("bm","This group of parameters allow to tune the block-matching behaviour");
 
-     AddParameter(ParameterType_Choice,   "bm.metric", "Block-matching metric");
-     AddChoice("bm.metric.ncc","Normalized Cross-Correlation");
-     SetParameterDescription("bm.metric.ncc","Normalized Cross-Correlation between the left and right windows");
+    AddParameter(ParameterType_Choice,   "bm.metric", "Block-matching metric");
+    //SetDefaultParameterInt("bm.metric",3);
 
+    AddChoice("bm.metric.ssdmean","Sum of Squared Distances divided by mean of block");
+    SetParameterDescription("bm.metric.ssdmean","derived version of Sum of squared distances between pixels value in the metric window (SSD divided by mean over window)");
+    
+    AddChoice("bm.metric.ssd","Sum of Squared Distances");
+    SetParameterDescription("bm.metric.ssd","Sum of squared distances between pixels value in the metric window");
 
-     AddChoice("bm.metric.ssd","Sum of Squared Distances");
-     SetParameterDescription("bm.metric.ssd","Sum of squared distances between pixels value in the metric window");
+    AddChoice("bm.metric.ncc","Normalized Cross-Correlation");
+    SetParameterDescription("bm.metric.ncc","Normalized Cross-Correlation between the left and right windows");
 
-     AddChoice("bm.metric.ssdmean","Sum of Squared Distances divided by mean of block");
-     SetParameterDescription("bm.metric.ssdmean","derived version of Sum of squared distances between pixels value in the metric window (SSD divided by mean over window)");
+    AddChoice("bm.metric.lp","Lp pseudo-norm");
+    SetParameterDescription("bm.metric.lp","Lp pseudo-norm between the left and right windows");
 
-     AddChoice("bm.metric.lp","Lp pseudo-norm");
-     SetParameterDescription("bm.metric.lp","Lp pseudo-norm between the left and right windows");
-
-     AddParameter(ParameterType_Float,"bm.metric.lp.p","p value" );
-     SetParameterDescription("bm.metric.lp.p", "Value of the p parameter in Lp pseudo-norm (must be positive)");
-     SetDefaultParameterFloat("bm.metric.lp.p", 1.0);
-     SetMinimumParameterFloatValue("bm.metric.lp.p", 0.0);
+    AddParameter(ParameterType_Float,"bm.metric.lp.p","p value" );
+    SetParameterDescription("bm.metric.lp.p", "Value of the p parameter in Lp pseudo-norm (must be positive)");
+    SetDefaultParameterFloat("bm.metric.lp.p", 1.0);
+    SetMinimumParameterFloatValue("bm.metric.lp.p", 0.0);
 
     AddParameter(ParameterType_Int,"bm.radius","Radius of blocks for matching filter");
     SetParameterDescription("bm.radius","The radius (in pixels) of blocks in Block-Matching");
-    SetDefaultParameterInt("bm.radius",4);
+    SetDefaultParameterInt("bm.radius",2);
     SetMinimumParameterIntValue("bm.radius",1);
     MandatoryOff("bm.radius");
-
 
     AddParameter(ParameterType_Group,"postproc","Postprocessing parameters");
     SetParameterDescription("postproc","This group of parameters allow use optional filters.");
@@ -468,7 +468,7 @@ private:
     AddParameter(ParameterType_Empty,"postproc.bij","Use bijection consistency in block matching strategy");
     SetParameterDescription("postproc.bij","use bijection consistency. Right to Left correlation is computed to validate Left to Right disparities. If bijection is not found pixel is rejected.");
     MandatoryOff("postproc.bij");
-    DisableParameter("postproc.bij");
+    EnableParameter("postproc.bij");
 
     AddParameter(ParameterType_Empty,"postproc.med","Use median disparities filtering");
     SetParameterDescription("postproc.med","disparities output can be filtered using median post filtering (disabled by default).");
@@ -499,7 +499,7 @@ private:
     SetParameterDescription("mask.variancet","This parameter allows to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
     MandatoryOff("mask.variancet");
     SetDefaultParameterFloat("mask.variancet",100.);
-    DisableParameter("mask.variancet");
+    //DisableParameter("mask.variancet");
     
     AddRAMParameter();
     
@@ -885,71 +885,8 @@ private:
 
       switch (GetParameterInt("bm.metric"))
         {
-        case 0: //NCC
-          otbAppLogINFO(<<"Using NCC Metric for BlockMatching.")
-    ;
-          NCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
-          blockMatcherFilterPointer = NCCBlockMatcherFilter.GetPointer();
-          m_Filters.push_back(blockMatcherFilterPointer);
-
-          if (IsParameterEnabled("postproc.bij"))
-            {
-            //Reverse correlation
-            invNCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
-            invBlockMatcherFilterPointer = invNCCBlockMatcherFilter.GetPointer();
-            m_Filters.push_back(invBlockMatcherFilterPointer);
-            }
-          NCCSubPixelFilter = NCCSubPixelFilterType::New();
-          subPixelFilterPointer = NCCSubPixelFilter.GetPointer();
-          m_Filters.push_back(NCCSubPixelFilter.GetPointer());
-
-          minimize = false;
-          this->SetBlockMatchingParameters<FloatImageType, NCCBlockMatchingFunctorType> (
-                                                                                         NCCBlockMatcherFilter,
-                                                                                         invNCCBlockMatcherFilter,
-                                                                                         NCCSubPixelFilter,
-                                                                                         leftResampleFilter->GetOutput(),
-                                                                                         rightResampleFilter->GetOutput(),
-                                                                                         lBandMathFilter->GetOutput(),
-                                                                                         rBandMathFilter->GetOutput(),
-                                                                                         finalMaskFilter->GetOutput(),
-                                                                                         minimize, minDisp, maxDisp);
-          break;
-        case 1: //SSD
-          otbAppLogINFO(<<"Using SSD Metric for BlockMatching.")
-    ;
-
-          SSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
-          blockMatcherFilterPointer = SSDBlockMatcherFilter.GetPointer();
-          m_Filters.push_back(blockMatcherFilterPointer);
-
-          if (IsParameterEnabled("postproc.bij"))
-            {
-            //Reverse correlation
-            invSSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
-            invBlockMatcherFilterPointer = invSSDBlockMatcherFilter.GetPointer();
-            m_Filters.push_back(invBlockMatcherFilterPointer);
-            }
-          SSDSubPixelFilter = SSDSubPixelFilterType::New();
-          subPixelFilterPointer = SSDSubPixelFilter.GetPointer();
-          m_Filters.push_back(SSDSubPixelFilter.GetPointer());
-
-          minimize = true;
-          this->SetBlockMatchingParameters<FloatImageType, SSDBlockMatchingFunctorType> (
-                                                                                         SSDBlockMatcherFilter,
-                                                                                         invSSDBlockMatcherFilter,
-                                                                                         SSDSubPixelFilter,
-                                                                                         leftResampleFilter->GetOutput(),
-                                                                                         rightResampleFilter->GetOutput(),
-                                                                                         lBandMathFilter->GetOutput(),
-                                                                                         rBandMathFilter->GetOutput(),
-                                                                                         finalMaskFilter->GetOutput(),
-                                                                                         minimize, minDisp, maxDisp);
-
-          break;
-        case 2: //SSDDivMean
-          otbAppLogINFO(<<"Using robust SSD Metric for BlockMatching.")
-    ;
+        case 0: //SSDDivMean
+          otbAppLogINFO(<<"Using robust SSD Metric for BlockMatching.");
 
           SSDDivMeanBlockMatcherFilter = SSDDivMeanBlockMatchingFilterType::New();
           blockMatcherFilterPointer = SSDDivMeanBlockMatcherFilter.GetPointer();
@@ -968,21 +905,84 @@ private:
 
           minimize = true;
           this->SetBlockMatchingParameters<FloatImageType, SSDDivMeanBlockMatchingFunctorType> (
-                                                                                                SSDDivMeanBlockMatcherFilter,
-                                                                                                invSSDDivMeanBlockMatcherFilter,
-                                                                                                SSDDivMeanSubPixelFilter,
-                                                                                                leftResampleFilter->GetOutput(),
-                                                                                                rightResampleFilter->GetOutput(),
-                                                                                                lBandMathFilter->GetOutput(),
-                                                                                                rBandMathFilter->GetOutput(),
-                                                                                                finalMaskFilter->GetOutput(),
-                                                                                                minimize, minDisp,
-                                                                                                maxDisp);
+            SSDDivMeanBlockMatcherFilter,
+            invSSDDivMeanBlockMatcherFilter,
+            SSDDivMeanSubPixelFilter,
+            leftResampleFilter->GetOutput(),
+            rightResampleFilter->GetOutput(),
+            lBandMathFilter->GetOutput(),
+            rBandMathFilter->GetOutput(),
+            finalMaskFilter->GetOutput(),
+            minimize, minDisp,
+            maxDisp);
 
           break;
+
+          case 1: //SSD
+          otbAppLogINFO(<<"Using SSD Metric for BlockMatching.");
+
+          SSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
+          blockMatcherFilterPointer = SSDBlockMatcherFilter.GetPointer();
+          m_Filters.push_back(blockMatcherFilterPointer);
+
+          if (IsParameterEnabled("postproc.bij"))
+            {
+            //Reverse correlation
+            invSSDBlockMatcherFilter = SSDBlockMatchingFilterType::New();
+            invBlockMatcherFilterPointer = invSSDBlockMatcherFilter.GetPointer();
+            m_Filters.push_back(invBlockMatcherFilterPointer);
+            }
+          SSDSubPixelFilter = SSDSubPixelFilterType::New();
+          subPixelFilterPointer = SSDSubPixelFilter.GetPointer();
+          m_Filters.push_back(SSDSubPixelFilter.GetPointer());
+
+          minimize = true;
+          this->SetBlockMatchingParameters<FloatImageType, SSDBlockMatchingFunctorType> (
+            SSDBlockMatcherFilter,
+            invSSDBlockMatcherFilter,
+            SSDSubPixelFilter,
+            leftResampleFilter->GetOutput(),
+            rightResampleFilter->GetOutput(),
+            lBandMathFilter->GetOutput(),
+            rBandMathFilter->GetOutput(),
+            finalMaskFilter->GetOutput(),
+            minimize, minDisp, maxDisp);
+
+          break;
+        case 2: //NCC
+          otbAppLogINFO(<<"Using NCC Metric for BlockMatching.");
+
+          NCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
+          blockMatcherFilterPointer = NCCBlockMatcherFilter.GetPointer();
+          m_Filters.push_back(blockMatcherFilterPointer);
+
+          if (IsParameterEnabled("postproc.bij"))
+            {
+            //Reverse correlation
+            invNCCBlockMatcherFilter = NCCBlockMatchingFilterType::New();
+            invBlockMatcherFilterPointer = invNCCBlockMatcherFilter.GetPointer();
+            m_Filters.push_back(invBlockMatcherFilterPointer);
+            }
+          NCCSubPixelFilter = NCCSubPixelFilterType::New();
+          subPixelFilterPointer = NCCSubPixelFilter.GetPointer();
+          m_Filters.push_back(NCCSubPixelFilter.GetPointer());
+
+          minimize = false;
+          this->SetBlockMatchingParameters<FloatImageType, NCCBlockMatchingFunctorType> (
+            NCCBlockMatcherFilter,
+            invNCCBlockMatcherFilter,
+            NCCSubPixelFilter,
+            leftResampleFilter->GetOutput(),
+            rightResampleFilter->GetOutput(),
+            lBandMathFilter->GetOutput(),
+            rBandMathFilter->GetOutput(),
+            finalMaskFilter->GetOutput(),
+            minimize, minDisp, maxDisp);
+          break;
+        
+        
         case 3: //LP
-          otbAppLogINFO(<<"Using Lp Metric for BlockMatching.")
-    ;
+          otbAppLogINFO(<<"Using Lp Metric for BlockMatching.");
 
           LPBlockMatcherFilter = LPBlockMatchingFilterType::New();
           LPBlockMatcherFilter->GetFunctor().SetP(static_cast<double> (GetParameterFloat("bm.metric.lp.p")));
@@ -1004,15 +1004,15 @@ private:
 
           minimize = false;
           this->SetBlockMatchingParameters<FloatImageType, LPBlockMatchingFunctorType> (
-                                                                                        LPBlockMatcherFilter,
-                                                                                        invLPBlockMatcherFilter,
-                                                                                        LPSubPixelFilter,
-                                                                                        leftResampleFilter->GetOutput(),
-                                                                                        rightResampleFilter->GetOutput(),
-                                                                                        lBandMathFilter->GetOutput(),
-                                                                                        rBandMathFilter->GetOutput(),
-                                                                                        finalMaskFilter->GetOutput(),
-                                                                                        minimize, minDisp, maxDisp);
+            LPBlockMatcherFilter,
+            invLPBlockMatcherFilter,
+            LPSubPixelFilter,
+            leftResampleFilter->GetOutput(),
+            rightResampleFilter->GetOutput(),
+            lBandMathFilter->GetOutput(),
+            rBandMathFilter->GetOutput(),
+            finalMaskFilter->GetOutput(),
+            minimize, minDisp, maxDisp);
 
           break;
         default:
