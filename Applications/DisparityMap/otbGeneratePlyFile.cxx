@@ -146,6 +146,11 @@ private:
         dem3dPoint[0]=demPoint[0];
         dem3dPoint[1]=demPoint[1];
         dem3dPoint[2]=it.Get()[0];
+
+        if(dem3dPoint[2] <= -32768)
+          {
+          valid=false;
+          }
         }
       else
         {
@@ -254,6 +259,7 @@ private:
         dem3dPoint[0]=demPoint[0];
         dem3dPoint[1]=demPoint[1];
         dem3dPoint[2]=it.Get()[0];
+        valid =(dem3dPoint[2] > -32768);
         }
       else
         {
