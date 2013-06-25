@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>366</width>
+    <width>373</width>
     <height>111</height>
    </rect>
   </property>
@@ -304,12 +304,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>24</width>
-         <height>24</height>
-        </size>
-       </property>
        <property name="font">
         <font>
          <kerning>true</kerning>
@@ -319,7 +313,18 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>∞</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="mvdIcons.qrc">
+         <normaloff>:/newPrefix/Data/Icons/unlocked.png</normaloff>
+         <normalon>:/newPrefix/Data/Icons/locked.png</normalon>:/newPrefix/Data/Icons/unlocked.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>12</width>
+         <height>12</height>
+        </size>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -342,7 +347,11 @@
   <tabstop>minMaxButton</tabstop>
   <tabstop>defaultsButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="mvdApplicationsToolBox.qrc"/>
+  <include location="../../Application/Catalogue/mvdMainWindow.qrc"/>
+  <include location="mvdIcons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>linkButton</sender>

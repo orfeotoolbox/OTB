@@ -96,6 +96,7 @@ set( Common_Gui_FORMS
 set( Common_Gui_RESOURCES
   mvdApplicationsToolBox.qrc
   mvdDatabaseBrowserController.qrc
+  mvdIcons.qrc
 )
 
 include_directories(
