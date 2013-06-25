@@ -175,6 +175,10 @@ signals:
 
   /**
    */
+  void LinkToggled( RgbwChannel, bool );
+
+  /**
+   */
   void NoDataFlagToggled( bool enabled );
 
   /**

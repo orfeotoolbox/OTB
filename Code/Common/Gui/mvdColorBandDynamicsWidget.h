@@ -58,6 +58,7 @@ namespace
 
 namespace mvd
 {
+class DoubleValidator;
 //
 // Internal classes pre-declaration.
 namespace Ui
@@ -85,35 +86,47 @@ class Monteverdi2_EXPORT ColorBandDynamicsWidget :
 	      READ GetChannelLabel
 	      WRITE SetChannelLabel );
 
-  /** */
+  /**
+   */
   Q_PROPERTY( double minIntensity
 	      READ GetMinIntensity
 	      WRITE SetMinIntensity );
 
-  /** */
+  /**
+   */
   Q_PROPERTY( double maxIntensity
 	      READ GetMaxIntensity
 	      WRITE SetMaxIntensity );
 
-  /** */
+  /**
+   */
   Q_PROPERTY( double lowIntensity
 	      READ GetLowIntensity
 	      WRITE SetLowIntensity );
 
-  /** */
+  /**
+   */
   Q_PROPERTY( double highIntensity
 	      READ GetHighIntensity
 	      WRITE SetHighIntensity );
 
-  /** */
+  /**
+   */
   Q_PROPERTY( double lowQuantile
 	      READ GetLowQuantile
 	      WRITE SetLowQuantile );
 
-  /** */
+  /**
+   */
   Q_PROPERTY( double highQuantile
 	      READ GetHighQuantile
 	      WRITE SetHighQuantile );
+
+  /**
+   */
+  Q_PROPERTY( bool isBounded
+	      READ IsBounded()
+	      WRITE SetBounded() );
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -163,6 +176,13 @@ public:
   /** */
   void SetHighQuantile( double );
 
+  /**
+   */
+  bool IsBounded() const;
+  /**
+   */
+  void SetBounded( bool enabled );
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -183,6 +203,10 @@ signals:
   void ResetQuantileClicked( RgbwChannel );
   /** */
   void ApplyAllClicked( RgbwChannel, double, double);
+
+  /**
+   */
+  void LinkToggled( RgbwChannel, bool );
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -211,11 +235,11 @@ private:
 
   /**
    */
-  QDoubleValidator* m_LowIntensityValidator;
+  DoubleValidator* m_LowIntensityValidator;
 
   /**
    */
-  QDoubleValidator* m_HighIntensityValidator;
+  DoubleValidator* m_HighIntensityValidator;
 
   /** */
   RgbwChannel m_Channel;
@@ -234,6 +258,8 @@ private slots:
   void on_minMaxButton_clicked();
   void on_defaultsButton_clicked();
   void on_applyAllButton_clicked();
+
+  void on_linkButton_toggled( bool );
 };
 
 } // end namespace 'mvd'.

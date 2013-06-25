@@ -35,6 +35,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
+#include "Gui/mvdDoubleValidator.h"
 
 namespace mvd
 {
@@ -57,10 +58,10 @@ ColorBandDynamicsWidget
 {
   m_UI->setupUi( this );
 
-  m_LowIntensityValidator = new QDoubleValidator( m_UI->lowIntensityLineEdit );
+  m_LowIntensityValidator = new DoubleValidator( m_UI->lowIntensityLineEdit );
   m_UI->lowIntensityLineEdit->setValidator( m_LowIntensityValidator );
 
-  m_HighIntensityValidator = new QDoubleValidator( m_UI->highIntensityLineEdit );
+  m_HighIntensityValidator = new DoubleValidator( m_UI->highIntensityLineEdit );
   m_UI->highIntensityLineEdit->setValidator( m_HighIntensityValidator );
 }
 
@@ -185,6 +186,22 @@ ColorBandDynamicsWidget
 }
 
 /*****************************************************************************/
+bool
+ColorBandDynamicsWidget
+::IsBounded() const
+{
+  return m_UI->linkButton->isChecked();
+}
+
+/*****************************************************************************/
+void
+ColorBandDynamicsWidget
+::SetBounded( bool enabled )
+{
+  return m_UI->linkButton->setChecked( enabled );
+}
+
+/*****************************************************************************/
 void
 ColorBandDynamicsWidget
 ::SetChannelLabel( RgbwChannel channel )
@@ -202,7 +219,7 @@ ColorBandDynamicsWidget
     channel==RGBW_CHANNEL_RGB ||
     channel==RGBW_CHANNEL_ALL
   );
-  
+
   m_UI->bLabel->setVisible(
     channel==RGBW_CHANNEL_BLUE ||
     channel==RGBW_CHANNEL_RGB ||
@@ -317,6 +334,27 @@ ColorBandDynamicsWidget
     m_UI->lowQuantileSpinBox->value(),
     m_UI->highQuantileSpinBox->value()
   );
+}
+
+/*****************************************************************************/
+void
+ColorBandDynamicsWidget
+::on_linkButton_toggled( bool checked )
+{
+  /*
+  if( checked )
+    {
+    QString text( m_UI->lowIntensityLineEdit->text() );
+    m_LowIntensityValidator->fixup( text );
+    m_UI->lowIntensityLineEdit->setText( text );
+
+    text = m_UI->lowIntensityLineEdit->text();
+    m_HighIntensityValidator->fixup( text );
+    m_UI->highIntensityLineEdit->setText( text );
+    }
+  */
+
+  emit LinkToggled( m_Channel, checked );
 }
 
 } // end namespace 'mvd'

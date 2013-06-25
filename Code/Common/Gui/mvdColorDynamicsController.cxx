@@ -134,6 +134,14 @@ ColorDynamicsController
 
   QObject::connect(
     colorDynamicsWidget,
+    SIGNAL( LinkToggled( RgbwChannel, bool ) ),
+    // to:
+    this,
+    SLOT( OnLinkToggled( RgbwChannel, bool  ) )
+  );
+
+  QObject::connect(
+    colorDynamicsWidget,
     SIGNAL( NoDataFlagToggled( bool ) ),
     // to:
     this,
@@ -181,16 +189,20 @@ ColorDynamicsController
 
   widget->SetGrayscaleActivated( model->GetSettings().IsGrayscaleActivated() );
 
+  RgbwChannel channels = 
+    model->GetSettings().IsGrayscaleActivated()
+    ? RGBW_CHANNEL_WHITE
+    : RGBW_CHANNEL_RGB;
+
   //
   // Reset color-dynamics widget.
 
+  // Set ranges.
+  ResetIntensityRanges( channels );
+
   // Set intensities based on applied quantiles (restoring
   // dataset-descriptor settings).
-  SetIntensities(
-    model->GetSettings().IsGrayscaleActivated()
-    ? RGBW_CHANNEL_WHITE
-    : RGBW_CHANNEL_RGB
-  );
+  SetIntensities( channels );
 
   // Setup no-data state.
   SetNoData();
@@ -271,6 +283,14 @@ ColorDynamicsController
 
   QObject::disconnect(
     colorDynamicsWidget,
+    SIGNAL( LinkToggled( RgbwChannel, bool ) ),
+    // to:
+    this,
+    SLOT( OnLinkToggled( RgbwChannel, bool  ) )
+  );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
     SIGNAL( NoDataFlagToggled( bool ) ),
     // to:
     this,
@@ -299,6 +319,11 @@ void
 ColorDynamicsController
 ::ResetIntensityRanges( RgbwChannel channels )
 {
+  // Trace.
+  qDebug()
+    << this
+    << "::ResetIntensityRanges(" << RGBW_CHANNEL_NAMES[ channels ] << ")";
+
   //
   // Calculate loop bounds. Return if nothing to do.
   CountType begin = -1;
@@ -341,12 +366,17 @@ ColorDynamicsController
       colorDynamicsWidget->GetChannel( channel );
 
     DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.GetRgbwChannel( channel ) ]
+      -std::numeric_limits< DefaultImageType::PixelType::ValueType >::infinity()
+    );
+    DefaultImageType::PixelType::ValueType max(
+      +std::numeric_limits< DefaultImageType::PixelType::ValueType >::infinity()
     );
 
-    DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.GetRgbwChannel( channel ) ]
-    );
+    if( colorBandDynWgt->IsBounded() )
+      {
+      min = minPx[ settings.GetRgbwChannel( channel ) ];
+      max = maxPx[ settings.GetRgbwChannel( channel ) ];
+      }
 
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
@@ -564,6 +594,50 @@ ColorDynamicsController
 
     colorBandDynWgt->SetHighQuantile( 2.0 );
     OnHighQuantileChanged( channel, 2.0 );
+    }
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+    }
+  }
+  this->blockSignals( thisSignalsBlocked );
+}
+
+/*****************************************************************************/
+void
+ColorDynamicsController
+::RestoreQuantiles( RgbwChannel channels )
+{
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !RgbwBounds( begin, end, channels ) )
+    return;
+
+  //
+  // Access color-dynamics widget.
+  ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();
+
+
+  // Block this controller's signals to prevent display refreshed
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  bool thisSignalsBlocked = this->blockSignals( true );
+  {
+  // Assign values to controlled widget.
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
+
+    ColorBandDynamicsWidget* colorBandDynWgt =
+      colorDynamicsWidget->GetChannel( channel );
+
+    // Block widget's signals...
+    //...but force call to valueChanged() slot to force refresh.
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
+    {
+    OnLowQuantileChanged( channel, colorBandDynWgt->GetLowQuantile() );
+    OnHighQuantileChanged( channel, colorBandDynWgt->GetHighQuantile() );
     }
     colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
@@ -836,18 +910,21 @@ ColorDynamicsController
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynWgt->GetChannel( chan );
 
-    // Block widget signals to prevent recursive signal/slot loops.
-    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
-    {
-    // Refresh quantile display.
-    colorBandDynWgt->SetLowQuantile(
-      100.0 * imageModel->GetHistogramModel()->Percentile(
-	imageModel->GetSettings().GetRgbwChannel( chan ),
-	value,
-	BOUND_LOWER )
-    );
-    }
-    widgetSignalsBlocked = colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+    if( colorBandDynWgt->IsBounded() )
+      {
+      // Block widget signals to prevent recursive signal/slot loops.
+      bool wgtSignalsBlocked = colorBandDynWgt->blockSignals( true );
+      {
+      // Refresh quantile display.
+      colorBandDynWgt->SetLowQuantile(
+	100.0 * imageModel->GetHistogramModel()->Percentile(
+	  imageModel->GetSettings().GetRgbwChannel( chan ),
+	  value,
+	  BOUND_LOWER )
+      );
+      }
+      wgtSignalsBlocked = colorBandDynWgt->blockSignals( wgtSignalsBlocked );
+      }
     }
 
   // Signal model has been updated.
@@ -892,19 +969,22 @@ ColorDynamicsController
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynWgt->GetChannel( chan );
 
-    // Block widget signals to prevent recursive signal/slot loops.
-    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
-    {
-    // Refresh quantile display.
-    colorBandDynWgt->SetHighQuantile(
-      100.0 * imageModel->GetHistogramModel()->Percentile(
-	imageModel->GetSettings().GetRgbwChannel( chan ),
-	value,
-	BOUND_UPPER
-      )
-    );
-    }
-    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+    if( colorBandDynWgt->IsBounded() )
+      {
+      // Block widget signals to prevent recursive signal/slot loops.
+      bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
+      {
+      // Refresh quantile display.
+      colorBandDynWgt->SetHighQuantile(
+	100.0 * imageModel->GetHistogramModel()->Percentile(
+	  imageModel->GetSettings().GetRgbwChannel( chan ),
+	  value,
+	  BOUND_UPPER
+	)
+      );
+      }
+      colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+      }
     }
 
   // Signal model has been updated.
@@ -1079,6 +1159,23 @@ ColorDynamicsController
 
   //
   colorDynWgt->SetNoDataButtonChecked( false );
+}
+
+/*****************************************************************************/
+void
+ColorDynamicsController
+::OnLinkToggled( RgbwChannel channel, bool checked )
+{
+  // Trace.
+  qDebug()
+    << this
+    << "::OnLinkToggled("
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << checked
+    << ")";
+
+  ResetIntensityRanges( channel );
+
+  RestoreQuantiles( channel );
 }
 
 /*****************************************************************************/

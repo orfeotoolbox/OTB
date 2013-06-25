@@ -126,20 +126,6 @@ public slots:
    */
   void OnGrayscaleActivated( bool activated );
 
-  /**
-   * \brief Slot called when the NoDataFlagToggled() signal of the
-   * controlled widget has been emitted (\see ColorDynamicsWidget).
-   *
-   * \param enabled true when the no-data flag is enabled.
-   */
-  void OnNoDataFlagToggled( bool enabled );
-
-  /**
-   * \brief Slot called when the NoDataValueChanged() signal of the
-   * controlled widget has been emitted (\see ColorDynamicsWidget).
-   */
-  void OnNoDataValueChanged( double value );
-
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
@@ -209,7 +195,15 @@ private:
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.
    */
-  void ResetQuantiles( RgbwChannel );
+  void ResetQuantiles( RgbwChannel channels );
+
+  /**
+   * \brief Restore low and high intensities from quantile values
+   * stored in widget when enabling intensity-range bounds again.
+   *
+   * \param channels Channels for which to reset intensities.
+   */
+  void RestoreQuantiles( RgbwChannel channels );
 
   /**
    * \brief Convenience method used to compute integer indices in order
@@ -317,6 +311,28 @@ private slots:
    * quantiles.
    */
   void OnApplyAllClicked( RgbwChannel channel, double low, double high );
+
+  /**
+   * \brief Slot called when the NoDataFlagToggled() signal of the
+   * controlled widget has been emitted (\see ColorDynamicsWidget).
+   *
+   * \param enabled true when the no-data flag is enabled.
+   */
+  void OnNoDataFlagToggled( bool enabled );
+
+  /**
+   * \brief Slot called when the NoDataValueChanged() signal of the
+   * controlled widget has been emitted (\see ColorDynamicsWidget).
+   */
+  void OnNoDataValueChanged( double value );
+
+  /**
+   * \brief Slot called when the link button has been toggled.
+   *
+   * \param channel RGB channel for which the link button has been toggled.
+   * \param checked The state of the button.
+   */
+  void OnLinkToggled( RgbwChannel channel, bool checked );
 
 };
 

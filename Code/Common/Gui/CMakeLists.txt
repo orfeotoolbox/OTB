@@ -16,6 +16,7 @@ set( Common_Gui_SOURCES
   mvdDatabaseBrowserController.cxx
   mvdDatabaseBrowserWidget.cxx
   mvdDatasetCreationProgressDialog.cxx
+  mvdDoubleValidator.cxx
   mvdGLImageWidget.cxx
   mvdGui.cxx
   mvdI18nApplication.cxx
@@ -53,6 +54,7 @@ set( Common_Gui_HEADERS_MOC
   mvdDatabaseBrowserController.h
   mvdDatabaseBrowserWidget.h
   mvdDatasetCreationProgressDialog.h
+  mvdDoubleValidator.h
   mvdGLImageWidget.h
   # mvdGui.h
   mvdI18nApplication.h

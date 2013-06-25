@@ -239,6 +239,14 @@ ColorDynamicsWidget
     this,
     SIGNAL( ApplyAllClicked( RgbwChannel, double, double ) )
   );
+
+  QObject::connect(
+    child,
+    SIGNAL( LinkToggled( RgbwChannel, bool ) ),
+    // TO:
+    this,
+    SIGNAL( LinkToggled( RgbwChannel, bool ) )
+  );
 }
 
 /*****************************************************************************/
