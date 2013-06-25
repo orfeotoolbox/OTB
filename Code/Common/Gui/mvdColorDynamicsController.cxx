@@ -1175,7 +1175,12 @@ ColorDynamicsController
 
   ResetIntensityRanges( channel );
 
-  RestoreQuantiles( channel );
+  if( checked )
+    {
+    RestoreQuantiles( channel );
+
+    emit ModelUpdated();
+    }
 }
 
 /*****************************************************************************/
