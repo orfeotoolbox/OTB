@@ -365,10 +365,10 @@ private:
     AddParameter(ParameterType_Group, "output", "Output parameters");
     SetParameterDescription("output","This group of parameters allows to choose the DSM resolution and projection parameters.");
 
-    // Build the Output Map Projection
-    MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
-
-    SetParameterString("map","wgs");
+    // // Build the Output Map Projection - Commented until bug fix
+    // for custom map projection
+    // MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
+    // SetParameterString("map","wgs");
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
     SetParameterDescription("output.res","Spatial sampling distance of the output elevation (in m)");
@@ -627,10 +627,13 @@ private:
       m_ExtractorList[i]->UpdateOutputInformation();
 
       }
-    // Update the UTM zone params
-    MapProjectionParametersHandler::InitializeUTMParameters(this, "input.il", "map");
+    // Update the UTM zone params - Commented until bug fix on custom
+    // map projections
+    // MapProjectionParametersHandler::InitializeUTMParameters(this, "input.il", "map");
     // Get the output projection Ref
-    m_OutputProjectionRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map");
+    // m_OutputProjectionRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map");
+
+    m_OutputProjectionRef = "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]";
 
     //create BCO interpolator with radius 2
     // used by Left and Right Resampler and Left and Right Mask REsampler
