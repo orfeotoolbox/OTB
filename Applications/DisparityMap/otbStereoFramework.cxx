@@ -1061,6 +1061,7 @@ private:
 
 
       FloatImageType::Pointer hDispOutput = subPixelFilterPointer->GetOutput(0);
+      FloatImageType::Pointer finalMaskImage=finalMaskFilter->GetOutput();
       if (IsParameterEnabled("postproc.med"))
         {
         MedianFilterType::Pointer hMedianFilter = MedianFilterType::New();
@@ -1070,6 +1071,7 @@ private:
         hMedianFilter->SetMaskInput(finalMaskFilter->GetOutput());
         hMedianFilter->UpdateOutputInformation();
         hDispOutput = hMedianFilter->GetOutput();
+        finalMaskImage = hMedianFilter->GetOutputMask();
         m_Filters.push_back(hMedianFilter.GetPointer());
         }
 
@@ -1090,10 +1092,9 @@ private:
       dispTranslateMaskFilter->SetExpression("hdisp!=-32768");
       m_Filters.push_back(dispTranslateMaskFilter.GetPointer());
 
-
       FloatImageType::Pointer hDispOutput2 = disparityTranslateFilter->GetHorizontalDisparityMapOutput();
       FloatImageType::Pointer vDispOutput2 = disparityTranslateFilter->GetVerticalDisparityMapOutput();
-
+      FloatImageType::Pointer translatedMaskImage =  dispTranslateMaskFilter->GetOutput();
       if (IsParameterEnabled("postproc.med"))
         {
         MedianFilterType::Pointer hMedianFilter2 = MedianFilterType::New();
@@ -1103,19 +1104,21 @@ private:
         hMedianFilter2->SetInput(disparityTranslateFilter->GetHorizontalDisparityMapOutput());
         hMedianFilter2->SetRadius(2);
         hMedianFilter2->SetIncoherenceThreshold(2.0);
-        //hMedianFilter2->SetMaskInput(lBandMathFilter->GetOutput());
+        hMedianFilter2->SetMaskInput(dispTranslateMaskFilter->GetOutput());
         hMedianFilter2->UpdateOutputInformation();
         hDispOutput2 = hMedianFilter2->GetOutput();
+        translatedMaskImage = hMedianFilter2->GetOutputMask();
         m_Filters.push_back(hMedianFilter2.GetPointer());
 
         vMedianFilter2->SetInput(disparityTranslateFilter->GetVerticalDisparityMapOutput());
         vMedianFilter2->SetRadius(2);
         vMedianFilter2->SetIncoherenceThreshold(2.0);
-        //vMedianFilter2->SetMaskInput(lBandMathFilter->GetOutput());
+        vMedianFilter2->SetMaskInput(dispTranslateMaskFilter->GetOutput());
         vMedianFilter2->UpdateOutputInformation();
         vDispOutput2 = vMedianFilter2->GetOutput();
         m_Filters.push_back(vMedianFilter2.GetPointer());
         }
+
       // transform disparity into 3D map
       m_MultiDisparityTo3DFilterList[i]->SetReferenceKeywordList(inleft->GetImageKeywordlist());
       m_MultiDisparityTo3DFilterList[i]->SetNumberOfMovingImages(1);
@@ -1123,7 +1126,7 @@ private:
       m_MultiDisparityTo3DFilterList[i]->SetVerticalDisparityMapInput(0, vDispOutput2);
       m_MultiDisparityTo3DFilterList[i]->SetMovingKeywordList(0, inright->GetImageKeywordlist());
       m_MultiDisparityTo3DFilterList[i]->UpdateOutputInformation();
-      m_MultiDisparityTo3DFilterList[i]->SetDisparityMaskInput(0,dispTranslateMaskFilter->GetOutput());
+      m_MultiDisparityTo3DFilterList[i]->SetDisparityMaskInput(0, translatedMaskImage);
 
       // PARAMETER ESTIMATION
 
@@ -1184,8 +1187,7 @@ private:
       // Compute disparity mask
       BandMathFilterType::Pointer dispMaskFilter = BandMathFilterType::New();
       dispMaskFilter->SetNthInput(0, hDispOutput, "hdisp");
-      dispMaskFilter->SetNthInput(1, finalMaskFilter->GetOutput(), "mask");
-
+      dispMaskFilter->SetNthInput(1, finalMaskImage, "mask");
       std::ostringstream maskFormula;
       maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (mask>0";
       if (IsParameterEnabled("postproc.metrict"))
