@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdCatalogueApplication.h"
+#include "mvdApplication.h"
 
 
 /*****************************************************************************/
@@ -47,7 +47,7 @@ namespace mvd
 {
 
 /*
-  TRANSLATOR mvd::CatalogueApplication
+  TRANSLATOR mvd::Application
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -66,22 +66,22 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-CatalogueApplication
-::CatalogueApplication( QApplication* qtApp ) :
+Application
+::Application( QApplication* qtApp ) :
   I18nApplication( qtApp ),
   m_OTBApplicationsModel( NULL )
 {
 }
 
 /*******************************************************************************/
-CatalogueApplication
-::~CatalogueApplication()
+Application
+::~Application()
 {
 }
 
 /*******************************************************************************/
 CountType
-CatalogueApplication
+Application
 ::OpenDatabase()
 {
   DatabaseModel* databaseModel = new DatabaseModel( this );
@@ -96,7 +96,7 @@ CatalogueApplication
 
 /*******************************************************************************/
 void
-CatalogueApplication
+Application
 ::OpenApplicationsBrowser()
 {
 #ifdef OTB_WRAP_QT
@@ -107,7 +107,7 @@ CatalogueApplication
 
 /*******************************************************************************/
 void
-CatalogueApplication
+Application
 ::virtual_InitializeCore()
 {
   I18nApplication::virtual_InitializeCore();

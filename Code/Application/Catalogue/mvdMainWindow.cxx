@@ -69,7 +69,7 @@
 #include "Gui/mvdTaskProgressDialog.h"
 #include "Gui/mvdPixelDescriptionWidget.h"
 //
-#include "mvdCatalogueApplication.h"
+#include "mvdApplication.h"
 #include "mvdPreferencesDialog.h"
 
 namespace mvd
@@ -172,7 +172,7 @@ MainWindow
   // Done here cause needed to be done once and only once.
   SetControllerModel(
     m_OtbApplicationsBrowserDock,
-    CatalogueApplication::Instance()->GetOTBApplicationsModel()
+    Application::Instance()->GetOTBApplicationsModel()
   );
 
   //
@@ -815,17 +815,17 @@ MainWindow
   if( progress.Exec()!=QMessageBox::Accepted )
     return;
 
-  assert( CatalogueApplication::Instance() );
-  assert( CatalogueApplication::Instance()->GetModel()!=NULL );
+  assert( Application::Instance() );
+  assert( Application::Instance()->GetModel()!=NULL );
   assert(
-    CatalogueApplication::Instance()->GetModel()==
-    CatalogueApplication::Instance()->GetModel< DatabaseModel >()
+    Application::Instance()->GetModel()==
+    Application::Instance()->GetModel< DatabaseModel >()
   );
 
   assert( progress.GetObject< DatasetModel >()!=NULL );
 
   DatabaseModel* databaseModel =
-    CatalogueApplication::Instance()->GetModel< DatabaseModel >();
+    Application::Instance()->GetModel< DatabaseModel >();
   assert( databaseModel!=NULL );
 
   databaseModel->SelectDatasetModel(
@@ -840,14 +840,14 @@ void
 MainWindow
 ::closeEvent( QCloseEvent* event )
 {
-  assert( CatalogueApplication::Instance() );
+  assert( Application::Instance() );
   assert(
-    CatalogueApplication::Instance()->GetModel()==
-    CatalogueApplication::Instance()->GetModel< DatabaseModel >()
+    Application::Instance()->GetModel()==
+    Application::Instance()->GetModel< DatabaseModel >()
   );
 
   DatabaseModel* databaseModel =
-    CatalogueApplication::Instance()->GetModel< DatabaseModel >();
+    Application::Instance()->GetModel< DatabaseModel >();
 
   DatasetModel* datasetModel = databaseModel->GetSelectedDatasetModel();
 
@@ -943,12 +943,12 @@ MainWindow
 
   SetControllerModel( m_DatabaseBrowserDock, NULL );
 
-  assert( CatalogueApplication::Instance()!=NULL );
+  assert( Application::Instance()!=NULL );
 
   DatabaseModel* databaseModel =
-    CatalogueApplication::Instance()->GetModel< DatabaseModel >();
+    Application::Instance()->GetModel< DatabaseModel >();
   // Check that NULL==NULL or (DatabaseModel*)==(AbstractModel*)
-  assert( databaseModel==CatalogueApplication::Instance()->GetModel() );
+  assert( databaseModel==Application::Instance()->GetModel() );
 
   // Exit, if there were no previously set database model.
   if( databaseModel==NULL )
@@ -1071,7 +1071,7 @@ MainWindow
 
   // Access database-model.
   DatabaseModel* databaseModel =
-    CatalogueApplication::Instance()->GetModel< DatabaseModel >();
+    Application::Instance()->GetModel< DatabaseModel >();
 
   // Application should always have a valid database model.
   assert( databaseModel!=NULL );

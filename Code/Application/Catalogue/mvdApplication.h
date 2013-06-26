@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdCatalogueApplication_h
-#define __mvdCatalogueApplication_h
+#ifndef __mvdApplication_h
+#define __mvdApplication_h
 
 //
 // Configuration include.
@@ -65,10 +65,10 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/** \class CatalogueApplication
+/** \class Application
  *
  */
-class Monteverdi2_EXPORT CatalogueApplication
+class Monteverdi2_EXPORT Application
   : public I18nApplication
 {
 
@@ -91,10 +91,10 @@ public:
    *
    * \param qtApp The parent Qt application (\see I18nApplication).
    */
-  CatalogueApplication( QApplication* qtApp );
+  Application( QApplication* qtApp );
 
   /** \brief Destructor. */
-  virtual ~CatalogueApplication();
+  virtual ~Application();
 
   /**
    * \return The number of outdated dataset-models present in the
@@ -119,17 +119,17 @@ public:
 
   /**
    * \brief Access the const instance of application singleton.
-   * \return The const instance to the singleton CatalogueApplication.
+   * \return The const instance to the singleton Application.
    */
   inline
-    static const CatalogueApplication* ConstInstance();
+    static const Application* ConstInstance();
 
   /**
    * \brief Access the non-const instance of application singleton.
-   * \return The non-const instance to the singleton CatalogueApplication.
+   * \return The non-const instance to the singleton Application.
    */
   inline
-    static CatalogueApplication* Instance();
+    static Application* Instance();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -188,26 +188,26 @@ namespace mvd
 
 /*****************************************************************************/
 inline
-const CatalogueApplication*
-CatalogueApplication
+const Application*
+Application
 ::ConstInstance()
 {
-  return I18nCoreApplication::ConstInstance< CatalogueApplication >();
+  return I18nCoreApplication::ConstInstance< Application >();
 }
 
 /*****************************************************************************/
 inline
-CatalogueApplication*
-CatalogueApplication
+Application*
+Application
 ::Instance()
 {
-  return I18nCoreApplication::Instance< CatalogueApplication >();
+  return I18nCoreApplication::Instance< Application >();
 }
 
 /*****************************************************************************/
 inline
 const AbstractModel*
-CatalogueApplication
+Application
 ::GetOTBApplicationsModel() const
 {
   return m_OTBApplicationsModel;
@@ -216,7 +216,7 @@ CatalogueApplication
 /*****************************************************************************/
 inline
 AbstractModel*
-CatalogueApplication
+Application
 ::GetOTBApplicationsModel()
 {
   return m_OTBApplicationsModel;
@@ -224,4 +224,4 @@ CatalogueApplication
 
 } // end namespace 'mvd'
 
-#endif // __CatalogueApplication_h
+#endif // __Application_h

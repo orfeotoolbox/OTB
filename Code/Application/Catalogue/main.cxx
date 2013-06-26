@@ -41,7 +41,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdCatalogueApplication.h"
+#include "mvdApplication.h"
 #include "mvdMainWindow.h"
 
 /*****************************************************************************/
@@ -57,7 +57,7 @@ main( int argc, char* argv[] )
   QApplication qtApp( argc, argv );
 
   // 1. Initialize application and sync settings.
-  mvd::CatalogueApplication application( &qtApp );
+  mvd::Application application( &qtApp );
   application.Initialize();
 
   // 2. Initialize main-window (UI).

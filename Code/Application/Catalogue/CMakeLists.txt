@@ -1,14 +1,14 @@
 #############################################################################
 # Input files.
 set( Catalogue_SOURCES
-       mvdCatalogueApplication.cxx
+       mvdApplication.cxx
        mvdMainWindow.cxx
        mvdPreferencesDialog.cxx
 )
 
 # Headers for classes with Q_OBJECT macro (needs to go to Qt moc)
 set( Catalogue_HEADERS_MOC
-       mvdCatalogueApplication.h
+       mvdApplication.h
        mvdMainWindow.h
        mvdPreferencesDialog.h
 )
@@ -71,32 +71,32 @@ endif()
 # The library is also used in tests, waiting for a better test strategy
 # The library is not installed
 
-add_library(Monteverdi2_Catalogue
+add_library( Monteverdi2_Catalogue
   STATIC
   ${Catalogue_SOURCES}
   ${Catalogue_FORMS_HEADERS}
   ${Catalogue_SRC_MOC}
 )
-target_link_libraries(Monteverdi2_Catalogue
+target_link_libraries( Monteverdi2_Catalogue
   Monteverdi2_Gui
 )
 
 if (OTB_WRAP_QT)
-target_link_libraries(Monteverdi2_Catalogue
+target_link_libraries( Monteverdi2_Catalogue
   Monteverdi2_ApplicationsWrapper
 )
 endif()
 
 #############################################################################
 # monteverdi2 executable
-add_executable( mvd2-catalogue
+add_executable( monteverdi2
   WIN32
   main.cxx
   ${Monteverdi2_WIN32_RC_FILE}
   ${Catalogue_RESOURCES_RCC}
 )
 
-target_link_libraries( mvd2-catalogue
+target_link_libraries( monteverdi2
   Monteverdi2_Catalogue
   #Monteverdi2_Gui
   ${QT_QTMAIN_LIBRARY}
@@ -104,11 +104,11 @@ target_link_libraries( mvd2-catalogue
 
 # deploy a qt.conf file in the monteverdi2 target build dir
 # to avoid warning on translation discovery
-deploy_qt_conf( mvd2-catalogue )
+deploy_qt_conf( monteverdi2 )
 
 #############################################################################
 install(
-  TARGETS mvd2-catalogue
+  TARGETS monteverdi2
   RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
   LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
   ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
