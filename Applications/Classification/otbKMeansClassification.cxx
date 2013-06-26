@@ -204,7 +204,7 @@ private:
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
     AddParameter(ParameterType_Float, "ct", "Convergence threshold");
-    SetParameterDescription("ct", "Convergence threshold for class centroid  (L2 distance, by default 0.01).");
+    SetParameterDescription("ct", "Convergence threshold for class centroid  (L2 distance, by default 0.0001).");
     SetDefaultParameterFloat("ct", 0.0001);
     MandatoryOff("ct");
     AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
@@ -219,7 +219,7 @@ private:
     SetDocExampleParameterValue("nc", "5");
     SetDocExampleParameterValue("maxit", "1000");
     SetDocExampleParameterValue("ct", "0.0001");
-    SetDocExampleParameterValue("out", "ClassificationFilterOuptut.tif");
+    SetDocExampleParameterValue("out", "ClassificationFilterOutput.tif");
   }
 
   void DoUpdateParameters()
@@ -233,7 +233,7 @@ private:
       RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
       int availableRAM = GetParameterInt("ram");
       streamingManager->SetAvailableRAMInMB(availableRAM);
-      float bias = 1.5; // empric value;
+      float bias = 1.5; // empirical value
       streamingManager->SetBias(bias);
       FloatVectorImageType::RegionType largestRegion = inImage->GetLargestPossibleRegion();
       FloatVectorImageType::SizeType largestRegionSize = largestRegion.GetSize();
@@ -244,17 +244,15 @@ private:
 
       unsigned long maxPixNb = largestPixNb / nbDivisions;
 
-
       if (GetParameterInt("ts") > static_cast<int> (maxPixNb))
         {
-        otbAppLogWARNING(" available RAM is too small to process this sample size is.Sample size will be reduced to "<<maxPixNb<<std::endl);
+        otbAppLogWARNING("The available RAM is too small to process this sample size of " << GetParameterInt("ts") <<
+            " pixels. The sample size will be reduced to " << maxPixNb << " pixels." << std::endl);
         this->SetParameterInt("ts", maxPixNb);
         }
 
       this->SetMaximumParameterIntValue("ts", maxPixNb);
-
       }
-
   }
 
   void DoExecute()
@@ -288,13 +286,14 @@ private:
       if (m_InImage->GetLargestPossibleRegion() != maskImage->GetLargestPossibleRegion())
         {
         GetLogger()->Error("Mask image and input image have different sizes.");
+        return;
         }
       }
 
     // Training sample lists
     ListSampleType::Pointer sampleList = ListSampleType::New();
 
-    unsigned int init_means_index = 0;
+    //unsigned int init_means_index = 0;
 
     // Sample dimension and max dimension
     const unsigned int nbComp = m_InImage->GetNumberOfComponentsPerPixel();
@@ -316,7 +315,7 @@ private:
     const double upperThresholdNBSamplesForKMeans = 1000 * 1000;
     const double actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans, upperThresholdNBSamplesForKMeans);
 
-    otbAppLogINFO(<<actualNBSamplesForKMeans<<" is the maximum sample size that will be used."<<std::endl);
+    otbAppLogINFO(<< actualNBSamplesForKMeans << " is the maximum sample size that will be used." << std::endl);
 
     const double shrinkFactor = vcl_floor(
                                           vcl_sqrt(
@@ -353,10 +352,17 @@ private:
 
     if (maskFlag)
       {
-      while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd() && (m_MaskIt.Get() <= 0))
+      while (!it.IsAtEnd() && !m_MaskIt.IsAtEnd() && (m_MaskIt.Get() <= 0))
         {
         ++it;
         ++m_MaskIt;
+        }
+
+      // If the mask is empty after the subsampling
+      if (m_MaskIt.IsAtEnd())
+        {
+        GetLogger()->Error("The mask image is empty after subsampling. Please increase the training set size.");
+        return;
         }
       }
 
@@ -419,7 +425,7 @@ private:
         initialMeans[compIndex + classIndex * sampleSize] = newCentroid[compIndex];
         }
       }
-    otbAppLogINFO(<<totalSamples <<" samples will be used as estimator input."<<std::endl);
+    otbAppLogINFO(<< totalSamples << " samples will be used as estimator input." << std::endl);
 
     /*******************************************/
     /*           Learning                      */
@@ -463,7 +469,7 @@ private:
     otbAppLogINFO("Optimization completed." );
     if (estimator->GetCurrentIteration() == maxIt)
       {
-      otbAppLogWARNING("estimator reached maximum iteration number."<<std::endl);
+      otbAppLogWARNING("The estimator reached the maximum iteration number." << std::endl);
       }
     message.str("");
     message << "Estimated centroids are: " << std::endl;
@@ -485,7 +491,8 @@ private:
 
     /*******************************************/
     /*           Classification                */
-    /*******************************************/otbAppLogINFO("-- CLASSIFICATION --" << std::endl);
+    /*******************************************/
+    otbAppLogINFO("-- CLASSIFICATION --" << std::endl);
 
     // Finally, update the KMeans filter
     KMeansFunctorType functor;
