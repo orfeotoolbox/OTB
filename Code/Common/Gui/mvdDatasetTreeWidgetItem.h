@@ -82,20 +82,20 @@ public:
   /**
    * \brief Constructor.
    */
-  DatasetTreeWidgetItem(const QString & datasetId, 
-                        QTreeWidgetItem* parent, 
-                        const QStringList & stringList
-    );
+  DatasetTreeWidgetItem( QTreeWidgetItem* parent,
+			 const QString& id, 
+			 const QString& alias,
+			 const QStringList& columns = QStringList() );
 
   /**
    * \brief Destructor.
    */
   virtual ~DatasetTreeWidgetItem();
 
-    /**
+  /**
    * \brief Get the datasetID 
    */
-  const QString & GetDatasetId();
+  inline QString GetId() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -129,8 +129,6 @@ private:
 // Private attributes.
 private:
 
-  QString    m_DatasetId;
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -138,6 +136,23 @@ private:
 private slots:
 
 };
+
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+
+/*******************************************************************************/
+inline
+QString
+DatasetTreeWidgetItem
+::GetId() const
+{
+  return text( 1 );
+}
 
 } // end namespace 'mvd'
 

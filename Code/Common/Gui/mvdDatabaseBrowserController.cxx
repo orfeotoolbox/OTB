@@ -239,7 +239,7 @@ DatabaseBrowserController
         dynamic_cast<DatasetTreeWidgetItem*>(
           tree->topLevelItem(topIdx)->child(idx)
           );
-      QString datasetId =  currentDatasetItem->GetDatasetId();
+      QString datasetId =  currentDatasetItem->GetId();
 
       const DatasetModel* datasetModel = model->FindDatasetModel( datasetId );
       assert( datasetModel!=NULL );
@@ -309,7 +309,7 @@ DatabaseBrowserController
   assert( GetWidget()==GetWidget< DatabaseBrowserWidget >() );
 
   GetWidget< DatabaseBrowserWidget >()->SetCurrentDataset(
-    datasetModel->GetAlias()
+    datasetModel->GetName()
   );
 }
 

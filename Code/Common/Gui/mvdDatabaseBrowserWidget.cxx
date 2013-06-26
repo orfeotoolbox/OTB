@@ -42,6 +42,7 @@
 #include "Gui/mvdDatabaseTreeWidget.h"
 #include "Gui/mvdDatasetTreeWidgetItem.h"
 
+#define ENABLE_DISPLAY_ID 1
 
 namespace mvd
 {
@@ -75,15 +76,21 @@ DatabaseBrowserWidget
 {
   m_UI->setupUi( this );
 
+#if defined( _DEBUG ) && ENABLE_DISPLAY_ID
+  m_UI->databaseTreeWidget->headerItem()->setText( 1, "Id" );
+#endif
+
   SetupUI();
 
   //
   // connect search box changed
-  QObject::connect(m_UI->m_SearchLine,
-                   SIGNAL( textChanged(const QString &) ),
-                   this,
-                   SLOT( OnSearchBoxChanged(const QString &) )
-    );
+  QObject::connect(
+    m_UI->m_SearchLine,
+    SIGNAL( textChanged( const QString& ) ),
+    // to:
+    this,
+    SLOT( OnSearchBoxChanged( const QString& ) )
+  );
 }
 
 /*******************************************************************************/
@@ -120,7 +127,7 @@ DatabaseBrowserWidget
     dynamic_cast<DatasetTreeWidgetItem*>( GetDatabaseTreeWidget()->currentItem() );
   if (selectedItem)
     {
-    currentItemId = selectedItem->GetDatasetId();
+    currentItemId = selectedItem->GetId();
     }
   
   // Remove all previously stored dataset child items.
@@ -142,26 +149,22 @@ DatabaseBrowserWidget
     // qDebug() << "+" << *it;
 
     // current alias
-    QString currentAlias  =  (*it).first;
+    const StringPairListType::value_type::first_type& alias = it->first;
+    const StringPairListType::value_type::second_type& id = it->second;
 
     // Is the searchText match the current alias or at least a part of
     // it 
     if (m_SearchText.isEmpty() ||
-        currentAlias.contains(m_SearchText ,Qt::CaseInsensitive) )
+        alias.contains(m_SearchText ,Qt::CaseInsensitive) )
       {
+      DatasetTreeWidgetItem* item =
+	new DatasetTreeWidgetItem( m_DatasetRootItem, id, alias );
 
       // was it the selected item ?
-      if (currentItemId == currentAlias )
+      if( currentItemId == alias )
         {
         // ...add this child item as currentItem
-        GetDatabaseTreeWidget()->setCurrentItem( 
-          new DatasetTreeWidgetItem( (*it).second, m_DatasetRootItem, QStringList( currentAlias ) )
-          );
-        }
-      else
-        {
-        // ...as child items.
-        new DatasetTreeWidgetItem( (*it).second, m_DatasetRootItem, QStringList( currentAlias ) );
+        GetDatabaseTreeWidget()->setCurrentItem( item );
         }
       }
     
@@ -169,7 +172,7 @@ DatabaseBrowserWidget
 
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 DatabaseBrowserWidget
 ::SetupUI()
@@ -204,14 +207,16 @@ DatabaseBrowserWidget
 /*****************************************************************************/
 void
 DatabaseBrowserWidget
-::SetCurrentDataset( const QString& name )
+::SetCurrentDataset( const QString& id )
 {
+  qDebug() << this << "::SetCurrentDataset(" << id << ")";
+
   assert( m_UI!=NULL );
   assert( m_UI->databaseTreeWidget!=NULL );
 
   QList< QTreeWidgetItem* > items(
     m_UI->databaseTreeWidget->findItems(
-      name,
+      id,
       Qt::MatchExactly | Qt::MatchRecursive
     )
   );
@@ -239,7 +244,7 @@ DatabaseBrowserWidget
   if ( current && current->parent() )
     {
     emit CurrentDatasetChanged( 
-      dynamic_cast<DatasetTreeWidgetItem*>(current)->GetDatasetId() 
+      dynamic_cast<DatasetTreeWidgetItem*>(current)->GetId() 
       );
     }
   else

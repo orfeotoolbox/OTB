@@ -64,30 +64,19 @@ namespace mvd
 
 /*******************************************************************************/
 DatasetTreeWidgetItem
-::DatasetTreeWidgetItem(const QString & datasetId, 
-                        QTreeWidgetItem* parent, 
-                        const QStringList & stringList): 
-  QTreeWidgetItem( parent, stringList),
-  m_DatasetId( datasetId )
+::DatasetTreeWidgetItem( QTreeWidgetItem* parent,
+			 const QString& id, 
+			 const QString& alias,
+			 const QStringList& columns ) :
+  QTreeWidgetItem( parent, QStringList( alias ) << id << columns )
 {
-
+  assert( !id.isEmpty() );
 }
-
-
 
 /*******************************************************************************/
 DatasetTreeWidgetItem
 ::~DatasetTreeWidgetItem()
 {
-}
-
-
-/*******************************************************************************/
-const QString &
-DatasetTreeWidgetItem
-::GetDatasetId()
-{
-  return m_DatasetId;
 }
 
 } // end namespace 'mvd'
