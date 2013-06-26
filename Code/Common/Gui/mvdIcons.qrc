@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>../../../Data/Icons/locked.png</file>
+    <file>../../../Data/Icons/unlocked.png</file>
+  </qresource>
+</RCC>
