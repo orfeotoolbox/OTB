@@ -550,6 +550,8 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
 
   typename T3DImage::RegionType splitRegion;
 
+  MapPixelType position;
+
   itk::ImageRegionConstIterator<InputMapType> mapIt;
   for (unsigned int k = 0; k < this->GetNumberOf3DMaps(); ++k)
     {
@@ -613,7 +615,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
             }
           }
 
-        MapPixelType position = mapIt.Get();
+        position = mapIt.Get();
 
         //std::cout<<"position"<<position<<std::endl;
         if (!this->m_IsGeographic)
