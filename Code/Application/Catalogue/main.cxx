@@ -139,11 +139,14 @@ main( int argc, char* argv[] )
 #if defined( _DEBUG )
   // Usefull when developping/debugging to avoid overlapping other windows.
   mainWindow.show();
+
 #else
   // TODO: Correctly manage main-window state via application settings.
   mainWindow.showMaximized();
+  
 #endif
 
+  splash.finish(&mainWindow);
 
   // 6. Let's go: run the application and return exit code.
   return QCoreApplication::instance()->exec();
