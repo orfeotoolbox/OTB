@@ -4,7 +4,7 @@ set(CPACK_NSIS_MODIFY_PATH ON PARENT_SCOPE)
 # with the monteverdi2.bat shortcut
 set(CPACK_NSIS_MENU_LINKS
     "bin/mvd2-viewer.bat" "Monteverdi2 Viewer"
-    "bin/mvd2-catalogue.bat" "Monteverdi2 Catalogue"
+    "bin/monteverdi2.bat" "Monteverdi2"
     PARENT_SCOPE)
 
 # Since we put bat files as MENU_LINKS, they does not get an icon automatically
@@ -16,7 +16,7 @@ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
     CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2 Viewer.lnk\\\" \\\"$INSTDIR\\\\bin\\\\mvd2-viewer.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\mvd2-viewer.exe\\\"
     "
     "
-    CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2 Catalogue.lnk\\\" \\\"$INSTDIR\\\\bin\\\\mvd2-catalogue.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\mvd2-catalogue.exe\\\"
+    CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2.lnk\\\" \\\"$INSTDIR\\\\bin\\\\monteverdi2.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\monteverdi2.exe\\\"
     "
     PARENT_SCOPE)
 
@@ -25,12 +25,12 @@ set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
     Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2 Viewer.lnk\\\"
     "
     "
-    Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2 Catalogue.lnk\\\"
+    Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2.lnk\\\"
     "
     PARENT_SCOPE)
 
 # Icon for the add-remove program
-set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\mvd2-catalogue.exe" PARENT_SCOPE)
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\monteverdi2.exe" PARENT_SCOPE)
 
 # set the install/unistall icon used for the installer itself
 # There is a bug in NSI that does not handle full unix paths properly.
@@ -81,7 +81,7 @@ install(FILES qt.conf
         COMPONENT Resources)
         
 install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/mvd2-viewer.bat
-              ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/mvd2-catalogue.bat
+              ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
         DESTINATION bin
         COMPONENT Runtime)
 
