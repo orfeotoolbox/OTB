@@ -407,7 +407,12 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     minMapIndex[1] = static_cast<long int> (mapRegion.GetIndex(1));
 
     IndexType minMapRequestedIndex;
+    minMapRequestedIndex[0]= maxMapIndex[0]+1;
+    minMapRequestedIndex[1]= maxMapIndex[1]+1;
     IndexType maxMapRequestedIndex;
+    maxMapRequestedIndex[0]= 0;
+    maxMapRequestedIndex[1]= 0;
+
     for (unsigned int i = 0; i < 8; i++)
       {
       TDPointType tmpSensor = groundToSensorTransform->TransformPoint(corners[i]);
