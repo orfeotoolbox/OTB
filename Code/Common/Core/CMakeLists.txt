@@ -46,7 +46,7 @@ set( Common_Core_HEADERS_MOC
   mvdI18nCoreApplication.h
   mvdImageImporter.h
   mvdImagePlacenameLoader.h
-  mvdImageProperties.h
+  # mvdImageProperties.h
   # mvdMath.h
   mvdMyClass.h
   mvdQuicklookModel.h

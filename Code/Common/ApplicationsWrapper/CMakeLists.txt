@@ -24,7 +24,7 @@ set( Common_ApplicationsWrapper_HEADERS_MOC
   mvdApplicationsBrowser.h
   mvdApplicationLauncher.h
   mvdWrapperQtWidgetInputImageParameter.h
-  mvdWrapperQtWidgetParameterFactory.h
+  # mvdWrapperQtWidgetParameterFactory.h
   mvdWrapperQtWidgetView.h
   mvdWrapperQtWidgetParameterGroup.h
   mvdWrapperQtWidgetChoiceParameter.h

@@ -7,6 +7,7 @@ set( Common_Gui_SOURCES
   mvdAbstractModelController.cxx
   #mvdAbstractModelRenderer.cxx
   mvdAbstractViewManipulator.cxx
+  mvdApplicationsToolBox.cxx
   mvdCheckableLineEdit.cxx
   mvdColorBandDynamicsWidget.cxx
   mvdColorDynamicsController.cxx
@@ -15,7 +16,11 @@ set( Common_Gui_SOURCES
   mvdColorSetupWidget.cxx
   mvdDatabaseBrowserController.cxx
   mvdDatabaseBrowserWidget.cxx
+  mvdDatabaseTreeWidget.cxx
   mvdDatasetCreationProgressDialog.cxx
+  mvdDatasetPropertiesController.cxx
+  mvdDatasetPropertiesWidget.cxx
+  mvdDatasetTreeWidgetItem.cxx
   mvdDoubleValidator.cxx
   mvdGLImageWidget.cxx
   mvdGui.cxx
@@ -25,15 +30,10 @@ set( Common_Gui_SOURCES
   mvdImageViewManipulator.cxx
   mvdMainWindowTitleLoader.cxx
   mvdMyWidget.cxx
+  mvdPixelDescriptionWidget.cxx
   mvdQuicklookViewManipulator.cxx
   mvdStatusBarWidget.cxx
   mvdTaskProgressDialog.cxx
-  mvdApplicationsToolBox.cxx
-  mvdDatabaseTreeWidget.cxx
-  mvdDatasetPropertiesWidget.cxx
-  mvdDatasetPropertiesController.cxx
-  mvdDatasetTreeWidgetItem.cxx
-  mvdPixelDescriptionWidget.cxx
 )
 
 #############################################################################
@@ -45,6 +45,7 @@ set( Common_Gui_HEADERS_MOC
   mvdAbstractModelController.h
   mvdAbstractModelRenderer.h
   mvdAbstractViewManipulator.h
+  mvdApplicationsToolBox.h
   mvdCheckableLineEdit.h
   mvdColorBandDynamicsWidget.h
   mvdColorDynamicsController.h
@@ -53,25 +54,24 @@ set( Common_Gui_HEADERS_MOC
   mvdColorSetupWidget.h
   mvdDatabaseBrowserController.h
   mvdDatabaseBrowserWidget.h
+  mvdDatabaseTreeWidget.h
   mvdDatasetCreationProgressDialog.h
+  mvdDatasetPropertiesController.h
+  mvdDatasetPropertiesWidget.h
+  #mvdDatasetTreeWidgetItem.h
   mvdDoubleValidator.h
   mvdGLImageWidget.h
-  # mvdGui.h
+  #mvdGui.h
   mvdI18nApplication.h
   mvdI18nMainWindow.h
   mvdImageModelRenderer.h
   mvdImageViewManipulator.h
   mvdMainWindowTitleLoader.h
   mvdMyWidget.h
+  mvdPixelDescriptionWidget.h
   mvdQuicklookViewManipulator.h
   mvdStatusBarWidget.h
   mvdTaskProgressDialog.h
-  mvdApplicationsToolBox.h
-  mvdDatabaseTreeWidget.h
-  mvdDatasetPropertiesWidget.h
-  mvdDatasetPropertiesController.h
-  mvdDatasetTreeWidgetItem.h
-  mvdPixelDescriptionWidget.h
 )
 
 #############################################################################
@@ -85,11 +85,11 @@ set( Common_Gui_FORMS
   mvdColorSetupWidget.ui
   mvdDatabaseBrowserWidget.ui
   mvdDatasetCreationProgressDialog.ui
+  mvdDatasetPropertiesWidget.ui
   mvdMyWidget.ui
+  mvdPixelDescriptionWidget.ui
   mvdStatusBarWidget.ui
   mvdVideoColorToolBox.ui
-  mvdDatasetPropertiesWidget.ui
-  mvdPixelDescriptionWidget.ui
 )
 
 # Qt resources

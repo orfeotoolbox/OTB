@@ -71,8 +71,9 @@ class BackgroundTask;
  * \brief 
  */
 class Monteverdi2_EXPORT DatasetTreeWidgetItem :
-    public QTreeWidgetItem
+    public QTreeWidgetItem // not a QObject
 {
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
