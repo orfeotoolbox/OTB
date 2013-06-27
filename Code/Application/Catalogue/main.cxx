@@ -80,14 +80,14 @@ main( int argc, char* argv[] )
     QMessageBox::critical(
       &mainWindow,
       QCoreApplication::translate(
-	PROJECT_NAME,
-	PROJECT_NAME " - Critical error!"
+  PROJECT_NAME,
+  PROJECT_NAME " - Critical error!"
       ),
       QCoreApplication::translate(
-	PROJECT_NAME,
-	"Error when creating repository cache-directory:\n"
-	"%1\n"
-	"Application will exit!"
+  PROJECT_NAME,
+  "Error when creating repository cache-directory:\n"
+  "%1\n"
+  "Application will exit!"
       )
       .arg( exc.what() )
     );
@@ -103,25 +103,25 @@ main( int argc, char* argv[] )
     QMessageBox::StandardButton button =
 #endif
       QMessageBox::warning(
-	&mainWindow,
-	QCoreApplication::translate(
-	  PROJECT_NAME,
-	  PROJECT_NAME " " Monteverdi2_VERSION_STRING " - Warning! "
-	),
-	QCoreApplication::translate(
-	  PROJECT_NAME,
-	  "There are %1 outdated dataset(s) in cache-directory.\n\n"
-	  "Please remove cache-directory '%2' and restart "
-	  PROJECT_NAME "."
+  &mainWindow,
+  QCoreApplication::translate(
+    PROJECT_NAME,
+    PROJECT_NAME " " Monteverdi2_VERSION_STRING " - Warning! "
+  ),
+  QCoreApplication::translate(
+    PROJECT_NAME,
+    "There are %1 outdated dataset(s) in cache-directory.\n\n"
+    "Please remove cache-directory '%2' and restart "
+    PROJECT_NAME "."
 #if defined( _DEBUG )
-	  "\n\nDo you want to quit now ?" 
+    "\n\nDo you want to quit now ?" 
 #endif
-	).arg( nb ).arg( application.GetCacheDir().path() ),
+  ).arg( nb ).arg( application.GetCacheDir().path() ),
 #if defined( _DEBUG )
-	QMessageBox::Yes | QMessageBox::No,
-	QMessageBox::Yes
+  QMessageBox::Yes | QMessageBox::No,
+  QMessageBox::Yes
 #else
-	QMessageBox::Ok
+  QMessageBox::Ok
 #endif
       );
 
