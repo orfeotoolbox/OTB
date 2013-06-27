@@ -414,9 +414,12 @@ KmzProductWriter<TInputImage>
         m_VectorImageExtractROIFilter->SetSizeY(extractSize[1]);
 
         // Set Channel to extract
-        m_VectorImageExtractROIFilter->SetChannel(1); //m_ProductVector[m_CurrentProduct].m_Composition[0] + 1);
-        m_VectorImageExtractROIFilter->SetChannel(2); //m_ProductVector[m_CurrentProduct].m_Composition[1] + 1);
-        m_VectorImageExtractROIFilter->SetChannel(3); //m_ProductVector[m_CurrentProduct].m_Composition[2] + 1);
+        if(m_VectorImage->GetNumberOfComponentsPerPixel()>3)
+          {
+          m_VectorImageExtractROIFilter->SetChannel(1); //m_ProductVector[m_CurrentProduct].m_Composition[0] + 1);
+          m_VectorImageExtractROIFilter->SetChannel(2); //m_ProductVector[m_CurrentProduct].m_Composition[1] + 1);
+          m_VectorImageExtractROIFilter->SetChannel(3); //m_ProductVector[m_CurrentProduct].m_Composition[2] + 1);
+          }
 
         // Set extract roi input
         m_VectorImageExtractROIFilter->SetInput(m_ResampleVectorImage);
