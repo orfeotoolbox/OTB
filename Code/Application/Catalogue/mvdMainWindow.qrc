@@ -8,5 +8,6 @@
   </qresource>
   <qresource prefix="/images">
     <file alias="application_icon">../../../Data/Icons/monteverdi2-128x128.png</file>
+    <file alias="application_splash">../../../Data/Icons/monteverdi2-splash.png</file>
   </qresource>
 </RCC>

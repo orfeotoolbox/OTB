@@ -29,7 +29,8 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-
+#include <QPixmap>
+#include <QSplashScreen>
 //
 // System includes (sorted by alphabetic order)
 
@@ -56,6 +57,11 @@ main( int argc, char* argv[] )
 {
   QApplication qtApp( argc, argv );
 
+  QPixmap pixmap(QLatin1String( ":/images/application_splash" ));
+  QSplashScreen splash(pixmap);
+  splash.show();
+  splash.showMessage("Wait...");
+  qtApp.processEvents();//This is used to accept a click on the screen so that user can cancel the screen
   // 1. Initialize application and sync settings.
   mvd::Application application( &qtApp );
   application.Initialize();

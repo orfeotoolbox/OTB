@@ -22,6 +22,12 @@ install(FILES Icons/monteverdi2-32x32.png
         RENAME monteverdi2.png
         COMPONENT Resources)
 
+install(FILES Icons/monteverdi2-splash.png
+        DESTINATION share/pixmaps
+        RENAME monteverdi2-splash.png
+        COMPONENT Resources)
+
+
 install(FILES Icons/monteverdi2-32x32.xpm
         DESTINATION share/pixmaps
         RENAME monteverdi2.xpm
