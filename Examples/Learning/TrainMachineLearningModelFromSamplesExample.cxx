@@ -16,171 +16,166 @@
 
 =========================================================================*/
 
-//Image
-#include "otbVectorImage.h"
-#include "otbVectorData.h"
-#include "otbListSampleGenerator.h"
+//Random
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
-//Reader
-#include "otbImageFileReader.h"
-#include "otbVectorDataFileReader.h"
+//List sample generator
+#include "otbListSampleGenerator.h"
 
 //Estimator
 # include "otbSVMMachineLearningModel.h"
 #include "otbMachineLearningModelFactory.h"
 
-// Normalize the samples
-#include "otbShiftScaleSampleListFilter.h"
-
-// Extract a ROI of the vectordata
-#include "otbVectorDataIntoImageProjectionFilter.h"
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_1_ortho.tif}, {VectorData_QB1.shp}
-//    OUTPUTS: {clLIBSVMModelQB1.libsvm}
+//    INPUTS: {1000}, {4}, {5}, {121212}
+//    OUTPUTS: {clSVMModelFromSamples.svm}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
-// This example illustrates the use of the
+// This example illustrates the use of the \doxygen{otb}{SVMMachineLearningModel} class, which inherits from the
 // \doxygen{otb}{MachineLearningModel} class. This class allows the
-// estimation of a classification model (supervised learning) from samples. In this example, we will train an SVM
-// with 4 classes.
+// estimation of a classification model (supervised learning) from samples. In this example, we will train an SVM model
+// with 4 output classes, from 1000 randomly generated training samples, each of them having 7 components.
 //
 //  Software Guide : EndLatex
 
 int main(int argc, char* argv[])
 {
 
-  const char* inputImageFileName = argv[1];
-  const char* trainingShpFileName = argv[2];
-  const char* outputModelFileName = argv[3];
+  /*
+  if (argc != 6)
+    {
+    std::cerr << "Usage: " << argv[0] << " nbSamples nbSampleComponents nbClasses inputSeed outputModelFileName" << std::endl;
+    return EXIT_FAILURE;
+    }
+  */
 
-  typedef unsigned int InputPixelType;
-  const unsigned int Dimension = 2;
+  if (argc != 2)
+    {
+    std::cerr << "Usage: " << argv[0] << " outputModelFileName" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  // Software Guide : BeginLatex
+  // The input parameters of the sample generator and of the SVM classifier are initialized.
+  // Software Guide : EndLatex
+
+  /*
+  int nbSamples = atoi(argv[1]);
+  int nbSampleComponents = atoi(argv[2]);
+  int nbClasses = atoi(argv[3]);
+  unsigned int inputSeed = atoi(argv[4]);
+  */
+
+  // Software Guide : BeginCodeSnippet
+  int nbSamples = 1000;
+  int nbSampleComponents = 7;
+  int nbClasses = 4;
+  // Software Guide : EndCodeSnippet
+
+  unsigned int inputSeed = 121212;
+  const char* outputModelFileName = argv[1];//argv[5];
 
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
-  typedef otb::Image<InputImageType::InternalPixelType, 2> ImageType;
+  // Software Guide : BeginLatex
+  // Two lists are generated into a \subdoxygen{itk}{Statistics}{ListSample} which is the structure
+  // used to handle both lists of samples and of labels for the machine learning classes derived from
+  // \doxygen{otb}{MachineLearningModel}. The first list is composed of feature vectors representing
+  // multi-component samples, and the second one is filled with their corresponding class labels. The
+  // list of labels is composed of scalar values.
+  // Software Guide : EndLatex
 
-  typedef otb::VectorData<double, 2>                   VectorDataType;
-  
-  typedef otb::ImageFileReader<InputImageType>    InputReaderType;
-  typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
 
-// Software Guide : BeginLatex
-//
-// In this framework, we must transformed the input samples store in a vector
-// data into a \subdoxygen{itk}{Statistics}{ListSample} which is the structure
-// compatible with the machine learning classes. We are using feature vectors
-// for the characterisation of the class and on the other hand the class labels
-// are scalar values.  We first re-project the input vector data using the
-// \doxygen{otb}{VectorDataIntoImageProjectionFilter} class.  To convert the
-// input samples store in a vector data into a
-// \subdoxygen{itk}{Statistics}{ListSample}, we use the
-// \doxygen{otb}{ListSampleGenerator class}
-//
-// Software Guide : EndLatex
-// VectorData projection filter
+  // Software Guide : BeginCodeSnippet
+  // Input related typedefs
+  typedef float InputValueType;
+  typedef itk::VariableLengthVector<InputValueType> InputSampleType;
+  typedef itk::Statistics::ListSample<InputSampleType> InputListSampleType;
 
-// Software Guide : BeginCodeSnippet
-  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, InputImageType>
-                                              VectorDataReprojectionType;
+  // Target related typedefs
+  typedef int TargetValueType;
+  typedef itk::FixedArray<TargetValueType, 1> TargetSampleType;
+  typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
 
-  InputReaderType::Pointer    inputReader = InputReaderType::New();
-  inputReader->SetFileName(inputImageFileName);
-  
-  InputImageType::Pointer image = inputReader->GetOutput();
-  image->UpdateOutputInformation();
-
-  // read the Vectordata
-  VectorDataReaderType::Pointer vectorReader = VectorDataReaderType::New();
-  vectorReader->SetFileName(trainingShpFileName);
-  vectorReader->Update();
-
-  VectorDataType::Pointer vectorData = vectorReader->GetOutput();
-  vectorData->Update();
-
-  VectorDataReprojectionType::Pointer vdreproj = VectorDataReprojectionType::New();
-
-  vdreproj->SetInputImage(image);
-  vdreproj->SetInput(vectorData);
-  vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
-
-  vdreproj->Update();
-
-  typedef otb::ListSampleGenerator<InputImageType, VectorDataType> ListSampleGeneratorType;
-  ListSampleGeneratorType::Pointer sampleGenerator = ListSampleGeneratorType::New();
-
-  sampleGenerator->SetInput(image);
-  sampleGenerator->SetInputVectorData(vdreproj->GetOutput());
-  sampleGenerator->SetClassKey("Class");
-
-  sampleGenerator->Update();
+  InputListSampleType::Pointer InputListSample = InputListSampleType::New();
+  TargetListSampleType::Pointer TargetListSample = TargetListSampleType::New();
   // Software Guide : EndCodeSnippet
 
 
-  //std::cout << "Number of classes: " << sampleGenerator->GetNumberOfClasses() << std::endl;
-
-  // typedef ListSampleGeneratorType::ListSampleType ListSampleType;
-  // typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
-
-  // // Shift scale the samples
-  // ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
-  // trainingShiftScaleFilter->SetInput(concatenateTrainingSamples->GetOutput());
-  // trainingShiftScaleFilter->SetShifts(meanMeasurementVector);
-  // trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
-  // trainingShiftScaleFilter->Update();
+  // Software Guide : BeginLatex
+  // In this example, the list of multi-component training samples is randomly filled with a random number
+  // generator based on the \subdoxygen{itk}{Statistics}{MersenneTwisterRandomVariateGenerator} class.
+  // Each component's value is generated from a normal law centered around the corresponding class label of
+  // each sample multiplied by 100, with a standard deviation of 10.
+  // Software Guide : EndLatex
 
 
-// Software Guide : BeginLatex
-//
-// Now, we need to declare the machine learning model which is to be used by the
-// classifier. In this case we train a SVM model, the
-// \doxygen{otb}{SVMMachineLearningModel} class inherates from the pure virtual
-// class \doxygen{otb}{MachineLearningModel} which is templated over the type of
-// value used for the measures and the type of pixel used for the labels.  Most
-// of the classification and regression algorithms available through this
-// interface in OTB is based on the OpenCV library \cite{opencv_library}.  Specific methods
-// allow to set classifier parameters. In the case of SVM, we set here the type
-// of the kernel. Other parameters are let with their default values.
-//
-// Software Guide : EndLatex
+  // Software Guide : BeginCodeSnippet
+  itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer randGen;
+  randGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
 
-// Software Guide : BeginCodeSnippet
-  typedef otb::SVMMachineLearningModel<InputImageType::InternalPixelType,
-                                       ListSampleGeneratorType::ClassLabelType> SVMType;
+  // Filling the two input training lists
+  for (int i = 0; i < nbSamples; ++i)
+    {
+    InputSampleType sample;
+    TargetValueType label = (i % nbClasses) + 1;
+
+    // Multi-component sample randomly filled from a normal law for each component
+    sample.SetSize(nbSampleComponents);
+    for (int itComp = 0; itComp < nbSampleComponents; ++itComp)
+      {
+      sample[itComp] = randGen->GetNormalVariate(100 * label, 10);
+      }
+
+    InputListSample->PushBack(sample);
+    TargetListSample->PushBack(label);
+    }
+  // Software Guide : EndCodeSnippet
+
+  // Displays the corresponding values (not into the Software Guide)
+  for (int i = 0; i < nbSamples; ++i)
+    {
+    std::cout << i + 1 << "-label = " << TargetListSample->GetMeasurementVector(i) << std::endl;
+    std::cout << "sample = " << InputListSample->GetMeasurementVector(i) << std::endl << std::endl;
+    }
+
+  // Software Guide : BeginLatex
+  //Once both sample and label lists are generated, the second step consists in
+  //declaring the machine learning classifier. In our case we use an SVM model
+  //with the help of the \doxygen{otb}{SVMMachineLearningModel} class which is
+  //derived from the \doxygen{otb}{MachineLearningModel} class.
+  //This pure virtual class is based on the machine learning framework of the
+  //OpenCV library (\cite{opencv_library}) which handles other classifiers than
+  //the SVM.
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  typedef otb::SVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
 
   SVMType::Pointer SVMClassifier = SVMType::New();
 
-  SVMClassifier->SetInputListSample(sampleGenerator->GetTrainingListSample());
-  SVMClassifier->SetTargetListSample(sampleGenerator->GetTrainingListLabel());
+  SVMClassifier->SetInputListSample(InputListSample);
+  SVMClassifier->SetTargetListSample(TargetListSample);
 
   SVMClassifier->SetKernelType(CvSVM::LINEAR);
   // Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
-// The machine learning interface is generic and give access to We now train the
-// SVM model using the \code{Train} and save the model to a text file using the
-// \code{Save} method.
-//
-// Software Guide : EndLatex
+  // Software Guide : BeginLatex
+  //
+  // Once the classifier is parametrized with both input lists and default parameters, except
+  // for the kernel type in our example of SVM model estimation, the model
+  // training is computed with the \code{Train} method. Finally, the \code{Save} method
+  // exports the model to a text file. All the available classifiers based on OpenCV are
+  // implemented with these interfaces. Like for the SVM model training, the other classifiers
+  // can be parametrized with specific settings.
+  //
+  // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   SVMClassifier->Train();
   SVMClassifier->Save(outputModelFileName);
-// Software Guide : EndCodeSnippet
-
-// Software Guide : BeginLatex
-
-// You can now use the \code{Predict} method which takes a
-// \subdoxygen{itk}{Statistics}{ListSample} as input and estimate the label of the
-// input sample using the model. Finallyse the
-// \doxygen{otb}{ImageClassificationModel} which inherates from the
-// \doxygen{itk}{ImageToImageFilter} and allow to classify pixels in the
-// input image and predict their labels using a model.
-//
-// Software Guide : EndLatex
+  // Software Guide : EndCodeSnippet
 
 }
 
