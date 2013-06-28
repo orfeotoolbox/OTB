@@ -90,11 +90,11 @@ PixelDescriptionWidget
   m_CartographicRootItem->setText(0, tr("Cartographic"));
   m_CartographicRootItem->setExpanded(true);
 
-  m_CartographicItem = new QTreeWidgetItem( m_CartographicRootItem );
-  m_CartographicItem->setText(0, tr("Coordinates"));
+  // m_CartographicItem = new QTreeWidgetItem( m_CartographicRootItem );
+  // m_CartographicItem->setText(0, tr("Coordinates"));
 
   //
-  // Geographic coordiantes
+  // Geographic coordinates
   m_GeographicRootItem = new QTreeWidgetItem( GetDescriptionTree() );
   m_GeographicRootItem->setText(0, tr("Geographic"));
   m_GeographicRootItem->setExpanded(true);
@@ -122,9 +122,32 @@ PixelDescriptionWidget
 /*******************************************************************************/
 void
 PixelDescriptionWidget
-::OnCurrentPhysicalUpdated(const QString & currentPhysical)
+::OnCurrentPhysicalUpdated(const QStringList & currentPhysical)
 {
-  m_CartographicItem->setText(1, currentPhysical);
+  //m_CartographicItem->setText(1, currentPhysical);
+
+  // remove the previous QTreeWidgetItem  of m_GeographicRootItem
+  while( m_CartographicRootItem->childCount()>0 )
+    {
+    // Remove QTreeWidgetItem
+    QTreeWidgetItem* child = m_CartographicRootItem->takeChild( 0 );
+
+    // Delete it from memory.
+    delete child;
+    child = NULL;
+    }
+
+  if (!currentPhysical.empty())
+    {
+    // fill with the new values
+    QTreeWidgetItem * iCartoXItem = new QTreeWidgetItem( m_CartographicRootItem );
+    iCartoXItem->setText(0,QString( tr("X") ));
+    iCartoXItem->setText(1, QString("%1").arg(currentPhysical[0] ) );
+
+    QTreeWidgetItem * iCartoYItem = new QTreeWidgetItem( m_CartographicRootItem );
+    iCartoYItem->setText(0,QString( tr("Y") ));
+    iCartoYItem->setText(1, QString("%1").arg(currentPhysical[1] ) );
+    }
 }
 
 /*******************************************************************************/

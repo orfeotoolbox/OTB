@@ -473,7 +473,7 @@ signals:
 
   /** */
   void CurrentIndexUpdated(const QString&);
-  void CurrentPhysicalUpdated(const QString&);
+  void CurrentPhysicalUpdated(const QStringList&);
   void CurrentGeographicUpdated(const QStringList&);
   void CurrentRadioUpdated(const QString&);
   void CurrentPixelValueUpdated(const VectorImageType::PixelType &, 

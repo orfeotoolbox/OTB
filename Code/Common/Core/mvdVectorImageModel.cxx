@@ -897,7 +897,8 @@ VectorImageModel
 {
   // stream to fill
   std::ostringstream ossIndex;
-  std::ostringstream ossPhysical;
+  std::ostringstream ossPhysicalX;
+  std::ostringstream ossPhysicalY;
   std::ostringstream ossGeographicLong;
   std::ostringstream ossGeographicLat;
   std::ostringstream ossGeographicElevation;
@@ -910,6 +911,10 @@ VectorImageModel
   //emitted current geography
   StringVector     geoVector;
   QStringList      geoList;
+
+  //emitted current geography
+  StringVector     cartoVector;
+  QStringList      cartoList;
 
   // the current physical point
   PointType point;
@@ -933,8 +938,19 @@ VectorImageModel
     // get the physical coordinates
     if (!ToImage()->GetProjectionRef().empty())
       {
-      ossPhysical.str("");
-      ossPhysical<<"[" << Xpc <<","<< Ypc << "]";
+      //ossPhysical.str("");
+      //ossPhysical<<"[" << Xpc <<","<< Ypc << "]";
+      ossPhysicalX << Xpc;
+      ossPhysicalY << Ypc;
+
+      cartoVector.push_back(ossPhysicalX.str());
+      cartoVector.push_back(ossPhysicalY.str());
+      }
+    else
+      {
+      //No cartographic info available
+      cartoVector.push_back("");
+      cartoVector.push_back("");
       }
 
     // index in current Lod image
@@ -977,6 +993,8 @@ VectorImageModel
         geoVector.push_back("");
         geoVector.push_back("");
         }
+
+      cartoList = ToQStringList( cartoVector );
       }
     else
       {
@@ -1064,7 +1082,7 @@ VectorImageModel
 
   // update the status bar
   emit CurrentIndexUpdated( QString(ossIndex.str().c_str()) );
-  emit CurrentPhysicalUpdated( QString(ossPhysical.str().c_str()) );
+  emit CurrentPhysicalUpdated( cartoList );
   emit CurrentGeographicUpdated( geoList );
   emit CurrentRadioUpdated( QString(ossRadio.str().c_str()) );
   emit CurrentPixelValueUpdated( currentPixel,  bandNames);

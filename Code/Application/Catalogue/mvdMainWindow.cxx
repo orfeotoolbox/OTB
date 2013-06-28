@@ -461,16 +461,16 @@ MainWindow
 
     QObject::connect(
       vectorImageModel,
-      SIGNAL( CurrentPhysicalUpdated(const QString& ) ),
+      SIGNAL( CurrentPhysicalUpdated(const QStringList& ) ),
       wpixelDescription,
-      SLOT( OnCurrentPhysicalUpdated(const QString &) )
+      SLOT( OnCurrentPhysicalUpdated(const QStringList&) )
       );
 
     QObject::connect(
       vectorImageModel,
       SIGNAL( CurrentGeographicUpdated(const QStringList& ) ),
       wpixelDescription,
-      SLOT( OnCurrentGeographicUpdated(const QStringList &) )
+      SLOT( OnCurrentGeographicUpdated(const QStringList& ) )
       );
 
     QObject::connect(

@@ -102,7 +102,7 @@ public:
 // Public SLOTS.
 public slots:
 
-  void OnCurrentPhysicalUpdated(const QString &);
+  void OnCurrentPhysicalUpdated(const QStringList&);
   
   void OnCurrentGeographicUpdated(const QStringList& /*currentGeo const QString &*/);
 
