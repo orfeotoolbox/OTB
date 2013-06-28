@@ -60,6 +60,8 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
+  listGlVersions();
+
   // Set focus policy so that the widget gets the focus if it is clicked
   setMouseTracking(true);
 
@@ -83,6 +85,8 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
+  listGlVersions();
+
   // Set focus policy so that the widget gets the focus if it is clicked
   setMouseTracking(true);
   setFocusPolicy(Qt::StrongFocus);
@@ -106,6 +110,8 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
+  listGlVersions();
+
   // Set focus policy so that the widget gets the focus if it is clicked
   setMouseTracking(true);
   setFocusPolicy(Qt::StrongFocus);
@@ -398,6 +404,61 @@ GLImageWidget::dropEvent(QDropEvent *event)
     {
     emit ImageToImportDropped( fileName );
     }
+}
+
+/*******************************************************************************/
+void
+GLImageWidget
+::listGlVersions() const
+{
+  qWarning() <<
+    tr( "Runtime version of OpenGL used by Qt %1: %2.%3." )
+    .arg( qVersion() )
+    .arg( format().majorVersion() )
+    .arg( format().minorVersion() )
+    .toLatin1()
+    .constData();
+
+  QGLFormat::OpenGLVersionFlags glVersionFlags(
+    QGLFormat::openGLVersionFlags()
+  );
+
+  qWarning() <<
+    tr( "Version(s) of OpenGL supported by Qt %1:" )
+    .arg( qVersion() )
+    .toLatin1()
+    .constData();
+
+  if( glVersionFlags & QGLFormat::OpenGL_Version_4_0 )
+    qWarning() << "QGLFormat::OpenGL_Version_4_0";
+
+  if( glVersionFlags & QGLFormat::OpenGL_Version_3_3 )
+    qWarning() << "- QGLFormat::OpenGL_Version_3_3";
+  if( glVersionFlags & QGLFormat::OpenGL_Version_3_2 )
+    qWarning() << "- QGLFormat::OpenGL_Version_3_2";
+  if( glVersionFlags & QGLFormat::OpenGL_Version_3_1 )
+    qWarning() << "- QGLFormat::OpenGL_Version_3_1";
+  if( glVersionFlags & QGLFormat::OpenGL_Version_3_0 )
+    qWarning() << "- QGLFormat::OpenGL_Version_3_0";
+
+  if( glVersionFlags & QGLFormat::OpenGL_Version_2_1 )
+    qWarning() << "- QGLFormat::OpenGL_Version_2_1";
+  if( glVersionFlags & QGLFormat::OpenGL_Version_2_0 )
+    qWarning() << "- QGLFormat::OpenGL_Version_2_0";
+
+  if( glVersionFlags & QGLFormat::OpenGL_Version_1_5 )
+    qWarning() << "- QGLFormat::OpenGL_Version_1_5";
+  if( glVersionFlags & QGLFormat::OpenGL_Version_1_4 )
+    qWarning() << "- QGLFormat::OpenGL_Version_1_4";
+  if( glVersionFlags & QGLFormat::OpenGL_Version_1_3 )
+    qWarning() << "- QGLFormat::OpenGL_Version_1_3";
+  if( glVersionFlags & QGLFormat::OpenGL_Version_1_2 )
+    qWarning() << "- QGLFormat::OpenGL_Version_1_2";
+  if( glVersionFlags & QGLFormat::OpenGL_Version_1_1 )
+    qWarning() << "- QGLFormat::OpenGL_Version_1_1";
+
+  if( glVersionFlags & QGLFormat::OpenGL_Version_None )
+    qWarning() << "- QGLFormat::OpenGL_Version_None";
 }
 
 /*******************************************************************************/

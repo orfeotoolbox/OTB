@@ -184,6 +184,10 @@ private:
   void Initialize(AbstractViewManipulator * manipulator,
                   AbstractModelRenderer * renderer);
 
+  /**
+   */
+  void listGlVersions() const;
+
 //
 // Private attributes.
 private:
