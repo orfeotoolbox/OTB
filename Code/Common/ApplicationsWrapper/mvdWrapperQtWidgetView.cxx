@@ -76,17 +76,26 @@ namespace Wrapper
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-QtWidgetView::QtWidgetView(otb::Wrapper::Application* app)
+QtWidgetView
+::QtWidgetView( otb::Wrapper::Application::Pointer otbApp,
+		QWidget* parent,
+		Qt::WindowFlags flags ) :
+  m_Application( otbApp ),
+  m_Model( NULL ),
+  m_ExecButton( NULL ),
+  m_QuitButton( NULL ),
+  m_Message( NULL )
 {
-  m_Model = new otb::Wrapper::QtWidgetModel(app);
-  m_Application = app;
+  m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
 }
 
 /*******************************************************************************/
 QtWidgetView::~QtWidgetView()
 {
-  if(m_Model)
-    delete m_Model;
+  // m_Application is smart-pointed and will be automatically deleted.
+
+  delete m_Model;
+  m_Model = NULL;
 }
 
 /*******************************************************************************/

@@ -64,16 +64,18 @@ namespace mvd
 /*******************************************************************************/
 OTBApplicationsModel
 ::OTBApplicationsModel( QObject* parent ) :
-  AbstractModel( parent )
+  AbstractModel( parent ),
+  m_ApplicationsBrowser( NULL ),
+  m_ApplicationLauncher( NULL )
 {
   //
   // instanciate apps browser
-  m_ApplicationsBrowser = new ApplicationsBrowser();  
+  m_ApplicationsBrowser = new ApplicationsBrowser( this );  
 
   //
   // instanciate app launcher
-  m_ApplicationLauncher = new ApplicationLauncher();
-  
+  m_ApplicationLauncher = new ApplicationLauncher( this );
+
   // initialize the app browser with empty string. The default
   // behavior use the env ITK_AUTOLOAD_PATH
   //m_ApplicationsBrowser->SetAutoLoadPath("");
@@ -103,14 +105,6 @@ OTBApplicationsModel
   // ApplicationBrowser, when the map is filled with tags/Apps, a
   // signal is emitted and received by the widget to fill its tree.
   m_ApplicationsBrowser->SearchAvailableApplicationsTags();
-}
-
-/*******************************************************************************/
-QWidget*
-OTBApplicationsModel
-::GetSelectedApplicationWidget(const QString& appname )
-{
-  return m_ApplicationLauncher->GetSelectedApplicationWidget( appname );
 }
 
 /*******************************************************************************/

@@ -42,6 +42,7 @@
 //
 #include "Gui/mvdApplicationsToolBox.h"
 //
+#include "ApplicationsWrapper/mvdApplicationLauncher.h"
 #include "ApplicationsWrapper/mvdApplicationsBrowser.h"
 #include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
 
@@ -153,12 +154,14 @@ QWidget *
 ApplicationsToolBoxController
 ::GetSelectedApplicationWidget( const QString& appName )
 {
+  /*
   //
   // Access model.
   OTBApplicationsModel* model = GetModel< OTBApplicationsModel >();
   assert( model!=NULL );
+  */
 
-  return model->GetSelectedApplicationWidget( appName );  
+  return ApplicationLauncher::NewOtbApplicationWidget( appName );
 }
 
 /*******************************************************************************/

@@ -96,20 +96,13 @@ public:
   /** \brief Fill Widget Tree */
   void FillTree();
 
-  /** request the selected application Gui (from the launcher)*/
-  QWidget * GetSelectedApplicationWidget(const QString& appname );
+  /**
+   */
+  inline const ApplicationsBrowser* GetApplicationsBrowser() const;
 
-  //
-  // Get Application Browser
-  const ApplicationsBrowser* GetApplicationsBrowser() const
-  {
-    return m_ApplicationsBrowser;
-  }
-
-  ApplicationsBrowser* GetApplicationsBrowser()
-  {
-    return m_ApplicationsBrowser;
-  }  
+  /**
+   */
+  inline ApplicationsBrowser* GetApplicationsBrowser();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -146,8 +139,8 @@ private:
 // Private attributes.
 private:
 
-  ApplicationsBrowser * m_ApplicationsBrowser;
-  ApplicationLauncher * m_ApplicationLauncher;
+  ApplicationsBrowser* m_ApplicationsBrowser;
+  ApplicationLauncher* m_ApplicationLauncher;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -166,6 +159,23 @@ private slots:
 
 namespace mvd
 {
+/*****************************************************************************/
+inline
+const ApplicationsBrowser*
+OTBApplicationsModel
+::GetApplicationsBrowser() const
+{
+  return m_ApplicationsBrowser;
+}
+
+/*****************************************************************************/
+inline
+ApplicationsBrowser*
+OTBApplicationsModel
+::GetApplicationsBrowser()
+{
+  return m_ApplicationsBrowser;
+}  
 
 } // end namespace 'mvd'
 

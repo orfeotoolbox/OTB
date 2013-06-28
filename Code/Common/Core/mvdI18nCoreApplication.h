@@ -206,7 +206,7 @@ public:
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline bool HasSettingsKey( const QString& key );
+  inline bool HasSettingsKey( const QString& key ) const;
 
   /**
    */
@@ -216,7 +216,7 @@ public:
   /**
    */
   // TODO: Move method into Application class.
-  inline QVariant RetrieveSettingsKey( const QString& key );
+  inline QVariant RetrieveSettingsKey( const QString& key ) const;
 
   /**
    */
@@ -404,7 +404,7 @@ protected:
 
   /**
    */
-  inline void SynchronizeSettings();
+  inline void SynchronizeSettings() const;
 
 //
 // Protected attributes.
@@ -619,7 +619,7 @@ I18nCoreApplication
 inline
 bool
 I18nCoreApplication
-::HasSettingsKey( const QString& key )
+::HasSettingsKey( const QString& key ) const
 {
   assert( m_Settings!=NULL );
 
@@ -645,7 +645,7 @@ I18nCoreApplication
 inline
 QVariant
 I18nCoreApplication
-::RetrieveSettingsKey( const QString& key )
+::RetrieveSettingsKey( const QString& key ) const
 {
   assert( m_Settings!=NULL );
 
@@ -658,7 +658,7 @@ I18nCoreApplication
 inline
 void
 I18nCoreApplication
-::SynchronizeSettings()
+::SynchronizeSettings() const
 {
   assert( m_Settings!=NULL );
 

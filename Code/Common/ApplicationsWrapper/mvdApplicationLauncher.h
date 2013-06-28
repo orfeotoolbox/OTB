@@ -88,11 +88,12 @@ public:
 
   /** \brief Destructor. */
   virtual ~ApplicationLauncher();
-  
-  /** return the automatic generated widget of the selected
-    * application 
-    */
-  QWidget * GetSelectedApplicationWidget(const QString& appname);
+
+  /**
+   * \return A new instance of the automatically-generated widget of
+   * the given OTB application.
+   */
+  static QWidget* NewOtbApplicationWidget( const QString& appName );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

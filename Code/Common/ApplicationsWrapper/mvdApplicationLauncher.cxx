@@ -40,6 +40,8 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
+#include "Core/mvdI18nCoreApplication.h"
+//#include "Core/mvdTextStream.h"
 #include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
 
 namespace mvd
@@ -80,53 +82,100 @@ ApplicationLauncher
 /*******************************************************************************/
 QWidget* 
 ApplicationLauncher
-::GetSelectedApplicationWidget(const QString& appname)
+::NewOtbApplicationWidget( const QString& appName )
 {
   // Create module
-  otb::Wrapper::Application::Pointer app 
-    = otb::Wrapper::ApplicationRegistry::CreateApplication( ToStdString (appname) );
-  
-  if ( app.IsNull() )
+  otb::Wrapper::Application::Pointer otbApp(
+    otb::Wrapper::ApplicationRegistry::CreateApplication(
+      ToStdString( appName )
+    )
+  );
+
+  if( otbApp.IsNull() )
     {
-    std::cerr << "Could not Load application " << ToStdString( appname ) << std::endl;
+    throw std::runtime_error(
+      ToStdString(
+	tr( "Failed to instanciate OTB-application '%1'" )
+	.arg( appName )
+      )
+    );
     }
-  else
+
+  // Search for elev parameters
+  typedef std::vector< std::string > ParametersKeys;
+  const ParametersKeys parameters( otbApp->GetParametersKeys() );
+
+  // Little flag structure with bool operator to optimize look
+  // scanning parameter keys.
+  struct Flags
+  {
+    Flags() :
+      m_HasDem( false ),
+      m_HasGeoid( false )
     {
-    QSettings settings;
+    }
 
-    // Search for elev parameters
-    std::vector<std::string> parameters = app->GetParametersKeys();
+    inline operator bool () const
+    {
+      return m_HasDem && m_HasGeoid;
+    }
 
-    for(std::vector<std::string>::const_iterator it = parameters.begin();
-        it!=parameters.end();++it)
+    bool m_HasDem : 1;
+    bool m_HasGeoid : 1;
+  };
+
+  Flags found;
+
+  for( ParametersKeys::const_iterator it( parameters.begin() );
+       it!=parameters.end() && !found;
+       ++it )
+    {
+    std::size_t lastDot = it->find_last_of('.');
+
+    assert( I18nCoreApplication::ConstInstance()!=NULL );
+    const I18nCoreApplication* i18nApp = I18nCoreApplication::ConstInstance();
+
+    if( lastDot != std::string::npos )
       {
-      std::size_t lastDot = (it->find_last_of('.'));
-      
-      if(lastDot != std::string::npos)
-        {
-        std::string lastKey = it->substr(lastDot+1,it->size()-lastDot-1);
+      std::string lastKey( it->substr( lastDot + 1, it->size() - lastDot - 1 ) );
 
-        if(lastKey == "dem" && settings.contains("srtmDirActive") && settings.value("srtmDirActive").toBool())
-          {
-          app->EnableParameter(*it);
-          app->SetParameterString(*it,settings.value("srtmDir").toString().toStdString());
-          }
-        if(lastKey == "geoid" && settings.contains("geoidPathActive") && settings.value("geoidPathActive").toBool())
-          {
-          app->EnableParameter(*it);
-          app->SetParameterString(*it,settings.value("geoidPath").toString().toStdString());
-          }
-        }
+      if( lastKey=="dem" )
+	{
+	found.m_HasDem = true;
+
+	if( i18nApp->HasSettingsKey( "srtmDirActive" ) &&
+	    i18nApp->RetrieveSettingsKey( "srtmDirActive" ).toBool() )
+	{
+	otbApp->EnableParameter( *it );
+	otbApp->SetParameterString(
+	  *it,
+	  ToStdString( i18nApp->RetrieveSettingsKey( "srtmDir" ).toString()
+	  )
+	);
+	}
+	}
+      else if( lastKey=="geoid" )
+	{
+	found.m_HasGeoid = true;
+
+	if( i18nApp->HasSettingsKey( "geoidPathActive" ) &&
+	    i18nApp->RetrieveSettingsKey( "geoidPathActive" ).toBool() )
+	  {
+	  otbApp->EnableParameter( *it );
+	  otbApp->SetParameterString(
+	    *it,
+	    ToStdString( i18nApp->RetrieveSettingsKey( "geoidPath" ).toString() )
+	  );
+	  }
+	}
       }
-
-    // Create GUI based on module
-    Wrapper::QtWidgetView* gui = new Wrapper::QtWidgetView(app);
-    gui->CreateGui();
-
-    return gui;
     }
 
-  return NULL;
+  // Create GUI based on module
+  Wrapper::QtWidgetView* gui = new Wrapper::QtWidgetView( otbApp );
+  gui->CreateGui();
+
+  return gui;
 }
 
 /*******************************************************************************/
@@ -134,28 +183,27 @@ ApplicationLauncher
 /*******************************************************************************/
 void 
 ApplicationLauncher
-::OnApplicationToLaunchSelected(const QString& appname)
+::OnApplicationToLaunchSelected( const QString& appName )
 {
-  QWidget * gui = GetSelectedApplicationWidget( appname );
-  
-  if (gui)
-    {
-    // MainWidget : that contains the view and any other widget
-    // (progress, logs...)
-    QMainWindow* mainWindow =  new QMainWindow();
-    mainWindow->setWindowIcon(QIcon( ":/otb_small.png" ));
-    //mainWindow->setWindowTitle(QString(gui->->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
- 
-    // build the main window, central widget is the plugin view, other
-    // are docked widget (progress, logs...)
-    mainWindow->setCentralWidget( gui );
+  QWidget* gui = ApplicationLauncher::NewOtbApplicationWidget( appName );
 
-    // Connect the View "Quit" signal, to the mainWindow close slot
-    QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
+  assert( gui!=NULL );
+
+  // MainWidget : that contains the view and any other widget
+  // (progress, logs...)
+  QMainWindow* mainWindow =  new QMainWindow();
+  mainWindow->setWindowIcon(QIcon( ":/otb_small.png" ));
+  //mainWindow->setWindowTitle(QString(gui->->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
+ 
+  // build the main window, central widget is the plugin view, other
+  // are docked widget (progress, logs...)
+  mainWindow->setCentralWidget( gui );
+
+  // Connect the View "Quit" signal, to the mainWindow close slot
+  QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
   
-    // Show the main window
-    mainWindow->show();
-    }
+  // Show the main window
+  mainWindow->show();
 }
 
 } // end namespace 'mvd'

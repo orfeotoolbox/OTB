@@ -58,6 +58,7 @@ namespace
 
 namespace mvd
 {
+
 namespace Wrapper
 {
 
@@ -70,7 +71,8 @@ namespace Wrapper
  * \brief WIP.
  */
 
-class QtWidgetView : public QWidget
+class QtWidgetView :
+    public QWidget
 {
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
   
@@ -83,7 +85,9 @@ class QtWidgetView : public QWidget
 public:
 
   /** \brief Constructor. */
-  QtWidgetView(otb::Wrapper::Application* app);
+  QtWidgetView( otb::Wrapper::Application::Pointer otbApp,
+		QWidget* parent =0,
+		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   virtual ~QtWidgetView();
@@ -148,7 +152,7 @@ private:
 private:
 
   otb::Wrapper::Application::Pointer m_Application;
-  otb::Wrapper::QtWidgetModel*       m_Model;
+  otb::Wrapper::QtWidgetModel* m_Model;
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
