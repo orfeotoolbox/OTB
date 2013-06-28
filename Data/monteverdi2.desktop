@@ -1,11 +1,11 @@
 [Desktop Entry]
 Type=Application
-Name=Monteverdi2 Catalogue
-Name[fr_FR]=Catalogue Monteverdi2
+Name=Monteverdi2
+Name[fr_FR]=Monteverdi2
 GenericName=Image processing
 Comment=Remote sensing image processing application based on OrfeoToolbox
-TryExec=/usr/bin/mvd2-catalogue
-Exec=/usr/bin/mvd2-catalogue %F
+TryExec=/usr/bin/monteverdi2
+Exec=/usr/bin/monteverdi2 %F
 Terminal=false
 StartupNotify=false
 Icon=monteverdi2
