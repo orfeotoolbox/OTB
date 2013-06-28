@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
 
   unsigned int inputSeed = 121212;
-  const char* outputModelFileName = argv[1];//argv[5];
+  const char* outputModelFileName = argv[1]; //argv[5];
 
 
   // Software Guide : BeginLatex
