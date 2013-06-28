@@ -704,12 +704,12 @@ QuickBirdImageMetadataInterface
   std::vector<std::string> enhBandNames;
   std::vector<std::string> rawBandNames = this->Superclass::GetBandName();
 
-  std::cout << rawBandNames.size() << std::endl;
+  //std::cout << rawBandNames.size() << std::endl;
   if(rawBandNames.size())
     {
     for (std::vector<std::string>::iterator it = rawBandNames.begin(); it != rawBandNames.end(); ++it)
       {
-      std::cout << *it << std::endl;
+      //std::cout << *it << std::endl;
 
       // Manage Panchro case
       if ( (rawBandNames.size() == 1) && !(*it).compare("P") )
