@@ -57,11 +57,20 @@ main( int argc, char* argv[] )
 {
   QApplication qtApp( argc, argv );
 
+  // 0. Splash-screen.
+#if !defined( _DEBUG )
   QPixmap pixmap(QLatin1String( ":/images/application_splash" ));
   QSplashScreen splash(pixmap);
   splash.show();
-  splash.showMessage("Wait...");
+  splash.showMessage(
+    QCoreApplication::translate(
+      PROJECT_NAME,
+      "Please wait..."
+    )
+  );
   qtApp.processEvents();//This is used to accept a click on the screen so that user can cancel the screen
+#endif
+
   // 1. Initialize application and sync settings.
   mvd::Application application( &qtApp );
   application.Initialize();
@@ -80,14 +89,14 @@ main( int argc, char* argv[] )
     QMessageBox::critical(
       &mainWindow,
       QCoreApplication::translate(
-  PROJECT_NAME,
-  PROJECT_NAME " - Critical error!"
+	PROJECT_NAME,
+	PROJECT_NAME " - Critical error!"
       ),
       QCoreApplication::translate(
-  PROJECT_NAME,
-  "Error when creating repository cache-directory:\n"
-  "%1\n"
-  "Application will exit!"
+	PROJECT_NAME,
+	"Error when creating repository cache-directory:\n"
+	"%1\n"
+	"Application will exit!"
       )
       .arg( exc.what() )
     );
@@ -141,12 +150,12 @@ main( int argc, char* argv[] )
   mainWindow.show();
 
 #else
+  splash.finish(&mainWindow);
+
   // TODO: Correctly manage main-window state via application settings.
   mainWindow.showMaximized();
   
 #endif
-
-  splash.finish(&mainWindow);
 
   // 6. Let's go: run the application and return exit code.
   return QCoreApplication::instance()->exec();
