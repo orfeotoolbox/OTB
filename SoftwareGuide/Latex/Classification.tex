@@ -2,57 +2,67 @@
 
 \section{Introduction}
 
-In statistical classification, each object is represented by $d$ features (a
-measurement vector), and the goal of classification becomes finding compact and
-disjoint regions (decision regions\cite{Duda2000}) for classes in a
-$d$-dimensional feature space. Such decision regions are defined by decision
-rules that are known or can be trained.  The simplest configuration of a
-classification consists of a decision rule and multiple membership functions;
-each membership function represents a class. Figure~\ref{fig:simple}
-illustrates this general framework.
+Image classification consists in extracting added-value information from images. 
+Such processing methods classify pixels within images into geographical connected 
+zones with similar properties, and identified by a common class label. The 
+classification can be either unsupervised or supervised.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.7\textwidth]{DudaClassifier.eps}
-  \itkcaption[Simple conceptual classifier]{Simple conceptual classifier.}
-  \label{fig:simple}
-\end{figure}
+Unsupervised classification does not require any additional information about the
+properties of the input image to classify it. On the contrary, supervised methods 
+need a preliminary learning to be computed over training datasets having similar 
+properties than the image to classify, in order to build a classification model.
 
-This framework closely follows that of Duda and
-Hart\cite{Duda2000}. The classification process can be described
-as follows:
+%In statistical classification, each object is represented by $d$ features (a
+%measurement vector), and the goal of classification becomes finding compact and
+%disjoint regions (decision regions\cite{Duda2000}) for classes in a
+%$d$-dimensional feature space. Such decision regions are defined by decision
+%rules that are known or can be trained.  The simplest configuration of a
+%classification consists of a decision rule and multiple membership functions;
+%each membership function represents a class. Figure~\ref{fig:simple}
+%illustrates this general framework.
 
-\begin{enumerate}
-\item{A measurement vector is input to each membership function.}
-\item{Membership functions feed the membership scores to the
-    decision rule.}
-\item{A decision rule compares the membership scores and returns a
-    class label.}
-\end{enumerate}
+%\begin{figure}[h]
+%  \centering
+%  \includegraphics[width=0.7\textwidth]{DudaClassifier.eps}
+%  \itkcaption[Simple conceptual classifier]{Simple conceptual classifier.}
+%  \label{fig:simple}
+%\end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.7\textwidth]{StatisticalClassificationFramework.eps}
-  \itkcaption[Statistical classification framework]{Statistical classification
-framework.}
-  \protect\label{fig:StatisticalClassificationFramework}
-\end{figure}
+%This framework closely follows that of Duda and
+%Hart\cite{Duda2000}. The classification process can be described
+%as follows:
 
-This simple configuration can be used to formulated various classification
-tasks by using different membership functions and incorporating task specific
-requirements and prior knowledge into the decision rule. For example, instead
-of using probability density functions as membership functions, through
-distance functions and a minimum value decision rule (which assigns a class
-from the distance function that returns the smallest value) users can achieve a
-least squared error classifier. As another example, users can add a rejection
-scheme to the decision rule so that even in a situation where the membership
-scores suggest a ``winner'', a measurement vector can be flagged as ill
-defined. Such a rejection scheme can avoid risks of assigning a class label
-without a proper win margin.
+%\begin{enumerate}
+%\item{A measurement vector is input to each membership function.}
+%\item{Membership functions feed the membership scores to the
+%    decision rule.}
+%\item{A decision rule compares the membership scores and returns a
+%    class label.}
+%\end{enumerate}
 
-Note that to use these concepts into your own programs, you might have to link
-to other OTB libraries (edit the \code{TARGET\_LINK\_LIBRARIES} to add them),
-for example OTBLearning, OTBMarkov.
+%\begin{figure}
+%  \centering
+%  \includegraphics[width=0.7\textwidth]{StatisticalClassificationFramework.eps}
+%  \itkcaption[Statistical classification framework]{Statistical classification
+%framework.}
+%  \protect\label{fig:StatisticalClassificationFramework}
+%\end{figure}
+
+%This simple configuration can be used to formulated various classification
+%tasks by using different membership functions and incorporating task specific
+%requirements and prior knowledge into the decision rule. For example, instead
+%of using probability density functions as membership functions, through
+%distance functions and a minimum value decision rule (which assigns a class
+%from the distance function that returns the smallest value) users can achieve a
+%least squared error classifier. As another example, users can add a rejection
+%scheme to the decision rule so that even in a situation where the membership
+%scores suggest a ``winner'', a measurement vector can be flagged as ill
+%defined. Such a rejection scheme can avoid risks of assigning a class label
+%without a proper win margin.
+
+%Note that to use these concepts into your own programs, you might have to link
+%to other OTB libraries (edit the \code{TARGET\_LINK\_LIBRARIES} to add them),
+%for example OTBLearning, OTBMarkov.
 
 \section{Unsupervised classification}
 
@@ -215,16 +225,12 @@ own framework.
 \input{MarkovRegularizationExample.tex}
 \fi 
 
+
+
+
 \section{Supervised classification}
 
-\subsection{Learning from samples}
-\input{TrainMachineLearningModelFromSamplesExample.tex}
-%\subsection{Learning from images}
-%todo
-
-
-
-\section{Support Vector Machines}
+\subsection{An example of supervised classification method: Support Vector Machines}
 \label{sec:SupportVectorMachines}
 
 Kernel based learning methods in general and the Support Vector
@@ -244,10 +250,11 @@ nonlinearly separable, the method uses a kernel expansion in order to make
 projections of the feature space onto higher dimensionality spaces
 where the separation of the classes becomes linear.
 
- \subsection{Mathematical formulation}
 
- This section reminds the basic principles of SVM learning and
- classification. A good tutorial on SVM can be found in, \cite{burges}.
+\subsection{SVM mathematical formulation}
+
+This subsection reminds the basic principles of SVM learning and
+classification. A good tutorial on SVM can be found in, \cite{burges}.
  
 We have $N$ samples represented by the couple $(y_i,\mathbf{x}_i),
 i=1\ldots N$ where $y_i \in \{-1,+1\}$ is the class label and
@@ -339,22 +346,44 @@ is the one that we use, the final decision is taken by choosing the
 class which is most often selected by the whole set of SVM.
 
 
-\subsection{Learning With PointSets}
-\label{sec:LearningWithPointSets}
-\input{SVMPointSetModelEstimatorExample}
-\subsection{PointSet Classification}
-\label{sec:PointSetClassification}
-\input{SVMPointSetClassificationExample}
-\subsection{Learning With Images}
-\label{sec:LearningWithImages}
-\input{SVMImageModelEstimatorExample}
-\subsection{Image Classification}
-\label{sec:ImageClassification}
-\input{SVMImageClassificationExample}
-\input{SVMImageEstimatorClassificationMultiExample}
-\subsection{Generic Kernel SVM}
 
-OTB has developed a specific interface for user-defined kernels. A function
+\subsection{Learning from samples}
+\input{TrainMachineLearningModelFromSamplesExample.tex}
+
+\subsection{Learning from images}
+\input{TrainMachineLearningModelFromImagesExample.tex}
+
+
+%\subsection{Learning With PointSets}
+%\label{sec:LearningWithPointSets}
+%\input{SVMPointSetModelEstimatorExample}
+
+%\subsection{PointSet Classification}
+%\label{sec:PointSetClassification}
+%\input{SVMPointSetClassificationExample}
+
+%\subsection{Learning With Images}
+%\label{sec:LearningWithImages}
+%\input{SVMImageModelEstimatorExample}
+
+%\subsection{Image Classification}
+%\label{sec:ImageClassification}
+%\input{SVMImageClassificationExample}
+%\input{SVMImageEstimatorClassificationMultiExample}
+
+
+\subsection{Multi-band, streamed classification}
+
+\ifitkFullVersion
+\input{SVMImageClassifierExample.tex}
+\fi
+
+
+
+
+\subsection{Generic Kernel SVM}
+OTB has developed a specific interface for user-defined kernels. However, the 
+following functions use a deprecated OTB interface. A function 
 $k(\cdot,\cdot)$ is considered to be a kernel when:
 \begin{align}\label{eqMercer}
         \forall g(\cdot) \in {\cal L}^2(\mathbbm{R}^n) \quad & \text{so 
@@ -422,13 +451,11 @@ presented in section \ref{sec:KullbackLeiblerProfile}.
 \input{SVMGenericKernelImageClassificationExample.tex}
 \fi
 
-\subsection{Multi-band, streamed classification}
 
-\ifitkFullVersion
-\input{SVMImageClassifierExample.tex}
-\fi
 
-\subsection{Classification map regularization}
+\section{Classification map regularization}
+
+%\subsection{Regularization by neighborhood-based majority voting}
 
 \ifitkFullVersion
 \input{ClassificationMapRegularizationExample.tex}
