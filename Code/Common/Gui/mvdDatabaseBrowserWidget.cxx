@@ -237,6 +237,12 @@ DatabaseBrowserWidget
 ::on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
 					    QTreeWidgetItem* previous )
 {
+  qDebug() <<
+    this <<
+    "::on_databaseTreeWidget_currentItemChanged(" <<
+    current << ", " << previous <<
+    ")";
+
   assert( current!=previous );
 
   // if current is root and not NULL get the Id of the

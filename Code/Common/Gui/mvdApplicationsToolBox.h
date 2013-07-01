@@ -173,7 +173,7 @@ private:
   /**
    * \brief text to search in the widget tree
    */
-  QString                  m_SearchText;  
+  QString m_SearchText;  
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

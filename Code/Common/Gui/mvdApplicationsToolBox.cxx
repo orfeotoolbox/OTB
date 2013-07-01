@@ -66,7 +66,10 @@ namespace mvd
 ApplicationsToolBox
 ::ApplicationsToolBox( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
-  m_UI( new mvd::Ui::ApplicationsToolBox() )
+  m_UI( new mvd::Ui::ApplicationsToolBox() ),
+  m_AppTags(),
+  m_AppsDocNameToNameMap(),
+  m_SearchText()
 {
   m_UI->setupUi( this );
 
