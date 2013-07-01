@@ -1,26 +1,26 @@
 #############################################################################
 # Input files.
-set( Monteverdi2_SOURCES
+set( Monteverdi2_Catalogue_SOURCES
        mvdApplication.cxx
        mvdMainWindow.cxx
        mvdPreferencesDialog.cxx
 )
 
 # Headers for classes with Q_OBJECT macro (needs to go to Qt moc)
-set( Monteverdi2_HEADERS_MOC
+set( Monteverdi2_Catalogue_HEADERS_MOC
        mvdApplication.h
        mvdMainWindow.h
        mvdPreferencesDialog.h
 )
 
 # Qt designer UI files
-set( Monteverdi2_FORMS
+set( Monteverdi2_Catalogue_FORMS
        mvdMainWindow.ui
        mvdPreferencesDialog.ui
 )
 
 # Qt resources included in executable
-set( Monteverdi2_RESOURCES
+set( Monteverdi2_Catalogue_RESOURCES
        mvdMainWindow.qrc
 )
 
@@ -38,22 +38,22 @@ include_directories(
 
 #############################################################################
 # Qt4 wrapped files.
-qt4_wrap_cpp( Monteverdi2_SRC_MOC ${Monteverdi2_HEADERS_MOC} )
-qt4_wrap_ui( Monteverdi2_FORMS_HEADERS ${Monteverdi2_FORMS}  )
-qt4_add_resources( Monteverdi2_RESOURCES_RCC ${Monteverdi2_RESOURCES} )
+qt4_wrap_cpp( Monteverdi2_Catalogue_SRC_MOC ${Monteverdi2_Catalogue_HEADERS_MOC} )
+qt4_wrap_ui( Monteverdi2_Catalogue_FORMS_HEADERS ${Monteverdi2_Catalogue_FORMS}  )
+qt4_add_resources( Monteverdi2_Catalogue_RESOURCES_RCC ${Monteverdi2_Catalogue_RESOURCES} )
 
 #############################################################################
 # Sources files to translate.
 add_to_qt4_i18n_sources(
-  ${Monteverdi2_SOURCES}
-  ${Monteverdi2_HEADERS_MOC}
-  ${Monteverdi2_FORMS}
+  ${Monteverdi2_Catalogue_SOURCES}
+  ${Monteverdi2_Catalogue_HEADERS_MOC}
+  ${Monteverdi2_Catalogue_FORMS}
 )
 
 if (WIN32)
     # Windows Resource file need to have the full path to icon
     # if the .ico is not in the current dir
-    set( Monteverdi2_WIN32_ICON ${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico)
+    set( Monteverdi2_Catalogue_WIN32_ICON ${Monteverdi2_SOURCE_DIR}/Data/Icons/monteverdi2.ico)
     configure_file(
       ${CMAKE_CURRENT_SOURCE_DIR}/mvdWin32.rc.in
       ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc
@@ -61,7 +61,7 @@ if (WIN32)
     )
 
     # The RC file to be added to source list
-    set( Monteverdi2_WIN32_RC_FILE ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc )
+    set( Monteverdi2_Catalogue_WIN32_RC_FILE ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc )
 endif()
 
 
@@ -71,18 +71,18 @@ endif()
 # The library is also used in tests, waiting for a better test strategy
 # The library is not installed
 
-add_library( Monteverdi2_Catalog
+add_library( Monteverdi2_Catalogue
   STATIC
-  ${Monteverdi2_SOURCES}
-  ${Monteverdi2_FORMS_HEADERS}
-  ${Monteverdi2_SRC_MOC}
+  ${Monteverdi2_Catalogue_SOURCES}
+  ${Monteverdi2_Catalogue_FORMS_HEADERS}
+  ${Monteverdi2_Catalogue_SRC_MOC}
 )
-target_link_libraries( Monteverdi2_Catalog
+target_link_libraries( Monteverdi2_Catalogue
   Monteverdi2_Gui
 )
 
 if (OTB_WRAP_QT)
-target_link_libraries( Monteverdi2_Catalog
+target_link_libraries( Monteverdi2_Catalogue
   Monteverdi2_ApplicationsWrapper
 )
 endif()
@@ -92,12 +92,12 @@ endif()
 add_executable( monteverdi2
   WIN32
   main.cxx
-  ${Monteverdi2_WIN32_RC_FILE}
-  ${Monteverdi2_RESOURCES_RCC}
+  ${Monteverdi2_Catalogue_WIN32_RC_FILE}
+  ${Monteverdi2_Catalogue_RESOURCES_RCC}
 )
 
 target_link_libraries( monteverdi2
-  Monteverdi2_Catalog
+  Monteverdi2_Catalogue
   #Monteverdi2_Gui
   ${QT_QTMAIN_LIBRARY}
 )
