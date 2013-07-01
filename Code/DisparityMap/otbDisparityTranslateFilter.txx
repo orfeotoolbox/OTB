@@ -228,7 +228,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
   emptyRegion.SetSize(0,0);
   emptyRegion.SetSize(1,0);
   leftIn->SetRequestedRegion(emptyRegion);
-  
+
   TDisparityImage * horizOut = this->GetHorizontalDisparityMapOutput();
   
   TDisparityImage * horizIn = const_cast<TDisparityImage*>(this->GetHorizontalDisparityMapInput());
@@ -323,113 +323,80 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   const TGridImage * leftGrid = this->GetInverseEpipolarLeftGrid();
   const TGridImage * rightGrid = this->GetDirectEpipolarRightGrid();
-  
+
   TDisparityImage * horizOut = this->GetHorizontalDisparityMapOutput();
   TDisparityImage * vertiOut = this->GetVerticalDisparityMapOutput();
-  
+
   const TDisparityImage * horizIn = this->GetHorizontalDisparityMapInput();
   const TDisparityImage * vertiIn = this->GetVerticalDisparityMapInput();
-  
+
   const TMaskImage * maskIn = this->GetDisparityMaskInput();
-  
+
   GridRegionType leftLargest = leftGrid->GetLargestPossibleRegion();
   GridRegionType rightLargest = rightGrid->GetLargestPossibleRegion();
   RegionType buffered = horizIn->GetBufferedRegion();
-  
-  typedef itk::ImageRegionIteratorWithIndex<TDisparityImage> DispIterator;
-  DispIterator horizIter(horizOut,outputRegionForThread);
-  DispIterator vertiIter(vertiOut,outputRegionForThread);
-  
-  horizIter.GoToBegin();
-  vertiIter.GoToBegin();
-  
-  while (!horizIter.IsAtEnd() && !vertiIter.IsAtEnd())
-    {
-    PointType pointSensor;
-    horizOut->TransformIndexToPhysicalPoint(horizIter.GetIndex(),pointSensor);
-    
-    itk::ContinuousIndex<double,2> indexGrid;
-    leftGrid->TransformPhysicalPointToContinuousIndex(pointSensor,indexGrid);
-    
-    // Interpolate in left grid
-    IndexType ul;
-    ul[0] = static_cast<long>(vcl_floor(indexGrid[0]));
-    ul[1] = static_cast<long>(vcl_floor(indexGrid[1]));
-    if (ul[0]<leftLargest.GetIndex()[0]) ul[0]=leftLargest.GetIndex()[0];
-    if (ul[1]<leftLargest.GetIndex()[1]) ul[1]=leftLargest.GetIndex()[1];
-    if (ul[0]>(unsigned int)(leftLargest.GetIndex()[0]+leftLargest.GetSize()[0]-2)) ul[0]=(leftLargest.GetIndex()[0]+leftLargest.GetSize()[0]-2);
-    if (ul[1]>(unsigned int)(leftLargest.GetIndex()[1]+leftLargest.GetSize()[1]-2)) ul[1]=(leftLargest.GetIndex()[1]+leftLargest.GetSize()[1]-2);
-  
-    IndexType ur = ul;
-    ur[0] += 1;
-    IndexType ll = ul;
-    ll[1] += 1;
-    IndexType lr = ul;
-    lr[0] += 1;
-    lr[1] += 1;
-    
-    double rx = indexGrid[0] - static_cast<double>(ul[0]);
-    double ry = indexGrid[1] - static_cast<double>(ul[1]);
-    PointType pointEpi = pointSensor;
-    
-    pointEpi[0] += (1. - ry) * ((1. - rx) * leftGrid->GetPixel(ul)[0] + rx * leftGrid->GetPixel(ur)[0]) +
-                           ry * ((1. - rx) * leftGrid->GetPixel(ll)[0] + rx * leftGrid->GetPixel(lr)[0]);
-    pointEpi[1] += (1. - ry) * ((1. - rx) * leftGrid->GetPixel(ul)[1] + rx * leftGrid->GetPixel(ur)[1]) +
-                           ry * ((1. - rx) * leftGrid->GetPixel(ll)[1] + rx * leftGrid->GetPixel(lr)[1]);
-    
-    itk::ContinuousIndex<double,2> indexEpi;
-    horizIn->TransformPhysicalPointToContinuousIndex(pointEpi,indexEpi);
-    
-    // Interpolate in disparity map
-    ul[0] = static_cast<long>(vcl_floor(indexEpi[0]));
-    ul[1] = static_cast<long>(vcl_floor(indexEpi[1]));
-    if (ul[0]<buffered.GetIndex()[0]) ul[0]=buffered.GetIndex()[0];
-    if (ul[1]<buffered.GetIndex()[1]) ul[1]=buffered.GetIndex()[1];
-    if (ul[0]>(unsigned int)(buffered.GetIndex()[0]+buffered.GetSize()[0]-2)) ul[0]=(buffered.GetIndex()[0]+buffered.GetSize()[0]-2);
-    if (ul[1]>(unsigned int)(buffered.GetIndex()[1]+buffered.GetSize()[1]-2)) ul[1]=(buffered.GetIndex()[1]+buffered.GetSize()[1]-2);
-  
-    ur = ul;
-    ur[0] += 1;
-    ll = ul;
-    ll[1] += 1;
-    lr = ul;
-    lr[0] += 1;
-    lr[1] += 1;
-    
-    // check if all corners are valid
-    if (!maskIn || (maskIn &&
-        maskIn->GetPixel(ul) > 0 &&
-        maskIn->GetPixel(ur) > 0 &&
-        maskIn->GetPixel(ll) > 0 &&
-        maskIn->GetPixel(lr) > 0))
+
+  const bool emptyInputRegion=buffered.GetNumberOfPixels() == 0;
+
+    typedef itk::ImageRegionIteratorWithIndex<TDisparityImage> DispIterator;
+    DispIterator horizIter(horizOut, outputRegionForThread);
+    DispIterator vertiIter(vertiOut, outputRegionForThread);
+
+    horizIter.GoToBegin();
+    vertiIter.GoToBegin();
+
+    while (!horizIter.IsAtEnd() && !vertiIter.IsAtEnd())
       {
-      rx = indexEpi[0] - static_cast<double>(ul[0]);
-      ry = indexEpi[1] - static_cast<double>(ul[1]);
-      
-      itk::ContinuousIndex<double,2> indexRight(indexEpi);
-      
-      indexRight[0] += (1. - ry) * ((1. - rx) * horizIn->GetPixel(ul) + rx * horizIn->GetPixel(ur)) +
-                            ry * ((1. - rx) * horizIn->GetPixel(ll) + rx * horizIn->GetPixel(lr));
-      if (vertiIn)
+
+      if(!emptyInputRegion)
         {
-        indexRight[1] += (1. - ry) * ((1. - rx) * vertiIn->GetPixel(ul) + rx * vertiIn->GetPixel(ur)) +
-                            ry * ((1. - rx) * vertiIn->GetPixel(ll) + rx * vertiIn->GetPixel(lr));
-        }
-      
-      PointType pointRight;
-      horizIn->TransformContinuousIndexToPhysicalPoint(indexRight,pointRight);
-      
-      itk::ContinuousIndex<double,2> indexGridRight;
-      rightGrid->TransformPhysicalPointToContinuousIndex(pointRight,indexGridRight);
-      
-      // Interpolate in right grid
-      ul[0] = static_cast<long>(vcl_floor(indexGridRight[0]));
-      ul[1] = static_cast<long>(vcl_floor(indexGridRight[1]));
-      if (ul[0]<rightLargest.GetIndex()[0]) ul[0]=rightLargest.GetIndex()[0];
-      if (ul[1]<rightLargest.GetIndex()[1]) ul[1]=rightLargest.GetIndex()[1];
-      if (ul[0]>(unsigned int)(rightLargest.GetIndex()[0]+rightLargest.GetSize()[0]-2)) ul[0]=(rightLargest.GetIndex()[0]+rightLargest.GetSize()[0]-2);
-      if (ul[1]>(unsigned int)(rightLargest.GetIndex()[1]+rightLargest.GetSize()[1]-2)) ul[1]=(rightLargest.GetIndex()[1]+rightLargest.GetSize()[1]-2);
-    
+      PointType pointSensor;
+      horizOut->TransformIndexToPhysicalPoint(horizIter.GetIndex(), pointSensor);
+
+      itk::ContinuousIndex<double, 2> indexGrid;
+      leftGrid->TransformPhysicalPointToContinuousIndex(pointSensor, indexGrid);
+
+      // Interpolate in left grid
+      IndexType ul;
+      ul[0] = static_cast<long> (vcl_floor(indexGrid[0]));
+      ul[1] = static_cast<long> (vcl_floor(indexGrid[1]));
+      if (ul[0] < leftLargest.GetIndex()[0]) ul[0] = leftLargest.GetIndex()[0];
+      if (ul[1] < leftLargest.GetIndex()[1]) ul[1] = leftLargest.GetIndex()[1];
+      if (ul[0] > (unsigned int) (leftLargest.GetIndex()[0] + leftLargest.GetSize()[0] - 2)) ul[0] = (
+          leftLargest.GetIndex()[0] + leftLargest.GetSize()[0] - 2);
+      if (ul[1] > (unsigned int) (leftLargest.GetIndex()[1] + leftLargest.GetSize()[1] - 2)) ul[1] = (
+          leftLargest.GetIndex()[1] + leftLargest.GetSize()[1] - 2);
+
+      IndexType ur = ul;
+      ur[0] += 1;
+      IndexType ll = ul;
+      ll[1] += 1;
+      IndexType lr = ul;
+      lr[0] += 1;
+      lr[1] += 1;
+
+      double rx = indexGrid[0] - static_cast<double> (ul[0]);
+      double ry = indexGrid[1] - static_cast<double> (ul[1]);
+      PointType pointEpi = pointSensor;
+
+      pointEpi[0] += (1. - ry) * ((1. - rx) * leftGrid->GetPixel(ul)[0] + rx * leftGrid->GetPixel(ur)[0]) + ry * ((1.
+          - rx) * leftGrid->GetPixel(ll)[0] + rx * leftGrid->GetPixel(lr)[0]);
+      pointEpi[1] += (1. - ry) * ((1. - rx) * leftGrid->GetPixel(ul)[1] + rx * leftGrid->GetPixel(ur)[1]) + ry * ((1.
+          - rx) * leftGrid->GetPixel(ll)[1] + rx * leftGrid->GetPixel(lr)[1]);
+
+      itk::ContinuousIndex<double, 2> indexEpi;
+      horizIn->TransformPhysicalPointToContinuousIndex(pointEpi, indexEpi);
+
+      // Interpolate in disparity map
+      ul[0] = static_cast<long> (vcl_floor(indexEpi[0]));
+      ul[1] = static_cast<long> (vcl_floor(indexEpi[1]));
+      if (ul[0] < buffered.GetIndex()[0]) ul[0] = buffered.GetIndex()[0];
+      if (ul[1] < buffered.GetIndex()[1]) ul[1] = buffered.GetIndex()[1];
+      if (ul[0] > (unsigned int) (buffered.GetIndex()[0] + buffered.GetSize()[0] - 2)) ul[0] = (buffered.GetIndex()[0]
+          + buffered.GetSize()[0] - 2);
+      if (ul[1] > (unsigned int) (buffered.GetIndex()[1] + buffered.GetSize()[1] - 2)) ul[1] = (buffered.GetIndex()[1]
+          + buffered.GetSize()[1] - 2);
+
       ur = ul;
       ur[0] += 1;
       ll = ul;
@@ -437,29 +404,77 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
       lr = ul;
       lr[0] += 1;
       lr[1] += 1;
-      
-      rx = indexGridRight[0] - static_cast<double>(ul[0]);
-      ry = indexGridRight[1] - static_cast<double>(ul[1]);
-      
-      PointType pointSensorRight = pointRight;
-      
-      pointSensorRight[0] += (1. - ry) * ((1. - rx) * rightGrid->GetPixel(ul)[0] + rx * rightGrid->GetPixel(ur)[0]) +
-                                    ry * ((1. - rx) * rightGrid->GetPixel(ll)[0] + rx * rightGrid->GetPixel(lr)[0]);
-      pointSensorRight[1] += (1. - ry) * ((1. - rx) * rightGrid->GetPixel(ul)[1] + rx * rightGrid->GetPixel(ur)[1]) +
-                                    ry * ((1. - rx) * rightGrid->GetPixel(ll)[1] + rx * rightGrid->GetPixel(lr)[1]);
-      
-      horizIter.Set(pointSensorRight[0] - pointSensor[0]);
-      vertiIter.Set(pointSensorRight[1] - pointSensor[1]);
+
+      // check if all corners are valid
+      if (!maskIn || (maskIn && maskIn->GetPixel(ul) > 0 && maskIn->GetPixel(ur) > 0 && maskIn->GetPixel(ll) > 0 &&
+          maskIn->GetPixel(lr) > 0))
+        {
+        rx = indexEpi[0] - static_cast<double> (ul[0]);
+        ry = indexEpi[1] - static_cast<double> (ul[1]);
+
+        itk::ContinuousIndex<double, 2> indexRight(indexEpi);
+
+        indexRight[0] += (1. - ry) * ((1. - rx) * horizIn->GetPixel(ul) + rx * horizIn->GetPixel(ur)) + ry * ((1. - rx)
+            * horizIn->GetPixel(ll) + rx * horizIn->GetPixel(lr));
+        if (vertiIn)
+          {
+          indexRight[1] += (1. - ry) * ((1. - rx) * vertiIn->GetPixel(ul) + rx * vertiIn->GetPixel(ur)) + ry * ((1.
+              - rx) * vertiIn->GetPixel(ll) + rx * vertiIn->GetPixel(lr));
+          }
+
+        PointType pointRight;
+        horizIn->TransformContinuousIndexToPhysicalPoint(indexRight, pointRight);
+
+        itk::ContinuousIndex<double, 2> indexGridRight;
+        rightGrid->TransformPhysicalPointToContinuousIndex(pointRight, indexGridRight);
+
+        // Interpolate in right grid
+        ul[0] = static_cast<long> (vcl_floor(indexGridRight[0]));
+        ul[1] = static_cast<long> (vcl_floor(indexGridRight[1]));
+        if (ul[0] < rightLargest.GetIndex()[0]) ul[0] = rightLargest.GetIndex()[0];
+        if (ul[1] < rightLargest.GetIndex()[1]) ul[1] = rightLargest.GetIndex()[1];
+        if (ul[0] > (unsigned int) (rightLargest.GetIndex()[0] + rightLargest.GetSize()[0] - 2)) ul[0] = (
+            rightLargest.GetIndex()[0] + rightLargest.GetSize()[0] - 2);
+        if (ul[1] > (unsigned int) (rightLargest.GetIndex()[1] + rightLargest.GetSize()[1] - 2)) ul[1] = (
+            rightLargest.GetIndex()[1] + rightLargest.GetSize()[1] - 2);
+
+        ur = ul;
+        ur[0] += 1;
+        ll = ul;
+        ll[1] += 1;
+        lr = ul;
+        lr[0] += 1;
+        lr[1] += 1;
+
+        rx = indexGridRight[0] - static_cast<double> (ul[0]);
+        ry = indexGridRight[1] - static_cast<double> (ul[1]);
+
+        PointType pointSensorRight = pointRight;
+
+        pointSensorRight[0] += (1. - ry) * ((1. - rx) * rightGrid->GetPixel(ul)[0] + rx * rightGrid->GetPixel(ur)[0]) +
+            ry * ((1. - rx) * rightGrid->GetPixel(ll)[0] + rx * rightGrid->GetPixel(lr)[0]);
+        pointSensorRight[1] += (1. - ry) * ((1. - rx) * rightGrid->GetPixel(ul)[1] + rx * rightGrid->GetPixel(ur)[1]) +
+            ry * ((1. - rx) * rightGrid->GetPixel(ll)[1] + rx * rightGrid->GetPixel(lr)[1]);
+
+        horizIter.Set(pointSensorRight[0] - pointSensor[0]);
+        vertiIter.Set(pointSensorRight[1] - pointSensor[1]);
+        }
+      else
+        {
+        horizIter.Set(m_NoDataValue);
+        vertiIter.Set(m_NoDataValue);
+        }
+        }
+      else
+        {
+        horizIter.Set(m_NoDataValue);
+        vertiIter.Set(m_NoDataValue);
+        }
+      ++horizIter;
+      ++vertiIter;
       }
-    else
-      {
-      horizIter.Set(m_NoDataValue);
-      vertiIter.Set(m_NoDataValue);
-      }
-    
-    ++horizIter;
-    ++vertiIter;
-    }
+
+
 }
 
 
