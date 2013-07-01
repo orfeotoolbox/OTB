@@ -44,10 +44,17 @@ namespace mvd
 namespace Wrapper
 {
 
-QtWidgetChoiceParameter::QtWidgetChoiceParameter(otb::Wrapper::ChoiceParameter* param, 
-                                                 otb::Wrapper::QtWidgetModel* m)
-  : otb::Wrapper::QtWidgetParameterBase(param, m),
-  m_ChoiceParam(param)
+QtWidgetChoiceParameter
+::QtWidgetChoiceParameter( otb::Wrapper::ChoiceParameter* param, 
+			   otb::Wrapper::QtWidgetModel* m) :
+  otb::Wrapper::QtWidgetParameterBase(param, m),
+  m_ChoiceParam(param),
+  m_MainHLayout( NULL ),
+  m_ComboBox( NULL ),
+  m_StackWidget( NULL ),
+  m_VLayout( NULL ),
+  m_VLayoutGroup( NULL ),
+  m_WidgetList()
 {
 }
 

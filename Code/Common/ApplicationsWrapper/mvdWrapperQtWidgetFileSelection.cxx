@@ -62,8 +62,12 @@ namespace Wrapper
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-QtWidgetFileSelection::QtWidgetFileSelection()
-  : QWidget()
+QtWidgetFileSelection::QtWidgetFileSelection() :
+  QWidget(),
+  m_HLayout( NULL ),
+  m_Input( NULL ),
+  m_Button( NULL ),
+  m_Checkbox( NULL )
 {
   this->DoCreateWidget();
 
@@ -215,7 +219,8 @@ QtWidgetFileSelection::ExtractValidFilename(std::string payload)
 /*******************************************************************************/
 void QtWidgetFileSelection::SelectFile()
 {
-  QFileDialog fileDialog;
+  QFileDialog fileDialog( this );
+
   fileDialog.setConfirmOverwrite(true);
   fileDialog.setFileMode(QFileDialog::ExistingFile);
   fileDialog.setNameFilter("Raster files (*)");

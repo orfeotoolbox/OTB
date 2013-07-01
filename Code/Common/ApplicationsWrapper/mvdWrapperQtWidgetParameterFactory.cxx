@@ -96,8 +96,10 @@ public:
     return dynamic_cast<TParameterType *>(param) != 0;
   }
 
-  static otb::Wrapper::QtWidgetParameterBase* Create( otb::Wrapper::Parameter* param, 
-                                                      otb::Wrapper::QtWidgetModel* model )
+  static
+  otb::Wrapper::QtWidgetParameterBase*
+  Create( otb::Wrapper::Parameter* param, 
+	  otb::Wrapper::QtWidgetModel* model )
   {
 
     otb::Wrapper::QtWidgetParameterBase* widget = 0;
@@ -178,7 +180,7 @@ QtWidgetParameterFactory::CreateQtWidget( otb::Wrapper::Parameter* param,
                mvd::Wrapper::QtWidgetParameterGroup)
   CREATEWIDGET(otb::Wrapper::RAMParameter,            
                otb::Wrapper::QtWidgetRAMParameter)
-    
+
 #undef CREATEWIDGET
 
   if (widget)

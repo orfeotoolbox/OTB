@@ -101,6 +101,7 @@ Application
 {
 #ifdef OTB_WRAP_QT
   m_OTBApplicationsModel = new OTBApplicationsModel( this );
+
   m_OTBApplicationsModel->BuildModel();
 #endif
 }

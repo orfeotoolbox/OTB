@@ -154,9 +154,9 @@ private:
 // Private attributes.
 private:
 
-  std::string     m_AutoLoadPath;
+  std::string m_AutoLoadPath;
 
-  ApplicationDocNameToNameMap   m_DocNameToNameMap;
+  ApplicationDocNameToNameMap m_DocNameToNameMap;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

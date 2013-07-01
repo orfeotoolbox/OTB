@@ -63,15 +63,19 @@ namespace Wrapper
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-QtWidgetInputImageParameter::QtWidgetInputImageParameter(otb::Wrapper::InputImageParameter* param, 
-                                                         otb::Wrapper::QtWidgetModel* m): 
+QtWidgetInputImageParameter
+::QtWidgetInputImageParameter( otb::Wrapper::InputImageParameter* param,
+			       otb::Wrapper::QtWidgetModel* m ) :
   otb::Wrapper::QtWidgetParameterBase(param, m),
-  m_InputImageParam(param)
+  m_InputImageParam(param),
+  m_HLayout( NULL ),
+  m_Input( NULL ),
+  m_Button( NULL )
 {
   // 
   //
-  m_HLayout = new QHBoxLayout;
-  m_Button = new QPushButton();
+  m_Button = new QPushButton( this );
+  m_HLayout = new QHBoxLayout();
   m_Input = new QLabel(this);
 
   //

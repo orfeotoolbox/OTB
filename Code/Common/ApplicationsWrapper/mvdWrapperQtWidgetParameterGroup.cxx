@@ -68,10 +68,12 @@ namespace Wrapper
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-QtWidgetParameterGroup::QtWidgetParameterGroup(otb::Wrapper::ParameterGroup::Pointer paramList, 
-                                               otb::Wrapper::QtWidgetModel* m)
-: otb::Wrapper::QtWidgetParameterBase(paramList, m),
-  m_ParamList(paramList)
+QtWidgetParameterGroup
+::QtWidgetParameterGroup( otb::Wrapper::ParameterGroup::Pointer paramList, 
+			  otb::Wrapper::QtWidgetModel* m) :
+  otb::Wrapper::QtWidgetParameterBase(paramList, m),
+  m_ParamList(paramList),
+  m_WidgetList()
 {
 }
 
@@ -105,8 +107,11 @@ void QtWidgetParameterGroup::DoCreateWidget()
 
     if (param != 0)
       {
-      otb::Wrapper::ParameterGroup* paramAsGroup = dynamic_cast<otb::Wrapper::ParameterGroup*>(param);
-      otb::Wrapper::ChoiceParameter* paramAsChoice = dynamic_cast<otb::Wrapper::ChoiceParameter*>(param);
+      otb::Wrapper::ParameterGroup* paramAsGroup =
+	dynamic_cast<otb::Wrapper::ParameterGroup*>(param);
+
+      otb::Wrapper::ChoiceParameter* paramAsChoice =
+	dynamic_cast<otb::Wrapper::ChoiceParameter*>(param);
 
       if (paramAsGroup == 0 && paramAsChoice == 0)
         {
@@ -122,10 +127,22 @@ void QtWidgetParameterGroup::DoCreateWidget()
 
         // CheckBox (col 0)
         QCheckBox * checkBox = new QCheckBox;
-        connect( checkBox, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
-        connect( checkBox, SIGNAL(clicked(bool)), GetModel(), SLOT(NotifyUpdate()) );
-        connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), checkBox, SLOT(setChecked(bool)));
-        connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), specificWidget, SLOT(SetActivationState(bool)));
+
+        connect(
+	  checkBox, SIGNAL(clicked(bool)),
+	  specificWidget, SLOT(SetActivationState(bool)));
+
+        connect(
+	  checkBox, SIGNAL(clicked(bool)),
+	  GetModel(), SLOT(NotifyUpdate()) );
+
+        connect(
+	  specificWidget, SIGNAL(ParameterActiveStatus(bool)),
+	  checkBox, SLOT(setChecked(bool)));
+
+        connect(
+	  specificWidget, SIGNAL(ParameterActiveStatus(bool)),
+	  specificWidget, SLOT(SetActivationState(bool)));
 
         // if Mandatory make the checkbox checked and deactivated
         if (param->GetMandatory())
@@ -157,8 +174,12 @@ void QtWidgetParameterGroup::DoCreateWidget()
             gridLayout->addWidget(resetButton, i, 3);
             
             // Slots to connect to the reset button
-            connect( resetButton, SIGNAL(clicked()), specificWidget, SLOT(Reset()) );
-            connect( resetButton, SIGNAL(clicked()), GetModel(), SLOT(NotifyUpdate()) );
+            connect(
+	      resetButton, SIGNAL(clicked()),
+	      specificWidget, SLOT(Reset()) );
+            connect(
+	      resetButton, SIGNAL(clicked()),
+	      GetModel(), SLOT(NotifyUpdate()) );
             }
           }
 

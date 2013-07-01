@@ -82,8 +82,9 @@ class QtWidgetInputImageParameter : public otb::Wrapper::QtWidgetParameterBase
 public:
 
   /** \brief Constructor. */
-  QtWidgetInputImageParameter(otb::Wrapper::InputImageParameter*, otb::Wrapper::QtWidgetModel*);
-  
+  QtWidgetInputImageParameter( otb::Wrapper::InputImageParameter*,
+			       otb::Wrapper::QtWidgetModel* );
+
   /** \brief Destructor. */
   virtual ~QtWidgetInputImageParameter();
 
@@ -94,7 +95,7 @@ public:
 
 signals:
   void textChanged(const QString&);
-                                     
+
 protected slots:
   bool SetFileName( const QString& value );
   void SelectFile();

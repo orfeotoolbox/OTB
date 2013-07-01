@@ -98,8 +98,10 @@ public:
   itkTypeMacro(QtWidgetParameterFactory, itk::Object);
 
   /** Create the appropriate ImageIO depending on the particulars of the file. */
-  static otb::Wrapper::QtWidgetParameterBase* CreateQtWidget( otb::Wrapper::Parameter* param, 
-                                                              otb::Wrapper::QtWidgetModel* model );
+  static
+    otb::Wrapper::QtWidgetParameterBase*
+    CreateQtWidget( otb::Wrapper::Parameter* param, 
+		    otb::Wrapper::QtWidgetModel* model );
 
   /*-[ PROTECTED SECTION ]------------------------------------------------------*/
 

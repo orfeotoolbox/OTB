@@ -65,10 +65,14 @@ namespace Wrapper
 
 /*******************************************************************************/
 QtWidgetInputImageListParameter::
-QtWidgetInputImageListParameter(otb::Wrapper::InputImageListParameter* param, 
-                                otb::Wrapper::QtWidgetModel* m)
-: otb::Wrapper::QtWidgetParameterBase(param, m),
-  m_InputImageListParam(param)
+QtWidgetInputImageListParameter( otb::Wrapper::InputImageListParameter* param, 
+                                 otb::Wrapper::QtWidgetModel* m ) :
+  otb::Wrapper::QtWidgetParameterBase(param, m),
+  m_InputImageListParam(param),
+  m_HLayout( NULL ),
+  m_FileLayout( NULL ),
+  m_Scroll( NULL ),
+  m_FileSelectionList()
 {
   QObject::connect( this, SIGNAL(Change()), GetModel(), SLOT(NotifyUpdate()) );
 }

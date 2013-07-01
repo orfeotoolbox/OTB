@@ -95,7 +95,9 @@ ApplicationsBrowser
 {
   //
   // get available application in search path
-  StringVector appList = otb::Wrapper::ApplicationRegistry::GetAvailableApplications();
+  StringVector appList(
+    otb::Wrapper::ApplicationRegistry::GetAvailableApplications()
+  );
 
   // 
   // some verbosity
@@ -125,24 +127,21 @@ ApplicationsBrowser
 ::GetApplicationTags( const std::string& appName )
 {
   //
-  // output vector
-  StringVector  vtags;
-  
-  //
   // instantiate the application using the factory
-  otb::Wrapper::Application::Pointer application 
-    = otb::Wrapper::ApplicationRegistry::CreateApplication(appName);
+  otb::Wrapper::Application::Pointer application(
+    otb::Wrapper::ApplicationRegistry::CreateApplication( appName )
+  );
+
+  if( application.IsNull() )
+    return StringVector();
 
   //
   // get tags
-  if ( !application.IsNull() )
-    {
-    vtags = application->GetDocTags();
+  StringVector vtags( application->GetDocTags() );
 
-    //
-    // fill the OTBApps 'docName <-> name' map
-    m_DocNameToNameMap[ application->GetDocName() ] = appName;
-    }
+  //
+  // fill the OTBApps 'docName <-> name' map
+  m_DocNameToNameMap[ application->GetDocName() ] = appName;
 
   return vtags;
 }
