@@ -71,18 +71,18 @@ endif()
 # The library is also used in tests, waiting for a better test strategy
 # The library is not installed
 
-add_library( Monteverdi2
+add_library( Monteverdi2_Catalog
   STATIC
   ${Monteverdi2_SOURCES}
   ${Monteverdi2_FORMS_HEADERS}
   ${Monteverdi2_SRC_MOC}
 )
-target_link_libraries( Monteverdi2
+target_link_libraries( Monteverdi2_Catalog
   Monteverdi2_Gui
 )
 
 if (OTB_WRAP_QT)
-target_link_libraries( Monteverdi2
+target_link_libraries( Monteverdi2_Catalog
   Monteverdi2_ApplicationsWrapper
 )
 endif()
@@ -97,7 +97,7 @@ add_executable( monteverdi2
 )
 
 target_link_libraries( monteverdi2
-  Monteverdi2
+  Monteverdi2_Catalog
   #Monteverdi2_Gui
   ${QT_QTMAIN_LIBRARY}
 )
