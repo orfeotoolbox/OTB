@@ -161,7 +161,12 @@ IF(OTB_USE_EXTERNAL_TINYXML)
 ENDIF(OTB_USE_EXTERNAL_TINYXML)
 
 IF(OTB_USE_OPENCV)
-  FIND_PACKAGE(OpenCV REQUIRED)
+  FIND_PACKAGE(OpenCV
+               REQUIRED
+               PATHS
+                /opt/local/lib/cmake # MacPort
+               )
+
   INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 ENDIF()
 
