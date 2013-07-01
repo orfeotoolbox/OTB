@@ -186,7 +186,7 @@ private:
 
   /**
    */
-  void listGlVersions() const;
+  void ListGlVersions() const;
 
 //
 // Private attributes.

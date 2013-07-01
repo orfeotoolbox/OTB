@@ -60,7 +60,7 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
-  listGlVersions();
+  ListGlVersions();
 
   // Set focus policy so that the widget gets the focus if it is clicked
   setMouseTracking(true);
@@ -85,7 +85,7 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
-  listGlVersions();
+  ListGlVersions();
 
   // Set focus policy so that the widget gets the focus if it is clicked
   setMouseTracking(true);
@@ -110,7 +110,7 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
-  listGlVersions();
+  ListGlVersions();
 
   // Set focus policy so that the widget gets the focus if it is clicked
   setMouseTracking(true);
@@ -409,8 +409,17 @@ GLImageWidget::dropEvent(QDropEvent *event)
 /*******************************************************************************/
 void
 GLImageWidget
-::listGlVersions() const
+::ListGlVersions() const
 {
+#if QT_VERSION < QT_VERSION_CHECK( 4, 7, 0 )
+  qWarning() <<
+    tr( "Unable to list suppored OpenGL versions using QGLFormat. "
+	"Qt version is %1. Please upgrade to Qt 4.7.0 or newer." )
+    .arg( qVersion() )
+    .toLatin1()
+    .constData();
+
+#else
   qWarning() <<
     tr( "Runtime version of OpenGL used by Qt %1: %2.%3." )
     .arg( qVersion() )
@@ -459,6 +468,7 @@ GLImageWidget
 
   if( glVersionFlags & QGLFormat::OpenGL_Version_None )
     qWarning() << "- QGLFormat::OpenGL_Version_None";
+#endif
 }
 
 /*******************************************************************************/
