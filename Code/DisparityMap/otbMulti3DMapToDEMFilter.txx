@@ -576,7 +576,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
         groundTransform = RSTransform2DType::New();
         ImageKeywordListType imageKWL = imgPtr->GetImageKeywordlist();
         //groundTransform->SetInputKeywordList(imageKWL);
-        groundTransform->SetInputProjectionRef(static_cast<std::string>(otb::GeoInformationConversion::ToWKT(4326)));
+        groundTransform->SetInputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
         groundTransform->SetOutputProjectionRef(m_ProjectionRef);
         //groundTransform->SetInputOrigin(origin);
         //groundTransform->SetInputSpacing(spacing);
@@ -587,136 +587,137 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
         {
         splitRegion = m_MapSplitterList->GetNthElement(k)->GetSplit(threadId, m_NumberOfSplit[k],
                                                                     imgPtr->GetRequestedRegion());
+
+        tmpDEM = m_TempDEMRegions[threadId];
+        tmpAcc = m_TempDEMAccumulatorRegions[threadId];
+
+        mapIt = itk::ImageRegionConstIterator<InputMapType>(imgPtr, splitRegion);
+        mapIt.GoToBegin();
+        itk::ImageRegionConstIterator<MaskImageType> maskIt;
+        bool useMask = false;
+        if (mskPtr)
+          {
+          useMask = true;
+          maskIt = itk::ImageRegionConstIterator<MaskImageType>(mskPtr, splitRegion);
+          maskIt.GoToBegin();
+          }
+
+        while (!mapIt.IsAtEnd())
+          {
+          // check mask value if any
+          if (useMask)
+            {
+            if (!(maskIt.Get() > 0))
+              {
+              ++mapIt;
+              ++maskIt;
+              continue;
+              }
+            }
+
+          position = mapIt.Get();
+
+          //std::cout<<"position"<<position<<std::endl;
+          if (!this->m_IsGeographic)
+            {
+            //std::cout<<"is geographic "<<std::endl;
+            typename RSTransform2DType::InputPointType tmpPoint;
+            tmpPoint[0] = position[0];
+            tmpPoint[1] = position[1];
+            RSTransform2DType::OutputPointType groundPosition = groundTransform->TransformPoint(tmpPoint);
+            position[0] = groundPosition[0];
+            position[1] = groundPosition[1];
+            }
+
+          //test if position is in DEM BBOX
+          bool isInDEM = (position[0] >= minLong) && (position[0] < maxLong) && (position[1] >= minLat) && (position[1]
+              < maxLat);
+
+          // Is point inside DEM area ?
+          typename OutputImageType::PointType point2D;
+          point2D[0] = position[0];
+          point2D[1] = position[1];
+          itk::ContinuousIndex<double, 2> continuousIndex;
+
+          //std::cout<<"point2D "<<point2D<<std::endl;
+          outputPtr->TransformPhysicalPointToContinuousIndex(point2D, continuousIndex);
+          typename OutputImageType::IndexType cellIndex;
+          cellIndex[0] = static_cast<int> (vcl_floor(continuousIndex[0]));
+          cellIndex[1] = static_cast<int> (vcl_floor(continuousIndex[1]));
+          //std::cout<<"cellindex "<<cellIndex<<std::endl;
+          //index from physical
+          typename OutputImageType::IndexType physCellIndex;
+          //double CellIndexLong=(position[0]-outOrigin[0])/step[0];
+          //double CellIndexLat=(position[1]-outOrigin[1])/step[1];
+          typename OutputImageType::IndexType cellIndex2;
+
+          if (outputRequestedRegion.IsInside(cellIndex))
+            {
+            //std::cout<<"is inside "<<std::endl;
+            // Add point to its corresponding cell (keep maximum)
+            DEMPixelType cellHeight = static_cast<DEMPixelType> (position[2]);
+            //if (cellHeight > tmpDEM->GetPixel(cellIndex) && cellHeight < static_cast<DEMPixelType>(m_ElevationMax))
+            //  {
+            // tmpDEM->SetPixel(cellIndex,tmpDEM->GetPixel(cellIndex)+1);
+
+            AccumulatorPixelType accPixel = tmpAcc->GetPixel(cellIndex);
+            tmpAcc->SetPixel(cellIndex, tmpAcc->GetPixel(cellIndex) + 1);
+
+            if (accPixel == 0)
+              {
+              tmpDEM->SetPixel(cellIndex, cellHeight);
+              }
+            else
+              {
+              DEMPixelType cellCurrentValue = tmpDEM->GetPixel(cellIndex);
+
+              switch (this->m_CellFusionMode)
+                {
+                case otb::CellFusionMode::MIN:
+                  {
+                  if (cellHeight < cellCurrentValue)
+                    {
+                    tmpDEM->SetPixel(cellIndex, cellHeight);
+                    }
+                  }
+                  break;
+                case otb::CellFusionMode::MAX:
+                  {
+                  if (cellHeight > cellCurrentValue)
+                    {
+                    tmpDEM->SetPixel(cellIndex, cellHeight);
+                    }
+                  }
+                  break;
+                case otb::CellFusionMode::MEAN:
+                  {
+                  tmpDEM->SetPixel(cellIndex, cellCurrentValue + cellHeight);
+                  }
+                  break;
+                case otb::CellFusionMode::ACC:
+                  {
+                  }
+                  break;
+                default:
+
+                  itkExceptionMacro(<< "Unexpected value cell fusion mode :"<<this->m_CellFusionMode)
+                  ;
+                  break;
+                }
+              }
+
+            }
+
+          ++mapIt;
+
+          if (useMask) ++maskIt;
+
+          }
         }
       else
         {
         splitRegion = requestedRegion;
         otbMsgDevMacro( "map " << k << " will not be splitted " );
-        }
-      tmpDEM = m_TempDEMRegions[threadId];
-      tmpAcc = m_TempDEMAccumulatorRegions[threadId];
-
-      mapIt = itk::ImageRegionConstIterator<InputMapType>(imgPtr, splitRegion);
-      mapIt.GoToBegin();
-      itk::ImageRegionConstIterator<MaskImageType> maskIt;
-      bool useMask = false;
-      if (mskPtr)
-        {
-        useMask = true;
-        maskIt = itk::ImageRegionConstIterator<MaskImageType>(mskPtr, splitRegion);
-        maskIt.GoToBegin();
-        }
-
-      while (!mapIt.IsAtEnd())
-        {
-        // check mask value if any
-        if (useMask)
-          {
-          if (!(maskIt.Get() > 0))
-            {
-            ++mapIt;
-            ++maskIt;
-            continue;
-            }
-          }
-
-        position = mapIt.Get();
-
-        //std::cout<<"position"<<position<<std::endl;
-        if (!this->m_IsGeographic)
-          {
-          //std::cout<<"is geographic "<<std::endl;
-          typename RSTransform2DType::InputPointType tmpPoint;
-          tmpPoint[0] = position[0];
-          tmpPoint[1] = position[1];
-          RSTransform2DType::OutputPointType groundPosition = groundTransform->TransformPoint(tmpPoint);
-          position[0] = groundPosition[0];
-          position[1] = groundPosition[1];
-          }
-
-        //test if position is in DEM BBOX
-        bool isInDEM = (position[0] >= minLong) && (position[0] < maxLong) && (position[1] >= minLat) && (position[1]
-            < maxLat);
-
-        // Is point inside DEM area ?
-        typename OutputImageType::PointType point2D;
-        point2D[0] = position[0];
-        point2D[1] = position[1];
-        itk::ContinuousIndex<double, 2> continuousIndex;
-
-        //std::cout<<"point2D "<<point2D<<std::endl;
-        outputPtr->TransformPhysicalPointToContinuousIndex(point2D, continuousIndex);
-        typename OutputImageType::IndexType cellIndex;
-        cellIndex[0] = static_cast<int> (vcl_floor(continuousIndex[0]));
-        cellIndex[1] = static_cast<int> (vcl_floor(continuousIndex[1]));
-        //std::cout<<"cellindex "<<cellIndex<<std::endl;
-        //index from physical
-        typename OutputImageType::IndexType physCellIndex;
-        //double CellIndexLong=(position[0]-outOrigin[0])/step[0];
-        //double CellIndexLat=(position[1]-outOrigin[1])/step[1];
-        typename OutputImageType::IndexType cellIndex2;
-
-        if (outputRequestedRegion.IsInside(cellIndex))
-          {
-          //std::cout<<"is inside "<<std::endl;
-          // Add point to its corresponding cell (keep maximum)
-          DEMPixelType cellHeight = static_cast<DEMPixelType> (position[2]);
-          //if (cellHeight > tmpDEM->GetPixel(cellIndex) && cellHeight < static_cast<DEMPixelType>(m_ElevationMax))
-          //  {
-          // tmpDEM->SetPixel(cellIndex,tmpDEM->GetPixel(cellIndex)+1);
-
-          AccumulatorPixelType accPixel = tmpAcc->GetPixel(cellIndex);
-          tmpAcc->SetPixel(cellIndex, tmpAcc->GetPixel(cellIndex) + 1);
-
-          if (accPixel == 0)
-            {
-            tmpDEM->SetPixel(cellIndex, cellHeight);
-            }
-          else
-            {
-            DEMPixelType cellCurrentValue = tmpDEM->GetPixel(cellIndex);
-
-            switch (this->m_CellFusionMode)
-              {
-              case otb::CellFusionMode::MIN:
-                {
-                if (cellHeight < cellCurrentValue)
-                  {
-                  tmpDEM->SetPixel(cellIndex, cellHeight);
-                  }
-                }
-                break;
-              case otb::CellFusionMode::MAX:
-                {
-                if (cellHeight > cellCurrentValue)
-                  {
-                  tmpDEM->SetPixel(cellIndex, cellHeight);
-                  }
-                }
-                break;
-              case otb::CellFusionMode::MEAN:
-                {
-                tmpDEM->SetPixel(cellIndex, cellCurrentValue + cellHeight);
-                }
-                break;
-              case otb::CellFusionMode::ACC:
-                {
-                }
-                break;
-              default:
-
-                itkExceptionMacro(<< "Unexpected value cell fusion mode :"<<this->m_CellFusionMode)
- ;
-                break;
-              }
-            }
-
-          }
-
-        ++mapIt;
-
-        if (useMask) ++maskIt;
-
         }
       }
     }
