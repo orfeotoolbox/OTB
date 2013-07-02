@@ -230,9 +230,30 @@ own framework.
 
 \section{Supervised classification}
 
+\subsection{Generic machine learning framework}
+\label{sec:MLGenericFramework}
+
+The OTB supervised classification is implemented as a generic Machine Learning 
+framework based on the OpenCV library (\cite{opencv_library}). Thus, several 
+classifiers are available through the same generic interface within the OTB:
+
+\begin{itemize}
+  \item \textbf{LibSVM}: Support Vector Machines classifier based on libSVM.
+  \item \textbf{SVM}: Support Vector Machines classifier based on OpenCV, itself based on libSVM.
+  \item \textbf{Bayes}: Normal Bayes classifier based on OpenCV.
+  \item \textbf{Boost}: Boost classifier based on OpenCV.
+  \item \textbf{DT}: Decision Tree classifier based on OpenCV.
+  \item \textbf{RF}: Random Forests classifier based on the Random Trees in OpenCV.
+  \item \textbf{GBT}: Gradient Boosted Tree classifier based on OpenCV.
+  \item \textbf{KNN}: K-Nearest Neighbors classifier based on OpenCV.
+  \item \textbf{ANN}: Artificial Neural Network classifier based on OpenCV.
+\end{itemize}
+
+
 \subsection{An example of supervised classification method: Support Vector Machines}
 \label{sec:SupportVectorMachines}
 
+\subsubsection{SVM general description}
 Kernel based learning methods in general and the Support Vector
 Machines (SVM) in particular, have been introduced in the last years
 in learning theory for classification and regression tasks,
@@ -251,7 +272,7 @@ projections of the feature space onto higher dimensionality spaces
 where the separation of the classes becomes linear.
 
 
-\subsection{SVM mathematical formulation}
+\subsubsection{SVM mathematical formulation}
 
 This subsection reminds the basic principles of SVM learning and
 classification. A good tutorial on SVM can be found in, \cite{burges}.
@@ -348,9 +369,11 @@ class which is most often selected by the whole set of SVM.
 
 
 \subsection{Learning from samples}
+\label{ssec:LearningFromSamples}
 \input{TrainMachineLearningModelFromSamplesExample.tex}
 
 \subsection{Learning from images}
+\label{ssec:LearningFromImages}
 \input{TrainMachineLearningModelFromImagesExample.tex}
 
 
@@ -375,7 +398,7 @@ class which is most often selected by the whole set of SVM.
 \subsection{Multi-band, streamed classification}
 
 \ifitkFullVersion
-\input{SVMImageClassifierExample.tex}
+\input{SupervisedImageClassificationExample.tex}
 \fi
 
 
