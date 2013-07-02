@@ -315,7 +315,7 @@ private:
   void DoInit()
   {
     SetName("StereoFramework");
-    SetDescription("Compute the ground elevation based on a one or multiple stereo pair(s)");
+    SetDescription("Compute the ground elevation based on one or multiple stereo pair(s)");
 
     SetDocName("Stereo Framework");
     SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm "
