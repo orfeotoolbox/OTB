@@ -315,15 +315,15 @@ private:
   void DoInit()
   {
     SetName("StereoFramework");
-    SetDescription("Compute the ground elevation based on a stereo pair");
+    SetDescription("Compute the ground elevation based on a one or multiple stereo pair(s)");
 
     SetDocName("Stereo Framework");
     SetDocLongDescription("Compute the ground elevation with a stereo block matching algorithm "
-                          "between one are several stereo pair in sensor geometry. The output is projected in "
-                          "desired geographic or cartographic projection (UTM by default). The pipeline is made of the following steps:\n"
+                          "between one or mulitple stereo pair in sensor geometry. The output is projected in "
+                          "desired geographic or cartographic map projection (UTM by default). The pipeline is made of the following steps:\n"
                           "for each sensor pair :\n"
-                          "\t- compute the epipolar deformation grids from the stereo pair\n"
-                          "\t- resample the stereo pair into epipolar images using BCO interpolation\n"
+                          "\t- compute the epipolar deformation grids from the stereo pair (direct and inverse)\n"
+                          "\t- resample the stereo pair into epipolar geometry using BCO interpolation\n"
                           "\t- create masks for each epipolar image : remove black borders and resample"
                           " input masks\n"
                           "\t- compute horizontal disparities with a block matching algorithm\n"
@@ -343,13 +343,12 @@ private:
     AddParameter(ParameterType_Group, "input", "Input parameters");
     SetParameterDescription("input","This group of parameters allows to parametrize input data.");
 
-
     AddParameter(ParameterType_InputImageList,  "input.il",   "Input images list");
-    SetParameterDescription("input.il", "The list of images. First image is used as left sensor image. Other images are used to complete stereo couple.");
+    SetParameterDescription("input.il", "The list of images.");
 
     AddParameter(ParameterType_String, "input.co", "Couples list");
-    SetParameterDescription("input.co","list of index of couples. couples must be separated by a comma. (index start at 0). for example : 0 1,1 2. note that images are handled by pairs."
-        " if left empty couples are created from input index (in this case image list must be even).");
+    SetParameterDescription("input.co","List of index of couples im image list. Couples must be separated by a comma. (index start at 0). for example : 0 1,1 2 will process a first couple composed of the first and the second image in image list, then the first and the third image\n. note that images are handled by pairs."
+        " if left empty couples are created from input index i.e. a first couple will be composed of the first and second image, a second couple with third and fourth image etc. (in this case image list must be even).");
     MandatoryOff("input.co");
     SetParameterString("input.co","");
     DisableParameter("input.co");
@@ -371,23 +370,23 @@ private:
     SetParameterString("map","wgs");
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
-    SetParameterDescription("output.res","Spatial sampling distance of the output elevation (in m)");
+    SetParameterDescription("output.res","Spatial sampling distance of the output elevation : the cell size (in m)");
     SetDefaultParameterFloat("output.res",1.);
 
     AddParameter(ParameterType_Float, "output.nodata","NoData value");
-    SetParameterDescription("output.nodata","DSM empty cells are filled with tihs value (optional -32768 by default)");
+    SetParameterDescription("output.nodata","DSM empty cells are filled with this value (optional -32768 by default)");
     SetDefaultParameterFloat("output.nodata",-32768);
     MandatoryOff("output.nodata");
 
     // UserDefined values
     AddParameter(ParameterType_Choice, "output.fusionmethod", "Method to fuse measures in each DSM cell");
     SetParameterDescription("output.fusionmethod","This parameter allows to choose the method used to fuse elevation measurements in each output DSM cell");
-    AddChoice("output.fusionmethod.max", "Value is the maximum elevation measured in the cell.");
-    AddChoice("output.fusionmethod.min", "Value is the minimum elevation measured in the cell.");
-    AddChoice("output.fusionmethod.mean", "Value is the mean elevation measured in the cell.");
-    AddChoice("output.fusionmethod.acc", "Value is the number of measures in the cell (for debugging purposes).");
+    AddChoice("output.fusionmethod.max", "The cell is filled with the maximum measured elevation values");
+    AddChoice("output.fusionmethod.min", "The cell is filled with the minimum measured elevation values");
+    AddChoice("output.fusionmethod.mean","The cell is filled with the mean of measured elevation values");
+    AddChoice("output.fusionmethod.acc", "accumulator mode. The cell is filled with the the number of values (for debugging purposes).");
 
-    AddParameter(ParameterType_OutputImage,"output.out","Output image");
+    AddParameter(ParameterType_OutputImage,"output.out","Output DSM");
     SetParameterDescription("output.out","Output elevation image");
 
     // UserDefined values
@@ -397,30 +396,30 @@ private:
     AddChoice("output.mode.user", "User Defined");
     SetParameterDescription("output.mode.user","This mode allows you to fully modify default values.");
     // Upper left point coordinates
-    AddParameter(ParameterType_Float, "output.mode.user.ulx", "Upper Left X");
+    AddParameter(ParameterType_Float, "output.mode.user.ulx", "Upper Left X ");
     SetParameterDescription("output.mode.user.ulx","Cartographic X coordinate of upper-left corner (meters for cartographic projections, degrees for geographic ones)");
 
-    AddParameter(ParameterType_Float, "output.mode.user.uly", "Upper Left Y");
+    AddParameter(ParameterType_Float, "output.mode.user.uly", "Upper Left Y ");
     SetParameterDescription("output.mode.user.uly","Cartographic Y coordinate of the upper-left corner (meters for cartographic projections, degrees for geographic ones)");
 
     // Size of the output image
-    AddParameter(ParameterType_Int, "output.mode.user.sizex", "Size X");
+    AddParameter(ParameterType_Int, "output.mode.user.sizex", "Size X ");
     SetParameterDescription("output.mode.user.sizex","Size of projected image along X (in pixels)");
 
-    AddParameter(ParameterType_Int, "output.mode.user.sizey", "Size Y");
+    AddParameter(ParameterType_Int, "output.mode.user.sizey", "Size Y ");
     SetParameterDescription("output.mode.user.sizey","Size of projected image along Y (in pixels)");
 
     // Spacing of the output image
-    AddParameter(ParameterType_Float, "output.mode.user.spacingx", "Pixel Size X");
+    AddParameter(ParameterType_Float, "output.mode.user.spacingx", "Pixel Size X ");
     SetParameterDescription("output.mode.user.spacingx","Size of each pixel along X axis (meters for cartographic projections, degrees for geographic ones)");
 
 
-    AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y");
+    AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y ");
     SetParameterDescription("output.mode.user.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
 
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "stereorect", "Stereorectification Grid parameters");
-    SetParameterDescription("stereorect","This group of parameters allows to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption .");
+    SetParameterDescription("stereorect","This group of parameters allows to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption.");
 
     AddParameter(ParameterType_Int,"stereorect.fwdgridstep","Step of the deformation grid (in pixels)");
     SetParameterDescription("stereorect.fwdgridstep","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommended to use a coarser grid (higher step value) in case of large images");
@@ -434,13 +433,13 @@ private:
     MandatoryOff("stereorect.invgridssrate");
 
     AddParameter(ParameterType_Group,"bm","Block matching parameters");
-    SetParameterDescription("bm","This group of parameters allow to tune the block-matching behaviour");
+    SetParameterDescription("bm","This group of parameters allow to tune the block-matching behavior");
 
     AddParameter(ParameterType_Choice,   "bm.metric", "Block-matching metric");
     //SetDefaultParameterInt("bm.metric",3);
 
     AddChoice("bm.metric.ssdmean","Sum of Squared Distances divided by mean of block");
-    SetParameterDescription("bm.metric.ssdmean","derived version of Sum of squared distances between pixels value in the metric window (SSD divided by mean over window)");
+    SetParameterDescription("bm.metric.ssdmean","derived version of Sum of Squared Distances between pixels value in the metric window (SSD divided by mean over window)");
     
     AddChoice("bm.metric.ssd","Sum of Squared Distances");
     SetParameterDescription("bm.metric.ssd","Sum of squared distances between pixels value in the metric window");
@@ -489,7 +488,7 @@ private:
 
 
     AddParameter(ParameterType_Float,"postproc.metrict","Correlation metric threshold");
-    SetParameterDescription("postproc.metrict","Use block matching metric output to discard pixels with low correlation value (disabled by default)");
+    SetParameterDescription("postproc.metrict","Use block matching metric output to discard pixels with low correlation value (disabled by default, float value)");
     MandatoryOff("postproc.metrict");
     SetDefaultParameterFloat("postproc.metrict",0.6);
     DisableParameter("postproc.metrict");
