@@ -362,7 +362,7 @@ private:
     
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "output", "Output parameters");
-    SetParameterDescription("output","This group of parameters allows to choose the DSM resolution and projection parameters.");
+    SetParameterDescription("output","This group of parameters allows to choose the DSM resolution, nodata value, and projection parameters.");
 
     // // Build the Output Map Projection - Commented until bug fix
     // for custom map projection
