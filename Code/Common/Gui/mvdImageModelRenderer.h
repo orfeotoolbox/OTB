@@ -112,20 +112,20 @@ private:
 //
 // Private attributes.
 private:
-  unsigned char *   m_Buffer;
-  bool              m_IsMoving;
+  unsigned char * m_Buffer;
+  bool m_IsMoving;
 
-  double                       m_PreviousOriginX;
-  double                       m_PreviousOriginY;
-  double                       m_MovingOriginX;
-  double                       m_MovingOriginY;
+  double m_PreviousOriginX;
+  double m_PreviousOriginY;
+  double m_MovingOriginX;
+  double m_MovingOriginY;
 
   // 
   // used for quicklook renderer
-  PointType                    m_SquarePointUL;
-  PointType                    m_SquarePointLR;
+  PointType m_SquarePointUL;
+  PointType m_SquarePointLR;
 
-  unsigned int                 m_Texture;
+  unsigned int m_Texture;
 
 //
 // SLOTS.

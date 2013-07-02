@@ -243,7 +243,7 @@ DatabaseBrowserWidget
     current << ", " << previous <<
     ")";
 
-  assert( current!=previous );
+  // assert( current!=previous );
 
   // if current is root and not NULL get the Id of the
   // corresponding Dataset

@@ -622,8 +622,8 @@ private:
   unsigned char *                     m_RasterizedBuffer;
 
   // Extract filter
-  ExtractFilterType::Pointer          m_ExtractFilter;
-  RenderingFilterType::Pointer        m_RenderingFilter;
+  ExtractFilterType::Pointer m_ExtractFilter;
+  RenderingFilterType::Pointer m_RenderingFilter;
 
   /**
    * User-configurable settings of image-model.
@@ -631,16 +631,16 @@ private:
   Settings m_Settings;
 
   // store the previously requested region
-  ImageRegionType                     m_PreviousRegion;
+  ImageRegionType m_PreviousRegion;
 
   // Store the already loaded region
-  ImageRegionType                     m_AlreadyLoadedRegion;
+  ImageRegionType m_AlreadyLoadedRegion;
 
   // store the current requested region
-  ImageRegionType                     m_Region;
+  ImageRegionType m_Region;
 
   // Vector storing the region to load
-  std::vector< ImageRegionType >       m_RegionsToLoadVector;
+  std::vector< ImageRegionType > m_RegionsToLoadVector;
 
   // store the input image filename
   QString m_Filename;

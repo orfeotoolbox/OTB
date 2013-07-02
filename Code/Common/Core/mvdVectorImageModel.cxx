@@ -91,7 +91,7 @@ VectorImageModel
 VectorImageModel
 ::~VectorImageModel()
 {
-  this->ClearBuffer();
+  ClearBuffer();
 }
 
 /*****************************************************************************/
@@ -378,7 +378,9 @@ VectorImageModel
 /*****************************************************************************/
 unsigned char *
 VectorImageModel
-::RasterizeRegion( const ImageRegionType& region, const double zoomFactor, bool refresh)
+::RasterizeRegion( const ImageRegionType& region,
+		   const double zoomFactor,
+		   bool refresh )
 {
   m_Region = region;
 
@@ -403,8 +405,8 @@ VectorImageModel
 
     // if the first time or no pixels in common , reload all
     if ( res &&
-   m_PreviousRegion!=ImageRegionType() &&
-   GetSettings().IsApplied() &&
+	 m_PreviousRegion!=ImageRegionType() &&
+	 GetSettings().IsApplied() &&
          !refresh )
       {
       // Compute loaded region, and the four regions not loaded yet
@@ -835,6 +837,11 @@ VectorImageModel
   QuicklookModel* quicklookModel = GetQuicklookModel();
   if(quicklookModel!=NULL)
     quicklookModel->ReleaseMemory();
+
+  // Warning: This call effectively releases allocated memory but is
+  // dangerous because bare pointer is shared with ImageModelRenderer
+  // which uses it through glTexImage2D() call!
+  ClearBuffer();
 
   // Initialize the RGBA pipeline
   InitializeRgbaPipeline();

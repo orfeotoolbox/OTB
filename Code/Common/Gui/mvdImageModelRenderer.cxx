@@ -57,12 +57,16 @@ namespace mvd
 ImageModelRenderer
 ::ImageModelRenderer( QObject* parent ) :
   AbstractModelRenderer( parent ),
-  m_IsMoving(false)
+  m_Buffer( NULL ),
+  m_IsMoving(false),
+  m_PreviousOriginX( 0.0 ),
+  m_PreviousOriginY( 0.0 ),
+  m_SquarePointUL(),
+  m_SquarePointLR(),
+  m_Texture( -1 )
 {
-  m_PreviousOriginX = 0.;
-  m_PreviousOriginY = 0.;
-  m_SquarePointUL.Fill(0.);
-  m_SquarePointLR.Fill(0.);
+  m_SquarePointUL.Fill( 0. );
+  m_SquarePointLR.Fill( 0. );
 }
 
 /*****************************************************************************/
