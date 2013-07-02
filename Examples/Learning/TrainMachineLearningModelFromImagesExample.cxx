@@ -16,25 +16,6 @@
 
 =========================================================================*/
 
-//Image
-#include "otbVectorImage.h"
-#include "otbVectorData.h"
-#include "otbListSampleGenerator.h"
-
-//Reader
-#include "otbImageFileReader.h"
-#include "otbVectorDataFileReader.h"
-
-//Estimator
-# include "otbSVMMachineLearningModel.h"
-#include "otbMachineLearningModelFactory.h"
-
-// Normalize the samples
-#include "otbShiftScaleSampleListFilter.h"
-
-// Extract a ROI of the vectordata
-#include "otbVectorDataIntoImageProjectionFilter.h"
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_1_ortho.tif}, {VectorData_QB1.shp}
 //    OUTPUTS: {clLIBSVMModelQB1.libsvm}
@@ -44,13 +25,35 @@
 // This example illustrates the use of the
 // \doxygen{otb}{MachineLearningModel} class. This class allows the
 // estimation of a classification model (supervised learning) from images. In this example, we will train an SVM
-// with 4 classes.
+// with 4 classes. We start by including the appropriate header files.
 //
 //  Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
+// List sample generator
+#include "otbListSampleGenerator.h"
+
+// Extract a ROI of the vectordata
+#include "otbVectorDataIntoImageProjectionFilter.h"
+
+// SVM model Estimator
+#include "otbSVMMachineLearningModel.h"
+// Software Guide : EndCodeSnippet
+
+
+// Image
+#include "otbVectorImage.h"
+#include "otbVectorData.h"
+
+// Reader
+#include "otbImageFileReader.h"
+#include "otbVectorDataFileReader.h"
+
+// Normalize the samples
+//#include "otbShiftScaleSampleListFilter.h"
+
 
 int main(int argc, char* argv[])
 {
-
   const char* inputImageFileName = argv[1];
   const char* trainingShpFileName = argv[2];
   const char* outputModelFileName = argv[3];
@@ -64,8 +67,8 @@ int main(int argc, char* argv[])
 
   typedef otb::VectorData<double, 2>                   VectorDataType;
   
-  typedef otb::ImageFileReader<InputImageType>    InputReaderType;
-  typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
+  typedef otb::ImageFileReader<InputImageType>         InputReaderType;
+  typedef otb::VectorDataFileReader<VectorDataType>    VectorDataReaderType;
 
 // Software Guide : BeginLatex
 //
@@ -84,9 +87,9 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
   // VectorData projection filter
   typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, InputImageType>
-                                              VectorDataReprojectionType;
+                                                        VectorDataReprojectionType;
 
-  InputReaderType::Pointer    inputReader = InputReaderType::New();
+  InputReaderType::Pointer inputReader = InputReaderType::New();
   inputReader->SetFileName(inputImageFileName);
   
   InputImageType::Pointer image = inputReader->GetOutput();
@@ -149,8 +152,9 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::SVMMachineLearningModel<InputImageType::InternalPixelType,
-                                       ListSampleGeneratorType::ClassLabelType> SVMType;
+  typedef otb::SVMMachineLearningModel
+                                 <InputImageType::InternalPixelType,
+                                  ListSampleGeneratorType::ClassLabelType> SVMType;
 
   SVMType::Pointer SVMClassifier = SVMType::New();
 

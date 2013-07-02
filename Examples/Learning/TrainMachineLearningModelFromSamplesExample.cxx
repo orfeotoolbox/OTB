@@ -16,29 +16,31 @@
 
 =========================================================================*/
 
-//Random
-#include "itkMersenneTwisterRandomVariateGenerator.h"
-
-//List sample generator
-#include "otbListSampleGenerator.h"
-
-//Estimator
-# include "otbSVMMachineLearningModel.h"
-#include "otbMachineLearningModelFactory.h"
-
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {1000}, {4}, {5}, {121212}
 //    OUTPUTS: {clSVMModelFromSamples.svm}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
+//
 // This example illustrates the use of the \doxygen{otb}{SVMMachineLearningModel} class, which inherits from the
 // \doxygen{otb}{MachineLearningModel} class. This class allows the
 // estimation of a classification model (supervised learning) from samples. In this example, we will train an SVM model
 // with 4 output classes, from 1000 randomly generated training samples, each of them having 7 components.
+// We start by including the appropriate header files.
 //
 //  Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
+// List sample generator
+#include "otbListSampleGenerator.h"
+
+// Random number generator
+#include "itkMersenneTwisterRandomVariateGenerator.h"
+
+// SVM model Estimator
+#include "otbSVMMachineLearningModel.h"
+// Software Guide : EndCodeSnippet
+
 
 int main(int argc, char* argv[])
 {
