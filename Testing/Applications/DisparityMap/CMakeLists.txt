@@ -165,10 +165,10 @@ OTB_TEST_APPLICATION(NAME apTvDmStereoFramework
                                 -postproc.med 1 
                                 -postproc.bij 1 
                                 -output.res 1.
-                                -output.out ${TEMP}/StereoFrameworkHaiti.tif                       
-                    # VALID   --compare-image ${EPSILON_10}
-                    #         ${BASELINE_EXAMPLE}/elevationOutput.tif
-                    #         ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
+                                -output.out ${TEMP}/apTvStereoFrameworkHaiti.tif                       
+                     VALID   --compare-image ${EPSILON_10}
+                             ${BASELINE}/apTvStereoFrameworkHaiti.tif
+                             ${TEMP}/apTvStereoFrameworkHaiti.tif
                      )  
                      
                      
@@ -189,10 +189,10 @@ OTB_TEST_APPLICATION(NAME apTvDmStereoFramework
                                 -postproc.med 1 
                                 -postproc.bij 1 
                                 -output.res 1.
-                                -output.out ${TEMP}/StereoFrameworkHaiti2.tif                       
-                    # VALID   --compare-image ${EPSILON_10}
-                    #         ${BASELINE_EXAMPLE}/elevationOutput.tif
-                    #         ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
+                                -output.out ${TEMP}/apTvStereoFrameworkHaiti2.tif                       
+                      VALID   --compare-image ${EPSILON_10}
+                            ${BASELINE}/apTvStereoFrameworkHaiti2.tif
+                            ${TEMP}/apTvStereoFrameworkHaiti2.tif
                      )                      
 
 
