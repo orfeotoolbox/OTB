@@ -119,6 +119,12 @@ private:
     otbAppLogINFO("Loading model");
     m_Model = MachineLearningModelFactoryType::CreateMachineLearningModel(GetParameterString("model"),
                                                                           MachineLearningModelFactoryType::ReadMode);
+
+    if (m_Model.IsNull())
+      {
+      otbAppLogFATAL(<< "Error when loading model " << GetParameterString("model") << " : unsupported model type");
+      }
+
     m_Model->Load(GetParameterString("model"));
     otbAppLogINFO("Model loaded");
 

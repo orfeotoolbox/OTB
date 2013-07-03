@@ -214,6 +214,12 @@ void TrainImagesClassifier::Classify(ListSampleType::Pointer validationListSampl
   //Classification
   ModelPointerType model = MachineLearningModelFactoryType::CreateMachineLearningModel(GetParameterString("io.out"),
                                                                                        MachineLearningModelFactoryType::ReadMode);
+
+  if (model.IsNull())
+    {
+    otbAppLogFATAL(<< "Error when loading model " << GetParameterString("io.out"));
+    }
+
   model->Load(GetParameterString("io.out"));
   model->SetInputListSample(validationListSample);
   model->SetTargetListSample(predictedList);
