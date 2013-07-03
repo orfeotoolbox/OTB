@@ -364,7 +364,7 @@ private:
     AddParameter(ParameterType_Group, "output", "Output parameters");
     SetParameterDescription("output","This group of parameters allows to choose the DSM resolution, nodata value, and projection parameters.");
 
-    // // Build the Output Map Projection - Commented until bug fix
+    // // Build the Output Map Projection
     // for custom map projection
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
     SetParameterString("map","wgs");
