@@ -1,44 +1,6 @@
 SET(EPSILON_10 0.0000000001)
 SET(BASELINE_EXAMPLE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)
 SET(DEM_DATA   ${OTB_DATA_ROOT}/Input/DEM/srtm_directory)
-#--- StereoSensorModelToElevationMap ---#
-
-OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapTest
-                     APP  StereoSensorModelToElevationMap
-                     OPTIONS -ref ${EXAMPLEDATA}/sensor_stereo_left.tif
-                             -sec ${EXAMPLEDATA}/sensor_stereo_right.tif
-                             -out ${TEMP}/apTvDmStereoSensorModelToElevationMapTest.tif
-                             -r 3
-                             -ct 0.7
-                             -vt 4.0
-                             -minh -20.0
-                             -maxh 20.0
-                             -step 1.0
-                             -elev.dem ${INPUTDATA}/DEM/srtm_directory/
-                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
-                     VALID   --compare-image ${EPSILON_10}
-                             ${BASELINE}/apTvDmStereoSensorModelToElevationMapTest.tif
-                             ${TEMP}/apTvDmStereoSensorModelToElevationMapTest.tif)
-
-OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapWithSmoothing
-                     APP  StereoSensorModelToElevationMap
-                     OPTIONS -ref ${EXAMPLEDATA}/sensor_stereo_left.tif
-                             -sec ${EXAMPLEDATA}/sensor_stereo_right.tif
-                             -out ${TEMP}/apTvDmStereoSensorModelToElevationMapWithSmoothing.tif
-                             -r 3
-                             -ct 0.7
-                             -vt 4.0
-                             -minh -20.0
-                             -maxh 20.0
-                             -step 1.0
-                             -elev.dem ${INPUTDATA}/DEM/srtm_directory/
-                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
-                             -rgs 2.0
-                             -sgs 2.0
-                     VALID   --compare-image ${EPSILON_10}
-                             ${BASELINE}/apTvDmStereoSensorModelToElevationMapWithSmoothing.tif
-                             ${TEMP}/apTvDmStereoSensorModelToElevationMapWithSmoothing.tif)
-
 #--- FineRegistration ---#
 OTB_TEST_APPLICATION(NAME apTvDmFineRegistrationTest
                      APP  FineRegistration

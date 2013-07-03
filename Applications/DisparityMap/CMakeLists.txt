@@ -1,8 +1,3 @@
-
-OTB_CREATE_APPLICATION(NAME           StereoSensorModelToElevationMap
-                       SOURCES        otbStereoSensorModelToElevationMap.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
-
 OTB_CREATE_APPLICATION(NAME           FineRegistration
                        SOURCES        otbFineRegistration.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
