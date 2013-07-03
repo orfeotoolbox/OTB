@@ -124,7 +124,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(labelVotingFilter->GetOutput());
   writer->SetFileName(outfname);

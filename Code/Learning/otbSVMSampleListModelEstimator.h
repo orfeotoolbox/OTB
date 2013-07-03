@@ -103,7 +103,7 @@ public:
  * \sa MachineLearningModel
  * \sa LibSVMMachineLearningModel
  * \sa ImageClassificationFilter
- * 
+ *
  * \ingroup ClassificationFilters
  */
 template <class TInputSampleList,

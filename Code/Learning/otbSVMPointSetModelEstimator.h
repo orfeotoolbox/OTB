@@ -47,7 +47,7 @@ namespace otb
  * \sa MachineLearningModel
  * \sa LibSVMMachineLearningModel
  * \sa ImageClassificationFilter
- * 
+ *
  * \ingroup ClassificationFilters
  */
 template <class TInputPointSet, class TTrainingPointSet>

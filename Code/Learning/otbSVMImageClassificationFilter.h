@@ -32,11 +32,11 @@ namespace otb
  *  while fully using several core.
  *
  * \deprecated
- * 
+ *
  * \sa MachineLearningModel
  * \sa LibSVMMachineLearningModel
  * \sa ImageClassificationFilter
- * 
+ *
  * \ingroup Streamed
  * \ingroup Threaded
  */

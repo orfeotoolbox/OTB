@@ -47,7 +47,7 @@ namespace otb
  * the Subsample objects act as separate class masks.
  *
  * \deprecated
- * 
+ *
  * \sa MachineLearningModel
  * \sa LibSVMMachineLearningModel
  * \sa ImageClassificationFilter

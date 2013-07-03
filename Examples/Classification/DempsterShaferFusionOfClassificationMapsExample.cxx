@@ -173,7 +173,6 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &m
 
 
 
-
 int main(int argc, char * argv[])
 {
 // Software Guide : BeginLatex
@@ -203,7 +202,6 @@ int main(int argc, char * argv[])
   //
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageList<LabelImageType> LabelImageListType;
   typedef otb::ImageListToVectorImageFilter
             <LabelImageListType, VectorImageType> ImageListToVectorImageFilterType;
@@ -321,7 +319,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(dsFusionFilter->GetOutput());
   writer->SetFileName(outfname);
