@@ -234,8 +234,11 @@ own framework.
 \label{sec:MLGenericFramework}
 
 The OTB supervised classification is implemented as a generic Machine Learning 
-framework based on the OpenCV library (\cite{opencv_library}). Thus, several 
-classifiers are available through the same generic interface within the OTB:
+framework, supporting several possible machine learning library as backends.
+As of now both libSVM (the machine learning library historically integrated in OTB)
+and the machin learning methods of OpenCV library (\cite{opencv_library}) are available.
+
+The current list of classifiers available through the same generic interface within the OTB is:
 
 \begin{itemize}
   \item \textbf{LibSVM}: Support Vector Machines classifier based on libSVM.
