@@ -191,10 +191,17 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       glDeleteTextures(1,&m_Texture);
       glGenTextures(1, &m_Texture);
       glBindTexture(GL_TEXTURE_2D, m_Texture);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
-                   scaledRegion.GetSize()[0],
-                   scaledRegion.GetSize()[1], 
-                   0, GL_BGRA, GL_UNSIGNED_BYTE, m_Buffer.data());
+      glTexImage2D(
+	GL_TEXTURE_2D, 0, GL_RGBA8,
+	scaledRegion.GetSize()[0],
+	scaledRegion.GetSize()[1], 
+	0, GL_BGRA, GL_UNSIGNED_BYTE,
+#if USE_BYTE_POINTER_bis
+	m_Buffer.data()
+#else
+	m_Buffer
+#endif
+      );
 
       // With MSVC10, GL_TEXTURE_BASE_LEVEL && GL_TEXTURE_MAX_LEVEL
       // are not defined
