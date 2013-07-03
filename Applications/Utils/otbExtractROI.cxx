@@ -61,7 +61,7 @@ private:
 
     // Documentation
     SetDocName("Extract ROI");
-    SetDocLongDescription("This application extracts a Region Of Interest with user defined size.");
+    SetDocLongDescription("This application extracts a Region Of Interest with user defined size, or reference image.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
