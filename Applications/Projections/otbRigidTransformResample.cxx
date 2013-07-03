@@ -85,7 +85,8 @@ private:
     SetDescription("Resample an image with a rigid transform");
     // Documentation
     SetDocName("Image resampling with a rigid transform");
-    SetDocLongDescription("This application performs an translation on the input image.\n Parameters of the translation can be set with tx and ty options.");
+    SetDocLongDescription("This application performs a parametric transform on the input image. Scaling, translation and rotation with scaling factor are handled."
+        " Parameters of the transform are expressed in physical units, thus particular attention must be paid on pixel size (value, and sign).");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation");
@@ -96,7 +97,7 @@ private:
     AddParameter(ParameterType_InputImage,   "in",   "Input image");
     SetParameterDescription("in","The input image to translate.");
     AddParameter(ParameterType_OutputImage,  "out",  "Output image");
-    SetParameterDescription("out","The translated output image.");
+    SetParameterDescription("out","The transformed output image.");
 
     //Transform
     AddParameter(ParameterType_Group,"transform","Transform parameters");
