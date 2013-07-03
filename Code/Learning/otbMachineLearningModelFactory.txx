@@ -87,12 +87,11 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
 ::RegisterBuiltInFactories()
 {
   itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
+  
+  RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 
 #ifdef OTB_USE_OPENCV
-  // KNN Format for OTB
-  //itk::ObjectFactoryBase::RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(RandomForestsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-  RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(SVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(BoostMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue>::New());
