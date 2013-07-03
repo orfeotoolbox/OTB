@@ -479,6 +479,68 @@ presented in section \ref{sec:KullbackLeiblerProfile}.
 
 
 
+
+\section{Fusion of Classification maps}
+
+\subsection{General approach of image fusion}
+In order to obtain a relevant image classification it is sometimes necessary to 
+fuse several classification maps coming from different classification methods 
+(SVM, KNN, Random Forest, Artificial Neural Networks,...). The fusion of 
+classification maps combines them in a more robust and precise one. Two methods are 
+available in the OTB: the majority voting and the Demspter Shafer framework.
+
+
+\subsection{Majority voting}
+\subsubsection{General description}
+For each input pixel, the Majority Voting method consists in choosing the more 
+frequent class label among all classification maps to fuse. In case of not unique 
+more frequent class labels, the undecided value is set for such pixels in 
+the fused output image.
+
+\subsubsection{An example of majority voting fusion}
+\ifitkFullVersion
+\input{MajorityVotingFusionOfClassificationMapsExample.tex}
+\fi
+
+
+\subsection{Dempster Shafer}
+
+\subsubsection{General description}
+A more adaptive fusion method using the 
+\href{http://en.wikipedia.org/wiki/Dempster\%E2\%80\%93Shafer_theory}{Dempster-Shafer theory} 
+is available within the OTB. This method is adaptive as it is based on the 
+so-called belief function of each class label for each classification map. Thus, 
+each classified pixel is associated to a degree of confidence according to the 
+classifier used. In the Dempster Shafer framework, the expert's point of view 
+(i.e. with a high belief function) is considered as the truth. In order to 
+estimate the belief function of each class label, we use the Dempster Shafer 
+combination of masses of belief for each class label and for each classification 
+map. In this framework, the output fused label of each pixel is the one with the 
+maximal belief function.
+
+Like for the majority voting method, the Dempster Shafer fusion handles not 
+unique class labels with the maximal belief function. In this case, the output 
+fused pixels are set to the undecided value.
+
+The confidence levels of all the class labels are estimated from a comparision of 
+the classification maps to fuse with a ground truth, which results in a 
+confusion matrix. For each classification maps, these confusion matrices are then 
+used to estimate the mass of belief of each class label.
+
+
+\subsubsection{Mathematical formulation of the combination algorithm}
+
+A description of the mathematical formulation of the Dempster Shafer combination 
+algorithm is available in the following OTB Wiki page:
+\href{http://wiki.orfeo-toolbox.org/index.php/Information_fusion_framework}{http://wiki.orfeo-toolbox.org/index.php/} page.
+
+\subsubsection{An example of Dempster Shafer fusion}
+\ifitkFullVersion
+\input{DempsterShaferFusionOfClassificationMapsExample.tex}
+\fi
+
+
+
 \section{Classification map regularization}
 
 %\subsection{Regularization by neighborhood-based majority voting}
