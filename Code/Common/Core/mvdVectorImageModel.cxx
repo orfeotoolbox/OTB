@@ -69,7 +69,11 @@ VectorImageModel
   AbstractImageModel( parent ),
   m_Image(),
   m_ImageFileReader(),
+#if USE_BYTE_POINTER
+  m_RasterizedBuffer(),
+#else
   m_RasterizedBuffer( NULL ),
+#endif
   m_ExtractFilter(),
   m_RenderingFilter(),
   m_Settings(),
@@ -370,13 +374,21 @@ void
 VectorImageModel
 ::ClearBuffer()
 {
+#if USE_BYTE_POINTER
+  m_RasterizedBuffer.clear();
+#else
   // Delete previous buffer if needed
   delete[] m_RasterizedBuffer;
   m_RasterizedBuffer = NULL;
+#endif
 }
 
 /*****************************************************************************/
+#if USE_BYTE_POINTER
+VectorImageModel::BytePointer
+#else
 unsigned char *
+#endif
 VectorImageModel
 ::RasterizeRegion( const ImageRegionType& region,
 		   const double zoomFactor,
@@ -413,22 +425,43 @@ VectorImageModel
       // within the new requested region
       this->ComputeRegionsToLoad(m_Region);
 
+      // Buffer size.
+      size_t nbPixels0 = 4 * m_PreviousRegion.GetNumberOfPixels();
+
       // Copy the previous buffer into a temporary buf to access the
       // previously loaded data
-      unsigned char * previousRasterizedBuffer =  
-        new unsigned char[4 * m_PreviousRegion.GetNumberOfPixels()];
+#if USE_BYTE_POINTER
+      BytePointer previousRasterizedBuffer( new unsigned char[ nbPixels0 ] );
+#else
+      unsigned char * previousRasterizedBuffer = new unsigned char[ nbPixels0 ];
+#endif
 
-      std::memcpy(previousRasterizedBuffer, m_RasterizedBuffer, 4 * m_PreviousRegion.GetNumberOfPixels());
+      std::memcpy(
+#if USE_BYTE_POINTER
+	previousRasterizedBuffer.data(),
+	m_RasterizedBuffer.data(),
+#else
+	previousRasterizedBuffer,
+	m_RasterizedBuffer,
+#endif
+	nbPixels0
+      );
 
       // Clear the previous buffer 
-      this->ClearBuffer();
+      ClearBuffer();
 
       // Allocate new memory
       unsigned int nbPixels = 4 * region.GetNumberOfPixels();
-      m_RasterizedBuffer = new unsigned char[nbPixels];
-    
+
+#if USE_BYTE_POINTER
+      m_RasterizedBuffer = BytePointer( new unsigned char[ nbPixels ] );
+#else
+      m_RasterizedBuffer = new unsigned char[ nbPixels ];
+#endif
+
       // Copy the already loaded pixels into the m_RasterizedBuffer
       unsigned int previousNbPixels = m_PreviousRegion.GetNumberOfPixels();
+
       
       for (unsigned int idx = 0; idx < previousNbPixels; idx++)
         {
@@ -444,36 +477,64 @@ VectorImageModel
           newBufferindex = ComputeXAxisFlippedBufferIndex(imageIndex, m_Region);
           
           // Copy the already loaded values into the new buffer
-          m_RasterizedBuffer[newBufferindex]     = previousRasterizedBuffer[4*idx];
-          m_RasterizedBuffer[newBufferindex + 1] = previousRasterizedBuffer[4*idx + 1];
-          m_RasterizedBuffer[newBufferindex + 2] = previousRasterizedBuffer[4*idx + 2];
-          m_RasterizedBuffer[newBufferindex + 3] = previousRasterizedBuffer[4*idx + 3];
+#if USE_BYTE_POINTER
+          m_RasterizedBuffer.data()[ newBufferindex ] =
+	    previousRasterizedBuffer.data()[ 4*idx ];
+
+          m_RasterizedBuffer.data()[ newBufferindex + 1 ] =
+	    previousRasterizedBuffer.data()[ 4*idx + 1 ];
+
+          m_RasterizedBuffer.data()[ newBufferindex + 2 ] =
+	    previousRasterizedBuffer.data()[ 4*idx + 2 ];
+
+          m_RasterizedBuffer.data()[ newBufferindex + 3 ] =
+	    previousRasterizedBuffer.data()[ 4*idx + 3 ];
+#else
+          m_RasterizedBuffer[ newBufferindex ] =
+	    previousRasterizedBuffer[ 4*idx ];
+
+          m_RasterizedBuffer[ newBufferindex + 1 ] =
+	    previousRasterizedBuffer[ 4*idx + 1 ];
+
+          m_RasterizedBuffer[ newBufferindex + 2 ] =
+	    previousRasterizedBuffer[ 4*idx + 2 ];
+
+          m_RasterizedBuffer[ newBufferindex + 3 ] =
+	    previousRasterizedBuffer[ 4*idx + 3 ];
+#endif
           }
         }
       
       // Dump pixels not loaded in the m_RasterizedBuffer
       for (unsigned int idx = 0; idx < m_RegionsToLoadVector.size() ; idx++)
         {
-        this->DumpImagePixelsWithinRegionIntoBuffer(m_RegionsToLoadVector[idx]);
+        DumpImagePixelsWithinRegionIntoBuffer(m_RegionsToLoadVector[idx]);
         }
 
+#if USE_BYTE_POINTER
+      previousRasterizedBuffer.clear();
+#else
       // free the previous buffer memory (copied one)
-      if (previousRasterizedBuffer != NULL)
-        {
-        delete[] previousRasterizedBuffer;
-        previousRasterizedBuffer = NULL;
-        }
+      delete[] previousRasterizedBuffer;
+      previousRasterizedBuffer = NULL;
+#endif
       }
     else
       {
       // Delete previous buffer if needed
-      this->ClearBuffer();
+      ClearBuffer();
  
       // Allocate new memory
-      m_RasterizedBuffer = new unsigned char[4 * region.GetNumberOfPixels()];
+#if USE_BYTE_POINTER
+      m_RasterizedBuffer =
+	BytePointer( new unsigned char[ 4 * region.GetNumberOfPixels() ] );
+#else
+      m_RasterizedBuffer =
+	new unsigned char[ 4 * region.GetNumberOfPixels() ];
+#endif
 
       // rasterize the region
-      this->DumpImagePixelsWithinRegionIntoBuffer(region);
+      DumpImagePixelsWithinRegionIntoBuffer(region);
       }
     }
 
@@ -546,12 +607,21 @@ VectorImageModel
     index = ComputeXAxisFlippedBufferIndex(it.GetIndex(), m_Region);
 
     // Fill the buffer
+#if USE_BYTE_POINTER
+    m_RasterizedBuffer.data()[ index]      = it.Get()[ 2 ];
+    m_RasterizedBuffer.data()[ index + 1 ] = it.Get()[ 1 ];
+    m_RasterizedBuffer.data()[ index + 2 ] = it.Get()[ 0 ]; 
+
+    // Could be changed later for real alpha channal
+    m_RasterizedBuffer.data()[ index + 3 ] = 255;
+#else
     m_RasterizedBuffer[index]  = it.Get()[2];
     m_RasterizedBuffer[index + 1] = it.Get()[1];
     m_RasterizedBuffer[index + 2] = it.Get()[0]; 
 
     // Could be changed later for real alpha channal
     m_RasterizedBuffer[index + 3] = 255;
+#endif
     ++it;
     }
 }

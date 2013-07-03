@@ -44,6 +44,8 @@
 #include "Core/mvdTypes.h"
 #include "Gui/mvdAbstractModelRenderer.h"
 
+#define USE_BYTE_POINTER_bis 1
+
 //
 // External classes pre-declaration.
 namespace
@@ -67,6 +69,10 @@ class ImageModelRenderer :
 //
 // Public types.
 public:
+#if USE_BYTE_POINTER_bis
+  typedef QSharedPointer< unsigned char > BytePointer;
+#endif
+
 //
 // Public methods.
 public:
@@ -112,7 +118,12 @@ private:
 //
 // Private attributes.
 private:
+#if USE_BYTE_POINTER_bis
+  BytePointer m_Buffer;
+#else
   unsigned char * m_Buffer;
+#endif
+
   bool m_IsMoving;
 
   double m_PreviousOriginX;

@@ -51,6 +51,8 @@
 #include "Core/mvdTypes.h"
 #include "Gui/mvdColorSetupWidget.h"
 
+#define USE_BYTE_POINTER 1
+
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
@@ -90,6 +92,12 @@ public:
    * In-memory storage type of source image (from file).
    */
   typedef DefaultImageType SourceImageType;
+
+  /**
+   */
+#if USE_BYTE_POINTER
+  typedef QSharedPointer< unsigned char > BytePointer;
+#endif
 
   /**
    * \brief WIP.
@@ -393,9 +401,14 @@ public:
   inline QString GetFilename() const;
 
   /** Rasterize the buffered region in a buffer */
-  unsigned char * RasterizeRegion(const ImageRegionType& region,
-                                  const double zoomFactor,
-                                  bool refresh);
+#if USE_BYTE_POINTER
+  BytePointer
+#else
+  unsigned char *
+#endif
+    RasterizeRegion( const ImageRegionType& region,
+		     const double zoomFactor,
+		     bool refresh );
 
   /**
    * Following the zoom factor, get the best level of detail
@@ -618,8 +631,12 @@ private:
   // Default image reader
   DefaultImageFileReaderType::Pointer m_ImageFileReader;
 
+#if USE_BYTE_POINTER
+  BytePointer m_RasterizedBuffer;
+#else
   // Buffer where to store the image pixels needed by the renderer
-  unsigned char *                     m_RasterizedBuffer;
+  unsigned char* m_RasterizedBuffer;
+#endif
 
   // Extract filter
   ExtractFilterType::Pointer m_ExtractFilter;

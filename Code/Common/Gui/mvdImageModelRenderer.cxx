@@ -57,7 +57,11 @@ namespace mvd
 ImageModelRenderer
 ::ImageModelRenderer( QObject* parent ) :
   AbstractModelRenderer( parent ),
+#if USE_BYTE_POINTER_bis
+  m_Buffer(),
+#else
   m_Buffer( NULL ),
+#endif
   m_IsMoving(false),
   m_PreviousOriginX( 0.0 ),
   m_PreviousOriginY( 0.0 ),
@@ -190,7 +194,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
                    scaledRegion.GetSize()[0],
                    scaledRegion.GetSize()[1], 
-                   0, GL_BGRA, GL_UNSIGNED_BYTE, m_Buffer);
+                   0, GL_BGRA, GL_UNSIGNED_BYTE, m_Buffer.data());
 
       // With MSVC10, GL_TEXTURE_BASE_LEVEL && GL_TEXTURE_MAX_LEVEL
       // are not defined
