@@ -33,4 +33,8 @@ OTB_CREATE_APPLICATION(NAME LocalStatisticExtraction
      
 OTB_CREATE_APPLICATION(NAME EdgeExtraction
                        SOURCES otbEdgeExtraction.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction)                     
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction)
+
+OTB_CREATE_APPLICATION(NAME DimensionalityReduction
+                       SOURCES otbDimensionalityReduction.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
