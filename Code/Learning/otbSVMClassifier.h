@@ -18,6 +18,8 @@
 #ifndef __otbSVMClassifier_h
 #define __otbSVMClassifier_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkSampleClassifier.h"
 #include "otbSVMModel.h"
 #include "itkVectorImage.h"
@@ -44,6 +46,11 @@ namespace otb
  * The InstanceIdentifiers come from the target sample data. Therefore,
  * the Subsample objects act as separate class masks.
  *
+ * \deprecated
+ * 
+ * \sa MachineLearningModel
+ * \sa LibSVMMachineLearningModel
+ * \sa ImageClassificationFilter
  *
  */
 

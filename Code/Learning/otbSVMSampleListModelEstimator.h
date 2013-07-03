@@ -18,6 +18,8 @@
 #ifndef __otbSVMSampleListModelEstimator_h
 #define __otbSVMSampleListModelEstimator_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkImageModelEstimatorBase.h"
 #include "itkImageRegionIterator.h"
 #include "otbSVMModel.h"
@@ -96,6 +98,12 @@ public:
  * vector. The classified data is treated as a single band scalar
  * data.
  *
+ * \deprecated
+ *
+ * \sa MachineLearningModel
+ * \sa LibSVMMachineLearningModel
+ * \sa ImageClassificationFilter
+ * 
  * \ingroup ClassificationFilters
  */
 template <class TInputSampleList,

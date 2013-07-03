@@ -18,6 +18,8 @@
 #ifndef __otbSVMImageClassificationFilter_h
 #define __otbSVMImageClassificationFilter_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkInPlaceImageFilter.h"
 #include "otbSVMModel.h"
 
@@ -29,7 +31,12 @@ namespace otb
  *  This filter is streamed and threaded, allowing to classify huge images
  *  while fully using several core.
  *
- * \sa SVMClassifier
+ * \deprecated
+ * 
+ * \sa MachineLearningModel
+ * \sa LibSVMMachineLearningModel
+ * \sa ImageClassificationFilter
+ * 
  * \ingroup Streamed
  * \ingroup Threaded
  */

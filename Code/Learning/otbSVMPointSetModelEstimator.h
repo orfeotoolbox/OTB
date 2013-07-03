@@ -18,6 +18,8 @@
 #ifndef __otbSVMPointSetModelEstimator_h
 #define __otbSVMPointSetModelEstimator_h
 
+#include "vcl_deprecated_header.h"
+
 #include "otbSVMModelEstimator.h"
 
 namespace otb
@@ -40,6 +42,12 @@ namespace otb
  * vector. The classified data is treated as a single band scalar
  * data.
  *
+ * \deprecated
+ *
+ * \sa MachineLearningModel
+ * \sa LibSVMMachineLearningModel
+ * \sa ImageClassificationFilter
+ * 
  * \ingroup ClassificationFilters
  */
 template <class TInputPointSet, class TTrainingPointSet>

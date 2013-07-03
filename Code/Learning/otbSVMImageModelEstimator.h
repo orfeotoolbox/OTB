@@ -18,6 +18,8 @@
 #ifndef __otbSVMImageModelEstimator_h
 #define __otbSVMImageModelEstimator_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkImageModelEstimatorBase.h"
 #include "itkImageRegionIterator.h"
 #include "otbSVMModel.h"
@@ -40,7 +42,13 @@ namespace otb
  * image is treated as a vector image with a single element for every
  * vector. The classified image is treated as a single band scalar
  * image.
+ * 
+ * \deprecated
  *
+ * \sa MachineLearningModel
+ * \sa LibSVMMachineLearningModel
+ * \sa ImageClassificationFilter
+ * 
  * \ingroup ClassificationFilters
  */
 template <class TInputImage, class TTrainingImage>
