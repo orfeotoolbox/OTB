@@ -24,6 +24,7 @@
   std::ostringstream message; \
   message << "" x << std::endl; \
   this->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() ); \
+  itkGenericExceptionMacro(<< "Fatal error caught. Aborting..."); \
   }
 
 #define otbAppLogCRITICAL(x) \
