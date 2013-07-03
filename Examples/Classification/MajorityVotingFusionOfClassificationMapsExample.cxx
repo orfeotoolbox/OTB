@@ -21,7 +21,7 @@
 //
 // The Majority Voting fusion filter \doxygen{itk}{LabelVotingImageFilter} used is based on ITK.
 // For each pixel, it chooses the more frequent class label among the input classification maps.
-// In case of not unique class labels, the output pixel is set to the \emph{undecidedLabel} value.
+// In case of not unique more frequent class labels, the output pixel is set to the \emph{undecidedLabel} value.
 // We start by including the appropriate header file.
 //
 // Software Guide : EndLatex
