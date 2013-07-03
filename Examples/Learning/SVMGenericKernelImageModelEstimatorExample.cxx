@@ -23,7 +23,7 @@
 // This example illustrates the modifications to be added to the
 // use of \doxygen{otb}{SVMImageModelEstimator} in order to add a
 // user defined kernel. This initial program has been explained in section
-// \ref{sec:LearningWithImages}.
+// \ref{ssec:LearningFromImages}.
 //
 // The first thing to do is to include the header file for the new kernel.
 //

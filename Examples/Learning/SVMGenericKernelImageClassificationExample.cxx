@@ -33,8 +33,7 @@
 // classification on images with a user-defined kernel.
 // In this example, we will use an SVM model estimated in the previous
 // section to separate between water and non-water pixels by using the RGB
-// values only. The images used for this example are shown in
-// figure~\ref{fig:SVMROIS}.
+// values only.
 // The first thing to do is include the header file for the
 // class as well as the header of the appropriated kernel to be used.
 //
@@ -98,7 +97,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginLatex
 //
 // After instantiation, we can load a model saved to a file (see
-// section \ref{sec:LearningWithImages} for an example of model
+// section \ref{ssec:LearningFromImages} for an example of model
 // estimation and storage to a file).
 //
 // When using a user defined kernel, an explicit instanciation has
