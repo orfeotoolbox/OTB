@@ -140,3 +140,22 @@ OTB_TEST_APPLICATION(NAME apTvHomologousPointsExtractionGeoBins
                      VALID   --compare-ascii ${EPSILON_9}
                              ${BASELINE_FILES}/apTvHomologousPointsExtractionGeoBins.txt
                              ${TEMP}/apTvHomologousPointsExtractionGeoBins.txt)
+
+OTB_TEST_APPLICATION(NAME   apTvFEDimensionalityReductionPCA
+                     APP  DimensionalityReduction
+                     OPTIONS -in ${INPUTDATA}/cupriteSubHsi.tif
+                             -out ${TEMP}/apTvChDimensionalityReductionPCA.tif
+                             -method pca
+                     VALID   --compare-image 0.025
+                             ${BASELINE}/bfTvPCAImageFilter3.tif
+                             ${TEMP}/apTvChDimensionalityReductionPCA.tif)
+
+OTB_TEST_APPLICATION(NAME   apTvFEDimensionalityReductionMAF
+                     APP  DimensionalityReduction
+                     OPTIONS -in ${INPUTDATA}/cupriteSubHsi.tif
+                             -out ${TEMP}/apTvFEDimensionalityReductionMAF.tif
+                             -method maf
+                     VALID   --compare-image 0.025
+                             ${BASELINE}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
+                             ${TEMP}/apTvFEDimensionalityReductionMAF.tif)
+                             
