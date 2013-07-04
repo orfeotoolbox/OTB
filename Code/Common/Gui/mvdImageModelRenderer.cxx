@@ -184,7 +184,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
 
     // needed cause RGB not RGBA rendering. 
     //glPixelStorei(GL_UNPACK_ALIGNMENT,1); 
-                                
+                               
     // Load texture 
     if(!m_IsMoving)
       {
