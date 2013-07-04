@@ -173,27 +173,24 @@ PixelDescriptionWidget
     // fill with the new values
     m_GeographicRootItem->setText(0, QString("%1").arg(currentGeo[0]));
   
-    if (currentGeo[1] != "" || currentGeo[2] != "" || currentGeo[3] != "")
-      {
-      QTreeWidgetItem * iGeoLongItem = new QTreeWidgetItem( m_GeographicRootItem );
-      iGeoLongItem->setText(0,QString( tr("Long") ));
-      iGeoLongItem->setText(1, QString("%1").arg(currentGeo[1] ) );
+    QTreeWidgetItem * iGeoLongItem = new QTreeWidgetItem( m_GeographicRootItem );
+    iGeoLongItem->setText(0,QString( tr("Long") ));
+    iGeoLongItem->setText(1, QString("%1").arg(currentGeo[1] ) );
 
-      QTreeWidgetItem * iGeoLatItem = new QTreeWidgetItem( m_GeographicRootItem );
-      iGeoLatItem->setText(0,QString( tr("Lat") ));
-      iGeoLatItem->setText(1, QString("%1").arg(currentGeo[2] ) );
+    QTreeWidgetItem * iGeoLatItem = new QTreeWidgetItem( m_GeographicRootItem );
+    iGeoLatItem->setText(0,QString( tr("Lat") ));
+    iGeoLatItem->setText(1, QString("%1").arg(currentGeo[2] ) );
 
-      QTreeWidgetItem * iGeoElevationItem = new QTreeWidgetItem( m_GeographicRootItem );
-      iGeoElevationItem->setText(0,QString( tr("Elevation") ));
-      if(currentGeo.size() > 2)
-        {
-        iGeoElevationItem->setText(1, QString("%1").arg(currentGeo[3] ) );
-        }
-      else
-        {
-        iGeoElevationItem->setText(1, QString(tr("Not available")));
-        }
-      }
+    QTreeWidgetItem * iGeoElevationItem = new QTreeWidgetItem( m_GeographicRootItem );
+    iGeoElevationItem->setText(0,QString( tr("Elevation") ));
+  if(currentGeo.size() > 2)
+    {
+    iGeoElevationItem->setText(1, QString("%1").arg(currentGeo[2] ) );
+    }
+  else
+    {
+    iGeoElevationItem->setText(1, QString(tr("Not available")));
+    }
     }
 }                       
 /*******************************************************************************/
