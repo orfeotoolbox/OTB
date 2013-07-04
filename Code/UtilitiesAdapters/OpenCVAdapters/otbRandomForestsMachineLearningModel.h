@@ -71,10 +71,10 @@ public:
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &) = 0;
+  virtual bool CanReadFile(const std::string &);
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &)  = 0;
+  virtual bool CanWriteFile(const std::string &);
   //@}
 
   //Setters of RT parameters (documentation get from opencv doxygen 2.4)
