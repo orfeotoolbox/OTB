@@ -1015,17 +1015,20 @@ VectorImageModel
     // get the physical coordinates
     if (!ToImage()->GetProjectionRef().empty())
       {
-      cartoVector.push_back("Cartographic");
-      }
-    else
-      {
-      cartoVector.push_back("Physical");
-      }
+      //ossPhysical.str("");
+      //ossPhysical<<"[" << Xpc <<","<< Ypc << "]";
       ossPhysicalX << Xpc;
       ossPhysicalY << Ypc;
 
       cartoVector.push_back(ossPhysicalX.str());
       cartoVector.push_back(ossPhysicalY.str());
+      }
+    else
+      {
+      //No cartographic info available
+      cartoVector.push_back("");
+      cartoVector.push_back("");
+      }
 
     // index in current Lod image
     IndexType currentLodIndex;
@@ -1034,18 +1037,6 @@ VectorImageModel
     
     //
     // get the LatLong
-    if (!ToImage()->GetProjectionRef().empty()) 
-      {
-      geoVector.push_back("Geographic(exact)");
-      }
-    else if (ToImage()->GetImageKeywordlist().GetSize() != 0)
-      {
-      geoVector.push_back("Geographic(using sensor model)");
-      }
-    else
-      {
-      geoVector.push_back("No geoinfo");
-      }
     
     if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex))
       {
@@ -1088,9 +1079,6 @@ VectorImageModel
       //displays geographic info when the user is scrolling over the QL
       //
       // compute the current ql index
-
-      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0) 
-        {
       currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0]) 
         / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[0]);
       currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1]) 
@@ -1119,16 +1107,8 @@ VectorImageModel
          geoVector.push_back(ossGeographicElevation.str());
          }
       }
-    else
-      {
-      //No geoinfo available
-      geoVector.push_back("");
-      geoVector.push_back("");
-      geoVector.push_back("");
-      }
-      }
     geoList = ToQStringList( geoVector );
-    
+
     //
     // Display the radiometry of the displayed channels
     Settings::ChannelVector rgb;
