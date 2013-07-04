@@ -6,9 +6,8 @@ the following main functionnalities :
  * Huge improvements in Stereo framework, to compute DEM from stereo pairs :
    check the StereoFramework application !
  * Whole new classification framework, with seamless integration of all OpenCV classifiers in addition to the
-   existing SVM classifier, kept for backward compatibility : check the TrainImageClassifier application !
+   existing libSVM classifier, kept for backward compatibility : check the TrainImageClassifier application !
  * A classifiers fusion framework based on Dempster Shafer theory : check the FusionOfClassifications application !
-
 
 The full list of improvements comes here :
  
@@ -86,6 +85,8 @@ The full list of improvements comes here :
         * Add support for final projection of DEM in other SRS than WGS84
       * ExtractROI : add a mode to fit another reference image
       * StereoRectificationGridGenerator : disable agvdem by default
+      * StereoSensorModelToElevationMap application removed to avoid duplicating functionnalities provided by StereoFramework
+      * MaxiumuAutocorrelationFactor application removed to avoid duplicating functionnalities provided by DimensionnalityReduction
       * BlockMatching : expose step parameter
       * BlockMatching : supports a shift on the subsampled grid
       * ColorMapping : remove flooding of logs
