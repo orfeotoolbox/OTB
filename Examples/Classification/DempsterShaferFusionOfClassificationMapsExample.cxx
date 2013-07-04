@@ -172,7 +172,6 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &m
   }
 
 
-
 int main(int argc, char * argv[])
 {
 // Software Guide : BeginLatex
