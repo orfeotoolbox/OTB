@@ -85,7 +85,7 @@ DatasetModel
     }
   catch(...)
     {
-    qWarning() <<" Exception cauht while checking for version compliance on dataset "<<name<<" in directory "<<path;
+    qWarning() <<" Exception caught while checking for version compliance on dataset "<<name<<" in directory "<<path;
     return false;
     }
 }
