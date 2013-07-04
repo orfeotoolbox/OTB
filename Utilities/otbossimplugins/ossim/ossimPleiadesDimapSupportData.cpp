@@ -950,8 +950,6 @@ namespace ossimplugins
          }
       }
 
-      const char* lookup;
-
       theImageSize      = createIpt(kwl.find(prefix, "image_size"));
       theRefGroundPoint = createGround(kwl.find(prefix, "reference_ground_point"));
       theRefImagePoint  = createDpt(kwl.find(prefix, "reference_image_point"));
