@@ -1,4 +1,4 @@
-OTB-v.3.18 - Changes since version 3.16 (2013/06/21)
+OTB-v.3.18 - Changes since version 3.16 (2013/07/05)
 --------------------------------------------------------
 
 Among the classical improvements and bug fixes to exisiting functionnalities, this release provides 
