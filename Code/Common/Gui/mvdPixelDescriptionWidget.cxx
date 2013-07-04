@@ -179,7 +179,14 @@ PixelDescriptionWidget
 
   QTreeWidgetItem * iGeoElevationItem = new QTreeWidgetItem( m_GeographicRootItem );
   iGeoElevationItem->setText(0,QString( tr("Elevation") ));
-  iGeoElevationItem->setText(1, QString("%1").arg(currentGeo[2] ) );
+  if(currentGeo.size() > 2)
+    {
+    iGeoElevationItem->setText(1, QString("%1").arg(currentGeo[2] ) );
+    }
+  else
+    {
+    iGeoElevationItem->setText(1, QString(tr("Not available")));
+    }
     }
 }                       
 /*******************************************************************************/
