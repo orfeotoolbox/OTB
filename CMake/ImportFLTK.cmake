@@ -76,6 +76,9 @@ IF(OTB_USE_VISU_GUI)
           SET(FLUID_COMMAND fluid)
           # FLTK CMake needs a variable called JPEG_INCLUDE_DIR
           SET(JPEG_INCLUDE_DIR ${JPEG_INCLUDE_DIRS})
+          
+          # FindPNG does not define libpng13 as a possible libpng name
+          SET(PNG_NAMES libpng13)
 
           # Needed for version 1.1.>=9
           SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
