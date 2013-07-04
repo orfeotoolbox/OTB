@@ -86,7 +86,7 @@ private:
     // Documentation
     SetDocName("Image resampling with a rigid transform");
     SetDocLongDescription("This application performs a parametric transform on the input image. Scaling, translation and rotation with scaling factor are handled."
-        " Parameters of the transform are expressed in physical units, thus particular attention must be paid on pixel size (value, and sign).");
+        " Parameters of the transform is expressed in physical units, thus particular attention must be paid on pixel size (value, and sign). Moreover transform is expressed from input space to output space (on the contrary ITK Transforms are expressed form output space to input space). ");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation");
@@ -246,9 +246,9 @@ private:
       {
       TransformType::Pointer transform = TransformType::New();
       TransformType::OutputVectorType offset;
-      offset[0] = GetParameterFloat("transform.type.translation.tx");
-      offset[1] = GetParameterFloat("transform.type.translation.ty");
-      otbAppLogINFO( << "Offset : " << offset );
+      offset[0] = -1.0 * GetParameterFloat("transform.type.translation.tx"); // Offset is inverted to make transform from input cs. to output cs.
+      offset[1] = -1.0 * GetParameterFloat("transform.type.translation.ty");
+      otbAppLogINFO( << "Offset (inverted to respect ITK transform convention e.g. from output space to input space) : " << offset );
       transform->SetOffset(offset);
       m_Resampler->SetTransform(transform);
       m_Resampler->SetOutputParametersFromImage(inputImage);
