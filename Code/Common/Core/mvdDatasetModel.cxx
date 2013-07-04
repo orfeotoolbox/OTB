@@ -76,10 +76,18 @@ bool
 DatasetModel
 ::IsVersionCompliant( const QString& path, const QString& name )
 {
-  return DatasetDescriptor::IsVersionCompliant(
-     QDir( QFileInfo( path, name ).filePath() )
-     .filePath( DatasetModel::DESCRIPTOR_FILENAME )
-  );
+  try
+    {
+    return DatasetDescriptor::IsVersionCompliant(
+      QDir( QFileInfo( path, name ).filePath() )
+      .filePath( DatasetModel::DESCRIPTOR_FILENAME )
+      );
+    }
+  catch(...)
+    {
+    qWarning() <<" Exception cauht while checking for version compliance on dataset "<<name<<" in directory "<<path;
+    return false;
+    }
 }
 
 /*****************************************************************************/

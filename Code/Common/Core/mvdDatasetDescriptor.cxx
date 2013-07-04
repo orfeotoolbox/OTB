@@ -698,7 +698,7 @@ DatasetDescriptor
 
   // Link to content and manages error.
   if( !domDoc.setContent( device, true, &error, &line, &column ) )
-    throw /* XmlError( error, line, column ) */;
+    throw SystemError();
 
   // If Ok, remember DOM document data (otherwise, forget temporary
   // DOM document and leave class state unchanged).
@@ -709,7 +709,7 @@ DatasetDescriptor
     m_DomDocument.firstChildElement( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] );
 
   if( m_RootElement.isNull() )
-    throw /* XmlError(); */
+    throw SystemError();
 
   qDebug() << "XML descriptor has been read.";
 }
