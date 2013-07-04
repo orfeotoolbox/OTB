@@ -11,14 +11,6 @@ ENDIF(WIN32)
 
 SET(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
-# OSSIM_STATIC macro
-# Using an external static library of ossim is not supported
-IF (WIN32)
-  IF(NOT OTB_BUILD_SHARED_LIBS AND NOT OTB_USE_EXTERNAL_OSSIM)
-    ADD_DEFINITIONS(-DOSSIM_STATIC)
-  ENDIF(NOT OTB_BUILD_SHARED_LIBS AND NOT OTB_USE_EXTERNAL_OSSIM)
-ENDIF (WIN32)
-
 # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
 # warnings
 IF(WIN32)
