@@ -20,13 +20,13 @@
 // Software Guide : BeginLatex
 //
 // The fusion filter \doxygen{otb}{DSFusionOfClassifiersImageFilter} is based on the Dempster
-// Shafer (DS) fusion framework. For each pixel, it chooses the class label Ai for which the
-// belief function bel(Ai) is maximal after the DS combination of all the available masses of
+// Shafer (DS) fusion framework. For each pixel, it chooses the class label \emph{Ai} for which the
+// belief function \emph{bel(Ai)} is maximal after the DS combination of all the available masses of
 // belief of all the class labels. The masses of belief (MOBs) of all the labels present in each
 // classification map are read from input *.CSV confusion matrix files.
 // Moreover, the pixels into the input classification maps to be fused which are equal to the
-// \emph{nodataLabel} value are ignored by the fusion process. In case of not unique class labels,
-// the output pixel is set to the \emph{undecidedLabel} value.
+// \emph{nodataLabel} value are ignored by the fusion process. In case of not unique class labels
+// with the maximal belief function, the output pixels are set to the \emph{undecidedLabel} value.
 // We start by including the appropriate header files.
 //
 // Software Guide : EndLatex
@@ -280,8 +280,8 @@ int main(int argc, char * argv[])
     confusionMatrixToMassOfBeliefFilter->SetDefinitionMethod(massOfBeliefDef);
     confusionMatrixToMassOfBeliefFilter->Update();
 
-    // Vector containing ALL the K (= nbClassifiers) std::map<Label, MOB> of Masses
-    // of Belief
+    // Vector containing ALL the K (= nbClassificationMaps) std::map<Label, MOB>
+    // of Masses of Belief
     vectorOfMapOfMassesOfBelief.push_back(
         confusionMatrixToMassOfBeliefFilter->GetMapMassOfBelief());
     }
