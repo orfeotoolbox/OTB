@@ -66,13 +66,14 @@ public:
   /** Load the model from file */
   virtual void Load(const std::string & filename, const std::string & name="");
 
-  /** Determine the file type. Returns true if this ImageIO can read the
-   * file specified. */
-  virtual bool CanReadFile(const std::string &);
+  /**\name Classification model file compatibility tests */
+  //@{
+  /** Is the input model file readable and compatible with the corresponding classifier ? */
+  virtual bool CanReadFile(const std::string &) = 0;
 
-  /** Determine the file type. Returns true if this ImageIO can write the
-   * file specified. */
-  virtual bool CanWriteFile(const std::string &);
+  /** Is the input model file writable and compatible with the corresponding classifier ? */
+  virtual bool CanWriteFile(const std::string &)  = 0;
+  //@}
 
 protected:
   /** Constructor */

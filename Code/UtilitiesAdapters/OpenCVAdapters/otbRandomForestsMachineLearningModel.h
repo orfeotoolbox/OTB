@@ -68,21 +68,14 @@ public:
   /** Load the model from file */
   virtual void Load(const std::string & filename, const std::string & name="");
 
-  /** Determine the file type. Returns true if this ImageIO can read the
-   * file specified. */
-  virtual bool CanReadFile(const std::string &);
+  /**\name Classification model file compatibility tests */
+  //@{
+  /** Is the input model file readable and compatible with the corresponding classifier ? */
+  virtual bool CanReadFile(const std::string &) = 0;
 
-  /** Determine the file type. Returns true if this ImageIO can write the
-   * file specified. */
-  virtual bool CanWriteFile(const std::string &);
-
-  /* /\** Input accessors *\/ */
-  /* itkSetObjectMacro(InputListSample,InputListSampleType); */
-  /* itkGetObjectMacro(InputListSample,InputListSampleType); */
-
-  /* /\** Target accessors *\/ */
-  /* itkSetObjectMacro(TargetListSample,TargetListSampleType); */
-  /* itkGetObjectMacro(TargetListSample,TargetListSampleType); */
+  /** Is the input model file writable and compatible with the corresponding classifier ? */
+  virtual bool CanWriteFile(const std::string &)  = 0;
+  //@}
 
   //Setters of RT parameters (documentation get from opencv doxygen 2.4)
   /* the depth of the tree. A low value will likely underfit and conversely a

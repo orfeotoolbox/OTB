@@ -64,24 +64,33 @@ class ITK_EXPORT MachineLearningModel
   : public itk::Object
 {
 public:
-  /** Standard class typedefs. */
+  /**\name Standard ITK typedefs */
+  //@{
   typedef MachineLearningModel                          Self;
   typedef itk::Object                                   Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
+  //@}
 
-  // Input related typedefs
+  /**\name Input related typedefs */
+  //@{
   typedef TInputValue                                   InputValueType;
   typedef itk::VariableLengthVector<InputValueType>     InputSampleType;
   typedef itk::Statistics::ListSample<InputSampleType>  InputListSampleType;
-
-  // Target related typedefs
+  //@}
+  
+  /**\name Target related typedefs */
+  //@{
   typedef TTargetValue                                  TargetValueType;
   typedef itk::FixedArray<TargetValueType,1>            TargetSampleType;
   typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
-
+  //@}
+  
+  /**\name Standard macros */
+  //@{
   /** Run-time type information (and related methods). */
   itkTypeMacro(MachineLearningModel, itk::Object);
+  //@}
 
   /** Train the machine learning model */
   virtual void Train() = 0;
