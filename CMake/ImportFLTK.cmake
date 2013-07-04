@@ -35,10 +35,13 @@ IF(OTB_USE_VISU_GUI)
         # FLTK Library
         #-------------------------------
 
-        # Use an external version of FLTK by default
-        # FLTK is now packaged on most systems
-        # Internal FLTK version is 1.1 and there is some issue Monteverdi
-        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
+        # Use an external version of FLTK by default except on windows (FLTK is not packaged in OSGeo4W)
+        SET(DEFAULT_OTB_USE_EXTERNAL_FLTK ON)
+        IF(WIN32)
+          SET(DEFAULT_OTB_USE_EXTERNAL_FLTK OFF)
+        ENDIF()
+
+        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ${DEFAULT_OTB_USE_EXTERNAL_FLTK})
         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
 
         IF(OTB_USE_EXTERNAL_FLTK)
