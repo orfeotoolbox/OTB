@@ -26,8 +26,8 @@ OTB_TEST_APPLICATION(NAME apTvPrRigidTransformResample
                      OPTIONS -in ${INPUTDATA}/poupees.tif
                  			       -out ${TEMP}/apTvPrRigidTransformResampleTest.tif
                              -transform.type translation
-                             -transform.type.translation.tx 5
-                             -transform.type.translation.ty -5
+                             -transform.type.translation.tx -5
+                             -transform.type.translation.ty 5
                              -interpolator nn
                      VALID   --compare-image ${NOTOL}
                               ${BASELINE}/owTvRigidTransformResampleTest.tif
