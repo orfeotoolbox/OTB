@@ -18,6 +18,7 @@ The full list of improvements comes here :
     * Preparation for ITKv4 : got rid of most patches in internal ITK version
     * Removal of old deprecated methods in all OTB classes
     * Fix mangling of internal OpenJPEG
+    * Simpler and more automatic configuration and build on Windows based on OSGeo4W
   
   * Basic filters
     * Add NoData value and flag for StreamingMinMaxVectorImageFilter
@@ -94,8 +95,8 @@ The full list of improvements comes here :
       * ReadImageInfo : add index of largest possible region
       * ComputeImageStatistics : support for background values, add progress reporting
       * CompareImages : use whole image when no ROI is provided
-        
-      
+      * RigidTransformResample : all transformations are now synced to be from input space to output space
+
     * Core Framework
       * Manage UTF8 paths in GUI
       * Fix a crash in string list parameter widget in GUI
