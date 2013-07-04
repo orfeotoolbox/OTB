@@ -87,7 +87,7 @@ PixelDescriptionWidget
   //
   // Cartographic coordiantes
   m_CartographicRootItem = new QTreeWidgetItem( GetDescriptionTree() ); 
-  m_CartographicRootItem->setText(0, tr("Cartographic"));
+  //m_CartographicRootItem->setText(0, tr("Cartographic"));
   m_CartographicRootItem->setExpanded(true);
 
   // m_CartographicItem = new QTreeWidgetItem( m_CartographicRootItem );
@@ -123,30 +123,33 @@ PixelDescriptionWidget
 void
 PixelDescriptionWidget
 ::OnCurrentPhysicalUpdated(const QStringList & currentPhysical)
-{
+{ 
   //m_CartographicItem->setText(1, currentPhysical);
-
-  // remove the previous QTreeWidgetItem  of m_GeographicRootItem
-  while( m_CartographicRootItem->childCount()>0 )
-    {
-    // Remove QTreeWidgetItem
-    QTreeWidgetItem* child = m_CartographicRootItem->takeChild( 0 );
-
-    // Delete it from memory.
-    delete child;
-    child = NULL;
-    }
 
   if (!currentPhysical.empty())
     {
+    // remove the previous QTreeWidgetItem  of m_GeographicRootItem
+    while( m_CartographicRootItem->childCount()>0 )
+      {
+      // Remove QTreeWidgetItem
+      QTreeWidgetItem* child = m_CartographicRootItem->takeChild( 0 );
+
+      // Delete it from memory.
+      delete child;
+      child = NULL;
+      }
+
+  
+    m_CartographicRootItem->setText(0, QString("%1").arg(currentPhysical[0]));
+    
     // fill with the new values
     QTreeWidgetItem * iCartoXItem = new QTreeWidgetItem( m_CartographicRootItem );
     iCartoXItem->setText(0,QString( tr("X") ));
-    iCartoXItem->setText(1, QString("%1").arg(currentPhysical[0] ) );
+    iCartoXItem->setText(1, QString("%1").arg(currentPhysical[1] ) );
 
     QTreeWidgetItem * iCartoYItem = new QTreeWidgetItem( m_CartographicRootItem );
     iCartoYItem->setText(0,QString( tr("Y") ));
-    iCartoYItem->setText(1, QString("%1").arg(currentPhysical[1] ) );
+    iCartoYItem->setText(1, QString("%1").arg(currentPhysical[2] ) );
     }
 }
 
@@ -155,38 +158,40 @@ void
 PixelDescriptionWidget
 ::OnCurrentGeographicUpdated(const QStringList&/*const QString &*/ currentGeo)
 {
-  // remove the previous QTreeWidgetItem  of m_GeographicRootItem
-  while( m_GeographicRootItem->childCount()>0 )
-    {
-    // Remove QTreeWidgetItem
-    QTreeWidgetItem* child = m_GeographicRootItem->takeChild( 0 );
-
-    // Delete it from memory.
-    delete child;
-    child = NULL;
-    }
-
   if (!currentGeo.empty())
     {
-  // fill with the new values
-  QTreeWidgetItem * iGeoLongItem = new QTreeWidgetItem( m_GeographicRootItem );
-  iGeoLongItem->setText(0,QString( tr("Long") ));
-  iGeoLongItem->setText(1, QString("%1").arg(currentGeo[0] ) );
+    // remove the previous QTreeWidgetItem  of m_GeographicRootItem
+    while( m_GeographicRootItem->childCount()>0 )
+      {
+      // Remove QTreeWidgetItem
+      QTreeWidgetItem* child = m_GeographicRootItem->takeChild( 0 );
 
-  QTreeWidgetItem * iGeoLatItem = new QTreeWidgetItem( m_GeographicRootItem );
-  iGeoLatItem->setText(0,QString( tr("Lat") ));
-  iGeoLatItem->setText(1, QString("%1").arg(currentGeo[1] ) );
+      // Delete it from memory.
+      delete child;
+      child = NULL;
+      }
 
-  QTreeWidgetItem * iGeoElevationItem = new QTreeWidgetItem( m_GeographicRootItem );
-  iGeoElevationItem->setText(0,QString( tr("Elevation") ));
-  if(currentGeo.size() > 2)
-    {
-    iGeoElevationItem->setText(1, QString("%1").arg(currentGeo[2] ) );
-    }
-  else
-    {
-    iGeoElevationItem->setText(1, QString(tr("Not available")));
-    }
+  
+    m_GeographicRootItem->setText(0, QString("%1").arg(currentGeo[0]));
+    // fill with the new values
+    QTreeWidgetItem * iGeoLongItem = new QTreeWidgetItem( m_GeographicRootItem );
+    iGeoLongItem->setText(0,QString( tr("Long") ));
+    iGeoLongItem->setText(1, QString("%1").arg(currentGeo[1] ) );
+
+    QTreeWidgetItem * iGeoLatItem = new QTreeWidgetItem( m_GeographicRootItem );
+    iGeoLatItem->setText(0,QString( tr("Lat") ));
+    iGeoLatItem->setText(1, QString("%1").arg(currentGeo[2] ) );
+
+    QTreeWidgetItem * iGeoElevationItem = new QTreeWidgetItem( m_GeographicRootItem );
+    iGeoElevationItem->setText(0,QString( tr("Elevation") ));
+    if(currentGeo.size() > 3)
+      {
+      iGeoElevationItem->setText(1, QString("%1").arg(currentGeo[3] ) );
+      }
+    else
+      {
+      iGeoElevationItem->setText(1, QString(tr("Not available")));
+      }
     }
 }                       
 /*******************************************************************************/
