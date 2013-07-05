@@ -200,35 +200,38 @@ PixelDescriptionWidget
 ::OnCurrentPixelValueUpdated(const VectorImageType::PixelType & currentPixel, 
                              const QStringList& bandNames)
 {
-  //
-  // remove the previous QTreeWidgetItem  of m_PixelValueRootItem
-  while( m_PixelValueRootItem->childCount()>0 )
+  if (!bandNames.empty() || currentPixel.GetSize() != 0)
     {
-    // Remove QTreeWidgetItem
-    QTreeWidgetItem* child = m_PixelValueRootItem->takeChild( 0 );
-
-    // Delete it from memory.
-    delete child;
-    child = NULL;
-    }
-
-  // fill with the new values
-  for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
-    {
-    QTreeWidgetItem * iBandItem = new QTreeWidgetItem( m_PixelValueRootItem );
-
-    // figure out if a band name is available, if not use Band idx
-    if( !bandNames[ idx ].isEmpty() &&
-	static_cast< unsigned int >( bandNames.size() )==currentPixel.GetSize() )
+    //
+    // remove the previous QTreeWidgetItem  of m_PixelValueRootItem
+    while( m_PixelValueRootItem->childCount()>0 )
       {
-      iBandItem->setText(0, bandNames[ idx ] );
+      // Remove QTreeWidgetItem
+      QTreeWidgetItem* child = m_PixelValueRootItem->takeChild( 0 );
+
+      // Delete it from memory.
+      delete child;
+      child = NULL;
       }
-    else
+
+    // fill with the new values
+    for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
       {
-      iBandItem->setText(0, QString( tr("Band") )+ QString(" %1").arg(idx) );
+      QTreeWidgetItem * iBandItem = new QTreeWidgetItem( m_PixelValueRootItem );
+
+      // figure out if a band name is available, if not use Band idx
+      if( !bandNames[ idx ].isEmpty() &&
+          static_cast< unsigned int >( bandNames.size() )==currentPixel.GetSize() )
+        {
+        iBandItem->setText(0, bandNames[ idx ] );
+        }
+      else
+        {
+        iBandItem->setText(0, QString( tr("Band") )+ QString(" %1").arg(idx) );
+        }
+      // set the value
+      iBandItem->setText(1, QString("%1").arg(currentPixel.GetElement( idx )) );
       }
-    // set the value
-    iBandItem->setText(1, QString("%1").arg(currentPixel.GetElement( idx )) );
     }
 }
 
