@@ -48,6 +48,7 @@
 #include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetInputFilenameParameter.h"
+#include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetDirectoryParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
@@ -146,6 +147,8 @@ QtWidgetParameterFactory::CreateQtWidget( otb::Wrapper::Parameter* param,
                otb::Wrapper::QtWidgetFloatParameter)
   CREATEWIDGET(otb::Wrapper::InputFilenameParameter,       
                otb::Wrapper::QtWidgetInputFilenameParameter)
+  CREATEWIDGET(otb::Wrapper::InputFilenameListParameter,       
+               otb::Wrapper::QtWidgetInputFilenameListParameter)
   CREATEWIDGET(otb::Wrapper::OutputFilenameParameter,       
                otb::Wrapper::QtWidgetOutputFilenameParameter)
   CREATEWIDGET(otb::Wrapper::DirectoryParameter,      
