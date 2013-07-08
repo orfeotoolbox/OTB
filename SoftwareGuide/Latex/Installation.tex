@@ -586,7 +586,7 @@ FIND_PACKAGE(OTB REQUIRED)
 INCLUDE(${OTB_USE_FILE})
 
 ADD_EXECUTABLE(HelloWorld HelloWorld.cxx )
-TARGET_LINK_LIBRARIES(HelloWorld OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(HelloWorld OTBIO)
 \end{verbatim}
 
 \normalsize
