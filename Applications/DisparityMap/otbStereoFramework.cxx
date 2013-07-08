@@ -515,8 +515,13 @@ private:
     
 
     SetDocExampleParameterValue("input.il","sensor_stereo_left.tif sensor_stereo_right.tif");
+    SetDocExampleParameterValue("elev.default","200");
+    SetDocExampleParameterValue("stereorect.fwdgridstep", "8");
+    SetDocExampleParameterValue("stereorect.invgridssrate", "4");
+    SetDocExampleParameterValue("postproc.med","1");
     SetDocExampleParameterValue("output.res","2.5");
     SetDocExampleParameterValue("output.out","dem.tif");
+
     
   }
   
