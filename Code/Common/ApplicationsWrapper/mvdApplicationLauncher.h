@@ -59,7 +59,10 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-
+namespace Wrapper
+{
+class QtWidgetView;
+}
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -93,7 +96,7 @@ public:
    * \return A new instance of the automatically-generated widget of
    * the given OTB application.
    */
-  static QWidget* NewOtbApplicationWidget( const QString& appName );
+  static Wrapper::QtWidgetView* NewOtbApplicationWidget( const QString& appName );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

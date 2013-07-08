@@ -40,6 +40,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #ifdef OTB_WRAP_QT
+# include  "ApplicationsWrapper/mvdApplicationLauncher.h"
 # include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
 # include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
 # include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
@@ -1367,41 +1368,39 @@ void
 MainWindow
 ::OnApplicationToLaunchSelected(const QString & appName, const QString & docName)
 {
-
 #ifdef OTB_WRAP_QT
-  // need to get the controller to request the application widget
-  ApplicationsToolBoxController * controller =
-    m_OtbApplicationsBrowserDock->findChild<ApplicationsToolBoxController *>();
+
+  Wrapper::QtWidgetView* appWidget =
+    ApplicationLauncher::NewOtbApplicationWidget( appName );
+  assert( appWidget!=NULL );
 
   //
   // add the application in a tab
   // TODO : check if this application is already opened ???
-  m_CentralTabWidget->addTab(controller->GetSelectedApplicationWidget(appName),
-                              docName);
+  int tabIndex = m_CentralTabWidget->addTab(
+    appWidget, QIcon( ":/images/process_icon" ), docName );
 
   // no checking needed here, if index is not available nothing is
   // done. Focus on the newly added tab
-  m_CentralTabWidget->setCurrentIndex( m_CentralTabWidget->count() - 1 );
-
-  // set tab icon
-  m_CentralTabWidget->setTabIcon( m_CentralTabWidget->currentIndex(),
-                                   QIcon(":/images/process_icon")  );
+  m_CentralTabWidget->setCurrentIndex( tabIndex );
 
   //
   // connections. not using m_CentralTabWidget->currentWidget() leads
   // to a wrong connection!!!!
   QObject::connect(
-    qobject_cast<Wrapper::QtWidgetView *>( m_CentralTabWidget->currentWidget() ),
-    SIGNAL( OTBApplicationOutputImageChanged( const QString &, const QString &) ),
+    m_CentralTabWidget->currentWidget(),
+    SIGNAL( OTBApplicationOutputImageChanged( const QString&, const QString& ) ),
+    // to:
     this,
-    SLOT( OnOTBApplicationOutputImageChanged( const QString &, const QString &) )
+    SLOT( OnOTBApplicationOutputImageChanged( const QString&, const QString& ) )
     );
 
   //
   // on quit widget signal, close its tab
   QObject::connect(
-    qobject_cast<Wrapper::QtWidgetView *>( m_CentralTabWidget->currentWidget() ),
+    m_CentralTabWidget->currentWidget(),
     SIGNAL( QuitSignal() ),
+    // to:
     this,
     SLOT( OnTabCloseRequested() )
     );
@@ -1422,31 +1421,36 @@ MainWindow
   OnTabCloseRequested( currentIndex );
 }
 
-
 /*****************************************************************************/
 void
 MainWindow
-::OnTabCloseRequested(int index)
+::OnTabCloseRequested( int index )
 {
-  //
-  // Quicklook tab is not removable
-  if (index > 0 )
+  assert( index >= 1 );
+
+  QWidget* appWidget = m_CentralTabWidget->widget( index );
+  assert( appWidget!=NULL );
+
+  assert( appWidget==qobject_cast< Wrapper::QtWidgetView* >( appWidget ) );
+  Wrapper::QtWidgetView* appWidgetView =
+    qobject_cast< Wrapper::QtWidgetView* >( appWidget );
+  assert( appWidgetView!=NULL );
+
+  if( !appWidgetView->IsClosable() )
     {
-    //
-    //
-    QWidget * widgetToDelete = m_CentralTabWidget->widget(index);
-
-    //
-    // remove the tab
-    m_CentralTabWidget->removeTab(index);
-
-    //
-    // delete the selected widget
-    if (widgetToDelete)
-      {
-      delete widgetToDelete;
-      }
+    QMessageBox::warning(
+      this,
+      tr( PROJECT_NAME " - Warning!" ),
+      tr( "Tab cannot be closed while OTB application is running." )
+    );
+   
+    return;
     }
+
+  m_CentralTabWidget->removeTab( index );
+
+  delete appWidgetView;
+  appWidgetView = NULL;
 }
 
 /*****************************************************************************/

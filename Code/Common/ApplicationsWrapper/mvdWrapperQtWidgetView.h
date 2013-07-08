@@ -78,8 +78,12 @@ class QtWidgetView :
   
   Q_OBJECT
 
+  Q_PROPERTY( bool isClosable
+	      READ IsClosable
+	      WRITE SetClosable );
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-  
+
 //
 // Public methods.
 public:
@@ -100,6 +104,10 @@ public:
   {
     return m_Model;
   }
+
+  /**
+   */
+  inline bool IsClosable() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -158,17 +166,91 @@ private:
   QPushButton* m_QuitButton;
   QLabel*      m_Message;
 
+  bool m_IsClosable : 1;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
+
   void UpdateMessageAfterExcuteClicked();
+
   void UpdateMessageAfterApplicationReady(bool val);
+
+  /**
+   */
+  inline void OnProgressReportBegin();
+
+  /**
+   */
+  inline void OnProgressReportEnd();
+
+  /**
+   */
+  inline void SetClosable( bool );
 };
 
+} // end namespace 'Wrapper'
 
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+
+namespace Wrapper
+{
+
+/*****************************************************************************/
+inline
+bool
+QtWidgetView
+::IsClosable() const
+{
+  return m_IsClosable;
 }
+
+/*****************************************************************************/
+inline
+void
+QtWidgetView
+::SetClosable( bool enabled )
+{
+  m_IsClosable = enabled;
+
+  setEnabled( true );
+
+  if( m_QuitButton!=NULL )
+    m_QuitButton->setEnabled( m_IsClosable );
 }
+
+/*******************************************************************************/
+inline
+void
+QtWidgetView
+::OnProgressReportBegin()
+{
+  qDebug() << this << "::OnProgressReportBegin()";
+
+  SetClosable( false );
+}
+
+/*******************************************************************************/
+inline
+void
+QtWidgetView
+::OnProgressReportEnd()
+{
+  qDebug() << this << "::OnProgressReportEnd()";
+
+  SetClosable( true );
+}
+
+} // end namespace 'Wrapper'
+
+} // end namespace 'mvd'
 
 #endif

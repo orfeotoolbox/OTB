@@ -84,9 +84,20 @@ QtWidgetView
   m_Model( NULL ),
   m_ExecButton( NULL ),
   m_QuitButton( NULL ),
-  m_Message( NULL )
+  m_Message( NULL ),
+  m_IsClosable( true )
 {
   m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
+
+  QObject::connect(
+    m_Model, SIGNAL( SetProgressReportBegin() ),
+    this, SLOT( OnProgressReportBegin() )
+  );
+
+  QObject::connect(
+    m_Model, SIGNAL( SetProgressReportDone() ),
+    this, SLOT( OnProgressReportEnd() )
+  );
 }
 
 /*******************************************************************************/
@@ -118,10 +129,15 @@ void QtWidgetView::CreateGui()
   tab->addTab(log, "Logs");
 
   m_Message = new QLabel("<center><font color=\"#FF0000\">Select parameters</font></center>");
-  connect( m_Model, SIGNAL(SetApplicationReady(bool)), this, SLOT(UpdateMessageAfterApplicationReady(bool)) );
+  connect(
+    m_Model,
+    SIGNAL( SetApplicationReady( bool ) ),
+    this, SLOT( UpdateMessageAfterApplicationReady( bool ) )
+  );
   mainLayout->addWidget(m_Message);
 
-  otb::Wrapper::QtWidgetSimpleProgressReport * progressReport =  new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model);
+  otb::Wrapper::QtWidgetSimpleProgressReport* progressReport =
+    new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model);
   progressReport->SetApplication(m_Application);
    
   QHBoxLayout *footLayout = new QHBoxLayout;
@@ -183,13 +199,25 @@ QWidget* QtWidgetView::CreateFooter()
   m_ExecButton->setDefault(true);
   m_ExecButton->setEnabled(false);
   m_ExecButton->setText(QObject::tr("Execute"));
-  connect( m_ExecButton, SIGNAL(clicked()), m_Model, SLOT(ExecuteAndWriteOutputSlot() ) );
-  connect( m_Model, SIGNAL(SetApplicationReady(bool)), m_ExecButton, SLOT(setEnabled(bool)) );
-  connect( m_ExecButton, SIGNAL(clicked()), this, SLOT(UpdateMessageAfterExcuteClicked() ) );
+  connect(
+    m_Model, SIGNAL( SetApplicationReady( bool ) ),
+    m_ExecButton, SLOT( setEnabled( bool ) )
+  );
+  connect(
+    m_ExecButton, SIGNAL( clicked() ),
+    m_Model, SLOT( ExecuteAndWriteOutputSlot() )
+  );
+  connect(
+    m_ExecButton, SIGNAL( clicked() ),
+    this, SLOT( UpdateMessageAfterExcuteClicked() )
+  );
 
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
-  connect( m_QuitButton, SIGNAL(clicked()), this, SLOT(CloseSlot()) );
+  connect(
+    m_QuitButton, SIGNAL( clicked() ),
+    this, SLOT( CloseSlot() )
+  );
 
   // Put the buttons on the right
   footerLayout->addStretch();
@@ -365,4 +393,5 @@ void QtWidgetView::OnApplicationExecutionDone()
 }
 
 }
+
 }

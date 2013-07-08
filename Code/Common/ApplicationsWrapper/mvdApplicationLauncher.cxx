@@ -80,7 +80,7 @@ ApplicationLauncher
 }
 
 /*******************************************************************************/
-QWidget* 
+Wrapper::QtWidgetView*
 ApplicationLauncher
 ::NewOtbApplicationWidget( const QString& appName )
 {

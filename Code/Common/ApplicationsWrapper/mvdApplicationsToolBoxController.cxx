@@ -151,19 +151,21 @@ ApplicationsToolBoxController
 }
 
 /*******************************************************************************/
+/*
 QWidget *
 ApplicationsToolBoxController
 ::GetSelectedApplicationWidget( const QString& appName )
 {
-  /*
+#if 0
   //
   // Access model.
   OTBApplicationsModel* model = GetModel< OTBApplicationsModel >();
   assert( model!=NULL );
-  */
+#endif
 
   return ApplicationLauncher::NewOtbApplicationWidget( appName );
 }
+*/
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

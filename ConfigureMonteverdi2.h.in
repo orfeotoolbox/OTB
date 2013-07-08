@@ -66,6 +66,10 @@
 
 //
 // Qt Message handling and logging.
+#ifndef NO_QECHO
+#define NO_QECHO        0
+#endif
+
 #ifndef NO_QDEBUG
 #define NO_QDEBUG       0
 #endif
@@ -80,10 +84,6 @@
 
 #ifndef NO_QFATAL
 #define NO_QFATAL       0
-#endif
-
-#ifndef NO_QECHO
-#define NO_QECHO        0
 #endif
 
 #ifndef NO_QLOG
