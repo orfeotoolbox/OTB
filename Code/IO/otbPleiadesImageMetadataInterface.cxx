@@ -859,7 +859,6 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType
 PleiadesImageMetadataInterface
 ::GetSpectralSensitivity()  const
 {
-  // TODO MSD what must do this function ???
   //TODO tabulate spectral responses
   WavelengthSpectralBandVectorType wavelengthSpectralBand = InternalWavelengthSpectralBandVectorType::New();
 
