@@ -77,6 +77,8 @@ PixelDescriptionWidget
 PixelDescriptionWidget
 ::~PixelDescriptionWidget()
 {
+  delete m_UI;
+  m_UI = NULL;
 }
 
 /*******************************************************************************/

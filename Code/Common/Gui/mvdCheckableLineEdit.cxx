@@ -75,6 +75,8 @@ CheckableLineEdit
 CheckableLineEdit
 ::~CheckableLineEdit()
 {
+  delete m_UI;
+  m_UI = NULL;
 }
 
 /*******************************************************************************/

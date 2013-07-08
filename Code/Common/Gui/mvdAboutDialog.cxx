@@ -62,6 +62,8 @@ AboutDialog
 AboutDialog
 ::~AboutDialog()
 {
+  delete m_UI;
+  m_UI = NULL;
 }
 
 /*******************************************************************************/

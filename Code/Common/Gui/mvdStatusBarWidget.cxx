@@ -74,6 +74,8 @@ StatusBarWidget
 StatusBarWidget
 ::~StatusBarWidget()
 {
+  delete m_UI;
+  m_UI = NULL;
 }
 
 /*******************************************************************************/

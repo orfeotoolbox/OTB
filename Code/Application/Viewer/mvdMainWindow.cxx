@@ -82,6 +82,8 @@ MainWindow
 MainWindow
 ::~MainWindow()
 {
+  delete m_UI;
+  m_UI = NULL;
 }
 
 void
