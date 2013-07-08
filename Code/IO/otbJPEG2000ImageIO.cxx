@@ -635,7 +635,7 @@ void JPEG2000TileCache::EstimateTileCacheSize(unsigned int originalWidthTile, un
 {
   this->m_TileCacheSizeInByte = originalWidthTile * originalHeightTile
                               * nbComponent
-                              * precision
+                              * sizeof(OPJ_INT32)
                               / vcl_pow(2, 2*static_cast<double>(resolution) );
 
   if (!this->m_TileCacheSizeInByte)
