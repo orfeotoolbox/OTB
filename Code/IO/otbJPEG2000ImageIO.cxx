@@ -104,7 +104,7 @@ namespace otb
 
 /** Compute offsets needed to read the data from the tile decoded and
  * offsets needed to write into the output buffer.
- * 
+ *
  * Please note that this function uses a bare pointer instead of a
  * shared one because it is called within LoadTileData, which hides
  * the opj_image_t pointer between a void * for proper hiding of
@@ -662,7 +662,7 @@ boost::shared_ptr<opj_image_t> JPEG2000TileCache::GetTile(unsigned int tileIndex
 }
 
 void JPEG2000TileCache::RemoveOneTile()
-{    
+{
   if(!m_Cache.empty())
     {
     m_Cache.pop_front();
@@ -907,7 +907,7 @@ void JPEG2000ImageIO::Read(void* buffer)
 
   // If we will read more tiles than the cache size, clear it
   if(toReadTiles.size() > m_TileCache->GetCacheSizeInTiles())
-    { 
+    {
     m_TileCache->Clear();
     }
   // Else if there is not enough rooms from new tiles
