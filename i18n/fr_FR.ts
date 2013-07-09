@@ -2,6 +2,132 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
+    <name>ApplicationLauncher</name>
+    <message>
+        <source>Failed to instanciate OTB-application &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ApplicationsToolBox</name>
+    <message>
+        <source>Search Application ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Orfeo Toolbox Algorithms</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ColorBandDynamicsWidget</name>
+    <message>
+        <source>Invalid argument &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ColorSetupWidget</name>
+    <message>
+        <source>BAND %1</source>
+        <translation type="unfinished">BANDE %1</translation>
+    </message>
+</context>
+<context>
+    <name>DatabaseBrowserController</name>
+    <message>
+        <source>Inconsistent Dataset disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning!</source>
+        <translation type="unfinished">Avertissement !</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete dataset &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DatabaseBrowserWidget</name>
+    <message>
+        <source>Datasets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search Dataset ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DatabaseTreeWidget</name>
+    <message>
+        <source>Delete Dataset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename Dataset</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PixelDescriptionWidget</name>
+    <message>
+        <source>Geographic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixel Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Long</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Elevation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Band</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Execute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TaskProgressDialog</name>
+    <message>
+        <source>%1 - Warning!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>mvd::AboutDialog</name>
     <message>
         <source>About...</source>
@@ -40,6 +166,46 @@
         <source>BAND </source>
         <translation>BANDE </translation>
     </message>
+    <message>
+        <source>Red</source>
+        <translation type="unfinished">Rouge</translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation type="unfinished">Vert</translation>
+    </message>
+    <message>
+        <source>Blue</source>
+        <translation type="unfinished">Bleu</translation>
+    </message>
+    <message>
+        <source>Yellow</source>
+        <translation type="unfinished">Jaune</translation>
+    </message>
+    <message>
+        <source>RedEdge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coastal</source>
+        <translation type="unfinished">Côtier</translation>
+    </message>
+    <message>
+        <source>NIR</source>
+        <translation type="unfinished">PIR</translation>
+    </message>
+    <message>
+        <source>NIR1</source>
+        <translation type="unfinished">PIR1</translation>
+    </message>
+    <message>
+        <source>NIR2</source>
+        <translation type="unfinished">PIR2</translation>
+    </message>
+    <message>
+        <source>PAN</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::AbstractModel</name>
@@ -66,6 +232,14 @@
     </message>
 </context>
 <context>
+    <name>mvd::AbstractWorker</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>mvd::Algorithm</name>
     <message>
         <source></source>
@@ -75,6 +249,66 @@
 </context>
 <context>
     <name>mvd::Application</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ApplicationLauncher</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ApplicationsBrowser</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ApplicationsToolBox</name>
+    <message>
+        <source>OTB Applications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ApplicationsToolBoxController</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::BackgroundTask</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::CheckableLineEdit</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
@@ -113,31 +347,23 @@
     </message>
     <message>
         <source>Apply to all</source>
-        <translation>Appliquer à tous</translation>
+        <translation type="obsolete">Appliquer à tous</translation>
     </message>
     <message>
         <source>Intensity</source>
-        <translation>Intensité</translation>
+        <translation type="obsolete">Intensité</translation>
     </message>
     <message>
         <source>Set the lower intensity threshold. Values bellow this threshold will be clamped to 0.</source>
-        <translation>Règle le seuil bas pour l&apos;intensité. Les valeurs en dessous de ce seuil seront clampées à 0.</translation>
+        <translation type="obsolete">Règle le seuil bas pour l&apos;intensité. Les valeurs en dessous de ce seuil seront clampées à 0.</translation>
     </message>
     <message>
         <source>Set the higher intensity threshold. Values bellow this threshold will be clamped to 255.</source>
-        <translation>Règle le seuil haut pour l&apos;intensité. Les valeurs au dessus de ce seuil seront clampées à 255.</translation>
+        <translation type="obsolete">Règle le seuil haut pour l&apos;intensité. Les valeurs au dessus de ce seuil seront clampées à 255.</translation>
     </message>
     <message>
         <source>Set the intensity low and high thresholds to the minimum and maximum values of the current band.</source>
         <translation>Règle les seuils bas et haut de l&apos;intensité aux valeurs minimum et maximum pour la bande courante.</translation>
-    </message>
-    <message>
-        <source>Min/Max</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Quantile</source>
-        <translation></translation>
     </message>
     <message>
         <source>Percentage of the band histogram beginning clipped to obtain lower intensity threshold.</source>
@@ -157,12 +383,40 @@
     </message>
     <message>
         <source>Defaults</source>
-        <translation>Défaut</translation>
+        <translation type="obsolete">Défaut</translation>
     </message>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>Apply all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>min/Max</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quantile:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Intensity:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>2%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot;color:#EEEEEE;background-color:#111111&quot;&gt;&amp;nbsp;&lt;b&gt;W&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&amp;lceil;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -183,6 +437,14 @@
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>No data: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -242,46 +504,114 @@
     </message>
     <message>
         <source>BAND %1</source>
-        <translation>BANDE %1</translation>
+        <translation type="obsolete">BANDE %1</translation>
     </message>
     <message>
         <source>Red</source>
-        <translation>Rouge</translation>
+        <translation type="obsolete">Rouge</translation>
     </message>
     <message>
         <source>Green</source>
-        <translation>Vert</translation>
+        <translation type="obsolete">Vert</translation>
     </message>
     <message>
         <source>Blue</source>
-        <translation>Bleu</translation>
+        <translation type="obsolete">Bleu</translation>
     </message>
     <message>
         <source>Yellow</source>
-        <translation>Jaune</translation>
-    </message>
-    <message>
-        <source>RedEdge</source>
-        <translation></translation>
+        <translation type="obsolete">Jaune</translation>
     </message>
     <message>
         <source>Coastal</source>
-        <translation>Côtier</translation>
+        <translation type="obsolete">Côtier</translation>
     </message>
     <message>
         <source>NIR</source>
-        <translation>PIR</translation>
+        <translation type="obsolete">PIR</translation>
     </message>
     <message>
         <source>NIR1</source>
-        <translation>PIR1</translation>
+        <translation type="obsolete">PIR1</translation>
     </message>
     <message>
         <source>NIR2</source>
-        <translation>PIR2</translation>
+        <translation type="obsolete">PIR2</translation>
     </message>
     <message>
-        <source>PAN</source>
+        <source>&lt;span style=&quot;color:#EEEEEE;background-color:#111111&quot;&gt;&amp;nbsp;&lt;b&gt;W&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable/disable gray-scale mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::Core</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatabaseBrowserController</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatabaseBrowserWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Datasets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatabaseModel</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Failed to remove file &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to access parent directory of &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to remove dataset directory &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 outdated datasets. Please clear cache directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatabaseTreeWidget</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
 </context>
@@ -328,6 +658,110 @@
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
+    <message>
+        <source>unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File Informations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size in Bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image Informations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dimension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Origin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixels size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of components</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Block size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Placename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Metadatas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sensor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default RGB</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatasetPropertiesController</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatasetPropertiesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatasetTreeWidgetItem</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DoubleValidator</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>mvd::GLImageWidget</name>
@@ -335,6 +769,18 @@
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>Unable to list suppored OpenGL versions using QGLFormat. Qt version is %1. Please upgrade to Qt 4.7.0 or newer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Runtime version of OpenGL used by Qt %1: %2.%3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version(s) of OpenGL supported by Qt %1:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -354,35 +800,51 @@
     </message>
     <message>
         <source>%1: Generating histogram (I)...</source>
-        <translation>%1: Génération de l&apos;histogramme (I)...</translation>
+        <translation type="obsolete">%1: Génération de l&apos;histogramme (I)...</translation>
     </message>
     <message>
         <source>%1: Pass #1 - finding pixel min/maxes...</source>
-        <translation>%1: Passe #1 - Recherche des min/max des pixels...</translation>
+        <translation type="obsolete">%1: Passe #1 - Recherche des min/max des pixels...</translation>
     </message>
     <message>
         <source>%1: Pass #1 - done (%2 ms).</source>
-        <translation>%1: Pass #1 - terminé (%2 ms).</translation>
+        <translation type="obsolete">%1: Pass #1 - terminé (%2 ms).</translation>
     </message>
     <message>
         <source>%1: Pass #2 - computing histogram...</source>
-        <translation>%1: Pass #2 - calcul de l&apos;histogramme...</translation>
+        <translation type="obsolete">%1: Pass #2 - calcul de l&apos;histogramme...</translation>
     </message>
     <message>
         <source>%1: Pass #2 - done (%2 ms).</source>
-        <translation>%1: Pass #2 - terminé (%2 ms).</translation>
+        <translation type="obsolete">%1: Pass #2 - terminé (%2 ms).</translation>
     </message>
     <message>
         <source>%1: Histogram (I) generated (%2 ms).</source>
-        <translation>%1: Histogramme (I) généré (%2 ms).</translation>
+        <translation type="obsolete">%1: Histogramme (I) généré (%2 ms).</translation>
     </message>
     <message>
         <source>%1: Generating histogram (M)...</source>
-        <translation>%1: Generation de l&apos;histogramme (M)...</translation>
+        <translation type="obsolete">%1: Generation de l&apos;histogramme (M)...</translation>
     </message>
     <message>
         <source>%1: Histogram (M) generated (%2 ms).</source>
-        <translation>%1: Histogramme (M) généré (%2 ms).</translation>
+        <translation type="obsolete">%1: Histogramme (M) généré (%2 ms).</translation>
+    </message>
+    <message>
+        <source>%1: Reading histogram...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: Histogram read (%2 ms)...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: Writing histogram...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: Histogram written (%2 ms)...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -394,51 +856,160 @@
     </message>
     <message>
         <source>Running from build directory &apos;%1&apos;.</source>
-        <translation>Exécution depuis le répertoire de compilation &apos;%1&apos;.</translation>
+        <translation type="obsolete">Exécution depuis le répertoire de compilation &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Running from install directory &apos;%1&apos;.</source>
-        <translation>Exécution depuis le répertoire d&apos;installation &apos;%1&apos;.</translation>
+        <translation type="obsolete">Exécution depuis le répertoire d&apos;installation &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to load &apos;%1&apos; translation file from &apos;%2&apos;.</source>
-        <translation>Échec de chargement du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+        <translation type="obsolete">Échec de chargement du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>Warning!</source>
-        <translation>Avertissement !</translation>
+        <translation type="obsolete">Avertissement !</translation>
     </message>
     <message>
         <source>Successfully loaded &apos;%1&apos; translation file from &apos;%2&apos;.</source>
-        <translation>Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+        <translation type="obsolete">Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>Executable dir : %1</source>
-        <translation>Répertoire de l&apos;exécutable : %1</translation>
+        <translation type="obsolete">Répertoire de l&apos;exécutable : %1</translation>
     </message>
     <message>
         <source>Candidate install prefix found : %1</source>
-        <translation>Répertoire d&apos;installation pontentiel trouvé : %1</translation>
+        <translation type="obsolete">Répertoire d&apos;installation pontentiel trouvé : %1</translation>
     </message>
     <message>
         <source>Unable to locate translation files</source>
-        <translation>Impossible de trouver les fichiers de traductions</translation>
+        <translation type="obsolete">Impossible de trouver les fichiers de traductions</translation>
     </message>
     <message>
         <source>Critical error</source>
-        <translation>Erreur critique</translation>
+        <translation type="obsolete">Erreur critique</translation>
     </message>
     <message>
         <source>Using translation dir &apos;%1&apos;.</source>
-        <translation>Utilisation du répertoire de traduction :%1&apos;.</translation>
+        <translation type="obsolete">Utilisation du répertoire de traduction :%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to access translation-files directory &apos;%1&apos;</source>
-        <translation>Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
+        <translation type="obsolete">Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Cache directory created at %1</source>
-        <translation>Répertoire de cache créé dans %1</translation>
+        <translation type="obsolete">Répertoire de cache créé dans %1</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::I18nCoreApplication</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>WARNG&gt; %s
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ERROR&gt; %s
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FATAL&gt; %s
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fatal error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Class &apos;I18nCoreApplication&apos; instance must be provided aQCoreApplication&apos; pointer at construction time!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured while loading the geoid file, no geoid file will be used.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured while loading the DEM directory, no DEM will be used.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to locate translation files directory &apos;i18n&apos; in &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Running from build directory &apos;%1&apos;.</source>
+        <translation type="unfinished">Exécution depuis le répertoire de compilation &apos;%1&apos;.</translation>
+    </message>
+    <message>
+        <source>Loading translation files from directory &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Running from install directory &apos;%1&apos;.</source>
+        <translation type="unfinished">Exécution depuis le répertoire d&apos;installation &apos;%1&apos;.</translation>
+    </message>
+    <message>
+        <source>Failed to access translation-files directory &apos;%1&apos;</source>
+        <translation type="unfinished">Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Failed to load &apos;%1&apos; translation file from &apos;%2&apos;.</source>
+        <translation type="unfinished">Échec de chargement du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+    </message>
+    <message>
+        <source>Successfully loaded &apos;%1&apos; translation file from &apos;%2&apos;.</source>
+        <translation type="unfinished">Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::I18nMainWindow</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Welcome new </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to specify a custom repository location?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please, select directory where the </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dataset has been modified.
+Do you want to save settings before quitting?</source>
+        <translation type="unfinished">Jeu de données modifié.
+Voulez-vous sauvegarder avant de quitter ?</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ImageImporter</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Importing image &apos;%1&apos; as dataset into cache directory...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -451,6 +1022,14 @@
 </context>
 <context>
     <name>mvd::ImageModelRenderer</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ImageProperties</name>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
@@ -513,7 +1092,7 @@
     </message>
     <message>
         <source>Location</source>
-        <translation>Localisation</translation>
+        <translation type="obsolete">Localisation</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -570,11 +1149,7 @@
     </message>
     <message>
         <source> bands, </source>
-        <translation> bandes, </translation>
-    </message>
-    <message>
-        <source> pixels)</source>
-        <translation></translation>
+        <translation type="obsolete"> bandes, </translation>
     </message>
     <message>
         <source>Warning</source>
@@ -618,9 +1193,104 @@ Do you want to save settings before quitting?</source>
         <translation>Jeu de données modifié.
 Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
+    <message>
+        <source>&amp;Open image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open image-file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom to image extent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom to full resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tool bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixel Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dataset properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OTB Applications browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quicklook view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color dynamics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab cannot be closed while OTB application is running.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Welcome new Montevedi2 user !</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::MainWindowTitleLoader</name>
+    <message>
+        <source> bands, </source>
+        <translation type="unfinished"> bandes, </translation>
+    </message>
+    <message>
+        <source> pixels)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation type="unfinished">Localisation</translation>
+    </message>
 </context>
 <context>
     <name>mvd::Math</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ModifiableInterface</name>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
@@ -640,6 +1310,34 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     <message>
         <source>Form</source>
         <translation></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::OTBApplicationsModel</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::PixelDescriptionWidget</name>
+    <message>
+        <source>Pixel Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source></source>
@@ -688,6 +1386,42 @@ Please choose another one.</source>
         <translation>Le répertoire &apos;%1&apos; semble incorrect pour stocker le cache.
 Merci d&apos;en sélectionner un autre.</translation>
     </message>
+    <message>
+        <source>Location of user dataset-repository.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Results directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default directory for results data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Elevation Management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Geoid File            </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SRTM Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the directory containing SRTM tiles.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a geoid file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select the default directory for results data: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::QuicklookModel</name>
@@ -706,31 +1440,51 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
 </context>
 <context>
+    <name>mvd::SerializableInterface</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>mvd::StatusBarWidget</name>
     <message>
         <source>Index:</source>
-        <translation>Indice:</translation>
+        <translation type="obsolete">Indice:</translation>
     </message>
     <message>
         <source>Physical: [xxx, yyy]</source>
-        <translation>Physique: [xxx, yyy]</translation>
+        <translation type="obsolete">Physique: [xxx, yyy]</translation>
     </message>
     <message>
         <source>WGS84: [lon, lat]</source>
-        <translation>WGS84: [lon, lat]</translation>
+        <translation type="obsolete">WGS84: [lon, lat]</translation>
     </message>
     <message>
         <source>Radiometry: [0 1 2]</source>
-        <translation>Radiométrie: [0 1 2]</translation>
+        <translation type="obsolete">Radiométrie: [0 1 2]</translation>
     </message>
     <message>
         <source>Zoom Level:</source>
-        <translation>Niveau de zoom:</translation>
+        <translation type="obsolete">Niveau de zoom:</translation>
     </message>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Radiometry</source>
+        <translation type="unfinished">Radiométrie</translation>
+    </message>
+    <message>
+        <source>Zoom Level</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -742,11 +1496,27 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>System error %1: &apos;%2&apos;.</source>
-        <translation>Erreur système %1: &apos;%2.</translation>
+        <translation type="obsolete">Erreur système %1: &apos;%2.</translation>
     </message>
     <message>
         <source>System error %1: &apos;%2&apos; %3.</source>
-        <translation>Erruur système %1: &apos;%2&apos; %3.</translation>
+        <translation type="obsolete">Erruur système %1: &apos;%2&apos; %3.</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::TaskProgressDialog</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::TextStream</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -770,7 +1540,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Physical</source>
-        <translation>Physique</translation>
+        <translation type="obsolete">Physique</translation>
     </message>
     <message>
         <source>Radiometry</source>
@@ -798,12 +1568,12 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>The file already has overviews !</source>
-        <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
+        <translation type="obsolete">Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
     <message>
         <source>OTB can not read this file (&apos;%1&apos;).
 Please check.</source>
-        <translation>OTB ne peut pas lire le fichier (&apos;%1&apos;).
+        <translation type="obsolete">OTB ne peut pas lire le fichier (&apos;%1&apos;).
 Merci de vérifier.</translation>
     </message>
     <message>
@@ -811,6 +1581,10 @@ Merci de vérifier.</translation>
 Navigation in resolution will be slower.</source>
         <translation>La création de la pyramide multi-résolution a échoué.
 La navigation en résolution sera plus lente.</translation>
+    </message>
+    <message>
+        <source>The file already has overviews!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
