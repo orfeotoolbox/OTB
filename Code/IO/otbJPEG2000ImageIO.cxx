@@ -46,6 +46,15 @@ extern "C"
 
 #include "otbTinyXML.h"
 
+#include <boost/shared_ptr.hpp>
+
+void OpjImageDestroy(opj_image_t * img)
+{
+  if(img)
+    {
+    otbopenjpeg_opj_image_destroy(img);
+    }
+}
 
 /**
 Divide an integer by a power of 2 and round upwards
@@ -89,8 +98,15 @@ void info_callback(const char *msg, void *client_data)
 
 namespace otb
 {
+
 /** Compute offsets needed to read the data from the tile decoded and
- * offsets needed to write into the output buffer */
+ * offsets needed to write into the output buffer.
+ * 
+ * Please note that this function uses a bare pointer instead of a
+ * shared one because it is called within LoadTileData, which hides
+ * the opj_image_t pointer between a void * for proper hiding of
+ * openjpeg API.
+ */
 void ComputeOffsets(opj_image_t * tile,
                     const itk::ImageIORegion & ioRegion,
                     unsigned int &l_width_src,
@@ -235,7 +251,7 @@ public:
     this->Clean();
   }
   
-  opj_image_t * DecodeTile(unsigned int tileIndex);
+  boost::shared_ptr<opj_image_t> DecodeTile(unsigned int tileIndex);
 
   const std::vector<unsigned int> & GetAvailableResolutions(){return this->m_AvailableResolutions; };
 
@@ -381,12 +397,12 @@ void JPEG2000InternalReader::Clean()
   this->m_CodecFormat = CODEC_UNKNOWN;
 }
 
-opj_image_t * JPEG2000InternalReader::DecodeTile(unsigned int tileIndex)
+boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int tileIndex)
 {
-  opj_image_t * image = otbopenjpeg_opj_image_create0();
-  otbopenjpeg_opj_copy_image_header(m_Image, image);
+  boost::shared_ptr<opj_image_t> image (otbopenjpeg_opj_image_create0(),OpjImageDestroy);
+  otbopenjpeg_opj_copy_image_header(m_Image, image.get());
 
-  bool success = otbopenjpeg_opj_get_decoded_tile(m_Codec, m_Stream, image, tileIndex);
+  bool success = otbopenjpeg_opj_get_decoded_tile(m_Codec, m_Stream, image.get(), tileIndex);
 
   if(success)
     {
@@ -395,7 +411,7 @@ opj_image_t * JPEG2000InternalReader::DecodeTile(unsigned int tileIndex)
     }
   else
     {
-    return NULL;
+    return boost::shared_ptr<opj_image_t>();
     }
 }
 
@@ -543,15 +559,15 @@ public:
   JPEG2000TileCache();
   ~JPEG2000TileCache();
 
-  typedef std::pair<unsigned int, opj_image_t *> CachedTileType;
+  typedef std::pair<unsigned int, boost::shared_ptr<opj_image_t> > CachedTileType;
   typedef std::deque<CachedTileType> TileCacheType;
 
   /** Get a tile in cache, return null if cache does not contain the
   tile */
-  opj_image_t * GetTile(unsigned int tileIndex);
+  boost::shared_ptr<opj_image_t> GetTile(unsigned int tileIndex);
 
   /** Register a new tile in cache */
-  void AddTile(unsigned int tileIndex, opj_image_t * tileData);
+  void AddTile(unsigned int tileIndex, boost::shared_ptr<opj_image_t> tileData);
 
   /** Remove the front tile */
   void RemoveOneTile();
@@ -649,28 +665,14 @@ void JPEG2000TileCache::EstimateTileCacheSize(unsigned int originalWidthTile, un
 
 void JPEG2000TileCache::Clear()
 {
-  for(TileCacheType::iterator it = m_Cache.begin();
-      it != m_Cache.end(); ++it)
-    {
-    CachedTileType erasedTile = *it;
-    
-    // Destroy the image
-    if (erasedTile.second)
-      {
-      otbopenjpeg_opj_image_destroy(erasedTile.second);
-      }
-    erasedTile.second = NULL;
-    }
   m_Cache.clear();
-
   m_CacheSizeInTiles = 4;
   m_CacheSizeInByte = 0;
-
   m_IsReady = false;
 }
 
 
-opj_image_t * JPEG2000TileCache::GetTile(unsigned int tileIndex)
+boost::shared_ptr<opj_image_t> JPEG2000TileCache::GetTile(unsigned int tileIndex)
 {
   for(TileCacheType::iterator it = m_Cache.begin();
       it != m_Cache.end(); ++it)
@@ -681,27 +683,18 @@ opj_image_t * JPEG2000TileCache::GetTile(unsigned int tileIndex)
       return it->second;
       }
     }
-  return NULL;
+  return boost::shared_ptr<opj_image_t>();
 }
 
 void JPEG2000TileCache::RemoveOneTile()
-{
+{    
   if(!m_Cache.empty())
     {
-    CachedTileType erasedTile = *m_Cache.begin();
-  
-    // Destroy the image
-    if (erasedTile.second)
-      {
-      otbopenjpeg_opj_image_destroy(erasedTile.second);
-      }
-    erasedTile.second = NULL;
-    
     m_Cache.pop_front();
     }
 }
 
-void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
+void JPEG2000TileCache::AddTile(unsigned int tileIndex, boost::shared_ptr<opj_image_t> tileData)
 {
   for(TileCacheType::const_iterator it = m_Cache.begin();
       it != m_Cache.end(); ++it)
@@ -711,12 +704,10 @@ void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
       return;
       }
     }
-
   if(m_Cache.size() >= m_CacheSizeInTiles)
     {
     this->RemoveOneTile();
     }
-
   m_Cache.push_back(CachedTileType(tileIndex, tileData));
 }
 
@@ -931,7 +922,7 @@ void JPEG2000ImageIO::Read(void* buffer)
 
   for (std::vector<unsigned int>::iterator itTile = tileList.begin(); itTile < tileList.end(); ++itTile)
     {
-    opj_image_t * currentImage = m_TileCache->GetTile(*itTile);
+    boost::shared_ptr<opj_image_t> currentImage(m_TileCache->GetTile(*itTile));
 
     JPEG2000TileCache::CachedTileType currentTile = std::make_pair((*itTile), currentImage);
 
@@ -948,19 +939,23 @@ void JPEG2000ImageIO::Read(void* buffer)
   // First, load tiles from cache
   for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = cachedTiles.begin(); itTile < cachedTiles.end(); ++itTile)
     {
-    this->LoadTileData(buffer, itTile->second);
+    this->LoadTileData(buffer, itTile->second.get());
     }
 
-
-  int nbTileToRemove = static_cast<int>(toReadTiles.size())
-      - static_cast<int>(m_TileCache->GetCacheSizeInTiles() - m_TileCache->GetCurrentNumberOfTileInCache());
-  if ( nbTileToRemove <= 0 )
-    nbTileToRemove = 0;
-
-  // Remove from cache as many tiles that will be read in this step
-   for (int itTileR = 0; itTileR < nbTileToRemove; ++itTileR)
+  // If we will read more tiles than the cache size, clear it
+  if(toReadTiles.size() > m_TileCache->GetCacheSizeInTiles())
+    { 
+    m_TileCache->Clear();
+    }
+  // Else if there is not enough rooms from new tiles
+  else if(toReadTiles.size() > (m_TileCache->GetCacheSizeInTiles() - m_TileCache->GetCurrentNumberOfTileInCache()))
     {
-    m_TileCache->RemoveOneTile();
+    int nbTileToRemove = toReadTiles.size() - (m_TileCache->GetCacheSizeInTiles() - m_TileCache->GetCurrentNumberOfTileInCache());
+    // Remove from cache as many tiles that will be read in this step
+    for (int itTileR = 0; itTileR < nbTileToRemove; ++itTileR)
+      {
+      m_TileCache->RemoveOneTile();
+      }
     }
 
   // Decode all tiles not in cache in parallel
@@ -988,7 +983,7 @@ void JPEG2000ImageIO::Read(void* buffer)
   // Load tiles that have been read
   for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
     {
-    this->LoadTileData(buffer, itTile->second);
+    this->LoadTileData(buffer, itTile->second.get());
     }
   
 
@@ -1012,11 +1007,12 @@ void JPEG2000ImageIO::Read(void* buffer)
     }
 }
 
-void JPEG2000ImageIO::LoadTileData(void * buffer, void * tile)
+// The void * interface prevent us to propagate shared_ptr here
+void JPEG2000ImageIO::LoadTileData(void * buffer, void * currentTile)
 {
-  opj_image_t * currentTile = static_cast<opj_image_t *>(tile);
+  opj_image_t * tile = static_cast<opj_image_t *>(currentTile);
 
-  if(!currentTile)
+  if(!tile)
     {
     itkExceptionMacro(<<"Tile needed but not loaded.");
     }
@@ -1032,7 +1028,7 @@ void JPEG2000ImageIO::LoadTileData(void * buffer, void * tile)
   unsigned int lStartOffsetPxlDest; // Offset where begin to write the area in the otb buffer in nb of pixel
   unsigned int lStartOffsetPxlSrc; // Offset where begin to write the area in the otb buffer in nb of pixel
 
-  ComputeOffsets(currentTile, this->GetIORegion(), lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
+  ComputeOffsets(tile, this->GetIORegion(), lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
 
   switch (this->GetComponentType())
     {
@@ -1047,7 +1043,7 @@ void JPEG2000ImageIO::LoadTileData(void * buffer, void * tile)
         {
         for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
           {
-          OPJ_INT32* data = currentTile->comps[itComp].data;
+          OPJ_INT32* data = tile->comps[itComp].data;
           *(current_dst_line++) = static_cast<char> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
           }
         }
@@ -1065,7 +1061,7 @@ void JPEG2000ImageIO::LoadTileData(void * buffer, void * tile)
         {
         for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
           {
-          OPJ_INT32* data = currentTile->comps[itComp].data;
+          OPJ_INT32* data = tile->comps[itComp].data;
           unsigned char component_val = data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xff;
           *(current_dst_line++) = static_cast<unsigned char> (component_val);
           }
@@ -1084,7 +1080,7 @@ void JPEG2000ImageIO::LoadTileData(void * buffer, void * tile)
         {
         for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
           {
-          OPJ_INT32* data = currentTile->comps[itComp].data;
+          OPJ_INT32* data = tile->comps[itComp].data;
           *(current_dst_line++) = static_cast<short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
           }
         }
@@ -1102,7 +1098,7 @@ void JPEG2000ImageIO::LoadTileData(void * buffer, void * tile)
         {
         for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
           {
-          OPJ_INT32* data = currentTile->comps[itComp].data;
+          OPJ_INT32* data = tile->comps[itComp].data;
           *(current_dst_line++) = static_cast<unsigned short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xffff);
           }
         }
