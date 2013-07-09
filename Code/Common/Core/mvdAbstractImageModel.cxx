@@ -159,12 +159,11 @@ AbstractImageModel
     
     // set the output QStringList
     qBandNames1 = ToQStringList( outputBandNames );
-
     }
   else
     {
     // useless
-    assert( stdBandNames1.empty() ||
+    assert( !stdBandNames1.empty() ||
             stdBandNames1.size()==output->GetNumberOfComponentsPerPixel() );
 
     if( stdBandNames1.size()!=output->GetNumberOfComponentsPerPixel() )
@@ -183,7 +182,7 @@ AbstractImageModel
         }
       catch( itk::ExceptionObject& exc )
         {
-	qDebug() << exc.what();
+	qWarning() << exc.what();
 	}
       }
 
