@@ -21,6 +21,7 @@
 #include "otbImageIOBase.h"
 #include "itkMultiThreader.h"
 
+#include <boost/shared_ptr.hpp>
 
 namespace otb
 {
@@ -124,10 +125,10 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  typedef std::vector<JPEG2000InternalReader *> ReaderVectorType;
+  typedef std::vector<boost::shared_ptr<JPEG2000InternalReader> > ReaderVectorType;
 
-  ReaderVectorType    m_InternalReaders;
-  JPEG2000TileCache*  m_TileCache;
+  ReaderVectorType                     m_InternalReaders;
+  boost::shared_ptr<JPEG2000TileCache> m_TileCache;
 
 private:
   JPEG2000ImageIO(const Self &); //purposely not implemented

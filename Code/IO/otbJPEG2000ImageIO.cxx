@@ -46,8 +46,6 @@ extern "C"
 
 #include "otbTinyXML.h"
 
-#include <boost/shared_ptr.hpp>
-
 void OpjImageDestroy(opj_image_t * img)
 {
   if(img)
@@ -722,9 +720,9 @@ JPEG2000ImageIO::JPEG2000ImageIO()
 
   for(int i = 0; i<m_NumberOfThreads; ++i)
     {
-    m_InternalReaders.push_back(new JPEG2000InternalReader);
+    m_InternalReaders.push_back(boost::shared_ptr<JPEG2000InternalReader>(new JPEG2000InternalReader));
     }
-  m_TileCache      = new JPEG2000TileCache;
+  m_TileCache = boost::shared_ptr<JPEG2000TileCache>(new JPEG2000TileCache);
 
   // By default set number of dimensions to two.
   this->SetNumberOfDimensions(2);
@@ -745,19 +743,7 @@ JPEG2000ImageIO::JPEG2000ImageIO()
 }
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
-{
-  for(ReaderVectorType::iterator it = m_InternalReaders.begin();
-      it != m_InternalReaders.end();
-      ++it)
-    {
-    (*it)->Clean();
-    delete (*it);
-    }
-  m_InternalReaders.clear();
-
-  m_TileCache->Clear();
-  delete m_TileCache;
-}
+{}
 
 bool JPEG2000ImageIO::CanReadFile(const char* filename)
 {
@@ -808,7 +794,7 @@ void JPEG2000ImageIO::ReadVolume(void*)
 /** Internal structure used for passing image data into the threading library */
 struct ThreadStruct
 {
-  std::vector<JPEG2000InternalReader *> Readers;
+  std::vector<boost::shared_ptr<JPEG2000InternalReader> > Readers;
   std::vector<JPEG2000TileCache::CachedTileType> * Tiles;
 };
 
@@ -1125,7 +1111,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
   str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
 
   // Retrieve data
-  std::vector<JPEG2000InternalReader *> readers = str->Readers;
+  std::vector<boost::shared_ptr<JPEG2000InternalReader> > readers = str->Readers;
   std::vector<JPEG2000TileCache::CachedTileType> *  tiles = str->Tiles;
 
   total = std::min((unsigned int)tiles->size(), threadCount);
