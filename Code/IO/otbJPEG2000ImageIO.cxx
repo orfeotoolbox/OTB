@@ -1197,7 +1197,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 }
 
 void JPEG2000ImageIO::ConfigureCache()
-{ 
+{
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::CacheSizeInBytes,
                                     m_CacheSizeInByte);
