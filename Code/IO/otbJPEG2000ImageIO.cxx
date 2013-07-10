@@ -286,19 +286,8 @@ public:
 
   unsigned int m_ResolutionFactor;
 
-  boost::shared_ptr<opj_codestream_info_v2> GetCstrInfo()
-  {
-    return m_CstrInfo;
-  }
-
 private:
-  boost::shared_ptr<opj_codec_t>  m_Codec;
   boost::shared_ptr<FILE> m_File;
-  boost::shared_ptr<opj_image_t> m_Image;
-  boost::shared_ptr<opj_stream_t> m_Stream;
-  boost::shared_ptr<opj_codestream_info_v2> m_CstrInfo;
-  opj_event_mgr_t m_EventManager;
-
   int Initialize();
 };
 
@@ -311,6 +300,7 @@ int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
   this->m_File  = boost::shared_ptr<FILE>(fopen(filename, "rb"),fclose);
   if (!this->m_File)
     {
+    this->Clean();
     return 0;
     }
 
@@ -347,12 +337,7 @@ int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
 
 void JPEG2000InternalReader::Clean()
 {
-  // Clear opj members and file pointer
-  m_Image = boost::shared_ptr<opj_image_t>();
-  m_Stream = boost::shared_ptr<opj_stream_t>();
   m_File = boost::shared_ptr<FILE>();
-  m_Codec = boost::shared_ptr<opj_codec_t>();
-  m_CstrInfo = boost::shared_ptr<opj_codestream_info_v2>();
 
   this->m_XResolution.clear();
   this->m_YResolution.clear();
@@ -374,12 +359,64 @@ void JPEG2000InternalReader::Clean()
 
 boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int tileIndex)
 {
-  boost::shared_ptr<opj_image_t> image (otbopenjpeg_opj_image_create0(),OpjImageDestroy);
-  otbopenjpeg_opj_copy_image_header(m_Image.get(), image.get());
 
-  bool success = otbopenjpeg_opj_get_decoded_tile(m_Codec.get(), m_Stream.get(), image.get(), tileIndex);
+  if (!m_File)
+    {
+    this->Clean();
+    return boost::shared_ptr<opj_image_t>();
+    }
 
-  if(success)
+  // Creating the file stream
+  boost::shared_ptr<opj_stream_t> stream = boost::shared_ptr<opj_stream_t>(otbopenjpeg_opj_stream_create_default_file_stream(m_File.get(), true),otbopenjpeg_opj_stream_destroy);
+  if (!stream)
+    {
+    this->Clean();
+    return boost::shared_ptr<opj_image_t>();
+    }
+  
+  // Creating the codec
+  boost::shared_ptr<opj_codec_t> codec = boost::shared_ptr<opj_codec_t>(otbopenjpeg_opj_create_decompress_v2(this->m_CodecFormat),otbopenjpeg_opj_destroy_codec);
+  
+  if (!codec)
+    {
+    this->Clean();
+    return boost::shared_ptr<opj_image_t>();
+    }
+  
+  // Setting default parameters
+  opj_dparameters_t parameters;
+  otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
+  parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
+  
+  otbMsgDevMacro( << "Initialize decoder with cp_reduce = " << parameters.cp_reduce);
+  
+  // Set default event mgr
+  opj_event_mgr_t eventManager;
+  eventManager.info_handler = info_callback;
+  eventManager.warning_handler = warning_callback;
+  eventManager.error_handler = error_callback;
+  
+  // Setup the decoder decoding parameters using user parameters
+  if (!otbopenjpeg_opj_setup_decoder_v2(codec.get(), &parameters, &eventManager))
+    {
+    this->Clean();
+    return boost::shared_ptr<opj_image_t>();
+    }
+  
+  // Read the main header of the codestream and if necessary the JP2
+  // boxes
+  opj_image_t * unsafeOpjImgPtr = NULL;
+  
+  if (!otbopenjpeg_opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
+    {
+    boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
+    this->Clean();
+    return boost::shared_ptr<opj_image_t>();
+    }
+  
+  boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
+
+  if(otbopenjpeg_opj_get_decoded_tile(codec.get(), stream.get(), image.get(), tileIndex))
     {
     otbMsgDevMacro(<<"Tile "<<tileIndex<<" read from file");
     return image;
@@ -392,12 +429,6 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
 
 JPEG2000InternalReader::JPEG2000InternalReader()
 {
-  // Set default event mgr
-  memset(&m_EventManager, 0, sizeof(opj_event_mgr_t));
-  m_EventManager.info_handler = info_callback;
-  m_EventManager.warning_handler = warning_callback;
-  m_EventManager.error_handler = error_callback;
-
   this->Clean();
 }
 
@@ -406,17 +437,17 @@ int JPEG2000InternalReader::Initialize()
   if (m_File)
     {
     // Creating the file stream
-    m_Stream = boost::shared_ptr<opj_stream_t>(otbopenjpeg_opj_stream_create_default_file_stream(m_File.get(), true),otbopenjpeg_opj_stream_destroy);
-    if (!m_Stream)
+    boost::shared_ptr<opj_stream_t> stream = boost::shared_ptr<opj_stream_t>(otbopenjpeg_opj_stream_create_default_file_stream(m_File.get(), true),otbopenjpeg_opj_stream_destroy);
+    if (!stream)
       {
       this->Clean();
       return 0;
       }
 
     // Creating the codec
-    m_Codec = boost::shared_ptr<opj_codec_t>(otbopenjpeg_opj_create_decompress_v2(this->m_CodecFormat),otbopenjpeg_opj_destroy_codec);
+    boost::shared_ptr<opj_codec_t> codec = boost::shared_ptr<opj_codec_t>(otbopenjpeg_opj_create_decompress_v2(this->m_CodecFormat),otbopenjpeg_opj_destroy_codec);
 
-    if (!m_Codec)
+    if (!codec)
       {
       this->Clean();
       return 0;
@@ -429,8 +460,14 @@ int JPEG2000InternalReader::Initialize()
 
     otbMsgDevMacro( << "Initialize decoder with cp_reduce = " << parameters.cp_reduce);
 
+    // Set default event mgr
+    opj_event_mgr_t eventManager;
+    eventManager.info_handler = info_callback;
+    eventManager.warning_handler = warning_callback;
+    eventManager.error_handler = error_callback;
+
     // Setup the decoder decoding parameters using user parameters
-    if (!otbopenjpeg_opj_setup_decoder_v2(m_Codec.get(), &parameters, &m_EventManager))
+    if (!otbopenjpeg_opj_setup_decoder_v2(codec.get(), &parameters, &eventManager))
       {
       this->Clean();
       return 0;
@@ -439,19 +476,20 @@ int JPEG2000InternalReader::Initialize()
     // Read the main header of the codestream and if necessary the JP2
     // boxes
     opj_image_t * unsafeOpjImgPtr = NULL;
-    if (!otbopenjpeg_opj_read_header(m_Stream.get(), m_Codec.get(),&unsafeOpjImgPtr))
+
+    if (!otbopenjpeg_opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
       {
-      m_Image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
+      boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
       this->Clean();
       return 0;
       }
 
-      m_Image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
+    boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
 
     // Get the codestream information
-    this->m_CstrInfo = boost::shared_ptr<opj_codestream_info_v2>(otbopenjpeg_opj_get_cstr_info(m_Codec.get()),OpjCodestreamDestroy);
+    boost::shared_ptr<opj_codestream_info_v2> cstrInfo = boost::shared_ptr<opj_codestream_info_v2>(otbopenjpeg_opj_get_cstr_info(codec.get()),OpjCodestreamDestroy);
 
-    if (!m_CstrInfo)
+    if (!cstrInfo)
       {
       std::cerr << "ERROR while get codestream info" << std::endl;
       this->Clean();
@@ -460,33 +498,33 @@ int JPEG2000InternalReader::Initialize()
 
     // We can now retrieve the main information of the image and the codestream
     // (based on the first component and with no subsampling)
-    this->m_Width = this->m_Image->comps->w;
-    this->m_Height = this->m_Image->comps->h;
+    this->m_Width = image->comps->w;
+    this->m_Height = image->comps->h;
 
     otbMsgDevMacro(<< "JPEG2000InternalReader dimension (after reading header) = " << this->m_Image->comps->w << " x "
-                   << this->m_Image->comps->h );
+                   << image->comps->h );
 
-    this->m_TileHeight = this->m_CstrInfo->tdy;
-    this->m_TileWidth = this->m_CstrInfo->tdx;
-    this->m_XNbOfTile = this->m_CstrInfo->tw;
-    this->m_YNbOfTile = this->m_CstrInfo->th;
+    this->m_TileHeight = cstrInfo->tdy;
+    this->m_TileWidth = cstrInfo->tdx;
+    this->m_XNbOfTile = cstrInfo->tw;
+    this->m_YNbOfTile = cstrInfo->th;
 
-    this->m_NbOfComponent = this->m_Image->numcomps;
+    this->m_NbOfComponent = image->numcomps;
 
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_Precision.push_back( this->m_Image->comps[itComp].prec);
-      this->m_Signed.push_back( this->m_Image->comps[itComp].sgnd);
-      this->m_XResolution.push_back( this->m_Image->comps[itComp].dx);
-      this->m_YResolution.push_back( this->m_Image->comps[itComp].dy);
+      this->m_Precision.push_back( image->comps[itComp].prec);
+      this->m_Signed.push_back( image->comps[itComp].sgnd);
+      this->m_XResolution.push_back( image->comps[itComp].dx);
+      this->m_YResolution.push_back( image->comps[itComp].dy);
       }
-    }
 
-  // Warning: This value is based on the first component of the default tile parameters.
-  unsigned int numResAvailable = this->m_CstrInfo->m_default_tile_info.tccp_info[0].numresolutions;
-  for (unsigned int itRes = 0; itRes < numResAvailable; itRes++)
-    {
-    m_AvailableResolutions.push_back(itRes);
+    // Warning: This value is based on the first component of the default tile parameters.
+    unsigned int numResAvailable = cstrInfo->m_default_tile_info.tccp_info[0].numresolutions;
+    for (unsigned int itRes = 0; itRes < numResAvailable; itRes++)
+      {
+      m_AvailableResolutions.push_back(itRes);
+      }
     }
 
   return 1;
@@ -495,11 +533,7 @@ int JPEG2000InternalReader::Initialize()
 
 int JPEG2000InternalReader::CanRead()
  {
-   if  ( this->m_File &&
-       this->m_Codec &&
-       this->m_Stream &&
-       this->m_CstrInfo &&
-       this->m_Image &&
+   if  (Initialize() &&
        ( this->m_Width > 0 ) && ( this->m_Height > 0 ) &&
        ( this->m_TileWidth > 0 ) && ( this->m_TileHeight > 0 ) &&
        ( this->m_XNbOfTile > 0 ) && ( this->m_YNbOfTile > 0 ) &&
@@ -795,8 +829,8 @@ bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vec
     int w = int_ceildivpow2( originalWidth, *itRes);
     int h = int_ceildivpow2( originalHeight, *itRes);
 
-    int tw = int_ceildivpow2(m_InternalReaders[0]->GetCstrInfo()->tdx, *itRes);
-    int th = int_ceildivpow2(m_InternalReaders[0]->GetCstrInfo()->tdy, *itRes);
+    int tw = int_ceildivpow2(m_InternalReaders[0]->m_TileWidth, *itRes);
+    int th = int_ceildivpow2(m_InternalReaders[0]->m_TileHeight, *itRes);
 
     oss << "Resolution: " << *itRes << " (Image [w x h]: " << w << "x" << h << ", Tile [w x h]: " << tw << "x" << th << ")";
 
@@ -1496,8 +1530,8 @@ std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
   unsigned int tile_size_y = m_InternalReaders.front()->m_TileHeight;
   unsigned int width = m_Dimensions[0];
   unsigned int height = m_Dimensions[1];
-  unsigned int nbOfTileX = m_InternalReaders.front()->GetCstrInfo()->tw;
-  unsigned int nbOfTileY = m_InternalReaders.front()->GetCstrInfo()->th;
+  unsigned int nbOfTileX = m_InternalReaders.front()->m_XNbOfTile;
+  unsigned int nbOfTileY = m_InternalReaders.front()->m_YNbOfTile;
 
   unsigned int tilePosX0, tilePosX1;
   unsigned int tilePosY0, tilePosY1;
