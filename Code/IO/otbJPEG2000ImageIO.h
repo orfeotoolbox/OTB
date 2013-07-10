@@ -162,6 +162,9 @@ private:
    * library will call this routine for each thread, which will delegate the
    * control to ThreadedGenerateData(). */
   static ITK_THREAD_RETURN_TYPE ThreaderCallback( void *arg );
+
+  /** Configure cache manager */
+  void ConfigureCache();
 };
 
 } // end namespace otb

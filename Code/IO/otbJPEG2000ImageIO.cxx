@@ -46,6 +46,8 @@ extern "C"
 
 #include "otbTinyXML.h"
 
+#include "itkFastMutexLock.h"
+
 void OpjImageDestroy(opj_image_t * img)
 {
   if(img)
@@ -386,9 +388,6 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
   // Setting default parameters
   opj_dparameters_t parameters;
   otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
-  parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
-  
-  otbMsgDevMacro( << "Initialize decoder with cp_reduce = " << parameters.cp_reduce);
   
   // Set default event mgr
   opj_event_mgr_t eventManager;
@@ -416,13 +415,22 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
   
   boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
 
-  if(otbopenjpeg_opj_get_decoded_tile(codec.get(), stream.get(), image.get(), tileIndex))
+  if(!otbopenjpeg_opj_set_decoded_resolution_factor(codec.get(),static_cast<int>(this->m_ResolutionFactor)))
+    {
+    this->Clean();
+    return boost::shared_ptr<opj_image_t>();
+    }
+
+
+  if( otbopenjpeg_opj_get_decoded_tile(codec.get(), stream.get(), image.get(), tileIndex))
     {
     otbMsgDevMacro(<<"Tile "<<tileIndex<<" read from file");
+
     return image;
     }
   else
     {
+    this->Clean();
     return boost::shared_ptr<opj_image_t>();
     }
 }
@@ -456,9 +464,6 @@ int JPEG2000InternalReader::Initialize()
     // Setting default parameters
     opj_dparameters_t parameters;
     otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
-    parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
-
-    otbMsgDevMacro( << "Initialize decoder with cp_reduce = " << parameters.cp_reduce);
 
     // Set default event mgr
     opj_event_mgr_t eventManager;
@@ -675,9 +680,6 @@ void JPEG2000TileCache::EstimateTileCacheSize(unsigned int originalWidthTile, un
 void JPEG2000TileCache::Clear()
 {
   m_Cache.clear();
-  m_CacheSizeInTiles = 4;
-  m_CacheSizeInByte = 0;
-  m_IsReady = false;
 }
 
 
@@ -705,6 +707,11 @@ void JPEG2000TileCache::RemoveOneTile()
 
 void JPEG2000TileCache::AddTile(unsigned int tileIndex, boost::shared_ptr<opj_image_t> tileData)
 {
+  if(!m_IsReady)
+    {
+    std::cerr<<(this)<<" Cache is not configured !"<<std::endl;
+    }
+
   for(TileCacheType::const_iterator it = m_Cache.begin();
       it != m_Cache.end(); ++it)
     {
@@ -807,6 +814,9 @@ struct ThreadStruct
 {
   std::vector<boost::shared_ptr<JPEG2000InternalReader> > Readers;
   std::vector<JPEG2000TileCache::CachedTileType> * Tiles;
+  JPEG2000ImageIO::Pointer IO;
+  boost::shared_ptr<JPEG2000TileCache> Cache;
+  void * Buffer;
 };
 
 
@@ -969,28 +979,15 @@ void JPEG2000ImageIO::Read(void* buffer)
     ThreadStruct str;
     str.Readers = m_InternalReaders;
     str.Tiles = &toReadTiles;
-    
+    str.IO = this;
+    str.Cache = m_TileCache;
+    str.Buffer = buffer;
+
     // Set-up multi-threader
     this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
     
     // multithread the execution
     this->GetMultiThreader()->SingleMethodExecute();
-    }
-
-  // Load tiles that have been read
-  for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
-    {
-    this->LoadTileData(buffer, itTile->second.get());
-    }
-  
-
-  // Now, do cache book-keeping if necessary
-  if (m_TileCache->GetCacheSizeInTiles() != 0)
-    {
-    for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
-      {
-      m_TileCache->AddTile(itTile->first, itTile->second);
-      }
     }
 
   chrono.Stop();
@@ -1112,6 +1109,8 @@ void JPEG2000ImageIO::LoadTileData(void * buffer, void * currentTile)
 
 ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 {
+  static itk::SimpleFastMutexLock cacheMutex;
+
   ThreadStruct *str;
   unsigned int total, threadCount;
   int threadId;
@@ -1124,6 +1123,9 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
   // Retrieve data
   std::vector<boost::shared_ptr<JPEG2000InternalReader> > readers = str->Readers;
   std::vector<JPEG2000TileCache::CachedTileType> *  tiles = str->Tiles;
+  JPEG2000ImageIO::Pointer io = str->IO;
+  boost::shared_ptr<JPEG2000TileCache> cache = str->Cache;
+  void * buffer = str->Buffer;
 
   total = std::min((unsigned int)tiles->size(), threadCount);
 
@@ -1143,15 +1145,25 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
         i < tilesPerThread * (threadId+1);
         ++i)
     {
-    tiles->at(i).second = readers.at(threadId)->DecodeTile(tiles->at(i).first);
+    boost::shared_ptr<opj_image_t> currentTile = readers.at(threadId)->DecodeTile(tiles->at(i).first);
 
     // Check if tile is valid
-    if(!tiles->at(i).second)
+    if(!currentTile)
       {
       readers.at(threadId)->Clean();
       itkGenericExceptionMacro(" otbopenjpeg failed to decode the desired tile "<<tiles->at(i).first << "!");
       }
+
     otbMsgDevMacro(<< " Tile " << tiles->at(i).first << " decoded by thread "<<threadId);
+
+    io->LoadTileData(buffer, currentTile.get());
+     
+    if (cache->GetCacheSizeInTiles() != 0)
+     {
+     cacheMutex.Lock();
+     cache->AddTile(tiles->at(i).first, currentTile);
+     cacheMutex.Unlock();
+     }
     }
 
   unsigned int lastTile = threadCount*tilesPerThread + threadId;
@@ -1160,19 +1172,47 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 
   if(lastTile < tiles->size())
     {
-    tiles->at(lastTile).second = readers.at(threadId)->DecodeTile(tiles->at(lastTile).first);
-    
-    if(!tiles->at(lastTile).second)
+    boost::shared_ptr<opj_image_t> currentTile = readers.at(threadId)->DecodeTile(tiles->at(lastTile).first);
+
+    // Check if tile is valid
+    if(!currentTile)
       {
       readers.at(threadId)->Clean();
       itkGenericExceptionMacro(" otbopenjpeg failed to decode the desired tile "<<tiles->at(lastTile).first << "!");
       }
-    otbMsgDevMacro(<<" Tile " << tiles->at(lastTile).first << " decoded by thread "<<threadId);
+
+    otbMsgDevMacro(<< " Tile " <<tiles->at(lastTile).first  << " decoded by thread "<<threadId);
+
+    io->LoadTileData(buffer, currentTile.get());
+     
+    if (cache->GetCacheSizeInTiles() != 0)
+     {
+     cacheMutex.Lock();
+     cache->AddTile(tiles->at(lastTile).first, currentTile);
+     cacheMutex.Unlock();
+     }
     }
 
   return ITK_THREAD_RETURN_VALUE;
 }
 
+void JPEG2000ImageIO::ConfigureCache()
+{ 
+  itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
+                                    MetaDataKey::CacheSizeInBytes,
+                                    m_CacheSizeInByte);
+  
+  // Initialize some parameters of the tile cache
+  this->m_TileCache->Initialize(m_InternalReaders.front()->m_TileWidth,
+                                m_InternalReaders.front()->m_TileHeight,
+                                m_InternalReaders.front()->m_NbOfComponent,
+                                m_BytePerPixel,
+                                m_ResolutionFactor);
+
+  // If available set the size of the cache
+  if (this->m_CacheSizeInByte)
+    this->m_TileCache->SetCacheSizeInByte(this->m_CacheSizeInByte);
+}
 
 void JPEG2000ImageIO::ReadImageInformation()
 {
@@ -1181,10 +1221,6 @@ void JPEG2000ImageIO::ReadImageInformation()
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::ResolutionFactor,
                                     m_ResolutionFactor);
-
-  itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
-                                    MetaDataKey::CacheSizeInBytes,
-                                    m_CacheSizeInByte);
 
   // Now initialize the itk dictionary
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
@@ -1483,16 +1519,7 @@ void JPEG2000ImageIO::ReadImageInformation()
     this->SetPixelType(VECTOR);
     }
 
-  // Initialize some parameters of the tile cache
-  this->m_TileCache->Initialize(m_InternalReaders.front()->m_TileWidth,
-                                m_InternalReaders.front()->m_TileHeight,
-                                m_InternalReaders.front()->m_NbOfComponent,
-                                m_BytePerPixel,
-                                m_ResolutionFactor);
-
-  // If available set the size of the cache
-  if (this->m_CacheSizeInByte)
-    this->m_TileCache->SetCacheSizeInByte(this->m_CacheSizeInByte);
+  this->ConfigureCache();
 
   otbMsgDebugMacro(<< "==========================");
   otbMsgDebugMacro(<< "ReadImageInformation: ");
