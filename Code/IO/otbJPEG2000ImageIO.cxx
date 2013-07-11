@@ -46,7 +46,8 @@ extern "C"
 
 #include "otbTinyXML.h"
 
-#include "itkFastMutexLock.h"
+#include "itkMutexLock.h"
+#include "itkMutexLockHolder.h"
 
 void OpjImageDestroy(opj_image_t * img)
 {
@@ -1155,9 +1156,13 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
      
     if (cache->GetCacheSizeInTiles() != 0)
      {
-     cacheMutex.Lock();
+     static itk::SimpleMutexLock mutex;
+     {
+     // This helper class makes sure the Mutex is unlocked
+     // in the event an exception is thrown.
+     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
      cache->AddTile(tiles->at(i).first, currentTile);
-     cacheMutex.Unlock();
+     }
      }
     }
 
