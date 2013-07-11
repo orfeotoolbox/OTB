@@ -180,8 +180,6 @@ private:
     MandatoryOff("radius");
     SetDefaultParameterInt("radius", 2);
 
-    AddRAMParameter();
-
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("level", "toa");
