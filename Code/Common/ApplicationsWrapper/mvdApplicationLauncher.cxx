@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "ApplicationsWrapper/mvdApplicationLauncher.h"
+#include "mvdApplicationLauncher.h"
 
 
 /*****************************************************************************/
@@ -95,7 +95,7 @@ ApplicationLauncher
     {
     throw std::runtime_error(
       ToStdString(
-	tr( "Failed to instanciate OTB-application '%1'" )
+	tr( "Failed to instanciate OTB-application '%1'." )
 	.arg( appName )
       )
     );

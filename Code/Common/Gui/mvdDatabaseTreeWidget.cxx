@@ -16,8 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdDatabaseTreeWidget.h"
-//#include "Gui/ui_mvdDatabaseTreeWidget.h"
+#include "mvdDatabaseTreeWidget.h"
 
 
 /*****************************************************************************/

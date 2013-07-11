@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdTaskProgressDialog.h"
+#include "mvdTaskProgressDialog.h"
 
 
 /*****************************************************************************/

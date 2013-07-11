@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdColorSetupWidget.h"
-#include "Gui/ui_mvdColorSetupWidget.h"
+#include "mvdColorSetupWidget.h"
+#include "ui_mvdColorSetupWidget.h"
 
 
 /*****************************************************************************/

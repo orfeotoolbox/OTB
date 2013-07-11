@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdDatabaseBrowserWidget.h"
-#include "Gui/ui_mvdDatabaseBrowserWidget.h"
+#include "mvdDatabaseBrowserWidget.h"
+#include "ui_mvdDatabaseBrowserWidget.h"
 
 
 /*****************************************************************************/
@@ -184,7 +184,7 @@ DatabaseBrowserWidget
 
   m_DatasetRootItem = m_UI->databaseTreeWidget->topLevelItem( 0 );
   assert( m_DatasetRootItem!=NULL );
-  assert( m_DatasetRootItem->text( 0 )==tr( "Datasets" ) );
+  assert( m_DatasetRootItem->text( 0 )=="Datasets" );
 
 #if 0
   m_DatasetRootItem->setChildIndicatorPolicy( DatasetTreeWidgetItem::ShowIndicator );

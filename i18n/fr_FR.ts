@@ -2,111 +2,17 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
-    <name>ApplicationLauncher</name>
-    <message>
-        <source>Failed to instanciate OTB-application &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ApplicationsToolBox</name>
-    <message>
-        <source>Search Application ...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Orfeo Toolbox Algorithms</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ColorBandDynamicsWidget</name>
-    <message>
-        <source>Invalid argument &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ColorSetupWidget</name>
     <message>
         <source>BAND %1</source>
-        <translation type="unfinished">BANDE %1</translation>
+        <translation type="obsolete">BANDE %1</translation>
     </message>
 </context>
 <context>
     <name>DatabaseBrowserController</name>
     <message>
-        <source>Inconsistent Dataset disabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Warning!</source>
-        <translation type="unfinished">Avertissement !</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete dataset &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DatabaseBrowserWidget</name>
-    <message>
-        <source>Datasets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search Dataset ...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DatabaseTreeWidget</name>
-    <message>
-        <source>Delete Dataset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rename Dataset</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PixelDescriptionWidget</name>
-    <message>
-        <source>Geographic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pixel Values</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>X</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Y</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Long</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Elevation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Band</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Avertissement !</translation>
     </message>
 </context>
 <context>
@@ -117,13 +23,6 @@
     </message>
     <message>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TaskProgressDialog</name>
-    <message>
-        <source>%1 - Warning!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -262,6 +161,10 @@
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
+    <message>
+        <source>Failed to instanciate OTB-application &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::ApplicationsBrowser</name>
@@ -281,6 +184,14 @@
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>Search Application ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Orfeo Toolbox Algorithms</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -418,6 +329,10 @@
         <source>&lt;p&gt;&amp;lceil;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Invalid argument &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::ColorDynamicsController</name>
@@ -504,7 +419,7 @@
     </message>
     <message>
         <source>BAND %1</source>
-        <translation type="obsolete">BANDE %1</translation>
+        <translation type="unfinished">BANDE %1</translation>
     </message>
     <message>
         <source>Red</source>
@@ -562,6 +477,18 @@
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
+    <message>
+        <source>Inconsistent Dataset disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning!</source>
+        <translation type="unfinished">Avertissement !</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete dataset &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::DatabaseBrowserWidget</name>
@@ -581,6 +508,10 @@
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>Search Dataset ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -613,6 +544,14 @@
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>Delete Dataset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rename Dataset</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1344,6 +1283,42 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
+    <message>
+        <source>Geographic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixel Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Long</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Elevation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Band %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::PreferencesDialog</name>
@@ -1509,6 +1484,10 @@ Merci d&apos;en sélectionner un autre.</translation>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>%1 - Warning!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -60,9 +60,11 @@ set( Common_Core_HEADERS_MOC
 include_directories(
   ${Monteverdi2_BINARY_DIR}
   #
-  ${Monteverdi2_SOURCE_DIR}/Code/Common 
+  ${Monteverdi2_SOURCE_DIR}/Code/Common
+  #${Monteverdi2_SOURCE_DIR}/Code/Common/Core
   #
   ${Monteverdi2_BINARY_DIR}/Code/Common
+  ${Monteverdi2_BINARY_DIR}/Code/Common/Core
 )
 
 #############################################################################

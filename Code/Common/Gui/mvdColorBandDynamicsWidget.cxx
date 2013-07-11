@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdColorBandDynamicsWidget.h"
-#include "Gui/ui_mvdColorBandDynamicsWidget.h"
+#include "mvdColorBandDynamicsWidget.h"
+#include "ui_mvdColorBandDynamicsWidget.h"
 
 //
 // Qt includes (sorted by alphabetic order)

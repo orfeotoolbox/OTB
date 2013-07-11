@@ -40,8 +40,10 @@ include_directories(
   ${Monteverdi2_BINARY_DIR}
   #
   ${Monteverdi2_SOURCE_DIR}/Code/Common
+  #${Monteverdi2_SOURCE_DIR}/Code/Common/ApplicationsWrapper
   #
   ${Monteverdi2_BINARY_DIR}/Code/Common
+  ${Monteverdi2_BINARY_DIR}/Code/Common/ApplicationsWrapper
 )
 
 #############################################################################

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdPixelDescriptionWidget.h"
-#include "Gui/ui_mvdPixelDescriptionWidget.h"
+#include "mvdPixelDescriptionWidget.h"
+#include "ui_mvdPixelDescriptionWidget.h"
 
 
 /*****************************************************************************/
@@ -229,7 +229,7 @@ PixelDescriptionWidget
         }
       else
         {
-        iBandItem->setText(0, QString( tr("Band") )+ QString(" %1").arg(idx) );
+	iBandItem->setText( 0, tr( "Band %1" ).arg( idx ) );
         }
       // set the value
       iBandItem->setText(1, QString("%1").arg(currentPixel.GetElement( idx )) );
