@@ -207,17 +207,23 @@ MainWindow
   // Connect Appllication and MainWindow when selected model is about
   // to change.
   QObject::connect(
-    qApp, SIGNAL( AboutToChangeModel( const AbstractModel* ) ),
-    this, SLOT( OnAboutToChangeModel( const AbstractModel* ) )
+    I18nApplication::Instance(),
+    SIGNAL( AboutToChangeModel( const AbstractModel* ) ),
+    // to:
+    this,
+    SLOT( OnAboutToChangeModel( const AbstractModel* ) )
   );
 
   // Connect Application and MainWindow when selected model has been
   // changed.
   QObject::connect(
-    qApp, SIGNAL( ModelChanged( AbstractModel* ) ),
-    this, SLOT( OnModelChanged( AbstractModel* ) )
+    I18nApplication::Instance(),
+    SIGNAL( ModelChanged( AbstractModel* ) ),
+    // to:
+    this,
+    SLOT( OnModelChanged( AbstractModel* ) )
   );
-  
+
   // Show the progress dialog when a new image is loaded
   QObject::connect(
     this, SIGNAL( OpenImageRequest(QString) ), 

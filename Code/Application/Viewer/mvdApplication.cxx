@@ -67,10 +67,6 @@ Application
 ::Application( QApplication* qtApp ) :
   I18nApplication( qtApp )
 {
-  QObject::connect(
-    this, SIGNAL( aboutToQuit() ),
-    this, SLOT( OnAboutToQuit() )
-    );
 }
 
 /*******************************************************************************/
@@ -172,11 +168,5 @@ Application
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-Application
-::OnAboutToQuit()
-{
-  qDebug() << "mvd::Application::OnAboutToQuit().";
-}
 
 } // end namespace 'mvd'
