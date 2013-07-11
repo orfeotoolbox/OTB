@@ -388,6 +388,7 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
   // Setting default parameters
   opj_dparameters_t parameters;
   otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
+  parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
   
   // Set default event mgr
   opj_event_mgr_t eventManager;
@@ -414,13 +415,6 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
     }
   
   boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
-
-  if(!otbopenjpeg_opj_set_decoded_resolution_factor(codec.get(),static_cast<int>(this->m_ResolutionFactor)))
-    {
-    this->Clean();
-    return boost::shared_ptr<opj_image_t>();
-    }
-
 
   if( otbopenjpeg_opj_get_decoded_tile(codec.get(), stream.get(), image.get(), tileIndex))
     {
@@ -464,6 +458,7 @@ int JPEG2000InternalReader::Initialize()
     // Setting default parameters
     opj_dparameters_t parameters;
     otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
+    parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
 
     // Set default event mgr
     opj_event_mgr_t eventManager;
