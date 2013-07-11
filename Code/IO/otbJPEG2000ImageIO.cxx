@@ -502,7 +502,7 @@ int JPEG2000InternalReader::Initialize()
     this->m_Width = image->comps->w;
     this->m_Height = image->comps->h;
 
-    otbMsgDevMacro(<< "JPEG2000InternalReader dimension (after reading header) = "
+    otbMsgDevMacro(<< "JPEG2000InternalReader dimension (after reading header) = " << this->image->comps->w << " x "
                    << image->comps->w << " x " << image->comps->h );
 
     this->m_TileHeight = cstrInfo->tdy;
