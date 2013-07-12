@@ -1105,8 +1105,6 @@ void JPEG2000ImageIO::LoadTileData(void * buffer, void * currentTile)
 
 ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 {
-  static itk::SimpleFastMutexLock cacheMutex;
-
   ThreadStruct *str;
   unsigned int total, threadCount;
   int threadId;
