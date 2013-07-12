@@ -637,6 +637,8 @@ private:
   unsigned int m_TileCacheSizeInByte;
   bool m_IsReady;
 
+  itk::SimpleMutexLock m_Mutex;
+
   /** Estimate the size of a tile in memory*/
   void EstimateTileCacheSize(unsigned int originalWidthTile, unsigned int originalHeightTile,
                              unsigned int nbComponent,
@@ -703,6 +705,10 @@ void JPEG2000TileCache::RemoveOneTile()
 
 void JPEG2000TileCache::AddTile(unsigned int tileIndex, boost::shared_ptr<opj_image_t> tileData)
 {
+  // This helper class makes sure the Mutex is unlocked
+  // in the event an exception is thrown.
+  itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
+  
   if(!m_IsReady)
     {
     std::cerr<<(this)<<" Cache is not configured !"<<std::endl;
@@ -1154,13 +1160,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
      
     if (cache->GetCacheSizeInTiles() != 0)
      {
-     static itk::SimpleMutexLock mutex;
-     {
-     // This helper class makes sure the Mutex is unlocked
-     // in the event an exception is thrown.
-     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
      cache->AddTile(tiles->at(i).first, currentTile);
-     }
      }
     }
 
@@ -1185,9 +1185,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
      
     if (cache->GetCacheSizeInTiles() != 0)
      {
-     cacheMutex.Lock();
      cache->AddTile(tiles->at(lastTile).first, currentTile);
-     cacheMutex.Unlock();
      }
     }
 
