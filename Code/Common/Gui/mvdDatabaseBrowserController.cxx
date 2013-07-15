@@ -267,6 +267,8 @@ void
 DatabaseBrowserController
 ::OnCurrentDatasetChanged( const QString& name )
 {
+  qDebug() << this << "(" << name << ")";
+
   if( name.isEmpty() )
     return;
 

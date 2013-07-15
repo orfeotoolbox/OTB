@@ -65,12 +65,15 @@ namespace mvd
 /*******************************************************************************/
 DatasetTreeWidgetItem
 ::DatasetTreeWidgetItem( QTreeWidgetItem* parent,
-			 const QString& id, 
+			 const QString& id,
 			 const QString& alias,
 			 const QStringList& columns ) :
   QTreeWidgetItem( parent, QStringList( alias ) << id << columns )
 {
   assert( !id.isEmpty() );
+  assert( text( 1 )==id );
+
+  qDebug() << this << "(" << text( 0 ) << ", " << text( 1 ) << ")";
 }
 
 /*******************************************************************************/

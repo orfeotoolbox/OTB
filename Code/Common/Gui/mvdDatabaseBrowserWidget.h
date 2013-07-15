@@ -123,8 +123,6 @@ public:
 // Public SLOTS.
 public slots:
 
-  void OnSearchBoxChanged( const QString & search );
-
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -188,16 +186,16 @@ private:
   /**
    * \brief Root item of displayed datasets. It is named 'datasets'.
    */
-  StringPairListType  m_DatasetList;
+  StringPairListType m_DatasetList;
 
   /**
    */
-  QPoint           m_StartDragPosition;
+  QPoint m_StartDragPosition;
 
   /**
    * \brief text to search in the widget tree
    */
-  QString                  m_SearchText;  
+  QString m_SearchText;  
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -214,6 +212,16 @@ private slots:
    */
   void on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
 						 QTreeWidgetItem* previous );
+
+#if 0
+  /**
+   */
+  void OnSearchBoxChanged( const QString & search );
+#else
+  /**
+   */
+  void on_m_SearchLine_textChanged( const QString& search );
+#endif
 };
 
 } // end namespace 'mvd'

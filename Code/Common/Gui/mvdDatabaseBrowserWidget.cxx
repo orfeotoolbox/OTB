@@ -72,7 +72,10 @@ DatabaseBrowserWidget
 ::DatabaseBrowserWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::DatabaseBrowserWidget() ),
-  m_DatasetRootItem( NULL )
+  m_DatasetRootItem( NULL ),
+  m_DatasetList(),
+  m_StartDragPosition(),
+  m_SearchText()
 {
   m_UI->setupUi( this );
 
@@ -82,6 +85,7 @@ DatabaseBrowserWidget
 
   SetupUI();
 
+#if 0
   //
   // connect search box changed
   QObject::connect(
@@ -91,6 +95,7 @@ DatabaseBrowserWidget
     this,
     SLOT( OnSearchBoxChanged( const QString& ) )
   );
+#endif
 }
 
 /*******************************************************************************/
@@ -123,15 +128,30 @@ DatabaseBrowserWidget
   // get the currentItem Id if any selected.
   // since all the TreeWidgetItem are deleted next, need to remember
   // it in order to set it back
-  QString currentItemId = QString();
+  QString currentItemId;
 
   DatasetTreeWidgetItem* selectedItem = 
-    dynamic_cast<DatasetTreeWidgetItem*>( GetDatabaseTreeWidget()->currentItem() );
+    dynamic_cast< DatasetTreeWidgetItem* >(
+      GetDatabaseTreeWidget()->currentItem()
+    );
+
   if (selectedItem)
     {
     currentItemId = selectedItem->GetId();
     }
-  
+
+  // TODO: Get initial algorithm back (synchronizes two ordered
+  // sequences using QTreeWidget::findItems<>().
+  //
+  // Because:
+  // 1. removing items can provoque selection changes;
+  // 2. it's needed to re-emit signal to keep current selection
+  // active.
+  //
+  // Initial algorithm took care of current-selection and was
+  // optimized to not delete useful items which must be inserted
+  // again.
+
   // Remove all previously stored dataset child items.
   while( m_DatasetRootItem->childCount()>0 )
     {
@@ -154,24 +174,23 @@ DatabaseBrowserWidget
     const StringPairListType::value_type::first_type& alias = it->first;
     const StringPairListType::value_type::second_type& id = it->second;
 
-    // Is the searchText match the current alias or at least a part of
-    // it 
-    if (m_SearchText.isEmpty() ||
-        alias.contains(m_SearchText ,Qt::CaseInsensitive) )
+    DatasetTreeWidgetItem* item =
+      new DatasetTreeWidgetItem( m_DatasetRootItem, id, alias );
+
+    // Item is visible is search-text is empty or if alias contains
+    // search-text.
+    item->setHidden(
+      !m_SearchText.isEmpty() &&
+      !item->text( 0 ).contains( m_SearchText, Qt::CaseInsensitive )
+    );
+
+    // was it the selected item ?
+    if( currentItemId == id )
       {
-      DatasetTreeWidgetItem* item =
-	new DatasetTreeWidgetItem( m_DatasetRootItem, id, alias );
-
-      // was it the selected item ?
-      if( currentItemId == alias )
-        {
-        // ...add this child item as currentItem
-        GetDatabaseTreeWidget()->setCurrentItem( item );
-        }
+      // ...add this child item as currentItem
+      GetDatabaseTreeWidget()->setCurrentItem( item );
       }
-    
     }
-
 }
 
 /*****************************************************************************/
@@ -264,14 +283,33 @@ DatabaseBrowserWidget
 /*******************************************************************************/
 void
 DatabaseBrowserWidget
+#if 0
 ::OnSearchBoxChanged(const QString & search)
+#else
+::on_m_SearchLine_textChanged( const QString& search )
+#endif
 {
   // 
   // get the search text
   m_SearchText = search;
-  
+
+#if 0
   // fill the tree with the application
   FillTree();  
+#else
+  for( int i=0; i<m_DatasetRootItem->childCount();  ++i )
+    {
+    QTreeWidgetItem* item = m_DatasetRootItem->child( i );
+    assert( item!=NULL );
+
+    // Item is visible if search is empty or if alias contains
+    // search-text.
+    item->setHidden(
+      !search.isEmpty() &&
+      !item->text( 0 ).contains( search, Qt::CaseInsensitive )
+    );
+    }
+#endif
 }
 
 } // end namespace 'mvd'

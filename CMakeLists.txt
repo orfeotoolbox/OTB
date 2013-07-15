@@ -41,7 +41,7 @@ if(WIN32)
   add_definitions(-DNOMINMAX -DOSSIM_STATIC)
 endif(WIN32)
 
-#----------------------------------------------------------------------------
+#--------------------------------------------------------------3--------------
 # Orfeo ToolBox
 find_package(OTB REQUIRED)
 if(OTB_FOUND)
