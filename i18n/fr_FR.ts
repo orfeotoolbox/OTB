@@ -19,11 +19,11 @@
     <name>QObject</name>
     <message>
         <source>Execute</source>
-        <translation type="unfinished"></translation>
+        <translation>Exécuter</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitter</translation>
     </message>
 </context>
 <context>
@@ -67,19 +67,19 @@
     </message>
     <message>
         <source>Red</source>
-        <translation type="unfinished">Rouge</translation>
+        <translation>Rouge</translation>
     </message>
     <message>
         <source>Green</source>
-        <translation type="unfinished">Vert</translation>
+        <translation>Vert</translation>
     </message>
     <message>
         <source>Blue</source>
-        <translation type="unfinished">Bleu</translation>
+        <translation>Bleu</translation>
     </message>
     <message>
         <source>Yellow</source>
-        <translation type="unfinished">Jaune</translation>
+        <translation>Jaune</translation>
     </message>
     <message>
         <source>RedEdge</source>
@@ -87,23 +87,23 @@
     </message>
     <message>
         <source>Coastal</source>
-        <translation type="unfinished">Côtier</translation>
+        <translation>Côtier</translation>
     </message>
     <message>
         <source>NIR</source>
-        <translation type="unfinished">PIR</translation>
+        <translation>PIR</translation>
     </message>
     <message>
         <source>NIR1</source>
-        <translation type="unfinished">PIR1</translation>
+        <translation>PIR1</translation>
     </message>
     <message>
         <source>NIR2</source>
-        <translation type="unfinished">PIR2</translation>
+        <translation>PIR2</translation>
     </message>
     <message>
         <source>PAN</source>
-        <translation type="unfinished"></translation>
+        <translation>PAN</translation>
     </message>
 </context>
 <context>
@@ -163,7 +163,7 @@
     </message>
     <message>
         <source>Failed to instanciate OTB-application &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec lors de l&apos;instanciation de l&apos;application OTB &apos;%1&apos;.</translation>
     </message>
 </context>
 <context>
@@ -178,7 +178,7 @@
     <name>mvd::ApplicationsToolBox</name>
     <message>
         <source>OTB Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Applications OTB</translation>
     </message>
     <message>
         <source></source>
@@ -187,11 +187,11 @@
     </message>
     <message>
         <source>Search Application ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Recher application...</translation>
     </message>
     <message>
         <source>Orfeo Toolbox Algorithms</source>
-        <translation type="unfinished"></translation>
+        <translation>Algorithmes Orfeo Toolbox</translation>
     </message>
 </context>
 <context>
@@ -218,7 +218,7 @@
     </message>
     <message>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Activé</translation>
     </message>
     <message>
         <source></source>
@@ -303,35 +303,35 @@
     </message>
     <message>
         <source>Apply all</source>
-        <translation type="unfinished"></translation>
+        <translation>Appliquer à tous</translation>
     </message>
     <message>
         <source>min/Max</source>
-        <translation type="unfinished"></translation>
+        <translation>min/Max</translation>
     </message>
     <message>
         <source>Quantile:</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantile:</translation>
     </message>
     <message>
         <source>Intensity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Intensité:</translation>
     </message>
     <message>
         <source>2%</source>
-        <translation type="unfinished"></translation>
+        <translation>2%</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;color:#EEEEEE;background-color:#111111&quot;&gt;&amp;nbsp;&lt;b&gt;W&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&quot;color:#EEEEEE;background-color:#111111&quot;&gt;&amp;nbsp;&lt;b&gt;G&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;&amp;lceil;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Invalid argument &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Argument &apos;%1&apos; invalide.</translation>
     </message>
 </context>
 <context>
@@ -359,7 +359,7 @@
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Appliquer</translation>
     </message>
 </context>
 <context>
@@ -419,7 +419,7 @@
     </message>
     <message>
         <source>BAND %1</source>
-        <translation type="unfinished">BANDE %1</translation>
+        <translation>BANDE %1</translation>
     </message>
     <message>
         <source>Red</source>
@@ -455,11 +455,11 @@
     </message>
     <message>
         <source>&lt;span style=&quot;color:#EEEEEE;background-color:#111111&quot;&gt;&amp;nbsp;&lt;b&gt;W&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span style=&quot;color:#EEEEEE;background-color:#111111&quot;&gt;&amp;nbsp;&lt;b&gt;G&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Enable/disable gray-scale mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer/désactiver le mode niveaux de gris.</translation>
     </message>
 </context>
 <context>
@@ -479,15 +479,15 @@
     </message>
     <message>
         <source>Inconsistent Dataset disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Dataset inconsistent désactivé</translation>
     </message>
     <message>
         <source>Warning!</source>
-        <translation type="unfinished">Avertissement !</translation>
+        <translation>Avertissement !</translation>
     </message>
     <message>
         <source>Are you sure you want to delete dataset &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous certain de vouloir supprimer le dataset &apos;%1&apos; ?</translation>
     </message>
 </context>
 <context>
@@ -498,11 +498,11 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Datasets</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source></source>
@@ -511,7 +511,7 @@
     </message>
     <message>
         <source>Search Dataset ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechercher dataset...</translation>
     </message>
 </context>
 <context>
@@ -523,19 +523,19 @@
     </message>
     <message>
         <source>Failed to remove file &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la suppression du fichier &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to access parent directory of &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec de l&apos;accès au répertoire parent &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to remove dataset directory &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec lors de la suppression du répertoire du dataset &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>%1 outdated datasets. Please clear cache directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 datasets obsolètes. Veuillez vider votre répertoire de cache.</translation>
     </message>
 </context>
 <context>
@@ -547,11 +547,11 @@
     </message>
     <message>
         <source>Delete Dataset</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer dataset</translation>
     </message>
     <message>
         <source>Rename Dataset</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer dataset</translation>
     </message>
 </context>
 <context>
@@ -599,35 +599,35 @@
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>inconnu(e)</translation>
     </message>
     <message>
         <source>File Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations fichier</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier</translation>
     </message>
     <message>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire</translation>
     </message>
     <message>
         <source>Size in Bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille (en octets)</translation>
     </message>
     <message>
         <source>Image Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations image</translation>
     </message>
     <message>
         <source>Dimension</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimension</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished"></translation>
+        <translation>Origine</translation>
     </message>
     <message>
         <source>Pixels size</source>
@@ -635,27 +635,27 @@
     </message>
     <message>
         <source>Number of components</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de composantes</translation>
     </message>
     <message>
         <source>Block size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille de bloc</translation>
     </message>
     <message>
         <source>Placename</source>
-        <translation type="unfinished"></translation>
+        <translation>Toponyme</translation>
     </message>
     <message>
         <source>Metadatas</source>
-        <translation type="unfinished"></translation>
+        <translation>Méta-données</translation>
     </message>
     <message>
         <source>Sensor</source>
-        <translation type="unfinished"></translation>
+        <translation>Capteur</translation>
     </message>
     <message>
         <source>Default RGB</source>
-        <translation type="unfinished"></translation>
+        <translation>RVB par défaut</translation>
     </message>
 </context>
 <context>
@@ -674,11 +674,11 @@
     </message>
     <message>
         <source>Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriété</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur</translation>
     </message>
     <message>
         <source></source>
@@ -711,15 +711,15 @@
     </message>
     <message>
         <source>Unable to list suppored OpenGL versions using QGLFormat. Qt version is %1. Please upgrade to Qt 4.7.0 or newer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de lister les version OpenGL supportés via QGLFormat. Qt version is %1. Veuillez actualiser Qt à la version 4.7.0 ou plus.  </translation>
     </message>
     <message>
         <source>Runtime version of OpenGL used by Qt %1: %2.%3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Version OpenGL utilisée par Qt %1.%2.%3 durant l&apos;exécution.</translation>
     </message>
     <message>
         <source>Version(s) of OpenGL supported by Qt %1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Version(s) OpenGL supportées par Qt %1:</translation>
     </message>
 </context>
 <context>
@@ -771,19 +771,19 @@
     </message>
     <message>
         <source>%1: Reading histogram...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 : Lecture de l&apos;histogramme...</translation>
     </message>
     <message>
         <source>%1: Histogram read (%2 ms)...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 : Histogramme lu (%2 ms)...</translation>
     </message>
     <message>
         <source>%1: Writing histogram...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 : Écriture de l&apos;histogramme... </translation>
     </message>
     <message>
         <source>%1: Histogram written (%2 ms)...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 : histogram écrit (%2 ms)...</translation>
     </message>
 </context>
 <context>
@@ -861,7 +861,7 @@
     </message>
     <message>
         <source>Error: </source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur : </translation>
     </message>
     <message>
         <source>FATAL&gt; %s
@@ -870,47 +870,47 @@
     </message>
     <message>
         <source>Fatal error: </source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur fatale : </translation>
     </message>
     <message>
         <source>Class &apos;I18nCoreApplication&apos; instance must be provided aQCoreApplication&apos; pointer at construction time!</source>
-        <translation type="unfinished"></translation>
+        <translation>Il faut fournir un pointeur vers une instance de &quot;QCoreApplication&quot; lors de la construction d&apos;une instance de la classe &quot;I18nCoreApplication&quot; !</translation>
     </message>
     <message>
         <source>An error occured while loading the geoid file, no geoid file will be used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s&apos;est produite lors du chargement du fichier geoide, aucun fichier geoide ne sera utilisé.</translation>
     </message>
     <message>
         <source>An error occured while loading the DEM directory, no DEM will be used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s&apos;est produite lors du chargement depuis le répertoire MNT, aucun MNT ne sera utilisé.</translation>
     </message>
     <message>
         <source>Failed to locate translation files directory &apos;i18n&apos; in &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le sous-répertoire &apos;%1&apos; contenant les fichiers de traduction n&apos;a pas pu être trouvé dans le répertoire &apos;i18n&apos;.</translation>
     </message>
     <message>
         <source>Running from build directory &apos;%1&apos;.</source>
-        <translation type="unfinished">Exécution depuis le répertoire de compilation &apos;%1&apos;.</translation>
+        <translation>Exécution depuis le répertoire de compilation &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Loading translation files from directory &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Charement des fichiers de traduction depuis le répertoire &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Running from install directory &apos;%1&apos;.</source>
-        <translation type="unfinished">Exécution depuis le répertoire d&apos;installation &apos;%1&apos;.</translation>
+        <translation>Exécution depuis le répertoire d&apos;installation &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to access translation-files directory &apos;%1&apos;</source>
-        <translation type="unfinished">Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
+        <translation>Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Failed to load &apos;%1&apos; translation file from &apos;%2&apos;.</source>
-        <translation type="unfinished">Échec de chargement du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+        <translation>Échec de chargement du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
     </message>
     <message>
         <source>Successfully loaded &apos;%1&apos; translation file from &apos;%2&apos;.</source>
-        <translation type="unfinished">Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+        <translation>Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
     </message>
 </context>
 <context>
@@ -922,20 +922,20 @@
     </message>
     <message>
         <source>Welcome new </source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenu nouvel </translation>
     </message>
     <message>
         <source>Do you want to specify a custom repository location?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous définir une chemin de dépôt personnalisé ?</translation>
     </message>
     <message>
         <source>Please, select directory where the </source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez sélectionner un répertoire où </translation>
     </message>
     <message>
         <source>Dataset has been modified.
 Do you want to save settings before quitting?</source>
-        <translation type="unfinished">Jeu de données modifié.
+        <translation>Jeu de données modifié.
 Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
 </context>
@@ -948,7 +948,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Importing image &apos;%1&apos; as dataset into cache directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Image &apos;%1&apos; en cours d&apos;import comme dataset dans le répertoire de cache...</translation>
     </message>
 </context>
 <context>
@@ -1134,90 +1134,90 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>&amp;Open image...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ouvrir image...</translation>
     </message>
     <message>
         <source>Open image...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir image...</translation>
     </message>
     <message>
         <source>Open image-file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir fichier image.</translation>
     </message>
     <message>
         <source>Zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomer</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>Dézoomer</translation>
     </message>
     <message>
         <source>Zoom to image extent</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomer étendue image</translation>
     </message>
     <message>
         <source>Zoom to full resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomer à pleine résolution</translation>
     </message>
     <message>
         <source>Tool bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barre d&apos;outils</translation>
     </message>
     <message>
         <source>Database browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigateur de base de données</translation>
     </message>
     <message>
         <source>Pixel Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Description pixel</translation>
     </message>
     <message>
         <source>Dataset properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés du dataset</translation>
     </message>
     <message>
         <source>OTB Applications browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigateur d&apos;applications OTB</translation>
     </message>
     <message>
         <source>Quicklook view</source>
-        <translation type="unfinished"></translation>
+        <translation>Apperçu</translation>
     </message>
     <message>
         <source>Color setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix des canaux couleurs</translation>
     </message>
     <message>
         <source>Color dynamics</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglage de la dynamique d&apos;affichage</translation>
     </message>
     <message>
         <source>Image view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vue image</translation>
     </message>
     <message>
         <source>Tab cannot be closed while OTB application is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;onglet de l&apos;application OTB ne peut pas être fermé lors de l&apos;exécution de l&apos;application OTB.</translation>
     </message>
     <message>
         <source>Welcome new Montevedi2 user !</source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenu, nouvel utilisateur Monteverdi2 !</translation>
     </message>
 </context>
 <context>
     <name>mvd::MainWindowTitleLoader</name>
     <message>
         <source> bands, </source>
-        <translation type="unfinished"> bandes, </translation>
+        <translation> bandes, </translation>
     </message>
     <message>
         <source> pixels)</source>
-        <translation type="unfinished"></translation>
+        <translation> pixels)</translation>
     </message>
     <message>
         <source>Location</source>
-        <translation type="unfinished">Localisation</translation>
+        <translation>Localisation</translation>
     </message>
 </context>
 <context>
@@ -1268,15 +1268,15 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     <name>mvd::PixelDescriptionWidget</name>
     <message>
         <source>Pixel Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Description pixel</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Description</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur</translation>
     </message>
     <message>
         <source></source>
@@ -1285,11 +1285,11 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Geographic</source>
-        <translation type="unfinished"></translation>
+        <translation>Géographique</translation>
     </message>
     <message>
         <source>Pixel Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeurs pixel</translation>
     </message>
     <message>
         <source>X</source>
@@ -1309,15 +1309,15 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Elevation</source>
-        <translation type="unfinished"></translation>
+        <translation>Élévation</translation>
     </message>
     <message>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Non disponible</translation>
     </message>
     <message>
         <source>Band %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bande %1</translation>
     </message>
 </context>
 <context>
@@ -1363,39 +1363,39 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Location of user dataset-repository.</source>
-        <translation type="unfinished"></translation>
+        <translation>Localisation du dépôt de dataset utilisateur.</translation>
     </message>
     <message>
         <source>Results directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire de résultats</translation>
     </message>
     <message>
         <source>Default directory for results data</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire par défaut pour les données résultats</translation>
     </message>
     <message>
         <source>Elevation Management</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestion de l&apos;élévation</translation>
     </message>
     <message>
         <source>Geoid File            </source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier géoide</translation>
     </message>
     <message>
         <source>SRTM Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire SRTM</translation>
     </message>
     <message>
         <source>Select the directory containing SRTM tiles.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez choisir le répertoire contenant les tuiles SRTM.</translation>
     </message>
     <message>
         <source>Select a geoid file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuilez choisir un fichier geoïde.</translation>
     </message>
     <message>
         <source>Select the default directory for results data: </source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez choisir le répertoire par défaut pour les données résultats:</translation>
     </message>
 </context>
 <context>
@@ -1451,15 +1451,15 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Position</translation>
     </message>
     <message>
         <source>Radiometry</source>
-        <translation type="unfinished">Radiométrie</translation>
+        <translation>Radiométrie</translation>
     </message>
     <message>
         <source>Zoom Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de zoom</translation>
     </message>
 </context>
 <context>
@@ -1487,7 +1487,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>%1 - Warning!</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - Avertissement !</translation>
     </message>
 </context>
 <context>
@@ -1563,7 +1563,7 @@ La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
         <source>The file already has overviews!</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
 </context>
 <context>
