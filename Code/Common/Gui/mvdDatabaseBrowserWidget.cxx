@@ -238,7 +238,8 @@ DatabaseBrowserWidget
   QList< QTreeWidgetItem* > items(
     m_UI->databaseTreeWidget->findItems(
       id,
-      Qt::MatchExactly | Qt::MatchRecursive
+      Qt::MatchExactly | Qt::MatchRecursive,
+      1
     )
   );
 
