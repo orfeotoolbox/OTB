@@ -62,6 +62,14 @@ void OpjCodestreamDestroy(opj_codestream_info_v2 * cstr)
   otbopenjpeg_opj_destroy_cstr_info_v2(&cstr);
 }
 
+void FileDestroy(FILE * file)
+{
+  if(file)
+    {
+    fclose(file);
+    }
+}
+
 /**
 Divide an integer by a power of 2 and round upwards
 @return Returns a divided by 2^b
@@ -300,7 +308,7 @@ int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
   this->Clean();
 
   // Open the file
-  this->m_File  = boost::shared_ptr<FILE>(fopen(filename, "rb"),fclose);
+  this->m_File  = boost::shared_ptr<FILE>(fopen(filename, "rb"),FileDestroy);
   if (!this->m_File)
     {
     this->Clean();
