@@ -530,6 +530,7 @@ int JPEG2000InternalReader::Initialize()
 
     // Warning: This value is based on the first component of the default tile parameters.
     unsigned int numResAvailable = cstrInfo->m_default_tile_info.tccp_info[0].numresolutions;
+    m_AvailableResolutions.clear();
     for (unsigned int itRes = 0; itRes < numResAvailable; itRes++)
       {
       m_AvailableResolutions.push_back(itRes);
