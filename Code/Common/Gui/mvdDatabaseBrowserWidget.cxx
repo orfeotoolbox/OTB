@@ -230,7 +230,7 @@ void
 DatabaseBrowserWidget
 ::SetCurrentDataset( const QString& id )
 {
-  qDebug() << this << "::SetCurrentDataset(" << id << ")";
+  // qDebug() << this << "::SetCurrentDataset(" << id << ")";
 
   assert( m_UI!=NULL );
   assert( m_UI->databaseTreeWidget!=NULL );
@@ -259,11 +259,13 @@ DatabaseBrowserWidget
 ::on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
 					    QTreeWidgetItem* previous )
 {
+  /*
   qDebug() <<
     this <<
     "::on_databaseTreeWidget_currentItemChanged(" <<
     current << ", " << previous <<
     ")";
+  */
 
   // assert( current!=previous );
 
