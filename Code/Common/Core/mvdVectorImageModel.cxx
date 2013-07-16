@@ -33,6 +33,7 @@
 // ITK includes (sorted by alphabetic order)
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itksys/SystemTools.hxx"
+#include "vnl/vnl_random.h"
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -42,6 +43,7 @@
 #include "otbGeoInformationConversion.h"
 #include "otbCoordinateToName.h"
 #include "otbDEMHandler.h"
+#include "otbGroundSpacingImageFunction.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -124,11 +126,34 @@ VectorImageModel
   // Remember native spacing
   m_NativeSpacing = m_ImageFileReader->GetOutput()->GetSpacing();
 
+  
   // Setup GenericRSTransform
   m_GenericRSTransform = otb::GenericRSTransform<>::New();
   m_GenericRSTransform->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
   m_GenericRSTransform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
   m_GenericRSTransform->InstanciateTransform();
+
+  //Compute estimated spacing here
+  //m_EstimatedGroundSpacing
+  m_EstimatedGroundSpacing = m_NativeSpacing;
+ 
+  typedef otb::GroundSpacingImageFunction<VectorImageType> GroundSpacingImageType;
+  GroundSpacingImageType::Pointer GroundSpacing = GroundSpacingImageType::New();
+  GroundSpacing->SetInputImage(m_ImageFileReader->GetOutput());
+  
+  if (m_GenericRSTransform->IsUpToDate())
+    {
+    if (m_GenericRSTransform->GetTransformAccuracy() != otb::Projection::UNKNOWN)
+      {
+      IndexType  index;
+      vnl_random rand;
+
+      index[0] = static_cast<IndexType::IndexValueType>(rand.lrand32(0, m_ImageFileReader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]));
+      index[1] = static_cast<IndexType::IndexValueType>(rand.lrand32(0, m_ImageFileReader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]));
+
+      m_EstimatedGroundSpacing = GroundSpacing->EvaluateAtIndex(index);
+      }
+    }
 
   //
   // 2. Setup file-reader.

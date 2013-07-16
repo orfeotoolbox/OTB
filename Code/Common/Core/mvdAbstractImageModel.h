@@ -222,6 +222,12 @@ public:
    */
   inline const SpacingType& GetNativeSpacing() const;
 
+  /**
+   * \return The estimated spacing of the native image at full resolution
+   * 
+   */
+  inline const SpacingType& GetEstimatedGroundSpacing() const;
+
   /** */
   inline CountType GetNbComponents() const;
 
@@ -321,6 +327,12 @@ protected:
    * default, LOD level zero.
    */
   SpacingType m_NativeSpacing;
+
+  /**
+   * The estimated spacing of the native image at full resolution  which is, by
+   * default, display in image info.
+   */
+  SpacingType m_EstimatedGroundSpacing;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -489,6 +501,16 @@ AbstractImageModel
 ::GetNativeSpacing() const
 {
   return m_NativeSpacing;
+}
+
+
+/*****************************************************************************/
+inline
+const SpacingType&
+AbstractImageModel
+::GetEstimatedGroundSpacing() const
+{
+  return m_EstimatedGroundSpacing;
 }
 
 /*****************************************************************************/

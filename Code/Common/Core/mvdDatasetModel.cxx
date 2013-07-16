@@ -629,9 +629,9 @@ DatasetModel
   porigin.second = ToStdString( viModel->ToImageBase()->GetOrigin() );
 
   //
-  pspacing.first  = ToStdString ( tr("Pixels size") );
-  pspacing.second = ToStdString( viModel->GetNativeSpacing() );
-
+  pspacing.first  = ToStdString ( tr("Estimated ground spacing") );
+  pspacing.second = ToStdString( viModel->GetEstimatedGroundSpacing() );
+  
   //
   pnbcomp.first  = ToStdString ( tr("Number of components") );
   pnbcomp.second = ToStdString( viModel->ToImageBase()->GetNumberOfComponentsPerPixel() );
