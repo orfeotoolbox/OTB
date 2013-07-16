@@ -1368,7 +1368,8 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnApplicationToLaunchSelected(const QString & appName, const QString & docName)
+::OnApplicationToLaunchSelected( const QString& appName,
+				 const QString& docName)
 {
 #ifdef OTB_WRAP_QT
 
@@ -1433,6 +1434,8 @@ MainWindow
   QWidget* appWidget = m_CentralTabWidget->widget( index );
   assert( appWidget!=NULL );
 
+#ifdef OTB_WRAP_QT
+
   assert( appWidget==qobject_cast< Wrapper::QtWidgetView* >( appWidget ) );
   Wrapper::QtWidgetView* appWidgetView =
     qobject_cast< Wrapper::QtWidgetView* >( appWidget );
@@ -1449,10 +1452,12 @@ MainWindow
     return;
     }
 
+#endif
+
   m_CentralTabWidget->removeTab( index );
 
-  delete appWidgetView;
-  appWidgetView = NULL;
+  delete appWidget;
+  appWidget = NULL;
 }
 
 /*****************************************************************************/
