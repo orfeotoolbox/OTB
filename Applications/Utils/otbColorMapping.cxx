@@ -421,6 +421,8 @@ private:
   {
     if (GetParameterInt("method") == 0)
       {
+      otbAppLogINFO("Color mapping with custom labeled look-up table");
+
       m_CasterToLabelImage = CasterToLabelImageType::New();
       m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
       m_CasterToLabelImage->InPlaceOn();
@@ -435,6 +437,8 @@ private:
       }
     else if (GetParameterInt("method") == 1)
       {
+      otbAppLogINFO("Color mapping with continuous look-up table");
+
       m_ContinuousColorMapper = ColorMapFilterType::New();
 
       m_ContinuousColorMapper->SetInput(GetParameterFloatImage("in"));
@@ -467,6 +471,8 @@ private:
       }
     else if (GetParameterInt("method") == 2)
       {
+      otbAppLogINFO("Color mapping with an optimized look-up table");
+      
       m_CasterToLabelImage = CasterToLabelImageType::New();
       m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
       m_CasterToLabelImage->InPlaceOn();
@@ -478,7 +484,7 @@ private:
       }
     else if (GetParameterInt("method") == 3)
       {
-      otbAppLogINFO(" look-up table calculated on support image ");
+      otbAppLogINFO("Color mapping with a look-up table computed on support image ");
 
       // image normalisation of the sampling
       FloatVectorImageType::Pointer supportImage = this->GetParameterImage("method.image.in");
@@ -660,12 +666,15 @@ private:
 
     if(GetParameterInt("method")==0)
       {
+      otbAppLogINFO("Color mapping with custom labeled look-up table");
       ReadLutFromFile(false);
 
       SetParameterOutputImage<LabelVectorImageType>("out", m_InverseMapper->GetOutput());
       }
     else if(GetParameterInt("method")==2)
       {
+      otbAppLogINFO("Color mapping with an optimized look-up table");
+
       // Safe mode : the LUT is computed with the colors found in the image
       std::set<RGBPixelType, Functor::VectorLexicographicCompare<RGBPixelType> > colorList;
       RGBPixelType background;
