@@ -83,7 +83,7 @@
     </message>
     <message>
         <source>RedEdge</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Red-edge</translation>
     </message>
     <message>
         <source>Coastal</source>
@@ -191,7 +191,7 @@
     </message>
     <message>
         <source>Orfeo Toolbox Algorithms</source>
-        <translation>Algorithmes Orfeo Toolbox</translation>
+        <translation>Applications OTB</translation>
     </message>
 </context>
 <context>
@@ -214,7 +214,7 @@
     <name>mvd::CheckableLineEdit</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -254,7 +254,7 @@
     </message>
     <message>
         <source>Apply quantiles to all channels.</source>
-        <translation>Applique les quantiles à tout les canaux.</translation>
+        <translation type="unfinished">Applique les quantiles à tous les canaux.</translation>
     </message>
     <message>
         <source>Apply to all</source>
@@ -307,7 +307,7 @@
     </message>
     <message>
         <source>min/Max</source>
-        <translation>min/Max</translation>
+        <translation type="unfinished">min/max</translation>
     </message>
     <message>
         <source>Quantile:</source>
@@ -355,7 +355,7 @@
     </message>
     <message>
         <source>No data: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">NoData:</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -378,7 +378,7 @@
     </message>
     <message utf8="true">
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Image bands&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Bandes de l&apos;image&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Bandes&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;color:#000000;background-color:#FF4444&quot;&gt;&amp;nbsp;&lt;b&gt;R&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
@@ -630,10 +630,6 @@
         <translation>Origine</translation>
     </message>
     <message>
-        <source>Pixels size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Number of components</source>
         <translation>Nombre de composantes</translation>
     </message>
@@ -656,6 +652,10 @@
     <message>
         <source>Default RGB</source>
         <translation>RVB par défaut</translation>
+    </message>
+    <message>
+        <source>Estimated ground spacing</source>
+        <translation>Résolution au sol (estimée)</translation>
     </message>
 </context>
 <context>
@@ -779,7 +779,7 @@
     </message>
     <message>
         <source>%1: Writing histogram...</source>
-        <translation type="unfinished">%1 : Écriture de l&apos;histogramme... </translation>
+        <translation>%1 : Écriture de l&apos;histogramme... </translation>
     </message>
     <message>
         <source>%1: Histogram written (%2 ms)...</source>
@@ -1068,23 +1068,23 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Quicklook (show/hide).</source>
-        <translation>Aperçu (voir/masquer).</translation>
+        <translation>Aperçu (montrer/cacher).</translation>
     </message>
     <message>
         <source>Video color setup</source>
-        <translation>Choix des canaux couleurs</translation>
+        <translation>Choix des canaux</translation>
     </message>
     <message>
         <source>Video color setup (show/hide).</source>
-        <translation>Choix des canaux couleurs (voir/masquer).</translation>
+        <translation>Choix des canaux (montrer/cacher).</translation>
     </message>
     <message>
         <source>Video color dynamics</source>
-        <translation>Réglage de la dynamique d&apos;affichage</translation>
+        <translation>Réglage de la dynamique</translation>
     </message>
     <message>
         <source>Video color dynamics (show/hide).</source>
-        <translation>Réglage de la dynamique d&apos;affichage (voir/masquer).</translation>
+        <translation>Réglage de la dynamique (montrer/cacher).</translation>
     </message>
     <message>
         <source> bands, </source>
@@ -1138,11 +1138,11 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Open image...</source>
-        <translation>Ouvrir image...</translation>
+        <translation>Nouvelle image...</translation>
     </message>
     <message>
         <source>Open image-file.</source>
-        <translation>Ouvrir fichier image.</translation>
+        <translation>Nouveau fichier image.</translation>
     </message>
     <message>
         <source>Zoom in</source>
@@ -1154,7 +1154,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Zoom to image extent</source>
-        <translation>Zoomer étendue image</translation>
+        <translation>Zoomer sur l&apos;étendue</translation>
     </message>
     <message>
         <source>Zoom to full resolution</source>
@@ -1178,19 +1178,19 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>OTB Applications browser</source>
-        <translation>Navigateur d&apos;applications OTB</translation>
+        <translation>Applications OTB</translation>
     </message>
     <message>
         <source>Quicklook view</source>
-        <translation>Apperçu</translation>
+        <translation>Aperçu</translation>
     </message>
     <message>
         <source>Color setup</source>
-        <translation>Choix des canaux couleurs</translation>
+        <translation>Choix des canaux</translation>
     </message>
     <message>
         <source>Color dynamics</source>
-        <translation>Réglage de la dynamique d&apos;affichage</translation>
+        <translation>Réglage de la dynamique</translation>
     </message>
     <message>
         <source>Image view</source>
@@ -1379,11 +1379,11 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Geoid File            </source>
-        <translation>Fichier géoide</translation>
+        <translation type="unfinished">Fichier géoïde</translation>
     </message>
     <message>
         <source>SRTM Directory</source>
-        <translation>Répertoire SRTM</translation>
+        <translation>Répertoire MNT</translation>
     </message>
     <message>
         <source>Select the directory containing SRTM tiles.</source>
@@ -1519,7 +1519,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Physical</source>
-        <translation type="obsolete">Physique</translation>
+        <translation type="unfinished">Physique</translation>
     </message>
     <message>
         <source>Radiometry</source>
@@ -1565,6 +1565,22 @@ La navigation en résolution sera plus lente.</translation>
         <source>The file already has overviews!</source>
         <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
+    <message>
+        <source>Cartographic</source>
+        <translation type="unfinished">Cartographique</translation>
+    </message>
+    <message>
+        <source>Geographic(exact)</source>
+        <translation type="unfinished">Geographique(exact)</translation>
+    </message>
+    <message>
+        <source>Geographic(sensor model)</source>
+        <translation type="unfinished">Geographique(modèle capteur)</translation>
+    </message>
+    <message>
+        <source>No geoinfo</source>
+        <translation type="unfinished">Pas d&apos;info géo</translation>
+    </message>
 </context>
 <context>
     <name>mvd::VideoColorToolBox</name>
@@ -1574,11 +1590,11 @@ La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
         <source>Video color setup</source>
-        <translation>Choix des canaux couleurs</translation>
+        <translation>Choix des canaux</translation>
     </message>
     <message>
         <source>Video color dynamics</source>
-        <translation>Réglage de la dynamique d&apos;affichage</translation>
+        <translation>Réglage de la dynamique</translation>
     </message>
 </context>
 </TS>
