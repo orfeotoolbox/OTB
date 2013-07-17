@@ -1040,12 +1040,12 @@ VectorImageModel
     // get the physical coordinates
     if (!ToImage()->GetProjectionRef().empty())
       {
-      cartoVector.push_back("Cartographic");
+      cartoVector.push_back(tr("Cartographic"));
       }
     else
       {
       //No cartographic info available
-      cartoVector.push_back("Physical");
+      cartoVector.push_back(tr("Physical"));
       }
 
     ossPhysicalX << Xpc;
@@ -1064,15 +1064,15 @@ VectorImageModel
     
     if (!ToImage()->GetProjectionRef().empty()) 
       {
-      geoVector.push_back("Geographic(exact)");
+      geoVector.push_back(tr("Geographic(exact)"));
       }
     else if (ToImage()->GetImageKeywordlist().GetSize() != 0)
       {
-      geoVector.push_back("Geographic(sensor model)");
+      geoVector.push_back(tr("Geographic(sensor model)"));
       }
     else
       {
-      geoVector.push_back("No geoinfo");
+      geoVector.push_back(tr("No geoinfo"));
       }
 
     if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex))
