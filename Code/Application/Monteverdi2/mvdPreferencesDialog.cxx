@@ -194,7 +194,7 @@ void PreferencesDialog
     {
     QString srtmDirStr = I18nMainWindow::GetExistingDirectory(
         this,
-        tr("Select the directory containing SRTM tiles."));
+        tr("Select the directory containing DEM files."));
     if (srtmDirStr.isEmpty())
       { // User push default button => don't modify the value
       break;

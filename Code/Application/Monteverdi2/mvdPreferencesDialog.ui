@@ -227,7 +227,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>SRTM Directory</string>
+           <string>DEM directory</string>
           </property>
          </widget>
         </item>
