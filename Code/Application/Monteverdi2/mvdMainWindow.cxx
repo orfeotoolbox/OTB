@@ -683,8 +683,7 @@ MainWindow
     CreateQuicklookWidget( m_ImageView),
     "QUICKLOOK_VIEW",
     tr( "Quicklook view" ),
-    Qt::RightDockWidgetArea,
-    true
+    Qt::RightDockWidgetArea
   );
 
 #if 0
@@ -709,8 +708,7 @@ MainWindow
     < ColorSetupWidget, ColorSetupController, QDockWidget >
     ( "COLOR_SETUP",
       tr( "Color setup" ),
-      Qt::RightDockWidgetArea,
-      true
+      Qt::RightDockWidgetArea
     );
 
   // Color-dynamics.
