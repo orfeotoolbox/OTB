@@ -658,7 +658,7 @@ MainWindow
   tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
 #endif
 
-#if 1
+#if 0
   // Pixel Description (no controller needed here / direct update of
   // the pixel description through signals from VectorImageModel)
   assert( m_PixelDescriptionDock==NULL );
@@ -686,7 +686,7 @@ MainWindow
     Qt::RightDockWidgetArea
   );
 
-#if 0
+#if 1
   // Pixel Description (no controller needed here / direct update of
   // the pixel description through signals from VectorImageModel)
   assert( m_PixelDescriptionDock==NULL );

@@ -72,8 +72,6 @@ DatasetTreeWidgetItem
 {
   assert( !id.isEmpty() );
   assert( text( 1 )==id );
-
-  qDebug() << this << "(" << text( 0 ) << ", " << text( 1 ) << ")";
 }
 
 /*******************************************************************************/
