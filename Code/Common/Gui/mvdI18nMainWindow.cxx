@@ -144,22 +144,14 @@ I18nMainWindow
     QDockWidget::DockWidgetClosable
   );
 
+  // dockWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+
+  // dockWidget->adjustSize();
+
   // Add dock.
   addDockWidget( dockArea, dockWidget );
 
-#if 0
-  // Install event-handler to catch closeEvents() if QDockWidget is
-  // closable.
   //
-  // N.B.: Test is done here in case QDockWidget::features() is given
-  // as argument.
-  if( dockWidget->features() & QDockWidget::DockWidgetClosable )
-    {
-    dockWidget->installEventFilter( this );
-    }
-#endif
-
-    //
   return dockWidget;
 }
 

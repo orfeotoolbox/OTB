@@ -658,7 +658,7 @@ MainWindow
   tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
 #endif
 
-#if 0
+#if 1
   // Pixel Description (no controller needed here / direct update of
   // the pixel description through signals from VectorImageModel)
   assert( m_PixelDescriptionDock==NULL );
@@ -683,10 +683,11 @@ MainWindow
     CreateQuicklookWidget( m_ImageView),
     "QUICKLOOK_VIEW",
     tr( "Quicklook view" ),
-    Qt::RightDockWidgetArea
+    Qt::RightDockWidgetArea,
+    true
   );
 
-#if 1
+#if 0
   // Pixel Description (no controller needed here / direct update of
   // the pixel description through signals from VectorImageModel)
   assert( m_PixelDescriptionDock==NULL );
@@ -708,7 +709,8 @@ MainWindow
     < ColorSetupWidget, ColorSetupController, QDockWidget >
     ( "COLOR_SETUP",
       tr( "Color setup" ),
-      Qt::RightDockWidgetArea
+      Qt::RightDockWidgetArea,
+      true
     );
 
   // Color-dynamics.
@@ -736,6 +738,10 @@ MainWindow
 
   // Customize it.
   m_CentralTabWidget->setTabsClosable( true );
+  /*
+  m_CentralTabWidget->setSizePolicy(
+    QSizePolicy::Expanding, QSizePolicy::Expanding );
+  */
 
   // Set-it up as central widget.
   setCentralWidget( m_CentralTabWidget );
@@ -785,7 +791,10 @@ MainWindow
     sharedGlWidget
   );
 
-  quicklookView->setMinimumSize( 100, 100 );
+  quicklookView->setMinimumSize(  64,  64 );
+  quicklookView->setMaximumSize( 512, 512 );
+  // quicklookView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+  quicklookView->setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
 
   return quicklookView;
 }
@@ -807,6 +816,11 @@ MainWindow
     this,
     sharedGlWidget
   );
+
+  /*
+  imageView->setSizePolicy(
+    QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
+  */
 
   return imageView;
 }

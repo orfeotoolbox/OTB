@@ -1,5 +1,6 @@
 <RCC>
-  <qresource prefix="newPrefix">
+  <qresource prefix="/icons">
+    <file>../../../Data/Icons/execute.png</file>
     <file>../../../Data/Icons/locked.png</file>
     <file>../../../Data/Icons/unlocked.png</file>
   </qresource>
