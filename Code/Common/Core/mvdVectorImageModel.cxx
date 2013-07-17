@@ -416,8 +416,8 @@ unsigned char *
 #endif
 VectorImageModel
 ::RasterizeRegion( const ImageRegionType& region,
-		   const double zoomFactor,
-		   bool refresh )
+       const double zoomFactor,
+       bool refresh )
 {
   m_Region = region;
 
@@ -442,8 +442,8 @@ VectorImageModel
 
     // if the first time or no pixels in common , reload all
     if ( res &&
-	 m_PreviousRegion!=ImageRegionType() &&
-	 GetSettings().IsApplied() &&
+   m_PreviousRegion!=ImageRegionType() &&
+   GetSettings().IsApplied() &&
          !refresh )
       {
       // Compute loaded region, and the four regions not loaded yet
@@ -463,13 +463,13 @@ VectorImageModel
 
       std::memcpy(
 #if USE_BYTE_POINTER
-	previousRasterizedBuffer.data(),
-	m_RasterizedBuffer.data(),
+  previousRasterizedBuffer.data(),
+  m_RasterizedBuffer.data(),
 #else
-	previousRasterizedBuffer,
-	m_RasterizedBuffer,
+  previousRasterizedBuffer,
+  m_RasterizedBuffer,
 #endif
-	nbPixels0
+  nbPixels0
       );
 
       // Clear the previous buffer 
@@ -504,28 +504,28 @@ VectorImageModel
           // Copy the already loaded values into the new buffer
 #if USE_BYTE_POINTER
           m_RasterizedBuffer.data()[ newBufferindex ] =
-	    previousRasterizedBuffer.data()[ 4*idx ];
+      previousRasterizedBuffer.data()[ 4*idx ];
 
           m_RasterizedBuffer.data()[ newBufferindex + 1 ] =
-	    previousRasterizedBuffer.data()[ 4*idx + 1 ];
+      previousRasterizedBuffer.data()[ 4*idx + 1 ];
 
           m_RasterizedBuffer.data()[ newBufferindex + 2 ] =
-	    previousRasterizedBuffer.data()[ 4*idx + 2 ];
+      previousRasterizedBuffer.data()[ 4*idx + 2 ];
 
           m_RasterizedBuffer.data()[ newBufferindex + 3 ] =
-	    previousRasterizedBuffer.data()[ 4*idx + 3 ];
+      previousRasterizedBuffer.data()[ 4*idx + 3 ];
 #else
           m_RasterizedBuffer[ newBufferindex ] =
-	    previousRasterizedBuffer[ 4*idx ];
+      previousRasterizedBuffer[ 4*idx ];
 
           m_RasterizedBuffer[ newBufferindex + 1 ] =
-	    previousRasterizedBuffer[ 4*idx + 1 ];
+      previousRasterizedBuffer[ 4*idx + 1 ];
 
           m_RasterizedBuffer[ newBufferindex + 2 ] =
-	    previousRasterizedBuffer[ 4*idx + 2 ];
+      previousRasterizedBuffer[ 4*idx + 2 ];
 
           m_RasterizedBuffer[ newBufferindex + 3 ] =
-	    previousRasterizedBuffer[ 4*idx + 3 ];
+      previousRasterizedBuffer[ 4*idx + 3 ];
 #endif
           }
         }
@@ -552,10 +552,10 @@ VectorImageModel
       // Allocate new memory
 #if USE_BYTE_POINTER
       m_RasterizedBuffer =
-	BytePointer( new unsigned char[ 4 * region.GetNumberOfPixels() ] );
+  BytePointer( new unsigned char[ 4 * region.GetNumberOfPixels() ] );
 #else
       m_RasterizedBuffer =
-	new unsigned char[ 4 * region.GetNumberOfPixels() ];
+  new unsigned char[ 4 * region.GetNumberOfPixels() ];
 #endif
 
       // rasterize the region
