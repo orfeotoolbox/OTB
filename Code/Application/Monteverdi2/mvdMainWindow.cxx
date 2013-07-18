@@ -658,7 +658,7 @@ MainWindow
   tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
 #endif
 
-#if 1
+#if 0
   // Pixel Description (no controller needed here / direct update of
   // the pixel description through signals from VectorImageModel)
   assert( m_PixelDescriptionDock==NULL );
@@ -686,7 +686,7 @@ MainWindow
     Qt::RightDockWidgetArea
   );
 
-#if 0
+#if 1
   // Pixel Description (no controller needed here / direct update of
   // the pixel description through signals from VectorImageModel)
   assert( m_PixelDescriptionDock==NULL );
@@ -736,10 +736,6 @@ MainWindow
 
   // Customize it.
   m_CentralTabWidget->setTabsClosable( true );
-  /*
-  m_CentralTabWidget->setSizePolicy(
-    QSizePolicy::Expanding, QSizePolicy::Expanding );
-  */
 
   // Set-it up as central widget.
   setCentralWidget( m_CentralTabWidget );
@@ -815,6 +811,7 @@ MainWindow
     sharedGlWidget
   );
 
+  imageView->setMinimumWidth( 256 );
   /*
   imageView->setSizePolicy(
     QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
