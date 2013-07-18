@@ -129,7 +129,7 @@ signals:
 // Protected methods.
 protected:
 
-  void ImportImage( const QString & filename );
+  void ImportImage( const QString& filename, bool forceCreate );
 
   //
   // QMainWindow overrides.

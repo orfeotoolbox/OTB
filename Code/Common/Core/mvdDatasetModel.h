@@ -103,13 +103,15 @@ public:
 		  const QString& name,
 		  const QString& alias,
 		  int width,
-		  int height ) :
+		  int height,
+		  bool isForceCreateEnabled =false ) :
       m_Path( path ),
       m_Name( name ),
       m_Alias( alias),
       m_Width( width ),
       m_Height( height ),
-      m_IsLoadSubModelsEnabled( true )
+      m_IsLoadSubModelsEnabled( true ),
+      m_IsForceCreateEnabled( isForceCreateEnabled )
     {
     }
 
@@ -121,7 +123,8 @@ public:
       m_Alias(),
       m_Width( -1 ),
       m_Height( -1 ),
-      m_IsLoadSubModelsEnabled( false )
+      m_IsLoadSubModelsEnabled( false ),
+      m_IsForceCreateEnabled( false )
     {
     }
 
@@ -132,7 +135,8 @@ public:
       m_Alias(),
       m_Width( width ),
       m_Height( height ),
-      m_IsLoadSubModelsEnabled( true )
+      m_IsLoadSubModelsEnabled( true ),
+      m_IsForceCreateEnabled( false )
     {
     }
 
@@ -144,7 +148,19 @@ public:
     QString m_Alias;
     int m_Width;
     int m_Height;
-    bool m_IsLoadSubModelsEnabled;
+    bool m_IsLoadSubModelsEnabled: 1;
+    bool m_IsForceCreateEnabled: 1;
+    /*
+    union
+    {
+      struct
+      {
+	bool m_IsLoadSubModelsEnabled: 1;
+	bool m_IsForceCreateEnabled: 1;
+      };
+      unsigned char m_Flags;
+    };
+    */
   };
 
 //

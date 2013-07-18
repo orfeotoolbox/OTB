@@ -69,13 +69,15 @@ namespace
 /*******************************************************************************/
 ImageImporter
 ::ImageImporter( const QString& filename,
+		 bool isForceCreateEnabled,
 		 int width,
 		 int height,
 		 QObject* parent ) :
   AbstractWorker( parent ),
   m_Filename( filename ),
   m_Width( width ),
-  m_Height( height )
+  m_Height( height ),
+  m_IsForceCreateEnabled( isForceCreateEnabled )
 {
 }
 
@@ -100,7 +102,10 @@ ImageImporter
   emit ProgressRangeChanged( 0, 0 );
 
   // Load dataset-model.
-  return I18nCoreApplication::LoadDatasetModel( m_Filename, m_Width, m_Height );
+  return
+    I18nCoreApplication::LoadDatasetModel(
+      m_Filename, m_Width, m_Height, m_IsForceCreateEnabled
+    );
 }
 
 /*******************************************************************************/

@@ -823,7 +823,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::ImportImage( const QString& filename )
+::ImportImage( const QString& filename, bool forceCreate )
 {
   //
   // Background task.
@@ -833,6 +833,7 @@ MainWindow
   ImageImporter* importer =
     new ImageImporter(
       filename,
+      forceCreate,
       m_ImageView->width(), m_ImageView->height()
     );
 
@@ -921,7 +922,7 @@ MainWindow
 
   //
   // Import the image
-  ImportImage( filename );
+  ImportImage( filename, false );
 }
 
 /*****************************************************************************/
@@ -1482,7 +1483,7 @@ MainWindow
   // catalog database.
 
   // import the result image into the database
-  ImportImage( outfname );
+  ImportImage( outfname, true );
 }
 
 /*****************************************************************************/
@@ -1518,7 +1519,7 @@ void
 MainWindow
 ::OnImageToImportDropped(const QString & fname)
 {
-  ImportImage( fname );
+  ImportImage( fname, false );
 }
 
 } // end namespace 'mvd'

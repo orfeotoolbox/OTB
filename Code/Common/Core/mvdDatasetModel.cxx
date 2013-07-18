@@ -321,7 +321,7 @@ DatasetModel
   m_Directory = workingDir;
 
   // Initialize content.
-  if( isEmpty )
+  if( isEmpty || buildContext->m_IsForceCreateEnabled )
     {
     // Create in-memory descriptor.
     assert( m_Descriptor==NULL );

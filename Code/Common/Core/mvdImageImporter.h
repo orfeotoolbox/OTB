@@ -89,8 +89,10 @@ public:
    * \param filename Filename of image to import.
    * \param width Width of the best-fit size or -1 if none.
    * \param height Height of the best-fit size or -1 if none.
+   * \param isForceCreateEnabled true to force creation of dataset.
    */
   ImageImporter( const QString& filename,
+		 bool isForceCreateEnabled,
 		 int width =-1,
 		 int height =-1,
 		 QObject* parent =NULL );
@@ -160,6 +162,9 @@ private:
   /**
    */
   int m_Height;
+  /**
+   */
+  bool m_IsForceCreateEnabled: 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

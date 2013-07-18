@@ -161,7 +161,8 @@ DatasetModel*
 I18nCoreApplication
 ::LoadDatasetModel( const QString& imageFilename,
 		    int width,
-		    int height )
+		    int height,
+		    bool forceCreate )
 {
   // New model.
   DatasetModel* model = new DatasetModel();
@@ -187,7 +188,7 @@ I18nCoreApplication
 
     // Build model (relink to cached data).
     DatasetModel::BuildContext context(
-      path, name, finfo.baseName(), width, height
+      path, name, finfo.baseName(), width, height, forceCreate
     );
     model->BuildModel( &context );
 

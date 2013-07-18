@@ -67,7 +67,8 @@ ImageLoader
   try
     {
     DatasetModel* model = Application::LoadDatasetModel(
-      m_Filename, m_Width, m_Height );
+      m_Filename, m_Width, m_Height, false
+    );
 
     // We can only push to another thread,
     // so thread affinity must be set here,
