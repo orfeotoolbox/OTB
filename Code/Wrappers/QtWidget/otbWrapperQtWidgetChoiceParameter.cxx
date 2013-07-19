@@ -25,9 +25,15 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetChoiceParameter::QtWidgetChoiceParameter(ChoiceParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
-  m_ChoiceParam(param)
+QtWidgetChoiceParameter::QtWidgetChoiceParameter( ChoiceParameter* param,
+						  QtWidgetModel* m ) :
+  QtWidgetParameterBase(param, m),
+  m_ChoiceParam(param),
+  m_ComboBox( NULL ),
+  m_StackWidget( NULL ),
+  m_VLayout( NULL ),
+  m_VLayoutGroup( NULL ),
+  m_WidgetList()
 {
 }
 
@@ -64,8 +70,11 @@ void QtWidgetChoiceParameter::DoCreateWidget()
     ParameterGroup::Pointer param = m_ChoiceParam->GetChoiceParameterGroupByIndex(i);
     if (param.IsNotNull())
       {
-      QtWidgetParameterBase* widget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+      QtWidgetParameterBase* widget =
+	QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+
       m_StackWidget->addWidget(widget);
+
       m_WidgetList.push_back(widget);
       }
     }

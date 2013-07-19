@@ -22,8 +22,9 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetModel::QtWidgetModel(Application* app)
- : m_Application(app)
+QtWidgetModel::QtWidgetModel(Application* app) :
+  m_Application(app),
+  m_LogOutput()
 {
   // Init only if not already done
   if(!m_Application->IsInitialized())
