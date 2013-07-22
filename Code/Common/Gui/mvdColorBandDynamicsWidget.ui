@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>254</width>
+    <width>279</width>
     <height>88</height>
    </rect>
   </property>
@@ -217,7 +217,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Whit (gray) channel.</string>
+        <string>White (gray) channel.</string>
        </property>
        <property name="text">
         <string>&lt;span style=&quot;color:#EEEEEE;background-color:#111111&quot;&gt;&amp;nbsp;&lt;b&gt;W&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</string>
