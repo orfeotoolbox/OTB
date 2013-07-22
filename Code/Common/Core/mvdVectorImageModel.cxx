@@ -215,7 +215,8 @@ VectorImageModel
 
   filter->SetInputFileName(tempfilename);
   filter->SetResamplingMethod(otb::AVERAGE);
-  filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size());
+  filter->SetResolutionFactor(4);
+  filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size()/2);
 
   try
     {
