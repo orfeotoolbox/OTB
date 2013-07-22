@@ -203,7 +203,7 @@ DatabaseBrowserWidget
 
   m_DatasetRootItem = m_UI->databaseTreeWidget->topLevelItem( 0 );
   assert( m_DatasetRootItem!=NULL );
-  assert( m_DatasetRootItem->text( 0 )=="Datasets" );
+  assert( m_DatasetRootItem->text( 0 )=="Datasets" || m_DatasetRootItem->text( 0 )=="Données");
 
 #if 0
   m_DatasetRootItem->setChildIndicatorPolicy( DatasetTreeWidgetItem::ShowIndicator );
