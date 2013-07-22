@@ -132,6 +132,8 @@ signals:
   
   void OTBApplicationOutputImageChanged( const QString &, const QString &);
 
+  void ExecuteAndWriteOutput();
+
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
@@ -174,9 +176,15 @@ private:
 // Slots.
 private slots:
 
+#if 0
   void UpdateMessageAfterExcuteClicked();
+#endif
 
   void UpdateMessageAfterApplicationReady(bool val);
+
+  /**
+   */
+  void OnExecButtonClicked();
 
   /**
    */

@@ -203,6 +203,7 @@ QWidget* QtWidgetView::CreateFooter()
     m_Model, SIGNAL( SetApplicationReady( bool ) ),
     m_ExecButton, SLOT( setEnabled( bool ) )
   );
+#if 0
   connect(
     m_ExecButton, SIGNAL( clicked() ),
     m_Model, SLOT( ExecuteAndWriteOutputSlot() )
@@ -211,6 +212,18 @@ QWidget* QtWidgetView::CreateFooter()
     m_ExecButton, SIGNAL( clicked() ),
     this, SLOT( UpdateMessageAfterExcuteClicked() )
   );
+#else
+  QObject::connect(
+    m_ExecButton, SIGNAL( clicked() ),
+    // to:
+    this, SLOT( OnExecButtonClicked() )
+  );
+  QObject::connect(
+    this, SIGNAL( ExecuteAndWriteOutput() ),
+    // to:
+    m_Model, SLOT( ExecuteAndWriteOutputSlot() )
+  );
+#endif
 
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
@@ -338,9 +351,60 @@ void QtWidgetView::CloseSlot()
 }
 
 /*******************************************************************************/
+#if 0
 void QtWidgetView::UpdateMessageAfterExcuteClicked()
 {
   m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
+}
+#endif
+
+/*******************************************************************************/
+void
+QtWidgetView::OnExecButtonClicked()
+{
+  assert( m_Model!=NULL );
+  assert( m_Model->GetApplication()!=NULL );
+
+  otb::Wrapper::Application::Pointer otbApp( m_Model->GetApplication() );
+
+  StringVector paramKeys( otbApp->GetParametersKeys() );
+
+  bool isSure = false;
+
+  for( StringVector::const_iterator it( paramKeys.begin() );
+       it!=paramKeys.end();
+       ++it )
+    {
+    if( otbApp->GetParameterType( *it )==
+	otb::Wrapper::ParameterType_OutputImage &&
+        otbApp->IsParameterEnabled( *it ) &&
+        otbApp->HasValue( *it ) )
+      {
+      otb::Wrapper::Parameter::Pointer param( otbApp->GetParameterByKey( *it ) );
+
+      otb::Wrapper::OutputImageParameter::Pointer outImgParam(
+	otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
+      );
+
+      isSure =
+	QMessageBox::question(
+	  this,
+	  tr( PROJECT_NAME ),
+	  tr( "Are you sure you want to overwrite file '%1'?" )
+	  .arg( outImgParam->GetFileName() ),
+	  QMessageBox::Yes | QMessageBox::No,
+	  QMessageBox::No
+	)==QMessageBox::Yes ||
+	isSure;
+      }
+    }
+
+  if( !isSure )
+    return;
+
+  m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
+
+  emit ExecuteAndWriteOutput();
 }
 
 /*******************************************************************************/
