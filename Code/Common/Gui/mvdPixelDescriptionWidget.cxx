@@ -229,7 +229,7 @@ PixelDescriptionWidget
         }
       else
         {
-	iBandItem->setText( 0, tr( "Band %1" ).arg( idx ) );
+	iBandItem->setText( 0, tr( "Band %1" ).arg( idx+1 ) );
         }
       // set the value
       iBandItem->setText(1, QString("%1").arg(currentPixel.GetElement( idx )) );

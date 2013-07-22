@@ -113,11 +113,11 @@ ColorSetupWidget
     {
     if( itemTexts[ i ].isEmpty() )
       {
-      itemTexts[ i ] = tr( "BAND %1" ).arg( i );
+      itemTexts[ i ] = tr( "BAND %1" ).arg( i+1 );
       }
     else
       {
-      itemTexts[ i ].prepend( QString( "%1: " ).arg( i ) );
+      itemTexts[ i ].prepend( QString( "%1: " ).arg( i+1 ) );
       }
     }
 
