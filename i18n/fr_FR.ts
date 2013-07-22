@@ -254,7 +254,7 @@
     </message>
     <message>
         <source>Apply quantiles to all channels.</source>
-        <translation type="unfinished">Applique les quantiles à tous les canaux.</translation>
+        <translation type="unfinished">Appliquer les quantiles à tous les canaux.</translation>
     </message>
     <message>
         <source>Apply to all</source>
@@ -303,7 +303,7 @@
     </message>
     <message>
         <source>Apply all</source>
-        <translation>Appliquer à tous</translation>
+        <translation type="obsolete">Appliquer à tous</translation>
     </message>
     <message>
         <source>min/Max</source>
@@ -311,11 +311,11 @@
     </message>
     <message>
         <source>Quantile:</source>
-        <translation>Quantile:</translation>
+        <translation type="obsolete">Quantile:</translation>
     </message>
     <message>
         <source>Intensity:</source>
-        <translation>Intensité:</translation>
+        <translation type="obsolete">Intensité:</translation>
     </message>
     <message>
         <source>2%</source>
@@ -332,6 +332,38 @@
     <message>
         <source>Invalid argument &apos;%1&apos;.</source>
         <translation>Argument &apos;%1&apos; invalide.</translation>
+    </message>
+    <message>
+        <source>Quantile percentile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Q:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pixel value on band.</source>
+        <translation type="unfinished">Valeur du pixel.</translation>
+    </message>
+    <message>
+        <source>V:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red channel.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green channel.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue channel.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Whit (gray) channel.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -405,10 +437,6 @@
         <translation>&lt;span style=&quot;color:#000000;background-color:#44FF44&quot;&gt;&amp;nbsp;&lt;b&gt;V&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>BNAD 2</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>&lt;span style=&quot;color:#CCCCCC;background-color:#4444FF&quot;&gt;&amp;nbsp;&lt;b&gt;B&lt;/b&gt;&amp;nbsp;&lt;/span&gt;</source>
         <translation></translation>
     </message>
@@ -461,6 +489,22 @@
         <source>Enable/disable gray-scale mode.</source>
         <translation>Activer/désactiver le mode niveaux de gris.</translation>
     </message>
+    <message>
+        <source>White (gray) channel.</source>
+        <translation type="unfinished">Canal blanc (gris).</translation>
+    </message>
+    <message>
+        <source>Red channel.</source>
+        <translation type="unfinished">Canal rouge.</translation>
+    </message>
+    <message>
+        <source>Green channel.</source>
+        <translation type="unfinished">Canal vert.</translation>
+    </message>
+    <message>
+        <source>Blue channel.</source>
+        <translation type="unfinished">Canal bleu.</translation>
+    </message>
 </context>
 <context>
     <name>mvd::Core</name>
@@ -479,7 +523,7 @@
     </message>
     <message>
         <source>Inconsistent Dataset disabled</source>
-        <translation>Dataset inconsistent désactivé</translation>
+        <translation type="unfinished">Donnée inconsistente désactivée</translation>
     </message>
     <message>
         <source>Warning!</source>
@@ -487,7 +531,7 @@
     </message>
     <message>
         <source>Are you sure you want to delete dataset &apos;%1&apos;?</source>
-        <translation>Êtes-vous certain de vouloir supprimer le dataset &apos;%1&apos; ?</translation>
+        <translation type="unfinished">Êtes-vous certain de vouloir supprimer la donnée &apos;%1&apos; ?</translation>
     </message>
 </context>
 <context>
@@ -502,7 +546,7 @@
     </message>
     <message>
         <source>Datasets</source>
-        <translation></translation>
+        <translation type="unfinished">Données</translation>
     </message>
     <message>
         <source></source>
@@ -511,7 +555,7 @@
     </message>
     <message>
         <source>Search Dataset ...</source>
-        <translation>Rechercher dataset...</translation>
+        <translation type="unfinished">Rechercher une donnée...</translation>
     </message>
 </context>
 <context>
@@ -1293,19 +1337,19 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">X</translation>
     </message>
     <message>
         <source>Y</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Y</translation>
     </message>
     <message>
         <source>Long</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Long</translation>
     </message>
     <message>
         <source>Lat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lat</translation>
     </message>
     <message>
         <source>Elevation</source>
@@ -1383,11 +1427,11 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>SRTM Directory</source>
-        <translation>Répertoire MNT</translation>
+        <translation type="obsolete">Répertoire MNT</translation>
     </message>
     <message>
         <source>Select the directory containing SRTM tiles.</source>
-        <translation>Veuillez choisir le répertoire contenant les tuiles SRTM.</translation>
+        <translation type="obsolete">Veuillez choisir le répertoire contenant les tuiles SRTM.</translation>
     </message>
     <message>
         <source>Select a geoid file.</source>
@@ -1396,6 +1440,14 @@ Merci d&apos;en sélectionner un autre.</translation>
     <message>
         <source>Select the default directory for results data: </source>
         <translation>Veuillez choisir le répertoire par défaut pour les données résultats:</translation>
+    </message>
+    <message>
+        <source>DEM directory</source>
+        <translation type="unfinished">Répertoire MNT</translation>
+    </message>
+    <message>
+        <source>Select the directory containing DEM files.</source>
+        <translation type="unfinished">Sélectionner un répertoire contenant les fichiers MNT.</translation>
     </message>
 </context>
 <context>
@@ -1571,11 +1623,11 @@ La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
         <source>Geographic(exact)</source>
-        <translation type="unfinished">Geographique(exact)</translation>
+        <translation type="unfinished">Geographique (exact)</translation>
     </message>
     <message>
         <source>Geographic(sensor model)</source>
-        <translation type="unfinished">Geographique(modèle capteur)</translation>
+        <translation type="unfinished">Geographique (modèle capteur)</translation>
     </message>
     <message>
         <source>No geoinfo</source>
@@ -1595,6 +1647,20 @@ La navigation en résolution sera plus lente.</translation>
     <message>
         <source>Video color dynamics</source>
         <translation>Réglage de la dynamique</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::Wrapper::QtWidgetFileSelection</name>
+    <message>
+        <source>Drag and drop a dataset here</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::Wrapper::QtWidgetInputImageParameter</name>
+    <message>
+        <source>Drag and drop a dataset here</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
