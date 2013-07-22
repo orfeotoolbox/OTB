@@ -100,6 +100,7 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   // Set up input QLabel
   m_Input->setToolTip( m_InputImageParam->GetDescription() );
   m_Input->setFrameShape(QFrame::Box);
+  m_Input->setText(tr("Drag and drop a dataset here"));
 
   // TODO : QLabel does not have signals, remove connections
   connect( this, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );

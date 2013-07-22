@@ -101,6 +101,7 @@ void QtWidgetFileSelection::DoCreateWidget()
 
   m_Input = new QLabel;
   m_Input->setFrameShape(QFrame::Box);
+  m_Input->setText(tr("Drag and drop a dataset here"));
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
