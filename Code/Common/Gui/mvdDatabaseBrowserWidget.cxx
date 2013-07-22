@@ -203,7 +203,7 @@ DatabaseBrowserWidget
 
   m_DatasetRootItem = m_UI->databaseTreeWidget->topLevelItem( 0 );
   assert( m_DatasetRootItem!=NULL );
-  assert( m_DatasetRootItem->text( 0 )=="Datasets" || m_DatasetRootItem->text( 0 )=="Données");
+  assert( m_DatasetRootItem->text( 0 ) == "Datasets" || m_DatasetRootItem->text( 0 ) == "Données");
 
 #if 0
   m_DatasetRootItem->setChildIndicatorPolicy( DatasetTreeWidgetItem::ShowIndicator );
@@ -243,7 +243,7 @@ DatabaseBrowserWidget
     )
   );
 
-  assert( items.isEmpty() || items.size()==1 );
+  assert( items.isEmpty() || items.size() == 1 );
 
   if( items.isEmpty() )
     return;
@@ -257,7 +257,7 @@ DatabaseBrowserWidget
 void
 DatabaseBrowserWidget
 ::on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
-					    QTreeWidgetItem* previous )
+              QTreeWidgetItem* previous )
 {
   /*
   qDebug() <<
