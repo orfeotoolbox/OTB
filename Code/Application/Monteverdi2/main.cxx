@@ -62,12 +62,6 @@ main( int argc, char* argv[] )
   QPixmap pixmap(QLatin1String( ":/images/application_splash" ));
   QSplashScreen splash(pixmap);
   splash.show();
-  splash.showMessage(
-    QCoreApplication::translate(
-      PROJECT_NAME,
-      "Please wait..."
-    )
-  );
   qtApp.processEvents();//This is used to accept a click on the screen so that user can cancel the screen
 #endif
 
