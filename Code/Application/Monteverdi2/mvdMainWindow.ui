@@ -139,6 +139,9 @@
    <property name="text">
     <string>Zoom in</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
   </action>
   <action name="action_ZoomOut">
    <property name="enabled">
@@ -150,6 +153,9 @@
    </property>
    <property name="text">
     <string>Zoom out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
    </property>
   </action>
   <action name="action_ZoomExtent">
