@@ -131,6 +131,11 @@ public:
     m_NbOfResolutions = nbResol;
   };
 
+  void SetResolutionFactor(unsigned int factor)
+  {
+    m_ResolutionFactor = factor;
+  }
+
   void SetInputFileName(std::string str)
   {
     m_InputFileName = str;
@@ -151,6 +156,7 @@ private:
 
   std::string m_InputFileName;
   unsigned int m_NbOfResolutions;
+  unsigned int m_ResolutionFactor;
   GDALResamplingType m_ResamplingMethod;
 
   void GetGDALResamplingMethod(std::string &resamplingMethod);

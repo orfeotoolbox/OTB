@@ -112,6 +112,7 @@ GDALDriverManagerWrapper::GetDriverByName( std::string driverShortName ) const
 GDALOverviewsBuilder::GDALOverviewsBuilder()
 {
   m_NbOfResolutions = 1;
+  m_ResolutionFactor = 2;
   m_ResamplingMethod = NEAREST;
   Superclass::SetNumberOfRequiredInputs(0);
   Superclass::SetNumberOfRequiredOutputs(0);
@@ -184,9 +185,11 @@ void GDALOverviewsBuilder::Update()
 
     // Build the overviews list from nb of resolution desired
     std::vector<int> ovwlist;
+    unsigned int factor = 1;
     for (unsigned int i = 1; i < m_NbOfResolutions; i++)
       {
-      ovwlist.push_back(1<<i);
+      factor*=m_ResolutionFactor;
+      ovwlist.push_back(factor);
       }
 
     /*std::cout << "list of overviews level= ";
