@@ -26,7 +26,7 @@ namespace Wrapper
 {
 
 QtWidgetChoiceParameter::QtWidgetChoiceParameter( ChoiceParameter* param,
-						  QtWidgetModel* m ) :
+                                            QtWidgetModel* m ) :
   QtWidgetParameterBase(param, m),
   m_ChoiceParam(param),
   m_ComboBox( NULL ),
@@ -71,7 +71,7 @@ void QtWidgetChoiceParameter::DoCreateWidget()
     if (param.IsNotNull())
       {
       QtWidgetParameterBase* widget =
-	QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+       QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
 
       m_StackWidget->addWidget(widget);
 
