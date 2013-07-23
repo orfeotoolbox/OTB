@@ -909,7 +909,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::on_action_OpenImage_triggered()
+::on_action_ImportImage_triggered()
 {
   //
   // Select filename.

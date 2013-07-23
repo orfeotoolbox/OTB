@@ -30,7 +30,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_OpenImage"/>
+    <addaction name="action_ImportImage"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
@@ -64,13 +64,16 @@
    <property name="windowTitle">
     <string>Main toolbar</string>
    </property>
+   <property name="toolTip">
+    <string>Import image-file.</string>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_OpenImage"/>
+   <addaction name="action_ImportImage"/>
    <addaction name="separator"/>
    <addaction name="action_ZoomIn"/>
    <addaction name="action_ZoomOut"/>
@@ -88,7 +91,7 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="action_OpenImage">
+  <action name="action_ImportImage">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -97,13 +100,13 @@
      <normaloff>:/icons/action_Open_Icon</normaloff>:/icons/action_Open_Icon</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open image...</string>
+    <string>&amp;Import image...</string>
    </property>
    <property name="iconText">
-    <string>Open image...</string>
+    <string>Import image...</string>
    </property>
    <property name="toolTip">
-    <string>Open image-file.</string>
+    <string>Import image-file.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
