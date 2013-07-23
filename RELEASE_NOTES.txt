@@ -1,3 +1,25 @@
+OTB-v.3.18.1 - Changes since version 3.18.0 (2013/07/22)
+--------------------------------------------------------
+
+* Library
+  * Core and Third Parties
+    * Update the JPEG2000ImageIO to decrease cache consumption and avoid memory leak between OTB and internal OpenJPEG library
+    * Improve the control over the generation of GDAL overviews with a new method to set the resolution factor
+
+  * CMake
+    * remove OTBParseArguments from OTB source because it is not used
+
+  * Examples
+    * Update HelloWorld example CMakeLists
+ 
+  * Applications
+    * Updated applications
+      * Update Stereo application documentation example with new parameters
+      * Add a log message about color mapping method used by application
+    * Core Framework
+      * Intialize properly QtWidgetChoiceParameter
+    * Increase minimun cmake version to 2.8.3 wwhen build applications  
+
 OTB-v.3.18 - Changes since version 3.16 (2013/07/05)
 --------------------------------------------------------
 
