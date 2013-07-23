@@ -75,8 +75,9 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   "dataset",
   "name",
   "alias",
-  "path",
-  "directory",
+  "date",
+  // "path",
+  // "directory",
   //
   "images",
   "image_information",
@@ -796,6 +797,13 @@ DatasetDescriptor
                     TAG_NAMES[ ELEMENT_DATASET_ALIAS ] )
     );
   datasetElt.appendChild( aliasElt );
+
+  // dataset creation-date element
+  QDomElement dateElt(
+    CreateTextNode( QDateTime::currentDateTime().toString( Qt::ISODate ),
+                    TAG_NAMES[ ELEMENT_DATASET_DATE ] )
+    );
+  datasetElt.appendChild( dateElt );
 
   // Remember dataset group element.
   m_DatasetGroupElement = datasetElt;

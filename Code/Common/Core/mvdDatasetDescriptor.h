@@ -136,6 +136,10 @@ public:
 
   /**
    */
+  inline QDateTime GetDate() const;
+
+  /**
+   */
   void InsertImageModel( int id,
 			 const QString& imageFilename,
                          const QString& placename,
@@ -307,8 +311,9 @@ private:
     ELEMENT_DATASET_GROUP,
     ELEMENT_DATASET_NAME,
     ELEMENT_DATASET_ALIAS,
-    ELEMENT_DATASET_PATH,
-    ELEMENT_DATASET_DIRECTORY,
+    ELEMENT_DATASET_DATE,
+    // ELEMENT_DATASET_PATH,
+    // ELEMENT_DATASET_DIRECTORY,
     //
     ELEMENT_IMAGES_GROUP,
     ELEMENT_IMAGE_INFORMATION,
@@ -408,6 +413,21 @@ DatasetDescriptor
   assert( !m_RootElement.isNull() );
 
   return m_RootElement.attribute( "version" );
+}
+
+/*****************************************************************************/
+QDateTime
+DatasetDescriptor
+::GetDate() const
+{
+  assert( !m_DatasetGroupElement.isNull() );
+
+  QDomElement dateElt(
+    m_DatasetGroupElement.firstChildElement( TAG_NAMES[ ELEMENT_DATASET_DATE  ] )
+  );
+  assert( !dateElt.isNull() );
+
+  return QDateTime::fromString( dateElt.text(), Qt::ISODate );
 }
 
 /*****************************************************************************/

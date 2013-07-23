@@ -155,7 +155,8 @@ DatasetModel
       isConsistent &&
       imgFInfo.exists() && imgFInfo.isReadable() &&
       qlFInfo.exists() && qlFInfo.isReadable() &&
-      htgmFInfo.exists() && htgmFInfo.isReadable();
+      htgmFInfo.exists() && htgmFInfo.isReadable() &&
+      imgFInfo.created() <= m_Descriptor->GetDate();
     }
 
   return isConsistent;
