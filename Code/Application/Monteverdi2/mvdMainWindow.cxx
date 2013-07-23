@@ -138,6 +138,7 @@ MainWindow
 
   InitializeStatusBarWidgets();
 }
+
 /*****************************************************************************/
 void
 MainWindow
@@ -922,7 +923,7 @@ MainWindow
 
   //
   // Import the image
-  ImportImage( filename, false );
+  ImportImage( filename, true );
 }
 
 /*****************************************************************************/
