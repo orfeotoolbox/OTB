@@ -369,7 +369,7 @@ QtWidgetView::OnExecButtonClicked()
 
   StringVector paramKeys( otbApp->GetParametersKeys() );
 
-  bool isSure = false;
+  bool isSure = true;
 
   for( StringVector::const_iterator it( paramKeys.begin() );
        it!=paramKeys.end();
@@ -387,14 +387,15 @@ QtWidgetView::OnExecButtonClicked()
       );
 
       isSure =
-	QMessageBox::question(
-	  this,
-	  tr( PROJECT_NAME ),
-	  tr( "Are you sure you want to overwrite file '%1'?" )
-	  .arg( outImgParam->GetFileName() ),
-	  QMessageBox::Yes | QMessageBox::No,
-	  QMessageBox::No
-	)==QMessageBox::Yes ||
+	( !QFileInfo( outImgParam->GetFileName() ).exists() ||
+	  QMessageBox::question(
+	    this,
+	    tr( PROJECT_NAME ),
+	    tr( "Are you sure you want to overwrite file '%1'?" )
+	    .arg( outImgParam->GetFileName() ),
+	    QMessageBox::Yes | QMessageBox::No,
+	    QMessageBox::No
+	  )==QMessageBox::Yes ) &&
 	isSure;
       }
     }

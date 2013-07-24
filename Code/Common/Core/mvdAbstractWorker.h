@@ -86,6 +86,10 @@ public:
   /** \brief Destructor. */
   virtual ~AbstractWorker();
 
+  /**
+   */
+  inline QString GetFirstProgressText() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -166,6 +170,10 @@ private:
    */
   virtual QObject* virtual_Do() =0;
 
+  /**
+   */
+  virtual QString virtual_GetFirstProgressText() const =0;
+
 
 //
 // Private attributes.
@@ -201,6 +209,14 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+QString
+AbstractWorker::GetFirstProgressText() const
+{
+  return virtual_GetFirstProgressText();
+}
 
 } // end namespace 'mvd'
 

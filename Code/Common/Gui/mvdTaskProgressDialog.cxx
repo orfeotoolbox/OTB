@@ -126,6 +126,8 @@ TaskProgressDialog
 {
   m_BackgroundTask->start();
 
+  setLabelText( m_BackgroundTask->GetWorker()->GetFirstProgressText() );
+
   return exec();
 }
 

@@ -149,6 +149,8 @@ private:
 
   QObject* virtual_Do();
 
+  QString virtual_GetFirstProgressText() const;
+
 
 //
 // Private attributes.

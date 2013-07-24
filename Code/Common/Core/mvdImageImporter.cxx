@@ -92,10 +92,14 @@ QObject*
 ImageImporter
 ::virtual_Do()
 {
+  /*
   emit ProgressTextChanged(
     tr( "Importing image '%1' as dataset into cache directory..." )
     .arg( QFileInfo( m_Filename ).fileName() )
   );
+  */
+
+  // emit ProgressTextChanged( GetFirstProgressText() );
 
   emit ProgressValueChanged( -1 );
 
@@ -106,6 +110,16 @@ ImageImporter
     I18nCoreApplication::LoadDatasetModel(
       m_Filename, m_Width, m_Height, m_IsForceCreateEnabled
     );
+}
+
+/*******************************************************************************/
+QString
+ImageImporter
+::virtual_GetFirstProgressText() const
+{
+  return
+    tr( "Importing image '%1' as dataset into cache directory..." )
+    .arg( QFileInfo( m_Filename ).fileName() );
 }
 
 /*******************************************************************************/
