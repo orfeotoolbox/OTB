@@ -94,7 +94,7 @@ ImageImporter
 {
   emit ProgressTextChanged(
     tr( "Importing image '%1' as dataset into cache directory..." )
-    .arg( m_Filename )
+    .arg( QFileInfo( m_Filename ).fileName() )
   );
 
   emit ProgressValueChanged( -1 );
