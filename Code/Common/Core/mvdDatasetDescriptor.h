@@ -398,6 +398,7 @@ DatasetDescriptor
     filename << " version " << descriptor.GetVersionString();
 
   return
+    !descriptor.GetVersionString().isEmpty() &&
     IsVersionGreaterEqual(
       descriptor.GetVersionString(),
       Monteverdi2_DATA_VERSION_STRING
