@@ -413,7 +413,6 @@
   <tabstop>defaultsButton</tabstop>
  </tabstops>
  <resources>
-  <include location="mvdApplicationsToolBox.qrc"/>
   <include location="mvdIcons.qrc"/>
  </resources>
  <connections>

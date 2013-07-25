@@ -1,5 +1,10 @@
 <RCC>
   <qresource prefix="/icons">
+    <file>../../../Data/Icons/execute.png</file>
+    <file>../../../Data/Icons/locked.png</file>
+    <file>../../../Data/Icons/unlocked.png</file>
+    <file>../../../Data/Icons/alg.png</file>
+    <file>../../../Data/Icons/forbidden-128x128.png</file>
     <file alias="action_ZoomIn_Icon">../../../Data/Icons/action-zoomin_24x24.png</file>
     <file alias="action_ZoomExtent_Icon">../../../Data/Icons/action-zoomfullextent_24x24.png</file>
     <file alias="action_ZoomOut_Icon">../../../Data/Icons/action-zoomout_24x24.png</file>
