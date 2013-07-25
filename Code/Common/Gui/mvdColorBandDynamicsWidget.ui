@@ -315,7 +315,8 @@
        </property>
        <property name="icon">
         <iconset resource="mvdIcons.qrc">
-         <normaloff>:/icons/Data/Icons/unlocked.png</normaloff>:/icons/Data/Icons/unlocked.png</iconset>
+         <normaloff>:/icons/Data/Icons/unlocked.png</normaloff>
+         <normalon>:/icons/Data/Icons/locked.png</normalon>:/icons/Data/Icons/unlocked.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -415,5 +416,38 @@
   <include location="mvdApplicationsToolBox.qrc"/>
   <include location="mvdIcons.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>linkButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>lowQuantileSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>19</x>
+     <y>70</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>107</x>
+     <y>71</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>linkButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>highQuantileSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>19</x>
+     <y>70</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>174</x>
+     <y>71</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
