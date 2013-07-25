@@ -1,0 +1,8 @@
+set(APP_LIST @OTB_APPS_NAME_LIST@)
+
+foreach(APP ${APP_LIST})
+  list(APPEND OTB_APPS_LIST_INSTALL ${CMAKE_INSTALL_PREFIX}/lib/otb/applications/${APP})
+endforeach(APP)
+
+include(BundleUtilities)
+fixup_bundle("${CMAKE_INSTALL_PREFIX}/bin/monteverdi2.exe" "${OTB_APPS_LIST_INSTALL}" "")

@@ -41,10 +41,31 @@ if(NOT GDAL_DATA)
   message(FATAL_ERROR "Cannot generate installer without OSGeo4W environment : GDAL_DATA")
 endif(NOT GDAL_DATA)
 
+
+# Search all the applications available in the OTB build dir
+file(GLOB OTB_APPS_LIST ${OTB_DIR}/bin/RelWithDebInfo/otbapp_*.dll)
+
+# Install the applications 
+install(FILES ${OTB_APPS_LIST}
+        DESTINATION lib/otb/applications
+        COMPONENT Runtime)
+
+# Retrieve the name of all the applications available
+foreach(APP ${OTB_APPS_LIST})
+    string(REPLACE ${OTB_DIR}/bin/RelWithDebInfo/ "" APP_NAME ${APP})
+    list(APPEND OTB_APPS_NAME_LIST ${APP_NAME})
+endforeach(APP)
+
+# configure the file to pass the list of available applications
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
+                ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
+                @ONLY)
+
+#Use the configured file with the list of apps 
 # Gather all dlls from which Monteverdi depends, and put them aside the executable
 # For this to work, the necessary DLL must be in PATH
-install(SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake
-        COMPONENT Runtime)
+install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
+                COMPONENT Runtime)
 
 # For some reason, fixup_bundle won't package the msvc runtime dll
 # I guess it's because cpack already handles installing the runtime,
