@@ -105,11 +105,13 @@ target_link_libraries( mvd2-viewer
 deploy_qt_conf( mvd2-viewer )
 
 #############################################################################
-install(
-  TARGETS mvd2-viewer
-  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
-  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
-  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
-)
+
+# mvd2-viewer is not installed
+#install(
+#  TARGETS mvd2-viewer
+#  RUNTIME DESTINATION ${Monteverdi2_INSTALL_BIN_DIR} COMPONENT Runtime
+#  LIBRARY DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Runtime
+#  ARCHIVE DESTINATION ${Monteverdi2_INSTALL_LIB_DIR} COMPONENT Development
+#)
 
 #############################################################################

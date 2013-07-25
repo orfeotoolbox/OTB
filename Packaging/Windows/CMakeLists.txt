@@ -3,7 +3,6 @@ set(CPACK_NSIS_MODIFY_PATH ON PARENT_SCOPE)
 # Override the monteverdi2.exe
 # with the monteverdi2.bat shortcut
 set(CPACK_NSIS_MENU_LINKS
-    "bin/mvd2-viewer.bat" "Monteverdi2 Viewer"
     "bin/monteverdi2.bat" "Monteverdi2"
     PARENT_SCOPE)
 
@@ -13,17 +12,11 @@ set(CPACK_NSIS_MENU_LINKS
 # to the bat file :
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
     "
-    CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2 Viewer.lnk\\\" \\\"$INSTDIR\\\\bin\\\\mvd2-viewer.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\mvd2-viewer.exe\\\"
-    "
-    "
     CreateShortCut \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2.lnk\\\" \\\"$INSTDIR\\\\bin\\\\monteverdi2.bat\\\" \\\" \\\" \\\"$INSTDIR\\\\bin\\\\monteverdi2.exe\\\"
     "
     PARENT_SCOPE)
 
 set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
-    "
-    Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2 Viewer.lnk\\\"
-    "
     "
     Delete \\\"$SMPROGRAMS\\\\Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}\\\\Monteverdi2.lnk\\\"
     "
@@ -80,8 +73,7 @@ install(FILES qt.conf
         DESTINATION  bin
         COMPONENT Resources)
         
-install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/mvd2-viewer.bat
-              ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
+install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
         DESTINATION bin
         COMPONENT Runtime)
 

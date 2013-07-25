@@ -33,7 +33,7 @@ set(CPACK_PACKAGE_VERSION_PATCH "${Monteverdi2_VERSION_PATCH}")
 set(CPACK_PACKAGE_CONTACT "contact@orfeo-toolbox.org" CACHE STRING "Orfeo toolbox contact email")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${Monteverdi2_SOURCE_DIR}/Description.txt")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Monteverdi2-${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}")
-set(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi2_SOURCE_DIR}/Copyright.txt")
+set(CPACK_RESOURCE_FILE_LICENSE "${Monteverdi2_SOURCE_DIR}/Copyright/Copyright.txt")
 
 # http://www.vtk.org/Bug/view.php?id=7828
 # Need to use the CPACK_PACKAGE_EXECUTABLES
