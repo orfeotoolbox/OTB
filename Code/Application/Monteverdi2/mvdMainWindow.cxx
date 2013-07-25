@@ -1392,7 +1392,7 @@ MainWindow
   // add the application in a tab
   // TODO : check if this application is already opened ???
   int tabIndex = m_CentralTabWidget->addTab(
-    appWidget, QIcon( ":/images/process_icon" ), docName );
+    appWidget, QIcon( ":/icons/process" ), docName );
 
   // no checking needed here, if index is not available nothing is
   // done. Focus on the newly added tab

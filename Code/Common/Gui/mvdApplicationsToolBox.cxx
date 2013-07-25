@@ -151,7 +151,7 @@ ApplicationsToolBox
 
         //
         // add category icon
-        cmainItem->setIcon(0, QIcon( ":/images/otb_icon" ));
+        cmainItem->setIcon(0, QIcon( ":/icons/otb" ));
         
         //
         // step #2 -> Add algorithms name if matching the search label
@@ -176,7 +176,7 @@ ApplicationsToolBox
           
             //
             // add algorithm icon
-            secItem->setIcon(0, QIcon( ":/images/process_icon" ));
+            secItem->setIcon(0, QIcon( ":/icons/process" ));
             }
 
           ++itApps;
