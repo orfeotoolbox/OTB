@@ -93,9 +93,7 @@ void CommandLineLauncher::DeleteWatcherList()
 
 bool CommandLineLauncher::Load(const std::string & exp)
 {
-  std::cout<<exp<<std::endl;
   m_Expression = exp;
-
   return this->Load();
 }
 
