@@ -120,7 +120,7 @@ QuicklookModel
     assert( viModel!=NULL );
 
     // Write quicklook file on the disk.
-    fileWriter->SetFileName( ToStdString( quicklookFilename ) );
+    fileWriter->SetFileName( quicklookFilename.toUtf8().constData() );
     fileWriter->SetInput( viModel->ToImage() );
     fileWriter->Update();
     }

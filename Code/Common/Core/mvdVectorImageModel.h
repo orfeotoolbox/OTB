@@ -356,7 +356,7 @@ public:
     try
     {
       DefaultImageFileReaderType::Pointer imageFileReader = DefaultImageFileReaderType::New();
-      imageFileReader->SetFileName( ToStdString( filename ) );
+      imageFileReader->SetFileName( filename.toUtf8().constData() );
       imageFileReader->UpdateOutputInformation();
     }
     catch(std::exception& exc )

@@ -809,7 +809,7 @@ VectorImageModel
 
   try
     {
-    fileReader->SetFileName( ToStdString( lodFilename ) );
+    fileReader->SetFileName( lodFilename.toUtf8().constData() );
     fileReader->UpdateOutputInformation();
 
     m_ImageFileReader = fileReader;
