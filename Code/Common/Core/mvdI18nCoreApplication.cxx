@@ -456,9 +456,11 @@ void
 I18nCoreApplication
 ::InitializeLocale()
 {
+  
   QTextCodec::setCodecForTr( QTextCodec::codecForName( "utf8" ) );
-  QTextCodec::setCodecForLocale( QTextCodec::codecForName("utf8") );
+  //QTextCodec::setCodecForLocale( QTextCodec::codecForName("utf8") );
   QTextCodec::setCodecForCStrings( QTextCodec::codecForName("utf8") );
+  
 
   //
   // 1. default UI language is english (no translation).

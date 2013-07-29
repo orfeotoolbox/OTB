@@ -809,7 +809,7 @@ VectorImageModel
 
   try
     {
-    fileReader->SetFileName( lodFilename.toUtf8().constData() );
+    fileReader->SetFileName( QFile::encodeName(lodFilename).constData() );
     fileReader->UpdateOutputInformation();
 
     m_ImageFileReader = fileReader;
