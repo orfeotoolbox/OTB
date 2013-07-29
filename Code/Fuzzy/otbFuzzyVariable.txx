@@ -133,7 +133,7 @@ FuzzyVariable<TLabel, TPrecision>
     ParametersType parameters = mapIt->second;
 
     // Remaining of the code is trapezoidal function
-    if( value < parameters[0] || value > parameters[3] )
+    if( value < parameters[0] || value >= parameters[3] )
       {
       output = parameters[4];
       }
@@ -142,7 +142,7 @@ FuzzyVariable<TLabel, TPrecision>
       {
       if(parameters[1]>parameters[0])
         {
-        output = static_cast<TPrecision>((value - parameters[0])
+        output = static_cast<TPrecision>(parameters[4] + (value - parameters[0])
                                          /(parameters[1] - parameters[0])
                                          *(parameters[5] - parameters[4]));
         }
@@ -163,7 +163,7 @@ FuzzyVariable<TLabel, TPrecision>
       {
       if(parameters[3]>parameters[2])
         {
-        output = static_cast<TPrecision>((parameters[3] - value)
+        output = static_cast<TPrecision>(parameters[4] + (parameters[3] - value)
                                          /(parameters[3] - parameters[2])
                                          *(parameters[5] - parameters[4]));
         }
