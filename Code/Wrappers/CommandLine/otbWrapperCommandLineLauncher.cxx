@@ -647,7 +647,9 @@ void CommandLineLauncher::DisplayHelp()
     }
 
   std::cerr<<std::endl;
-  std::string cl(m_Application->GetCLExample());
+  //std::string cl(m_Application->GetCLExample());
+
+  std::cerr << "Examples: " << std::endl;
   std::cerr << m_Application->GetCLExample() << std::endl;
 
 }
