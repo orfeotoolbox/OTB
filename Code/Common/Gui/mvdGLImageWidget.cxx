@@ -361,7 +361,7 @@ GLImageWidget
 void
 GLImageWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-  if (event->mimeData()->hasText())
+  if( event->mimeData()->hasUrls() )
     {
     event->acceptProposedAction();
     }
