@@ -31,11 +31,14 @@
 //// Must be included before system/custom includes.
 #include <QPixmap>
 #include <QSplashScreen>
+
 //
 // System includes (sorted by alphabetic order)
+#include <exception>
 
 //
 // ITK includes (sorted by alphabetic order)
+#include "itksys/SystemTools.hxx"
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -115,27 +118,33 @@ main( int argc, char* argv[] )
     PROJECT_NAME,
     "There are %1 outdated dataset(s) in cache-directory.\n\n"
     "Please remove cache-directory '%2' and restart "
-    PROJECT_NAME "."
-#if defined( _DEBUG )
-    "\n\nDo you want to quit now ?" 
-#endif
+    PROJECT_NAME ".\n\n"
+    "Do you to delete cache-directory '%2' before quitting " PROJECT_NAME "?"
   ).arg( nb ).arg( application.GetCacheDir().path() ),
-#if defined( _DEBUG )
   QMessageBox::Yes | QMessageBox::No,
   QMessageBox::Yes
-#else
-  QMessageBox::Ok
-#endif
       );
 
-#if defined( _DEBUG )
     if( button==QMessageBox::Yes )
       {
-      return -2;
+      if( application.GetCacheDir()==QDir::home() )
+	{
+	throw std::runtime_error(
+	  mvd::ToStdString(
+	    QCoreApplication::translate(
+	      PROJECT_NAME,
+	      "Tryed to remove home dir."
+	    )
+	  )
+	);
+	}
+
+      itksys::SystemTools::RemoveADirectory(
+	QFile::encodeName( application.GetCacheDir().path() ).constData()
+      );
       }
-#else
+
     return -2;
-#endif
     }
 
   // 5. Show window.
