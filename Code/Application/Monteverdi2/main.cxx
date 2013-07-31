@@ -105,24 +105,22 @@ main( int argc, char* argv[] )
   mvd::CountType nb = application.OpenDatabase();
   if( nb > 0 )
     {
-#if defined( _DEBUG )
     QMessageBox::StandardButton button =
-#endif
       QMessageBox::warning(
-  &mainWindow,
-  QCoreApplication::translate(
-    PROJECT_NAME,
-    PROJECT_NAME " " Monteverdi2_VERSION_STRING " - Warning! "
-  ),
-  QCoreApplication::translate(
-    PROJECT_NAME,
-    "There are %1 outdated dataset(s) in cache-directory.\n\n"
-    "Please remove cache-directory '%2' and restart "
-    PROJECT_NAME ".\n\n"
-    "Do you to delete cache-directory '%2' before quitting " PROJECT_NAME "?"
-  ).arg( nb ).arg( application.GetCacheDir().path() ),
-  QMessageBox::Yes | QMessageBox::No,
-  QMessageBox::Yes
+	&mainWindow,
+	QCoreApplication::translate(
+	  PROJECT_NAME,
+	  PROJECT_NAME " " Monteverdi2_VERSION_STRING " - Warning! "
+	),
+	QCoreApplication::translate(
+	  PROJECT_NAME,
+	  "There are %1 outdated dataset(s) in cache-directory.\n\n"
+	  "Please remove cache-directory '%2' and restart "
+	  PROJECT_NAME ".\n\n"
+	  "Do you to delete cache-directory '%2' before quitting " PROJECT_NAME "?"
+	).arg( nb ).arg( application.GetCacheDir().path() ),
+	QMessageBox::Yes | QMessageBox::No,
+	QMessageBox::Yes
       );
 
     if( button==QMessageBox::Yes )
