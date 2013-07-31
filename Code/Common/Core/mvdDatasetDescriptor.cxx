@@ -800,7 +800,7 @@ DatasetDescriptor
 
   // dataset creation-date element
   QDomElement dateElt(
-    CreateTextNode( QDateTime::currentDateTime().toString( Qt::ISODate ),
+    CreateTextNode( QDateTime::currentDateTime().toString( "yyyy-MM-ddThh:mm:ss.zzz" ),
                     TAG_NAMES[ ELEMENT_DATASET_DATE ] )
     );
   datasetElt.appendChild( dateElt );

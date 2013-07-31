@@ -428,7 +428,7 @@ DatasetDescriptor
   );
   assert( !dateElt.isNull() );
 
-  return QDateTime::fromString( dateElt.text(), Qt::ISODate );
+  return QDateTime::fromString( dateElt.text(), "yyyy-MM-ddThh:mm:ss.zzz" );
 }
 
 /*****************************************************************************/
