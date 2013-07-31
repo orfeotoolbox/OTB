@@ -22,6 +22,7 @@ set( Common_Gui_SOURCES
   mvdDatasetPropertiesWidget.cxx
   mvdDatasetTreeWidgetItem.cxx
   mvdDoubleValidator.cxx
+  mvdDropLineEdit.cxx
   mvdGLImageWidget.cxx
   mvdGui.cxx
   mvdI18nApplication.cxx
@@ -60,6 +61,7 @@ set( Common_Gui_HEADERS_MOC
   mvdDatasetPropertiesWidget.h
   #mvdDatasetTreeWidgetItem.h
   mvdDoubleValidator.h
+  mvdDropLineEdit.h
   mvdGLImageWidget.h
   #mvdGui.h
   mvdI18nApplication.h

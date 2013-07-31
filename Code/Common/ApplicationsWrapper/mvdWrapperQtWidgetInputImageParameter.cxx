@@ -37,6 +37,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
+#include "Gui/mvdDropLineEdit.h"
 
 namespace mvd
 {
@@ -76,11 +77,18 @@ QtWidgetInputImageParameter
   //
   m_Button = new QPushButton( this );
   m_HLayout = new QHBoxLayout();
-  m_Input = new QLabel(this);
+  m_Input = new DropLineEdit( this );
 
+  QObject::connect(
+    m_Input, SIGNAL( textChanged( const QString& ) ),
+    this, SIGNAL( textChanged( const QString& ) )
+  );
+
+#if 0
   //
   // set accept drops in the widget
   setAcceptDrops( true );
+#endif
 }
 
 /*******************************************************************************/
@@ -96,16 +104,20 @@ void QtWidgetInputImageParameter::DoUpdateGUI()
 /*******************************************************************************/
 void QtWidgetInputImageParameter::DoCreateWidget()
 {
-
   // Set up input QLabel
   m_Input->setToolTip( m_InputImageParam->GetDescription() );
-  m_Input->setFrameShape(QFrame::Box);
-  m_Input->setText(tr("Drag and drop a dataset here"));
+  // m_Input->setFrameShape(QFrame::Box);
+  m_Input->setText(tr("Drag and drop a dataset here."));
 
   // TODO : QLabel does not have signals, remove connections
-  connect( this, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( this, SIGNAL(textChanged(const QString&)), 
-           GetModel(),SLOT(NotifyUpdate()) );
+  QObject::connect(
+    this, SIGNAL( textChanged( const QString& ) ),
+    this, SLOT( SetFileName( const QString& ) )
+  );
+  QObject::connect(
+    this, SIGNAL( textChanged( const QString& ) ),
+    GetModel(), SLOT( NotifyUpdate() )
+  );
 
   // layout the QLabel
   m_HLayout->setSpacing(0);
@@ -122,6 +134,7 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
+#if 0
 /*******************************************************************************/
 void
 QtWidgetInputImageParameter::dragEnterEvent( QDragEnterEvent * event )
@@ -187,6 +200,7 @@ void QtWidgetInputImageParameter::dropEvent(QDropEvent *event)
     emit textChanged( ofname );
     }
 }
+#endif
 
 /*******************************************************************************/
 std::string 

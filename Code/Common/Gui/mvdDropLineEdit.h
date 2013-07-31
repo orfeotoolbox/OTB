@@ -16,13 +16,14 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdWrapperQtWidgetInputImageParameter_h
-#define __mvdWrapperQtWidgetInputImageParameter_h
+#ifndef __mvdDropLineEdit_h
+#define __mvdDropLineEdit_h
 
 //
 // Configuration include.
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
+
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -30,7 +31,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtCore>
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -40,10 +41,10 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbWrapperQtWidgetParameterBase.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -56,26 +57,32 @@ namespace
 
 namespace mvd
 {
-class DropLineEdit;
 
-namespace Wrapper
+//
+// Internal classes pre-declaration.
+namespace Ui
 {
+// class DropLineEdit;
+};
+
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class ApplicationLauncher
+ * \class DropLineEdit
  *
- * \brief WIP.
+ * \brief Widget template skeleton to copy-paste when adding a new
+ * widget class.
  */
-
-class QtWidgetInputImageParameter : public otb::Wrapper::QtWidgetParameterBase
+class Monteverdi2_EXPORT DropLineEdit :
+    public QLineEdit
 {
+
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
   Q_OBJECT;
-  
+
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
@@ -83,47 +90,68 @@ class QtWidgetInputImageParameter : public otb::Wrapper::QtWidgetParameterBase
 public:
 
   /** \brief Constructor. */
-  QtWidgetInputImageParameter( otb::Wrapper::InputImageParameter*,
-			       otb::Wrapper::QtWidgetModel* );
+  DropLineEdit( QWidget* parent =0 );
+
+  /** \brief Constructor. */
+  DropLineEdit( const QString& contents, QWidget* parent =0 );
 
   /** \brief Destructor. */
-  virtual ~QtWidgetInputImageParameter();
+  virtual ~DropLineEdit();
 
-#if 0
-  /** \brief drag and drop events reimplementation */
-  void dragEnterEvent( QDragEnterEvent * event );
-  void dropEvent( QDropEvent *event );
-  void dragMoveEvent(QDragMoveEvent *event);
-#endif
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
+//
+// Public SLOTS.
+public slots:
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
+//
+// Signals.
 signals:
-  void textChanged(const QString&);
 
-protected slots:
-  bool SetFileName( const QString& value );
-  void SelectFile();
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
+//
+// Protected methods.
 protected:
 
+  virtual void dragEnterEvent( QDragEnterEvent* event );
+  virtual void dragMoveEvent( QDragMoveEvent* event );
+  virtual void dropEvent( QDropEvent* event );
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
+//
+// Protected attributes.
+protected:
+
+//
+// Private methods.
 private:
-  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
 
-  virtual void DoCreateWidget();
+//
+// Private attributes.
+private:
+  /**
+   * \brief uic generated.
+   */
+  // Ui::DropLineEdit* m_UI;
 
-  virtual void DoUpdateGUI();
-  
-  std::string ExtractValidFilename(std::string payload);
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-  otb::Wrapper::InputImageParameter::Pointer m_InputImageParam;
-
-  QHBoxLayout* m_HLayout;
-  DropLineEdit* m_Input;
-  QPushButton* m_Button;
+//
+// Slots.
+private slots:
 };
 
+} // end namespace 'mvd'
 
-}
-}
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
 
-#endif
+namespace mvd
+{
+} // end namespace 'mvd'
+
+#endif // __mvdDropLineEdit_h

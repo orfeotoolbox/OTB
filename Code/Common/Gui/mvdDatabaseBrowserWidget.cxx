@@ -286,11 +286,7 @@ DatabaseBrowserWidget
 /*******************************************************************************/
 void
 DatabaseBrowserWidget
-#if 0
-::OnSearchBoxChanged(const QString & search)
-#else
 ::on_m_SearchLine_textChanged( const QString& search )
-#endif
 {
   // 
   // get the search text

@@ -213,15 +213,10 @@ private slots:
   void on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
 						 QTreeWidgetItem* previous );
 
-#if 0
-  /**
-   */
-  void OnSearchBoxChanged( const QString & search );
-#else
   /**
    */
   void on_m_SearchLine_textChanged( const QString& search );
-#endif
+
 };
 
 } // end namespace 'mvd'

@@ -37,6 +37,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
+#include "Gui/mvdDropLineEdit.h"
 
 namespace mvd
 {
@@ -71,9 +72,11 @@ QtWidgetFileSelection::QtWidgetFileSelection() :
 {
   this->DoCreateWidget();
 
+#if 0
   //
   // set accept drops in the widget
   setAcceptDrops( true );  
+#endif
 }
 
 /*******************************************************************************/
@@ -99,10 +102,14 @@ void QtWidgetFileSelection::DoCreateWidget()
   m_Checkbox = new QCheckBox();
   m_HLayout->addWidget(m_Checkbox);
 
-  m_Input = new QLabel;
-  m_Input->setFrameShape(QFrame::Box);
-  m_Input->setText(tr("Drag and drop a dataset here"));
+  m_Input = new DropLineEdit( this );
+  // m_Input->setFrameShape(QFrame::Box);
+  m_Input->setText(tr("Drag and drop a dataset here."));
   m_HLayout->addWidget(m_Input);
+  QObject::connect(
+    m_Input, SIGNAL( textChanged( const QString& ) ),
+    this, SIGNAL( textChanged( const QString& ) )
+  );
 
   // Set up input text edit
   m_Button = new QPushButton;
@@ -116,6 +123,7 @@ void QtWidgetFileSelection::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
+#if 0
 /*******************************************************************************/
 void
 QtWidgetFileSelection::dragEnterEvent( QDragEnterEvent * event )
@@ -182,6 +190,7 @@ QtWidgetFileSelection::dropEvent(QDropEvent *event)
     emit textChanged( ofname );
     }
 }
+#endif
 
 /*******************************************************************************/
 std::string 

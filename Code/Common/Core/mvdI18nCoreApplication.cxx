@@ -28,6 +28,9 @@
 
 //
 // System includes (sorted by alphabetic order)
+#ifdef _WIN32
+#include <windows.h>
+#endif
 #include <exception>
 
 //
@@ -223,6 +226,10 @@ I18nCoreApplication
     // DEBUG
     case QtDebugMsg:
 #if ECHO_QDEBUG
+#if _WIN32
+      OutputDebugString( message );
+      OutputDebugString( "\n" );
+#endif
       fprintf( stderr, "%s\n", message );
 #endif
 #if LOG_QDEBUG
@@ -233,6 +240,11 @@ I18nCoreApplication
     // WARNING
     case QtWarningMsg:
 #if ECHO_QWARNING
+#if _WIN32
+      OutputDebugString( "WARNG> " );
+      OutputDebugString( message );
+      OutputDebugString( "\n" );
+#endif
       fprintf( stderr, tr( "WARNG> %s\n" ).toLatin1().constData(), message );
 #endif
 #if LOG_QWARNING
@@ -243,6 +255,11 @@ I18nCoreApplication
     // CRITICAL
     case QtCriticalMsg:
 #if ECHO_QCRITICAL
+#if _WIN32
+      OutputDebugString( "ERROR> " );
+      OutputDebugString( message );
+      OutputDebugString( "\n" );
+#endif
       fprintf( stderr, tr( "ERROR> %s\n" ).toLatin1().constData(), message );
 #endif
 #if LOG_QCRITICAL
@@ -261,6 +278,11 @@ I18nCoreApplication
     // FATAL
     case QtFatalMsg:
 #if ECHO_QFATAL
+#if _WIN32
+      OutputDebugString( "FATAL> " );
+      OutputDebugString( message );
+      OutputDebugString( "\n" );
+#endif
       fprintf(
 	stderr,
 	tr( "FATAL> %s\n" ).toLatin1().constData(),

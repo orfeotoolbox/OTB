@@ -51,6 +51,8 @@ namespace
 
 namespace mvd
 {
+class DropLineEdit;
+
 namespace Wrapper
 {
 
@@ -102,11 +104,13 @@ public:
   {
     m_Input->clear();
   }
-  
-  QLabel* GetInput()
+
+  /*
+  DropLineEdit* GetInput()
   {
     return m_Input;
   }
+  */
 
 signals:
   void textChanged(const QString &);
@@ -116,10 +120,12 @@ protected slots:
 
 protected:
 
+#if 0
   /** \brief drag and drop events reimplementation */
   void dragEnterEvent( QDragEnterEvent * event );
   void dropEvent( QDropEvent *event );
   void dragMoveEvent(QDragMoveEvent *event);
+#endif
 
 private:
   QtWidgetFileSelection(const QtWidgetFileSelection&); //purposely not implemented
@@ -131,15 +137,14 @@ private:
 
   std::string ExtractValidFilename(std::string payload);
 
-
-  QHBoxLayout * m_HLayout;
-  QLabel*       m_Input;
-  QPushButton * m_Button;
-  QCheckBox *   m_Checkbox;
+  QHBoxLayout* m_HLayout;
+  QLineEdit* m_Input;
+  QPushButton* m_Button;
+  QCheckBox* m_Checkbox;
 };
 
-
 }
+
 }
 
 #endif
