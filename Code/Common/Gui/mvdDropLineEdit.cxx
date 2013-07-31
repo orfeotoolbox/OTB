@@ -105,10 +105,15 @@ DropLineEdit
 {
   assert( event!=NULL );
 
+  /*
   if( ( event->mimeData()->hasText() &&
 	QUrl( event->mimeData()->text() ).isLocalFile() ) ||
       ( event->mimeData()->hasFormat(
 	"application/x-qabstractitemmodeldatalist" ) ) )
+  */
+  if( event->mimeData()->hasText() ||
+      event->mimeData()->hasFormat(
+	"application/x-qabstractitemmodeldatalist" ) )
     {
     event->acceptProposedAction();
     }
@@ -128,11 +133,15 @@ DropLineEdit
   if( event->mimeData()->hasText() )
     {
     QUrl url( event->mimeData()->text() );
-    
+
+    /*
     if( url.isLocalFile() )
       {
-      setText( url.toLocalFile() );
+    */
+    setText( url.toLocalFile() );
+    /*
       }
+    */
     }
   else if( event->mimeData()->hasFormat(
 	     "application/x-qabstractitemmodeldatalist" ) )
