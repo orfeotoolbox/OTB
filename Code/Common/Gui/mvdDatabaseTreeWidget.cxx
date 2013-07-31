@@ -157,7 +157,7 @@ DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 void
 DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-  if (event->mimeData()->hasText()/*("text/uri-list")*/)
+  if (event->mimeData()->hasUrls()/*("text/uri-list")*/)
     {
     event->acceptProposedAction();
     }
