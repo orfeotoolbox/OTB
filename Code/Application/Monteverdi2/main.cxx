@@ -117,7 +117,7 @@ main( int argc, char* argv[] )
 	  "There are %1 outdated dataset(s) in cache-directory.\n\n"
 	  "Please remove cache-directory '%2' and restart "
 	  PROJECT_NAME ".\n\n"
-	  "Do you to delete cache-directory '%2' before quitting " PROJECT_NAME "?"
+	  "Do you want to delete cache-directory '%2' before quitting " PROJECT_NAME "?"
 	).arg( nb ).arg( application.GetCacheDir().path() ),
 	QMessageBox::Yes | QMessageBox::No,
 	QMessageBox::Yes
