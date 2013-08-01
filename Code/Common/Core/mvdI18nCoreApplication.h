@@ -639,6 +639,8 @@ I18nCoreApplication
 {
   assert( m_Settings!=NULL );
 
+  // qDebug() << this << "::StoreSettingsKey(" << key << ", " << value << ")";
+
   m_Settings->setValue( key, value );
 
   SynchronizeSettings();

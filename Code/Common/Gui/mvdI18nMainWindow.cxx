@@ -202,8 +202,10 @@ I18nMainWindow
   if( I18nApplication::ConstInstance()->IsCacheDirValid() )
     return;
 
-  QFileInfo fileInfo( QDir::home(), I18nApplication::DEFAULT_CACHE_DIR_NAME ); 
+  QFileInfo fileInfo( QDir::home(), I18nApplication::DEFAULT_CACHE_DIR_NAME );
   QDir dir( fileInfo.dir() );
+
+  // qDebug() << dir.path();
 
   QMessageBox messageBox;
 

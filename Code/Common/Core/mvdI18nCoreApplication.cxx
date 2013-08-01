@@ -111,7 +111,14 @@ I18nCoreApplication
 
   QDir treeDir( pathDir.filePath( tree ) );
   if( treeDir.exists() )
+    {
+    if( dir!=NULL )
+      {
+      *dir = treeDir;
+      }
+
     return false;
+    }
 
   if( !pathDir.mkpath( tree ) )
     throw SystemError(
