@@ -96,6 +96,10 @@ add_executable( monteverdi2
   ${Monteverdi2_Catalogue_RESOURCES_RCC}
 )
 
+if (MONTEVERDI2_OUTPUT_NAME)
+  set_target_properties(monteverdi2 PROPERTIES OUTPUT_NAME ${MONTEVERDI2_OUTPUT_NAME})
+endif()
+
 target_link_libraries( monteverdi2
   Monteverdi2_Catalogue
   #Monteverdi2_Gui
