@@ -7,7 +7,7 @@ RESOURCES="$BUNDLE/Contents/Resources"
 #echo "RESOURCES: $RESOURCES"
 
 export GDAL_DATA=$RESOURCES/share/gdal
-export ITK_AUTOLOAD_PATH=$RESSOURCES/lib/otb/applications
+export ITK_AUTOLOAD_PATH=$RESOURCES/lib/otb/applications
 
 cd $HOME
 
