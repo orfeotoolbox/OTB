@@ -351,19 +351,19 @@
     </message>
     <message>
         <source>Red channel.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Canal rouge.</translation>
     </message>
     <message>
         <source>Green channel.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Canal vert.</translation>
     </message>
     <message>
         <source>Blue channel.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Canal bleu.</translation>
     </message>
     <message>
-        <source>Whit (gray) channel.</source>
-        <translation type="unfinished"></translation>
+        <source>White (gray) channel.</source>
+        <translation type="unfinished">Canal blanc (gris).</translation>
     </message>
 </context>
 <context>
@@ -744,6 +744,14 @@
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DropLineEdit</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1178,15 +1186,15 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>&amp;Open image...</source>
-        <translation>&amp;Ouvrir image...</translation>
+        <translation type="obsolete">&amp;Ouvrir image...</translation>
     </message>
     <message>
         <source>Open image...</source>
-        <translation>Nouvelle image...</translation>
+        <translation type="obsolete">Nouvelle image...</translation>
     </message>
     <message>
         <source>Open image-file.</source>
-        <translation>Nouveau fichier image.</translation>
+        <translation type="obsolete">Nouveau fichier image.</translation>
     </message>
     <message>
         <source>Zoom in</source>
@@ -1247,6 +1255,26 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     <message>
         <source>Welcome new Montevedi2 user !</source>
         <translation>Bienvenu, nouvel utilisateur Monteverdi2 !</translation>
+    </message>
+    <message>
+        <source>Import image-file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Import image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl++</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+-</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1652,14 +1680,21 @@ La navigation en résolution sera plus lente.</translation>
 <context>
     <name>mvd::Wrapper::QtWidgetFileSelection</name>
     <message>
-        <source>Drag and drop a dataset here</source>
+        <source>Drag and drop a dataset here.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>mvd::Wrapper::QtWidgetInputImageParameter</name>
     <message>
-        <source>Drag and drop a dataset here</source>
+        <source>Drag and drop a dataset here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::Wrapper::QtWidgetView</name>
+    <message>
+        <source>Are you sure you want to overwrite file &apos;%1&apos;?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
