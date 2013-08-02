@@ -24,17 +24,19 @@
     </message>
     <message>
         <source>Monteverdi2 - Critical error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Monteverdi2 - Erreur critique !</translation>
     </message>
     <message>
         <source>Error when creating repository cache-directory:
 %1
 Application will exit!</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s&apos;est produite lors de la création du répertoire de cache :
+%1
+L&apos;application va se terminer !</translation>
     </message>
     <message>
         <source>Monteverdi2 - Warning!</source>
-        <translation type="unfinished"></translation>
+        <translation>Monteverdi2 - Avertissement !</translation>
     </message>
     <message>
         <source>There are %1 outdated dataset(s) in cache-directory.
@@ -42,11 +44,15 @@ Application will exit!</source>
 Please remove cache-directory &apos;%2&apos; and restart Monteverdi2
 
 Do you want to delete cache-directory &apos;%2&apos; before quitting Monteverdi2?</source>
-        <translation type="unfinished"></translation>
+        <translation>Il y a %1 jeu(x) de données obsolète(s) dans le répertoire de cache.
+
+Veuillez supprimer le répertoire de cache  &apos;%2&apos; avant de redémarrer Monteverdi2.
+
+Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Monteverdi2 ?</translation>
     </message>
     <message>
         <source>Tryed to remove home dir.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tentative de suppression du compte utilisateur.</translation>
     </message>
 </context>
 <context>
@@ -580,7 +586,7 @@ Do you want to delete cache-directory &apos;%2&apos; before quitting Monteverdi2
     </message>
     <message>
         <source>Datasets</source>
-        <translation>Jeu de données</translation>
+        <translation type="unfinished">Jeu(x) de données</translation>
     </message>
     <message>
         <source></source>
@@ -938,12 +944,12 @@ Do you want to delete cache-directory &apos;%2&apos; before quitting Monteverdi2
     <message>
         <source>WARNG&gt; %s
 </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>ERROR&gt; %s
 </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Error: </source>
@@ -952,7 +958,7 @@ Do you want to delete cache-directory &apos;%2&apos; before quitting Monteverdi2
     <message>
         <source>FATAL&gt; %s
 </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Fatal error: </source>
@@ -1032,15 +1038,21 @@ Default cache-directory location is: &apos;%1&apos;.
 Warning:
 - Your account needs to have write access to this directory;
 - Please be aware that this directory can consume significant disk space.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Monteverdi2 maintient un dépôt où sont stockées des données additionnelles liées à chaque image (par exemple, réglage d&apos;affichage, histogrammes, aperçus etc.).
+
+L&apos;emplacement par défaut du répertoire de cache est : &apos;%1&apos;.
+
+Attention :
+- Vous devez posséder les droits d&apos;écritures sur ce répertoire ;
+- Soyez conscients que ce répertoire peut grossir and consommer un espace disque significatif.</translation>
     </message>
     <message>
         <source>Please, select directory where the Monteverdi2 cache repository will be stored.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez sélectionner le répertoire où sera stocké le dépôt de Monteverdi2.</translation>
     </message>
     <message>
         <source>Welcome new Monteverdi2 user!</source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenu, nouvel utilisateur Monteverdi2 !</translation>
     </message>
 </context>
 <context>
@@ -1330,7 +1342,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Monteverdi2 - Warning!</source>
-        <translation type="unfinished"></translation>
+        <translation>Monteverdi2 - Avertissement !</translation>
     </message>
 </context>
 <context>
