@@ -45,6 +45,7 @@ qt4_add_resources( Monteverdi2_Catalogue_RESOURCES_RCC ${Monteverdi2_Catalogue_R
 #############################################################################
 # Sources files to translate.
 add_to_qt4_i18n_sources(
+  main.cxx
   ${Monteverdi2_Catalogue_SOURCES}
   ${Monteverdi2_Catalogue_HEADERS_MOC}
   ${Monteverdi2_Catalogue_FORMS}

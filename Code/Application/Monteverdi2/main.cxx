@@ -86,11 +86,11 @@ main( int argc, char* argv[] )
     QMessageBox::critical(
       &mainWindow,
       QCoreApplication::translate(
-	PROJECT_NAME,
-	PROJECT_NAME " - Critical error!"
+	"Monteverdi2",
+	"Monteverdi2 - Critical error!"
       ),
       QCoreApplication::translate(
-	PROJECT_NAME,
+	"Monteverdi2",
 	"Error when creating repository cache-directory:\n"
 	"%1\n"
 	"Application will exit!"
@@ -109,15 +109,14 @@ main( int argc, char* argv[] )
       QMessageBox::warning(
 	&mainWindow,
 	QCoreApplication::translate(
-	  PROJECT_NAME,
-	  PROJECT_NAME " " Monteverdi2_VERSION_STRING " - Warning! "
+	  "Monteverdi2",
+	  "Monteverdi2 - Warning!"
 	),
 	QCoreApplication::translate(
-	  PROJECT_NAME,
+	  "Monteverdi2",
 	  "There are %1 outdated dataset(s) in cache-directory.\n\n"
-	  "Please remove cache-directory '%2' and restart "
-	  PROJECT_NAME ".\n\n"
-	  "Do you want to delete cache-directory '%2' before quitting " PROJECT_NAME "?"
+	  "Please remove cache-directory '%2' and restart Monteverdi2\n\n"
+	  "Do you want to delete cache-directory '%2' before quitting Monteverdi2?"
 	).arg( nb ).arg( application.GetCacheDir().path() ),
 	QMessageBox::Yes | QMessageBox::No,
 	QMessageBox::Yes
@@ -130,7 +129,7 @@ main( int argc, char* argv[] )
 	throw std::runtime_error(
 	  mvd::ToStdString(
 	    QCoreApplication::translate(
-	      PROJECT_NAME,
+	      "Monteverdi2",
 	      "Tryed to remove home dir."
 	    )
 	  )

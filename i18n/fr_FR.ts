@@ -16,6 +16,40 @@
     </message>
 </context>
 <context>
+    <name>Monteverdi2</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Monteverdi2 - Critical error!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error when creating repository cache-directory:
+%1
+Application will exit!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Monteverdi2 - Warning!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There are %1 outdated dataset(s) in cache-directory.
+
+Please remove cache-directory &apos;%2&apos; and restart Monteverdi2
+
+Do you want to delete cache-directory &apos;%2&apos; before quitting Monteverdi2?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tryed to remove home dir.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Execute</source>
@@ -751,7 +785,7 @@
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -974,7 +1008,7 @@
     </message>
     <message>
         <source>Welcome new </source>
-        <translation>Bienvenu nouvel </translation>
+        <translation type="obsolete">Bienvenu nouvel </translation>
     </message>
     <message>
         <source>Do you want to specify a custom repository location?</source>
@@ -982,13 +1016,31 @@
     </message>
     <message>
         <source>Please, select directory where the </source>
-        <translation>Veuillez sélectionner un répertoire où </translation>
+        <translation type="obsolete">Veuillez sélectionner un répertoire où </translation>
     </message>
     <message>
         <source>Dataset has been modified.
 Do you want to save settings before quitting?</source>
         <translation>Jeu de données modifié.
 Voulez-vous sauvegarder avant de quitter ?</translation>
+    </message>
+    <message>
+        <source>Monteverdi2 maintains a repository where cached data related to images is stored (such as, for example, color-settings, histogram, quicklook etc.).
+
+Default cache-directory location is: &apos;%1&apos;.
+
+Warning:
+- Your account needs to have write access to this directory;
+- Please be aware that this directory can consume significant disk space.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please, select directory where the Monteverdi2 cache repository will be stored.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Welcome new Monteverdi2 user!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1275,6 +1327,10 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     <message>
         <source>Ctrl+-</source>
         <translation>Ctrl+-</translation>
+    </message>
+    <message>
+        <source>Monteverdi2 - Warning!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

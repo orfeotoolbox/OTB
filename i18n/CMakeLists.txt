@@ -13,7 +13,8 @@ option( MERGE_TS "Create/merge .ts source translation files. WARNING: 'make clea
 #
 # Sources to translate.
 if( MERGE_TS )
-  message( "Warning: MERGE_TS:BOOL option is ON. 'make clean' will delete .ts files from source directory!" )
+  message( STATUS "Warning: MERGE_TS:BOOL option is ON. 'make clean' will delete .ts files from source directory!" )
+  message( STATUS "I18N source files: " ${Monteverdi2_I18N_SOURCE_FILES} )
   qt4_create_translation( Monteverdi2_QM_TRANSLATIONS
     ${Monteverdi2_I18N_SOURCE_FILES}
     ${Monteverdi2_TS_TRANSLATIONS}

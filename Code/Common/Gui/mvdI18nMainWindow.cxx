@@ -209,12 +209,11 @@ I18nMainWindow
 
   QMessageBox messageBox;
 
-  messageBox.setWindowTitle( tr( "Welcome new " PROJECT_NAME " user!" ) );
+  messageBox.setWindowTitle( tr( "Welcome new Monteverdi2 user!" ) );
 
   messageBox.setText(
     tr(
-      PROJECT_NAME
-      " maintains a repository where cached data related to images is stored "
+      "Monteverdi2 maintains a repository where cached data related to images is stored "
       "(such as, for example, color-settings, histogram, quicklook etc.)."
       "\n\n"
       "Default cache-directory location is: '%1'."
@@ -240,8 +239,7 @@ I18nMainWindow
       I18nMainWindow::GetExistingDirectory(
 	this,
 	tr(
-	  "Please, select directory where the "
-	  PROJECT_NAME
+	  "Please, select directory where the Monteverdi2"
 	  " cache repository will be stored."
 	),
 	dir.path()
