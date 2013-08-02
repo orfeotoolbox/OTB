@@ -83,7 +83,7 @@
     </message>
     <message>
         <source>RedEdge</source>
-        <translation type="unfinished">Red-edge</translation>
+        <translation>RedEdge</translation>
     </message>
     <message>
         <source>Coastal</source>
@@ -254,7 +254,7 @@
     </message>
     <message>
         <source>Apply quantiles to all channels.</source>
-        <translation type="unfinished">Appliquer les quantiles à tous les canaux.</translation>
+        <translation>Appliquer les quantiles à tous les canaux.</translation>
     </message>
     <message>
         <source>Apply to all</source>
@@ -307,7 +307,7 @@
     </message>
     <message>
         <source>min/Max</source>
-        <translation type="unfinished">min/max</translation>
+        <translation>min/Max</translation>
     </message>
     <message>
         <source>Quantile:</source>
@@ -335,35 +335,35 @@
     </message>
     <message>
         <source>Quantile percentile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pourcentage de quantile.</translation>
     </message>
     <message>
         <source>Q:</source>
-        <translation type="unfinished"></translation>
+        <translation>Q :</translation>
     </message>
     <message>
         <source>Pixel value on band.</source>
-        <translation type="unfinished">Valeur du pixel.</translation>
+        <translation>Valeur du pixel pour la bande.</translation>
     </message>
     <message>
         <source>V:</source>
-        <translation type="unfinished"></translation>
+        <translation>V :</translation>
     </message>
     <message>
         <source>Red channel.</source>
-        <translation type="unfinished">Canal rouge.</translation>
+        <translation>Canal rouge.</translation>
     </message>
     <message>
         <source>Green channel.</source>
-        <translation type="unfinished">Canal vert.</translation>
+        <translation>Canal vert.</translation>
     </message>
     <message>
         <source>Blue channel.</source>
-        <translation type="unfinished">Canal bleu.</translation>
+        <translation>Canal bleu.</translation>
     </message>
     <message>
         <source>White (gray) channel.</source>
-        <translation type="unfinished">Canal blanc (gris).</translation>
+        <translation>Canal blanc (niveau de gris).</translation>
     </message>
 </context>
 <context>
@@ -387,7 +387,7 @@
     </message>
     <message>
         <source>No data: </source>
-        <translation type="unfinished">NoData:</translation>
+        <translation>No data :</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -491,19 +491,19 @@
     </message>
     <message>
         <source>White (gray) channel.</source>
-        <translation type="unfinished">Canal blanc (gris).</translation>
+        <translation>Canal blanc (niveau de gris).</translation>
     </message>
     <message>
         <source>Red channel.</source>
-        <translation type="unfinished">Canal rouge.</translation>
+        <translation>Canal rouge.</translation>
     </message>
     <message>
         <source>Green channel.</source>
-        <translation type="unfinished">Canal vert.</translation>
+        <translation>Canal vert.</translation>
     </message>
     <message>
         <source>Blue channel.</source>
-        <translation type="unfinished">Canal bleu.</translation>
+        <translation>Canal bleu.</translation>
     </message>
 </context>
 <context>
@@ -523,7 +523,7 @@
     </message>
     <message>
         <source>Inconsistent Dataset disabled</source>
-        <translation type="unfinished">Donnée inconsistente désactivée</translation>
+        <translation>Jeu de données inconsistent désactivé</translation>
     </message>
     <message>
         <source>Warning!</source>
@@ -531,7 +531,7 @@
     </message>
     <message>
         <source>Are you sure you want to delete dataset &apos;%1&apos;?</source>
-        <translation type="unfinished">Êtes-vous certain de vouloir supprimer la donnée &apos;%1&apos; ?</translation>
+        <translation>Êtes-vous certain de vouloir supprimer le jeu de données &apos;%1&apos; ?</translation>
     </message>
 </context>
 <context>
@@ -546,7 +546,7 @@
     </message>
     <message>
         <source>Datasets</source>
-        <translation type="unfinished">Données</translation>
+        <translation>Jeu de données</translation>
     </message>
     <message>
         <source></source>
@@ -555,7 +555,7 @@
     </message>
     <message>
         <source>Search Dataset ...</source>
-        <translation type="unfinished">Rechercher une donnée...</translation>
+        <translation>Rechercher un jeu de données...</translation>
     </message>
 </context>
 <context>
@@ -978,7 +978,7 @@
     </message>
     <message>
         <source>Do you want to specify a custom repository location?</source>
-        <translation>Voulez-vous définir une chemin de dépôt personnalisé ?</translation>
+        <translation>Voulez-vous définir un chemin de dépôt personnalisé ?</translation>
     </message>
     <message>
         <source>Please, select directory where the </source>
@@ -1258,23 +1258,23 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Import image-file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer fichier image.</translation>
     </message>
     <message>
         <source>&amp;Import image...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Importer image...</translation>
     </message>
     <message>
         <source>Import image...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer image...</translation>
     </message>
     <message>
         <source>Ctrl++</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl++</translation>
     </message>
     <message>
         <source>Ctrl+-</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+-</translation>
     </message>
 </context>
 <context>
@@ -1365,19 +1365,19 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>X</source>
-        <translation type="unfinished">X</translation>
+        <translation>X</translation>
     </message>
     <message>
         <source>Y</source>
-        <translation type="unfinished">Y</translation>
+        <translation>Y</translation>
     </message>
     <message>
         <source>Long</source>
-        <translation type="unfinished">Long</translation>
+        <translation>Long</translation>
     </message>
     <message>
         <source>Lat</source>
-        <translation type="unfinished">Lat</translation>
+        <translation>Lat</translation>
     </message>
     <message>
         <source>Elevation</source>
@@ -1451,7 +1451,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Geoid File            </source>
-        <translation type="unfinished">Fichier géoïde</translation>
+        <translation>Fichier géoïde</translation>
     </message>
     <message>
         <source>SRTM Directory</source>
@@ -1471,11 +1471,11 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>DEM directory</source>
-        <translation type="unfinished">Répertoire MNT</translation>
+        <translation>Répertoire MNT</translation>
     </message>
     <message>
         <source>Select the directory containing DEM files.</source>
-        <translation type="unfinished">Sélectionner un répertoire contenant les fichiers MNT.</translation>
+        <translation>Sélectionner un répertoire contenant les fichiers MNT.</translation>
     </message>
 </context>
 <context>
@@ -1599,7 +1599,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Physical</source>
-        <translation type="unfinished">Physique</translation>
+        <translation>Physique</translation>
     </message>
     <message>
         <source>Radiometry</source>
@@ -1647,19 +1647,19 @@ La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
         <source>Cartographic</source>
-        <translation type="unfinished">Cartographique</translation>
+        <translation>Cartographique</translation>
     </message>
     <message>
         <source>Geographic(exact)</source>
-        <translation type="unfinished">Geographique (exact)</translation>
+        <translation>Geographique (exact)</translation>
     </message>
     <message>
         <source>Geographic(sensor model)</source>
-        <translation type="unfinished">Geographique (modèle capteur)</translation>
+        <translation>Geographique (modèle capteur)</translation>
     </message>
     <message>
         <source>No geoinfo</source>
-        <translation type="unfinished">Pas d&apos;info géo</translation>
+        <translation>Pas d&apos;info géo</translation>
     </message>
 </context>
 <context>
@@ -1681,21 +1681,21 @@ La navigation en résolution sera plus lente.</translation>
     <name>mvd::Wrapper::QtWidgetFileSelection</name>
     <message>
         <source>Drag and drop a dataset here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Glisser-déposer un jeu de données ici.</translation>
     </message>
 </context>
 <context>
     <name>mvd::Wrapper::QtWidgetInputImageParameter</name>
     <message>
         <source>Drag and drop a dataset here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Glisser-déposer un jeu de données ici.</translation>
     </message>
 </context>
 <context>
     <name>mvd::Wrapper::QtWidgetView</name>
     <message>
         <source>Are you sure you want to overwrite file &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous certain de vouloir écraser le fichier &apos;%1&apos; ?</translation>
     </message>
 </context>
 </TS>
