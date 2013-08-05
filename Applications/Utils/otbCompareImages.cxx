@@ -62,7 +62,7 @@ private:
 
     AddParameter(ParameterType_Group, "ref", "Reference image properties");
     AddParameter(ParameterType_InputImage,  "ref.in",   "Reference image");
-    SetParameterDescription("ref.in", "Image used as reference in the comparaison");
+    SetParameterDescription("ref.in", "Image used as reference in the comparison");
     AddParameter(ParameterType_Int,  "ref.channel",   "Reference image channel");
     SetParameterDescription("ref.channel", "Used channel for the reference image");
     SetDefaultParameterInt("ref.channel", 1);
@@ -70,7 +70,7 @@ private:
 
     AddParameter(ParameterType_Group, "meas", "Measured image properties");
     AddParameter(ParameterType_InputImage,  "meas.in",   "Measured image");
-    SetParameterDescription("meas.in", "Image used as measured in the comparaison");
+    SetParameterDescription("meas.in", "Image used as measured in the comparison");
     AddParameter(ParameterType_Int,  "meas.channel",   "Measured image channel");
     SetParameterDescription("meas.channel", "Used channel for the measured image");
     SetDefaultParameterInt("meas.channel", 1);
@@ -194,6 +194,7 @@ private:
     m_ExtractMeasFilter->SetExtractionRegion(region);
 
     // Set channels to extract
+    otbAppLogINFO( << "reference image channel "<<this->GetParameterInt("ref.channel")<<" is compared with measured image channel "<<this->GetParameterInt("meas.channel"));
     m_ExtractRefFilter->SetChannel( this->GetParameterInt("ref.channel") );
     m_ExtractMeasFilter->SetChannel( this->GetParameterInt("meas.channel") );
 
