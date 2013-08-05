@@ -265,17 +265,17 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::OnCurrentDatasetChanged( const QString& name )
+::OnCurrentDatasetChanged( const QString& id )
 {
-  qDebug() << this << "(" << name << ")";
+  // qDebug() << this << "::OnCurrentDatasetChanged(" << id << ")";
 
-  if( name.isEmpty() )
+  if( id.isEmpty() )
     return;
 
   DatabaseModel* model = GetModel< DatabaseModel >();
 
   // set the newly selected dataset id
-  model->SelectDatasetModel( name );
+  model->SelectDatasetModel( id );
 
   // emit selected dataset image filename
   VectorImageModel * imageModel
@@ -310,9 +310,17 @@ DatabaseBrowserController
   assert( GetWidget()!=NULL );
   assert( GetWidget()==GetWidget< DatabaseBrowserWidget >() );
 
-  GetWidget< DatabaseBrowserWidget >()->SetCurrentDataset(
-    datasetModel->GetName()
-  );
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+
+  //
+  // Block widget's signals here to avoid recursive
+  // SelectedDatasetModelChanged(), CurrentDatasetModelChanged()
+  // loop.
+  bool areSignalsBlocked = widget->blockSignals( true );
+  {
+  widget->SetCurrentDataset( datasetModel->GetName() );
+  }
+  widget->blockSignals( areSignalsBlocked );
 }
 
 /*******************************************************************************/

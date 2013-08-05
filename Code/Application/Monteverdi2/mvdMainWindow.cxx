@@ -874,11 +874,30 @@ MainWindow
     Application::Instance()->GetModel< DatabaseModel >();
   assert( databaseModel!=NULL );
 
+#if 1
   databaseModel->SelectDatasetModel(
     databaseModel->RegisterDatasetModel(
       progress.GetObject< DatasetModel >()
     )
   );
+
+#else
+
+  assert(
+    m_DatabaseBrowserDock->widget()==
+    qobject_cast< DatabaseBrowserWidget* >( m_DatabaseBrowserDock->widget() )
+  );
+
+  DatabaseBrowserWidget* widget =
+    qobject_cast< DatabaseBrowserWidget* >( m_DatabaseBrowserDock->widget() );
+
+  widget->SetCurrentDataset(
+    databaseModel->RegisterDatasetModel(
+      progress.GetObject< DatasetModel >()
+    )
+  );
+
+#endif
 }
 
 /*****************************************************************************/

@@ -130,16 +130,20 @@ DatabaseModel
   DatasetModel* datasetModel = FindDatasetModel( id );
   assert( datasetModel!=NULL );
 
+  // Optimize select by only returning already selected
+  // dataset-model.
+  if( datasetModel==m_SelectedDatasetModel )
+    return datasetModel;
+
   try
     {
     // Load dataset sub-models.
     datasetModel->LoadImageModels( -1, -1 );
 
     // Release memory from previous model
-    if(m_SelectedDatasetModel)
+    if( m_SelectedDatasetModel!=NULL )
       {
       m_SelectedDatasetModel->GetSelectedImageModel()->ReleaseMemory();
-      
       }
 
     // If dataset model has been loaded, select it.
