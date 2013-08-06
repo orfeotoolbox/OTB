@@ -559,6 +559,12 @@ private:
       otbAppLogCRITICAL("Wrong value : negative size : ("<<GetParameterInt("outputs.sizex")<<" , "<<GetParameterInt("outputs.sizey")<<")");
       }
 
+    //Check spacing sign
+    if (GetParameterFloat("outputs.spacingy") > 0.)
+      {
+      otbAppLogWARNING(<<"Wrong value for outputs.spacingy: Pixel size along Y axis should be negative, (outputs.spacingy=" <<GetParameterFloat("outputs.spacingy") << ")" )
+      }
+
     // Get Interpolator
     switch ( GetParameterInt("interpolator") )
       {
