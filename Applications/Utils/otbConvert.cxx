@@ -128,7 +128,7 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
-    SetDocExampleParameterValue("out", "otbConvertWithScalingOutput.png uchar");
+    SetDocExampleParameterValue("out", "otbConvertWithScalingOutput.png uint8");
     SetDocExampleParameterValue("type", "linear");
   }
 
