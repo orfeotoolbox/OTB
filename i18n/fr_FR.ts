@@ -1043,7 +1043,7 @@ Warning:
 L&apos;emplacement par défaut du répertoire de cache est : &apos;%1&apos;.
 
 Attention :
-- Vous devez posséder les droits d&apos;écritures sur ce répertoire ;
+- Vous devez posséder les droits d&apos;écriture sur ce répertoire ;
 - Soyez conscients que ce répertoire peut grossir and consommer un espace disque significatif.</translation>
     </message>
     <message>
@@ -1225,7 +1225,7 @@ Be aware that this directory can grow and consume a significant disk space.</sou
         <translation>Monteverdi2 maintient un répertoire pour stocker des données additionnelles liées à chaque image (réglage d&apos;affichage, histogrammes, aperçus...).
 
 Attention:
-Vous devez posséder les droits d&apos;écritures sur ce répertoire.
+Vous devez posséder les droits d&apos;écriture sur ce répertoire.
 Soyez conscients que ce répertoire peut grossir and consommer un espace disque significatif.</translation>
     </message>
     <message>
