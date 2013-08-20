@@ -590,10 +590,10 @@ void CommandLineLauncher::LinkWatchers(itk::Object * caller, const itk::EventObj
 
     if (typeid(otb::Wrapper::AddProcessToWatchEvent) == typeid( event ))
       {
-      const AddProcessToWatchEvent* eventToWacth = dynamic_cast<const AddProcessToWatchEvent*> (&event);
+      const AddProcessToWatchEvent* eventToWatch = dynamic_cast<const AddProcessToWatchEvent*> (&event);
 
-      StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(eventToWacth->GetProcess(),
-                                                                              eventToWacth->GetProcessDescription());
+      StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(eventToWatch->GetProcess(),
+                                                                              eventToWatch->GetProcessDescription());
       m_WatcherList.push_back(watch);
       }
     }
