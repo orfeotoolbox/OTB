@@ -25,6 +25,8 @@ set( Common_Gui_SOURCES
   mvdDropLineEdit.cxx
   mvdGLImageWidget.cxx
   mvdGui.cxx
+  mvdHistogramController.cxx
+  mvdHistogramWidget.cxx
   mvdI18nApplication.cxx
   mvdI18nMainWindow.cxx
   mvdImageModelRenderer.cxx
@@ -68,6 +70,8 @@ set( Common_Gui_HEADERS_MOC
   mvdI18nMainWindow.h
   mvdImageModelRenderer.h
   mvdImageViewManipulator.h
+  mvdHistogramController.h
+  mvdHistogramWidget.h
   mvdMainWindowTitleLoader.h
   mvdMyWidget.h
   mvdPixelDescriptionWidget.h
@@ -88,6 +92,7 @@ set( Common_Gui_FORMS
   mvdDatabaseBrowserWidget.ui
   mvdDatasetCreationProgressDialog.ui
   mvdDatasetPropertiesWidget.ui
+  mvdHistogramWidget.ui
   mvdMyWidget.ui
   mvdPixelDescriptionWidget.ui
   mvdStatusBarWidget.ui
@@ -102,6 +107,8 @@ set( Common_Gui_RESOURCES
 )
 
 include_directories(
+  ${QWT_INCLUDE_DIRS}
+  #
   ${Monteverdi2_BINARY_DIR}
   #
   ${Monteverdi2_SOURCE_DIR}/Code/Common
@@ -142,6 +149,7 @@ target_link_libraries(Monteverdi2_Gui
   #Qt4::QtCore
   Qt4::QtGui
   Qt4::QtOpenGL
+  ${QWT_LIBRARIES}
 )
 
 set_target_properties(Monteverdi2_Gui

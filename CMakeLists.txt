@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 2.6)
 # Modules
 set( CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake ${CMAKE_MODULE_PATH} )
 include( i18n_qt4 )
+#include( FindQwt )
 
 #----------------------------------------------------------------------------
 # ensure WIN32 definition
@@ -59,6 +60,14 @@ find_package( OpenGL REQUIRED )
 set(QT_USE_IMPORTED_TARGETS ON)
 find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtXml )
 include( ${QT_USE_FILE} )
+
+#----------------------------------------------------------------------------
+# Qwt
+find_package(Qwt REQUIRED)
+if(QWT_FOUND)
+else(QWT_FOUND)
+  message(FATAL_ERROR "Qwt not found.")
+endif(QWT_FOUND)
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
