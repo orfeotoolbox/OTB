@@ -9,6 +9,26 @@ greater usability and operationnality.
 We therefore decided to rework the Monteverdi concept into a brand new software,
 enlightened by this experience.
 
+Here are suggested steps for the Monteverdi2 beginner.
+
+1) Get the software.
+
+            http://orfeo-toolbox.org/otb/download.html
+
+2) The software is compiled using CMake http://www.cmake.org. CMake
+   generates Makefiles on Unix platforms, and Windows workspaces (or
+   appropriate) build files according to your compiler, operating
+   system, and other system variables.
+
+   Create a binary directory, and then run cmake. Provide to CMake
+   the source directory of Monteverdi2 and the binary directory that you
+   just created.
+
+   Monteverdi2 depends on OTB. You have to fill up the OTB_DIR variable with the
+   location of the compiled OTB. If you use ccmake or cmake-gui, you have an
+   inteface to enter the value.
+
+
 Please submit bug reports using the OTB bug tracker at:
             http://bugs.orfeo-toolbox.org
 
