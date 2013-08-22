@@ -63,6 +63,8 @@
 #include "Gui/mvdDatasetPropertiesController.h"
 #include "Gui/mvdDatasetPropertiesWidget.h"
 #include "Gui/mvdGLImageWidget.h"
+#include "Gui/mvdHistogramController.h"
+#include "Gui/mvdHistogramWidget.h"
 #include "Gui/mvdImageModelRenderer.h"
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdQuicklookViewManipulator.h"
@@ -106,6 +108,7 @@ MainWindow
   m_DatabaseBrowserDock( NULL ),
   m_DatasetPropertiesDock(NULL),
   m_PixelDescriptionDock(NULL),
+  m_HistogramDock( NULL ),
 #ifdef OTB_WRAP_QT
   m_OtbApplicationsBrowserDock(NULL),
 #endif
@@ -724,6 +727,19 @@ MainWindow
 
   // Tabify dock-widgets.
   tabifyDockWidget( m_ColorSetupDock, m_ColorDynamicsDock );
+
+  //
+  //
+
+  assert( m_HistogramDock==NULL );
+  m_HistogramDock =
+    AddDockWidget
+    < HistogramWidget, HistogramController, QDockWidget >
+    ( "HISTOGRAM",
+      tr( "Histogram" ),
+      Qt::BottomDockWidgetArea,
+      true
+    );
 }
 
 /*****************************************************************************/
@@ -1015,15 +1031,18 @@ MainWindow
   // Check that NULL==NULL or (DatabaseModel*)==(AbstractModel*)
   assert( databaseModel==Application::Instance()->GetModel() );
 
-  // Exit, if there were no previously set database model.
-  if( databaseModel==NULL )
-    return;
-
   // Force to disconnect previously selected dataset-model before
-  // database-model is connected.
+  // database-model is disconnected.
+  //
+  // If there were no previously set database-model, this will cause
+  // GUI views to be disabled.
   //
   // N.B.: This will cause UI controllers to disable widgets.
   OnAboutToChangeSelectedDatasetModel( NULL );
+
+  // Exit, if there were no previously set database model.
+  if( databaseModel==NULL )
+    return;
 
   // Disonnect database-model from main-window when selected
   // dataset-model is about to change.
@@ -1110,11 +1129,14 @@ MainWindow
   // Unset dataset-model from dataset-properties controller.
   SetControllerModel( m_DatasetPropertiesDock, NULL );
 
-  // Unset image-model to color-dynamics controller.
+  // Unset image-model from color-dynamics controller.
   SetControllerModel( m_ColorDynamicsDock, NULL );
 
-  // Unset image-model to color-setup controller.
+  // Unset image-model from color-setup controller.
   SetControllerModel( m_ColorSetupDock, NULL );
+
+  // Unset histogram-model from histogram controller.
+  SetControllerModel( m_HistogramDock, NULL );
 
   //
   // VIEWS.
@@ -1138,8 +1160,10 @@ MainWindow
   DatabaseModel* databaseModel =
     Application::Instance()->GetModel< DatabaseModel >();
 
-  // Application should always have a valid database model.
-  assert( databaseModel!=NULL );
+
+  // Do not continue if application does not have a databaseModel set.
+  if( databaseModel==NULL )
+    return;
 
   // Access previously selected dataset-model.
   DatasetModel* datasetModel =
@@ -1174,7 +1198,7 @@ MainWindow
   // Connect newly selected model to view (after all other widgets are
   // connected to prevent signals/slots to produce multiple view
   // refreshes).
-  if( vectorImageModel )  // could be null when no dataset selected
+  if( vectorImageModel!=NULL )  // could be null when no dataset selected
     {
     // Disconnect previously selected image-model from view.
     QObject::disconnect(
@@ -1217,12 +1241,12 @@ MainWindow
 
   // Disconnect update of last viewport informations in datasetmodel
   // from the previous ImageView
-    QObject::disconnect(
-      m_ImageView,
-      SIGNAL( RenderingContextChanged( const PointType&, double ) ),
-      datasetModel,
-      SLOT(  OnRenderingContextChanged(const PointType&, double ))
-      );
+  QObject::disconnect(
+    m_ImageView,
+    SIGNAL( RenderingContextChanged( const PointType&, double ) ),
+    datasetModel,
+    SLOT(  OnRenderingContextChanged(const PointType&, double ))
+  );
 
   // Disconnect the signals from the previous dataset model
   DisconnectStatusBar( datasetModel );
@@ -1257,13 +1281,13 @@ MainWindow
   ConnectPixelDescriptionWidget( model );
   
   // connect to get the last rendering context (to be written in Descriptor)
-  if (vectorImageModel)
+  if( vectorImageModel!=NULL )
     {
     // update the last viewport centerPoint and zoom in DatasetModel
     QObject::connect(
       m_ImageView,
       SIGNAL( RenderingContextChanged( const PointType&, double ) ),
-      model,
+      vectorImageModel,
       SLOT(  OnRenderingContextChanged(const PointType&, double ))
       );
     }
@@ -1303,7 +1327,7 @@ MainWindow
 
   // connected to prevent signals/slots to produce multiple view
   // refreshes).
-  if (vectorImageModel)  // could be null when no dataset selected
+  if( vectorImageModel!=NULL )  // could be null when no dataset selected
     {
     //
     // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent
@@ -1351,15 +1375,11 @@ MainWindow
       SLOT( OnViewportRegionChanged( double, double ) )
       );
 
-    }
-
-  //
-  // trigger the placename computation
-  // used by m_DatasetPropertiesDock
-  // Done here to find placename if not computed, everytime this
-  // dataset is loaded
-  if (vectorImageModel!=NULL)
-    {
+    //
+    // trigger the placename computation
+    // used by m_DatasetPropertiesDock
+    // Done here to find placename if not computed, everytime this
+    // dataset is loaded
     model->LoadImagePlacename();
     }
 
@@ -1385,6 +1405,16 @@ MainWindow
 
   // Assign image-model to color-setup controller.
   SetControllerModel( m_ColorSetupDock, vectorImageModel );
+
+  // Sub-models.
+  if( vectorImageModel!=NULL )
+    {
+    // Assign histogram-model to histogram controller.
+    assert( vectorImageModel->GetHistogramModel()!=NULL );
+    SetControllerModel(
+      m_HistogramDock, vectorImageModel->GetHistogramModel()
+    );
+    }
 
   //
   // TOOLBAR.

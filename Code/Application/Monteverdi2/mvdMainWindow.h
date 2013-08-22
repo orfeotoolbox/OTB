@@ -280,6 +280,11 @@ private:
    */
   QDockWidget* m_PixelDescriptionDock;
 
+  /**
+   * \brief Histogram dock-widget.
+   */
+  QDockWidget* m_HistogramDock;
+
 
 #ifdef OTB_WRAP_QT
   /**
