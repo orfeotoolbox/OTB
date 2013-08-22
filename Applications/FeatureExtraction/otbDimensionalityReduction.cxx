@@ -344,7 +344,7 @@ private:
       }
 
     //Write transformation matrix
-    if (this->GetParameterString("outmatrix").c_str())
+    if (this->GetParameterString("outmatrix").size() != 0)
       {
       if (GetParameterInt("method") == 2) //MAF or VD
         {
@@ -359,16 +359,6 @@ private:
         outFile.precision(10);
 
         outFile << m_TransformationMatrix;
-        // if (invTransform)
-        //   {
-        //   outFile << m_InverseFilter->GetTransformationMatrix();
-        //   }
-        // else
-        //   {
-        //   outFile << m_ForwardFilter->GetTransformationMatrix();
-        //   }
-          
-        //outFile << std::endl;
         outFile.close();
         }
       }
