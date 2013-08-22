@@ -72,7 +72,9 @@ public:
   typedef otb::FastICAImageFilter<FloatVectorImageType, FloatVectorImageType, otb::Transform::INVERSE>
       ICAInverseFilterType;
 
-  //typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StreamingStatisticsVectorImageFilterType;
+  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StreamingStatisticsVectorImageFilterType;
+
+  typedef StreamingStatisticsVectorImageFilterType::MatrixObjectType::ComponentType                 MatrixType;
   //typedef otb::VirtualDimensionality<double> VDFilterType;
 
 
@@ -167,6 +169,10 @@ private:
     SetParameterDescription("normalize", "center AND reduce data before Dimensionality reduction.");
     MandatoryOff("normalize");
 
+    AddParameter(ParameterType_OutputFilename, "outmatrix", "Transformation matrix output");
+    SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");
+    MandatoryOff("outmatrix");
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("out", "FilterOutput.tif");
@@ -191,17 +197,19 @@ private:
       // PCA Algorithm
       case 0:
         {
-
         otbAppLogDEBUG( << "PCA Algorithm ");
         PCAForwardFilterType::Pointer filter = PCAForwardFilterType::New();
         m_ForwardFilter = filter;
         PCAInverseFilterType::Pointer invFilter = PCAInverseFilterType::New();
         m_InverseFilter = invFilter;
 
+        
+
         filter->SetInput(GetParameterFloatVectorImage("in"));
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
         filter->SetUseNormalization(normalize);
         m_ForwardFilter->Update();
+
         if (invTransform)
           {
           invFilter->SetInput(m_ForwardFilter->GetOutput());
@@ -214,8 +222,11 @@ private:
             }
 
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
+          m_TransformationMatrix = invFilter->GetTransformationMatrix();
           }
 
+        m_TransformationMatrix = filter->GetTransformationMatrix();
+        
         break;
         }
       case 1:
@@ -235,6 +246,7 @@ private:
         NAPCAInverseFilterType::Pointer invFilter = NAPCAInverseFilterType::New();
         m_InverseFilter = invFilter;
 
+        
         filter->SetInput(GetParameterFloatVectorImage("in"));
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
         filter->SetUseNormalization(normalize);
@@ -251,8 +263,10 @@ private:
             }
 
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
-
+          m_TransformationMatrix = invFilter->GetTransformationMatrix();
           }
+        
+        m_TransformationMatrix = filter->GetTransformationMatrix();
 
         break;
         }
@@ -270,7 +284,7 @@ private:
         }
       case 3:
         {
-        otbAppLogDEBUG( << "ICA Algorithm ");
+        otbAppLogDEBUG( << "Fast ICA Algorithm ");
 
         unsigned int nbIterations = static_cast<unsigned int> (GetParameterInt("method.ica.iter"));
         double mu = static_cast<double> (GetParameterFloat("method.ica.mu"));
@@ -285,6 +299,7 @@ private:
         filter->SetNumberOfIterations(nbIterations);
         filter->SetMu(mu);
         m_ForwardFilter->Update();
+
         if (invTransform)
           {
           otbAppLogDEBUG( << "Compute Inverse Transform");
@@ -298,6 +313,9 @@ private:
           invFilter->SetPCATransformationMatrix(filter->GetPCATransformationMatrix());
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
           }
+
+        m_TransformationMatrix = filter->GetTransformationMatrix();
+
         break;
         }
         /* case 4:
@@ -323,6 +341,36 @@ private:
         otbAppLogWARNING(<<"This application only provides the forward transform .");
         }
       else SetParameterOutputImage("outinv", m_InverseFilter->GetOutput());
+      }
+
+    //Write transformation matrix
+    if (this->GetParameterString("outmatrix").c_str())
+      {
+      if (GetParameterInt("method") == 2) //MAF or VD
+        {
+        otbAppLogWARNING(<<"No transformation matrix available for MAF.");
+        }
+      else
+        {
+        //Write transformation matrix
+        std::ofstream outFile;
+        outFile.open(this->GetParameterString("outmatrix").c_str());
+        outFile << std::fixed;
+        outFile.precision(10);
+
+        outFile << m_TransformationMatrix;
+        // if (invTransform)
+        //   {
+        //   outFile << m_InverseFilter->GetTransformationMatrix();
+        //   }
+        // else
+        //   {
+        //   outFile << m_ForwardFilter->GetTransformationMatrix();
+        //   }
+          
+        //outFile << std::endl;
+        outFile.close();
+        }
       }
 
     if (!rescale)
@@ -364,12 +412,15 @@ private:
       SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
       }
 
+    
+
   }
 
   MinMaxFilterType::Pointer               m_MinMaxFilter;
   RescaleImageFilterType::Pointer         m_RescaleFilter;
-  DimensionalityReductionFilter::Pointer m_ForwardFilter;
-  DimensionalityReductionFilter::Pointer m_InverseFilter;
+  DimensionalityReductionFilter::Pointer  m_ForwardFilter;
+  DimensionalityReductionFilter::Pointer  m_InverseFilter;
+  MatrixType                              m_TransformationMatrix;
 };
 
 }
