@@ -37,6 +37,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdHistogramModel.h"
 #include "Gui/mvdHistogramWidget.h"
 
 namespace mvd
@@ -71,7 +72,7 @@ void
 HistogramController
 ::Connect( AbstractModel* model )
 {
-  HistogramWidget* widget = GetWidget< HistogramWidget >();
+  // HistogramWidget* widget = GetWidget< HistogramWidget >();
 
   //
   // Connect GUI to controller.
@@ -85,7 +86,7 @@ void
 HistogramController
 ::Disconnect( AbstractModel* model )
 {
-  HistogramWidget* widget = GetWidget< HistogramWidget >();
+  // HistogramWidget* widget = GetWidget< HistogramWidget >();
 
   //
   // Disconnect controller to model.
@@ -99,6 +100,44 @@ void
 HistogramController
 ::ResetWidget()
 {
+  assert( GetModel()==GetModel< HistogramModel >() );
+  HistogramModel* model = GetModel< HistogramModel >();
+  assert( model!=NULL );
+
+  assert( GetWidget()==GetWidget< HistogramWidget >() );
+  HistogramWidget* widget = GetWidget< HistogramWidget >();
+  assert( widget!=NULL );
+
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !RgbBounds( begin, end, RGBW_CHANNEL_RGB ) )
+    return;
+
+  assert( std::numeric_limits< double >::has_quiet_NaN );
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    size_t size = model->GetDataCount( i );
+
+    double* x = new double[ size ];
+    double* y = new double[ size ];
+
+    double xMin = std::numeric_limits< double >::quiet_NaN();
+    double yMin = std::numeric_limits< double >::quiet_NaN();
+    double xMax = std::numeric_limits< double >::quiet_NaN();
+    double yMax = std::numeric_limits< double >::quiet_NaN();
+
+    model->GetData( i, x, y, xMin, xMax, yMin, yMax );
+
+    widget->SetData( static_cast< RgbwChannel >( i ), x, y, size );
+
+    delete x;
+    x = NULL;
+
+    delete y;
+    y = NULL;
+    }
 }
 
 /*******************************************************************************/

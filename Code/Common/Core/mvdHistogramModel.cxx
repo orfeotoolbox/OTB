@@ -92,6 +92,7 @@ HistogramModel
   Histogram::Pointer histogram( m_Histograms->GetNthElement( band ) );
 
   // Contruct 1D measurement vector.
+  assert( Histogram::MeasurementVectorSize==1 );
   Histogram::MeasurementVectorType measurement( 1 );
   measurement[ 0 ] = intensity;
 
@@ -169,6 +170,89 @@ HistogramModel
 
   // Return frequency rate.
   return percent;
+}
+
+/*******************************************************************************/
+void
+HistogramModel
+::GetData( CountType band,
+	   double * const x,
+	   double * const y,
+	   double& xMin,
+	   double& xMax,
+	   double& yMin,
+	   double& yMax ) const
+{
+  assert( x!=NULL );
+  assert( y!=NULL );
+
+  // Get histogram of band.
+  Histogram::Pointer histogram( m_Histograms->GetNthElement( band ) );
+  assert( !histogram.IsNull() );
+
+  // Get number of bins for each dimension.
+  typename Histogram::SizeType size( histogram->GetSize() );
+
+  // Ensure dimension is 1.
+  assert( Histogram::MeasurementVectorSize==1 );
+
+  // Initialize bounds.
+  assert( std::numeric_limits< double >::has_infinity );
+  yMax = -std::numeric_limits< double >::infinity();
+  yMin = 0;
+  xMin = histogram->GetBinMin( 0, 0 );
+  xMax = histogram->GetBinMax( 0, size[ 0 ] - 1 );
+
+  // Traverse samples.
+  for( unsigned long bin=0; bin<size[ 0 ]; ++bin )
+    {
+
+    Histogram::FrequencyType f( histogram->GetFrequency( bin, 0 ) );
+
+    if( f>yMax )
+      yMax = f;
+
+    if( f<yMin )
+      yMin = f;
+
+#if HISTOGRAM_CURVE_TYPE==0
+    CountType i = 2 * bin;
+
+    x[ i ] = histogram->GetBinMin( 0, bin );
+    y[ i ] = f;
+
+    ++ i;
+
+    x[ i ] = histogram->GetBinMax( 0, bin );
+    y[ i ] = f;
+
+    // Warning:
+    // coordinates for (x, y) curve will cause graphical artefacts if
+    // max[ bin ]!=min[ bin + 1].
+
+#elif HISTOGRAM_CURVE_TYPE==1
+    x[ bin ] = histogram->GetBinMin( 0, bin );
+    y[ bin ] = f;
+
+#elif HISTOGRAM_CURVE_TYPE==2
+    CountType i = 4 * bin;
+
+    x[ i ] = histogram->GetBinMin( 0, bin );
+    y[ i ] = 0;
+
+    x[ i + 1 ] = x[ i ];
+    y[ i + 1 ] = f;
+
+    x[ i + 2 ] = histogram->GetBinMax( 0, bin );
+    y[ i + 2 ] = f;
+
+    x[ i + 3 ] = x[ i + 2 ];
+    y[ i + 3 ] = 0;
+
+#else
+
+#endif
+    }
 }
 
 /*******************************************************************************/

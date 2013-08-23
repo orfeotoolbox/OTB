@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "Core/mvdCore.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -54,6 +54,10 @@
 namespace
 {
 }
+
+class QwtPlot;
+class QwtPlotGrid;
+class QwtPlotCurve;
 
 namespace mvd
 {
@@ -86,6 +90,9 @@ class Monteverdi2_EXPORT HistogramWidget :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public constants
+
+//
 // Public methods.
 public:
 
@@ -94,6 +101,14 @@ public:
 
   /** \brief Destructor. */
   virtual ~HistogramWidget();
+
+  /**
+   * \brief 
+   */
+  void SetData( RgbwChannel channel,
+		double * const x,
+		double * const y,
+		size_t size );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -127,9 +142,31 @@ private:
 // Private attributes.
 private:
   /**
+   * \brief 
+   */
+  static const CountType CURVE_COUNT = 3;
+
+  /**
+   */
+  static const char* CURVE_NAMES[ HistogramWidget::CURVE_COUNT ];
+
+  /**
+   */
+  static const QColor CURVE_COLORS[ HistogramWidget::CURVE_COUNT ];
+
+  /**
    * \brief uic generated.
    */
   Ui::HistogramWidget* m_UI;
+
+  /**
+   */
+  QwtPlotGrid* m_PlotGrid;
+
+  /**
+   * \brief
+   */
+  QwtPlotCurve* m_PlotCurves[ CURVE_COUNT ];
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

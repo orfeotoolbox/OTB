@@ -49,6 +49,7 @@
 #include "mvdAlgorithm.h"
 #include "mvdSerializableInterface.h"
 
+#define HISTOGRAM_CURVE_TYPE 2
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -166,6 +167,20 @@ public:
 
   /** */
   inline VectorPixelType GetMaxPixel() const;
+
+  /**
+   */
+  inline size_t GetDataCount( CountType band ) const;
+
+  /**
+   */
+  void GetData( CountType band,
+		double * const x,
+		double * const y,
+		double& xMin,
+		double& xMax,
+		double& yMin,
+		double& yMax ) const;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -313,6 +328,38 @@ HistogramModel
     0,
     bound==BOUND_UPPER ? 1.0 - p : p
   );
+}
+
+/*******************************************************************************/
+inline
+size_t
+HistogramModel
+::GetDataCount( CountType band ) const
+{
+  // Get histogram of band.
+  Histogram::Pointer histogram( m_Histograms->GetNthElement( band ) );
+  assert( !histogram.IsNull() );
+
+  // Get number of bins for each dimension.
+  typename Histogram::SizeType size( histogram->GetSize() );
+
+  // Ensure dimension is 1.
+  assert( Histogram::MeasurementVectorSize==1 );
+
+  // There are twince number of points than number of bins.
+#if HISTOGRAM_CURVE_TYPE==0
+  return 2 * size[ 0 ];
+
+#elif HISTOGRAM_CURVE_TYPE==1
+  return size[ 0 ];
+
+#elif HISTOGRAM_CURVE_TYPE==2
+  return 4 * size[ 0 ];
+
+#else
+  assert( false );
+
+#endif
 }
 
 /*******************************************************************************/

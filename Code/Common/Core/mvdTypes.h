@@ -177,6 +177,10 @@ typedef std::vector< unsigned int > UIntVector;
  */
 typedef std::list< std::string > StringList;
 
+/**
+ */
+typedef std::vector< double > DoubleVector;
+
 /*******************************************************************************/
 /* Type definitions of ITK realization.                                        */
 
