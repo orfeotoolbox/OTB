@@ -55,9 +55,10 @@ public:
 
   typedef otb::GenericRSTransform<>     RSTransformType;
 
-  typedef FloatVectorImageType::IndexType IndexType;
-  typedef FloatVectorImageType::PointType PointType;
-  typedef FloatVectorImageType::SizeType  SizeType;
+  typedef FloatVectorImageType::IndexType    IndexType;
+  typedef FloatVectorImageType::PointType    PointType;
+  typedef FloatVectorImageType::SizeType     SizeType;
+  typedef FloatVectorImageType::SpacingType  SpacingType;
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -159,36 +160,38 @@ private:
       inImage->UpdateOutputInformation();
 
       RSTransformType::Pointer rsTransformToWGS84 = RSTransformType::New();
-      rsTransformToWGS84->SetInputKeywordList(inImage->GetImageKeywordlist());
-      rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
+       rsTransformToWGS84->SetInputKeywordList(inImage->GetImageKeywordlist());
+       rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
+       rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
 
-      rsTransformToWGS84->InstanciateTransform();
+       rsTransformToWGS84->InstanciateTransform();
 
-      const SizeType size = inImage->GetLargestPossibleRegion().GetSize();
+       const SizeType size = inImage->GetLargestPossibleRegion().GetSize();
+       const PointType origin=inImage->GetOrigin();
+       const SpacingType spacing=inImage->GetSpacing();
+       PointType upperLeft;
+       upperLeft[0] = origin[0];
+       upperLeft[1] = origin[1];
+       PointType upperLeftWGS84 = rsTransformToWGS84->TransformPoint(upperLeft);
+       otbAppLogDEBUG(<< "upperLeftWGS84 " << upperLeftWGS84);
 
-      PointType upperLeft;
-      upperLeft[0] = 0;
-      upperLeft[1] = 0;
-      PointType upperLeftWGS84 = rsTransformToWGS84->TransformPoint(upperLeft);
-      otbAppLogDEBUG(<< "upperLeftWGS84 " << upperLeftWGS84);
+       PointType upperRight;
+       upperRight[0] = origin[0]+ (size[0] - 1) * spacing[0];
+       upperRight[1] = origin[1];
+       PointType upperRightWGS84 = rsTransformToWGS84->TransformPoint(upperRight);
+       otbAppLogDEBUG(<< "upperRightWGS84 " << upperRightWGS84);
 
-      PointType upperRight;
-      upperRight[0] = size[0] - 1;
-      upperRight[1] = 0;
-      PointType upperRightWGS84 = rsTransformToWGS84->TransformPoint(upperRight);
-      otbAppLogDEBUG(<< "upperRightWGS84 " << upperRightWGS84);
+       PointType lowerLeft;
+       lowerLeft[0] = origin[0];
+       lowerLeft[1] = origin[1]+ (size[1] - 1) * spacing[1];
+       PointType lowerLeftWGS84 = rsTransformToWGS84->TransformPoint(lowerLeft);
+       otbAppLogDEBUG(<< "lowerLeftWGS84 " << lowerLeftWGS84);
 
-      PointType lowerLeft;
-      lowerLeft[0] = 0;
-      lowerLeft[1] = size[1] - 1;
-      PointType lowerLeftWGS84 = rsTransformToWGS84->TransformPoint(lowerLeft);
-      otbAppLogDEBUG(<< "lowerLeftWGS84 " << lowerLeftWGS84);
-
-      PointType lowerRight;
-      lowerRight[0] = size[0] - 1;
-      lowerRight[1] = size[1] - 1;
-      PointType lowerRightWGS84 = rsTransformToWGS84->TransformPoint(lowerRight);
-      otbAppLogDEBUG(<< "lowerRightWGS84 " << lowerRightWGS84);
+       PointType lowerRight;
+       lowerRight[0] = origin[0] + (size[0] - 1) * spacing[0];
+       lowerRight[1] = origin[1] + (size[1] - 1) * spacing[1];
+       PointType lowerRightWGS84 = rsTransformToWGS84->TransformPoint(lowerRight);
+       otbAppLogDEBUG(<< "lowerRightWGS84 " << lowerRightWGS84);
 
       // the iterator constructor can also be used to construct from arrays:
       const double Longitude[] = {upperLeftWGS84[0],upperRightWGS84[0],lowerLeftWGS84[0],lowerRightWGS84[0]};
