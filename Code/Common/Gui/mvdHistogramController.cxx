@@ -130,7 +130,12 @@ HistogramController
 
     model->GetData( i, x, y, xMin, xMax, yMin, yMax );
 
-    widget->SetData( static_cast< RgbwChannel >( i ), x, y, size );
+    widget->SetData(
+      static_cast< RgbwChannel >( i ),
+      x, y, size,
+      xMin, yMin,
+      xMax, yMax
+    );
 
     delete x;
     x = NULL;
@@ -138,6 +143,8 @@ HistogramController
     delete y;
     y = NULL;
     }
+
+  widget->Replot();
 }
 
 /*******************************************************************************/

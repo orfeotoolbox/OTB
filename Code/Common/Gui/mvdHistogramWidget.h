@@ -103,18 +103,33 @@ public:
   virtual ~HistogramWidget();
 
   /**
+   * \brief
+   */
+  void SetBounds( RgbwChannel channel,
+		  double xMin, double xMax,
+		  double yMin, double yMax );
+
+  /**
    * \brief 
    */
   void SetData( RgbwChannel channel,
 		double * const x,
 		double * const y,
-		size_t size );
+		size_t size,
+		double xMin,
+		double yMin,
+		double xMax,
+		double yMax );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
 // Public SLOTS.
 public slots:
+  /**
+   * \brief
+   */
+  void Replot();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -128,15 +143,39 @@ signals:
 // Protected methods.
 protected:
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
 //
 // Protected attributes.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
+//
+// Private types.
+private:
+  struct Bounds
+  {
+    Bounds( double xMin =0.0, double xMax =1.0,
+		double yMin =0.0, double yMax =1.0 ) :
+      m_XMin( xMin ),
+      m_XMax( xMax ),
+      m_YMin( yMin ),
+      m_YMax( yMax )
+    {
+    }
+
+    double m_XMin;
+    double m_XMax;
+    double m_YMin;
+    double m_YMax;
+  };
+
 //
 // Private methods.
 private:
+  /**
+   * \brief
+   */
+  void RefreshScale();
 
 //
 // Private attributes.
@@ -168,6 +207,10 @@ private:
    */
   QwtPlotCurve* m_PlotCurves[ CURVE_COUNT ];
 
+  /**
+   */
+  Bounds m_Bounds[ CURVE_COUNT ];
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -182,6 +225,7 @@ private slots:
 
 namespace mvd
 {
+
 } // end namespace 'mvd'
 
 #endif // __mvdHistogramWidget_h

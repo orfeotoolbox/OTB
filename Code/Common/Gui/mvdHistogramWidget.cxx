@@ -31,6 +31,7 @@
 // Qwt includes
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
+#include <qwt_scale_engine.h>
 
 //
 // System includes (sorted by alphabetic order)
@@ -102,7 +103,8 @@ HistogramWidget
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::HistogramWidget() ),
   m_PlotGrid( NULL ),
-  m_PlotCurves()
+  m_PlotCurves(),
+  m_Bounds()
 {
   m_UI->setupUi( this );
 
@@ -155,7 +157,35 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::SetData( RgbwChannel channel, double * const x, double * const y, size_t size )
+::SetBounds( RgbwChannel channel,
+	     double xMin, double xMax,
+	     double yMin, double yMax )
+{
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !RgbBounds( begin, end, channel ) )
+    return;
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    m_Bounds[ i ].m_XMin = xMin;
+    m_Bounds[ i ].m_XMax = xMax;
+
+    m_Bounds[ i ].m_YMin = yMin;
+    m_Bounds[ i ].m_YMax = yMax;
+    }
+
+  RefreshScale();
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::SetData( RgbwChannel channel,
+	   double * const x, double * const y, size_t size,
+	   double xMin, double yMin,
+	   double xMax, double yMax )
 {
   assert( x!=NULL );
   assert( y!=NULL );
@@ -172,7 +202,75 @@ HistogramWidget
     assert( m_PlotCurves[ i ]!=NULL );
 
     m_PlotCurves[ i ]->setData( x, y, size );
+
+    qDebug()
+      << RGBW_CHANNEL_NAMES[ i ]
+      << "[" << xMin << "; " << xMax << "]"
+      << "x [" << yMin << "; " << yMax << "]";
+
+    m_Bounds[ i ].m_XMin = xMin;
+    m_Bounds[ i ].m_XMax = xMax;
+
+    m_Bounds[ i ].m_YMin = yMin;
+    m_Bounds[ i ].m_YMax = yMax;
     }
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::Replot()
+{
+  RefreshScale();
+
+  m_UI->histogramPlot->replot();
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::RefreshScale()
+{
+  assert( std::numeric_limits< double >::has_infinity );
+
+  double xMin = +std::numeric_limits< double >::infinity();
+  double xMax = -std::numeric_limits< double >::infinity();
+
+  double yMin = +std::numeric_limits< double >::infinity();
+  double yMax = -std::numeric_limits< double >::infinity();
+
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !RgbBounds( begin, end, RGBW_CHANNEL_RGB ) )
+    return;
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    if( m_Bounds[ i ].m_XMin<xMin )
+      xMin = m_Bounds[ i ].m_XMin;
+
+    if( m_Bounds[ i ].m_XMax>xMax )
+      xMax = m_Bounds[ i ].m_XMax;
+
+    if( m_Bounds[ i ].m_YMin<yMin )
+      yMin = m_Bounds[ i ].m_YMin;
+
+    if( m_Bounds[ i ].m_YMax>yMax )
+      yMax = m_Bounds[ i ].m_YMax;
+    }
+
+  qDebug()
+    << "[" << xMin << "; " << xMax << "]"
+    << "x [" << yMin << "; " << yMax << "]";
+
+  m_UI->histogramPlot
+    ->axisScaleDiv( QwtPlot::xBottom )
+    ->setInterval( xMin, xMax );
+
+  m_UI->histogramPlot
+    ->axisScaleDiv( QwtPlot::yLeft )
+    ->setInterval( yMin, yMax );
 }
 
 /*******************************************************************************/

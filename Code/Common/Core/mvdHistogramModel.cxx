@@ -206,7 +206,6 @@ HistogramModel
   // Traverse samples.
   for( unsigned long bin=0; bin<size[ 0 ]; ++bin )
     {
-
     Histogram::FrequencyType f( histogram->GetFrequency( bin, 0 ) );
 
     if( f>yMax )
