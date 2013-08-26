@@ -493,7 +493,6 @@ void
 I18nCoreApplication
 ::InitializeLocale()
 {
-  
   QTextCodec::setCodecForTr( QTextCodec::codecForName( "utf8" ) );
   //QTextCodec::setCodecForLocale( QTextCodec::codecForName("utf8") );
   QTextCodec::setCodecForCStrings( QTextCodec::codecForName("utf8") );
@@ -582,17 +581,31 @@ I18nCoreApplication
       );
       }
     }
-  
-  //
-  // 3.1 Stack Qt translator.
-  LoadAndInstallTranslator(
-    "qt_" + sys_lc.name(),
-    QLibraryInfo::location( QLibraryInfo::TranslationsPath  )
-  );
 
-  //
-  // 3.2 Stack Monteverdi2 translator as prioritary over Qt translator.
-  LoadAndInstallTranslator( sys_lc.name(), i18n_dir.path() );
+  try
+    {
+    //
+    // 3.1 Stack Qt translator.
+    LoadAndInstallTranslator(
+      "qt_" + sys_lc.name(),
+      QLibraryInfo::location( QLibraryInfo::TranslationsPath  )
+    );
+    }
+  catch( std::exception& exc )
+    {
+    qWarning() << exc.what();
+    }
+
+  try
+    {
+    //
+    // 3.2 Stack Monteverdi2 translator as prioritary over Qt translator.
+    LoadAndInstallTranslator( sys_lc.name(), i18n_dir.path() );
+    }
+  catch( std::exception& exc )
+    {
+    qWarning() << exc.what();
+    }
 
   // TODO: Record locale translation filename(s) used in UI component (e.g.
   // AboutDialog, Settings dialog, Information dialog etc.)
