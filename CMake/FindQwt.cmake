@@ -80,7 +80,7 @@ endif ()
 
 
 find_library ( QWT_LIBRARY
-  NAMES qwt qwt-qt3 qwt-qt4 qwt-qt5
+  NAMES qwt qwt-qt3 qwt-qt4 qwt-qt5 qwt${QWT_MAJOR_VERSION}
   HINTS ${QT_LIBRARY_DIR}
 )
 
