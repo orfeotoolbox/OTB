@@ -108,6 +108,7 @@ protected:
   {
     this->SetName("Output Vector Data");
     this->SetKey("outvd");
+    this->SetRole(Role_Output);
   }
 
   /** Destructor */
