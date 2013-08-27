@@ -51,8 +51,9 @@ OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
                               -outms ${TEMP}/apTvSeHooverCompareSegmentationTestOutms.tif
                      TESTENVOPTIONS ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
                      VALID    --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/apTvSeHooverCompareSegmentationTest.txt
-                	         ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
+                              ${BASELINE_FILES}/apTvSeHooverCompareSegmentationTest.txt
+                	      ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
+                              --ignore-lines-with 2 outgt: outms:
                      )
                      
 #--- Segmentation ---#
