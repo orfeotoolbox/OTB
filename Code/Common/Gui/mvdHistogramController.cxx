@@ -37,7 +37,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdHistogramModel.h"
+#include "Core/mvdVectorImageModel.h"
 #include "Gui/mvdHistogramWidget.h"
 
 namespace mvd
@@ -100,8 +100,19 @@ void
 HistogramController
 ::ResetWidget()
 {
-  assert( GetModel()==GetModel< HistogramModel >() );
-  HistogramModel* model = GetModel< HistogramModel >();
+  ResetWidget( RGBW_CHANNEL_RGB );
+}
+
+/*******************************************************************************/
+void
+HistogramController
+::ResetWidget( RgbwChannel channel )
+{
+  assert( GetModel()==GetModel< VectorImageModel >() );
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  HistogramModel* model = imageModel->GetHistogramModel();
   assert( model!=NULL );
 
   assert( GetWidget()==GetWidget< HistogramWidget >() );
@@ -111,7 +122,9 @@ HistogramController
   CountType begin = 0;
   CountType end = 0;
 
-  if( !RgbBounds( begin, end, RGBW_CHANNEL_RGB ) )
+  if( !RgbBounds( begin,
+		  end,
+		  channel==RGBW_CHANNEL_WHITE ? RGBW_CHANNEL_RGB : channel ) )
     return;
 
   assert( std::numeric_limits< double >::has_quiet_NaN );
@@ -128,14 +141,24 @@ HistogramController
     double xMax = std::numeric_limits< double >::quiet_NaN();
     double yMax = std::numeric_limits< double >::quiet_NaN();
 
-    model->GetData( i, x, y, xMin, xMax, yMin, yMax );
+    const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
-    widget->SetData(
-      static_cast< RgbwChannel >( i ),
-      x, y, size,
-      xMin, yMin,
-      xMax, yMax
-    );
+    RgbwChannel outChan = static_cast< RgbwChannel >( i );
+
+    RgbwChannel inChan =
+      channel==RGBW_CHANNEL_WHITE
+	? RGBW_CHANNEL_WHITE
+      : outChan;
+
+    VectorImageModel::Settings::ChannelVector::value_type band =
+      settings.GetRgbwChannel( inChan );
+
+    model->GetData( band, x, y, xMin, xMax, yMin, yMax );
+
+    widget->SetData( outChan, x, y, size, xMin, yMin, xMax, yMax );
+
+    widget->SetLowMarker( outChan, settings.GetLowIntensity( inChan ) );
+    widget->SetHighMarker( outChan, settings.GetHighIntensity( inChan ) );
 
     delete x;
     x = NULL;
@@ -149,6 +172,48 @@ HistogramController
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
+/*****************************************************************************/
+void
+HistogramController
+::OnRgbChannelIndexChanged( RgbwChannel channel, int band )
+{
+  qDebug()
+    << this
+    << "::OnRgbChannelIndexChanged("
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << band <<
+    ")";
+
+  ResetWidget( channel );
+}
+
+/*****************************************************************************/
+void
+HistogramController
+::OnGrayChannelIndexChanged( int band )
+{
+  qDebug()
+    << this
+    << "::OnGrayChannelIndexChanged(" << band << ")";
+
+  ResetWidget( RGBW_CHANNEL_WHITE );
+}
+
+/*******************************************************************************/
+void
+HistogramController
+::OnGrayscaleActivated( bool activated )
+{
+  qDebug()
+    << this
+    << "::OnGrayscaleActivated(" << activated << ")";
+
+  ResetWidget(
+    activated
+    ? RGBW_CHANNEL_WHITE
+    : RGBW_CHANNEL_RGB
+  );
+}
+
 /*******************************************************************************/
 void
 HistogramController
@@ -158,7 +223,12 @@ HistogramController
   HistogramWidget* widget = GetWidget< HistogramWidget >();
   assert( widget!=NULL );
 
-  widget->SetLowMarker( channel, value );
+  widget->SetLowMarker(
+    channel==RGBW_CHANNEL_WHITE
+    ? RGBW_CHANNEL_RGB
+    : channel,
+    value
+  );
 
   if( refresh )
     widget->Replot();
@@ -173,7 +243,12 @@ HistogramController
   HistogramWidget* widget = GetWidget< HistogramWidget >();
   assert( widget!=NULL );
 
-  widget->SetHighMarker( channel, value );
+  widget->SetHighMarker(
+    channel==RGBW_CHANNEL_WHITE
+    ? RGBW_CHANNEL_RGB
+    : channel,
+    value
+  );
 
   if( refresh )
     widget->Replot();

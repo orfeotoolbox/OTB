@@ -175,6 +175,28 @@ MainWindow
   );
 
   QObject::connect(
+    m_ColorSetupDock->findChild< AbstractModelController* >(),
+    SIGNAL( RgbChannelIndexChanged( RgbwChannel, int ) ),
+    // to: ...color-dynamics controller model update signal.
+    m_HistogramDock->findChild< AbstractModelController* >(),
+    SLOT( OnRgbChannelIndexChanged( RgbwChannel, int ) )
+  );
+  QObject::connect(
+    m_ColorSetupDock->findChild< AbstractModelController* >(),
+    SIGNAL( GrayChannelIndexChanged( int ) ),
+    // to: ...color-dynamics controller model update signal.
+    m_HistogramDock->findChild< AbstractModelController* >(),
+    SLOT( OnGrayChannelIndexChanged( int ) )
+  );
+  QObject::connect(
+    m_ColorSetupDock->findChild< AbstractModelController* >(),
+    SIGNAL( GrayscaleActivated( bool ) ),
+    // to: ...color-dynamics controller model update signal.
+    m_HistogramDock->findChild< AbstractModelController* >(),
+    SLOT( OnGrayscaleActivated( bool ) )
+  );
+
+  QObject::connect(
     m_ColorDynamicsDock->findChild< AbstractModelController* >(),
     SIGNAL( LowIntensityChanged( RgbwChannel, double, bool ) ),
     // to: ...histogram controller model update signal.
@@ -1422,15 +1444,8 @@ MainWindow
   // Assign image-model to color-setup controller.
   SetControllerModel( m_ColorSetupDock, vectorImageModel );
 
-  // Sub-models.
-  if( vectorImageModel!=NULL )
-    {
-    // Assign histogram-model to histogram controller.
-    assert( vectorImageModel->GetHistogramModel()!=NULL );
-    SetControllerModel(
-      m_HistogramDock, vectorImageModel->GetHistogramModel()
-    );
-    }
+  // Assign histogram-model to histogram controller.
+  SetControllerModel( m_HistogramDock, vectorImageModel );
 
   //
   // TOOLBAR.
