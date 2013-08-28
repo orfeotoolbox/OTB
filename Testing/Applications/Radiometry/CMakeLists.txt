@@ -75,12 +75,15 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_toa_PHR1A
                              ${BASELINE}/apTvRaOpticalCalibration_toa_PHR1A.tif
                              ${TEMP}/apTvRaOpticalCalibration_toa_PHR1A.tif )
 
+#for TOC computation, for now we use for baseline the output of the toc computation + 200 (milli reflectance) to avoid negative values.
+#FIXME update with a proper baseline after investigatio
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_toc_PHR1A
                      APP  OpticalCalibration
                      OPTIONS -in ${LARGEDATA}/PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2
                              -level toc
                              -milli 1
                              -clamp 0
+                             # change the atmospheric pressure as scene is acquired over a region at 1000 meters of altitude
                              -atmo.pressure 899
                              -out ${TEMP}/apTvRaOpticalCalibration_toc_PHR1A.tif?&box=334:2722:512:512 int16
                      VALID   --compare-image ${EPSILON_7}
