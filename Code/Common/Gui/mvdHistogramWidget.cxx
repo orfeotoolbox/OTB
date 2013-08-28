@@ -94,8 +94,8 @@ HistogramWidget::MARKER_COLORS[ HistogramWidget::CURVE_COUNT ] =
 namespace
 {
 const QColor CANVAS_BACKGROUND( 0x33, 0x33, 0x33 );
-const QColor GRID_MAJ_PEN_COLOR( 0x88, 0x88, 0x88 );
-const QColor GRID_MIN_PEN_COLOR( 0x66, 0x66, 0x66 );
+const QColor GRID_MAJ_PEN_COLOR( 0x66, 0x66, 0x66 );
+const QColor GRID_MIN_PEN_COLOR( 0x44, 0x44, 0x44 );
 }
 
 
