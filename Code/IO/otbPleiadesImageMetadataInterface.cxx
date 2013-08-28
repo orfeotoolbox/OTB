@@ -543,30 +543,143 @@ PleiadesImageMetadataInterface::VariableLengthVectorType
 PleiadesImageMetadataInterface
 ::GetPhysicalGain() const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-    {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-    }
+  // const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  // if (!this->CanRead())
+  //   {
+  //   itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
+  //   }
 
-  ImageKeywordlistType imageKeywordlist;
+  // ImageKeywordlistType imageKeywordlist;
 
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
+  // if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  //   {
+  //   itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  //   }
+
+  // std::vector<double>      outputValues;
+  // if (imageKeywordlist.HasKey("support_data.physical_gain"))
+  //   {
+  //   std::vector<std::string> outputValuesString;
+  //   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.physical_gain");
+  //   boost::trim(valueString);
+  //   boost::split(outputValuesString, valueString, boost::is_any_of(" "));
+  //   for (unsigned int i = 0; i < outputValuesString.size(); ++i)
+  //     {
+  //     outputValues.push_back(atof(outputValuesString[i].c_str()));
+  //     }
+  //   }
+
+  // VariableLengthVectorType outputValuesVariableLengthVector;
+  // outputValuesVariableLengthVector.SetSize(outputValues.size());
+  // outputValuesVariableLengthVector.Fill(0);
+
+  // // Use BandIndexToWavelengthPosition because values in keywordlist are sorted by wavelength
+  // for (unsigned int i = 0; i < outputValues.size(); ++i)
+  //   {
+  //   outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
+  //   }
+
+  // otbMsgDevMacro( << "physical gain " << outputValuesVariableLengthVector);
+  // return outputValuesVariableLengthVector;
+
+  //Using here tabulate in flight values for physical gain of PHR. Those values evolve
+  //with time and are much more accurate. Values provided by CNES calibration
+  //team. Diference between metadata values and in flight gain can lead to
+  //difference of 10%.
+
+  //Values:
+  // Ak values for PHR1A are given in the following table :
+
+  // Dates                                       PA NTDI=13       B0           B1           B2           B3
+
+  // From 17/12/2011 to 01/08/2012               11.75     9.52       9.62       10.55     15.73
+  // From 01/08/2012 to 01/03/2013               11.73     9.45       9.48       10.51     15.71
+  // From 01/03/2013                             11.70     9.38       9.34       10.46     15.69
+
+  // For PHR1B in the following table :
+
+  // Dates                       PA NTDI=13       B0           B1           B2           B3
+  // From 01/12/2012             12.04     10.46     10.47     11.32     17.21
 
   std::vector<double>      outputValues;
-  if (imageKeywordlist.HasKey("support_data.physical_gain"))
+  const std::string sensorId = this->GetSensorID();
+  const int         nbBands = this->GetNumberOfBands();
+
+  if (sensorId == "PHR 1A")
     {
-    std::vector<std::string> outputValuesString;
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.physical_gain");
-    boost::trim(valueString);
-    boost::split(outputValuesString, valueString, boost::is_any_of(" "));
-    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
+    //PHR 1A
+    if ( (this->GetYear() < 2012) || (this->GetYear() == 2012 && this->GetMonth() <8 ) )
       {
-      outputValues.push_back(atof(outputValuesString[i].c_str()));
+      if (nbBands == 1)
+        {
+        outputValues.push_back(11.75);
+        }
+      else
+        {
+        outputValues.push_back(9.52);
+        outputValues.push_back(9.62);
+        outputValues.push_back(10.55);
+        outputValues.push_back(15.73);
+        }
       }
+    else if ( (this->GetYear() == 2012 && this->GetMonth() >=8) || (this->GetYear() == 2013 && this->GetMonth() <3) )
+      {
+      if (nbBands == 1)
+        {
+        outputValues.push_back(11.73);
+        }
+      else
+        {
+        outputValues.push_back(9.45);
+        outputValues.push_back(9.48);
+        outputValues.push_back(10.51);
+        outputValues.push_back(15.71);
+        }
+      }
+    else if ( (this->GetYear() == 2013 && this->GetMonth() >= 3) || this->GetYear() > 2013 )
+      {
+      if (nbBands == 1)
+        {
+        outputValues.push_back(11.7);
+        }
+      else
+        {
+        outputValues.push_back(9.38);
+        outputValues.push_back(9.34);
+        outputValues.push_back(10.46);
+        outputValues.push_back(15.69);
+        }
+      }
+    else
+      {
+      itkExceptionMacro(<< "Invalid metadata, wrong acquisition date");
+      }
+    }
+  else if (sensorId == "PHR 1B")
+    {
+    //PHR 1B
+    if ( this->GetYear() >= 2012 )
+      {
+    if (nbBands == 1)
+        {
+        outputValues.push_back(12.04);
+        }
+      else
+        {
+        outputValues.push_back(10.46);
+        outputValues.push_back(10.47);
+        outputValues.push_back(11.32);
+        outputValues.push_back(17.21);
+        }
+      }
+    else
+      {
+      itkExceptionMacro(<< "Invalid metadata, wrong acquisition date");
+      }
+    }
+  else
+    {
+    itkExceptionMacro(<< "Invalid metadata, bad sensor id");
     }
 
   VariableLengthVectorType outputValuesVariableLengthVector;
@@ -581,6 +694,7 @@ PleiadesImageMetadataInterface
 
   otbMsgDevMacro( << "physical gain " << outputValuesVariableLengthVector);
   return outputValuesVariableLengthVector;
+
 }
 
 double
