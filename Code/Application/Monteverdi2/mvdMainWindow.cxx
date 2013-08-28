@@ -174,6 +174,21 @@ MainWindow
     SLOT( OnGrayscaleActivated( bool ) )
   );
 
+  QObject::connect(
+    m_ColorDynamicsDock->findChild< AbstractModelController* >(),
+    SIGNAL( LowIntensityChanged( RgbwChannel, double, bool ) ),
+    // to: ...histogram controller model update signal.
+    m_HistogramDock->findChild< AbstractModelController* >(),
+    SLOT( OnLowIntensityChanged( RgbwChannel, double, bool ) )
+  );
+  QObject::connect(
+    m_ColorDynamicsDock->findChild< AbstractModelController* >(),
+    SIGNAL( HighIntensityChanged( RgbwChannel, double, bool ) ),
+    // to: ...histogram controller model update signal.
+    m_HistogramDock->findChild< AbstractModelController* >(),
+    SLOT( OnHighIntensityChanged( RgbwChannel, double, bool ) )
+  );
+
 #ifdef OTB_WRAP_QT
   //
   // Done here cause needed to be done once and only once.

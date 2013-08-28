@@ -31,6 +31,7 @@
 // Qwt includes
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
+#include <qwt_plot_marker.h>
 #include <qwt_scale_engine.h>
 
 //
@@ -82,9 +83,17 @@ HistogramWidget::CURVE_COLORS[ HistogramWidget::CURVE_COUNT ] =
   QColor( 0x44, 0x44, 0xFF/*, 0x88*/ )
 };
 
+const QColor
+HistogramWidget::MARKER_COLORS[ HistogramWidget::CURVE_COUNT ] =
+{
+  QColor( 0xFF, 0x77, 0x77/*, 0x00*/ ),
+  QColor( 0x77, 0xFF, 0x77/*, 0x77*/ ),
+  QColor( 0x77, 0x77, 0xFF/*, 0x00*/ )
+};
+
 namespace
 {
-const QColor CANVAS_BACKGROUND( 0x44, 0x44, 0x44 );
+const QColor CANVAS_BACKGROUND( 0x33, 0x33, 0x33 );
 const QColor GRID_MAJ_PEN_COLOR( 0x88, 0x88, 0x88 );
 const QColor GRID_MIN_PEN_COLOR( 0x66, 0x66, 0x66 );
 }
@@ -118,6 +127,8 @@ HistogramWidget
 
   for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
     {
+    //
+    // Curve
     m_PlotCurves[ i ] =
       new QwtPlotCurve( tr( HistogramWidget::CURVE_NAMES[ i ] ) );
 
@@ -134,6 +145,23 @@ HistogramWidget
     m_PlotCurves[ i ]->setPen( QPen( CURVE_COLORS[ i ] ) );
 
     m_PlotCurves[ i ]->attach( m_UI->histogramPlot );
+
+    //
+    // Markers
+
+    m_LowPlotMarkers[ i ] = new QwtPlotMarker();
+    m_LowPlotMarkers[ i ]->setLineStyle( QwtPlotMarker::VLine );
+    m_LowPlotMarkers[ i ]->setLinePen(
+      QPen( HistogramWidget::MARKER_COLORS[ i ] )
+    );
+    m_LowPlotMarkers[ i ]->attach( m_UI->histogramPlot );
+
+    m_HighPlotMarkers[ i ] = new QwtPlotMarker();
+    m_HighPlotMarkers[ i ]->setLineStyle( QwtPlotMarker::VLine );
+    m_HighPlotMarkers[ i ]->setLinePen(
+      QPen( HistogramWidget::MARKER_COLORS[ i ] )
+    );
+    m_HighPlotMarkers[ i ]->attach( m_UI->histogramPlot );
     }
 }
 
@@ -145,6 +173,12 @@ HistogramWidget
     {
     delete m_PlotCurves[ i ];
     m_PlotCurves[ i ] = NULL;
+
+    delete m_LowPlotMarkers[ i ];
+    m_LowPlotMarkers[ i ] = NULL;
+
+    delete m_HighPlotMarkers[ i ];
+    m_HighPlotMarkers[ i ] = NULL;
     }
 
   delete m_PlotGrid;
@@ -213,6 +247,50 @@ HistogramWidget
 
     m_Bounds[ i ].m_YMin = yMin;
     m_Bounds[ i ].m_YMax = yMax;
+    }
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::SetLowMarker( RgbwChannel channel,
+		double low )
+{
+  qDebug()
+    << this << "::SetLowMarker("
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << low << ")";
+
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !RgbBounds( begin, end, channel ) )
+    return;
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    m_LowPlotMarkers[ i ]->setXValue( low );
+    }
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::SetHighMarker( RgbwChannel channel,
+		double high )
+{
+  qDebug()
+    << this << "::SetLowMarker("
+    << RGBW_CHANNEL_NAMES[ channel ] << ", " << high << ")";
+
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !RgbBounds( begin, end, channel ) )
+    return;
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    m_HighPlotMarkers[ i ]->setXValue( high );
     }
 }
 

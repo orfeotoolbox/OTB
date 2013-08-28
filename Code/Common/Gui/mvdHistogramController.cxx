@@ -150,6 +150,34 @@ HistogramController
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+HistogramController
+::OnLowIntensityChanged( RgbwChannel channel, double value, bool refresh )
+{
+  assert( GetWidget()==GetWidget< HistogramWidget >() );
+  HistogramWidget* widget = GetWidget< HistogramWidget >();
+  assert( widget!=NULL );
+
+  widget->SetLowMarker( channel, value );
+
+  if( refresh )
+    widget->Replot();
+}
+
+/*******************************************************************************/
+void
+HistogramController
+::OnHighIntensityChanged( RgbwChannel channel, double value, bool refresh )
+{
+  assert( GetWidget()==GetWidget< HistogramWidget >() );
+  HistogramWidget* widget = GetWidget< HistogramWidget >();
+  assert( widget!=NULL );
+
+  widget->SetHighMarker( channel, value );
+
+  if( refresh )
+    widget->Replot();
+}
 
 /*******************************************************************************/
 

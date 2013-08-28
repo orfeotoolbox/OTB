@@ -131,6 +131,15 @@ public slots:
 //
 // Signals.
 signals:
+  /**
+   * \brief
+   */
+  void LowIntensityChanged( RgbwChannel channel, double value, bool refresh );
+
+  /**
+   * \brief
+   */
+  void HighIntensityChanged( RgbwChannel channel, double value, bool refresh );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

@@ -1,6 +1,6 @@
 /*=========================================================================
 
-  Program:   Monteverdi2
+  Program:   Montemitverdi2
   Language:  C++
 
 
@@ -365,6 +365,10 @@ ColorDynamicsController
     ColorBandDynamicsWidget* colorBandDynWgt =
       colorDynamicsWidget->GetChannel( channel );
 
+    assert(
+      std::numeric_limits< DefaultImageType::PixelType::ValueType >::has_infinity
+    );
+
     DefaultImageType::PixelType::ValueType min(
       -std::numeric_limits< DefaultImageType::PixelType::ValueType >::infinity()
     );
@@ -426,12 +430,6 @@ ColorDynamicsController
   // Get image rengering settings.
   const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
-
-  // Block this controller's signals to prevent display refreshes
-  // but let let widget(s) signal their changes so linked values
-  // will be correctly updated.
-  bool thisSignalsBlocks = this->blockSignals( true );
-  {
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
     {
@@ -447,6 +445,12 @@ ColorDynamicsController
     DefaultImageType::PixelType::ValueType max(
       maxPx[ settings.GetRgbwChannel( channel ) ]
     );
+
+    // Block this controller's signals to prevent display refreshes
+    // but let let widget(s) signal their changes so linked values
+    // will be correctly updated.
+    bool thisSignalsBlocks = this->blockSignals( true );
+    {
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
     bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
@@ -460,8 +464,11 @@ ColorDynamicsController
     }
     colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
-  }
-  this->blockSignals( thisSignalsBlocks );
+    this->blockSignals( thisSignalsBlocks );
+
+    emit LowIntensityChanged( channel, min, false );
+    emit HighIntensityChanged( channel, max, false );
+    }
 }
 
 /*****************************************************************************/
@@ -490,11 +497,6 @@ ColorDynamicsController
   const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
 
-  // Block this controller's signals to prevent display refreshes
-  // but let let widget(s) signal their changes so linked values
-  // will be correctly updated.
-  bool thisSignalsBlocked = this->blockSignals( true );
-  {
   // Assign values to controlled widget.
   for( CountType i=begin; i<end; ++i )
     {
@@ -506,6 +508,11 @@ ColorDynamicsController
     ParametersType::ValueType low = settings.GetLowIntensity( channel );
     ParametersType::ValueType hi = settings.GetHighIntensity( channel );
 
+    // Block this controller's signals to prevent display refreshes
+    // but let let widget(s) signal their changes so linked values
+    // will be correctly updated.
+    bool thisSignalsBlocked = this->blockSignals( true );
+    {
     // Block widget's signals...
     //...but force call to valueChanged() slot to force refresh.
     bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
@@ -519,8 +526,11 @@ ColorDynamicsController
     }
     colorBandDynWgt->blockSignals( widgetSignalsBlocked );
     }
-  }
-  this->blockSignals( thisSignalsBlocked );
+    this->blockSignals( thisSignalsBlocked );
+
+    emit LowIntensityChanged( channel, low, false );
+    emit HighIntensityChanged( channel, hi, false );
+    }
 }
 
 /*****************************************************************************/
@@ -798,6 +808,8 @@ ColorDynamicsController
     colorBandDynWgt->SetLowIntensity( intensity );
     }
     colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+
+    emit LowIntensityChanged( chan, intensity, true );
     }
 
   // Signal model has been updated.
@@ -866,6 +878,8 @@ ColorDynamicsController
     colorBandDynWgt->SetHighIntensity( intensity );
     }
     widgetSignalsBlocked = colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+
+    emit HighIntensityChanged( chan, intensity, true );
     }
 
   // Signal model has been updated.
@@ -925,6 +939,8 @@ ColorDynamicsController
       }
       wgtSignalsBlocked = colorBandDynWgt->blockSignals( wgtSignalsBlocked );
       }
+
+    emit LowIntensityChanged( chan, value, true );
     }
 
   // Signal model has been updated.
@@ -985,6 +1001,8 @@ ColorDynamicsController
       }
       colorBandDynWgt->blockSignals( widgetSignalsBlocked );
       }
+
+    emit HighIntensityChanged( chan, value, true );
     }
 
   // Signal model has been updated.

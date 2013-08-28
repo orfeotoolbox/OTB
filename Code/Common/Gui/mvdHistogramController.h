@@ -139,7 +139,15 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   * \brief
+   */
+  void OnLowIntensityChanged( RgbwChannel channel, double value, bool refresh );
 
+  /**
+   * \brief
+   */
+  void OnHighIntensityChanged( RgbwChannel channel, double value, bool refresh );
 };
 
 } // end namespace 'mvd'.

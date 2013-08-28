@@ -58,6 +58,7 @@ namespace
 class QwtPlot;
 class QwtPlotGrid;
 class QwtPlotCurve;
+class QwtPlotMarker;
 
 namespace mvd
 {
@@ -120,6 +121,14 @@ public:
 		double yMin,
 		double xMax,
 		double yMax );
+
+  /**
+   */
+  void SetLowMarker( RgbwChannel channel, double low );
+
+  /**
+   */
+  void SetHighMarker( RgbwChannel channel, double high );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -194,6 +203,10 @@ private:
   static const QColor CURVE_COLORS[ HistogramWidget::CURVE_COUNT ];
 
   /**
+   */
+  static const QColor MARKER_COLORS[ HistogramWidget::CURVE_COUNT ];
+
+  /**
    * \brief uic generated.
    */
   Ui::HistogramWidget* m_UI;
@@ -206,6 +219,14 @@ private:
    * \brief
    */
   QwtPlotCurve* m_PlotCurves[ CURVE_COUNT ];
+
+  /**
+   */
+  QwtPlotMarker* m_LowPlotMarkers[ CURVE_COUNT ];
+
+  /**
+   */
+  QwtPlotMarker* m_HighPlotMarkers[ CURVE_COUNT ];
 
   /**
    */
