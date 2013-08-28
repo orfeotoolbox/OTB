@@ -64,25 +64,26 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Formosat
                              ${TEMP}/apTvRaOpticalCalibration_Formosat.tif )
 
 IF (OTB_DATA_USE_LARGEINPUT)
-OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_toa_PHR1B
+OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_toa_PHR1A
                      APP  OpticalCalibration
                      OPTIONS -in ${LARGEDATA}/PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2
                              -level toa
                              -milli 1
                              -clamp 0
-                             -out ${TEMP}/apTvRaOpticalCalibration_toa_PHR1B.tif?&box=334:2722:512:512 int16
+                             -out ${TEMP}/apTvRaOpticalCalibration_toa_PHR1A.tif?&box=334:2722:512:512 int16
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/apTvRaOpticalCalibration_toa_PHR1B.tif
-                             ${TEMP}/apTvRaOpticalCalibration_toa_PHR1B.tif )
+                             ${BASELINE}/apTvRaOpticalCalibration_toa_PHR1A.tif
+                             ${TEMP}/apTvRaOpticalCalibration_toa_PHR1A.tif )
 
-OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_toc_PHR1B
+OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_toc_PHR1A
                      APP  OpticalCalibration
                      OPTIONS -in ${LARGEDATA}/PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2
                              -level toc
                              -milli 1
                              -clamp 0
-                             -out ${TEMP}/apTvRaOpticalCalibration_toc_PHR1B.tif?&box=334:2722:512:512 int16
+                             -atmo.pressure 899
+                             -out ${TEMP}/apTvRaOpticalCalibration_toc_PHR1A.tif?&box=334:2722:512:512 int16
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/apTvRaOpticalCalibration_toc_PHR1B.tif
-                             ${TEMP}/apTvRaOpticalCalibration_toc_PHR1B.tif )
+                             ${BASELINE}/apTvRaOpticalCalibration_toc_PHR1A.tif
+                             ${TEMP}/apTvRaOpticalCalibration_toc_PHR1A.tif )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
