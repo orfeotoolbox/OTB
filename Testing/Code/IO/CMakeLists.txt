@@ -2354,12 +2354,13 @@ FOREACH( current_file ${GenericTestPHR_DATA_INPUTS} )
 
     # Decode the whole image with the lowest resolution (res=5)
     # (take only one channel to put the file in baseline repository)
+    #write only a subpart of the output image using the extended parameter "box"
     ADD_TEST(ioTvReaderWriterJP22TIF_${current_type}_res5 ${COMMON_TESTS2}
              --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_res5.tif
                                            ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif
              otbMultiChannelExtractROI
                 -ushort ${current_file}?resol=5
-                -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif
+                -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif?&box=0:0:128:128
                 -channels 1
                 -time
          )
