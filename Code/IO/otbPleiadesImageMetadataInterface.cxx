@@ -543,46 +543,7 @@ PleiadesImageMetadataInterface::VariableLengthVectorType
 PleiadesImageMetadataInterface
 ::GetPhysicalGain() const
 {
-  // const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  // if (!this->CanRead())
-  //   {
-  //   itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  //   }
-
-  // ImageKeywordlistType imageKeywordlist;
-
-  // if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  //   {
-  //   itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  //   }
-
-  // std::vector<double>      outputValues;
-  // if (imageKeywordlist.HasKey("support_data.physical_gain"))
-  //   {
-  //   std::vector<std::string> outputValuesString;
-  //   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.physical_gain");
-  //   boost::trim(valueString);
-  //   boost::split(outputValuesString, valueString, boost::is_any_of(" "));
-  //   for (unsigned int i = 0; i < outputValuesString.size(); ++i)
-  //     {
-  //     outputValues.push_back(atof(outputValuesString[i].c_str()));
-  //     }
-  //   }
-
-  // VariableLengthVectorType outputValuesVariableLengthVector;
-  // outputValuesVariableLengthVector.SetSize(outputValues.size());
-  // outputValuesVariableLengthVector.Fill(0);
-
-  // // Use BandIndexToWavelengthPosition because values in keywordlist are sorted by wavelength
-  // for (unsigned int i = 0; i < outputValues.size(); ++i)
-  //   {
-  //   outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
-  //   }
-
-  // otbMsgDevMacro( << "physical gain " << outputValuesVariableLengthVector);
-  // return outputValuesVariableLengthVector;
-
-  //Using here tabulate in flight values for physical gain of PHR. Those values evolve
+  //We use here tabulate in flight values for physical gain of PHR. Those values evolve
   //with time and are much more accurate. Values provided by CNES calibration
   //team. Diference between metadata values and in flight gain can lead to
   //difference of 10%.
@@ -686,7 +647,7 @@ PleiadesImageMetadataInterface
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
 
-  // Use BandIndexToWavelengthPosition because values in keywordlist are sorted by wavelength
+  // Use BandIndexToWavelengthPosition because values are tabulated and sorted by wavelength
   for (unsigned int i = 0; i < outputValues.size(); ++i)
     {
     outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
@@ -694,7 +655,6 @@ PleiadesImageMetadataInterface
 
   otbMsgDevMacro( << "physical gain " << outputValuesVariableLengthVector);
   return outputValuesVariableLengthVector;
-
 }
 
 double
