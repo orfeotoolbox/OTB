@@ -73,6 +73,7 @@ HistogramWidget::CURVE_NAMES[ HistogramWidget::CURVE_COUNT ] =
   QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Red" ),
   QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Green" ),
   QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Blue" ),
+  QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Gray" ), 
 };
 
 const QColor
@@ -80,7 +81,8 @@ HistogramWidget::CURVE_COLORS[ HistogramWidget::CURVE_COUNT ] =
 {
   QColor( 0xFF, 0x44, 0x44/*, 0x88*/ ),
   QColor( 0x44, 0xFF, 0x44/*, 0x88*/ ),
-  QColor( 0x44, 0x44, 0xFF/*, 0x88*/ )
+  QColor( 0x44, 0x44, 0xFF/*, 0x88*/ ),
+  QColor( 0xBB, 0xBB, 0xBB/*, 0x88*/ ),
 };
 
 const QColor
@@ -88,7 +90,8 @@ HistogramWidget::MARKER_COLORS[ HistogramWidget::CURVE_COUNT ] =
 {
   QColor( 0xFF, 0x77, 0x77/*, 0x00*/ ),
   QColor( 0x77, 0xFF, 0x77/*, 0x77*/ ),
-  QColor( 0x77, 0x77, 0xFF/*, 0x00*/ )
+  QColor( 0x77, 0x77, 0xFF/*, 0x00*/ ),
+  QColor( 0xFF, 0xFF, 0xFF/*, 0x00*/ ),
 };
 
 namespace
@@ -198,7 +201,7 @@ HistogramWidget
   CountType begin = 0;
   CountType end = 0;
 
-  if( !RgbBounds( begin, end, channel ) )
+  if( !RgbwBounds( begin, end, channel ) )
     return;
 
   for( CountType i=begin; i<end; ++i )
@@ -227,7 +230,7 @@ HistogramWidget
   CountType begin = 0;
   CountType end = 0;
 
-  if( !RgbBounds( begin, end, channel ) )
+  if( !RgbwBounds( begin, end, channel ) )
     return;
 
   for( CountType i=begin; i<end; ++i )
@@ -263,7 +266,7 @@ HistogramWidget
   CountType begin = 0;
   CountType end = 0;
 
-  if( !RgbBounds( begin, end, channel ) )
+  if( !RgbwBounds( begin, end, channel ) )
     return;
 
   for( CountType i=begin; i<end; ++i )
@@ -285,12 +288,31 @@ HistogramWidget
   CountType begin = 0;
   CountType end = 0;
 
-  if( !RgbBounds( begin, end, channel ) )
+  if( !RgbwBounds( begin, end, channel ) )
     return;
 
   for( CountType i=begin; i<end; ++i )
     {
     m_HighPlotMarkers[ i ]->setXValue( high );
+    }
+}
+
+/*****************************************************************************/
+void
+HistogramWidget
+::SetGrayscaleActivated( bool activated )
+{
+  for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
+    {
+    bool isVisible = 
+      i<RGBW_CHANNEL_WHITE
+      ? !activated
+      : activated;
+
+    m_PlotCurves[ i ]->setVisible( isVisible );
+
+    m_LowPlotMarkers[ i ]->setVisible( isVisible );
+    m_HighPlotMarkers[ i ]->setVisible( isVisible );
     }
 }
 

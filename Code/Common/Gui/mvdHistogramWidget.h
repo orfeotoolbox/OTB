@@ -130,6 +130,11 @@ public:
    */
   void SetHighMarker( RgbwChannel channel, double high );
 
+  /**
+   * \brief
+   */
+  void SetGrayscaleActivated( bool activated );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -192,7 +197,7 @@ private:
   /**
    * \brief 
    */
-  static const CountType CURVE_COUNT = 3;
+  static const CountType CURVE_COUNT = 4;
 
   /**
    */

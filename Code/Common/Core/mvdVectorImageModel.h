@@ -882,7 +882,11 @@ VectorImageModel::Settings
       case RGBW_CHANNEL_GREEN:
       case RGBW_CHANNEL_BLUE:
 	return m_RgbChannels[ channel ];
-	  break;
+	break;
+
+      case RGBW_CHANNEL_WHITE:
+	return m_GrayChannel;
+	break;
 
       default:
 	throw std::invalid_argument(

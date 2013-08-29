@@ -100,7 +100,7 @@ void
 HistogramController
 ::ResetWidget()
 {
-  ResetWidget( RGBW_CHANNEL_RGB );
+  ResetWidget( RGBW_CHANNEL_ALL );
 }
 
 /*******************************************************************************/
@@ -122,16 +122,23 @@ HistogramController
   CountType begin = 0;
   CountType end = 0;
 
-  if( !RgbBounds( begin,
-		  end,
-		  channel==RGBW_CHANNEL_WHITE ? RGBW_CHANNEL_RGB : channel ) )
+  if( !RgbwBounds( begin, end, channel ) )
     return;
+
+  const VectorImageModel::Settings& settings = imageModel->GetSettings();
+
+  widget->SetGrayscaleActivated( settings.IsGrayscaleActivated() );
 
   assert( std::numeric_limits< double >::has_quiet_NaN );
 
   for( CountType i=begin; i<end; ++i )
     {
-    size_t size = model->GetDataCount( i );
+    RgbwChannel chan = static_cast< RgbwChannel >( i );
+
+    VectorImageModel::Settings::ChannelVector::value_type band =
+      settings.GetRgbwChannel( chan );
+
+    size_t size = model->GetDataCount( band );
 
     double* x = new double[ size ];
     double* y = new double[ size ];
@@ -141,24 +148,12 @@ HistogramController
     double xMax = std::numeric_limits< double >::quiet_NaN();
     double yMax = std::numeric_limits< double >::quiet_NaN();
 
-    const VectorImageModel::Settings& settings = imageModel->GetSettings();
-
-    RgbwChannel outChan = static_cast< RgbwChannel >( i );
-
-    RgbwChannel inChan =
-      channel==RGBW_CHANNEL_WHITE
-	? RGBW_CHANNEL_WHITE
-      : outChan;
-
-    VectorImageModel::Settings::ChannelVector::value_type band =
-      settings.GetRgbwChannel( inChan );
-
     model->GetData( band, x, y, xMin, xMax, yMin, yMax );
 
-    widget->SetData( outChan, x, y, size, xMin, yMin, xMax, yMax );
+    widget->SetData( chan, x, y, size, xMin, yMin, xMax, yMax );
 
-    widget->SetLowMarker( outChan, settings.GetLowIntensity( inChan ) );
-    widget->SetHighMarker( outChan, settings.GetHighIntensity( inChan ) );
+    widget->SetLowMarker( chan, settings.GetLowIntensity( chan ) );
+    widget->SetHighMarker( chan, settings.GetHighIntensity( chan ) );
 
     delete x;
     x = NULL;
@@ -207,11 +202,14 @@ HistogramController
     << this
     << "::OnGrayscaleActivated(" << activated << ")";
 
-  ResetWidget(
-    activated
-    ? RGBW_CHANNEL_WHITE
-    : RGBW_CHANNEL_RGB
-  );
+  assert( GetWidget()==GetWidget< HistogramWidget >() );
+  HistogramWidget* widget = GetWidget< HistogramWidget >();
+  assert( widget!=NULL );
+
+  widget->SetGrayscaleActivated( activated );
+  widget->Replot();
+
+  // ResetWidget( RGBW_CHANNEL_WHITE );
 }
 
 /*******************************************************************************/
@@ -223,12 +221,7 @@ HistogramController
   HistogramWidget* widget = GetWidget< HistogramWidget >();
   assert( widget!=NULL );
 
-  widget->SetLowMarker(
-    channel==RGBW_CHANNEL_WHITE
-    ? RGBW_CHANNEL_RGB
-    : channel,
-    value
-  );
+  widget->SetLowMarker( channel, value );
 
   if( refresh )
     widget->Replot();
@@ -243,12 +236,7 @@ HistogramController
   HistogramWidget* widget = GetWidget< HistogramWidget >();
   assert( widget!=NULL );
 
-  widget->SetHighMarker(
-    channel==RGBW_CHANNEL_WHITE
-    ? RGBW_CHANNEL_RGB
-    : channel,
-    value
-  );
+  widget->SetHighMarker( channel, value );
 
   if( refresh )
     widget->Replot();
