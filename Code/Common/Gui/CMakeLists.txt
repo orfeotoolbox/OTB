@@ -26,7 +26,6 @@ set( Common_Gui_SOURCES
   mvdGLImageWidget.cxx
   mvdGui.cxx
   mvdHistogramController.cxx
-  mvdHistogramPlot.cxx
   mvdHistogramWidget.cxx
   mvdI18nApplication.cxx
   mvdI18nMainWindow.cxx
@@ -72,7 +71,6 @@ set( Common_Gui_HEADERS_MOC
   mvdImageModelRenderer.h
   mvdImageViewManipulator.h
   mvdHistogramController.h
-  mvdHistogramPlot.h
   mvdHistogramWidget.h
   mvdMainWindowTitleLoader.h
   mvdMyWidget.h
