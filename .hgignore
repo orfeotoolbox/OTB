@@ -8,5 +8,4 @@ syntax: glob
 tags
 *vim*
 *.template
-CMakeLists.txt
 
