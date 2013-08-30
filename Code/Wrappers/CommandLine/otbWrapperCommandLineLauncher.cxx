@@ -621,11 +621,11 @@ void CommandLineLauncher::DisplayHelp()
   m_MaxKeySize = std::string("progress").size();
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
-    if (m_Application->GetParameterRole(appKeyList[i]) != Role_Output)
-      {
+    //if (m_Application->GetParameterRole(appKeyList[i]) != Role_Output)
+    //{
       if( m_MaxKeySize < appKeyList[i].size() )
         m_MaxKeySize = appKeyList[i].size();
-      }
+      //}
     }
 
   //// progress report parameter
@@ -638,10 +638,10 @@ void CommandLineLauncher::DisplayHelp()
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
       Parameter::Pointer param = m_Application->GetParameterByKey(appKeyList[i]);
-      if (param->GetRole() != Role_Output)
-        {
+      //if (param->GetRole() != Role_Output)
+      //{
         std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
-        }
+        //}
     }
 
   std::cerr<<std::endl;
