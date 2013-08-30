@@ -33,7 +33,6 @@
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
-
 #include "otbWrapperDocExampleStructure.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
@@ -82,6 +81,9 @@ public:
 
   /** Check if the application has been initialized */
   bool IsInitialized() const;
+
+  /** rashad: Adding global parameters eg: -xml */  
+  void AddGlobalParameters();
 
   /** Update the value of parameters for which no user value has been provided */
   void UpdateParameters();

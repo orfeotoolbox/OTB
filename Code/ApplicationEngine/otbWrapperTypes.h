@@ -53,7 +53,8 @@ typedef enum
   ParameterType_ListView,
   ParameterType_ComplexInputImage,
   ParameterType_ComplexOutputImage,
-  ParameterType_RAM
+  ParameterType_RAM,
+  ParameterType_OutputProcessXml
 } ParameterType;
 
 typedef enum

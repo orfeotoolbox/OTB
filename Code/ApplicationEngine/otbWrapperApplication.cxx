@@ -114,6 +114,22 @@ void Application::Init()
   m_DocExample    = DocExampleStructure::New();
   m_ParameterList = ParameterGroup::New();
   this->DoInit();
+  
+  //rashad: global parameters. now used only for save xml 
+  AddGlobalParameters();
+}
+
+void Application::AddGlobalParameters()
+{
+  const std::string xmlKey = "xml";
+  AddParameter(ParameterType_String,  xmlKey,   "Save process to xml file");
+  SetParameterDescription(xmlKey, "Save process to xml file");
+  MandatoryOff(xmlKey);
+  
+  const std::string defaultXmlFileName = std::string(GetName())  + ".xml";
+  SetParameterString(xmlKey, defaultXmlFileName);
+  DisableParameter(xmlKey);
+
 }
 
 void Application::UpdateParameters()
@@ -225,6 +241,25 @@ int Application::ExecuteAndWriteOutput()
         progressId << "Writing " << outputParam->GetFileName() << "...";
         AddProcess(outputParam->GetWriter(), progressId.str());
         outputParam->Write();
+        }
+
+      //rashad: xml writer parameter
+      else if (GetParameterType(key) == ParameterType_OutputProcessXml
+                && IsParameterEnabled(key) && HasValue(key) )
+        {
+        /*
+        Parameter* param = GetParameterByKey(key);
+        OutputProcessXmlParameter* outputParam = dynamic_cast<OutputProcessXmlParameter*>(param);
+        outputParam->InitializeWriters();
+        if (useRAM)
+          {
+          outputParam->SetRAMValue(ram);
+          }
+        std::ostringstream progressId;
+        progressId << "Writing " << outputParam->GetFileName() << "...";
+        AddProcess(outputParam->GetWriter(), progressId.str());
+        outputParam->Write();
+        */
         }
       }
     }
