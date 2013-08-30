@@ -66,14 +66,40 @@ namespace
 
 /*******************************************************************************/
 HistogramPlot
-::HistogramPlot( QObject* parent ) :
-  QObject( parent )
+::HistogramPlot( const QwtText& title ) :
+  QwtPlotItem( title ),
+  m_XMin( NULL, NULL,  0 ),
+  m_XMax( NULL, NULL, 0 ),
+  m_Y( NULL, NULL, 0 )
 {
 }
 
 /*******************************************************************************/
 HistogramPlot
 ::~HistogramPlot()
+{
+}
+
+/*******************************************************************************/
+void
+HistogramPlot
+::SetData( double * const xMin,
+	   double * const xMax,
+	   double * const y,
+	   size_t size )
+{
+  m_XMin = QwtCPointerData( xMin, NULL, 2 * size );
+  m_XMax = QwtCPointerData( xMax, NULL, 2 * size );
+  m_Y = QwtCPointerData( y, NULL, size );
+}
+
+/*******************************************************************************/
+void
+HistogramPlot
+::draw( QPainter* painter,
+	const QwtScaleMap& xMap,
+	const QwtScaleMap& yMap,
+	const QRect& canvasRect ) const
 {
 }
 

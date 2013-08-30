@@ -37,6 +37,11 @@
 // System includes (sorted by alphabetic order)
 
 //
+// Qwt includes (sorted by alphabetical order)
+#include <qwt_data.h>
+#include <qwt_plot_item.h>
+
+//
 // ITK includes (sorted by alphabetic order)
 
 //
@@ -70,36 +75,58 @@ namespace mvd
  * \brief WIP.
  */
 class Monteverdi2_EXPORT HistogramPlot :
-    public QObject
+    public QwtPlotItem
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
-  Q_OBJECT;
+  // Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public types.
+public:
+  /**
+   * \brief
+   */
+  typedef QwtArray< double > QwtDoubleArray;
 
 //
 // Public methods.
 public:
 
   /** \brief Constructor. */
-  HistogramPlot( QObject* parent =NULL );
+  HistogramPlot( const QwtText& title =QwtText() );
 
   /** \brief Destructor. */
   virtual ~HistogramPlot();
+
+  /**
+   */
+  void draw( QPainter* painter,
+	     const QwtScaleMap& xMap,
+	     const QwtScaleMap& yMap,
+	     const QRect& canvasRect ) const;
+
+  /**
+   */
+  void SetData( double * const xMin,
+		double * const xMax,
+		double * const y,
+		size_t size );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
 // Public SLOTS.
-public slots:
+// public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
-signals:
+// signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -121,12 +148,23 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  QwtCPointerData m_XMin;
+
+  /**
+   */
+  QwtCPointerData m_XMax;
+
+  /**
+   */
+  QwtCPointerData m_Y;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
-private slots:
+// private slots:
 };
 
 } // end namespace 'mvd'.

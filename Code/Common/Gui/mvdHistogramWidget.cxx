@@ -79,10 +79,10 @@ HistogramWidget::CURVE_NAMES[ HistogramWidget::CURVE_COUNT ] =
 const QColor
 HistogramWidget::CURVE_COLORS[ HistogramWidget::CURVE_COUNT ] =
 {
-  QColor( 0xFF, 0x44, 0x44/*, 0x88*/ ),
-  QColor( 0x44, 0xFF, 0x44/*, 0x88*/ ),
-  QColor( 0x44, 0x44, 0xFF/*, 0x88*/ ),
-  QColor( 0xBB, 0xBB, 0xBB/*, 0x88*/ ),
+  QColor( 0xFF, 0x44, 0x44, 0x77 ),
+  QColor( 0x44, 0xFF, 0x44, 0x77 ),
+  QColor( 0x44, 0x44, 0xFF, 0x77 ),
+  QColor( 0xBB, 0xBB, 0xBB, 0x77 ),
 };
 
 const QColor
@@ -146,6 +146,7 @@ HistogramWidget
 #endif
 
     m_PlotCurves[ i ]->setPen( QPen( CURVE_COLORS[ i ] ) );
+    m_PlotCurves[ i ]->setBrush( QBrush( CURVE_COLORS[ i ] ) );
 
     m_PlotCurves[ i ]->attach( m_UI->histogramPlot );
 
