@@ -178,6 +178,10 @@ private slots:
    * \brief
    */
   void OnHighIntensityChanged( RgbwChannel channel, double value, bool refresh );
+
+  /**
+   */
+  void OnHistogramRefreshed();
 };
 
 } // end namespace 'mvd'.

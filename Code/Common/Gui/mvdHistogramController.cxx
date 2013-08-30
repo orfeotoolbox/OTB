@@ -165,8 +165,8 @@ HistogramController
   widget->Replot();
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
+/*****************************************************************************/
+/* SLOTS                                                                     */
 /*****************************************************************************/
 void
 HistogramController
@@ -193,7 +193,7 @@ HistogramController
   ResetWidget( RGBW_CHANNEL_WHITE );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 HistogramController
 ::OnGrayscaleActivated( bool activated )
@@ -212,7 +212,7 @@ HistogramController
   // ResetWidget( RGBW_CHANNEL_WHITE );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 HistogramController
 ::OnLowIntensityChanged( RgbwChannel channel, double value, bool refresh )
@@ -227,7 +227,7 @@ HistogramController
     widget->Replot();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 HistogramController
 ::OnHighIntensityChanged( RgbwChannel channel, double value, bool refresh )
@@ -242,6 +242,14 @@ HistogramController
     widget->Replot();
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
+void
+HistogramController
+::OnHistogramRefreshed()
+{
+  ResetWidget( RGBW_CHANNEL_ALL );
+}
+
+/*****************************************************************************/
 
 } // end namespace 'mvd'

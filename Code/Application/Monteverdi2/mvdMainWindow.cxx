@@ -210,6 +210,13 @@ MainWindow
     m_HistogramDock->findChild< AbstractModelController* >(),
     SLOT( OnHighIntensityChanged( RgbwChannel, double, bool ) )
   );
+  QObject::connect(
+    m_ColorDynamicsDock->findChild< AbstractModelController* >(),
+    SIGNAL( HistogramRefreshed() ),
+    // to: ...histogram controller model update signal.
+    m_HistogramDock->findChild< AbstractModelController* >(),
+    SLOT( OnHistogramRefreshed() )
+  );
 
 #ifdef OTB_WRAP_QT
   //

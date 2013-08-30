@@ -141,6 +141,10 @@ signals:
    */
   void HighIntensityChanged( RgbwChannel channel, double value, bool refresh );
 
+  /**
+   */
+  void HistogramRefreshed();
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //

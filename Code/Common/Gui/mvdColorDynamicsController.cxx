@@ -679,6 +679,9 @@ ColorDynamicsController
     ? RGBW_CHANNEL_WHITE
     : RGBW_CHANNEL_RGB );
 
+  // Signal histogram has been refreshed.
+  emit HistogramRefreshed();
+
   // Signal model has been updated.
   emit ModelUpdated();
 }
