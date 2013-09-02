@@ -1023,6 +1023,9 @@ ColorDynamicsController
 
   ResetIntensities( channel );
 
+  // Emit signal to force histogram refresh.
+  emit HistogramRefreshed();
+
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
 }
@@ -1037,6 +1040,9 @@ ColorDynamicsController
     << "::OnResetQuantileChanged(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
 
   ResetQuantiles( channel );
+
+  // Emit signal to force histogram refresh.
+  emit HistogramRefreshed();
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
@@ -1116,7 +1122,13 @@ ColorDynamicsController
     colorBandDynWgt->SetHighQuantile( high );
     }
     colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+
+    emit LowIntensityChanged( chan, lintensity, false );
+    emit HighIntensityChanged( chan, uintensity, false );
     }
+
+  // Force histogram refresh.
+  emit HistogramRefreshed();
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();
