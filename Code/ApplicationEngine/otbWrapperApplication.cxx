@@ -120,8 +120,7 @@ void Application::Init()
   //rashad: global parameters. now used only for save xml 
   if (this->GetHaveXML())
     {
-    AddXMLParameter();
-    this->UpdateParameters();
+      AddXMLParameter();
     }
 }
 
@@ -138,8 +137,8 @@ void Application::AddXMLParameter()
   AddParameter(ParameterType_OutputProcessXML,  key,   descr);
   SetParameterDescription(key, descr);
   MandatoryOff(key);
-  SetParameterString(key, defaultXMLFileName);
-  //  DisableParameter(key); 
+  //SetParameterString(key, defaultXMLFileName);
+  DisableParameter(key); 
 }
 
 void Application::UpdateParameters()
@@ -254,11 +253,12 @@ int Application::ExecuteAndWriteOutput()
         }
 
       //rashad: xml writer parameter
-      else if (GetParameterType(key) == ParameterType_OutputProcessXML )
-        {       
+      else if (GetParameterType(key) == ParameterType_OutputProcessXML 
+	       && IsParameterEnabled(key) && HasValue(key) )
+        {
         Parameter* param = GetParameterByKey(key);
-        OutputProcessXMLParameter* outputParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-        outputParam->Write(this);
+        OutputProcessXMLParameter* xmlParam = dynamic_cast<OutputProcessXMLParameter*>(param);
+        xmlParam->Write(this);
         }
       }
     }
@@ -969,7 +969,7 @@ std::string Application::GetParameterString(std::string parameter)
     }
   else
    {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to string");
+    itkExceptionMacro(<<parameter << " : parameter can't be casted to string");
    }
 
   return ret;

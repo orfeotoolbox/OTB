@@ -33,6 +33,7 @@
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperRAMParameter.h"
+#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
 
 // List value parameter
@@ -358,6 +359,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     {
     const std::string paramKey(appKeyList[i]);
     std::vector<std::string> values;
+
+
     Parameter::Pointer param = m_Application->GetParameterByKey(paramKey);
     ParameterType type = m_Application->GetParameterType(paramKey);
 
@@ -475,9 +478,9 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             == ParameterType_InputFilenameList || type == ParameterType_OutputFilename || type
             == ParameterType_ComplexInputImage || type == ParameterType_InputImage || type
             == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList || type
-            == ParameterType_OutputVectorData || type == ParameterType_RAM)
+            == ParameterType_OutputVectorData || type == ParameterType_RAM || type == ParameterType_OutputProcessXML )
           {
-          m_Application->SetParameterString(paramKey, values[0]);
+          m_Application->SetParameterString(paramKey, values[0]);                  
           }
         else
           if (type == ParameterType_Empty)
@@ -491,6 +494,14 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                 {
                 dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(false);
                 }
+	      else
+		if (type == ParameterType_OutputProcessXML)
+		  {
+		   
+		    std::cerr << "ddddd\n\n\n\n";
+		    dynamic_cast<OutputProcessXMLParameter *> (param.GetPointer())->SetFileName(values[0]);
+		    //m_Application->SetParameterString(paramKey, values[0])
+		  }
               else
                 {
                 std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
