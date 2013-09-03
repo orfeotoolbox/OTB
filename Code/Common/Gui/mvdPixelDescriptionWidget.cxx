@@ -195,7 +195,8 @@ PixelDescriptionWidget
       iGeoElevationItem->setText(1, QString(tr("Not available")));
       }
     }
-}                       
+}
+
 /*******************************************************************************/
 void
 PixelDescriptionWidget

@@ -175,24 +175,32 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::ResetWidget()
+::ClearWidget()
 {
-  RefreshWidget();
+  ResetDatasetTree( StringPairListType() );
 }
 
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::ResetDatasetTree()
+::ResetWidget()
 {
-  //
-  // Access widget.
-  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
-
   //
   // Access model.
   DatabaseModel* model = GetModel< DatabaseModel >();
   assert( model!=NULL );
+
+  ResetDatasetTree( model->QueryDatasetModels() );
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::ResetDatasetTree( const StringPairListType& datasets )
+{
+  //
+  // Access widget.
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
 
   // Block this controller's signals to prevent display refreshes
   // but let let widget(s) signal their changes so linked values
@@ -204,7 +212,7 @@ DatabaseBrowserController
   widget->blockSignals( true );
   {
   // TODO: Fill in widget.
-  widget->SetDatasetList( model->QueryDatasetModels() );
+  widget->SetDatasetList( datasets );
   }
   widget->blockSignals( false );
   }
@@ -292,8 +300,11 @@ void
 DatabaseBrowserController
 ::RefreshWidget()
 {
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
   // Reset widget.
-  ResetDatasetTree();
+  ResetDatasetTree( model->QueryDatasetModels() );
 
   // Check every dataset consistency  
   CheckDatasetsConsistensy();

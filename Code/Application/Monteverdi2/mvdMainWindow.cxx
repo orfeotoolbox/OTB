@@ -735,6 +735,18 @@ MainWindow
     Qt::RightDockWidgetArea
   );
 
+  assert( m_HistogramDock==NULL );
+  m_HistogramDock =
+    AddDockWidget
+    < HistogramWidget, HistogramController, QDockWidget >
+    ( "HISTOGRAM",
+      tr( "Histogram" ),
+      Qt::RightDockWidgetArea,
+      false
+    );
+
+  tabifyDockWidget( m_QuicklookViewDock, m_HistogramDock );
+
 #if 1
   // Pixel Description (no controller needed here / direct update of
   // the pixel description through signals from VectorImageModel)
@@ -772,19 +784,6 @@ MainWindow
 
   // Tabify dock-widgets.
   tabifyDockWidget( m_ColorSetupDock, m_ColorDynamicsDock );
-
-  //
-  //
-
-  assert( m_HistogramDock==NULL );
-  m_HistogramDock =
-    AddDockWidget
-    < HistogramWidget, HistogramController, QDockWidget >
-    ( "HISTOGRAM",
-      tr( "Histogram" ),
-      Qt::BottomDockWidgetArea,
-      true
-    );
 }
 
 /*****************************************************************************/

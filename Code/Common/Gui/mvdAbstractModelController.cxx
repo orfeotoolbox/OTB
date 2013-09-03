@@ -87,6 +87,9 @@ AbstractModelController
   // Disable GUI widget while there is no model.
   GetWidget()->setEnabled( false );
 
+  // Clear widget from previous values.
+  private_ClearWidget();
+
   // Forget previously disconnected model before new model is
   // connected. This is done in order to stay in a consistent internal
   // state whenever the connection is aborted (e.g. by an exception).
@@ -145,6 +148,15 @@ AbstractModelController
   );
 
   emit ModelDisconnected( model );
+}
+
+/*****************************************************************************/
+void
+AbstractModelController
+::private_ClearWidget()
+{
+  // Reset UI from model.
+  ClearWidget();
 }
 
 /*****************************************************************************/

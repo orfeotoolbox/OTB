@@ -211,6 +211,57 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
+::ClearWidget()
+{
+  assert( GetWidget()!=NULL &&
+	  GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
+
+  widget->SetGrayscaleActivated( true );
+
+  CountType begin = -1;
+  CountType end = -1;
+
+  if( !RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
+    return;
+
+  // Block this controller's signals to prevent display refreshes
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  bool thisSignalsBlocked = this->blockSignals( true );
+  {
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
+
+    ColorBandDynamicsWidget* colorBandDynWgt =
+      widget->GetChannel( channel );
+
+
+    // Block widget's signals...
+    //...but force call to valueChanged() slot to force refresh.
+    bool widgetSignalsBlocked = colorBandDynWgt->blockSignals( true );
+    {
+    colorBandDynWgt->SetBounded( true );
+
+    colorBandDynWgt->SetMinIntensity( 0.0 );
+    colorBandDynWgt->SetMaxIntensity( 1.0 );
+
+    colorBandDynWgt->SetLowIntensity( 0.0 );
+    colorBandDynWgt->SetHighIntensity( 1.0 );
+
+    colorBandDynWgt->SetLowQuantile( 2.0 );
+    colorBandDynWgt->SetLowQuantile( 2.0 );
+    }
+    colorBandDynWgt->blockSignals( widgetSignalsBlocked );
+    }
+  }
+  this->blockSignals( thisSignalsBlocked );
+}
+
+/*****************************************************************************/
+void
+ColorDynamicsController
 ::Disconnect( AbstractModel* model )
 {
   ColorDynamicsWidget* colorDynamicsWidget = GetWidget< ColorDynamicsWidget >();

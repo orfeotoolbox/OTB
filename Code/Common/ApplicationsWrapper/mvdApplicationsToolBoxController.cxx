@@ -125,6 +125,13 @@ ApplicationsToolBoxController
 /*******************************************************************************/
 void
 ApplicationsToolBoxController
+::ClearWidget()
+{
+}
+
+/*******************************************************************************/
+void
+ApplicationsToolBoxController
 ::ResetWidget()
 {
   // Reset widget.

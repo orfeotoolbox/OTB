@@ -124,12 +124,14 @@ private:
 
   /**
    */
-  void ResetDatasetTree();
+  void ResetDatasetTree( const PropertiesContainer& properties );
 
   //
   // AbstractModelController overrides.
 
   virtual void Connect( AbstractModel* );
+
+  virtual void ClearWidget();
 
   virtual void ResetWidget();
 

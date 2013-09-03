@@ -140,7 +140,7 @@ private:
 
   /**
    */
-  void ResetDatasetTree();
+  void ResetDatasetTree( const StringPairListType& datasets );
 
   /**
    */
@@ -150,6 +150,8 @@ private:
   // AbstractModelController overrides.
 
   virtual void Connect( AbstractModel* );
+
+  virtual void ClearWidget();
 
   virtual void ResetWidget();
 

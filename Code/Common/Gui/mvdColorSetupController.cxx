@@ -154,6 +154,62 @@ ColorSetupController
 /*******************************************************************************/
 void
 ColorSetupController
+::ClearWidget()
+{
+  //
+  // Calculate loop bounds. Return if nothing to do.
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !mvd::RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
+    return;
+
+  //
+  // Access color-dynamics widget.
+  ColorSetupWidget* colorSetupWidget = GetWidget< ColorSetupWidget >();
+
+  // Block this controller's signals to prevent display refreshes
+  // but let let widget(s) signal their changes so linked values
+  // will be correctly updated.
+  bool thisSignalsBlocked = this->blockSignals( true );
+  {
+  // Block widget's signals...
+  //...but force call to valueChanged() slot to force refresh.
+  bool widgetSignalsBlocked = colorSetupWidget->blockSignals( true );
+  {
+  // Reset list of component names.
+  colorSetupWidget->SetComponents( QStringList( tr( "BAND 0" ) ) );
+
+  //
+  // RGBW-mode.
+
+  // Reset current-indices of RGB channels widgets.
+  for( CountType i=begin; i<end; ++i )
+    {
+    RgbwChannel channel = static_cast< RgbwChannel >( i );
+
+    // Set current-index of channel.
+    colorSetupWidget->SetCurrentRgbIndex( channel, 0 );
+    }
+
+  //
+  // Grayscale-mode.
+  colorSetupWidget->SetGrayscaleActivated( true );
+
+  // Allow user-selectable grayscale-mode.
+  colorSetupWidget->SetGrayscaleEnabled( false );
+
+  // Set current-index of white (gray).
+  colorSetupWidget->SetCurrentGrayIndex( 0 );
+  }
+  colorSetupWidget->blockSignals( widgetSignalsBlocked );
+  }
+  this->blockSignals( thisSignalsBlocked );
+}
+
+/*******************************************************************************/
+void
+ColorSetupController
 ::ResetWidget()
 {
   // Reset color-setup widget.

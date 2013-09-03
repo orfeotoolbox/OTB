@@ -106,25 +106,34 @@ DatasetPropertiesController
 /*******************************************************************************/
 void
 DatasetPropertiesController
-::ResetWidget()
+::ClearWidget()
 {
   // Reset widget.
-  ResetDatasetTree();
+  ResetDatasetTree( PropertiesContainer() );
 }
 
 /*******************************************************************************/
 void
 DatasetPropertiesController
-::ResetDatasetTree()
+::ResetWidget()
 {
-  //
-  // Access widget.
-  DatasetPropertiesWidget* widget = GetWidget< DatasetPropertiesWidget >();
-
   //
   // Access model.
   DatasetModel* model = GetModel< DatasetModel >();
   assert( model!=NULL );
+
+  // Reset widget.
+  ResetDatasetTree( model->QueryDatasetProperties() );
+}
+
+/*******************************************************************************/
+void
+DatasetPropertiesController
+::ResetDatasetTree( const PropertiesContainer& properties )
+{
+  //
+  // Access widget.
+  DatasetPropertiesWidget* widget = GetWidget< DatasetPropertiesWidget >();
 
   // Block this controller's signals to prevent display refreshes
   // but let let widget(s) signal their changes so linked values
@@ -136,7 +145,7 @@ DatasetPropertiesController
   widget->blockSignals( true );
   {
   // TODO: Fill in widget.
-  widget->FillDatasetProperties( model->QueryDatasetProperties() );
+  widget->FillDatasetProperties( properties );
   }
   widget->blockSignals( false );
   }
@@ -150,7 +159,7 @@ void
 DatasetPropertiesController
 ::OnPlacenameLoaded()
 {
-  ResetDatasetTree();
+  ResetDatasetTree( PropertiesContainer());
 }
 
 } // end namespace 'mvd'

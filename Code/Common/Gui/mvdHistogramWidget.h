@@ -135,6 +135,10 @@ public:
    */
   void SetGrayscaleActivated( bool activated );
 
+  /**
+   */
+  void Clear();
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

@@ -178,6 +178,10 @@ private:
 
   /**
    */
+  void private_ClearWidget();
+
+  /**
+   */
   void private_ResetWidget();
 
   /**
@@ -187,6 +191,10 @@ private:
   /**
    */
   virtual void Disconnect( AbstractModel* ) =0;
+
+  /**
+   */
+  virtual void ClearWidget() =0;
 
   /**
    */

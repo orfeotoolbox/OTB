@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>273</width>
-    <height>249</height>
+    <width>218</width>
+    <height>118</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,20 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QwtPlot" name="histogramPlot"/>
+    <widget class="QwtPlot" name="histogramPlot">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>100</height>
+      </size>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

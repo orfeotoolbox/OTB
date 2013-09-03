@@ -98,6 +98,18 @@ HistogramController
 /*******************************************************************************/
 void
 HistogramController
+::ClearWidget()
+{
+  assert( GetWidget()==GetWidget< HistogramWidget >() );
+  HistogramWidget* widget = GetWidget< HistogramWidget >();
+  assert( widget!=NULL );
+
+  widget->Clear();
+}
+
+/*******************************************************************************/
+void
+HistogramController
 ::ResetWidget()
 {
   ResetWidget( RGBW_CHANNEL_ALL );

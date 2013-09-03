@@ -225,8 +225,8 @@ HistogramWidget
 	   double xMin, double yMin,
 	   double xMax, double yMax )
 {
-  assert( x!=NULL );
-  assert( y!=NULL );
+  assert( ( x==NULL && y==NULL && size==0 ) ||
+	  ( x!=NULL && y!=NULL && size!=0 ) );
 
   CountType begin = 0;
   CountType end = 0;
@@ -241,10 +241,15 @@ HistogramWidget
 
     m_PlotCurves[ i ]->setData( x, y, size );
 
+    if( x==NULL && y==NULL )
+      m_PlotCurves[ i ]->setVisible( false );
+
+    /*
     qDebug()
       << RGBW_CHANNEL_NAMES[ i ]
       << "[" << xMin << "; " << xMax << "]"
       << "x [" << yMin << "; " << yMax << "]";
+    */
 
     m_Bounds[ i ].m_XMin = xMin;
     m_Bounds[ i ].m_XMax = xMax;
@@ -280,7 +285,7 @@ HistogramWidget
 void
 HistogramWidget
 ::SetHighMarker( RgbwChannel channel,
-		double high )
+		 double high )
 {
   qDebug()
     << this << "::SetLowMarker("
@@ -343,7 +348,7 @@ HistogramWidget
   CountType begin = 0;
   CountType end = 0;
 
-  if( !RgbBounds( begin, end, RGBW_CHANNEL_RGB ) )
+  if( !RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
     return;
 
   for( CountType i=begin; i<end; ++i )
@@ -372,6 +377,39 @@ HistogramWidget
   m_UI->histogramPlot
     ->axisScaleDiv( QwtPlot::yLeft )
     ->setInterval( yMin, yMax );
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::Clear()
+{
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
+    return;
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    m_PlotCurves[ i ]->setVisible( false );
+    m_LowPlotMarkers[ i ]->setVisible( false );
+    m_HighPlotMarkers[ i ]->setVisible( false );
+    /*
+    qDebug()
+      << RGBW_CHANNEL_NAMES[ i ]
+      << "[" << xMin << "; " << xMax << "]"
+      << "x [" << yMin << "; " << yMax << "]";
+    */
+
+    m_Bounds[ i ].m_XMin = 0.0;
+    m_Bounds[ i ].m_XMax = 1000.0;
+
+    m_Bounds[ i ].m_YMin = 0.0;
+    m_Bounds[ i ].m_YMax = 1000.0;
+    }
+
+  Replot();
 }
 
 /*******************************************************************************/
