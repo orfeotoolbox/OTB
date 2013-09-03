@@ -54,7 +54,7 @@ typedef enum
   ParameterType_ComplexInputImage,
   ParameterType_ComplexOutputImage,
   ParameterType_RAM,
-  ParameterType_OutputProcessXml
+  ParameterType_OutputProcessXML
 } ParameterType;
 
 typedef enum

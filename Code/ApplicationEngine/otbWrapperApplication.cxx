@@ -24,6 +24,7 @@
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
+#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperNumericalParameter.h"
@@ -58,6 +59,7 @@ Application::Application()
     m_DocAuthors(""),
     m_DocLimitations(""),
     m_DocSeeAlso(""),
+    m_HaveXML(true),
     m_DocTags()
 {
   // Don't call Init from the constructor, since it calls a virtual method !
@@ -116,20 +118,28 @@ void Application::Init()
   this->DoInit();
   
   //rashad: global parameters. now used only for save xml 
-  AddGlobalParameters();
+  if (this->GetHaveXML())
+    {
+    AddXMLParameter();
+    this->UpdateParameters();
+    }
 }
 
-void Application::AddGlobalParameters()
+void Application::AddXMLParameter()
 {
-  const std::string xmlKey = "xml";
-  AddParameter(ParameterType_String,  xmlKey,   "Save process to xml file");
-  SetParameterDescription(xmlKey, "Save process to xml file");
-  MandatoryOff(xmlKey);
   
-  const std::string defaultXmlFileName = std::string(GetName())  + ".xml";
-  SetParameterString(xmlKey, defaultXmlFileName);
-  DisableParameter(xmlKey);
+  Parameter::Pointer tmpParam;
+  tmpParam = OutputProcessXMLParameter::New();
+  const std::string key =   tmpParam->GetKey();
+  const std::string descr = tmpParam->GetDescription();
+  const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
+  tmpParam = NULL;
 
+  AddParameter(ParameterType_OutputProcessXML,  key,   descr);
+  SetParameterDescription(key, descr);
+  MandatoryOff(key);
+  SetParameterString(key, defaultXMLFileName);
+  //  DisableParameter(key); 
 }
 
 void Application::UpdateParameters()
@@ -156,9 +166,7 @@ int Application::Execute()
       int seed = randParam->GetValue();
       itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(seed);
       }
-
     }
-
   if (!UseSpecificSeed)
     {
     itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->Initialize();
@@ -185,6 +193,8 @@ int Application::ExecuteAndWriteOutput()
           ++it)
       {
       std::string key = *it;
+
+
 
       if (GetParameterType(key) == ParameterType_RAM
         && IsParameterEnabled(key))
@@ -244,22 +254,11 @@ int Application::ExecuteAndWriteOutput()
         }
 
       //rashad: xml writer parameter
-      else if (GetParameterType(key) == ParameterType_OutputProcessXml
-                && IsParameterEnabled(key) && HasValue(key) )
-        {
-        /*
+      else if (GetParameterType(key) == ParameterType_OutputProcessXML )
+        {       
         Parameter* param = GetParameterByKey(key);
-        OutputProcessXmlParameter* outputParam = dynamic_cast<OutputProcessXmlParameter*>(param);
-        outputParam->InitializeWriters();
-        if (useRAM)
-          {
-          outputParam->SetRAMValue(ram);
-          }
-        std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
-        */
+        OutputProcessXMLParameter* outputParam = dynamic_cast<OutputProcessXMLParameter*>(param);
+        outputParam->Write(this);
         }
       }
     }
@@ -364,6 +363,7 @@ void Application::SetParameterRole(std::string paramKey, Role role)
 ParameterType Application::GetParameterType(std::string paramKey) const
 {
   const Parameter* param = GetParameterByKey(paramKey);
+
   ParameterType type;
 
   if (dynamic_cast<const ChoiceParameter*>(param))
@@ -453,6 +453,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
   else if (dynamic_cast<const ParameterGroup*>(param))
     {
     type = ParameterType_Group;
+    }
+  else if (dynamic_cast<const OutputProcessXMLParameter*>(param))
+    {
+    type = ParameterType_OutputProcessXML;
     }
   else
     {
@@ -713,6 +717,11 @@ void Application::SetParameterString(std::string parameter, std::string value)
   else if (dynamic_cast<RAMParameter*>(param))
     {
     RAMParameter* paramDown = dynamic_cast<RAMParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<OutputProcessXMLParameter*>(param))
+    {
+    OutputProcessXMLParameter* paramDown = dynamic_cast<OutputProcessXMLParameter*>(param);
     paramDown->SetValue(value);
     }
 }

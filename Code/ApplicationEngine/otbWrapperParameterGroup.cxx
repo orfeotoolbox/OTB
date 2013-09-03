@@ -23,6 +23,7 @@
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
+#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
@@ -212,6 +213,7 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
   // Get the last subkey
   std::string lastkey = pKey.GetLastElement();
 
+
   std::string parentkey;
   Parameter::Pointer parentParam;
 
@@ -341,6 +343,12 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         newParam = RAMParameter::New();
         }
         break;
+      case ParameterType_OutputProcessXML:
+        {	  
+        newParam = OutputProcessXMLParameter::New();
+
+        }
+        break;
       }
 
     if (newParam.IsNull())
@@ -385,6 +393,7 @@ Parameter::Pointer
 ParameterGroup::GetParameterByKey(std::string name)
 {
   ParameterKey pName(name);
+
  // Split the parameter name
   std::vector<std::string> splittedName = pName.Split();
 
@@ -397,6 +406,7 @@ ParameterGroup::GetParameterByKey(std::string name)
   for (it = m_ParameterList.begin(); it != m_ParameterList.end(); ++it)
     {
     Parameter::Pointer param = *it;
+
     if (param->GetKey() == parentName)
       {
       parentParam = param;

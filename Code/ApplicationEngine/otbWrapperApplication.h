@@ -82,8 +82,18 @@ public:
   /** Check if the application has been initialized */
   bool IsInitialized() const;
 
-  /** rashad: Adding global parameters eg: -xml */  
-  void AddGlobalParameters();
+  /** rashad: Add xml parameters eg: -xml */  
+  void AddXMLParameter();
+
+  /** Set the parameter xml flag */
+  itkSetMacro(HaveXML, bool);
+
+  /** Get the parameter xml flag */
+  itkGetConstMacro(HaveXML, bool);
+
+  /** Toogle the parameter xml flag */
+  itkBooleanMacro(HaveXML);
+
 
   /** Update the value of parameters for which no user value has been provided */
   void UpdateParameters();
@@ -725,6 +735,9 @@ private:
   std::string                       m_Name;
   std::string                       m_Description;
   ParameterGroup::Pointer           m_ParameterList;
+
+  //rashad:: controls adding of -xml parameter. set to true by default
+  bool                              m_HaveXML;
 
   itk::Logger::Pointer              m_Logger;
 
