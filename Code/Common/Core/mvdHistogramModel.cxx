@@ -191,7 +191,7 @@ HistogramModel
   assert( !histogram.IsNull() );
 
   // Get number of bins for each dimension.
-  typename Histogram::SizeType size( histogram->GetSize() );
+  Histogram::SizeType size( histogram->GetSize() );
 
   // Ensure dimension is 1.
   assert( Histogram::MeasurementVectorSize==1 );
