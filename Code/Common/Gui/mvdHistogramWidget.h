@@ -59,6 +59,7 @@ class QwtPlot;
 class QwtPlotGrid;
 class QwtPlotCurve;
 class QwtPlotMarker;
+class QwtPlotPicker;
 
 namespace mvd
 {
@@ -223,6 +224,10 @@ private:
   /**
    */
   QwtPlotGrid* m_PlotGrid;
+
+  /**
+   */
+  QwtPlotPicker* m_PlotPicker;
 
   /**
    * \brief

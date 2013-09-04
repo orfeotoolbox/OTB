@@ -32,6 +32,7 @@
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_marker.h>
+#include <qwt_plot_picker.h>
 #include <qwt_scale_engine.h>
 
 //
@@ -115,7 +116,10 @@ HistogramWidget
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::HistogramWidget() ),
   m_PlotGrid( NULL ),
+  m_PlotPicker( NULL ),
   m_PlotCurves(),
+  m_LowPlotMarkers(),
+  m_HighPlotMarkers(),
   m_Bounds()
 {
   m_UI->setupUi( this );
@@ -127,6 +131,14 @@ HistogramWidget
 
   m_PlotGrid->setMajPen( GRID_MAJ_PEN_COLOR );
   m_PlotGrid->setMinPen( GRID_MIN_PEN_COLOR );
+
+  m_PlotPicker = new QwtPlotPicker( m_UI->histogramPlot->canvas() );
+  m_PlotPicker->setTrackerMode( QwtPicker::AlwaysOn );
+  m_PlotPicker->setSelectionFlags( QwtPicker::PointSelection );
+  m_PlotPicker->setRubberBandPen( QColor( 0xFF, 0xFF, 0x00, 0xAA ) );
+  m_PlotPicker->setRubberBand( QwtPicker::CrossRubberBand );
+  m_PlotPicker->setTrackerPen( QColor( Qt::yellow ) );
+  // m_PlotPicker->setEnabled( true );
 
   for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
     {
@@ -184,6 +196,9 @@ HistogramWidget
     delete m_HighPlotMarkers[ i ];
     m_HighPlotMarkers[ i ] = NULL;
     }
+
+  delete m_PlotPicker;
+  m_PlotPicker = NULL;
 
   delete m_PlotGrid;
   m_PlotGrid = NULL;
