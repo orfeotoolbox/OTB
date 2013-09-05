@@ -134,6 +134,8 @@ InputProcessXMLParameter::Read(Application::Pointer app)
 
   TiXmlElement *n_OTB;
   n_OTB = handle.FirstChild("OTB").Element();
+  if(!n_OTB)
+    itkExceptionMacro(<< "Input XML file " << this->GetFileName() << " is invalid.");
   std::string otb_Version, otb_Build, otb_Platform;
   otb_Version = GetChildNodeTextOf(n_OTB,"version");
   otb_Build = GetChildNodeTextOf(n_OTB, "build");

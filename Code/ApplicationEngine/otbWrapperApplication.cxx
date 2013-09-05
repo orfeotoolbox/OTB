@@ -1010,6 +1010,11 @@ std::string Application::GetParameterString(std::string parameter)
     OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
     ret = paramDown->GetFileName();
     }
+  else if (dynamic_cast<OutputProcessXMLParameter*>(param))
+    {
+    OutputProcessXMLParameter* paramDown = dynamic_cast<OutputProcessXMLParameter*>(param);
+    ret = paramDown->GetFileName();
+    }
   else
    {
     itkExceptionMacro(<<parameter << " : parameter can't be casted to string");
@@ -1150,7 +1155,8 @@ std::string Application::GetParameterAsString(std::string paramKey)
       || type == ParameterType_Directory || type == ParameterType_InputImage
       || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
       || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData
-      || type == ParameterType_ListView || type == ParameterType_Choice)
+      || type == ParameterType_ListView || type == ParameterType_Choice
+      || type == ParameterType_OutputProcessXML )
     {
       ret = this->GetParameterString( paramKey );
     }
