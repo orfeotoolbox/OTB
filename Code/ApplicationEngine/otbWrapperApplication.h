@@ -33,7 +33,6 @@
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
-
 #include "otbWrapperDocExampleStructure.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
@@ -82,6 +81,31 @@ public:
 
   /** Check if the application has been initialized */
   bool IsInitialized() const;
+
+  /** rashad: Add xml parameters eg: -xml */  
+  void AddInXMLParameter();
+
+  void AddOutXMLParameter();
+
+  /** Set the parameter xml flag */
+  itkSetMacro(HaveInXML, bool);
+
+  /** Get the parameter xml flag */
+  itkGetConstMacro(HaveInXML, bool);
+
+  /** Toogle the parameter xml flag */
+  itkBooleanMacro(HaveInXML);
+
+  /** Set the parameter xml flag */
+  itkSetMacro(HaveOutXML, bool);
+
+  /** Get the parameter xml flag */
+  itkGetConstMacro(HaveOutXML, bool);
+
+  /** Toogle the parameter xml flag */
+  itkBooleanMacro(HaveOutXML);
+
+
 
   /** Update the value of parameters for which no user value has been provided */
   void UpdateParameters();
@@ -723,6 +747,10 @@ private:
   std::string                       m_Name;
   std::string                       m_Description;
   ParameterGroup::Pointer           m_ParameterList;
+
+  //rashad:: controls adding of -xml parameter. set to true by default
+  bool                              m_HaveInXML;
+  bool                              m_HaveOutXML;
 
   itk::Logger::Pointer              m_Logger;
 
