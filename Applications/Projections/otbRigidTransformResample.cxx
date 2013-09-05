@@ -125,6 +125,12 @@ private:
     AddParameter(ParameterType_Float,"transform.type.translation.ty",   "The Y translation (in physical units)");
     SetParameterDescription("transform.type.translation.ty","The translation value along Y axis (in physical units)");
     SetDefaultParameterFloat("transform.type.translation.ty",0.);
+    AddParameter(ParameterType_Float,"transform.type.translation.scalex",   "X scaling");
+    SetParameterDescription("transform.type.translation.scalex","Scaling factor between the output X spacing and the input X spacing");
+    SetDefaultParameterFloat("transform.type.translation.scalex",1.);
+    AddParameter(ParameterType_Float,"transform.type.translation.scaley",   "Y scaling");
+    SetParameterDescription("transform.type.translation.scaley","Scaling factor between the output Y spacing and the input Y spacing");
+    SetDefaultParameterFloat("transform.type.translation.scaley",1.);
 
     AddChoice("transform.type.rotation", "rotation");
     SetParameterDescription("transform.type.rotation","rotation");
@@ -244,14 +250,39 @@ private:
 
       case Transform_Translation:
       {
+      m_Resampler->SetOutputParametersFromImage(inputImage);
+
       TransformType::Pointer transform = TransformType::New();
       TransformType::OutputVectorType offset;
       offset[0] = -1.0 * GetParameterFloat("transform.type.translation.tx"); // Offset is inverted to make transform from input cs. to output cs.
       offset[1] = -1.0 * GetParameterFloat("transform.type.translation.ty");
       otbAppLogINFO( << "Offset (inverted to respect ITK transform convention e.g. from output space to input space) : " << offset );
       transform->SetOffset(offset);
+
+      // Scale Transform
+      OutputVectorType scale;
+      scale[0] = 1.0 / GetParameterFloat("transform.type.translation.scalex");
+      scale[1] = 1.0 / GetParameterFloat("transform.type.translation.scaley");
+
+      // Evaluate spacing
+      FloatVectorImageType::SpacingType spacing = inputImage->GetSpacing();
+      FloatVectorImageType::SpacingType OutputSpacing;
+      OutputSpacing=spacing;
+
+      OutputSpacing[0] = spacing[0] * scale[0];
+      OutputSpacing[1] = spacing[1] * scale[1];
+
+      m_Resampler->SetOutputSpacing(OutputSpacing);
+
+      ResampleFilterType::SizeType recomputedSize;
+      recomputedSize[0] = inputImage->GetLargestPossibleRegion().GetSize()[0] / scale[0];
+      recomputedSize[1] = inputImage->GetLargestPossibleRegion().GetSize()[1] / scale[1];
+      
+      m_Resampler->SetOutputSize(recomputedSize);
+      
+      otbAppLogINFO( << "Output image size : " << recomputedSize );
       m_Resampler->SetTransform(transform);
-      m_Resampler->SetOutputParametersFromImage(inputImage);
+ 
       }
       break;
 
