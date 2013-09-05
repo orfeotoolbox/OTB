@@ -33,6 +33,7 @@
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
+#include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperRAMParameter.h"
 
 #include "otbWrapperParameterGroup.h"
@@ -59,7 +60,8 @@ Application::Application()
     m_DocAuthors(""),
     m_DocLimitations(""),
     m_DocSeeAlso(""),
-    m_HaveXML(true),
+    m_HaveInXML(true),
+    m_HaveOutXML(true),
     m_DocTags()
 {
   // Don't call Init from the constructor, since it calls a virtual method !
@@ -118,13 +120,17 @@ void Application::Init()
   this->DoInit();
   
   //rashad: global parameters. now used only for save xml 
-  if (this->GetHaveXML())
+  if (this->GetHaveInXML())
     {
-      AddXMLParameter();
+      AddInXMLParameter();
+    }
+  if (this->GetHaveOutXML())
+    {
+      AddOutXMLParameter();
     }
 }
 
-void Application::AddXMLParameter()
+void Application::AddOutXMLParameter()
 {
   
   Parameter::Pointer tmpParam;
@@ -141,6 +147,25 @@ void Application::AddXMLParameter()
   DisableParameter(key); 
 }
 
+
+void Application::AddInXMLParameter()
+{
+  
+  Parameter::Pointer tmpParam;
+  tmpParam = InputProcessXMLParameter::New();
+  const std::string key =   tmpParam->GetKey();
+  const std::string descr = tmpParam->GetDescription();
+  const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
+  tmpParam = NULL;
+
+  AddParameter(ParameterType_InputProcessXML,  key,   descr);
+  SetParameterDescription(key, descr);
+  MandatoryOff(key);
+  //SetParameterString(key, defaultXMLFileName);
+  DisableParameter(key); 
+}
+
+
 void Application::UpdateParameters()
 {
   this->DoUpdateParameters();
@@ -149,6 +174,18 @@ void Application::UpdateParameters()
 int Application::Execute()
 {
   int ret = 0;
+
+  //read application from xml
+  std::string inXMLKey = "inxml";
+  if (GetParameterType(inXMLKey) == ParameterType_InputProcessXML 
+       && IsParameterEnabled(inXMLKey)  )
+      {
+      Parameter* param = GetParameterByKey(inXMLKey);
+      InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
+      inXMLParam->Read(this);
+      this->UpdateParameters();
+      }
+
   // before execute we set the seed of mersenne twister
   std::vector<std::string> paramList = GetParametersKeys(true);
   bool UseSpecificSeed = false;
@@ -156,7 +193,6 @@ int Application::Execute()
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
     {
     std::string key = *it;
-
     if ((key.compare(0, 4, "rand") == 0) && HasValue("rand"))
       {
       UseSpecificSeed = true;
@@ -192,8 +228,6 @@ int Application::ExecuteAndWriteOutput()
           ++it)
       {
       std::string key = *it;
-
-
 
       if (GetParameterType(key) == ParameterType_RAM
         && IsParameterEnabled(key))
@@ -252,13 +286,13 @@ int Application::ExecuteAndWriteOutput()
         outputParam->Write();
         }
 
-      //rashad: xml writer parameter
+      //xml writer parameter
       else if (GetParameterType(key) == ParameterType_OutputProcessXML 
 	       && IsParameterEnabled(key) && HasValue(key) )
         {
         Parameter* param = GetParameterByKey(key);
-        OutputProcessXMLParameter* xmlParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-        xmlParam->Write(this);
+        OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
+        outXMLParam->Write(this);
         }
       }
     }
@@ -457,6 +491,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
   else if (dynamic_cast<const OutputProcessXMLParameter*>(param))
     {
     type = ParameterType_OutputProcessXML;
+    }
+  else if (dynamic_cast<const InputProcessXMLParameter*>(param))
+    {
+    type = ParameterType_InputProcessXML;
     }
   else
     {
@@ -722,6 +760,11 @@ void Application::SetParameterString(std::string parameter, std::string value)
   else if (dynamic_cast<OutputProcessXMLParameter*>(param))
     {
     OutputProcessXMLParameter* paramDown = dynamic_cast<OutputProcessXMLParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<InputProcessXMLParameter*>(param))
+    {
+    InputProcessXMLParameter* paramDown = dynamic_cast<InputProcessXMLParameter*>(param);
     paramDown->SetValue(value);
     }
 }

@@ -473,12 +473,13 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                         }
 
         // Single value parameter
-        if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type
-            == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename || type
-            == ParameterType_InputFilenameList || type == ParameterType_OutputFilename || type
-            == ParameterType_ComplexInputImage || type == ParameterType_InputImage || type
-            == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList || type
-            == ParameterType_OutputVectorData || type == ParameterType_RAM || type == ParameterType_OutputProcessXML )
+        if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || 
+	    type == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename || 
+	    type == ParameterType_InputFilenameList || type == ParameterType_OutputFilename || 
+	    type == ParameterType_ComplexInputImage || type == ParameterType_InputImage || 
+	    type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList || 
+	    type == ParameterType_OutputVectorData || type == ParameterType_RAM || 
+	    type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML)
           {
           m_Application->SetParameterString(paramKey, values[0]);                  
           }
@@ -495,17 +496,9 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                 dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(false);
                 }
 	      else
-		if (type == ParameterType_OutputProcessXML)
-		  {
-		   
-		    std::cerr << "ddddd\n\n\n\n";
-		    dynamic_cast<OutputProcessXMLParameter *> (param.GetPointer())->SetFileName(values[0]);
-		    //m_Application->SetParameterString(paramKey, values[0])
-		  }
-              else
-                {
-                std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
-                return WRONGPARAMETERVALUE;
+		{
+		  std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
+		  return WRONGPARAMETERVALUE;
                 }
             }
         // Update the flag UserValue
@@ -552,6 +545,14 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         }
       }
 
+    const char *inXMLKey = "inxml";
+    const bool paramInXMLExists(m_Parser->IsAttributExists(std::string("-").append(inXMLKey), m_Expression));
+    if(paramInXMLExists)
+      {
+        //skip if mandatory parameters are missing because we have it already in XML
+        mustBeSet = false;
+      }
+
     if( mustBeSet )
       {
       if (!paramExists)
@@ -583,7 +584,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_Expression);
         if (values.size() == 0)
           {
-          std::cerr << "ERROR: Missing mandatory parameter: " << paramKey << std::endl;
+          std::cerr << "ERROR: Missing non-mandatory parameter: " << paramKey << std::endl;
           return MISSINGPARAMETERVALUE;
           }
         }

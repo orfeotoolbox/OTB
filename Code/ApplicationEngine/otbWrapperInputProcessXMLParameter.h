@@ -1,5 +1,5 @@
-#ifndef __otbWrapperOutputProcessXMLParameter_h
-#define __otbWrapperOutputProcessXMLParameter_h
+#ifndef __otbWrapperInputProcessXMLParameter_h
+#define __otbWrapperInputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
 #include "otbTinyXML.h"
 
@@ -8,15 +8,15 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class OutputProcessXMLParameter
- *  \brief This class represent a xml filename parameter for the wrapper framework to save otb application.
+/** \class InputProcessXMLParameter
+ *  \brief This class represent a xml filename parameter for the wrapper framework to load otb application.
  */
-class OutputProcessXMLParameter
+class InputProcessXMLParameter
   : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef OutputProcessXMLParameter     Self;
+  typedef InputProcessXMLParameter      Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -25,7 +25,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(OutputProcessXMLParameter, Parameter);
+  itkTypeMacro(InputProcessXMLParameter, Parameter);
 
   itkGetStringMacro(FileName);
 
@@ -54,27 +54,27 @@ public:
     this->Modified();
     }
   
-  TiXmlElement* AddChildNodeTo(TiXmlElement* parent, std::string name, std::string value="");
+  const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
 
   std::string pixelTypeToString(ImagePixelType pixType);
 
   ParameterType GetParameterType(const Parameter* param) const;
 
-  void Write(Application::Pointer application);
+  void Read(Application::Pointer application);
   
 protected:
 
-  OutputProcessXMLParameter();
+  InputProcessXMLParameter();
 
   /** Destructor */
-  virtual ~OutputProcessXMLParameter();
+  virtual ~InputProcessXMLParameter();
 
 private:
 
   std::string    m_FileName;
 
-  OutputProcessXMLParameter(const OutputProcessXMLParameter &); //purposely not implemented
-  void operator =(const OutputProcessXMLParameter&); //purposely not implemented
+  InputProcessXMLParameter(const InputProcessXMLParameter &); //purposely not implemented
+  void operator =(const InputProcessXMLParameter&); //purposely not implemented
 
 
 }; // End class Parameter

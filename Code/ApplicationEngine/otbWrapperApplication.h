@@ -83,16 +83,28 @@ public:
   bool IsInitialized() const;
 
   /** rashad: Add xml parameters eg: -xml */  
-  void AddXMLParameter();
+  void AddInXMLParameter();
+
+  void AddOutXMLParameter();
 
   /** Set the parameter xml flag */
-  itkSetMacro(HaveXML, bool);
+  itkSetMacro(HaveInXML, bool);
 
   /** Get the parameter xml flag */
-  itkGetConstMacro(HaveXML, bool);
+  itkGetConstMacro(HaveInXML, bool);
 
   /** Toogle the parameter xml flag */
-  itkBooleanMacro(HaveXML);
+  itkBooleanMacro(HaveInXML);
+
+  /** Set the parameter xml flag */
+  itkSetMacro(HaveOutXML, bool);
+
+  /** Get the parameter xml flag */
+  itkGetConstMacro(HaveOutXML, bool);
+
+  /** Toogle the parameter xml flag */
+  itkBooleanMacro(HaveOutXML);
+
 
 
   /** Update the value of parameters for which no user value has been provided */
@@ -737,7 +749,8 @@ private:
   ParameterGroup::Pointer           m_ParameterList;
 
   //rashad:: controls adding of -xml parameter. set to true by default
-  bool                              m_HaveXML;
+  bool                              m_HaveInXML;
+  bool                              m_HaveOutXML;
 
   itk::Logger::Pointer              m_Logger;
 

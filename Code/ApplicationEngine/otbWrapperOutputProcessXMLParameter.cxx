@@ -8,7 +8,6 @@
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
-#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperNumericalParameter.h"
@@ -22,22 +21,20 @@
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperRAMParameter.h"
-
 #include "itksys/SystemTools.hxx"
 
 namespace otb
 {
 namespace Wrapper
 {
-
 OutputProcessXMLParameter::OutputProcessXMLParameter()
 {
-  this->SetKey("xml");
-  this->SetName("Save process to xml file");
-  this->SetDescription("Save process to xml file");
+  this->SetKey("outxml");
+  this->SetName("Save otb application to xml file");
+  this->SetDescription("Save otb application to xml file");
   this->SetMandatory(false);
   this->SetActive(false);
-  //  this->SetRole(Role_Input); //rashad FIXME
+  this->SetRole(Role_Output);
 }
 
 OutputProcessXMLParameter::~OutputProcessXMLParameter()
@@ -91,7 +88,6 @@ OutputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
   return type;
 }
 
-
 TiXmlElement* OutputProcessXMLParameter::AddChildNodeTo(TiXmlElement *parent, std::string name, std::string value)
 {
   TiXmlElement * n_Node = new TiXmlElement( name.c_str() );
@@ -103,7 +99,6 @@ TiXmlElement* OutputProcessXMLParameter::AddChildNodeTo(TiXmlElement *parent, st
     }
   return n_Node;
 }
-
 
 void
 OutputProcessXMLParameter::Write(Application::Pointer app)
@@ -146,16 +141,22 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 
 
   TiXmlElement *n_AppDoc;
-  n_AppDoc = AddChildNodeTo(n_Application, "doc");
+  n_AppDoc = AddChildNodeTo(n_App, "doc");
   AddChildNodeTo(n_AppDoc, "name", app->GetDocName());
   AddChildNodeTo(n_AppDoc, "descr", app->GetDocLongDescription());
   AddChildNodeTo(n_AppDoc, "author", app->GetDocAuthors());
   AddChildNodeTo(n_AppDoc, "limitation", app->GetDocLimitations());
-  AddChildNodeTo(n_AppDoc, "related", app->GetSeeAlso());
-  AddChildNodeTo(n_AppDoc, "tags", app->GetTags());
+  AddChildNodeTo(n_AppDoc, "related", app->GetDocSeeAlso());
 
-  //AddChildNodeTo(n_AppDoc, "example", app->GetDocExampleString());
-
+  TiXmlElement *n_DocTags;
+  n_DocTags = AddChildNodeTo(n_AppDoc, "tags");
+  std::vector<std::string> docTagList = app->GetDocTags();
+  std::vector<std::string>::iterator tagIt;
+  for(tagIt = docTagList.begin(); tagIt!= docTagList.end(); ++tagIt)
+    {
+      std::string tag = *tagIt;
+      AddChildNodeTo(n_DocTags, "tag", tag);
+    }
   ParameterGroup::Pointer paramGroup = app->GetParameterList();
 
   std::vector<std::string> paramList = paramGroup->GetParametersKeys(true);
@@ -167,12 +168,13 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
       std::string key = *it;
       Parameter *param = paramGroup->GetParameterByKey(key);
       ParameterType type = app->GetParameterType(key);
+      std::string typeAsString = paramGroup->GetParameterTypeAsString(type);
 
       // if param is a Group, dont do anything, ParamGroup dont have values
       if (type != ParameterType_Group)
       {
 	bool paramExists = app->HasValue(key);
-	if ( key == "xml" )
+	if ( key == "outxml" )
 	  paramExists = false;
 
 	// if parameter doesn't have any value then skip it
@@ -214,55 +216,63 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 		  value = app->GetParameterString(key);
 		}
 
-		//parameter node in xml
-		TiXmlElement * n_Parameter = new TiXmlElement("Parameter");
-
-		const char * mandatory = "false";
-
-		if( param->GetMandatory() )
-		  mandatory = "true";
-
-		n_Parameter->SetAttribute("mandatory", mandatory);
-
-		//setting parameter key as child node in parameter
-		TiXmlElement *n_ParamKey = new TiXmlElement( "key" );
-		TiXmlText * nv_ParamKey = new TiXmlText( key.c_str() );
-		n_ParamKey->LinkEndChild( nv_ParamKey );
-		n_Parameter->LinkEndChild( n_ParamKey );
-
-		//setting parameter value as child node in parameter
-		TiXmlElement *n_ParamValue = new TiXmlElement( "value" );
-     
-		if(!hasValueList)
-		  {
-		    TiXmlText * nv_ParamValue = new TiXmlText( value.c_str() );
-		    n_ParamValue->LinkEndChild( nv_ParamValue );
-		    n_Parameter->LinkEndChild(n_ParamValue);
-		  }
-		else
-		  {
-		    TiXmlElement * n_Values = new TiXmlElement("values");
-		    std::vector<std::string>::iterator strIt;
-		    for(strIt = values.begin(); strIt != values.end(); ++strIt)
+	  //get only file name
+    /*
+	  if(type == ParameterType_InputFilename || type == ParameterType_InputImage ||
+	     type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
+             type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
+	    {
+	      unsigned found = value.find_last_of("/\\");
+	      //std::cerr << " path: " << value.substr(0,found) << '\n';
+	      value = value.substr(found+1);
+	    }
+	  else 
+	    if(type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
+	       type == ParameterType_InputVectorDataList)
+	      {
+		      std::vector<std::string>::iterator strIt;
+		      for(strIt = values.begin(); strIt != values.end(); ++strIt)
 		      {
-			TiXmlElement * n_ValuesValue = new TiXmlElement("value");
-			const char *value = (*strIt).c_str();
-			TiXmlText *nv_ValuesValue = new TiXmlText(value);
-			n_ValuesValue->LinkEndChild(nv_ValuesValue);
-			n_Values->LinkEndChild(n_ValuesValue);
+		        std::string val = *strIt;
+		        unsigned found = val.find_last_of("/\\");
+		        *strIt = val.substr(found+1);
 		      }
-		    n_Parameter->LinkEndChild(n_Values);
-		  }
+	      }
+  */
+	  //parameter node in xml
+	  TiXmlElement * n_Parameter = new TiXmlElement("parameter");
 
-		n_App->LinkEndChild( n_Parameter ); 
+	  const char * mandatory = "false";
+
+	  if( param->GetMandatory() )
+	    mandatory = "true";
+
+	  n_Parameter->SetAttribute("mandatory", mandatory);
+
+	  //setting parameter key as child node in parameter
+	  AddChildNodeTo(n_Parameter, "key", key);
+     	  AddChildNodeTo(n_Parameter, "type", typeAsString);
+	  if(!hasValueList)
+	    {
+	      AddChildNodeTo(n_Parameter, "value", value);
+	    }
+	  else
+	    {
+	      TiXmlElement *n_Values = AddChildNodeTo(n_Parameter, "values");
+	      std::vector<std::string>::iterator strIt;
+	      for(strIt = values.begin(); strIt != values.end(); ++strIt)
+		{
+		  AddChildNodeTo(n_Values, "value",*strIt);
+		}
+	    }
+	  n_App->LinkEndChild(n_Parameter);
 	}
       }
     }
-  
-  // Finally, write xml contents to file
 
+  // Finally, write xml contents to file
   doc.SaveFile( m_FileName.c_str() );
- 
+
 }
 
 } //end namespace wrapper
