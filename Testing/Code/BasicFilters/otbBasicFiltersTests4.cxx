@@ -31,6 +31,7 @@ void RegisterTests()
   REGISTER_TEST(otbPerBandVectorImageFilterWithSobelFilter);
   REGISTER_TEST(otbStreamingStatisticsImageFilterNew);
   REGISTER_TEST(otbStreamingStatisticsImageFilter);
+  REGISTER_TEST(otbStreamingStatisticsMapFromLabelImageFilterTest);
   REGISTER_TEST(otbStreamingCompareImageFilterNew);
   REGISTER_TEST(otbStreamingCompareImageFilter);
   REGISTER_TEST(otbVectorImageTo3DScalarImageFilterNew);

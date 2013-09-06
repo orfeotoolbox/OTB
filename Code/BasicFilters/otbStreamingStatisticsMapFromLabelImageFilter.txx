@@ -98,6 +98,14 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 }
 
 template<class TInputVectorImage, class TLabelImage>
+typename PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>::LabelPopulationMapType
+PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
+::GetLabelPopulationMap() const
+{
+  return m_LabelPopulation;
+}
+
+template<class TInputVectorImage, class TLabelImage>
 void
 PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
 ::GenerateOutputInformation()
