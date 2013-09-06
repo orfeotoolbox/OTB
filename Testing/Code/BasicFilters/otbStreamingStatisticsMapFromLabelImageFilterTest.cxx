@@ -243,4 +243,6 @@ int otbStreamingStatisticsMapFromLabelImageFilterTest(int argc, char * argv[])
     {
     return generic_StreamingStatisticsMapFromLabelImageFilterTest<double> (argc, argv);
     }
+
+  return EXIT_SUCCESS;
 }
