@@ -168,7 +168,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   LabelImagePointer labelInputPtr =  const_cast<TLabelImage *>(this->GetInputLabelImage());
   
   itk::ImageRegionConstIterator<TInputVectorImage> inIt(inputPtr, inputPtr->GetRequestedRegion());
-  itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, labelInputPtr->GetRequestedRegion());
+  itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, inputPtr->GetRequestedRegion());
   
 
 
