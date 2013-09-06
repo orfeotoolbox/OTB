@@ -56,11 +56,9 @@ int generic_StreamingStatisticsMapFromLabelImageFilterTest(int argc, char * argv
 
   typedef otb::ImageFileWriter<VectorImageType> WriterType;
   typedef typename WriterType::Pointer WriterPointerType;
-  WriterPointerType writer = WriterType::New();//Instanciation du writer
 
   typedef otb::ImageFileWriter<LabelImageType> LWriterType;
   typedef typename LWriterType::Pointer LWriterPointerType;
-  LWriterPointerType lwriter = LWriterType::New();//Instanciation du writer
 
   VectorPixelType redColor(nbComponents), greenColor(nbComponents), blueColor(nbComponents);
   redColor[0] = 255, redColor[1] = 0, redColor[2] = 0;
@@ -132,13 +130,19 @@ int generic_StreamingStatisticsMapFromLabelImageFilterTest(int argc, char * argv
     ++labelImageGreenIterator;
   }
 
-  writer->SetFileName(argv[4]);
-  writer->SetInput(supportImage);
-  writer->Update();
+  //Optional writing of the generated images
+  if (atoi(argv[4]) != 0)
+    {
+    WriterPointerType writer = WriterType::New();
+    writer->SetFileName(argv[5]);
+    writer->SetInput(supportImage);
+    writer->Update();
 
-  lwriter->SetFileName(argv[5]);
-  lwriter->SetInput(labelImage);
-  lwriter->Update();
+    LWriterPointerType lwriter = LWriterType::New();
+    lwriter->SetFileName(argv[6]);
+    lwriter->SetInput(labelImage);
+    lwriter->Update();
+    }
 
   unsigned int nbPixels = size[0] * size[1];
   unsigned int nbRedPixBL = sizeSelectRed[0] * sizeSelectRed[1];
