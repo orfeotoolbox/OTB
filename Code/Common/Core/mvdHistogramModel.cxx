@@ -249,6 +249,7 @@ HistogramModel
     y[ i + 3 ] = 0;
 
 #else
+  assert( false && "Unknown HISTOGRAM_CURVE_TYPE value" );
 
 #endif
     }

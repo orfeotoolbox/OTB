@@ -46,6 +46,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdHistogramPlotPicker.h"
 
 namespace mvd
 {
@@ -132,18 +133,13 @@ HistogramWidget
   m_PlotGrid->setMajPen( GRID_MAJ_PEN_COLOR );
   m_PlotGrid->setMinPen( GRID_MIN_PEN_COLOR );
 
-  m_PlotPicker = new QwtPlotPicker( m_UI->histogramPlot->canvas() );
-  m_PlotPicker->setTrackerMode( QwtPicker::AlwaysOn );
-  m_PlotPicker->setSelectionFlags( QwtPicker::PointSelection );
-  m_PlotPicker->setRubberBandPen( QColor( 0xFF, 0xFF, 0x00, 0xAA ) );
-  m_PlotPicker->setRubberBand( QwtPicker::CrossRubberBand );
-  m_PlotPicker->setTrackerPen( QColor( Qt::yellow ) );
-  // m_PlotPicker->setEnabled( true );
+  HistogramPlotPicker::PlotCurveVector curves( HistogramWidget::CURVE_COUNT );
 
   for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
     {
     //
     // Curve
+    curves[ i ] =
     m_PlotCurves[ i ] =
       new QwtPlotCurve( tr( HistogramWidget::CURVE_NAMES[ i ] ) );
 
@@ -179,12 +175,57 @@ HistogramWidget
     );
     m_HighPlotMarkers[ i ]->attach( m_UI->histogramPlot );
     }
+
+  m_PlotPicker =
+    new HistogramPlotPicker( curves, m_UI->histogramPlot->canvas() );
+  m_PlotPicker->setTrackerMode( QwtPicker::AlwaysOn );
+  // m_PlotPicker->setSelectionFlags( QwtPicker::PointSelection );
+  m_PlotPicker->setRubberBandPen( QColor( 0xFF, 0xFF, 0x00, 0xAA ) );
+  // m_PlotPicker->setRubberBand( QwtPicker::CrossRubberBand );
+  m_PlotPicker->setTrackerPen( QColor( Qt::yellow ) );
+  // m_PlotPicker->setEnabled( true );
+
+  //
+  //
+  QObject::connect(
+    m_PlotPicker, SIGNAL( appended( const QwtDoublePoint& ) ),
+    this, SLOT( OnAppended( const QwtDoublePoint& ) )
+  );
+  QObject::connect(
+    m_PlotPicker, SIGNAL( appended( const QPoint& ) ),
+    this, SLOT( OnAppended( const QPoint& ) )
+  );
+  //
+  QObject::connect(
+    m_PlotPicker, SIGNAL( changed( const QwtPolygon& ) ),
+    this, SLOT( OnChanged( const QwtPolygon& ) )
+  );
+  //
+  QObject::connect(
+    m_PlotPicker, SIGNAL( selected( const QwtDoublePoint& ) ),
+    this, SLOT( OnSelected( const QwtDoublePoint& ) )
+  );
+  QObject::connect(
+    m_PlotPicker, SIGNAL( selected( const QwtDoubleRect& ) ),
+    this, SLOT( OnSelected( const QwtDoubleRect& ) )
+  );
+  QObject::connect(
+    m_PlotPicker, SIGNAL( selected( const QwtPolygon& ) ),
+    this, SLOT( OnSelected( const QwtPolygon& ) )
+  );
+  QObject::connect(
+    m_PlotPicker, SIGNAL( selected( const QwtArray< QwtDoublePoint >& ) ),
+    this, SLOT( OnSelected( const QwtArray< QwtDoublePolygon >& ) )
+  );
 }
 
 /*******************************************************************************/
 HistogramWidget
 ::~HistogramWidget()
 {
+  delete m_PlotPicker;
+  m_PlotPicker = NULL;
+
   for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
     {
     delete m_PlotCurves[ i ];
@@ -196,9 +237,6 @@ HistogramWidget
     delete m_HighPlotMarkers[ i ];
     m_HighPlotMarkers[ i ] = NULL;
     }
-
-  delete m_PlotPicker;
-  m_PlotPicker = NULL;
 
   delete m_PlotGrid;
   m_PlotGrid = NULL;
@@ -337,6 +375,16 @@ HistogramWidget
     }
 }
 
+/*****************************************************************************/
+bool
+HistogramWidget
+::IsGrayscaleActivated() const
+{
+  assert( m_PlotCurves[ RGBW_CHANNEL_WHITE ]!=NULL );
+
+  return m_PlotCurves[ RGBW_CHANNEL_WHITE ]->isVisible();
+}
+
 /*******************************************************************************/
 void
 HistogramWidget
@@ -435,5 +483,75 @@ HistogramWidget
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+HistogramWidget
+::OnAppended( const QwtDoublePoint& pos )
+{
+  qDebug() << this << "::OnAppended(" << pos.x() << ", " << pos.y() << ")";
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::OnAppended( const QPoint& pos )
+{
+  qDebug() << this << "::OnAppended(" << pos << ")";
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::OnChanged( const QwtPolygon& pa )
+{
+  qDebug() << this << "::OnChanged(" << pa << ")";
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::OnMoved( const QwtDoublePoint& pos )
+{
+  qDebug() << this << "::OnMoved(" << pos.x() << ", " << pos.y() << ")";
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::OnMoved( const QPoint& pos )
+{
+  qDebug() << this << "::OnMoved(" << pos << ")";
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::OnSelected( const QwtDoublePoint& pos )
+{
+  qDebug() << this << "::OnSelected(" << pos.x() << ", " << pos.y() << ")";
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::OnSelected( const QwtDoubleRect& rect )
+{
+  qDebug() << this << "::OnSelected(" << rect.x() << ", " << rect.y() << ")";
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::OnSelected( const QwtPolygon& pa )
+{
+  qDebug() << this << "::OnSelected(" << pa << ")";
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::OnSelected( const QwtArray< QwtDoublePoint >& pa )
+{
+  qDebug() << this << "::OnSelected(" << pa << ")";
+}
 
 } // end namespace 'mvd'

@@ -357,7 +357,7 @@ HistogramModel
   return 4 * size[ 0 ];
 
 #else
-  assert( false );
+  assert( false && "Unknown HISTOGRAM_CURVE_TYPE value" );
 
 #endif
 }

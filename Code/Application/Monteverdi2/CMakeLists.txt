@@ -26,13 +26,15 @@ set( Monteverdi2_Catalogue_RESOURCES
 
 # General include directories.
 include_directories(
+  ${QWT_INCLUDE_DIRS}
+  #
   ${Monteverdi2_BINARY_DIR}
-
+  #
   ${Monteverdi2_SOURCE_DIR}/Code/Common
-
+  #
   ${Monteverdi2_SOURCE_DIR}/Code/Application/Monteverdi2
   ${Monteverdi2_BINARY_DIR}/Code/Application/Monteverdi2
-
+  #
   ${Monteverdi2_SOURCE_DIR}/Data/Icons
 )
 
