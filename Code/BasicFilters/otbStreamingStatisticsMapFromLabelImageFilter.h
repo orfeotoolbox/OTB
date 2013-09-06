@@ -71,10 +71,10 @@ public:
   typedef TLabelImage                         LabelImageType;
   typedef typename TLabelImage::Pointer       LabelImagePointer;
 
-  typedef typename VectorImageType::PixelType         VectorPixelType;
-  typedef typename LabelImageType::PixelType          LabelPixelType;
-  typedef std::map<LabelPixelType, VectorPixelType>   MeanValueMapType;
-  typedef std::map<LabelPixelType, unsigned int>      LabelPopulationMapType;
+  typedef typename VectorImageType::PixelType                           VectorPixelType;
+  typedef typename LabelImageType::PixelType                            LabelPixelType;
+  typedef std::map<LabelPixelType, itk::VariableLengthVector<double> >  MeanValueMapType;
+  typedef std::map<LabelPixelType, double>                              LabelPopulationMapType;
   
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputVectorImage::ImageDimension);
