@@ -71,9 +71,10 @@ public:
   typedef TLabelImage                         LabelImageType;
   typedef typename TLabelImage::Pointer       LabelImagePointer;
 
-  typedef typename VectorImageType::PixelType         VectorPixelType;
-  typedef typename LabelImageType::PixelType          LabelPixelType;
-  typedef std::map<LabelPixelType, VectorPixelType>   MeanValueMapType;
+  typedef typename VectorImageType::PixelType                           VectorPixelType;
+  typedef typename LabelImageType::PixelType                            LabelPixelType;
+  typedef std::map<LabelPixelType, itk::VariableLengthVector<double> >  MeanValueMapType;
+  typedef std::map<LabelPixelType, double>                              LabelPopulationMapType;
   
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputVectorImage::ImageDimension);
@@ -96,6 +97,9 @@ public:
   
   /** Return the computed Mean for each label in the input label image */
   MeanValueMapType GetMeanValueMap() const;
+
+  /** Return the computed number of labeled pixels for each label in the input label image */
+  LabelPopulationMapType GetLabelPopulationMap() const;
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
@@ -125,7 +129,7 @@ private:
   void operator =(const Self&); //purposely not implemented
   
   MeanValueMapType                       m_RadiometricValueAccumulator;
-  std::map<LabelPixelType, unsigned int> m_LabelPopulation;
+  LabelPopulationMapType                 m_LabelPopulation;
 }; // end of class PersistentStreamingStatisticsMapFromLabelImageFilter
 
 
@@ -197,6 +201,8 @@ public:
   typedef typename Superclass::FilterType::MeanValueMapType          MeanValueMapType;
   typedef typename Superclass::FilterType::MeanValueMapObjectType    MeanValueMapObjectType;
 
+  typedef typename Superclass::FilterType::LabelPopulationMapType    LabelPopulationMapType;
+
   /** Set input multispectral image */
   void SetInput(const VectorImageType * input)
   {
@@ -225,6 +231,12 @@ public:
   MeanValueMapType GetMeanValueMap() const
   {
     return this->GetFilter()->GetMeanValueMap();
+  }
+
+  /** Return the computed number of labeled pixels for each label */
+  LabelPopulationMapType GetLabelPopulationMap() const
+  {
+    return this->GetFilter()->GetLabelPopulationMap();
   }
 
 protected:

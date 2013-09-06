@@ -460,6 +460,32 @@ ADD_TEST(bfTvStreamingStatisticsImageFilterWithBckGrdVal ${BASICFILTERS_TESTS4}
                 ${TEMP}/bfStreamingStatisticsImageFilterWithBckGrdValResults.txt
                 0 )
                 
+                
+FOREACH(inputFileType "UINT8" "UINT16" "INT16" "UINT32" "INT32" "FLOAT" "DOUBLE")
+  FOREACH(sizeType "LARGE" "SMALL")
+    STRING(TOLOWER ${sizeType} lsizeType)
+    
+    IF( sizeType STREQUAL "LARGE" )
+      SET(size "1024")
+    ELSE()
+      SET(size "256")
+    ENDIF()
+
+    # Derive output file names
+    SET(OUTFILENAME RGBSquares${inputFileType}_${lsizeType}.tif)
+    SET(OUTLABELFILENAME RGBSquares${inputFileType}_${lsizeType}_Labels.tif)
+    
+    ADD_TEST(bfTvStreamingStatisticsMapFromLabelImageFilterTest${inputFileType}${lsizeType} ${BASICFILTERS_TESTS4}
+         otbStreamingStatisticsMapFromLabelImageFilterTest
+               ${inputFileType}
+               ${size}
+               ${size}
+               ${TEMP}/${OUTFILENAME}
+               ${TEMP}/${OUTLABELFILENAME}
+    )
+  ENDFOREACH(sizeType)
+ENDFOREACH(inputFileType)
+                
 # -------            otb::StreamingCompareImageFilter   ----------------------------
 
 ADD_TEST(bfTuStreamingCompareImageFilterNew ${BASICFILTERS_TESTS4}
@@ -2920,6 +2946,7 @@ otbPerBandVectorImageFilterWithMeanFilter.cxx
 otbPerBandVectorImageFilterWithSobelFilter.cxx
 otbStreamingStatisticsImageFilterNew.cxx
 otbStreamingStatisticsImageFilter.cxx
+otbStreamingStatisticsMapFromLabelImageFilterTest.cxx
 otbStreamingCompareImageFilter.cxx
 otbVectorImageTo3DScalarImageFilterNew.cxx
 otbVectorImageTo3DScalarImageFilter.cxx
