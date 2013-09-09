@@ -62,7 +62,8 @@ namespace
 const char* QCOMBOBOX_NAMES[] = {
   "rComboBox",
   "gComboBox",
-  "bComboBox"
+  "bComboBox",
+  "wComboBox"
 };
 
 } // end of anonymous namespace.
