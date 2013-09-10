@@ -109,7 +109,7 @@ const std::string InputProcessXMLParameter::GetChildNodeTextOf(TiXmlElement *par
 }
 
 
-void
+int
 InputProcessXMLParameter::Read(Application::Pointer app)
 {
   // Check if the filename is not empty
@@ -135,7 +135,8 @@ InputProcessXMLParameter::Read(Application::Pointer app)
   TiXmlElement *n_OTB;
   n_OTB = handle.FirstChild("OTB").Element();
   if(!n_OTB)
-    itkExceptionMacro(<< "Input XML file " << this->GetFileName() << " is invalid.");
+    itkExceptionMacro( << "Input XML file " << this->GetFileName() << " is invalid.");
+
   std::string otb_Version, otb_Build, otb_Platform;
   otb_Version = GetChildNodeTextOf(n_OTB,"version");
   otb_Build = GetChildNodeTextOf(n_OTB, "build");
@@ -159,10 +160,26 @@ InputProcessXMLParameter::Read(Application::Pointer app)
 
   //  GetChildNodeTextOf(n_Tags, "tag");
  
-  std::cerr << "Application : " << app_Name << std::endl;
-  std::cerr << "Description : " << app_Descr << std::endl;
-  std::cerr << "OTB Version : " << otb_Version << std::endl;
-  std::cerr << "OS          : " << otb_Platform << std::endl;
+  /*
+  app->otbAppLogINFO(<< "Application Name : " << app_Name );
+  otbAppLogINFO(<< "Description      : " << app_Descr )
+  otbAppLogINFO(<< "OTB Version      : " << otb_Version);
+  otbAppLogINFO(<< "Operating system : " << otb_Platform);
+
+  otbAppLogINFO(<< "Doc Name        : " << doc_Name );
+  otbAppLogINFO(<< "Doc Description : " << doc_Descr )
+  otbAppLogINFO(<< "Author          : " << doc_Author);
+  otbAppLogINFO(<< "Limitation      : " << doc_Limitation);
+  otbAppLogINFO(<< "Related         : " << doc_Related);
+  */
+
+  if(app->GetName() != app_Name)
+    {
+      //hopefully shouldn't reach here ...
+      itkExceptionMacro( << "Input XML was generated for a different application( " <<
+                        app_Name << ") while application loaded is:" << app->GetName());
+      return -1;
+    }
     
   // Iterate through the tree to get all the stats
   for( TiXmlElement* n_Parameter = n_App->FirstChildElement("parameter"); n_Parameter != NULL; 
@@ -177,20 +194,20 @@ InputProcessXMLParameter::Read(Application::Pointer app)
       TiXmlElement* n_Values = NULL;
       n_Values = n_Parameter->FirstChildElement("values");
       if(n_Values)
-	{
-	  for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != NULL;
+	      {
+	      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != NULL;
 	      n_Value = n_Value->NextSiblingElement())
-	    {
-	      values.push_back(n_Value->GetText());
-	    }  
-	}
+	        {
+	        values.push_back(n_Value->GetText());
+	        }  
+	      }
 
       if ( type == "InputFilename" || type == "OutputFilename" || 
-	   type == "Directory" ||  type == "InputImage" ||   
-	   type == "ComplexInputImage" || type == "InputVectorData" ||
-	   type == "OutputImage" || type == "ComplexOutputImage" || 
-	   type ==  "OutputVectorData" || type == "String" ||
-	   type == "Choice")
+	    type == "Directory" ||  type == "InputImage" ||   
+	    type == "ComplexInputImage" || type == "InputVectorData" ||
+	    type == "OutputImage" || type == "ComplexOutputImage" || 
+	    type ==  "OutputVectorData" || type == "String" ||
+	    type == "Choice")
         {
 	  std::string userValue = app->GetParameterString(key);
 	  if(userValue.empty())
@@ -223,11 +240,16 @@ InputProcessXMLParameter::Read(Application::Pointer app)
 
 	  std::vector<std::string> userValues;
 	  userValues = app->GetParameterStringList(key);
+
+    //skip = (skip == true) ? true: ( (userValues.size() == 0) ? true : false )
 	  if( userValues.size() == 0 )
+    {
 	    app->SetParameterStringList(key,values);
-        }
+    }
+  }
       //choice also comes as setint and setstring why??
     }
+    return 0;
   }
 } //end namespace wrapper
 

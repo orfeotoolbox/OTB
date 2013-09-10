@@ -43,6 +43,8 @@
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetRAMParameter.h"
+#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
+#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 
 namespace otb
 {
@@ -114,7 +116,8 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(EmptyParameter,          QtWidgetEmptyParameter)
   CREATEWIDGET(ParameterGroup,          QtWidgetParameterGroup)
   CREATEWIDGET(RAMParameter,            QtWidgetRAMParameter)
-
+  CREATEWIDGET(OutputProcessXMLParameter,        QtWidgetOutputProcessXMLParameter)
+  CREATEWIDGET(InputProcessXMLParameter,        QtWidgetInputProcessXMLParameter)
 #undef CREATEWIDGET
 
   if (widget)

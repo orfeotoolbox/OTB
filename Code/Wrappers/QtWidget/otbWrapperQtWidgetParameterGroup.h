@@ -24,6 +24,8 @@
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
+#include "otbWrapperInputProcessXMLParameter.h"
+#include "otbWrapperOutputProcessXMLParameter.h"
 
 namespace otb
 {

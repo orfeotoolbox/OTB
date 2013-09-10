@@ -132,7 +132,6 @@ void Application::Init()
 
 void Application::AddOutXMLParameter()
 {
-  
   Parameter::Pointer tmpParam;
   tmpParam = OutputProcessXMLParameter::New();
   const std::string key =   tmpParam->GetKey();
@@ -147,10 +146,8 @@ void Application::AddOutXMLParameter()
   DisableParameter(key); 
 }
 
-
 void Application::AddInXMLParameter()
 {
-  
   Parameter::Pointer tmpParam;
   tmpParam = InputProcessXMLParameter::New();
   const std::string key =   tmpParam->GetKey();
@@ -164,7 +161,6 @@ void Application::AddInXMLParameter()
   //SetParameterString(key, defaultXMLFileName);
   DisableParameter(key); 
 }
-
 
 void Application::UpdateParameters()
 {
@@ -182,7 +178,12 @@ int Application::Execute()
       {
       Parameter* param = GetParameterByKey(inXMLKey);
       InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
-      inXMLParam->Read(this);
+      int ret = inXMLParam->Read(this);
+      if( ret != 0 )
+        {
+        return -1;
+        }
+
       this->UpdateParameters();
       }
 

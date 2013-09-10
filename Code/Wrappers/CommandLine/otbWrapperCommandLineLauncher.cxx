@@ -754,7 +754,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<float>         ";
     }
-  else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||type == ParameterType_Directory || type == ParameterType_InputImage ||
+  else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||type == ParameterType_Directory || type == ParameterType_InputImage || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML ||
            type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData ||
            type == ParameterType_String || type == ParameterType_Choice )
     {

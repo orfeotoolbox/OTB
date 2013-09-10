@@ -29,17 +29,7 @@ public:
 
   itkGetStringMacro(FileName);
 
-  bool HasValue() const
-  {
-    if(m_FileName.empty())
-      return false;
-    else
-      return true;
-  }
-  
-  // Get Value
-  //TODO otbGetObjectMemberMacro(StringParam, Value , std::string);
-  
+  // Set FileName
   void SetFileName(std::string value)
   {
     this->SetValue(value);
@@ -53,6 +43,19 @@ public:
     SetActive(true);
     this->Modified();
     }
+
+  bool HasValue() const
+  {
+    if(m_FileName.empty())
+      return false;
+    else
+      return true;
+  }
+
+  void ClearValue()
+  {
+    m_FileName = "";
+  }  
   
   TiXmlElement* AddChildNodeTo(TiXmlElement* parent, std::string name, std::string value="");
 

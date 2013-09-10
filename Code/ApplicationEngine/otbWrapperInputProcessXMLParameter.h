@@ -60,7 +60,7 @@ public:
 
   ParameterType GetParameterType(const Parameter* param) const;
 
-  void Read(Application::Pointer application);
+  int Read(Application::Pointer application);
   
 protected:
 
