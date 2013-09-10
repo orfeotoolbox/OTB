@@ -36,7 +36,20 @@ QtWidgetInputVectorDataListParameter::~QtWidgetInputVectorDataListParameter()
 
 void QtWidgetInputVectorDataListParameter::DoUpdateGUI()
 {
+  if(!m_InputVectorDataListParam)
+    return;
 
+  std::vector<std::string> fileList = m_InputVectorDataListParam->GetFileNameList();
+  for( int i = m_FileSelectionList.size(); i < fileList.size(); i++ )
+    {
+      this->AddFile();
+    }
+  int i = 0;
+  std::vector<std::string>::iterator it;
+  for (it = fileList.begin(); it != fileList.end(); ++it)
+    {
+      m_FileSelectionList[i++]->GetInput()->setText(QString( (*it).c_str() ));
+    }
 }
 
 void QtWidgetInputVectorDataListParameter::DoCreateWidget()
