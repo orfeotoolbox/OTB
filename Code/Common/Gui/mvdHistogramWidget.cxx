@@ -96,11 +96,21 @@ HistogramWidget::MARKER_COLORS[ HistogramWidget::CURVE_COUNT ] =
   QColor( 0xFF, 0xFF, 0xFF/*, 0x00*/ ),
 };
 
+const QColor
+HistogramWidget::RUBBER_BAND_COLORS[ HistogramWidget::CURVE_COUNT ] =
+{
+  QColor( 0xFF, 0x77, 0x77/*, 0xAA */),
+  QColor( 0x77, 0xFF, 0x77/*, 0xAA */ ),
+  QColor( 0x77, 0x77, 0xFF/*, 0xAA */ ),
+  QColor( 0xFF, 0xFF, 0xFF/*, 0xAA */ ),
+};
+
 namespace
 {
 const QColor CANVAS_BACKGROUND( 0x33, 0x33, 0x33 );
 const QColor GRID_MAJ_PEN_COLOR( 0x66, 0x66, 0x66 );
 const QColor GRID_MIN_PEN_COLOR( 0x44, 0x44, 0x44 );
+const QColor RUBBER_BAND_COLOR( 0xFF, 0xFF, 0x00, 0xAA );
 }
 
 
@@ -127,11 +137,18 @@ HistogramWidget
 
   m_UI->histogramPlot->setCanvasBackground( CANVAS_BACKGROUND  );
 
+
+  //
+  // GRID.
+
   m_PlotGrid = new QwtPlotGrid();
   m_PlotGrid->attach( m_UI->histogramPlot );
 
   m_PlotGrid->setMajPen( GRID_MAJ_PEN_COLOR );
   m_PlotGrid->setMinPen( GRID_MIN_PEN_COLOR );
+
+  //
+  // CURVES.
 
   HistogramPlotPicker::PlotCurveVector curves( HistogramWidget::CURVE_COUNT );
 
@@ -139,6 +156,7 @@ HistogramWidget
     {
     //
     // Curve
+
     curves[ i ] =
     m_PlotCurves[ i ] =
       new QwtPlotCurve( tr( HistogramWidget::CURVE_NAMES[ i ] ) );
@@ -176,14 +194,25 @@ HistogramWidget
     m_HighPlotMarkers[ i ]->attach( m_UI->histogramPlot );
     }
 
+  //
+  // PICKER.
+
   m_PlotPicker =
     new HistogramPlotPicker( curves, m_UI->histogramPlot->canvas() );
   m_PlotPicker->setTrackerMode( QwtPicker::AlwaysOn );
-  // m_PlotPicker->setSelectionFlags( QwtPicker::PointSelection );
-  m_PlotPicker->setRubberBandPen( QColor( 0xFF, 0xFF, 0x00, 0xAA ) );
-  // m_PlotPicker->setRubberBand( QwtPicker::CrossRubberBand );
+  m_PlotPicker->setRubberBandPen( RUBBER_BAND_COLOR );
   m_PlotPicker->setTrackerPen( QColor( Qt::yellow ) );
-  // m_PlotPicker->setEnabled( true );
+
+  for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
+    {
+    m_PlotPicker->SetRubberBandPen(
+      static_cast< RgbwChannel >( i ),
+      QPen( HistogramWidget::RUBBER_BAND_COLORS[ i ] )
+    );
+    }
+
+  //
+  // CONNECTIONS.
 
   //
   //
@@ -373,9 +402,12 @@ HistogramWidget
     m_LowPlotMarkers[ i ]->setVisible( isVisible );
     m_HighPlotMarkers[ i ]->setVisible( isVisible );
     }
+
+  m_PlotPicker->SetGrayscaleActivated( activated );
 }
 
 /*****************************************************************************/
+/*
 bool
 HistogramWidget
 ::IsGrayscaleActivated() const
@@ -384,6 +416,7 @@ HistogramWidget
 
   return m_PlotCurves[ RGBW_CHANNEL_WHITE ]->isVisible();
 }
+*/
 
 /*******************************************************************************/
 void

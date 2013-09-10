@@ -47,6 +47,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdCore.h"
 #include "Core/mvdTypes.h"
 
 
@@ -121,6 +122,14 @@ public:
   /** \brief Destructor. */
   virtual ~HistogramPlotPicker();
 
+  /**
+   */
+  void SetRubberBandPen( RgbwChannel channel, const QPen& pen );
+
+  /**
+   */
+  void SetGrayscaleActivated( bool activated );
+
   //
   // QwtPlotPicker overrides.
 
@@ -163,6 +172,14 @@ private:
    */
   double Find( const QwtPlotCurve* curve, double x ) const;
 
+  /**
+   */
+  int Find( const QwtPlotCurve* curve,
+	    double x,
+	    double& xmin,
+	    double& xmax,
+	    double& y ) const;
+
 //
 // Private attributes.
 private:
@@ -175,6 +192,14 @@ private:
    * \brief
    */
   PlotCurveVector m_PlotCurves;
+
+  /**
+   */
+  QPen m_RubberBandPens[ CURVE_COUNT ];
+
+  /**
+   */
+  bool m_IsGrayscaleActivated : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -190,6 +215,7 @@ private slots:
 
 namespace mvd
 {
+
 } // end namespace 'mvd'
 
 #endif // __mvdHistogramPlotPicker_h

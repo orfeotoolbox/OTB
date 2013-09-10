@@ -75,7 +75,9 @@ namespace mvd
 HistogramPlotPicker
 ::HistogramPlotPicker( const PlotCurveVector& curves, QwtPlotCanvas* canvas ) :
   QwtPlotPicker( canvas ),
-  m_PlotCurves( curves )
+  m_PlotCurves( curves ),
+  m_RubberBandPens(),
+  m_IsGrayscaleActivated( false )
 {
   assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
 
@@ -90,7 +92,10 @@ HistogramPlotPicker
 		       int yAxis,
 		       QwtPlotCanvas* canvas ) :
   QwtPlotPicker( xAxis, yAxis, canvas ),
-  m_PlotCurves( curves )
+  m_PlotCurves( curves ),
+  m_RubberBandPens(),
+  m_IsGrayscaleActivated( false )
+
 {
   assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
 
@@ -113,7 +118,9 @@ HistogramPlotPicker
     QwtPicker::UserRubberBand,
     trackerMode,
     canvas ),
-  m_PlotCurves( curves )
+  m_PlotCurves( curves ),
+  m_RubberBandPens(),
+  m_IsGrayscaleActivated( false )
 {
   assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
 }
@@ -122,6 +129,33 @@ HistogramPlotPicker
 HistogramPlotPicker
 ::~HistogramPlotPicker()
 {
+}
+
+/*******************************************************************************/
+void
+HistogramPlotPicker
+::SetRubberBandPen( RgbwChannel channel, const QPen& pen )
+{
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !RgbwBounds( begin, end, channel ) )
+    return;
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    qDebug() << RGBW_CHANNEL_NAMES[ i ] << pen;
+
+    m_RubberBandPens[ i ] = pen;
+    }
+}
+
+/*******************************************************************************/
+void
+HistogramPlotPicker
+::SetGrayscaleActivated( bool activated )
+{
+  m_IsGrayscaleActivated = activated;
 }
 
 /*******************************************************************************/
@@ -142,50 +176,53 @@ HistogramPlotPicker
       rubberBandPen().style()==Qt::NoPen )
     return;
 
-  const QRect& rect = pickRect();
   const QwtPolygon& pa = selection();
 
   if( rubberBand()==QwtPicker::UserRubberBand &&
       ( selectionFlags() & PointSelection ) &&
       selection().count() >= 1 )
-    {
+    {   
+    const QRect& rect = pickRect();
     const QPoint& pos = pa[ 0 ];
-
-    QwtDoublePoint pR( invTransform( pos ) );
-    QwtDoublePoint pG( pR );
-    QwtDoublePoint pB( pR );
-
-    pR.setY( Find( m_PlotCurves[ RGBW_CHANNEL_RED ], pR.x() ) );
-    pG.setY( Find( m_PlotCurves[ RGBW_CHANNEL_GREEN ], pG.x() ) );
-    pB.setY( Find( m_PlotCurves[ RGBW_CHANNEL_BLUE ], pB.x() ) );
-
-    QPoint posR( transform( pR ) );
-    QPoint posG( transform( pG ) );
-    QPoint posB( transform( pB ) );
-
+   
     QwtPainter::drawLine(
       painter,
       pos.x(), rect.bottom(),
       pos.x(), rect.top()
     );
 
-    QwtPainter::drawLine(
-      painter,
-      rect.left(), posR.y(),
-      rect.right(), posR.y()
-    );
+    CountType begin = 0;
+    CountType end = 0;
 
-    QwtPainter::drawLine(
-      painter,
-      rect.left(), posG.y(),
-      rect.right(), posG.y()
-    );
+    if( !RgbwBounds( begin,
+		     end,
+		     m_IsGrayscaleActivated
+		     ? RGBW_CHANNEL_WHITE
+		     : RGBW_CHANNEL_RGB ) )
+      return;
 
-    QwtPainter::drawLine(
-      painter,
-      rect.left(), posB.y(),
-      rect.right(), posB.y()
-    );
+    QwtDoublePoint p( invTransform( pos ) );
+
+    for( CountType i=begin; i<end; ++i )
+      {
+      // RgbwChannel channel = static_cast< RgbwChannel >( i );
+
+      p.setY( Find( m_PlotCurves[ i ], p.x() ) );
+      QPoint pos2( transform( p ) );
+
+      /*
+      QPen pen( m_RubberBandPens[ i ] );
+      painter->setPen( rubberBandPen() );
+      */
+
+      QwtPainter::drawLine(
+	painter,
+	rect.left(), pos2.y(),
+	rect.right(), pos2.y()
+      );
+
+      // painter->setPen( pen );
+      }
     }
 }
 
@@ -218,15 +255,28 @@ HistogramPlotPicker
   assert( widget!=NULL );
   */
 
-  return QwtText(
-    QString().sprintf(
+  QwtText text;
+
+  if( m_IsGrayscaleActivated )
+    {
+    text = QString().sprintf(
+      "(%.0f)\n%.4f",
+      Find( m_PlotCurves[ RGBW_CHANNEL_WHITE ], point.x() ),
+      point.x()
+    );
+    }
+  else
+    {
+    text = QString().sprintf(
       "(%.0f, %.0f, %.0f)\n%.4f",
       Find( m_PlotCurves[ RGBW_CHANNEL_RED ], point.x() ),
       Find( m_PlotCurves[ RGBW_CHANNEL_GREEN ], point.x() ),
       Find( m_PlotCurves[ RGBW_CHANNEL_BLUE ], point.x() ),
       point.x()
-    )
-  );
+    );
+    }
+
+  return text;
 }
 
 /*******************************************************************************/
@@ -311,6 +361,92 @@ HistogramPlotPicker
 */
 }
 
+/*******************************************************************************/
+int
+HistogramPlotPicker
+::Find( const QwtPlotCurve* curve,
+	double x,
+	double& xmin,
+	double& xmax,
+	double& y ) const
+{
+  const QwtData& data = curve->data();
+
+/*
+#if HISTOGRAM_CURVE_TYPE==0
+  assert( false && "Not yet implemented!" );
+
+#elif HISTOGRAM_CURVE_TYPE==1
+  assert( false && "Not yet implemented!" );
+
+#elif HISTOGRAM_CURVE_TYPE==2
+*/
+
+  assert( data.size() % 4 == 0 );
+
+  CountType steps = 0;
+
+  if( data.size()==0 )
+    return 0;
+
+  CountType i0 = 0;
+  CountType i1 = data.size() / 4 - 1;
+
+  if( x<data.x( 4 * i0 ) || x>data.x( 4 * i1 + 3 ) )
+    return 0;
+
+  while( i0!=i1 )
+    {
+    assert( data.x( 4 * i0 )==data.x( 4 * i0 + 1 ) );
+    assert( data.x( 4 * i0 + 2 )==data.x( 4 * i0 + 3 ) );
+    assert( data.y( 4 * i0 + 1 )==data.y( 4 * i0 + 2 ) );
+    assert( data.y( 4 * i0 )==data.y( 4 * i0 + 3 ) );
+
+    assert( data.x( 4 * i1 )==data.x( 4 * i1 + 1 ) );
+    assert( data.x( 4 * i1 + 2 )==data.x( 4 * i1 + 3 ) );
+    assert( data.y( 4 * i1 + 1 )==data.y( 4 * i1 + 2 ) );
+    assert( data.y( 4 * i1 )==data.y( 4 * i1 + 3 ) );
+
+    CountType i = (i0 + i1 + 1) / 2;
+
+#if 0
+    qDebug()
+      << i0 << " (" << data.x( 4*i0 ) << ", " << data.x( 4*i0+2 ) << ") "
+      << i << " (" << data.x( 4*i ) << ", " << data.x( 4*i+2 ) << ") "
+      << i1 << " (" << data.x( 4*i1 ) << ", " << data.x( 4*i1+2 ) << ")";
+#endif
+
+    if( x<data.x( 4 * i ) )
+      i1 = i - 1;
+    else
+      i0 = i;
+
+    ++ steps;
+    }
+
+  assert( x>=data.x( 4 * i0 ) && x<=data.x( 4 * i0 + 2 ) );
+  assert( x>=data.x( 4 * i0 + 1 ) && x<=data.x( 4 * i0 + 3 ) );
+
+#if 0
+  qDebug()
+    << steps << ":"
+    << x << "in [" << data.x( 4 * i0 ) << "; " << data.x( 4 * i0 + 2 ) << "] ->"
+    << data.y( 4 * i0 + 1 );
+#endif
+
+  xmin = data.x( 4 * i0 );
+  xmax = data.x( 4 * i0 + 2 );
+  y = data.y( 4 * i0 + 1 );
+
+  return steps;
+
+/*
+#else
+  assert( false && "Unknown HISTOGRAM_CURVE_TYPE value" );
+
+#endif
+*/
+}
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

@@ -64,10 +64,11 @@ class QwtPlot;
 class QwtPlotGrid;
 class QwtPlotCurve;
 class QwtPlotMarker;
-class QwtPlotPicker;
 
 namespace mvd
 {
+
+class HistogramPlotPicker;
 
 //
 // Internal classes pre-declaration.
@@ -144,7 +145,7 @@ public:
   /**
    * \brief
    */
-  bool IsGrayscaleActivated() const;
+  // bool IsGrayscaleActivated() const;
 
   /**
    */
@@ -227,6 +228,10 @@ private:
   static const QColor MARKER_COLORS[ HistogramWidget::CURVE_COUNT ];
 
   /**
+   */
+  static const QColor RUBBER_BAND_COLORS[ HistogramWidget::CURVE_COUNT ];
+
+  /**
    * \brief uic generated.
    */
   Ui::HistogramWidget* m_UI;
@@ -237,7 +242,7 @@ private:
 
   /**
    */
-  QwtPlotPicker* m_PlotPicker;
+  HistogramPlotPicker* m_PlotPicker;
 
   /**
    * \brief
