@@ -174,11 +174,11 @@ private:
 
   /**
    */
-  int Find( const QwtPlotCurve* curve,
-	    double x,
-	    double& xmin,
-	    double& xmax,
-	    double& y ) const;
+  CountType Find( const QwtPlotCurve* curve,
+		  double x,
+		  double& xmin,
+		  double& xmax,
+		  double& y ) const;
 
 //
 // Private attributes.

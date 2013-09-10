@@ -259,20 +259,50 @@ HistogramPlotPicker
 
   if( m_IsGrayscaleActivated )
     {
+    double w0 = 0.0;
+    double w1 = 0.0;
+    double wf = 0.0;
+
+    Find( m_PlotCurves[ RGBW_CHANNEL_WHITE ], point.x(), w0, w1, wf );
+
     text = QString().sprintf(
-      "(%.0f)\n%.4f",
-      Find( m_PlotCurves[ RGBW_CHANNEL_WHITE ], point.x() ),
-      point.x()
+      // "[%.4f; %.4f[ %.0f",
+      "%.4f/%.4f/%.0f",
+      w0, w1, wf
     );
     }
   else
     {
+    double r0 = 0.0;
+    double r1 = 0.0;
+    double rf = 0.0;
+
+    Find( m_PlotCurves[ RGBW_CHANNEL_RED ], point.x(), r0, r1, rf );
+
+    double g0 = 0.0;
+    double g1 = 0.0;
+    double gf = 0.0;
+
+    Find( m_PlotCurves[ RGBW_CHANNEL_GREEN ], point.x(), g0, g1, gf );
+
+    double b0 = 0.0;
+    double b1 = 0.0;
+    double bf = 0.0;
+
+    Find( m_PlotCurves[ RGBW_CHANNEL_BLUE ], point.x(), b0, b1, bf );
+
     text = QString().sprintf(
-      "(%.0f, %.0f, %.0f)\n%.4f",
-      Find( m_PlotCurves[ RGBW_CHANNEL_RED ], point.x() ),
-      Find( m_PlotCurves[ RGBW_CHANNEL_GREEN ], point.x() ),
-      Find( m_PlotCurves[ RGBW_CHANNEL_BLUE ], point.x() ),
-      point.x()
+      /*
+      "[%.4f; %.4f[ %.0f\n"
+      "[%.4f; %.4f[ %.0f\n"
+      "[%.4f; %.4f[ %.0f",
+      */
+      "%.4f/%.4f/%.0f\n"
+      "%.4f/%.4f/%.0f\n"
+      "%.4f/%.4f/%.0f",
+      r0, r1, rf,
+      g0, g1, gf,
+      b0, b1, bf
     );
     }
 
@@ -362,7 +392,7 @@ HistogramPlotPicker
 }
 
 /*******************************************************************************/
-int
+CountType
 HistogramPlotPicker
 ::Find( const QwtPlotCurve* curve,
 	double x,
