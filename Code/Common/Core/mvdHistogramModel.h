@@ -104,8 +104,11 @@ public:
     //
     // This typedef is used for compatibility with
     // itk::Histogram<>::MeasurementType.
-    itk::NumericTraits< DefaultImageType::InternalPixelType >::RealType
-    MeasurementType;
+    itk::NumericTraits< DefaultImageType::InternalPixelType >::RealType RealType;
+
+  /**
+   */
+  typedef RealType MeasurementType;
 
   /**
    * \class BuildContext
@@ -209,9 +212,7 @@ protected:
 //
 // Private constants.
 private:
-  /**
-   */
-  static const int BINS_OVERSAMPLING_RATE;
+
 
 //
 // Private types.
@@ -228,10 +229,10 @@ private:
 private:
   /**
    */
-#if 0
+  /*
   template< typename TImage >
     void template_BuildModel_I();
-#endif
+  */
 
   /**
    */
@@ -274,12 +275,13 @@ private slots:
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbStreamingHistogramVectorImageFilter.h"
 #include "otbStreamingMinMaxVectorImageFilter.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAbstractImageModel.h"
+#include "Core/mvdStreamingHistogramVectorImageFilter.h"
 
 namespace mvd
 {
@@ -363,7 +365,7 @@ HistogramModel
 }
 
 /*******************************************************************************/
-#if 0
+/*
 template< typename TImage >
 void
 HistogramModel
@@ -405,13 +407,6 @@ HistogramModel
   );
 
   filterMinMax->Update();
-
-  /*
-  // Extract min/MAX intensities for each band.
-  // itk::VariableLengthVector< FLOAT_TYPE >
-  typename MinMaxFilter::PixelType lSrcMin( f );
-  typename MinMaxFilter::PixelType lSrcMax( filterMinMax->GetMaximum() );
-  */
 
   // Extract-convert-remember min/MAX intensities for each band.
   m_MinPixel = filterMinMax->GetMinimum();
@@ -464,7 +459,7 @@ HistogramModel
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
     .arg( lMain.elapsed() );
 }
-#endif
+*/
 
 /*******************************************************************************/
 template< typename TImageModel >
@@ -492,6 +487,9 @@ HistogramModel
   TImageModel* imageModel = parentImageModel->GetQuicklookModel();
   assert( imageModel!=NULL );
 
+  CountType components = imageModel->ToImage()->GetNumberOfComponentsPerPixel();
+  assert( components>0 );
+
   //
   // 1st pass: process min/MAX for each band.
 
@@ -500,6 +498,7 @@ HistogramModel
 
   lPass1.start();
 
+  /*
   // Connect min/MAX pipe-section.
   typedef
     otb::StreamingMinMaxVectorImageFilter<
@@ -512,17 +511,69 @@ HistogramModel
   filterMinMax->GetFilter()->SetNoDataFlag( imageProperties->IsNoDataEnabled() );
   filterMinMax->GetFilter()->SetNoDataValue( imageProperties->GetNoData() );
 
+  // Connect statistics pipe-section.
   filterMinMax->Update();
-
-  /*
-  // Extract min/MAX intensities for each bands.
-  typename MinMaxFilter::PixelType lSrcMin( filterMinMax->GetMinimum() );
-  typename MinMaxFilter::PixelType lSrcMax( filterMinMax->GetMaximum() );
-  */
 
   // Extract-convert-remember min/MAX intensities for each band.
   m_MinPixel = filterMinMax->GetMinimum();
   m_MaxPixel = filterMinMax->GetMaximum();
+
+  // qDebug() << "min:" << m_MinPixel << "max:" << m_MaxPixel;
+  // std::cout << "min:" << m_MinPixel << "\tmax:" << m_MaxPixel << std::endl;
+  */
+
+  // Define histogram-filter type.
+  typedef
+    otb::StreamingHistogramVectorImageFilter<
+      typename TImageModel::SourceImageType >
+    HistogramFilter;
+
+
+  // Connect statistics pipe-section.
+  typedef
+    otb::StreamingStatisticsVectorImageFilter<
+      typename TImageModel::SourceImageType >
+    StatisticsFilter;
+
+  typename StatisticsFilter::Pointer filterStats( StatisticsFilter::New() );
+
+  filterStats->SetInput( imageModel->ToImage() );
+  filterStats->SetEnableMinMax( true );
+  filterStats->SetIgnoreUserDefinedValue( imageProperties->IsNoDataEnabled() );
+  filterStats->SetUserIgnoredValue( imageProperties->GetNoData() );
+
+  // Connect statistics pipe-section.
+  filterStats->Update();
+
+  // qDebug() << "min:" << m_MinPixel << "max:" << m_MaxPixel;
+  // std::cout << "min:" << m_MinPixel << "\tmax:" << m_MaxPixel << std::endl;
+
+  // Extract-convert-remember min/MAX intensities for each band.
+  m_MinPixel = filterStats->GetMinimum();
+  m_MaxPixel = filterStats->GetMaximum();
+
+  // Extract sigmas for each band from covariance matrix.
+  typename StatisticsFilter::MatrixType covariance(
+    filterStats->GetFilter()->GetCovariance()
+  );
+
+  typename HistogramFilter::FilterType::CountVectorType bins( components );
+  typename StatisticsFilter::RealPixelType sums( filterStats->GetSum() );
+  typename StatisticsFilter::RealPixelType means( filterStats->GetMean() );
+
+  for( CountType i=0; i<components; ++i )
+    {
+    RealType sigma = sqrt( covariance( i, i ) );
+    RealType n = sums[ i ] / means[ i ];
+
+    // Scott's formula
+    // See http://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
+    RealType h = 3.5 * sigma / pow( n, 1.0 / 3.0 );
+
+    bins[ i ] = ceil( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h;
+    }
+
+  std::cout << bins;
 
   qDebug() << tr( "%1: Pass #1 - done (%2 ms)." )
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )
@@ -537,10 +588,6 @@ HistogramModel
   lPass2.start();
 
   // Connect histogram-generator pipe-section.
-  typedef
-    otb::StreamingHistogramVectorImageFilter<
-      typename TImageModel::SourceImageType >
-    HistogramFilter;
 
   typename HistogramFilter::Pointer histogramFilter( HistogramFilter::New()  );
 
@@ -549,9 +596,7 @@ HistogramModel
   // Setup histogram filter.
   histogramFilter->GetFilter()->SetHistogramMin( m_MinPixel );
   histogramFilter->GetFilter()->SetHistogramMax( m_MaxPixel );
-  histogramFilter->GetFilter()->SetNumberOfBins(
-    HistogramModel::BINS_OVERSAMPLING_RATE * 256
-  );
+  histogramFilter->GetFilter()->SetNumberOfBins( bins );
   histogramFilter->GetFilter()->SetSubSamplingRate( 1 );
   histogramFilter->GetFilter()->SetNoDataFlag(
     imageProperties->IsNoDataEnabled() );

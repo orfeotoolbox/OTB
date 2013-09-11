@@ -61,8 +61,6 @@ namespace
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
-const int HistogramModel::BINS_OVERSAMPLING_RATE = 3;
-
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */

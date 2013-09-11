@@ -267,7 +267,8 @@ HistogramPlotPicker
 
     text = QString().sprintf(
       // "[%.4f; %.4f[ %.0f",
-      "%.4f/%.4f/%.0f",
+      "%.4f\n%.4f/%.4f/%.0f",
+      point.x(),
       w0, w1, wf
     );
     }
@@ -297,9 +298,11 @@ HistogramPlotPicker
       "[%.4f; %.4f[ %.0f\n"
       "[%.4f; %.4f[ %.0f",
       */
+      "%.4f\n"
       "%.4f/%.4f/%.0f\n"
       "%.4f/%.4f/%.0f\n"
       "%.4f/%.4f/%.0f",
+      point.x(),
       r0, r1, rf,
       g0, g1, gf,
       b0, b1, bf
