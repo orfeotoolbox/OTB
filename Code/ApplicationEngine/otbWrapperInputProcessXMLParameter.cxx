@@ -108,6 +108,11 @@ const std::string InputProcessXMLParameter::GetChildNodeTextOf(TiXmlElement *par
   return value;
 }
 
+void 
+InputProcessXMLParameter::otbAppLogInfo(Application::Pointer app, std::string info)
+{
+  app->GetLogger()->Write(itk::LoggerBase::INFO, info );
+}
 
 int
 InputProcessXMLParameter::Read(Application::Pointer app)
@@ -134,8 +139,12 @@ InputProcessXMLParameter::Read(Application::Pointer app)
 
   TiXmlElement *n_OTB;
   n_OTB = handle.FirstChild("OTB").Element();
+ 
   if(!n_OTB)
-    itkExceptionMacro( << "Input XML file " << this->GetFileName() << " is invalid.");
+  {
+    std::string info = "Input XML file " + std::string(this->GetFileName()) + " is invalid.";
+    this->otbAppLogInfo(app,info);
+  }
 
   std::string otb_Version, otb_Build, otb_Platform;
   otb_Version = GetChildNodeTextOf(n_OTB,"version");
@@ -158,19 +167,20 @@ InputProcessXMLParameter::Read(Application::Pointer app)
   TiXmlElement* n_Tags    = n_Doc->FirstChildElement("tags");
   std::vector<std::string> doc_TagList;
 
-  //  GetChildNodeTextOf(n_Tags, "tag");
+  //GetChildNodeTextOf(n_Tags, "tag");
  
   /*
-  app->otbAppLogINFO(<< "Application Name : " << app_Name );
-  otbAppLogINFO(<< "Description      : " << app_Descr )
-  otbAppLogINFO(<< "OTB Version      : " << otb_Version);
-  otbAppLogINFO(<< "Operating system : " << otb_Platform);
+  FIXME removed temporarily
+  this->otbAppLogInfo(app, "Application Name : " + app_Name);
+  this->otbAppLogInfo(app, "Description      : " + app_Descr);
+  this->otbAppLogInfo(app, "OTB Version      : " + otb_Version);
+  this->otbAppLogInfo(app, "Operating system : " + otb_Platform);
 
-  otbAppLogINFO(<< "Doc Name        : " << doc_Name );
-  otbAppLogINFO(<< "Doc Description : " << doc_Descr )
-  otbAppLogINFO(<< "Author          : " << doc_Author);
-  otbAppLogINFO(<< "Limitation      : " << doc_Limitation);
-  otbAppLogINFO(<< "Related         : " << doc_Related);
+  this->otbAppLogInfo(app, "Doc Name        : " + doc_Name);
+  this->otbAppLogInfo(app, "Doc Description : " + doc_Descr);
+  this->otbAppLogInfo(app, "Author          : " + doc_Author);
+  this->otbAppLogInfo(app, "Limitation      : " + doc_Limitation);
+  this->otbAppLogInfo(app, "Related         : " + doc_Related);
   */
 
   if(app->GetName() != app_Name)

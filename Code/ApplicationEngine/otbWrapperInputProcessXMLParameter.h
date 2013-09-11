@@ -2,6 +2,7 @@
 #define __otbWrapperInputProcessXMLParameter_h
 #include "otbWrapperApplication.h"
 #include "otbTinyXML.h"
+#include <sstream>
 
 namespace otb
 {
@@ -61,6 +62,8 @@ public:
   ParameterType GetParameterType(const Parameter* param) const;
 
   int Read(Application::Pointer application);
+
+  void otbAppLogInfo(Application::Pointer app, std::string info);
   
 protected:
 
