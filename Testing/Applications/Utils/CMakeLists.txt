@@ -18,6 +18,24 @@ OTB_TEST_APPLICATION(NAME  apTvUtSmoothingTest
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtSmoothingTest.tif
                              ${TEMP}/apTvUtSmoothingTest.tif)
+
+OTB_TEST_APPLICATION(NAME  apTvUtSmoothingTest_OutXML
+                     APP  Smoothing
+                     OPTIONS -in ${INPUTDATA}/poupees.tif
+               	             -out ${TEMP}/apTvUtSmoothingTest.tif
+                             -type mean
+                             -outxml ${TEMP}/apTvUtSmoothingTest_OutXML.xml
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtSmoothingTest.tif
+                             ${TEMP}/apTvUtSmoothingTest.tif)
+
+OTB_TEST_APPLICATION(NAME  apTvUtSmoothingTest_InXML
+                     APP  Smoothing
+                     OPTIONS -inxml ${TEMP}/apTvUtSmoothingTest_OutXML.xml
+                             -type mean                         
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtSmoothingTest.tif
+                             ${TEMP}/apTvUtSmoothingTest.tif)
 #--- ReadImageInfo ---#
 
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoTest

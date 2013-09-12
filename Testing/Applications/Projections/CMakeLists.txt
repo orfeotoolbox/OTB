@@ -19,6 +19,64 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
                  			  ${TEMP}/apTvPrOrthorectifTest_UTM.tif)
 
+
+OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM_OutXML1
+                     APP  OrthoRectification
+                     OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                 			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif
+                 			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
+                 		     -outputs.ulx  374100.8
+                 			 -outputs.uly  4829184.8
+                 			 -outputs.sizex 500
+                 			 -outputs.sizey 500
+                 			 -outputs.spacingx  0.5
+                 			 -outputs.spacingy  -0.5
+                 			 -map utm
+                 			 -opt.gridspacing 4 # Spacing of the deformation field
+                       -outxml  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.xml
+                       -interpolator linear
+                     VALID   --compare-image ${EPSILON_4}
+                              ${BASELINE}/owTvOrthorectifTest_UTM.tif
+                 			  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif)
+
+OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM_OutXML2
+                     APP  OrthoRectification
+                     OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                 			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML2.tif #should be moved to baseline
+                 			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
+                 		     -outputs.ulx  374100.8
+                 			 -outputs.uly  4829184.8
+                 			 -outputs.sizex 400
+                 			 -outputs.sizey 400
+                 			 -outputs.spacingx  0.5
+                 			 -outputs.spacingy  -0.5
+                 			 -map utm
+                 			 -opt.gridspacing 3 # Spacing of the deformation field
+                       -outxml  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML2.xml
+                       -interpolator linear
+                     VALID   --compare-image ${EPSILON_4}
+                              ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML2.tif
+                 			  ${BASELINE}/apTvPrOrthorectifTest_UTM2.tif)
+
+OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM_InXML1
+                     APP  OrthoRectification
+                     OPTIONS 
+                     -inxml  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.xml
+                     VALID   --compare-image ${EPSILON_4}
+                              ${BASELINE}/owTvOrthorectifTest_UTM.tif
+                 			  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif)
+
+OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM_InXML2
+                     APP  OrthoRectification
+                     OPTIONS 
+                     -inxml  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.xml
+              			 -outputs.sizex 400
+               			 -outputs.sizey 400
+                     -opt.gridspacing 3
+                     VALID   --compare-image ${EPSILON_4}
+                              ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif
+                 			  ${BASELINE}/apTvPrOrthorectifTest_UTM2.tif)
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME apTvPrRigidTransformResample
