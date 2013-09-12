@@ -258,6 +258,13 @@ public:
   itkGetMacro(EstimateOutputRpcModel, bool);
   itkBooleanMacro(EstimateOutputRpcModel);
   
+  /* Set number of threads to 1 for Deformation field generator (use for faster access to
+  * OSSIM elevation source)*/
+  void SetDeformationFilterNumberOfThreads(unsigned int nbThread)
+  {
+    m_Resampler->SetDeformationFilterNumberOfThreads(nbThread);
+  }
+
 protected:
   GenericRSResampleImageFilter();
   /** Destructor */

@@ -153,7 +153,7 @@ public:
   }
   otbGetObjectMemberConstMacro(WarpFilter, Interpolator, const InterpolatorType *);
 
-  /** Default Edge padding value */
+  /** Default Edgepadding value */
   otbSetObjectMemberMacro(WarpFilter,
                           EdgePaddingValue,
                           typename OutputImageType::PixelType);
@@ -163,6 +163,12 @@ public:
 
   /** Import output parameters from a given image */
   void SetOutputParametersFromImage(const ImageBaseType * image);
+
+  /* Set number of threads for Deformation field generator*/
+  void SetDeformationFilterNumberOfThreads(unsigned int nbThread)
+  {
+    m_DeformationFilter->SetNumberOfThreads(nbThread);
+  }
 
 protected:
   StreamingResampleImageFilter();
