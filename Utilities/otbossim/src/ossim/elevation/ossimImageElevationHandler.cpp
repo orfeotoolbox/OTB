@@ -202,10 +202,9 @@ double ossimImageElevationHandler::getHeightAboveMSL(const ossimGpt& gpt)
          }
          
       } // if ( data.valid() )
-      
+      m_Mutex.unlock();
    } // if ( m_rect.pointWithin(dpt) )
    
-   m_Mutex.unlock();
    return height;
 }
 
