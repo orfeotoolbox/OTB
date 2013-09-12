@@ -466,7 +466,7 @@ FOREACH(inputFileType "UINT8" "UINT16" "INT16" "UINT32" "INT32" "FLOAT" "DOUBLE"
     STRING(TOLOWER ${sizeType} lsizeType)
     
     IF( sizeType STREQUAL "LARGE" )
-      SET(size "1024")
+      SET(size "2048")
     ELSE()
       SET(size "256")
     ENDIF()
@@ -475,11 +475,14 @@ FOREACH(inputFileType "UINT8" "UINT16" "INT16" "UINT32" "INT32" "FLOAT" "DOUBLE"
     SET(OUTFILENAME RGBSquares${inputFileType}_${lsizeType}.tif)
     SET(OUTLABELFILENAME RGBSquares${inputFileType}_${lsizeType}_Labels.tif)
     
+    SET(writeOutputImagesRq "0")
+    
     ADD_TEST(bfTvStreamingStatisticsMapFromLabelImageFilterTest${inputFileType}${lsizeType} ${BASICFILTERS_TESTS4}
          otbStreamingStatisticsMapFromLabelImageFilterTest
                ${inputFileType}
                ${size}
                ${size}
+               ${writeOutputImagesRq}
                ${TEMP}/${OUTFILENAME}
                ${TEMP}/${OUTLABELFILENAME}
     )
