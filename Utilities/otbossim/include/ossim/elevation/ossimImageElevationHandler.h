@@ -100,6 +100,7 @@ private:
 
    /** Image space rect stored as drect for inlined pointHasCoverage method. */
    ossimDrect                          m_rect;
+   mutable OpenThreads::Mutex          m_Mutex;
 
    TYPE_DATA
 };

@@ -142,8 +142,10 @@ double ossimImageElevationHandler::getHeightAboveMSL(const ossimGpt& gpt)
       {
          --y0;
       }
-   
+      
+      m_Mutex.lock();
       ossimRefPtr<ossimImageData> data = m_ih->getTile( ossimIrect(x0, y0, x0+1, y0+1), 0 );
+
       if ( data.valid() )
       {
          ossimIrect dataRect = data->getImageRectangle();
@@ -203,6 +205,7 @@ double ossimImageElevationHandler::getHeightAboveMSL(const ossimGpt& gpt)
       
    } // if ( m_rect.pointWithin(dpt) )
    
+   m_Mutex.unlock();
    return height;
 }
 
