@@ -123,6 +123,9 @@ private:
     ResamplerType::Pointer    resampler = ResamplerType::New();
     m_Ref.push_back(resampler.GetPointer());
 
+    //Elevation handler is faster calling OSSIM elevation source
+    resampler->SetDeformationFilterNumberOfThreads(1);
+
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
     
