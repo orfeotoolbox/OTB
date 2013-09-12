@@ -31,8 +31,10 @@
 // Qwt includes
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
+#include <qwt_plot_magnifier.h>
 #include <qwt_plot_marker.h>
-#include <qwt_plot_picker.h>
+#include <qwt_plot_panner.h>
+// #include <qwt_plot_zoomer.h>
 #include <qwt_scale_engine.h>
 
 //
@@ -128,6 +130,9 @@ HistogramWidget
   m_UI( new mvd::Ui::HistogramWidget() ),
   m_PlotGrid( NULL ),
   m_PlotPicker( NULL ),
+  // m_PlotZoomer( NULL ),
+  m_PlotMagnifier( NULL ),
+  m_PlotPanner( NULL ),
   m_PlotCurves(),
   m_LowPlotMarkers(),
   m_HighPlotMarkers(),
@@ -146,6 +151,26 @@ HistogramWidget
 
   m_PlotGrid->setMajPen( GRID_MAJ_PEN_COLOR );
   m_PlotGrid->setMinPen( GRID_MIN_PEN_COLOR );
+
+  //
+  // ZOOMER.
+  /*
+  m_PlotZoomer = new QwtPlotZoomer( m_UI->histogramPlot->canvas() );
+  m_PlotZoomer->setTrackerMode( QwtPicker::AlwaysOff );
+  m_PlotZoomer->setSelectionFlags(
+    QwtPicker::RectSelection |
+    QwtPicker::DragSelection );
+  m_PlotZoomer->setRubberBandPen( QPen( QColor( 0xFF, 0x44, 0xFF ) ) );
+  m_PlotZoomer->setTrackerPen( QPen( QColor( 0xFF, 0x44, 0xFF ) ) );
+  */
+  m_PlotMagnifier = new QwtPlotMagnifier( m_UI->histogramPlot->canvas() );
+  m_PlotMagnifier->setAxisEnabled( QwtPlot::yLeft, false );
+  m_PlotMagnifier->setWheelFactor( 1.0 / m_PlotMagnifier->wheelFactor() );
+
+  m_PlotPanner = new QwtPlotPanner( m_UI->histogramPlot->canvas() );
+  // m_PlotPanner->setAxisEnabled( QwtPlot::yLeft, false );
+  m_PlotPanner->setMouseButton( Qt::RightButton );
+  m_PlotPanner->setOrientations( Qt::Horizontal );
 
   //
   // CURVES.
@@ -266,6 +291,17 @@ HistogramWidget
     delete m_HighPlotMarkers[ i ];
     m_HighPlotMarkers[ i ] = NULL;
     }
+
+  delete m_PlotPanner;
+  m_PlotPanner = NULL;
+
+  delete m_PlotMagnifier;
+  m_PlotMagnifier = NULL;
+
+  /*
+  delete m_PlotZoomer;
+  m_PlotZoomer = NULL;
+  */
 
   delete m_PlotGrid;
   m_PlotGrid = NULL;

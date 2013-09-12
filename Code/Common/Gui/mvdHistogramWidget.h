@@ -63,7 +63,10 @@ namespace
 class QwtPlot;
 class QwtPlotGrid;
 class QwtPlotCurve;
+class QwtPlotMagnifier;
 class QwtPlotMarker;
+class QwtPlotPanner;
+// class QwtPlotZoomer;
 
 namespace mvd
 {
@@ -243,6 +246,18 @@ private:
   /**
    */
   HistogramPlotPicker* m_PlotPicker;
+
+  /**
+   */
+  // QwtPlotZoomer* m_PlotZoomer;
+
+  /**
+   */
+  QwtPlotMagnifier* m_PlotMagnifier;
+
+  /**
+   */
+  QwtPlotPanner* m_PlotPanner;
 
   /**
    * \brief
