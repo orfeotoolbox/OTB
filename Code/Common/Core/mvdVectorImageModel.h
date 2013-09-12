@@ -193,6 +193,14 @@ public:
     GetRgbwChannel( RgbwChannel channel ) const;
 
     /**
+     * \return the band-index for the given component not taking the
+     * grayscale-mode activation state flag into account.
+     */
+    inline
+    ChannelVector::value_type
+    GetChannel( RgbwChannel channel ) const;
+
+    /**
      * \return the channels band-index vector taking the
      * grayscale-mode activation state flag into account.
      */
@@ -876,28 +884,37 @@ VectorImageModel::Settings
     }
   else
     {
-    switch( channel )
-      {
-      case RGBW_CHANNEL_RED:
-      case RGBW_CHANNEL_GREEN:
-      case RGBW_CHANNEL_BLUE:
-	return m_RgbChannels[ channel ];
-	break;
+    return GetChannel( channel );
+    }
+}
 
-      case RGBW_CHANNEL_WHITE:
-	return m_GrayChannel;
-	break;
+/*****************************************************************************/
+inline
+VectorImageModel::Settings::ChannelVector::value_type
+VectorImageModel::Settings
+::GetChannel( RgbwChannel channel ) const
+{
+  switch( channel )
+    {
+    case RGBW_CHANNEL_RED:
+    case RGBW_CHANNEL_GREEN:
+    case RGBW_CHANNEL_BLUE:
+      return m_RgbChannels[ channel ];
+      break;
 
-      default:
-	throw std::invalid_argument(
-	  ToStdString(
-	    tr( "Invalid argument: %1 ('%2')" )
-	    .arg( channel )
-	    .arg( RGBW_CHANNEL_NAMES[ channel ] )
-	  )
-	);
-	break;
-      }
+    case RGBW_CHANNEL_WHITE:
+      return m_GrayChannel;
+      break;
+
+    default:
+      throw std::invalid_argument(
+	ToStdString(
+	  tr( "Invalid argument: %1 ('%2')" )
+	  .arg( channel )
+	  .arg( RGBW_CHANNEL_NAMES[ channel ] )
+	)
+      );
+      break;
     }
 }
 
