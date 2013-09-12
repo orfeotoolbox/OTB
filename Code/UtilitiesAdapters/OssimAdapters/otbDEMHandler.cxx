@@ -24,6 +24,7 @@
 #include "ossim/base/ossimDirectory.h"
 #include "ossim/base/ossimGeoidEgm96.h"
 #include "ossim/base/ossimRefPtr.h"
+#include <ossim/elevation/ossimImageElevationDatabase.h>
 
 namespace otb
 {
@@ -66,7 +67,23 @@ DEMHandler
 
   if (!m_ElevManager->loadElevationPath(ossimDEMDir))
     {
-    itkExceptionMacro("Failed to open DEM Directory: " << ossimDEMDir);
+    // In ossim elevation database factory code, the
+    // ossimImageElevationDatabase is explicitly disabled by a #if 0
+    // guard, because it causes problem when loading ossim related
+    // application. Therefore, we explicitly call
+    // ossimImageElevationDatabase here to allow for general elevation
+    // images support.
+    ossimRefPtr<ossimElevationDatabase> imageElevationDatabase = new ossimImageElevationDatabase;
+    
+    if(!imageElevationDatabase->open(DEMDirectory))
+      {
+      itkExceptionMacro("Failed to open DEM Directory: " << ossimDEMDir);
+      }
+    else
+      {
+      otbMsgDevMacro(<< "DEM directory contains general elevation image files: " << ossimDEMDir);
+      m_ElevManager->addDatabase(imageElevationDatabase.get());
+      }
     }
 }
 
