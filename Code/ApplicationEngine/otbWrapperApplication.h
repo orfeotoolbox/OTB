@@ -176,12 +176,20 @@ public:
    * or a value set externally by user */
   bool HasValue(std::string paramKey) const;
 
+  /* Activate or deactivate the bool parameter
+   */
+  void SetParameterEmpty(std::string paramKey, bool active);
+  
+  /* Get active flag of parameter with key paramKey
+   */
+  bool GetParameterEmpty(std::string paramKey);
+  
   /* Return the user level of access to a parameter */
   UserLevel GetParameterUserLevel(std::string paramKey) const;
-
+  
   /** Get the role of the parameter */
   Role GetParameterRole(std::string paramKey) const;
-
+  
   /* Get the parameter type from its name */
   ParameterType GetParameterType(std::string paramKey) const;
 
@@ -498,6 +506,13 @@ public:
    * \li ParameterType_OutputImage
    */
   ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
+
+  /* GetXMLOverride
+   *
+   * wrapper function for Paramter::IsUseXMLValue() for application instance.
+   * Needs parameter key as argument.
+   */
+  bool IsUseXMLValue(std::string parameter);
 
   /* Get the pixel type in which the complex image will be saved
    *

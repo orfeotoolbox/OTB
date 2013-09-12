@@ -202,246 +202,240 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
   return selectedItems;
 }
 
-
-
-
-
- /* Get the parameter type from its string version of ParameterType enum */
-ParameterType ParameterGroup::GetParameterTypeFromString(std::string type)
-{
-  ParameterType paramType;
-
-  if (type == "Choice")
-    {
-    type = ParameterType_Choice;
-    }
-  else if (type == "ListView")
-    {
-    paramType = ParameterType_ListView;
-    }
-  else if (type == "Radius")
-    {
-    paramType = ParameterType_Radius;
-    }
-  else if (type == "Empty")
-    {
-    paramType = ParameterType_Empty;
-    }
- else if (type == "Int")
-    {
-    paramType = ParameterType_Int;
-    }
-  else if (type == "Float")
-    {
-    paramType = ParameterType_Float;
-    }
-  else if (type == "InputFilename")
-    {
-    paramType = ParameterType_InputFilename;
-    }
-  else if (type == "InputFilenameList")
-    {
-    paramType = ParameterType_InputFilenameList;
-    }
-  else if (type == "OutputFilename")
-    {
-    paramType = ParameterType_OutputFilename;
-    }
-  else if (type == "Directory")
-    {
-    paramType = ParameterType_Directory;
-    }
-  else if (type == "InputImage")
-    {
-    paramType = ParameterType_InputImage;
-    }
- else if (type == "InputImageList")
-    {
-    paramType = ParameterType_InputImageList;
-    }
-  else if (type == "ComplexInputImage")
-    {
-    paramType = ParameterType_ComplexInputImage;
-    }
-  else if (type == "InputVectorData")
-    {
-    paramType = ParameterType_InputVectorData;
-    }
-  else if (type == "InputVectorDataList")
-    {
-    paramType = ParameterType_InputVectorDataList;
-    }
-  else if (type == "OutputImage")
-    {
-    paramType = ParameterType_OutputImage;
-    }
-    else if (type == "ComplexOutputImage")
-    {
-    paramType = ParameterType_ComplexOutputImage;
-    }
-  else if (type == "OutputVectorData")
-    {
-    paramType = ParameterType_OutputVectorData;
-    }
-  else if (type == "String")
-    {
-    paramType = ParameterType_String;
-    }
-  else if (type == "StringList")
-    {
-    paramType = ParameterType_StringList;
-    }
-  else if (type == "RAM")
-    {
-    paramType = ParameterType_RAM;
-    }
-  else if (type == "Group")
-    {
-    paramType = ParameterType_Group;
-    }
-  else if (type == "OutputProcessXML")
-    {
-    paramType = ParameterType_OutputProcessXML;
-    }
-  else if (type == "InputProcessXML")
-    {
-    paramType = ParameterType_InputProcessXML;
-    }
-
-  return paramType;
+/* Get the parameter type from its string version of ParameterType enum */
+ ParameterType ParameterGroup::GetParameterTypeFromString(std::string type)
+ {
+   ParameterType paramType;
+   
+   if (type == "Choice")
+     {
+       type = ParameterType_Choice;
+     }
+   else if (type == "ListView")
+     {
+       paramType = ParameterType_ListView;
+     }
+   else if (type == "Radius")
+     {
+       paramType = ParameterType_Radius;
+     }
+   else if (type == "Empty")
+     {
+       paramType = ParameterType_Empty;
+     }
+   else if (type == "Int")
+     {
+       paramType = ParameterType_Int;
+     }
+   else if (type == "Float")
+     {
+       paramType = ParameterType_Float;
+     }
+   else if (type == "InputFilename")
+     {
+       paramType = ParameterType_InputFilename;
+     }
+   else if (type == "InputFilenameList")
+     {
+       paramType = ParameterType_InputFilenameList;
+     }
+   else if (type == "OutputFilename")
+     {
+       paramType = ParameterType_OutputFilename;
+     }
+   else if (type == "Directory")
+     {
+       paramType = ParameterType_Directory;
+     }
+   else if (type == "InputImage")
+     {
+       paramType = ParameterType_InputImage;
+     }
+   else if (type == "InputImageList")
+     {
+       paramType = ParameterType_InputImageList;
+     }
+   else if (type == "ComplexInputImage")
+     {
+       paramType = ParameterType_ComplexInputImage;
+     }
+   else if (type == "InputVectorData")
+     {
+       paramType = ParameterType_InputVectorData;
+     }
+   else if (type == "InputVectorDataList")
+     {
+       paramType = ParameterType_InputVectorDataList;
+     }
+   else if (type == "OutputImage")
+     {
+       paramType = ParameterType_OutputImage;
+     }
+   else if (type == "ComplexOutputImage")
+     {
+       paramType = ParameterType_ComplexOutputImage;
+     }
+   else if (type == "OutputVectorData")
+     {
+       paramType = ParameterType_OutputVectorData;
+     }
+   else if (type == "String")
+     {
+       paramType = ParameterType_String;
+     }
+   else if (type == "StringList")
+     {
+       paramType = ParameterType_StringList;
+     }
+   else if (type == "RAM")
+     {
+       paramType = ParameterType_RAM;
+     }
+   else if (type == "Group")
+     {
+       paramType = ParameterType_Group;
+     }
+   else if (type == "OutputProcessXML")
+     {
+       paramType = ParameterType_OutputProcessXML;
+     }
+   else if (type == "InputProcessXML")
+     {
+       paramType = ParameterType_InputProcessXML;
+     }
+   
+   return paramType;
 }
-
-
 
 /* Get the parameter type as string from its ParameterType enum */
 std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
 {
   std::string paramType;
-
-    switch (type)
+  
+  switch (type)
+    {
+    case ParameterType_Empty:
       {
-      case ParameterType_Empty:
-        {
         paramType = "Empty";
-        }
-        break;
-      case ParameterType_Int:
-        {
-        paramType = "Int";
-        }
-        break;
-      case ParameterType_Float:
-        {
-        paramType = "Float";
-        }
-        break;
-      case ParameterType_String:
-        {
-        paramType = "String";
-        }
-        break;
-      case ParameterType_InputFilename:
-        {
-        paramType = "InputFilename";
-        }
-        break;
-      case ParameterType_OutputFilename:
-        {
-        paramType = "OutputFilename";
-        }
-        break;
-      case ParameterType_Directory:
-        {
-        paramType = "Directory";
-        }
-        break;
-      case ParameterType_InputImage:
-        {
-        paramType = "InputImage";
-        }
-        break;
-      case ParameterType_InputVectorData:
-        {
-        paramType = "InputVectorData";
-        }
-        break;
-      case ParameterType_OutputImage:
-        {
-        paramType = "OutputImage";
-        }
-        break;
-      case ParameterType_OutputVectorData:
-        {
-        paramType = "OutputVectorData";
-        }
-        break;
-      case ParameterType_Radius:
-        {
-        paramType = "Radius";
-        }
-        break;
-      case ParameterType_Choice:
-        {
-        paramType = "Choice";
-        }
-        break;
-      case ParameterType_Group:
-        {
-        paramType = "Group";
-        }
-        break;
-      case ParameterType_StringList:
-        {
-        paramType = "StringList";
-        }
-        break;
-      case ParameterType_InputFilenameList:
-        {
-        paramType = "InputFilenameList";
-        }
-        break;
-      case ParameterType_InputImageList:
-        {
-        paramType = "InputImageList";
-        }
-        break;
-      case ParameterType_InputVectorDataList:
-        {
-        paramType = "InputVectorDataList";
-        }
-        break;
-      case ParameterType_ListView:
-        {
-        paramType = "ListView";
-        }
-        break;
-      case ParameterType_ComplexInputImage:
-        {
-        paramType = "ComplexInputImage";
-        }
-        break;
-      case ParameterType_ComplexOutputImage:
-        {
-        paramType = "ComplexOutputImage";
-        }
-        break;
-      case ParameterType_RAM:
-        {
-        paramType = "RAM";;
-        }
-        break;
-      case ParameterType_OutputProcessXML:
-        {	  
-        paramType = "OutputProcessXML";
-        }
-        break;
-      case ParameterType_InputProcessXML:
-        {	  
-        paramType = "InputProcessXML";
-        }
-        break;
       }
-
+      break;
+    case ParameterType_Int:
+      {
+        paramType = "Int";
+      }
+      break;
+    case ParameterType_Float:
+      {
+        paramType = "Float";
+      }
+      break;
+    case ParameterType_String:
+      {
+        paramType = "String";
+      }
+      break;
+    case ParameterType_InputFilename:
+      {
+        paramType = "InputFilename";
+      }
+      break;
+    case ParameterType_OutputFilename:
+      {
+        paramType = "OutputFilename";
+      }
+      break;
+    case ParameterType_Directory:
+      {
+        paramType = "Directory";
+      }
+      break;
+    case ParameterType_InputImage:
+      {
+        paramType = "InputImage";
+      }
+      break;
+    case ParameterType_InputVectorData:
+      {
+        paramType = "InputVectorData";
+      }
+      break;
+    case ParameterType_OutputImage:
+      {
+        paramType = "OutputImage";
+      }
+      break;
+    case ParameterType_OutputVectorData:
+      {
+        paramType = "OutputVectorData";
+      }
+      break;
+    case ParameterType_Radius:
+      {
+        paramType = "Radius";
+      }
+      break;
+    case ParameterType_Choice:
+      {
+        paramType = "Choice";
+      }
+      break;
+    case ParameterType_Group:
+      {
+        paramType = "Group";
+      }
+      break;
+    case ParameterType_StringList:
+      {
+	paramType = "StringList";
+      }
+      break;
+    case ParameterType_InputFilenameList:
+      {
+        paramType = "InputFilenameList";
+      }
+      break;
+    case ParameterType_InputImageList:
+      {
+        paramType = "InputImageList";
+      }
+      break;
+    case ParameterType_InputVectorDataList:
+      {
+        paramType = "InputVectorDataList";
+      }
+      break;
+    case ParameterType_ListView:
+      {
+        paramType = "ListView";
+      }
+      break;
+    case ParameterType_ComplexInputImage:
+      {
+        paramType = "ComplexInputImage";
+      }
+      break;
+    case ParameterType_ComplexOutputImage:
+      {
+        paramType = "ComplexOutputImage";
+      }
+      break;
+    case ParameterType_RAM:
+      {
+        paramType = "RAM";;
+      }
+      break;
+    case ParameterType_OutputProcessXML:
+      {	  
+        paramType = "OutputProcessXML";
+      }
+      break;
+    case ParameterType_InputProcessXML:
+      {	  
+        paramType = "InputProcessXML";
+      }
+      break;
+    }
+  
   return paramType;
 }
   
@@ -588,12 +582,12 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         break;
       case ParameterType_OutputProcessXML:
         {	  
-        newParam = OutputProcessXMLParameter::New();
+	newParam = OutputProcessXMLParameter::New();
         }
         break;
       case ParameterType_InputProcessXML:
         {	  
-        newParam = InputProcessXMLParameter::New();
+	newParam = InputProcessXMLParameter::New();
         }
         break;
       }

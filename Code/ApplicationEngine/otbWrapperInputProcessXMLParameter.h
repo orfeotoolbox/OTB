@@ -58,9 +58,9 @@ public:
   const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
 
   std::string pixelTypeToString(ImagePixelType pixType);
-
+  
   ParameterType GetParameterType(const Parameter* param) const;
-
+  
   int Read(Application::Pointer application);
 
   void otbAppLogInfo(Application::Pointer app, std::string info);

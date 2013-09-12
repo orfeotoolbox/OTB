@@ -104,7 +104,6 @@ void
 OutputProcessXMLParameter::Write(Application::Pointer app)
 {
   // Check if the filename is not empty
-  
   if(m_FileName.empty())
     itkExceptionMacro("The XML output FileName is empty, please set the filename via the method SetFileName");
 
@@ -113,10 +112,9 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
     {
     itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
                       <<" is a wrong Extension FileName : Expected .xml");
-    }
+    }  
 
-  
-  // Write the XML file
+  // start creating XML file
   TiXmlDocument doc;
 
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -169,16 +167,22 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
       Parameter *param = paramGroup->GetParameterByKey(key);
       ParameterType type = app->GetParameterType(key);
       std::string typeAsString = paramGroup->GetParameterTypeAsString(type);
+      
 
       // if param is a Group, dont do anything, ParamGroup dont have values
       if (type != ParameterType_Group)
       {
-	bool paramExists = app->HasValue(key);
+	bool paramExists = app->HasValue(key) && app->IsParameterEnabled(key);
 	if ( key == "outxml" )
-	  paramExists = false;
-
+	  {
+	    paramExists = false;
+	  }
+	if (type == ParameterType_Empty)
+	  {
+	    paramExists = true;
+	  }
 	// if parameter doesn't have any value then skip it
-       if (paramExists)
+	if (paramExists)
         {
 	  std::vector<std::string> values;
 	  std::string value;
@@ -197,8 +201,6 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 	      {
 		values = app->GetParameterStringList(key);
 		hasValueList = true;
-		//std::cerr << "its list type!!:" <<  values[0] << "\n\n\n ";
-		
 	      }
 	  else
 	    if (type == ParameterType_Float || type == ParameterType_Int || 
@@ -215,40 +217,57 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 		{
 		  value = app->GetParameterString(key);
 		}
-
+	      else 
+       if(key == "rand")
+	 {
+	   std::ostringstream strm;
+        strm << app->GetParameterInt("rand");
+        value = strm.str();
+	 }
+       else
+      if (typeAsString == "Empty")
+	{
+	  EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param); 
+	  value = "false";
+	  if( eParam->GetActive() ) 
+	    {
+	      value = "true";
+	    }
+	}
+	  
 	  //get only file name
     /*
-	  if(type == ParameterType_InputFilename || type == ParameterType_InputImage ||
-	     type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
-             type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
+      if(type == ParameterType_InputFilename || type == ParameterType_InputImage ||
+      type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
+      type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
 	    {
-	      unsigned found = value.find_last_of("/\\");
-	      //std::cerr << " path: " << value.substr(0,found) << '\n';
-	      value = value.substr(found+1);
+	    unsigned found = value.find_last_of("/\\");
+	    //std::cerr << " path: " << value.substr(0,found) << '\n';
+	    value = value.substr(found+1);
 	    }
-	  else 
+	    else 
 	    if(type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
-	       type == ParameterType_InputVectorDataList)
-	      {
-		      std::vector<std::string>::iterator strIt;
-		      for(strIt = values.begin(); strIt != values.end(); ++strIt)
+	    type == ParameterType_InputVectorDataList)
+	    {
+	    std::vector<std::string>::iterator strIt;
+	    for(strIt = values.begin(); strIt != values.end(); ++strIt)
 		      {
-		        std::string val = *strIt;
-		        unsigned found = val.find_last_of("/\\");
-		        *strIt = val.substr(found+1);
+		      std::string val = *strIt;
+		      unsigned found = val.find_last_of("/\\");
+		      *strIt = val.substr(found+1);
 		      }
-	      }
+		      }
   */
 	  //parameter node in xml
 	  TiXmlElement * n_Parameter = new TiXmlElement("parameter");
 
 	  const char * mandatory = "false";
-
+	  
 	  if( param->GetMandatory() )
 	    mandatory = "true";
 
 	  n_Parameter->SetAttribute("mandatory", mandatory);
-
+	  
 	  //setting parameter key as child node in parameter
 	  AddChildNodeTo(n_Parameter, "key", key);
      	  AddChildNodeTo(n_Parameter, "type", typeAsString);
@@ -269,7 +288,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 	}
       }
     }
-
+  
   // Finally, write xml contents to file
   doc.SaveFile( m_FileName.c_str() );
 

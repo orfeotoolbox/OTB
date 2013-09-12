@@ -90,10 +90,10 @@ public:
   /** Get the parameter key */
   itkGetStringMacro(Key);
 
-  /** Set the parameter mandatory flag */
+  /** Set the parameter Active flag */
   itkSetMacro(Active, bool);
 
-  /** Get the parameter mandatory flag */
+  /** Get the parameter Active flag */
   itkGetConstMacro(Active, bool);
 
   /** Set the parameter mandatory flag */
@@ -105,13 +105,13 @@ public:
   /** Toogle the parameter mandatory flag */
   itkBooleanMacro(Mandatory);
 
-  /** Set the parameter mandatory flag */
+  /** Set the parameter AutomaticValue flag */
   itkSetMacro(AutomaticValue, bool);
 
-  /** Get the parameter mandatory flag */
+  /** Get the parameter AutomaticValue flag */
   itkGetConstMacro(AutomaticValue, bool);
 
-  /** Toogle the parameter mandatory flag */
+  /** Toogle the parameter AutomaticValue flag */
   itkBooleanMacro(AutomaticValue);
 
   /** Set the default value mode */
@@ -157,6 +157,19 @@ public:
   virtual void ClearValue()
   {
     itkExceptionMacro(<<"ClearValue() method must be re-implemented by sub-classes.");
+  }
+  
+  /** Get parameter's useXMLValue flag for xml input */
+  virtual bool IsUseXMLValue()
+  {
+    return m_UseXMLValue;
+  }
+  
+  /** Set the m_UseXMLValue flag for allowing to override
+    parameter value from user input */
+  virtual void SetUseXMLValue(bool use)
+  {
+    m_UseXMLValue = use;
   }
   
   /** Set/Get the root of the current parameter (direct parent) */
@@ -214,6 +227,7 @@ protected:
                 m_Mandatory(true),
                 m_Active(false),
                 m_UserValue(false),
+                m_UseXMLValue(true),
                 m_AutomaticValue(false),
                 m_DefaultValueMode(DefaultValueMode_UNKNOWN),
                 m_UserLevel(UserLevel_Basic),
@@ -235,6 +249,10 @@ protected:
   /** Key of the parameter */
   std::string                        m_Key;
 
+  /** True if the parameter value in the input xml is used
+      irrespective of user provide a different value */
+  bool                               m_UseXMLValue;
+  
   /** True if the parameter is mandatory */
   bool                               m_Mandatory;
 

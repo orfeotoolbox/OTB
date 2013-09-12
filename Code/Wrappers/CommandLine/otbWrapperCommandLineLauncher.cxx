@@ -360,7 +360,6 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     const std::string paramKey(appKeyList[i]);
     std::vector<std::string> values;
 
-
     Parameter::Pointer param = m_Application->GetParameterByKey(paramKey);
     ParameterType type = m_Application->GetParameterType(paramKey);
 
@@ -382,6 +381,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           std::cerr << "ERROR: No value associated to the parameter : \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
           return INVALIDNUMBEROFVALUE;
           }
+
+          param->SetUseXMLValue(false);
 
         // Ensure that the parameter is enabled
         m_Application->EnableParameter(paramKey);
