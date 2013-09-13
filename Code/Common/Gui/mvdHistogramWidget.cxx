@@ -563,6 +563,15 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
+::on_zoom1Button_clicked()
+{
+  RefreshScale();
+  Replot();
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
 ::OnAppended( const QwtDoublePoint& pos )
 {
   qDebug() << this << "::OnAppended(" << pos.x() << ", " << pos.y() << ")";

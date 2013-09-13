@@ -287,6 +287,10 @@ private:
 private slots:
   /**
    */
+  void on_zoom1Button_clicked();
+
+  /**
+   */
   void OnAppended( const QwtDoublePoint& pos );
   void OnAppended( const QPoint& pos );
 

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/icons">
+    <file>../../../Data/Icons/zoom-1to1.png</file>
     <file alias="otb">../../../Data/Icons/monteverdi2-32x32.png</file>
     <file alias="process">../../../Data/Icons/alg.png</file>
     <file>../../../Data/Icons/execute.png</file>
