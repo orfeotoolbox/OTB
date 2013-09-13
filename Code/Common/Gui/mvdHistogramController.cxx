@@ -174,6 +174,8 @@ HistogramController
     y = NULL;
     }
 
+  widget->RefreshScale( true );
+
   widget->Replot();
 }
 
@@ -219,6 +221,8 @@ HistogramController
   assert( widget!=NULL );
 
   widget->SetGrayscaleActivated( activated );
+
+  widget->RefreshScale( true );
   widget->Replot();
 
   // ResetWidget( RGBW_CHANNEL_WHITE );

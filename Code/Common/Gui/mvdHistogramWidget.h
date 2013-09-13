@@ -127,10 +127,8 @@ public:
 		double * const x,
 		double * const y,
 		size_t size,
-		double xMin,
-		double yMin,
-		double xMax,
-		double yMax );
+		double xMin, double yMin,
+		double xMax, double yMax );
 
   /**
    */
@@ -149,6 +147,11 @@ public:
    * \brief
    */
   // bool IsGrayscaleActivated() const;
+
+  /**
+   * \brief
+   */
+  void RefreshScale( bool iqr );
 
   /**
    */
@@ -188,27 +191,30 @@ private:
   struct Bounds
   {
     Bounds( double xMin =0.0, double xMax =1.0,
-		double yMin =0.0, double yMax =1.0 ) :
+	    double yMin =0.0, double yMax =1.0,
+	    double qMin =0.0, double qMax =1.0 ) :
       m_XMin( xMin ),
       m_XMax( xMax ),
       m_YMin( yMin ),
-      m_YMax( yMax )
+      m_YMax( yMax ),
+      m_QMin( qMin ),
+      m_QMax( qMax )
     {
     }
 
     double m_XMin;
     double m_XMax;
+
     double m_YMin;
     double m_YMax;
+
+    double m_QMin;
+    double m_QMax;
   };
 
 //
 // Private methods.
 private:
-  /**
-   * \brief
-   */
-  void RefreshScale();
 
 //
 // Private attributes.
@@ -288,6 +294,10 @@ private slots:
   /**
    */
   void on_zoom1Button_clicked();
+
+  /**
+   */
+  void on_zoomQButton_clicked();
 
   /**
    */

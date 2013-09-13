@@ -31,6 +31,17 @@
       </widget>
      </item>
      <item>
+      <widget class="QToolButton" name="zoomQButton">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
+         <normaloff>:/icons/action_ZoomExtent_Icon</normaloff>:/icons/action_ZoomExtent_Icon</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

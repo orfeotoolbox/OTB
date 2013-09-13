@@ -341,7 +341,7 @@ HistogramWidget
     m_Bounds[ i ].m_YMax = yMax;
     }
 
-  RefreshScale();
+  // RefreshScale();
 }
 
 /*******************************************************************************/
@@ -405,6 +405,8 @@ HistogramWidget
   for( CountType i=begin; i<end; ++i )
     {
     m_LowPlotMarkers[ i ]->setXValue( low );
+
+    m_Bounds[ i ].m_QMin = low;
     }
 }
 
@@ -427,6 +429,8 @@ HistogramWidget
   for( CountType i=begin; i<end; ++i )
     {
     m_HighPlotMarkers[ i ]->setXValue( high );
+
+    m_Bounds[ i ].m_QMax = high;
     }
 }
 
@@ -468,7 +472,7 @@ void
 HistogramWidget
 ::Replot()
 {
-  RefreshScale();
+  // RefreshScale( true );
 
   m_UI->histogramPlot->replot();
 }
@@ -476,7 +480,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::RefreshScale()
+::RefreshScale( bool iqr )
 {
   assert( std::numeric_limits< double >::has_infinity );
 
@@ -494,11 +498,22 @@ HistogramWidget
 
   for( CountType i=begin; i<end; ++i )
     {
-    if( m_Bounds[ i ].m_XMin<xMin )
-      xMin = m_Bounds[ i ].m_XMin;
+    if( iqr )
+      {
+      if( m_Bounds[ i ].m_QMin<xMin )
+	xMin = m_Bounds[ i ].m_QMin;
 
-    if( m_Bounds[ i ].m_XMax>xMax )
-      xMax = m_Bounds[ i ].m_XMax;
+      if( m_Bounds[ i ].m_QMax>xMax )
+	xMax = m_Bounds[ i ].m_QMax;
+      }
+    else
+      {
+      if( m_Bounds[ i ].m_XMin<xMin )
+	xMin = m_Bounds[ i ].m_XMin;
+
+      if( m_Bounds[ i ].m_XMax>xMax )
+	xMax = m_Bounds[ i ].m_XMax;
+      }
 
     if( m_Bounds[ i ].m_YMin<yMin )
       yMin = m_Bounds[ i ].m_YMin;
@@ -553,7 +568,12 @@ HistogramWidget
 
     m_Bounds[ i ].m_YMin = 0.0;
     m_Bounds[ i ].m_YMax = 1000.0;
+
+    m_Bounds[ i ].m_QMin = 0.0;
+    m_Bounds[ i ].m_QMax = 1000.0;
     }
+
+  RefreshScale( false );
 
   Replot();
 }
@@ -565,7 +585,16 @@ void
 HistogramWidget
 ::on_zoom1Button_clicked()
 {
-  RefreshScale();
+  RefreshScale( false );
+  Replot();
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::on_zoomQButton_clicked()
+{
+  RefreshScale( true );
   Replot();
 }
 
