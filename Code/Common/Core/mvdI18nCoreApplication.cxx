@@ -652,8 +652,7 @@ I18nCoreApplication
   //
   // Create settings proxy.
   m_Settings = new QSettings(
-    // TODO: Change QSettings::NativeFormat by QSettings::IniFormat.
-    QSettings::NativeFormat,
+    QSettings::IniFormat,
     QSettings::UserScope,
     QCoreApplication::organizationName(),
     QCoreApplication::applicationName(),
