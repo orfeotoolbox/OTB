@@ -228,6 +228,10 @@ private:
 
   /**
    */
+  static const QColor BAR_COLORS[ HistogramWidget::CURVE_COUNT ];
+
+  /**
+   */
   static const QColor MARKER_COLORS[ HistogramWidget::CURVE_COUNT ];
 
   /**
