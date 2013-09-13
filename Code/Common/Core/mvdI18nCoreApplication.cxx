@@ -216,7 +216,7 @@ I18nCoreApplication
     delete model;
     model = NULL;
 
-    throw;
+    throw exc;
     }
  
   return model;

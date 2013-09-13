@@ -469,7 +469,7 @@ AbstractImageModel
     }
   catch( std::exception& exc )
     {
-    throw;
+    throw exc;
     }
 
   // if everything ok emit the new spacing of the current lod

@@ -227,7 +227,7 @@ VectorImageModel
     filter->Update();
     std::cout << std::endl;
     }
-  catch( std::exception& exc )
+  catch( std::exception& /*exc*/ )
     {
     // The user can continue to use the file so we return a warning message
     // TODO MSD return the message to the log widget
@@ -816,7 +816,7 @@ VectorImageModel
     }
   catch( std::exception& exc )
     {
-    throw;
+    throw exc;
     }
 
   // (Always) Update m_Image reference.

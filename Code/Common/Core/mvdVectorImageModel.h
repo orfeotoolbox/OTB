@@ -371,10 +371,14 @@ public:
     {
       // TODO manage the message returned by OTB
       qWarning() << "Error returned by OTB:" << exc.what();
+
       throw std::runtime_error(
-          ToStdString(
-              tr("OTB can not read this file ('%1').\n"
-                  "Please check.").arg( filename ) ) );
+	ToStdString(
+	  tr( "OTB can not read this file ('%1').\n"
+	      "Please check."
+	  ).arg( filename )
+	)
+      );
     }
   }
 
