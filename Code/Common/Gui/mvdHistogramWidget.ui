@@ -21,6 +21,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QToolButton" name="zoom1Button">
+       <property name="toolTip">
+        <string>Zoom to full intensity range.</string>
+       </property>
        <property name="text">
         <string>PushButton</string>
        </property>
@@ -32,6 +35,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="zoomQButton">
+       <property name="toolTip">
+        <string>Zoom to quantile ranges.</string>
+       </property>
        <property name="text">
         <string>PushButton</string>
        </property>
@@ -56,6 +62,9 @@
      </item>
      <item>
       <widget class="QComboBox" name="channelComboBox">
+       <property name="toolTip">
+        <string>Select channel(s) to display.</string>
+       </property>
        <item>
         <property name="text">
          <string>Red</string>

@@ -266,8 +266,8 @@ HistogramPlotPicker
     Find( m_PlotCurves[ RGBW_CHANNEL_WHITE ], point.x(), w0, w1, wf );
 
     text = QString().sprintf(
-      // "[%.4f; %.4f[ %.0f",
-      "%.4f\n%.4f/%.4f/%.0f",
+      "%.4f\n[%.4f; %.4f[, %.0f",
+      //"%.4f\n%.4f/%.4f/%.0f",
       point.x(),
       w0, w1, wf
     );
@@ -293,15 +293,16 @@ HistogramPlotPicker
     Find( m_PlotCurves[ RGBW_CHANNEL_BLUE ], point.x(), b0, b1, bf );
 
     text = QString().sprintf(
+      "%.4f\n"
+      "[%.4f; %.4f[, %.0f\n"
+      "[%.4f; %.4f[, %.0f\n"
+      "[%.4f; %.4f[, %.0f",
       /*
-      "[%.4f; %.4f[ %.0f\n"
-      "[%.4f; %.4f[ %.0f\n"
-      "[%.4f; %.4f[ %.0f",
-      */
       "%.4f\n"
       "%.4f/%.4f/%.0f\n"
       "%.4f/%.4f/%.0f\n"
       "%.4f/%.4f/%.0f",
+      */
       point.x(),
       r0, r1, rf,
       g0, g1, gf,
