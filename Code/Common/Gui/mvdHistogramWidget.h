@@ -215,6 +215,9 @@ private:
 //
 // Private methods.
 private:
+  /**
+   */
+  void foo( CountType index );
 
 //
 // Private attributes.
@@ -286,6 +289,10 @@ private:
    */
   Bounds m_Bounds[ CURVE_COUNT ];
 
+  /**
+   */
+  bool m_IsGrayscaleActivated;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -298,6 +305,10 @@ private slots:
   /**
    */
   void on_zoomQButton_clicked();
+
+  /**
+   */
+  void on_channelComboBox_currentIndexChanged( int index );
 
   /**
    */

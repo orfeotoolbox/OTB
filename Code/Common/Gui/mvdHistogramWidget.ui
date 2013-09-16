@@ -82,7 +82,7 @@
        </item>
        <item>
         <property name="text">
-         <string>RGB/W</string>
+         <string>RGB</string>
         </property>
        </item>
       </widget>

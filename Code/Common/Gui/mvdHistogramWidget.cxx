@@ -145,7 +145,8 @@ HistogramWidget
   m_PlotCurves(),
   m_LowPlotMarkers(),
   m_HighPlotMarkers(),
-  m_Bounds()
+  m_Bounds(),
+  m_IsGrayscaleActivated( false )
 {
   m_UI->setupUi( this );
 
@@ -439,6 +440,9 @@ void
 HistogramWidget
 ::SetGrayscaleActivated( bool activated )
 {
+  m_IsGrayscaleActivated = activated;
+
+  /*
   for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
     {
     bool isVisible = 
@@ -451,7 +455,22 @@ HistogramWidget
     m_LowPlotMarkers[ i ]->setVisible( isVisible );
     m_HighPlotMarkers[ i ]->setVisible( isVisible );
     }
+  */
 
+  m_UI->channelComboBox->setEnabled( !activated );
+
+  bool areSignalsBlocked = m_UI->channelComboBox->blockSignals( true );
+  {
+  m_UI->channelComboBox->setItemText(
+    3,
+    activated
+    ? tr( "White" )
+    : tr( "RGB" )
+  );
+  m_UI->channelComboBox->setCurrentIndex( 3 );
+  foo( 3 );
+  }
+  m_UI->channelComboBox->blockSignals( areSignalsBlocked );
   m_PlotPicker->SetGrayscaleActivated( activated );
 }
 
@@ -475,6 +494,32 @@ HistogramWidget
   // RefreshScale( true );
 
   m_UI->histogramPlot->replot();
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::foo( CountType index )
+{
+  CountType begin = 0;
+  CountType end = 0;
+
+  if( !RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
+    return;
+
+  for( CountType i=begin; i<end; ++i )
+    {
+    bool isVisible =
+      m_IsGrayscaleActivated
+      ? i==RGBW_CHANNEL_WHITE
+      : ( index==RGBW_CHANNEL_WHITE
+	  ? i<RGBW_CHANNEL_WHITE
+	  : i==index ); 
+
+    m_PlotCurves[ i ]->setVisible( isVisible );
+    m_LowPlotMarkers[ i ]->setVisible( isVisible );
+    m_HighPlotMarkers[ i ]->setVisible( isVisible );
+    }
 }
 
 /*******************************************************************************/
@@ -595,6 +640,16 @@ HistogramWidget
 ::on_zoomQButton_clicked()
 {
   RefreshScale( true );
+  Replot();
+}
+
+/*******************************************************************************/
+void
+HistogramWidget
+::on_channelComboBox_currentIndexChanged( int /*index*/ )
+{
+  foo( m_UI->channelComboBox->currentIndex() );
+
   Replot();
 }
 
