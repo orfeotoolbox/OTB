@@ -224,8 +224,6 @@ HistogramController
 
   widget->RefreshScale( true );
   widget->Replot();
-
-  // ResetWidget( RGBW_CHANNEL_WHITE );
 }
 
 /*****************************************************************************/

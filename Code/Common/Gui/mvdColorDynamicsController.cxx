@@ -189,7 +189,7 @@ ColorDynamicsController
 
   widget->SetGrayscaleActivated( model->GetSettings().IsGrayscaleActivated() );
 
-  RgbwChannel channels = 
+  RgbwChannel channels =
     model->GetSettings().IsGrayscaleActivated()
     ? RGBW_CHANNEL_WHITE
     : RGBW_CHANNEL_RGB;
@@ -728,7 +728,8 @@ ColorDynamicsController
   ResetQuantiles(
     imageModel->GetSettings().IsGrayscaleActivated()
     ? RGBW_CHANNEL_WHITE
-    : RGBW_CHANNEL_RGB );
+    : RGBW_CHANNEL_RGB
+    );
 
   // Signal histogram has been refreshed.
   emit HistogramRefreshed();

@@ -234,7 +234,7 @@ HistogramWidget
 
   m_PlotPicker =
     new HistogramPlotPicker( curves, m_UI->histogramPlot->canvas() );
-  m_PlotPicker->setTrackerMode( QwtPicker::AlwaysOn );
+  m_PlotPicker->setTrackerMode( QwtPicker::ActiveOnly );
   m_PlotPicker->setRubberBandPen( RUBBER_BAND_COLOR );
   m_PlotPicker->setTrackerPen( QColor( Qt::yellow ) );
 
@@ -468,7 +468,7 @@ HistogramWidget
     : tr( "RGB" )
   );
   m_UI->channelComboBox->setCurrentIndex( 3 );
-  foo( 3 );
+  UpdateCurvesVisibility( 3 );
   }
   m_UI->channelComboBox->blockSignals( areSignalsBlocked );
   m_PlotPicker->SetGrayscaleActivated( activated );
@@ -499,7 +499,7 @@ HistogramWidget
 /*******************************************************************************/
 void
 HistogramWidget
-::foo( CountType index )
+::UpdateCurvesVisibility( CountType index )
 {
   CountType begin = 0;
   CountType end = 0;
@@ -648,7 +648,7 @@ void
 HistogramWidget
 ::on_channelComboBox_currentIndexChanged( int /*index*/ )
 {
-  foo( m_UI->channelComboBox->currentIndex() );
+  UpdateCurvesVisibility( m_UI->channelComboBox->currentIndex() );
 
   Replot();
 }

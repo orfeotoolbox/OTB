@@ -217,7 +217,7 @@ private:
 private:
   /**
    */
-  void foo( CountType index );
+  void UpdateCurvesVisibility( CountType index );
 
 //
 // Private attributes.

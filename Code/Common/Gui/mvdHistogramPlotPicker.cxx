@@ -181,7 +181,7 @@ HistogramPlotPicker
   if( rubberBand()==QwtPicker::UserRubberBand &&
       ( selectionFlags() & PointSelection ) &&
       selection().count() >= 1 )
-    {   
+    {
     const QRect& rect = pickRect();
     const QPoint& pos = pa[ 0 ];
    
@@ -194,35 +194,32 @@ HistogramPlotPicker
     CountType begin = 0;
     CountType end = 0;
 
-    if( !RgbwBounds( begin,
-		     end,
-		     m_IsGrayscaleActivated
-		     ? RGBW_CHANNEL_WHITE
-		     : RGBW_CHANNEL_RGB ) )
+    if( !RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
       return;
 
     QwtDoublePoint p( invTransform( pos ) );
 
     for( CountType i=begin; i<end; ++i )
-      {
-      // RgbwChannel channel = static_cast< RgbwChannel >( i );
+      if( m_PlotCurves[ i ]->isVisible() )
+	{
+	// RgbwChannel channel = static_cast< RgbwChannel >( i );
 
-      p.setY( Find( m_PlotCurves[ i ], p.x() ) );
-      QPoint pos2( transform( p ) );
+	p.setY( Find( m_PlotCurves[ i ], p.x() ) );
+	QPoint pos2( transform( p ) );
 
-      /*
-      QPen pen( m_RubberBandPens[ i ] );
-      painter->setPen( rubberBandPen() );
-      */
+	/*
+	  QPen pen( m_RubberBandPens[ i ] );
+	  painter->setPen( rubberBandPen() );
+	*/
 
-      QwtPainter::drawLine(
-	painter,
-	rect.left(), pos2.y(),
-	rect.right(), pos2.y()
-      );
+	QwtPainter::drawLine(
+	  painter,
+	  rect.left(), pos2.y(),
+	  rect.right(), pos2.y()
+	);
 
-      // painter->setPen( pen );
-      }
+	// painter->setPen( pen );
+	}
     }
 }
 
@@ -244,71 +241,29 @@ HistogramPlotPicker
       )
     );
 
-  /*
-  assert( plot()!=NULL );
-  assert(
-    plot()->parent()==qobject_cast< const HistogramWidget* >( plot()->parent() )
-  );
+  QString text;
+  text.sprintf( "%.4f", point.x() );
 
-  const HistogramWidget* widget =
-    qobject_cast< const HistogramWidget* >( plot()->parent() );
-  assert( widget!=NULL );
-  */
+  CountType begin = 0;
+  CountType end = 0;
 
-  QwtText text;
+  if( RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
+    for( CountType i=begin; i<end; ++i )
+      if( m_PlotCurves[ i ]->isVisible() )
+	{
+	double c0 = 0.0;
+	double c1 = 0.0;
+	double cf = 0.0;
 
-  if( m_IsGrayscaleActivated )
-    {
-    double w0 = 0.0;
-    double w1 = 0.0;
-    double wf = 0.0;
+	Find( m_PlotCurves[ i ], point.x(), c0, c1, cf );
 
-    Find( m_PlotCurves[ RGBW_CHANNEL_WHITE ], point.x(), w0, w1, wf );
-
-    text = QString().sprintf(
-      "%.4f\n[%.4f; %.4f[, %.0f",
-      //"%.4f\n%.4f/%.4f/%.0f",
-      point.x(),
-      w0, w1, wf
-    );
-    }
-  else
-    {
-    double r0 = 0.0;
-    double r1 = 0.0;
-    double rf = 0.0;
-
-    Find( m_PlotCurves[ RGBW_CHANNEL_RED ], point.x(), r0, r1, rf );
-
-    double g0 = 0.0;
-    double g1 = 0.0;
-    double gf = 0.0;
-
-    Find( m_PlotCurves[ RGBW_CHANNEL_GREEN ], point.x(), g0, g1, gf );
-
-    double b0 = 0.0;
-    double b1 = 0.0;
-    double bf = 0.0;
-
-    Find( m_PlotCurves[ RGBW_CHANNEL_BLUE ], point.x(), b0, b1, bf );
-
-    text = QString().sprintf(
-      "%.4f\n"
-      "[%.4f; %.4f[, %.0f\n"
-      "[%.4f; %.4f[, %.0f\n"
-      "[%.4f; %.4f[, %.0f",
-      /*
-      "%.4f\n"
-      "%.4f/%.4f/%.0f\n"
-      "%.4f/%.4f/%.0f\n"
-      "%.4f/%.4f/%.0f",
-      */
-      point.x(),
-      r0, r1, rf,
-      g0, g1, gf,
-      b0, b1, bf
-    );
-    }
+	text.append(
+	  QString().sprintf(
+	    "\n[%.4f; %.4f[, %.0f",
+	    c0, c1, cf
+	  )
+	);
+	}
 
   return text;
 }
