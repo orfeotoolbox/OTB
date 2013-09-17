@@ -190,7 +190,7 @@ public:
      */
     inline
     ChannelVector::value_type
-    GetRgbwChannel( RgbwChannel channel ) const;
+    GetSmartChannel( RgbwChannel channel ) const;
 
     /**
      * \return the band-index for the given component not taking the
@@ -198,13 +198,13 @@ public:
      */
     inline
     ChannelVector::value_type
-    GetChannel( RgbwChannel channel ) const;
+    GetRgbwChannel( RgbwChannel channel ) const;
 
     /**
      * \return the channels band-index vector taking the
      * grayscale-mode activation state flag into account.
      */
-    inline void GetRgbwChannels( ChannelVector& channels ) const;
+    inline void GetSmartChannels( ChannelVector& channels ) const;
 
     //
     // COLOR DYNAMICS.
@@ -212,11 +212,15 @@ public:
 
     /**
      */
-    inline void SetDynamicsParams( const ParametersType& params );
+    inline void SetRgbDynamicsParams( const ParametersType& params );
 
     /**
      */
-    inline const ParametersType& GetDynamicsParams() const;
+    inline const ParametersType& GetRgbDynamicsParams() const;
+
+    /**
+     */
+    inline ParametersType GetSmartDynamicsParams() const;
 
     /**
      * Set low-intensity dynamics parameter for given channel. If
@@ -278,6 +282,14 @@ public:
      */
     inline unsigned int GetGrayChannel() const;
 
+    /**
+     */
+    inline void SetGrayDynamicsParams( const ParametersType& params );
+
+    /**
+     */
+    inline const ParametersType& GetGrayDynamicsParams() const;
+
 
     //
     // Private methods.
@@ -286,13 +298,24 @@ public:
     /**
      */
     inline
-    const ParametersType::ValueType& GetDynamicsParam( CountType i ) const;
+    const ParametersType::ValueType& GetRgbDynamicsParam( CountType i ) const;
 
     /**
      */
     inline
-    void SetDynamicsParam( CountType i,
-			   const ParametersType::ValueType& param );
+    void SetRgbDynamicsParam( CountType i,
+			      const ParametersType::ValueType& param );
+
+    /**
+     */
+    inline
+    const ParametersType::ValueType& GetGrayDynamicsParam( bool high ) const;
+
+    /**
+     */
+    inline
+    void SetGrayDynamicsParam( bool high,
+			       const ParametersType::ValueType& param );
 
     //
     // Private attributes.
@@ -307,12 +330,7 @@ public:
      * \brief Color-dynamics parameters (\sa
      * HistogramModel::Quantile()).
      */
-    ParametersType m_DynamicsParams;
-
-    /**
-     * \brief Grayscale-mode band-index.
-     */
-    ChannelVector::value_type m_GrayChannel;
+    ParametersType m_RgbDynamicsParams;
 
     /**
      * \brief Grayscale-mode activation state.
@@ -320,18 +338,29 @@ public:
     bool m_IsGrayscaleActivated;
 
     /**
+     * \brief Grayscale-mode band-index.
+     */
+    ChannelVector::value_type m_GrayChannel;
+
+    /**
+     * \brief Color-dynamics parameters (\sa
+     * HistogramModel::Quantile()).
+     */
+    ParametersType m_GrayDynamicsParams;
+
+    /**
      * \brief Flag which notices that rendering settings have been
      * edited.
      */
     // TODO: Optimize using C++ bitset bool foo:1;
-    bool m_IsModified;
+    bool m_IsModified: 1;
 
     /**
      * \brief Flag which notices that rendering settings have been
      * applied to display.
      */
     // TODO: Optimize using C++ bitset bool foo:1;
-    bool m_IsApplied;
+    bool m_IsApplied: 1;
   };
 
 //
@@ -707,9 +736,10 @@ inline
 VectorImageModel::Settings
 ::Settings() :
   m_RgbChannels(),
-  m_DynamicsParams( 6 ),
-  m_GrayChannel( 0 ),
+  m_RgbDynamicsParams( 6 ),
   m_IsGrayscaleActivated( false ),
+  m_GrayChannel( 0 ),
+  m_GrayDynamicsParams( 6 ),
   m_IsModified( false ),
   m_IsApplied( false )
 {
@@ -720,9 +750,10 @@ inline
 VectorImageModel::Settings
 ::Settings( const Settings& other ) :
   m_RgbChannels( other.m_RgbChannels ),
-  m_DynamicsParams( other.m_DynamicsParams ),
-  m_GrayChannel( other.m_GrayChannel ),
+  m_RgbDynamicsParams( other.m_RgbDynamicsParams ),
   m_IsGrayscaleActivated( false ),
+  m_GrayChannel( other.m_GrayChannel ),
+  m_GrayDynamicsParams( 6 ),
   m_IsModified( false ),
   m_IsApplied( other.m_IsApplied )
 {
@@ -738,9 +769,10 @@ VectorImageModel::Settings
     return *this;
 
   m_RgbChannels = other.m_RgbChannels;
-  m_DynamicsParams = other.m_DynamicsParams;
-  m_GrayChannel = other.m_GrayChannel;
+  m_RgbDynamicsParams = other.m_RgbDynamicsParams;
   m_IsGrayscaleActivated = other.m_IsGrayscaleActivated;
+  m_GrayChannel = other.m_GrayChannel;
+  m_GrayDynamicsParams = other.m_GrayDynamicsParams;
   m_IsApplied = other.m_IsApplied;
 
   return *this;
@@ -777,7 +809,7 @@ void
 VectorImageModel::Settings
 ::SetModified()
 {
-  qDebug() << this << "::SetModified()";
+  // qDebug() << this << "::SetModified()";
 
   m_IsModified = true;
   m_IsApplied = false;
@@ -789,7 +821,7 @@ void
 VectorImageModel::Settings
 ::ClearModified()
 {
-  qDebug() << this << "::ClearModified()";
+  // qDebug() << this << "::ClearModified()";
 
   m_IsModified = false;
 }
@@ -800,7 +832,7 @@ void
 VectorImageModel::Settings
 ::SetApplied()
 {
-  qDebug() << this << "::SetApplied()";
+  // qDebug() << this << "::SetApplied()";
 
   m_IsApplied = true;
 }
@@ -811,7 +843,7 @@ void
 VectorImageModel::Settings
 ::SetRgbChannels( const ChannelVector& rgb )
 {
-  qDebug() << "setRgbChannels()";
+  // qDebug() << "setRgbChannels()";
 
   assert( m_RgbChannels.empty() || m_RgbChannels.size()==rgb.size() );
 
@@ -837,7 +869,7 @@ VectorImageModel::Settings
 inline
 void
 VectorImageModel::Settings
-::GetRgbwChannels( VectorImageModel::Settings::ChannelVector& channels ) const
+::GetSmartChannels( VectorImageModel::Settings::ChannelVector& channels ) const
 {
   if( IsGrayscaleActivated() )
     {
@@ -857,7 +889,7 @@ VectorImageModel::Settings
 ::SetRgbChannel( ChannelVector::size_type i,
 		 const ChannelVector::value_type& channel )
 {
-  qDebug() << "SetRgbChannel()";
+  // qDebug() << "SetRgbChannel()";
 
   if( m_RgbChannels[ i ]==channel )
     return;
@@ -880,23 +912,31 @@ VectorImageModel::Settings
 inline
 VectorImageModel::Settings::ChannelVector::value_type
 VectorImageModel::Settings
-::GetRgbwChannel( RgbwChannel channel ) const
+::GetSmartChannel( RgbwChannel channel ) const
 {
+  return GetRgbwChannel(
+    m_IsGrayscaleActivated
+    ? RGBW_CHANNEL_WHITE
+    : channel
+  );
+
+  /*
   if( m_IsGrayscaleActivated )
     {
     return m_GrayChannel;
     }
   else
     {
-    return GetChannel( channel );
+    return GetRgbwChannel( channel );
     }
+  */
 }
 
 /*****************************************************************************/
 inline
 VectorImageModel::Settings::ChannelVector::value_type
 VectorImageModel::Settings
-::GetChannel( RgbwChannel channel ) const
+::GetRgbwChannel( RgbwChannel channel ) const
 {
   switch( channel )
     {
@@ -926,18 +966,18 @@ VectorImageModel::Settings
 inline
 void
 VectorImageModel::Settings
-::SetDynamicsParams( const ParametersType& params )
+::SetRgbDynamicsParams( const ParametersType& params )
 {
-  qDebug() << "SetDynamicsParams()";
+  // qDebug() << "SetDynamicsParams()";
 
-  assert( m_DynamicsParams.size()==params.size() );
+  assert( m_RgbDynamicsParams.size()==params.size() );
 
-  if( std::equal( m_DynamicsParams.begin(),
-		  m_DynamicsParams.end(),
+  if( std::equal( m_RgbDynamicsParams.begin(),
+		  m_RgbDynamicsParams.end(),
 		  params.begin() ) )
     return;
 
-  m_DynamicsParams = params;
+  m_RgbDynamicsParams = params;
 
   SetModified();
 }
@@ -946,9 +986,18 @@ VectorImageModel::Settings
 inline
 const ParametersType&
 VectorImageModel::Settings
-::GetDynamicsParams() const
+::GetRgbDynamicsParams() const
 {
-  return m_DynamicsParams;
+  return m_RgbDynamicsParams;
+}
+
+/*****************************************************************************/
+inline
+ParametersType
+VectorImageModel::Settings
+::GetSmartDynamicsParams() const
+{
+  return m_IsGrayscaleActivated ? m_GrayDynamicsParams : m_RgbDynamicsParams;
 }
 
 /*****************************************************************************/
@@ -960,16 +1009,19 @@ VectorImageModel::Settings
   switch( channel )
     {
     case RGBW_CHANNEL_RGB:
+      SetRgbDynamicsParam( 2 * RGBW_CHANNEL_RED, intensity );
+      SetRgbDynamicsParam( 2 * RGBW_CHANNEL_GREEN, intensity );
+      SetRgbDynamicsParam( 2 * RGBW_CHANNEL_BLUE, intensity );
+      break;
+
     case RGBW_CHANNEL_WHITE:
-      SetDynamicsParam( 2 * RGBW_CHANNEL_RED, intensity );
-      SetDynamicsParam( 2 * RGBW_CHANNEL_GREEN, intensity );
-      SetDynamicsParam( 2 * RGBW_CHANNEL_BLUE, intensity );
+      SetGrayDynamicsParam( 0, intensity );
       break;
 
     case RGBW_CHANNEL_RED:
     case RGBW_CHANNEL_GREEN:
     case RGBW_CHANNEL_BLUE:
-      SetDynamicsParam( 2 * channel, intensity );
+      SetRgbDynamicsParam( 2 * channel, intensity );
       break;
 
     default:
@@ -993,19 +1045,28 @@ VectorImageModel::Settings
   switch( channel )
     {
     case RGBW_CHANNEL_RGB:
-    case RGBW_CHANNEL_WHITE:
       {
-      ParametersType::ValueType r = GetDynamicsParam( 2 * RGBW_CHANNEL_RED );
-      ParametersType::ValueType g = GetDynamicsParam( 2 * RGBW_CHANNEL_GREEN );
-      ParametersType::ValueType b = GetDynamicsParam( 2 * RGBW_CHANNEL_BLUE );
+      ParametersType::ValueType r =
+	GetRgbDynamicsParam( 2 * RGBW_CHANNEL_RED );
+
+      ParametersType::ValueType g =
+	GetRgbDynamicsParam( 2 * RGBW_CHANNEL_GREEN );
+
+      ParametersType::ValueType b =
+	GetRgbDynamicsParam( 2 * RGBW_CHANNEL_BLUE );
+
       return (r + g + b) / 3;
       }
+      break;
+
+    case RGBW_CHANNEL_WHITE:
+      return GetGrayDynamicsParam( 0 );
       break;
 
     case RGBW_CHANNEL_RED:
     case RGBW_CHANNEL_GREEN:
     case RGBW_CHANNEL_BLUE:
-      return GetDynamicsParam( 2 * channel );
+      return GetRgbDynamicsParam( 2 * channel );
       break;
 
     default:
@@ -1029,16 +1090,19 @@ VectorImageModel::Settings
   switch( channel )
     {
     case RGBW_CHANNEL_RGB:
+      SetRgbDynamicsParam( 1 + 2 * RGBW_CHANNEL_RED, intensity );
+      SetRgbDynamicsParam( 1 + 2 * RGBW_CHANNEL_GREEN, intensity );
+      SetRgbDynamicsParam( 1 + 2 * RGBW_CHANNEL_BLUE, intensity );
+      break;
+
     case RGBW_CHANNEL_WHITE:
-      SetDynamicsParam( 1 + 2 * RGBW_CHANNEL_RED, intensity );
-      SetDynamicsParam( 1 + 2 * RGBW_CHANNEL_GREEN, intensity );
-      SetDynamicsParam( 1 + 2 * RGBW_CHANNEL_BLUE, intensity );
+      SetGrayDynamicsParam( 1, intensity );
       break;
 
     case RGBW_CHANNEL_RED:
     case RGBW_CHANNEL_GREEN:
     case RGBW_CHANNEL_BLUE:
-      SetDynamicsParam( 1 + 2 * channel, intensity );
+      SetRgbDynamicsParam( 1 + 2 * channel, intensity );
       break;
 
     default:
@@ -1056,19 +1120,28 @@ VectorImageModel::Settings
   switch( channel )
     {
     case RGBW_CHANNEL_RGB:
-    case RGBW_CHANNEL_WHITE:
       {
-      ParametersType::ValueType r = GetDynamicsParam( 1+ 2*RGBW_CHANNEL_RED );
-      ParametersType::ValueType g = GetDynamicsParam( 1+ 2*RGBW_CHANNEL_GREEN );
-      ParametersType::ValueType b = GetDynamicsParam( 1+ 2*RGBW_CHANNEL_BLUE );
+      ParametersType::ValueType r =
+	GetRgbDynamicsParam( 1+ 2*RGBW_CHANNEL_RED );
+
+      ParametersType::ValueType g =
+	GetRgbDynamicsParam( 1+ 2*RGBW_CHANNEL_GREEN );
+
+      ParametersType::ValueType b =
+	GetRgbDynamicsParam( 1+ 2*RGBW_CHANNEL_BLUE );
+
       return (r + g + b) / 3;
       }
+      break;
+
+    case RGBW_CHANNEL_WHITE:
+      return GetGrayDynamicsParam( 1 );
       break;
 
     case RGBW_CHANNEL_RED:
     case RGBW_CHANNEL_GREEN:
     case RGBW_CHANNEL_BLUE:
-      return GetDynamicsParam( 1 + 2 * channel );
+      return GetRgbDynamicsParam( 1 + 2 * channel );
       break;
 
     default:
@@ -1087,26 +1160,26 @@ VectorImageModel::Settings
 inline
 const ParametersType::ValueType&
 VectorImageModel::Settings
-::GetDynamicsParam( CountType i ) const
+::GetRgbDynamicsParam( CountType i ) const
 {
-  return m_DynamicsParams[ i ];
+  return m_RgbDynamicsParams[ i ];
 }
 
 /*****************************************************************************/
 inline
 void
 VectorImageModel::Settings
-::SetDynamicsParam( CountType i,
-		    const ParametersType::ValueType& param )
+::SetRgbDynamicsParam( CountType i,
+		       const ParametersType::ValueType& param )
 {
-  qDebug() << "SetDynamicsParam()";
+  // qDebug() << "SetDynamicsParam()";
 
-  if( m_DynamicsParams[ i ]==param )
+  if( m_RgbDynamicsParams[ i ]==param )
     return;
 
   SetModified();
 
-  m_DynamicsParams[ i ] = param;
+  m_RgbDynamicsParams[ i ] = param;
 }
 
 /*****************************************************************************/
@@ -1147,6 +1220,47 @@ VectorImageModel::Settings
   m_GrayChannel = index;
 
   SetModified();
+}
+
+/*****************************************************************************/
+inline
+const ParametersType&
+VectorImageModel::Settings
+::GetGrayDynamicsParams() const
+{
+  return m_GrayDynamicsParams;
+}
+
+/*****************************************************************************/
+inline
+const ParametersType::ValueType&
+VectorImageModel::Settings
+::GetGrayDynamicsParam( bool high ) const
+{
+  return m_GrayDynamicsParams[ high ? 1 : 0 ];
+}
+
+/*****************************************************************************/
+inline
+void
+VectorImageModel::Settings
+::SetGrayDynamicsParam( bool high,
+			const ParametersType::ValueType& param )
+{
+  // qDebug() << "SetDynamicsParam()";
+
+  CountType ofs = high ? 1 : 0;
+
+  if( m_GrayDynamicsParams[0 * 2 + ofs ]==param )
+    return;
+
+  SetModified();
+
+  // Indices are detailed for better readability since the compiler
+  // will optimize constants.
+  m_GrayDynamicsParams[ 0 * 2 + ofs ] = param;
+  m_GrayDynamicsParams[ 1 * 2 + ofs ] = param;
+  m_GrayDynamicsParams[ 2 * 2 + ofs ] = param;
 }
 
 } // end namespace 'mvd'.

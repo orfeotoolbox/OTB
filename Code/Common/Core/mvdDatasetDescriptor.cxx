@@ -89,7 +89,8 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   "settings",
   "rgb",
   "grayscale",
-  "dynamics",
+  "rgb-dynamics",
+  "w-dynamics",
   //
   "properties",
   "no_data",
@@ -223,16 +224,27 @@ DatasetDescriptor
 
   //
   // Dynamics parameters.
-  QDomElement dynamicsElement(
+  QDomElement rgbDynamicsElement(
     CreateTextNode(
       ContainerToString(
-        settings->GetDynamicsParams().begin(),
-        settings->GetDynamicsParams().end()
+        settings->GetRgbDynamicsParams().begin(),
+        settings->GetRgbDynamicsParams().end()
       ),
-      TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ]
+      TAG_NAMES[ ELEMENT_RGB_DYNAMICS_PARAMETERS ]
     )
   );
-  settingsElement.appendChild( dynamicsElement );
+  settingsElement.appendChild( rgbDynamicsElement );
+
+  QDomElement wDynamicsElement(
+    CreateTextNode(
+      ContainerToString(
+        settings->GetGrayDynamicsParams().begin(),
+        settings->GetGrayDynamicsParams().end()
+      ),
+      TAG_NAMES[ ELEMENT_W_DYNAMICS_PARAMETERS ]
+    )
+  );
+  settingsElement.appendChild( wDynamicsElement );
   }
 }
 
@@ -300,29 +312,59 @@ DatasetDescriptor
   }
 
   {
-    // Dynamics
-    QDomElement dynamicsElt(
-      settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ] )
+    // RGB Dynamics
+    QDomElement rgbDynamicsElt(
+      settingsElt.firstChildElement(
+	TAG_NAMES[ ELEMENT_RGB_DYNAMICS_PARAMETERS ]
+      )
     );
     // TODO: Manage XML structure errors.
-    assert( !dynamicsElt.isNull() );
-    
-    QDomNode node = dynamicsElt.firstChild();
+    assert( !rgbDynamicsElt.isNull() );
+
+    QDomNode node = rgbDynamicsElt.firstChild();
     // TODO: Manage XML structure errors.
     assert( !node.isNull() );
     assert( node.isText() );
-    
+
     QDomText textNode( node.toText() );
     // TODO: Manage XML structure errors.
     assert( !textNode.isNull() );
 
     textNode.setData(
       ContainerToString(
-        settings->GetDynamicsParams().begin(),
-        settings->GetDynamicsParams().end()
+        settings->GetRgbDynamicsParams().begin(),
+        settings->GetRgbDynamicsParams().end()
       )
     );
   }
+
+  {
+    // Gray Dynamics
+    QDomElement wDynamicsElt(
+      settingsElt.firstChildElement(
+	TAG_NAMES[ ELEMENT_W_DYNAMICS_PARAMETERS ]
+      )
+    );
+    // TODO: Manage XML structure errors.
+    assert( !wDynamicsElt.isNull() );
+
+    QDomNode node = wDynamicsElt.firstChild();
+    // TODO: Manage XML structure errors.
+    assert( !node.isNull() );
+    assert( node.isText() );
+
+    QDomText textNode( node.toText() );
+    // TODO: Manage XML structure errors.
+    assert( !textNode.isNull() );
+
+    textNode.setData(
+      ContainerToString(
+        settings->GetGrayDynamicsParams().begin(),
+        settings->GetGrayDynamicsParams().end()
+      )
+    );
+  }
+
   // if everything went ok
   return true;
 }
@@ -580,16 +622,31 @@ DatasetDescriptor
     );
     settings->SetGrayChannel( grayscaleElt.attribute( "gray" ).toUInt() );
 
-    // Dynamics
-    QDomElement dynamicsElt(
-      settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_DYNAMICS_PARAMETERS ] )
+    // RGB Dynamics
+    QDomElement rgbDynamicsElt(
+      settingsElt.firstChildElement(
+	TAG_NAMES[ ELEMENT_RGB_DYNAMICS_PARAMETERS ]
+      )
     );
     // TODO: Manage XML structure errors.
-    assert( !dynamicsElt.isNull() );
-    ParametersType dynamics;
-    ExtractArrayFromElement( dynamics, dynamicsElt );
-    assert( dynamics.GetSize() == 6 );
-    settings->SetDynamicsParams( dynamics );
+    assert( !rgbDynamicsElt.isNull() );
+    ParametersType rgbDynamics;
+    ExtractArrayFromElement( rgbDynamics, rgbDynamicsElt );
+    assert( rgbDynamics.GetSize() == 6 );
+    settings->SetRgbDynamicsParams( rgbDynamics );
+
+    // Gray Dynamics
+    QDomElement wDynamicsElt(
+      settingsElt.firstChildElement(
+	TAG_NAMES[ ELEMENT_W_DYNAMICS_PARAMETERS ]
+      )
+    );
+    // TODO: Manage XML structure errors.
+    assert( !wDynamicsElt.isNull() );
+    ParametersType wDynamics;
+    ExtractArrayFromElement( wDynamics, wDynamicsElt );
+    assert( wDynamics.GetSize() == 6 );
+    settings->SetRgbDynamicsParams( wDynamics );
     }
 }
 

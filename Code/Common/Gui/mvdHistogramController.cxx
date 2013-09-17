@@ -148,7 +148,7 @@ HistogramController
     RgbwChannel chan = static_cast< RgbwChannel >( i );
 
     VectorImageModel::Settings::ChannelVector::value_type band =
-      settings.GetChannel( chan );
+      settings.GetRgbwChannel( chan );
 
     size_t size = model->GetDataCount( band );
 

@@ -367,7 +367,7 @@ VectorImageModel
     RgbwChannel channel = static_cast< RgbwChannel >( i );
 
     Settings::ChannelVector::value_type band =
-      GetSettings().GetRgbwChannel( channel );
+      GetSettings().GetSmartChannel( channel );
 
     GetSettings().SetLowIntensity(
       channel,
@@ -958,10 +958,10 @@ VectorImageModel
     m_RenderingFilter->GetRenderingFunction();
 
   Settings::ChannelVector rgb;
-  GetSettings().GetRgbwChannels( rgb );
+  GetSettings().GetSmartChannels( rgb );
 
   renderingFunc->SetChannelList( rgb );
-  renderingFunc->SetParameters( GetSettings().GetDynamicsParams() );
+  renderingFunc->SetParameters( GetSettings().GetSmartDynamicsParams() );
 
   // TODO: Remove temporary hack (Quicklook rendering settings).
   QuicklookModel* quicklookModel = GetQuicklookModel();
@@ -1161,7 +1161,7 @@ VectorImageModel
     //
     // Display the radiometry of the displayed channels
     Settings::ChannelVector rgb;
-    GetSettings().GetRgbwChannels( rgb );
+    GetSettings().GetSmartChannels( rgb );
 
     if ( ToImage()->GetBufferedRegion().IsInside(currentLodIndex) )
       {
@@ -1175,7 +1175,6 @@ VectorImageModel
         ossRadio <<currentPixel.GetElement(rgb[idx]) << " ";
         }
       ossRadio <<"]";
-
       }
     else
       {

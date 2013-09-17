@@ -429,8 +429,8 @@ ColorDynamicsController
 
     if( colorBandDynWgt->IsBounded() )
       {
-      min = minPx[ settings.GetChannel( channel ) ];
-      max = maxPx[ settings.GetChannel( channel ) ];
+      min = minPx[ settings.GetRgbwChannel( channel ) ];
+      max = maxPx[ settings.GetRgbwChannel( channel ) ];
       }
 
     // Block widget's signals...
@@ -490,11 +490,11 @@ ColorDynamicsController
       colorDynamicsWidget->GetChannel( channel );
 
     DefaultImageType::PixelType::ValueType min(
-      minPx[ settings.GetChannel( channel ) ]
+      minPx[ settings.GetRgbwChannel( channel ) ]
     );
 
     DefaultImageType::PixelType::ValueType max(
-      maxPx[ settings.GetChannel( channel ) ]
+      maxPx[ settings.GetRgbwChannel( channel ) ]
     );
 
     // Block this controller's signals to prevent display refreshes
@@ -841,7 +841,7 @@ ColorDynamicsController
     // Calculate quantile intensity.
     HistogramModel::MeasurementType intensity =
       imageModel->GetHistogramModel()->Quantile(
-	settings.GetChannel( chan ),
+	settings.GetRgbwChannel( chan ),
 	0.01 * value,
 	BOUND_LOWER
       );
@@ -911,7 +911,7 @@ ColorDynamicsController
     // Calculate quantile intensity.
     HistogramModel::MeasurementType intensity =
       imageModel->GetHistogramModel()->Quantile(
-	settings.GetChannel( chan ),
+	settings.GetRgbwChannel( chan ),
 	0.01 * value,
 	BOUND_UPPER
       );
@@ -987,7 +987,7 @@ ColorDynamicsController
       // Refresh quantile display.
       colorBandDynWgt->SetLowQuantile(
 	100.0 * imageModel->GetHistogramModel()->Percentile(
-	  imageModel->GetSettings().GetChannel( chan ),
+	  imageModel->GetSettings().GetRgbwChannel( chan ),
 	  value,
 	  BOUND_LOWER )
       );
@@ -1048,7 +1048,7 @@ ColorDynamicsController
       // Refresh quantile display.
       colorBandDynWgt->SetHighQuantile(
 	100.0 * imageModel->GetHistogramModel()->Percentile(
-	  imageModel->GetSettings().GetChannel( chan ),
+	  imageModel->GetSettings().GetRgbwChannel( chan ),
 	  value,
 	  BOUND_UPPER
 	)
@@ -1136,7 +1136,7 @@ ColorDynamicsController
     RgbwChannel chan = static_cast< RgbwChannel >( i );
 
     VectorImageModel::Settings::ChannelVector::value_type band(
-      settings.GetChannel( chan )
+      settings.GetRgbwChannel( chan )
     );
 
     HistogramModel::MeasurementType lintensity =
