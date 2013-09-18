@@ -91,8 +91,8 @@ int generic_StreamingStatisticsMapFromLabelImageFilterTest(int argc, char * argv
   typename VectorImageType::RegionType regionSelectRed, regionSelectGreen;
   sizeSelectRed[0] = size[0] / 4.0; // size along X
   sizeSelectRed[1] = size[1] / 4.0; // size along Y
-  sizeSelectGreen[0] = size[0] / 2.0;; // size along X
-  sizeSelectGreen[1] = size[1] / 2.0;; // size along Y
+  sizeSelectGreen[0] = size[0] / 2.0; ; // size along X
+  sizeSelectGreen[1] = size[1] / 2.0; ; // size along Y
 
   startSelectRed[0] = (size[0] - sizeSelectRed[0] - sizeSelectGreen[0]) / 3.0; // first index on X
   startSelectRed[1] = (size[1] - sizeSelectRed[1] - sizeSelectGreen[1]) / 3.0; // first index on Y
@@ -113,7 +113,7 @@ int generic_StreamingStatisticsMapFromLabelImageFilterTest(int argc, char * argv
   VIteratorType supportImageRedIterator(supportImage, regionSelectRed);
   IteratorType labelImageRedIterator(labelImage, regionSelectRed);
   labelImageRedIterator.GoToBegin();
-  for(supportImageRedIterator.GoToBegin() ; !supportImageRedIterator.IsAtEnd() ; ++supportImageRedIterator)
+  for(supportImageRedIterator.GoToBegin(); !supportImageRedIterator.IsAtEnd(); ++supportImageRedIterator)
   {
     supportImageRedIterator.Set(redColor);
     labelImageRedIterator.Set(redLabel);
@@ -123,7 +123,7 @@ int generic_StreamingStatisticsMapFromLabelImageFilterTest(int argc, char * argv
   VIteratorType supportImageGreenIterator(supportImage, regionSelectGreen);
   IteratorType labelImageGreenIterator(labelImage, regionSelectGreen);
   labelImageGreenIterator.GoToBegin();
-  for(supportImageGreenIterator.GoToBegin() ; !supportImageGreenIterator.IsAtEnd() ; ++supportImageGreenIterator)
+  for(supportImageGreenIterator.GoToBegin(); !supportImageGreenIterator.IsAtEnd(); ++supportImageGreenIterator)
   {
     supportImageGreenIterator.Set(greenColor);
     labelImageGreenIterator.Set(greenLabel);
