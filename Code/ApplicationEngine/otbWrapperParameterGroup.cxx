@@ -657,6 +657,7 @@ ParameterGroup::GetParameterByKey(std::string name)
 
   if (parentParam.IsNull())
     {
+      if(parentParam->GetKey() != "inxml") FIXNEEDED
     itkExceptionMacro(<< "Could not find parameter " << name)
     }
 
