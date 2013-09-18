@@ -110,7 +110,7 @@ HistogramWidget::MARKER_COLORS[ HistogramWidget::CURVE_COUNT ] =
 const QColor
 HistogramWidget::RUBBER_BAND_COLORS[ HistogramWidget::CURVE_COUNT ] =
 {
-  QColor( 0xFF, 0x77, 0x77/*, 0xAA */),
+  QColor( 0xFF, 0x77, 0x77/*, 0xAA */ ),
   QColor( 0x77, 0xFF, 0x77/*, 0xAA */ ),
   QColor( 0x77, 0x77, 0xFF/*, 0xAA */ ),
   QColor( 0xFF, 0xFF, 0xFF/*, 0xAA */ ),
@@ -173,19 +173,17 @@ HistogramWidget
   m_PlotZoomer->setRubberBandPen( QPen( QColor( 0xFF, 0x44, 0xFF ) ) );
   m_PlotZoomer->setTrackerPen( QPen( QColor( 0xFF, 0x44, 0xFF ) ) );
   */
-#if 1
   m_PlotMagnifier = new QwtPlotMagnifier( m_UI->histogramPlot->canvas() );
   m_PlotMagnifier->setAxisEnabled( QwtPlot::yLeft, false );
   m_PlotMagnifier->setWheelFactor( 1.0 / m_PlotMagnifier->wheelFactor() );
   m_PlotMagnifier->setMouseButton( Qt::MiddleButton );
-#endif
+  // m_PlotMagnifier->setZoomInKey( Qt::Key_Plus, Qt::NoModifier );
+  // m_PlotMagnifier->setZoomOutKey( Qt::Key_Minus, Qt::NoModifier );
 
-#if 1
   m_PlotPanner = new QwtPlotPanner( m_UI->histogramPlot->canvas() );
   // m_PlotPanner->setAxisEnabled( QwtPlot::yLeft, false );
   m_PlotPanner->setMouseButton( Qt::RightButton );
   m_PlotPanner->setOrientations( Qt::Horizontal );
-#endif
 
   //
   // CURVES.
