@@ -359,7 +359,7 @@ VectorImageModel
   CountType begin = -1;
   CountType end = -1;
 
-  mvd::RgbBounds( begin, end, RGBW_CHANNEL_RGB );
+  mvd::RgbwBounds( begin, end, RGBW_CHANNEL_ALL );
 
   // Store min/max intensities of default-display channels.
   for( CountType i=begin; i<end; ++i )
@@ -367,7 +367,7 @@ VectorImageModel
     RgbwChannel channel = static_cast< RgbwChannel >( i );
 
     Settings::ChannelVector::value_type band =
-      GetSettings().GetSmartChannel( channel );
+      GetSettings().GetRgbwChannel( channel );
 
     GetSettings().SetLowIntensity(
       channel,
@@ -948,6 +948,7 @@ VectorImageModel
   SetCurrentLod(GetCurrentLod());
 }
 
+/*****************************************************************************/
 void
 VectorImageModel
 ::ApplySettings()

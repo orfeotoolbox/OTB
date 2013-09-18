@@ -1224,6 +1224,26 @@ VectorImageModel::Settings
 
 /*****************************************************************************/
 inline
+void
+VectorImageModel::Settings
+::SetGrayDynamicsParams( const ParametersType& params )
+{
+  // qDebug() << "SetDynamicsParams()";
+
+  assert( m_GrayDynamicsParams.size()==params.size() );
+
+  if( std::equal( m_GrayDynamicsParams.begin(),
+		  m_GrayDynamicsParams.end(),
+		  params.begin() ) )
+    return;
+
+  m_GrayDynamicsParams = params;
+
+  SetModified();
+}
+
+/*****************************************************************************/
+inline
 const ParametersType&
 VectorImageModel::Settings
 ::GetGrayDynamicsParams() const

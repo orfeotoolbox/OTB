@@ -646,7 +646,7 @@ DatasetDescriptor
     ParametersType wDynamics;
     ExtractArrayFromElement( wDynamics, wDynamicsElt );
     assert( wDynamics.GetSize() == 6 );
-    settings->SetRgbDynamicsParams( wDynamics );
+    settings->SetGrayDynamicsParams( wDynamics );
     }
 }
 
