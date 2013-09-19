@@ -8,13 +8,13 @@ SET(TESTSYSTEM_TESTS ${CXX_TEST_PATH}/otbTestSystemTests)
 ADD_TEST(tsTvIsNightlyRevision ${TESTSYSTEM_TESTS}
          otbIsNightlyRevision
          ${OTB_WC_REVISION}
-         http://www.orfeo-toolbox.org/nightly/libNightlyNumber )
+         http://hg.orfeo-toolbox.org/nightly/libNightlyNumber )
 
 #Test if the current working copy corresponds to the nightly revision number
 ADD_TEST(tsTvDataIsNightlyRevision ${TESTSYSTEM_TESTS}
          otbIsNightlyRevision
          ${OTB_DATA_WC_REVISION}
-         http://www.orfeo-toolbox.org/nightly/dataNightlyNumber )
+         http://hg.orfeo-toolbox.org/nightly/dataNightlyNumber )
 
 #Test a basic ascii comparison
 ADD_TEST(tsTvCompareAscii ${TESTSYSTEM_TESTS}
