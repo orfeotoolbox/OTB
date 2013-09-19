@@ -574,18 +574,8 @@ HistogramWidget
     << "[" << xMin << "; " << xMax << "]"
     << "x [" << yMin << "; " << yMax << "]";
 
-#if 0
-  m_UI->histogramPlot
-    ->axisScaleDiv( QwtPlot::xBottom )
-    ->setInterval( xMin, xMax );
-
-  m_UI->histogramPlot
-    ->axisScaleDiv( QwtPlot::yLeft )
-    ->setInterval( yMin, yMax );
-#else
   m_UI->histogramPlot->setAxisScale( QwtPlot::xBottom, xMin, xMax );
   m_UI->histogramPlot->setAxisScale( QwtPlot::yLeft, yMin, yMax );
-#endif
 }
 
 /*******************************************************************************/
