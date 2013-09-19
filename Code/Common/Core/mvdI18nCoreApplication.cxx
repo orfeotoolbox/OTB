@@ -442,8 +442,11 @@ I18nCoreApplication
 
   //
   // Remember cache-dir.
-  StoreSettingsKey( "cacheDir", QDir::cleanPath( m_CacheDir.path() ) );
-  
+  StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_CACHE_DIR,
+    QDir::cleanPath( m_CacheDir.path() )
+  );
+
   //
   // Construct result-dir path.
   I18nCoreApplication::MakeDirTree(
@@ -454,7 +457,10 @@ I18nCoreApplication
 
   //
   // Remember result-dir
-  StoreSettingsKey( "resultsDir", QDir::cleanPath( m_ResultsDir.path() ) );
+  StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR,
+    QDir::cleanPath( m_ResultsDir.path() )
+  );
 
   //
   // Result.
@@ -466,34 +472,68 @@ void
 I18nCoreApplication
 ::ElevationSetup()
 {
-  QSettings settings;
+  otb::DEMHandler::Pointer demHandlerInstance( otb::DEMHandler::Instance() );
 
-  otb::DEMHandler::Pointer demHandlerInstance = otb::DEMHandler::Instance();
-
-  if(settings.contains("geoidPathActive") && settings.value("geoidPathActive").toBool())
+  if( I18nCoreApplication::HasSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ) &&
+      I18nCoreApplication::RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ).toBool() )
     {
-    qDebug() << "Settings/GeoidFile:" <<settings.value("geoidPath").toString() ;
+    qDebug() <<
+      "Settings/GeoidFile:" <<
+      I18nCoreApplication::RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+      ).toString();
+
     try
       {
-      demHandlerInstance->OpenGeoidFile(settings.value("geoidPath").toString().toStdString());
+      demHandlerInstance->OpenGeoidFile(
+	ToStdString(
+	  I18nCoreApplication::RetrieveSettingsKey(
+	    I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+	  ).toString()
+	)
+      );
       }
-    catch(itk::ExceptionObject & err)
+    catch( itk::ExceptionObject& err )
       {
-      qWarning() <<tr("An error occured while loading the geoid file, no geoid file will be used.");
-      qWarning()<<err.what();
+      qWarning() <<
+	tr( "An error occured while loading the geoid file, "
+	    "no geoid file will be used." );
+
+      qWarning() << err.what();
       }
     }
-  if(settings.contains("srtmDirActive") && settings.value("srtmDirActive").toBool())
+
+  if( I18nCoreApplication::HasSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ) &&
+      I18nCoreApplication::RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ).toBool() )
     {
-    qDebug() << "Settings/DEMDir:" <<settings.value("srtmDir").toString();
+    qDebug() <<
+      "Settings/DEMDir:" <<
+      I18nCoreApplication::RetrieveSettingsKey(
+	I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
+      ).toString();
+
     try
       {
-      demHandlerInstance->OpenDEMDirectory(settings.value("srtmDir").toString().toStdString());
+      demHandlerInstance->OpenDEMDirectory(
+	ToStdString(
+	  I18nCoreApplication::RetrieveSettingsKey(
+	    I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
+	  )
+	  .toString()
+	)
+      );
       }
-    catch(itk::ExceptionObject & err)
+    catch( itk::ExceptionObject& err )
       {
-      qWarning() <<tr("An error occured while loading the DEM directory, no DEM will be used.");
-      qWarning()<<err.what();
+      qWarning() <<
+	tr( "An error occured while loading the DEM directory, "
+	    "no DEM will be used." );
+
+      qWarning() << err.what();
       }
     }
 }
@@ -671,7 +711,9 @@ I18nCoreApplication
 
   //
   // Restore cache directory.
-  QVariant value( RetrieveSettingsKey( "cacheDir" ) );
+  QVariant value(
+    RetrieveSettingsKey( I18nCoreApplication::SETTINGS_KEY_CACHE_DIR )
+  );
 
   if( !value.isNull() )
     {
@@ -687,7 +729,9 @@ I18nCoreApplication
 
   //
   // Restore result directory.
-  QVariant resultDir( RetrieveSettingsKey( "resultsDir" ) );
+  QVariant resultDir(
+    RetrieveSettingsKey( I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR )
+  );
 
   if( !resultDir.isNull() )
     {
