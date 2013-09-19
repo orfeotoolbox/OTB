@@ -5,7 +5,7 @@
     <name>ColorSetupController</name>
     <message>
         <source>BAND 0</source>
-        <translation type="unfinished">BANDE 0</translation>
+        <translation>BANDE 0</translation>
     </message>
 </context>
 <context>
@@ -26,11 +26,11 @@
     <name>HistogramWidget</name>
     <message>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation>Gris</translation>
     </message>
     <message>
         <source>RGB</source>
-        <translation type="unfinished"></translation>
+        <translation>RVB</translation>
     </message>
 </context>
 <context>
@@ -604,7 +604,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Datasets</source>
-        <translation type="unfinished">Jeu(x) de données</translation>
+        <translation>Jeux de données</translation>
     </message>
     <message>
         <source></source>
@@ -920,7 +920,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Zoom to full intensity range.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom sur l&apos;intervale des intensités.</translation>
     </message>
     <message>
         <source>PushButton</source>
@@ -928,31 +928,31 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Zoom to quantile ranges.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom sur l&apos;intervale des quantiles.</translation>
     </message>
     <message>
         <source>Select channel(s) to display.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner les cannaux à afficher.</translation>
     </message>
     <message>
         <source>Red</source>
-        <translation type="unfinished">Rouge</translation>
+        <translation>Rouge</translation>
     </message>
     <message>
         <source>Green</source>
-        <translation type="unfinished">Vert</translation>
+        <translation>Vert</translation>
     </message>
     <message>
         <source>Blue</source>
-        <translation type="unfinished">Bleu</translation>
+        <translation>Bleu</translation>
     </message>
     <message>
         <source>RGB</source>
-        <translation type="unfinished"></translation>
+        <translation>RVB</translation>
     </message>
     <message>
         <source>Histogram estimated on Quicklook.</source>
-        <translation type="unfinished"></translation>
+        <translation>Histogramme estimé à partir de l&apos;Aperçu.</translation>
     </message>
     <message>
         <source></source>
@@ -961,7 +961,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Gray</source>
-        <translation type="unfinished"></translation>
+        <translation>Gris</translation>
     </message>
 </context>
 <context>
@@ -1124,7 +1124,7 @@ Default cache-directory location is: &apos;%1&apos;.
 Warning:
 - Your account needs to have write access to this directory;
 - Please be aware that this directory can consume significant disk space.</source>
-        <translation type="unfinished">Monteverdi2 maintient un dépôt où sont stockées des données additionnelles liées à chaque image (par exemple, réglage d&apos;affichage, histogrammes, aperçus etc.).
+        <translation>Monteverdi2 maintient un dépôt où sont stockées des données additionnelles liées à chaque image (par exemple, réglage d&apos;affichage, histogrammes, aperçus etc.).
 
 L&apos;emplacement par défaut du répertoire de cache est : &apos;%1&apos;.
 
@@ -1432,7 +1432,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Histogram</source>
-        <translation type="unfinished"></translation>
+        <translation>Histogramme</translation>
     </message>
 </context>
 <context>
