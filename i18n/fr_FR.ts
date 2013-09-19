@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
+    <name>ColorSetupController</name>
+    <message>
+        <source>BAND 0</source>
+        <translation type="unfinished">BANDE 0</translation>
+    </message>
+</context>
+<context>
     <name>ColorSetupWidget</name>
     <message>
         <source>BAND %1</source>
@@ -13,6 +20,17 @@
     <message>
         <source>Warning!</source>
         <translation type="obsolete">Avertissement !</translation>
+    </message>
+</context>
+<context>
+    <name>HistogramWidget</name>
+    <message>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RGB</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -823,6 +841,14 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
 </context>
 <context>
+    <name>mvd::HistogramController</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>mvd::HistogramModel</name>
     <message>
         <source></source>
@@ -876,6 +902,66 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     <message>
         <source>%1: Histogram written (%2 ms)...</source>
         <translation>%1 : histogram écrit (%2 ms)...</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::HistogramPlotPicker</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::HistogramWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom to full intensity range.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom to quantile ranges.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select channel(s) to display.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red</source>
+        <translation type="unfinished">Rouge</translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation type="unfinished">Vert</translation>
+    </message>
+    <message>
+        <source>Blue</source>
+        <translation type="unfinished">Bleu</translation>
+    </message>
+    <message>
+        <source>RGB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Histogram estimated on Quicklook.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Gray</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1343,6 +1429,10 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     <message>
         <source>Monteverdi2 - Warning!</source>
         <translation>Monteverdi2 - Avertissement !</translation>
+    </message>
+    <message>
+        <source>Histogram</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
