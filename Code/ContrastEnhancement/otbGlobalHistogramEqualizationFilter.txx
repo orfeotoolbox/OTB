@@ -85,8 +85,7 @@ GlobalHistogramEqualizationFilter<TInput, TOutput>
     this->AllocateOutputs();
 
     // Iterator which traverse the input
-    itk::ImageRegionConstIteratorWithIndex<TInput> itInput(input,
-                                                input->GetLargestPossibleRegion());
+    itk::ImageRegionConstIteratorWithIndex<TInput> itInput(input,outputRegion);
 
 
       itInput.GoToBegin();
