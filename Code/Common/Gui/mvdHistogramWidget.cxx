@@ -282,7 +282,7 @@ HistogramWidget
   );
   QObject::connect(
     m_PlotPicker, SIGNAL( selected( const QwtArray< QwtDoublePoint >& ) ),
-    this, SLOT( OnSelected( const QwtArray< QwtDoublePolygon >& ) )
+    this, SLOT( OnSelected( const QwtArray< QwtDoublePoint >& ) )
   );
 }
 

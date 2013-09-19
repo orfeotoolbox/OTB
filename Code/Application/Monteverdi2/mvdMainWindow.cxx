@@ -1331,7 +1331,7 @@ MainWindow
     QObject::connect(
       m_ImageView,
       SIGNAL( RenderingContextChanged( const PointType&, double ) ),
-      vectorImageModel,
+      model,
       SLOT(  OnRenderingContextChanged(const PointType&, double ))
       );
     }
