@@ -79,7 +79,7 @@ class Monteverdi2_EXPORT Application
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public constants.
+// Public constants/types.
 public:
 
 //

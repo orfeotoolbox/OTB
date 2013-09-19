@@ -143,13 +143,19 @@ ApplicationLauncher
 	{
 	found.m_HasDem = true;
 
-	if( i18nApp->HasSettingsKey( "srtmDirActive" ) &&
-	    i18nApp->RetrieveSettingsKey( "srtmDirActive" ).toBool() )
+	if( i18nApp->HasSettingsKey(
+	      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ) &&
+	    i18nApp->RetrieveSettingsKey(
+	      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE ).toBool() )
 	{
 	otbApp->EnableParameter( *it );
 	otbApp->SetParameterString(
 	  *it,
-	  ToStdString( i18nApp->RetrieveSettingsKey( "srtmDir" ).toString()
+	  ToStdString(
+	    i18nApp->RetrieveSettingsKey(
+	      I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
+	    )
+	    .toString()
 	  )
 	);
 	}
@@ -158,13 +164,20 @@ ApplicationLauncher
 	{
 	found.m_HasGeoid = true;
 
-	if( i18nApp->HasSettingsKey( "geoidPathActive" ) &&
-	    i18nApp->RetrieveSettingsKey( "geoidPathActive" ).toBool() )
+	if( i18nApp->HasSettingsKey(
+	      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ) &&
+	    i18nApp->RetrieveSettingsKey(
+	      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE ).toBool() )
 	  {
 	  otbApp->EnableParameter( *it );
 	  otbApp->SetParameterString(
 	    *it,
-	    ToStdString( i18nApp->RetrieveSettingsKey( "geoidPath" ).toString() )
+	    ToStdString(
+	      i18nApp->RetrieveSettingsKey(
+		I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+	      )
+	      .toString()
+	    )
 	  );
 	  }
 	}

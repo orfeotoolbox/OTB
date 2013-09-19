@@ -72,46 +72,59 @@ PreferencesDialog
   m_ResultsDirModified(false)
 {
   m_UI->setupUi( this );
-  
-  QSettings settings;
-  if ( settings.contains("cacheDir") )
-    {
-    m_UI->cacheDirPathLineEdit->setText( settings.value( "cacheDir" ).toString() );
-    }
-  if ( settings.contains("resultsDir") )
-    {
-    m_UI->resultDirPathLineEdit->setText( settings.value( "resultsDir" ).toString() );
-    }
-  
-  if(settings.contains("srtmDir"))
-    {
-    m_UI->srtmLineEdit->setText(settings.value("srtmDir").toString());
-    }
-  if(settings.contains("srtmDirActive"))
-    {
-    m_UI->srtmCheckbox->setChecked(settings.value("srtmDirActive").toBool());
-    m_UI->srtmLineEdit->setEnabled(true);
-    m_UI->srtmButton->setEnabled(true);
-    }
-  if(settings.contains("geoidPath"))
-    {
-    m_UI->geoidLineEdit->setText(settings.value("geoidPath").toString());
-    }
-  if(settings.contains("geoidPathActive"))
-    {
-    m_UI->geoidCheckbox->setChecked(settings.value("geoidPathActive").toBool());
-    m_UI->geoidLineEdit->setEnabled(true);
-    m_UI->geoidButton->setEnabled(true);
-    }
 
+  m_UI->cacheDirPathLineEdit->setText(
+    I18nApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_CACHE_DIR
+    )
+    .toString()
+  );
 
-  
+  m_UI->resultDirPathLineEdit->setText(
+    I18nApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR
+    )
+    .toString()
+  );
+
+  m_UI->srtmLineEdit->setText(
+    I18nApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
+    )
+    .toString()
+  );
+
+  m_UI->srtmCheckbox->setChecked(
+    I18nApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE
+    )
+    .toBool()
+  );
+  m_UI->srtmLineEdit->setEnabled( m_UI->srtmCheckbox->isChecked() );
+  m_UI->srtmButton->setEnabled( m_UI->srtmCheckbox->isChecked() );
+
+  m_UI->geoidLineEdit->setText(
+    I18nApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
+    )
+    .toString()
+  );
+
+  m_UI->geoidCheckbox->setChecked(
+    I18nApplication::Instance()->RetrieveSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE
+    )
+    .toBool()
+  );
+
+  m_UI->geoidLineEdit->setEnabled( m_UI->geoidCheckbox->isChecked() );
+  m_UI->geoidButton->setEnabled( m_UI->geoidCheckbox->isChecked() );
+
   // Connect centralWidget manipulator to Ql renderer when viewportRegionChanged
   QObject::connect(
     m_UI->buttonBox, SIGNAL( rejected() ), 
     this, SLOT( close() )
     );
-
 }
 
 /*******************************************************************************/
@@ -147,22 +160,40 @@ PreferencesDialog
     }
 #endif
 
-  if(m_ResultsDirModified)
+  if( m_ResultsDirModified )
     {
     // Set the result dir
-    I18nApplication::Instance()->StoreSettingsKey("resultsDir",QDir::cleanPath(m_UI->resultDirPathLineEdit->text()));
-    
+    I18nApplication::Instance()->StoreSettingsKey(
+      I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR,
+      QDir::cleanPath( m_UI->resultDirPathLineEdit->text()
+      )
+    );
+   
     m_ResultsDirModified = false;
     }
 
-  I18nApplication::Instance()->StoreSettingsKey( "srtmDir", QDir::cleanPath( m_UI->srtmLineEdit->text() ) );
-  I18nApplication::Instance()->StoreSettingsKey( "geoidPath", m_UI->geoidLineEdit->text() );
-  I18nApplication::Instance()->StoreSettingsKey( "srtmDirActive", this->m_UI->srtmCheckbox->isChecked() );
-  I18nApplication::Instance()->StoreSettingsKey( "geoidPathActive", this->m_UI->geoidCheckbox->isChecked() );
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_SRTM_DIR,
+    QDir::cleanPath( m_UI->srtmLineEdit->text()
+    )
+  );
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_GEOID_PATH,
+    m_UI->geoidLineEdit->text()
+  );
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
+    this->m_UI->srtmCheckbox->isChecked()
+  );
+  I18nApplication::Instance()->StoreSettingsKey(
+    I18nCoreApplication::SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
+    this->m_UI->geoidCheckbox->isChecked()
+  );
 
-  if(m_ElevationSetupModified)
+  if( m_ElevationSetupModified )
     {
     I18nApplication::Instance()->ElevationSetup();
+
     m_ElevationSetupModified = false;
     }
 

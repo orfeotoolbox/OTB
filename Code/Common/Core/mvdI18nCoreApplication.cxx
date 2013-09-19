@@ -63,6 +63,16 @@ const char* I18nCoreApplication::DEFAULT_CACHE_RESULT_DIR_NAME = "result";
 
 const char* I18nCoreApplication::DATASET_EXT = ".ds";
 
+const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
+{
+  "cacheDir",
+  "resultsDir",
+  "srtmDir",
+  "srtmDirActive",
+  "geoidPath",
+  "geoidPathActive",
+};
+
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 

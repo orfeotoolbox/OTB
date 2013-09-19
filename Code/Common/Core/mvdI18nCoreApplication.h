@@ -104,6 +104,21 @@ class Monteverdi2_EXPORT I18nCoreApplication
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public constants & types.
+public:
+  enum SettingsKey
+  {
+    SETTINGS_KEY_CACHE_DIR =0,
+    SETTINGS_KEY_RESULTS_DIR,
+    SETTINGS_KEY_SRTM_DIR,
+    SETTINGS_KEY_IS_SRTM_DIR_ACTIVE,
+    SETTINGS_KEY_GEOID_PATH,
+    SETTINGS_KEY_IS_GEOID_PATH_ACTIVE,
+    //
+    SETTINGS_KEY_COUNT
+  };
+
+//
 // Public methods.
 public:
 
@@ -206,17 +221,17 @@ public:
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline bool HasSettingsKey( const QString& key ) const;
+  inline bool HasSettingsKey( const SettingsKey& key ) const;
 
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline void StoreSettingsKey( const QString& key, const QVariant& value );
+  inline void StoreSettingsKey( const SettingsKey& key, const QVariant& value );
 
   /**
    */
   // TODO: Move method into Application class.
-  inline QVariant RetrieveSettingsKey( const QString& key ) const;
+  inline QVariant RetrieveSettingsKey( const SettingsKey& key ) const;
 
   /**
    */
@@ -409,6 +424,21 @@ protected:
    */
   inline void SynchronizeSettings() const;
 
+  /**
+   */
+  // TODO: Move method into ApplicationSettings class.
+  inline bool HasSettingsKey( const QString& key ) const;
+
+  /**
+   */
+  // TODO: Move method into ApplicationSettings class.
+  inline void StoreSettingsKey( const QString& key, const QVariant& value );
+
+  /**
+   */
+  // TODO: Move method into Application class.
+  inline QVariant RetrieveSettingsKey( const QString& key ) const;
+
 //
 // Protected attributes.
 protected:
@@ -455,6 +485,10 @@ private:
 //
 // Private attributes.
 private:
+
+  /**
+   */
+  static const char* SETTINGS_KEYS[ SETTINGS_KEY_COUNT ];
 
   /**
    * \brief I18nCoreApplication singleton instance.
@@ -616,6 +650,47 @@ I18nCoreApplication
 ::GetResultsDir()
 {
   return m_ResultsDir;
+}
+
+/*****************************************************************************/
+inline
+bool
+I18nCoreApplication
+::HasSettingsKey( const SettingsKey& key ) const
+{
+  assert( m_Settings!=NULL );
+
+  SynchronizeSettings();
+
+  return m_Settings->contains( I18nCoreApplication::SETTINGS_KEYS[ key ] );
+}
+
+/*****************************************************************************/
+inline
+void
+I18nCoreApplication
+::StoreSettingsKey( const SettingsKey& key, const QVariant& value )
+{
+  assert( m_Settings!=NULL );
+
+  // qDebug() << this << "::StoreSettingsKey(" << key << ", " << value << ")";
+
+  m_Settings->setValue( I18nCoreApplication::SETTINGS_KEYS[ key ], value );
+
+  SynchronizeSettings();
+}
+
+/*****************************************************************************/
+inline
+QVariant
+I18nCoreApplication
+::RetrieveSettingsKey( const SettingsKey& key ) const
+{
+  assert( m_Settings!=NULL );
+
+  SynchronizeSettings();
+
+  return m_Settings->value( I18nCoreApplication::SETTINGS_KEYS[ key ] );
 }
 
 /*****************************************************************************/
