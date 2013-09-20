@@ -112,7 +112,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
     {
     itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
                       <<" is a wrong Extension FileName : Expected .xml");
-    }  
+    }
 
   // start creating XML file
   TiXmlDocument doc;
@@ -172,120 +172,120 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
       // if param is a Group, dont do anything, ParamGroup dont have values
       if (type != ParameterType_Group)
       {
-	bool paramExists = app->HasValue(key) && app->IsParameterEnabled(key);
-	if ( key == "outxml" )
-	  {
-	    paramExists = false;
-	  }
-	if (type == ParameterType_Empty)
-	  {
-	    paramExists = true;
-	  }
-	// if parameter doesn't have any value then skip it
-	if (paramExists)
+       bool paramExists = app->HasValue(key) && app->IsParameterEnabled(key);
+       if ( key == "outxml" )
+         {
+           paramExists = false;
+         }
+       if (type == ParameterType_Empty)
+         {
+           paramExists = true;
+         }
+       // if parameter doesn't have any value then skip it
+       if (paramExists)
         {
-	  std::vector<std::string> values;
-	  std::string value;
-	  bool hasValueList = false;
-	  if (type == ParameterType_OutputImage)
+         std::vector<std::string> values;
+         std::string value;
+         bool hasValueList = false;
+         if (type == ParameterType_OutputImage)
           {
-	    OutputImageParameter *imgParam = dynamic_cast<OutputImageParameter *>(param);
-	    value = imgParam->GetFileName();
-	    ImagePixelType pixType = imgParam->GetPixelType();
-	    std::string ptype = pixelTypeToString(pixType); //FIXME save this
+           OutputImageParameter *imgParam = dynamic_cast<OutputImageParameter *>(param);
+           value = imgParam->GetFileName();
+           ImagePixelType pixType = imgParam->GetPixelType();
+           std::string ptype = pixelTypeToString(pixType); //FIXME save this
 
-	  }
-	  else
-	    if( type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
-		type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
-	      {
-		values = app->GetParameterStringList(key);
-		hasValueList = true;
-	      }
-	  else
-	    if (type == ParameterType_Float || type == ParameterType_Int || 
-		type == ParameterType_Radius || type == ParameterType_RAM ) 
-	      {
-		value = app->GetParameterAsString(key);
-	      }
-	    else
-	      if ( type == ParameterType_String || type == ParameterType_InputFilename ||
-		   type == ParameterType_Directory || type == ParameterType_InputImage ||
-		   type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
-		   type == ParameterType_Choice || type == ParameterType_ListView ||
-		   type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
-		{
-		  value = app->GetParameterString(key);
-		}
-	      else 
+         }
+         else
+           if( type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
+              type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
+             {
+              values = app->GetParameterStringList(key);
+              hasValueList = true;
+             }
+         else
+           if (type == ParameterType_Float || type == ParameterType_Int ||
+              type == ParameterType_Radius || type == ParameterType_RAM )
+             {
+              value = app->GetParameterAsString(key);
+             }
+           else
+             if ( type == ParameterType_String || type == ParameterType_InputFilename ||
+                 type == ParameterType_Directory || type == ParameterType_InputImage ||
+                 type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
+                 type == ParameterType_Choice || type == ParameterType_ListView ||
+                 type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
+              {
+                value = app->GetParameterString(key);
+              }
+             else
        if(key == "rand")
-	 {
-	   std::ostringstream strm;
+        {
+          std::ostringstream strm;
         strm << app->GetParameterInt("rand");
         value = strm.str();
-	 }
+        }
        else
       if (typeAsString == "Empty")
-	{
-	  EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param); 
-	  value = "false";
-	  if( eParam->GetActive() ) 
-	    {
-	      value = "true";
-	    }
-	}
-	  
-	  //get only file name
+       {
+         EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
+         value = "false";
+         if( eParam->GetActive() )
+           {
+             value = "true";
+           }
+       }
+         
+         //get only file name
     /*
       if(type == ParameterType_InputFilename || type == ParameterType_InputImage ||
       type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
       type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
-	    {
-	    unsigned found = value.find_last_of("/\\");
-	    //std::cerr << " path: " << value.substr(0,found) << '\n';
-	    value = value.substr(found+1);
-	    }
-	    else 
-	    if(type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
-	    type == ParameterType_InputVectorDataList)
-	    {
-	    std::vector<std::string>::iterator strIt;
-	    for(strIt = values.begin(); strIt != values.end(); ++strIt)
-		      {
-		      std::string val = *strIt;
-		      unsigned found = val.find_last_of("/\\");
-		      *strIt = val.substr(found+1);
-		      }
-		      }
+           {
+           unsigned found = value.find_last_of("/\\");
+           //std::cerr << " path: " << value.substr(0,found) << '\n';
+           value = value.substr(found+1);
+           }
+           else
+           if(type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
+           type == ParameterType_InputVectorDataList)
+           {
+           std::vector<std::string>::iterator strIt;
+           for(strIt = values.begin(); strIt != values.end(); ++strIt)
+                    {
+                    std::string val = *strIt;
+                    unsigned found = val.find_last_of("/\\");
+                    *strIt = val.substr(found+1);
+                    }
+                    }
   */
-	  //parameter node in xml
-	  TiXmlElement * n_Parameter = new TiXmlElement("parameter");
+         //parameter node in xml
+         TiXmlElement * n_Parameter = new TiXmlElement("parameter");
 
-	  const char * mandatory = "false";
-	  
-	  if( param->GetMandatory() )
-	    mandatory = "true";
+         const char * mandatory = "false";
+         
+         if( param->GetMandatory() )
+           mandatory = "true";
 
-	  n_Parameter->SetAttribute("mandatory", mandatory);
-	  
-	  //setting parameter key as child node in parameter
-	  AddChildNodeTo(n_Parameter, "key", key);
-     	  AddChildNodeTo(n_Parameter, "type", typeAsString);
-	  if(!hasValueList)
-	    {
-	      AddChildNodeTo(n_Parameter, "value", value);
-	    }
-	  else
-	    {
-	      TiXmlElement *n_Values = AddChildNodeTo(n_Parameter, "values");
-	      std::vector<std::string>::iterator strIt;
-	      for(strIt = values.begin(); strIt != values.end(); ++strIt)
-		{
-		  AddChildNodeTo(n_Values, "value",*strIt);
-		}
-	    }
-	  n_App->LinkEndChild(n_Parameter);
-	}
+         n_Parameter->SetAttribute("mandatory", mandatory);
+         
+         //setting parameter key as child node in parameter
+         AddChildNodeTo(n_Parameter, "key", key);
+              AddChildNodeTo(n_Parameter, "type", typeAsString);
+         if(!hasValueList)
+           {
+             AddChildNodeTo(n_Parameter, "value", value);
+           }
+         else
+           {
+             TiXmlElement *n_Values = AddChildNodeTo(n_Parameter, "values");
+             std::vector<std::string>::iterator strIt;
+             for(strIt = values.begin(); strIt != values.end(); ++strIt)
+              {
+                AddChildNodeTo(n_Values, "value",*strIt);
+              }
+           }
+         n_App->LinkEndChild(n_Parameter);
+       }
       }
     }
   

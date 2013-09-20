@@ -386,7 +386,7 @@ std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
       break;
     case ParameterType_StringList:
       {
-	paramType = "StringList";
+       paramType = "StringList";
       }
       break;
     case ParameterType_InputFilenameList:
@@ -421,16 +421,16 @@ std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
       break;
     case ParameterType_RAM:
       {
-        paramType = "RAM";;
+        paramType = "RAM"; ;
       }
       break;
     case ParameterType_OutputProcessXML:
-      {	  
+      {
         paramType = "OutputProcessXML";
       }
       break;
     case ParameterType_InputProcessXML:
-      {	  
+      {
         paramType = "InputProcessXML";
       }
       break;
@@ -581,13 +581,13 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         }
         break;
       case ParameterType_OutputProcessXML:
-        {	  
-	newParam = OutputProcessXMLParameter::New();
+        {
+       newParam = OutputProcessXMLParameter::New();
         }
         break;
       case ParameterType_InputProcessXML:
-        {	  
-	newParam = InputProcessXMLParameter::New();
+        {
+       newParam = InputProcessXMLParameter::New();
         }
         break;
       }

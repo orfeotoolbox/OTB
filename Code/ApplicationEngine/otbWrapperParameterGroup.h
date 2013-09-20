@@ -63,7 +63,7 @@ public:
 
   Parameter::Pointer GetParameterByKey(std::string name);
 
-  /** Get the parameter type as string from its ParameterType enum 
+  /** Get the parameter type as string from its ParameterType enum
    * For example if type of parameter is ParameterType_InputImage this
    * function return the string InputImage */
   std::string GetParameterTypeAsString(ParameterType paramType);

@@ -55,7 +55,7 @@ public:
   void ClearValue()
   {
     m_FileName = "";
-  }  
+  }
   
   TiXmlElement* AddChildNodeTo(TiXmlElement* parent, std::string name, std::string value="");
 

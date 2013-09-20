@@ -474,15 +474,15 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                         }
 
         // Single value parameter
-        if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || 
-	    type == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename || 
-	    type == ParameterType_InputFilenameList || type == ParameterType_OutputFilename || 
-	    type == ParameterType_ComplexInputImage || type == ParameterType_InputImage || 
-	    type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList || 
-	    type == ParameterType_OutputVectorData || type == ParameterType_RAM || 
-	    type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML)
+        if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int ||
+           type == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename ||
+           type == ParameterType_InputFilenameList || type == ParameterType_OutputFilename ||
+           type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
+           type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||
+           type == ParameterType_OutputVectorData || type == ParameterType_RAM ||
+           type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML)
           {
-          m_Application->SetParameterString(paramKey, values[0]);                  
+          m_Application->SetParameterString(paramKey, values[0]);
           }
         else
           if (type == ParameterType_Empty)
@@ -496,10 +496,10 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                 {
                 dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(false);
                 }
-	      else
-		{
-		  std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
-		  return WRONGPARAMETERVALUE;
+             else
+              {
+                std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
+                return WRONGPARAMETERVALUE;
                 }
             }
         // Update the flag UserValue

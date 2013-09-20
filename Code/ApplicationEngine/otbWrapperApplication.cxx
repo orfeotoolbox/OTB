@@ -120,7 +120,7 @@ void Application::Init()
   m_ParameterList = ParameterGroup::New();
   this->DoInit();
   
-  //rashad: global parameters. now used only for save xml 
+  //rashad: global parameters. now used only for save xml
   if (this->GetHaveInXML())
     {
       AddInXMLParameter();
@@ -144,7 +144,7 @@ void Application::AddOutXMLParameter()
   SetParameterDescription(key, descr);
   MandatoryOff(key);
   //SetParameterString(key, defaultXMLFileName);
-  DisableParameter(key); 
+  DisableParameter(key);
 }
 
 void Application::AddInXMLParameter()
@@ -160,7 +160,7 @@ void Application::AddInXMLParameter()
   SetParameterDescription(key, descr);
   MandatoryOff(key);
   //SetParameterString(key, defaultXMLFileName);
-  DisableParameter(key); 
+  DisableParameter(key);
 }
 
 void Application::UpdateParameters()
@@ -174,7 +174,7 @@ int Application::Execute()
 
   //read application from xml
   std::string inXMLKey = "inxml";
-  if (GetParameterType(inXMLKey) == ParameterType_InputProcessXML 
+  if (GetParameterType(inXMLKey) == ParameterType_InputProcessXML
       && IsParameterEnabled(inXMLKey)  )
     {
       Parameter* param = GetParameterByKey(inXMLKey);
@@ -182,7 +182,7 @@ int Application::Execute()
       int ret = inXMLParam->Read(this);
       if( ret != 0 )
         {
-	  return -1;
+         return -1;
         }
       
       this->UpdateParameters();
@@ -196,8 +196,8 @@ int Application::Execute()
     {
       std::string key = *it;
       if ((key.compare(0, 4, "rand") == 0) && HasValue("rand"))
-	{
-	  UseSpecificSeed = true;
+       {
+         UseSpecificSeed = true;
       Parameter* param = GetParameterByKey(key);
       IntParameter* randParam = dynamic_cast<IntParameter*> (param);
       int seed = randParam->GetValue();
@@ -226,77 +226,77 @@ int Application::ExecuteAndWriteOutput()
       bool useRAM = false;
       unsigned int ram = 0;
       for (std::vector<std::string>::const_iterator it = paramList.begin();
-	   it != paramList.end();
-	   ++it)
+          it != paramList.end();
+          ++it)
       {
-	std::string key = *it;
-	
-	if (GetParameterType(key) == ParameterType_RAM
-	    && IsParameterEnabled(key))
-	  {
-	    Parameter* param = GetParameterByKey(key);
-	    RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
-	    ram = ramParam->GetValue();
-	    useRAM = true;
-	  }
+       std::string key = *it;
+       
+       if (GetParameterType(key) == ParameterType_RAM
+           && IsParameterEnabled(key))
+         {
+           Parameter* param = GetParameterByKey(key);
+           RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
+           ram = ramParam->GetValue();
+           useRAM = true;
+         }
       }
 
       for (std::vector<std::string>::const_iterator it = paramList.begin();
-	   it != paramList.end();
-	   ++it)
-	{
-	  std::string key = *it;
-	  if (GetParameterType(key) == ParameterType_OutputImage
-	      && IsParameterEnabled(key) && HasValue(key) )
-	    {
-	      Parameter* param = GetParameterByKey(key);
-	      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-	      outputParam->InitializeWriters();
-	      if (useRAM)
-		{
-		  outputParam->SetRAMValue(ram);
-		}
-	      std::ostringstream progressId;
-	      progressId << "Writing " << outputParam->GetFileName() << "...";
-	      AddProcess(outputParam->GetWriter(), progressId.str());
-	      outputParam->Write();
-	    }
-	  else if (GetParameterType(key) == ParameterType_OutputVectorData
-		   && IsParameterEnabled(key) && HasValue(key) )
-	    {
-	      Parameter* param = GetParameterByKey(key);
-	      OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
-	      outputParam->InitializeWriters();
-	      std::ostringstream progressId;
-	      progressId << "Writing " << outputParam->GetFileName() << "...";
-	      AddProcess(outputParam->GetWriter(), progressId.str());
-	      outputParam->Write();
-	    }
-	  else if (GetParameterType(key) == ParameterType_ComplexOutputImage
-		   && IsParameterEnabled(key) && HasValue(key) )
-	    {
-	      Parameter* param = GetParameterByKey(key);
-	      ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
-	      outputParam->InitializeWriters();
-	      if (useRAM)
-		{
-		  outputParam->SetRAMValue(ram);
-		}
-	      std::ostringstream progressId;
-	      progressId << "Writing " << outputParam->GetFileName() << "...";
-	      AddProcess(outputParam->GetWriter(), progressId.str());
-	      outputParam->Write();
-	    }
-	  
-	  //xml writer parameter
-	  else if (GetParameterType(key) == ParameterType_OutputProcessXML 
-		   && IsParameterEnabled(key) && HasValue(key) )
-	    {
-	      Parameter* param = GetParameterByKey(key);
-	      OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-	      outXMLParam->Write(this);
-	    }
-	}
+          it != paramList.end();
+          ++it)
+       {
+         std::string key = *it;
+         if (GetParameterType(key) == ParameterType_OutputImage
+             && IsParameterEnabled(key) && HasValue(key) )
+           {
+             Parameter* param = GetParameterByKey(key);
+             OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+             outputParam->InitializeWriters();
+             if (useRAM)
+              {
+                outputParam->SetRAMValue(ram);
+              }
+             std::ostringstream progressId;
+             progressId << "Writing " << outputParam->GetFileName() << "...";
+             AddProcess(outputParam->GetWriter(), progressId.str());
+             outputParam->Write();
+           }
+         else if (GetParameterType(key) == ParameterType_OutputVectorData
+                 && IsParameterEnabled(key) && HasValue(key) )
+           {
+             Parameter* param = GetParameterByKey(key);
+             OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
+             outputParam->InitializeWriters();
+             std::ostringstream progressId;
+             progressId << "Writing " << outputParam->GetFileName() << "...";
+             AddProcess(outputParam->GetWriter(), progressId.str());
+             outputParam->Write();
+           }
+         else if (GetParameterType(key) == ParameterType_ComplexOutputImage
+                 && IsParameterEnabled(key) && HasValue(key) )
+           {
+             Parameter* param = GetParameterByKey(key);
+             ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
+             outputParam->InitializeWriters();
+             if (useRAM)
+              {
+                outputParam->SetRAMValue(ram);
+              }
+             std::ostringstream progressId;
+             progressId << "Writing " << outputParam->GetFileName() << "...";
+             AddProcess(outputParam->GetWriter(), progressId.str());
+             outputParam->Write();
+           }
+         
+         //xml writer parameter
+         else if (GetParameterType(key) == ParameterType_OutputProcessXML
+                 && IsParameterEnabled(key) && HasValue(key) )
+           {
+             Parameter* param = GetParameterByKey(key);
+             OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
+             outXMLParam->Write(this);
+           }
+       }
     }
   return status;
 }
