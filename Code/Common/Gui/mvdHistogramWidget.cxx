@@ -176,7 +176,7 @@ HistogramWidget
   m_PlotMagnifier = new QwtPlotMagnifier( m_UI->histogramPlot->canvas() );
   m_PlotMagnifier->setAxisEnabled( QwtPlot::yLeft, false );
   m_PlotMagnifier->setWheelFactor( 1.0 / m_PlotMagnifier->wheelFactor() );
-  m_PlotMagnifier->setMouseButton( Qt::MiddleButton );
+  m_PlotMagnifier->setMouseButton( Qt::MidButton );
   // m_PlotMagnifier->setZoomInKey( Qt::Key_Plus, Qt::NoModifier );
   // m_PlotMagnifier->setZoomOutKey( Qt::Key_Minus, Qt::NoModifier );
 

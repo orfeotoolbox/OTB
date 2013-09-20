@@ -25,7 +25,7 @@
         <string>Zoom to full intensity range.</string>
        </property>
        <property name="text">
-        <string>PushButton</string>
+        <string/>
        </property>
        <property name="icon">
         <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
@@ -39,7 +39,7 @@
         <string>Zoom to quantile ranges.</string>
        </property>
        <property name="text">
-        <string>PushButton</string>
+        <string/>
        </property>
        <property name="icon">
         <iconset resource="../../Application/Monteverdi2/mvdMainWindow.qrc">
