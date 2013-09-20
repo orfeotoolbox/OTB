@@ -35,7 +35,20 @@ QtWidgetInputImageListParameter::~QtWidgetInputImageListParameter()
 
 void QtWidgetInputImageListParameter::DoUpdateGUI()
 {
+  if(!m_InputImageListParam)
+    return;
 
+  std::vector<std::string> fileList = m_InputImageListParam->GetFileNameList();
+  for( int i = m_FileSelectionList.size(); i < fileList.size(); i++ )
+    {
+      this->AddFile();
+    }
+  int i = 0;
+  std::vector<std::string>::iterator it;
+  for (it = fileList.begin(); it != fileList.end(); ++it)
+    {
+      m_FileSelectionList[i++]->GetInput()->setText( QString::fromStdString( (*it) ) );
+    }
 }
 
 void QtWidgetInputImageListParameter::DoCreateWidget()
@@ -110,7 +123,7 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
   fileSelection->setFixedHeight(30);
   fileLayout->addWidget(fileSelection);
-  m_InputImageListParam->AddNullElement();
+  //m_InputImageListParam->AddNullElement();
   connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
 
   m_FileSelectionList.push_back(fileSelection);
@@ -146,10 +159,8 @@ QtWidgetInputImageListParameter::UpdateImageList()
       this->GetModel()->SendLogWARNING(oss.str());
       }
     }
-
   emit Change();
 }
-
 
 void
 QtWidgetInputImageListParameter::UpFile()
@@ -282,7 +293,7 @@ QtWidgetInputImageListParameter::AddFile()
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
-  m_InputImageListParam->AddNullElement();
+  //m_InputImageListParam->AddNullElement();
   connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
 
   QGroupBox *mainGroup = new QGroupBox();
@@ -317,7 +328,6 @@ QtWidgetInputImageListParameter::SupressFile()
   this->RecreateImageList();
 }
 
-
 void
 QtWidgetInputImageListParameter::EraseFile()
 {
@@ -329,7 +339,7 @@ QtWidgetInputImageListParameter::EraseFile()
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
-  m_InputImageListParam->AddNullElement();
+  //m_InputImageListParam->AddNullElement();
   connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
 
   QGroupBox *mainGroup = new QGroupBox();
@@ -339,7 +349,6 @@ QtWidgetInputImageListParameter::EraseFile()
   this->update();
   this->RecreateImageList();
 }
-
 
 void QtWidgetInputImageListParameter::RecreateImageList()
 {

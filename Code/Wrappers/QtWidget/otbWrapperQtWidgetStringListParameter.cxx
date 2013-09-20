@@ -38,7 +38,20 @@ QtWidgetStringListParameter::~QtWidgetStringListParameter()
 
 void QtWidgetStringListParameter::DoUpdateGUI()
 {
+  if(!m_StringListParam)
+    return;
 
+  std::vector<std::string> strList = m_StringListParam->GetValue();
+  for( int i = m_LineEditList.size(); i < strList.size(); i++ )
+    {
+      this->AddString();
+    }
+  int i = 0;
+  std::vector<std::string>::iterator it;
+  for (it = strList.begin(); it != strList.end(); ++it)
+    {
+      m_LineEditList[i++]->SetText(QString( (*it).c_str() ));
+    }
 }
 
 void QtWidgetStringListParameter::DoCreateWidget()

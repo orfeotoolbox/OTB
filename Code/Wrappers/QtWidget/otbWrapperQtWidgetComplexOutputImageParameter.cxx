@@ -35,7 +35,10 @@ QtWidgetComplexOutputImageParameter::~QtWidgetComplexOutputImageParameter()
 
 void QtWidgetComplexOutputImageParameter::DoUpdateGUI()
 {
-
+  // Update the lineEdit
+  QString text( m_OutputImageParam->GetFileName() );
+  if (text != m_Input->text())
+    m_Input->setText(text);
 }
 
 void QtWidgetComplexOutputImageParameter::DoCreateWidget()

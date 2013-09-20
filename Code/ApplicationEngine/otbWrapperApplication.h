@@ -33,7 +33,6 @@
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
-
 #include "otbWrapperDocExampleStructure.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
@@ -82,6 +81,23 @@ public:
 
   /** Check if the application has been initialized */
   bool IsInitialized() const;
+
+  /** rashad: Add xml parameters eg: -xml */  
+  void AddInXMLParameter();
+
+  void AddOutXMLParameter();
+
+  /** Set the parameter xml flag */
+  itkSetMacro(HaveInXML, bool);
+
+  /** Get the parameter xml flag */
+  itkGetConstMacro(HaveInXML, bool);
+
+  /** Set the parameter xml flag */
+  itkSetMacro(HaveOutXML, bool);
+
+  /** Get the parameter xml flag */
+  itkGetConstMacro(HaveOutXML, bool);
 
   /** Update the value of parameters for which no user value has been provided */
   void UpdateParameters();
@@ -160,12 +176,20 @@ public:
    * or a value set externally by user */
   bool HasValue(std::string paramKey) const;
 
+  /* Activate or deactivate the bool parameter
+   */
+  void SetParameterEmpty(std::string paramKey, bool active);
+  
+  /* Get active flag of parameter with key paramKey
+   */
+  bool GetParameterEmpty(std::string paramKey);
+  
   /* Return the user level of access to a parameter */
   UserLevel GetParameterUserLevel(std::string paramKey) const;
-
+  
   /** Get the role of the parameter */
   Role GetParameterRole(std::string paramKey) const;
-
+  
   /* Get the parameter type from its name */
   ParameterType GetParameterType(std::string paramKey) const;
 
@@ -179,7 +203,6 @@ public:
    * parameters have to be set
    */
   bool IsApplicationReady();
-
 
   /* Set an integer value
    *
@@ -454,7 +477,6 @@ public:
      */
   VectorDataListType* GetParameterVectorDataList(std::string parameter);
 
-
  /* Get the parameter as a std::string
    *
    * Can be called for types :
@@ -485,6 +507,13 @@ public:
    */
   ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
 
+  /* GetXMLOverride
+   *
+   * wrapper function for Paramter::IsUseXMLValue() for application instance.
+   * Needs parameter key as argument.
+   */
+  bool IsUseXMLValue(std::string parameter);
+
   /* Get the pixel type in which the complex image will be saved
    *
    * Can be called for types :
@@ -497,7 +526,6 @@ public:
   itk::ProcessObject* GetProgressSource() const;
 
   std::string GetProgressDescription() const;
-
 
   /** Doc element accessors. */
   itkSetStringMacro(DocName);
@@ -628,7 +656,6 @@ protected:
    /** Add a parameterRAND method with no parameter*/
    void AddRANDParameter(std::string paramKey="rand");
 
-
   /** Remove the items added to the ListWidget */
   void ClearChoices(std::string key);
 
@@ -707,6 +734,8 @@ protected:
       }
   }
 
+
+
 private:
   /* Implement this method to add parameters */
   virtual void DoInit() = 0;
@@ -723,7 +752,6 @@ private:
   std::string                       m_Name;
   std::string                       m_Description;
   ParameterGroup::Pointer           m_ParameterList;
-
   itk::Logger::Pointer              m_Logger;
 
   itk::ProcessObject::Pointer       m_ProgressSource;
@@ -743,6 +771,10 @@ private:
   std::string m_DocSeeAlso;
   /** Tags that define the application (ex : segmentation, OBIA).*/
   std::vector<std::string> m_DocTags;
+
+  //rashad:: controls adding of -xml parameter. set to true by default
+  bool                              m_HaveInXML;
+  bool                              m_HaveOutXML;
 
   /**
     * Declare the class

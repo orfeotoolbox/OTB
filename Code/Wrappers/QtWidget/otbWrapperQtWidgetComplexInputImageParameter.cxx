@@ -34,7 +34,9 @@ QtWidgetComplexInputImageParameter::~QtWidgetComplexInputImageParameter()
 
 void QtWidgetComplexInputImageParameter::DoUpdateGUI()
 {
-
+  QString text( m_ComplexInputImageParam->GetFileName().c_str() );
+  if (text != m_Input->text())
+    m_Input->setText(text);
 }
 
 void QtWidgetComplexInputImageParameter::DoCreateWidget()

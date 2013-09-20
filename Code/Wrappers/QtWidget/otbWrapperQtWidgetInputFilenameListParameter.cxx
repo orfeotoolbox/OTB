@@ -35,7 +35,20 @@ QtWidgetInputFilenameListParameter::~QtWidgetInputFilenameListParameter()
 
 void QtWidgetInputFilenameListParameter::DoUpdateGUI()
 {
+  if(!m_InputFilenameListParam)
+    return;
 
+  std::vector<std::string> fileList = m_InputFilenameListParam->GetFileNameList();
+  for( int i = m_FileSelectionList.size(); i < fileList.size(); i++ )
+    {
+      this->AddFile();
+    }
+  int i = 0;
+  std::vector<std::string>::iterator it;
+  for (it = fileList.begin(); it != fileList.end(); ++it)
+    {
+      m_FileSelectionList[i++]->GetInput()->setText(QString( (*it).c_str() ));
+    }
 }
 
 void QtWidgetInputFilenameListParameter::DoCreateWidget()

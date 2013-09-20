@@ -87,6 +87,32 @@ IF(OTB_USE_OPENCV)
                                   ${TEMP}/${OUTMODELFILE}
                          )
 
+    OTB_TEST_APPLICATION(
+                         NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1
+                         APP      TrainImagesClassifier
+                         OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+                                  -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
+                                  -io.imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
+                                  -classifier ${lclassifier}
+                                  ${${lclassifier}_parameters}
+                                  -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
+                                  -rand 121212
+                                  -outxml ${TEMP}/cl${classifier}_OutXML1.xml
+
+                         VALID    ${ascii_comparison}
+                                  ${ascii_ref_path}/${OUTMODELFILE}
+                                  ${TEMP}/OutXML1_${OUTMODELFILE}
+                         )
+
+    OTB_TEST_APPLICATION(
+                         NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
+                         APP      TrainImagesClassifier
+                         OPTIONS  -inxml ${TEMP}/cl${classifier}_OutXML1.xml
+
+                         VALID    ${ascii_comparison}
+                                  ${ascii_ref_path}/${OUTMODELFILE}
+                                  ${TEMP}/OutXML1_${OUTMODELFILE}
+                         )
 
     OTB_TEST_APPLICATION(
                          NAME     apTvClMethod${classifier}ImageClassifierQB1
@@ -119,6 +145,32 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1
 
 SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
 
+OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_OutXML
+                      APP  TrainImagesClassifier
+                      OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
+                              -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
+                              -io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
+                              -classifier libsvm
+                              -classifier.libsvm.opt true
+                              -io.out ${TEMP}/clsvmModelQB1_OutXML.svm
+                              -rand 121212
+                              -outxml ${TEMP}/clsvmModelQB1_OutXML.xml
+                      VALID   --compare-ascii ${NOTOL}
+                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
+                              ${TEMP}/clsvmModelQB1_OutXML.svm)
+
+SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_OutXML PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
+
+
+OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_InXML1
+                      APP  TrainImagesClassifier
+                      OPTIONS -inxml ${TEMP}/clsvmModelQB1_OutXML.xml
+                              -rand 121212
+                      VALID   --compare-ascii ${NOTOL}
+                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
+                              ${TEMP}/clsvmModelQB1_OutXML.svm)
+
+SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
 
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                       APP  TrainImagesClassifier
@@ -137,6 +189,22 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                               ${TEMP}/clsvmModelQB1_allOpt.svm)
   
 SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
+
+
+OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
+                      APP  TrainImagesClassifier
+                      OPTIONS -inxml ${TEMP}/clsvmModelQB1_OutXML.xml
+                              -sample.mv 100
+                              -sample.mt 100
+                              -sample.vtr 0.5
+                              -classifier.libsvm.opt true
+                              -rand 121212
+                              -io.out ${TEMP}/clsvmModelQB1_allOpt_InXML.svm
+                      VALID   --compare-ascii ${NOTOL}
+                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
+                              ${TEMP}/clsvmModelQB1_allOpt_InXML.svm)
+
+SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt_InXML PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
 
 
 OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB1
@@ -176,6 +244,30 @@ OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB3
                               ${TEMP}/clLabeledImageQB3.tif)
 
 SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB3 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
+
+
+OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB3_OutXML
+                      APP  ImageClassifier
+                      OPTIONS -in      ${INPUTDATA}/Classification/QB_3_ortho.tif
+                              -imstat  ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
+                              -model   ${TEMP}/clsvmModelQB1.svm
+                              -out     ${TEMP}/clLabeledImageQB3.tif
+                              -outxml  ${TEMP}/clLabeledImageQB3_OutXML.xml
+                      VALID   --compare-image ${NOTOL}
+                              ${OTBAPP_BASELINE}/clLabeledImageQB3.tif
+                              ${TEMP}/clLabeledImageQB3.tif)
+
+SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB3_OutXML PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
+
+
+OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB3_InXML
+                      APP  ImageClassifier
+                      OPTIONS -inxml  ${TEMP}/clLabeledImageQB3_OutXML.xml
+                      VALID   --compare-image ${NOTOL}
+                              ${OTBAPP_BASELINE}/clLabeledImageQB3.tif
+                              ${TEMP}/clLabeledImageQB3.tif)
+
+SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB3_InXML PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
 
 #--------
 # QB multi chain

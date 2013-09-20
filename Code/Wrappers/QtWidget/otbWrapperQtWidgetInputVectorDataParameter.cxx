@@ -34,7 +34,10 @@ QtWidgetInputVectorDataParameter::~QtWidgetInputVectorDataParameter()
 
 void QtWidgetInputVectorDataParameter::DoUpdateGUI()
 {
-
+  //update lineedit
+  QString text( m_InputVectorDataParam->GetFileName().c_str() );
+  if (text != m_Input->text())
+    m_Input->setText(text);
 }
 
 void QtWidgetInputVectorDataParameter::DoCreateWidget()

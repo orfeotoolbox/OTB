@@ -24,6 +24,7 @@
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
+#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperNumericalParameter.h"
@@ -32,6 +33,7 @@
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
+#include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperRAMParameter.h"
 
 #include "otbWrapperParameterGroup.h"
@@ -58,6 +60,8 @@ Application::Application()
     m_DocAuthors(""),
     m_DocLimitations(""),
     m_DocSeeAlso(""),
+    m_HaveInXML(true),
+    m_HaveOutXML(true),
     m_DocTags()
 {
   // Don't call Init from the constructor, since it calls a virtual method !
@@ -114,6 +118,48 @@ void Application::Init()
   m_DocExample    = DocExampleStructure::New();
   m_ParameterList = ParameterGroup::New();
   this->DoInit();
+  
+  //rashad: global parameters. now used only for save xml 
+  if (this->GetHaveInXML())
+    {
+      AddInXMLParameter();
+    }
+  if (this->GetHaveOutXML())
+    {
+      AddOutXMLParameter();
+    }
+}
+
+void Application::AddOutXMLParameter()
+{
+  Parameter::Pointer tmpParam;
+  tmpParam = OutputProcessXMLParameter::New();
+  const std::string key =   tmpParam->GetKey();
+  const std::string descr = tmpParam->GetDescription();
+  const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
+  tmpParam = NULL;
+
+  AddParameter(ParameterType_OutputProcessXML,  key,   descr);
+  SetParameterDescription(key, descr);
+  MandatoryOff(key);
+  //SetParameterString(key, defaultXMLFileName);
+  DisableParameter(key); 
+}
+
+void Application::AddInXMLParameter()
+{
+  Parameter::Pointer tmpParam;
+  tmpParam = InputProcessXMLParameter::New();
+  const std::string key =   tmpParam->GetKey();
+  const std::string descr = tmpParam->GetDescription();
+  const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
+  tmpParam = NULL;
+
+  AddParameter(ParameterType_InputProcessXML,  key,   descr);
+  SetParameterDescription(key, descr);
+  MandatoryOff(key);
+  //SetParameterString(key, defaultXMLFileName);
+  DisableParameter(key); 
 }
 
 void Application::UpdateParameters()
@@ -124,111 +170,133 @@ void Application::UpdateParameters()
 int Application::Execute()
 {
   int ret = 0;
+
+  //read application from xml
+  std::string inXMLKey = "inxml";
+  if (GetParameterType(inXMLKey) == ParameterType_InputProcessXML 
+      && IsParameterEnabled(inXMLKey)  )
+    {
+      Parameter* param = GetParameterByKey(inXMLKey);
+      InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
+      int ret = inXMLParam->Read(this);
+      if( ret != 0 )
+        {
+	  return -1;
+        }
+      
+      this->UpdateParameters();
+    }
+  
   // before execute we set the seed of mersenne twister
   std::vector<std::string> paramList = GetParametersKeys(true);
   bool UseSpecificSeed = false;
-
+  
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
     {
-    std::string key = *it;
-
-    if ((key.compare(0, 4, "rand") == 0) && HasValue("rand"))
-      {
-      UseSpecificSeed = true;
+      std::string key = *it;
+      if ((key.compare(0, 4, "rand") == 0) && HasValue("rand"))
+	{
+	  UseSpecificSeed = true;
       Parameter* param = GetParameterByKey(key);
       IntParameter* randParam = dynamic_cast<IntParameter*> (param);
       int seed = randParam->GetValue();
       itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(seed);
       }
-
     }
-
   if (!UseSpecificSeed)
     {
-    itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->Initialize();
+      itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->Initialize();
     }
-
+  
   this->DoExecute();
-
+  
   return ret;
 }
 
 int Application::ExecuteAndWriteOutput()
 {
   int status = this->Execute();
-
+  
   if (status == 0)
     {
-    std::vector<std::string> paramList = GetParametersKeys(true);
-    // First Get the value of the available memory to use with the
-    // writer if a RAMParameter is set
-    bool useRAM = false;
-    unsigned int ram = 0;
-    for (std::vector<std::string>::const_iterator it = paramList.begin();
-          it != paramList.end();
-          ++it)
+      std::vector<std::string> paramList = GetParametersKeys(true);
+      // First Get the value of the available memory to use with the
+      // writer if a RAMParameter is set
+      bool useRAM = false;
+      unsigned int ram = 0;
+      for (std::vector<std::string>::const_iterator it = paramList.begin();
+	   it != paramList.end();
+	   ++it)
       {
-      std::string key = *it;
-
-      if (GetParameterType(key) == ParameterType_RAM
-        && IsParameterEnabled(key))
-        {
-        Parameter* param = GetParameterByKey(key);
-        RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
-        ram = ramParam->GetValue();
-        useRAM = true;
-        }
+	std::string key = *it;
+	
+	if (GetParameterType(key) == ParameterType_RAM
+	    && IsParameterEnabled(key))
+	  {
+	    Parameter* param = GetParameterByKey(key);
+	    RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
+	    ram = ramParam->GetValue();
+	    useRAM = true;
+	  }
       }
 
-    for (std::vector<std::string>::const_iterator it = paramList.begin();
-          it != paramList.end();
-          ++it)
-      {
-      std::string key = *it;
-      if (GetParameterType(key) == ParameterType_OutputImage
-          && IsParameterEnabled(key) && HasValue(key) )
-        {
-        Parameter* param = GetParameterByKey(key);
-        OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-        outputParam->InitializeWriters();
-        if (useRAM)
-          {
-          outputParam->SetRAMValue(ram);
-          }
-        std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
-        }
-      else if (GetParameterType(key) == ParameterType_OutputVectorData
-                && IsParameterEnabled(key) && HasValue(key) )
-        {
-        Parameter* param = GetParameterByKey(key);
-        OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
-        outputParam->InitializeWriters();
-        std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
-        }
-      else if (GetParameterType(key) == ParameterType_ComplexOutputImage
-                && IsParameterEnabled(key) && HasValue(key) )
-        {
-        Parameter* param = GetParameterByKey(key);
-        ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
-        outputParam->InitializeWriters();
-        if (useRAM)
-          {
-          outputParam->SetRAMValue(ram);
-          }
-        std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
-        }
-      }
+      for (std::vector<std::string>::const_iterator it = paramList.begin();
+	   it != paramList.end();
+	   ++it)
+	{
+	  std::string key = *it;
+	  if (GetParameterType(key) == ParameterType_OutputImage
+	      && IsParameterEnabled(key) && HasValue(key) )
+	    {
+	      Parameter* param = GetParameterByKey(key);
+	      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+	      outputParam->InitializeWriters();
+	      if (useRAM)
+		{
+		  outputParam->SetRAMValue(ram);
+		}
+	      std::ostringstream progressId;
+	      progressId << "Writing " << outputParam->GetFileName() << "...";
+	      AddProcess(outputParam->GetWriter(), progressId.str());
+	      outputParam->Write();
+	    }
+	  else if (GetParameterType(key) == ParameterType_OutputVectorData
+		   && IsParameterEnabled(key) && HasValue(key) )
+	    {
+	      Parameter* param = GetParameterByKey(key);
+	      OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
+	      outputParam->InitializeWriters();
+	      std::ostringstream progressId;
+	      progressId << "Writing " << outputParam->GetFileName() << "...";
+	      AddProcess(outputParam->GetWriter(), progressId.str());
+	      outputParam->Write();
+	    }
+	  else if (GetParameterType(key) == ParameterType_ComplexOutputImage
+		   && IsParameterEnabled(key) && HasValue(key) )
+	    {
+	      Parameter* param = GetParameterByKey(key);
+	      ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
+	      outputParam->InitializeWriters();
+	      if (useRAM)
+		{
+		  outputParam->SetRAMValue(ram);
+		}
+	      std::ostringstream progressId;
+	      progressId << "Writing " << outputParam->GetFileName() << "...";
+	      AddProcess(outputParam->GetWriter(), progressId.str());
+	      outputParam->Write();
+	    }
+	  
+	  //xml writer parameter
+	  else if (GetParameterType(key) == ParameterType_OutputProcessXML 
+		   && IsParameterEnabled(key) && HasValue(key) )
+	    {
+	      Parameter* param = GetParameterByKey(key);
+	      OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
+	      outXMLParam->Write(this);
+	    }
+	}
     }
-
   return status;
 }
 
@@ -319,6 +387,16 @@ Role Application::GetParameterRole(std::string paramKey) const
   return GetParameterByKey(paramKey)->GetRole();
 }
 
+void Application::SetParameterEmpty(std::string paramKey, bool active)
+{
+  GetParameterByKey(paramKey)->SetActive(active);
+}
+
+bool Application::GetParameterEmpty(std::string paramKey)
+{
+  return GetParameterByKey(paramKey)->GetActive();
+}
+
 /* Return the role (input/output) of a parameter */
 void Application::SetParameterRole(std::string paramKey, Role role)
 {
@@ -329,6 +407,7 @@ void Application::SetParameterRole(std::string paramKey, Role role)
 ParameterType Application::GetParameterType(std::string paramKey) const
 {
   const Parameter* param = GetParameterByKey(paramKey);
+
   ParameterType type;
 
   if (dynamic_cast<const ChoiceParameter*>(param))
@@ -418,6 +497,14 @@ ParameterType Application::GetParameterType(std::string paramKey) const
   else if (dynamic_cast<const ParameterGroup*>(param))
     {
     type = ParameterType_Group;
+    }
+  else if (dynamic_cast<const OutputProcessXMLParameter*>(param))
+    {
+    type = ParameterType_OutputProcessXML;
+    }
+  else if (dynamic_cast<const InputProcessXMLParameter*>(param))
+    {
+    type = ParameterType_InputProcessXML;
     }
   else
     {
@@ -680,6 +767,16 @@ void Application::SetParameterString(std::string parameter, std::string value)
     RAMParameter* paramDown = dynamic_cast<RAMParameter*>(param);
     paramDown->SetValue(value);
     }
+  else if (dynamic_cast<OutputProcessXMLParameter*>(param))
+    {
+    OutputProcessXMLParameter* paramDown = dynamic_cast<OutputProcessXMLParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<InputProcessXMLParameter*>(param))
+    {
+    InputProcessXMLParameter* paramDown = dynamic_cast<InputProcessXMLParameter*>(param);
+    paramDown->SetValue(value);
+    }
 }
 
 void Application::SetParameterStringList(std::string parameter, std::vector<std::string> value)
@@ -771,6 +868,11 @@ void Application::SetParameterOutputVectorData(std::string parameter, VectorData
     }
 }
 
+bool Application::IsUseXMLValue(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  return param->IsUseXMLValue();
+}
 std::string Application::GetParameterName(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
@@ -923,9 +1025,14 @@ std::string Application::GetParameterString(std::string parameter)
     OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
     ret = paramDown->GetFileName();
     }
+  else if (dynamic_cast<OutputProcessXMLParameter*>(param))
+    {
+    OutputProcessXMLParameter* paramDown = dynamic_cast<OutputProcessXMLParameter*>(param);
+    ret = paramDown->GetFileName();
+    }
   else
    {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to string");
+    itkExceptionMacro(<<parameter << " : parameter can't be casted to string");
    }
 
   return ret;
@@ -1063,7 +1170,8 @@ std::string Application::GetParameterAsString(std::string paramKey)
       || type == ParameterType_Directory || type == ParameterType_InputImage
       || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
       || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData
-      || type == ParameterType_ListView || type == ParameterType_Choice)
+      || type == ParameterType_ListView || type == ParameterType_Choice
+      || type == ParameterType_OutputProcessXML )
     {
       ret = this->GetParameterString( paramKey );
     }

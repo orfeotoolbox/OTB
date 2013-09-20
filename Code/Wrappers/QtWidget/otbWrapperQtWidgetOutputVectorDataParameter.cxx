@@ -35,7 +35,10 @@ QtWidgetOutputVectorDataParameter::~QtWidgetOutputVectorDataParameter()
 
 void QtWidgetOutputVectorDataParameter::DoUpdateGUI()
 {
-
+  //update lineedit
+  QString text( m_OutputVectorDataParam->GetFileName() );
+  if (text != m_Input->text())
+    m_Input->setText(text);
 }
 
 void QtWidgetOutputVectorDataParameter::DoCreateWidget()

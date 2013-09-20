@@ -33,6 +33,7 @@
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperRAMParameter.h"
+#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
 
 // List value parameter
@@ -358,6 +359,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     {
     const std::string paramKey(appKeyList[i]);
     std::vector<std::string> values;
+
     Parameter::Pointer param = m_Application->GetParameterByKey(paramKey);
     ParameterType type = m_Application->GetParameterType(paramKey);
 
@@ -379,6 +381,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           std::cerr << "ERROR: No value associated to the parameter : \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
           return INVALIDNUMBEROFVALUE;
           }
+
+          param->SetUseXMLValue(false);
 
         // Ensure that the parameter is enabled
         m_Application->EnableParameter(paramKey);
@@ -470,14 +474,15 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                         }
 
         // Single value parameter
-        if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type
-            == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename || type
-            == ParameterType_InputFilenameList || type == ParameterType_OutputFilename || type
-            == ParameterType_ComplexInputImage || type == ParameterType_InputImage || type
-            == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList || type
-            == ParameterType_OutputVectorData || type == ParameterType_RAM)
+        if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || 
+	    type == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename || 
+	    type == ParameterType_InputFilenameList || type == ParameterType_OutputFilename || 
+	    type == ParameterType_ComplexInputImage || type == ParameterType_InputImage || 
+	    type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList || 
+	    type == ParameterType_OutputVectorData || type == ParameterType_RAM || 
+	    type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML)
           {
-          m_Application->SetParameterString(paramKey, values[0]);
+          m_Application->SetParameterString(paramKey, values[0]);                  
           }
         else
           if (type == ParameterType_Empty)
@@ -491,10 +496,10 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                 {
                 dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(false);
                 }
-              else
-                {
-                std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
-                return WRONGPARAMETERVALUE;
+	      else
+		{
+		  std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
+		  return WRONGPARAMETERVALUE;
                 }
             }
         // Update the flag UserValue
@@ -541,6 +546,14 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         }
       }
 
+    const char *inXMLKey = "inxml";
+    const bool paramInXMLExists(m_Parser->IsAttributExists(std::string("-").append(inXMLKey), m_Expression));
+    if(paramInXMLExists)
+      {
+        //skip if mandatory parameters are missing because we have it already in XML
+        mustBeSet = false;
+      }
+
     if( mustBeSet )
       {
       if (!paramExists)
@@ -572,7 +585,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_Expression);
         if (values.size() == 0)
           {
-          std::cerr << "ERROR: Missing mandatory parameter: " << paramKey << std::endl;
+          std::cerr << "ERROR: Missing non-mandatory parameter: " << paramKey << std::endl;
           return MISSINGPARAMETERVALUE;
           }
         }
@@ -742,7 +755,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<float>         ";
     }
-  else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||type == ParameterType_Directory || type == ParameterType_InputImage ||
+  else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||type == ParameterType_Directory || type == ParameterType_InputImage || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML ||
            type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData ||
            type == ParameterType_String || type == ParameterType_Choice )
     {

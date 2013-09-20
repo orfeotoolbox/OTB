@@ -15,40 +15,39 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperQtWidgetInputImageParameter.h"
-#include <stdexcept>
+#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-QtWidgetInputImageParameter::QtWidgetInputImageParameter(InputImageParameter* param, QtWidgetModel* m)
+QtWidgetOutputProcessXMLParameter::QtWidgetOutputProcessXMLParameter(OutputProcessXMLParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
-  m_InputImageParam(param)
+  m_XMLParam(param)
 {
 }
 
-QtWidgetInputImageParameter::~QtWidgetInputImageParameter()
+QtWidgetOutputProcessXMLParameter::~QtWidgetOutputProcessXMLParameter()
 {
 }
 
-void QtWidgetInputImageParameter::DoUpdateGUI()
+void QtWidgetOutputProcessXMLParameter::DoUpdateGUI()
 {
-  //update lineedit
-  QString text( m_InputImageParam->GetFileName().c_str() );
+  // Update the lineEdit
+  QString text( m_XMLParam->GetFileName() );
   if (text != m_Input->text())
     m_Input->setText(text);
 }
 
-void QtWidgetInputImageParameter::DoCreateWidget()
+void QtWidgetOutputProcessXMLParameter::DoCreateWidget()
 {
   // Set up input text edit
   m_HLayout = new QHBoxLayout;
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
   m_Input = new QLineEdit;
-  m_Input->setToolTip( m_InputImageParam->GetDescription() );
+  m_Input->setToolTip( m_XMLParam->GetDescription() );
   connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
   connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
 
@@ -65,43 +64,31 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetInputImageParameter::SelectFile()
+void QtWidgetOutputProcessXMLParameter::SelectFile()
 {
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setNameFilter("Raster files (*)");
+  fileDialog.setFileMode(QFileDialog::AnyFile);
+
+  fileDialog.setNameFilter("XML File (*.xml)");
 
   if (fileDialog.exec())
     {
-    if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == true )
-      m_Input->setText(fileDialog.selectedFiles().at(0));
-    else
-      {
-      std::ostringstream oss;
-      oss << "The given file "
-          << fileDialog.selectedFiles().at(0).toAscii().constData()
-          << " is not valid.";
-      this->GetModel()->SendLogWARNING( oss.str() );
-      }
+    this->SetFileName(fileDialog.selectedFiles().at(0));
+    m_Input->setText(fileDialog.selectedFiles().at(0));
     }
 }
 
-bool QtWidgetInputImageParameter::SetFileName(const QString& value)
+void QtWidgetOutputProcessXMLParameter::SetFileName(const QString& value)
 {
-  bool res = true;
-  // save value
-  if(m_InputImageParam->SetFromFileName(value.toAscii().constData()) == true)
-    {
-    // notify of value change
-    QString key( m_InputImageParam->GetKey() );
+  // save xml file name
+  m_XMLParam->SetValue(value.toAscii().constData());
 
-    emit ParameterChanged(key);
-    }
-  else
-    res = false;
+  // notify of value change
+  QString key( m_XMLParam->GetKey() );
+  emit ParameterChanged(key);
 
-  return res;
+
 }
 
 }
