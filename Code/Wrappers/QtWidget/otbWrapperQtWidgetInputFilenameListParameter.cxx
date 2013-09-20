@@ -39,7 +39,7 @@ void QtWidgetInputFilenameListParameter::DoUpdateGUI()
     return;
 
   std::vector<std::string> fileList = m_InputFilenameListParam->GetFileNameList();
-  for( int i = m_FileSelectionList.size(); i < fileList.size(); i++ )
+  for( unsigned int i = m_FileSelectionList.size(); i < fileList.size(); i++ )
     {
       this->AddFile();
     }

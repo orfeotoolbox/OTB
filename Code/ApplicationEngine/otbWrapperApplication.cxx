@@ -60,9 +60,10 @@ Application::Application()
     m_DocAuthors(""),
     m_DocLimitations(""),
     m_DocSeeAlso(""),
+    m_DocTags(),
     m_HaveInXML(true),
-    m_HaveOutXML(true),
-    m_DocTags()
+    m_HaveOutXML(true)
+
 {
   // Don't call Init from the constructor, since it calls a virtual method !
 
