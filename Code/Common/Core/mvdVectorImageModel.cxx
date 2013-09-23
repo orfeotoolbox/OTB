@@ -423,7 +423,7 @@ VectorImageModel
   m_Region = region;
 
   // Compute the best level of detail
-  CountType bestLod = this->ComputeBestLevelOfDetail(zoomFactor);
+  CountType bestLod = this->ComputeBestLod(zoomFactor);
 
   // Set the corresponding Level of Detail
   if( GetCurrentLod()!=bestLod )
@@ -728,7 +728,28 @@ size[0] = vcl_abs(static_cast<int>(region.GetSize()[0] + region.GetIndex()[0]
 
 /*****************************************************************************/
 CountType
-VectorImageModel::ComputeBestLevelOfDetail(const double zoomFactor)
+VectorImageModel::ComputeBestLod( int width, int height ) const
+{
+  if( width<=0 || height<=0 )
+    return 0;
+
+  ImageRegionType nativeLargestRegion( GetNativeLargestRegion() );
+
+  double factorX =
+    double( width ) / double( nativeLargestRegion.GetSize()[ 0 ] );
+
+  double factorY =
+    double( height ) / double( nativeLargestRegion.GetSize()[ 1 ] );
+
+  double initialZoomFactor = std::min(factorX, factorY);
+
+  // Compute the best lod from the initialZoomFactor
+  return ComputeBestLod( initialZoomFactor );
+}
+
+/*****************************************************************************/
+CountType
+VectorImageModel::ComputeBestLod(const double zoomFactor) const
 {
   int inverseZoomFactor =  static_cast<int>((1/zoomFactor + 0.5));
   CountType bestLod = this->Closest(inverseZoomFactor, m_AvailableLod);
@@ -777,7 +798,7 @@ VectorImageModel
     double initialZoomFactor = std::min(factorX, factorY);
 
     // Compute the best lod from the initialZoomFactor
-    bestInitialLod = ComputeBestLevelOfDetail(initialZoomFactor);
+    bestInitialLod = ComputeBestLod(initialZoomFactor);
     }
 
   this->SetCurrentLod( bestInitialLod );

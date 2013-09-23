@@ -119,10 +119,19 @@ QuicklookModel
     VectorImageModel* viModel = GetImageModel< VectorImageModel >();
     assert( viModel!=NULL );
 
+    CountType currentLod = viModel->GetCurrentLod();
+    CountType bestLod = viModel->ComputeBestLod( 512, 512 );
+
+    if( bestLod!=currentLod )
+      viModel->SetCurrentLod( bestLod );
+
     // Write quicklook file on the disk.
     fileWriter->SetFileName( QFile::encodeName(quicklookFilename).constData()  );
     fileWriter->SetInput( viModel->ToImage() );
     fileWriter->Update();
+
+    if( currentLod!=bestLod )
+      viModel->SetCurrentLod( currentLod );
     }
 
   // Source stored quicklook image-file.

@@ -95,7 +95,7 @@ void ImageModelRenderer::paintGL( const RenderingContext& context )
   const ImageRegionType&  region = context.m_ImageRegion;
 
   ImageRegionType  scaledRegion = region;
-  CountType bestLod = viModel->ComputeBestLevelOfDetail(context.m_IsotropicZoom);
+  CountType bestLod = viModel->ComputeBestLod(context.m_IsotropicZoom);
 
   // If it is not the original level of detail recompute the region to request
   double currentResolutionFactorX = 1.;

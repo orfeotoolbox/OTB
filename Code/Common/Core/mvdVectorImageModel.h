@@ -454,7 +454,12 @@ public:
   /**
    * Following the zoom factor, get the best level of detail
    */
-  CountType ComputeBestLevelOfDetail(const double ZoomFactor);
+  CountType ComputeBestLod( double ZoomFactor ) const;
+
+  /**
+   * Following the zoom factor, get the best level of detail
+   */
+  CountType ComputeBestLod( int width, int height ) const;
 
   //
   // AbstractImageModel overrides.
