@@ -104,14 +104,14 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
     {
       // Get the last subkey
       std::string lastkey = pKey.GetLastElement();
-      
+
       std::string parentkey = pKey.GetRoot();
       Parameter::Pointer parentParam = GetParameterByKey(parentkey);
 
       // parentParam must be a choice, a listBox or this is an error
       ChoiceParameter* comboboxParentAsChoice = dynamic_cast<ChoiceParameter*>(parentParam.GetPointer());
       ListViewParameter* listBoxParentAsChoice = dynamic_cast<ListViewParameter*>(parentParam.GetPointer());
-      
+
       if (comboboxParentAsChoice)
         {
         comboboxParentAsChoice->AddChoice(lastkey, paramName);
@@ -189,7 +189,7 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
 
    // parentParam must be a choice, a listBox or this is an error
   ListViewParameter* listBoxParentAsChoice = dynamic_cast<ListViewParameter*>(parentParam.GetPointer());
-  
+
   if (listBoxParentAsChoice)
     {
     selectedItems = listBoxParentAsChoice->GetSelectedItems();
@@ -206,7 +206,7 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
  ParameterType ParameterGroup::GetParameterTypeFromString(std::string type)
  {
    ParameterType paramType;
-   
+
    if (type == "Choice")
      {
        type = ParameterType_Choice;
@@ -303,7 +303,7 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
      {
        paramType = ParameterType_InputProcessXML;
      }
-   
+
    return paramType;
 }
 
@@ -311,7 +311,7 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
 std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
 {
   std::string paramType;
-  
+
   switch (type)
     {
     case ParameterType_Empty:
@@ -425,20 +425,20 @@ std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
       }
       break;
     case ParameterType_OutputProcessXML:
-      {	  
+      {
         paramType = "OutputProcessXML";
       }
       break;
     case ParameterType_InputProcessXML:
-      {	  
+      {
         paramType = "InputProcessXML";
       }
       break;
     }
-  
+
   return paramType;
 }
-  
+
 /** Add a new parameter to the parameter group */
 void
 ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::string paramName)
@@ -581,12 +581,12 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         }
         break;
       case ParameterType_OutputProcessXML:
-        {	  
+        {
 	newParam = OutputProcessXMLParameter::New();
         }
         break;
       case ParameterType_InputProcessXML:
-        {	  
+        {
 	newParam = InputProcessXMLParameter::New();
         }
         break;
@@ -655,9 +655,9 @@ ParameterGroup::GetParameterByKey(std::string name)
       }
     }
 
-  if (parentParam.IsNull())
+  /* HaveInXML and HaveOutXML should act here */
+  if (parentParam.IsNull()) // && parentParam->GetKey()!= "inxml" && parentParam->GetKey()!="outxml" )
     {
-      if(parentParam->GetKey() != "inxml") FIXNEEDED
     itkExceptionMacro(<< "Could not find parameter " << name)
     }
 

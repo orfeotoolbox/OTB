@@ -37,14 +37,13 @@ void
 GlobalHistogramEqualizationFilter<TInput,TOutput>
 ::BeforeThreadedGenerateData()
 {
-
   unsigned long inputSize= this->GetInput()->GetLargestPossibleRegion().GetSize()[0] *
     this->GetInput()->GetLargestPossibleRegion().GetSize()[1];
 
-    unsigned long histoSize = m_Histogram->Size();
+  unsigned long histoSize = m_Histogram->Size();
 
-    m_MinimumRange = ( histoSize==256 ) ? 0 : m_MinimumRange;
-    double lutScale  =   static_cast<double>( inputSize ) /  static_cast<double>( histoSize );
+  m_MinimumRange = ( histoSize==256 ) ? 0 : m_MinimumRange;
+  double lutScale  =   static_cast<double>( inputSize ) /  static_cast<double>( histoSize );
 
 
   ArrayType CumulativeArray(histoSize);
@@ -60,11 +59,11 @@ GlobalHistogramEqualizationFilter<TInput,TOutput>
     CumulativeArray[i] = m_Histogram->GetFrequency(i)+ CumulativeArray[i-1];
     }
 
-    for (unsigned int i = 0; i< histoSize; i++)
-      {
-      m_LookupArray[i] = static_cast<InternalPixelType>(
-        vnl_math_max( static_cast<double>(m_MinimumRange), -1.0 +
-                      vcl_floor( static_cast<double>(CumulativeArray[i]) / lutScale + 0.5)));
+  for (unsigned int i = 0; i< histoSize; i++)
+    {
+    m_LookupArray[i] = static_cast<InternalPixelType>(
+      vnl_math_max( static_cast<double>(m_MinimumRange), -1.0 +
+                    vcl_floor( static_cast<double>(CumulativeArray[i]) / lutScale + 0.5)));
       }
 
 
@@ -78,11 +77,11 @@ GlobalHistogramEqualizationFilter<TInput, TOutput>
 {
     typename TInput::ConstPointer input = this->GetInput();
     typename TOutput::Pointer output = this->GetOutput();
-    output->SetNumberOfComponentsPerPixel(1); //for N-band gray scale images
-                                              //where N > 1
+//    output->SetNumberOfComponentsPerPixel(1);
 
     // Allocate the output
     this->AllocateOutputs();
+    itk::ProgressReporter progress(this,threadId,outputRegion.GetNumberOfPixels());
 
     // Iterator which traverse the input
     itk::ImageRegionConstIteratorWithIndex<TInput> itInput(input,outputRegion);
@@ -92,16 +91,16 @@ GlobalHistogramEqualizationFilter<TInput, TOutput>
       while ( !itInput.IsAtEnd() )
         {
         PixelType outPixel;
-        int numComponents = output->GetNumberOfComponentsPerPixel();
+//        int numComponents = output->GetNumberOfComponentsPerPixel();
 
-     outPixel.Reserve(numComponents);
+//     outPixel.Reserve(numComponents);
 //       outPixel.Reserve(1);
-            for (int k =0; k < numComponents; k++)
-              outPixel[k]  = m_LookupArray[ static_cast<InternalPixelType>( itInput.Get()[k] - m_MinimumRange ) ];
+        //          for (int k =0; k < numComponents; k++)
+        outPixel  = m_LookupArray[ static_cast<InternalPixelType>( itInput.Get() - m_MinimumRange ) ];
 
       output->SetPixel(itInput.GetIndex(), outPixel);
               ++itInput;
-
+              progress.CompletedPixel();
         }
 
 

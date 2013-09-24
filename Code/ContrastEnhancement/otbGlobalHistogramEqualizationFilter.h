@@ -24,14 +24,10 @@
 #include "itkImageToImageFilter.h"
 #include "itkHistogram.h"
 #include "itkArray.h"
-
-#include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
-#include "itkImageRegionIteratorWithIndex.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 
 namespace otb
 {
-
 
 template<class TInput, class TOutput>
 class ITK_EXPORT GlobalHistogramEqualizationFilter :
@@ -44,7 +40,10 @@ public:
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
 
-  typedef typename TInput::InternalPixelType   InternalPixelType;
+  typedef typename TInput::PixelType   InternalPixelType;
+  typedef typename TInput::PixelType           PixelType;
+
+
   typedef typename itk::NumericTraits< InternalPixelType >::RealType MeasurementType;
   typedef itk::Statistics::Histogram< MeasurementType, 1 > HistogramType;
   typedef typename HistogramType::Pointer HistogramPointerType;
@@ -57,7 +56,6 @@ public:
 
   typedef typename TInput::RegionType          RegionType;
   typedef typename TInput::Pointer            InputImagePointer;
-  typedef typename TInput::PixelType           PixelType;
 
   itkGetConstMacro(MinimumRange, InternalPixelType)
   itkSetMacro(MinimumRange, InternalPixelType);
@@ -73,7 +71,6 @@ public:
   }
 
   virtual void BeforeThreadedGenerateData();
-
   virtual void ThreadedGenerateData(const RegionType&
                                      outputRegion, int threadId);
 
@@ -81,18 +78,17 @@ public:
 protected:
   GlobalHistogramEqualizationFilter()
     {
-//    m_LookupArray = ArrayType::New();
     this->SetNumberOfRequiredInputs( 1 );
     }
-  virtual ~GlobalHistogramEqualizationFilter(){}
+  virtual ~GlobalHistogramEqualizationFilter()
+  {
+    //clear and remove lookup table
+    // m_LookupArray.clear();
+  }
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const { }
 
-  /** Generate data method. */
-//  void GenerateData();
-
-  /** Adaptive histogram equalization requires more input that it
-   * outputs. It needs request an input region that is padded by the
-   * radius.
+  /*
   * \sa ProcessObject::GenerateInputRequestedRegion() */
   //void GenerateInputRequestedRegion();
 
@@ -108,10 +104,6 @@ private:
  typedef itk::Array<unsigned long> ArrayType;
 
   ArrayType m_LookupArray;
-
-  //bool         m_NoDataFlag;
-  //NoDataType   m_NoData;
-  //int          m_NumberOfBins;
 
 };
 
