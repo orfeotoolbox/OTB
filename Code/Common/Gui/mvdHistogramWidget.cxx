@@ -142,9 +142,9 @@ HistogramWidget
   // m_PlotZoomer( NULL ),
   m_PlotMagnifier( NULL ),
   m_PlotPanner( NULL ),
-  m_PlotCurves(),
-  m_LowPlotMarkers(),
-  m_HighPlotMarkers(),
+  // m_PlotCurves(),
+  // m_LowPlotMarkers(),
+  // m_HighPlotMarkers(),
   m_Bounds(),
   m_IsGrayscaleActivated( false )
 {
