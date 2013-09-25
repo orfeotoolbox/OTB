@@ -54,6 +54,8 @@
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetRAMParameter.h"
+#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
+#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -183,6 +185,10 @@ QtWidgetParameterFactory::CreateQtWidget( otb::Wrapper::Parameter* param,
                mvd::Wrapper::QtWidgetParameterGroup)
   CREATEWIDGET(otb::Wrapper::RAMParameter,            
                otb::Wrapper::QtWidgetRAMParameter)
+  CREATEWIDGET(otb::Wrapper::OutputProcessXMLParameter,        
+               otb::Wrapper::QtWidgetOutputProcessXMLParameter)
+  CREATEWIDGET(otb::Wrapper::InputProcessXMLParameter,
+               otb::Wrapper::QtWidgetInputProcessXMLParameter)
 
 #undef CREATEWIDGET
 
