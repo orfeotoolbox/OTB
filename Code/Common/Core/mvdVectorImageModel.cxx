@@ -47,8 +47,10 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAlgorithm.h"
-#include "mvdQuicklookModel.h"
+#include "Core/mvdAlgorithm.h"
+#include "Core/mvdQuicklookModel.h"
+#include "Core/mvdSystemError.h"
+
 
 
 namespace mvd
@@ -163,6 +165,37 @@ VectorImageModel
 /*****************************************************************************/
 void
 VectorImageModel
+::EnsureValidImage( const QString& filename )
+{
+  try
+    {
+    DefaultImageFileReaderType::Pointer imageFileReader(
+      DefaultImageFileReaderType::New()
+    );
+
+    imageFileReader->SetFileName( QFile::encodeName( filename ).constData() );
+    imageFileReader->UpdateOutputInformation();
+    }
+
+  catch( std::exception& exc )
+    {
+    // TODO manage the message returned by OTB
+    qWarning() << "VectorImageModel::EnsureValidImage:" <<  exc.what();
+
+    throw
+      // std::runtime_error(
+      SystemError(
+	ToStdString(
+	  tr( "File '%1' cannot be read by OTB." )
+	  .arg( filename )
+	)
+      );
+    }
+}
+
+/*****************************************************************************/
+void
+VectorImageModel
 ::BuildGdalOverviews()
 {
   // Build overviews if necessary
@@ -176,7 +209,7 @@ VectorImageModel
     // the current file doesn't have overviews available and the ImageIO doesn't support overviews
     throw std::runtime_error(
       ToStdString(
-  tr( "The ImageIO used to read this file doesn't support Overviews." )
+	tr( "The ImageIO used to read this file doesn't support Overviews." )
       )
     );
     }
@@ -187,7 +220,7 @@ VectorImageModel
 
   if( nbOfAvailableOvw>0 )
     {
-    qDebug() << tr("The file already has overviews!");
+    // qDebug() << tr("The file already has overviews!");
     return;
     }
 
@@ -205,7 +238,7 @@ VectorImageModel
     }
 
   // the user want to cache the overviews
-  qDebug() << tr("Caching of overviews.");
+  // qDebug() << tr("Caching of overviews.");
   typedef otb::GDALOverviewsBuilder FilterType;
   FilterType::Pointer filter = FilterType::New();
 
@@ -231,8 +264,8 @@ VectorImageModel
     {
     // The user can continue to use the file so we return a warning message
     // TODO MSD return the message to the log widget
-    qWarning() << tr( "The overviews creation failed.\n"
-        "Navigation in resolution will be slower." );
+    qWarning() <<
+      tr( "The overviews creation failed.\nNavigation in resolution will be slower." );
 
     // throw exc;
     }
@@ -828,17 +861,21 @@ VectorImageModel
     DefaultImageFileReaderType::New()
   );
 
+  /*
   try
     {
+  */
     fileReader->SetFileName( QFile::encodeName(lodFilename).constData() );
     fileReader->UpdateOutputInformation();
 
     m_ImageFileReader = fileReader;
+  /*
     }
   catch( std::exception& exc )
     {
     throw exc;
     }
+  */
 
   // (Always) Update m_Image reference.
   m_Image = m_ImageFileReader->GetOutput();
@@ -974,7 +1011,7 @@ void
 VectorImageModel
 ::ApplySettings()
 {
-  qDebug() << this << "::ApplySettings()";
+  // qDebug() << this << "::ApplySettings()";
 
   RenderingFilterType::RenderingFunctionType* renderingFunc =
     m_RenderingFilter->GetRenderingFunction();
@@ -1003,7 +1040,7 @@ void
 VectorImageModel
 ::OnModelUpdated()
 {
-  qDebug() << this << "::OnModelUpdated()";
+  // qDebug() << this << "::OnModelUpdated()";
 
   // Apply settings to rendering pipeline.
   ApplySettings();

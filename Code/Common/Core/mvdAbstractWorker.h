@@ -99,7 +99,7 @@ public slots:
   /**
    * \brief Call the implemented do job/task routine.
    */
-  void Do();
+  void Do() throw();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -145,7 +145,7 @@ signals:
    *
    * \param 
    */
-  void ExceptionRaised( const QString& what );
+  void ExceptionRaised( QString what );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

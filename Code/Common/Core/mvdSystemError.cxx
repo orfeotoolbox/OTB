@@ -100,7 +100,6 @@ SystemError
 {
   // Do not use qCritial() nor qFatal() here because it will throw an
   // exception again causing infinite exception loop!
-  qDebug() << what();
 }
 
 /*******************************************************************************/
@@ -111,7 +110,6 @@ SystemError
 {
   // Do not use qCritial() nor qFatal() here because it will throw an
   // exception again causing infinite exception loop!
-  qDebug() << what();
 }
 
 /*******************************************************************************/

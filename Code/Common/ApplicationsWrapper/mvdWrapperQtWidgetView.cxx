@@ -203,16 +203,7 @@ QWidget* QtWidgetView::CreateFooter()
     m_Model, SIGNAL( SetApplicationReady( bool ) ),
     m_ExecButton, SLOT( setEnabled( bool ) )
   );
-#if 0
-  connect(
-    m_ExecButton, SIGNAL( clicked() ),
-    m_Model, SLOT( ExecuteAndWriteOutputSlot() )
-  );
-  connect(
-    m_ExecButton, SIGNAL( clicked() ),
-    this, SLOT( UpdateMessageAfterExcuteClicked() )
-  );
-#else
+
   QObject::connect(
     m_ExecButton, SIGNAL( clicked() ),
     // to:
@@ -223,7 +214,6 @@ QWidget* QtWidgetView::CreateFooter()
     // to:
     m_Model, SLOT( ExecuteAndWriteOutputSlot() )
   );
-#endif
 
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
@@ -371,8 +361,14 @@ QtWidgetView::OnExecButtonClicked()
 
   bool isSure = true;
 
+  /*
+  typedef QVector< QFileInfo > FileInfoVector;
+
+  FileInfoVector fileInfos;
+  */
+
   for( StringVector::const_iterator it( paramKeys.begin() );
-       it!=paramKeys.end();
+       it!=paramKeys.end() && isSure;
        ++it )
     {
     if( otbApp->GetParameterType( *it )==
@@ -386,8 +382,11 @@ QtWidgetView::OnExecButtonClicked()
 	otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
       );
 
-      isSure =
-	( !QFileInfo( outImgParam->GetFileName() ).exists() ||
+      QFileInfo fileInfo( outImgParam->GetFileName() );
+
+      if( fileInfo.exists() )
+	{
+	QMessageBox::StandardButton questionButton =
 	  QMessageBox::question(
 	    this,
 	    tr( PROJECT_NAME ),
@@ -395,13 +394,38 @@ QtWidgetView::OnExecButtonClicked()
 	    .arg( outImgParam->GetFileName() ),
 	    QMessageBox::Yes | QMessageBox::No,
 	    QMessageBox::No
-	  )==QMessageBox::Yes ) &&
-	isSure;
+	  );
+
+	if( questionButton==QMessageBox::Yes )
+	  {
+	  /*
+	  fileInfos.push_back( fileInfo );
+	  */
+	  }
+	else
+	  isSure = false;
+	}
       }
     }
 
   if( !isSure )
     return;
+
+  /* U N S A F E
+  // BUGFIX: Mantis-750
+  //
+  // Remove files which will be overwritten in order to use
+  // file-existence to check whether to emit the OutputImageChanged
+  // signal (see ::OnApplicationExecutionDone()).
+  for( FileInfoVector::const_iterator it( fileInfos.begin() );
+       it!=fileInfos.end();
+       ++it )
+    {
+    qDebug() << "Removing:" << it->filePath();
+
+    it->dir().remove( it->fileName() );
+    }
+  */
 
   m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
 
@@ -425,6 +449,8 @@ void QtWidgetView::OnApplicationExecutionDone()
   // the output filenames if any
   std::vector<std::string> paramList = m_Model->GetApplication()->GetParametersKeys(true);
   
+  CountType count = 0;
+
   // iterate on the application parameters
   for (std::vector<std::string>::const_iterator it = paramList.begin();
           it != paramList.end();
@@ -439,8 +465,9 @@ void QtWidgetView::OnApplicationExecutionDone()
         m_Model->GetApplication()->HasValue(key) )
         {
         // get the parameter
-        otb::Wrapper::Parameter* param = m_Model->GetApplication()->GetParameterByKey(key);
-        
+        otb::Wrapper::Parameter* param =
+	  m_Model->GetApplication()->GetParameterByKey( key );
+       
         // try to cast it 
         otb::Wrapper::OutputImageParameter* outputParam = 
           dynamic_cast<otb::Wrapper::OutputImageParameter*>(param);
@@ -448,13 +475,31 @@ void QtWidgetView::OnApplicationExecutionDone()
         // emit the output image filename selected
         if (outputParam)
           {
-          emit OTBApplicationOutputImageChanged( QString ( m_Model->GetApplication()->GetName() ),// app
-                                                 QString ( outputParam->GetFileName() )          // outfname
-                                                 
-            );
+	  QFileInfo fileInfo( outputParam->GetFileName() );
+
+	  /* U N S A F E
+	  // BUGFIX: Mantis-750
+	  //
+	  // If output image-exists, it's sure that it has been output
+	  // from the OTB-application process because overwritten
+	  // files are first deleted (see OnExecButtonClicked()).
+	  if( fileInfo.exists() )
+	    {
+	    ++ count;
+	  */
+	    emit OTBApplicationOutputImageChanged(
+	      QString( m_Model->GetApplication()->GetName() ),
+	      QString( outputParam->GetFileName() )
+	    );
+
+	  /*
+	    }
+	  */
           }
         }
     }
+
+  emit ExecutionDone( count );
 }
 
 }

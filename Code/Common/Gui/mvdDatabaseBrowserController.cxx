@@ -185,12 +185,18 @@ void
 DatabaseBrowserController
 ::ResetWidget()
 {
+#if 0
   //
   // Access model.
   DatabaseModel* model = GetModel< DatabaseModel >();
   assert( model!=NULL );
 
   ResetDatasetTree( model->QueryDatasetModels() );
+
+#else
+  RefreshWidget();
+
+#endif
 }
 
 /*******************************************************************************/
@@ -222,7 +228,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::CheckDatasetsConsistensy()
+::CheckDatasetsConsistency()
 {
   //
   // access widget.
@@ -307,7 +313,7 @@ DatabaseBrowserController
   ResetDatasetTree( model->QueryDatasetModels() );
 
   // Check every dataset consistency  
-  CheckDatasetsConsistensy();
+  CheckDatasetsConsistency();
 }
 
 /*******************************************************************************/

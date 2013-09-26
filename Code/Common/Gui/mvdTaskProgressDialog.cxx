@@ -106,10 +106,10 @@ TaskProgressDialog
 
   QObject::connect(
     task->GetWorker(),
-    SIGNAL( ExceptionRaised( const QString& ) ),
+    SIGNAL( ExceptionRaised( QString ) ),
     // to:
     this,
-    SLOT( OnExceptionRaised( const QString& ) )
+    SLOT( OnExceptionRaised( QString ) )
   );
 }
 
@@ -146,7 +146,7 @@ TaskProgressDialog
 /*******************************************************************************/
 void
 TaskProgressDialog
-::OnExceptionRaised( const QString& what )
+::OnExceptionRaised( QString what )
 {
   QMessageBox::warning(
     this,

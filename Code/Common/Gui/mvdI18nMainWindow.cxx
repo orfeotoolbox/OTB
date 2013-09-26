@@ -205,8 +205,6 @@ I18nMainWindow
   QFileInfo fileInfo( QDir::home(), I18nApplication::DEFAULT_CACHE_DIR_NAME );
   QDir dir( fileInfo.dir() );
 
-  // qDebug() << dir.path();
-
   QMessageBox messageBox;
 
   messageBox.setWindowTitle( tr( "Welcome new Monteverdi2 user!" ) );

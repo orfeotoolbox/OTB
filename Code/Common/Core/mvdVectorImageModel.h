@@ -388,28 +388,7 @@ public:
   inline DatasetModel* GetDatasetModel();
 
   /** */
-  static void EnsureValidImage(QString filename)
-  {
-    try
-    {
-      DefaultImageFileReaderType::Pointer imageFileReader = DefaultImageFileReaderType::New();
-      imageFileReader->SetFileName( QFile::encodeName(filename).constData() );
-      imageFileReader->UpdateOutputInformation();
-    }
-    catch(std::exception& exc )
-    {
-      // TODO manage the message returned by OTB
-      qWarning() << "Error returned by OTB:" << exc.what();
-
-      throw std::runtime_error(
-	ToStdString(
-	  tr( "OTB can not read this file ('%1').\n"
-	      "Please check."
-	  ).arg( filename )
-	)
-      );
-    }
-  }
+  static void EnsureValidImage( const QString& filename );
 
   /** */
   // TODO: Move into template wrapper base-class.

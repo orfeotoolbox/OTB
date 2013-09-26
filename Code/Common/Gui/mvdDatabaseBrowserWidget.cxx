@@ -168,8 +168,6 @@ DatabaseBrowserWidget
        it!=m_DatasetList.end();
        ++it )
     {
-    // qDebug() << "+" << *it;
-
     // current alias
     const StringPairListType::value_type::first_type& alias = it->first;
     const StringPairListType::value_type::second_type& id = it->second;

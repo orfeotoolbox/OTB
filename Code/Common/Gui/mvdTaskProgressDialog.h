@@ -161,7 +161,7 @@ private slots:
   void OnDone( QObject* result );
   /**
    */
-  void OnExceptionRaised( const QString& what );
+  void OnExceptionRaised( QString what );
   /**
    */
   void OnObjectDestroyed( QObject* object );

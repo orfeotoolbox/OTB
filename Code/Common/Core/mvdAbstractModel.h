@@ -198,12 +198,12 @@ AbstractModel
     {
     attachChildModel( model, context );
     }
-  catch( std::exception& exc )
+  catch( ... )
     {
     delete model;
     model = NULL;
 
-    throw exc;
+    throw;
     }
 
   return model;

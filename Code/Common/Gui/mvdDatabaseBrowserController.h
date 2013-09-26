@@ -119,8 +119,10 @@ signals:
 // Slots.
 public slots:
 
-  
-
+  /**
+   *  \brief
+   */
+  void CheckDatasetsConsistency();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -142,10 +144,6 @@ private:
    */
   void ResetDatasetTree( const StringPairListType& datasets );
 
-  /**
-   */
-  void CheckDatasetsConsistensy();
- 
   //
   // AbstractModelController overrides.
 

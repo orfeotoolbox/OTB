@@ -934,30 +934,11 @@ MainWindow
     Application::Instance()->GetModel< DatabaseModel >();
   assert( databaseModel!=NULL );
 
-#if 1
   databaseModel->SelectDatasetModel(
     databaseModel->RegisterDatasetModel(
       progress.GetObject< DatasetModel >()
     )
   );
-
-#else
-
-  assert(
-    m_DatabaseBrowserDock->widget()==
-    qobject_cast< DatabaseBrowserWidget* >( m_DatabaseBrowserDock->widget() )
-  );
-
-  DatabaseBrowserWidget* widget =
-    qobject_cast< DatabaseBrowserWidget* >( m_DatabaseBrowserDock->widget() );
-
-  widget->SetCurrentDataset(
-    databaseModel->RegisterDatasetModel(
-      progress.GetObject< DatasetModel >()
-    )
-  );
-
-#endif
 }
 
 /*****************************************************************************/
@@ -1064,7 +1045,7 @@ void
 MainWindow
 ::OnAboutToChangeModel( const AbstractModel* model )
 {
-  qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
+  // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
   SetControllerModel( m_DatabaseBrowserDock, NULL );
 
@@ -1114,7 +1095,7 @@ void
 MainWindow
 ::OnModelChanged( AbstractModel* model )
 {
-  qDebug() << this << "::OnModelChanged(" << model << ")";
+  // qDebug() << this << "::OnModelChanged(" << model << ")";
 
   SetControllerModel( m_DatabaseBrowserDock, model );
 
@@ -1156,7 +1137,7 @@ void
 MainWindow
 ::OnAboutToChangeSelectedDatasetModel( const DatasetModel* model )
 {
-  qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
+  // qDebug() << this << "::OnAboutToChangeSelectedDatasetModel(" << model << ")";
 
   //
   // CONTROLLERS.
@@ -1304,7 +1285,7 @@ void
 MainWindow
 ::OnSelectedDatasetModelChanged( DatasetModel* model )
 {
-  qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
+  // qDebug() << this << "::OnSelectedDatasetModelChanged(" << model << ")";
 
   // Access vector-image model.
   VectorImageModel* vectorImageModel =
@@ -1489,11 +1470,21 @@ MainWindow
   // to a wrong connection!!!!
   QObject::connect(
     m_CentralTabWidget->currentWidget(),
-    SIGNAL( OTBApplicationOutputImageChanged( const QString&, const QString& ) ),
+    SIGNAL( OTBApplicationOutputImageChanged( const QString&,
+					      const QString& ) ),
     // to:
     this,
-    SLOT( OnOTBApplicationOutputImageChanged( const QString&, const QString& ) )
+    SLOT( OnOTBApplicationOutputImageChanged( const QString&,
+					      const QString& ) )
     );
+
+  QObject::connect(
+    appWidget,
+    SIGNAL( ExecutionDone( CountType ) ),
+    // to:
+    this,
+    SLOT( OnExecutionDone( CountType ) )
+  );
 
   //
   // on quit widget signal, close its tab
@@ -1560,7 +1551,8 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnOTBApplicationOutputImageChanged( const QString & appName , const QString & outfname)
+::OnOTBApplicationOutputImageChanged( const QString& appName,
+				      const QString & outfname )
 {
   //
   // If this slot is called, it means that an application has finished
@@ -1571,6 +1563,24 @@ MainWindow
 
   // import the result image into the database
   ImportImage( outfname, true );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnExecutionDone( CountType nbOutputs )
+{
+  if( nbOutputs>0 )
+    return;
+
+  assert( m_DatabaseBrowserDock!=NULL );
+  assert(
+    m_DatabaseBrowserDock->findChild< const DatabaseBrowserController* >()!=NULL
+  );
+
+  m_DatabaseBrowserDock
+    ->findChild< DatabaseBrowserController* >()
+    ->CheckDatasetsConsistency();
 }
 
 /*****************************************************************************/

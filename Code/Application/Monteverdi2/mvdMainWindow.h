@@ -179,6 +179,10 @@ protected slots:
 
   /**
    */
+  void OnExecutionDone( CountType nbOutputs );
+
+  /**
+   */
   void OnImageToImportDropped(const QString& fname);
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
@@ -356,8 +360,6 @@ private slots:
 
   /** */
   void OnUserScaleEditingFinished();
-
-
 };
 
 } // end namespace 'mvd'

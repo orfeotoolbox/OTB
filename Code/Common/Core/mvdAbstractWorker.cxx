@@ -80,7 +80,7 @@ AbstractWorker
 /*****************************************************************************/
 void
 AbstractWorker
-::Do()
+::Do() throw()
 {
   QObject* result = NULL;
 

@@ -396,9 +396,11 @@ HistogramWidget
 ::SetLowMarker( RgbwChannel channel,
 		double low )
 {
+  /*
   qDebug()
     << this << "::SetLowMarker("
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << low << ")";
+  */
 
   CountType begin = 0;
   CountType end = 0;
@@ -420,9 +422,11 @@ HistogramWidget
 ::SetHighMarker( RgbwChannel channel,
 		 double high )
 {
+  /*
   qDebug()
     << this << "::SetLowMarker("
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << high << ")";
+  */
 
   CountType begin = 0;
   CountType end = 0;
@@ -570,9 +574,11 @@ HistogramWidget
       yMax = m_Bounds[ i ].m_YMax;
     }
 
+  /*
   qDebug()
     << "[" << xMin << "; " << xMax << "]"
     << "x [" << yMin << "; " << yMax << "]";
+  */
 
   m_UI->histogramPlot->setAxisScale( QwtPlot::xBottom, xMin, xMax );
   m_UI->histogramPlot->setAxisScale( QwtPlot::yLeft, yMin, yMax );

@@ -372,10 +372,12 @@ void
 ColorDynamicsController
 ::ResetIntensityRanges( RgbwChannel channels )
 {
+  /*
   // Trace.
   qDebug()
     << this
     << "::ResetIntensityRanges(" << RGBW_CHANNEL_NAMES[ channels ] << ")";
+  */
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -713,10 +715,12 @@ void
 ColorDynamicsController
 ::RefreshHistogram()
 {
+  /*
   // Trace.
   qDebug()
     << this
     << "::RefreshHistogram()";
+  */
 
   // Get image-model.
   assert( GetModel()==GetModel< VectorImageModel>() );
@@ -750,11 +754,13 @@ void
 ColorDynamicsController
 ::OnRgbChannelIndexChanged( RgbwChannel channel, int band )
 {
+  /*
   qDebug()
     << this
     << "::OnRgbChannelIndexChanged("
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << band <<
     ")";
+  */
 
   //
   // Reset color-dynamics widget.
@@ -769,9 +775,11 @@ void
 ColorDynamicsController
 ::OnGrayChannelIndexChanged( int band )
 {
+  /*
   qDebug()
     << this
     << "::OnGrayChannelIndexChanged(" << band << ")";
+  */
 
   //
   // Reset color-dynamics widget.
@@ -786,9 +794,11 @@ void
 ColorDynamicsController
 ::OnGrayscaleActivated( bool activated )
 {
+  /*
   qDebug()
     << this
     << "::OnGrayscaleActivated(" << activated << ")";
+  */
 
   //
   // Toggle grayscale-mode activation-state of controlled widget.
@@ -811,11 +821,13 @@ void
 ColorDynamicsController
 ::OnLowQuantileChanged( RgbwChannel channel, double value )
 {
+  /*
   qDebug()
     << this
     << "::OnLowQuantileChanged("
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
+  */
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -881,11 +893,13 @@ void
 ColorDynamicsController
 ::OnHighQuantileChanged( RgbwChannel channel, double value )
 {
+  /*
   qDebug()
     << this
     << "::OnHighQuantileChanged("
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
+  */
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -951,11 +965,13 @@ void
 ColorDynamicsController
 ::OnLowIntensityChanged( RgbwChannel channel, double value )
 {
+  /*
   qDebug()
     << this
     << "::OnLowIntensityChanged("
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
+  */
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -1012,11 +1028,13 @@ void
 ColorDynamicsController
 ::OnHighIntensityChanged( RgbwChannel channel, double value )
 {
+  /*
   qDebug()
     << this
     << "::OnHighIntensityChanged("
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << value
     << ")";
+  */
 
   //
   // Calculate loop bounds. Return if nothing to do.
@@ -1074,9 +1092,11 @@ void
 ColorDynamicsController
 ::OnResetIntensityClicked( RgbwChannel channel )
 {
+  /*
   qDebug()
     << this
     << "::OnResetIntensityClicked(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
+  */
 
   ResetIntensities( channel );
 
@@ -1092,9 +1112,11 @@ void
 ColorDynamicsController
 ::OnResetQuantileClicked( RgbwChannel channel )
 {
+  /*
   qDebug()
     << this
     << "::OnResetQuantileChanged(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
+  */
 
   ResetQuantiles( channel );
 
@@ -1196,10 +1218,12 @@ void
 ColorDynamicsController
 ::OnNoDataFlagToggled( bool enabled )
 {
+  /*
   // Trace.
   qDebug()
     << this
     << "::OnNoDataFlagToggled(" << enabled << ")";
+  */
 
   // Get image-model.
   assert( GetModel()==GetModel< VectorImageModel>() );
@@ -1226,10 +1250,12 @@ void
 ColorDynamicsController
 ::OnNoDataValueChanged( double value )
 {
+  /*
   // Trace.
   qDebug()
     << this
     << "::OnNoDataValueChanged(" << value << ")";
+  */
 
   // Get image-model.
   assert( GetModel()==GetModel< VectorImageModel>() );

@@ -143,7 +143,7 @@ signals:
 //
 // Protected methods.
 protected:
-  
+
   /** Fill the tree using the dataset list */
   void FillTree();
   

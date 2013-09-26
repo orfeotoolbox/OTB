@@ -253,7 +253,7 @@ bool
 DatasetDescriptor
 ::SetImageModelSettings( int id, const void* imageSettings )
 {
-  qDebug() << "DatasetDescriptor::SetImageModelSettings(" << id << ")";
+  // qDebug() << "DatasetDescriptor::SetImageModelSettings(" << id << ")";
 
   assert( imageSettings!=NULL );  
 
@@ -374,7 +374,7 @@ bool
 DatasetDescriptor
 ::SetImageModelProperties( int id, const ImageProperties* imageProperties )
 {
-  qDebug() << "DatasetDescriptor::SetImageModelProperties(" << id << ")";
+  // qDebug() << "DatasetDescriptor::SetImageModelProperties(" << id << ")";
 
   assert( imageProperties!=NULL );  
 

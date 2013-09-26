@@ -45,7 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "Core/mvdTypes.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -133,6 +133,8 @@ signals:
   void OTBApplicationOutputImageChanged( const QString &, const QString &);
 
   void ExecuteAndWriteOutput();
+
+  void ExecutionDone( CountType nbOutputs );
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
@@ -241,8 +243,6 @@ void
 QtWidgetView
 ::OnProgressReportBegin()
 {
-  qDebug() << this << "::OnProgressReportBegin()";
-
   SetClosable( false );
 }
 
@@ -252,8 +252,6 @@ void
 QtWidgetView
 ::OnProgressReportEnd()
 {
-  qDebug() << this << "::OnProgressReportEnd()";
-
   SetClosable( true );
 }
 

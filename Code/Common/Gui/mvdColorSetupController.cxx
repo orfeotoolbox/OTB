@@ -298,11 +298,13 @@ void
 ColorSetupController
 ::OnCurrentRgbIndexChanged( RgbwChannel channel, int index )
 {
+  /*
   qDebug()
     << this
     << "::OnCurrentRgbIndexChanged("
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << index
     << ")";
+  */
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -324,7 +326,7 @@ void
 ColorSetupController
 ::OnCurrentGrayIndexChanged( int index )
 {
-  qDebug() << this << "::OnCurrentGrayIndexChanged(" << index << ")";
+  // qDebug() << this << "::OnCurrentGrayIndexChanged(" << index << ")";
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
@@ -346,7 +348,7 @@ void
 ColorSetupController
 ::OnGrayscaleActivated( bool activated )
 {
-  qDebug() << this << "::OnGrayscaleActivated(" << activated << ")";
+  // qDebug() << this << "::OnGrayscaleActivated(" << activated << ")";
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();

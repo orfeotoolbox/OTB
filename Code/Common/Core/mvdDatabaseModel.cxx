@@ -135,8 +135,10 @@ DatabaseModel
   if( datasetModel==m_SelectedDatasetModel )
     return datasetModel;
 
+  /*
   try
     {
+  */
     // Load dataset sub-models.
     datasetModel->LoadImageModels( -1, -1 );
 
@@ -148,11 +150,13 @@ DatabaseModel
 
     // If dataset model has been loaded, select it.
     SetSelectedDatasetModel( datasetModel );
+  /*
     }
   catch( std::exception& exc )
     {
     throw exc;
     }
+  */
 
   // Return loaded and selected dataset model.
   return datasetModel;
@@ -244,7 +248,7 @@ void
 DatabaseModel
 ::ReleaseDatasetModel( const DatasetId& id, bool remove )
 {
-  qDebug() << this << "::ReleaseDatasetModel(" << id << ")";
+  // qDebug() << this << "::ReleaseDatasetModel(" << id << ")";
 
   // Find (key, value) pair.
   DatasetModelMap::iterator it( DatasetModelIterator( id ) );
@@ -298,14 +302,14 @@ DatabaseModel
     datasetModel->BuildModel( &context );
     }
 
-  catch( std::exception& exc )
+  catch( ... )
     {
     // If loading was interrupted, delete allocated memory.
     delete datasetModel;
     datasetModel = NULL;
 
     // And forward interrupting exception.
-    throw exc;
+    throw;
     }
 
   // Return loaded and selected dataset model.

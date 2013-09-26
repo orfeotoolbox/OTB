@@ -144,8 +144,6 @@ HistogramPlotPicker
 
   for( CountType i=begin; i<end; ++i )
     {
-    qDebug() << RGBW_CHANNEL_NAMES[ i ] << pen;
-
     m_RubberBandPens[ i ] = pen;
     }
 }
@@ -228,8 +226,6 @@ QwtText
 HistogramPlotPicker
 ::trackerText( const QwtDoublePoint& point ) const
 {
-  // qDebug() << this << "::trackerText(" << point << ")";
-
   if( rubberBand()!=QwtPicker::UserRubberBand )
     return QwtPlotPicker::trackerText( point );
 
@@ -273,8 +269,6 @@ double
 HistogramPlotPicker
 ::Find( const QwtPlotCurve* curve, double x ) const
 {
-  // qDebug() << this << "::Find(" << curve << ", " << x << ")";
-
   const QwtData& data = curve->data();
 
 /*

@@ -186,11 +186,13 @@ void
 HistogramController
 ::OnRgbChannelIndexChanged( RgbwChannel channel, int band )
 {
+  /*
   qDebug()
     << this
     << "::OnRgbChannelIndexChanged("
     << RGBW_CHANNEL_NAMES[ channel ] << ", " << band <<
     ")";
+  */
 
   ResetWidget( channel );
 }
@@ -200,9 +202,11 @@ void
 HistogramController
 ::OnGrayChannelIndexChanged( int band )
 {
+  /*
   qDebug()
     << this
     << "::OnGrayChannelIndexChanged(" << band << ")";
+  */
 
   ResetWidget( RGBW_CHANNEL_WHITE );
 }
@@ -212,9 +216,11 @@ void
 HistogramController
 ::OnGrayscaleActivated( bool activated )
 {
+  /*
   qDebug()
     << this
     << "::OnGrayscaleActivated(" << activated << ")";
+  */
 
   assert( GetWidget()==GetWidget< HistogramWidget >() );
   HistogramWidget* widget = GetWidget< HistogramWidget >();

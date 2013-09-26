@@ -279,14 +279,14 @@ DatasetModel
     );
 
     }
-  catch( std::exception& exc )
+  catch( ... )
     {
     // Release local memory allocation.
     delete vectorImageModel;
     vectorImageModel = NULL;
 
     // Forward exception to upper level (GUI).
-    throw exc;
+    throw;
     }
 
   return vectorImageModel;
@@ -398,7 +398,7 @@ DatasetModel
 
     // Traces.
     qDebug()
-      << "Input image:"
+      << "Image information:"
       << "\n- ID:" << imageContext.m_Id
       << ";\n- filename:" << imageContext.m_Filename
       << ";\n- quicklook:" << imageContext.m_Quicklook 
@@ -432,7 +432,7 @@ DatasetModel
 ::ParseAlias()
 {
   // local variable
-  QString  dsName;
+  QString dsName;
    
   // loop on dataset elements
   for( QDomElement datasetElt( m_Descriptor->FirstDatasetElement() );
@@ -452,9 +452,10 @@ DatasetModel
   
 
   // verbosity
-  qDebug() << "Input Dataset :"
-           << "\n Path : " << dsName
-           << "\n Alias: " << m_Alias;
+  qDebug()
+    << "Input Dataset :"
+    << "\n Path :" << dsName
+    << "\n Alias:" << m_Alias;
 }
 
 /*****************************************************************************/
@@ -810,7 +811,9 @@ DatasetModel
 {
   assert( imageModel!=NULL );
 
+  /*
   qDebug() << "DatasetModel::OnSettingsUpdated(" << imageModel->GetId() << ")";
+  */
 
   VectorImageModel* vectorImageModel =
     qobject_cast< VectorImageModel* >( imageModel );
@@ -830,7 +833,9 @@ DatasetModel
 {
   assert( imageModel!=NULL );
 
+  /*
   qDebug() << "DatasetModel::OnPropertiesUpdated(" << imageModel->GetId() << ")";
+  */
 
   VectorImageModel* vectorImageModel =
     qobject_cast< VectorImageModel* >( imageModel );

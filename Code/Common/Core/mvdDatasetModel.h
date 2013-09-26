@@ -383,21 +383,21 @@ private:
    * \brief Last physical center used for viewport rendering
    * 
    */
-  PointType      m_LastPhysicalCenter;
+  PointType m_LastPhysicalCenter;
 
   /**
    * \brief Last zoom level used for viewport rendering
    * 
    */
-  double         m_LastIsotropicZoom;
+  double m_LastIsotropicZoom;
 
   /**
    * \brief Image Placename
    * 
    */
-  QString         m_Placename;
+  QString m_Placename;
 
-  QPointer<ImagePlacenameLoader> m_PlacenameLoader;
+  QPointer< ImagePlacenameLoader > m_PlacenameLoader;
   
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/

@@ -89,8 +89,6 @@ void
 DoubleValidator
 ::fixup( QString& input ) const
 {
-  qDebug() << this << "::fixup(" << input << ")";
-
   int pos = input.length();
 
   if( validate( input, pos )!=QValidator::Intermediate )

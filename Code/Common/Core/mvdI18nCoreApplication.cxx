@@ -192,8 +192,8 @@ I18nCoreApplication
   QString name;
 
   I18nCoreApplication::DatasetPathName( path, name, imageFilename );
-  qDebug() << "Dataset path: " << path;
-  qDebug() << "Dataset name: " << name;
+  qDebug() << "Dataset path:" << path;
+  qDebug() << "Dataset name:" << name;
 
   // Setup QObject
   model->setObjectName( QDir( path ).filePath( name ) );
@@ -220,13 +220,12 @@ I18nCoreApplication
       model->ImportImage( imageFilename, width, height );
       }
     }
-
-  catch( std::exception& exc )
+  catch( ... )
     {
     delete model;
     model = NULL;
 
-    throw exc;
+    throw;
     }
  
   return model;
@@ -423,7 +422,7 @@ bool
 I18nCoreApplication
 ::MakeCacheDir( const QString& path )
 {
-  qDebug() << this << "::MakeCacheDir(" << path << ")";
+  // qDebug() << this << "::MakeCacheDir(" << path << ")";
 
   //
   // Check path.
