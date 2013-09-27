@@ -654,9 +654,7 @@ ParameterGroup::GetParameterByKey(std::string name)
       break;
       }
     }
-
-  /* HaveInXML and HaveOutXML should act here */
-  if (parentParam.IsNull()) // && parentParam->GetKey()!= "inxml" && parentParam->GetKey()!="outxml" )
+  if (parentParam.IsNull())
     {
     itkExceptionMacro(<< "Could not find parameter " << name)
     }

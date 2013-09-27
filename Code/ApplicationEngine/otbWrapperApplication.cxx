@@ -118,8 +118,8 @@ void Application::Init()
   m_DocExample    = DocExampleStructure::New();
   m_ParameterList = ParameterGroup::New();
   this->DoInit();
-  
-  //rashad: global parameters. now used only for save xml 
+
+  //rashad: global parameters. now used only for save xml
   if (this->GetHaveInXML())
     {
       AddInXMLParameter();
@@ -143,7 +143,7 @@ void Application::AddOutXMLParameter()
   SetParameterDescription(key, descr);
   MandatoryOff(key);
   //SetParameterString(key, defaultXMLFileName);
-  DisableParameter(key); 
+  DisableParameter(key);
 }
 
 void Application::AddInXMLParameter()
@@ -159,7 +159,7 @@ void Application::AddInXMLParameter()
   SetParameterDescription(key, descr);
   MandatoryOff(key);
   //SetParameterString(key, defaultXMLFileName);
-  DisableParameter(key); 
+  DisableParameter(key);
 }
 
 void Application::UpdateParameters()
@@ -173,7 +173,7 @@ int Application::Execute()
 
   //read application from xml
   std::string inXMLKey = "inxml";
-  if (GetParameterType(inXMLKey) == ParameterType_InputProcessXML 
+  if ( m_HaveInXML && GetParameterType(inXMLKey) == ParameterType_InputProcessXML
       && IsParameterEnabled(inXMLKey)  )
     {
       Parameter* param = GetParameterByKey(inXMLKey);
@@ -183,14 +183,14 @@ int Application::Execute()
         {
 	  return -1;
         }
-      
+
       this->UpdateParameters();
     }
-  
+
   // before execute we set the seed of mersenne twister
   std::vector<std::string> paramList = GetParametersKeys(true);
   bool UseSpecificSeed = false;
-  
+
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
     {
       std::string key = *it;
@@ -207,16 +207,16 @@ int Application::Execute()
     {
       itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->Initialize();
     }
-  
+
   this->DoExecute();
-  
+
   return ret;
 }
 
 int Application::ExecuteAndWriteOutput()
 {
   int status = this->Execute();
-  
+
   if (status == 0)
     {
       std::vector<std::string> paramList = GetParametersKeys(true);
@@ -229,7 +229,7 @@ int Application::ExecuteAndWriteOutput()
 	   ++it)
       {
 	std::string key = *it;
-	
+
 	if (GetParameterType(key) == ParameterType_RAM
 	    && IsParameterEnabled(key))
 	  {
@@ -286,9 +286,9 @@ int Application::ExecuteAndWriteOutput()
 	      AddProcess(outputParam->GetWriter(), progressId.str());
 	      outputParam->Write();
 	    }
-	  
+
 	  //xml writer parameter
-	  else if (GetParameterType(key) == ParameterType_OutputProcessXML 
+	  else if (m_HaveOutXML && GetParameterType(key) == ParameterType_OutputProcessXML
 		   && IsParameterEnabled(key) && HasValue(key) )
 	    {
 	      Parameter* param = GetParameterByKey(key);
@@ -649,7 +649,7 @@ void Application::SetMaximumParameterIntValue(std::string parameter, int value)
     }
   else
     itkExceptionMacro(<<parameter << "parameter can't be casted to int");
-  
+
 }
 
 void Application::SetMinimumParameterFloatValue(std::string parameter, float value)
@@ -676,7 +676,7 @@ void Application::SetMaximumParameterFloatValue(std::string parameter, float val
     }
   else
     itkExceptionMacro(<<parameter << "parameter can't be casted to float");
-  
+
 }
 
 
@@ -734,7 +734,7 @@ void Application::SetParameterString(std::string parameter, std::string value)
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
     if ( !paramDown->SetFromFileName(value) )
       otbAppLogCRITICAL( <<"Invalid image filename " << value <<".");
-      
+
     }
   else if (dynamic_cast<ComplexInputImageParameter*>(param))
     {
@@ -1324,7 +1324,7 @@ Application::GetOutputParametersSumUp()
     {
     Parameter* param = GetParameterByKey(*it);
     ParameterType type = GetParameterType(*it);
-    
+
     if ( type != ParameterType_Group )
       {
       if ( param->GetRole() == Role_Output && IsParameterEnabled(*it) )
@@ -1384,9 +1384,9 @@ Application::IsApplicationReady()
             otbDebugMacro("MISSING : "<< (*it).c_str() << " ( Is Level 1)");
             return false;
             }
-          
+
           int level = 1;
-          
+
           while (!currentParam->IsRoot())
             {
             if (!currentParam->GetActive())
@@ -1395,9 +1395,9 @@ Application::IsApplicationReady()
               break;
               }
             currentParam = currentParam->GetRoot();
-            
+
             level++;
-            
+
             if (currentParam->IsRoot())
               {
               // the missing parameter is on an active branch : we need it
