@@ -73,7 +73,6 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Analysis);
     AddDocTag("Histogram");
     AddDocTag("Contrast Enhancement");
 

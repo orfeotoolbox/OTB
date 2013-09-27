@@ -50,7 +50,6 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag(Tags::Analysis);
     AddDocTag("color");
     AddDocTag("histogram");
 

@@ -81,7 +81,6 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ColorSpaceTransform");
 
-    AddDocTag(Tags::Analysis);
     AddDocTag("Contrast Enhancement");
     AddDocTag("color histogram");
 
