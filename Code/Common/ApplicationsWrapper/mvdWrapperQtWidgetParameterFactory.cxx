@@ -21,6 +21,7 @@
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
+#define OTB_MIN_VERSION_3_18_1
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -33,6 +34,8 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbConfigure.h"
+
 #include "otbWrapperParameter.h"
 #include "otbWrapperQtWidgetModel.h"
 
@@ -54,8 +57,10 @@
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetRAMParameter.h"
-#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
-#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
+#if OTB_VERSION_CHECK( 3, 18, 2 )
+#  include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
+#  include "otbWrapperQtWidgetInputProcessXMLParameter.h"
+#endif
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -185,10 +190,12 @@ QtWidgetParameterFactory::CreateQtWidget( otb::Wrapper::Parameter* param,
                mvd::Wrapper::QtWidgetParameterGroup)
   CREATEWIDGET(otb::Wrapper::RAMParameter,            
                otb::Wrapper::QtWidgetRAMParameter)
+#if OTB_VERSION_CHECK( 3, 18, 2 )
   CREATEWIDGET(otb::Wrapper::OutputProcessXMLParameter,        
                otb::Wrapper::QtWidgetOutputProcessXMLParameter)
   CREATEWIDGET(otb::Wrapper::InputProcessXMLParameter,
                otb::Wrapper::QtWidgetInputProcessXMLParameter)
+#endif
 
 #undef CREATEWIDGET
 

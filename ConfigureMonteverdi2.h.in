@@ -46,6 +46,13 @@
   Monteverdi2_DATA_VERSION_PATCH        )
 
 //
+//
+#define OTB_VERSION_CHECK( M, m, p )					\
+  (OTB_VERSION_MAJOR>(M) ||						\
+   (OTB_VERSION_MAJOR==(M) && (OTB_VERSION_MINOR>(m) ||			\
+			       OTB_VERSION_MINOR==(m) && OTB_VERSION_PATH>=(p))))
+
+//
 // Directories
 #define Monteverdi2_INSTALL_BIN_DIR "@Monteverdi2_INSTALL_BIN_DIR@"
 #define Monteverdi2_INSTALL_INCLUDE_DIR "@Monteverdi2_INSTALL_INCLUDE_DIR@"
