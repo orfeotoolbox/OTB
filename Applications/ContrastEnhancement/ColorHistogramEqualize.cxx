@@ -245,8 +245,10 @@ private:
     rgbFilter->Update();
 
     SetParameterOutputImage("out", rgbFilter->GetOutput());
+  }
 
-    return EXIT_SUCCESS;
-}
+};
+} //end namespace Wrapper
+} //end namespace otb
 
-  OTB_APPLICATION_EXPORT(otb::Wrapper::ColorHistogramEqualize)
+OTB_APPLICATION_EXPORT(otb::Wrapper::ColorHistogramEqualize)
