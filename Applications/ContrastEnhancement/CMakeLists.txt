@@ -1,27 +1,13 @@
-#cmake_minimum_required(VERSION 2.8)
-#PROJECT(ContrastEnhancement)
-#INCLUDE_REGULAR_EXPRESSION("^.*$")
-
-#FIND_PACKAGE(OTB REQUIRED)
-#INCLUDE(${OTB_USE_FILE})
-#ADD_EXECUTABLE(HistogramEqualize HistogramEqualize.cxx )
-#TARGET_LINK_LIBRARIES(HistogramEqualize OTBCommon OTBIO OTBContrastEnhancementFilters)
-
-#DD_EXECUTABLE(HistogramEqualize_gray HistogramEqualize_gray.cxx )
-#TARGET_LINK_LIBRARIES(HistogramEqualize_gray OTBCommon OTBIO OTBContrastEnhancementFilters)
-
-#ADD_EXECUTABLE(ColorSpace ColorSpace.cxx )
-#TARGET_LINK_LIBRARIES(ColorSpace OTBCommon OTBIO OTBContrastEnhancementFilters)
 OTB_CREATE_APPLICATION(NAME           ColorSpaceTransform
-                       SOURCES        ColorSpaceTransform.cxx
+                       SOURCES        otbColorSpaceTransform.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBContrastEnhancementFilters)
 
 OTB_CREATE_APPLICATION(NAME           MonoChannelHistogramEqualize
-                       SOURCES        MonoChannelHistogramEqualize.cxx
+                       SOURCES        otbMonoChannelHistogramEqualize.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBContrastEnhancementFilters)
 
 OTB_CREATE_APPLICATION(NAME           ColorHistogramEqualize
-                       SOURCES        ColorHistogramEqualize.cxx
+                       SOURCES        otbColorHistogramEqualize.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBContrastEnhancementFilters)
 
 
