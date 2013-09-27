@@ -12,8 +12,8 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingHistogramVectorImageFilter.h"
 #include "otbStreamingMinMaxVectorImageFilter.h"
-#include "ContrastEnhancement/otbGlobalHistogramEqualizationFilter.h"
-#include "ContrastEnhancement/otbVectorImageColorSpaceTransformFilter.h"
+#include "otbGlobalHistogramEqualizationFilter.h"
+#include "otbVectorImageColorSpaceTransformFilter.h"
 #include "otbImageFileWriter.h"
 #include "otbImageListToVectorImageFilter.h"
 
