@@ -5,6 +5,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_BINARY_DIR})
 # These directories are always needed.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/BasicFilters
+  ${OTB_SOURCE_DIR}/Code/ContrastEnhancement
   ${OTB_SOURCE_DIR}/Code/ChangeDetection
   ${OTB_SOURCE_DIR}/Code/Common
   ${OTB_SOURCE_DIR}/Code/DisparityMap
