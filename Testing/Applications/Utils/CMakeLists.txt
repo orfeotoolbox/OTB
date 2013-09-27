@@ -165,7 +165,7 @@ OTB_TEST_APPLICATION(NAME apTvUtConvertBasic
 OTB_TEST_APPLICATION(NAME apTvUtConvertWithScaling
                      APP Convert
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertWithScalingOutput.tif
+                             -out ${TEMP}/apTvUtConvertWithScalingOutput.tif uint8
                              -type linear
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtConvertWithScalingOutput.tif

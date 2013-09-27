@@ -248,10 +248,6 @@ protected:
 
   /** Key of the parameter */
   std::string                        m_Key;
-
-  /** True if the parameter value in the input xml is used
-      irrespective of user provide a different value */
-  bool                               m_UseXMLValue;
   
   /** True if the parameter is mandatory */
   bool                               m_Mandatory;
@@ -261,6 +257,11 @@ protected:
 
   /** True if the value is set in user mode */
   bool                               m_UserValue;
+
+  /** True if the parameter value in the input xml is used
+      irrespective of user provide a different value */
+  bool                               m_UseXMLValue;
+
 
   /** True if the application change the value of this parameter */
   bool                               m_AutomaticValue;

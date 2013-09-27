@@ -42,7 +42,7 @@ void QtWidgetStringListParameter::DoUpdateGUI()
     return;
 
   std::vector<std::string> strList = m_StringListParam->GetValue();
-  for( int i = m_LineEditList.size(); i < strList.size(); i++ )
+  for( unsigned int i = m_LineEditList.size(); i < strList.size(); i++ )
     {
       this->AddString();
     }

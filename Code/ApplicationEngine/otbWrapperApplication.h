@@ -82,7 +82,7 @@ public:
   /** Check if the application has been initialized */
   bool IsInitialized() const;
 
-  /** rashad: Add xml parameters eg: -xml */  
+  /** rashad: Add xml parameters eg: -xml */
   void AddInXMLParameter();
 
   void AddOutXMLParameter();
@@ -733,7 +733,6 @@ protected:
       paramDown->SetValue(value);
       }
   }
-
 
 
 private:
