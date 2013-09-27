@@ -60,4 +60,5 @@ add_subdirectory(Radiometry)
 add_subdirectory(Rasterization)
 add_subdirectory(Segmentation)
 add_subdirectory(Utils)
+add_subdirectory(ContrastEnhancement)
 
