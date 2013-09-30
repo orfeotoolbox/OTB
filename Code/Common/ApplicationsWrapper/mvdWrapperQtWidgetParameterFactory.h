@@ -117,7 +117,8 @@ private:
 
 };
 
-}
-}
+} // End of namespace 'Wrapper'.
+
+} // End of namespace 'mvd'.
 
 #endif

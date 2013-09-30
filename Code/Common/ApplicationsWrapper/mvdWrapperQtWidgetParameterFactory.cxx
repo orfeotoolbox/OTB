@@ -21,7 +21,6 @@
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
-#define OTB_MIN_VERSION_3_18_1
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -109,7 +108,6 @@ public:
   Create( otb::Wrapper::Parameter* param, 
 	  otb::Wrapper::QtWidgetModel* model )
   {
-
     otb::Wrapper::QtWidgetParameterBase* widget = 0;
     TParameterType* specificParam = dynamic_cast<TParameterType *>(param);
 

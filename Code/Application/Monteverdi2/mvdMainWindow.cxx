@@ -669,21 +669,6 @@ MainWindow
       Qt::LeftDockWidgetArea
     );
 
-#if 0
-  // Pixel Description (no controller needed here / direct update of
-  // the pixel description through signals from VectorImageModel)
-  assert( m_PixelDescriptionDock==NULL );
-  m_PixelDescriptionDock =
-    AddDockWidget
-    < PixelDescriptionWidget, QDockWidget >
-    ( "CURRENT_PIXEL_DESCRIPTION",
-      tr( "Pixel Description" ),
-      Qt::LeftDockWidgetArea
-    );
-
-  // tabifyDockWidget( m_DatabaseBrowserDock, m_PixelDescriptionDock );
-#endif
-
   // Dataset-properties.
   assert( m_DatasetPropertiesDock==NULL );
   m_DatasetPropertiesDock =
@@ -705,21 +690,6 @@ MainWindow
       Qt::LeftDockWidgetArea );
 
   tabifyDockWidget( m_DatasetPropertiesDock, m_OtbApplicationsBrowserDock );
-#endif
-
-#if 0
-  // Pixel Description (no controller needed here / direct update of
-  // the pixel description through signals from VectorImageModel)
-  assert( m_PixelDescriptionDock==NULL );
-  m_PixelDescriptionDock =
-    AddDockWidget
-    < PixelDescriptionWidget, QDockWidget >
-    ( "CURRENT_PIXEL_DESCRIPTION",
-      tr( "Pixel Description" ),
-      Qt::LeftDockWidgetArea
-    );
-
-  tabifyDockWidget( m_DatasetPropertiesDock, m_PixelDescriptionDock );
 #endif
 
   //
@@ -745,9 +715,6 @@ MainWindow
       false
     );
 
-  tabifyDockWidget( m_QuicklookViewDock, m_HistogramDock );
-
-#if 1
   // Pixel Description (no controller needed here / direct update of
   // the pixel description through signals from VectorImageModel)
   assert( m_PixelDescriptionDock==NULL );
@@ -759,8 +726,7 @@ MainWindow
       Qt::RightDockWidgetArea
     );
 
-  // tabifyDockWidget( m_QuicklookViewDock, m_PixelDescriptionDock );
-#endif
+  tabifyDockWidget( m_PixelDescriptionDock, m_HistogramDock );
 
   // Color-setup.
   assert( m_ColorSetupDock==NULL );
