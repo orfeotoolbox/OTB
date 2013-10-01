@@ -928,8 +928,8 @@ VectorImageModel
   //
   // Compute the physical coordinates of the center pixel 
   PointType centerPoint;
-  centerPoint[0] = (centerIndex[0] *  vcl_abs( GetNativeSpacing()[0] ) ) + GetOrigin()[0];
-  centerPoint[1] = (centerIndex[1] *  vcl_abs( GetNativeSpacing()[1] ) ) + GetOrigin()[1];
+  centerPoint[0] = (centerIndex[0] *   GetNativeSpacing()[0] )  + GetOrigin()[0];
+  centerPoint[1] = (centerIndex[1] *   GetNativeSpacing()[1] )  + GetOrigin()[1];
   
   // lat / long
   PointType wgs84;
@@ -1085,8 +1085,8 @@ VectorImageModel
 
   // physical coordinates to index (at resol 0)
   IndexType currentIndex;
-  currentIndex[0] = static_cast<unsigned int>( ( Xpc - GetOrigin()[0] ) / vcl_abs(GetNativeSpacing()[0]) );
-  currentIndex[1] = static_cast<unsigned int>( ( Ypc - GetOrigin()[1] ) / vcl_abs(GetNativeSpacing()[1]) );
+  currentIndex[0] = static_cast<unsigned int>( ( Xpc - GetOrigin()[0] ) / GetNativeSpacing()[0] );
+  currentIndex[1] = static_cast<unsigned int>( ( Ypc - GetOrigin()[1] ) / GetNativeSpacing()[1] );
 
   // show the current pixel description only if the mouse cursor is
   // under the image
@@ -1116,8 +1116,8 @@ VectorImageModel
 
     // index in current Lod image
     IndexType currentLodIndex;
-    currentLodIndex[0] = (Xpc - ToImage()->GetOrigin()[0]) / vcl_abs(ToImage()->GetSpacing()[0]);
-    currentLodIndex[1] = (Ypc - ToImage()->GetOrigin()[1]) / vcl_abs(ToImage()->GetSpacing()[1]);
+    currentLodIndex[0] = (Xpc - ToImage()->GetOrigin()[0]) / ToImage()->GetSpacing()[0];
+    currentLodIndex[1] = (Ypc - ToImage()->GetOrigin()[1]) / ToImage()->GetSpacing()[1];
     
     //
     // get the LatLong
@@ -1180,9 +1180,9 @@ VectorImageModel
       if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0) 
         {
       currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0]) 
-        / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[0]);
+        / GetQuicklookModel()->ToImage()->GetSpacing()[0];
       currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1]) 
-        / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[1]);
+        / GetQuicklookModel()->ToImage()->GetSpacing()[1];
 
        PointType wgs84;
        PointType currentLodPoint;
@@ -1240,9 +1240,9 @@ VectorImageModel
       //
       // compute the current ql index
       currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0]) 
-        / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[0]);
+        / GetQuicklookModel()->ToImage()->GetSpacing()[0];
       currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1]) 
-        / vcl_abs(GetQuicklookModel()->ToImage()->GetSpacing()[1]);
+        / GetQuicklookModel()->ToImage()->GetSpacing()[1];
     
       //
       // Get the radiometry form the Ql
@@ -1303,8 +1303,8 @@ VectorImageModel
   if ( GetNativeLargestRegion().IsInside(index) )
     {
     // propagate the physical center
-    double Xpc = index[0] * vcl_abs( GetNativeSpacing()[0] ) + GetOrigin()[0];
-    double Ypc = index[1] * vcl_abs( GetNativeSpacing()[1] ) + GetOrigin()[1];
+    double Xpc = index[0] * GetNativeSpacing()[0] + GetOrigin()[0];
+    double Ypc = index[1] * GetNativeSpacing()[1] + GetOrigin()[1];
 
     emit ViewportRegionChanged( Xpc, Ypc );
     }

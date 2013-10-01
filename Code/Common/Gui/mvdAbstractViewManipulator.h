@@ -349,8 +349,8 @@ AbstractViewManipulator
   
   //
   // step #3: index -> physical point
-  pt[0] = pt[0] * vcl_abs(GetNativeSpacing()[0])  + GetOrigin()[0];
-  pt[1] = pt[1] * vcl_abs(GetNativeSpacing()[1])  + GetOrigin()[1];
+  pt[0] = pt[0] * GetNativeSpacing()[0]  + GetOrigin()[0];
+  pt[1] = pt[1] * GetNativeSpacing()[1]  + GetOrigin()[1];
 
   return pt;
 }
@@ -384,8 +384,8 @@ AbstractViewManipulator
   
   // index -> physical point
   PointType  physicalCenter;
-  physicalCenter[0] = centerX * vcl_abs(GetNativeSpacing()[0]) + GetOrigin()[0];
-  physicalCenter[1] = centerY * vcl_abs(GetNativeSpacing()[1]) + GetOrigin()[1];
+  physicalCenter[0] = centerX * GetNativeSpacing()[0] + GetOrigin()[0];
+  physicalCenter[1] = centerY * GetNativeSpacing()[1] + GetOrigin()[1];
   
   //
   return physicalCenter;
