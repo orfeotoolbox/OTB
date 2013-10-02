@@ -119,48 +119,16 @@ void Application::Init()
   m_DocExample    = DocExampleStructure::New();
   m_ParameterList = ParameterGroup::New();
   this->DoInit();
-  
-  //rashad: global parameters. now used only for save xml
-  if (this->GetHaveInXML())
+
+  //rashad: global parameters. now used only for inxml and outxml
+  if(this->GetHaveInXML())
     {
-      AddInXMLParameter();
+    AddInXMLParameter();
     }
-  if (this->GetHaveOutXML())
+  if(this->GetHaveOutXML())
     {
-      AddOutXMLParameter();
+    AddOutXMLParameter();
     }
-}
-
-void Application::AddOutXMLParameter()
-{
-  Parameter::Pointer tmpParam;
-  tmpParam = OutputProcessXMLParameter::New();
-  const std::string key =   tmpParam->GetKey();
-  const std::string descr = tmpParam->GetDescription();
-  const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
-  tmpParam = NULL;
-
-  AddParameter(ParameterType_OutputProcessXML,  key,   descr);
-  SetParameterDescription(key, descr);
-  MandatoryOff(key);
-  //SetParameterString(key, defaultXMLFileName);
-  DisableParameter(key);
-}
-
-void Application::AddInXMLParameter()
-{
-  Parameter::Pointer tmpParam;
-  tmpParam = InputProcessXMLParameter::New();
-  const std::string key =   tmpParam->GetKey();
-  const std::string descr = tmpParam->GetDescription();
-  const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
-  tmpParam = NULL;
-
-  AddParameter(ParameterType_InputProcessXML,  key,   descr);
-  SetParameterDescription(key, descr);
-  MandatoryOff(key);
-  //SetParameterString(key, defaultXMLFileName);
-  DisableParameter(key);
 }
 
 void Application::UpdateParameters()
@@ -1031,6 +999,11 @@ std::string Application::GetParameterString(std::string parameter)
     OutputProcessXMLParameter* paramDown = dynamic_cast<OutputProcessXMLParameter*>(param);
     ret = paramDown->GetFileName();
     }
+  else if (dynamic_cast<InputProcessXMLParameter*>(param))
+    {
+    InputProcessXMLParameter* paramDown = dynamic_cast<InputProcessXMLParameter*>(param);
+    ret = paramDown->GetFileName();
+    }
   else
    {
     itkExceptionMacro(<<parameter << " : parameter can't be casted to string");
@@ -1172,7 +1145,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
       || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
       || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData
       || type == ParameterType_ListView || type == ParameterType_Choice
-      || type == ParameterType_OutputProcessXML )
+      || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML )
     {
       ret = this->GetParameterString( paramKey );
     }
@@ -1349,6 +1322,217 @@ Application::GetOutputParametersSumUp()
     }
   return res;
 }
+
+
+void
+Application::UpdateParameterListFromXML(std::string xmlFileName)
+{
+  std::cerr << "before do init2\n";
+  UpdateMetaDataFromXML(xmlFileName);
+
+
+  this->Init();
+
+  std::cerr << "before do init3\n";
+
+/*
+  ClearParameterList();
+
+  AddInXMLParameter();
+  AddOutXMLParameter();
+
+*/
+    std::string key = "inxml";
+    //  std::string inputFilename = GetParameterString(key);
+    InputProcessXMLParameter::Pointer inXMLParam = dynamic_cast<InputProcessXMLParameter*>(GetParameterByKey(key));
+//    InputProcessXMLParameter::Pointer inXMLParam =
+//    InputProcessXMLParameter::New();
+    inXMLParam->SetFileName(xmlFileName);
+/*
+//  ReadMetaData();
+//  std::string app_Name = GetMetaDataByKey("appname");
+  ParameterGroup::Pointer paramGroup = GetParameterList();
+
+    std::cerr << "in updateparamlist in xmloader1\n";
+
+    SetParameterString(key, inputFilename);
+
+
+    TiXmlDocument doc(inputFilename.c_str());
+
+//  FILE* fp = inXMLParam->TiXmlFOpen( inputFilename.c_str (), "rb" );
+
+  if(!doc.LoadFile())
+    std::cerr << "error loading xml\n";
+
+  TiXmlHandle handle(&doc);
+
+    std::cerr << "in updateparamlist in xmloader2\n";
+
+
+  TiXmlElement *n_OTB = handle.FirstChild("OTB").Element();
+
+    std::cerr << "in updateparamlist in xmloader--1\n";
+
+  TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
+
+    std::cerr << "in updateparamlist in xmloader3\n";
+
+  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != NULL;
+       n_Parameter = n_Parameter->NextSiblingElement() )
+    {
+    std::string key,typeAsString, value, paramName;
+    std::vector<std::string> values;
+    key = inXMLParam->GetChildNodeTextOf(n_Parameter, "key");
+    typeAsString = inXMLParam->GetChildNodeTextOf(n_Parameter, "type");
+    value = inXMLParam->GetChildNodeTextOf(n_Parameter, "value");
+    paramName = inXMLParam->GetChildNodeTextOf(n_Parameter, "name");
+    ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
+
+    if(key == "ram")
+      {
+      this->AddRAMParameter();
+      }
+
+    std::cerr << "kk=" << key << "\n";
+    this->AddParameter(type, key, paramName);
+    }
+  fclose(fp);
+
+    std::cerr << "in updateparamlist in xmloader991\n";
+*/
+}
+
+int
+Application::UpdateMetaDataFromXML(std::string xmlFileName)
+{
+
+  // Check if the filename is not empty
+//  if(xmlFileName.empty())
+  //  return -1;
+
+  /*
+  // Check that the right extension is given : expected .xml
+  if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml")
+    {
+    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
+                      <<" is a wrong Extension FileName : Expected .xml");
+    }
+*/
+
+
+
+
+  // Open the xml file
+  TiXmlDocument doc;
+
+  FILE* fp = fopen( xmlFileName.c_str (), "rb" );
+
+  if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
+    {
+    itkExceptionMacro(<< "Can't open file " << xmlFileName);
+    }
+
+  TiXmlHandle handle(&doc);
+
+  TiXmlElement *n_OTB;
+  n_OTB = handle.FirstChild("OTB").Element();
+
+  if(!n_OTB)
+  {
+    std::string info = "Input XML file " + xmlFileName + " is invalid.";
+    std::cerr << info << "\n\n";
+    //this->otbAppLogInfo(app,info);
+  }
+
+  std::string otb_Version, otb_Build, otb_Platform;
+  otb_Version = GetChildNodeTextOf(n_OTB,"version");
+  otb_Build = GetChildNodeTextOf(n_OTB, "build");
+  otb_Platform = GetChildNodeTextOf(n_OTB, "platform");
+
+  TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
+
+  std::string app_Name, app_Descr;
+  m_Name = GetChildNodeTextOf(n_AppNode, "name");
+//  AddMetaData("appname", app_Name);
+  //SetName(app_Name);
+
+  m_Description = GetChildNodeTextOf(n_AppNode, "descr");
+  //AddMetaData("appdescr", app_Descr);
+  //SetDescription(app_Descr);
+
+  TiXmlElement* n_Doc    = n_AppNode->FirstChildElement("doc");
+
+//  std::string doc_Name, doc_LongDescr, doc_Authors, doc_Limitations, doc_SeeAlso;
+
+  m_DocName = GetChildNodeTextOf(n_Doc, "name");
+//  AddMetaData("docname", doc_Name);
+  //SetDocName(doc_Name);
+
+  m_DocLongDescription = GetChildNodeTextOf(n_Doc, "longdescr");
+//  AddMetaData("doclongdescr", doc_Descr);
+//  SetDocLongDescription(doc_LongDescr);
+
+
+  m_DocAuthors = GetChildNodeTextOf(n_Doc, "authors");
+//  AddMetaData("docauthors", doc_Author);
+  //SetDocAuthors(doc_Authors);
+
+  m_DocLimitations = GetChildNodeTextOf(n_Doc, "limitations");
+//  AddMetaData("doclimitations", doc_Limitation);
+  //SetDocLimitations(doc_Limitations);
+
+  m_DocSeeAlso = GetChildNodeTextOf(n_Doc, "seealso");
+  //AddMetaData("docseealso", doc_SeeAlso);
+  //SetDocSeeAlso(doc_SeelAlso);
+
+
+
+  TiXmlElement* n_Tags = NULL;
+  n_Tags = n_Doc->FirstChildElement("tags");
+  if(n_Tags != NULL)
+    {
+    for(TiXmlElement* n_Tag = n_Tags->FirstChildElement("tag");  n_Tag != NULL;
+      n_Tag = n_Tag->NextSiblingElement() )
+      {
+      AddDocTag(n_Tag->GetText());
+      }
+    }
+
+  fclose(fp);
+
+  return 0;
+}
+
+
+const std::string
+Application::GetChildNodeTextOf(TiXmlElement *parentElement, std::string key)
+{
+  std::string value="";
+
+  if(parentElement)
+    {
+      TiXmlElement* childElement = 0;
+      childElement = parentElement->FirstChildElement(key.c_str());
+
+      //same as childElement->GetText() does but that call is failing if there is no such node.
+      //but the below code works and is a replacement for GetText()
+      if(childElement)
+       {
+         const TiXmlNode* child = childElement->FirstChild();
+         if ( child )
+           {
+             const TiXmlText* childText = child->ToText();
+             if ( childText )
+              {
+                value = childText->Value();
+              }
+           }
+       }
+    }
+  return value;
+}
+
 
 bool
 Application::IsApplicationReady()

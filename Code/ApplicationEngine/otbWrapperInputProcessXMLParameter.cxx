@@ -21,7 +21,6 @@
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperRAMParameter.h"
-
 #include "itksys/SystemTools.hxx"
 
 namespace otb
@@ -47,7 +46,7 @@ std::string
 InputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
 {
   std::string type;
-  
+
   switch( pixType )
     {
     case ImagePixelType_uint8:
@@ -89,32 +88,7 @@ InputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
   return type;
 }
 
-const std::string InputProcessXMLParameter::GetChildNodeTextOf(TiXmlElement *parentElement, std::string key)
-{
-  std::string value="";
-  
-  if(parentElement)
-    {
-      TiXmlElement* childElement = 0;
-      childElement = parentElement->FirstChildElement(key.c_str());
-    
-      //same as childElement->GetText() does but that call is failing if there is no such node.
-      //but the below code works and is a replacement for GetText()
-      if(childElement)
-       {
-         const TiXmlNode* child = childElement->FirstChild();
-         if ( child )
-           {
-             const TiXmlText* childText = child->ToText();
-             if ( childText )
-              {
-                value = childText->Value();
-              }
-           }
-       }
-    }
-  return value;
-}
+
 
 void
 InputProcessXMLParameter::otbAppLogInfo(Application::Pointer app, std::string info)
@@ -122,14 +96,24 @@ InputProcessXMLParameter::otbAppLogInfo(Application::Pointer app, std::string in
   app->GetLogger()->Write(itk::LoggerBase::INFO, info );
 }
 
-int
-InputProcessXMLParameter::Read(Application::Pointer app)
+InputProcessXMLParameter::MetaDataType
+InputProcessXMLParameter::GetMetaData(bool force)
 {
+  if(force || m_MetaData.size() == 0 )
+    ReadMetaData();
+  return m_MetaData;
+}
+
+int
+InputProcessXMLParameter::ReadMetaData()
+{
+
+/*
   // Check if the filename is not empty
   if(m_FileName.empty())
     itkExceptionMacro(<<"The XML input FileName is empty, please set the filename via the method SetFileName");
 
-  // Check that the right extension is given : expected .xml */
+  // Check that the right extension is given : expected .xml
   if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml")
     {
     itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
@@ -137,189 +121,349 @@ InputProcessXMLParameter::Read(Application::Pointer app)
     }
 
   // Open the xml file
-  TiXmlDocument doc(m_FileName.c_str());
-  if (!doc.LoadFile())
+  TiXmlDocument doc;
+
+  FILE* fp = TiXmlFOpen( m_FileName.c_str (), "rb" );
+
+  if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
     {
-    itkExceptionMacro(<<"Can't open file "<<m_FileName);
+    itkExceptionMacro(<< "Can't open file " << m_FileName);
     }
-  
+
   TiXmlHandle handle(&doc);
 
   TiXmlElement *n_OTB;
   n_OTB = handle.FirstChild("OTB").Element();
- 
+
   if(!n_OTB)
   {
     std::string info = "Input XML file " + std::string(this->GetFileName()) + " is invalid.";
-    this->otbAppLogInfo(app,info);
+    //this->otbAppLogInfo(app,info);
   }
 
   std::string otb_Version, otb_Build, otb_Platform;
-  otb_Version = GetChildNodeTextOf(n_OTB,"version");
+  otb_Version = this_->GetChildNodeTextOf(n_OTB,"version");
   otb_Build = GetChildNodeTextOf(n_OTB, "build");
-  otb_Platform = GetChildNodeTextOf(n_OTB, "platform");
-  
-  TiXmlElement* n_App    = n_OTB->FirstChildElement("application");
+  otb_Platform = this_->GetChildNodeTextOf(n_OTB, "platform");
+
+  TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
+
   std::string app_Name, app_Descr;
-  app_Name = GetChildNodeTextOf(n_App, "name");
-  app_Descr = GetChildNodeTextOf(n_App, "descr");
-  
-  TiXmlElement* n_Doc    = n_App->FirstChildElement("doc");
-  std::string doc_Name, doc_Descr, doc_Author, doc_Limitation, doc_Related;
-  doc_Name = GetChildNodeTextOf(n_Doc, "name");
-  doc_Descr = GetChildNodeTextOf(n_Doc, "descr");
-  doc_Author = GetChildNodeTextOf(n_Doc, "author");
-  doc_Limitation = GetChildNodeTextOf(n_Doc, "limitation");
-  doc_Related = GetChildNodeTextOf(n_Doc, "related");
+  app_Name = this_->GetChildNodeTextOf(n_AppNode, "name");
+  AddMetaData("appname", app_Name);
 
-  TiXmlElement* n_Tags    = n_Doc->FirstChildElement("tags");
-  std::vector<std::string> doc_TagList;
+  app_Descr = this_->GetChildNodeTextOf(n_AppNode, "descr");
+  AddMetaData("appdescr", app_Descr);
 
-  //GetChildNodeTextOf(n_Tags, "tag");
- 
-  /*
-  FIXME removed temporarily
-  this->otbAppLogInfo(app, "Application Name : " + app_Name);
-  this->otbAppLogInfo(app, "Description      : " + app_Descr);
-  this->otbAppLogInfo(app, "OTB Version      : " + otb_Version);
-  this->otbAppLogInfo(app, "Operating system : " + otb_Platform);
+  TiXmlElement* n_Doc    = n_AppNode->FirstChildElement("doc");
 
-  this->otbAppLogInfo(app, "Doc Name        : " + doc_Name);
-  this->otbAppLogInfo(app, "Doc Description : " + doc_Descr);
-  this->otbAppLogInfo(app, "Author          : " + doc_Author);
-  this->otbAppLogInfo(app, "Limitation      : " + doc_Limitation);
-  this->otbAppLogInfo(app, "Related         : " + doc_Related);
-  */
+  std::string doc_Name, doc_Descr, doc_Author, doc_Limitation, doc_SeeAlso;
 
-  if(app->GetName() != app_Name)
+  doc_Name = this_->GetChildNodeTextOf(n_Doc, "name");
+  AddMetaData("docname", doc_Name);
+
+  doc_Descr = this_->GetChildNodeTextOf(n_Doc, "longdescr");
+  AddMetaData("doclongdescr", doc_Descr);
+
+  doc_Author = this_->GetChildNodeTextOf(n_Doc, "authors");
+  AddMetaData("docauthors", doc_Author);
+
+  doc_Limitation = this_->GetChildNodeTextOf(n_Doc, "limitations");
+  AddMetaData("doclimitations", doc_Limitation);
+
+  doc_SeeAlso = this_->GetChildNodeTextOf(n_Doc, "seealso");
+  AddMetaData("docseealso", doc_SeeAlso);
+
+
+  TiXmlElement* n_Tags = NULL;
+  n_Tags = n_Doc->FirstChildElement("tags");
+  if(n_Tags != NULL)
     {
-      //hopefully shouldn't reach here ...
-      itkExceptionMacro( << "Input XML was generated for a different application( " <<
-                      app_Name << ") while application loaded is:" << app->GetName());
-      return -1;
+    for(TiXmlElement* n_Tag = n_Tags->FirstChildElement("tag");  n_Tag != NULL;
+      n_Tag = n_Tag->NextSiblingElement() )
+      {
+      m_DocTagList.push_back(n_Tag->GetText()); //need to push into
+                                                //metdata. due to list its not
+                                                //efficient that way
+      }
     }
-  
-  // Iterate through the tree to get all the stats
-  for( TiXmlElement* n_Parameter = n_App->FirstChildElement("parameter"); n_Parameter != NULL;
+
+  fclose(fp);
+*/
+  return 0;
+}
+
+void
+InputProcessXMLParameter::PrintMetaData()
+{
+  for(MetaDataTypeIterator mit = m_MetaData.begin(); mit != m_MetaData.end(); ++mit)
+    {
+    std::cerr << mit->first << " = " << mit->second << std::endl;
+    }
+}
+
+void
+InputProcessXMLParameter::AddMetaData(KeyType key, ValueType value)
+{
+  m_MetaData.insert ( std::pair<KeyType,ValueType>(key,value) );
+
+}
+
+InputProcessXMLParameter::ValueType
+InputProcessXMLParameter::GetMetaDataByKey(KeyType key)
+{
+  return m_MetaData[key];
+}
+
+void
+InputProcessXMLParameter::UpdateParameterList(Application::Pointer this_)
+{
+
+/*
+
+  this_->ClearParameterList();
+  this_->AddInXMLParameter();
+  this_->AddOutXMLParameter();
+  ReadMetaData();
+  std::string app_Name = GetMetaDataByKey("appname");
+  ParameterGroup::Pointer paramGroup = this_->GetParameterList();
+
+  TiXmlDocument doc;
+
+  FILE* fp = TiXmlFOpen( m_FileName.c_str (), "rb" );
+
+  doc.LoadFile(fp , TIXML_ENCODING_UTF8);
+
+  TiXmlHandle handle(&doc);
+
+  TiXmlElement *n_OTB = handle.FirstChild("OTB").Element();
+  TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
+
+  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != NULL;
        n_Parameter = n_Parameter->NextSiblingElement() )
     {
-      std::string key, type, value;
-      std::vector<std::string> values;
-      key = GetChildNodeTextOf(n_Parameter, "key");
-      type = GetChildNodeTextOf(n_Parameter, "type");
-      value = GetChildNodeTextOf(n_Parameter, "value");
-            
-      TiXmlElement* n_Values = NULL;
-      n_Values = n_Parameter->FirstChildElement("values");
-      if(n_Values)
-       {
-         for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != NULL;
-             n_Value = n_Value->NextSiblingElement())
-           {
-             values.push_back(n_Value->GetText());
-           }
-       }
-      if ( type == "InputFilename" || type == "OutputFilename" ||
-          type == "Directory" ||  type == "InputImage" ||
-          type == "ComplexInputImage" || type == "InputVectorData" ||
-          type == "OutputImage" || type == "ComplexOutputImage" ||
-          type ==  "OutputVectorData" || type == "String" ||
-          type == "Choice")
-       {
-         if(app->IsUseXMLValue(key))
-           {
-             app->SetParameterString(key, value);
-           }
-         else
-           {
-             std::string userValue = app->GetParameterString(key);
-             if(!userValue.empty())
-              {
-                app->SetParameterString(key, userValue);
-              }
-           }
-       }
-      else if (type == "Radius" || type == "Int" || type == "RAM" || type == "rand" )
-       {
-         int intValue;
-         std::stringstream(value) >> intValue;
-         if(app->IsUseXMLValue(key))
-           {
-             app->SetParameterInt(key, intValue);
-           }
-         else
-           {
-             int userValue = 0;
-             userValue = app->GetParameterInt(key);
-             if(userValue != 0)
-              {
-                app->SetParameterInt(key,userValue);
-              }
-           }
-       }
-      else if (type == "Float")
+    std::string key,typeAsString, value, paramName;
+    std::vector<std::string> values;
+    key = this_->GetChildNodeTextOf(n_Parameter, "key");
+    typeAsString = this_->GetChildNodeTextOf(n_Parameter, "type");
+    value = this_->GetChildNodeTextOf(n_Parameter, "value");
+    paramName = this_->GetChildNodeTextOf(n_Parameter, "name");
+    ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
+
+    if(key == "ram")
+      {
+      this_->AddRAMParameter();
+      }
+
+    std::cerr << "kk=" << key << "\n";
+    this_->AddParameter(type, key, paramName);
+    }
+  fclose(fp);
+*/
+}
+
+int
+InputProcessXMLParameter::Read(Application::Pointer this_)
+{
+
+
+  ReadMetaData();
+  std::string app_Name = GetMetaDataByKey("appname");
+
+  TiXmlDocument doc;
+
+  FILE* fp = TiXmlFOpen( m_FileName.c_str (), "rb" );
+
+  doc.LoadFile(fp , TIXML_ENCODING_UTF8);
+
+  TiXmlHandle handle(&doc);
+
+  TiXmlElement *n_OTB = handle.FirstChild("OTB").Element();
+  TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
+
+  if(this_->GetName() != app_Name)
+    {
+      //hopefully shouldn't reach here ...
+//      itkExceptionMacro( << "Input XML was generated for a different application( " <<
+    //                  app_Name << ") while application loaded is:" <<this_->GetName());
+  //    return -1;
+    std::string message = "Input XML was generated for a different application( "
+        + app_Name + ") while application loaded is:" + this_->GetName();
+    std::cerr << message << "\n\n";
+    return -1;
+    }
+
+
+
+  ParameterGroup::Pointer paramGroup = this_->GetParameterList();
+
+  // Iterate through the paramGroup
+  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != NULL;
+       n_Parameter = n_Parameter->NextSiblingElement() )
+    {
+    std::string key,typeAsString, value, paramName;
+    std::vector<std::string> values;
+    key = this_->GetChildNodeTextOf(n_Parameter, "key");
+    typeAsString = this_->GetChildNodeTextOf(n_Parameter, "type");
+    value = this_->GetChildNodeTextOf(n_Parameter, "value");
+    paramName = this_->GetChildNodeTextOf(n_Parameter, "name");
+    ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
+
+/*  if(!sameApp)
+    {
+    if(key == "ram")
+      {
+      this_->AddRAMParameter();
+      }
+//    std::cerr << "kk=" << key << "\n";
+    this_->AddParameter(type, key, paramName);
+    }
+*/
+
+    TiXmlElement* n_Values = NULL;
+    n_Values = n_Parameter->FirstChildElement("values");
+    if(n_Values)
+      {
+      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != NULL;
+          n_Value = n_Value->NextSiblingElement())
         {
-         float floatValue;
-         std::stringstream(value) >> floatValue;
-         if(app->IsUseXMLValue(key))
-           {
-             app->SetParameterFloat(key, floatValue);
-           }
-         else
-           {
-             float userValue = 0;
-             userValue = app->GetParameterFloat(key);
-             if(userValue != 0)
-              {
-                app->SetParameterFloat(key,userValue);
-              }
-           }
+        values.push_back(n_Value->GetText());
         }
-      else if (type == "Empty")
+      }
+    if ( type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||
+         type == ParameterType_Directory ||  type == ParameterType_InputImage ||
+         type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
+         type == ParameterType_OutputImage || type == ParameterType_ComplexOutputImage ||
+         type == ParameterType_OutputVectorData || type == ParameterType_String ||
+         type == ParameterType_Choice)
+      {
+      if(this_->IsUseXMLValue(key))
         {
-         bool emptyValue = false;
-         // std::stringstream(value) >> floatValue;
-         if( value == "true")
-           {
-             emptyValue = true;
-           }
-         if(app->IsUseXMLValue(key))
-           {
-             app->SetParameterEmpty(key, emptyValue);
-           }
-         else
-           {
-             bool userValue = app->GetParameterEmpty(key);
-             app->SetParameterEmpty(key,userValue);
-           }
+        this_->SetParameterString(key, value);
         }
-      else if (type == "InputFilenameList" || type == "InputImageList" ||
-              type =="InputVectorDataList" || type == "StringList" ||
-              type == "ListView")
+      else
         {
-         if(values.empty())
-           itkWarningMacro(<< key << " has null values");
-         
-         if(app->IsUseXMLValue(key))
-           {
-             app->SetParameterStringList(key, values);
-           }
-         else
-           {
-             std::vector<std::string> userValues;
-             userValues = app->GetParameterStringList(key);
-             
-             if(userValues.size() != 0)
-              {
-                app->SetParameterStringList(key,userValues);
-              }
-           }
-         //skip = (skip == true) ? true: ( (userValues.size() == 0) ? true : false )
-       }
-      //choice also comes as setint and setstring why??
+        std::string userValue = this_->GetParameterString(key);
+        if(!userValue.empty())
+          {
+          this_->SetParameterString(key, userValue);
+          }
+        }
+      }
+    else if (type == ParameterType_Radius || type == ParameterType_Int ||
+             type == ParameterType_RAM || typeAsString == "rand" )
+      {
+      int intValue;
+      std::stringstream(value) >> intValue;
+      if(this_->IsUseXMLValue(key))
+        {
+        this_->SetParameterInt(key, intValue);
+        }
+      else
+        {
+        int userValue = 0;
+        userValue = this_->GetParameterInt(key);
+        if(userValue != 0)
+          {
+          this_->SetParameterInt(key,userValue);
+          }
+        }
+      }
+    else if (type == ParameterType_Float)
+      {
+      float floatValue;
+      std::stringstream(value) >> floatValue;
+      if(this_->IsUseXMLValue(key))
+        {
+        this_->SetParameterFloat(key, floatValue);
+        }
+      else
+        {
+        float userValue = 0;
+        userValue = this_->GetParameterFloat(key);
+        if(userValue != 0)
+          {
+          this_->SetParameterFloat(key,userValue);
+          }
+        }
+      }
+    else if (type == ParameterType_Empty)
+      {
+      bool emptyValue = false;
+      // std::stringstream(value) >> floatValue;
+      if( value == "true")
+        {
+        emptyValue = true;
+        }
+      if(this_->IsUseXMLValue(key))
+        {
+        this_->SetParameterEmpty(key, emptyValue);
+        }
+      else
+        {
+        bool userValue = this_->GetParameterEmpty(key);
+        this_->SetParameterEmpty(key,userValue);
+        }
+      }
+    else if (type == ParameterType_InputFilenameList || type == ParameterType_InputImageList ||
+             type == ParameterType_InputVectorDataList || type == ParameterType_StringList ||
+             type == ParameterType_ListView)
+      {
+      if(values.empty())
+        itkWarningMacro(<< key << " has null values");
+
+      if(this_->IsUseXMLValue(key))
+        {
+        this_->SetParameterStringList(key, values);
+        }
+      else
+        {
+        std::vector<std::string> userValues;
+        userValues = this_->GetParameterStringList(key);
+
+        if(userValues.size() != 0)
+          {
+
+          this_->SetParameterStringList(key,userValues);
+          }
+        }
+      //skip = (skip == true) ? true: ( (userValues.size() == 0) ? true : false )
+      }
+    //choice also comes as setint and setstring why??
     }
   return 0;
 }
+
+/* copied from Utilities/tinyXMLlib/tinyxml.cpp. Must have a FIX inside tinyxml.cpp */
+FILE*
+InputProcessXMLParameter::TiXmlFOpen( const char* filename, const char* mode )
+{
+#if defined(_MSC_VER) && (_MSC_VER >= 1400 )
+  FILE* fp = 0;
+  errno_t err = fopen_s( &fp, filename, mode );
+  if ( !err && fp )
+    return fp;
+  return 0;
+  #else
+  return fopen( filename, mode );
+  #endif
+}
+
+void
+InputProcessXMLParameter::UpdateMetaData(Application::Pointer this_)
+{
+
+  this_->SetName(GetMetaDataByKey("appname"));
+  this_->SetDescription(GetMetaDataByKey("appdescr"));
+  this_->SetDocName(GetMetaDataByKey("docname"));
+  this_->SetDocLongDescription(GetMetaDataByKey("doclongdescr"));
+  this_->SetDocAuthors(GetMetaDataByKey("docauthors"));
+  this_->SetDocLimitations(GetMetaDataByKey("doclimitations"));
+  this_->SetDocSeeAlso(GetMetaDataByKey("docseealso"));
+
+
+}
+
 } //end namespace wrapper
-  
+
 } //end namespace otb

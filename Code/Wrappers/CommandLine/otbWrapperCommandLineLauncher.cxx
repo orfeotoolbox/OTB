@@ -678,7 +678,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
 {
   // Display the type the type
   ParameterType type = m_Application->GetParameterType(paramKey);
-  
+
   // Discard Group parameters (they don't need a value)
   if (type == ParameterType_Group)
     {

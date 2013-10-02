@@ -1,19 +1,19 @@
 /*=========================================================================
-  
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
-  
-  
+
+
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
-  
-  
+
+
   This software is distributed WITHOUT ANY WARRANTY; without even
   the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
-  
+
   =========================================================================*/
 #ifndef __otbWrapperApplication_h
 #define __otbWrapperApplication_h
@@ -35,12 +35,13 @@
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperDocExampleStructure.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
+#include "otbTinyXML.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-  
+
 /** \class Application
  *  \brief This class represent an application
  *  TODO
@@ -82,11 +83,6 @@ public:
   /** Check if the application has been initialized */
   bool IsInitialized() const;
 
-  /** rashad: Add xml parameters eg: -xml */
-  void AddInXMLParameter();
-
-  void AddOutXMLParameter();
-
   /** Set the parameter xml flag */
   itkSetMacro(HaveInXML, bool);
 
@@ -127,6 +123,27 @@ public:
    *
    * WARNING: this method may disappear from the API */
   ParameterGroup* GetParameterList();
+
+  void ClearParameterList()
+  {
+    m_ParameterList->Clear();
+  }
+
+  void AddInXMLParameter()
+  {
+    GetParameterList()->AddInXMLParameter();
+  }
+
+  void AddOutXMLParameter()
+  {
+    GetParameterList()->AddOutXMLParameter();
+  }
+
+  const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
+
+  int UpdateMetaDataFromXML(std::string xmlFileName);
+
+  void UpdateParameterListFromXML(std::string xmlFileName);
 
   /* Get the internal application parameter specified
    *
@@ -179,17 +196,17 @@ public:
   /* Activate or deactivate the bool parameter
    */
   void SetParameterEmpty(std::string paramKey, bool active);
-  
+
   /* Get active flag of parameter with key paramKey
    */
   bool GetParameterEmpty(std::string paramKey);
-  
+
   /* Return the user level of access to a parameter */
   UserLevel GetParameterUserLevel(std::string paramKey) const;
-  
+
   /** Get the role of the parameter */
   Role GetParameterRole(std::string paramKey) const;
-  
+
   /* Get the parameter type from its name */
   ParameterType GetParameterType(std::string paramKey) const;
 
@@ -402,7 +419,7 @@ public:
       }                                                                 \
     return ret;                                                         \
     }
-   
+
   otbGetParameterImageMacro(UInt8Image);
   otbGetParameterImageMacro(UInt16Image);
   otbGetParameterImageMacro(Int16Image);
@@ -514,6 +531,11 @@ public:
    */
   bool IsUseXMLValue(std::string parameter);
 
+  void SetParameterList(ParameterGroup::Pointer paramGroup)
+  {
+    m_ParameterList = paramGroup;
+  }
+
   /* Get the pixel type in which the complex image will be saved
    *
    * Can be called for types :
@@ -609,7 +631,7 @@ public:
     this->Modified();
     return id;
   }
-  
+
   std::string GetCLExample()
   {
     return GetDocExample()->GenerateCLExample();
@@ -625,6 +647,18 @@ public:
   */
   std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
 
+  //rashad: moved to public sector
+  /** Add a new parameter to the parameter group
+   * the parent key of paramKey can be the path to a parameter group
+   * or the path to a choice value */
+  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
+
+  /** Add a parameterRAM method with no parameter*/
+  void AddRAMParameter(std::string paramKey="ram");
+
+   /** Add a parameterRAND method with no parameter*/
+   void AddRANDParameter(std::string paramKey="rand");
+
 protected:
   /** Constructor */
   Application();
@@ -638,23 +672,12 @@ protected:
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
 
-  /** Add a new parameter to the parameter group
-   * the parent key of paramKey can be the path to a parameter group
-   * or the path to a choice value */
-  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
-
   /** Add a parameterRAM method with parameter*/
   void AddRAMParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
-
-  /** Add a parameterRAM method with no parameter*/
-  void AddRAMParameter(std::string paramKey="ram");
 
   /** Add a parameterRAND method with parameter
    * by default seed initialization is based on time value*/
    void AddRANDParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
-
-   /** Add a parameterRAND method with no parameter*/
-   void AddRANDParameter(std::string paramKey="rand");
 
   /** Remove the items added to the ListWidget */
   void ClearChoices(std::string key);
@@ -689,17 +712,17 @@ protected:
       InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
       ret = paramDown->GetImage<TImageType>();
       }
-    
+
     //TODO: exception if not found ?
     return ret;
   }
 
   /** Declare a parameter as having an automatic value */
   void AutomaticValueOn(std::string paramKey);
-  
+
   /** Declare a parameter as NOT having an automatic value */
   void AutomaticValueOff(std::string paramKey);
-  
+
   /* Set an output image value
    *
    * Can be called for types :
@@ -709,7 +732,7 @@ protected:
     void SetParameterOutputImage(std::string parameter, TImageType* value)
   {
     Parameter* param = GetParameterByKey(parameter);
-    
+
     if (dynamic_cast<OutputImageParameter*>(param))
       {
       OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
@@ -726,7 +749,7 @@ protected:
     void SetParameterComplexOutputImage(std::string parameter, TImageType* value)
   {
     Parameter* param = GetParameterByKey(parameter);
-    
+
     if (dynamic_cast<ComplexOutputImageParameter*>(param))
       {
       ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);

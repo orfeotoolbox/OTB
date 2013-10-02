@@ -135,16 +135,16 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
   n_App = AddChildNodeTo(n_OTB, "application");
   AddChildNodeTo(n_App, "name", app->GetName());
   AddChildNodeTo(n_App, "descr", app->GetDescription());
-  
+
 
 
   TiXmlElement *n_AppDoc;
   n_AppDoc = AddChildNodeTo(n_App, "doc");
   AddChildNodeTo(n_AppDoc, "name", app->GetDocName());
-  AddChildNodeTo(n_AppDoc, "descr", app->GetDocLongDescription());
-  AddChildNodeTo(n_AppDoc, "author", app->GetDocAuthors());
-  AddChildNodeTo(n_AppDoc, "limitation", app->GetDocLimitations());
-  AddChildNodeTo(n_AppDoc, "related", app->GetDocSeeAlso());
+  AddChildNodeTo(n_AppDoc, "longdescr", app->GetDocLongDescription());
+  AddChildNodeTo(n_AppDoc, "authors", app->GetDocAuthors());
+  AddChildNodeTo(n_AppDoc, "limitations", app->GetDocLimitations());
+  AddChildNodeTo(n_AppDoc, "seealso", app->GetDocSeeAlso());
 
   TiXmlElement *n_DocTags;
   n_DocTags = AddChildNodeTo(n_AppDoc, "tags");
@@ -159,15 +159,16 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 
   std::vector<std::string> paramList = paramGroup->GetParametersKeys(true);
 
-  
+
   // Iterate through parameters
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it!= paramList.end(); ++it)
     {
       std::string key = *it;
       Parameter *param = paramGroup->GetParameterByKey(key);
+      std::string paramName = param->GetName();
       ParameterType type = app->GetParameterType(key);
       std::string typeAsString = paramGroup->GetParameterTypeAsString(type);
-      
+
 
       // if param is a Group, dont do anything, ParamGroup dont have values
       if (type != ParameterType_Group)
@@ -234,7 +235,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
              value = "true";
            }
        }
-         
+
          //get only file name
     /*
       if(type == ParameterType_InputFilename || type == ParameterType_InputImage ||
@@ -262,15 +263,17 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          TiXmlElement * n_Parameter = new TiXmlElement("parameter");
 
          const char * mandatory = "false";
-         
+
          if( param->GetMandatory() )
            mandatory = "true";
 
          n_Parameter->SetAttribute("mandatory", mandatory);
-         
+
          //setting parameter key as child node in parameter
          AddChildNodeTo(n_Parameter, "key", key);
-              AddChildNodeTo(n_Parameter, "type", typeAsString);
+         AddChildNodeTo(n_Parameter, "type", typeAsString);
+         AddChildNodeTo(n_Parameter, "name", paramName);
+
          if(!hasValueList)
            {
              AddChildNodeTo(n_Parameter, "value", value);
@@ -288,7 +291,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
        }
       }
     }
-  
+
   // Finally, write xml contents to file
   doc.SaveFile( m_FileName.c_str() );
 

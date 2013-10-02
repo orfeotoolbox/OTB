@@ -87,3 +87,7 @@ OTB_CREATE_APPLICATION(NAME           TileFusion
 OTB_CREATE_APPLICATION(NAME           DownloadSRTMTiles
                        SOURCES        otbDownloadSRTMTiles.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBProjections)
+
+OTB_CREATE_APPLICATION(NAME           XMLLoader
+                       SOURCES        otbXMLLoader.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;)
