@@ -20,7 +20,6 @@ public:
   typedef Application Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef InputProcessXMLParameter::MetaDataType MetaDataType;
 
   itkNewMacro(Self);
   itkTypeMacro(Self, otb::Application);
@@ -29,7 +28,9 @@ private:
 
   void DoInit()
   {
-    this->SetHaveInXML(true);
+    this->SetHaveInXML(false);
+    this->SetHaveOutXML(false);
+
     SetName("XMLLoader");
     SetDescription("XML Loader reads xml created from the execution of otb application and executes it");
 
@@ -42,11 +43,11 @@ private:
     AddDocTag("xml");
     AddDocTag("application");
 
-    //  AddParameter(ParameterType_String, "in", "Input XML File");
+    AddParameter(ParameterType_InputFilename, "in", "Input XML File");
     AddParameter(ParameterType_Empty, "info", "Display information about application from the given input xml");
-    SetDocExampleParameterValue("inxml", "application.xml");
+    SetDocExampleParameterValue("in", "application.xml");
     SetDocExampleParameterValue("info", "true");
-    //MandatoryOn("inxml")
+    MandatoryOn("in");
 
   }
 
@@ -71,11 +72,12 @@ private:
 //    ClearParameterList();
     //  std::cerr << "before read in xmloader1\n";
 
-    std::string key = "inxml";
-    std::string inputFilename = GetParameterString(key);
 
-    UpdateParameterListFromXML(inputFilename);
+    std::string inputFilename = GetParameterString("in");
 
+    //  UpdateParameterListFromXML(inputFilename);
+
+    //UpdateMetaDataFromXML(inputFilename);
 
     //  AddParameter(ParameterType_InputProcessXML, key, inXMLParam->GetName());
     //  inXMLParam = dynamic_cast<InputProcessXMLParameter*>(GetParameterByKey(key));
@@ -114,7 +116,9 @@ private:
   void DoExecute()
   {
 
-    std::cerr << GetName() << ":nn\n";
+//    std::cerr << GetName() << ":nn\n";
+
+/*
     std::vector<std::string> paramList = GetParametersKeys(true);
 //   std::cerr << paramList.size() << "psize\n";
     for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
@@ -125,6 +129,7 @@ private:
     }
 
 //    this->Execute();
+*/
 
   }
 

@@ -42,6 +42,34 @@ InputProcessXMLParameter::~InputProcessXMLParameter()
 
 }
 
+const std::string
+InputProcessXMLParameter::GetChildNodeTextOf(TiXmlElement *parentElement, std::string key)
+{
+  std::string value="";
+
+  if(parentElement)
+    {
+      TiXmlElement* childElement = 0;
+      childElement = parentElement->FirstChildElement(key.c_str());
+
+      //same as childElement->GetText() does but that call is failing if there is no such node.
+      //but the below code works and is a replacement for GetText()
+      if(childElement)
+       {
+         const TiXmlNode* child = childElement->FirstChild();
+         if ( child )
+           {
+             const TiXmlText* childText = child->ToText();
+             if ( childText )
+              {
+                value = childText->Value();
+              }
+           }
+       }
+    }
+  return value;
+}
+
 std::string
 InputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
 {
@@ -88,27 +116,16 @@ InputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
   return type;
 }
 
-
-
 void
 InputProcessXMLParameter::otbAppLogInfo(Application::Pointer app, std::string info)
 {
   app->GetLogger()->Write(itk::LoggerBase::INFO, info );
 }
 
-InputProcessXMLParameter::MetaDataType
-InputProcessXMLParameter::GetMetaData(bool force)
-{
-  if(force || m_MetaData.size() == 0 )
-    ReadMetaData();
-  return m_MetaData;
-}
-
 int
-InputProcessXMLParameter::ReadMetaData()
+InputProcessXMLParameter::Read(Application::Pointer this_)
 {
 
-/*
   // Check if the filename is not empty
   if(m_FileName.empty())
     itkExceptionMacro(<<"The XML input FileName is empty, please set the filename via the method SetFileName");
@@ -141,15 +158,18 @@ InputProcessXMLParameter::ReadMetaData()
     //this->otbAppLogInfo(app,info);
   }
 
+  /*
   std::string otb_Version, otb_Build, otb_Platform;
   otb_Version = this_->GetChildNodeTextOf(n_OTB,"version");
   otb_Build = GetChildNodeTextOf(n_OTB, "build");
   otb_Platform = this_->GetChildNodeTextOf(n_OTB, "platform");
+  */
 
   TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
 
-  std::string app_Name, app_Descr;
-  app_Name = this_->GetChildNodeTextOf(n_AppNode, "name");
+  std::string app_Name;
+  app_Name = GetChildNodeTextOf(n_AppNode, "name");
+  /*
   AddMetaData("appname", app_Name);
 
   app_Descr = this_->GetChildNodeTextOf(n_AppNode, "descr");
@@ -173,113 +193,8 @@ InputProcessXMLParameter::ReadMetaData()
 
   doc_SeeAlso = this_->GetChildNodeTextOf(n_Doc, "seealso");
   AddMetaData("docseealso", doc_SeeAlso);
+  */
 
-
-  TiXmlElement* n_Tags = NULL;
-  n_Tags = n_Doc->FirstChildElement("tags");
-  if(n_Tags != NULL)
-    {
-    for(TiXmlElement* n_Tag = n_Tags->FirstChildElement("tag");  n_Tag != NULL;
-      n_Tag = n_Tag->NextSiblingElement() )
-      {
-      m_DocTagList.push_back(n_Tag->GetText()); //need to push into
-                                                //metdata. due to list its not
-                                                //efficient that way
-      }
-    }
-
-  fclose(fp);
-*/
-  return 0;
-}
-
-void
-InputProcessXMLParameter::PrintMetaData()
-{
-  for(MetaDataTypeIterator mit = m_MetaData.begin(); mit != m_MetaData.end(); ++mit)
-    {
-    std::cerr << mit->first << " = " << mit->second << std::endl;
-    }
-}
-
-void
-InputProcessXMLParameter::AddMetaData(KeyType key, ValueType value)
-{
-  m_MetaData.insert ( std::pair<KeyType,ValueType>(key,value) );
-
-}
-
-InputProcessXMLParameter::ValueType
-InputProcessXMLParameter::GetMetaDataByKey(KeyType key)
-{
-  return m_MetaData[key];
-}
-
-void
-InputProcessXMLParameter::UpdateParameterList(Application::Pointer this_)
-{
-
-/*
-
-  this_->ClearParameterList();
-  this_->AddInXMLParameter();
-  this_->AddOutXMLParameter();
-  ReadMetaData();
-  std::string app_Name = GetMetaDataByKey("appname");
-  ParameterGroup::Pointer paramGroup = this_->GetParameterList();
-
-  TiXmlDocument doc;
-
-  FILE* fp = TiXmlFOpen( m_FileName.c_str (), "rb" );
-
-  doc.LoadFile(fp , TIXML_ENCODING_UTF8);
-
-  TiXmlHandle handle(&doc);
-
-  TiXmlElement *n_OTB = handle.FirstChild("OTB").Element();
-  TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
-
-  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != NULL;
-       n_Parameter = n_Parameter->NextSiblingElement() )
-    {
-    std::string key,typeAsString, value, paramName;
-    std::vector<std::string> values;
-    key = this_->GetChildNodeTextOf(n_Parameter, "key");
-    typeAsString = this_->GetChildNodeTextOf(n_Parameter, "type");
-    value = this_->GetChildNodeTextOf(n_Parameter, "value");
-    paramName = this_->GetChildNodeTextOf(n_Parameter, "name");
-    ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
-
-    if(key == "ram")
-      {
-      this_->AddRAMParameter();
-      }
-
-    std::cerr << "kk=" << key << "\n";
-    this_->AddParameter(type, key, paramName);
-    }
-  fclose(fp);
-*/
-}
-
-int
-InputProcessXMLParameter::Read(Application::Pointer this_)
-{
-
-
-  ReadMetaData();
-  std::string app_Name = GetMetaDataByKey("appname");
-
-  TiXmlDocument doc;
-
-  FILE* fp = TiXmlFOpen( m_FileName.c_str (), "rb" );
-
-  doc.LoadFile(fp , TIXML_ENCODING_UTF8);
-
-  TiXmlHandle handle(&doc);
-
-  TiXmlElement *n_OTB = handle.FirstChild("OTB").Element();
-  TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
 
   if(this_->GetName() != app_Name)
     {
@@ -293,32 +208,19 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     return -1;
     }
 
-
-
   ParameterGroup::Pointer paramGroup = this_->GetParameterList();
 
-  // Iterate through the paramGroup
+  // Iterate through the parameter list
   for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != NULL;
        n_Parameter = n_Parameter->NextSiblingElement() )
     {
     std::string key,typeAsString, value, paramName;
     std::vector<std::string> values;
-    key = this_->GetChildNodeTextOf(n_Parameter, "key");
-    typeAsString = this_->GetChildNodeTextOf(n_Parameter, "type");
-    value = this_->GetChildNodeTextOf(n_Parameter, "value");
-    paramName = this_->GetChildNodeTextOf(n_Parameter, "name");
+    key = GetChildNodeTextOf(n_Parameter, "key");
+    typeAsString = GetChildNodeTextOf(n_Parameter, "type");
+    value = GetChildNodeTextOf(n_Parameter, "value");
+    paramName = GetChildNodeTextOf(n_Parameter, "name");
     ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
-
-/*  if(!sameApp)
-    {
-    if(key == "ram")
-      {
-      this_->AddRAMParameter();
-      }
-//    std::cerr << "kk=" << key << "\n";
-    this_->AddParameter(type, key, paramName);
-    }
-*/
 
     TiXmlElement* n_Values = NULL;
     n_Values = n_Parameter->FirstChildElement("values");
@@ -447,21 +349,6 @@ InputProcessXMLParameter::TiXmlFOpen( const char* filename, const char* mode )
   #else
   return fopen( filename, mode );
   #endif
-}
-
-void
-InputProcessXMLParameter::UpdateMetaData(Application::Pointer this_)
-{
-
-  this_->SetName(GetMetaDataByKey("appname"));
-  this_->SetDescription(GetMetaDataByKey("appdescr"));
-  this_->SetDocName(GetMetaDataByKey("docname"));
-  this_->SetDocLongDescription(GetMetaDataByKey("doclongdescr"));
-  this_->SetDocAuthors(GetMetaDataByKey("docauthors"));
-  this_->SetDocLimitations(GetMetaDataByKey("doclimitations"));
-  this_->SetDocSeeAlso(GetMetaDataByKey("docseealso"));
-
-
 }
 
 } //end namespace wrapper

@@ -22,11 +22,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef std::string KeyType;
-  typedef std::string ValueType;
-  typedef std::map<KeyType,ValueType> MetaDataType;
-  typedef MetaDataType::iterator MetaDataTypeIterator;
-
   /** Defining ::New() static method */
   itkNewMacro(Self);
 
@@ -60,34 +55,17 @@ public:
     this->Modified();
     }
 
-  void UpdateParameterList(Application::Pointer application);
 
   std::string pixelTypeToString(ImagePixelType pixType);
 
   ParameterType GetParameterType(const Parameter* param) const;
 
-  int ReadMetaData();
-
-  void PrintMetaData();
-
-  MetaDataType GetMetaData(bool force = true);
-
-  void UpdateMetaData(Application::Pointer application);
+  const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
 
   int Read(Application::Pointer application);
 
-//  void ReloadApplication(Application::Pointer application, std::string moduleName);
-
   void otbAppLogInfo(Application::Pointer app, std::string info);
 
-  ValueType GetMetaDataByKey(KeyType key);
-
-  void AddMetaData(KeyType key, ValueType value);
-
-  std::vector<std::string> GetDocTagList()
-  {
-    return m_DocTagList;
-  }
 
 /* copied from Utilities/tinyXMLlib/tinyxml.cpp. Must have a FIX inside tinyxml.cpp */
   FILE* TiXmlFOpen( const char* filename, const char* mode );
@@ -102,8 +80,6 @@ protected:
 private:
 
   std::string    m_FileName;
-  MetaDataType m_MetaData;
-  std::vector<std::string> m_DocTagList;
 
   InputProcessXMLParameter(const InputProcessXMLParameter &); //purposely not implemented
   void operator =(const InputProcessXMLParameter&); //purposely not implemented

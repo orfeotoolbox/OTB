@@ -124,11 +124,6 @@ public:
    * WARNING: this method may disappear from the API */
   ParameterGroup* GetParameterList();
 
-  void ClearParameterList()
-  {
-    m_ParameterList->Clear();
-  }
-
   void AddInXMLParameter()
   {
     GetParameterList()->AddInXMLParameter();
@@ -138,12 +133,6 @@ public:
   {
     GetParameterList()->AddOutXMLParameter();
   }
-
-  const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
-
-  int UpdateMetaDataFromXML(std::string xmlFileName);
-
-  void UpdateParameterListFromXML(std::string xmlFileName);
 
   /* Get the internal application parameter specified
    *
