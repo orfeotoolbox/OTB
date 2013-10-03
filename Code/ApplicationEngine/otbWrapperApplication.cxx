@@ -1215,7 +1215,6 @@ ComplexImagePixelType Application::GetParameterComplexOutputImagePixelType(std::
   return ret;
 }
 
-
 void
 Application::AddChoice(std::string paramKey, std::string paramName)
 {

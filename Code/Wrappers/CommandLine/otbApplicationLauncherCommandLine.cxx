@@ -18,6 +18,8 @@
 
 #include "otbWrapperCommandLineLauncher.h"
 
+std::string PrepareExpressionFromXML(std::string filename);
+
 int main(int argc, char* argv[])
 {
   if (argc < 2)
@@ -26,8 +28,14 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
-  // Construct the string expression
   std::string exp;
+  if( strcmp(argv[1], "-inxml") == 0 )
+  {
+     PrepareExpressionFromXML(argv[2]);
+  }
+
+  // Construct the string expression
+
   for (int i = 1; i < argc; i++)
     {
     if (i != argc - 1)
@@ -40,6 +48,8 @@ int main(int argc, char* argv[])
       exp.append(argv[i]);
       }
     }
+
+  std::cerr << exp << "\n";
 
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();
@@ -57,4 +67,14 @@ int main(int argc, char* argv[])
     }
 
   return EXIT_SUCCESS;
+}
+
+std::string PrepareExpressionFromXML(std::string filename)
+{
+
+  std::string expression;
+
+//XMLLoader -in ./output.xml
+  return expression;
+
 }
