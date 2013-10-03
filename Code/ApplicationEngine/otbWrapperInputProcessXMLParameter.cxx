@@ -94,6 +94,50 @@ InputProcessXMLParameter::otbAppLogInfo(Application::Pointer app, std::string in
   app->GetLogger()->Write(itk::LoggerBase::INFO, info );
 }
 
+
+/* copied from Utilities/tinyXMLlib/tinyxml.cpp. Must have a FIX inside tinyxml.cpp */
+FILE*
+InputProcessXMLParameter::TiXmlFOpen( const char* filename, const char* mode )
+{
+#if defined(_MSC_VER) && (_MSC_VER >= 1400 )
+  FILE* fp = 0;
+  errno_t err = fopen_s( &fp, filename, mode );
+  if ( !err && fp )
+    return fp;
+  return 0;
+  #else
+  return fopen( filename, mode );
+  #endif
+}
+
+const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key)
+{
+  std::string value="";
+
+  if(parentElement)
+    {
+    TiXmlElement* childElement = 0;
+    childElement = parentElement->FirstChildElement(key.c_str());
+
+    //same as childElement->GetText() does but that call is failing if there is
+    //no such node.
+    //but the below code works and is a replacement for GetText()
+    if(childElement)
+      {
+      const TiXmlNode* child = childElement->FirstChild();
+      if ( child )
+        {
+        const TiXmlText* childText = child->ToText();
+        if ( childText )
+          {
+          value = childText->Value();
+          }
+        }
+      }
+    }
+  return value;
+}
+
 int
 InputProcessXMLParameter::Read(Application::Pointer this_)
 {
