@@ -144,53 +144,76 @@ QtWidgetParameterFactory::CreateQtWidget( otb::Wrapper::Parameter* param,
     }
 
   if (0) {}
-  CREATEWIDGET(otb::Wrapper::EmptyParameter,          
+  CREATEWIDGET(otb::Wrapper::EmptyParameter,
                otb::Wrapper::QtWidgetEmptyParameter)
-  CREATEWIDGET(otb::Wrapper::IntParameter,            
+
+  CREATEWIDGET(otb::Wrapper::IntParameter,
                otb::Wrapper::QtWidgetIntParameter)
-  CREATEWIDGET(otb::Wrapper::FloatParameter,          
+
+  CREATEWIDGET(otb::Wrapper::FloatParameter,
                otb::Wrapper::QtWidgetFloatParameter)
-  CREATEWIDGET(otb::Wrapper::InputFilenameParameter,       
+
+  CREATEWIDGET(otb::Wrapper::InputFilenameParameter,
                otb::Wrapper::QtWidgetInputFilenameParameter)
-  CREATEWIDGET(otb::Wrapper::InputFilenameListParameter,       
+
+  CREATEWIDGET(otb::Wrapper::InputFilenameListParameter,
                otb::Wrapper::QtWidgetInputFilenameListParameter)
-  CREATEWIDGET(otb::Wrapper::OutputFilenameParameter,       
-               otb::Wrapper::QtWidgetOutputFilenameParameter)
-  CREATEWIDGET(otb::Wrapper::DirectoryParameter,      
+
+  CREATEWIDGET(otb::Wrapper::OutputFilenameParameter,
+	       otb::Wrapper::QtWidgetOutputFilenameParameter)
+
+    CREATEWIDGET(otb::Wrapper::DirectoryParameter,
                otb::Wrapper::QtWidgetDirectoryParameter)
-  CREATEWIDGET(otb::Wrapper::StringParameter,         
-               otb::Wrapper::QtWidgetStringParameter)
-  CREATEWIDGET(otb::Wrapper::StringListParameter,     
+
+  CREATEWIDGET(otb::Wrapper::StringParameter,
+	       otb::Wrapper::QtWidgetStringParameter)
+
+  CREATEWIDGET(otb::Wrapper::StringListParameter,
                otb::Wrapper::QtWidgetStringListParameter)
-  CREATEWIDGET(otb::Wrapper::ChoiceParameter,         
+
+  CREATEWIDGET(otb::Wrapper::ChoiceParameter,
                mvd::Wrapper::QtWidgetChoiceParameter)
-  CREATEWIDGET(otb::Wrapper::ListViewParameter,       
+
+  CREATEWIDGET(otb::Wrapper::ListViewParameter,
                otb::Wrapper::QtWidgetListViewParameter)
-  CREATEWIDGET(otb::Wrapper::InputImageParameter,     
-               mvd::Wrapper::QtWidgetInputImageParameter)
-  CREATEWIDGET(otb::Wrapper::ComplexInputImageParameter,  
-               otb::Wrapper::QtWidgetComplexInputImageParameter)
-  CREATEWIDGET(otb::Wrapper::ComplexOutputImageParameter,     
+
+  CREATEWIDGET(otb::Wrapper::InputImageParameter,
+	       mvd::Wrapper::QtWidgetInputImageParameter)
+
+  CREATEWIDGET(otb::Wrapper::ComplexInputImageParameter,
+	       otb::Wrapper::QtWidgetComplexInputImageParameter)
+
+  CREATEWIDGET(otb::Wrapper::ComplexOutputImageParameter,
                otb::Wrapper::QtWidgetComplexOutputImageParameter)
-  CREATEWIDGET(otb::Wrapper::InputImageListParameter, 
+
+  CREATEWIDGET(otb::Wrapper::InputImageListParameter,
                mvd::Wrapper::QtWidgetInputImageListParameter)
-  CREATEWIDGET(otb::Wrapper::InputVectorDataListParameter, 
+
+  CREATEWIDGET(otb::Wrapper::InputVectorDataListParameter,
                otb::Wrapper::QtWidgetInputVectorDataListParameter)
-  CREATEWIDGET(otb::Wrapper::InputVectorDataParameter, 
+
+  CREATEWIDGET(otb::Wrapper::InputVectorDataParameter,
                otb::Wrapper::QtWidgetInputVectorDataParameter)
-  CREATEWIDGET(otb::Wrapper::OutputImageParameter,    
+
+  CREATEWIDGET(otb::Wrapper::OutputImageParameter,
                otb::Wrapper::QtWidgetOutputImageParameter)
-  CREATEWIDGET(otb::Wrapper::OutputVectorDataParameter, 
+
+  CREATEWIDGET(otb::Wrapper::OutputVectorDataParameter,
                otb::Wrapper::QtWidgetOutputVectorDataParameter)
-  CREATEWIDGET(otb::Wrapper::EmptyParameter,          
+
+  CREATEWIDGET(otb::Wrapper::EmptyParameter,
                otb::Wrapper::QtWidgetEmptyParameter)
-  CREATEWIDGET(otb::Wrapper::ParameterGroup,          
+
+  CREATEWIDGET(otb::Wrapper::ParameterGroup,
                mvd::Wrapper::QtWidgetParameterGroup)
-  CREATEWIDGET(otb::Wrapper::RAMParameter,            
+
+  CREATEWIDGET(otb::Wrapper::RAMParameter,
                otb::Wrapper::QtWidgetRAMParameter)
+
 #if OTB_VERSION_CHECK( 3, 18, 2 )
-  CREATEWIDGET(otb::Wrapper::OutputProcessXMLParameter,        
+  CREATEWIDGET(otb::Wrapper::OutputProcessXMLParameter,
                otb::Wrapper::QtWidgetOutputProcessXMLParameter)
+
   CREATEWIDGET(otb::Wrapper::InputProcessXMLParameter,
                otb::Wrapper::QtWidgetInputProcessXMLParameter)
 #endif

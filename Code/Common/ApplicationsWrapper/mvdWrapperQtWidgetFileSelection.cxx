@@ -104,7 +104,8 @@ void QtWidgetFileSelection::DoCreateWidget()
 
   m_Input = new DropLineEdit( this );
   // m_Input->setFrameShape(QFrame::Box);
-  m_Input->setText(tr("Drag and drop a dataset here."));
+  m_Input->setToolTip( "Drag and drop a dataset here." );
+  // m_Input->setText( tr( "Drag and drop a dataset here." ) );
   m_HLayout->addWidget(m_Input);
   QObject::connect(
     m_Input, SIGNAL( textChanged( const QString& ) ),
@@ -169,9 +170,12 @@ QtWidgetFileSelection::dropEvent(QDropEvent *event)
     // set the filename
     m_Input->setText( QString( ofname.data() ) );
 
+#if 0
+    // QLabel replaced by QLineEdit.
     // since QLabel does not emit signal when textChanged, raise a signal
     // in the code
     emit textChanged( QString( ofname.data() ) );
+#endif
     }
   else if ( event->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist") )
     {
@@ -185,9 +189,12 @@ QtWidgetFileSelection::dropEvent(QDropEvent *event)
     // set the filename
     m_Input->setText( ofname);
 
+#if 0
+    // QLabel replaced by QLineEdit.
     // since QLabel does not emit signal when textChanged, raise a signal
     // in the code
     emit textChanged( ofname );
+#endif
     }
 }
 #endif
