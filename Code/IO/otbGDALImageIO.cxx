@@ -1264,7 +1264,7 @@ void GDALImageIO::WriteImageInformation()
 
 void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 {
-  char **     papszOptions = NULL;
+  //char **     papszOptions = NULL;
   std::string driverShortName;
   m_NbBands = this->GetNumberOfComponents();
 

@@ -75,18 +75,18 @@ public:
   typedef Application                         Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
-  
+
   /** Standard macro */
   itkNewMacro(Self);
 
   itkTypeMacro(StereoFramework, otb::Application);
-  
+
   /** Filters typedefs */
   typedef FloatImageType::PixelType           FloatPixelType;
-  
+
   typedef otb::StereorectificationDeformationFieldSource
     <FloatImageType,FloatVectorImageType>     DeformationFieldSourceType;
-  
+
   typedef itk::Vector<double,2>               DeformationType;
   typedef otb::Image<DeformationType>         DeformationFieldType;
 
@@ -97,7 +97,7 @@ public:
   typedef otb::InverseDeformationFieldImageFilter
    <DeformationFieldType,DeformationFieldType> InverseDeformationFieldFilterType;
 
-  
+
 
   typedef otb::StreamingWarpImageFilter
     <FloatImageType,
@@ -106,7 +106,7 @@ public:
 
   typedef otb::BCOInterpolateImageFunction
     <FloatImageType>                          InterpolatorType;
-  
+
    typedef otb::Functor::SSDBlockMatching<FloatImageType,FloatImageType> SSDBlockMatchingFunctorType;
    typedef otb::Functor::SSDDivMeanBlockMatching<FloatImageType,FloatImageType> SSDDivMeanBlockMatchingFunctorType;
 
@@ -178,35 +178,35 @@ public:
      FloatImageType,
      DeformationFieldType,
      FloatImageType>                          DisparityToElevationFilterType;
-  
+
   typedef otb::DEMToImageGenerator
     <FloatImageType>                          DEMToImageGeneratorType;
-  
+
   typedef otb::StreamingMinMaxImageFilter
     <FloatImageType>                          MinMaxFilterType;
-  
+
   typedef otb::StreamingStatisticsImageFilter
     <FloatImageType>                          StatisticsFilterType;
-   
+
   typedef otb::ExtractROI
     <FloatPixelType,FloatPixelType>           ExtractFilterType;
-  
+
   typedef otb::ImageList<FloatImageType>      ImageListType;
-  
+
   typedef otb::ImageListToVectorImageFilter
     <ImageListType,
      FloatVectorImageType>                    ImageListToVectorImageFilterType;
-  
+
   typedef otb::ImageFileReader
     <FloatVectorImageType>                    ReaderType;
-  
+
   typedef otb::ImageFileWriter
     <FloatVectorImageType>                    WriterType;
-  
+
   typedef otb::VectorImageToImageListFilter
     <FloatVectorImageType,
      ImageListType>                           VectorImageToListFilterType;
-  
+
   typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
                                          FloatImageType::PixelType>               ExtractROIFilterType;
 
@@ -242,14 +242,14 @@ public:
 
     typedef itk::ImageToImageFilter<FloatImageType,FloatImageType>  FilterType;
 private:
-  
+
   StereoFramework()
     {
 
      m_Interpolator = InterpolatorType::New();
      m_Multi3DMapToDEMFilter =  Multi3DFilterType::New();
     }
-  
+
   std::vector<std::vector<int> > CreateCouplesList(string couples)
     {
     std::vector<std::vector<int> > couplesList;
@@ -359,7 +359,7 @@ private:
     SetMinimumParameterIntValue("input.channel", 1);
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
-    
+
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "output", "Output parameters");
     SetParameterDescription("output","This group of parameters allows to choose the DSM resolution, nodata value, and projection parameters.");
@@ -440,7 +440,7 @@ private:
 
     AddChoice("bm.metric.ssdmean","Sum of Squared Distances divided by mean of block");
     SetParameterDescription("bm.metric.ssdmean","derived version of Sum of Squared Distances between pixels value in the metric window (SSD divided by mean over window)");
-    
+
     AddChoice("bm.metric.ssd","Sum of Squared Distances");
     SetParameterDescription("bm.metric.ssd","Sum of squared distances between pixels value in the metric window");
 
@@ -494,25 +494,25 @@ private:
     DisableParameter("postproc.metrict");
 
     AddParameter(ParameterType_Group,"mask","Masks");
-    
+
     AddParameter(ParameterType_InputImage, "mask.left","Input left mask");
     SetParameterDescription("mask.left","Mask for left input image");
     MandatoryOff("mask.left");
     DisableParameter("mask.left");
-    
+
     AddParameter(ParameterType_InputImage, "mask.right","Input right mask");
     SetParameterDescription("mask.right","Mask for right input image");
     MandatoryOff("mask.right");
     DisableParameter("mask.right");
-    
+
     AddParameter(ParameterType_Float,"mask.variancet","Discard pixels with low local variance");
     SetParameterDescription("mask.variancet","This parameter allows to discard pixels whose local variance is too small (the size of the neighborhood is given by the radius parameter)");
     MandatoryOff("mask.variancet");
     SetDefaultParameterFloat("mask.variancet",50.);
     //DisableParameter("mask.variancet");
-    
+
     AddRAMParameter();
-    
+
 
     SetDocExampleParameterValue("input.il","sensor_stereo_left.tif sensor_stereo_right.tif");
     SetDocExampleParameterValue("elev.default","200");
@@ -522,21 +522,21 @@ private:
     SetDocExampleParameterValue("output.res","2.5");
     SetDocExampleParameterValue("output.out","dem.tif");
 
-    
+
   }
-  
+
   void DoUpdateParameters()
   {
     if( HasValue("input.il") )
       {
       // Get the input image list
       FloatVectorImageListType::Pointer inList = this->GetParameterImageList("input.il");
-    
+
       // Set channel interval
       SetMaximumParameterIntValue("input.channel", inList->GetNthElement(0)->GetNumberOfComponentsPerPixel());
       }
   }
-  
+
 
   template<class TInputImage, class TMetricFunctor>
     void
@@ -883,9 +883,9 @@ private:
         }
 
       // Compute disparities
-      FilterType* blockMatcherFilterPointer;
+      FilterType* blockMatcherFilterPointer = NULL;
       FilterType* invBlockMatcherFilterPointer = NULL;
-      FilterType* subPixelFilterPointer;
+      FilterType* subPixelFilterPointer = NULL;
       BijectionFilterType::Pointer bijectFilter;
 
       // pointer
@@ -1004,8 +1004,8 @@ private:
             finalMaskFilter->GetOutput(),
             minimize, minDisp, maxDisp);
           break;
-        
-        
+
+
         case 3: //LP
           otbAppLogINFO(<<"Using Lp Metric for BlockMatching.");
 
@@ -1067,7 +1067,7 @@ private:
         }
 
 
-      FloatImageType::Pointer hDispOutput = subPixelFilterPointer->GetOutput(0);
+     FloatImageType::Pointer hDispOutput = subPixelFilterPointer->GetOutput(0);
       FloatImageType::Pointer finalMaskImage=finalMaskFilter->GetOutput();
       if (IsParameterEnabled("postproc.med"))
         {
@@ -1279,12 +1279,12 @@ private:
     SetParameterOutputImage("output.out", m_Multi3DMapToDEMFilter->GetOutput());
 
   }
-  
+
   // private filters
   std::vector<itk::LightObject::Pointer> m_Filters;
 
   InterpolatorType::Pointer m_Interpolator;
-  
+
   MultiDisparityTo3DFilterListType  m_MultiDisparityTo3DFilterList;
   Multi3DFilterType::Pointer        m_Multi3DMapToDEMFilter;
 

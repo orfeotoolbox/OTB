@@ -382,7 +382,7 @@ void otb::ogr::Field::SetValue(T const& value)
   BOOST_MPL_ASSERT_MSG(!boost::is_array<InterfaceType>::value, InterFaceType_Cant_Be_An_array, (T, InterfaceType));
   typedef typename boost::mpl::at<internal::FieldType_Map, InterfaceType>::type Kind;
   BOOST_MPL_ASSERT_MSG(!(boost::is_same<Kind, boost::mpl::void_>::value), UNEXPECTED_KIND_TYPE, (T, InterfaceType, Kind));
-  const int VALUE = Kind::value;
+  //const int VALUE = Kind::value;
   assert(m_Definition.GetType() == VALUE && "OGR field type mismatches the type of new field value");
   typedef typename boost::mpl::at<internal::FieldSetters_Map, Kind>::type SetterType;
   // If you experience a static assertion failure in the line below, it means
@@ -398,7 +398,7 @@ T otb::ogr::Field::GetValue() const
   CheckInvariants();
   assert(HasBeenSet() && "Cannot access the value of a field that hasn't been set");
   typedef typename boost::mpl::at<internal::FieldType_Map, T>::type Kind;
-  const int VALUE = Kind::value;
+  //const int VALUE = Kind::value;
   BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
   assert(m_Definition.GetType() == VALUE && "OGR field type mismatches the type of requested field value");
   typedef typename boost::mpl::at<internal::FieldGetters_Map, Kind>::type GetterType;

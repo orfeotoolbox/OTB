@@ -287,6 +287,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 
   // Calculation of the four constants A, B, C and K
   MassType A = 0, B = 1, C = 1, K;
+  K = 0; //supress warning. not sure about default value ??
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
     {
     classLabelk = itMapMOBClk->first;

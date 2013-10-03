@@ -37,7 +37,7 @@ ClampImageFilter<TInputImage, TOutputImage>
 {
   m_Lower = itk::NumericTraits<OutputImagePixelType>::NonpositiveMin();
   m_Upper = itk::NumericTraits<OutputImagePixelType>::max();
-  
+
   m_DLower = static_cast<double>(m_Lower);
   m_DUpper = static_cast<double>(m_Upper);
 }
@@ -110,7 +110,7 @@ ClampImageFilter<TInputImage, TOutputImage>
     itkExceptionMacro(<<"Lower threshold cannot be greater than upper threshold.");
     return;
     }
-  
+
   if (m_Lower != lower || m_Upper != upper)
     {
     m_Lower = lower;
@@ -147,7 +147,7 @@ ClampImageFilter<TInputImage, TOutputImage>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-          
+
   // walk the regions, threshold each pixel
   while( !outIt.IsAtEnd() && !inIt.IsAtEnd()  )
     {
@@ -155,17 +155,20 @@ ClampImageFilter<TInputImage, TOutputImage>
     // with the double version of the upper and the lower bounds of
     // output image
     const double value = static_cast<double>(inIt.Get());
-    OutputImagePixelType      outPix;
+    OutputImagePixelType      outPix = m_Lower;
 
     if ( m_DLower <= value && value <= m_DUpper)
       {
       // pixel passes to output unchanged
       outPix = static_cast<OutputImagePixelType>(value);
       }
+    /* Already outPix is initialized with m_Lower even for preventing Warning.
+     *
     else if ( value < m_DLower )
       {
       outPix = m_Lower;
       }
+     */
     else if ( value > m_DUpper)
       {
       outPix = m_Upper;

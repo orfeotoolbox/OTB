@@ -143,9 +143,9 @@ inline
 void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
 {
   CheckInvariants();
-  OGRGeometry * g = geometry.get();
+  //OGRGeometry * g = geometry.get();
   UncheckedSetGeometryDirectly(otb::move(geometry));
-  assert(m_Feature->GetGeometryRef() == g && "The new geometry hasn't been set as expected");
+  assert(m_Feature->GetGeometryRef() == geometry.get() && "The new geometry hasn't been set as expected");
   assert(! geometry && "UniqueGeometryPtr hasn't released its pointer");
 }
 

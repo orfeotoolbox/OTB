@@ -22,7 +22,6 @@
 #include "otbMacro.h"
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-
 #include "otbWrapperTypes.h"
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"

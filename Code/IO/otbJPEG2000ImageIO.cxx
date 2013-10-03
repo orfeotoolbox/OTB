@@ -264,7 +264,7 @@ public:
   {
     this->Clean();
   }
-  
+
   boost::shared_ptr<opj_image_t> DecodeTile(unsigned int tileIndex);
 
   const std::vector<unsigned int> & GetAvailableResolutions(){return this->m_AvailableResolutions; };
@@ -292,7 +292,7 @@ public:
   unsigned int         m_TileHeight;
   unsigned int         m_XNbOfTile;
   unsigned int         m_YNbOfTile;
-  
+
   std::vector<unsigned int> m_AvailableResolutions;
 
   unsigned int m_ResolutionFactor;
@@ -384,45 +384,45 @@ boost::shared_ptr<opj_image_t> JPEG2000InternalReader::DecodeTile(unsigned int t
     this->Clean();
     return boost::shared_ptr<opj_image_t>();
     }
-  
+
   // Creating the codec
   boost::shared_ptr<opj_codec_t> codec = boost::shared_ptr<opj_codec_t>(otbopenjpeg_opj_create_decompress_v2(this->m_CodecFormat),otbopenjpeg_opj_destroy_codec);
-  
+
   if (!codec)
     {
     this->Clean();
     return boost::shared_ptr<opj_image_t>();
     }
-  
+
   // Setting default parameters
   opj_dparameters_t parameters;
   otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
   parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
-  
+
   // Set default event mgr
   opj_event_mgr_t eventManager;
   eventManager.info_handler = info_callback;
   eventManager.warning_handler = warning_callback;
   eventManager.error_handler = error_callback;
-  
+
   // Setup the decoder decoding parameters using user parameters
   if (!otbopenjpeg_opj_setup_decoder_v2(codec.get(), &parameters, &eventManager))
     {
     this->Clean();
     return boost::shared_ptr<opj_image_t>();
     }
-  
+
   // Read the main header of the codestream and if necessary the JP2
   // boxes
   opj_image_t * unsafeOpjImgPtr = NULL;
-  
+
   if (!otbopenjpeg_opj_read_header(stream.get(), codec.get(),&unsafeOpjImgPtr))
     {
     boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
     this->Clean();
     return boost::shared_ptr<opj_image_t>();
     }
-  
+
   boost::shared_ptr<opj_image_t> image = boost::shared_ptr<opj_image_t>(unsafeOpjImgPtr,OpjImageDestroy);
 
   if( otbopenjpeg_opj_get_decoded_tile(codec.get(), stream.get(), image.get(), tileIndex))
@@ -717,7 +717,7 @@ void JPEG2000TileCache::AddTile(unsigned int tileIndex, boost::shared_ptr<opj_im
   // This helper class makes sure the Mutex is unlocked
   // in the event an exception is thrown.
   itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
-  
+
   if(!m_IsReady)
     {
     std::cerr<<(this)<<" Cache is not configured !"<<std::endl;
@@ -906,7 +906,7 @@ void JPEG2000ImageIO::Read(void* buffer)
       {
       open = (*it)->m_IsOpen && open;
       }
-  
+
   if ( !open )
     {
     if ( !this->CanReadFile( m_FileName.c_str() ) )
@@ -996,7 +996,7 @@ void JPEG2000ImageIO::Read(void* buffer)
 
     // Set-up multi-threader
     this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
-    
+
     // multithread the execution
     this->GetMultiThreader()->SingleMethodExecute();
     }
@@ -1023,10 +1023,14 @@ void JPEG2000ImageIO::LoadTileData(void * buffer, void * currentTile)
     }
 
  // Get nb. of lines and columns of the region to read
+  /* -Wunused-variable
   int lNbLines     = this->GetIORegion().GetSize()[1];
+  */
   int lNbColumns   = this->GetIORegion().GetSize()[0];
+  /* -Wunused-variable
   int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
+  */
   unsigned int lWidthSrc; // Width of the input pixel in nb of pixel
   unsigned int lHeightDest; // Height of the area where write in nb of pixel
   unsigned int lWidthDest; // Width of the area where write in nb of pixel
@@ -1126,7 +1130,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 
   threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
   threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
-  
+
   str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
 
   // Retrieve data
@@ -1166,7 +1170,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
     otbMsgDevMacro(<< " Tile " << tiles->at(i).first << " decoded by thread "<<threadId);
 
     io->LoadTileData(buffer, currentTile.get());
-     
+
     if (cache->GetCacheSizeInTiles() != 0)
      {
      cache->AddTile(tiles->at(i).first, currentTile);
@@ -1191,7 +1195,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
     otbMsgDevMacro(<< " Tile " <<tiles->at(lastTile).first  << " decoded by thread "<<threadId);
 
     io->LoadTileData(buffer, currentTile.get());
-     
+
     if (cache->GetCacheSizeInTiles() != 0)
      {
      cache->AddTile(tiles->at(lastTile).first, currentTile);
@@ -1206,7 +1210,7 @@ void JPEG2000ImageIO::ConfigureCache()
   itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
                                     MetaDataKey::CacheSizeInBytes,
                                     m_CacheSizeInByte);
-  
+
   // Initialize some parameters of the tile cache
   this->m_TileCache->Initialize(m_InternalReaders.front()->m_TileWidth,
                                 m_InternalReaders.front()->m_TileHeight,
@@ -1322,7 +1326,7 @@ void JPEG2000ImageIO::ReadImageInformation()
         std::ostringstream lStream;
         lStream << MetaDataKey::MetadataKey << cpt;
         key = lStream.str();
-        
+
         itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszGMLMetadata[cpt]));
         otbMsgDevMacro( << static_cast<std::string>(papszGMLMetadata[cpt]));
         }
@@ -1443,7 +1447,7 @@ void JPEG2000ImageIO::ReadImageInformation()
   // Encapsulate tile hints for streaming
   unsigned int tileHintX = m_InternalReaders.front()->m_TileWidth / static_cast<unsigned int>(vcl_pow(2.0, static_cast<int>(m_ResolutionFactor) ));
   unsigned int tileHintY = m_InternalReaders.front()->m_TileHeight / static_cast<unsigned int>(vcl_pow(2.0, static_cast<int>(m_ResolutionFactor) ));
-  
+
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, tileHintX);
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, tileHintY);
 

@@ -636,7 +636,7 @@ void OGRIOHelper
       }
       }
 
-      
+
     OGRFeature::DestroyFeature(feature);
     chrono.Stop();
     ++counter;
@@ -671,7 +671,7 @@ unsigned int OGRIOHelper
     itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(),
                                                MetaDataKey::VectorDataKeywordlistKey,
                                                kwl);
-    
+
     // Create the field once
     if (ogrCurrentLayer != NULL && !fieldsAddedToOGRLayer)
       {
@@ -745,7 +745,7 @@ unsigned int OGRIOHelper
         {
         OGRFeature *ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-    
+
         // Add the fields to the features
         for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
           {
@@ -758,7 +758,7 @@ unsigned int OGRIOHelper
             ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
             }
           }
-    
+
 //        ogrFeature->SetField("Name", dataNode->GetNodeId());
         ogrFeature->SetGeometry(&ogrPoint);
 
@@ -812,7 +812,7 @@ unsigned int OGRIOHelper
           // Edit the value of the field and add it to the current feature
           ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
           }
-    
+
 //        ogrFeature->SetField("Name", dataNode->GetNodeId());
         ogrFeature->SetGeometry(&ogrLine);
 
@@ -888,7 +888,7 @@ unsigned int OGRIOHelper
         {
         OGRFeature *ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-    
+
         // Add the fields to the features
         for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
           {
@@ -897,14 +897,14 @@ unsigned int OGRIOHelper
           // Edit the value of the field and add it to the current feature
           ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
           }
-    
+
         ogrFeature->SetGeometry(ogrPolygon);
-    
+
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
           {
           itkExceptionMacro(<< "Failed to create feature in shapefile.");
           }
-    
+
         OGRFeature::DestroyFeature(ogrFeature);
         }
       else
@@ -1028,7 +1028,7 @@ std::vector<OGRLayer*> OGRIOHelper
                                  OGRLayer* ogrCurrentLayer,
                                  OGRSpatialReference * oSRS)
 {
-  
+
   // Create the in memory datasource if NULL
   if (inMemoryDataSource == NULL)
     {
@@ -1038,7 +1038,7 @@ std::vector<OGRLayer*> OGRIOHelper
     }
 
   std::vector<OGRLayer*>  ogrLayerVector;
-  unsigned int kept = 0;
+  //unsigned int kept = 0;
   bool fieldsAddedToOGRLayer = false;
   // Get the children list from the input node
   typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
@@ -1048,13 +1048,13 @@ std::vector<OGRLayer*> OGRIOHelper
   for (ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
     {
     DataNodePointerType dataNode = (*it)->Get();
-    
+
     // Get the kwl
     otb::VectorDataKeywordlist kwl;
     itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(),
                                                MetaDataKey::VectorDataKeywordlistKey,
                                                kwl);
-    
+
     // Create the field once
     if (ogrCurrentLayer != NULL && !fieldsAddedToOGRLayer)
       {
@@ -1121,13 +1121,13 @@ std::vector<OGRLayer*> OGRIOHelper
       //Save it in the structure
       OGRFeature *ogrFeature;
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-    
+
       // Add the fields to the features
       for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
         {
         // Get the key of the Nth OGRFieldRefn
         const char * key = kwl.GetNthField(i).first->GetNameRef();
-          
+
         if (std::string(key) != "FID")
           {
           // Edit the value of the field and add it to the current feature
@@ -1240,7 +1240,7 @@ std::vector<OGRLayer*> OGRIOHelper
 
       OGRFeature *ogrFeature;
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-    
+
       // Add the fields to the features
       for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
         {
@@ -1249,14 +1249,14 @@ std::vector<OGRLayer*> OGRIOHelper
         // Edit the value of the field and add it to the current feature
         ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
         }
-    
+
       ogrFeature->SetGeometry(ogrPolygon);
-    
+
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-    
+
       OGRFeature::DestroyFeature(ogrFeature);
       OGRGeometryFactory::destroyGeometry(ogrPolygon);
       break;

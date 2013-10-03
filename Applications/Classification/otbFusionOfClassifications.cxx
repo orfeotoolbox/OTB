@@ -111,7 +111,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageClassifier application");
- 
+
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);
 
@@ -347,6 +347,8 @@ private:
         std::vector<std::string> confusionMatricesFilenameList = GetParameterStringList("method.dempstershafer.cmfl");
 
         MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
+        //setting default to supress warning
+        massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
         switch (GetParameterInt("method.dempstershafer.mob"))
           {
           case Mode_MOB_Precision:
@@ -436,7 +438,7 @@ private:
 
       }
   }
-  
+
   std::vector<itk::LightObject::Pointer> m_Filters;
 };
 

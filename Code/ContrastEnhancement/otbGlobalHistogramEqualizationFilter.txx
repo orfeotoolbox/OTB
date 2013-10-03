@@ -54,7 +54,7 @@ GlobalHistogramEqualizationFilter<TInput,TOutput>
   m_LookupArray.Fill(0);
 
   CumulativeArray[0] = static_cast<unsigned int>(m_Histogram->GetFrequency(0));
-  for( int i = 1;  i < histoSize; i++ )
+  for( unsigned int i = 1;  i < histoSize; i++ )
     {
     CumulativeArray[i] = m_Histogram->GetFrequency(i)+ CumulativeArray[i-1];
     }

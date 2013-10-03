@@ -630,9 +630,10 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
             }
 
           //test if position is in DEM BBOX
+          /**    -Wunused-variable
           bool isInDEM = (position[0] >= minLong) && (position[0] < maxLong) && (position[1] >= minLat) && (position[1]
-              < maxLat);
-
+                      < maxLat);
+          **/
           // Is point inside DEM area ?
           typename OutputImageType::PointType point2D;
           point2D[0] = position[0];
@@ -646,11 +647,13 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
           cellIndex[1] = static_cast<int> (vcl_floor(continuousIndex[1]));
           //std::cout<<"cellindex "<<cellIndex<<std::endl;
           //index from physical
-          typename OutputImageType::IndexType physCellIndex;
+          /** -Wunused-variable
+            typename OutputImageType::IndexType physCellIndex;
+
           //double CellIndexLong=(position[0]-outOrigin[0])/step[0];
           //double CellIndexLat=(position[1]-outOrigin[1])/step[1];
           typename OutputImageType::IndexType cellIndex2;
-
+          **/
           if (outputRequestedRegion.IsInside(cellIndex))
             {
             //std::cout<<"is inside "<<std::endl;

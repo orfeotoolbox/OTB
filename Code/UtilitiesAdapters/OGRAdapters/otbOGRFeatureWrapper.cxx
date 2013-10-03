@@ -95,7 +95,6 @@ void otb::ogr::Feature::UncheckedPrintSelf(std::ostream & os, itk::Indent indent
     Field const& field = (*this)[i];
     field.PrintSelf(os, indent);
     }
-  OGRGeometry const* g = GetGeometry();
 }
 
 bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const& rhs)

@@ -215,14 +215,14 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   region.SetIndex(id);
   region.SetSize(size);
-  
+
   itk::ImageRegionIterator<OutputImageType> it(modulusImage, region);
-  
+
   it.GoToBegin();
   while (!it.IsAtEnd())
     {
     unsigned int    bin = static_cast<unsigned int> (static_cast<double>(it.Value()-min) / lengthBin);
-    
+
     // Highlights bug 498
     assert(bin<NbBin);
 
@@ -330,7 +330,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   while (itRec != m_RectangleList.end())
     {
     VertexType start, end;
-    
+
     start[0] = origin[0]
       + static_cast<TPrecision>((*itRec)[0]) * spacing[0];
     start[1] = origin[1]
@@ -340,7 +340,7 @@ LineSegmentDetector<TInputImage, TPrecision>
       + static_cast<TPrecision>((*itRec)[2]) * spacing[0];
     end[1] = origin[1]
       + static_cast<TPrecision>((*itRec)[3]) * spacing[1];
-    
+
     typename DataNodeType::Pointer CurrentGeometry = DataNodeType::New();
     CurrentGeometry->SetNodeId("FEATURE_LINE");
     CurrentGeometry->SetNodeType(otb::FEATURE_LINE);
@@ -352,7 +352,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
     ++itRec;
     }
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -480,7 +480,7 @@ LineSegmentDetector<TInputImage, TPrecision>
       CopyRectangle(rec, r);
       }
     }
- 
+
   return NFA;
 
 }
@@ -644,7 +644,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 {
   /** Add the point to the used list point*/
   this->SetPixelToUsed(index);
-  
+
   /** Neighborhooding */
   typedef itk::ConstNeighborhoodIterator<OutputImageType> NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType radius;
@@ -719,7 +719,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     diff -= CONST_2PI;
     if (diff < 0.0) diff = -diff;
     }
-  
+
   return diff < prec;
 }
 
@@ -836,7 +836,7 @@ LineSegmentDetector<TInputImage, TPrecision>
    */
   RectangleType          rec(8, 0.);       // Definition of a
                                            // rectangle : 8 components
-  
+
   if (vcl_abs(wl - wr)
       - vcl_sqrt( static_cast<double> (largestRegion.GetSize(0) * largestRegion.GetSize(0) +
                                        largestRegion.GetSize(1) * largestRegion.GetSize(1)))
@@ -850,9 +850,9 @@ LineSegmentDetector<TInputImage, TPrecision>
     rec[5] = theta;
     rec[6] = m_Prec;
     rec[7] = m_DirectionsAllowed;
-    
+
     if (rec[4] - 1. < 1e-10) rec[4] = 1.;
-    
+
     }
   return rec;
 }
@@ -974,11 +974,11 @@ LineSegmentDetector<TInputImage, TPrecision>
   /** Get The Bounding Region*/
   OutputImageDirRegionType region = m_OrientationFilter->GetOutput()->GetLargestPossibleRegion();
   region.Crop(rectangle->GetBoundingRegion());
-  
+
 
   itk::ImageRegionIterator<OutputImageDirType> it(m_OrientationFilter->GetOutput(), region);
   it.GoToBegin();
-  
+
   int pts = 0;
 
   while (!it.IsAtEnd())
@@ -1023,7 +1023,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   if (k == 0)
     return -logNT;
 
-  double x = p;
+//  double x = p;
   double a = k_d;
   double b = n_d - k_d + 1.0;
   val = -logNT - log10( dbetai_(&p, &a, &b) );

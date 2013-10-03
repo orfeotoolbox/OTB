@@ -34,7 +34,7 @@ VectorDataEditionModel::UpdatePoint( PointType srcPoint, PointType dstPoint)
 {
   srcPoint[0] = this->GetOrigin()[0] + srcPoint[0] / this->GetSpacing()[0];
   srcPoint[1] = this->GetOrigin()[1] + srcPoint[1] / this->GetSpacing()[1];
-  
+
   if ( m_SearchIndex != -1 )
     {
     // Set the geometry the srcPoint belongs to, as the SelectedGeometry
@@ -68,8 +68,10 @@ VectorDataEditionModel::UpdatePoint( PointType srcPoint, PointType dstPoint)
     }
 
     // needed variables
-    int size = newVertexList->Size();
-    unsigned int vidx = 0;
+    /* -Wunused-variable
+    *  int size = newVertexList->Size();
+    *  unsigned int vidx = 0;
+    */
     bool found = false;
 
     // Try with VertexIterator
@@ -103,7 +105,7 @@ VectorDataEditionModel::UpdateGeometryPosition(double tx, double ty)
     {
     itk::TimeProbe chrono;
     chrono.Start();
-    
+
     // Set the current Geometry the geometry which the srcPoint
     // belongs to
     this->SetSelectedGeometry(m_SearchIndex);
@@ -117,7 +119,7 @@ VectorDataEditionModel::UpdateGeometryPosition(double tx, double ty)
       case FEATURE_LINE:
       {
       newVertexList = const_cast< VertexListType*>(GetSelectedGeometry()->GetLine()->GetVertexList());
-      
+
       this->ProcessVertexListTranslation(newVertexList, tx, ty);
       }
       break;
@@ -160,18 +162,18 @@ VectorDataEditionModel::SearchDataNodeIndexFromPoint( PointType srcPoint)
 
   // Initialize the search index
   m_SearchIndex = -1;
-  
+
   // Search wich geometry the src point belong to
   itk::PreOrderTreeIterator<VectorDataType::DataTreeType> it(this->GetVectorData()->GetDataTree());
   it.GoToBegin();
   int count = 0;
-    
+
   while (!it.IsAtEnd() )
     {
     if (it.Get()->IsPointFeature() || it.Get()->IsLineFeature() || it.Get()->IsPolygonFeature())
       {
       double dist = it.Get()->EuclideanDistance(srcPoint);
-      
+
       if (dist < m_Threshold )
         {
         m_SearchIndex = count;
@@ -220,7 +222,7 @@ void VectorDataEditionModel
 {
   itk::TimeProbe chrono;
   chrono.Start();
-  
+
   // From RemoteSensingRegion To Datanode (polygon)
   DataNodeType::Pointer  regionNode = DataNodeType::New();
   PolygonType::Pointer regionPolygon = PolygonType::New();
@@ -228,7 +230,7 @@ void VectorDataEditionModel
   regionNode->SetNodeId("FEATURE_POLYGON");
   regionNode->SetNodeType(otb::FEATURE_POLYGON);
   regionNode->SetPolygonExteriorRing(regionPolygon);
-  
+
   // Add the verticies to the polygon
   VertexType p;
   VertexType ul,ur, ll, lr;
@@ -264,11 +266,11 @@ void VectorDataEditionModel
         {
         // Remove the node
         it.Remove();
-        
+
         // must go the to begin, because the iterator seems lost when
         // removing a node from its tree
         it.GoToBegin();
-        
+
         //nbGeomDeleted++;
         }
       //count++;
@@ -281,4 +283,3 @@ void VectorDataEditionModel
 }
 
 }
-

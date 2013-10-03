@@ -48,7 +48,7 @@ public:
   typedef std::vector<TiePointType>            TiePointsType;
 
   typedef otb::GenericRSTransform<double,3,3>  RSTransformType;
-  
+
   /** Standard macro */
   itkNewMacro(Self);
   itkTypeMacro(RefineSensorModel, otb::Application);
@@ -58,7 +58,7 @@ private:
   {
     SetName("RefineSensorModel");
     SetDescription("Perform least-square fit of a sensor model to a set of tie points");
-    
+
     SetDocName("Refine Sensor Model");
     SetDocLongDescription("This application reads a geom file containing a sensor model and a text file containing a list of ground control point, and performs a least-square fit of the sensor model adjustable parameters to these tie points. It produces an updated geom file as output, as well as an optional ground control points based statistics file and a vector file containing residues. The output geom file can then be used to ortho-rectify the data more accurately. Plaease note that for a proper use of the application, elevation must be correctly set (including DEM and geoid file). The map parameters allows to choose a map projection in which the accuracy will be estimated in meters.");
 
@@ -67,7 +67,7 @@ private:
     SetDocLimitations("None");
     SetDocSeeAlso("OrthoRectification,HomologousPointsExtraction");
     SetDocAuthors("OTB-Team");
-    
+
     AddParameter(ParameterType_InputFilename,"ingeom","Input geom file");
     SetParameterDescription("ingeom","Geom file containing the sensor model to refine");
 
@@ -112,7 +112,7 @@ private:
 
     otb::SensorModelAdapter::Pointer sm     = otb::SensorModelAdapter::New();
     otb::SensorModelAdapter::Pointer sm_ref = otb::SensorModelAdapter::New();
-    
+
     // Read the geom file
     sm->ReadGeomFile(GetParameterString("ingeom"));
     sm_ref->ReadGeomFile(GetParameterString("ingeom"));
@@ -123,16 +123,16 @@ private:
     // Parse the input file for ground control points
     std::ifstream ifs;
     ifs.open(GetParameterString("inpoints").c_str());
-   
+
   TiePointsType tiepoints;
 
   while(!ifs.eof())
     {
     std::string line;
     std::getline(ifs,line);
-    
+
     double x,y,z,lat,lon;
-    
+
     // Avoid commented lines or too short ones
     if (!line.empty() && line[0] != '#')
       {
@@ -149,11 +149,11 @@ private:
       pos = nextpos + 1;
       nextpos = line.find_first_of("\t", pos);
       lat = atof(line.substr(pos, nextpos).c_str());
-      
+
       z = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(lon,lat);
 
       otbAppLogINFO("Adding tie point x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat);
-      
+
       sm->AddTiePoint(x,y,z,lon,lat);
 
       PointType p1,p2;
@@ -169,12 +169,12 @@ private:
       }
     }
   ifs.close();
-  
+
   otbAppLogINFO("Optimization in progress ...");
   sm->Optimize();
   otbAppLogINFO("Done.\n");
 
-  bool canWrite = sm->WriteGeomFile(GetParameterString("outgeom"));
+//  bool canWrite = sm->WriteGeomFile(GetParameterString("outgeom"));
 
   double rmse = 0;
   double rmsex = 0;
@@ -230,7 +230,7 @@ private:
     double gerror = distance->Evaluate(ref,tmpPoint);
     double xerror = ref[0]-tmpPoint[0];
     double yerror = ref[1]-tmpPoint[1];
-    
+
     double gerror_ref = distance->Evaluate(ref,tmpPoint_ref);
     double xerror_ref = ref[0]-tmpPoint_ref[0];
     double yerror_ref = ref[1]-tmpPoint_ref[1];
@@ -322,16 +322,16 @@ if(IsParameterEnabled("outvector"))
   // Create the datasource (for matches export)
   otb::ogr::Layer layer(NULL, false);
   otb::ogr::DataSource::Pointer ogrDS;
-  
+
   ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);
   std::string projref = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map");
   OGRSpatialReference oSRS(projref.c_str());
-  
+
   // and create the layer
   layer = ogrDS->CreateLayer("matches", &oSRS, wkbMultiLineString);
   OGRFeatureDefn & defn = layer.GetLayerDefn();
   ogr::Feature feature(defn);
-  
+
   feature.SetGeometry(&mls);
   layer.CreateFeature(feature);
   }

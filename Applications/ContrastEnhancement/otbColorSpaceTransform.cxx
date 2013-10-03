@@ -97,7 +97,7 @@ private:
     index[1] = GetParameterInt("green");
     index[2] = GetParameterInt("blue");
 
-    int delta;
+    int delta = 128;
     if (type == "uint8")
       delta = 128;
     else if(type == "uint16")

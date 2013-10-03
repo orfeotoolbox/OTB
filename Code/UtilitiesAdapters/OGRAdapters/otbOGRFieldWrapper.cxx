@@ -119,7 +119,7 @@ otb::ogr::Field::Field(otb::ogr::Feature & feature, size_t index)
 std::ostream & otb::ogr::Field::UncheckedPrintSelf(
   std::ostream& os, itk::Indent indent) const
 {
-  const itk::Indent one_indent = itk::Indent().GetNextIndent();
+  //const itk::Indent one_indent = itk::Indent().GetNextIndent();
   // os << indent << "|" << one_indent << "+ ";
   os << indent << this->GetName() << ": ";
   switch (this->GetType())

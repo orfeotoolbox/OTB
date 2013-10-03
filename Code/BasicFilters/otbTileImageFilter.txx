@@ -50,10 +50,10 @@ TileImageFilter<TImage>
 {
   // First, call superclass implementation
   Superclass::GenerateOutputInformation();
-  
+
   // Get the number of images
   unsigned int numberOfImages = m_Layout[0] * m_Layout[1];
-  
+
   // Check we have enough inputs
   if(numberOfImages != this->GetNumberOfInputs())
     {
@@ -74,7 +74,7 @@ TileImageFilter<TImage>
       // First, get current tile
       const ImageType * currentTile = this->GetInput(col + row * m_Layout[0]);
       typename ImageType::SizeType currentSize = currentTile->GetLargestPossibleRegion().GetSize();
-      
+
       // Retrieve row and column sizes
       if(col == 0)
         {
@@ -84,7 +84,7 @@ TileImageFilter<TImage>
         {
         m_ColumnsSizes.push_back(currentSize[0]);
         }
-      
+
       // Check for consistent layout
       if(currentSize[1] != m_RowsSizes[row]
          || currentSize[0] != m_ColumnsSizes[col])
@@ -117,18 +117,18 @@ TileImageFilter<TImage>
     {
     totalSize[1]+=m_RowsSizes[i];
     }
-  
+
   // Fill out output image settings
   typename ImageType::RegionType outRegion;
   outRegion.SetSize(totalSize);
 
   //std::cout<<"Output largest region: "<<outRegion<<std::endl;
-  
+
   ImageType * outputPtr = this->GetOutput();
-  
+
   // Copy information from first tile
   outputPtr->CopyInformation(this->GetInput());
- 
+
   // Set region
   outputPtr->SetLargestPossibleRegion(outRegion);
 }
@@ -151,7 +151,7 @@ TileImageFilter<TImage>
   for(unsigned int i = 0; i < numberOfImages; ++i)
     {
     ImageType * inputTile = const_cast<ImageType *>(this->GetInput(i));
-    
+
     RegionType inRegion = OutputRegionToInputRegion(i,outRegion);
 
     //std::cout<<"In region: "<<i<<", "<<inRegion<<std::endl;
@@ -175,7 +175,7 @@ TileImageFilter<TImage>
   for(unsigned int i = 0; i < numberOfImages; ++i)
     {
     const ImageType * inputTile = this->GetInput(i);
-  
+
     RegionType inRegion = OutputRegionToInputRegion(i,outputRegionForThread);
     RegionType outRegion = InputRegionToOutputRegion(i,inRegion);
 
@@ -217,14 +217,13 @@ TileImageFilter<TImage>
 
   RegionType out2inRegion = requestedRegion;
   typename RegionType::IndexType regionIndex = out2inRegion.GetIndex();
-  
+
   // Compute tile offsets
   for(unsigned int i = 0; i < tileXIndex; ++i)
     {
     regionIndex[0]-=m_ColumnsSizes.at(i);
     }
 
-  unsigned int tileYOffset = 0;
   for(unsigned int i = 0; i < tileYIndex; ++i)
     {
     regionIndex[1]-=m_RowsSizes.at(i);
@@ -255,14 +254,14 @@ TileImageFilter<TImage>
 ::InputRegionToOutputRegion(unsigned int tileIndex, const RegionType & requestedRegion)
 {
   // Retrieve the nth tile pointer
-  const ImageType * tile = this->GetInput(tileIndex);
+//  const ImageType * tile = this->GetInput(tileIndex);
 
   unsigned int tileYIndex = tileIndex / m_Layout[0];
   unsigned int tileXIndex = tileIndex % m_Layout[0];
 
   RegionType out2inRegion = requestedRegion;
   typename RegionType::IndexType regionIndex = out2inRegion.GetIndex();
-  
+
 
   // Compute tile offsets
   for(unsigned int i = 0; i < tileXIndex; ++i)

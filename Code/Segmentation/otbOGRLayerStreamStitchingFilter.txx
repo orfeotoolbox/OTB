@@ -292,9 +292,10 @@ OGRLayerStreamStitchingFilter<TInputImage>
                          #endif
                     }
 
-
+                     /** -Wunused-variable
                      long upperFID = upper.feat.GetFID();
                      long lowerFID = lower.feat.GetFID();
+                     **/
                      fusionList.push_back(fusion);
                     }
                 }
@@ -329,14 +330,14 @@ OGRLayerStreamStitchingFilter<TInputImage>
                  }
             }
          }
-         
+
          // Update progress
          progress.CompletedPixel();
-         
+
       } //end for x
       m_OGRLayer.ogr().CommitTransaction();
 
-      
+
    } //end for y
    m_OGRLayer.ogr().CommitTransaction();
 
@@ -351,22 +352,22 @@ OGRLayerStreamStitchingFilter<TImage>
    {
       itkExceptionMacro(<<"Input OGR layer is null!");
    }
-   
+
    this->InvokeEvent(itk::StartEvent());
 
    typename InputImageType::ConstPointer inputImage = this->GetInput();
-  
+
   //compute the number of stream division in row and column
    SizeType imageSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
    unsigned int nbRowStream = static_cast<unsigned int>(imageSize[1] / m_StreamSize[1] + 1);
    unsigned int nbColStream = static_cast<unsigned int>(imageSize[0] / m_StreamSize[0] + 1);
-   
+
    itk::ProgressReporter progress(this,0,2*nbRowStream*nbColStream,100,0);
    //Process column
    this->ProcessStreamingLine(false, progress);
    //Process row
    this->ProcessStreamingLine(true, progress);
-   
+
    this->InvokeEvent(itk::EndEvent());
 }
 
