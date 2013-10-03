@@ -55,13 +55,19 @@ public:
     this->Modified();
     }
 
+
   std::string pixelTypeToString(ImagePixelType pixType);
 
   ParameterType GetParameterType(const Parameter* param) const;
 
+  const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
+
   int Read(Application::Pointer application);
 
   void otbAppLogInfo(Application::Pointer app, std::string info);
+
+/* copied from Utilities/tinyXMLlib/tinyxml.cpp. Must have a FIX inside tinyxml.cpp */
+  FILE* TiXmlFOpen( const char* filename, const char* mode );
 
 protected:
 

@@ -124,16 +124,6 @@ public:
    * WARNING: this method may disappear from the API */
   ParameterGroup* GetParameterList();
 
-  void AddInXMLParameter()
-  {
-    GetParameterList()->AddInXMLParameter();
-  }
-
-  void AddOutXMLParameter()
-  {
-    GetParameterList()->AddOutXMLParameter();
-  }
-
   /* Get the internal application parameter specified
    *
    * WARNING: this method may disappear from the API */
@@ -636,18 +626,6 @@ public:
   */
   std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
 
-  //rashad: moved to public sector
-  /** Add a new parameter to the parameter group
-   * the parent key of paramKey can be the path to a parameter group
-   * or the path to a choice value */
-  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
-
-  /** Add a parameterRAM method with no parameter*/
-  void AddRAMParameter(std::string paramKey="ram");
-
-   /** Add a parameterRAND method with no parameter*/
-   void AddRANDParameter(std::string paramKey="rand");
-
 protected:
   /** Constructor */
   Application();
@@ -661,12 +639,33 @@ protected:
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
 
+  /** Add a new parameter to the parameter group
+   * the parent key of paramKey can be the path to a parameter group
+   * or the path to a choice value */
+  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
+
+  /** Add a parameterRAM method with no parameter*/
+  void AddRAMParameter(std::string paramKey="ram");
+
   /** Add a parameterRAM method with parameter*/
   void AddRAMParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
+
+   /** Add a parameterRAND method with no parameter*/
+   void AddRANDParameter(std::string paramKey="rand");
 
   /** Add a parameterRAND method with parameter
    * by default seed initialization is based on time value*/
    void AddRANDParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
+
+   void AddInXMLParameter()
+   {
+     GetParameterList()->AddInXMLParameter();
+   }
+
+   void AddOutXMLParameter()
+   {
+     GetParameterList()->AddOutXMLParameter();
+   }
 
   /** Remove the items added to the ListWidget */
   void ClearChoices(std::string key);

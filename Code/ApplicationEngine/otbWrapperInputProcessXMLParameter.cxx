@@ -110,7 +110,8 @@ InputProcessXMLParameter::TiXmlFOpen( const char* filename, const char* mode )
   #endif
 }
 
-const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key)
+const std::string
+InputProcessXMLParameter::GetChildNodeTextOf(TiXmlElement *parentElement, std::string key)
 {
   std::string value="";
 
