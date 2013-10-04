@@ -390,9 +390,9 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
         m_PointCounts[label] = newPointCounts[canLabel];
         }
       }
-    /* -Wunused-variable
+
     unsigned int oldRegionCount = regionCount;
-    */
+
     regionCount = label;
 
     /* reassign labels in label image */

@@ -383,7 +383,7 @@ void otb::ogr::Field::SetValue(T const& value)
   typedef typename boost::mpl::at<internal::FieldType_Map, InterfaceType>::type Kind;
   BOOST_MPL_ASSERT_MSG(!(boost::is_same<Kind, boost::mpl::void_>::value), UNEXPECTED_KIND_TYPE, (T, InterfaceType, Kind));
   //const int VALUE = Kind::value;
-  assert(m_Definition.GetType() == VALUE && "OGR field type mismatches the type of new field value");
+  assert(m_Definition.GetType() == Kind::value && "OGR field type mismatches the type of new field value");
   typedef typename boost::mpl::at<internal::FieldSetters_Map, Kind>::type SetterType;
   // If you experience a static assertion failure in the line below, it means
   // the type of the parameter is not supported to set a field.
@@ -400,7 +400,7 @@ T otb::ogr::Field::GetValue() const
   typedef typename boost::mpl::at<internal::FieldType_Map, T>::type Kind;
   //const int VALUE = Kind::value;
   BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
-  assert(m_Definition.GetType() == VALUE && "OGR field type mismatches the type of requested field value");
+  assert(m_Definition.GetType() == Kind::value && "OGR field type mismatches the type of requested field value");
   typedef typename boost::mpl::at<internal::FieldGetters_Map, Kind>::type GetterType;
   // If you experience a static assertion failure in the line below, it means
   // the field cannot be extracted into the type requested.

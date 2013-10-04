@@ -20,6 +20,7 @@
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
+#include "otbQtApplication.h"
 #include "itksys/SystemTools.hxx"
 
 using otb::Wrapper::Application;
@@ -27,6 +28,7 @@ using otb::Wrapper::ApplicationRegistry;
 using otb::Wrapper::QtWidgetView;
 //using otb::Wrapper::QtWidgetProgressReport;
 using otb::Wrapper::QtWidgetSimpleProgressReport;
+using otb::Wrapper::QtApplication;
 
 int main(int argc, char* argv[])
 {
@@ -35,7 +37,7 @@ int main(int argc, char* argv[])
   QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
   QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
 
-  QApplication qtApp(argc, argv);
+  QtApplication qtApp(argc, argv);
 
   if (argc < 2)
     {
@@ -93,10 +95,13 @@ int main(int argc, char* argv[])
   // Connect the View "Quit" signal, to the mainWindow close slot
   QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
 
+  QObject::connect(&qtApp, SIGNAL(UnhandledException(QString)), gui, SLOT(UnhandledException(QString)));
+
+
   // build the main window, central widget is the plugin view, other
   // are docked widget (progress, logs...)
   mainWindow->setCentralWidget(gui);
-  
+
   // Show the main window
   mainWindow->show();
 

@@ -48,17 +48,17 @@ void QtWidgetView::CreateGui()
 {
   // Create a VBoxLayout with the header, the input widgets, and the footer
   QVBoxLayout *mainLayout = new QVBoxLayout();
-  QTabWidget *tab = new QTabWidget();
+  m_TabWidget = new QTabWidget();
  
-  tab->addTab(CreateInputWidgets(), "Parameters");
-  QTextEdit *log = new QTextEdit();
-  connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), log, SLOT(append(QString) ) );
-  tab->addTab(log, "Logs");
+  m_TabWidget->addTab(CreateInputWidgets(), "Parameters");
+  m_LogText = new QTextEdit();
+  connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), m_LogText, SLOT(append(QString) ) );
+  m_TabWidget->addTab(m_LogText, "Logs");
   QtWidgetProgressReport* prog =  new QtWidgetProgressReport(m_Model);
   prog->SetApplication(m_Application);
-  tab->addTab(prog, "Progress");
-  tab->addTab(CreateDoc(), "Documentation");
-  mainLayout->addWidget(tab);
+  m_TabWidget->addTab(prog, "Progress");
+  m_TabWidget->addTab(CreateDoc(), "Documentation");
+  mainLayout->addWidget(m_TabWidget);
 
   m_Message = new QLabel("<center><font color=\"#FF0000\">Select parameters</font></center>");
   connect( m_Model, SIGNAL(SetApplicationReady(bool)), this, SLOT(UpdateMessageAfterApplicationReady(bool)) );
@@ -164,6 +164,12 @@ void QtWidgetView::CloseSlot()
 
   // Emit a signal to close any widget that this gui belonging to
   emit QuitSignal();
+}
+
+void QtWidgetView::UnhandledException(QString message)
+{
+  m_TabWidget->setCurrentIndex(1);
+  m_LogText->append(message);
 }
 
 }

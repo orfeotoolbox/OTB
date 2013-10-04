@@ -27,6 +27,7 @@ set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetListViewParameter.h
        otbQtFileSelectionWidget.h
        otbQtStringSelectionWidget.h
+       otbQtApplication.h
        itkQtProgressBar.h
        otbWrapperQtWidgetInputFilenameParameter.h
        otbWrapperQtWidgetInputFilenameListParameter.h

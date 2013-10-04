@@ -47,6 +47,7 @@ public:
 
 public slots:
   void CloseSlot();
+  void UnhandledException(QString message);
 
 private slots:
   void UpdateMessageAfterExcuteClicked();
@@ -69,6 +70,9 @@ private:
   Application::Pointer m_Application;
 
   QtWidgetModel* m_Model;
+
+  QTextEdit *m_LogText;
+  QTabWidget *m_TabWidget;
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
