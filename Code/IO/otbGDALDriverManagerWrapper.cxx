@@ -186,7 +186,9 @@ void GDALOverviewsBuilder::Update()
 
     if( m_NbOfResolutions==0 )
       {
-      itkExceptionMactro( "Wrong number of resolutions: " << m_NbOfResolutions );
+      itkExceptionMacro(
+	<< "Wrong number of resolutions: " << m_NbOfResolutions
+      );
       }
 
     // Build the overviews list from nb of resolution desired
