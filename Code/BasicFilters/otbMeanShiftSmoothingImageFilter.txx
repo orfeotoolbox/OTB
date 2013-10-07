@@ -32,7 +32,7 @@ namespace otb
 {
 template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
 MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::MeanShiftSmoothingImageFilter() :
-  m_RangeBandwidth(16.), m_SpatialBandwidth(3)
+  m_RangeBandwidth(16.), m_RangeBandwidthRamp(0), m_SpatialBandwidth(3)
   // , m_SpatialRadius(???)
       , m_Threshold(1e-3), m_MaxIterationNumber(10)
       // , m_Kernel(...)
@@ -181,7 +181,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
 
   for(unsigned int comp = 0; comp < ImageDimension; ++comp)
     {
-    margin[comp] = m_MaxIterationNumber * m_SpatialRadius[comp];
+      margin[comp] = (m_MaxIterationNumber+1) * m_SpatialRadius[comp];
     }
 
   inputRequestedRegion.PadByRadius(margin);
@@ -561,9 +561,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   RealVector bandwidth(jointDimension);
   for (unsigned int comp = 0; comp < ImageDimension; comp++)
     bandwidth[comp] = m_SpatialBandwidth;
-  for (unsigned int comp = ImageDimension; comp < jointDimension; comp++)
-    bandwidth[comp] = m_RangeBandwidth;
-
+  
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   RegionType const& requestedRegion = input->GetRequestedRegion();
@@ -617,6 +615,9 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     // get input pixel in the joint spatial-range domain (with components
     // normalized by bandwith)
     jointPixel = jointIt.Get(); // Pixel in the joint spatial-range domain
+
+    for (unsigned int comp = ImageDimension; comp < jointDimension; comp++)
+      bandwidth[comp] = m_RangeBandwidthRamp*jointPixel[comp]+m_RangeBandwidth;
 
     // index of the currently processed output pixel
     InputIndexType currentIndex = jointIt.GetIndex();

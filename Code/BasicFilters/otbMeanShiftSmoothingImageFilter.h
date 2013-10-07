@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbMeanShiftSmoothingImageFilter_h
-#define __otbMeanShiftSmoothingImageFilter_h
+#ifndef __MeanShiftSmoothingImageFilter_h
+#define __MeanShiftSmoothingImageFilter_h
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -401,7 +401,9 @@ private:
  * its neighbors that are within a spatial distance (set using
  * SetSpatialBandwidth()) and within a spectral range (set using
  * SetRangeBandwidth()). The resulting filtered image can be retrieved by
- * GetOutput() or GetRangeOutput().
+ * GetOutput() or GetRangeOutput(). Parameter SetRangeBandwidthRamp()
+ * allows to linearly adapt the range bandwidth to the intensity of
+ * each channel if set greater than 0 (default value is 0).
  *
  * There are additional output images, as explained below.
  * Internally, the algorithm will iteratively update a pixel both in position
@@ -495,43 +497,43 @@ public:
   /** Sets the spatial bandwidth (or radius in the case of a uniform kernel)
    * of the neighborhood for each pixel
    */
-  itkSetMacro(SpatialBandwidth, RealType)
-; itkGetConstReferenceMacro(SpatialBandwidth, RealType)
-;
+  itkSetMacro(SpatialBandwidth, RealType);
+  itkGetConstReferenceMacro(SpatialBandwidth, RealType);
 
   /** Sets the spectral bandwidth (or radius for a uniform kernel) for pixels
    * to be included in the same mode
    */
-  itkSetMacro(RangeBandwidth, RealType)
-; itkGetConstReferenceMacro(RangeBandwidth, RealType)
-;
+  itkSetMacro(RangeBandwidth, RealType);
+  itkGetConstReferenceMacro(RangeBandwidth, RealType);
+
+   /** Sets the range bandwidth ramp. If > 0, the range bandwidth
+    * will be y = RangeBandwidthRamp * x + RangeBandwidth, where x is
+    * the band value. */
+  itkSetMacro(RangeBandwidthRamp, RealType);
+  itkGetConstReferenceMacro(RangeBandwidthRamp,RealType);
 
   /** Sets the maximum number of algorithm iterations */
-  itkGetConstReferenceMacro(MaxIterationNumber, unsigned int)
-; itkSetMacro(MaxIterationNumber, unsigned int)
-;
+  itkGetConstReferenceMacro(MaxIterationNumber, unsigned int);
+  itkSetMacro(MaxIterationNumber, unsigned int);
 
   /** Sets the threshold value for the mean shift vector's squared norm,
    * under which convergence is assumed
    */
-  itkGetConstReferenceMacro(Threshold, double)
-; itkSetMacro(Threshold, double)
-;
+  itkGetConstReferenceMacro(Threshold, double);
+  itkSetMacro(Threshold, double);
 
   /** Toggle mode search, which is enabled by default.
    * When off, the output label image is not available
    * Be careful, with this option, the result will slightly depend on thread number.
    */
-  itkSetMacro(ModeSearch, bool)
-; itkGetConstReferenceMacro(ModeSearch, bool)
-;
+  itkSetMacro(ModeSearch, bool);
+  itkGetConstReferenceMacro(ModeSearch, bool);
 
 #if 0
   /** Toggle bucket optimization, which is disabled by default.
    */
-  itkSetMacro(BucketOptimization, bool)
-; itkGetConstReferenceMacro(BucketOptimization, bool)
-;
+  itkSetMacro(BucketOptimization, bool);
+  itkGetConstReferenceMacro(BucketOptimization, bool);
 #endif
 
   /** Global shift allows to tackle down numerical instabilities by
@@ -608,6 +610,9 @@ private:
 
   /** Range bandwidth */
   RealType m_RangeBandwidth;
+
+  /** Coefficient */
+  RealType m_RangeBandwidthRamp;
 
   /** Spatial bandwidth */
   RealType m_SpatialBandwidth;
