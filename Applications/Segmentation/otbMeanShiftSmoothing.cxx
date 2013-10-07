@@ -59,33 +59,46 @@ private:
 
     AddParameter(ParameterType_InputImage,   "in",     "Input Image");
     SetParameterDescription( "in", "The input image." );
+
     AddParameter(ParameterType_OutputImage,  "fout",    "Filtered output");
     SetParameterDescription( "fout", "The filtered output image." );
 
+    AddParameter(ParameterType_OutputImage,  "outpos",    "Spatial image");
+    SetParameterDescription( "outpos", " The spatial image output. Spatial image output is a displacement map (pixel position after convergence).");
+
     AddParameter(ParameterType_Int, "spatialr", "Spatial radius");
     SetParameterDescription("spatialr", "Spatial radius of the neighborhood.");
+    SetDefaultParameterInt("spatialr", 5);
+    MandatoryOff("spatialr");
+
     AddParameter(ParameterType_Float, "ranger", "Range radius");
     SetParameterDescription("ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
+    SetDefaultParameterFloat("ranger", 15.0);
+    MandatoryOff("ranger");
+
     AddParameter(ParameterType_Float, "thres", "Mode convergence threshold");
     SetParameterDescription("thres", "Algorithm iterative scheme will stop if mean-shift "
                                "vector is below this threshold or if iteration number reached maximum number of iterations.");
+    SetMinimumParameterFloatValue("thres", 0.0);
+    SetDefaultParameterFloat("thres", 0.1);
     MandatoryOff("thres");
-
 
     AddParameter(ParameterType_Int, "maxiter", "Maximum number of iterations");
     SetParameterDescription("maxiter", "Algorithm iterative scheme will stop if convergence hasn't been reached after the maximum number of iterations.");
+    SetDefaultParameterInt("maxiter", 100);
+    SetMinimumParameterIntValue("maxiter", 1);
     MandatoryOff("maxiter");
+
+    AddParameter(ParameterType_Float, "rangeramp", "Range radius coefficient");
+    SetParameterDescription("rangeramp", "This coefficient makes dependent the ranger of the colorimetry of the filtered pixel : y = rangeramp*x+ranger.");
+    SetDefaultParameterFloat("rangeramp", 0.);
+    SetMinimumParameterFloatValue("rangeramp", 0);
+    MandatoryOff("rangeramp");
+
     AddParameter(ParameterType_Empty, "modesearch", "Mode search.");
     SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path . Be careful, with this option, the result will slightly depend on thread number");
     EnableParameter("modesearch");
     MandatoryOff("modesearch");
-
-    SetDefaultParameterInt("spatialr", 5);
-    SetDefaultParameterFloat("ranger", 15.0);
-    SetDefaultParameterFloat("thres", 0.1);
-    SetMinimumParameterFloatValue("thres", 0.1);
-    SetDefaultParameterInt("maxiter", 100);
-    SetMinimumParameterIntValue("maxiter", 1);
 
 
     // Doc example parameter settings
@@ -115,15 +128,15 @@ private:
     m_Filter->SetRangeBandwidth(GetParameterFloat("ranger"));
     m_Filter->SetThreshold(GetParameterFloat("thres"));
     m_Filter->SetMaxIterationNumber(GetParameterInt("maxiter"));
+    m_Filter->SetRangeBandwidthRamp(GetParameterFloat("rangeramp"));
 
+    SetParameterOutputImage("fout", m_Filter->GetOutput());
+    SetParameterOutputImage("outpos", m_Filter->GetSpatialOutput());
     if(!IsParameterEnabled("modesearch"))
       {
         otbAppLogINFO(<<"Mode Search is disabled." << std::endl);
         m_Filter->SetModeSearch(false);
       }
-
-    SetParameterOutputImage("fout", m_Filter->GetOutput());
-
    }
 
   MSFilterType::Pointer m_Filter;
