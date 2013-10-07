@@ -563,17 +563,31 @@ HistogramModel
 
   for( CountType i=0; i<components; ++i )
     {
-    RealType sigma = sqrt( covariance( i, i ) );
     RealType n = sums[ i ] / means[ i ];
 
-    // Scott's formula
-    // See http://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
-    RealType h = 3.5 * sigma / pow( n, 1.0 / 3.0 );
+    if( n <= 1.0 )
+      bins[ i ] = 1;
 
-    bins[ i ] = ceil( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h;
+    else
+      {
+      RealType sigma = sqrt( covariance( i, i ) );
+      assert( sigma >= 0.0 );
+
+      if( sigma==0.0 )
+	bins[ i ] = 1;
+
+      else
+	{
+	// Scott's formula
+	// See http://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
+	RealType h = 3.5 * sigma / pow( n, 1.0 / 3.0 );
+
+	bins[ i ] = ceil( m_MaxPixel[ i ] - m_MinPixel[ i ] / h );
+	}
+      }
     }
 
-  std::cout << bins;
+  // std::cout << bins;
 
   qDebug() << tr( "%1: Pass #1 - done (%2 ms)." )
     .arg( QDateTime::currentDateTime().toString( Qt::ISODate ) )

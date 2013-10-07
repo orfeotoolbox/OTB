@@ -249,7 +249,12 @@ VectorImageModel
   filter->SetInputFileName(tempfilename);
   filter->SetResamplingMethod(otb::AVERAGE);
   filter->SetResolutionFactor(4);
-  filter->SetNbOfResolutions(m_ImageFileReader->GetAvailableResolutions().size()/2);
+  assert( m_ImageFileReader->GetAvailableResolutions().size()==m_AvailableLod.size() );
+  filter->SetNbOfResolutions(
+    m_AvailableLod.size() > 1
+    ? m_AvailableLod.size() / 2
+    : 1
+  );
 
   try
     {
