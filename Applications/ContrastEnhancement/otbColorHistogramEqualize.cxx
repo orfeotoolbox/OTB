@@ -16,6 +16,8 @@
 #include "otbVectorImageColorSpaceTransformFilter.h"
 #include "otbImageFileWriter.h"
 #include "otbImageListToVectorImageFilter.h"
+#include "otbRGBToYUVFunctor.h"
+#include "otbYUVToRGBFunctor.h"
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"

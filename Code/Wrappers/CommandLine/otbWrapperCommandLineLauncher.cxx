@@ -507,6 +507,11 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         // Call the DoUpdateParameter to update dependant params
         m_Application->UpdateParameters();
         }
+  else
+{
+
+param->SetUseXMLValue(true);
+}
       }
 
     // When a parameter is mandatory :

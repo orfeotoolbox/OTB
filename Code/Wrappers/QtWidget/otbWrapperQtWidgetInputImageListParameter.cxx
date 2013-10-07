@@ -159,6 +159,8 @@ QtWidgetInputImageListParameter::UpdateImageList()
       this->GetModel()->SendLogWARNING(oss.str());
       }
     }
+
+  SetUseXMLValue(false);
   emit Change();
 }
 
@@ -272,6 +274,8 @@ QtWidgetInputImageListParameter::UpdateFileList(std::map<unsigned int, unsigned 
 
   this->update();
 
+  SetUseXMLValue(false);
+
   // notify of value change
   QString key(m_InputImageListParam->GetKey());
   emit ParameterChanged(key);
@@ -299,6 +303,7 @@ QtWidgetInputImageListParameter::AddFile()
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_FileLayout);
   m_Scroll->setWidget(mainGroup);
+  SetUseXMLValue(false);
 
   this->update();
 }
@@ -370,6 +375,7 @@ void QtWidgetInputImageListParameter::RecreateImageList()
     emit Change();
     // notify of value change
     QString key(m_InputImageListParam->GetKey());
+SetUseXMLValue(false);
     emit ParameterChanged(key);
     }
 }

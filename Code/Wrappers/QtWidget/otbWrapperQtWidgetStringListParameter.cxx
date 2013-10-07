@@ -133,6 +133,7 @@ QtWidgetStringListParameter::UpdateStringList()
     updatedList.push_back(m_LineEditList[j]->ToStdString());
     }
   m_StringListParam->SetValue(updatedList);
+  m_StringListParam->SetUseXMLValue(false);
 
   // notify model text changed
   emit Change();

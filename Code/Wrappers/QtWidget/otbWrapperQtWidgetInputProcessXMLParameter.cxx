@@ -77,6 +77,7 @@ void QtWidgetInputProcessXMLParameter::SelectFile()
     if( !name.isEmpty() )
       {
       this->SetFileName(name);
+m_XMLParam->SetUseXMLValue(true);
       m_Input->setText(name);
       }
     }

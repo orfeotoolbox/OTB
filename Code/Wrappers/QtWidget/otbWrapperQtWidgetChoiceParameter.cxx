@@ -97,6 +97,7 @@ void QtWidgetChoiceParameter::DoCreateWidget()
 void QtWidgetChoiceParameter::SetValue(int value)
 {
   m_ChoiceParam->SetValue( value );
+  m_ChoiceParam->SetUseXMLValue(false);
 }
 
 }

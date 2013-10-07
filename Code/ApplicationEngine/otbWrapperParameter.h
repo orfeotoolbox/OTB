@@ -227,7 +227,7 @@ protected:
                 m_Mandatory(true),
                 m_Active(false),
                 m_UserValue(false),
-                m_UseXMLValue(true),
+                m_UseXMLValue(false),
                 m_AutomaticValue(false),
                 m_DefaultValueMode(DefaultValueMode_UNKNOWN),
                 m_UserLevel(UserLevel_Basic),

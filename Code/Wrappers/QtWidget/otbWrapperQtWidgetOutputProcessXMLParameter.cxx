@@ -76,6 +76,7 @@ void QtWidgetOutputProcessXMLParameter::SelectFile()
     {
     this->SetFileName(fileDialog.selectedFiles().at(0));
     m_Input->setText(fileDialog.selectedFiles().at(0));
+    m_XMLParam->SetUseXMLValue(false);
     }
 }
 

@@ -239,6 +239,9 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     paramName = GetChildNodeTextOf(n_Parameter, "name");
     ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
 
+    //this_->SetUseXMLValue(key,false);
+
+
     TiXmlElement* n_Values = NULL;
     n_Values = n_Parameter->FirstChildElement("values");
     if(n_Values)

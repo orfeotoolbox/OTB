@@ -826,6 +826,7 @@ void Application::SetParameterComplexOutputImagePixelType(std::string parameter,
     paramDown->SetComplexPixelType(cpixelType);
     }
 }
+
 void Application::SetParameterOutputVectorData(std::string parameter, VectorDataType* value)
 {
   Parameter* param = GetParameterByKey(parameter);
@@ -842,6 +843,7 @@ bool Application::IsUseXMLValue(std::string parameter)
   Parameter* param = GetParameterByKey(parameter);
   return param->IsUseXMLValue();
 }
+
 std::string Application::GetParameterName(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);

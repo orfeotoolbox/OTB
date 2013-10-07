@@ -39,6 +39,8 @@ public:
 
   void CreateWidget();
 
+  void SetUseXMLValue(bool use);
+
 public slots:
   void UpdateGUI();
   virtual void SetActivationState( bool value );

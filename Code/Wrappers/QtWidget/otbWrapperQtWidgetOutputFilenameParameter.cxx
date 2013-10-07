@@ -89,6 +89,7 @@ void QtWidgetOutputFilenameParameter::SelectFile()
   if (fileDialog.exec())
     {
     this->SetFileName(fileDialog.selectedFiles().at(0));
+    m_FilenameParam->SetUseXMLValue(false);
     m_Input->setText(fileDialog.selectedFiles().at(0));
     }
 }

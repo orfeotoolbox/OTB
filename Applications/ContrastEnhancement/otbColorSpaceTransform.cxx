@@ -14,6 +14,9 @@
 #include "otbVectorImage.h"
 #include "otbImageList.h"
 #include "otbImage.h"
+#include "otbRGBToYUVFunctor.h"
+#include "otbYUVToRGBFunctor.h"
+
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
