@@ -183,6 +183,12 @@ void GDALOverviewsBuilder::Update()
       itkExceptionMacro(<< "Error while opening the file "<< m_InputFileName.c_str() << ".");
       }
 
+
+    if( m_NbOfResolutions==0 )
+      {
+      itkExceptionMactro( "Wrong number of resolutions: " << m_NbOfResolutions );
+      }
+
     // Build the overviews list from nb of resolution desired
     std::vector<int> ovwlist;
     unsigned int factor = 1;
