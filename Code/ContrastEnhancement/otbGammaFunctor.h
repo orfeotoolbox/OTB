@@ -27,7 +27,6 @@ namespace otb
 {
 namespace Functor
 {
-
 template<class TInput, class TOutput>
 class GammaFunctor {
 
@@ -65,7 +64,7 @@ public:
 
    for (unsigned int i = 0; i < input.Size(); ++i)
      {
-//output[i] = vcl_pow(m_Range *  (input[i] / m_Range) , m_Gamma);
+     //output[i] = vcl_pow(m_Range *  (input[i] / m_Range) , m_Gamma);
      output[i] = vcl_pow(input[i] , m_Gamma);
      }
     return output;

@@ -21,12 +21,10 @@
 #ifndef __otbGammaCorrectionFilter_txx
 #define __otbGammaCorrectionFilter_txx
 
-
 #include "otbGammaCorrectionFilter.h"
 
 namespace otb
 {
-
 template <class TInput, class TOutput, class TFunctor>
 void
 GammaCorrectionFilter<TInput, TOutput, TFunctor>

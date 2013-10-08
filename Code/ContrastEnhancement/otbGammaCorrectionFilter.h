@@ -25,7 +25,6 @@
 
 namespace otb
 {
-
 template<class TInput, class TOutput, class TFunctor >
 class ITK_EXPORT GammaCorrectionFilter :
     public itk::UnaryFunctorImageFilter <TInput, TOutput,TFunctor >
