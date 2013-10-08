@@ -652,9 +652,9 @@ private:
 
             // Convert the radiometric value to [0, 255]
             // using the clamping from histogram cut
-            // Since an UInt8 output value is expected, the round() instruction is used
-            VectorPixelType::ValueType val = round(255 * (meanValue[dispIndex] - minVal[dispIndex])
-                                       / (maxVal[dispIndex] - minVal[dispIndex]));
+            // Since an UInt8 output value is expected, the rounding instruction is used (floor(x+0.5) as rounding method)
+            VectorPixelType::ValueType val = vcl_floor(255 * (meanValue[dispIndex] - minVal[dispIndex])
+                                       / (maxVal[dispIndex] - minVal[dispIndex])+0.5);
             color[RGB] = val < 0.0 ? 0.0 : ( val > 255.0 ? 255.0 : val );
             }
           }
