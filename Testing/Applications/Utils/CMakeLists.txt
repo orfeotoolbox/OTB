@@ -31,7 +31,7 @@ OTB_TEST_APPLICATION(NAME  apTvUtSmoothingTest_OutXML
 
 OTB_TEST_APPLICATION(NAME  apTvUtSmoothingTest_InXML
                      APP  Smoothing
-                     OPTIONS -inxml ${BASELINE_FILES}/apTvUtSmoothingTest_OutXML.xml
+                     OPTIONS -inxml ${INPUTDATA}/apTvUtSmoothingTest_OutXML.xml
                              -type mean                         
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtSmoothingTest.tif
