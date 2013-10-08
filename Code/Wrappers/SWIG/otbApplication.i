@@ -17,7 +17,7 @@
 =========================================================================*/
 
 %module otbApplication
- 
+
 
  %{
 #include "itkBase.includes"
@@ -44,7 +44,7 @@ namespace Wrapper
     DefaultValueMode_RELATIVE,
     DefaultValueMode_ABSOLUTE
   };
-  
+
   typedef enum
   {
     ParameterType_Empty,
@@ -72,13 +72,13 @@ namespace Wrapper
     ParameterType_OutputProcessXML,
     ParameterType_InputProcessXML
   } ParameterType;
-  
+
   typedef enum
   {
     UserLevel_Basic,
     UserLevel_Advanced
   } UserLevel;
-  
+
   typedef enum
   {
     ImagePixelType_uint8,
@@ -101,7 +101,7 @@ namespace Wrapper
    ComplexImagePixelType_float,
    ComplexImagePixelType_double,
  } ComplexImagePixelType;
-  
+
 }
 }
 
@@ -118,12 +118,12 @@ public:
   void UpdateParameters();
   int Execute();
   int ExecuteAndWriteOutput();
-  
+
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   std::string GetParameterName(std::string);
   std::string GetParameterDescription(std::string);
   void SetParameterDescription(std::string paramKey, std::string dec);
-  
+
   void EnableParameter(std::string paramKey);
   void DisableParameter(std::string paramKey);
   bool IsParameterEnabled(std::string paramKey) const;
@@ -135,29 +135,29 @@ public:
   otb::Wrapper::UserLevel GetParameterUserLevel(std::string paramKey) const;
   otb::Wrapper::ParameterType GetParameterType(std::string paramKey) const;
   otb::Wrapper::Role GetParameterRole(std::string paramKey) const;
- 
+
   std::vector<std::string> GetChoiceKeys(std::string choiceKey);
   std::vector<std::string> GetChoiceNames(std::string choiceKey);
-  
+
   bool IsApplicationReady();
-  
+
   void SetParameterInt(std::string parameter, int value);
   void SetParameterFloat(std::string parameter, float value);
   void SetParameterString(std::string parameter, std::string value);
   void SetParameterStringList(std::string parameter, std::vector<std::string> value);
-  
+
   void SetParameterOutputImagePixelType(std::string parameter, otb::Wrapper::ImagePixelType pixelType);
   void SetParameterComplexOutputImagePixelType(std::string parameter, otb::Wrapper::ComplexImagePixelType cpixelType);
 
   otb::Wrapper::ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
   otb::Wrapper::ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
-  
+
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
   std::string GetParameterString(std::string parameter);
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
-  
+
   itkProcessObject* GetProgressSource() const;
 
   std::string GetProgressDescription() const;
@@ -182,7 +182,7 @@ public:
   unsigned int GetExampleNumberOfParameters(unsigned int id);
   std::string GetExampleParameterKey(unsigned int exId, unsigned int paramId);
   std::string GetExampleParameterValue(unsigned int exId, unsigned int paramId);
-  
+
   void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 );
   void SetExampleComment( const std::string & comm, unsigned int i );
   unsigned int AddExample( const std::string & comm="" );
@@ -202,6 +202,33 @@ private:
 };
 DECLARE_REF_COUNT_CLASS( Application )
 
+%extend Application {
+  %pythoncode {
+    def GetParameterValue(self, paramKey):
+       paramType = self.GetParameterType(paramKey)
+       if paramType in [ParameterType_InputProcessXML, ParameterType_Choice, ParameterType_ListView,
+                        ParameterType_String, ParameterType_InputFilename,
+                        ParameterType_OutputImage, ParameterType_OutputVectorData,
+                        ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+                        ParameterType_Directory, ParameterType_InputImage,
+                        ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+          return self.GetParameterString(paramKey)
+
+       elif paramType in [ ParameterType_InputImageList, ParameterType_InputVectorDataList,
+                        ParameterType_InputFilenameList, ParameterType_StringList ]:
+          return self.GetParameterStringList(paramKey)
+
+       elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
+          return self.GetParameterInt(paramKey)
+
+       elif paramType in [ParameterType_Float]:
+          return self.GetParameterFloat(paramKey)
+
+       else:
+          print "Cant get value for parameter '" + paramKey  + " ' of type '" + paramType + "' or ParameterType Emtpy"
+          return None
+      }
+}
 
 class Registry : public itkObject
 {
@@ -235,5 +262,3 @@ public:
 };
 
 %include "PyCommand.i"
-
-

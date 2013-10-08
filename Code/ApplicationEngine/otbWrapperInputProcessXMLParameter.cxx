@@ -150,7 +150,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
   // Check that the right extension is given : expected .xml
   if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml")
     {
-    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
+    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName) << " " << m_FileName << " "
                       <<" is a wrong Extension FileName : Expected .xml");
     }
 

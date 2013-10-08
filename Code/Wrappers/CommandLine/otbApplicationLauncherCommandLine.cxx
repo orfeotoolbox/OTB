@@ -35,7 +35,7 @@ std::string PrepareExpressionFromXML(std::string filename)
     }
   std::string ext = filename.substr(filename.size()-4,filename.size());
   if(ext != ".xml" )
-    std::cerr << ext  << " is a wrong extension: Expected .xml" << std::endl;
+    std::cerr << ext  << " is a wrong extension: Expected .xml " << __FILE__ << std::endl;
 
   // Open the xml file
   TiXmlDocument doc;
@@ -163,7 +163,7 @@ int main(int argc, char* argv[])
     }
 
    }
-  std::cerr << exp << ":\n";
+//  std::cerr << exp << ":\n";
 
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();

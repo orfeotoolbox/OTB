@@ -43,7 +43,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM_OutXML1
 OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM_InXML1
                      APP  OrthoRectification
                      OPTIONS 
-                     -inxml  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.xml
+                     -inxml  ${BASELINE_FILES}/apTvPrOrthorectifTest_UTM_OutXML1.xml
                      VALID   --compare-image ${EPSILON_4}
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
                  			  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif)

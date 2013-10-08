@@ -107,7 +107,7 @@ IF(OTB_USE_OPENCV)
     OTB_TEST_APPLICATION(
                          NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
                          APP      TrainImagesClassifier
-                         OPTIONS  -inxml ${TEMP}/cl${classifier}_OutXML1.xml
+                         OPTIONS  -inxml ${BASELINE_FILES}/cl${classifier}_OutXML1.xml
 
                          VALID    ${ascii_comparison}
                                   ${ascii_ref_path}/${OUTMODELFILE}
@@ -164,7 +164,7 @@ SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_OutXML PROPERTIES DEPENDS
 
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_InXML1
                       APP  TrainImagesClassifier
-                      OPTIONS -inxml ${TEMP}/clsvmModelQB1_OutXML.xml
+                      OPTIONS -inxml ${BASELINE_FILES}/clsvmModelQB1_OutXML.xml
                               -rand 121212
                       VALID   --compare-ascii ${NOTOL}
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
@@ -193,7 +193,7 @@ SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS
 
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                       APP  TrainImagesClassifier
-                      OPTIONS -inxml ${TEMP}/clsvmModelQB1_OutXML.xml
+                      OPTIONS -inxml ${BASELINE_FILES}/clsvmModelQB1_OutXML.xml
                               -sample.mv 100
                               -sample.mt 100
                               -sample.vtr 0.5
@@ -262,7 +262,7 @@ SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB3_OutXML PROPERTIES DEPENDS apTvC
 
 OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB3_InXML
                       APP  ImageClassifier
-                      OPTIONS -inxml  ${TEMP}/clLabeledImageQB3_OutXML.xml
+                      OPTIONS -inxml  ${BASELINE_FILES}/clLabeledImageQB3_OutXML.xml
                       VALID   --compare-image ${NOTOL}
                               ${OTBAPP_BASELINE}/clLabeledImageQB3.tif
                               ${TEMP}/clLabeledImageQB3.tif)

@@ -10,9 +10,6 @@ OTB_CREATE_APPLICATION(NAME           ColorHistogramEqualize
                        SOURCES        otbColorHistogramEqualize.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBContrastEnhancementFilters)
 
-
-#OTB_CREATE_APPLICATION(NAME FindPixelType 
-#                      SOURCES FindPixelType.cxx
-#                       LINK_LIBRARIES OTBIO;OTBCommon)
-                       
-
+OTB_CREATE_APPLICATION(NAME           GammaCorrection
+                       SOURCES        otbGammaCorrection.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBContrastEnhancementFilters)
