@@ -98,7 +98,6 @@ public:
    <DeformationFieldType,DeformationFieldType> InverseDeformationFieldFilterType;
 
 
-
   typedef otb::StreamingWarpImageFilter
     <FloatImageType,
      FloatImageType,

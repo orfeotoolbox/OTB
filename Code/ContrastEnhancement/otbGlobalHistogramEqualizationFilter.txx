@@ -104,7 +104,6 @@ GlobalHistogramEqualizationFilter<TInput, TOutput>
         }
 
 
-
 }
 } // end namespace otb
 #endif

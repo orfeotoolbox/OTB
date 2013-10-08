@@ -136,7 +136,7 @@ private:
     std::string inputFilename = GetParameterAsString("in");
     std::string type = GetParameterString("type");
     itk::Index<3> index;
-    index[0] = GetParameterInt("red");;
+    index[0] = GetParameterInt("red"); ;
     index[1] = GetParameterInt("green");
     index[2] = GetParameterInt("blue");
 
@@ -207,7 +207,7 @@ private:
     maxPixel = filterMinMax->GetMaximum();
 
     unsigned int binestimate = maxPixel[0]- minPixel[0] + 1;
-    unsigned int bins = (binestimate < 256)? 256: binestimate ;
+    unsigned int bins = (binestimate < 256)? 256: binestimate;
 
     otbAppLogDEBUG( << "MaxPixelValue = " << maxPixelValue <<std::endl );
     otbAppLogDEBUG( << "Delta = " << delta << std::endl );

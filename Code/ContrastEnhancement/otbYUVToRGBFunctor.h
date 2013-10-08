@@ -68,7 +68,7 @@ public:
     TOutput output;
     output.SetSize(3);
 
-    double Y =  input[0] ;
+    double Y =  input[0];
     double Cb = input[1] - m_Delta;
     double Cr = input[2] - m_Delta;
 

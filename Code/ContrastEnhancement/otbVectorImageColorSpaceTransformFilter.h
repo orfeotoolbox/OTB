@@ -53,7 +53,6 @@ public:
   
 
 
-
   void SetRGBIndex(const IndexType index)
   {
 
@@ -80,7 +79,6 @@ public:
 
   virtual void GenerateOutputInformation();
   virtual void BeforeThreadedGenerateData();
-
 
 
 protected:
