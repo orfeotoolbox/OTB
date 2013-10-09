@@ -71,7 +71,7 @@ public:
   typedef otb::StreamingMinMaxVectorImageFilter<VectorType> StreamingMinMaxFilterType;
 
   typedef otb::StreamingHistogramVectorImageFilter<VectorType> HistogramFilterType;
-  typedef typename itk::NumericTraits< PixelType >::RealType MeasurementType;
+  typedef itk::NumericTraits< PixelType >::RealType MeasurementType;
   typedef itk::Statistics::Histogram< MeasurementType, 1 > HistogramType;
   typedef otb::ObjectList< HistogramType > HistogramListType;
 
