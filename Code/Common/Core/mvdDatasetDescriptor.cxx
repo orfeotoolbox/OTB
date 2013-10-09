@@ -105,7 +105,6 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
 /*****************************************************************************/
 DatasetDescriptor
 ::DatasetDescriptor( QObject* parent ) :
@@ -606,7 +605,7 @@ DatasetDescriptor
     // TODO: Manage XML structure errors.
     assert( !rgbElt.isNull() );
     VectorImageModel::Settings::ChannelVector rgb;
-    ExtractVectorFromElement( rgb, rgbElt );
+    DatasetDescriptor::ExtractVectorFromElement( rgb, rgbElt );
     assert( rgb.size() == 3 );
     settings->SetRgbChannels( rgb );
 
@@ -631,7 +630,7 @@ DatasetDescriptor
     // TODO: Manage XML structure errors.
     assert( !rgbDynamicsElt.isNull() );
     ParametersType rgbDynamics;
-    ExtractArrayFromElement( rgbDynamics, rgbDynamicsElt );
+    DatasetDescriptor::ExtractArrayFromElement( rgbDynamics, rgbDynamicsElt );
     assert( rgbDynamics.GetSize() == 6 );
     settings->SetRgbDynamicsParams( rgbDynamics );
 
@@ -644,7 +643,7 @@ DatasetDescriptor
     // TODO: Manage XML structure errors.
     assert( !wDynamicsElt.isNull() );
     ParametersType wDynamics;
-    ExtractArrayFromElement( wDynamics, wDynamicsElt );
+    DatasetDescriptor::ExtractArrayFromElement( wDynamics, wDynamicsElt );
     assert( wDynamics.GetSize() == 6 );
     settings->SetGrayDynamicsParams( wDynamics );
     }
@@ -703,7 +702,7 @@ DatasetDescriptor
 
   // get the viewport physical center
   itk::Array<double>  aCenter;
-  ExtractArrayFromElement(aCenter, centerElt );
+  DatasetDescriptor::ExtractArrayFromElement(aCenter, centerElt );
 
   // fill the reference to the center argument
   center[0] = aCenter.GetElement(0);

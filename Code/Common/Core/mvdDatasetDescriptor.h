@@ -47,6 +47,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "mvdCore.h"
 #include "mvdAbstractModel.h"
+#include "mvdAlgorithm.h"
 #include "mvdSerializableInterface.h"
 
 
@@ -240,15 +241,17 @@ protected:
 //
 // Private methods.
 private:
-  
+
   /**
    * \brief Serialize an STL-compliant container to a QString
    */
   template< typename TInputIterator >
-  inline
-  QString ContainerToString( const TInputIterator& first,
-                             const TInputIterator& last );
-  
+    inline
+    static
+    QString ContainerToString( const TInputIterator& first,
+			       const TInputIterator& last );
+			       
+
   /**
    * \brief Create a QDomElement containing specified text as child
    */
@@ -260,19 +263,19 @@ private:
    * \brief Deserialize a std::vector from a QDomElement
    */
   template< typename T >
-  inline
-  static
-  void ExtractVectorFromElement( std::vector<T>& vector,
-                                 QDomElement& tagName );
+    inline
+    static
+    void ExtractVectorFromElement( std::vector<T>& vector,
+				   QDomElement& tagName );
 
   /**
    * \brief Deserialize a itk::Array from a QDomElement
    */
   template< typename T >
-  inline
-  static
-  void ExtractArrayFromElement( itk::Array<T>& array,
-                                QDomElement& tagName );
+    inline
+    static
+    void ExtractArrayFromElement( itk::Array<T>& array,
+				  QDomElement& tagName );
 
   /**
    */
@@ -512,11 +515,13 @@ DatasetDescriptor
                      const TInputIterator& last )
 {
   QStringList stringList;
-  
+
   for( TInputIterator it( first ); it != last; ++it )
     {
-    stringList.append( QString( "%1" ).arg( *it ) );
+//  stringList.append( QString( "%1" ).arg( *it ) );
+    stringList.append( ToQString( *it ) );
     }
+
   return stringList.join( " " );
 }
 

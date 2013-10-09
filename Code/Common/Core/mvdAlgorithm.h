@@ -256,8 +256,7 @@ ToString( const QString& str );
 
 
 /**
- * return a std::string form various types
- *
+ * \return a std::string form various types.
  */
 inline
 std::string
@@ -278,6 +277,27 @@ ToStdString( const PointType & point);
 template< typename T>
 std::string
 ToStdString( const std::vector<T> & vec);
+
+/**
+ */
+template< typename T >
+inline
+QString
+ToQString( const T& val );
+
+/**
+ */
+template<>
+inline
+QString
+ToQString< float >( const float& );
+
+/**
+ */
+template<>
+inline
+QString
+ToQString< double >( const double& );
 
 } // end namespace 'mvd'.
 
@@ -521,6 +541,83 @@ ToStdString( const std::vector<T> & vec)
 }
 
 /*******************************************************************************/
+template< typename T >
+inline
+QString
+ToQString( const T& val )
+{
+  return QString( "%1" ).arg( val );
+}
+
+/*****************************************************************************/
+template<>
+inline
+QString
+ToQString< float >( const float& val )
+{
+  QString valf;
+
+  // See IEEE-754
+  // Ref. http://en.wikipedia.org/wiki/Single-precision_floating-point_format
+  valf.sprintf( "%.9g", val );
+
+#if 0
+  std::cout
+    << "ToString< float >(" << val << "): "
+    << ToStdString( valf )
+    << "\t"
+    << valf.toFloat()
+    << std::endl;
+#endif
+
+  if( valf.toDouble()!=val )
+    throw std::runtime_error(
+      ToStdString(
+	QCoreApplication::translate(
+	  "mvd::DatasetDescritor",
+	  "Accuracy error when converting float (%1) to string."
+	)
+	.arg( valf )
+      )
+    );
+
+  return valf;
+}
+
+/*****************************************************************************/
+template<>
+inline
+QString
+ToQString< double >( const double& val )
+{
+  QString vald;
+
+  // See IEEE-754
+  // Ref. http://en.wikipedia.org/wiki/Double_precision
+  vald.sprintf( "%.17g", val );
+
+#if 0
+  std::cout
+    << "ToString< double >(" << val << "): "
+    << ToStdString( vald )
+    << "\t"
+    << vald.toDouble()
+    << std::endl;
+#endif
+
+  if( vald.toDouble()!=val )
+    throw std::runtime_error(
+      ToStdString(
+	QCoreApplication::translate(
+	  "mvd::DatasetDescriptor",
+	  "Accuracy error when converting double (%1) to string."
+	)
+	.arg( vald )
+      )
+    );
+
+  return vald;
+}
 
 } // end namespace 'mvd'
 
