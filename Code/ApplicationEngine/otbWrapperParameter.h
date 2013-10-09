@@ -158,20 +158,7 @@ public:
   {
     itkExceptionMacro(<<"ClearValue() method must be re-implemented by sub-classes.");
   }
-  
-  /** Get parameter's useXMLValue flag for xml input */
-  virtual bool IsUseXMLValue()
-  {
-    return m_UseXMLValue;
-  }
-  
-  /** Set the m_UseXMLValue flag for allowing to override
-    parameter value from user input */
-  virtual void SetUseXMLValue(bool use)
-  {
-    m_UseXMLValue = use;
-  }
-  
+
   /** Set/Get the root of the current parameter (direct parent) */
   virtual void SetRoot(const Parameter::Pointer  root)
   {
@@ -227,7 +214,6 @@ protected:
                 m_Mandatory(true),
                 m_Active(false),
                 m_UserValue(false),
-                m_UseXMLValue(false),
                 m_AutomaticValue(false),
                 m_DefaultValueMode(DefaultValueMode_UNKNOWN),
                 m_UserLevel(UserLevel_Basic),
@@ -248,7 +234,7 @@ protected:
 
   /** Key of the parameter */
   std::string                        m_Key;
-  
+
   /** True if the parameter is mandatory */
   bool                               m_Mandatory;
 
@@ -257,11 +243,6 @@ protected:
 
   /** True if the value is set in user mode */
   bool                               m_UserValue;
-
-  /** True if the parameter value in the input xml is used
-      irrespective of user provide a different value */
-  bool                               m_UseXMLValue;
-
 
   /** True if the application change the value of this parameter */
   bool                               m_AutomaticValue;

@@ -216,12 +216,15 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
   if(this_->GetName() != app_Name)
     {
       //hopefully shouldn't reach here ...
-//      itkExceptionMacro( << "Input XML was generated for a different application( " <<
-    //                  app_Name << ") while application loaded is:" <<this_->GetName());
-  //    return -1;
+    /*
     std::string message = "Input XML was generated for a different application( "
         + app_Name + ") while application loaded is:" + this_->GetName();
+
     std::cerr << message << "\n\n";
+    */
+    itkExceptionMacro( << "Input XML was generated for a different application( " <<
+                       app_Name << ") while application loaded is:" <<this_->GetName());
+
     return -1;
     }
 
@@ -238,9 +241,6 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     value = GetChildNodeTextOf(n_Parameter, "value");
     paramName = GetChildNodeTextOf(n_Parameter, "name");
     ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
-
-    //this_->SetUseXMLValue(key,false);
-
 
     TiXmlElement* n_Values = NULL;
     n_Values = n_Parameter->FirstChildElement("values");
@@ -259,73 +259,29 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
          type == ParameterType_OutputVectorData || type == ParameterType_String ||
          type == ParameterType_Choice)
       {
-      if(this_->IsUseXMLValue(key))
-        {
-        this_->SetParameterString(key, value);
-        }
-      else
-        {
-        std::string userValue = this_->GetParameterString(key);
-        if(!userValue.empty())
-          {
-          this_->SetParameterString(key, userValue);
-          }
-        }
+      this_->SetParameterString(key, value);
       }
     else if (type == ParameterType_Radius || type == ParameterType_Int ||
              type == ParameterType_RAM || typeAsString == "rand" )
       {
       int intValue;
       std::stringstream(value) >> intValue;
-      if(this_->IsUseXMLValue(key))
-        {
-        this_->SetParameterInt(key, intValue);
-        }
-      else
-        {
-        int userValue = 0;
-        userValue = this_->GetParameterInt(key);
-        if(userValue != 0)
-          {
-          this_->SetParameterInt(key,userValue);
-          }
-        }
+      this_->SetParameterInt(key, intValue);
       }
     else if (type == ParameterType_Float)
       {
       float floatValue;
       std::stringstream(value) >> floatValue;
-      if(this_->IsUseXMLValue(key))
-        {
-        this_->SetParameterFloat(key, floatValue);
-        }
-      else
-        {
-        float userValue = 0;
-        userValue = this_->GetParameterFloat(key);
-        if(userValue != 0)
-          {
-          this_->SetParameterFloat(key,userValue);
-          }
-        }
+      this_->SetParameterFloat(key, floatValue);
       }
     else if (type == ParameterType_Empty)
       {
       bool emptyValue = false;
-      // std::stringstream(value) >> floatValue;
       if( value == "true")
         {
         emptyValue = true;
         }
-      if(this_->IsUseXMLValue(key))
-        {
-        this_->SetParameterEmpty(key, emptyValue);
-        }
-      else
-        {
-        bool userValue = this_->GetParameterEmpty(key);
-        this_->SetParameterEmpty(key,userValue);
-        }
+      this_->SetParameterEmpty(key, emptyValue);
       }
     else if (type == ParameterType_InputFilenameList || type == ParameterType_InputImageList ||
              type == ParameterType_InputVectorDataList || type == ParameterType_StringList ||
@@ -334,22 +290,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       if(values.empty())
         itkWarningMacro(<< key << " has null values");
 
-      if(this_->IsUseXMLValue(key))
-        {
-        this_->SetParameterStringList(key, values);
-        }
-      else
-        {
-        std::vector<std::string> userValues;
-        userValues = this_->GetParameterStringList(key);
-
-        if(userValues.size() != 0)
-          {
-
-          this_->SetParameterStringList(key,userValues);
-          }
-        }
-      //skip = (skip == true) ? true: ( (userValues.size() == 0) ? true : false )
+      this_->SetParameterStringList(key, values);
       }
     //choice also comes as setint and setstring why??
     }

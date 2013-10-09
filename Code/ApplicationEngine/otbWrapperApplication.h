@@ -34,7 +34,6 @@
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperDocExampleStructure.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
-#include "otbTinyXML.h"
 
 namespace otb
 {
@@ -502,13 +501,6 @@ public:
    */
   ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
 
-  /* GetXMLOverride
-   *
-   * wrapper function for Paramter::IsUseXMLValue() for application instance.
-   * Needs parameter key as argument.
-   */
-  bool IsUseXMLValue(std::string parameter);
-
   void SetParameterList(ParameterGroup::Pointer paramGroup)
   {
     m_ParameterList = paramGroup;
@@ -624,6 +616,12 @@ public:
   * parameter key and its value.
   */
   std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
+
+   /** If need to force readxml more than once in application */
+   void ForceInXMLParseFlag()
+   {
+     m_IsInXMLParsed = false;
+   }
 
 protected:
   /** Constructor */
@@ -784,7 +782,7 @@ private:
   //rashad:: controls adding of -xml parameter. set to true by default
   bool                              m_HaveInXML;
   bool                              m_HaveOutXML;
-
+  bool                              m_IsInXMLParsed;
   /**
     * Declare the class
     * - Wrapper::MapProjectionParametersHandler
