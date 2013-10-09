@@ -140,7 +140,6 @@ void Application::UpdateParameters()
   if ( (m_HaveInXML && !m_IsInXMLParsed) &&  (GetParameterType(inXMLKey) == ParameterType_InputProcessXML
                                             && IsParameterEnabled(inXMLKey))  )
     {
-
     Parameter* param = GetParameterByKey(inXMLKey);
     InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
     inXMLParam->Read(this);
@@ -163,8 +162,8 @@ int Application::Execute()
     {
       std::string key = *it;
       if ((key.compare(0, 4, "rand") == 0) && HasValue("rand"))
-	{
-	  UseSpecificSeed = true;
+       {
+         UseSpecificSeed = true;
       Parameter* param = GetParameterByKey(key);
       IntParameter* randParam = dynamic_cast<IntParameter*> (param);
       int seed = randParam->GetValue();

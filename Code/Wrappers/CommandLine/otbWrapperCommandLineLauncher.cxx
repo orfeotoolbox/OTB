@@ -209,6 +209,13 @@ bool CommandLineLauncher::BeforeExecute()
     return false;
     }
 
+  //display OTB version
+  if (m_Parser->IsAttributExists("-version", m_Expression) == true)
+    {
+    std::cerr << "This is the "<<m_Application->GetName() << " application, version " << OTB_VERSION_STRING <<std::endl;
+    return false;
+    }
+
   // if we want to load test environnement
   if (m_Parser->IsAttributExists("-testenv", m_Expression) == true)
     {
@@ -624,10 +631,8 @@ void CommandLineLauncher::LinkWatchers(itk::Object * caller, const itk::EventObj
 
 void CommandLineLauncher::DisplayHelp()
 {
-  std::cerr << std::endl;
+  std::cerr << "This is the "<<m_Application->GetName() << " application, version " << OTB_VERSION_STRING <<std::endl;
 
-  std::cerr << "This is the "<<m_Application->GetName() << " application."<<std::endl;
-  std::cerr<<std::endl;
   std::cerr << m_Application->GetDescription() << std::endl;
   std::cerr<<std::endl;
   std::string link = "http://www.orfeo-toolbox.org/Applications/";
@@ -888,6 +893,7 @@ bool CommandLineLauncher::CheckKeyValidity(std::string& refKey)
   appKeyList.push_back("help");
   appKeyList.push_back("progress");
   appKeyList.push_back("testenv");
+  appKeyList.push_back("version");
 
   // Check if each key in the expression exists in the application
   for (unsigned int i = 0; i < expKeyList.size(); i++)

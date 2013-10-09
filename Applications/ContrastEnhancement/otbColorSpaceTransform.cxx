@@ -115,7 +115,7 @@ private:
 
 
     itk::Index<3> index;
-    index[0] = GetParameterInt("red");;
+    index[0] = GetParameterInt("red"); ;
     index[1] = GetParameterInt("green");
     index[2] = GetParameterInt("blue");
 
@@ -154,7 +154,6 @@ private:
 
     MinMaxPixelType maxPixel = filterMinMax->GetMaximum();
     MinMaxPixelType::ValueType maxPixelValue;
-
 
 
     maxPixelValue = maxPixel[0]; //must get the maximum of all bands

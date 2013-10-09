@@ -137,7 +137,6 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
   AddChildNodeTo(n_App, "descr", app->GetDescription());
 
 
-
   TiXmlElement *n_AppDoc;
   n_AppDoc = AddChildNodeTo(n_App, "doc");
   AddChildNodeTo(n_AppDoc, "name", app->GetDocName());

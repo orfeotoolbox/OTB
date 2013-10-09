@@ -64,9 +64,9 @@ public:
     typedef typename TInput::ValueType InputType;
     typedef typename TOutput::ValueType OutputType;
 
-    InputType R = input[m_rChannel] ;
-    InputType G = input[m_gChannel] ;
-    InputType B = input[m_bChannel] ;
+    InputType R = input[m_rChannel];
+    InputType G = input[m_gChannel];
+    InputType B = input[m_bChannel];
 
     double Y  =  0.299 * R + 0.587 * G + 0.114  * B;
     double Cb = -0.169 * R - 0.331 * G + 0.499  * B + m_Delta;

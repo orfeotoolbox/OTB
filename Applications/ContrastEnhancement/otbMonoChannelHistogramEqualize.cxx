@@ -143,7 +143,7 @@ private:
     histogramFilter->SetInput( histInput );
 
     unsigned int binestimate = maxPixel[0]- minPixel[0] + 1;
-    unsigned int bins = (binestimate < 256)? 256: binestimate ;
+    unsigned int bins = (binestimate < 256)? 256: binestimate;
     otbAppLogDEBUG( << "bins = " << bins <<std::endl );
     //otbAppLogDEBUG( << "MinPixel = " << minPixel[0] << std::endl );
     //should also skip minmax setting since the bin size is default

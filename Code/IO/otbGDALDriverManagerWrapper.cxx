@@ -187,7 +187,7 @@ void GDALOverviewsBuilder::Update()
     if( m_NbOfResolutions==0 )
       {
       itkExceptionMacro(
-	<< "Wrong number of resolutions: " << m_NbOfResolutions
+       << "Wrong number of resolutions: " << m_NbOfResolutions
       );
       }
 

@@ -98,7 +98,17 @@ bool
 DEMHandler
 ::IsValidDEMDirectory(const char* DEMDirectory)
 {
-  return m_ElevManager->loadElevationPath(DEMDirectory);
+  //Try to load elevation source
+  bool result = m_ElevManager->loadElevationPath(DEMDirectory);
+  
+  if (!result)
+    {
+      // we explicitly call ossimImageElevationDatabase here to allow for general elevation
+      // images support and test the open method to check if the directory .
+      ossimRefPtr<ossimElevationDatabase> imageElevationDatabase = new ossimImageElevationDatabase;
+      result = imageElevationDatabase->open(DEMDirectory);
+    }
+  return result;
 }
 
 void
