@@ -44,9 +44,10 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM_InXML1
                      APP  OrthoRectification
                      OPTIONS 
                      -inxml  ${INPUTDATA}/apTvPrOrthorectifTest_UTM_OutXML1.xml
+                 		 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_InXML1.tif
                      VALID   --compare-image ${EPSILON_4}
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
-                 			  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif)
+                 			  ${TEMP}/apTvPrOrthorectifTest_UTM_InXML1.tif)
 
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
