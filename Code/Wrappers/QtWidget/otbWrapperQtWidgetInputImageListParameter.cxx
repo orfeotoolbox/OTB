@@ -123,7 +123,7 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
   fileSelection->setFixedHeight(30);
   fileLayout->addWidget(fileSelection);
-  //m_InputImageListParam->AddNullElement();
+  m_InputImageListParam->AddNullElement();
   connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
 
   m_FileSelectionList.push_back(fileSelection);
@@ -160,7 +160,6 @@ QtWidgetInputImageListParameter::UpdateImageList()
       }
     }
 
-  SetUseXMLValue(false);
   emit Change();
 }
 
@@ -274,8 +273,6 @@ QtWidgetInputImageListParameter::UpdateFileList(std::map<unsigned int, unsigned 
 
   this->update();
 
-  SetUseXMLValue(false);
-
   // notify of value change
   QString key(m_InputImageListParam->GetKey());
   emit ParameterChanged(key);
@@ -297,13 +294,12 @@ QtWidgetInputImageListParameter::AddFile()
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
-  //m_InputImageListParam->AddNullElement();
+  m_InputImageListParam->AddNullElement();
   connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_FileLayout);
   m_Scroll->setWidget(mainGroup);
-  SetUseXMLValue(false);
 
   this->update();
 }
@@ -344,7 +340,7 @@ QtWidgetInputImageListParameter::EraseFile()
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
-  //m_InputImageListParam->AddNullElement();
+  m_InputImageListParam->AddNullElement();
   connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
 
   QGroupBox *mainGroup = new QGroupBox();
@@ -375,7 +371,7 @@ void QtWidgetInputImageListParameter::RecreateImageList()
     emit Change();
     // notify of value change
     QString key(m_InputImageListParam->GetKey());
-SetUseXMLValue(false);
+
     emit ParameterChanged(key);
     }
 }

@@ -77,7 +77,6 @@ void QtWidgetInputProcessXMLParameter::SelectFile()
     if( !name.isEmpty() )
       {
       this->SetFileName(name);
-m_XMLParam->SetUseXMLValue(true);
       m_Input->setText(name);
       }
     }
@@ -87,15 +86,18 @@ void QtWidgetInputProcessXMLParameter::SetFileName(const QString& value)
 {
   // load xml file name
   m_XMLParam->SetValue(value.toAscii().constData());
+
+ // app->UpdateParameters();
   
   // notify of value change
   QString key( m_XMLParam->GetKey() );
+
   emit ParameterChanged(key);
 
-  Application* app = GetModel()->GetApplication();
-  m_XMLParam->Read(app);
-  //app->UpdateParameters();
+  GetModel()->UpdateAllWidgets();
+
 }
 
 }
+
 }

@@ -161,8 +161,6 @@ QtWidgetInputVectorDataListParameter::UpdateVectorDataList()
       }
     }
 
-  m_InputVectorDataListParam->SetUseXMLValue(false);
-
   emit Change();
 }
 

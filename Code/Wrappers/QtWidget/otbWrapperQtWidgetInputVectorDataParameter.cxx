@@ -76,7 +76,6 @@ void QtWidgetInputVectorDataParameter::SelectFile()
     if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == true )
     {
       m_Input->setText(fileDialog.selectedFiles().at(0));
-      m_InputVectorDataParam->SetUseXMLValue(false);
     }
     else
       {

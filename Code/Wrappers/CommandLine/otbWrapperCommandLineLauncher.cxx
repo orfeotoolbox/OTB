@@ -353,6 +353,20 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     itkExceptionMacro("No application loaded");
     }
 
+  /* Check for inxml parameter. If exists Update all Parameters from xml and
+   * check for user defined parameters for overriding those from XML
+   */
+  const char *inXMLKey =  "inxml";
+  const char *attrib   = "-inxml";
+  const bool paramInXMLExists(m_Parser->IsAttributExists(attrib, m_Expression));
+  if(paramInXMLExists)
+    {
+    std::vector<std::string> inXMLValues;
+    inXMLValues = m_Parser->GetAttribut(attrib, m_Expression);
+    m_Application->SetParameterString(inXMLKey, inXMLValues[0]);
+    m_Application->UpdateParameters();
+    }
+
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   // Loop over each parameter key declared in the application
   for (unsigned int i = 0; i < appKeyList.size(); i++)
@@ -378,11 +392,10 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         // Check if there is a value associated to the attribute
         if ( values.empty() )
           {
-          std::cerr << "ERROR: No value associated to the parameter : \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
+          std::cerr << "ERROR: No value associated to the parameter : \"" << paramKey
+                    << "\", invalid number of values " << values.size() << std::endl;
           return INVALIDNUMBEROFVALUE;
           }
-
-          param->SetUseXMLValue(false);
 
         // Ensure that the parameter is enabled
         m_Application->EnableParameter(paramKey);
@@ -409,7 +422,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
               else
                 if (type == ParameterType_String)
                   {
-                  dynamic_cast<StringParameter *> (param.GetPointer())->SetValue( m_Parser->GetAttributAsString(std::string("-").append(paramKey), m_Expression) );
+                  dynamic_cast<StringParameter *> (param.GetPointer())->SetValue(
+                    m_Parser->GetAttributAsString(std::string("-").append(paramKey), m_Expression) );
                   }
                 else
                   if (type == ParameterType_OutputImage)
@@ -442,7 +456,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                     else
                       if (values.size() != 1 && values.size() != 2)
                         {
-                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
+                        std::cerr << "ERROR: Invalid number of value for: \"" << paramKey
+                                  << "\", invalid number of values " << values.size() << std::endl;
                         return INVALIDNUMBEROFVALUE;
                         }
                     }
@@ -456,8 +471,9 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                         {
                         // Handle space in filename. Only for input
                         // files or directories
-                        if (type == ParameterType_Directory || type == ParameterType_InputFilename || type == ParameterType_ComplexInputImage ||
-                            type == ParameterType_InputImage || type == ParameterType_InputVectorData ||  type == ParameterType_OutputVectorData )
+                        if (type == ParameterType_Directory         || type == ParameterType_InputFilename ||
+                            type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
+                            type == ParameterType_InputVectorData   || type == ParameterType_OutputVectorData )
                           {
                           for(unsigned int i=1; i<values.size(); i++)
                             {
@@ -472,15 +488,14 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                           return INVALIDNUMBEROFVALUE;
                           }
                         }
-
         // Single value parameter
         if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int ||
-           type == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename ||
-           type == ParameterType_InputFilenameList || type == ParameterType_OutputFilename ||
-           type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
-           type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||
-           type == ParameterType_OutputVectorData || type == ParameterType_RAM ||
-           type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML)
+            type == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_InputFilename ||
+            type == ParameterType_InputFilenameList || type == ParameterType_OutputFilename ||
+            type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
+            type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||
+            type == ParameterType_OutputVectorData || type == ParameterType_RAM ||
+            type == ParameterType_OutputProcessXML) // || type == ParameterType_InputProcessXML)
           {
           m_Application->SetParameterString(paramKey, values[0]);
           }
@@ -498,20 +513,15 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                 }
              else
               {
-                std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
-                return WRONGPARAMETERVALUE;
-                }
+              std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
+              return WRONGPARAMETERVALUE;
+              }
             }
         // Update the flag UserValue
         param->SetUserValue(true);
         // Call the DoUpdateParameter to update dependant params
         m_Application->UpdateParameters();
         }
-  else
-{
-
-param->SetUseXMLValue(true);
-}
       }
 
     // When a parameter is mandatory :
@@ -522,41 +532,37 @@ param->SetUseXMLValue(true);
     bool mustBeSet = false;
     const bool hasValue = m_Application->HasValue(paramKey);
 
-    if( param->GetMandatory() == true && param->GetRole() != Role_Output && type != ParameterType_Group)
+    //skip if mandatory parameters are missing because we have it already in XML
+    if(!paramInXMLExists)
       {
-      // check if the parameter is linked to a root parameter with a chain of active parameters
-      if( param->IsRoot() || param->GetRoot()->IsRoot())
+      if( param->GetMandatory() == true && param->GetRole() != Role_Output && type != ParameterType_Group)
         {
-        // the parameter is a root or inside a group at root level
-        mustBeSet = true;
-        }
-      else
-        {
-        Parameter* currentParam = param->GetRoot();
-        while (!currentParam->IsRoot())
+        // check if the parameter is linked to a root parameter with a chain of active parameters
+        if( param->IsRoot() || param->GetRoot()->IsRoot())
           {
-          if (!currentParam->GetActive())
+          // the parameter is a root or inside a group at root level
+          mustBeSet = true;
+          }
+        else
+          {
+          Parameter* currentParam = param->GetRoot();
+          while (!currentParam->IsRoot())
             {
-            // the missing parameter is not on an active branch : we can ignore it
-            break;
-            }
-          currentParam = currentParam->GetRoot();
+            if (!currentParam->GetActive())
+              {
+              // the missing parameter is not on an active branch : we can ignore it
+              break;
+              }
+            currentParam = currentParam->GetRoot();
 
-          if (currentParam->IsRoot())
-            {
-            // the missing parameter is on an active branch : we need it
-            mustBeSet = true;
+            if (currentParam->IsRoot())
+              {
+              // the missing parameter is on an active branch : we need it
+              mustBeSet = true;
+              }
             }
           }
         }
-      }
-
-    const char *inXMLKey = "inxml";
-    const bool paramInXMLExists(m_Parser->IsAttributExists(std::string("-").append(inXMLKey), m_Expression));
-    if(paramInXMLExists)
-      {
-        //skip if mandatory parameters are missing because we have it already in XML
-        mustBeSet = false;
       }
 
     if( mustBeSet )
@@ -581,7 +587,6 @@ param->SetUseXMLValue(true);
           }
         }
       }
-
     // Check if non mandatory parameter have values
     else
       {
@@ -594,9 +599,9 @@ param->SetUseXMLValue(true);
           return MISSINGPARAMETERVALUE;
           }
         }
-
       }
     }
+
   return OKPARAM;
 }
 
