@@ -103,7 +103,7 @@ private:
     SetParameterOutputImage("out", m_GammaFilter->GetOutput());
   }
 
-  typedef typename FloatVectorImageType::PixelType PixelType;
+  typedef FloatVectorImageType::PixelType PixelType;
   typedef otb::Functor::GammaFunctor<PixelType, PixelType> GammaFunctorType;
   typedef otb::GammaCorrectionFilter<FloatVectorImageType,FloatVectorImageType,GammaFunctorType> GammaFilterType;
 
