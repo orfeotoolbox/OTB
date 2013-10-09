@@ -463,7 +463,7 @@ std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
     break;
     case ParameterType_RAM:
     {
-    paramType = "RAM"; ;
+    paramType = "RAM";
     }
     break;
     case ParameterType_OutputProcessXML:

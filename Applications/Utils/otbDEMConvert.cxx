@@ -87,7 +87,7 @@ void DoExecute()
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   
   // Set temporary tif filename (for ossim)
-  std::string ofname = GetParameterString("out"); ;
+  std::string ofname = GetParameterString("out");
   std::string path   = itksys::SystemTools::GetFilenamePath(ofname);
   std::string fname  = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
   std::string tempFilename = path+"/"+fname+"_DEMConvert.tif";
