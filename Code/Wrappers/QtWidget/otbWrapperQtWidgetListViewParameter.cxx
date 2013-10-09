@@ -86,7 +86,6 @@ void QtWidgetListViewParameter::SelectedItems()
       }
     }
   m_ListViewParam->SetSelectedItems(m_SelectedItems);
-  m_ListViewParam->SetUseXMLValue(false);
 }
 
 }

@@ -32,7 +32,6 @@ QtWidgetStringParameter::~QtWidgetStringParameter()
 {
 }
 
-
 void QtWidgetStringParameter::DoUpdateGUI()
 {
   m_Input->setToolTip(m_StringParam->GetDescription());
@@ -68,7 +67,6 @@ void QtWidgetStringParameter::SetValue(const QString& value)
 {
   m_StringParam->SetValue(value.toAscii().constData());
   m_StringParam->SetUserValue(true);
-  m_StringParam->SetUseXMLValue(false);
   QString key( m_StringParam->GetKey() );
   emit ParameterChanged(key);
 }

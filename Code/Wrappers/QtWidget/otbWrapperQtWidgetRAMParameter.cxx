@@ -87,8 +87,6 @@ void QtWidgetRAMParameter::SetValue(int value)
   m_RAMParam->SetValue(static_cast<unsigned int>(value));
   m_RAMParam->SetUserValue(true);
   m_RAMParam->SetAutomaticValue(false);
-  m_RAMParam->SetUseXMLValue(false);
-
 }
 
 }
