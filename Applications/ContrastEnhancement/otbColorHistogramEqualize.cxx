@@ -72,7 +72,7 @@ public:
   typedef itk::VariableLengthVector<PixelType> MinMaxPixelType;
 
   typedef otb::StreamingHistogramVectorImageFilter<VectorType> HistogramFilterType;
-  typedef typename itk::NumericTraits< float >::RealType MeasurementType;
+  typedef itk::NumericTraits< float >::RealType MeasurementType;
   typedef itk::Statistics::Histogram< MeasurementType, 1 > HistogramType;
   typedef otb::ObjectList< HistogramType > HistogramListType;
   typedef otb::GlobalHistogramEqualizationFilter<ImageType, FloatImageType> HistogramEqualizationFilterType;
