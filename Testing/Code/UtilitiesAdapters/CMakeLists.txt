@@ -352,6 +352,21 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid
   0.001
 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+# Test with general elevation images (tif format)
+ADD_TEST(uaTvDEMHandler_AboveEllipsoid_BDALTI_TIF_NoGeoid
+  ${UtilitiesAdapters_TESTS1}
+  otbDEMHandlerTest
+  ${LARGEINPUT}/BD_ALTI/
+  no
+  800
+  7.283262
+  48.598675
+  0
+  869
+  1
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 SET(UtilitiesAdapters_SRCS1
 otbUtilitiesAdaptersTests1.cxx
