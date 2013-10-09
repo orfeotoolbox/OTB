@@ -547,7 +547,7 @@ private:
     // Resampler Instanciation
     m_ResampleFilter = ResampleFilterType::New();
     
-    //Elevation handler is faster calling OSSIM elevation source
+    //Elevation handler is faster calling OSSIM elevation source without multithreading
     m_ResampleFilter->SetDeformationFilterNumberOfThreads(1);
 
     m_ResampleFilter->SetInput(inImage);
