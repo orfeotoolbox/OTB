@@ -217,19 +217,19 @@ private:
     // TODO: Check this
     if(!HasValue("inpos"))
       {
-	if(HasValue("in"))
-	  {
-	    typedef float ImagePixelType;
-	    typedef otb::VectorImage<ImagePixelType, 2> ImageType;
-	    typedef otb::ImageFileReader<ImageType> ImageReaderType;
-	    typedef otb::ImageFileWriter<ImageType> ImageWriterType;
+      if(HasValue("in"))
+        {
+        typedef float ImagePixelType;
+        typedef otb::VectorImage<ImagePixelType, 2> ImageType;
+        typedef otb::ImageFileReader<ImageType> ImageReaderType;
+        typedef otb::ImageFileWriter<ImageType> ImageWriterType;
 	    
-	    FloatVectorImageType* input = GetParameterImage("in");
-	    unsigned long sizeImageX = input->GetLargestPossibleRegion().GetSize()[0],
-	    sizeImageY = input->GetLargestPossibleRegion().GetSize()[1];
-	    SetParameterInt("spatialr",sqrt(sizeImageX*sizeImageX+sizeImageY*sizeImageY)+1);
-	    spatialIn = GetParameterImage("in");
-	  }
+        FloatVectorImageType* input = GetParameterImage("in");
+        unsigned long sizeImageX = input->GetLargestPossibleRegion().GetSize()[0],
+          sizeImageY = input->GetLargestPossibleRegion().GetSize()[1];
+        SetParameterInt("spatialr",sqrt(sizeImageX*sizeImageX+sizeImageY*sizeImageY)+1);
+        spatialIn = GetParameterImage("in");
+        }
       }
     else spatialIn = GetParameterImage("inpos");      
 
@@ -251,360 +251,306 @@ private:
     changeLabel1 = ChangeLabelImageFilterType::New();
     changeLabel2 = ChangeLabelImageFilterType::New();
 
-    if((step==0)||(step==1))
-      {
-	//Segmentation by the connected component per tile and label
-	//shifting
-      otbAppLogINFO(<<"Tile shifting ...");
+    //Segmentation by the connected component per tile and label
+    //shifting
+    otbAppLogINFO(<<"Tile shifting ...");
       
-	LabelImageType::SizeType layout; layout[0] = nbTilesX; layout[1] = nbTilesY;
+    LabelImageType::SizeType layout; layout[0] = nbTilesX; layout[1] = nbTilesY;
 
-	tileFusion->SetLayout(layout);
-	unsigned int nbTile=0;
+    tileFusion->SetLayout(layout);
+    unsigned int nbTile=0;
       
-	LabelImageWriterType::Pointer ImageWriter = LabelImageWriterType::New();
+    LabelImageWriterType::Pointer ImageWriter = LabelImageWriterType::New();
 
       
-	for(unsigned int row = 0; row < nbTilesY ; row++)
-	  for(unsigned int column = 0; column < nbTilesX ; column++)
-	    {		
-	      unsigned long startX = column*sizeTilesX, startY = row*sizeTilesY;
-	      unsigned long sizeX = vcl_min(sizeTilesX+1,sizeImageX-startX+1),sizeY = vcl_min(sizeTilesY+1,sizeImageY-startY+1);
+    for(unsigned int row = 0; row < nbTilesY ; row++)
+      for(unsigned int column = 0; column < nbTilesX ; column++)
+        {		
+        unsigned long startX = column*sizeTilesX, startY = row*sizeTilesY;
+        unsigned long sizeX = vcl_min(sizeTilesX+1,sizeImageX-startX+1),sizeY = vcl_min(sizeTilesY+1,sizeImageY-startY+1);
 	    
-	      //Tiles extraction of :
-	      //- the input image (filtering image)
-	      MultiChannelExtractROIFilterType::Pointer extractROIFilter = MultiChannelExtractROIFilterType::New();
-	      extractROIFilter->SetInput(imageIn);
-	      extractROIFilter->SetStartX(startX);
-	      extractROIFilter->SetStartY(startY);
-	      extractROIFilter->SetSizeX(sizeX);
-	      extractROIFilter->SetSizeY(sizeY);
-	      extractROIFilter->Update();
+        //Tiles extraction of :
+        //- the input image (filtering image)
+        MultiChannelExtractROIFilterType::Pointer extractROIFilter = MultiChannelExtractROIFilterType::New();
+        extractROIFilter->SetInput(imageIn);
+        extractROIFilter->SetStartX(startX);
+        extractROIFilter->SetStartY(startY);
+        extractROIFilter->SetSizeX(sizeX);
+        extractROIFilter->SetSizeY(sizeY);
+        extractROIFilter->Update();
 
-	      //- the spatial image (final positions)
-	      MultiChannelExtractROIFilterType::Pointer extractROIFilter2 = MultiChannelExtractROIFilterType::New();
-	      extractROIFilter2->SetInput(spatialIn);
-	      extractROIFilter2->SetStartX(startX);
-	      extractROIFilter2->SetStartY(startY);
-	      extractROIFilter2->SetSizeX(sizeX);
-	      extractROIFilter2->SetSizeY(sizeY);
-	      extractROIFilter2->Update();
+        //- the spatial image (final positions)
+        MultiChannelExtractROIFilterType::Pointer extractROIFilter2 = MultiChannelExtractROIFilterType::New();
+        extractROIFilter2->SetInput(spatialIn);
+        extractROIFilter2->SetStartX(startX);
+        extractROIFilter2->SetStartY(startY);
+        extractROIFilter2->SetSizeX(sizeX);
+        extractROIFilter2->SetSizeY(sizeY);
+        extractROIFilter2->Update();
 	    
-	      //Concatenation of the two input images
-	      ConcatenateType::Pointer concat = ConcatenateType::New();
-	      concat->SetInput1(extractROIFilter->GetOutput());
-	      concat->SetInput2(extractROIFilter2->GetOutput());
-	      concat->Update();
+        //Concatenation of the two input images
+        ConcatenateType::Pointer concat = ConcatenateType::New();
+        concat->SetInput1(extractROIFilter->GetOutput());
+        concat->SetInput2(extractROIFilter2->GetOutput());
+        concat->Update();
 	    
-	      //Expression 1 : radiometric distance < ranger
-	      std::stringstream expr;
-	      expr<<"sqrt((p1b1-p2b1)*(p1b1-p2b1)";
-	      for(unsigned int i=1;i<nbComp;i++)
-		expr<<"+(p1b"<<i+1<<"-p2b"<<i+1<<")*(p1b"<<i+1<<"-p2b"<<i+1<<")";
-	      expr<<")"<<"<"<<ranger<<" and sqrt(";
+        //Expression 1 : radiometric distance < ranger
+        std::stringstream expr;
+        expr<<"sqrt((p1b1-p2b1)*(p1b1-p2b1)";
+        for(unsigned int i=1;i<nbComp;i++)
+          expr<<"+(p1b"<<i+1<<"-p2b"<<i+1<<")*(p1b"<<i+1<<"-p2b"<<i+1<<")";
+        expr<<")"<<"<"<<ranger<<" and sqrt(";
 
-	      //Expression 2 : final positions < spatialr
-	      expr<<"(p1b"<<nbComp+1<<"-p2b"<<nbComp+1<<")*(p1b"<<nbComp+1<<"-p2b"<<nbComp+1<<")+";
-	      expr<<"(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<")*(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<"))"<<"<"<<spatialr;
+        //Expression 2 : final positions < spatialr
+        expr<<"(p1b"<<nbComp+1<<"-p2b"<<nbComp+1<<")*(p1b"<<nbComp+1<<"-p2b"<<nbComp+1<<")+";
+        expr<<"(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<")*(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<"))"<<"<"<<spatialr;
 	    
-	      //Segmentation
-	      CCFilterType::Pointer ccFilter = CCFilterType::New();
-	      ccFilter->SetInput(concat->GetOutput());
-	      ccFilter->GetFunctor().SetExpression(expr.str());
-	      ccFilter->Update();	    
+        //Segmentation
+        CCFilterType::Pointer ccFilter = CCFilterType::New();
+        ccFilter->SetInput(concat->GetOutput());
+        ccFilter->GetFunctor().SetExpression(expr.str());
+        ccFilter->Update();	    
     
-	      std::stringstream ssexpr;
-	      ssexpr<<"label+"<<regionCount;
+        std::stringstream ssexpr;
+        ssexpr<<"label+"<<regionCount;
 	    
-	      //Shifting
-	      BandMathImageFilterType::Pointer labelBandMath = BandMathImageFilterType::New();
-	      labelBandMath->SetNthInput(0,ccFilter->GetOutput(),"label");
-	      labelBandMath->SetExpression(ssexpr.str());
-	      labelBandMath->Update();
+        //Shifting
+        BandMathImageFilterType::Pointer labelBandMath = BandMathImageFilterType::New();
+        labelBandMath->SetNthInput(0,ccFilter->GetOutput(),"label");
+        labelBandMath->SetExpression(ssexpr.str());
+        labelBandMath->Update();
 
-	      //Maximum label calculation for the shifting
-	      StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
-	      stats->SetInput(ccFilter->GetOutput());	
-	      stats->Update();
-	      regionCount+=stats->GetMaximum();
+        //Maximum label calculation for the shifting
+        StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
+        stats->SetInput(ccFilter->GetOutput());	
+        stats->Update();
+        regionCount+=stats->GetMaximum();
 
-              std::stringstream tileOut;
-              tileOut<<tilesname<<"_"<<row<<"_"<<column<<"_SEG.tif";
-
-              std::vector<std::string> joins;
-              if(IsParameterEnabled("tmpdir"))
-                {
-                joins.push_back(GetParameterString("tmpdir"));
-                }
-              joins.push_back(tileOut.str());
-              
-              std::string currentFile =itksys::SystemTools::JoinPath(joins);
-              createdFiles.push_back(currentFile);
-              
-              ImageWriter->SetInput(labelBandMath->GetOutput());
-              ImageWriter->SetFileName(currentFile);
-              ImageWriter->Update();
-
-              LabelImageReaderType::Pointer currentReader = LabelImageReaderType::New();
-              currentReader->SetFileName(currentFile);
-              
-              readers.push_back(currentReader);
-              
-	      tileFusion->SetInput(nbTile++,currentReader->GetOutput());
-	    }
-      
-	// std::stringstream seg1;
-	// seg1<<tilesname<<"_tmp1.tif";
-
-        // std::vector<std::string> joins;
-        // if(IsParameterEnabled("tmpdir"))
-        //   {
-        //   joins.push_back(GetParameterString("tmpdir"));
-        //   }
-        // joins.push_back(seg1.str());
-
-        // std::string currentFile =itksys::SystemTools::JoinPath(joins);
-        
-        // createdFiles.push_back(currentFile);
-            
-	// //Writing of the tiles
-	// ImageWriter->SetInput(tileFusion->GetOutput());
-	// ImageWriter->SetFileName(currentFile);
-	// ImageWriter->Update();
-
-        // readers.clear();
-      }
-
-    if((step==0)||(step==2))
-      {
-	LabelImageType::SizeType layout; layout[0] = nbTilesX; layout[1] = nbTilesY;
-	tileFusion2->SetLayout(layout);
-	unsigned int nbTile=0;
-      
-	LabelImageWriterType::Pointer ImageWriter = LabelImageWriterType::New();
-
-	// std::stringstream seg1;
-	// seg1<<tilesname<<"_tmp1.tif";
-      
-	// LabelImageReaderType::Pointer seg1Reader = LabelImageReaderType::New();
-	// seg1Reader->SetFileName(seg1.str());
-	// seg1Reader->UpdateOutputInformation();
-	unsigned long seg1X = tileFusion->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-	  seg1Y = tileFusion->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
-
-	StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
-	stats->SetInput(tileFusion->GetOutput());	
-	stats->Update();
-	regionCount = stats->GetMaximum();
-
-	std::vector<LabelImagePixelType> LUT; 
-	LUT.clear();
-	LUT.resize(regionCount+1);
-	for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
-	  LUT[curLabel] = curLabel;
-      
-        otbAppLogINFO(<<"LUT creation ...");
-
-	for(unsigned int row = 1; row < nbTilesY ; row++)
-	  {
-	    unsigned long startY = row*(sizeTilesY+1);
-	  
-	    ExtractROIFilterType::Pointer extractROI = ExtractROIFilterType::New();
-	    extractROI->SetInput(tileFusion->GetOutput());
-	    extractROI->SetStartX(0);
-	    extractROI->SetStartY(startY-1);
-	    extractROI->SetSizeX(seg1X);
-	    extractROI->SetSizeY(2);
-	    extractROI->Update();
-
-	    unsigned long e1X = extractROI->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-	      e1Y = extractROI->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
-      
-	    //Equivalence between current tile and the tile of the top
-	    LabelImageType::IndexType pixelIndex1;
-	    LabelImageType::IndexType pixelIndex2;
-	  
-            pixelIndex1[1]=0;
-            pixelIndex2[1]=1;
-
-	    for(pixelIndex1[0]=0;pixelIndex1[0]<static_cast<long>(seg1X);pixelIndex1[0]++){
-	      pixelIndex2[0] = pixelIndex1[0];
-	      LabelImagePixelType curCanLabel = extractROI->GetOutput()->GetPixel(pixelIndex1);
-	      while(LUT[curCanLabel] != curCanLabel) curCanLabel = LUT[curCanLabel];
-	      LabelImagePixelType adjCanLabel = extractROI->GetOutput()->GetPixel(pixelIndex2);
-	      while(LUT[adjCanLabel] != adjCanLabel) adjCanLabel = LUT[adjCanLabel];
-	      if(curCanLabel < adjCanLabel) LUT[adjCanLabel] = curCanLabel;
-	      else{LUT[LUT[curCanLabel]] = adjCanLabel; LUT[curCanLabel] = adjCanLabel;}
-	    }
-	
-	  }
-
-        otbAppLogINFO(<<"LUT processing ...");
-
-	for(unsigned int column = 1; column < nbTilesX ; column++)
-	  {
-	    unsigned long startX = column*(sizeTilesX+1);
-	  
-	    ExtractROIFilterType::Pointer extractROI = ExtractROIFilterType::New();
-	    extractROI->SetInput(tileFusion->GetOutput());
-	    extractROI->SetStartX(startX-1);
-	    extractROI->SetStartY(0);
-	    extractROI->SetSizeX(2);
-	    extractROI->SetSizeY(seg1Y);
-	    extractROI->Update();
-	
-	    //Equivalence between the current tile and the left tile
-	    LabelImageType::IndexType pixelIndex1;
-	    LabelImageType::IndexType pixelIndex2;
-
-	  
-	    pixelIndex1[0] = 0; 
-            pixelIndex2[0] = 1;
-	  
-	    for(pixelIndex1[1]=0;pixelIndex1[1]<static_cast<long>(seg1Y);pixelIndex1[1]++)
-              {
-              pixelIndex2[1] = pixelIndex1[1];
-              LabelImagePixelType curCanLabel = extractROI->GetOutput()->GetPixel(pixelIndex1);
-              while(LUT[curCanLabel] != curCanLabel) curCanLabel = LUT[curCanLabel];
-	      LabelImagePixelType adjCanLabel = extractROI->GetOutput()->GetPixel(pixelIndex2);
-	      while(LUT[adjCanLabel] != adjCanLabel) adjCanLabel = LUT[adjCanLabel];
-	      if(curCanLabel < adjCanLabel) LUT[adjCanLabel] = curCanLabel;
-	      else {LUT[LUT[curCanLabel]] = adjCanLabel; LUT[curCanLabel] = adjCanLabel;}
-	    }
-	  
-	  }
-    
-	for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
-	  {                                                                                                                                  
-	    LabelImagePixelType can = label;
-	    while(LUT[can] != can) can = LUT[can];                                                  
-	    LUT[label] = can;
-	  }
- 
-	for(unsigned int row = 0; row < nbTilesY ; row++)
-	  for(unsigned int column = 0; column < nbTilesX ; column++)
-	    {
-	      unsigned long startX = column*(sizeTilesX+1), startY = row*(sizeTilesY+1);
-	      unsigned long sizeX = vcl_min(sizeTilesX,seg1X-startX),sizeY = vcl_min(sizeTilesY,seg1Y-startY);
-	    
-	      //Tiles extraction (without overlapping)
-	      ExtractROIFilterType::Pointer extractROI = ExtractROIFilterType::New();
-	      extractROI->SetInput(tileFusion->GetOutput());
-	      extractROI->SetStartX(startX);
-	      extractROI->SetStartY(startY);
-	      extractROI->SetSizeX(sizeX);
-	      extractROI->SetSizeY(sizeY);
-	      extractROI->Update();
-
-              std::stringstream tileOut;
-              tileOut<<tilesname<<"_"<<row<<"_"<<column<<"_RELAB.tif";
-
-              std::vector<std::string> joins;
-              if(IsParameterEnabled("tmpdir"))
-                {
-                joins.push_back(GetParameterString("tmpdir"));
-                }
-              joins.push_back(tileOut.str());
-              
-              std::string currentFile =itksys::SystemTools::JoinPath(joins);
-              createdFiles.push_back(currentFile);
-              
-              ImageWriter->SetInput(extractROI->GetOutput());
-              ImageWriter->SetFileName(currentFile);
-              ImageWriter->Update();
-
-              LabelImageReaderType::Pointer currentReader = LabelImageReaderType::New();
-              currentReader->SetFileName(currentFile);
-              
-              readers.push_back(currentReader);
-              
-	      tileFusion2->SetInput(nbTile++,currentReader->GetOutput());
-	    }
-     
-	std::stringstream seg2;
-	seg2<<tilesname<<"_tmp2.tif";
+        std::stringstream tileOut;
+        tileOut<<tilesname<<"_"<<row<<"_"<<column<<"_SEG.tif";
 
         std::vector<std::string> joins;
         if(IsParameterEnabled("tmpdir"))
           {
           joins.push_back(GetParameterString("tmpdir"));
           }
-        joins.push_back(seg2.str());
-
+        joins.push_back(tileOut.str());
+              
         std::string currentFile =itksys::SystemTools::JoinPath(joins);
         createdFiles.push_back(currentFile);
+              
+        ImageWriter->SetInput(labelBandMath->GetOutput());
+        ImageWriter->SetFileName(currentFile);
+        ImageWriter->Update();
 
+        LabelImageReaderType::Pointer currentReader = LabelImageReaderType::New();
+        currentReader->SetFileName(currentFile);
+              
+        readers.push_back(currentReader);
+              
+        tileFusion->SetInput(nbTile++,currentReader->GetOutput());
+        }
 
-	//Tiles relabelling
-	changeLabel1->SetInput(tileFusion2->GetOutput());
-	for(LabelImagePixelType label = 1;label<regionCount+1; ++label)
-	  if(label!=LUT[label]) changeLabel1->SetChange(label,LUT[label]);
-      }
+    tileFusion->GetOutput()->UpdateOutputInformation();
+    tileFusion2->SetLayout(layout);
+    
+    nbTile=0;
+      
+    ImageWriter = LabelImageWriterType::New();
 
-    if((step==0)||(step==3))
+    unsigned long seg1X = tileFusion->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+      seg1Y = tileFusion->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+
+    StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
+    stats->SetInput(tileFusion->GetOutput());	
+    stats->Update();
+    regionCount = stats->GetMaximum();
+
+    std::vector<LabelImagePixelType> LUT; 
+    LUT.clear();
+    LUT.resize(regionCount+1);
+    for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+      LUT[curLabel] = curLabel;
+      
+    otbAppLogINFO(<<"LUT creation ...");
+
+    for(unsigned int row = 1; row < nbTilesY ; row++)
       {
-	LabelImageWriterType::Pointer ImageWriter = LabelImageWriterType::New();
+      unsigned long startY = row*(sizeTilesY+1);
+	  
+      ExtractROIFilterType::Pointer extractROI = ExtractROIFilterType::New();
+      extractROI->SetInput(tileFusion->GetOutput());
+      extractROI->SetStartX(0);
+      extractROI->SetStartY(startY-1);
+      extractROI->SetSizeX(seg1X);
+      extractROI->SetSizeY(2);
+      extractROI->Update();
 
-	 std::stringstream seg2;
-	 seg2<<tilesname<<"_tmp2.tif";
-
-	 LabelImageReaderType::Pointer seg2Reader = LabelImageReaderType::New();
-	 seg2Reader->SetFileName(seg2.str());
-
-	std::vector<LabelImagePixelType> sizePerRegion; 
-	sizePerRegion.clear();                
-	sizePerRegion.resize(regionCount+1);
+      unsigned long e1X = extractROI->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+        e1Y = extractROI->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
       
-	for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
-	  sizePerRegion[curLabel] = 0;
+      //Equivalence between current tile and the tile of the top
+      LabelImageType::IndexType pixelIndex1;
+      LabelImageType::IndexType pixelIndex2;
+	  
+      pixelIndex1[1]=0;
+      pixelIndex2[1]=1;
 
-	std::vector<LabelImagePixelType> newLabel; 
-	newLabel.clear();                
-	newLabel.resize(regionCount+1);
-      
-	for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
-	  newLabel[curLabel] = 0;
-
-        otbAppLogINFO(<<"Small regions pruning ...");
-      
-	for(unsigned int column = 0; column < nbTilesX ; column++)
-	  for(unsigned int row = 0; row < nbTilesY ; row++)
-	    {
-	      unsigned long startX = column*sizeTilesX, startY = row*sizeTilesY;
-	      unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX),sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
-	    
-	      ExtractROIFilterType::Pointer extractROI = ExtractROIFilterType::New();
-	      extractROI->SetInput(changeLabel1->GetOutput());
-	      extractROI->SetStartX(startX);
-	      extractROI->SetStartY(startY);
-	      extractROI->SetSizeX(sizeX);
-	      extractROI->SetSizeY(sizeY);
-	      extractROI->Update();
-	    
-	      //Size per region calculation
-	      LabelImageIterator it( extractROI->GetOutput(), extractROI->GetOutput()->GetLargestPossibleRegion());
-	      for (it = it.Begin(); !it.IsAtEnd(); ++it) sizePerRegion[it.Value()]++;
-            }
-      
-	LabelImagePixelType newLab=1;
-	for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
-	  if(sizePerRegion[curLabel]<minRegionSize) newLabel[curLabel]=0;
-	  else{newLabel[curLabel]=newLab++;}
-
-	//Relabelling
-	changeLabel2->SetInput(changeLabel1->GetOutput());
-	for(LabelImagePixelType label = 1;label<regionCount+1; ++label)
-	  if(label!=newLabel[label]) changeLabel2->SetChange(label,newLabel[label]);
-      
+      for(pixelIndex1[0]=0;pixelIndex1[0]<static_cast<long>(seg1X);pixelIndex1[0]++){
+      pixelIndex2[0] = pixelIndex1[0];
+      LabelImagePixelType curCanLabel = extractROI->GetOutput()->GetPixel(pixelIndex1);
+      while(LUT[curCanLabel] != curCanLabel) curCanLabel = LUT[curCanLabel];
+      LabelImagePixelType adjCanLabel = extractROI->GetOutput()->GetPixel(pixelIndex2);
+      while(LUT[adjCanLabel] != adjCanLabel) adjCanLabel = LUT[adjCanLabel];
+      if(curCanLabel < adjCanLabel) LUT[adjCanLabel] = curCanLabel;
+      else{LUT[LUT[curCanLabel]] = adjCanLabel; LUT[curCanLabel] = adjCanLabel;}
+      }
+	
       }
 
+    otbAppLogINFO(<<"LUT processing ...");
 
+    for(unsigned int column = 1; column < nbTilesX ; column++)
+      {
+      unsigned long startX = column*(sizeTilesX+1);
+	  
+      ExtractROIFilterType::Pointer extractROI = ExtractROIFilterType::New();
+      extractROI->SetInput(tileFusion->GetOutput());
+      extractROI->SetStartX(startX-1);
+      extractROI->SetStartY(0);
+      extractROI->SetSizeX(2);
+      extractROI->SetSizeY(seg1Y);
+      extractROI->Update();
+	
+      //Equivalence between the current tile and the left tile
+      LabelImageType::IndexType pixelIndex1;
+      LabelImageType::IndexType pixelIndex2;
+
+	  
+      pixelIndex1[0] = 0; 
+      pixelIndex2[0] = 1;
+	  
+      for(pixelIndex1[1]=0;pixelIndex1[1]<static_cast<long>(seg1Y);pixelIndex1[1]++)
+        {
+        pixelIndex2[1] = pixelIndex1[1];
+        LabelImagePixelType curCanLabel = extractROI->GetOutput()->GetPixel(pixelIndex1);
+        while(LUT[curCanLabel] != curCanLabel) curCanLabel = LUT[curCanLabel];
+        LabelImagePixelType adjCanLabel = extractROI->GetOutput()->GetPixel(pixelIndex2);
+        while(LUT[adjCanLabel] != adjCanLabel) adjCanLabel = LUT[adjCanLabel];
+        if(curCanLabel < adjCanLabel) LUT[adjCanLabel] = curCanLabel;
+        else {LUT[LUT[curCanLabel]] = adjCanLabel; LUT[curCanLabel] = adjCanLabel;}
+        }
+	  
+      }
+    
+    for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
+      {                                                                                                                                  
+      LabelImagePixelType can = label;
+      while(LUT[can] != can) can = LUT[can];                                                  
+      LUT[label] = can;
+      }
+ 
+    for(unsigned int row = 0; row < nbTilesY ; row++)
+      for(unsigned int column = 0; column < nbTilesX ; column++)
+        {
+        unsigned long startX = column*(sizeTilesX+1), startY = row*(sizeTilesY+1);
+        unsigned long sizeX = vcl_min(sizeTilesX,seg1X-startX),sizeY = vcl_min(sizeTilesY,seg1Y-startY);
+	
+        //Tiles extraction (without overlapping)
+        ExtractROIFilterType::Pointer extractROI = ExtractROIFilterType::New();
+        extractROI->SetInput(tileFusion->GetOutput());
+        extractROI->SetStartX(startX);
+        extractROI->SetStartY(startY);
+        extractROI->SetSizeX(sizeX);
+        extractROI->SetSizeY(sizeY);
+        extractROI->Update();
+
+        std::stringstream tileOut;
+        tileOut<<tilesname<<"_"<<row<<"_"<<column<<"_RELAB.tif";
+
+        std::vector<std::string> joins;
+        if(IsParameterEnabled("tmpdir"))
+          {
+          joins.push_back(GetParameterString("tmpdir"));
+          }
+        joins.push_back(tileOut.str());
+              
+        std::string currentFile =itksys::SystemTools::JoinPath(joins);
+        createdFiles.push_back(currentFile);
+              
+        ImageWriter->SetInput(extractROI->GetOutput());
+        ImageWriter->SetFileName(currentFile);
+        ImageWriter->Update();
+
+        LabelImageReaderType::Pointer currentReader = LabelImageReaderType::New();
+        currentReader->SetFileName(currentFile);
+
+        readers.push_back(currentReader);
+              
+        tileFusion2->SetInput(nbTile++,currentReader->GetOutput());
+        }
+
+    tileFusion2->GetOutput()->UpdateOutputInformation();
+
+    //Tiles relabelling
+    changeLabel1->SetInput(tileFusion2->GetOutput());
+    for(LabelImagePixelType label = 1;label<regionCount+1; ++label)
+      if(label!=LUT[label]) changeLabel1->SetChange(label,LUT[label]);
+    
+    
+    std::vector<LabelImagePixelType> sizePerRegion; 
+    sizePerRegion.clear();                
+    sizePerRegion.resize(regionCount+1);
+    
+    for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+      sizePerRegion[curLabel] = 0;
+    
+    std::vector<LabelImagePixelType> newLabel; 
+    newLabel.clear();                
+    newLabel.resize(regionCount+1);
+    
+    for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+      newLabel[curLabel] = 0;
+    
+    otbAppLogINFO(<<"Small regions pruning ...");
+    
+    for(unsigned int column = 0; column < nbTilesX ; column++)
+      for(unsigned int row = 0; row < nbTilesY ; row++)
+        {
+        unsigned long startX = column*sizeTilesX, startY = row*sizeTilesY;
+        unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX),sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
+	
+        ExtractROIFilterType::Pointer extractROI = ExtractROIFilterType::New();
+        extractROI->SetInput(changeLabel1->GetOutput());
+        extractROI->SetStartX(startX);
+        extractROI->SetStartY(startY);
+        extractROI->SetSizeX(sizeX);
+        extractROI->SetSizeY(sizeY);
+        extractROI->Update();
+	
+        //Size per region calculation
+        LabelImageIterator it( extractROI->GetOutput(), extractROI->GetOutput()->GetLargestPossibleRegion());
+        for (it = it.Begin(); !it.IsAtEnd(); ++it) sizePerRegion[it.Value()]++;
+        }
+  
+    LabelImagePixelType newLab=1;
+    for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+      if(sizePerRegion[curLabel]<minRegionSize) newLabel[curLabel]=0;
+      else{newLabel[curLabel]=newLab++;}
+    
+    //Relabelling
+    changeLabel2->SetInput(changeLabel1->GetOutput());
+    for(LabelImagePixelType label = 1;label<regionCount+1; ++label)
+      if(label!=newLabel[label]) changeLabel2->SetChange(label,newLabel[label]);
+    
+    
+    
     SetParameterOutputImage("out", changeLabel2->GetOutput());
-        
+    
     clock_t toc = clock();
-  
+    
     otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
-  
+    
     // Cleanup
     if(IsParameterEnabled("cleanup"))
       {
