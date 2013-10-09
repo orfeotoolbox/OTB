@@ -196,7 +196,8 @@ private:
     unsigned int nbTilesX       = GetParameterInt("nbtilesx");
     unsigned int nbTilesY       = GetParameterInt("nbtilesy");
 
-    unsigned int step = 0;
+    std::vector<LabelImageReaderType::Pointer> localReaders;
+    readers.clear();
 
     // Ensure that temporary directory exists if activated:
     if(IsParameterEnabled("tmpdir"))
@@ -212,7 +213,8 @@ private:
 
     ImageType::Pointer spatialIn;
 
-    std::vector<std::string> createdFiles;
+    std::vector<std::string> createdFiles1;
+    std::vector<std::string> createdFiles2;
         
     // TODO: Check this
     if(!HasValue("inpos"))
@@ -239,9 +241,6 @@ private:
     unsigned long sizeImageX = imageIn->GetLargestPossibleRegion().GetSize()[0],
       sizeImageY = imageIn->GetLargestPossibleRegion().GetSize()[1];
     unsigned int nbComp = imageIn->GetNumberOfComponentsPerPixel();
-
-    long nbStars = 50;
-
 
     unsigned long sizeTilesX = (sizeImageX+nbTilesX-1)/nbTilesX, sizeTilesY = (sizeImageY+nbTilesY-1)/nbTilesY;  
     unsigned long regionCount = 0;
@@ -337,7 +336,7 @@ private:
         joins.push_back(tileOut.str());
               
         std::string currentFile =itksys::SystemTools::JoinPath(joins);
-        createdFiles.push_back(currentFile);
+        createdFiles1.push_back(currentFile);
               
         ImageWriter->SetInput(labelBandMath->GetOutput());
         ImageWriter->SetFileName(currentFile);
@@ -346,7 +345,7 @@ private:
         LabelImageReaderType::Pointer currentReader = LabelImageReaderType::New();
         currentReader->SetFileName(currentFile);
               
-        readers.push_back(currentReader);
+        localReaders.push_back(currentReader);
               
         tileFusion->SetInput(nbTile++,currentReader->GetOutput());
         }
@@ -373,7 +372,8 @@ private:
       LUT[curLabel] = curLabel;
       
     otbAppLogINFO(<<"LUT creation ...");
-
+    // Ok for memory (only tile borders are loaded), but problem with
+    // number of open files)
     for(unsigned int row = 1; row < nbTilesY ; row++)
       {
       unsigned long startY = row*(sizeTilesY+1);
@@ -450,6 +450,8 @@ private:
       LUT[label] = can;
       }
  
+
+    // Cette partie ne sert à rien
     for(unsigned int row = 0; row < nbTilesY ; row++)
       for(unsigned int column = 0; column < nbTilesX ; column++)
         {
@@ -476,7 +478,7 @@ private:
         joins.push_back(tileOut.str());
               
         std::string currentFile =itksys::SystemTools::JoinPath(joins);
-        createdFiles.push_back(currentFile);
+        createdFiles2.push_back(currentFile);
               
         ImageWriter->SetInput(extractROI->GetOutput());
         ImageWriter->SetFileName(currentFile);
@@ -489,6 +491,30 @@ private:
               
         tileFusion2->SetInput(nbTile++,currentReader->GetOutput());
         }
+
+    localReaders.clear();
+
+    // Cleanup
+    if(IsParameterEnabled("cleanup"))
+      {
+      otbAppLogINFO(<<"Cleaning temporary files");
+      for(std::vector<string>::const_iterator it = createdFiles1.begin();
+          it!=createdFiles1.end();++it)
+        {
+        // Try to remove the geom file if existing
+        std::string geomfile = it->substr(0,it->size() - itksys::SystemTools::GetFilenameExtension(it->c_str()).size()).append(".geom");
+
+        if(itksys::SystemTools::FileExists(geomfile.c_str()))
+          {
+          itksys::SystemTools::RemoveFile(geomfile.c_str());
+          }
+        if(itksys::SystemTools::FileExists(it->c_str()))
+          {
+          itksys::SystemTools::RemoveFile(it->c_str());
+          }
+        }
+      }
+
 
     tileFusion2->GetOutput()->UpdateOutputInformation();
 
@@ -521,6 +547,7 @@ private:
         unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX),sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
 	
         ExtractROIFilterType::Pointer extractROI = ExtractROIFilterType::New();
+        // TODO check me
         extractROI->SetInput(changeLabel1->GetOutput());
         extractROI->SetStartX(startX);
         extractROI->SetStartY(startY);
@@ -542,11 +569,17 @@ private:
     changeLabel2->SetInput(changeLabel1->GetOutput());
     for(LabelImagePixelType label = 1;label<regionCount+1; ++label)
       if(label!=newLabel[label]) changeLabel2->SetChange(label,newLabel[label]);
-    
-    
-    
+
+    for(std::vector<LabelImageReaderType::Pointer>::iterator readIt = readers.begin();
+        readIt!=readers.end();++readIt)
+      {
+      std::cout<<(*readIt)->GetOutput()->GetBufferedRegion()<<std::endl;
+      }
+
+    readers.clear();
+  
     SetParameterOutputImage("out", changeLabel2->GetOutput());
-    
+  
     clock_t toc = clock();
     
     otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
@@ -555,8 +588,8 @@ private:
     if(IsParameterEnabled("cleanup"))
       {
       otbAppLogINFO(<<"Cleaning temporary files");
-      for(std::vector<string>::const_iterator it = createdFiles.begin();
-          it!=createdFiles.end();++it)
+      for(std::vector<string>::const_iterator it = createdFiles2.begin();
+          it!=createdFiles2.end();++it)
         {
         // Try to remove the geom file if existing
         std::string geomfile = it->substr(0,it->size() - itksys::SystemTools::GetFilenameExtension(it->c_str()).size()).append(".geom");
