@@ -106,6 +106,13 @@ public:
   void SendLogINFO( const std::string & mes );
   /** Logger debug message sender */
   void SendLogDEBUG( const std::string & mes );
+  
+  /** Used by inxml when forcing xml parse flag to update widget data via UpdateGui */
+  void UpdateAllWidgets()
+  {
+    GetApplication()->ForceInXMLParseFlag();
+    emit UpdateGui();
+  }
 
 signals:
   void SetApplicationReady(bool);

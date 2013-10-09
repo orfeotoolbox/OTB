@@ -25,22 +25,18 @@ namespace Wrapper
 QtWidgetParameterBase::QtWidgetParameterBase(Parameter * param, QtWidgetModel* m)
   : m_Model(m), m_Param(param)
 {
-  SetUseXMLValue(true);
+
 }
 
 QtWidgetParameterBase::~QtWidgetParameterBase()
 {
 }
 
-void QtWidgetParameterBase::SetUseXMLValue(bool use)
-{
-  m_Param->SetUseXMLValue(use);
-}
 
 void QtWidgetParameterBase::CreateWidget()
 {
   this->DoCreateWidget();
-  
+
   // connect the update signal to this widget
   connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 }
