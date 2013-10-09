@@ -43,8 +43,8 @@ add_test( NAME pyTvBandMathOutXML
 
 add_test( NAME pyTvBandMathInXML
           COMMAND ${TEST_DRIVER} Execute
-                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/pyTvBandMathInXML.py
-                  ${INPUTDATA}/pyTvBandMathOutXML.xml
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonInXMLTest.py
+                  ${INPUTDATA}/pyTvBandMathInXML.xml
                   ${TEMP}/pyTvBandMathInXML.tif
                   )
 
