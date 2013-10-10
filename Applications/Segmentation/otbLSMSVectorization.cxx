@@ -345,7 +345,6 @@ private:
       //Next geometry
       firstFeature=nextFeature;
       }
-    std::cout<<std::endl;
   
     layer.ogr().CommitTransaction();
   
