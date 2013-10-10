@@ -19,8 +19,8 @@ OTB_CREATE_APPLICATION(NAME           LSMSSegmentation
                        SOURCES        otbLSMSSegmentation.cxx
                        LINK_LIBRARIES OTBBasicFilters;OTBOBIA;OTBOGRAdapters)
 
-OTB_CREATE_APPLICATION(NAME           LSMSMerging
-                       SOURCES        otbLSMSMerging.cxx
+OTB_CREATE_APPLICATION(NAME           LSMSSmallRegionsMerging
+                       SOURCES        otbLSMSSmallRegionsMerging.cxx
                        LINK_LIBRARIES OTBBasicFilters;OTBOBIA;OTBOGRAdapters)
 
 OTB_CREATE_APPLICATION(NAME           LSMSVectorization

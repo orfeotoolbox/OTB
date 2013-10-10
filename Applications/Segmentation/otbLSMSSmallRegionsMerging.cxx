@@ -43,10 +43,10 @@ namespace otb
 {
 namespace Wrapper
 {
-class LSMSMerging : public Application
+class LSMSSmallRegionsMerging : public Application
 {
 public:
-  typedef LSMSMerging Self;
+  typedef LSMSSmallRegionsMerging Self;
   typedef Application Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -80,7 +80,7 @@ private:
 
   void DoInit()
   {
-    SetName("LSMSSmallRegionMerging");
+    SetName("LSMSSmallRegionsMerging");
     SetDescription("Third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow.");
 
     SetDocName("Exact Large-Scale Mean-Shift segmentation, step 3 (optional)");
@@ -427,6 +427,6 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::LSMSMerging)
+OTB_APPLICATION_EXPORT(otb::Wrapper::LSMSSmallRegionsMerging)
 
 
