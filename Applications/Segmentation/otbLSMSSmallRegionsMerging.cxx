@@ -104,27 +104,24 @@ private:
     SetDefaultParameterInt("minsize", 50);
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
-    
-    AddParameter(ParameterType_Int, "nbtilesx", "Number of Tiles (X-axis)");
-    SetParameterDescription("nbtilesx", "Number of Tiles along the X-axis.");
-    SetDefaultParameterInt("nbtilesx", 10);
-    SetMinimumParameterIntValue("nbtilesx", 1);
-    MandatoryOff("nbtilesx");
 
-    AddParameter(ParameterType_Int, "nbtilesy", "Number of Tiles (Y-axis)");
-    SetParameterDescription("nbtilesy", "Number of Tiles along the Y-axis.");
-    SetDefaultParameterInt("nbtilesy", 10);
-    SetMinimumParameterIntValue("nbtilesy", 1);
-    MandatoryOff("nbtilesy");
+    AddParameter(ParameterType_Int, "tilesizex", "Size of tiles in pixel (X-axis)");
+    SetParameterDescription("tilesizex", "Size of tiles along the X-axis.");
+    SetDefaultParameterInt("tilesizex", 500);
+    SetMinimumParameterIntValue("tilesizex", 1);
 
+    AddParameter(ParameterType_Int, "tilesizey", "Size of tiles in pixel (Y-axis)");
+    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis.");
+    SetDefaultParameterInt("tilesizey", 500);
+    SetMinimumParameterIntValue("tilesizey", 1);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in","smooth.tif");
     SetDocExampleParameterValue("inseg","segmentation.tif");
     SetDocExampleParameterValue("out","merged.tif");
     SetDocExampleParameterValue("minsize","20");
-    SetDocExampleParameterValue("nbtilesx","4");
-    SetDocExampleParameterValue("nbtilesy","4");
+    SetDocExampleParameterValue("tilesizex","256");
+    SetDocExampleParameterValue("tilesizey","256");
 
   }
 
@@ -136,11 +133,10 @@ private:
   {
     clock_t tic = clock();
   
-    unsigned int minSize   = GetParameterInt("minsize");
+    unsigned int minSize     = GetParameterInt("minsize");
     
-    unsigned int nbTilesX       = GetParameterInt("nbtilesx");
-    unsigned int nbTilesY       = GetParameterInt("nbtilesy");
-
+    unsigned long sizeTilesX = GetParameterInt("tilesizex");
+    unsigned long sizeTilesY = GetParameterInt("tilesizey");
 
     //Acquisition of the input image dimensions
     ImageType::Pointer imageIn = GetParameterImage("in");
@@ -166,12 +162,14 @@ private:
     defaultValue.Fill(0);
 
     std::vector<ImageType::PixelType>sum(regionCount+1,defaultValue);
-   
+
+    unsigned int nbTilesX = sizeImageX/sizeTilesX + (sizeImageX%sizeTilesX > 0 ? 1 : 0);
+    unsigned int nbTilesY = sizeImageY/sizeTilesY + (sizeImageY%sizeTilesY > 0 ? 1 : 0);
+    
+    otbAppLogINFO(<<"Number of tiles: "<<nbTilesX<<" x "<<nbTilesY);
+
     //Sums calculation per label
     otbAppLogINFO(<<"Sums calculation ...");
-
-    unsigned long sizeTilesX = (sizeImageX+nbTilesX-1)/nbTilesX;
-    unsigned long sizeTilesY = (sizeImageY+nbTilesY-1)/nbTilesY;  
 
     for(unsigned int row = 0; row < nbTilesY ; row++)
       for(unsigned int column = 0; column < nbTilesX ; column++)

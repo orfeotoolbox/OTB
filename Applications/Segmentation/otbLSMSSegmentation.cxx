@@ -221,17 +221,15 @@ private:
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
     
-    AddParameter(ParameterType_Int, "nbtilesx", "Number of Tiles (X-axis)");
-    SetParameterDescription("nbtilesx", "Number of Tiles along the X-axis.");
-    SetDefaultParameterInt("nbtilesx", 10);
-    SetMinimumParameterIntValue("nbtilesx", 1);
-    MandatoryOff("nbtilesx");
+    AddParameter(ParameterType_Int, "tilesizex", "Size of tiles in pixel (X-axis)");
+    SetParameterDescription("tilesizex", "Size of tiles along the X-axis.");
+    SetDefaultParameterInt("tilesizex", 500);
+    SetMinimumParameterIntValue("tilesizex", 1);
 
-    AddParameter(ParameterType_Int, "nbtilesy", "Number of Tiles (Y-axis)");
-    SetParameterDescription("nbtilesy", "Number of Tiles along the Y-axis.");
-    SetDefaultParameterInt("nbtilesy", 10);
-    SetMinimumParameterIntValue("nbtilesy", 1);
-    MandatoryOff("nbtilesy");
+    AddParameter(ParameterType_Int, "tilesizey", "Size of tiles in pixel (Y-axis)");
+    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis.");
+    SetDefaultParameterInt("tilesizey", 500);
+    SetMinimumParameterIntValue("tilesizey", 1);
 
     AddParameter(ParameterType_Directory,"tmpdir","Directory where to write temporary files");
     SetParameterDescription("tmpdir","This applications need to write some temporary files for each tile. This parameters allows to choose the path where to write those files. If disabled, the current path will be used.");
@@ -250,8 +248,8 @@ private:
     SetDocExampleParameterValue("ranger","15");
     SetDocExampleParameterValue("spatialr","5");
     SetDocExampleParameterValue("minsize","0");
-    SetDocExampleParameterValue("nbtilesx","4");
-    SetDocExampleParameterValue("nbtilesy","4");
+    SetDocExampleParameterValue("tilesizex","256");
+    SetDocExampleParameterValue("tilesizey","256");
     
   }
 
@@ -265,13 +263,13 @@ private:
 
     clock_t tic = clock();
   
-    const float ranger        = GetParameterFloat("ranger");
-    const float spatialr      = GetParameterFloat("spatialr");
+    const float ranger         = GetParameterFloat("ranger");
+    const float spatialr       = GetParameterFloat("spatialr");
     
-    unsigned int minRegionSize   = GetParameterInt("minsize");
+    unsigned int minRegionSize = GetParameterInt("minsize");
     
-    unsigned int nbTilesX       = GetParameterInt("nbtilesx");
-    unsigned int nbTilesY       = GetParameterInt("nbtilesy");
+    unsigned long sizeTilesX   = GetParameterInt("tilesizex");
+    unsigned long sizeTilesY   = GetParameterInt("tilesizey");
 
 
     // Ensure that temporary directory exists if activated:
@@ -305,7 +303,11 @@ private:
     unsigned long sizeImageY = imageIn->GetLargestPossibleRegion().GetSize()[1];
     unsigned int nbComp      = imageIn->GetNumberOfComponentsPerPixel();
 
-    unsigned long sizeTilesX = (sizeImageX+nbTilesX-1)/nbTilesX, sizeTilesY = (sizeImageY+nbTilesY-1)/nbTilesY;  
+    unsigned int nbTilesX = sizeImageX/sizeTilesX + (sizeImageX%sizeTilesX > 0 ? 1 : 0);
+    unsigned int nbTilesY = sizeImageY/sizeTilesY + (sizeImageY%sizeTilesY > 0 ? 1 : 0);
+
+    otbAppLogINFO(<<"Number of tiles: "<<nbTilesX<<" x "<<nbTilesY);
+
     unsigned long regionCount = 0;
   
     //Segmentation by the connected component per tile and label

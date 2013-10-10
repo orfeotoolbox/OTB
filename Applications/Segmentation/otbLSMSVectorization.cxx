@@ -91,24 +91,22 @@ private:
     AddParameter(ParameterType_OutputFilename, "out", "Output GIS vector file");
     SetParameterDescription( "out", "The output GIS vector fie, representing the vectorized version of the segmented image where the features of the polygones are the radiometric means and variances." );
 
-    AddParameter(ParameterType_Int, "nbtilesx", "Number of Tiles (X-axis)");
-    SetParameterDescription("nbtilesx", "Number of Tiles along the X-axis.");
-    SetDefaultParameterInt("nbtilesx", 10);
-    SetMinimumParameterIntValue("nbtilesx", 1);
-    MandatoryOff("nbtilesx");
+    AddParameter(ParameterType_Int, "tilesizex", "Size of tiles in pixel (X-axis)");
+    SetParameterDescription("tilesizex", "Size of tiles along the X-axis.");
+    SetDefaultParameterInt("tilesizex", 500);
+    SetMinimumParameterIntValue("tilesizex", 1);
 
-    AddParameter(ParameterType_Int, "nbtilesy", "Number of Tiles (Y-axis)");
-    SetParameterDescription("nbtilesy", "Number of Tiles along the Y-axis.");
-    SetDefaultParameterInt("nbtilesy", 10);
-    SetMinimumParameterIntValue("nbtilesy", 1);
-    MandatoryOff("nbtilesy");
+    AddParameter(ParameterType_Int, "tilesizey", "Size of tiles in pixel (Y-axis)");
+    SetParameterDescription("tilesizey", "Size of tiles along the Y-axis.");
+    SetDefaultParameterInt("tilesizey", 500);
+    SetMinimumParameterIntValue("tilesizey", 1);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in","avions.tif");
     SetDocExampleParameterValue("inseg","merged.tif");
     SetDocExampleParameterValue("out","vecto.shp");
-    SetDocExampleParameterValue("nbtilesx","4");
-    SetDocExampleParameterValue("nbtilesy","4");
+    SetDocExampleParameterValue("tilesizex","256");
+    SetDocExampleParameterValue("tilesizey","256");
   }
 
   void DoUpdateParameters()
@@ -119,16 +117,22 @@ private:
   {
     clock_t tic = clock();
 
-    const char * shapefile = GetParameterString("out").c_str();
+    const char * shapefile   = GetParameterString("out").c_str();
     
-    unsigned int nbTilesX       = GetParameterInt("nbtilesx");
-    unsigned int nbTilesY       = GetParameterInt("nbtilesy");
+    unsigned long sizeTilesX = GetParameterInt("tilesizex");
+    unsigned long sizeTilesY = GetParameterInt("tilesizey");
+
    
     LabelImageType::Pointer labelIn = GetParameterUInt32Image("inseg");
     labelIn->UpdateOutputInformation();
 
     unsigned long sizeImageX = labelIn->GetLargestPossibleRegion().GetSize()[0];
     unsigned long sizeImageY = labelIn->GetLargestPossibleRegion().GetSize()[1];
+
+    unsigned int nbTilesX = sizeImageX/sizeTilesX + (sizeImageX%sizeTilesX > 0 ? 1 : 0);
+    unsigned int nbTilesY = sizeImageY/sizeTilesY + (sizeImageY%sizeTilesY > 0 ? 1 : 0);
+    
+    otbAppLogINFO(<<"Number of tiles: "<<nbTilesX<<" x "<<nbTilesY);
 
     StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
     stats->SetInput(labelIn);	
@@ -186,10 +190,6 @@ private:
     OGRFieldDefn field(fieldoss.str().c_str(), OFTReal);
     layer.CreateField(field, true);
     }
-
-    unsigned long sizeTilesX = (sizeImageX+nbTilesX-1)/nbTilesX;
-    unsigned long sizeTilesY = (sizeImageY+nbTilesY-1)/nbTilesY;  
-
 
     //Vectorization per tile
     otbAppLogINFO(<<"Vectorization ...");
@@ -273,7 +273,7 @@ private:
     otb::ogr::Feature firstFeature = layerTmp.ogr().GetNextFeature();
 
     //Geometry fusion
-    otbAppLogINFO("Fusion of polygons accross tiles ...");
+    otbAppLogINFO("Merging polygons accross tiles ...");
     while(firstFeature.addr())
       {
       LabelImagePixelType curLabel = firstFeature.ogr().GetFieldAsInteger("label");
