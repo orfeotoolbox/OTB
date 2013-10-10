@@ -15,8 +15,6 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
@@ -27,13 +25,10 @@
 #include "itkStatisticsImageFilter.h"
 #include "itkChangeLabelImageFilter.h"
 #include "itkImageRegionConstIterator.h"
-#include "otbTileImageFilter.h"
-#include "itkLabelToRGBImageFilter.h"
 #include "itkScalarConnectedComponentImageFilter.h"
 #include "otbConcatenateVectorImageFilter.h"
 
 #include "otbMultiToMonoChannelExtractROI.h"
-#include "otbObjectList.h"
 #include "otbImportGeoInformationImageFilter.h"
 
 #include <time.h>
@@ -61,40 +56,26 @@ public:
 
   itkTypeMacro(MeanShiftSegmentation, otb::Application);
 
-
-  typedef float ImagePixelType;
-  typedef otb::VectorImage<ImagePixelType, 2> ImageType;
+  typedef FloatVectorImageType              ImageType;
+  typedef ImageType::InternalPixelType      ImagePixelType;
+  typedef UInt32ImageType                   LabelImageType;
+  typedef LabelImageType::InternalPixelType LabelPixelType;
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
   typedef otb::ImageFileWriter<ImageType> ImageWriterType;
-  
-  typedef unsigned int LabelImagePixelType;
-  typedef otb::Image<LabelImagePixelType, 2> LabelImageType;
   typedef otb::ImageFileReader<LabelImageType> LabelImageReaderType;
   typedef otb::ImageFileWriter<LabelImageType> LabelImageWriterType;  
-  
   typedef otb::MultiChannelExtractROI <ImagePixelType,ImagePixelType > MultiChannelExtractROIFilterType;
-  typedef otb::ExtractROI<LabelImagePixelType,LabelImagePixelType> ExtractROIFilterType;
-  
+  typedef otb::ExtractROI<LabelImagePixelType,LabelImagePixelType> ExtractROIFilterType; 
   typedef otb::MultiToMonoChannelExtractROI<ImagePixelType,LabelImagePixelType> MultiToMonoChannelExtractROIFilterType;
-  typedef otb::ObjectList<MultiToMonoChannelExtractROIFilterType> MultiToMonoChannelExtractROIFilterListType;
-  
   typedef otb::Functor::ConnectedComponentMuParserFunctor<ImageType::PixelType>  CCFunctorType;
   typedef itk::ConnectedComponentFunctorImageFilter<ImageType, LabelImageType, CCFunctorType, otb::Image<unsigned int> > CCFilterType;
-  
   typedef itk::ScalarConnectedComponentImageFilter<LabelImageType, LabelImageType> ScalarCCFilterType;
-  
   typedef otb::BandMathImageFilter<LabelImageType> BandMathImageFilterType;
   typedef itk::StatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
   typedef itk::ChangeLabelImageFilter<LabelImageType,LabelImageType> ChangeLabelImageFilterType;
-  typedef otb::TileImageFilter<LabelImageType> TileImageFilterType;
   typedef otb::ImportGeoInformationImageFilter<LabelImageType,ImageType> ImportGeoInformationImageFilterType;
   typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
-  
-  typedef itk::RGBPixel<unsigned char>    RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2>  RGBImageType;
-  typedef itk::LabelToRGBImageFilter<LabelImageType, RGBImageType> LabelToRGBFilterType;
-  typedef otb::ImageFileWriter< RGBImageType > RGBWriterType;
-  
+    
   typedef otb::ConcatenateVectorImageFilter <ImageType,ImageType,ImageType> ConcatenateType;  
 
 private:      
@@ -160,7 +141,7 @@ private:
     std::string outfname = GetParameterString("out");
     std::string vrtfname = outfname.substr(0,outfname.size() - itksys::SystemTools::GetFilenameExtension(outfname.c_str()).size()).append(".vrt");
 
-    std::cout<<"Creating vrt: "<<vrtfname<<std::endl;
+    otbAppLogINFO(<<"Creating vrt: "<<vrtfname);
 
     std::ofstream ofs(vrtfname.c_str());
 
@@ -514,7 +495,7 @@ private:
         }
       LUT[label] = can;
       }
-    otbAppLogINFO(<<"LUT size: "<<LUT.size());
+    otbAppLogINFO(<<"LUT size: "<<LUT.size()<<" segments");
  
     // These variables will be used to estimate the size of each
     // region on the flow
@@ -578,6 +559,8 @@ private:
     // Clear lut, we do not need it anymore
     LUT.clear();
 
+    unsigned int smallCount = 0;
+
       // Create the LUT to filter small regions and assign min labels
       otbAppLogINFO(<<"Small regions pruning ...");
       LabelImagePixelType newLab=1;
@@ -587,6 +570,7 @@ private:
         if(sizePerRegion[curLabel]<minRegionSize) 
           {
           newLabels[curLabel]=0;
+          ++smallCount;
           }
         else
           {
@@ -594,8 +578,8 @@ private:
           newLab+=1;
           }
         }
-      otbAppLogINFO(<<"LUT size: "<<newLabels.size());
 
+      otbAppLogINFO(<<smallCount<<" small regions will be removed");
 
       // Clear sizePerRegion, we do not need it anymore
       sizePerRegion.clear();
