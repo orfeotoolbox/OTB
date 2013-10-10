@@ -149,6 +149,9 @@ void Application::UpdateParameters()
   this->DoUpdateParameters();
 }
 
+void Application::AfterExecuteAndWriteOutputs()
+{}
+
 int Application::Execute()
 {
 
@@ -264,6 +267,9 @@ int Application::ExecuteAndWriteOutput()
           }
         }
     }
+
+  this->AfterExecuteAndWriteOutputs();
+
   return status;
 }
 
