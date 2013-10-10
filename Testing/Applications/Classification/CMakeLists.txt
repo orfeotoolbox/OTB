@@ -108,6 +108,9 @@ IF(OTB_USE_OPENCV)
                          NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
                          APP      TrainImagesClassifier
                          OPTIONS  -inxml ${TEMP}/cl${classifier}_OutXML1.xml
+                                  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+                                  -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
+                                  -io.imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
                                   -io.out ${TEMP}/OutXML2_${OUTMODELFILE}
 
                          VALID    ${ascii_comparison}
@@ -115,7 +118,7 @@ IF(OTB_USE_OPENCV)
                                   ${TEMP}/OutXML2_${OUTMODELFILE}
                          )
 
-                       SET_TESTS_PROPERTIES(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1)
+                       #SET_TESTS_PROPERTIES(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1_OutXML1)
 
     OTB_TEST_APPLICATION(
                          NAME     apTvClMethod${classifier}ImageClassifierQB1
@@ -183,7 +186,11 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
   
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                       APP  TrainImagesClassifier
-                      OPTIONS -inxml ${TEMP}/clsvmModelQB1_OutXML.xml
+                      OPTIONS 
+                              -inxml ${TEMP}/clsvmModelQB1_OutXML.xml
+                              -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
+                              -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
+                              -io.imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
                               -sample.mv 100
                               -sample.mt 100
                               -sample.vtr 0.5
@@ -194,7 +201,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                               ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
                               ${TEMP}/clsvmModelQB1_allOpt_InXML.svm)
 
-SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt_InXML PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1_OutXML)
+#SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt_InXML PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1_OutXML)
 
 OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB1
                       APP  ImageClassifier
