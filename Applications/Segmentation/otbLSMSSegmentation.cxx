@@ -175,7 +175,7 @@ private:
     SetDescription("First step of the exact large-scale Mean-Shift segmentation workflow.");
 
     SetDocName("Exact large-scale Mean-Shift segmentation, step 1");
-    SetDocLongDescription("This application performs the first step of the exact large-scale Mean-Shift segmentation workflow. Filtered range image and spatial image should be created with the MeanShiftSmoothing application, with modesearch parameter disabled. If spatial image is not set, the application will only process the range image and spatial radius parameter will not be taken into account. This application will produce a labeled image where neighbor pixels whose range distance is bellow range radius (and optionnaly spatial distance bellow spatial radius) will be grouped together into the same cluster. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results.");
+    SetDocLongDescription("This application performs the first step of the exact large-scale Mean-Shift segmentation workflow. Filtered range image and spatial image should be created with the MeanShiftSmoothing application, with modesearch parameter disabled. If spatial image is not set, the application will only process the range image and spatial radius parameter will not be taken into account. This application will produce a labeled image where neighbor pixels whose range distance is bellow range radius (and optionnaly spatial distance bellow spatial radius) will be grouped together into the same cluster. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results. Please note that this application will generate a lot of temporary files (as many as the number of tiles), and will therefore require twice the size of the final result in term of disk space. The cleanup option (activated by default) allows to remove all temporary file as soon as they are not needed anymore. The tmpdir option allows to define a directory where to write the temporary files. Please also note that the output image type should be set to uint32 to ensure that there are enough labels available.");
     SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) and may not be suited for any other purpose.");
     SetDocAuthors("David Youssefi");
     SetDocSeeAlso(" ");
@@ -189,7 +189,7 @@ private:
     MandatoryOff("inpos");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription( "out", "The output image. The output image is the segmentation of the filtered image." );
+    SetParameterDescription( "out", "The output image. The output image is the segmentation of the filtered image. It is recommanded to set the pixel type to uint32." );
 
     AddParameter(ParameterType_Float, "ranger", "Range radius");
     SetParameterDescription("ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
