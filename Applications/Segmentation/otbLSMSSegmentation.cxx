@@ -238,7 +238,8 @@ private:
     MandatoryOff("tmpdir");
     DisableParameter("tmpdir");
 
-    AddParameter(ParameterType_Empty,"cleanup","Activate temporary files cleaning");
+    AddParameter(ParameterType_Empty,"cleanup","Temporary files cleaning");
+    EnableParameter("cleanup");
     SetParameterDescription("cleanup","If activated, the application will try to clean all temporary files it created");
     MandatoryOff("cleanup");
 
