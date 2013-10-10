@@ -32,7 +32,7 @@ class GammaFunctor {
 
 public:
 
-  GammaFunctor() : m_Gamma(1.0)
+  GammaFunctor() : m_GammaInverse(1.0)
   {}
 
   inline void SetGamma(double gamma)
