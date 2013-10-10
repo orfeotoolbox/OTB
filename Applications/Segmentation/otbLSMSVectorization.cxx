@@ -73,22 +73,23 @@ private:
   void DoInit()
   {
     SetName("LSMSVectorization");
-    SetDescription("Performs the vectorization of a segmentation.");
+    SetDescription("Fourth step of the exact Large-Scale Mean-Shift segmentation workflow.");
 
-    SetDocName("Vectorization");
-    SetDocLongDescription("This application performs the vectorization of a segmentation. It converts the labelled regions to polygons where the features are the radiometric means and variances.");
-    SetDocLimitations("");
+    SetDocName("Exact Large-Scale Mean-Shift segmentation, step 4");
+    SetDocLongDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS). Given a segmentation result (label image), that may have been processed for small regions merging or not, it will convert it to a GIS vector file containing one polygon per segment. Each polygon contains additional fields: mean and variance of each channels from input image (in parameter), segmentation image label, number of pixels in the polygon. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results.");
+    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) and may not be suited for any other purpose.");
     SetDocAuthors("David Youssefi");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("MeanShiftSmoothing, LSMSSegmentation, LSMSSmallRegionsMerging");
     AddDocTag(Tags::Segmentation);
+    AddDocTag("LSMS");
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription( "in", "The input image." );
-    AddParameter(ParameterType_InputImage,  "seg",    "Segmented image");
-    SetParameterDescription( "seg", " The segmented image input. Segmented image input is the segmentation of the input image." );
+    AddParameter(ParameterType_InputImage,  "inseg",    "Segmented image");
+    SetParameterDescription( "inseg", " The segmented image input. Segmented image input is the segmentation of the input image." );
 
-    AddParameter(ParameterType_OutputFilename, "out", "Shapefile Name");
-    SetParameterDescription( "out", "The shapefile name. The shapefile is the vectorized version of the segmented image where the features of the polygones are the radiometric means and variances." );
+    AddParameter(ParameterType_OutputFilename, "out", "Output GIS vector file");
+    SetParameterDescription( "out", "The output GIS vector fie, representing the vectorized version of the segmented image where the features of the polygones are the radiometric means and variances." );
 
     AddParameter(ParameterType_Int, "nbtilesx", "Number of Tiles (X-axis)");
     SetParameterDescription("nbtilesx", "Number of Tiles along the X-axis.");
@@ -104,7 +105,7 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in","avions.tif");
-    SetDocExampleParameterValue("seg","merged.tif");
+    SetDocExampleParameterValue("inseg","merged.tif");
     SetDocExampleParameterValue("out","vecto.shp");
     SetDocExampleParameterValue("nbtilesx","4");
     SetDocExampleParameterValue("nbtilesy","4");
@@ -123,7 +124,7 @@ private:
     unsigned int nbTilesX       = GetParameterInt("nbtilesx");
     unsigned int nbTilesY       = GetParameterInt("nbtilesy");
    
-    LabelImageType::Pointer labelIn = GetParameterUInt32Image("seg");
+    LabelImageType::Pointer labelIn = GetParameterUInt32Image("inseg");
     labelIn->UpdateOutputInformation();
 
     unsigned long sizeImageX = labelIn->GetLargestPossibleRegion().GetSize()[0];
