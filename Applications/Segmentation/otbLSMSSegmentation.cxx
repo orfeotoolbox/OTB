@@ -59,7 +59,7 @@ public:
   typedef FloatVectorImageType              ImageType;
   typedef ImageType::InternalPixelType      ImagePixelType;
   typedef UInt32ImageType                   LabelImageType;
-  typedef LabelImageType::InternalPixelType LabelPixelType;
+  typedef LabelImageType::InternalPixelType LabelImagePixelType;
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
   typedef otb::ImageFileWriter<ImageType> ImageWriterType;
   typedef otb::ImageFileReader<LabelImageType> LabelImageReaderType;
@@ -78,9 +78,15 @@ public:
     
   typedef otb::ConcatenateVectorImageFilter <ImageType,ImageType,ImageType> ConcatenateType;  
 
+  LSMSSegmentation(): m_FinalReader(),m_ImportGeoInformationFilter(),m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
+  
+  virtual ~LSMSSegmentation(){}
+
 private:      
   LabelImageReaderType::Pointer m_FinalReader;
   ImportGeoInformationImageFilterType::Pointer m_ImportGeoInformationFilter;
+  std::vector<string> m_FilesToRemoveAfterExecute;
+  bool m_TmpDirCleanup;
 
   std::string CreateFileName(unsigned int row, unsigned int column, std::string label)
   {;
@@ -94,7 +100,13 @@ private:
     std::vector<std::string> joins;
     if(IsParameterEnabled("tmpdir"))
       {
-      joins.push_back(GetParameterString("tmpdir"));
+      std::string tmpdir = GetParameterString("tmpdir");
+      
+      if(tmpdir.size() > 1 && tmpdir[tmpdir.size()-1] != '/')
+        {
+        tmpdir.append("/");
+        }
+      joins.push_back(tmpdir);
       }
     joins.push_back(tileOut.str());
     
@@ -115,7 +127,7 @@ private:
     return currentFile;
   }
 
-  void RemoveTile(std::string tile)
+  void RemoveFile(std::string tile)
   {
     // Cleanup
     if(IsParameterEnabled("cleanup"))
@@ -141,7 +153,7 @@ private:
     std::string outfname = GetParameterString("out");
     std::string vrtfname = outfname.substr(0,outfname.size() - itksys::SystemTools::GetFilenameExtension(outfname.c_str()).size()).append(".vrt");
 
-    otbAppLogINFO(<<"Creating vrt: "<<vrtfname);
+    otbAppLogINFO(<<"Creating temporary vrt file: "<<vrtfname);
 
     std::ofstream ofs(vrtfname.c_str());
 
@@ -175,7 +187,7 @@ private:
     SetDescription("First step of the exact large-scale Mean-Shift segmentation workflow.");
 
     SetDocName("Exact large-scale Mean-Shift segmentation, step 1");
-    SetDocLongDescription("This application performs the first step of the exact large-scale Mean-Shift segmentation workflow. Filtered range image and spatial image should be created with the MeanShiftSmoothing application, with modesearch parameter disabled. If spatial image is not set, the application will only process the range image and spatial radius parameter will not be taken into account. This application will produce a labeled image where neighbor pixels whose range distance is bellow range radius (and optionnaly spatial distance bellow spatial radius) will be grouped together into the same cluster. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results. Please note that this application will generate a lot of temporary files (as many as the number of tiles), and will therefore require twice the size of the final result in term of disk space. The cleanup option (activated by default) allows to remove all temporary file as soon as they are not needed anymore. The tmpdir option allows to define a directory where to write the temporary files. Please also note that the output image type should be set to uint32 to ensure that there are enough labels available.");
+    SetDocLongDescription("This application performs the first step of the exact large-scale Mean-Shift segmentation workflow. Filtered range image and spatial image should be created with the MeanShiftSmoothing application, with modesearch parameter disabled. If spatial image is not set, the application will only process the range image and spatial radius parameter will not be taken into account. This application will produce a labeled image where neighbor pixels whose range distance is bellow range radius (and optionnaly spatial distance bellow spatial radius) will be grouped together into the same cluster. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results. Please note that this application will generate a lot of temporary files (as many as the number of tiles), and will therefore require twice the size of the final result in term of disk space. The cleanup option (activated by default) allows to remove all temporary file as soon as they are not needed anymore (if cleanup is activated, tmpdir set and tmpdir does not exists before running the application, it will be removed as well during cleanup). The tmpdir option allows to define a directory where to write the temporary files. Please also note that the output image type should be set to uint32 to ensure that there are enough labels available.");
     SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) and may not be suited for any other purpose.");
     SetDocAuthors("David Youssefi");
     SetDocSeeAlso(" ");
@@ -248,6 +260,8 @@ private:
 
   void DoExecute()
   {
+    m_FilesToRemoveAfterExecute.clear();
+
     clock_t tic = clock();
   
     const float ranger        = GetParameterFloat("ranger");
@@ -262,6 +276,10 @@ private:
     // Ensure that temporary directory exists if activated:
     if(IsParameterEnabled("tmpdir"))
       {
+      if(!itksys::SystemTools::FileExists(GetParameterString("tmpdir").c_str()))
+        {
+        m_TmpDirCleanup = true;
+        }
       otbAppLogINFO(<<"Temporary directory "<<GetParameterString("tmpdir")<<" will be used");
       itksys::SystemTools::MakeDirectory(GetParameterString("tmpdir").c_str());
       }
@@ -272,9 +290,6 @@ private:
     // 3-Minimal size region suppression
 
     ImageType::Pointer spatialIn;
-
-    std::vector<std::string> createdFiles1;
-    std::vector<std::string> createdFiles2;
         
     if(HasValue("inpos"))
       {
@@ -375,8 +390,6 @@ private:
         regionCount+=stats->GetMaximum();
 
         std::string filename = WriteTile(labelBandMath->GetOutput(),row,column,"SEG");
-
-        createdFiles1.push_back(filename);
         }
     
 
@@ -501,7 +514,7 @@ private:
     // region on the flow
     std::vector<unsigned long> sizePerRegion(regionCount+1,0);
 
-    otbAppLogINFO(<<"Tiles relabelisation");
+    otbAppLogINFO(<<"Tiles relabelisation ...");
     for(unsigned int column = 0; column < nbTilesX ; ++column)
       {
       for(unsigned int row = 0; row < nbTilesY ; ++row)
@@ -552,7 +565,7 @@ private:
         WriteTile(changeLabel->GetOutput(),row,column,"RELAB");
 
         // Remove previous tile (not needed anymore)
-        RemoveTile(tileIn);
+        RemoveFile(tileIn);
         }
       }
 
@@ -604,10 +617,11 @@ private:
             }
           
           // Write the relabeled tile
-          WriteTile(readerIn->GetOutput(),row,column,"FINAL");
-          
+          std::string tmpfile = WriteTile(readerIn->GetOutput(),row,column,"FINAL");
+          m_FilesToRemoveAfterExecute.push_back(tmpfile);
+
           // Clean previous tiles (not needed anymore)
-          RemoveTile(tileIn);
+          RemoveFile(tileIn);
           }
         }
 
@@ -617,6 +631,8 @@ private:
       // Here we write a temporary vrt file that will be used to
       // stitch together all the tiles
       std::string vrtfile = WriteVRTFile(nbTilesY,nbTilesY,sizeTilesX,sizeTilesY,sizeImageX,sizeImageY);
+
+      m_FilesToRemoveAfterExecute.push_back(vrtfile);
 
       clock_t toc = clock();
       
@@ -631,6 +647,28 @@ private:
       m_ImportGeoInformationFilter->SetSource(imageIn);
 
       SetParameterOutputImage("out",m_ImportGeoInformationFilter->GetOutput());
+  }
+
+  void AfterExecuteAndWriteOutputs()
+  {
+    if(IsParameterEnabled("cleanup"))
+      {
+      otbAppLogINFO(<<"Final clean-up ...");
+
+      for(std::vector<std::string>::iterator it = m_FilesToRemoveAfterExecute.begin();
+          it!=m_FilesToRemoveAfterExecute.end();++it)
+        {
+        RemoveFile(*it);
+        }
+
+      if(IsParameterEnabled("tmpdir") && m_TmpDirCleanup)
+        {
+        otbAppLogINFO(<<"Removing tmp directory "<<GetParameterString("tmpdir")<<", since it has been created by the application");
+        itksys::SystemTools::RemoveADirectory(GetParameterString("tmpdir").c_str());
+        }
+      }
+
+    m_FilesToRemoveAfterExecute.clear();
   }
 };
 }
