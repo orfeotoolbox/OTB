@@ -63,8 +63,8 @@ private:
     AddParameter(ParameterType_OutputImage,  "fout",    "Filtered output");
     SetParameterDescription( "fout", "The filtered output image." );
 
-    AddParameter(ParameterType_OutputImage,  "outpos",    "Spatial image");
-    SetParameterDescription( "outpos", " The spatial image output. Spatial image output is a displacement map (pixel position after convergence).");
+    AddParameter(ParameterType_OutputImage,  "foutpos",    "Spatial image");
+    SetParameterDescription( "foutpos", " The spatial image output. Spatial image output is a displacement map (pixel position after convergence).");
 
     AddParameter(ParameterType_Int, "spatialr", "Spatial radius");
     SetParameterDescription("spatialr", "Spatial radius of the neighborhood.");
@@ -131,7 +131,7 @@ private:
     m_Filter->SetRangeBandwidthRamp(GetParameterFloat("rangeramp"));
 
     SetParameterOutputImage("fout", m_Filter->GetOutput());
-    SetParameterOutputImage("outpos", m_Filter->GetSpatialOutput());
+    SetParameterOutputImage("foutpos", m_Filter->GetSpatialOutput());
     if(!IsParameterEnabled("modesearch"))
       {
         otbAppLogINFO(<<"Mode Search is disabled." << std::endl);
