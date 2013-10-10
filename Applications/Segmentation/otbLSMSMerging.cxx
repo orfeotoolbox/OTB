@@ -80,20 +80,21 @@ private:
 
   void DoInit()
   {
-    SetName("LSMSMerging");
-    SetDescription("Performs the small region pruning by merging of a segmentation.");
+    SetName("LSMSSmallRegionMerging");
+    SetDescription("Third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow.");
 
-    SetDocName("Merging");
-    SetDocLongDescription("This application performs the small region pruning by merging of a segmentation. Regions are merged by increasing sizes, starting with regions of size 1, until regions of the minimal acceptable size.");
-    SetDocLimitations("");
+    SetDocName("Exact Large-Scale Mean-Shift segmentation, step 3 (optional)");
+    SetDocLongDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS). Given a segmentation result (label image) and the original image, it will merge regions whose size in pixels is lower than minsize parameter with the adjacent regions with the adjacent region with closest radiometry and acceptable size. Small regions will be processed by size: first all regions of size 1 will be merged, then all regions of size 2, until regions of size minsize. For large images one can use the nbtilesx and nbtilesy parameters for tile-wise processing, with the guarantees of identical results.");
+    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation workflow (LSMS) and may not be suited for any other purpose.");
     SetDocAuthors("David Youssefi");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("LSMSSegmentation, LSMSVectorization, MeanShiftSmoothing");
     AddDocTag(Tags::Segmentation);
+    AddDocTag("LSMS");
 
     AddParameter(ParameterType_InputImage,  "in",    "Input image");
     SetParameterDescription( "in", "The input image." );
-    AddParameter(ParameterType_InputImage,  "seg",    "Segmented image");
-    SetParameterDescription( "seg", " The segmented image input. Segmented image input is the segmentation of the input image." );
+    AddParameter(ParameterType_InputImage,  "inseg",    "Segmented image");
+    SetParameterDescription( "inseg", " The segmented image input. Segmented image input is the segmentation of the input image." );
    
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription( "out", "The output image. The output image is the input image where the minimal regions have been merged." );
@@ -119,7 +120,7 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in","smooth.tif");
-    SetDocExampleParameterValue("seg","segmentation.tif");
+    SetDocExampleParameterValue("inseg","segmentation.tif");
     SetDocExampleParameterValue("out","merged.tif");
     SetDocExampleParameterValue("minsize","20");
     SetDocExampleParameterValue("nbtilesx","4");
@@ -148,7 +149,7 @@ private:
       sizeImageY = imageIn->GetLargestPossibleRegion().GetSize()[1];
     unsigned int numberOfComponentsPerPixel = imageIn->GetNumberOfComponentsPerPixel();
 
-    LabelImageType::Pointer labelIn = GetParameterUInt32Image("seg");
+    LabelImageType::Pointer labelIn = GetParameterUInt32Image("inseg");
 
     StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
     stats->SetInput(labelIn);	
