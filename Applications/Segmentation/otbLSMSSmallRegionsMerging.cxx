@@ -100,7 +100,7 @@ private:
     SetParameterDescription( "out", "The output image. The output image is the input image where the minimal regions have been merged." );
 
     AddParameter(ParameterType_Int, "minsize", "Minimum Region Size");
-    SetParameterDescription("minsize", "Minimum Region Size. If, after the segmentation, a region is of size lower than this criterion, the region is merged with the \"nearest\" region (radiometrically).");  
+    SetParameterDescription("minsize", "Minimum Region Size. If, after the segmentation, a region is of size lower than this criterion, the region is merged with the \"nearest\" region (radiometrically).");
     SetDefaultParameterInt("minsize", 50);
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
@@ -126,7 +126,7 @@ private:
   }
 
   void DoUpdateParameters()
-  {      
+  {
   }
 
   void DoExecute()
@@ -148,12 +148,12 @@ private:
     LabelImageType::Pointer labelIn = GetParameterUInt32Image("inseg");
 
     StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
-    stats->SetInput(labelIn);	
+    stats->SetInput(labelIn);
     stats->Update();
     unsigned int regionCount=stats->GetMaximum();
 
-    std::vector<unsigned int>nbPixels; 
-    nbPixels.clear();                
+    std::vector<unsigned int>nbPixels;
+    nbPixels.clear();
     nbPixels.resize(regionCount+1);
     for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
       nbPixels[curLabel] = 0;
@@ -171,9 +171,9 @@ private:
     //Sums calculation per label
     otbAppLogINFO(<<"Sums calculation ...");
 
-    for(unsigned int row = 0; row < nbTilesY ; row++)
-      for(unsigned int column = 0; column < nbTilesX ; column++)
-	{	
+    for(unsigned int row = 0; row < nbTilesY; row++)
+      for(unsigned int column = 0; column < nbTilesX; column++)
+       {
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
         unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
@@ -202,7 +202,7 @@ private:
         ImageIterator itImage( imageROI->GetOutput(), imageROI->GetOutput()->GetLargestPossibleRegion());
 
         for (itLabel.GoToBegin(), itImage.GoToBegin(); !itLabel.IsAtEnd(); ++itLabel, ++itImage)
-          {	
+          {
           nbPixels[itLabel.Value()]++;
           for(unsigned int comp = 0; comp<numberOfComponentsPerPixel; ++comp)
             {
@@ -223,8 +223,8 @@ private:
     //Minimal size region suppression
     otbAppLogINFO(<<"Building LUT for small regions merging ...");
   
-    for (unsigned int size=1;size<minSize;size++)
-      {      
+    for (unsigned int size=1; size<minSize; size++)
+      {
       // LUTtmp creation in order to modify the LUT only at the end of the pass
       std::vector<LabelImagePixelType> LUTtmp;
       LUTtmp.clear();
@@ -234,10 +234,10 @@ private:
         LUTtmp[curLabel] = LUT[curLabel];
         }
 
-      for(unsigned int row = 0; row < nbTilesY ; row++)
+      for(unsigned int row = 0; row < nbTilesY; row++)
         {
-        for(unsigned int column = 0; column < nbTilesX ; column++)
-          {		
+        for(unsigned int column = 0; column < nbTilesX; column++)
+          {
           std::set<int> minLabel, edgeLabel, labelMerged;
           std::map<int,std::set<int> > adjMap;
             
@@ -253,19 +253,19 @@ private:
           labelImageROI->SetSizeY(sizeY);
           labelImageROI->Update();
             
-          LabelImageType::IndexType pixelIndex; 
+          LabelImageType::IndexType pixelIndex;
             
           //"Adjacency map" creation for the region with nbPixels=="size"
-          for(pixelIndex[0]=0;pixelIndex[0]<static_cast<long>(sizeX);++pixelIndex[0])
-            for(pixelIndex[1]=0;pixelIndex[1]<static_cast<long>(sizeY);++pixelIndex[1])
+          for(pixelIndex[0]=0; pixelIndex[0]<static_cast<long>(sizeX); ++pixelIndex[0])
+            for(pixelIndex[1]=0; pixelIndex[1]<static_cast<long>(sizeY); ++pixelIndex[1])
               {
               LabelImagePixelType curLabel = labelImageROI->GetOutput()->GetPixel(pixelIndex);
-		
+              
               if(labelMerged.count(LUT[curLabel]))
-                { 
+                {
                 edgeLabel.insert(LUT[curLabel]);
                 }
-              if((pixelIndex[0]==0)&&(startX!=0)) 
+              if((pixelIndex[0]==0)&&(startX!=0))
                 {
                 edgeLabel.insert(LUT[curLabel]);
                 }
@@ -317,14 +317,14 @@ private:
                   if((nbPixels[LUT[adjLabelY]]>0)&&(nbPixels[LUT[adjLabelY]]==size))
                     {
                     adjMap[LUT[adjLabelY]].insert(LUT[curLabel]);
-                    minLabel.insert(LUT[adjLabelY]);}
+                    minLabel.insert(LUT[adjLabelY]); }
                   }
                 }
               }
           
           //Searching the "nearest" region
           for(std::set<int>::iterator itMinLabel=minLabel.begin(); itMinLabel!=minLabel.end(); ++itMinLabel)
-            {   
+            {
             LabelImagePixelType curLabel = *itMinLabel, adjLabel;
             double err = itk::NumericTraits<double>::max();
             if(edgeLabel.count(curLabel)==0)
@@ -332,10 +332,10 @@ private:
               if(nbPixels[curLabel]==size)
                 {
                 edgeLabel.insert(curLabel);
-                for(std::set<int>::iterator itAdjLabel=adjMap[curLabel].begin(); 
+                for(std::set<int>::iterator itAdjLabel=adjMap[curLabel].begin();
                     itAdjLabel!=adjMap[curLabel].end(); ++itAdjLabel)
                   {
-                  double tmpError = 0; 
+                  double tmpError = 0;
                   LabelImagePixelType tmpLabel = *itAdjLabel;
                   if(tmpLabel!=curLabel)
                     {
@@ -352,12 +352,12 @@ private:
                       }
                     }
                   }
-		   
+                 
                 //Fusion of the two regions
                 if(adjLabel!=curLabel)
                   {
                   unsigned int curLabelLUT = curLabel, adjLabelLUT = adjLabel;
-                  while(LUTtmp[curLabelLUT] != curLabelLUT) 
+                  while(LUTtmp[curLabelLUT] != curLabelLUT)
                     {
                     curLabelLUT = LUTtmp[curLabelLUT];
                     }
@@ -365,7 +365,7 @@ private:
                     {
                     adjLabelLUT = LUTtmp[adjLabelLUT];
                     }
-                  if(curLabelLUT < adjLabelLUT) 
+                  if(curLabelLUT < adjLabelLUT)
                     {
                     LUTtmp[adjLabelLUT] = curLabelLUT;
                     }
@@ -377,19 +377,19 @@ private:
                 }
               }
             }
-	       
+              
           for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
             {
             LabelImagePixelType can = label;
-            while(LUTtmp[can] != can) 
+            while(LUTtmp[can] != can)
               {
               can = LUTtmp[can];
               }
             LUTtmp[label] = can;
             }
           }
-        }    
-	 
+        }
+        
       for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
         {
         LUT[label]=LUTtmp[label];
@@ -402,14 +402,14 @@ private:
             sum[LUT[label]][comp]+=sum[label][comp];
             }
           }
-        } 
+        }
       }
     //Relabelling
     m_ChangeLabelFilter = ChangeLabelImageFilterType::New();
     m_ChangeLabelFilter->SetInput(labelIn);
-    for(LabelImagePixelType label = 1;label<regionCount+1; ++label)
+    for(LabelImagePixelType label = 1; label<regionCount+1; ++label)
       {
-      if(label!=LUT[label]) 
+      if(label!=LUT[label])
         {
         m_ChangeLabelFilter->SetChange(label,LUT[label]);
         }

@@ -753,7 +753,7 @@ private:
   /* Implement this method to build the output */
   virtual void DoExecute() = 0;
 
-  /* This method will be called after the 
+  /* This method will be called after the
    * ExecuteAndWriteOutput() call to allow for cleanup. Default
    * implementation does nothing */
   virtual void AfterExecuteAndWriteOutputs();

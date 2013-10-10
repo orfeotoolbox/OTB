@@ -135,7 +135,7 @@ private:
     otbAppLogINFO(<<"Number of tiles: "<<nbTilesX<<" x "<<nbTilesY);
 
     StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
-    stats->SetInput(labelIn);	
+    stats->SetInput(labelIn);
     stats->Update();
     unsigned int regionCount=stats->GetMaximum();
 
@@ -145,8 +145,8 @@ private:
     unsigned long numberOfComponentsPerPixel = imageIn->GetNumberOfComponentsPerPixel();
     std::string projRef = imageIn->GetProjectionRef();
 
-    std::vector<int>nbPixels; 
-    nbPixels.clear();                
+    std::vector<int>nbPixels;
+    nbPixels.clear();
     nbPixels.resize(regionCount+1);
 
     for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
@@ -193,10 +193,10 @@ private:
 
     //Vectorization per tile
     otbAppLogINFO(<<"Vectorization ...");
-    for(unsigned int row = 0; row < nbTilesY ; row++)
+    for(unsigned int row = 0; row < nbTilesY; row++)
       {
-      for(unsigned int column = 0; column < nbTilesX ; column++)
-	{		
+      for(unsigned int column = 0; column < nbTilesX; column++)
+       {
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
         unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
@@ -258,7 +258,7 @@ private:
           dstFeature.SetFrom( *featIt, TRUE );
           layer.CreateFeature( dstFeature );
           }
-	}
+       }
       }
 
     //Sorting by increasing label of the features
@@ -286,14 +286,14 @@ private:
       bool haveMerged=false;
 
       while(merging)
-        {  
+        {
         nextFeature = layerTmp.ogr().GetNextFeature();
-	  
+         
         if(nextFeature.addr())
           {
           LabelImagePixelType newLabel = nextFeature.ogr().GetFieldAsInteger("label");
           merging=(newLabel==curLabel);
-	      
+             
           //Storing of the new geometry if labels are identical
           if(merging)
             {
@@ -309,7 +309,7 @@ private:
             }
           }
         //If end of list : end of loop
-        else 
+        else
           {
           merging=false;
           }
@@ -338,8 +338,8 @@ private:
       
       //Geometries simplification
       otb::ogr::UniqueGeometryPtr geom = otb::ogr::Simplify(*firstFeature.GetGeometry(),0);
-      firstFeature.SetGeometryDirectly(otb::ogr::Simplify(*geom,0));	  
-	  
+      firstFeature.SetGeometryDirectly(otb::ogr::Simplify(*geom,0));
+         
       layer.SetFeature(firstFeature);
       
       //Next geometry

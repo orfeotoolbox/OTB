@@ -104,7 +104,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
       m_CorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());
       otbMsgDevMacro(<< "use filter available in MetadataInterface " << imageMetadataInterface->GetSpectralSensitivity());
       }
-    else 
+    else
       {
       otbMsgDevMacro(<< "use dummy filter");
       m_FilterFunctionCoef->Clear();

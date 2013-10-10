@@ -63,9 +63,9 @@ public:
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
   typedef otb::ImageFileWriter<ImageType> ImageWriterType;
   typedef otb::ImageFileReader<LabelImageType> LabelImageReaderType;
-  typedef otb::ImageFileWriter<LabelImageType> LabelImageWriterType;  
+  typedef otb::ImageFileWriter<LabelImageType> LabelImageWriterType;
   typedef otb::MultiChannelExtractROI <ImagePixelType,ImagePixelType > MultiChannelExtractROIFilterType;
-  typedef otb::ExtractROI<LabelImagePixelType,LabelImagePixelType> ExtractROIFilterType; 
+  typedef otb::ExtractROI<LabelImagePixelType,LabelImagePixelType> ExtractROIFilterType;
   typedef otb::MultiToMonoChannelExtractROI<ImagePixelType,LabelImagePixelType> MultiToMonoChannelExtractROIFilterType;
   typedef otb::Functor::ConnectedComponentMuParserFunctor<ImageType::PixelType>  CCFunctorType;
   typedef itk::ConnectedComponentFunctorImageFilter<ImageType, LabelImageType, CCFunctorType, otb::Image<unsigned int> > CCFilterType;
@@ -76,13 +76,13 @@ public:
   typedef otb::ImportGeoInformationImageFilter<LabelImageType,ImageType> ImportGeoInformationImageFilterType;
   typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
     
-  typedef otb::ConcatenateVectorImageFilter <ImageType,ImageType,ImageType> ConcatenateType;  
+  typedef otb::ConcatenateVectorImageFilter <ImageType,ImageType,ImageType> ConcatenateType;
 
   LSMSSegmentation(): m_FinalReader(),m_ImportGeoInformationFilter(),m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
   
   virtual ~LSMSSegmentation(){}
 
-private:      
+private:
   LabelImageReaderType::Pointer m_FinalReader;
   ImportGeoInformationImageFilterType::Pointer m_ImportGeoInformationFilter;
   std::vector<string> m_FilesToRemoveAfterExecute;
@@ -116,13 +116,13 @@ private:
   }
   
   std::string WriteTile(LabelImageType::Pointer img, unsigned int row, unsigned int column, std::string label)
-  { 
+  {
     std::string currentFile = CreateFileName(row,column,label);
     
     LabelImageWriterType::Pointer imageWriter = LabelImageWriterType::New();
     imageWriter->SetInput(img);
     imageWriter->SetFileName(currentFile);
-    imageWriter->Update();    
+    imageWriter->Update();
 
     return currentFile;
   }
@@ -161,9 +161,9 @@ private:
     ofs<<"\t<VRTRasterBand dataType=\"UInt32\" band=\"1\">"<<std::endl;
     ofs<<"\t\t<ColorInterp>Gray</ColorInterp>"<<std::endl;
 
-     for(unsigned int column = 0; column < nbTilesX ; ++column)
+     for(unsigned int column = 0; column < nbTilesX; ++column)
       {
-      for(unsigned int row = 0; row < nbTilesY ; ++row)
+      for(unsigned int row = 0; row < nbTilesY; ++row)
         {
         ofs<<"\t\t<SimpleSource>"<<std::endl;
         ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<<CreateFileName(row,column,"FINAL")<<"</SourceFilename>"<<std::endl;
@@ -216,7 +216,7 @@ private:
     MandatoryOff("spatialr");
 
     AddParameter(ParameterType_Int, "minsize", "Minimum Region Size");
-    SetParameterDescription("minsize", "Minimum Region Size. If, after the segmentation, a region is of size lower than this criterion, the region is deleted.");  
+    SetParameterDescription("minsize", "Minimum Region Size. If, after the segmentation, a region is of size lower than this criterion, the region is deleted.");
     SetDefaultParameterInt("minsize", 0);
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
@@ -254,7 +254,7 @@ private:
   }
 
   void DoUpdateParameters()
-  {      
+  {
   }
 
   void DoExecute()
@@ -314,15 +314,15 @@ private:
     //shifting
     otbAppLogINFO(<<"Tile shifting ...");
       
-    for(unsigned int row = 0; row < nbTilesY ; ++row)
-      for(unsigned int column = 0; column < nbTilesX ; ++column)
-        {		
+    for(unsigned int row = 0; row < nbTilesY; ++row)
+      for(unsigned int column = 0; column < nbTilesX; ++column)
+        {
         // Compute extraction parameters
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
         unsigned long sizeX = vcl_min(sizeTilesX+1,sizeImageX-startX+1);
         unsigned long sizeY = vcl_min(sizeTilesY+1,sizeImageY-startY+1);
-	    
+           
         //Tiles extraction of :
         //- the input image (filtering image)
         MultiChannelExtractROIFilterType::Pointer extractROIFilter = MultiChannelExtractROIFilterType::New();
@@ -346,7 +346,7 @@ private:
           extractROIFilter2->SetSizeX(sizeX);
           extractROIFilter2->SetSizeY(sizeY);
           extractROIFilter2->Update();
-	  
+         
           //Concatenation of the two input images
           concat->SetInput1(extractROIFilter->GetOutput());
           concat->SetInput2(extractROIFilter2->GetOutput());
@@ -356,13 +356,13 @@ private:
           }
         else
           {
-	  ccFilter->SetInput(extractROIFilter->GetOutput());
+         ccFilter->SetInput(extractROIFilter->GetOutput());
           }
         
         //Expression 1 : radiometric distance < ranger
         std::stringstream expr;
         expr<<"sqrt((p1b1-p2b1)*(p1b1-p2b1)";
-        for(unsigned int i=1;i<nbComp;i++)
+        for(unsigned int i=1; i<nbComp; i++)
           expr<<"+(p1b"<<i+1<<"-p2b"<<i+1<<")*(p1b"<<i+1<<"-p2b"<<i+1<<")";
         expr<<")"<<"<"<<ranger;
 
@@ -370,16 +370,16 @@ private:
           {
           //Expression 2 : final positions < spatialr
           expr<<" and sqrt((p1b"<<nbComp+1<<"-p2b"<<nbComp+1<<")*(p1b"<<nbComp+1<<"-p2b"<<nbComp+1<<")+";
-          expr<<"(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<")*(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<"))"<<"<"<<spatialr; 
+          expr<<"(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<")*(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<"))"<<"<"<<spatialr;
           }
         
         //Segmentation
         ccFilter->GetFunctor().SetExpression(expr.str());
-        ccFilter->Update();	    
+        ccFilter->Update();
     
         std::stringstream ssexpr;
         ssexpr<<"label+"<<regionCount;
-	    
+           
         //Shifting
         BandMathImageFilterType::Pointer labelBandMath = BandMathImageFilterType::New();
         labelBandMath->SetNthInput(0,ccFilter->GetOutput(),"label");
@@ -388,7 +388,7 @@ private:
 
         //Maximum label calculation for the shifting
         StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
-        stats->SetInput(ccFilter->GetOutput());	
+        stats->SetInput(ccFilter->GetOutput());
         stats->Update();
         regionCount+=stats->GetMaximum();
 
@@ -398,15 +398,15 @@ private:
 
     // Step 2: create the look-up table for all overlaps
     otbAppLogINFO(<<"LUT creation ...");
-    std::vector<LabelImagePixelType> LUT; 
+    std::vector<LabelImagePixelType> LUT;
     LUT.clear();
     LUT.resize(regionCount+1);
     for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
       LUT[curLabel] = curLabel;
       
-    for(unsigned int row = 0; row < nbTilesY ; row++)
+    for(unsigned int row = 0; row < nbTilesY; row++)
       {
-      for(unsigned int column = 0; column < nbTilesX ; column++)
+      for(unsigned int column = 0; column < nbTilesX; column++)
         {
         unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
@@ -424,8 +424,8 @@ private:
         if(row>0)
           {
           std::string tileUp = CreateFileName(row-1,column,"SEG");
-	  LabelImageReaderType::Pointer tileUpReader = LabelImageReaderType::New();
-	  tileUpReader->SetFileName(tileUp);
+         LabelImageReaderType::Pointer tileUpReader = LabelImageReaderType::New();
+         tileUpReader->SetFileName(tileUp);
           tileUpReader->Update();
 
           LabelImageType::IndexType pixelIndexIn;
@@ -434,26 +434,26 @@ private:
           pixelIndexIn[1] = 0;
           pixelIndexUp[1] = sizeTilesY;
 
-          for(pixelIndexIn[0]=0;pixelIndexIn[0]<static_cast<long>(sizeX-1);++pixelIndexIn[0])
+          for(pixelIndexIn[0]=0; pixelIndexIn[0]<static_cast<long>(sizeX-1); ++pixelIndexIn[0])
             {
             pixelIndexUp[0] = pixelIndexIn[0];
 
             LabelImagePixelType curCanLabel = tileInReader->GetOutput()->GetPixel(pixelIndexIn);
-	    while(LUT[curCanLabel] != curCanLabel) 
+           while(LUT[curCanLabel] != curCanLabel)
               {
               curCanLabel = LUT[curCanLabel];
               }
-	    LabelImagePixelType adjCanLabel = tileUpReader->GetOutput()->GetPixel(pixelIndexUp);
+           LabelImagePixelType adjCanLabel = tileUpReader->GetOutput()->GetPixel(pixelIndexUp);
             
-	    while(LUT[adjCanLabel] != adjCanLabel)
+           while(LUT[adjCanLabel] != adjCanLabel)
               {
               adjCanLabel = LUT[adjCanLabel];
               }
-	    if(curCanLabel < adjCanLabel) 
+           if(curCanLabel < adjCanLabel)
               {
               LUT[adjCanLabel] = curCanLabel;
               }
-	    else
+           else
               {
               LUT[LUT[curCanLabel]] = adjCanLabel; LUT[curCanLabel] = adjCanLabel;
               }
@@ -464,8 +464,8 @@ private:
          if(column>0)
           {
           std::string tileLeft = CreateFileName(row,column-1,"SEG");
-	  LabelImageReaderType::Pointer tileLeftReader = LabelImageReaderType::New();
-	  tileLeftReader->SetFileName(tileLeft);
+         LabelImageReaderType::Pointer tileLeftReader = LabelImageReaderType::New();
+         tileLeftReader->SetFileName(tileLeft);
           tileLeftReader->Update();
 
           LabelImageType::IndexType pixelIndexIn;
@@ -474,25 +474,25 @@ private:
           pixelIndexIn[0] = 0;
           pixelIndexUp[0] = sizeTilesX;
 
-          for(pixelIndexIn[1]=0;pixelIndexIn[1]<static_cast<long>(sizeY-1);++pixelIndexIn[1])
+          for(pixelIndexIn[1]=0; pixelIndexIn[1]<static_cast<long>(sizeY-1); ++pixelIndexIn[1])
             {
             pixelIndexUp[1] = pixelIndexIn[1];
 
             LabelImagePixelType curCanLabel = tileInReader->GetOutput()->GetPixel(pixelIndexIn);
-	    while(LUT[curCanLabel] != curCanLabel) 
+           while(LUT[curCanLabel] != curCanLabel)
               {
               curCanLabel = LUT[curCanLabel];
               }
-	    LabelImagePixelType adjCanLabel = tileLeftReader->GetOutput()->GetPixel(pixelIndexUp);
-	    while(LUT[adjCanLabel] != adjCanLabel)
-              { 
+           LabelImagePixelType adjCanLabel = tileLeftReader->GetOutput()->GetPixel(pixelIndexUp);
+           while(LUT[adjCanLabel] != adjCanLabel)
+              {
               adjCanLabel = LUT[adjCanLabel];
               }
-	    if(curCanLabel < adjCanLabel) 
+           if(curCanLabel < adjCanLabel)
               {
               LUT[adjCanLabel] = curCanLabel;
               }
-	    else
+           else
               {
               LUT[LUT[curCanLabel]] = adjCanLabel; LUT[curCanLabel] = adjCanLabel;
               }
@@ -503,9 +503,9 @@ private:
     
     // Reduce LUT to canonical labels
     for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
-      {             
+      {
       LabelImagePixelType can = label;
-      while(LUT[can] != can) 
+      while(LUT[can] != can)
         {
         can = LUT[can];
         }
@@ -518,13 +518,13 @@ private:
     std::vector<unsigned long> sizePerRegion(regionCount+1,0);
 
     otbAppLogINFO(<<"Tiles relabelisation ...");
-    for(unsigned int column = 0; column < nbTilesX ; ++column)
+    for(unsigned int column = 0; column < nbTilesX; ++column)
       {
-      for(unsigned int row = 0; row < nbTilesY ; ++row)
+      for(unsigned int row = 0; row < nbTilesY; ++row)
         {
-	unsigned long startX = column*sizeTilesX;
+       unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
-	unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
+       unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
         unsigned long sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
 
         std::string tileIn = CreateFileName(row,column,"SEG");
@@ -534,20 +534,20 @@ private:
 
         // Remove extra margin now that lut is built
         ExtractROIFilterType::Pointer labelImage = ExtractROIFilterType::New();
-	labelImage->SetInput(readerIn->GetOutput());
-	labelImage->SetStartX(0);
-	labelImage->SetStartY(0);
-	labelImage->SetSizeX(sizeX);
-	labelImage->SetSizeY(sizeY);
+       labelImage->SetInput(readerIn->GetOutput());
+       labelImage->SetStartX(0);
+       labelImage->SetStartY(0);
+       labelImage->SetSizeX(sizeX);
+       labelImage->SetSizeY(sizeY);
         
         // Relabel tile according to look-up table
         ChangeLabelImageFilterType::Pointer changeLabel = ChangeLabelImageFilterType::New();
-	changeLabel->SetInput(labelImage->GetOutput());
-	
+       changeLabel->SetInput(labelImage->GetOutput());
+       
         // Fill LUT
-        for(LabelImagePixelType label = 1;label<regionCount+1; ++label)
+        for(LabelImagePixelType label = 1; label<regionCount+1; ++label)
           {
-	  if(label!=LUT[label]) 
+         if(label!=LUT[label])
             {
             changeLabel->SetChange(label,LUT[label]);
             }
@@ -559,7 +559,7 @@ private:
 
         // Update region sizes
         LabelImageIterator it( changeLabel->GetOutput(), changeLabel->GetOutput()->GetLargestPossibleRegion());
-	for (it = it.Begin(); !it.IsAtEnd(); ++it) 
+       for (it = it.Begin(); !it.IsAtEnd(); ++it)
           {
           sizePerRegion[it.Value()]+=1;
           }
@@ -583,7 +583,7 @@ private:
       std::vector<LabelImagePixelType> newLabels(regionCount+1,0);
       for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
         {
-        if(sizePerRegion[curLabel]<minRegionSize) 
+        if(sizePerRegion[curLabel]<minRegionSize)
           {
           newLabels[curLabel]=0;
           ++smallCount;
@@ -600,9 +600,9 @@ private:
       // Clear sizePerRegion, we do not need it anymore
       sizePerRegion.clear();
      
-      for(unsigned int column = 0; column < nbTilesX ; ++column)
+      for(unsigned int column = 0; column < nbTilesX; ++column)
         {
-        for(unsigned int row = 0; row < nbTilesY ; ++row)
+        for(unsigned int row = 0; row < nbTilesY; ++row)
           {
           std::string tileIn = CreateFileName(row,column,"RELAB");
 
@@ -611,7 +611,7 @@ private:
 
           ChangeLabelImageFilterType::Pointer changeLabel = ChangeLabelImageFilterType::New();
           changeLabel->SetInput(readerIn->GetOutput());
-          for(LabelImagePixelType label = 1;label<regionCount+1; ++label)
+          for(LabelImagePixelType label = 1; label<regionCount+1; ++label)
             {
             if(label != newLabels[label])
               {
@@ -659,7 +659,7 @@ private:
       otbAppLogINFO(<<"Final clean-up ...");
 
       for(std::vector<std::string>::iterator it = m_FilesToRemoveAfterExecute.begin();
-          it!=m_FilesToRemoveAfterExecute.end();++it)
+          it!=m_FilesToRemoveAfterExecute.end(); ++it)
         {
         RemoveFile(*it);
         }
