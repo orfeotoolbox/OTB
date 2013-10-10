@@ -620,7 +620,7 @@ private:
             }
           
           // Write the relabeled tile
-          std::string tmpfile = WriteTile(readerIn->GetOutput(),row,column,"FINAL");
+          std::string tmpfile = WriteTile(changeLabel->GetOutput(),row,column,"FINAL");
           m_FilesToRemoveAfterExecute.push_back(tmpfile);
 
           // Clean previous tiles (not needed anymore)
