@@ -178,3 +178,94 @@ SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULCO
                      PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
                                 WILL_FAIL TRUE
                                 RESOURCE_LOCK ${OUTFILE})
+
+
+# Test of LSMS workflow
+
+OTB_TEST_APPLICATION(NAME     apTvLSMS1MeanShiftSmoothingNoModeSearch
+                     APP      MeanShiftSmoothing
+                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                              -fout ${TEMP}/apTvLSMS1_filtered_range.tif
+                              -foutpos ${TEMP}/apTvLSMS1_filtered_spatial.tif
+                              -ranger 30
+                              -spatialr  5
+                              -maxiter 10
+                              -modesearch 0
+                     VALID    --compare-n-images ${EPSILON_7} 2
+                              ${BASELINE}/apTvLSMS1_filtered_range.tif
+                              ${TEMP}/apTvLSMS1_filtered_range.tif
+                              ${BASELINE}/apTvLSMS1_filtered_spatial.tif
+                              ${TEMP}/apTvLSMS1_filtered_spatial.tif
+                     )
+
+OTB_TEST_APPLICATION(NAME     apTvLSMS2Segmentation
+                     APP      LSMSSegmentation
+                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
+                              -inpos ${TEMP}/apTvLSMS1_filtered_spatial.tif
+                              -out ${TEMP}/apTvLSMS2_Segmentation.tif uint32
+                              -ranger 30
+                              -spatialr  5
+                              -minsize 0
+                              -tilesizex 100 
+                              -tilesizey 100
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvLSMS2_Segmentation.tif
+                              ${TEMP}/apTvLSMS2_Segmentation.tif
+                     )
+SET_TESTS_PROPERTIES(apTvLSMS2Segmentation PROPERTIES DEPENDS apTvLSMS1MeanShiftSmoothingNoModeSearch)
+
+OTB_TEST_APPLICATION(NAME     apTvLSMS2Segmentation_NoSmall
+                     APP      LSMSSegmentation
+                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
+                              -inpos ${TEMP}/apTvLSMS1_filtered_spatial.tif
+                              -out ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif uint32
+                              -ranger 30
+                              -spatialr  5
+                              -minsize 10
+                              -tilesizex 100 
+                              -tilesizey 100
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvLSMS2_Segmentation_NoSmall.tif
+                              ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
+                     )
+SET_TESTS_PROPERTIES(apTvLSMS2Segmentation_NoSmall PROPERTIES DEPENDS apTvLSMS1MeanShiftSmoothingNoModeSearch)
+
+OTB_TEST_APPLICATION(NAME     apTvLSMS3SmallRegionsMerging
+                     APP      LSMSSmallRegionsMerging
+                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
+                              -inseg  ${TEMP}/apTvLSMS2_Segmentation.tif
+                              -out ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif uint32
+                              -minsize 10
+                              -tilesizex 100 
+                              -tilesizey 100
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
+                              ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif
+                     )
+SET_TESTS_PROPERTIES(apTvLSMS3SmallRegionsMerging PROPERTIES DEPENDS apTvLSMS2Segmentation)
+
+OTB_TEST_APPLICATION(NAME     apTvLSMS4Vectorization_SmallMerged
+                     APP      LSMSVectorization
+                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                              -inseg  ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif
+                              -out ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
+                              -tilesizex 100 
+                              -tilesizey 100
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLSMS4_Segmentation_SmallMerged.shp
+                              ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
+                     )
+SET_TESTS_PROPERTIES(apTvLSMS4Vectorization_SmallMerged PROPERTIES DEPENDS apTvLSMS3SmallRegionsMerging)
+
+OTB_TEST_APPLICATION(NAME     apTvLSMS4Vectorization_NoSmall
+                     APP      LSMSVectorization
+                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                              -inseg  ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
+                              -out ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
+                              -tilesizex 100 
+                              -tilesizey 100
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLSMS4_Segmentation_NoSmall.shp
+                              ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
+                     )
+SET_TESTS_PROPERTIES(apTvLSMS4Vectorization_NoSmall PROPERTIES DEPENDS apTvLSMS2Segmentation_NoSmall)
