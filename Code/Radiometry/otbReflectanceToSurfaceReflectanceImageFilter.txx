@@ -99,26 +99,23 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
   //case where filter function values are not read from an ascii file
   else
     {
-    try
+    if (imageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
       {
       m_CorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());
       otbMsgDevMacro(<< "use filter available in MetadataInterface " << imageMetadataInterface->GetSpectralSensitivity());
       }
-
-       catch (itk::ExceptionObject& err)
-      {
-      if (m_FilterFunctionCoef->Size() == 0)
+    else 
       {
       otbMsgDevMacro(<< "use dummy filter");
+      m_FilterFunctionCoef->Clear();
       for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
         {
         m_FilterFunctionCoef->PushBack(FilterFunctionValues::New());
         }
-
-      }
       m_CorrectionParameters->SetWavelengthSpectralBand(m_FilterFunctionCoef);
       }
     }
+
   Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
   param2Terms->SetInput(m_CorrectionParameters);
   param2Terms->Update();
