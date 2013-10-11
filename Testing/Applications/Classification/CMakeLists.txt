@@ -107,7 +107,7 @@ IF(OTB_USE_OPENCV)
     OTB_TEST_APPLICATION(
                          NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
                          APP      TrainImagesClassifier
-                         OPTIONS  -inxml ${TEMP}/cl${classifier}_OutXML1.xml
+                         OPTIONS  -inxml ${INPUTDATA}/cl${classifier}_OutXML1.xml
                                   -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
                                   -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
                                   -io.imstat ${ascii_ref_path}/clImageStatisticsQB1${stat_input_format}
@@ -187,7 +187,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt_InXML
                       APP  TrainImagesClassifier
                       OPTIONS 
-                              -inxml ${TEMP}/clsvmModelQB1_OutXML.xml
+                              -inxml ${INPUTDATA}/clsvmModelQB1_OutXML.xml
                               -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
                               -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
                               -io.imstat ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
