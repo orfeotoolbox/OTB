@@ -202,6 +202,7 @@ private:
 };
 DECLARE_REF_COUNT_CLASS( Application )
 
+#if SWIGPYTHON
 %extend Application {
   %pythoncode {
     def GetParameterValue(self, paramKey):
@@ -229,6 +230,7 @@ DECLARE_REF_COUNT_CLASS( Application )
           return None
       }
 }
+#endif
 
 class Registry : public itkObject
 {
