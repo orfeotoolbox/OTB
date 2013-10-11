@@ -6,20 +6,15 @@
 from sys import argv
 import otbApplication as otb
 
-filelen = len(argv) - 2
-last = len(argv) - 1
-imagelist = []
-for i in range(1,filelen ):
-  imagelist.append(argv[i])
-
+imagelist = argv[1:-2]
 exp = "cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3, im3b4)"
-out = argv[last-1]
-outxml = argv[last]
+out = argv[-2]
+outxml = argv[-1]
 app = otb.Registry_CreateApplication('BandMath')
 app.SetParameterStringList("il", imagelist)
 app.SetParameterString("out", out)
 app.SetParameterString("exp", exp)
-app.SetParameterString("outxml",outxml)
+app.SetParameterString("outxml", outxml)
 
 for paramKey in app.GetParametersKeys():
   app.GetParameterValue(paramKey)
