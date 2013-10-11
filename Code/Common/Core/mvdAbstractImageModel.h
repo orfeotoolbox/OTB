@@ -467,8 +467,8 @@ AbstractImageModel
   */
     virtual_SetCurrentLod( lod );
 
-  /*
     m_CurrentLod = lod;
+  /*
     }
   catch( std::exception& exc )
     {
