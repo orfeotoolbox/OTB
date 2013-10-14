@@ -242,6 +242,9 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     paramName = GetChildNodeTextOf(n_Parameter, "name");
     ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
 
+    Parameter* param = this_->GetParameterByKey(key);
+    param->SetUserValue(true);
+
     TiXmlElement* n_Values = NULL;
     n_Values = n_Parameter->FirstChildElement("values");
     if(n_Values)
@@ -252,14 +255,82 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
         values.push_back(n_Value->GetText());
         }
       }
-    if ( type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||
-         type == ParameterType_Directory ||  type == ParameterType_InputImage ||
-         type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
-         type == ParameterType_OutputImage || type == ParameterType_ComplexOutputImage ||
-         type == ParameterType_OutputVectorData || type == ParameterType_String ||
-         type == ParameterType_Choice)
+
+    if ( type == ParameterType_OutputFilename || type == ParameterType_OutputImage ||
+         type == ParameterType_ComplexOutputImage || type == ParameterType_OutputVectorData ||
+         type == ParameterType_String || type == ParameterType_Choice)
       {
       this_->SetParameterString(key, value);
+      }
+    else if (dynamic_cast<DirectoryParameter*>(param))
+      {
+      DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
+      paramDown->SetValue(value);
+      }
+    else if (dynamic_cast<InputFilenameParameter*>(param))
+      {
+      InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
+      paramDown->SetValue(value);
+/*    if ( !paramDown->SetValue(value) )
+      {
+      return -1;
+      }
+*/
+      }
+    else if (dynamic_cast<InputImageParameter*>(param))
+    {
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+//    paramDown->SetFromFileName(value);
+    if ( !paramDown->SetFromFileName(value) )
+      {
+      return -1;
+      }
+    }
+    else if (dynamic_cast<ComplexInputImageParameter*>(param))
+      {
+      ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
+      paramDown->SetFromFileName(value);
+/*  if ( !paramDown->SetFromFileName(value) )
+      {
+      return -1;
+      }
+*/
+      }
+    else if (dynamic_cast<InputVectorDataParameter*>(param))
+      {
+      InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
+      //paramDown->SetFromFileName(value);
+      if ( !paramDown->SetFromFileName(value) )
+        {
+        return -1;
+        }
+      }
+    else if (dynamic_cast<InputImageListParameter*>(param))
+      {
+      InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+      //paramDown->SetListFromFileName(values);
+      if ( !paramDown->SetListFromFileName(values) )
+        {
+        return -1;
+        }
+      }
+    else if (dynamic_cast<InputVectorDataListParameter*>(param))
+      {
+     InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
+     //paramDown->SetListFromFileName(values);
+     if ( !paramDown->SetListFromFileName(values) )
+       {
+       return -1;
+       }
+      }
+    else if (dynamic_cast<InputFilenameListParameter*>(param))
+      {
+      InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*>(param);
+      //paramDown->SetListFromFileName(values);
+      if ( !paramDown->SetListFromFileName(values) )
+        {
+        return -1;
+        }
       }
     else if (type == ParameterType_Radius || type == ParameterType_Int ||
              type == ParameterType_RAM || typeAsString == "rand" )
@@ -283,15 +354,14 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
         }
       this_->SetParameterEmpty(key, emptyValue);
       }
-    else if (type == ParameterType_InputFilenameList || type == ParameterType_InputImageList ||
-             type == ParameterType_InputVectorDataList || type == ParameterType_StringList ||
-             type == ParameterType_ListView)
+    else if (type == ParameterType_StringList || type == ParameterType_ListView)
       {
       if(values.empty())
         itkWarningMacro(<< key << " has null values");
 
       this_->SetParameterStringList(key, values);
       }
+
     //choice also comes as setint and setstring why??
     }
   return 0;
