@@ -195,45 +195,46 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
            std::string ptype = pixelTypeToString(pixType); //FIXME save this
 
          }
-         else
-           if( type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
-              type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
-             {
-              values = app->GetParameterStringList(key);
-              hasValueList = true;
-             }
-         else
-           if (type == ParameterType_Float || type == ParameterType_Int ||
-              type == ParameterType_Radius || type == ParameterType_RAM )
-             {
-              value = app->GetParameterAsString(key);
-             }
-           else
-             if ( type == ParameterType_String || type == ParameterType_InputFilename ||
-                 type == ParameterType_Directory || type == ParameterType_InputImage ||
-                 type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
-                 type == ParameterType_Choice || type == ParameterType_ListView ||
-                 type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
-              {
-                value = app->GetParameterString(key);
-              }
-             else
-       if(key == "rand")
-        {
-          std::ostringstream strm;
-        strm << app->GetParameterInt("rand");
-        value = strm.str();
-        }
-       else
-      if (typeAsString == "Empty")
-       {
-         EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
-         value = "false";
-         if( eParam->GetActive() )
+         else if( type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
+                  type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
            {
-             value = "true";
+           values = app->GetParameterStringList(key);
+           hasValueList = true;
            }
-       }
+         else if (type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_RAM )
+           {
+           value = app->GetParameterAsString(key);
+           }
+         else if(type == ParameterType_Float)
+           {
+           std::ostringstream oss;
+           oss << std::setprecision(10);
+           oss << app->GetParameterFloat( key );
+           value = oss.str();
+           }
+         else if ( type == ParameterType_String || type == ParameterType_InputFilename ||
+                   type == ParameterType_Directory || type == ParameterType_InputImage ||
+                   type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
+                   type == ParameterType_Choice || type == ParameterType_ListView ||
+                   type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
+           {
+           value = app->GetParameterString(key);
+           }
+         else if(key == "rand")
+           {
+           std::ostringstream strm;
+           strm << app->GetParameterInt("rand");
+           value = strm.str();
+           }
+         else if (typeAsString == "Empty")
+           {
+           EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
+           value = "false";
+           if( eParam->GetActive() )
+             {
+             value = "true";
+             }
+           }
 
          //get only file name
     /*
