@@ -45,7 +45,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM_InXML1
                      OPTIONS
                        -inxml  ${INPUTDATA}/apTvPrOrthorectifTest_UTM_OutXML1.xml
                  			 -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-                 			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif
+                 			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_InXML1.tif
                  			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
                         VALID   --compare-image ${EPSILON_4}
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
