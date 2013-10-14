@@ -672,6 +672,7 @@ private:
       }
 
     m_FilesToRemoveAfterExecute.clear();
+    m_TmpDirCleanup = false;
   }
 };
 }
