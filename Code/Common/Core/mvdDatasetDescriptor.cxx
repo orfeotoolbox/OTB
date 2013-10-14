@@ -440,8 +440,8 @@ DatasetDescriptor
 ::UpdateViewContext(const PointType& center, double zoom)
 {
   // Create QString from parameters
-  QString scenter = QString( "%1 %2" ).arg( center[0] ).arg( center[1] );
-  QString szoom   = QString( "%1" ).arg( zoom );
+  QString scenter( ToQString( center[ 0 ] ) + " " + ToQString( center [ 1 ] ) );
+  QString szoom( ToQString( zoom ) );
  
   // Access image view group
   if ( m_ImageViewGroupElement.isNull() )

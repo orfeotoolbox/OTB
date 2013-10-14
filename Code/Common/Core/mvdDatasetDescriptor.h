@@ -518,7 +518,6 @@ DatasetDescriptor
 
   for( TInputIterator it( first ); it != last; ++it )
     {
-//  stringList.append( QString( "%1" ).arg( *it ) );
     stringList.append( ToQString( *it ) );
     }
 

@@ -185,6 +185,26 @@ operator << ( QTextStream& stream,
 	      const std::vector< T, Alloc >& vector );
 
 /**
+ * \brief
+ */
+template<>
+inline
+QTextStream&
+operator << < double, std::allocator< double > >(
+  QTextStream& stream,
+  const std::vector< double, std::allocator< double > >& vector );
+
+/**
+ * \brief
+ */
+template<>
+inline
+QTextStream&
+operator << < float, std::allocator< float > >(
+  QTextStream& stream,
+  const std::vector< float, std::allocator< float > >& vector );
+
+/**
  * \brief Read an std::vector< T, Alloc > from a QTextStream.
  *
  * \param stream QTextStream from which to read data.
@@ -243,6 +263,22 @@ inline
 QTextStream&
 operator << ( QTextStream& stream,
 	      const itk::VariableLengthVector< T >& vector );
+
+/**
+ */
+template<>
+inline
+QTextStream&
+operator << ( QTextStream& stream,
+	      const itk::VariableLengthVector< float >& vector );
+
+/**
+ */
+template<>
+inline
+QTextStream&
+operator << ( QTextStream& stream,
+	      const itk::VariableLengthVector< double >& vector );
 
 /**
  * \brief Read an itk::VariableLengthVector< T > from a QTextStream.
@@ -427,6 +463,50 @@ operator << ( QTextStream& stream,
 }
 
 /*******************************************************************************/
+template<>
+inline
+QTextStream&
+operator << < float, std::allocator< float > >(
+  QTextStream& stream,
+  const std::vector< float, std::allocator< float > >& vector )
+{
+  typedef std::vector< float, std::allocator< float > > Vector;
+
+  stream << STREAM_TAG_VECTOR << vector.size();
+
+  for( typename Vector::const_iterator it( vector.begin() );
+       it!=vector.end();
+       ++it )
+    {
+    stream << " " << ToQString( *it );
+    }
+
+  return stream;
+}
+
+/*******************************************************************************/
+template<>
+inline
+QTextStream&
+operator << < double, std::allocator< double > >(
+  QTextStream& stream,
+  const std::vector< double, std::allocator< double > >& vector )
+{
+  typedef std::vector< double, std::allocator< double > > Vector;
+
+  stream << STREAM_TAG_VECTOR << vector.size();
+
+  for( typename Vector::const_iterator it( vector.begin() );
+       it!=vector.end();
+       ++it )
+    {
+    stream << " " << ToQString( *it );
+    }
+
+  return stream;
+}
+
+/*******************************************************************************/
 template< typename T, typename Alloc >
 inline
 QTextStream&
@@ -541,6 +621,56 @@ operator << ( QTextStream& stream,
 }
 
 /*******************************************************************************/
+template<>
+inline
+QTextStream&
+operator << ( QTextStream& stream,
+	      const itk::VariableLengthVector< double >& vector )
+{
+  typedef typename itk::VariableLengthVector< double > Vector;
+
+  // Write number of elements.
+  stream << STREAM_TAG_VARIABLE_LENGTH_VECTOR << vector.Size();
+  CheckStreamStatus( stream );
+
+  // Write each element prefixed by a delimitting whitespace.
+  for( typename Vector::ElementIdentifier i=0;
+       i<vector.Size();
+       ++i )
+    {
+    stream << " " << ToQString( vector[ i ] );
+    CheckStreamStatus( stream );
+    }
+
+  return stream;
+}
+
+/*******************************************************************************/
+template<>
+inline
+QTextStream&
+operator << ( QTextStream& stream,
+	      const itk::VariableLengthVector< float >& vector )
+{
+  typedef typename itk::VariableLengthVector< float > Vector;
+
+  // Write number of elements.
+  stream << STREAM_TAG_VARIABLE_LENGTH_VECTOR << vector.Size();
+  CheckStreamStatus( stream );
+
+  // Write each element prefixed by a delimitting whitespace.
+  for( typename Vector::ElementIdentifier i=0;
+       i<vector.Size();
+       ++i )
+    {
+    stream << " " << ToQString( vector[ i ] );
+    CheckStreamStatus( stream );
+    }
+
+  return stream;
+}
+
+/*******************************************************************************/
 template< typename T >
 inline
 QTextStream&
@@ -629,7 +759,7 @@ operator << ( QTextStream& stream,
     {
     stream
       << it.GetInstanceIdentifier() << " "
-      << it.GetFrequency() << endl;
+      << ToQString( it.GetFrequency() ) << endl;
 
     CheckStreamStatus( stream );
     }
