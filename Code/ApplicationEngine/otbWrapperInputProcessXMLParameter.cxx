@@ -182,6 +182,8 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
   otb_Platform = this_->GetChildNodeTextOf(n_OTB, "platform");
   */
 
+  int ret = 0;
+
   TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
 
   std::string app_Name;
@@ -271,65 +273,57 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       {
       InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
       paramDown->SetValue(value);
-/*    if ( !paramDown->SetValue(value) )
-      {
-      return -1;
-      }
-*/
       }
     else if (dynamic_cast<InputImageParameter*>(param))
-    {
-    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-//    paramDown->SetFromFileName(value);
-    if ( !paramDown->SetFromFileName(value) )
       {
-      return -1;
+      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+      paramDown->SetFromFileName(value);
+      if (!paramDown->SetFromFileName(value))
+        {
+        ret= -1;
+        }
       }
-    }
     else if (dynamic_cast<ComplexInputImageParameter*>(param))
       {
       ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
       paramDown->SetFromFileName(value);
-/*  if ( !paramDown->SetFromFileName(value) )
-      {
-      return -1;
-      }
-*/
       }
     else if (dynamic_cast<InputVectorDataParameter*>(param))
       {
       InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
-      //paramDown->SetFromFileName(value);
+      paramDown->SetFromFileName(value);
       if ( !paramDown->SetFromFileName(value) )
         {
-        return -1;
+        ret = -1;
         }
       }
     else if (dynamic_cast<InputImageListParameter*>(param))
       {
       InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
-      //paramDown->SetListFromFileName(values);
+      paramDown->SetListFromFileName(values);
+
       if ( !paramDown->SetListFromFileName(values) )
         {
-        return -1;
+        ret = -1;
         }
+
       }
     else if (dynamic_cast<InputVectorDataListParameter*>(param))
       {
      InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
-     //paramDown->SetListFromFileName(values);
+     paramDown->SetListFromFileName(values);
      if ( !paramDown->SetListFromFileName(values) )
        {
-       return -1;
+       ret = -1;
        }
       }
     else if (dynamic_cast<InputFilenameListParameter*>(param))
       {
       InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*>(param);
-      //paramDown->SetListFromFileName(values);
+      paramDown->SetListFromFileName(values);
       if ( !paramDown->SetListFromFileName(values) )
         {
-        return -1;
+        ret= -1;
         }
       }
     else if (type == ParameterType_Radius || type == ParameterType_Int ||
