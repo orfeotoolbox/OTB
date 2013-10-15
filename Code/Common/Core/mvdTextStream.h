@@ -474,7 +474,7 @@ operator << < float, std::allocator< float > >(
 
   stream << STREAM_TAG_VECTOR << vector.size();
 
-  for( typename Vector::const_iterator it( vector.begin() );
+  for( Vector::const_iterator it( vector.begin() );
        it!=vector.end();
        ++it )
     {
@@ -496,7 +496,7 @@ operator << < double, std::allocator< double > >(
 
   stream << STREAM_TAG_VECTOR << vector.size();
 
-  for( typename Vector::const_iterator it( vector.begin() );
+  for( Vector::const_iterator it( vector.begin() );
        it!=vector.end();
        ++it )
     {
