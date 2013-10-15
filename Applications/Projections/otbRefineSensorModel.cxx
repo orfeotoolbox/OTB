@@ -174,7 +174,7 @@ private:
   sm->Optimize();
   otbAppLogINFO("Done.\n");
 
-//  bool canWrite = sm->WriteGeomFile(GetParameterString("outgeom"));
+  sm->WriteGeomFile(GetParameterString("outgeom"));
 
   double rmse = 0;
   double rmsex = 0;
