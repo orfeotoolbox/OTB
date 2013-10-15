@@ -456,8 +456,8 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     if( m_UseUnbiasedEstimator && nbPixels>1 )
       {
       regul =
-	static_cast< double >( nbRelevantPixels ) /
-	( static_cast< double >( nbRelevantPixels ) - 1.0 );
+       static_cast< double >( nbRelevantPixels ) /
+       ( static_cast< double >( nbRelevantPixels ) - 1.0 );
       }
 
     MatrixType cov  = cor;
