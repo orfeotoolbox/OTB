@@ -410,7 +410,24 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     ignoredUserPixelCount += m_IgnoredUserPixelCount[threadId];
     }
 
-  unsigned int nbRelevantPixels = nbPixels - (ignoredInfinitePixelCount + ignoredUserPixelCount);
+  // There cannot be more ignored pixels than read pixels.
+  assert( nbPixels >= ignoredInfinitePixelCount + ignoredUserPixelCount );
+  if( nbPixels < ignoredInfinitePixelCount + ignoredUserPixelCount )
+    {
+    itkExceptionMacro(
+      "nbPixels < ignoredInfinitePixelCount + ignoredUserPixelCount"
+    );
+    }
+
+  unsigned int nbRelevantPixels =
+    nbPixels - (ignoredInfinitePixelCount + ignoredUserPixelCount);
+
+  if( nbRelevantPixels==0 )
+    {
+    itkExceptionMacro(
+      "Statistics cannot be calculated with zero relevant pixels."
+    );
+    }
 
   // Final calculations
   if (m_EnableMinMax)
@@ -429,16 +446,18 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 
   if (m_EnableSecondOrderStats)
     {
-
     MatrixType cor = streamSecondOrderAccumulator / nbRelevantPixels;
     this->GetCorrelationOutput()->Set(cor);
 
     const RealPixelType& mean = this->GetMeanOutput()->Get();
-    double regul = static_cast<double>(nbRelevantPixels) / (nbRelevantPixels - 1);
 
-    if (!m_UseUnbiasedEstimator)
+    double regul = 1.0;
+
+    if( m_UseUnbiasedEstimator && nbPixels>1 )
       {
-        regul = 1;
+      regul =
+	static_cast< double >( nbRelevantPixels ) /
+	( static_cast< double >( nbRelevantPixels ) - 1.0 );
       }
 
     MatrixType cov  = cor;
