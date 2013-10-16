@@ -165,8 +165,6 @@ private:
       {
       for(unsigned int row = 0; row < nbTilesY; ++row)
         {
-        std::cout<<"Row: "<<row<<", column: "<<column<<std::endl;
-
         ofs<<"\t\t<SimpleSource>"<<std::endl;
         ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<<CreateFileName(row,column,"FINAL")<<"</SourceFilename>"<<std::endl;
         ofs<<"\t\t\t<SourceBand>1</SourceBand>"<<std::endl;
