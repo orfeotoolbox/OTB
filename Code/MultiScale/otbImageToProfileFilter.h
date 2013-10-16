@@ -83,7 +83,7 @@ protected:
    * Set the profile parameter
    * \param param The parameter to set
    */
-  virtual void SetProfileParameter(ParameterType param) {}
+  virtual void SetProfileParameter(ParameterType /*param*/) {}
   /** Get the pointer to the filter */
   itkGetObjectMacro(Filter, FilterType);
   /** GenerateData method */

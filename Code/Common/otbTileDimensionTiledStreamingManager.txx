@@ -38,7 +38,7 @@ TileDimensionTiledStreamingManager<TImage>::~TileDimensionTiledStreamingManager(
 
 template <class TImage>
 void
-TileDimensionTiledStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
+TileDimensionTiledStreamingManager<TImage>::PrepareStreaming( itk::DataObject * /*input*/, const RegionType &region )
 {
   if (m_TileDimension < 16)
     {
