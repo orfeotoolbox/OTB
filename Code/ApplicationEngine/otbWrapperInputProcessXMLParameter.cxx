@@ -46,15 +46,32 @@ ImagePixelType
 InputProcessXMLParameter::GetPixelTypeFromString(std::string strType)
 {
   if(strType == "uint8")
+    {
     return ImagePixelType_uint8;
-  if (strType == "uint16")
+    }
+  else if (strType == "uint16")
+    {
     return ImagePixelType_uint16;
-  if(strType == "uint32")
+    }
+  else if(strType == "uint32")
+    {
     return ImagePixelType_int32;
-  if(strType == "float")
+    }
+  else if(strType == "float")
+    {
     return ImagePixelType_float;
-  if(strType == "double")
+    }
+  else if(strType == "double")
+    {
     return ImagePixelType_double;
+    }
+  else
+    {
+    /*by default return float. Eg: if strType is emtpy because of no pixtype
+    node in xml which was the case earlier
+    */
+    return ImagePixelType_float;
+    }
 }
 
 void
@@ -192,7 +209,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
 
     std::cerr << message << "\n\n";
     */
-    itkExceptionMacro( << "Input XML was generated for a different application( " <<
+    itkWarningMacro( << "Input XML was generated for a different application( " <<
                        app_Name << ") while application loaded is:" <<this_->GetName());
 
     return -1;
@@ -234,9 +251,8 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       {
       OutputImageParameter *paramDown = dynamic_cast<OutputImageParameter*>(param);
       paramDown->SetFileName(value);
-      ImagePixelType outPixType = ImagePixelType_float;
-      std::string pixTypeAsString  = GetChildNodeTextOf(n_Parameter, "type");
-      outPixType = GetPixelTypeFromString(pixTypeAsString);
+      std::string pixTypeAsString  = GetChildNodeTextOf(n_Parameter, "pixtype");
+      ImagePixelType outPixType = GetPixelTypeFromString(pixTypeAsString);
       paramDown->SetPixelType(outPixType);
       }
     else if (dynamic_cast<ComplexOutputImageParameter*>(param))
