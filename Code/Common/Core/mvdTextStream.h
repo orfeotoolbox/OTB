@@ -627,14 +627,14 @@ QTextStream&
 operator << ( QTextStream& stream,
 	      const itk::VariableLengthVector< double >& vector )
 {
-  typedef typename itk::VariableLengthVector< double > Vector;
+  typedef itk::VariableLengthVector< double > Vector;
 
   // Write number of elements.
   stream << STREAM_TAG_VARIABLE_LENGTH_VECTOR << vector.Size();
   CheckStreamStatus( stream );
 
   // Write each element prefixed by a delimitting whitespace.
-  for( typename Vector::ElementIdentifier i=0;
+  for( Vector::ElementIdentifier i=0;
        i<vector.Size();
        ++i )
     {
@@ -652,14 +652,14 @@ QTextStream&
 operator << ( QTextStream& stream,
 	      const itk::VariableLengthVector< float >& vector )
 {
-  typedef typename itk::VariableLengthVector< float > Vector;
+  typedef itk::VariableLengthVector< float > Vector;
 
   // Write number of elements.
   stream << STREAM_TAG_VARIABLE_LENGTH_VECTOR << vector.Size();
   CheckStreamStatus( stream );
 
   // Write each element prefixed by a delimitting whitespace.
-  for( typename Vector::ElementIdentifier i=0;
+  for( Vector::ElementIdentifier i=0;
        i<vector.Size();
        ++i )
     {
