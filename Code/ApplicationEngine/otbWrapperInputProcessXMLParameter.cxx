@@ -276,25 +276,34 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       }
     else if (dynamic_cast<InputImageParameter*>(param))
       {
-      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-      paramDown->SetFromFileName(value);
-      if (!paramDown->SetFromFileName(value))
+      if(itksys::SystemTools::FileExists(value.c_str()))
         {
-        ret= -1;
+        InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+        paramDown->SetFromFileName(value);
+        if (!paramDown->SetFromFileName(value))
+          {
+          ret= -1;
+          }
         }
       }
     else if (dynamic_cast<ComplexInputImageParameter*>(param))
       {
-      ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
-      paramDown->SetFromFileName(value);
+      if(itksys::SystemTools::FileExists(value.c_str()))
+        {
+        ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
+        paramDown->SetFromFileName(value);
+        }
       }
     else if (dynamic_cast<InputVectorDataParameter*>(param))
       {
-      InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
-      paramDown->SetFromFileName(value);
-      if ( !paramDown->SetFromFileName(value) )
+      if(itksys::SystemTools::FileExists(value.c_str()))
         {
-        ret = -1;
+        InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
+        paramDown->SetFromFileName(value);
+        if ( !paramDown->SetFromFileName(value) )
+          {
+          ret = -1;
+          }
         }
       }
     else if (dynamic_cast<InputImageListParameter*>(param))
