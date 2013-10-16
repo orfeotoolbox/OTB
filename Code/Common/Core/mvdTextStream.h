@@ -171,18 +171,18 @@ operator >> ( QTextStream& stream,
 /*****************************************************************************/
 
 /**
- * \brief Write an std::vector< T, Alloc > into a QTextStream.
+ * \brief Write an std::vector< T, std::allocator< T > > into a QTextStream.
  *
  * \param stream QTextStream into which to write data.
- * \param vector std::vector< T, Alloc > data to write.
+ * \param vector std::vector< T, std::allocator< T > > data to write.
  *
  * \return stream instance.
  */
-template< typename T, typename Alloc >
+template< typename T >
 inline
 QTextStream&
 operator << ( QTextStream& stream,
-	      const std::vector< T, Alloc >& vector );
+	      const std::vector< T, std::allocator< T > >& vector );
 
 /**
  * \brief
@@ -190,9 +190,8 @@ operator << ( QTextStream& stream,
 template<>
 inline
 QTextStream&
-operator << < double, std::allocator< double > >(
-  QTextStream& stream,
-  const std::vector< double, std::allocator< double > >& vector );
+operator << < double >( QTextStream& stream,
+			const std::vector< double >& vector );
 
 /**
  * \brief
@@ -200,9 +199,8 @@ operator << < double, std::allocator< double > >(
 template<>
 inline
 QTextStream&
-operator << < float, std::allocator< float > >(
-  QTextStream& stream,
-  const std::vector< float, std::allocator< float > >& vector );
+operator << < float >( QTextStream& stream,
+		       const std::vector< float >& vector );
 
 /**
  * \brief Read an std::vector< T, Alloc > from a QTextStream.
@@ -442,13 +440,13 @@ operator >> ( QTextStream& stream,
 }
 
 /*******************************************************************************/
-template< typename T, typename Alloc >
+template< typename T >
 inline
 QTextStream&
 operator << ( QTextStream& stream,
-	      const std::vector< T, Alloc >& vector )
+	      const std::vector< T, std::allocator< T > >& vector )
 {
-  typedef std::vector< T, Alloc > Vector;
+  typedef std::vector< T, std::allocator< T > > Vector;
 
   stream << STREAM_TAG_VECTOR << vector.size();
 
@@ -466,9 +464,8 @@ operator << ( QTextStream& stream,
 template<>
 inline
 QTextStream&
-operator << < float, std::allocator< float > >(
-  QTextStream& stream,
-  const std::vector< float, std::allocator< float > >& vector )
+operator << < float >( QTextStream& stream,
+		       const std::vector< float >& vector )
 {
   typedef std::vector< float, std::allocator< float > > Vector;
 
@@ -488,9 +485,8 @@ operator << < float, std::allocator< float > >(
 template<>
 inline
 QTextStream&
-operator << < double, std::allocator< double > >(
-  QTextStream& stream,
-  const std::vector< double, std::allocator< double > >& vector )
+operator << < double >( QTextStream& stream,
+			const std::vector< double >& vector )
 {
   typedef std::vector< double, std::allocator< double > > Vector;
 
