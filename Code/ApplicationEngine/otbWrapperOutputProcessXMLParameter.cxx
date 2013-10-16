@@ -172,12 +172,12 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
       // if param is a Group, dont do anything, ParamGroup dont have values
       if (type != ParameterType_Group)
       {
-       bool paramExists = app->HasValue(key) && app->IsParameterEnabled(key);
+       bool paramExists = app->HasUserValue(key) && app->IsParameterEnabled(key);
        if ( key == "outxml" )
          {
            paramExists = false;
          }
-       if (type == ParameterType_Empty)
+       if (type == ParameterType_Empty && app->HasUserValue(key))
          {
            paramExists = true;
          }
