@@ -136,16 +136,17 @@ void Application::UpdateParameters()
 {
   //read application from xml only once m_IsInXMLParsed is in charge of it.
   std::string inXMLKey = "inxml";
-
-  if ( (m_HaveInXML && !m_IsInXMLParsed) &&  (GetParameterType(inXMLKey) == ParameterType_InputProcessXML
-                                            && IsParameterEnabled(inXMLKey))  )
+  if (m_HaveInXML && !m_IsInXMLParsed)
     {
-    Parameter* param = GetParameterByKey(inXMLKey);
-    InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
-    inXMLParam->Read(this);
-    m_IsInXMLParsed = true;
+    if ( GetParameterType(inXMLKey) == ParameterType_InputProcessXML  &&
+         IsParameterEnabled(inXMLKey) && HasValue(inXMLKey) )
+      {
+      Parameter* param = GetParameterByKey(inXMLKey);
+      InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
+      inXMLParam->Read(this);
+      m_IsInXMLParsed = true;
+      }
     }
-
   this->DoUpdateParameters();
 }
 

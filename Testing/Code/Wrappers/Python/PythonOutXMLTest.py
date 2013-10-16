@@ -15,9 +15,10 @@ app.SetParameterStringList("il", imagelist)
 app.SetParameterString("out", out)
 app.SetParameterString("exp", exp)
 app.SetParameterString("outxml", outxml)
-
+app.UpdateParameters()
 for paramKey in app.GetParametersKeys():
-  app.GetParameterValue(paramKey)
+  #app.GetParameterValue(paramKey)
+  print app.HasUserValue(paramKey)
 app.ExecuteAndWriteOutput()
 
 
