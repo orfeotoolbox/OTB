@@ -265,7 +265,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
 
          if(type == ParameterType_OutputImage || type == ParameterType_ComplexOutputImage)
            {
-           AddChildNodeTo(n_Parameter, "type", pixelTypeAsString);
+           AddChildNodeTo(n_Parameter, "pixtype", pixelTypeAsString);
            }
          if(!hasValueList)
            {
