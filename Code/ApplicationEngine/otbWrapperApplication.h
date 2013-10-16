@@ -178,6 +178,10 @@ public:
    */
   bool GetParameterEmpty(std::string paramKey);
 
+  /** Set HasUserValue flag of parameter with key paramKey
+   */
+  void SetParameterUserValue(std::string paramKey, bool value);
+
   /* Return the user level of access to a parameter */
   UserLevel GetParameterUserLevel(std::string paramKey) const;
 
