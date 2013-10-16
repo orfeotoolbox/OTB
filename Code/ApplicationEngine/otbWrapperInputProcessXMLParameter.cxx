@@ -358,7 +358,8 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
 
     //choice also comes as setint and setstring why??
     }
-  return 0;
+  ret = 0; //resetting return to zero, we dont use it anyway for now.
+  return ret;
 }
 
 
