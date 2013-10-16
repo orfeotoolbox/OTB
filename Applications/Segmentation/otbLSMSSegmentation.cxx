@@ -633,7 +633,7 @@ private:
   
       // Here we write a temporary vrt file that will be used to
       // stitch together all the tiles
-      std::string vrtfile = WriteVRTFile(nbTilesY,nbTilesY,sizeTilesX,sizeTilesY,sizeImageX,sizeImageY);
+      std::string vrtfile = WriteVRTFile(nbTilesX,nbTilesY,sizeTilesX,sizeTilesY,sizeImageX,sizeImageY);
 
       m_FilesToRemoveAfterExecute.push_back(vrtfile);
 

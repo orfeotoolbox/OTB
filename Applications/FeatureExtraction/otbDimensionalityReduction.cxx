@@ -337,7 +337,8 @@ private:
       {
       if (GetParameterInt("method") == 2) //MAF or VD
         {
-        otbAppLogWARNING(<<"This application only provides the forward transform .");
+        this->DisableParameter("outinv");
+        otbAppLogWARNING(<<"This application only provides the forward transform for the MAF method.");
         }
       else SetParameterOutputImage("outinv", m_InverseFilter->GetOutput());
       }
