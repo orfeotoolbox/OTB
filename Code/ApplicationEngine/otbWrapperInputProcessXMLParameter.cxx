@@ -281,6 +281,10 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
           ret= -1;
           }
         }
+      else
+        {
+        otbMsgDevMacro( << "InputImageFile saved in InputXML does not exists" );
+        }
       }
     else if (dynamic_cast<ComplexInputImageParameter*>(param))
       {
