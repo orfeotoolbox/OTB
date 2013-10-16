@@ -83,9 +83,25 @@ DatasetModel
       .filePath( DatasetModel::DESCRIPTOR_FILENAME )
       );
     }
-  catch(...)
+
+  catch( std::exception& exc )
     {
-    qWarning() <<" Exception caught while checking for version compliance on dataset "<<name<<" in directory "<<path;
+    qWarning()
+      << ToStdString(
+	tr( "Exception caught when checking version of dataset '%1': " )
+	.arg( path ) ).c_str()
+      << exc.what();
+
+    return false;
+    }
+
+  catch( ... )
+    {
+    qWarning()
+      << ToStdString(
+	tr("Exception caught when checking for version of dataset '%1': " )
+	.arg( path ) ).c_str();
+
     return false;
     }
 }

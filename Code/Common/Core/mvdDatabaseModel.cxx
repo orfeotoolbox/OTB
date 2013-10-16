@@ -135,28 +135,17 @@ DatabaseModel
   if( datasetModel==m_SelectedDatasetModel )
     return datasetModel;
 
-  /*
-  try
-    {
-  */
-    // Load dataset sub-models.
-    datasetModel->LoadImageModels( -1, -1 );
+  // Load dataset sub-models.
+  datasetModel->LoadImageModels( -1, -1 );
 
-    // Release memory from previous model
-    if( m_SelectedDatasetModel!=NULL )
-      {
-      m_SelectedDatasetModel->GetSelectedImageModel()->ReleaseMemory();
-      }
-
-    // If dataset model has been loaded, select it.
-    SetSelectedDatasetModel( datasetModel );
-  /*
-    }
-  catch( std::exception& exc )
+  // Release memory from previous model
+  if( m_SelectedDatasetModel!=NULL )
     {
-    throw exc;
+    m_SelectedDatasetModel->GetSelectedImageModel()->ReleaseMemory();
     }
-  */
+
+  // If dataset model has been loaded, select it.
+  SetSelectedDatasetModel( datasetModel );
 
   // Return loaded and selected dataset model.
   return datasetModel;

@@ -460,21 +460,9 @@ AbstractImageModel
 ::SetCurrentLod( CountType lod )
 {
   assert( lod<GetNbLod() );
+  virtual_SetCurrentLod( lod );
 
-  /*
-  try
-    {
-  */
-    virtual_SetCurrentLod( lod );
-
-    m_CurrentLod = lod;
-  /*
-    }
-  catch( std::exception& exc )
-    {
-    throw exc;
-    }
-  */
+  m_CurrentLod = lod;
 
   // if everything ok emit the new spacing of the current lod
   emit SpacingChanged(ToImageBase()->GetSpacing());

@@ -494,13 +494,12 @@ I18nCoreApplication
 	)
       );
       }
-    catch( itk::ExceptionObject& err )
+    catch( std::exception& err )
       {
-      qWarning() <<
-	tr( "An error occured while loading the geoid file, "
-	    "no geoid file will be used." );
-
-      qWarning() << err.what();
+      qWarning()
+	<< ToStdString( tr( "An error occured while loading the geoid file, "
+			    "no geoid file will be used: " ) ).c_str()
+	<< err.what();
       }
     }
 
@@ -526,13 +525,12 @@ I18nCoreApplication
 	)
       );
       }
-    catch( itk::ExceptionObject& err )
+    catch( std::exception& err )
       {
-      qWarning() <<
-	tr( "An error occured while loading the DEM directory, "
-	    "no DEM will be used." );
-
-      qWarning() << err.what();
+      qWarning()
+	<< ToStdString( tr( "An error occured while loading the DEM directory, "
+			    "no DEM will be used: " ) ).c_str()
+	<< err.what();
       }
     }
 }

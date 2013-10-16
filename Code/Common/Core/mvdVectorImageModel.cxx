@@ -180,7 +180,11 @@ VectorImageModel
   catch( std::exception& exc )
     {
     // TODO manage the message returned by OTB
-    qWarning() << "VectorImageModel::EnsureValidImage:" <<  exc.what();
+    qWarning()
+      << ToStdString(
+	tr( "Exception caught when validating file '%1': ")
+	.arg( filename ) ).c_str()
+      << exc.what();
 
     throw
       // std::runtime_error(
@@ -270,7 +274,10 @@ VectorImageModel
     // The user can continue to use the file so we return a warning message
     // TODO MSD return the message to the log widget
     qWarning() <<
-      tr( "The overviews creation failed.\nNavigation in resolution will be slower." );
+      ToStdString(
+	tr( "The overviews creation failed.\n"
+	    "Navigation in resolution will be slower." )
+      ).c_str();
 
     // throw exc;
     }
@@ -866,21 +873,10 @@ VectorImageModel
     DefaultImageFileReaderType::New()
   );
 
-  /*
-  try
-    {
-  */
-    fileReader->SetFileName( QFile::encodeName(lodFilename).constData() );
-    fileReader->UpdateOutputInformation();
+  fileReader->SetFileName( QFile::encodeName(lodFilename).constData() );
+  fileReader->UpdateOutputInformation();
 
-    m_ImageFileReader = fileReader;
-  /*
-    }
-  catch( std::exception& exc )
-    {
-    throw exc;
-    }
-  */
+  m_ImageFileReader = fileReader;
 
   // (Always) Update m_Image reference.
   m_Image = m_ImageFileReader->GetOutput();

@@ -180,7 +180,7 @@ AbstractImageModel
         {
         stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
         }
-      catch( itk::ExceptionObject& exc )
+      catch( std::exception& exc )
         {
 	qWarning() << exc.what();
 	}
