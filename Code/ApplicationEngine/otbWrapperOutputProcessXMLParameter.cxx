@@ -59,24 +59,14 @@ OutputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
     type = "int16";
     break;
     }
-    case ImagePixelType_uint16:
-    {
-    type = "uint16";
-    break;
-    }
     case ImagePixelType_int32:
     {
     type = "int32";
     break;
     }
-    case ImagePixelType_uint32:
-    {
-    type = "uint32";
-    break;
-    }
     case ImagePixelType_float:
     {
-      type = "float";
+    type = "float";
     break;
     }
     case ImagePixelType_double:
@@ -168,7 +158,6 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
       ParameterType type = app->GetParameterType(key);
       std::string typeAsString = paramGroup->GetParameterTypeAsString(type);
 
-
       // if param is a Group, dont do anything, ParamGroup dont have values
       if (type != ParameterType_Group)
       {
@@ -187,13 +176,13 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          std::vector<std::string> values;
          std::string value;
          bool hasValueList = false;
+         std::string pixelTypeAsString;
          if (type == ParameterType_OutputImage)
           {
            OutputImageParameter *imgParam = dynamic_cast<OutputImageParameter *>(param);
            value = imgParam->GetFileName();
            ImagePixelType pixType = imgParam->GetPixelType();
-           std::string ptype = pixelTypeToString(pixType); //FIXME save this
-
+           pixelTypeAsString = pixelTypeToString(pixType); //FIXME save this
          }
          else if( type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
                   type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
@@ -274,6 +263,10 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          AddChildNodeTo(n_Parameter, "type", typeAsString);
          AddChildNodeTo(n_Parameter, "name", paramName);
 
+         if(type == ParameterType_OutputImage || type == ParameterType_ComplexOutputImage)
+           {
+           AddChildNodeTo(n_Parameter, "type", pixelTypeAsString);
+           }
          if(!hasValueList)
            {
              AddChildNodeTo(n_Parameter, "value", value);
