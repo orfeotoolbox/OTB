@@ -55,8 +55,7 @@ public:
     this->Modified();
     }
 
-
-  std::string pixelTypeToString(ImagePixelType pixType);
+  ImagePixelType GetPixelTypeFromString(std::string pixTypeAsString);
 
   ParameterType GetParameterType(const Parameter* param) const;
 

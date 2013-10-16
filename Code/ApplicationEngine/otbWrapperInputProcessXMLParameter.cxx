@@ -42,50 +42,19 @@ InputProcessXMLParameter::~InputProcessXMLParameter()
 
 }
 
-std::string
-InputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
+ImagePixelType
+InputProcessXMLParameter::GetPixelTypeFromString(std::string strType)
 {
-  std::string type;
-
-  switch( pixType )
-    {
-    case ImagePixelType_uint8:
-      {
-       type = "uint8";
-       break;
-      }
-    case ImagePixelType_int16:
-      {
-       type = "int16";
-       break;
-      }
-    case ImagePixelType_uint16:
-      {
-       type = "uint16";
-       break;
-      }
-    case ImagePixelType_int32:
-      {
-       type = "int32";
-       break;
-      }
-    case ImagePixelType_uint32:
-      {
-       type = "uint32";
-       break;
-      }
-    case ImagePixelType_float:
-      {
-       type = "float";
-       break;
-      }
-    case ImagePixelType_double:
-      {
-       type = "double";
-       break;
-      }
-    }
-  return type;
+  if(strType == "uint8")
+    return ImagePixelType_uint8;
+  if (strType == "uint16")
+    return ImagePixelType_uint16;
+  if(strType == "uint32")
+    return ImagePixelType_int32;
+  if(strType == "float")
+    return ImagePixelType_float;
+  if(strType == "double")
+    return ImagePixelType_double;
 }
 
 void
@@ -93,7 +62,6 @@ InputProcessXMLParameter::otbAppLogInfo(Application::Pointer app, std::string in
 {
   app->GetLogger()->Write(itk::LoggerBase::INFO, info );
 }
-
 
 /* copied from Utilities/tinyXMLlib/tinyxml.cpp. Must have a FIX inside tinyxml.cpp */
 FILE*
@@ -246,7 +214,6 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
 
     Parameter* param = this_->GetParameterByKey(key);
     param->SetUserValue(true);
-
     TiXmlElement* n_Values = NULL;
     n_Values = n_Parameter->FirstChildElement("values");
     if(n_Values)
@@ -258,11 +225,24 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
         }
       }
 
-    if ( type == ParameterType_OutputFilename || type == ParameterType_OutputImage ||
-         type == ParameterType_ComplexOutputImage || type == ParameterType_OutputVectorData ||
+    if ( type == ParameterType_OutputFilename || type == ParameterType_OutputVectorData ||
          type == ParameterType_String || type == ParameterType_Choice)
       {
       this_->SetParameterString(key, value);
+      }
+    else if (type == ParameterType_OutputImage)
+      {
+      OutputImageParameter *paramDown = dynamic_cast<OutputImageParameter*>(param);
+      paramDown->SetFileName(value);
+      ImagePixelType outPixType = ImagePixelType_float;
+      std::string pixTypeAsString  = GetChildNodeTextOf(n_Parameter, "type");
+      outPixType = GetPixelTypeFromString(pixTypeAsString);
+      paramDown->SetPixelType(outPixType);
+      }
+    else if (dynamic_cast<ComplexOutputImageParameter*>(param))
+      {
+      ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
+      paramDown->SetFileName(value);
       }
     else if (dynamic_cast<DirectoryParameter*>(param))
       {
