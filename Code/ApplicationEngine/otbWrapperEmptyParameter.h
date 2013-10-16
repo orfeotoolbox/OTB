@@ -50,6 +50,11 @@ public:
     return false;
   }
 
+  bool HasUserValue() const
+  {
+    return this->m_UserValue;
+  }
+
 protected:
   /** Constructor */
   EmptyParameter()
