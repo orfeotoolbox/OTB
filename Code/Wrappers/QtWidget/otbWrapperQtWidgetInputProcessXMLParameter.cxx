@@ -86,8 +86,6 @@ void QtWidgetInputProcessXMLParameter::SetFileName(const QString& value)
 {
   // load xml file name
   m_XMLParam->SetValue(value.toAscii().constData());
-
- // app->UpdateParameters();
   
   // notify of value change
   QString key( m_XMLParam->GetKey() );
