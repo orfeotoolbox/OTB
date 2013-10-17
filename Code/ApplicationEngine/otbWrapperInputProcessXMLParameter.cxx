@@ -230,141 +230,147 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
 
     Parameter* param = this_->GetParameterByKey(key);
-    param->SetUserValue(true);
-    TiXmlElement* n_Values = NULL;
-    n_Values = n_Parameter->FirstChildElement("values");
-    if(n_Values)
-      {
-      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != NULL;
-          n_Value = n_Value->NextSiblingElement())
-        {
-        values.push_back(n_Value->GetText());
-        }
-      }
+    bool updateFromXML = true;
 
-    if ( type == ParameterType_OutputFilename || type == ParameterType_OutputVectorData ||
-         type == ParameterType_String || type == ParameterType_Choice)
+    if(param->HasUserValue())
+      updateFromXML = false;
+
+    if(updateFromXML)
       {
-      this_->SetParameterString(key, value);
-      }
-    else if (type == ParameterType_OutputImage)
-      {
-      OutputImageParameter *paramDown = dynamic_cast<OutputImageParameter*>(param);
-      paramDown->SetFileName(value);
-      std::string pixTypeAsString  = GetChildNodeTextOf(n_Parameter, "pixtype");
-      ImagePixelType outPixType = GetPixelTypeFromString(pixTypeAsString);
-      paramDown->SetPixelType(outPixType);
-      }
-    else if (dynamic_cast<ComplexOutputImageParameter*>(param))
-      {
-      ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
-      paramDown->SetFileName(value);
-      }
-    else if (dynamic_cast<DirectoryParameter*>(param))
-      {
-      DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
-      paramDown->SetValue(value);
-      }
-    else if (dynamic_cast<InputFilenameParameter*>(param))
-      {
-      InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
-      paramDown->SetValue(value);
-      }
-    else if (dynamic_cast<InputImageParameter*>(param))
-      {
-      if(itksys::SystemTools::FileExists(value.c_str()))
+      param->SetUserValue(true);
+
+      TiXmlElement* n_Values = NULL;
+      n_Values = n_Parameter->FirstChildElement("values");
+      if(n_Values)
         {
-        InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-        paramDown->SetFromFileName(value);
-        if (!paramDown->SetFromFileName(value))
+        for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != NULL;
+            n_Value = n_Value->NextSiblingElement())
           {
-          ret= -1;
+          values.push_back(n_Value->GetText());
           }
         }
-      else
+
+      if ( type == ParameterType_OutputFilename || type == ParameterType_OutputVectorData ||
+           type == ParameterType_String || type == ParameterType_Choice)
         {
-        otbMsgDevMacro( << "InputImageFile saved in InputXML does not exists" );
+        this_->SetParameterString(key, value);
         }
-      }
-    else if (dynamic_cast<ComplexInputImageParameter*>(param))
-      {
-      if(itksys::SystemTools::FileExists(value.c_str()))
+      else if (type == ParameterType_OutputImage)
         {
-        ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
-        paramDown->SetFromFileName(value);
+        OutputImageParameter *paramDown = dynamic_cast<OutputImageParameter*>(param);
+        paramDown->SetFileName(value);
+        std::string pixTypeAsString  = GetChildNodeTextOf(n_Parameter, "pixtype");
+        ImagePixelType outPixType = GetPixelTypeFromString(pixTypeAsString);
+        paramDown->SetPixelType(outPixType);
         }
-      }
-    else if (dynamic_cast<InputVectorDataParameter*>(param))
-      {
-      if(itksys::SystemTools::FileExists(value.c_str()))
+      else if (dynamic_cast<ComplexOutputImageParameter*>(param))
         {
-        InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
-        paramDown->SetFromFileName(value);
-        if ( !paramDown->SetFromFileName(value) )
+        ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
+        paramDown->SetFileName(value);
+        }
+      else if (dynamic_cast<DirectoryParameter*>(param))
+        {
+        DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
+        paramDown->SetValue(value);
+        }
+      else if (dynamic_cast<InputFilenameParameter*>(param))
+        {
+        InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
+        paramDown->SetValue(value);
+        }
+      else if (dynamic_cast<InputImageParameter*>(param))
+        {
+        if(itksys::SystemTools::FileExists(value.c_str()))
+          {
+          InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+          paramDown->SetFromFileName(value);
+          if (!paramDown->SetFromFileName(value))
+            {
+            ret= -1;
+            }
+          }
+        else
+          {
+          otbMsgDevMacro( << "InputImageFile saved in InputXML does not exists" );
+          }
+        }
+      else if (dynamic_cast<ComplexInputImageParameter*>(param))
+        {
+        if(itksys::SystemTools::FileExists(value.c_str()))
+          {
+          ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
+          paramDown->SetFromFileName(value);
+          }
+        }
+      else if (dynamic_cast<InputVectorDataParameter*>(param))
+        {
+        if(itksys::SystemTools::FileExists(value.c_str()))
+          {
+          InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
+          paramDown->SetFromFileName(value);
+          if ( !paramDown->SetFromFileName(value) )
+            {
+            ret = -1;
+            }
+          }
+        }
+      else if (dynamic_cast<InputImageListParameter*>(param))
+        {
+        InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+        paramDown->SetListFromFileName(values);
+        if ( !paramDown->SetListFromFileName(values) )
           {
           ret = -1;
           }
         }
-      }
-    else if (dynamic_cast<InputImageListParameter*>(param))
-      {
-      InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
-      paramDown->SetListFromFileName(values);
-
-      if ( !paramDown->SetListFromFileName(values) )
+      else if (dynamic_cast<InputVectorDataListParameter*>(param))
         {
-        ret = -1;
+        InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
+        paramDown->SetListFromFileName(values);
+        if ( !paramDown->SetListFromFileName(values) )
+          {
+          ret = -1;
+          }
         }
-
-      }
-    else if (dynamic_cast<InputVectorDataListParameter*>(param))
-      {
-     InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
-     paramDown->SetListFromFileName(values);
-     if ( !paramDown->SetListFromFileName(values) )
-       {
-       ret = -1;
-       }
-      }
-    else if (dynamic_cast<InputFilenameListParameter*>(param))
-      {
-      InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*>(param);
-      paramDown->SetListFromFileName(values);
-      if ( !paramDown->SetListFromFileName(values) )
+      else if (dynamic_cast<InputFilenameListParameter*>(param))
         {
-        ret= -1;
+        InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*>(param);
+        paramDown->SetListFromFileName(values);
+        if ( !paramDown->SetListFromFileName(values) )
+          {
+          ret= -1;
+          }
         }
-      }
-    else if (type == ParameterType_Radius || type == ParameterType_Int ||
-             type == ParameterType_RAM || typeAsString == "rand" )
-      {
-      int intValue;
-      std::stringstream(value) >> intValue;
-      this_->SetParameterInt(key, intValue);
-      }
-    else if (type == ParameterType_Float)
-      {
-      float floatValue;
-      std::stringstream(value) >> floatValue;
-      this_->SetParameterFloat(key, floatValue);
-      }
-    else if (type == ParameterType_Empty)
-      {
-      bool emptyValue = false;
-      if( value == "true")
+      else if (type == ParameterType_Radius || type == ParameterType_Int ||
+               type == ParameterType_RAM || typeAsString == "rand" )
         {
-        emptyValue = true;
+        int intValue;
+        std::stringstream(value) >> intValue;
+        this_->SetParameterInt(key, intValue);
         }
-      this_->SetParameterEmpty(key, emptyValue);
-      }
-    else if (type == ParameterType_StringList || type == ParameterType_ListView)
-      {
-      if(values.empty())
-        itkWarningMacro(<< key << " has null values");
+      else if (type == ParameterType_Float)
+        {
+        float floatValue;
+        std::stringstream(value) >> floatValue;
+        this_->SetParameterFloat(key, floatValue);
+        }
+      else if (type == ParameterType_Empty)
+        {
+        bool emptyValue = false;
+        if( value == "true")
+          {
+          emptyValue = true;
+          }
+        this_->SetParameterEmpty(key, emptyValue);
+        }
+      else if (type == ParameterType_StringList || type == ParameterType_ListView)
+        {
+        if(values.empty())
+          itkWarningMacro(<< key << " has null values");
 
-      this_->SetParameterStringList(key, values);
-      }
-
+        this_->SetParameterStringList(key, values);
+        }
+      } //end updateFromXML
     //choice also comes as setint and setstring why??
     }
   ret = 0; //resetting return to zero, we dont use it anyway for now.
