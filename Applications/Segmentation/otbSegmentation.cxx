@@ -447,6 +447,10 @@ private:
     if (segModeType == "vector")
       {
       otbAppLogINFO(<<"Large scale segmentation mode which output vector data" << std::endl);
+
+      DisableParameter("mode.raster.out");
+      EnableParameter("mode.vector.out");
+
       AddProcess(streamingVectorizedFilter->GetStreamer(), "Computing " + (dynamic_cast <ChoiceParameter *> (this->GetParameterByKey("filter")))->GetChoiceKey(GetParameterInt("filter")) + " segmentation");
 
       streamingVectorizedFilter->Initialize(); //must be called !
@@ -455,6 +459,9 @@ private:
     else if (segModeType == "raster")
       {
       otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
+
+      DisableParameter("mode.vector.out");
+      EnableParameter("mode.raster.out");
 
       streamingVectorizedFilter->GetSegmentationFilter()->SetInput(inputImage);
       SetParameterOutputImage<UInt32ImageType> ("mode.raster.out", dynamic_cast<UInt32ImageType *> (streamingVectorizedFilter->GetSegmentationFilter()->GetOutputs().at(outputNb).GetPointer()));
