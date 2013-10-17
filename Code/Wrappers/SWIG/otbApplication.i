@@ -147,6 +147,13 @@ public:
   void SetParameterString(std::string parameter, std::string value);
   void SetParameterStringList(std::string parameter, std::vector<std::string> value);
 
+  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag);
+  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag);
+  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag);
+  void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag);
+  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag);
+
+
   void SetParameterOutputImagePixelType(std::string parameter, otb::Wrapper::ImagePixelType pixelType);
   void SetParameterComplexOutputImagePixelType(std::string parameter, otb::Wrapper::ComplexImagePixelType cpixelType);
 
@@ -203,6 +210,7 @@ private:
 };
 DECLARE_REF_COUNT_CLASS( Application )
 
+/* Must be Applicaton class
 %extend Application
 {
   void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag)
@@ -226,7 +234,7 @@ DECLARE_REF_COUNT_CLASS( Application )
     $self->Application::SetParameterUserValue(parameter, hasUserValueFlag);
   }
 };
-
+*/
 #if SWIGPYTHON
 %extend Application {
   %pythoncode {

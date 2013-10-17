@@ -200,6 +200,14 @@ public:
   /* Is the application ready to be executed : All the mandatory
    * parameters have to be set
    */
+  /* Set the Parameter value and Update the UserFlag. used by xml parameter
+   */
+  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag);
+  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag);
+  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag);
+  void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag);
+  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag);
+
   bool IsApplicationReady();
 
   /* Set an integer value

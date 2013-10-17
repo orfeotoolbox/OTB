@@ -106,6 +106,35 @@ Parameter* Application::GetParameterByKey(std::string name)
   return GetParameterList()->GetParameterByKey(name);
 }
 
+void Application::SetParameterInt(std::string parameter, int value, bool hasUserValueFlag)
+{
+  this->SetParameterInt(parameter, value);
+  this->SetParameterUserValue(parameter, hasUserValueFlag);
+}
+void Application::SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag)
+{
+  this->SetParameterFloat(parameter, value);
+  this->SetParameterUserValue(parameter, hasUserValueFlag);
+}
+
+void Application::SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag)
+{
+  this->SetParameterString(parameter, value);
+  this->SetParameterUserValue(parameter, hasUserValueFlag);
+}
+
+void Application::SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag)
+{
+  this->SetParameterStringList(parameter, values);
+  this->SetParameterUserValue(parameter, hasUserValueFlag);
+}
+
+void Application::SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag)
+{
+  this->SetParameterEmpty(parameter, value);
+  this->SetParameterUserValue(parameter, hasUserValueFlag);
+}
+
 void Application::SetParameterUserValue(std::string paramKey, bool value)
 {
   GetParameterByKey(paramKey)->SetUserValue(value);
