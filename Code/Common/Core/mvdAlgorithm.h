@@ -570,12 +570,12 @@ ToQString< float >( const float& val )
     << std::endl;
 #endif
 
-  if( valf.toDouble()!=val )
+  if( valf.toFloat()!=val )
     throw std::runtime_error(
       ToStdString(
 	QCoreApplication::translate(
 	  "mvd::DatasetDescritor",
-	  "Accuracy error when converting float (%1) to string."
+	  "Accuracy loss when converting float (%1) to string."
 	)
 	.arg( valf )
       )
@@ -610,7 +610,7 @@ ToQString< double >( const double& val )
       ToStdString(
 	QCoreApplication::translate(
 	  "mvd::DatasetDescriptor",
-	  "Accuracy error when converting double (%1) to string."
+	  "Accuracy loss when converting double (%1) to string."
 	)
 	.arg( vald )
       )

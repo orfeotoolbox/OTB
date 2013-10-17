@@ -565,24 +565,44 @@ HistogramModel
     {
     RealType n = sums[ i ] / means[ i ];
 
-    if( n <= 1.0 )
-      bins[ i ] = 1;
+    qDebug() << "#" << i << ": " << n;
 
+    if( n <= 1.0 )
+      {
+      bins[ i ] = 1;
+      }
     else
       {
       RealType sigma = sqrt( covariance( i, i ) );
+
+      // qDebug() << "#" << i << ":" << sigma;
+
       assert( sigma >= 0.0 );
-
-      if( sigma==0.0 )
+     
+      if( sigma<=0.0 )
+	{
 	bins[ i ] = 1;
-
+	}
       else
 	{
 	// Scott's formula
 	// See http://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
 	RealType h = 3.5 * sigma / pow( n, 1.0 / 3.0 );
 
-	bins[ i ] = ceil( m_MaxPixel[ i ] - m_MinPixel[ i ] / h );
+	/*
+	qDebug()
+	  << "#" << i
+	  << ": h = pow(" << n << "," << 1.0 / 3.0 << ") ="
+	  << h;
+
+	qDebug()
+	  << "#" << i
+	  << ": bins[" << i << "] = ceil( ("
+	  << m_MaxPixel[ i ] << "-" << m_MinPixel[ i ] << ") / " << h << ") ="
+	  << ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
+	*/
+
+	bins[ i ] = ceil( ( m_MaxPixel[ i ] - m_MinPixel[ i ] ) / h );
 	}
       }
     }
