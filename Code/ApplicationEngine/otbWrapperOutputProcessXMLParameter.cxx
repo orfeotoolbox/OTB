@@ -59,9 +59,19 @@ OutputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
     type = "int16";
     break;
     }
+    case ImagePixelType_uint16:
+    {
+    type = "uint16";
+    break;
+    }
     case ImagePixelType_int32:
     {
     type = "int32";
+    break;
+    }
+    case ImagePixelType_uint32:
+    {
+    type = "uint32";
     break;
     }
     case ImagePixelType_float:

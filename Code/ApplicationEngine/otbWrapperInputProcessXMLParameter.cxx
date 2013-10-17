@@ -49,13 +49,21 @@ InputProcessXMLParameter::GetPixelTypeFromString(std::string strType)
     {
     return ImagePixelType_uint8;
     }
+  else if (strType == "int16")
+    {
+    return ImagePixelType_int16;
+    }
   else if (strType == "uint16")
     {
     return ImagePixelType_uint16;
     }
-  else if(strType == "uint32")
+  else if(strType == "int32")
     {
     return ImagePixelType_int32;
+    }
+  else if(strType == "uint32")
+    {
+    return ImagePixelType_uint32;
     }
   else if(strType == "float")
     {
