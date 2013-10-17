@@ -74,6 +74,11 @@ OutputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
     type = "double";
     break;
     }
+    default:
+    {
+    type = "float";
+    break;
+    }
     }
   return type;
 }
@@ -158,7 +163,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
       if (type != ParameterType_Group)
       {
        bool paramExists = app->HasUserValue(key) && app->IsParameterEnabled(key);
-       if ( key == "outxml" )
+       if ( type == ParameterType_OutputProcessXML )
          {
            paramExists = false;
          }
@@ -166,6 +171,10 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          {
            paramExists = true;
          }
+        if(type  == ParameterType_RAM)
+        {
+          paramExists = true;
+        }
        // if parameter doesn't have any value then skip it
        if (paramExists)
         {
@@ -178,7 +187,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
            OutputImageParameter *imgParam = dynamic_cast<OutputImageParameter *>(param);
            value = imgParam->GetFileName();
            ImagePixelType pixType = imgParam->GetPixelType();
-           pixelTypeAsString = pixelTypeToString(pixType); //FIXME save this
+           pixelTypeAsString = pixelTypeToString(pixType);
          }
          else if( type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
                   type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
