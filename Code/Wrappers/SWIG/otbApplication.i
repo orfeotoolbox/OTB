@@ -210,31 +210,6 @@ private:
 };
 DECLARE_REF_COUNT_CLASS( Application )
 
-/* Must be Applicaton class
-%extend Application
-{
-  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag)
-  {
-    $self->Application::SetParameterInt(parameter, value);
-    $self->Application::SetParameterUserValue(parameter, hasUserValueFlag);
-  }
-  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag)
-  {
-    $self->Application::SetParameterFloat(parameter, value);
-    $self->Application::SetParameterUserValue(parameter, hasUserValueFlag);
-  }
-  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag)
-  {
-    $self->Application::SetParameterString(parameter, value);
-    $self->Application::SetParameterUserValue(parameter, hasUserValueFlag);
-  }
-  void SetParameterStringList(std::string parameter, std::vector<std::string> value, bool hasUserValueFlag)
-  {
-    $self->Application::SetParameterStringList(parameter, value);
-    $self->Application::SetParameterUserValue(parameter, hasUserValueFlag);
-  }
-};
-*/
 #if SWIGPYTHON
 %extend Application {
   %pythoncode {
