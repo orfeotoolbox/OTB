@@ -37,3 +37,29 @@ add_test( NAME jaTvRescale
             ${TEMP}/jaTvRescaleTest.tif
             20
             150 )
+
+add_jar( JavaRescaleOutXMLTest JavaRescaleOutXMLTest.java )
+add_dependencies( JavaRescaleOutXMLTest org_otb_Application_jar )
+add_test( NAME jaTvRescaleOutXML
+          COMMAND ${TEST_DRIVER} Execute
+          ${Java_JAVA_EXECUTABLE}
+            "-Djava.library.path=${OTB_BINARY_DIR}/Code/Wrappers/SWIG${PATH_SEPARATOR}$<TARGET_FILE_DIR:otbApplicationJava>"
+            -cp "${CMAKE_JAVA_INCLUDE_PATH}${PATH_SEPARATOR}${CMAKE_CURRENT_BINARY_DIR}/JavaRescaleOutXMLTest.jar"
+            RescaleOutXMLTest
+            ${INPUTDATA}/poupees.tif
+            ${TEMP}/jaTvRescaleOutXMLTest.tif
+            20
+            150
+            ${TEMP}/jaTvRescaleOutXMLTest.xml )
+
+add_jar( JavaRescaleInXMLTest JavaRescaleInXMLTest.java )
+add_dependencies( JavaRescaleInXMLTest org_otb_Application_jar )
+add_test( NAME jaTvRescaleInXML
+          COMMAND ${TEST_DRIVER} Execute
+          ${Java_JAVA_EXECUTABLE}
+            "-Djava.library.path=${OTB_BINARY_DIR}/Code/Wrappers/SWIG${PATH_SEPARATOR}$<TARGET_FILE_DIR:otbApplicationJava>"
+            -cp "${CMAKE_JAVA_INCLUDE_PATH}${PATH_SEPARATOR}${CMAKE_CURRENT_BINARY_DIR}/JavaRescaleInXMLTest.jar"
+            RescaleInXMLTest
+            ${INPUTDATA}/jaTvRescaleInXMLTest.xml
+            ${INPUTDATA}/poupees.tif
+            ${TEMP}/jaTvRescaleInXMLTest.tif)
