@@ -10,18 +10,19 @@
 // Contains class declaration for ossimGeneralRasterWriter.
 //
 //*******************************************************************
-// $Id: ossimGeneralRasterWriter.h 21962 2012-11-30 15:44:32Z dburken $
+// $Id: ossimGeneralRasterWriter.h 22197 2013-03-12 02:00:55Z dburken $
 
 #ifndef ossimGeneralRasterWriter_HEADER
 #define ossimGeneralRasterWriter_HEADER 1
 
+#include <ossim/base/ossimConstants.h>
 #include <ossim/imaging/ossimImageFileWriter.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeyword.h>
 
-class ossimGeneralRasterWriter : public ossimImageFileWriter
+class OSSIM_DLL ossimGeneralRasterWriter : public ossimImageFileWriter
 {
 public:
 

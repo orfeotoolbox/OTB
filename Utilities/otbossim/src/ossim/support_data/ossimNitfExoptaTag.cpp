@@ -13,12 +13,9 @@
 #include <iostream>
 
 ossimNitfExoptaTag::ossimNitfExoptaTag()
+   : ossimNitfRegisteredTag(std::string("EXOPTA"), CEL_SIZE) 
 {
    clearFields();   
-}
-std::string ossimNitfExoptaTag::getRegisterTagName() const
-{
-   return "EXOPTA";
 }
 
 void ossimNitfExoptaTag::parseStream(std::istream& in)
@@ -66,29 +63,15 @@ void ossimNitfExoptaTag::writeStream(std::ostream& out)
    out.write(m_sunAz, SUN_AZ_SIZE);
 }
 
-ossim_uint32 ossimNitfExoptaTag::getSizeInBytes()const
-{
-   return (ANGLE_TO_NORTH_SIZE+ MEAN_GSD_SIZE+
-           EXOPTA_RESERVED1_SIZE+DYNAMIC_RANGE_SIZE+
-           EXOPTA_RESERVED2_SIZE + OBL_ANG_SIZE+
-           ROLL_ANG_SIZE+PRIME_ID_SIZE+
-           PRIME_BE_SIZE+EXOPTA_RESERVED3_SIZE+
-           N_SEC_SIZE+EXOPTA_RESERVED4_SIZE+
-           EXOPTA_RESERVED5_SIZE+N_SEG_SIZE+
-           MAX_LP_SEG_SIZE+EXOPTA_RESERVED6_SIZE+
-           SUN_EL_SIZE + SUN_AZ_SIZE);
-
-}
-
 std::ostream& ossimNitfExoptaTag::print(std::ostream& out,
   const std::string& prefix )const
 {
    std::string pfx = prefix;
-   pfx += getRegisterTagName();
+   pfx += getTagName();
    pfx += ".";
    out << setiosflags(ios::left)
-       << pfx << std::setw(24) << "CETAG:"      << getRegisterTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"        << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "CETAG:"      << getTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"        << getTagLength() << "\n"
        << pfx << std::setw(24) << "ANGLE_TO_NORTH:"        << m_angleToNorth<< "\n"
        << pfx << std::setw(24) << "DYNAMIC_RANGE:"        << m_dynamicRange<< "\n"
        << pfx << std::setw(24) << "OBL_ANG:"        << m_oblAng<< "\n"

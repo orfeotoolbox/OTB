@@ -13,7 +13,7 @@
 // LIMITATIONS: Does not support parameter adjustment (YET)
 //
 //*****************************************************************************
-//  $Id: ossimRpcModel.cpp 20600 2012-02-20 15:03:14Z gpotts $
+//  $Id: ossimRpcModel.cpp 22283 2013-06-10 18:41:54Z dburken $
 
 #include <ossim/projection/ossimRpcModel.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -327,6 +327,24 @@ void ossimRpcModel::worldToLineSample(const ossimGpt& ground_point,
 void  ossimRpcModel::lineSampleToWorld(const ossimDpt& imagePoint,
                                        ossimGpt&       worldPoint) const
 {
+
+//---
+// Under debate... (drb 20130610)
+// this seems to be more accurate for the round trip
+//---   
+#if 0
+   if(!imagePoint.hasNans())
+   {
+      
+      lineSampleHeightToWorld(imagePoint,
+                              worldPoint.height(),
+                              worldPoint);
+   }
+   else
+   {
+      worldPoint.makeNan();
+   }
+#else
    if(!imagePoint.hasNans())
    {
       ossimEcefRay ray;
@@ -337,6 +355,7 @@ void  ossimRpcModel::lineSampleToWorld(const ossimDpt& imagePoint,
    {
       worldPoint.makeNan();
    }
+#endif
 }
 
 //*****************************************************************************
@@ -358,6 +377,34 @@ void ossimRpcModel::imagingRay(const ossimDpt& imagePoint,
    // ossimEllipsoid::nearestIntersection method, else it goes off in the
    // weeds...
    //---
+
+// this one is messed up so keep as #if 0 untill tested more
+  #if 0 
+
+  ossimGpt gpt;
+
+ lineSampleHeightToWorld(imagePoint, theHgtOffset, gpt);
+
+ //lineSampleHeightToWorld(imagePoint, ossim::nan(), gpt);
+
+  ossimEcefVector v;
+  if(gpt.datum())
+  {
+    if(gpt.datum()->ellipsoid())
+    {
+      gpt.datum()->ellipsoid()->gradient(ossimEcefPoint(gpt), v);
+
+      v = v.unitVector();
+
+      ossimEcefPoint intECFto(gpt);
+      ossimEcefPoint intECFfrom = (intECFto + v*100000);
+
+      ossimEcefRay ray(intECFfrom, intECFto);
+
+      imageRay = ray;
+    }
+  }
+#else
    double vectorLength = theHgtScale ? (theHgtScale * 2.0) : 1000.0;
 
    ossimGpt gpt;
@@ -375,6 +422,8 @@ void ossimRpcModel::imagingRay(const ossimDpt& imagePoint,
    ossimEcefRay ray(intECFfrom, intECFto);
    
    imageRay = ray;
+
+   #endif
 }
 
 
@@ -524,6 +573,12 @@ void ossimRpcModel::lineSampleHeightToWorld(const ossimDpt& image_point,
          nlon += deltaLon;
       }
       
+      //double h = ossimElevManager::instance()->getHeightAboveEllipsoid(ossimGpt(nlat, nlon));
+     // if(!ossim::isnan(h))
+     // {
+     //   nhgt = h;
+     // }
+
       iteration++;
       
    } while (((fabs(deltaU)>epsilonU) || (fabs(deltaV)>epsilonV))

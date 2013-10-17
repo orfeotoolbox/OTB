@@ -10,7 +10,7 @@
 // Contains class declaration for common error interfaces.
 //
 //*************************************************************************
-// $Id: ossimErrorStatusInterface.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimErrorStatusInterface.h 22149 2013-02-11 21:36:10Z dburken $
 
 #ifndef ossimErrorStatusInterface_HEADER
 #define ossimErrorStatusInterface_HEADER
@@ -47,6 +47,9 @@ public:
 
    /*! Clears theErrorStatus by setting to ossimErrorCodes::OSSIM_OK or 0. */
    virtual void  clearErrorStatus() const;
+
+   /*! @return true if theErrorStatus != ossimErrorCodes::OSSIM_OK. */
+   bool hasError() const;
 
    /**
     * Outputs theErrorStatus as an ossimErrorCode and an ossimString.

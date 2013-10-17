@@ -11,7 +11,7 @@
 // This class is used to remap image data from one scalar type to another.
 //
 //*******************************************************************
-//  $Id: ossimScalarRemapper.cpp 17495 2010-06-01 23:21:42Z gpotts $
+//  $Id: ossimScalarRemapper.cpp 22135 2013-02-02 16:27:24Z dburken $
 
 #include <iostream>
 
@@ -168,36 +168,27 @@ ossimRefPtr<ossimImageData> ossimScalarRemapper::getTile(
       case OSSIM_NORMALIZED_DOUBLE:
       {
          // Un-normalize and copy the buffer to the destination tile.
-         theTile->copyNormalizedBufferToTile(static_cast<double*>(
-                                                inputTile->getBuf()));
+         theTile->copyNormalizedBufferToTile(
+            static_cast<double*>( inputTile->getBuf() ) );
          break;
       }
       case OSSIM_NORMALIZED_FLOAT:
       {
          // Un-normalize and copy the buffer to the destination tile.
-         theTile->copyNormalizedBufferToTile(static_cast<float*>(
-                                                inputTile->getBuf()));
-         break;
-      }
-      case OSSIM_SINT16:
-      case OSSIM_UINT16:
-      case OSSIM_SINT32:
-      {
-         //---
-         // Special case.  Stretch assuming caller want to view this data.
-         //---
-         inputTile->stretchMinMax();
-
-         // Normalize and copy the source tile to a buffer.
-         inputTile->copyTileToNormalizedBuffer(theNormBuf);
-         
-         // Un-normalize and copy the buffer to the destination tile.
-         theTile->copyNormalizedBufferToTile(theNormBuf);
-
+         theTile->copyNormalizedBufferToTile(
+            static_cast<float*>( inputTile->getBuf() ) );
          break;
       }
       default:
       {
+         //---
+         // NOTE: stretchMinMax commented out as it was incorrectly not resetting
+         // the tile's min/max data members; hence, messing up the downstream copy
+         // to normalized buffer. (drb 02 Feb. 2013)
+         // Special case.  Stretch assuming caller want to view this data.
+         //---
+         // inputTile->stretchMinMax();
+
          // Normalize and copy the source tile to a buffer.
          inputTile->copyTileToNormalizedBuffer(theNormBuf);
          

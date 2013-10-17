@@ -9,9 +9,9 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTag.h 21842 2012-10-11 21:00:41Z dburken $
+// $Id: ossimNitfRegisteredTag.h 22013 2012-12-19 17:37:20Z dburken $
 #ifndef ossimNitfRegisteredTag_HEADER
-#define ossimNitfRegisteredTag_HEADER
+#define ossimNitfRegisteredTag_HEADER 1
 
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimPropertyInterface.h>
@@ -19,38 +19,74 @@
 #include <string>
 
 class ossimKeywordlist;
+class ossimString;
 
 class OSSIM_DLL ossimNitfRegisteredTag : public ossimObject ,
                                          public ossimPropertyInterface
 {
 public:
+   /** @brief default constructor */
    ossimNitfRegisteredTag();
+   
+   /** @brief Constructor that takes name and size. */
+   ossimNitfRegisteredTag(const std::string& tagName, ossim_uint32 tagLength);
+
+   /** @brief destructor */
    virtual ~ossimNitfRegisteredTag();
    
    /**
-    * 
-    * This will return the name of the registered tag for this
-    * user defined header.
-    * 
+    * @brief This will return the name of the registered tag for this user
+    * defined header.
+    *
+    * @note Deprecated - Use getTagName()
     */
-   virtual std::string getRegisterTagName()const=0;
+   virtual std::string getRegisterTagName() const;
    
    /**
-    * 
-    * This will allow the user defined data to parse the stream.
-    * 
+    * @brief This will return the name of the registered tag for this user
+    * defined header.
     */
-   virtual void parseStream(std::istream& in)=0;
-   virtual void writeStream(std::ostream& out)=0;
+   virtual const std::string& getTagName() const;
 
    /**
+    * @param tagName Name of tag.
+    *
+    * @note Users should set tag name as this is an unknown tag.
+    */
+   virtual void setTagName(const std::string& tagName);
+ 
+   /**
+    * @brief Returns the length in bytes of the tag from the CEL or REL field.
+    * 
+    * @note Depricated use: getTagLength()
+    *
+    * The entire TRE length is 11 plus this(the size of the CEL or REL field).
+    *
+    * @return Length of REDATA or CEDATA.
+    */
+   virtual ossim_uint32 getSizeInBytes()const;
+
+  /**
     * @brief Returns the length in bytes of the tag from the CEL or REL field.
     *
     * The entire TRE length is 11 plus this(the size of the CEL or REL field).
     *
     * @return Length of REDATA or CEDATA.
     */
-   virtual ossim_uint32 getSizeInBytes()const=0;
+   virtual ossim_uint32 getTagLength()const;
+
+  /**
+    * @brief Set the tag length.
+    *
+    * @param length Length of tag.
+    */
+   virtual void setTagLength(ossim_uint32 length);
+    
+   /**
+    * This will allow the user defined data to parse the stream.
+    */
+   virtual void parseStream(std::istream& in)=0;
+   virtual void writeStream(std::ostream& out)=0;
 
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
@@ -79,7 +115,8 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix)const;
    
 protected:
-   ossimString theRegisteredTagName;
+   std::string  m_tagName;
+   ossim_uint32 m_tagLength;
    
 TYPE_DATA
 };

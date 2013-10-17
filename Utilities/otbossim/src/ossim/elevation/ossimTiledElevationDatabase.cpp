@@ -14,8 +14,6 @@
 // $Id$
 
 #include <ossim/elevation/ossimTiledElevationDatabase.h>
-
-#include <ossim/base/ossimCallback1.h>
 #include <ossim/base/ossimDblGrid.h>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimDpt.h>
@@ -31,43 +29,16 @@
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/util/ossimFileWalker.h>
-
 #include <cmath>
 
 static ossimTrace traceDebug(ossimString("ossimTiledElevationDatabase:debug"));
 
 RTTI_DEF1(ossimTiledElevationDatabase, "ossimTiledElevationDatabase", ossimElevationDatabase);
 
-//---
-// Call back class to register with ossimFileWalker for call to
-// ossimTiledElevationDatabase::processFile
-//
-// Placed here as it is unique to this class.
-//---
-class ProcessFileCB: public ossimCallback1<const ossimFilename&>
-{
-public:
-   ProcessFileCB(
-      ossimTiledElevationDatabase* obj,
-      void (ossimTiledElevationDatabase::*func)(const ossimFilename&))
-      :
-      m_obj(obj),
-      m_func(func)
-   {}
-      
-   virtual void operator()(const ossimFilename& file) const
-   {
-      (m_obj->*m_func)(file);
-   }
-
-private:
-   ossimTiledElevationDatabase* m_obj;
-   void (ossimTiledElevationDatabase::*m_func)(const ossimFilename& file);
-};
-
 ossimTiledElevationDatabase::ossimTiledElevationDatabase()
    :
    ossimElevationDatabase(),
+   ossimFileProcessorInterface(), 
    m_entries(0),
    m_grid(0),
    m_referenceProj(0),
@@ -94,6 +65,11 @@ ossimTiledElevationDatabase::~ossimTiledElevationDatabase()
    {
       delete m_grid;
       m_grid = 0;
+   }
+   if ( m_fileWalker )
+   {
+      delete m_fileWalker;
+      m_fileWalker = 0;
    }
 }
 
@@ -157,9 +133,6 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
    
    if ( m_connectionString.size() )
    {
-      // Put these outside the try block so we can delete if exception thrown.
-      ossimCallback1<const ossimFilename&>* cb = 0;
-
       // Wrap in try catch block as excptions can be thrown under the hood.
       try
       {
@@ -168,17 +141,21 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
          ossimFilename f = m_connectionString;
          if ( f.exists() )
          {
-            // Walk the directory
-            m_fileWalker = new ossimFileWalker();
-            m_fileWalker->initializeDefaultFilterList();
+            if ( !m_fileWalker )
+            {
+               m_fileWalker = new ossimFileWalker();
+               m_fileWalker->initializeDefaultFilterList();
 
-            m_fileWalker->setNumberOfThreads( ossim::getNumberOfThreads() );
+               m_fileWalker->setNumberOfThreads( ossim::getNumberOfThreads() );
 
-            // Must set this so we can stop recursion on directory based images.
-            m_fileWalker->setWaitOnDirFlag( true );
-            
-            cb = new ProcessFileCB(this, &ossimTiledElevationDatabase::processFile);
-            m_fileWalker->registerProcessFileCallback(cb);
+               // Must set this so we can stop recursion on directory based images.
+               m_fileWalker->setWaitOnDirFlag( true );
+
+               // This links the file walker back to our "processFile" method.
+               m_fileWalker->setFileProcessor( this );
+            }
+
+            // Walk the directory:
             m_fileWalker->walk(f);
 
             mapRegion();
@@ -194,7 +171,7 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
       {
          ossimNotify(ossimNotifyLevel_WARN)
             << "Caught exception: " << e.what() << endl;
-         m_entries.clear();
+         m_entries. clear();
       }
 
       // cleanup:
@@ -203,12 +180,7 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
          delete m_fileWalker;
          m_fileWalker = 0;
       }
-      if ( cb )
-      {
-         delete cb;
-         cb = 0;
-      }
-   }
+}
 
    if(traceDebug())
    {

@@ -21,6 +21,7 @@
 #include <ossim/base/ossimIpt.h>
 #include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageHandler.h>
+#include <OpenThreads/Mutex>
 
 /**
  * @class ossimImageElevationHandler
@@ -100,7 +101,8 @@ private:
 
    /** Image space rect stored as drect for inlined pointHasCoverage method. */
    ossimDrect                          m_rect;
-   mutable OpenThreads::Mutex          m_Mutex;
+   
+   mutable OpenThreads::Mutex          m_mutex; 
 
    TYPE_DATA
 };

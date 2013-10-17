@@ -23,47 +23,44 @@ public:
    /*!
     *  Swap bytes methods that work on a single pixel.
     */
-   void swap(ossim_sint8    &/*data*/){}
-   void swap(ossim_uint8    &/*data*/){}
-   void swap(ossim_int16   &data) const;
-   void swap(ossim_uint16  &data) const;
-   void swap(ossim_int32   &data) const;
-   void swap(ossim_uint32  &data) const;
-   void swap(ossim_uint64  &data) const;
-   void swap(ossim_sint64  &data) const;
-   void swap(ossim_float32 &data) const;
-   void swap(ossim_float64 &data) const;
+   inline void swap(ossim_sint8    &/*data*/){}
+   inline void swap(ossim_uint8    &/*data*/){}
+   inline void swap(ossim_int16   &data) const;
+   inline void swap(ossim_uint16  &data) const;
+   inline void swap(ossim_int32   &data) const;
+   inline void swap(ossim_uint32  &data) const;
+   inline void swap(ossim_uint64  &data) const;
+   inline void swap(ossim_sint64  &data) const;
+   inline void swap(ossim_float32 &data) const;
+   inline void swap(ossim_float64 &data) const;
 
    /*!
     *  Swap bytes methods that work on arrays of pixels.
     *
     *  @note size is number of pixels, not number of bytes.
     */
-   void swap(ossimScalarType scalar, void* data, ossim_uint32 size) const;
+   inline void swap(ossimScalarType scalar, void* data, ossim_uint32 size) const;
    // only here to allow template based swaps to compile correctly
    //
-   void swap(ossim_sint8* data, ossim_uint32 size)const;
-   void swap(ossim_uint8* data, ossim_uint32 size)const;
-
+   inline void swap(ossim_sint8* data, ossim_uint32 size)const;
+   inline void swap(ossim_uint8* data, ossim_uint32 size)const;
    
-   void swap(ossim_int16* data, ossim_uint32 size) const;
-   void swap(ossim_uint16* data, ossim_uint32 size) const;
+   inline void swap(ossim_int16* data, ossim_uint32 size) const;
+   inline void swap(ossim_uint16* data, ossim_uint32 size) const;
 
-   void swap(ossim_int32* data, ossim_uint32 size) const;
-   void swap(ossim_uint32* data, ossim_uint32 size) const;
+   inline void swap(ossim_int32* data, ossim_uint32 size) const;
+   inline void swap(ossim_uint32* data, ossim_uint32 size) const;
 
-//#ifdef HAS_LONG_LONG
-   void swap(ossim_int64* data, ossim_uint32 size) const;
-   void swap(ossim_uint64* data, ossim_uint32 size) const;
-//#endif
+   inline void swap(ossim_int64* data, ossim_uint32 size) const;
+   inline void swap(ossim_uint64* data, ossim_uint32 size) const;
 
-   void swap(ossim_float32* data, ossim_uint32 size) const;
-   void swap(ossim_float64* data, ossim_uint32 size) const;
+   inline void swap(ossim_float32* data, ossim_uint32 size) const;
+   inline void swap(ossim_float64* data, ossim_uint32 size) const;
 
-   void swapTwoBytes(void* data, ossim_uint32 size) const;
-   void swapFourBytes(void* data, ossim_uint32 size) const;
-   void swapEightBytes(void* data, ossim_uint32 size) const;
-   ossimByteOrder getSystemEndianType() const;
+   inline void swapTwoBytes(void* data, ossim_uint32 size) const;
+   inline void swapFourBytes(void* data, ossim_uint32 size) const;
+   inline void swapEightBytes(void* data, ossim_uint32 size) const;
+   inline ossimByteOrder getSystemEndianType() const;
 
 private:
 
@@ -214,8 +211,6 @@ inline void ossimEndian::swap(ossim_uint32* data, ossim_uint32 size) const
    swapFourBytes(data, size);
 }
 
-#ifdef HAS_LONG_LONG
-
 inline void ossimEndian::swap(ossim_int64* data, ossim_uint32 size) const
 {
    swapEightBytes(data, size);
@@ -225,8 +220,6 @@ inline void ossimEndian::swap(ossim_uint64* data, ossim_uint32 size) const
 {
    swapEightBytes(data, size);
 }
-
-#endif /* End of #ifdef HAS_LONG_LONG */
 
 inline void ossimEndian::swap(ossim_float32* data, ossim_uint32 size) const
 {
@@ -262,9 +255,8 @@ inline void ossimEndian::swapFourBytes(void* data, ossim_uint32 size) const
 
 inline void ossimEndian::swapEightBytes(void* data, ossim_uint32 size) const
 {
-#ifdef HAS_LONG_LONG
-   uint64* buf = reinterpret_cast<ossim_uint64*>(data);
-   for (uint32 i=0; i<size; ++i)
+   ossim_uint64* buf = reinterpret_cast<ossim_uint64*>(data);
+   for (ossim_uint32 i=0; i<size; ++i)
    {
       buf[i]
          = (  ((buf[i] & 0xff00000000000000ull) >> 56)
@@ -276,14 +268,6 @@ inline void ossimEndian::swapEightBytes(void* data, ossim_uint32 size) const
             | ((buf[i] & 0x000000000000ff00ull) << 40)
             | ((buf[i] & 0x00000000000000ffull) << 56));
    }
-#else
-   ossim_float64* buf = reinterpret_cast<ossim_float64*>(data);
-   for (ossim_uint32 i=0; i<size; ++i)
-   {
-      swapEightBytes(buf+i);
-   }
-   
-#endif
 }
 
 #endif /* End of #ifndef ossimEndian_HEADER */

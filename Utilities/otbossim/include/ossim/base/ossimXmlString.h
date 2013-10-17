@@ -6,7 +6,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimXmlString.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimXmlString.h 22326 2013-07-25 17:13:55Z gpotts $
 
 #ifndef ossimXmlString_HEADER
 #define ossimXmlString_HEADER
@@ -58,7 +58,9 @@ public:
       {
          return assign(ossimString(s));
       }
-
+   static ossimString wrapCDataIfNeeded(const ossimString& input);
+   static ossimString wrapCData(const ossimString& input);
+   static bool containsSpecialXmlCharacters(const ossimString& value);
    const ossimXmlString& assign(const ossimString& s);
 };
 

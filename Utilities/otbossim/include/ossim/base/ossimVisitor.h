@@ -1,4 +1,4 @@
-// $Id: ossimVisitor.h 21850 2012-10-21 20:09:55Z dburken $
+// $Id: ossimVisitor.h 22158 2013-02-20 12:29:10Z gpotts $
 
 #ifndef ossimVisitor_HEADER
 #define ossimVisitor_HEADER 1
@@ -90,9 +90,16 @@ protected:
 class OSSIM_DLL ossimIdVisitor : public ossimVisitor
 {
 public:
-   ossimIdVisitor(int visitorType =(VISIT_INPUTS|VISIT_CHILDREN));
-   ossimIdVisitor(const ossimId& id = ossimId(), int visitorType =(VISIT_INPUTS|VISIT_CHILDREN));
+   /** 
+    * @brief Default constructor
+    * Constructs with id of 0 and vistor type of VISIT_INPUTS|VISIT_CHILDREN.
+    */
+   ossimIdVisitor();
+
+   ossimIdVisitor(int visitorType);
+   ossimIdVisitor(const ossimId& id, int visitorType =(VISIT_INPUTS|VISIT_CHILDREN));
    ossimIdVisitor(const ossimIdVisitor& src);
+
    virtual ossimRefPtr<ossimVisitor> dup()const;
    virtual void visit(ossimConnectableObject* obj);
 
@@ -187,6 +194,9 @@ public:
     */
    virtual void visit(ossimObject* obj);
    
+
+   ossimObject* getView();
+   const ossimObject* getView()const;
 protected:
    ossimRefPtr<ossimObject> m_view;
 };

@@ -13,7 +13,7 @@
 // ossimTiffTileSource  is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimTiffTileSource.h 21631 2012-09-06 18:10:55Z dburken $
+//  $Id: ossimTiffTileSource.h 22243 2013-04-20 15:27:22Z dburken $
 
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER 1
@@ -37,7 +37,8 @@ public:
       READ_RGBA_U8_STRIP,
       READ_RGBA_U8A_STRIP,
       READ_SCAN_LINE,
-      READ_TILE
+      READ_TILE,
+      READ_U16_STRIP
    };
 
    ossimTiffTileSource();
@@ -265,10 +266,13 @@ private:
    bool loadFromRgbaU8aStrip(const ossimIrect& tile_rect,
                              const ossimIrect& clip_rect,
                              ossimImageData* result);
+
+   bool loadFromU16Strip(const ossimIrect& clip_rect,
+                         ossimImageData* result);
    
    bool loadFromScanLine(const ossimIrect& clip_rect,
                          ossimImageData* result);
-   
+
    bool loadFromTile(const ossimIrect& clip_rect,
                      ossimImageData* result);
    

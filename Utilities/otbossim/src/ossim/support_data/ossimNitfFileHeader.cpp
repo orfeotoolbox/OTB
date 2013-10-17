@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.cpp 19043 2011-03-10 15:24:24Z dburken $
+// $Id: ossimNitfFileHeader.cpp 22418 2013-09-26 15:01:12Z gpotts $
 #include <ossim/support_data/ossimNitfFileHeader.h>
 #include <ossim/base/ossimContainerProperty.h>
 #include <iostream>
@@ -95,9 +95,12 @@ void ossimNitfFileHeader::removeTag(const ossimString& tagName)
       }
    }
 }
-void ossimNitfFileHeader::addTag(const ossimNitfTagInformation& tag)
+void ossimNitfFileHeader::addTag(const ossimNitfTagInformation& tag, bool unique)
 {
-   removeTag(tag.getTagName());
+   if(unique)
+   {
+      removeTag(tag.getTagName());
+   }
    theTagList.push_back(tag);
 }
 

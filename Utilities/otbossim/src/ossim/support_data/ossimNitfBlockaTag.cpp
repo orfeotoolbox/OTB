@@ -9,7 +9,7 @@
 // Description: BLOCKA tag class declaration.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfBlockaTag.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfBlockaTag.cpp 22013 2012-12-19 17:37:20Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <sstream>
@@ -27,13 +27,9 @@ static const ossimTrace traceDebug(ossimString("ossimNitfBlockaTag:debug"));
 RTTI_DEF1(ossimNitfBlockaTag, "ossimNitfBlockaTag", ossimNitfRegisteredTag);
 
 ossimNitfBlockaTag::ossimNitfBlockaTag()
+   : ossimNitfRegisteredTag(std::string("BLOCKA"), 123)
 {
    clearFields();
-}
-
-std::string ossimNitfBlockaTag::getRegisterTagName() const
-{
-   return std::string("BLOCKA");
 }
 
 void ossimNitfBlockaTag::parseStream(std::istream& in)
@@ -69,11 +65,6 @@ void ossimNitfBlockaTag::writeStream(std::ostream& out)
    out.write(theField11,       FIELD_11_SIZE);
 }
 
-ossim_uint32 ossimNitfBlockaTag::getSizeInBytes()const
-{
-   return 123;
-}
-
 void ossimNitfBlockaTag::clearFields()
 {
    memcpy(theBlockInstance, "01",    BLOCK_INSTANCE_SIZE);
@@ -105,7 +96,7 @@ std::ostream& ossimNitfBlockaTag::print(std::ostream& out,
                                         const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getRegisterTagName();
+   pfx += getTagName();
    pfx += ".";
    
    // Grab the corners parsed into points.
@@ -119,8 +110,8 @@ std::ostream& ossimNitfBlockaTag::print(std::ostream& out,
    getLrfcLoc(llPt);
    
    out << setiosflags(ios::left)
-       << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "CETAG:" << getTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
        << pfx << std::setw(24) << "BLOCK_INSTANCE:" << theBlockInstance << "\n"
        << pfx << std::setw(24) << "N_GRAY:"         << theNGray << "\n"
        << pfx << std::setw(24) << "L_LINES:"        << theLLines << "\n"

@@ -6,12 +6,13 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfTagInformation.cpp 16997 2010-04-12 18:53:48Z dburken $
+// $Id: ossimNitfTagInformation.cpp 22418 2013-09-26 15:01:12Z gpotts $
 
 #include <ossim/support_data/ossimNitfTagInformation.h>
+#include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/support_data/ossimNitfTagFactoryRegistry.h>
 #include <ossim/support_data/ossimNitfUnknownTag.h>
-#include <ossim/base/ossimCommon.h>
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -30,25 +31,40 @@ void ossimNitfTagInformation::parseStream(std::istream &in)
 {
    if(in)
    {
+      clearFields();
       theTagOffset = in.tellg();
       in.read(theTagName, 6);
       in.read(theTagLength, 5);
       theTagDataOffset = in.tellg();
 
-      theTagData = ossimNitfTagFactoryRegistry::instance()->
-         create(getTagName());
+      theTagData = ossimNitfTagFactoryRegistry::instance()->create(getTagName());
 
       if (theTagData.valid())
       {
          if (theTagData->getClassName() == "ossimNitfUnknownTag")
          {
-            ossimNitfUnknownTag* tag = PTR_CAST(ossimNitfUnknownTag,
-                                                theTagData.get());
-            if (tag)
-            {
-               tag->setTagName(getTagName());
-               tag->setTagLength(getTagLength());
-            }
+            // Unknown tag doesn't know his tag name yet.
+            theTagData->setTagName( getTagName() );
+         }
+
+         //---
+         // Tags with dynamic tag length construct with 0 length.
+         // Set if 0.
+         //---
+         if ( theTagData->getTagLength() == 0 )
+         {
+            theTagData->setTagLength( getTagLength() );
+         }
+         // Sanity check fixed length in code with length from CEL field:
+         else if ( theTagData->getTagLength() != getTagLength() )
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimNitfTagInformation::parseStream WARNING!"
+               << "\nCEL field length does not match fixed tag length for tag: "
+               << theTagData->getTagName().c_str()
+               << "\nCEL: " << getTagLength()
+               << "\nTag: " << theTagData->getTagLength()
+               << std::endl;
          }
                                
          theTagData->parseStream(in);
@@ -99,8 +115,9 @@ ossimString ossimNitfTagInformation::getTagName()const
 
 std::ostream& ossimNitfTagInformation::print(std::ostream& out)const
 {
-   out << "theTagName:          " << theTagName
+   out << "theTagName:            " << theTagName
        << "\ntheTagLength:        " << theTagLength
+       << "\theTagType:           " << theTagType
        << "\ntheTagOffset:        " << theTagOffset
        << "\ntheTagDataOffset:    " << theTagDataOffset
        << std::endl;
@@ -112,6 +129,7 @@ void ossimNitfTagInformation::clearFields()
 {
    memset(theTagName, ' ', 6);
    memset(theTagLength, '0', 5);
+   strcpy(theTagType, "IXSHD ");
 
    theTagName[6]    = '\0';
    theTagLength[5]  = '\0';
@@ -173,3 +191,19 @@ void ossimNitfTagInformation::setTagData(ossimRefPtr<ossimNitfRegisteredTag> tag
       setTagLength(theTagData->getSizeInBytes());
    }
 }
+ossimString ossimNitfTagInformation::getTagType() const
+{
+   return ossimString(theTagType).trim();
+}
+
+void ossimNitfTagInformation::setTagType(const ossimString& tagType) const
+{
+   std::ostringstream out;
+   out << std::setw(6)
+       << std::setfill(' ')
+       << std::setiosflags(std::ios::left)
+       << tagType;
+   memcpy(theTagType, out.str().c_str(), 6);
+   theTagType[6] = 0;
+}
+

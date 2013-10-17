@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.cpp 20061 2011-09-07 16:46:16Z gpotts $
+//  $Id: ossimSFIMFusion.cpp 22439 2013-10-11 19:16:09Z dburken $
 #include <ossim/imaging/ossimSFIMFusion.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
@@ -55,8 +55,6 @@ ossimRefPtr<ossimImageData> ossimSFIMFusion::getTile(const ossimIrect& rect,
    {
       return theInputConnection->getTile(rect, resLevel);
    }
-
-   
    
    if(!theNormLowPassTile.valid())
    {
@@ -110,14 +108,6 @@ ossimRefPtr<ossimImageData> ossimSFIMFusion::getTile(const ossimIrect& rect,
 
    ossimRefPtr<ossimImageData> normColorData = getNormTile(rect, resLevel);
    
-   ossim_uint32 y = 0;
-   ossim_uint32 x = 0;
-   ossim_uint32 w = theTile->getWidth();
-   ossim_uint32 h = theTile->getHeight();
-
-   theTile->makeBlank();
-   theTile->setImageRectangle(rect);
-   
    if(!normColorData.valid())
    {
      return 0;
@@ -129,6 +119,16 @@ ossimRefPtr<ossimImageData> ossimSFIMFusion::getTile(const ossimIrect& rect,
    {
       return theTile;
    }
+
+   // Must set the rectangle before querrying height and width.
+   theTile->makeBlank();
+   theTile->setImageRectangle(rect);
+   
+   ossim_uint32 y = 0;
+   ossim_uint32 x = 0;
+   ossim_uint32 w = theTile->getWidth();
+   ossim_uint32 h = theTile->getHeight();
+
    ossimRefPtr<ossimImageData> normColorOutputData = (ossimImageData*)normColorData->dup();
    normColorOutputData->setImageRectangle(rect);
    normColorOutputData->loadTile(normColorData.get());

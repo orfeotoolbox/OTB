@@ -7,10 +7,10 @@ class ossimNitfLocalCartographicTag : public ossimNitfRegisteredTag
 public:
    ossimNitfLocalCartographicTag();
    virtual ~ossimNitfLocalCartographicTag();
-   virtual std::string getRegisterTagName()const;
+
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
-   virtual ossim_uint32 getSizeInBytes()const;
+
    virtual void clearFields();
 
 

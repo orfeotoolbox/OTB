@@ -8,24 +8,19 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfProjectionParameterTag.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfProjectionParameterTag.cpp 22013 2012-12-19 17:37:20Z dburken $
 #include <ossim/support_data/ossimNitfProjectionParameterTag.h>
 #include <sstream>
 #include <iomanip>
 
 ossimNitfProjectionParameterTag::ossimNitfProjectionParameterTag()
-:ossimNitfRegisteredTag()
+   :ossimNitfRegisteredTag(std::string("PRJPSB"), 0 )
 {
    clearFields();
 }
 
 ossimNitfProjectionParameterTag::~ossimNitfProjectionParameterTag()
 {
-}
-
-std::string ossimNitfProjectionParameterTag::getRegisterTagName()const
-{
-   return std::string("PRJPSB");
 }
 
 void ossimNitfProjectionParameterTag::parseStream(std::istream& in)
@@ -48,6 +43,9 @@ void ossimNitfProjectionParameterTag::parseStream(std::istream& in)
    }
    in.read(theFalseXOrigin, 15);
    in.read(theFalseYOrigin, 15);
+
+   // Set the base tag length.
+   setTagLength( getSizeInBytes() );
 }
 
 void ossimNitfProjectionParameterTag::writeStream(std::ostream& out)
@@ -87,7 +85,7 @@ std::ostream& ossimNitfProjectionParameterTag::print(
 
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
        << pfx << std::setw(24) << "PRN:"   << theProjectionName << "\n"
        << pfx << std::setw(24) << "PCO:"   << theProjectionCode << "\n"
        << pfx << std::setw(24) << "NUM_PRJ:" << theNumberOfParameters << "\n";
@@ -122,6 +120,9 @@ void ossimNitfProjectionParameterTag::clearFields()
    theNumberOfParameters[1] = '\0';
    theFalseXOrigin[15] = '\0';
    theFalseYOrigin[15] = '\0';
+
+   // Set the base tag length.
+   setTagLength( 0 );
 }
 
 void ossimNitfProjectionParameterTag::clearParameters()

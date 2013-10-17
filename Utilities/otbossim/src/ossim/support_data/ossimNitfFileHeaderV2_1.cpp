@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.cpp 20123 2011-10-11 17:55:44Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.cpp 22418 2013-09-26 15:01:12Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -22,12 +22,13 @@
 #include <ossim/base/ossimColorProperty.h>
 #include <ossim/base/ossimDateProperty.h>
 #include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimIoStream.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/support_data/ossimNitfImageHeaderV2_1.h>
 #include <ossim/support_data/ossimNitfImageHeaderV2_X.h>
-#include <ossim/support_data/ossimNitfDataExtensionSegmentV2_0.h> // ??? drb
+#include <ossim/support_data/ossimNitfDataExtensionSegmentV2_1.h> // ??? drb
 
 
 RTTI_DEF1(ossimNitfFileHeaderV2_1,
@@ -59,9 +60,9 @@ std::ostream& operator <<(std::ostream& out,
               << std::endl;
 }
 
-ossim_uint32 ossimNitfImageInfoRecordV2_1::getHeaderLength()const
+ossim_uint64 ossimNitfImageInfoRecordV2_1::getHeaderLength()const
 {
-   return ossimString(theImageSubheaderLength).toUInt32();
+   return ossimString(theImageSubheaderLength).toUInt64();
 }
 
 ossim_uint64 ossimNitfImageInfoRecordV2_1::getImageLength()const
@@ -93,8 +94,22 @@ std::ostream& operator <<(std::ostream& out,
               << data.theTextFileLength
               << std::endl;
 }
+ossim_uint64 ossimNitfGraphicInfoRecordV2_1::getHeaderLength()const
+{
+   return ossimString(theGraphicSubheaderLength).toUInt64();
+}
 
-void ossimNitfTextFileInfoRecordV2_1::setSubheaderLength(ossim_uint32 length)
+ossim_uint64 ossimNitfGraphicInfoRecordV2_1::getGraphicLength()const
+{
+   return ossimString(theGraphicLength).toUInt64();
+}
+
+ossim_uint64 ossimNitfGraphicInfoRecordV2_1::getTotalLength()const
+{
+   return getGraphicLength() + getHeaderLength();
+}
+
+void ossimNitfTextFileInfoRecordV2_1::setSubheaderLength(ossim_uint64 length)
 {
    ostringstream out;
    
@@ -120,17 +135,17 @@ void ossimNitfTextFileInfoRecordV2_1::setTextLength(ossim_uint64 length)
    theTextFileLength[5] = '\0';
 }
 
-ossim_uint32 ossimNitfTextFileInfoRecordV2_1::getHeaderLength()const
+ossim_uint64 ossimNitfTextFileInfoRecordV2_1::getHeaderLength()const
 {
-   return ossimString(theTextFileSubheaderLength).toInt32();
+   return ossimString(theTextFileSubheaderLength).toUInt64();
 }
 
-ossim_uint32 ossimNitfTextFileInfoRecordV2_1::getTextLength()const
+ossim_uint64 ossimNitfTextFileInfoRecordV2_1::getTextLength()const
 {
-   return ossimString(theTextFileLength).toInt32();
+   return ossimString(theTextFileLength).toUInt64();
 }
 
-ossim_uint32 ossimNitfTextFileInfoRecordV2_1::getTotalLength()const
+ossim_uint64 ossimNitfTextFileInfoRecordV2_1::getTotalLength()const
 {
    return (getHeaderLength() + getTextLength());
 }
@@ -146,6 +161,21 @@ std::ostream& operator <<(std::ostream& out,
               << std::endl;
 }
 
+ossim_uint64 ossimNitfDataExtSegInfoRecordV2_1::getHeaderLength()const
+{
+   return ossimString(theDataExtSegSubheaderLength).toUInt64();
+}
+
+ossim_uint64 ossimNitfDataExtSegInfoRecordV2_1::getDataExtSegLength()const
+{
+   return ossimString(theDataExtSegLength).toUInt64();
+}
+
+ossim_uint64 ossimNitfDataExtSegInfoRecordV2_1::getTotalLength()const
+{
+   return getDataExtSegLength() + getHeaderLength();
+}
+
 std::ostream& operator <<(std::ostream& out,
                      const ossimNitfResExtSegInfoRecordV2_1 &data)
 {
@@ -156,6 +186,20 @@ std::ostream& operator <<(std::ostream& out,
               << std::endl;
 }
 
+ossim_uint64 ossimNitfResExtSegInfoRecordV2_1::getHeaderLength()const
+{
+   return ossimString(theResExtSegSubheaderLength).toUInt64();
+}
+
+ossim_uint64 ossimNitfResExtSegInfoRecordV2_1::getResExtSegLength()const
+{
+   return ossimString(theResExtSegLength).toUInt64();
+}
+
+ossim_uint64 ossimNitfResExtSegInfoRecordV2_1::getTotalLength()const
+{
+   return getResExtSegLength() + getHeaderLength();
+}
 
 void ossimNitfImageInfoRecordV2_1::setSubheaderLength(ossim_uint32 length)
 {
@@ -304,16 +348,18 @@ void ossimNitfFileHeaderV2_1::parseStream(std::istream& in)
    if(userDefinedHeaderLength > 0)
    {
       in.read(theUserDefinedHeaderOverflow, 3);
+      current = in.tellg();
          
       while((current - start) < userDefinedHeaderLength)
       {
          headerTag.parseStream(in);
+         headerTag.setTagType("UDHD");
          theTagList.push_back(headerTag);
          // in.ignore(headerTag.getTagLength());
          // headerTag.clearFields();
          current = in.tellg();
       }
-      in.seekg(start + userDefinedHeaderLength);
+      //in.seekg(start + userDefinedHeaderLength);
       theHeaderSize += (userDefinedHeaderLength);
    }
    in.read(theExtendedHeaderDataLength, 5);
@@ -326,6 +372,7 @@ void ossimNitfFileHeaderV2_1::parseStream(std::istream& in)
    if(extendedHeaderDataLength > 0)
    {
       in.read(theExtendedHeaderDataOverflow, 3);
+      current = in.tellg();
       while((current - start) < extendedHeaderDataLength)
       {
          headerTag.parseStream(in);
@@ -336,11 +383,47 @@ void ossimNitfFileHeaderV2_1::parseStream(std::istream& in)
          current = in.tellg();
       }
       theHeaderSize += extendedHeaderDataLength;
-      in.seekg(start + extendedHeaderDataLength);
+      //in.seekg(start + extendedHeaderDataLength);
    }
 
    // this need to be re-thought
    initializeAllOffsets();
+   readOverflowTags(in);
+}
+
+void ossimNitfFileHeaderV2_1::readOverflowTags(istream& in)
+{
+   ossim_int32 overflow = ossimString(theUserDefinedHeaderOverflow).toInt32();
+   if (overflow != 0)
+   {
+      ossimNitfDataExtensionSegment *des = getNewDataExtensionSegment(overflow-1, in);
+      if (des != NULL)
+      {
+         const vector<ossimNitfTagInformation> &desTags = des->getTagList();
+         for (vector<ossimNitfTagInformation>::const_iterator iter = desTags.begin(); iter != desTags.end(); ++iter)
+         {
+            iter->setTagType("UDHD");
+            theTagList.push_back(*iter);
+         }
+      }
+      delete des;
+   }
+
+   overflow = ossimString(theExtendedHeaderDataOverflow).toInt32();
+   if (overflow != 0)
+   {
+      ossimNitfDataExtensionSegment *des = getNewDataExtensionSegment(overflow-1, in);
+      if (des != NULL)
+      {
+         const vector<ossimNitfTagInformation> &desTags = des->getTagList();
+         for (vector<ossimNitfTagInformation>::const_iterator iter = desTags.begin(); iter != desTags.end(); ++iter)
+         {
+            iter->setTagType("XHD");
+            theTagList.push_back(*iter);
+         }
+      }
+      delete des;
+   }
 }
 
 void ossimNitfFileHeaderV2_1::writeStream(std::ostream &out)
@@ -458,12 +541,12 @@ void ossimNitfFileHeaderV2_1::writeStream(std::ostream &out)
          out.write(theNitfResExtSegInfoRecords[idx].theResExtSegLength, 7);
       }
    }
+/*
    out.write(theUserDefinedHeaderDataLength, 5);
    if(ossimString(theUserDefinedHeaderDataLength).toInt32() > 0)
    {
       out.write(theUserDefinedHeaderOverflow, 3);
    }
-
    ossim_uint32 totalLength = getTotalTagLength();
    if(totalLength <= 99999)
    {
@@ -498,6 +581,81 @@ void ossimNitfFileHeaderV2_1::writeStream(std::ostream &out)
    {
       ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimNitfFileHeaderV2_1::writeStream: Only support writing of total tag length < 99999" << std::endl;
    }
+   */
+      ossim_uint32 totalLength = ossimString(theUserDefinedHeaderDataLength).toUInt32();
+   if (totalLength > 0)
+   {
+      totalLength += 3;
+   }
+
+   // Scope tempOut
+   {
+      std::ostringstream tempOut;
+      tempOut << std::setw(5)
+              << std::setfill('0')
+              << std::setiosflags(ios::right)
+              << totalLength;
+
+      out.write(tempOut.str().c_str(), 5);
+   }
+
+   if (totalLength > 0)
+   {
+      if(totalLength <= 99999)
+      {
+         out.write(theUserDefinedHeaderOverflow, 3);
+
+         for (unsigned int i = 0; i < theTagList.size(); ++i)
+         {
+            if (theTagList[i].getTagType() == "UDHD")
+            {
+               theTagList[i].writeStream(out);
+            }
+         }
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimNitfFileHeaderV2_1::writeStream: Only support writing of total tag length <= 99999" << std::endl;
+      }
+   }
+
+   totalLength = ossimString(theExtendedHeaderDataLength).toUInt32();
+   if (totalLength > 0)
+   {
+      totalLength += 3;
+   }
+
+   // Scope tempOut
+   {
+      std::ostringstream tempOut;
+      tempOut << std::setw(5)
+              << std::setfill('0')
+              << std::setiosflags(ios::right)
+              << totalLength;
+
+      out.write(tempOut.str().c_str(), 5);
+   }
+
+   if (totalLength > 0)
+   {
+      if(totalLength <= 99999)
+      {
+         out.write(theExtendedHeaderDataOverflow, 3);
+
+         for(unsigned int i = 0; i < theTagList.size(); ++i)
+         {
+            if (theTagList[i].getTagType() == "XHD")
+            {
+               theTagList[i].writeStream(out);
+            }
+         }
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimNitfFileHeaderV2_1::writeStream: Only support writing of total tag length <= 99999" << std::endl;
+      }
+   }
+
 }
 
 std::ostream& ossimNitfFileHeaderV2_1::print(std::ostream& out,
@@ -710,7 +868,7 @@ ossimNitfTextHeader *ossimNitfFileHeaderV2_1::allocateTextHeader()const
 
 ossimNitfDataExtensionSegment* ossimNitfFileHeaderV2_1::allocateDataExtSegment()const
 {
-   return new ossimNitfDataExtensionSegmentV2_0;
+   return new ossimNitfDataExtensionSegmentV2_1;
 }
 
 bool ossimNitfFileHeaderV2_1::isEncrypted()const
@@ -958,12 +1116,17 @@ ossim_int32 ossimNitfFileHeaderV2_1::getNumberOfSymbols()const
 
 ossim_int32 ossimNitfFileHeaderV2_1::getNumberOfGraphics()const
 {
-   return 0;
+   return theNitfGraphicInfoRecords.size();
 }
 
 ossim_int32 ossimNitfFileHeaderV2_1::getNumberOfDataExtSegments()const
 {
-   return 0;
+   return theNitfDataExtSegInfoRecords.size();
+}
+
+ossim_int32 ossimNitfFileHeaderV2_1::getNumberOfReservedExtSegments()const
+{
+   return theNitfResExtSegInfoRecords.size();
 }
 
 const char* ossimNitfFileHeaderV2_1::getDateTime()const
@@ -1024,13 +1187,35 @@ void ossimNitfFileHeaderV2_1::initializeAllOffsets()
 
    // clear out all offset inforamtion and begin populating them
    theImageOffsetList.clear();
+   theGraphicOffsetList.clear();
+   theTextFileOffsetList.clear();
+   theDataExtSegOffsetList.clear();
 
    for(idx = 0; idx < theNitfImageInfoRecords.size(); ++idx)
    {
       theImageOffsetList.push_back(ossimNitfImageOffsetInformation(tally,
-                                                                   tally + (ossim_uint64)theNitfImageInfoRecords[idx].getHeaderLength()));
+                                                                   tally + theNitfImageInfoRecords[idx].getHeaderLength()));
       tally += theNitfImageInfoRecords[idx].getTotalLength();
+   }
+   for(idx = 0; idx < theNitfGraphicInfoRecords.size(); ++idx)
+   {
+      theGraphicOffsetList.push_back(ossimNitfGraphicOffsetInformation(tally,
+                                                                     tally + theNitfGraphicInfoRecords[idx].getHeaderLength()));
+      tally += theNitfGraphicInfoRecords[idx].getTotalLength();
+   }
 
+   for(idx = 0; idx < theNitfTextFileInfoRecords.size(); ++idx)
+   {
+      theTextFileOffsetList.push_back(ossimNitfTextOffsetInformation(tally,
+                                                                     tally + theNitfTextFileInfoRecords[idx].getHeaderLength()));
+      tally += theNitfTextFileInfoRecords[idx].getTotalLength();
+   }
+
+   for(idx = 0; idx < theNitfDataExtSegInfoRecords.size(); ++idx)
+   {
+      theDataExtSegOffsetList.push_back(ossimNitfDataExtSegOffsetInformation(tally,
+                                                                             tally + theNitfDataExtSegInfoRecords[idx].getHeaderLength()));
+      tally += theNitfDataExtSegInfoRecords[idx].getTotalLength();
    }
 }
 
@@ -1093,10 +1278,18 @@ ossimNitfFileHeaderV2_1::getNewTextHeader(ossim_uint32 /* textNumber */,
 
 ossimNitfDataExtensionSegment*
 ossimNitfFileHeaderV2_1::getNewDataExtensionSegment(
-   ossim_uint32 /* dataExtNumber */, std::istream& /* in */)const
+   ossim_int32 dataExtNumber, std::istream&  in )const
 {
-   // Currently not implemented...
    ossimNitfDataExtensionSegment *result = 0;
+
+   if((getNumberOfDataExtSegments() > 0) &&
+      (dataExtNumber < (ossim_int32)theNitfDataExtSegInfoRecords.size()) &&
+      (dataExtNumber >= 0))
+   {
+      result = allocateDataExtSegment();
+      ossimIFStream64::seekg64(in, theDataExtSegOffsetList[dataExtNumber].theDataExtSegHeaderOffset, ios::beg);
+      result->parseStream(in, theNitfDataExtSegInfoRecords[dataExtNumber].getDataExtSegLength());
+   }
    
    return result;
 }
@@ -1333,7 +1526,7 @@ void ossimNitfFileHeaderV2_1::setSecurityClassificationSys(const ossimString& va
        << std::setiosflags(ios::left)
        << ossimString(value).trim();
 
-   memcpy(theSecurityClassificationSys, out.str().c_str(), 1);
+   memcpy(theSecurityClassificationSys, out.str().c_str(), 2);
 }
 
 void ossimNitfFileHeaderV2_1::setCodeWords(const ossimString& codeWords)
@@ -1345,7 +1538,7 @@ void ossimNitfFileHeaderV2_1::setCodeWords(const ossimString& codeWords)
        << std::setiosflags(ios::left)
        << ossimString(codeWords).trim();
 
-   memcpy(theCodewords, out.str().c_str(), 1);
+   memcpy(theCodewords, out.str().c_str(), 11);
 }
 
 void ossimNitfFileHeaderV2_1::setControlAndHandling(const ossimString& controlAndHandling)
@@ -1357,19 +1550,19 @@ void ossimNitfFileHeaderV2_1::setControlAndHandling(const ossimString& controlAn
        << std::setiosflags(ios::left)
        << ossimString(controlAndHandling).trim();
 
-   memcpy(theControlAndHandling, out.str().c_str(), 1);
+   memcpy(theControlAndHandling, out.str().c_str(), 2);
 }
 
 void ossimNitfFileHeaderV2_1::setReleasingInstructions(const ossimString& releasingInstructions)
 {
    std::ostringstream out;
    
-   out << std::setw(2)
+   out << std::setw(20)
        << std::setfill(' ')
        << std::setiosflags(ios::left)
        << ossimString(releasingInstructions).trim();
 
-   memcpy(theReleasingInstructions, out.str().c_str(), 1);
+   memcpy(theReleasingInstructions, out.str().c_str(), 20);
 }
 
 void ossimNitfFileHeaderV2_1::setDeclassificationType(const ossimString& declassType)
@@ -1381,7 +1574,7 @@ void ossimNitfFileHeaderV2_1::setDeclassificationType(const ossimString& declass
        << std::setiosflags(ios::left)
        << declassType.trim();
 
-   memcpy(theDeclassificationType, out.str().c_str(), 1);
+   memcpy(theDeclassificationType, out.str().c_str(), 2);
 }
 
 void ossimNitfFileHeaderV2_1::setDeclassificationDate(const ossimLocalTm& d)
@@ -1671,16 +1864,29 @@ void ossimNitfFileHeaderV2_1::setProperty(ossimRefPtr<ossimProperty> property)
    }
    else if(name == FBKGC_KW)
    {
-      ossimString value = property->valueToString();
-      std::vector<ossimString> splitString;
-      value = value.trim();
-      value.split(splitString, " ");
-      if(splitString.size() == 3)
+      ossimColorProperty* colorProp = PTR_CAST(ossimColorProperty, property.get());
+      if (colorProp)
       {
-         setFileBackgroundColor((ossim_uint8)splitString[0].toUInt32(), 
-                                (ossim_uint8)splitString[1].toUInt32(), 
-                                (ossim_uint8)splitString[2].toUInt32());
+         ossim_uint8 r = colorProp->getRed();
+         ossim_uint8 g = colorProp->getGreen();
+         ossim_uint8 b = colorProp->getBlue();
+
+         setFileBackgroundColor(r, g, b);
       }
+      else
+      {
+        ossimString value = property->valueToString();
+        std::vector<ossimString> splitString;
+        value = value.trim();
+        value.split(splitString, " ");
+        if(splitString.size() == 3)
+        {
+           setFileBackgroundColor((ossim_uint8)splitString[0].toUInt32(), 
+                                  (ossim_uint8)splitString[1].toUInt32(), 
+                                  (ossim_uint8)splitString[2].toUInt32());
+        }
+      }
+
    }
    else
    {
@@ -1818,3 +2024,90 @@ void ossimNitfFileHeaderV2_1::getPropertyNames(std::vector<ossimString>& propert
    propertyNames.push_back(FSSRDT_KW);
    propertyNames.push_back(FBKGC_KW);
 }
+
+void ossimNitfFileHeaderV2_1::addTag(ossimNitfTagInformation tag, bool unique)
+{
+   if (unique)
+   {
+      removeTag(tag.getTagName());
+   }
+   theTagList.push_back(tag);
+}
+
+void ossimNitfFileHeaderV2_1::removeTag(const ossimString& tagName)
+{
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx < theTagList.size(); ++idx)
+   {
+      if(theTagList[idx].getTagName() == tagName)
+      {
+         theTagList.erase(theTagList.begin() + idx);
+         return;
+      }
+   }
+}
+
+bool ossimNitfFileHeaderV2_1::takeOverflowTags(std::vector<ossimNitfTagInformation> &overflowTags,
+   ossim_uint32 potentialDesIndex, bool userDefinedTags)
+{
+   overflowTags.clear();
+   std::vector<ossimNitfTagInformation>::iterator iter;
+   std::vector<ossimNitfTagInformation> specifiedTags;
+   const ossimString tagType(userDefinedTags ? "UDHD" : "XHD");
+   for (iter = theTagList.begin(); iter != theTagList.end(); ++iter)
+   {
+      if (iter->getTagType() == tagType)
+      {
+         specifiedTags.push_back(*iter);
+      }
+   }
+
+   std::sort(specifiedTags.begin(), specifiedTags.end());
+
+   ossim_uint32 totalSize = 0;
+   const ossim_uint32 maxSize = 9996;
+   for (iter = specifiedTags.begin(); iter != specifiedTags.end() &&
+      totalSize + iter->getTotalTagLength() <= maxSize; ++iter)
+   {
+      totalSize += iter->getTotalTagLength();
+   }
+
+   for (; iter != specifiedTags.end(); ++iter)
+   {
+      overflowTags.push_back(*iter);
+      removeTag(iter->getTagName());
+   }
+
+   // If there are no overflow tags, then no DES is required
+   if (overflowTags.empty() == true)
+   {
+      potentialDesIndex = 0;
+   }
+
+   std::ostringstream overflowDes;
+   overflowDes << std::setw(3)
+           << std::setfill('0')
+           << std::setiosflags(ios::right)
+           << potentialDesIndex;
+
+   std::ostringstream tagLength;
+   tagLength << std::setw(5)
+           << std::setfill('0')
+           << std::setiosflags(ios::right)
+           << totalSize;
+
+   // Even if no overflow tags exist, update the fields
+   if (userDefinedTags)
+   {
+      strcpy(theUserDefinedHeaderOverflow, overflowDes.str().c_str());
+      strcpy(theUserDefinedHeaderDataLength, tagLength.str().c_str());
+   }
+   else
+   {
+      strcpy(theExtendedHeaderDataOverflow, overflowDes.str().c_str());
+      strcpy(theExtendedHeaderDataLength, tagLength.str().c_str());
+   }
+
+   return (overflowTags.empty() == false);
+}
+

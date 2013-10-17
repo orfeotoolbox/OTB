@@ -9,7 +9,7 @@
 // Description: Container class for a tile of image data.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 19931 2011-08-10 11:53:25Z gpotts $
+// $Id: ossimImageData.h 22358 2013-08-06 23:08:21Z dburken $
 #ifndef ossimImageData_HEADER
 #define ossimImageData_HEADER 1
 
@@ -550,9 +550,10 @@ public:
    /**
     * @brief Writes tile to stream.
     *
-    * This will write the buffer to the stream assuming a contiguous buffer in
-    * BSQ format.  Currently does not support converting to BIP or BIL
-    * or byte swapping but probably should add at some point.
+    * This will write the buffer to file with an associated header file.
+    * Assuming a contiguous buffer in BSQ format.  Currently does not
+    * support converting to BIP or BIL or byte swapping but probably
+    * should add at some point.
     *
     * @param f File to write.
     *

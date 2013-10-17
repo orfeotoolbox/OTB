@@ -1,15 +1,38 @@
 #include <ossim/support_data/ossimAlphaSensorSupportData.h>
-#include <ossim/support_data/ossimEnviHeader.h>
-#include <ossim/matrix/newmatio.h>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimEcefPoint.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/support_data/ossimEnviHeader.h>
 #include <fstream>
+#include <sstream>
 
-static ossimTrace traceExec ("ossimAlphaSensorSupportData:exec");
 static ossimTrace traceDebug("ossimAlphaSensorSupportData:debug");
 
 
 ossimAlphaSensorSupportData::ossimAlphaSensorSupportData()
+   : m_isHSI(false),
+     m_sensorType(),
+     m_imageSize(),
+     m_rollBias(ossim::nan()),
+     m_pitchBias(ossim::nan()),
+     m_headingBias(ossim::nan()),
+     m_fov(ossim::nan()),
+     m_slitRot(ossim::nan()),
+     m_imgLine(),
+     m_roll(),
+     m_pitch(),
+     m_heading(),
+     m_lon(),
+     m_lat(),
+     m_alt(),
+     m_scanAng(),
+     m_rollPolyCoef(),
+     m_pitchPolyCoef(),
+     m_headingPolyCoef(),
+     m_lonPolyCoef(),
+     m_altPolyCoef(),
+     m_scanAngPolyCoef()
 {
    reset();
 }
@@ -51,10 +74,20 @@ bool ossimAlphaSensorSupportData::readSupportFiles(const ossimEnviHeader& hdr)
          //   .txt = "/data/AH/2012-06-15_20-00-29/HSI/Scan_00002/NavData/2012-06-15_20-00-29.HSI.Scan_00002.scene.insgps.txt"
          // txtFile.insert(hdr.getFile().find_last_of('/'), "/NavData");
          // txtFile.gsub("corrected.hsi.hdr", "insgps.txt");
-         txtFile = hdr.getFile().path();
-         txtFile = txtFile.dirCat("NavData");
-         txtFile = txtFile.dirCat( hdr.getFile().file() );
-         txtFile.gsub("corrected.hsi.hdr", "insgps.txt");
+
+         ossimFilename navDir = hdr.getFile().path();
+         navDir = navDir.dirCat("NavData");
+         if ( navDir.exists() )
+         {
+            txtFile = navDir.dirCat( hdr.getFile().file() );
+            txtFile.gsub("corrected.hsi.hdr", "insgps.txt");
+         }
+         else
+         {
+            navDir = "../nav";
+            txtFile = navDir.dirCat( hdr.getFile().file() );
+            txtFile.gsub("hsi.hdr", "txt");
+         }
       }
       else
       {
@@ -64,19 +97,45 @@ bool ossimAlphaSensorSupportData::readSupportFiles(const ossimEnviHeader& hdr)
          //   example:
          //   .hdr = "/data/AH/2012-06-15_20-00-29/HRI/HRI_2/2012-06-15_20-00-29.HRI_2.Strip_00004.corrected.hri.hdr"
          //   .txt = "/data/AH/2012-06-15_20-00-29/HRI/NavData/2012-06-15_20-00-29.HRI.Strip_00004.insgps.txt"
-         txtFile = hdr.getFile().path();
-         if ( txtFile.empty() )
+
+         // Replaced: 29 July 2013 (drb)
+         // txtFile = hdr.getFile().path();
+         // if ( txtFile.empty() )
+         // {
+         //    txtFile = txtFile.dirCat("../NavData");
+         // }
+         // else
+         // {
+         //    txtFile.replace(txtFile.find("HRI_"), 5, "NavData");
+         // }  
+         // txtFile = txtFile.dirCat( hdr.getFile().file() );
+         // txtFile.replace(txtFile.find("HRI_"), 5, "HRI");
+         // txtFile.gsub("corrected.hri.hdr", "insgps.txt");
+         // 
+         // with:
+
+         ossimFilename navDir = hdr.getFile().path();
+         if ( navDir.empty() )
          {
-            txtFile = txtFile.dirCat("../NavData");
+            navDir = navDir.dirCat("../NavData");
          }
          else
          {
-            txtFile.replace(txtFile.find("HRI_"), 5, "NavData");
-         }  
-         txtFile = txtFile.dirCat( hdr.getFile().file() );
-         txtFile.replace(txtFile.find("HRI_"), 5, "HRI");
-         txtFile.gsub("corrected.hri.hdr", "insgps.txt");
-      }
+            navDir = navDir.replace(navDir.find("HRI_"), 5, "NavData");
+         }
+         if ( navDir.exists() )
+         {
+            txtFile = navDir.dirCat( hdr.getFile().file() );
+            txtFile.replace(txtFile.find("HRI_"), 5, "HRI");
+            txtFile.gsub("corrected.hri.hdr", "insgps.txt");
+         }
+         else
+         {
+            navDir = "../nav";
+            txtFile = navDir.dirCat( hdr.getFile().file() );
+            txtFile.gsub("hri.hdr", "txt");
+         }
+      }            
 
       // Read .txt file
       readOK = readInsGpsFile(txtFile);
@@ -116,9 +175,6 @@ bool ossimAlphaSensorSupportData::readHdrFile(const ossimEnviHeader& hdr)
       m_sensorType = hdr.getSensorType();
       if ( m_sensorType.empty() ) break;
       
-      // m_imageID = hdr.getFile().afterPos(hdr.getFile().find_last_of('/'));
-      m_imageID = hdr.getFile().file();
-
       if ( m_sensorType == "Unknown" )
       {
          // Make an assumption from file name...
@@ -136,15 +192,14 @@ bool ossimAlphaSensorSupportData::readHdrFile(const ossimEnviHeader& hdr)
       {
          break; // Get out...
       }
-      
-      if (m_sensorType.contains("HSI"))
+
+      // Set the hsi flag:
+      if ( m_sensorType.contains("HSI") || (hdr.getBands() > 63 ) ) // arbitrary...
       {
-         m_imageID  = m_imageID.beforePos(m_imageID.find(".scene"));
          m_isHSI = true;
       }
-      else 
+      else
       {
-         m_imageID  = m_imageID.beforePos(m_imageID.find(".corrected"));
          m_isHSI = false;
       }
 
@@ -201,12 +256,13 @@ bool ossimAlphaSensorSupportData::readHdrFile(const ossimEnviHeader& hdr)
       }
       else
       {
-         break;
+         // Removed requirement. Missing in some support data and always 0 when present.
+         if ( traceDebug() )
+         {
+            ossimNotify(ossimNotifyLevel_NOTICE)
+               << "Missing: \"slit rotation deg\"\n";
+         }
       }
-
-      // Last two lines of while forever.  If we get here, set status true and break out.
-      result = true;
-      break;
 
       if (traceDebug())
       {
@@ -220,8 +276,12 @@ bool ossimAlphaSensorSupportData::readHdrFile(const ossimEnviHeader& hdr)
             << "\n heading bias = " << m_headingBias
             << "\n fpa fov deg = " << m_fov
             << "\n slit rotation deg = " << m_slitRot
-            << std::endl;
+            << "\n";
       }
+
+      // Last two lines of while forever.  If we get here, set status true and break out.
+      result = true;
+      break;
    }
 
    return result;
@@ -231,51 +291,94 @@ bool ossimAlphaSensorSupportData::readHdrFile(const ossimEnviHeader& hdr)
 bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
 {
    bool result = true;
-   std::ifstream in(file.c_str(), std::ios::in);
 
-   ossimString line1;
-   // int nLines = 0;
-
-   ossim_float64 inum;
-   ossim_float64 roll;
-   ossim_float64 pitch;
-   ossim_float64 heading;
-   ossim_float64 lon;
-   ossim_float64 lat;
-   ossim_float64 alt;
-   ossim_float64 scanAng;
-   int res;
-   int frm;
-   ossim_float64 timeCode;
-
-
-   std::vector< ossim_uint32 > lines;
-
+   static const char M[] = "ossimAlphaSensorSupportData::readInsGpsFile";
+   
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimAlphaSensorSupportData::readInsGpsFile DEBUG:" << std::endl;
-      ossimNotify(ossimNotifyLevel_DEBUG)<<std::setprecision(8);
-      ossimNotify(ossimNotifyLevel_DEBUG)<<std::setiosflags(std::ios_base::scientific);
-
+         << M << " entered:\n" << "file: " << file << "\n";
    }
-
-   // Format: line,roll,pitch,heading,lon,lat,alt,scanAngle,reserved,frame,time
-   if (in)
+   
+   std::ifstream in(file.c_str(), std::ios::in);
+   if ( in.good() )
    {
-      in >> line1;
-      while(!in.eof())
-      {
-         in >> inum >> roll >> pitch >> heading >> lon >> lat >> alt >> scanAng >> res >> frm >> timeCode;
+      ossim_float64 inum;
+      ossim_float64 roll;
+      ossim_float64 pitch;
+      ossim_float64 heading;
+      ossim_float64 lon;
+      ossim_float64 lat;
+      ossim_float64 alt;
+      ossim_float64 scanAng;
+      int res;
+      int frm;
+      const ossim_float64 BOGUS = -99999.0; // To detect read error/missing value.
+      ossim_float64 timeCode = BOGUS;
 
-         lines.push_back(inum);
-         m_roll.push_back(roll);
-         m_pitch.push_back(pitch);
-         m_heading.push_back(heading);
-         m_lon.push_back(lon);
-         m_lat.push_back(lat);
-         m_alt.push_back(alt);
-         m_scanAng.push_back(scanAng);
+      std::vector< ossim_uint32 > lines;
+
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimAlphaSensorSupportData::readInsGpsFile DEBUG:" << std::endl;
+         ossimNotify(ossimNotifyLevel_DEBUG)<<std::setprecision(8);
+         ossimNotify(ossimNotifyLevel_DEBUG)<<std::setiosflags(std::ios_base::scientific);
+
+      }
+
+      // Format: line,roll,pitch,heading,lon,lat,alt,scanAngle,reserved,frame,time
+
+      // Check the first line.  Some data has a phantom line, some starts with good data.
+      std::string line1;
+      std::getline( in, line1 );
+      ossim_uint32 fields = 0;
+      if ( line1.size() )
+      {
+         std::string s;
+         std::istringstream tmpStr( line1 );
+         while ( !tmpStr.eof() )
+         {
+            tmpStr >> s;
+            if ( s.size() )
+            {
+               ++fields;
+               s.clear();
+            }
+         }
+         if ( fields == 11 )
+         {
+            // First line is valid.
+            in.seekg( 0, std::ios_base::beg );
+         }
+      }
+
+      while( !in.eof() )
+      {
+         // To detect read error/missing value. Check eof was missing last line.
+         timeCode = BOGUS; 
+         
+         in >> inum >> roll >> pitch >> heading >> lon >> lat
+            >> alt >> scanAng >> res >> frm >> timeCode;
+
+         // if(!in.eof())
+         if ( timeCode != BOGUS )
+         {
+            lines.push_back(inum);
+            m_roll.push_back(roll);
+            m_pitch.push_back(pitch);
+            m_heading.push_back(heading);
+            m_lon.push_back(lon);
+            m_lat.push_back(lat);
+            m_alt.push_back(alt);
+            m_scanAng.push_back(scanAng);
+          }
+      }
+      
+      // Make sure we have a value per line
+      if( (lines.size() < m_imageSize.y) || (lines.size() < 10) )
+      {
+         return false;
       }
 
       // Load independent variable (line number, referenced to first line)
@@ -286,7 +389,6 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
       {
          pit->push_back(lines[j]-lines[0]);
       }
-
 
       // Dependent variable solutions follow...
       double rms=0.0;
@@ -322,7 +424,8 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
          result = saPoly.SLSfit(expSet[SCAN_ANGLE_DEG], m_imgLine, m_scanAng, &rms);
          if (traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "\n SA  poly deg, rms error = "
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "\n SA  poly deg, rms error = "
                << SCAN_ANGLE_DEG << ", " << ossim::radiansToDegrees(rms) << " deg";
          }
       }
@@ -331,7 +434,8 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
          result = rPoly.SLSfit(expSet[ROLL_DEG], m_imgLine, m_roll, &rms);
          if (traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "\n R   poly deg, rms error = "
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "\n R   poly deg, rms error = "
                << ROLL_DEG << ", " << ossim::radiansToDegrees(rms) << " deg";
          }
 
@@ -340,7 +444,8 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
             result = pPoly.SLSfit(expSet[PITCH_DEG], m_imgLine, m_pitch, &rms);
             if (traceDebug())
             {
-               ossimNotify(ossimNotifyLevel_DEBUG) << "\n P   poly deg, rms error = "
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "\n P   poly deg, rms error = "
                   << PITCH_DEG << ", " << ossim::radiansToDegrees(rms) << " deg";
             }
 
@@ -349,7 +454,8 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
                result = hPoly.SLSfit(expSet[HEADING_DEG], m_imgLine, m_heading, &rms);
                if (traceDebug())
                {
-                  ossimNotify(ossimNotifyLevel_DEBUG) << "\n H   poly deg, rms error = "
+                  ossimNotify(ossimNotifyLevel_DEBUG)
+                     << "\n H   poly deg, rms error = "
                      << HEADING_DEG << ", " << ossim::radiansToDegrees(rms) << " deg";
                }
 
@@ -358,7 +464,8 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
                   result = lonPoly.SLSfit(expSet[LON_DEG], m_imgLine, m_lon, &rms);
                   if (traceDebug())
                   {
-                     ossimNotify(ossimNotifyLevel_DEBUG) << "\n Lon poly deg, rms error = "
+                     ossimNotify(ossimNotifyLevel_DEBUG)
+                        << "\n Lon poly deg, rms error = "
                         << LON_DEG << ", " << ossim::radiansToDegrees(rms) << " deg";
                   }
 
@@ -367,7 +474,8 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
                      result = latPoly.SLSfit(expSet[LAT_DEG], m_imgLine, m_lat, &rms);
                      if (traceDebug())
                      {
-                        ossimNotify(ossimNotifyLevel_DEBUG) << "\n Lat poly deg, rms error = "
+                        ossimNotify(ossimNotifyLevel_DEBUG)
+                           << "\n Lat poly deg, rms error = "
                            << LAT_DEG << ", " << ossim::radiansToDegrees(rms) << " deg";
                      }
 
@@ -376,7 +484,8 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
                         result = altPoly.SLSfit(expSet[ALT_DEG], m_imgLine, m_alt, &rms);
                         if (traceDebug())
                         {
-                           ossimNotify(ossimNotifyLevel_DEBUG) << "\n Alt poly deg, rms error = "
+                           ossimNotify(ossimNotifyLevel_DEBUG)
+                              << "\n Alt poly deg, rms error = "
                               << ALT_DEG << ", " << rms << " mtr";
                         }
                      }
@@ -471,7 +580,6 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
                << "  ...polynomial solution error for file: " << file << std::endl;
          }
       }
-
    }
    else
    {
@@ -479,12 +587,16 @@ bool ossimAlphaSensorSupportData::readInsGpsFile(const ossimFilename& file)
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimAlphaSensorSupportData::readInsGpsFile DEBUG:" << std::endl;
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "  ...ifstream error for file: " << file << std::endl;
+            << "Could not open: " << file << "\n";
       }
    }
 
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << M << " exit status = " << ( result ? "true" : "false" ) << "\n";
+   }
+   
    return result;
 }
 

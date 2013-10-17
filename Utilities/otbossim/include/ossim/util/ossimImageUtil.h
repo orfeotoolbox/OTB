@@ -18,8 +18,8 @@
 #define ossimImageUtil_HEADER 1
 
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimFileProcessorInterface.h>
 #include <ossim/base/ossimKeywordlist.h>
-#include <ossim/base/ossimPropertyInterface.h>
 #include <ossim/base/ossimReferenced.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/imaging/ossimImageHandler.h>
@@ -30,6 +30,7 @@
 class ossimArgumentParser;
 class ossimFileWalker;
 class ossimGpt;
+class ossimPropertyInterface;
 
 /**
  * @brief ossimImageUtil class.
@@ -38,7 +39,8 @@ class ossimGpt;
  * 
  * building overview, histograms, compute min/max, extract vertices.
  */
-class OSSIM_DLL ossimImageUtil : public ossimReferenced
+class OSSIM_DLL ossimImageUtil :
+   public ossimReferenced, public ossimFileProcessorInterface
 {
 public:
 
@@ -70,13 +72,19 @@ public:
     * @brief Execute method.
     *
     * This launches file walking mechanism.
+    *
+    * @return int, 0 = good, non-zero something happened.  Because this can
+    * process multiple files a non-zero return may indicate just one file
+    * did not complete, e.g. building overviews.
     * 
     * @note Throws ossimException on error.
     */
-   void execute();
+   ossim_int32 execute();
 
    /**
     * @brief ProcessFile method.
+    *
+    * Satisfies pure virtual ossimFileProcessorInterface::processFile.
     *
     * This method is linked to the ossimFileWalker::walk method via a callback
     * mechanism.  It is called by the ossimFileWalk (caller).  In turn this
@@ -85,7 +93,7 @@ public:
     * 
     * @param file to process.
     */
-   void processFile(const ossimFilename& file);
+   virtual void processFile(const ossimFilename& file);
 
    /**
     * @brief Sets create overviews flag keyword CREATE_OVERVIEWS_KW used by
@@ -267,6 +275,18 @@ public:
     * false.
     */
    bool getCopyAllFlag() const;
+
+   /**
+    * @brief Sets the overview builder internal overviews flag.
+    * @param flag
+    */
+   void setInternalOverviewsFlag( bool flag );
+   
+   /**
+    * @return true if INTERNAL_OVERVIEWS_FLAG_KW key is found and value is true; else,
+    * false.
+    */
+   bool getInternalOverviewsFlag() const;
    
    /**
     * @brief Sets the output directory.  Typically overviews and histograms
@@ -364,12 +384,20 @@ private:
     */
    void addOption( const std::string& key, ossim_uint32 value );
    void addOption( const std::string& key, const std::string& value );
+
+   /**
+    * @brief Sets the m_errorStatus for return on execute.
+    */
+   void setErrorStatus( ossim_int32 status );
+
    
    /** Holds all options passed into intialize except writer props. */
    ossimRefPtr<ossimKeywordlist> m_kwl;
 
    ossimFileWalker*   m_fileWalker;
    OpenThreads::Mutex m_mutex;
+
+   ossim_int32 m_errorStatus;
 };
 
 #endif /* #ifndef ossimImageUtil_HEADER */

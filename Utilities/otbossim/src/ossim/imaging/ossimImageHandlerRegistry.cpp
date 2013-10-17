@@ -9,7 +9,7 @@
 // Contains class definition for ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.cpp 20317 2011-12-02 18:03:49Z oscarkramer $
+//  $Id: ossimImageHandlerRegistry.cpp 22228 2013-04-12 14:11:45Z dburken $
 
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/base/ossimFilename.h>
@@ -98,8 +98,8 @@ void ossimImageHandlerRegistry::getImageHandlersBySuffix(ossimImageHandlerFactor
    }
 }
 
-void ossimImageHandlerRegistry::getImageHandlersByMimeType(ossimImageHandlerFactoryBase::ImageHandlerList& result,
-                                                           const ossimString& mimeType)const
+void ossimImageHandlerRegistry::getImageHandlersByMimeType(
+   ossimImageHandlerFactoryBase::ImageHandlerList& result, const ossimString& mimeType)const
 {
    vector<ossimImageHandlerFactoryBase*>::const_iterator iter = m_factoryList.begin();
    ossimImageHandlerFactoryBase::ImageHandlerList temp;
@@ -120,7 +120,13 @@ void ossimImageHandlerRegistry::getImageHandlersByMimeType(ossimImageHandlerFact
    }
 }
 
-void ossimImageHandlerRegistry::getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const
+void ossimImageHandlerRegistry::getTypeNameList( std::vector<ossimString>& typeList ) const
+{
+   getAllTypeNamesFromRegistry(typeList);
+}
+
+void ossimImageHandlerRegistry::getSupportedExtensions(
+   ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const
 {
    vector<ossimString> result;
    vector<ossimImageHandlerFactoryBase*>::const_iterator iter = m_factoryList.begin();
@@ -176,6 +182,28 @@ ossimImageHandler* ossimImageHandlerRegistry::open(const ossimKeywordlist& kwl,
    }
    
    return result;
+}
+
+ossimRefPtr<ossimImageHandler> ossimImageHandlerRegistry::openOverview(
+   const ossimFilename& file ) const
+{
+   ossimRefPtr<ossimImageHandler> result = 0;
+   vector<ossimImageHandlerFactoryBase*>::const_iterator factory = m_factoryList.begin();
+   while( factory != m_factoryList.end() )
+   {
+      result = (*factory)->openOverview( file );
+      if ( result.valid() )
+      {
+         break;
+      }
+      ++factory;
+   }  
+   return result;
+}
+
+ossimObject* ossimImageHandlerRegistry::createObject(const ossimString& typeName) const
+{
+   return createObjectFromRegistry(typeName);
 }
 
 std::ostream& ossimImageHandlerRegistry::printReaderProps(std::ostream& out) const

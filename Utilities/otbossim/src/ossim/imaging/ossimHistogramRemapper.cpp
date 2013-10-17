@@ -11,7 +11,7 @@
 // Remaps a tile based on mode and histogram clip points.
 //
 //*************************************************************************
-// $Id: ossimHistogramRemapper.cpp 21850 2012-10-21 20:09:55Z dburken $
+// $Id: ossimHistogramRemapper.cpp 22187 2013-03-07 20:29:00Z dburken $
 
 #include <ossim/imaging/ossimHistogramRemapper.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
@@ -45,7 +45,7 @@ static const char STRETCH_MODE_KW[] = "stretch_mode";
 static const char HISTOGRAM_FILENAME_KW[] = "histogram_filename";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 21850 2012-10-21 20:09:55Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 22187 2013-03-07 20:29:00Z dburken $";
 #endif
 
 ossimHistogramRemapper::ossimHistogramRemapper()
@@ -1105,6 +1105,18 @@ void ossimHistogramRemapper::buildLinearTable()
          buildLinearTable(ossim_sint16(0));
          break;
       }
+
+      case OSSIM_UINT32:
+      {
+         buildLinearTable(ossim_uint32(0));
+         break;
+      }
+			
+      case OSSIM_SINT32:
+      {
+         buildLinearTable(ossim_sint32(0));
+         break;
+      }
 			
       case OSSIM_NORMALIZED_FLOAT:      
       case OSSIM_FLOAT:
@@ -1604,7 +1616,7 @@ void ossimHistogramRemapper::setupTable()
          bytes_per_pixel = 1;
          theTableType = ossimTableRemapper::NATIVE;
          break;
-			
+         
       case OSSIM_USHORT11:
          values_per_band = 2048; // 2 ^ 11
          bytes_per_pixel = 2;
@@ -1615,6 +1627,13 @@ void ossimHistogramRemapper::setupTable()
       case OSSIM_SINT16:
          values_per_band = 65536; // 2 ^ 16
          bytes_per_pixel = 2;
+         theTableType = ossimTableRemapper::NATIVE;
+         break;
+         
+      case OSSIM_UINT32:
+      case OSSIM_SINT32:
+         values_per_band = 65536; // 2 ^ 16
+         bytes_per_pixel = 4;
          theTableType = ossimTableRemapper::NATIVE;
          break;
 			

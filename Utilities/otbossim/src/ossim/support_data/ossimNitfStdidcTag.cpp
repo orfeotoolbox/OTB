@@ -11,7 +11,7 @@
 // See:  STDI-000_v2.1 Table 7-3 for detailed description.
 // 
 //********************************************************************
-// $Id: ossimNitfStdidcTag.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfStdidcTag.cpp 22013 2012-12-19 17:37:20Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -38,17 +38,13 @@ static const ossimString LOCATION_KW = "LOCATION";
 
 
 ossimNitfStdidcTag::ossimNitfStdidcTag()
+   : ossimNitfRegisteredTag(std::string("STDIDC"), 89)
 {
    clearFields();
 }
 
 ossimNitfStdidcTag::~ossimNitfStdidcTag()
 {
-}
-
-std::string ossimNitfStdidcTag::getRegisterTagName()const
-{
-   return std::string("STDIDC");
 }
 
 void ossimNitfStdidcTag::parseStream(std::istream& in)
@@ -95,11 +91,6 @@ void ossimNitfStdidcTag::writeStream(std::ostream& out)
    out.write(theLocation,     LOCATION_SIZE);
    out.write(theField17,      FIELD17_SIZE);
    out.write(theField18,      FIELD18_SIZE);
-}
-
-ossim_uint32 ossimNitfStdidcTag::getSizeInBytes()const
-{
-   return 89;
 }
 
 void ossimNitfStdidcTag::clearFields()
@@ -345,13 +336,13 @@ std::ostream& ossimNitfStdidcTag::print(std::ostream& out,
                                         const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getRegisterTagName();
+   pfx += getTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getRegisterTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << getTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
        << pfx << std::setw(24) << "ACQDATE:"      << theAcqDate << "\n"
        << pfx << std::setw(24) << "MISSION:"      << theMission << "\n"
        << pfx << std::setw(24) << "PASS:"         << thePass << "\n"

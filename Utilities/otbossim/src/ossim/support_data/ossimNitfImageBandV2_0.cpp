@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageBandV2_0.cpp 16035 2009-12-03 21:32:27Z dburken $
+// $Id: ossimNitfImageBandV2_0.cpp 22418 2013-09-26 15:01:12Z gpotts $
 
 #include <sstream>
 #include <iostream>
@@ -69,7 +69,7 @@ void ossimNitfImageBandV2_0::writeStream(std::ostream& out)
    out.write(theBandStandardImageFilterCode, 3);
    out.write(theBandNumberOfLuts, 1);
 
-   if(ossimString(theBandNumberOfLuts) > 0)
+   if(ossimString(theBandNumberOfLuts).toUInt32() > 0)
    {
       // lut output not supported currently
    }
@@ -117,6 +117,11 @@ std::ostream& ossimNitfImageBandV2_0::print(std::ostream& out,
 
    out << prefix << std::setw(24)
        << tmpStr << theBandNumberOfLutEntries << "\n";
+
+   for(ossim_uint32 idx = 0; idx < theLookupTables.size(); ++idx)
+   {
+      out << *theLookupTables[idx] << std::endl;
+   }
    
    return out;
 }

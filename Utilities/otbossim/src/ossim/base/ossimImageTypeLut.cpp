@@ -2,7 +2,7 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author:  David Burken (dburken@imagelinks.com)
+// Author:  David Burken
 //
 // Description:
 //
@@ -11,7 +11,7 @@
 // enumeration.
 //
 //*******************************************************************
-//  $Id: ossimImageTypeLut.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimImageTypeLut.cpp 22221 2013-04-11 15:30:08Z dburken $
 
 #include <ossim/base/ossimImageTypeLut.h>
 
@@ -22,7 +22,7 @@ const ossimKeyword ossimImageTypeLut::IMAGE_TYPE_KW("image_type",
                                                     "Image type.\n\
 Valid types are:  ccf, tiff, tiled_tiff, jpeg, and general_raster.");
 
-static const int TABLE_SIZE = 8;
+static const int TABLE_SIZE = 9;
 
 //*******************************************************************
 // Public Constructor:
@@ -51,4 +51,6 @@ ossimImageTypeLut::ossimImageTypeLut()
    theTable[6].theValue = "general_raster_bsq";
    theTable[7].theKey   = OSSIM_JPEG;
    theTable[7].theValue = "jpeg";
+   theTable[8].theKey   = OSSIM_PDF;
+   theTable[8].theValue = "ossim_pdf";
 }

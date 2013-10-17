@@ -12,10 +12,10 @@
 // DIGEST Part 2 Annex D - Appendix 1, Table D1-3
 // 
 //********************************************************************
-// $Id: ossimNitfGeoPositioningTag.h 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfGeoPositioningTag.h 22013 2012-12-19 17:37:20Z dburken $
 //
 #ifndef ossimNitfGeoPositioningTag_HEADER
-#define ossimNitfGeoPositioningTag_HEADER
+#define ossimNitfGeoPositioningTag_HEADER 1
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 
 class OSSIM_DLL ossimNitfGeoPositioningTag : public ossimNitfRegisteredTag
@@ -23,10 +23,10 @@ class OSSIM_DLL ossimNitfGeoPositioningTag : public ossimNitfRegisteredTag
 public:
    ossimNitfGeoPositioningTag();
    virtual ~ossimNitfGeoPositioningTag();
-   virtual std::string getRegisterTagName()const;
+
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
-   virtual ossim_uint32 getSizeInBytes()const;
+
    virtual void clearFields();
 
    /**

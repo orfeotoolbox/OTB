@@ -5,7 +5,7 @@
 // Author:  Garrett Potts (gpotts@imagelinks.com)
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerFactoryBase.cpp 18011 2010-08-31 12:48:56Z dburken $
+//  $Id: ossimImageHandlerFactoryBase.cpp 22384 2013-08-30 14:09:08Z dburken $
 #include <ossim/imaging/ossimImageHandlerFactoryBase.h>
 
 RTTI_DEF1(ossimImageHandlerFactoryBase, "ossimImageHandlerFactoryBase", ossimObjectFactory);
@@ -18,4 +18,10 @@ void ossimImageHandlerFactoryBase::getImageHandlersBySuffix(ImageHandlerList& /*
 void ossimImageHandlerFactoryBase::getImageHandlersByMimeType(ImageHandlerList& /*result*/,
                                                               const ossimString& /*mimeType*/)const
 {
+}
+
+ossimRefPtr<ossimImageHandler> ossimImageHandlerFactoryBase::openOverview(
+   const ossimFilename& /* file */ ) const
+{
+   return ossimRefPtr<ossimImageHandler>(0);
 }

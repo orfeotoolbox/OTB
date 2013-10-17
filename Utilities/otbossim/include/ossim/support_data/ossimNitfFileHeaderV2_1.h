@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.h 20123 2011-10-11 17:55:44Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.h 22418 2013-09-26 15:01:12Z gpotts $
 #ifndef ossimNitfFileHeaderV2_1_HEADER
 #define ossimNitfFileHeaderV2_1_HEADER
 
@@ -25,7 +25,7 @@ public:
    friend std::ostream& operator <<(std::ostream& out,
                                     const ossimNitfImageInfoRecordV2_1 &data);
    
-   ossim_uint32 getHeaderLength()const;
+   ossim_uint64 getHeaderLength()const;
    ossim_uint64 getImageLength()const;
    ossim_uint64 getTotalLength()const;
    
@@ -50,6 +50,9 @@ public:
    friend std::ostream& operator <<(std::ostream& out,
                                     const ossimNitfGraphicInfoRecordV2_1 &data);
    
+   ossim_uint64 getHeaderLength()const;
+   ossim_uint64 getGraphicLength()const;
+   ossim_uint64 getTotalLength()const;
    /**
     * Is a 4 byte numeric 0258-9999
     */
@@ -69,11 +72,11 @@ public:
                                    const ossimNitfTextFileInfoRecordV2_1 &data);
 
 
-   ossim_uint32 getHeaderLength()const;
-   ossim_uint32 getTextLength()const;
-   ossim_uint32 getTotalLength()const;
+   ossim_uint64 getHeaderLength()const;
+   ossim_uint64 getTextLength()const;
+   ossim_uint64 getTotalLength()const;
 
-   void setSubheaderLength(ossim_uint32 length);
+   void setSubheaderLength(ossim_uint64 length);
    void setTextLength(ossim_uint64 length);
    
    /**
@@ -93,6 +96,9 @@ public:
    friend std::ostream& operator<<(std::ostream& out,
                                    const ossimNitfDataExtSegInfoRecordV2_1 &data);
 
+   ossim_uint64 getHeaderLength()const;
+   ossim_uint64 getDataExtSegLength()const;
+   ossim_uint64 getTotalLength()const;
    /**
     * Is a 4 byte numeric 200-9999
     */
@@ -110,7 +116,10 @@ public:
    friend std::ostream& operator<<(std::ostream& out,
                                    const ossimNitfResExtSegInfoRecordV2_1 &data);
 
-   /**
+   ossim_uint64 getHeaderLength()const;
+   ossim_uint64 getResExtSegLength()const;
+   ossim_uint64 getTotalLength()const;
+  /**
     * Is a 4 byte numeric 0-9999
     */
    char theResExtSegSubheaderLength[5];
@@ -136,6 +145,7 @@ public:
    virtual ossim_int32 getNumberOfGraphics()const;
    virtual ossim_int32 getNumberOfTextSegments()const;
    virtual ossim_int32 getNumberOfDataExtSegments()const;
+  virtual ossim_int32 getNumberOfReservedExtSegments()const;
    virtual ossim_int32 getHeaderSize()const;
    virtual ossim_int64 getFileSize()const;
    virtual const char* getVersion()const;
@@ -157,7 +167,7 @@ public:
    virtual ossimNitfTextHeader* getNewTextHeader(ossim_uint32 textNumber,
                                                    std::istream& in)const;
    virtual ossimNitfDataExtensionSegment* getNewDataExtensionSegment(
-      ossim_uint32 dataExtNumber, std::istream& in)const;
+      ossim_int32 dataExtNumber, std::istream& in)const;
 
    virtual ossimNitfImageHeader*  allocateImageHeader()const;
    virtual ossimNitfSymbolHeader* allocateSymbolHeader()const;
@@ -250,6 +260,10 @@ public:
    
    void clearFields();
 
+   void addTag(ossimNitfTagInformation tag, bool unique = true);
+   void removeTag(const ossimString& tagName);
+   bool takeOverflowTags(std::vector<ossimNitfTagInformation> &overflowTags,
+                         ossim_uint32 potentialDesIndex, bool userDefinedTags = false);
    /**
     * @brief print method that outputs a key/value type format adding prefix
     * to keys.
@@ -286,6 +300,12 @@ private:
     */
    void initializeAllOffsets();
    
+   /**
+    * If the header was parsed and the offsets have been initialized, this method will
+    * parse all overflow tags and put them into theTagList.
+    */
+   void readOverflowTags(std::istream& in);
+
    // Note: these are work variables and not part of the
    // Nitf header.  These variables will be used to quickly
    // access various parts of the file.
@@ -310,6 +330,10 @@ private:
     * and start to their data.
     */
    std::vector<ossimNitfImageOffsetInformation>  theImageOffsetList;
+   
+   std::vector<ossimNitfGraphicOffsetInformation> theGraphicOffsetList;
+   std::vector<ossimNitfTextOffsetInformation> theTextFileOffsetList;
+   std::vector<ossimNitfDataExtSegOffsetInformation> theDataExtSegOffsetList;
    
    // START Of header variables
    /**

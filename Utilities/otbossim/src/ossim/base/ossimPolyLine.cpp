@@ -5,7 +5,7 @@
 // AUTHOR: Garrett Potts (gpotts@imagelinks.com)
 //
 //*****************************************************************************
-//  $Id: ossimPolyLine.cpp 15927 2009-11-16 17:30:08Z dburken $
+//  $Id: ossimPolyLine.cpp 22418 2013-09-26 15:01:12Z gpotts $
 //
 #include <ossim/base/ossimPolyLine.h>
 #include <ossim/base/ossimCommon.h>
@@ -21,14 +21,12 @@ using namespace std;
 static const char* NUMBER_VERTICES_KW = "number_vertices";
 
 ossimPolyLine::ossimPolyLine(const vector<ossimIpt>& polyLine)
-   :theVertexList(polyLine.size()),
-    theAttributeList(),
-    theCurrentVertex(0)
+   :theCurrentVertex(0)
 {
-   // Assign std::vector<ossimIpt> list to std::vector<ossimDpt> theVertexList.
-   for (std::vector<ossimIpt>::size_type i = 0; i < polyLine.size(); ++i)
+   for (std::vector<ossimIpt>::const_iterator iter = polyLine.begin();
+      iter != polyLine.end(); ++iter)
    {
-      theVertexList[i] = polyLine[i];
+      theVertexList.push_back(ossimDpt(*iter));
    }
 }
 
@@ -437,12 +435,11 @@ const ossimPolyLine& ossimPolyLine::operator= (const vector<ossimDpt>& vertexLis
 
 const ossimPolyLine& ossimPolyLine::operator= (const vector<ossimIpt>& vertexList)
 {
-   theVertexList.resize(vertexList.size());
-
-   // Assign std::vector<ossimIpt> list to std::vector<ossimDpt> theVertexList.
-   for (std::vector<ossimIpt>::size_type i = 0; i < vertexList.size(); ++i)
+   theVertexList.clear();
+   for (std::vector<ossimIpt>::const_iterator iter = vertexList.begin();
+      iter != vertexList.end(); ++iter)
    {
-      theVertexList[i] = vertexList[i];
+      theVertexList.push_back(*iter);
    }
    
    theCurrentVertex = 0;
@@ -470,8 +467,8 @@ bool ossimPolyLine::operator==(const ossimPolyLine& polyLine) const
 
 const ossimPolyLine& ossimPolyLine::operator *=(const ossimDpt& scale)
 {
-   ossim_uint32 upper = (ossim_uint32)theVertexList.size();
-   ossim_uint32 i = 0;
+   int upper = theVertexList.size();
+   int i = 0;
    
    for(i = 0; i < upper; ++i)
    {
@@ -486,8 +483,8 @@ ossimPolyLine ossimPolyLine::operator *(const ossimDpt& scale)const
 {
    ossimPolyLine result(*this);
 
-   ossim_uint32 i = 0;
-   ossim_uint32 upper = (ossim_uint32)theVertexList.size();
+   int i = 0;
+   int upper = theVertexList.size();
    for(i = 0; i < upper; ++i)
    {
       result.theVertexList[i].x*=scale.x;
@@ -549,8 +546,7 @@ bool ossimPolyLine::loadState(const ossimKeywordlist& kwl,
 
    theVertexList.clear();
    int vertexCount = ossimString(number_vertices).toLong();
-   ossimString x = "0.0";
-   ossimString y = "0.0";
+   double x = 0.0, y =0.0;
    for(i = 0; i < vertexCount; ++i)
    {
       ossimString v = kwl.find(prefix, (ossimString("v")+ossimString::toString(i)).c_str());
@@ -558,7 +554,7 @@ bool ossimPolyLine::loadState(const ossimKeywordlist& kwl,
 
       istringstream vStream(v);
       vStream >> x >> y;
-      theVertexList.push_back(ossimDpt(x.toDouble(),y.toDouble()));
+      theVertexList.push_back(ossimDpt(x,y));
    }
 
    return true;

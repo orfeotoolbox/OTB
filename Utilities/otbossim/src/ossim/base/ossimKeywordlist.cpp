@@ -5,7 +5,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.cpp 21527 2012-08-26 16:50:49Z dburken $
+// $Id: ossimKeywordlist.cpp 22376 2013-08-28 13:26:03Z gpotts $
 
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDirectory.h>
@@ -28,7 +28,7 @@ static const char NULL_KEY_NOTICE[]
 
 #ifdef OSSIM_ID_ENABLED
 static const bool TRACE = false;
-static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 21527 2012-08-26 16:50:49Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 22376 2013-08-28 13:26:03Z gpotts $";
 #endif
 
 const std::string ossimKeywordlist::NULL_KW = "";
@@ -39,6 +39,15 @@ m_delimiter(src.m_delimiter),
 m_preserveKeyValues(src.m_preserveKeyValues),
 m_expandEnvVars(src.m_expandEnvVars)
 {
+}
+
+ossimKeywordlist::ossimKeywordlist(const std::map<std::string, std::string>& keywordMap)
+:m_map(keywordMap),
+m_delimiter(DEFAULT_DELIMITER),
+m_preserveKeyValues(true),
+m_expandEnvVars(true)
+{
+
 }
 
 ossimKeywordlist::ossimKeywordlist(char delimiter, 
@@ -585,43 +594,36 @@ const std::string& ossimKeywordlist::findKey(const std::string& prefix,
 
 const char* ossimKeywordlist::find(const char* key) const
 {
-   const char* result = NULL;
-   
+   const char* result = 0;
    if (key)
    {
-      ossimString k = key;
-      
-      KeywordMap::const_iterator i = m_map.find(k.c_str());
-      
+      std::string k = key;
+      KeywordMap::const_iterator i = m_map.find( k );
       if (i != m_map.end())
       {
          result = (*i).second.c_str();
       }
    }
-   
    return result;
 }
 
 const char* ossimKeywordlist::find(const char* prefix,
                                    const char* key) const
 {
-   const char* result = NULL;
-   
+   const char* result = 0;
    if (key)
    {
-      ossimString k;
+      std::string k;
       if (prefix) k = prefix;
       k += key;
-      KeywordMap::const_iterator i = m_map.find(k.c_str());
+      KeywordMap::const_iterator i = m_map.find( k );
       if (i != m_map.end())
       {
          result = (*i).second.c_str();
       }
    }
-   
    return result;
 }
-
 
 void ossimKeywordlist::remove(const char * key)
 {

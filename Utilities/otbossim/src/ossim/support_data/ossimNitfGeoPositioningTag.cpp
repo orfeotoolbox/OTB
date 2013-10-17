@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfGeoPositioningTag.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfGeoPositioningTag.cpp 22013 2012-12-19 17:37:20Z dburken $
 
 #include <ossim/support_data/ossimNitfGeoPositioningTag.h>
 #include <cstring>
@@ -20,18 +20,13 @@
 RTTI_DEF1(ossimNitfGeoPositioningTag, "ossimNitfGeoPositioningTag", ossimNitfRegisteredTag);
 
 ossimNitfGeoPositioningTag::ossimNitfGeoPositioningTag()
-      :ossimNitfRegisteredTag()
+   : ossimNitfRegisteredTag(std::string("GEOPSB"),  443)
 {
    clearFields();
 }
 
 ossimNitfGeoPositioningTag::~ossimNitfGeoPositioningTag()
 {
-}
-
-std::string ossimNitfGeoPositioningTag::getRegisterTagName()const
-{
-   return std::string("GEOPSB");
 }
 
 void ossimNitfGeoPositioningTag::parseStream(std::istream& in)
@@ -70,11 +65,6 @@ void ossimNitfGeoPositioningTag::writeStream(std::ostream& out)
    out.write(theGridCode, 3);
    out.write(theGridDescription, 80);
    out.write(theGridZoneNumber, 4);
-}
-
-ossim_uint32 ossimNitfGeoPositioningTag::getSizeInBytes()const
-{
-   return 443;
 }
 
 void ossimNitfGeoPositioningTag::clearFields()
@@ -126,13 +116,13 @@ std::ostream& ossimNitfGeoPositioningTag::print(
    std::ostream& out, const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getRegisterTagName();
+   pfx += getTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getRegisterTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << getTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
        << pfx << std::setw(24) << "TYP:" << theType << "\n"
        << pfx << std::setw(24) << "UNI:" << theCoordinateUnits << "\n"
        << pfx << std::setw(24) << "DAG:" << theGeodeticDatumName << "\n"

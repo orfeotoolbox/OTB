@@ -36,15 +36,15 @@ public:
       MAX_LP_SEG_SIZE       = 6,
       EXOPTA_RESERVED6_SIZE = 12,
       SUN_EL_SIZE           = 5,
-      SUN_AZ_SIZE           = 5
+      SUN_AZ_SIZE           = 5,
+      CEL_SIZE              = 107 // total
    };
 
    ossimNitfExoptaTag();
-   virtual std::string getRegisterTagName() const;
+
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
 
-   virtual ossim_uint32 getSizeInBytes()const;
    virtual std::ostream& print(std::ostream& out,
                                const std::string& prefix=std::string()) const;
    virtual void clearFields();

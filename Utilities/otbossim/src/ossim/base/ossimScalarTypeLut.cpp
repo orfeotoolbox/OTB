@@ -9,7 +9,7 @@
 // Contains class definition for ossimScalarTypeLUT.
 // 
 //*******************************************************************
-//  $Id: ossimScalarTypeLut.cpp 21527 2012-08-26 16:50:49Z dburken $
+//  $Id: ossimScalarTypeLut.cpp 22072 2013-01-04 13:46:52Z dburken $
 
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimString.h>
@@ -51,6 +51,12 @@ ossimScalarTypeLut::ossimScalarTypeLut()
    theTable.push_back(entry);
 
    entry.init(OSSIM_SINT32, "ossim_sint32");
+   theTable.push_back(entry);
+
+   entry.init(OSSIM_UINT64, "ossim_uint64");
+   theTable.push_back(entry);
+
+   entry.init(OSSIM_SINT64, "ossim_sint64");
    theTable.push_back(entry);
 
    entry.init(OSSIM_FLOAT32, "ossim_float32");

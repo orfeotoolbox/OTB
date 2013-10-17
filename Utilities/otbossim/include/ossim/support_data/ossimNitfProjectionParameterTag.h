@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfProjectionParameterTag.h 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfProjectionParameterTag.h 22013 2012-12-19 17:37:20Z dburken $
 
 #ifndef ossimNitfProjectionParameterTag_HEADER
 #define ossimNitfProjectionParameterTag_HEADER
@@ -20,7 +20,7 @@ class OSSIM_DLL ossimNitfProjectionParameterTag : public ossimNitfRegisteredTag
 public:
    ossimNitfProjectionParameterTag();
    virtual ~ossimNitfProjectionParameterTag();
-   virtual std::string getRegisterTagName()const;
+
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
 

@@ -180,9 +180,9 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 2219,ATS77 / UTM zone 19N,Transverse Mercator,metre,4041,Average Terrestrial System 1977,Average Terrestrial System 1977,500000,0,0,-69,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2220,ATS77 / UTM zone 20N,Transverse Mercator,metre,4041,Average Terrestrial System 1977,Average Terrestrial System 1977,500000,0,0,-63,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2221,Scoresbysund 1952 / Greenland zone 6 east,Lambert Conic Conformal (West Orientated),metre,4195,Scoresbysund 1952,International 1924,0,67.3,0,-32,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-2222,NAD83 / Arizona East (ft),Transverse Mercator,US survey foot,4269,North American Datum 1983,GRS 1980,700000,31,0,-110.1,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-2223,NAD83 / Arizona Central (ft),Transverse Mercator,US survey foot,4269,North American Datum 1983,GRS 1980,700000,31,0,-111.55,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-2224,NAD83 / Arizona West (ft),Transverse Mercator,US survey foot,4269,North American Datum 1983,GRS 1980,700000,31,0,-113.45,0.999933333,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2222,NAD83 / Arizona East (ft),Transverse Mercator,foot,4269,North American Datum 1983,GRS 1980,700000,31,0,-110.1,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2223,NAD83 / Arizona Central (ft),Transverse Mercator,foot,4269,North American Datum 1983,GRS 1980,700000,31,0,-111.55,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2224,NAD83 / Arizona West (ft),Transverse Mercator,foot,4269,North American Datum 1983,GRS 1980,700000,31,0,-113.45,0.999933333,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2225,NAD83 / California zone 1 (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,39.2,-122,41.4,1640416.667,6561666.667
 2226,NAD83 / California zone 2 (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38.2,37.4,-122,39.5,1640416.667,6561666.667
 2227,NAD83 / California zone 3 (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.04,36.3,-120.3,38.26,1640416.667,6561666.667
@@ -207,12 +207,12 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 2248,NAD83 / Maryland (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38.18,37.4,-77,39.27,0,1312333.333
 2249,NAD83 / Massachusetts Mainland (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41.43,41,-71.3,42.41,2460625,656166.667
 2250,NAD83 / Massachusetts Island (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41.17,41,-70.3,41.29,0,1640416.667
-2251,NAD83 / Michigan North (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.29,44.47,-87,47.05,0,26246719.16
-2252,NAD83 / Michigan Central (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.11,43.19,-84.22,45.42,0,19685039.37
-2253,NAD83 / Michigan South (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.06,41.3,-84.22,43.4,0,13123359.58
+2251,NAD83 / Michigan North (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.29,44.47,-87,47.05,0,26246719.16
+2252,NAD83 / Michigan Central (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.11,43.19,-84.22,45.42,0,19685039.37
+2253,NAD83 / Michigan South (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.06,41.3,-84.22,43.4,0,13123359.58
 2254,NAD83 / Mississippi East (ftUS),Transverse Mercator,US survey foot,4269,North American Datum 1983,GRS 1980,984250,29.3,0,-88.5,0.99995,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2255,NAD83 / Mississippi West (ftUS),Transverse Mercator,US survey foot,4269,North American Datum 1983,GRS 1980,2296583.333,29.3,0,-90.2,0.99995,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-2256,NAD83 / Montana (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,44.15,-109.3,49,0,1968503.937
+2256,NAD83 / Montana (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,44.15,-109.3,49,0,1968503.937
 2257,NAD83 / New Mexico East (ftUS),Transverse Mercator,US survey foot,4269,North American Datum 1983,GRS 1980,541337.5,31,0,-104.2,0.999909091,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2258,NAD83 / New Mexico Central (ftUS),Transverse Mercator,US survey foot,4269,North American Datum 1983,GRS 1980,1640416.667,31,0,-106.15,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2259,NAD83 / New Mexico West (ftUS),Transverse Mercator,US survey foot,4269,North American Datum 1983,GRS 1980,2723091.667,31,0,-107.5,0.999916667,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -221,24 +221,24 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 2262,NAD83 / New York West (ftUS),Transverse Mercator,US survey foot,4269,North American Datum 1983,GRS 1980,1148291.667,40,0,-78.35,0.9999375,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2263,NAD83 / New York Long Island (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.4,40.1,-74,41.02,0,984250
 2264,NAD83 / North Carolina (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34.2,33.45,-79,36.1,0,2000000
-2265,NAD83 / North Dakota North (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.26,47,-100.3,48.44,0,1968503.937
-2266,NAD83 / North Dakota South (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46.11,45.4,-100.3,47.29,0,1968503.937
+2265,NAD83 / North Dakota North (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.26,47,-100.3,48.44,0,1968503.937
+2266,NAD83 / North Dakota South (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46.11,45.4,-100.3,47.29,0,1968503.937
 2267,NAD83 / Oklahoma North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,35.34,35,-98,36.46,0,1968500
 2268,NAD83 / Oklahoma South (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33.56,33.2,-98,35.14,0,1968500
-2269,NAD83 / Oregon North (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.2,43.4,-120.3,46,0,8202099.738
-2270,NAD83 / Oregon South (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.2,41.4,-120.3,44,0,4921259.843
+2269,NAD83 / Oregon North (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.2,43.4,-120.3,46,0,8202099.738
+2270,NAD83 / Oregon South (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.2,41.4,-120.3,44,0,4921259.843
 2271,NAD83 / Pennsylvania North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.53,40.1,-77.45,41.57,0,1968500
 2272,NAD83 / Pennsylvania South (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.56,39.2,-77.45,40.58,0,1968500
-2273,NAD83 / South Carolina (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.3,31.5,-81,34.5,0,2000000
+2273,NAD83 / South Carolina (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.3,31.5,-81,34.5,0,2000000
 2274,NAD83 / Tennessee (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,35.15,34.2,-86,36.25,0,1968500
 2275,NAD83 / Texas North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34.39,34,-101.3,36.11,3280833.333,656166.667
 2276,NAD83 / Texas North Central (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.08,31.4,-98.3,33.58,6561666.667,1968500
 2277,NAD83 / Texas Central (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30.07,29.4,-100.2,31.53,9842500,2296583.333
 2278,NAD83 / Texas South Central (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,28.23,27.5,-99,30.17,13123333.33,1968500
 2279,NAD83 / Texas South (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,26.1,25.4,-98.3,27.5,16404166.67,984250
-2280,NAD83 / Utah North (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.43,40.2,-111.3,41.47,3280839.895,1640419.948
-2281,NAD83 / Utah Central (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.01,38.2,-111.3,40.39,6561679.79,1640419.948
-2282,NAD83 / Utah South (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.13,36.4,-111.3,38.21,9842519.685,1640419.948
+2280,NAD83 / Utah North (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.43,40.2,-111.3,41.47,3280839.895,1640419.948
+2281,NAD83 / Utah Central (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.01,38.2,-111.3,40.39,6561679.79,1640419.948
+2282,NAD83 / Utah South (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.13,36.4,-111.3,38.21,9842519.685,1640419.948
 2283,NAD83 / Virginia North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38.02,37.4,-78.3,39.12,6561666.667,11482916.67
 2284,NAD83 / Virginia South (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,36.46,36.2,-78.3,37.58,3280833.333,11482916.67
 2285,NAD83 / Washington North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.3,47,-120.5,48.44,0,1640416.667
@@ -809,9 +809,9 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 2864,NAD83(HARN) / Wyoming West Central,Transverse Mercator,metre,4152,NAD83 (High Accuracy Regional Network),GRS 1980,600000,40.3,0,-108.45,0.9999375,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2865,NAD83(HARN) / Wyoming West,Transverse Mercator,metre,4152,NAD83 (High Accuracy Regional Network),GRS 1980,800000,40.3,100000,-110.05,0.9999375,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2866,NAD83(HARN) / Puerto Rico and Virgin Is.,Lambert Conic Conformal (2SP),metre,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18.02,17.5,-66.26,18.26,200000,200000
-2867,NAD83(HARN) / Arizona East (ft),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,700000,31,0,-110.1,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-2868,NAD83(HARN) / Arizona Central (ft),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,700000,31,0,-111.55,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-2869,NAD83(HARN) / Arizona West (ft),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,700000,31,0,-113.45,0.999933333,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2867,NAD83(HARN) / Arizona East (ft),Transverse Mercator,foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,700000,31,0,-110.1,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2868,NAD83(HARN) / Arizona Central (ft),Transverse Mercator,foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,700000,31,0,-111.55,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2869,NAD83(HARN) / Arizona West (ft),Transverse Mercator,foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,700000,31,0,-113.45,0.999933333,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2870,NAD83(HARN) / California zone 1 (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,39.2,-122,41.4,1640416.667,6561666.667
 2871,NAD83(HARN) / California zone 2 (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38.2,37.4,-122,39.5,1640416.667,6561666.667
 2872,NAD83(HARN) / California zone 3 (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.04,36.3,-120.3,38.26,1640416.667,6561666.667
@@ -836,12 +836,12 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 2893,NAD83(HARN) / Maryland (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38.18,37.4,-77,39.27,0,1312333.333
 2894,NAD83(HARN) / Massachusetts Mainland (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41.43,41,-71.3,42.41,2460625,656166.667
 2895,NAD83(HARN) / Massachusetts Island (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41.17,41,-70.3,41.29,0,1640416.667
-2896,NAD83(HARN) / Michigan North (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.29,44.47,-87,47.05,0,26246719.16
-2897,NAD83(HARN) / Michigan Central (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.11,43.19,-84.22,45.42,0,19685039.37
-2898,NAD83(HARN) / Michigan South (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.06,41.3,-84.22,43.4,0,13123359.58
+2896,NAD83(HARN) / Michigan North (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.29,44.47,-87,47.05,0,26246719.16
+2897,NAD83(HARN) / Michigan Central (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.11,43.19,-84.22,45.42,0,19685039.37
+2898,NAD83(HARN) / Michigan South (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.06,41.3,-84.22,43.4,0,13123359.58
 2899,NAD83(HARN) / Mississippi East (ftUS),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,984250,29.3,0,-88.5,0.99995,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2900,NAD83(HARN) / Mississippi West (ftUS),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,2296583.333,29.3,0,-90.2,0.99995,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-2901,NAD83(HARN) / Montana (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,44.15,-109.3,49,0,1968503.937
+2901,NAD83(HARN) / Montana (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,44.15,-109.3,49,0,1968503.937
 2902,NAD83(HARN) / New Mexico East (ftUS),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,541337.5,31,0,-104.2,0.999909091,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2903,NAD83(HARN) / New Mexico Central (ftUS),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,1640416.667,31,0,-106.15,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2904,NAD83(HARN) / New Mexico West (ftUS),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,2723091.667,31,0,-107.5,0.999916667,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -849,21 +849,21 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 2906,NAD83(HARN) / New York Central (ftUS),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,820208.333,40,0,-76.35,0.9999375,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2907,NAD83(HARN) / New York West (ftUS),Transverse Mercator,US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,1148291.667,40,0,-78.35,0.9999375,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2908,NAD83(HARN) / New York Long Island (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.4,40.1,-74,41.02,0,984250
-2909,NAD83(HARN) / North Dakota North (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.26,47,-100.3,48.44,0,1968503.937
-2910,NAD83(HARN) / North Dakota South (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46.11,45.4,-100.3,47.29,0,1968503.937
+2909,NAD83(HARN) / North Dakota North (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.26,47,-100.3,48.44,0,1968503.937
+2910,NAD83(HARN) / North Dakota South (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46.11,45.4,-100.3,47.29,0,1968503.937
 2911,NAD83(HARN) / Oklahoma North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,35.34,35,-98,36.46,0,1968500
 2912,NAD83(HARN) / Oklahoma South (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33.56,33.2,-98,35.14,0,1968500
-2913,NAD83(HARN) / Oregon North (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.2,43.4,-120.3,46,0,8202099.738
-2914,NAD83(HARN) / Oregon South (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.2,41.4,-120.3,44,0,4921259.843
+2913,NAD83(HARN) / Oregon North (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.2,43.4,-120.3,46,0,8202099.738
+2914,NAD83(HARN) / Oregon South (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.2,41.4,-120.3,44,0,4921259.843
 2915,NAD83(HARN) / Tennessee (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,35.15,34.2,-86,36.25,0,1968500
 2916,NAD83(HARN) / Texas North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34.39,34,-101.3,36.11,3280833.333,656166.667
 2917,NAD83(HARN) / Texas North Central (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.08,31.4,-98.3,33.58,6561666.667,1968500
 2918,NAD83(HARN) / Texas Central (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30.07,29.4,-100.2,31.53,9842500,2296583.333
 2919,NAD83(HARN) / Texas South Central (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,28.23,27.5,-99,30.17,13123333.33,1968500
 2920,NAD83(HARN) / Texas South (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,26.1,25.4,-98.3,27.5,16404166.67,984250
-2921,NAD83(HARN) / Utah North (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.43,40.2,-111.3,41.47,3280839.895,1640419.948
-2922,NAD83(HARN) / Utah Central (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.01,38.2,-111.3,40.39,6561679.79,1640419.948
-2923,NAD83(HARN) / Utah South (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.13,36.4,-111.3,38.21,9842519.685,1640419.948
+2921,NAD83(HARN) / Utah North (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.43,40.2,-111.3,41.47,3280839.895,1640419.948
+2922,NAD83(HARN) / Utah Central (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.01,38.2,-111.3,40.39,6561679.79,1640419.948
+2923,NAD83(HARN) / Utah South (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.13,36.4,-111.3,38.21,9842519.685,1640419.948
 2924,NAD83(HARN) / Virginia North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38.02,37.4,-78.3,39.12,6561666.667,11482916.67
 2925,NAD83(HARN) / Virginia South (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,36.46,36.2,-78.3,37.58,3280833.333,11482916.67
 2926,NAD83(HARN) / Washington North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.3,47,-120.5,48.44,0,1640416.667
@@ -924,9 +924,9 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 2987,Saint Pierre et Miquelon 1950 / UTM zone 21N,Transverse Mercator,metre,4638,Saint Pierre et Miquelon 1950,Clarke 1866,500000,0,0,-57,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2988,MOP78 / UTM zone 1S,Transverse Mercator,metre,4639,MOP78,International 1924,500000,0,10000000,-177,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2991,NAD83 / Oregon Lambert,Lambert Conic Conformal (2SP),metre,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.3,41.45,-120.3,43,0,400000,
-2992,NAD83 / Oregon Lambert (ft),Lambert Conic Conformal (2SP),US survey foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.3,41.45,-120.3,43,0,1312335.958,
+2992,NAD83 / Oregon Lambert (ft),Lambert Conic Conformal (2SP),foot,4269,North American Datum 1983,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.3,41.45,-120.3,43,0,1312335.958,
 2993,NAD83(HARN) / Oregon Lambert,Lambert Conic Conformal (2SP),metre,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.3,41.45,-120.3,43,0,400000,
-2994,NAD83(HARN) / Oregon Lambert (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.3,41.45,-120.3,43,0,1312335.958
+2994,NAD83(HARN) / Oregon Lambert (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.3,41.45,-120.3,43,0,1312335.958
 2995,IGN53 Mare / UTM zone 58S,Transverse Mercator,metre,4641,IGN53 Mare,International 1924,500000,0,10000000,165,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2996,ST84 Ile des Pins / UTM zone 58S,Transverse Mercator,metre,4642,ST84 Ile des Pins,International 1924,500000,0,10000000,165,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2997,ST71 Belep / UTM zone 58S,Transverse Mercator,metre,4643,ST71 Belep,International 1924,500000,0,10000000,165,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -1283,7 +1283,7 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 3357,Little Cayman 1961 / UTM zone 17N,Transverse Mercator,metre,0,Little Cayman 1961,Clarke 1866,500000,0,0,-81,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3358,NAD83(HARN) / North Carolina,Lambert Conic Conformal (2SP),metre,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34.2,33.45,-79,36.1,0,609601.22
 3360,NAD83(HARN) / South Carolina,Lambert Conic Conformal (2SP),metre,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.3,31.5,-81,34.5,0,609600
-3361,NAD83(HARN) / South Carolina (ft),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.3,31.5,-81,34.5,0,2000000
+3361,NAD83(HARN) / South Carolina (ft),Lambert Conic Conformal (2SP),foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.3,31.5,-81,34.5,0,2000000
 3362,NAD83(HARN) / Pennsylvania North,Lambert Conic Conformal (2SP),metre,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.53,40.1,-77.45,41.57,0,600000
 3363,NAD83(HARN) / Pennsylvania North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.53,40.1,-77.45,41.57,0,1968500
 3364,NAD83(HARN) / Pennsylvania South,Lambert Conic Conformal (2SP),metre,4152,NAD83 (High Accuracy Regional Network),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.56,39.2,-77.45,40.58,0,600000
@@ -1399,11 +1399,11 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 3476,NAD83(NSRS2007) / Alaska zone 9,Transverse Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,500000,54,0,-170,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3477,NAD83(NSRS2007) / Alaska zone 10,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,51.5,51,-176,53.5,0,1000000
 3478,NAD83(NSRS2007) / Arizona Central,Transverse Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,213360,31,0,-111.55,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-3479,NAD83(NSRS2007) / Arizona Central (ft),Transverse Mercator,US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,700000,31,0,-111.55,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+3479,NAD83(NSRS2007) / Arizona Central (ft),Transverse Mercator,foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,700000,31,0,-111.55,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3480,NAD83(NSRS2007) / Arizona East,Transverse Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,213360,31,0,-110.1,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-3481,NAD83(NSRS2007) / Arizona East (ft),Transverse Mercator,US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,700000,31,0,-110.1,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+3481,NAD83(NSRS2007) / Arizona East (ft),Transverse Mercator,foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,700000,31,0,-110.1,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3482,NAD83(NSRS2007) / Arizona West,Transverse Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,213360,31,0,-113.45,0.999933333,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-3483,NAD83(NSRS2007) / Arizona West (ft),Transverse Mercator,US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,700000,31,0,-113.45,0.999933333,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+3483,NAD83(NSRS2007) / Arizona West (ft),Transverse Mercator,foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,700000,31,0,-113.45,0.999933333,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3484,NAD83(NSRS2007) / Arkansas North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34.56,34.2,-92,36.14,0,400000
 3485,NAD83(NSRS2007) / Arkansas North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34.56,34.2,-92,36.14,0,1312333.333
 3486,NAD83(NSRS2007) / Arkansas South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33.18,32.4,-92,34.46,400000,400000
@@ -1508,12 +1508,12 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 3585,NAD83(NSRS2007) / Massachusetts Mainland,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41.43,41,-71.3,42.41,750000,200000
 3586,NAD83(NSRS2007) / Massachusetts Mainland (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41.43,41,-71.3,42.41,2460625,656166.667
 3587,NAD83(NSRS2007) / Michigan Central,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.11,43.19,-84.22,45.42,0,6000000
-3588,NAD83(NSRS2007) / Michigan Central (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.11,43.19,-84.22,45.42,0,19685039.37
+3588,NAD83(NSRS2007) / Michigan Central (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.11,43.19,-84.22,45.42,0,19685039.37
 3589,NAD83(NSRS2007) / Michigan North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.29,44.47,-87,47.05,0,8000000
-3590,NAD83(NSRS2007) / Michigan North (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.29,44.47,-87,47.05,0,26246719.16
+3590,NAD83(NSRS2007) / Michigan North (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.29,44.47,-87,47.05,0,26246719.16
 3591,NAD83(NSRS2007) / Michigan Oblique Mercator,Hotine Oblique Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,2546731.496,0,-4354009.816,0,0,337.25556,45.1833,0,337.25556,0.9996,0,-86,0,0,0,0,0,0,0,0,
 3592,NAD83(NSRS2007) / Michigan South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.06,41.3,-84.22,43.4,0,4000000
-3593,NAD83(NSRS2007) / Michigan South (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.06,41.3,-84.22,43.4,0,13123359.58
+3593,NAD83(NSRS2007) / Michigan South (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.06,41.3,-84.22,43.4,0,13123359.58
 3594,NAD83(NSRS2007) / Minnesota Central,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.37,45,-94.15,47.03,100000,800000
 3595,NAD83(NSRS2007) / Minnesota North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.02,46.3,-93.06,48.38,100000,800000
 3596,NAD83(NSRS2007) / Minnesota South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43.47,43,-94,45.13,100000,800000
@@ -1525,7 +1525,7 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 3602,NAD83(NSRS2007) / Missouri East,Transverse Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,250000,35.5,0,-90.3,0.999933333,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3603,NAD83(NSRS2007) / Missouri West,Transverse Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,850000,36.1,0,-94.3,0.999941177,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3604,NAD83(NSRS2007) / Montana,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,44.15,-109.3,49,0,600000
-3605,NAD83(NSRS2007) / Montana (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,44.15,-109.3,49,0,1968503.937
+3605,NAD83(NSRS2007) / Montana (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45,44.15,-109.3,49,0,1968503.937
 3606,NAD83(NSRS2007) / Nebraska,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40,39.5,-100,43,0,500000
 3607,NAD83(NSRS2007) / Nevada Central,Transverse Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,500000,34.45,6000000,-116.4,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3608,NAD83(NSRS2007) / Nevada Central (ft US),Transverse Mercator,US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,1640416.667,34.45,19685000,-116.4,0.9999,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -1554,9 +1554,9 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 3631,NAD83(NSRS2007) / North Carolina,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34.2,33.45,-79,36.1,0,609601.22
 3632,NAD83(NSRS2007) / North Carolina (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,34.2,33.45,-79,36.1,0,2000000
 3633,NAD83(NSRS2007) / North Dakota North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.26,47,-100.3,48.44,0,600000
-3634,NAD83(NSRS2007) / North Dakota North (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.26,47,-100.3,48.44,0,1968503.937
+3634,NAD83(NSRS2007) / North Dakota North (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47.26,47,-100.3,48.44,0,1968503.937
 3635,NAD83(NSRS2007) / North Dakota South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46.11,45.4,-100.3,47.29,0,600000
-3636,NAD83(NSRS2007) / North Dakota South (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46.11,45.4,-100.3,47.29,0,1968503.937
+3636,NAD83(NSRS2007) / North Dakota South (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46.11,45.4,-100.3,47.29,0,1968503.937
 3637,NAD83(NSRS2007) / Ohio North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.26,39.4,-82.3,41.42,0,600000
 3638,NAD83(NSRS2007) / Ohio South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38.44,38,-82.3,40.02,0,600000
 3639,NAD83(NSRS2007) / Oklahoma North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,35.34,35,-98,36.46,0,600000
@@ -1564,11 +1564,11 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 3641,NAD83(NSRS2007) / Oklahoma South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33.56,33.2,-98,35.14,0,600000
 3642,NAD83(NSRS2007) / Oklahoma South (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33.56,33.2,-98,35.14,0,1968500
 3643,NAD83(NSRS2007) / Oregon Lambert,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.3,41.45,-120.3,43,0,400000
-3644,NAD83(NSRS2007) / Oregon Lambert (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.3,41.45,-120.3,43,0,1312335.958
+3644,NAD83(NSRS2007) / Oregon Lambert (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45.3,41.45,-120.3,43,0,1312335.958
 3645,NAD83(NSRS2007) / Oregon North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.2,43.4,-120.3,46,0,2500000
-3646,NAD83(NSRS2007) / Oregon North (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.2,43.4,-120.3,46,0,8202099.738
+3646,NAD83(NSRS2007) / Oregon North (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.2,43.4,-120.3,46,0,8202099.738
 3647,NAD83(NSRS2007) / Oregon South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.2,41.4,-120.3,44,0,1500000
-3648,NAD83(NSRS2007) / Oregon South (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.2,41.4,-120.3,44,0,4921259.843
+3648,NAD83(NSRS2007) / Oregon South (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.2,41.4,-120.3,44,0,4921259.843
 3649,NAD83(NSRS2007) / Pennsylvania North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.53,40.1,-77.45,41.57,0,600000
 3650,NAD83(NSRS2007) / Pennsylvania North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.53,40.1,-77.45,41.57,0,1968500
 3651,NAD83(NSRS2007) / Pennsylvania South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.56,39.2,-77.45,40.58,0,600000
@@ -1576,7 +1576,7 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 3653,NAD83(NSRS2007) / Rhode Island,Transverse Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,100000,41.05,0,-71.3,0.99999375,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3654,NAD83(NSRS2007) / Rhode Island (ftUS),Transverse Mercator,US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,328083.3333,41.05,0,-71.3,0.99999375,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3655,NAD83(NSRS2007) / South Carolina,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.3,31.5,-81,34.5,0,609600
-3656,NAD83(NSRS2007) / South Carolina (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.3,31.5,-81,34.5,0,2000000
+3656,NAD83(NSRS2007) / South Carolina (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32.3,31.5,-81,34.5,0,2000000
 3657,NAD83(NSRS2007) / South Dakota North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.25,43.5,-100,45.41,0,600000
 3658,NAD83(NSRS2007) / South Dakota North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44.25,43.5,-100,45.41,0,1968500
 3659,NAD83(NSRS2007) / South Dakota South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,42.5,42.2,-100.2,44.24,0,600000
@@ -1596,13 +1596,13 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 3673,NAD83(NSRS2007) / Texas South Central,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,28.23,27.5,-99,30.17,4000000,600000
 3674,NAD83(NSRS2007) / Texas South Central (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,28.23,27.5,-99,30.17,13123333.33,1968500
 3675,NAD83(NSRS2007) / Utah Central,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.01,38.2,-111.3,40.39,2000000,500000
-3676,NAD83(NSRS2007) / Utah Central (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.01,38.2,-111.3,40.39,6561679.79,1640419.948
+3676,NAD83(NSRS2007) / Utah Central (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.01,38.2,-111.3,40.39,6561679.79,1640419.948
 3677,NAD83(NSRS2007) / Utah Central (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,39.01,38.2,-111.3,40.39,6561666.667,1640416.667
 3678,NAD83(NSRS2007) / Utah North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.43,40.2,-111.3,41.47,1000000,500000
-3679,NAD83(NSRS2007) / Utah North (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.43,40.2,-111.3,41.47,3280839.895,1640419.948
+3679,NAD83(NSRS2007) / Utah North (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.43,40.2,-111.3,41.47,3280839.895,1640419.948
 3680,NAD83(NSRS2007) / Utah North (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40.43,40.2,-111.3,41.47,3280833.333,1640416.667
 3681,NAD83(NSRS2007) / Utah South,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.13,36.4,-111.3,38.21,3000000,500000
-3682,NAD83(NSRS2007) / Utah South (ft),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.13,36.4,-111.3,38.21,9842519.685,1640419.948
+3682,NAD83(NSRS2007) / Utah South (ft),Lambert Conic Conformal (2SP),foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.13,36.4,-111.3,38.21,9842519.685,1640419.948
 3683,NAD83(NSRS2007) / Utah South (ftUS),Lambert Conic Conformal (2SP),US survey foot,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,37.13,36.4,-111.3,38.21,9842500,1640416.667
 3684,NAD83(NSRS2007) / Vermont,Transverse Mercator,metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,500000,42.3,0,-72.3,0.999964286,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3685,NAD83(NSRS2007) / Virginia North,Lambert Conic Conformal (2SP),metre,4269,NAD83 (National Spatial Reference System 2007),GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,38.02,37.4,-78.3,39.12,2000000,3500000

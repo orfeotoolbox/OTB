@@ -26,7 +26,7 @@
 RTTI_DEF1(ossimNitfEngrdaTag, "ossimNitfEngrdaTag", ossimNitfRegisteredTag);
 
 ossimNitfEngrdaTag::ossimNitfEngrdaTag()
-   : ossimNitfRegisteredTag()
+   : ossimNitfRegisteredTag(std::string("ENGRDA"), 0)
 {
    clearFields();
 }
@@ -35,22 +35,17 @@ ossimNitfEngrdaTag::~ossimNitfEngrdaTag()
 {
 }
 
-std::string ossimNitfEngrdaTag::getRegisterTagName() const
-{
-   return std::string("ENGRDA");
-}
-
 void ossimNitfEngrdaTag::parseStream(std::istream& in)
 {
    clearFields();
 
-   // theTreLength = RETAG_SIZE + REL_SIZE;
+   // m_tagLength = RETAG_SIZE + REL_SIZE;
    
    in.read(theReSrc, RESRC_SIZE);
-   theTreLength += RESRC_SIZE;
+   m_tagLength += RESRC_SIZE;
    
    in.read(theReCnt, RECNT_SIZE);
-   theTreLength += RECNT_SIZE;
+   m_tagLength += RECNT_SIZE;
 
    const ossim_uint16 ELEMENT_COUNT = ossimString(theReCnt).toUInt16();
    
@@ -62,48 +57,48 @@ void ossimNitfEngrdaTag::parseStream(std::istream& in)
 
       // ENGLN - label length field
       in.read(buf, ENGLN_SIZE);
-      theTreLength += ENGLN_SIZE;
+      m_tagLength += ENGLN_SIZE;
       buf[ENGLN_SIZE] = '\n';
       os = buf;
 
       // ENGLBL - label field
       ossim_uint32 size = os.toUInt16();
       in.read(buf, size);
-      theTreLength += size;
+      m_tagLength += size;
       buf[size] = '\0';
       element.theEngLbl = buf;
 
       // ENGMTXC - data column count
       in.read(buf, ENGMTXC_SIZE);
-      theTreLength += ENGMTXC_SIZE;
+      m_tagLength += ENGMTXC_SIZE;
       buf[ENGMTXC_SIZE] = '\0';
       os = buf;
       element.theEngMtxC = os.toUInt16();
 
       // ENGMTXR - data row count
       in.read(buf, ENGMTXR_SIZE);
-      theTreLength += ENGMTXR_SIZE;
+      m_tagLength += ENGMTXR_SIZE;
       buf[ENGMTXR_SIZE] = '\0';
       os = buf;
       element.theEngMtxR = os.toUInt16();
 
       // ENGTYP - Value Type of Engineering Data Element.
       in.get( element.theEngTyp );
-      theTreLength += ENGTYP_SIZE;
+      m_tagLength += ENGTYP_SIZE;
 
       // ENGDTS - Engineering Data Element Size
       element.theEngDts = static_cast<ossim_uint8>(in.get());
-      theTreLength += ENGDTS_SIZE;
+      m_tagLength += ENGDTS_SIZE;
 
       // ENGDATU - Engineering Data Units.
       in.read(buf, ENGDATU_SIZE);
-      theTreLength += ENGDATU_SIZE;
+      m_tagLength += ENGDATU_SIZE;
       buf[ENGDATU_SIZE] = '\0';
       element.theEngDatU = buf;
 
       // ENGDATC - Engineering Data Count
       in.read(buf, ENGDATC_SIZE);
-      theTreLength += ENGDATC_SIZE;
+      m_tagLength += ENGDATC_SIZE;
       buf[ENGDATC_SIZE] = '\n';
       os = buf;
       ossim_uint32 engDatC = os.toUInt32();
@@ -111,7 +106,7 @@ void ossimNitfEngrdaTag::parseStream(std::istream& in)
       // ENGDATA - Engineering Data
       element.theEngDat.resize(engDatC);
       in.read((char*)&(element.theEngDat.front()), (std::streamsize)element.theEngDat.size());
-      theTreLength += engDatC;
+      m_tagLength += engDatC;
       
       theData.push_back(element);
 
@@ -167,11 +162,6 @@ void ossimNitfEngrdaTag::writeStream(std::ostream& out)
    
 }
 
-ossim_uint32 ossimNitfEngrdaTag::getSizeInBytes()const
-{
-   return theTreLength;
-}
-
 void ossimNitfEngrdaTag::clearFields()
 {
    // BCS-N's to '0's, BCS-A's to ' '(spaces)
@@ -185,19 +175,19 @@ void ossimNitfEngrdaTag::clearFields()
    theReSrc[RESRC_SIZE] = '\0';
    theReCnt[RECNT_SIZE] = '\0';
 
-   theTreLength = 0;
+   m_tagLength = 0;
 }
 
 std::ostream& ossimNitfEngrdaTag::print(
    std::ostream& out, const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getRegisterTagName();
+   pfx += getTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getRegisterTagName() << "\n"
+       << getTagName() << "\n"
        << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "RESRC:" << theReSrc << "\n"
        << pfx << std::setw(24) << "RECNT:" << theReCnt << "\n";

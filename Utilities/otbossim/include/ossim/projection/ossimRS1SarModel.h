@@ -12,7 +12,7 @@
 //  $Id:$
 
 #ifndef ossimRS1SarModel_HEADER
-#define ossimRS1SarModel_HEADER
+#define ossimRS1SarModel_HEADER 1
 
 #include <ossim/base/ossimLsrPoint.h>
 #include <ossim/base/ossimLsrVector.h>
@@ -25,7 +25,11 @@
 #include <ossim/base/ossimLagrangeInterpolator.h>
 #include <ossim/support_data/ossimCeosData.h>
 
-class NEWMAT::Matrix;
+// Namespace class forward class declaration.
+namespace NEWMAT
+{
+   class Matrix;
+}
 
 //*****************************************************************************
 // CLASS:  ossimRS1SarModel
@@ -150,4 +154,3 @@ protected:
 
 
 #endif
-

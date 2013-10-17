@@ -10,7 +10,7 @@
 // Images) header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeader.cpp 21527 2012-08-26 16:50:49Z dburken $
+// $Id: ossimEnviHeader.cpp 22349 2013-08-01 21:38:29Z dburken $
 
 #include <ossim/support_data/ossimEnviHeader.h>
 #include <ossim/base/ossimCommon.h>
@@ -20,6 +20,7 @@
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/support_data/ossimWavelength.h>
 #include <algorithm>
 #include <fstream>
 #include <string>
@@ -109,12 +110,6 @@ bool ossimEnviHeader::getValue( const ossimString& key, ossimString& value ) con
    return result;
 }
 
-bool ossimEnviHeader::findCaseInsensitive(const ossimString& key, ossimString& value) const
-{
-   return m_keywords.findValue<KwlKeyCaseInsensitiveEquals>(
-      value, KwlKeyCaseInsensitiveEquals(key));
-}
-
 bool ossimEnviHeader::findSubStringCaseInsensitive(const ossimString& key,
                                                    ossimString& value) const
 {
@@ -190,8 +185,9 @@ bool ossimEnviHeader::readStream(std::istream& in)
       }
 
       // Test for minimum set of keywords needed.
-      if (m_keywords["samples"].empty() || m_keywords["lines"].empty() || 
-          m_keywords["bands"].empty())
+      if ( m_keywords.findKey( std::string("samples") ).empty() ||
+           m_keywords.findKey( std::string("lines") ).empty() || 
+           m_keywords.findKey( std::string("bands") ).empty())
       {
          result =  false;
       }
@@ -202,7 +198,7 @@ bool ossimEnviHeader::readStream(std::istream& in)
 
 bool ossimEnviHeader::writeFile(const ossimFilename& file)
 {
-   if (m_keywords["description"].empty())
+   if (m_keywords.findKey( std::string("description") ).empty())
    {
       m_keywords["description"] = file.c_str();
    }
@@ -232,7 +228,7 @@ std::ostream& operator<<(std::ostream& out, const ossimEnviHeader& obj)
 
 ossimString ossimEnviHeader::getDescription() const
 {
-   return m_keywords["description"];
+   return ossimString( m_keywords.findKey( std::string("description") ) );
 }
 
 void ossimEnviHeader::setDescription(const ossimString& description)
@@ -243,7 +239,7 @@ void ossimEnviHeader::setDescription(const ossimString& description)
 ossim_uint32 ossimEnviHeader::getSamples() const
 {
    ossim_uint32 result = 0;
-   ossimString value = m_keywords[ std::string("samples") ];
+   ossimString value = m_keywords.findKey( std::string("samples") );
    if( value.size() )
    {
       result = value.toUInt32();
@@ -259,7 +255,7 @@ void ossimEnviHeader::setSamples(ossim_uint32 samples)
 ossim_uint32 ossimEnviHeader::getLines() const
 {
    ossim_uint32 result = 0;
-   ossimString value = m_keywords["lines"];
+   ossimString value = m_keywords.findKey( std::string("lines") );
    if( value.size() )
    {
       result = value.toUInt32();
@@ -275,7 +271,7 @@ void ossimEnviHeader::setLines(ossim_uint32 lines)
 ossim_uint32 ossimEnviHeader::getBands() const
 {
    ossim_uint32 result = 0;
-   ossimString value = m_keywords["bands"];
+   ossimString value = m_keywords.findKey( std::string("bands") );
    if( value.size() )
    {
       result = value.toUInt32();
@@ -286,6 +282,59 @@ ossim_uint32 ossimEnviHeader::getBands() const
 void ossimEnviHeader::setBands(ossim_uint32 bands)
 {
    m_keywords["bands"] = ossimString::toString(bands).c_str();
+}
+
+bool ossimEnviHeader::getDefaultBands( std::vector<ossim_uint32>& bands ) const
+{
+   bands.clear();
+
+   // Note: We could do a "m_map.downcaseKeywords()". (drb)
+   ossimString value = m_keywords.findKey( std::string("default bands") );
+   if ( !value.size() )
+   {
+      value = m_keywords.findKey( std::string("Default bands") );
+      if ( !value.size() )
+      {
+        value = m_keywords.findKey( std::string("DEFAULT BANDS") );
+      }
+   }
+
+   if ( value.size() )
+   {
+      std::vector<ossimString> strLst;
+      value.split( strLst, ossimString(","));
+      if ( strLst.size() )
+      {
+         std::vector<ossimString>::const_iterator i = strLst.begin();
+         ossim_uint32 band = 0;
+         while ( i != strLst.end() )
+         {
+            band = (*i).toUInt32();
+            if ( band )
+            {
+               // Assuming "default bands" are one based.  Totally a hunch... (drb)
+               --band;
+               bands.push_back(band);
+            }
+            else
+            {
+               ossimNotify(ossimNotifyLevel_WARN)
+                  << "ossimEnviHeader::getDefaultBands WARN!"
+                  << "\nDetected zero based bands in \"default bands\" from header!"
+                  << std::endl;
+            }
+            
+            ++i;
+         }
+      }
+   }
+
+   if ( rangeCheckBands( bands ) == false )
+   {
+      bands.clear();
+   }
+   
+   return (bands.size() ? true : false);
 }
 
 ossim_uint32 ossimEnviHeader::getHeaderOffset() const
@@ -879,4 +928,25 @@ bool ossimEnviHeader::isEnviHeader( std::istream& in )
 const ossimFilename& ossimEnviHeader::getFile() const
 {
    return m_file;
+}
+
+bool ossimEnviHeader::rangeCheckBands( const std::vector<ossim_uint32>& bands ) const
+{
+   bool result = false;
+   const ossim_uint32 INPUT_BANDS = getBands();
+   if ( INPUT_BANDS )
+   {
+      result = true;
+      std::vector<ossim_uint32>::const_iterator i = bands.begin();
+      while ( i != bands.end() )
+      {
+         if ( (*i) >= INPUT_BANDS )
+         {
+            result = false;
+            break;
+         }
+         ++i;
+      }
+   }
+   return result;
 }

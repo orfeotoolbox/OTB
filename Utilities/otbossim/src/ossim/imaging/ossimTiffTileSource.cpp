@@ -12,7 +12,7 @@
 // Contains class definition for TiffTileSource.
 //
 //*******************************************************************
-//  $Id: ossimTiffTileSource.cpp 21745 2012-09-16 15:21:53Z dburken $
+//  $Id: ossimTiffTileSource.cpp 22282 2013-06-09 14:57:06Z dburken $
 
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/support_data/ossimGeoTiff.h>
@@ -820,9 +820,13 @@ bool ossimTiffTileSource::open()
    GTIF* gtif = GTIFNew(theTiffPtr);
    ossim_uint16 raster_type;
    if (GTIFKeyGet(gtif, GTRasterTypeGeoKey, &raster_type, 0, 1) && (raster_type == 1))
+   {
       thePixelType = OSSIM_PIXEL_IS_AREA;
+   }
    else
+   {
       thePixelType = OSSIM_PIXEL_IS_POINT;
+   }
    GTIFFree(gtif);
 
    // Let base-class finish the rest:
@@ -993,6 +997,10 @@ bool ossimTiffTileSource::loadTile(const ossimIrect& tile_rect,
          case READ_RGBA_U8A_STRIP:
             status = loadFromRgbaU8aStrip(tile_rect, clip_rect, result);
             break;
+
+         case READ_U16_STRIP:
+            status = loadFromU16Strip(clip_rect, result);
+            break;
             
          default:
             ossimNotify(ossimNotifyLevel_WARN)
@@ -1012,7 +1020,7 @@ bool ossimTiffTileSource::loadFromScanLine(const ossimIrect& clip_rect,
    ossimInterleaveType type =
       (thePlanarConfig[theCurrentDirectory] == PLANARCONFIG_CONTIG) ?
        OSSIM_BIP : OSSIM_BIL;
-   
+
    if ( theBufferRLevel != getCurrentTiffRLevel() ||
         !clip_rect.completely_within(theBufferRect) )
    {
@@ -1679,7 +1687,103 @@ bool ossimTiffTileSource::loadFromRgbaU8aStrip(const ossimIrect& tile_rect,
    delete [] d;
                
    return true;
-}
+   
+} // End: ossimTiffTileSource::loadFromRgbaU8aStrip( ... )
+
+bool ossimTiffTileSource::loadFromU16Strip( const ossimIrect& clip_rect, ossimImageData* result )
+{
+   bool status = true;
+   
+   // Calculate the strips to read.
+   ossim_uint32 starting_strip = clip_rect.ul().y / theRowsPerStrip[theCurrentDirectory];
+   ossim_uint32 ending_strip   = clip_rect.lr().y / theRowsPerStrip[theCurrentDirectory];
+
+   ossim_uint32 stripsPerBand = theImageLength[theCurrentDirectory] /
+      theRowsPerStrip[theCurrentDirectory];
+   if ( theImageLength[theCurrentDirectory] % theRowsPerStrip[theCurrentDirectory] )
+   {
+      ++stripsPerBand;
+   }
+   
+   // Loop through strips....
+   for ( ossim_uint32 strip = starting_strip; strip <= ending_strip; ++strip )
+   {
+      if ( (theBufferRLevel != theCurrentDirectory) ||
+           !clip_rect.completely_within(theBufferRect) )
+      {
+         // Fill buffer block:
+         
+         ossim_uint32 linesInStrip = theRowsPerStrip[theCurrentDirectory];
+         
+         // If last strip and not filling entirely memset it.
+         if ( strip == ( stripsPerBand - 1 ) )
+         {
+            // Last strip of image. Strip may be clipped to end of image.
+            linesInStrip = theImageLength[theCurrentDirectory] %
+               theRowsPerStrip[theCurrentDirectory];
+         }
+
+         ossim_uint32 bytesPerStrip = linesInStrip * theImageWidth[theCurrentDirectory] * 2;
+                  
+         // TIFFReadEncodedStrip takes signed int32 arg.
+         ossim_int32 bytesToRead = (ossim_int32)bytesPerStrip;
+         
+         ossim_uint32 startY = strip * theRowsPerStrip[theCurrentDirectory];
+         
+         // Need to read in the strip data:
+         ossim_uint32 bufferOffsetInBytes = 0;
+         
+         for (ossim_uint32 band = 0; band < theSamplesPerPixel; ++band)
+         {
+            ossim_uint32 bandStrip = strip + band * stripsPerBand;
+            
+            //---
+            // TIFFReadEncodedStrip does byte swapping for us.
+            // -1 says to read entire strip.
+            // Return of -1 is error.
+            //---
+            ossim_int32 bytesRead = TIFFReadEncodedStrip( theTiffPtr,
+                                                          bandStrip,
+                                                          theBuffer+bufferOffsetInBytes,
+                                                          bytesToRead );
+            if ( bytesRead != bytesToRead )
+            {
+               if(traceDebug())
+               {
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << "ossimTiffTileSource::loadFromU16Strip Read Error!"
+                     << "\nReturning error...  " << endl;
+               }
+               theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+               status = false;
+               result->makeBlank();
+               break;
+            }
+            bufferOffsetInBytes += bytesPerStrip;
+         }
+         
+         if ( status )
+         {
+            // Capture rect and rlevel of buffer:
+            theBufferRLevel = theCurrentDirectory;
+            theBufferRect = ossimIrect( 0,
+                                        startY,
+                                        theImageWidth[theCurrentDirectory] - 1,
+                                        startY + linesInStrip - 1);
+         }
+         
+      } // End: Fill buffer block.
+      
+      if ( status )
+      {
+         result->loadTile(theBuffer, theBufferRect, OSSIM_BSQ);
+      }
+      
+   } // End of strip loop.
+   
+   return status;
+   
+} // End: ossimTiffTileSource::loadFromU16Strip( ... )
 
 void ossimTiffTileSource::adjustToStartOfTile(ossimIpt& pt) const
 {
@@ -1742,22 +1846,32 @@ ossim_uint32 ossimTiffTileSource::getCurrentTiffRLevel() const
 
 ossimString ossimTiffTileSource::getReadMethod(ossim_uint32 directory) const
 {
-   switch (theReadMethod[directory])
+   ossimString result = "UNKNOWN";
+   if ( directory < theReadMethod.size() )
    {
-      case READ_RGBA_U8_TILE:
-         return ossimString("READ_RGBA_U8_TILE");
-      case READ_RGBA_U8_STRIP:
-         return ossimString("READ_RGBA_U8_STRIP");
-      case READ_RGBA_U8A_STRIP:
-         return ossimString("READ_RGBA_U8A_STRIP");
-      case READ_SCAN_LINE:
-         return ossimString("READ_SCAN_LINE");
-      case READ_TILE:
-         return ossimString("READ_TILE");
-      case UNKNOWN:
-      default:
-         return ossimString("UNKNOWN");
+      switch (theReadMethod[directory])
+      {
+         case READ_RGBA_U8_TILE:
+            result = "READ_RGBA_U8_TILE";
+            break;
+         case READ_RGBA_U8_STRIP:
+            result = "READ_RGBA_U8_STRIP";
+            break;
+         case READ_RGBA_U8A_STRIP:
+            result = "READ_RGBA_U8A_STRIP";
+            break;
+         case READ_SCAN_LINE:
+            result = "READ_SCAN_LINE";
+            break;
+         case READ_TILE:
+            result = "READ_TILE";
+            break;
+         case UNKNOWN:
+         default:
+            break;
+      }
    }
+   return result;
 }      
 
 ossim_uint32 ossimTiffTileSource::getNumberOfDirectories() const
@@ -1855,9 +1969,8 @@ ossimString ossimTiffTileSource::getLongName()const
 
 ossimString ossimTiffTileSource::getShortName()const
 {
-   return ossimString("TIFF Image Handler");
+   return ossimString("ossim_tiff");
 }
-
 
 std::ostream& ossimTiffTileSource::print(std::ostream& os) const
 {
@@ -2072,6 +2185,14 @@ void ossimTiffTileSource::setReadMethod()
          {
             theReadMethod[dir] = READ_RGBA_U8_STRIP;
          }
+         else if ( ( theBitsPerSample == 16 ) &&
+                   ( theRowsPerStrip[dir] > 1 ) &&
+                   ( thePlanarConfig[dir] == PLANARCONFIG_SEPARATE ) &&
+                   ( theCompressionType == COMPRESSION_NONE ) )
+         {
+            // Buffer a strip of bands.
+            theReadMethod[dir] = READ_U16_STRIP;
+         }
          else if (theSamplesPerPixel <= 3 && theBitsPerSample == 1)
          {
             //---
@@ -2159,9 +2280,12 @@ bool ossimTiffTileSource::setTiffDirectory(ossim_uint16 directory)
       }
       else
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimTiffTileSource::setTiffDirectory ERROR setting directory "
-            << directory << "!" << endl;
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimTiffTileSource::setTiffDirectory ERROR setting directory "
+               << directory << "!" << endl;
+         }
       }
    }
    
@@ -2497,7 +2621,13 @@ bool ossimTiffTileSource::allocateBuffer()
          buffer_size = theImageWidth[0]*theRowsPerStrip[theCurrentDirectory]*
             theBytesPerPixel*4;
          break;
-      }  
+      } 
+      case READ_U16_STRIP:
+      {
+         buffer_size = theImageWidth[0]*theRowsPerStrip[theCurrentDirectory]*
+            theBytesPerPixel*theSamplesPerPixel;
+         break;
+      }
       case READ_SCAN_LINE:
       {
 #if OSSIM_BUFFER_SCAN_LINE_READS

@@ -36,7 +36,8 @@ ossimImageElevationHandler::ossimImageElevationHandler()
    ossimElevCellHandler(),
    m_ih(0),
    m_geom(0),
-   m_rect()
+   m_rect(),
+   m_mutex()
 {
 }
 
@@ -142,10 +143,9 @@ double ossimImageElevationHandler::getHeightAboveMSL(const ossimGpt& gpt)
       {
          --y0;
       }
-      
-      m_Mutex.lock();
-      ossimRefPtr<ossimImageData> data = m_ih->getTile( ossimIrect(x0, y0, x0+1, y0+1), 0 );
 
+      m_mutex.lock(); // Call to getTile not thread safe.
+      ossimRefPtr<ossimImageData> data = m_ih->getTile( ossimIrect(x0, y0, x0+1, y0+1), 0 );
       if ( data.valid() )
       {
          ossimIrect dataRect = data->getImageRectangle();
@@ -202,7 +202,8 @@ double ossimImageElevationHandler::getHeightAboveMSL(const ossimGpt& gpt)
          }
          
       } // if ( data.valid() )
-      m_Mutex.unlock();
+      m_mutex.unlock();
+      
    } // if ( m_rect.pointWithin(dpt) )
    
    return height;
@@ -225,12 +226,15 @@ double ossimImageElevationHandler::getPostValue(const ossimIpt& gridPt ) const
    if ( m_rect.pointWithin(ossimDpt(gridPt)) )
    {
       ossimRefPtr<ossimImageHandler> ih = const_cast<ossimImageHandler*>(m_ih.get());
+      
+      m_mutex.lock(); // Call to getTile(...) not thread safe.
       ossimRefPtr<ossimImageData> data =
          ih->getTile( ossimIrect(gridPt.x, gridPt.y, gridPt.x+1, gridPt.y+1), 0 );
       if ( data.valid() )
       {
          height = data->getPix(0, 0);
       }
+      m_mutex.unlock();
    }
    return height;
 }

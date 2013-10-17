@@ -68,7 +68,6 @@ ossimAlphaSensor::ossimAlphaSensor(const ossimAlphaSensor& src)
    m_fov(src.m_fov),
    m_slitRot(src.m_slitRot),
    m_focalLength(src.m_focalLength),
-   m_adjustedFocalLength(src.m_adjustedFocalLength),
    m_rollPoly(src.m_rollPoly),
    m_pitchPoly(src.m_pitchPoly),
    m_headingPoly(src.m_headingPoly),
@@ -76,7 +75,8 @@ ossimAlphaSensor::ossimAlphaSensor(const ossimAlphaSensor& src)
    m_latPoly(src.m_latPoly),
    m_altPoly(src.m_altPoly),
    m_scanPoly(src.m_scanPoly),
-   m_cam2Platform(src.m_cam2Platform)
+   m_cam2Platform(src.m_cam2Platform),
+   m_adjustedFocalLength(src.m_adjustedFocalLength)
 {
 }
 

@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.h 20123 2011-10-11 17:55:44Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.h 22418 2013-09-26 15:01:12Z gpotts $
 
 #ifndef ossimNitfImageHeaderV2_1_HEADER
 #define ossimNitfImageHeaderV2_1_HEADER
@@ -18,12 +18,14 @@
 #include <ossim/support_data/ossimNitfImageHeaderV2_X.h>
 #include <ossim/support_data/ossimNitfImageBandV2_1.h>
 
+class ossimNitfFileHeaderV2_1;
 class OSSIMDLLEXPORT ossimNitfImageHeaderV2_1 : public ossimNitfImageHeaderV2_X
 {
 public:
    ossimNitfImageHeaderV2_1();
    virtual ~ossimNitfImageHeaderV2_1();
 
+   virtual void parseStream(std::istream &in, const ossimNitfFileHeaderV2_1 *file);
    virtual void parseStream(std::istream &in);
    virtual void writeStream(std::ostream &out);
 
@@ -34,6 +36,8 @@ public:
    virtual std::ostream& print(std::ostream& out,
                                const std::string& prefix) const;
    
+   virtual ossimIrect  getImageRect()const;   
+   virtual ossimIrect  getBlockImageRect()const;   
    virtual bool        isCompressed()const;
    virtual bool        isEncrypted()const;
 
@@ -57,8 +61,11 @@ public:
    virtual ossimString getCategory()const;
    virtual ossimString getRepresentation()const;
    virtual ossimString getCoordinateSystem()const;
+   virtual ossimString getGeographicLocation()const;
    virtual ossimString getPixelValueType()const;
 
+  virtual bool takeOverflowTags(std::vector<ossimNitfTagInformation> &overflowTags,
+      ossim_uint32 potentialDesIndex, bool userDefinedTags = false);
 
    virtual bool hasBlockMaskRecords()const;
    virtual bool hasPadPixelMaskRecords()const;
@@ -75,6 +82,26 @@ public:
    
    virtual void setNumberOfRows(ossim_uint32 rows);
    virtual void setNumberOfCols(ossim_uint32 cols);
+
+   virtual void setGeographicLocationDms(const ossimDpt& ul,
+                                         const ossimDpt& ur,
+                                         const ossimDpt& lr,
+                                         const ossimDpt& ll);
+   
+   virtual void setGeographicLocationDecimalDegrees(const ossimDpt& ul,
+                                                    const ossimDpt& ur,
+                                                    const ossimDpt& lr,
+                                                    const ossimDpt& ll);
+   virtual void setUtmNorth(ossim_uint32 zone,
+                            const ossimDpt& ul,
+                            const ossimDpt& ur,
+                            const ossimDpt& lr,
+                            const ossimDpt& ll);
+   virtual void setUtmSouth(ossim_uint32 zone,
+                            const ossimDpt& ul,
+                            const ossimDpt& ur,
+                            const ossimDpt& lr,
+                            const ossimDpt& ll);
 
    virtual void setSecurityClassificationSystem(const ossimString& value);
    virtual void setCodewords(const ossimString& value);
@@ -136,6 +163,12 @@ public:
 
 private:
    void clearFields();
+
+   ossimString encodeUtm(ossim_uint32 zone,
+                         const ossimDpt& ul,
+                         const ossimDpt& ur,
+                         const ossimDpt& lr,
+                         const ossimDpt& ll)const throw(std::out_of_range);
 
    /**
     * FIELD: ISCLSY

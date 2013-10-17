@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageData.cpp 21864 2012-10-22 14:59:23Z dburken $
+// $Id: ossimImageData.cpp 22161 2013-02-25 12:10:04Z gpotts $
 
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimSource.h>
@@ -2409,6 +2409,7 @@ void ossimImageData::setNumberOfBands(ossim_uint32 bands,
       
       ossim_uint32 minBands = ossim::min(b, bands);
 
+
       vector<ossim_float64> newNull(bands);
       vector<ossim_float64> newMin(bands);
       vector<ossim_float64> newMax(bands);
@@ -2421,12 +2422,16 @@ void ossimImageData::setNumberOfBands(ossim_uint32 bands,
          newMax[i]  = m_maxPixelValue[i];
          ++i;
       }
-      while (i < bands)
+
+      if(b)
       {
-         newNull[i] = m_nullPixelValue[b-1];
-         newMin[i]  = m_minPixelValue[b-1];
-         newMax[i]  = m_maxPixelValue[b-1];
-         ++i;
+        while (i < bands)
+        {
+           newNull[i] = m_nullPixelValue[b-1];
+           newMin[i]  = m_minPixelValue[b-1];
+           newMax[i]  = m_maxPixelValue[b-1];
+           ++i;
+        }
       }
       
       m_nullPixelValue = newNull;
@@ -6512,6 +6517,9 @@ template <class T> void ossimImageData::stretchMinMax(T /* dummyTemplate */)
    // scalar max
    const ossim_float64 S_MAX = ossim::defaultMax(getScalarType());
 
+   // scalar null
+   const ossim_float64 S_NUL = ossim::defaultNull(getScalarType());
+
    // scalar range
    const ossim_float64 S_RNG = S_MAX-S_MIN+1.0;
 
@@ -6529,24 +6537,32 @@ template <class T> void ossimImageData::stretchMinMax(T /* dummyTemplate */)
          
          for(ossim_uint32 i = 0; i < SPB; ++i)
          {
-            if (s[i] != T_NUL)
+            ossim_float64 p = s[i];
+            if ( p == T_NUL )
             {
-               ossim_float64 p = s[i];
-               if (p <= T_MIN)
-               {
-                  p = S_MIN;
-               }
-               else if (p >= T_MAX)
-               {
-                  p = S_MAX;
-               }
-               else
-               {
-                  p = (p - T_MIN + 1.0) * SPP + S_MIN - 1.0;
-               }
-               s[i] = ossim::round<T>(p);
+               p = S_NUL;
             }
+            else if (p <= T_MIN)
+            {
+               p = S_MIN;
+            }
+            else if (p >= T_MAX)
+            {
+               p = S_MAX;
+            }
+            else
+            {
+               // Stretch...
+               p = (p - T_MIN + 1.0) * SPP + S_MIN - 1.0;
+            }
+            s[i] = ossim::round<T>(p);
          }
+
+         // Set the min, max, null:
+         m_minPixelValue[band]  = S_MIN;
+         m_maxPixelValue[band]  = S_MAX;
+         m_nullPixelValue[band] = S_NUL;
+         
       }
    } 
 }
@@ -6907,7 +6923,7 @@ bool ossimImageData::saveState(ossimKeywordlist& kwl, const char* prefix)const
 bool ossimImageData::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
    bool result = ossimRectilinearDataObject::loadState(kwl, prefix);
-
+   m_spatialExtents.resize(2);
    if(result)
    {
       const char* null_pixels = kwl.find(prefix, "null_pixels");
@@ -6916,6 +6932,8 @@ bool ossimImageData::loadState(const ossimKeywordlist& kwl, const char* prefix)
       const char* alpha = kwl.find(prefix, "alpha");
       const char* origin = kwl.find(prefix, "origin");
       const char* indexed = kwl.find(prefix, "indexed");
+      ossimString rectString = kwl.find(prefix, "rect");
+      const char* numberOfBands = kwl.find(prefix, "number_bands");
       m_nullPixelValue.clear();
       m_minPixelValue.clear();
       m_maxPixelValue.clear();
@@ -6957,7 +6975,26 @@ bool ossimImageData::loadState(const ossimKeywordlist& kwl, const char* prefix)
       {
          m_indexedFlag = ossimString(indexed).toBool();
       }
-      
+      if(!rectString.empty())
+      {
+        ossimIrect rect;
+
+        if(rect.toRect(rectString))
+        {
+          setImageRectangle(rect);
+        }
+      }
+      if(numberOfBands)
+      {
+        ossim_uint32 nBands = ossimString(numberOfBands).toUInt32();
+        setNumberOfDataComponents(nBands);
+        if(m_nullPixelValue.empty()||
+          m_minPixelValue.empty()||
+          m_maxPixelValue.empty())
+          {
+            initializeDefaults();
+          }
+      }
    }
    
    return result;

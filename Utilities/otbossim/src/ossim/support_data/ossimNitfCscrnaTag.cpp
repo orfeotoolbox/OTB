@@ -26,18 +26,13 @@
 RTTI_DEF1(ossimNitfCscrnaTag, "ossimNitfCscrnaTag", ossimNitfRegisteredTag);
 
 ossimNitfCscrnaTag::ossimNitfCscrnaTag()
-   : ossimNitfRegisteredTag()
+   : ossimNitfRegisteredTag(std::string("CSCRNA"), 109)
 {
    clearFields();
 }
 
 ossimNitfCscrnaTag::~ossimNitfCscrnaTag()
 {
-}
-
-std::string ossimNitfCscrnaTag::getRegisterTagName() const
-{
-   return std::string("CSCRNA");
 }
 
 void ossimNitfCscrnaTag::parseStream(std::istream& in)
@@ -84,11 +79,6 @@ void ossimNitfCscrnaTag::writeStream(std::ostream& out)
    out.write(theLlHt, 8);
 }
 
-ossim_uint32 ossimNitfCscrnaTag::getSizeInBytes()const
-{
-   return 109;
-}
-
 void ossimNitfCscrnaTag::clearFields()
 {
    // BCS-N's to '0's, BCS-A's to ' '(spaces)
@@ -133,13 +123,13 @@ std::ostream& ossimNitfCscrnaTag::print(
    std::ostream& out, const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getRegisterTagName();
+   pfx += getTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getRegisterTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << getTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
       
        << pfx << std::setw(24) << "PREDICT_CORNERS:"
        << thePredictedCornerFlag << "\n"

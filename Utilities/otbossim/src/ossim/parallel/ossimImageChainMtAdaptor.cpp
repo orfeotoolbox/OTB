@@ -420,7 +420,7 @@ const ossimConnectableObject::ConnectableObjectList&
 //! Adapts the image chain event handler. If the event involves a change to the original image 
 //! chain, then the clones will need to be regenerated here.
 //*************************************************************************************************
-void ossimImageChainMtAdaptor::processEvent(ossimEvent& event)
+void ossimImageChainMtAdaptor::processEvent(ossimEvent& /* event */)
 {
    ossimNotify(ossimNotifyLevel_WARN)<<"ossimImageChainMtAdaptor::processEvent() -- "
       "NOT YET IMPLEMENTED"<<endl;

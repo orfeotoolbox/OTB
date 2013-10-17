@@ -12,7 +12,7 @@
 // the tag factories.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfUnknownTag.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfUnknownTag.cpp 22013 2012-12-19 17:37:20Z dburken $
 
 #include <ostream>
 #include <iomanip>
@@ -24,63 +24,50 @@
 RTTI_DEF1(ossimNitfUnknownTag, "ossimNitfUnknownTag", ossimNitfRegisteredTag);
 
 ossimNitfUnknownTag::ossimNitfUnknownTag()
-   : theTagName(),
-     theTagLength(0),
-     theTagData(NULL)
-   
+   : m_tagData(0)
 {
 }
 
 ossimNitfUnknownTag::~ossimNitfUnknownTag()
 {
-   if (theTagData)
+   if (m_tagData)
    {
-      delete [] theTagData;
-      theTagData = NULL;
+      delete [] m_tagData;
+      m_tagData = 0;
    }
-}
-
-std::string ossimNitfUnknownTag::getRegisterTagName() const
-{
-   return theTagName;
 }
 
 void ossimNitfUnknownTag::parseStream(std::istream& in)
 {
-   if (theTagLength)
+   if (m_tagLength)
    {
-      if (theTagData)
+      if (m_tagData)
       {
-         delete [] theTagData;
+         delete [] m_tagData;
       }
 
-      theTagData = new char[theTagLength+1];
+      m_tagData = new char[m_tagLength+1];
       
-      in.read(theTagData, theTagLength);
+      in.read(m_tagData, m_tagLength);
 
-      theTagData[theTagLength] = '\0';
+      m_tagData[m_tagLength] = '\0';
    }
 }
 
 void ossimNitfUnknownTag::writeStream(std::ostream& out)
 {
-   if (theTagLength && theTagData)
+   if (m_tagLength && m_tagData)
    {
-      out.write(theTagData, theTagLength);
+      out.write(m_tagData, m_tagLength);
    }
-}
-
-ossim_uint32 ossimNitfUnknownTag::getSizeInBytes()const
-{
-   return theTagLength;
 }
 
 void ossimNitfUnknownTag::clearFields()
 {
-   if (theTagData)
+   if (m_tagData)
    {
-      delete [] theTagData;
-      theTagData = NULL;
+      delete [] m_tagData;
+      m_tagData = 0;
    }
 }
 
@@ -88,17 +75,17 @@ std::ostream& ossimNitfUnknownTag::print(std::ostream& out,
                                          const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getRegisterTagName();
+   pfx += getTagName();
    pfx += ".";
 
    out << setiosflags(std::ios::left)
-       << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "CETAG:" << getTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
        << pfx << std::setw(24) << "unformatted_tag_data: ";
    
    if (tagDataIsAscii())
    {
-      out << theTagData << "\n";
+      out << m_tagData << "\n";
    }
    else
    {
@@ -108,32 +95,26 @@ std::ostream& ossimNitfUnknownTag::print(std::ostream& out,
    return out;
 }
 
-void ossimNitfUnknownTag::setTagName(const ossimString& tagName)
-{
-   theTagName = tagName.string();
-}
-
-
 void ossimNitfUnknownTag::setTagLength(ossim_uint32 length)
 {
-   if (theTagData)
+   if (m_tagData)
    {
-      delete [] theTagData;
-      theTagData = NULL;
+      delete [] m_tagData;
+      m_tagData = 0;
    }
-   theTagLength = length;
+   m_tagLength = length;
 }
 
 bool ossimNitfUnknownTag::tagDataIsAscii() const
 {
-   if ( (theTagLength == 0) || !theTagData )
+   if ( (m_tagLength == 0) || !m_tagData )
    {
       return false;
    }
 
-   for (ossim_uint32 i = 0; i < theTagLength; ++i)
+   for (ossim_uint32 i = 0; i < m_tagLength; ++i)
    {
-      int c = theTagData[i];
+      int c = m_tagData[i];
       if (isascii(c) == false)
       {
          return false;

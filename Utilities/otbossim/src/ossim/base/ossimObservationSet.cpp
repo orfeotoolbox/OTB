@@ -125,6 +125,12 @@ ossimImageGeometry* ossimObservationSet::getImageGeom(const int index)
 }
 
 
+void ossimObservationSet::setImageGeom(const int index, ossimImageGeometry* geom)
+{
+   theImageHandlers[index]->setImageGeometry(geom);
+}
+
+
 bool ossimObservationSet::evaluate(NEWMAT::Matrix& measResiduals,
                                    NEWMAT::Matrix& objPartials,
                                    NEWMAT::Matrix& parPartials)

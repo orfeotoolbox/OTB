@@ -38,6 +38,7 @@ public:
       const ossimString& getConnectionString()const{return m_connectionString;}
       virtual void visit(ossimObject* obj);
       ossimElevationDatabase* getElevationDatabase(){return m_database.get();} 
+
       
    protected:
       ossimString m_connectionString;
@@ -54,13 +55,8 @@ public:
    
    virtual double getHeightAboveEllipsoid(const ossimGpt& gpt);
    virtual double getHeightAboveMSL(const ossimGpt& gpt);
+   virtual bool pointHasCoverage(const ossimGpt&) const;
 
-
-   virtual bool pointHasCoverage(const ossimGpt& /*gpt*/) const
-   {
-      std::cout << "ossimElevManager::pointHasCoverage(): NOT IMPLEMENTED!!!\n";
-      return false;
-   }
    virtual double getMeanSpacingMeters() const
    {
       std::cout << "ossimElevManager::pointHasCoverage(): NOT IMPLEMENTED AND SHOULD NOT BE USED AT THIS LEVEL!!!\n";

@@ -10,7 +10,7 @@
 // instance of a Wgs84Ellipsoid and set the initial defaults for
 // that are specific to a Wgs84Datum
 //*******************************************************************
-//  $Id: ossimWgs84Datum.cpp 19795 2011-06-30 15:04:48Z gpotts $
+//  $Id: ossimWgs84Datum.cpp 22321 2013-07-22 11:40:45Z gpotts $
 
 #include <ossim/base/ossimWgs84Datum.h>
 #include <ossim/base/ossimConstants.h>
@@ -25,7 +25,7 @@ ossimWgs84Datum::ossimWgs84Datum()
                          "World Geodetic System 1984",
                          ossimEllipsoidFactory::instance()->wgs84(),
                          0.0, 0.0, 0.0,
-                         -M_PI/2.0, M_PI/2.0, -M_PI, M_PI,
+                         -180.0,180.0,-90.0,90.0,
                          0.0, 0.0, 0.0)
 {
    if(!ellipsoid())

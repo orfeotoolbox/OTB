@@ -18,7 +18,7 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimInit.cpp 19765 2011-06-22 14:33:40Z gpotts $
+// $Id: ossimInit.cpp 22278 2013-06-08 01:19:14Z gpotts $
 
 
 #include <ossim/init/ossimInit.h>
@@ -84,6 +84,8 @@ ossimInit::ossimInit()
 
 ossimInit* ossimInit::instance()
 {
+   static OpenThreads::Mutex m;
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m);
    if (!theInstance)
    {
       theInstance = new ossimInit();
@@ -112,7 +114,9 @@ void ossimInit::addOptions(ossimArgumentParser& parser)
  *****************************************************************************/
 void ossimInit::initialize(int& argc, char** argv)
 {
-   if( !theInitializedFlag )
+    static OpenThreads::Mutex m;
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m);
+  if( !theInitializedFlag )
    {
       ossimArgumentParser argumentParser(&argc, argv);
       theInstance->initialize(argumentParser);
@@ -121,6 +125,8 @@ void ossimInit::initialize(int& argc, char** argv)
 
 void ossimInit::initialize(ossimArgumentParser& parser)
 {
+   static OpenThreads::Mutex m;
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m);
    if(theInitializedFlag)
    {
       if (traceDebug())
@@ -168,6 +174,8 @@ void ossimInit::initialize(ossimArgumentParser& parser)
 
 void ossimInit::initialize()
 {
+    static OpenThreads::Mutex m;
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m);
    if(theInitializedFlag)
    {
       if (traceDebug())
@@ -587,7 +595,13 @@ void ossimInit::initializePlugins()
    // and load them
    if(auto_load_plugins.toBool())
    {
+      ossimFilename ossimpluginsDir = ossimFilename(theAppName).dirCat("ossimplugins");
       ossimDirectory currentDir(theAppName.path());
+
+      if(ossimpluginsDir.exists())
+      {
+         currentDir = ossimpluginsDir;
+      }
       std::vector<ossimFilename> result;
       currentDir.findAllFilesThatMatch(result, "ossim.*plugin.*", ossimDirectory::OSSIM_DIR_FILES);
       

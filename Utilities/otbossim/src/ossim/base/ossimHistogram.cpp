@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.cpp 21742 2012-09-14 19:00:24Z dburken $
+// $Id: ossimHistogram.cpp 22124 2013-01-27 16:03:52Z dburken $
 
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimHistogram.h>
@@ -1415,7 +1415,7 @@ bool ossimHistogram::loadState(const ossimKeywordlist& kwl,
 
    if(number_of_bins)
    {
-      long bins = ossimString(number_of_bins).toLong();
+      ossim_uint32 bins = ossimString(number_of_bins).toUInt32();
 
       if(bins > 0)
       {
@@ -1436,7 +1436,7 @@ bool ossimHistogram::loadState(const ossimKeywordlist& kwl,
             maxValue = (ossim_float32)ossimString(max_value).toDouble();
          }
 
-         create(bins, minValue, maxValue);
+         create((int)bins, minValue, maxValue);
          float* countsPtr = GetCounts();
          memset(countsPtr, '\0', bins*sizeof(float));
          // this is new style histogram creation

@@ -7,7 +7,7 @@
 // Description: Class definition for sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.h 19724 2011-06-06 21:07:15Z dburken $
+// $Id: ossimOverviewSequencer.h 22149 2013-02-11 21:36:10Z dburken $
 #ifndef ossimOverviewSequencer_HEADER
 #define ossimOverviewSequencer_HEADER 1
 
@@ -27,7 +27,9 @@ class ossimFilename;
 /**
  * @class Sequencer for building overview files.
  */
-class OSSIM_DLL ossimOverviewSequencer : public ossimReferenced
+class OSSIM_DLL ossimOverviewSequencer
+   : public ossimReferenced, public ossimErrorStatusInterface
+   
 {
 public:
 

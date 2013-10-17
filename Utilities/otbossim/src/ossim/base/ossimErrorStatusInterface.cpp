@@ -9,7 +9,7 @@
 // Contains class definition for common error interfaces.
 //
 //*************************************************************************
-// $Id: ossimErrorStatusInterface.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimErrorStatusInterface.cpp 22149 2013-02-11 21:36:10Z dburken $
 
 #include <iostream>
 #include <ossim/base/ossimErrorStatusInterface.h>
@@ -48,6 +48,11 @@ void  ossimErrorStatusInterface::setErrorStatus() const
 void  ossimErrorStatusInterface::clearErrorStatus() const
 {
    theErrorStatus = ossimErrorCodes::OSSIM_OK;
+}
+
+bool ossimErrorStatusInterface::hasError() const
+{
+   return ( theErrorStatus != ossimErrorCodes::OSSIM_OK );
 }
 
 std::ostream& ossimErrorStatusInterface::print(std::ostream& out) const

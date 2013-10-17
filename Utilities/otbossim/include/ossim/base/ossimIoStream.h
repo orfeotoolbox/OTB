@@ -19,7 +19,7 @@
 // ossimOFStream
 //
 //*******************************************************************
-//  $Id: ossimIoStream.h 11176 2007-06-07 19:45:56Z dburken $
+//  $Id: ossimIoStream.h 22422 2013-09-27 17:32:22Z gpotts $
 #ifndef ossimIoStream_HEADER
 #define ossimIoStream_HEADER
 
@@ -162,6 +162,65 @@ public:
    virtual ~ossimOFStream();
 
 };
+
+
+#ifdef _MSC_VER
+
+class ossimIFStream64 : public std::ifstream
+{
+public:
+   ossimIFStream64(const char* pFilename, 
+      std::ios_base::openmode mode = ios_base::in, 
+      int prot = ios_base::_Openprot);
+
+   virtual ~ossimIFStream64();
+   void seekg64(off_type off, ios_base::seekdir way);
+
+   void seekg64(streampos pos, ios_base::seekdir way);
+
+   static void seekg64(std::istream& str, off_type off, ios_base::seekdir way);
+ 
+   static void seekg64(std::istream& str, std::streampos pos, ios_base::seekdir way);
+private:
+   FILE* theFile;
+};
+
+class ossimOFStream64 : public std::ofstream
+{
+public:
+   ossimOFStream64(const char* pFilename, 
+                   std::ios_base::openmode mode = ios_base::out, 
+                   int prot = ios_base::_Openprot);
+   virtual ~ossimOFStream64();
+
+   ossim_uint64 tellp64();
+};
+
+#else
+
+class ossimIFStream64 : public std::ifstream
+{
+public:
+   ossimIFStream64(const char* pFilename, std::ios_base::openmode mode = ios_base::in, long prot = 0666);
+
+   virtual ~ossimIFStream64();
+
+   void seekg64(off_type off, ios_base::seekdir way);
+
+   static void seekg64(std::istream& str, off_type off, ios_base::seekdir way);
+};
+
+class ossimOFStream64 : public std::ofstream
+{
+public:
+   ossimOFStream64(const char* pFilename, std::ios_base::openmode mode = ios_base::out, long prot = 0666);
+
+   virtual ~ossimOFStream64();
+
+   ossim_uint64 tellp64();
+};
+
+#endif // _MSC_VER
 
 OSSIM_DLL void operator >> (ossimIStream& in,ossimOStream& out);
 OSSIM_DLL ossimIOStream& operator >> (ossimIStream& in,ossimIOStream& out);

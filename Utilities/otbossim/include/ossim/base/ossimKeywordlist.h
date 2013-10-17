@@ -7,7 +7,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.h 21527 2012-08-26 16:50:49Z dburken $
+// $Id: ossimKeywordlist.h 22376 2013-08-28 13:26:03Z gpotts $
 
 #ifndef ossimKeywordlist_HEADER
 #define ossimKeywordlist_HEADER 1
@@ -35,6 +35,7 @@ public:
    typedef std::map<std::string, std::string> KeywordMap;
 
    ossimKeywordlist(const ossimKeywordlist& src);
+   ossimKeywordlist(const std::map<std::string, std::string>& keywordMap);
    ossimKeywordlist(char delimiter = DEFAULT_DELIMITER,
                     bool expandEnvVars = false);
 

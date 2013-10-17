@@ -115,7 +115,9 @@
 //////////////////////////////////////////////////////////////
 
 #include <cstring> // for strdup,strcmp
+#include <string> // for strdup,strcmp
 #include <ossim/base/ossimConstants.h>
+#include <vector>
 /////////////////////////////////////////////////////////////
 
 class RTTITypeinfo;
@@ -162,6 +164,7 @@ class OSSIMDLLEXPORT RTTIdyntypeid : public RTTItypeid					//Class for dynamic t
 
 class OSSIMDLLEXPORT RTTITypeinfo {							//Implementation of type-related info
 		public:
+			typedef std::vector<const RTTITypeinfo*> SubtypesConstVector;
 
 		               RTTITypeinfo(const char* name, const RTTITypeinfo* bb[],
 					 void* (*)(int,void*),void* (*)());
@@ -183,10 +186,12 @@ class OSSIMDLLEXPORT RTTITypeinfo {							//Implementation of type-related info
 			
 		private:
 
-		   char* 	          n;				//type name 
+		   //char* 	          n;				//type name 
+			std::string n;
 	           const RTTITypeinfo**   b;				//base types (NULL-ended array of RTTITypeinfo's for this's direct bases)
 		   int			  ns;				//#subtypes of this type
-		   const RTTITypeinfo**	  subtypes;			//types derived from this type
+		   SubtypesConstVector subtypes;
+		   //const RTTITypeinfo**	  subtypes;			//types derived from this type
 		   static const RTTITypeinfo null_type;			//convenience type info for a 'null' type
 		   void*		  (*new_obj)();			//func to create a new obj of this type
 		   void*		  (*cast)(int,void*);		//func to cast an obj of this type to
@@ -213,7 +218,7 @@ inline const RTTITypeinfo* RTTITypeinfo::subclass(int i) const		//Return ith sub
 
 inline int RTTITypeinfo::same(const RTTITypeinfo* p) const			//Compare 2 RTTITypeinfo's:
 {  										//First, try to see if it's the same
-   return this==p || !strcmp(n,p->n); 						//'physical' RTTITypeinfo (which should be the case,
+   return this==p || !strcmp(n.c_str(),p->n.c_str()); 						//'physical' RTTITypeinfo (which should be the case,
 }										//since we create them per-class and not per-obj).
   										//If this fails, still do a textual name comaprison.
 

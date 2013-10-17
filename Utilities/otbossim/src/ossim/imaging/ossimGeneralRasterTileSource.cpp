@@ -10,7 +10,7 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 21962 2012-11-30 15:44:32Z dburken $
+//  $Id: ossimGeneralRasterTileSource.cpp 22364 2013-08-08 13:32:18Z dburken $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -363,19 +363,20 @@ bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin,
    
    ossim_sint64 currentLine = origin.y;
 
+   // Bytes in one line all bands.
+   const std::streamoff LINE_OFFSET =
+      m_rasterInfo.bytesPerRawLine() * m_rasterInfo.numberOfBands();
+
    // Start seek position.
    std::streamoff offset = ( m_rasterInfo.offsetToFirstValidSample() +
-                             currentLine * m_rasterInfo.bytesPerRawLine() *
-                             m_rasterInfo.numberOfBands() +
+                             currentLine * LINE_OFFSET +
                              origin.x * m_rasterInfo.bytesPerPixel() );
 
    //---
    // Loop through and process lines. 
    //---
-   ossim_uint64 linesProcessed = 0;
-   
+   ossim_int32 linesProcessed = 0;
    std::streamsize buffer_width = m_bufferRect.width() * m_rasterInfo.bytesPerPixel();
-   
    ossim_uint8* buf = m_buffer;
 
 #if 0 /* Please leave for debug.  (drb) */
@@ -387,18 +388,19 @@ bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin,
       << "\nbuffer_width:           " << buffer_width << std::endl;
 #endif
 
-   ossim_uint64 height    = size.y;
-   ossim_sint64 num_bands = m_rasterInfo.numberOfBands();
-   
+   // Line loop:
    while ((currentLine <= static_cast<ossim_sint64>(m_rasterInfo.imageRect().lr().y)) &&
-          linesProcessed < height)
+          linesProcessed < size.y)
    {
-      for (ossim_int32 band = 0; band < num_bands; ++band)
+      // Band loop:
+      std::vector<ossim_uint32>::const_iterator i = m_outputBandList.begin();
+      while ( i != m_outputBandList.end() )
       {
-         //***
+         ossim_int64 band = static_cast<ossim_sint64>( (*i) );
+         const std::streamoff bandOffset = band * m_rasterInfo.bytesPerRawLine();
+         
          // Seek to line.
-         //***
-         m_fileStrList[0]->seekg(offset, ios::beg);
+         m_fileStrList[0]->seekg(offset + bandOffset, ios::beg);
          if (!m_fileStrList[0])
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
@@ -414,19 +416,22 @@ bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin,
          if ( m_fileStrList[0]->gcount() != buffer_width ) 
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-            ossimNotify(ossimNotifyLevel_WARN) << MODULE << "\nERROR:  Reading image line."
-                                               << "\ncurrentLine:  " << currentLine << std::endl;
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << "\nERROR:  Reading image line."
+               << "\ncurrentLine:  " << currentLine << std::endl;
             return false;
          }
-
+         
          buf += buffer_width;
-         offset += m_rasterInfo.bytesPerRawLine();
+         ++i;
 
       } // End of band loop.
       
       ++linesProcessed;
       ++currentLine;
-   }
+      offset += LINE_OFFSET;
+      
+   } // End: line loop
    
    return true;
 }
@@ -1021,7 +1026,7 @@ ossim_uint32 ossimGeneralRasterTileSource::getImageTileHeight() const
 
 ossimString ossimGeneralRasterTileSource::getShortName()const
 {
-   return ossimString("ras");
+   return ossimString("ossim_raster");
 }
 
 ossimString ossimGeneralRasterTileSource::getLongName()const
@@ -1485,19 +1490,13 @@ ossimRefPtr<ossimImageGeometry> ossimGeneralRasterTileSource::getImageGeometry()
 bool ossimGeneralRasterTileSource::isBandSelector() const
 {
    bool result = false;
-   if ( m_rasterInfo.interleaveType() == OSSIM_BSQ_MULTI_FILE )
+   if ( ( m_rasterInfo.interleaveType() == OSSIM_BSQ_MULTI_FILE ) ||
+        ( m_rasterInfo.interleaveType() == OSSIM_BIP ) ||
+        ( m_rasterInfo.interleaveType() == OSSIM_BIL ) )
    {
       result = true;
    }
-   else if ( m_rasterInfo.interleaveType() == OSSIM_BIP )
-   {
-      // Added for hyper spectral data with 256 bands.
-      const ossim_int32 THRESHOLD = 4;
-      if ( m_rasterInfo.numberOfBands() >= THRESHOLD )
-      {
-         result = true;
-      }
-   }
+
    if ( result && theOverview.valid() )
    {
       result = theOverview->isBandSelector();

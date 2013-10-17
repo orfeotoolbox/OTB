@@ -1,12 +1,11 @@
 #ifndef ossimAlphaSensorSupportData_HEADER
-#define ossimAlphaSensorSupportData_HEADER
+#define ossimAlphaSensorSupportData_HEADER 1
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/base/ossimPolynom.h>
-#include <iostream>
 
 class ossimEnviHeader;
 
@@ -59,7 +58,6 @@ protected:
    bool m_isHSI;
 
    // hdr data
-   ossimString   m_imageID;
    ossimString   m_sensorType;
    ossimDpt      m_imageSize;
    ossim_float64 m_rollBias;

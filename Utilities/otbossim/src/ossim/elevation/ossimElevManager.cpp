@@ -19,7 +19,7 @@
 //              Initial coding.
 //<
 //**************************************************************************
-// $Id: ossimElevManager.cpp 21970 2012-12-05 18:19:32Z okramer $
+// $Id: ossimElevManager.cpp 22288 2013-06-25 14:01:00Z gpotts $
 
 #include <algorithm>
 #include <ossim/elevation/ossimElevManager.h>
@@ -241,6 +241,19 @@ bool ossimElevManager::getAccuracyInfo(ossimElevationAccuracyInfo& info, const o
    for(ossim_uint32 idx = 0;(idx < m_elevationDatabaseList.size()); ++idx)
    {
       if(m_elevationDatabaseList[idx]->getAccuracyInfo(info, gpt))
+      {
+         return true;
+      }
+   }
+
+   return false;
+}
+
+bool ossimElevManager::pointHasCoverage(const ossimGpt& gpt) const
+{
+   for(ossim_uint32 idx = 0;(idx < m_elevationDatabaseList.size()); ++idx)
+   {
+      if(m_elevationDatabaseList[idx]->pointHasCoverage(gpt))
       {
          return true;
       }

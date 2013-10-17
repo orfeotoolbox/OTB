@@ -6,8 +6,9 @@ State Plane support can be picked up via ossimPreferences by adding the
 key "state_plane_csv_file" to your preferences file.  Auto detection from 
 some common place is on the to do list.
 Example preference entry:
-state_plane_csv_file1: /usr/local/share/ossim/ossim_state_plane.csv
-state_plane_csv_file2: /usr/local/share/ossim/ossim_harn_state_plane.csv
+
+state_plane_csv_file1: /usr/local/share/ossim/projection/ossim_state_plane.csv
+state_plane_csv_file2: /usr/local/share/ossim/projection/ossim_harn_state_plane.csv
 
 
 The state_plane.csv (comma separated value) file is used by the 

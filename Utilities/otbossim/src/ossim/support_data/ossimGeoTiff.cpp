@@ -366,7 +366,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          gcs = USER_DEFINED;
 
          std::ostringstream os;
-         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 21024 $ $Date: 2012-05-30 10:45:13 +0200 (mer. 30 mai 2012) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 21024 $ $Date: 2012-05-30 10:45:13 +0200 (mer., 30 mai 2012) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
          GTIFKeySet(gtif,
                     GeogCitationGeoKey,

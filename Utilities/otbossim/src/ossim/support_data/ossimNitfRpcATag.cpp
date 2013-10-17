@@ -10,7 +10,7 @@
 // Rational Polynomial Coefficient extension.
 //
 //********************************************************************
-// $Id: ossimNitfRpcATag.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfRpcATag.cpp 22013 2012-12-19 17:37:20Z dburken $
 
 #include <ossim/support_data/ossimNitfRpcATag.h>
 
@@ -19,9 +19,6 @@ RTTI_DEF1(ossimNitfRpcATag, "ossimNitfRpcATag", ossimNitfRpcBase);
 ossimNitfRpcATag::ossimNitfRpcATag()
    : ossimNitfRpcBase()
 {
-}
-
-std::string ossimNitfRpcATag::getRegisterTagName() const
-{
-   return std::string("RPC00A");
+   // Set the tag name in base.
+   setTagName(std::string("RPC00A"));
 }

@@ -10,7 +10,7 @@
 // Description: Common file for utility functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.h 20255 2011-11-14 16:38:57Z oscarkramer $
+// $Id: ossimCommon.h 22197 2013-03-12 02:00:55Z dburken $
 #ifndef ossimCommon_HEADER
 #define ossimCommon_HEADER 1
 
@@ -21,6 +21,9 @@
 #define ossimCHECK(expr) 
 #define ossimSTATIC_CHECK(expr,msg)  
 
+#include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimString.h>
+#include <cfloat>
 #include <cmath>
 #include <istream>
 #include <sstream>
@@ -29,8 +32,6 @@
 #include <iostream>
 #include <algorithm>
 #include <iterator>
-#include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimString.h>
 class ossimIpt;
 class ossimDpt;
 class ossimGpt;

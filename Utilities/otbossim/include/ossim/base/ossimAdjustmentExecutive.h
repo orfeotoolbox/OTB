@@ -104,6 +104,16 @@ public:
    inline bool isValid() const { return theExecValid; }
 
 
+   // Generate time stamp
+   inline ossimString timeStamp()const
+   {
+      char timeString[22];
+      time_t now = time(NULL);
+      strftime(timeString, 22, "%a %m.%d.%y %H:%M:%S", localtime(&now));
+      string timeStamp(timeString);
+      return timeStamp;
+   }
+
 protected:
    bool theExecValid;
 
@@ -146,6 +156,7 @@ protected:
    std::vector<double> theParInitialValues;
    std::vector<double> theParInitialStdDev;
    std::vector<ossimString> theParDesc;
+   std::vector<int> theImgs;
 
    // Observation info
    std::vector<double> theObsInitialValues;
@@ -163,16 +174,6 @@ protected:
     * @brief Update observatin.
     */
    bool updateObservations();
-
-   // Generate time stamp
-   inline ossimString timeStamp()const
-   {
-      char timeString[22];
-      time_t now = time(NULL);
-      strftime(timeString, 22, "%a %m.%d.%y %H:%M:%S", localtime(&now));
-      string timeStamp(timeString);
-      return timeStamp;
-   }
 
 };
 

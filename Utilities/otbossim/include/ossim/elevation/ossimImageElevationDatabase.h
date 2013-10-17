@@ -17,6 +17,7 @@
 #define ossimImageElevationDatabase_HEADER 1
 
 #include <ossim/elevation/ossimElevationDatabase.h>
+#include <ossim/base/ossimFileProcessorInterface.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimGrect.h>
@@ -33,7 +34,8 @@ class ossimString;
  * ossimImageHandler. This class is typically utilized through the
  * ossimElevManager.
  */
-class OSSIM_DLL ossimImageElevationDatabase : public ossimElevationCellDatabase
+class OSSIM_DLL ossimImageElevationDatabase :
+   public ossimElevationCellDatabase, public ossimFileProcessorInterface
 {
 public:
 
@@ -120,14 +122,14 @@ public:
    /**
     * @brief ProcessFile method.
     *
-    * This method is linked to the ossimFileWalker::walk method via a callback
-    * mechanism.  So it is called by the ossimFileWalk (caller).  This class
-    * (callee) sets recurse and return flags accordingly to control
-    * the ossimFileWalker, e.g. don't recurse, stop altogether.
+    * Satisfies pure virtual ossimFileProcessorInterface::processFile.
+    *
+    * This method is linked to the ossimFileWalker::walk method via a pointer
+    * to this class.
     * 
     * @param file to process.
     */
-   void processFile(const ossimFilename& file);
+   virtual void processFile(const ossimFilename& file);
    
 protected:
    /**
@@ -136,7 +138,7 @@ protected:
     * This class is derived from ossimReferenced so users should always use
     * ossimRefPtr<ossimImageElevationDatabase> to hold instance.
     */
-   ~ossimImageElevationDatabase();
+   virtual ~ossimImageElevationDatabase();
 
    virtual ossimRefPtr<ossimElevCellHandler> createCell(const ossimGpt& gpt);
 

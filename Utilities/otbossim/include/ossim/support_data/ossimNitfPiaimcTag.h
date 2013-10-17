@@ -15,7 +15,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfPiaimcTag.h 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfPiaimcTag.h 22013 2012-12-19 17:37:20Z dburken $
 #ifndef ossimNitfPiaimcTag_HEADER
 #define ossimNitfPiaimcTag_HEADER
 
@@ -54,9 +54,6 @@ public:
    
    /** default constructor */
    ossimNitfPiaimcTag();
-
-   /** @return "PIAIMC" as an ossimString. */
-   virtual std::string getRegisterTagName() const;
   
    /**
     * Parse method.
@@ -71,9 +68,6 @@ public:
     * @param out Stream to write to.
     */
    virtual void writeStream(std::ostream& out);
-   
-   /** @return The size of this record in bytes (362) within a nitf file. */
-   virtual ossim_uint32 getSizeInBytes()const;
    
    /**
     * Clears all string fields within the record to some default nothingness.

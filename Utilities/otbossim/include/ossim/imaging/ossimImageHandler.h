@@ -12,7 +12,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 21745 2012-09-16 15:21:53Z dburken $
+// $Id: ossimImageHandler.h 22187 2013-03-07 20:29:00Z dburken $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER 1
 
@@ -294,15 +294,23 @@ public:
    virtual ossim_uint32 getNumberOfSamples(ossim_uint32 resLevel = 0) const = 0;
    
    /**
-    * Returns the zero-based (relative) image rectangle for the reduced
-    * resolution data set (rrds) passed in.  Note that rrds 0 is the highest
-    * resolution rrds.
+    * @brief Returns zero-based bounding rectangle of the image.
+    * Note sub-image offset now in ossimImageGeometry class.
+    * 
+    * @param resLevel Reduced resolution level for rectangle.
+    *
+    * @return Rectangle of reduced resolution level.
     */
    virtual ossimIrect getImageRectangle(ossim_uint32 resLevel = 0) const; 
 
    /**
-    * Returns the absolute bounding rectangle of the image. The upper left
-    * corner may be non-zero if this is a subimage.
+    * @brief Returns zero-based bounding rectangle of the image.
+    * Same as getImageRectangle() call.  Note sub-image offset now
+    * in ossimImageGeometry class.
+    * 
+    * @param resLevel Reduced resolution level for rectangle.
+    *
+    * @return Rectangle of reduced resolution level.
     */
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel = 0) const;
 
@@ -533,6 +541,23 @@ public:
     * @return The number of entries (images) in the image file.
     */
    virtual ossim_uint32 getNumberOfEntries()const;
+
+   /**
+    * @brief Get the name of entry as a string.
+    *
+    * This implementation clears name. Derived classes that support multiple
+    * entries and have "named" entries should re-implement to provide entry
+    * names.  Example given from HDF5 file:
+    * 
+    * entry_name: /All_Data/VIIRS-IMG-GTM-EDR-GEO_All/QF1_VIIRSGTMGEO
+    *
+    * @param entryIdx Zero based entry index. If out of range name will
+    * be cleared.
+    * 
+    * @param name Initialized by this.
+    */
+   virtual void getEntryName( ossim_uint32 entryIdx,
+                              std::string& name ) const;
    
    /**
     * @param entryList This is the list to initialize with entry indexes.

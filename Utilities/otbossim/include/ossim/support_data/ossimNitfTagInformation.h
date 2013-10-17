@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfTagInformation.h 16997 2010-04-12 18:53:48Z dburken $
+// $Id: ossimNitfTagInformation.h 22418 2013-09-26 15:01:12Z gpotts $
 #ifndef ossimNitfTagInformation_HEADER
 #define ossimNitfTagInformation_HEADER
 
@@ -51,6 +51,13 @@ public:
    ossimRefPtr<ossimNitfRegisteredTag> getTagData();
    const ossimRefPtr<ossimNitfRegisteredTag> getTagData()const;
    void setTagData(ossimRefPtr<ossimNitfRegisteredTag> tagData);
+   ossimString getTagType() const;
+   void setTagType(const ossimString& tagType) const;
+
+   bool operator<(const ossimNitfTagInformation& rhs) const
+   {
+      return getTotalTagLength() < rhs.getTotalTagLength();
+   }
    
 private:
 
@@ -63,6 +70,12 @@ private:
     * This is a 5 byte field
     */
    char           theTagLength[6];
+
+   /**
+    * This is a 6 byte field which should be UDHD, UDID, XHD, IXSHD, SXSHD, or TXSHD.
+    * This is declared as mutable since changing the tag type doesn't change the contents of the tag.
+    */
+   mutable char theTagType[7];
 
    /**
     * This will hold the offset to the start of the above information

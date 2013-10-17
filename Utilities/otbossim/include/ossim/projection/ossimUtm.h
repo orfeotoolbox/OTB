@@ -1,6 +1,5 @@
 #ifndef UTM_H
   #define UTM_H
-
 /***************************************************************************/
 /* RSC IDENTIFIER: UTM
  *
@@ -76,6 +75,7 @@
 /*
  *                              DEFINES
  */
+#include <ossim/base/ossimConstants.h>
 
   #define UTM_NO_ERROR            0x0000
   #define UTM_LAT_ERROR           0x0001
@@ -100,7 +100,7 @@
 extern "C" {
   #endif
 
-  long Set_UTM_Parameters(double a,      
+  long OSSIM_DLL Set_UTM_Parameters(double a,      
                           double f,
                           long   override);
 /*
@@ -115,7 +115,7 @@ extern "C" {
  */
 
 
-  void Get_UTM_Parameters(double *a,
+  void OSSIM_DLL Get_UTM_Parameters(double *a,
                           double *f,
                           long   *override);
 /*
@@ -128,7 +128,7 @@ extern "C" {
  */
 
 
-  long Convert_Geodetic_To_UTM (double Latitude,
+  long OSSIM_DLL Convert_Geodetic_To_UTM (double Latitude,
                                 double Longitude,
                                 long   *Zone,
                                 char   *Hemisphere,
@@ -150,7 +150,7 @@ extern "C" {
  */
 
 
-  long Convert_UTM_To_Geodetic(long   Zone,
+  long OSSIM_DLL Convert_UTM_To_Geodetic(long   Zone,
                                char   Hemisphere,
                                double Easting,
                                double Northing,

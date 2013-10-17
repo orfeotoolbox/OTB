@@ -11,7 +11,7 @@
 // Contains class declaration for TiffOverviewBuilder.
 //
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.h 19735 2011-06-07 15:17:20Z dburken $
+//  $Id: ossimTiffOverviewBuilder.h 22232 2013-04-13 20:06:19Z dburken $
 
 #ifndef ossimTiffOverviewBuilder_HEADER
 #define ossimTiffOverviewBuilder_HEADER
@@ -109,15 +109,23 @@ public:
    bool getCopyAllFlag() const;
 
    /**
+    * @brief Sets internal overviews flag.
+    * @param flag If true, and input source is tiff format, overviews will be
+    * built internally.
+    */
+   void setInternalOverviewsFlag(bool flag);
+
+   /** @return The intenal overview flag. */
+   bool getInternalOverviewsFlag() const;
+
+   /**
     * @brief Sets theCopyAllFlag.
     * @param flag The flag. If true all data will be written to the
     * overview including R0.
     */
    void setCopyAllFlag(bool flag);
 
-   /**
-    * @return ossimObject* to this object.
-    */
+   /** @return ossimObject* to this object. */
    virtual ossimObject* getObject();
 
    /**
@@ -253,10 +261,21 @@ private:
                        ossim_uint32 resLevel,
                        TIFF* tif);
 
-   TIFF* openTiff(const ossimString& filename,
-                  const ossimString& openMode);
+   TIFF* openTiff( const ossimString& filename ) const;
 
    void closeTiff(TIFF* tif);
+
+   /**
+    * @returns true if m_internalOverviewsFlag and input image supports
+    * building internal overviews.  Currently only tiff reader.
+    */
+   bool buildInternalOverviews() const;
+
+   /**
+    * @return true if m_copyAllFlag is set and build internal overviews is not
+    * set.
+    */
+   bool copyR0() const;
 
    // Disallow these...
    ossimTiffOverviewBuilder(const ossimTiffOverviewBuilder& source);
@@ -276,6 +295,7 @@ private:
    std::vector<double>                                m_nullPixelValues;
    bool                                               m_copyAllFlag;
    bool                                               m_outputTileSizeSetFlag;
+   bool                                               m_internalOverviewsFlag;
 
 TYPE_DATA   
 };

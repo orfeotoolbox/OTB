@@ -13,7 +13,7 @@
 // Container class for four double points representing a rectangle.
 // 
 //*******************************************************************
-//  $Id: ossimDrect.h 21560 2012-08-30 12:09:03Z gpotts $
+//  $Id: ossimDrect.h 22197 2013-03-12 02:00:55Z dburken $
 
 #ifndef ossimDrect_HEADER
 #define ossimDrect_HEADER
@@ -128,30 +128,31 @@ public:
               const double&   size_y,
               ossimCoordSysOrientMode mode=OSSIM_LEFT_HANDED);
 
-   const ossimDrect& operator=  (const ossimDrect& rect);
-   const ossimDrect& operator=  (const ossimIrect& rect);
-   bool         operator!= (const ossimDrect& rect) const;
-   bool         operator== (const ossimDrect& rect) const;
-    friend ossimDrect operator*(double scalar, const ossimDrect& rect)
-      {
-         ossimDpt ul(rect.theUlCorner.x*scalar,
-                     rect.theUlCorner.y*scalar);
+   inline const ossimDrect& operator=  (const ossimDrect& rect);
+   const ossimDrect&        operator=  (const ossimIrect& rect);
+   inline bool              operator!= (const ossimDrect& rect) const;
+   inline bool              operator== (const ossimDrect& rect) const;
 
-         if(rect.theOrientMode == OSSIM_LEFT_HANDED)
-         {
-            return ossimDrect(ul.x,
-                              ul.y,
-                              ul.x+rect.width()*scalar-1,
-                              ul.y+rect.height()*scalar-1,
-                              rect.theOrientMode);
-         }
+   friend ossimDrect operator*(double scalar, const ossimDrect& rect)
+   {
+      ossimDpt ul(rect.theUlCorner.x*scalar,
+                  rect.theUlCorner.y*scalar);
+      
+      if(rect.theOrientMode == OSSIM_LEFT_HANDED)
+      {
          return ossimDrect(ul.x,
                            ul.y,
                            ul.x+rect.width()*scalar-1,
-                           ul.y-(rect.height()*scalar-1),
+                           ul.y+rect.height()*scalar-1,
                            rect.theOrientMode);
-         
       }
+      return ossimDrect(ul.x,
+                        ul.y,
+                        ul.x+rect.width()*scalar-1,
+                        ul.y-(rect.height()*scalar-1),
+                        rect.theOrientMode);
+      
+   }
    
    const ossimDrect& operator *=(double scalar)
       {
@@ -417,65 +418,65 @@ public:
     * Sets the upper left corner to "pt".  Adjusts the remaining corners
     * accordingly.
     */
-   void set_ul(const ossimDpt& pt);
+   inline void set_ul(const ossimDpt& pt);
 
    /*!
     * Sets the upper right corner to "pt".  Adjusts the remaining corners
     * accordingly.
     */
-   void set_ur(const ossimDpt& pt);
+   inline void set_ur(const ossimDpt& pt);
 
    /*!
     * Sets the lower right corner to "pt".  Adjusts the remaining corners
     * accordingly.
     */
-   void set_lr(const ossimDpt& pt);
+   inline void set_lr(const ossimDpt& pt);
 
    /*!
     * Sets the lower left corner to "pt".  Adjusts the remaining corners
     * accordingly.
     */
-   void set_ll(const ossimDpt& pt);
+   inline void set_ll(const ossimDpt& pt);
 
    /*!
     * Sets the upper left x.  Adjusts the remaining corners accordingly.
     */
-   void set_ulx(ossim_float64 x);
+   inline void set_ulx(ossim_float64 x);
 
    /*!
     * Sets the upper left y.  Adjusts the remaining corners accordingly.
     */
-   void set_uly(ossim_float64 y);
+   inline void set_uly(ossim_float64 y);
 
    /*!
     * Sets the upper right x.  Adjusts the remaining corners accordingly.
     */
-   void set_urx(ossim_float64 x);
+   inline void set_urx(ossim_float64 x);
 
    /*!
     * Sets the upper right y.  Adjusts the remaining corners accordingly.
     */
-   void set_ury(ossim_float64 y);
+   inline void set_ury(ossim_float64 y);
 
    /*!
     * Sets the lower right x.  Adjusts the remaining corners accordingly.
     */
-   void set_lrx(ossim_float64 x);
+   inline void set_lrx(ossim_float64 x);
 
    /*!
     * Sets the lower right y.  Adjusts the remaining corners accordingly.
     */
-   void set_lry(ossim_float64 y);
+   inline void set_lry(ossim_float64 y);
 
    /*!
     * Sets the lower left x.  Adjusts the remaining corners accordingly.
     */
-   void set_llx(ossim_float64 x);
+   inline void set_llx(ossim_float64 x);
 
    /*!
     * Sets the lower left y.  Adjusts the remaining corners accordingly.
     */
-   void set_lly(ossim_float64 y);
+   inline void set_lly(ossim_float64 y);
 
    /*!
     * METHOD: initBoundingRect(points)

@@ -5,10 +5,11 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.cpp 21631 2012-09-06 18:10:55Z dburken $
+// $Id: ossimGeoPolyCutter.cpp 22303 2013-07-04 18:15:52Z dburken $
 
 #include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -20,10 +21,12 @@ RTTI_DEF2(ossimGeoPolyCutter, "ossimGeoPolyCutter", ossimPolyCutter, ossimViewIn
 
 ossimGeoPolyCutter::ossimGeoPolyCutter()
    : ossimPolyCutter(),
-     ossimViewInterface(NULL)
+     ossimViewInterface(0),
+     m_viewGeometry(0),
+     m_geoPolygonList(0)
 {
    ossimViewInterface::theObject = this;
-   theGeoPolygonList.push_back(ossimGeoPolygon());
+   m_geoPolygonList.push_back(ossimGeoPolygon());
 }
 
 ossimGeoPolyCutter::~ossimGeoPolyCutter()
@@ -31,7 +34,7 @@ ossimGeoPolyCutter::~ossimGeoPolyCutter()
 }
 
 bool ossimGeoPolyCutter::saveState(ossimKeywordlist& kwl,
-                                const char* prefix)const
+                                   const char* prefix)const
 {
     ossimString newPrefix = prefix;
 
@@ -39,11 +42,11 @@ bool ossimGeoPolyCutter::saveState(ossimKeywordlist& kwl,
     {
        newPrefix = ossimString(prefix) + "geo_polygon" + ossimString::toString(i)+".";
 
-       theGeoPolygonList[i].saveState(kwl, newPrefix.c_str());
+       m_geoPolygonList[i].saveState(kwl, newPrefix.c_str());
     }
     kwl.add(prefix,
             NUMBER_POLYGONS_KW,
-            static_cast<ossim_uint32>(theGeoPolygonList.size()),
+            static_cast<ossim_uint32>(m_geoPolygonList.size()),
             true);
    
     ossimString fillType = "null_inside";
@@ -56,12 +59,12 @@ bool ossimGeoPolyCutter::saveState(ossimKeywordlist& kwl,
             fillType.c_str(),
             true);   
 
-    if(theViewProjection.valid())
+    if(m_viewGeometry.valid())
     {
        ossimString viewPrefix = prefix;
        viewPrefix += "view.";
 
-       theViewProjection->saveState(kwl, viewPrefix.c_str());
+       m_viewGeometry->saveState(kwl, viewPrefix.c_str());
     }
   
    return ossimImageSourceFilter::saveState(kwl, prefix);;
@@ -89,9 +92,9 @@ bool ossimGeoPolyCutter::loadState(const ossimKeywordlist& kwl,
    thePolygonList.clear();
    for(int i = 0; i < (int)numberList.size();++i)
    {
-      theGeoPolygonList.push_back(ossimGeoPolygon());
+      m_geoPolygonList.push_back(ossimGeoPolygon());
       newPrefix = copyPrefix+"geo_polygon"+ossimString::toString(numberList[i])+".";
-      theGeoPolygonList[i].loadState(kwl, newPrefix.c_str());
+      m_geoPolygonList[i].loadState(kwl, newPrefix.c_str());
    }
    
    const char* lookup = kwl.find(prefix,
@@ -112,8 +115,8 @@ bool ossimGeoPolyCutter::loadState(const ossimKeywordlist& kwl,
 
    ossimString viewPrefix = prefix;
    viewPrefix += "view.";
-   theViewProjection = new ossimImageGeometry();
-   if(theViewProjection->loadState(kwl,
+   m_viewGeometry = new ossimImageGeometry();
+   if(m_viewGeometry->loadState(kwl,
                                 viewPrefix))
    {
       transformVertices();
@@ -123,9 +126,9 @@ bool ossimGeoPolyCutter::loadState(const ossimKeywordlist& kwl,
 
 
 void ossimGeoPolyCutter::setPolygon(const vector<ossimDpt>& polygon,
-                                 ossim_uint32 index)
+                                    ossim_uint32 index)
 {
-   if(theViewProjection.valid())
+   if(m_viewGeometry.valid())
    {
       ossimPolyCutter::setPolygon(polygon);
       invertPolygon(index);
@@ -133,9 +136,9 @@ void ossimGeoPolyCutter::setPolygon(const vector<ossimDpt>& polygon,
 }
 
 void ossimGeoPolyCutter::setPolygon(const vector<ossimIpt>& polygon,
-                                 ossim_uint32 index)
+                                    ossim_uint32 index)
 {
-   if(theViewProjection.valid())
+   if(m_viewGeometry.valid())
    {
       ossimPolyCutter::setPolygon(polygon);
       invertPolygon(index);
@@ -145,9 +148,9 @@ void ossimGeoPolyCutter::setPolygon(const vector<ossimIpt>& polygon,
 void ossimGeoPolyCutter::setPolygon(const vector<ossimGpt>& polygon,
                                     ossim_uint32 i)
 {
-   if(i < theGeoPolygonList.size())
+   if(i < m_geoPolygonList.size())
    {
-      theGeoPolygonList[i] = polygon;
+      m_geoPolygonList[i] = polygon;
 
       transformVertices(i);
    }
@@ -156,9 +159,9 @@ void ossimGeoPolyCutter::setPolygon(const vector<ossimGpt>& polygon,
 void ossimGeoPolyCutter::setPolygon(const ossimGeoPolygon& polygon,
                                     ossim_uint32 i)
 {
-   if(i < theGeoPolygonList.size())
+   if(i < m_geoPolygonList.size())
    {
-      theGeoPolygonList[i] = polygon.getVertexList();
+      m_geoPolygonList[i] = polygon.getVertexList();
 
       transformVertices(i);
    }
@@ -167,41 +170,41 @@ void ossimGeoPolyCutter::setPolygon(const ossimGeoPolygon& polygon,
 
 void ossimGeoPolyCutter::addPolygon(const vector<ossimGpt>& polygon)
 {
-   theGeoPolygonList.push_back(polygon);
+   m_geoPolygonList.push_back(polygon);
    thePolygonList.push_back(ossimPolygon());
 
-   if(theViewProjection.valid())
+   if(m_viewGeometry.valid())
    {
-      transformVertices(((int)theGeoPolygonList.size())-1);
+      transformVertices(((int)m_geoPolygonList.size())-1);
    }
 }
 
 void ossimGeoPolyCutter::addPolygon(const vector<ossimIpt>& polygon)
 {
-   if(theViewProjection.valid())
+   if(m_viewGeometry.valid())
    {
       ossimPolyCutter::addPolygon(polygon);
-      theGeoPolygonList.push_back(ossimGeoPolygon());
+      m_geoPolygonList.push_back(ossimGeoPolygon());
       invertPolygon((int)thePolygonList.size()-1);
    }
 }
 
 void ossimGeoPolyCutter::addPolygon(const vector<ossimDpt>& polygon)
 {
-   if(theViewProjection.valid())
+   if(m_viewGeometry.valid())
    {
       ossimPolyCutter::addPolygon(polygon);
-      theGeoPolygonList.push_back(ossimGeoPolygon());
+      m_geoPolygonList.push_back(ossimGeoPolygon());
       invertPolygon((int)thePolygonList.size()-1);
    }
 }
 
 void ossimGeoPolyCutter::addPolygon(const ossimPolygon& polygon)
 {
-   if(theViewProjection.valid())
+   if(m_viewGeometry.valid())
    {
       ossimPolyCutter::addPolygon(polygon);
-      theGeoPolygonList.push_back(ossimGeoPolygon());
+      m_geoPolygonList.push_back(ossimGeoPolygon());
       invertPolygon((int)thePolygonList.size()-1);
    }
 }
@@ -209,114 +212,164 @@ void ossimGeoPolyCutter::addPolygon(const ossimPolygon& polygon)
 void ossimGeoPolyCutter::addPolygon(const ossimGeoPolygon& polygon)
 {
    ossimPolyCutter::addPolygon(ossimPolygon());
-   theGeoPolygonList.push_back(polygon);
+   m_geoPolygonList.push_back(polygon);
    
-   if(theViewProjection.valid())
+   if(m_viewGeometry.valid())
    {
-      transformVertices(((int)theGeoPolygonList.size())-1);
+      transformVertices(((int)m_geoPolygonList.size())-1);
    }
+}
+
+void ossimGeoPolyCutter::setNumberOfPolygons(ossim_uint32 count)
+{
+   if(!count)
+   {
+      m_geoPolygonList.clear();
+   }
+   else
+   {
+      m_geoPolygonList.resize(count);
+   }
+   ossimPolyCutter::setNumberOfPolygons(count);
+}
+
+std::vector<ossimGeoPolygon>& ossimGeoPolyCutter::getGeoPolygonList()
+{
+   return m_geoPolygonList;
+}
+
+const std::vector<ossimGeoPolygon>& ossimGeoPolyCutter::getGeoPolygonList() const
+{
+   return m_geoPolygonList;
 }
 
 void ossimGeoPolyCutter::invertPolygon(int polygonNumber)
 {
-   if(!theViewProjection) return;
+   if(!m_viewGeometry) return;
    
    
    ossimPolygon& poly      = thePolygonList[polygonNumber];
-   ossimGeoPolygon& gpoly  = theGeoPolygonList[polygonNumber];
+   ossimGeoPolygon& gpoly  = m_geoPolygonList[polygonNumber];
    
    gpoly.clear();
    gpoly.resize(poly.getVertexCount());
    int j = 0;
    for(j = 0; j < (int)poly.getVertexCount(); ++j)
    {
-      theViewProjection->localToWorld(poly[j], gpoly[j]);
+      m_viewGeometry->localToWorld(poly[j], gpoly[j]);
    }
 }
 
 bool ossimGeoPolyCutter::setView(ossimObject* baseObject)
 {
-   
-   ossimProjection* proj = dynamic_cast<ossimProjection*>(baseObject);
-   if(proj)
+   if ( baseObject )
    {
-      theViewProjection = new ossimImageGeometry(0, proj);
-      transformVertices();
-   }
-   else 
-   {
-      theViewProjection = dynamic_cast<ossimImageGeometry*>(baseObject);
+      ossimRefPtr<ossimImageGeometry> origGeom = m_viewGeometry;
+
+      ossimRefPtr<ossimImageGeometry> geom = dynamic_cast<ossimImageGeometry*>(baseObject);
+      if ( geom.valid() )
+      {
+         m_viewGeometry = geom;
+      }
+      else
+      {
+         ossimRefPtr<ossimProjection> proj = dynamic_cast<ossimProjection*>(baseObject);
+         if( proj.valid() )
+         {
+            m_viewGeometry = new ossimImageGeometry( 0, proj.get() );
+         }
+         else
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimGeoPolyCutter::setView WARNING: Invalid class type!"
+               << std::endl;
+         }
+      }
+      
+      if ( m_viewGeometry.valid() )
+      {
+         // If view changed transform points...
+         if ( !origGeom ||
+              ( m_viewGeometry->isEqualTo( *( (ossimObject*)(origGeom.get()) ) ) == false )
+              )
+         {
+            transformVertices();
+         }
+      }
    }
 
-   return theViewProjection.valid();
-}
+   return m_viewGeometry.valid();
+   
+} // End: ossimGeoPolyCutter::setView(ossimObject* baseObject)
 
 ossimObject* ossimGeoPolyCutter::getView()
 {
-   return theViewProjection.get();
+   return m_viewGeometry.get();
 }
 
 const ossimObject* ossimGeoPolyCutter::getView()const
 {
-   return theViewProjection.get();
+   return m_viewGeometry.get();
 }
 
 void ossimGeoPolyCutter::transformVertices()
 {
-   if(!theViewProjection) return;
-   
-   if(theGeoPolygonList.size())
+   if( m_viewGeometry.valid() )
    {
-      if(theGeoPolygonList.size() != thePolygonList.size())
+      if( m_geoPolygonList.size() )
       {
-         thePolygonList.resize(theGeoPolygonList.size());
-      }
-      int i = 0;
-      int j = 0;
-      for(i = 0; i < (int)theGeoPolygonList.size(); ++i)
-      {
-         ossimGeoPolygon& gpoly = theGeoPolygonList[i];
-         ossimPolygon&    poly  = thePolygonList[i];
-         int nvert = (int)gpoly.size();
-         if((int)poly.getVertexCount() != nvert)
+         if(m_geoPolygonList.size() != thePolygonList.size())
          {
-            poly.resize(nvert);
+            thePolygonList.resize(m_geoPolygonList.size());
          }
-         for(j = 0; j < nvert; ++j)
+         int i = 0;
+         int j = 0;
+         for(i = 0; i < (int)m_geoPolygonList.size(); ++i)
          {
+            ossimGeoPolygon& gpoly = m_geoPolygonList[i];
+            ossimPolygon&    poly  = thePolygonList[i];
+            int nvert = (int)gpoly.size();
+            if((int)poly.getVertexCount() != nvert)
+            {
+               poly.resize(nvert);
+            }
+            for(j = 0; j < nvert; ++j)
+            {
 //	   ossimDpt error;
-            theViewProjection->worldToLocal(gpoly[j], poly[j]);
-//	    theViewProjection->getRoundTripError(ossimIpt(poly[j]), error);
+               m_viewGeometry->worldToLocal(gpoly[j], poly[j]);
+//	    m_viewGeometry->getRoundTripError(ossimIpt(poly[j]), error);
 //	    poly[j] = poly[j] + error;
-            poly[j] = ossimDpt(ossim::round<int>(poly[j].x),
-                               ossim::round<int>(poly[j].y));
+               poly[j] = ossimDpt(ossim::round<int>(poly[j].x),
+                                  ossim::round<int>(poly[j].y));
+            }
          }
+         computeBoundingRect();
       }
-      computeBoundingRect();
    }
 }
 
 void ossimGeoPolyCutter::transformVertices(int i)
 {
-   if(!theViewProjection) return;
-   
-   ossimGeoPolygon& gpoly = theGeoPolygonList[i];
-   ossimPolygon&    poly  = thePolygonList[i];
-   int nvert = (int)gpoly.size();
-   if((int)poly.getVertexCount() != nvert)
+   if( m_viewGeometry.valid() )
    {
-      poly.resize(nvert);
-   }
-   int j = 0;
-   for(j = 0; j < nvert; ++j)
-   {
+      ossimGeoPolygon& gpoly = m_geoPolygonList[i];
+      ossimPolygon&    poly  = thePolygonList[i];
+      int nvert = (int)gpoly.size();
+      if((int)poly.getVertexCount() != nvert)
+      {
+         poly.resize(nvert);
+      }
+      int j = 0;
+      for(j = 0; j < nvert; ++j)
+      {
 //     ossimDpt error;
-     theViewProjection->worldToLocal(gpoly[j], poly[j]);
-//     theViewProjection->getRoundTripError(poly[j], error);
+         m_viewGeometry->worldToLocal(gpoly[j], poly[j]);
+//     m_viewGeometry->getRoundTripError(poly[j], error);
 //     poly[j] = poly[j] + error;
-     poly[j] = ossimDpt(ossim::round<int>(poly[j].x),
-			ossim::round<int>(poly[j].y));
+         poly[j] = ossimDpt(ossim::round<int>(poly[j].x),
+                            ossim::round<int>(poly[j].y));
+      }
+      
+      computeBoundingRect();
    }
-   
-   computeBoundingRect();
 }

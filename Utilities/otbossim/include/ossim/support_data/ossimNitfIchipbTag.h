@@ -11,9 +11,9 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfIchipbTag.h 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfIchipbTag.h 22013 2012-12-19 17:37:20Z dburken $
 #ifndef ossimNitfIchipbTag_HEADER
-#define ossimNitfIchipbTag_HEADER
+#define ossimNitfIchipbTag_HEADER 1
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -67,9 +67,6 @@ public:
    /** default constructor */
    ossimNitfIchipbTag();
 
-   /** @return "ICHIPB" as an ossimString. */
-   virtual std::string getRegisterTagName() const;
-  
    /**
     * Parse method.
     *
@@ -83,9 +80,6 @@ public:
     * @param out Stream to write to.
     */
    virtual void writeStream(std::ostream& out);
-   
-   /** @return The size of this record in bytes (123) within a nitf file. */
-   virtual ossim_uint32 getSizeInBytes()const;
    
    /**
     * Clears all string fields within the record to some default nothingness.

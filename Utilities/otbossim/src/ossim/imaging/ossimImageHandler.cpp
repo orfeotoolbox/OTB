@@ -12,7 +12,7 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 21804 2012-10-05 14:18:45Z dburken $
+//  $Id: ossimImageHandler.cpp 22228 2013-04-12 14:11:45Z dburken $
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimBooleanProperty.h>
@@ -53,7 +53,7 @@ static const char SUPPLEMENTARY_DIRECTORY_KW[] = "supplementary_directory";
 static const char VALID_VERTICES_FILE_KW[]     = "valid_vertices_file";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 21804 2012-10-05 14:18:45Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 22228 2013-04-12 14:11:45Z dburken $";
 #endif
 
 // GARRETT! All of the decimation factors are scattered throughout. We want to fold that into 
@@ -813,11 +813,9 @@ bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
       //---
       ossim_uint32 overviewStartingResLevel = getNumberOfDecimationLevels();
 
-      //---
+
       // Try to open:
-      // False argument to open tell the overview reader not to try to open overviews.
-      //---
-      theOverview = ossimImageHandlerRegistry::instance()->open(overview_file, false);
+      theOverview = ossimImageHandlerRegistry::instance()->openOverview( overview_file );
 
       if (theOverview.valid())
       {
@@ -908,7 +906,7 @@ bool ossimImageHandler::openOverview()
    
    if ( overviewFilename.exists() )
    {
-      status = openOverview(overviewFilename);
+      status = openOverview( overviewFilename );
    }
 
    if ( !status  && traceDebug() )
@@ -1316,6 +1314,15 @@ ossim_uint32 ossimImageHandler::getNumberOfEntries()const
    getEntryList(tempList);
    
    return (ossim_uint32)tempList.size();
+}
+
+void ossimImageHandler::getEntryName( ossim_uint32 /* entryIdx */, std::string& name ) const
+{
+   //---
+   // This implementation does nothing. Interface for multi entry image readers that have
+   // named entries, e.g. HDF5 data.
+   //---
+   name.clear();
 }
 
 void ossimImageHandler::completeOpen()

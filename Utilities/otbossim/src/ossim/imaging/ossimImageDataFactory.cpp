@@ -8,7 +8,7 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 // 
 //*************************************************************************
-// $Id: ossimImageDataFactory.cpp 19900 2011-08-04 14:19:57Z dburken $
+// $Id: ossimImageDataFactory.cpp 22135 2013-02-02 16:27:24Z dburken $
 
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimU8ImageData.h>
@@ -107,6 +107,18 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
       {
          // create a generic image data implementation.
          result = new ossimImageData(owner, scalar, bands, width, height);
+
+         // Set the scalar type for stretching.
+         ossimImageSource* inputSource = dynamic_cast<ossimImageSource*>(owner);
+         if( inputSource )
+         {
+            for(ossim_uint32 band = 0; band < bands; ++band)
+            {
+               result->setMinPix(inputSource->getMinPixelValue(band), band);
+               result->setMaxPix(inputSource->getMaxPixelValue(band), band);
+               result->setNullPix(inputSource->getNullPixelValue(band), band);
+            }
+         }
          break;
       }
    }

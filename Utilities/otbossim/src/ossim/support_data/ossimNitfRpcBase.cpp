@@ -10,7 +10,7 @@
 // Rational Polynomial Coefficient extension.
 //
 //********************************************************************
-// $Id: ossimNitfRpcBase.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimNitfRpcBase.cpp 22013 2012-12-19 17:37:20Z dburken $
 
 #include <algorithm>
 #include <iostream>
@@ -44,7 +44,11 @@ RTTI_DEF1(ossimNitfRpcBase, "ossimNitfRpcBase", ossimNitfRegisteredTag);
 
 
 ossimNitfRpcBase::ossimNitfRpcBase()
+   : ossimNitfRegisteredTag()
 {
+   // Set the tag length in base.
+   setTagLength(1041);
+   
    clearFields();
 }
 
@@ -138,11 +142,6 @@ void ossimNitfRpcBase::writeStream(std::ostream& out)
       out.write(theSampleDenominatorCoefficient[idx].c_str(),
                 SAMPLE_DENOMINATOR_COEFFICIENT_SIZE);
    }
-}
-
-ossim_uint32 ossimNitfRpcBase::getSizeInBytes()const
-{
-   return 1041;
 }
 
 void ossimNitfRpcBase::clearFields()
@@ -701,12 +700,12 @@ std::ostream& ossimNitfRpcBase::print(std::ostream& out,
                                       const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getRegisterTagName();
+   pfx += getTagName();
    pfx += ".";
 
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getRegisterTagName() << "\n"
+       << getTagName() << "\n"
        << pfx << std::setw(24) << "CEL:"
        << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "SUCCESS:"

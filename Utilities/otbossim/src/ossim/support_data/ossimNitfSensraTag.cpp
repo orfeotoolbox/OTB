@@ -9,7 +9,7 @@
 // Description: Nitf support class for SENSRA - Sensor parameters extension.
 // 
 //********************************************************************
-// $Id: ossimNitfSensraTag.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfSensraTag.cpp 22013 2012-12-19 17:37:20Z dburken $
 
 #include <istream>
 #include <iomanip>
@@ -19,17 +19,13 @@ RTTI_DEF1(ossimNitfSensraTag, "ossimNitfSensraTag", ossimNitfRegisteredTag);
 
 
 ossimNitfSensraTag::ossimNitfSensraTag()
+   : ossimNitfRegisteredTag(std::string("SENSRA"), 132)
 {
    clearFields();
 }
 
 ossimNitfSensraTag::~ossimNitfSensraTag()
 {
-}
-
-std::string ossimNitfSensraTag::getRegisterTagName()const
-{
-   return std::string("SENSRA");
 }
 
 void ossimNitfSensraTag::parseStream(std::istream& in)
@@ -90,11 +86,6 @@ void ossimNitfSensraTag::writeStream(std::ostream& out)
    out.write(theSpotNum, SPOT_NUM_SIZE);
 }
 
-ossim_uint32 ossimNitfSensraTag::getSizeInBytes()const
-{
-   return 132;
-}
-
 void ossimNitfSensraTag::clearFields()
 {
    memset(theRefRow, ' ', REF_ROW_SIZE);
@@ -152,13 +143,13 @@ std::ostream& ossimNitfSensraTag::print(
    std::ostream& out, const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getRegisterTagName();
+   pfx += getTagName();
    pfx += ".";
    
    out << std::setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getRegisterTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:" << getSizeInBytes() << "\n"
+       << getTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:" << getTagLength() << "\n"
        << pfx << std::setw(24) << "REFROW:" << theRefRow << "\n"
        << pfx << std::setw(24) << "REFCOL:" << theRefCol << "\n"
        << pfx << std::setw(24) << "SENSORMODEL:" << theSensorModel<< "\n"

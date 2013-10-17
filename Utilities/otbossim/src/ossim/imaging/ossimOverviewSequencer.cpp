@@ -7,7 +7,7 @@
 // Description: Sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.cpp 19724 2011-06-06 21:07:15Z dburken $
+// $Id: ossimOverviewSequencer.cpp 22149 2013-02-11 21:36:10Z dburken $
 
 #include <ossim/imaging/ossimOverviewSequencer.h>
 #include <ossim/base/ossimIpt.h>
@@ -23,7 +23,7 @@
 
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 19724 2011-06-06 21:07:15Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 22149 2013-02-11 21:36:10Z dburken $";
 #endif
 
 static ossimTrace traceDebug("ossimOverviewSequencer:debug");
@@ -31,6 +31,7 @@ static ossimTrace traceDebug("ossimOverviewSequencer:debug");
 ossimOverviewSequencer::ossimOverviewSequencer()
    :
    ossimReferenced(),
+   ossimErrorStatusInterface(),
    m_imageHandler(0),
    m_maskWriter(0),
    m_maskFilter(0),
@@ -326,50 +327,78 @@ ossimRefPtr<ossimImageData> ossimOverviewSequencer::getNextTile()
    // Grab the input tile.
    ossimRefPtr<ossimImageData> inputTile;
    if (m_maskFilter.valid())
+   {
       inputTile = m_maskFilter->getTile(inputRect, m_sourceResLevel);
+
+      // Check for errors reading tile and set our error status for callers.
+      if ( m_maskFilter->hasError() )
+      {
+         setErrorStatus();
+      }
+   }
    else
+   {
       inputTile = m_imageHandler->getTile(inputRect, m_sourceResLevel);
 
-   if (inputTile.valid() == false)
+      // Check for errors reading tile and set our error status for callers.
+      if ( m_imageHandler->hasError() )
+      {
+         setErrorStatus();
+      }
+   }
+
+   if ( hasError() )
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "ossimOverviewSequencer::getNextTile  ERROR:"
+         << "\nError set reading tile:  " << m_currentTileNumber << std::endl;
+      if ( inputTile.valid() )
+      {
+         inputTile->makeBlank();
+      }
+   }
+   else if ( inputTile.valid() )
+   {
+      if ( m_scanForMinMaxNull )
+      {
+         inputTile->computeMinMaxNulPix(m_minValues, m_maxValues, m_nulValues);
+      }
+      else if ( m_scanForMinMax )
+      {
+         inputTile->computeMinMaxPix(m_minValues, m_maxValues);
+      }
+      
+      if ( ( m_histoMode != OSSIM_HISTO_MODE_UNKNOWN ) &&
+           ( (m_currentTileNumber % m_histoTileIndex) == 0 ) )
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimOverviewSequencer::getNextTile DEBUG:"
+               << "\npopulating histogram for tile: " << m_currentTileNumber
+               << "\n";
+         }
+         inputTile->populateHistogram(m_histogram);
+      }
+      
+      if ( (inputTile->getDataObjectStatus() == OSSIM_PARTIAL) ||
+           (inputTile->getDataObjectStatus() == OSSIM_FULL ) )
+      {
+         // Resample the tile.
+         resampleTile(inputTile.get());
+         m_tile->validate();
+         
+         // Scan the resampled pixels for bogus values to be masked out (if masking enabled)
+         if (m_maskWriter.valid())
+            m_maskWriter->generateMask(m_tile, m_sourceResLevel+1);
+      }
+   }
+   else
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "ossimOverviewSequencer::getNextTile DEBUG:"
          << "\nRequest failed for input rect: " << inputRect
          << "\nRes level:  " << m_sourceResLevel << std::endl;
-   }
-
-   if ( m_scanForMinMaxNull )
-   {
-      inputTile->computeMinMaxNulPix(m_minValues, m_maxValues, m_nulValues);
-   }
-   else if ( m_scanForMinMax )
-   {
-      inputTile->computeMinMaxPix(m_minValues, m_maxValues);
-   }
-
-   if ( ( m_histoMode != OSSIM_HISTO_MODE_UNKNOWN ) &&
-        ( (m_currentTileNumber % m_histoTileIndex) == 0 ) )
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimOverviewSequencer::getNextTile DEBUG:"
-            << "\npopulating histogram for tile: " << m_currentTileNumber
-            << "\n";
-      }
-      inputTile->populateHistogram(m_histogram);
-   }
-
-   if ( (inputTile->getDataObjectStatus() == OSSIM_PARTIAL) ||
-        (inputTile->getDataObjectStatus() == OSSIM_FULL ) )
-   {
-      // Resample the tile.
-      resampleTile(inputTile.get());
-      m_tile->validate();
-
-      // Scan the resampled pixels for bogus values to be masked out (if masking enabled)
-      if (m_maskWriter.valid())
-         m_maskWriter->generateMask(m_tile, m_sourceResLevel+1);
    }
 
    // Increment the tile index.

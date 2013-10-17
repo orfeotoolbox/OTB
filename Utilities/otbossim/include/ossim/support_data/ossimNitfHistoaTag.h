@@ -7,7 +7,7 @@
 // Description: HISTOA tag class declaration.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimNitfHistoaTag.h 21517 2012-08-22 21:14:38Z dburken $
+// $Id: ossimNitfHistoaTag.h 22013 2012-12-19 17:37:20Z dburken $
 
 #ifndef ossimNitfHistoaTag_HEADER
 #define ossimNitfHistoaTag_HEADER 1
@@ -69,7 +69,6 @@ public:
       OUTBWC_SIZE    = 10
    };
    ossimNitfHistoaProcessingEvent();
-   std::string getRegisterTagName() const;
    ossim_uint32 getSizeInBytes()const;
    void parseStream(std::istream& in);
    void writeStream(std::ostream& out);
@@ -529,8 +528,6 @@ public:
    
    ossimNitfHistoaTag();
    
-   /** @return "HISTOA" as an ossimString. */
-   virtual std::string getRegisterTagName() const;
    /**
     * 
     * This will allow the user defined data to parse the stream.

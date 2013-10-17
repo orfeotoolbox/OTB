@@ -12,7 +12,7 @@
 // the tag factories.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfUnknownTag.h 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimNitfUnknownTag.h 22013 2012-12-19 17:37:20Z dburken $
 #ifndef ossimNitfUnknownTag_HEADER
 #define ossimNitfUnknownTag_HEADER 1
 
@@ -26,13 +26,6 @@ public:
 
    /** destructor */
    virtual ~ossimNitfUnknownTag();
-
-   /**
-    * @return "tagname" as an std::string.
-    *
-    * @note: This has to be set by maker as the tag is not in any factory.
-    */
-   virtual std::string getRegisterTagName() const;
   
    /**
     * Parse method.
@@ -50,13 +43,6 @@ public:
    virtual void writeStream(std::ostream& out);
    
    /**
-    * @return The size of this record in bytes within a nitf file.
-    *
-    * @ote: This has to be set by maker as the tag is not in any factory.
-    */
-   virtual ossim_uint32 getSizeInBytes()const;
-   
-   /**
     * Clears all string fields within the record to some default nothingness.
     */
    virtual void clearFields();
@@ -68,13 +54,6 @@ public:
    virtual std::ostream& print(std::ostream& out,
                                const std::string& prefix=std::string()) const;
 
-      /**
-    * @param tagName Name of tag.
-    *
-    * @note Users should set tag name as this is an unknown tag.
-    */
-   void setTagName(const ossimString& tagName);
-
    /**
     * @param length Length of tag.
     *
@@ -84,7 +63,7 @@ public:
     * exist it will be deleted by this method.
     * Subsequent "parseStream" calls will allocate theTagData as needed.
     */
-   void setTagLength(ossim_uint32 length);
+   virtual void setTagLength(ossim_uint32 length);
    
 protected:
 
@@ -93,13 +72,10 @@ protected:
     */
    bool tagDataIsAscii() const;
 
-   std::string  theTagName;
-   ossim_uint32 theTagLength;
-
    /**
     * Holds entire tag data(theTagLength) plus one byte for null terminator.
     */
-   char*        theTagData;
+   char* m_tagData;
    
 TYPE_DATA   
 };

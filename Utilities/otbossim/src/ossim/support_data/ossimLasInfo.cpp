@@ -50,6 +50,7 @@ std::ostream& ossimLasInfo::print(std::ostream& out) const
       ossimLasHdr hdr;
       if ( hdr.checkSignature(istr) )
       {
+         istr.seekg(0, std::ios_base::beg);
          hdr.readStream(istr);
          hdr.print(out);
       }

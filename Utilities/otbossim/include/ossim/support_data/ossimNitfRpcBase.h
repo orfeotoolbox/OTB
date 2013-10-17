@@ -13,9 +13,9 @@
 // See: http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //********************************************************************
-// $Id: ossimNitfRpcBase.h 14576 2009-05-20 13:58:45Z dburken $
+// $Id: ossimNitfRpcBase.h 22013 2012-12-19 17:37:20Z dburken $
 #ifndef ossimNitfRpcBase_HEADER
-#define ossimNitfRpcBase_HEADER
+#define ossimNitfRpcBase_HEADER 1
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 
 class OSSIM_DLL ossimNitfRpcBase : public ossimNitfRegisteredTag
@@ -64,9 +64,6 @@ class OSSIM_DLL ossimNitfRpcBase : public ossimNitfRegisteredTag
    * @param out Stream to write to.
    */
   virtual void writeStream(std::ostream& out);
-
-  /** @return The size of this record in bytes (1041) within a nitf file. */
-  virtual ossim_uint32 getSizeInBytes()const;
 
   /**
    * Clears all string fields within the record to some default nothingness.
