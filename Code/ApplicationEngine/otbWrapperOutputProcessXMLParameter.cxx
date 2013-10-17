@@ -113,13 +113,9 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
   TiXmlElement * n_OTB = new TiXmlElement( "OTB");
   doc.LinkEndChild( n_OTB );
 
-  std::string version = "3.18";
-  std::string platform = "Linux";
-  std::string build = "18-05-2013";
+  std::string version = OTB_VERSION_STRING;
 
   AddChildNodeTo(n_OTB, "version", version);
-  AddChildNodeTo(n_OTB, "build", build);
-  AddChildNodeTo(n_OTB, "platform", platform);
 
   TiXmlElement *n_App;
   n_App = AddChildNodeTo(n_OTB, "application");
