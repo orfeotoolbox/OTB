@@ -160,6 +160,13 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     //this->otbAppLogInfo(app,info);
   }
 
+  std::string otb_Version;
+  otb_Version = GetChildNodeTextOf(n_OTB,"version");
+
+  if(otb_Version != OTB_VERSION_STRING)
+    otbMsgDebugMacro( << "Input XML was generated with a different version of OTB (" <<
+                       otb_Version << ") and current version is OTB (" << OTB_VERSION_STRING << ")" );
+
   /*
   std::string otb_Version, otb_Build, otb_Platform;
   otb_Version = this_->GetChildNodeTextOf(n_OTB,"version");
@@ -251,7 +258,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
         }
 
       if ( type == ParameterType_OutputFilename || type == ParameterType_OutputVectorData ||
-           type == ParameterType_String || type == ParameterType_Choice)
+           type == ParameterType_String || type == ParameterType_Choice || type == ParameterType_RAM)
         {
         this_->SetParameterString(key, value);
         }
@@ -342,7 +349,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
           }
         }
       else if (type == ParameterType_Radius || type == ParameterType_Int ||
-               type == ParameterType_RAM || typeAsString == "rand" )
+               typeAsString == "rand" )
         {
         int intValue;
         std::stringstream(value) >> intValue;
