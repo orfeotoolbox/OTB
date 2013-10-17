@@ -87,7 +87,7 @@ public:
   typedef otb::StereorectificationDeformationFieldSource
     <FloatImageType,FloatVectorImageType>     DeformationFieldSourceType;
 
-  typedef itk::Vector<double,2>               DeformationType;
+  typedef itk::Vector<float,2>               DeformationType;
   typedef otb::Image<DeformationType>         DeformationFieldType;
 
   typedef itk::VectorCastImageFilter
