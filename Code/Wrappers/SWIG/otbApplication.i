@@ -24,12 +24,6 @@
 #include "otbWrapperSWIGIncludes.h"
  %}
 
-%rename("SetParameterStringList_") Application::SetParameterStringList(std::string parameter, std::vector<std::string> value);
-%rename("SetParameterInt_") Application::SetParameterInt(std::string parameter, int value);
-%rename("SetParameterFloat_") Application::SetParameterFloat(std::string parameter, float value);
-%rename("SetParameterString_") Application::SetParameterString(std::string parameter, std::string value);
-
-
 // Langage specific extension
 %include "Python.i"
 %include "Java.i"
@@ -209,6 +203,30 @@ private:
 };
 DECLARE_REF_COUNT_CLASS( Application )
 
+%extend Application
+{
+  void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag)
+  {
+    $self->Application::SetParameterInt(parameter, value);
+    $self->Application::SetParameterUserValue(parameter, hasUserValueFlag);
+  }
+  void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag)
+  {
+    $self->Application::SetParameterFloat(parameter, value);
+    $self->Application::SetParameterUserValue(parameter, hasUserValueFlag);
+  }
+  void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag)
+  {
+    $self->Application::SetParameterString(parameter, value);
+    $self->Application::SetParameterUserValue(parameter, hasUserValueFlag);
+  }
+  void SetParameterStringList(std::string parameter, std::vector<std::string> value, bool hasUserValueFlag)
+  {
+    $self->Application::SetParameterStringList(parameter, value);
+    $self->Application::SetParameterUserValue(parameter, hasUserValueFlag);
+  }
+};
+
 #if SWIGPYTHON
 %extend Application {
   %pythoncode {
@@ -235,23 +253,6 @@ DECLARE_REF_COUNT_CLASS( Application )
        else:
           print "Cant get value for parameter '" + paramKey  + " ' of type '" + paramType + "' or ParameterType Emtpy"
           return None
-
-    def SetParameterStringList(self, paramKey, paramValue, overwriteFlag=False):
-          assert not isinstance(paramValue, basestring) #provide a better error message
-          self.SetParameterStringList_(paramKey, paramValue)
-          self.SetParameterUserValue(paramKey, overwriteFlag)
-
-    def SetParameterString(self, paramKey, paramValue, overwriteFlag=False):
-          self.SetParameterString_(paramKey, paramValue)
-          self.SetParameterUserValue(paramKey, overwriteFlag)
-
-    def SetParameterInt(self, paramKey, paramValue, overwriteFlag=False):
-          self.SetParameterInt_(paramKey, paramValue)
-          self.SetParameterUserValue(paramKey, overwriteFlag)
-
-    def SetParameterFloat(self, paramKey, paramValue, overwriteFlag=False):
-          self.SetParameterFloat_(paramKey, paramValue)
-          self.SetParameterUserValue(paramKey, overwriteFlag)
 
       }
 }
