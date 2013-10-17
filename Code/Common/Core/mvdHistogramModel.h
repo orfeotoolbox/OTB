@@ -565,7 +565,7 @@ HistogramModel
     {
     RealType n = sums[ i ] / means[ i ];
 
-    qDebug() << "#" << i << ": " << n;
+    // qDebug() << "#" << i << ": " << n;
 
     if( n <= 1.0 )
       {
