@@ -1214,7 +1214,7 @@ PleiadesImageMetadataInterface
           0.0006144646,0.000603138,0.0006116329,0.0005578319,0.0005295155,0.0005295155,
           0.0005210206,0.0005054466,0.0004473982,0.0004473953,0.0004077553,0.0004558931,
           0.0004077553,0.0004346558,0.0003766073,0.0003851022,0.0003879338,0.0003723599,
-          0.0003341328,0.0003723599,0.0003313012,0.0003341328,0.0003143114  
+          0.0003341328,0.0003723599,0.0003313012,0.0003341328,0.0003143114
         };
       //add panchromatic band to the temporary list
       const std::vector<float> vpan (pan, pan + sizeof(pan) / sizeof(float) );
@@ -1228,7 +1228,7 @@ PleiadesImageMetadataInterface
   else if (nbBands > 1 && nbBands < 5)
     {
     if (sensorId == "PHR 1A")
-      {  
+      {
       //band B0 (blue band)
       const float b0[209] =
         {
