@@ -12,7 +12,7 @@
 #define OSSIM_HAS_FREETYPE 0
 
 /* Define to "1" if you have GEOTIFF, "0" if not. */
-#define OSSIM_HAS_GEOTIFF 0
+#define OSSIM_HAS_GEOTIFF 1
 
 /* Define to "1" if you have OpenThreads for mutex support, "0" if not. */
 #define OSSIM_HAS_OPEN_THREADS 0

@@ -40,6 +40,11 @@
 #include <ossim/support_data/ossimNitfStdidcTag.h>
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 
+
+#if defined(JPEG_DUAL_MODE_8_12)
+#undef JPEG_DUAL_MODE_8_12
+#endif
+
 #if defined(JPEG_DUAL_MODE_8_12)
 #include <ossim/imaging/ossimNitfTileSource_12.h>
 #endif
