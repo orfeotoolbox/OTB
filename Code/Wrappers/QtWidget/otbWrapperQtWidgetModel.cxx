@@ -19,10 +19,12 @@
 
 namespace otb
 {
+
 namespace Wrapper
 {
 
-QtWidgetModel::QtWidgetModel(Application* app) :
+QtWidgetModel
+::QtWidgetModel(Application* app) :
   m_Application(app),
   m_LogOutput()
 {
@@ -43,7 +45,9 @@ QtWidgetModel::~QtWidgetModel()
 {
 }
 
-void QtWidgetModel::NotifyUpdate()
+void
+QtWidgetModel
+::NotifyUpdate()
 {
   // Update the parameters
   m_Application->UpdateParameters();
@@ -54,15 +58,31 @@ void QtWidgetModel::NotifyUpdate()
   emit SetApplicationReady(applicationStatus);
 }
 
-void QtWidgetModel::ExecuteAndWriteOutputSlot()
+void
+QtWidgetModel
+::ExecuteAndWriteOutputSlot()
 {
   // Deactivate the Execute button while processing
   emit SetApplicationReady(false);
 
   // launch the output image writing
   AppliThread * taskAppli = new AppliThread( m_Application );
-  connect(taskAppli, SIGNAL(ApplicationExecutionDone()), this, SLOT(NotifyUpdate()));
-  connect(taskAppli, SIGNAL(ApplicationExecutionDone()), this, SLOT(ActivateExecuteButton()));
+
+  QObject::connect(
+    taskAppli,
+    SIGNAL( ExceptionRaised( QString ) ),
+    // to:
+    this,
+    SLOT( ExceptionRaised( QString ) )
+  );
+
+  QObject::connect(
+    taskAppli,
+    SIGNAL( ApplicationExecutionDone( int ) ),
+    // to:
+    this,
+    SLOT( OnApplicationExecutionDone( int ) )
+  );
 
   taskAppli->Execute();
 
@@ -70,30 +90,102 @@ void QtWidgetModel::ExecuteAndWriteOutputSlot()
   emit SetProgressReportBegin();
 }
 
-void QtWidgetModel::ActivateExecuteButton()
+void
+QtWidgetModel
+::OnApplicationExecutionDone( int status )
 {
+  // Require GUI update.
+  NotifyUpdate();
+
   // For the view to activate the button "Execute"
-  emit SetApplicationReady(true);
+  emit SetApplicationReady( true );
 
   // For the progressReport to close the Progress widget
-  emit SetProgressReportDone();
+  emit SetProgressReportDone( status );
 }
 
-void QtWidgetModel::SendLogWARNING( const std::string & mes )
+void
+QtWidgetModel
+::SendLogWARNING( const std::string & mes )
 {
   m_Application->GetLogger()->Write( itk::LoggerBase::WARNING, mes );
 }
 
-void QtWidgetModel::SendLogINFO( const std::string & mes )
+void
+QtWidgetModel
+::SendLogINFO( const std::string & mes )
 {
   m_Application->GetLogger()->Write( itk::LoggerBase::INFO, mes );
 }
 
-void QtWidgetModel::SendLogDEBUG( const std::string & mes )
+void
+QtWidgetModel
+::SendLogDEBUG( const std::string & mes )
 {
   m_Application->GetLogger()->Write( itk::LoggerBase::DEBUG, mes );
 }
 
+}
 
 }
+
+namespace otb
+{
+
+namespace Wrapper
+{
+
+AppliThread
+::~AppliThread()
+{
+  wait();
+}
+
+void
+AppliThread
+::run()
+{
+  int result = -1;
+
+  //
+  // Try to execute OTB-application.
+  try
+    {
+    result = m_Application->ExecuteAndWriteOutput();
+    }
+  //
+  // Catch standard exceptions.
+  catch( std::exception& err )
+    {
+    std::ostringstream message;
+
+    message
+      << "The following error occurred during OTB-application execution: "
+      << err.what()
+      << std::endl;
+
+    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() );
+
+    // Signal exception.
+    emit ExceptionRaised( err.what() );
+    }
+  //
+  // Catch other exceptions.
+  catch( ... )
+    {
+    m_Application->GetLogger()->Write(
+      itk::LoggerBase::FATAL,
+      "An unknown exception has been raised during OTB-application execution"
+    );
+
+    // Signal exception.
+    emit ExceptionRaised( "Exception raised by OTB-application." );
+    }
+  //
+  // Signal OTB-application has ended with result status.
+  emit ApplicationExecutionDone( result );
+}
+
+}
+
 }

@@ -24,52 +24,46 @@
 
 namespace otb
 {
+
 namespace Wrapper
 {
 
 class AppliThread : public QThread
 {
  Q_OBJECT
+
  public:
-  AppliThread(Application* app)
+  inline AppliThread(Application* app)
     {
       m_Application = app;
     }
 
-  ~AppliThread()
-  {
-    wait();
-  }
+  virtual ~AppliThread();
 
-  void Execute()
+  inline void Execute()
   {
     // Call the signal start to begin running the program
     start();
   }
 
 signals:
-  void ApplicationExecutionDone();
+  /**
+   * \brief Signal emitted when the OTB-application has finished.
+   *
+   * \param status 0 The result status of the OTB-application.
+   */
+  void ApplicationExecutionDone( int status =0 );
+
+  /**
+   * \brief Signal emitted when an exception has been raised by an
+   * otb::Application and is caught by this calling QThread.
+   *
+   * \param what The std::exception::what() which is forwarded to listeners.
+   */
+  void ExceptionRaised( QString what );
 
 protected:
-  virtual void run()
-  {
-    try
-      {
-      m_Application->ExecuteAndWriteOutput();
-      }
-    catch(std::exception& err)
-      {
-      std::ostringstream message;
-      message << "The following error occurred during application execution : " << err.what() << std::endl;
-      m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() );
-      }
-    catch(...)
-      {
-      m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, "An unknown exception has been raised during application execution" );
-      }
-    
-    emit ApplicationExecutionDone();
-  }
+  virtual void run();
 
 private:
   AppliThread(const AppliThread&); //purposely not implemented
@@ -117,17 +111,39 @@ public:
 signals:
   void SetApplicationReady(bool);
   void SetProgressReportBegin();
-  void SetProgressReportDone();
+  /**
+   * \brief
+   * \param status
+   */
+  void SetProgressReportDone( int status =0 );
   void UpdateGui();
 
 protected slots:
-  // slot called everytime one of the widget is updated
-  void NotifyUpdate();
-  // slot called when execution is requested
+  /**
+   * \brief Slot called when execution is requested (e.g. by
+   * otb::Wrapper::QtWidgetView).
+   *
+   * This slot is protected so it can only be called via Qt
+   * signal/slot mechanism and not directly by extern caller.
+   */
   void ExecuteAndWriteOutputSlot();
-  // slot called to activate the Execute button after the application
-  // is done
-  void ActivateExecuteButton();
+
+  /**
+   * \brief Slots called everytime one of the widget needs to be
+   * updated (e.g. by specialized parameter widgets).
+   *
+   * This slot is protected so it can only be called via Qt
+   * signal/slot mechanism and not directly by extern caller.
+   */
+  void NotifyUpdate();
+
+private slots:
+  /**
+   * \brief
+   *
+   * \param status
+   */
+  void OnApplicationExecutionDone( int status );
 
 private:
   QtWidgetModel(const QtWidgetModel&); //purposely not implemented
