@@ -22,23 +22,23 @@ namespace ossimplugins
  * @ingroup EnvisatAsarDataFile
  * @brief This class is a factory able to construct Record base classes
  */
-   class EnvisatAsarDataFactory : public EnvisatAsarRecordFactory
-   {
-   public:
-      /**
-       * @brief Constructor
-       */
-      EnvisatAsarDataFactory();
-      /**
-       * @brief Destructor
-       */
-      ~EnvisatAsarDataFactory();
+class EnvisatAsarDataFactory : public EnvisatAsarRecordFactory
+{
+public:
+  /**
+   * @brief Constructor
+   */
+  EnvisatAsarDataFactory();
+  /**
+   * @brief Destructor
+   */
+  ~EnvisatAsarDataFactory();
 
 
-   protected:
+protected:
 
 
-   private:
-   };
+private:
+};
 }
 #endif

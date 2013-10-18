@@ -9,12 +9,10 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <iostream>
-#include <sstream>
-
 #include <ossimTerraSarModel.h>
 #include <ossimPluginCommon.h>
 #include <ossimTerraSarProductDoc.h>
+#include <ossim/base/ossimEnvironmentUtility.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimRefPtr.h>
@@ -23,7 +21,7 @@
 #include <ossim/base/ossimXmlNode.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimTrace.h>
-
+#include <ossim/support_data/ossimSupportFilesList.h>
 #include <otb/GalileanEphemeris.h>
 #include <otb/GeographicEphemeris.h>
 #include <otb/GMSTDateTime.h>
@@ -31,9 +29,10 @@
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
 #include <otb/SarSensor.h>
-#include <ossim/base/ossimEnvironmentUtility.h>
-#include <ossim/support_data/ossimSupportFilesList.h>
 #include <cmath>
+#include <iostream>
+#include <sstream>
+
 
 // Keyword constants:
 static const char NUMBER_SRGR_COEFFICIENTS_KW[] = "sr_gr_coeffs_count";
@@ -89,7 +88,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _polLayer("UNDEFINED"),
      _polLayerList(),
      _noise(0),
-     _sceneCoord(),
+     _sceneCoord(0),
      _calFactor(0.),
      _radarFrequency(0.),
      _numberOfLayers(0),
@@ -119,7 +118,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _polLayer(rhs._polLayer),
      _polLayerList(rhs._polLayerList),
      _noise(rhs._noise),
-     _sceneCoord(rhs._sceneCoord),
+     _sceneCoord( 0 ),
      _calFactor(rhs._calFactor),
      _radarFrequency(rhs._radarFrequency),
      _numberOfLayers(rhs._numberOfLayers),
@@ -129,6 +128,10 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _rgLastPixelTime(rhs._rgLastPixelTime),
      _generationTime(rhs._generationTime)
 {
+   if ( rhs._sceneCoord )
+   {
+      _sceneCoord = new SceneCoord( *(rhs._sceneCoord) );
+   }  
 }
 
 ossimplugins::ossimTerraSarModel::~ossimTerraSarModel()
@@ -141,9 +144,10 @@ ossimplugins::ossimTerraSarModel::~ossimTerraSarModel()
  delete _noise;
  }
 */
-   if (_sceneCoord != 0)
+   if (_sceneCoord)
    {
       delete _sceneCoord;
+      _sceneCoord = 0;
    }
 }
 
@@ -874,7 +878,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    ossimGeometricSarSensorModel::print(out);
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
    {
-      if ( _noise[i].print(out) == false )
+      if ( !_noise[i].print(out) )
       {
          if (traceDebug())
          {
@@ -885,7 +889,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
       }
    }
 
-   if ( _sceneCoord->print(out) == false )
+   if ( !_sceneCoord->print(out) )
    {
       if (traceDebug())
       {
@@ -2065,7 +2069,7 @@ bool ossimplugins::ossimTerraSarModel::getNoiseAtGivenNode(
 
 
 bool ossimplugins::ossimTerraSarModel::initNoise(
-   const ossimXmlDocument* xmlDocument, const ossimTerraSarProductDoc& tsDoc)
+   const ossimXmlDocument* xmlDocument, const ossimTerraSarProductDoc& /* tsDoc */ )
 {
    ossimString xpath;
    ossimString polLayerName;
@@ -2260,7 +2264,7 @@ bool ossimplugins::ossimTerraSarModel::getPolLayerFromImageFile(
 
 
 bool ossimplugins::ossimTerraSarModel::initCalibration(
-   const ossimXmlDocument* xmlDocument, const ossimTerraSarProductDoc& tsDoc)
+   const ossimXmlDocument* xmlDocument, const ossimTerraSarProductDoc& /* tsDoc */ )
 {
    ossimString xpath;
    ossimString polLayerName;
@@ -2382,6 +2386,16 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
    }
    else
    {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimplugins::ossimTerraSarModel::findTSXLeader "
+            << " directory scan turned off.  This is killing the factory open."
+            << " We should never scan a directory.  Need to resolve. "
+            << std::endl;
+      }
+
+#if 0
       ossimFilename imagePath = file.path();
       if (imagePath.empty())
          imagePath = ossimEnvironmentUtility::instance()->getCurrentWorkingDir();
@@ -2421,7 +2435,7 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
                << std::endl;
          }
       }
-	  
+#endif	  
    }
 
    return res;

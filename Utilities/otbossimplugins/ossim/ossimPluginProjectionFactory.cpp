@@ -40,427 +40,427 @@ namespace ossimplugins
 {
 
 
-   ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
-   {
-      static ossimPluginProjectionFactory* factoryInstance =
-         new ossimPluginProjectionFactory();
+ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
+{
+   static ossimPluginProjectionFactory* factoryInstance =
+      new ossimPluginProjectionFactory();
 
-      return factoryInstance;
+   return factoryInstance;
+}
+   
+ossimProjection* ossimPluginProjectionFactory::createProjection(
+   const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
+{
+   static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
+   ossimRefPtr<ossimProjection> projection = 0;
+   //traceDebug.setTraceFlag(true);
+
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: testing ossimRadarSat2Model" << std::endl;
+   }
+
+   if ( !projection )
+   {
+      ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
+      if ( model->open(filename) )
+      {
+         // Check if a coarse grid was generated, and use it instead:
+         projection = model->getReplacementOcgModel().get();
+         if (projection.valid())
+            model = 0; // Have OCG, don't need this one anymore
+         else
+            projection = model.get();
+      }
+      else
+      {
+         model = 0;
+      }
    }
    
-   ossimProjection* ossimPluginProjectionFactory::createProjection(
-      const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
+   if(traceDebug())
    {
-      static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
-      ossimRefPtr<ossimProjection> projection = 0;
-      //traceDebug.setTraceFlag(true);
+      ossimNotify(ossimNotifyLevel_DEBUG)
+             << MODULE << " DEBUG: testing ossimPleiadesModel" << std::endl;
+   }
 
-      if(traceDebug())
+   // Pleiades
+   if ( !projection )
+   {
+      ossimRefPtr<ossimPleiadesModel> model = new ossimPleiadesModel();
+      if ( model->open(filename) )
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimRadarSat2Model" << std::endl;
+         projection = model.get();
       }
-
-      if ( !projection )
+      else
       {
-         ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
-         if ( model->open(filename) )
-         {
-            // Check if a coarse grid was generated, and use it instead:
-            projection = model->getReplacementOcgModel().get();
-            if (projection.valid())
-               model = 0; // Have OCG, don't need this one anymore
-            else
-               projection = model.get();
-         }
+         model = 0;
+      }
+   }
+
+   if(traceDebug())
+   	{
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: testing ossimTerraSarModel" << std::endl;
+    }
+
+   if ( !projection )
+   {
+      ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
+
+     if ( model->open(filename) )
+      {
+         // Check if a coarse grid was generated, and use it instead:
+         projection = model->getReplacementOcgModel().get();
+         if (projection.valid())
+            model = 0; // Have OCG, don't need this one anymore
          else
-         {
-            model = 0;
-         }
-      }
-   
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimPleiadesModel" << std::endl;
-      }
-
-      // Pleiades
-      if ( !projection )
-      {
-         ossimRefPtr<ossimPleiadesModel> model = new ossimPleiadesModel();
-         if ( model->open(filename) )
-         {
             projection = model.get();
-         }
-         else
-         {
-            model = 0;
-         }
       }
-
-      if(traceDebug())
+      else
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimTerraSarModel" << std::endl;
+         model = 0;
       }
+   }
 
-      if ( !projection )
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: testing ossimErsSarModel" << std::endl;
+   }
+
+   if ( !projection )
+   {
+      ossimRefPtr<ossimErsSarModel> model = new ossimErsSarModel();
+      if ( model->open(filename) )
       {
-         ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
-
-         if ( model->open(filename) )
-         {
-            // Check if a coarse grid was generated, and use it instead:
-            projection = model->getReplacementOcgModel().get();
-            if (projection.valid())
-               model = 0; // Have OCG, don't need this one anymore
-            else
-               projection = model.get();
-         }
-         else
-         {
-            model = 0;
-         }
+         projection = model.get();
       }
-
-      if(traceDebug())
+      else
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimErsSarModel" << std::endl;
+         model = 0;
       }
+   }
 
-      if ( !projection )
-      {
-         ossimRefPtr<ossimErsSarModel> model = new ossimErsSarModel();
-         if ( model->open(filename) )
-         {
-            projection = model.get();
-         }
-         else
-         {
-            model = 0;
-         }
-      }
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: testing ossimEnvisatSarModel" << std::endl;
+   }
 
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimEnvisatSarModel" << std::endl;
-      }
+   if (!projection)
+   {
+     ossimRefPtr<ossimEnvisatAsarModel> model = new ossimEnvisatAsarModel();
+     if (model->open(filename))
+     {
+       projection = model.get();
+     }
+     else
+     {
+       model = 0;
+     }
+   }
 
-      if (!projection)
-      {
-         ossimRefPtr<ossimEnvisatAsarModel> model = new ossimEnvisatAsarModel();
-         if (model->open(filename))
-         {
-            projection = model.get();
-         }
-         else
-         {
-            model = 0;
-         }
-      }
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: testing ossimRadarSatModel" << std::endl;
+   }
 
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimRadarSatModel" << std::endl;
-      }
+   if (!projection)
+   {
+     ossimRefPtr<ossimRadarSatModel> model = new ossimRadarSatModel();
+     if (model->open(filename))
+     {
+       projection = model.get();
+     }
+     else
+     {
+       model = 0;
+     }
+   }
 
-      if (!projection)
-      {
-         ossimRefPtr<ossimRadarSatModel> model = new ossimRadarSatModel();
-         if (model->open(filename))
-         {
-            projection = model.get();
-         }
-         else
-         {
-            model = 0;
-         }
-      }
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: testing ossimAlosPalsarModel" << std::endl;
+   }
 
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimAlosPalsarModel" << std::endl;
-      }
+   if (!projection)
+   {
+     ossimRefPtr<ossimAlosPalsarModel> model = new ossimAlosPalsarModel();
+     if (model->open(filename))
+     {
+       projection = model.get();
+     }
+     else
+     {
+       model = 0;
+     }
+   }
 
-      if (!projection)
-      {
-         ossimRefPtr<ossimAlosPalsarModel> model = new ossimAlosPalsarModel();
-         if (model->open(filename))
-         {
-            projection = model.get();
-         }
-         else
-         {
-            model = 0;
-         }
-      }
+   if(traceDebug())
+   	{
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: testing ossimFormosatModel" << std::endl;
+    }
 
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimFormosatModel" << std::endl;
-      }
-
-      ossimFilename formosatTest = filename;
-      formosatTest = formosatTest.setExtension("geom");
-      if(!formosatTest.exists())
+   ossimFilename formosatTest = filename;
+   formosatTest = formosatTest.setExtension("geom");
+   if(!formosatTest.exists())
+   {
+      formosatTest = filename.path();
+      formosatTest = formosatTest.dirCat(ossimFilename("METADATA.DIM"));
+      if (formosatTest.exists() == false)
       {
          formosatTest = filename.path();
-         formosatTest = formosatTest.dirCat(ossimFilename("METADATA.DIM"));
-         if (formosatTest.exists() == false)
-         {
-            formosatTest = filename.path();
-            formosatTest = formosatTest.dirCat(ossimFilename("metadata.dim"));
-         }
+         formosatTest = formosatTest.dirCat(ossimFilename("metadata.dim"));
       }
-      if(formosatTest.exists())
+   }
+   if(formosatTest.exists())
+   {
+      ossimRefPtr<ossimFormosatDimapSupportData> meta =
+         new ossimFormosatDimapSupportData;
+      if(meta->loadXmlFile(formosatTest))
       {
-         ossimRefPtr<ossimFormosatDimapSupportData> meta =
-            new ossimFormosatDimapSupportData;
-         if(meta->loadXmlFile(formosatTest))
-         {
-            ossimRefPtr<ossimFormosatModel> model = new ossimFormosatModel(meta.get());
-            if(!model->getErrorStatus())
-            {
-               projection = model.get();
-            }
-            model = 0;
-         }
-      }
-
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimTileMapModel" << std::endl;
-      }
-
-      if (!projection)
-      {
-         ossimRefPtr<ossimTileMapModel> model = new ossimTileMapModel();
-         if (model->open(filename))
+   		 ossimRefPtr<ossimFormosatModel> model = new ossimFormosatModel(meta.get());
+         if(!model->getErrorStatus())
          {
             projection = model.get();
          }
-         else
-         {
-            model = 0;
-         }
+         model = 0;
       }
-
-      return projection.release();
    }
 
-   ossimProjection* ossimPluginProjectionFactory::createProjection(
-      const ossimString& name)const
+   if(traceDebug())
    {
-      static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimString& name)";
-
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: Entering ...." << std::endl;
-      }
-
-      //   else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
-      //    {
-      //      return new ossimCosmoSkymedModel;
-      //   }
-      if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
-      {
-         return new ossimRadarSat2Model();
-      }
-      else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
-      {
-         return new ossimTerraSarModel();
-      }
-      else if (name == STATIC_TYPE_NAME(ossimErsSarModel))
-      {
-         return new ossimErsSarModel;
-      }
-      else if (name == STATIC_TYPE_NAME(ossimEnvisatAsarModel))
-      {
-         return new ossimEnvisatAsarModel;
-      }
-      else if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
-      {
-         return new ossimRadarSatModel;
-      }
-      else if (name == STATIC_TYPE_NAME(ossimAlosPalsarModel))
-      {
-         return new ossimAlosPalsarModel;
-      }
-      else if (name == STATIC_TYPE_NAME(ossimFormosatModel))
-      {
-         return new ossimFormosatModel;
-      }
-      else if (name == STATIC_TYPE_NAME(ossimTileMapModel))
-      {
-         return new ossimTileMapModel;
-      }
-      else if (name == STATIC_TYPE_NAME(ossimPleiadesModel))
-      {
-         return new ossimPleiadesModel;
-      }
-
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: Leaving ...." << std::endl;
-      }
-
-      return 0;
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: testing ossimTileMapModel" << std::endl;
    }
 
-   ossimProjection* ossimPluginProjectionFactory::createProjection(
-      const ossimKeywordlist& kwl, const char* prefix)const
+   if (!projection)
    {
-      ossimRefPtr<ossimProjection> result = 0;
-      static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimKeywordlist& kwl)";
+     ossimRefPtr<ossimTileMapModel> model = new ossimTileMapModel();
+     if (model->open(filename))
+     {
+       projection = model.get();
+     }
+     else
+     {
+       model = 0;
+     }
+   }
 
-      if(traceDebug())
+   return projection.release();
+}
+
+ossimProjection* ossimPluginProjectionFactory::createProjection(
+   const ossimString& name)const
+{
+   static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimString& name)";
+
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: Entering ...." << std::endl;
+   }
+
+   //   else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
+   //    {
+   //      return new ossimCosmoSkymedModel;
+   //   }
+   if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
+   {
+      return new ossimRadarSat2Model();
+   }
+   else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
+   {
+      return new ossimTerraSarModel();
+   }
+   else if (name == STATIC_TYPE_NAME(ossimErsSarModel))
+   {
+     return new ossimErsSarModel;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimEnvisatAsarModel))
+   {
+     return new ossimEnvisatAsarModel;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
+   {
+     return new ossimRadarSatModel;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimAlosPalsarModel))
+   {
+     return new ossimAlosPalsarModel;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimFormosatModel))
+   {
+     return new ossimFormosatModel;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimTileMapModel))
+   {
+     return new ossimTileMapModel;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimPleiadesModel))
+   {
+     return new ossimPleiadesModel;
+   }
+
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: Leaving ...." << std::endl;
+   }
+
+   return 0;
+}
+
+ossimProjection* ossimPluginProjectionFactory::createProjection(
+   const ossimKeywordlist& kwl, const char* prefix)const
+{
+   ossimRefPtr<ossimProjection> result = 0;
+   static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimKeywordlist& kwl)";
+
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: Start ...." << std::endl;
+   }
+
+   const char* lookup = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
+   if (lookup)
+   {
+      ossimString type = lookup;
+
+      if (type == "ossimRadarSat2Model")
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: Start ...." << std::endl;
+         result = new ossimRadarSat2Model();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimTerraSarModel")
+      {
+         result = new ossimTerraSarModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimErsSarModel")
+      {
+         result = new ossimErsSarModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimEnvisatAsarModel")
+      {
+         result = new ossimEnvisatAsarModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimRadarSatModel")
+      {
+         result = new ossimRadarSatModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimAlosPalsarModel")
+      {
+         result = new ossimAlosPalsarModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimFormosatModel")
+      {
+         result = new ossimFormosatModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimTileMapModel")
+      {
+         result = new ossimTileMapModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimPleiadesModel")
+      {
+         result = new ossimPleiadesModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
       }
 
-      const char* lookup = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
-      if (lookup)
-      {
-         ossimString type = lookup;
+   }
 
-         if (type == "ossimRadarSat2Model")
-         {
-            result = new ossimRadarSat2Model();
-            if ( !result->loadState(kwl, prefix) )
-            {
-               result = 0;
-            }
-         }
-         else if (type == "ossimTerraSarModel")
-         {
-            result = new ossimTerraSarModel();
-            if ( !result->loadState(kwl, prefix) )
-            {
-               result = 0;
-            }
-         }
-         else if (type == "ossimErsSarModel")
-         {
-            result = new ossimErsSarModel();
-            if ( !result->loadState(kwl, prefix) )
-            {
-               result = 0;
-            }
-         }
-         else if (type == "ossimEnvisatAsarModel")
-         {
-            result = new ossimEnvisatAsarModel();
-            if ( !result->loadState(kwl, prefix) )
-            {
-               result = 0;
-            }
-         }
-         else if (type == "ossimRadarSatModel")
-         {
-            result = new ossimRadarSatModel();
-            if ( !result->loadState(kwl, prefix) )
-            {
-               result = 0;
-            }
-         }
-         else if (type == "ossimAlosPalsarModel")
-         {
-            result = new ossimAlosPalsarModel();
-            if ( !result->loadState(kwl, prefix) )
-            {
-               result = 0;
-            }
-         }
-         else if (type == "ossimFormosatModel")
-         {
-            result = new ossimFormosatModel();
-            if ( !result->loadState(kwl, prefix) )
-            {
-               result = 0;
-            }
-         }
-         else if (type == "ossimTileMapModel")
-         {
-            result = new ossimTileMapModel();
-            if ( !result->loadState(kwl, prefix) )
-            {
-               result = 0;
-            }
-         }
-         else if (type == "ossimPleiadesModel")
-         {
-            result = new ossimPleiadesModel();
-            if ( !result->loadState(kwl, prefix) )
-            {
-               result = 0;
-            }
-         }
-
-      }
-
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: End ...." << std::endl;
-      }
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: End ...." << std::endl;
+   }
    
-      return result.release();
-   }
+   return result.release();
+}
 
-   ossimObject* ossimPluginProjectionFactory::createObject(
-      const ossimString& typeName)const
-   {
-      return createProjection(typeName);
-   }
+ossimObject* ossimPluginProjectionFactory::createObject(
+   const ossimString& typeName)const
+{
+   return createProjection(typeName);
+}
 
-   ossimObject* ossimPluginProjectionFactory::createObject(
-      const ossimKeywordlist& kwl, const char* prefix)const
-   {
-      return createProjection(kwl, prefix);
-   }
+ossimObject* ossimPluginProjectionFactory::createObject(
+   const ossimKeywordlist& kwl, const char* prefix)const
+{
+   return createProjection(kwl, prefix);
+}
 
 
-   void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
-   {
-      typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
-      typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
-      typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
-      //   result.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
-      typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
-      typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
-      typeList.push_back(STATIC_TYPE_NAME(ossimAlosPalsarModel));
-      typeList.push_back(STATIC_TYPE_NAME(ossimFormosatModel));
-      typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
-      typeList.push_back(STATIC_TYPE_NAME(ossimPleiadesModel));
-   }
+void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
+{
+   typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
+   typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
+   //   result.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimAlosPalsarModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimFormosatModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimPleiadesModel));
+}
 
-   bool ossimPluginProjectionFactory::isTileMap(const ossimFilename& filename)const
-   {
-      ossimFilename temp(filename);
-      temp.downcase();
+bool ossimPluginProjectionFactory::isTileMap(const ossimFilename& filename)const
+{
+  ossimFilename temp(filename);
+  temp.downcase();
   
-      ossimString os = temp.beforePos(4);
+  ossimString os = temp.beforePos(4);
   
-      if(temp.ext()=="otb")
-      {
-         return true;
-      }
-      else if(os == "http")
-      {
-         return true;
-      }
-      return false;
-   }
+  if(temp.ext()=="otb")
+  {
+    return true;
+  }
+  else if(os == "http")
+  {
+    return true;
+  }
+  return false;
+}
 
 
 }

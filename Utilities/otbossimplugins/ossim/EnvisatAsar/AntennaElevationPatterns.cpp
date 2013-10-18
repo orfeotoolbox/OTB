@@ -46,8 +46,8 @@ namespace ossimplugins
       buf12[12] = '\0';
       char buf3[4];
       buf3[3] = '\0';
-      char buf2[3];
-      buf2[2] = '\0';
+      // char buf2[3];
+      // buf2[2] = '\0';
 //	char buf1[1]; // avoid not used warning
 
       is.read(buf12,12);

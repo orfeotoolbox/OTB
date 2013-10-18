@@ -16,72 +16,72 @@ namespace ossimplugins
 {
 
 
-   AlosPalsarPositionVectorRecord::AlosPalsarPositionVectorRecord()
-   {
-   }
+AlosPalsarPositionVectorRecord::AlosPalsarPositionVectorRecord()
+{
+}
 
-   AlosPalsarPositionVectorRecord::~AlosPalsarPositionVectorRecord()
-   {
-   }
+AlosPalsarPositionVectorRecord::~AlosPalsarPositionVectorRecord()
+{
+}
 
-   std::ostream& operator<<(std::ostream& os, const AlosPalsarPositionVectorRecord& data)
-   {
-      for (int i = 0; i < 3; i++)
-      {
-         os << "pos[" << i << "]:" << data._pos[i] << std::endl;
-      }
+std::ostream& operator<<(std::ostream& os, const AlosPalsarPositionVectorRecord& data)
+{
+  for (int i = 0; i < 3; i++)
+  {
+    os << "pos[" << i << "]:" << data._pos[i] << std::endl;
+  }
 
-      for (int i = 0; i < 3; i++)
-      {
-         os << "vel[" << i << "]:" << data._vel[i] << std::endl;
-      }
-      return os;
-   }
+  for (int i = 0; i < 3; i++)
+  {
+    os << "vel[" << i << "]:" << data._vel[i] << std::endl;
+  }
+  return os;
+}
 
-   std::istream& operator>>(std::istream& is, AlosPalsarPositionVectorRecord& data)
-   {
-      char buf[23];
-      buf[22] = '\0';
+std::istream& operator>>(std::istream& is, AlosPalsarPositionVectorRecord& data)
+{
+  char buf[23];
+  buf[22] = '\0';
 
-      for (int i = 0; i < 3; i++)
-      {
-         is.read(buf, 22);
-         data._pos[i] = atof(buf);
-      }
+  for (int i = 0; i < 3; i++)
+  {
+    is.read(buf, 22);
+    data._pos[i] = atof(buf);
+  }
 
-      for (int i = 0; i < 3; i++)
-      {
-         is.read(buf, 22);
-         data._vel[i] = atof(buf);
-      }
-      return is;
-   }
+  for (int i = 0; i < 3; i++)
+  {
+    is.read(buf, 22);
+    data._vel[i] = atof(buf);
+  }
+  return is;
+}
 
-   AlosPalsarPositionVectorRecord::AlosPalsarPositionVectorRecord(const AlosPalsarPositionVectorRecord& rhs)
-   {
-      for (int i = 0; i < 3; i++)
-      {
-         _pos[i] = rhs._pos[i];
-      }
+AlosPalsarPositionVectorRecord::AlosPalsarPositionVectorRecord(const AlosPalsarPositionVectorRecord& rhs)
+{
+  for (int i = 0; i < 3; i++)
+  {
+    _pos[i] = rhs._pos[i];
+  }
 
-      for (int i = 0; i < 3; i++)
-      {
-         _vel[i] = rhs._vel[i];
-      }
-   }
+  for (int i = 0; i < 3; i++)
+  {
+    _vel[i] = rhs._vel[i];
+  }
+}
 
-   AlosPalsarPositionVectorRecord& AlosPalsarPositionVectorRecord::operator=(const AlosPalsarPositionVectorRecord& rhs)
-   {
-      for (int i = 0; i < 3; i++)
-      {
-         _pos[i] = rhs._pos[i];
-      }
+AlosPalsarPositionVectorRecord& AlosPalsarPositionVectorRecord::operator=(const AlosPalsarPositionVectorRecord& rhs)
+{
+  for (int i = 0; i < 3; i++)
+  {
+    _pos[i] = rhs._pos[i];
+  }
 
-      for (int i = 0; i < 3; i++)
-      {
-         _vel[i] = rhs._vel[i];
-      }
-      return *this;
-   }
+  for (int i = 0; i < 3; i++)
+  {
+    _vel[i] = rhs._vel[i];
+  }
+  return *this;
+}
 
 }

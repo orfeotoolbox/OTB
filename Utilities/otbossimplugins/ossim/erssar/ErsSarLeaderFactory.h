@@ -25,24 +25,24 @@ namespace ossimplugins
  * @brief This class is a facory able to construct Record base classes
  *
  */
-   class ErsSarLeaderFactory : public ErsSarRecordFactory
-   {
-   public:
-      /**
-       * @brief Contstructor
-       */
-      ErsSarLeaderFactory();
-      /**
-       * @brief Destructor
-       */
-      virtual ~ErsSarLeaderFactory();
+class ErsSarLeaderFactory : public ErsSarRecordFactory
+{
+public:
+  /**
+   * @brief Contstructor
+   */
+  ErsSarLeaderFactory();
+  /**
+   * @brief Destructor
+   */
+  virtual ~ErsSarLeaderFactory();
 
 
-   protected:
+protected:
 
 
-   private:
-   };
+private:
+};
 }
 
 #endif

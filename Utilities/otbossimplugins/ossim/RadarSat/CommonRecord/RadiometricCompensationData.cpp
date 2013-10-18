@@ -84,7 +84,7 @@ namespace ossimplugins
       }
    }
 
-   RadiometricCompensationData& RadiometricCompensationData::operator=(const RadiometricCompensationData& rhs)
+   RadiometricCompensationData& RadiometricCompensationData::operator=(const RadiometricCompensationData& /* rhs */)
    {
       return *this;
    }

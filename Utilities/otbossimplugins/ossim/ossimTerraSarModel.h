@@ -103,11 +103,11 @@ namespace ossimplugins
       virtual std::ostream& print(std::ostream& out) const;
 
       //---
-      // Convenient method to print important image info:
+   	  // Convenient method to print important image info:
       //---
       void  printInfo (ostream& os) const;
    
-   private:
+      private:
 
       virtual bool InitPlatformPosition(const ossimKeywordlist &kwl,
                                         const char *prefix);
@@ -148,7 +148,7 @@ namespace ossimplugins
        * @return true on success, false on error.
        */
       bool initAcquisitionInfo( const ossimXmlDocument* xdoc, 
-                                const ossimTerraSarProductDoc& tsDoc);
+                        const ossimTerraSarProductDoc& tsDoc);
 
       /**
        * @brief Method to initialize Calibration parameters from
@@ -156,8 +156,8 @@ namespace ossimplugins
        * @param xdoc Opened product xml file.
        * @return true on success, false on error.
        */
-      bool initCalibration( const ossimXmlDocument* xmlDocument, 
-                            const ossimTerraSarProductDoc& tsDoc);
+	  bool initCalibration( const ossimXmlDocument* xmlDocument, 
+                        const ossimTerraSarProductDoc& tsDoc);
 
       /**
        * @brief Method to initialize InfoIncidenceAngle parameters from
@@ -166,7 +166,7 @@ namespace ossimplugins
        * @return true on success, false on error.
        */
       bool initSceneCoord(
-         const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc);
+		     const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc);
 
       /**
        * @brief Method to initialize ImageNoise parameters from
@@ -200,7 +200,7 @@ namespace ossimplugins
        * @param file image or metadata path.
        * @return true on success, false on error.
        */
-      bool getPolLayerFromImageFile( const ossimXmlDocument* xmlDocument, const ossimFilename& imageFilename);
+       bool getPolLayerFromImageFile( const ossimXmlDocument* xmlDocument, const ossimFilename& imageFilename);
 
       /**
        * @brief Slant Range TO Ground Range Projection reference point
@@ -316,13 +316,13 @@ namespace ossimplugins
       /**
        * @brief Generation time.
        */
-      ossimString _generationTime;
+       ossimString _generationTime;
 
       ossimFilename theProductXmlFile;
 
       TYPE_DATA
 
-         };
+   };
 
 } // End: namespace ossimplugins
 

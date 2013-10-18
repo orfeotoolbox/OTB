@@ -74,10 +74,10 @@ namespace ossimplugins
       buf16[16] = '\0';
       char buf32[33];
       buf32[32] = '\0';
-      char buf8[9];
-      buf8[8] = '\0';
-      char buf4[5];
-      buf4[4] = '\0';
+      // char buf8[9];
+      // buf8[8] = '\0';
+      // char buf4[5];
+      // buf4[4] = '\0';
 
       is.read(buf16, 16);
 

@@ -12,14 +12,15 @@
 // Contains function declarations for translating between OGC WKT strings,
 // and OSSIM projection definitions.
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.h 19683 2011-05-31 14:24:10Z dburken $
+//  $Id: ossimOgcWktTranslator.h 20724 2012-04-13 21:00:52Z dburken $
 
 #ifndef ossimOgcWktTranslator_HEADER
 #define ossimOgcWktTranslator_HEADER
 
+#include <ossimPluginConstants.h>
+
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimString.h>
-#include <ossimPluginConstants.h>
 
 #include <map>
 #include <string>

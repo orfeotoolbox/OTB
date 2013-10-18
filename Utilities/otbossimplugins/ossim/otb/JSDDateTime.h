@@ -20,115 +20,115 @@ namespace ossimplugins
 {
 
 
-   class CivilDateTime;
-   class GMSTDateTime;
-   class JulianDate;
+class CivilDateTime;
+class GMSTDateTime;
+class JulianDate;
 
 /**
  * @brief This class represents a date
  */
-   class OSSIM_PLUGINS_DLL JSDDateTime
+class OSSIM_PLUGINS_DLL JSDDateTime
+{
+public:
+   /**
+    * @brief constructor
+    */
+   JSDDateTime();
+   /**
+    * @brief Destructor
+    */
+   ~JSDDateTime();
+   /**
+    * @brief Copy constructor
+    */
+   JSDDateTime(const JSDDateTime& rhs);
+
+   /**
+    * @brief Constructor with date initialisation
+    */
+   JSDDateTime(JulianDate day0hTU, double second, double decimal);
+
+   /**
+    * @brief Constructor with date initialisation using a CivilDateTime
+    */
+   JSDDateTime(CivilDateTime& rhs);
+
+   /**
+    * @brief Constructor with date initialisation using a CivilDateTime
+    */
+   JSDDateTime(JulianDate& rhs);
+
+   /**
+    * @brief Constructor with date initialisation using a MJDDateTime (Modified Julian Date - Used for ENVISAT)
+    */
+   JSDDateTime(MJDDateTime& rhs);
+
+   /**
+    * @brief Affectation operator
+    */
+   JSDDateTime& operator=(const JSDDateTime& rhs);
+
+   JulianDate get_day0hTU() const
    {
-   public:
-      /**
-       * @brief constructor
-       */
-      JSDDateTime();
-      /**
-       * @brief Destructor
-       */
-      ~JSDDateTime();
-      /**
-       * @brief Copy constructor
-       */
-      JSDDateTime(const JSDDateTime& rhs);
+      return _day0hTU;
+   }
 
-      /**
-       * @brief Constructor with date initialisation
-       */
-      JSDDateTime(JulianDate day0hTU, double second, double decimal);
+   double get_second() const
+   {
+      return _second;
+   }
 
-      /**
-       * @brief Constructor with date initialisation using a CivilDateTime
-       */
-      JSDDateTime(CivilDateTime& rhs);
+   double get_decimal() const
+   {
+      return _decimal;
+   }
 
-      /**
-       * @brief Constructor with date initialisation using a CivilDateTime
-       */
-      JSDDateTime(JulianDate& rhs);
+   void set_day0hTU(JulianDate  day)
+   {
+      _day0hTU = day;
+   }
 
-      /**
-       * @brief Constructor with date initialisation using a MJDDateTime (Modified Julian Date - Used for ENVISAT)
-       */
-      JSDDateTime(MJDDateTime& rhs);
+   void set_second(double second)
+   {
+      _second = second;
+   }
 
-      /**
-       * @brief Affectation operator
-       */
-      JSDDateTime& operator=(const JSDDateTime& rhs);
+   void set_decimal(double decimal)
+   {
+      _decimal = decimal;
+   }
 
-      JulianDate get_day0hTU() const
-      {
-         return _day0hTU;
-      }
+   void NormDate() ;
 
-      double get_second() const
-      {
-         return _second;
-      }
+   /**
+    * @brief This function converts the current JSDDateTime into Julian Date
+    * @return 0 if no error or an int greater than 0 indicating the error
+    * @param julianDate [out] The classe that receives the result of the conversion of the current JSDDateTime in JulianDate
+    */
+   int AsJulianDate(JulianDate* julian);
 
-      double get_decimal() const
-      {
-         return _decimal;
-      }
+   /**
+    * @brief This function converts the current JSDDateTime into GMST Date
+    * @return 0 if no error or an int greater than 0 indicating the error
+    * @param julianDate [out] The class that receives the result of the conversion of the current JSDDateTime into GMST Date
+    */
+   int AsGMSTDateTime(GMSTDateTime* GMST);
 
-      void set_day0hTU(JulianDate  day)
-      {
-         _day0hTU = day;
-      }
+   operator JulianDate() ;
+   operator GMSTDateTime() ;
 
-      void set_second(double second)
-      {
-         _second = second;
-      }
+protected:
 
-      void set_decimal(double decimal)
-      {
-         _decimal = decimal;
-      }
-
-      void NormDate() ;
-
-      /**
-       * @brief This function converts the current JSDDateTime into Julian Date
-       * @return 0 if no error or an int greater than 0 indicating the error
-       * @param julianDate [out] The classe that receives the result of the conversion of the current JSDDateTime in JulianDate
-       */
-      int AsJulianDate(JulianDate* julian);
-
-      /**
-       * @brief This function converts the current JSDDateTime into GMST Date
-       * @return 0 if no error or an int greater than 0 indicating the error
-       * @param julianDate [out] The class that receives the result of the conversion of the current JSDDateTime into GMST Date
-       */
-      int AsGMSTDateTime(GMSTDateTime* GMST);
-
-      operator JulianDate() ;
-      operator GMSTDateTime() ;
-
-   protected:
-
-      /**
-       * @brief Julian day at 0h00 UT
-       */
-      JulianDate _day0hTU;
-      double _second;
-      double _decimal;
+   /**
+    * @brief Julian day at 0h00 UT
+    */
+   JulianDate _day0hTU;
+   double _second;
+   double _decimal;
 
 
-   private:
-   };
+private:
+};
 }
 
 #endif

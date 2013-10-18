@@ -698,7 +698,7 @@ namespace ossimplugins
 
    }
 
-   ProcessingParameters& ProcessingParameters::operator=(const ProcessingParameters& rhs)
+   ProcessingParameters& ProcessingParameters::operator=(const ProcessingParameters& /* rhs */)
    {
       /*
 	int   _rec_seq

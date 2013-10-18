@@ -26,63 +26,63 @@ namespace ossimplugins
  * @ingroup IncidenceAngles
  * @brief This class represents Incidence Angles
  */
-   class OSSIM_PLUGINS_DLL IncidenceAngles
-   {
-   public:
-      /**
-       * @brief Constructor
-       */
-      IncidenceAngles();
+class OSSIM_PLUGINS_DLL IncidenceAngles
+{
+public:
+   /**
+    * @brief Constructor
+    */
+  IncidenceAngles();
 
-      /**
-       * @brief Destructor
-       */
-      virtual ~IncidenceAngles();
+   /**
+    * @brief Destructor
+    */
+  virtual ~IncidenceAngles();
 
-      /**
-       * @brief Copy constructor
-       */
-      IncidenceAngles(const IncidenceAngles& rhs);
+   /**
+    * @brief Copy constructor
+    */
+  IncidenceAngles(const IncidenceAngles& rhs);
 
-      /**
-       * @brief Affectation operator
-       */
-      IncidenceAngles& operator=(const IncidenceAngles& rhs);
+   /**
+    * @brief Affectation operator
+    */
+  IncidenceAngles& operator=(const IncidenceAngles& rhs);
 
-      /**
-       * @brief Method to save object state to a keyword list.
-       * @param kwl Keyword list to save to.
-       * @param prefix added to keys when saved.
-       * @return true on success, false on error.
-       */
-      bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
+   /**
+    * @brief Method to save object state to a keyword list.
+    * @param kwl Keyword list to save to.
+    * @param prefix added to keys when saved.
+    * @return true on success, false on error.
+    */
+   bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
 
-      /**
-       * @brief Method to the load (recreate) the state of the object from a
-       * keyword list. Return true if ok or false on error.
-       * @return true if load OK, false on error
-       */
-      bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
-      /*!
-       * METHOD: print()
-       * Fulfills base-class pure virtual. Dumps contents of object to ostream.
-       */
-      virtual std::ostream& print(std::ostream& out) const;
+   /**
+    * @brief Method to the load (recreate) the state of the object from a
+    * keyword list. Return true if ok or false on error.
+    * @return true if load OK, false on error
+    */
+   bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+   /*!
+    * METHOD: print()
+    * Fulfills base-class pure virtual. Dumps contents of object to ostream.
+    */
+   virtual std::ostream& print(std::ostream& out) const;
 
-      void set_numberOfCornerIncidenceAngles(const ossim_uint32& numberOfCornerIncidenceAngles)
-      {
-         _numberOfCornerIncidenceAngles = numberOfCornerIncidenceAngles;
-      }
-      void set_centerInfoIncidenceAngle(const InfoIncidenceAngle& centerInfoIncidenceAngle)
-      {
-         _centerInfoIncidenceAngle = centerInfoIncidenceAngle;
-      }
-      void set_cornersInfoIncidenceAngle(const std::vector<InfoIncidenceAngle>& cornersInfoIncidenceAngle)
-      {
-         _tabCornersInfoIncidenceAngle = cornersInfoIncidenceAngle;
-      }
+  void set_numberOfCornerIncidenceAngles(const ossim_uint32& numberOfCornerIncidenceAngles)
+  {
+    _numberOfCornerIncidenceAngles = numberOfCornerIncidenceAngles;
+  }
+  void set_centerInfoIncidenceAngle(const InfoIncidenceAngle& centerInfoIncidenceAngle)
+  {
+    _centerInfoIncidenceAngle = centerInfoIncidenceAngle;
+  }
+  void set_cornersInfoIncidenceAngle(const std::vector<InfoIncidenceAngle>& cornersInfoIncidenceAngle)
+  {
+    _tabCornersInfoIncidenceAngle = cornersInfoIncidenceAngle;
+  }
 
-   protected:
+protected:
 
       /**
        * @brief Number of incidence angles
@@ -97,8 +97,8 @@ namespace ossimplugins
        */
       std::vector<InfoIncidenceAngle> _tabCornersInfoIncidenceAngle;
   
-   private:
-   };
+private:
+};
 }
 
 #endif

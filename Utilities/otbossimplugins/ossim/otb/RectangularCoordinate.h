@@ -19,40 +19,40 @@ namespace ossimplugins
 {
 
 
-   class GeodesicCoordinate;
+class GeodesicCoordinate;
 /**
  * @ingroup Date
  * @brief This class represents a coordinate in a rectangular reference
  */
-   class OSSIM_PLUGINS_DLL RectangularCoordinate : public Coordinate
-   {
-   public:
-      /**
-       * @brief Constructor
-       */
-      RectangularCoordinate();
-      /**
-       * @brief Destructor
-       */
-      ~RectangularCoordinate();
-      /**
-       * @brief Cosntructor with initializations
-       */
-      RectangularCoordinate(double x, double y, double z);
-      /**
-       * @brief Copy constructor
-       */
-      RectangularCoordinate(const RectangularCoordinate& rhs);
+ class OSSIM_PLUGINS_DLL RectangularCoordinate : public Coordinate
+ {
+ public:
+  /**
+    * @brief Constructor
+    */
+  RectangularCoordinate();
+  /**
+   * @brief Destructor
+   */
+  ~RectangularCoordinate();
+  /**
+   * @brief Cosntructor with initializations
+   */
+  RectangularCoordinate(double x, double y, double z);
+  /**
+   * @brief Copy constructor
+   */
+  RectangularCoordinate(const RectangularCoordinate& rhs);
 
-      /**
-       * @brief Affectation operator
-       */
-      RectangularCoordinate& operator=(const RectangularCoordinate& rhs);
+  /**
+   * @brief Affectation operator
+   */
+  RectangularCoordinate& operator=(const RectangularCoordinate& rhs);
 
-      void AsGeodesicCoordinates(double demiGdAxe, double demiPtAxe, GeodesicCoordinate* geod);
-   protected:
-   private:
-   };
+  void AsGeodesicCoordinates(double demiGdAxe, double demiPtAxe, GeodesicCoordinate* geod);
+ protected:
+ private:
+ };
 }
 
-#endif
+ #endif

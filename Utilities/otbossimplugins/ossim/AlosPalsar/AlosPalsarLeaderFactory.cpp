@@ -21,19 +21,19 @@
 namespace ossimplugins
 {
 
-   AlosPalsarLeaderFactory::AlosPalsarLeaderFactory()
-   {
-      RegisterRecord(17, new AlosPalsarFacilityData());
-      RegisterRecord(5, new AlosPalsarRadiometricData());
-      RegisterRecord(3, new AlosPalsarPlatformPositionData());
+AlosPalsarLeaderFactory::AlosPalsarLeaderFactory()
+{
+  RegisterRecord(17, new AlosPalsarFacilityData());
+  RegisterRecord(5, new AlosPalsarRadiometricData());
+  RegisterRecord(3, new AlosPalsarPlatformPositionData());
 //  RegisterRecord(3, new AlosPalsarMapProjectionData());//
-      RegisterRecord(2, new AlosPalsarDataSetSummary());
-      RegisterRecord(1, new AlosPalsarFileDescriptor());
-   }
+  RegisterRecord(2, new AlosPalsarDataSetSummary());
+  RegisterRecord(1, new AlosPalsarFileDescriptor());
+}
 
-   AlosPalsarLeaderFactory::~AlosPalsarLeaderFactory()
-   {
+AlosPalsarLeaderFactory::~AlosPalsarLeaderFactory()
+{
 
-   }
+}
 
 }

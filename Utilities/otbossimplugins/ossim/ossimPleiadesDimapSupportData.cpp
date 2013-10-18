@@ -950,6 +950,8 @@ namespace ossimplugins
          }
       }
 
+      // const char* lookup;
+
       theImageSize      = createIpt(kwl.find(prefix, "image_size"));
       theRefGroundPoint = createGround(kwl.find(prefix, "reference_ground_point"));
       theRefImagePoint  = createDpt(kwl.find(prefix, "reference_image_point"));
@@ -1309,27 +1311,31 @@ namespace ossimplugins
          }
 
          ossimString bandName = sub_nodes[0]->getText();
-         ossim_uint32 bandIndex;
-         if (bandName == "B0")
+         ossim_uint32 bandIndex = 99999; // Bogus index...
+         if ( (bandName == "B0") || (bandName == "P") ||
+              (bandName == "PA") || (theNumBands == 1) )
+         {
             bandIndex = 0;
+         }
+         else if ( (bandName == "B1") && (theNumBands > 1) )
+         {
+            bandIndex = 1;
+         }
+         else if ( (bandName == "B2") && (theNumBands > 2) )
+         {
+            bandIndex = 2;
+         }
+         else if ( (bandName == "B3") && (theNumBands > 3) )
+         {
+            bandIndex = 3;
+         }         
          else
-            if (bandName == "B1")
-               bandIndex = 1;
-            else
-               if (bandName == "B2")
-                  bandIndex = 2;
-               else
-                  if (bandName == "B3")
-                     bandIndex = 3;
-                  else
-                     if (bandName == "P") bandIndex = 0;
-                     else
-                     {
-                        ossimNotify(ossimNotifyLevel_WARN)
-                           << "ossimPleiadesDimapSupportData::parseRadiometricMetadata ERROR: Band ID is incorrect\n";
-                     }
-
-         if ((bandIndex >= theNumBands ) )
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimPleiadesDimapSupportData::parseRadiometricMetadata ERROR: Band ID is incorrect\n";
+         }
+         
+         if (bandIndex >= theNumBands )
          {
             ossimNotify(ossimNotifyLevel_WARN)
                << "ossimPleiadesDimapSupportData::parseRadiometricMetadata ERROR: Band index outside of range\n";
@@ -1381,36 +1387,30 @@ namespace ossimplugins
          }
 
          ossimString bandName = sub_nodes[0]->getText();
-         ossim_uint32 bandIndex;
-         if (bandName == "B0")
+         ossim_uint32 bandIndex = 99999; // Bogus index...
+         if ( (bandName == "B0") || (bandName == "P") ||
+              (bandName == "PA") || (theNumBands == 1) )
+         {
             bandIndex = 0;
+         }
+         else if ( (bandName == "B1") && (theNumBands > 1) )
+         {
+            bandIndex = 1;
+         }
+         else if ( (bandName == "B2") && (theNumBands > 2) )
+         {
+            bandIndex = 2;
+         }
+         else if ( (bandName == "B3") && (theNumBands > 3) )
+         {
+            bandIndex = 3;
+         }
          else
-            if (bandName == "B1")
-               if (theNumBands != 1)
-                  bandIndex = 1;
-               else
-                  bandIndex = 0;
-            else
-               if (bandName == "B2")
-                  if (theNumBands != 1)
-                     bandIndex = 2;
-                  else
-                     bandIndex = 0;
-               else
-                  if (bandName == "B3")
-                     if (theNumBands != 1)
-                        bandIndex = 3;
-                     else
-                        bandIndex = 0;
-                  else
-                     if (bandName == "P")
-                        bandIndex = 0;
-                     else
-                     {
-                        ossimNotify(ossimNotifyLevel_WARN)
-                           << "ossimPleiadesDimapSupportData::parseRadiometricMetadata ERROR: Band ID is incorrect\n";
-                     }
-
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimPleiadesDimapSupportData::parseRadiometricMetadata ERROR: Band ID is incorrect\n";
+         }
+         
          if ((bandIndex >= theNumBands))
          {
             ossimNotify(ossimNotifyLevel_WARN)
@@ -1433,7 +1433,6 @@ namespace ossimplugins
 
       return true;
    }
-
 
    bool ossimPleiadesDimapSupportData::parseRPCMetadata(
       ossimRefPtr<ossimXmlDocument> xmlDocument)
@@ -1777,7 +1776,7 @@ namespace ossimplugins
 
    bool ossimPleiadesDimapSupportData::parseMetadataIdentificationDIMAPv1(ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
-      static const char MODULE[] = "ossimPleiadesDimapSupportData::parseMetadataIdentification";
+      // static const char MODULE[] = "ossimPleiadesDimapSupportData::parseMetadataIdentification";
 
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
       ossimString xpath, nodeValue;
@@ -1829,7 +1828,7 @@ namespace ossimplugins
    }
    bool ossimPleiadesDimapSupportData::parseMetadataIdentificationDIMAPv2(ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
-      static const char MODULE[] = "ossimPleiadesDimapSupportData::parseMetadataIdentification";
+      // static const char MODULE[] = "ossimPleiadesDimapSupportData::parseMetadataIdentification";
 
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
       ossimString xpath, nodeValue;
@@ -1953,24 +1952,24 @@ namespace ossimplugins
       return true;
    }
 
-   bool ossimPleiadesDimapSupportData::parseDatasetIdentification(ossimRefPtr<ossimXmlDocument> xmlDocument)
+   bool ossimPleiadesDimapSupportData::parseDatasetIdentification(ossimRefPtr<ossimXmlDocument> /* xmlDocument */ )
    {
       return true;
    }
 
-   bool ossimPleiadesDimapSupportData::parseCoordinateReferenceSystem(ossimRefPtr<ossimXmlDocument> xmlDocument)
+   bool ossimPleiadesDimapSupportData::parseCoordinateReferenceSystem(ossimRefPtr<ossimXmlDocument> /* xmlDocument */ )
    {
       return true;
    }
 
-   bool ossimPleiadesDimapSupportData::parseGeoposition(ossimRefPtr<ossimXmlDocument> xmlDocument)
+   bool ossimPleiadesDimapSupportData::parseGeoposition(ossimRefPtr<ossimXmlDocument> /* xmlDocument */ )
    {
       return true;
    }
 
    bool ossimPleiadesDimapSupportData::parseProcessingInformation(ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
-      static const char MODULE[] = "ossimPleiadesDimapSupportData::parseProcessingInformation";
+      // static const char MODULE[] = "ossimPleiadesDimapSupportData::parseProcessingInformation";
 
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
       ossimString xpath, nodeValue;
@@ -2470,14 +2469,14 @@ namespace ossimplugins
       return true;
    }
 
-   bool ossimPleiadesDimapSupportData::parseQualityAssessment(ossimRefPtr<ossimXmlDocument> xmlDocument)
+   bool ossimPleiadesDimapSupportData::parseQualityAssessment(ossimRefPtr<ossimXmlDocument> /* xmlDocument */ )
    {
       return true;
    }
 
    bool ossimPleiadesDimapSupportData::parseDatasetSources(ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
-      static const char MODULE[] = "ossimPleiadesDimapSupportData::parseDatasetSources";
+      // static const char MODULE[] = "ossimPleiadesDimapSupportData::parseDatasetSources";
       ossimString xpath, nodeValue;
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
@@ -2618,3 +2617,4 @@ namespace ossimplugins
    }
 
 }
+

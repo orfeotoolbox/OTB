@@ -378,9 +378,8 @@ namespace ossimplugins
 
    }
 
-   ImageOptionsFileDescriptor& ImageOptionsFileDescriptor::operator=(const ImageOptionsFileDescriptor& rhs)
+   ImageOptionsFileDescriptor& ImageOptionsFileDescriptor::operator=(const ImageOptionsFileDescriptor& /* rhs */)
    {
-
       return *this;
    }
 }

@@ -9,8 +9,6 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <cstdlib>
-
 #include <ossimTerraSarTiffReader.h>
 #include <ossimTerraSarProductDoc.h>
 #include <ossimTerraSarModel.h>
@@ -31,13 +29,13 @@ static const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
 
 namespace ossimplugins
 {
-   RTTI_DEF1(ossimTerraSarTiffReader,
-             "ossimTerraSarTiffReader",
-             ossimTiffTileSource)
+RTTI_DEF1(ossimTerraSarTiffReader,
+          "ossimTerraSarTiffReader",
+          ossimTiffTileSource)
 }
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id$";
+   static const char OSSIM_ID[] = "$Id$";
 #endif
    
 static ossimTrace traceDebug("ossimTerraSarTiffReader:degug");  
@@ -158,16 +156,16 @@ bool ossimplugins::ossimTerraSarTiffReader::open(const ossimFilename& file)
    // Check extension to see if it's xml.
    if ( file.ext().downcase() == "xml" )
    {
-      ossimXmlDocument* xdoc = new ossimXmlDocument();
+      ossimRefPtr<ossimXmlDocument> xdoc = new ossimXmlDocument();
       if ( xdoc->openFile(file) )
       {
          // See if it's a TerraSAR-X product xml file.
-         if ( isTerraSarProductFile(xdoc) )
+         if ( isTerraSarProductFile( xdoc.get() ) )
          {
             ossimString s;
             ossimTerraSarProductDoc helper;
             
-            if ( helper.getImageFile(xdoc, s) )
+            if ( helper.getImageFile(xdoc.get(), s) )
             {
                ossimFilename imageFile = file.expand().path();
                imageFile = imageFile.dirCat(s);
@@ -184,8 +182,6 @@ bool ossimplugins::ossimTerraSarTiffReader::open(const ossimFilename& file)
             }
          }
       }
-      delete xdoc;
-      xdoc = 0;
       
    } // matches: if ( file.ext().downcase() == "xml" )
 
@@ -252,12 +248,12 @@ ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry() const
 
    ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry();
    
-   ossimXmlDocument* xdoc = new ossimXmlDocument();
+   ossimRefPtr<ossimXmlDocument> xdoc = new ossimXmlDocument();
    if ( xdoc->openFile(theProductXmlFile) )
    {
       ossimTerraSarProductDoc helper;
       ossimString s;
-      if ( helper.getProjection(xdoc, s) )
+      if ( helper.getProjection(xdoc.get(), s) )
       {
          s.upcase();
          if ( s == "GROUNDRANGE" )
@@ -284,7 +280,7 @@ ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry() const
             {
                ossimRefPtr<ossimProjection> proj =
                   ossimProjectionFactoryRegistry::instance()->
-                  createProjection(kwl);
+                     createProjection(kwl);
             
                if ( proj.valid() )
                {
@@ -306,9 +302,6 @@ ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry() const
       
    } // matches: if ( xdoc->openFile(theProductXmlFile) )
    
-   delete xdoc;
-   xdoc = 0;
-
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited..." << std::endl;
@@ -325,15 +318,11 @@ bool ossimplugins::ossimTerraSarTiffReader::isTerraSarProductFile(
    // Check extension to see if it's xml.
    if ( file.ext().downcase() == "xml" )
    {
-      ossimXmlDocument* xdoc = new ossimXmlDocument();
-
+      ossimRefPtr<ossimXmlDocument> xdoc = new ossimXmlDocument();
       if ( xdoc->openFile(file) )
       {
-         result = isTerraSarProductFile(xdoc);
+         result = isTerraSarProductFile( xdoc.get() );
       }
-
-      delete xdoc;
-      xdoc = 0;
    }
    
    return result;

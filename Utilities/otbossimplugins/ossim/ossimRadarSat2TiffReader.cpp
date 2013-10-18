@@ -30,13 +30,13 @@ static const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
 
 namespace ossimplugins
 {
-   RTTI_DEF1(ossimRadarSat2TiffReader,
-             "ossimRadarSat2TiffReader",
-             ossimTiffTileSource)
+RTTI_DEF1(ossimRadarSat2TiffReader,
+          "ossimRadarSat2TiffReader",
+          ossimTiffTileSource)
 }
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id$";
+   static const char OSSIM_ID[] = "$Id$";
 #endif
    
 static ossimTrace traceDebug("ossimRadarSat2TiffReader:degug");  

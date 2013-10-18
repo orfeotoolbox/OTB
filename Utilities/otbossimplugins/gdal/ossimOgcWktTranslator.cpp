@@ -15,7 +15,7 @@
 // accomplish the translation. 
 //
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.cpp 19683 2011-05-31 14:24:10Z dburken $
+//  $Id: ossimOgcWktTranslator.cpp 20724 2012-04-13 21:00:52Z dburken $
 
 #include <cstdio>
 #include <gdal.h>
@@ -148,7 +148,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    oSRS.SetLinearUnits("Meter", 1.0);
 
    int pcsCodeVal = (pcsCode.empty() == false) ? pcsCode.toInt() : EPSG_CODE_MAX;
-
+   
    // since approximately ossim version r20036
    // kwl.find(prefix, ossimKeywordNames::PCS_CODE_KW)
    // return 0 instead of "" previously.
@@ -156,8 +156,8 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    // Since EPSG:0 is not a valid epsg code, the fix is safe
    // (ref http://spatialreference.org/ref/epsg/)
    if(pcsCodeVal == 0)
-      pcsCodeVal = EPSG_CODE_MAX;
-
+        pcsCodeVal = EPSG_CODE_MAX;
+   
    if(pcsCodeVal < EPSG_CODE_MAX)
    {
       // ESH 06/2008 -- HACK!!!
@@ -176,7 +176,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
          ossimString epsg_spec = proj_db->findProjectionCode(newPcsCodeName);
          ossim_uint32 new_code = epsg_spec.after(":").toUInt32();
          if (new_code)
-            pcsCodeVal = new_code;
+          pcsCodeVal = new_code;
       }
       oSRS.importFromEPSG( pcsCodeVal );
    }
@@ -521,7 +521,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       }
       else if(datumType == "NTF")
       {
-         oSRS.SetWellKnownGeogCS("EPSG:4275");
+        oSRS.SetWellKnownGeogCS("EPSG:4275");
       }
       else
       {
@@ -926,16 +926,15 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       {
          oDatum = "WGE";
       }
-
-      // Trouble with ESPG 3857
-      // The ellipsoid used by ossim is the WGS84 one with minor and major axis differs.
-      // We need to build our own projection in this case.
-      if( oDatum == "WGE" && ossimString(epsg_code) == "3857" )
-      {
-         oDatum = "6055";
-      }
    }
-       
+   
+   // Trouble with ESPG 3857 
+   // The ellipsoid used by ossim is the WGS84 one with minor and major axis differs. 
+   // We need to build our own projection in this case. 
+   if( oDatum == "WGE" && ossimString(epsg_code) == "3857" ) 
+   { 
+      oDatum = "6055";
+   }     
    kwl.add(prefix, ossimKeywordNames::DATUM_KW, oDatum, true);
      
    OSRDestroySpatialReference( hSRS );

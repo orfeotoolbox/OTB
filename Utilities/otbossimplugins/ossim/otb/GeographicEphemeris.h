@@ -19,56 +19,56 @@ namespace ossimplugins
 {
 
 
-   class GalileanEphemeris;
+class GalileanEphemeris;
 /**
  * @ingroup Ephemeris
  * @brief This class represent an ephemeris in Geographic coordinates system
  */
-   class OSSIM_PLUGINS_DLL GeographicEphemeris : public Ephemeris
-   {
-   public:
-      /**
-       * @brief Constructor
-       */
-      GeographicEphemeris();
-      /**
-       * @brief Destructor
-       */
-      virtual ~GeographicEphemeris();
+class OSSIM_PLUGINS_DLL GeographicEphemeris : public Ephemeris
+{
+public:
+  /**
+   * @brief Constructor
+   */
+  GeographicEphemeris();
+  /**
+    * @brief Destructor
+    */
+  virtual ~GeographicEphemeris();
 
-      /**
-       * @brief Constructor with initialisations
-       */
-      GeographicEphemeris(JSDDateTime date, double pos[3], double speed[3]);
-      /**
-       * @brief Copy constructor
-       */
-      GeographicEphemeris(const GeographicEphemeris& rhs);
+  /**
+   * @brief Constructor with initialisations
+   */
+  GeographicEphemeris(JSDDateTime date, double pos[3], double speed[3]);
+  /**
+   * @brief Copy constructor
+   */
+  GeographicEphemeris(const GeographicEphemeris& rhs);
 
-      GeographicEphemeris(GalileanEphemeris& rhs);
-      /**
-       * @brief Affectation operator
-       */
-      GeographicEphemeris& operator=(const GeographicEphemeris& rhs);
+  GeographicEphemeris(GalileanEphemeris& rhs);
+  /**
+   * @brief Affectation operator
+   */
+  GeographicEphemeris& operator=(const GeographicEphemeris& rhs);
 
-      /**
-       * @brief This fonction converts the current ephemeris in the Galilean coordinates system
-       */
-      void ToGalilean(GalileanEphemeris* vGal);
+  /**
+   * @brief This fonction converts the current ephemeris in the Galilean coordinates system
+   */
+  void ToGalilean(GalileanEphemeris* vGal);
 
-      operator GalileanEphemeris();
+  operator GalileanEphemeris();
 
-      /**
-       * @brief This function creates a copy of the current class
-       */
-      virtual Ephemeris* Clone()
-      {
-         return new GeographicEphemeris(*this);
-      };
-   protected:
-   private:
+  /**
+   * @brief This function creates a copy of the current class
+   */
+  virtual Ephemeris* Clone()
+  {
+    return new GeographicEphemeris(*this);
+  };
+protected:
+private:
 
-   };
+};
 }
 
 #endif

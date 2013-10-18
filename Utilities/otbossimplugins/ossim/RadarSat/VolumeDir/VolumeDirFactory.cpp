@@ -18,30 +18,30 @@
 
 namespace ossimplugins
 {
-   VolumeDirFactory::VolumeDirFactory()
-   {
-      RegisterRecord(1, new VolumeDescriptorRecord());
-      RegisterRecord(2, new SARLeaderFilePointerRecord());
-      RegisterRecord(3, new ImageOptionsFilePointerRecord());
-      RegisterRecord(4, new SARTrailerFilePointerRecord());
-      RegisterRecord(5, new TextRecord());
-   }
+VolumeDirFactory::VolumeDirFactory()
+{
+  RegisterRecord(1, new VolumeDescriptorRecord());
+  RegisterRecord(2, new SARLeaderFilePointerRecord());
+  RegisterRecord(3, new ImageOptionsFilePointerRecord());
+  RegisterRecord(4, new SARTrailerFilePointerRecord());
+  RegisterRecord(5, new TextRecord());
+}
 
-   VolumeDirFactory::~VolumeDirFactory()
-   {
+VolumeDirFactory::~VolumeDirFactory()
+{
 
-      std::map<int, RadarSatRecord*>::iterator i = _availableRecords.begin();
+  std::map<int, RadarSatRecord*>::iterator i = _availableRecords.begin();
 
-      while (i != _availableRecords.end())
-      {
-         if ( (*i).second )
-         {
-            delete (*i).second;
-            (*i).second = 0;
-         }
-         ++i;
-      }
-      _availableRecords.clear();
+  while (i != _availableRecords.end())
+  {
+     if ( (*i).second )
+     {
+        delete (*i).second;
+        (*i).second = 0;
+     }
+     ++i;
+  }
+  _availableRecords.clear();
 
-   }
+}
 }

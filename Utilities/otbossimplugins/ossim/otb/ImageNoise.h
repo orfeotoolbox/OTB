@@ -27,106 +27,106 @@ namespace ossimplugins
  * @ingroup ImageNoise
  * @brief This class represents an ImageNoise
  */
-   class OSSIM_PLUGINS_DLL ImageNoise
+class OSSIM_PLUGINS_DLL ImageNoise
+{
+public:
+   /**
+    * @brief Constructor
+    */
+   ImageNoise();
+
+   /**
+    * @brief Destructor
+    */
+   virtual ~ImageNoise();
+
+   /**
+    * @brief Copy constructor
+    */
+   ImageNoise(const ImageNoise& rhs);
+
+   /**
+    * @brief Affectation operator
+    */
+   ImageNoise& operator=(const ImageNoise& rhs);
+
+   /**
+    * @brief Method to save object state to a keyword list.
+    * @param kwl Keyword list to save to.
+    * @param prefix added to keys when saved.
+    * @return true on success, false on error.
+    */
+   bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
+
+   /**
+    * @brief Method to the load (recreate) the state of the object from a
+    * keyword list. Return true if ok or false on error.
+    * @return true if load OK, false on error
+    */
+   bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+
+   void set_timeUTC(const ossimString& value)
    {
-   public:
-      /**
-       * @brief Constructor
-       */
-      ImageNoise();
+      _timeUTC = value;
+   }
 
-      /**
-       * @brief Destructor
-       */
-      virtual ~ImageNoise();
+  const ossimString & get_timeUTC(void) const
+  {
+    return _timeUTC;
+  }
 
-      /**
-       * @brief Copy constructor
-       */
-      ImageNoise(const ImageNoise& rhs);
-
-      /**
-       * @brief Affectation operator
-       */
-      ImageNoise& operator=(const ImageNoise& rhs);
-
-      /**
-       * @brief Method to save object state to a keyword list.
-       * @param kwl Keyword list to save to.
-       * @param prefix added to keys when saved.
-       * @return true on success, false on error.
-       */
-      bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
-
-      /**
-       * @brief Method to the load (recreate) the state of the object from a
-       * keyword list. Return true if ok or false on error.
-       * @return true if load OK, false on error
-       */
-      bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
-
-      void set_timeUTC(const ossimString& value)
-      {
-         _timeUTC = value;
-      }
-
-      const ossimString & get_timeUTC(void) const
-      {
-         return _timeUTC;
-      }
-
-      void set_validityRangeMin(double value)
-      {
-         _validityRangeMin = value;
-      }
+   void set_validityRangeMin(double value)
+   {
+      _validityRangeMin = value;
+   }
   
-      double get_validityRangeMin(void) const
-      {
-         return _validityRangeMin;
-      }
+  double get_validityRangeMin(void) const
+  {
+    return _validityRangeMin;
+  }
 
-      void set_validityRangeMax(double value)
-      {
-         _validityRangeMax = value;
-      }
+   void set_validityRangeMax(double value)
+   {
+      _validityRangeMax = value;
+   }
 
-      double get_validityRangeMax(void) const
-      {
-         return _validityRangeMax;
-      }
+  double get_validityRangeMax(void) const
+  {
+    return _validityRangeMax;
+  }
 
-      void set_referencePoint(double value)
-      {
-         _referencePoint = value;
-      }
+   void set_referencePoint(double value)
+   {
+      _referencePoint = value;
+   }
 
-      double get_referencePoint(void) const
-      {
-         return _referencePoint;
-      }
+  double get_referencePoint(void) const
+  {
+    return _referencePoint;
+  }
   
-      void set_polynomialDegree(unsigned int value)
-      {
-         _polynomialDegree = value;
-      }
+   void set_polynomialDegree(unsigned int value)
+   {
+      _polynomialDegree = value;
+   }
 
-      unsigned int get_polynomialDegree() const
-      {
-         return _polynomialDegree;
-      }
+  unsigned int get_polynomialDegree() const
+  {
+    return _polynomialDegree;
+  }
 
 
-      void set_polynomialCoefficients(const std::vector<double>& value)
-      {
-         _polynomialCoefficients = value;
-      }
+   void set_polynomialCoefficients(const std::vector<double>& value)
+   {
+      _polynomialCoefficients = value;
+   }
 
-      const std::vector<double> & get_polynomialCoefficients(void) const
-      {
-         return _polynomialCoefficients;
-      }
+  const std::vector<double> & get_polynomialCoefficients(void) const
+  {
+    return _polynomialCoefficients;
+  }
 
-   protected:
+protected:
 
       /**
        * @brief TimeUTC (Noise/ImageNoise node).
@@ -155,8 +155,8 @@ namespace ossimplugins
        */
       std::vector<double> _polynomialCoefficients;
 
-   private:
-   };
+private:
+};
 }
 
 #endif

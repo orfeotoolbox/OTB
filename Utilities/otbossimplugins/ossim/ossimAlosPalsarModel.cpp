@@ -69,7 +69,7 @@ namespace ossimplugins
       return new ossimAlosPalsarModel(*this);
    }
 
-   double ossimAlosPalsarModel::getSlantRangeFromGeoreferenced(double col) const
+   double ossimAlosPalsarModel::getSlantRangeFromGeoreferenced(double /* col */) const
    {
       std::cout << "WARNING: getSlantRangeFromGeoreferenced not implemented for AlosPalsar" << std::endl;
       return 0.0;
@@ -660,7 +660,7 @@ namespace ossimplugins
 
 // Note: Products georeferenced to ground range are not handled in AlosPalsarModel
 //  therefore the following method will not be used
-   bool ossimAlosPalsarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
+   bool ossimAlosPalsarModel::InitSRGR(const ossimKeywordlist& /* kwl */, const char* /* prefix */)
    {
       // TODO Add user warning and reference to ERS Model
       return false;

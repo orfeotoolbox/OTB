@@ -9,12 +9,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-
 #ifndef ossimFormosatDimapSupportData_HEADER
-#define ossimFormosatDimapSupportData_HEADER
-
-#include <vector>
-#include <iostream>
+#define ossimFormosatDimapSupportData_HEADER 1
 
 #include <ossimPluginConstants.h>
 
@@ -30,12 +26,15 @@
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEcefPoint.h>
 
+#include <vector>
+#include <iostream>
+
 class ossimKeywordlist;
 // class ossimRefPtr;
 class ossimXmlDocument;
 
-class OSSIM_PLUGINS_DLL ossimFormosatDimapSupportData : public ossimObject,
-   public ossimErrorStatusInterface
+class OSSIM_PLUGINS_DLL ossimFormosatDimapSupportData :
+   public ossimObject, public ossimErrorStatusInterface
 {
 public:
 
@@ -128,10 +127,10 @@ public:
    //---
    void getPixelLookAngleX (ossim_uint32 sample, ossim_float64& pa) const;
    void getPixelLookAngleX (const ossim_float64& sample,
-                            ossim_float64& pa) const;
+                        	    ossim_float64& pa) const;
    void getPixelLookAngleY (ossim_uint32 sample, ossim_float64& pa) const;
    void getPixelLookAngleY (const ossim_float64& sample,
-                            ossim_float64& pa) const;
+                     	       ossim_float64& pa) const;
 
    //---
    // Geoposition points provided in the file (most likely just corner points):

@@ -215,9 +215,8 @@ namespace ossimplugins
 
    }
 
-   ProcessedDataRecord& ProcessedDataRecord::operator=(const ProcessedDataRecord& rhs)
+   ProcessedDataRecord& ProcessedDataRecord::operator=(const ProcessedDataRecord& /* rhs */)
    {
-
       return *this;
    }
 }

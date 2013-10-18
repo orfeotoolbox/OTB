@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 #ifndef ossimPluginReaderFactory_HEADER
-#define ossimPluginReaderFactory_HEADER
+#define ossimPluginReaderFactory_HEADER 1
 
 #include <ossimPluginConstants.h>
 #include <ossim/imaging/ossimImageHandlerFactoryBase.h>

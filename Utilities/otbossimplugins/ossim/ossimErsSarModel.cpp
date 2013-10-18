@@ -218,7 +218,7 @@ namespace ossimplugins
 
 
    bool ossimErsSarModel::saveState(ossimKeywordlist& kwl,
-                                    const char* prefix) const
+                                    const char* /* prefix */) const
    {
       static const char MODULE[] = "ossimErsSarModel::saveState";
 
@@ -593,7 +593,7 @@ namespace ossimplugins
       return true;
    }
 
-   bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
+   bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char* /* prefix */)
    {
       // Product type = PRI
       ossimString filename(kwl.find("filename"));

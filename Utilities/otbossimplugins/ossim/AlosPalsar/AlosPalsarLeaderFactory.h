@@ -24,23 +24,23 @@ namespace ossimplugins
  * @ingroup AlosPalsarLeaderFile
  * @brief This class is a facory able to construct Record base classes
  */
-   class AlosPalsarLeaderFactory : public AlosPalsarRecordFactory
-   {
-   public:
-      /**
-       * @brief Contstructor
-       */
-      AlosPalsarLeaderFactory();
-      /**
-       * @brief Destructor
-       */
-      ~AlosPalsarLeaderFactory();
+class AlosPalsarLeaderFactory : public AlosPalsarRecordFactory
+{
+public:
+  /**
+   * @brief Contstructor
+   */
+  AlosPalsarLeaderFactory();
+  /**
+   * @brief Destructor
+   */
+  ~AlosPalsarLeaderFactory();
 
 
-   protected:
+protected:
 
 
-   private:
-   };
+private:
+};
 }
 #endif

@@ -19,34 +19,34 @@ static ossimTrace traceDebug("AlosPalsarRecordFactory:debug");
 namespace ossimplugins
 {
 
-   AlosPalsarRecordFactory::AlosPalsarRecordFactory()
-   {
-   }
+AlosPalsarRecordFactory::AlosPalsarRecordFactory()
+{
+}
 
-   AlosPalsarRecordFactory::~AlosPalsarRecordFactory()
-   {
-   }
+AlosPalsarRecordFactory::~AlosPalsarRecordFactory()
+{
+}
 
-   AlosPalsarRecord* AlosPalsarRecordFactory::Instanciate(int id)
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "Intanciate AlosPalsar record:" << id << "\n";
-      }
-      AlosPalsarRecord* record = _availableRecords[id];
-      if (record == NULL)
-      {
-         return NULL;
-      }
-      else
-      {
-         return record->Instanciate();
-      }
-   }
+AlosPalsarRecord* AlosPalsarRecordFactory::Instanciate(int id)
+{
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG) << "Intanciate AlosPalsar record:" << id << "\n";
+  }
+  AlosPalsarRecord* record = _availableRecords[id];
+  if (record == NULL)
+  {
+    return NULL;
+  }
+  else
+  {
+    return record->Instanciate();
+  }
+}
 
-   void AlosPalsarRecordFactory::RegisterRecord(int id, AlosPalsarRecord * record)
-   {
-      _availableRecords[id] = record;
-   }
+void AlosPalsarRecordFactory::RegisterRecord(int id, AlosPalsarRecord * record)
+{
+  _availableRecords[id] = record;
+}
 
 }

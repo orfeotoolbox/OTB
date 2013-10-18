@@ -22,20 +22,20 @@ namespace ossimplugins
  * @ingroup DataFile
  * @brief This class is a factory able to construct Record base classes
  */
-   class DataFactory : public RadarSatRecordFactory
-   {
-   public:
-      /**
-       * @brief Contstructor
-       */
-      DataFactory();
-      /**
-       * @brief Destructor
-       */
-      ~DataFactory();
+class DataFactory : public RadarSatRecordFactory
+{
+public:
+  /**
+   * @brief Contstructor
+   */
+  DataFactory();
+  /**
+   * @brief Destructor
+   */
+  ~DataFactory();
 
-   protected:
-   private:
-   };
+protected:
+private:
+};
 }
 #endif

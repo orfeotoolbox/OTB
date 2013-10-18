@@ -22,23 +22,23 @@ namespace ossimplugins
  * @ingroup LeaderFile
  * @brief This class is a factory able to construct Record base classes
  */
-   class LeaderFactory : public RadarSatRecordFactory
-   {
-   public:
-      /**
-       * @brief Contstructor
-       */
-      LeaderFactory();
-      /**
-       * @brief Destructor
-       */
-      ~LeaderFactory();
+class LeaderFactory : public RadarSatRecordFactory
+{
+public:
+  /**
+   * @brief Contstructor
+   */
+  LeaderFactory();
+  /**
+   * @brief Destructor
+   */
+  ~LeaderFactory();
 
 
-   protected:
+protected:
 
 
-   private:
-   };
+private:
+};
 }
 #endif

@@ -75,11 +75,12 @@ namespace ossimplugins
    void GalileanEphemeris::ToGeographic(double greenwich,GeographicEphemeris* vGeo)
    {
       const double OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
-      int etat, ierr ;
+      // int etat,
+      int ierr ;
       double p[10],pd[10];
       double day;
 
-      etat = 0 ;
+      // etat = 0 ;
 
       vGeo->set_date(this->_date);
 

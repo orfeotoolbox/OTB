@@ -14,17 +14,17 @@
 
 namespace ossimplugins
 {
-   EnvisatAsarRecord::EnvisatAsarRecord(std::string mnemonic):
-      _mnemonic(mnemonic)
-   {
-   }
+EnvisatAsarRecord::EnvisatAsarRecord(std::string mnemonic):
+	_mnemonic(mnemonic)
+{
+}
 
-   EnvisatAsarRecord::~EnvisatAsarRecord()
-   {
-   }
+EnvisatAsarRecord::~EnvisatAsarRecord()
+{
+}
 
-   EnvisatAsarRecord::EnvisatAsarRecord(const EnvisatAsarRecord& rhs):
-      _mnemonic(rhs._mnemonic)
-   {
-   }
+EnvisatAsarRecord::EnvisatAsarRecord(const EnvisatAsarRecord& rhs):
+	_mnemonic(rhs._mnemonic)
+{
+}
 }

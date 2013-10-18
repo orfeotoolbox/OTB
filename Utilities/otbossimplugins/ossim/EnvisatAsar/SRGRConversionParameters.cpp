@@ -47,8 +47,8 @@ namespace ossimplugins
    {
       char buf14[15];
       buf14[14] = '\0';
-      char buf12[13];
-      buf12[12] = '\0';
+      // char buf12[13];
+      // buf12[12] = '\0';
 
 
       is.read((char*)&(data._first_zero_doppler_time_day),4);

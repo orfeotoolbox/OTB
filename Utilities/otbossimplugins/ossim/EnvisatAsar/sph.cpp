@@ -233,8 +233,8 @@ namespace ossimplugins
       buf4[4] = '\0';
       char buf3[4];
       buf3[3] = '\0';
-      char buf2[3];
-      buf2[2] = '\0';
+      // char buf2[3];
+      // buf2[2] = '\0';
       char buf1[1];
 
 

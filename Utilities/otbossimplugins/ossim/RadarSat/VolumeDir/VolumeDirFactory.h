@@ -22,23 +22,23 @@ namespace ossimplugins
  * @ingroup VolumeDirFile
  * @brief This class is a factory able to construct Record base classes
  */
-   class VolumeDirFactory : public RadarSatRecordFactory
-   {
-   public:
-      /**
-       * @brief Contstructor
-       */
-      VolumeDirFactory();
-      /**
-       * @brief Destructor
-       */
-      ~VolumeDirFactory();
+class VolumeDirFactory : public RadarSatRecordFactory
+{
+public:
+  /**
+   * @brief Contstructor
+   */
+  VolumeDirFactory();
+  /**
+   * @brief Destructor
+   */
+  ~VolumeDirFactory();
 
 
-   protected:
+protected:
 
 
-   private:
-   };
+private:
+};
 }
 #endif

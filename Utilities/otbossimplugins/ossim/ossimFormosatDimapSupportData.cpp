@@ -253,12 +253,12 @@ bool ossimFormosatDimapSupportData::loadXmlFile(const ossimFilename& file)
    if(in.good()&&(fileSize > 0))
    {
       char buf[100];
-      fullBuffer.resize(fileSize);
+	  fullBuffer.resize(fileSize);
       in.read(buf, ossim::min((ossim_int64)100, fileSize));
       if(!in.fail())
       {
          ossimString testString = ossimString(buf,
-                                              buf + in.gcount());
+                                  buf + in.gcount());
          if(testString.contains("xml"))
          {
             in.seekg(0);
@@ -317,23 +317,23 @@ bool ossimFormosatDimapSupportData::loadXmlFile(const ossimFilename& file)
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
-      setErrorStatus();
-      if(traceDebug())
-      {
+     setErrorStatus();
+     if(traceDebug())
+       {
 	 ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\n Not a FORMOSAT DIMAP file format."<< std::endl;
-      }
-      return false;
+	   << "DEBUG:\n Not a FORMOSAT DIMAP file format."<< std::endl;
+       }
+     return false;
    }
 
    if ( xml_nodes[0]->getText() != "FORMOSAT" && xml_nodes[0]->getText() != "Formosat" && xml_nodes[0]->getText() != "formosat" )
-   {
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\n Not a FORMOSAT DIMAP file format."<< std::endl;
-      }
-      return false;
+     {
+       if(traceDebug())
+	 {
+	   ossimNotify(ossimNotifyLevel_DEBUG)
+	     << "DEBUG:\n Not a FORMOSAT DIMAP file format."<< std::endl;
+	 }
+       return false;
    }
 
    //---
@@ -421,12 +421,12 @@ bool ossimFormosatDimapSupportData::loadXmlFile(const ossimFilename& file)
 
    if (parsePart4(xmlDocument) == false)
    {
-      ossimNotify(ossimNotifyLevel_FATAL)
+     ossimNotify(ossimNotifyLevel_FATAL)
          << MODULE << " DEBUG:"
          << "ossimFormosatDimapSupportData::loadXmlFile:"
          << "\nPart 4 initialization failed.  Returning false"
          << std::endl;
-      return false;
+     return false;
    }
 
    if (traceDebug())
@@ -442,17 +442,17 @@ bool ossimFormosatDimapSupportData::loadXmlFile(const ossimFilename& file)
 }
 
 void ossimFormosatDimapSupportData::getPositionEcf(ossim_uint32 sample,
-                                                   ossimEcefPoint& pe)  const
+                                               ossimEcefPoint& pe)  const
 {
    pe.makeNan();
    pe = ossimEcefPoint(thePosEcfSamples[sample].x,
-                       thePosEcfSamples[sample].y,
+	                   thePosEcfSamples[sample].y,
                        thePosEcfSamples[sample].z);
 
 }
 
 void ossimFormosatDimapSupportData::getPositionEcf(const ossim_float64& time,
-                                                   ossimEcefPoint& pe)  const
+                                               ossimEcefPoint& pe)  const
 {
    ossimDpt3d tempPt;
 
@@ -480,7 +480,7 @@ void ossimFormosatDimapSupportData::getVelocityEcf(ossim_uint32 sample, ossimEce
 }
 
 void ossimFormosatDimapSupportData::getVelocityEcf(const ossim_float64& time,
-                                                   ossimEcefPoint& ve)  const
+                                               ossimEcefPoint& ve)  const
 {
    ossimDpt3d tempPt;
 
@@ -500,7 +500,7 @@ void ossimFormosatDimapSupportData::getVelocityEcf(const ossim_float64& time,
 }
 
 void ossimFormosatDimapSupportData::getEphSampTime(ossim_uint32 sample,
-                                                   ossim_float64& et)  const
+                                               ossim_float64& et)  const
 {
    et = ossim::nan();
    if(theEphSampTimes.size() < theImageSize.samp)
@@ -534,7 +534,7 @@ void ossimFormosatDimapSupportData::getEphSampTime(ossim_uint32 sample,
 }
 
 void ossimFormosatDimapSupportData::getAttitude(ossim_uint32 sample,
-                                                ossimDpt3d& at)  const
+                                            ossimDpt3d& at)  const
 {
    if (sample >= theAttitudeSamples.size())
    {
@@ -546,12 +546,12 @@ void ossimFormosatDimapSupportData::getAttitude(ossim_uint32 sample,
 }
 
 void ossimFormosatDimapSupportData::getAttitude(const ossim_float64& time,
-                                                ossimDpt3d& at)  const
+                                            ossimDpt3d& at)  const
 {
    if (theAttSampTimes.empty())
    {
-      at.makeNan();
-      return;
+     at.makeNan();
+     return;
    }
 
    if ((time <  theAttSampTimes.front()) ||
@@ -591,26 +591,26 @@ void ossimFormosatDimapSupportData::getAttSampTime(ossim_uint32 sample, ossim_fl
 }
 
 void ossimFormosatDimapSupportData::getPixelLookAngleX(ossim_uint32 sample,
-                                                       ossim_float64& pa) const
+                                                 	  		  ossim_float64& pa) const
 {
    getInterpolatedLookAngle(sample, thePolynomialLookAngleX, pa);
 }
 
 void ossimFormosatDimapSupportData::getPixelLookAngleX(const ossim_float64& sample,
-                                                       ossim_float64& pa) const
+                                                   			  ossim_float64& pa) const
 {
    ossim_uint32 s = static_cast<ossim_uint32>(sample);
    getInterpolatedLookAngle(s, thePolynomialLookAngleX, pa);
 }
 
 void ossimFormosatDimapSupportData::getPixelLookAngleY(ossim_uint32 sample,
-                                                       ossim_float64& pa) const
+                                                     		  ossim_float64& pa) const
 {
    getInterpolatedLookAngle(sample, thePolynomialLookAngleY, pa);
 }
 
 void ossimFormosatDimapSupportData::getPixelLookAngleY(const ossim_float64& sample,
-                                                       ossim_float64& pa) const
+                                                   			  ossim_float64& pa) const
 {
    ossim_uint32 s = static_cast<ossim_uint32>(sample);
    getInterpolatedLookAngle(s, thePolynomialLookAngleY, pa);
@@ -752,7 +752,7 @@ ossim_float64 ossimFormosatDimapSupportData::convertTimeStamp(const ossimString&
 }
 
 void ossimFormosatDimapSupportData::convertTimeStamp(const ossimString& time_stamp,
-                                                     ossim_float64& ti) const
+                                                 ossim_float64& ti) const
 {
    int    year, month, day, hour, minute;
    double second;
@@ -778,8 +778,8 @@ void ossimFormosatDimapSupportData::convertTimeStamp(const ossimString& time_sta
 }
 
 void ossimFormosatDimapSupportData::getGeoPosPoint (ossim_uint32 point,
-                                                    ossimDpt& ip,
-                                                    ossimGpt& gp) const
+                                                ossimDpt& ip,
+                                                ossimGpt& gp) const
 {
    if (point < theGeoPosImagePoints.size())
    {
@@ -825,7 +825,7 @@ void ossimFormosatDimapSupportData::printInfo(ostream& os) const
 
 ossimString ossimFormosatDimapSupportData::getSensorID() const
 {
-   return theSensorID;
+  return theSensorID;
 }
 
 ossimString   ossimFormosatDimapSupportData::getMetadataVersionString() const
@@ -983,7 +983,7 @@ void ossimFormosatDimapSupportData::getSubImageOffset(ossimDpt& offset) const
 }
 
 bool ossimFormosatDimapSupportData::saveState(ossimKeywordlist& kwl,
-                                              const char* prefix)const
+                                          const char* prefix)const
 {
    kwl.add(prefix,
            ossimKeywordNames::TYPE_KW,
@@ -1241,7 +1241,7 @@ bool ossimFormosatDimapSupportData::saveState(ossimKeywordlist& kwl,
    tempString = "";
    for(idx = 0; idx < thePhysicalBias.size(); ++idx)
    {
-      tempString += (ossimString::toString(thePhysicalBias[idx]) + " ");
+     tempString += (ossimString::toString(thePhysicalBias[idx]) + " ");
    }
    kwl.add(prefix,
            "physical_bias",
@@ -1251,7 +1251,7 @@ bool ossimFormosatDimapSupportData::saveState(ossimKeywordlist& kwl,
    tempString = "";
    for(idx = 0; idx < thePhysicalGain.size(); ++idx)
    {
-      tempString += (ossimString::toString(thePhysicalGain[idx]) + " ");
+     tempString += (ossimString::toString(thePhysicalGain[idx]) + " ");
    }
    kwl.add(prefix,
            "physical_gain",
@@ -1261,7 +1261,7 @@ bool ossimFormosatDimapSupportData::saveState(ossimKeywordlist& kwl,
    tempString = "";
    for(idx = 0; idx < theSolarIrradiance.size(); ++idx)
    {
-      tempString += (ossimString::toString(theSolarIrradiance[idx]) + " ");
+     tempString += (ossimString::toString(theSolarIrradiance[idx]) + " ");
    }
 
    kwl.add(prefix,
@@ -1273,7 +1273,7 @@ bool ossimFormosatDimapSupportData::saveState(ossimKeywordlist& kwl,
 }
 
 bool ossimFormosatDimapSupportData::loadState(const ossimKeywordlist& kwl,
-                                              const char* prefix)
+                                          const char* prefix)
 {
    clearFields();
 
@@ -1428,7 +1428,7 @@ bool ossimFormosatDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theViewingAngleAcrossTrack = ossimString(kwl.find(prefix, "viewing_angle_across_track")).toDouble();
    theSceneOrientation        = ossimString(kwl.find(prefix, "scene_orientation")).toDouble();
    
-   /* TODO add reading FrameVertex point */
+	/* TODO add reading FrameVertex point */
 
    theSensorID = ossimString(kwl.find(prefix, "sensorID"));
 
@@ -1436,39 +1436,39 @@ bool ossimFormosatDimapSupportData::loadState(const ossimKeywordlist& kwl,
    tempString = kwl.find(prefix,"physical_bias");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
-      ossimString tempValue;
-      for(idx = 0; idx < thePhysicalBias.size();++idx)
-      {
-         in >> tempValue;
-         thePhysicalBias[idx] = tempValue.toDouble();
-      }
+     std::istringstream in(tempString);
+     ossimString tempValue;
+     for(idx = 0; idx < thePhysicalBias.size();++idx)
+     {
+       in >> tempValue;
+       thePhysicalBias[idx] = tempValue.toDouble();
+     }
    }
 
    thePhysicalGain.resize(theNumBands);
    tempString = kwl.find(prefix,"physical_gain");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
-      ossimString tempValue;
-      for(idx = 0; idx < thePhysicalGain.size();++idx)
-      {
-         in >> tempValue;
-         thePhysicalGain[idx] = tempValue.toDouble();
-      }
+     std::istringstream in(tempString);
+     ossimString tempValue;
+     for(idx = 0; idx < thePhysicalGain.size();++idx)
+     {
+       in >> tempValue;
+       thePhysicalGain[idx] = tempValue.toDouble();
+     }
    }
 
    theSolarIrradiance.resize(theNumBands);
    tempString = kwl.find(prefix,"solar_irradiance");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
-      ossimString tempValue;
-      for(idx = 0; idx < theSolarIrradiance.size();++idx)
-      {
-         in >> tempValue;
-         theSolarIrradiance[idx] = tempValue.toDouble();
-      }
+     std::istringstream in(tempString);
+     ossimString tempValue;
+     for(idx = 0; idx < theSolarIrradiance.size();++idx)
+     {
+       in >> tempValue;
+       theSolarIrradiance[idx] = tempValue.toDouble();
+     }
    }
 
    return true;
@@ -1763,7 +1763,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
    }
    else if (theNumBands == 4)
    {
-      band_index = 1; // using green band for Polynomial Look angles
+         band_index = 1; // using green band for Polynomial Look angles
    }
    else
    {
@@ -1791,26 +1791,7 @@ bool ossimFormosatDimapSupportData::parsePart2(
    xmlDocument->findNodes(xpath, xml_nodes);
 //   if (xml_nodes.size() != theNumBands)
 //   {
-   if(xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-
-   node = xml_nodes.begin();
-   while (node != xml_nodes.end())
-   {
-      sub_nodes.clear();
-      xpath = "BAND_INDEX";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
+      if(xml_nodes.size() == 0)
       {
          setErrorStatus();
          if(traceDebug())
@@ -1823,98 +1804,117 @@ bool ossimFormosatDimapSupportData::parsePart2(
          return false;
       }
 
-      ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
-
-      if( (bandIndex >= static_cast<int>(theNumBands) ) || (bandIndex<0) )
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << "ossimFormosatDimapSupportData: ERROR: Band index outside of range\n";
-         return false;
-      }
-
-      if(bandIndex == band_index)
-      {
-         sub_nodes.clear();
-         xpath = "Polynomial_Look_Angles/XLOS_0";
-         (*node)->findChildNodes(xpath, sub_nodes);
-         if (sub_nodes.size() == 0)
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+  {
+    sub_nodes.clear();
+    xpath = "BAND_INDEX";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
+         if(traceDebug())
          {
-            setErrorStatus();
-            return false;
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
          }
-         thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
+      	return false;
+    }
 
-         sub_nodes.clear();
-         xpath = "Polynomial_Look_Angles/XLOS_1";
-         (*node)->findChildNodes(xpath, sub_nodes);
-         if (sub_nodes.size() == 0)
-         {
-            setErrorStatus();
-            return false;
-         }
-         thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
+    ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
 
-         sub_nodes.clear();
-         xpath = "Polynomial_Look_Angles/XLOS_2";
-         (*node)->findChildNodes(xpath, sub_nodes);
-         if (sub_nodes.size() == 0)
-         {
-            setErrorStatus();
-            return false;
-         }
-         thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
+    if( (bandIndex >= static_cast<int>(theNumBands) ) || (bandIndex<0) )
+    {
+       ossimNotify(ossimNotifyLevel_WARN) << "ossimFormosatDimapSupportData: ERROR: Band index outside of range\n";
+       return false;
+    }
 
-         sub_nodes.clear();
-         xpath = "Polynomial_Look_Angles/XLOS_3";
-         (*node)->findChildNodes(xpath, sub_nodes);
-         if (sub_nodes.size() == 0)
-         {
-            setErrorStatus();
-            return false;
-         }
-         thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
+	if(bandIndex == band_index)
+	{
+  		sub_nodes.clear();
+    	xpath = "Polynomial_Look_Angles/XLOS_0";
+    	(*node)->findChildNodes(xpath, sub_nodes);
+    	if (sub_nodes.size() == 0)
+    	{
+      		setErrorStatus();
+      		return false;
+    	}
+    	thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
 
-         sub_nodes.clear();
-         xpath = "Polynomial_Look_Angles/YLOS_0";
-         (*node)->findChildNodes(xpath, sub_nodes);
-         if (sub_nodes.size() == 0)
-         {
-            setErrorStatus();
-            return false;
-         }
-         thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
+      sub_nodes.clear();
+    	xpath = "Polynomial_Look_Angles/XLOS_1";
+    	(*node)->findChildNodes(xpath, sub_nodes);
+    	if (sub_nodes.size() == 0)
+    	{
+      		setErrorStatus();
+      		return false;
+    	}
+    	thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
 
-         sub_nodes.clear();
-         xpath = "Polynomial_Look_Angles/YLOS_1";
-         (*node)->findChildNodes(xpath, sub_nodes);
-         if (sub_nodes.size() == 0)
-         {
-            setErrorStatus();
-            return false;
-         }
-         thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
+      sub_nodes.clear();
+    	xpath = "Polynomial_Look_Angles/XLOS_2";
+    	(*node)->findChildNodes(xpath, sub_nodes);
+    	if (sub_nodes.size() == 0)
+    	{
+      		setErrorStatus();
+      		return false;
+    	}
+    	thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
 
-         sub_nodes.clear();
-         xpath = "Polynomial_Look_Angles/YLOS_2";
-         (*node)->findChildNodes(xpath, sub_nodes);
-         if (sub_nodes.size() == 0)
-         {
-            setErrorStatus();
-            return false;
-         }
-         thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
+      sub_nodes.clear();
+    	xpath = "Polynomial_Look_Angles/XLOS_3";
+    	(*node)->findChildNodes(xpath, sub_nodes);
+    	if (sub_nodes.size() == 0)
+    	{
+      		setErrorStatus();
+      		return false;
+    	}
+    	thePolynomialLookAngleX.push_back(sub_nodes[0]->getText().toDouble());
 
-         sub_nodes.clear();
-         xpath = "Polynomial_Look_Angles/YLOS_3";
-         (*node)->findChildNodes(xpath, sub_nodes);
-         if (sub_nodes.size() == 0)
-         {
-            setErrorStatus();
-            return false;
-         }
-         thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
-      }
-      ++node;
-   }
+      sub_nodes.clear();
+    	xpath = "Polynomial_Look_Angles/YLOS_0";
+    	(*node)->findChildNodes(xpath, sub_nodes);
+    	if (sub_nodes.size() == 0)
+    	{
+      		setErrorStatus();
+      		return false;
+    	}
+    	thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
+
+      sub_nodes.clear();
+    	xpath = "Polynomial_Look_Angles/YLOS_1";
+    	(*node)->findChildNodes(xpath, sub_nodes);
+    	if (sub_nodes.size() == 0)
+    	{
+      		setErrorStatus();
+      		return false;
+    	}
+    	thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
+
+      sub_nodes.clear();
+    	xpath = "Polynomial_Look_Angles/YLOS_2";
+    	(*node)->findChildNodes(xpath, sub_nodes);
+    	if (sub_nodes.size() == 0)
+    	{
+      		setErrorStatus();
+      		return false;
+    	}
+    	thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
+
+      sub_nodes.clear();
+    	xpath = "Polynomial_Look_Angles/YLOS_3";
+    	(*node)->findChildNodes(xpath, sub_nodes);
+    	if (sub_nodes.size() == 0)
+    	{
+      		setErrorStatus();
+      		return false;
+    	}
+    	thePolynomialLookAngleY.push_back(sub_nodes[0]->getText().toDouble());
+	}
+    ++node;
+  }
 
 
    //---
@@ -1927,15 +1927,15 @@ bool ossimFormosatDimapSupportData::parsePart2(
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
+		setErrorStatus();
+        if(traceDebug())
+        {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+        }
+        return false;
    }
 
    node = xml_nodes.begin();
@@ -2013,15 +2013,15 @@ bool ossimFormosatDimapSupportData::parsePart3(
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
+      	setErrorStatus();
+        if(traceDebug())
+        {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\nCould not find: " << xpath
+               << std::endl;
+        }
+      	return false;
    }
    node = xml_nodes.begin();
 
@@ -2115,7 +2115,7 @@ bool ossimFormosatDimapSupportData::parsePart3(
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
-      theStarTrackerUsed = false;
+         theStarTrackerUsed = false;
 //       setErrorStatus();
 //       return false;
    }
@@ -2184,7 +2184,7 @@ bool ossimFormosatDimapSupportData::parsePart3(
       (*node)->findChildNodes(xpath, sub_nodes);
       if (sub_nodes.size() != 0)
       {
-         gpt.hgt = sub_nodes[0]->getText().toDouble();
+          gpt.hgt = sub_nodes[0]->getText().toDouble();
       }
 
       theGeoPosImagePoints.push_back(ipt);
@@ -2196,47 +2196,47 @@ bool ossimFormosatDimapSupportData::parsePart3(
    return true;
 }
 bool ossimFormosatDimapSupportData::parsePart4(
-   ossimRefPtr<ossimXmlDocument> xmlDocument)
+                                           ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
-   ossimString xpath;
-   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
-   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
-   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+  ossimString xpath;
+  std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+  std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+  std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
 
-   static const char MODULE[] = "ossimFormosatDimapSupportData::parsePart4";
+  static const char MODULE[] = "ossimFormosatDimapSupportData::parsePart4";
 
-   //---
-   // Fetch the gain and bias for each spectral band:
-   //---
+  //---
+  // Fetch the gain and bias for each spectral band:
+  //---
 
-   thePhysicalGain.assign(theNumBands, 1.000);
-   thePhysicalBias.assign(theNumBands, 0.000);
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Data_Strip/Sensor_Calibration/Calibration/Band_Parameters/";
+  thePhysicalGain.assign(theNumBands, 1.000);
+  thePhysicalBias.assign(theNumBands, 0.000);
+  xml_nodes.clear();
+  xpath = "/Dimap_Document/Data_Strip/Sensor_Calibration/Calibration/Band_Parameters/";
   	 
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if(xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << std::endl;
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if(xml_nodes.size() == 0)
+  {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  	    ossimNotify(ossimNotifyLevel_DEBUG)
+    		      	<< MODULE << " DEBUG:"
+            	  	<< "\nCould not find: " << xpath
+               		<< std::endl;
       }
       return false;
-   }
+  }
 
-   node = xml_nodes.begin();
-   while (node != xml_nodes.end())
-   {
-      sub_nodes.clear();
-      xpath = "BAND_INDEX";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
-      {
-         setErrorStatus();
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+  {
+    sub_nodes.clear();
+    xpath = "BAND_INDEX";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      	setErrorStatus();
          if(traceDebug())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
@@ -2244,79 +2244,79 @@ bool ossimFormosatDimapSupportData::parsePart4(
                << "\nCould not find: " << xpath
                << std::endl;
          }
-         return false;
-      }
+      	return false;
+    }
 
-      ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
+    ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
 	
 
-      if( (bandIndex >= static_cast<int>(theNumBands) ) || (bandIndex<0) )
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << "ossimFormosatDimapSupportData: ERROR: Band index outside of range\n";
-         return false;
-      }
+    if( (bandIndex >= static_cast<int>(theNumBands) ) || (bandIndex<0) )
+    {
+       ossimNotify(ossimNotifyLevel_WARN) << "ossimFormosatDimapSupportData: ERROR: Band index outside of range\n";
+       return false;
+    }
 
-      sub_nodes.clear();
-      xpath = "Gain_Section_List/Gain_Section/PHYSICAL_BIAS";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
-      {
-         setErrorStatus();
-         return false;
-      }
-      thePhysicalBias[bandIndex] = sub_nodes[0]->getText().toDouble();
+	sub_nodes.clear();
+    xpath = "Gain_Section_List/Gain_Section/PHYSICAL_BIAS";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+    	setErrorStatus();
+    	return false;
+    }
+    thePhysicalBias[bandIndex] = sub_nodes[0]->getText().toDouble();
     	
-      sub_nodes.clear();
-      xpath = "Gain_Section_List/Gain_Section/PHYSICAL_GAIN";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
-      {
-         setErrorStatus();
-         return false;
-      }
-      thePhysicalGain[bandIndex] = sub_nodes[0]->getText().toDouble();
+	sub_nodes.clear();
+    xpath = "Gain_Section_List/Gain_Section/PHYSICAL_GAIN";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+    	setErrorStatus();
+    	return false;
+    }
+    thePhysicalGain[bandIndex] = sub_nodes[0]->getText().toDouble();
 	
-      ++node;
-   }
+    ++node;
+  }
 
-   theSolarIrradiance.assign(theNumBands, 0.000);
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Data_Strip/Sensor_Calibration/Solar_Irradiance/Band_Solar_Irradiance";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   node = xml_nodes.begin();
-   while (node != xml_nodes.end())
-   {
-      sub_nodes.clear();
-      xpath = "BAND_INDEX";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
-      {
-         setErrorStatus();
-         return false;
-      }
+  theSolarIrradiance.assign(theNumBands, 0.000);
+  xml_nodes.clear();
+  xpath = "/Dimap_Document/Data_Strip/Sensor_Calibration/Solar_Irradiance/Band_Solar_Irradiance";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+  {
+    sub_nodes.clear();
+    xpath = "BAND_INDEX";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      setErrorStatus();
+      return false;
+    }
 
-      ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
+    ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
     
-      if((bandIndex >= static_cast<ossim_int32>(theNumBands) ) || (bandIndex<0))
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << "ossimFormosatDimapSupportData::parsePart4 ERROR: Band index outside of range\n";
-         return false;
-      }
+    if((bandIndex >= static_cast<ossim_int32>(theNumBands) ) || (bandIndex<0))
+    {
+       ossimNotify(ossimNotifyLevel_WARN) << "ossimFormosatDimapSupportData::parsePart4 ERROR: Band index outside of range\n";
+       return false;
+    }
     
-      sub_nodes.clear();
-      xpath = "SOLAR_IRRADIANCE_VALUE";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
-      {
-         setErrorStatus();
-         return false;
-      }
-      theSolarIrradiance[bandIndex] = sub_nodes[0]->getText().toDouble();
+    sub_nodes.clear();
+    xpath = "SOLAR_IRRADIANCE_VALUE";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+    {
+      setErrorStatus();
+      return false;
+    }
+    theSolarIrradiance[bandIndex] = sub_nodes[0]->getText().toDouble();
 
-      ++node;
-   }
+    ++node;
+  }
 
-   return true;
+  return true;
 }
 
 bool ossimFormosatDimapSupportData::initMetadataVersion(ossimRefPtr<ossimXmlDocument> xmlDocument)
@@ -2399,28 +2399,28 @@ bool ossimFormosatDimapSupportData::initSceneSource(
    ossimString xpath;
    vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
-   //---
-   // Fetch the mission index (Formosat 1 or 2):
-   // and generate theSensorID
-   //---
+  //---
+  // Fetch the mission index (Formosat 1 or 2):
+  // and generate theSensorID
+  //---
    xml_nodes.clear();
    xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/MISSION_INDEX";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
+     setErrorStatus();
+     if(traceDebug())
+       {
+	 		ossimNotify(ossimNotifyLevel_DEBUG)
+	   				<< "DEBUG:\nCould not find: " << xpath
+	   				<< std::endl;
+       }
+     return false;
    }
    if (xml_nodes[0]->getText() == "1")
-      theSensorID = "Formosat 1";
+     theSensorID = "Formosat 1";
    if (xml_nodes[0]->getText() == "2")
-      theSensorID = "Formosat 2";
+     theSensorID = "Formosat 2";
 
    //---
    // Fetch the Viewing Angle Along Track:
@@ -2636,7 +2636,7 @@ bool ossimFormosatDimapSupportData::initFramePoints(
       }
       ipt.samp = sub_nodes[0]->getText().toDouble() - 1.0;
 
-      theFrameVertexPosImagePoints.push_back(ipt);
+	  theFrameVertexPosImagePoints.push_back(ipt);
       theFrameVertexPosGroundPoints.push_back(gpt);
 
       ++node;

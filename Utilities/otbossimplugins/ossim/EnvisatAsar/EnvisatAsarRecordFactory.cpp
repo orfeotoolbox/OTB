@@ -13,29 +13,29 @@
 
 namespace ossimplugins
 {
-   EnvisatAsarRecordFactory::EnvisatAsarRecordFactory()
-   {
-   }
+EnvisatAsarRecordFactory::EnvisatAsarRecordFactory()
+{
+}
 
-   EnvisatAsarRecordFactory::~EnvisatAsarRecordFactory()
-   {
-   }
+EnvisatAsarRecordFactory::~EnvisatAsarRecordFactory()
+{
+}
 
-   EnvisatAsarRecord* EnvisatAsarRecordFactory::Instanciate(std::string id)
-   {
-      EnvisatAsarRecord* record = _availableRecords[id];
-      if(record == NULL)
-      {
-         return NULL;
-      }
-      else
-      {
-         return record->Instanciate();
-      }
-   }
+EnvisatAsarRecord* EnvisatAsarRecordFactory::Instanciate(std::string id)
+{
+	EnvisatAsarRecord* record = _availableRecords[id];
+	if(record == NULL)
+	{
+		return NULL;
+	}
+	else
+	{
+		return record->Instanciate();
+	}
+}
 
-   void EnvisatAsarRecordFactory::RegisterRecord(std::string id, EnvisatAsarRecord * record)
-   {
-      _availableRecords[id] = record;
-   }
+void EnvisatAsarRecordFactory::RegisterRecord(std::string id, EnvisatAsarRecord * record)
+{
+	_availableRecords[id] = record;
+}
 }

@@ -31,7 +31,7 @@ using namespace std;
 
 namespace ossimplugins
 {
-   RTTI_DEF1(ossimFormosatModel, "ossimFormosatModel", ossimSensorModel);
+RTTI_DEF1(ossimFormosatModel, "ossimFormosatModel", ossimSensorModel);
 }
 
 //---
@@ -166,8 +166,8 @@ void ossimplugins::ossimFormosatModel::computeSatToOrbRotation(NEWMAT::Matrix& r
    if (traceExec())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimFormosatModel::computeSatToOrbRotation(): entering..."
-         << std::endl;
+      << "DEBUG ossimFormosatModel::computeSatToOrbRotation(): entering..."
+      << std::endl;
    }
    //---
    // Linearly interpolate attitudes angles:
@@ -198,8 +198,8 @@ void ossimplugins::ossimFormosatModel::computeSatToOrbRotation(NEWMAT::Matrix& r
    //---
    result = NEWMAT::Matrix(3,3);
    result << (cr*cy) << (-cr*sy) << (-sr)
-          << (cp*sy+sp*sr*cy) << (cp*cy-sp*sr*sy) << (sp*cr)
-          << (-sp*sy+cp*sr*cy) << (-sp*cy-cp*sr*sy) <<  cp*cr;
+   << (cp*sy+sp*sr*cy) << (cp*cy-sp*sr*sy) << (sp*cr)
+   << (-sp*sy+cp*sr*cy) << (-sp*cy-cp*sr*sy) <<  cp*cr;
 
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::computeSatToOrbRotation(): returning..." << std::endl;
@@ -235,23 +235,23 @@ void ossimplugins::ossimFormosatModel::computeSatToOrbRotation(ossim_float64 t)c
    //---
    // Compute trig functions to populate rotation matrices: ANGLES IN RADIANS
    //---
-   double cp = cos(att.x);
-   double sp = sin(att.x);
-   double cr = cos(att.y);
-   double sr = sin(att.y);
-   double cy = cos(att.z);
-   double sy = sin(att.z);
+    double cp = cos(att.x);
+    double sp = sin(att.x);
+    double cr = cos(att.y);
+    double sr = sin(att.y);
+    double cy = cos(att.z);
+    double sy = sin(att.z);
 
    //---
    // Populate rotation matrix:
    //---
-   theSatToOrbRotation = NEWMAT::Matrix(3,3);
-   theSatToOrbRotation << (cr*cy) << (-cr*sy) << (-sr)
-                       << (cp*sy+sp*sr*cy) << (cp*cy-sp*sr*sy) << (sp*cr)
-                       << (-sp*sy+cp*sr*cy) << (-sp*cy-cp*sr*sy) <<  cp*cr;
+    theSatToOrbRotation = NEWMAT::Matrix(3,3);
+    theSatToOrbRotation << (cr*cy) << (-cr*sy) << (-sr)
+                        << (cp*sy+sp*sr*cy) << (cp*cy-sp*sr*sy) << (sp*cr)
+                        << (-sp*sy+cp*sr*cy) << (-sp*cy-cp*sr*sy) <<  cp*cr;
 
 
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::computeSatToOrbRotation(): returning..." << std::endl;
+    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::computeSatToOrbRotation(): returning..." << std::endl;
 }
 #endif
 //*****************************************************************************
@@ -354,10 +354,10 @@ void ossimplugins::ossimFormosatModel::loadSupportData()
    }
 
    if (traceExec())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::loadSupportData(): theSupportData->getErrorStatus(): " 
-                                          << theSupportData->getErrorStatus() <<std::endl;
-   }
+     {
+   ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimFormosatModel::loadSupportData(): theSupportData->getErrorStatus(): " 
+                << theSupportData->getErrorStatus() <<std::endl;
+     }
 
    if (theSupportData->getErrorStatus() != ossimErrorCodes::OSSIM_OK)
    {
@@ -490,23 +490,23 @@ std::ostream& ossimplugins::ossimFormosatModel::print(std::ostream& out) const
 }
 
 bool ossimplugins::ossimFormosatModel::saveState(ossimKeywordlist& kwl,
-                                                 const char* prefix) const
+                          const char* prefix) const
 {
-   if(theSupportData.valid())
-   {
-      ossimString supportPrefix = ossimString(prefix) + "support_data.";
-      theSupportData->saveState(kwl, supportPrefix);
-   }
-   else
-   {
-      return false;
-   }
+  if(theSupportData.valid())
+  {
+     ossimString supportPrefix = ossimString(prefix) + "support_data.";
+     theSupportData->saveState(kwl, supportPrefix);
+  }
+  else
+  {
+     return false;
+  }
 
    return ossimSensorModel::saveState(kwl, prefix);
 }
 
 bool ossimplugins::ossimFormosatModel::loadState(const ossimKeywordlist& kwl,
-                                                 const char* prefix)
+                                const char* prefix)
 {
    ossimString supportPrefix = ossimString(prefix) + "support_data.";
 
@@ -534,7 +534,7 @@ bool ossimplugins::ossimFormosatModel::loadState(const ossimKeywordlist& kwl,
 }
 
 void ossimplugins::ossimFormosatModel::imagingRay(const ossimDpt& image_point,
-                                                  ossimEcefRay&   image_ray) const
+                                 ossimEcefRay&   image_ray) const
 {
    bool runtime_dbflag = 0;
    NEWMAT::Matrix satToOrbit;
@@ -546,7 +546,7 @@ void ossimplugins::ossimFormosatModel::imagingRay(const ossimDpt& image_point,
    // 1. Establish time of line imaging:
    //
    double t_line = theRefImagingTime +
-      theLineSamplingPeriod*(iPt.line - theRefImagingTimeLine);
+                   theLineSamplingPeriod*(iPt.line - theRefImagingTimeLine);
    if (traceDebug() || runtime_dbflag)
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG FormosatModel::imagingRay():------------ BEGIN DEBUG PASS ---------------" << std::endl;
@@ -574,37 +574,37 @@ void ossimplugins::ossimFormosatModel::imagingRay(const ossimDpt& image_point,
    // 3. Establish the look direction in Vehicle LSR space (S_sat).
    //    ANGLES IN RADIANS
    //
-   ossim_float64 Psi_x;
-   theSupportData->getPixelLookAngleX(iPt.samp, Psi_x);
-   ossim_float64 Psi_y;
-   theSupportData->getPixelLookAngleY(iPt.samp, Psi_y);
-   if (traceDebug() || runtime_dbflag)
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG:\n\t Psi_x = " << Psi_x
-         << "\n\t Psi_y = " << Psi_y << endl;
-   }
+    ossim_float64 Psi_x;
+    theSupportData->getPixelLookAngleX(iPt.samp, Psi_x);
+    ossim_float64 Psi_y;
+    theSupportData->getPixelLookAngleY(iPt.samp, Psi_y);
+    if (traceDebug() || runtime_dbflag)
+    {
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG:\n\t Psi_x = " << Psi_x
+          << "\n\t Psi_y = " << Psi_y << endl;
+    }
 
-   ossimColumnVector3d u_sat (-tan(Psi_y), tan(Psi_x), -(1.0 + theFocalLenOffset));
-   if (traceDebug() || runtime_dbflag)
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG \n\t u_sat = " << u_sat << endl;
-   }
+    ossimColumnVector3d u_sat (-tan(Psi_y), tan(Psi_x), -(1.0 + theFocalLenOffset));
+    if (traceDebug() || runtime_dbflag)
+    {
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG \n\t u_sat = " << u_sat << endl;
+    }
 
    //
    // 4. Transform vehicle LSR space look direction vector to orbital LSR space
    //    (S_orb):
    //
-   computeSatToOrbRotation(satToOrbit, t_line);
+    computeSatToOrbRotation(satToOrbit, t_line);
 
-   ossimColumnVector3d u_orb = (satToOrbit*u_sat).unit();
-   if (traceDebug() || runtime_dbflag)
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG:\n\t theSatToOrbRotation = " << satToOrbit
-         << "\n\t u_orb = " << u_orb << endl;
-   }
+    ossimColumnVector3d u_orb = (satToOrbit*u_sat).unit();
+    if (traceDebug() || runtime_dbflag)
+    {
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG:\n\t theSatToOrbRotation = " << satToOrbit
+          << "\n\t u_orb = " << u_orb << endl;
+    }
 
    //
    // 5. Transform orbital LSR space look direction vector to ECF.
@@ -613,45 +613,45 @@ void ossimplugins::ossimFormosatModel::imagingRay(const ossimDpt& image_point,
    //   b. X_orb axis is computed as cross-product between velocity and radial,
    //   c. Y_orb completes the orthogonal S_orb coordinate system.
    //
-   ossimColumnVector3d Z_orb (P_ecf.x(),
-                              P_ecf.y(),
-                              P_ecf.z());
-   Z_orb = Z_orb.unit();
+    ossimColumnVector3d Z_orb (P_ecf.x(),
+                               P_ecf.y(),
+                               P_ecf.z());
+    Z_orb = Z_orb.unit();
 
-   ossimColumnVector3d X_orb = ossimColumnVector3d(V_ecf.x(),
-                                                   V_ecf.y(),
-                                                   V_ecf.z()).cross(Z_orb).unit();
-   ossimColumnVector3d Y_orb = Z_orb.cross(X_orb);
+    ossimColumnVector3d X_orb = ossimColumnVector3d(V_ecf.x(),
+                                                    V_ecf.y(),
+                                                    V_ecf.z()).cross(Z_orb).unit();
+    ossimColumnVector3d Y_orb = Z_orb.cross(X_orb);
 
-   NEWMAT::Matrix orbToEcfRotation = NEWMAT::Matrix(3, 3);
-   orbToEcfRotation << X_orb[0] << Y_orb[0] << Z_orb[0]
-                    << X_orb[1] << Y_orb[1] << Z_orb[1]
-                    << X_orb[2] << Y_orb[2] << Z_orb[2];
+    NEWMAT::Matrix orbToEcfRotation = NEWMAT::Matrix(3, 3);
+    orbToEcfRotation << X_orb[0] << Y_orb[0] << Z_orb[0]
+                        << X_orb[1] << Y_orb[1] << Z_orb[1]
+                        << X_orb[2] << Y_orb[2] << Z_orb[2];
 
 
    ossimColumnVector3d u_ecf  = (orbToEcfRotation*u_orb);
-   if (traceDebug() || runtime_dbflag)
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG:\n\t orbToEcfRotation = " << orbToEcfRotation
-         << "\n\t u_ecf = " << u_ecf << endl;
-   }
+    if (traceDebug() || runtime_dbflag)
+    {
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG:\n\t orbToEcfRotation = " << orbToEcfRotation
+          << "\n\t u_ecf = " << u_ecf << endl;
+    }
 
    //
    // Establish the imaging ray given direction and origin:
    //
-   image_ray = ossimEcefRay(P_ecf, ossimEcefVector(u_ecf[0], u_ecf[1], u_ecf[2]));
+    image_ray = ossimEcefRay(P_ecf, ossimEcefVector(u_ecf[0], u_ecf[1], u_ecf[2]));
 
-   if (traceExec())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG FormosatModel::imagingRay(): returning..." << std::endl;
-   }
+    if (traceExec())
+    {
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG FormosatModel::imagingRay(): returning..." << std::endl;
+    }
 }
 
 void ossimplugins::ossimFormosatModel::lineSampleHeightToWorld(const ossimDpt& image_point,
-                                                               const ossim_float64& heightEllipsoid,
-                                                               ossimGpt& worldPoint) const
+                                              const ossim_float64& heightEllipsoid,
+                                              ossimGpt& worldPoint) const
 {
    if (!insideImage(image_point))
    {

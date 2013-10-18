@@ -23,33 +23,33 @@ namespace ossimplugins
  * @ingroup Date
  * @brief This class represents a coordinate in a geodesic reference
  */
-   class OSSIM_PLUGINS_DLL GeodesicCoordinate : public Coordinate
-   {
-   public:
-      /**
-       * @brief Constructor
-       */
-      GeodesicCoordinate();
-      /**
-       * @brief Destructor
-       */
-      ~GeodesicCoordinate();
-      /**
-       * @brief Cosntructor with initializations
-       */
-      GeodesicCoordinate(double x, double y, double z);
-      /**
-       * @brief Copy constructor
-       */
-      GeodesicCoordinate(const GeodesicCoordinate& rhs);
+ class OSSIM_PLUGINS_DLL GeodesicCoordinate : public Coordinate
+ {
+ public:
+  /**
+    * @brief Constructor
+    */
+  GeodesicCoordinate();
+  /**
+   * @brief Destructor
+   */
+  ~GeodesicCoordinate();
+  /**
+   * @brief Cosntructor with initializations
+   */
+  GeodesicCoordinate(double x, double y, double z);
+  /**
+   * @brief Copy constructor
+   */
+  GeodesicCoordinate(const GeodesicCoordinate& rhs);
 
-      /**
-       * @brief Affectation operator
-       */
-      GeodesicCoordinate& operator=(const GeodesicCoordinate& rhs);
-   protected:
-   private:
-   };
+  /**
+   * @brief Affectation operator
+   */
+  GeodesicCoordinate& operator=(const GeodesicCoordinate& rhs);
+ protected:
+ private:
+ };
 }
 
-#endif
+ #endif

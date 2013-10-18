@@ -121,7 +121,7 @@ namespace ossimplugins
       lineSampleHeightToWorld(image_point, 0.0, gpt);
    }
    void ossimTileMapModel::lineSampleHeightToWorld(const ossimDpt& image_point,
-                                                   const double&   height,
+                                                   const double&   /* height */,
                                                    ossimGpt&       gpt) const
    {
       if(!image_point.hasNans())

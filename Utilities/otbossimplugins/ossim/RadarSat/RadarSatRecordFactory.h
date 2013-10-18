@@ -23,38 +23,38 @@ namespace ossimplugins
  * @ingroup RadarSat
  * @brief This class is a factory able to construct Record base classes given the id of the wanted record
  */
-   class RadarSatRecordFactory
-   {
-   public:
-      /**
-       * @brief Constructor
-       */
-      RadarSatRecordFactory();
-      /**
-       * @brief Destructor
-       */
-      ~RadarSatRecordFactory();
+class RadarSatRecordFactory
+{
+public:
+  /**
+   * @brief Constructor
+   */
+  RadarSatRecordFactory();
+  /**
+   * @brief Destructor
+   */
+  ~RadarSatRecordFactory();
 
-      /**
-       * @brief Add a new Record type available in this factory
-       * @param record Record to add in the factory
-       * @param id Id of the new available Record
-       */
-      void RegisterRecord(int id, RadarSatRecord * record);
+  /**
+   * @brief Add a new Record type available in this factory
+   * @param record Record to add in the factory
+   * @param id Id of the new available Record
+   */
+  void RegisterRecord(int id, RadarSatRecord * record);
 
-      /**
-       * @brief Instanciates a new Record
-       * @param id Id of the Record we want to instanciate
-       */
-      RadarSatRecord* Instanciate(int id) ;
-   protected:
+  /**
+   * @brief Instanciates a new Record
+   * @param id Id of the Record we want to instanciate
+   */
+  RadarSatRecord* Instanciate(int id) ;
+protected:
 
-      /**
-       * @brief Contains all the available Records for the factory
-       */
-      std::map<int, RadarSatRecord*> _availableRecords;
+  /**
+   * @brief Contains all the available Records for the factory
+   */
+  std::map<int, RadarSatRecord*> _availableRecords;
 
-   private:
-   };
+private:
+};
 }
 #endif

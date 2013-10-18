@@ -340,8 +340,8 @@ namespace ossimplugins
    {
       char buf64[65];
       buf64[64] = '\0';
-      char buf32[33];
-      buf32[32] = '\0';
+      // char buf32[33];
+      // buf32[32] = '\0';
       char buf24[25];
       buf24[24] = '\0';
       char buf22[23];

@@ -350,3 +350,4 @@ namespace ossimplugins
       };
 }
 #endif /* #ifndef ossimPleiadesDimapSupportData_HEADER */
+

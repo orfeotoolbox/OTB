@@ -22,23 +22,23 @@ namespace ossimplugins
  * @ingroup TrailerFile
  * @brief This class is a factory able to construct Record base classes
  */
-   class TrailerFactory : public RadarSatRecordFactory
-   {
-   public:
-      /**
-       * @brief Contstructor
-       */
-      TrailerFactory();
-      /**
-       * @brief Destructor
-       */
-      ~TrailerFactory();
+class TrailerFactory : public RadarSatRecordFactory
+{
+public:
+  /**
+   * @brief Contstructor
+   */
+  TrailerFactory();
+  /**
+   * @brief Destructor
+   */
+  ~TrailerFactory();
 
 
-   protected:
+protected:
 
 
-   private:
-   };
+private:
+};
 }
 #endif

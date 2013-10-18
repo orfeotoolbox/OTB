@@ -15,14 +15,13 @@
 
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/base/ossimFilename.h>
-#include <ossimPluginConstants.h>
 
 // Forward class declarations outside of namespace ossimplugins.
 class ossimXmlDocument;
 
 namespace ossimplugins
 {
-   class OSSIM_PLUGINS_DLL ossimRadarSat2TiffReader : public ossimTiffTileSource
+   class ossimRadarSat2TiffReader : public ossimTiffTileSource
    {
    public:
       
@@ -99,7 +98,7 @@ namespace ossimplugins
       ossimFilename theProductXmlFile;
 
       TYPE_DATA
-         };
+   };
 
 } // End: namespace ossimplugins
 

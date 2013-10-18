@@ -23,38 +23,38 @@ namespace ossimplugins
  * @ingroup EnvisatAsar
  * @brief This class is a factory able to construct Record base classes given the id of the record wanted
  */
-   class EnvisatAsarRecordFactory
-   {
-   public:
-      /**
-       * @brief Constructor
-       */
-      EnvisatAsarRecordFactory();
-      /**
-       * @brief Destructor
-       */
-      ~EnvisatAsarRecordFactory();
+class EnvisatAsarRecordFactory
+{
+public:
+  /**
+   * @brief Constructor
+   */
+  EnvisatAsarRecordFactory();
+  /**
+   * @brief Destructor
+   */
+  ~EnvisatAsarRecordFactory();
 
-      /**
-       * @brief Adds a new Record type available in this factory
-       * @param record Record to add in the factory
-       * @param id Id of the new avalaible Record
-       */
-      void RegisterRecord(std::string id, EnvisatAsarRecord * record);
+  /**
+   * @brief Adds a new Record type available in this factory
+   * @param record Record to add in the factory
+   * @param id Id of the new avalaible Record
+   */
+  void RegisterRecord(std::string id, EnvisatAsarRecord * record);
 
-      /**
-       * @brief Instanciatse a new Record
-       * @param id Id of the Record we want to instanciate
-       */
-      EnvisatAsarRecord* Instanciate(std::string id);
+  /**
+   * @brief Instanciatse a new Record
+   * @param id Id of the Record we want to instanciate
+   */
+  EnvisatAsarRecord* Instanciate(std::string id);
 
-   protected:
-      /**
-       * @brief Contains all the available Records for the factory
-       */
-      std::map<std::string, EnvisatAsarRecord*> _availableRecords;
+protected:
+  /**
+   * @brief Contains all the available Records for the factory
+   */
+  std::map<std::string, EnvisatAsarRecord*> _availableRecords;
 
-   private:
-   };
+private:
+};
 }
 #endif
