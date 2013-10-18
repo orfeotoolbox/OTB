@@ -91,6 +91,22 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
 
   m_NumberOfClasses = countClasses;
 
+
+  // SORTING of m_MapOfClasses and m_MapOfIndices according to increasing class labels
+  typename MapOfClassesType::iterator itMapOfClasses;
+  itMapOfClasses = m_MapOfClasses.begin();
+
+  unsigned int itElt = 0;
+  while (itMapOfClasses != m_MapOfClasses.end())
+    {
+    ClassLabelType currentLabel = itMapOfClasses->first;
+    m_MapOfClasses[currentLabel] = itElt;
+    m_MapOfIndices[itElt] = currentLabel;
+    ++itMapOfClasses;
+    ++itElt;
+    }
+
+
   std::vector<long int> samplesPerClass;
 
   for (unsigned int i = 0; i < m_NumberOfClasses; ++i)

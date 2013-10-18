@@ -159,7 +159,6 @@ void TrainImagesClassifier::LogConfusionMatrix(ConfusionMatrixCalculatorType* co
       }
     }
 
-  typedef std::map<int, ConfusionMatrixCalculatorType::ClassLabelType> MapOfIndicesType;
   MapOfIndicesType mapOfIndices = confMatCalc->GetMapOfIndices();
 
   MapOfIndicesType::const_iterator it = mapOfIndices.begin();
@@ -478,13 +477,13 @@ void TrainImagesClassifier::DoExecute()
       {
       // Writing the confusion matrix in the output .CSV file
 
-      MapOfClassesType::iterator itMapOfClassesValid, itMapOfClassesPred;
+      MapOfIndicesType::iterator itMapOfIndicesValid, itMapOfIndicesPred;
       ClassLabelType labelValid = 0;
 
       ConfusionMatrixType confusionMatrix = confMatCalc->GetConfusionMatrix();
-      MapOfClassesType mapOfClassesValid = confMatCalc->GetMapOfClasses();
+      MapOfIndicesType mapOfIndicesValid = confMatCalc->GetMapOfIndices();
 
-      unsigned int nbClassesPred = mapOfClassesValid.size();
+      unsigned int nbClassesPred = mapOfIndicesValid.size();
 
       /////////////////////////////////////////////
       // Filling the 2 headers for the output file
@@ -496,17 +495,22 @@ void TrainImagesClassifier::DoExecute()
       // Filling ossHeaderValidLabels and ossHeaderPredLabels for the output file
       ossHeaderValidLabels << commentValidStr;
       ossHeaderPredLabels << commentPredStr;
-      itMapOfClassesValid = mapOfClassesValid.begin();
-      while (itMapOfClassesValid != mapOfClassesValid.end())
+
+      itMapOfIndicesValid = mapOfIndicesValid.begin();
+
+      while (itMapOfIndicesValid != mapOfIndicesValid.end())
         {
-        // labels labelValid of mapOfClassesValid are already sorted
-        labelValid = itMapOfClassesValid->first;
-        otbAppLogINFO("mapOfClassesValid[" << labelValid << "] = " << itMapOfClassesValid->second);
+        // labels labelValid of mapOfIndicesValid are already sorted in otbConfusionMatrixCalculator
+        labelValid = itMapOfIndicesValid->second;
+
+        otbAppLogINFO("mapOfIndicesValid[" << itMapOfIndicesValid->first << "] = " << labelValid);
 
         ossHeaderValidLabels << labelValid;
         ossHeaderPredLabels << labelValid;
-        ++itMapOfClassesValid;
-        if (itMapOfClassesValid != mapOfClassesValid.end())
+
+        ++itMapOfIndicesValid;
+
+        if (itMapOfIndicesValid != mapOfIndicesValid.end())
           {
           ossHeaderValidLabels << separatorChar;
           ossHeaderPredLabels << separatorChar;
@@ -518,12 +522,10 @@ void TrainImagesClassifier::DoExecute()
           }
         }
 
-
       std::ofstream outFile;
       outFile.open(this->GetParameterString("io.confmatout").c_str());
       outFile << std::fixed;
       outFile.precision(10);
-
 
       /////////////////////////////////////
       // Writing the 2 headers
@@ -531,18 +533,17 @@ void TrainImagesClassifier::DoExecute()
       outFile << ossHeaderPredLabels.str();
       /////////////////////////////////////
 
-      unsigned int indiceLabelValid = 0, indiceLabelPred = 0;
+      unsigned int indexLabelValid = 0, indexLabelPred = 0;
 
-      for (itMapOfClassesValid = mapOfClassesValid.begin(); itMapOfClassesValid != mapOfClassesValid.end(); ++itMapOfClassesValid)
+      for (itMapOfIndicesValid = mapOfIndicesValid.begin(); itMapOfIndicesValid != mapOfIndicesValid.end(); ++itMapOfIndicesValid)
         {
-        // labels labelValid = itMapOfClassesValid->first of mapOfClassesRef are already sorted
+        indexLabelPred = 0;
 
-        indiceLabelPred = 0;
-        for (itMapOfClassesPred = mapOfClassesValid.begin(); itMapOfClassesPred != mapOfClassesValid.end(); ++itMapOfClassesPred)
+        for (itMapOfIndicesPred = mapOfIndicesValid.begin(); itMapOfIndicesPred != mapOfIndicesValid.end(); ++itMapOfIndicesPred)
           {
-          // Writing the ordered confusion matrix in the output file
-          outFile << confusionMatrix(indiceLabelValid, indiceLabelPred);
-          if (indiceLabelPred < (nbClassesPred - 1))
+          // Writing the confusion matrix (sorted in otbConfusionMatrixCalculator) in the output file
+          outFile << confusionMatrix(indexLabelValid, indexLabelPred);
+          if (indexLabelPred < (nbClassesPred - 1))
             {
             outFile << separatorChar;
             }
@@ -550,10 +551,10 @@ void TrainImagesClassifier::DoExecute()
             {
             outFile << std::endl;
             }
-          ++indiceLabelPred;
+          ++indexLabelPred;
           }
 
-        ++indiceLabelValid;
+        ++indexLabelValid;
         }
 
       outFile.close();

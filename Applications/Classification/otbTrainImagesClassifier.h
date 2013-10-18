@@ -134,7 +134,7 @@ public:
   // Estimate performance on validation sample
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType, LabelListSampleType> ConfusionMatrixCalculatorType;
   typedef ConfusionMatrixCalculatorType::ConfusionMatrixType ConfusionMatrixType;
-  typedef ConfusionMatrixCalculatorType::MapOfClassesType MapOfClassesType;
+  typedef ConfusionMatrixCalculatorType::MapOfIndicesType MapOfIndicesType;
   typedef ConfusionMatrixCalculatorType::ClassLabelType ClassLabelType;
 
 

@@ -33,6 +33,8 @@ namespace otb
  *  position of the labels in the lists to build the pairs
  *  reference/produced labels.
  *
+ *  The rows and columns of the output confusion matrix are sorted according to increasing class labels.
+ *
  *  For a 2 classes problem, the confusion matrix is organized as follows:
  *  \f[ \left( \begin{array}{cc} True Positives & False Negatives \\ False Positives & True Negatives \end{array} \right) \f]
  *

@@ -328,16 +328,15 @@ private:
     // Filling ossHeaderRefLabels for the output file
     ossHeaderRefLabels << commentRefStr;
     itMapOfClassesRef = mapOfClassesRef.begin();
-    int indiceLabelRef = 0;
+    int indexLabelRef = 0;
     while (itMapOfClassesRef != mapOfClassesRef.end())
       {
       // labels labelRef of mapOfClassesRef are already sorted
       labelRef = itMapOfClassesRef->first;
-      otbAppLogINFO("mapOfClassesRef[" << labelRef << "] = " << itMapOfClassesRef->second);
 
       // SORTING the itMapOfClassesRef->second items of mapOfClassesRef
-      mapOfClassesRef[labelRef] = indiceLabelRef;
-      ++indiceLabelRef;
+      mapOfClassesRef[labelRef] = indexLabelRef;
+      otbAppLogINFO("mapOfClassesRef[" << labelRef << "] = " << mapOfClassesRef[labelRef]);
 
       ossHeaderRefLabels << labelRef;
       ++itMapOfClassesRef;
@@ -349,16 +348,23 @@ private:
         {
         ossHeaderRefLabels << std::endl;
         }
+
+      ++indexLabelRef;
       }
 
     // Filling ossHeaderProdLabels for the output file
     ossHeaderProdLabels << commentProdStr;
     itMapOfClassesProd = mapOfClassesProd.begin();
+    int indexLabelProd = 0;
     while (itMapOfClassesProd != mapOfClassesProd.end())
       {
       // labels labelProd of mapOfClassesProd are already sorted
       labelProd = itMapOfClassesProd->first;
-      otbAppLogINFO("mapOfClassesProd[" << labelProd << "] = " << itMapOfClassesProd->second);
+
+      // SORTING the itMapOfClassesProd->second items of mapOfClassesProd
+      mapOfClassesProd[labelProd] = indexLabelProd;
+      otbAppLogINFO("mapOfClassesProd[" << labelProd << "] = " << mapOfClassesProd[labelProd]);
+
       ossHeaderProdLabels << labelProd;
       ++itMapOfClassesProd;
       if (itMapOfClassesProd != mapOfClassesProd.end())
@@ -369,6 +375,8 @@ private:
         {
         ossHeaderProdLabels << std::endl;
         }
+
+      ++indexLabelProd;
       }
 
 
@@ -390,8 +398,8 @@ private:
 
     // Formatting m_MatrixLOG from m_Matrix in order to make m_MatrixLOG a square matrix
     // from the reference labels in mapOfClassesRef
-    indiceLabelRef = 0;
-    unsigned int indiceLabelProd = 0, indiceLabelProdInRef = 0;
+    indexLabelRef = 0;
+    int indexLabelProdInRef = 0;
 
     // Initialization of m_MatrixLOG
     m_MatrixLOG.SetSize(nbClassesRef, nbClassesRef);
@@ -401,7 +409,7 @@ private:
       // labels labelRef of mapOfClassesRef are already sorted
       labelRef = itMapOfClassesRef->first;
 
-      indiceLabelProd = 0;
+      indexLabelProd = 0;
       for (itMapOfClassesProd = mapOfClassesProd.begin(); itMapOfClassesProd != mapOfClassesProd.end(); ++itMapOfClassesProd)
         {
         // labels labelProd of mapOfClassesProd are already sorted
@@ -410,15 +418,15 @@ private:
         // If labelProd is present in mapOfClassesRef
         if (mapOfClassesRef.count(labelProd) != 0)
           {
-          // Indice of labelProd in mapOfClassesRef; itMapOfClassesRef->second elements are now SORTED
-          indiceLabelProdInRef = mapOfClassesRef[labelProd];
-          m_MatrixLOG(indiceLabelRef, indiceLabelProdInRef) = m_Matrix[labelRef][labelProd];
+          // Index of labelProd in mapOfClassesRef; itMapOfClassesRef->second elements are now SORTED
+          indexLabelProdInRef = mapOfClassesRef[labelProd];
+          m_MatrixLOG(indexLabelRef, indexLabelProdInRef) = m_Matrix[labelRef][labelProd];
           }
 
         ///////////////////////////////////////////////////////////
         // Writing the ordered confusion matrix in the output file
         outFile << m_Matrix[labelRef][labelProd];
-        if (indiceLabelProd < (nbClassesProd - 1))
+        if (indexLabelProd < (nbClassesProd - 1))
           {
           outFile << separatorChar;
           }
@@ -427,11 +435,11 @@ private:
           outFile << std::endl;
           }
         ///////////////////////////////////////////////////////////
-        ++indiceLabelProd;
+        ++indexLabelProd;
         }
 
       m_Matrix[labelRef].clear();
-      ++indiceLabelRef;
+      ++indexLabelRef;
       }
 
     // m_Matrix is cleared in order to remove old results in case of successive runs of the GUI application
@@ -455,11 +463,11 @@ private:
     for (itMapOfClassesRef = mapOfClassesRef.begin(); itMapOfClassesRef != mapOfClassesRef.end(); ++itMapOfClassesRef)
       {
       labelRef = itMapOfClassesRef->first;
-      indiceLabelRef = itMapOfClassesRef->second;
+      indexLabelRef = itMapOfClassesRef->second;
 
-      otbAppLogINFO("Precision of class [" << labelRef << "] vs all: " << confMatMeasurements->GetPrecisions()[indiceLabelRef]);
-      otbAppLogINFO("Recall of class [" << labelRef << "] vs all: " << confMatMeasurements->GetRecalls()[indiceLabelRef]);
-      otbAppLogINFO("F-score of class [" << labelRef << "] vs all: " << confMatMeasurements->GetFScores()[indiceLabelRef] << std::endl);
+      otbAppLogINFO("Precision of class [" << labelRef << "] vs all: " << confMatMeasurements->GetPrecisions()[indexLabelRef]);
+      otbAppLogINFO("Recall of class [" << labelRef << "] vs all: " << confMatMeasurements->GetRecalls()[indexLabelRef]);
+      otbAppLogINFO("F-score of class [" << labelRef << "] vs all: " << confMatMeasurements->GetFScores()[indexLabelRef] << std::endl);
       }
 
     otbAppLogINFO("Precision of the different classes: " << confMatMeasurements->GetPrecisions());
