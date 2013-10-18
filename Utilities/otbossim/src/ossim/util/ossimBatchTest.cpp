@@ -560,13 +560,13 @@ ossim_uint8 ossimBatchTest::execute()
       << endl; // flush
    m_logStr.close();
 
-   cout << "\nWrote log: " << logFile << "\n" << endl;
+   cout << "Wrote: " << logFile << endl;
    return overall_test_status;
 }
 
-//************************************************************************************************
+//**************************************************************************************************
 // Special handler for KWL containing list of test config files.
-//************************************************************************************************
+//**************************************************************************************************
 ossim_uint8 ossimBatchTest::processConfigList(const ossimKeywordlist& kwl)
 {
    ossim_uint8 overall_test_status = (ossim_uint8) TEST_TBD;
@@ -576,7 +576,6 @@ ossim_uint8 ossimBatchTest::processConfigList(const ossimKeywordlist& kwl)
    ossimString prefixBase = "test_config_file";
    ossimString regExpStr = prefixBase + "[0-9]+";
    const ossim_uint32 count = kwl.getNumberOfSubstringKeys(regExpStr);
-   const ossim_uint32 MAX_INDEX = count + 100;
    if (count != 0)
    {
       // This is indeed a list of config files:
@@ -602,25 +601,21 @@ ossim_uint8 ossimBatchTest::processConfigList(const ossimKeywordlist& kwl)
          // Execute this config file:
          if (m_configFileName.isReadable())
          {
+            cout << "\n\nProcessing config file: " << m_configFileName.c_str() << "\n";
             overall_test_status |= execute();
             ++processedIndexes;
          }
 
          ++index;
-         
-         if ( index >= MAX_INDEX )
-         {
-            break;  // Config file has bad numbering...
-         }
       }
    }
 
    return overall_test_status;
 }
 
-//************************************************************************************************
+//**************************************************************************************************
 //! Fetches string from OS for naming and tagging the log file.
-//************************************************************************************************
+//**************************************************************************************************
 void ossimBatchTest::getDateString(ossimString& date)
 {
    time_t t;

@@ -7,7 +7,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimIgen.cpp 22299 2013-07-02 19:28:28Z dburken $
+// $Id: ossimIgen.cpp 21850 2012-10-21 20:09:55Z dburken $
 
 #include <ossim/ossimConfig.h> /* To pick up define OSSIM_HAS_MPI. */
 
@@ -475,14 +475,17 @@ void ossimIgen::outputProduct()
    {
       theTiling->initialize(*(theProductProjection.get()), theOutputRect);
 
-      ossimRectangleCutFilter* cut = 0;
+      ossimRectangleCutFilter* cut = NULL;
       ossimTilingPoly* tilingPoly = dynamic_cast<ossimTilingPoly*>( theTiling.get() );
+      if (tilingPoly == NULL)
+      {
+         cut = new ossimRectangleCutFilter;
+         theProductChain->addFirst(cut);
+      }
       
       ossimFilename tempFile = writer->getFilename();
       if(!tempFile.isDir())
-      {
          tempFile = tempFile.path();
-      }
 
       ossimString tileName;
       ossimIrect clipRect;
@@ -491,24 +494,10 @@ void ossimIgen::outputProduct()
       // so this data member is modified here, then later accessed by setView:
       while(theTiling->next(theProductProjection, clipRect, tileName))
       {
-         if ( !tilingPoly )//use ossimTiling or ossimTilingRect
+         if (cut && tilingPoly == NULL)//use ossimTiling or ossimTilingRect
          {
-            // Disconnect prior to setting up chain.
-            writer->disconnect();
-
-            // This will progate the updated projection from theTiling->next call.
             setView();
-
-            // Recompute the bounding rect:
-            initializeChain();
-
-            // Hook writer up:
-            writer->connectMyInputTo(theProductChain.get());
-            writer->setFilename(tempFile.dirCat(tileName));
-            writer->initialize();
-
-            // Set the clip rect for tile:
-            writer->setAreaOfInterest( clipRect );
+            cut->setRectangle(clipRect);
          }
          else //otherwise use ossimTilingPoly
          {
@@ -540,21 +529,16 @@ void ossimIgen::outputProduct()
                   }
                }
             }
-
-            initializeChain();
-            writer->disconnect();
-            writer->connectMyInputTo(theProductChain.get());
-            writer->setFilename(tempFile.dirCat(tileName));
-            writer->initialize();
-            
-         } // if ( !tilingPoly ){} else{
-         
-
-         // Write the file:
-         if ( !writeToFile( writer.get() ))
-         {
-            break;
          }
+         
+         initializeChain();
+         writer->disconnect();
+         writer->connectMyInputTo(theProductChain.get());
+         writer->setFilename(tempFile.dirCat(tileName));
+         writer->initialize();
+
+         if (!writeToFile(writer.get()))
+            break;
       }
    }
    else

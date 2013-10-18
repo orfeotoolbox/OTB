@@ -7,7 +7,7 @@
 // Description: HISTOA tag class definition.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimNitfHistoaTag.cpp 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfHistoaTag.cpp 21287 2012-07-17 17:50:15Z dburken $
 
 #include <ossim/support_data/ossimNitfHistoaTag.h>
 #include <ossim/base/ossimCommon.h>
@@ -17,6 +17,11 @@
 ossimNitfHistoaProcessingEvent::ossimNitfHistoaProcessingEvent()
 {
    clearFields();
+}
+
+std::string ossimNitfHistoaProcessingEvent::getRegisterTagName() const
+{
+   return "HISTOA";
 }
 
 ossim_uint32 ossimNitfHistoaProcessingEvent::getSizeInBytes()const
@@ -358,8 +363,13 @@ void ossimNitfHistoaProcessingEvent::clearFields()
 }
 
 ossimNitfHistoaTag::ossimNitfHistoaTag()
-   : ossimNitfRegisteredTag( std::string("HISTOA"), 0 )
 {
+   
+}
+
+std::string ossimNitfHistoaTag::getRegisterTagName() const
+{
+   return "HISTOA";
 }
 
 void ossimNitfHistoaTag::parseStream(std::istream& in)
@@ -383,9 +393,6 @@ void ossimNitfHistoaTag::parseStream(std::istream& in)
          m_eventList.push_back(evt);
       }
    }
-
-   // Set the tag length in base for the getTagLenth method.
-   setTagLength( getSizeInBytes() );
 }
 
 void ossimNitfHistoaTag::writeStream(std::ostream& out)
@@ -437,21 +444,19 @@ void ossimNitfHistoaTag::clearFields()
    m_lutid[LUTID_SIZE] = '\0';
    m_nEvents[NEVENTS_SIZE] = '\0';
    m_eventList.clear();
-
-   // Clear the tag length in base.
-   setTagLength(0);
 }
+
 
 std::ostream& ossimNitfHistoaTag::print(std::ostream& out,
                                         const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
    << pfx << std::setw(24) << "CETAG:"
-   << getTagName() << "\n"
+   << getRegisterTagName() << "\n"
    << pfx << std::setw(24) << "CEL:"
    << getSizeInBytes() << "\n"
    << pfx << std::setw(24) << "SYSTYPE:"     << m_systype << "\n"

@@ -11,7 +11,7 @@
 // See:  STDI-000_v2.1 Table 7-3 for detailed description.
 // 
 //********************************************************************
-// $Id: ossimNitfStdidcTag.h 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfStdidcTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfStdidcTag_HEADER
 #define ossimNitfStdidcTag_HEADER 1
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -46,10 +46,10 @@ public:
       
    ossimNitfStdidcTag();
    virtual ~ossimNitfStdidcTag();
-
+   virtual std::string getRegisterTagName()const;
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
-
+   virtual ossim_uint32 getSizeInBytes()const;
    virtual void clearFields();
 
   // The set methods below taking ossimString args will truncate and

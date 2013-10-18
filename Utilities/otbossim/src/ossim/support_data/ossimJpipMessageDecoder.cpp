@@ -8,8 +8,8 @@ m_inputStream(&m_streamBuffer)
 {
 }
 
-// ossimJpipMessage* ossimJpipMessageDecoder::readMessage() throw(ossimException)
-ossimJpipMessage* ossimJpipMessageDecoder::readMessage()   
+
+ossimJpipMessage* ossimJpipMessageDecoder::readMessage() throw(ossimException)
 {
     ossim_int32 BinIDIndicator = 0;
     ossim_int64 inClassIdentifier = 0;
@@ -113,8 +113,7 @@ ossimJpipMessage* ossimJpipMessageDecoder::readMessage()
     return jpipMessage.release();
 }
 
-// ossim_int64 ossimJpipMessageDecoder::readVBAS() throw(ossimException)
-ossim_int64 ossimJpipMessageDecoder::readVBAS()
+ossim_int64 ossimJpipMessageDecoder::readVBAS() throw(ossimException)
 {
     ossim_int64 value = 0;
     ossim_int64 tempByte;
@@ -144,8 +143,7 @@ ossim_int64 ossimJpipMessageDecoder::readVBAS()
     return value;
 }
 
-// ossimJpipMessage* ossimJpipMessageDecoder::readEORMessage() throw(ossimException)
-ossimJpipMessage* ossimJpipMessageDecoder::readEORMessage()
+ossimJpipMessage* ossimJpipMessageDecoder::readEORMessage() throw(ossimException)
 {
     ossimRefPtr<ossimJpipMessage> jpipMessage; 
     

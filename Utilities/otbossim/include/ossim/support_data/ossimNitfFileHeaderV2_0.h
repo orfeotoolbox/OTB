@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.h 22418 2013-09-26 15:01:12Z gpotts $
+// $Id: ossimNitfFileHeaderV2_0.h 18413 2010-11-11 19:56:22Z gpotts $
 #ifndef ossimNitfFileHeaderV2_0_HEADER
 #define ossimNitfFileHeaderV2_0_HEADER
 
@@ -173,7 +173,6 @@ public:
    virtual ossim_int32 getNumberOfGraphics()const;
    virtual ossim_int32 getNumberOfTextSegments()const;
    virtual ossim_int32 getNumberOfDataExtSegments()const;
-   virtual ossim_int32 getNumberOfReservedExtSegments()const;
    virtual ossim_int32 getHeaderSize()const;
    virtual ossim_int64 getFileSize()const;
    virtual ossimString getSecurityClassification()const;
@@ -195,7 +194,7 @@ public:
    virtual ossimNitfTextHeader*   getNewTextHeader(ossim_uint32 textNumber,
                                                    std::istream& in)const;
    virtual ossimNitfDataExtensionSegment* getNewDataExtensionSegment(
-      ossim_int32 dataExtNumber, std::istream& in)const;
+      ossim_uint32 dataExtNumber, std::istream& in)const;
    
    virtual ossimNitfImageHeader*  allocateImageHeader()const;
    virtual ossimNitfSymbolHeader* allocateSymbolHeader()const;
@@ -321,12 +320,6 @@ private:
     * from the start of the file to each major section and eqach subsection.
     */
    void initializeAllOffsets();
-
-  /*!
-    * If the header was parsed and the offsets have been initialized, this method will
-    * parse all overflow tags and put them into theTagList.
-    */
-   void readOverflowTags(std::istream& in);
 
    /*!
     * This method will be called after the header is read

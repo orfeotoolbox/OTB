@@ -17,8 +17,9 @@
 
 #include <ossim/base/ossimConstants.h>
 
-#include <iosfwd>
-#include <string>
+#include <istream>
+#include <ostream>
+
 class ossimKeywordlist;
 
 class OSSIM_DLL ossimLasHdr
@@ -32,7 +33,7 @@ public:
    ossimLasHdr(const ossimLasHdr& hdr);
 
    /* @brief assignment operator= */
-   const ossimLasHdr& operator=(const ossimLasHdr& hdr);
+   const ossimLasHdr& operator=(const ossimLasHdr& copy_this);
 
    /* destructor */
    ~ossimLasHdr();
@@ -45,10 +46,9 @@ public:
 
    /**
     * @brief Method to initialize from input stream.
-    *
-    * Input stream should be at beginning of file.
-    * 
     * @param in Stream to read from.
+    * @note The first four bytes are not read in so stream should be
+    * positioned at the 5th byte.
     */
    void readStream(std::istream& in);
 
@@ -77,9 +77,6 @@ public:
    
    /** @return True if bit 3 of m_globalEncoding is set, false if not. */
    bool getReturnsSyntheticallyGeneratedBit() const;
-
-   /** @return True if bit 4 of m_globalEncoding is set, false if not. */
-   bool getWktBit() const;
    
    /**
     * @return The project ID GUID data, e.g.: 55b44da7-7c23-4f86-a54ec39e8f1d1ea1
@@ -108,13 +105,13 @@ public:
    ossim_uint8 getPointDataFormatId() const;
 
    /** @return The number of total points. */
-   ossim_uint64 getNumberOfPoints() const;
+   ossim_uint32 getNumberOfPoints() const;
 
    /**
     * @brief Gets number of points for entry where entry is synonymous returns.
     * @return The number of points for entries 0 through 4.
     */
-   ossim_uint64 getNumberOfPoints(ossim_uint32 entry) const;
+   ossim_uint32 getNumberOfPoints(ossim_uint32 entry) const;
 
    const ossim_float64& getScaleFactorX() const;
    const ossim_float64& getScaleFactorY() const;
@@ -135,15 +132,6 @@ private:
    /** @brief Performs a swap if system byte order is not little endian. */
    void swap();
 
-   /**
-    * @brief Test version.
-    * @param major
-    * @param minor
-    * @return true if m_versionMajor and m_versionMinor are greater than major and minor
-    * args.
-    */
-   bool versionGreaterThan( ossim_uint8 major, ossim_uint8 minor ) const;
-
    char          m_fileSignature[4];
    ossim_uint16  m_fileSourceId;
    ossim_uint16  m_globalEncoding;
@@ -162,8 +150,12 @@ private:
    ossim_uint32  m_numberOfVariableLengthRecords;
    ossim_uint8   m_pointDataFormatId;
    ossim_uint16  m_pointDataRecordLength;
-   ossim_uint32  m_legacyNumberOfPointRecords;            // deprecated 1_4
-   ossim_uint32  m_legacyNumberOfPointsByReturn[5];       // deprecated 1_4
+   ossim_uint32  m_numberOfPointRecords;
+   ossim_uint32  m_numberOfPointsReturn1;
+   ossim_uint32  m_numberOfPointsReturn2;
+   ossim_uint32  m_numberOfPointsReturn3;
+   ossim_uint32  m_numberOfPointsReturn4;
+   ossim_uint32  m_numberOfPointsReturn5;
    ossim_float64 m_xScaleFactor;
    ossim_float64 m_yScaleFactor;
    ossim_float64 m_zScaleFactor;
@@ -176,12 +168,9 @@ private:
    ossim_float64 m_minY;
    ossim_float64 m_maxZ;
    ossim_float64 m_minZ;
-   ossim_uint64  m_startOfWaveformDataPacket;             // Added 1_3
-   ossim_uint64  m_startOfExtendedVariableLengthRecords;  // Added 1_4
-   ossim_uint32  m_numberOfExtendedVariableLengthRecords; // Added 1_4
-   ossim_uint64  m_numberOfPointRecords;                  // Added 1_4
-   ossim_uint64  m_numberOfPointsByReturn[15];            // Added 1_4
-   
+   ossim_uint64  m_startOfWaveformData;
 };
+
+
 
 #endif /* End of "#ifndef ossimLasHdr_HEADER" */

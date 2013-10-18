@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.cpp 22417 2013-09-26 14:54:58Z gpotts $
+// $Id: ossimNitfImageHeader.cpp 18443 2010-11-22 23:42:39Z gpotts $
 
 #include <cmath> /* for fmod */
 #include <iomanip>
@@ -105,12 +105,9 @@ ossim_uint32 ossimNitfImageHeader::getNumberOfTags()const
    return static_cast<ossim_uint32>(theTagList.size());
 }
 
-void ossimNitfImageHeader::addTag(const ossimNitfTagInformation& tag, bool unique)
+void ossimNitfImageHeader::addTag(const ossimNitfTagInformation& tag)
 {
-   if(unique)
-   {
-      removeTag(tag.getTagName());
-   }
+   removeTag(tag.getTagName());
    theTagList.push_back(tag);
 }
 

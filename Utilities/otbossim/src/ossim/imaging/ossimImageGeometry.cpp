@@ -13,12 +13,12 @@
 
 #include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/base/ossimCommon.h>
-#include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossim2dTo2dTransformRegistry.h>
 #include <ossim/elevation/ossimElevManager.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <cmath>
@@ -935,21 +935,6 @@ void ossimImageGeometry::getBoundingRect(ossimIrect& bounding_rect) const
    }
 }
 
-void ossimImageGeometry::getBoundingRect(ossimDrect& bounding_rect) const
-{
-   if (m_imageSize.hasNans())
-   {
-      bounding_rect.makeNan();
-   }
-   else
-   {
-      bounding_rect.set_ulx(0);
-      bounding_rect.set_uly(0);
-      bounding_rect.set_lrx(m_imageSize.x-1);
-      bounding_rect.set_lry(m_imageSize.y-1);
-   }
-}
-
 void ossimImageGeometry::applyScale(const ossimDpt& scale, bool recenterTiePoint)
 {
    if ((scale.x != 0.0) && (scale.y != 0.0))
@@ -989,25 +974,21 @@ bool ossimImageGeometry::computeImageToGroundPartialsWRTAdjParam(ossimDpt& resul
    if(idx >= adjustableParamInterface->getNumberOfAdjustableParameters()) return false;
    
    ossimDpt p1, p2;
-   // double middle = adjustableParamInterface->getAdjustableParameter(idx);
-   double middle = adjustableParamInterface->getParameterCenter(idx);
+   double middle = adjustableParamInterface->getAdjustableParameter(idx);
    
    //set parm to high value
-   // adjustableParamInterface->setAdjustableParameter(idx, middle + paramDelta, true);
-   adjustableParamInterface->setParameterCenter(idx, middle + paramDelta, true);
+   adjustableParamInterface->setAdjustableParameter(idx, middle + paramDelta, true);
    worldToLocal(gpt, p1);
    
    //set parm to low value and gte difference
-   // adjustableParamInterface->setAdjustableParameter(idx, middle - paramDelta, true);
-   adjustableParamInterface->setParameterCenter(idx, middle - paramDelta, true);
+   adjustableParamInterface->setAdjustableParameter(idx, middle - paramDelta, true);
    worldToLocal(gpt, p2);
    
    //get partial derivative
    result = (p2-p1)*den;
    
    //reset param
-   // adjustableParamInterface->setAdjustableParameter(idx, middle, true);
-   adjustableParamInterface->setParameterCenter(idx, middle, true);
+   adjustableParamInterface->setAdjustableParameter(idx, middle, true);
    
    return !result.hasNans();
 }
@@ -1143,164 +1124,4 @@ bool ossimImageGeometry::computeGroundToImagePartials(NEWMAT::Matrix& result,
    return false;
 }
 
-ossim_float64 ossimImageGeometry::upIsUpAngle() const
-{
-   ossim_float64 result = ossim::nan();
 
-   if ( m_projection.valid() )
-   {
-      if ( m_projection->isAffectedByElevation() )
-      {
-         const int NUMBER_OF_SAMPLES = 9;
-         
-         // In meters.  This is about a height of a 6 to 7 story building.
-         const double ELEVATION_DISPLACEMENT = 20;
-         
-         ossimDrect bounds;
-         getBoundingRect( bounds );
-         
-         if( !bounds.hasNans() )
-         {
-            ossim_float64 widthPercent  = bounds.width()*.1;
-            ossim_float64 heightPercent = bounds.height()*.1;
-            
-            //---
-            // Sanity check to make sure that taking 10 percent out on the image
-            // gets us to at least 1 pixel away.
-            //---
-            if(widthPercent < 1.0) widthPercent = 1.0;
-            if(heightPercent < 1.0) heightPercent = 1.0;
-            
-            // set up some work variables to help calculate the average partial
-            //
-            std::vector<ossimDpt> ipts(NUMBER_OF_SAMPLES);
-            std::vector<ossimGpt> gpts(NUMBER_OF_SAMPLES);
-            std::vector<ossimDpt> iptsDisplacement(NUMBER_OF_SAMPLES);
-            std::vector<ossimDpt> partials(NUMBER_OF_SAMPLES);
-            ossimDpt averageDelta(0.0,0.0);
-            
-            ossimDpt centerIpt = bounds.midPoint();
-            
-            //---
-            // Lets take an average displacement about the center point (3x3 grid)
-            // we will go 10 percent out of the width and height of the image and
-            // look at the displacement at those points and average them we will
-            // use the average displacement to compute the up is up rotation.
-            //---
-            
-            // top row:
-
-            // 45 degree left quadrant
-            ipts[0] = centerIpt + ossimDpt(widthPercent, -heightPercent);
-            // 45 degree middle top 
-            ipts[1] = centerIpt + ossimDpt(0.0,heightPercent);
-            // 45 degree right quadrant
-            ipts[2] = centerIpt + ossimDpt( widthPercent, -heightPercent);
-            
-            // middle row
-            ipts[3] = centerIpt + ossimDpt(-widthPercent, 0.0); // left middle
-            ipts[4] = centerIpt;
-            ipts[5] = centerIpt + ossimDpt(widthPercent, 0.0);
-            
-            // bottom row
-            ipts[6] = centerIpt + ossimDpt(-widthPercent, heightPercent);
-            ipts[7] = centerIpt + ossimDpt(0.0, heightPercent);
-            ipts[8] = centerIpt + ossimDpt(widthPercent, heightPercent);
-            
-            ossim_uint32 idx = 0;
-            for(idx = 0; idx < ipts.size(); ++idx)
-            {
-               double h = 0.0;
-               localToWorld(ipts[idx], gpts[idx]);
-               h = gpts[idx].height();
-               if(ossim::isnan(h)) h = 0.0;
-               gpts[idx].height(h + ELEVATION_DISPLACEMENT);
-               worldToLocal(gpts[idx], iptsDisplacement[idx]);
-               averageDelta = averageDelta + (iptsDisplacement[idx] - ipts[idx]);
-            }
-            
-            ossim_float64 averageLength = averageDelta.length();
-            if(averageLength < 1) return false;
-            
-            if(!ossim::almostEqual((double)0.0, (double)averageLength))
-            {
-               averageDelta = averageDelta/averageLength;
-            }
-            
-            ossimDpt averageLocation =  (ossimDpt(averageDelta.x*bounds.width(), 
-                                                  averageDelta.y*bounds.height())+centerIpt) ;
-            ossimGpt averageLocationGpt;
-            ossimGpt centerGpt;
-            
-            localToWorld(averageLocation, averageLocationGpt);
-            localToWorld(ipts[0], centerGpt);
-            
-            ossimDpt deltaPt = averageLocation - centerIpt; 
-            ossimDpt deltaUnitPt = deltaPt;
-            double len = deltaPt.length();
-            if(len > FLT_EPSILON)
-            {
-               deltaUnitPt  = deltaUnitPt/len;
-            }
-            
-            // Image space model positive y is down.  Let's reflect to positve y up.
-            deltaUnitPt.y *= -1.0; // Reflect y to be right handed.
-            
-            result = ossim::atan2d(deltaUnitPt.x, deltaUnitPt.y);
-            
-            //---
-            // We are essentially simulating camera rotation so negate the rotation
-            // value.
-            //---
-            result *= -1;
-            
-            if(result < 0) result += 360.0;
-            
-         }  // Matches: if( bounds.hasNans() == false )
-      }
-      else
-      {
-         result = 0;
-      }
-      
-   } // Matches: if ( m_projection.valid() && m_projection->isAffectedByElevation() )
-
-   return result;
-   
-} // End: ossimImageGeometry::upIsUpAngle()
-
-ossim_float64 ossimImageGeometry::northUpAngle()const
-{
-   ossim_float64 result = ossim::nan();
-
-   if ( m_projection.valid() )
-   {
-      ossimDrect bounds;
-      getBoundingRect( bounds );
-      
-      if( !bounds.hasNans() )
-      {
-         ossimDpt centerIpt = bounds.midPoint();
-
-         ossimDpt midBottomIpt( centerIpt.x, bounds.lr().y );
-         ossimDpt midTopIpt( centerIpt.x, bounds.ul().y );
-
-         ossimGpt midBottomGpt;
-         ossimGpt midTopGpt;
-         
-         localToWorld( midBottomIpt, midBottomGpt );
-         localToWorld( midTopIpt, midTopGpt );
-
-         if ( !midBottomGpt.hasNans() && !midTopGpt.hasNans() )
-         {
-            result = midBottomGpt.azimuthTo( midTopGpt );
-
-            if(result < 0) result += 360.0;
-         }
-      }
-      
-   } // Matches: if ( m_projection.valid() )
-
-   return result;
-   
-} // End: ossimImageGeometry::northUpAngle()

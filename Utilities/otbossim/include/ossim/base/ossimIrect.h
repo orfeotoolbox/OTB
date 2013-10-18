@@ -10,7 +10,7 @@
 // Container class for four integer points representing a rectangle.
 //
 //*******************************************************************
-//  $Id: ossimIrect.h 22197 2013-03-12 02:00:55Z dburken $
+//  $Id: ossimIrect.h 19180 2011-03-22 17:36:33Z oscarkramer $
 
 #ifndef ossimIrect_HEADER
 #define ossimIrect_HEADER 1
@@ -122,10 +122,10 @@ public:
    /** destructor */
    ~ossimIrect();
    
-   inline const ossimIrect& operator=  (const ossimIrect& rect);
-   const ossimIrect&        operator=  (const ossimDrect& rect);
-   inline bool              operator!= (const ossimIrect& rect) const;
-   inline bool              operator== (const ossimIrect& rect) const;
+   const ossimIrect& operator=  (const ossimIrect& rect);
+   const ossimIrect& operator=  (const ossimDrect& rect);
+   bool         operator!= (const ossimIrect& rect) const;
+   bool         operator== (const ossimIrect& rect) const;
 
    friend ossimIrect operator*(double scalar, const ossimIrect& rect)
       {
@@ -402,71 +402,71 @@ public:
     * Sets the upper left corner to "pt".  Adjusts the remaining corners
     * accordingly.
     */
-   inline void set_ul(const ossimIpt& pt);
+   void set_ul(const ossimIpt& pt);
 
    /*!
     * Sets the upper right corner to "pt".  Adjusts the remaining corners
     * accordingly.
     */
-   inline void set_ur(const ossimIpt& pt);
+   void set_ur(const ossimIpt& pt);
 
    /*!
     * Sets the lower right corner to "pt".  Adjusts the remaining corners
     * accordingly.
     */
-   inline void set_lr(const ossimIpt& pt);
+   void set_lr(const ossimIpt& pt);
 
    /*!
     * Sets the lower left corner to "pt".  Adjusts the remaining corners
     * accordingly.
     */
-   inline void set_ll(const ossimIpt& pt);
+   void set_ll(const ossimIpt& pt);
 
    /*!
     * Sets the upper left x.  Adjusts the remaining corners accordingly.
     */
-   inline void set_ulx(ossim_int32 x);
+   void set_ulx(ossim_int32 x);
 
    /*!
     * Sets the upper left y.  Adjusts the remaining corners accordingly.
     */
-   inline void set_uly(ossim_int32 y);
+   void set_uly(ossim_int32 y);
 
    /*!
     * Sets the upper right x.  Adjusts the remaining corners accordingly.
     */
-   inline void set_urx(ossim_int32 x);
+   void set_urx(ossim_int32 x);
 
    /*!
     * Sets the upper right y.  Adjusts the remaining corners accordingly.
     */
-   inline void set_ury(ossim_int32 y);
+   void set_ury(ossim_int32 y);
 
    /*!
     * Sets the lower right x.  Adjusts the remaining corners accordingly.
     */
-   inline void set_lrx(ossim_int32 x);
+   void set_lrx(ossim_int32 x);
 
    /*!
     * Sets the lower right y.  Adjusts the remaining corners accordingly.
     */
-   inline void set_lry(ossim_int32 y);
+   void set_lry(ossim_int32 y);
 
    /*!
     * Sets the lower left x.  Adjusts the remaining corners accordingly.
     */
-   inline void set_llx(ossim_int32 x);
+   void set_llx(ossim_int32 x);
 
    /*!
     * Sets the lower left y.  Adjusts the remaining corners accordingly.
     */
-   inline void set_lly(ossim_int32 y);
+   void set_lly(ossim_int32 y);
 
    /*!
     * Returns true if "pt" falls within rectangle.  Fall on an edge is also
     * considered to be within.
     */
-   inline bool pointWithin(const ossimIpt& pt) const;
+   bool pointWithin(const ossimIpt& pt) const;
 
    /*!
     * Returns true if any portion of an input rectangle "rect" intersects

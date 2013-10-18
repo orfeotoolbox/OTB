@@ -26,13 +26,18 @@
 RTTI_DEF1(ossimNitfCsdidaTag, "ossimNitfCsdidaTag", ossimNitfRegisteredTag);
 
 ossimNitfCsdidaTag::ossimNitfCsdidaTag()
-   : ossimNitfRegisteredTag(std::string("CSDIDA"), 70)
+   : ossimNitfRegisteredTag()
 {
    clearFields();
 }
 
 ossimNitfCsdidaTag::~ossimNitfCsdidaTag()
 {
+}
+
+std::string ossimNitfCsdidaTag::getRegisterTagName() const
+{
+   return std::string("CSDIDA");
 }
 
 void ossimNitfCsdidaTag::parseStream(std::istream& in)
@@ -77,6 +82,11 @@ void ossimNitfCsdidaTag::writeStream(std::ostream& out)
    out.write(theReservedField4, 1);
    out.write(theReservedField5, 1);
    out.write(theSoftwareVersionNumber, 10);
+}
+
+ossim_uint32 ossimNitfCsdidaTag::getSizeInBytes()const
+{
+   return 70;
 }
 
 void ossimNitfCsdidaTag::clearFields()
@@ -124,13 +134,13 @@ std::ostream& ossimNitfCsdidaTag::print(
    std::ostream& out, const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
+       << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "DAY:" << theDay << "\n"
        << pfx << std::setw(24) << "MONTH:" << theMonth << "\n"
        << pfx << std::setw(24) << "YEAR:" << theYear << "\n"

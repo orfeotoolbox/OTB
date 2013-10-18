@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfLocalCartographicTag.cpp 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfLocalCartographicTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <sstream>
 #include <iostream>
@@ -18,12 +18,16 @@
 RTTI_DEF1(ossimNitfLocalCartographicTag, "ossimNitfLocalCartographicTag", ossimNitfRegisteredTag);
 
 ossimNitfLocalCartographicTag::ossimNitfLocalCartographicTag()
-   : ossimNitfRegisteredTag(std::string("MAPLOB"), 43)
 {
 }
 
 ossimNitfLocalCartographicTag::~ossimNitfLocalCartographicTag()
 {
+}
+
+std::string ossimNitfLocalCartographicTag::getRegisterTagName()const
+{
+   return std::string("MAPLOB");
 }
 
 void ossimNitfLocalCartographicTag::parseStream(std::istream& in)
@@ -44,6 +48,12 @@ void ossimNitfLocalCartographicTag::writeStream(std::ostream& out)
    out.write(theNorthingInterval, 5);
    out.write(theEastingReferenceOrigin, 15);
    out.write(theNorthingReferenceOrigin, 15);
+}
+
+
+ossim_uint32 ossimNitfLocalCartographicTag::getSizeInBytes()const
+{
+   return 43;
 }
 
 void ossimNitfLocalCartographicTag::clearFields()

@@ -11,6 +11,10 @@
 //  $Id$
 #ifndef ossimBuckeyeSensor_HEADER
 #define ossimBuckeyeSensor_HEADER
+#include "ossimSensorModel.h"
+#include "ossimSmacCallibrationSystem.h"
+#include "ossimUtmProjection.h"
+
 /**
  * The Buckey sensor has a set of simple orientation paramters.  For this model we are using the
  * orientation paramters found in the MetaData_GSTI.txt file typically found in the directory where the
@@ -47,86 +51,90 @@
  * smac_decent: -.1483e-6 .1558e-6 -.1464e-18 .1233e-38
  * rect: 0 0 7239 5432
  */
-#include <ossim/projection/ossimFcsiModel.h>
-#include <ossim/base/ossimDpt3d.h>
-#include "ossimSmacCallibrationSystem.h"
-
 class OSSIM_DLL ossimBuckeyeSensor : public ossimSensorModel
 {
 public:
    ossimBuckeyeSensor();
-   ossimBuckeyeSensor(const ossimDrect& imageRect, // center in image space
-                          const ossimGpt& platformPosition,
-                          double roll,
-                          double pitch,
-                          double heading,
-                          const ossimDpt& principalPoint, // in millimeters
-                          double focalLength, // in millimeters
-                          const ossimDpt& pixelSize); // in millimeters
-   ossimBuckeyeSensor(const ossimBuckeyeSensor& src);
-   virtual ossimObject* dup()const;
+   ossimBuckeyeSensor(const ossimBuckeyeSensor& src)
+   :ossimSensorModel(src),
+   m_compositeMatrix(src.m_compositeMatrix),
+   m_compositeMatrixInverse(src.m_compositeMatrixInverse),
+   m_roll(src.m_roll),
+   m_pitch(src.m_pitch),
+   m_yaw(src.m_yaw),
+   m_principalPoint(src.m_principalPoint), // in millimeters
+   m_pixelSize(src.m_pixelSize),      // in millimeters
+   m_focalLength(src.m_focalLength),    // in millimeters
+   m_ecefPlatformPosition(src.m_ecefPlatformPosition),
+   m_platformPosition(src.m_platformPosition),
+   m_lensDistortion(src.m_lensDistortion)
+   {
+   }
+   virtual ossimObject* dup()const
+   {
+      return new ossimBuckeyeSensor(*this);
+   }
    
    virtual void imagingRay(const ossimDpt& image_point,
                            ossimEcefRay&   image_ray) const;
 
-   void lineSampleToWorld(const ossimDpt& image_point,
-                          ossimGpt&       gpt) const;
-  
-   
    virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
                                         const double&   heightEllipsoid,
                                         ossimGpt&       worldPoint) const;
-   virtual void worldToLineSample(const ossimGpt& world_point,
-                                  ossimDpt&       image_point) const;
+   void lineSampleToWorld(const ossimDpt& image_point,
+                          ossimGpt&       gpt) const;
    
+//   virtual void worldToLineSample(const ossimGpt& world_point,
+//                                  ossimDpt&       image_point) const;
    virtual void updateModel();
-
-   void setPrincipalPoint(ossimDpt principalPoint);
-
-   virtual bool insideImage(const ossimDpt& p) const
+   
+   void setRollPitchYaw(double r, double p, double y)
    {
-      return theImageClipRect.pointWithin(p, theImageClipRect.width());
+      m_roll  = r;
+      m_pitch = p;
+      m_yaw   = y;
    }
-
-
-   void setRollPitchHeading(double roll,
-                            double pitch,
-                            double heading);
+   void setFocalLength(double value)
+   {
+      m_focalLength = value;
+   }
+   void setPlatformPosition(const ossimGpt& value)
+   {
+      m_platformPosition     = value;
+      m_ecefPlatformPosition = value;
+   }
    
-   void setPixelSize(const ossimDpt& pixelSize);
-   void setImageRect(const ossimDrect& rect);
-   void setFocalLength(double focalLength);
-   void setPlatformPosition(const ossimGpt& gpt);
-
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=0) const;
+   void setPrincipalPoint(const ossimDpt& value)
+   {
+      m_principalPoint = value;
+   }
+   void setPixelSize(const ossimDpt& value)
+   {
+      m_pixelSize = value;
+   }
+   inline virtual bool useForward()const {return true;} //!ground to image faster (you don't need DEM) //TBC
    
-   virtual bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix=0);
+   void setLensDistortion(ossimSmacCallibrationSystem* distortion)
+   {
+      m_lensDistortion = distortion;
+   }
    virtual void initAdjustableParameters();
+   virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
+   virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0)const;
    
-   /*!
-    * ossimOptimizableProjection
-    */
-//   inline virtual bool useForward()const {return true;} //!ground to image faster (you don't need DEM)
-   inline virtual bool useForward()const {return false;} //!ground to image faster (you don't need DEM)
-   virtual bool setupOptimizer(const ossimString& init_file); //!uses file path to init model
-
 protected:
+   NEWMAT::Matrix m_compositeMatrix;
+   NEWMAT::Matrix m_compositeMatrixInverse;
+   double         m_roll;
+   double         m_pitch;
+   double         m_yaw;
+   ossimDpt       m_principalPoint; // in millimeters
+   ossimDpt       m_pixelSize;      // in millimeters
+   double         m_focalLength;    // in millimeters
+   ossimEcefPoint m_ecefPlatformPosition;
+   ossimGpt       m_platformPosition;
    
-   NEWMAT::Matrix theCompositeMatrix;
-   NEWMAT::Matrix theCompositeMatrixInverse;
-   double         theRoll;
-   double         thePitch;
-   double         theHeading;
-   ossimDpt       thePrincipalPoint;
-   ossimDpt       thePixelSize;
-   double         theFocalLength;
-   ossimEcefPoint theEcefPlatformPosition;
-   ossimRefPtr<ossimSmacCallibrationSystem> theLensDistortion;
-
-
-   ossimEcefPoint theAdjEcefPlatformPosition;
+   ossimRefPtr<ossimSmacCallibrationSystem> m_lensDistortion;
    
 TYPE_DATA
 };

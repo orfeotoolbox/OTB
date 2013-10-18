@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimClosestToCenterCombiner.h 22162 2013-02-26 01:37:48Z gpotts $
+// $Id: ossimClosestToCenterCombiner.h 9094 2006-06-13 19:12:40Z dburken $
 #ifndef ossimClosestToCenterCombiner_HEADER
 #define ossimClosestToCenterCombiner_HEADER
 #include <vector>
@@ -22,7 +22,7 @@
   * sensor data.
   * 
   */
-class OSSIM_DLL ossimClosestToCenterCombiner : public ossimImageMosaic
+class ossimClosestToCenterCombiner : public ossimImageMosaic
 {
 public:
    ossimClosestToCenterCombiner();

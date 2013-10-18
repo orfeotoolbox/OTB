@@ -19,11 +19,11 @@
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimKeywordlist.h>
 
-#include <bitset>
-#include <cstring>
+#include <cstring> /* memset */
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <string>
 
 ossimLasHdr::ossimLasHdr() :
    m_fileSourceId(0),
@@ -40,7 +40,12 @@ ossimLasHdr::ossimLasHdr() :
    m_numberOfVariableLengthRecords(0),
    m_pointDataFormatId(0),
    m_pointDataRecordLength(0),
-   m_legacyNumberOfPointRecords(0),
+   m_numberOfPointRecords(0),
+   m_numberOfPointsReturn1(0),
+   m_numberOfPointsReturn2(0),
+   m_numberOfPointsReturn3(0),
+   m_numberOfPointsReturn4(0),
+   m_numberOfPointsReturn5(0),
    m_xScaleFactor(0.0),
    m_yScaleFactor(0.0),
    m_zScaleFactor(0.0),
@@ -53,18 +58,13 @@ ossimLasHdr::ossimLasHdr() :
    m_minY(0.0),
    m_maxZ(0.0),
    m_minZ(0.0),
-   m_startOfWaveformDataPacket(0),
-   m_startOfExtendedVariableLengthRecords(0),
-   m_numberOfExtendedVariableLengthRecords(0),
-   m_numberOfPointRecords(0)
+   m_startOfWaveformData(0)
+   
 {
-   // Initialize arrays:
    strncpy(m_fileSignature, "LASF", 4);
    memset(m_projectIdGuidData4, 0, 8);
    memset(m_systemIndentifier, 0, 32);
    memset(m_generatingSoftware, 0, 32);
-   memset(m_legacyNumberOfPointsByReturn, 0, 20); // 5 uint32s(5 x 4)
-   memset(m_numberOfPointsByReturn, 0, 120);   // 15 unint64s(15 x 8)
 }
 
 ossimLasHdr::ossimLasHdr(const ossimLasHdr& hdr) :
@@ -82,7 +82,12 @@ ossimLasHdr::ossimLasHdr(const ossimLasHdr& hdr) :
    m_numberOfVariableLengthRecords(hdr.m_numberOfVariableLengthRecords),
    m_pointDataFormatId(hdr.m_pointDataFormatId),
    m_pointDataRecordLength(hdr.m_pointDataRecordLength),
-   m_legacyNumberOfPointRecords(hdr.m_legacyNumberOfPointRecords),
+   m_numberOfPointRecords(hdr.m_numberOfPointRecords),
+   m_numberOfPointsReturn1(hdr.m_numberOfPointsReturn1),
+   m_numberOfPointsReturn2(hdr.m_numberOfPointsReturn2),
+   m_numberOfPointsReturn3(hdr.m_numberOfPointsReturn3),
+   m_numberOfPointsReturn4(hdr.m_numberOfPointsReturn4),
+   m_numberOfPointsReturn5(hdr.m_numberOfPointsReturn5),
    m_xScaleFactor(hdr.m_xScaleFactor),
    m_yScaleFactor(hdr.m_yScaleFactor),
    m_zScaleFactor(hdr.m_zScaleFactor),
@@ -95,66 +100,61 @@ ossimLasHdr::ossimLasHdr(const ossimLasHdr& hdr) :
    m_minY(hdr.m_minY),
    m_maxZ(hdr.m_maxZ),
    m_minZ(hdr.m_minZ),
-   m_startOfWaveformDataPacket(hdr.m_startOfWaveformDataPacket),
-   m_startOfExtendedVariableLengthRecords(hdr.m_startOfExtendedVariableLengthRecords),
-   m_numberOfExtendedVariableLengthRecords(hdr.m_numberOfExtendedVariableLengthRecords),
-   m_numberOfPointRecords(hdr.m_numberOfPointRecords)
+   m_startOfWaveformData(hdr.m_startOfWaveformData)
 {
-   // Copy arrays.
-   memcpy((void*)m_fileSignature, (void*)(hdr.m_fileSignature), 4);
-   memcpy((void*)m_projectIdGuidData4, (void*)(hdr.m_projectIdGuidData4), 8);
-   memcpy((void*)m_systemIndentifier, (void*)(hdr.m_systemIndentifier), 32);
-   memcpy((void*)m_generatingSoftware, (void*)(hdr.m_generatingSoftware), 32);
-   memcpy((void*)m_legacyNumberOfPointsByReturn, (void*)(hdr.m_legacyNumberOfPointsByReturn), 20);
-   memcpy((void*)m_numberOfPointsByReturn, (void*)(hdr.m_numberOfPointsByReturn), 120);
+   strncpy(m_fileSignature, hdr.m_fileSignature, 4);
+   for (int i=0; i<8; ++i)
+   {
+      m_projectIdGuidData4[i] = hdr.m_projectIdGuidData4[i];
+   }
+   strncpy(m_systemIndentifier, hdr.m_systemIndentifier, 32);
+   strncpy(m_generatingSoftware, hdr.m_generatingSoftware, 32);
 }
 
-const ossimLasHdr& ossimLasHdr::operator=(const ossimLasHdr& hdr)
+const ossimLasHdr& ossimLasHdr::operator=(const ossimLasHdr& copy_this)
 {
-   if (this != &hdr)
+   if (this != &copy_this)
    {
-      m_fileSourceId = hdr.m_fileSourceId;
-      m_globalEncoding = hdr.m_globalEncoding;
-      m_projectIdGuidData1 = hdr.m_projectIdGuidData1;
-      m_projectIdGuidData2 = hdr.m_projectIdGuidData2;
-      m_projectIdGuidData3 = hdr.m_projectIdGuidData3;
-      m_versionMajor = hdr.m_versionMajor;
-      m_versionMinor = hdr.m_versionMinor;
-      strncpy(m_systemIndentifier, hdr.m_systemIndentifier, 32);
-      strncpy(m_generatingSoftware, hdr.m_generatingSoftware, 32);      
-      m_fileCreationDay = hdr.m_fileCreationDay;
-      m_fileCreateionYear = hdr.m_fileCreateionYear;
-      m_headerSize = hdr.m_headerSize;
-      m_offsetToPointData = hdr.m_offsetToPointData;
-      m_numberOfVariableLengthRecords = hdr.m_numberOfVariableLengthRecords;
-      m_pointDataFormatId = hdr.m_pointDataFormatId;
-      m_pointDataRecordLength = hdr.m_pointDataRecordLength;
-      m_legacyNumberOfPointRecords = hdr.m_legacyNumberOfPointRecords;
-      m_xScaleFactor = hdr.m_xScaleFactor;
-      m_yScaleFactor = hdr.m_yScaleFactor;
-      m_zScaleFactor = hdr.m_zScaleFactor;
-      m_xOffset = hdr.m_xOffset;
-      m_yOffset = hdr.m_yOffset;
-      m_zOffset = hdr.m_zOffset;
-      m_maxX = hdr.m_maxX;
-      m_minX = hdr.m_minX;
-      m_maxY = hdr.m_maxY;
-      m_minY = hdr.m_minY;
-      m_maxZ = hdr.m_maxZ;
-      m_minZ = hdr.m_minZ;
-      m_startOfWaveformDataPacket = hdr.m_startOfWaveformDataPacket;
-      m_startOfExtendedVariableLengthRecords = hdr.m_startOfExtendedVariableLengthRecords;
-      m_numberOfExtendedVariableLengthRecords = hdr.m_numberOfExtendedVariableLengthRecords;
-      m_numberOfPointRecords = hdr.m_numberOfPointRecords;
-
-      // Copy arrays.
-      memcpy((void*)m_fileSignature,(void*)(hdr.m_fileSignature), 4);
-      memcpy((void*)m_projectIdGuidData4, (void*)(hdr.m_projectIdGuidData4), 8);
-      memcpy((void*)m_systemIndentifier, (void*)(hdr.m_systemIndentifier), 32);
-      memcpy((void*)m_generatingSoftware, (void*)(hdr.m_generatingSoftware), 32);
-      memcpy((void*)m_legacyNumberOfPointsByReturn,
-             (void*)(hdr.m_legacyNumberOfPointsByReturn), 20);
-      memcpy((void*)m_numberOfPointsByReturn, (void*)(hdr.m_numberOfPointsByReturn), 120);
+      strncpy(m_fileSignature, copy_this.m_fileSignature, 4);
+      m_fileSourceId= copy_this.m_fileSourceId;
+      m_globalEncoding = copy_this.m_globalEncoding;
+      m_projectIdGuidData1 = copy_this.m_projectIdGuidData1;
+      m_projectIdGuidData2 = copy_this.m_projectIdGuidData2;
+      m_projectIdGuidData3 = copy_this.m_projectIdGuidData3;
+      for (int i=0; i<8; ++i)
+      {
+         m_projectIdGuidData4[i] = copy_this.m_projectIdGuidData4[i];
+      }
+      m_versionMajor = copy_this.m_versionMajor;
+      m_versionMinor = copy_this.m_versionMinor;
+      strncpy(m_systemIndentifier, copy_this.m_systemIndentifier, 32);
+      strncpy(m_generatingSoftware, copy_this.m_generatingSoftware, 32);      
+      m_fileCreationDay = copy_this.m_fileCreationDay;
+      m_fileCreateionYear = copy_this.m_fileCreateionYear;
+      m_headerSize = copy_this.m_headerSize;
+      m_offsetToPointData = copy_this.m_offsetToPointData;
+      m_numberOfVariableLengthRecords = copy_this.m_numberOfVariableLengthRecords;
+      m_pointDataFormatId = copy_this.m_pointDataFormatId;
+      m_pointDataRecordLength = copy_this.m_pointDataRecordLength;
+      m_numberOfPointRecords = copy_this.m_numberOfPointRecords;
+      m_numberOfPointsReturn1 = copy_this.m_numberOfPointsReturn1;
+      m_numberOfPointsReturn2 = copy_this.m_numberOfPointsReturn2;
+      m_numberOfPointsReturn3 = copy_this.m_numberOfPointsReturn3;
+      m_numberOfPointsReturn4 = copy_this.m_numberOfPointsReturn4;
+      m_numberOfPointsReturn5 = copy_this.m_numberOfPointsReturn5;
+      m_xScaleFactor = copy_this.m_xScaleFactor;
+      m_yScaleFactor = copy_this.m_yScaleFactor;
+      m_zScaleFactor = copy_this.m_zScaleFactor;
+      m_xOffset = copy_this.m_xOffset;
+      m_yOffset = copy_this.m_yOffset;
+      m_zOffset = copy_this.m_zOffset;
+      m_maxX = copy_this.m_maxX;
+      m_minX = copy_this.m_minX;
+      m_maxY = copy_this.m_maxY;
+      m_minY = copy_this.m_minY;
+      m_maxZ = copy_this.m_maxZ;
+      m_minZ = copy_this.m_minZ;
+      m_startOfWaveformData = copy_this.m_startOfWaveformData;
    }
    return *this;
 }
@@ -178,7 +178,6 @@ bool ossimLasHdr::checkSignature(std::istream& in) const
 
 void ossimLasHdr::readStream(std::istream& in)
 {
-   in.read(m_fileSignature, 4);
    in.read((char*)&m_fileSourceId, 2);
    in.read((char*)&m_globalEncoding, 2);
    in.read((char*)&m_projectIdGuidData1, 4);
@@ -196,8 +195,12 @@ void ossimLasHdr::readStream(std::istream& in)
    in.read((char*)&m_numberOfVariableLengthRecords, 4);
    in.read((char*)&m_pointDataFormatId, 1);
    in.read((char*)&m_pointDataRecordLength, 2);
-   in.read((char*)&m_legacyNumberOfPointRecords, 4);
-   in.read((char*)&m_legacyNumberOfPointsByReturn, 20);
+   in.read((char*)&m_numberOfPointRecords, 4);
+   in.read((char*)&m_numberOfPointsReturn1, 4);
+   in.read((char*)&m_numberOfPointsReturn2, 4);
+   in.read((char*)&m_numberOfPointsReturn3, 4);
+   in.read((char*)&m_numberOfPointsReturn4, 4);
+   in.read((char*)&m_numberOfPointsReturn5, 4);
    in.read((char*)&m_xScaleFactor, 8);
    in.read((char*)&m_yScaleFactor, 8);
    in.read((char*)&m_zScaleFactor, 8);
@@ -210,38 +213,14 @@ void ossimLasHdr::readStream(std::istream& in)
    in.read((char*)&m_minY, 8);
    in.read((char*)&m_maxZ, 8);
    in.read((char*)&m_minZ, 8);
-
-   // Version specific:
-   if ( versionGreaterThan( 1, 2 ) )
+   if ( (m_versionMajor == 1) && ( m_versionMinor > 2) )
    {
-      // Added in 1.3:
-      in.read((char*)&m_startOfWaveformDataPacket, 8);
-   }
-   if ( versionGreaterThan( 1, 3 ) )
-   {
-      // Added in 1.4:
-      in.read((char*)&m_startOfExtendedVariableLengthRecords, 8);
-      in.read((char*)&m_numberOfExtendedVariableLengthRecords, 4);
-      in.read((char*)&m_numberOfPointRecords, 8);
-      in.read((char*)&m_numberOfPointsByReturn, 120);
+      in.read((char*)&m_startOfWaveformData, 8);
    }
 
    if ( ossim::byteOrder() == OSSIM_BIG_ENDIAN )
    {
       swap();
-   }
-
-   if ( !versionGreaterThan( 1, 3 ) ) // Less than 1.4
-   {
-      //---
-      // Copy legacy point count to 64 bit data members. This will allow LAS code
-      // to always go through same methods for point counts.
-      //---
-      m_numberOfPointRecords = m_legacyNumberOfPointRecords;
-      for ( ossim_uint32 i = 0; i < 5; ++i )
-      {
-         m_numberOfPointsByReturn[i] = m_legacyNumberOfPointsByReturn[i];
-      }
    }
 }
 
@@ -271,8 +250,12 @@ void ossimLasHdr::writeStream(std::ostream& out)
    out.write((char*)&m_numberOfVariableLengthRecords, 4);
    out.write((char*)&m_pointDataFormatId, 1);
    out.write((char*)&m_pointDataRecordLength, 2);
-   out.write((char*)&m_legacyNumberOfPointRecords, 4);
-   out.write((char*)&m_legacyNumberOfPointsByReturn, 20);
+   out.write((char*)&m_numberOfPointRecords, 4);
+   out.write((char*)&m_numberOfPointsReturn1, 4);
+   out.write((char*)&m_numberOfPointsReturn2, 4);
+   out.write((char*)&m_numberOfPointsReturn3, 4);
+   out.write((char*)&m_numberOfPointsReturn4, 4);
+   out.write((char*)&m_numberOfPointsReturn5, 4);
    out.write((char*)&m_xScaleFactor, 8);
    out.write((char*)&m_yScaleFactor, 8);
    out.write((char*)&m_zScaleFactor, 8);
@@ -285,19 +268,9 @@ void ossimLasHdr::writeStream(std::ostream& out)
    out.write((char*)&m_minY, 8);
    out.write((char*)&m_maxZ, 8);
    out.write((char*)&m_minZ, 8);
-
-   if ( versionGreaterThan( 1, 2 ) )
+   if ( (m_versionMajor == 1) && ( m_versionMinor > 2) )
    {
-      // Added in 1.3:
-      out.write((char*)&m_startOfWaveformDataPacket, 8);
-   }
-   if ( versionGreaterThan( 1, 3 ) )
-   {
-      // Added in 1.4:
-      out.write((char*)&m_startOfExtendedVariableLengthRecords, 8);
-      out.write((char*)&m_numberOfExtendedVariableLengthRecords, 4);
-      out.write((char*)&m_numberOfPointRecords, 8);
-      out.write((char*)&m_numberOfPointsByReturn, 120);
+      out.write((char*)&m_startOfWaveformData, 8);
    }
 
    if ( ossim::byteOrder() == OSSIM_BIG_ENDIAN )
@@ -309,9 +282,73 @@ void ossimLasHdr::writeStream(std::ostream& out)
 
 std::ostream& ossimLasHdr::print(std::ostream& out) const
 {
-   ossimKeywordlist kwl;
-   getKeywordlist( kwl );
-   return out << kwl;
+   // Capture the original flags.
+   std::ios_base::fmtflags f = out.flags();
+
+   out << std::setiosflags(std::ios_base::fixed) << std::setprecision(4);
+   
+   out << "las.file_source_id: " << m_fileSourceId;
+
+   //---
+   // m_globalEncoding is a bit encoding so we output bit at a time:
+   // At the time of this coding only first four bits used.
+   //---
+   out << "\nlas.gps_time_type: " << (getGpsTimeTypeBit()?"1":"0")
+       << "\nlas.waveform_data_packets_internal: " << (getWaveforDataPacketsInternalBit()?"1":"0")
+       << "\nlas.waveform_data_packets_external: " << (getWaveforDataPacketsExternalBit()?"1":"0")
+       << "\nlas.synthetically_generated: " << (getReturnsSyntheticallyGeneratedBit()?"1":"0")
+
+       << "\nlas.project_id_guid: " << getProjectIdGuid()
+      
+       << "\nlas.version: " << getVersion()
+      
+       << "\nlas.system_indentifier: " << getSystemIndentifier().c_str()
+       << "\nlas.generating_software: " << getGeneratingSoftware().c_str()
+      
+       << "\nlas.file_creation_day: " << m_fileCreationDay
+       << "\nlas.file_creation_year: " << m_fileCreateionYear
+
+       << "\nlas.header_size: " << m_headerSize
+       << "\nlas.offset_to_point_data: " << m_offsetToPointData 
+       << "\nlas.number_of_variable_length_records: " << m_numberOfVariableLengthRecords
+       << "\nlas.point_data_format_id: " << int(m_pointDataFormatId)
+       << "\nlas.point_data_record_length: " << m_pointDataRecordLength
+      
+       << "\nlas.number_of_point_records: " << m_numberOfPointRecords
+       << "\nlas.number_of_points_return1: " << m_numberOfPointsReturn1
+       << "\nlas.number_of_points_return2: " << m_numberOfPointsReturn2
+       << "\nlas.number_of_points_return3: " << m_numberOfPointsReturn3
+       << "\nlas.number_of_points_return4: " << m_numberOfPointsReturn4
+       << "\nlas.number_of_points_return5: " << m_numberOfPointsReturn5
+      
+       << "\nlas.x_scale_factor: " << m_xScaleFactor
+       << "\nlas.y_scale_factor: " << m_yScaleFactor
+       << "\nlas.z_scale_factor: " << m_zScaleFactor
+      
+       << "\nlas.x_offset: " << m_xOffset
+       << "\nlas.y_offset: " << m_yOffset
+       << "\nlas.z_offset: " << m_zOffset
+      
+       << "\nlas.max_x: " << m_maxX
+       << "\nlas.min_x: " << m_minX
+       << "\nlas.max_y: " << m_maxY
+       << "\nlas.min_y: " << m_minY
+       << "\nlas.max_z: " << m_maxZ
+       << "\nlas.min_z: " << m_minZ;
+   
+   if ( (m_versionMajor == 1) && ( m_versionMinor > 2) )
+   {
+      out << "\nlas.start_of_wave_form_data: " << m_startOfWaveformData << std::endl;
+   }
+   else
+   {
+      out << std::endl;
+   }
+
+   // Reset flags.
+   out.setf(f);
+
+   return out;
 }
 
 std::ostream& operator<<(std::ostream& out, const ossimLasHdr& hdr)
@@ -327,25 +364,18 @@ void ossimLasHdr::getKeywordlist(ossimKeywordlist& kwl) const
    // m_globalEncoding is a bit encoding so we output bit at a time:
    // At the time of this coding only first four bits used.
    //---
-
-   // 1.2:
    kwl.add("las.gps_time_type", (getGpsTimeTypeBit()?"1":"0") );
-
-   if ( versionGreaterThan( 1, 2 ) )
-   {
-      // Added in 1.3:
-      kwl.add("las.waveform_data_packets_internal", (getWaveforDataPacketsInternalBit()?"1":"0") );
-      kwl.add("las.waveform_data_packets_external", (getWaveforDataPacketsExternalBit()?"1":"0") );
-      kwl.add("las.synthetically_generated", (getReturnsSyntheticallyGeneratedBit()?"1":"0") );
-   }
-
-   if (  versionGreaterThan( 1, 3 ) )
-   {
-      // 1.4:
-      kwl.add("las.wkt", (getWktBit()?"1":"0") );
-   }
+   kwl.add("las.waveform_data_packets_internal", (getWaveforDataPacketsInternalBit()?"1":"0") );
+   kwl.add("las.waveform_data_packets_external", (getWaveforDataPacketsExternalBit()?"1":"0") );
+   kwl.add("las.synthetically_generated", (getReturnsSyntheticallyGeneratedBit()?"1":"0") );
    
    kwl.add("las.project_id_guid", getProjectIdGuid().c_str());
+
+
+   kwl.add("las.gps_time_type", (getGpsTimeTypeBit()?"1":"0") );
+   kwl.add("las.waveform_data_packets_internal", (getWaveforDataPacketsInternalBit()?"1":"0") );
+   kwl.add("las.waveform_data_packets_external", (getWaveforDataPacketsExternalBit()?"1":"0") );
+   kwl.add("las.synthetically_generated", (getReturnsSyntheticallyGeneratedBit()?"1":"0") );
 
    kwl.add("las.version", getVersion().c_str());
 
@@ -360,6 +390,13 @@ void ossimLasHdr::getKeywordlist(ossimKeywordlist& kwl) const
    kwl.add("las.number_of_variable_length_records", m_numberOfVariableLengthRecords);
    kwl.add("las.point_data_format_id", m_pointDataFormatId);
    kwl.add("las.point_data_record_length", m_pointDataRecordLength);
+
+   kwl.add("las.number_of_point_records", m_numberOfPointRecords);
+   kwl.add("las.number_of_points_return1", m_numberOfPointsReturn1);
+   kwl.add("las.number_of_points_return2", m_numberOfPointsReturn2);
+   kwl.add("las.number_of_points_return3", m_numberOfPointsReturn3);
+   kwl.add("las.number_of_points_return4", m_numberOfPointsReturn4);
+   kwl.add("las.number_of_points_return5", m_numberOfPointsReturn5);
 
    kwl.add("las.x_scale_factor", m_xScaleFactor);
    kwl.add("las.y_scale_factor", m_yScaleFactor);
@@ -376,64 +413,27 @@ void ossimLasHdr::getKeywordlist(ossimKeywordlist& kwl) const
    kwl.add("las.max_z", m_maxZ);
    kwl.add("las.min_z", m_minZ);
 
-   kwl.add("las.start_of_wave_form_data", m_startOfWaveformDataPacket);
-
-   if ( versionGreaterThan( 1, 3 ) )
-   {
-      kwl.add("las.number_of_point_records", m_numberOfPointRecords);
-      for (ossim_uint32 i = 0; i < 15; ++i)
-      {
-         std::ostringstream os;
-         os << "las.number_of_points_return" << (i+1);
-         kwl.add( os.str().c_str(), m_numberOfPointsByReturn[i] );
-      }
-   }
-   else
-   {
-      // Prior to 1.4:
-      kwl.add("las.number_of_point_records", m_legacyNumberOfPointRecords);
-      for (ossim_uint32 i = 0; i < 5; ++i)
-      {
-         std::ostringstream os;
-         os << "las.number_of_points_return" << (i+1);
-         kwl.add( os.str().c_str(), m_legacyNumberOfPointsByReturn[i] );
-      } 
-   }
+   kwl.add("las.start_of_wave_form_data", m_startOfWaveformData);
 }
 
 bool ossimLasHdr::getGpsTimeTypeBit() const
 {
-   // Test the first bit:
-   std::bitset<1> bs( m_globalEncoding );
-   return bs.test(0);
+   return (0x0001 & m_globalEncoding) ? true : false;
 }
 
 bool ossimLasHdr::getWaveforDataPacketsInternalBit() const
 {
-   // Test the second bit:
-   std::bitset<2> bs( m_globalEncoding );
-   return bs.test(1);
+   return (0x0010 & m_globalEncoding) ? true : false;
 }
 
 bool ossimLasHdr::getWaveforDataPacketsExternalBit() const
 {
-   // Test the third bit:
-   std::bitset<3> bs( m_globalEncoding );
-   return bs.test(2);
+   return (0x0100 & m_globalEncoding) ? true : false;
 }
 
 bool ossimLasHdr::getReturnsSyntheticallyGeneratedBit() const
 {
-   // Test the fourth bit:
-   std::bitset<4> bs( m_globalEncoding );
-   return bs.test(3);
-}
-
-bool ossimLasHdr::getWktBit() const
-{
-   // Test the fith bit:
-   std::bitset<5> bs( m_globalEncoding );
-   return bs.test(4); 
+   return (0x1000 & m_globalEncoding) ? true : false;
 }
 
 std::string ossimLasHdr::getProjectIdGuid() const
@@ -500,17 +500,33 @@ ossim_uint8 ossimLasHdr::getPointDataFormatId() const
    return m_pointDataFormatId;
 }
 
-ossim_uint64 ossimLasHdr::getNumberOfPoints() const
+ossim_uint32 ossimLasHdr::getNumberOfPoints() const
 {
    return m_numberOfPointRecords;
 }
 
-ossim_uint64 ossimLasHdr::getNumberOfPoints(ossim_uint32 entry) const
+ossim_uint32 ossimLasHdr::getNumberOfPoints(ossim_uint32 entry) const
 {
-   ossim_uint64 result = 0;
-   if ( entry < 15 )
+   ossim_uint32 result = 0;
+   switch (entry)
    {
-      result = m_numberOfPointsByReturn[entry];
+      case 0:
+         result = m_numberOfPointsReturn1;
+         break;
+      case 1:
+         result = m_numberOfPointsReturn2;
+         break;
+      case 2:
+         result = m_numberOfPointsReturn3;
+         break;
+      case 3:
+         result = m_numberOfPointsReturn4;
+         break;
+      case 4:
+         result = m_numberOfPointsReturn5;
+         break;
+      default:
+         break;
    }
    return result;
 }
@@ -589,8 +605,12 @@ void ossimLasHdr::swap()
    endian.swap(m_offsetToPointData);
    endian.swap(m_numberOfVariableLengthRecords);
    endian.swap(m_pointDataRecordLength);
-   endian.swap(m_legacyNumberOfPointRecords);
-   endian.swap(m_legacyNumberOfPointsByReturn, 5);
+   endian.swap(m_numberOfPointRecords);
+   endian.swap(m_numberOfPointsReturn1);
+   endian.swap(m_numberOfPointsReturn2);
+   endian.swap(m_numberOfPointsReturn3);
+   endian.swap(m_numberOfPointsReturn4);
+   endian.swap(m_numberOfPointsReturn5);
    endian.swap(m_xScaleFactor);
    endian.swap(m_yScaleFactor);
    endian.swap(m_zScaleFactor);
@@ -603,23 +623,5 @@ void ossimLasHdr::swap()
    endian.swap(m_minY);
    endian.swap(m_maxZ);
    endian.swap(m_minZ);
-   endian.swap(m_startOfWaveformDataPacket);
-   endian.swap(m_startOfExtendedVariableLengthRecords);
-   endian.swap(m_numberOfExtendedVariableLengthRecords);
-   endian.swap(m_numberOfPointRecords);
-   endian.swap(m_numberOfPointsByReturn, 15);
-}
-
-bool ossimLasHdr::versionGreaterThan( ossim_uint8 major, ossim_uint8 minor ) const
-{
-   bool result = false;
-   if ( m_versionMajor == major )
-   {
-      result = m_versionMinor > minor;
-   }
-   else if ( m_versionMajor > major )
-   {
-      result = true;
-   }
-   return result;
+   endian.swap(m_startOfWaveformData);
 }

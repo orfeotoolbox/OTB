@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //
-// File: ossimChipperUtil.h
+// File: ossimElevUtil.h
 // 
 // License:  LGPL
 // 
@@ -10,14 +10,14 @@
 //
 // Description:
 // 
-// Utility class to for chipping out images. , orthorectifying imagery with an added slant
-// toward doing digital elevation model(DEM) operations.
+// Utility class to orthorectify imagery with an added slant toward doing
+// digital elevation model(DEM) operations.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimChipperUtil.h 22438 2013-10-11 01:04:29Z dburken $
+// $Id: ossimElevUtil.h 21939 2012-11-15 20:39:16Z dburken $
 
-#ifndef ossimChipperUtil_HEADER
-#define ossimChipperUtil_HEADER 1
+#ifndef ossimElevUtil_HEADER
+#define ossimElevUtil_HEADER 1
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimReferenced.h>
@@ -34,15 +34,13 @@ class ossimArgumentParser;
 class ossimDpt;
 class ossimFilename;
 class ossimGpt;
-class ossimImageData;
 class ossimImageFileWriter;
 class ossimImageGeometry;
-class ossimImageViewAffineTransform;
 class ossimIrect;
 class ossimKeywordlist;
 
 /**
- * @brief ossimChipperUtil class.
+ * @brief ossimElevUtil class.
  *
  * This is a utility class to orthorectify imagery with an added slant toward
  * doing digital elevation model(DEM) operations.
@@ -55,37 +53,35 @@ class ossimKeywordlist;
  * @note "bumpshade" and "hillshade" intermixed throughout.  The class to do
  * a hillshade is the ossimBumpShadeTileSource.
  */
-class OSSIM_DLL ossimChipperUtil : public ossimReferenced
+class OSSIM_DLL ossimElevUtil : public ossimReferenced
 {
 public:
 
    /** emumerated operations */
-   enum ossimChipperOperation
+   enum ossimDemOperation
    {
-      OSSIM_CHIPPER_OP_UNKNOWN      = 0,
-      OSSIM_CHIPPER_OP_HILL_SHADE   = 1,
-      OSSIM_CHIPPER_OP_COLOR_RELIEF = 2,
-      OSSIM_CHIPPER_OP_ORTHO        = 3,
-      OSSIM_CHIPPER_OP_2CMV         = 4, // two color multiview
-      OSSIM_CHIPPER_OP_CHIP         = 5, // image space
-      OSSIM_CHIPPER_OP_PSM          = 6  // pan sharpened multispectral
+      OSSIM_DEM_OP_UNKNOWN      = 0,
+      OSSIM_DEM_OP_HILL_SHADE   = 1,
+      OSSIM_DEM_OP_COLOR_RELIEF = 2,
+      OSSIM_DEM_OP_ORTHO        = 3,
+      OSSIM_DEM_OP_2CMV         = 4  // Two color multiview.
    };
 
    /** emumerated output projections */
-   enum ossimChipperOutputProjection
+   enum ossimDemOutputProjection
    {
-      OSSIM_CHIPPER_PROJ_UNKNOWN    = 0,
-      OSSIM_CHIPPER_PROJ_GEO        = 1,
-      OSSIM_CHIPPER_PROJ_GEO_SCALED = 2,
-      OSSIM_CHIPPER_PROJ_INPUT      = 3,
-      OSSIM_CHIPPER_PROJ_UTM        = 4
+      OSSIM_DEM_PROJ_UNKNOWN    = 0,
+      OSSIM_DEM_PROJ_GEO        = 1,
+      OSSIM_DEM_PROJ_GEO_SCALED = 2,
+      OSSIM_DEM_PROJ_INPUT      = 3,
+      OSSIM_DEM_PROJ_UTM        = 4
    };
 
    /** default constructor */
-   ossimChipperUtil();
+   ossimElevUtil();
 
    /** virtual destructor */
-   virtual ~ossimChipperUtil();
+   virtual ~ossimElevUtil();
 
    /**
     * @brief Initial method to be ran prior to execute.
@@ -96,13 +92,16 @@ public:
     */
    bool initialize(ossimArgumentParser& ap);
 
-
    /**
     * @brief Initial method to be ran prior to execute.
+    *
+    * This was separated out from initialize(ossimArgumentParser& ap) because
+    * you could make an initialize(const ossimKeywordlist& kwl) and then call
+    * initialize().
     * 
     * @note Throws ossimException on error.
     */
-   void initialize(const ossimKeywordlist& kwl);
+   void initialize();
 
    /**
     * @brief execute method.  Performs the actual product write.
@@ -111,65 +110,14 @@ public:
    void execute();
 
    /**
-    * @brief Gets initialized area of interest(aoi) from chain.
-    * @return Pointer to ossimImageData holding chip.  Pointer
-    * can be null if not initialized properly so caller should
-    * check.
-    */
-   ossimRefPtr<ossimImageData> getChip();
-
-   /**
     * @brief Gets the output file name.
-    * @param f Initialized by this with the filename.
+    * @param f Filename to initialize.
+    * @return The output file name.
     */
    void getOutputFilename(ossimFilename& f) const;
 
 private:
 
-   /**
-    * @brief Initial method to be ran prior to execute.
-    *
-    * @note Throws ossimException on error.
-    */
-   void initialize();
-
-   /**
-    * @brief Builds image chains returns ref pointer to image source
-    * and initializes area of interest(aoi).
-    * @return Ref pointer to image chain.
-    */
-   ossimRefPtr<ossimImageSource> initializeChain( ossimIrect& aoi );
-
-   /**
-    * @brief Initializes a color relief chain.
-    * @return Ref pointer to image chain.
-    */
-   ossimRefPtr<ossimImageSource> initializeColorReliefChain();
-
-   /**
-    * @brief Initializes a bump shade chain.
-    * @return Ref pointer to image chain.
-    */
-   ossimRefPtr<ossimImageSource> initializeBumpShadeChain();
-
-   /**
-    * @brief Combines two images into a two color multi view chain.
-    * @return ossimRefPtr with pointer to ossimImageSource.  Can be null.
-    */
-   ossimRefPtr<ossimImageSource> initialize2CmvChain();
-
-   /**
-    * @brief Initializes a psm (pan sharpening multispectra) chain.
-    * @return Ref pointer to image chain.
-    */
-   ossimRefPtr<ossimImageSource> initializePsmChain();
-
-   /**
-    * @brief Initializes the output projection and propagates to image chains.
-    * @note Throws ossimException on error.
-    */
-   void initializeOutputProjection();
-   
    /** @brief Create chains for all dems. */
    void addDemSources();
    
@@ -215,14 +163,6 @@ private:
     * @note All chains should be constructed prior to calling this.
     */
    void createOutputProjection();
-   
-   /**
-    * @brief Sets the single image chain for identity operations view to
-    * a ossimImageViewAffineTransform.  This will have a rotation if
-    * up is up is selected.  Also set m_outputProjection to the input's
-    * for area of interest.
-    */
-   void createIdentityProjection();
 
    /**
     * @brief Gets the first input projection.
@@ -253,8 +193,7 @@ private:
     * @brief Convenience method to get a projection from an srs code.
     * @return new ossimMapProjection.
     */  
-   ossimRefPtr<ossimMapProjection> getNewProjectionFromSrsCode(
-      const std::string& code );
+   ossimRefPtr<ossimMapProjection> getNewProjectionFromSrsCode(const ossimString& code);
 
    /**
     * @brief Convenience method to get a utm projection.
@@ -288,15 +227,6 @@ private:
     * @note Throws ossimException on error.
     */
    void initializeProjectionGsd();   
-
-   /**
-    * @brief Initializes the image view transform(IVT) scale.
-    *
-    * Chip mode only. Sets IVT scale to output / input.
-    * 
-    * @note Throws ossimException on error.
-    */
-   void initializeIvtScale();   
 
    /**
     * @brief Loops through all layers to get the upper left tie point.
@@ -341,22 +271,16 @@ private:
    void getMetersPerPixel(ossimSingleImageChain* chain, ossimDpt& gsd);
 
    /**
-    * @brief Gets value of key "central_meridan" if set, nan if not.
+    * @brief Gets the origin for projection.
     *
-    * @return Value as a double or nan if keyord is not set.
+    * This is conditional.  If keywords origin_latitude or central_meridan are
+    * set from optional args those are used; else, the scene center is use.
     * 
-    * @note Throws ossimException on range error.
-    */
-   ossim_float64 getCentralMeridian() const;
-
-   /**
-    * @brief Gets value of key "origin_latitude" if set, nan if not.
-    *
-    * @return Value as a double or nan if keyord is not set.
+    * @param gpt Point to initialize.
     * 
-    * @note Throws ossimException on range error.
+    * @note Throws ossimException on error.
     */
-   ossim_float64 getOriginLatitude() const;
+   void getOrigin(ossimGpt& gpt);
 
    /**
     * @brief Loops through all layers to get the scene center ground point.
@@ -402,6 +326,11 @@ private:
    /** @brief Combines dems(m_demLayer) and images(m_imgLayer). */
    ossimRefPtr<ossimImageSource> combineLayers();
 
+   /** @brief Combines two images into a two color multi view chain.
+    * @return ossimRefPtr with pointer to ossimImageSource.  Can be null.
+    */
+   ossimRefPtr<ossimImageSource> combine2CmvLayers();
+
    /**
     * @brief Creates ossimIndexToRgbLutFilter and connects to source.
     * @param Source to connect to.
@@ -427,16 +356,7 @@ private:
     * @param chain Chain to set up.
     * @return true on success, false on error.
     */
-   bool setupChainHistogram( ossimRefPtr<ossimSingleImageChain>& chain) const;
-
-   /**
-    * @brief Sets entry for a chain.
-    * @param chain Chain to set up.
-    * @param entryIndex Zero based index.
-    * @return true on success, false on error.
-    */
-   bool setChainEntry( ossimRefPtr<ossimSingleImageChain>& chain,
-                       ossim_uint32 entryIndex ) const;
+   bool setupChainHistogram( ossimRefPtr<ossimSingleImageChain> &chain) const;
 
    /**
     * @brief Initializes "rect" with the output area of interest.
@@ -449,7 +369,7 @@ private:
     *
     * @note Throws ossimException on error.
     */
-   void getAreaOfInterest( ossimImageSource* source, ossimIrect& rect ) const;
+   void getAreaOfInterest(const ossimImageSource* source, ossimIrect& rect) const;
 
    /**
     * @brief Method to calculate and initialize scale and area of interest
@@ -465,19 +385,6 @@ private:
     */
    void initializeThumbnailProjection(const ossimIrect& originalRect,
                                       ossimIrect& adjustedRect);
-
-   /** @return true if BANDS keyword is set; false, if not. */
-   bool hasBandSelection() const;
-
-   /**
-    * @brief Gets the band list if BANDS keyword is set.
-    *
-    * NOTE: BANDS keyword values are ONE based.  bandList values are
-    * ZERO based.
-    *
-    * @param bandList List initialized by this.
-    */
-   void getBandList( std::vector<ossim_uint32>& bandList ) const;
 
    /** @return true if color table (lut) is set; false, if not. */
    bool hasLutFile() const;
@@ -515,7 +422,7 @@ private:
     * @return The enumerated output projection type.
     * @note This does not cover SRS keyword which could be any type of projection.
     */
-   ossimChipperOutputProjection getOutputProjectionType() const;
+   ossimDemOutputProjection getOutputProjectionType() const;
 
    /**
     * @brief Returns the scalar type from OUTPUT_RADIOMETRY_KW keyword if
@@ -530,60 +437,8 @@ private:
    bool scaleToEightBit() const;
 
    /** @return true if snap tie to origin option is set; false, if not. */
-   bool snapTieToOrigin() const;
+   bool snapTieToOrigin() const;   
 
-   /**
-    * @brief Gets rotation.
-    *
-    * @return Rotation in decimal degrees if ROTATION_KW option is set;
-    * ossim::nan, if not.
-    *
-    * @note Throws ossimException on range error.
-    */
-   ossim_float64 getRotation() const;
-
-   /** @return true if ROTATION_KW option is set; false, if not. */
-   bool hasRotation() const;
-
-   /** @return true if UP_IS_UP_KW option is set; false, if not. */
-   bool upIsUp() const;
-
-   /** @return true if NORTH_UP_KW option is set; false, if not. */
-   bool northUp() const;
-
-   /** @return true if operation is "chip" or identity; false, if not. */
-   bool isIdentity() const;
-
-   /** @return true if key is set to true; false, if not. */
-   bool keyIsTrue( const std::string& key ) const;
-
-   /**
-    * @return The entry number if set.  Zero if ossimKeywordNames::ENTRY_KW not
-    * found.
-    */
-   ossim_uint32 getEntryNumber() const;
-
-   /**
-    * @return True if any input has a sensor model input, false if all input
-    * projections are map projections.
-    */
-   bool hasSensorModelInput() const;
-
-   /**
-    * @return true if all size cut box width height keywords are true.
-    */
-   bool hasCutBoxWidthHeight() const;
-
-   /**
-    * @return true if meters, degrees or cut box with width and height option.
-    */  
-   bool hasScaleOption() const;
-   
-   /**
-    * @return true if three band out is true, false if not.
-    */  
-   bool isThreeBandOut() const;
-   
    /**
     * @brief Adds application arguments to the argument parser.
     * @param ap Parser to add to.
@@ -593,14 +448,8 @@ private:
    /** @brief Initializes arg parser and outputs usage. */
    void usage(ossimArgumentParser& ap);
 
-   /** @brief Hidden from use copy constructor. */
-   ossimChipperUtil( const ossimChipperUtil& obj );
-
-   /** @brief Hidden from use assignment operator. */
-   const ossimChipperUtil& operator=( const ossimChipperUtil& rhs );
-
    /** Enumerated operation to perform. */
-   ossimChipperOperation m_operation;
+   ossimDemOperation m_operation;
    
    /** Hold all options passed into intialize except writer props. */
    ossimRefPtr<ossimKeywordlist> m_kwl;
@@ -609,17 +458,10 @@ private:
    ossimRefPtr<ossimKeywordlist> m_srcKwl;
 
    /**
-    * The image geometry.  In chip mode this will be from the input image. So
-    * this may or may not have a map projection. In any other mode it
-    * will the view or output geometry which will be a map projection.
+    * The output (view) projection/image geometry. 
+    * Initialized with output projection only(no transform).
     */
-   ossimRefPtr<ossimImageGeometry> m_geom;
-
-   /**
-    * Image view transform(IVT). Only set/used in "chip"(identity) operation as
-    * the IVT for the resampler(ossimImageRenderer).
-    */
-   ossimRefPtr<ossimImageViewAffineTransform> m_ivt;
+   ossimRefPtr<ossimImageGeometry> m_outputGeometry;
 
    /**  Array of dem chains. */
    std::vector< ossimRefPtr<ossimSingleImageChain> > m_demLayer;
@@ -628,4 +470,4 @@ private:
    std::vector< ossimRefPtr<ossimSingleImageChain> > m_imgLayer;
 };
 
-#endif /* #ifndef ossimChipperUtil_HEADER */
+#endif /* #ifndef ossimElevUtil_HEADER */

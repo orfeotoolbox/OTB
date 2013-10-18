@@ -7,7 +7,7 @@
 //
 // Contains class definition for ossimNotify.
 //*******************************************************************
-//  $Id: ossimNotify.cpp 22149 2013-02-11 21:36:10Z dburken $
+//  $Id: ossimNotify.cpp 18953 2011-02-23 20:18:39Z gpotts $
 
 #include <iostream>
 #include <cstdio>
@@ -398,7 +398,6 @@ void ossimSetError( const char* /* className */,
                     ossim_int32 /* error */,
                     const char *fmtString, ...)
 {
-   // NOTE: This code has an infinite loop in it!!! (drb)
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    va_list args;
    

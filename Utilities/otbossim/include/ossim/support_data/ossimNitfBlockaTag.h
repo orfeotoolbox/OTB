@@ -13,7 +13,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfBlockaTag.h 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfBlockaTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfBlockaTag_HEADER
 #define ossimNitfBlockaTag_HEADER
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -42,6 +42,9 @@ public:
    
    /** default constructor */
    ossimNitfBlockaTag();
+
+   /** @return "BLOCKA" as an ossimString. */
+   virtual std::string getRegisterTagName() const;
   
    /**
     * Parse method.
@@ -56,6 +59,9 @@ public:
     * @param out Stream to write to.
     */
    virtual void writeStream(std::ostream& out);
+   
+   /** @return The size of this record in bytes (123) within a nitf file. */
+   virtual ossim_uint32 getSizeInBytes()const;
    
    /**
     * Clears all string fields within the record to some default nothingness.
@@ -163,7 +169,7 @@ public:
    /** @param pt Ground point to initialize with location. */
    void getLrfcLoc(ossimDpt& pt) const;
 
-   /**
+      /**
     * Convert latitude and logitude to theFrfcLoc string.
     * 
     * @param pt Ground point of first row, first column.

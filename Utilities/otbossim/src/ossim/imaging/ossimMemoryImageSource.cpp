@@ -226,7 +226,6 @@ bool ossimMemoryImageSource::loadState(const ossimKeywordlist& kwl, const char* 
       {
          m_image = new ossimImageData();
          returnResult = m_image->loadState(kwl, imagePrefix.c_str());
-         m_image->initialize();
          m_boundingRect = m_image->getImageRectangle();
       }
       

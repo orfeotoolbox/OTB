@@ -10,7 +10,7 @@
 // instance of a Wgs72Ellipsoid and set the initial defaults for
 // that are specific to a Wgs72Datum
 //*******************************************************************
-//  $Id: ossimWgs72Datum.cpp 22321 2013-07-22 11:40:45Z gpotts $
+//  $Id: ossimWgs72Datum.cpp 20096 2011-09-14 16:44:20Z dburken $
 
 #include <iostream>
 using namespace std;
@@ -36,10 +36,10 @@ ossimWgs72Datum::ossimWgs72Datum()
                          0.0,
                          0.0,
                          0.0,
-                         -180,
-                         180,
-                         -90,
-                         90,
+                         -M_PI/2.0,
+                         M_PI/2.0,
+                         -M_PI,
+                         M_PI,
                          0.0,
                          0.0,
                          0.0)

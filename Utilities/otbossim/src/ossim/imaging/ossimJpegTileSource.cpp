@@ -8,7 +8,7 @@
 //
 // Contains class definition for JpegTileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.cpp 22117 2013-01-18 21:04:23Z dburken $
+//  $Id: ossimJpegTileSource.cpp 19907 2011-08-05 19:55:46Z dburken $
 
 #if defined(__BORLANDC__)
 #  include <iostream>
@@ -25,26 +25,20 @@ extern "C"
 }
 
 #include <ossim/imaging/ossimJpegTileSource.h>
-#include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimContainerProperty.h>
-#include <ossim/base/ossimDpt.h>
-#include <ossim/base/ossimDrect.h>
-#include <ossim/base/ossimFilename.h>
-#include <ossim/base/ossimIpt.h>
-#include <ossim/base/ossimIrect.h>
-#include <ossim/base/ossimKeywordlist.h>
-#include <ossim/base/ossimNotify.h>
-#include <ossim/base/ossimStringProperty.h>
-#include <ossim/base/ossimTrace.h>
 #include <ossim/imaging/ossimJpegStdIOSrc.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
-#include <ossim/imaging/ossimImageGeometry.h>
-#include <ossim/imaging/ossimImageGeometryRegistry.h>
+#include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimIpt.h>
+#include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimKeywordlist.h>
 #include <ossim/imaging/ossimU8ImageData.h>
-#include <ossim/projection/ossimBilinearProjection.h>
-#include <ossim/projection/ossimProjection.h>
-#include <ossim/support_data/ossimXmpInfo.h>
+#include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimContainerProperty.h>
 
 //---
 // Using windows .NET compiler there is a conflict in the libjpeg with INT32
@@ -697,59 +691,4 @@ void ossimJpegTileSource::restart()
    jpeg_read_header(&thePrivateData->theCinfo, TRUE);
 
    jpeg_start_decompress(&thePrivateData->theCinfo);
-}
-
-ossimRefPtr<ossimImageGeometry> ossimJpegTileSource::getImageGeometry()
-{
-   if ( !theGeometry )
-   {
-      // Check for external geom:
-      theGeometry = getExternalImageGeometry();
-      
-      if ( !theGeometry )
-      {
-         // Check the internal geometry first to avoid a factory call.
-         theGeometry = getInternalImageGeometry();
-         
-         // At this point it is assured theGeometry is set.
-         
-         //---
-         // WARNING:
-         // Must create/set theGeometry at this point or the next call to
-         // ossimImageGeometryRegistry::extendGeometry will put us in an infinite loop
-         // as it does a recursive call back to ossimImageHandler::getImageGeometry().
-         //---         
-         
-         // Check for set projection.
-         if ( !theGeometry->getProjection() )
-         {
-            // Try factories for projection.
-            ossimImageGeometryRegistry::instance()->extendGeometry(this);
-         }
-      }
-      
-      // Set image things the geometry object should know about.
-      initImageParameters( theGeometry.get() );
-   }
-   
-   return theGeometry;
-}
-
-ossimRefPtr<ossimImageGeometry> ossimJpegTileSource::getInternalImageGeometry() const
-{
-   ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry();
-
-   // See if we can pull a projection from the XMP APP1 XML block if present:
-   ossimXmpInfo info;
-   if ( info.open( getFilename() ) )
-   {
-      ossimDrect imageRect = getImageRectangle( 0 );
-      ossimRefPtr<ossimProjection> proj = info.getProjection( imageRect );
-      if ( proj.valid() )
-      {
-         geom->setProjection( proj.get() );
-      }
-   }
-
-   return geom;
 }

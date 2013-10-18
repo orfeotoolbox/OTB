@@ -8,12 +8,12 @@
 //
 // Contains class declaration for ossimImageHandlerFactoryMaker.
 //*******************************************************************
-// $Id: ossimImageHandlerFactory.h 22228 2013-04-12 14:11:45Z dburken $
+//  $Id: ossimImageHandlerFactory.h 19443 2011-04-25 18:17:25Z dburken $
 
 #ifndef ossimImageHandlerFactory_HEADER
-#define ossimImageHandlerFactory_HEADER 1
-
+#define ossimImageHandlerFactory_HEADER
 #include <ossim/imaging/ossimImageHandlerFactoryBase.h>
+
 #include <ossim/base/ossimString.h>
 
 class ossimImageHandler;
@@ -38,16 +38,6 @@ public:
    virtual ossimImageHandler* open(const ossimKeywordlist& kwl,
                                    const char* prefix=0)const;
 
-   /**
-    * @brief Open overview that takes a file name.
-    * 
-    * @param file File to open.
-    * 
-    * @return ossimRefPtr to image handler on success or null on failure.
-    */
-   virtual ossimRefPtr<ossimImageHandler> openOverview(
-      const ossimFilename& file ) const;
-   
    virtual ossimObject* createObject(const ossimString& typeName)const;
    
    /*!

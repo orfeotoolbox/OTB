@@ -11,7 +11,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfIchipbTag.cpp 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfIchipbTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <iomanip>
@@ -50,9 +50,13 @@ static const ossimString FI_COL_KW = "FI_COL";
 RTTI_DEF1(ossimNitfIchipbTag, "ossimNitfIchipbTag", ossimNitfRegisteredTag);
 
 ossimNitfIchipbTag::ossimNitfIchipbTag()
-   : ossimNitfRegisteredTag(std::string("ICHIPB"), 224)
 {
    clearFields();
+}
+
+std::string ossimNitfIchipbTag::getRegisterTagName() const
+{
+   return std::string("ICHIPB");
 }
 
 void ossimNitfIchipbTag::parseStream(std::istream& in)
@@ -109,6 +113,11 @@ void ossimNitfIchipbTag::writeStream(std::ostream& out)
    out.write(theFullImageCol, FI_COL_SIZE);
 }
 
+ossim_uint32 ossimNitfIchipbTag::getSizeInBytes()const
+{
+   return 224;
+}
+
 void ossimNitfIchipbTag::clearFields()
 {
    memset(theXfrmFlag,     '0', XFRM_FLAG_SIZE);
@@ -162,14 +171,14 @@ std::ostream& ossimNitfIchipbTag::print(std::ostream& out,
                                         const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
 
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getTagName() << "\n"
+       << getRegisterTagName() << "\n"
        << pfx << std::setw(24) << "CEL:"
-       << getTagLength() << "\n"
+       << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "XFRM_FLAG:"     << theXfrmFlag << "\n"
        << pfx << std::setw(24) << "SCALE_FACTOR:"  << theScaleFactor << "\n"
        << pfx << std::setw(24) << "ANAMRPH_CORR:"  << theAnamrphCorr << "\n"

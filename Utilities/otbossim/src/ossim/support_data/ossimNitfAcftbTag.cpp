@@ -25,13 +25,18 @@
 RTTI_DEF1(ossimNitfAcftbTag, "ossimNitfAcftbTag", ossimNitfRegisteredTag);
 
 ossimNitfAcftbTag::ossimNitfAcftbTag()
-   : ossimNitfRegisteredTag(std::string("ACFTB"), CEL_SIZE)
+   : ossimNitfRegisteredTag()
 {
    clearFields();
 }
 
 ossimNitfAcftbTag::~ossimNitfAcftbTag()
 {
+}
+
+std::string ossimNitfAcftbTag::getRegisterTagName() const
+{
+   return std::string("ACFTB");
 }
 
 void ossimNitfAcftbTag::parseStream(std::istream& in)
@@ -98,6 +103,11 @@ void ossimNitfAcftbTag::writeStream(std::ostream& out)
    out.write(theCalDate, CAL_DATE_SIZE);
    out.write(thePatchTot, PATCH_TOT_SIZE);
    out.write(theMtiTot, MTI_TOT_SIZE);
+}
+
+ossim_uint32 ossimNitfAcftbTag::getSizeInBytes()const
+{
+   return CEL_SIZE;
 }
 
 void ossimNitfAcftbTag::clearFields()
@@ -196,13 +206,13 @@ std::ostream& ossimNitfAcftbTag::print(
    std::ostream& out, const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
+       << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "AC_MSN_ID:"
        << theAcMsnId << "\n"
        << pfx << std::setw(24) << "AC_TAIL_NO:"

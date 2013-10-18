@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.cpp 22440 2013-10-15 12:31:04Z gpotts $
+// $Id: ossimNitfFile.cpp 21351 2012-07-20 13:27:15Z dburken $
 
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimNitfFileHeader.h>
@@ -24,7 +24,6 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimNotify.h>
-#include <ossim/base/ossimIoStream.h>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -172,13 +171,6 @@ bool ossimNitfFile::parseFile(const ossimFilename& file)
          << "endtered......"
          << std::endl;
    }
-   if(!file.exists()) return false;
-   // this currently crashes if the open fails so I am going back to
-   // using ifstream instead of this one
-   //
-
-   //ossimIFStream64 in(file.c_str(), std::ios::in|std::ios::binary);
-
    std::ifstream in(file.c_str(), std::ios::in|std::ios::binary);
    if (in.fail())
    {
@@ -199,7 +191,6 @@ bool ossimNitfFile::parseFile(const ossimFilename& file)
 
    char temp[10];
    in.read(temp, 9);
-   //in.seekg64(0, std::ios::beg);
    in.seekg(0, std::ios::beg);
    temp[9] ='\0';
    
@@ -249,12 +240,6 @@ bool ossimNitfFile::parseFile(const ossimFilename& file)
          theNitfFileHeader->parseStream(in);
 
          // Sanity check the size before going on:
-
-#if 0                                                                   \
-   /*
-    * Temp removed for release as workaround for VS10 >2gb offset issue.
-    * drb 20130418
-    */
          if ( file.fileSize() < theNitfFileHeader->getFileSize() )
          {
             if (traceDebug())
@@ -268,8 +253,6 @@ bool ossimNitfFile::parseFile(const ossimFilename& file)
             }
             return false;
          }
-#endif
-         
       }
       catch( const ossimException& e )
       {

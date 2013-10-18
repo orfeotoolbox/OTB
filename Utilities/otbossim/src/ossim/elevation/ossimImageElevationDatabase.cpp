@@ -14,6 +14,7 @@
 // $Id$
 
 #include <ossim/elevation/ossimImageElevationDatabase.h>
+#include <ossim/base/ossimCallback1.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimTrace.h>
@@ -25,10 +26,36 @@ static ossimTrace traceDebug(ossimString("ossimImageElevationDatabase:debug"));
 
 RTTI_DEF1(ossimImageElevationDatabase, "ossimImageElevationDatabase", ossimElevationDatabase);
 
+//---
+// Call back class to register with ossimFileWalker for call to
+// ossimImageElevationDatabase::processFile
+//
+// Placed here as it is unique to this class.
+//---
+class ProcessFileCB: public ossimCallback1<const ossimFilename&>
+{
+public:
+   ProcessFileCB(
+      ossimImageElevationDatabase* obj,
+      void (ossimImageElevationDatabase::*func)(const ossimFilename&))
+      :
+      m_obj(obj),
+      m_func(func)
+   {}
+      
+   virtual void operator()(const ossimFilename& file) const
+   {
+      (m_obj->*m_func)(file);
+   }
+
+private:
+   ossimImageElevationDatabase* m_obj;
+   void (ossimImageElevationDatabase::*m_func)(const ossimFilename& file);
+};
+
 ossimImageElevationDatabase::ossimImageElevationDatabase()
    :
    ossimElevationCellDatabase(),
-   ossimFileProcessorInterface(),
    m_entryMap(),
    m_lastMapKey(0),
    m_lastAccessedId(0)
@@ -371,11 +398,10 @@ void ossimImageElevationDatabase::loadFileMap()
    {
       // Create a file walker which will find files we can load from the connection string.
       ossimFileWalker* fw = new ossimFileWalker();
-      
       fw->initializeDefaultFilterList();
-
-      // This links the file walker back to our "processFile" method.
-      fw->setFileProcessor( this );
+      ossimCallback1<const ossimFilename&>* cb =
+         new ProcessFileCB(this, &ossimImageElevationDatabase::processFile);
+      fw->registerProcessFileCallback(cb);
       
       ossimFilename f = m_connectionString;
 
@@ -384,6 +410,8 @@ void ossimImageElevationDatabase::loadFileMap()
       
       delete fw;
       fw = 0;
+      delete cb;
+      cb = 0;
    }
 }
 

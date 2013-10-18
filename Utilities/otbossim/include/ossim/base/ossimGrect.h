@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGrect.h 22197 2013-03-12 02:00:55Z dburken $
+// $Id: ossimGrect.h 19447 2011-04-25 19:42:33Z dburken $
 #ifndef ossimGrect_HEADER
 #define ossimGrect_HEADER 1
 
@@ -107,35 +107,35 @@ public:
          return *this;
       }
 
-   inline ossimGpt midPoint()const;
+   ossimGpt midPoint()const;
    
    /**
     * Returns the height of a rectangle.
     */
-   inline ossim_float64 height() const;
+   ossim_float64 height() const;
 
    /**
     * Returns the width of a rectangle.
     */
-   inline ossim_float64 width()  const;
+   ossim_float64 width()  const;
    
-   inline const ossimGpt& ul()const;
-   inline const ossimGpt& ur()const;
-   inline const ossimGpt& ll()const;
-   inline const ossimGpt& lr()const;
+   const ossimGpt& ul()const;
+   const ossimGpt& ur()const;
+   const ossimGpt& ll()const;
+   const ossimGpt& lr()const;
    
-   inline ossimGpt& ul();
-   inline ossimGpt& ur();
-   inline ossimGpt& ll();
-   inline ossimGpt& lr();
+   ossimGpt& ul();
+   ossimGpt& ur();
+   ossimGpt& ll();
+   ossimGpt& lr();
 	
-   inline void makeNan();
+   void makeNan();
    
-   inline bool isLonLatNan()const;
+   bool isLonLatNan()const;
 	
-   inline bool hasNans()const;
+   bool hasNans()const;
    
-   inline bool isNan()const;
+   bool isNan()const;
    
    /*!
     * Returns true if "this" rectangle is contained completely within the
@@ -149,9 +149,9 @@ public:
     */
    bool intersects(const ossimGrect& rect) const;
 
-   inline ossimGrect clipToRect(const ossimGrect& rect)const;
+   ossimGrect clipToRect(const ossimGrect& rect)const;
 
-   inline ossimGrect combine(const ossimGrect& rect)const;
+   ossimGrect combine(const ossimGrect& rect)const;
 
    /**
     * METHOD: pointWithin(ossimGpt)
@@ -163,7 +163,7 @@ public:
     * @note Height is not considered and there is no datum shift applied if
     * gpt is of a different datum than this datum.
     */
-   inline bool pointWithin(const ossimGpt& gpt) const; //inline below
+   bool pointWithin(const ossimGpt& gpt) const; //inline below
 
    ossimGrect stretchToEvenBoundary(double latSpacingInDegrees,
                                     double lonSpacingInDegrees)const;

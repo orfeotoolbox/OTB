@@ -10,7 +10,7 @@
 // Exploitation Usability extension.
 // 
 //********************************************************************
-// $Id: ossimNitfUse00aTag.cpp 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfUse00aTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -34,13 +34,17 @@ static const ossimString SUNAZ_KW = "SUNAZ";
 
 
 ossimNitfUse00aTag::ossimNitfUse00aTag()
-   : ossimNitfRegisteredTag(std::string("USE00A"), 107) 
 {
    clearFields();
 }
 
 ossimNitfUse00aTag::~ossimNitfUse00aTag()
 {
+}
+
+std::string ossimNitfUse00aTag::getRegisterTagName()const
+{
+   return std::string("USE00A");
 }
 
 void ossimNitfUse00aTag::parseStream(std::istream& in)
@@ -99,6 +103,11 @@ void ossimNitfUse00aTag::writeStream(std::ostream& out)
    out.write(theField21, FIELD21_SIZE);
    out.write(theSunEl, SUN_EL_SIZE);
    out.write(theSunAz, SUN_AZ_SIZE);
+}
+
+ossim_uint32 ossimNitfUse00aTag::getSizeInBytes()const
+{
+   return 107;
 }
 
 void ossimNitfUse00aTag::clearFields()
@@ -439,12 +448,12 @@ std::ostream& ossimNitfUse00aTag::print(std::ostream& out,
                                         const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
 
    out << setiosflags(std::ios::left)
-       << pfx << std::setw(24) << "CETAG:" << getTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
+       << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "ANGLETONORTH:" << theAngleToNorth << "\n" 
        << pfx << std::setw(24) << "MEANGSD:"      << theMeanGsd << "\n"
        << pfx << std::setw(24) << "DYNAMICRANGE:" << theDynamicRange << "\n"

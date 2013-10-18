@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSubImageTileSource.h 22233 2013-04-15 15:12:54Z gpotts $
+//  $Id: ossimSubImageTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimSubImageTileSource_HEADER
 #define ossimSubImageTileSource_HEADER
@@ -30,7 +30,7 @@
  *  a full-image space coordinate to a sub-image coordinate.
  *
  *****************************************************************************/
-class OSSIM_DLL ossimSubImageTileSource : public ossimImageSourceFilter
+class ossimSubImageTileSource : public ossimImageSourceFilter
 {
 public:
    /*!

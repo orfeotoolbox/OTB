@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfLocalGeographicTag.cpp 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfLocalGeographicTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 #include <ossim/support_data/ossimNitfLocalGeographicTag.h>
 #include <iomanip>
 #include <sstream>
@@ -17,13 +17,17 @@
 RTTI_DEF1(ossimNitfLocalGeographicTag, "ossimNitfLocalGeographicTag", ossimNitfRegisteredTag);
 
 ossimNitfLocalGeographicTag::ossimNitfLocalGeographicTag()
-   : ossimNitfRegisteredTag(std::string("GEOLOB"), 48)
 {
    clearFields();
 }
 
 ossimNitfLocalGeographicTag::~ossimNitfLocalGeographicTag()
 {
+}
+
+std::string ossimNitfLocalGeographicTag::getRegisterTagName()const
+{
+   return std::string("GEOLOB");
 }
 
 void ossimNitfLocalGeographicTag::parseStream(std::istream& in)
@@ -40,6 +44,11 @@ void ossimNitfLocalGeographicTag::writeStream(std::ostream& out)
    out.write(theLatDensity, 9);
    out.write(theLonOrigin, 15);
    out.write(theLatOrigin, 15);
+}
+
+ossim_uint32 ossimNitfLocalGeographicTag::getSizeInBytes()const
+{
+   return 48;
 }
 
 void ossimNitfLocalGeographicTag::clearFields()

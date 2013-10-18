@@ -3,9 +3,13 @@
 #include <iostream>
 
 ossimNitfCsproaTag::ossimNitfCsproaTag()
-   : ossimNitfRegisteredTag(std::string("CSPROA"), 120)
 {
    clearFields();
+}
+
+std::string ossimNitfCsproaTag::getRegisterTagName() const
+{
+   return "CSPROA";
 }
 
 void ossimNitfCsproaTag::parseStream(std::istream& in)
@@ -36,15 +40,23 @@ void ossimNitfCsproaTag::writeStream(std::ostream& out)
    out.write(m_bwc, BWC_SIZE);
 }
 
+ossim_uint32 ossimNitfCsproaTag::getSizeInBytes()const
+{
+   return (RESERVE1_SIZE+RESERVE2_SIZE+RESERVE3_SIZE+
+           RESERVE4_SIZE+RESERVE5_SIZE+RESERVE6_SIZE+
+           RESERVE7_SIZE+RESERVE8_SIZE+RESERVE9_SIZE+
+           BWC_SIZE);
+}
+
 std::ostream& ossimNitfCsproaTag::print(std::ostream& out,
                             const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagLength();
+   pfx += getRegisterTagName();
    pfx += ".";
    out << setiosflags(ios::left)
-       << pfx << std::setw(24) << "CETAG:"      << getTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"        << getTagLength() << "\n"
+       << pfx << std::setw(24) << "CETAG:"      << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"        << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "RESERVED1:"   << m_reserved1 << "\n"
        << pfx << std::setw(24) << "RESERVED2:"   << m_reserved2 << "\n"
        << pfx << std::setw(24) << "RESERVED3:"   << m_reserved3 << "\n"

@@ -36,7 +36,6 @@ public:
 
    // image accessor
    ossimImageGeometry* getImageGeom(const int index);
-   void setImageGeom(const int index, ossimImageGeometry* geom);
 
    // image index accessor
    inline int imIndex(const int& i)const { return theImageIndex[i]; }

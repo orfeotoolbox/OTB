@@ -58,39 +58,63 @@
 #include <string>
 #include <vector>
 
-static std::string COPY_ALL_FLAG_KW           = "copy_all_flag";
-static std::string CREATE_HISTOGRAM_KW        = "create_histogram";
-static std::string CREATE_HISTOGRAM_FAST_KW   = "create_histogram_fast";
-static std::string CREATE_HISTOGRAM_R0_KW     = "create_histogram_r0";
-static std::string CREATE_OVERVIEWS_KW        = "create_overviews";
-static std::string FALSE_KW                   = "false";
-static std::string FILE_KW                    = "file";
-static std::string INTERNAL_OVERVIEWS_FLAG_KW = "internal_overviews_flag";
-static std::string OUTPUT_DIRECTORY_KW        = "output_directory";
-static std::string OUTPUT_FILENAMES_KW        = "output_filenames";
-static std::string OVERVIEW_STOP_DIM_KW       = "overview_stop_dimension";
-static std::string OVERVIEW_TYPE_KW           = "overview_type";
-static std::string READER_PROP_KW             = "reader_prop";
-static std::string REBUILD_HISTOGRAM_KW       = "rebuild_histogram";
-static std::string REBUILD_OVERVIEWS_KW       = "rebuild_overviews";
-static std::string SCAN_MIN_MAX_KW            = "scan_for_min_max";
-static std::string SCAN_MIN_MAX_NULL_KW       = "scan_for_min_max_null";
-static std::string THREADS_KW                 = "threads";
-static std::string TILE_SIZE_KW               = "tile_size";
-static std::string TRUE_KW                    = "true";
-static std::string WRITER_PROP_KW             = "writer_prop";
+static std::string COPY_ALL_FLAG_KW         = "copy_all_flag";
+static std::string CREATE_HISTOGRAM_KW      = "create_histogram";
+static std::string CREATE_HISTOGRAM_FAST_KW = "create_histogram_fast";
+static std::string CREATE_HISTOGRAM_R0_KW   = "create_histogram_r0";
+static std::string CREATE_OVERVIEWS_KW      = "create_overviews";
+static std::string FALSE_KW                 = "false";
+static std::string FILE_KW                  = "file";
+static std::string OUTPUT_DIRECTORY_KW      = "output_directory";
+static std::string OUTPUT_FILENAMES_KW      = "output_filenames";
+static std::string OVERVIEW_STOP_DIM_KW     = "overview_stop_dimension";
+static std::string OVERVIEW_TYPE_KW         = "overview_type";
+static std::string READER_PROP_KW           = "reader_prop";
+static std::string REBUILD_HISTOGRAM_KW     = "rebuild_histogram";
+static std::string REBUILD_OVERVIEWS_KW     = "rebuild_overviews";
+static std::string SCAN_MIN_MAX_KW          = "scan_for_min_max";
+static std::string SCAN_MIN_MAX_NULL_KW     = "scan_for_min_max_null";
+static std::string THREADS_KW               = "threads";
+static std::string TILE_SIZE_KW             = "tile_size";
+static std::string TRUE_KW                  = "true";
+static std::string WRITER_PROP_KW           = "writer_prop";
+
+//---
+// Call back class to register with ossimFileWalker for call to
+// ossimImageUtil::processFile
+//
+// Placed here as it is unique to this class.
+//---
+class ProcessFileCB: public ossimCallback1<const ossimFilename&>
+{
+public:
+   ProcessFileCB(
+      ossimImageUtil* obj,
+      void (ossimImageUtil::*func)(const ossimFilename&))
+      :
+      m_obj(obj),
+      m_func(func)
+   {}
+      
+   virtual void operator()(const ossimFilename& file) const
+   {
+      (m_obj->*m_func)(file);
+   }
+
+private:
+   ossimImageUtil* m_obj;
+   void (ossimImageUtil::*m_func)(const ossimFilename& file);
+};
+
 
 // Static trace for debugging.  Use -T ossimImageUtil to turn on.
 static ossimTrace traceDebug = ossimTrace("ossimImageUtil:debug");
 
 ossimImageUtil::ossimImageUtil()
    :
-   ossimReferenced(),
-   ossimFileProcessorInterface(),
    m_kwl( new ossimKeywordlist() ),
    m_fileWalker(0),
-   m_mutex(),
-   m_errorStatus(0)
+   m_mutex()
 {
 }
 
@@ -130,8 +154,6 @@ void ossimImageUtil::addArguments(ossimArgumentParser& ap)
    
    au->addCommandLineOption("-h", "Display this information");
 
-   au->addCommandLineOption("-i or --internal-overviews", "Builds internal overviews. Requires -o option. Option only valid with tiff input image and tiff overview builder. WARNING: Modifies source image and cannot be undone!");
-   
    au->addCommandLineOption("--list-entries", "Lists the entries within the image");
 
    au->addCommandLineOption("-o", "Creates overviews. (default=ossim_tiff_box)");
@@ -253,15 +275,6 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
          if( ap.read("-d", sp1) )
          {
             setOutputDirectory( ts1 );
-            if ( ap.argc() < 2 )
-            {
-               break;
-            }
-         }
-
-         if( ap.read("-i") || ap.read("--internal-overviews") )
-         {
-            setInternalOverviewsFlag( true );
             if ( ap.argc() < 2 )
             {
                break;
@@ -428,13 +441,14 @@ bool ossimImageUtil::initialize(ossimArgumentParser& ap)
    return result;
 }
 
-ossim_int32 ossimImageUtil::execute()
+void ossimImageUtil::execute()
 {
    static const char M[] = "ossimImageUtil::execute()";
    
    if ( traceDebug() )
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << M << " entered...\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << M << " entered...\n";
    }
 
    if ( !m_fileWalker )
@@ -454,8 +468,10 @@ ossim_int32 ossimImageUtil::execute()
       // Must set this so we can stop recursion on directory based images.
       m_fileWalker->setWaitOnDirFlag( true );
 
-      // This links the file walker back to our "processFile" method.
-      m_fileWalker->setFileProcessor( this );
+      ossimCallback1<const ossimFilename&>* cb =
+         new ProcessFileCB(this, &ossimImageUtil::processFile);
+
+      m_fileWalker->registerProcessFileCallback(cb);
       
       // Wrap in try catch block as excptions can be thrown under the hood.
       try
@@ -486,19 +502,21 @@ ossim_int32 ossimImageUtil::execute()
       {
          ossimNotify(ossimNotifyLevel_WARN)
             << "Caught exception: " << e.what() << endl;
-         setErrorStatus( ossimErrorCodes::OSSIM_ERROR );
+      }
+      
+      // cleanup:
+      if ( cb )
+      {
+         delete cb;
+         cb = 0;
       }
       
    } // if ( fileCount )
 
    if ( traceDebug() )
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << M << " exit status: " << m_errorStatus << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << M << " exited...\n";
    }
-   
-   // Zero is good, non zero is bad.
-   return m_errorStatus; 
 }
 
 //---
@@ -523,7 +541,7 @@ void ossimImageUtil::processFile(const ossimFilename& file)
 
    m_mutex.unlock();
 
-   if ( ih.valid() && !ih->hasError() )
+   if ( ih.valid() )
    {
       if ( isDirectoryBasedImage( ih.get() ) )
       {
@@ -649,13 +667,6 @@ void ossimImageUtil::createOverview(ossimRefPtr<ossimImageHandler>& ih,
    
    if ( ih.valid() && ob.valid() )
    {
-      if (useEntryIndex)
-      {
-         // Set entry before deriving file name.
-         ih->setCurrentEntry(entry);
-         ossimNotify(ossimNotifyLevel_NOTICE) << "entry number: "<< entry << std::endl;
-      }
-      
       ossimFilename outputFile =
          ih->getFilenameWithThisExtension(ossimString(".ovr"), useEntryIndex);
       
@@ -667,27 +678,12 @@ void ossimImageUtil::createOverview(ossimRefPtr<ossimImageHandler>& ih,
             outputFile.remove();
          }
       }
-
-      if ( getInternalOverviewsFlag() )
+         
+      if (useEntryIndex)
       {
-         if ( ih->getClassName() == "ossimTiffTileSource")
-         {
-            //---
-            // INTERNAL_OVERVIEWS_FLAG_KW is set to true:
-            // Tiff reader can handle internal overviews.  Set the output file to
-            // input file.  Do it after the above remove so that if there were
-            // external overviews they will get removed.
-            //---
-            outputFile = ih->getFilename();
-         }
-         else 
-         {
-            ossimNotify(ossimNotifyLevel_NOTICE)
-               << "Internal overviews not supported for reader type: "
-               <<ih->getClassName()
-               << "\nIgnoring option..."
-               << endl;
-         }
+         ih->setCurrentEntry(entry);
+         
+         ossimNotify(ossimNotifyLevel_NOTICE) << "entry number: "<< entry << std::endl;
       }
 
       if ( hasRequiredOverview( ih, ob ) == false )
@@ -745,7 +741,6 @@ void ossimImageUtil::createOverview(ossimRefPtr<ossimImageHandler>& ih,
          // Create the overview for this entry in this file:
          if ( ob->execute() == false )
          {
-            setErrorStatus( ossimErrorCodes::OSSIM_ERROR );
             ossimNotify(ossimNotifyLevel_WARN)
                << "Error returned creating overviews for file: " << ih->getFilename() << std::endl;
          }
@@ -851,7 +846,6 @@ void ossimImageUtil::createHistogram(ossimRefPtr<ossimImageHandler>& ih,
    {
       if (useEntryIndex)
       {
-         // Set entry before deriving file name.
          ih->setCurrentEntry(entry);
          ossimNotify(ossimNotifyLevel_NOTICE) << "entry number: "<< entry << std::endl;
       }
@@ -1139,34 +1133,6 @@ bool ossimImageUtil::getCopyAllFlag() const
 {
    bool result = false;
    std::string lookup = m_kwl->findKey( COPY_ALL_FLAG_KW );
-   if ( lookup.size() )
-   {
-      ossimString os(lookup);
-      result = os.toBool();
-   }
-   return result;
-}
-
-void ossimImageUtil::setInternalOverviewsFlag( bool flag )
-{
-   // Add this for hasRequiredOverview method.
-   std::string key   = INTERNAL_OVERVIEWS_FLAG_KW;
-   std::string value = ( flag ? TRUE_KW : FALSE_KW );
-   addOption( key, value );
-
-   // Add as a writer prop:
-   key = WRITER_PROP_KW;
-   key += ossimString::toString( getNextWriterPropIndex() ).string();
-   value = INTERNAL_OVERVIEWS_FLAG_KW;
-   value += "=";
-   value += ( flag ? TRUE_KW : FALSE_KW );
-   addOption( key, value );
-}
-
-bool ossimImageUtil::getInternalOverviewsFlag() const
-{
-   bool result = false;
-   std::string lookup = m_kwl->findKey( INTERNAL_OVERVIEWS_FLAG_KW );
    if ( lookup.size() )
    {
       ossimString os(lookup);
@@ -1465,12 +1431,5 @@ void ossimImageUtil::addOption(  const std::string& key, const std::string& valu
          m_kwl->addPair( key, value );
       }
    }
-   m_mutex.unlock();
-}
-
-void ossimImageUtil::setErrorStatus( ossim_int32 status )
-{
-   m_mutex.lock();
-   m_errorStatus = status;
    m_mutex.unlock();
 }

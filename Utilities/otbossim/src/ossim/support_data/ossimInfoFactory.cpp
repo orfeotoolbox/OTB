@@ -9,7 +9,7 @@
 // Description: Factory for info objects.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimInfoFactory.cpp 22118 2013-01-18 21:05:14Z dburken $
+// $Id: ossimInfoFactory.cpp 21533 2012-08-27 18:02:55Z dburken $
 
 #include <ossim/support_data/ossimInfoFactory.h>
 #include <ossim/support_data/ossimInfoBase.h>
@@ -24,7 +24,6 @@
 #include <ossim/support_data/ossimNitfInfo.h>
 #include <ossim/support_data/ossimRpfInfo.h>
 #include <ossim/support_data/ossimTiffInfo.h>
-#include <ossim/support_data/ossimXmpInfo.h>
 
 #include <ossim/base/ossimFilename.h>
 
@@ -83,12 +82,6 @@ ossimInfoBase* ossimInfoFactory::create(const ossimFilename& file) const
    }
 
    result = new ossimRpfInfo();
-   if ( result->open(file) )
-   {
-      return result.release();
-   }
-   
-   result = new ossimXmpInfo();
    if ( result->open(file) )
    {
       return result.release();

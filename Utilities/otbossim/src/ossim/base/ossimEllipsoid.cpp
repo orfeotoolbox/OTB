@@ -13,7 +13,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEllipsoid.cpp 22323 2013-07-25 12:10:44Z gpotts $
+//  $Id: ossimEllipsoid.cpp 21164 2012-06-24 20:17:58Z dhicks $
 
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimDpt.h>
@@ -29,7 +29,6 @@
 // Define Trace flags for use within this file:
 //***
 #include <ossim/base/ossimTrace.h>
-#include <cmath>
 static ossimTrace traceExec  ("ossimEllipsoid:exec");
 static ossimTrace traceDebug ("ossimEllipsoid:debug");
 
@@ -536,53 +535,6 @@ void ossimEllipsoid::latLonHeightToXYZ(double lat, double lon, double height,
 void ossimEllipsoid::XYZToLatLonHeight(double x, double y, double z,
                                        double& lat, double& lon, double& height)const
 {
-
-#if 1
-  // Author: Norman J. Goldstein (ngoldstein@SystemSolutionsRD.com, 
-//                              normvcr@telus.net)
-
-  const double tol = 1e-15;
-  const double d = sqrt(x*x + y*y);
-  const int MAX_ITER = 10;
-
-  const double a2 = theA * theA;
-  const double b2 = theB * theB;
-  const double pa2 = d * d * a2;
-  const double qb2 = z * z * b2;
-  const double ae2 = a2 * eccentricitySquared();
-  const double ae4 = ae2 * ae2;
-
-  const double c3 = -( ae4/2 + pa2 + qb2 );          // s^2
-  const double c4 = ae2*( pa2 - qb2 );               // s^1
-  const double c5 = ae4/4 * ( ae4/4 - pa2 - qb2 );   // s^0
-
-  double s0 = 0.5 * (a2 + b2) * hypot( d/theA, z/theB );
-
-  for( int iterIdx = 0; iterIdx < MAX_ITER; ++iterIdx )
-  {
-    const double pol = c5 + s0 * ( c4 + s0 * ( c3 + s0 * s0 ) );
-    const double der = c4 + s0 * ( 2 * c3  + 4 * s0 * s0 );
-
-    const double ds = - pol / der;
-    s0 += ds;
-
-    if( fabs( ds ) < tol * s0 )
-    {
-      const double t = s0 - 0.5 * (a2 + b2);
-      const double x_ell = d / ( 1.0 + t/a2 );
-      const double y_ell = z / ( 1.0 + t/b2 );
-
-      height = ( d - x_ell ) * x_ell/a2 + ( z - y_ell ) * y_ell/b2;
-      height /= hypot( x_ell/a2 ,  y_ell/b2 );
-
-      lat = atan2( y_ell/b2, x_ell/a2 ) * DEG_PER_RAD;
-      lon = atan2( y, x ) * DEG_PER_RAD;
-
-      return;
-    }
-  }
-
-  #else
    double d = sqrt(x*x + y*y);
 
    double phi2 = z / ((1 - theEccentricitySquared) * d);
@@ -617,6 +569,26 @@ void ossimEllipsoid::XYZToLatLonHeight(double x, double y, double z,
    lat = phi2*DEG_PER_RAD; 
    lon = atan2(y, x)*DEG_PER_RAD;                                                                
    height = height1; 
+
+#if 0
+    double p = sqrt(x*x + y*y);
+    double theta = atan(z*theA/ (p*theB));
+    double eDashSquared = (theA*theA - theB*theB)/
+                          (theB*theB);
+
+    double sin_theta = sin(theta);
+    double cos_theta = cos(theta);
+
+    lat = atan( (z + eDashSquared*theB*sin_theta*sin_theta*sin_theta) /
+                     (p - theEccentricitySquared*theA*cos_theta*cos_theta*cos_theta) );
+    lon = atan2(y,x);
+
+    double sin_latitude = sin(lat);
+    double N = theA / sqrt( 1.0 - theEccentricitySquared*sin_latitude*sin_latitude);
+
+    height = p/cos(lat) - N;
+    lat*=DEG_PER_RAD;
+    lon*=DEG_PER_RAD;
 #endif
 }
 

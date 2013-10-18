@@ -10,7 +10,7 @@
 // $Id$
 
 #include <ossim/imaging/ossimJpegMemDest.h>
-#include <cstdlib> /* free, malloc */
+#include <cstdlib>
 
 /* *** Custom destination manager for JPEG writer *** */
 
@@ -59,6 +59,7 @@ void term_destination (j_compress_ptr cinfo)
    dest->stream->flush();
    free (cinfo->dest);
 }
+
 
 void jpeg_cpp_stream_dest (j_compress_ptr cinfo, std::ostream& stream)
 {

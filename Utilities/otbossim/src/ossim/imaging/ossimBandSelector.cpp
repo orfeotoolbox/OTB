@@ -10,7 +10,7 @@
 // Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.cpp 22230 2013-04-12 16:34:05Z dburken $
+//  $Id: ossimBandSelector.cpp 21660 2012-09-07 20:56:53Z dburken $
 
 #include <ossim/imaging/ossimBandSelector.h>
 #include <ossim/base/ossimTrace.h>
@@ -152,7 +152,7 @@ ossim_uint32 ossimBandSelector::getNumberOfOutputBands() const
    
    if(isSourceEnabled())
    {
-      bands = static_cast<ossim_uint32>(theOutputBandList.size());
+      bands = theOutputBandList.size();
    }
    else
    {

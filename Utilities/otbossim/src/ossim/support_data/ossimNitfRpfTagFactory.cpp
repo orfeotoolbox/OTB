@@ -7,11 +7,10 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRpfTagFactory.cpp 22427 2013-10-01 15:59:24Z gpotts $
+// $Id: ossimNitfRpfTagFactory.cpp 16997 2010-04-12 18:53:48Z dburken $
 #include <ossim/support_data/ossimNitfRpfTagFactory.h>
 #include <ossim/support_data/ossimRpfHeader.h>
 #include <ossim/base/ossimNotify.h>
-#include <ossim/base/ossimTrace.h>
 
 RTTI_DEF1(ossimNitfRpfTagFactory, "ossimNitfRpfTagFactory", ossimNitfTagFactory);
 
@@ -19,7 +18,6 @@ ossimNitfRpfTagFactory* ossimNitfRpfTagFactory::theInstance = 0;
 
 static const ossimString REGISTERED_RPF_HEADER_TAG = "RPFHDR";
 static const ossimString REGISTERED_RPF_DES_TAG    = "RPFDES";
-static ossimTrace traceDebug = ossimTrace("ossimNitfRpfTagFactory:debug");
 
 ossimNitfRpfTagFactory::ossimNitfRpfTagFactory()
 {
@@ -51,10 +49,7 @@ ossimRefPtr<ossimNitfRegisteredTag> ossimNitfRpfTagFactory::create(const ossimSt
    }
    if(temp == REGISTERED_RPF_DES_TAG)
    {
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_WARN) << "WARNING  ossimNitfRpfTagFactory::create: Reader for REGISTERED_RPF_DES_TAG not implemented yet" << std::endl;
-      }
+      ossimNotify(ossimNotifyLevel_WARN) << "WARNING  ossimNitfRpfTagFactory::create: Reader for REGISTERED_RPF_DES_TAG not implemented yet" << std::endl;
    }
    
    return 0;

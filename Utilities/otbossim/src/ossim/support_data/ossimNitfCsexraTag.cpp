@@ -26,13 +26,18 @@
 RTTI_DEF1(ossimNitfCsexraTag, "ossimNitfCsexraTag", ossimNitfRegisteredTag);
 
 ossimNitfCsexraTag::ossimNitfCsexraTag()
-   : ossimNitfRegisteredTag(std::string("CSEXRA"), 132)
+   : ossimNitfRegisteredTag()
 {
    clearFields();
 }
 
 ossimNitfCsexraTag::~ossimNitfCsexraTag()
 {
+}
+
+std::string ossimNitfCsexraTag::getRegisterTagName() const
+{
+   return std::string("CSEXRA");
 }
 
 void ossimNitfCsexraTag::parseStream(std::istream& in)
@@ -91,6 +96,11 @@ void ossimNitfCsexraTag::writeStream(std::ostream& out)
    out.write(thePredictedNiirs, 3);
    out.write(theCircularError, 3);
    out.write(theLinearError, 3);
+}
+
+ossim_uint32 ossimNitfCsexraTag::getSizeInBytes()const
+{
+   return 132;
 }
 
 void ossimNitfCsexraTag::clearFields()
@@ -156,14 +166,14 @@ std::ostream& ossimNitfCsexraTag::print(
    std::ostream& out, const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getTagName() << "\n"
+       << getRegisterTagName() << "\n"
        << pfx << std::setw(24) << "CEL:"
-       << getTagLength() << "\n"
+       << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "SENSOR:"
        << theSensor << "\n"
        << pfx << std::setw(24) << "TIME_FIRST_LINE_IMAGE:"

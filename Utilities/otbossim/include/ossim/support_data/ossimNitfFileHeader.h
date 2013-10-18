@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.h 22418 2013-09-26 15:01:12Z gpotts $
+// $Id: ossimNitfFileHeader.h 18413 2010-11-11 19:56:22Z gpotts $
 #ifndef ossimNitfFileHeader_HEADER
 #define ossimNitfFileHeader_HEADER
 
@@ -26,7 +26,6 @@ class ossimNitfImageHeader;
 class ossimNitfSymbolHeader;
 class ossimNitfTextHeader;
 class ossimNitfLabelHeader;
-class ossimNitfRegisteredTag;
 class ossimNitfDataExtensionSegment;
 // These structures are just data holders and will
 // not be used directly by outside users.  This is for internal use
@@ -60,20 +59,6 @@ public:
    
    ossim_uint64 theSymbolHeaderOffset;
    ossim_uint64 theSymbolDataOffset;
-};
-
-class OSSIMDLLEXPORT ossimNitfGraphicOffsetInformation : public ossimObject
-{
-public:
-   ossimNitfGraphicOffsetInformation(ossim_uint64 headerOffset,
-                                    ossim_uint64 dataOffset)
-      :theGraphicHeaderOffset(headerOffset),
-       theGraphicDataOffset(dataOffset)
-      {
-      }
-   
-   ossim_uint64 theGraphicHeaderOffset;
-   ossim_uint64 theGraphicDataOffset;
 };
 
 class OSSIMDLLEXPORT ossimNitfLabelOffsetInformation : public ossimObject
@@ -138,10 +123,9 @@ public:
    virtual ossim_int32 getNumberOfGraphics()const=0;
    virtual ossim_int32 getNumberOfTextSegments()const=0;
    virtual ossim_int32 getNumberOfDataExtSegments()const=0;
-   virtual ossim_int32 getNumberOfReservedExtSegments()const=0;
    virtual ossim_int32 getHeaderSize()const=0;
    
-   void addTag(const ossimNitfTagInformation& tag, bool unique=true);
+   void addTag(const ossimNitfTagInformation& tag);
    virtual void removeTag(const ossimString& tagName);
    virtual bool  getTagInformation(ossimNitfTagInformation& tag,
                                    int idx)const;
@@ -173,7 +157,7 @@ public:
    virtual ossimNitfTextHeader* getNewTextHeader(ossim_uint32 textNumber,
                                                 std::istream& in)const=0;
    virtual ossimNitfDataExtensionSegment* getNewDataExtensionSegment(
-      ossim_int32 dataExtNumber, std::istream& in)const=0;
+      ossim_uint32 dataExtNumber, std::istream& in)const=0;
    
    virtual ossimNitfImageHeader*    allocateImageHeader()const=0;
    virtual ossimNitfSymbolHeader*   allocateSymbolHeader()const=0;

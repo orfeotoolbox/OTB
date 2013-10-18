@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.cpp 22271 2013-05-27 18:24:22Z gpotts $
+//  $Id: ossimApplanixEcefModel.cpp 21214 2012-07-03 16:20:11Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -28,7 +28,7 @@ static ossimTrace traceDebug("ossimApplanixEcefModel:debug");
 RTTI_DEF1(ossimApplanixEcefModel, "ossimApplanixEcefModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 22271 2013-05-27 18:24:22Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 21214 2012-07-03 16:20:11Z dburken $";
 #endif
 
 ossimApplanixEcefModel::ossimApplanixEcefModel()
@@ -784,7 +784,6 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
                                           << "pitch:    " << thePitch << std::endl
                                           << "heading:  " << theHeading << std::endl
                                           << "platform: " << theEcefPlatformPosition << std::endl
-                                          << "latlon Platform: " << ossimGpt(theEcefPlatformPosition) << std::endl
                                           << "focal len: " << theFocalLength << std::endl
                                           << "principal: " << thePrincipalPoint << std::endl
                                           << "Ground:    " << ossimGpt(theEcefPlatformPosition) << std::endl;

@@ -25,13 +25,18 @@
 RTTI_DEF1(ossimNitfMstgtaTag, "ossimNitfMstgtaTag", ossimNitfRegisteredTag);
 
 ossimNitfMstgtaTag::ossimNitfMstgtaTag()
-   : ossimNitfRegisteredTag(std::string("MSTGTA"), 101)
+   : ossimNitfRegisteredTag()
 {
    clearFields();
 }
 
 ossimNitfMstgtaTag::~ossimNitfMstgtaTag()
 {
+}
+
+std::string ossimNitfMstgtaTag::getRegisterTagName() const
+{
+   return std::string("MSTGTA");
 }
 
 void ossimNitfMstgtaTag::parseStream(std::istream& in)
@@ -68,6 +73,11 @@ void ossimNitfMstgtaTag::writeStream(std::ostream& out)
    out.write(theTgtElev, TGT_ELEV_SIZE);
    out.write(theTgtElevUnit, TGT_ELEV_UNIT_SIZE);
    out.write(theTgtLoc, TGT_LOC_SIZE);
+}
+
+ossim_uint32 ossimNitfMstgtaTag::getSizeInBytes()const
+{
+   return 101;
 }
 
 void ossimNitfMstgtaTag::clearFields()
@@ -109,13 +119,13 @@ std::ostream& ossimNitfMstgtaTag::print(
    std::ostream& out, const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
+       << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "TGT_NUM:" << theTgtNum << "\n"
        << pfx << std::setw(24) << "TGT_ID:" << theTgtId << "\n"
        << pfx << std::setw(24) << "TGT_BE:" << theTgtBe << "\n"

@@ -18,7 +18,6 @@
 
 #include <ossim/util/ossimFileWalker.h>
 #include <ossim/base/ossimDirectory.h>
-#include <ossim/base/ossimFileProcessorInterface.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/parallel/ossimJobQueue.h>
 #include <OpenThreads/Thread>
@@ -26,7 +25,7 @@
 static ossimTrace traceDebug(ossimString("ossimFileWalker:debug"));
 
 ossimFileWalker::ossimFileWalker()
-   : m_fileProcessor(0),
+   : m_processFileCallBackPtr(0),
      m_jobQueue(new ossimJobMultiThreadQueue(new ossimJobQueue(), 1)),     
      m_filteredExtensions(0),
      m_recurseFlag(true),
@@ -55,7 +54,7 @@ void ossimFileWalker::walk(const std::vector<ossimFilename>& files)
       while ( i != files.end() )
       {
          // Must have call back set at this point.
-         if ( !m_abortFlag && m_fileProcessor )
+         if ( !m_abortFlag && m_processFileCallBackPtr )
          {
             ossimFilename file = (*i).expand();
             if ( file.size() && file.exists() )
@@ -76,7 +75,7 @@ void ossimFileWalker::walk(const std::vector<ossimFilename>& files)
                      
                      // Make the job:
                      ossimRefPtr<ossimFileWalkerJob> job =
-                        new ossimFileWalkerJob( m_fileProcessor, file );
+                        new ossimFileWalkerJob( m_processFileCallBackPtr, file );
                      
                      job->setName( ossimString( file.string() ) );
                      
@@ -135,7 +134,7 @@ void ossimFileWalker::walk(const ossimFilename& root)
    }
 
    // Must have call back set at this point.
-   if ( !m_abortFlag && m_fileProcessor )
+   if ( !m_abortFlag && m_processFileCallBackPtr )
    {
       ossimFilename rootFile = root.expand();
       if ( rootFile.size() && rootFile.exists() )
@@ -159,9 +158,9 @@ void ossimFileWalker::walk(const ossimFilename& root)
          else
          {
             // Single file no job queue needed.
-            if ( isFiltered( rootFile ) == false )
+            if ( isFiltered(rootFile) == false )
             {
-               m_fileProcessor->processFile( rootFile );
+               m_processFileCallBackPtr->operator()(rootFile);
             }
          }
       }
@@ -231,7 +230,7 @@ void ossimFileWalker::walkDir(const ossimFilename& dir)
          
          // Make the job:
          ossimRefPtr<ossimFileWalkerJob> job =
-            new ossimFileWalkerJob( m_fileProcessor, (*i) );
+            new ossimFileWalkerJob( m_processFileCallBackPtr, (*i) );
 
          job->setName( ossimString( (*i).string() ) );
 
@@ -414,17 +413,13 @@ void ossimFileWalker::initializeDefaultFilterList()
    m_filteredExtensions.push_back(std::string("bin"));
    m_filteredExtensions.push_back(std::string("dbf"));
    m_filteredExtensions.push_back(std::string("hdr"));
-   m_filteredExtensions.push_back(std::string("jgw"));
-   m_filteredExtensions.push_back(std::string("jpw"));   
+   m_filteredExtensions.push_back(std::string("jpw"));
    m_filteredExtensions.push_back(std::string("kwl"));
    m_filteredExtensions.push_back(std::string("log"));
-   m_filteredExtensions.push_back(std::string("man"));
    m_filteredExtensions.push_back(std::string("out"));
    m_filteredExtensions.push_back(std::string("prj"));
    m_filteredExtensions.push_back(std::string("save"));
    m_filteredExtensions.push_back(std::string("sdw"));
-   m_filteredExtensions.push_back(std::string("sh"));
-   m_filteredExtensions.push_back(std::string("shp"));
    m_filteredExtensions.push_back(std::string("shx"));
    m_filteredExtensions.push_back(std::string("spec"));
    m_filteredExtensions.push_back(std::string("statistics"));
@@ -463,26 +458,27 @@ void ossimFileWalker::setNumberOfThreads(ossim_uint32 nThreads)
    m_mutex.unlock();
 }
 
-void ossimFileWalker::setFileProcessor(ossimFileProcessorInterface* fpi)
+void ossimFileWalker::registerProcessFileCallback(
+   ossimCallback1<const ossimFilename&>* cb)
 {
    m_mutex.lock();
-   m_fileProcessor = fpi;
+   m_processFileCallBackPtr = cb;
    m_mutex.unlock();
 }
 
 ossimFileWalker::ossimFileWalkerJob::ossimFileWalkerJob(
-   ossimFileProcessorInterface* fpi,
+   ossimCallback1<const ossimFilename&>* cb,
    const ossimFilename& file)
-   : m_fileProcessor( fpi ),
-     m_file( file )
+   : m_processFileCallBackPtr(cb),
+     m_file(file)
 {
 }
 
 void ossimFileWalker::ossimFileWalkerJob::start()
 {
-   if ( m_fileProcessor && m_file.size() )
+   if ( m_processFileCallBackPtr && m_file.size() )
    {
-      m_fileProcessor->processFile( m_file );
+      m_processFileCallBackPtr->operator()(m_file);
    }
 }
 

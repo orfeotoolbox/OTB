@@ -102,23 +102,21 @@ void ossimPointObservation::addMeasurement(const ossimDpt& meas,
                                            const ossimFilename& imgFile,
                                            const ossimDpt& measSigma)
 {
+   theImageFiles.push_back(imgFile);
+
    // Image handler
-   ossimRefPtr<ossimImageHandler> ih =
-      ossimImageHandlerRegistry::instance()->open(imgFile);
-   if ( ih.valid() )
-   {
-      theImageFiles.push_back(imgFile);
-      theImageHandlers.push_back(ih);
-      
-      // Image measurements & sigmas
-      theMeas.push_back(meas);
-      theMeasSigmas.push_back(measSigma);
-      
-      // Number of parameters
-      ossimAdjustableParameterInterface* adjParInterface =
-         ih->getImageGeometry().get()->getAdjustableParameterInterface();
-      theNumPars.push_back(adjParInterface->getNumberOfAdjustableParameters());
-   }
+   ossimRefPtr<ossimImageHandler> ih;
+   ih = ossimImageHandlerRegistry::instance()->open(imgFile);
+   theImageHandlers.push_back(ih);
+
+   // Image measurements & sigmas
+   theMeas.push_back(meas);
+   theMeasSigmas.push_back(measSigma);
+
+   // Number of parameters
+   ossimAdjustableParameterInterface* adjParInterface =
+      ih->getImageGeometry().get()->getAdjustableParameterInterface();
+   theNumPars.push_back(adjParInterface->getNumberOfAdjustableParameters());
 }
 
 

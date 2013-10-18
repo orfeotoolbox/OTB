@@ -9,9 +9,9 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRpcBTag.h 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfRpcBTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfRpcBTag_HEADER
-#define ossimNitfRpcBTag_HEADER 1
+#define ossimNitfRpcBTag_HEADER
 
 #include <ossim/support_data/ossimNitfRpcBase.h>
 
@@ -23,6 +23,9 @@ class OSSIM_DLL ossimNitfRpcBTag : public ossimNitfRpcBase
 {
 public:
    ossimNitfRpcBTag();
+
+   /** @return "RPC00B" as an ossimString. */
+   virtual std::string getRegisterTagName() const;
 
 TYPE_DATA   
 };

@@ -17,10 +17,11 @@
 #define ossimTiledElevationDatabase_HEADER 1
 
 #include <ossim/elevation/ossimElevationDatabase.h>
-#include <ossim/base/ossimFileProcessorInterface.h>
+
 #include <ossim/base/ossimGrect.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimRtti.h>
+
 #include <vector>
 
 class ossimDblGrid;
@@ -44,8 +45,7 @@ class ossimString;
  * elevation prior to processing for speed.  Can work on a file or a
  * directory of files.
  */
-class OSSIM_DLL ossimTiledElevationDatabase :
-   public ossimElevationDatabase, public ossimFileProcessorInterface
+class OSSIM_DLL ossimTiledElevationDatabase : public ossimElevationDatabase
 {
 public:
 
@@ -105,30 +105,27 @@ public:
    /** @brief Save the state to a keyword list. */
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix)const;
    
-   bool getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& /*gpt*/) const
-   {
-      info.makeNan();
-      
-      return false;
-   }
-   
+    bool getAccuracyInfo(ossimElevationAccuracyInfo& info, const ossimGpt& /*gpt*/) const
+    {
+       info.makeNan();
+
+       return false;
+    }
    /**
     * @brief ProcessFile method.
     *
-    * Satisfies pure virtual ossimFileProcessorInterface::processFile.
-    *
     * This method is linked to the ossimFileWalker::walk method via a callback
-    * mechanism.  It is called by the ossimFileWalk (caller).  This class
+    * mechanism.  So it is called by the ossimFileWalk (caller).  This class
     * (callee) sets recurse and return flags accordingly to control
     * the ossimFileWalker, e.g. don't recurse, stop altogether.
     * 
     * @param file to process.
     */
-   virtual void processFile(const ossimFilename& file);
+   void processFile(const ossimFilename& file);
    
 protected:
    /** Protected destructor as this is derived from ossimRefenced. */
-   virtual ~ossimTiledElevationDatabase();
+   ~ossimTiledElevationDatabase();
 
 private:
 

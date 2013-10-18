@@ -5,7 +5,7 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.cpp 22235 2013-04-16 22:37:08Z dburken $
+//  $Id: ossimTiffWriter.cpp 20026 2011-09-01 16:33:18Z dburken $
 
 #include <ossim/ossimConfig.h>
 #include <ossim/imaging/ossimTiffWriter.h>
@@ -56,7 +56,7 @@ static const long  DEFAULT_JPEG_QUALITY = 75;
 RTTI_DEF1(ossimTiffWriter, "ossimTiffWriter", ossimImageFileWriter);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 22235 2013-04-16 22:37:08Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 20026 2011-09-01 16:33:18Z dburken $";
 #endif
 
 ossimTiffWriter::ossimTiffWriter()
@@ -97,66 +97,76 @@ bool ossimTiffWriter::openTiff()
 {
    static const char* MODULE = "ossimTiffWriter::openTiff()";
 
-   bool status = false;
-   
-   // Close the existing file pointer.
-   closeTiff();
+   if (theTif) // Close the existing file pointer.
+   {
+      
+#ifdef OSSIM_HAS_GEOTIFF
+#  if OSSIM_HAS_GEOTIFF 
+      XTIFFClose( (TIFF*)theTif );
+#  else
+      TIFFClose( (TIFF*)theTif );
+#  endif
+#else
+      TIFFClose( (TIFF*)theTif );   
+#endif
+
+   }
 
    // Check for empty file name.
-   if ( theFilename.size() )
+   if (theFilename.empty())
    {
-      //---
-      // On windows libtiff can treat class tiff offsets as signed(2GB limit) or
-      // unsigned(4GB) so if even close to 2GB (2.1.47 GB) limit make a big tiff.
-      //---
-      const ossim_uint64 BIGTIFF_THRESHOLD = 2000000000;
-      ossimIrect bounds = theInputConnection->getBoundingRect();
-      ossim_uint64 byteCheck =
-         (static_cast<ossim_uint64>(bounds.width())*
-          static_cast<ossim_uint64>(bounds.height())*
-          static_cast<ossim_uint64>(theInputConnection->getNumberOfOutputBands())*
-          static_cast<ossim_uint64>(ossim::scalarSizeInBytes(theInputConnection->getOutputScalarType())));
-      
-      if( byteCheck > BIGTIFF_THRESHOLD )
-      {
-         theBigTiffFlag = true;
-      }
-      
-      ossimString openMode = "w";
-      if(theBigTiffFlag||theForceBigTiffFlag)
-      {
-         openMode += "8";
-      }
-      
-      // Open the new file.
-      theTif = XTIFFOpen( theFilename.c_str(), openMode.c_str() );
-      if ( theTif )
-      {
-         status = true;
-      }
-      else
-      {
-         setErrorStatus(); // base class
-         ossimSetError(getClassName().c_str(),
-                       ossimErrorCodes::OSSIM_ERROR,
-                       "File %s line %d Module %s Error:\n\
-Error opening file:  %s\n",
-                       __FILE__,
-                       __LINE__,
-                       MODULE,
-                       theFilename.c_str());
-      }
+      return false;
    }
-   return status;
+
+   ossimString openMode = "w";
+   if(theBigTiffFlag||theForceBigTiffFlag)
+   {
+      openMode += "8";
+   }
+   // Open the new file.
+#ifdef OSSIM_HAS_GEOTIFF
+#  if OSSIM_HAS_GEOTIFF
+   theTif = XTIFFOpen( theFilename.c_str(), openMode.c_str() );
+#  else
+   theTif = TIFFOpen( theFilename.c_str(), openMode.c_str() );
+#  endif
+#else
+   theTif = TIFFOpen( theFilename.c_str(), openMode.c_str() );
+#endif
+
+   if (!theTif)
+   {
+      setErrorStatus(); // base class
+      ossimSetError(getClassName().c_str(),
+                    ossimErrorCodes::OSSIM_ERROR,
+                    "File %s line %d Module %s Error:\n\
+Error opening file:  %s\n",
+                    __FILE__,
+                    __LINE__,
+                    MODULE,
+                    theFilename.c_str());
+
+      return false;
+   }
+   return true;
 }
 
 bool ossimTiffWriter::closeTiff()
 {
    if (theTif)
    {
+#ifdef OSSIM_HAS_GEOTIFF
+#  if OSSIM_HAS_GEOTIFF
       XTIFFClose( (TIFF*)theTif );
+#  else
+      TIFFClose( (TIFF*)theTif );
+#  endif
+#else
+      TIFFClose( (TIFF*)theTif );
+#endif
       theTif = NULL;
    }
+
    return true;
 }
 
@@ -496,6 +506,31 @@ bool ossimTiffWriter::writeFile()
       return true;
    }
 
+   // this might be called from writeFile(projection infoamrtion) method
+   // we will check to see if the tiff is open.  If not then call the open.
+   //
+   if(isOpen())
+   {
+      close();
+   }
+   ossim_uint64 threeGigs = (static_cast<ossim_uint64>(1024)*
+                            static_cast<ossim_uint64>(1024)*
+                            static_cast<ossim_uint64>(1024)*
+                            static_cast<ossim_uint64>(3));
+   ossimIrect bounds = theInputConnection->getBoundingRect();
+   ossim_uint64 byteCheck = (static_cast<ossim_uint64>(bounds.width())*
+                             static_cast<ossim_uint64>(bounds.height())*
+                             static_cast<ossim_uint64>(theInputConnection->getNumberOfOutputBands())*
+                             static_cast<ossim_uint64>(ossim::scalarSizeInBytes(theInputConnection->getOutputScalarType())));
+	
+   if(byteCheck > threeGigs)
+   {
+      theBigTiffFlag = true;
+   }
+   else
+   {
+      theBigTiffFlag = false;
+   }
    open();
 
    if (!isOpen())
@@ -1443,35 +1478,36 @@ void ossimTiffWriter::setProperty(ossimRefPtr<ossimProperty> property)
 
 ossimRefPtr<ossimProperty> ossimTiffWriter::getProperty(const ossimString& name)const
 {
-   ossimRefPtr<ossimProperty> prop = 0;
-   
-   if (name == "Filename")
+   if(name == "Filename")
    {
-      prop = ossimImageFileWriter::getProperty(name);
-      if ( prop.valid() )
+      ossimRefPtr<ossimProperty> tempProp = ossimImageFileWriter::getProperty(name);
+      if(tempProp.valid())
       {
-         ossimRefPtr<ossimFilenameProperty> filenameProp = PTR_CAST(ossimFilenameProperty,
-                                                                    prop.get());
-         if ( filenameProp.valid() )
+         ossimFilenameProperty* filenameProp = PTR_CAST(ossimFilenameProperty,
+                                                        tempProp.get());
+
+         if(filenameProp)
          {
             filenameProp->addFilter("*.tif");
          }
-         prop = filenameProp.get();
+
+         return tempProp;
       }
    }
    else if (name == ossimKeywordNames::COMPRESSION_QUALITY_KW)
    {
-      ossimRefPtr<ossimNumericProperty> numericProp =
+      ossimNumericProperty* numericProp =
          new ossimNumericProperty(name,
                                   ossimString::toString(theJpegQuality),
                                   1.0,
                                   100.0);
-      numericProp->setNumericType(ossimNumericProperty::ossimNumericPropertyType_INT);
-      prop = numericProp.get();
+      numericProp->
+         setNumericType(ossimNumericProperty::ossimNumericPropertyType_INT);
+      return numericProp;
    }
    else if (name == ossimKeywordNames::COMPRESSION_TYPE_KW)
    {
-      ossimRefPtr<ossimStringProperty> stringProp =
+      ossimStringProperty* stringProp =
          new ossimStringProperty(name,
                                  getCompressionType(),
                                  false); // editable flag
@@ -1480,27 +1516,30 @@ ossimRefPtr<ossimProperty> ossimTiffWriter::getProperty(const ossimString& name)
       stringProp->addConstraint(ossimString("packbits"));
       stringProp->addConstraint(ossimString("deflate"));
       stringProp->addConstraint(ossimString("zip"));      
-      prop = stringProp.get();
+      return stringProp;
    }
    else if (name == "lut_file")
    {
-      ossimRefPtr<ossimFilenameProperty> property =
-         new ossimFilenameProperty(name, theLutFilename);
+      ossimFilenameProperty* property = new ossimFilenameProperty(name, theLutFilename);
       property->setIoType(ossimFilenameProperty::ossimFilenamePropertyIoType_INPUT);
-      
-      prop = property.get();
+
+      return property;
    }
    else if (name == "color_lut_flag")
    {
-      prop = new ossimBooleanProperty(name, theColorLutFlag);
+      ossimBooleanProperty* boolProperty = new ossimBooleanProperty(name,
+                                                                    theColorLutFlag);
+      return boolProperty;
    }
    else if(name == "big_tiff_flag")
    {
-       prop = new ossimBooleanProperty(name, theForceBigTiffFlag);
+       ossimBooleanProperty* boolProperty = new ossimBooleanProperty(name,
+                                                                    theForceBigTiffFlag);
+      return boolProperty;     
    }
-   else if( name == ossimKeywordNames::OUTPUT_TILE_SIZE_KW )
+   else if(name == "output_tile_size")
    {
-      ossimRefPtr<ossimStringProperty> stringProp =
+      ossimStringProperty* stringProp =
          new ossimStringProperty(name,
                                  ossimString::toString(theOutputTileSize.x),
                                  false); // editable flag
@@ -1511,14 +1550,11 @@ ossimRefPtr<ossimProperty> ossimTiffWriter::getProperty(const ossimString& name)
       stringProp->addConstraint(ossimString("256"));      
       stringProp->addConstraint(ossimString("512"));      
       stringProp->addConstraint(ossimString("1024"));      
-      stringProp->addConstraint(ossimString("2048"));
-      prop = stringProp.get();
+      stringProp->addConstraint(ossimString("2048"));      
+      return stringProp;
+     
    }
-   else
-   {
-      prop = ossimImageFileWriter::getProperty(name);
-   }
-   return prop;
+   return ossimImageFileWriter::getProperty(name);
 }
 
 void ossimTiffWriter::getPropertyNames(std::vector<ossimString>& propertyNames)const
@@ -1530,7 +1566,7 @@ void ossimTiffWriter::getPropertyNames(std::vector<ossimString>& propertyNames)c
    propertyNames.push_back(ossimString("lut_file"));
    propertyNames.push_back(ossimString("color_lut_flag"));
    propertyNames.push_back(ossimString("big_tiff_flag"));
-   propertyNames.push_back(ossimString(ossimKeywordNames::OUTPUT_TILE_SIZE_KW));
+   propertyNames.push_back(ossimString("output_tile_size"));
   
    ossimImageFileWriter::getPropertyNames(propertyNames);
 }

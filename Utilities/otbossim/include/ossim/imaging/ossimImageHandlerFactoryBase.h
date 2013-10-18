@@ -2,13 +2,13 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author:  Garrett Potts
+// Author:  Garrett Potts (gpotts@imagelinks.com)
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerFactoryBase.h 22228 2013-04-12 14:11:45Z dburken $
+//  $Id: ossimImageHandlerFactoryBase.h 19443 2011-04-25 18:17:25Z dburken $
 
 #ifndef ossimImageHandlerFactoryBase_HEADER
-#define ossimImageHandlerFactoryBase_HEADER 1
+#define ossimImageHandlerFactoryBase_HEADER
 
 #include <algorithm>
 
@@ -62,19 +62,6 @@ public:
                                    bool openOverview=true)const = 0;
    virtual ossimImageHandler* open(const ossimKeywordlist& kwl,
                                    const char* prefix=0)const = 0;
-
-   /**
-    * @brief Open overview that takes a file name.
-    *
-    * This default implementation returns a null ref pointer.
-    * Derived factories that have overview readers should override.
-    * 
-    * @param file File to open.
-    *
-    * @return This default implementation returns a null ref pointer.
-    */
-   virtual ossimRefPtr<ossimImageHandler> openOverview(
-      const ossimFilename& file ) const;
 
    virtual void getImageHandlersBySuffix(ImageHandlerList& result,
                                          const ossimString& ext)const;

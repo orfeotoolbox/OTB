@@ -14,7 +14,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimLsrPoint.h 22197 2013-03-12 02:00:55Z dburken $
+//  $Id: ossimLsrPoint.h 12790 2008-05-05 13:41:33Z dburken $
 
 #ifndef ossimLsrPoint_HEADER
 #define ossimLsrPoint_HEADER
@@ -64,11 +64,11 @@ public:
    /*!
     * OPERATORS:
     */
-   inline const ossimLsrPoint& operator= (const ossimLsrPoint&); //inline below
-   ossimLsrVector operator- (const ossimLsrPoint&)  const;
-   ossimLsrPoint  operator+ (const ossimLsrVector&) const;
-   inline bool    operator==(const ossimLsrPoint&)  const;//inline below
-   inline bool    operator!=(const ossimLsrPoint&)  const;//inline below
+   const ossimLsrPoint& operator= (const ossimLsrPoint&);       //inline below
+   ossimLsrVector       operator- (const ossimLsrPoint&)  const;
+   ossimLsrPoint        operator+ (const ossimLsrVector&) const;
+   bool                 operator==(const ossimLsrPoint&)  const;//inline below
+   bool                 operator!=(const ossimLsrPoint&)  const;//inline below
 
    /*!
     * CASTING OPERATOR:
@@ -111,7 +111,7 @@ public:
    /*!
     * Debug Dump: 
     */
-   inline void print(ostream& stream = ossimNotify(ossimNotifyLevel_INFO)) const;
+   void print(ostream& stream = ossimNotify(ossimNotifyLevel_INFO)) const;
 
    friend ostream& operator<< (ostream& os , const ossimLsrPoint& instance)
       { instance.print(os); return os; }

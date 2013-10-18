@@ -15,7 +15,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfPiaimcTag.cpp 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfPiaimcTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <iostream>
@@ -51,9 +51,13 @@ RTTI_DEF1(ossimNitfPiaimcTag,
           ossimNitfRegisteredTag);
 
 ossimNitfPiaimcTag::ossimNitfPiaimcTag()
-   : ossimNitfRegisteredTag(std::string("PIAIMC"), 362)
 {
    clearFields();
+}
+
+std::string ossimNitfPiaimcTag::getRegisterTagName() const
+{
+   return std::string("PIAIMC");
 }
 
 void ossimNitfPiaimcTag::parseStream(std::istream& in)
@@ -104,6 +108,11 @@ void ossimNitfPiaimcTag::writeStream(std::ostream& out)
    out.write(theSattrack,   SATTRACK_SIZE);
 }
 
+ossim_uint32 ossimNitfPiaimcTag::getSizeInBytes()const
+{
+   return 362;
+}
+
 void ossimNitfPiaimcTag::clearFields()
 {
    memcpy(theCloudcvr, "999",   CLOUDCVR_SIZE);
@@ -151,12 +160,12 @@ std::ostream& ossimNitfPiaimcTag::print(std::ostream& out,
                                         const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
-       << pfx << std::setw(24) << "CETAG:" << getTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
+       << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "CLOUDCVR:"  << theCloudcvr << "\n"
        << pfx << std::setw(24) << "SRP:"       << theSrp << "\n"
        << pfx << std::setw(24) << "SENSMODE:"   << thesSensmode << "\n"

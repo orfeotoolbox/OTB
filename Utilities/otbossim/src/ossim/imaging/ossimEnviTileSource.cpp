@@ -12,15 +12,13 @@
 // $Id$
 
 #include <ossim/imaging/ossimEnviTileSource.h>
-#include <ossim/base/ossimAffineTransform.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/imaging/ossimImageGeometryRegistry.h>
 #include <ossim/projection/ossimAlphaSensorHRI.h>
 #include <ossim/projection/ossimAlphaSensorHSI.h>
 #include <ossim/support_data/ossimAlphaSensorSupportData.h>
-#include <ossim/support_data/ossimWavelength.h>
-
+#include <ossim/base/ossimAffineTransform.h>
 
 RTTI_DEF1(ossimEnviTileSource,
           "ossimEnviTileSource",
@@ -254,26 +252,52 @@ void ossimEnviTileSource::setDefaultBandList()
 {
    if ( isBandSelector() )
    {
-      // Look in ENVI header for "default bands":
-      std::vector<ossim_uint32> bands;
-      m_enviHdr.getDefaultBands( bands );
-
-      if ( !bands.size() && ( getNumberOfInputBands() > 2 ) )
+      ossimString value;
+      value.string() = m_enviHdr.getMap().findKey( std::string("default bands") );
+      if ( value.size() )
       {
-         // Try to derive RGB from wavelengths if found in ENVI header.
-         ossimWavelength wl;
-         if ( wl.initialize( m_enviHdr ) )
+         std::vector<ossimString> strLst;
+         value.split( strLst, ossimString(","));
+         if ( strLst.size() )
          {
-            wl.getRgbBands( bands );
+            const ossim_uint32 INPUT_BANDS = getNumberOfInputBands();
+            std::vector<ossimString>::const_iterator i = strLst.begin();
+            std::vector<ossim_uint32> bands;
+            ossim_uint32 band = 0;
+            while ( i != strLst.end() )
+            {
+               band = (*i).toUInt32();
+               if ( band )
+               {
+                  // Assuming "default bands" are one based.  Totally a hunch... (drb)
+                  --band; 
+               }
+               else
+               {
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << "ossimEnviTileSource::setDefaultBandList WARN!"
+                     << "\nDetected zero based bands in \"default bands\" from header!"
+                     << std::endl;
+               }
+               
+               if ( band < INPUT_BANDS )
+               {
+                  bands.push_back( band );
+               }
+               else
+               {
+                  bands.clear(); // Out of range.
+                  break;
+               }
+               ++i;
+            }
+            if ( bands.size() )
+            {
+               ossimImageHandler::setOutputBandList(bands, m_outputBandList);
+            }
          }
       }
-      
-      if ( bands.size() )
-      {            
-         ossimImageHandler::setOutputBandList(bands, m_outputBandList);
-      }
    }
-   
    if ( m_outputBandList.empty() )
    {
       // Initialized to identity (input = output):

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.cpp 22430 2013-10-02 12:53:34Z gpotts $
+// $Id: ossimNitfFileHeaderV2_0.cpp 19058 2011-03-11 20:03:24Z dburken $
 
 
 #include <sstream>
@@ -314,11 +314,9 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
    {
       in.read(theUserDefinedHeaderOverflow, 3);
       
-      current = in.tellg();
       while((current - start) < userDefinedHeaderLength)
       {
          headerTag.parseStream(in);
-         headerTag.setTagType("UDHD");
          theTagList.push_back(headerTag);
          // in.ignore(headerTag.getTagLength());
          // headerTag.clearFields();
@@ -348,12 +346,10 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
    if(extendedHeaderDataLength > 0)
    {
       in.read(theExtendedHeaderOverflow, 3);
-      current = in.tellg();
-     
+      
       while((current - start) < extendedHeaderDataLength)
       {
          headerTag.parseStream(in);
-         headerTag.setTagType("XHD");
          theTagList.push_back(headerTag);
          in.ignore(headerTag.getTagLength());
          headerTag.clearFields();
@@ -363,7 +359,6 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
    
    // this need to be re-thought
    initializeAllOffsets();
-   readOverflowTags(in);
 
    if(traceDebug())
    {
@@ -377,44 +372,6 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
    }
 //      initializeDisplayLevels(in);
 
-}
-
-void ossimNitfFileHeaderV2_0::readOverflowTags(istream& in)
-{
-   ossim_int32 overflow = ossimString(theUserDefinedHeaderOverflow).toInt32();
-   if (overflow != 0)
-   {
-      ossimRefPtr<ossimNitfDataExtensionSegment> des = getNewDataExtensionSegment(overflow-1, in);
-      if (des.valid())
-      {
-         const vector<ossimNitfTagInformation> &desTags = des->getTagList();
-         for (vector<ossimNitfTagInformation>::const_iterator iter = desTags.begin(); 
-              iter != desTags.end(); 
-              ++iter)
-         {
-            iter->setTagType("UDHD");
-            theTagList.push_back(*iter);
-         }
-         des = 0;
-      }
-   }
-
-   overflow = ossimString(theExtendedHeaderOverflow).toInt32();
-   if (overflow != 0)
-   {
-      ossimRefPtr<ossimNitfDataExtensionSegment> des = getNewDataExtensionSegment(overflow-1, in);
-      if (des.valid())
-      {
-         const vector<ossimNitfTagInformation> &desTags = des->getTagList();
-         for (vector<ossimNitfTagInformation>::const_iterator iter = desTags.begin(); iter != desTags.end(); ++iter)
-         {
-            iter->setTagType("XHD");
-            theTagList.push_back(*iter);
-         }
-         des = 0;
-
-      }
-   }
 }
 
 void ossimNitfFileHeaderV2_0::writeStream(std::ostream &out)
@@ -1026,18 +983,18 @@ ossimNitfTextHeader *ossimNitfFileHeaderV2_0::getNewTextHeader(
    return result;
 }
 
-ossimNitfDataExtensionSegment* ossimNitfFileHeaderV2_0::getNewDataExtensionSegment(ossim_int32 dataExtNumber,
-                                                                                   std::istream& in)const
+ossimNitfDataExtensionSegment*
+ossimNitfFileHeaderV2_0::getNewDataExtensionSegment(
+    ossim_uint32 dataExtNumber, std::istream& in)const
 {
    ossimNitfDataExtensionSegment *result = 0;
 
-   if((getNumberOfDataExtSegments() > 0) &&
-      (dataExtNumber < (ossim_int32)theNitfDataExtSegInfoRecords.size()) &&
-      (dataExtNumber >= 0))
+   if( (getNumberOfDataExtSegments() > 0) &&
+       (dataExtNumber < theNitfDataExtSegInfoRecords.size()) )
    {
       result = allocateDataExtSegment();
       in.seekg(theDataExtSegOffsetList[dataExtNumber].theDataExtSegHeaderOffset, std::ios::beg);
-      result->parseStream(in, theNitfDataExtSegInfoRecords[dataExtNumber].getImageLength());
+      result->parseStream(in);
    }
    
    return result;
@@ -1185,7 +1142,7 @@ ossimNitfTextHeader *ossimNitfFileHeaderV2_0::allocateTextHeader()const
 
 ossimNitfDataExtensionSegment* ossimNitfFileHeaderV2_0::allocateDataExtSegment()const
 {
-   return new ossimNitfDataExtensionSegmentV2_0();
+   return new ossimNitfDataExtensionSegmentV2_0;
 }
 
 bool ossimNitfFileHeaderV2_0::isEncrypted()const
@@ -1226,11 +1183,6 @@ ossim_int32 ossimNitfFileHeaderV2_0::getNumberOfDataExtSegments()const
 ossim_int32 ossimNitfFileHeaderV2_0::getHeaderSize()const
 {
    return theHeaderSize;
-}
-
-ossim_int32 ossimNitfFileHeaderV2_0::getNumberOfReservedExtSegments()const
-{
-   return theNitfResExtSegInfoRecords.size();
 }
 
 ossim_int64 ossimNitfFileHeaderV2_0::getFileSize()const
@@ -1682,22 +1634,5 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_0::getProperty(const ossimStrin
 void ossimNitfFileHeaderV2_0::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
    ossimNitfFileHeaderV2_X::getPropertyNames(propertyNames);
-
-   propertyNames.push_back(CLEVEL_KW);
-   propertyNames.push_back(STYPE_KW);
-   propertyNames.push_back(OSTAID_KW);
-   propertyNames.push_back(FDT_KW);
-   propertyNames.push_back(FTITLE_KW);
-   propertyNames.push_back(FSCLAS_KW);
-   propertyNames.push_back(FSCODE_KW);
-   propertyNames.push_back(FSCTLH_KW);
-   propertyNames.push_back(FSREL_KW);
-   propertyNames.push_back(FSCAUT_KW);
-   propertyNames.push_back(FSCTLN_KW);
-   propertyNames.push_back(FSCOP_KW);
-   propertyNames.push_back(FSCPYS_KW);
-   propertyNames.push_back(ENCRYP_KW);
-   propertyNames.push_back(ONAME_KW);
-   propertyNames.push_back(OPHONE_KW);
 }
 

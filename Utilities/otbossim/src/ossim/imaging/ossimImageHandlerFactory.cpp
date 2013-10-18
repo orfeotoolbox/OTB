@@ -5,12 +5,8 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 22230 2013-04-12 16:34:05Z dburken $
-
+// $Id: ossimImageHandlerFactory.cpp 21512 2012-08-22 11:53:57Z dburken $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
-#include <ossim/base/ossimKeywordNames.h>
-#include <ossim/base/ossimRegExp.h>
-#include <ossim/base/ossimTrace.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
 #include <ossim/imaging/ossimCibCadrgTileSource.h>
@@ -18,7 +14,6 @@
 #include <ossim/imaging/ossimDtedTileSource.h>
 #include <ossim/imaging/ossimEnviTileSource.h>
 #include <ossim/imaging/ossimNitfTileSource.h>
-// #include <ossim/imaging/ossimPdfReader.h>
 #include <ossim/imaging/ossimQuickbirdNitfTileSource.h>
 #include <ossim/imaging/ossimSrtmTileSource.h>
 #include <ossim/imaging/ossimQuickbirdTiffTileSource.h>
@@ -28,6 +23,8 @@
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/imaging/ossimVpfTileSource.h>
+#include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
 #include <ossim/imaging/ossimRpfCacheTileSource.h>
 #include <ossim/imaging/ossimImageCacheTileSource.h>
@@ -35,7 +32,7 @@
 #include <ossim/imaging/ossimBitMaskTileSource.h>
 #include <ossim/imaging/ossimBandSeparateHandler.h>
 #include <ossim/parallel/ossimImageHandlerMtAdaptor.h>
-
+#include <ossim/base/ossimRegExp.h>
 
 static const ossimTrace traceDebug("ossimImageHandlerFactory:debug");
 
@@ -350,24 +347,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    }
 
    return result.release();
-}
-
-ossimRefPtr<ossimImageHandler> ossimImageHandlerFactory::openOverview(
-   const ossimFilename& file ) const
-{
-   ossimRefPtr<ossimImageHandler> result = 0;
-   if ( file.size() )
-   {
-      result = new ossimTiffTileSource;
-      
-      result->setOpenOverviewFlag( false ); // Always false.
-
-      if ( result->open( file ) == false )
-      {
-         result = 0;
-      }
-   }
-   return result;
 }
 
 #if 0

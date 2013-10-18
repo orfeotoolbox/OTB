@@ -2,13 +2,13 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author:  Garrett Potts
+// Author:  Garrett Potts (gpott@imagelinks.com)
 //
 // Description:  Contains class definition for the class
 //               ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.h 22228 2013-04-12 14:11:45Z dburken $
+//  $Id: ossimImageHandlerRegistry.h 19551 2011-05-07 16:36:34Z dburken $
 
 #ifndef ossimImageHandlerRegistry_HEADER
 #define ossimImageHandlerRegistry_HEADER 1
@@ -41,33 +41,23 @@ public:
     * default = true
     * @return Pointer to image handler or null if cannot open.
     */
-   virtual ossimImageHandler* open(const ossimFilename& fileName,
-                                   bool trySuffixFirst=true,
-                                   bool openOverview=true)const;
+   ossimImageHandler* open(const ossimFilename& fileName,
+                           bool trySuffixFirst=true,
+                           bool openOverview=true)const;
    
-   /**
+   /*!
     *  Given a keyword list return a pointer to an ImageHandler.  Returns
     *  null if a valid handler cannot be found.
     */
-   virtual ossimImageHandler* open(const ossimKeywordlist& kwl,
-                                   const char* prefix=0)const;
-   
-   /**
-    * @brief Open overview that takes a file name.
-    *
-    * This will only check readers that can be overview handlers.
-    * 
-    * @param file File to open.
-    * 
-    * @return ossimRefPtr to image handler on success or null on failure.
-    */
-   virtual ossimRefPtr<ossimImageHandler> openOverview(
-      const ossimFilename& file ) const;
+   ossimImageHandler* open(const ossimKeywordlist& kwl, const char* prefix=0)const;
 
    /*!
     * Creates an object given a type name.
     */
-   virtual ossimObject* createObject(const ossimString& typeName) const;
+   virtual ossimObject* createObject(const ossimString& typeName)const
+   {
+      return createObjectFromRegistry(typeName);
+   }
    
    /*!
     * Creates and object given a keyword list.
@@ -76,10 +66,9 @@ public:
                                      const char* prefix=0)const;
 
    /**
-    * openBySuffix will call the mthod getImageHandlersBySuffix and go through
-    * each handler to try and open the file.  This should be a faster open
-    * for we do not have to do a magic number compare on all prior files and
-    * keep opening and closing files.
+    * openBySuffix will call the mthod getImageHandlersBySuffix and go through each handler to try and open the file.
+    * This should be a faster open for we do not have to do a magic number compare on all prior files and keep opening and
+    * closing files.
     * @param openOverview If true image handler will attempt to open overview.
     * default = true
     */
@@ -106,10 +95,12 @@ public:
     * This is the name used to construct the objects dynamially and this
     * name must be unique.
     */
-   virtual void getTypeNameList( std::vector<ossimString>& typeList ) const;
+   virtual void getTypeNameList(std::vector<ossimString>& typeList)const
+   {
+      getAllTypeNamesFromRegistry(typeList);
+   }
 
-   virtual void getSupportedExtensions(
-      ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const;
+   virtual void getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const;
 
    /**
     * @brief Prints list of readers and properties.
@@ -123,15 +114,14 @@ protected:
    ossimImageHandlerRegistry(const ossimImageHandlerRegistry& rhs);
    const ossimImageHandlerRegistry&
       operator=(const ossimImageHandlerRegistry& rhs);
-   
+
    //static ossimImageHandlerRegistry*            theInstance;
-   
+
 TYPE_DATA
 };
 
 extern "C"
 {
-   OSSIM_DLL  void* ossimImageHandlerRegistryGetInstance();
+ OSSIM_DLL  void* ossimImageHandlerRegistryGetInstance();
 }
-
-#endif /* #ifndef ossimImageHandlerRegistry_HEADER */
+#endif

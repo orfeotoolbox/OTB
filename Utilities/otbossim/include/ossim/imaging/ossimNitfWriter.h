@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfWriter.h 22420 2013-09-26 16:42:56Z gpotts $
+//  $Id: ossimNitfWriter.h 18674 2011-01-11 16:24:12Z dburken $
 #ifndef ossimNitfWriter_HEADER
 #define ossimNitfWriter_HEADER
 
@@ -22,8 +22,6 @@
 #include <ossim/support_data/ossimNitfImageHeaderV2_1.h>
 #include <ossim/support_data/ossimNitfTextHeaderV2_0.h>
 #include <ossim/support_data/ossimNitfTextHeaderV2_1.h>
-#include <ossim/support_data/ossimNitfDataExtensionSegmentV2_1.h>
-#include <ossim/base/ossimIoStream.h>
 
 class ossimProjection;
 
@@ -59,13 +57,10 @@ public:
     * @note The following names are handled:
     *  file_header
     *  image_header
-    *  des_header
     */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
-   void addRegisteredTag(ossimRefPtr<ossimNitfRegisteredTag> registeredTag, bool unique = true);
-   void addRegisteredTag(ossimRefPtr<ossimNitfRegisteredTag> registeredTag, bool unique,
-      const ossim_uint32& ownerIndex, const ossimString& tagType);
+   void addRegisteredTag(ossimRefPtr<ossimNitfRegisteredTag> registeredTag);
 
    /**
     * Saves the state of the writer to kwl with prefix then calls
@@ -106,32 +101,6 @@ public:
     */
    virtual void setTileSize(const ossimIpt& tileSize);
 
-   /**
-    * Get the image header used for export.
-    *
-    * @warning Many values will be overwritten at export time.  This includes the 
-    *          ossimNitfImageBandV2_1, if the number of bands on the image header
-    *          does not match that on the writer.
-    *
-    * @return The image header.
-    */
-   virtual ossimNitfImageHeaderV2_1 *getImageHeader();
-
-   /**
-    * Get the file header used for export.
-    *
-    * @warning Many values will be overwritten at export time.
-    *
-    * @return The file header.
-    */
-   virtual ossimNitfFileHeaderV2_1 *getFileHeader();
-
-   /**
-    * Add a DES to the file.
-    *
-    * @param des The DES to add to the file.
-    */
-   virtual void addDataExtensionSegment(const ossimNitfDataExtensionSegmentV2_1& des, bool allowTreOverflow);
 protected:
    
    /**
@@ -155,18 +124,14 @@ protected:
    /** Currently disabled... */
    // virtual void addStandardTags();
 
-   ossimOFStream64*                      m_outputStream;
+   std::ofstream*                        m_outputStream;
    ossimRefPtr<ossimNitfFileHeaderV2_1>  m_fileHeader;
    ossimRefPtr<ossimNitfImageHeaderV2_1> m_imageHeader;
-   std::vector<ossimNitfDataExtensionSegmentV2_1> m_dataExtensionSegments;
    ossimRefPtr<ossimNitfTextHeaderV2_1>  m_textHeader;
    std::string                           m_textEntry;
    ossimIpt                              m_blockSize;
 
-TYPE_DATA 
-private:
-   void takeOverflowTags(bool useFileHeader, bool userDefinedTags);
-
+TYPE_DATA   
 };
 
 #endif /* #ifndef ossimNitfWriter_HEADER */

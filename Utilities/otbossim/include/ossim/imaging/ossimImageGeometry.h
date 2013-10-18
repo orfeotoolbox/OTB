@@ -1,4 +1,4 @@
-//***********************************************************************************************
+//**************************************************************************************************
 //
 // License:  LGPL
 // 
@@ -8,7 +8,7 @@
 //
 // Description: Class declaration of ossimImageGeometry.
 //
-//***********************************************************************************************
+//**************************************************************************************************
 // $Id: ossimImageGeometry.h 3102 2012-01-18 15:30:20Z oscar.kramer $
 
 #ifndef ossimImageGeometry_HEADER
@@ -20,7 +20,6 @@
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimRtti.h>
 #include <ossim/base/ossimRefPtr.h>
-#include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossim2dTo2dTransform.h>
 #include <vector>
@@ -28,11 +27,9 @@
 #include <ossim/base/ossimDpt3d.h>
 #include <ossim/base/ossimAdjustableParameterInterface.h>
 
-// Forward class declarations:
-class ossimDrect;
 class ossimIrect;
 
-//***********************************************************************************************
+//**************************************************************************************************
 //! Container class that holds both 2D transform and 3D projection information for an image
 //! Only one instance of this is alive per image. This is  the object that is returned from
 //! a call to ossimImageSource::getImageGeometry()
@@ -59,7 +56,7 @@ class ossimIrect;
 //
 //! 2) A decimation of 1.0 is the full image.  This may or may not be r0 as r0 can be decimated.
 //!
-//***********************************************************************************************
+//**************************************************************************************************
 class OSSIM_DLL ossimImageGeometry : public ossimObject
 {
 public:
@@ -155,20 +152,6 @@ public:
    //! Access methods for projection (may be NULL pointer).
    const ossimProjection* getProjection() const { return m_projection.get(); }
    ossimProjection*       getProjection()       { return m_projection.get(); }
-
-   /**
-    * @return const ossimMapProjection* or NULL if projection not set or not
-    * derived from ossimMapProjection.
-    */
-   const ossimMapProjection* getAsMapProjection() const
-   { return dynamic_cast<const ossimMapProjection*>( m_projection.get() ); }
-
-   /**
-    * @return ossimMapProjection* or NULL if projection not set or not
-    * derived from ossimMapProjection.
-    */
-   ossimMapProjection*       getAsMapProjection()
-   { return dynamic_cast<ossimMapProjection*>( m_projection.get() ); }
 
    //! Returns TRUE if valid projection defined
    bool hasProjection() const { return m_projection.valid(); }
@@ -325,7 +308,6 @@ public:
     * ossimIrect::makeNan() if the image size is not initialized.
     */
    void getBoundingRect(ossimIrect& bounding_rect) const;
-   void getBoundingRect(ossimDrect& bounding_rect) const; // Overloaded for drect.
    
    //! Creates a new instance of ossimImageGeometry with the same transform and projection.
    //! Overrides base-class version requiring loadState() and saveState() (not implemented yet)
@@ -399,18 +381,6 @@ public:
    
    bool computeGroundToImagePartials(NEWMAT::Matrix& result,
                                      const ossimGpt& gpt);
-
-   /**
-    * @return Returns the angle to "up is up" in decimal degrees, 0.0 if image
-    * is not affected by elevation, ossim::nan on error.
-    */
-   ossim_float64 upIsUpAngle() const;
-
-   /**
-    * @return Returns the angle to "north up" in decimal degrees, ossim::nan
-    * on error.
-    */
-   ossim_float64 northUpAngle() const;
    
 protected:
    //! @brief Method to back out decimation of a point.

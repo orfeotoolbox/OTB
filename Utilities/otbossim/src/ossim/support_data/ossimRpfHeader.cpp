@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimRpfHeader.cpp 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimRpfHeader.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <cstring>
 #include <iostream>
@@ -54,7 +54,6 @@ static const ossimString SECURITY_RELEASE_MARKING_KW = "SecurityReleaseMarking";
 
 ossimRpfHeader::ossimRpfHeader()
    :
-   ossimNitfRegisteredTag(std::string("RPFHDR"), 48),
    m_littleBigEndianIndicator(0x00),
    m_headerSectionLength(48),
    m_fileName(),
@@ -84,7 +83,6 @@ ossimRpfHeader::ossimRpfHeader()
 
 ossimRpfHeader::ossimRpfHeader(const ossimRpfHeader& obj)
    :
-   ossimNitfRegisteredTag(std::string("RPFHDR"), 48),
    m_littleBigEndianIndicator(obj.m_littleBigEndianIndicator),
    m_headerSectionLength(obj.m_headerSectionLength),
    m_fileName(),
@@ -132,6 +130,11 @@ ossimRpfHeader::~ossimRpfHeader()
       delete m_locationSection;
       m_locationSection = 0;
    }
+}
+
+std::string ossimRpfHeader::getRegisterTagName()const
+{
+   return std::string("RPFHDR");
 }
 
 void ossimRpfHeader::parseStream(std::istream& in)
@@ -260,6 +263,11 @@ std::ostream& ossimRpfHeader::print(std::ostream& out, const std::string& prefix
    }
 
    return out;
+}
+
+ossim_uint32 ossimRpfHeader::getSizeInBytes()const
+{
+   return 48;
 }
 
 ossimByteOrder ossimRpfHeader::getByteOrder()const

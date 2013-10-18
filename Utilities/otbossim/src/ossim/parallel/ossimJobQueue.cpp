@@ -151,7 +151,7 @@ void ossimJobQueue::clear()
    }
    if(cb.valid())
    {
-      // ossim_uint32 idx = 0;
+      ossim_uint32 idx = 0;
       for(ossimJob::List::iterator iter=removedJobs.begin();iter!=removedJobs.end();++iter)
       {
          cb->removed(this, (*iter).get());
@@ -199,12 +199,8 @@ void ossimJobQueue::releaseBlock()
 }
 bool ossimJobQueue::isEmpty()const
 {
-   // OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_jobQueueMutex);
-   // return m_jobQueue.empty();
-   m_jobQueueMutex.lock();
-   bool result =  m_jobQueue.empty();
-   m_jobQueueMutex.unlock();
-   return result;
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_jobQueueMutex);
+   return m_jobQueue.empty();
 }
 
 ossim_uint32 ossimJobQueue::size()

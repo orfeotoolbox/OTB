@@ -11,7 +11,7 @@
 //
 // Contains class declaration for ossimGeneralRasterInfo
 //*******************************************************************
-//  $Id: ossimGeneralRasterInfo.h 22197 2013-03-12 02:00:55Z dburken $
+//  $Id: ossimGeneralRasterInfo.h 21527 2012-08-26 16:50:49Z dburken $
 
 #ifndef ossimGeneralRasterInfo_HEADER
 #define ossimGeneralRasterInfo_HEADER 1
@@ -121,13 +121,13 @@ public:
     * @brief Number of bands. Inlined below.
     * @return Number of bands from theMetaData class member cast to an int32.
     */
-   inline ossim_int32 numberOfBands() const;
+   ossim_int32 numberOfBands() const;
    
    /**
     * @brief Bytes per pixel.  Inlined below.
     * @return Bytes per pixel from theMetaData class member cast to an int32.
     */   
-   inline ossim_int32 bytesPerPixel() const;
+   ossim_int32 bytesPerPixel() const;
    
    /**
     *  Returns the number of pixels from the edge of a line
@@ -146,37 +146,37 @@ public:
    /**
     *  Returns the number of lines within "theValidImageRect".
     */
-   inline ossim_int32 validLines() const;
+   ossim_int32 validLines() const;
 
    /**
     *  Returns the number of lines within "theRawImageRect".
     */
-   inline ossim_int32 rawLines() const;
+   ossim_int32 rawLines() const;
 
    /**
     *  Returns the number of bytes in a raw line.
     */
-   inline ossim_int32 bytesPerRawLine() const;
+   ossim_int32 bytesPerRawLine() const;
 
    /**
     *  Returns the number of bytes in a valid line.
     */
-   inline ossim_int32 bytesPerValidLine() const;
+   ossim_int32 bytesPerValidLine() const;
 
    /**
     *  Returns the number of samples within "theValidImageRect".
     */
-   inline ossim_int32 validSamples() const;
+   ossim_int32 validSamples() const;
 
    /**
     *  Returns the number of samples within "theRawImageRect".
     */
-   inline ossim_int32 rawSamples() const;
+   ossim_int32 rawSamples() const;
 
    /**
     *  Returns the offset in bytes to the first valid sample in the image.
     */
-   inline std::streamoff offsetToFirstValidSample() const;
+   std::streamoff offsetToFirstValidSample() const;
    
    const std::vector<ossimFilename>& getImageFileList() const;
 
@@ -229,10 +229,10 @@ public:
    bool open( const ossimFilename& imageFile );
 
    /** @return Const reference to theMetaData class member. */
-   inline const ossimImageMetaData& getImageMetaData() const;
+   const ossimImageMetaData& getImageMetaData() const;
 
    /** @return Reference to theMetaData class member. */
-   inline ossimImageMetaData& getImageMetaData();
+   ossimImageMetaData& getImageMetaData();
 
    /**
     * @brief Initialize from envi header file.

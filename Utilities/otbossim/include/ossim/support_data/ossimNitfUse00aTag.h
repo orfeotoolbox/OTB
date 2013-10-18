@@ -10,7 +10,7 @@
 // Exploitation Usability extension.
 // 
 //********************************************************************
-// $Id: ossimNitfUse00aTag.h 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfUse00aTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfUse00aTag_HEADER
 #define ossimNitfUse00aTag_HEADER
 
@@ -52,10 +52,10 @@ public:
    
    ossimNitfUse00aTag();
    virtual ~ossimNitfUse00aTag();
-
+   virtual std::string getRegisterTagName()const;
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
-
+   virtual ossim_uint32 getSizeInBytes()const;
    virtual void clearFields();
    
   // The set methods below taking ossimString args will truncate and

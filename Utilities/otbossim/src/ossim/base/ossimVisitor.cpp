@@ -1,4 +1,4 @@
-// $Id: ossimVisitor.cpp 22158 2013-02-20 12:29:10Z gpotts $
+// $Id: ossimVisitor.cpp 21850 2012-10-21 20:09:55Z dburken $
 
 #include <ossim/base/ossimVisitor.h>
 #include <ossim/base/ossimConnectableObject.h>
@@ -68,14 +68,6 @@ bool ossimVisitor::stopTraversal()const
    return m_stopTraversalFlag;
 }
 
-
-ossimIdVisitor::ossimIdVisitor()
-   :
-   ossimVisitor(ossimVisitor::VISIT_INPUTS|ossimVisitor::VISIT_CHILDREN),
-   m_object(0),
-   m_id(0)
-{
-}
 
 ossimIdVisitor::ossimIdVisitor(int visitorType)
    :
@@ -342,16 +334,6 @@ ossimViewInterfaceVisitor::ossimViewInterfaceVisitor(const ossimViewInterfaceVis
 ossimRefPtr<ossimVisitor> ossimViewInterfaceVisitor::dup()const
 {
    return new ossimViewInterfaceVisitor(*this);
-}
-
-ossimObject* ossimViewInterfaceVisitor::getView()
-{
-   return m_view.get();
-}
-
-const ossimObject* ossimViewInterfaceVisitor::getView()const
-{
-   return m_view.get();
 }
 
 void ossimViewInterfaceVisitor::visit(ossimObject* obj)

@@ -45,11 +45,20 @@ public:
    /** @brief destructor */
    virtual ~ossimNitfEngrdaTag();
 
+   /**
+    * @brief Method to return tag name.
+    * @return "ENGRDA" as a std::string.
+    */
+   virtual std::string getRegisterTagName()const;
+
    /** @brief Method to parse data from stream. */
    virtual void parseStream(std::istream& in);
 
    /** @brief Method to write data to stream. */
    virtual void writeStream(std::ostream& out);
+
+   /** @return Byte size of this tag. */
+   virtual ossim_uint32 getSizeInBytes()const;
 
    /** @brief Method to clear all fields including null terminating. */
    virtual void clearFields();

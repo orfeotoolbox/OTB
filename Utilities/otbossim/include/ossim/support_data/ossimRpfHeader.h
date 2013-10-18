@@ -9,7 +9,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfHeader.h 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimRpfHeader.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimRpfHeader_HEADER
 #define ossimRpfHeader_HEADER 1
 
@@ -49,6 +49,12 @@ public:
 
    virtual ~ossimRpfHeader();
 
+   /*!
+    * This will return the name of the registered tag for this
+    * user defined header.
+    */
+   virtual std::string getRegisterTagName()const;
+
    /**
     * @brief Parse method.
     *
@@ -75,6 +81,8 @@ public:
    std::ostream& print(std::ostream& out,
                        const std::string& prefix=std::string()) const;
 
+   virtual ossim_uint32 getSizeInBytes()const;
+   
    virtual ossimByteOrder getByteOrder()const;
    
    const ossimRpfLocationSection* getLocationSection() const;

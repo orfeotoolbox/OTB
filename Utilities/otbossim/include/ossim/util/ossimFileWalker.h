@@ -16,6 +16,7 @@
 #ifndef ossimFileWalker_HEADER
 #define ossimFileWalker_HEADER 1
 
+#include <ossim/base/ossimCallback1.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/parallel/ossimJob.h>
@@ -25,21 +26,24 @@
 #include <vector>
 
 class ossimFilename;
-class ossimFileProcessorInterface;
 
 /**
  * @class ossimFileWalker
  *
  * Utility class to walk through directories and get a list of files to
- * process. For each file found the ossimFileProcessorInterface::processFile
- * method is excecuted.  Internally the processFile calls are placed in a job
- * queue.
+ * process. For each file found the callback is excecuted.  Mechanisms are in
+ * place to filter files and to call back  to a processFile method.  This
+ * requires a callback method to process files from the user.  The callback is
+ * set via registerProcessFileCallback method.  Internally the processFile
+ * calls are placed in a job queue.
  *
  * Typical usage (snip from ossimTiledElevationDatabase):
  *
  * ossimFileWalker* fw = new ossimFileWalker();
  * fw->initializeDefaultFilterList();
- * fw->setFileProcessor( this ); 
+ * ossimCallback1<const ossimFilename&, bool&, bool>* cb =
+ * new ProcessFileCB(this, &ossimTiledElevationDatabase::processFile);
+ * fw->registerProcessFileCallback(cb);
  * fw->walk(f);
  */
 class OSSIM_DLL ossimFileWalker
@@ -82,12 +86,16 @@ public:
     */
    void walk(const ossimFilename& root);
 
+   // void walk(const ossimFilename& root);
+
    /**
-    * @brief Sets ossimFileProcessorInterfacecallback method to process files.
+    * @brief Registers callback method to process a file.
     *
-    * @param fpi ossimFileProcessorInterface pointer
+    * @param cb Callback to register.
+    *
+    * @see m_processFileCallBackPtr for documentation on template interface.
     */   
-   void setFileProcessor(ossimFileProcessorInterface* fpi);
+   void registerProcessFileCallback(ossimCallback1<const ossimFilename&>* cb);
 
    /** @return The list of filtered out files. */
    const std::vector<std::string>& getFilteredExtensions() const;
@@ -148,11 +156,11 @@ private:
    {
    public:
       /**
-       * @brief Constructor that takes file processor pointer and file.
-       * @param fpi ossimFileProcessorInterface pointer
+       * @brief Constructor that takes callback and file.
+       * @param cb Callback to method to process a file.
        * @param file The file to process.
        */
-      ossimFileWalkerJob(ossimFileProcessorInterface* fpi,
+      ossimFileWalkerJob(ossimCallback1<const ossimFilename&>* cb,
                          const ossimFilename& file);
       /**
        * @brief Defines pure virtual ossimJob::start.
@@ -162,8 +170,8 @@ private:
       virtual void start();
       
    private:
-      ossimFileProcessorInterface* m_fileProcessor;
-      ossimFilename                m_file;
+      ossimCallback1<const ossimFilename&>* m_processFileCallBackPtr;
+      ossimFilename                         m_file;
       
    }; // End: class ossimFileWalkerJob
 
@@ -207,7 +215,7 @@ private:
     *
     * @param const ossimFilename& First parameter(argument) file to process.
     */
-   ossimFileProcessorInterface*          m_fileProcessor;
+   ossimCallback1<const ossimFilename&>* m_processFileCallBackPtr;
    ossimRefPtr<ossimJobMultiThreadQueue> m_jobQueue;
    std::vector<std::string>              m_filteredExtensions;
    bool                                  m_recurseFlag;

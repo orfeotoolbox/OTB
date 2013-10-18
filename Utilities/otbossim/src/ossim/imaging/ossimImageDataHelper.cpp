@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageDataHelper.cpp 22345 2013-07-26 20:07:19Z dburken $
+// $Id: ossimImageDataHelper.cpp 21184 2012-06-29 15:13:09Z dburken $
 #include <ossim/imaging/ossimImageDataHelper.h>
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimLine.h>
@@ -330,17 +330,20 @@ void ossimImageDataHelper::copyInputToThis(const T* inputBuf,
       ossimPolyArea2d clipArea = polyArea&thePolyImageRectangle;
       
       vector<ossimPolygon> clipList;
-      //      clipArea.getAllVisiblePolygons(clipList);
+//      clipArea.getAllVisiblePolygons(clipList);
       clipArea.getVisiblePolygons(clipList);
-
-      for(ossim_uint32 i = 0; i < (int)clipList.size();++i)
+      int i = 0;
+            
+      for(i = 0; i < (int)clipList.size();++i)
       {
-         copyInputToThis( inputBuf, clipList[i] );
+         copyInputToThis(inputBuf,
+                         clipList[i]);
       }
    }
    else
    {
-      copyInputToThis( inputBuf, region );
+      copyInputToThis(inputBuf,
+                      region);
    }
 }
 
@@ -443,17 +446,22 @@ void ossimImageDataHelper::fill(T dummyVariable,
       ossimPolyArea2d clipArea = polyArea&thePolyImageRectangle;
       
       vector<ossimPolygon> clipList;
-      
+//      clipArea.getAllVisiblePolygons(clipList);
       clipArea.getVisiblePolygons(clipList);
-      
-      for(ossim_uint32 i = 0; i < clipList.size();++i)
+            
+      int i = 0;
+      for(i = 0; i < (int)clipList.size();++i)
       {
-         fill( dummyVariable, values, clipList[i] );
+         fill(dummyVariable,
+              values,
+              clipList[i]);
       }
    }
    else
    {
-      fill( dummyVariable, values, region );
+      fill(dummyVariable,
+           values,
+           region);
    }
 }
 

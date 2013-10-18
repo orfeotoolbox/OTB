@@ -5,9 +5,9 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.h 22303 2013-07-04 18:15:52Z dburken $
+// $Id: ossimGeoPolyCutter.h 19907 2011-08-05 19:55:46Z dburken $
 #ifndef ossimGeoPolyCutter_HEADER
-#define ossimGeoPolyCutter_HEADER 1
+#define ossimGeoPolyCutter_HEADER
 #include <ossim/imaging/ossimPolyCutter.h>
 #include <ossim/base/ossimViewInterface.h>
 #include <ossim/base/ossimGeoPolygon.h>
@@ -158,17 +158,31 @@ public:
     * Will set the number of polygons and will call the base
     * class set number of polygons.
     */
-   virtual void setNumberOfPolygons(ossim_uint32 count);
-
+   virtual void setNumberOfPolygons(ossim_uint32 count)
+      {
+         if(!count)
+         {
+            theGeoPolygonList.clear();
+         }
+         else
+         {
+            theGeoPolygonList.resize(count);
+         }
+         ossimPolyCutter::setNumberOfPolygons(count);
+      }
    /*!
     * This should only be used for informational uses only.  If updates
     * are to be made please go through the access methods that change
     * the polygon data.
     */
-   virtual std::vector<ossimGeoPolygon>& getGeoPolygonList();
-
-   virtual const std::vector<ossimGeoPolygon>& getGeoPolygonList()const;
-
+   virtual std::vector<ossimGeoPolygon>& getGeoPolygonList()
+      {
+         return theGeoPolygonList;
+      }
+   virtual const std::vector<ossimGeoPolygon>& getGeoPolygonList()const
+      {
+         return theGeoPolygonList;
+      }
 
    /*!
     * Will set the view to the passed in object.  Once set it will project the
@@ -188,6 +202,13 @@ public:
    
 protected:
    virtual ~ossimGeoPolyCutter();
+   
+   /*!
+    * The view projection used to project the ground coordinates.
+    */
+   ossimRefPtr<ossimImageGeometry> theViewProjection;
+
+   std::vector<ossimGeoPolygon> theGeoPolygonList;
 
    /*!
     * Utility method used to invert any passed in projected polygons to
@@ -197,7 +218,7 @@ protected:
    void invertPolygon(int polygonNumber);
 
    /*!
-    * Transforms all vertices based on the current m_viewProjection.
+    * Transforms all vertices based on the current theViewProjection.
     */
    void transformVertices();
 
@@ -206,16 +227,7 @@ protected:
     * \param i The polygon index to project.
     */
    void transformVertices(int i);
-
-   /*!
-    * The view projection used to project the ground coordinates.
-    */
-   ossimRefPtr<ossimImageGeometry> m_viewGeometry;
-
-   std::vector<ossimGeoPolygon> m_geoPolygonList;
-
    
 TYPE_DATA  
 };
-
-#endif /* #ifndef ossimGeoPolyCutter_HEADER */
+#endif

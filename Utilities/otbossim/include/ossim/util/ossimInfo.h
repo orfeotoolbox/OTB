@@ -12,7 +12,7 @@
 // See class doxygen descriptions below for more.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimInfo.h 22436 2013-10-04 20:34:41Z dburken $
+// $Id: ossimInfo.h 21773 2012-09-26 00:08:19Z dlucas $
 
 #ifndef ossimInfo_HEADER
 #define ossimInfo_HEADER 1
@@ -90,6 +90,10 @@ public:
     * Flags turn on various pieces of info.  These equate to options in
     * ossim-info for image information.
     *
+    * This method opens and closes "file" under the hood so if an image is
+    * open and it's not the same as "file" it will be closed by this call.
+    * On exite the image will be closed.
+    *
     * @param file Image file to get information for.
     * @param dumpFlag      ossim-info -d
     * @param dnoFlag       ossim-info --dno
@@ -99,31 +103,14 @@ public:
     * @param paletteFlag   ossim-info --palette
     * @param kwl Initialized by this method.
     */
-   void getImageInfo( const ossimFilename& file,
-                      bool dumpFlag,
-                      bool dnoFlag,
-                      bool imageGeomFlag,
-                      bool imageInfoFlag,
-                      bool metaDataFlag,
-                      bool paletteFlag,
-                      ossimKeywordlist& kwl ) const;
-
-   /**
-    * @brief getImageInfo Method to open image "file" and get image info
-    * for entry in the form of a ossimKeywordlist.
-    *
-    * Equivalent of ossim-info -i -p <image> for entry. 
-    *
-    * Throws ossimException on error if file cannot be opened or entry is
-    * invalid.
-    *
-    * @param file Image file to get information for.
-    * @param entry Entry index to open.
-    * @return true on success, false on error.
-    */
-   bool getImageInfo( const ossimFilename& file,
-                      ossim_uint32 entry,
-                      ossimKeywordlist& kwl ) const;
+   void getImageInfo(const ossimFilename& file,
+                     bool dumpFlag,
+                     bool dnoFlag,
+                     bool imageGeomFlag,
+                     bool imageInfoFlag,
+                     bool metaDataFlag,
+                     bool paletteFlag,
+                     ossimKeywordlist& kwl);
    
    /**
     * @brief Opens image handler and stores in m_img data member.
@@ -232,57 +219,11 @@ public:
                               ossimKeywordlist& kwl, 
                               bool dnoFlag );
 
-   /**
-    * @brief Populates keyword list with image center point..
-    * @param kwl Keyword list to populate.
-    */
    void getCenterImage(ossimKeywordlist& kwl);
-
-   /**
-    * @brief Populates keyword list with image center point..
-    * @param entry Entry number to select.  Note this is the entry number
-    * from the getEntryList call not a simple zero based entry index.
-    * @param kwl Keyword list to populate.
-    */
-   void getCenterImage(ossim_uint32 entry, ossimKeywordlist& kwl);
-
-   /**
-    * @brief Populates keyword list with image center ground point..
-    * @param kwl Keyword list to populate.
-    */  
+   bool getCenterImage(ossim_uint32 entry, ossimKeywordlist& kwl);
    void getCenterGround(ossimKeywordlist& kwl);
+   bool getCenterGround(ossim_uint32 entry, ossimKeywordlist& kwl);
 
-   /**
-    * @brief Populates keyword list with image center ground point..
-    * @param entry Entry number to select.  Note this is the entry number
-    * from the getEntryList call not a simple zero based entry index.
-    * @param kwl Keyword list to populate.
-    */
-   void getCenterGround(ossim_uint32 entry, ossimKeywordlist& kwl);
-
-   /**
-    * @brief Populates keyword list with up_is_up_rotation.
-    *
-    * @param kwl Keyword list to populate.
-    *
-    * This requires open image.
-    */
-   void getUpIsUpAngle(ossimKeywordlist& kwl);
-
-   /**
-    * @brief Populates keyword list with up_is_up_rotation.
-    *
-    * @param entry Entry number to select.  Note this is the entry number
-    * from the getEntryList call not a simple zero based entry index.
-    * 
-    * @param kwl Keyword list to populate.
-    *
-    * @param dnoFlag If true no entries flaged as overviews will be output.
-    *
-    * This requires open image.
-    */
-   void getUpIsUpAngle(ossim_uint32 entry, ossimKeywordlist& kwl);
-   
    /**
     * @brief Populates keyword list with image rectangle.
     *
@@ -301,8 +242,10 @@ public:
     * @param kwl Keyword list to populate.
     *
     * This requires open image.
+    *
+    * @return true if entry info was saved to keyword list false if not.
     */
-   void getImageRect(ossim_uint32 entry, ossimKeywordlist& kwl);
+   bool getImageRect(ossim_uint32 entry, ossimKeywordlist& kwl);
 
    /**
     * @return true if current open image entry is an overview.
@@ -530,33 +473,16 @@ private:
                               bool dnoFlag ) const;
 
    void getCenterImage( ossimImageHandler* ih,
-                        ossimKeywordlist& kwl ) const;
-   void getCenterImage( ossimImageHandler* ih,
-                        ossim_uint32 entry, 
-                        ossimKeywordlist& kwl ) const;
+                      ossimKeywordlist& kwl ) const;
+   bool getCenterImage( ossimImageHandler* ih,
+                      ossim_uint32 entry, 
+                      ossimKeywordlist& kwl ) const;
    void getCenterGround( ossimImageHandler* ih,
-                         ossimKeywordlist& kwl ) const;
-   void getCenterGround( ossimImageHandler* ih,
-                         ossim_uint32 entry, 
-                         ossimKeywordlist& kwl ) const;
+                      ossimKeywordlist& kwl ) const;
+   bool getCenterGround( ossimImageHandler* ih,
+                      ossim_uint32 entry, 
+                      ossimKeywordlist& kwl ) const;
 
-   /**
-    * @brief Populates keyword list with up_is_up_rotation.
-    * @param kwl Keyword list to populate.
-    */
-   void getUpIsUpAngle( ossimImageHandler* ih,
-                        ossimKeywordlist& kwl ) const;
-
-   /**
-    * @brief Populates keyword list with up_is_up_rotation.
-    * @param entry Entry number to select.  Note this is the entry number from
-    * the getEntryList call not a simple zero based entry index.
-    * @param kwl Keyword list to populate.
-    */  
-   void getUpIsUpAngle( ossimImageHandler* ih,
-                        ossim_uint32 entry, 
-                        ossimKeywordlist& kwl ) const;
-   
    /**
     * @brief Populates keyword list with image rectangle.
     *
@@ -570,27 +496,15 @@ private:
     * @param entry Entry number to select.  Note this is the entry number from
     * the getEntryList call not a simple zero based entry index.
     * @param kwl Keyword list to populate.
+    * @return true if entry info was saved to keyword list false if not.
     */
-   void getImageRect( ossimImageHandler* ih,
+   bool getImageRect( ossimImageHandler* ih,
                       ossim_uint32 entry, 
                       ossimKeywordlist& kwl ) const;
 
    /** @return true if current open image entry is an overview. */
    bool isImageEntryOverview( const ossimImageHandler* ih ) const;
 
-   /**
-    * @brief Convert keyword list to xml then outputs to standard out.
-    * @param kwl Keyword list to output.
-    */
-   void outputXml( const ossimKeywordlist& kwl ) const;
-   
-   /**
-    * @brief Convert keyword list to xml then outputs to file.
-    * @param kwl Keyword list to output.
-    * @param file Output file to write to.
-    */
-   void outputXml( const ossimKeywordlist& kwl, const ossimFilename& file ) const;
-  
   /**
    * @brief Opens image.
    * @param Image to open.

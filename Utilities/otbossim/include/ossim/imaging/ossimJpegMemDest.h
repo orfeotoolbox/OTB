@@ -11,21 +11,13 @@
 //----------------------------------------------------------------------------
 // $Id$
 #ifndef ossimJpegMemSrc_HEADER
-#define ossimJpegMemSrc_HEADER 1
+#define ossimJpegMemSrc_HEADER
 
-#include <ostream>                     /** for std::ostream */
+#include <fstream>
 #include <ossim/base/ossimConstants.h> /** for OSSIM_DLL export macro */
 #include <cstdio>                      /** for size_t  */
 #include <csetjmp>                     /** for jmp_buf */
-extern "C"
-{
-#if defined(_MSC_VER) || defined(__MINGW32__)
-#  ifndef XMD_H
-#    define XMD_H
-#  endif
-#endif
-#include <jpeglib.h> /** for jpeg stuff */
-}
+#include <jpeglib.h>                   /** for jpeg stuff */
 
 /**
  * @brief Method which uses memory instead of a FILE* to write to.

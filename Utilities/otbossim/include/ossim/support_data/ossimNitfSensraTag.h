@@ -9,7 +9,7 @@
 // Description: Nitf support class for SENSRA - Sensor parameters extension.
 // 
 //********************************************************************
-// $Id: ossimNitfSensraTag.h 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfSensraTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfSensraTag_HEADER
 #define ossimNitfSensraTag_HEADER
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -50,10 +50,10 @@ public:
 
    ossimNitfSensraTag();
    virtual ~ossimNitfSensraTag();
-
+   virtual std::string getRegisterTagName()const;
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
-
+   virtual ossim_uint32 getSizeInBytes()const;
    virtual void clearFields();
 
    /**

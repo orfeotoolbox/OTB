@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageRenderer.cpp 22303 2013-07-04 18:15:52Z dburken $
+//  $Id: ossimImageRenderer.cpp 20352 2011-12-12 17:24:52Z dburken $
 
 #include <ossim/imaging/ossimImageRenderer.h>
 #include <ossim/base/ossimDpt.h>
@@ -38,7 +38,7 @@
 using namespace std;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 22303 2013-07-04 18:15:52Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 20352 2011-12-12 17:24:52Z dburken $";
 #endif
 
 static ossimTrace traceDebug("ossimImageRenderer:debug");
@@ -1092,7 +1092,7 @@ void ossimImageRenderer::initializeBoundingRects()
 
 #if 0 /* Please leave for debug. */
    ossimNotify(ossimNotifyLevel_DEBUG)
-      << "ossimImageRenderer::initializeBoundingRects() debug:\n"
+      << "ossimImageRenderer::getBoundingRect(rect, resLevel) debug:\n"
       << "\ninput rect: " << m_inputR0Rect
       << "\nview rect:  " << m_viewRect << endl;
 #endif

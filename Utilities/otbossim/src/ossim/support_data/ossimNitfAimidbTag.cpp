@@ -25,13 +25,18 @@
 RTTI_DEF1(ossimNitfAimidbTag, "ossimNitfAimidbTag", ossimNitfRegisteredTag);
 
 ossimNitfAimidbTag::ossimNitfAimidbTag()
-   : ossimNitfRegisteredTag(std::string("AIMIDB"), CEL_SIZE)
+   : ossimNitfRegisteredTag()
 {
    clearFields();
 }
 
 ossimNitfAimidbTag::~ossimNitfAimidbTag()
 {
+}
+
+std::string ossimNitfAimidbTag::getRegisterTagName() const
+{
+   return std::string("AIMIDB");
 }
 
 void ossimNitfAimidbTag::parseStream(std::istream& in)
@@ -78,6 +83,11 @@ void ossimNitfAimidbTag::writeStream(std::ostream& out)
    out.write(theReserved2, RESERVED_2_SIZE);
    out.write(theLocation, LOCATION_SIZE);
    out.write(theReserved3, RESERVED_3_SIZE);
+}
+
+ossim_uint32 ossimNitfAimidbTag::getSizeInBytes()const
+{
+   return CEL_SIZE;
 }
 
 void ossimNitfAimidbTag::clearFields()
@@ -129,13 +139,13 @@ std::ostream& ossimNitfAimidbTag::print(
    std::ostream& out, const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
    
    out << setiosflags(std::ios::left)
        << pfx << std::setw(24) << "CETAG:"
-       << getTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"   << getTagLength() << "\n"
+       << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "ACQUISITION_DATE:"
        << theAcquisitionDate << "\n"
        << pfx << std::setw(24) << "MISSION_NO:"

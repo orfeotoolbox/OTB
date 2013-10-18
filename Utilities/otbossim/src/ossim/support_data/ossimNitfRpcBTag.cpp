@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRpcBTag.cpp 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfRpcBTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/support_data/ossimNitfRpcBTag.h>
 
@@ -17,6 +17,9 @@ RTTI_DEF1(ossimNitfRpcBTag, "ossimNitfRpcBTag", ossimNitfRpcBase);
 ossimNitfRpcBTag::ossimNitfRpcBTag()
    : ossimNitfRpcBase()
 {
-   // Set the tag name in base.
-   setTagName(std::string("RPC00B"));
+}
+
+std::string ossimNitfRpcBTag::getRegisterTagName() const
+{
+   return std::string("RPC00B");
 }

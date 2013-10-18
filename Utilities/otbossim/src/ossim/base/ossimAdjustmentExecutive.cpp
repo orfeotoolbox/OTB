@@ -197,8 +197,7 @@ bool ossimAdjustmentExecutive::initializeSolution(ossimObservationSet& obsSet)
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
                <<"\n "<<cp<<"  "<<iface->getParameterDescription(cp)
-               // <<"=  "<<iface->getAdjustableParameter(cp)
-               <<"=  "<<iface->getParameterCenter(cp)
+               <<"=  "<<iface->getAdjustableParameter(cp)
                <<", units= "<<iface->getParameterUnit(cp)
                <<", sigma= "<<iface->getParameterSigma(cp);
          }
@@ -218,11 +217,7 @@ bool ossimAdjustmentExecutive::initializeSolution(ossimObservationSet& obsSet)
       parCov = 0.0;
       for (int cp=0; cp<np; ++cp)
       {
-         // Get the a priori value
-         // theParInitialValues.push_back(iface->getAdjustableParameter(cp));
-         theParInitialValues.push_back(iface->getParameterCenter(cp));
-         theImgs.push_back(i);
-
+         theParInitialValues.push_back(iface->getAdjustableParameter(cp));
          theParDesc.push_back(iface->getParameterDescription(cp));
          double sig = iface->getParameterSigma(cp);
          
@@ -479,19 +474,13 @@ bool ossimAdjustmentExecutive::updateParameters()
    int currPar = 1;
    for (int img=0; img<theNumImages; ++img)
    {
-      ossimAdjustableParameterInterface* iface =
-         theObsSet->getImageGeom(img)->getAdjustableParameterInterface();
-
       for (int par=0; par<theSolAttributes->theImgNumparXref[img]; ++par)
       {
-         // double middle = iface->getAdjustableParameter(par);
-         // middle += theSolAttributes->theLastCorrections(currPar);
-         // iface->setAdjustableParameter(par, middle, true);
-
-         double middle = iface->getParameterCenter(par);
+         ossimAdjustableParameterInterface* iface =
+            theObsSet->getImageGeom(img)->getAdjustableParameterInterface();
+         double middle = iface->getAdjustableParameter(par);
          middle += theSolAttributes->theLastCorrections(currPar);
-         iface->setParameterCenter(par, middle, true);
-
+         iface->setAdjustableParameter(par, middle, true);
          currPar++;    
       }
    }
@@ -688,17 +677,16 @@ std::ostream& ossimAdjustmentExecutive::
 printParameterCorrectionSummary(std::ostream& out) const
 {
    out<<"\nParameter Corrections...";
-   out<<"\n  n im        parameter    a_priori  total_corr   last_corr initial_std    prop_std";
+   out<<"\n  n       parameter     a_priori   total_corr    last_corr  initial_std     prop_std";
    for (int pc=1; pc<=theNumParams; ++pc)
    {
       out<<"\n "<<setprecision(5)<<setw(2)<<pc;
-      out<<setw(3)<<theImgs[pc-1]+1;
-      out<<setw(17)<<theParDesc[pc-1];
-      out<<setw(12)<<theParInitialValues[pc-1];
-      out<<setw(12)<<theSolAttributes->theTotalCorrections(pc);
-      out<<setw(12)<<theSolAttributes->theLastCorrections(pc);
-      out<<setw(12)<<theParInitialStdDev[pc-1];
-      out<<setw(12)<<sqrt(theSolAttributes->theFullCovMatrix(pc,pc));
+      out<<setw(16)<<theParDesc[pc-1];
+      out<<setw(13)<<theParInitialValues[pc-1];
+      out<<setw(13)<<theSolAttributes->theTotalCorrections(pc);
+      out<<setw(13)<<theSolAttributes->theLastCorrections(pc);
+      out<<setw(13)<<theParInitialStdDev[pc-1];
+      out<<setw(13)<<sqrt(theSolAttributes->theFullCovMatrix(pc,pc));
    }
    out<<endl;
 
@@ -714,11 +702,11 @@ std::ostream& ossimAdjustmentExecutive::
 printObservationCorrectionSummary(std::ostream& out) const
 {
    out<<"\nObservation Corrections...";
-   out<<"\n  n         observation    a_priori  total_corr   last_corr initial_std    prop_std";
+   out<<"\n  n     observation     a_priori   total_corr    last_corr  initial_std     prop_std";
    for (int obs=0; obs<theNumObsInSet; ++obs)
    {
       out<<"\n "<<setprecision(5)<<setw(2)<<obs+1;
-      out<<" "<<setw(19)<<theObsSet->observ(obs)->ID();
+      out<<" "<<setw(15)<<theObsSet->observ(obs)->ID();
       double mPerRadp = theObsSet->observ(obs)->Gpt().metersPerDegree().y*DEG_PER_RAD;
       double mPerRadl = theObsSet->observ(obs)->Gpt().metersPerDegree().x*DEG_PER_RAD;
       // ossim_uint32 iobs = obs*3+1;
@@ -727,9 +715,9 @@ printObservationCorrectionSummary(std::ostream& out) const
       {
          int idx = theNumParams + obs*3 + k + 1;
          if (k<2)
-            out<<setw(12)<<theObsInitialValues[obs*3+k]*DEG_PER_RAD;
+            out<<setw(13)<<theObsInitialValues[obs*3+k]*DEG_PER_RAD;
          else
-            out<<setw(12)<<theObsInitialValues[obs*3+k];
+            out<<setw(13)<<theObsInitialValues[obs*3+k];
          double factor;
          if (k==0)
             factor = mPerRadp;
@@ -737,11 +725,11 @@ printObservationCorrectionSummary(std::ostream& out) const
             factor = mPerRadl;
          else
             factor = 1.0;
-         out<<setw(12)<<theSolAttributes->theTotalCorrections(idx)*factor;
-         out<<setw(12)<<theSolAttributes->theLastCorrections(idx)*factor;
-         out<<setw(12)<<theObsInitialStdDev[obs*3+k]*factor;
-         out<<setw(12)<<sqrt(theSolAttributes->theFullCovMatrix(idx,idx))*factor;
-         out<<endl<<"                       ";
+         out<<setw(13)<<theSolAttributes->theTotalCorrections(idx)*factor;
+         out<<setw(13)<<theSolAttributes->theLastCorrections(idx)*factor;
+         out<<setw(13)<<theObsInitialStdDev[obs*3+k]*factor;
+         out<<setw(13)<<sqrt(theSolAttributes->theFullCovMatrix(idx,idx))*factor;
+         out<<endl<<"                   ";
       }
    }
    out<<endl;
@@ -765,11 +753,10 @@ printResidualSummary(std::ostream& out) const
       int numMeasPerObs = theObsSet->observ(obs)->numMeas();
       for (int meas=0; meas<numMeasPerObs; ++meas)
       {
-         int imIdx = theObsSet->imIndex(j);
          ++j;
          out<<"\n";
          out<<setw(12)<<theObsSet->observ(obs)->ID();
-         out<<setw(8)<<imIdx+1;
+         out<<setw(8)<<meas+1;
          out<<setprecision(1)<<setw(8)<<theMeasResiduals(j,1);
          out<<setprecision(1)<<setw(8)<<theMeasResiduals(j,2);
          out<<"    ";

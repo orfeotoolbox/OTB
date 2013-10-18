@@ -27,10 +27,14 @@
 RTTI_DEF1(ossimNitfJ2klraTag, "ossimNitfJ2klraTag", ossimNitfRegisteredTag);
 
 ossimNitfJ2klraTag::ossimNitfJ2klraTag()
-   : ossimNitfRegisteredTag(std::string("J2KLRA"), 0),
-     m_layer(1)
+   : m_layer(1)
 {
    clearFields();
+}
+
+std::string ossimNitfJ2klraTag::getRegisterTagName() const
+{
+   return std::string("J2KLRA");
 }
 
 void ossimNitfJ2klraTag::parseStream(std::istream& in)
@@ -66,10 +70,7 @@ void ossimNitfJ2klraTag::parseStream(std::istream& in)
       in.read(m_nlevels_i, NLEVELS_I_SIZE);
       in.read(m_nbands_i, NBANDS_I_SIZE);
       in.read(m_nlayers_i, NLAYERS_I_SIZE);
-   }
-
-   // Set the base tag length.
-   setTagLength( getSizeInBytes() );
+   }   
 }
 
 void ossimNitfJ2klraTag::writeStream(std::ostream& out)
@@ -132,21 +133,18 @@ void ossimNitfJ2klraTag::clearFields()
    m_nlevels_i[NLEVELS_I_SIZE]= '\0';
    m_nbands_i[NBANDS_I_SIZE] = '\0';
    m_nlayers_i[NLAYERS_I_SIZE] = '\0';
-
-   // Set the base tag length.
-   setTagLength( 0 );
 }
 
 std::ostream& ossimNitfJ2klraTag::print(std::ostream& out,
                                         const std::string& prefix) const
 {
    std::string pfx = prefix;
-   pfx += getTagName();
+   pfx += getRegisterTagName();
    pfx += ".";
    
    out << setiosflags(ios::left)
-       << pfx << std::setw(24) << "CETAG:"     << getTagName() << "\n"
-       << pfx << std::setw(24) << "CEL:"       << getTagLength() << "\n"
+       << pfx << std::setw(24) << "CETAG:"     << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"       << getSizeInBytes() << "\n"
        << pfx << std::setw(24) << "ORIG:"      << m_orig << "\n"
        << pfx << std::setw(24) << "NLEVELS_O:" << m_levels_o << "\n"
        << pfx << std::setw(24) << "NBANDS_O:"  << m_bands_o << "\n"

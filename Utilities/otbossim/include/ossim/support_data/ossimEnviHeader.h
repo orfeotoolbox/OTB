@@ -11,7 +11,7 @@
 // list.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeader.h 22349 2013-08-01 21:38:29Z dburken $
+// $Id: ossimEnviHeader.h 21519 2012-08-22 21:16:25Z dburken $
 
 #ifndef ossimEnviHeader_HEADER
 #define ossimEnviHeader_HEADER 1
@@ -46,10 +46,9 @@ public:
 
    /**
     * @brief Gets value for key.
-    * @param key To search for.
-    * @param value Initialized by this.
-    * @return true on success, false on error. This will return true if key is
-    * found, even if value is empty.
+    * @param key
+    * @param value
+    * @return true if key is in map even if value is empty; false, if not.
     */
    bool getValue( const ossimString& key, ossimString& value ) const;
 
@@ -145,22 +144,6 @@ public:
     * @param bands The number of bands.
     */
    void setBands(ossim_uint32 bands);
-
-   /**
-    * @brief Gets default bands if "default bands" keyword is present.
-    * @param bands Initialized by this.
-    * @return true on success, false if keyword not found. "bands" will be
-    * zeroed out on failure. 
-    */
-   bool getDefaultBands( std::vector<ossim_uint32>& bands ) const;
-
-   /**
-    * @brief Gets rgb bands if "wavelength" keyword is present.
-    * @param bands Initialized by this.
-    * @return true on success, false if keyword not found.  "bands" will be
-    * zeroed out on failure.
-    */   
-   bool getRgbBandsFromWaveLength( std::vector<ossim_uint32>& bands ) const;
 
    /**
     * @return The number of header offset in bytes.
@@ -393,14 +376,6 @@ public:
    const ossimFilename& getFile() const;
    
 private:
-
-   /**
-    * @brief Check band list to see if any are outside of range of bands.
-    * Bands should be zero base.
-    * @return true if all bands are less than number of bands; false, if
-    * outside range or if "bands" key is not found.
-    */
-   bool rangeCheckBands( const std::vector<ossim_uint32>& bands ) const;
 
    /**
     * @brief Parses stream.

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTag.cpp 22013 2012-12-19 17:37:20Z dburken $
+// $Id: ossimNitfRegisteredTag.cpp 18413 2010-11-11 19:56:22Z gpotts $
 
 #include <iostream>
 #include <sstream>
@@ -20,54 +20,13 @@
 RTTI_DEF2(ossimNitfRegisteredTag, "ossimNitfRegisteredTag", ossimObject, ossimPropertyInterface)
 
 ossimNitfRegisteredTag::ossimNitfRegisteredTag()
-   : 
-   ossimObject(),
-   ossimPropertyInterface(),
-   m_tagName(),
-   m_tagLength(0)
-{}
-ossimNitfRegisteredTag::ossimNitfRegisteredTag(const std::string& tagName, ossim_uint32 tagLength)
-   : 
-   ossimObject(),
-   ossimPropertyInterface(),
-   m_tagName(tagName),
-   m_tagLength(tagLength)
+   : ossimObject(),
+     ossimPropertyInterface(),
+     theRegisteredTagName()
 {}
 
 ossimNitfRegisteredTag::~ossimNitfRegisteredTag()
 {}
-
-std::string ossimNitfRegisteredTag::getRegisterTagName() const
-{
-   // Deprecated:
-   return m_tagName;
-}
-
-const std::string& ossimNitfRegisteredTag::getTagName() const
-{
-   return m_tagName;
-}
-
-void ossimNitfRegisteredTag::setTagName(const std::string& tagName)
-{
-   m_tagName = tagName;
-}
-
-ossim_uint32 ossimNitfRegisteredTag::getSizeInBytes() const
-{
-   // Deprecated:
-   return getTagLength();
-}
-
-ossim_uint32 ossimNitfRegisteredTag::getTagLength() const
-{
-   return m_tagLength;
-}
-
-void ossimNitfRegisteredTag::setTagLength(ossim_uint32 length)
-{
-   m_tagLength = length;
-}
 
 void ossimNitfRegisteredTag::setProperty(ossimRefPtr<ossimProperty> /* property */)
 {
@@ -114,3 +73,4 @@ bool ossimNitfRegisteredTag::saveState(ossimKeywordlist& kwl, const ossimString&
    
    return result;
 }
+

@@ -63,13 +63,6 @@ ossimSingleImageChain::ossimSingleImageChain(bool addHistogramFlag,
 
 ossimSingleImageChain::~ossimSingleImageChain()
 {
-   m_handler           = 0;
-   m_bandSelector      = 0;
-   m_histogramRemapper = 0;
-   m_resamplerCache    = 0;
-   m_resampler         = 0;
-   m_scalarRemapper    = 0;
-   m_chainCache        = 0; 
 }
 
 void ossimSingleImageChain::reset()
@@ -683,30 +676,24 @@ void ossimSingleImageChain::setToThreeBands()
 {
    if ( m_handler.valid() )
    {
-      // Only do if not three bands already so the band list order is not wiped out.
-      if ( !m_bandSelector.valid() ||
-           ( m_bandSelector.valid() &&
-             ( m_bandSelector->getNumberOfOutputBands() != 3 ) ) )
+      std::vector<ossim_uint32> bandList(3);
+      const ossim_uint32 BANDS = m_handler->getNumberOfInputBands();
+      if(BANDS >= 3)
       {
-         std::vector<ossim_uint32> bandList(3);
-         const ossim_uint32 BANDS = m_handler->getNumberOfInputBands();
-         if(BANDS >= 3)
-         {
-            bandList[0] = 0;
-            bandList[1] = 1;
-            bandList[2] = 2;
-         }
-         else
-         {
-            bandList[0] = 0;
-            bandList[1] = 0;
-            bandList[2] = 0;
-         }
-         setBandSelection(bandList);
+         bandList[0] = 0;
+         bandList[1] = 1;
+         bandList[2] = 2;
       }
+      else
+      {
+         bandList[0] = 0;
+         bandList[1] = 0;
+         bandList[2] = 0;
+      }
+      setBandSelection(bandList);
    }
 }
-
+   
 void ossimSingleImageChain::setToThreeBandsReverse()
 {
    if ( m_handler.valid() )

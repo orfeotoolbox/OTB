@@ -12,7 +12,7 @@
 // JpegTileSource is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.h 22117 2013-01-18 21:04:23Z dburken $
+//  $Id: ossimJpegTileSource.h 16860 2010-03-11 15:28:09Z gpotts $
 
 #ifndef ossimJpegTileSource_HEADER
 #define ossimJpegTileSource_HEADER
@@ -157,22 +157,7 @@ public:
     * @param propertyNames The list to push back names to.
     */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
-
-   /**
-    * Returns the image geometry object associated with this tile source or
-    * NULL if non defined.  The geometry contains full-to-local image
-    * transform as well as projection (image-to-world).
-    */
-   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
-   
 protected:
-
-   /**
-    * @param Method to get geometry from the xml file or internal geotiff
-    * tags.
-    */
-   virtual ossimRefPtr<ossimImageGeometry> getInternalImageGeometry() const; 
-   
    virtual ~ossimJpegTileSource();
 	class PrivateData;
    /**

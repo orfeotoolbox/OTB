@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 22160 2013-02-25 12:09:35Z gpotts $
+// $Id: ossimString.cpp 20204 2011-11-04 15:12:28Z dburken $
 
 #include <cctype> /* for toupper */
 #include <cstdlib> /* for getenv() */
@@ -28,7 +28,7 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 22160 2013-02-25 12:09:35Z gpotts $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 20204 2011-11-04 15:12:28Z dburken $";
 #endif
 
 ossimString ossimString::upcase(const ossimString& aString)
@@ -733,13 +733,13 @@ ossim_float32 ossimString::toFloat32()const
    // There is a possibility that this isn't a thread safe implementation
    // in mingw stl.  Let's resort back to atof for now
 
-#if 0
+#if 1
    d = (ossim_float32)atof(c_str());
 #endif
-#if 1
+#if 0
    if (!empty())
    {
-      std::istringstream is(c_str());
+      std::istringstream is(m_str);
       is >> d;
       if(is.fail())
       {
@@ -766,13 +766,13 @@ ossim_float64 ossimString::toFloat64()const
    // There is a possibility that this isn't a thread safe implementation
    // in mingw stl.  Let's resort back to atof for now
 
-#if 0
+#if 1
    d = (ossim_float64)atof(c_str());
 #endif
-#if 1
+#if 0
    if (!empty())
    {
-      std::istringstream is(c_str());
+      std::istringstream is(m_str);
       is >> d;
       if(is.fail())
       {
@@ -802,18 +802,15 @@ double ossimString::toDouble()const
 
    if (!empty())
    {
-#if 0
+#if 1
       d = atof(c_str());
 #endif
-#if 1
-      if(!empty())
+#if 0
+      std::istringstream is(m_str);
+      is >> d;
+      if(is.fail())
       {
-         std::istringstream is(c_str());
-         is >> d;
-         if(is.fail())
-         {
-            d = 0.0;
-         }
+         d = 0.0;
       }
 #endif
    }

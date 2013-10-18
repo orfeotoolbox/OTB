@@ -23,11 +23,11 @@ const char* ossimImageHandlerMtAdaptor::ADAPTEE_ID_KW = "adaptee_id";
 // Constructor
 //**************************************************************************************************
 ossimImageHandlerMtAdaptor::ossimImageHandlerMtAdaptor(ossimImageHandler* adaptee)
-   :  d_getTileT (0),
-      m_adaptedHandler (0),
-      m_cache (0),
-      d_useCache (false),
-      d_useFauxTile (false)
+   :  m_adaptedHandler (0),
+   m_cache (0),
+   d_useCache (false),
+   d_useFauxTile (false),
+   d_getTileT (0)
 {
    //###### DEBUG ############
    ossimMtDebug* mt_debug = ossimMtDebug::instance();
@@ -351,14 +351,14 @@ ossim_float64 ossimImageHandlerMtAdaptor::getMinPixelValue(ossim_uint32 band) co
 ossim_float64 ossimImageHandlerMtAdaptor::getMaxPixelValue(ossim_uint32 band) const
 {
    if (m_adaptedHandler.valid())
-      return m_adaptedHandler->getMaxPixelValue(band);
+      return m_adaptedHandler->getMaxPixelValue();
    return 0.0;
 }
 
 ossim_float64 ossimImageHandlerMtAdaptor::getNullPixelValue(ossim_uint32 band) const
 {
    if (m_adaptedHandler.valid())
-      return m_adaptedHandler->getNullPixelValue(band);
+      return m_adaptedHandler->getNullPixelValue();
    return 0.0;
 }
 

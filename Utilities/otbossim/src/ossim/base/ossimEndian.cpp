@@ -8,7 +8,7 @@
 //              endian byte swap routines.
 //
 //***********************************
-// $Id: ossimEndian.cpp 22197 2013-03-12 02:00:55Z dburken $
+// $Id: ossimEndian.cpp 11678 2007-09-07 12:06:19Z dburken $
 
 #include <ossim/base/ossimEndian.h>
 
@@ -21,3 +21,5 @@ ossimEndian::ossimEndian()
    testPtr       = reinterpret_cast<unsigned char*>(&test);
    theSystemEndianType = testPtr[0] ? OSSIM_LITTLE_ENDIAN : OSSIM_BIG_ENDIAN;
 }
+
+

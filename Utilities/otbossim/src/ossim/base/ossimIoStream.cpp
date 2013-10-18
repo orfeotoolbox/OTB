@@ -19,7 +19,7 @@
 // ossimOFStream
 //
 //*******************************************************************
-//  $Id: ossimIoStream.cpp 22423 2013-09-27 17:36:26Z gpotts $
+//  $Id: ossimIoStream.cpp 11206 2007-06-13 13:11:35Z gpotts $
 #include <ossim/base/ossimIoStream.h>
 
 ossimIStream::ossimIStream()
@@ -234,134 +234,6 @@ ossimOFStream::ossimOFStream(const char* name, std::ios_base::openmode mode)
 ossimOFStream::~ossimOFStream()
 {
 }
-#ifdef _MSC_VER
-
-  ossimIFStream64::ossimIFStream64(const char* pFilename, std::ios_base::openmode mode, int prot) :
-      std::ifstream(theFile = std::_Fiopen(pFilename, mode, prot))
-   {
-   }
-
-   ossimIFStream64::~ossimIFStream64()
-   {
-      if(is_open())
-      {
-         close();
-      }
-   }
-
-   void ossimIFStream64::seekg64(off_type off, ios_base::seekdir way)
-   {
-      _fseeki64(theFile, off, way);
-   }
-
-   void ossimIFStream64::seekg64(streampos pos, ios_base::seekdir way)
-   {
-      // Undo the potentially bad typecast done by _FPOSOFF when fpos is > max long
-      const off_type off(pos);
-      const fpos_t fpos = pos.seekpos();
-      seekg64(off - _FPOSOFF(fpos) + fpos, way);
-   }
-
-   void ossimIFStream64::seekg64(std::istream& str, off_type off, 
-                                 ios_base::seekdir way)
-   {
-      ossimIFStream64* pStream = dynamic_cast<ossimIFStream64*>(&str);
-      if (pStream != NULL)
-      {
-         pStream->seekg64(off, way);
-      }
-      else
-      {
-         str.seekg(off, way);
-      }
-   }
-
-   void ossimIFStream64::seekg64(std::istream& str, 
-                                 std::streampos pos, 
-                                 ios_base::seekdir way)
-   {
-      ossimIFStream64* pStream = dynamic_cast<ossimIFStream64*>(&str);
-      if (pStream != NULL)
-      {
-         pStream->seekg64(pos, way);
-      }
-      else
-      {
-         str.seekg(pos, way);
-      }
-   }
-
-   ossimOFStream64::ossimOFStream64(const char* pFilename, 
-      std::ios_base::openmode mode, 
-      int prot) :
-      std::ofstream(pFilename, mode, prot)
-   {
-   }
-
-   ossimOFStream64::~ossimOFStream64()
-   {
-      if(is_open())
-      {
-         close();
-      }
-   }
-
-   ossim_uint64 ossimOFStream64::tellp64()
-   {
-      // Undo the potentially bad typecast done by _FPOSOFF when fpos is > max long
-      const pos_type pos = tellp();
-      const off_type off(pos);
-      const fpos_t fpos = pos.seekpos();
-      return off - _FPOSOFF(fpos) + fpos;
-   }
-
-#else
-
-   ossimIFStream64::ossimIFStream64(const char* pFilename, 
-      std::ios_base::openmode mode, long prot) :
-      std::ifstream(pFilename, mode)
-   {
-   }
-
-   ossimIFStream64::~ossimIFStream64()
-   {
-      if(is_open())
-      {
-         close();
-      }
-   }
-
-   void ossimIFStream64::seekg64(off_type off, ios_base::seekdir way)
-   {
-      std::ifstream::seekg(off, way);
-   }
-
-   void ossimIFStream64::seekg64(std::istream& str, 
-                                 off_type off, ios_base::seekdir way)
-   {
-      str.seekg(off, way);
-   }
-
-   ossimOFStream64::ossimOFStream64(const char* pFilename, 
-      std::ios_base::openmode mode, long prot) :
-      std::ofstream(pFilename, mode)
-   {
-   }
-
-   ossimOFStream64::~ossimOFStream64()
-   {
-      if(is_open())
-      {
-         close();
-      }
-   }
-
-   ossim_uint64 ossimOFStream64::tellp64()
-   {
-      return tellp();
-   }
-
-#endif // _MSC_VER
 
 void operator >> (ossimIStream& in,ossimOStream& out)
 {

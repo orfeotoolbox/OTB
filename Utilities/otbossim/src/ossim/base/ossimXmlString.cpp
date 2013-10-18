@@ -6,33 +6,8 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimXmlString.cpp 22326 2013-07-25 17:13:55Z gpotts $
+// $Id: ossimXmlString.cpp 19682 2011-05-31 14:21:20Z dburken $
 #include <ossim/base/ossimXmlString.h>
-
-bool ossimXmlString::containsSpecialXmlCharacters(const ossimString& value)
-{
-   for(ossimString::const_iterator it = value.begin();
-      it != value.end();++it)
-   {
-      switch(*it)
-      {
-         case '&':
-         case '<':
-         case '>':
-         case '"':
-         case '\'':
-         {
-            return true;
-         }
-         default:
-         {
-            break;
-         }
-      }
-
-   }
-   return false;
-}
 
 const ossimXmlString& ossimXmlString::assign(const ossimString& s)
 {
@@ -81,18 +56,3 @@ const ossimXmlString& ossimXmlString::assign(const ossimString& s)
 
    return *this;
 }
-
-ossimString ossimXmlString::wrapCDataIfNeeded(const ossimString& input)
-{
-   if(containsSpecialXmlCharacters(input))
-   {
-      return wrapCData(input);
-   }
-
-   return input;
-}
-ossimString ossimXmlString::wrapCData(const ossimString& input)
-{
-   return "<![CDATA[" + input + "]]>";
-}
-

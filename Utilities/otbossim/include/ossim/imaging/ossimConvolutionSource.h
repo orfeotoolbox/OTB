@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimConvolutionSource.h 22233 2013-04-15 15:12:54Z gpotts $
+//  $Id: ossimConvolutionSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimConvolutionSource_HEADER
 #define ossimConvolutionSource_HEADER
 #include <vector>
@@ -21,7 +21,7 @@ using namespace std;
 class ossimTilePatch;
 class ossimDiscreteConvolutionKernel;
 
-class OSSIM_DLL ossimConvolutionSource : public ossimImageSourceFilter
+class ossimConvolutionSource : public ossimImageSourceFilter
 {
 public:
    ossimConvolutionSource();

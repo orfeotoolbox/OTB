@@ -7,7 +7,7 @@
 // Description: Base class for tuple-based ossimSensorModel metric operations.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSensorModelTuple.cpp 22045 2012-12-28 21:22:35Z dhicks $
+// $Id: ossimSensorModelTuple.cpp 21805 2012-10-05 14:20:02Z dhicks $
 
 #include <ossim/projection/ossimSensorModelTuple.h>
 #include <ossim/projection/ossimPositionQualityEvaluator.h>
@@ -26,7 +26,7 @@ static ossimTrace traceDebug(ossimString("ossimSensorModelTuple:debug"));
 static ossimTrace traceExec(ossimString("ossimSensorModelTuple:exec"));
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimSensorModelTuple.cpp 22045 2012-12-28 21:22:35Z dhicks $";
+static const char OSSIM_ID[] = "$Id: ossimSensorModelTuple.cpp 21805 2012-10-05 14:20:02Z dhicks $";
 #endif
 
 ossimRpcPqeInputs::ossimRpcPqeInputs()
@@ -179,98 +179,95 @@ intersect(const DptSet_t   obs,
    bool epOK;
    ossim_int32 nImages = (ossim_int32)obs.size();
 
-   if (nImages > 1)
-   {
+   
+   // Matrices
+   NEWMAT::SymmetricMatrix N(3);
+   NEWMAT::SymmetricMatrix BtWB(3);
+   NEWMAT::Matrix Ni(3,3);
+   NEWMAT::ColumnVector C(3);
+   NEWMAT::ColumnVector BtWF(3);
+   NEWMAT::ColumnVector F(2);
+   NEWMAT::ColumnVector dR(3);
+   NEWMAT::Matrix B(2,3);
+   NEWMAT::SymmetricMatrix W(2);
+   
+   // Get a priori ground estimate using first point
+   ossimGpt estG;
+   theImages[1]->lineSampleToWorld(obs[1], estG);
+   
+   for (int iter=0; iter<5; iter++)
+   {   
+      N = 0.0;
+      C = 0.0;
 
-      // Matrices
-      NEWMAT::SymmetricMatrix N(3);
-      NEWMAT::SymmetricMatrix BtWB(3);
-      NEWMAT::Matrix Ni(3,3);
-      NEWMAT::ColumnVector C(3);
-      NEWMAT::ColumnVector BtWF(3);
-      NEWMAT::ColumnVector F(2);
-      NEWMAT::ColumnVector dR(3);
-      NEWMAT::Matrix B(2,3);
-      NEWMAT::SymmetricMatrix W(2);
-      
-      // Get a priori ground estimate using first point
-      ossimGpt estG;
-      theImages[1]->lineSampleToWorld(obs[1], estG);
-      
-      for (int iter=0; iter<5; iter++)
-      {   
-         N = 0.0;
-         C = 0.0;
-
-   // cout<<"\n Iter: "<<iter;
-         // Loop over observations
-         for (int i=0; i<nImages; i++)
-         {
-            ossimDpt resid;
-            // if (!getGroundObsEqComponents(i, iter, obs[i], estG, resid, B, W))
-            if (!getGroundObsEqComponents(i, obs[i], estG, resid, B, W))
-            {
-               covOK = false;
-            }
-            
-            F[0] = resid.x;
-            F[1] = resid.y;
-   // cout<<"\n  F{"<<i+1<<"}: "<<F[0]<<", "<<F[1];
-
-            // Form coefficient matrix & discrepancy vector
-            BtWF << B.t() * W * F;
-            BtWB << B.t() * W * B;
-            C += BtWF;
-            N += BtWB;
-         }
-
-         // Solve system
-         Ni = invert(N);
-         dR = Ni * C;
-
-   // cout<<"\n    dR: ("<<dR[0]<<", "<<dR[1]<<", "<<dR[2]<<")"<<endl;
-
-         // Update estimate
-         double latUpd = estG.latd()   - dR[0];
-         double lonUpd = estG.lond()   - dR[1];
-         double hgtUpd = estG.height() - dR[2];
-
-         estG.latd(latUpd);
-         estG.lond(lonUpd);
-         estG.height(hgtUpd);
-
-
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "DEBUG: intersect:\n"
-               << "  iteration:\n" << iter
-               // << "  C:\n"  << C 
-               // << "  Ni:\n" << Ni 
-               << "  dR:\n" << dR <<std::endl;
-         }
-      
-      } // iterative loop
-      
-      // Return intersected point
-      ossimEcefPoint finalEst(estG);
-      pt = finalEst;
-      
-      // Return propagated covariance matrix
-      if (covOK)
+// cout<<"\n Iter: "<<iter;
+      // Loop over observations
+      for (int i=0; i<nImages; i++)
       {
-         covMat = Ni;
-         epOK = true;
+         ossimDpt resid;
+         // if (!getGroundObsEqComponents(i, iter, obs[i], estG, resid, B, W))
+         if (!getGroundObsEqComponents(i, obs[i], estG, resid, B, W))
+         {
+            covOK = false;
+         }
+         
+         F[0] = resid.x;
+         F[1] = resid.y;
+// cout<<"\n  F{"<<i+1<<"}: "<<F[0]<<", "<<F[1];
+
+         // Form coefficient matrix & discrepancy vector
+         BtWF << B.t() * W * F;
+         BtWB << B.t() * W * B;
+         C += BtWF;
+         N += BtWB;
       }
-      else
-         epOK = false;
-      
-      // Set operation status
-      if (epOK)
-         opOK = OP_SUCCESS;
-      else
-         opOK = ERROR_PROP_FAIL;
+
+      // Solve system
+      Ni = invert(N);
+      dR = Ni * C;
+
+// cout<<"\n    dR: ("<<dR[0]<<", "<<dR[1]<<", "<<dR[2]<<")"<<endl;
+
+      // Update estimate
+      double latUpd = estG.latd()   - dR[0];
+      double lonUpd = estG.lond()   - dR[1];
+      double hgtUpd = estG.height() - dR[2];
+
+      estG.latd(latUpd);
+      estG.lond(lonUpd);
+      estG.height(hgtUpd);
+
+
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG: intersect:\n"
+            << "  iteration:\n" << iter
+            // << "  C:\n"  << C 
+            // << "  Ni:\n" << Ni 
+            << "  dR:\n" << dR <<std::endl;
+      }
+   
+   } // iterative loop
+   
+   // Return intersected point
+   ossimEcefPoint finalEst(estG);
+   pt = finalEst;
+   
+   // Return propagated covariance matrix
+   if (covOK)
+   {
+      covMat = Ni;
+      epOK = true;
    }
+   else
+      epOK = false;
+   
+   // Set operation status
+   if (epOK)
+      opOK = OP_SUCCESS;
+   else
+      opOK = ERROR_PROP_FAIL;
    
    return opOK;
 }

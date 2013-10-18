@@ -43,6 +43,9 @@ public:
    
    /** default constructor */
    ossimNitfJ2klraTag();
+
+   /** @return "J2KLRA" as a std:;string. */
+   virtual std::string getRegisterTagName() const;
   
    /**
     * Parse method.

@@ -11,7 +11,7 @@
 // Contains class definition for TiffOverviewBuilder
 // 
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.cpp 22362 2013-08-07 20:23:22Z dburken $
+//  $Id: ossimTiffOverviewBuilder.cpp 21653 2012-09-07 15:03:08Z dburken $
 
 #include <ossim/imaging/ossimTiffOverviewBuilder.h>
 #include <ossim/parallel/ossimMpi.h>
@@ -50,11 +50,10 @@ RTTI_DEF1(ossimTiffOverviewBuilder,
 static ossimTrace traceDebug("ossimTiffOverviewBuilder:degug");
 
 // Property keywords.
-static const char COPY_ALL_KW[]           = "copy_all_flag";
-static const char INTERNAL_OVERVIEWS_KW[] = "internal_overviews_flag";
+static const char COPY_ALL_KW[] = "copy_all_flag";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 22362 2013-08-07 20:23:22Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 21653 2012-09-07 15:03:08Z dburken $";
 #endif
 
 
@@ -77,8 +76,7 @@ ossimTiffOverviewBuilder::ossimTiffOverviewBuilder()
       m_resampleType(ossimFilterResampler::ossimFilterResampler_BOX),
       m_nullPixelValues(),
       m_copyAllFlag(false),
-      m_outputTileSizeSetFlag(false),
-      m_internalOverviewsFlag(false)
+      m_outputTileSizeSetFlag(false)
 {
    if (traceDebug())
    {
@@ -138,9 +136,8 @@ bool ossimTiffOverviewBuilder::execute()
       return false;
    }
 
-   if ( !m_imageHandler || m_imageHandler->hasError() )
+   if ( !m_imageHandler )
    {
-      setErrorStatus();
       return false;
    }
 
@@ -151,7 +148,7 @@ bool ossimTiffOverviewBuilder::execute()
    }
 
    // Check the file.  Disallow same file overview building.
-   if ( !buildInternalOverviews() && (m_imageHandler->getFilename() == m_outputFile) )
+   if (m_imageHandler->getFilename() == m_outputFile)
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "Source image file and overview file cannot be the same!"
@@ -159,20 +156,15 @@ bool ossimTiffOverviewBuilder::execute()
       return false;
    }
 
-   ossimFilename outputFileTemp = m_outputFile;
-   
-   if ( !buildInternalOverviews() )
-   {
-      // Add .tmp in case process gets aborted to avoid leaving bad .ovr file.
-      outputFileTemp += ".tmp";
-   }
+   // Add .tmp in case process gets aborted to avoid leaving bad .ovr file.
+   ossimFilename outputFileTemp = m_outputFile + ".tmp";
 
    // Required number of levels needed including r0.
    ossim_uint32 requiedResLevels = getRequiredResLevels(m_imageHandler.get());
 
    // Zero based starting resLevel.
    ossim_uint32 startingResLevel  = 0;
-   if ( !copyR0() )
+   if (!m_copyAllFlag)
    {
       startingResLevel = m_imageHandler->getNumberOfDecimationLevels();
    }
@@ -197,19 +189,10 @@ bool ossimTiffOverviewBuilder::execute()
          << std::endl;
       return true;
    }
-
-   //---
-   // If image handler is band selector, start with all bands.
-   // Some sources, e.g. ossimEnviTileSource can pick up default
-   // bands and filter out all other bands.
-   //---
-   m_imageHandler->setOutputToInputBandList();  
    
-   //---
    // If alpha bit mask generation was requested, then need to instantiate the mask writer object.
-   // This is simply a "transparent" tile source placed after to the right of the image handler
-   // that scans the pixels being pulled and accumulates alpha bit mask for writing at the end.
-   //---
+   // This is simply a "transparent" tile source placed after to the right of the image handler that
+   // scans the pixels being pulled and accumulates alpha bit mask for writing at the end:
    if (m_bitMaskSpec.getSize() > 0)
    {
       m_maskWriter = new ossimBitMaskWriter();
@@ -230,18 +213,47 @@ bool ossimTiffOverviewBuilder::execute()
 
    if (ossimMpi::instance()->getRank() == 0 )
    {
+      ossim_uint64 fourGigs = (static_cast<ossim_uint64>(1024)*
+                               static_cast<ossim_uint64>(1024)*
+                               static_cast<ossim_uint64>(1024)*
+                               static_cast<ossim_uint64>(4));
+      ossimIrect bounds = m_imageHandler->getBoundingRect();
+      ossim_uint64 byteCheck = (static_cast<ossim_uint64>(bounds.width())*
+                                static_cast<ossim_uint64>(bounds.height())*
+                                static_cast<ossim_uint64>(m_imageHandler->getNumberOfOutputBands())*
+                                static_cast<ossim_uint64>(ossim::scalarSizeInBytes(m_imageHandler->getOutputScalarType())));
+      ossimString openMode = "w";
+      if((byteCheck*static_cast<ossim_uint64>(2))>fourGigs)
+      {
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG) << " Big tiff activated\n";
+         }
+         openMode += "8";
+      }
+      else
+      {
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG) << " No big tiff activated\n";
+         }
+      }
+      
       //---
       // See if the file can be opened for writing.
       // Note:  If this file existed previously it will be overwritten.
       //---
-      tif = openTiff(outputFileTemp);
+      tif = openTiff(outputFileTemp, openMode);
       if (!tif)
       {
          // Set the error...
-         setErrorStatus();
-         ossimNotify(ossimNotifyLevel_WARN)
-            << __FILE__ << " " << __LINE__ << " " << MODULE
-            << "\nCannot open file: " << outputFileTemp << std::endl;
+         ossimSetError(getClassName(),
+                       ossimErrorCodes::OSSIM_OPEN_FILE_ERROR,
+                       "%s file %s line %d\nCannot open file:  %s",
+                       MODULE,
+                       __FILE__,
+                       __LINE__,
+                       outputFileTemp.c_str());      
          return false;
       } 
 
@@ -261,22 +273,17 @@ bool ossimTiffOverviewBuilder::execute()
          if (!writeR0(tif))
          {
             // Set the error...
-            setErrorStatus();
-            ossimNotify(ossimNotifyLevel_WARN)
-               << __FILE__ << " " << __LINE__
-               << "\nError copying image!" << std::endl;
-
+            ossimSetError(getClassName(),
+                          ossimErrorCodes::OSSIM_ERROR,
+                          "File %s line %d\nError copying image!",
+                          __FILE__,
+                          __LINE__);
             closeTiff(tif);
             if (progressListener)
             {
                removeListener(progressListener);
                delete progressListener;
                progressListener = 0;
-            }
-            
-            if ( outputFileTemp.exists() && !buildInternalOverviews() )
-            {
-               ossimFilename::remove( outputFileTemp );
             }
             return false;
          }
@@ -306,7 +313,6 @@ bool ossimTiffOverviewBuilder::execute()
       {
          TIFFFlush(tif);
       }
-
       // Sync all processes...
       ossimMpi::instance()->barrier();
       
@@ -316,7 +322,7 @@ bool ossimTiffOverviewBuilder::execute()
       // If we copied r0 to the overview file use it instead of the
       // original image handler as it is probably faster.
       //---
-      if ( !copyR0() && (i <= m_imageHandler->getNumberOfDecimationLevels()) ) 
+      if ( i <= m_imageHandler->getNumberOfDecimationLevels())
       {
          ih = m_imageHandler;
       }
@@ -326,26 +332,23 @@ bool ossimTiffOverviewBuilder::execute()
          ih = new ossimTiffTileSource;
          if ( ih->open(outputFileTemp) == false )
          {
-            ih = 0;
-            
             // Set the error...
-            setErrorStatus();
-            ossimNotify(ossimNotifyLevel_WARN)
-               << __FILE__ << " " << __LINE__ << " " << MODULE
-               << "\nCannot open file: " << outputFileTemp << std::endl;
-            
+            ossimSetError(getClassName(),
+                          ossimErrorCodes::OSSIM_OPEN_FILE_ERROR,
+                          "%s file %s line %d\nCannot open file:  %s",
+                          MODULE,
+                          __FILE__,
+                          __LINE__,
+                          outputFileTemp.c_str());
+            ih = 0;
             return false;
          }
 
-         //---
          // Since the overview file is being opened here, need to set its handler's starting res
-         // level where the original image file left off. This is usually R1 since the original
-         // file only has R0, but the original file may have more than R0:
-         //---
-         if ( !copyR0() &&  !buildInternalOverviews() )
-         {
+         // level where the original image file left off. This is usually R1 since the original file
+         // only has R0, but the original file may have more than R0:
+         if (!m_copyAllFlag)
             ih->setStartingResLevel( m_imageHandler->getNumberOfDecimationLevels());
-         }
       }
       
       // If mask is to be generated, need to notify both the writer and the reader of new 
@@ -356,14 +359,16 @@ bool ossimTiffOverviewBuilder::execute()
          m_maskWriter->connectMyInputTo(ih.get());
       }
 
-      if ( !writeRn( ih.get(), tif, i, (i==startingResLevel) && !copyR0() ) )
+      if ( !writeRn( ih.get(), tif, i, (i==startingResLevel)&&(!m_copyAllFlag) ) )
       {
          // Set the error...
-         setErrorStatus();
-         ossimNotify(ossimNotifyLevel_WARN)
-            << __FILE__ << " " << __LINE__ << " " << MODULE
-            << "\nError creating reduced res set: " << i << std::endl;
-
+         ossimSetError(getClassName(),
+                       ossimErrorCodes::OSSIM_WRITE_FILE_ERROR,
+                       "\
+%s file %s line %d\nError creating reduced res set!",
+                       MODULE,
+                       __FILE__,
+                       __LINE__);
          ih->disconnect();
          ih = 0;
          if (tif)
@@ -371,19 +376,12 @@ bool ossimTiffOverviewBuilder::execute()
             closeTiff(tif);
             tif = 0;
          }
-
          if (progressListener)
          {
             removeListener(progressListener);
             delete progressListener;
             progressListener = 0;
          }
-
-         if ( outputFileTemp.exists() && !buildInternalOverviews() )
-         {
-            ossimFilename::remove( outputFileTemp );
-         }
-
          return false;
       }
       
@@ -435,12 +433,8 @@ bool ossimTiffOverviewBuilder::execute()
          delete progressListener;
          progressListener = 0;
       }
-
-      if ( !buildInternalOverviews() )
-      {
-         outputFileTemp.rename(m_outputFile);
-      }
       
+      outputFileTemp.rename(m_outputFile);
       if(traceDebug())
       {
          ossimNotify(ossimNotifyLevel_INFO)
@@ -463,8 +457,8 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
 
    if (!setTags(tif, rect, 0))
    {
-      closeTiff(tif);
-      ossimNotify(ossimNotifyLevel_WARN) << MODULE << " Error writing tags!" << std::endl;
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Error writing tags!" << std::endl;
       return false;
    }
    
@@ -526,14 +520,6 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
                                                 origin.x +(m_tileWidth-1),
                                                 origin.y +(m_tileHeight-1)));
 
-         // Check for errors reading tile:
-         if ( m_imageHandler->hasError() )
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << MODULE << " ERROR: reading tile:  " << i << std::endl;
-            return false;
-         }
-
          // If masking was enabled, pass the tile onto that object for processing:
          if (m_maskWriter.valid())
             m_maskWriter->generateMask(t, 0);
@@ -542,7 +528,7 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
          // Band loop.
          //***
          for (uint32 band=0;
-              band < m_imageHandler->getNumberOfOutputBands();
+              band<m_imageHandler->getNumberOfInputBands();
               ++band)
          {
             tdata_t data;
@@ -613,21 +599,11 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
    return true;
 }
 
-bool ossimTiffOverviewBuilder::writeRn( ossimImageHandler* imageHandler,
-                                        TIFF* tif,
-                                        ossim_uint32 resLevel,
-                                        bool firstResLevel )
+bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
+                                       TIFF* tif,
+                                       ossim_uint32 resLevel,
+                                       bool firstResLevel)
 {
-   if ( tif ) //  && buildInternalOverviews() )
-   {
-      // Create an empty directory to start with.
-      TIFFCreateDirectory( tif );
-   }
-   else
-   {
-      return false;
-   }
-   
    //---
    // Set up the sequencer.  This will be one of three depending on if we're
    // running mpi and if we are a master process or a slave process.
@@ -649,17 +625,13 @@ bool ossimTiffOverviewBuilder::writeRn( ossimImageHandler* imageHandler,
    {
       sequencer = new ossimOverviewSequencer();
    }
-   
+
    sequencer->setImageHandler(imageHandler);
-
    if (m_maskWriter.valid() && m_maskFilter.valid())
-   {
       sequencer->setBitMaskObjects(m_maskWriter.get(), m_maskFilter.get());
-   }
 
-   // sourceResLevel: This is the res level to pull data from:
-   ossim_uint32 sourceResLevel = imageHandler->getNumberOfDecimationLevels() +
-      imageHandler->getStartingResLevel() - 1;
+   int rlevel_offset = imageHandler->getStartingResLevel() - 1;
+   ossim_uint32 sourceResLevel = imageHandler->getNumberOfDecimationLevels() + rlevel_offset;
 
    sequencer->setSourceLevel(sourceResLevel);
    sequencer->setResampleType(m_resampleType);
@@ -720,14 +692,13 @@ bool ossimTiffOverviewBuilder::writeRn( ossimImageHandler* imageHandler,
 
    if (!setTags(tif, rect, resLevel))
    {
-      setErrorStatus();
       closeTiff(tif);
-      tif = 0;
-      ossimNotify(ossimNotifyLevel_WARN) << MODULE << " Error writing tags!" << std::endl;
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " Error writing tags!" << std::endl;
       return false;
    }
 
-   if ( !buildInternalOverviews() && !copyR0() && (resLevel == 1) )
+   if ( !m_copyAllFlag && (resLevel == 1) )
    {
       //---
       // Set the geotif tags for the first layer.
@@ -772,17 +743,7 @@ bool ossimTiffOverviewBuilder::writeRn( ossimImageHandler* imageHandler,
       {
          // Grab the resampled tile.
          ossimRefPtr<ossimImageData> t = sequencer->getNextTile();
-
-         // Check for errors reading tile:
-         if ( sequencer->hasError() )
-         {
-            setErrorStatus();
-            ossimNotify(ossimNotifyLevel_WARN)
-               << MODULE << " ERROR: reading tile:  " << i << std::endl;
-            return false;
-         }
-         
-         if ( t.valid() && ( t->getDataObjectStatus() != OSSIM_NULL ) )
+         if (t.valid() && ( t->getDataObjectStatus() != OSSIM_NULL ) )
          {
             // Write it to the tiff.
             for (ossim_uint32 band = 0; band < t->getNumberOfBands(); ++band)
@@ -836,7 +797,6 @@ bool ossimTiffOverviewBuilder::writeRn( ossimImageHandler* imageHandler,
    //---
    if (!TIFFFlush(tif))
    {
-      setErrorStatus();
       ossimNotify(ossimNotifyLevel_WARN)
          << MODULE << " Error writing to TIF file!" << std::endl;
       return false;
@@ -857,7 +817,7 @@ bool ossimTiffOverviewBuilder::writeRn( ossimImageHandler* imageHandler,
          if ( ( getScanForMinMaxNull() == true ) || ( getScanForMinMax() == true ) )
          {
             // Write the omd file:
-            ossimFilename file = getOutputFile();
+            ossimFilename file = m_outputFile;
             file = file.setExtension("omd");
             sequencer->writeOmdFile(file);
          }
@@ -939,13 +899,12 @@ bool ossimTiffOverviewBuilder::setTags(TIFF* tif,
       if ( traceDebug() && (m_tiffCompressType != COMPRESSION_NONE ) )
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimTiffOverviewBuilder::setTags WARNING:\n"
-            << "Compression not set for this data type:\n"
-            << "scalar type: "
-            << ossimScalarTypeLut::instance()->getEntryString(
-               m_imageHandler->getOutputScalarType())
-            << "\nband count: " << m_imageHandler->getNumberOfInputBands()
-            << std::endl;
+         << "ossimTiffOverviewBuilder::setTags WARNING:\n"
+         << "Compression not set for this data type:\n"
+         << "scalar type: "
+         << ossimScalarTypeLut::instance()->getEntryString(m_imageHandler->getOutputScalarType())
+         << "\nband count: " << m_imageHandler->getNumberOfInputBands()
+         << std::endl;
       }
       TIFFSetField( tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE );
    }
@@ -1013,54 +972,33 @@ bool ossimTiffOverviewBuilder::setGeotiffTags(const ossimImageGeometry* geom,
    return result;
 }
 
-TIFF* ossimTiffOverviewBuilder::openTiff(const ossimString& filename) const
+TIFF* ossimTiffOverviewBuilder::openTiff(const ossimString& filename,
+                                         const ossimString& openMode)
 {
-   ossimString openMode;
-   if ( !buildInternalOverviews() )
-   {
-      openMode = "w";
-
-      ossim_uint64 fourGigs = (static_cast<ossim_uint64>(1024)*
-                               static_cast<ossim_uint64>(1024)*
-                               static_cast<ossim_uint64>(1024)*
-                               static_cast<ossim_uint64>(4));
-      ossimIrect bounds = m_imageHandler->getBoundingRect();
-      ossim_uint64 byteCheck =
-         (static_cast<ossim_uint64>(bounds.width())*
-          static_cast<ossim_uint64>(bounds.height())*
-          static_cast<ossim_uint64>(m_imageHandler->getNumberOfOutputBands())*
-          static_cast<ossim_uint64>(ossim::scalarSizeInBytes(m_imageHandler->
-                                                             getOutputScalarType())));
-         
-      if((byteCheck*static_cast<ossim_uint64>(2))>fourGigs)
-      {
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG) << " Big tiff activated\n";
-         }
-         openMode += "8";
-      }
-      else
-      {
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG) << " No big tiff activated\n";
-         }
-      }
-   }
-   else
-   {
-      openMode = "r+"; // Append to existing file...
-   }
-
-   // Open:
+// #ifdef OSSIM_HAS_GEOTIFF
+// #  if OSSIM_HAS_GEOTIFF
    return XTIFFOpen( filename.c_str(), openMode.c_str() );
+// #  else
+//    return TIFFOpen( filename.c_str(), openMode.c_str() );
+// #  endif
+// #else
+//    return TIFFOpen( filename.c_str(), openMode.c_str() );
+// #endif
 }
 
 void ossimTiffOverviewBuilder::closeTiff(TIFF* tif)
 {
-   XTIFFClose( tif );
+// #ifdef OSSIM_HAS_GEOTIFF
+// #  if OSSIM_HAS_GEOTIFF 
+      XTIFFClose( tif );
+// #  else
+//       TIFFClose( tif );
+// #  endif
+// #else
+//       TIFFClose( tif );   
+// #endif
 }
+
 
 void ossimTiffOverviewBuilder::setCompressionType(ossim_uint16 compression_type)
 {
@@ -1076,11 +1014,14 @@ void ossimTiffOverviewBuilder::setCompressionType(ossim_uint16 compression_type)
       m_tiffCompressType = COMPRESSION_NONE;
       if (traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << __FILE__ << " " << __LINE__
-            << "\nossimTiffOverviewBuilder::setCompressionType Unsupported compression type: "
-            << compression_type << "\nDefaulting to none."
-            << std::endl;
+         ossimSetError(getClassName(),
+                       ossimErrorCodes::OSSIM_WARNING,
+                       "\
+ossimTiffOverviewBuilder::setCompressionType\nfile %s line %d\n\
+Unsupported compression type: %d  Defaulting to none.",
+                       __FILE__,
+                       __LINE__,
+                       compression_type);
       }
       break;
    }
@@ -1096,11 +1037,15 @@ void ossimTiffOverviewBuilder::setJpegCompressionQuality(ossim_int32 quality)
    {
       m_jpegCompressQuality = DEFAULT_COMPRESS_QUALITY;
 
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "ossimTiffOverviewBuilder::setJpegCompressionQuality\n"
-         << "\nCompression quality of " << quality << " is out of range!"
-         << "\nRange is 100 to 1.  Current quality set to default of 75."
-         << std::endl;
+      ossimSetError(getClassName(),
+                    ossimErrorCodes::OSSIM_WARNING,
+                    "\
+ossimTiffOverviewBuilder::setJpegCompressionQuality\n%s file %s \
+line %d Compression quality of %d is out of range!\nis out of range!\n\
+Range is 100 to 1.  Current quality set to default of 75.",
+                    __FILE__,
+                    __LINE__,
+                    quality);
    }
 }
 
@@ -1112,16 +1057,6 @@ bool ossimTiffOverviewBuilder::getCopyAllFlag() const
 void ossimTiffOverviewBuilder::setCopyAllFlag(bool flag)
 {
    m_copyAllFlag = flag;
-}
-
-void ossimTiffOverviewBuilder::setInternalOverviewsFlag( bool flag )
-{
-   m_internalOverviewsFlag = flag;
-}
-
-bool ossimTiffOverviewBuilder::getInternalOverviewsFlag() const
-{
-   return m_internalOverviewsFlag;
 }
 
 ossimObject* ossimTiffOverviewBuilder::getObject()
@@ -1141,28 +1076,16 @@ void ossimTiffOverviewBuilder::setOutputFile(const ossimFilename& file)
 
 ossimFilename ossimTiffOverviewBuilder::getOutputFile() const
 {
-   ossimFilename result;
-
-   if ( buildInternalOverviews() )
-   {
-      // m_imageHandler pointer good if buildInternalOverviews() returns true.
-      result = m_imageHandler->getFilename();
-   }
-   else
-   {
-      result = m_outputFile;
-   }
-
+   ossimFilename result = m_outputFile;
    if (m_outputFile == ossimFilename::NIL)
    {
-      if ( m_imageHandler.valid() )
+      if (m_imageHandler.valid())
       {
          bool usePrefix = (m_imageHandler->getNumberOfEntries()>1?true:false);
          result = m_imageHandler->
             getFilenameWithThisExtension(ossimString("ovr"), usePrefix);
       }
    }
-   
    return result;
 }
 
@@ -1255,13 +1178,18 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
             
          default:
             // Set the error...
-            setErrorStatus();
+            theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
             ossimNotify(ossimNotifyLevel_WARN)
                << MODULE << " ERROR:"
                << "\nUnknow pixel type:  "
                << (ossimScalarTypeLut::instance()->
                    getEntryString(m_imageHandler->getOutputScalarType()))
                << std::endl;
+            ossimSetError(getClassName(),
+                          ossimErrorCodes::OSSIM_ERROR,
+                          "Unknown pixel type!",
+                          __FILE__,
+                          __LINE__);
             result = false;
       }
 
@@ -1282,11 +1210,17 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
    else
    {
       // Set the error...
-      setErrorStatus();
+      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
       ossimNotify(ossimNotifyLevel_WARN)
          << MODULE << " ERROR:"
          << "\nSetting image handler as input failed!"
          << std::endl;
+      ossimSetError(getClassName(),
+                    ossimErrorCodes::OSSIM_ERROR,
+                    "%s File %s line %d\nSetting image handler as input failed!",
+                    MODULE,
+                    __FILE__,
+                    __LINE__);
    }
 
    return result;
@@ -1343,39 +1277,36 @@ void ossimTiffOverviewBuilder::setProperty(ossimRefPtr<ossimProperty> property)
       }
       else if(property->getName() == ossimKeywordNames::COMPRESSION_TYPE_KW)
       {
-         ossimString value = property->valueToString();
-         value = value.downcase();
-         if(value == "jpeg")
-         {
-            m_tiffCompressType =  COMPRESSION_JPEG;
-         }
-         else if(value == "lzw")
-         {
-            m_tiffCompressType =  COMPRESSION_LZW;
-            
-         }
-         else if(value == "deflate")
-         {
-            m_tiffCompressType =  COMPRESSION_DEFLATE;
-         }
-         else if(value == "packbits")
-         {
-            m_tiffCompressType =  COMPRESSION_PACKBITS;
-         }
-         else
-         {
-            m_tiffCompressType = COMPRESSION_NONE;
-         }
+      ossimString value = property->valueToString();
+      value = value.downcase();
+      if(value == "jpeg")
+      {
+         m_tiffCompressType =  COMPRESSION_JPEG;
+      }
+      else if(value == "lzw")
+      {
+         m_tiffCompressType =  COMPRESSION_LZW;
+         
+      }
+      else if(value == "deflate")
+      {
+         m_tiffCompressType =  COMPRESSION_DEFLATE;
+      }
+      else if(value == "packbits")
+      {
+         m_tiffCompressType =  COMPRESSION_PACKBITS;
+      }
+      else
+      {
+         m_tiffCompressType = COMPRESSION_NONE;
+      }
       }
       else if(property->getName() == COPY_ALL_KW)
       {
          m_copyAllFlag = property->valueToString().toBool();
       }
-      else if( property->getName() == INTERNAL_OVERVIEWS_KW )
-      {
-         m_internalOverviewsFlag = property->valueToString().toBool();
-      }
-      else if(property->getName() == ossimKeywordNames::OVERVIEW_STOP_DIMENSION_KW)
+      else if(property->getName() ==
+              ossimKeywordNames::OVERVIEW_STOP_DIMENSION_KW)
       {
          m_overviewStopDimension = property->valueToString().toUInt32();
       }
@@ -1395,7 +1326,6 @@ void ossimTiffOverviewBuilder::getPropertyNames(std::vector<ossimString>& proper
    propertyNames.push_back(ossimKeywordNames::COMPRESSION_QUALITY_KW);
    propertyNames.push_back(ossimKeywordNames::COMPRESSION_TYPE_KW);
    propertyNames.push_back(COPY_ALL_KW);
-   propertyNames.push_back(INTERNAL_OVERVIEWS_KW);
    propertyNames.push_back(ossimKeywordNames::OVERVIEW_STOP_DIMENSION_KW);
 }
 
@@ -1412,27 +1342,3 @@ bool ossimTiffOverviewBuilder::canConnectMyInputTo(
    return false;
 }
 
-bool ossimTiffOverviewBuilder::buildInternalOverviews() const
-{
-   bool result = false;
-   if ( m_internalOverviewsFlag &&  m_imageHandler.valid() )
-   {
-      if ( m_imageHandler->getClassName() == "ossimTiffTileSource" )
-      {
-         result = true;
-      }
-      else
-      {
-         ossimNotify(ossimNotifyLevel_NOTICE)
-            << "Internal overviews opton not supported for class: "
-            << m_imageHandler->getClassName()
-            << std::endl;
-      }
-   }
-   return result;
-}
-
-bool ossimTiffOverviewBuilder::copyR0() const
-{
-   return ( m_copyAllFlag && !buildInternalOverviews());
-}
