@@ -232,7 +232,7 @@ private:
     SetMinimumParameterIntValue("tilesizey", 1);
 
     AddParameter(ParameterType_Directory,"tmpdir","Directory where to write temporary files");
-    SetParameterDescription("tmpdir","This applications need to write some temporary files for each tile. This parameters allows to choose the path where to write those files. If disabled, the current path will be used.");
+    SetParameterDescription("tmpdir","This applications need to write temporary files for each tile. This parameter allows choosing the path where to write those files. If disabled, the current path will be used.");
     MandatoryOff("tmpdir");
     DisableParameter("tmpdir");
 
