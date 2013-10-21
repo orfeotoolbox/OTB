@@ -23,7 +23,6 @@
 #include "otbWrapperTypes.h"
 
 
-
 namespace otb
 {
 namespace Wrapper
@@ -64,7 +63,7 @@ ComplexInputImageParameter::SetFromFileName(const std::string& filename)
       }
     catch(itk::ExceptionObject & /*err*/)
       {
-    	return false;
+           return false;
       }
 
     // the specified filename is valid => store the value
