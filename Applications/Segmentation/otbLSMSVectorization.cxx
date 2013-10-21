@@ -89,7 +89,7 @@ private:
     SetParameterDescription( "inseg", " The segmented image input. Segmented image input is the segmentation of the input image." );
 
     AddParameter(ParameterType_OutputFilename, "out", "Output GIS vector file");
-    SetParameterDescription( "out", "The output GIS vector fie, representing the vectorized version of the segmented image where the features of the polygones are the radiometric means and variances." );
+    SetParameterDescription( "out", "The output GIS vector file, representing the vectorized version of the segmented image where the features of the polygons are the radiometric means and variances." );
 
     AddParameter(ParameterType_Int, "tilesizex", "Size of tiles in pixel (X-axis)");
     SetParameterDescription("tilesizex", "Size of tiles along the X-axis.");
@@ -104,7 +104,7 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in","avions.tif");
     SetDocExampleParameterValue("inseg","merged.tif");
-    SetDocExampleParameterValue("out","vecto.shp");
+    SetDocExampleParameterValue("out","vector.shp");
     SetDocExampleParameterValue("tilesizex","256");
     SetDocExampleParameterValue("tilesizey","256");
   }
