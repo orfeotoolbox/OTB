@@ -273,7 +273,7 @@ private:
     otb::ogr::Feature firstFeature = layerTmp.ogr().GetNextFeature();
 
     //Geometry fusion
-    otbAppLogINFO("Merging polygons accross tiles ...");
+    otbAppLogINFO("Merging polygons across tiles ...");
     while(firstFeature.addr())
       {
       LabelImagePixelType curLabel = firstFeature.ogr().GetFieldAsInteger("label");
