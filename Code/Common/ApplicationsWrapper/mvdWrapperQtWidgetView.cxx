@@ -592,7 +592,7 @@ QtWidgetView
       }
     }
 
-  emit ExecutionDone( count );
+  emit ExecutionDone( status );
 }
 
 }

@@ -1446,10 +1446,10 @@ MainWindow
 
   QObject::connect(
     appWidget,
-    SIGNAL( ExecutionDone( CountType ) ),
+    SIGNAL( ExecutionDone( int ) ),
     // to:
     this,
-    SLOT( OnExecutionDone( CountType ) )
+    SLOT( OnExecutionDone( int ) )
   );
 
   //

@@ -134,7 +134,7 @@ signals:
 
   void ExecuteAndWriteOutput();
 
-  void ExecutionDone( CountType nbOutputs );
+  void ExecutionDone( int nbOutputs );
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
