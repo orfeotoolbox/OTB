@@ -110,12 +110,25 @@ public:
 
 signals:
   void SetApplicationReady(bool);
+
   void SetProgressReportBegin();
+
   /**
-   * \brief
-   * \param status
+   * \brief Signal emitted when execution otb::Application has finished.
+   *
+   * \param status The result status of the otb::application (-1 when
+   * an exception has occured).
    */
   void SetProgressReportDone( int status =0 );
+
+  /**
+   * \brief Signal emitted when an exception has been raised by an
+   * otb::Application and is caught by the calling QThread.
+   *
+   * \param what The std::exception::what() which is forwarded to listeners.
+   */
+  void ExceptionRaised( QString what );
+
   void UpdateGui();
 
 protected slots:

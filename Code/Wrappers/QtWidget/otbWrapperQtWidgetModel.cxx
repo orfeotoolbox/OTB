@@ -73,7 +73,7 @@ QtWidgetModel
     SIGNAL( ExceptionRaised( QString ) ),
     // to:
     this,
-    SLOT( ExceptionRaised( QString ) )
+    SIGNAL( ExceptionRaised( QString ) )
   );
 
   QObject::connect(
