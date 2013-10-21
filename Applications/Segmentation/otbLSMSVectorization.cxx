@@ -46,8 +46,6 @@ public:
   typedef UInt32ImageType                   LabelImageType;
   typedef LabelImageType::InternalPixelType LabelImagePixelType;
   
-  typedef otb::ImageFileReader<ImageType> ImageReaderType;
-  
   typedef otb::ImageFileReader<LabelImageType> LabelImageReaderType;
   
   typedef otb::MultiChannelExtractROI <ImagePixelType,ImagePixelType > MultiChannelExtractROIFilterType;

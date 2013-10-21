@@ -201,7 +201,7 @@ private:
     MandatoryOff("inpos");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription( "out", "The output image. The output image is the segmentation of the filtered image. It is recommanded to set the pixel type to uint32." );
+    SetParameterDescription( "out", "The output image. The output image is the segmentation of the filtered image. It is recommended to set the pixel type to uint32." );
 
     AddParameter(ParameterType_Float, "ranger", "Range radius");
     SetParameterDescription("ranger", "Range radius defining the radius (expressed in radiometry unit) in the multi-spectral space.");
