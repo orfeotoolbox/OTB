@@ -118,7 +118,7 @@ public slots:
   // slot in charge of emiting a signal to the catalogue mainWindow.
   // when received, the main application need to get the output
   // image filename{s} set by the user in this OTB application (if any).
-  void OnApplicationExecutionDone();
+  void OnApplicationExecutionDone( int );
 
   // application closed
   void CloseSlot();
@@ -156,7 +156,7 @@ private:
   void FillOTBAppDefaultOutputImageParameter(QWidget * widgets);
 
   // method to generate an unique identifier
-  const QString GenerateIdentifier();
+  QString GenerateIdentifier();
 
 //
 // Private attributes.
@@ -194,7 +194,11 @@ private slots:
 
   /**
    */
-  inline void OnProgressReportEnd();
+  inline void OnProgressReportEnd( int status );
+
+  /**
+   */
+  void OnExceptionRaised( QString what );
 
   /**
    */
@@ -250,7 +254,7 @@ QtWidgetView
 inline
 void
 QtWidgetView
-::OnProgressReportEnd()
+::OnProgressReportEnd( int status )
 {
   SetClosable( true );
 }

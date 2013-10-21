@@ -1534,9 +1534,9 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnExecutionDone( CountType nbOutputs )
+::OnExecutionDone( int status )
 {
-  if( nbOutputs>0 )
+  if( status<0 )
     return;
 
   assert( m_DatabaseBrowserDock!=NULL );

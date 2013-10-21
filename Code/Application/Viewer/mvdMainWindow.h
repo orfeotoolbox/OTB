@@ -419,7 +419,7 @@ MainWindow
 {
   return QMessageBox::question(
     this,
-    tr( PROJECT_NAME ),
+    PROJECT_NAME,
     tr( "Dataset has been modified.\n"
 	"Do you want to save settings before quitting?" ),
     QMessageBox::Save |

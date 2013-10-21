@@ -1274,7 +1274,7 @@ VectorImageModel
 }
 
 /*****************************************************************************/
-void 
+void
 VectorImageModel
 ::OnUserCoordinatesEditingFinished(const QString& coord)
 {
@@ -1293,7 +1293,7 @@ VectorImageModel
   double y = parts.at( 1 ).toDouble( &yOk );
   if ( !yOk )
     return;
-  
+
   //
   // Center the viewport on this index if inside the largest
   // possible region

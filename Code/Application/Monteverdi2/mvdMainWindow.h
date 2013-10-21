@@ -179,7 +179,7 @@ protected slots:
 
   /**
    */
-  void OnExecutionDone( CountType nbOutputs );
+  void OnExecutionDone( int status );
 
   /**
    */

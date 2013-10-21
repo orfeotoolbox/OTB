@@ -95,13 +95,19 @@ QtWidgetView
   );
 
   QObject::connect(
-    m_Model, SIGNAL( SetProgressReportDone() ),
-    this, SLOT( OnProgressReportEnd() )
+    m_Model, SIGNAL( SetProgressReportDone( int ) ),
+    this, SLOT( OnProgressReportEnd( int ) )
+  );
+
+  QObject::connect(
+    m_Model, SIGNAL( ExceptionRaised( QString ) ),
+    this, SLOT( OnExceptionRaised( QString ) )
   );
 }
 
 /*******************************************************************************/
-QtWidgetView::~QtWidgetView()
+QtWidgetView
+::~QtWidgetView()
 {
   // m_Application is smart-pointed and will be automatically deleted.
 
@@ -110,7 +116,9 @@ QtWidgetView::~QtWidgetView()
 }
 
 /*******************************************************************************/
-void QtWidgetView::CreateGui()
+void
+QtWidgetView
+::CreateGui()
 {
   // Create a VBoxLayout with the header, the input widgets, and the footer
   QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -157,7 +165,9 @@ void QtWidgetView::CreateGui()
 
 
 /*******************************************************************************/
-QWidget* QtWidgetView::CreateInputWidgets()
+QWidget*
+QtWidgetView
+::CreateInputWidgets()
 {
   QScrollArea *scrollArea = new QScrollArea;
   // Put the main group inside a scroll area
@@ -172,9 +182,12 @@ QWidget* QtWidgetView::CreateInputWidgets()
 
   //
   // need to be connected to the end of a process
-  QObject::connect(m_Model, SIGNAL( SetProgressReportDone() ),
-                   this,
-                   SLOT ( OnApplicationExecutionDone() )
+  QObject::connect(
+    m_Model,
+    SIGNAL( SetProgressReportDone( int ) ),
+    // to:
+    this,
+    SLOT ( OnApplicationExecutionDone( int ) )
     );
 
   //
@@ -185,7 +198,9 @@ QWidget* QtWidgetView::CreateInputWidgets()
 }
 
 /*******************************************************************************/
-QWidget* QtWidgetView::CreateFooter()
+QWidget*
+QtWidgetView
+::CreateFooter()
 {
   // an HLayout with two buttons : Execute and Quit
   QGroupBox *footerGroup = new QGroupBox;
@@ -233,7 +248,9 @@ QWidget* QtWidgetView::CreateFooter()
 }
 
 /*******************************************************************************/
-QWidget* QtWidgetView::CreateDoc()
+QWidget*
+QtWidgetView
+::CreateDoc()
 {
   QTextEdit *text = new QTextEdit;
   text->setReadOnly(true);
@@ -252,7 +269,8 @@ QWidget* QtWidgetView::CreateDoc()
 
 /*******************************************************************************/
 void 
-QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
+QtWidgetView
+::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
 {
   //
   // Get the cache dir
@@ -316,8 +334,9 @@ QtWidgetView::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
 
 
 /*******************************************************************************/
-const QString 
-QtWidgetView::GenerateIdentifier()
+QString 
+QtWidgetView
+::GenerateIdentifier()
 {
   //
   // get an unique identifier  and remove braces
@@ -331,7 +350,9 @@ QtWidgetView::GenerateIdentifier()
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void QtWidgetView::CloseSlot()
+void
+QtWidgetView
+::CloseSlot()
 {
   // Close the widget
   this->close();
@@ -342,7 +363,9 @@ void QtWidgetView::CloseSlot()
 
 /*******************************************************************************/
 #if 0
-void QtWidgetView::UpdateMessageAfterExcuteClicked()
+void
+QtWidgetView
+::UpdateMessageAfterExcuteClicked()
 {
   m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
 }
@@ -350,7 +373,8 @@ void QtWidgetView::UpdateMessageAfterExcuteClicked()
 
 /*******************************************************************************/
 void
-QtWidgetView::OnExecButtonClicked()
+QtWidgetView
+::OnExecButtonClicked()
 {
   assert( m_Model!=NULL );
   assert( m_Model->GetApplication()!=NULL );
@@ -433,7 +457,9 @@ QtWidgetView::OnExecButtonClicked()
 }
 
 /*******************************************************************************/
-void QtWidgetView::UpdateMessageAfterApplicationReady( bool val )
+void
+QtWidgetView
+::UpdateMessageAfterApplicationReady( bool val )
 {
   if(val == true)
     m_Message->setText("<center><font color=\"#00FF00\">Ready to run</font></center>");
@@ -442,61 +468,115 @@ void QtWidgetView::UpdateMessageAfterApplicationReady( bool val )
 }
 
 /*******************************************************************************/
-void QtWidgetView::OnApplicationExecutionDone()
+void
+QtWidgetView
+::OnExceptionRaised( QString what  )
 {
+  qWarning() << what;
+
+  QMessageBox::warning(
+    this,
+    PROJECT_NAME,
+    what,
+    QMessageBox::Ok
+  );
+}
+
+/*******************************************************************************/
+void
+QtWidgetView
+::OnApplicationExecutionDone( int status )
+{
+  otb::Wrapper::Application::Pointer otbApp( m_Model->GetApplication() );
+
+  if( status!=0 )
+    {
+    QMessageBox::information(
+      this,
+      PROJECT_NAME,
+      tr( "'%1' has failed with return status %2.\n"
+	  "Please refer to '%1' documentation."
+      )
+      .arg( otbApp->GetName() )
+      .arg( status ),
+      QMessageBox::Ok
+    );
+
+    emit ExecutionDone( status );
+
+    return;
+    }
+
+  QMessageBox::StandardButton button =
+    QMessageBox::information(
+      this,
+      PROJECT_NAME,
+      tr( "'%1' has succeeded with return status %2.\n"
+	  "Would you like to import results?")
+      .arg( otbApp->GetName() )
+      .arg( status ),
+      QMessageBox::Yes | QMessageBox::No,
+      QMessageBox::Yes
+    );
+
+  if( button==QMessageBox::No )
+    {
+    return;
+    }
+
+  CountType count = 0;
+
   //
   // detect if this application has outputImageParameter. emit
   // the output filenames if any
-  std::vector<std::string> paramList = m_Model->GetApplication()->GetParametersKeys(true);
-  
-  CountType count = 0;
+  StringVector paramList( otbApp->GetParametersKeys( true ) );
 
   // iterate on the application parameters
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-          it != paramList.end();
-          ++it)
+  for ( StringVector::const_iterator it( paramList.begin() );
+	it!=paramList.end();
+	++it )
     {
     // parameter key
-    std::string key = *it;
+    const std::string& key = *it;
 
     // get a valid outputParameter
-    if (m_Model->GetApplication()->GetParameterType(key) == otb::Wrapper::ParameterType_OutputImage && 
-        m_Model->GetApplication()->IsParameterEnabled(key) &&
-        m_Model->GetApplication()->HasValue(key) )
-        {
-        // get the parameter
-        otb::Wrapper::Parameter* param =
-	  m_Model->GetApplication()->GetParameterByKey( key );
-       
-        // try to cast it 
-        otb::Wrapper::OutputImageParameter* outputParam = 
-          dynamic_cast<otb::Wrapper::OutputImageParameter*>(param);
+    if( otbApp->GetParameterType( key )
+	==otb::Wrapper::ParameterType_OutputImage && 
+	otbApp->IsParameterEnabled (key ) &&
+	otbApp->HasValue( key ) )
+      {
+      // get the parameter
+      otb::Wrapper::Parameter* param = otbApp->GetParameterByKey( key );
 
-        // emit the output image filename selected
-        if (outputParam)
-          {
-	  QFileInfo fileInfo( outputParam->GetFileName() );
+      // try to cast it 
+      otb::Wrapper::OutputImageParameter* outputParam = 
+	dynamic_cast< otb::Wrapper::OutputImageParameter* >( param );
 
-	  /* U N S A F E
-	  // BUGFIX: Mantis-750
-	  //
-	  // If output image-exists, it's sure that it has been output
-	  // from the OTB-application process because overwritten
-	  // files are first deleted (see OnExecButtonClicked()).
-	  if( fileInfo.exists() )
-	    {
-	    ++ count;
-	  */
-	    emit OTBApplicationOutputImageChanged(
-	      QString( m_Model->GetApplication()->GetName() ),
-	      QString( outputParam->GetFileName() )
-	    );
+      // emit the output image filename selected
+      if( outputParam!=NULL )
+	{
+	QFileInfo fileInfo( outputParam->GetFileName() );
 
-	  /*
-	    }
-	  */
-          }
-        }
+	/* U N S A F E
+	// BUGFIX: Mantis-750
+	//
+	// If output image-exists, it's sure that it has been output
+	// from the OTB-application process because overwritten
+	// files are first deleted (see OnExecButtonClicked()).
+	if( fileInfo.exists() )
+	{
+	*/
+	++ count;
+
+	emit OTBApplicationOutputImageChanged(
+	  QString( otbApp->GetName() ),
+	  QString( outputParam->GetFileName() )
+	);
+	/*
+	}
+	*/
+	}
+      }
     }
 
   emit ExecutionDone( count );
