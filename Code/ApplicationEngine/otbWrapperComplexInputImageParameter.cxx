@@ -22,6 +22,8 @@
 #include "otbImageToVectorImageCastFilter.h"
 #include "otbWrapperTypes.h"
 
+
+
 namespace otb
 {
 namespace Wrapper
@@ -32,6 +34,8 @@ ComplexInputImageParameter::ComplexInputImageParameter()
   this->SetName("Complex Input Image");
   this->SetKey("cin");
   m_FileName="";
+  m_PreviousFileName="";
+  m_UseFilename = true;
   this->ClearValue();
 }
 
@@ -39,31 +43,37 @@ ComplexInputImageParameter::~ComplexInputImageParameter()
 {
 }
 
-void
+bool
 ComplexInputImageParameter::SetFromFileName(const std::string& filename)
 {
   // First clear previous file choosen
   this->ClearValue();
 
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  if (!filename.empty()
-      && itksys::SystemTools::FileExists(filename.c_str()))
+  // No file existence is done here :
+  //  - Done in the reader
+  //  - allow appending additional information to the filename
+  // myfile.tif:2 for example, or myfile.tif:nocarto
+  if (!filename.empty())
     {
     ComplexFloatVectorReaderType::Pointer reader = ComplexFloatVectorReaderType::New();
     reader->SetFileName(filename);
+
     try
       {
       reader->UpdateOutputInformation();
       }
-    catch(itk::ExceptionObject &)
+    catch(itk::ExceptionObject & /*err*/)
       {
+    	return false;
       }
 
     // the specified filename is valid => store the value
     m_FileName = filename;
+    m_UseFilename = true;
     SetActive(true);
+    return true;
     }
+  return false;
 }
 
 
@@ -91,31 +101,61 @@ template <class TOutputImage>
 TOutputImage *
 ComplexInputImageParameter::GetImage()
 {
-  // 2 cases : the user set a filename vs. the user set an image
-  //////////////////////// Filename case:
-  if( !m_FileName.empty() )
-    {
-    typedef otb::ImageFileReader<TOutputImage> ReaderType;
-    typename ReaderType::Pointer reader = ReaderType::New();
-    reader->SetFileName(m_FileName);
-    try
-      {
-      reader->UpdateOutputInformation();
-      }
-    catch(itk::ExceptionObject &)
-      {
-      this->ClearValue();
-      }
-    
-    m_Image = reader->GetOutput();
-    m_Reader = reader;
+  // Used m_PreviousFileName because if not, when the user call twice GetImage,
+  // it without changing the filename, it returns 2 different
+  // image pointers
+  // Only one image type can be used
 
-    // Pay attention, don't return m_Image because it is a ImageBase...
-    return reader->GetOutput();
+  // 2 cases : the user set a filename vs. the user set an image
+  if (m_UseFilename)
+    {
+    if( m_PreviousFileName!=m_FileName && !m_FileName.empty() )
+      {
+      //////////////////////// Filename case:
+      // A new valid filename has been given : a reader is created
+      m_PreviousFileName = m_FileName;
+      typedef otb::ImageFileReader<TOutputImage> ReaderType;
+      typename ReaderType::Pointer reader = ReaderType::New();
+      reader->SetFileName(m_FileName);
+      try
+        {
+        reader->UpdateOutputInformation();
+        }
+      catch(itk::ExceptionObject &)
+        {
+        this->ClearValue();
+        }
+
+      m_Image = reader->GetOutput();
+      m_Reader = reader;
+
+      // Pay attention, don't return m_Image because it is a ImageBase...
+      return reader->GetOutput();
+      }
+    else
+      {
+      // In this case, the reader and the image should already be there
+      if (m_Image.IsNull())
+        {
+        itkExceptionMacro("No input image or filename detected...");
+        }
+      else
+        {
+        // Check if the image type asked here is the same as the one used for the reader
+        if (dynamic_cast<TOutputImage*> (m_Image.GetPointer()))
+          {
+          return dynamic_cast<TOutputImage*> (m_Image.GetPointer());
+          }
+        else
+          {
+          itkExceptionMacro("Cannot ask a different image type");
+          }
+        }
+      }
     }
-  //////////////////////// Image case:
   else
     {
+    //////////////////////// Image case:
     if( m_Image.IsNull() )
       {
       itkExceptionMacro("No input image or filename detected...");
@@ -214,6 +254,7 @@ ComplexInputImageParameter::CastVectorImageFromImage()
   void
 ComplexInputImageParameter::SetImage(ComplexFloatVectorImageType* image)
 {
+  m_UseFilename = false;
   this->SetImage<ComplexFloatVectorImageType>( image );
 }
 
@@ -241,6 +282,9 @@ ComplexInputImageParameter::ClearValue()
   m_Image   = NULL;
   m_Reader = NULL;
   m_Caster = NULL;
+  m_FileName = "";
+  m_PreviousFileName="";
+  m_UseFilename = true;
 }
 
 

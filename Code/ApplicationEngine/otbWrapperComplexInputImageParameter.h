@@ -48,7 +48,7 @@ public:
   itkTypeMacro(ComplexInputImageParameter, Parameter);
 
   /** Set value from filename */
-  void SetFromFileName(const std::string& filename);
+  bool SetFromFileName(const std::string& filename);
   itkGetConstMacro(FileName, std::string);
 
   /** Get the input image as CFloatVectorImageType. */
@@ -118,6 +118,12 @@ protected:
 private:
   ComplexInputImageParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
+
+  /** Store the loaded image filename */
+  std::string m_PreviousFileName;
+
+  /** flag : are we using a filename or an image pointer as an input */
+  bool m_UseFilename;
 
 }; // End class ComplexInputImage Parameter
 
