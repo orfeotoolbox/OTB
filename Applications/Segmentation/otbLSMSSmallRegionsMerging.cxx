@@ -15,10 +15,6 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
 
 #include "otbMultiChannelExtractROI.h"
 #include "otbExtractROI.h"
@@ -55,11 +51,6 @@ public:
   typedef ImageType::InternalPixelType      ImagePixelType;
   typedef UInt32ImageType                   LabelImageType;
   typedef LabelImageType::InternalPixelType LabelImagePixelType;
-
-  typedef otb::ImageFileReader<ImageType> ImageReaderType;
-  
-  typedef otb::ImageFileReader<LabelImageType> LabelImageReaderType;
-  typedef otb::ImageFileWriter<LabelImageType> LabelImageWriterType;
   
   typedef otb::MultiChannelExtractROI <ImagePixelType,ImagePixelType > MultiChannelExtractROIFilterType;
   typedef otb::ExtractROI<LabelImagePixelType,LabelImagePixelType> ExtractROIFilterType;
