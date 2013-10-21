@@ -18,9 +18,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbImage.h"
-#include "otbVectorImage.h"
-
 #include "otbMultiChannelExtractROI.h"
 #include "otbExtractROI.h"
 
@@ -28,7 +25,6 @@
 #include "otbLabelImageToOGRDataSourceFilter.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "otbOGRFeatureWrapper.h"
-#include "otbSystem.h"
 
 #include <time.h>
 #include <vcl_algorithm.h>
