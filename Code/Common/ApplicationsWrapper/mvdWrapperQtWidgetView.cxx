@@ -507,6 +507,18 @@ QtWidgetView
     return;
     }
 
+#if 1
+  QMessageBox::information(
+    this,
+    PROJECT_NAME,
+    tr( "'%1' has succeeded with return status %2.\n"
+	"Result(s) will be imported as dataset(s).")
+    .arg( otbApp->GetName() )
+    .arg( status ),
+    QMessageBox::Ok
+  );
+
+#else
   QMessageBox::StandardButton button =
     QMessageBox::information(
       this,
@@ -523,6 +535,7 @@ QtWidgetView
     {
     return;
     }
+#endif
 
   CountType count = 0;
 
