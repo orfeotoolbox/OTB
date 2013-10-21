@@ -2395,7 +2395,7 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
             << std::endl;
       }
 
-#if 0
+//#if 0
       ossimFilename imagePath = file.path();
       if (imagePath.empty())
          imagePath = ossimEnvironmentUtility::instance()->getCurrentWorkingDir();
@@ -2435,7 +2435,7 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
                << std::endl;
          }
       }
-#endif	  
+//#endif
    }
 
    return res;
