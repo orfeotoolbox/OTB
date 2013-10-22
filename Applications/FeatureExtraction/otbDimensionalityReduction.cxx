@@ -180,21 +180,21 @@ private:
 
   void DoUpdateParameters()
   {
-		if (HasValue("in"))
-		{
-			FloatVectorImageType::Pointer inImage = this->GetParameterImage<FloatVectorImageType> ("in");
-			inImage->UpdateOutputInformation();
+              if (HasValue("in"))
+              {
+                     FloatVectorImageType::Pointer inImage = this->GetParameterImage<FloatVectorImageType> ("in");
+                     inImage->UpdateOutputInformation();
 
-			// Update the values of the channels to be selected
-			unsigned int	nbComponents = inImage->GetNumberOfComponentsPerPixel();
-			unsigned int nbComp = static_cast<unsigned int> (GetParameterInt("nbcomp"));
-			if (nbComp > nbComponents)
-			{
-				SetParameterInt("nbcomp", nbComponents);
-				otbAppLogINFO( << "number of selected components can't exceed image dimension : "<<nbComponents );
-			}
+                     // Update the values of the channels to be selected
+                     unsigned int       nbComponents = inImage->GetNumberOfComponentsPerPixel();
+                     unsigned int nbComp = static_cast<unsigned int> (GetParameterInt("nbcomp"));
+                     if (nbComp > nbComponents)
+                     {
+                            SetParameterInt("nbcomp", nbComponents);
+                            otbAppLogINFO( << "number of selected components can't exceed image dimension : "<<nbComponents );
+                     }
 
-		}
+              }
   }
 
   void DoExecute()
