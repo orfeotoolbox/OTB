@@ -93,7 +93,6 @@ private:
     // TODO: Beware of file extensions with more than 3 chars
     std::string outfname = GetParameterString("out");
     std::string tilesname = outfname.substr(0,outfname.size() - itksys::SystemTools::GetFilenameExtension(outfname.c_str()).size());
-    
     std::stringstream tileOut;
     tileOut<<tilesname<<"_"<<row<<"_"<<column<<"_"<<label<<".tif";
     
@@ -110,7 +109,7 @@ private:
       }
     joins.push_back(tileOut.str());
     
-    std::string currentFile =itksys::SystemTools::JoinPath(joins);
+    std::string currentFile = itksys::SystemTools::JoinPath(joins);
 
     return currentFile;
   }
@@ -424,8 +423,8 @@ private:
         if(row>0)
           {
           std::string tileUp = CreateFileName(row-1,column,"SEG");
-         LabelImageReaderType::Pointer tileUpReader = LabelImageReaderType::New();
-         tileUpReader->SetFileName(tileUp);
+          LabelImageReaderType::Pointer tileUpReader = LabelImageReaderType::New();
+          tileUpReader->SetFileName(tileUp);
           tileUpReader->Update();
 
           LabelImageType::IndexType pixelIndexIn;
@@ -464,8 +463,8 @@ private:
          if(column>0)
           {
           std::string tileLeft = CreateFileName(row,column-1,"SEG");
-         LabelImageReaderType::Pointer tileLeftReader = LabelImageReaderType::New();
-         tileLeftReader->SetFileName(tileLeft);
+          LabelImageReaderType::Pointer tileLeftReader = LabelImageReaderType::New();
+          tileLeftReader->SetFileName(tileLeft);
           tileLeftReader->Update();
 
           LabelImageType::IndexType pixelIndexIn;
@@ -522,9 +521,9 @@ private:
       {
       for(unsigned int row = 0; row < nbTilesY; ++row)
         {
-       unsigned long startX = column*sizeTilesX;
+        unsigned long startX = column*sizeTilesX;
         unsigned long startY = row*sizeTilesY;
-       unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
+        unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
         unsigned long sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
 
         std::string tileIn = CreateFileName(row,column,"SEG");
@@ -534,20 +533,20 @@ private:
 
         // Remove extra margin now that lut is built
         ExtractROIFilterType::Pointer labelImage = ExtractROIFilterType::New();
-       labelImage->SetInput(readerIn->GetOutput());
-       labelImage->SetStartX(0);
-       labelImage->SetStartY(0);
-       labelImage->SetSizeX(sizeX);
-       labelImage->SetSizeY(sizeY);
+        labelImage->SetInput(readerIn->GetOutput());
+        labelImage->SetStartX(0);
+        labelImage->SetStartY(0);
+        labelImage->SetSizeX(sizeX);
+        labelImage->SetSizeY(sizeY);
         
         // Relabel tile according to look-up table
         ChangeLabelImageFilterType::Pointer changeLabel = ChangeLabelImageFilterType::New();
-       changeLabel->SetInput(labelImage->GetOutput());
+        changeLabel->SetInput(labelImage->GetOutput());
        
         // Fill LUT
         for(LabelImagePixelType label = 1; label<regionCount+1; ++label)
           {
-         if(label!=LUT[label])
+          if(label!=LUT[label])
             {
             changeLabel->SetChange(label,LUT[label]);
             }
