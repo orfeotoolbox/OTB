@@ -89,10 +89,10 @@ private:
   bool m_TmpDirCleanup;
 
   std::string CreateFileName(unsigned int row, unsigned int column, std::string label)
-  {;
-    // TODO: Beware of file extensions with more than 3 chars
+  {
     std::string outfname = GetParameterString("out");
-    std::string tilesname = outfname.substr(0,outfname.size() - itksys::SystemTools::GetFilenameExtension(outfname.c_str()).size());
+    std::string tilesname = itksys::SystemTools::GetFilenameWithoutExtension(outfname.c_str());
+
     std::stringstream tileOut;
     tileOut<<tilesname<<"_"<<row<<"_"<<column<<"_"<<label<<".tif";
     
