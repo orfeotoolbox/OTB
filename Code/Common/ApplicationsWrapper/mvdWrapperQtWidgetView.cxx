@@ -474,12 +474,14 @@ QtWidgetView
 {
   qWarning() << what;
 
+#if defined( _DEBUG )
   QMessageBox::warning(
     this,
     PROJECT_NAME,
     what,
     QMessageBox::Ok
   );
+#endif
 }
 
 /*******************************************************************************/
@@ -495,7 +497,7 @@ QtWidgetView
       this,
       PROJECT_NAME,
       tr( "'%1' has failed with return status %2.\n"
-	  "Please refer to '%1' documentation."
+	  "Please refer to '%1' documentation and check log tab."
       )
       .arg( otbApp->GetName() )
       .arg( status ),
@@ -507,35 +509,16 @@ QtWidgetView
     return;
     }
 
-#if 1
   QMessageBox::information(
     this,
     PROJECT_NAME,
     tr( "'%1' has succeeded with return status %2.\n"
-	"Result(s) will be imported as dataset(s).")
+	"Result(s) will be imported as dataset(s).\n"
+	"Please check '%1' log tab." )
     .arg( otbApp->GetName() )
     .arg( status ),
     QMessageBox::Ok
   );
-
-#else
-  QMessageBox::StandardButton button =
-    QMessageBox::information(
-      this,
-      PROJECT_NAME,
-      tr( "'%1' has succeeded with return status %2.\n"
-	  "Would you like to import results?")
-      .arg( otbApp->GetName() )
-      .arg( status ),
-      QMessageBox::Yes | QMessageBox::No,
-      QMessageBox::Yes
-    );
-
-  if( button==QMessageBox::No )
-    {
-    return;
-    }
-#endif
 
   CountType count = 0;
 
