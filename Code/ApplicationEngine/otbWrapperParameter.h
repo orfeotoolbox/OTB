@@ -20,7 +20,6 @@
 
 #include "otbMacro.h"
 #include "itkObject.h"
-#include "boost/any.hpp"
 #include "itkObjectFactory.h"
 
 #include "otbWrapperTypes.h"
