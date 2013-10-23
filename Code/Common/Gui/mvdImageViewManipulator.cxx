@@ -605,12 +605,20 @@ ImageViewManipulator
   ImageRegionType& currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // center the region on the position under the cursor  
-  typedef unsigned int uint;
 
-  assert( ( Xpc - GetOrigin()[ 0 ] ) / m_NativeSpacing[ 0 ] >= 0.0 );
-  assert( ( Ypc - GetOrigin()[ 1 ] ) / m_NativeSpacing[ 1 ] >= 0.0 );
+  /*
+  assert( ( Xpc - GetOrigin()[ 0 ] ) / m_NativeSpacing[ 0 ]
+	  - currentRegion.GetSize()[ 0 ] / 2
+	  >= 0.0 );
+
+  assert( ( Ypc - GetOrigin()[ 1 ] ) / m_NativeSpacing[ 1 ]
+	  - currentRegion.GetSize()[ 1 ] / 2
+	  >= 0.0 );
+  */
 
   IndexType origin;
+
+  typedef unsigned int uint;
 
   origin[ 0 ] =
     static_cast< uint >( ( Xpc - GetOrigin()[ 0 ] ) / m_NativeSpacing[ 0 ] )
