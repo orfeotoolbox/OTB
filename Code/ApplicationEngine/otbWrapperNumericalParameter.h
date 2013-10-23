@@ -20,6 +20,7 @@
 
 #include "otbWrapperParameter.h"
 #include "itkNumericTraits.h"
+#include <boost/any.hpp>
 
 namespace otb
 {

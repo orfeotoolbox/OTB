@@ -93,7 +93,15 @@ public:
   itkSetMacro(Active, bool);
 
   /** Get the parameter Active flag */
-  itkGetConstMacro(Active, bool);
+  bool GetActive(bool recurseParents = false) const
+  {
+    bool result = m_Active;
+    if (recurseParents && !IsRoot())
+      {
+      result = result && GetRoot()->GetActive(recurseParents);
+      }
+    return result;
+  }
 
   /** Set the parameter mandatory flag */
   itkSetMacro(Mandatory, bool);
@@ -164,13 +172,13 @@ public:
     m_Root = root.GetPointer();
   }
 
-  virtual const Parameter::Pointer GetRoot()
+  virtual const Parameter::Pointer GetRoot() const
   {
     return m_Root.GetPointer();
   }
 
   /** Is the paramter a root or a child of another param */
-  virtual bool IsRoot()
+  virtual bool IsRoot() const
   {
     return (this == m_Root.GetPointer());
   }
