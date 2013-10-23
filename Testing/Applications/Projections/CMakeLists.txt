@@ -109,11 +109,22 @@ OTB_TEST_APPLICATION(NAME apTvPrConvertSensorToGeoPoint
 OTB_TEST_APPLICATION(NAME apTvPrBundleToPerfectSensor
                      APP BundleToPerfectSensor
                      OPTIONS -inp  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-                             -inxs ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvPrBundleToPerfectSensor.tif
+                             -inxs ${INPUTDATA}/QB_Toulouse_Ortho_XS_ROI_170x230.tif
+                             -elev.dem ${INPUTDATA}/DEM/srtm_directory
+                             -out ${TEMP}/apTvPrBundleToPerfectSensor.tif int16
                      VALID  --compare-image ${EPSILON_7}
                         ${BASELINE}/apTvPrBundleToPerfectSensor.tif
                         ${TEMP}/apTvPrBundleToPerfectSensor.tif)
+                        
+OTB_TEST_APPLICATION(NAME apTvPrSuperimpose
+                     APP Superimpose
+                     OPTIONS -inr  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -inm ${INPUTDATA}/QB_Toulouse_Ortho_XS_ROI_170x230.tif
+                             -elev.dem ${INPUTDATA}/DEM/srtm_directory
+                             -out ${TEMP}/apTvPrSuperimpose.tif int16
+                     VALID  --compare-image ${EPSILON_7}
+                        ${BASELINE}/apTvPrSuperimpose.tif
+                        ${TEMP}/apTvPrSuperimpose.tif)
 
 
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToImage
