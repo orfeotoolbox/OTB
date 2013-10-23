@@ -278,22 +278,22 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
         ImagePixelType outPixType = GetPixelTypeFromString(pixTypeAsString);
         paramDown->SetPixelType(outPixType);
         }
-      else if (dynamic_cast<ComplexOutputImageParameter*>(param))
+      else if (type == ParameterType_ComplexOutputImage)
         {
         ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
         paramDown->SetFileName(value);
         }
-      else if (dynamic_cast<DirectoryParameter*>(param))
+      else if (type == ParameterType_Directory)
         {
         DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
         paramDown->SetValue(value);
         }
-      else if (dynamic_cast<InputFilenameParameter*>(param))
+      else if (type == ParameterType_InputFilename)
         {
         InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
         paramDown->SetValue(value);
         }
-      else if (dynamic_cast<InputImageParameter*>(param))
+      else if (type == ParameterType_InputImage)
         {
         if(itksys::SystemTools::FileExists(value.c_str()))
           {
@@ -309,7 +309,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
           otbMsgDevMacro( << "InputImageFile saved in InputXML does not exists" );
           }
         }
-      else if (dynamic_cast<ComplexInputImageParameter*>(param))
+      else if (type == ParameterType_ComplexInputImage)
         {
         if(itksys::SystemTools::FileExists(value.c_str()))
           {
@@ -389,7 +389,6 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     //choice also comes as setint and setstring why??
     }
   ret = 0; //resetting return to zero, we dont use it anyway for now.
-  return ret;
 }
 
 
