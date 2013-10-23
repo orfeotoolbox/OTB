@@ -212,7 +212,7 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          else if(type == ParameterType_Float)
            {
            std::ostringstream oss;
-           oss << std::setprecision(10);
+           oss << std::setprecision(std::numeric_limits<float>::digits10+1);
            oss << app->GetParameterFloat( key );
            value = oss.str();
            }
