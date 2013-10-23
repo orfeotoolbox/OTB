@@ -150,7 +150,27 @@ private:
     ImageType::Pointer imageIn = GetParameterImage("in");
 
     std::string outfname = GetParameterString("out");
-    std::string vrtfname = outfname.substr(0,outfname.size() - itksys::SystemTools::GetFilenameExtension(outfname.c_str()).size()).append(".vrt");
+    
+    std::stringstream vrtfOut;
+    vrtfOut<<itksys::SystemTools::GetFilenameWithoutExtension(outfname.c_str())<<".vrt";
+    
+    std::vector<std::string> joins;
+    if(IsParameterEnabled("tmpdir"))
+      {
+      std::string tmpdir = GetParameterString("tmpdir");
+      
+      if(tmpdir.size() > 1 && tmpdir[tmpdir.size()-1] != '/')
+        {
+        tmpdir.append("/");
+        }
+      joins.push_back(tmpdir);
+      }
+    joins.push_back(vrtfOut.str());
+    
+    std::string vrtfname = itksys::SystemTools::JoinPath(joins);
+
+    
+    //std::string vrtfname = outfname.substr(0,outfname.size() - itksys::SystemTools::GetFilenameExtension(outfname.c_str()).size()).append(".vrt");
 
     otbAppLogINFO(<<"Creating temporary vrt file: "<<vrtfname);
 
