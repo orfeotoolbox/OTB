@@ -346,7 +346,7 @@ AbstractViewManipulator
   // step #2: viewport coordinates -> index
   pt[0] +=  (double)m_NavigationContext.m_ViewportImageRegion.GetIndex()[0];
   pt[1] +=  (double)m_NavigationContext.m_ViewportImageRegion.GetIndex()[1];
-  
+
   //
   // step #3: index -> physical point
   pt[0] = pt[0] * GetNativeSpacing()[0]  + GetOrigin()[0];
@@ -381,7 +381,7 @@ AbstractViewManipulator
   IndexType        origin = currentRegion.GetIndex();
   double centerX = (double)(origin[0]) + (double)(currentRegion.GetSize()[0])/2.;
   double centerY = (double)(origin[1]) + (double)(currentRegion.GetSize()[1])/2.;
-  
+
   // index -> physical point
   PointType  physicalCenter;
   physicalCenter[0] = centerX * GetNativeSpacing()[0] + GetOrigin()[0];

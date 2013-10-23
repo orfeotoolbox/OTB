@@ -597,28 +597,41 @@ ImageViewManipulator
 }
 
 /*****************************************************************************/
-void 
+void
 ImageViewManipulator
 ::OnViewportRegionChanged(double Xpc, double Ypc)
 {
   // Update the navigation context
-  ImageRegionType & currentRegion = m_NavigationContext.m_ViewportImageRegion;
+  ImageRegionType& currentRegion = m_NavigationContext.m_ViewportImageRegion;
 
   // center the region on the position under the cursor  
-  IndexType   origin;
-  origin[0] = static_cast<unsigned int>( (Xpc - GetOrigin()[0] ) / vcl_abs(m_NativeSpacing[0]) ) 
-    - currentRegion.GetSize()[0] / 2 ;
-  origin[1] = static_cast<unsigned int>( (Ypc - GetOrigin()[1] ) / vcl_abs(m_NativeSpacing[1]) ) 
-    - currentRegion.GetSize()[1] / 2 ;
-  currentRegion.SetIndex(origin);
-  
+  typedef unsigned int uint;
+
+  assert( ( Xpc - GetOrigin()[ 0 ] ) / m_NativeSpacing[ 0 ] >= 0.0 );
+  assert( ( Ypc - GetOrigin()[ 1 ] ) / m_NativeSpacing[ 1 ] >= 0.0 );
+
+  IndexType origin;
+
+  origin[ 0 ] =
+    static_cast< uint >( ( Xpc - GetOrigin()[ 0 ] ) / m_NativeSpacing[ 0 ] )
+    - currentRegion.GetSize()[ 0 ] / 2 ;
+
+  origin[ 1 ] =
+    static_cast< uint >( ( Ypc - GetOrigin()[ 1 ] ) / m_NativeSpacing[ 1 ] )
+    - currentRegion.GetSize()[ 1 ] / 2 ;
+
+  currentRegion.SetIndex( origin );
+
   // Constraint this region to the LargestPossibleRegion
-  this->ConstrainRegion(currentRegion, m_NavigationContext.m_ModelImageRegion);
+  ConstrainRegion( currentRegion, m_NavigationContext.m_ModelImageRegion );
 
   // tell the quicklook renderer to update the red square rendering
-  this->PropagateViewportRegionChanged(currentRegion);  
+  PropagateViewportRegionChanged( currentRegion );
   
   // force repaintGL
+  assert( parent()!=NULL );
+  assert( qobject_cast< QWidget* >( parent() )==parent() );
+
   qobject_cast< QWidget* >( parent() )->update();
 }
 

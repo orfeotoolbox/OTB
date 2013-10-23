@@ -555,7 +555,7 @@ QtWidgetView
     // get a valid outputParameter
     if( otbApp->GetParameterType( key )
 	==otb::Wrapper::ParameterType_OutputImage && 
-	otbApp->IsParameterEnabled (key ) &&
+	otbApp->IsParameterEnabled( key ) &&
 	otbApp->HasValue( key ) )
       {
       // get the parameter
