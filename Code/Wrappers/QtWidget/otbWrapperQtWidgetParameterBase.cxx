@@ -65,7 +65,7 @@ void QtWidgetParameterBase::UpdateGUI()
 
 void QtWidgetParameterBase::ParameterChanged(const QString& key)
 {
-
+  m_Param->SetUserValue(true);
 }
 
 QtWidgetModel* QtWidgetParameterBase::GetModel()

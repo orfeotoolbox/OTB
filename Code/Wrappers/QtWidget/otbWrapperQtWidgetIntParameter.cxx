@@ -86,7 +86,13 @@ void QtWidgetIntParameter::DoUpdateGUI()
 void QtWidgetIntParameter::SetValue(int value)
 {
   m_IntParam->SetValue(value);
-  m_IntParam->SetUserValue(true);
+
+  /** moved to ParameterChanged slot in QtWidgetParameterBase:: **/
+  /**m_IntParam->SetUserValue(true); **/
+
+  QString key( m_IntParam->GetKey() );
+  emit ParameterChanged(key);
+
   m_IntParam->SetAutomaticValue(false);
 }
 

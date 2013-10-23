@@ -36,9 +36,12 @@ void QtWidgetStringParameter::DoUpdateGUI()
 {
   m_Input->setToolTip(m_StringParam->GetDescription());
 
-  // Update the lineEdit
+  // Update the lineEdit only if there is a change and thats not empty or whitespaces
   QString text( m_StringParam->GetValue().c_str() );
-  m_Input->setText(text);
+  if (!text.trimmed().isEmpty() && text != m_Input->text())
+    {
+    m_Input->setText(text);
+    }
 }
 
 void QtWidgetStringParameter::DoCreateWidget()
@@ -65,10 +68,17 @@ void QtWidgetStringParameter::DoCreateWidget()
 
 void QtWidgetStringParameter::SetValue(const QString& value)
 {
+
   m_StringParam->SetValue(value.toAscii().constData());
-  m_StringParam->SetUserValue(true);
-  QString key( m_StringParam->GetKey() );
-  emit ParameterChanged(key);
+
+  if (m_StringParam->GetValue() != value.toAscii().constData())
+    {
+    QString key( m_StringParam->GetKey() );
+    emit ParameterChanged(key);
+    }
+  /** moved to ParameterChanged slot in QtWidgetParameterBase:: **/
+  //m_StringParam->SetUserValue(true);
+
 }
 
 }

@@ -88,7 +88,12 @@ void QtWidgetFloatParameter::DoCreateWidget()
 void QtWidgetFloatParameter::SetValue(double value)
 {
   m_FloatParam->SetValue( static_cast<float>(value) );
-  m_FloatParam->SetUserValue(true);
+  /** moved to ParameterChanged slot in QtWidgetParameterBase:: **/
+  /** m_FloatParam->SetUserValue(true); **/
+
+  QString key( m_FloatParam->GetKey() );
+  emit ParameterChanged(key);
+
   m_FloatParam->SetAutomaticValue(false);
 }
 

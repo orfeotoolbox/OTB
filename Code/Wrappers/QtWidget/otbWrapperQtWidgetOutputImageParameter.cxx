@@ -39,6 +39,7 @@ void QtWidgetOutputImageParameter::DoUpdateGUI()
   if (m_Input->text() != m_OutputImageParam->GetFileName())
     {
     m_Input->setText(m_OutputImageParam->GetFileName());
+    m_ComboBox->setCurrentIndex(m_OutputImageParam->GetPixelType());
     }
 }
 

@@ -97,6 +97,9 @@ void QtWidgetChoiceParameter::DoCreateWidget()
 void QtWidgetChoiceParameter::SetValue(int value)
 {
   m_ChoiceParam->SetValue( value );
+
+  QString key( m_ChoiceParam->GetKey() );
+  emit ParameterChanged(key);
 }
 
 }
