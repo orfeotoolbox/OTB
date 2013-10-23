@@ -185,7 +185,7 @@ private:
       for(unsigned int row = 0; row < nbTilesY; ++row)
         {
         ofs<<"\t\t<SimpleSource>"<<std::endl;
-        ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<<CreateFileName(row,column,"FINAL")<<"</SourceFilename>"<<std::endl;
+        ofs<<"\t\t\t<SourceFilename relativeToVRT=\"1\">"<< itksys::SystemTools::GetFilenameName(CreateFileName(row,column,"FINAL")) <<"</SourceFilename>"<<std::endl;
         ofs<<"\t\t\t<SourceBand>1</SourceBand>"<<std::endl;
         ofs<<"\t\t\t<SrcRect xOff=\""<<0<<"\" yOff=\""<<0<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
         ofs<<"\t\t\t<DstRect xOff=\""<<column*tileSizeX<<"\" yOff=\""<<row*tileSizeY<<"\" xSize=\""<<tileSizeX<<"\" ySize=\""<<tileSizeY<<"\"/>"<<std::endl;
