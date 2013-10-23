@@ -195,6 +195,35 @@ private:
                      }
 
               }
+              if (GetParameterInt("method")==2) //maf
+              {
+            	  if (this->GetParameterString("outinv").size()!= 0)
+            	  {
+            		  otbAppLogWARNING(<<"This application only provides the forward transform for the MAF method.");
+            		  this->SetParameterString("outinv", "");
+            	  }
+            	  this->DisableParameter("outinv");
+
+            	  if (this->GetParameterString("outmatrix").size()!= 0)
+            	  {
+            		  otbAppLogWARNING(<<"No transformation matrix available for MAF method.");
+            		  this->SetParameterString("outmatrix", "");
+            	  }
+            	  this->DisableParameter("outmatrix");
+
+            	  FloatVectorImageType::Pointer inImage = this->GetParameterImage<FloatVectorImageType> ("in");
+            	  inImage->UpdateOutputInformation();
+
+            	  // Update the values of the channels to be selected
+            	  unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
+            	  unsigned int nbComp = static_cast<unsigned int> (GetParameterInt("nbcomp"));
+            	  if ((nbComp != 0) && (nbComp != nbComponents))
+            	  {
+            		  SetParameterInt("nbcomp", nbComponents);
+            		  otbAppLogINFO( << "all components are kept when using MAF filter method.");
+            	  }
+
+		}
   }
 
   void DoExecute()
