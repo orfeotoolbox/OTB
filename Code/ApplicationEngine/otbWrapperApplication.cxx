@@ -322,9 +322,9 @@ void Application::DisableParameter(std::string paramKey)
 }
 
 /* Return the enable state of an optional parameter  */
-bool Application::IsParameterEnabled(std::string paramKey) const
+bool Application::IsParameterEnabled(std::string paramKey, bool recurseParents) const
 {
-  return GetParameterByKey(paramKey)->GetActive();
+  return GetParameterByKey(paramKey)->GetActive(recurseParents);
 }
 
 /* Return true if the specified parameter is mandatory */

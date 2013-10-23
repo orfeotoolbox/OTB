@@ -148,7 +148,7 @@ public:
   void DisableParameter(std::string paramKey);
 
   /* Return the enable state of an optional parameter  */
-  bool IsParameterEnabled(std::string paramKey) const;
+  bool IsParameterEnabled(std::string paramKey, bool recurseParents = false) const;
 
   /* Return true if the specified parameter is mandatory */
   bool IsMandatory(std::string paramKey) const;
