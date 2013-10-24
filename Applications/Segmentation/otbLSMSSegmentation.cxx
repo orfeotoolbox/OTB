@@ -176,11 +176,6 @@ private:
     joins.push_back(vrtfOut.str());
     
     std::string vrtfname = itksys::SystemTools::JoinPath(joins);
-std::cout << "vrt : " << vrtfname << std::endl;
-
-    
-    //std::string vrtfname = outfname.substr(0,outfname.size() - itksys::SystemTools::GetFilenameExtension(outfname.c_str()).size()).append(".vrt");
-
     otbAppLogINFO(<<"Creating temporary vrt file: "<<vrtfname);
 
     std::ofstream ofs(vrtfname.c_str());
