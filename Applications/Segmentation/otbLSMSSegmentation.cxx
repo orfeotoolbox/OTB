@@ -136,11 +136,19 @@ private:
 
       if(itksys::SystemTools::FileExists(geomfile.c_str()))
         {
-        itksys::SystemTools::RemoveFile(geomfile.c_str());
+        bool res = itksys::SystemTools::RemoveFile(geomfile.c_str());
+        if (!res)
+          {
+          otbAppLogINFO(<<"Unable to remove file  "<<geomfile);
+          }
         }
       if(itksys::SystemTools::FileExists(tile.c_str()))
         {
-        itksys::SystemTools::RemoveFile(tile.c_str());
+        bool res = itksys::SystemTools::RemoveFile(tile.c_str());
+        if (!res)
+          {
+          otbAppLogINFO(<<"Unable to remove file  "<<tile);
+          }
         }
       }
   }
@@ -168,6 +176,7 @@ private:
     joins.push_back(vrtfOut.str());
     
     std::string vrtfname = itksys::SystemTools::JoinPath(joins);
+std::cout << "vrt : " << vrtfname << std::endl;
 
     
     //std::string vrtfname = outfname.substr(0,outfname.size() - itksys::SystemTools::GetFilenameExtension(outfname.c_str()).size()).append(".vrt");
@@ -587,6 +596,7 @@ private:
         WriteTile(changeLabel->GetOutput(),row,column,"RELAB");
 
         // Remove previous tile (not needed anymore)
+        readerIn = 0; // release the input file
         RemoveFile(tileIn);
         }
       }
@@ -643,6 +653,7 @@ private:
           m_FilesToRemoveAfterExecute.push_back(tmpfile);
 
           // Clean previous tiles (not needed anymore)
+          readerIn = 0; // release the input file
           RemoveFile(tileIn);
           }
         }
@@ -673,6 +684,9 @@ private:
 
   void AfterExecuteAndWriteOutputs()
   {
+    // Release input files
+    m_FinalReader = 0;
+    
     if(IsParameterEnabled("cleanup"))
       {
       otbAppLogINFO(<<"Final clean-up ...");
