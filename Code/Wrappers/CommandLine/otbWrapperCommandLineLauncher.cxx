@@ -542,7 +542,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     //skip if mandatory parameters are missing because we have it already in XML
     if(!paramInXMLExists)
       {
-      if( param->GetMandatory() == true && type != ParameterType_Group)
+      if( param->GetMandatory() == true && param->GetRole() != Role_Output && type != ParameterType_Group)
         {
         // check if the parameter is linked to a root parameter with a chain of active parameters
         if( param->IsRoot() || param->GetRoot()->IsRoot())
