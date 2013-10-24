@@ -40,10 +40,10 @@
 #include "otbWrapperApplicationHtmlDocGenerator.h"
 
 #include "otbWrapperTypes.h"
+#include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperComplexOutputImageParameter.h" // TODO : handle
-                                                   // this param to
-                                                   // get the outfname
+#include "otbWrapperOutputVectorDataParameter.h"
+#include "otbWrapperComplexOutputImageParameter.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -395,39 +395,88 @@ QtWidgetView
        it!=paramKeys.end() && isSure;
        ++it )
     {
-    if( otbApp->GetParameterType( *it )==
-	otb::Wrapper::ParameterType_OutputImage &&
-        otbApp->IsParameterEnabled( *it ) &&
+    if( otbApp->IsParameterEnabled( *it, true ) &&
         otbApp->HasValue( *it ) )
       {
       otb::Wrapper::Parameter::Pointer param( otbApp->GetParameterByKey( *it ) );
+      assert( !param.IsNull() );
 
-      otb::Wrapper::OutputImageParameter::Pointer outImgParam(
-	otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
-      );
+      // qDebug()
+      // 	<< it->c_str() << ": type" << otbApp->GetParameterType( *it );
 
-      QFileInfo fileInfo( outImgParam->GetFileName() );
+      // const char* filename = NULL;
+      std::string filename;
 
-      if( fileInfo.exists() )
+      switch( otbApp->GetParameterType( *it ) )
 	{
-	QMessageBox::StandardButton questionButton =
-	  QMessageBox::question(
-	    this,
-	    tr( PROJECT_NAME ),
-	    tr( "Are you sure you want to overwrite file '%1'?" )
-	    .arg( outImgParam->GetFileName() ),
-	    QMessageBox::Yes | QMessageBox::No,
-	    QMessageBox::No
-	  );
-
-	if( questionButton==QMessageBox::Yes )
-	  {
+	case otb::Wrapper::ParameterType_OutputFilename:
 	  /*
-	  fileInfos.push_back( fileInfo );
+	  assert(
+	    otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
+	    == param
+	  );
 	  */
+	  filename =
+	    otb::DynamicCast< otb::Wrapper::OutputFilenameParameter >( param )
+	    ->GetValue();
+	  break;
+	//
+	// FILENAME.
+	//
+	// IMAGE.
+	case otb::Wrapper::ParameterType_OutputImage:
+	  filename =
+	    otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
+	    ->GetFileName();
+	  break;
+	//
+	// VECTOR-DATA.
+	case otb::Wrapper::ParameterType_OutputVectorData:
+	  filename =
+	    otb::DynamicCast< otb::Wrapper::OutputVectorDataParameter >( param )
+	    ->GetFileName();
+	  break;
+	//
+	// COMPLEX IMAGE.
+	case otb::Wrapper::ParameterType_ComplexOutputImage:
+	  filename =
+	    otb::DynamicCast< otb::Wrapper::ComplexOutputImageParameter >( param )
+	    ->GetFileName();
+	  break;
+	//
+	// NONE.
+	default:
+	  break;
+	}
+
+      if( !filename.empty() )
+	{
+	// qDebug()
+	//   << it->c_str() << ":" << QString( filename.c_str() );
+
+	QFileInfo fileInfo( filename.c_str() );
+
+	if( fileInfo.exists() )
+	  {
+	  QMessageBox::StandardButton questionButton =
+	    QMessageBox::question(
+	      this,
+	      tr( PROJECT_NAME ),
+	      tr( "Are you sure you want to overwrite file '%1'?" )
+	      .arg( filename.c_str() ),
+	      QMessageBox::Yes | QMessageBox::No,
+	      QMessageBox::No
+	    );
+
+	  if( questionButton==QMessageBox::Yes )
+	    {
+	    /*
+	      fileInfos.push_back( fileInfo );
+	    */
+	    }
+	  else
+	    isSure = false;
 	  }
-	else
-	  isSure = false;
 	}
       }
     }
@@ -538,7 +587,7 @@ QtWidgetView
     // get a valid outputParameter
     if( otbApp->GetParameterType( key )
 	==otb::Wrapper::ParameterType_OutputImage && 
-	otbApp->IsParameterEnabled( key ) &&
+	otbApp->IsParameterEnabled( key, true ) &&
 	otbApp->HasValue( key ) )
       {
       // get the parameter
