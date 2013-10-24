@@ -7,7 +7,8 @@
 OTB_TEST_APPLICATION(NAME apTuSeMeanShiftSmoothing 
                      APP  MeanShiftSmoothing
                      OPTIONS -in  ${INPUTDATA}/QB_Suburb.png
-                             -fout ${TEMP}/apTvSeMeanShiftSmoothing_FilterOutput.tif
+                             -fout ${TEMP}/apTvSeMeanShiftSmoothingFilter_SpectralOutput.tif
+                             -foutpos ${TEMP}/apTvSeMeanShiftSmoothingFilter_SpatialOutput.tif
                  			 -spatialr 4
                  			 -ranger 25
                  			 -maxiter 100
@@ -15,7 +16,7 @@ OTB_TEST_APPLICATION(NAME apTuSeMeanShiftSmoothing
                  			 -modesearch 0)
 #                     VALID   --compare-image ${EPSILON_7} 
 #                               ${BASELINE}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBSuburbNonOptim.tif
-#                    		   ${TEMP}/apTvSeMeanShiftSmoothing_FilterOutput.tif)
+#                    		   ${TEMP}/apTvSeMeanShiftSmoothingFilter_SpectralOutput.tif)
 
 #--- ConnectedComponentSegmentation ---#
 
