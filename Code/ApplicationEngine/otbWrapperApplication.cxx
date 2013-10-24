@@ -1368,7 +1368,7 @@ Application::IsApplicationReady()
        ++it)
     {
     // Check all Input Parameters with Input Role
-    if (GetParameterByKey(*it)->GetMandatory() == true)
+    if (GetParameterByKey(*it)->GetRole() == Role_Input)
       {
       // When a parameter is mandatory :
       // return false when does not have value and:
