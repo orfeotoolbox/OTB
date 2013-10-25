@@ -185,7 +185,7 @@ OutputImageParameter::SwitchRGBAImageWrite()
     m_RGBAUInt8Writer->Update();
     }
    else
-     itkExceptionMacro("Unknown PixelType for RGBA Image.");
+     itkExceptionMacro("Unknown PixelType for RGBA Image. Only uint8 is supported.");
   }
 
 template <class TInputRGBImageType>
@@ -200,7 +200,7 @@ OutputImageParameter::SwitchRGBImageWrite()
     m_RGBUInt8Writer->Update();
     }
    else
-     itkExceptionMacro("Unknown PixelType for RGB Image.");
+     itkExceptionMacro("Unknown PixelType for RGB Image. Only uint8 is supported.");
   }
 
 void
