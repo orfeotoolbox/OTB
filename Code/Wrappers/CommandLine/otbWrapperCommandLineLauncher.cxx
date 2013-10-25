@@ -98,6 +98,143 @@ bool CommandLineLauncher::Load(const std::string & exp)
   return this->Load();
 }
 
+
+const std::string CommandLineLauncher::GetChildNodeTextOf(TiXmlElement *parentElement, std::string key)
+{
+  std::string value="";
+
+  if(parentElement)
+    {
+    TiXmlElement* childElement = 0;
+    childElement = parentElement->FirstChildElement(key.c_str());
+
+    //same as childElement->GetText() does but that call is failing if there is
+    //no such node.
+    //but the below code works and is a replacement for GetText()
+    if(childElement)
+      {
+      const TiXmlNode* child = childElement->FirstChild();
+      if ( child )
+        {
+        const TiXmlText* childText = child->ToText();
+        if ( childText )
+          {
+          value = childText->Value();
+          }
+        }
+      }
+    }
+  return value;
+}
+
+std::string CommandLineLauncher::PrepareExpressionFromXML(std::string filename, std::string modulePath,
+                                                          std::string cmdExpression)
+{
+  std::string expression;
+
+  if(filename.empty())
+    {
+    itkExceptionMacro( <<"Input XML Filename is empty" );
+    }
+
+  std::string ext = filename.substr(filename.size()-4,filename.size());
+  if(ext != ".xml" )
+    {
+    itkExceptionMacro( <<  ext << " is a wrong extension: Expected .xml");
+    }
+
+  // Open the xml file
+  TiXmlDocument doc;
+
+  FILE* fp = fopen( filename.c_str (), "rb" ); //must be changed TiXmlFileOpen
+                                               //from tinyxml.cpp
+
+  if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
+    {
+    itkExceptionMacro( << "Can't open file " << filename );
+    }
+
+  TiXmlHandle handle(&doc);
+
+  TiXmlElement *n_OTB;
+  n_OTB = handle.FirstChild("OTB").Element();
+
+  if(!n_OTB)
+  {
+  itkExceptionMacro( <<  "Input XML file " << filename << " doesn't contain a valid otb application.");
+    return expression;
+  }
+
+  TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
+
+  std::string moduleName;
+  moduleName = GetChildNodeTextOf(n_AppNode, "name");
+
+  expression.append(moduleName);
+
+  if(!modulePath.empty())
+    {
+    expression.append(" ");
+    expression.append(modulePath);
+    }
+
+  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != NULL;
+       n_Parameter = n_Parameter->NextSiblingElement() )
+    {
+    std::string key="-";
+    std::string value;
+    key.append(GetChildNodeTextOf(n_Parameter, "key"));
+
+    /** check if the user has an values to be overridden from xml
+        TODO check if the extra key name is correct
+    **/
+    if (m_Parser->IsAttributExists(key, cmdExpression) == true)
+      {
+      std::vector<std::string> cmdValues;
+      cmdValues = m_Parser->GetAttribut(key, cmdExpression);
+      std::string values = "";
+      for(std::vector<std::string>::iterator vit = cmdValues.begin(); vit !=cmdValues.end(); ++vit)
+        {
+        values.append(*vit);
+        values.append(" ");
+        }
+      value = values.substr(0, values.size()-1);
+      }
+    else //take value from xml
+      {
+      TiXmlElement* n_Values = NULL;
+      n_Values = n_Parameter->FirstChildElement("values");
+      if(n_Values)
+        {
+        std::string values;
+        for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != NULL;
+            n_Value = n_Value->NextSiblingElement())
+          {
+          values.append(n_Value->GetText());
+          values.append(" ");
+          }
+        value = values.substr(0,values.size()-1);
+        }
+      else
+        {
+        value = GetChildNodeTextOf(n_Parameter, "value");
+        }
+      std::string pixtype = GetChildNodeTextOf(n_Parameter, "pixtype");
+      if(!pixtype.empty())
+        {
+        value.append(" ");
+        value.append(pixtype);
+        }
+      } //end else take value from xml
+
+      expression.append(" ");
+      expression.append(key);
+      expression.append(" ");
+      expression.append(value);
+    }
+  return expression;
+}
+
 bool CommandLineLauncher::Load()
 {
   // Add a space to clarify output logs
@@ -105,6 +242,24 @@ bool CommandLineLauncher::Load()
   if (m_Expression == "")
     {
     itkExceptionMacro("No expression specified...");
+    }
+
+  std::string tmp;
+  /*No Module given. check for -inxml and prepare the expression */
+  if (m_Parser->GetModuleName(tmp, m_Expression) != CommandLineParser::NOMODULENAME)
+    {
+    if (m_Parser->IsAttributExists("-inxml",m_Expression) == true)
+      {
+      std::vector<std::string> inXMLValue;
+      inXMLValue = m_Parser->GetAttribut("-inxml", m_Expression);
+      if (inXMLValue.size() == 0)
+        {
+        std::cerr << "ERROR: Missing parameter value for inxml" << std::endl;
+        return MISSINGPARAMETERVALUE;
+        }
+      std::string modulePath = m_Expression.substr( 0, m_Expression.find(" -inxml"));
+      m_Expression = this->PrepareExpressionFromXML(inXMLValue[0], modulePath, m_Expression);
+      }
     }
 
   if (this->CheckParametersPrefix() == false)
@@ -370,6 +525,11 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     {
     std::vector<std::string> inXMLValues;
     inXMLValues = m_Parser->GetAttribut(attrib, m_Expression);
+    if (inXMLValues.size() == 0)
+      {
+      std::cerr << "ERROR: Missing parameter value for " << inXMLKey << std::endl;
+      return MISSINGPARAMETERVALUE;
+      }
     m_Application->SetParameterString(inXMLKey, inXMLValues[0]);
     m_Application->UpdateParameters();
     }
