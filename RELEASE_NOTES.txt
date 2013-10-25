@@ -1,3 +1,31 @@
+OTB-v.3.20 - Changes since version 3.18.1 (2013/10/28)
+--------------------------------------------------------
+
+* Library
+  * Core
+    * Fix trapezoidal function in otb::FuzzyVariable
+    * PleiadesImageMetadataInterface
+      * update calibration absolute gains for Pleiades (values provided by CNES and not read from metadata anymore)
+      * add calibration data for Pleiades 1B
+    * StreamingStatisticsMapFromLabelImageFilter : change accumulator type to double instead of unsigned int
+    * DEMHandler : support GeoTIFF as elevation
+
+  * ThirdParties
+    * Synced ossim plugins with the ossim repository
+
+  * Applications
+
+    * Updated applications :
+      * ClassificationMapRegularization : handle images with label up to 65535
+      * DimensionnalityReduction : added new parameter for saving transformation matrix
+      * DownloadSRTMTiles : support projected input images
+
+    * Core framework :
+      * Fix otbgui_XXX scripts to check for existence of otbgui.sh
+      * Support saving and loading application parameters from/to XML files
+
+
+
 OTB-v.3.18.1 - Changes since version 3.18.0 (2013/07/22)
 --------------------------------------------------------
 
