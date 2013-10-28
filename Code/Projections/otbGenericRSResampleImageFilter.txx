@@ -52,6 +52,10 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_InputRpcEstimator = InputRpcModelEstimatorType::New();
   m_OutputRpcEstimator= OutputRpcModelEstimatorType::New();
   m_Transform         = GenericRSTransformType::New();
+
+  /** Set number of threads to 1 for Deformation field generator (use for faster access to
+    * OSSIM elevation source, which does not handle multithreading when accessing to DEM data) */
+  this->SetDeformationFilterNumberOfThreads(1);
 }
 
 template <class TInputImage, class TOutputImage>
