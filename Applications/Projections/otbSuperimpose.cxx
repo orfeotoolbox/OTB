@@ -141,9 +141,6 @@ private:
     // Resample filter
     m_Resampler = ResamplerType::New();
     
-    //Elevation handler is faster calling OSSIM elevation source without multithreading
-    m_Resampler->SetDeformationFilterNumberOfThreads(1);
-    
     // Get Interpolator
     switch ( GetParameterInt("interpolator") )
       {
