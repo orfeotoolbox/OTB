@@ -2,6 +2,7 @@ OTB-v.3.20 - Changes since version 3.18.1 (2013/10/28)
 --------------------------------------------------------
 
 * Library
+
   * Core
     * Fix trapezoidal function in otb::FuzzyVariable
     * PleiadesImageMetadataInterface
@@ -14,25 +15,30 @@ OTB-v.3.20 - Changes since version 3.18.1 (2013/10/28)
     * MeanShiftSmoothingImageFilter : add range bandwidth parameter to adapt spectral radius to actual pixel value
     * StreamingStatisticsVectorImageFilter : protect against corner cases when image has 0 or 1 pixels
 
-
   * ThirdParties
     * Synced ossim plugins with the ossim repository
 
-  * Applications
-    * New applications :
-      * Large scale MeanShift set of applications : LSMSSegmentation, LSMSSmallRegionMerging, LSMSVectorization
-        * See recipe in the CookBook
+* Applications
 
+  * New applications :
+    * Large scale MeanShift set of applications : LSMSSegmentation, LSMSSmallRegionMerging, LSMSVectorization
+      * See recipe in the CookBook
 
-    * Updated applications :
-      * ClassificationMapRegularization : handle images with label up to 65535
-      * DimensionnalityReduction : added new parameter for saving transformation matrix
-      * DownloadSRTMTiles : support projected input images
-      * MeanShiftSmoothing : expose range bandwidth parameter
+  * Updated applications :
+    * ClassificationMapRegularization : handle images with label up to 65535
+    * DimensionnalityReduction : added new parameter for saving transformation matrix
+    * DownloadSRTMTiles : support projected input images
+    * MeanShiftSmoothing : expose range bandwidth parameter
+    * StereoFramework : deformation field are computed in float precision instead of double
+    * TrainImageClassifier : fix ordering confusion matrix in case of arbitrary labels, like in ComputeConfusionMatrix
+    * DimensionnalityReduction : add bounds for number of components depending on input image
 
-    * Core framework :
-      * Fix otbgui_XXX scripts to check for existence of otbgui.sh
-      * Support saving and loading application parameters from/to XML files
+  * Core framework :
+    * Fix otbgui_XXX scripts to check for existence of otbgui.sh
+    * Support saving and loading application parameters from/to XML files
+    * Support extended filename for complex input images
+    * QtWidgetModel emits a signal with associated exception in case an error occurs during application execution
+
 
 
 
