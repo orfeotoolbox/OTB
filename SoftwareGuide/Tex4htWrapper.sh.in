@@ -8,7 +8,16 @@ mkdir ${HTML_OUTPUT}
 cd ${HTML_OUTPUT}
 ${TEX4HT_COMPILER} "$@" ${TEX4HT_OPTIONS}
 
+# Make an index.html symlink pointing to the root page
+${LN_COMMAND} -nsf SoftwareGuide.html index.html
+
+# Make a FAQ.html symlink pointing to the correct SoftwareGuide chapter
+${LN_COMMAND} -nsf `${GREP_COMMAND} -El "<head><title>[0-9]+ Frequently Asked Questions</title>" *` FAQ.html
+
 cd ..
 
-#insert analytics tracker
+#Insert analytics tracker
 find ${HTML_OUTPUT} -name '*.html' | xargs sed -i "s/<\/body>/ <script type=\"text\/javascript\"> var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https:\/\/ssl.\" : \"http:\/\/www.\"); document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com\/ga.js' type='text\/javascript'%3E%3C\/script%3E\")); <\/script> <script type=\"text\/javascript\"> try { var pageTracker = _gat._getTracker(\"UA-7072990-1\"); pageTracker._trackPageview(); } catch(err) {}<\/script><\/body>/g"
+
+# Make a .tar.gz of the whole directory
+${TAR_COMMAND} cvzf SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}

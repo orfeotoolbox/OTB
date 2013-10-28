@@ -38,6 +38,12 @@ FIND_PROGRAM(RM_COMMAND
 )
 MARK_AS_ADVANCED(RM_COMMAND)
 
+FIND_PROGRAM(GREP_COMMAND
+  NAMES grep
+  PATHS /usr/bin
+)
+MARK_AS_ADVANCED(GREP_COMMAND)
+
 #
 # Verify that we found all the components we need
 #
@@ -239,26 +245,6 @@ ADD_CUSTOM_TARGET(SoftwareGuide_HTML
 		  COMMENT "Building HTML documentation"
 		  )
 ADD_DEPENDENCIES(SoftwareGuide_HTML SoftwareGuide_RenamePdf)
-
-ADD_CUSTOM_TARGET(SoftwareGuide_HTML_symlinks
-		  ALL
-		  COMMAND ${RM_COMMAND} -f index.html
-		  COMMAND ${LN_COMMAND} -s SoftwareGuide.html index.html
-                  COMMAND ${RM_COMMAND} -f FAQ.html
-                  COMMAND ${LN_COMMAND} -s `grep -El "<head><title>[0-9]+ Frequently Asked Questions</title>" *` FAQ.html
-		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}/SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}
-		  COMMENT "Building HTML documentation index.html"
-		  )
-ADD_DEPENDENCIES(SoftwareGuide_HTML_symlinks SoftwareGuide_HTML)
-
-
-ADD_CUSTOM_TARGET(SoftwareGuide_HTML_targz
-		  ALL
-		  COMMAND ${TAR_COMMAND} cvzf SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz SoftwareGuide-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}
-		  WORKING_DIRECTORY ${SoftwareGuide_BINARY_DIR}
-		  COMMENT "Building Software Guide HTML documentation tar.gz"
-		  )
-ADD_DEPENDENCIES(SoftwareGuide_HTML_targz SoftwareGuide_HTML_symlinks)
 
 
 # FAQ
