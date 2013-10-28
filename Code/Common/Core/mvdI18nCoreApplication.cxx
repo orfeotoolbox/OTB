@@ -167,7 +167,7 @@ I18nCoreApplication
   // Dataset is stored into application cache-directory.
   // E.g. '$HOME/<CACHE_DIR>'
   path = I18nCoreApplication::Instance()->GetCacheDir().path();
-  
+
   // get the md5 of the filename
   QByteArray result = QCryptographicHash::hash(fileInfo.absoluteFilePath().toAscii(), 
                                                QCryptographicHash::Md5);
@@ -195,8 +195,10 @@ I18nCoreApplication
   qDebug() << "Dataset path:" << path;
   qDebug() << "Dataset name:" << name;
 
+  QString pathname( QDir( path ).filePath( name ) );
+
   // Setup QObject
-  model->setObjectName( QDir( path ).filePath( name ) );
+  model->setObjectName( pathname );
 
   try
     {

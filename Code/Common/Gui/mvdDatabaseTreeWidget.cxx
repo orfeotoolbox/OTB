@@ -204,7 +204,8 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
-DatabaseTreeWidget::OnSelectedDatasetFilenameChanged(const QString& filename)
+DatabaseTreeWidget
+::OnSelectedDatasetFilenameChanged( const QString& filename )
 {
   //
   // update the dataset image filename to be used in the dragged mime data

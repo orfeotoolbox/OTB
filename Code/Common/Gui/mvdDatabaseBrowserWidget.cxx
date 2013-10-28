@@ -243,10 +243,26 @@ DatabaseBrowserWidget
 
   assert( items.isEmpty() || items.size() == 1 );
 
+  /*
+  qDebug()
+    << ( items.isEmpty() ? "NONE" : items.first()->text( 0 ) )
+    << m_UI->databaseTreeWidget->selectionModel()->selectedIndexes().size();
+  */
+
+#if 0
+
+   m_UI->databaseTreeWidget->setCurrentItem(
+    items.isEmpty() ? NULL : items.first(),
+    0,
+    QItemSelectionModel::Clear |
+    QItemSelectionModel::Current
+  );
+#else
   if( items.isEmpty() )
     return;
 
   m_UI->databaseTreeWidget->setCurrentItem( items.first() );
+#endif
 }
 
 /*******************************************************************************/
@@ -255,30 +271,35 @@ DatabaseBrowserWidget
 void
 DatabaseBrowserWidget
 ::on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
-              QTreeWidgetItem* previous )
+					    QTreeWidgetItem* previous )
 {
-  /*
-  qDebug() <<
-    this <<
-    "::on_databaseTreeWidget_currentItemChanged(" <<
-    current << ", " << previous <<
-    ")";
-  */
+  //
+  // Current
 
-  // assert( current!=previous );
+  // TODO: Should be DatabaseModel::DatasetId but widgets should not depend on models!!!
+  QString currentId;
 
-  // if current is root and not NULL get the Id of the
-  // corresponding Dataset
-  if ( current && current->parent() )
-    {
-    emit CurrentDatasetChanged( 
-      dynamic_cast<DatasetTreeWidgetItem*>(current)->GetId() 
-      );
-    }
-  else
-    {
-    emit CurrentDatasetChanged( QString() );
-    }
+  DatasetTreeWidgetItem* currentItem = dynamic_cast< DatasetTreeWidgetItem* >( current );
+
+  if( currentItem!=NULL && currentItem->parent()!=NULL )
+    // if current is root and not NULL get the Id of the corresponding
+    // Dataset.
+    currentId = currentItem->GetId();
+
+  //
+  // Previous
+
+  // TODO: Should be DatabaseModel::DatasetId but widgets should not depend on models!!!
+  QString previousId;
+
+  DatasetTreeWidgetItem* previousItem = dynamic_cast< DatasetTreeWidgetItem* >( previous );
+
+  if( previousItem!=NULL )
+    previousId = previousItem->GetId();
+
+  //
+  // Emit event.
+  emit CurrentDatasetChanged( currentId, previousId );
 }
 
 /*******************************************************************************/

@@ -144,7 +144,12 @@ DatasetModel
   if( m_Descriptor==NULL )
     return false;
 
-  for( QDomElement imageElt( m_Descriptor->FirstImageElement() );
+  QDomElement imageElt( m_Descriptor->FirstImageElement() );
+
+  if( imageElt.isNull() )
+    return false;
+
+  for( ;
        !imageElt.isNull() && isConsistent;
        imageElt = DatasetDescriptor::NextImageSiblingElement( imageElt ) )
     {
@@ -384,6 +389,8 @@ DatasetModel
 {
   assert( context );
   assert( context->m_IsLoadSubModelsEnabled );
+
+  // throw std::runtime_error( "Debugging error!" );
 
   if( !context->m_IsLoadSubModelsEnabled )
     {
@@ -778,7 +785,7 @@ DatasetModel
   QThread* thread = new QThread;
   m_PlacenameLoader = new ImagePlacenameLoader( viModel );
   m_PlacenameLoader->moveToThread(thread);
-  
+
   // At thread startup, trigger the processing function
   QObject::connect(thread, 
                    SIGNAL(started()), 

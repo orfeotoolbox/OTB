@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>94</width>
+    <width>262</width>
     <height>116</height>
    </rect>
   </property>
@@ -38,6 +38,12 @@
    </item>
    <item row="1" column="0">
     <widget class="mvd::DatabaseTreeWidget" name="databaseTreeWidget">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
      <column>
       <property name="text">
        <string>Name</string>

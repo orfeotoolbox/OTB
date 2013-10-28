@@ -37,14 +37,12 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdDatabaseModel.h"
 //
-#include "Gui/mvdDatabaseBrowserWidget.h"
-
+#include "Core/mvdDatabaseModel.h"
 #include "Core/mvdVectorImageModel.h"
 //
+#include "Gui/mvdDatabaseBrowserWidget.h"
 #include "Gui/mvdDatabaseTreeWidget.h"
-//
 #include "Gui/mvdDatasetTreeWidgetItem.h"
 
 namespace mvd
@@ -82,10 +80,11 @@ DatabaseBrowserController
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
 
   QObject::connect(
-    widget, SIGNAL( CurrentDatasetChanged( const QString& )  ),
+    widget,
+    SIGNAL( CurrentDatasetChanged( const QString&, const QString& ) ),
     // to:
     this,
-    SLOT( OnCurrentDatasetChanged( const QString& ) )
+    SLOT( OnCurrentDatasetChanged( const QString&, const QString& ) )
   );
 
   QObject::connect(
@@ -148,11 +147,13 @@ DatabaseBrowserController
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
 
   QObject::disconnect(
-    widget, SIGNAL( CurrentDatasetChanged( const QString& )  ),
+    widget,
+    SIGNAL( CurrentDatasetChanged( const QString&, const QString& ) ),
     // from:
-    this, SLOT( OnCurrentDatasetChanged( const QString& ) )
+    this,
+    SLOT( OnCurrentDatasetChanged( const QString&, const QString& ) )
   );
-  
+
   //
   QObject::disconnect(
     this, 
@@ -185,18 +186,7 @@ void
 DatabaseBrowserController
 ::ResetWidget()
 {
-#if 0
-  //
-  // Access model.
-  DatabaseModel* model = GetModel< DatabaseModel >();
-  assert( model!=NULL );
-
-  ResetDatasetTree( model->QueryDatasetModels() );
-
-#else
   RefreshWidget();
-
-#endif
 }
 
 /*******************************************************************************/
@@ -255,6 +245,8 @@ DatabaseBrowserController
           );
       QString datasetId =  currentDatasetItem->GetId();
 
+      // qDebug() << "Checking dataset:" << currentDatasetItem->GetId();
+
       const DatasetModel* datasetModel = model->FindDatasetModel( datasetId );
       assert( datasetModel!=NULL );
 
@@ -279,7 +271,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::OnCurrentDatasetChanged( const QString& id )
+::OnCurrentDatasetChanged( const QString& id, const QString& previousId )
 {
   // qDebug() << this << "::OnCurrentDatasetChanged(" << id << ")";
 
@@ -288,17 +280,60 @@ DatabaseBrowserController
 
   DatabaseModel* model = GetModel< DatabaseModel >();
 
-  // set the newly selected dataset id
-  model->SelectDatasetModel( id );
+  try
+    {
+    // set the newly selected dataset id
+    model->SelectDatasetModel( id );
+    }
+  catch( std::exception& exc )
+    {
+    QMessageBox::warning(
+      GetWidget(),
+      PROJECT_NAME,
+      tr( "Failed to load dataset.\n\n%1" ).arg( exc.what() ),
+      QMessageBox::Ok
+    );
+
+    // assert( false && "Debug SetCurrentDataset() or remove call." );
+
+    /*
+    assert( GetWidget< DatabaseBrowserWidget >()==GetWidget() );
+    GetWidget< DatabaseBrowserWidget >()->SetCurrentDataset( previousId );
+    */
+
+    emit SelectedDatasetFilenameChanged( QString() );
+
+    return;
+    }
+  catch( ... )
+    {
+    QMessageBox::warning(
+      GetWidget(),
+      PROJECT_NAME,
+      tr( "Failed to load dataset.\n" ),
+      QMessageBox::Ok
+    );
+
+    /*
+    assert( GetWidget< DatabaseBrowserWidget >()==GetWidget() );
+    GetWidget< DatabaseBrowserWidget >()->SetCurrentDataset( previousId );
+    */
+
+    emit SelectedDatasetFilenameChanged( QString() );
+
+    return;
+    }
 
   // emit selected dataset image filename
   VectorImageModel * imageModel
-    =  qobject_cast< VectorImageModel *>(model->GetSelectedDatasetModel()->GetSelectedImageModel());
+    =  qobject_cast< VectorImageModel *>(
+      model->GetSelectedDatasetModel()->GetSelectedImageModel()
+    );
 
   //
   // this signal is used to pass the current dataset input filename.
   // it is connected to the DatabaseBrowserWidget custom QTreeWidget
-  emit SelectedDatasetFilenameChanged(imageModel->GetFilename());
+  emit SelectedDatasetFilenameChanged( imageModel->GetFilename() );
 }
 
 /*******************************************************************************/

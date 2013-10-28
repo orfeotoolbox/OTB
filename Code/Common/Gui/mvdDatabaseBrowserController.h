@@ -43,8 +43,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractModelController.h"
-#include "mvdGui.h"
+#include "Gui/mvdAbstractModelController.h"
+#include "Gui/mvdGui.h"
 
 
 /*****************************************************************************/
@@ -167,12 +167,12 @@ private:
 private slots:
 
   /**
-   * \brief Slot called when the current (selected) dataset has
-   * changed.
+   * \brief Slot called when the currently selected dataset has changed.
    *
-   * \param name The name of the newly selected dataset.
+   * \param id The ID of the newly selected dataset.
+   * \param previousId The ID of the previously selected dataset.
    */
-  void OnCurrentDatasetChanged( const QString& name );
+  void OnCurrentDatasetChanged( const QString& id, const QString& previousId );
 
   /**
    */

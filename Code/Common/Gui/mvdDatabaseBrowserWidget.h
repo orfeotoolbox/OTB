@@ -131,12 +131,13 @@ public slots:
 signals:
 
   /**
-   * \brief Slot emitted when the current (selected) dataset has
-   * changed.
+   * \brief Slot emitted when the currently selected dataset has changed.
    *
-   * \param text Name of new current (selected) dataset.
+   * \param id ID of newly selected dataset.
+   * \param previousId ID of the previously selected dataset.
    */
-  void CurrentDatasetChanged( const QString& text );
+  void CurrentDatasetChanged( const QString& id,
+			      const QString& previousId =QString() );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

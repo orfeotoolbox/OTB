@@ -163,7 +163,6 @@ QtWidgetView
   this->setLayout(finalLayout);
 }
 
-
 /*******************************************************************************/
 QWidget*
 QtWidgetView
