@@ -461,7 +461,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>BAND 0</source>
-        <translation type="unfinished">BANDE 0</translation>
+        <translation>BANDE 0</translation>
     </message>
 </context>
 <context>
@@ -599,12 +599,14 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
         <source>Failed to load dataset.
 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec lors du chargement du jeu de données
+
+%1</translation>
     </message>
     <message>
         <source>Failed to load dataset.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Échec lors du chargement du jeu de données.</translation>
     </message>
 </context>
 <context>
@@ -776,11 +778,11 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Exception caught when checking version of dataset &apos;%1&apos;: </source>
-        <translation type="unfinished"></translation>
+        <translation>Exception rattrapée lors de la vérification de la version du jeu de données &apos;%1&apos;:</translation>
     </message>
     <message>
         <source>Exception caught when checking for version of dataset &apos;%1&apos;: </source>
-        <translation type="unfinished"></translation>
+        <translation>Exception rattrapée lors de la vérification de la version du dataset &apos;%1&apos;:</translation>
     </message>
 </context>
 <context>
@@ -984,7 +986,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>White</source>
-        <translation type="unfinished">Gris</translation>
+        <translation>Blanc</translation>
     </message>
 </context>
 <context>
@@ -1103,7 +1105,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Failed to access translation-files directory &apos;%1&apos;</source>
-        <translation>Echec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
+        <translation>Échec de l&apos;accès au répertoire de fichiers de traduction : &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Failed to load &apos;%1&apos; translation file from &apos;%2&apos;.</source>
@@ -1115,11 +1117,11 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>An error occured while loading the geoid file, no geoid file will be used: </source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s&apos;est produite lors du chargement du fichier geoide, aucun fichier geoide ne sera utilisé : </translation>
     </message>
     <message>
         <source>An error occured while loading the DEM directory, no DEM will be used: </source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur s&apos;est produite lors du chargement depuis le répertoire MNT, aucun MNT ne sera utilisé : </translation>
     </message>
 </context>
 <context>
@@ -1852,11 +1854,11 @@ La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
         <source>Exception caught when validating file &apos;%1&apos;: </source>
-        <translation type="unfinished"></translation>
+        <translation>Exception rattrapée lors de la validation du fichier &apos;%1&apos; : </translation>
     </message>
     <message>
         <source>File &apos;%1&apos; cannot be read by OTB.</source>
-        <translation type="unfinished"></translation>
+        <translation>OTB ne peut pas lire le fichier &apos;%1&apos;.</translation>
     </message>
 </context>
 <context>
@@ -1897,13 +1899,16 @@ La navigation en résolution sera plus lente.</translation>
     <message>
         <source>&apos;%1&apos; has failed with return status %2.
 Please refer to &apos;%1&apos; documentation and check log tab.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;exécution de &apos;%1&apos; a échoué avec le code de retour %2..
+Veuillez, s&apos;il vous plait, vous référer à la documentation de &apos;%1&apos; et vérifier l&apos;onglet du journal.</translation>
     </message>
     <message>
         <source>&apos;%1&apos; has succeeded with return status %2.
 Result(s) will be imported as dataset(s).
 Please check &apos;%1&apos; log tab.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;exécution de &apos;%1&apos; a réussi avec le code de retour %2.
+Les résultats seront importés en tant que jeu de données.
+Veuillez, s&apos;il vous plait, vérifier l&apos;onglet du journal de &apos;%1&apos;.</translation>
     </message>
 </context>
 </TS>
