@@ -393,8 +393,8 @@ private:
 
 
     // Initialization of the Confusion Matrix for the application LOG and for measurements
-    unsigned int nbClassesRef = mapOfClassesRef.size();
-    unsigned int nbClassesProd = mapOfClassesProd.size();
+    int nbClassesRef = mapOfClassesRef.size();
+    int nbClassesProd = mapOfClassesProd.size();
 
     // Formatting m_MatrixLOG from m_Matrix in order to make m_MatrixLOG a square matrix
     // from the reference labels in mapOfClassesRef
