@@ -10,7 +10,9 @@ OTB-v.3.20 - Changes since version 3.18.1 (2013/10/28)
       * add calibration data for Pleiades 1B
     * StreamingStatisticsMapFromLabelImageFilter : change accumulator type to double instead of unsigned int
     * DEMHandler : support GeoTIFF as elevation
-    * <TODO : check> GenericRSResampleImageFilter & StreamingResampleImageFilter : add accessors for number of thread of deformation filter
+    * GenericRSResampleImageFilter & StreamingResampleImageFilter
+      * add accessors for number of thread of deformation filter
+      * set number of threads to 1 by default for the deformation field generator
     * SpotImageMetadataInterface : add relative spectral response for HRG1
     * MeanShiftSmoothingImageFilter : add range bandwidth parameter to adapt spectral radius to actual pixel value
     * StreamingStatisticsVectorImageFilter : protect against corner cases when image has 0 or 1 pixels
