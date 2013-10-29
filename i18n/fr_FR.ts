@@ -591,6 +591,17 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
         <source>Are you sure you want to delete dataset &apos;%1&apos;?</source>
         <translation>Êtes-vous certain de vouloir supprimer le jeu de données &apos;%1&apos; ?</translation>
     </message>
+    <message>
+        <source>Failed to load dataset.
+
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to load dataset.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::DatabaseBrowserWidget</name>
@@ -759,6 +770,14 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
         <source>Estimated ground spacing</source>
         <translation>Résolution au sol (estimée)</translation>
     </message>
+    <message>
+        <source>Exception caught when checking version of dataset &apos;%1&apos;: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exception caught when checking for version of dataset &apos;%1&apos;: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mvd::DatasetPropertiesController</name>
@@ -923,10 +942,6 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
         <translation>Zoom sur l&apos;intervale des intensités.</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Zoom to quantile ranges.</source>
         <translation>Zoom sur l&apos;intervale des quantiles.</translation>
     </message>
@@ -1056,11 +1071,11 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>An error occured while loading the geoid file, no geoid file will be used.</source>
-        <translation>Une erreur s&apos;est produite lors du chargement du fichier geoide, aucun fichier geoide ne sera utilisé.</translation>
+        <translation type="obsolete">Une erreur s&apos;est produite lors du chargement du fichier geoide, aucun fichier geoide ne sera utilisé.</translation>
     </message>
     <message>
         <source>An error occured while loading the DEM directory, no DEM will be used.</source>
-        <translation>Une erreur s&apos;est produite lors du chargement depuis le répertoire MNT, aucun MNT ne sera utilisé.</translation>
+        <translation type="obsolete">Une erreur s&apos;est produite lors du chargement depuis le répertoire MNT, aucun MNT ne sera utilisé.</translation>
     </message>
     <message>
         <source>Failed to locate translation files directory &apos;i18n&apos; in &apos;%1&apos;.</source>
@@ -1089,6 +1104,14 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     <message>
         <source>Successfully loaded &apos;%1&apos; translation file from &apos;%2&apos;.</source>
         <translation>Chargement réussi du fichier de traduction &apos;%1&apos; depuis &apos;%2&apos;.</translation>
+    </message>
+    <message>
+        <source>An error occured while loading the geoid file, no geoid file will be used: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error occured while loading the DEM directory, no DEM will be used: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1777,7 +1800,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Caching of overviews.</source>
-        <translation>Mise en cache de la pyramide multi-résolution.</translation>
+        <translation type="obsolete">Mise en cache de la pyramide multi-résolution.</translation>
     </message>
     <message>
         <source>Letting GDAL decimate the file on-the-fly !</source>
@@ -1801,7 +1824,7 @@ La navigation en résolution sera plus lente.</translation>
     </message>
     <message>
         <source>The file already has overviews!</source>
-        <translation>Le fichier a déjà une pyramide multi-résolution !</translation>
+        <translation type="obsolete">Le fichier a déjà une pyramide multi-résolution !</translation>
     </message>
     <message>
         <source>Cartographic</source>
@@ -1818,6 +1841,14 @@ La navigation en résolution sera plus lente.</translation>
     <message>
         <source>No geoinfo</source>
         <translation>Pas d&apos;info géo</translation>
+    </message>
+    <message>
+        <source>Exception caught when validating file &apos;%1&apos;: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File &apos;%1&apos; cannot be read by OTB.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1839,7 +1870,7 @@ La navigation en résolution sera plus lente.</translation>
     <name>mvd::Wrapper::QtWidgetFileSelection</name>
     <message>
         <source>Drag and drop a dataset here.</source>
-        <translation>Glisser-déposer un jeu de données ici.</translation>
+        <translation type="obsolete">Glisser-déposer un jeu de données ici.</translation>
     </message>
 </context>
 <context>
@@ -1854,6 +1885,17 @@ La navigation en résolution sera plus lente.</translation>
     <message>
         <source>Are you sure you want to overwrite file &apos;%1&apos;?</source>
         <translation>Êtes-vous certain de vouloir écraser le fichier &apos;%1&apos; ?</translation>
+    </message>
+    <message>
+        <source>&apos;%1&apos; has failed with return status %2.
+Please refer to &apos;%1&apos; documentation and check log tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&apos;%1&apos; has succeeded with return status %2.
+Result(s) will be imported as dataset(s).
+Please check &apos;%1&apos; log tab.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
