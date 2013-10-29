@@ -133,7 +133,7 @@ KmzProductWriter<TInputImage>
   // Check if the path is not empty
   if (m_Path.empty())
     {
-    itkExceptionMacro(<<" Output path is empty !"); 
+    itkExceptionMacro(<<" Output path is empty !");
     }
 
   // Check that the right extension is given : expected .kmz */
@@ -1437,7 +1437,7 @@ void
 KmzProductWriter<TInputImage>
 :: SetTileSize(unsigned int tileSize)
 {
-  if (tileSize >1 ) 
+  if (tileSize >1 )
     m_TileSize = tileSize;
   else
     itkExceptionMacro(<< "Tile size is incorrect, it should be superior to 1");
