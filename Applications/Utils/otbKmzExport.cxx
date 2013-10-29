@@ -64,7 +64,8 @@ private:
     SetParameterDescription("out", "Output Kmz product directory (with .kmz extension)");
     
     AddParameter(ParameterType_Int, "tilesize",  "Tile Size");
-    SetParameterDescription("tilesize", "Size of the tiles in the kmz product, in number of pixels.");
+    SetParameterDescription("tilesize", "Size of the tiles in the kmz product, in number of pixels (default = 512).");
+    SetDefaultParameterInt("tilesize", 512);
     MandatoryOff("tilesize");
     
     AddParameter(ParameterType_InputImage, "logo",  "Image logo");
@@ -105,7 +106,10 @@ private:
     // If the tile size is set
     if( this->HasValue("tilesize") )
       {
-      kmzWriter->SetTileSize( this->GetParameterInt("tilesize") );
+      if (this->GetParameterInt("tilesize") >= 0)
+        kmzWriter->SetTileSize( this->GetParameterInt("tilesize") );
+      else
+        itkExceptionMacro(<< "The tile size should be a positive value.");
       }
     
     // Add the logo if any

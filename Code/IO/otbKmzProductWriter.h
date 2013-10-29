@@ -156,7 +156,7 @@ public:
   }
 
   /** Set the size of the tiles to produce */
-  itkSetMacro(TileSize, int);
+  void SetTileSize(unsigned int tileSize);
 
 protected:
   KmzProductWriter();
@@ -279,7 +279,7 @@ private:
   typename DataNodeType::Pointer                   m_Folder;
   
   // Tile size
-  int                    m_TileSize;
+  unsigned int          m_TileSize;
   int                    m_MaxDepth;
   int                    m_CurrentDepth;
   unsigned int           m_CurIdx;
