@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdHistogramWidget.h"
-#include "Gui/ui_mvdHistogramWidget.h"
+#include "mvdHistogramWidget.h"
+#include "ui_mvdHistogramWidget.h"
 
 
 /*****************************************************************************/

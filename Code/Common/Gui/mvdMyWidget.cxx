@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdMyWidget.h"
-#include "Gui/ui_mvdMyWidget.h"
+#include "mvdMyWidget.h"
+#include "ui_mvdMyWidget.h"
 
 
 /*****************************************************************************/

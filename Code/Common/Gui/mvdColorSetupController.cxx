@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdColorSetupController.h"
+#include "mvdColorSetupController.h"
 
 
 /*****************************************************************************/

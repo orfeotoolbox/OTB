@@ -5,7 +5,7 @@
     <name>ColorSetupController</name>
     <message>
         <source>BAND 0</source>
-        <translation>BANDE 0</translation>
+        <translation type="obsolete">BANDE 0</translation>
     </message>
 </context>
 <context>
@@ -26,11 +26,11 @@
     <name>HistogramWidget</name>
     <message>
         <source>White</source>
-        <translation>Gris</translation>
+        <translation type="obsolete">Gris</translation>
     </message>
     <message>
         <source>RGB</source>
-        <translation>RVB</translation>
+        <translation type="obsolete">RVB</translation>
     </message>
 </context>
 <context>
@@ -458,6 +458,10 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
+    </message>
+    <message>
+        <source>BAND 0</source>
+        <translation type="unfinished">BANDE 0</translation>
     </message>
 </context>
 <context>
@@ -977,6 +981,10 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     <message>
         <source>Gray</source>
         <translation>Gris</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Gris</translation>
     </message>
 </context>
 <context>
