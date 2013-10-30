@@ -258,7 +258,7 @@ private:
     //Sorting by increasing label of the features
     std::ostringstream sqloss;
     sqloss.str("");
-    sqloss<<"SELECT * FROM "<<layername<<" ORDER BY label";
+    sqloss<<"SELECT * FROM \""<<layername<<"\" ORDER BY label";
     otb::ogr::Layer layerTmp=ogrDS->ExecuteSQL(sqloss.str().c_str(), NULL, NULL);
  
     bool goesOn = true;
