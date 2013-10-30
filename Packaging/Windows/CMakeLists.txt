@@ -45,10 +45,8 @@ endif(NOT GDAL_DATA)
 # Search all the applications available in the OTB install dir
 file(GLOB OTB_APPS_LIST ${OTB_DIR}/applications/otbapp_*.dll) # /lib/otb
 
-message("${OTB_DIR}/lib/otb/applications/")
-
 if(NOT OTB_APPS_LIST)
-    message(WARNING "No OTB-applications detected")
+    message(FATAL_ERROR "No OTB-applications detected")
 endif()
 
 # Install the applications 
