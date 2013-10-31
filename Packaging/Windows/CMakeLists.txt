@@ -56,7 +56,7 @@ install(FILES ${OTB_APPS_LIST}
 
 # Retrieve the name of all the applications available
 foreach(APP ${OTB_APPS_LIST})
-    string(REPLACE ${OTB_DIR}/bin/RelWithDebInfo/ "" APP_NAME ${APP})
+    string(REPLACE ${OTB_DIR}/applications/ "" APP_NAME ${APP})
     list(APPEND OTB_APPS_NAME_LIST ${APP_NAME})
 endforeach(APP)
 
@@ -80,6 +80,15 @@ install(FILES ${OSGEO4W_ROOT}/bin/msvcp60.dll
               ${OSGEO4W_ROOT}/bin/msvcp71.dll
               ${OSGEO4W_ROOT}/bin/msvcr71.dll
               ${OSGEO4W_ROOT}/bin/msvcrt.dll
+        DESTINATION bin
+        COMPONENT Runtime)
+        
+# Since an upgrade in OSGeo4W of libpq (around 2013/10)
+# libpq depends on two additional libs that cmake
+# surprisingly miss during package generation
+# Let's add them manually
+install(FILES ${OSGEO4W_ROOT}/bin/libgcc_s_dw2-1.dll
+              ${OSGEO4W_ROOT}/bin/libiconv-2.dll
         DESTINATION bin
         COMPONENT Runtime)
 
