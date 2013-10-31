@@ -40,7 +40,7 @@ int mvdMonteverdi2ApplicationTest(int argc, char* argv[])
 
   main_window.show();
 
-  QTimer::singleShot(1000, &application, SLOT(quit()));
+  QTimer::singleShot(1000, &qtApp, SLOT(quit()));
 
   return qtApp.exec();
 }
