@@ -176,7 +176,7 @@ ApplicationsBrowser
       {
       // add a default tag 'unknown'. The processing after remains
       // unchanged
-      ctags.push_back( ToStdString(tr("Unknown")) );
+      ctags.push_back( ToStdString(tr("Uncategorized")) );
       }
 
     // key will be the tag (easier for tree origanisation in )
