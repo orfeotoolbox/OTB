@@ -17,7 +17,7 @@
 
 =========================================================================*/
 #include "ApplicationsWrapper/mvdApplicationsBrowser.h"
-
+#include "Core/mvdAlgorithm.h"
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -171,8 +171,17 @@ ApplicationsBrowser
     // get tags of current app
     StringVector ctags = GetApplicationTags( *it );
 
+    // case applications has no tag associated 
+    if (ctags.size() == 0 )
+      {
+      // add a default tag 'unknown'. The processing after remains
+      // unchanged
+      ctags.push_back( ToStdString(tr("Unknown")) );
+      }
+
     // key will be the tag (easier for tree origanisation in )
     StringVector::const_iterator  itTag = ctags.begin();
+    
     while ( itTag != ctags.end() )
       {
 
@@ -196,7 +205,7 @@ ApplicationsBrowser
 
       ++itTag;
       }
-
+    
     ++it;
     }
 
