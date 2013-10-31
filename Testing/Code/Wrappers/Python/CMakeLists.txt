@@ -31,6 +31,11 @@ add_test( NAME pyTvBug440
                   ${TEMP}/pyTvBug440Output.tif
                   )
 
+add_test( NAME pyTvBug804
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Bug804.py
+                  )
+
 add_test( NAME pyTvBandMathOutXML
           COMMAND ${TEST_DRIVER} Execute
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonOutXMLTest.py
