@@ -29,7 +29,6 @@
 #include "otbWindowedSincInterpolateImageHammingFunction.h"
 #include "otbWindowedSincInterpolateImageCosineFunction.h"
 #include "itkWindowedSincInterpolateImageFunction.h"
-#include "itkDifferenceImageFilter.h"
 
 int otbProlateInterpolateImageFunction(int argc, char * argv[])
 {
