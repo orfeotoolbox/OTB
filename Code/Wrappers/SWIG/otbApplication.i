@@ -234,7 +234,7 @@ DECLARE_REF_COUNT_CLASS( Application )
           return self.GetParameterFloat(paramKey)
 
        else:
-          print "Cant get value for parameter '" + paramKey  + " ' of type '" + paramType + "' or ParameterType Emtpy"
+          print "Cant get value for parameter '" + paramKey  + "' of type '" + str(paramType) + "' or ParameterType_Emtpy"
           return None
 
       }
