@@ -277,12 +277,12 @@ KmzProductWriter<TInputImage>
   SizeType size;
   size = m_VectorImage->GetLargestPossibleRegion().GetSize();
 
-  int sizeX = size[0];
-  int sizeY = size[1];
+  unsigned int sizeX = size[0];
+  unsigned int sizeY = size[1];
 
   // Compute max depth
-  int maxDepth =
-    static_cast<int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
+  unsigned int maxDepth =
+    static_cast<unsigned int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
                               vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
   m_MaxDepth = maxDepth;
   m_CurIdx = 0;
@@ -290,9 +290,9 @@ KmzProductWriter<TInputImage>
   // Compute nbTile
   int nbTile = 0;
 
-  for (int i = 0; i <= maxDepth; ++i)
+  for (unsigned int i = 0; i <= maxDepth; ++i)
     {
-    int ratio = static_cast<int>(vcl_pow(2., (maxDepth - i)));
+    unsigned int ratio = static_cast<unsigned int>(vcl_pow(2., (maxDepth - i)));
     nbTile += (((sizeX / ratio) / m_TileSize) + 1)  * (((sizeY / ratio) / m_TileSize) + 1);
     }
 
@@ -300,7 +300,7 @@ KmzProductWriter<TInputImage>
   SizeType  extractSize;
   IndexType extractIndex;
 
-  for (int depth = 0; depth <= maxDepth; depth++)
+  for (unsigned int depth = 0; depth <= maxDepth; depth++)
     {
     // update the attribute value Current Depth
     m_CurrentDepth = depth;
@@ -370,9 +370,9 @@ KmzProductWriter<TInputImage>
     sizeY = size[1];
 
     // Tiling resample image
-    for (int tx = 0, x = 0; tx < sizeX; tx += m_TileSize, ++x)
+    for (unsigned int tx = 0, x = 0; tx < sizeX; tx += m_TileSize, ++x)
       {
-      for (int ty = 0, y = 0; ty < sizeY; ty += m_TileSize, ++y)
+      for (unsigned int ty = 0, y = 0; ty < sizeY; ty += m_TileSize, ++y)
         {
         if ((tx + m_TileSize) >= sizeX)
           {
