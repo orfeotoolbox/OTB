@@ -75,7 +75,7 @@ protected:
   {
     // Initialize the String Parameter
     m_StringParam= StringParameter::New();
-    m_Role= Role_Output;
+    
     
   }
 

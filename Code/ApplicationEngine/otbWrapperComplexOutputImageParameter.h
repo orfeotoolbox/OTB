@@ -103,7 +103,7 @@ protected:
   //FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
   std::string            m_FileName;
-  ComplexImagePixelType  m_ComplexPixelType;
+  ComplexImagePixelType         m_ComplexPixelType;
 
 
   typedef otb::ImageFileWriter<ComplexFloatImageType>  ComplexFloatWriterType;
