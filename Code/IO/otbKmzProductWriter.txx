@@ -292,7 +292,7 @@ KmzProductWriter<TInputImage>
 
   for (unsigned int i = 0; i <= maxDepth; ++i)
     {
-    unsigned int ratio = static_cast<unsigned int>(vcl_pow(2., (static_cast<int>(maxDepth) - i)));
+    unsigned int ratio = static_cast<unsigned int>(vcl_pow(2.,static_cast<int>((static_cast<int>(maxDepth) - i))));
     nbTile += (((sizeX / ratio) / m_TileSize) + 1)  * (((sizeY / ratio) / m_TileSize) + 1);
     }
 
