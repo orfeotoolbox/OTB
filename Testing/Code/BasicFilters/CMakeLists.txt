@@ -1312,6 +1312,27 @@ ADD_TEST(bfTuMeanShiftSmoothingImageFilterROIQBMul4 ${BASICFILTERS_TESTS9}
         ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_ROIQBMul4.tif
         4 50 0.1 100
         )
+        
+ #TOLERANCE SHOULD BE SET TO NOTOL       
+ ## Spatial Stability
+ ADD_TEST(bfTuMeanShiftSmoothingImageFilterSpatialStability ${BASICFILTERS_TESTS9}
+        --compare-n-images ${EPSILON_10} 2
+        ${BASELINE}/bfMeanShiftSmoothingImageFilterSpatialStability_SpatialOutput.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialStability_SpatialOutput.tif
+        ${BASELINE}/bfMeanShiftSmoothingImageFilterSpatialStability_SpectralOutput.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialStability_SpectralOutput.tif
+        otbMeanShiftSmoothingImageFilterSpatialStability
+        ${INPUTDATA}/ROI_QB_MUL_4.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialStability_SpatialOutput.tif
+        ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialStability_SpectralOutput.tif
+        4 50 0.1 40
+        100 100 512 512
+        )
+
+      
+  
+               
+        
 
 ADD_TEST(bfTuMeanShiftVectorImageFilterQBRoad ${BASICFILTERS_TESTS9}
         otbMeanShiftVectorImageFilter
@@ -3049,6 +3070,7 @@ otbMeanShiftImageFilterNew.cxx
 otbMeanShiftImageFilter.cxx
 otbMeanShiftSmoothingImageFilterNew.cxx
 otbMeanShiftSmoothingImageFilter.cxx
+otbMeanShiftSmoothingImageFilterSpatialStability.cxx
 otbMeanShiftSmoothingImageFilterThreading.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
