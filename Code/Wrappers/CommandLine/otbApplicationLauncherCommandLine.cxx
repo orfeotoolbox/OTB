@@ -25,7 +25,6 @@ std::string PrepareExpressionFromXML(std::string filename);
 
 std::string PrepareExpressionFromXML(std::string filename)
 {
-
   std::string expression;
 
   if(filename.empty())
@@ -97,7 +96,6 @@ std::string PrepareExpressionFromXML(std::string filename)
        n_Parameter = n_Parameter->NextSiblingElement() )
     {
     std::string key="-";
-
     key.append(GetChildNodeTextOf(n_Parameter, "key"));
 
     TiXmlElement* n_Values = NULL;
@@ -121,10 +119,19 @@ std::string PrepareExpressionFromXML(std::string filename)
       {
       std::string value;
       value = GetChildNodeTextOf(n_Parameter, "value");
+
       expression.append(" ");
       expression.append(key);
       expression.append(" ");
       expression.append(value);
+
+      std::string type = GetChildNodeTextOf(n_Parameter, "type");
+      if (type == "OutputImage")
+        {
+        std::string type = GetChildNodeTextOf(n_Parameter, "pixtype");
+        expression.append(" ");
+        expression.append(type);
+        }
       }
     }
   return expression;
@@ -139,31 +146,28 @@ int main(int argc, char* argv[])
     }
 
   std::string exp;
-  if( strcmp(argv[1], "-inxml") == 0 )
-  {
+  if (strcmp(argv[1], "-inxml") == 0)
+    {
     exp = PrepareExpressionFromXML(argv[2]);
-  }
-
+    }
   else
     {
-
-  // Construct the string expression
-
-  for (int i = 1; i < argc; i++)
-    {
-    if (i != argc - 1)
+    // Construct the string expression
+    for (int i = 1; i < argc; i++)
       {
-      exp.append(argv[i]);
-      exp.append(" ");
+      if (i != argc - 1)
+        {
+        exp.append(argv[i]);
+        exp.append(" ");
+        }
+      else
+        {
+        exp.append(argv[i]);
+        }
       }
-    else
-      {
-      exp.append(argv[i]);
-      }
+
     }
-
-   }
-//  std::cerr << exp << ":\n";
+  //  std::cerr << exp << ":\n";
 
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();
