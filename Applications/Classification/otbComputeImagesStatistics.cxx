@@ -107,8 +107,8 @@ private:
         }
       else if (nbBands != image->GetNumberOfComponentsPerPixel())
         {
-        itkExceptionMacro(<< "The image #" << imageId << " has " << image->GetNumberOfComponentsPerPixel()
-            << " bands, while the first one has " << nbBands );
+        itkExceptionMacro(<< "The image #" << imageId + 1 << " has " << image->GetNumberOfComponentsPerPixel()
+            << " bands, while the image #1 has " << nbBands );
         }
 
       FloatVectorImageType::SizeType size = image->GetLargestPossibleRegion().GetSize();
