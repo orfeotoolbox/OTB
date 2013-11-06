@@ -168,7 +168,7 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char * argv[])
    bool spectralUnstable = false;
 
 
-   for(unsigned int i = 0; i < spectralOutputDiff.Size();++i)
+   for(unsigned int i = 0; i < spectralOutputDiff.Size(); ++i)
      {
      if(spatialOutputDiff[i] > 0)
        {
@@ -176,7 +176,7 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char * argv[])
        }
      }
 
-   for(unsigned int i = 0; i < spectralOutputDiff.Size();++i)
+   for(unsigned int i = 0; i < spectralOutputDiff.Size(); ++i)
      {
      if(spectralOutputDiff[i] > 0)
        {
