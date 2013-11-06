@@ -35,10 +35,13 @@ QtWidgetInputImageParameter::~QtWidgetInputImageParameter()
 
 void QtWidgetInputImageParameter::DoUpdateGUI()
 {
-  //update lineedit
-  QString text( m_InputImageParam->GetFileName().c_str() );
-  if (text != m_Input->text())
-    m_Input->setText(text);
+  //update lineedit if HasUserValue flag is set(from xml)
+  if(m_InputImageParam->HasUserValue())
+    {
+    QString text( m_InputImageParam->GetFileName().c_str() );
+    if (text != m_Input->text())
+      m_Input->setText(text);
+    }
 }
 
 void QtWidgetInputImageParameter::DoCreateWidget()
