@@ -215,7 +215,7 @@ DECLARE_REF_COUNT_CLASS( Application )
   %pythoncode {
     def GetParameterValue(self, paramKey):
        paramType = self.GetParameterType(paramKey)
-       if paramType in [ParameterType_InputProcessXML, ParameterType_Choice, ParameterType_ListView,
+       if paramType in [ParameterType_InputProcessXML, ParameterType_Choice,
                         ParameterType_String, ParameterType_InputFilename,
                         ParameterType_OutputImage, ParameterType_OutputVectorData,
                         ParameterType_OutputProcessXML, ParameterType_OutputFilename,
@@ -224,7 +224,8 @@ DECLARE_REF_COUNT_CLASS( Application )
           return self.GetParameterString(paramKey)
 
        elif paramType in [ ParameterType_InputImageList, ParameterType_InputVectorDataList,
-                        ParameterType_InputFilenameList, ParameterType_StringList ]:
+                        ParameterType_InputFilenameList, ParameterType_StringList,
+                        ParameterType_ListView]:
           return self.GetParameterStringList(paramKey)
 
        elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
@@ -233,10 +234,12 @@ DECLARE_REF_COUNT_CLASS( Application )
        elif paramType in [ParameterType_Float]:
           return self.GetParameterFloat(paramKey)
 
-       else:
-          print "Cant get value for parameter '" + paramKey  + "' of type '" + str(paramType) + "' or ParameterType_Emtpy"
-          return None
+       elif paramType in [ParameterType_Empty]:
+          return self.IsParameterEnabled(paramKey)
 
+       else:
+          print "Unsupported parameter type for '" + paramKey  + "'"
+          return None
       }
 }
 #endif

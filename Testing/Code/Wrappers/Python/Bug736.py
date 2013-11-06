@@ -13,4 +13,6 @@ RadiometricIndices.SetParameterStringList("list",
         
 print RadiometricIndices.GetParameterStringList("list")
 
+print RadiometricIndices.GetParameterValue("list")
+
 RadiometricIndices.ExecuteAndWriteOutput()
