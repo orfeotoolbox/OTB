@@ -19,17 +19,18 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
 #include "otbMeanShiftSmoothingImageFilter.h"
 
 
-#include "itkSubtractImageFilter.h"
+#include "otbDifferenceImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
+
+#include <iomanip>
 
 
 int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char * argv[])
 {
-  if (argc != 12)
+  if (argc != 10)
     {
     std::cerr << "Usage: " << argv[0] <<
     " infname spatialdifffname spectraldifffname  spatialBandwidth rangeBandwidth threshold maxiterationnumber startx starty sizex sizey"
@@ -38,16 +39,14 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char * argv[])
     }
 
   const char *       infname                   = argv[1];
-  const char *       spatialdifffname              = argv[2];
-  const char *       spectraldifffname             = argv[3];
-  const double       spatialBandwidth          = atof(argv[4]);
-  const double       rangeBandwidth            = atof(argv[5]);
-  const double       threshold                 = atof(argv[6]);
-  const unsigned int maxiterationnumber        = atoi(argv[7]);
-  const unsigned int startX                    = atoi(argv[8]);
-  const unsigned int startY                    = atoi(argv[9]);
-  const unsigned int sizeX                    = atoi(argv[10]);
-  const unsigned int sizeY                    = atoi(argv[11]);
+  const double       spatialBandwidth          = atof(argv[2]);
+  const double       rangeBandwidth            = atof(argv[3]);
+  const double       threshold                 = atof(argv[4]);
+  const unsigned int maxiterationnumber        = atoi(argv[5]);
+  const unsigned int startX                    = atoi(argv[6]);
+  const unsigned int startY                    = atoi(argv[7]);
+  const unsigned int sizeX                    = atoi(argv[8]);
+  const unsigned int sizeY                    = atoi(argv[9]);
 
 
   /* maxit - threshold */
@@ -57,20 +56,16 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char * argv[])
   typedef double                                           KernelType;
   typedef otb::VectorImage<PixelType, Dimension>           ImageType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                  WriterType;
   typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> FilterType;
   typedef FilterType::OutputIterationImageType             IterationImageType;
-  typedef otb::ImageFileWriter<IterationImageType>         IterationWriterType;
   typedef FilterType::OutputSpatialImageType               SpatialImageType;
   typedef SpatialImageType::InternalPixelType                      SpatialPixelType;
-  typedef otb::ImageFileWriter<SpatialImageType>           SpatialWriterType;
   typedef FilterType::OutputLabelImageType                 LabelImageType;
-  typedef otb::ImageFileWriter<LabelImageType>             LabelWriterType;
   typedef otb::MultiChannelExtractROI<PixelType,PixelType>  ExtractROIFilterType;
   typedef otb::MultiChannelExtractROI<SpatialPixelType,SpatialPixelType>  SpatialExtractROIFilterType;
 
-  typedef itk::SubtractImageFilter<ImageType,ImageType,ImageType>  SubtractFilterType;
-  typedef itk::SubtractImageFilter<SpatialImageType,SpatialImageType,SpatialImageType>  SpatialSubtractFilterType;
+  typedef otb::DifferenceImageFilter<ImageType,ImageType>  SubtractFilterType;
+  typedef otb::DifferenceImageFilter<SpatialImageType,SpatialImageType>  SpatialSubtractFilterType;
 
   // Instantiating object
 
@@ -109,8 +104,13 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char * argv[])
   MSfilterROI->SetInput(filterROI->GetOutput());
   MSfilterROI->SetModeSearch(false);
 
-  //compare output
+  // GlobalShift ensure spatial stability
+  ImageType::IndexType globalShift;
+  globalShift[0]=startX;
+  globalShift[1]=startY;
+  MSfilterROI->SetGlobalShift(globalShift);
 
+  //compare output
   const unsigned int border=maxiterationnumber*spatialBandwidth+1;
   const unsigned int startXROI2=border;
   const unsigned int startXROI=border+startX;
@@ -136,8 +136,11 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char * argv[])
   filterROISpatial2->SetSizeY(sizeYROI);
 
   SpatialSubtractFilterType::Pointer filterSubSpatial = SpatialSubtractFilterType::New();
-  filterSubSpatial->SetInput1(filterROISpatial1->GetOutput());
-  filterSubSpatial->SetInput2(filterROISpatial2->GetOutput());
+  filterSubSpatial->SetValidInput(filterROISpatial1->GetOutput());
+  filterSubSpatial->SetTestInput(filterROISpatial2->GetOutput());
+  filterSubSpatial->Update();
+
+  SpatialImageType::PixelType spatialOutputDiff = filterSubSpatial->GetTotalDifference();
 
   ExtractROIFilterType::Pointer filterROISpectral1 = ExtractROIFilterType::New();
   filterROISpectral1->SetInput(MSfilter->GetRangeOutput());
@@ -155,21 +158,49 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char * argv[])
   filterROISpectral2->SetSizeY(sizeYROI);
 
    SubtractFilterType::Pointer filterSubSpectral = SubtractFilterType::New();
-   filterSubSpectral->SetInput1(filterROISpectral1->GetOutput());
-   filterSubSpectral->SetInput2(filterROISpectral2->GetOutput());
+   filterSubSpectral->SetValidInput(filterROISpectral1->GetOutput());
+   filterSubSpectral->SetTestInput(filterROISpectral2->GetOutput());
+   filterSubSpectral->Update();
 
-  SpatialWriterType::Pointer writerSpatial = SpatialWriterType::New();
-  WriterType::Pointer writerSpectral = WriterType::New();
+   ImageType::PixelType spectralOutputDiff = filterSubSpectral->GetTotalDifference();
 
-  writerSpatial->SetFileName(spatialdifffname);
-  writerSpectral->SetFileName(spectraldifffname);
-
-  writerSpatial->SetInput(filterSubSpatial->GetOutput());
-  writerSpectral->SetInput(filterSubSpectral->GetOutput());
+   bool spatialUnstable = false;
+   bool spectralUnstable = false;
 
 
-  writerSpatial->Update();
-  writerSpectral->Update();
+   for(unsigned int i = 0; i < spectralOutputDiff.Size();++i)
+     {
+     if(spatialOutputDiff[i] > 0)
+       {
+       spatialUnstable = true;
+       }
+     }
+
+   for(unsigned int i = 0; i < spectralOutputDiff.Size();++i)
+     {
+     if(spectralOutputDiff[i] > 0)
+       {
+       spectralUnstable = true;
+       }
+     }
+
+   std::cerr<<std::setprecision(10);
+
+   if(spatialUnstable)
+     {
+     std::cerr<<"Spatial output is unstable (total difference = "<<spatialOutputDiff<<")"<<std::endl;
+     }
+
+   if(spectralUnstable)
+     {
+     std::cerr<<"Spectral output is unstable (total difference = "<<spectralOutputDiff<<")"<<std::endl;
+     }
+
+
+   if(spatialUnstable || spectralUnstable)
+     {
+     return EXIT_FAILURE;
+     }
 
   return EXIT_SUCCESS;
 }
