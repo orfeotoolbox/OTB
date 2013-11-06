@@ -1057,25 +1057,34 @@ std::vector<std::string> Application::GetParameterStringList(std::string paramet
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*> (param);
     ret = paramDown->GetFileNameList();
     }
-  else if (dynamic_cast<InputVectorDataListParameter*> (param))
+  else
+    if (dynamic_cast<InputVectorDataListParameter*> (param))
       {
       InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*> (param);
       ret = paramDown->GetFileNameList();
       }
-  else if (dynamic_cast<InputFilenameListParameter*> (param))
-      {
-      InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*> (param);
-      ret = paramDown->GetFileNameList();
-      }
-  else if (dynamic_cast<StringListParameter*> (param))
-      {
-      StringListParameter* paramDown = dynamic_cast<StringListParameter*> (param);
-      ret = paramDown->GetValue();
-      }
-  else
-    {
-    itkExceptionMacro(<<parameter << "parameter can't be casted to StringList");
-    }
+    else
+      if (dynamic_cast<InputFilenameListParameter*> (param))
+        {
+        InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*> (param);
+        ret = paramDown->GetFileNameList();
+        }
+      else
+        if (dynamic_cast<StringListParameter*> (param))
+          {
+          StringListParameter* paramDown = dynamic_cast<StringListParameter*> (param);
+          ret = paramDown->GetValue();
+          }
+        else
+          if (dynamic_cast<ListViewParameter*> (param))
+            {
+            ListViewParameter* paramDown = dynamic_cast<ListViewParameter*> (param);
+            ret = paramDown->GetSelectedNames();
+            }
+          else
+            {
+            itkExceptionMacro(<<parameter << "parameter can't be casted to StringList");
+            }
 
   return ret;
 }

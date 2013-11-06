@@ -36,6 +36,17 @@ add_test( NAME pyTvBug804
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Bug804.py
                   )
 
+add_test( NAME pyTvBug736
+          COMMAND ${TEST_DRIVER}
+                  --compare-image ${NOTOL}
+                    ${BASELINE}/apTvRIRadiometricVegetationIndices.tif
+                    ${TEMP}/pyTvBug736Output.tif
+                  Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Bug736.py
+                  ${OTB_DATA_ROOT}/Input/veryverySmallFSATSW.tif
+                  ${TEMP}/pyTvBug736Output.tif
+                  )
+
 add_test( NAME pyTvBandMathOutXML
           COMMAND ${TEST_DRIVER} Execute
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonOutXMLTest.py
