@@ -29,7 +29,6 @@ OutputImageParameter::OutputImageParameter()
 {
   this->SetName("Output Image");
   this->SetKey("out");
-  this->SetRole(Role_Output);
 }
 
 
