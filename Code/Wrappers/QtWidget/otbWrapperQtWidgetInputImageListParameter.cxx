@@ -161,6 +161,10 @@ QtWidgetInputImageListParameter::UpdateImageList()
     }
 
   emit Change();
+
+  // notify of value change
+  QString key(m_InputImageListParam->GetKey());
+  emit ParameterChanged(key);
 }
 
 void

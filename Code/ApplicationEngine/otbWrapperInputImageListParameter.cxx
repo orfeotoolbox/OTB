@@ -149,6 +149,7 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
     m_ImageList->SetNthElement(id, reader->GetOutput());
 
     this->Modified();
+    SetActive(true);
     return true;
     }
 
