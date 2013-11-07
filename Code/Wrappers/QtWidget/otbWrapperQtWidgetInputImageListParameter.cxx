@@ -158,7 +158,7 @@ QtWidgetInputImageListParameter::UpdateImageList()
 * m_InputImageList's ImageList are of same size. So that GetImageList().Size()
 * seems to be happy.
   */
-  for(unsigned int i = m_InputImageListParam->GetImageList()->Size() ; i < m_FileSelectionList.size(); i++)
+  for(unsigned int i = m_InputImageListParam->GetImageList()->Size(); i < m_FileSelectionList.size(); i++)
     {
     m_InputImageListParam->AddNullElement();
     }
