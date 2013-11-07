@@ -103,6 +103,26 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_DEMTIF_UTM_InXML1
                         ${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_InXML1.tif)
 
 
+OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_WGS84BugMantis806
+                     APP  OrthoRectification
+                     OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                       -io.out ${TEMP}/apTvPrOrthorectifTest_WGS84.tif
+                       -elev.dem ${INPUTDATA}/DEM/srtm_directory/
+                       -outputs.ulx  1.35404
+                       -outputs.uly  43.65414
+                       -outputs.sizex 500
+                       -outputs.sizey 500
+                       -outputs.spacingx  0.00000621314
+                       -outputs.spacingy  -0.00000621314
+                       -map wgs
+                       -opt.gridspacing 4 # Spacing of the deformation field
+                       -interpolator linear
+                     VALID   --compare-image ${EPSILON_4}
+                        ${BASELINE}/owTvOrthorectifTest_WGS84.tif
+                        ${TEMP}/apTvPrOrthorectifTest_WGS84.tif
+                     )
+
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME apTvPrRigidTransformResample
