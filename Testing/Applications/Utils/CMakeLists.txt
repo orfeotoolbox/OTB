@@ -182,6 +182,7 @@ OTB_TEST_APPLICATION(NAME apTvUtKmzExport
                              -logo ${INPUTDATA}/cnes.png
                              -legend ${INPUTDATA}/otb_big.png
                              -elev.dem ${INPUTDATA}/DEM/srtm_directory)
+SET_PROPERTY(TEST apTvUtKmzExport PROPERTY RESOURCE_LOCK kmz_tmp_dir)
 
 OTB_TEST_APPLICATION(NAME apTvUtKmzExport1Band
                      APP KmzExport
@@ -192,6 +193,7 @@ OTB_TEST_APPLICATION(NAME apTvUtKmzExport1Band
                              -legend ${INPUTDATA}/otb_big.png
                              -elev.dem ${INPUTDATA}/DEM/srtm_directory
                              -tilesize 50) # needed to see the bug mantis #773
+SET_PROPERTY(TEST apTvUtKmzExport1Band PROPERTY RESOURCE_LOCK kmz_tmp_dir)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 #--- OSMDownloader ---
