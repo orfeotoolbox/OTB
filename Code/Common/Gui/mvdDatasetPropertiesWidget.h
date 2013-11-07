@@ -96,9 +96,6 @@ public:
   /** \brief Destructor. */
   virtual ~DatasetPropertiesWidget();
 
-  /** Get TreeWidget */
-  QTreeWidget * GetPropertiesTree();
-
   /** Fill the widget with the content of the map props */
   void FillDatasetProperties(const PropertiesContainer& props);
 
@@ -136,6 +133,9 @@ private:
   /**
    */
   void SetupUI();
+
+  /** Get TreeWidget */
+  QTreeWidget* GetPropertiesTree();
 
 //
 // Private attributes.

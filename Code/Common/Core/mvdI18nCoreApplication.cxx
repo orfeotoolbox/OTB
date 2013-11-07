@@ -169,8 +169,9 @@ I18nCoreApplication
   path = I18nCoreApplication::Instance()->GetCacheDir().path();
 
   // get the md5 of the filename
-  QByteArray result = QCryptographicHash::hash(fileInfo.absoluteFilePath().toAscii(), 
-                                               QCryptographicHash::Md5);
+  QByteArray result =
+    QCryptographicHash::hash( fileInfo.absoluteFilePath().toAscii(), 
+			      QCryptographicHash::Md5 );
 
   // store the md5 + the dataset extension at the end
   name = result.toHex() + I18nCoreApplication::DATASET_EXT;

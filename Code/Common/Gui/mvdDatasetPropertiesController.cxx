@@ -60,7 +60,8 @@ namespace mvd
 
 /*******************************************************************************/
 DatasetPropertiesController
-::DatasetPropertiesController( DatasetPropertiesWidget* widget, QObject* parent ) :
+::DatasetPropertiesController( DatasetPropertiesWidget* widget,
+			       QObject* parent ) :
   AbstractModelController( widget, parent )
 {
 }
@@ -96,11 +97,12 @@ DatasetPropertiesController
 {
   DatasetModel* datasetmodel = qobject_cast<DatasetModel* >(model);
 
-  QObject::disconnect(datasetmodel,
-                   SIGNAL( PlacenameLoaded() ),
-                   this,
-                   SLOT( OnPlacenameLoaded() )
-    );
+  QObject::disconnect(
+    datasetmodel,
+    SIGNAL( PlacenameLoaded() ),
+    this,
+    SLOT( OnPlacenameLoaded() )
+  );
 }
 
 /*******************************************************************************/
@@ -108,6 +110,8 @@ void
 DatasetPropertiesController
 ::ClearWidget()
 {
+  // qDebug() << this << "::ClearWidget()";
+
   // Reset widget.
   ResetDatasetTree( PropertiesContainer() );
 }
@@ -117,6 +121,8 @@ void
 DatasetPropertiesController
 ::ResetWidget()
 {
+  // qDebug() << this << "::ResetWidget()";
+
   //
   // Access model.
   DatasetModel* model = GetModel< DatasetModel >();
@@ -159,7 +165,10 @@ void
 DatasetPropertiesController
 ::OnPlacenameLoaded()
 {
-  ResetDatasetTree( PropertiesContainer());
+  // qDebug() << this << "::OnPlacenameLoaded()";
+
+  // ResetDatasetTree( PropertiesContainer());
+  ResetWidget();
 }
 
 } // end namespace 'mvd'
