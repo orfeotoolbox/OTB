@@ -38,19 +38,23 @@ void QtWidgetInputImageListParameter::DoUpdateGUI()
   if(!m_InputImageListParam)
     return;
 
-  std::vector<std::string> fileList = m_InputImageListParam->GetFileNameList();
-  for( unsigned int i = m_FileSelectionList.size(); i < fileList.size(); i++ )
+  //update fileSelectionList only if HasUserValue flag is set(from xml)
+  if(m_InputImageListParam->HasUserValue())
     {
+    std::vector<std::string> fileList = m_InputImageListParam->GetFileNameList();
+
+    for( unsigned int i = m_FileSelectionList.size(); i < fileList.size(); i++ )
+      {
       this->AddFile();
-    }
-  int i = 0;
-  std::vector<std::string>::iterator it;
-  for (it = fileList.begin(); it != fileList.end(); ++it)
-    {
+      }
+    unsigned int i = 0;
+    std::vector<std::string>::iterator it;
+    for (it = fileList.begin(); it != fileList.end(); ++it)
+      {
       m_FileSelectionList[i++]->GetInput()->setText( QString::fromStdString( (*it) ) );
+      }
     }
 }
-
 void QtWidgetInputImageListParameter::DoCreateWidget()
 {
   m_FileSelectionList.clear();
@@ -150,6 +154,15 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
 void
 QtWidgetInputImageListParameter::UpdateImageList()
 {
+  /* Adding a NullElement so to make the m_FileSelectionList and
+* m_InputImageList's ImageList are of same size. So that GetImageList().Size()
+* seems to be happy.
+  */
+  for(unsigned int i = m_InputImageListParam->GetImageList()->Size() ; i < m_FileSelectionList.size(); i++)
+    {
+    m_InputImageListParam->AddNullElement();
+    }
+
   for(unsigned int j = 0; j < m_InputImageListParam->GetImageList()->Size(); j++)
     {
     if(m_InputImageListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename()) == false)
@@ -298,7 +311,8 @@ QtWidgetInputImageListParameter::AddFile()
   fileSelection->setFixedHeight(30);
   m_FileLayout->addWidget(fileSelection);
   m_FileSelectionList.push_back(fileSelection);
-  m_InputImageListParam->AddNullElement();
+  /* No need of AddNullElement() here. Moved adding NullElement when updating the list  */
+  //m_InputImageListParam->AddNullElement();
   connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
 
   QGroupBox *mainGroup = new QGroupBox();
