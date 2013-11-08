@@ -641,13 +641,24 @@ private:
 
       // Predict size of deformation grid
       ResampleFilterType::SizeType deformationGridSize;
-      deformationGridSize[0] = GetParameterInt("outputs.sizex") * GetParameterFloat("outputs.spacingx") / GetParameterFloat("opt.gridspacing");
-      deformationGridSize[1] = GetParameterInt("outputs.sizey") * GetParameterFloat("outputs.spacingy") / GetParameterFloat("opt.gridspacing");
+      deformationGridSize[0] = static_cast<ResampleFilterType::SizeType::SizeValueType>(vcl_abs(
+          GetParameterInt("outputs.sizex") * GetParameterFloat("outputs.spacingx") / GetParameterFloat("opt.gridspacing") ));
+      deformationGridSize[1] = static_cast<ResampleFilterType::SizeType::SizeValueType>(vcl_abs(
+          GetParameterInt("outputs.sizey") * GetParameterFloat("outputs.spacingy") / GetParameterFloat("opt.gridspacing") ));
       otbAppLogINFO("Using a deformation grid with a size of " << deformationGridSize);
 
       if (deformationGridSize[0] * deformationGridSize[1] == 0)
         {
-        otbAppLogFATAL("Deformation grid degenerated (size of 0). You shall set opt.gridspacing appropriately");
+        otbAppLogFATAL("Deformation grid degenerated (size of 0). "
+            "You shall set opt.gridspacing appropriately. opt.gridspacing is homogenous to outputs.spacing parameters");
+        }
+
+      if (vcl_abs(GetParameterFloat("opt.gridspacing")) < vcl_abs(GetParameterFloat("outputs.spacingx"))
+           || vcl_abs(GetParameterFloat("opt.gridspacing")) < vcl_abs(GetParameterFloat("outputs.spacingy")) )
+        {
+        otbAppLogWARNING("Resolution of deformation grid should not be better than "
+            "resolution of output image. Computation time will be slow, and precision of output won't be better. "
+            "You shall set opt.gridspacing appropriately.");
         }
 
       //otb::GeoInformationConversion::ToWKT(4326)
