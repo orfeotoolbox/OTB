@@ -19,7 +19,7 @@
 // ossimOFStream
 //
 //*******************************************************************
-//  $Id: ossimIoStream.h 11176 2007-06-07 19:45:56Z dburken $
+//  $Id: ossimIoStream.h 22475 2013-11-07 13:28:51Z gpotts $
 #ifndef ossimIoStream_HEADER
 #define ossimIoStream_HEADER
 
@@ -31,27 +31,28 @@
 #include <ossim/base/ossimString.h>
 
 
-class OSSIM_DLL ossimIStream : public ossimStreamBase, public std::istream   
+class OSSIM_DLL ossimIStream : public ossimStreamBase, public std::basic_istream<char>   
 {
 public:
-   ossimIStream();
+   //ossimIStream();
    ossimIStream(std::streambuf* sb);
    virtual ~ossimIStream();
 };
 
 
-class OSSIM_DLL ossimOStream : public ossimStreamBase, public std::ostream
+class OSSIM_DLL ossimOStream : public ossimStreamBase, public std::basic_ostream<char>
 {
 public:
-   ossimOStream();
+   //ossimOStream();
    ossimOStream(std::streambuf* sb);   
    virtual ~ossimOStream();
 };
 
-class OSSIM_DLL ossimIOStream : public ossimStreamBase, public std::iostream
+class OSSIM_DLL ossimIOStream : public ossimStreamBase, public std::basic_iostream<char>
 {
 public:
-   ossimIOStream();
+   //ossimIOStream();
+   ossimIOStream(std::streambuf* sb);   
    virtual ~ossimIOStream();
 };
 
@@ -126,7 +127,7 @@ protected:
    std::stringbuf theBuf;
 };
 
-class OSSIM_DLL ossimIOFStream : public ossimStreamBase, public std::fstream
+class OSSIM_DLL ossimIOFStream : public ossimStreamBase, public std::basic_fstream<char>
 {
 public:
    ossimIOFStream();
@@ -138,7 +139,7 @@ public:
    virtual ~ossimIOFStream();
 };
 
-class OSSIM_DLL ossimIFStream : public ossimStreamBase, public std::ifstream
+class OSSIM_DLL ossimIFStream : public ossimStreamBase, public std::basic_ifstream<char>
 {
 public:
    ossimIFStream();
@@ -150,7 +151,7 @@ public:
 
 };
 
-class OSSIM_DLL ossimOFStream : public ossimStreamBase, public std::ofstream
+class OSSIM_DLL ossimOFStream : public ossimStreamBase, public std::basic_ofstream<char>
 {
 public:
    ossimOFStream();
@@ -162,6 +163,65 @@ public:
    virtual ~ossimOFStream();
 
 };
+
+
+#ifdef _MSC_VER
+
+class ossimIFStream64 : public std::basic_ifstream<char>
+{
+public:
+   ossimIFStream64(const char* pFilename, 
+      std::ios_base::openmode mode = ios_base::in, 
+      int prot = ios_base::_Openprot);
+
+   virtual ~ossimIFStream64();
+   void seekg64(off_type off, ios_base::seekdir way);
+
+   void seekg64(streampos pos, ios_base::seekdir way);
+
+   static void seekg64(std::istream& str, off_type off, ios_base::seekdir way);
+ 
+   static void seekg64(std::istream& str, std::streampos pos, ios_base::seekdir way);
+private:
+   FILE* theFile;
+};
+
+class ossimOFStream64 : public std::basic_ofstream<char>
+{
+public:
+   ossimOFStream64(const char* pFilename, 
+                   std::ios_base::openmode mode = ios_base::out, 
+                   int prot = ios_base::_Openprot);
+   virtual ~ossimOFStream64();
+
+   ossim_uint64 tellp64();
+};
+
+#else
+
+class ossimIFStream64 : public std::basic_ifstream<char>
+{
+public:
+   ossimIFStream64(const char* pFilename, std::ios_base::openmode mode = ios_base::in, long prot = 0666);
+
+   virtual ~ossimIFStream64();
+
+   void seekg64(off_type off, ios_base::seekdir way);
+
+   static void seekg64(std::istream& str, off_type off, ios_base::seekdir way);
+};
+
+class ossimOFStream64 : public std::basic_ofstream<char>
+{
+public:
+   ossimOFStream64(const char* pFilename, std::ios_base::openmode mode = ios_base::out, long prot = 0666);
+
+   virtual ~ossimOFStream64();
+
+   ossim_uint64 tellp64();
+};
+
+#endif // _MSC_VER
 
 OSSIM_DLL void operator >> (ossimIStream& in,ossimOStream& out);
 OSSIM_DLL ossimIOStream& operator >> (ossimIStream& in,ossimIOStream& out);
