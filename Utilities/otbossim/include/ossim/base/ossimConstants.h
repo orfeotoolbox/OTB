@@ -12,10 +12,6 @@
 #ifndef ossimConstants_HEADER
 #define ossimConstants_HEADER
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef __cplusplus   
 #include <cfloat>
 #else
@@ -23,10 +19,6 @@ extern "C" {
 #endif
 #include <ossim/ossimConfig.h>
 
-#ifdef NULL
-#undef NULL
-#define NULL 0
-#endif
 /**
  * WARNINGS SECTION:
  */
@@ -531,9 +523,5 @@ enum ossimCompareType
 #define OSSIM_DEFAULT_MAX_PIX_NORM_DOUBLE ((ossim_float64)(1.0))
 
 #define OSSIM_DEFAULT_MEAN_SEA_LEVEL ((ossim_float64)0.0)
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
