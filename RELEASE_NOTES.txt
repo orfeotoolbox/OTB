@@ -621,7 +621,7 @@ OTB-v.3.14.0 - Changes since version 3.12.0 (2012/07/09)
     * 0000557: Weird default value for RAM parameter in OTB application
     * 0000544: SWIG 2.0.5 not supported on mac
     * 0000554: OTB compilation : error while loading libfltk.so.9
-    * 0000559: Even if OTB_USE_MAPNICK is ON, otbapp_Rasterization
+    * 0000559: Even if OTB_USE_MAPNIK is ON, otbapp_Rasterization
                does not get compiled
     * 0000558: GetParameterFloat method of WrapperApplication
                class does not returns exactly input value
