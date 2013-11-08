@@ -231,7 +231,7 @@ private:
 
     // Get Parameters
     int nbComp = GetParameterInt("nbcomp");
-    bool normalize = HasValue("normalize");
+    bool normalize = IsParameterEnabled("normalize");
     bool rescale = IsParameterEnabled("rescale");
 
     bool invTransform = HasValue("outinv");
