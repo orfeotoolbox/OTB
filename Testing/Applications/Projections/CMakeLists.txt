@@ -13,7 +13,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM
                  			 -outputs.spacingx  0.5
                  			 -outputs.spacingy  -0.5
                  			 -map utm
-                 			 -opt.gridspacing 4 # Spacing of the deformation field
+                 			 -opt.gridspacing 4 # Spacing of the deformation field (equal to 4 meters)
                        -interpolator linear
                      VALID   --compare-image ${EPSILON_4}
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
@@ -32,7 +32,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM_OutXML1
                  			 -outputs.spacingx  0.5
                  			 -outputs.spacingy  -0.5
                  			 -map utm
-                 			 -opt.gridspacing 4 # Spacing of the deformation field
+                 			 -opt.gridspacing 4 # Spacing of the deformation field (equal to 4 meters)
                        -outxml  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.xml
                        -interpolator linear
                      VALID   --compare-image ${EPSILON_4}
@@ -64,7 +64,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_DEMTIF_UTM
                        -outputs.spacingx  0.5
                        -outputs.spacingy  -0.5
                        -map utm
-                       -opt.gridspacing 4 # Spacing of the deformation field
+                       -opt.gridspacing 4 # Spacing of the deformation field (equal to 4 meters)
                        -interpolator linear
                      VALID   --compare-image ${EPSILON_4}
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
@@ -83,7 +83,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_DEMTIF_UTM_OutXML1
                        -outputs.spacingx  0.5
                        -outputs.spacingy  -0.5
                        -map utm
-                       -opt.gridspacing 4 # Spacing of the deformation field
+                       -opt.gridspacing 4 # Spacing of the deformation field (equal to 4 meters)
                        -outxml  ${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_OutXML1.xml
                        -interpolator linear
                      VALID   --compare-image ${EPSILON_4}
@@ -103,7 +103,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_DEMTIF_UTM_InXML1
                         ${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_InXML1.tif)
 
 
-OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_WGS84BugMantis806
+OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_WGS84
                      APP  OrthoRectification
                      OPTIONS -io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                        -io.out ${TEMP}/apTvPrOrthorectifTest_WGS84.tif
@@ -115,7 +115,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_WGS84BugMantis806
                        -outputs.spacingx  0.00000621314
                        -outputs.spacingy  -0.00000621314
                        -map wgs
-                       -opt.gridspacing 4 # Spacing of the deformation field
+                       -opt.gridspacing 0.00001242628 # Spacing of the deformation field (equal to |2*outputs.spacingx| degrees)
                        -interpolator linear
                      VALID   --compare-image ${EPSILON_4}
                         ${BASELINE}/owTvOrthorectifTest_WGS84.tif
