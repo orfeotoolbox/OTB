@@ -604,7 +604,8 @@ private:
     if(IsParameterEnabled("opt.rpc"))
       {
       m_ResampleFilter->EstimateInputRpcModelOn();
-      m_ResampleFilter->SetInputRpcGridSize( GetParameterInt("opt.rpc"));
+      m_ResampleFilter->SetInputRpcGridSize( GetParameterInt("opt.rpc") );
+      otbAppLogINFO("Generating RPC modeling with " << GetParameterInt("opt.rpc") << " points per axis");
       }
 
     // Set Output information
@@ -612,22 +613,26 @@ private:
     size[0] = GetParameterInt("outputs.sizex");
     size[1] = GetParameterInt("outputs.sizey");
     m_ResampleFilter->SetOutputSize(size);
+    otbAppLogINFO("Generating output with size = " << size);
 
     ResampleFilterType::SpacingType spacing;
     spacing[0] = GetParameterFloat("outputs.spacingx");
     spacing[1] = GetParameterFloat("outputs.spacingy");
     m_ResampleFilter->SetOutputSpacing(spacing);
+    otbAppLogINFO("Generating output with pixel spacing = " << spacing);
 
     ResampleFilterType::OriginType ul;
     ul[0] = GetParameterFloat("outputs.ulx");
     ul[1] = GetParameterFloat("outputs.uly");
     m_ResampleFilter->SetOutputOrigin(ul);
+    otbAppLogINFO("Generating output with origin = " << ul);
 
     // Build the default pixel
     FloatVectorImageType::PixelType defaultValue;
     defaultValue.SetSize(inImage->GetNumberOfComponentsPerPixel());
     defaultValue.Fill(GetParameterFloat("outputs.default"));
     m_ResampleFilter->SetEdgePaddingValue(defaultValue);
+    otbAppLogINFO("Area outside input image bounds will have a pixel value of " << defaultValue);
 
 
     // Deformation Field spacing
