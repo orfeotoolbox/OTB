@@ -636,6 +636,21 @@ private:
       {
       gridSpacing[0] = GetParameterFloat("opt.gridspacing");
       gridSpacing[1] = -GetParameterFloat("opt.gridspacing");
+
+      otbAppLogINFO("Using a deformation grid with a physical spacing of " << GetParameterFloat("opt.gridspacing"));
+
+      // Predict size of deformation grid
+      ResampleFilterType::SizeType deformationGridSize;
+      deformationGridSize[0] = GetParameterInt("outputs.sizex") * GetParameterFloat("outputs.spacingx") / GetParameterFloat("opt.gridspacing");
+      deformationGridSize[1] = GetParameterInt("outputs.sizey") * GetParameterFloat("outputs.spacingy") / GetParameterFloat("opt.gridspacing");
+      otbAppLogINFO("Using a deformation grid with a size of " << deformationGridSize);
+
+      if (deformationGridSize[0] * deformationGridSize[1] == 0)
+        {
+        otbAppLogFATAL("Deformation grid degenerated (size of 0). You shall set opt.gridspacing appropriately");
+        }
+
+      //otb::GeoInformationConversion::ToWKT(4326)
       m_ResampleFilter->SetDeformationFieldSpacing(gridSpacing);
       }
 
