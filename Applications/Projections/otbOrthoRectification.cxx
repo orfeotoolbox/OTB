@@ -32,6 +32,8 @@
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
 
+#include "otbGeographicalDistance.h"
+
 #include "otbMacro.h"
 
 namespace otb
@@ -53,6 +55,8 @@ enum
   Mode_OutputROI,
   Mode_OrthoFit
 };
+
+const float DefaultGridSpacingMeter = 4.0;
 
 namespace Wrapper
 {
@@ -215,7 +219,7 @@ private:
 
     // Deformation Field Spacing
     AddParameter(ParameterType_Float, "opt.gridspacing", "Resampling grid spacing");
-    SetDefaultParameterFloat("opt.gridspacing", 4.0);
+    SetDefaultParameterFloat("opt.gridspacing", DefaultGridSpacingMeter);
     SetParameterDescription("opt.gridspacing",
                             "Resampling is done according to a coordinate mapping deformation grid, "
                             "whose pixel size is set by this parameter, and "
@@ -539,8 +543,53 @@ private:
           }
         }
         break;
-        }
-      }
+        } // switch (GetParameterInt("outputs.mode") )
+
+      if (!HasUserValue("opt.gridspacing"))
+        {
+        // Update opt.gridspacing
+        // In case output coordinate system is WG84,
+        if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
+          {
+          // How much is 4 meters in degrees ?
+          typedef itk::Point<float,2> FloatPointType;
+          FloatPointType point1, point2;
+
+          typedef otb::GeographicalDistance<FloatPointType> GeographicalDistanceType;
+          GeographicalDistanceType::Pointer geoDistanceCalculator = GeographicalDistanceType::New();
+
+          // center
+          point1[0] = GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * GetParameterInt("outputs.sizex") / 2;
+          point1[1] = GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * GetParameterInt("outputs.sizey") / 2;
+
+          // center + [1,0]
+          point2[0] = point1[0] + GetParameterFloat("outputs.spacingx");
+          point2[1] = point1[1];
+          double xgroundspacing = geoDistanceCalculator->Evaluate(point1, point2);
+          otbAppLogINFO( "Output X ground spacing in meter = " << xgroundspacing );
+
+          // center + [0,1]
+          point2[0] = point1[0];
+          point2[1] = point1[1] + GetParameterFloat("outputs.spacingy");
+          double ygroundspacing = geoDistanceCalculator->Evaluate(point1, point2);
+          otbAppLogINFO( "Output Y ground spacing in meter = " << ygroundspacing );
+
+          double xgridspacing = DefaultGridSpacingMeter * GetParameterFloat("outputs.spacingx") / xgroundspacing;
+          double ygridspacing = DefaultGridSpacingMeter * GetParameterFloat("outputs.spacingy") / ygroundspacing;
+
+          otbAppLogINFO( << DefaultGridSpacingMeter << " meters in X direction correspond roughly to "
+                         << xgridspacing << " degrees" );
+          otbAppLogINFO( << DefaultGridSpacingMeter << " meters in Y direction correspond roughly to "
+                         << ygridspacing << " degrees" );
+
+          // Use the smallest spacing (more precise grid)
+          double optimalSpacing = std::min( vcl_abs(xgridspacing), vcl_abs(ygridspacing) );
+          otbAppLogINFO( "Setting grid spacing to " << optimalSpacing );
+          SetParameterFloat("opt.gridspacing", optimalSpacing);
+
+          }
+        } // if (!HasUserValue("opt.gridspacing"))
+      } // if (HasValue("io.in"))
   }
 
   void DoExecute()
@@ -651,23 +700,25 @@ private:
           GetParameterInt("outputs.sizex") * GetParameterFloat("outputs.spacingx") / GetParameterFloat("opt.gridspacing") ));
       deformationGridSize[1] = static_cast<ResampleFilterType::SizeType::SizeValueType>(vcl_abs(
           GetParameterInt("outputs.sizey") * GetParameterFloat("outputs.spacingy") / GetParameterFloat("opt.gridspacing") ));
-      otbAppLogINFO("Using a deformation grid with a size of " << deformationGridSize);
+      otbAppLogINFO("Using a deformation grid of size " << deformationGridSize);
 
       if (deformationGridSize[0] * deformationGridSize[1] == 0)
         {
         otbAppLogFATAL("Deformation grid degenerated (size of 0). "
-            "You shall set opt.gridspacing appropriately. opt.gridspacing is homogenous to outputs.spacing parameters");
+            "You shall set opt.gridspacing appropriately. "
+            "opt.gridspacing units are the same as outputs.spacing units");
         }
 
       if (vcl_abs(GetParameterFloat("opt.gridspacing")) < vcl_abs(GetParameterFloat("outputs.spacingx"))
            || vcl_abs(GetParameterFloat("opt.gridspacing")) < vcl_abs(GetParameterFloat("outputs.spacingy")) )
         {
-        otbAppLogWARNING("Resolution of deformation grid should not be better than "
-            "resolution of output image. Computation time will be slow, and precision of output won't be better. "
-            "You shall set opt.gridspacing appropriately.");
+        otbAppLogWARNING("Spacing of deformation grid should be at least equal to "
+            "spacing of output image. Otherwise, computation time will be slow, "
+            "and precision of output will not be better. "
+            "You shall set opt.gridspacing appropriately. "
+            "opt.gridspacing units are the same as outputs.spacing units");
         }
 
-      //otb::GeoInformationConversion::ToWKT(4326)
       m_ResampleFilter->SetDeformationFieldSpacing(gridSpacing);
       }
 
