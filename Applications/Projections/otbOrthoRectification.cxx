@@ -215,8 +215,13 @@ private:
 
     // Deformation Field Spacing
     AddParameter(ParameterType_Float, "opt.gridspacing", "Resampling grid spacing");
-    SetDefaultParameterFloat("opt.gridspacing", 4.);
-    SetParameterDescription("opt.gridspacing", "Resampling is done according to a coordinate mapping grid, whose pixel size is set by this parameter. The closer to the output spacing this parameter is, the more precise will be the ortho-rectified image, but increasing this parameter allows to reduce processing time.");
+    SetDefaultParameterFloat("opt.gridspacing", 4.0);
+    SetParameterDescription("opt.gridspacing",
+                            "Resampling is done according to a coordinate mapping deformation grid, "
+                            "whose pixel size is set by this parameter."
+                            "The closer to the output spacing this parameter is, "
+                            "the more precise will be the ortho-rectified image,"
+                            "but increasing this parameter will reduce processing time.");
     MandatoryOff("opt.gridspacing");
 
     // Doc example parameter settings
@@ -539,8 +544,6 @@ private:
 
   void DoExecute()
     {
-    GetLogger()->Debug("Entering DoExecute\n");
-
     // Get the input image
     FloatVectorImageType* inImage = GetParameterImage("io.in");
 
