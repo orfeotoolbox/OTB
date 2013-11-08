@@ -218,7 +218,8 @@ private:
     SetDefaultParameterFloat("opt.gridspacing", 4.0);
     SetParameterDescription("opt.gridspacing",
                             "Resampling is done according to a coordinate mapping deformation grid, "
-                            "whose pixel size is set by this parameter."
+                            "whose pixel size is set by this parameter, and "
+                            "expressed in the coordinate system of the output image "
                             "The closer to the output spacing this parameter is, "
                             "the more precise will be the ortho-rectified image,"
                             "but increasing this parameter will reduce processing time.");
