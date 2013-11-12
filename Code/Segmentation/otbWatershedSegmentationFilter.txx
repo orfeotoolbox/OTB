@@ -48,6 +48,10 @@ WatershedSegmentationFilter<TInputImage, TOutputLabelImage>
   m_CastFilter->Update();
   this->GraftOutput(m_CastFilter->GetOutput());
 
+  // Since WatershedFilterType outputs an itk::Image,
+  // we loose the additionnal metadata of OTB like ProjectionRef.
+  // Import them before exiting
+  this->GetOutput()->CopyInformation( this->GetInput() );
 }
 
 } // end namespace otb
