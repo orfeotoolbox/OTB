@@ -1968,10 +1968,10 @@ ADD_TEST(bfTvInnerProductPCAImageFilterAllsOutputs ${BASICFILTERS_TESTS11}
 ADD_TEST(bfTvInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator ${BASICFILTERS_TESTS11}
     --compare-image ${EPSILON_7}
     ${BASELINE}/bfInnerProductPCAImageFilterAllsOutputs.tif
-    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator.tif
     otbInnerProductPCAImageFilter
     ${INPUTDATA}/poupees_sub_3c.png
-    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator.tif
     1 # Flag generate Mean component ?
     1 #center data
     3 # Nb Of Principal Components
