@@ -42,6 +42,34 @@ OTB-v.3.20 - Changes since version 3.18.1 (2013/10/28)
     * QtWidgetModel emits a signal with associated exception in case an error occurs during application execution
 
 * Bugs fixed :
+  * OTB library
+    * 0000805: All links in html FAQ return Error 404
+    * 0000776: computeImagesStatistics imagelist input confusing error
+    * 0000804: str and int concatenate error in Python Wrapper Application.GetParameterValue
+    * 0000775: DoUpdateGUI() doing nothing for some parameters in QtWidget Wrapper
+    * 0000799: when using OTB Applications in graphic mode "Execute" button become clickable even if output data is not set
+    * 0000801: Some mandatory parameter with RoleOutput  should not be set by user
+    * 0000770: Output parameter does not appear anymore in the command line helper
+    * 0000798: All the OTB app parameters are not all saved into the xml output file
+    * 0000779: [OTB]otbTrainImagesClassifier generates an output *.CSV confusion matrix with a wrong header
+    * 0000809: LSMS Vectorization application didn't support ouput file with "-" special character
+    * 0000807: otbKmzExport application generate weird kmz if the tilesize parameter is equal to zero
+    * 0000808: otbDownloadSRTMTiles application seems to be broken
+    * 0000803: otbApplicationLauncherCommandLine -inxml parameter does not retrieve pixel type for output image parameter
+    * 0000794: Tiling mechanism didn't work into Large Scale MeanShift  application
+    * 0000760: ClassificationMapRegularization output pixel values are always on 8 bits
+    * 0000809: LSMS Vectorization application didn't support ouput file with "-" special character
+    * 0000803: otbApplicationLauncherCommandLine -inxml parameter does not retrieve pixel type for output image parameter
+    * 0000736: Error setting the index in RadiometricIndices application via python
+    * 0000800: Watershed mode of segmentation application produce an image without CRS even if the input image has one
+    * 0000806: Orthorectifcation application return black or weird output if we request an output in WGS projection
+    * 0000755: otb-bin-qt 3.18.1 package on Ubuntu installation triggered a warning at installation
+    * 0000801: Some mandatory parameter with RoleOutput should not be set by user
+    * 0000770: Output parameter does not appear anymore in the command line helper
+    * 0000793: Using dimensionality Reduction application with MAF algorithm and "Inverse output image" checked leads to crash
+    * 0000773: [OTB]otbStreamingStatisticsMapFromLabelImageFilter wrongly counts and accumulates vectorpixel values
+    * 0000398: OTB does not handle ortho-ready products properly
+
   * Monteverdi2
     * 0000789: Crash when selecting badly imported dataset.
     * 0000787: Can't drag up in Quick look view with ortho product
@@ -59,24 +87,6 @@ OTB-v.3.20 - Changes since version 3.18.1 (2013/10/28)
     * 0000746: Locked/unlocked button didn't work
     * 0000768: Monteverdi 0.5.0 package depend now on QWT
     * 0000790: Monteverdi 2 crashes when running segmentation
-
-  * OTB library
-    * 0000805: All links in html FAQ return Error 404
-    * 0000776: computeImagesStatistics imagelist input confusing error
-    * 0000804: str and int concatenate error in Python Wrapper Application.GetParameterValue
-    * 0000775: DoUpdateGUI() doing nothing for some parameters in QtWidget Wrapper
-    * 0000799: when using OTB Applications in graphic mode "Execute" button become clickable even if output data is not set
-    * 0000801: Some mandatory parameter with RoleOutput  should not be set by user
-    * 0000770: Output parameter does not appear anymore in the command line helper
-    * 0000798: All the OTB app parameters are not all saved into the xml output file
-    * 0000779: [OTB]otbTrainImagesClassifier generates an output *.CSV confusion matrix with a wrong header
-    * 0000809: LSMS Vectorization application didn't support ouput file with "-" special character
-    * 0000807: otbKmzExport application generate weird kmz if the tilesize parameter is equal to zero
-    * 0000808: otbDownloadSRTMTiles application seems to be broken
-    * 0000803: otbApplicationLauncherCommandLine -inxml parameter does not retrieve pixel type for output image parameter
-    * 0000794: Tiling mechanism didn't work into Large Scale MeanShift  application
-    * 0000760: ClassificationMapRegularization output pixel values are always on 8 bits
-
 
 OTB-v.3.18.1 - Changes since version 3.18.0 (2013/07/22)
 --------------------------------------------------------
