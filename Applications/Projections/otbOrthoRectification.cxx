@@ -586,8 +586,11 @@ private:
           double optimalSpacing = std::min( vcl_abs(xgridspacing), vcl_abs(ygridspacing) );
           otbAppLogINFO( "Setting grid spacing to " << optimalSpacing );
           SetParameterFloat("opt.gridspacing", optimalSpacing);
-
           }
+        else // if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
+          {
+          SetParameterFloat("opt.gridspacing", DefaultGridSpacingMeter);
+          } // if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
         } // if (!HasUserValue("opt.gridspacing"))
       } // if (HasValue("io.in"))
   }
