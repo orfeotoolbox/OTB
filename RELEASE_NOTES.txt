@@ -1,4 +1,4 @@
-OTB-v.3.20 - Changes since version 3.18.1 (2013/10/28)
+OTB-v.3.20 - Changes since version 3.18.1 (2013/11/13)
 --------------------------------------------------------
 
 * Library
