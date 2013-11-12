@@ -54,7 +54,7 @@ OTB_TEST_APPLICATION(NAME  apTvFEHaralickTextureExtraction
                              -out ${TEMP}/apTvFEHaralickTextureExtraction.tif
                              -parameters.min 127
                              -parameters.max 1578
-                     VALID   --compare-image ${NOTOL}
+                     VALID   --compare-image ${EPSILON_15}
                    			 ${BASELINE}/apTvFEHaralickTextureExtraction.tif
                  		     ${TEMP}/apTvFEHaralickTextureExtraction.tif)
                  		     
