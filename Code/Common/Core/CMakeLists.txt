@@ -11,6 +11,7 @@ set( Common_Core_SOURCES
   mvdCore.cxx
   mvdDatasetDescriptor.cxx
   mvdDatabaseConnection.cxx
+  mvdDatabaseError.cxx
   mvdDatabaseModel.cxx
   mvdDatasetModel.cxx
   mvdHistogramModel.cxx
@@ -41,6 +42,7 @@ set( Common_Core_HEADERS_MOC
   mvdBackgroundTask.h
   # mvdCore.h
   mvdDatabaseConnection.h
+  mvdDatabaseError.h
   mvdDatabaseModel.h
   mvdDatasetDescriptor.h
   mvdDatasetModel.h
