@@ -1,2 +1,3 @@
 [Paths]
 Translations=@QT_TRANSLATIONS_DIR@
+Plugins=@QT_PLUGINS_DIR@

@@ -89,6 +89,7 @@ add_library(Monteverdi2_Core
 target_link_libraries(Monteverdi2_Core
   OTBIO
   Qt4::QtCore
+  Qt4::QtSql
   Qt4::QtXml
 )
 

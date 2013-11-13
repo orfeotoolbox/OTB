@@ -103,10 +103,14 @@ install(FILES ${QT_TRANSLATIONS_FILES}
         DESTINATION  share/qt4/translations
         COMPONENT Resources)
 
+install(FILES ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll
+        DESTINATION lib/qt4/plugins/sqldrivers/
+        COMPONENT Runtime)
+
 install(FILES qt.conf
         DESTINATION  bin
         COMPONENT Resources)
-        
+
 install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
         DESTINATION bin
         COMPONENT Runtime)

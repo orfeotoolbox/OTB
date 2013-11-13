@@ -58,13 +58,18 @@ find_package( OpenGL REQUIRED )
 #----------------------------------------------------------------------------
 # Qt4
 set(QT_USE_IMPORTED_TARGETS ON)
-find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtXml )
+find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtSql QtXml )
 include( ${QT_USE_FILE} )
+if( QT_FOUND )
+  message( "Qt plugins dir: '${QT_PLUGINS_DIR}'" )
+  message( "Qt translations dir: '${QT_TRANSLATIONS_DIR}'" )
+endif( QT_FOUND )
 
 #----------------------------------------------------------------------------
 # Qwt
 find_package(Qwt REQUIRED)
 if(QWT_FOUND)
+  # message( ${QWT_LIBRARIES} )
   if(WIN32)
     add_definitions(-DQWT_DLL)
   endif(WIN32)
