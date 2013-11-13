@@ -42,7 +42,7 @@ set( Common_Core_HEADERS_MOC
   mvdBackgroundTask.h
   # mvdCore.h
   mvdDatabaseConnection.h
-  mvdDatabaseError.h
+  # mvdDatabaseError.h
   mvdDatabaseModel.h
   mvdDatasetDescriptor.h
   mvdDatasetModel.h

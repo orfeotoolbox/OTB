@@ -35,8 +35,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdDatabaseConnection.h"
 #include "Core/mvdDatasetModel.h"
-//
 #include "Gui/mvdAboutDialog.h"
 #include "Gui/mvdI18nApplication.h"
 
@@ -248,7 +248,12 @@ I18nMainWindow
       dir.setPath( path );
     }
 
-  I18nApplication::Instance()->MakeCacheDir( dir.path() );
+  bool isNew = I18nApplication::Instance()->MakeCacheDir( dir.path() );
+
+  //
+  // Setup initial empty database
+  if( isNew )
+    DatabaseConnection::Foo();
 }
 
 /*****************************************************************************/

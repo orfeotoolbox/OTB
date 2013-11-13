@@ -89,6 +89,10 @@ public:
   /** \brief Destructor. */
   virtual ~DatabaseConnection();
 
+  /**
+   */
+  static void Foo();
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

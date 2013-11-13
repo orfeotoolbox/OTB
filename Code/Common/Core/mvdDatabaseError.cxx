@@ -28,6 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <sstream>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -37,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -59,21 +61,92 @@ namespace
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
+/*****************************************************************************/
+std::string
+DatabaseError
+::whatString( const QSqlError& sqlError, const QString& msg )
+{
+  std::stringstream strStream( std::ios_base::out );
 
+  switch( sqlError.type() )
+    {
+    case QSqlError::NoError:
+      strStream <<
+        ToStdString(
+          QCoreApplication::translate(
+            "mvd::DatabaseError",
+            "No database error"
+          )
+        );
+      break;
+
+    case QSqlError::ConnectionError:
+      strStream <<
+        ToStdString(
+          QCoreApplication::translate(
+            "mvd::DatabaseError",
+            "Database connection error"
+          )
+        );
+      break;
+
+    case QSqlError::StatementError:
+      strStream <<
+        ToStdString(
+          QCoreApplication::translate(
+            "mvd::DatabaseError",
+            "SQL statement syntax error" )
+        );
+      break;
+
+    case QSqlError::TransactionError:
+      strStream <<
+        ToStdString(
+          QCoreApplication::translate(
+            "mvd::DatabaseError",
+            "Database transaction failed error" )
+        );
+      break;
+
+    case QSqlError::UnknownError:
+      strStream <<
+        ToStdString(
+          QCoreApplication::translate(
+            "mvd::DatabaseError",
+            "Unknown database error" )
+        );
+      break;
+
+    default:
+      assert( false && "Unexpected QSqlError::ErrorType." );
+      break;
+    }
+
+  strStream <<
+    " " << sqlError.number() <<
+    ": " << ToStdString( sqlError.text() );
+
+  if( !msg.isEmpty() )
+    strStream << std::endl << ToStdString( msg );
+
+  return strStream.str();
+}
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
 DatabaseError
-::DatabaseError( QObject* parent ) :
-  QObject( parent )
+::DatabaseError( const QSqlError& sqlError ) :
+  std::runtime_error( whatString( sqlError ) ),
+  m_SqlError( sqlError )
 {
 }
 
 /*******************************************************************************/
 DatabaseError
 ::~DatabaseError()
+  throw()
 {
 }
 

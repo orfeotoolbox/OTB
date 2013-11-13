@@ -31,10 +31,11 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtCore>
+#include <QtSql>
 
 //
 // System includes (sorted by alphabetic order)
+#include <stdexcept>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -70,12 +71,8 @@ namespace mvd
  * \brief WIP.
  */
 class Monteverdi2_EXPORT DatabaseError :
-    public QObject
+    public std::runtime_error
 {
-
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
-  Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -84,22 +81,10 @@ class Monteverdi2_EXPORT DatabaseError :
 public:
 
   /** \brief Constructor. */
-  DatabaseError( QObject* parent =NULL );
+  DatabaseError( const QSqlError& sqlError );
 
   /** \brief Destructor. */
-  virtual ~DatabaseError();
-
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
-public slots:
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
+  virtual ~DatabaseError() throw();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -116,17 +101,13 @@ protected:
 //
 // Private methods.
 private:
-
+  static std::string whatString( const QSqlError& sqlError,
+                                 const QString& msg =QString() );
 
 //
 // Private attributes.
 private:
-
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
-private slots:
+  QSqlError m_SqlError;
 };
 
 } // end namespace 'mvd'.

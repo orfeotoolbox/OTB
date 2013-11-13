@@ -25,6 +25,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtSql>
 
 //
 // System includes (sorted by alphabetic order)
@@ -37,6 +38,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdDatabaseError.h"
+#include "Core/mvdI18nCoreApplication.h"
 
 namespace mvd
 {
@@ -75,6 +78,23 @@ DatabaseConnection
 DatabaseConnection
 ::~DatabaseConnection()
 {
+}
+
+/*******************************************************************************/
+void
+DatabaseConnection
+::Foo()
+{
+  QSqlDatabase db( QSqlDatabase::addDatabase( "QSQLITE", "mvd2" ) );
+
+  QString filename(
+    I18nCoreApplication::ConstInstance()->GetCacheDir().filePath( "db.sqlite" )
+  );
+
+  db.setDatabaseName( filename );
+
+  if( !db.open() )
+    throw DatabaseError( db.lastError() );
 }
 
 /*******************************************************************************/
