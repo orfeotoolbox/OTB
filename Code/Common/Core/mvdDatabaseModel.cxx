@@ -197,9 +197,9 @@ DatabaseModel
     {
     if( !dir.remove( it->fileName() ) )
       throw SystemError(
-	ToStdString(
-	  tr( "Failed to remove file '%1'." ).arg( it->filePath() )
-	)
+        ToStdString(
+          tr( "Failed to remove file '%1'." ).arg( it->filePath() )
+        )
       );
     }
 
@@ -208,14 +208,14 @@ DatabaseModel
   if( !parentDir.cdUp() )
     throw SystemError(
       ToStdString(
-	tr( "Failed to access parent directory of '%1'." ).arg( dir.path() )
+        tr( "Failed to access parent directory of '%1'." ).arg( dir.path() )
       )
     );
 
   if( !parentDir.rmdir( id  ) )
     throw SystemError(
       ToStdString(
-	tr( "Failed to remove dataset directory '%1'." ).arg( dir.path() )
+        tr( "Failed to remove dataset directory '%1'." ).arg( dir.path() )
       )
     );
 }
@@ -350,8 +350,8 @@ DatabaseModel
     {
     qWarning() <<
       ToString(
-	tr( "%1 outdated datasets. Please clear cache directory." )
-	.arg( nbOutdated ) );
+        tr( "%1 outdated datasets. Please clear cache directory." )
+        .arg( nbOutdated ) );
     }
 }
 
@@ -371,7 +371,8 @@ DatabaseModel
        ++it )
     {
     if( DatasetModel::IsVersionCompliant(
-	  I18nCoreApplication::ConstInstance()->GetCacheDir().path(), *it ) )
+          I18nCoreApplication::ConstInstance()->GetCacheDir().path(),
+          *it ) )
       {
       DatasetModel* datasetModel = NewDatasetModel( *it );
       assert( datasetModel!=NULL );

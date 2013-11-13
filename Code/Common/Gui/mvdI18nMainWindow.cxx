@@ -10,11 +10,11 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+  =========================================================================*/
 
 #include "mvdI18nMainWindow.h"
 
@@ -124,10 +124,10 @@ I18nMainWindow
 QDockWidget*
 I18nMainWindow
 ::AddWidgetToDock( QWidget* widget,
-		   const QString& dockName,
-		   const QString& dockTitle,
-		   Qt::DockWidgetArea dockArea,
-		   bool isFloating )
+                   const QString& dockName,
+                   const QString& dockTitle,
+                   Qt::DockWidgetArea dockArea,
+                   bool isFloating )
 {
   // New dock.
   QDockWidget* dockWidget = new QDockWidget( dockTitle, this );
@@ -235,13 +235,13 @@ I18nMainWindow
     {
     QString path(
       I18nMainWindow::GetExistingDirectory(
-	this,
-	tr(
-	  "Please, select directory where the Monteverdi2"
-	  " cache repository will be stored."
-	),
-	dir.path()
-    )
+        this,
+        tr(
+          "Please, select directory where the Monteverdi2"
+          " cache repository will be stored."
+        ),
+        dir.path()
+      )
     );
 
     if( !path.isEmpty() )

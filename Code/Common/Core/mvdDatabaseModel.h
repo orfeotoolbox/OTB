@@ -32,6 +32,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtSql>
 
 //
 // System includes (sorted by alphabetic order)
@@ -215,7 +216,7 @@ private:
 private:
   /**
    */
-  CountType InitializeDatasetModels();
+  CountType InitializeDatasetModels();   
 
   /**
    */
