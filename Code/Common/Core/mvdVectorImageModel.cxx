@@ -66,7 +66,6 @@ namespace mvd
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
 /*****************************************************************************/
 VectorImageModel
 ::VectorImageModel( QObject* parent ) :
