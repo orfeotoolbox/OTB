@@ -18,6 +18,7 @@
 #ifndef __otbDefaultImageMetadataInterface_h
 #define __otbDefaultImageMetadataInterface_h
 
+#include <algorithm>
 
 #include "otbMacro.h"
 
