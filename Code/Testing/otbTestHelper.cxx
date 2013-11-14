@@ -359,13 +359,13 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   //fill up a vector of string, in which each element is one line of the file
   std::vector<std::string> listLineFileRef;
   std::vector<std::string> listLineFileTest;
-  while (std::getline(fluxfileref, strfileref) != 0)
+  while (std::getline(fluxfileref, strfileref))
     {
     listLineFileRef.push_back(strfileref);
     }
   fluxfileref.close();
 
-  while (std::getline(fluxfiletest, strfiletest) != 0)
+  while (std::getline(fluxfiletest, strfiletest))
     {
     listLineFileTest.push_back(strfiletest);
     }
