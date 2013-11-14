@@ -36,6 +36,11 @@ add_test( NAME pyTvBug804
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Bug804.py
                   )
 
+add_test( NAME pyTvBug823
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Bug823.py
+                  )
+
 add_test( NAME pyTvBug736
           COMMAND ${TEST_DRIVER}
                   --compare-image ${NOTOL}
