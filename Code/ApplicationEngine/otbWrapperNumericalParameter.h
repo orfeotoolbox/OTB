@@ -76,6 +76,10 @@ public:
   /** Get the value */
   ScalarType GetValue() const
   {
+    if (!HasValue())
+      {
+      itkGenericExceptionMacro(<< "Parameter " << this->GetKey() << " has no value yet.");
+      }
     return boost::any_cast<ScalarType>(m_Value);
   }
 
