@@ -45,7 +45,7 @@ int otbFlusserMomentsImageFunctionNew(int argc, char * argv[])
   FunctionType::Pointer function       = FunctionType::New();
 
   std::cout << function << std::endl;
- 
+
   return EXIT_SUCCESS;
 }
 
@@ -94,7 +94,7 @@ int otbFlusserMomentsImageFunction(int argc, char * argv[])
 int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
-  
+
   typedef double InputPixelType;
   const unsigned int Dimension = 2;
   typedef otb::Image<InputPixelType,  Dimension>                          InputImageType;
@@ -106,13 +106,13 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
     double>                                                               InterpolatorType;
   typedef otb::FlusserMomentsImageFunction<InputImageType>                FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
-  
+
   ReaderType::Pointer                         reader = ReaderType::New();
   StreamingResampleImageFilterType::Pointer   resampler = StreamingResampleImageFilterType::New();
   InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
   FunctionType::Pointer                       function1 = FunctionType::New();
   FunctionType::Pointer                       function2 = FunctionType::New();
-  
+
   reader->SetFileName(inputFilename);
   reader->Update();
 
@@ -144,7 +144,7 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error = 0.0;
-  
+
   for (unsigned int j = 1; j < 12; ++j)
     {
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
@@ -154,7 +154,7 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
               << "  /  Scaled - F" << j
               << " : " << Result2[j-1] << std::endl;
     }
-    
+
   error = vcl_sqrt(error)/11.0;
   std::cout << "Error : " << error << std::endl
             << std::endl;
@@ -164,7 +164,7 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
     itkGenericExceptionMacro( << "Error = " << error
                               << "  > 1E-3     -> TEST FAILLED" << std::endl );
     }
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -185,7 +185,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   typedef otb::FlusserMomentsImageFunction<InputImageType>                FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
   typedef itk::AffineTransform< double, Dimension >                       TransformType;
- 
+
 
   ReaderType::Pointer                         reader = ReaderType::New();
   FilterType::Pointer                         filter = FilterType::New();
@@ -193,7 +193,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
   FunctionType::Pointer                       function1 = FunctionType::New();
   FunctionType::Pointer                       function2 = FunctionType::New();
-  
+
   reader->SetFileName(inputFilename);
   reader->Update();
 
@@ -222,7 +222,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   translation1[0] =   -imageCenterX;
   translation1[1] =   -imageCenterY;
   transform->Translate( translation1 );
-  
+
   const double degreesToRadians = vcl_atan(1.0) / 45.0;
   const double angle = angleInDegrees * degreesToRadians;
   transform->Rotate2D( -angle, false );
@@ -231,7 +231,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   translation2[0] =   imageCenterX;
   translation2[1] =   imageCenterY;
   transform->Translate( translation2, false );
- 
+
   filter->SetTransform( transform );
   filter->Update();
 
@@ -254,13 +254,13 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   for (unsigned int j = 1; j < 12; ++j)
     {
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
-    
+
     std::cout << "Original -F" << j
               << " : " << Result1[j-1]
               << "  /  Rotated - F" << j
               << " : " << Result2[j-1] << std::endl;
     }
-    
+
   error = vcl_sqrt(error)/11.0;
   std::cout << "Error : " << error << std::endl
             << std::endl;
@@ -270,6 +270,6 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
     itkGenericExceptionMacro( << "Error = " << error
                               << "  > 1E-3     -> TEST FAILLED" << std::endl );
     }
-  
+
   return EXIT_SUCCESS;
 }

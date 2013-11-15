@@ -62,7 +62,7 @@ int otbTileImageFilter(int argc, char * argv[])
 
     VectorImageReaderType::Pointer reader = VectorImageReaderType::New();
     reader->SetFileName(argv[i+4]);
-    
+
     readersVector.push_back(reader);
 
     tileFilter->SetInput(i,reader->GetOutput());
@@ -73,6 +73,6 @@ int otbTileImageFilter(int argc, char * argv[])
   writer->SetFileName(outfname);
   writer->SetInput(tileFilter->GetOutput());
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

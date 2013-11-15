@@ -37,7 +37,7 @@ int otbImageSimulationMethodWithSpatialisationTest(int argc, char * argv[])
    const char * outfilename = argv[5];
    const char * outLabelfilename = argv[6];
 
-   
+
    typedef unsigned short LabelType;
    const unsigned int Dimension = 2;
    typedef otb::Image<LabelType, Dimension>                                           LabelImageType;
@@ -47,17 +47,17 @@ int otbImageSimulationMethodWithSpatialisationTest(int argc, char * argv[])
    typedef otb::VectorData<double, Dimension>                                         VectorDataType;
    typedef otb::AttributesMapLabelObject<LabelType, Dimension, std::string>           LabelObjectType;
    typedef itk::LabelMap<LabelObjectType>                                             LabelMapType;
-   
-   
+
+
    typedef otb::SpatialisationFilter<LabelMapType>                                    SpatialisationFilterType;
    typedef otb::ProspectModel                                                         SimulationStep1Type;
    typedef otb::SailModel                                                             SimulationStep2Type;
    typedef otb::ProlateInterpolateImageFunction<LabelImageType>                       FTMType;
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
     SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
-   
 
-   
+
+
    /** Instantiation of pointer objects*/
    ImageWriterType::Pointer writer = ImageWriterType::New();
    LabelImageWriterType::Pointer labelWriter = LabelImageWriterType::New();
@@ -67,11 +67,11 @@ int otbImageSimulationMethodWithSpatialisationTest(int argc, char * argv[])
    SpatialisationFilterType::SizeType objectSize;
    objectSize[0]=300;
    objectSize[1]=300;
-   
+
    SpatialisationFilterType::SizeType nbOjects;
    nbOjects[0]=3;
    nbOjects[1]=3;
-   
+
    std::vector<std::string> pathVector(9);
    pathVector[0]="JHU/becknic/rocks/sedimentary/powder/0_75/txt/greywa1f.txt";
    pathVector[1]="";
@@ -82,7 +82,7 @@ int otbImageSimulationMethodWithSpatialisationTest(int argc, char * argv[])
    pathVector[6]="JHU/becknic/water/txt/coarse.txt";
    pathVector[7]="JHU/becknic/rocks/igneous/solid/txt/andesi1s.txt";
    pathVector[8]="JHU/becknic/soils/txt/0015c.txt";
-   
+
    std::vector<std::string> areaVector(9);
    areaVector[0]="sedimentaryRock";
    areaVector[1]="prosail";
@@ -93,7 +93,7 @@ int otbImageSimulationMethodWithSpatialisationTest(int argc, char * argv[])
    areaVector[6]="water";
    areaVector[7]="igneousRocks";
    areaVector[8]="soils";
-   
+
    std::vector<LabelType> labels(9);
    labels[0]=1;
    labels[1]=2;
@@ -124,11 +124,11 @@ int otbImageSimulationMethodWithSpatialisationTest(int argc, char * argv[])
    writer->SetFileName(outfilename);
    writer->SetInput(imageSimulation->GetOutputReflectanceImage());
    writer->Update();
-   
+
    labelWriter->SetFileName(outLabelfilename);
    labelWriter->SetInput(imageSimulation->GetOutputLabelImage());
    labelWriter->Update();
-   
-   
+
+
    return EXIT_SUCCESS;
 }

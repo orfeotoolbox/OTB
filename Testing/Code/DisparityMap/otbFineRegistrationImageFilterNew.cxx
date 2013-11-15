@@ -31,7 +31,7 @@ int otbFineRegistrationImageFilterNew( int argc, char * argv[] )
   typedef otb::Image< PixelType>                                               ImageType;
   typedef otb::Image<DisplacementValueType, 2>                                   FieldImageType;
   typedef otb::FineRegistrationImageFilter<ImageType, ImageType, FieldImageType> RegistrationFilterType;
-  
+
   RegistrationFilterType::Pointer filter = RegistrationFilterType::New();
 
   std::cout << filter << std::endl;

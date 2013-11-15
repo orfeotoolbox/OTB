@@ -37,9 +37,9 @@ int otbRealMomentsImageFunctionNew(int argc, char * argv[])
 
   // Instantiating object
   FunctionType::Pointer  function       = FunctionType::New();
-  
+
   std::cout << function << std::endl;
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -78,7 +78,7 @@ int otbRealMomentsImageFunction(int argc, char * argv[])
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Central Image moments: [10]" << std::endl;
-  
+
   function->SetNeighborhoodRadius(3);
   Result = function->EvaluateAtIndex(index);
   for (unsigned int k=0; k<=p; ++k)

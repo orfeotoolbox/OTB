@@ -30,7 +30,7 @@ int otbSinclairToCovarianceMatrixFunctor(int argc, char * argv[])
   OutputType  result(10);
   FunctorType funct;
   OutputType outputFunct;
-  
+
   result[0] = ComplexType(17.,  0. );
   result[1] = ComplexType(14.,  5.);
   result[2] = ComplexType(11., 10.);
@@ -41,7 +41,7 @@ int otbSinclairToCovarianceMatrixFunctor(int argc, char * argv[])
   result[7] = ComplexType(13.,  0.);
   result[8] = ComplexType(14.,  5.);
   result[9] = ComplexType(17.,  0.);
-  
+
 
   outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.) );
 

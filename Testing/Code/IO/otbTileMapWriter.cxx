@@ -65,7 +65,7 @@ int otbTileMapWriter(int argc, char *argv[])
   typedef otb::ImageFileWriter<CharVectorImageType> WriterType;
 
   otb::DEMHandler::Instance()->OpenDEMDirectory(argv[2]);
-  
+
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
   mapProjection->SetLevel(depth);
 

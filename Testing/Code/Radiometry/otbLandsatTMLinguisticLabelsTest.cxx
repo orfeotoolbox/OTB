@@ -179,7 +179,7 @@ int otbLandsatTMLinguisticLabels(int argc, char * argv[])
   if( result[ LVFunctorType::ndbsi ] != goodResult )
     return EXIT_FAILURE;
   }
-  
-   
+
+
   return EXIT_SUCCESS;
 }

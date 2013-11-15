@@ -40,7 +40,7 @@ int otbPipelineMemoryPrintCalculatorTest(int argc, char * argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
-  
+
   IntensityImageFilterType::Pointer intensity = IntensityImageFilterType::New();
   intensity->SetInput(reader->GetOutput());
 

@@ -36,9 +36,9 @@ int otbWrapperDocExampleStructureTest(int argc, char* argv[])
 {
   typedef otb::Wrapper::DocExampleStructure DocExampleStructureType;
   DocExampleStructureType::Pointer docStruct = DocExampleStructureType::New();
-  
+
   docStruct->SetApplicationName("TestApplication");
-  
+
   docStruct->SetExampleComment("Exmaple1", 0);
 
   docStruct->AddParameter( "key1", "val1_1" );

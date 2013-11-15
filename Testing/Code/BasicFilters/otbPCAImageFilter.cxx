@@ -52,7 +52,7 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-    
+
   try
   {
     parser->ParseCommandLine( argc, argv, parseResult );
@@ -120,7 +120,7 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
     typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
     CommandType2::Pointer invObserver = CommandType2::New();
     invFilter->AddObserver( itk::ProgressEvent(), invObserver );
-    
+
     ImageWriterType::Pointer invWriter = ImageWriterType::New();
     invWriter->SetFileName( parseResult->GetParameterString("--Inverse") );
     invWriter->SetInput( invFilter->GetOutput() );

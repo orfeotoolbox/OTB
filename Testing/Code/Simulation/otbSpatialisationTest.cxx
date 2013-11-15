@@ -36,7 +36,7 @@ int otbSpatialisationTest(int argc, char * argv[])
   typedef otb::SpatialisationFilter<LabelMapType>                             FilterType;
   typedef itk::LabelMapToLabelImageFilter<LabelMapType, ImageType>             LabelMapToLabelImageFilterType;
 
-  
+
   /** Instantiation of pointer objects*/
   ImageWriterType::Pointer writer = ImageWriterType::New();
   FilterType::Pointer filter = FilterType::New();
@@ -45,11 +45,11 @@ int otbSpatialisationTest(int argc, char * argv[])
   FilterType::SizeType objectSize;
   objectSize[0]=300;
   objectSize[1]=300;
-  
+
   FilterType::SizeType nbOjects;
   nbOjects[0]=3;
   nbOjects[1]=3;
-  
+
   std::vector<std::string> pathVector(9);
   pathVector[0]="path1";
   pathVector[1]="path2";
@@ -60,7 +60,7 @@ int otbSpatialisationTest(int argc, char * argv[])
   pathVector[6]="path7";
   pathVector[7]="path8";
   pathVector[8]="path9";
-  
+
   std::vector<std::string> areaVector(9);
   areaVector[0]="moutains";
   areaVector[1]="plants";
@@ -82,7 +82,7 @@ int otbSpatialisationTest(int argc, char * argv[])
   labels[6]=7;
   labels[7]=8;
   labels[8]=9;
-  
+
   filter->SetObjectSize(objectSize);
   filter->SetNumberOfObjects(nbOjects);
   filter->SetPathVector(pathVector);

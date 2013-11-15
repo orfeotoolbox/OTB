@@ -71,13 +71,13 @@ int otbGeographicalDistance(int argc, char * argv[])
     std::cerr<<"Evaluate("<<a<<", "<<b<<") is innacurate: expected "<< expectedDistance<<", found "<<distEvaluate2<<std::endl;
     failFlag = true;
     }
-  
+
   if(distEvaluate2Null > tolerance)
     {
     std::cerr<<"Evaluate("<<a<<", "<<a<<") is innacurate: expected 0., found "<<distEvaluate2Null<<std::endl;
     failFlag = true;
     }
-  
+
     if(distEvaluate1Null > tolerance)
     {
     std::cerr<<"Evaluate("<<b<<") with origin "<<o<< " is innacurate: expected 0., found "<<distEvaluate2Null<<std::endl;

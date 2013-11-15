@@ -44,7 +44,7 @@ int otbBandMathImageFilter( int argc, char* argv[])
   //typedef float                                             PixelType;
   typedef otb::Image<PixelType, 2>                          ImageType;
   typedef otb::BandMathImageFilter<ImageType>               FilterType;
-  
+
   unsigned int i;
   const unsigned int N = 100;
   unsigned int FAIL_FLAG = 0;
@@ -126,15 +126,15 @@ int otbBandMathImageFilter( int argc, char* argv[])
       ndvi_expected = 0.0;
     else
       ndvi_expected = (px2-px1)/(px2+px1);
-    
+
     PixelType expected = vcl_cos( 2 * otb::CONST_PI * px1 ) / ( 2 * otb::CONST_PI * px2 + 1E-3 ) * vcl_sin( otb::CONST_PI * px3 )
       + ndvi_expected * vcl_sqrt(PixelType(2)) * px3;
-    
+
     /*
     std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Pixel_3 =  " << it3.Get()
         << "     Result =  " << it.Get() << "     Expected =  " << expected << std::endl;
     */
-    
+
     error = (result - expected) * (result - expected) / (result + expected);
     if ( error > 1E-9 )
       {
@@ -153,7 +153,7 @@ int otbBandMathImageFilter( int argc, char* argv[])
   else
     std::cout << "[FAILLED]" << std::endl;
   FAIL_FLAG = 0;
-  
+
 
 
   /** Edge Effect Handling */
@@ -235,7 +235,7 @@ int otbBandMathImageFilterWithIdx( int argc, char* argv[])
   image2->SetSpacing(spacing);
   image3->SetOrigin(origin);
   image3->SetSpacing(spacing);
-  
+
   for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3)
   {
     ImageType::IndexType i1 = it1.GetIndex();

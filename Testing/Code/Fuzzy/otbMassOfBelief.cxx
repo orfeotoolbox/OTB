@@ -48,9 +48,9 @@ int otbMassOfBelief(int argc, char* argv[])
   massFunction->SetMass(set4, 0.1);
 
   std::cout<<massFunction<<std::endl;
-  
+
   std::cout<<"Removing mass from set " <<set4<<std::endl;
- 
+
   massFunction->RemoveMass(set4);
 
   std::cout<<massFunction<<std::endl;

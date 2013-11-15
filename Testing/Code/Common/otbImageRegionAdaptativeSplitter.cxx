@@ -27,7 +27,7 @@ typedef RegionType::IndexType                         IndexType;
 int otbImageRegionAdaptativeSplitterNew(int argc, char * argv[])
 {
   SplitterType::Pointer splitter = SplitterType::New();
-  
+
   std::cout<<splitter<<std::endl;
 
   return EXIT_SUCCESS;
@@ -48,7 +48,7 @@ int otbImageRegionAdaptativeSplitter(int argc, char * argv[])
   tileHint[1]    = atoi(argv[6]);
   requestedNbSplits = atoi(argv[7]);
   std::string outfname = argv[8];
-  
+
   std::ofstream outfile(outfname.c_str());
 
   region.SetSize(regionSize);

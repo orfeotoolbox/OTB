@@ -26,17 +26,17 @@ int otbViewerViewTest(int argc, char* argv[])
   typedef otb::ViewerController ControllerType;
   typedef otb::ViewerViewGUI ViewType;
 
-  
+
   ControllerType::Pointer controller = ControllerType::New();
   ViewType::Pointer view = ViewType::New();
-  
+
   controller->SetView(view);
   view->SetViewerController(controller);
 
   view->Show();
 
   controller->OpenInputImage(argv[1]);
-   
+
   Fl::check();
   view->guiMainWindow->hide();
 

@@ -43,6 +43,6 @@ int otbFuzzyVariableSetValue(int argc, char* argv[])
 
   if( memValues["High"] != static_cast<PrecisionType>((0.75-0.5)/(0.75-0.25)) )
     return EXIT_FAILURE;
-  
+
   return EXIT_SUCCESS;
 }

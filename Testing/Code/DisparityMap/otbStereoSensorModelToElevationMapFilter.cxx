@@ -57,7 +57,7 @@ int otbStereoSensorModelToElevationMapFilter( int argc, char * argv[] )
 {
   ReaderType::Pointer masterReader = ReaderType::New();
   masterReader->SetFileName(argv[1]);
-  
+
   ReaderType::Pointer slaveReader = ReaderType::New();
   slaveReader->SetFileName(argv[2]);
 

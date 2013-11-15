@@ -29,7 +29,7 @@
 int otbAngularProjectionImageFilterNew ( int argc, char * argv[] )
 {
   const unsigned int Dimension = 2;
-  
+
   typedef float  PixelType;
   typedef double PrecisionType;
   typedef itk::FixedArray< PrecisionType, 1 > AngleType;

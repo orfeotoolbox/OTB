@@ -45,6 +45,6 @@ int otbPolynomialTimeSeriesTest(int argc, char* argv[])
   for(int val = -VALMAX; val <= VALMAX; ++val)
     if( f.GetValue( val ) != (coefs[0]+coefs[1]*val+coefs[2]*val*val) )
       return EXIT_FAILURE;
-  
+
   return EXIT_SUCCESS;
 }

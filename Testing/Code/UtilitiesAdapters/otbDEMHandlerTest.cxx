@@ -26,7 +26,7 @@ int otbDEMHandlerTest(int argc, char * argv[])
     std::cerr<<"Usage: "<<argv[0]<<" demdir[path|no] geoid[path|no] defaultHeight longitude latitude aboveMSLFlag targetValue tolerance"<<std::endl;
     return EXIT_FAILURE;
     }
-  
+
 
   std::string demdir   = argv[1];
   std::string geoid    = argv[2];
@@ -97,7 +97,7 @@ int otbDEMHandlerTest(int argc, char * argv[])
     std::cerr<<"Target value is "<<target<<" meters, computed value is "<<height<<" meters. error ("<<error<<" meters) > tolerance ("<<tolerance<<" meters)"<<std::endl;
     fail = true;
     }
-  
+
   if(fail)
     {
     return EXIT_FAILURE;

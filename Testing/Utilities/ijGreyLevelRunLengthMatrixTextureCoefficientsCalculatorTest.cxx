@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,7 +36,7 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
   typedef float RealType;
 
   typedef otb::Image<PixelType, ImageDimension> ImageType;
-  
+
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer imageReader = ReaderType::New();
   imageReader->SetFileName( argv[1] );
@@ -48,12 +48,12 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
   unsigned int numberOfDirections = 1;
   for ( unsigned int i = 0; i < ImageDimension; i++ )
     {
-    antiorigin[i] += imageReader->GetOutput()->GetSpacing()[i] * 
+    antiorigin[i] += imageReader->GetOutput()->GetSpacing()[i] *
       ( imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[i] - 1 ) ;
-    
+
     numberOfPixelsInMask *= imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[i];
     numberOfDirections *= 3;
-    } 
+    }
   numberOfDirections = static_cast<unsigned int>( vcl_floor( 0.5 * static_cast<double>(numberOfDirections) ) );
   unsigned int numberOfBins = 100;
 
@@ -67,14 +67,14 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
 				generator->SetPixelValueMinMax( 0, 255 );
 				generator->SetDistanceValueMinMax( 0, origin.EuclideanDistanceTo( antiorigin ) );
 				generator->Update();
-		
+
 				typedef itk::Statistics::GreyLevelRunLengthMatrixTextureCoefficientsCalculator
 						<RunLengthMatrixGeneratorType::HistogramType> CalculatorType;
 				CalculatorType::Pointer calculator = CalculatorType::New();
 				calculator->SetInput( generator->GetOutput() );
 				calculator->Update();
-		
-				RealType sre = calculator->GetShortRunEmphasis() 
+
+				RealType sre = calculator->GetShortRunEmphasis()
 						/ static_cast<RealType>( numberOfDirections );
 				RealType lre = calculator->GetLongRunEmphasis()
 						/ static_cast<RealType>( numberOfDirections );
@@ -82,7 +82,7 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
 						/ static_cast<RealType>( numberOfDirections );
 				RealType rln = calculator->GetRunLengthNonuniformity()
 						/ static_cast<RealType>( numberOfDirections );
-				RealType rp = static_cast<RealType>( calculator->GetTotalNumberOfRuns() ) 
+				RealType rp = static_cast<RealType>( calculator->GetTotalNumberOfRuns() )
 						/ static_cast<RealType>( numberOfPixelsInMask )
 						/ static_cast<RealType>( numberOfDirections );
 				RealType lgre = calculator->GetLowGreyLevelRunEmphasis()
@@ -112,11 +112,11 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
 				std::cout << "SRHGE: " << srhge << std::endl;
 				std::cout << "LRLGE: " << lrlge << std::endl;
 				std::cout << "LRHGE: " << lrhge << std::endl;
-                                
+
                                 bool passed = true;
                                 double trueSRE = 0.249999;
                                 double trueRLN = 247518;
-                                
+
 
                                 if (vnl_math_abs(sre - trueSRE) > 0.001)
                                   {
@@ -132,7 +132,7 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
                                             << rln << std::endl;
                                   passed = false;
                                   }
-                                
+
                                 if (!passed)
                                   {
                                   std::cerr << "Test failed" << std::endl;
@@ -143,13 +143,13 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
                                   std::cerr << "Test succeeded" << std::endl;
                                   return EXIT_SUCCESS;
                                   }
-                                
-                                
-                                
+
+
+
     return EXIT_SUCCESS;
     }
   catch (...)
     {
-    return EXIT_FAILURE;  
+    return EXIT_FAILURE;
     }
 }

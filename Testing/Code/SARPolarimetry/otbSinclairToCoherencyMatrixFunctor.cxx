@@ -29,7 +29,7 @@ int otbSinclairToCoherencyMatrixFunctor(int argc, char * argv[])
   OutputType  result(10);
   FunctorType funct;
   OutputType outputFunct;
-  
+
   result[0] = ComplexType(25., 0.);
   result[1] = ComplexType( 0., -15.);
   result[2] = ComplexType(25., 0.);

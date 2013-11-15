@@ -29,7 +29,7 @@ int otbScalarBufferToImageFileWriterTest(int argc, char* argv[])
 
   typedef otb::ScalarBufferToImageFileWriter<float, unsigned int> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  
+
   float * tab = new float[nbCh*sizeX*sizeY];
 
   int cpt=0;
@@ -45,7 +45,7 @@ int otbScalarBufferToImageFileWriterTest(int argc, char* argv[])
                      }
               }
        }
-  
+
   FilterType::SizeType size;
   size[0] = sizeX;
   size[1] = sizeY;

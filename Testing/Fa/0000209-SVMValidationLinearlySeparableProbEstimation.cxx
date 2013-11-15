@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
   TrainingListSampleType::Pointer trainingLabels = TrainingListSampleType::New();
   ListSampleType::Pointer validationSamples = ListSampleType::New();
   TrainingListSampleType::Pointer validationLabels = TrainingListSampleType::New();
- 
+
   // Set the size of the measurement vectors
   trainingSamples ->SetMeasurementVectorSize(2);
   trainingLabels->SetMeasurementVectorSize(1);

@@ -53,7 +53,7 @@ int otbWrapperStringListParameterTest1(int argc, char* argv[])
     {
       return EXIT_FAILURE;
     }
-  
+
   if( numParam->GetNthElement(1) != value3 )
     {
       return EXIT_FAILURE;

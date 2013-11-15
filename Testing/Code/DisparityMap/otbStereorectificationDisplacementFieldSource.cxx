@@ -46,7 +46,7 @@ int otbStereorectificationDisplacementFieldSource(int argc, char * argv[])
   double avgElev   = atof(argv[5]);
   double scale     = atof(argv[6]);
   double gridStep  = atoi(argv[7]);
-  
+
   // Instantiation
   DisplacementFieldSourceType::Pointer dfSource = DisplacementFieldSourceType::New();
 

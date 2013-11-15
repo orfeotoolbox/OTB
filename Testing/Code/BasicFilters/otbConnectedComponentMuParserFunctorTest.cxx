@@ -34,7 +34,7 @@
 int otbConnectedComponentMuParserFunctorTest(int argc, char * argv[])
 {
 
- 
+
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
@@ -65,7 +65,7 @@ int otbConnectedComponentMuParserFunctorTest(int argc, char * argv[])
   typedef otb::Functor::ConnectedComponentMuParserFunctor<InputVectorImageType::PixelType>  FunctorType;
   typedef itk::ConnectedComponentFunctorImageFilter<InputVectorImageType, OutputImageType, FunctorType, InputMaskImageType> FilterType;
 
-  
+
   MaskReaderType::Pointer maskReader;
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -76,7 +76,7 @@ int otbConnectedComponentMuParserFunctorTest(int argc, char * argv[])
   writer->SetFileName(outputFilename);
 
  filter->SetInput(reader->GetOutput());
- 
+
  if(NULL != maskFilename)
  {
   maskReader = MaskReaderType::New();
@@ -85,13 +85,13 @@ int otbConnectedComponentMuParserFunctorTest(int argc, char * argv[])
 
   filter->SetMaskImage(maskReader->GetOutput());
  }
- 
+
 
   std::string stringExpression(expression);
- 
+
  filter->GetFunctor().SetExpression(stringExpression);
  filter->Update();
- 
+
   writer->SetInput(filter->GetOutput());
   writer->Update();
 

@@ -53,7 +53,7 @@ int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>                   ExtractorType;
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType;
- 
+
 
   //Allocate pointer
   ReaderType::Pointer reader = ReaderType::New();
@@ -104,7 +104,7 @@ int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
   gridSpacing[0] = atof(argv[11]);
   gridSpacing[1] = -atof(argv[11]);
   orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
-  
+
   writer->SetInput(orthoRectifFilter->GetOutput());
   writer->SetAutomaticTiledStreaming();
   writer->SetNumberOfThreads(1);

@@ -39,11 +39,11 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];
-  
+
   typedef ImageType::SizeType              SizeType;
   typedef ImageType::SpacingType           SpacingType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
-  
+
   // Reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -57,13 +57,13 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   SpacingType  spacing;
   spacing[0] = 0.000006;
   spacing[1] = -0.000006;
-  
+
   // Filter  : Target SRS : WGS84
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
   filter->SetOutputProjectionRef("4326");  //WGS84
   filter->Compute();
-    
+
   // Output file
   std::ofstream outfile(outfname);
 
@@ -76,7 +76,7 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   // Target SRS : 32631 UTM 31 N
   filter->SetOutputProjectionRef("32631");  // UTM 31 N
   filter->Compute();
-  
+
   outfile<<"Output Parameters for SRID : 32631 (UTM 31 N)"<<std::endl;
   outfile<<"Output Origin : "<<filter->GetOutputOrigin()<<std::endl;
   outfile<<"Output Spacing : "<<filter->GetOutputSpacing()<<std::endl;
@@ -90,15 +90,15 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
 
   filter->SetOutputProjectionRef(lambertRef);
   filter->Compute();
-  
+
   outfile<<"Output Parameters for SRS : Lambert II Etendu"<<std::endl;
   outfile<<"Output Origin : "<<filter->GetOutputOrigin()<<std::endl;
   outfile<<"Output Spacing : "<<filter->GetOutputSpacing()<<std::endl;
   outfile<<"Output Size : "<<filter->GetOutputSize()<<std::endl;
   outfile<< std::endl;
-  
+
 
   outfile.close();
-    
+
   return EXIT_SUCCESS;
 }

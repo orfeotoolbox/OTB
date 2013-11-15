@@ -35,26 +35,26 @@ int main(int argc, char* argv[])
     std::cout << argv[0] << " <input image> <output image>" << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   typedef otb::Image<float, 2>                   ImageType;
   typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::ImageFileWriter<ImageType>    WriterType;
   typedef itk::CastImageFilter<ImageType, ImageType>   CastFilterType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->Update();
-  
+
   CastFilterType::Pointer caster = CastFilterType::New();
   caster->SetInput( reader->GetOutput() );
   caster->InPlaceOn();
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(caster->GetOutput());
   writer->SetFileName(argv[2]);
   //writer->SetAutomaticTiledStreaming(1024);
   writer->SetNumberOfDivisionsStrippedStreaming(10);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

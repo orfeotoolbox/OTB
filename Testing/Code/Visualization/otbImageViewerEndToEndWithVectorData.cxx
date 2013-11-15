@@ -99,7 +99,7 @@ int otbImageViewerEndToEndWithVectorData(int argc, char * argv[])
   vreader->UpdateOutputInformation();
 
   otb::DEMHandler::Instance()->OpenDEMDirectory(demdir);
-  
+
   VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
   vproj->SetInput(vreader->GetOutput());
   vproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());

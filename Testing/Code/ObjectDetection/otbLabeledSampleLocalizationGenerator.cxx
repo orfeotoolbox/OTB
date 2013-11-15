@@ -40,7 +40,7 @@ int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
   const char * inputVD1  = argv[1];
   const char * inputVD2  = argv[2];
   const char * outputVD  = argv[3];
-    
+
   typedef otb::VectorData<>                                        VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType>                VectorDataReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType>                VectorDataWriterType;
@@ -51,7 +51,7 @@ int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
   VectorDataReaderType::Pointer  reader2    = VectorDataReaderType::New();
   VectorDataWriterType::Pointer  writer     = VectorDataWriterType::New();
   GeneratorType::Pointer         generator  = GeneratorType::New();
-  
+
   reader1->SetFileName(inputVD1);
   //reader1->Update();
 

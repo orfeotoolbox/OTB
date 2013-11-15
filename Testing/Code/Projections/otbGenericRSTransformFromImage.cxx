@@ -52,7 +52,7 @@ int otbGenericRSTransformFromImage(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
-  
+
   // Build wgs ref
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
@@ -80,7 +80,7 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
 {
   std::string infname = argv[1];
   std::string demdir = argv[2];
-  
+
   ImageType::PointType refImgPt, refGeoPt, estimatedImgPt, estimatedGeoPt;
   refImgPt[0] = atof(argv[4]);
   refImgPt[1] = atof(argv[5]);
@@ -102,7 +102,7 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
-  
+
   // Build wgs ref
   OGRSpatialReference oSRS;
   oSRS.SetWellKnownGeogCS("WGS84");
@@ -159,7 +159,7 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
 
   std::cout<<"-------------------- "<<std::endl;
   std::cout<<"Using geoid and height above ellipsoid from "<<demdir<<std::endl;
-  
+
   estimatedImgPt = wgs2img->TransformPoint(refGeoPt);
   std::cout<<"Inverse(refGeo): "<<refGeoPt<<" -> "<< estimatedImgPt <<std::endl;
 
@@ -201,7 +201,7 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
     pass = false;
     std::cerr<<"Geographic (WGS84) residual is too high: "<<geoRes<<" meters"<<std::endl;
     }
-  
+
   estimatedImgPt3d = wgs2img3d->TransformPoint(refGeoPt3d);
   std::cout<<"Inverse(refGeo): "<<refGeoPt3d<<" -> "<< estimatedImgPt3d <<std::endl;
   imgRes = distance3d->Evaluate(refImgPt3d, estimatedImgPt3d);
@@ -229,7 +229,7 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* ar
     pass = false;
     std::cerr<<"Geographic (WGS84) residual is too high: "<<geoRes<<" meters"<<std::endl;
     }
-  
+
   estimatedImgPt3d = wgs2img3d->TransformPoint(refGeoPt3d);
   std::cout<<"Inverse(refGeo): "<<refGeoPt<<" -> "<< estimatedImgPt <<std::endl;
   imgRes = distance3d->Evaluate(refImgPt3d, estimatedImgPt3d);

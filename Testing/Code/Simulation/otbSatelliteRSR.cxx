@@ -24,7 +24,7 @@ int otbSatelliteRSR(int argc, char * argv[])
 {
   typedef otb::SatelliteRSR< double, double>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;
-  
+
   if ( argc!=5 )
   {
     std::cout << argv[0] << std::endl << "\t" << "<RSR_filename>"<< "\t" << "<Nb total band>"<< "\t" << "<lambda>"<< "\t" << "<band>"<< std::endl;
@@ -32,7 +32,7 @@ int otbSatelliteRSR(int argc, char * argv[])
   }
   //Instantiation
   ResponsePointerType  myResponse=ResponseType::New();
-  
+
   myResponse->SetNbBands(atoi(argv[2]));
   //Load file into vector
   const std::string file(argv[1]);
@@ -47,7 +47,7 @@ int otbSatelliteRSR(int argc, char * argv[])
 //   {
 //      std::cout << "RSR("<<myResponse->GetRSR()[NumBand]->GetResponse()[i]->first<<","<< NumBand <<")= " << myResponse->GetRSR()[NumBand]->GetResponse()[i]->second << std::endl;
 //   }
-  
-  
+
+
   return EXIT_SUCCESS;
 }

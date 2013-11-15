@@ -57,7 +57,7 @@ int otbSOM(int argc, char* argv[])
 
   ListSampleType::Pointer listSample = ListSampleType::New();
   listSample->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-  
+
   itk::ImageRegionIterator<ImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
   it.GoToBegin();

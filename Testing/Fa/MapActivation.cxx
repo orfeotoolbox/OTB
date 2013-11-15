@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 
   typedef itk::VariableLengthVector<double>                  MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType> SampleType;
-  
+
   SampleType::Pointer liste = SampleType::New();
   liste->SetMeasurementVectorSize(nbcolonnes);
 

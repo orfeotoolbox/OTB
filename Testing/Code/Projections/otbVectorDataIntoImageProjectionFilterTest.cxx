@@ -54,7 +54,7 @@ int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
   std::string vectorDataInputFilename = argv[2];
   std::string demDirectory = argv[3];
   int expectedFeatures = atoi(argv[4]);
-  
+
   otb::DEMHandler::Instance()->OpenDEMDirectory(demDirectory);
 
   // Read the image
@@ -138,7 +138,7 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int argc, char * argv[
     {
     otb::DEMHandler::Instance()->OpenDEMDirectory(demDirectory);
     }
-    
+
   // Read the image
   ReaderType::Pointer    reader  = ReaderType::New();
   reader->SetFileName(imageInputFilename);

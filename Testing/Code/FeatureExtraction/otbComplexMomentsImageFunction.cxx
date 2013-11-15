@@ -40,9 +40,9 @@ int otbComplexMomentsImageFunctionNew(int argc, char * argv[])
 
   // Instantiating object
   FunctionType::Pointer function = FunctionType::New();
-  
+
   std::cout << function << std::endl;
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -81,7 +81,7 @@ int otbComplexMomentsImageFunction(int argc, char * argv[])
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10);
-  
+
   function->SetNeighborhoodRadius(3);
   Result = function->EvaluateAtIndex(index);
   for (unsigned int k=0; k<=p; ++k)
@@ -114,13 +114,13 @@ int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
     double>                                                               InterpolatorType;
   typedef otb::ComplexMomentsImageFunction<InputImageType>                FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
-  
+
   ReaderType::Pointer                         reader = ReaderType::New();
   StreamingResampleImageFilterType::Pointer   resampler = StreamingResampleImageFilterType::New();
   InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
   FunctionType::Pointer                       function1 = FunctionType::New();
   FunctionType::Pointer                       function2 = FunctionType::New();
-  
+
   reader->SetFileName(inputFilename);
   reader->Update();
 
@@ -136,7 +136,7 @@ int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   resampler->SetOutputSize(size);
   resampler->SetOutputSpacing(0.5);
   resampler->Update();
-  
+
   function1->SetInputImage(reader->GetOutput());
   function1->SetQmax(q);
   function1->SetPmax(p);
@@ -164,18 +164,18 @@ int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
     for (unsigned int l=0; l<=q; ++l)
       {
       error += vcl_pow(vcl_abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
-      
+
       std::cout << "Original - C" << k << l
                 << " : " << Result1.at(k).at(l)
                 << "  /  Scaled - C" << k << l
                 << " : " << Result2.at(k).at(l) << std::endl;
       }
     }
-  
+
   error = vcl_sqrt(error)/(q+p);
   std::cout << "Error : " << error << std::endl
             << std::endl;
-  
+
   if (error > 1E-3)
     {
     itkGenericExceptionMacro( << "Error = " << error

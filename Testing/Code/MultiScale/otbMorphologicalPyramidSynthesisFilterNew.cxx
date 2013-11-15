@@ -36,6 +36,6 @@ int otbMorphologicalPyramidSynthesisFilterNew(int argc, char * argv[])
   PyramidSynthesisFilterType::Pointer filter = PyramidSynthesisFilterType::New();
 
   std::cout << filter << std::endl;
-    
+
   return EXIT_SUCCESS;
 }

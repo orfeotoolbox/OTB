@@ -35,18 +35,18 @@ int otbMapFileProductWriter(int argc, char* argv[])
 
   MapFileProductWriterType::Pointer    mapWriter  = MapFileProductWriterType::New();
   ImageFileReaderType::Pointer         reader     = ImageFileReaderType::New();
-  
+
   // Read the image
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
-  
+
   mapWriter->SetInput(reader->GetOutput());
   mapWriter->SetFileName(path);
   mapWriter->SetShapeIndexPath(shapepath);
   mapWriter->SetCGIPath(cgipath);
   mapWriter->SetTileSize(tileSize);
   mapWriter->SetSRID(4326);
-  
+
   mapWriter->Update();
 
 

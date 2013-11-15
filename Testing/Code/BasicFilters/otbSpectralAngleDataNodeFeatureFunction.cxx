@@ -79,9 +79,9 @@ int otbSpectralAngleDataNodeFeatureFunction(int argc, char* argv[])
    {
     imgReader->SetGlobalWarningDisplay(0);
    }
-   
+
   otb::DEMHandler::Instance()->OpenDEMDirectory(DEMDir);
-  
+
   vdReader->SetFileName(inputVD);
   vdReader->Update();
 

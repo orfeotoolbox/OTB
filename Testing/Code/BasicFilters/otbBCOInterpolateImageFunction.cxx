@@ -45,25 +45,25 @@ int otbBCOInterpolateImageFunction(int argc, char * argv[])
   const char * outfname     = argv[2];
   const unsigned int radius = atoi(argv[3]);
   const double alpha        = atof(argv[4]);
-  
+
   typedef otb::Image<double, 2>                               ImageType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double> InterpolatorType;
   typedef InterpolatorType::ContinuousIndexType               ContinuousIndexType;
   typedef otb::ImageFileReader<ImageType>                     ReaderType;
 
   int i = 5;
-  
+
   std::vector<ContinuousIndexType> indicesList;
-  
+
   while (i < argc && (i + 1) < argc)
     {
     ContinuousIndexType idx;
-    
+
     idx[0] = atof(argv[i]);
     idx[1] = atof(argv[i + 1]);
-    
+
     indicesList.push_back(idx);
-    
+
     i += 2;
     }
 
@@ -82,9 +82,9 @@ int otbBCOInterpolateImageFunction(int argc, char * argv[])
   std::cout << "Radius Checking : " << std::endl << filter->GetRadius() << std::endl;
   filter->SetRadius(radius);
   std::cout << filter->GetRadius() << std::endl;
-  
+
   filter->SetInputImage(reader->GetOutput());
-  
+
   std::ofstream file;
   file.open(outfname);
 
@@ -117,25 +117,25 @@ int otbBCOInterpolateImageFunctionOverVectorImage(int argc, char * argv[])
   const char * outfname     = argv[2];
   const unsigned int radius = atoi(argv[3]);
   const double alpha        = atof(argv[4]);
-  
+
   typedef otb::VectorImage<double, 2>                         ImageType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double> InterpolatorType;
   typedef InterpolatorType::ContinuousIndexType               ContinuousIndexType;
   typedef otb::ImageFileReader<ImageType>                     ReaderType;
 
   int i = 5;
-  
+
   std::vector<ContinuousIndexType> indicesList;
-  
+
   while (i < argc && (i + 1) < argc)
     {
     ContinuousIndexType idx;
-    
+
     idx[0] = atof(argv[i]);
     idx[1] = atof(argv[i + 1]);
-    
+
     indicesList.push_back(idx);
-    
+
     i += 2;
     }
 
@@ -156,7 +156,7 @@ int otbBCOInterpolateImageFunctionOverVectorImage(int argc, char * argv[])
   std::cout << filter->GetRadius() << std::endl;
 
   filter->SetInputImage(reader->GetOutput());
-  
+
   std::ofstream file;
   file.open(outfname);
 
@@ -173,7 +173,7 @@ int otbBCOInterpolateImageFunctionOverVectorImage(int argc, char * argv[])
 
 int otbBCOInterpolateImageFunctionTest(int argc, char * argv[])
 {
-  
+
   const char * infname      = argv[1];
   const char * outfname     = argv[2];
   const unsigned int radius = atoi(argv[3]);
@@ -197,7 +197,7 @@ int otbBCOInterpolateImageFunctionTest(int argc, char * argv[])
   interpolator->SetInputImage(reader->GetOutput());
   interpolator->SetRadius(radius);
   interpolator->SetAlpha(alpha);
- 
+
   resampler->SetInput(reader->GetOutput());
   resampler->SetInterpolator(interpolator);
   StreamingResampleImageFilterType::SizeType size;
@@ -216,7 +216,7 @@ int otbBCOInterpolateImageFunctionTest(int argc, char * argv[])
 
 int otbBCOInterpolateImageFunctionVectorImageTest(int argc, char * argv[])
 {
-  
+
   const char * infname      = argv[1];
   const char * outfname     = argv[2];
   const unsigned int radius = atoi(argv[3]);

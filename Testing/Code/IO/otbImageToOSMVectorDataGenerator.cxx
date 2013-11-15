@@ -38,7 +38,7 @@ typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
 int otbImageToOSMVectorDataGeneratorNew(int argc, char * argv[])
 {
   FilterType::Pointer vdgenerator = FilterType::New();
-  
+
 
   return EXIT_SUCCESS;
 }
@@ -53,10 +53,10 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
   parser->AddOption("--OutputVectorData","Output VectorData","-out", true);
   parser->AddOption("--Key","Key to search in the XML OSM file","-key", 1, false);
   parser->AddOption("--OSM","OSM XML file to be parsed","-osm", 1, false);
-  
+
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-  
+
   try
     {
     parser->ParseCommandLine(argc, argv, parseResult);
@@ -65,7 +65,7 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
     {
     return EXIT_FAILURE;
     }
-  
+
   // convenient typedefs to store keys and their value
   typedef std::pair<std::string, std::string>      KeyValueType;
   typedef std::vector<KeyValueType>                KeyValueListType;
@@ -84,7 +84,7 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
     vdgenerator->SetFileName(parseResult->GetParameterString("--OSM"));
     }
   vdgenerator->Update();
-  
+
   // Split the classes to get classes and values
   KeyValueListType keyvalueList;
   for (unsigned int idClass = 0; idClass < 1; idClass++)
@@ -100,14 +100,14 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
     currentkeyvalue.first = str.substr (0, pos);
     if(pos != std::string::npos)
       currentkeyvalue.second = str.substr (pos+1);
-    
+
     keyvalueList.push_back(currentkeyvalue);
     }
 
   std::cout <<"Searching for class "<<keyvalueList[0].first
             << " and subclass "<< keyvalueList[0].second  << std::endl;
 
-  
+
   // Write the generated vector data
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
   writer->SetFileName(parseResult->GetParameterString("--OutputVectorData"));
@@ -125,7 +125,7 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
       vdgenerator->GetVectorDataByName("highway");
     writer->SetInput(vd);
     }
-  
+
   // trigger the excecution
   writer->Update();
 

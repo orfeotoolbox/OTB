@@ -41,14 +41,14 @@ int otbImageWidgetImageDump(int argc, char * argv[])
   reader->Update();
   ImageType::RegionType region = reader->GetOutput()->GetLargestPossibleRegion();
   ImageType::RegionType::SizeType size = region.GetSize();
-  
+
   if( argc == 5 )
     {
     size[0] /= atoi(argv[4]);
     size[1] /= atoi(argv[4]);
     }
   region.SetSize(size);
-  
+
   // Create a widget
   WidgetType::Pointer widget = WidgetType::New();
   // Set the acceleration mode
@@ -70,13 +70,13 @@ int otbImageWidgetImageDump(int argc, char * argv[])
 
  // Dump image
   DumperType::Pointer dumper = DumperType::New();
- 
+
   dumper->SetNumberOfChannels(3);
   dumper->SetBuffer( widget->GetOpenGlBuffer() );
   dumper->SetImageSize(widget->GetOpenGlBufferedRegion().GetSize());
   dumper->SetFileName(filename);
   dumper->SetInverseXSpacing(true);
   dumper->Update();
-  
+
   return EXIT_SUCCESS;
 }

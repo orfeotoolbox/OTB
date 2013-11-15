@@ -53,6 +53,6 @@ int main(int argc, char* argv[])
   //writer->SetAutomaticTiledStreaming(1024);
   writer->SetTileDimensionTiledStreaming(256);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

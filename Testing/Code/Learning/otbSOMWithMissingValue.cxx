@@ -66,7 +66,7 @@ int otbSOMWithMissingValueTest(int argc, char* argv[])
 
   SampleListType::Pointer listSample = SampleListType::New();
   listSample->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-  
+
   itk::ImageRegionIterator<ImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
   it.GoToBegin();

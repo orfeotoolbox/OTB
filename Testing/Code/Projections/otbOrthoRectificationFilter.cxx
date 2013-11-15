@@ -87,17 +87,17 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   utmMapProjection->SetZone(atoi(argv[9]));
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
- 
+
   // Displacement Field spacing
   VectorImageType::SpacingType  gridSpacing;
   gridSpacing[0] = atof(argv[11]);
   gridSpacing[1] = -atof(argv[11]);
   orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
-  
+
   VectorImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   no_data.Fill(0);
   orthoRectifFilter->SetEdgePaddingValue(no_data);
-  
+
   writer->SetInput(orthoRectifFilter->GetOutput());
   writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->Update();
@@ -140,7 +140,7 @@ int otbOrthoRectificationComplexFilter(int argc, char* argv[])
 
   ComplexToModulusFilterType::Pointer complexToModulus = ComplexToModulusFilterType::New();
   complexToModulus->SetInput(reader->GetOutput());
-  
+
   UtmMapProjectionType::Pointer  utmMapProjection = UtmMapProjectionType::New();
   OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
 
@@ -169,14 +169,14 @@ int otbOrthoRectificationComplexFilter(int argc, char* argv[])
   utmMapProjection->SetZone(atoi(argv[9]));
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
- 
+
   // Displacement Field spacing
   ComplexVectorImageType::SpacingType  gridSpacing;
   gridSpacing[0] = atof(argv[11]);
   gridSpacing[1] = -atof(argv[11]);
   orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
-  
-  
+
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(orthoRectifFilter->GetOutput());

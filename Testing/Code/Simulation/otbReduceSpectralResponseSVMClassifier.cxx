@@ -109,12 +109,12 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
       std::vector<std::string> training; //contains training files for this class (directory)
       std::vector<std::string> testing; //contains testing files for this class (directory)
       training = result;
-      
+
       // initiating random number generation
       itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer
         randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::New();
       //randomGen->Initialize();
-      
+
     for (unsigned int j = 0; j < static_cast<unsigned int> (percentage * result.size()); ++j)
       {
         ind = randomGen->GetIntegerVariate() % (result.size());

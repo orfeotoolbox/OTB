@@ -24,7 +24,7 @@ int otbPolarimetricSynthesisFunctor(int argc, char * argv[])
   typedef std::complex<double>                   ComplexType;
 
   typedef otb::Functor::PolarimetricSynthesisFunctor<ComplexType, ComplexType, ComplexType, ComplexType, double >         FunctorType;
- 
+
   double result(449.);
   double outputFunct(0.);
   FunctorType funct;

@@ -36,7 +36,7 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   HistogramType::MeasurementVectorType upperBound(1);
   lowerBound[0] = 0.0;
   upperBound[0] = NbOfBins;
-  
+
   histogram->SetMeasurementVectorSize(1);
   histogram->Initialize(size, lowerBound, upperBound);
 

@@ -37,7 +37,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
   typedef otb::SpectralResponse<double, double> SpectralResponseType;
   typedef SpectralResponseType::Pointer SpectralResponsePointerType;
-  
+
   typedef otb::SatelliteRSR<double, double> SatRSRType;
   typedef SatRSRType::Pointer SatRSRPointerType;
 
@@ -143,7 +143,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
   for (unsigned int i = 0; i < dirSR.size(); ++i) //for each class (directory)
     {
       std::cout << "dirSR[" << i << "] : " << dirSR[i] << std::endl;
-      
+
       // Find all .txt file in the directory
       std::string fileExp = dirSR[i];
       fileExp.append("/*.txt");
@@ -158,7 +158,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       std::vector<std::string> training; //contains training files for this class (directory)
       std::vector<std::string> testing; //contains testing files for this class (directory)
       training = result;
-      
+
       // initiating random number generation
       itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer
         randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::New();

@@ -44,8 +44,8 @@ int main(int argc, char * argv[])
   ShrinkType::Pointer shrinker = ShrinkType::New();
 
   reader->SetFileName(infname);
-  
-    
+
+
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
   filter->SetMinimumRegionSize(minRegionSize);

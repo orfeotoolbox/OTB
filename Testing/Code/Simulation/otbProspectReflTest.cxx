@@ -32,7 +32,7 @@ int otbProspectReflTest(int argc, char * argv[])
       std::cout<<"Wrong number of arguments !"<<std::endl;
       return EXIT_FAILURE;
    }
-   
+
    double Cab=static_cast<double>(atof(argv[1]));
    double Car=static_cast<double>(atof(argv[2]));
    double CBrown=static_cast<double>(atof(argv[3]));
@@ -40,11 +40,11 @@ int otbProspectReflTest(int argc, char * argv[])
    double Cm=static_cast<double>(atof(argv[5]));
    double N=static_cast<double>(atof(argv[6]));
    char * OutputName      = argv[7];
-   
+
    //typedef
    typedef otb::ProspectModel PropectType;
    typedef otb::LeafParameters LeafParametersType;
-   
+
    //instantiation
    LeafParametersType::Pointer leafParams = LeafParametersType::New();
    PropectType::Pointer prospect = PropectType::New();
@@ -55,16 +55,16 @@ int otbProspectReflTest(int argc, char * argv[])
    leafParams->SetCw(Cw);
    leafParams->SetCm(Cm);
    leafParams->SetN(N);
-   
+
    prospect->SetInput(leafParams);
    prospect->Update();
-   
+
    std::ofstream outputFile(OutputName, std::ios::out);
    for(unsigned int i=0; i<prospect->GetReflectance()->Size(); ++i)
    {
       outputFile<<prospect->GetReflectance()->GetResponse()[i].second<<std::endl;
    }
 
-   
+
    return EXIT_SUCCESS;
 }

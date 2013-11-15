@@ -83,9 +83,9 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
   p1.push_back(1500);
 
   p2.push_back(6);
-  
+
   p3.push_back(5);
-  
+
   p4.push_back(9);
   p4.push_back(5);
   p4.push_back(5);
@@ -104,18 +104,18 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
 
   Ireader->SetFileName(inputFilename);
   VIreader->SetFileName(inputFilename);
-  
+
   builder->AddImage(Ireader->GetOutput());
   builder->SetNeighborhoodRadius(8);
-  
+
   builder->SetLocalHistogramIFParameters(p1);
   builder->SetFlusserMomentsIFParameters(p2);
   builder->SetRadiometricMomentsIFParameters(p3);
   builder->SetFourierMellinDescriptorsIFParameters(p4);
   builder->SetHaralickTexturesIFParameters(p5);
-    
+
   builder->AddImage(VIreader->GetOutput());
-  
+
   MetaImageFunctionType::Pointer MIF = builder->GetMetaImageFunction();
   std::cout << MIF << std::endl;
 
@@ -127,7 +127,7 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
   std::cout << static_cast<AdaptedRadiometricMomentsIF *>(MIF->GetNthFunction(3))->GetInternalImageFunction()
             << std::endl;
 
- 
+
   std::cout << static_cast<AdaptedFlusserMomentsIF *>(MIF->GetNthFunction(1))->GetInternalImageFunction()
             << std::endl;
   std::cout << static_cast<AdaptedFlusserMomentsIF *>(MIF->GetNthFunction(7))->GetInternalImageFunction()
@@ -149,6 +149,6 @@ int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
   std::cout << static_cast<AdaptedHaralickTexturesIF *>(MIF->GetNthFunction(21))->GetInternalImageFunction()
             << std::endl;
 */
-  
+
   return EXIT_SUCCESS;
 }

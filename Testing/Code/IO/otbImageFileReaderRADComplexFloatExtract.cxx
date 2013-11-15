@@ -36,7 +36,7 @@ int otbImageFileReaderRADComplexFloatExtract(int argc, char* argv[])
 
   typedef std::complex<float> InputPixelType;
   typedef std::complex<float> OutputPixelType;
-  
+
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType,  Dimension> InputImageType;

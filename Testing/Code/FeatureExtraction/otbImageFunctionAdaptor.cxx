@@ -40,7 +40,7 @@ int otbImageFunctionAdaptorNew(int argc, char * argv[])
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
-  
+
   typedef otb::FourierMellinDescriptorsImageFunction<InputImageType>    FMDFunctionType;
   typedef otb::RealMomentsImageFunction<InputImageType>                 RMFunctionType;
   typedef otb::ComplexMomentsImageFunction<InputImageType>              CMFunctionType;
@@ -72,14 +72,14 @@ int otbImageFunctionAdaptorNew(int argc, char * argv[])
   std::cout << RaMadaptedFunction << std::endl;
   LHImageFunctionAdaptorType::Pointer LHadaptedFunction = LHImageFunctionAdaptorType::New();
   std::cout << LHadaptedFunction << std::endl;
- 
+
   return EXIT_SUCCESS;
 }
 
 int otbImageFunctionAdaptor(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
-  
+
   typedef double InputPixelType;
   typedef double PrecisionType;
   const unsigned int Dimension = 2;
@@ -88,7 +88,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
   typedef otb::ImageFileReader<InputImageType>                          ReaderType;
   typedef otb::StreamingMinMaxImageFilter<InputImageType>               MinMaxFilterType;
-  
+
   typedef otb::FourierMellinDescriptorsImageFunction<InputImageType>    FMDFunctionType;
   typedef otb::RealMomentsImageFunction<InputImageType>                 RMFunctionType;
   typedef otb::ComplexMomentsImageFunction<InputImageType>              CMFunctionType;
@@ -108,7 +108,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   // Instantiating objects
   ReaderType::Pointer  reader = ReaderType::New();
   MinMaxFilterType::Pointer filter   = MinMaxFilterType::New();
-  
+
   FMDFunctionType::Pointer FMDFunction = FMDFunctionType::New();
   RMFunctionType::Pointer  RMFunction  = RMFunctionType::New();
   CMFunctionType::Pointer  CMFunction  = CMFunctionType::New();
@@ -124,7 +124,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   HMImageFunctionAdaptorType::Pointer  HMadaptedFunction  = HMImageFunctionAdaptorType::New();
   RaMImageFunctionAdaptorType::Pointer RaMadaptedFunction = RaMImageFunctionAdaptorType::New();
   LHImageFunctionAdaptorType::Pointer  LHadaptedFunction  = LHImageFunctionAdaptorType::New();
-   
+
   reader->SetFileName(inputFilename);
   filter->SetInput(reader->GetOutput());
   filter->Update();
@@ -132,11 +132,11 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
   InputImageType::IndexType index;
   index[0] = 100;
   index[1] = 100;
-  
+
   // Content testing
   double error = 0.0;
 
-  
+
   try
     {
     FMDFunction->SetInputImage(reader->GetOutput());
@@ -356,7 +356,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for LHFunction() !" << std::endl;
     std::cout << err << std::endl;
-    
+
     return EXIT_FAILURE;
     }
 
@@ -369,7 +369,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     itkGenericExceptionMacro( << "Error = " << error
                               << "  > 1E-9     -> TEST FAILLED" << std::endl );
     }
-  
+
   // Testing the use of a user defined InternalImageFunction instead
   // of the build-in InternalImageFunction
   try
@@ -400,7 +400,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     {
     std::cout << "ExceptionObject caught for FMDFunctionType() !" << std::endl;
     std::cout << err << std::endl;
-    
+
     return EXIT_FAILURE;
     }
 

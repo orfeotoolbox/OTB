@@ -32,8 +32,8 @@ int otbLabelImageToVectorDataFilter(int argc, char * argv[])
     }
   const char * infname = argv[1];
   const char * outfname = argv[2];
-  
-  
+
+
   const unsigned int Dimension = 2;
   typedef unsigned short LabelType;
   typedef otb::Image<LabelType, Dimension> InputLabelImageType;
@@ -42,11 +42,11 @@ int otbLabelImageToVectorDataFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<InputLabelImageType>                LabelImageReaderType;
   typedef FilterType::VectorDataType                               VectorDataType;
   typedef otb::VectorDataFileWriter<VectorDataType>                WriterType;
-  
+
   FilterType::Pointer filter = FilterType::New();
   LabelImageReaderType::Pointer reader = LabelImageReaderType::New();
   WriterType::Pointer  writer = WriterType::New();
-  
+
   reader->SetFileName(infname);
 
   filter->SetInput(reader->GetOutput());

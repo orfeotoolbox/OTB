@@ -78,6 +78,6 @@ int otbFuzzyVariable2Values(int argc, char* argv[])
   // For the sake of coverage
   fv->RemoveMembership("Low");
   fv->Clear();
-  
+
   return EXIT_SUCCESS;
 }

@@ -31,7 +31,7 @@ int otbAngularProjectionSetImageFilterNew ( int argc, char * argv[] )
 {
   const unsigned int Dimension = 2;
   const unsigned int SpaceDimension = 3;
-  
+
   typedef float  PixelType;
   typedef double PrecisionType;
   typedef itk::FixedArray< PrecisionType, SpaceDimension > AngleType;

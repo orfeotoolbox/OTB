@@ -51,7 +51,7 @@ int otbSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
 
   weightSeries[nbDates/4] = 100000.0;
   weightSeries[nbDates/2] = 100000.0;
-  
+
   typedef otb::Functor::SavitzkyGolayInterpolationFunctor<Radius, SeriesType, DatesType, SeriesType> FunctorType;
 
   FunctorType f;
@@ -76,6 +76,6 @@ int otbSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
     std::cout << "Interpolation error = " << interpolError << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   return EXIT_SUCCESS;
 }

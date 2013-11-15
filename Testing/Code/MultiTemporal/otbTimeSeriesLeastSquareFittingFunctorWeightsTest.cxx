@@ -32,14 +32,14 @@ int otbTimeSeriesLeastSquareFittingFunctorWeightsTest(int argc, char* argv[])
   typedef unsigned int DoYType;
   typedef itk::FixedArray< PixelType, nbDates > SeriesType;
   typedef itk::FixedArray< DoYType, nbDates > DatesType;
-  
+
   typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<SeriesType, FunctionType, DatesType> FunctorType;
 
   DatesType doySeries;
   // one acquisition every 2 days
   for(unsigned int i = 0; i<nbDates; ++i)
     doySeries[i] = 2*i;
-  
+
 
   SeriesType inSeries;
   SeriesType weightSeries;
@@ -76,6 +76,6 @@ int otbTimeSeriesLeastSquareFittingFunctorWeightsTest(int argc, char* argv[])
       std::cout << outCoefs[i] << " != " << inCoefs[i] << std::endl;
       return EXIT_FAILURE;
       }
-  
+
   return EXIT_SUCCESS;
 }

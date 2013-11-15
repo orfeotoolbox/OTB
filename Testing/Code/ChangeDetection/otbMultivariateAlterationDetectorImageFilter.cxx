@@ -30,7 +30,7 @@ typedef otb::MultivariateAlterationDetectorImageFilter<ImageType, OutputImageTyp
 int otbMultivariateAlterationDetectorImageFilterNew(int argc, char* argv[])
 {
   MADFilterType::Pointer  madFilter = MADFilterType::New();
- 
+
   return EXIT_SUCCESS;
 }
 

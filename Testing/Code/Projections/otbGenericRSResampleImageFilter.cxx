@@ -61,39 +61,39 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   double iGridSpacing    = atof(argv[3]);
   int    useInRpc          = atoi(argv[4]);
   int    useOutRpc          = atoi(argv[5]);
-  
+
 
   ReaderType::Pointer         reader    = ReaderType::New();
-  
+
   // Read the input image
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
-  
+
   // Fill the output size with the user selection
   SizeType      size;
   size.Fill(isize);
-  
+
   // Set the origin & the spacing of the output
   OriginType  origin;
   origin[0] = 367340;
   origin[1] = 4.83467e+06;
-  
+
   SpacingType  spacing;
   spacing[0] = 0.6;
   spacing[1] = -0.6;
-  
+
   // Build the ouput projection ref : UTM ref
   OGRSpatialReference    oSRS;
   oSRS.SetProjCS("UTM");
   oSRS.SetUTM(31, true);
   char * utmRef = NULL;
   oSRS.exportToWkt(&utmRef);
-  
+
   // Displacement Field spacing
   SpacingType  gridSpacing;
   gridSpacing[0] = iGridSpacing;
   gridSpacing[1] = -iGridSpacing;
-  
+
   // Default value builder
   ImageType::PixelType defaultValue;
   itk::NumericTraits<ImageType::PixelType>::SetLength(defaultValue, reader->GetOutput()->GetNumberOfComponentsPerPixel());
@@ -111,21 +111,21 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
     resampler->SetInputRpcGridSize(20);
     resampler->EstimateInputRpcModelOn();
     }
-    
+
   if (useOutRpc)
     {
     resampler->SetOutputRpcGridSize(20);
     resampler->EstimateOutputRpcModelOn();
     }
 
-    
+
   // Write the resampled image
   WriterType::Pointer writer= WriterType::New();
   writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->SetFileName(outfname);
   writer->SetInput(resampler->GetOutput());
   writer->Update();
-  
+
   std::cout << resampler << std::endl;
 
   return EXIT_SUCCESS;
@@ -144,21 +144,21 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   const char * outfname  = argv[4];
   double iGridSpacing    = atof(argv[2]);
   int    useInRpc        = atoi(argv[3]);
-  
+
   // Reader Instanciation
   ReaderType::Pointer         reader    = ReaderType::New();
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
-  
+
   SpacingType  spacing;
   spacing[0] =  2.5;
   spacing[1] = -2.5;
- 
+
   // Displacement Field spacing
   SpacingType  gridSpacing;
   gridSpacing[0] = iGridSpacing;
   gridSpacing[1] = -iGridSpacing;
-  
+
   // Default value builder
   ImageType::PixelType defaultValue;
   itk::NumericTraits<ImageType::PixelType>::SetLength(defaultValue, reader->GetOutput()->GetNumberOfComponentsPerPixel());
@@ -167,26 +167,26 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   ImageType::RegionType roi;
   ImageType::IndexType  roiIndex;
   SizeType              roiSize;
-  
+
   // Fill the size
   roiSize.Fill(250);
-  
+
   // Fill the start index
   roiIndex[0] = (unsigned int)((reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0] - roiSize[0]) /2);
   roiIndex[1] = (unsigned int)((reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] - roiSize[1]) /2);
 
   roi.SetIndex(roiIndex);
   roi.SetSize(roiSize);
-  
+
   extractor->SetExtractionRegion(roi);
   extractor->SetInput(reader->GetOutput());
   extractor->UpdateOutputInformation();
-  
+
   // Set the Resampler Parameters
   resampler->SetInput(extractor->GetOutput());
   resampler->SetDisplacementFieldSpacing(gridSpacing);
   resampler->SetOutputParametersFromMap("UTM", spacing);
-  
+
   if (useInRpc)
     {
     resampler->SetInputRpcGridSize(20);

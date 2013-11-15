@@ -31,7 +31,7 @@ int otbSpatialisationTestNew(int argc, char * argv[])
   typedef otb::AttributesMapLabelObject<LabelType, Dimension, std::string>    LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                                      LabelMapType;
   typedef otb::SpatialisationFilter<LabelMapType>                             FilterType;
-  
+
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;

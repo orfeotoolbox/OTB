@@ -60,24 +60,24 @@ int otbSarParametricMapFunctionTest(int argc, char* argv[])
   InputPixelType           value;
   FunctionType::PointType  pDst;
 
-   
+
   p0[0] = static_cast<unsigned int>(size[0] / 2.);
   p0[1] = static_cast<unsigned int>(size[1] / 4.);
 
   value = 10.0;
-  
+
   points->SetPoint(0, p0);
   points->SetPointData(0, value);
   filter->SetPointSet(points);
-  
+
   filter->EvaluateParametricCoefficient();
   std::cout << filter << std::endl;
-  
+
   p0[0] = static_cast<unsigned int>(size[0] / 4.);
   p0[1] = static_cast<unsigned int>(size[1] / 8.);
 
   value = 20.0;
-  
+
   points->SetPoint(1, p0);
   points->SetPointData(1, value);
   filter->SetPointSet(points);

@@ -77,7 +77,7 @@ int otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction(int argc, cha
    {
     imgReader->SetGlobalWarningDisplay(0);
    }
-   
+
   otb::DEMHandler::Instance()->OpenDEMDirectory(DEMDir);
 
   vdReader->SetFileName(inputVD);

@@ -46,7 +46,7 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-    
+
   try
   {
     parser->ParseCommandLine( argc, argv, parseResult );
@@ -75,7 +75,7 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
   // Main type definition
   typedef float  PixelType;
   typedef double PrecisionType;
-  
+
   typedef itk::FixedArray< PrecisionType, nbInputImages-1 > AngleType;
   typedef itk::Statistics::ListSample< AngleType >          AngleListType;
 
@@ -99,7 +99,7 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
     reader->GetNthElement(i)->Update();
 
     // Here, we will have 'nbInputImages' image lists of one image each only
-    
+
     listOfInputImages->SetNthElement(i, ImageListType::New() );
     listOfInputImages->GetNthElement(i)->PushBack( reader->GetNthElement(i)->GetOutput() );
   }

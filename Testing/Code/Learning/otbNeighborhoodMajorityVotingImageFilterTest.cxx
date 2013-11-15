@@ -32,36 +32,36 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
 {
   typedef unsigned char IOLabelPixelType; // 8 bits
   const unsigned int Dimension = 2;
-  
+
   typedef otb::Image<IOLabelPixelType, Dimension> IOLabelImageType;
-  
+
   typedef otb::ImageFileReader<IOLabelImageType> ReaderType;
   typedef otb::ImageFileWriter<IOLabelImageType> WriterType;
-  
-  
+
+
   // Neighborhood majority voting filter type
   typedef otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType> NeighborhoodMajorityVotingFilterType;
-  
+
   // Binary ball Structuring Element type
   typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
   typedef StructuringType::RadiusType RadiusType;
-  
-  
+
+
   const char * inputFileName = argv[1];
   const char * outputFileName = argv[2];
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
-  
+
   // Neighborhood majority voting filter
   NeighborhoodMajorityVotingFilterType::Pointer NeighMajVotingFilter;
   NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
-  
+
   NeighMajVotingFilter->SetInput(reader->GetOutput());
-  
+
   StructuringType seBall;
   RadiusType rad;
-  
+
 
   std::string KeepOriginalLabelBoolStr = argv[3];
   if (KeepOriginalLabelBoolStr.compare("true") == 0)
@@ -72,17 +72,17 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
   {
     NeighMajVotingFilter->SetKeepOriginalLabelBool(false);
   }
-  
-  
+
+
   if (argc >= 5)
   {
     rad[0] = atoi(argv[4]);
     rad[1] = atoi(argv[5]);
-    
+
     if (argc >= 6)
     {
       NeighMajVotingFilter->SetLabelForNoDataPixels(atoi(argv[6]));
-      
+
       if (argc >= 7)
       {
         NeighMajVotingFilter->SetLabelForUndecidedPixels(atoi(argv[7]));
@@ -95,15 +95,15 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
     rad[1] = 1;
   }
 
-  
+
   seBall.SetRadius(rad);
   seBall.CreateStructuringElement();
   NeighMajVotingFilter->SetKernel(seBall);
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFileName);
   writer->SetInput(NeighMajVotingFilter->GetOutput());
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

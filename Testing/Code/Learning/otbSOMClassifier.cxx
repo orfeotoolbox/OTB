@@ -69,7 +69,7 @@ int otbSOMClassifier(int argc, char* argv[])
 
   SampleType::Pointer listSample = SampleType::New();
   listSample->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-  
+
   itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
   it.GoToBegin();

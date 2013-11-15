@@ -41,7 +41,7 @@ typedef otb::VectorImage<PixelType, Dimension>                                  
 typedef otb::Image<unsigned int, 2>                                                 LabeledImageType;
 
 typedef LabelMapType::Iterator                                                      IteratorType;
-  
+
 typedef otb::ImageFileReader<VectorImageType>                                       ReaderType;
 typedef otb::ImageFileReader<LabeledImageType>                                      LabeledReaderType;
 typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>             LabelMapFilterType;
@@ -88,7 +88,7 @@ int otbKMeansAttributesLabelMapFilter(int argc, char * argv[])
   IteratorType loIt = IteratorType( labelMap );
 
   unsigned int labelObjectID = 0;
-  
+
   while ( !loIt.IsAtEnd() )
     {
     unsigned int classLabel = labelObjectID % 3;

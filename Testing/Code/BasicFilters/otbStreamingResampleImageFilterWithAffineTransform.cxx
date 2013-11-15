@@ -45,7 +45,7 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     const char * infname = argv[1];
     const char * outfname = argv[3];
     unsigned int isize    = atoi(argv[2]);
-  
+
     typedef itk::Transform<
         InternalPixelType, Dimension, Dimension>     TransformType;
 
@@ -62,12 +62,12 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     // Get the image file
     reader->SetFileName(infname);
     reader->UpdateOutputInformation();
-  
+
     /** Set the options. */
     ImageResamplerType::OriginType centerOfRotation;
     centerOfRotation[ 0 ] = -3.0; centerOfRotation[ 1 ] = -3.0;
     affineTransform->SetCenter( centerOfRotation );
-  
+
     /** Create and set parameters. */
     AffineTransformType::ParametersType parameters( affineTransform->GetNumberOfParameters() );
     parameters[ 0 ] =   1.1;
@@ -77,7 +77,7 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     parameters[ 4 ] =  10.3;
     parameters[ 5 ] = -33.8;
     affineTransform->SetParameters( parameters );
-  
+
     // Get the size specified by the user
     ImageType::SizeType   size;
     size.Fill(isize);
@@ -93,7 +93,7 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     resampler->SetDisplacementFieldSpacing(5.);
     resampler->SetOutputSize(size);
     resampler->SetEdgePaddingValue(defaultValue);
-    
+
     // Write the resampled image
     typedef otb::ImageFileWriter<ImageType>    WriterType;
     WriterType::Pointer writer= WriterType::New();

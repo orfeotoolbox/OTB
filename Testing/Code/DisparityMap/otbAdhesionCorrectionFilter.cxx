@@ -73,7 +73,7 @@ int otbAdhesionCorrectionFilter(int argc, char* argv[])
   const char* correctedDisparityFileName = argv[9];
   const char* correctedMaskFileName = argv[10];
   const char* riskEdgesFileName = argv[11];
-    
+
   typedef otb::ImageFileReader<ImageType> DisparityMapReaderType;
   DisparityMapReaderType::Pointer mediandisparityreader = DisparityMapReaderType::New();
   mediandisparityreader->SetFileName(medianDisparityFileName);
@@ -81,18 +81,18 @@ int otbAdhesionCorrectionFilter(int argc, char* argv[])
   typedef otb::ImageFileReader<MaskImageType> MaskReaderType;
   MaskReaderType::Pointer medianmaskreader = MaskReaderType::New();
   medianmaskreader->SetFileName(medianMaskFileName);
-       
+
   DisparityMapReaderType::Pointer subpixeldisparityreader = DisparityMapReaderType::New();
   subpixeldisparityreader->SetFileName(subpixelDisparityFileName);
 
   typedef otb::ImageFileReader<MaskImageType> MaskReaderType;
   MaskReaderType::Pointer subpixelmaskreader = MaskReaderType::New();
   subpixelmaskreader->SetFileName(subpixelMaskFileName);
-       
+
   /// Edge images are read from Canny filtering performed with MARC2
   InputReaderType::Pointer cannyrefReader = InputReaderType::New();
   cannyrefReader->SetFileName(cannyRefFileName);
-       
+
   InputReaderType::Pointer cannymedianReader = InputReaderType::New();
   cannymedianReader->SetFileName(cannyMedianFileName);
 

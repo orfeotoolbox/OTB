@@ -40,15 +40,15 @@ int main(int argc, char *argv[])
 
   typedef otb::Wrapper::InputImageParameter InputImageParameterType;
   InputImageParameterType::Pointer param = InputImageParameterType::New();
-  
+
   param->SetFromFileName(argv[2]);
 
   if( param->GetImage() != param->GetImage() )
     {
       return EXIT_FAILURE;
     }
-  
-  
+
+
 
   return EXIT_SUCCESS;
 }

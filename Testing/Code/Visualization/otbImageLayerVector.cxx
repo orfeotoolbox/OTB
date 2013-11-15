@@ -128,7 +128,7 @@ int otbImageLayerVector(int argc, char * argv[])
   writer->SetInput(layer->GetRenderedExtract());
   writer->SetFileName(extoutfname);
   writer->Update();
-  
+
   writer = WriterType::New();
   writer->SetInput(layer->GetRenderedScaledExtract());
   writer->SetFileName(sextoutfname);

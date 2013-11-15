@@ -27,7 +27,7 @@ typedef otb::VectorDataFileWriter<FilterType::VectorDataType> VectorDataFileWrit
 int otbOSMToVectorDataGeneratorNew (int argc, char * argv[])
 {
   FilterType::Pointer filter = FilterType::New();
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -47,7 +47,7 @@ int otbOSMToVectorDataGeneratorTest (int argc, char * argv[])
   writer->SetInput(filter->GetVectorDataByName("building"));
   writer->SetFileName(argv[2]);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -61,10 +61,10 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
 
   parser->AddOption("--OutputVectorData","The output vectordata",
                     "-vd", 1, true);
-  
+
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-  
+
   try
     {
     parser->ParseCommandLine(argc, argv, parseResult);
@@ -77,13 +77,13 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetFileName(parseResult->GetParameterString("--OSMFile"));
   filter->SetUseUrl(false);
-  
+
   // Set the extent of the request
   filter->SetNorth(43.62811);
   filter->SetSouth(43.60185);
   filter->SetWest(1.54911);
   filter->SetEast(1.59323);
-  
+
   filter->Update();
 
   const FilterType::VectorDataType*  v1 = filter->GetVectorDataByName("waterway");
@@ -91,11 +91,11 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
 
   const FilterType::VectorDataType*  v2 = filter->GetVectorDataByName("highway");
   std::cout <<"Size of the vectordata v2 : "<< v2->Size() << std::endl;
-  
-  
+
+
   const FilterType::VectorDataType*  v3 = filter->GetVectorDataByName("building");
   std::cout <<"Size of the vectordata v3 : "<< v3->Size() << std::endl;
-  
+
   const FilterType::VectorDataType*  v4 = filter->GetVectorDataByName("highway","motorway_link");
   std::cout <<"Size of the vectordata v4 : "<< v4->Size() << std::endl;
 
@@ -105,6 +105,6 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
   writer->SetInput(v4);
   writer->Update();
 
-  
+
   return EXIT_SUCCESS;
 }

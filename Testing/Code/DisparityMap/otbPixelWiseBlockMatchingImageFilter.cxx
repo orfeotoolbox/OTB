@@ -48,7 +48,7 @@ int otbPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
 
   ReaderType::Pointer rightReader = ReaderType::New();
   rightReader->SetFileName(argv[2]);
-  
+
   PixelWiseBlockMatchingImageFilterType::Pointer bmFilter = PixelWiseBlockMatchingImageFilterType::New();
   bmFilter->SetLeftInput(leftReader->GetOutput());
   bmFilter->SetRightInput(rightReader->GetOutput());
@@ -91,7 +91,7 @@ int otbPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
 
   ReaderType::Pointer rightReader = ReaderType::New();
   rightReader->SetFileName(argv[2]);
-  
+
   PixelWiseNCCBlockMatchingImageFilterType::Pointer bmFilter = PixelWiseNCCBlockMatchingImageFilterType::New();
   bmFilter->SetLeftInput(leftReader->GetOutput());
   bmFilter->SetRightInput(rightReader->GetOutput());

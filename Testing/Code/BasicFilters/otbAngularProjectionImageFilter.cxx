@@ -36,7 +36,7 @@ int otbAngularProjectionImageFilterTest ( int argc, char * argv[] )
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-    
+
   try
   {
     parser->ParseCommandLine( argc, argv, parseResult );
@@ -60,7 +60,7 @@ int otbAngularProjectionImageFilterTest ( int argc, char * argv[] )
 
   // Main type definition
   const unsigned int Dimension = 2;
-  
+
   typedef float  PixelType;
   typedef double PrecisionType;
   typedef itk::FixedArray< PrecisionType, 1 > AngleType;
@@ -86,14 +86,14 @@ int otbAngularProjectionImageFilterTest ( int argc, char * argv[] )
   filter->SetInput( 0, reader1->GetOutput() );
   filter->SetInput( 1, reader2->GetOutput() );
   filter->SetAngleArray( angle );
-  
+
   // Saving
   typedef otb::ImageFileWriter< ImageType > WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( outputImageName );
   writer->SetInput( filter->GetOutput() );
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }
 

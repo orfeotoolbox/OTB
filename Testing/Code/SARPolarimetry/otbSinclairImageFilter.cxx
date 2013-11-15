@@ -70,7 +70,7 @@ int generic_SinclairImageFilter(int argc, char * argv[])
   typename ReaderType::Pointer reader1 = ReaderType::New();
   typename ReaderType::Pointer reader2 = ReaderType::New();
   typename ReaderType::Pointer reader3 = ReaderType::New();
-  
+
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);
   reader3->SetFileName(inputFilename3);
@@ -78,9 +78,9 @@ int generic_SinclairImageFilter(int argc, char * argv[])
   filter->SetInputHV(reader2->GetOutput());
   filter->SetInputVH(reader2->GetOutput());
   filter->SetInputVV(reader3->GetOutput());
-  
+
   filter->UpdateOutputInformation();
-  
+
   typename ExtractROIType::Pointer  extract = ExtractROIType::New();
   extract->SetStartX(10);
   extract->SetStartY(10);

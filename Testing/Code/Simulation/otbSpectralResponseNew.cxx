@@ -24,8 +24,8 @@ int otbSpectralResponseNew(int argc, char * argv[])
 {
   typedef otb::SpectralResponse< double, double>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;
-  
-  
+
+
   //Instantiation
   ResponsePointerType  myResponse=ResponseType::New();
 

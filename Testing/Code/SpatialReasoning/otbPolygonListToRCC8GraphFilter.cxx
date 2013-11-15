@@ -53,7 +53,7 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
   RCC8GraphFilterType::SegmentationRangesType ranges;
 
   ranges.push_back(0);
-  
+
   PolygonType::Pointer polygon = PolygonType::New();
   polygon->AddVertex(Vertex(0,0));
   polygon->AddVertex(Vertex(2,0));
@@ -69,7 +69,7 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
   regions->PushBack(polygon);
 
   ranges.push_back(2);
-  
+
   polygon = PolygonType::New();
   polygon->AddVertex(Vertex(3,1));
   polygon->AddVertex(Vertex(4,1));

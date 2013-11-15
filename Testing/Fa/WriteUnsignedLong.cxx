@@ -51,18 +51,18 @@ int main(int argc, char *argv[])
 
   region.SetSize(size);
   region.SetIndex(start);
-  
+
   image->SetRegions(region);
   image->Allocate();
 
   ImageType::PixelType initialValue = 0;
   image->FillBuffer(initialValue);
-  
+
   ImageType::IndexType pixelIndex;
 
   pixelIndex[0] = 1;   // x position
   pixelIndex[1] = 1;
-  
+
   image->SetPixel(pixelIndex, initialValue + 1);
 
   writer->SetInput(image);
@@ -74,10 +74,10 @@ int main(int argc, char *argv[])
 
   ImageType::RegionType outputRegion;
   outputRegion = reader->GetOutput()->GetLargestPossibleRegion();
-  
+
   ImageType::SizeType outputSize;
   outputSize = outputRegion.GetSize();
-  
+
   if (reader->GetOutput()->GetPixel(pixelIndex) != initialValue + 1 )
     {
     return EXIT_FAILURE;

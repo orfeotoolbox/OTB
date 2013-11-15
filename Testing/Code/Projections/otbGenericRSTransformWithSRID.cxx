@@ -113,7 +113,7 @@ int otbGenericRSTransformWithSRID(int argc, char* argv[])
   TransformType::Pointer utm2lambert    = TransformType::New();
   utm2lambert->SetInputProjectionRef("32631");  // UTM
   utm2lambert->SetOutputProjectionRef(lambertRef);
-  
+
   utm2lambert->InstanciateTransform();
 
   TransformType::Pointer lambert2utm    = TransformType::New();

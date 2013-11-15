@@ -157,7 +157,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
       }
 
     otb::DEMHandler::Instance()->OpenDEMDirectory(argv[14]);
-    
+
     std::cout<<"Elevation from DEM "<<argv[14]<<" used."<<std::endl;
     }
   else
@@ -213,7 +213,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
     }
 
   std::cout<<std::endl;
-  
+
   if(outRes>outThreshold)
     {
     failed = true;
@@ -240,7 +240,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
     std::cerr<<"Failed to read in distance flag. Should be one of PHYSICAL, GEO."<<std::endl;
     return EXIT_FAILURE;
     }
-  
+
   std::cout<<std::endl;
 
   if(inRes>inThreshold)

@@ -36,13 +36,13 @@ int otbLocalHistogramImageFunctionTest(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>                    ReaderType;
   typedef otb::LocalHistogramImageFunction<InputImageType>        FunctionType;
 
-  
+
   ReaderType::Pointer reader         = ReaderType::New();
   FunctionType::Pointer function     = FunctionType::New();
 
   reader->SetFileName(inputFilename);
   reader->Update();
-  
+
   function->SetInputImage(reader->GetOutput());
 
   InputImageType::IndexType index;

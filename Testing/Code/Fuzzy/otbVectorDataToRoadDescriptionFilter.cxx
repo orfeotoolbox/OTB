@@ -45,7 +45,7 @@ int otbVectorDataToRoadDescriptionFilterNew(int argc, char* argv[])
 
   VectorDataToRoadDescriptionFilterType::Pointer filter =
     VectorDataToRoadDescriptionFilterType::New();
-  
+
   std::cout<<filter<<std::endl;
 
   return EXIT_SUCCESS;
@@ -66,7 +66,7 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
 
   typedef otb::VectorDataToRoadDescriptionFilter<VectorDataType, ImageType>
                                           VectorDataToRoadDescriptionFilterType;
-  
+
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
   typedef otb::VectorDataFileReader<VectorDataType>
                                           VectorDataReaderType;
@@ -99,7 +99,7 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
 
   vdReader->SetFileName(inputVD);
   vdReader->Update();
-  
+
   vdReProjFilter->SetInputImage(reader->GetOutput());
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
   vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(true);

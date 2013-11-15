@@ -142,7 +142,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
        vect.push_back(value);
        }
       }
-    
+
     fin.close();
 
     functionValues->SetFilterFunctionValues(vect);

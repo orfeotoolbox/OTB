@@ -28,14 +28,14 @@ int otbMuellerToReciprocalCovarianceFunctor(int argc, char * argv[])
   typedef itk::VariableLengthVector<ComplexType> VectorComplexType;
 
   typedef otb::Functor::MuellerToReciprocalCovarianceFunctor<VectorDoubleType, VectorComplexType> FunctorType;
- 
+
   VectorDoubleType input;
   input.SetSize(16);
   VectorComplexType outputFunct;
   outputFunct.SetSize(6);
   VectorComplexType result;
   result.SetSize(6);
-  
+
   double val = 0;
   for(unsigned int i=0; i<input.Size(); ++i)
     {
@@ -66,7 +66,7 @@ int otbMuellerToReciprocalCovarianceFunctor(int argc, char * argv[])
       vcl_abs(result[4].imag()-outputFunct[4].imag()) > 1e-10 ||
       vcl_abs(result[5].real()-outputFunct[5].real()) > 1e-10 ||
       vcl_abs(result[5].imag()-outputFunct[5].imag()) > 1e-10    )
-       
+
     {
       std::cout<<"Test gives :"<<std::endl;
       std::cout<<outputFunct<<std::endl;

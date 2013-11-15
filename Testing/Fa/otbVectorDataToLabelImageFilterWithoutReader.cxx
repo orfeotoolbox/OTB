@@ -42,7 +42,7 @@ typedef LineType::VertexType                      VertexType;
 
 int main(int argc, char* argv[])
 {
-  
+
   //OGRRegisterAll();
 
   // Create vector Data
@@ -119,9 +119,9 @@ int main(int argc, char* argv[])
    data->GetDataTree()->Add(folder, document);
    data->GetDataTree()->Add(polygon1, folder);
    data->GetDataTree()->Add(polygon2, folder);
-  
+
    data->Update();
-  
+
   // rasterize
   RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
   rasterization->AddVectorData(data);

@@ -36,12 +36,12 @@ int otbFourierMellinDescriptorsNew(int argc, char * argv[])
 
   typedef otb::Image<InputPixelType,  Dimension>                     ImageType;
   typedef otb::FourierMellinDescriptorsImageFunction<ImageType>      FunctionType;
-  
+
   // Instantiating object
   FunctionType::Pointer function = FunctionType::New();
- 
+
   std::cout << function << std::endl;
-   
+
   return EXIT_SUCCESS;
 }
 
@@ -67,20 +67,20 @@ int otbFourierMellinDescriptors(int argc, char * argv[])
   reader->Update();
 
   function->SetInputImage(reader->GetOutput());
-  
+
   function->SetQmax(q);
   function->SetPmax(p);
-  
+
   ImageType::IndexType index;
   index[0] = 256;
   index[1] = 256;
   function->SetNeighborhoodRadius(3);
-  
+
   OutputType Result = function->EvaluateAtIndex(index);
 
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10);
-  
+
   for (unsigned int k=0; k<=p; ++k)
     {
     for (unsigned int l=0; l<=q; ++l)
@@ -110,13 +110,13 @@ int otbFourierMellinDescriptorsScaleInvariant(int argc, char * argv[])
     double>                                                               InterpolatorType;
   typedef otb::FourierMellinDescriptorsImageFunction<InputImageType>      FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
-  
+
   ReaderType::Pointer                         reader = ReaderType::New();
   StreamingResampleImageFilterType::Pointer   resampler = StreamingResampleImageFilterType::New();
   InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
   FunctionType::Pointer                       function1 = FunctionType::New();
   FunctionType::Pointer                       function2 = FunctionType::New();
-  
+
   reader->SetFileName(inputFilename);
   reader->Update();
 
@@ -152,7 +152,7 @@ int otbFourierMellinDescriptorsScaleInvariant(int argc, char * argv[])
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error = 0.0;
-  
+
   for (unsigned int k=0; k<=p; ++k)
     {
     for (unsigned int l=0; l<=q; ++l)
@@ -165,17 +165,17 @@ int otbFourierMellinDescriptorsScaleInvariant(int argc, char * argv[])
                 << " : " << Result2.at(k).at(l) << std::endl;
       }
     }
-  
+
   error = vcl_sqrt(error)/(q+p);
   std::cout << "Error : " << error << std::endl
             << std::endl;
-    
+
   if (error > 1E-2)
     {
     itkGenericExceptionMacro( << "Error = " << error
                               << "  > 1E-2     -> TEST FAILLED" << std::endl );
     }
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -205,14 +205,14 @@ int otbFourierMellinDescriptorsRotationInvariant(int argc, char * argv[])
   InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
   FunctionType::Pointer                       function1 = FunctionType::New();
   FunctionType::Pointer                       function2 = FunctionType::New();
-  
+
   reader->SetFileName(inputFilename);
   reader->Update();
 
   interpolator->SetInputImage(reader->GetOutput());
   interpolator->SetRadius(2);
   interpolator->SetAlpha(-0.5);
-  
+
   filter->SetInterpolator(interpolator);
   filter->SetDefaultPixelValue( 100 );
 
@@ -220,12 +220,12 @@ int otbFourierMellinDescriptorsRotationInvariant(int argc, char * argv[])
   const InputImageType::PointType & origin  = reader->GetOutput()->GetOrigin();
   InputImageType::SizeType size =
     reader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  
+
   filter->SetOutputOrigin( origin );
   filter->SetOutputSpacing( spacing );
   filter->SetOutputDirection( reader->GetOutput()->GetDirection() );
   filter->SetSize( size );
-  
+
   filter->SetInput(reader->GetOutput());
 
   TransformType::OutputVectorType translation1;
@@ -234,7 +234,7 @@ int otbFourierMellinDescriptorsRotationInvariant(int argc, char * argv[])
   translation1[0] =   -imageCenterX;
   translation1[1] =   -imageCenterY;
   transform->Translate( translation1 );
-  
+
   const double degreesToRadians = vcl_atan(1.0) / 45.0;
   const double angle = angleInDegrees * degreesToRadians;
   transform->Rotate2D( -angle, false );
@@ -243,7 +243,7 @@ int otbFourierMellinDescriptorsRotationInvariant(int argc, char * argv[])
   translation2[0] =   imageCenterX;
   translation2[1] =   imageCenterY;
   transform->Translate( translation2, false );
- 
+
   filter->SetTransform( transform );
   filter->Update();
 
@@ -266,24 +266,24 @@ int otbFourierMellinDescriptorsRotationInvariant(int argc, char * argv[])
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error = 0.0;
-  
+
   for (unsigned int k=0; k<=p; ++k)
     {
     for (unsigned int l=0; l<=q; ++l)
       {
       error += vcl_pow(vcl_abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
-      
+
       std::cout << "Original - D" << k << l
                 << " : " << Result1.at(k).at(l)
                 << "  /  Rotated - D" << k << l
                 << " : " << Result2.at(k).at(l) << std::endl;
       }
     }
-  
+
   error = vcl_sqrt(error)/(q+p);
   std::cout << "Error : " << error << std::endl
             << std::endl;
-  
+
  if (error > 1E-3)
    {
   itkGenericExceptionMacro( << "Error = " << error

@@ -106,7 +106,7 @@ int otbMapProjection(int argc, char* argv[])
   // Moving to GenericMapProjection, change the access
   lUtmProjection->SetParameter("MetersPerPixelX", "1");
   lUtmProjection->SetParameter("MetersPerPixelY", "1");
-  
+
   file << "\n\n *** Test accessors *** \n\n";
   file << std::setprecision(15);
   file << "Origin: \t" << lUtmProjection->GetParameter("Origin") << std::endl;

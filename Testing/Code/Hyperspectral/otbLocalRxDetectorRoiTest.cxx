@@ -30,7 +30,7 @@ int LocalRXDetectorROITest(int argc, char * argv[])
 
         const unsigned int indexX = atoi(argv[5]);
        const unsigned int indexY = atoi(argv[6]);
-       
+
        const unsigned int sizeX = atoi(argv[7]);
        const unsigned int sizeY = atoi(argv[8]);
 

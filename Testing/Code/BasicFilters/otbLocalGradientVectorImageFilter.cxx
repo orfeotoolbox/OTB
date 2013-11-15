@@ -48,7 +48,7 @@ int otbLocalGradientVectorImageFilterTest ( int argc, char* argv[] )
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-    
+
   try
   {
     parser->ParseCommandLine( argc, argv, parseResult );

@@ -59,7 +59,7 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-    
+
   try
   {
     parser->ParseCommandLine( argc, argv, parseResult );
@@ -132,7 +132,7 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
     typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
     CommandType2::Pointer invObserver = CommandType2::New();
     invFilter->AddObserver( itk::ProgressEvent(), invObserver );
-    
+
     std::cerr << "Reconstruction\n";
 
     ImageWriterType::Pointer invWriter = ImageWriterType::New();

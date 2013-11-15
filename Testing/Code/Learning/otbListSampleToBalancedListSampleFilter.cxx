@@ -101,14 +101,14 @@ int otbListSampleToBalancedListSampleFilter(int argc, char * argv[])
 
   IntegerSampleListType::ConstIterator labelIt = filter->GetOutputLabel()->Begin();
   ofs<<"Output Label samples: "<<std::endl;
-  
+
   while(labelIt != filter->GetOutputLabel()->End())
     {
     ofs<<labelIt.GetMeasurementVector()<<std::endl;
     ++labelIt;
     }
   ofs.close();
-  
+
   std::cout <<"Output balanced SampleList Size         : "<< filter->GetOutput()->Size()  << std::endl;
   std::cout <<"Output balanced Labeled SampleList Size : "<< filter->GetOutputLabel()->Size() << std::endl;
 

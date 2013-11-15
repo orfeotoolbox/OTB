@@ -58,13 +58,13 @@ int otbKmzProductWriter(int argc, char* argv[])
   const char * infname       = argv[1];
   const char * demPath       = argv[2];
   const char * kmzFileName   = argv[3];
-  
+
   // Instanciate reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
   otb::DEMHandler::Instance()->OpenDEMDirectory(demPath);
-  
+
   GCPsToSensorModelFilterType::Pointer rpcEstimator = GCPsToSensorModelFilterType::New();
   rpcEstimator->SetInput(reader->GetOutput());
 
@@ -89,15 +89,15 @@ int otbKmzProductWriter(int argc, char* argv[])
     }
 
   rpcEstimator->GetOutput()->UpdateOutputInformation();
-  
+
   std::cout << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
-  
+
   // Second part : Image To Kmz
   KmzProductWriterType::Pointer    kmzWriter  = KmzProductWriterType::New();
 
   kmzWriter->SetInput(rpcEstimator->GetOutput());
   kmzWriter->SetPath(kmzFileName);
-  
+
   kmzWriter->Update();
 
   return EXIT_SUCCESS;
@@ -119,7 +119,7 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
   parser->AddOptionNParams("--GroudControlPoints",
                            "Ground Control Points to estimate sensor model a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz",
                            "-gcp", true);
-  
+
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
 
@@ -143,7 +143,7 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
 
   // Check if the number of gcp pairs point is consistent
   unsigned int nbPoints = parseResult->GetNumberOfParameters("--GroudControlPoints");
-  
+
   if (nbPoints % 5 != 0)
     {
     std::cout <<"argc " << argc << std::endl;
@@ -159,15 +159,15 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
   rpcEstimator->SetInput(reader->GetOutput());
 
   std::cout << "Receiving " << nbPoints << " from command line." << std::endl;
-  
+
   unsigned int nbGCPs =  nbPoints/5;
-  
+
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
     sensorPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints",     gcpId * 5);
     sensorPoint[1] = parseResult->GetParameterFloat("--GroudControlPoints", 1 + gcpId * 5);
-    
+
     Point3DType geoPoint;
     geoPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints", 2 + gcpId * 5);
     geoPoint[1] = parseResult->GetParameterFloat("--GroudControlPoints", 3 + gcpId * 5);
@@ -180,7 +180,7 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
 
   rpcEstimator->GetOutput()->UpdateOutputInformation();
   std::cout << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
-  
+
   // Second part : Image To Kmz
   KmzProductWriterType::Pointer    kmzWriter  = KmzProductWriterType::New();
   kmzWriter->SetInput(rpcEstimator->GetOutput());
@@ -208,7 +208,7 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
     {
     otb::DEMHandler::Instance()->OpenDEMDirectory(parseResult->GetParameterString("--DEMDirectory"));
     }
-  
+
   // trigger the writing
   kmzWriter->Update();
 

@@ -24,7 +24,7 @@
 int otbParserTestNew(int argc, char * argv[])
 {
   typedef otb::Parser                                 ParserType;
-  
+
   // Instantiating object
   ParserType::Pointer parser = ParserType::New();
 
@@ -50,14 +50,14 @@ int otbParserTest(int argc, char * argv[])
   std::string Expression_UserDefinedVars = "(var1+var2-var3)*var4/var5";
   std::string Expression_Mixed           = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100, 10)";
   std::string Expression_StressTest      = "(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100, 10)*40+rint(83.144)*0.6588";
-  
+
   typedef otb::Parser                                 ParserType;
-  
+
   // Instantiating object
   ParserType::Pointer parser = ParserType::New();
 
   std::cout << std::endl;
-  
+
   parser->SetExpr(Expression_Numerical);
   result = parser->Eval();
   std::cout << "Expression Parsing Result : "                    << std::endl;
@@ -98,7 +98,7 @@ int otbParserTest(int argc, char * argv[])
   std::cout << Expression_UserDefinedVars << " = " << result     << std::endl; // 2.5
   std::cout << "Expected Result : " << 2.5         << std::endl  << std::endl;
   error += sqrt((result - 2.5)*(result - 2.5));
-  
+
   parser->SetExpr(Expression_Mixed);
   result = parser->Eval();
   std::cout << "Expression Parsing Result : "                    << std::endl;

@@ -45,18 +45,18 @@ int otbConcatenateVectorDataFilter (int argc, char * argv[])
   ParserType::Pointer parser = ParserType::New();
   parser->AddOptionNParams("--InputVectorDatas","Input VectorDatas to concatenate ", "-in", true);
   parser->AddOption("--OutputVectorData","Output concatenated VectorData","-out", true);
-    
+
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
   parser->ParseCommandLine(argc, argv, parseResult);
-  
+
   // Get number of input vectorDatas
   unsigned int nbInputs = parseResult->GetNumberOfParameters("--InputVectorDatas");
 
   // Instanciate a concatenate filter
     // Concatenate the vector datas
   ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
-  
+
   for (unsigned int idx = 0; idx < nbInputs; ++idx)
     {
     // Reader object
@@ -64,10 +64,10 @@ int otbConcatenateVectorDataFilter (int argc, char * argv[])
     //std::cout << << std::endl;
     reader->SetFileName(parseResult->GetParameterString("--InputVectorDatas", idx ));
     reader->Update();
-    
+
     concatenate->AddInput(reader->GetOutput());
     }
-  
+
   // Write the output
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(parseResult->GetParameterString("--OutputVectorData"));

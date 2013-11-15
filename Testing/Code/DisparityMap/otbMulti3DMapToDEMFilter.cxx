@@ -27,20 +27,20 @@
 #include "otbGeoInformationConversion.h"
 
 typedef otb::Image<double, 2>                    ImageType;
-  
+
 typedef otb::VectorImage<double, 2>              VectorImageType;
-  
+
 typedef otb::Multi3DMapToDEMFilter
   <VectorImageType,
     ImageType,
     ImageType>                              Multi3DFilterType;
 
-    
+
 int otbMulti3DMapToDEMFilterNew(int argc, char* argv[])
 {
   // Instantiation
   Multi3DFilterType::Pointer multiFilter = Multi3DFilterType::New();
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -496,20 +496,20 @@ return EXIT_SUCCESS; */
 int otbMulti3DMapToDEMFilter(int argc, char* argv[])
 {
   typedef otb::ImageFileReader<ImageType>    ReaderType;
-  
+
   typedef otb::ImageFileReader
     <VectorImageType>                        ReaderVectorType;
-    
+
 
   typedef otb::ImageFileWriter
     <ImageType>                              WriterType;
-  
+
   typedef otb::ImageList<ImageType>          ImageListType;
-  
+
   typedef otb::VectorImageToImageListFilter
     <VectorImageType,
      ImageListType>                               VectorToListFilterType;
-  
+
   typedef otb::ObjectList<ReaderType>            MaskReaderListType;
   typedef otb::ObjectList<ReaderVectorType>      MapReaderListType;
 
@@ -519,10 +519,10 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
     std::cout << "Usage: "<<argv[0]<<" 3DMapImage1 .mask1... 3DMapImageN maskN  DEMoutput DEMGridStep FusionMode ThreadNb StreamNb" << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   unsigned int mapSize=(argc-6)/2;
 
-  
+
   MapReaderListType::Pointer mapReaderList=MapReaderListType::New();
   MaskReaderListType::Pointer  maskReaderList=MaskReaderListType::New();
   for(unsigned int i=0; i<(mapSize); i++)
@@ -543,13 +543,13 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
     maskReaderList->GetNthElement(index)->UpdateOutputInformation();
     index++;
   }
-  
+
   float gridStep=atof(argv[argc-4]);
-  
+
   std::cout<<"gridStep "<<gridStep<<std::endl;
-  
+
   int fusionMode=atof(argv[argc-3]);
-  
+
   std::cout<<"fusionMode "<<fusionMode<<std::endl;
 
 
@@ -577,6 +577,6 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
   writer->SetNumberOfDivisionsStrippedStreaming(atoi(argv[argc-1]));
   writer->Update();
 
-  
+
   return EXIT_SUCCESS;
 }

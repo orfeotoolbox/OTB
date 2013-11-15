@@ -31,10 +31,10 @@ int otbTimeSeriesLeastSquareFittingFunctorNew(int argc, char* argv[])
   typedef double CoefficientPrecisionType;
   const unsigned int Degree = 2;
   typedef otb::PolynomialTimeSeries< Degree, CoefficientPrecisionType > FunctionType;
-  
+
   typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<SeriesType, FunctionType, DatesType> FunctorType;
 
   FunctorType f;
-  
+
   return EXIT_SUCCESS;
 }

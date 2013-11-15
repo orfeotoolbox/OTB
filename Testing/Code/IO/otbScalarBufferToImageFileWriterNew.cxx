@@ -25,6 +25,6 @@ int otbScalarBufferToImageFileWriterNew(int argc, char* argv[])
 {
   typedef otb::ScalarBufferToImageFileWriter<int, double> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  
+
   return EXIT_SUCCESS;
 }

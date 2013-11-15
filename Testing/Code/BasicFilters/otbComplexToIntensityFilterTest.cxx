@@ -37,8 +37,8 @@ int otbComplexToIntensityFilterTest(int, char* [] )
   typedef otb::Image<InputPixelType, ImageDimension>  InputImageType;
   typedef otb::Image<float,          ImageDimension>  OutputImageType;
 
-  
-  
+
+
   // Declare Iterator types apropriated for each image
   typedef itk::ImageRegionIteratorWithIndex<
                                   InputImageType>  InputIteratorType;
@@ -59,7 +59,7 @@ int otbComplexToIntensityFilterTest(int, char* [] )
 
   // Create two images
   InputImageType::Pointer inputImage  = InputImageType::New();
-  
+
   // Define their size, and start index
   SizeType size;
   size[0] = 2;
@@ -95,7 +95,7 @@ int otbComplexToIntensityFilterTest(int, char* [] )
   // Declare the type for the ComplexToIntensity filter
   typedef otb::ComplexToIntensityImageFilter< InputImageType,
                                OutputImageType  >  FilterType;
-            
+
 
   // Create an ADD Filter
   FilterType::Pointer filter = FilterType::New();
@@ -107,13 +107,13 @@ int otbComplexToIntensityFilterTest(int, char* [] )
   // Get the Smart Pointer to the Filter Output
   OutputImageType::Pointer outputImage = filter->GetOutput();
 
-  
+
   // Execute the filter
   filter->Update();
 
   // Create an iterator for going through the image output
   OutputIteratorType ot(outputImage, outputImage->GetRequestedRegion());
-  
+
   //  Check the content of the result image
   std::cout << "Verification of the output " << std::endl;
   const OutputImageType::PixelType epsilon = 1e-6;
@@ -123,7 +123,7 @@ int otbComplexToIntensityFilterTest(int, char* [] )
     {
     const InputImageType::PixelType  input  = it.Get();
     const OutputImageType::PixelType output = ot.Get();
-    
+
     double intensityd =  input.real()*input.real() + input.imag()*input.imag();
 
     const OutputImageType::PixelType intensity  =

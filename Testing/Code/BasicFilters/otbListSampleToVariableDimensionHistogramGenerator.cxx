@@ -38,10 +38,10 @@ int otbListSampleToVariableDimensionHistogramGenerator(int argc, char * argv[])
 
   reader->SetFileName(argv[1]);
   reader->Update();
-  
+
   // Set the size of the ListSample Measurement Vector
   ls->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-    
+
   itk::ImageRegionConstIterator<VectorImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
   for (it.GoToBegin(); !it.IsAtEnd(); ++it)

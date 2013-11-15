@@ -34,12 +34,12 @@ int otbRadiometricMomentsImageFunctionNew(int argc, char * argv[])
 
   typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
   typedef otb::RadiometricMomentsImageFunction<InputImageType>    FunctionType;
- 
+
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
 
   std::cout << function << std::endl;
-  
+
   return EXIT_SUCCESS;
 }
 

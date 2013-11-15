@@ -61,7 +61,7 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
   resVect[0] = 8.22892;
   resVect[1] = -1.08457;
   resVect[2] = -5.64434;
-  
+
   FilterType filter;
 
   MatrixType mat;
@@ -108,7 +108,7 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
     std::cout<<"Vectors: "<<eigVal<<std::endl;
     std::cout<<"Wanted results are :"<<std::endl;
     std::cout<<"Vectors: "<<resEigVal<<std::endl;
-   
+
     return EXIT_FAILURE;
   }
 

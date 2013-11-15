@@ -25,7 +25,7 @@ int otbWrapperParameterKey(int argc, char* argv[])
 {
 
   std::string theKey = "parent.current.child";
-  
+
   otb::Wrapper::ParameterKey pKey;
   pKey.SetKey( theKey );
 
@@ -49,7 +49,7 @@ int otbWrapperParameterKey(int argc, char* argv[])
       return EXIT_FAILURE;
     }
 
-  
+
   if( pKey.GetLastElement() != "child" )
     {
       std::cout<<"Error in GetLastElement method. Waiting for \"child\" receiving "<<pKey.GetLastElement()<<"."<<std::endl;

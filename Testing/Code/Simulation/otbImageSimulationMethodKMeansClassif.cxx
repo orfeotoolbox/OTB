@@ -47,7 +47,7 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
    const unsigned int nbClasses = 4;
    double ConvergenceThreshold = 0.0001;
    unsigned int NumberOfIterations = 1000;
-   
+
    typedef unsigned short LabelType;
    const unsigned int Dimension = 2;
    typedef otb::Image<LabelType, Dimension>                                           LabelImageType;
@@ -58,55 +58,55 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
    typedef otb::AttributesMapLabelObject<LabelType, Dimension, std::string>           LabelObjectType;
    typedef itk::LabelMap<LabelObjectType>                                             LabelMapType;
    typedef otb::VectorDataFileReader<VectorDataType>                                  VectorDataFileReaderType;
-   
+
    typedef otb::SpatialisationFilter<LabelMapType>                                    SpatialisationFilterType;
    typedef otb::ProspectModel                                                         SimulationStep1Type;
    typedef otb::SailModel                                                             SimulationStep2Type;
    typedef otb::ProlateInterpolateImageFunction<LabelImageType>                       FTMType;
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
     SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
-   
+
    typedef OutputImageType::PixelType                               SampleType;
    typedef itk::Statistics::ListSample<SampleType>                          ListSampleType;
    typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType> TreeGeneratorType;
    typedef TreeGeneratorType::KdTreeType                                    TreeType;
    typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>            EstimatorType;
-   
+
    typedef otb::KMeansImageClassificationFilter<OutputImageType, LabelImageType, nbClasses> ClassificationFilterType;
    typedef ClassificationFilterType::KMeansParametersType                    KMeansParametersType;
-   
+
    typedef itk::ImageRegionIterator<OutputImageType> ImageRegionIteratorType;
 
-   
+
    /** Instantiation of pointer objects*/
    ImageWriterType::Pointer writer = ImageWriterType::New();
    LabelImageWriterType::Pointer labelWriter = LabelImageWriterType::New();
    ImageSimulationMethodType::Pointer imageSimulation = ImageSimulationMethodType::New();
    SpatialisationFilterType::Pointer spatialisationFilter = SpatialisationFilterType::New();
-   
+
 
    ClassificationFilterType::Pointer classifier = ClassificationFilterType::New();
 
    SpatialisationFilterType::SizeType objectSize;
    objectSize[0]=300;
    objectSize[1]=300;
-   
+
    SpatialisationFilterType::SizeType nbOjects;
    nbOjects[0]=2;
    nbOjects[1]=2;
-   
+
    std::vector<std::string> pathVector(nbClasses);
    pathVector[0]="JHU/becknic/rocks/sedimentary/powder/0_75/txt/greywa1f.txt";
    pathVector[1]="";
    pathVector[2]="JHU/becknic/water/txt/coarse.txt";
    pathVector[3]="JHU/becknic/soils/txt/0015c.txt";
-   
+
    std::vector<std::string> areaVector(nbClasses);
    areaVector[0]="sedimentaryRock";
    areaVector[1]="prosail";
    areaVector[2]="water";
    areaVector[3]="soils";
-   
+
    std::vector<LabelType> labels(nbClasses);
    labels[0]=1;
    labels[1]=2;
@@ -128,14 +128,14 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
 //    imageSimulation->SetMean();
 //    imageSimulation->SetVariance();
    imageSimulation->UpdateData();
-   
+
    imageSimulation->GetOutputReflectanceImage()->Update();
 
    //get all the pixel of the image for KMeans centroid estimation
    OutputImageType::IndexType centroidIndex;
    centroidIndex[0]=objectSize[0]/2;
    centroidIndex[1]=objectSize[1]/2;
-   
+
    EstimatorType::ParametersType initialCentroids(nbBands * nbClasses);
    ImageRegionIteratorType it(imageSimulation->GetOutputReflectanceImage(), imageSimulation->GetOutputReflectanceImage()->GetLargestPossibleRegion());
    it.GoToBegin();
@@ -152,7 +152,7 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
             initialCentroids[j+classIndex*nbBands]=it.Get()[j];
          }
          classIndex++;
-   
+
          if(x<(nbOjects[0]-1))
          {
             centroidIndex[0]+=objectSize[0];
@@ -168,13 +168,13 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
       listSample->PushBack(it.Get());
       ++it;
    }
-   
-   
+
+
    TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
    treeGenerator->SetSample(listSample);
    treeGenerator->SetBucketSize(100 / (10 * nbClasses));
    treeGenerator->Update();
-   
+
    EstimatorType::Pointer estimator = EstimatorType::New();
    estimator->SetKdTree(treeGenerator->GetOutput());
    estimator->SetParameters(initialCentroids);
@@ -184,18 +184,18 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
 
    classifier->SetCentroids(estimator->GetParameters());
    classifier->SetInput(imageSimulation->GetOutputReflectanceImage());
-  
+
    //Write the result to an image file
    writer->SetFileName(outfilename);
    writer->SetInput(imageSimulation->GetOutputReflectanceImage());
    writer->Update();
-   
+
    labelWriter->SetFileName(outLabelfilename);
 //    labelWriter->SetInput(imageSimulation->GetOutputLabelImage());
    labelWriter->SetInput(classifier->GetOutput());
    labelWriter->Update();
-   
-   
+
+
    return EXIT_SUCCESS;
 }
 

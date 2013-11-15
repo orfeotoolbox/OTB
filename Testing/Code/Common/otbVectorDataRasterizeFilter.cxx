@@ -47,7 +47,7 @@ int otbVectorDataRasterizeFilterNew(int argc, char* argv[])
 
 int otbVectorDataRasterizeFilter(int argc, char* argv[])
 {
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
@@ -55,13 +55,13 @@ int otbVectorDataRasterizeFilter(int argc, char* argv[])
   // Read and project the vd into the raster coordinates images
   VDReaderType::Pointer vdreader = VDReaderType::New();
   vdreader->SetFileName(argv[2]);
-  
+
   VDProjectionType::Pointer vdproj = VDProjectionType::New();
   vdproj->SetInput(vdreader->GetOutput());
   vdproj->SetInputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
   vdproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   vdproj->Update();
-  
+
   // rasterize
   RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
   rasterization->SetInput(reader->GetOutput());

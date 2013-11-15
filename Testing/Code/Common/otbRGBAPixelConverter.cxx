@@ -27,18 +27,18 @@ int otbRGBAPixelConverterNew(int argc, char * argv[])
   typedef double                                                 PixelType1;
   typedef itk::RGBAPixel<unsigned char>                          PixelType2;
   typedef itk::RGBPixel<double>                                  PixelType3;
-  
+
   typedef otb::RGBAPixelConverter<PixelType0, PixelType0>        ConverterType0;
   typedef otb::RGBAPixelConverter<PixelType1, PixelType1>        ConverterType1;
   typedef otb::RGBAPixelConverter<PixelType0, PixelType2>        ConverterType2;
   typedef otb::RGBAPixelConverter<PixelType0, PixelType3>        ConverterType3;
-  
+
   // Instantiating object
   ConverterType0::Pointer converter0 = ConverterType0::New();
   ConverterType1::Pointer converter1 = ConverterType1::New();
   ConverterType2::Pointer converter2 = ConverterType2::New();
   ConverterType3::Pointer converter3 = ConverterType3::New();
-  
+
   std::cout << converter0 << std::endl;
   std::cout << converter1 << std::endl;
   std::cout << converter2 << std::endl;
@@ -53,18 +53,18 @@ int otbRGBAPixelConverter(int argc, char * argv[])
   typedef double                                                 PixelType1;
   typedef itk::RGBAPixel<unsigned int>                           PixelType2;
   typedef itk::RGBPixel<double>                                  PixelType3;
-  
+
   typedef otb::RGBAPixelConverter<PixelType0, PixelType0>        ConverterType0;
   typedef otb::RGBAPixelConverter<PixelType1, PixelType0>        ConverterType1;
   typedef otb::RGBAPixelConverter<PixelType0, PixelType2>        ConverterType2;
   typedef otb::RGBAPixelConverter<PixelType0, PixelType3>        ConverterType3;
-  
+
   // Instantiating object
   ConverterType0::Pointer converter0 = ConverterType0::New();
   ConverterType1::Pointer converter1 = ConverterType1::New();
   ConverterType2::Pointer converter2 = ConverterType2::New();
   ConverterType3::Pointer converter3 = ConverterType3::New();
-  
+
   PixelType2 pixel0;
   pixel0[0] = 125;
   pixel0[1] = 105;

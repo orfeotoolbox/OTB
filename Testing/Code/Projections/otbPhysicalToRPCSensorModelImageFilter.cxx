@@ -38,15 +38,15 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
     const char * infname  = argv[1];
     unsigned int gridSize = atoi(argv[2]);
     const char * outfname  = argv[3];
-    
+
     // Reader
     typedef otb::ImageFileReader<ImageType>             ReaderType;
     ReaderType::Pointer                reader    = ReaderType::New();
-  
+
     // Set the fileName
     reader->SetFileName(infname);
     reader->UpdateOutputInformation();
-    
+
     // wire the filter
     estimator->SetInput(reader->GetOutput());
     estimator->SetGridSize(gridSize);
@@ -63,6 +63,6 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
     {
     std::cout <<"Unit Test" << std::endl;
     }
-  
+
   return 0;
 }

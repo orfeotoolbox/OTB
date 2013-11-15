@@ -68,11 +68,11 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   typedef otb::ImageFileWriter< FieldImageType>                       FieldWriterType;
   typedef otb::ExtractROI<PixelType, PixelType>                                ExtractFiltertype;
   typedef otb::FineRegistrationImageFilter<ImageType, ImageType, FieldImageType> RegistrationFilterType;
-  
+
   ReaderType::Pointer freader = ReaderType::New();
   freader->SetFileName(fixedFileName);
   //freader->Update();
-  
+
   ReaderType::Pointer mreader = ReaderType::New();
   mreader->SetFileName(movingFileName);
   //mreader->Update();

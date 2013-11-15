@@ -56,6 +56,6 @@ int otbLandsatTMIndexMIR2(int argc, char * argv[])
   std::cout << " " << result << std::endl;
 
   if( result!=goodResult ) return EXIT_FAILURE;
-  
+
   return EXIT_SUCCESS;
 }

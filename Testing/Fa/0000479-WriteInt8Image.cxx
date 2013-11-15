@@ -28,7 +28,7 @@
 int main(int argc, char* argv[])
 {
   typedef char PixelType;
-  
+
   const char * out = argv[1];
   const PixelType value = static_cast<PixelType>(atof(argv[2] ));
 
@@ -50,10 +50,10 @@ int main(int argc, char* argv[])
   image->SetRegions(region);
   image->Allocate();
   image->FillBuffer(value);
- 
+
   IterType it1( image, region );
   it1.GoToBegin();
- 
+
   it1.GoToBegin();
   while( !it1.IsAtEnd() )
     {
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
       }
     ++it1;
     }
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(image);
   writer->SetFileName(out);

@@ -26,7 +26,7 @@ int otbSpectralResponse(int argc, char * argv[])
   typedef otb::SpectralResponse< double, double>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;
   typedef otb::VectorImage<double, 2> ImageType;
-  
+
   if ( argc!=3 )
   {
     std::cout << argv[0] << std::endl << "\t" << "<Spectrum_filename>"  << "\t" << "<Lambda>"<< std::endl;
@@ -39,7 +39,7 @@ int otbSpectralResponse(int argc, char * argv[])
   myResponse->Load(file, 100.0);
   //itk::Indent ind;
   double lambda = atof(argv[2]);
-  
+
   ImageType::Pointer image = ImageType::New();
   myResponse->GetImage(image);
 

@@ -32,7 +32,7 @@ int otbSailReflVTest(int argc, char * argv[])
       std::cout<<"Wrong number of arguments !"<<std::endl;
       return EXIT_FAILURE;
    }
-   
+
    double Cab=static_cast<double>(atof(argv[1]));
    double Car=static_cast<double>(atof(argv[2]));
    double CBrown=static_cast<double>(atof(argv[3]));
@@ -48,13 +48,13 @@ int otbSailReflVTest(int argc, char * argv[])
    double TTO=static_cast<double>(atof(argv[13]));
    double PSI=static_cast<double>(atof(argv[14]));
    char * OutputName      = argv[15];
-   
-   
+
+
    typedef otb::ProspectModel ProspectType;
    typedef otb::SailModel SailType;
    typedef otb::LeafParameters LeafParametersType;
-   
-   
+
+
    LeafParametersType::Pointer leafParams = LeafParametersType::New();
    ProspectType::Pointer prospect = ProspectType::New();
    SailType::Pointer sail = SailType::New();
@@ -65,11 +65,11 @@ int otbSailReflVTest(int argc, char * argv[])
    leafParams->SetCw(Cw);
    leafParams->SetCm(Cm);
    leafParams->SetN(N);
-   
-   
-   
+
+
+
    prospect->SetInput(leafParams);
-   
+
    sail->SetLAI(LAI);
    sail->SetAngl(Angl);
    sail->SetPSoil(PSoil);
@@ -81,13 +81,13 @@ int otbSailReflVTest(int argc, char * argv[])
    sail->SetReflectance(prospect->GetReflectance());
    sail->SetTransmittance(prospect->GetTransmittance());
    sail->Update();
-   
+
    std::ofstream outputFile(OutputName, std::ios::out);
    for(unsigned int i=0; i<sail->GetViewingReflectance()->Size(); ++i)
    {
       outputFile<<sail->GetViewingReflectance()->GetResponse()[i].second<<std::endl;
    }
 
-   
+
    return EXIT_SUCCESS;
 }

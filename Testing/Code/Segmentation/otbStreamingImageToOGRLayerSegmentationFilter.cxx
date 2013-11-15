@@ -92,14 +92,14 @@ int otbStreamingImageToOGRLayerSegmentationFilter(int argc, char * argv[])
 
   reader->SetFileName(imageName);
   reader->UpdateOutputInformation();
-  
+
   maskReader->SetFileName(maskName);
   maskReader->UpdateOutputInformation();
-  
+
   // Create the output data-source in overwrite mode
   // TODO: Change once flags have been updated
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Overwrite);
-  
+
   OGRSpatialReference oSRS(reader->GetOutput()->GetProjectionRef().c_str());
 
   // Create the layer

@@ -29,10 +29,10 @@ int otbSavitzkyGolayInterpolationFunctorNew(int argc, char* argv[])
   typedef itk::FixedArray< PixelType > SeriesType;
   typedef itk::FixedArray< DoYType > DatesType;
   const unsigned int Radius = 2;
-  
+
   typedef otb::Functor::SavitzkyGolayInterpolationFunctor<Radius, SeriesType, DatesType> FunctorType;
 
   FunctorType f;
-  
+
   return EXIT_SUCCESS;
 }

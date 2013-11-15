@@ -50,7 +50,7 @@ int otbMassOfBeliefDSApplied(int argc, char* argv[])
 
   desc1->SetMembership("H1", 0, 0, 0.1, 0.5, 0, 0.8);
   desc1->SetMembership("H1_", 0.5, 0.8, 1.0, 1.0, 0, 0.8);
-  
+
   desc2->SetMembership("H2", 0, 0, 0.58, 0.68, 0, 0.99);
   desc2->SetMembership("H2_", 0.68, 0.98, 1.0, 1.0, 0, 0.99);
 
@@ -65,11 +65,11 @@ int otbMassOfBeliefDSApplied(int argc, char* argv[])
   universe.insert("H1_");
   universe.insert("H2");
   universe.insert("H2_");
-  
+
   // Studied hypothesis
   Hyp.insert(hyp_1);
   Hyp.insert(hyp_2);
-  
+
   // Initialize masses
   mass1->InitializePowerSetMasses(universe);
   mass2->InitializePowerSetMasses(universe);
@@ -85,7 +85,7 @@ int otbMassOfBeliefDSApplied(int argc, char* argv[])
   mass2->SetMass(H2, desc2->GetMembership("H2", desc2Val));
   mass2->SetMass(H2_, desc2->GetMembership("H2_", desc2Val));
   mass2->EstimateUncertainty();
-  
+
   JointMassOfBeliefFilterType::Pointer jointMassFilter = JointMassOfBeliefFilterType::New();
   // Compute joint mass
   jointMassFilter->PushBackInput(mass1);
@@ -94,9 +94,9 @@ int otbMassOfBeliefDSApplied(int argc, char* argv[])
   jointMass = jointMassFilter->GetOutput();
 
   std::cout<<mass1<<std::endl;
-  
+
   std::cout<<mass2<<std::endl;
-  
+
   std::cout << jointMass << std::endl;
   std::cout << "Considered Hypothesis : " << Hyp << std::endl;
   std::cout << "Belief(Hyp) : "

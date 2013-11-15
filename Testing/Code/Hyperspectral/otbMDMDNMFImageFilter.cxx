@@ -40,7 +40,7 @@ int otbMDMDNMFImageFilterTest(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>                ReaderType;
   typedef otb::ImageFileWriter<ImageType>       WriterType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
-  
+
   const char * inputImage = argv[1];
   const char * outputImage = argv[2];
   const unsigned int maxIter = atoi(argv[3]);
@@ -81,7 +81,7 @@ int otbMDMDNMFImageFilterTest2(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>                ReaderType;
   typedef otb::ImageFileWriter<ImageType>       WriterType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
-  
+
   const char * inputImage = argv[1];
   const char * inputEndmembers = argv[2];
   const char * outputImage = argv[3];

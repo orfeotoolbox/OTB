@@ -44,7 +44,7 @@ int otbHistogramOfOrientedGradientCovariantImageFunctionNew(int argc, char * arg
   FunctionType::Pointer function       = FunctionType::New();
 
   std::cout << function << std::endl;
- 
+
   return EXIT_SUCCESS;
 }
 
@@ -62,9 +62,9 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int argc, char * argv[]
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
   function->SetInputImage(gradient->GetOutput());
-  
+
   InputImageType::IndexType index;
-  
+
   unsigned int radius = atoi(argv[3]);
   index[0] = atoi(argv[4]);
   index[1] = atoi(argv[5]);

@@ -36,7 +36,7 @@ int otbViewerModelTest(int argc, char* argv[])
 
   const char * inName = argv[1];
   const char * inName2 = argv[2];
-  
+
   typedef otb::ViewerController ControllerType;
   typedef otb::ViewerViewGUI ViewType;
   typedef otb::ViewerModel ModelType;
@@ -53,7 +53,7 @@ int otbViewerModelTest(int argc, char* argv[])
   // model instance
   ModelType::Pointer model = ModelType::GetInstance();
   model->OpenImage(inName);
-  
+
   Fl::check();
 
   /** Adding a second image*/
@@ -64,8 +64,8 @@ int otbViewerModelTest(int argc, char* argv[])
 
   /** Reading all the component stored in the list*/
   ObjectTrackedList  modelList = model->GetObjectList();
-  
-  
+
+
   ObjectTrackedList::iterator it = modelList.begin();
   while(it != modelList.end() )
     {
@@ -75,7 +75,7 @@ int otbViewerModelTest(int argc, char* argv[])
       std::cout << " layer     "<<  (*it).pLayer << std::endl;
       ++it;
     }
-   
+
 
   return EXIT_SUCCESS;
 }
@@ -90,7 +90,7 @@ int otbViewerModelWithAddNumTest(int argc, char* argv[])
 
   const char * inName = argv[1];
   unsigned int id     = atoi(argv[2]);
-  
+
   typedef otb::ViewerController ControllerType;
   typedef otb::ViewerViewGUI ViewType;
   typedef otb::ViewerModel ModelType;
@@ -106,14 +106,14 @@ int otbViewerModelWithAddNumTest(int argc, char* argv[])
   // model instance
   ModelType::Pointer model = ModelType::GetInstance();
   model->OpenImage(inName, id);
-   
+
   Fl::check();
   view->guiMainWindow->hide();
 
   /** Reading all the component stored in the list*/
   ObjectTrackedList  modelList = model->GetObjectList();
-  
-  
+
+
   ObjectTrackedList::iterator it = modelList.begin();
   while(it != modelList.end() )
     {
@@ -123,7 +123,7 @@ int otbViewerModelWithAddNumTest(int argc, char* argv[])
       std::cout << " layer    "<<  (*it).pLayer << std::endl;
       ++it;
     }
-   
+
 
   return EXIT_SUCCESS;
 }

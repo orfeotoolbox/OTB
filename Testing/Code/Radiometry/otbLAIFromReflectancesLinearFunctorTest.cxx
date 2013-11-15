@@ -47,6 +47,6 @@ int otbLAIFromReflectancesLinear(int argc, char * argv[])
   double result = laiFunct(pixel);
 
   if( result!=goodResult ) return EXIT_FAILURE;
-  
+
   return EXIT_SUCCESS;
 }

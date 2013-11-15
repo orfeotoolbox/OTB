@@ -35,7 +35,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
                            "Ground Control Points to estimate sensor model a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz",
                            "-gcp", true);
   parser->AddOption("--ErrorAllowed", "Error allowed to declare a point not good ", "-err", 1, false);
-  
+
   // Parse the command line
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -60,13 +60,13 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
 
   // Check if the number of gcp pairs point is consistent
   unsigned int nbPoints = parseResult->GetNumberOfParameters("--GroudControlPoints");
-  
+
   if (nbPoints % 5 != 0)
     {
     std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   typedef otb::VectorImage<float, 2>                      ImageType;
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
   typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
@@ -84,13 +84,13 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
 
   unsigned int nbGCPs = nbPoints / 5;
   std::cout << "Receiving " << nbPoints << " from command line." << std::endl;
-  
+
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
     sensorPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints",     gcpId * 5);
     sensorPoint[1] = parseResult->GetParameterFloat("--GroudControlPoints", 1 + gcpId * 5);
-    
+
     Point3DType geoPoint;
     geoPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints", 2 + gcpId * 5);
     geoPoint[1] = parseResult->GetParameterFloat("--GroudControlPoints", 3 + gcpId * 5);
@@ -100,7 +100,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
     }
-  
+
   // Estimate the rpc model
   rpcEstimator->GetOutput()->UpdateOutputInformation();
 
@@ -109,7 +109,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   // coordiantes.
   // The test will check for nan coordinates, and the distance between
   // geographical coordinates.
-  
+
   GenericRSTransformType::Pointer grsTrasnform = GenericRSTransformType::New();
   grsTrasnform->SetInputKeywordList(rpcEstimator->GetKeywordlist());
   std::cout<<rpcEstimator->GetKeywordlist()<<std::endl;
@@ -130,7 +130,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   // Test
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();
   bool isErrorDetected = false;
-  
+
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point3DType point;
@@ -140,7 +140,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
 
     Point3DType transformedPoint;
     transformedPoint = grsTrasnform->TransformPoint(point);
-    
+
     Point2DType transformedPoint2D;
     transformedPoint2D[0] = transformedPoint[0];
     transformedPoint2D[1] = transformedPoint[1];
@@ -160,7 +160,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
                << std::endl<<std::endl;
       isErrorDetected = true;
       }
-    
+
     // Search for wrong projection results
     double residual = geoDistance->Evaluate(geoPoint, transformedPoint2D);
     if( residual > parseResult->GetParameterFloat("--ErrorAllowed"))
@@ -176,10 +176,10 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
       isErrorDetected = true;
       }
     }
-  
+
   // Is there an error
   if ( isErrorDetected )
     return EXIT_FAILURE;
-  
+
   return EXIT_SUCCESS;
 }

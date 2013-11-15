@@ -85,7 +85,7 @@ int otbSVMSampleListModelEstimatorTest(int argc, char* argv[])
 
   VectorDataReaderType::Pointer vectorReader = VectorDataReaderType::New();
   vectorReader->SetFileName(vectorDataFilename);
-  
+
   typedef otb::ListSampleGenerator<ImageType, VectorDataType> ListSampleGeneratorType;
   ListSampleGeneratorType::Pointer generator = ListSampleGeneratorType::New();
   generator->SetMaxTrainingSize(maxTrainingSize);
@@ -108,7 +108,7 @@ int otbSVMSampleListModelEstimatorTest(int argc, char* argv[])
 
   // Print the ListSample generator
   std::cout << generator << std::endl;
-  
+
 
   return EXIT_SUCCESS;
 }

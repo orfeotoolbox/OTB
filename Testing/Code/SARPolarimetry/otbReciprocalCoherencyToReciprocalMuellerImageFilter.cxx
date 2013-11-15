@@ -35,7 +35,7 @@ int otbReciprocalCoherencyToReciprocalMuellerImageFilter(int argc, char * argv[]
   typedef std::complex<PixelType>  InputPixelType;
   const unsigned int Dimension = 2;
 
- 
+
   typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
   typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
 

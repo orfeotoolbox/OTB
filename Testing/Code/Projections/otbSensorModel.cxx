@@ -52,7 +52,7 @@ int otbSensorModel(int argc, char* argv[])
   file << reader->GetOutput()->GetImageKeywordlist();
 
   file << "\n*** TRANSFORM ***\n";
-  
+
   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(16.19688987731934);
 
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;

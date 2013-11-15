@@ -38,7 +38,7 @@ int otbImageSimulationMethodWithVectorDataTest(int argc, char * argv[])
    const char * outfilename = argv[6];
    const char * outLabelfilename = argv[7];
 
-   
+
    typedef unsigned short LabelType;
    const unsigned int Dimension = 2;
    typedef otb::Image<LabelType, Dimension>                                           LabelImageType;
@@ -57,7 +57,7 @@ int otbImageSimulationMethodWithVectorDataTest(int argc, char * argv[])
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
     SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
 
-   
+
    /** Instantiation of pointer objects*/
    VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
    ImageWriterType::Pointer writer = ImageWriterType::New();
@@ -68,12 +68,12 @@ int otbImageSimulationMethodWithVectorDataTest(int argc, char * argv[])
 
    reader->SetFileName(infilename);
    reader->Update();
- 
+
 
    spatialisationFilter->SetInput(reader->GetOutput());
    spatialisationFilter->SetInitialLabel(1);
    spatialisationFilter->SetBackgroundValue(0);
-   
+
    imageSimulation->SetSpatialisation(spatialisationFilter);
    imageSimulation->SetNumberOfComponentsPerPixel(nbBands);
    imageSimulation->SetSatRSRFilename(satRSRFilename);
@@ -83,16 +83,16 @@ int otbImageSimulationMethodWithVectorDataTest(int argc, char * argv[])
 //    imageSimulation->SetVariance();
    imageSimulation->UpdateData();
 
-  
+
    //Write the result to an image file
    writer->SetFileName(outfilename);
    writer->SetInput(imageSimulation->GetOutputReflectanceImage());
    writer->Update();
-   
+
    labelWriter->SetFileName(outLabelfilename);
    labelWriter->SetInput(imageSimulation->GetOutputLabelImage());
    labelWriter->Update();
-   
-   
+
+
    return EXIT_SUCCESS;
 }

@@ -80,7 +80,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
   v45.push_back(TM5);
 
   PrecisionType max45 = *(max_element ( v45.begin(), v45.end() ));
-  
+
   PrecisionType TV1 = 0.7;
   PrecisionType TV2 = 0.5;
 
@@ -95,7 +95,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
     && (TM5 <= TV1 * TM4)
     && (TM5 >= TV1 * max123)
     && (TM7 <= TV1 * TM4));
-  
+
   if( result!=goodResult )
     {
     std::cerr << "Rule 1 " << goodResult << " " << result << std::endl;
@@ -326,7 +326,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
 
 
 
-  
+
   return EXIT_SUCCESS;
 
 }
@@ -353,9 +353,9 @@ int otbLandsatTMKernelSpectralRulesWithImage(int argc, char * argv[])
   typedef double InputPixelType;
 
   typedef otb::VectorImage< InputPixelType, 2 > InputImageType;
-  
+
   typedef otb::ImageFileReader< InputImageType > ReaderType;
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
   reader->Update();
@@ -372,7 +372,7 @@ int otbLandsatTMKernelSpectralRulesWithImage(int argc, char * argv[])
     std::cerr << " Image must have either 7 or 8 bands " << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   while(! it.IsAtEnd() )
     {
 
@@ -393,12 +393,12 @@ int otbLandsatTMKernelSpectralRulesWithImage(int argc, char * argv[])
       {
       return EXIT_FAILURE;
       }
-    
+
     ++it;
     }
-  
 
-  
+
+
   return EXIT_SUCCESS;
 }
 

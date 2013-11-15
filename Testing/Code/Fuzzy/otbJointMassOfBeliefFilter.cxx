@@ -40,13 +40,13 @@ int otbJointMassOfBeliefFilter(int argc, char* argv[])
   MassOfBeliefFunctionType::Pointer mass1 = MassOfBeliefFunctionType::New();
   MassOfBeliefFunctionType::Pointer mass2 = MassOfBeliefFunctionType::New();
   JointMassOfBeliefFilterType::Pointer jointMassFilter = JointMassOfBeliefFilterType::New();
-  
+
   MassOfBeliefFunctionType::LabelSetType universe;
   universe.insert("a");
   universe.insert("b");
   universe.insert("c");
   universe.insert("d");
-  
+
   mass1->InitializePowerSetMasses(universe);
   mass2->InitializePowerSetMasses(universe);
 
@@ -103,7 +103,7 @@ int otbJointMassOfBeliefFilter(int argc, char* argv[])
                 << "baseline[i](" << baseline[i]
                 << ") != results[i](" << results[i]
                 << std::endl;
-      
+
       return EXIT_FAILURE;
       }
     }
@@ -115,11 +115,11 @@ int otbJointMassOfBeliefFilterLimit(int argc, char* argv[])
 {
   typedef otb::MassOfBelief<std::string> MassOfBeliefFunctionType;
   typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> JointMassOfBeliefFilterType;
-  
+
   MassOfBeliefFunctionType::Pointer mass1 = MassOfBeliefFunctionType::New();
   MassOfBeliefFunctionType::Pointer mass2 = MassOfBeliefFunctionType::New();
   JointMassOfBeliefFilterType::Pointer jointMassFilter = JointMassOfBeliefFilterType::New();
-  
+
   // Exemple from
   // http://www.sandia.gov/epistemic/Reports/SAND2002-0835.pdf
   // page 27
@@ -128,7 +128,7 @@ int otbJointMassOfBeliefFilterLimit(int argc, char* argv[])
   universe.insert("a");
   universe.insert("b");
   universe.insert("c");
-  
+
   mass1->InitializePowerSetMasses(universe);
   mass2->InitializePowerSetMasses(universe);
 

@@ -65,7 +65,7 @@ int otbPolygonizationRasterizationTest(int argc, char* argv[])
                                                           reader->GetOutput()->GetLargestPossibleRegion());
   itk::ImageRegionConstIteratorWithIndex<ImageType> itTest(rasterization->GetOutput(),
                                                            rasterization->GetOutput()->GetLargestPossibleRegion());
-  
+
   for(itRef.GoToBegin(), itTest.GoToBegin();
       !itRef.IsAtEnd()  && !itTest.IsAtEnd();
       ++itRef, ++itTest)

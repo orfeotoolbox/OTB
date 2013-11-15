@@ -27,7 +27,7 @@ int otbLabelImageToVectorDataFilterNew(int argc, char * argv[])
   typedef otb::Image<LabelType, Dimension> InputLabelImageType;
 
   typedef otb::LabelImageToVectorDataFilter<InputLabelImageType>  FilterType;
-  
+
   FilterType::Pointer filter = FilterType::New();
 
 

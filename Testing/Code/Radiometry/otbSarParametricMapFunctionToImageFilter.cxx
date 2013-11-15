@@ -71,13 +71,13 @@ int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
   /** Test on some indexes and some physical coordinates*/
   FunctionType::PointType  p0;
   PixelType                value;
- 
+
   p0[0] = static_cast<unsigned int>(0);
   p0[1] = static_cast<unsigned int>(0);
   value = 10.0;
   points->SetPoint(0, p0);
   points->SetPointData(0, value);
-  
+
   p0[0] = static_cast<unsigned int>(size[0] / 2.);
   p0[1] = static_cast<unsigned int>(size[1] / 2.);
   value = 100.0;

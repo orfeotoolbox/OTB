@@ -50,13 +50,13 @@ int otbLandsatTMSpectralRuleBasedClassifierTest(int argc, char * argv[])
   (filter->GetFunctor()).SetDegree(otb::Functor::LandsatTM::HundredsKelvin);
   (filter->GetFunctor()).SetReflectance(otb::Functor::LandsatTM::Thousands);
   (filter->GetFunctor()).SetSAT(otb::Functor::LandsatTM::L5);
-    
+
   filter->SetInput( reader->GetOutput() );
 
   writer->SetInput( filter->GetOutput() );
 
   writer->Update();
 
-  
+
   return EXIT_SUCCESS;
 }

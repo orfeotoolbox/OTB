@@ -120,7 +120,7 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputInt);
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputFloat);
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputDouble);
- 
+
   //merge filter function values tests in IOTests23
   REGISTER_TEST(otbSpectralSensitivityReaderNew);
   REGISTER_TEST(otbSpectralSensitivityReaderTest);

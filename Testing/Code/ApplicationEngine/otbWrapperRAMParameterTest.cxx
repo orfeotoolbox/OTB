@@ -36,17 +36,17 @@ int otbWrapperRAMParameterNew(int argc, char* argv[])
   RAMParameterType::ScalarType  min = 0;
   RAMParameterType::ScalarType  max = 1024;
   RAMParameterType::ScalarType  def = 256;
-  
+
   parameter->SetDefaultValue(def);
   parameter->SetMinimumValue(min);
   parameter->SetMaximumValue(max);
-  
+
   if (parameter->GetMinimumValue() != min)
     {
     std::cout <<"Minimum Value : expexted "<< min << " --> got "<< parameter->GetMinimumValue()  << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   if (parameter->GetMaximumValue() != max)
     {
     std::cout <<"Maximum Value : expexted "<< max << " --> got "<< parameter->GetMaximumValue()  << std::endl;
@@ -58,7 +58,7 @@ int otbWrapperRAMParameterNew(int argc, char* argv[])
     std::cout <<"Default Value : expexted "<< def<< " --> got "<< parameter->GetDefaultValue()  << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   // Reset Value
   parameter->Reset();
   std::cout <<"Last RAMParameter Value set : " << parameter->GetValue() << std::endl;

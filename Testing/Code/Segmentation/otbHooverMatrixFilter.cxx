@@ -34,7 +34,7 @@ int otbHooverMatrixFilter(int argc, char* argv[])
     <ImageType, LabelMapType>                       ImageToLabelMapFilterType;
   typedef otb::ImageFileReader<ImageType>           ImageReaderType;
   typedef HooverMatrixFilterType::MatrixType     MatrixType;
-  
+
   if(argc != 4)
     {
     std::cerr << "Usage: " << argv[0];
@@ -44,27 +44,27 @@ int otbHooverMatrixFilter(int argc, char* argv[])
 
   ImageReaderType::Pointer gt_reader = ImageReaderType::New();
   gt_reader->SetFileName(argv[1]);
-  
+
   ImageReaderType::Pointer ms_reader = ImageReaderType::New();
   ms_reader->SetFileName(argv[2]);
-  
+
   ImageToLabelMapFilterType::Pointer gt_filter = ImageToLabelMapFilterType::New();
   gt_filter->SetInput(gt_reader->GetOutput());
   gt_filter->SetBackgroundValue(0);
-  
+
   ImageToLabelMapFilterType::Pointer ms_filter = ImageToLabelMapFilterType::New();
   ms_filter->SetInput(ms_reader->GetOutput());
   ms_filter->SetBackgroundValue(0);
-  
+
   HooverMatrixFilterType::Pointer hooverFilter = HooverMatrixFilterType::New();
   hooverFilter->SetGroundTruthLabelMap(gt_filter->GetOutput());
   hooverFilter->SetMachineSegmentationLabelMap(ms_filter->GetOutput());
-  
+
   hooverFilter->Update();
-  
+
   std::ofstream outputFile;
   outputFile.open(argv[3]);
-  
+
   MatrixType &mat = hooverFilter->GetHooverConfusionMatrix();
   unsigned int n = mat.Rows(), p = mat.Cols();
   for (unsigned int i=0; i<n; i++)
@@ -82,6 +82,6 @@ int otbHooverMatrixFilter(int argc, char* argv[])
         }
       }
     }
-  
+
   return EXIT_SUCCESS;
 }

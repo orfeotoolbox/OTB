@@ -33,7 +33,7 @@ int otbNAPCAImageFilterNewTest ( int argc, char* argv[] )
   typedef otb::VectorImage< PixelType, Dimension > ImageType;
 
   typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
-   
+
   typedef otb::NAPCAImageFilter< ImageType, ImageType,
     NoiseFilterType, otb::Transform::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
@@ -59,7 +59,7 @@ int otbNAPCAImageFilterTest ( int argc, char* argv[] )
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-    
+
   try
   {
     parser->ParseCommandLine( argc, argv, parseResult );
@@ -139,7 +139,7 @@ int otbNAPCAImageFilterTest ( int argc, char* argv[] )
     typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
     CommandType2::Pointer invObserver = CommandType2::New();
     invFilter->AddObserver( itk::ProgressEvent(), invObserver );
-    
+
     ImageWriterType::Pointer invWriter = ImageWriterType::New();
     invWriter->SetFileName( parseResult->GetParameterString("--Inverse") );
     invWriter->SetInput( invFilter->GetOutput() );

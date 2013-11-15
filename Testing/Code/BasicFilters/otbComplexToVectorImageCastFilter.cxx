@@ -53,7 +53,7 @@ int otbComplexToVectorImageCastFilterTest(int argc, char * argv[])
   typedef otb::ImageFileReader<VCplxImageType>                                VReaderType;
 
   typedef otb::ImageFileWriter<VectorImageType>                               WriterType;
- 
+
 
    // Instantiating objects
   ReaderType::Pointer reader = ReaderType::New();

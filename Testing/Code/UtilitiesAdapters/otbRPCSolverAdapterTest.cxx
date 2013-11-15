@@ -48,7 +48,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
 
   std::cout<<"GeoTol: "<<geoTol<<" meters"<<std::endl;
   std::cout<<"ImgTol: "<<imgTol<<" pixels"<<std::endl;
-  
+
    otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
    demHandler->SetDefaultHeightAboveEllipsoid(0);
    if(demdir!="no")
@@ -97,7 +97,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
       std::cout<<currentPoint[0]<<" "<<currentPoint[1]<<" "<< current3DWgs84Point[0]<<" "<<current3DWgs84Point[1]<<" "<<current3DWgs84Point[2]<<std::endl;
       }
     }
-  
+
   // Solve rpc
   otb::ImageKeywordlist rpcKwl;
   double rmse;
@@ -159,7 +159,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
 
     // Check inverse transform
     imgPoint = rpcInvTransform->TransformPoint(groundPoint2dRef);
-    
+
     double imgRes = euclideanDistance->Evaluate(imgPoint,it->first);
 
     if(imgRes>imgTol)
@@ -168,12 +168,12 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
       std::cerr<<"Imprecise result with inverse estimated model: inv("<<groundPoint2dRef<<") = "<<imgPoint<<", but reference is "<<it->first<<" error: "<<imgRes<<" pixels)"<<std::endl;
       }
     }
-  
+
 
   if(fail)
     {
     return EXIT_FAILURE;
     }
-  
+
   return EXIT_SUCCESS;
 }

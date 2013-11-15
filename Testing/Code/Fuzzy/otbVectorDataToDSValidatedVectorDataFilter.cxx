@@ -29,13 +29,13 @@ int otbVectorDataToDSValidatedVectorDataFilterNew(int argc, char* argv[])
 {
   typedef float                           PrecisionType;
   typedef otb::VectorData<PrecisionType>  VectorDataType;
-  
+
   typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
                                           VectorDataValidationFilterType;
 
   VectorDataValidationFilterType::Pointer filter =
     VectorDataValidationFilterType::New();
-  
+
   std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
@@ -64,7 +64,7 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
 
   VectorDataValidationFilterType::Pointer filter =
     VectorDataValidationFilterType::New();
-  
+
   vdReader->SetFileName(inputVD);
   vdReader->Update();
 
@@ -95,7 +95,7 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
   vdWriter->SetFileName(outputVD);
   vdWriter->SetInput(filter->GetOutput());
   vdWriter->Update();
-  
+
   std::cout << "Input VectorData Size : "
             << vdReader->GetOutput()->Size() << std::endl
             << "CriterionFormula : "

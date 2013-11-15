@@ -35,6 +35,6 @@ int otbLabelMapSourceNew(int argc, char * argv[])
   LabelMapSourceType::Pointer labelMap = LabelMapSourceType::New();
 
   std::cout << labelMap << std::endl;
-  
+
   return EXIT_SUCCESS;
 }

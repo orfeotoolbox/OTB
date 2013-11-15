@@ -78,14 +78,14 @@ int otbTileImageFilterRSTransformTest(int argc, char * argv[])
 
     tileFilter->SetInput(i,reader->GetOutput());
     }
-  
+
   tileFilter->GetOutput()->UpdateOutputInformation();
 
   // Build RS transform for tiled image
   RSTransformType::Pointer mosaicRsTransform = RSTransformType::New();
   mosaicRsTransform->SetInputKeywordList(tileFilter->GetOutput()->GetImageKeywordlist());
   mosaicRsTransform->InstanciateTransform();
-  
+
   // Check that individual RSTransform gives the same result as tiled
   // transform
 
@@ -97,7 +97,7 @@ int otbTileImageFilterRSTransformTest(int argc, char * argv[])
     {
     PointType tilePoint   = transforms.at(i)->TransformPoint(points.at(i));
     PointType mosaicPoint = mosaicRsTransform->TransformPoint(points.at(i));
-    
+
     double distValue = distance->Evaluate(tilePoint,mosaicPoint);
 
     std::cout<<"Tile "<<i<<":"<<std::endl;
@@ -108,7 +108,7 @@ int otbTileImageFilterRSTransformTest(int argc, char * argv[])
 
     if(distValue > threshold)
       {
-      
+
       std::cerr<<"Projection consistency problem in tile "<<argv[i+3]<<std::endl;
       return EXIT_FAILURE;
       }

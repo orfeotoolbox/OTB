@@ -24,17 +24,17 @@
 #include "otbImageListToVectorImageFilter.h"
 
 typedef otb::Image<float, 2>                    FloatImageType;
-  
+
 typedef otb::VectorImage<float, 2>              FloatVectorImageType;
 
 typedef otb::ImageFileReader<FloatImageType>    ReaderType;
 
 typedef otb::ImageFileReader
   <FloatVectorImageType>                        ReaderVectorType;
-  
+
 typedef otb::ImageFileWriter
   <FloatVectorImageType>                        WriterType;
-  
+
 typedef otb::ImageFileWriter
   <FloatImageType>                              WriterScalarType;
 
@@ -69,41 +69,41 @@ int otbDisparityTranslateFilter(int argc, char* argv[])
     std::cout << "Usage: "<<argv[0]<<" dispMap_epi leftInvGrid rightDirectGrid left_sensor dispMap_sensor" << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   ReaderVectorType::Pointer dispReader = ReaderVectorType::New();
   dispReader->SetFileName(argv[1]);
-  
+
   ReaderVectorType::Pointer leftGridReader = ReaderVectorType::New();
   leftGridReader->SetFileName(argv[2]);
-  
+
   ReaderVectorType::Pointer rightGridReader = ReaderVectorType::New();
   rightGridReader->SetFileName(argv[3]);
-  
+
   ReaderType::Pointer leftSensor = ReaderType::New();
   leftSensor->SetFileName(argv[4]);
-  
+
   VectorToListFilterType::Pointer vectorToListFilter = VectorToListFilterType::New();
   vectorToListFilter->SetInput(dispReader->GetOutput());
   vectorToListFilter->UpdateOutputInformation();
-  
+
   TranslateFilter::Pointer translator = TranslateFilter::New();
   translator->SetHorizontalDisparityMapInput(vectorToListFilter->GetOutput()->GetNthElement(0));
   translator->SetVerticalDisparityMapInput(vectorToListFilter->GetOutput()->GetNthElement(1));
   translator->SetInverseEpipolarLeftGrid(leftGridReader->GetOutput());
   translator->SetDirectEpipolarRightGrid(rightGridReader->GetOutput());
   translator->SetLeftSensorImageInput(leftSensor->GetOutput());
-  
+
   ImageListType::Pointer outputList = ImageListType::New();
   outputList->PushBack(translator->GetHorizontalDisparityMapOutput());
   outputList->PushBack(translator->GetVerticalDisparityMapOutput());
-  
+
   ListToVectorFilterType::Pointer listToVectorFilter = ListToVectorFilterType::New();
   listToVectorFilter->SetInput(outputList);
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(listToVectorFilter->GetOutput());
   writer->SetFileName(argv[5]);
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

@@ -104,7 +104,7 @@ int otbExtractROITestMetaData(int argc, char * argv[])
     {
     std::cout<<"The read generated extract from index (0, 0) must NOT contain a ProjectionReference."<<std::endl;
     std::cout<<"Found ProjectionReference: "<<reader00->GetOutput()->GetProjectionRef()<<std::endl;
-  
+
     return EXIT_FAILURE;
     }
 
@@ -124,7 +124,7 @@ int otbExtractROITestMetaData(int argc, char * argv[])
     std::cout<<"Found ProjectionReference: "<<reader57->GetOutput()->GetProjectionRef()<<std::endl;
     return EXIT_FAILURE;
     }
-  
+
   if( reader57->GetOutput()->GetGCPCount() != 0)
     {
     std::cout<<"The read generated extract from index (x, y) must NOT contain a list a GCPs.."<<std::endl;

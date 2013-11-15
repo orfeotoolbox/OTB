@@ -29,7 +29,7 @@ int otbLabelImageToOGRDataSourceFilterNew(int argc, char * argv[])
   typedef otb::Image<LabelType, Dimension> InputLabelImageType;
 
   typedef otb::LabelImageToOGRDataSourceFilter<InputLabelImageType>  FilterType;
-  
+
   FilterType::Pointer filter = FilterType::New();
 
 
@@ -47,8 +47,8 @@ int otbLabelImageToOGRDataSourceFilter(int argc, char * argv[])
     }
   const char * infname = argv[1];
   const char * outfname = argv[2];
-  
-  
+
+
   const unsigned int Dimension = 2;
   typedef unsigned short LabelType;
   typedef otb::Image<LabelType, Dimension> InputLabelImageType;
@@ -59,12 +59,12 @@ int otbLabelImageToOGRDataSourceFilter(int argc, char * argv[])
 
   FilterType::Pointer filter = FilterType::New();
   LabelImageReaderType::Pointer reader = LabelImageReaderType::New();
-  
+
   reader->SetFileName(infname);
 
   filter->SetInput(reader->GetOutput());
   filter->Update();
-  
+
 
   return EXIT_SUCCESS;
 }

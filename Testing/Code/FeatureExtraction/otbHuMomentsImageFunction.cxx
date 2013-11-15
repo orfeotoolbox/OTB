@@ -44,7 +44,7 @@ int otbHuMomentsImageFunctionNew(int argc, char * argv[])
   FunctionType::Pointer function       = FunctionType::New();
 
   std::cout << function << std::endl;
- 
+
   return EXIT_SUCCESS;
 }
 
@@ -60,14 +60,14 @@ int otbHuMomentsImageFunction(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>               ReaderType;
   typedef otb::HuMomentsImageFunction<InputImageType>        FunctionType;
   typedef FunctionType::OutputType                           OutputType;
-  
+
   ReaderType::Pointer   reader         = ReaderType::New();
   FunctionType::Pointer function = FunctionType::New();
 
   reader->SetFileName(inputFilename);
   reader->Update();
   function->SetInputImage(reader->GetOutput());
- 
+
   InputImageType::IndexType index;
   index[0] = 100;
   index[1] = 100;
@@ -104,13 +104,13 @@ int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
     double>                                                               InterpolatorType;
   typedef otb::HuMomentsImageFunction<InputImageType>                     FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
-  
+
   ReaderType::Pointer                         reader = ReaderType::New();
   StreamingResampleImageFilterType::Pointer   resampler = StreamingResampleImageFilterType::New();
   InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
   FunctionType::Pointer                       function1 = FunctionType::New();
   FunctionType::Pointer                       function2 = FunctionType::New();
-  
+
   reader->SetFileName(inputFilename);
   reader->Update();
 
@@ -146,7 +146,7 @@ int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   for (unsigned int j = 1; j < 8; ++j)
     {
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
-    
+
     std::cout << "Original -H" << j
               << " : " << Result1[j-1]
               << "  /  Scaled - H" << j
@@ -156,13 +156,13 @@ int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   error = vcl_sqrt(error)/7.0;
   std::cout << "Error : " << error << std::endl
             << std::endl;
-  
+
   if (error > 1E-3)
     {
     itkGenericExceptionMacro( << "Error = " << error
                               << "  > 1E-3     -> TEST FAILLED" << std::endl );
     }
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -183,7 +183,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   typedef otb::HuMomentsImageFunction<InputImageType>                     FunctionType;
   typedef FunctionType::OutputType                                        OutputType;
   typedef itk::AffineTransform< double, Dimension >  TransformType;
- 
+
 
   ReaderType::Pointer                         reader = ReaderType::New();
   FilterType::Pointer                         filter = FilterType::New();
@@ -191,7 +191,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
   FunctionType::Pointer                       function1 = FunctionType::New();
   FunctionType::Pointer                       function2 = FunctionType::New();
-   
+
   reader->SetFileName(inputFilename);
   reader->Update();
 
@@ -220,7 +220,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   translation1[0] =   -imageCenterX;
   translation1[1] =   -imageCenterY;
   transform->Translate( translation1 );
-  
+
   const double degreesToRadians = vcl_atan(1.0) / 45.0;
   const double angle = angleInDegrees * degreesToRadians;
   transform->Rotate2D( -angle, false );
@@ -229,7 +229,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   translation2[0] =   imageCenterX;
   translation2[1] =   imageCenterY;
   transform->Translate( translation2, false );
- 
+
   filter->SetTransform( transform );
   filter->Update();
 
@@ -248,7 +248,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   OutputType Result2 = function2->EvaluateAtIndex(index2);
 
   double error = 0.0;
-  
+
   for (unsigned int j = 1; j < 8; ++j)
     {
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
@@ -262,12 +262,12 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
   error = vcl_sqrt(error)/7.0;
   std::cout << "Error : " << error << std::endl
             << std::endl;
-   
+
   if (error > 1E-3)
       {
       itkGenericExceptionMacro( << "Error = " << error
                                 << "  > 1E-3     -> TEST FAILLED" << std::endl );
       }
-    
+
   return EXIT_SUCCESS;
 }

@@ -30,7 +30,7 @@ int otbVectorDataToSpecificDescriptionFilterBaseNew(int argc, char* argv[])
 
   VectorDataToSpecificDescriptionFilterType::Pointer filter =
     VectorDataToSpecificDescriptionFilterType::New();
-  
+
   std::cout<<filter<<std::endl;
 
   return EXIT_SUCCESS;

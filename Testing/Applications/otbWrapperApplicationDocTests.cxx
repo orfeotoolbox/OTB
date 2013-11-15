@@ -116,7 +116,7 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
         }
       count++;
       }
-    
+
     if( !hasValue )
       {
       std::cout<<"Error in doc example: no value for the example found !!!"<<std::endl;

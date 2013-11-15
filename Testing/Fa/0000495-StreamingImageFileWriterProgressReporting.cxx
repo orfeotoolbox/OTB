@@ -29,17 +29,17 @@ int main(int argc, char* argv[])
     std::cout << argv[0] << " <input image> <output image 1> <output image 2>" << std::endl;
     return EXIT_FAILURE;
     }
-  
+
   typedef otb::Image<float, 2>                        ImageType;
   typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::ImageFileWriter<ImageType>    WriterType;
   typedef itk::CastImageFilter<ImageType, ImageType>  CastFilterType;
-  
+
   bool hasObserver = false;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
-  
+
   CastFilterType::Pointer cast = CastFilterType::New();
   cast->SetInput(reader->GetOutput());
 
@@ -84,6 +84,6 @@ int main(int argc, char* argv[])
   // Execute the pipeline
   // The reader object
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

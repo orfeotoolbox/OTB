@@ -26,6 +26,6 @@ int otbFuzzyVariableNew(int argc, char* argv[])
   typedef otb::FuzzyVariable<LabelType, PrecisionType> FuzzyVarType;
 
   FuzzyVarType::Pointer fv = FuzzyVarType::New();
-  
+
   return EXIT_SUCCESS;
 }

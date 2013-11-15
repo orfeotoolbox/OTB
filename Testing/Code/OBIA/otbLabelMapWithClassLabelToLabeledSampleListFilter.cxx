@@ -58,7 +58,7 @@ int otbLabelMapWithClassLabelToLabeledSampleListFilter(int argc, char* argv[])
   // instantiation
    LabeledReaderType::Pointer lreader = LabeledReaderType::New();
    lreader->SetFileName(infname);
-   
+
    LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
    labelMapFilter->SetInput(lreader->GetOutput());
    labelMapFilter->SetInputForegroundValue(255);
@@ -80,7 +80,7 @@ int otbLabelMapWithClassLabelToLabeledSampleListFilter(int argc, char* argv[])
      {
      filter->GetMeasurementFunctor().AddAttribute(argv[i]);
      }
-   
+
    std::cout<<"Number of attributes: "<<filter->GetMeasurementFunctor().GetNumberOfAttributes()<<std::endl;
 
    shapeLabelMapFilter->GetOutput()->GetLabelObject(1)->SetClassLabel(1);

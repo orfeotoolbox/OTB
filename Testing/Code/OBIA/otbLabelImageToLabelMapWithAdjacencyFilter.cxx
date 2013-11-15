@@ -48,7 +48,7 @@ int otbLabelImageToLabelMapWithAdjacencyFilter(int argc, char * argv[])
 {
   LabelReaderType::Pointer reader = LabelReaderType::New();
   reader->SetFileName(argv[1]);
-  
+
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
   filter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
@@ -56,7 +56,7 @@ int otbLabelImageToLabelMapWithAdjacencyFilter(int argc, char * argv[])
 
   std::ofstream ofs(argv[2]);
 
-  // Retrieve the label map  
+  // Retrieve the label map
   ConstIteratorType  lIt = ConstIteratorType( filter->GetOutput() );
 
   ofs<<"Label map: "<<std::endl;
@@ -65,10 +65,10 @@ int otbLabelImageToLabelMapWithAdjacencyFilter(int argc, char * argv[])
     {
     // Retrieve the label object
     const LabelObjectType * lo = lIt.GetLabelObject();
-    
+
     // Retrieve the line container
     ConstLineIteratorType lineIt = ConstLineIteratorType( lo );
-    
+
     ofs<<"Label: "<<lo->GetLabel()<<", lines: ";
 
     while ( !lineIt.IsAtEnd() )
