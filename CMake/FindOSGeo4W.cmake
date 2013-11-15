@@ -12,5 +12,5 @@ if(WIN32)
 	else()
 		message(STATUS "Could not find OSGeo4W")
 	endif()
-	
+
 endif()

@@ -533,7 +533,7 @@ add_test(dmTuMulti3DMapToDEMFilterMeanMultiThreadMultiStream ${DISPARITYMAP_TEST
 		 2
 		 8
 		 4)
-		
+
 add_test(dmTuMulti3DMapToDEMFilterAccMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilter
          ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
@@ -544,7 +544,7 @@ add_test(dmTuMulti3DMapToDEMFilterAccMultiThreadMultiStream ${DISPARITYMAP_TESTS
 		 2.5
 		 3
 		 8
-		 4		
+		 4
 )
 endif()
 

@@ -29,7 +29,7 @@ OTB_TEST_APPLICATION(NAME apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt
 
 set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_gt)
 set_tests_properties(apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt PROPERTIES DEPENDS apTvCdbComputePolylineFeatureFromImage_LI_ROADSA_gt)
-				     																	
+
 OTB_TEST_APPLICATION(NAME apTvCdbComputePolylineFeatureFromImage_LI_NONDVI_wr
                      APP  ComputePolylineFeatureFromImage
                      OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/NDVI.TIF
@@ -130,7 +130,7 @@ OTB_TEST_APPLICATION(NAME cdbTvVectorDataDSValidationGroundTruth_LI
 					VALID	 --compare-ogr 0.0
 							 ${OTBAPP_BASELINE_FILES}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp
 							 ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp)
-							
+
 
 OTB_TEST_APPLICATION(NAME cdbTvVectorDataDSValidationWrongRoads_LI
                      APP  VectorDataDSValidation
@@ -142,7 +142,7 @@ OTB_TEST_APPLICATION(NAME cdbTvVectorDataDSValidationWrongRoads_LI
 					VALID	 --compare-ogr 0.0
 							 ${OTBAPP_BASELINE_FILES}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp
 							 ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp)
-							
+
 
 OTB_TEST_APPLICATION(NAME apTvCdbVectorDataDSValidationRoadExtractionApplication_LI
                      APP  VectorDataDSValidation
@@ -151,7 +151,7 @@ OTB_TEST_APPLICATION(NAME apTvCdbVectorDataDSValidationRoadExtractionApplication
                 		     -plasup "NONDVI" "ROADSA" "NOBUIL"
                 		     -descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml
                 		     -out ${TEMP}/apTvCdbVectorDataDSValidationOutpout_LI_RoadExtractionApplication.shp)
-					
-					
-							
+
+
+
 

@@ -95,11 +95,11 @@ else()
         add_subdirectory(OBIA)
         add_subdirectory(Simulation)
 		add_subdirectory(Hyperspectral)
-		
-	if(BUILD_APPLICATIONS)	
+
+	if(BUILD_APPLICATIONS)
 		add_subdirectory(Application)
-	endif()	
-		
+	endif()
+
     if(OTB_USE_VISU_GUI)
         add_subdirectory(Visualization)
     endif()

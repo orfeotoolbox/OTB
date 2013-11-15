@@ -9,7 +9,7 @@ set(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests4)
 set(LEARNING_TESTS5 ${CXX_TEST_PATH}/otbLearningTests5)
 if(OTB_USE_OPENCV)
 	set(LEARNING_TESTS6 ${CXX_TEST_PATH}/otbLearningTests6)
-endif()	
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -778,7 +778,7 @@ if(OTB_USE_OPENCV)
 
      add_test(leTuImageClassificationFilterNew ${LEARNING_TESTS6}
        	 otbImageClassificationFilterNew)
-       	
+
      add_test(leTvImageClassificationFilterLibSVM ${LEARNING_TESTS6}
      	--compare-image ${NOTOL}
        	 ${BASELINE}/leSVMImageClassificationFilterOutput.tif
@@ -788,7 +788,7 @@ if(OTB_USE_OPENCV)
 		 ${INPUTDATA}/svm_model_image
 		 ${TEMP}/leImageClassificationFilterLibSVMOutput.tif
        	 )
-       	
+
      add_test(leTvImageClassificationFilterSVM ${LEARNING_TESTS6}
      	--compare-image ${NOTOL}
        	 ${BASELINE}/leImageClassificationFilterSVMOutput.tif
@@ -798,56 +798,56 @@ if(OTB_USE_OPENCV)
 		 ${INPUTDATA}/ROI_QB_MUL_4_svmModel.txt
 		 ${TEMP}/leImageClassificationFilterSVMOutput.tif
        	 )
-       	
+
      add_test(leTuLibSVMMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbLibSVMMachineLearningModelCanRead
        	 ${TEMP}/libsvm_model.txt
        	 )
      set_tests_properties(leTuLibSVMMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvLibSVMMachineLearningModel)
-       	
+
      add_test(leTuSVMMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbSVMMachineLearningModelCanRead
        	 ${TEMP}/svm_model.txt
        	 )
      set_tests_properties(leTuSVMMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvSVMMachineLearningModel)
-     					
+
      add_test(leTuRandomForestsMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbRandomForestsMachineLearningModelCanRead
        	 ${TEMP}/rf_model.txt
        	 )
      set_tests_properties(leTuRandomForestsMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvRandomForestsMachineLearningModel)
-     					
+
      add_test(leTuBoostMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbBoostMachineLearningModelCanRead
        	 ${TEMP}/boost_model.txt
        	 )
      set_tests_properties(leTuBoostMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvBoostMachineLearningModel)
-     	       	
+
      add_test(leTuANNMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbNeuralNetworkMachineLearningModelCanRead
        	 ${TEMP}/ann_model.txt
        	 )
      set_tests_properties(leTuANNMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvANNMachineLearningModel)
-     					      	
+
      add_test(leTuNormalBayesMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbNormalBayesMachineLearningModelCanRead
        	 ${TEMP}/normalbayes_model.txt
        	 )
      set_tests_properties(leTuNormalBayesMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvNormalBayesMachineLearningModel)
-     					       	
+
 	add_test(leTuDecisionTreeMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbDecisionTreeMachineLearningModelCanRead
        	 ${TEMP}/decisiontree_model.txt
        	 )
      set_tests_properties(leTuDecisionTreeMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvDecisionTreeMachineLearningModel)
-     					       	
+
     add_test(leTuGradientBoostedTreeMachineLearningModelCanRead ${LEARNING_TESTS6}
        	 otbGradientBoostedTreeMachineLearningModelCanRead
        	 ${TEMP}/gbt_model.txt
@@ -861,7 +861,7 @@ if(OTB_USE_OPENCV)
        	 )
     set_tests_properties(leTuKNNMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvKNearestNeighborsMachineLearningModel)
-     					
+
 endif()
 
 # Testing srcs

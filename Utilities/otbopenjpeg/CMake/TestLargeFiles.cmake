@@ -53,7 +53,7 @@ macro(OPJ_TEST_LARGE_FILES VARIABLE)
                 set(_LARGE_FILES 1)
             endif()
         endif()
-	
+
         if(NOT FILE64_OK)
             # Test with _LARGEFILE_SOURCE
             try_compile(FILE64_OK "${PROJECT_BINARY_DIR}"
@@ -94,7 +94,7 @@ macro(OPJ_TEST_LARGE_FILES VARIABLE)
 	    try_compile(FSEEKO_COMPILE_OK
 	                "${PROJECT_BINARY_DIR}"
                     "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/TestLargeFiles.c")
-	
+
 	    if(FSEEKO_COMPILE_OK)
             message(STATUS "Checking for fseeko/ftello - present")
         endif()

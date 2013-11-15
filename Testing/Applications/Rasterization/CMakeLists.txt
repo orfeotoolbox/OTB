@@ -96,4 +96,4 @@ OTB_TEST_APPLICATION(NAME apTvRsRasterizationShadowsSHP
                      VALID   --compare-image ${NOTOL}
                               ${BASELINE}/apTvRsRasterizationShadowsSHP.tif
                 	            ${TEMP}/apTvRsRasterizationShadowsSHP.tif)
-  	
+

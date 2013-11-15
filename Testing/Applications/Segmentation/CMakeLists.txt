@@ -41,7 +41,7 @@ OTB_TEST_APPLICATION(NAME  apTvCcConnectedComponentSegmentatioNoMask
                              -obia "SHAPE_Elongation>8"
                      VALID   --compare-ogr ${NOTOL}
                              ${BASELINE_FILES}/apTvCcConnectedComponentSegmentationNoMask.shp
-                             ${TEMP}/apTvCcConnectedComponentSegmentationNoMask.shp)                    		
+                             ${TEMP}/apTvCcConnectedComponentSegmentationNoMask.shp)
 
 #--- HooverCompareSegmentation ---#
 OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest

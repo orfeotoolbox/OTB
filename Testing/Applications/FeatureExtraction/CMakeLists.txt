@@ -57,7 +57,7 @@ OTB_TEST_APPLICATION(NAME  apTvFEHaralickTextureExtraction
                      VALID   --compare-image ${EPSILON_15}
                    			 ${BASELINE}/apTvFEHaralickTextureExtraction.tif
                  		     ${TEMP}/apTvFEHaralickTextureExtraction.tif)
-                 		
+
 OTB_TEST_APPLICATION(NAME  apTvFESFSTextureExtraction
                      APP  SFSTextureExtraction
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
@@ -66,7 +66,7 @@ OTB_TEST_APPLICATION(NAME  apTvFESFSTextureExtraction
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFESFSTextureExtraction.tif
                  		     ${TEMP}/apTvFESFSTextureExtraction.tif)
-                 		
+
 OTB_TEST_APPLICATION(NAME  apTvFEBinaryMorphologicalOperation
                      APP  BinaryMorphologicalOperation
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
@@ -79,7 +79,7 @@ OTB_TEST_APPLICATION(NAME  apTvFEBinaryMorphologicalOperation
                              -out ${TEMP}/apTvFEBinaryMorphologicalOperation.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEBinaryMorphologicalOperation.tif
-                 		     ${TEMP}/apTvFEBinaryMorphologicalOperation.tif)	
+                 		     ${TEMP}/apTvFEBinaryMorphologicalOperation.tif)
 
 OTB_TEST_APPLICATION(NAME  apTvFEGrayScaleMorphologicalOperation
                      APP  GrayScaleMorphologicalOperation
@@ -91,8 +91,8 @@ OTB_TEST_APPLICATION(NAME  apTvFEGrayScaleMorphologicalOperation
                              -out ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEGrayScaleMorphologicalOperation.tif
-                 		     ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif)	
-                 		
+                 		     ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif)
+
 OTB_TEST_APPLICATION(NAME  apTvFELocalStatisticExtraction
                      APP  LocalStatisticExtraction
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
@@ -101,8 +101,8 @@ OTB_TEST_APPLICATION(NAME  apTvFELocalStatisticExtraction
                              -out ${TEMP}/apTvFELocalStatisticExtraction.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/feTvRadiometricMomentsImageFilter.tif
-                 		     ${TEMP}/apTvFELocalStatisticExtraction.tif)      		
-                 		
+                 		     ${TEMP}/apTvFELocalStatisticExtraction.tif)
+
 OTB_TEST_APPLICATION(NAME  apTvFEEdgeExtraction
                      APP  EdgeExtraction
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
