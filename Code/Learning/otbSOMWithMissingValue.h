@@ -105,7 +105,7 @@ protected:
   }
   /** PrintSelf method */
 void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
 
 private:
   SOMWithMissingValue (const Self &);    // purposely not implemented

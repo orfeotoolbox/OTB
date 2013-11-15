@@ -53,23 +53,23 @@ int DEMConvertAdapter::Convert(std::string tempFilename, std::string output)
   // Define the output file type
   std::string output_type("general_raster_bsq_envi");
   kwl.add(PREFIX, ossimKeywordNames::TYPE_KW, output_type.c_str(), true);
-    
+
   // Get an image handler for the input file.
   ossimRefPtr<ossimImageHandler> ih = ossimImageHandlerRegistry::instance()->open(ossimString(tempFilename));
-   
+
   // Initialize the
   if (ih->getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
     {
     itkExceptionMacro("Error reading image:  " << tempFilename  << "Exiting application...");
     return EXIT_FAILURE;
     }
-   
+
   ih->initialize();
-   
+
   ossimRefPtr<ossimImageSource> source = ih.get();
   ossimRefPtr<ossimBandSelector> bs = 0;
-   
-   
+
+
   // Get the image rectangle for the rrLevel selected.
   ossimIrect output_rect;
   output_rect = source->getBoundingRect(0);
@@ -79,7 +79,7 @@ int DEMConvertAdapter::Convert(std::string tempFilename, std::string output)
 
   writer->connectMyInputTo(0, source.get());
   writer->open(ossimFilename(output));
-   
+
   // Add a listener to get percent complete.
   ossimStdOutProgress prog(0, true);
   writer->addListener(&prog);
@@ -109,7 +109,7 @@ int DEMConvertAdapter::Convert(std::string tempFilename, std::string output)
       }
     writer->initialize();
     writer->setAreaOfInterest(output_rect); // Set the output rectangle.
-      
+
     try
       {
       writer->execute();

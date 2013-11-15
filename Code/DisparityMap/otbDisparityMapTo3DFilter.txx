@@ -168,10 +168,10 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   const TDisparityImage * horizDisp = this->GetHorizontalDisparityMapInput();
   TOutputImage * outputPtr = this->GetOutput();
-  
+
   outputPtr->SetLargestPossibleRegion(horizDisp->GetLargestPossibleRegion());
   outputPtr->SetNumberOfComponentsPerPixel(3);
-  
+
   // copy also origin and spacing
   outputPtr->SetOrigin(horizDisp->GetOrigin());
   outputPtr->SetSpacing(horizDisp->GetSpacing());
@@ -186,16 +186,16 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
   // For the epi grid : generate full buffer here !
   TEpipolarGridImage * leftGrid = const_cast<TEpipolarGridImage*>(this->GetLeftEpipolarGridInput());
   TEpipolarGridImage * rightGrid = const_cast<TEpipolarGridImage*>(this->GetRightEpipolarGridInput());
-  
+
   leftGrid->SetRequestedRegionToLargestPossibleRegion();
   rightGrid->SetRequestedRegionToLargestPossibleRegion();
-  
+
   TOutputImage * outputDEM = this->GetOutput();
-  
+
   TDisparityImage * horizDisp = const_cast<TDisparityImage*>(this->GetHorizontalDisparityMapInput());
   TDisparityImage * vertiDisp = const_cast<TDisparityImage*>(this->GetVerticalDisparityMapInput());
   TMaskImage * maskDisp = const_cast<TMaskImage*>(this->GetDisparityMaskInput());
-  
+
   // We impose that both disparity map inputs have the same size
   if(vertiDisp &&
      horizDisp->GetLargestPossibleRegion() != vertiDisp->GetLargestPossibleRegion())
@@ -203,26 +203,26 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     itkExceptionMacro(<<"Horizontal and vertical disparity maps do not have the same size ! Horizontal largest region: "
       <<horizDisp->GetLargestPossibleRegion()<<", vertical largest region: "<<vertiDisp->GetLargestPossibleRegion());
     }
-    
-  
+
+
   if (maskDisp && horizDisp->GetLargestPossibleRegion() != maskDisp->GetLargestPossibleRegion())
     {
     itkExceptionMacro(<<"Disparity map and mask do not have the same size ! Map region : "
       <<horizDisp->GetLargestPossibleRegion()<<", mask region : "<<maskDisp->GetLargestPossibleRegion());
     }
-  
+
   horizDisp->SetRequestedRegion( outputDEM->GetRequestedRegion() );
-  
+
   if (vertiDisp)
     {
     vertiDisp->SetRequestedRegion( outputDEM->GetRequestedRegion() );
     }
-    
+
   if (maskDisp)
     {
     maskDisp->SetRequestedRegion( outputDEM->GetRequestedRegion() );
     }
-  
+
   // Check that the keywordlists are not empty
   if (m_LeftKeywordList.GetSize() == 0 || m_RightKeywordList.GetSize() == 0)
     {
@@ -239,10 +239,10 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
   // Instanciate transforms
   m_LeftToGroundTransform = RSTransformType::New();
   m_RightToGroundTransform = RSTransformType::New();
-  
+
   m_LeftToGroundTransform->SetInputKeywordList(m_LeftKeywordList);
   m_RightToGroundTransform->SetInputKeywordList(m_RightKeywordList);
-    
+
   m_LeftToGroundTransform->InstanciateTransform();
   m_RightToGroundTransform->InstanciateTransform();
 }
@@ -255,22 +255,22 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 {
   const TDisparityImage * horizDisp = this->GetHorizontalDisparityMapInput();
   const TDisparityImage * vertiDisp = this->GetVerticalDisparityMapInput();
-  
+
   const TMaskImage * disparityMask = this->GetDisparityMaskInput();
-  
+
   TOutputImage * outputDEM = this->GetOutput();
 
   // Get epipolar grids
   const TEpipolarGridImage * leftGrid = this->GetLeftEpipolarGridInput();
   const TEpipolarGridImage * rightGrid = this->GetRightEpipolarGridInput();
-  
+
   typename TEpipolarGridImage::RegionType gridRegion = leftGrid->GetLargestPossibleRegion();
-  
+
   typename TOutputImage::RegionType outputRequestedRegion = outputDEM->GetRequestedRegion();
-  
+
   itk::ImageRegionIterator<OutputImageType> demIt(outputDEM,outputRequestedRegion);
   itk::ImageRegionConstIteratorWithIndex<DisparityMapType> horizIt(horizDisp,outputRequestedRegion);
-  
+
   demIt.GoToBegin();
   horizIt.GoToBegin();
 
@@ -282,7 +282,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     vertiIt = itk::ImageRegionConstIteratorWithIndex<DisparityMapType>(vertiDisp,outputRequestedRegion);
     vertiIt.GoToBegin();
   }
-  
+
   bool useMask = false;
   itk::ImageRegionConstIterator<MaskImageType> maskIt;
   if (disparityMask)
@@ -291,12 +291,12 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     maskIt = itk::ImageRegionConstIterator<MaskImageType>(disparityMask,outputRequestedRegion);
     maskIt.GoToBegin();
     }
-  
+
   double elevationMin = 0.0;
   double elevationMax = 300.0;
-  
+
   typename OptimizerType::Pointer optimizer = OptimizerType::New();
-  
+
   typename TDisparityImage::PointType epiPoint;
   itk::ContinuousIndex<double,2> gridIndexConti;
   double subPixIndex[2];
@@ -306,18 +306,18 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
   typename GridImageType::PixelType lrPixel(2);
   typename GridImageType::PixelType llPixel(2);
   typename GridImageType::PixelType cPixel(2);
-  
+
   typename GridImageType::PointType ulPoint;
   typename GridImageType::PointType urPoint;
   typename GridImageType::PointType lrPoint;
   typename GridImageType::PointType llPoint;
-  
+
   TDPointType sensorPoint;
   TDPointType leftGroundHmin;
   TDPointType leftGroundHmax;
   TDPointType rightGroundHmin;
   TDPointType rightGroundHmax;
-  
+
   while (!demIt.IsAtEnd() && !horizIt.IsAtEnd())
     {
     // check mask value if any
@@ -329,7 +329,7 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
          typename OutputImageType::PixelType pixel3D(3);
          pixel3D.Fill(0);
          demIt.Set(pixel3D);
-        
+
         ++demIt;
         ++horizIt;
         if (useVerti) ++vertiIt;
@@ -337,11 +337,11 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
         continue;
         }
       }
-    
+
     // compute left ray
     horizDisp->TransformIndexToPhysicalPoint(horizIt.GetIndex(),epiPoint);
     leftGrid->TransformPhysicalPointToContinuousIndex(epiPoint,gridIndexConti);
-    
+
     ulIndex[0] = static_cast<int>(vcl_floor(gridIndexConti[0]));
     ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
     if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
@@ -362,12 +362,12 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     llIndex[1] = ulIndex[1] + 1;
     subPixIndex[0] = gridIndexConti[0] - static_cast<double>(ulIndex[0]);
     subPixIndex[1] = gridIndexConti[1] - static_cast<double>(ulIndex[1]);
-    
+
     leftGrid->TransformIndexToPhysicalPoint(ulIndex, ulPoint);
     leftGrid->TransformIndexToPhysicalPoint(urIndex, urPoint);
     leftGrid->TransformIndexToPhysicalPoint(lrIndex, lrPoint);
     leftGrid->TransformIndexToPhysicalPoint(llIndex, llPoint);
-    
+
     ulPixel[0] = (leftGrid->GetPixel(ulIndex))[0] + ulPoint[0];
     ulPixel[1] = (leftGrid->GetPixel(ulIndex))[1] + ulPoint[1];
     urPixel[0] = (leftGrid->GetPixel(urIndex))[0] + urPoint[0];
@@ -378,26 +378,26 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     llPixel[1] = (leftGrid->GetPixel(llIndex))[1] + llPoint[1];
     cPixel = (ulPixel * (1.0 - subPixIndex[0]) + urPixel * subPixIndex[0]) * (1.0 - subPixIndex[1]) +
              (llPixel * (1.0 - subPixIndex[0]) + lrPixel * subPixIndex[0]) * subPixIndex[1];
-    
+
     sensorPoint[0] = cPixel[0];
     sensorPoint[1] = cPixel[1];
     sensorPoint[2] = elevationMin;
     leftGroundHmin = m_LeftToGroundTransform->TransformPoint(sensorPoint);
-    
+
     sensorPoint[2] = elevationMax;
     leftGroundHmax = m_LeftToGroundTransform->TransformPoint(sensorPoint);
-    
+
     // compute right ray
     itk::ContinuousIndex<double,2> rightIndexEstimate;
     rightIndexEstimate[0] = static_cast<double>((horizIt.GetIndex())[0]) + static_cast<double>(horizIt.Get());
-    
+
     double verticalShift = 0;
     if (useVerti) verticalShift = static_cast<double>(vertiIt.Get());
     rightIndexEstimate[1] = static_cast<double>((horizIt.GetIndex())[1]) + verticalShift;
-    
+
     horizDisp->TransformContinuousIndexToPhysicalPoint(rightIndexEstimate,epiPoint);
     rightGrid->TransformPhysicalPointToContinuousIndex(epiPoint,gridIndexConti);
-    
+
     ulIndex[0] = static_cast<int>(vcl_floor(gridIndexConti[0]));
     ulIndex[1] = static_cast<int>(vcl_floor(gridIndexConti[1]));
     if (ulIndex[0] < gridRegion.GetIndex(0)) ulIndex[0] = gridRegion.GetIndex(0);
@@ -418,12 +418,12 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     llIndex[1] = ulIndex[1] + 1;
     subPixIndex[0] = gridIndexConti[0] - static_cast<double>(ulIndex[0]);
     subPixIndex[1] = gridIndexConti[1] - static_cast<double>(ulIndex[1]);
-    
+
     rightGrid->TransformIndexToPhysicalPoint(ulIndex, ulPoint);
     rightGrid->TransformIndexToPhysicalPoint(urIndex, urPoint);
     rightGrid->TransformIndexToPhysicalPoint(lrIndex, lrPoint);
     rightGrid->TransformIndexToPhysicalPoint(llIndex, llPoint);
-    
+
     ulPixel[0] = (rightGrid->GetPixel(ulIndex))[0] + ulPoint[0];
     ulPixel[1] = (rightGrid->GetPixel(ulIndex))[1] + ulPoint[1];
     urPixel[0] = (rightGrid->GetPixel(urIndex))[0] + urPoint[0];
@@ -434,46 +434,46 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
     llPixel[1] = (rightGrid->GetPixel(llIndex))[1] + llPoint[1];
     cPixel = (ulPixel * (1.0 - subPixIndex[0]) + urPixel * subPixIndex[0]) * (1.0 - subPixIndex[1]) +
              (llPixel * (1.0 - subPixIndex[0]) + lrPixel * subPixIndex[0]) * subPixIndex[1];
-    
+
     sensorPoint[0] = cPixel[0];
     sensorPoint[1] = cPixel[1];
     sensorPoint[2] = elevationMin;
     rightGroundHmin = m_RightToGroundTransform->TransformPoint(sensorPoint);
-    
+
     sensorPoint[2] = elevationMax;
     rightGroundHmax = m_RightToGroundTransform->TransformPoint(sensorPoint);
-    
+
     // Compute ray intersection with the generic line of sight optimizer
     typename PointSetType::Pointer pointSetA = PointSetType::New();
     typename PointSetType::Pointer pointSetB = PointSetType::New();
-    
+
     pointSetA->SetPoint(0,leftGroundHmax);
     pointSetA->SetPoint(1,rightGroundHmax);
     pointSetA->SetPointData(0,0);
     pointSetA->SetPointData(1,1);
-    
+
     pointSetB->SetPoint(0,leftGroundHmin);
     pointSetB->SetPoint(1,rightGroundHmin);
     pointSetB->SetPointData(0,0);
     pointSetB->SetPointData(1,1);
-    
+
     TDPointType midPoint3D = optimizer->Compute(pointSetA,pointSetB);
-    
+
     // record 3D point
     typename OutputImageType::PixelType pixel3D(3);
     pixel3D[0] = midPoint3D[0];
     pixel3D[1] = midPoint3D[1];
     pixel3D[2] = midPoint3D[2];
     demIt.Set(pixel3D);
-    
+
     ++demIt;
     ++horizIt;
-    
+
     if (useVerti) ++vertiIt;
     if (useMask) ++maskIt;
-    
+
     }
-   
+
 }
 
 }

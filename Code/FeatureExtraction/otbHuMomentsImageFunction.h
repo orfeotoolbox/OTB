@@ -121,7 +121,7 @@ public:
    */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
-  
+
 protected:
   HuMomentsImageFunction();
   virtual ~HuMomentsImageFunction() {}

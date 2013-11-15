@@ -203,7 +203,7 @@ public:
   }
 
   virtual LayerValueType GetValueAtIndex(const IndexType& index);
-  
+
   itkSetMacro(ComputeHistoOnFullResolution, bool);
   itkSetMacro(ComputeHistoOnZoomResolution, bool);
   itkSetMacro(UpdateHisto, bool);

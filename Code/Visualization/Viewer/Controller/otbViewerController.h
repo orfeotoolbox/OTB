@@ -47,25 +47,25 @@ public:
   typedef ViewType::VisuViewType           VisuViewType;
   typedef ViewType::VisuViewPointerType    VisuViewPointerType;
   typedef ViewType::ImageWidgetPointerType VisuWidgetPointerType;
-  
+
   typedef Superclass::ImageType            InputImageType;
   typedef Superclass::ImagePointerType     InputImagePointerType;
 
   /** NewVisu */
   typedef ModelType::VisuModelType        VisuModelType;
   typedef ModelType::VisuModelPointerType VisuModelPointerType;
-  
+
   typedef ObjectList<VisuControllerType> VisuControllerListType;
-  
+
   typedef WidgetResizingActionHandler<VisuModelType, VisuViewType> ResizingHandlerType;
   typedef ResizingHandlerType::Pointer                             ResizingHandlerPointerType;
 
   typedef ChangeExtractRegionActionHandler<VisuModelType, VisuViewType> ChangeExtractRegionHandlerType;
   typedef ChangeExtractRegionHandlerType::Pointer                       ChangeExtractRegionHandlerPointerType;
-  
+
   typedef AutoScaleActionHandler<ViewType::ImageWidgetType> AutoScaleHandlerType;
   typedef AutoScaleHandlerType::Pointer                     AutoScaleHandlerPointerType;
-  
+
   /** Standard type macros */
   itkTypeMacro(ViewerController, Superclass);
   itkNewMacro(Self);
@@ -79,24 +79,24 @@ public:
   {
     return m_PreviewVisuController;
   }
-  
+
   void SetView(ViewPointerType pView)
   {
     m_View = pView;
-    
+
     m_AutoScaleHandler = AutoScaleHandlerType::New();
     m_AutoScaleHandler->SetPreviewWidget(m_View->GetPreviewWidget());
     m_PreviewVisuController->AddActionHandler(m_AutoScaleHandler);
   }
 
-  
-   
+
+
 /*   VisuControllerListPointerType GetVisuControllerList() */
 /*   { */
 /*     return m_VisuControllerList; */
 /*   } */
-  
-  
+
+
   //virtual void AddController(VisuModelPointerType  modelRenderingLayer  , VisuViewPointerType visuView);
 
   virtual unsigned int OpenInputImage(const char * filename, const unsigned int & id=0);
@@ -128,9 +128,9 @@ private:
   AutoScaleHandlerPointerType   m_AutoScaleHandler;
 
   VisuControllerListPointerType   m_VisuControllerList;
-  
+
   /** Model of the application*/
-      
+
 };
 } //end namespace otb
 

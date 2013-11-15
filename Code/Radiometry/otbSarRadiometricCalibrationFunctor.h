@@ -119,7 +119,7 @@ public:
   {
     return m_AntennaPatternOldGain;
   }
-  
+
   /** Set incidenceAngle method */
   void SetIncidenceAngle(RealType value)
   {

@@ -41,7 +41,7 @@ ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
   choice.m_AssociatedParameter = ParameterGroup::New();
   choice.m_AssociatedParameter->SetName(choiceName);
   choice.m_AssociatedParameter->SetRoot(this);
-  
+
   m_ChoiceList.push_back(choice);
 
   // check if the new choice matches the m_CurrentChoice : if so the group should be active.
@@ -152,7 +152,7 @@ ChoiceParameter::SetValue(unsigned int v)
         }
       }
     }
-  
+
   // Call Modified();
   this->Modified();
 }

@@ -42,7 +42,7 @@ LmvmPanSharpeningFusionImageFilter
   m_XsNoiseFilter = XsNoiseFilterType::New();
   m_XsVectorConvolutionFilter = XsVectorConvolutionFilterType::New();
   m_XsVectorNoiseFilter = XsVectorNoiseFilterType::New();
-  
+
 
   // Set-up default parameters
   m_Radius.Fill(3);
@@ -151,16 +151,16 @@ LmvmPanSharpeningFusionImageFilter
   m_XsNoiseFilter->SetRadius(this->m_Radius);
   m_XsVectorNoiseFilter->SetInput(this->GetXsInput());
   m_XsVectorNoiseFilter->SetFilter(m_XsNoiseFilter);
-  
-  
+
+
   m_FusionStep1Filter->SetInput1(m_XsVectorNoiseFilter->GetOutput());
   m_FusionStep1Filter->SetInput2(m_PanConvolutionFilter->GetOutput());
   m_FusionStep1Filter->SetInput3(this->GetPanInput());
-  
+
   m_FusionStep2Filter->SetInput1(m_FusionStep1Filter->GetOutput());
   m_FusionStep2Filter->SetInput3(m_PanNoiseFilter->GetOutput());
   m_FusionStep2Filter->SetInput2(m_XsVectorConvolutionFilter->GetOutput());
-  
+
   m_FusionStep2Filter->UpdateOutputInformation();
 
   // Wire composite filter

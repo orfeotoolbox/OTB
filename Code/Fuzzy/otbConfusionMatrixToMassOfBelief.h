@@ -135,10 +135,10 @@ public:
 protected:
   /** Constructor */
   ConfusionMatrixToMassOfBelief();
-  
+
   /** Destructor */
   virtual ~ConfusionMatrixToMassOfBelief() {};
-  
+
   /** Triggers the computation of the confusion matrix */
   void GenerateData(void);
 

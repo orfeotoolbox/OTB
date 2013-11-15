@@ -137,7 +137,7 @@ public:
           typename TOutputImage::PixelType,
           TPrecision>
      >                                 Superclass;
-  
+
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -145,7 +145,7 @@ public:
       typename TInputImage::PixelType,
       typename TOutputImage::PixelType,
       TPrecision> FunctorType;
-  
+
   typedef typename FunctorType::MatrixType MatrixType;
 
   /** Method for creation through the object factory. */

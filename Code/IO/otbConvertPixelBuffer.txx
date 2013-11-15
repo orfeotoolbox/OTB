@@ -141,8 +141,8 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     break;
     }
 }
-  
-  
+
+
 template < typename InputPixelType,
            typename OutputPixelType,
            class OutputConvertTraits
@@ -187,7 +187,7 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     inputData += 3;
     OutputConvertTraits::SetNthComponent(0, *outputData++, val);
     }
-  
+
 }
 
 
@@ -218,7 +218,7 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     OutputComponentType val = static_cast<OutputComponentType>( tempval );
     OutputConvertTraits::SetNthComponent(0, *outputData++, val);
     }
-  
+
 }
 
 template < typename InputPixelType,
@@ -270,7 +270,7 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
     }
 }
 
-  
+
 template < typename InputPixelType,
            typename OutputPixelType,
            class OutputConvertTraits
@@ -410,7 +410,7 @@ void
 ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
 ::ConvertGrayToRGBA(InputPixelType* inputData,
                     OutputPixelType* outputData , size_t size)
-  
+
 {
   InputPixelType* endInput = inputData + size;
   while(inputData != endInput)

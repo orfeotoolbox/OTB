@@ -86,7 +86,7 @@ public:
 
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer       DataObjectPointer;
-  
+
   /** Types for histogram */
   typedef itk::Statistics::DenseFrequencyContainer        DFContainerType;
   typedef typename itk::NumericTraits
@@ -114,7 +114,7 @@ public:
    *  m_NoDataValue are ignored.
    */
   itkSetMacro(NoDataFlag, bool);
- 
+
   /** Get the NoDataFlag. If set to true, samples with values equal to
    *  m_NoDataValue are ignored.
    */
@@ -136,22 +136,22 @@ public:
 
   /** Get the minimum values for histograms */
   itkGetConstReferenceMacro(HistogramMin,MeasurementVectorType);
-  
+
   /** Set the minimum values for histograms */
   itkSetMacro(HistogramMin,MeasurementVectorType);
-  
+
   /** Get the maximum values for histograms */
   itkGetConstReferenceMacro(HistogramMax,MeasurementVectorType);
-  
+
   /** Set the maximum values for histograms */
   itkSetMacro(HistogramMax,MeasurementVectorType);
-  
+
   /** Set the subsampling rate */
   itkSetMacro(SubSamplingRate, unsigned int);
-  
+
   /** Get the subsampling rate */
   itkGetMacro(SubSamplingRate, unsigned int);
-  
+
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
@@ -175,17 +175,17 @@ protected:
 private:
   PersistentHistogramVectorImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-  
+
   ArrayHistogramListType   m_ThreadHistogramList;
   HistogramSizeType        m_Size;
   MeasurementVectorType    m_HistogramMin;
   MeasurementVectorType    m_HistogramMax;
   bool                     m_NoDataFlag;
   InternalPixelType        m_NoDataValue;
-  
+
   /** Set the subsampling along each direction */
   unsigned int             m_SubSamplingRate;
-  
+
 }; // end of class PersistentStatisticsVectorImageFilter
 
 /**===========================================================================*/
@@ -232,7 +232,7 @@ public:
   /** Types needed for histograms */
   typedef typename InternalFilterType::HistogramType      HistogramType;
   typedef typename InternalFilterType::HistogramListType  HistogramListType;
-  
+
   void SetInput(InputImageType * input)
   {
     this->GetFilter()->SetInput(input);
@@ -241,13 +241,13 @@ public:
   {
     return this->GetFilter()->GetInput();
   }
-  
+
   /** Return the computed histogram */
   HistogramListType* GetHistogramList()
   {
     return this->GetFilter()->GetHistogramListOutput();
   }
-  
+
 
 protected:
   /** Constructor */

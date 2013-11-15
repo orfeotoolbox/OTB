@@ -54,13 +54,13 @@ public:
   typedef VectorDataSource<TVectorData>                Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(LabeledSampleLocalizationGenerator, VectorDataSource);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   typedef TVectorData                                           VectorDataType;
   typedef typename VectorDataType::Pointer                      VectorDataPointerType;
   typedef typename VectorDataType::DataNodeType                 DataNodeType;
@@ -68,12 +68,12 @@ public:
   typedef typename DataNodeType::PointType                      PointType;
   typedef typename DataNodeType::PolygonType::VertexType        VertexType;
   typedef typename std::vector<PointType>                       PointVectorType;
- 
+
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
-  
+
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
   typedef itk::Statistics::EuclideanDistanceMetric<PointType>          EuclideanDistanceType;
-  
+
   /** Connects the VectorDatas from which the localizations are going to be extracted. */
   void PushBackInput(const VectorDataType *);
   const VectorDataType * GetInput(unsigned int idx) const;
@@ -119,7 +119,7 @@ protected:
   PointVectorType RandomPointsGenerator(DataNodeType * node);
 
   PointVectorType PointDensification(DataNodeType * node);
-  
+
 private:
   LabeledSampleLocalizationGenerator(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

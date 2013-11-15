@@ -49,29 +49,29 @@ public:
    typedef double                                ParametersValueType;
    typedef itk::Array<ParametersValueType>       ParametersType;
    typedef otb::SpectralResponse<double, double>  SpectralResponseType;
-   
-   
+
+
    /** Standard Macro*/
    itkTypeMacro(SimulationStep1Base, ProcessObject);
 
    itkSetMacro(Parameters, ParametersType)
    itkGetMacro(Parameters, ParametersType)
    //virtual  void SetInput(const ParametersType &) = 0;
-   
+
    virtual SpectralResponseType * GetReflectance() = 0;
    virtual SpectralResponseType * GetTransmittance() = 0;
-   
-   
+
+
 protected:
    SimulationStep1Base(){};
    virtual ~SimulationStep1Base() {}
-   
+
 
 
 private:
    SimulationStep1Base(const Self &); //purposely not implemented
    void operator =(const Self&); //purposely not implemented
-   
+
    ParametersType m_Parameters;
 
 };

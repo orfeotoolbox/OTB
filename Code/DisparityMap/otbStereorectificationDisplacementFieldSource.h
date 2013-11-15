@@ -159,7 +159,7 @@ public:
 protected:
   /** Constructor */
   StereorectificationDisplacementFieldSource( void );
-  
+
   /** Destructor */
   ~StereorectificationDisplacementFieldSource( void ) {};
 

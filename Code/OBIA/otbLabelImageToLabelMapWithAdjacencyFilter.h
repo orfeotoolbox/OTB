@@ -51,7 +51,7 @@ public:
   typedef typename InputImageType::RegionType                   InputImageRegionType;
   typedef typename InputImageType::PixelType                    InputImagePixelType;
   typedef typename InputImageType::IndexType                    IndexType;
-  
+
   typedef typename OutputImageType::Pointer                     OutputImagePointer;
   typedef typename OutputImageType::ConstPointer                OutputImageConstPointer;
   typedef typename OutputImageType::RegionType                  OutputImageRegionType;
@@ -109,7 +109,7 @@ protected:
       length = l;
       label = la;
     }
-    
+
   }; // end class RLE
 
   // RLE Vector
@@ -122,13 +122,13 @@ protected:
 
   /** LabelImageToLabelMapWithAdjacencyFilter will produce the entire output. */
   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
-  
+
   virtual void BeforeThreadedGenerateData();
 
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
   virtual void AfterThreadedGenerateData();
-  
+
   /** Add a new adjacency */
   void AddAdjacency(LabelType label1, LabelType label2, itk::ThreadIdType threadId);
 
@@ -144,14 +144,14 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   OutputImagePixelType m_BackgroundValue;
-  
+
   typename std::vector< OutputImagePointer > m_TemporaryImages;
   typename std::vector<AdjacencyMapType>     m_TemporaryAdjacencyMaps;
 
 }; // end of class
 
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLabelImageToLabelMapWithAdjacencyFilter.txx"
 #endif

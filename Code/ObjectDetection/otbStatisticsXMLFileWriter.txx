@@ -39,7 +39,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
 {
   InputDataType    inputData;
   inputData.first  = name;
-  
+
   // Check if the statistic name is already added
   for(unsigned int idx= 0; idx< m_MeasurementVectorContainer.size(); ++idx)
     {
@@ -49,7 +49,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
                         <<name<<") is already added to the XML file");
       }
     }
-  
+
   inputData.second = inputVector;
   m_MeasurementVectorContainer.push_back(inputData);
 }
@@ -66,14 +66,14 @@ StatisticsXMLFileWriter<TMeasurementVector>
   // Check if the filename is not empty
   if(m_FileName.empty())
     itkExceptionMacro(<<"The XML output FileName is empty, please set the filename via the method SetFileName");
-  
+
   // Check that the right extension is given : expected .xml */
   if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml")
     {
     itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
                       <<" is a wrong Extension FileName : Expected .xml");
     }
-  
+
   // Write the XML file
   TiXmlDocument doc;
 
@@ -88,7 +88,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
     {
     std::string            featureName              = m_MeasurementVectorContainer[i].first;
     MeasurementVectorType  currentMeasurementVector = m_MeasurementVectorContainer[i].second;
-    
+
     // The current statistic
     TiXmlElement * feature = new TiXmlElement("Statistic");
     feature->SetAttribute("name", featureName.c_str());
@@ -103,7 +103,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
       feature->LinkEndChild(curStatisticVector);
       }
     }
-  
+
   // Finally, write the file
   doc.SaveFile( m_FileName.c_str() );
 }

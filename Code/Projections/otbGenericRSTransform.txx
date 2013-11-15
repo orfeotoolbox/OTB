@@ -203,9 +203,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     {
     typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
     typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
-    
+
     sensorModel->SetImageGeometry(m_OutputKeywordList);
-    
+
     if (sensorModel->IsValidSensorModel())
       {
       m_OutputTransform = sensorModel.GetPointer();

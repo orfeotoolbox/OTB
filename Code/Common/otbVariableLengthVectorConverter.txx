@@ -38,7 +38,7 @@ VariableLengthVectorConverter< std::vector<std::vector<TInternalInputType> >, TP
   unsigned int rsltIdx = 0;
 
   OutputType result;
-  
+
   p = input.size();
 
   for (unsigned int l=0; l<p; ++l)
@@ -74,7 +74,7 @@ VariableLengthVectorConverter< std::vector<std::vector<std::complex<TInternalInp
   unsigned int count = 0;
   unsigned int rsltIdx = 0;
   OutputType result;
-  
+
   p = input.size();
 
   for (unsigned int l=0; l<p; ++l)
@@ -132,7 +132,7 @@ VariableLengthVectorConverter< itk::SmartPointer< itk::Statistics::Histogram<TPi
   OutputType result;
 
   nbBins[0] = input->GetSize()[0];
-  
+
   result.SetSize(nbBins[0]);
 
   for (unsigned int i=0; i<nbBins[0]; ++i)

@@ -48,7 +48,7 @@ public:
   typedef itk::MemberCommand< QtWidgetProgressReport >  AddProcessCommandType;
 
   void ProcessEvent( itk::Object * caller, const itk::EventObject & event );
-                                                                           
+
   std::string GetCurrentDescription()
   {
     return m_CurrentDescription;
@@ -59,7 +59,7 @@ public:
   {
     return m_CurrentProcess;
   }
-  
+
   QtWidgetModel * GetModel()
   {
     m_Model;

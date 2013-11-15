@@ -86,32 +86,32 @@ public:
   typedef typename TImage::OffsetType            OffsetType;
   typedef typename TMask::Pointer                MaskImagePointerType;
   typedef typename TMask::PixelType              MaskImagePixelType;
- 
+
   typedef itk::ConstNeighborhoodIterator<TImage> NeighborhoodIteratorType;
 
   typedef otb::Image<double, 2> AuxImageType;
   typedef typename AuxImageType::Pointer AuxImagePointerType;
-  
+
   typedef std::vector<int>  IntVectorType;
-  
+
   /** Set input images **/
   void SetMedianDisparityInput( const TImage * medianmap);
   void SetMedianMaskInput( const TMask * medianmask);
   void SetEdgesDisparityInput( const TImage * cannymedianmap);
   void SetSubPixelMaskInput( const TMask * subpixelmask);
-  
+
   /** Get the inputs */
   const TImage * GetMedianDisparityInput();
   const TMask * GetMedianMaskInput();
   const TImage * GetEdgesDisparityInput();
   const TMask * GetSubPixelMaskInput();
-  
+
   /** Get the output mask  **/
   TMask * GetOutputMask(); // mask corresponding to the corrected disparity map
-   
+
   /** Get the output risk edges **/
   TImage * GetOutputRiskEdges();
-  
+
   /** Set/Get the radius */
   itkSetMacro(Radius, SizeType);
   itkGetMacro(Radius, SizeType);
@@ -125,23 +125,23 @@ public:
   /** Set/Get the threshold for the tolerated difference between disparities */
   itkSetMacro(Tolerance, double);
   itkGetMacro(Tolerance, double);
-  
+
   /** Set/Get the discontinuity threshold  */
   itkSetMacro(DiscontinuityThreshold, double);
   itkGetMacro(DiscontinuityThreshold, double);
-  
+
   /** Set/Get the high discontinuity threshold   */
   itkSetMacro(DiscontinuityHighThreshold, double);
   itkGetMacro(DiscontinuityHighThreshold, double);
-  
+
   /** Set/Get the maximum edge gap  */
   itkSetMacro(MaxEdgeGap, double);
   itkGetMacro(MaxEdgeGap, double);
-  
+
   /** Set/Get the edge threshold  */
   itkSetMacro(EdgeThreshold, double);
   itkGetMacro(EdgeThreshold, double);
-  
+
 protected:
   /** Constructor */
   AdhesionCorrectionFilter();
@@ -156,7 +156,7 @@ protected:
 
   /** Generate output information */
   virtual void GenerateOutputInformation(void);
-  
+
 private:
   AdhesionCorrectionFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -167,13 +167,13 @@ private:
 
   /** Tolerance  */
   double                        m_Tolerance;
-  
+
   /** Thresholds  */
   double                        m_DiscontinuityThreshold;
   double                        m_DiscontinuityHighThreshold;
   double                        m_MaxEdgeGap;
   double                        m_EdgeThreshold;
- 
+
 };
 
 } // end namespace otb

@@ -121,7 +121,7 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
       currentGeometry->SetFieldAsDouble("NONDVI", (double)(m_NDVIFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
       currentGeometry->SetFieldAsDouble("ROADSA", (double)(m_SpectralAngleFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
       currentGeometry->SetFieldAsDouble("NOBUIL", (double)(m_DBOverlapFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
-      
+
       this->GetOutput(0)->GetDataTree()->Add(currentGeometry, folder);
       }
     ++itVector;

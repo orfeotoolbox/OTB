@@ -112,7 +112,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
             resetButton->setText("Reset");
             resetButton->setToolTip("Reset the value of this parameter");
             gridLayout->addWidget(resetButton, i, 3);
-            
+
             // Slots to connect to the reset button
             connect( resetButton, SIGNAL(clicked()), specificWidget, SLOT(Reset()) );
             connect( resetButton, SIGNAL(clicked()), GetModel(), SLOT(NotifyUpdate()) );

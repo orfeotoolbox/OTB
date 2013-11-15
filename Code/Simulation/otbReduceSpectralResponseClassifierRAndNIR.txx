@@ -40,7 +40,7 @@ namespace otb
     return ( m_InputReduceSpectralResponse->Clear() );
   }
 
-  
+
   template <class TReduceSpectralResponse , class TFunction>
       inline typename ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
   ::ValuePrecisionType
@@ -49,9 +49,9 @@ namespace otb
   {
       return m_Functor((*m_InputReduceSpectralResponse)(m_RBandNumber), (*m_InputReduceSpectralResponse)(m_NIRBandNumber));
   }
-  
 
-  
+
+
   template <class TReduceSpectralResponse , class TFunction>
       void
           ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>

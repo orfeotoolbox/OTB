@@ -82,7 +82,7 @@ void QtWidgetProgressReport::ReportProcess ( )
 
   // label
   QLabel *label = new QLabel(QString(m_CurrentDescription.c_str()));
-  
+
   // Build the layout and store the pointers
   m_Layout->addWidget(label);
   m_Layout->addWidget(bar);

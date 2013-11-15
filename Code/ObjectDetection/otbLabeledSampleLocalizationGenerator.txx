@@ -37,7 +37,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
- 
+
   m_RandomGenerator = RandomGeneratorType::GetInstance();
 }
 
@@ -114,7 +114,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   typename RegionType::SizeType generatorRegionSize = generatorRegion.GetSize();
   typename RegionType::IndexType generatorRegionIndex = generatorRegion.GetIndex();
   //typename RegionType::IndexType generatorRegionOrigin = generatorRegion.GetOrigin();
-  
+
   // Identify inside known points
   std::vector<PointType> insiders;
   typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetOutput(0));
@@ -143,13 +143,13 @@ LabeledSampleLocalizationGenerator<TVectorData>
   unsigned int nbPosition = nbMaxPosition;
 
   PointType rangeMin, rangeMax;
-  
+
   for(unsigned int dim = 0; dim < 2; ++dim)
     {
     rangeMin[dim] = generatorRegionIndex[dim];
     rangeMax[dim] = generatorRegionIndex[dim] + generatorRegionSize[dim];
     }
-  
+
   while(nbIter > 0 && nbPosition > 0)
     {
     VertexType candidate;
@@ -157,7 +157,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
       {
       candidate[dim] = this->m_RandomGenerator->GetUniformVariate(rangeMin[dim], rangeMax[dim]);
       }
-    
+
     if(node->GetPolygonExteriorRing()->IsInside(candidate))
       {
       typename PointVectorType::const_iterator pit = insiders.begin();
@@ -190,7 +190,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   unsigned int nbInputs = this->GetNumberOfInputs();
 
   this->GetOutput(0)->SetMetaDataDictionary(this->GetInput(0)->GetMetaDataDictionary());
-  
+
   // Retrieving root node
   typename DataNodeType::Pointer root = this->GetOutput(0)->GetDataTree()->GetRoot()->Get();
   // Create the document node
@@ -205,7 +205,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   for (unsigned int i=0; i<nbInputs; ++i)
     {
     typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
-    
+
     TreeIteratorType itVector(vectorData->GetDataTree());
     itVector.GoToBegin();
     while (!itVector.IsAtEnd())
@@ -223,7 +223,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
         currentGeometry->SetNodeId(this->GetNextID());
         currentGeometry->SetNodeType(otb::FEATURE_POINT);
         currentGeometry->SetPoint(itVector.Get()->GetPoint());
-        
+
         std::vector<std::string> fields = itVector.Get()->GetFieldList();
         for (std::vector<std::string>::const_iterator it = fields.begin(); it != fields.end(); ++it)
           {
@@ -243,7 +243,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   for (unsigned int i=0; i<nbInputs; ++i)
     {
     typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
-    
+
     TreeIteratorType itVector(vectorData->GetDataTree());
     itVector.GoToBegin();
     while (!itVector.IsAtEnd())
@@ -251,7 +251,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
       if (itVector.Get()->IsPolygonFeature())
         {
         PointVectorType vPoints = RandomPointsGenerator(itVector.Get());
-        
+
         for (typename PointVectorType::const_iterator it = vPoints.begin(); it != vPoints.end(); ++it)
           {
           typename DataNodeType::Pointer currentGeometry = DataNodeType::New();
@@ -269,7 +269,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   for (unsigned int i=0; i<nbInputs; ++i)
     {
     typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
-    
+
     TreeIteratorType itVector(vectorData->GetDataTree());
     itVector.GoToBegin();
     while (!itVector.IsAtEnd())

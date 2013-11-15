@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 {
 
   otbI18nMacro();
-  
+
   typedef otb::ViewerController ControllerType;
   typedef otb::ViewerViewGUI    ViewType;
 

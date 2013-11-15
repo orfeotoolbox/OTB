@@ -58,19 +58,19 @@ public:
   //typedef typename LabelObjectType::LineContainerType   LineContainerType;
   typedef typename LabelObjectType::IndexType           IndexType;
   typedef typename LabelObjectType::LabelType           LabelType;
-  
+
   typedef unsigned long                                 CoefficientType;
   typedef itk::VariableSizeMatrix<CoefficientType>      MatrixType;
-  
+
   /** Set the ground truth label map */
   void SetGroundTruthLabelMap(const LabelMapType *gt);
-  
+
   /** Set the machine segmentation label map */
   void SetMachineSegmentationLabelMap(const LabelMapType *ms);
-  
+
   /** Get the ground truth label map */
   const LabelMapType* GetGroundTruthLabelMap();
-  
+
   /** Get the machine segmentation label map */
   const LabelMapType* GetMachineSegmentationLabelMap();
 
@@ -83,9 +83,9 @@ public:
 protected:
   /** Constructor */
   HooverMatrixFilter();
-  
+
   ~HooverMatrixFilter() {};
-  
+
   /** Action :  Resize the matrix
    */
   virtual void BeforeThreadedGenerateData();
@@ -96,16 +96,16 @@ protected:
   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
 
 private:
-  
+
   /** Number of label objects found in the ground truth (GT) label maps */
   unsigned long     m_NumberOfRegionsGT;
-  
+
   /** Number of label objects found in the machine segmentation (MS) label maps */
   unsigned long     m_NumberOfRegionsMS;
-  
+
   /** List of labels in GT label map */
   LabelVectorType   m_LabelsGT;
-  
+
   /** Hoover confusion matrix */
   MatrixType        m_Matrix;
 };

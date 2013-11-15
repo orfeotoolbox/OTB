@@ -85,18 +85,18 @@ public:
 
   /** Erase one element of the list. */
   void Erase( unsigned int id );
-  
+
  /** Clear all the list. */
   virtual void ClearValue();
 
- 
+
 protected:
   /** Constructor */
   InputVectorDataListParameter();
 
   /** Destructor */
   virtual ~InputVectorDataListParameter();
-  
+
   VectorDataListType::Pointer m_VectorDataList;
   VectorDataFileReaderListType::Pointer  m_ReaderList;
 

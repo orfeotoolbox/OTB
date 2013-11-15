@@ -47,14 +47,14 @@ public:
   typedef VectorDataSource<TVectorData >               Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConcatenateVectorDataFilter,
                VectorDataSource);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   typedef TVectorData                                           VectorDataType;
   typedef typename VectorDataType::Pointer                      VectorDataPointerType;
   typedef typename VectorDataType::DataNodeType                 DataNodeType;
@@ -68,12 +68,12 @@ public:
   typedef typename TreeNodeType::ChildrenListType               ChildrenListType;
 
   typedef typename std::vector<PointType>                       PointVectorType;
- 
+
   /** Connects the VectorDatas from which the localizations are going to be extracted. */
   void AddInput(const VectorDataType *);
 
   const VectorDataType * GetInput(unsigned int idx) const;
-  
+
 protected:
   ConcatenateVectorDataFilter();
   virtual ~ConcatenateVectorDataFilter() {}
@@ -81,10 +81,10 @@ protected:
 
   /** Triggers the Computation of the sample list */
   void GenerateData(void);
-  
+
   /** Recursive method to visit efficiently the vectordata*/
   void ProcessNode(TreeNodeType * source, DataNodeType * outputDocument);
-  
+
 private:
   ConcatenateVectorDataFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

@@ -46,7 +46,7 @@ GeographicalDistance<TVector>
   VectorType origin(x);
   origin[0]=this->GetOrigin()[0];
   origin[1]=this->GetOrigin()[1];
- 
+
   return this->Evaluate(origin, x);
 }
 

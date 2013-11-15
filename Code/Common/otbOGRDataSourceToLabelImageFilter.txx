@@ -40,7 +40,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
   m_OutputStartIndex.Fill(0);
   m_BandsToBurn.clear();
   m_BandsToBurn.push_back(1);
-  
+
 }
 
 template< class TOutputImage>
@@ -118,7 +118,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
   const OutputImageType * src = dynamic_cast<const OutputImageType*>(image);
-  
+
   this->SetOutputOrigin ( src->GetOrigin() );
   this->SetOutputSpacing ( src->GetSpacing() );
   //this->SetOutputStartIndex ( src->GetLargestPossibleRegion().GetIndex() );
@@ -152,7 +152,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>
   itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
                                          static_cast<std::string>(this->GetOutputProjectionRef()));
-  
+
   // Generate the OGRLayers from the input OGRDataSource
   for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
     {
@@ -172,7 +172,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
 {
   // Call Superclass GenerateData
   this->AllocateOutputs();
-  
+
   // Get the buffered region
   OutputImageRegionType bufferedRegion = this->GetOutput()->GetBufferedRegion();
 
@@ -181,7 +181,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
 
   // register drivers
   GDALAllRegister();
-  
+
   std::ostringstream stream;
   stream << "MEM:::"
          <<  "DATAPOINTER=" << (unsigned long)(this->GetOutput()->GetBufferPointer()) << ","
@@ -192,7 +192,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
          <<  "PIXELOFFSET=" << sizeof(OutputImageInternalPixelType) *  nbBands << ","
          <<  "LINEOFFSET=" << sizeof(OutputImageInternalPixelType)*nbBands*bufferedRegion.GetSize()[0] << ","
          <<  "BANDOFFSET=" << sizeof(OutputImageInternalPixelType);
-  
+
   GDALDatasetH dataset = GDALOpen(stream.str().c_str(), GA_Update);
 
   // Add the projection ref to the dataset
@@ -204,7 +204,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
      GDALRasterBandH hBand = GDALGetRasterBand(dataset, band + 1);
      GDALFillRaster(hBand, m_BackgroundValue, 0);
     }
-  
+
   // add the geoTransform to the dataset
   itk::VariableLengthVector<double> geoTransform(6);
 
@@ -227,7 +227,7 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
    if (dataset != NULL)
      {
      std::vector<std::string> options;
-     
+
      std::vector<double> foreground(nbBands,m_ForegroundValue);
 
      if(m_BurnAttributeMode)

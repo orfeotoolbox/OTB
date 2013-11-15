@@ -79,7 +79,7 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
     if ( it[i].IsAtEnd() )
       iteratorsAtEnd = true;
   }
-  
+
   itk::ImageRegionIterator<OutputImageType> outIter
     ( this->GetOutput(), outputRegionForThread );
   outIter.GoToBegin();
@@ -134,7 +134,7 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
                 - output * vcl_sin( alpha );
     } while ( i-- == 0 );
   }
-  
+
   return static_cast<OutputImagePixelType>( output );
 }
 

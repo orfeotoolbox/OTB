@@ -75,7 +75,7 @@ public:
   typedef typename LabelImageType::PixelType                            LabelPixelType;
   typedef std::map<LabelPixelType, itk::VariableLengthVector<double> >  MeanValueMapType;
   typedef std::map<LabelPixelType, double>                              LabelPopulationMapType;
-  
+
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputVectorImage::ImageDimension);
 
@@ -97,7 +97,7 @@ public:
 
   /** Get input label image */
   virtual const LabelImageType * GetInputLabelImage();
-  
+
   /** Return the computed Mean for each label in the input label image */
   MeanValueMapType GetMeanValueMap() const;
 
@@ -134,7 +134,7 @@ protected:
 private:
   PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-  
+
   MeanValueMapType                       m_RadiometricValueAccumulator;
   LabelPopulationMapType                 m_LabelPopulation;
 }; // end of class PersistentStreamingStatisticsMapFromLabelImageFilter
@@ -204,7 +204,7 @@ public:
 
   typedef TInputVectorImage                   VectorImageType;
   typedef TLabelImage                         LabelImageType;
-  
+
   typedef typename Superclass::FilterType::MeanValueMapType          MeanValueMapType;
   typedef typename Superclass::FilterType::MeanValueMapObjectType    MeanValueMapObjectType;
 

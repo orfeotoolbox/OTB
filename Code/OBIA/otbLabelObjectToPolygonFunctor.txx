@@ -55,7 +55,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
   // Get the internal container
   //LineContainerType lcontainer = labelObject->GetLineContainer();
 
-  // Sort it 
+  // Sort it
   //sort(lcontainer.begin(), lcontainer.end(), &LexicographicalLineCompare);
   //Use the Optimize method
   labelObject->Optimize();
@@ -553,7 +553,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
             PolygonType * polygon,
             const StateType state)
 {
-  
+
    if( vcl_abs(static_cast<long int>(line + m_LineOffset - endPoint[1])) > 1 )
      {
        itkExceptionMacro("End point not with +/-1 line from line")

@@ -161,7 +161,7 @@ public:
               {
               m_RightAsymptote->SetAbcisse(newRightAbcisse);
               m_Curve->redraw();
-              
+
               //  Update The Rendering Function min and max
               ParametersType param = m_RenderingFunction->GetParameters();
               param.SetElement(2 * m_Channel, m_LeftAsymptote->GetAbcisse());

@@ -58,7 +58,7 @@ bool LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccesso
     otbWarningMacro("Attribute name is empty");
     return false;
     }
-  
+
   if( channel<GetNumberOfComponentsPerPixel() )
     {
     m_ChosenAttributes[channel] = strAttribute;
@@ -91,13 +91,13 @@ void LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccesso
 {
   //first call superclass method to initialize label object container and progress
   Superclass::BeforeThreadedGenerateData();
-  
+
   unsigned int nbChannels = GetNumberOfComponentsPerPixel();
   if (nbChannels == 0)
     {
     itkExceptionMacro("No attribute given");
     }
-  
+
   OutputImageType *output = this->GetOutput();
   OutputPixelType backgroundPixel;
   backgroundPixel.SetSize(nbChannels);

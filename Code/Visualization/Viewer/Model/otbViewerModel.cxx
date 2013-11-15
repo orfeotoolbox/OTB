@@ -110,7 +110,7 @@ ViewerModel
     }
 #endif
   return res;
-  
+
 }
 
 void
@@ -181,7 +181,7 @@ ViewerModel
       {
       filename.erase(loc, 4);
       }
-    
+
     GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
     readerGDAL->SetFileName(filename);
     readerGDAL->CanReadFile(filename.c_str());
@@ -197,7 +197,7 @@ ViewerModel
    ReaderPointerType  reader = ReaderType::New();
    reader->SetFileName(filepath);
    reader->GenerateOutputInformation();
-   
+
    // Special action if we use the GDAL image IO
    if (strcmp(reader->GetImageIO()->GetNameOfClass(), "GDALImageIO") == 0)
       {
@@ -290,7 +290,7 @@ ViewerModel
       {
       shrinkFactor = static_cast<unsigned int>( vcl_floor( static_cast<double>(maxSize)/256. + 0.5) );
       }
-   
+
     shrinker->SetShrinkFactor(shrinkFactor);
     shrinker->SetInput(reader->GetOutput());
     FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,

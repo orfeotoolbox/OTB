@@ -79,12 +79,12 @@ public:
   typedef TOutputDEMImage         DEMImageType;
   typedef TEpipolarGridImage      GridImageType;
   typedef TMaskImage              MaskImageType;
-  
+
   typedef typename DEMImageType::RegionType         RegionType;
   typedef typename DEMImageType::PixelType          DEMPixelType;
-  
+
   typedef itk::ImageRegionSplitter<2>   SplitterType;
-  
+
   // 3D RS transform
   // TODO: Allow to tune precision (i.e. double or float)
   typedef otb::GenericRSTransform<double,3,3>       RSTransformType;
@@ -92,25 +92,25 @@ public:
 
   // 3D points
   typedef typename RSTransformType::InputPointType  TDPointType;
-  
+
   /** Set horizontal disparity map input */
   void SetHorizontalDisparityMapInput( const TDisparityImage * hmap);
-  
+
   /** Set vertical disparity map input */
   void SetVerticalDisparityMapInput( const TDisparityImage * vmap);
-  
+
   /** Set left input */
   void SetLeftInput( const TInputImage * image);
 
   /** Set right input */
   void SetRightInput( const TInputImage * image);
-  
+
   /** Set left epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
   void SetLeftEpipolarGridInput( const TEpipolarGridImage * grid);
-  
+
   /** Set right epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
   void SetRightEpipolarGridInput( const TEpipolarGridImage * grid);
-  
+
   /** Set mask associated to disparity maps (optional, pixels with a null mask value are ignored) */
   void SetDisparityMaskInput( const TMaskImage * mask);
 
@@ -126,15 +126,15 @@ public:
   /** Get DEM output*/
   const TOutputDEMImage * GetDEMOutput() const;
   TOutputDEMImage * GetDEMOutput();
-  
+
   /** Set/Get macro for minimum elevation */
   itkSetMacro(ElevationMin, double);
   itkGetConstReferenceMacro(ElevationMin, double);
-  
+
   /** Set/Get macro for maximum elevation */
   itkSetMacro(ElevationMax, double);
   itkGetConstReferenceMacro(ElevationMax, double);
-  
+
   /** Set/Get macro for DEM grid step */
   itkSetMacro(DEMGridStep, double);
   itkGetConstReferenceMacro(DEMGridStep, double);
@@ -154,13 +154,13 @@ protected:
 
   /** Before threaded generate data */
   virtual void BeforeThreadedGenerateData();
-  
+
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
-  
+
   /** After threaded generate data : sum up temporary DEMs */
   virtual void AfterThreadedGenerateData();
-  
+
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.
     *
@@ -172,22 +172,22 @@ protected:
 private:
   DisparityMapToDEMFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Minimum elevation of the DEM in meters */
   double m_ElevationMin;
-  
+
   /** Maximum elevation of the DEM in meters */
   double m_ElevationMax;
-  
+
   /** DEM grid step (in meters) */
   double m_DEMGridStep;
-    
+
   /** Region splitter for input disparity maps */
   SplitterType::Pointer m_InputSplitter;
-  
+
   /** Number of splits used for input multithreading */
   unsigned int m_UsedInputSplits;
-  
+
   /** Temporary DEMs for mutlithreading */
   std::vector<typename DEMImageType::Pointer> m_TempDEMRegions;
 };

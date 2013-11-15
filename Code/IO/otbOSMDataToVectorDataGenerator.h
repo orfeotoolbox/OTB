@@ -87,7 +87,7 @@ public:
 
   // Vector to store <Key, value>
   typedef std::pair <std::string, std::string>     ElementPairType;
-  
+
   // Coordinates of the nodes
   typedef std::vector<VertexType >                    PointTypeList;
   typedef std::pair<ElementPairType, PointTypeList>   VectorDataElementType;
@@ -99,14 +99,14 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(OSMDataToVectorDataGenerator, VectorDataSource);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Set/Get FileName */
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
-  
+
   /** Macro to Set/GEt the extent */
   itkSetMacro(North, double);
   itkSetMacro(South, double);
@@ -158,13 +158,13 @@ public:
 protected:
   /** Generate Data method : lauch the process */
   virtual void GenerateData();
-  
+
   /**
     * Parse the xml file get from OSM to compose the requested vector
     * data
     */
   void ParseXmlFile();
-  
+
   /**
     * Compose the vector data
     */
@@ -175,7 +175,7 @@ protected:
     */
   bool IsKeyPresent(const std::string& key);
 
-  
+
   OSMDataToVectorDataGenerator();
   virtual ~OSMDataToVectorDataGenerator();
 
@@ -191,11 +191,11 @@ private:
   double                      m_South;
   double                      m_East;
   double                      m_West;
-  
+
   /** the url in OSM API format */
   std::string                 m_Url;
   bool                        m_UseUrl;
-  
+
   /** List to store keys to search */
   std::vector<std::string >   m_KeyList;
 
@@ -203,7 +203,7 @@ private:
   std::string                 m_FileName;
   ContainerType               m_GeoPointContainer;
   VectorDataElementListType   m_VectorDataElementList;
-  
+
   /** Curl object to get the XML file */
   CurlHelper::Pointer         m_Curl;
 
@@ -216,7 +216,7 @@ private:
   /** Class key and its value */
   std::string                 m_ClassKey;
   int                         m_ClassKeyValue;
-  
+
 }; // end of class
 
 } // end of namespace otb

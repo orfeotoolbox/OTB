@@ -73,29 +73,29 @@ public:
   typedef typename VectorDataType::LineType      LineType;
   typedef typename VectorDataType::PointType     PointType;
   typedef typename LineType::VertexType          VertexType;
-  
+
   typedef ogr::DataSource                            OGRDataSourceType;
   typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
   typedef ogr::Layer                                 OGRLayerType;
-  
-  
+
+
   /** Set/Get the input image of this process object.  */
   virtual void SetInput(const InputImageType *input);
   virtual const InputImageType * GetInput(void);
-  
+
   /** Set the input mask image.
    * All pixels in the mask with a value of 0 will not be considered
    * suitable for vectorization.
    */
   virtual void SetInputMask(const InputImageType *input);
   virtual const InputImageType * GetInputMask(void);
-  
+
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);
-  
+
   itkSetMacro(Use8Connected, bool);
   itkGetMacro(Use8Connected, bool);
-  
+
 protected:
   LabelImageToVectorDataFilter();
   virtual ~LabelImageToVectorDataFilter() {}
@@ -104,11 +104,11 @@ protected:
 
   /** Generate Data method*/
   virtual void GenerateData();
-  
+
 private:
   LabelImageToVectorDataFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);      //purposely not implemented
-  
+
   std::string m_FieldName;
   bool m_Use8Connected;
 

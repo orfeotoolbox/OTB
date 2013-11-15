@@ -60,7 +60,7 @@ public:
 
   /** New macro*/
   itkNewMacro(Self);
-  
+
   typedef TInputImage                 InputImageType;
   typedef TLabeledImage               LabeledImageType;
   typedef TLabelObject                LabelObjectType;
@@ -68,7 +68,7 @@ public:
   typedef typename LabelObjectType::LabelType                                  LabelType;
   typedef LabelMapWithAdjacency<LabelObjectType>                               LabelMapType;
   typedef typename LabelMapType::AdjacentLabelsContainerType                   AdjacentLabelsContainerType;
-  
+
   typedef LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
   typedef ShapeAttributesLabelMapFilter<LabelMapType>                             ShapeLabelMapFilterType;
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType>   BandStatisticsLabelMapFilterType;
@@ -80,14 +80,14 @@ public:
   virtual LabelMapType* GetOutput();
 
   virtual void GenerateData();
-  
+
 protected:
   /** Constructor */
   ImageToLabelMapWithAttributesFilter();
   /** Destructor */
   virtual ~ImageToLabelMapWithAttributesFilter(){};
-  
- 
+
+
 private:
   ImageToLabelMapWithAttributesFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

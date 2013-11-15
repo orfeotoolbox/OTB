@@ -42,7 +42,7 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   itkTypeMacro(QtLogOutput, itk::LogOutput);
-  
+
   itkNewMacro(QtLogOutput);
 
   /** flush a buffer */

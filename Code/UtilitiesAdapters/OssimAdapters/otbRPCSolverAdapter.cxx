@@ -57,13 +57,13 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
     // Check if point is inside bounds
     // Fill sensor point
     sensorPoint = ossimDpt(gcpIt->first[0], gcpIt->first[1]);
-    
+
     // Fill geo point (lat, lon, elev)
     geoPoint =  ossimGpt(gcpIt->second[1], gcpIt->second[0], gcpIt->second[2]);
-    
+
     // Add the sensor point to the list
     sensorPoints.push_back(sensorPoint);
-    
+
     // Add the geo point to the list
     geoPoints.push_back(geoPoint);
     }
@@ -85,7 +85,7 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
     otbGenericWarningMacro("Only "<<sensorPoints.size()<<" ground control points are provided, can not estimate a RPC model with elevation support (at least 40 points required). Elevation support will be disabled for RPC estimation. All coefficients related to elevation will be set to zero, and elevation will have no effect on the resulting transform.");
     useElevation = false;
     }
-  
+
   // Build the ossim rpc solver
   ossimRefPtr<ossimRpcSolver> rpcSolver = new ossimRpcSolver(useElevation, false);
 
@@ -100,7 +100,7 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
   // Export the sensor model in an ossimKeywordlist
   ossimKeywordlist geom_kwl;
   rpcProjection->saveState(geom_kwl);
-  
+
   // Build an otb::ImageKeywordList
   otb_kwl.SetKeywordlist(geom_kwl);
 }

@@ -158,7 +158,7 @@ public:
   typedef double                                                       PrecisionType;
   typedef vnl_matrix<PrecisionType>                                    MatrixType;
   typedef typename otb::VectorImageToMatrixImageFilter<InputImageType> VectorImageToMatrixImageFilterType;
-  
+
   /* vector type */
   typedef vnl_vector<double> VectorType;
 
@@ -174,16 +174,16 @@ public:
   /** Setters / Getters */
   itkSetMacro(MaxIter, unsigned int);
   itkGetMacro(MaxIter, unsigned int);
-  
+
   itkSetMacro(CritStopValue, double);
   itkGetMacro(CritStopValue, double);
-  
+
   itkSetMacro(Delt, double);
   itkGetMacro(Delt, double);
-  
+
   itkSetMacro(LambdD, double);
   itkGetMacro(LambdD, double);
-  
+
   itkSetMacro(LambdS, double);
   itkGetMacro(LambdS, double);
 
@@ -208,7 +208,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   static void AddOneRowOfOnes(const MatrixType & m, MatrixType & M);
-  
+
   static double Criterion(const MatrixType & X,
                    const MatrixType & A,
                    const MatrixType & S,
@@ -236,7 +236,7 @@ private:
               const double & delt,
               const double & lambdS,
               const double & lambdD, const bool isDirectEvalDirection);
-  
+
   static void ProjGradOneStep(
     const MatrixType & X,
     const MatrixType & fixedMat,
@@ -250,11 +250,11 @@ private:
     double & alph, const bool isDirectEvalDirection );
 
   static void SetNegativeCoefficientsToZero(MatrixType & M);
-  
+
   static MatrixType TermByTermMatrixProduct(const MatrixType & M1, const MatrixType & M2);
 
   static double SumMatrixElements(const MatrixType & M);
-  
+
   static bool ArmijoTest(const double & sig,
                   const MatrixType variMat,
                   const MatrixType & newVariMat,
@@ -262,7 +262,7 @@ private:
                   const double & newEvalf,
                   const MatrixType & gradVariMat,
                   const double & alph);
-  
+
   // attributes
   MatrixType   m_Endmembers;
   unsigned int m_MaxIter;

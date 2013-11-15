@@ -117,7 +117,7 @@ public:
   {
     return m_AntennaPatternOldGain;
   }
-  
+
   /** Set rangeSpreadLoss method */
   void SetRangeSpreadLoss(RealType value)
   {

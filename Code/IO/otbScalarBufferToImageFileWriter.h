@@ -72,11 +72,11 @@ public:
   /** Size accessors */
   itkGetMacro(ImageSize, SizeType);
   itkSetMacro(ImageSize, SizeType);
-  
+
   /** Number of channels */
   itkGetMacro(NumberOfChannels, unsigned int);
   itkSetMacro(NumberOfChannels, unsigned int);
-  
+
   /** Inverse X spacing accessors. */
   itkGetMacro(InverseXSpacing, bool);
   itkSetMacro(InverseXSpacing, bool);
@@ -86,9 +86,9 @@ public:
   {
        m_Buffer = pBuff;
   }
-  
+
    virtual void GenerateData();
- 
+
    virtual void Update()
    {
      this->GenerateData();
@@ -103,7 +103,7 @@ private:
 
   ScalarBufferToImageFileWriter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-  
+
 
   /** Writer */
   WriterPointer m_Writer;
@@ -113,7 +113,7 @@ private:
 
   /**Output image number of channels */
   unsigned int m_NumberOfChannels;
-         
+
   /** Output image size */
   SizeType m_ImageSize;
 

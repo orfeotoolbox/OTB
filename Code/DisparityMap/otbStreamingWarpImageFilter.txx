@@ -212,27 +212,27 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
   {
   // the superclass itk::WarpImageFilter is doing the actual warping
   Superclass::ThreadedGenerateData(outputRegionForThread,threadId);
-  
+
   // second pass on the thread region to mask pixels outside the displacement grid
   const PixelType paddingValue = this->GetEdgePaddingValue();
   OutputImagePointerType outputPtr = this->GetOutput();
   DisplacementFieldPointerType fieldPtr = this->GetDisplacementField();
-  
+
   DisplacementFieldRegionType defRegion = fieldPtr->GetLargestPossibleRegion();
-  
+
   itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(
     outputPtr, outputRegionForThread );
   IndexType currentIndex;
   PointType currentPoint;
   itk::ContinuousIndex<double,DisplacementFieldType::ImageDimension> contiIndex;
-  
+
   while(!outputIt.IsAtEnd())
     {
     // get the output image index
     currentIndex = outputIt.GetIndex();
     outputPtr->TransformIndexToPhysicalPoint(currentIndex,currentPoint);
     fieldPtr->TransformPhysicalPointToContinuousIndex(currentPoint,contiIndex);
-    
+
     for (unsigned int dim = 0; dim<DisplacementFieldType::ImageDimension; ++dim)
       {
       if (contiIndex[dim] < static_cast<double>(defRegion.GetIndex(dim)) ||

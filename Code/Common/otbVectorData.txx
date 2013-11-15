@@ -162,7 +162,7 @@ VectorData<TPrecision, VDimension, TValuePrecision>
 {
   // call the superclass' implementation
   Superclass::Graft( data );
-  
+
   if ( data )
     {
     // Attempt to cast data to an Image
@@ -176,7 +176,7 @@ VectorData<TPrecision, VDimension, TValuePrecision>
       {
       return;
       }
-    
+
     if ( vdData )
       {
       // Copy all the needed data : DataTree, spacing, origin and

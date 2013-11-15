@@ -72,7 +72,7 @@ public:
   /** Typedef parameters*/
   typedef TInputImage                InputImageType;
   typedef TOutputImage               OutputImageType;
-  
+
   /** Displacement field used to warp the image*/
   typedef itk::Vector<double,
                       TOutputImage::ImageDimension>              DisplacementType;
@@ -82,7 +82,7 @@ public:
   typedef StreamingWarpImageFilter<InputImageType,
                                    OutputImageType,
                                    DisplacementFieldType>        WarpImageFilterType;
-  
+
   /** Internal filters typedefs*/
   typedef itk::TransformToDisplacementFieldSource<DisplacementFieldType,
                                                  double>        DisplacementFieldGeneratorType;
@@ -102,8 +102,8 @@ public:
 
   /** ImageBase typedef */
   typedef itk::ImageBase<OutputImageType::ImageDimension>     ImageBaseType;
-  
-  
+
+
   /** Accessors to internal filters parameters */
   void SetTransform(TransformType * transform)
   {
@@ -144,7 +144,7 @@ public:
   // Output Spacing
   otbSetObjectMemberMacro(WarpFilter, OutputSpacing, SpacingType);
   otbGetObjectMemberConstReferenceMacro(WarpFilter, OutputSpacing, SpacingType);
-  
+
   /** Methods to Set/Get the interpolator */
   void SetInterpolator(InterpolatorType * interpolator)
   {

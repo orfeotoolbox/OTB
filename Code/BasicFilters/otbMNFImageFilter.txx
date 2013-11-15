@@ -244,7 +244,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     }
 
     GenerateTransformationMatrix();
-    
+
     m_IsTransformationMatrixForward = false;
     if ( m_TransformationMatrix.Rows() == m_TransformationMatrix.Cols() )
       m_TransformationMatrix = vnl_matrix_inverse< MatrixElementType >

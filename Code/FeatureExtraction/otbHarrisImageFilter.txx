@@ -54,13 +54,13 @@ HarrisImageFilter<TInputImage, TOutputImage>
   m_GaussianFilter0->SetSigma(this->m_SigmaI);
   m_GaussianFilter0->SetOrder(GaussianFilterType::ZeroOrder);
   m_GaussianFilter0->SetNormalizeAcrossScale(false);
-  
+
   m_GaussianFilter1->SetInput(m_GaussianFilter0->GetOutput());
   m_GaussianFilter1->SetSigma(this->m_SigmaI);
   m_GaussianFilter1->SetOrder(GaussianFilterType::ZeroOrder);
   m_GaussianFilter1->SetNormalizeAcrossScale(false);
   m_GaussianFilter1->SetDirection(1);
-  
+
   m_HessianToScalarFilter->SetInput(m_GaussianFilter1->GetOutput());
   m_HessianToScalarFilter->SetAlpha(this->m_Alpha);
 

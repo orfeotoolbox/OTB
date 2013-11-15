@@ -102,7 +102,7 @@ KMLVectorDataIO::WalkFeature(const kmldom::FeaturePtr& feature, DataNodePointerT
   DataNodePointerType node = NULL;
 
   if (!feature) return;
-    
+
   if (const kmldom::ContainerPtr container = kmldom::AsContainer(feature))
     {
     WalkContainer(container, father);
@@ -115,7 +115,7 @@ KMLVectorDataIO::WalkFeature(const kmldom::FeaturePtr& feature, DataNodePointerT
     // The Read() method is not exhaustive it is possible to add the read of the "link",
     // the style (iconStyle, LineStyle...). Then into the containers we also can find the fields :
     // <visibility> <description> <LookAt>... cf. code.google.com/apis/kml/documentation/kmlelementssinmaps.html
-    
+
   return;
 }
 

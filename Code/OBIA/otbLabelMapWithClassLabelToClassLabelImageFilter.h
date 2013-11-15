@@ -46,15 +46,15 @@ public:
   typedef typename InputImageType::RegionType      InputImageRegionType;
   typedef typename InputImageType::PixelType       InputImagePixelType;
   typedef typename InputImageType::LabelObjectType LabelObjectType;
-  
+
   typedef typename LabelObjectType::ConstLineIterator  ConstLineIteratorType;
-  
+
   typedef typename OutputImageType::Pointer        OutputImagePointer;
   typedef typename OutputImageType::ConstPointer   OutputImageConstPointer;
   typedef typename OutputImageType::RegionType     OutputImageRegionType;
   typedef typename OutputImageType::PixelType      OutputImagePixelType;
   typedef typename OutputImageType::IndexType      IndexType;
-  
+
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
@@ -83,7 +83,7 @@ private:
 }; // end of class
 
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.txx"
 #endif

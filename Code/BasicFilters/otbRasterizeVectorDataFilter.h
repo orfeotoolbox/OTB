@@ -65,11 +65,11 @@ public:
   typedef itk::CastImageFilter<TInputImage, TOutputImage>     Superclass;
   typedef itk::SmartPointer< Self >                           Pointer;
   typedef itk::SmartPointer<const Self>                       ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   //itkTypeMacro(RasterizeVectorDataFilter, itk::InPlaceImageFilter);
   itkTypeMacro(RasterizeVectorDataFilter, itk::CastImageFilter);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -92,12 +92,12 @@ public:
   typedef typename DataTreeType::TreeNodeType    InternalTreeNodeType;
   typedef typename DataTreeType::Pointer         DataTreePointerType;
   typedef typename DataTreeType::ConstPointer    DataTreeConstPointerType;
-  
+
   typedef itk::DataObject                        DataObjectType;
 
   const InputImageType * GetInput();
   const DataObjectType* GetInput(unsigned int idx);
-  
+
   /** Add VectorData Input */
   virtual void AddVectorData(const VectorDataType* vd);
 
@@ -130,7 +130,7 @@ public:
       m_BurnValues.push_back(static_cast<double>(burnValuesPix.GetElement(idx)));
       }
   }
-  
+
 protected:
   virtual void GenerateData();
 
@@ -144,7 +144,7 @@ protected:
   }
 
   virtual void GenerateOutputInformation();
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

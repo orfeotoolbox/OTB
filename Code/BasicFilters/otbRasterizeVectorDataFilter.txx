@@ -55,7 +55,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  
+
   // Generate the OGRLayers from the input VectorDatas
   // iteration begin from 1 cause the 0th input is a image
   for (unsigned int idx = 1; idx < this->GetNumberOfInputs(); ++idx)
@@ -75,7 +75,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
       {
       otbMsgDevMacro(<< "Projection information unavailable");
       }
-  
+
     // Retrieving root node
     DataTreeConstPointerType tree = vd->GetDataTree();
 
@@ -96,7 +96,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>
                                                                   m_OGRDataSourcePointer,
                                                                   ogrCurrentLayer,
                                                                   oSRS);
-  
+
     // Cast OGRLayer* to OGRLayerH
     for (unsigned int idx = 0; idx < ogrLayerVector.size(); ++idx)
       {
@@ -149,7 +149,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::GenerateData(
 
   // register drivers
   GDALAllRegister();
-  
+
   std::ostringstream stream;
   stream << "MEM:::"
          <<  "DATAPOINTER=" << (unsigned long)(this->GetOutput()->GetBufferPointer()) << ","
@@ -160,7 +160,7 @@ RasterizeVectorDataFilter<TVectorData, TInputImage, TOutputImage>::GenerateData(
          <<  "PIXELOFFSET=" << sizeof(OutputImageInternalPixelType) *  nbBands << ","
          <<  "LINEOFFSET=" << sizeof(OutputImageInternalPixelType)*nbBands*bufferedRegion.GetSize()[0] << ","
          <<  "BANDOFFSET=" << sizeof(OutputImageInternalPixelType);
-  
+
   GDALDatasetH dataset = GDALOpen(stream.str().c_str(), GA_Update);
 
   // Add the projection ref to the dataset

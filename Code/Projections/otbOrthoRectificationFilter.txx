@@ -57,7 +57,7 @@ OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolato
 {
   // call the superclass' implementation of this method
   Superclass::GenerateOutputInformation();
-  
+
   if(!m_MapProjection.IsNull()  && !m_MapProjection->GetWkt().empty())
     {
     // fill up the metadata information for ProjectionRef

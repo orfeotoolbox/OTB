@@ -67,17 +67,17 @@ public:
   typedef typename VectorDataType::PointType     PointType;
   typedef typename LineType::VertexType          VertexType;
   typedef typename LineType::VertexListType      VertexListType;
-  
+
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType>
                                                  TreeIteratorType;
-  
+
   /** Set/Get the thresholds*/
   itkGetMacro(DistanceThreshold, double);
   itkSetMacro(DistanceThreshold, double);
-  
+
   itkGetMacro(AngleThreshold, double);
   itkSetMacro(AngleThreshold, double);
-  
+
 protected:
   /** Constructor.*/
   VectorDataToRightAngleVectorDataFilter();

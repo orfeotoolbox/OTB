@@ -59,14 +59,14 @@ public:
 
   /** Output type */
   typedef TOutput    OutputType;
-  
+
   /** Evaluate at the specified input position */
   virtual OutputType Evaluate( const DataNodeType& node ) const = 0;
 
 protected:
   DataNodeFunctionBase(){};
   ~DataNodeFunctionBase(){};
-  
+
 private:
   DataNodeFunctionBase(const Self& ); //purposely not implemented
   void operator=(const Self& ); //purposely not implemented

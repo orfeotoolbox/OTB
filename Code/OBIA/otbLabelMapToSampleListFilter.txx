@@ -54,7 +54,7 @@ LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
 void
 LabelMapToSampleListFilter<TInputLabelMap, TOutputListSample, TMeasurementFunctor>
-::SetInputLabelMap(const InputLabelMapType * inputLabelMap ) 
+::SetInputLabelMap(const InputLabelMapType * inputLabelMap )
 {
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(0,
@@ -89,7 +89,7 @@ LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
 
 
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
-void 
+void
 LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
 ::GenerateData()
 {
@@ -100,7 +100,7 @@ LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
   OutputSampleListPointerType outputSampleList = const_cast<OutputSampleListType*>(this->GetOutputSampleList());
 
   ConstIteratorType it = ConstIteratorType( inputLabelMap );
-  
+
   // iterate on label objects
   bool isFirstIteration = true;
   while( !it.IsAtEnd() )

@@ -90,10 +90,10 @@ public:
   typedef itk::DataObject               Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(MassOfBelief, DataObject);
 
@@ -105,14 +105,14 @@ public:
 
   /** Register a mass associated with an element of the power-set */
   void SetMass(const LabelSetType & labelSet, const MassType & mass);
-  
+
   /** Retrieve the mass associated with the given element of the power
    *  set */
   MassType GetMass(const LabelSetType & labelSet) const;
 
   /** Remove mass from the support */
   void RemoveMass(const LabelSetType & labelSet);
-  
+
   /** Retrieve the support of the mass of belief (i.e. a vector of
    * element of the power set for which the mass of belief is not
    * null) */
@@ -173,10 +173,10 @@ public:
 protected:
   /** Constructor */
   MassOfBelief() {}
-  
+
   /** Desctructor */
   virtual ~MassOfBelief() {}
-  
+
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

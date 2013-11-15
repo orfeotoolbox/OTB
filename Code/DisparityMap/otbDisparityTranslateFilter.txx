@@ -197,12 +197,12 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 ::GenerateOutputInformation()
 {
 //   this->Superclass::GenerateOutputInformation();
-  
+
   TDisparityImage * horizOut = this->GetHorizontalDisparityMapOutput();
   TDisparityImage * vertiOut = this->GetVerticalDisparityMapOutput();
-  
+
   const TSensorImage * leftIn = this->GetLeftSensorImageInput();
-  
+
   horizOut->CopyInformation(leftIn);
   vertiOut->CopyInformation(leftIn);
 }
@@ -213,16 +213,16 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 ::GenerateInputRequestedRegion()
 {
   this->Superclass::GenerateInputRequestedRegion();
-  
+
   TGridImage * leftGrid = const_cast<TGridImage*>(this->GetInverseEpipolarLeftGrid());
   TGridImage * rightGrid = const_cast<TGridImage*>(this->GetDirectEpipolarRightGrid());
-  
+
   leftGrid->SetRequestedRegionToLargestPossibleRegion();
   rightGrid->SetRequestedRegionToLargestPossibleRegion();
-  
+
   leftGrid->UpdateOutputData();
   rightGrid->UpdateOutputData();
-  
+
   TSensorImage * leftIn = const_cast<TSensorImage*>(this->GetLeftSensorImageInput());
   RegionType emptyRegion = leftIn->GetLargestPossibleRegion();
   emptyRegion.SetSize(0,0);
@@ -230,12 +230,12 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
   leftIn->SetRequestedRegion(emptyRegion);
 
   TDisparityImage * horizOut = this->GetHorizontalDisparityMapOutput();
-  
+
   TDisparityImage * horizIn = const_cast<TDisparityImage*>(this->GetHorizontalDisparityMapInput());
   TDisparityImage * vertiIn = const_cast<TDisparityImage*>(this->GetVerticalDisparityMapInput());
-  
+
   TMaskImage * maskIn = const_cast<TMaskImage*>(this->GetDisparityMaskInput());
-  
+
   RegionType requested    = this->GetHorizontalDisparityMapOutput()->GetRequestedRegion();
   RegionType inputlargest = this->GetHorizontalDisparityMapInput()->GetLargestPossibleRegion();
   RegionType inputRequested;
@@ -264,7 +264,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     if (ul[1]<gridLargest.GetIndex()[1]) ul[1]=gridLargest.GetIndex()[1];
     if (ul[0]>(unsigned int)(gridLargest.GetIndex()[0]+gridLargest.GetSize()[0]-2)) ul[0]=(gridLargest.GetIndex()[0]+gridLargest.GetSize()[0]-2);
     if (ul[1]>(unsigned int)(gridLargest.GetIndex()[1]+gridLargest.GetSize()[1]-2)) ul[1]=(gridLargest.GetIndex()[1]+gridLargest.GetSize()[1]-2);
-  
+
     IndexType ur = ul;
     ur[0] += 1;
     IndexType ll = ul;
@@ -272,17 +272,17 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
     IndexType lr = ul;
     lr[0] += 1;
     lr[1] += 1;
-    
+
     double rx = indexGrid[0] - static_cast<double>(ul[0]);
     double ry = indexGrid[1] - static_cast<double>(ul[1]);
     PointType pointEpi = pointSensor;
-    
+
     pointEpi[0] += (1. - ry) * ((1. - rx) * leftGrid->GetPixel(ul)[0] + rx * leftGrid->GetPixel(ur)[0]) +
                            ry * ((1. - rx) * leftGrid->GetPixel(ll)[0] + rx * leftGrid->GetPixel(lr)[0]);
     pointEpi[1] += (1. - ry) * ((1. - rx) * leftGrid->GetPixel(ul)[1] + rx * leftGrid->GetPixel(ur)[1]) +
                            ry * ((1. - rx) * leftGrid->GetPixel(ll)[1] + rx * leftGrid->GetPixel(lr)[1]);
     itk::ContinuousIndex<double,2> indexEpi;
-    
+
     horizIn->TransformPhysicalPointToContinuousIndex(pointEpi,indexEpi);
     if (k == 0)
       {
@@ -299,18 +299,18 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
       if (maxIndex[1]<static_cast<long>(vcl_ceil(indexEpi[1])))   maxIndex[1]=static_cast<long>(vcl_ceil(indexEpi[1]));
       }
     }
-  
+
   inputRequested.SetIndex(minIndex);
   inputRequested.SetSize(0,static_cast<unsigned long>(maxIndex[0]-minIndex[0]));
   inputRequested.SetSize(1,static_cast<unsigned long>(maxIndex[1]-minIndex[1]));
-  
+
   if (!inputRequested.Crop(inputlargest))
     {
     inputRequested.SetSize(0,0);
     inputRequested.SetSize(1,0);
     inputRequested.SetIndex(inputlargest.GetIndex());
     }
-  
+
   horizIn->SetRequestedRegion(inputRequested);
   if (vertiIn) vertiIn->SetRequestedRegion(inputRequested);
   if (maskIn) maskIn->SetRequestedRegion(inputRequested);

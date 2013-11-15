@@ -321,7 +321,7 @@ VectorDataModel::AddNode( TreeNodeType * node )
 
         //Add Other Fields
         CopyFields( node );
-      
+
   this->EndGeometry(false);
   break;
       }

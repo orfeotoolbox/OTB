@@ -107,14 +107,14 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
     {
     NeuronType tempNeuron = it.Get();
     NeuronType newNeuron(tempNeuron.Size());
-    
+
     FixedArrayIndexType positionFA,indexFA;
     positionFA[0] = position[0];
     positionFA[1] = position[1];
 
     indexFA[0] = it.GetIndex()[0];
     indexFA[1] = it.GetIndex()[1];
-    
+
     double tempBeta = beta
                       / (1 +
                          distance->Evaluate(positionFA, indexFA));

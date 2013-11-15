@@ -56,7 +56,7 @@ SVMMarginSampler< TSample, TModel >
 
   OutputType* output = const_cast<OutputType*>(this->GetOutput());
   output->SetSample(this->GetInput());
-  
+
   this->DoMarginSampling();
 }
 
@@ -83,14 +83,14 @@ SVMMarginSampler< TSample, TModel >
   {
     int i = 0;
     typename SVMModelType::MeasurementType     modelMeasurement;
-  
+
     measurements = iter.GetMeasurementVector();
     // otbMsgDevMacro(  << "Loop on components " << svm_type );
     for (i=0; i<numberOfComponentsPerSample; ++i)
     {
     modelMeasurement.push_back(measurements[i]);
     }
-    
+
     // Get distances to the hyperplanes
     DistancesVectorType hdistances = m_Model->EvaluateHyperplanesDistances(modelMeasurement);
     double minDistance = vcl_abs(hdistances[0]);
@@ -110,7 +110,7 @@ SVMMarginSampler< TSample, TModel >
     ++iter;
     ++iterO;
   }
-  
+
   // Sort index by increasing distances
   sort(idDistVector.begin(), idDistVector.end(), &Compare);
 
@@ -119,7 +119,7 @@ SVMMarginSampler< TSample, TModel >
 
   // Clear previous margin samples
   m_MarginSamples.clear();
-  
+
   for(unsigned int i = 0; i<m_NumberOfCandidates && i<idDistVector.size(); ++i)
     {
     otbMsgDevMacro( "Sample "<<idDistVector[i].first<<" (distance= "<<idDistVector[i].second<<")" )

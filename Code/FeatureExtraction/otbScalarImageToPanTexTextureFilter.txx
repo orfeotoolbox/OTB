@@ -118,7 +118,7 @@ template <class TInputImage, class TOutputImage>
 void
 ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId)
-{  
+{
   // Retrieve the input and output pointers
   InputImagePointerType inputPtr = const_cast<InputImageType *> (this->GetInput());
   OutputImagePointerType outputPtr = this->GetOutput();
@@ -136,7 +136,7 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
     {
     // Initialise output value
     double out = itk::NumericTraits<double>::max();
-    
+
     // For each offset
     typename OffsetListType::const_iterator offIt;
     for (offIt = m_OffsetList.begin(); offIt != m_OffsetList.end(); ++offIt)
@@ -214,7 +214,7 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
       double inertia = 0;
       typename HistogramType::TotalAbsoluteFrequencyType  totalFrequency = histo->GetTotalFrequency();
       typename HistogramType::ConstIterator itr = histo->Begin();
-      typename HistogramType::ConstIterator end = histo->End();      
+      typename HistogramType::ConstIterator end = histo->End();
       for(; itr != end; ++itr )
         {
         MeasurementType frequency = itr.GetFrequency();

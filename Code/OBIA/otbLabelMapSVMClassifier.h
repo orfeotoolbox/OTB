@@ -48,7 +48,7 @@ public:
   typedef typename LabelMapType::Pointer         LabelMapPointer;
   typedef typename LabelMapType::ConstPointer    LabelMaponstPointer;
   typedef typename LabelMapType::LabelObjectType LabelObjectType;
-  
+
   typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
   typedef typename LabelObjectType::ClassLabelType          ClassLabelType;
   typedef std::vector<AttributesValueType>                  MeasurementVectorType;
@@ -105,7 +105,7 @@ private:
 }; // end of class
 
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLabelMapSVMClassifier.txx"
 #endif

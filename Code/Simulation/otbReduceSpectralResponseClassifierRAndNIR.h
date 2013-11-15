@@ -68,21 +68,21 @@ namespace otb
           typedef TFunction   FunctorType;
           typedef typename TReduceSpectralResponse::Pointer InputReduceSpectralResponsePointerType;
           typedef typename InputReduceSpectralResponseType::ValuePrecisionType ValuePrecisionType;
-          
-          
+
+
           /** Standard macros */
           itkNewMacro(Self);
           itkTypeMacro(ReduceSpectralResponseClassifierRAndNIR, DataObject);
-          
+
           itkGetConstObjectMacro(InputReduceSpectralResponse, InputReduceSpectralResponseType);
           itkSetObjectMacro(InputReduceSpectralResponse, InputReduceSpectralResponseType);
-          
+
           itkGetConstMacro(RBandNumber, unsigned int);
           itkSetMacro(RBandNumber, unsigned int);
-          
+
           itkGetConstMacro(NIRBandNumber, unsigned int);
           itkSetMacro(NIRBandNumber, unsigned int);
-       
+
           /** Get the functor object.  The functor is returned by reference.
            * (Functors do not have to derive from itk::LightObject, so they do
            * not necessarily have a reference count. So we cannot return a
@@ -108,17 +108,17 @@ namespace otb
 
           /** PrintSelf method */
           void PrintSelf(std::ostream& os, itk::Indent indent) const;
-          
-          
-          
+
+
+
           /**
            * \param ValuePrecisionType
            * \return the indice value.
            */
           inline ValuePrecisionType operator()();
-          
-          
-          
+
+
+
         protected:
           /** Constructor */
           ReduceSpectralResponseClassifierRAndNIR();
@@ -132,16 +132,16 @@ namespace otb
         private:
           ReduceSpectralResponseClassifierRAndNIR(const Self&); //purposely not implemented
           void operator=(const Self&); //purposely not implemented
-          
+
           /** Input reduce spectral sensor model of response */
           InputReduceSpectralResponsePointerType  m_InputReduceSpectralResponse;
-          
+
           /** Number of the red band in the ReduceSpectralResponse vector */
           unsigned int m_RBandNumber;
-          
+
           /** Number of the NIR band in the ReduceSpectralResponse vector */
           unsigned int m_NIRBandNumber;
-          
+
           /** Indice classifier */
           FunctorType m_Functor;
       };

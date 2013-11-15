@@ -38,9 +38,9 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   m_CurrentBandForLoop = 0;
   m_Beta = 0.;
   m_Den = 0.;
-  
+
   m_ContrastFunction = &vcl_tanh;
-  
+
   m_TransformFilter = TransformFilterType::New();
 }
 

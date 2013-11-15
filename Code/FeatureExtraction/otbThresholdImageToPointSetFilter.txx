@@ -51,7 +51,7 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 
   typename OutputPointSetType::PointType position;
   inputIt.GoToBegin();
-  
+
   unsigned long currentIndex = 0;
 
   while (!inputIt.IsAtEnd())

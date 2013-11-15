@@ -81,7 +81,7 @@ public:
    //TODO: template ??
    typedef LabelToProSailParameters<AttributesValueType>    LabelToParametersType;
    typedef typename LabelToParametersType::Pointer          LabelToParametersPointer;
-   
+
    typedef SpectralResponse<double, double>                 SpectralResponseType;
    typedef typename SpectralResponseType::Pointer           SpectralResponsePointer;
    typedef SatelliteRSR<double, double>                     SatelliteRSRType;
@@ -89,31 +89,31 @@ public:
 
    typedef ReduceSpectralResponse<SpectralResponseType, SatelliteRSRType> ReduceSpectralResponseType;
    typedef typename ReduceSpectralResponseType::Pointer                   ReduceSpectralResponsePointer;
-   
+
    typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
    typedef typename RandomGeneratorType::Pointer                  RandomGeneratorPointer;
 
-   
+
    /** Standard Macro*/
    itkTypeMacro(LabelMapToSimulatedImageFilter, LabelMapFilter);
    itkNewMacro(Self);
 
    itkSetMacro(NumberOfComponentsPerPixel, unsigned int);
    itkGetMacro(NumberOfComponentsPerPixel, unsigned int);
-   
+
    itkSetMacro(SatRSRFilename, std::string);
    itkGetMacro(SatRSRFilename, std::string);
 
    itkSetMacro(PathRoot, std::string);
    itkGetMacro(PathRoot, std::string);
-   
+
    itkSetMacro(Mean, double);
    itkGetMacro(Mean, double);
-   
+
    itkSetMacro(Variance, double);
    itkGetMacro(Variance, double);
-   
-   
+
+
 protected:
    LabelMapToSimulatedImageFilter();
    virtual ~LabelMapToSimulatedImageFilter() {}
@@ -127,7 +127,7 @@ protected:
 private:
    LabelMapToSimulatedImageFilter(const Self &); //purposely not implemented
    void operator =(const Self&); //purposely not implemented
-   
+
    unsigned int m_NumberOfComponentsPerPixel;
    std::string m_SatRSRFilename;
    std::string m_PathRoot;

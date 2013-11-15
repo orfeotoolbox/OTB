@@ -69,16 +69,16 @@ public:
   typedef typename OutputImageType::PixelType   OutputImagePixelType;
   typedef typename OutputImageType::InternalPixelType   OutputImageInternalPixelType;
 
-                 
+
   /** The values greater than or equal to the value are set to OutsideValue. */
   void ClampAbove(const OutputImageInternalPixelType &thresh);
-  
+
   /** The values less than or equal to the value are set to OutsideValue. */
   void ClampBelow(const OutputImageInternalPixelType &thresh);
 
   /** The values outside the range are set to OutsideValue. */
   void ClampOutside(const OutputImageInternalPixelType &lower, const OutputImageInternalPixelType &upper);
-  
+
   /** Set/Get methods to set the lower threshold */
   void SetLower(OutputImageInternalPixelType val)
   {
@@ -119,7 +119,7 @@ protected:
   void GenerateOutputInformation(void)
   {
     Superclass::GenerateOutputInformation();
-    
+
     this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetInput()->GetNumberOfComponentsPerPixel() );
   }
 
@@ -134,11 +134,11 @@ private:
   OutputImageInternalPixelType m_Upper;
 };
 
-  
+
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbClampVectorImageFilter.txx"
 #endif
-  
+
 #endif

@@ -62,10 +62,10 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** typedef the ListSampleType */
   typedef TListSample                                  ListSampleType;
-  
+
   /** Type needed for defining the limits of the histogram bins */
   typedef typename itk::NumericTraits<THistogramMeasurement>::RealType
   HistogramMeasurementRealType;
@@ -82,10 +82,10 @@ public:
   // Set/Get the input list sample
   void SetListSample(const ListSampleType* inputlist);
   const ListSampleType* GetListSample() const;
-  
+
   // Get the output histogram
   const HistogramType* GetOutput();
-  
+
   void SetMarginalScale(float scale)
   { m_MarginalScale = scale; }
 

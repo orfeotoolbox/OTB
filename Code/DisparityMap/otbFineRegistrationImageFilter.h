@@ -121,7 +121,7 @@ public:
 
   /** Get the output displacement field */
   TOutputDisplacementField * GetOutputDisplacementField();
- 
+
   /** Set the radius of the area on which metric is evaluated */
   itkSetMacro(Radius, SizeType);
   itkGetMacro(Radius, SizeType);
@@ -129,7 +129,7 @@ public:
   /** Set the searh radius */
   itkSetMacro(SearchRadius, SizeType);
   itkGetMacro(SearchRadius, SizeType);
-  
+
   /** Set/Get subpixel accuracy */
   itkSetMacro(SubPixelAccuracy, double);
   itkGetMacro(SubPixelAccuracy, double);
@@ -155,7 +155,7 @@ public:
   {
     m_Radius.Fill(radius);
   }
-  
+
  /** Set unsigned int radius */
   void SetSearchRadius(unsigned int radius)
   {

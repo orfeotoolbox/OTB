@@ -82,11 +82,11 @@ namespace otb
         // MDE
         typedef TTransferFunction                                 TransferFunctionType;
         typedef TPixelRepresentationFunction                      PixelRepresentationFunctionType;
-        
+
         typedef typename PixelRepresentationFunctionType::Pointer         PixelRepresentationFunctionPointerType;
         typedef typename PixelRepresentationFunctionType::ChannelListType ChannelListType;
         // \MDE
- 
+
         /**
          * Convert the output of the pixel representation to a RGB pixel on
          * unsigned char to be displayed on screen. Values are contrained to

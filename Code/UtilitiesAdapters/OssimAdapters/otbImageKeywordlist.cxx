@@ -217,7 +217,7 @@ ReadGeometryFromImage(const std::string& filename)
     else
       {
       otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
-      
+
       // Add ossimPlugins model
       ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
 
@@ -233,14 +233,14 @@ ReadGeometryFromImage(const std::string& filename)
           otb_kwl.SetKeywordlist(geom_kwl);
           }
         }
-      
+
       // If still no metadata, try the ".geom" file
       if (!hasMetaData && otb_kwl.GetSize() == 0)
         {
         ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
         otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
         }
-      
+
       }
     // Free memory
     delete handler;

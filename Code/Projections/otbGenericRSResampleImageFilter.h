@@ -70,7 +70,7 @@ public:
   typedef TOutputImage                                    OutputImageType;
   typedef typename OutputImageType::InternalPixelType     OutputInternalPixelType;
   typedef typename OutputImageType::PointType             OutputPointType;
-  
+
   /** Internal filters typedefs*/
   typedef StreamingResampleImageFilter<InputImageType,
                                  OutputImageType>          ResamplerType;
@@ -82,30 +82,30 @@ public:
   typedef typename ResamplerType::IndexType                IndexType;
   typedef typename ResamplerType::RegionType               RegionType;
   typedef typename ResamplerType::InterpolatorType         InterpolatorType;
-  
+
   /** Estimate the rpc model */
   typedef PhysicalToRPCSensorModelImageFilter<InputImageType>  InputRpcModelEstimatorType;
   typedef typename InputRpcModelEstimatorType::Pointer         InputRpcModelEstimatorPointerType;
-  
+
   typedef PhysicalToRPCSensorModelImageFilter<OutputImageType> OutputRpcModelEstimatorType;
   typedef typename OutputRpcModelEstimatorType::Pointer        OutputRpcModelEstimatorPointerType;
-  
-  
+
+
   /** Specialisation of OptResampleFilter with a remote
     * sensing  transform
     */
   typedef GenericRSTransform<>                       GenericRSTransformType;
   typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
-  
+
   typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
-  
+
   /** The Displacement field spacing & size */
   otbSetObjectMemberMacro(Resampler, DisplacementFieldSpacing, SpacingType);
 
   otbGetObjectMemberConstReferenceMacro(Resampler,
                                         DisplacementFieldSpacing,
                                         SpacingType);
-  
+
   /** The resampled image parameters */
   /** Output Origin */
   void SetOutputOrigin(const OriginType & origin)
@@ -114,19 +114,19 @@ public:
     this->Modified();
   }
   otbGetObjectMemberConstReferenceMacro(Resampler, OutputOrigin, OriginType);
-  
+
   /** Output Start index */
   otbSetObjectMemberMacro(Resampler, OutputStartIndex, IndexType);
   otbGetObjectMemberConstReferenceMacro(Resampler, OutputStartIndex, IndexType);
-  
+
   /** Output Size */
   otbSetObjectMemberMacro(Resampler, OutputSize, SizeType);
   otbGetObjectMemberConstReferenceMacro(Resampler, OutputSize, SizeType);
-  
+
   /** Output Spacing */
   otbSetObjectMemberMacro(Resampler, OutputSpacing, SpacingType);
   otbGetObjectMemberConstReferenceMacro(Resampler, OutputSpacing, SpacingType);
-  
+
   /** Methods to Set/Get the interpolator */
   void SetInterpolator(InterpolatorType * interpolator)
   {
@@ -142,7 +142,7 @@ public:
   otbGetObjectMemberMacro(Resampler,
                           EdgePaddingValue,
                           typename OutputImageType::PixelType);
-  
+
   /**
    * Set/Get input & output projections.
    * Set/Get input & output keywordlist
@@ -154,23 +154,23 @@ public:
     m_Transform->SetOutputProjectionRef(ref);
     this->Modified();
   }
-  
+
   std::string GetInputProjectionRef() const
   {
     return m_Transform->GetOutputProjectionRef();
   }
-  
+
   void SetOutputProjectionRef(const std::string&  ref)
   {
   m_Transform->SetInputProjectionRef(ref);
   this->Modified();
   }
-  
+
   std::string GetOutputProjectionRef() const
   {
     return m_Transform->GetInputProjectionRef();
   }
-  
+
   /** Set/Get Input Keywordlist*/
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
@@ -181,19 +181,19 @@ public:
   {
     return m_Transform->GetOutputKeywordList();
   }
-  
+
   /** Set/Get output Keywordlist*/
   void SetOutputKeywordList(const ImageKeywordlist& kwl)
   {
     m_Transform->SetInputKeywordList(kwl);
     this->Modified();
   }
-  
+
   const ImageKeywordlist GetOutputKeywordList()
   {
     return m_Transform->GetInputKeywordList();
   }
-  
+
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
@@ -211,7 +211,7 @@ public:
     * output size, spacing and origin are estimated
     */
   void SetOutputParametersFromMap(const std::string projectionRef);
-  
+
   /** Set/Get the grid size for rpc estimator*/
   void SetInputRpcGridSize(const SizeType& gridSize)
   {
@@ -229,12 +229,12 @@ public:
   {
     return m_InputRpcEstimator->GetGridSize();
   }
-  
+
   /** Macro to tune the EstimateInputRpcModel flag */
   itkSetMacro(EstimateInputRpcModel, bool);
   itkGetMacro(EstimateInputRpcModel, bool);
   itkBooleanMacro(EstimateInputRpcModel);
-  
+
   /** Macro to Set/Get the grid size for rpc estimator*/
   void SetOutputRpcGridSize(const SizeType& gridSize)
   {
@@ -257,7 +257,7 @@ public:
   itkSetMacro(EstimateOutputRpcModel, bool);
   itkGetMacro(EstimateOutputRpcModel, bool);
   itkBooleanMacro(EstimateOutputRpcModel);
-  
+
   /** Set number of threads for Displacement field generator */
   void SetDisplacementFilterNumberOfThreads(unsigned int nbThread)
   {
@@ -272,7 +272,7 @@ protected:
   virtual void GenerateData();
 
   virtual void GenerateOutputInformation();
-  
+
   virtual void GenerateInputRequestedRegion();
 
   virtual void UpdateTransform();
@@ -291,7 +291,7 @@ private:
   bool                               m_EstimateInputRpcModel;
   bool                               m_EstimateOutputRpcModel;
   bool                               m_RpcEstimationUpdated;
-  
+
   // Filters pointers
   ResamplerPointerType               m_Resampler;
   InputRpcModelEstimatorPointerType  m_InputRpcEstimator;

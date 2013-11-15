@@ -45,7 +45,7 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample
 ::MakeOutput(unsigned int idx)
 {
   DataObjectPointerType output;
-  
+
   switch (idx)
     {
     case 0:
@@ -58,7 +58,7 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap,TOutputListSample
       output = static_cast<itk::DataObject*>(OutputSampleListType::New().GetPointer());
       break;
     }
-  
+
   return output;
 }
 
@@ -79,18 +79,18 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap, TOutputListSampl
 {
   // Get input
   InputLabelMapConstPointerType inputLabelMap = this->GetInputLabelMap();
-  
+
   // Get outputs
   OutputSampleListPointerType outputSampleList = const_cast<OutputSampleListType*>
     (this->GetOutputSampleList());
-  
+
   OutputTrainingSampleListPointerType outputTrainingSampleList = const_cast<OutputTrainingSampleListType*>
     (this->GetOutputTrainingSampleList());
 
   // Clear  the ListSamples
   outputSampleList->Clear();
   outputTrainingSampleList->Clear();
-  
+
   // Lets begin by declaring the iterator for the objects in the image.
   ConstIteratorType it = ConstIteratorType( inputLabelMap );
 
@@ -115,12 +115,12 @@ LabelMapWithClassLabelToLabeledSampleListFilter<TInputLabelMap, TOutputListSampl
       typename OutputSampleListType::MeasurementVectorSizeType measurementSize;
       measurementSize = m_MeasurementFunctor(it.GetLabelObject()).Size();
       outputSampleList->SetMeasurementVectorSize(measurementSize);
-      
+
       // initialize the training samplelist
       outputTrainingSampleList->SetMeasurementVectorSize(label.Size());
       isFirstIteration = false;
       }
-    
+
     outputSampleList->PushBack(m_MeasurementFunctor(it.GetLabelObject()));
     outputTrainingSampleList->PushBack(label);
     ++it;

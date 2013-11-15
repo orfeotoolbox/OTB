@@ -60,8 +60,8 @@ BSplinesInterpolateTransformDisplacementFieldGenerator<TPointSet, TDisplacementF
   defaultValue.Fill(this->GetDefaultValue());
   outputPtr->Allocate();
   outputPtr->FillBuffer(defaultValue);
-  
-  typedef otb::ObjectList<BSplinerType>                         SPlineInterpolatorListType;  
+
+  typedef otb::ObjectList<BSplinerType>                         SPlineInterpolatorListType;
   typedef typename PointSetType::PointsContainer::ConstIterator PointSetIteratorType;
   typedef typename PointSetType::PointsContainer                PointsContainerType;
 
@@ -104,9 +104,9 @@ BSplinesInterpolateTransformDisplacementFieldGenerator<TPointSet, TDisplacementF
         }
       ++pointDataCounter;
       }
-    
+
     SPlineInterpolateFilterPointerType splineFilter = SPlineInterpolateFilterType::New();
-    
+
     // Set the interpolator parameters
     splineFilter->SetInput(tmpPointSet);
     splineFilter->SetSplineOrder(m_SplineOrder);
@@ -122,7 +122,7 @@ BSplinesInterpolateTransformDisplacementFieldGenerator<TPointSet, TDisplacementF
     splineFilter->SetSize(this->GetOutput()->GetLargestPossibleRegion().GetSize());
     splineFilter->Update();
 
-    // Image function 
+    // Image function
     splineIntList->Back()->SetSplineOrder( splineFilter->GetSplineOrder() );
     splineIntList->Back()->SetSize( splineFilter->GetSize() );
     splineIntList->Back()->SetSpacing( splineFilter->GetSpacing() );

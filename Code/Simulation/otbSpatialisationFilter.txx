@@ -70,7 +70,7 @@ SpatialisationFilter<TLabelMap>
    IndexType startIndex;
    startIndex[1]= static_cast<unsigned int> ( ((obj) / m_NumberOfObjects[0]) * m_ObjectSize[1] );
    startIndex[0]= static_cast<unsigned int> ( ((obj) % m_NumberOfObjects[0]) * m_ObjectSize[0] );
-   
+
    for(unsigned int col=startIndex[0]; col<startIndex[0]+m_ObjectSize[0]; col++)
    {
       for(unsigned int line=startIndex[1]; line<startIndex[1]+m_ObjectSize[1]; line++)

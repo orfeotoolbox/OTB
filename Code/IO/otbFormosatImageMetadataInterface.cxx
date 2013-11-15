@@ -555,7 +555,7 @@ FormosatImageMetadataInterface::GetSatAzimuth() const
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.sat_azimuth_angle");
   double satAz = atof(valueString.c_str());
- 
+
   // In some software version, a bug exists.
   // We have to check the version t correct the satellite azimuth angle contained in the metadata
   std::string softVersion = imageKeywordlist.GetMetadataByKey("support_data.software_version");
@@ -574,16 +574,16 @@ FormosatImageMetadataInterface::GetSatAzimuth() const
         {
           return 0;
         }
-      
+
       valueString = imageKeywordlist.GetMetadataByKey("support_data.viewing_angle_across_track");
       double viewingAngleAcrossTrack( atof(valueString.c_str()) );
       valueString = imageKeywordlist.GetMetadataByKey("support_data.viewing_angle_along_track");
       double viewingAngleAlongTrack( atof(valueString.c_str()) );
       valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
       double sceneOrientation( atof(valueString.c_str()) );
-      
+
       double alpha = vcl_atan( vcl_tan( viewingAngleAcrossTrack * CONST_PI_180 ) /  vcl_tan( viewingAngleAlongTrack * CONST_PI_180 ) ) * CONST_180_PI;
-      
+
       if( viewingAngleAlongTrack < 0 )
         {
           if (alpha >0)
@@ -595,7 +595,7 @@ FormosatImageMetadataInterface::GetSatAzimuth() const
               alpha = alpha + 180;
             }
         }
-      
+
       alpha -= sceneOrientation;
       if (alpha >0)
         {
@@ -605,7 +605,7 @@ FormosatImageMetadataInterface::GetSatAzimuth() const
         {
           satAz = 180 - satAz;
         }
-      
+
     }
 
   return satAz;

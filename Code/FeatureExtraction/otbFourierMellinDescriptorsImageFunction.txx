@@ -79,23 +79,23 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
     {
     return descriptors;
     }
-  
+
   // Check for out of buffer
   if ( !this->IsInsideBuffer( index ) )
     {
     return descriptors;
     }
-  
+
   // Create an N-d neighborhood kernel, using a zeroflux boundary condition
   typename InputImageType::SizeType kernelSize;
   kernelSize.Fill( m_NeighborhoodRadius );
-  
+
   itk::ConstNeighborhoodIterator<InputImageType>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-  
+
   // Set the iterator at the desired location
   it.SetLocation(index);
-  
+
   // Walk the neighborhood
   const unsigned int size = it.Size();
   for (unsigned int i = 0; i < size; ++i)
@@ -104,17 +104,17 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
     ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
     ScalarRealType     x = static_cast<ScalarRealType>(it.GetOffset(i)[0])/(2*m_NeighborhoodRadius+1);
     ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
-    
+
     // Build complex value
     ScalarComplexType xplusiy(x, y), x2plusy2(x*x+y*y, 0.0);
-    
+
     // Update cumulants
     for (unsigned int p = 0; p <= m_Pmax; p++)
       {
       for (unsigned int q= 0; q <= m_Qmax; q++)
         {
         ScalarComplexType power(double(p-2.0+m_Sigma)/2.0, -double(q)/2.0);
-        
+
         if (x!=0 || y!=0) // vcl_pow limitations
           {
           coefs.at(p).at(q) += vcl_pow(xplusiy, -p) * vcl_pow(x2plusy2, power) * value;
@@ -122,7 +122,7 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
         }
       }
     }
-  
+
   // Normalisation
 
   for (int p = m_Pmax; p >= 0; p--)
@@ -130,7 +130,7 @@ FourierMellinDescriptorsImageFunction<TInputImage, TCoordRep>
     for (int q = m_Qmax; q >= 0; q--)
       {
       coefs.at(p).at(q) /= 2*CONST_PI * coefs.at(0).at(0);
-      
+
       descriptors.at(p).at(q) = vcl_sqrt((coefs.at(p).at(q).real() * coefs.at(p).at(q).real()
                                           + coefs.at(p).at(q).imag() * coefs.at(p).at(q).imag()));
       }

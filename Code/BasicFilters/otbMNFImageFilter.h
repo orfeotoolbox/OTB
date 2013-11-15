@@ -82,7 +82,7 @@ public:
   typedef typename MatrixObjectType::ComponentType MatrixType;
   typedef typename MatrixType::InternalMatrixType InternalMatrixType;
   typedef typename InternalMatrixType::element_type MatrixElementType;
-  
+
   typedef MatrixImageFilter< InputImageType, OutputImageType > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 

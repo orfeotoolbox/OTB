@@ -37,7 +37,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
   // Create the second output
   //this->itk::ProcessObject::SetNthOutput(0, this->MakeOutput(0).GetPointer());
   this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
-  
+
   m_AddGaussianNoiseFilter = GaussianAdditiveNoiseType::New();
   m_BalancingFactor  = 5;
 }
@@ -70,7 +70,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
 template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
 void
 ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::SetInputLabel( const LabelSampleListType * labelPtr ) 
+::SetInputLabel( const LabelSampleListType * labelPtr )
 {
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(1,
@@ -112,22 +112,22 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
 {
   // Iterate on the labelSampleList to get the min and max label
   LabelValueType   maxLabel = itk::NumericTraits<LabelValueType>::min();
-  
+
   // Number of bins to add to the histogram
   typename LabelSampleListType::ConstPointer  labelPtr = this->GetInputLabel();
   typename LabelSampleListType::ConstIterator labelIt = labelPtr->Begin();
-  
+
   while(labelIt != labelPtr->End())
     {
     // Get the current label sample
     LabelMeasurementVectorType currentInputMeasurement = labelIt.GetMeasurementVector();
-    
+
     if (currentInputMeasurement[0] > maxLabel)
       maxLabel = currentInputMeasurement[0];
-    
+
     ++labelIt;
     }
-  
+
   // Prepare histogram with dimension 1 : default template parameters
   typedef typename itk::Statistics::Histogram<unsigned int>    HistogramType;
   typename HistogramType::Pointer histogram = HistogramType::New();
@@ -144,11 +144,11 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
     histogram->IncreaseFrequency(currentInputMeasurement[0], 1);
     ++labelIt;
     }
-  
+
   // Iterate through the histogram to get the maximum
   unsigned int maxvalue  = 0;
   HistogramType::Iterator iter = histogram->Begin();
-  
+
   while ( iter != histogram->End() )
     {
     if( static_cast<unsigned int>(iter.GetFrequency()) > maxvalue )
@@ -159,7 +159,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
   // Number of sample per label to reach in order to have a balanced
   // ListSample
   unsigned int balancedFrequency = m_BalancingFactor * maxvalue;
-  
+
   // Guess how much noised samples must be added per sample to get
   // a balanced ListSample : Computed using the
   //  - Frequency of each label  (stored in the histogram)
@@ -175,7 +175,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
       unsigned int coeff = static_cast<unsigned int>(balancedFrequency/iter.GetFrequency());
       m_MultiplicativeCoefficient.push_back(coeff);
       }
-    
+
     ++iter;
     }
 }
@@ -187,13 +187,13 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
 {
   // Get the how much each sample must be expanded
   this->ComputeMaxSampleFrequency();
-  
+
   // Retrieve input and output pointers
   InputSampleListConstPointer  inputSampleListPtr  = this->GetInput();
   LabelSampleListConstPointer labelSampleListPtr  = this->GetInputLabel();
   OutputSampleListPointer     outputSampleListPtr = this->GetOutput();
   LabelSampleListPointer      outputLabel         = this->GetOutputLabel();
-  
+
    // Clear any previous output
    outputSampleListPtr->Clear();
 
@@ -203,7 +203,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
 
    typename InputSampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
    typename LabelSampleListType::ConstIterator labelIt = labelSampleListPtr->Begin();
-   
+
    // Set-up progress reporting
    itk::ProgressReporter progress(this, 0, inputSampleListPtr->Size());
 
@@ -224,10 +224,10 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
      InputSampleListPointer tempListSample = InputSampleListType::New();
      tempListSample->SetMeasurementVectorSize(inputSampleListPtr->GetMeasurementVectorSize());
      tempListSample->PushBack(currentInputMeasurement);
-     
+
      // Get how many times we have to noise this sample
      unsigned int iterations =  m_MultiplicativeCoefficient[currentLabelMeasurement[0]];
-     
+
      // Noising filter
      //GaussianAdditiveNoisePointerType  noisingFilter = GaussianAdditiveNoiseType::New();
      noisingFilter->SetInput(tempListSample);
@@ -237,11 +237,11 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
      // Build current output sample
      OutputMeasurementVectorType currentOutputMeasurement;
      currentOutputMeasurement.SetSize(currentInputMeasurement.GetSize());
-    
+
      // Cast the current sample in outputSampleValue
      for(unsigned int idx = 0; idx < inputSampleListPtr->GetMeasurementVectorSize(); ++idx)
        currentOutputMeasurement[idx] = static_cast<OutputValueType>(currentInputMeasurement[idx]);
-     
+
      // Add the current input casted sample to the output SampleList
      outputSampleListPtr->PushBack(currentOutputMeasurement);
 
@@ -250,20 +250,20 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
 
      // Add the noised versions of the current sample to OutputSampleList
      typename OutputSampleListType::ConstIterator tempIt = noisingFilter->GetOutput()->Begin();
-     
+
      while(tempIt != noisingFilter->GetOutput()->End())
        {
        // Get the noised sample of the current measurement vector
        OutputMeasurementVectorType currentTempMeasurement = tempIt.GetMeasurementVector();
        // Add to output SampleList
        outputSampleListPtr->PushBack(currentTempMeasurement);
-       
+
        // Add a label in the output ListSample
        outputLabel->PushBack(currentLabelMeasurement);
-       
+
        ++tempIt;
        }
-     
+
      // Update progress
      progress.CompletedPixel();
 

@@ -125,13 +125,13 @@ public:
             Si[1] = cos(psi * m_PI_90) * cos(tau * m_PI_90);
             Si[2] = sin(psi * m_PI_90) * cos(tau * m_PI_90);
             Si[3] = sin(tau * m_PI_90);
-            
+
             // Evaluate the received Stokes vector
             Sr = muellerMatrix * Si;
-            
+
             //Evaluate Power and Polarisation degree
             P = Sr[0];
-            
+
             if (P < m_Epsilon)
               {
                 deg_pol = 0.;
@@ -140,7 +140,7 @@ public:
               {
                 deg_pol = vcl_sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
               }
-            
+
             if (P > l_PowerMax)
               {
                 l_PowerMax = P;
@@ -149,7 +149,7 @@ public:
               {
                 l_PowerMin = P;
               }
-            
+
             if (deg_pol > l_PolarisationDegreeMax)
               {
                 l_PolarisationDegreeMax = deg_pol;
@@ -162,13 +162,13 @@ public:
           }
         tau += 5.0;
       }
-    
+
     result[0] = l_PowerMin;
     result[1] = l_PowerMax;
     result[2] = l_PolarisationDegreeMin;
     result[3] = l_PolarisationDegreeMax;
-    
-    
+
+
     return result;
     }
 
@@ -229,7 +229,7 @@ private:
   MuellerToPolarisationDegreeAndPowerImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);                                 //purposely not implemented
 };
-  
+
 } // end namespace otb
 
 #endif

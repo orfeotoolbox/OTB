@@ -77,33 +77,33 @@ public:
   void AllocateOutputs();
   virtual void Reset(void);
   virtual void Synthetize(void);
-  
+
   /** This method creates the output layer in the OGRDataSource set by the user.
    * The name of the layer is set by \c SetLayerName .
    * \note This methode must be called before the call of Update .
    */
   virtual void Initialize(void);
-  
+
   /** Set/Get the name of the output layer to write in the \c ogr::DataSource. */
   itkSetStringMacro(LayerName);
   itkGetStringMacro(LayerName);
-  
+
   /** Set the Field Name in which labels will be written. (default is "DN")
    * A field FieldName is created in the output layer LayerName. The Field type is Integer.
    */
   itkSetMacro(FieldName, std::string);
-  
+
   /**
    * Return the Field name in which labels have been written.
    */
   itkGetMacro(FieldName, std::string);
-  
+
   /** Get the size of the tile used for streaming.
    * This is useful if you use for example the \c OGRFusionTileFilter
    * for fusioning streaming tiles.
    */
   itkGetMacro(StreamSize, SizeType);
-  
+
   /** Set the \c ogr::DataSource in which the layer LayerName will be created. */
   void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
   /** Get the \c ogr::DataSource output. */
@@ -114,7 +114,7 @@ public:
 
   /** Clear all OGR layer creation options */
   void ClearOGRLayerCreationOptions();
-  
+
   /** Set the OGR layer creation options */
   void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
 
@@ -132,7 +132,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   virtual OGRDataSourcePointerType ProcessTile() = 0;
-  
+
   std::string m_FieldName;
   std::string m_LayerName;
   OGRwkbGeometryType m_GeometryType;

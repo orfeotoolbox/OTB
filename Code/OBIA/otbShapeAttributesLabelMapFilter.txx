@@ -195,7 +195,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 template <class TLabelObject, class TLabelImage>
 void
 ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
-::operator() (LabelObjectType * lo) 
+::operator() (LabelObjectType * lo)
 {
   const typename LabelObjectType::LabelType& label = lo->GetLabel();
 
@@ -542,7 +542,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
       lo->SetAttribute("SHAPE::Flusser11", (c40 * vcl_pow(c12, 4)).imag());
       }
     }
-  
+
   // Set the attributes
   if (m_ComputePolygon)
     {

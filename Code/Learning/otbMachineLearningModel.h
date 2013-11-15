@@ -78,14 +78,14 @@ public:
   typedef itk::VariableLengthVector<InputValueType>     InputSampleType;
   typedef itk::Statistics::ListSample<InputSampleType>  InputListSampleType;
   //@}
-  
+
   /**\name Target related typedefs */
   //@{
   typedef TTargetValue                                  TargetValueType;
   typedef itk::FixedArray<TargetValueType,1>            TargetSampleType;
   typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
   //@}
-  
+
   /**\name Standard macros */
   //@{
   /** Run-time type information (and related methods). */
@@ -97,7 +97,7 @@ public:
 
   /** Predict values using the model */
   virtual TargetSampleType Predict(const InputSampleType& input) const = 0;
-  
+
   /** Classify all samples in InputListSample and fill TargetListSample with the associated label */
   void PredictAll();
 

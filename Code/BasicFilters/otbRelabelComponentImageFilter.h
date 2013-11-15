@@ -98,7 +98,7 @@ public:
                       TOutputImage::ImageDimension);
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
- 
+
   /**
    * Image typedef support
    */
@@ -113,12 +113,12 @@ public:
    */
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
-  
+
   /**
    * Run-time type information (and related methods)
    */
   itkTypeMacro(RelabelComponentImageFilter, ImageToImageFilter);
-  
+
   /**
    * Method for creation through the object factory.
    */
@@ -144,7 +144,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 };
-  
+
 } // end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION

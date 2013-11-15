@@ -85,20 +85,20 @@ public:
 
   /** Erase one element of the list. */
   void Erase( unsigned int id );
-  
+
  /** Clear all the list. */
   virtual void ClearValue();
 
- 
+
 protected:
   /** Constructor */
   InputImageListParameter();
 
   /** Destructor */
   virtual ~InputImageListParameter();
-  
 
- 
+
+
   FloatVectorImageListType::Pointer m_ImageList;
   ImageFileReaderListType::Pointer  m_ReaderList;
 

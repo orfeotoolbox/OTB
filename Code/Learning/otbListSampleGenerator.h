@@ -67,7 +67,7 @@ public:
   typedef typename ImageType::RegionType   ImageRegionType;
   typedef TVectorData                      VectorDataType;
   typedef typename VectorDataType::Pointer VectorDataPointerType;
-  
+
   /** List to store the pixel values */
   typedef typename ImageType::PixelType           SampleType;
   typedef itk::Statistics::ListSample<SampleType> ListSampleType;
@@ -120,7 +120,7 @@ public:
   itkGetStringMacro(ClassKey);
   itkSetStringMacro(ClassKey);
   itkGetConstMacro(ClassMinSize, double);
-  
+
   /** Returns the Training ListSample as a data object */
   ListSampleType * GetTrainingListSample();
 
@@ -132,13 +132,13 @@ public:
 
   /** Returns the label sample list as a data object */
   ListLabelType * GetValidationListLabel();
-  
+
   // Get the map size
   std::map<ClassLabelType, double> GetClassesSize() const
   {
     return m_ClassesSize;
   }
-  
+
 protected:
   ListSampleGenerator();
   virtual ~ListSampleGenerator() {}
@@ -146,7 +146,7 @@ protected:
 
   /** Triggers the Computation of the sample list */
   void GenerateData(void);
-   
+
   /** Compute the calss statistics*/
   void GenerateClassStatistics();
 
@@ -160,9 +160,9 @@ private:
   typedef typename DataNodeType::PolygonListType        PolygonListType;
   typedef typename DataNodeType::PolygonListPointerType PolygonListPointerType;
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
-  
+
   void ComputeClassSelectionProbability();
-  
+
   // Crop the polygon wrt the image largest region,
   // and return the resulting size in pixel units
   // This does not handle interior rings
@@ -179,7 +179,7 @@ private:
   unsigned short m_NumberOfClasses;
   std::string    m_ClassKey;
   double         m_ClassMinSize;
-  
+
   std::map<ClassLabelType, double> m_ClassesSize;
   std::map<ClassLabelType, double> m_ClassesProbTraining;
   std::map<ClassLabelType, double> m_ClassesProbValidation;

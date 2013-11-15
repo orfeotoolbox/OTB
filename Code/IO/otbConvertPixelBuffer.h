@@ -84,7 +84,7 @@ protected:
                                           int inputNumberOfComponents,
                                           OutputPixelType* outputData ,
                                           size_t size);
-  
+
   /** Convert to RGB output. */
   /** Each RGB output component is set the the
    * input Gray value. */
@@ -108,7 +108,7 @@ protected:
                                          int inputNumberOfComponents,
                                          OutputPixelType* outputData ,
                                          size_t size);
-    
+
   /** Convert to RGBA output. */
   static void ConvertGrayToRGBA(InputPixelType* inputData,
                                 OutputPixelType* outputData , size_t size);

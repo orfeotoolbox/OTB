@@ -64,7 +64,7 @@ private:
   QPushButton * m_Button;
   QComboBox*    m_ComboBox;
   int           m_PixelType;
-  
+
 };
 
 

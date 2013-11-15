@@ -98,7 +98,7 @@ public:
   void SetInput(const PathListType* path);
   const PathListType* GetInput() const;
 
-  // Return the output histogram. 
+  // Return the output histogram.
    const HistogramType * GetOutput() const;
 
   /** Set number of histogram bins */
@@ -118,7 +118,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  
+
   GeneratorPointer m_HistogramGenerator;
 
 };

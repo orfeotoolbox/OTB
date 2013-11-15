@@ -66,7 +66,7 @@ PointSetFileReader<TOutputPointSet>
 
   LASReaderH reader = LASReader_Create(m_FileName.c_str());
   LASHeaderH header = LASReader_GetHeader(reader);
-  
+
   otbDebugMacro(<< "Signature: " << LASHeader_GetFileSignature(header));
   otbDebugMacro(<< "Points count: " << LASHeader_GetPointRecordsCount(header));
 
@@ -76,7 +76,7 @@ PointSetFileReader<TOutputPointSet>
   m_MaxX = LASHeader_GetMaxX(header);
   m_MinY = LASHeader_GetMinY(header);
   m_MaxY = LASHeader_GetMaxY(header);
-  
+
   LASReader_Destroy(reader);
 }
 
@@ -121,7 +121,7 @@ void PointSetFileReader<TOutputPointSet>
 ::GenerateData()
 {
   typename TOutputPointSet::Pointer output = this->GetOutput();
-  
+
   LASReaderH reader = LASReader_Create(m_FileName.c_str());
   LASHeaderH header = LASReader_GetHeader(reader);
 
@@ -136,7 +136,7 @@ void PointSetFileReader<TOutputPointSet>
     LASPointH pt = LASPoint_Create();
     while ((pt = LASReader_GetNextPoint(reader)))
       {
-      
+
       PointType point;
       point[0] = LASPoint_GetX(pt);
       point[1] = LASPoint_GetY(pt);

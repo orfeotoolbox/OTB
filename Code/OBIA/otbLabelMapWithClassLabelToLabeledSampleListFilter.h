@@ -37,7 +37,7 @@ namespace otb
 template <class TInputLabelMap, class TOutputSampleList, class TOutputTrainingSampleList,
     class TMeasurementFunctor = Functor::AttributesMapMeasurementFunctor
     <typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType > >
-class ITK_EXPORT LabelMapWithClassLabelToLabeledSampleListFilter : 
+class ITK_EXPORT LabelMapWithClassLabelToLabeledSampleListFilter :
     public LabelMapToSampleListFilter<TInputLabelMap, TOutputSampleList,TMeasurementFunctor>
 {
 public:
@@ -58,14 +58,14 @@ public:
   typedef TInputLabelMap                              InputLabelMapType;
   typedef typename InputLabelMapType::ConstPointer    InputLabelMapConstPointerType;
   typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
-  typedef typename InputLabelMapType::ConstIterator   ConstIteratorType;   
+  typedef typename InputLabelMapType::ConstIterator   ConstIteratorType;
 
   /** Output sample list */
   typedef TOutputSampleList                           OutputSampleListType;
   typedef typename OutputSampleListType::Pointer      OutputSampleListPointerType;
   typedef typename OutputSampleListType
   ::MeasurementVectorType                             MeasurementVectorType;
-  
+
   /** Output training sample list */
   typedef TOutputTrainingSampleList                      OutputTrainingSampleListType;
   typedef typename OutputTrainingSampleListType::Pointer OutputTrainingSampleListPointerType;
@@ -74,19 +74,19 @@ public:
 
   /** Measurement functor */
   typedef TMeasurementFunctor                            MeasurementFunctorType;
-  
+
   // DataObject type definition from superclass
   typedef typename Superclass::DataObjectPointerType     DataObjectPointerType;
-  
-  // Get the output training ListSample 
+
+  // Get the output training ListSample
   const OutputTrainingSampleListType* GetOutputTrainingSampleList();
-  
-  // Get a hook on the functor for settings 
+
+  // Get a hook on the functor for settings
   void SetMeasurementFunctor(const MeasurementFunctorType& functor)
   {
     m_MeasurementFunctor = functor;
   }
-  
+
   MeasurementFunctorType & GetMeasurementFunctor()
   {
     return m_MeasurementFunctor;
@@ -97,16 +97,16 @@ protected:
   virtual ~LabelMapWithClassLabelToLabeledSampleListFilter();
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
   virtual void GenerateData();
-  
+
   /** Make Output */
   DataObjectPointerType MakeOutput(unsigned int idx);
 
 private:
   LabelMapWithClassLabelToLabeledSampleListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** The functor used to build the measurement vector */
   MeasurementFunctorType              m_MeasurementFunctor;
 };

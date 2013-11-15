@@ -121,15 +121,15 @@ public:
   typedef typename RSTransformType::InputPointType  TDPointType;
 
   typedef otb::ImageKeywordlist                     ImageKeywordListType;
-  
+
   typedef std::map
     <unsigned int,
      itk::ImageRegionConstIterator<InputMapType> >   MapIteratorList;
-  
+
   typedef std::map
     <unsigned int,
      itk::ImageRegionConstIterator<MaskImageType> >      MaskIteratorList;
-  
+
 
   typedef double ValueType;
   typedef itk::VariableLengthVector<ValueType> MeasurementType;
@@ -139,13 +139,13 @@ public:
 
   /** Set the number of 3D images (referred earlier as N) */
   void SetNumberOf3DMaps(unsigned int nb);
-  
+
   /** Get the number of 3D images (referred earlier as N) */
   unsigned int GetNumberOf3DMaps();
-  
+
   /** Set 3D map input at  corresponding 'index' */
   void Set3DMapInput(unsigned int index, const T3DImage * hmap);
-  
+
   /** Set mask associated to 3D maps  'index'
    * (optional, pixels with a null mask value are ignored)
    */
@@ -235,7 +235,7 @@ protected:
 
   /** Before threaded generate data */
   virtual void BeforeThreadedGenerateData();
-  
+
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
 
@@ -261,10 +261,10 @@ private:
   /** Keywordlist of each map */
  // std::vector<ImageKeywordListType> m_MapKeywordLists;
 
-  
+
   /** Reference sensor image transform */
   RSTransformType::Pointer m_ReferenceToGroundTransform;
-  
+
   /** Moving sensor image transforms */
   std::vector<RSTransformType::Pointer> m_MapToGroundTransform;
 

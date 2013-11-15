@@ -57,7 +57,7 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
   // Build moments vector
   OutputType moments;
   moments.resize(m_Pmax+1);
-  
+
   // Initialize moments
   for (unsigned int p = 0; p <= m_Pmax; p++)
     {
@@ -73,23 +73,23 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
     {
     return moments;
     }
-  
+
   // Check for out of buffer
   if ( !this->IsInsideBuffer( index ) )
     {
     return moments;
     }
-  
+
   // Create an N-d neighborhood kernel, using a zeroflux boundary condition
   typename InputImageType::SizeType kernelSize;
   kernelSize.Fill( m_NeighborhoodRadius );
-  
+
   itk::ConstNeighborhoodIterator<InputImageType>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-  
+
   // Set the iterator at the desired location
   it.SetLocation(index);
-  
+
   // Walk the neighborhood
   const unsigned int size = it.Size();
   for (unsigned int i = 0; i < size; ++i)
@@ -98,10 +98,10 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
     ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
     ScalarRealType     x = static_cast<ScalarRealType>(it.GetOffset(i)[0])/(2*m_NeighborhoodRadius+1);
     ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
-    
+
     // Build complex value
     ScalarComplexType xpy(x, y), xqy(x, -y);
-    
+
     // Update cumulants
     for (unsigned int p = 0; p <= m_Pmax; p++)
       {
@@ -111,7 +111,7 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
         }
       }
     }
-  
+
   // Normalisation
   for (int p = m_Pmax; p >= 0; p--)
     {
@@ -120,7 +120,7 @@ ComplexMomentsImageFunction<TInputImage, TCoordRep>
       moments.at(p).at(q) /= moments.at(0).at(0);
       }
     }
-  
+
   // Return result
   return moments;
 }

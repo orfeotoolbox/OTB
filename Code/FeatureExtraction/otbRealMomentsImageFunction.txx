@@ -57,11 +57,11 @@ RealMomentsImageFunction<TInputImage, TCoordRep>
   // Build moments vector
   OutputType moments;
   moments.resize(m_Pmax+1);
-  
+
   std::vector<ScalarRealType> valXpY, valXqY;
   valXpY.resize(m_Pmax+1);
   valXqY.resize(m_Qmax+1);
-    
+
   // Initialize moments
   for (unsigned int p = 0; p <= m_Pmax; p++)
     {
@@ -79,23 +79,23 @@ RealMomentsImageFunction<TInputImage, TCoordRep>
     {
     return moments;
     }
-  
+
   // Check for out of buffer
   if ( !this->IsInsideBuffer( index ) )
     {
     return moments;
     }
-  
+
   // Create an N-d neighborhood kernel, using a zeroflux boundary condition
   typename InputImageType::SizeType kernelSize;
   kernelSize.Fill( m_NeighborhoodRadius );
-  
+
   itk::ConstNeighborhoodIterator<InputImageType>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-  
+
   // Set the iterator at the desired location
   it.SetLocation(index);
-  
+
   // Walk the neighborhood
   const unsigned int size = it.Size();
   for (unsigned int i = 0; i < size; ++i)
@@ -104,10 +104,10 @@ RealMomentsImageFunction<TInputImage, TCoordRep>
     ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
     ScalarRealType     x = static_cast<ScalarRealType>(it.GetOffset(i)[0])/(2*m_NeighborhoodRadius+1);
     ScalarRealType     y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
-    
+
     unsigned int pTmp = 1;
     unsigned int qTmp = 1;
-    
+
     while (pTmp <= m_Pmax)
       {
       valXpY.at(pTmp) = valXpY.at(pTmp-1) * x;
@@ -118,7 +118,7 @@ RealMomentsImageFunction<TInputImage, TCoordRep>
       valXqY.at(qTmp) = valXqY.at(qTmp-1) * y;
       qTmp ++;
       }
-    
+
 
     // Update cumulants
     for (unsigned int p = 0; p <= m_Pmax; p++)
@@ -129,7 +129,7 @@ RealMomentsImageFunction<TInputImage, TCoordRep>
         }
       }
     }
-  
+
   // Normalisation
   for (int p = m_Pmax; p >= 0; p--)
     {

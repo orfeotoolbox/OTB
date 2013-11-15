@@ -32,8 +32,8 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>
   m_Writer = WriterType::New();
   m_ImageSize.Fill(0);
 }
-  
-  
+
+
 template<class TBufferType, class TOutputPixelType>
 void
 ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
@@ -43,34 +43,34 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
     {
       itkExceptionMacro("Invalid output image size, Size can't be null.");
     }
-  
+
   if( m_NumberOfChannels==0 )
     {
       itkExceptionMacro("Invalid output image number of channels.");
     }
-  
+
   RegionType lRegion;
   IndexType lId;
   lId.Fill(0);
   lRegion.SetIndex(lId);
   lRegion.SetSize(m_ImageSize);
-  
+
   typename ImageType::Pointer lImage = ImageType::New();
   lImage->SetRegions( lRegion );
   lImage->SetNumberOfComponentsPerPixel(m_NumberOfChannels);
   lImage->Allocate();
   PixelType lPix;
-  
+
   lPix.SetSize(m_NumberOfChannels);
   lPix.Fill( itk::NumericTraits<OutputPixelType>::Zero );
   lImage->FillBuffer(lPix);
-  
+
   // 1 specific loop for each case to save time processing
   if(m_InverseXSpacing == false)
     {
       itk::ImageRegionIterator<ImageType> it(lImage, lRegion);
       it.GoToBegin();
-      
+
       unsigned int cpt(0);
       while( it.IsAtEnd()==false )
         {
@@ -79,7 +79,7 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
               lPix[i] = static_cast<OutputPixelType>(m_Buffer[cpt]);
               ++cpt;
             }
-          
+
           it.Set( lPix );
           ++it;
         }
@@ -94,12 +94,12 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
         {
           IndexType index = it.GetIndex();
           cpt = (m_ImageSize[1] - 1 - index[1]) * m_NumberOfChannels * m_ImageSize[0] + m_NumberOfChannels * index[0];
-          
+
           for(unsigned int i=0; i<m_NumberOfChannels; ++i)
             {
               lPix[i] = static_cast<OutputPixelType>(m_Buffer[cpt+i]);
             }
-          
+
           it.Set( lPix );
           ++it;
         }

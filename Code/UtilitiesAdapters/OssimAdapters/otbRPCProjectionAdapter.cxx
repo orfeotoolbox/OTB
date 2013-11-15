@@ -108,14 +108,14 @@ RPCProjectionAdapter::Solve(const GCPsContainerType& gcpContainer,
   // Compute projection
   m_RpcProjection = dynamic_cast<ossimRpcProjection*>(
                                                       rpcSolver->createRpcProjection()->getProjection());
-  
+
   // Add spacings
   rpcModel->setMetersPerPixel( m_RpcProjection->getMetersPerPixel() );
 
   // Export the sensor model in an ossimKeywordlist
   ossimKeywordlist geom_kwl;
   rpcModel->saveState(geom_kwl);
-  
+
   ossimKeywordlist kwl;
   m_RpcProjection->saveState(kwl);
 
@@ -142,11 +142,11 @@ RPCProjectionAdapter
   // Lower right
   imagePoint = ossimDpt(orig[0]+size[1]-1, orig[1]+size[0]-1);
   m_RpcProjection->lineSampleToWorld(imagePoint, lr);
- 
+
 
   ossimKeywordlist geom_kwl;
   otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
- 
+
   ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
   rpcModel->loadState( geom_kwl );
   rpcModel->setGroundRect(ul, ur, lr, ll);

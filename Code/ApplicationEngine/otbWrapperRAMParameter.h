@@ -46,7 +46,7 @@ public:
   /** typedef */
   typedef NumericalParameter<unsigned int>     UnsignedIntParameter;
   typedef UnsignedIntParameter::ScalarType     ScalarType;
-  
+
   bool HasValue() const
   {
     return m_UnsignedIntParam->HasValue();

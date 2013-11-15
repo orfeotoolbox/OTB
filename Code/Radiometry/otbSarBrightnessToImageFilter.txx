@@ -52,27 +52,27 @@ SarBrightnessToImageFilter<TInputImage, TOutputImage>
   FunctionPointer function = this->GetFunction();
 
   function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
-  
+
   ParametricFunctionPointer   noise;
   ParametricFunctionPointer   antennaPatternNewGain;
   ParametricFunctionPointer   antennaPatternOldGain;
   ParametricFunctionPointer   rangeSpreadLoss;
-  
+
   noise = function->GetNoise();
   noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
   noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
   noise->EvaluateParametricCoefficient();
-  
+
   antennaPatternNewGain = function->GetAntennaPatternNewGain();
   antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
   antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
   antennaPatternNewGain->EvaluateParametricCoefficient();
-  
+
   antennaPatternOldGain = function->GetAntennaPatternOldGain();
   antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
   antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());
   antennaPatternOldGain->EvaluateParametricCoefficient();
-  
+
   rangeSpreadLoss = function->GetRangeSpreadLoss();
   rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
   rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());

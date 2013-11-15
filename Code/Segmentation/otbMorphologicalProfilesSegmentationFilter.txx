@@ -44,12 +44,12 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOuputImage,TInternalPrecisi
   m_ClosingDerivativeProfile->SetInput(m_ClosingProfile->GetOutput());
   m_OpeningCharacteristicsFilter->SetInput(m_OpeningDerivativeProfile->GetOutput());
   m_ClosingCharacteristicsFilter->SetInput(m_ClosingDerivativeProfile->GetOutput());
-  
+
   m_ClassificationFilter->SetOpeningProfileDerivativeMaxima(m_OpeningCharacteristicsFilter->GetOutput());
   m_ClassificationFilter->SetOpeningProfileCharacteristics(m_OpeningCharacteristicsFilter->GetOutputCharacteristics());
   m_ClassificationFilter->SetClosingProfileDerivativeMaxima(m_ClosingCharacteristicsFilter->GetOutput());
   m_ClassificationFilter->SetClosingProfileCharacteristics(m_ClosingCharacteristicsFilter->GetOutputCharacteristics());
-  
+
   m_ConnectedComponentsFilter->SetInput(m_ClassificationFilter->GetOutput());
 
 }

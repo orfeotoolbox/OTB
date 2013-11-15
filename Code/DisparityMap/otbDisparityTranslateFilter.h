@@ -62,40 +62,40 @@ public:
   typedef TGridImage       GridType;
   typedef TMaskImage       MaskType;
   typedef TSensorImage     SensorType;
-  
+
   typedef typename DispMapType::PixelType    PixelType;
   typedef typename DispMapType::RegionType   RegionType;
   typedef typename DispMapType::SizeType     SizeType;
   typedef typename DispMapType::IndexType    IndexType;
   typedef typename DispMapType::SpacingType  SpacingType;
   typedef typename DispMapType::PointType    PointType;
-  
+
   typedef typename GridType::RegionType      GridRegionType;
-  
+
   /** Set/Get macro for NoDataValue */
   itkSetMacro(NoDataValue, PixelType);
   itkGetConstReferenceMacro(NoDataValue, PixelType);
 
   /** Set the horizontal disparity map */
   void SetHorizontalDisparityMapInput( const TDisparityImage * hmap );
-  
+
   /** Set the vertical disparity map */
   void SetVerticalDisparityMapInput( const TDisparityImage * vmap );
-  
+
   /** Set the inverse left epipolar grid  */
   void SetInverseEpipolarLeftGrid( const TGridImage * lgrid );
-  
+
   /** Set the direct epipolar right grid */
   void SetDirectEpipolarRightGrid( const TGridImage * rgrid );
-  
+
   /** Set the mask relative to the input disparity map */
   void SetDisparityMaskInput(const TMaskImage * mask);
-  
+
   /** Set the left input sensor image
    *  (used as a support for the output disparity map)
    */
   void SetLeftSensorImageInput( const TSensorImage * left);
-  
+
   /** Get the inputs */
   const TDisparityImage * GetHorizontalDisparityMapInput() const;
   const TDisparityImage * GetVerticalDisparityMapInput() const;
@@ -103,11 +103,11 @@ public:
   const TGridImage * GetDirectEpipolarRightGrid() const;
   const TMaskImage * GetDisparityMaskInput() const;
   const TSensorImage * GetLeftSensorImageInput() const;
-  
+
   /** Get output disparity maps */
   TDisparityImage * GetHorizontalDisparityMapOutput();
   TDisparityImage * GetVerticalDisparityMapOutput();
-  
+
 protected:
   /** Constructor */
   DisparityTranslateFilter();
@@ -120,10 +120,10 @@ protected:
 
   /** Generate input requrested region */
   virtual void GenerateInputRequestedRegion();
-  
+
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
-  
+
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.
     *
@@ -135,7 +135,7 @@ protected:
 private:
   DisparityTranslateFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   PixelType              m_NoDataValue;
 };
 

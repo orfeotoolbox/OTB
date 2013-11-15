@@ -63,17 +63,17 @@ public:
   typedef vnl_vector<double>           VNLDoubleVectorType;
   typedef std::vector<double>           VectorType;
   typedef typename TOutput::ValueType   OutputValueType;
-  
-  
+
+
   inline TOutput operator()( const TInput & Coherency ) const
     {
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
- 
+
     const double T0 = static_cast<double>(Coherency[0].real());
     const double T1 = static_cast<double>(Coherency[3].real());
     const double T2 = static_cast<double>(Coherency[5].real());
-    
+
     VNLMatrixType vnlMat(3, 3, 0.);
     vnlMat[0][0] = ComplexType(T0,  0.);
     vnlMat[0][1] = std::conj(ComplexType(Coherency[1]));
@@ -84,26 +84,26 @@ public:
     vnlMat[2][0] = ComplexType(Coherency[2]);
     vnlMat[2][1] = ComplexType(Coherency[4]);
     vnlMat[2][2] = ComplexType(T2,  0.);
-    
+
     // Only compute the left symetry to respect the previous Hermitian Analisys code
     vnl_complex_eigensystem syst(vnlMat, false, true);
     const VNLMatrixType eigenVectors( syst.L );
     const VNLVectorType eigenValues(syst.W);
-    
+
     // Entropy estimation
     double totalEigenValues(0.0);
     double p[3];
     double entropy;
     double alpha;
     double anisotropy;
-    
+
     // Sort eigen values in decreasing order
     VectorType sortedRealEigenValues(3,  eigenValues[0].real());
     sortedRealEigenValues[1] = eigenValues[1].real();
     sortedRealEigenValues[2] = eigenValues[2].real();
     std::sort( sortedRealEigenValues.begin(), sortedRealEigenValues.end() );
     std::reverse( sortedRealEigenValues.begin(), sortedRealEigenValues.end() );
-    
+
     // Extract the first component of each the eigen vector sorted by eigen value decrease order
     VNLVectorType sortedGreaterEigenVector(3, eigenVectors[0][0]);
     for(unsigned int i=0; i<3; ++i)
@@ -117,7 +117,7 @@ public:
             sortedGreaterEigenVector[i] = eigenVectors[2][0];
           }
       }
- 
+
     totalEigenValues = sortedRealEigenValues[0] + sortedRealEigenValues[1] + sortedRealEigenValues[2];
     if (totalEigenValues <m_Epsilon)
       {
@@ -240,7 +240,7 @@ private:
   void operator=(const Self&);            //purposely not implemented
 
 };
-  
+
 } // end namespace otb
 
 #endif

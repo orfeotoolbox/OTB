@@ -115,24 +115,24 @@ public:
 
   /** Get the updated disparity map **/
   TOutputImage * GetOutputDisparityMap(); // input disparity map updated (incoherences between median and input disparity map are removed)
-  
+
   /** Get the updated disparity mask **/
   TMask * GetOutputDisparityMask();
 
   /** Set/Get the radius of the neighborhood used to compute the median. */
   itkSetMacro(Radius, SizeType);
   itkGetMacro(Radius, SizeType);
-  
+
   /** Set unsigned int radius */
   void SetRadius(unsigned int radius)
     {
     m_Radius.Fill(radius);
     }
-  
+
   /** Set/Get the incoherence threshold */
   itkSetMacro(IncoherenceThreshold, double);
   itkGetMacro(IncoherenceThreshold, double);
-  
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(SameDimensionCheck,
@@ -156,7 +156,7 @@ protected:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
-  
+
   /** Generate output information */
   virtual void GenerateOutputInformation(void);
 
@@ -169,11 +169,11 @@ private:
 
   /** Radius of median filter */
   SizeType m_Radius;
-  
+
   /** Threshold of incoherence between original and filtered disparity */
   double m_IncoherenceThreshold;
 };
-  
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

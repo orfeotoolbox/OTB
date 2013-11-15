@@ -101,7 +101,7 @@ public:
     <HistogramType>                                            TextureCoefficientsCalculatorType;
   typedef typename TextureCoefficientsCalculatorType::Pointer  TextureCoefficientsCalculatorPointerType;
   */
-  
+
   typedef itk::Statistics::ScalarImageToRunLengthFeaturesFilter
     <InputImageType> ScalarImageToRunLengthFeaturesFilterType;
   //typedef typename ImageType::PixelType                PixelType;
@@ -140,7 +140,7 @@ public:
 
   /** Get the input image maximum */
   itkGetMacro(InputImageMaximum, InputPixelType);
-  
+
   /* Enable/Disable fast calculation */
   itkGetConstMacro(FastCalculations, bool);
   itkSetMacro(FastCalculations, bool);
@@ -210,7 +210,7 @@ private:
 
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
-  
+
   /** Fast calculation */
   bool m_FastCalculations;
 };

@@ -48,7 +48,7 @@ ImageToGenericRSOutputParameters<TImage>
 
   if(m_Input->GetProjectionRef().empty() && m_Input->GetImageKeywordlist().GetSize() == 0)
     itkExceptionMacro(<<"No information in the metadata, please set an image with non empty metadata");
-  
+
   // First Call to UpdateTransform : Initialize with the input image
   // information
   this->UpdateTransform();
@@ -58,7 +58,7 @@ ImageToGenericRSOutputParameters<TImage>
 
   // Estimate the Output Origin
   this->EstimateOutputOrigin();
-  
+
   // Estimate the Output Spacing
   if(!m_ForceSpacing)
     this->EstimateOutputSpacing();
@@ -92,11 +92,11 @@ ImageToGenericRSOutputParameters<TImage>
   // Get the inverse transform again : used later
   GenericRSTransformPointerType invTransform = GenericRSTransformType::New();
   m_Transform->GetInverse(invTransform);
-  
+
   // Compute the 4 corners in the cartographic coordinate system
   std::vector<IndexType>       vindex;
   std::vector<PointType> voutput;
-  
+
   IndexType index1, index2, index3, index4;
   SizeType  size;
 
@@ -147,7 +147,7 @@ ImageToGenericRSOutputParameters<TImage>
     if (maxY < voutput[i][1])
       maxY = voutput[i][1];
     }
-  
+
   // Edit the output image extent type
   m_OutputExtent.maxX =  maxX;
   m_OutputExtent.minX =  minX;
@@ -189,10 +189,10 @@ ImageToGenericRSOutputParameters<TImage>
   PointType o, oX, oY;
   o[0] = this->GetOutputOrigin()[0];
   o[1] = this->GetOutputOrigin()[1];
-  
+
   oX = o;
   oY = o;
-  
+
   oX[0] += sizeCartoX;
   oY[1] += sizeCartoY;
 
@@ -247,7 +247,7 @@ ImageToGenericRSOutputParameters<TImage>
   // Compute the output size
   double sizeCartoX = vcl_abs(m_OutputExtent.maxX - m_OutputExtent.minX);
   double sizeCartoY = vcl_abs(m_OutputExtent.minY - m_OutputExtent.maxY);
-  
+
   // Evaluate output size
   SizeType outputSize;
   outputSize[0] = static_cast<unsigned int>(vcl_floor(vcl_abs(sizeCartoX / this->GetOutputSpacing()[0])));

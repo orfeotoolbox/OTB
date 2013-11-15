@@ -62,13 +62,13 @@ public:
   typedef typename TInputImage::SpacingType SpacingType;
   typedef typename TInputImage::PointType   PointType;
   typedef typename TInputImage::RegionType  RegionType;
- 
+
   typedef typename TOutputImage::PixelType OutputPixelType;
-  
+
   /** output map projection */
   typedef TMapProjection                   MapProjectionType;
   typedef typename TMapProjection::Pointer MapProjectionPointerType;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -90,14 +90,14 @@ protected:
   OrthoRectificationFilter();
   virtual ~OrthoRectificationFilter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
   virtual void GenerateInputRequestedRegion();
   virtual void GenerateOutputInformation(void);
 
 private:
   OrthoRectificationFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-  
+
   /** Map Projection used to transform cartographic coordinates in geographic  coordinates */
   MapProjectionPointerType m_MapProjection;
 

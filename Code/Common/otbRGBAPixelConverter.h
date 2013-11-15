@@ -47,7 +47,7 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(RGBAPixelConverter, ProcessObject);
 
@@ -56,7 +56,7 @@ public:
 
   typedef typename itk::RGBAPixel<TInternalInputPixelType>   InputPixelType;
   typedef TOutputPixelType                                   OutputPixelType;
-  
+
   OutputPixelType Convert (InputPixelType input);
 
 protected:
@@ -84,7 +84,7 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(RGBAPixelConverter, ProcessObject);
 
@@ -93,7 +93,7 @@ public:
 
   typedef typename itk::RGBAPixel<TInternalInputPixelType>   InputPixelType;
   typedef typename itk::RGBAPixel<TInternalOutputPixelType>  OutputPixelType;
-  
+
   OutputPixelType Convert (InputPixelType input);
 
 protected:
@@ -121,7 +121,7 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(RGBAPixelConverter, ProcessObject);
 
@@ -130,7 +130,7 @@ public:
 
   typedef typename itk::RGBAPixel<TInternalInputPixelType>   InputPixelType;
   typedef typename itk::RGBPixel<TInternalOutputPixelType>  OutputPixelType;
-  
+
   OutputPixelType Convert (InputPixelType input);
 
 protected:

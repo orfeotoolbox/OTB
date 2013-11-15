@@ -224,10 +224,10 @@ private:
 
   //Projection in the proj.4 format (for mapnik)
   std::string m_VectorDataProjectionProj4;
-  
+
   //Projection in the WKT format
   std::string m_VectorDataProjectionWKT;
-  
+
   //Rendering style type
   RenderingStyleType m_RenderingStyleType;
 

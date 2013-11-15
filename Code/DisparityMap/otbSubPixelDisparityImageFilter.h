@@ -89,13 +89,13 @@ public:
   typedef typename InputImageType::RegionType               RegionType;
   typedef typename InputImageType::SpacingType              SpacingType;
   typedef typename InputImageType::PointType                PointType;
-  
+
   typedef typename TOutputMetricImage::ValueType            MetricValueType;
-  
+
   typedef typename OutputDisparityImageType::PixelType      DisparityPixelType;
-  
+
   typedef itk::ConstNeighborhoodIterator<TInputImage>       ConstNeighborhoodIteratorType;
-  
+
   typedef itk::ResampleImageFilter<TInputImage, TInputImage, double>  ResamplerFilterType;
   typedef itk::TranslationTransform<double,2> TransformationType;
   typedef otb::PixelWiseBlockMatchingImageFilter
@@ -104,7 +104,7 @@ public:
             OutputDisparityImageType,
             InputMaskImageType,
             BlockMatchingFunctorType> BlockMatchingFilterType;
-  
+
   itkStaticConstMacro(PARABOLIC,int,0);
   itkStaticConstMacro(TRIANGULAR,int,1);
   itkStaticConstMacro(DICHOTOMY,int,2);
@@ -114,23 +114,23 @@ public:
 
   /** Set right input */
   void SetRightInput( const TInputImage * image);
-  
+
   /** Set initial horizontal disparity field */
   void SetHorizontalDisparityInput( const TDisparityImage * hfield);
 
   /** Set initial vertical disparity field */
   void SetVerticalDisparityInput( const TDisparityImage * vfield);
-  
+
   /** Set the input metric image */
   void SetMetricInput(const TOutputMetricImage * image);
-  
+
   /** Get the initial disparity fields */
   const TDisparityImage * GetHorizontalDisparityInput() const;
   const TDisparityImage * GetVerticalDisparityInput() const;
 
   /** Set mask input (optional) */
   void SetLeftMaskInput(const TMaskImage * image);
-  
+
   /** Set right mask input (optional) */
   void SetRightMaskInput(const TMaskImage * image);
 
@@ -161,7 +161,7 @@ public:
   /** Set/Get the radius of the area on which metric is evaluated */
   itkSetMacro(Radius, SizeType);
   itkGetConstReferenceMacro(Radius, SizeType);
-  
+
   /*** Set/Get the minimum disparity to explore */
   itkSetMacro(MinimumHorizontalDisparity,int);
   itkGetConstReferenceMacro(MinimumHorizontalDisparity,int);
@@ -181,7 +181,7 @@ public:
   itkSetMacro(Minimize, bool);
   itkGetConstReferenceMacro(Minimize,bool);
   itkBooleanMacro(Minimize);
-  
+
   /** Get the functor for parameters setting */
   BlockMatchingFunctorType &  GetFunctor()
   {
@@ -193,11 +193,11 @@ public:
   {
     return m_Functor;
   }
-  
+
   /** Set/Get the refinement method (PARABOLIC, TRIANGULAR or DICHOTOMY) */
   itkSetMacro(RefineMethod,int);
   itkGetMacro(RefineMethod,int);
-  
+
   void SetInputsFromBlockMatchingFilter(const BlockMatchingFilterType * filter);
 
 protected:
@@ -206,7 +206,7 @@ protected:
 
   /** Destructor */
   virtual ~SubPixelDisparityImageFilter();
-  
+
   /** Generate output information */
   virtual void GenerateOutputInformation();
 
@@ -215,26 +215,26 @@ protected:
 
   /** Before threaded generate data */
   virtual void BeforeThreadedGenerateData();
-  
+
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
-  
+
   /** After threaded generate data */
   virtual void AfterThreadedGenerateData();
-  
+
 private:
   SubPixelDisparityImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** parabolic refinement method */
   void ParabolicRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
-  
+
   /** triangular refinement method */
   void TriangularRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
-  
+
   /** dichotomy refinement method */
   void DichotomyRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
-  
+
   /** The radius of the blocks */
   SizeType                      m_Radius;
 
@@ -255,19 +255,19 @@ private:
 
   /** Block-matching functor */
   BlockMatchingFunctorType      m_Functor;
-  
+
   /** Refinement method (PARABOLIC, TRIANGULAR or DICHOTOMY)*/
   int                           m_RefineMethod;
-  
+
   /** Stores the number of pixels whose refined position has a worse metric than the initial position */
   std::vector<double>           m_WrongExtrema;
-  
+
   /** Stores the computed grid step of the disparity map (internal purpose only) */
   unsigned int                  m_Step;
-  
+
   /** Stores the computed grid start index of the disparity map (internal purpose only) */
   IndexType                     m_GridIndex;
-  
+
 };
 } // end namespace otb
 

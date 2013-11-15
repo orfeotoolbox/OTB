@@ -74,7 +74,7 @@ public:
   typedef TImage                          ImageType;
   typedef typename ImageType::PointType   PointType;
   typedef typename ImageType::SizeType    SizeType;
-  
+
   /** GCPsToSensor model filter */
   typedef GCPsToRPCSensorModelImageFilter<ImageType>          GCPsToSensorModelType;
   typedef typename GCPsToSensorModelType::Pointer             GCPsToSensorModelPointerType;
@@ -87,7 +87,7 @@ public:
   /** Remote Sensing Transform */
   typedef GenericRSTransform<>                                RSTransformType;
   typedef typename RSTransformType::Pointer                   RSTransformPointerType;
-  
+
   /** Set/Get the grid size*/
   itkSetMacro(GridSize, SizeType);
   itkGetConstReferenceMacro(GridSize, SizeType);
@@ -97,7 +97,7 @@ public:
   {
     SizeType iSize;
     iSize.Fill(inSize);
-    
+
     if(m_GridSize != iSize)
       {
       m_GridSize = iSize;
@@ -107,7 +107,7 @@ public:
 
   /** Reimplement the method Modified() */
   virtual void Modified();
-  
+
 protected:
   /** Constructor */
   PhysicalToRPCSensorModelImageFilter();
@@ -119,14 +119,14 @@ protected:
 
   /** Generate the Output image information*/
   virtual void GenerateOutputInformation();
-  
+
 private:
   PhysicalToRPCSensorModelImageFilter(const Self &);   // purposely not implemented
   void operator =(const Self&);    // purposely not implemented
-  
+
   /** The rpc model estimator */
   GCPsToSensorModelPointerType       m_GCPsToSensorModelFilter;
-  
+
   SizeType                           m_GridSize;
   bool                               m_OutputInformationGenerated;
 

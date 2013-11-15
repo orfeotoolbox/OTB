@@ -39,7 +39,7 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
    this->SetNumberOfRequiredInputs(2);
    this->SetNumberOfRequiredInputs(1);
    this->SetNumberOfRequiredOutputs(1);
-   
+
    GDALAllRegister();
 }
 
@@ -105,7 +105,7 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     }
   // The input is necessarily the largest possible region.
   input->SetRequestedRegionToLargestPossibleRegion();
-  
+
   typename InputImageType::Pointer mask  =
     const_cast<InputImageType *> (this->GetInputMask());
   if(!mask)
@@ -126,11 +126,11 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     {
     itkExceptionMacro(<< "Not streamed filter. ERROR : requested region is not the largest possible region.");
     }
-    
+
     typename InputImageType::Pointer inImage = const_cast<InputImageType *>(this->GetInput());
 
     SizeType size = this->GetInput()->GetLargestPossibleRegion().GetSize();
-    
+
     unsigned int nbBands = this->GetInput()->GetNumberOfComponentsPerPixel();
     unsigned int bytePerPixel = sizeof(InputPixelType);
 
@@ -149,15 +149,15 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
            <<  "PIXELOFFSET=" << bytePerPixel * nbBands << ","
            <<  "LINEOFFSET=" << bytePerPixel * nbBands * size[0] << ","
            <<  "BANDOFFSET=" << bytePerPixel;
-    
+
     GDALDataset * dataset = static_cast<GDALDataset *> (GDALOpen(stream.str().c_str(), GA_ReadOnly));
-    
+
     //Set input Projection ref and Geo transform to the dataset.
     dataset->SetProjection(this->GetInput()->GetProjectionRef().c_str());
-    
+
     unsigned int projSize = this->GetInput()->GetGeoTransform().size();
     double geoTransform[6];
-    
+
     //Set the geo transform of the input image (if any)
     // Reporting origin and spacing of the buffered region
     // the spacing is unchanged, the origin is relative to the buffered region
@@ -180,12 +180,12 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
       geoTransform[4] = this->GetInput()->GetGeoTransform()[4];
     }
     dataset->SetGeoTransform(geoTransform);
-    
+
     //Create the output layer for GDALPolygonize().
     ogr::DataSource::Pointer ogrDS = ogr::DataSource::New();
-    
+
     OGRLayerType outputLayer = ogrDS->CreateLayer("layer",NULL,wkbPolygon);
-    
+
     OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
     outputLayer.CreateField(field, true);
 
@@ -199,7 +199,7 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
       option[0] = const_cast<char *>(opt.c_str());
       options=option;
     }
-    
+
     /* Convert the mask input into a GDAL raster needed by GDALPolygonize */
     typename InputImageType::ConstPointer inputMask = this->GetInputMask();
     if (!inputMask.IsNull())
@@ -221,14 +221,14 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
             <<  "PIXELOFFSET=" << bytePerPixel * nbBands << ","
             <<  "LINEOFFSET=" << bytePerPixel * nbBands * size[0] << ","
             <<  "BANDOFFSET=" << bytePerPixel;
-      
+
       GDALDataset * maskDataset = static_cast<GDALDataset *> (GDALOpen(maskstream.str().c_str(), GA_ReadOnly));
-      
+
       //Set input Projection ref and Geo transform to the dataset.
       maskDataset->SetProjection(this->GetInputMask()->GetProjectionRef().c_str());
-      
+
       projSize = this->GetInputMask()->GetGeoTransform().size();
-      
+
       //Set the geo transform of the input mask image (if any)
       // Reporting origin and spacing of the buffered region
       // the spacing is unchanged, the origin is relative to the buffered region
@@ -250,7 +250,7 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
          geoTransform[4] = this->GetInputMask()->GetGeoTransform()[4];
       }
       maskDataset->SetGeoTransform(geoTransform);
-      
+
       GDALPolygonize(dataset->GetRasterBand(1), maskDataset->GetRasterBand(1), &outputLayer.ogr(), 0, options, NULL, NULL);
       GDALClose(maskDataset);
     }
@@ -259,7 +259,7 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
       GDALPolygonize(dataset->GetRasterBand(1), NULL, &outputLayer.ogr(), 0, options, NULL, NULL);
     }
 
-    
+
     /** Convert OGR layer into VectorData */
 
     // Create the document node
@@ -270,7 +270,7 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     // Adding the layer to the data tree
     VectorDataPointerType data = dynamic_cast<VectorDataType*>(this->GetOutput());
     data->SetProjectionRef(this->GetInput()->GetProjectionRef());
-    
+
     DataTreePointerType tree = data->GetDataTree();
     DataNodePointerType root = tree->GetRoot()->Get();
     tree->Add(document, root);
@@ -278,10 +278,10 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     //This is not good but we do not have the choice if we want to
     //get a hook on the internal structure
     InternalTreeNodeType * documentPtr = const_cast<InternalTreeNodeType *>(tree->GetNode(document));
-    
+
     OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
     OGRConversion->ConvertOGRLayerToDataTreeNode(&outputLayer.ogr(), documentPtr);
-    
+
     //Clear memory
     GDALClose(dataset);
 

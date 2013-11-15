@@ -79,7 +79,7 @@ DataNodeImageFunction<TImage, TOutput, TCoordRep, TPrecision>
       m_EndIndex[j] = m_StartIndex[j] + static_cast<IndexValueType>( size[j] ) - 1;
       m_StartContinuousIndex[j] = static_cast<CoordRepType>( m_StartIndex[j] - 0.5 );
       m_EndContinuousIndex[j]   = static_cast<CoordRepType>( m_EndIndex[j] + 0.5 );
-      
+
       //Comment these instructions after migration to ITKv4 where there is a correct
       //usage of centered-pixel coordinates
       //(ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY always ON)

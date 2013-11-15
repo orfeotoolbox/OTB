@@ -41,10 +41,10 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
 ::GenerateOutputInformation()
 {
    Superclass::GenerateOutputInformation();
-   
+
    OutputImageType * output = this->GetOutput();
    output->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
-   
+
 }
 
 template <class TInputLabelMap, class TSimuStep1, class TSimuStep2, class TOutputImage>
@@ -54,13 +54,13 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
 {
    OutputImageType * output = this->GetOutput();
    const InputLabelMapType * input = this->GetInput();
-   
+
    typename OutputImageType::PixelType pixel;
    pixel.SetSize(m_NumberOfComponentsPerPixel);
    pixel.Fill( input->GetBackgroundValue() );
-   
+
    output->FillBuffer(pixel);
-   
+
    Superclass::BeforeThreadedGenerateData();
 }
 
@@ -115,9 +115,9 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
 
   //TODO Change with a multithreaded method
   RandomGeneratorPointer randomGen = RandomGeneratorType::GetInstance();
-  
+
   ConstLineIteratorType lit = ConstLineIteratorType (labelObject);
-  
+
   while ( !lit.IsAtEnd() )
     {
     IndexType idx = lit.GetLine().GetIndex();
@@ -145,7 +145,7 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
    Superclass::PrintSelf(os, indent);
-   
+
 }
 
 } //end namespace otb

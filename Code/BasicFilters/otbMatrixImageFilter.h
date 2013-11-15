@@ -99,7 +99,7 @@ public:
     {
      return  m_Matrix;
     }
- 
+
   itkGetConstMacro( MatrixByVector, bool );
   itkSetMacro( MatrixByVector, bool );
   itkBooleanMacro( MatrixByVector );

@@ -103,7 +103,7 @@ public:
 private :
 // private constructor so that this class is allocated only inside GetInstance
   GDALDriverManagerWrapper();
-  
+
   ~GDALDriverManagerWrapper();
 }; // end of GDALDriverManagerWrapper
 

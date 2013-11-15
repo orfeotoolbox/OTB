@@ -76,7 +76,7 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
   typedef typename Superclass::OutputType          OutputType;
-  
+
   typedef double                                   ScalarRealType;
   typedef typename std::complex<ScalarRealType>    ScalarComplexType;
 
@@ -85,10 +85,10 @@ public:
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);
-  
+
   /** Evalulate the function at specified index */
   virtual OutputType EvaluateAtIndex(const IndexType& index) const;
-  
+
   /** Evaluate the function at non-integer positions */
   virtual OutputType Evaluate(const PointType& point) const
   {
@@ -103,13 +103,13 @@ public:
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
     return this->EvaluateAtIndex(index);
   }
-  
+
   /** Get/Set the radius of the neighborhood over which the
    *  statistics are evaluated
    */
   itkSetMacro( NeighborhoodRadius, unsigned int );
   itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
-  
+
   itkSetMacro(Pmax, unsigned int);
   itkGetConstReferenceMacro(Pmax, unsigned int);
   itkSetMacro(Qmax, unsigned int);

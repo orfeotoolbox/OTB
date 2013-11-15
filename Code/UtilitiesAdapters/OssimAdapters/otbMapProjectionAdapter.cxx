@@ -327,7 +327,7 @@ void MapProjectionAdapter::ApplyParametersToProjection()
     ossimGpt origin(originY, originX, originZ, datum);
     projection->setOrigin(origin);
     }
-  
+
   // Set up resolution
   StoreType::const_iterator itResMeterX = m_ParameterStore.find("MetersPerPixelX");
   StoreType::const_iterator itResMeterY = m_ParameterStore.find("MetersPerPixelY");

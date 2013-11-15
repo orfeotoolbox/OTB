@@ -24,7 +24,7 @@ bool
 CurlHelperInterface::IsCurlAvailable()
 {
   bool curlAvailable = false;
-  
+
 #ifdef OTB_USE_CURL
   curlAvailable = true;
 #endif
@@ -35,7 +35,7 @@ bool
 CurlHelperInterface::IsCurlMultiAvailable()
 {
   bool curlMultiAvailable = false;
-  
+
 #ifdef OTB_CURL_MULTI_AVAILABLE
   curlMultiAvailable = true;
 #endif

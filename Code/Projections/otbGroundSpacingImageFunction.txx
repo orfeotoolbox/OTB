@@ -62,7 +62,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   FloatType var;
-  
+
   if (!this->GetInputImage())
     {
     var.Fill(itk::NumericTraits<ValueType>::min());
@@ -127,13 +127,13 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
     {
     itkExceptionMacro(<< "No input image!");
     }
-  
+
   TransformType::Pointer transform = TransformType::New();
   const itk::MetaDataDictionary& inputDict = this->GetInputImage()->GetMetaDataDictionary();
   transform->SetInputDictionary(inputDict);
   transform->SetInputOrigin(this->GetInputImage()->GetOrigin());
   transform->SetInputSpacing(this->GetInputImage()->GetSpacing());
-  
+
   transform->InstanciateTransform();
   return transform->TransformPoint(inputPoint);
 }

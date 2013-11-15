@@ -32,7 +32,7 @@ PathListToHistogramGenerator<TPath, TFunction>
 
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
-  
+
   this->itk::ProcessObject::SetNthOutput(0, this->MakeOutput(0).GetPointer());
 }
 
@@ -99,7 +99,7 @@ PathListToHistogramGenerator<TPath, TFunction>
 template<class TPath, class TFunction>
 typename PathListToHistogramGenerator<TPath, TFunction>::DataObjectPointer
 PathListToHistogramGenerator<TPath, TFunction>
-::MakeOutput(unsigned int) 
+::MakeOutput(unsigned int)
 {
   DataObjectPointer output;
   output = static_cast<itk::DataObject*>(HistogramType::New().GetPointer());
@@ -137,7 +137,7 @@ PathListToHistogramGenerator<TPath, TFunction>
     {
     vertexList = pathList->GetNthElement(noPathList);//(*pathList)[noPathList];
     function->SetInputPath(vertexList);
-    
+
     ResultFunction[0] = static_cast<MeasurementType>(function->Evaluate());
     // Set the ListSample MeasurementVectorSize once before the PushBack
     if(noPathList==0)
@@ -145,7 +145,7 @@ PathListToHistogramGenerator<TPath, TFunction>
 
     listSample->PushBack(ResultFunction);
     }
-  
+
   m_HistogramGenerator->SetInput(listSample);
   m_HistogramGenerator->GraftOutput(const_cast<HistogramType*>(this->GetOutput()));
   m_HistogramGenerator->Update();

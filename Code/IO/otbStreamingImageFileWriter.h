@@ -45,14 +45,14 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageFileWriter, itk::ImageFileWriter);
 
  /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       Superclass::InputImageDimension);
-  
+
 protected:
   /** Constructor */
   StreamingImageFileWriter(){}

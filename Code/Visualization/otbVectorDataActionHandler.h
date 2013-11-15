@@ -240,7 +240,7 @@ private:
 
   /// End polygon Mouse button
   int m_EndMouseButton;
-  
+
   /// Add polygon Mouse button
   int m_AddMouseButton;
 

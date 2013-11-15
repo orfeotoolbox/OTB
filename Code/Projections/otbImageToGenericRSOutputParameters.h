@@ -55,10 +55,10 @@ public:
   typedef itk::Object                                Superclass;
   typedef itk::SmartPointer< Self >        Pointer;
   typedef itk::SmartPointer<const Self>    ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToGenericRSOutputParameters, itk::Object);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -68,7 +68,7 @@ public:
   typedef typename ImageType::IndexType              IndexType;
   typedef typename ImageType::SpacingType            SpacingType;
   typedef typename ImageType::PointType              PointType;
-  
+
   /** GenericRSTransform typedef */
   typedef GenericRSTransform<>                       GenericRSTransformType;
   typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
@@ -94,7 +94,7 @@ public:
   /** Output Spacing */
   itkSetMacro(OutputSpacing, SpacingType);
   itkGetMacro(OutputSpacing, SpacingType);
-  
+
   /** Output Size */
   itkSetMacro(OutputSize, SizeType);
   itkGetMacro(OutputSize, SizeType);
@@ -123,7 +123,7 @@ public:
     m_ForceSize = true;
     this->SetOutputSize(size);
   }
-  
+
   /**
    * Method to Set/Get the output projectionRef
    * We cannot use the macro otbGetObjectMemberConstMacro cause the
@@ -147,15 +147,15 @@ public:
     m_Transform->SetOutputKeywordList(kwl);
     this->Modified();
   }
-  
+
   const ImageKeywordlist GetInputKeywordList()
   {
     return m_Transform->GetOutputKeywordList();
   }
-  
+
   /** Method to trigger the output parameters */
   void Compute();
-  
+
 protected:
   ImageToGenericRSOutputParameters();
   virtual ~ImageToGenericRSOutputParameters() {}
@@ -169,7 +169,7 @@ private:
   void EstimateOutputSpacing();
   void EstimateOutputSize();
   void EstimateOutputOrigin();
-  
+
   typename ImageType::ConstPointer   m_Input;
   PointType                     m_OutputOrigin;
   SpacingType                   m_OutputSpacing;
@@ -181,7 +181,7 @@ private:
   bool                          m_ForceSpacing;
   bool                          m_ForceSize;
   bool                          m_EstimateIsotropicSpacing;
-  
+
 }; // end of class ImageToGenericRSOutputParameters
 
 } // end of namespace otb

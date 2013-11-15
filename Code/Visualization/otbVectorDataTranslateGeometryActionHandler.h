@@ -124,7 +124,7 @@ public:
   /** Set/Get the pointer to the model */
   itkSetObjectMacro(Model, ModelType);
   itkGetObjectMacro(Model, ModelType);
-  
+
   /** Set/Get End polygon Mouse button */
   itkSetMacro(DragMouseButton, int);
   itkGetMacro(DragMouseButton, int);
@@ -155,7 +155,7 @@ private:
 
   // Pointer to the model
   ModelPointerType m_Model;
-  
+
   /// Drag polygon Mouse button
   int        m_DragMouseButton;
 

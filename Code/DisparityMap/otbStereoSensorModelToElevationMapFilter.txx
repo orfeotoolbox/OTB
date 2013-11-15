@@ -478,7 +478,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
           // Now that we have the master and slave patches, call the
           // correlation function
           double correlationValue = this->Correlation(master, slave);
-          
+
           // Check if a better correlation was found
           if(correlationValue > optimalCorrelation)
             {

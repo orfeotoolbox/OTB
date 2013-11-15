@@ -96,14 +96,14 @@ public:
     * \param value The value of the field.
     */
   void SetFieldAsInt(const std::string& key, int value);
-  
+
   /**
     * Returns the value associated with a field name.
     * \param key The name of the field.
     * \return The value of the field. A default value is returned if the key was not found.
     */
   int GetFieldAsInt(const std::string& key) const;
-  
+
   /**
     * \return the nth field of the node as a std::pair of (key, value).
     * \param index the index of the field to return.

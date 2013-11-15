@@ -86,7 +86,7 @@ PointSetExtractROI<TInputPointSet, TOutputPointSet>
   OutputPointDataContainerPointer outData = outputPointSet->GetPointData();
 
   typename InputPointsContainer::ConstIterator    inputPoint  = inPoints->Begin();
-  
+
   // Commented cause using iterator on the pointSetData crash
   // Use a direct access to pointSet Data instead to avoid segfault
   //typename InputPointDataContainer::ConstIterator inputData = inData->Begin();
@@ -94,11 +94,11 @@ PointSetExtractROI<TInputPointSet, TOutputPointSet>
   //  {
   //    inputData = inData->Begin();
   //  }
-  
+
   while (inputPoint != inPoints->End())
     {
     typename InputPointsContainer::Element point = inputPoint.Value();
-    
+
     if ((((point[0] >= m_StartX) && (point[0] < m_StartX + m_SizeX))
          || ((point[0] <= m_StartX) && (point[0] > m_StartX + m_SizeX))) //cover the case when size<0
         && (((point[1] >= m_StartY) && (point[1] < m_StartY + m_SizeY))
@@ -111,7 +111,7 @@ PointSetExtractROI<TInputPointSet, TOutputPointSet>
       inputPointSet->GetPointData(inputPoint.Index(), &data);
       outData->push_back(data/*inputData.Value()*/);
       }
-    
+
     ++inputPoint;
     //++inputData;
     }

@@ -80,7 +80,7 @@ GaussianModelComponent<TSample>
   const MeasurementVectorSizeType measurementVectorLength = sample->GetMeasurementVectorSize();
   this->m_Parameters.SetSize(measurementVectorLength * (1 + measurementVectorLength));
 
-  // Set the size of the mean vector 
+  // Set the size of the mean vector
   m_Mean.SetSize(measurementVectorLength);
 
 
@@ -91,7 +91,7 @@ GaussianModelComponent<TSample>
   m_CovarianceEstimator = CovarianceEstimatorType::New();
   m_CovarianceEstimator->SetInput(sample);
   m_CovarianceEstimator->Update();
-  
+
   m_GaussianMembershipFunction = NativeMembershipFunctionType::New();
   this->m_PdfFunction = (MembershipFunctionType *) m_GaussianMembershipFunction;
   m_GaussianMembershipFunction->SetMeasurementVectorSize(
@@ -119,7 +119,7 @@ GaussianModelComponent<TSample>
     m_Mean[i] = parameters[paramIndex];
     paramIndex++;
     }
-  
+
   m_Covariance.SetSize(measurementVectorSize, measurementVectorSize);
   for (i = 0; i < measurementVectorSize; i++)
     for (j = 0; j < measurementVectorSize; j++)
@@ -147,7 +147,7 @@ GaussianModelComponent<TSample>
 
   // Get the mean using the convariance estimator (computed internally)
   typename CovarianceEstimatorType::MeasurementVectorType meanOutput = m_CovarianceEstimator->GetMean();
-  
+
   for (i = 0; i < measurementVectorSize; i++)
     {
     m_Mean.SetElement(i,meanOutput.GetElement(i));
@@ -157,7 +157,7 @@ GaussianModelComponent<TSample>
 
   // Get the covariance matrix and fill the parameters vector
   const typename CovarianceEstimatorType::MatrixType covariance = m_CovarianceEstimator->GetCovarianceMatrix();
-  
+
   for (i = 0; i < measurementVectorSize; i++)
     for (j = 0; j < measurementVectorSize; j++)
       {
@@ -165,7 +165,7 @@ GaussianModelComponent<TSample>
       m_Covariance(i, j)             = covariance.GetVnlMatrix().get(i, j);
       paramIndex++;
       }
-  
+
   this->m_GaussianMembershipFunction->SetMean(meanOutput);
   this->m_GaussianMembershipFunction->SetCovariance(m_Covariance);
 

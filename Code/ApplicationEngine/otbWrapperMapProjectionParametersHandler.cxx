@@ -32,7 +32,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
 {
   app->AddParameter(ParameterType_Choice, key, "Output Cartographic Map Projection");
   app->SetParameterDescription(key,"Parameters of the output map projection to be used.");
-    
+
   // utm
   std::ostringstream oss;
   oss << key<<".utm";
@@ -44,7 +44,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   app->SetParameterDescription(oss.str(),"The zone number ranges from 1 to 60 and allows to define the transverse mercator projection (along with the hemisphere)");
   app->SetMinimumParameterIntValue(oss.str(), 1);
   app->SetDefaultParameterInt(oss.str(), 31);
-  
+
   oss.str("");
   oss <<key<<".utm" <<".northhem";
   app->AddParameter(ParameterType_Empty, oss.str(),  "Northern Hemisphere");
@@ -81,7 +81,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   app->AddParameter(ParameterType_Float, subParamKey.str(), "False northing");
   app->SetParameterDescription(subParamKey.str(), " Transmercator false northing value.");
   app->SetDefaultParameterFloat(subParamKey.str(), 0.);
- 
+
   subParamKey.str("");
   subParamKey<<oss.str()<<".scale";
   app->AddParameter(ParameterType_Float, subParamKey.str(), "Scale factor");
@@ -122,10 +122,10 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
 
   std::ostringstream hemKey;
   hemKey << key<<".utm.northhem";
-  
+
   std::ostringstream  epsgKey;
   epsgKey << key <<".epsg.code";
-    
+
   // Get the user choice
   switch ( app->GetParameterInt(key) )
     {
@@ -142,7 +142,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     if (!app->IsParameterEnabled(hemKey.str()))
       hem = 'S';
     utmProjection->SetHemisphere(hem);
-        
+
     // Get the projection ref
     return utmProjection->GetWkt();
     }
@@ -165,12 +165,12 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     {
     typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
     TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
-    
+
     // Get the Transmercator parameters
     std::ostringstream falseeasting;
     std::ostringstream falsenorthing;
     std::ostringstream scale;
-    
+
     falseeasting  <<key <<".transmercator.falseeasting";
     falsenorthing <<key <<".transmercator.falsenorthing";
     scale         <<key <<".transmercator.scale";

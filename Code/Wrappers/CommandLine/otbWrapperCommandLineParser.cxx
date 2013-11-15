@@ -58,7 +58,7 @@ CommandLineParser::GetPathsAsString( const std::string & exp )
     {
     res = tempModPath.substr( tempModPath.find(" ")+1, tempModPath.size());
     }
-  
+
   // Suppress possible multi space at the beginning of the string
   while (res.size()>0 && res[0]==' ')
     {
@@ -88,7 +88,7 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
   if( tempModPath.size() > 0 )
     {
     std::vector<itksys::String> pathAttribut = itksys::SystemTools::SplitString(tempModPath.substr(0, tempModPath.size()).c_str(), ' ', false);
-      
+
 
     // Remove " " string element
     for(unsigned int i=0; i<pathAttribut.size(); i++)
@@ -113,8 +113,8 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
     {
     return NOMODULEPATH;
     }
-  
-  
+
+
   return OK;
 }
 
@@ -132,7 +132,7 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
       i--;
       }
     }
-  
+
   // The SplitString keep the separator in the string.
   // If exists a space a the beginnig of the string, it will be interpreted...
   // We have to delete it
@@ -140,7 +140,7 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
     {
     spaceSplittedExp[0].erase(spaceSplittedExp[0].begin());
     }
-  
+
   itksys::RegularExpression reg;
   reg.compile("([^0-9a-zA-Z])");
   // The first element must be the module path, non " -" allowed.
@@ -158,7 +158,7 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
     {
     modName = spaceSplittedExp[0];
     }
-      
+
   return OK;
 }
 
@@ -176,7 +176,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
     return res;
     }
   std::string expFromKey = std::string(exp).substr(found+key.size()+1, std::string(exp).size());
-  
+
   if( expFromKey.size() == 0 )
     {
     return res;
@@ -228,7 +228,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
   if( tempModKey.size() > 0 )
     {
     std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()).c_str(), ' ', false);
-      
+
     // Remove " " string element
     for(unsigned int i=0; i<spaceSplitted.size(); i++)
       {
@@ -315,12 +315,12 @@ CommandLineParser::GetKeyList( const std::string & exp  )
       {
       tmpKey = cutExp.substr(0, foundSpace);
       }
- 
+
     if( this->IsAValidKey(tmpKey) )
       {
       keyList.push_back( tmpKey );
       }
-    
+
 
     // Search the next key (ie. " -")
     found = cutExp.find(" -");

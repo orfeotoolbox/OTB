@@ -208,7 +208,7 @@ PersistentCompareImageFilter<TInputImage>
   int      i;
   long     count;
   RealType squareOfDifferences, absoluteValueOfDifferences;
-  
+
   int numberOfThreads = this->GetNumberOfThreads();
 
   PixelType minimumRef,  maximumRef;
@@ -222,13 +222,13 @@ PersistentCompareImageFilter<TInputImage>
   // Find min/max and the accumulate count and difference of squares over all threads
   minimumRef = itk::NumericTraits<PixelType>::max();
   maximumRef = itk::NumericTraits<PixelType>::NonpositiveMin();
-  
+
   for (i = 0; i < numberOfThreads; ++i)
     {
     count += m_Count[i];
     squareOfDifferences += m_SquareOfDifferences[i];
     absoluteValueOfDifferences += m_AbsoluteValueOfDifferences[i];
-    
+
     if (m_ThreadMinRef[i] < minimumRef)
       {
       minimumRef = m_ThreadMinRef[i];
@@ -238,12 +238,12 @@ PersistentCompareImageFilter<TInputImage>
       maximumRef = m_ThreadMaxRef[i];
       }
     }
-  
+
   // compute mse
   mse = (count != 0) ? squareOfDifferences / static_cast<RealType>(count) : 0.;
   // compute mse
   mae = (count != 0) ? absoluteValueOfDifferences / static_cast<RealType>(count) : 0.;
-  
+
   //compute psnr
   psnr = (vcl_abs(mse)>0.0000000001 && (maximumRef-minimumRef)>0.0000000001) ? 10.*vcl_log10(((maximumRef-minimumRef)*(maximumRef-minimumRef))/mse):0.;
   // Set the output
@@ -266,7 +266,7 @@ PersistentCompareImageFilter<TInputImage>
 
   m_ThreadMinRef.SetSize(numberOfThreads);
   m_ThreadMaxRef.SetSize(numberOfThreads);
-  
+
   // Initialize the temporaries
   m_Count.Fill(itk::NumericTraits<long>::Zero);
   m_SquareOfDifferences.Fill(itk::NumericTraits<RealType>::Zero);
@@ -286,13 +286,13 @@ PersistentCompareImageFilter<TInputImage>
    */
   InputImagePointer inputPtr1 =  const_cast<TInputImage *>(this->GetInput(0));
   InputImagePointer inputPtr2 =  const_cast<TInputImage *>(this->GetInput(1));
-  
+
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   RealType  realValue1, realValue2;
   PixelType value1, value2;
-  
+
   itk::ImageRegionConstIterator<TInputImage> it1(inputPtr1, outputRegionForThread);
   itk::ImageRegionConstIterator<TInputImage> it2(inputPtr2, outputRegionForThread);
 
@@ -315,7 +315,7 @@ PersistentCompareImageFilter<TInputImage>
       {
       m_ThreadMaxRef[threadId] = value1;
       }
-    
+
     m_SquareOfDifferences[threadId] += ( realValue1 - realValue2 ) * ( realValue1 - realValue2 );
     m_AbsoluteValueOfDifferences[threadId] += vcl_abs( realValue1 - realValue2 );
     m_Count[threadId]++;

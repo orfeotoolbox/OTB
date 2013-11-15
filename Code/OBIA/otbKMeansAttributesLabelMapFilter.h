@@ -135,7 +135,7 @@ private:
 }; // end of class
 
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbKMeansAttributesLabelMapFilter.txx"
 #endif

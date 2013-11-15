@@ -38,7 +38,7 @@ RGBAPixelConverter<TInternalInputPixelType,
     ( 2125.0 * static_cast<double>(input[0]) +
       7154.0 * static_cast<double>(input[1]) +
       0721.0 * static_cast<double>(input[2])) / 10000.0); //alpha not supported yet
-  
+
   return (static_cast<OutputPixelType>(result));
 }
 

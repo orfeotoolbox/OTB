@@ -747,7 +747,7 @@ SpotImageMetadataInterface
       }
     else if (sensorId == "Spot 5")
       {
-      
+
       }
     else
       {
@@ -1140,7 +1140,7 @@ SpotImageMetadataInterface
     const std::vector<float> vred (red, red + sizeof(red) / sizeof(float) );
     const std::vector<float> vnir (nir, nir + sizeof(nir) / sizeof(float) );
     const std::vector<float> vmir (mir, mir + sizeof(mir) / sizeof(float) );
-    
+
     tmpSpectralBandList.push_back(vgreen);
     tmpSpectralBandList.push_back(vred);
     tmpSpectralBandList.push_back(vnir);

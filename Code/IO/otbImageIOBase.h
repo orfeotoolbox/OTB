@@ -353,8 +353,8 @@ public:
   virtual itk::ImageIORegion
   GenerateStreamableReadRegionFromRequestedRegion( const itk::ImageIORegion & requested ) const;
 
-  
-  
+
+
   /** Before this method is called all the configuration will be done,
    * that is Streaming/PasteRegion/Compression/Filename etc
    * If pasting is being used the number of requested splits is for that
@@ -372,7 +372,7 @@ public:
   virtual unsigned int GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits,
                                                          const itk::ImageIORegion &pasteRegion,
                                                          const itk::ImageIORegion &largestPossibleRegion);
-             
+
   /** returns the ith IORegion
    *
    * numberOfActualSplits should be the value returned from GetActualNumberOfSplitsForWriting with the same parameters
@@ -434,7 +434,7 @@ protected:
 
   /** Should we use streaming for reading */
   bool m_UseStreamedReading;
-  
+
   /** Should we use streaming for writing */
   bool m_UseStreamedWriting;
 
@@ -503,7 +503,7 @@ protected:
   /** Convenient method to read a buffer as binary. Return true on success. */
   bool ReadBufferAsBinary(std::istream& os, void *buffer, SizeType numberOfBytesToBeRead);
 
-  
+
   /** Insert an extension to the list of supported extensions for reading. */
   void AddSupportedReadExtension( const char * extension );
 

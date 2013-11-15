@@ -60,7 +60,7 @@ public:
       bool resp = l2.second > l1.second;
       return resp;
     }
-  
+
   /** Type definitions for the SVM Model. */
   typedef TModel                                     SVMModelType;
   typedef typename SVMModelType::Pointer             SVMModelPointer;

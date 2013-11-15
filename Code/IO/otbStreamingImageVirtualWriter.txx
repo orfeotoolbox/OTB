@@ -153,7 +153,7 @@ StreamingImageVirtualWriter<TInputImage>
 {
   InputImagePointer inputPtr = const_cast<InputImageType *>(this->GetInput(0));
   inputPtr->UpdateOutputInformation();
-  
+
   this->GenerateData();
 }
 

@@ -71,7 +71,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       m_NumberOfPrincipalComponentsRequired =
         this->GetInput()->GetNumberOfComponentsPerPixel();
       }
-    
+
     this->GetOutput()->SetNumberOfComponentsPerPixel(
       m_NumberOfPrincipalComponentsRequired );
     break;
@@ -95,9 +95,9 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
                                  "Covariance or transformation matrix required to know the output size",
                                  ITK_LOCATION);
       }
-    
+
     this->GetOutput()->SetNumberOfComponentsPerPixel( theOutputDimension );
-    
+
     break;
     }
     default:
@@ -146,10 +146,10 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
         if ( m_GivenMeanValues )
           m_Normalizer->SetMean( m_MeanValues );
-         
+
         if ( m_GivenStdDevValues )
           m_Normalizer->SetStdDev( m_StdDevValues );
-        
+
         m_Normalizer->Update();
 
         if ( !m_GivenMeanValues )
@@ -335,8 +335,8 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
   else
     m_TransformationMatrix = transf;
-  
- 
+
+
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
     m_EigenValues[i] = static_cast< RealType >( valP[i] );
@@ -375,7 +375,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
   else
     m_TransformationMatrix = transf;
-  
+
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
     m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
@@ -397,7 +397,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     os << "true\n";
   else
     os << "false\n";
-  
+
   if ( m_GivenMeanValues )
     os << indent << "Given Mean : " << m_MeanValues << "\n";
 

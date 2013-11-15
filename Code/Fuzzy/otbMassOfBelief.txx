@@ -52,7 +52,7 @@ MassOfBelief<TLabel, TMass>
     this->Modified();
   }
 
-  
+
 template <class TLabel, class TMass>
 typename MassOfBelief<TLabel, TMass>
 ::MassType
@@ -71,7 +71,7 @@ MassOfBelief<TLabel, TMass>
       return itk::NumericTraits<MassType>::Zero;
       }
   }
-  
+
 template <class TLabel, class TMass>
 typename MassOfBelief<TLabel, TMass>
 ::LabelSetOfSetType
@@ -80,7 +80,7 @@ MassOfBelief<TLabel, TMass>
   {
     // Build the output
     LabelSetOfSetType output;
-    
+
     // Define an iterator on the mass map
     typename MassMapType::const_iterator it = m_MassesMap.begin();
 
@@ -103,7 +103,7 @@ MassOfBelief<TLabel, TMass>
   {
     // Build the output
     LabelSetType output;
-    
+
     // Retrieve support set
     LabelSetOfSetType support = this->GetSupport();
 
@@ -202,7 +202,7 @@ MassOfBelief<TLabel, TMass>
 {
   // Clear any previous mass
   this->Clear();
-  
+
   // Compute number of elements
   unsigned long nbElements = 1 << universe.size(); // 2^universe.size()
 
@@ -227,7 +227,7 @@ MassOfBelief<TLabel, TMass>
         {
         newElement.insert(*it);
         }
-      
+
       // Compute residu
       residu/=2;
       }
@@ -319,7 +319,7 @@ MassOfBelief<TLabel, TMass>
     {
     belief+=this->GetMass((*it));
     }
-  
+
   // return belief
   return belief;
 }
@@ -339,7 +339,7 @@ MassOfBelief<TLabel, TMass>
     {
     plausibility+=this->GetMass((*it));
     }
-  
+
   // return belief
   return plausibility;
 }
@@ -381,7 +381,7 @@ MassOfBelief<TLabel, TMass>
   os<<indent<<"Mass of belief support: "
     <<PrintLabelSetOfSet(os, this->GetSupport())
     <<std::endl;
-  
+
   // Display individual masses
   for(typename MassMapType::const_iterator it = m_MassesMap.begin();
       it!=m_MassesMap.end(); ++it)

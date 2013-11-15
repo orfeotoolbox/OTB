@@ -42,7 +42,7 @@ ShiftScaleSampleListFilter<TInputSampleList, TOutputSampleList>
   // Check if the inputSampleList is not empty
   if(inputSampleListPtr->Size() == 0)
     itkExceptionMacro(<< "Input Sample List is empty");
-  
+
   // Check if the size of the scale and the shift measurement vectors
   // are the same than the input vector
   if(inputSampleListPtr->GetMeasurementVectorSize() != m_Scales.Size()
@@ -53,7 +53,7 @@ ShiftScaleSampleListFilter<TInputSampleList, TOutputSampleList>
                       <<m_Scales.Size()
                       <<" Shift measurement vector size "
                       <<m_Shifts.Size());
-  
+
   // Compute the 1/(sigma) vector
   InputMeasurementVectorType invertedScales = m_Scales;
   for(unsigned int idx = 0; idx < invertedScales.Size(); ++idx)
@@ -77,24 +77,24 @@ ShiftScaleSampleListFilter<TInputSampleList, TOutputSampleList>
     {
     // Retrieve current input sample
     InputMeasurementVectorType currentInputMeasurement = inputIt.GetMeasurementVector();
-  
+
     // Build current output sample
     OutputMeasurementVectorType currentOutputMeasurement;
     currentOutputMeasurement.SetSize(currentInputMeasurement.GetSize());
-  
+
     // Center and reduce each component
     for(unsigned int idx = 0; idx < invertedScales.Size(); ++idx)
       {
       currentOutputMeasurement[idx] = static_cast<OutputValueType>(
         (currentInputMeasurement[idx]-m_Shifts[idx])*invertedScales[idx]);
       }
-  
+
     // Add the current output sample to the output SampleList
     outputSampleListPtr->PushBack(currentOutputMeasurement);
-  
+
     // Update progress
     progress.CompletedPixel();
-  
+
     ++inputIt;
     }
 }

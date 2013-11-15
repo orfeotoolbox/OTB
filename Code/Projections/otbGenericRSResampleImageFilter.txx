@@ -86,31 +86,31 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 {
   // call the superclass's implementation of this method
   Superclass::GenerateOutputInformation();
-  
+
   typename OutputImageType::Pointer outputPtr = this->GetOutput();
 
   outputPtr->SetSpacing( this->GetOutputSpacing() );
   outputPtr->SetOrigin( this->GetOutputOrigin() );
-  
+
   typename OutputImageType::RegionType region;
   region.SetSize(this->GetOutputSize());
   region.SetIndex(this->GetOutputStartIndex() );
 
   outputPtr->SetLargestPossibleRegion(region);
-  
+
   // Get the Output MetaData Dictionary
   itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
-  
+
   // Encapsulate the   metadata set by the user
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
                                         this->GetOutputProjectionRef());
-  
+
   if (this->GetOutputKeywordList().GetSize() > 0)
     {
     itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
                                                this->GetOutputKeywordList());
     }
-  
+
   // Estimate the output rpc Model if needed
   if (m_EstimateOutputRpcModel)
     this->EstimateOutputRpcModel();
@@ -126,7 +126,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 {
   // Get the output dictionary
   itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-  
+
   // Temp image : not allocated but with the same metadata than the
   // output
   typename OutputImageType::Pointer tempPtr = OutputImageType::New();
@@ -138,11 +138,11 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
                                         this->GetOutputProjectionRef() );
   itk::EncapsulateMetaData<ImageKeywordlist>(tempDict, MetaDataKey::OSSIMKeywordlistKey,
                                              this->GetOutputKeywordList());
-  
+
   // Estimate the rpc model from the temp image
   m_OutputRpcEstimator->SetInput(tempPtr);
   m_OutputRpcEstimator->UpdateOutputInformation();
-  
+
   // Encapsulate the estimated rpc model in the output
   if (m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist().GetSize() > 0)
     {
@@ -234,7 +234,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
    // transform with the kwl estimated
    if(m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
      m_Transform->SetOutputKeywordList(m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
-  
+
   // Update the flag for input rpcEstimation in order to not compute
   // the rpc model for each stream
   m_RpcEstimationUpdated = true;
@@ -250,7 +250,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::SetOutputParametersFromImage(const ImageBaseType * image)
 {
   const InputImageType * src = dynamic_cast<const InputImageType*>(image);
-  
+
   this->SetOutputOrigin ( src->GetOrigin() );
   this->SetOutputSpacing ( src->GetSpacing() );
   this->SetOutputStartIndex ( src->GetLargestPossibleRegion().GetIndex() );
@@ -290,7 +290,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 {
   // Get the input Image
   const InputImageType* input = this->GetInput();
-  
+
   // Update the transform with input information
   // Done here because the transform is not instanciated
   // yet
@@ -307,7 +307,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     // Build the UTM transform : Need the zone & the hemisphere
     // For this we us the geographic coordinate of the input UL corner
     typedef itk::Point<double, 2>                  GeoPointType;
-  
+
     // get the utm zone and hemisphere using the input UL corner
     // geographic coordinates
     typename InputImageType::PointType  pSrc;
@@ -316,24 +316,24 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     index[0] = input->GetLargestPossibleRegion().GetIndex()[0];
     index[1] = input->GetLargestPossibleRegion().GetIndex()[1];
     input->TransformIndexToPhysicalPoint(index, pSrc);
-  
+
     // The first transform of the inverse transform : input -> WGS84
     geoPoint = invTransform->GetTransform()->GetFirstTransform()->TransformPoint(pSrc);
-  
+
     // Guess the zone and the hemisphere
     int zone = Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
     bool hem = (geoPoint[1]>1e-10)?true:false;
-  
+
     // Build the output UTM projection ref
     OGRSpatialReferenceH oSRS = OSRNewSpatialReference(NULL);
     OSRSetProjCS(oSRS, "UTM");
     OSRSetWellKnownGeogCS(oSRS, "WGS84");
     OSRSetUTM(oSRS, zone, hem);
-  
+
     char * utmRefC = NULL;
     OSRExportToWkt(oSRS, &utmRefC);
     projectionRef = utmRefC;
-    
+
     CPLFree(utmRefC);
     OSRRelease(oSRS);
     }
@@ -354,7 +354,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   genericRSEstimator->SetOutputProjectionRef(projectionRef);
   genericRSEstimator->ForceSpacingTo(spacing);
   genericRSEstimator->Compute();
-  
+
   // Update the Output Parameters
   this->SetOutputProjectionRef(projectionRef);
   this->SetOutputOrigin(genericRSEstimator->GetOutputOrigin());
@@ -375,7 +375,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
 ::SetOutputParametersFromMap(const std::string projectionRef)
 {
   const InputImageType* input = this->GetInput();
-  
+
   // Compute the output parameters
   typedef otb::ImageToGenericRSOutputParameters<InputImageType> OutputParametersEstimatorType;
   typename OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
@@ -383,7 +383,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   genericRSEstimator->SetInput(input);
   genericRSEstimator->SetOutputProjectionRef(projectionRef);
   genericRSEstimator->Compute();
-  
+
   // Update the Output Parameters
   this->SetOutputProjectionRef(projectionRef);
   this->SetOutputOrigin(genericRSEstimator->GetOutputOrigin());

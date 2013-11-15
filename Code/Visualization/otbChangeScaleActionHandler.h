@@ -60,7 +60,7 @@ public:
   /** View typedefs */
   typedef TView                      ViewType;
   typedef typename ViewType::Pointer ViewPointerType;
- 
+
   typedef TViewToUpdate                      ViewToUpdateType;
   typedef typename ViewToUpdateType::Pointer ViewToUpdatePointerType;
 
@@ -94,15 +94,15 @@ public:
           if (sizex > 1. && sizey >1.)
             {
             m_View->GetZoomWidget()->SetIsotropicZoom(newScale);
-            
+
             // If set, update the IsotropicZoom of the second view
             if(m_ViewToUpdate.IsNotNull())
               {
               m_ViewToUpdate->GetZoomWidget()->SetIsotropicZoom(newScale);
               }
-            
+
             RegionType region = m_Model->GetScaledExtractRegion();
-            
+
             typename RegionType::IndexType index = region.GetIndex();
             typename RegionType::SizeType size = region.GetSize();
             index[0] += size[0] / 2;

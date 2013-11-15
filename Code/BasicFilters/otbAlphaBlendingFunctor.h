@@ -52,14 +52,14 @@ public:
     //Keep alpha between 0 and 1
     m_Alpha = a<0.0?0.0:(a>1.0?1.0:a);
   }
-  
+
   virtual double GetAlpha() const
   {
     return m_Alpha;
   }
 
   virtual inline OutputPixelType operator ()(InputPixel1Type input1, InputPixel2Type input2) const = 0;
-  
+
 protected:
   double m_Alpha;
 };
@@ -101,14 +101,14 @@ class ITK_EXPORT AlphaBlendingFunctor< itk::RGBAPixel<TInputInternalPixel1>,
 public:
   AlphaBlendingFunctor(){}
   ~AlphaBlendingFunctor(){}
-  
+
   typedef TInputInternalPixel1                     InternalInputPixel1Type;
   typedef itk::RGBAPixel<InternalInputPixel1Type>  InputPixel1Type;
   typedef TInputInternalPixel2                     InternalInputPixel2Type;
   typedef itk::RGBAPixel<InternalInputPixel2Type>  InputPixel2Type;
   typedef TOutputInternalPixel                     InternalOutputPixelType;
   typedef itk::RGBAPixel<InternalOutputPixelType>  OutputPixelType;
-  
+
   inline OutputPixelType operator ()(InputPixel1Type input1, InputPixel2Type input2) const
   {
     OutputPixelType resp;

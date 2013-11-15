@@ -109,7 +109,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
         size[k] = (unsigned int) floor(size[k] / std::pow(2.0, i));
       m_ResampleFilter->SetSize(size);
 
-      
+
       for (int k = 0; k < 2; ++k)
         spacing[k] = (spacing[k] * std::pow(2.0, i));
       m_ResampleFilter->SetOutputSpacing(spacing);
@@ -123,7 +123,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       otbGenericMsgDebugMacro(<< "ImageToSURFKeyPointSetFilter:: Size of the image at the octave : " \
                               << i << " is " \
                               << m_determinantImage->GetLargestPossibleRegion().GetSize());
-        
+
       }
 
     for (int j = 0; j < m_ScalesNumber; ++j)
@@ -159,7 +159,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       /** For each octave, we fill the imageList for the extremum search*/
       m_ImageList->PushBack(m_determinantImage);
       }
-        
+
     /*----------------------------------------------------*/
     /*           extremum  Search over octave's scales    */
     /*----------------------------------------------------*/
@@ -181,7 +181,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 
       NeighborhoodIteratorType itNeighNext(radius, m_ImageMovedNext, m_ImageMovedNext->GetLargestPossibleRegion());
       itNeighNext.GoToBegin();
- 
+
       while (!it.IsAtEnd())
         {
                 /**
@@ -209,8 +209,8 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
                                                                                           lTranslation);
 
           OffsetType lTranslateOffset = {{0, 0}};
-                        
-                        
+
+
           lTranslateOffset[0] += static_cast<int>(lTranslation[0] > 0.5);
           lTranslateOffset[0] += -static_cast<int>(lTranslation[0] < -0.5);
 
@@ -233,7 +233,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
             lTranslation[0] = 0.0;
                         lTranslation[1] = 0.0;
             }
-                  
+
                   if (accepted == false)
                   {
                         ++it;
@@ -246,7 +246,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
                   typename InputImageType::IndexType indexKeyPoint;
                   indexKeyPoint[0] = neighborCurrentScale.GetIndex()[0];
                   indexKeyPoint[1] = neighborCurrentScale.GetIndex()[1];
-                  
+
           double sigmaDetected = sigma_in / pow(k, (double) jj) * pow(2., (double) i);
 
           radius.Fill(GetMin((int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - indexKeyPoint[0]),
@@ -260,16 +260,16 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
                                                       this->GetInput()->GetLargestPossibleRegion());
 
                   itNeighOrientation.SetLocation(neighborCurrentScale.GetIndex());
-                  
+
           double orientationDetected = AssignOrientation(itNeighOrientation.GetNeighborhood(), sigmaDetected);
 
           /*Filling the Point pointSet Part*/
           typename InputImageType::PointType physicalKeyPoint;
           m_ImageCurrent->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(), keyPoint);
-                  
+
           physicalKeyPoint[0] = keyPoint[0] + spacing[0] * lTranslation[0];
                   physicalKeyPoint[1] = keyPoint[1] + spacing[1] * lTranslation[1];
-                  
+
                   outputPointSet->SetPoint(m_NumberOfPoints, physicalKeyPoint);
 
           /*----------------------------------------*/
@@ -509,7 +509,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
         accepted = false;
         //solution.Fill(0);
   }
-        
+
   return accepted;
 }
 

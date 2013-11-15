@@ -40,7 +40,7 @@ ListSampleToVariableDimensionHistogramGenerator<TListSample,
 
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
-  
+
   this->itk::ProcessObject::SetNthOutput(0, this->MakeOutput(0).GetPointer());
 }
 
@@ -92,12 +92,12 @@ ListSampleToVariableDimensionHistogramGenerator<TListSample, THistogramMeasureme
   return output;
 }
 
-// GenerateData method, 
+// GenerateData method,
 template<class TListSample,
          class THistogramMeasurement,
          class TFrequencyContainer>
 void
-ListSampleToVariableDimensionHistogramGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>  
+ListSampleToVariableDimensionHistogramGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
 ::GenerateData()
 {
   // Get the input ListSample
@@ -105,7 +105,7 @@ ListSampleToVariableDimensionHistogramGenerator<TListSample,THistogramMeasuremen
 
   // Get a pointer on the output
   typename HistogramType::Pointer histogram = const_cast<HistogramType*>(this->GetOutput());
-  
+
   otbMsgDebugMacro(<< "ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Entering");
   // TODO : Sanity checks
   if (m_Sizes.GetSize() != inputList->GetMeasurementVectorSize())
@@ -188,7 +188,7 @@ ListSampleToVariableDimensionHistogramGenerator<TListSample,THistogramMeasuremen
   // the upper and lower bound from the FindSampleBound function
   // Have to Set the MeasurementVectorSize
   histogram->SetMeasurementVectorSize(inputList->GetMeasurementVectorSize());
-  
+
 
   otbMsgDevMacro(
     << "ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Initializing histogram with (sizes= " <<

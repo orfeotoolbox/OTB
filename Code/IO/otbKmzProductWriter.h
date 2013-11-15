@@ -87,9 +87,9 @@ public:
   typedef typename VectorDataType::DataNodeType        DataNodeType;
   typedef typename DataNodeType::PolygonType           PolygonType;
   typedef typename PolygonType::VertexType             VertexType;
-  
+
   typedef VectorDataFileWriter<VectorDataType>         VectorDataFileWriterType;
-  
+
 
   // Multi channels Extract ROI filter
   typedef MultiChannelExtractROI<InternalPixelType,  OutputPixelType> VectorImageExtractROIFilterType;
@@ -116,7 +116,7 @@ public:
   // std::pair description <-> legend (image)
   typedef std::pair<std::string, InputImagePointer>                   LegendPairType;
   typedef std::vector<LegendPairType>                                 LegendVectorType;
-  
+
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension);
@@ -223,7 +223,7 @@ private:
   /** Method to create the bounding kml of the "iteration" th product */
   void GenerateBoundingKML(double north, double south,
                            double east,  double west);
-  
+
 
   /**
     * Add a networkLink <NetworkLink> ....  </NetworkLink>
@@ -248,7 +248,7 @@ private:
 
   /** Method to add logo if any */
   void AddLogo();
-  
+
   /** Method to add Legend if any */
   void ProcessLegends();
 
@@ -277,7 +277,7 @@ private:
   typename DataNodeType::Pointer                   m_Polygon;
   typename DataNodeType::Pointer                   m_MultiPolygon;
   typename DataNodeType::Pointer                   m_Folder;
-  
+
   // Tile size
   unsigned int          m_TileSize;
   int                    m_MaxDepth;
@@ -285,12 +285,12 @@ private:
   unsigned int           m_CurIdx;
 
   // KMZ file
-  
+
   kmlengine::KmzFilePtr  m_KmzFile;
-  
+
   // KMZ file name
   std::ostringstream     m_KmzFileName;
-  
+
   // the kml root ofstream
   std::ofstream          m_RootKmlFile;
   std::ofstream          m_TempRootKmlFile;

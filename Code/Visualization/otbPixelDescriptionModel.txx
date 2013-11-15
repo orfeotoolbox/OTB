@@ -51,7 +51,7 @@ PixelDescriptionModel<TOutputImage>
 {
   // The output stringstream
   std::ostringstream oss;
-  
+
   // Report pixel info for each visible layer
   for (typename Superclass::LayerIteratorType it = this->GetLayers()->Begin();
        it != this->GetLayers()->End(); ++it)

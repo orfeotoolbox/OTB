@@ -79,7 +79,7 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 {
   ConstLineIteratorType lit = ConstLineIteratorType(lo);
   lit.GoToBegin();
-  
+
   std::ostringstream oss;
 
   FeatureType min = itk::NumericTraits<FeatureType>::max();

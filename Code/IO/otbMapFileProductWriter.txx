@@ -32,7 +32,7 @@ MapFileProductWriter<TInputImage>
 ::MapFileProductWriter(): m_TileSize(256), m_SRID(26918)
 {
   m_GenericRSResampler = GenericRSResamplerType::New();
-  
+
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
 }
@@ -83,11 +83,11 @@ MapFileProductWriter<TInputImage>
     {
     return 0;
     }
-  
+
   return static_cast<const TInputImage * >
     (this->ProcessObject::GetInput(0) );
 }
-  
+
 /**
  *  Get the idx input
  */
@@ -126,10 +126,10 @@ MapFileProductWriter<TInputImage>
 
   // Initialize the filename, the vectordatas
   this->Initialize();
-  
+
   // Generate the mapFile
   this->GenerateMapFile();
-  
+
   // Do the tiling
   this->Tiling();
 }
@@ -149,7 +149,7 @@ MapFileProductWriter<TInputImage>
     itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
                       <<" is a wrong Extension FileName : Expected .map");
     }
-  
+
   // Initialize the index vectordata
   this->InitializeVectorData();
 }
@@ -169,13 +169,13 @@ MapFileProductWriter<TInputImage>
   DataNodeType::Pointer root = m_VectorDataIndexTile->GetDataTree()->GetRoot()->Get();
   DataNodeType::Pointer document = DataNodeType::New();
   m_Folder = DataNodeType::New();
-  
+
   document->SetNodeType(otb::DOCUMENT);
   m_Folder->SetNodeType(otb::FOLDER);
 
   document->SetNodeId("DOCUMENT");
   m_Folder->SetNodeId("FOLDER");
-  
+
   m_VectorDataIndexTile->GetDataTree()->Add(document, root);
   m_VectorDataIndexTile->GetDataTree()->Add(m_Folder, document);
 }
@@ -189,7 +189,7 @@ MapFileProductWriter<TInputImage>
 ::Tiling()
 {
   unsigned int numberOfChannel = m_VectorImage->GetNumberOfComponentsPerPixel();
-  
+
   /** Image statistics*/
   typename InputImageType::PixelType inMin(numberOfChannel), inMax(numberOfChannel),
     outMin(numberOfChannel), outMax(numberOfChannel);
@@ -198,11 +198,11 @@ MapFileProductWriter<TInputImage>
 
   // Update image base information
   m_VectorImage->UpdateOutputInformation();
-  
+
   // Get the image size
   SizeType size;
   size = m_VectorImage->GetLargestPossibleRegion().GetSize();
-  
+
   unsigned int sizeX = size[0];
   unsigned int sizeY = size[1];
 
@@ -210,7 +210,7 @@ MapFileProductWriter<TInputImage>
   unsigned int maxDepth =
     static_cast<unsigned int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
                                   vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
-  
+
   // Extract size & index
   SizeType  extractSize;
   IndexType extractIndex;
@@ -239,7 +239,7 @@ MapFileProductWriter<TInputImage>
       m_StreamingShrinkImageFilter->SetInput(m_VectorImage);
       m_StreamingShrinkImageFilter->GetStreamer()->SetAutomaticStrippedStreaming(0);
       m_StreamingShrinkImageFilter->Update();
-      
+
       m_VectorRescaleIntensityImageFilter = VectorRescaleIntensityImageFilterType::New();
       m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput());
       m_VectorRescaleIntensityImageFilter->SetOutputMinimum(outMin);
@@ -295,7 +295,7 @@ MapFileProductWriter<TInputImage>
       {
       itkExceptionMacro(<< "Error while creating cache directory" << path.str());
       }
-    
+
     // Tiling resample image
     for (unsigned int tx = 0; tx < sizeX; tx += m_TileSize)
       {
@@ -322,16 +322,16 @@ MapFileProductWriter<TInputImage>
           extractIndex[1] = ty;
           extractSize[1] = m_TileSize;
           }
-        
+
         // Generate Tile filename
         std::ostringstream ossFileName;
         ossFileName << path.str()<<"/";
         ossFileName << "tile_"<<m_CurrentDepth<<"_";
         ossFileName << x<<"_"<<y<<".tif";
-        
+
         // Extract ROI
         m_VectorImageExtractROIFilter = VectorImageExtractROIFilterType::New();
-        
+
         // Set extract roi parameters
         m_VectorImageExtractROIFilter->SetStartX(extractIndex[0]);
         m_VectorImageExtractROIFilter->SetStartY(extractIndex[1]);
@@ -351,24 +351,24 @@ MapFileProductWriter<TInputImage>
         m_VectorWriter->SetFileName(ossFileName.str().c_str());
         m_VectorWriter->SetInput(m_VectorImageExtractROIFilter->GetOutput());
         m_VectorWriter->Update();
-        
+
         /** TODO : Generate KML for this tile */
         // Search Lat/Lon box
 
         // Initialize the transform to be used
         //typename TransformType::Pointer transform =
         //TransformType::New();
-        
+
         m_Transform  = TransformType::New();
         m_Transform->SetInputProjectionRef(m_GenericRSResampler->GetOutputProjectionRef());
         m_Transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
         m_Transform->InstanciateTransform();
-        
+
         InputPointType  inputPoint;
         IndexType       indexTile;
         SizeType        sizeTile;
         sizeTile = extractSize;
- 
+
         /** GX LAT LON **/
         // Compute lower left corner
         indexTile[0] = extractIndex[0];
@@ -376,14 +376,14 @@ MapFileProductWriter<TInputImage>
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         OutputPointType lowerLeftCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " lowerLeftCorner "<<  lowerLeftCorner << std::endl;
-        
+
         // Compute lower right corner
         indexTile[0] = extractIndex[0] + sizeTile[0];
         indexTile[1] = extractIndex[1] + sizeTile[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         OutputPointType lowerRightCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " lowerRightCorner   "<< lowerRightCorner  << std::endl;
-        
+
         // Compute upper right corner
         indexTile[0] = extractIndex[0]+ sizeTile[0];
         indexTile[1] = extractIndex[1];
@@ -397,7 +397,7 @@ MapFileProductWriter<TInputImage>
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         OutputPointType upperLeftCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " upperLeftCorner "<< upperLeftCorner  << std::endl;
-  
+
         // Build The indexTile
         this->AddBBoxToIndexTile(lowerLeftCorner,
                                  lowerRightCorner,
@@ -413,13 +413,13 @@ MapFileProductWriter<TInputImage>
 
     // Add the layer in the mapfile
     this->AddLayer();
-    
+
     // Write the IndexTile
     typename VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
     writer->SetFileName(m_IndexShapeFileName);
     writer->SetInput(m_VectorDataIndexTile);
     writer->Update();
-    
+
     this->InitializeVectorData();
     }
 
@@ -446,33 +446,33 @@ MapFileProductWriter<TInputImage>
 
   pLL[0]=lowerLeftCorner[0];
   pLL[1]=lowerLeftCorner[1];
-  
+
   pLR[0]=lowerRightCorner[0];
   pLR[1]=lowerRightCorner[1];
-  
+
   pUR[0]=upperRightCorner[0];
   pUR[1]=upperRightCorner[1];
-  
+
   pUL[0]=upperLeftCorner[0];
   pUL[1]=upperLeftCorner[1];
-  
+
   // Form a polygon with the vertices
   PolygonType::Pointer poly = PolygonType::New();
   poly->AddVertex(pLL);
   poly->AddVertex(pLR);
   poly->AddVertex(pUR);
   poly->AddVertex(pUL);
- 
+
   // Add the polygon to the datanode
   m_Polygon = DataNodeType::New();
   m_Polygon->SetNodeId("FEATURE_POLYGON");
   m_Polygon->SetNodeType(otb::FEATURE_POLYGON);
   m_Polygon->SetPolygonExteriorRing(poly);
-  
+
   std::ostringstream oss;
   oss << "tiles/tile_";
   oss <<m_CurrentDepth <<"_"<< x <<"_"<< y <<".tif";
-  
+
   // Add the field "LOCATION" used in mapserver clients
   // to get the path to tiles
   m_Polygon->SetFieldAsString("LOCATION", oss.str());
@@ -493,7 +493,7 @@ MapFileProductWriter<TInputImage>
   // if it does not exists
   std::ostringstream path;
   path << itksys::SystemTools::GetFilenamePath(m_FileName);
-  
+
   if (!itksys::SystemTools::MakeDirectory(path.str().c_str()))
     {
     itkExceptionMacro(<< "Error while creating cache directory" << path.str());
@@ -502,7 +502,7 @@ MapFileProductWriter<TInputImage>
   // Create a mapfile
   m_File.open(m_FileName.c_str());
   m_File << std::fixed << std::setprecision(6);
-  
+
   // Get the name of the layer
   std::ostringstream tempIndexShapeName;
   tempIndexShapeName << itksys::SystemTools::GetFilenameWithoutExtension(m_FileName);

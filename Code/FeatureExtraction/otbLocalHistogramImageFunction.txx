@@ -88,7 +88,7 @@ LocalHistogramImageFunction<TInputImage, TCoordRep>
 
   itk::ConstNeighborhoodIterator<InputImageType>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-  
+
   // Set the iterator at the desired location
   it.SetLocation(index);
 
@@ -119,7 +119,7 @@ LocalHistogramImageFunction<TInputImage, TCoordRep>
         // Compute pixel location
         offset[0]=i;
         offset[1]=j;
- 
+
         // Get the current value
         typename HistogramType::MeasurementVectorType sample(this->GetInputImage()->GetNumberOfComponentsPerPixel());
         sample[0] = it.GetPixel(offset);

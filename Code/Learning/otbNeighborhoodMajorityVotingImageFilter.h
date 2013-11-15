@@ -72,14 +72,14 @@ public:
                                      Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
-  
+
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
   itkTypeMacro(NeighborhoodMajorityVotingImageFilter,
       itk::MorphologyImageFilter);
-  
+
   /** Declaration of pixel type. */
   typedef typename Superclass::PixelType PixelType;
 
@@ -105,7 +105,7 @@ public:
   itkStaticConstMacro(KernelDimension, unsigned int,
                       TKernel::NeighborhoodDimension);
 
-  
+
 
   /** Type of the pixels in the Kernel. */
   typedef typename TKernel::PixelType            KernelPixelType;
@@ -143,7 +143,7 @@ public:
 
   //Creates a SetLabelForUndecidedPixels method
   itkSetMacro(LabelForUndecidedPixels, PixelType);
-  
+
   //Creates a SetKeepOriginalLabelBool method
   itkSetMacro(KeepOriginalLabelBool, bool);
 
@@ -162,8 +162,8 @@ protected:
                      const KernelIteratorType kernelBegin,
                      const KernelIteratorType kernelEnd);
 
-  
-  
+
+
 private:
   NeighborhoodMajorityVotingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

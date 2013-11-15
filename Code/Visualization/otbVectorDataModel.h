@@ -73,11 +73,11 @@ public:
 
   /** Return a pointer to the vector data */
   itkGetObjectMacro(VectorData, VectorDataType);
-  
+
   /** Load a vector data. */
   void AddVectorData( VectorDataPointer vData , bool update = true);
   void AddNode( TreeNodeType * node );
-  
+
   /** Add vertex to the vector data representation.
    * If callUpdate is set to true il will update the full vector data display.
    */

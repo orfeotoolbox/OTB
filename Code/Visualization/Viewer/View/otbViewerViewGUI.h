@@ -188,7 +188,7 @@ protected:
 
   virtual void OpenJpeg2000Image();
   virtual void OpenHDFImage();
- 
+
 
   /** Constructor */
   ViewerViewGUI();

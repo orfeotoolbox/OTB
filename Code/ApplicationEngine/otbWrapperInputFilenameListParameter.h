@@ -77,20 +77,20 @@ public:
 
   /** Erase one element of the list. */
   void Erase( unsigned int id );
-  
+
  /** Clear all the list. */
   virtual void ClearValue();
 
- 
+
 protected:
   /** Constructor */
   InputFilenameListParameter();
 
   /** Destructor */
   virtual ~InputFilenameListParameter();
-  
 
- 
+
+
   StringParameterListType::Pointer  m_FilenameList;
 
 private:

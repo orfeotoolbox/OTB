@@ -153,18 +153,18 @@ SVMMachineLearningModel<TInputValue,TOutputValue>
 {
    std::ifstream ifs;
    ifs.open(file.c_str());
-   
+
    if(!ifs)
    {
       std::cerr<<"Could not read file "<<file<<std::endl;
       return false;
    }
-   
+
    while (!ifs.eof())
    {
       std::string line;
       std::getline(ifs, line);
-      
+
       //if (line.find(m_SVMModel->getName()) != std::string::npos)
       if (line.find(CV_TYPE_NAME_ML_SVM) != std::string::npos)
       {

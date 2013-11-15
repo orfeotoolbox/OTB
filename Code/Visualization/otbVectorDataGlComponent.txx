@@ -294,7 +294,7 @@ VectorDataGlComponent<TVectorData>
   // Render each child
   for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
     {
- 
+
     this->Render(*it, extent, space2ScreenTransform);
     }
 }

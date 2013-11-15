@@ -84,7 +84,7 @@ public:
 
   void SetInput ( unsigned int i, const InputImageListType * );
   const InputImageListType * GetInput( unsigned int i ) const;
-  
+
   /** ListSample is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */
   typedef itk::DataObject::Pointer                             DataObjectPointer;
@@ -123,7 +123,7 @@ private:
   ValueType m_ThresholdValue;
 
 }; // end of class
-                        
+
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

@@ -61,7 +61,7 @@ public:
   typedef TImageType              InputImageType;
   typedef TCoordRep               CoordRepType;
   typedef TPrecision              PrecisionType;
-  
+
   // Other typedef
   typedef typename MetaImageFunction<TPrecision>::Pointer  MetaImageFunctionPointerType;
   typedef typename std::vector<itk::DataObject::Pointer>   DataObjectContainerType;

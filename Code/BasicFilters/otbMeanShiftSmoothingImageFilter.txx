@@ -560,7 +560,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
   RealVector bandwidth(jointDimension);
   for (unsigned int comp = 0; comp < ImageDimension; comp++)
     bandwidth[comp] = m_SpatialBandwidth;
-  
+
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   RegionType const& requestedRegion = input->GetRequestedRegion();

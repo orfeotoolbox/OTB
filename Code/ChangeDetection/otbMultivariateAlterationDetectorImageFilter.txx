@@ -145,10 +145,10 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
     // Case where nbbands1 == nbbands2
 
     VnlMatrixType invs22 = vnl_matrix_inverse<RealType>(s22);
-    
+
     // Build the generalized eigensystem
     VnlMatrixType s12s22is21 = s12 * invs22 *s21;
-    
+
     vnl_generalized_eigensystem ges(s12s22is21, s11);
 
     m_V1 = ges.V;
@@ -207,7 +207,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
     vnl_generalized_eigensystem ges(sl, sr);
 
     VnlMatrixType V = ges.V;
-    
+
     V.fliplr();
 
     m_V1 = V.extract(nbComp1, nbComp1);
@@ -242,7 +242,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
       {
       aux5=aux5 + aux4.get_row(i);
       }
-    
+
     sign1.set_diagonal(aux5);
     sign1 = sign1.apply(&SignOfValue);
 
@@ -259,7 +259,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
     m_V2 =  m_V2 * aux3;
 
     VnlMatrixType sign2 = VnlMatrixType(nbComp2, nbComp2, 0);
-    
+
     aux5 = (m_V1.transpose() * s12 * m_V2).transpose().get_diagonal();
     sign2.set_diagonal(aux5);
     sign2 = sign2.apply(&SignOfValue);
@@ -304,12 +304,12 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
     VnlVectorType x2(nbComp2, 0);
     VnlVectorType x2bis(outNbComp, 0);
     VnlVectorType mad(outNbComp, 0);
-    
+
     for(unsigned int i = 0; i < nbComp1; ++i)
       {
       x1[i] = inIt1.Get()[i];
       }
-    
+
     for(unsigned int i = 0; i < nbComp2; ++i)
       {
       x2[i] = inIt2.Get()[i];
@@ -322,7 +322,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
       {
       x1bis[i] = first[i];
       }
-    
+
     for(unsigned int i = 0; i < nbComp2; ++i)
       {
       x2bis[i] = second[i];
@@ -331,7 +331,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
     mad = x1bis - x2bis;
 
     typename OutputImageType::PixelType outPixel(outNbComp);
-    
+
     if(nbComp1 == nbComp2)
       {
       for(unsigned int i = 0; i<outNbComp; ++i)
@@ -353,7 +353,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
       }
 
     outIt.Set(outPixel);
-    
+
     ++inIt1;
     ++inIt2;
     ++outIt;

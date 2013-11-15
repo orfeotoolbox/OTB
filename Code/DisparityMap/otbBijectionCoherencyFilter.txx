@@ -134,34 +134,34 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 ::GenerateOutputInformation()
 {
   this->Superclass::GenerateOutputInformation();
-  
+
   // check that both direct and reverse disparity maps are present
   const TDisparityImage * directHmap = this->GetDirectHorizontalDisparityMapInput();
   const TDisparityImage * reverseHmap = this->GetReverseHorizontalDisparityMapInput();
-  
+
   const TDisparityImage * directVmap = this->GetDirectVerticalDisparityMapInput();
   const TDisparityImage * reverseVmap = this->GetReverseVerticalDisparityMapInput();
-  
+
   if (!directHmap)
     {
     itkExceptionMacro(<<"Direct horizontal disparity map is missing");
     }
-  
+
   if (!reverseHmap)
     {
     itkExceptionMacro(<<"Reverse horizontal disparity map is missing");
     }
-  
+
   if (directVmap && directVmap->GetLargestPossibleRegion() != directHmap->GetLargestPossibleRegion())
     {
     itkExceptionMacro(<<"Horizontal and vertical direct disparity maps have different sizes.");
     }
-  
+
   if (reverseVmap && reverseVmap->GetLargestPossibleRegion() != reverseHmap->GetLargestPossibleRegion())
     {
     itkExceptionMacro(<<"Horizontal and vertical reverse disparity maps have different sizes.");
     }
-  
+
   if (this->m_MinHDisp > this->m_MaxHDisp)
     {
     itkExceptionMacro(<<"Wrong horizontal exploration values");
@@ -178,20 +178,20 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   this->Superclass::GenerateInputRequestedRegion();
-  
+
   OutputRegionType requested = this->GetOutput()->GetRequestedRegion();
   InputRegionType  directLargest = this->GetDirectHorizontalDisparityMapInput()->GetLargestPossibleRegion();
   InputRegionType  directRequested;
   InputRegionType  reverseLargest = this->GetReverseHorizontalDisparityMapInput()->GetLargestPossibleRegion();
   InputRegionType  reverseRequested;
-  
+
   this->CallCopyOutputRegionToInputRegion(directRequested,requested);
-  
+
   reverseRequested.SetIndex(0,requested.GetIndex(0) + this->m_MinHDisp);
   reverseRequested.SetIndex(1,requested.GetIndex(1) + this->m_MinVDisp);
   reverseRequested.SetSize(0,requested.GetSize(0) + this->m_MaxHDisp - this->m_MinHDisp);
   reverseRequested.SetSize(1,requested.GetSize(1) + this->m_MaxVDisp - this->m_MinVDisp);
-  
+
   if (!reverseRequested.Crop(reverseLargest))
     {
     reverseRequested.SetIndex(0,reverseLargest.GetIndex(0));
@@ -199,15 +199,15 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
     reverseRequested.SetSize(0,0);
     reverseRequested.SetSize(1,0);
     }
-  
+
   TDisparityImage * directHmap = const_cast<TDisparityImage *>(this->GetDirectHorizontalDisparityMapInput());
   TDisparityImage * directVmap = const_cast<TDisparityImage *>(this->GetDirectVerticalDisparityMapInput());
   TDisparityImage * reverseHmap = const_cast<TDisparityImage *>(this->GetReverseHorizontalDisparityMapInput());
   TDisparityImage * reverseVmap = const_cast<TDisparityImage *>(this->GetReverseVerticalDisparityMapInput());
-  
+
   directHmap->SetRequestedRegion(directRequested);
   if (directVmap) directVmap->SetRequestedRegion(directRequested);
-  
+
   reverseHmap->SetRequestedRegion(reverseRequested);
   if (reverseVmap) reverseVmap->SetRequestedRegion(reverseRequested);
 }
@@ -221,35 +221,35 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
   const TDisparityImage * directVmap = this->GetDirectVerticalDisparityMapInput();
   const TDisparityImage * reverseHmap = this->GetReverseHorizontalDisparityMapInput();
   const TDisparityImage * reverseVmap = this->GetReverseVerticalDisparityMapInput();
-  
+
   TOutputImage * output = this->GetOutput();
-  
+
   InputRegionType buffered = reverseHmap->GetBufferedRegion();
-  
+
   typedef itk::ImageRegionIterator<TOutputImage> MaskIteratorType;
   MaskIteratorType outIter = MaskIteratorType(output,outputRegionForThread);
-  
+
   typedef itk::ImageRegionConstIteratorWithIndex<TDisparityImage> DispIteratorType;
   DispIteratorType directHorizIter = DispIteratorType(directHmap,outputRegionForThread);
-  
+
   DispIteratorType directVertiIter;
   if (directVmap)
     {
     directVertiIter = DispIteratorType(directVmap,outputRegionForThread);
     directVertiIter.GoToBegin();
     }
-  
+
   outIter.GoToBegin();
   directHorizIter.GoToBegin();
-  
+
   while (!outIter.IsAtEnd())
   {
     IndexType startIndex = directHorizIter.GetIndex();
     itk::ContinuousIndex<double,2> tmpIndex(startIndex);
-    
+
     tmpIndex[0] += directHorizIter.Get();
     if (directVmap) tmpIndex[1] += directVertiIter.Get();
-    
+
     // Interpolate in reverse disparity map
     IndexType ul,ur,ll,lr;
     ul[0] = static_cast<long>(vcl_floor(tmpIndex[0]));
@@ -258,7 +258,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
     if (ul[1]<buffered.GetIndex()[1]) ul[1]=buffered.GetIndex()[1];
     if (ul[0]>(unsigned int)(buffered.GetIndex()[0]+buffered.GetSize()[0]-1)) ul[0]=(buffered.GetIndex()[0]+buffered.GetSize()[0]-1);
     if (ul[1]>(unsigned int)(buffered.GetIndex()[1]+buffered.GetSize()[1]-1)) ul[1]=(buffered.GetIndex()[1]+buffered.GetSize()[1]-1);
-  
+
     ur = ul;
     ur[0] += 1;
     ll = ul;
@@ -266,10 +266,10 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
     lr = ul;
     lr[0] += 1;
     lr[1] += 1;
-    
+
     double rx = tmpIndex[0] - static_cast<double>(ul[0]);
     double ry = tmpIndex[1] - static_cast<double>(ul[1]);
-    
+
     itk::ContinuousIndex<double,2> backIndex(tmpIndex);
     backIndex[0] += (1. - ry) * ((1. - rx) * reverseHmap->GetPixel(ul) + rx * reverseHmap->GetPixel(ur)) +
                             ry * ((1. - rx) * reverseHmap->GetPixel(ll) + rx * reverseHmap->GetPixel(lr));
@@ -278,7 +278,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
       backIndex[1] += (1. - ry) * ((1. - rx) * reverseVmap->GetPixel(ul) + rx * reverseVmap->GetPixel(ur)) +
                           ry * ((1. - rx) * reverseVmap->GetPixel(ll) + rx * reverseVmap->GetPixel(lr));
       }
-    
+
     if (vcl_abs(backIndex[0] - static_cast<double>(startIndex[0]))< this->m_Tolerance &&
         vcl_abs(backIndex[1] - static_cast<double>(startIndex[1]))< this->m_Tolerance)
       {
@@ -288,13 +288,13 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
       {
       outIter.Set(0);
       }
-    
+
     ++outIter;
     ++directHorizIter;
     if (directVmap) ++directVertiIter;
   }
-  
-  
+
+
 }
 
 }

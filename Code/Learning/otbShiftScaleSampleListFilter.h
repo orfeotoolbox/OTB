@@ -48,13 +48,13 @@ public:
   <TInputSampleList, TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ShiftScaleSampleListFilter, otb::Statistics::ListSampleToListSampleFilter);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** InputSampleList typedefs */
   typedef TInputSampleList                                    InputSampleListType;
   typedef typename InputSampleListType::Pointer               InputSampleListPointer;

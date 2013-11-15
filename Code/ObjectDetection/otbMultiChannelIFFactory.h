@@ -55,7 +55,7 @@ public:
   typedef ImageList<ImageType>                             ImageListType;
   typedef VectorImageToImageListFilter<InputImageType,
                                                 ImageListType>      VIToILFilterType;
-  
+
   void Create(InputImageType * image,
               ParameterContainerType param,
               MetaIFPointerType metaIF,
@@ -63,12 +63,12 @@ public:
   {
     m_Factory->Create(image, param, metaIF, container);
   }
-  
+
   MultiChannelIFFactory()
   {
     m_Factory = IFFactoryType::New();
   }
-  
+
   virtual ~MultiChannelIFFactory(){};
 
 private:
@@ -87,7 +87,7 @@ public:
   typedef typename IFFactoryType::CoordRepType          CoordRepType;
   typedef typename IFFactoryType::PrecisionType         PrecisionType;
   typedef VectorImage<TPixel, 2>                        InputImageType;
-  
+
   typedef typename std::vector<PrecisionType>           ParameterContainerType;
   typedef typename std::vector<itk::DataObject::Pointer>       ImageContainer;
   typedef typename MetaImageFunction<PrecisionType>::Pointer     MetaIFPointerType;
@@ -95,7 +95,7 @@ public:
   typedef ImageList<ImageType>                             ImageListType;
   typedef VectorImageToImageListFilter<InputImageType,
                                                 ImageListType>      VIToILFilterType;
-  
+
   void Create(InputImageType * image,
               ParameterContainerType param,
               MetaIFPointerType metaIF,
@@ -103,7 +103,7 @@ public:
   {
     unsigned int nbBand;
     typename VIToILFilterType::Pointer filter = VIToILFilterType::New();
-    
+
     filter->SetInput(image);
     filter->UpdateOutputInformation();
     nbBand = filter->GetOutput()->Size();
@@ -114,14 +114,14 @@ public:
       m_Factory->Create(filter->GetOutput()->GetNthElement(i), param, metaIF, container);
       }
   }
-  
+
   MultiChannelIFFactory()
   {
     m_Factory = IFFactoryType::New();
   }
-  
+
   virtual ~MultiChannelIFFactory(){};
-  
+
 private:
   IFFactoryPointerType   m_Factory;
 

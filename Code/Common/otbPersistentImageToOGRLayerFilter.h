@@ -74,18 +74,18 @@ public:
   void AllocateOutputs();
   virtual void Reset(void);
   virtual void Synthetize(void);
-  
+
   /** This method creates the output layer in the OGRLayer set by the user.
    * \note This methode must be called before the call of Update .
    */
   virtual void Initialize(void);
-      
+
   /** Get the size of the tile used for streaming.
    * This is useful if you use for example the \c OGRFusionTileFilter
    * for fusioning streaming tiles.
    */
   itkGetMacro(StreamSize, SizeType);
-  
+
   /** Set the \c ogr::Layer in which the geometries will be dumped */
   void SetOGRLayer( const OGRLayerType & ogrLayer );
   /** Get the \c ogr::Layer output. */
@@ -105,7 +105,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   virtual OGRDataSourcePointerType ProcessTile() = 0;
-  
+
   // The layer where to dump geometries
   OGRLayerType m_OGRLayer;
 

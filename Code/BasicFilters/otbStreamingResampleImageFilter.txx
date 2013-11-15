@@ -66,12 +66,12 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 {
   // call the superclass's implementation of this method
   Superclass::GenerateOutputInformation();
-  
+
   typename OutputImageType::Pointer outputPtr = this->GetOutput();
 
   outputPtr->SetSpacing( this->GetOutputSpacing() );
   outputPtr->SetOrigin(  this->GetOutputOrigin() );
-  
+
   typename OutputImageType::RegionType region;
   region.SetSize( this->GetOutputSize() );
   region.SetIndex(this->GetOutputStartIndex() );
@@ -102,7 +102,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 
   // Set up displacement field filter
   SizeType displacementFieldLargestSize;
-  
+
   for(unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
     {
     // vcl_ceil to avoid numerical problems due to division of
@@ -118,7 +118,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
     }
   m_DisplacementFilter->SetOutputSize(displacementFieldLargestSize);
   m_DisplacementFilter->SetOutputIndex(this->GetOutputStartIndex());
-  
+
   // Generate input requested region
   m_WarpFilter->SetInput(inputPtr);
   m_WarpFilter->GetOutput()->UpdateOutputInformation();

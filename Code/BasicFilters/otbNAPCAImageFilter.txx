@@ -40,7 +40,7 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
   InternalMatrixType Fn;
   vnl_vector<double> vectValPn;
   vnl_symmetric_eigensystem_compute( An, Fn, vectValPn );
-  
+
   /* We used normalized PCA */
   InternalMatrixType valPn ( vectValPn.size(), vectValPn.size(), vnl_matrix_null );
   for ( unsigned int i = 0; i < valPn.rows(); ++i )

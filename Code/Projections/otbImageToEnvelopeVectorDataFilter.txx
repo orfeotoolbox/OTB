@@ -144,7 +144,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   inputPtr->TransformIndexToPhysicalPoint(ll, llp);
 
   this->InstantiateTransform();
-  
+
   typename InputImageType::IndexType edgeIndex;
   typename InputImageType::PointType edgePoint;
 
@@ -155,7 +155,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
-  
+
   if (m_SamplingRate>0)
     {
     edgeIndex = ul;
@@ -170,12 +170,12 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
       edgeIndex[0]+=m_SamplingRate;
       }
     }
-  
+
   current = m_Transform->TransformPoint(urp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
-  
+
   if (m_SamplingRate>0)
     {
     edgeIndex = ur;
@@ -190,12 +190,12 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
       edgeIndex[1]+=m_SamplingRate;
       }
     }
-  
+
   current = m_Transform->TransformPoint(lrp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
-  
+
   if (m_SamplingRate>0)
     {
     edgeIndex = lr;
@@ -210,12 +210,12 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
       edgeIndex[0]-=m_SamplingRate;
       }
     }
-  
+
   current = m_Transform->TransformPoint(llp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
-  
+
   if (m_SamplingRate>0)
     {
     edgeIndex = ll;

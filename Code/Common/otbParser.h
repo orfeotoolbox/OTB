@@ -45,10 +45,10 @@ public:
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods) */
   itkTypeMacro(Parser, itk::LightObject);
-  
+
   /** Convenient type definitions */
   typedef Parser                                   ParserType;
   typedef double                                   ValueType;
@@ -58,13 +58,13 @@ public:
 
   /** Set the expression to be parsed */
   virtual void SetExpr(const std::string & Expression);
-  
+
   /** Trigger the parsing */
   ValueType Eval();
 
   /** Define a variable */
   void DefineVar(const std::string &sName, ValueType *fVar);
-  
+
   /** Clear all the defined variables */
   void ClearVar();
 

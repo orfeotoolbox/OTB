@@ -95,12 +95,12 @@ public:
           }
 
         unsigned int eventKey = Fl::event_key();
-        
+
         if(eventKey == m_UpKey)
           {
           typename ViewType::SizeType size;
           size = m_View->GetFullWidget()->GetExtent().GetSize();
-          
+
           // Get the current position
           typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
           screenPoint[0] = size[0] / 2;

@@ -53,16 +53,16 @@ RadiometricMomentsImageFunction<TInputImage, TCoordRep>
 {
   // Build moments vector
   OutputType moments;
-  
+
   // Initialize moments
   moments.Fill( itk::NumericTraits< ScalarRealType >::Zero );
-  
+
   // Check for input image
   if( !this->GetInputImage() )
     {
     return moments;
     }
-  
+
   // Check for out of buffer
   //Self* _this = const_cast<Self*>(this);
   //_this->SetInputImage( this->GetInputImage() );

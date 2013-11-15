@@ -48,7 +48,7 @@ public:
   typedef typename LabelObjectType::LineContainerType LineContainerType;
   typedef typename LabelObjectType::LineType          LineType;
   typedef typename LineType::IndexType                IndexType;
-  
+
 
   /**
    * \param l1 First label object to merge (data are copied from this
@@ -65,7 +65,7 @@ public:
     // Ensure they are sorted according to our criterion
     stable_sort(lines1.begin(), lines1.end(), &LexicographicalLineCompare);
     stable_sort(lines2.begin(), lines2.end(), &LexicographicalLineCompare);
-    
+
     // Merge the two containers
     LineContainerType linesOut1(lines1.size()+lines2.size());
     merge(lines1.begin(), lines1.end(), lines2.begin(), lines2.end(), linesOut1.begin(), &LexicographicalLineCompare);
@@ -86,7 +86,7 @@ public:
    {
    // Merge lines
    LineType mline = MergesLines(linesOut2.back(), *lit);
-  
+
    // Replace the last line by the merged line
    linesOut2.pop_back();
    linesOut2.push_back(mline);
@@ -96,7 +96,7 @@ public:
         // Push back the new line
   linesOut2.push_back(*lit);
    }
-      
+
       // fetch next line
       ++lit;
       }
@@ -105,7 +105,7 @@ public:
     LabelObjectPointerType resp = LabelObjectType::New();
     resp->CopyAllFrom(l1);
     resp->GetLineContainer() = linesOut2;
-    
+
     // Return the output label object
     return resp;
   }
@@ -143,7 +143,7 @@ private:
     resp.SetLength(length);
     return resp;
   }
-  
+
 }; // end class MergeLabelObjectFunctor
 
 } // end namespace Functor

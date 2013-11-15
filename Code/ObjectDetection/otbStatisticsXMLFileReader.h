@@ -41,13 +41,13 @@ public:
   typedef itk::Object                      Superclass;
   typedef itk::SmartPointer< Self >        Pointer;
   typedef itk::SmartPointer<const Self>    ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(StatisticsXMLFileReader, itk::Object);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** InputSampleList typedefs */
   typedef TMeasurementVector                             MeasurementVectorType;
   typedef typename MeasurementVectorType::ValueType      InputValueType;
@@ -55,12 +55,12 @@ public:
   /** Convenient typedef */
   typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
   typedef std::vector< InputDataType >                   MeasurementVectorContainer;
-  
+
   virtual void Modified()
     {
       m_IsUpdated = false;
     }
-  
+
   /** Set the output filename */
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
@@ -70,7 +70,7 @@ public:
 
   /** Method to get the MeasurementVector by name */
   MeasurementVectorType GetStatisticVectorByName(const char * statisticName);
-  
+
 protected:
 
   virtual void Read();

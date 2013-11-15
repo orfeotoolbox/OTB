@@ -47,7 +47,7 @@ class ITK_EXPORT GroundSpacingImageFunction :
 public:
   /** Standard class typedefs. */
   typedef GroundSpacingImageFunction Self;
-  
+
   /** Datatype used for the density */
   typedef float ValueType;
   //typedef std::pair<ValueType, ValueType> FloatType;
@@ -55,7 +55,7 @@ public:
 
   typedef itk::ImageFunction<TInputImage, FloatType ,
       TCoordRep>                                          Superclass;
-  
+
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

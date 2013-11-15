@@ -302,7 +302,7 @@ unsigned int StreamingTraits<TImage>
     otbMsgDevMacro(<< "BCO Interpolator");
     neededRadius = dynamic_cast<const BCOInterpolationType *>(interpolator)->GetRadius();
     }
- 
+
 
   /*else if (className == "WindowedSincInterpolateImageFunction")
   {

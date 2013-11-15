@@ -48,7 +48,7 @@ namespace otb
       {
        // Retrieve samples count
        unsigned int sampleCount = listSample->Size();
-    
+
        // Build an iterator
        typename T::ConstIterator sampleIt = listSample->Begin();
 

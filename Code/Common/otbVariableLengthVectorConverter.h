@@ -49,7 +49,7 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
@@ -59,7 +59,7 @@ public:
   typedef TPrecisionType                                            OutputPrecisionType;
   typedef typename itk::VariableLengthVector<OutputPrecisionType>   OutputType;
   typedef TInputType                                                InputType;
-  
+
   OutputType Convert (InputType input)
   {
     OutputType  output;
@@ -95,7 +95,7 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
@@ -105,7 +105,7 @@ public:
   typedef TPrecisionType                                            OutputPrecisionType;
   typedef typename itk::VariableLengthVector<OutputPrecisionType>   OutputType;
   typedef itk::VariableLengthVector<TInternalInputType>             InputType;
-  
+
   OutputType Convert (InputType input)
   {
     return static_cast<OutputType>(input);
@@ -139,7 +139,7 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
@@ -180,7 +180,7 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
@@ -221,7 +221,7 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
@@ -233,7 +233,7 @@ public:
   typedef typename itk::FixedArray<TInternalInputType, VArrayDimension>            InputType;
 
   OutputType Convert(InputType input);
- 
+
 protected:
   VariableLengthVectorConverter(){}
   virtual ~VariableLengthVectorConverter(){}
@@ -261,7 +261,7 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
 
@@ -273,7 +273,7 @@ public:
   typedef typename itk::SmartPointer< itk::Statistics::Histogram<TPixel> >         InputType;
 
   OutputType Convert(InputType input);
- 
+
 protected:
   VariableLengthVectorConverter(){}
   virtual ~VariableLengthVectorConverter(){}

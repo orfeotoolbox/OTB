@@ -87,8 +87,8 @@ public:
   /** Set a templated image.*/
   template <class TImageType>
     void SetImage(TImageType* image);
-  
-  
+
+
     /** Generic cast method that will be specified for each image type. */
   template <class TInputImage, class TOutputImage>
     TOutputImage* CastImage()
@@ -105,13 +105,13 @@ public:
   /** Cast an image to a vector image. */
   template <class TInputImage, class TOutputImage>
     TOutputImage* CastVectorImageFromImage();
-  
-  
+
+
   bool HasValue() const;
 
   void ClearValue();
 
-  
+
 protected:
   /** Constructor */
   InputImageParameter();

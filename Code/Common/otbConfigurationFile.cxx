@@ -186,7 +186,7 @@ ConfigurationFile
     {
     typedef otb::ConfigurationFile ConfigurationType;
     ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
-    
+
     availableRAMInBytes = conf->GetParameter< ::itksysFundamentalType_UInt64 >(
       "OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING");
     }

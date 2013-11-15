@@ -65,13 +65,13 @@ class MuellerToReciprocalCovarianceFunctor
 public:
   typedef std::complex<double>                      ComplexType;
   typedef typename TOutput::ValueType               OutputValueType;
-  
-  
+
+
   inline TOutput operator()( const TInput & Mueller ) const
   {
     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
-    
+
     // Keep the upper diagonal of the matrix
     const double M11 =  static_cast<double>(Mueller[0]);
     const double M12 =  static_cast<double>(Mueller[1]);
@@ -89,41 +89,41 @@ public:
     const double M42 =  static_cast<double>(Mueller[13]);
     const double M43 =  static_cast<double>(Mueller[14]);
     const double M44 =  static_cast<double>(Mueller[15]);
-    
+
     const ComplexType hhhh(M11+M22+M12+M21, 0.0);
     const ComplexType hvhv(M11+M12-M21-M22, 0.0);
     const ComplexType vvvv(M11+M22-M12-M21, 0.0);
     const ComplexType hhhv(M13+M23, M14+M24);
     const ComplexType hhvv(-M33-M44, M43-M34);
     const ComplexType hvvv(M32-M31, M41-M42);
-    
+
     result[0] = static_cast<OutputValueType>( hhhh );
     result[1] = static_cast<OutputValueType>( 2.* hhhv );
     result[2] = static_cast<OutputValueType>( hhvv );
     result[3] = static_cast<OutputValueType>( 4.* hvhv );
     result[4] = static_cast<OutputValueType>( 2.* hvvv );
     result[5] = static_cast<OutputValueType>( vvvv );
-    
+
     return 0.5*result;
   }
-  
+
   unsigned int GetOutputSize()
     {
      return m_NumberOfComponentsPerPixel;
     }
-  
+
   /** Constructor */
   MuellerToReciprocalCovarianceFunctor() : m_NumberOfComponentsPerPixel(6)  {}
-  
+
   /** Destructor */
   virtual ~MuellerToReciprocalCovarianceFunctor() {}
-  
+
  private:
   unsigned int m_NumberOfComponentsPerPixel;
 };
 }
- 
- 
+
+
 /** \class otbMuellerToReciprocalCovarianceImageFilter
  * \brief Compute the MLC  image
  * from the Mueller image (16 real channels)
@@ -162,7 +162,7 @@ private:
   MuellerToReciprocalCovarianceImageFilter(const Self&); // purposely not implemented
   void operator=(const Self&);          // purposely not implemented
 };
-  
+
 } // end namespace otb
 
 #endif

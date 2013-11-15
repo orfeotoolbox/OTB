@@ -128,7 +128,7 @@ PipelineMemoryPrintCalculator
       {
         // Retrieve possible source
         ProcessObjectType * source = input->GetSource();
-        
+
         // If data object has a source
         if(source)
           {
@@ -199,7 +199,7 @@ PipelineMemoryPrintCalculator
        }                                                           \
     return print;                                                  \
     }                                                              \
-    
+
 
   // Call the macro for each pixel type
   OTB_IMAGE_SIZE_BLOCK(unsigned char)

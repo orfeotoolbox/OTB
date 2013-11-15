@@ -60,47 +60,47 @@ public:
   typedef typename PointSetType::Pointer          PointSetPointerType;
   typedef typename PointSetType::PointsContainerConstIterator PointSetConstIteratorType;
   typedef typename PointSetType::PointDataContainerIterator LabelIteratorType;
-  
+
   typedef std::vector<TPrecision>                 ResidueType;
-  
+
   /** Compute the best intersection between N lines of sight.
    *  Starting points of every line of sight are stored in the point set 'pointA'
    *  ending points are stored in 'pointB' (however, the computation is symetrical)*/
   PointType Compute(PointSetPointerType pointA, PointSetPointerType pointB);
-  
+
   /** Get the residues from last computation */
   //itkGetMacro(Residues,ResidueType);
   ResidueType GetResidues()
   {
     return m_Residues;
   }
-  
+
   /** Get the global residue from last computation */
   itkGetMacro(GlobalResidue,PrecisionType);
-  
+
 protected:
   /** Constructor */
   LineOfSightOptimizer();
 
   /** Destructor */
   virtual ~LineOfSightOptimizer(){};
-  
-  
+
+
 private:
   LineOfSightOptimizer(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** residues from the last computation on each line of sight */
   ResidueType m_Residues;
-  
+
   /** global residu from last computation */
   PrecisionType m_GlobalResidue;
-  
+
   /** Internal matrices for computation */
   vnl_matrix<PrecisionType> m_InvCumul;
   vnl_matrix<PrecisionType> m_Identity;
   vnl_vector<PrecisionType> m_SecCumul;
-  
+
 };
 } // end namespace otb
 

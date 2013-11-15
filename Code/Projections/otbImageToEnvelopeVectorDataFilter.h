@@ -84,7 +84,7 @@ public:
   /** Set/Get output projection (default is WGS84)  */
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
-  
+
   itkSetMacro(SamplingRate, unsigned int);
   itkGetMacro(SamplingRate, unsigned int);
 

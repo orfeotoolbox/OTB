@@ -104,7 +104,7 @@ public:
       maxB + (maxB - minB) * upperBoundIncreaseFactor;
 
     histogram = HistogramType::New();
-    
+
     histogram->SetMeasurementVectorSize(2);
     histogram->Initialize(histogramSize, lowerBound, upperBound);
 

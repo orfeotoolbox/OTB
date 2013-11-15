@@ -115,17 +115,17 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
    //TODO: Rework.
    std::ifstream ifs;
    ifs.open(file.c_str());
-   
+
    if(!ifs)
    {
       std::cerr<<"Could not read file "<<file<<std::endl;
       return false;
    }
-   
+
    //Read only the first line.
    std::string line;
    std::getline(ifs, line);
-   
+
    //if (line.find(m_SVMModel->getName()) != std::string::npos)
    if (line.find("svm_type") != std::string::npos)
    {

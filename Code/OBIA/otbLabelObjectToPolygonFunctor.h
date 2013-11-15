@@ -62,7 +62,7 @@ public:
   typedef TLabelObject                                LabelObjectType;
   /** Const iterator over LabelObject lines */
   typedef typename LabelObjectType::ConstLineIterator  ConstLineIteratorType;
-  
+
   typedef typename LabelObjectType::LineType          LineType;
   typedef typename LineType::IndexType                IndexType;
   typedef TPolygon                                    PolygonType;

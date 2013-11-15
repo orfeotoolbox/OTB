@@ -80,7 +80,7 @@ public:
   typedef typename MatrixObjectType::ComponentType                 MatrixType;
   typedef typename MatrixType::InternalMatrixType                  InternalMatrixType;
   typedef typename InternalMatrixType::element_type                MatrixElementType;
-  
+
   typedef MatrixImageFilter< TInputImage, TOutputImage > TransformFilterType;
   typedef typename TransformFilterType::Pointer          TransformFilterPointerType;
 
@@ -125,7 +125,7 @@ public:
   }
 
   itkGetConstMacro(EigenValues, VectorType);
-  
+
   itkGetMacro(UseNormalization, bool);
   void SetUseNormalization ( bool norm )
   {

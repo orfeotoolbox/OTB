@@ -45,7 +45,7 @@ FuzzyDescriptorsModelManager
         }
       ++it;
     }
-  
+
   if( found == false )
     {
       itkGenericExceptionMacro(<<"No models named "<<model<<" found...");
@@ -112,7 +112,7 @@ FuzzyDescriptorsModelManager
     {
     itkGenericExceptionMacro(<<"Can't open file "<<filename);
     }
-  
+
   DescriptorsModelType descModel;
 
   TiXmlHandle hDoc(&doc);
@@ -131,7 +131,7 @@ FuzzyDescriptorsModelManager
       // Store the value in a std::vector, get the size and then
       // build a measurement vector
       ParameterType param;
-      
+
       for( TiXmlElement* sample = currentStat->FirstChildElement("Parameter");
            sample != NULL;
            sample = sample->NextSiblingElement() )
@@ -145,7 +145,7 @@ FuzzyDescriptorsModelManager
 
       // Add descriptor parmaeters
       currentDescriptor.second = param;
-      
+
       // Add the pai to the model
       descModel.push_back(currentDescriptor);
     }
@@ -163,14 +163,14 @@ FuzzyDescriptorsModelManager
     {
       itkGenericExceptionMacro(<<"The XML output FileName is empty");
     }
-  
+
   // Check that the right extension is given : expected .xml */
   if (itksys::SystemTools::GetFilenameLastExtension(filename) != ".xml")
     {
       itkGenericExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(filename)
                         <<" is a wrong Extension FileName : Expected .xml");
     }
-  
+
   // Write the XML file
   TiXmlDocument doc;
 
@@ -198,7 +198,7 @@ FuzzyDescriptorsModelManager
           desc->LinkEndChild(curStatisticVector);
         }
     }
-  
+
   // Finally, write the file
   doc.SaveFile( filename.c_str() );
 }

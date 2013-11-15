@@ -49,7 +49,7 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(1,
                     const_cast<LabeledImageType * >( image ) );
-  
+
 }
 
 template <class TInputImage, class TLabeledImage, class TOutputLabel, class TObjectLabel>
@@ -61,7 +61,7 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
     {
     return 0;
     }
-  
+
   return static_cast<const  InputImageType* >
     (this->itk::ProcessObject::GetInput(0) );
 }
@@ -75,7 +75,7 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
     {
     return 0;
     }
-  
+
   return static_cast<const  LabeledImageType* >
     (this->itk::ProcessObject::GetInput(1) );
 }
@@ -99,12 +99,12 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 {
   typename InputImageType::Pointer inputImage    = const_cast<InputImageType *>(this->GetInput());
   typename LabeledImageType::Pointer labeldImage = const_cast<LabeledImageType *>(this->GetLabeledImage());
-  
+
   // Convert to label map
   typename LabelMapFilterType::Pointer lfilter = LabelMapFilterType::New();
   lfilter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
   lfilter->SetInput(labeldImage);
-  
+
   // Compute shape attributes
   typename ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(lfilter->GetOutput());

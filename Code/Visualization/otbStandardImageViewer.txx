@@ -180,7 +180,7 @@ StandardImageViewer<TImage, TVectorData, TWidgetManager>
 
     // Set the cartographic region to the extract roi filter
     vdextract->SetRegion(rsRegion);
-    
+
     // Reproject VectorData in image projection
     vproj = VectorDataProjectionFilterType::New();
     vproj->SetInput(vdextract->GetOutput());

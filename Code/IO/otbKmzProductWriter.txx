@@ -83,11 +83,11 @@ KmzProductWriter<TInputImage>
     {
     return 0;
     }
-  
+
   return static_cast<const TInputImage * >
     (this->ProcessObject::GetInput(0) );
 }
-  
+
 /**
  *
  */
@@ -106,7 +106,7 @@ KmzProductWriter<TInputImage>
 ::Write()
 {
   m_VectorImage = const_cast<TInputImage *>(this->GetInput());
-  
+
   // Do some checks, If no metadata nor projection ref available,
   // input is not usable.
   bool emptyProjRef = m_VectorImage->GetProjectionRef().empty();
@@ -116,7 +116,7 @@ KmzProductWriter<TInputImage>
     {
     itkExceptionMacro(<<"The input image have empty keyword list, please use an image with metadata informations");
     }
-  
+
   // Continue processing
   this->Initialize();
   this->AddLogo();
@@ -147,7 +147,7 @@ KmzProductWriter<TInputImage>
   m_FileName = itksys::SystemTools::GetFilenameWithoutExtension(m_Path);
   m_Path = itksys::SystemTools::GetFilenamePath(m_Path);
   m_CurrentImageName = this->GetCuttenFileName(m_FileName, 0);
-  
+
   // Create the extension following the user choice
   if (m_UseExtendMode)
     {
@@ -180,29 +180,29 @@ KmzProductWriter<TInputImage>
   std::ostringstream     logoFilename;
   logoFilename << m_Path;
   logoFilename << "/logo.jpeg";
-    
+
   if (!itksys::SystemTools::MakeDirectory(m_Path.c_str()))
     {
     itkExceptionMacro(<< "Error while creating cache directory" << m_Path);
     }
-    
+
   typename CastFilterType::Pointer castFiler = CastFilterType::New();
   castFiler->SetInput(m_Logo);
-    
+
   m_VectorWriter = VectorWriterType::New();
   m_VectorWriter->SetFileName(logoFilename.str());
   m_VectorWriter->SetInput(castFiler->GetOutput());
   m_VectorWriter->Update();
-    
+
   // Add the logo to the kmz
   std::ostringstream logo_root_path_in_kmz;
   logo_root_path_in_kmz << "logo.jpeg";
-    
+
   std::ostringstream logo_absolut_path;
   logo_absolut_path << logoFilename.str();
-    
+
   this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
-    
+
   // Remove the logo file with stdio method :remove
   if (remove(logo_absolut_path.str().c_str()) != 0)
     {
@@ -223,7 +223,7 @@ KmzProductWriter<TInputImage>
     std::ostringstream legendName;
     legendName << m_Path;
     legendName << "/legend_" << idx <<".jpeg";
-    
+
     InputImagePointer legend = m_LegendVector[idx].second;
     typename CastFilterType::Pointer castFiler = CastFilterType::New();
     castFiler->SetInput(legend);
@@ -236,7 +236,7 @@ KmzProductWriter<TInputImage>
     // Add the legend to the kmz
     std::ostringstream legend_root_path_in_kmz;
     legend_root_path_in_kmz << "legends/legend_" << idx << ".jpeg";
-    
+
     std::ostringstream legend_absolut_path;
     legend_absolut_path << legendName.str();
 
@@ -257,7 +257,7 @@ KmzProductWriter<TInputImage>
 {
   unsigned int numberOfChannel = m_VectorImage->GetNumberOfComponentsPerPixel();
   unsigned int curIdx = 0;
-  
+
   /** Image statistics*/
   typename InputImageType::PixelType inMin(numberOfChannel), inMax(numberOfChannel),
     outMin(numberOfChannel), outMax(numberOfChannel);
@@ -497,7 +497,7 @@ KmzProductWriter<TInputImage>
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType lowerLeftCorner = outputPoint;
-  
+
         // Compute lower right corner
         indexTile[0] = extractIndex[0] + sizeTile[0];
         indexTile[1] = extractIndex[1] + sizeTile[1];
@@ -518,7 +518,7 @@ KmzProductWriter<TInputImage>
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType upperLeftCorner = outputPoint;
-  
+
         /** END GX LAT LON */
 
         // Create KML - Filename - PathName - tile number - North - South - East - West
@@ -712,7 +712,7 @@ KmzProductWriter<TInputImage>
     double     ly = static_cast<double>(logoSize[1]);
     int        sizey = 150/4;
     int        sizex = static_cast<int>((lx / ly * sizey));
-    
+
     /** LOGO **/
     m_RootKmlFile << "\t\t<ScreenOverlay>" << std::endl;
     m_RootKmlFile << "\t\t\t<Icon>" << std::endl;
@@ -786,7 +786,7 @@ KmzProductWriter<TInputImage>
     m_RootKmlFile << "\t\t\t\t\t</LatLonAltBox>" << std::endl;
     m_RootKmlFile << "\t\t\t\t</Region>" << std::endl;
     }
-  
+
   m_RootKmlFile << "\t\t\t\t<Link>" << std::endl;
   m_RootKmlFile << "\t\t\t\t\t<href>" << directory << "/0/0/0" << m_KmlExtension << "</href>" << std::endl;
   m_RootKmlFile << "\t\t\t\t\t<viewRefreshMode>onRegion</viewRefreshMode>" << std::endl;
@@ -860,7 +860,7 @@ KmzProductWriter<TInputImage>
 {
   double lat = (north + south) / 2.;
   double lon = (east + west) / 2.;
-  
+
   if (m_LegendVector.size() > 0)
     {
     m_RootKmlFile << "\t\t\t\t<Placemark>" << std::endl;
@@ -870,7 +870,7 @@ KmzProductWriter<TInputImage>
 
     for(unsigned int idx = 0; idx < m_LegendVector.size(); ++idx)
       m_RootKmlFile << "\t\t\t\t\t\t<img src=\"legends/legend_"<< idx <<".jpeg\" width=\"215\" height=\"175\"  >";
-    
+
     m_RootKmlFile << "\t\t\t\t\t\t ]]>" << std::endl;
     m_RootKmlFile << "\t\t\t\t\t</description>" << std::endl;
     m_RootKmlFile << "\t\t\t\t\t<Point>" << std::endl;
@@ -1407,11 +1407,11 @@ KmzProductWriter<TInputImage>
 {
   std::string currentImageName;
   std::string tempName;
-  
+
   std::ostringstream oss;
   oss << "tiles_" << idx;
   tempName = oss.str();
-  
+
   // Replace all the blanks in the string
   unsigned int i = 0;
   while (i < tempName.length())

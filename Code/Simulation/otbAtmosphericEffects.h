@@ -41,7 +41,7 @@ class AtmosphericEffects
            typedef itk::DataObject Superclass;
            typedef itk::SmartPointer<Self> Pointer;
            typedef itk::SmartPointer<const Self> ConstPointer;
-          
+
            /** Template parameters typedef. */
            /** Spectral response of a material (from the JPL ASTER spectral library for example)*/
            typedef TSpectralResponse InputSpectralResponseType;
@@ -51,34 +51,34 @@ class AtmosphericEffects
 
            typedef typename InputRSRType::Pointer InputRSRPointerType;
            typedef typename InputSpectralResponseType::Pointer InputSpectralResponsePointerType;
-          
+
            typedef typename InputRSRType::PrecisionType PrecisionType;
            typedef typename InputRSRType::ValuePrecisionType ValuePrecisionType;
            typedef typename InputSpectralResponseType::PairType PairType;
-                     
+
            /** 6S typedefs*/
            typedef otb::AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
            typedef itk::SmartPointer<AtmosphericCorrectionParametersType> AtmosphericCorrectionParametersPointerType;
-          
+
             /** Standard macros */
            itkNewMacro(Self);
            itkTypeMacro(AtmosphericEffects, DataObject);
-          
+
            itkGetConstObjectMacro(InputSatRSR, InputRSRType);
            itkSetObjectMacro(InputSatRSR, InputRSRType);
-          
+
            itkGetConstObjectMacro(InputSpectralResponse, InputSpectralResponseType);
            itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType);
-          
+
            itkGetConstObjectMacro(DataAtmosphericCorrectionParameters, AtmosphericCorrectionParametersType);
            itkSetObjectMacro(DataAtmosphericCorrectionParameters, AtmosphericCorrectionParametersType);
-           
+
            itkGetObjectMacro(CorrectedSpectralResponse, InputSpectralResponseType);
 
-        
+
 //           void  LoadFilterFunctionAtmosphericCorrectionParameters( double step = 0.0025);
            void  Process6S(/*const unsigned int numBand*/);
-          
+
         protected:
            /** Constructor */
            AtmosphericEffects();
@@ -88,13 +88,13 @@ class AtmosphericEffects
            virtual ~AtmosphericEffects() {};
            /** PrintSelf method */
            //void PrintSelf(std::ostream& os, itk::Indent indent) const;
-          
-           
-          
+
+
+
         private:
            AtmosphericEffects(const Self&); //purposely not implemented
            void operator=(const Self&); //purposely not implemented
-           
+
            AtmosphericCorrectionParametersPointerType m_DataAtmosphericCorrectionParameters;
            InputSpectralResponsePointerType m_InputSpectralResponse;
            InputSpectralResponsePointerType m_CorrectedSpectralResponse;

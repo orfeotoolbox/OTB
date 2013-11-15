@@ -773,9 +773,9 @@ TerraSarImageMetadataInterface::GetRSF() const
   {
     itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
   }
-  
+
   ImageKeywordlistType imageKeywordlist;
-  
+
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
   {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
@@ -783,7 +783,7 @@ TerraSarImageMetadataInterface::GetRSF() const
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.sampling_frequency");
   double      freq = atof(valueString.c_str());
-  
+
   return freq;
 }
 

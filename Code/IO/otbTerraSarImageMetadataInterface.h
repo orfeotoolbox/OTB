@@ -119,7 +119,7 @@ public:
 
   /** Get the RSF */
   double GetRSF() const;
-  
+
   /** Get the number of corner incidence angles */
   unsigned int GetNumberOfCornerIncidenceAngles() const;
 
@@ -153,7 +153,7 @@ public:
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const;
-  
+
 protected:
   TerraSarImageMetadataInterface();
   virtual ~TerraSarImageMetadataInterface() {}

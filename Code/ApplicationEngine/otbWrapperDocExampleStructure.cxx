@@ -45,7 +45,7 @@ DocExampleStructure::AddParameter( const std::string key, const std::string valu
       m_ParameterList.push_back(ParametersVectorType());
       }
     }
-  
+
   m_ParameterList.at(exId).push_back(std::make_pair(key, value));
 }
 
@@ -130,10 +130,10 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
     }
   else if ( m_ParameterList.at(exId).empty() )
     return res;
-  
+
   std::ostringstream oss;
   oss << "otbcli_" << m_ApplicationName << " ";
-  
+
   for (ParametersVectorType::const_iterator it = m_ParameterList.at(exId).begin();
        it != m_ParameterList.at(exId).end(); ++it)
     {
@@ -142,12 +142,12 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
       oss<< "-" << it->first << " " << it->second <<" ";
       }
     }
-  
+
   res = oss.str();
-  
+
   // Supress last added space
   res.erase( res.size()-1, 1);
-  
+
   return res.c_str();
 }
 
@@ -162,7 +162,7 @@ DocExampleStructure::GenerateCLExample()
     oss << this->GenerateCLExample( exId );
     oss << std::endl;
     }
-    
+
   std::string res = oss.str();
   return res;
 }
@@ -175,7 +175,7 @@ DocExampleStructure::GenerateHtmlExample( unsigned int exId )
     {
     return "";
     }
-  
+
   std::ostringstream oss;
   oss << "<ul>";
 
@@ -192,11 +192,11 @@ DocExampleStructure::GenerateHtmlExample( unsigned int exId )
       }
     }
   oss << "</ul>";
-  
+
   std::string res = oss.str();
-  
+
   return res;
-  
+
 }
 
 
@@ -206,7 +206,7 @@ DocExampleStructure::GenerateHtmlExample()
   std::ostringstream oss;
   if( m_NbOfExamples>1 )
     oss << "<ul>";
-  
+
   for( unsigned int exId=0; exId<m_NbOfExamples; exId++)
     {
     if( m_NbOfExamples>1 )
@@ -219,9 +219,9 @@ DocExampleStructure::GenerateHtmlExample()
     }
   if( m_NbOfExamples>1 )
     oss << "</ul>";
-  
+
   std::string res = oss.str();
-  
+
   return res;
 }
 

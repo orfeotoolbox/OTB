@@ -42,13 +42,13 @@ public:
   typedef ListSampleSource<TOutputSampleList>        Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ListSampleToListSampleFilter, ListSampleSource);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** InputSampleList typedefs */
   typedef TInputSampleList                                    InputSampleListType;
   typedef typename InputSampleListType::Pointer               InputSampleListPointer;
@@ -62,7 +62,7 @@ public:
   typedef typename Superclass::OutputSampleListConstPointer    OutputSampleListConstPointer;
   typedef typename Superclass::OutputMeasurementVectorType     OutputMeasurementVectorType;
   typedef typename Superclass::OutputValueType                 OutputValueType;
-  
+
   /** ListSample is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */
   typedef itk::DataObject::Pointer                             DataObjectPointer;

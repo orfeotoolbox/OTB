@@ -87,7 +87,7 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
 ::RegisterBuiltInFactories()
 {
   itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
-  
+
   RegisterFactory(LibSVMMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 
 #ifdef OTB_USE_OPENCV

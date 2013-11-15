@@ -221,7 +221,7 @@ namespace otb
         virtual void EvaluateGaussianDistribution()
         {
           m_BinLowerBounds.clear();
-    
+
     // MDE : Correction
           unsigned int nbHist = this->m_PixelRepresentationFunction->GetOutputSize();
 

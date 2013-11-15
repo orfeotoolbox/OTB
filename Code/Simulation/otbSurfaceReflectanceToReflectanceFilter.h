@@ -44,10 +44,10 @@ template <class TInput, class TOutput>
 class ReflectanceToSurfaceReflectanceImageFunctor
 {
 public:
-  
+
   /** "typedef" for standard classes. */
   typedef ReflectanceToSurfaceReflectanceImageFunctor   Self;
-  
+
   ReflectanceToSurfaceReflectanceImageFunctor()
   {
     m_Coefficient = 1.;
@@ -96,16 +96,16 @@ public:
   {
 //     std::cout << "m_Coefficient "<< m_Coefficient << std::endl;
 //     std::cout << "m_Residu "<< m_Residu << std::endl;
-    
+
     TOutput outPixel;
 //     outPixel.first = inPixel.first;
     double temp, temp1, temp2;
 //     temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
 //     temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
-    
+
     temp = 1. - (static_cast<double>(inPixel) * m_SphericalAlbedo);
     //temp1 =  1/temp;
-    
+
 //     std::cout << "------------------------------" << std::endl;
 //     std::cout << "B "<< temp << std::endl;
 //     std::cout << "B*residu "<< temp*m_Residu << std::endl;
@@ -122,7 +122,7 @@ public:
 //     std::cout << "1-row*S "<< temp << std::endl;
 //     outPixel = vcl_fabs (static_cast<TOutput>(temp2));
     outPixel = static_cast<TOutput>(temp2);
-    
+
 //     std::cout << "in out "<< static_cast<double>(inPixel) << "; " << static_cast<double>(outPixel)<< std::endl;
 //     std::cout <<"plot " << m_Residu << "+" << m_Coefficient << "*(x/(1-x*" << m_SphericalAlbedo << "))" << std::endl;
 //     std::cout << "------------------------------" << std::endl;
@@ -202,7 +202,7 @@ public:
   typedef FilterFunctionValues                                          FilterFunctionValuesType;
   typedef FilterFunctionValuesType::ValuesVectorType                    CoefVectorType;
   typedef std::vector<CoefVectorType>                                   FilterFunctionCoefVectorType;
-  
+
   typedef itk::MetaDataDictionary                                       MetaDataDictionaryType;
 
   /** Get/Set Atmospheric Radiative Terms. */
@@ -265,7 +265,7 @@ protected:
   void UpdateAtmosphericRadiativeTerms();
   /** Update Functors parameters */
   void UpdateFunctors();
-  
+
 private:
   AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
   CorrectionParametersPointerType      m_CorrectionParameters;

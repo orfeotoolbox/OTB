@@ -38,7 +38,7 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
   m_Size.Fill(0);
   m_StartIndex.Fill(0);
   m_InitialLabel = itk::NumericTraits<LabelType>::Zero;
-  
+
   m_AutomaticSizeComputation=true;
   m_VectorDataProperties = VectorDataPropertiesType::New();
 }
@@ -118,7 +118,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
     {
     return;
     }
-    
+
   RegionType outputLargestPossibleRegion;
   if(m_AutomaticSizeComputation==false)
   {
@@ -126,9 +126,9 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
      outputLargestPossibleRegion.SetSize(m_Size);
      outputLargestPossibleRegion.SetIndex(m_StartIndex);
      outputPtr->SetLargestPossibleRegion(outputLargestPossibleRegion);
-   
+
      otbGenericMsgDebugMacro(<< "LargestPossibleRegion " << outputPtr->GetLargestPossibleRegion());
-   
+
      // Set spacing and origin
      outputPtr->SetSpacing(m_Spacing);
      outputPtr->SetOrigin(m_Origin);
@@ -148,7 +148,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
       // Set spacing and origin
       outputLargestPossibleRegion.SetSize(m_VectorDataProperties->GetBoundingRegion().GetImageRegion().GetSize());
       outputLargestPossibleRegion.SetIndex(m_StartIndex);
-      
+
       outputPtr->SetLargestPossibleRegion(outputLargestPossibleRegion);
       outputPtr->SetSpacing(this->GetInput()->GetSpacing());
       outputPtr->SetOrigin(origin);

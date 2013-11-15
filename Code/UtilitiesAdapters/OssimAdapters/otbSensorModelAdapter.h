@@ -102,7 +102,7 @@ public:
 
   /** Read geom file and instanciate sensor model */
   bool ReadGeomFile(const std::string & infile);
-  
+
   /** Write geom file corresponding to sensor model */
   bool WriteGeomFile(const std::string& outfile);
 

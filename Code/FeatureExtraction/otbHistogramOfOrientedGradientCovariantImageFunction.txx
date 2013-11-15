@@ -52,13 +52,13 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 {
   // Build output vector
   OutputType hog;
-  
+
   // Check for input image
   if( !this->GetInputImage() )
     {
     return hog;
     }
-  
+
   // Check for out of buffer
   if ( !this->IsInsideBuffer( index ) )
     {
@@ -68,13 +68,13 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   // Create an N-d neighborhood kernel, using a zeroflux boundary condition
   typename InputImageType::SizeType kernelSize;
   kernelSize.Fill( m_NeighborhoodRadius );
-  
+
   itk::ConstNeighborhoodIterator<InputImageType>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-  
+
   // Set the iterator at the desired location
   it.SetLocation(index);
-  
+
   // Offset to be used in the loops
   typename InputImageType::OffsetType offset;
 
@@ -108,7 +108,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         // Compute pixel location
         offset[0]=i;
         offset[1]=j;
- 
+
         // Get the current gradient covariant value
         InputPixelType gradient = it.GetPixel(offset);
 
@@ -176,7 +176,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         // Compute pixel location
         offset[0]=i;
         offset[1]=j;
- 
+
         // Get the current gradient covariant value
         InputPixelType gradient = it.GetPixel(offset);
 
@@ -245,7 +245,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
             lowerLeftHistogram[binIndex]+= magnitude * gWeight;
             }
           }
- 
+
         // Cumulate values
         globalOrientationHistogram[binIndex]+= magnitude * gWeight;
         }

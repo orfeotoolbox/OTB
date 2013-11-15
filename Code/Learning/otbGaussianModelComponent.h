@@ -71,7 +71,7 @@ public:
    *  this component's distribution parameters */
   typedef itk::Statistics::CovarianceSampleFilter<TSample> CovarianceEstimatorType;
 
-  /** types of the covariance to be used by the 
+  /** types of the covariance to be used by the
    *  NativeMembershipFunctionType */
   typedef typename CovarianceEstimatorType::MatrixType CovarianceType;
 

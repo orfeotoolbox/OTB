@@ -47,7 +47,7 @@ public:
   typedef typename InputImageType::PixelType           InputImagePixelType;
   typedef typename InputImageType::LabelObjectType     LabelObjectType;
   typedef typename InputImageType::ConstIterator       ConstIteratorType;
-  
+
   typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
   typedef typename LabelObjectType::AttributesMapType       AttributesMapType;
   typedef itk::SimpleDataObjectDecorator<AttributesMapType> AttributesMapObjectType;
@@ -102,7 +102,7 @@ private:
 }; // end of class
 
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMinMaxAttributesLabelMapFilter.txx"
 #endif

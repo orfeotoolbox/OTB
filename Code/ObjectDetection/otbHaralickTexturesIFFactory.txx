@@ -50,7 +50,7 @@ HaralickTexturesIFFactory<TImageType, TCoordRep, TPrecision>
   OffsetType offset;
   offset.Fill(param[4]);
   function->GetInternalImageFunction()->SetOffset(offset);
-  
+
   metaIF->AddFunction(function);
   container->push_back(image);
 }

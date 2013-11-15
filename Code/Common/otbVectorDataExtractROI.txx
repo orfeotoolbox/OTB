@@ -257,7 +257,7 @@ VectorDataExtractROI<TVectorData>
     VertexType secondVertex;
     firstVertex = polygon->GetVertexList()->GetElement(i);
     secondVertex = polygon->GetVertexList()->GetElement(i+1);
-    
+
     // Build a line with each two vertex
     typename LineType::Pointer  line =  LineType::New();
     line->AddVertex(firstVertex);
@@ -278,7 +278,7 @@ VectorDataExtractROI<TVectorData>
 ::IsLineIntersectionNotNull(LinePointerType line)
 {
   RegionType lineRegion(line->GetBoundingRegion());
-  
+
   // if the line bounding box have a null
   // intersection with the geoROI
   // the line and the region do not intersect
@@ -296,7 +296,7 @@ VectorDataExtractROI<TVectorData>
       VertexType secondVertex;
       firstVertex = line->GetVertexList()->GetElement(i);
       secondVertex = line->GetVertexList()->GetElement(i+1);
-      
+
       //  -------------------
       // Case 1 : Check if one of the two points are in the region
       PointType firstPoint, secondPoint;
@@ -305,7 +305,7 @@ VectorDataExtractROI<TVectorData>
 
       secondPoint[0] = secondVertex[0];
       secondPoint[1] = secondVertex[1];
-    
+
       if (m_GeoROI.IsInside(this->PointToContinuousIndex(firstPoint))
           || m_GeoROI.IsInside(this->PointToContinuousIndex(secondPoint)))
         {
@@ -322,12 +322,12 @@ VectorDataExtractROI<TVectorData>
           typename LineType::Pointer  tempLine =  LineType::New();
           tempLine->AddVertex(firstVertex);
           tempLine->AddVertex(secondVertex);
-          
+
           // Check if the intersection is not null
           RegionType region(tempLine->GetBoundingRegion());
           if (region.Crop(m_GeoROI))
             return true;
-          
+
           //  -------------------
           // TODO : check if the segment cut
           //        one of the region edges
@@ -335,7 +335,7 @@ VectorDataExtractROI<TVectorData>
         }
       }
     }
-  
+
   return false;
 }
 

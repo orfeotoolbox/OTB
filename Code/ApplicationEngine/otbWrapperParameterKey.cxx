@@ -77,12 +77,12 @@ ParameterKey::Append( const std::string & val )
   m_Key.append(val);
 }
 
-  
+
 void
 ParameterKey::Append( const ParameterKey & pKey )
 {
   this->Append( pKey.GetKey() );
 }
-  
+
 } // end namespace Wrapper
 } //end namespace otb

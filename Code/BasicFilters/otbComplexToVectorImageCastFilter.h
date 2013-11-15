@@ -25,7 +25,7 @@
 
 namespace otb
 {
-  
+
 /** \class ComplexToVectorImageCastFilter
  * \brief Transform a complex image into a 2 channels vector image.
  * The first channel is the real part, the second the imaginary one.
@@ -35,7 +35,7 @@ namespace otb
  * \sa ComplexToRealImageFilter
  */
 namespace Functor {
- 
+
 template<class TInput, class TOutput>
 class SingleComplexToVector
 {
@@ -49,7 +49,7 @@ public:
     {
       TOutput output;
       output.SetSize( 2 );
-      
+
       output[0] = static_cast<OutputValueType>(A.real());
       output[1] = static_cast<OutputValueType>(A.imag());
 
@@ -73,7 +73,7 @@ public:
     {
       TOutput output;
       output.SetSize( 2*A.Size() );
-      
+
       for(unsigned int i=0; i<A.Size(); ++i)
         {
           output[2*i] = static_cast<OutputValueType>(A[i].real());
@@ -92,7 +92,7 @@ class ComplexToVector
 public:
   typedef SingleComplexToVector<TInput, TOutput> FunctorType;
 };
- 
+
 
 template< class TInput, class TOutput >
 class ComplexToVector<itk::VariableLengthVector<TInput>, TOutput>

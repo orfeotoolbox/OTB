@@ -198,7 +198,7 @@ public:
   {
 
     this->m_SAT = sat;
-    
+
     if( sat == L5 )
       {
       m_TM1 = 0;
@@ -299,7 +299,7 @@ protected:
     return newPix;
   }
 
-  
+
   double m_EpsilonToBeConsideredAsZero;
 
   unsigned int m_TM1;
@@ -338,7 +338,7 @@ public:
 
   LandsatTMIndex() {}
   virtual ~LandsatTMIndex() {}
-  
+
 
 };
 
@@ -377,7 +377,7 @@ public:
     double result = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+2*newPixel[this->m_TM3]+2*newPixel[this->m_TM4]+newPixel[this->m_TM5]+newPixel[this->m_TM7])/8.0;
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -415,7 +415,7 @@ public:
     double result = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+newPixel[this->m_TM3])/3.0;
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -446,7 +446,7 @@ public:
     double result = newPixel[this->m_TM4];
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -476,7 +476,7 @@ public:
     double result = newPixel[this->m_TM5];
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -506,7 +506,7 @@ public:
     double result = newPixel[this->m_TM7];
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -537,10 +537,10 @@ public:
 
     if( this->m_SAT == L5 )
       result = newPixel[this->m_TM60];
-    
+
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -584,10 +584,10 @@ public:
       tir = newPixel[this->m_TM60];
 
     double result = 255*(1 - mir1)*(tir+100)/100.;
-    
+
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -617,10 +617,10 @@ public:
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = (newPixel[this->m_TM4] - newPixel[this->m_TM3])/
       (newPixel[this->m_TM4] + newPixel[this->m_TM3] + this->m_EpsilonToBeConsideredAsZero);
-    
+
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -662,10 +662,10 @@ public:
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = (newPixel[this->m_TM5] - newPixel[this->m_TM4])/
       (newPixel[this->m_TM5] + newPixel[this->m_TM4] + this->m_EpsilonToBeConsideredAsZero);
-    
+
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -705,10 +705,10 @@ public:
                      - (newPixel[this->m_TM4] + newPixel[this->m_TM1]))
       /((newPixel[this->m_TM5] + newPixel[this->m_TM3])
         + (newPixel[this->m_TM4] + newPixel[this->m_TM1]));
-    
+
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -747,10 +747,10 @@ public:
     TInput newPixel(this->PrepareValues( inputPixel ));
     double result = (newPixel[this->m_TM2] - newPixel[this->m_TM5])
       /(newPixel[this->m_TM2] + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
-    
+
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -802,10 +802,10 @@ public:
     TInput newPixel(this->PrepareValues( inputPixel ));
     double vis = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+newPixel[this->m_TM3])/3.0;
     double result = (vis - newPixel[this->m_TM5])/(vis + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
-    
+
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -847,7 +847,7 @@ public:
       /(newPixel[this->m_TM1] + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
     return static_cast<TOutput>(result);
   }
-  
+
 
 };
 
@@ -878,16 +878,16 @@ public:
   typedef typename TInput::ValueType PrecisionType;
   typedef typename itk::FixedArray<unsigned int, 11> OutputPixelType;
   typedef otb::FuzzyVariable<unsigned short, PrecisionType> FuzzyVarType;
-  
+
   enum LinguisticValues {MINlv=0, Low=MINlv, Medium, MAXlv=2, High=MAXlv};
   enum Indices { MINid=0, bright=MINid, vis, nir, mir1, mir2, tir, mirtir, ndsivis, ndbbbi, ndvi, MAXid=10, ndbsi=MAXid };
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM Linguistic Variables";
   }
-  
+
   LinguisticVariables()
     {
     m_FvBright = FuzzyVarType::New();
@@ -981,7 +981,7 @@ public:
     result[ ndvi ] = m_FvNDVI->GetMaxVar(NDVI<TInput, PrecisionType>()( newPixel ));
 
     result[ ndbsi ] = m_FvNDBSI->GetMaxVar(NDBSI<TInput, PrecisionType>()( newPixel ));
-    
+
     return result;
   }
 
@@ -997,7 +997,7 @@ protected:
   typename FuzzyVarType::Pointer m_FvNDBBBI;
   typename FuzzyVarType::Pointer m_FvNDVI;
   typename FuzzyVarType::Pointer m_FvNDBSI;
-  
+
 
 };
 
@@ -1024,13 +1024,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM KernelSpectralRule";
   }
-  
+
   KernelSpectralRule() : m_TV1(0.7), m_TV2(0.5) { }
   virtual ~KernelSpectralRule() {}
 
@@ -1059,7 +1059,7 @@ protected:
   PrecisionType m_TV1;
   /** Tolerance value 2*/
   PrecisionType m_TV2;
-  
+
   void SetMinMax(const TInput& inputPixel, PrecisionType* max13, PrecisionType* min123, PrecisionType* max123, PrecisionType* min12347, PrecisionType* max12347, PrecisionType* max234, PrecisionType* max45)
   {
   std::vector< PrecisionType > v13;
@@ -1094,7 +1094,7 @@ protected:
   v234.push_back(inputPixel[this->m_TM4]);
 
   *max234 = *(std::max_element ( v234.begin(), v234.end() ));
-  
+
   std::vector< PrecisionType > v45;
   v45.push_back(inputPixel[this->m_TM4]);
   v45.push_back(inputPixel[this->m_TM5]);
@@ -1123,13 +1123,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM ThickCloudsSpectralRule";
   }
-  
+
   ThickCloudsSpectralRule() { }
   virtual ~ThickCloudsSpectralRule() {}
 
@@ -1179,13 +1179,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM ThinCloudsSpectralRule";
   }
-  
+
   ThinCloudsSpectralRule() { }
   virtual ~ThinCloudsSpectralRule() {}
 
@@ -1238,13 +1238,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM SnowOrIceSpectralRule";
   }
-  
+
   SnowOrIceSpectralRule() { }
   virtual ~SnowOrIceSpectralRule() {}
 
@@ -1295,13 +1295,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM WaterOrShadowSpectralRule";
   }
-  
+
   WaterOrShadowSpectralRule() { }
   virtual ~WaterOrShadowSpectralRule() {}
 
@@ -1340,13 +1340,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM PitbogOrGreenhouseSpectralRule";
   }
-  
+
   PitbogOrGreenhouseSpectralRule() { }
   virtual ~PitbogOrGreenhouseSpectralRule() {}
 
@@ -1396,13 +1396,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM DominantBlueSpectralRule";
   }
-  
+
   DominantBlueSpectralRule() { }
   virtual ~DominantBlueSpectralRule() {}
 
@@ -1442,13 +1442,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM VegetationSpectralRule";
   }
-  
+
   VegetationSpectralRule() { }
   virtual ~VegetationSpectralRule() {}
 
@@ -1500,13 +1500,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM RangelandSpectralRule";
   }
-  
+
   RangelandSpectralRule() { }
   virtual ~RangelandSpectralRule() {}
 
@@ -1559,13 +1559,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM BarrenLandOrBuiltUpOrCloudsSpectralRule";
   }
-  
+
   BarrenLandOrBuiltUpOrCloudsSpectralRule() { }
   virtual ~BarrenLandOrBuiltUpOrCloudsSpectralRule() {}
 
@@ -1615,13 +1615,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM FlatResponseBarrenLandOrBuiltUpSpectralRule";
   }
-  
+
   FlatResponseBarrenLandOrBuiltUpSpectralRule() { }
   virtual ~FlatResponseBarrenLandOrBuiltUpSpectralRule() {}
 
@@ -1667,13 +1667,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM ShadowWithBarrenLandSpectralRule";
   }
-  
+
   ShadowWithBarrenLandSpectralRule() { }
   virtual ~ShadowWithBarrenLandSpectralRule() {}
 
@@ -1712,13 +1712,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM ShadowWithVegetationSpectralRule";
   }
-  
+
   ShadowWithVegetationSpectralRule() { }
   virtual ~ShadowWithVegetationSpectralRule() {}
 
@@ -1758,13 +1758,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM ShadowCloudOrSnowSpectralRule";
   }
-  
+
   ShadowCloudOrSnowSpectralRule() { }
   virtual ~ShadowCloudOrSnowSpectralRule() {}
 
@@ -1779,7 +1779,7 @@ public:
     PrecisionType max234;
     PrecisionType max45;
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
-    
+
 
     bool result = (newPixel[this->m_TM1] >= this->m_TV1 * max234)
       && (max234 >= this->m_TV1 * newPixel[this->m_TM1])
@@ -1811,13 +1811,13 @@ public:
 
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM WetlandSpectralRule";
   }
-  
+
   WetlandSpectralRule() { }
   virtual ~WetlandSpectralRule() {}
 

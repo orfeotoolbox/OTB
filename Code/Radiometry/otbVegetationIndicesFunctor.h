@@ -1308,7 +1308,7 @@ public:
   {
     return (m_ExtinctionCoefficient);
   }
-  
+
 protected:
   inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
@@ -1383,7 +1383,7 @@ public:
   {
     return (m_NirCoef);
   }
-  
+
 protected:
   inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {

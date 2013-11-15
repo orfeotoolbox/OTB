@@ -39,7 +39,7 @@ ComputeMean()
     {
     RelativeFrequencyType frequency = static_cast<RelativeFrequencyType>(itr.GetFrequency()) /
       static_cast<RelativeFrequencyType>(m_Histogram->GetTotalFrequency());
-    
+
     IndexType       index = m_Histogram->GetIndex(itr.GetInstanceIdentifier());
     m_Mean += static_cast<double>(index[0]) * static_cast<double>(frequency);
     ++itr;
@@ -52,7 +52,7 @@ GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator<THistogram>::
 Compute()
 {
   typedef typename HistogramType::Iterator HistogramIterator;
-  
+
   // Now get the pixel mean.
   this->ComputeMean();
 
@@ -120,16 +120,16 @@ Compute()
   for (HistogramIterator hit = m_Histogram->Begin();
        hit != m_Histogram->End(); ++hit)
     {
-    double frequency = static_cast<double>(hit.GetFrequency()) 
+    double frequency = static_cast<double>(hit.GetFrequency())
       / static_cast<double>(m_Histogram->GetTotalFrequency());
-    
+
     IndexType index = m_Histogram->GetIndex(hit.GetInstanceIdentifier());
 
     m_Variance += ((static_cast<double>(index[0]) - m_Mean) * (static_cast<double>(index[0]) - m_Mean)) * frequency;
     Entropy -= (frequency > 0.0001) ? frequency * vcl_log(frequency) / log2 : 0.;
 
-    double pipj = 
-      static_cast<double>(m_Histogram->GetFrequency (index[0], 0))/ static_cast<double>(m_Histogram->GetTotalFrequency()) 
+    double pipj =
+      static_cast<double>(m_Histogram->GetFrequency (index[0], 0))/ static_cast<double>(m_Histogram->GetTotalFrequency())
       * static_cast<double>(m_Histogram->GetFrequency (index[1], 1))/  static_cast<double>(m_Histogram->GetTotalFrequency());
 
     hxy1 -= (pipj > 0.0001) ? frequency * vcl_log(pipj) : 0.;

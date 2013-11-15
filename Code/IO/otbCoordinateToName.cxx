@@ -120,7 +120,7 @@ void CoordinateToName::DoEvaluate()
       {
       m_IsValid = false;
       }
-    
+
     if(m_IsValid)
       {
       std::string placeName = "";

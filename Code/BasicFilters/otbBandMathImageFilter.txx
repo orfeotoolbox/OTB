@@ -84,7 +84,7 @@ void BandMathImageFilter<TImage>
   std::ostringstream varName;
   varName << "b" << nbInput;
   m_VVarName[idx] = varName.str();
-  
+
   m_VVarName[idx+1] = "idxX";
   m_VVarName[idx+2] = "idxY";
   m_VVarName[idx+3] = "idxPhyX";
@@ -98,7 +98,7 @@ void BandMathImageFilter<TImage>
   this->SetInput(idx, const_cast<TImage *>( image ));
   m_VVarName.resize(this->GetNumberOfInputs()+4);
   m_VVarName[idx] = varName;
-  
+
   m_VVarName[idx+1] = "idxX";
   m_VVarName[idx+2] = "idxY";
   m_VVarName[idx+3] = "idxPhyX";
@@ -191,7 +191,7 @@ void BandMathImageFilter<TImage>
   m_AImage.resize(nbThreads);
   m_NbVar = nbInputImages+nbAccessIndex;
   m_VVarName.resize(m_NbVar);
-  
+
   for(itParser = m_VParser.begin(); itParser < m_VParser.end(); itParser++)
     {
     *itParser = ParserType::New();
@@ -201,7 +201,7 @@ void BandMathImageFilter<TImage>
     {
     m_AImage.at(i).resize(m_NbVar);
     m_VParser.at(i)->SetExpr(m_Expression);
-  
+
     for(j=0; j < nbInputImages; ++j)
       {
       m_VParser.at(i)->DefineVar(m_VVarName.at(j), &(m_AImage.at(i).at(j)));
@@ -221,7 +221,7 @@ void BandMathImageFilter<TImage>
 {
   unsigned int nbThreads = this->GetNumberOfThreads();
   unsigned int i;
-  
+
   m_UnderflowCount = 0;
   m_OverflowCount = 0;
 
@@ -250,18 +250,18 @@ void BandMathImageFilter<TImage>
   double value;
   unsigned int j;
   unsigned int nbInputImages = this->GetNumberOfInputs();
-  
+
   typedef itk::ImageRegionConstIterator<TImage> ImageRegionConstIteratorType;
-  
+
   std::vector< ImageRegionConstIteratorType > Vit;
   Vit.resize(nbInputImages);
   for(j=0; j < nbInputImages; ++j)
     {
     Vit[j] = ImageRegionConstIteratorType (this->GetNthInput(j), outputRegionForThread);
     }
-  
+
   itk::ImageRegionIterator<TImage> ot (this->GetOutput(), outputRegionForThread);
-  
+
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -271,7 +271,7 @@ void BandMathImageFilter<TImage>
       {
       m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
       }
-    
+
     // Image Indexes
     for(j=0; j < 2; ++j)
       {
@@ -291,7 +291,7 @@ void BandMathImageFilter<TImage>
       {
       itkExceptionMacro(<< err);
       }
-    
+
     // Case value is equal to -inf or inferior to the minimum value
     // allowed by the pixelType cast
     if (value < double(itk::NumericTraits<PixelType>::NonpositiveMin()))

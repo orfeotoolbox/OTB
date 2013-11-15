@@ -140,7 +140,7 @@ PersistentImageToOGRLayerFilter<TImage>
      {
      itkExceptionMacro(<<"Spatial reference of internal and target layers do not match!");
      }
- 
+
   //Copy features contained in the memory layer (srcLayer) in the output layer
   itk::TimeProbe chrono;
   chrono.Start();
@@ -152,11 +152,11 @@ PersistentImageToOGRLayerFilter<TImage>
       dstFeature.SetFrom( *featIt, TRUE );
       m_OGRLayer.CreateFeature( dstFeature );
   }
-  
+
   m_OGRLayer.ogr().CommitTransaction();
   chrono.Stop();
   otbMsgDebugMacro(<< "write ogr tile took " << chrono.GetTotal() << " sec");
-  
+
 }
 
 template<class TImage>

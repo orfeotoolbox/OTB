@@ -59,10 +59,10 @@ public:
   typedef itk::ImageSource<TOutputImage>        Superclass;
   typedef itk::SmartPointer< Self >             Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(OGRDataSourceToLabelImageFilter, itk::ImageSource);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -85,10 +85,10 @@ public:
 
   /** Get Nth input \c OGRDataSource */
   const OGRDataSourceType*  GetInput(unsigned int idx);
-  
+
   /** Method for adding a \c OGRDataSource to rasterize  */
   virtual void AddOGRDataSource(const OGRDataSourceType* ds);
-  
+
   /** Set the size of the output image. */
   itkSetMacro(OutputSize, OutputSizeType);
 
@@ -142,7 +142,7 @@ protected:
   virtual ~OGRDataSourceToLabelImageFilter() {}
 
   virtual void GenerateOutputInformation();
-  
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
@@ -151,7 +151,7 @@ private:
 
   std::vector< OGRLayerH >    m_SrcDataSetLayers;
   std::vector<int>            m_BandsToBurn;
-  
+
   // Field used to extract the burn value
   std::string                   m_BurnAttribute;
 

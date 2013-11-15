@@ -332,7 +332,7 @@ bool CommandLineArgumentParser::IsNumber(const std::string& text)
 {
   if(text.empty())
     return false;
-  
+
   // Don't test the sign (-)
   unsigned int i = 1;
   while (text[i])

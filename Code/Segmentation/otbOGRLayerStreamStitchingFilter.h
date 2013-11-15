@@ -62,7 +62,7 @@ public:
   typedef itk::ProcessObject                   Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
-  
+
   /** Definition of the input image */
   typedef TInputImage                          InputImageType;
   typedef typename InputImageType::PixelType   InputPixelType;
@@ -72,7 +72,7 @@ public:
   typedef typename InputImageType::SpacingType SpacingType;
   typedef typename InputImageType::PointType   OriginType;
   typedef typename InputImageType::IndexType   IndexType;
-  
+
   typedef ogr::Layer                           OGRLayerType;
   typedef ogr::Feature                         OGRFeatureType;
 
@@ -80,18 +80,18 @@ public:
   virtual void SetInput(const InputImageType *input);
   /** Get the input image. */
   virtual const InputImageType * GetInput(void);
-  
+
   /** Method for management of the object factory. */
   itkNewMacro(Self);
 
   /** Return the name of the class. */
   itkTypeMacro(OGRLayerStreamStitchingFilter, ProcessObject);
-  
+
   /** Set the input OGRLayer */
   void SetOGRLayer( const OGRLayerType & ogrLayer );
   /** Get the input OGRLayer */
   const OGRLayerType & GetOGRLayer( void ) const;
-  
+
   /** Set the stream size.
    * As this filter is intended to be used right after the \c StreamingVectorizedSegmentation,
    * use the \c GetStreamSize() method on it to get the correct stream size.
@@ -99,14 +99,14 @@ public:
   itkSetMacro(StreamSize, SizeType);
   /** Get stream size*/
   itkGetMacro(StreamSize, SizeType);
-    
+
   /** Generate Data method. This method must be called explicitly (not through the \c Update method). */
   virtual void GenerateData();
-  
+
 protected:
   OGRLayerStreamStitchingFilter();
   virtual ~OGRLayerStreamStitchingFilter() {}
-  
+
   struct FusionStruct
   {
      unsigned int indStream1;
@@ -125,7 +125,7 @@ protected:
   {
      bool operator() (FusionStruct f1, FusionStruct f2) { return (f1.overlap > f2.overlap); }
   } SortFeature;
-  
+
   /**
    Main computation method. if line is true process row part, else process column part.
    */
@@ -140,7 +140,7 @@ protected:
 private:
   OGRLayerStreamStitchingFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);      //purposely not implemented
-  
+
   SizeType m_StreamSize;
   unsigned int m_Radius;
   OGRLayerType m_OGRLayer;

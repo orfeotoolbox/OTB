@@ -112,7 +112,7 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  
+
   if (this->GetInput())
     {
     this->GetOutput()->CopyInformation(this->GetInput());
@@ -197,10 +197,10 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
    */
   InputVectorImagePointer inputPtr =  const_cast<TInputVectorImage *>(this->GetInput());
   LabelImagePointer labelInputPtr =  const_cast<TLabelImage *>(this->GetInputLabelImage());
-  
+
   itk::ImageRegionConstIterator<TInputVectorImage> inIt(inputPtr, inputPtr->GetRequestedRegion());
   itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, labelInputPtr->GetRequestedRegion());
-  
+
 
 
   typename VectorImageType::PixelType value;

@@ -52,13 +52,13 @@ public:
   <TInputSampleList, TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ListSampleToBalancedListSampleFilter, otb::Statistics::ListSampleToListSampleFilter);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** InputSampleList typedefs */
   typedef TInputSampleList                                    InputSampleListType;
   typedef typename InputSampleListType::Pointer               InputSampleListPointer;
@@ -80,28 +80,28 @@ public:
   typedef typename OutputSampleListType::ConstPointer          OutputSampleListConstPointer;
   typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
-  
+
   /** DataObject typedef*/
   typedef typename Superclass::DataObjectPointer               DataObjectPointer;
-  
+
   /** Filter adding noise to a ListSample */
   typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter
   <InputSampleListType, OutputSampleListType>                   GaussianAdditiveNoiseType;
   typedef typename GaussianAdditiveNoiseType::Pointer          GaussianAdditiveNoisePointerType;
-  
+
   /** Get/Set the label sample list */
   void SetInputLabel( const LabelSampleListType * label );
-  
+
   /** Returns the label sample list */
   const LabelSampleListType * GetInputLabel() const;
-  
+
   /** Returns the label sample list as a data object */
   LabelSampleListType * GetOutputLabel();
-  
+
   /** Set/Get the mean for the white gaussian noise to generate  */
   otbSetObjectMemberMacro(AddGaussianNoiseFilter, Mean, double);
   otbGetObjectMemberConstMacro(AddGaussianNoiseFilter, Mean, double);
-  
+
   /** Set/Get the variance for the white gaussian noise to generate  */
   otbSetObjectMemberMacro(AddGaussianNoiseFilter, Variance, double);
   otbGetObjectMemberConstMacro(AddGaussianNoiseFilter, Variance, double);
@@ -112,11 +112,11 @@ public:
     */
   itkSetMacro(BalancingFactor, unsigned int);
   itkGetMacro(BalancingFactor, unsigned int);
-  
+
 protected:
   /** This method causes the filter to generate its output. */
   virtual void GenerateData();
-  
+
   /** In order to respect the fair data principle, the number of samples for
     * each label must be the same. This method computes the label that
     * have the higher number of sample.
@@ -125,7 +125,7 @@ protected:
 
   /** Make Output */
   DataObjectPointer MakeOutput(unsigned int idx);
-  
+
   ListSampleToBalancedListSampleFilter();
   virtual ~ListSampleToBalancedListSampleFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -137,7 +137,7 @@ private:
   GaussianAdditiveNoisePointerType       m_AddGaussianNoiseFilter;
   std::vector<unsigned int>              m_MultiplicativeCoefficient;
   unsigned int                           m_BalancingFactor;
-  
+
 }; // end of class ListSampleToBalancedListSampleFilter
 
 } // end of namespace Statistics

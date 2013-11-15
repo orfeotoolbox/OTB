@@ -44,7 +44,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
 
   // Output
   this->GetOutput(0)->SetMetaDataDictionary(vData->GetMetaDataDictionary());
-  
+
   // Retrieving root node
   typename DataNodeType::Pointer root = this->GetOutput(0)->GetDataTree()->GetRoot()->Get();
   // Create the document node
@@ -57,11 +57,11 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   folder->SetNodeType(otb::FOLDER);
   this->GetOutput(0)->GetDataTree()->Add(folder, document);
   this->GetOutput(0)->SetProjectionRef(vData->GetProjectionRef());
-  
+
   // Itterate on the vector data
   TreeIteratorType itVectorRef(vData->GetDataTree());      // Reference
   itVectorRef.GoToBegin();
-  
+
   while (!itVectorRef.IsAtEnd())
     {
     if (!itVectorRef.Get()->IsLineFeature())
@@ -70,7 +70,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
       continue; // do not process if it's not a line
       }
     TreeIteratorType itVectorCur = itVectorRef;    // Current
-      
+
     while (!itVectorCur.IsAtEnd())
       {
       if (!itVectorCur.Get()->IsLineFeature())
@@ -89,13 +89,13 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
         PointType RightAngleCoordinate;
         RightAngleCoordinate = this->ComputeRightAngleCoordinate(itVectorRef.Get()->GetLine(),
                                                                  itVectorCur.Get()->GetLine());
-            
+
         // Compute the distance between the two segments and the right angle formed by this segments
         double dist1_2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
                                                                itVectorRef.Get()->GetLine());
         double dist2_2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,
                                                                itVectorCur.Get()->GetLine());
-        
+
         double threshold_2 = m_DistanceThreshold * m_DistanceThreshold;
        if (dist1_2 < threshold_2 && dist2_2 < threshold_2)
           {
@@ -107,23 +107,23 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
           this->GetOutput(0)->GetDataTree()->Add(CurrentGeometry, folder);
           }
         }
-      
+
       ++itVectorCur;
       }
     ++itVectorRef;
     }
 }
- 
+
 template <class TVectorData>
 double
 VectorDataToRightAngleVectorDataFilter<TVectorData>
 ::ComputeDistanceFromPointToSegment(PointType rAngle, LineType * line)
 {
   VertexListType * vertexList = const_cast<VertexListType *>(line->GetVertexList());
-  
+
   VertexType v0 = vertexList->GetElement(0);
   VertexType v1 = vertexList->GetElement(1);
-  
+
   // Case the extremities of the segment are the same
   double l2 = v0.SquaredEuclideanDistanceTo(v1);
 
@@ -134,7 +134,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
 
   if( u < 1e-10 ) u = 0.;
   if( u -1. > 1e-10 ) u = 1.;
-  
+
   double x = v0[0] + u *(v1[0] - v0[0] );
   double y = v0[1] + u *(v1[1] - v0[1] );
 
@@ -196,7 +196,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
   double Yq1 = vertexListDst->GetElement(0)[1];
   double Xq2 = vertexListDst->GetElement(1)[0];
   double Yq2 = vertexListDst->GetElement(1)[1];
-  
+
   double numU = (Xq2 - Xq1)*(Yp1-Yq1) - (Yq2-Yq1)*(Xp1-Xq1);
   double denumU = (Yq2-Yq1)*(Xp2-Xp1)-(Xq2-Xq1)*(Yp2-Yp1);
 
@@ -204,7 +204,7 @@ VectorDataToRightAngleVectorDataFilter<TVectorData>
 
   P[0] = Xp1 + u*(Xp2-Xp1);
   P[1] = Yp1 + u * (Yp2-Yp1);
-  
+
   return P;
 }
 

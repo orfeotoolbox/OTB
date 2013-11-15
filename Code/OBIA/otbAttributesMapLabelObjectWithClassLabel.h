@@ -92,7 +92,7 @@ public:
   {
     return m_HasClassLabel;
   }
-  
+
   /** Invalidate the class label if any */
   void RemoveClassLabel()
   {
@@ -121,7 +121,7 @@ protected:
     {}
   /** Destructor */
   virtual ~AttributesMapLabelObjectWithClassLabel() {}
-  
+
   /** The printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
     {

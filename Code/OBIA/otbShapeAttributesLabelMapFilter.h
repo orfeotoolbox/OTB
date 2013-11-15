@@ -136,23 +136,23 @@ private:
 
   /** Convenience internal method  */
   static double hyperSphereRadiusFromVolume(double volume);
-  
+
   double ComputePerimeter(LabelObjectType *labelObject, const RegionType & region);
-  
+
   typedef itk::Offset<2>                                                          Offset2Type;
   typedef itk::Offset<3>                                                          Offset3Type;
   typedef itk::Vector<double, 2>                                                  Spacing2Type;
   typedef itk::Vector<double, 3>                                                  Spacing3Type;
   typedef std::map<Offset2Type, itk::SizeValueType, Offset2Type::LexicographicCompare> MapIntercept2Type;
   typedef std::map<Offset3Type, itk::SizeValueType, Offset3Type::LexicographicCompare> MapIntercept3Type;
-  
+
   template<class TMapIntercept, class TSpacing> double PerimeterFromInterceptCount( TMapIntercept & intercepts, const TSpacing & spacing );
 
 #if ! defined(ITK_DO_NOT_USE_PERIMETER_SPECIALIZATION)
   double PerimeterFromInterceptCount( MapIntercept2Type & intercepts, const Spacing2Type spacing );
   double PerimeterFromInterceptCount( MapIntercept3Type & intercepts, const Spacing3Type spacing );
 #endif
-  
+
   /** Do we compute the feret diameter ? */
   bool m_ComputeFeretDiameter;
 

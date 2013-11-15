@@ -39,10 +39,10 @@ public:
   typedef ImageWidgetActionHandler      Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
-  
+
   /** Runtime information */
   itkTypeMacro(AutoScaleActionHandler, ImageWidgetActionHandler);
 
@@ -63,17 +63,17 @@ public:
       {
        otbMsgDevMacro(<<"AutoScaleActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
        typename WidgetType::SizeType    size = m_PreviewWidget->GetOpenGlBufferedRegion().GetSize();
-       
+
        double zoomW = static_cast<double>(w)/static_cast<double>(size[0]);
        double zoomH = static_cast<double>(h)/static_cast<double>(size[1]);
        m_PreviewWidget->SetIsotropicZoom(std::min(zoomW, zoomH));
-       
+
        return true;
       }
-    
+
     return false;
   }
-  
+
   /** Set/Get the pointer to PreviewWidget */
  itkSetObjectMacro(PreviewWidget, WidgetType);
 
@@ -89,13 +89,13 @@ protected:
   {
     Superclass::PrintSelf(os, indent);
   }
- 
+
 private:
   AutoScaleActionHandler(const Self&);    // purposely not implemented
   void operator=(const Self&); // purposely not implemented
-  
+
   WidgetPointerType              m_PreviewWidget;
-  
+
 }; // end class
 } // end namespace otb
 #endif

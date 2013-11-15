@@ -34,13 +34,13 @@ SailModel
 {
    this->ProcessObject::SetNumberOfRequiredInputs(2);
    this->ProcessObject::SetNumberOfRequiredOutputs(2);
-   
+
    SpectralResponseType::Pointer vRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
    this->itk::ProcessObject::SetNthOutput(0, vRefl.GetPointer());
-   
+
    SpectralResponseType::Pointer hRefl = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
    this->itk::ProcessObject::SetNthOutput(1, hRefl.GetPointer());
-   
+
    //default values
    m_LAI=2;
    m_Angl=50;
@@ -137,7 +137,7 @@ void
 SailModel
 ::SetInput(const ParametersType & params)
 {
-   
+
    if(params.Size()!=8) itkExceptionMacro( << "Must have 8 parameters in that order : LAI, Angl, PSoil, Skyl, HSpot, TTS, TTO, PSI" );
    this->SetParameters(params);
    m_LAI=params[0];
@@ -182,7 +182,7 @@ SailModel
    SpectralResponseType::Pointer inTrans = this->GetTransmittance();
    SpectralResponseType::Pointer outVRefl = this->GetViewingReflectance();
    SpectralResponseType::Pointer outHRefl = this->GetHemisphericalReflectance();
-   
+
    // LEAF ANGLE DISTRIBUTION
    double rd = CONST_PI/180;
    VectorType lidf;
@@ -208,7 +208,7 @@ SailModel
    double ttl, ctl, ksli, koli, sobli, sofli, bfli;
    double chi_s, chi_o, frho, ftau;
    VectorType result(4);
-   
+
    // Weighted sums over LIDF
    for(unsigned int i=0; i<lidf.size(); ++i)
    {
@@ -216,7 +216,7 @@ SailModel
       ctl = vcl_cos(rd*ttl);
       // SAIL volume scattering phase function gives interception and portions to be
       // multiplied by rho and tau
-      
+
       this->Volscatt(m_TTS, m_TTO, m_PSI, ttl, result);
       chi_s = result[0];
       chi_o = result[1];
@@ -237,11 +237,11 @@ SailModel
       //*       vb   : Scattering coefficient of downward diffuse flux in the observed direction
       //*       w   : Bidirectional scattering coefficient
       //********************************************************************************
-   
+
       // Extinction coefficients
       ksli = chi_s/cts;
       koli = chi_o/cto;
-   
+
       // Area scattering coefficient fractions
       sobli       = frho*CONST_PI/ctscto;
       sofli       = ftau*CONST_PI/ctscto;
@@ -252,7 +252,7 @@ SailModel
       sob       = sob+sobli*lidf[i];
       sof       = sof+sofli*lidf[i];
    }
-   
+
    // Geometric factors to be used later with rho and tau
    double sdb, sdf, dob, dof, ddb, ddf;
    sdb       = 0.5*(ks+bf);
@@ -270,7 +270,7 @@ SailModel
    double Ps, Qs, Pv, Qv, z, g1, g2, Tv1, Tv2, T1, T2, T3;
    double alf, sumint, fhot, x1, y1, f1, fint, x2, y2, f2;
    double resh, resv;
-   
+
    int nbdata = sizeof(DataSpecP5B) / sizeof(DataSpec);
    for (int i = 0; i < nbdata; ++i)
    {
@@ -287,12 +287,12 @@ SailModel
       //Ed = diffuse
       PARdiro = (1-m_Skyl/100.)*Es;
       PARdifo = (m_Skyl/100.)*Ed;
-      
+
       // Soil Reflectance Properties
       //rsoil1 = dry soil
       //rsoil2 = wet soil
       rsoil0 = m_PSoil*Rsoil1+(1-m_PSoil)*Rsoil2;
-      
+
       // Here rho and tau come in
       sigb = ddb*rho+ddf*tau;
       sigf = ddf*rho+ddb*tau;
@@ -301,13 +301,13 @@ SailModel
       if(m2<=0) m2 = 0;
       m = vcl_sqrt(m2);
 
-   
+
       sb = sdb*rho+sdf*tau;
       sf = sdf*rho+sdb*tau;
       vb = dob*rho+dof*tau;
       vf = dof*rho+dob*tau;
       w = sob*rho+sof*tau;
-   
+
       // Here the LAI comes in
       // Outputs for the case LAI = 0
       if (m_LAI<0)
@@ -324,7 +324,7 @@ SailModel
          //rso = 0;
          rsos = 0;
          rsod = 0;
-   
+
          rddt = rsoil0;
          rsdt = rsoil0;
          rdot = rsoil0;
@@ -332,7 +332,7 @@ SailModel
          rsost = rsoil0;
          rsot = rsoil0;
       }
-      
+
       // Other cases (LAI > 0)
       e1 = exp(-m*m_LAI);
       e2 = e1*e1;
@@ -345,25 +345,25 @@ SailModel
       J2ks=Jfunc2(ks, m, m_LAI);
       J1ko=Jfunc1(ko, m, m_LAI);
       J2ko=Jfunc2(ko, m, m_LAI);
-      
+
       Ps = (sf+sb*rinf)*J1ks;
       Qs = (sf*rinf+sb)*J2ks;
       Pv = (vf+vb*rinf)*J1ko;
       Qv = (vf*rinf+vb)*J2ko;
-      
+
       rdd = rinf*(1.-e2)/denom;
       tdd = (1.-rinf2)*e1/denom;
       tsd = (Ps-re*Qs)/denom;
       rsd = (Qs-re*Ps)/denom;
       tdo = (Pv-re*Qv)/denom;
       rdo = (Qv-re*Pv)/denom;
-      
+
       tss = exp(-ks*m_LAI);
       too = exp(-ko*m_LAI);
       z = Jfunc3(ks, ko, m_LAI);
       g1 = (z-J1ks*too)/(ko+m);
       g2 = (z-J1ko*tss)/(ks+m);
-      
+
       Tv1 = (vf*rinf+vb)*g1;
       Tv2 = (vf+vb*rinf)*g2;
       T1 = Tv1*(sf+sb*rinf);
@@ -372,7 +372,7 @@ SailModel
 
       // Multiple scattering contribution to bidirectional canopy reflectance
       rsod = (T1+T2-T3)/(1.-rinf2);
-      
+
       // Treatment of the hotspot-effect
       alf=1e6;
       // Apply correction 2/(K+k) suggested by F.-M. Bron
@@ -396,7 +396,7 @@ SailModel
          f1=1;
          fint=(1.-exp(-alf))*0.05;
          sumint=0;
-         
+
          for(unsigned int j=1; j<=20; ++j)
          {
             if (j<20) x2 = -vcl_log(1.-j*fint)/alf;
@@ -418,18 +418,18 @@ SailModel
       // rso=rsos+rsod;
       //Interaction with the soil
       dn=1.-rsoil0*rdd;
-      
+
       rddt = rdd+tdd*rsoil0*tdd/dn;
       rsdt = rsd+(tsd+tss)*rsoil0*tdd/dn;
       rdot = rdo+tdd*rsoil0*(tdo+too)/dn;
-      
+
       rsodt = rsod+((tss+tsd)*tdo+(tsd+tss*rsoil0*rdd)*too)*rsoil0/dn;
       rsost = rsos+tsstoo*rsoil0;
       rsot = rsost+rsodt;
-      
+
       resh = (rddt*PARdifo+rsdt*PARdiro)/(PARdiro+PARdifo);
       resv = (rdot*PARdifo+rsot*PARdiro)/(PARdiro+PARdifo);
-      
+
       SpectralResponseType::PairType tmp1, tmp2;
       tmp1.first=lambda/1000.0;
       tmp1.second=resh;
@@ -535,7 +535,7 @@ SailModel
    double co = costl*costo;
    double ss = sintl*sints;
    double so = sintl*sinto;
-   
+
    // ..............................................................................
    //     betas -bts- and betao -bto- computation
    //     Transition angles (beta) for solar (betas) and view (betao) directions
@@ -546,14 +546,14 @@ SailModel
    // ..............................................................................
    double cosbts, cosbto, bts, ds, chi_s, bto, doo, chi_o;
    double btran1, btran2, bt1, bt2, bt3, t1, t2 , denom, frho, ftau;
-   
+
    cosbts = 5;
    if (vcl_abs(ss)>1e-6) cosbts = -cs/ss;
-   
+
    cosbto=5;
    if (vcl_abs(so)>1e-6) cosbto = -co/so;
-   
-   
+
+
    if (vcl_abs(cosbts)<1)
    {
       bts = vcl_acos(cosbts);
@@ -566,7 +566,7 @@ SailModel
    }
 
    chi_s = 2./CONST_PI*((bts-CONST_PI*0.5)*cs+vcl_sin(bts)*ss);
-   
+
    if (vcl_abs(cosbto)<1)
    {
       bto = vcl_acos(cosbto);
@@ -583,15 +583,15 @@ SailModel
       doo = -co;
    }
    chi_o = 2./CONST_PI*((bto-CONST_PI*0.5)*co+vcl_sin(bto)*so);
-   
+
    // ..............................................................................
    //   Computation of auxiliary azimut angles bt1, bt2, bt3 used
    //   for the computation of the bidirectional scattering coefficient w
    // .............................................................................
-   
+
    btran1 = vcl_abs(bts-bto);
    btran2 = CONST_PI - vcl_abs(bts+bto-CONST_PI);
-   
+
    if (psir<=btran1)
    {
       bt1=psir;
@@ -612,14 +612,14 @@ SailModel
          bt3=psir;
       }
    }
-   
+
    t1 = 2.*cs*co+ss*so*cospsi;
    t2 = 0;
    if (bt2>0) t2=sin(bt2)*(2.*ds*doo+ss*so*cos(bt1)*cos(bt3));
    denom = 2.*CONST_PI*CONST_PI;
    frho = ((CONST_PI-bt2)*t1+t2)/denom;
    ftau = (-bt2*t1+t2)/denom;
-   
+
    if (frho<0) frho = 0;
    if (ftau<0) ftau = 0;
 

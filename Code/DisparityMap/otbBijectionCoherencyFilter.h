@@ -61,46 +61,46 @@ public:
   /** Usefull typedefs */
   typedef TDisparityImage  DispMapType;
   typedef TOutputImage     MaskType;
-  
+
   typedef typename MaskType::RegionType      OutputRegionType;
   typedef typename DispMapType::RegionType   InputRegionType;
   typedef typename DispMapType::SizeType     SizeType;
   typedef typename DispMapType::IndexType    IndexType;
-  
+
   /** Set the direct horizontal disparity map */
   void SetDirectHorizontalDisparityMapInput( const TDisparityImage * hmap );
-  
+
   /** Set the direct vertical disparity map */
   void SetDirectVerticalDisparityMapInput( const TDisparityImage * vmap );
-  
+
   /** Set the reverse horizontal disparity map */
   void SetReverseHorizontalDisparityMapInput( const TDisparityImage * hmap );
-  
+
   /** Set the reverse vertical disparity map */
   void SetReverseVerticalDisparityMapInput( const TDisparityImage * vmap );
-  
+
   /** Get the inputs */
   const TDisparityImage * GetDirectHorizontalDisparityMapInput() const;
   const TDisparityImage * GetDirectVerticalDisparityMapInput() const;
   const TDisparityImage * GetReverseHorizontalDisparityMapInput() const;
   const TDisparityImage * GetReverseVerticalDisparityMapInput() const;
-  
+
   /** Set the tolerance radius */
   itkSetMacro(Tolerance,double);
-  
+
   /** Get the tolerance radius */
   itkGetMacro(Tolerance,double);
-  
+
   /** Set/Get macro for exploration area */
   itkSetMacro(MinHDisp,int);
   itkGetMacro(MinHDisp,int);
-  
+
   itkSetMacro(MaxHDisp,int);
   itkGetMacro(MaxHDisp,int);
-  
+
   itkSetMacro(MinVDisp,int);
   itkGetMacro(MinVDisp,int);
-  
+
   itkSetMacro(MaxVDisp,int);
   itkGetMacro(MaxVDisp,int);
 
@@ -116,26 +116,26 @@ protected:
 
   /** Generate input requrested region */
   virtual void GenerateInputRequestedRegion();
-  
+
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId);
-  
+
 private:
   BijectionCoherencyFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** Tolerance radius (in pixels) */
   double m_Tolerance;
-  
+
   /** Minimum horizontal input disparity  */
   int m_MinHDisp;
-  
+
   /** Maximum horizontal input disparity */
   int m_MaxHDisp;
-  
+
   /** Minimum vertical input disparity */
   int m_MinVDisp;
-  
+
   /** Maximum vertical input disparity */
   int m_MaxVDisp;
 };

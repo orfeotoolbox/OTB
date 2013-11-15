@@ -202,7 +202,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
   const TDisparityImage * horizDisp = this->GetHorizontalDisparityMapInput(0);
   TOutputImage * outputPtr = this->GetOutput();
   TResidueImage * residuePtr = this->GetResidueOutput();
-  
+
   if (horizDisp)
     {
     outputPtr->SetLargestPossibleRegion(horizDisp->GetLargestPossibleRegion());
@@ -210,14 +210,14 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
 
     residuePtr->SetLargestPossibleRegion(horizDisp->GetLargestPossibleRegion());
     residuePtr->SetNumberOfComponentsPerPixel(1);
-    
+
     // copy also origin and spacing
     outputPtr->SetOrigin(horizDisp->GetOrigin());
     outputPtr->SetSpacing(horizDisp->GetSpacing());
-  
+
     residuePtr->SetOrigin(horizDisp->GetOrigin());
     residuePtr->SetSpacing(horizDisp->GetSpacing());
-    
+
     if (this->m_ReferenceKeywordList.GetSize() > 0)
       {
       itk::EncapsulateMetaData<ImageKeywordListType>
@@ -248,7 +248,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
 {
   RegionType requested = this->GetOutput()->GetRequestedRegion();
   RegionType largest = this->GetHorizontalDisparityMapInput(0)->GetLargestPossibleRegion();
-  
+
   for (unsigned int i=0; i<this->GetNumberOfRequiredInputs(); ++i)
     {
     unsigned int index  = i % 3;
@@ -305,7 +305,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
         itkExceptionMacro(<< "Unexpected value for (i%3) ");
       }
     }
-  
+
   // Check moving keywordlist
   for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
   {
@@ -327,7 +327,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
   this->m_ReferenceToGroundTransform = RSTransformType::New();
   this->m_ReferenceToGroundTransform->SetInputKeywordList(this->m_ReferenceKeywordList);
   this->m_ReferenceToGroundTransform->InstanciateTransform();
-  
+
   this->m_MovingToGroundTransform.clear();
   for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
     {
@@ -346,16 +346,16 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
 {
   TOutputImage * outputPtr = this->GetOutput();
   TResidueImage * residuePtr = this->GetResidueOutput();
-  
+
   itk::ImageRegionIteratorWithIndex<OutputImageType>   outIt(outputPtr,outputRegionForThread);
   itk::ImageRegionIterator<ResidueImageType>  resIt(residuePtr,outputRegionForThread);
-  
+
   typename OptimizerType::Pointer optimizer = OptimizerType::New();
-  
+
   DispMapIteratorList hDispIts;
   DispMapIteratorList vDispIts;
   MaskIteratorList maskIts;
-  
+
   for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
     {
     // Iterators over horizontal disparity maps
@@ -374,77 +374,77 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
       maskIts[k].GoToBegin();
       }
     }
-  
+
   outIt.GoToBegin();
   resIt.GoToBegin();
-  
+
   PrecisionType altiMin = 0;
   PrecisionType altiMax = 500;
-  
+
   typename OutputImageType::PointType pointRef;
   TDPointType currentPoint;
-  
+
   typename OutputImageType::PixelType outPixel(3);
   PrecisionType globalResidue;
 
   typename PointSetType::Pointer pointSetA = PointSetType::New();
   typename PointSetType::Pointer pointSetB = PointSetType::New();
-  
+
   while (!outIt.IsAtEnd())
     {
     pointSetA->Initialize();
     pointSetB->Initialize();
-    
+
     // Compute reference line of sight
     TDPointType pointA, pointB;
-    
+
     outputPtr->TransformIndexToPhysicalPoint(outIt.GetIndex(), pointRef);
-    
+
     currentPoint[0] = pointRef[0];
     currentPoint[1] = pointRef[1];
     currentPoint[2] = altiMax;
     pointA = this->m_ReferenceToGroundTransform->TransformPoint(currentPoint);
-    
+
     currentPoint[2] = altiMin;
     pointB = this->m_ReferenceToGroundTransform->TransformPoint(currentPoint);
-    
+
     pointSetA->SetPoint(0, pointA);
     pointSetB->SetPoint(0, pointB);
     pointSetA->SetPointData(0,0);
     pointSetB->SetPointData(0,0);
-    
+
     unsigned int nbPoints = 1;
-    
+
     for (unsigned int k=0; k<this->m_MovingKeywordLists.size(); ++k)
       {
       // Compute the N moving lines of sight
       TDPointType pointAi, pointBi;
-    
+
       if (maskIts.count(k) && !(maskIts[k].Get() > 0))
         {
         continue;
         }
-      
+
       currentPoint[0] = pointRef[0] + hDispIts[k].Get();
       currentPoint[1] = pointRef[1];
       if (vDispIts.count(k))
         {
         currentPoint[1] += vDispIts[k].Get();
         }
-      
+
       currentPoint[2] = altiMax;
       pointAi = this->m_MovingToGroundTransform[k]->TransformPoint(currentPoint);
-      
+
       currentPoint[2] = altiMin;
       pointBi = this->m_MovingToGroundTransform[k]->TransformPoint(currentPoint);
-      
+
       pointSetA->SetPoint(nbPoints, pointAi);
       pointSetB->SetPoint(nbPoints, pointBi);
       pointSetA->SetPointData(nbPoints,k+1);
       pointSetB->SetPointData(nbPoints,k+1);
       ++nbPoints;
       }
-    
+
     // Check if there are at least 2 lines of sight, then compute intersection
     if (nbPoints >= 2)
       {
@@ -459,10 +459,10 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
       outPixel.Fill(0);
       globalResidue = 0;
       }
-    
+
     outIt.Set(outPixel);
     resIt.Set(globalResidue);
-    
+
     // Increment all iterators
     for (typename DispMapIteratorList::iterator hIt = hDispIts.begin(); hIt != hDispIts.end(); ++hIt)
       {
@@ -476,11 +476,11 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
       {
       ++mIt->second;
       }
-    
+
     ++outIt;
     ++resIt;
     }
-   
+
 }
 
 }

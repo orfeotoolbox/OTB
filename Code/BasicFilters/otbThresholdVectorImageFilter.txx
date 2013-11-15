@@ -112,7 +112,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
     itkExceptionMacro(<<"Lower threshold cannot be greater than upper threshold.");
     return;
     }
-  
+
   if (m_Lower != lower || m_Upper != upper)
     {
     m_Lower = lower;
@@ -147,7 +147,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-          
+
   // walk the regions, threshold each pixel
   while( !outIt.IsAtEnd() && !inIt.IsAtEnd()  )
     {
@@ -158,7 +158,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
     for(unsigned int i=0; i<l_size; i++)
       {
       const InputImageInternalPixelType value = inPix[i];
-        
+
       if (m_Lower <= value && value <= m_Upper)
         {
         // pixel passes to output unchanged and is replaced by m_OutsideValue in
@@ -177,7 +177,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
     ++outIt;
     progress.CompletedPixel();
     }
-  
+
 }
 
 } // end namespace itk

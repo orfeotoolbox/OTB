@@ -138,7 +138,7 @@ public:
 
   /** Get the covariance estimator (for progress reporting purposes) */
   itkGetObjectMacro(CovarianceEstimator, CovarianceEstimatorType);
-  
+
   /** Connect one of the operands for pixel-wise addition */
   void SetInput1(const TInputImage * image1);
 

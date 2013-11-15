@@ -42,20 +42,20 @@ public:
   <TSampleList, TSampleList>                          Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConcatenateSampleListFilter, otb::Statistics::ListSampleToListSampleFilter);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** SampleList typedefs */
   typedef TSampleList                                    SampleListType;
   typedef typename SampleListType::Pointer               SampleListPointer;
   typedef typename SampleListType::ConstPointer          SampleListConstPointer;
   typedef typename SampleListType::MeasurementVectorType MeasurementVectorType;
   typedef typename MeasurementVectorType::ValueType      ValueType;
-  
+
   /** Method to set/get the input list sample */
   void AddInput( const SampleListType * inputPtr );
 

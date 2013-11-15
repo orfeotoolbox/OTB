@@ -67,12 +67,12 @@ public:
    typedef typename OutputLabelMapType::LabelObjectType::LabelType  LabelType;
    typedef typename OutputLabelMapType::LabelObjectType  LabelObjectType;
    typedef typename LabelObjectType::AttributesValueType  AttributesValueType;
-   
+
    typedef itk::Size<2>              SizeType;
    typedef std::vector<AttributesValueType>  VectorType;
    typedef std::vector<LabelType>    LabelVectorType;
-   
-   
+
+
 
    /** Standard Macro*/
    itkTypeMacro(SpatialisationFilter, LabelMapSource);
@@ -81,10 +81,10 @@ public:
    /**Set input vector data*/
    itkSetMacro(ObjectSize, SizeType);
    itkGetMacro(ObjectSize, SizeType);
-   
+
    itkSetMacro(NumberOfObjects, SizeType);
    itkGetMacro(NumberOfObjects, SizeType);
-   
+
 //    itkSetMacro(PathVector, VectorType);
 //    itkGetMacro(PathVector, VectorType);
 //
@@ -94,26 +94,26 @@ public:
    {
       m_PathVector=v;
    }
-   
+
    void SetAreaVector(VectorType & v)
    {
       m_AreaVector=v;
    }
-   
+
    void SetLabels(LabelVectorType & v)
    {
       m_Labels=v;
    }
-   
-   
 
 
-   
+
+
+
 protected:
    SpatialisationFilter();
    virtual ~SpatialisationFilter() {}
    void PrintSelf(std::ostream& os, itk::Indent indent) const;
-   
+
    virtual void GenerateData();
    virtual void ProcessObject(unsigned int obj);
   virtual void GenerateOutputInformation();
@@ -121,7 +121,7 @@ protected:
 private:
    SpatialisationFilter(const Self &); //purposely not implemented
    void operator =(const Self&); //purposely not implemented
-  
+
    /** Common size for all objects in number of pixels (number of rows, number of columns).*/
    SizeType m_ObjectSize;
    /** Number of objects contained in the image (number of objects by line, number of objects by column).*/

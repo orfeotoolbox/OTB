@@ -1,19 +1,19 @@
 /*=========================================================================
-  
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
-  
-  
+
+
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
-  
-  
+
+
   This software is distributed WITHOUT ANY WARRANTY; without even
   the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
-  
+
   =========================================================================*/
 #ifndef __otbWrapperMapProjectionParametersHandler_h
 #define __otbWrapperMapProjectionParametersHandler_h
@@ -59,7 +59,7 @@ public:
     */
   static const std::string GetProjectionRefFromChoice(const Application::Pointer app,
                                                       const std::string & key);
-    
+
 
   /**
     * Helper method : Compute the UTM parameters relative an image

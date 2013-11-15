@@ -400,37 +400,37 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   typename VectorImageToMatrixImageFilterType::Pointer inputImage2Matrix = VectorImageToMatrixImageFilterType::New();
   inputImage2Matrix->SetInput(inputPtr);
   inputImage2Matrix->Update();
-  
+
   //useful const variables
   const unsigned int nbEndmembers = m_Endmembers.columns();
   const unsigned int nbComponentsPerPixel = inputPtr->GetNumberOfComponentsPerPixel();
   const unsigned int nbPixels = inputPtr->GetLargestPossibleRegion().GetNumberOfPixels();
-  
+
   // otbGenericMsgDebugMacro( << "nbEndmembers " << nbEndmembers );
   // otbGenericMsgDebugMacro( << "nbComponentsPerPixel " << nbComponentsPerPixel );
   // otbGenericMsgDebugMacro( << "nbPixels " << nbPixels );
-  
+
   // Other declarations
   double critA, critS, crit = 1;
   const unsigned int divisorParam = 10;
-  
+
   // Tunning the optimized function parameters
   //const double m_Delt =                       1.;
   //const double m_LambdD =                     0.01;
   m_LambdS *= nbEndmembers;
-  
+
   // Tunning the projected gradient parameters
   double sig = 0.05;
   double bet = 0.99;
   double alphA = 1.;
   double alphS = 1.;
-  
+
   MatrixType X = inputImage2Matrix->GetMatrix();
   //otbGenericMsgDebugMacro( << "X " << X  );
   //-------   A and S declaration and initialization   --------//
   //---> These values fit with the ones chosen in the matlab
   //---"nmf_validationOtb.m" function to validate the OTB code.
-  
+
   //A is the endmembers matrix? Output from VCA input of mdmd
   MatrixType A(this->m_Endmembers);
 
@@ -517,7 +517,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
       otbGenericMsgDebugMacro( << "normA = " << A.fro_norm() );
       otbGenericMsgDebugMacro( << "A(0, 0) = " << A(0, 0) );
       }
-    
+
     //------------   crit evaluation   --------------//
     Adiff = Aold-A;
     critA = Adiff.absolute_value_max();
@@ -535,17 +535,17 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 
     ++counter;
     }
-  
+
   //---   Putting the rows of in the bands of the output vector image   ---//
   //TODO
   // Could be impoved choosing an imageList for the abundance maps
   // and a vector list for the endmember spectra (columns of A).
-  
+
   itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr, outputPtr->GetRequestedRegion());
-  
+
   typename OutputImageType::PixelType vectorPixel;
   vectorPixel.SetSize(outputPtr->GetNumberOfComponentsPerPixel());
- 
+
   unsigned int i = 0;
   outputIt.GoToBegin();
   while ( !outputIt.IsAtEnd() )

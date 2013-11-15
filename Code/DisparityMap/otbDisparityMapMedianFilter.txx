@@ -140,7 +140,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  
+
   // get pointers to the input and output
   typename Superclass::InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   TMask * inputmaskPtr = const_cast< TMask * >(this->GetMaskInput());
@@ -148,12 +148,12 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
   TMask * outputmaskPtr = this->GetOutputMask();
   typename Superclass::OutputImagePointer outputdisparitymapPtr = this->GetOutputDisparityMap();
   TMask * outputdisparitymaskPtr = this->GetOutputDisparityMask();
-  
+
   if ( !inputPtr || !outputPtr || !outputmaskPtr || !outputdisparitymapPtr || !outputdisparitymaskPtr)
     {
     return;
     }
-  
+
   if (inputmaskPtr)
     {
     // check that the mask has the same size as the input image
@@ -180,7 +180,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
       {
       inputmaskPtr->SetRequestedRegion( inputRequestedRegion );
       }
-    
+
     return;
     }
   else
@@ -190,7 +190,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 
     // store what we tried to request (prior to trying to crop)
     inputPtr->SetRequestedRegion( inputRequestedRegion );
-    
+
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
@@ -216,9 +216,9 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
   TMask * outputmaskPtr = this->GetOutputMask();
   TOutputImage * outputdisparitymapPtr = this->GetOutputDisparityMap();
   TMask * outputdisparitymaskPtr = this->GetOutputDisparityMask();
-  
+
   SizeType imgSize = output->GetLargestPossibleRegion().GetSize();
-  
+
   /** Input iterators */
   itk::ConstNeighborhoodIterator<InputImageType> InputIt(m_Radius, input,input->GetRequestedRegion());
   itk::ConstNeighborhoodIterator<TMask> MaskInputIt;
@@ -300,7 +300,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
       }
 
     outputDisparityMapIt.Set( static_cast<typename OutputImageType::PixelType> (InputIt.GetCenterPixel())); // copy the input disparity map
-    
+
     if (inputmaskPtr)
       {
       outputDisparityMaskIt.Set(MaskInputIt.GetCenterPixel());  // copy the input disparity mask
@@ -344,7 +344,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         {
         MaskInputIt.SetLocation(outputIt.GetIndex());
         }
-      
+
       if ((!inputmaskPtr || (inputmaskPtr && MaskInputIt.GetCenterPixel() != 0)) &&
           std::fabs(InputIt.GetCenterPixel() - MedianIt.Get())>m_IncoherenceThreshold)
         {

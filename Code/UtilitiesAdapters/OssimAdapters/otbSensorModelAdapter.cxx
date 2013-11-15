@@ -215,14 +215,14 @@ bool SensorModelAdapter::ReadGeomFile(const std::string & infile)
   ossimKeywordlist geom;
 
   geom.add(infile.c_str());
-  
+
   m_SensorModel = ossimSensorModelFactory::instance()->createProjection(geom);
-  
+
   if (m_SensorModel == NULL)
     {
     m_SensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
     }
-  
+
   return (m_SensorModel != NULL);
 }
 

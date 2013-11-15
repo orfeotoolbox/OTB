@@ -81,7 +81,7 @@ public:
 
   typedef Functor::NDVI<ScalarRealType, ScalarRealType, PrecisionType>
                                                       NDVIFunctorType;
-  
+
   typedef std::vector<PrecisionType>                  OutputType;
 
   virtual OutputType Evaluate( const DataNodeType& node ) const;

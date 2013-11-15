@@ -53,25 +53,25 @@ FlusserMomentsImageFunction<TInputImage, TCoordRep>
 {
   // Build moments vector
   OutputType moments;
-  
+
   // Initialize moments
   moments.Fill( itk::NumericTraits< ScalarRealType >::Zero );
-  
+
   // Check for input image
   if( !this->GetInputImage() )
     {
     return moments;
     }
-  
+
   // Check for out of buffer
   if ( !this->IsInsideBuffer( index ) )
     {
     return moments;
     }
-  
+
   // Define complex type
   typedef std::complex<ScalarRealType> ComplexType;
-  
+
   // Define and intialize cumulants for complex moments
   ComplexType c11, c12, c21, c20, c30, c22, c31, c40;
   c11 = itk::NumericTraits<ComplexType>::Zero;
@@ -82,19 +82,19 @@ FlusserMomentsImageFunction<TInputImage, TCoordRep>
   c22 = itk::NumericTraits<ComplexType>::Zero;
   c31 = itk::NumericTraits<ComplexType>::Zero;
   c40 = itk::NumericTraits<ComplexType>::Zero;
-  
+
   ScalarRealType c00 = itk::NumericTraits<ScalarRealType>::Zero;
-    
+
   // Create an N-d neighborhood kernel, using a zeroflux boundary condition
   typename InputImageType::SizeType kernelSize;
   kernelSize.Fill( m_NeighborhoodRadius );
-  
+
   itk::ConstNeighborhoodIterator<InputImageType>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-  
+
   // Set the iterator at the desired location
   it.SetLocation(index);
-  
+
   // Walk the neighborhood
   const unsigned int size = it.Size();
   for (unsigned int i = 0; i < size; ++i)
@@ -103,10 +103,10 @@ FlusserMomentsImageFunction<TInputImage, TCoordRep>
     ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
     ScalarRealType x = static_cast<ScalarRealType>(it.GetOffset(i)[0])/(2*m_NeighborhoodRadius+1);
     ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
-    
+
     // Build complex value
     ComplexType xpy(x, y), xqy(x, -y);
-    
+
     // Update cumulants
     c00 += value;
     c11 += xpy*xqy*value;
@@ -118,7 +118,7 @@ FlusserMomentsImageFunction<TInputImage, TCoordRep>
     c31 += xpy*xpy*xpy*xqy*value;
     c40 += xpy*xpy*xpy*xpy*value;
     }
-  
+
   // Nomalisation
   c11 /= c00;
   c12 /= c00;
@@ -141,7 +141,7 @@ FlusserMomentsImageFunction<TInputImage, TCoordRep>
   moments[8]  = static_cast<ScalarRealType>((c31*c12*c12).imag());
   moments[9]  = static_cast<ScalarRealType>((c40*c12*c12*c12*c12).real());
   moments[10] = static_cast<ScalarRealType>((c40*c12*c12*c12*c12).imag());
-  
+
   // Return result
   return moments;
 }

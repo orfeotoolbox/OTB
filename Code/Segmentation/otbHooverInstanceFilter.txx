@@ -33,12 +33,12 @@ HooverInstanceFilter<TLabelMap>
   this->SetNumberOfRequiredOutputs(2);
   typename LabelMapType::Pointer secondOutput = LabelMapType::New();
   this->AddOutput(secondOutput);
-  
+
   m_HooverMatrix.SetSize(0, 0);
   m_CardRegGT.SetSize(0);
   m_CardRegMS.SetSize(0);
   m_LabelsGT.resize(0);
-  
+
   m_MeanRC = static_cast<AttributesValueType>(0);
   m_MeanRF = static_cast<AttributesValueType>(0);
   m_MeanRA = static_cast<AttributesValueType>(0);
@@ -99,11 +99,11 @@ void HooverInstanceFilter<TLabelMap>
 ::AllocateOutputs()
 {
   Superclass::AllocateOutputs();
-  
+
   if( this->GetInPlace() && this->CanRunInPlace() )
     {
     LabelMapPointer secondInput = const_cast<TLabelMap *>(this->GetMachineSegmentationLabelMap());
-    
+
     if( secondInput )
       {
       ImageRegionType region = this->GetOutput(1)->GetLargestPossibleRegion();
@@ -118,7 +118,7 @@ void HooverInstanceFilter<TLabelMap>
     TLabelMap * outputMS = this->GetOutput(1);
     assert( inputMS != NULL );
     assert( outputMS != NULL );
-    
+
     outputMS->SetBackgroundValue( inputMS->GetBackgroundValue() );
 
     ConstIteratorType  it = ConstIteratorType( inputMS );
@@ -132,7 +132,7 @@ void HooverInstanceFilter<TLabelMap>
 
       typename LabelObjectType::Pointer newLabelObject = LabelObjectType::New();
       newLabelObject->CopyAllFrom( labeObject );
-      
+
       outputMS->AddLabelObject( newLabelObject );
       ++it;
       }
@@ -144,7 +144,7 @@ void HooverInstanceFilter<TLabelMap>
 ::ReleaseInputs()
 {
   Superclass::ReleaseInputs();
-  
+
   if( this->GetInPlace() )
     {
     // Release second input
@@ -162,36 +162,36 @@ void HooverInstanceFilter<TLabelMap>
 {
   // first : call superclass method
   Superclass::BeforeThreadedGenerateData();
-  
+
   m_NumberOfRegionsGT = this->GetGroundTruthLabelMap()->GetNumberOfLabelObjects();
   m_NumberOfRegionsMS = this->GetMachineSegmentationLabelMap()->GetNumberOfLabelObjects();
-  
+
   if (m_NumberOfRegionsGT == 0 || m_NumberOfRegionsMS == 0)
     {
     itkExceptionMacro("Empty label map");
     }
-  
+
   //Check the matrix size
   if (m_NumberOfRegionsGT != m_HooverMatrix.Rows() || m_NumberOfRegionsMS != m_HooverMatrix.Cols())
     {
     itkExceptionMacro("The given Hoover confusion matrix ("<<m_HooverMatrix.Rows()<<" x "<<m_HooverMatrix.Cols() <<
                       ") doesn't match with the input label maps ("<<m_NumberOfRegionsGT<<" x "<<m_NumberOfRegionsMS<<")");
     }
-  
+
   //Init cardinalities lists
   m_CardRegGT.SetSize(m_NumberOfRegionsGT);
   m_CardRegGT.Fill(0);
-  
+
   m_CardRegMS.SetSize(m_NumberOfRegionsMS);
   m_CardRegMS.Fill(0);
-  
+
   //Fill cardinalities list for MS
   unsigned long i = 0;
-  
+
   IteratorType  iter = IteratorType( this->GetMachineSegmentationLabelMap() );
-  
+
   typename LabelObjectType::Pointer blankRegion;
-  
+
   while ( !iter.IsAtEnd() )
     {
     LabelObjectType *regionMS = iter.GetLabelObject();
@@ -205,7 +205,7 @@ void HooverInstanceFilter<TLabelMap>
     regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RF), 0.0);
     regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RA), 0.0);
     regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RN), 0.0);
-    
+
     if (m_UseExtendedAttributes)
       {
       blankRegion = LabelObjectType::New();
@@ -227,7 +227,7 @@ void HooverInstanceFilter<TLabelMap>
     i++;
     ++iter;
     }
-  
+
   m_LabelsGT = this->GetGroundTruthLabelMap()->GetLabels();
 }
 
@@ -246,19 +246,19 @@ void HooverInstanceFilter<TLabelMap>
       break;
       }
     }
-  
+
   m_CardRegGT[currentRegionGT] = labelObject->Size();
   if (m_CardRegGT[currentRegionGT] == 0)
     {
     otbWarningMacro("Region "<<currentRegionGT<<" in ground truth label map is empty");
     }
-  
+
   // reset any Hoover attribute already present
   labelObject->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RC), 0.0);
   labelObject->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RF), 0.0);
   labelObject->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RA), 0.0);
   labelObject->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RM), 0.0);
-  
+
   if (m_UseExtendedAttributes)
     {
     typename LabelObjectType::Pointer blankRegion;
@@ -286,7 +286,7 @@ void HooverInstanceFilter<TLabelMap>
 {
   LabelMapType* outGT = this->GetOutput(0);
   LabelMapType* outMS = this->GetOutput(1);
-  
+
   // Iterators on label object container (to gain efficiency when accessing them)
   IteratorType  iterGT = IteratorType( outGT );
   IteratorType  iterMS = IteratorType( outMS );
@@ -294,11 +294,11 @@ void HooverInstanceFilter<TLabelMap>
   // Set of classified regions
   RegionSetType GTindices;
   RegionSetType MSindices;
-  
+
   // flags to detect empty rows or columns
   bool IsRowEmpty;
   bool IsColEmpty;
-  
+
   // temporary buffers to compute average scores
   double bufferRC = 0.0;
   double bufferRF = 0.0;
@@ -307,7 +307,7 @@ void HooverInstanceFilter<TLabelMap>
   double bufferRN = 0.0;
   double areaGT = 0.0;
   double areaMS = 0.0;
-  
+
   // first pass : loop on GT regions first
   for(unsigned int row=0; row<m_NumberOfRegionsGT; row++, iterGT++)
     {
@@ -315,7 +315,7 @@ void HooverInstanceFilter<TLabelMap>
     double sumScoreRF = 0.0; // temporary sum  of (Tij x (Tij - 1)) terms for the RF score
     RegionSetType     regionsOfMS; // stores region indexes
     ObjectVectorType  objectsOfMS; // stores region pointers
-    
+
     double tGT = static_cast<double>(m_CardRegGT[row]) * m_Threshold; // card Ri x t
     IsRowEmpty = true;
     iterMS.GoToBegin();
@@ -332,32 +332,32 @@ void HooverInstanceFilter<TLabelMap>
         {
         IsRowEmpty = false;
         }
-      
+
       double tMS = static_cast<double>(m_CardRegMS[col]) * m_Threshold; // card Rj x t
-      
+
       otbDebugMacro(<< "* coef[" << row << "," << col << "]=" << coefT << " #tGT=" << tGT << " #tMS=" << tMS);
-      
+
       // Looking for Correct Detection and Over Segmentation (both can happen for the same GT region)
       if(coefT>=tMS)
         {
         if(coefT>=tGT)
           {
           otbDebugMacro(<< "1 coef[" << row << "," << col << "]=" << coefT << " #tGT=" << tGT << " #tMS=" << tMS << " -> CD");
-          
+
           LabelObjectType *regionGT = iterGT.GetLabelObject();
           LabelObjectType *regionMS = iterMS.GetLabelObject();
           double scoreRC = m_Threshold * (std::min(coefT / tGT, coefT / tMS));
           bufferRC += scoreRC * static_cast<double>(m_CardRegGT[row]);
-          
+
           regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RC), static_cast<AttributesValueType>(scoreRC));
           regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RC), static_cast<AttributesValueType>(scoreRC));
-          
+
           if (m_UseExtendedAttributes)
             {
             regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_CD), static_cast<AttributesValueType>(regionMS->GetLabel()));
             regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_CD), static_cast<AttributesValueType>(regionGT->GetLabel()));
             }
-          
+
           GTindices.insert(row);
           MSindices.insert(col);
           }
@@ -371,7 +371,7 @@ void HooverInstanceFilter<TLabelMap>
         sumScoreRF += coefT*(coefT-1.0);
         }
       } // end of column loop
-    
+
     otbDebugMacro(<< "end of line " << row << "; sumOS=" << sumOS << " " << regionsOfMS.size() << " of MS region");
     if(sumOS>=tGT && sumOS>0)
       {
@@ -385,31 +385,31 @@ void HooverInstanceFilter<TLabelMap>
         {
         otbDebugMacro(<< row << " OS by ");
         LabelObjectType *regionGT = iterGT.GetLabelObject();
-        
+
         double cardRegGT = static_cast<double>(m_CardRegGT[row]);
         double scoreRF = 1.0 - sumScoreRF / (cardRegGT * (cardRegGT - 1.0));
         bufferRF += scoreRF * cardRegGT;
-        
+
         regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RF), static_cast<AttributesValueType>(scoreRF));
-        
+
         unsigned int indexOS=1;
         for(typename ObjectVectorType::iterator it=objectsOfMS.begin(); it!=objectsOfMS.end(); ++it)
           {
           LabelObjectType *regionMS = *it;
           std::ostringstream attribute;
           attribute << ATTRIBUTE_OS << "_" << indexOS;
-          
+
           regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RF), static_cast<AttributesValueType>(scoreRF));
-          
+
           if (m_UseExtendedAttributes)
             {
             regionGT->SetAttribute(attribute.str().c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
             regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_OS), static_cast<AttributesValueType>(regionGT->GetLabel()));
             }
-          
+
           indexOS++;
           }
-        
+
         GTindices.insert(row);
         for(RegionSetType::iterator it=regionsOfMS.begin(); it!=regionsOfMS.end(); ++it)
           {
@@ -440,10 +440,10 @@ void HooverInstanceFilter<TLabelMap>
     double sumUS = 0.0; // sum of coefT for potential under-segmented regions
     double sumScoreUS = 0.0; // temporary sum of the (Tij x (Tij - 1)) for RA score
     double sumCardUS = 0.0; // temporary sum of under segmented region sizes
-    
+
     RegionSetType regionsOfGT;     // stores region indexes
     ObjectVectorType  objectsOfGT; // stores region pointers
-         
+
     double tMS = static_cast<double>(m_CardRegMS[col]) * m_Threshold;
     IsColEmpty = true;
     iterGT.GoToBegin();
@@ -459,7 +459,7 @@ void HooverInstanceFilter<TLabelMap>
         {
         IsColEmpty = false;
         }
-     
+
       double tGT = static_cast<double>(m_CardRegGT[row]) * m_Threshold;
       // Looking for Under-Segmented regions
       if(coefT>=tGT)
@@ -472,7 +472,7 @@ void HooverInstanceFilter<TLabelMap>
         sumCardUS += static_cast<double>(m_CardRegGT[row]);
         }
       } // end of line loop
-    
+
     // US
     if(sumUS>=tMS)
       {
@@ -485,27 +485,27 @@ void HooverInstanceFilter<TLabelMap>
         LabelObjectType *regionMS = iterMS.GetLabelObject();
         double scoreRA = 1.0 - sumScoreUS / (sumCardUS * (sumCardUS - 1.0));
         bufferRA += scoreRA * sumCardUS;
-        
+
         regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RA), static_cast<AttributesValueType>(scoreRA));
-        
+
         unsigned int indexUS=1;
         for(typename ObjectVectorType::iterator it=objectsOfGT.begin(); it!=objectsOfGT.end(); ++it)
           {
           LabelObjectType *regionGT = *it;
           std::ostringstream attribute;
           attribute << ATTRIBUTE_US << "_" << indexUS;
-          
+
           regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RA), static_cast<AttributesValueType>(scoreRA));
-          
+
           if (m_UseExtendedAttributes)
             {
             regionMS->SetAttribute(attribute.str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
             regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_US), static_cast<AttributesValueType>(regionMS->GetLabel()));
             }
-            
+
           indexUS++;
           }
-        
+
         MSindices.insert(col);
         for(RegionSetType::iterator it=regionsOfGT.begin(); it!=regionsOfGT.end(); ++it)
           {
@@ -538,17 +538,17 @@ void HooverInstanceFilter<TLabelMap>
       {
       otbDebugMacro(<< "M " << i);
       LabelObjectType *regionGT = iterGT.GetLabelObject();
-      
+
       bufferRM += static_cast<double>(m_CardRegGT[i]);
-      
+
       regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RM), 1.0);
-      
+
       if (m_UseExtendedAttributes)
         {
         regionGT->SetAttribute(GetNameFromAttribute(ATTRIBUTE_M),
                                static_cast<AttributesValueType>(regionGT->GetLabel()));
         }
-      
+
       }
     }
 
@@ -559,20 +559,20 @@ void HooverInstanceFilter<TLabelMap>
     if(MSindices.count(i)==0)
       {
       LabelObjectType *regionMS = iterMS.GetLabelObject();
-      
+
       bufferRN += static_cast<double>(m_CardRegMS[i]);
-      
+
       regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_RN), 1.0);
-      
+
       if (m_UseExtendedAttributes)
         {
         regionMS->SetAttribute(GetNameFromAttribute(ATTRIBUTE_N),
                                static_cast<AttributesValueType>(regionMS->GetLabel()));
         }
-      
+
       }
     }
-    
+
   // Compute average scores
   m_MeanRC = static_cast<AttributesValueType>(bufferRC / areaGT);
   m_MeanRF = static_cast<AttributesValueType>(bufferRF / areaGT);

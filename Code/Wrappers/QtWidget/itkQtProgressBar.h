@@ -39,11 +39,11 @@ public:
   /** Get Command */
   RedrawCommandType * GetRedrawCommand( void ) const;
 
-  
+
   /** Manage a Progress event */
   void ProcessEvent(itk::Object * caller, const itk::EventObject & event );
   void ConstProcessEvent(const itk::Object * caller, const itk::EventObject & event );
- 
+
 
   /** Manage a Progress event */
   void Observe( itk::Object *caller );

@@ -86,7 +86,7 @@ public:
   typedef typename InputImageType::Pointer             InputImagePointer;
   typedef typename InputImageType::RegionType          InputImageRegionType;
   typedef typename InputImageType::PixelType           InputImagePixelType;
-  
+
   typedef unsigned char                                OutputPixelType;
   typedef VectorImage<OutputPixelType>                 OutputImageType;
 
@@ -94,17 +94,17 @@ public:
   typedef typename VectorDataType::DataNodeType        DataNodeType;
   typedef typename DataNodeType::PolygonType           PolygonType;
   typedef typename PolygonType::VertexType             VertexType;
-  
+
   typedef VectorDataFileWriter<VectorDataType>         VectorDataFileWriterType;
-  
+
 
   /// Multi channels Extract ROI filter
   typedef MultiChannelExtractROI
   <InternalPixelType, OutputPixelType>                 VectorImageExtractROIFilterType;
-  
+
   // Writer
   typedef ImageFileWriter<OutputImageType>            VectorWriterType;
-  
+
   // Resampler
   typedef StreamingShrinkImageFilter
   <InputImageType, InputImageType >        StreamingShrinkImageFilterType;
@@ -142,11 +142,11 @@ public:
   /** Set CGI filename path */
   itkSetStringMacro(CGIPath);
   itkGetStringMacro(CGIPath);
-  
+
   /** Set SahpePATH: the directory where to store the shapefile */
   itkSetStringMacro(ShapeIndexPath);
   itkGetStringMacro(ShapeIndexPath);
-  
+
   /** Update Method : Call a porotected Write method */
   virtual void Update()
   {
@@ -215,7 +215,7 @@ private:
 
   // Projection Filter
   GenericRSResamplerPointerType                    m_GenericRSResampler;
-  
+
   // Tile size
   unsigned int                 m_TileSize;
   unsigned int                 m_CurrentDepth;

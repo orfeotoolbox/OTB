@@ -31,7 +31,7 @@ namespace otb
    *
    * \sa itk::DataObject
  */
- 
+
 class ITK_EXPORT LeafParameters : public itk::DataObject
 {
    public:
@@ -48,23 +48,23 @@ class ITK_EXPORT LeafParameters : public itk::DataObject
       /** Set/Get Chlorophyll content (ug/cm2)*/
       itkSetMacro(Cab, double);
       itkGetMacro(Cab, double);
-      
+
       /** Set/Get Carotenoid content (ug/cm2)*/
       itkSetMacro(Car, double);
       itkGetMacro(Car, double);
-      
+
       /** Set/Get Brown pigment content (arbitrary unit)*/
       itkSetMacro(CBrown, double);
       itkGetMacro(CBrown, double);
-      
+
       /** Set/Get equivalent leaf water thickness, EWT (cm)*/
       itkSetMacro(Cw, double);
       itkGetMacro(Cw, double);
-      
+
       /** Set/Get leaf dry matter, LMA (g/cm2)*/
       itkSetMacro(Cm, double);
       itkGetMacro(Cm, double);
-      
+
       /** Set/Get leaf structure coef*/
       itkSetMacro(N, double);
       itkGetMacro(N, double);
@@ -80,7 +80,7 @@ class ITK_EXPORT LeafParameters : public itk::DataObject
    private:
       LeafParameters(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
-      
+
       double m_Cab; //Chlorophyll content
       double m_Car; //Carotenoid content
       double m_CBrown; //Brown pigment content

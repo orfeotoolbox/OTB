@@ -164,7 +164,7 @@ public:
   /** Set the training image. */
   //itkSetMacro(TrainingSampleList, TrainingSampleListPointer);
   void SetTrainingSampleList(const TrainingSampleListType* trainingSampleList);
-  
+
   /** Get the training image. */
   //itkGetMacro(TrainingSampleList, TrainingSampleListPointer);
   const TrainingSampleListType* GetTrainingSampleList();

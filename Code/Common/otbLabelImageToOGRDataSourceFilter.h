@@ -65,22 +65,22 @@ public:
   typedef typename InputImageType::SpacingType  SpacingType;
   typedef typename InputImageType::PointType    OriginType;
   typedef typename InputImageType::IndexType    IndexType;
-  
+
   typedef ogr::DataSource                            OGRDataSourceType;
   typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
   typedef ogr::Layer                                 OGRLayerType;
-  
+
   /** Set/Get the input image of this process object.  */
   virtual void SetInput(const InputImageType *input);
   virtual const InputImageType * GetInput(void);
-  
+
   /** Set the input mask image.
    * All pixels in the mask with a value of 0 will not be considered
    * suitable for vectorization.
    */
   virtual void SetInputMask(const InputImageType *input);
   virtual const InputImageType * GetInputMask(void);
-  
+
   /** Set the Field Name in which labels will be written. (default is "DN")
    * A field "FieldName" of type integer is created in the output memory layer.
    */
@@ -89,7 +89,7 @@ public:
    * Return the Field name in which labels have been written.
    */
   itkGetMacro(FieldName, std::string);
-  
+
   /**
    * Set the value of 8-connected neighborhood option used in \c GDALPolygonize
    */
@@ -98,12 +98,12 @@ public:
    * Get the value of 8-connected neighborhood option used in \c GDALPolygonize
    */
   itkGetMacro(Use8Connected, bool);
-  
+
   /**
    * Get the output \c ogr::DataSource which is a "memory" datasource.
    */
   const OGRDataSourceType * GetOutput();
-  
+
 protected:
   LabelImageToOGRDataSourceFilter();
   virtual ~LabelImageToOGRDataSourceFilter() {}
@@ -112,16 +112,16 @@ protected:
 
   /** Generate Data method*/
   virtual void GenerateData();
-  
+
   /** DataObject pointer */
   typedef itk::DataObject::Pointer DataObjectPointer;
 
   virtual DataObjectPointer MakeOutput(unsigned int idx);
-  
+
 private:
   LabelImageToOGRDataSourceFilter(const Self &);  //purposely not implemented
   void operator =(const Self&);      //purposely not implemented
-  
+
   std::string m_FieldName;
   bool m_Use8Connected;
 

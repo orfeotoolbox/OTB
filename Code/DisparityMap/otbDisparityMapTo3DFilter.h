@@ -67,37 +67,37 @@ public:
   typedef TOutputImage            OutputImageType;
   typedef TEpipolarGridImage      GridImageType;
   typedef TMaskImage              MaskImageType;
-  
+
   typedef typename OutputImageType::RegionType         RegionType;
   typedef typename OutputImageType::PixelType          DEMPixelType;
-  
+
   // 3D RS transform
   // TODO: Allow to tune precision (i.e. double or float)
   typedef double                                      PrecisionType;
   typedef otb::GenericRSTransform<PrecisionType,3,3>  RSTransformType;
-  
+
   // 3D points
   typedef typename RSTransformType::InputPointType  TDPointType;
-  
+
   typedef otb::LineOfSightOptimizer<PrecisionType>  OptimizerType;
   typedef typename OptimizerType::PointSetType      PointSetType;
   typedef typename PointSetType::PointsContainer    PointsContainer;
   typedef typename PointSetType::PointDataContainer LabelContainer;
-  
+
   typedef otb::ImageKeywordlist                     ImageKeywordListType;
-  
+
   /** Set horizontal disparity map input */
   void SetHorizontalDisparityMapInput( const TDisparityImage * hmap);
-  
+
   /** Set vertical disparity map input */
   void SetVerticalDisparityMapInput( const TDisparityImage * vmap);
-  
+
   /** Set left epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
   void SetLeftEpipolarGridInput( const TEpipolarGridImage * grid);
-  
+
   /** Set right epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
   void SetRightEpipolarGridInput( const TEpipolarGridImage * grid);
-  
+
   /** Set mask associated to disparity maps (optional, pixels with a null mask value are ignored) */
   void SetDisparityMaskInput( const TMaskImage * mask);
 
@@ -114,20 +114,20 @@ public:
     this->m_LeftKeywordList = kwl;
     this->Modified();
     }
-  
+
   /** Get left keywordlist */
   const ImageKeywordListType & GetLeftKeywordList() const
     {
     return this->m_LeftKeywordList;
     }
- 
+
    /** Set right keywordlist */
   void SetRightKeywordList(const ImageKeywordListType kwl)
     {
     this->m_RightKeywordList = kwl;
     this->Modified();
     }
-  
+
   /** Get right keywordlist */
   const ImageKeywordListType & GetRightKeywordList() const
     {
@@ -149,10 +149,10 @@ protected:
 
   /** Before threaded generate data */
   virtual void BeforeThreadedGenerateData();
-  
+
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
-  
+
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.
     *
@@ -167,13 +167,13 @@ private:
 
   /** Keywordlist of left sensor image */
   ImageKeywordListType m_LeftKeywordList;
-  
+
   /** Keywordlist of right sensor image */
   ImageKeywordListType m_RightKeywordList;
-  
+
   /** Left sensor image transform */
   RSTransformType::Pointer m_LeftToGroundTransform;
-  
+
   /** Right sensor image transform */
   RSTransformType::Pointer m_RightToGroundTransform;
 };

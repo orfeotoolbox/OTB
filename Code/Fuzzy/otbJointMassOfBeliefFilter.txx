@@ -101,7 +101,7 @@ JointMassOfBeliefFilter<TMassFunction>
     {
     // Retrieve the ith input mass function
     typename MassFunctionType::ConstPointer inputPtr = this->GetInput(i);
-    
+
     // Combine it with the current joint mass
     this->CombineMasses(inputPtr, outputPtr);
     }
@@ -133,7 +133,7 @@ JointMassOfBeliefFilter<TMassFunction>
 
   // Define a temporary mass function
   typename MassFunctionType::Pointer newJointMass = MassFunctionType::New();
-  
+
   // Conflict sum will be used to wheight the final masses
   MassType conflict = itk::NumericTraits<MassType>::Zero;
 
@@ -158,7 +158,7 @@ JointMassOfBeliefFilter<TMassFunction>
 
       // Perform set intersection
       std::set_intersection(inputIt->begin(), inputIt->end(), currentIt->begin(), currentIt->end(), interIt);
-    
+
       // Compute mass product
       MassType massProduct = input->GetMass((*inputIt))*output->GetMass((*currentIt));
 
@@ -193,14 +193,14 @@ JointMassOfBeliefFilter<TMassFunction>
     {
     // Retrieve joint mass
     MassType jointMass = newJointMass->GetMass((*it));
-    
+
     // Normalize by conflict
     jointMass*=conflictCoefficient;
 
     // Update joint mass
     newJointMass->SetMass((*it), jointMass);
     }
-  
+
   // Finally, swap output and newJointMass function
   output->Copy(newJointMass);
 }

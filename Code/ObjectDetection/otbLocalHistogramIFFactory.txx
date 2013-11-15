@@ -40,7 +40,7 @@ LocalHistogramIFFactory<TImageType, TCoordRep, TPrecision>
          DataObjectContainerType * container)
 {
   typename AdaptedLocalHistogramIF::Pointer function = AdaptedLocalHistogramIF::New();
-  
+
   function->SetInputImage(image);
   function->GetInternalImageFunction()->SetNeighborhoodRadius(param[0]);
   function->GetInternalImageFunction()->SetNumberOfHistogramBins(param[1]);

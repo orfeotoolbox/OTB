@@ -56,7 +56,7 @@ LabelMapWithClassLabelToClassLabelImageFilter<TInputImage, TOutputImage>
     }
 
   ConstLineIteratorType lit = ConstLineIteratorType (labelObject);
-  
+
   while( !lit.IsAtEnd() )
     {
     IndexType idx = lit.GetLine().GetIndex();

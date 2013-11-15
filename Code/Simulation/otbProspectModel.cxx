@@ -35,10 +35,10 @@ ProspectModel
 {
    this->ProcessObject::SetNumberOfRequiredInputs(1);
    this->ProcessObject::SetNumberOfRequiredOutputs(2);
-   
+
    SpectralResponseType::Pointer outputRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
    this->itk::ProcessObject::SetNthOutput(0, outputRefl.GetPointer());
-   
+
    SpectralResponseType::Pointer outputTrans = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
    this->itk::ProcessObject::SetNthOutput(1, outputTrans.GetPointer());
 }
@@ -118,7 +118,7 @@ ProspectModel
    leafParams->SetCw(params[3]);
    leafParams->SetCm(params[4]);
    leafParams->SetN(params[5]);
-   
+
    this->itk::ProcessObject::SetNthInput(0, leafParams);
 }
 
@@ -128,62 +128,62 @@ void
 ProspectModel
 ::GenerateData()
 {
-   
+
    LeafParametersType::Pointer leafParameters = this->GetInput();
    SpectralResponseType::Pointer outRefl = this->GetReflectance();
    SpectralResponseType::Pointer outTrans = this->GetTransmittance();
-   
+
    unsigned int alpha=40;
    double lambda, n, k, trans, t12, temp, t21, r12, r21, x, y, ra, ta, r90, t90;
    double delta, beta, va, vb, vbNN, vbNNinv, vainv, s1, s2, s3, RN, TN;
    double N, Cab, Car, CBrown, Cw, Cm;
-   
+
    N = leafParameters->GetN();
    Cab = leafParameters->GetCab();
    Car = leafParameters->GetCar();
    CBrown = leafParameters->GetCBrown();
    Cw = leafParameters->GetCw();
    Cm = leafParameters->GetCm();
-   
+
    int nbdata = sizeof(DataSpecP5B) / sizeof(DataSpec);
    for (int i = 0; i < nbdata; ++i)
    {
       lambda = DataSpecP5B[i].lambda;
       n = DataSpecP5B[i].refLeafMatInd;
-      
+
       k = Cab*DataSpecP5B[i].chlAbsCoef+Car*DataSpecP5B[i].carAbsCoef+CBrown*DataSpecP5B[i].brownAbsCoef+Cw*DataSpecP5B[i].waterAbsCoef;
       k = k + Cm*DataSpecP5B[i].dryAbsCoef;
       k = k / N;
       if(k == itk::NumericTraits<double>::ZeroValue() ) k=EPSILON;
 
       trans=(1.-k)*exp(-k)+k*k*boost::math::expint(1, k);
-      
+
       t12 = this->Tav(alpha, n);
       temp = this->Tav(90, n);
-      
-      
+
+
       t21 = temp/(n*n);
       r12 = 1.-t12;
       r21 = 1.-t21;
       x = t12/temp;
       y = x*(temp-1)+1-t12;
-      
+
       ra = r12+(t12*t21*r21*(trans*trans))/(1.-r21*r21*trans*trans);
       ta = (t12*t21*trans)/(1.-r21*r21*trans*trans);
       r90 = (ra-y)/x;
       t90 = ta/x;
-      
+
       delta = (t90*t90-r90*r90-1.)*(t90*t90-r90*r90-1.) - 4.*r90*r90;
       if(delta < 0) delta = EPSILON;
       else delta=vcl_sqrt(delta);
-      
+
       beta = (1.+r90*r90-t90*t90-delta)/(2.*r90);
       va=(1.+r90*r90-t90*t90+delta)/(2.*r90);
       if ((beta-r90)<=0)
          vb=vcl_sqrt(beta*(va-r90)/(va*EPSILON));
       else
          vb=vcl_sqrt(beta*(va-r90)/(va*(beta-r90)));
-   
+
       vbNN = vcl_pow(vb, N-1.);
       vbNNinv = 1./vbNN;
       vainv = 1./va;
@@ -222,10 +222,10 @@ ProspectModel
    a=(ref+1)*(ref+1)/2;
    k=-(r2-1)*(r2-1)/4;
    ds=sin(theta_rad);
-   
+
    k2=k*k;
    rm2=rm*rm;
-   
+
    if(theta_rad==0) res=4*ref/((ref+1)*(ref+1));
    else
    {
@@ -244,8 +244,8 @@ ProspectModel
       res=(ts+tp)/(2*ds*ds);
    }
    return res;
-   
-   
+
+
 }
 
 void

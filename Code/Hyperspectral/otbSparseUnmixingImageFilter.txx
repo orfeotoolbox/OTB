@@ -156,7 +156,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 
     ++angleIter;
   }
-  
+
 #if 0
   for ( unsigned int index = 0; index < m_Histogram->GetSize()[0]; ++index )
     std::cerr << index << "\t" << m_Histogram->GetMeasurementVector( index )[0]

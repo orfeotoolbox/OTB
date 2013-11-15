@@ -63,10 +63,10 @@ public:
 
   typedef typename Superclass::InverseTransformBasePointer InverseTransformBasePointer;
   typedef typename Superclass::ParametersType              ParametersType;
-  
+
   typedef typename Superclass::ParametersValueType     ParametersValueType;
   typedef typename Superclass::NumberOfParametersType  NumberOfParametersType;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -110,7 +110,7 @@ public:
     OutputPointType outputPoint;
 
     unsigned int dimensionStride = (m_DenominatorDegree+1)+(m_NumeratorDegree+1);
-    
+
     // Compute RPC transform
     for(unsigned int dim = 0; dim < SpaceDimension; ++dim)
       {
@@ -118,14 +118,14 @@ public:
       TScalarType num   = itk::NumericTraits<TScalarType>::Zero;
       TScalarType denom = itk::NumericTraits<TScalarType>::Zero;
       TScalarType currentPower = 1.;
-      
+
       // 2) Compute numerator
       for(unsigned int numDegree = 0; numDegree <= m_NumeratorDegree; ++numDegree)
         {
         num+=this->m_Parameters[dim*dimensionStride+numDegree]*currentPower;
         currentPower*=inputPoint[dim];
         }
-      
+
       //3) Compute denominator
       currentPower = 1.;
       for(unsigned int denomDegree = 0; denomDegree <= m_DenominatorDegree; ++denomDegree)
@@ -156,7 +156,7 @@ public:
       {
       itkExceptionMacro(<<"Wrong number of parameters: found "<<params.Size()<<", expected "<<this->GetNumberOfParameters());
       }
-    
+
     // Set parametersg
     this->m_Parameters = params;
   }

@@ -36,7 +36,7 @@ public:
   typedef itk::ProcessObject            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
 
   typedef ViewerModel                     ModelType;
   typedef ModelType::VisuModelType        VisuModelType;
@@ -49,13 +49,13 @@ public:
 /** NewVisu */
   typedef ImageWidgetController           VisuControllerType;
   typedef VisuControllerType::Pointer     VisuControllerPointerType;
-  
+
   typedef ObjectList<VisuControllerType>  VisuControllerListType;
   typedef VisuControllerListType::Pointer VisuControllerListPointerType;
-  
+
   typedef ImageWidgetController           WidgetControllerType;
   typedef WidgetControllerType::Pointer   WidgetControllerPointerType;
-  
+
   typedef ImageWidget<>                   WidgetType;
   typedef WidgetType::Pointer             VisuWidgetPointerType;
 

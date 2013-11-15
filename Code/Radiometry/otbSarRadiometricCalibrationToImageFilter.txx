@@ -58,7 +58,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   ParametricFunctionPointer   antennaPatternOldGain;
   ParametricFunctionPointer   incidenceAngle;
   ParametricFunctionPointer   rangeSpreadLoss;
-  
+
   noise = function->GetNoise();
   noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
   noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
@@ -68,7 +68,7 @@ SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>
   antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
   antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
   antennaPatternNewGain->EvaluateParametricCoefficient();
-  
+
   antennaPatternOldGain = function->GetAntennaPatternOldGain();
   antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
   antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());

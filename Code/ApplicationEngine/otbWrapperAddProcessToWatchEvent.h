@@ -34,7 +34,7 @@ namespace Wrapper
 class ITK_EXPORT AddProcessToWatchEvent: public itk::EventObject
 {
 public:
- 
+
   typedef AddProcessToWatchEvent Self;
   typedef itk::EventObject       Superclass;
 
@@ -68,7 +68,7 @@ public:
   {
     return new Self;
   }
-  
+
   virtual const char* GetEventName() const
   {
     return "AddProcess";

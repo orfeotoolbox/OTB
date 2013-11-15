@@ -31,7 +31,7 @@ namespace Wrapper
   oss << "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\"><p align=\"center\" style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:x-large; font-weight:600;\"><span style=\" font-size:x-large;\">"; \
   oss << value;                                                         \
   oss << "</span></p>";
-  
+
 #define otbDocHtmlTitle1Macro( value )                                  \
   oss << "<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:large; font-weight:600;\"><span style=\" font-size:large;\">"; \
   oss << value;                                                         \
@@ -79,7 +79,7 @@ void
 ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::string & val, const bool showKey )
 {
   std::ostringstream oss;
-  
+
   oss << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd\">";
   oss << "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">";
   oss << "p, li { white-space: pre-wrap; }";
@@ -105,7 +105,7 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
     {
     otbDocHtmlBodyMacro( "None" );
     }
-    
+
   otbDocHtmlTitle1Macro("Long Description");
   otbDocHtmlBodyMacro( app->GetDocLongDescription() );
 
@@ -136,7 +136,7 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
     {
     otbDocHtmlBodyMacro( "<li>Command line to execute:</li>" );
     otbDocHtmlBodyCodeMacro( app->GetCLExample() );
-    
+
     oss << "</ul>";
     }
   oss << "</body></html>";
@@ -151,7 +151,7 @@ void
 ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const std::string& filename, const bool showKey)
 {
   std::string doc;
-  
+
   ApplicationHtmlDocGenerator::GenerateDoc( app, doc, showKey );
 
   std::ofstream ofs(filename.c_str());
@@ -169,7 +169,7 @@ void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer a
   std::ostringstream oss;
   const std::vector<std::string> appKeyList = app->GetParametersKeys( false );
   const unsigned int nbOfParam = appKeyList.size();
-  
+
   std::string paramDocs("");
   if( nbOfParam == 0)
     {
@@ -207,7 +207,7 @@ void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer a
        }
      }
     }
- 
+
    val = oss.str();
 }
 
@@ -218,7 +218,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Point
     {
     itkGenericExceptionMacro("Invalid parameter type for key "<<key<<", wait for ParameterGroup...");
     }
-  
+
   ParameterGroup * group = dynamic_cast<ParameterGroup *>(paramGr);
   const std::vector<std::string> appKeyList = group->GetParametersKeys( false );
   unsigned int nbOfParam = appKeyList.size();
@@ -271,7 +271,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterChoice( const Application::Poin
   unsigned int nbOfParam = choice->GetNbChoices();
   std::ostringstream oss;
   oss<<"<ul>";
-  
+
   for( unsigned int i=0; i<nbOfParam; i++ )
     {
     const std::string fullKey(std::string(key).append(".").append(appKeyList[i]));

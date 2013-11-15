@@ -95,10 +95,10 @@ public:
 
           double tx = -m_InScreenPointPushed[0] + inScreenPoint[0];
           double ty = -m_InScreenPointPushed[1] + inScreenPoint[1];
-          
+
           dstPoint[0] = m_PointPushed[0] + tx;
           dstPoint[1] = m_PointPushed[1] - ty;
-          
+
           // Call the model methods
           m_Model->UpdatePoint(m_PointPushed, dstPoint);
           m_Model->Update();
@@ -124,7 +124,7 @@ public:
   /** Set/Get the pointer to the model */
   itkSetObjectMacro(Model, ModelType);
   itkGetObjectMacro(Model, ModelType);
-  
+
   /** Set/Get End polygon Mouse button */
   itkSetMacro(DragMouseButton, int);
   itkGetMacro(DragMouseButton, int);
@@ -155,7 +155,7 @@ private:
 
   // Pointer to the model
   ModelPointerType m_Model;
-  
+
   /// Drag polygon Mouse button
   int        m_DragMouseButton;
 

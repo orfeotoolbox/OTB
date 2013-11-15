@@ -39,7 +39,7 @@ QtProgressBar::~QtProgressBar()
 {
   m_Caller->RemoveAllObservers();
 }
-  
+
 /** Get Command */
 QtProgressBar::RedrawCommandType *
 QtProgressBar::GetRedrawCommand( void ) const

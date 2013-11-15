@@ -311,13 +311,13 @@ GCPsToRPCSensorModelImageFilter<TImage>
     double rmsError;
     ImageKeywordlist otb_kwl;
     otb::RPCSolverAdapter::Solve(m_GCPsContainer, rmsError, otb_kwl);
-    
+
     // Retrieve the residual ground error
     m_RMSGroundError = rmsError;
-    
+
     // Compute errors
     this->ComputeErrors();
- 
+
     m_Keywordlist = otb_kwl;
 
     m_ModelUpToDate = true;

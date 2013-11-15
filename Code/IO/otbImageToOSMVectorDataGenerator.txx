@@ -67,7 +67,7 @@ ImageToOSMVectorDataGenerator<TImage>
 {
   // Get the extent of the image
   this->EstimateImageExtent();
-  
+
   this->SetWest(m_ImageExtent.minX);
   this->SetSouth(m_ImageExtent.minY);
   this->SetEast(m_ImageExtent.maxX);
@@ -95,7 +95,7 @@ ImageToOSMVectorDataGenerator<TImage>
   // Compute the 4 corners in the cartographic coordinate system
   std::vector< IndexType> vindex;
   std::vector<PointType> voutput;
-  
+
   IndexType index1, index2, index3, index4;
   SizeType  size;
 
@@ -148,7 +148,7 @@ ImageToOSMVectorDataGenerator<TImage>
     if (maxY < voutput[i][1])
       maxY = voutput[i][1];
     }
-  
+
   // Edit the output image extent type
   m_ImageExtent.maxX =  maxX;
   m_ImageExtent.minX =  minX;

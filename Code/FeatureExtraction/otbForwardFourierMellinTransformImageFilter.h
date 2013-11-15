@@ -50,7 +50,7 @@ template <class TPixel,
     unsigned int Dimension = 2>
 
 class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
-  public itk::ImageToImageFilter<Image<TPixel, Dimension>, 
+  public itk::ImageToImageFilter<Image<TPixel, Dimension>,
                                  itk::Image<std::complex<TPixel>, Dimension> >
 {
 public:

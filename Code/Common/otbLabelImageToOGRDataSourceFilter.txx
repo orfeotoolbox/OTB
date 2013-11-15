@@ -40,9 +40,9 @@ LabelImageToOGRDataSourceFilter<TInputImage>
    this->SetNumberOfRequiredInputs(2);
    this->SetNumberOfRequiredInputs(1);
    this->SetNumberOfRequiredOutputs(1);
-   
+
    GDALAllRegister();
-   
+
    this->ProcessObject::SetNthOutput(0, this->MakeOutput(0) );
 }
 
@@ -126,7 +126,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     }
   // The input is necessarily the largest possible region.
   input->SetRequestedRegionToLargestPossibleRegion();
-  
+
   typename InputImageType::Pointer mask  =
     const_cast<InputImageType *> (this->GetInputMask());
   if(!mask)
@@ -156,7 +156,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     size = this->GetInput()->GetLargestPossibleRegion().GetSize();
     nbBands = this->GetInput()->GetNumberOfComponentsPerPixel();
     bytePerPixel = sizeof(InputPixelType);
-    
+
     // buffer casted in unsigned long cause under Win32 the adress
     // don't begin with 0x, the adress in not interpreted as
     // hexadecimal but alpha numeric value, then the conversion to
@@ -171,15 +171,15 @@ LabelImageToOGRDataSourceFilter<TInputImage>
            <<  "PIXELOFFSET=" << bytePerPixel * nbBands << ","
            <<  "LINEOFFSET=" << bytePerPixel * nbBands * size[0] << ","
            <<  "BANDOFFSET=" << bytePerPixel;
-    
+
     GDALDataset * dataset = static_cast<GDALDataset *> (GDALOpen(stream.str().c_str(), GA_ReadOnly));
-    
+
     //Set input Projection ref and Geo transform to the dataset.
     dataset->SetProjection(this->GetInput()->GetProjectionRef().c_str());
-    
+
     unsigned int projSize = this->GetInput()->GetGeoTransform().size();
     double geoTransform[6];
-    
+
     //Set the geo transform of the input image (if any)
     // Reporting origin and spacing of the buffered region
     // the spacing is unchanged, the origin is relative to the buffered region
@@ -202,12 +202,12 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       geoTransform[4] = this->GetInput()->GetGeoTransform()[4];
     }
     dataset->SetGeoTransform(geoTransform);
-    
+
     //Create the output layer for GDALPolygonize().
     ogr::DataSource::Pointer ogrDS = ogr::DataSource::New();
-    
+
     OGRLayerType outputLayer = ogrDS->CreateLayer("layer",NULL,wkbPolygon);
-    
+
     OGRFieldDefn field(m_FieldName.c_str(),OFTInteger);
     outputLayer.CreateField(field, true);
 
@@ -221,7 +221,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       option[0] = const_cast<char *>(opt.c_str());
       options=option;
     }
-    
+
     /* Convert the mask input into a GDAL raster needed by GDALPolygonize */
     typename InputImageType::ConstPointer inputMask = this->GetInputMask();
     if (!inputMask.IsNull())
@@ -243,14 +243,14 @@ LabelImageToOGRDataSourceFilter<TInputImage>
             <<  "PIXELOFFSET=" << bytePerPixel * nbBands << ","
             <<  "LINEOFFSET=" << bytePerPixel * nbBands * size[0] << ","
             <<  "BANDOFFSET=" << bytePerPixel;
-      
+
       GDALDataset * maskDataset = static_cast<GDALDataset *> (GDALOpen(maskstream.str().c_str(), GA_ReadOnly));
-      
+
       //Set input Projection ref and Geo transform to the dataset.
       maskDataset->SetProjection(this->GetInputMask()->GetProjectionRef().c_str());
-      
+
       projSize = this->GetInputMask()->GetGeoTransform().size();
-      
+
       //Set the geo transform of the input mask image (if any)
       // Reporting origin and spacing of the buffered region
       // the spacing is unchanged, the origin is relative to the buffered region
@@ -272,7 +272,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
          geoTransform[4] = this->GetInputMask()->GetGeoTransform()[4];
       }
       maskDataset->SetGeoTransform(geoTransform);
-      
+
       GDALPolygonize(dataset->GetRasterBand(1), maskDataset->GetRasterBand(1), &outputLayer.ogr(), 0, options, NULL, NULL);
       GDALClose(maskDataset);
     }
@@ -280,9 +280,9 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     {
       GDALPolygonize(dataset->GetRasterBand(1), NULL, &outputLayer.ogr(), 0, options, NULL, NULL);
     }
-    
+
     this->SetNthOutput(0,ogrDS);
-    
+
     //Clear memory
     GDALClose(dataset);
 

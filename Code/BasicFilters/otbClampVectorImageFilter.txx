@@ -110,7 +110,7 @@ ClampVectorImageFilter<TInputImage, TOutputImage>
     itkExceptionMacro(<<"Lower threshold cannot be greater than upper threshold.");
     return;
     }
-  
+
   if (m_Lower != lower || m_Upper != upper)
     {
     m_Lower = lower;
@@ -147,7 +147,7 @@ ClampVectorImageFilter<TInputImage, TOutputImage>
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-          
+
   // walk the regions, threshold each pixel
   while( !outIt.IsAtEnd() && !inIt.IsAtEnd()  )
     {
@@ -179,7 +179,7 @@ ClampVectorImageFilter<TInputImage, TOutputImage>
 
       }
     outIt.Set( outPix );
-    
+
     ++inIt;
     ++outIt;
     progress.CompletedPixel();

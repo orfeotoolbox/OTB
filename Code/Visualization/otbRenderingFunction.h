@@ -187,7 +187,7 @@ protected:
       }
     // Create the histogram generation filter
     ListSamplePointerType pixelRepresentationListSample = ListSampleType::New();
-    
+
     for (typename ListSampleType::ConstIterator it = m_ListSample->Begin(); it != m_ListSample->End(); ++it)
       {
       PixelType sample;
@@ -221,7 +221,7 @@ protected:
     return m_ListSample;
   }
 
- 
+
 private:
   RenderingFunction(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

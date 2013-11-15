@@ -45,15 +45,15 @@ public:
   /** RTTI support */
   itkTypeMacro(InputFilenameParameter, Parameter);
 
-  
+
   bool HasValue() const
   {
     return m_StringParam->HasValue();
   }
-  
+
   // Get Value
   otbGetObjectMemberMacro(StringParam, Value , std::string);
-  
+
   // Set Value
   virtual void SetValue(const std::string value)
     {
@@ -62,21 +62,21 @@ public:
     SetActive(true);
     this->Modified();
     }
-  
+
   // Clear Value
   void ClearValue()
   {
     m_StringParam->ClearValue();
   }
-  
+
 protected:
   /** Constructor */
   InputFilenameParameter()
   {
     // Initialize the String Parameter
     m_StringParam= StringParameter::New();
-    
-    
+
+
   }
 
   /** Destructor */

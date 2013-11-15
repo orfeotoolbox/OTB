@@ -113,7 +113,7 @@ ImageLayer<TImage, TOutputImage>
 //     this->UpdateListSample();
 //   }
 // Render quicklook
-  
+
   if (this->GetHasQuicklook())
     {
     itk::TimeProbe probe;
@@ -177,7 +177,7 @@ ImageLayer<TImage, TOutputImage>
     {
     this->SetHasScaledExtract(false);
     }
-  
+
 }
 
 template <class TImage, class TOutputImage>
@@ -222,7 +222,7 @@ ImageLayer<TImage, TOutputImage>
       {
       otbMsgDevMacro(<< "ImageLayer::UpdateListSample():" << " (" << this->GetName() << ")"
                      << " Regenerating histogram due to pippeline update.");
-       
+
       // Update the histogram source
       histogramSource->Update();
 
@@ -248,7 +248,7 @@ ImageLayer<TImage, TOutputImage>
         }
       otbMsgDevMacro(<< "ImageLayer::UpdateListSample()" << " (" << this->GetName() << ")"
                      << " Sample list generated (" << m_ListSample->Size() << " samples, " << sampleSize << " bands)");
-      
+
       m_RenderingFunction->SetListSample(m_ListSample);
       // Init the rendering function with the input metadata dictionary
       m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary());
@@ -307,7 +307,7 @@ ImageLayer<TImage, TOutputImage>
 
       if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss << "(precise location)" << std::endl;
       if (m_Transform->GetTransformAccuracy() == Projection::ESTIMATE) oss << "(estimated location)" << std::endl;
-      
+
       // Get the placeName if asked for
       if (getPlaceName)
         {

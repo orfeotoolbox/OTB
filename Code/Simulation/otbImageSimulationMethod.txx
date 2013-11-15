@@ -123,16 +123,16 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 ::GenerateOutputInformation()
 {
    Superclass::GenerateOutputInformation();
-   
+
    OutputImageType * outputReflImage = this->GetOutputReflectanceImage();
-   
+
 //    m_Spatialisation->SetInput(m_InputVectorData);
    m_Spatialisation->UpdateOutputInformation();
-   
+
    outputReflImage->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
    outputReflImage->SetLargestPossibleRegion(m_Spatialisation->GetOutput()->GetLargestPossibleRegion());
    outputReflImage->SetOrigin(m_Spatialisation->GetOutput()->GetOrigin());
-   
+
    OutputLabelImageType * outputLabelImage = this->GetOutputLabelImage();
    outputLabelImage->SetLargestPossibleRegion(m_Spatialisation->GetOutput()->GetLargestPossibleRegion());
    outputLabelImage->SetOrigin(m_Spatialisation->GetOutput()->GetOrigin());
@@ -263,7 +263,7 @@ ImageSimulationMethod< TInputVectorData,  TSpatialisation, TSimulationStep1, TSi
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
    Superclass::PrintSelf(os, indent);
-   
+
 }
 
 } //end namespace otb

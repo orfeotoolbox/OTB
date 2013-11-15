@@ -111,7 +111,7 @@ public:
    *  m_NoDataValue are ignored.
    */
   itkSetMacro(NoDataFlag, bool);
- 
+
   /** Get the NoDataFlag. If set to true, samples with values equal to
    *  m_NoDataValue are ignored.
    */

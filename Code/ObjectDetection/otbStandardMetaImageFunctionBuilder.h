@@ -74,35 +74,35 @@ public:
   // Input and output typedef
   typedef TPrecision                                                ValueType;
   typedef TCoordRep                                                 CoordRepType;
-  
+
   // Other typedef
   typedef MetaImageFunction<TPrecision, CoordRepType>               MetaImageFunctionType;
   typedef typename MetaImageFunctionType::Pointer                   MetaImageFunctionPointerType;
   typedef typename std::vector<itk::DataObject::Pointer>            DataObjectContainerType;
   typedef typename std::vector<ValueType>                           ParamContainerType;
-  
+
   //Accessors
   unsigned int GetNeighborhoodRadius();
   void SetNeighborhoodRadius(unsigned int radius);
-  
+
   ParamContainerType GetFlusserMomentsIFParameters();
   void SetFlusserMomentsIFParameters(ParamContainerType Param);
-  
+
   ParamContainerType GetLocalHistogramIFParameters();
   void SetLocalHistogramIFParameters(ParamContainerType Param);
-  
+
   ParamContainerType GetRadiometricMomentsIFParameters();
   void SetRadiometricMomentsIFParameters(ParamContainerType Param);
-  
+
   ParamContainerType GetFourierMellinDescriptorsIFParameters();
   void SetFourierMellinDescriptorsIFParameters(ParamContainerType Param);
 
   ParamContainerType GetHaralickTexturesIFParameters();
   void SetHaralickTexturesIFParameters(ParamContainerType Param);
-  
+
   MetaImageFunctionPointerType GetMetaImageFunction();
   DataObjectContainerType GetDataObjectContainer();
-  
+
   // Adding Image
   template <class TInputImage>
   void AddImage(TInputImage * image)
@@ -110,7 +110,7 @@ public:
     typedef TInputImage                                   InputImageType;
     typedef typename InputImageType::InternalPixelType    InternalPixelType;
     typedef Image<InternalPixelType, 2>                   ImageType;
-   
+
     //Mono-Channel Factories
     typedef LocalHistogramIFFactory<ImageType,
       CoordRepType, TPrecision>               LocalHistogramIFFactoryType;
@@ -122,7 +122,7 @@ public:
       CoordRepType, TPrecision>               FourierMellinDescriptorsIFFactoryType;
     typedef HaralickTexturesIFFactory<ImageType,
       CoordRepType, TPrecision>               HaralickTexturesIFFactoryType;
-    
+
     //Multi-Channel Factories
     typedef MultiChannelIFFactory<LocalHistogramIFFactoryType, InputImageType>
                                                             MCLocalHistogramIFFactoryType;
@@ -141,7 +141,7 @@ public:
     MCFourierMellinDescriptorsIFFactoryType MCFourierMellinDescriptorsIFFactory;
     MCHaralickTexturesIFFactoryType MCHaralickTexturesIFFactory;
 
-    
+
     MCRadiometricMomentsIFFactory.Create(image,
                                          this->GetRadiometricMomentsIFParameters(),
                                          m_MetaImageFunction,
@@ -150,7 +150,7 @@ public:
                                      this->GetFlusserMomentsIFParameters(),
                                      m_MetaImageFunction,
                                      &m_DataObjectContainer);
-    
+
     MCFourierMellinDescriptorsIFFactory.Create(image,
                                                this->GetFourierMellinDescriptorsIFParameters(),
                                                m_MetaImageFunction,

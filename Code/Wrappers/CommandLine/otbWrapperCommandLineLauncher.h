@@ -1,19 +1,19 @@
 /*=========================================================================
-  
+
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
-  
-  
+
+
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
-  
-  
+
+
   This software is distributed WITHOUT ANY WARRANTY; without even
   the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
-  
+
 =========================================================================*/
 #ifndef __otbWrapperCommandLineLauncher_h
 #define __otbWrapperCommandLineLauncher_h
@@ -37,7 +37,7 @@ namespace otb
 {
 namespace Wrapper
 {
-  
+
 /** \class CommandLineLauncher
  *  \brief This class check the validity of a command line application.
  *
@@ -57,13 +57,13 @@ public:
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Defining ::New() static method */
   itkNewMacro(Self);
-  
+
   /** RTTI support */
   itkTypeMacro(CommandLineLauncher, itk::Object);
-  
+
   /** Parse result enum */
   typedef CommandLineParser::ParseResultType ParseResultType;
   typedef enum { OKPARAM, MISSINGMANDATORYPARAMETER,
@@ -164,7 +164,7 @@ private:
 
   CommandLineLauncher(const CommandLineLauncher &); //purposely not implemented
   void operator =(const CommandLineLauncher&); //purposely not implemented
-  
+
   std::string                       m_Path;
 
   Application::Pointer              m_Application;

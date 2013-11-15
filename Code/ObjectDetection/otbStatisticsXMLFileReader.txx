@@ -44,7 +44,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     {
     this->Read();
     }
-  
+
   // Check if the name of the Statistic is present
   bool found = false;
   unsigned int index = 0;
@@ -56,11 +56,11 @@ StatisticsXMLFileReader<TMeasurementVector>
       index = idx;
       }
     }
-  
+
   // if token not found throw an axception
   if(!found)
     itkExceptionMacro(<<"No entry corresponding to the token selected ("<<statisticName<<") in the XML file");
-  
+
   return m_MeasurementVectorContainer[index].second;
 }
 
@@ -86,7 +86,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     {
     itkExceptionMacro(<<"Can't open file "<<m_FileName);
     }
-  
+
   TiXmlHandle hDoc(&doc);
   TiXmlHandle root    = hDoc.FirstChildElement("FeatureStatistics");
 
@@ -96,7 +96,7 @@ StatisticsXMLFileReader<TMeasurementVector>
        currentStat = currentStat->NextSiblingElement() )
     {
     InputDataType   currentStatisticVector;
-    
+
     // Store the stat type name
     currentStatisticVector.first = currentStat->Attribute("name");
 
@@ -104,7 +104,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     // Store the value in a std::vector, get the size and then
     // build a measurement vector
     std::vector<double>   tempMeasurementVector;
-    
+
     for( TiXmlElement* sample = currentStat->FirstChildElement("StatisticVector");
    sample != NULL;
    sample = sample->NextSiblingElement() )
@@ -115,13 +115,13 @@ StatisticsXMLFileReader<TMeasurementVector>
       // Store the value
       tempMeasurementVector.push_back(value);
       }
-    
+
     // resize the Measurement Vector
     currentStatisticVector.second.SetSize(tempMeasurementVector.size());
     for(unsigned int i = 0; i < tempMeasurementVector.size(); ++i)
       currentStatisticVector.second.SetElement(i,
                                                (static_cast<InputValueType>(tempMeasurementVector[i])));
-    
+
     // Increment the number of output
     m_MeasurementVectorContainer.push_back(currentStatisticVector);
     m_NumberOfOutputs++;

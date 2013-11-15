@@ -47,7 +47,7 @@ public:
   itkTypeMacro(VectorDataStyle, LightObject);
 
   void LoadOSMStyle(mapnik::Map& mapnikMap) const;
-  
+
   void LoadBinaryRasterizationStyle(mapnik::Map& mapnikMap) const;
 
   /** Get/Set the size of the scale factor. */

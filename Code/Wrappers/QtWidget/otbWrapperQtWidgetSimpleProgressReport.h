@@ -41,13 +41,13 @@ class QtWidgetSimpleProgressReport : public QWidget
 public:
   QtWidgetSimpleProgressReport(QtWidgetModel * model);
   virtual ~QtWidgetSimpleProgressReport();
-  
+
   void SetApplication(Application::Pointer app);
-  
+
   typedef itk::MemberCommand< QtWidgetSimpleProgressReport >  AddProcessCommandType;
-  
+
   void ProcessEvent( itk::Object * caller, const itk::EventObject & event );
- 
+
 public slots:
   void Init();
   void ReportProcess();

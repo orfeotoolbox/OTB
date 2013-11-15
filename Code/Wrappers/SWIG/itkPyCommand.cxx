@@ -32,7 +32,7 @@ PyCommand::~PyCommand()
     }
     this->obj = NULL;
 }
-    
+
 void PyCommand::SetCommandCallable(PyObject *obj)
 {
     if (obj != this->obj)

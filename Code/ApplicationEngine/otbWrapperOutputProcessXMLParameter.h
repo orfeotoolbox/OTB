@@ -56,7 +56,7 @@ public:
   {
     m_FileName = "";
   }
-  
+
   TiXmlElement* AddChildNodeTo(TiXmlElement* parent, std::string name, std::string value="");
 
   std::string pixelTypeToString(ImagePixelType pixType);
@@ -64,7 +64,7 @@ public:
   ParameterType GetParameterType(const Parameter* param) const;
 
   void Write(Application::Pointer application);
-  
+
 protected:
 
   OutputProcessXMLParameter();

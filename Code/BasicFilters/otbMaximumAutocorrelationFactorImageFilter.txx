@@ -70,12 +70,12 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
   referenceRegion.SetSize(size);
   InputImageIndexType index = largestInputRegion.GetIndex();
   referenceRegion.SetIndex(index);
-  
+
   InputImageRegionType dhRegion;
   InputImageRegionType dvRegion;
-  
+
   index[0] += 1;
-  
+
   dhRegion.SetSize(size);
   dhRegion.SetIndex(index);
 
@@ -165,7 +165,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
   VnlMatrixType sign = VnlMatrixType(nbComp, nbComp, 0);
 
   VnlVectorType aux2 = VnlVectorType(nbComp, 0);
-  
+
   for(unsigned int i = 0; i < nbComp; ++i)
     {
     aux2=aux2 + aux1.get_row(i);
@@ -208,23 +208,23 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
     {
     VnlVectorType x(outNbComp, 0);
     VnlVectorType maf(outNbComp, 0);
-    
+
     for(unsigned int i = 0; i < outNbComp; ++i)
       {
       x[i] = inIt.Get()[i];
       }
-    
+
     maf = (x-m_Mean)*m_V;
 
     typename OutputImageType::PixelType outPixel(outNbComp);
-    
+
     for(unsigned int i = 0; i<outNbComp; ++i)
       {
       outPixel[i]=maf[i];
       }
-    
+
     outIt.Set(outPixel);
-    
+
     ++inIt;
     ++outIt;
     progress.CompletedPixel();

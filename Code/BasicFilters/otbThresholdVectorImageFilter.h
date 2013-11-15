@@ -71,19 +71,19 @@ public:
   /** Set the "outside" pixel value. The default value
    * NumericTraits<PixelType>::Zero. */
   itkSetMacro(OutsideValue, OutputImageInternalPixelType);
-  
+
   /** Get the "outside" pixel value. */
   itkGetConstMacro(OutsideValue, OutputImageInternalPixelType);
-                 
+
   /** The values greater than or equal to the value are set to OutsideValue. */
   void ThresholdAbove(const InputImageInternalPixelType &thresh);
-  
+
   /** The values less than or equal to the value are set to OutsideValue. */
   void ThresholdBelow(const InputImageInternalPixelType &thresh);
 
   /** The values outside the range are set to OutsideValue. */
   void ThresholdOutside(const InputImageInternalPixelType &lower, const InputImageInternalPixelType &upper);
-  
+
   /** Set/Get methods to set the lower threshold */
   itkSetMacro(Lower, InputImageInternalPixelType);
   itkGetConstMacro(Lower, InputImageInternalPixelType);
@@ -114,7 +114,7 @@ protected:
   void GenerateOutputInformation(void)
   {
     Superclass::GenerateOutputInformation();
-    
+
     this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetInput()->GetNumberOfComponentsPerPixel() );
   }
 
@@ -127,11 +127,11 @@ private:
   InputImageInternalPixelType m_Upper;
 };
 
-  
+
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbThresholdVectorImageFilter.txx"
 #endif
-  
+
 #endif

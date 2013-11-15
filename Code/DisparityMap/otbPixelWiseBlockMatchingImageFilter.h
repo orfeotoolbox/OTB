@@ -50,7 +50,7 @@ public:
   inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
   {
     MetricValueType ssd = 0;
-    
+
     // For some reason, iterators do not work on neighborhoods
     for(unsigned int i = 0; i<a.Size(); ++i)
       {
@@ -140,7 +140,7 @@ public:
       meanA+=static_cast<double>(a.GetPixel(i));
       meanB+=static_cast<double>(b.GetPixel(i));
       }
-    
+
     // Compute mean
     meanA/=size;
     meanB/=size;
@@ -153,7 +153,7 @@ public:
       sigmaA+=(valueA-meanA)*(valueA-meanA);
       sigmaB+=(valueB-meanB)*(valueB-meanB);
       }
-    
+
     cov/=size-1;
     sigmaA/=size-1;
     sigmaB/=size-1;
@@ -188,11 +188,11 @@ ITK_EXPORT class LPBlockMatching
 public:
   typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
   typedef typename TOutputMetricImage::ValueType      MetricValueType;
-  
+
   LPBlockMatching(): m_P(1)
     {
     }
-  
+
   void SetP(double p)
     {
     if (p > 0.0)
@@ -204,23 +204,23 @@ public:
       m_P = 1.0;
       }
     }
-  
+
   // Implement the Lp metric
   inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
   {
     MetricValueType score(0);
-    
+
     // For some reason, iterators do not work on neighborhoods
     for(unsigned int i = 0; i<a.Size(); ++i)
       {
       score += vcl_pow( vcl_abs(static_cast<double>(a.GetPixel(i)-b.GetPixel(i))) , m_P);
       }
-    
+
     return score;
   }
-  
+
 private:
-  
+
   double m_P;
 };
 
@@ -314,11 +314,11 @@ public:
   typedef typename InputImageType::RegionType               RegionType;
   typedef typename InputImageType::SpacingType              SpacingType;
   typedef typename InputImageType::PointType                PointType;
-  
+
   typedef typename TOutputMetricImage::ValueType            MetricValueType;
-  
+
   typedef typename OutputDisparityImageType::PixelType      DisparityPixelType;
-  
+
   typedef itk::ConstNeighborhoodIterator<TInputImage>       ConstNeighborhoodIteratorType;
 
   /** Set left input */
@@ -329,7 +329,7 @@ public:
 
   /** Set mask input (optional) */
   void SetLeftMaskInput(const TMaskImage * image);
-  
+
   /** Set right mask input (optional) */
   void SetRightMaskInput(const TMaskImage * image);
 
@@ -361,7 +361,7 @@ public:
   /** Set/Get the radius of the area on which metric is evaluated */
   itkSetMacro(Radius, SizeType);
   itkGetConstReferenceMacro(Radius, SizeType);
-  
+
   /*** Set/Get the minimum disparity to explore */
   itkSetMacro(MinimumHorizontalDisparity,int);
   itkGetConstReferenceMacro(MinimumHorizontalDisparity,int);
@@ -381,19 +381,19 @@ public:
   itkSetMacro(Minimize, bool);
   itkGetConstReferenceMacro(Minimize,bool);
   itkBooleanMacro(Minimize);
-  
+
   /** Set/Get the exploration radius in the disparity space */
   itkSetMacro(ExplorationRadius, SizeType);
   itkGetConstReferenceMacro(ExplorationRadius, SizeType);
-  
+
   /** Set/Get the initial horizontal disparity */
   itkSetMacro(InitHorizontalDisparity,int);
   itkGetConstReferenceMacro(InitHorizontalDisparity,int);
-  
+
   /** Set/Get the initial vertical disparity */
   itkSetMacro(InitVerticalDisparity,int);
   itkGetConstReferenceMacro(InitVerticalDisparity,int);
-  
+
   /** Get the functor for parameters setting */
   BlockMatchingFunctorType &  GetFunctor()
   {
@@ -411,22 +411,22 @@ public:
 
   /** Set initial vertical disparity field (optional, override m_InitVerticalDisparity) */
   void SetVerticalDisparityInput( const TOutputDisparityImage * vfield);
-  
+
   /** Get the initial disparity fields */
   const TOutputDisparityImage * GetHorizontalDisparityInput() const;
   const TOutputDisparityImage * GetVerticalDisparityInput() const;
-  
+
   /** Set/Get macro for the subsampling step */
   itkSetMacro(Step, unsigned int);
   itkGetMacro(Step, unsigned int);
-  
+
   /** Set/Get macro for the grid start index */
   itkSetMacro(GridIndex, IndexType);
   itkGetConstReferenceMacro(GridIndex, IndexType);
-  
+
   /** Conversion function between full and subsampled grid region */
   static RegionType ConvertFullToSubsampledRegion(RegionType full, unsigned int step, IndexType index);
-  
+
   /** Conversion function between subsampled and full grid region */
   static RegionType ConvertSubsampledToFullRegion(RegionType sub, unsigned int step, IndexType index);
 
@@ -436,7 +436,7 @@ protected:
 
   /** Destructor */
   virtual ~PixelWiseBlockMatchingImageFilter();
-  
+
   /** Generate output information */
   virtual void GenerateOutputInformation();
 
@@ -445,14 +445,14 @@ protected:
 
   /** Before threaded generate data */
   virtual void BeforeThreadedGenerateData();
-  
+
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
-  
+
 private:
   PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemeFnted
- 
+
   /** The radius of the blocks */
   SizeType                      m_Radius;
 
@@ -470,29 +470,29 @@ private:
 
   /** Should we minimize or maximize ? */
   bool                          m_Minimize;
-  
+
   /** The exploration radius for disparities (used if non null) */
   SizeType                      m_ExplorationRadius;
 
   /** Block-matching functor */
   BlockMatchingFunctorType      m_Functor;
-  
+
   /** Initial horizontal disparity (0 by default, used if an exploration radius is set and if no input horizontal
     disparity map is given) */
   int                           m_InitHorizontalDisparity;
-  
+
   /** Initial vertical disparity (0 by default, used if an exploration radius is set and if no input vertical
     disparity map is given) */
   int                           m_InitVerticalDisparity;
-  
+
   /** Computation step : disparities are computed on locations of a subsampled grid */
   unsigned int                  m_Step;
-  
+
   /** Starting index for the subsampled grid. The index is measured with respect to the input image grid
    *  Each coordinate shall lie in [0, m_Step-1]
    */
   IndexType                     m_GridIndex;
-  
+
 };
 } // end namespace otb
 

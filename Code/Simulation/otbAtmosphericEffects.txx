@@ -53,7 +53,7 @@ AtmosphericEffects<TSpectralResponse , TRSR>
 {
   typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       AtmosphericCorrectionParametersTo6SRadiativeTermsType;
-  
+
   AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer  filterAtmosphericCorrectionParametersTo6SRadiativeTerms = AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
 
     //Set filter function to get the RSR Sat!!!//TODO
@@ -68,7 +68,7 @@ AtmosphericEffects<TSpectralResponse , TRSR>
     PairType inter;
     inter = (this->m_InputSatRSR->GetRSR())[i]->GetInterval();
     otbGenericMsgDebugMacro(<<"inter " << inter.first << " " << inter.second);
-    
+
     PairType pair;
     pair.first=(inter.first+inter.second)/2.0;
     pair.second=0.;
@@ -83,7 +83,7 @@ AtmosphericEffects<TSpectralResponse , TRSR>
     functionValues->SetFilterFunctionValues(valuesVector);
     functionValues->SetMinSpectralValue(inter.first);
     functionValues->SetMaxSpectralValue(inter.second - step);
-  
+
   //TODO Is it the effecient method Problem in 6STraits
     functionValues->SetUserStep( step );
 
@@ -92,11 +92,11 @@ AtmosphericEffects<TSpectralResponse , TRSR>
 
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput( m_DataAtmosphericCorrectionParameters );
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->Update();
-  
+
   otbGenericMsgDebugMacro(<<"6S radiative term performed");
-  
+
   typedef typename InputSpectralResponseType::ImageType       ImageType;
-  
+
   typedef SurfaceReflectanceToReflectanceFilter<ImageType, ImageType>              SurfaceReflectanceToReflectanceFilterType;
   typename SurfaceReflectanceToReflectanceFilterType::Pointer filterSRToR = SurfaceReflectanceToReflectanceFilterType::New();
 
@@ -107,7 +107,7 @@ AtmosphericEffects<TSpectralResponse , TRSR>
   filterSRToR->SetInput( image );
   filterSRToR->Update();
 
-  
+
   this->m_CorrectedSpectralResponse->SetFromImage( filterSRToR->GetOutput() );
 }
 } // end namespace otb

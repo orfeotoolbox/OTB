@@ -62,7 +62,7 @@ bool PlaceNameToLonLat::Evaluate()
     if ( m_RequestSucceed )
       ParseXMLGeonames();
     }
-  
+
   // Google Maps service
   // if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
   //   {

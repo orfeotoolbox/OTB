@@ -71,9 +71,9 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList, TOutputSampleList>
   // Clear any previous output
   outputSampleListPtr->Clear();
 
-  // Set the measurement vector size 
+  // Set the measurement vector size
   outputSampleListPtr->SetMeasurementVectorSize(inputSampleListPtr->GetMeasurementVectorSize());
-  
+
   // Set-up progress reporting
   itk::ProgressReporter progress(this, 0, inputSampleListPtr->Size()*m_NumberOfIteration);
 
@@ -101,7 +101,7 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList, TOutputSampleList>
         currentOutputMeasurement[idx] = static_cast<OutputValueType>(
           (static_cast<double>(currentInputMeasurement[idx])+m_WhiteGaussianNoiseCoefficients[idx]));
         }
-      
+
       // Add the current output sample to the output SampleList
       outputSampleListPtr->PushBack(currentOutputMeasurement);
 

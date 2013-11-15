@@ -49,7 +49,7 @@ void QtWidgetView::CreateGui()
   // Create a VBoxLayout with the header, the input widgets, and the footer
   QVBoxLayout *mainLayout = new QVBoxLayout();
   m_TabWidget = new QTabWidget();
- 
+
   m_TabWidget->addTab(CreateInputWidgets(), "Parameters");
   m_LogText = new QTextEdit();
   connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), m_LogText, SLOT(append(QString) ) );
@@ -66,7 +66,7 @@ void QtWidgetView::CreateGui()
 
   QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(m_Model);
   progressReport->SetApplication(m_Application);
-   
+
   QHBoxLayout *footLayout = new QHBoxLayout;
   footLayout->addWidget(progressReport);
   footLayout->addWidget(CreateFooter());
@@ -113,7 +113,7 @@ QWidget* QtWidgetView::CreateFooter()
   // an HLayout with two buttons : Execute and Quit
   QGroupBox *footerGroup = new QGroupBox;
   QHBoxLayout *footerLayout = new QHBoxLayout;
- 
+
   footerGroup->setFixedHeight(40);
   footerGroup->setContentsMargins(0, 0, 0, 0);
   footerLayout->setContentsMargins(5, 5, 5, 5);

@@ -46,7 +46,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
   // just decorators around pixel types and histogram list
 
   m_Size.Fill(255);
-  
+
   HistogramListPointerType output = static_cast<HistogramListType*>(this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(1, output.GetPointer());
 }
@@ -127,14 +127,14 @@ PersistentHistogramVectorImageFilter<TInputImage>
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
   bool clipBins = true;
-  
+
   // if histogram Min and Max have the wrong size : set to default [0, 255]
   if (m_HistogramMin.Size() != numberOfComponent ||
       m_HistogramMax.Size() != numberOfComponent)
     {
     m_HistogramMin.SetSize(numberOfComponent);
     m_HistogramMax.SetSize(numberOfComponent);
-    
+
     m_HistogramMin.Fill(itk::NumericTraits<InternalPixelType>::Zero);
     m_HistogramMax.Fill(255);
     }
@@ -153,8 +153,8 @@ PersistentHistogramVectorImageFilter<TInputImage>
     histogram->Initialize(m_Size, bandMin, bandMax);
     outputHisto->PushBack(histogram);
     }
-  
-  
+
+
   // Setup HistogramLists for each thread
   m_ThreadHistogramList.clear();
   for (unsigned int i=0; i<numberOfThreads; ++i)
@@ -166,7 +166,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
       typename HistogramType::MeasurementVectorType bandMin, bandMax;
       bandMin[0] = m_HistogramMin[k];
       bandMax[0] = m_HistogramMax[k];
-      
+
       typename HistogramType::Pointer histogram = HistogramType::New();
       histogram->SetClipBinsAtEnds(clipBins);
       histogram->Initialize(m_Size, bandMin, bandMax);
@@ -194,14 +194,14 @@ PersistentHistogramVectorImageFilter<TInputImage>
       {
       HistogramType* outHisto = outputHisto->GetNthElement(j);
       HistogramType* threadHisto = m_ThreadHistogramList[i]->GetNthElement(j);
-      
+
       typename HistogramType::Iterator iterOutput = outHisto->Begin();
       typename HistogramType::Iterator iterThread = threadHisto->Begin();
-      
+
       while (iterOutput != outHisto->End() && iterThread != threadHisto->End())
         {
         iterOutput.SetFrequency(iterOutput.GetFrequency()+iterThread.GetFrequency());
-        
+
         ++iterOutput;
         ++iterThread;
         }
@@ -225,7 +225,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
 
   itk::ImageRegionConstIteratorWithIndex<TInputImage> it(inputPtr, outputRegionForThread);
   it.GoToBegin();
-  
+
   bool skipSample = false;
 
   // do the work
@@ -249,7 +249,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
         continue;
         }
       }
-      
+
     PixelType vectorValue = it.Get();
     for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
       {

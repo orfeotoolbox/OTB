@@ -60,22 +60,22 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
 {
   // Build textures vector
   OutputType textures;
-  
+
   // Initialize textures
   textures.Fill( itk::NumericTraits< ScalarRealType >::Zero );
-  
+
   // Check for input image
   if( !this->GetInputImage() )
     {
     return textures;
     }
-  
+
   // Check for out of buffer
   if ( !this->IsInsideBuffer( index ) )
     {
     return textures;
     }
-  
+
   // Build the co-occurence matrix generator
   CoocurrenceMatrixGeneratorPointerType coOccurenceMatrixGenerator = CoocurrenceMatrixGeneratorType::New();
   coOccurenceMatrixGenerator->SetInput(this->GetInputImage());
@@ -100,7 +100,7 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
   // Compute the co-occurence matrix
   coOccurenceMatrixGenerator->SetRegion(inputRegion);
   coOccurenceMatrixGenerator->Update();
-  
+
   // Build the texture calculator
   TextureCoefficientsCalculatorPointerType texturesCalculator = TextureCoefficientsCalculatorType::New();
 

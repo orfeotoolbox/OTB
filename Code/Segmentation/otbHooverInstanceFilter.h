@@ -94,32 +94,32 @@ public:
   //typedef typename LabelObjectType::LineContainerType   LineContainerType;
   typedef typename LabelObjectType::IndexType           IndexType;
   typedef typename LabelObjectType::LabelType           LabelType;
-  
+
   typedef unsigned long                                 CoefficientType;
   typedef itk::VariableSizeMatrix<CoefficientType>      MatrixType;
-  
+
   typedef itk::VariableLengthVector<CoefficientType>    CardinalVector;
   typedef std::set<CoefficientType>                     RegionSetType;
   typedef std::vector<LabelObjectType*>                 ObjectVectorType;
-  
+
   void SetGroundTruthLabelMap(const LabelMapType *gt);
   void SetMachineSegmentationLabelMap(const LabelMapType *ms);
-  
+
   const LabelMapType* GetGroundTruthLabelMap();
   LabelMapType* GetMachineSegmentationLabelMap();
 
   LabelMapType* GetOutputGroundTruthLabelMap();
   LabelMapType* GetOutputMachineSegmentationLabelMap();
-  
+
   itkSetMacro(HooverMatrix, MatrixType);
   itkGetMacro(HooverMatrix, MatrixType);
-  
+
   itkSetMacro(Threshold, double);
   itkGetMacro(Threshold, double);
 
   itkSetMacro(UseExtendedAttributes, bool);
   itkGetMacro(UseExtendedAttributes, bool);
-  
+
   /** Get the average scores (after filter update) */
   itkGetMacro(MeanRC, AttributesValueType);
   itkGetMacro(MeanRF, AttributesValueType);
@@ -204,71 +204,71 @@ public:
 protected:
   HooverInstanceFilter();
   ~HooverInstanceFilter() {};
-  
+
   /** Re implement the allocate output method to handle the second output correctly */
   virtual void AllocateOutputs();
-  
+
   /** Re implement the release input method to handle the second input correctly */
   virtual void ReleaseInputs();
-  
+
   /** Actions :
    *    - Fill cardinalities of GT regions
    */
   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
-  
+
   /** Actions:
    *    - Check matrix size
    *    - Init cardinalities lists
    *    - Fill cardinalities list for MS (GT is done by ThreadedProcessLabelObject)
    */
   virtual void BeforeThreadedGenerateData();
-  
+
   /** Actions :
    *    - Compute Hoover instances
    */
   virtual void AfterThreadedGenerateData();
 
 private:
-  
+
   /** number of regions (label objects) found in ground truth (GT) */
   unsigned long     m_NumberOfRegionsGT;
-  
+
   /** number of regions (label objects) found in machine segmentation (MS) */
   unsigned long     m_NumberOfRegionsMS;
-  
+
   /** List of labels in GT segmentation */
   LabelVectorType   m_LabelsGT;
-  
+
   /** Hoover confusion matrix computed between GT and MS*/
   MatrixType        m_HooverMatrix;
-  
+
   /** List of region sizes in GT */
   CardinalVector    m_CardRegGT;
-  
+
   /** List of region sizes in MS */
   CardinalVector    m_CardRegMS;
-  
+
   /** Threshold used to compute Hoover instances */
   double            m_Threshold;
-  
+
   /** Flag to output additional information in label maps */
   bool m_UseExtendedAttributes;
-  
+
   /** Average score for correct detection on the whole segmentation */
   AttributesValueType m_MeanRC;
-  
+
   /** Average score for over segmentation on the whole segmentation */
   AttributesValueType m_MeanRF;
-  
+
   /** Average score for under segmentation on the whole segmentation */
   AttributesValueType m_MeanRA;
-  
+
   /** Average score for missed detection on the whole segmentation */
   AttributesValueType m_MeanRM;
-  
+
   /** Average score for noise on the whole segmentation */
   AttributesValueType m_MeanRN;
-  
+
 };
 
 }

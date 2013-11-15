@@ -98,7 +98,7 @@ public:
     result[3] = ComplexType(0.25 * ( C1 + C3 + 2*C6));
     result[4] = ComplexType(rrlrReal, -rrlrImag);
     result[5] = ComplexType(0.25 * ( C1 + C3 + 4*C2 - 2*C6 + 4*C5 + 4*C9));
-  
+
     return result;
     }
 
@@ -156,7 +156,7 @@ private:
   void operator=(const Self&);                          //purposely not implemented
 
 };
-  
+
 } // end namespace otb
 
 #endif

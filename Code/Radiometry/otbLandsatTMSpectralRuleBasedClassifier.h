@@ -176,13 +176,13 @@ public:
   };
   typedef typename TInput::ValueType PrecisionType;
   typedef bool OutputPixelType;
-  
+
     /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM SpectralRuleBasedClassifier";
   }
-  
+
   SpectralRuleBasedClassifier() { }
   virtual ~SpectralRuleBasedClassifier() {}
 
@@ -199,7 +199,7 @@ public:
     lvf.SetSAT( this->m_SAT );
     typename LVType::OutputPixelType lv = lvf( newPixel );
 
-    
+
     typedef ThickCloudsSpectralRule<TInput, bool> TKCLSRType;
     TKCLSRType tkclsrf = TKCLSRType();
     tkclsrf.SetTV1( this->m_TV1 );
@@ -227,7 +227,7 @@ public:
     bool mMIRTIR     = (lv[ LVType::mirtir ] == LVType::Medium);
     bool lMIRTIR     = (lv[ LVType::mirtir ] == LVType::Low);
 
-    
+
     // cloud spectral category
     bool clsc = (tkclsr || tnclsr) && !(lBright ||
                                          lVis || lNIR ||
@@ -235,7 +235,7 @@ public:
                                          lMIR1 ||
                                          lMIR2 || hTIR
                                          || hMIRTIR);
-    
+
     // thick cloud spectral category
     if(clsc && lMIRTIR)
       return static_cast<TOutput>(TKCL);
@@ -257,7 +257,7 @@ public:
     bool lNDSIVis   = (lv[ LVType::ndsivis ] == LVType::Low);
     bool hMIR1      = (lv[ LVType::mir1 ] == LVType::High);
     bool hMIR2      = (lv[ LVType::mir2 ] == LVType::High);
-    
+
     // snow or ice spectral category
     bool snicsc = (snicsr && lNDBSI && !(lBright ||
                      lVis || lNDSIVis || lNIR || hMIR1 || hMIR2 || hTIR ));
@@ -279,14 +279,14 @@ public:
     washsrf.SetSAT( this->m_SAT );
 
     bool washsr = washsrf( newPixel );
-    
-    
+
+
     bool lNDVI = (lv[ LVType::ndvi ] == LVType::Low);
     bool lTIR  = (lv[ LVType::tir ] == LVType::Low);
     // water or shadow spectral category
     bool washsc = washsr && lBright && lVis && lNDVI && lNIR && lMIR1 && lMIR2 && !(lTIR);
 
-    
+
     // deep water or shadow spectral category
     if( washsc && hNDSIVis)
       return static_cast<TOutput>(DPWASH);
@@ -303,7 +303,7 @@ public:
     pbghsrf.SetSAT( this->m_SAT );
 
     bool pbghsr = pbghsrf( newPixel );
-    
+
     // Pit bog spectral category
     bool pbsc = pbghsr && lMIR1 && lMIR2 && lNDBSI && !(lNIR);
 
@@ -353,7 +353,7 @@ public:
     dbsrf.SetSAT( this->m_SAT );
 
     bool dbsr = dbsrf( newPixel );
-    
+
     // average vegetation spectral category
     bool avsc = (vsr || shvsr) && mNDVI && !(hMIR1 || hMIR2 || hNDBSI || dbsr);
 
@@ -369,7 +369,7 @@ public:
     rsrf.SetSAT( this->m_SAT );
 
     bool rsr = rsrf( newPixel );
-    
+
     // weak vegetation spectral category
     bool wvsc = (vsr || rsr || shvsr) && lNDVI && lNDBSI && lMIR1 && lMIR2 && !(dbsr);
 
@@ -393,7 +393,7 @@ public:
     wesrf.SetSAT( this->m_SAT );
 
     bool wesr = wesrf( newPixel );
-    
+
     // average shrub rangeland spectral category
     bool asrsc = rsr && mNDVI && mNDBSI && !(shvsr || wesr);
     if( asrsc && hNIR)
@@ -428,7 +428,7 @@ public:
     bool bbbsc = bbcsr && hNIR && lNDVI && hNDBSI && !(lMIR1 || lMIR2);
 
     bool lNDBBBI  = (lv[ LVType::ndbbbi ] == LVType::Low);
-    
+
     bool bbbhtirsc = bbbsc && hTIR;
 
     if( bbbhtirsc && !(lNDBBBI) )
@@ -451,7 +451,7 @@ public:
     bool fbbsr = fbbsrf( newPixel );
     // strong barren land or built up spectral category
     bool sbbsc = (bbcsr || fbbsr) && lNDVI && hNDBSI && !( hNIR || lMIR1);
-    
+
     bool sbbhtirsc = sbbsc && hTIR;
 
     if( sbbhtirsc && (dbsr || fbbsr) )
@@ -467,7 +467,7 @@ public:
 
     // average barren land or built up spectral category
     bool abbsc = (bbcsr || fbbsr) && lNDVI && mNDBSI && !(lMIR1);
-    
+
     bool abbhtirsc = abbsc && hTIR;
 
     if( abbhtirsc && !(lNDBBBI) )
@@ -483,7 +483,7 @@ public:
 
     // dark barren land or built
     bool dbbsc = (bbcsr || fbbsr) && lNDVI && lMIR1 && !( hNIR || hMIR2 || lNDBSI);
-    
+
     bool dbbhtirsc = dbbsc && hTIR;
 
     if( dbbhtirsc && (dbsr || fbbsr) )
@@ -542,14 +542,14 @@ public:
     bool wesc = dbsr && wesr && lBright && lVis && lNIR && lMIR1 && lMIR2 && !(hNDVI || hNDBSI || lNDSIVis);
     if( wesc )
       return static_cast<TOutput>(WE);
-    
+
     // turbid water spectral category
     bool twasc = dbsr && lNDVI && lMIR1 && lMIR2 && !(hBright || hVis || hNIR || lNDSIVis);
     if( twasc )
       return static_cast<TOutput>(TWA);
-    
+
     return static_cast<TOutput>(SU);
-    
+
   }
 };
 

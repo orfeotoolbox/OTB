@@ -32,7 +32,7 @@ PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
 {
   m_ExtractFilter = ExtractImageFilterType::New();
   m_OutputVectorData = OutputVectorDataType::New();
-  
+
   m_VectorDataIO = OGRVectorDataIOType::New();
 }
 

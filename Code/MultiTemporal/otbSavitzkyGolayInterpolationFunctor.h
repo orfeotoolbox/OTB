@@ -126,7 +126,7 @@ private:
 
   TWeight m_WeightSeries;
   TDates m_DoySeries;
-  
+
 };
 }
 } //namespace otb

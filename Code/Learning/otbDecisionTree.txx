@@ -129,7 +129,7 @@ DecisionTree<AttributeValueType, LabelType>
         }
       ++lmIt;
       }
-    
+
     // if we get here it means that a verified test was  not found
     itkGenericExceptionMacro(<< "Example could not be handled by decision tree.");
     }
@@ -186,7 +186,7 @@ DecisionTree<AttributeValueType, LabelType>
         }
       ++tmIt;
       }
-    
+
     if( ! found )                                         // attribute
       // not found
       // in the map

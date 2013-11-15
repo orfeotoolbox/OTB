@@ -57,7 +57,7 @@ public:
 
   /** Precision typedef */
   typedef TPrecision PrecisionType;
- 
+
   /** Type to hold the membership values */
   typedef std::map<LabelType, PrecisionType>        MembershipValueType;
   typedef itk::FixedArray< PrecisionType, 6>        ParametersType;

@@ -57,35 +57,35 @@ public:
   typedef typename InputImageType::LabelObjectType          LabelObjectType;
   typedef typename LabelObjectType::ConstLineIterator       ConstLineIteratorType;
   typedef typename LabelObjectType::AttributesMapType       AttributesMapType;
-  
+
   typedef TOutputImage                                OutputImageType;
   typedef typename OutputImageType::PixelType         OutputPixelType;
   typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
   typedef typename OutputImageType::IndexType         IndexType;
   typedef itk::VariableLengthVector<OutputInternalPixelType> VectorPixelType;
-  
+
   typedef std::vector< std::string >  AttributeListType;
   typedef TAttributeAccessor          AttributeAccessorType;
   typedef typename AttributeAccessorType::AttributeValueType AttributeValueType;
-  
+
   /** Get macro for background value */
   itkGetConstMacro(BackgroundValue, OutputInternalPixelType);
-  
+
   /** Set macro for background value */
   itkSetMacro(BackgroundValue, OutputInternalPixelType);
-  
+
   /** Get the current chosen attributes */
   const AttributeListType & GetChosenAttributes()
   {
     return m_ChosenAttributes;
   }
-  
+
   /** Set the chosen attributes */
   void SetChosenAttributes(AttributeListType & newAttributes);
-  
+
   /** Get the number of components of the output image */
   unsigned int GetNumberOfComponentsPerPixel();
-  
+
   /** Fill the given channel with value from the given attribute */
   bool SetAttributeForNthChannel(unsigned int channel, const char *attribute);
 
@@ -98,17 +98,17 @@ public:
 protected:
   LabelMapToAttributeImageFilter();
   ~LabelMapToAttributeImageFilter() {};
-  
+
   virtual void GenerateOutputInformation();
-  
+
   virtual void BeforeThreadedGenerateData();
-  
+
   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
 
 private:
   /** Background pixel value */
   OutputInternalPixelType m_BackgroundValue;
-  
+
   /** List of chosen attributes */
   AttributeListType m_ChosenAttributes;
 };

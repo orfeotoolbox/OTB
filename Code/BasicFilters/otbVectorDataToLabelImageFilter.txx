@@ -154,7 +154,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
   itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
                                          static_cast<std::string>(this->GetOutputProjectionRef()));
-  
+
   // Generate the OGRLayers from the input VectorDatas
   // iteration begin from 1 cause the 0th input is a image
   for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
@@ -174,7 +174,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
       {
       otbMsgDevMacro(<< "Projection information unavailable");
       }
-  
+
     // Retrieving root node
     DataTreeConstPointerType tree = vd->GetDataTree();
 
@@ -217,7 +217,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
           OGR_F_Destroy( hFeat );
           continue;
           }
-        
+
         hGeom = OGR_G_Clone( OGR_F_GetGeometryRef( hFeat ) );
         m_SrcDataSetGeometries.push_back( hGeom );
 
@@ -234,7 +234,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>
           {
           m_FullBurnValues.push_back( OGR_F_GetFieldAsDouble( hFeat, burnField ) );
           }
-        
+
         OGR_F_Destroy( hFeat );
         }
         }
@@ -254,7 +254,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
 {
   // Call Superclass GenerateData
   this->AllocateOutputs();
-  
+
   // Get the buffered region
   OutputImageRegionType bufferedRegion = this->GetOutput()->GetBufferedRegion();
 
@@ -263,7 +263,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
 
   // register drivers
   GDALAllRegister();
-  
+
   std::ostringstream stream;
   stream << "MEM:::"
          <<  "DATAPOINTER=" << (unsigned long)(this->GetOutput()->GetBufferPointer()) << ","
@@ -274,7 +274,7 @@ VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateData()
          <<  "PIXELOFFSET=" << sizeof(OutputImageInternalPixelType) *  nbBands << ","
          <<  "LINEOFFSET=" << sizeof(OutputImageInternalPixelType)*nbBands*bufferedRegion.GetSize()[0] << ","
          <<  "BANDOFFSET=" << sizeof(OutputImageInternalPixelType);
-  
+
   GDALDatasetH dataset = GDALOpen(stream.str().c_str(), GA_Update);
 
   // Add the projection ref to the dataset

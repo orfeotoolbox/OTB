@@ -72,17 +72,17 @@ public:
   typedef typename HistogramListType::Pointer         HistogramListPointerType;
 
   typedef typename TListSample::ConstPointer ListSampleConstPointerType;
-  
+
   /** DataObject typedef*/
   typedef typename Superclass::DataObjectPointer        DataObjectPointer;
-  
+
   // Set/Get the input list sample
   void SetListSample(const ListSampleType* inputlist);
   const ListSampleType* GetListSample() const;
-  
+
   // Get the output histogram
   const HistogramListType*  GetOutput();
-  
+
 
 //   /** plug in the ListSample object */
 //   void SetListSample(const TListSample* list)
@@ -104,7 +104,7 @@ public:
    *  m_NoDataValue are ignored.
    */
   itkSetMacro(NoDataFlag, bool);
- 
+
   /** Get the NoDataFlag. If set to true, samples with values equal to
    *  m_NoDataValue are ignored.
    */
@@ -126,7 +126,7 @@ public:
 
 //   HistogramListPointerType GetOutput() const
 //   { return m_HistogramList; }
-  
+
   itkSetMacro(AutoMinMax, bool);
   itkGetConstReferenceMacro(AutoMinMax, bool);
 

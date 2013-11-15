@@ -115,7 +115,7 @@ SVMClassifier<TSample, TLabel>
 
   // sample Measurement vector size
   int numberOfComponentsPerSample  = iter.GetMeasurementVector().Size();
-  
+
   // The size of the hyperplane distance vector is the number of hyperplanes
   m_HyperplanesDistancesOutput->SetMeasurementVectorSize(m_Model->GetNumberOfHyperplane());
 

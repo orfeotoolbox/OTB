@@ -88,7 +88,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(BandMathImageFilter, InPlaceImageFilter);
 
@@ -101,7 +101,7 @@ public:
   typedef typename ImageType::PointType           OrigineType;
   typedef typename ImageType::SpacingType         SpacingType;
   typedef Parser                                  ParserType;
-  
+
   /** Set the nth filter input with or without a specified associated variable name */
   void SetNthInput( unsigned int idx, const ImageType * image);
   void SetNthInput( unsigned int idx, const ImageType * image, const std::string& varName);
@@ -114,7 +114,7 @@ public:
 
   /** Return the expression to be parsed */
   std::string GetExpression() const;
-  
+
   /** Return the nth filter input associated variable name */
   std::string GetNthInputName(unsigned int idx) const;
 
@@ -125,7 +125,7 @@ protected :
   BandMathImageFilter();
   virtual ~BandMathImageFilter();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
- 
+
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
   void AfterThreadedGenerateData();

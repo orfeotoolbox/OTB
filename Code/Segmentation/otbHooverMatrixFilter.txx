@@ -70,7 +70,7 @@ void HooverMatrixFilter<TLabelMap>
 {
   // first : call superclass method
   Superclass::BeforeThreadedGenerateData();
-  
+
   // Set the matrix size
   m_NumberOfRegionsGT = this->GetGroundTruthLabelMap()->GetNumberOfLabelObjects();
   m_NumberOfRegionsMS = this->GetMachineSegmentationLabelMap()->GetNumberOfLabelObjects();
@@ -83,8 +83,8 @@ template <class TLabelMap>
 void HooverMatrixFilter<TLabelMap>
 ::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
-  
-  
+
+
   unsigned long currentRegionMS = 0;
   unsigned long currentRegionGT = 0;
   // find the index of the current GT region
@@ -97,7 +97,7 @@ void HooverMatrixFilter<TLabelMap>
       break;
       }
     }
-    
+
   // loop over the given region
   typedef typename LabelObjectType::ConstLineIterator IteratorType;
   IteratorType lit = IteratorType( labelObject );

@@ -48,13 +48,13 @@ public:
   <TInputSampleList, TOutputSampleList>               Superclass;
   typedef itk::SmartPointer< Self >                  Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(GaussianAdditiveNoiseSampleListFilter, otb::Statistics::ListSampleToListSampleFilter);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** InputSampleList typedefs */
   typedef TInputSampleList                                    InputSampleListType;
   typedef typename InputSampleListType::Pointer               InputSampleListPointer;
@@ -68,11 +68,11 @@ public:
   typedef typename OutputSampleListType::ConstPointer          OutputSampleListConstPointer;
   typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
-  
+
   /** Set/Get the Shifts for this sample list */
   itkSetMacro(Mean, double);
   itkGetMacro(Mean, double);
-  
+
   /** Set/Get the Scales for this sample list */
   itkSetMacro(Variance, double);
   itkGetMacro(Variance, double);
@@ -80,7 +80,7 @@ public:
   /** Set how many times the ListSample must be noised */
   itkSetMacro(NumberOfIteration, unsigned int);
   itkGetMacro(NumberOfIteration, unsigned int);
-  
+
 protected:
   /** This method causes the filter to generate its output. */
    virtual void GenerateData();
@@ -97,13 +97,13 @@ protected:
 private:
   GaussianAdditiveNoiseSampleListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   // Mean and variance for the white gaussian noise to generate
   double              m_Mean;
   double              m_Variance;
   std::vector<double> m_WhiteGaussianNoiseCoefficients;
   unsigned int        m_NumberOfIteration;
-  
+
 }; // end of class ImageToListGenerator
 
 } // end of namespace Statistics

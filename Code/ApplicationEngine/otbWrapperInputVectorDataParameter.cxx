@@ -97,7 +97,7 @@ InputVectorDataParameter::GetVectorData()
       itkExceptionMacro("No input vector data or filename detected...");
       }
     }
-  
+
   return m_VectorData;
 }
 

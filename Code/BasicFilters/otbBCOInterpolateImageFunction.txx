@@ -91,7 +91,7 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
     {
     // Compute the BCO coefficients according to alpha.
     dist = vcl_abs(position - offset*step);
-    
+
     if( dist <= 2. )
       {
       if (dist <= 1.)

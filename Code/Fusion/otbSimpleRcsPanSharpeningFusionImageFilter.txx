@@ -131,7 +131,7 @@ SimpleRcsPanSharpeningFusionImageFilter
   m_ConvolutionFilter->SetInput(this->GetPanInput());
   m_ConvolutionFilter->SetRadius(this->m_Radius);
   m_ConvolutionFilter->SetFilter(this->m_Filter);
-  
+
   m_FusionFilter->SetInput1(this->GetXsInput());
   m_FusionFilter->SetInput3(this->GetPanInput());
 

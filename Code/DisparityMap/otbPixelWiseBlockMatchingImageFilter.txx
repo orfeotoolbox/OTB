@@ -53,17 +53,17 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   m_MaximumHorizontalDisparity =  10;
   m_MinimumVerticalDisparity = 0;
   m_MaximumVerticalDisparity = 0;
-  
+
   // Default initial disparity
   m_InitHorizontalDisparity = 0;
   m_InitVerticalDisparity = 0;
-  
+
   // Default exploration radius : 0 (not used)
   m_ExplorationRadius.Fill(0);
-  
+
   // Default step
   m_Step = 1;
-  
+
   // Default grid index
   m_GridIndex[0] = 0;
   m_GridIndex[1] = 0;
@@ -322,40 +322,40 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 {
   // Call superclass implementation
   Superclass::GenerateOutputInformation();
-  
+
   // Sanity check
   if (this->m_Step == 0) this->m_Step = 1;
   this->m_GridIndex[0] = this->m_GridIndex[0] % this->m_Step;
   this->m_GridIndex[1] = this->m_GridIndex[1] % this->m_Step;
-    
+
   // Modify output size and index depending on the step
   const TInputImage * inLeftPtr  = this->GetLeftInput();
-  
+
   RegionType outputLargest = this->ConvertFullToSubsampledRegion(inLeftPtr->GetLargestPossibleRegion(), this->m_Step, this->m_GridIndex);
-  
+
   TOutputMetricImage    * outMetricPtr = const_cast<TOutputMetricImage * >(this->GetMetricOutput());
   TOutputDisparityImage * outHDispPtr = const_cast<TOutputDisparityImage * >(this->GetHorizontalDisparityOutput());
   TOutputDisparityImage * outVDispPtr = const_cast<TOutputDisparityImage * >(this->GetVerticalDisparityOutput());
-  
+
   outMetricPtr->SetLargestPossibleRegion(outputLargest);
   outHDispPtr->SetLargestPossibleRegion(outputLargest);
   outVDispPtr->SetLargestPossibleRegion(outputLargest);
-  
+
   // Adapt spacing
   SpacingType outSpacing = inLeftPtr->GetSpacing();
   outSpacing[0] *= static_cast<double>(this->m_Step);
   outSpacing[1] *= static_cast<double>(this->m_Step);
-  
+
   outMetricPtr->SetSpacing(outSpacing);
   outHDispPtr->SetSpacing(outSpacing);
   outVDispPtr->SetSpacing(outSpacing);
-  
+
   // Adapt origin
   PointType outOrigin = inLeftPtr->GetOrigin();
   SpacingType inSpacing = inLeftPtr->GetSpacing();
   outOrigin[0] += inSpacing[0] * static_cast<double>(this->m_GridIndex[0]);
   outOrigin[1] += inSpacing[1] * static_cast<double>(this->m_GridIndex[1]);
-  
+
   outMetricPtr->SetOrigin(outOrigin);
   outHDispPtr->SetOrigin(outOrigin);
   outVDispPtr->SetOrigin(outOrigin);
@@ -401,13 +401,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     {
     itkExceptionMacro(<<"Left and mask images do not have the same size ! Left largest region: "<<inLeftPtr->GetLargestPossibleRegion()<<", mask largest region: "<<inLeftMaskPtr->GetLargestPossibleRegion());
     }
-  
+
   // We also check that right mask image has same size if present
   if(inRightMaskPtr && inRightPtr->GetLargestPossibleRegion() != inRightMaskPtr->GetLargestPossibleRegion())
     {
     itkExceptionMacro(<<"Right and mask images do not have the same size ! Right largest region: "<<inRightPtr->GetLargestPossibleRegion()<<", mask largest region: "<<inRightMaskPtr->GetLargestPossibleRegion());
     }
-  
+
   // We check that the input initial disparity maps have the same size if present
   if (inHDispPtr && inLeftPtr->GetLargestPossibleRegion() != inHDispPtr->GetLargestPossibleRegion())
     {
@@ -426,7 +426,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   // Retrieve requested region (TODO: check if we need to handle
   // region for outHDispPtr)
   RegionType inputLeftRegion = this->ConvertSubsampledToFullRegion(outMetricPtr->GetRequestedRegion(), this->m_Step, this->m_GridIndex);
-  
+
   // Pad by the appropriate radius
   inputLeftRegion.PadByRadius(m_Radius);
 
@@ -495,19 +495,19 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     // no need to crop the mask region : left mask and left image have same largest possible region
     inLeftMaskPtr->SetRequestedRegion( inputLeftRegion );
     }
-  
+
   if(inRightMaskPtr)
     {
     // no need to crop the mask region : right mask and right image have same largest possible region
     inRightMaskPtr->SetRequestedRegion( inputRightRegion );
     }
-    
+
   if (inHDispPtr && inVDispPtr)
     {
     inHDispPtr->SetRequestedRegion( inputLeftRegion );
     inVDispPtr->SetRequestedRegion( inputLeftRegion );
     }
-    
+
 }
 template <class TInputImage, class TOutputMetricImage,
 class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
@@ -524,7 +524,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   if (this->m_Step == 0) this->m_Step = 1;
   this->m_GridIndex[0] = this->m_GridIndex[0] % this->m_Step;
   this->m_GridIndex[1] = this->m_GridIndex[1] % this->m_Step;
-  
+
   // Fill buffers with default values
   outMetricPtr->FillBuffer(0.);
   outHDispPtr->FillBuffer(static_cast<DisparityPixelType>(m_MaximumHorizontalDisparity) /
@@ -555,13 +555,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   // account for pixels that are out of range for a given disparity
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels()*(m_MaximumHorizontalDisparity - m_MinimumHorizontalDisparity + 1)*(m_MaximumVerticalDisparity - m_MinimumVerticalDisparity + 1),100);
 
-  
+
   // Handle initialisation properly
   typename InputMaskImageType::Pointer initMaskPtr = InputMaskImageType::New();
   initMaskPtr->SetRegions(outputRegionForThread);
   initMaskPtr->Allocate();
   initMaskPtr->FillBuffer(0);
-  
+
   // Compute region for thread at full resolution
   RegionType fullRegionForThread = this->ConvertSubsampledToFullRegion(outputRegionForThread, this->m_Step, this->m_GridIndex);
 
@@ -576,10 +576,10 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       useInitDispMaps = true;
       }
     }
-  
+
   // step value as disparityType
   DisparityPixelType stepDisparityInv = 1. / static_cast<DisparityPixelType>(this->m_Step);
-  
+
   // We loop on disparities
   for(int vdisparity = m_MinimumVerticalDisparity; vdisparity <= m_MaximumVerticalDisparity; ++vdisparity)
     {
@@ -604,7 +604,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
     RegionType inputLeftRegion;
     inputLeftRegion.SetIndex(leftRequestedRegionIndex);
     inputLeftRegion.SetSize(inputRightRegion.GetSize());
-    
+
     // Compute the equivalent region in subsampled grid
     RegionType outputRegion = this->ConvertFullToSubsampledRegion(inputLeftRegion, this->m_Step, this->m_GridIndex);
 
@@ -622,7 +622,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
     itk::ConstantBoundaryCondition<TInputImage> nbc1;
     itk::ConstantBoundaryCondition<TInputImage> nbc2;
-    
+
     leftIt.OverrideBoundaryCondition(&nbc1);
     rightIt.OverrideBoundaryCondition(&nbc2);
 
@@ -637,7 +637,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       inRightMaskIt = itk::ImageRegionConstIterator<TMaskImage>(inRightMaskPtr,inputRightRegion);
       inRightMaskIt.GoToBegin();
       }
-    
+
     // If we use initial disparity maps, define the iterators
     if (useInitDispMaps)
       {
@@ -646,7 +646,7 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
       inHDispIt.GoToBegin();
       inVDispIt.GoToBegin();
       }
-    
+
     // Initialize iterators
     leftIt.GoToBegin();
     rightIt.GoToBegin();
@@ -704,13 +704,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
                 estimatedMinVDisp = m_MinimumVerticalDisparity;
                 }
               }
-            
+
             if (vdisparity >= estimatedMinVDisp && vdisparity <= estimatedMaxVDisp &&
                 hdisparity >= estimatedMinHDisp && hdisparity <= estimatedMaxHDisp)
               {
               // Compute the block matching value
             double metric = m_Functor(leftIt,rightIt);
-      
+
               // If we are at first loop, fill both outputs
               // We adapt the disparity value to keep consistant with disparity map index space
             if(initIt.Get()==0)
@@ -743,24 +743,24 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
         }
       ++leftIt;
       ++rightIt;
-      
+
       if(inLeftMaskPtr)
         {
         ++inLeftMaskIt;
         }
-      
+
       if(inRightMaskPtr)
         {
         ++inRightMaskIt;
         }
-      
+
       if(useInitDispMaps)
         {
         ++inHDispIt;
         ++inVDispIt;
         }
       }
-      
+
     }
     }
 }
@@ -776,25 +776,25 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   IndexType shiftedFull = full.GetIndex();
   shiftedFull[0] -= index[0];
   shiftedFull[1] -= index[1];
-  
+
   IndexType subIndex;
   subIndex[0] = (shiftedFull[0]) / step;
   subIndex[1] = (shiftedFull[1]) / step;
   if (shiftedFull[0] % step) ++subIndex[0];
   if (shiftedFull[1] % step) ++subIndex[1];
-  
+
   if (shiftedFull[0]<0) subIndex[0] = 0;
   if (shiftedFull[1]<0) subIndex[1] = 0;
-  
+
   SizeType subSize;
   subSize[0] = (full.GetSize(0) - (subIndex[0] * step) + shiftedFull[0]) / step;
   subSize[1] = (full.GetSize(1) - (subIndex[1] * step) + shiftedFull[1]) / step;
-  
+
   if ((full.GetSize(0) - (subIndex[0] * step) + shiftedFull[0]) % step)
     ++subSize[0];
   if ((full.GetSize(1) - (subIndex[1] * step) + shiftedFull[1]) % step)
     ++subSize[1];
-  
+
   RegionType subRegion;
   subRegion.SetIndex(subIndex);
   subRegion.SetSize(subSize);
@@ -812,13 +812,13 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
   IndexType fullIndex;
   fullIndex[0] = sub.GetIndex(0) * step + index[0];
   fullIndex[1] = sub.GetIndex(1) * step + index[1];
-  
+
   SizeType fullSize;
   fullSize[0] = sub.GetSize(0) * step;
   fullSize[1] = sub.GetSize(1) * step;
   if (fullSize[0] > 0) fullSize[0] -= (step - 1);
   if (fullSize[1] > 0) fullSize[1] -= (step - 1);
-  
+
   RegionType fullRegion;
   fullRegion.SetIndex(fullIndex);
   fullRegion.SetSize(fullSize);

@@ -74,7 +74,7 @@ public:
 
   typedef otb::ConcatenateVectorDataFilter<OutputVectorDataType> ConcatenateVectorDataFilterType;
   typedef typename ConcatenateVectorDataFilterType::Pointer      ConcatenateVectorDataFilterPointerType;
-  
+
   typedef otb::OGRVectorDataIO       OGRVectorDataIOType;
   typedef typename OGRVectorDataIOType::Pointer   OGRVectorDataIOPointerType;
 
@@ -88,7 +88,7 @@ public:
   virtual void Reset(void);
 
   virtual void Synthetize(void);
-  
+
   /** Specify the name of the output shapefile to write. */
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
@@ -110,7 +110,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   virtual OutputVectorDataPointerType ProcessTile() = 0;
-  
+
   OGRVectorDataIOPointerType m_VectorDataIO;
   std::string m_FileName;
 

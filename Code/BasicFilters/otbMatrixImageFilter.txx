@@ -88,7 +88,7 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
 
   inIt.GoToBegin();
   outIt.GoToBegin();
-  
+
   const unsigned int inSize =  m_MatrixByVector ? m_Matrix.cols() : m_Matrix.rows();
   const unsigned int outSize = m_MatrixByVector ? m_Matrix.rows() : m_Matrix.cols();
 
@@ -100,7 +100,7 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
       const InputPixelType & inPix = inIt.Get();
       OutputPixelType outPix;
       outPix.SetSize(outSize);
-      
+
       for(unsigned int i=0; i<inSize; ++i)
         {
           inVect[i] = static_cast<InputRealType>(inPix[i]);

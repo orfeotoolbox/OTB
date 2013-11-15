@@ -117,7 +117,7 @@ private:
 
   LabelType m_Label;
 
-  
+
 };
 } // end namespace otb
 

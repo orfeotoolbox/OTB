@@ -48,10 +48,10 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToOSMVectorDataGenerator, OSMDataToVectorDataGenerator);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   // Image typedef
   typedef TImage                                ImageType;
   typedef typename ImageType::SizeType          SizeType;
@@ -60,7 +60,7 @@ public:
 
   // VectorData
   typedef Superclass::VectorDataType            VectorDataType;
-  
+
   // Struct to store the extent of the image
   struct ImageExtentType{
     double minX;
@@ -71,13 +71,13 @@ public:
 
   /** Method to set/get the input image */
   void SetInput( const ImageType  * input);
-  
+
    /** Returns the input image */
   const ImageType* GetInput() const;
 
 protected:
   virtual void GenerateData();
-  
+
   // Method to compute the extent of the image
   void EstimateImageExtent();
 

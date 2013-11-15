@@ -110,7 +110,7 @@ public:
       }
     return false;
   }
-    
+
   /** Set/Get the pointer to the view */
   itkSetObjectMacro(View, ViewType);
   itkGetObjectMacro(View, ViewType);

@@ -37,7 +37,7 @@ namespace otb
  */
 template<class TImage >
 class ITK_EXPORT AttributesMapOpeningLabelMapFilter
-  : public itk::AttributeOpeningLabelMapFilter<TImage, 
+  : public itk::AttributeOpeningLabelMapFilter<TImage,
       typename otb::Functor::AttributesMapLabelObjectAccessor< typename TImage::LabelObjectType> >
 {
 public:
@@ -72,7 +72,7 @@ public:
   {
     return m_Accessor;
   }
- 
+
   void SetAccessor(const AttributeAccessorType& accessor)
   {
     m_Accessor = accessor;

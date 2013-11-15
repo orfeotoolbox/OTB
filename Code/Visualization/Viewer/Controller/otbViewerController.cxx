@@ -46,12 +46,12 @@ ViewerController
 ::OpenInputImage(const char * filename, const unsigned int & id)
 {
   unsigned int numberOfOpenedImages = 0;
-  
+
   // Try to distinguish a jpeg2000 file whith the resoltion: filename:resId
   std::string realFile(filename);
   unsigned int addNum(0);
   System::ParseFileNameForAdditonalInfo( filename, realFile, addNum );
-  
+
   if( filename != realFile )
     {
     if( m_Model->IsJPEG2000File( realFile ) || m_Model->IsHDFFile(realFile) )
@@ -67,7 +67,7 @@ ViewerController
         }
       }
     }
- 
+
   try
     {
     std::string strFilename = filename;
@@ -85,7 +85,7 @@ ViewerController
       MsgReporter::GetInstance()->SendError(err.GetDescription());
       }
     }
-    
+
   return numberOfOpenedImages;
 }
 

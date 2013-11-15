@@ -48,29 +48,29 @@ SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
 ::UpdateAtmosphericRadiativeTerms()
 {
   MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
-  
+
   OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
-  
+
   if ((m_CorrectionParameters->GetDay() == 0))
     {
       m_CorrectionParameters->SetDay(imageMetadataInterface->GetDay());
     }
-  
+
   if ((m_CorrectionParameters->GetMonth() == 0))
     {
       m_CorrectionParameters->SetMonth(imageMetadataInterface->GetMonth());
     }
-  
+
   if ((m_CorrectionParameters->GetSolarZenithalAngle() == 361.))
     {
       m_CorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation());
     }
-  
+
   if ((m_CorrectionParameters->GetSolarAzimutalAngle() == 361.))
     {
       m_CorrectionParameters->SetSolarAzimutalAngle(imageMetadataInterface->GetSunAzimuth());
     }
-  
+
   if ((m_CorrectionParameters->GetViewingZenithalAngle() == 361.))
     {
       m_CorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation());
@@ -80,13 +80,13 @@ SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
     {
       m_CorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth());
     }
-  
+
   if(m_AeronetFileName != "")
     m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName,
                                           imageMetadataInterface->GetYear(),
                                           imageMetadataInterface->GetHour(),
                                           imageMetadataInterface->GetMinute() );
-  
+
   // load fiter function values
   if(m_FilterFunctionValuesFileName != "")
     {
@@ -105,13 +105,13 @@ SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
          functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
          functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths()[i]);
          functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths()[i]);
-         
+
          m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
        }
     }
-  
+
   Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
-  
+
   param2Terms->SetInput(m_CorrectionParameters);
   param2Terms->Update();
   m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
@@ -150,7 +150,7 @@ SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
       functor.SetCoefficient(coef);
       functor.SetResidu(res);
       functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
-   
+
       this->GetFunctorVector().push_back(functor);
 //       this->SetFunctor(functor);
    }
@@ -166,7 +166,7 @@ SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
     {
       this->UpdateAtmosphericRadiativeTerms();
     }
-  
+
   this->UpdateFunctors();
 }
 

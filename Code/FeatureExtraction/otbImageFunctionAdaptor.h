@@ -71,7 +71,7 @@ class ITK_EXPORT ImageFunctionAdaptor :
   typedef typename Superclass::PointType                       PointType;
   typedef typename Superclass::OutputType                      OutputType;
   typedef typename OutputType::ValueType                       OutputValueType;
-  
+
   // InternalImageFunction related typedefs //
   typedef TInternalImageFunctionType                        InternalImageFunctionType;
   typedef typename InternalImageFunctionType::OutputType    InternalImageFunctionOutputType;
@@ -104,12 +104,12 @@ class ITK_EXPORT ImageFunctionAdaptor :
   // Accessors //
   itkGetConstMacro(InternalImageFunction, typename InternalImageFunctionType::Pointer);
   itkSetMacro(InternalImageFunction, typename InternalImageFunctionType::Pointer);
-  
+
 protected:
   ImageFunctionAdaptor();
   virtual ~ImageFunctionAdaptor() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
 private:
   ImageFunctionAdaptor(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented

@@ -118,7 +118,7 @@ public:
     physicalPoint[0] = point[0] * m_Spacing[0] + m_Origin[0];
     physicalPoint[1] = point[1] * m_Spacing[1] + m_Origin[1];
   }
-  
+
   /** Graft the data and information from one VectorData to another. This
    * is a convenience method to setup a second VectorData with all the meta
    * information of another VectorData and use the same DataTree

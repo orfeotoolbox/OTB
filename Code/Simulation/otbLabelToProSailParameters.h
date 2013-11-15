@@ -73,27 +73,27 @@ public:
    /** Some convenient typedefs. */
    typedef typename Superclass::ParametersType           ParametersType;
    typedef typename Superclass::LabelType                LabelType;
-   
+
    /** Standard Macro*/
    itkTypeMacro(LabelToProSailParameters, LabelToSimulationParametersBase);
    itkNewMacro(Self);
 
   // virtual const ParametersType & GetStep1Parameters();
   //virtual const ParametersType & GetStep2Parameters();
-   
+
    virtual void GenerateData();
-   
+
 protected:
    LabelToProSailParameters();
    virtual ~LabelToProSailParameters() {}
-   
-   
+
+
 
 private:
    LabelToProSailParameters(const Self &); //purposely not implemented
    void operator =(const Self&); //purposely not implemented
-   
-   
+
+
 
 };
 

@@ -111,7 +111,7 @@ public:
 
   void SetInput ( unsigned int i, const InputImageType * );
   const InputImageType * GetInput( unsigned int i ) const;
-  
+
   void SetNumberOfDecomposition ( unsigned int nb )
   {
     for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
@@ -145,7 +145,7 @@ public:
     return m_NumberOfComponentsRequired;
   }
   itkSetMacro(NumberOfComponentsRequired, unsigned int);
-  
+
   itkSetMacro(NumberOfHistogramBins, unsigned int);
   itkGetMacro(NumberOfHistogramBins, unsigned int);
 

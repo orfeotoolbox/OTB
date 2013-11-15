@@ -71,7 +71,7 @@ public:
 
   // GetActive method
   otbGetObjectMemberConstMacro(StringParam, Active, bool);
-  
+
 protected:
   /** Constructor */
   DirectoryParameter()

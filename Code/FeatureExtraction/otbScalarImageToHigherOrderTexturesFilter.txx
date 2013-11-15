@@ -27,7 +27,7 @@ namespace otb
 {
 template <class TInputImage, class TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::ScalarImageToHigherOrderTexturesFilter() : 
+::ScalarImageToHigherOrderTexturesFilter() :
   m_Radius(),
   m_NumberOfBinsPerAxis(8),
   m_InputImageMinimum(0),
@@ -49,9 +49,9 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   this->SetNthOutput(8, OutputImageType::New());
   this->SetNthOutput(9, OutputImageType::New());
   this->SetNthOutput(10, OutputImageType::New());
-  
+
   m_Radius.Fill(10);
-  
+
   // Set the offset directions to their defaults: half of all the possible
   // directions 1 pixel away. (The other half is included by symmetry.)
   // We use a neighborhood iterator to calculate the appropriate offsets.
@@ -59,7 +59,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     InputImageType::ImageDimension> NeighborhoodType;
   NeighborhoodType hood;
   hood.SetRadius( 1 );
-  
+
   // select all "previous" neighbors that are face+edge+vertex
   // connected to the current pixel. do not include the center pixel.
   unsigned int centerIndex = hood.GetCenterNeighborhoodIndex();
@@ -70,7 +70,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     offsets->push_back( offset );
     }
   this->SetOffsets( offsets );
-  
+
 }
 
 template <class TInputImage, class TOutputImage>
@@ -253,7 +253,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   // by the default GenerateOutputRequestedRegiont() implementation
   OutputRegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
   InputRegionType inputRequestedRegion = outputRequestedRegion;
-  
+
   // Apply the radius
   inputRequestedRegion.PadByRadius(m_Radius);
 
@@ -317,9 +317,9 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     InputRegionType inputRegion;
     inputRegion.SetIndex(inputIndex);
     inputRegion.SetSize(inputSize);
-    
+
     inputRegion.Crop(inputPtr->GetBufferedRegion());
-    
+
     // Create a local image corresponding to the input region
     InputImagePointerType localInputImage = InputImageType::New();
     localInputImage->SetRegions(inputRegion);
@@ -333,16 +333,16 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
       {
       itLocalInputImage.Set(itInputPtr.Get());
       }
-      
+
     typename ScalarImageToRunLengthFeaturesFilterType::Pointer runLengthFeatureCalculator = ScalarImageToRunLengthFeaturesFilterType::New();
     runLengthFeatureCalculator->SetInput(localInputImage);
     runLengthFeatureCalculator->SetOffsets(m_Offsets);
     runLengthFeatureCalculator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
     runLengthFeatureCalculator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
     runLengthFeatureCalculator->SetDistanceValueMinMax(0, maxDistance);
-    
+
     runLengthFeatureCalculator->Update();
-    
+
     typename ScalarImageToRunLengthFeaturesFilterType::FeatureValueVector&
       featuresMeans = *(runLengthFeatureCalculator->GetFeatureMeans().GetPointer());
 

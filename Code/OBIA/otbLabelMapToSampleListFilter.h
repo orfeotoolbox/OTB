@@ -57,14 +57,14 @@ public:
   typedef TInputLabelMap                              InputLabelMapType;
   typedef typename InputLabelMapType::ConstPointer    InputLabelMapConstPointerType;
   typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
-   
+
   typedef typename InputLabelMapType::ConstIterator   ConstIteratorType;
 
   typedef TOutputSampleList                           OutputSampleListType;
   typedef typename OutputSampleListType::Pointer      OutputSampleListPointerType;
   typedef typename OutputSampleListType
   ::MeasurementVectorType                             MeasurementVectorType;
-  
+
   typedef TMeasurementFunctor                         MeasurementFunctorType;
 
   /** DataObject typedef*/
@@ -76,13 +76,13 @@ public:
 
   /** Get the output SampleList*/
   const OutputSampleListType* GetOutputSampleList();
-  
+
   /** Get a hook on the functor for settings */
   void SetMeasurementFunctor(const MeasurementFunctorType& functor)
   {
     m_MeasurementFunctor = functor;
   }
-  
+
   MeasurementFunctorType & GetMeasurementFunctor()
   {
     return m_MeasurementFunctor;
@@ -102,7 +102,7 @@ protected:
 private:
   LabelMapToSampleListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   /** The functor used to build the measurement vector */
   MeasurementFunctorType        m_MeasurementFunctor;
 };

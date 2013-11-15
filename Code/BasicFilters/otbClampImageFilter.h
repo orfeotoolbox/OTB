@@ -67,16 +67,16 @@ public:
   typedef typename OutputImageType::RegionType         OutputImageRegionType;
   typedef typename OutputImageType::PixelType          OutputImagePixelType;
 
-                 
+
   /** The values greater than or equal to the value are set to OutsideValue. */
   void ClampAbove(const OutputImagePixelType &thresh);
-  
+
   /** The values less than or equal to the value are set to OutsideValue. */
   void ClampBelow(const OutputImagePixelType &thresh);
 
   /** The values outside the range are set to OutsideValue. */
   void ClampOutside(const OutputImagePixelType &lower, const OutputImagePixelType &upper);
-  
+
   /** Set/Get methods to set the lower threshold */
   void SetLower(OutputImagePixelType val)
   {
@@ -117,14 +117,14 @@ protected:
   void GenerateOutputInformation(void)
   {
     Superclass::GenerateOutputInformation();
-    
+
     this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetInput()->GetNumberOfComponentsPerPixel() );
   }
 
 private:
   ClampImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   double m_DLower;
   double m_DUpper;
 
@@ -132,11 +132,11 @@ private:
   OutputImagePixelType m_Upper;
 };
 
-  
+
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbClampImageFilter.txx"
 #endif
-  
+
 #endif

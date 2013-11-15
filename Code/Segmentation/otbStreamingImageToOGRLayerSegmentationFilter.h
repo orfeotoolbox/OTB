@@ -108,12 +108,12 @@ public:
   typedef TSegmentationFilter                              SegmentationFilterType;
   typedef typename LabeledOutputAccessor<SegmentationFilterType>::LabelImageType  LabelImageType;
   typedef typename LabelImageType::PixelType                                      LabelPixelType;
-  
+
   typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType>          LabelImageToOGRDataSourceFilterType;
   typedef typename Superclass::OGRDataSourceType                        OGRDataSourceType;
   typedef typename Superclass::OGRDataSourcePointerType                 OGRDataSourcePointerType;
   typedef typename Superclass::OGRLayerType                             OGRLayerType;
-  
+
   typedef RelabelComponentImageFilter<LabelImageType,LabelImageType>    RelabelComponentImageFilterType;
   typedef itk::MultiplyImageFilter<LabelImageType,LabelImageType,LabelImageType>  MultiplyImageFilterType;
 
@@ -122,13 +122,13 @@ public:
 
   /** Runtime information support. */
   itkTypeMacro(PersistentImageToOGRLayerSegmentationFilter, PersistentImageToOGRLayerFilter);
-  
+
   /** Return a pointer to the segmentation filter used. */
   itkGetObjectMacro(SegmentationFilter, SegmentationFilterType);
 
   itkSetStringMacro(FieldName);
   itkGetStringMacro(FieldName);
-  
+
   /** Set the first Label value (default is 1). Incremental step is 1.*/
   void SetStartLabel(const LabelPixelType & label)
   {
@@ -137,7 +137,7 @@ public:
   }
   /** Return the first label value*/
   itkGetMacro(StartLabel, LabelPixelType);
-  
+
   /**
    * Set the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
    */
@@ -146,21 +146,21 @@ public:
    * Get the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
    */
   itkGetMacro(Use8Connected, bool);
-  
+
   /** Set the option for filtering small objects. Default to false. */
   itkSetMacro(FilterSmallObject, bool);
   /** Return the value of filter small objects option.*/
   itkGetMacro(FilterSmallObject, bool);
-  
+
   /** Set the minimum object size (in pixels) in case FilterSmallObject option is true.*/
   itkSetMacro(MinimumObjectSize, unsigned int);
   /** Get the minimum object size.*/
   itkGetMacro(MinimumObjectSize, unsigned int);
-  
+
   /** Option for simplifying geometries. Default to false.*/
   itkSetMacro(Simplify, bool);
   itkGetMacro(Simplify, bool);
-  
+
   /** Set the tolerance value for simplifying geometries.
    * \sa \c OGRGeometry::Simplify() \c OGRGeometry::SimplifyPreserveTopology()
    */
@@ -169,7 +169,7 @@ public:
    * \sa \c OGRGeometry::Simplify() \c OGRGeometry::SimplifyPreserveTopology()
    */
   itkGetMacro(SimplificationTolerance, double);
-  
+
   /** Set/Get the input mask image.
    * All pixels in the mask with a value of 0 will not be considered
    * suitable for vectorization.
@@ -188,12 +188,12 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   virtual OGRDataSourcePointerType ProcessTile();
-  
+
 
   int m_TileMaxLabel;
   LabelPixelType m_StartLabel;
   typename SegmentationFilterType::Pointer m_SegmentationFilter;
-  
+
   std::string m_FieldName;
 
   unsigned int m_TileNumber;
@@ -202,8 +202,8 @@ private:
   unsigned int m_MinimumObjectSize;
   bool m_Simplify;
   double m_SimplificationTolerance;
-  
-  
+
+
 };
 
 /** \class StreamingImageToOGRLayerSegmentationFilter
@@ -301,7 +301,7 @@ public:
   {
      return this->GetFilter()->GetSegmentationFilter();
   }
-  
+
   /** Set the first Label value (default is 1). Incremental step is 1.*/
   void SetStartLabel(const LabelPixelType & label)
   {
@@ -312,7 +312,7 @@ public:
   {
      return this->GetFilter()->GetStartLabel();
   }
-  
+
   /** Retrieve the actual streamsize used */
   SizeType GetStreamSize()
   {
@@ -330,7 +330,7 @@ public:
   {
      this->GetFilter()->SetUse8Connected(flag);
   }
-  
+
   const bool GetUse8Connected()
   {
      return this->GetFilter()->GetUse8Connected();
@@ -340,7 +340,7 @@ public:
   {
      this->GetFilter()->SetFilterSmallObject(flag);
   }
-  
+
   const bool GetFilterSmallObject()
   {
      return this->GetFilter()->GetFilterSmallObject();
@@ -350,7 +350,7 @@ public:
   {
      this->GetFilter()->SetMinimumObjectSize(size);
   }
-  
+
   const unsigned int GetMinimumObjectSize()
   {
      return this->GetFilter()->GetMinimumObjectSize();
@@ -360,7 +360,7 @@ public:
   {
      this->GetFilter()->SetSimplify(flag);
   }
-  
+
   const bool GetSimplify()
   {
      return this->GetFilter()->GetSimplify();
@@ -372,12 +372,12 @@ public:
   {
      this->GetFilter()->SetSimplificationTolerance(tol);
   }
-  
+
   const double GetSimplificationTolerance()
   {
      return this->GetFilter()->GetSimplificationTolerance();
   }
-  
+
 protected:
   /** Constructor */
   StreamingImageToOGRLayerSegmentationFilter() {}

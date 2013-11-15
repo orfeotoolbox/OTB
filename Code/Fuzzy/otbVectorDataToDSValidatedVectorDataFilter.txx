@@ -133,7 +133,7 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
                        1.0,
                        0.0,
                        m_DescriptorModels[i].second[3]);
-    
+
     m_FuzzyVars.push_back(fuz);
 
     m_Universe.insert(fuzName);
@@ -181,15 +181,15 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 
           typename MassOfBeliefFunctionType::Pointer mass = MassOfBeliefFunctionType::New();
           mass->InitializePowerSetMasses(m_Universe);
-          
+
           H.insert(fuzName);
           H_.insert(fuzName_);
-          
+
           mass->SetMass(H, m_FuzzyVars[i]->GetMembership(fuzName, currentGeometry->GetFieldAsDouble(fuzName)));
           mass->SetMass(H_, m_FuzzyVars[i]->GetMembership(fuzName_, currentGeometry->GetFieldAsDouble(fuzName)));
 
           mass->EstimateUncertainty();
-          
+
           jointMassFilter->PushBackInput(mass);
           }
         }

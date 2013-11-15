@@ -43,7 +43,7 @@ DEMHandler::Pointer DEMHandler::Instance()
       }
     m_Singleton->UnRegister();
     }
-  
+
   return m_Singleton;
 }
 
@@ -74,7 +74,7 @@ DEMHandler
     // ossimImageElevationDatabase here to allow for general elevation
     // images support.
     ossimRefPtr<ossimElevationDatabase> imageElevationDatabase = new ossimImageElevationDatabase;
-    
+
     if(!imageElevationDatabase->open(DEMDirectory))
       {
       itkExceptionMacro("Failed to open DEM Directory: " << ossimDEMDir);
@@ -100,7 +100,7 @@ DEMHandler
 {
   //Try to load elevation source
   bool result = m_ElevManager->loadElevationPath(DEMDirectory);
-  
+
   if (!result)
     {
       // we explicitly call ossimImageElevationDatabase here to allow for general elevation

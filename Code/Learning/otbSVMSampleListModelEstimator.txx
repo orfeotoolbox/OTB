@@ -42,12 +42,12 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
 
 //Set the input sample list
 template<class TInputSampleList,
-         class TTrainingSampleList, 
+         class TTrainingSampleList,
          class TMeasurementFunctor>
 void
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
-::SetInputSampleList( const InputSampleListType* inputSampleList ) 
-{  
+::SetInputSampleList( const InputSampleListType* inputSampleList )
+{
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(0,
                                         const_cast< InputSampleListType* >(inputSampleList) );
@@ -56,12 +56,12 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
 
 // Set the label sample list
 template<class TInputSampleList,
-         class TTrainingSampleList, 
+         class TTrainingSampleList,
          class TMeasurementFunctor>
 void
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
-::SetTrainingSampleList(const TrainingSampleListType* trainingSampleList) 
-{  
+::SetTrainingSampleList(const TrainingSampleListType* trainingSampleList)
+{
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(1,
                                         const_cast<TrainingSampleListType*>(trainingSampleList) );
@@ -69,38 +69,38 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
 
 // Get the input sample list
 template<class TInputSampleList,
-         class TTrainingSampleList, 
-         class TMeasurementFunctor> 
-const typename SVMSampleListModelEstimator<TInputSampleList, 
-                                           TTrainingSampleList, 
+         class TTrainingSampleList,
+         class TMeasurementFunctor>
+const typename SVMSampleListModelEstimator<TInputSampleList,
+                                           TTrainingSampleList,
                                            TMeasurementFunctor>::InputSampleListType *
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
-::GetInputSampleList( ) 
-{  
+::GetInputSampleList( )
+{
   if (this->GetNumberOfInputs() < 2)
     {
     return 0;
     }
-  
+
   return static_cast<const InputSampleListType* >
     (this->itk::ProcessObject::GetInput(0) );
 }
 
 // Get the input label sample list
 template<class TInputSampleList,
-         class TTrainingSampleList, 
-         class TMeasurementFunctor> 
-const typename SVMSampleListModelEstimator<TInputSampleList, 
-                                           TTrainingSampleList, 
+         class TTrainingSampleList,
+         class TMeasurementFunctor>
+const typename SVMSampleListModelEstimator<TInputSampleList,
+                                           TTrainingSampleList,
                                            TMeasurementFunctor>::TrainingSampleListType *
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
-::GetTrainingSampleList( ) 
-{  
+::GetTrainingSampleList( )
+{
   if (this->GetNumberOfInputs() < 2)
     {
     return 0;
     }
-  
+
   return static_cast<const TrainingSampleListType* >
     (this->itk::ProcessObject::GetInput(1));
 }

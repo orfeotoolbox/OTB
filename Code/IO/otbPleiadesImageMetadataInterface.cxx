@@ -2247,7 +2247,7 @@ PleiadesImageMetadataInterface
          0.2742732022,0.2114336281,0.1535541475,0.1063407965,0.0704419498,0.0459120639,
          0.0295347927,0.0192753862,0.0126804586,0.0084623824,0.0057690017
         };
-      
+
       //Add multispectral bands to the temporary list
       const std::vector<float> vb0 (b0, b0 + sizeof(b0) / sizeof(float) );
       const std::vector<float> vb1 (b1, b1 + sizeof(b1) / sizeof(float) );

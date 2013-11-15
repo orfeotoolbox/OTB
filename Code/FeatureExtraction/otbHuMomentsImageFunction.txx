@@ -53,25 +53,25 @@ HuMomentsImageFunction<TInputImage, TCoordRep>
 {
   // Build moments vector
   OutputType moments;
-  
+
   // Initialize moments
   moments.Fill( itk::NumericTraits< ScalarRealType >::Zero );
-  
+
   // Check for input image
   if( !this->GetInputImage() )
     {
     return moments;
     }
-  
+
   // Check for out of buffer
   if ( !this->IsInsideBuffer( index ) )
     {
     return moments;
     }
-  
+
   // Define complex type
   typedef std::complex<ScalarRealType> ComplexType;
-  
+
   // Define and intialize cumulants for complex moments
   ComplexType c11, c20, c02, c30, c03, c21, c12;
   c11 = itk::NumericTraits<ComplexType>::Zero;
@@ -81,19 +81,19 @@ HuMomentsImageFunction<TInputImage, TCoordRep>
   c03 = itk::NumericTraits<ComplexType>::Zero;
   c21 = itk::NumericTraits<ComplexType>::Zero;
   c12 = itk::NumericTraits<ComplexType>::Zero;
-  
+
   ScalarRealType c00 = itk::NumericTraits<ScalarRealType>::Zero;
-    
+
   // Create an N-d neighborhood kernel, using a zeroflux boundary condition
   typename InputImageType::SizeType kernelSize;
   kernelSize.Fill( m_NeighborhoodRadius );
-  
+
   itk::ConstNeighborhoodIterator<InputImageType>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-  
+
   // Set the iterator at the desired location
   it.SetLocation(index);
-  
+
   // Walk the neighborhood
   const unsigned int size = it.Size();
   for (unsigned int i = 0; i < size; ++i)
@@ -104,7 +104,7 @@ HuMomentsImageFunction<TInputImage, TCoordRep>
     ScalarRealType y = static_cast<ScalarRealType>(it.GetOffset(i)[1])/(2*m_NeighborhoodRadius+1);
     // Build complex value
     ComplexType xpy(x, y), xqy(x, -y);
-    
+
     // Update cumulants
     c00 += value;
     c11 += xpy*xqy*value;
@@ -124,7 +124,7 @@ HuMomentsImageFunction<TInputImage, TCoordRep>
   c03 /= c00;
   c21 /= c00;
   c12 /= c00;
- 
+
   // Compute moments combinations
   moments[0]  = static_cast<ScalarRealType>(c11.real());
   moments[1]  = static_cast<ScalarRealType>((c20*c02).real());
@@ -133,7 +133,7 @@ HuMomentsImageFunction<TInputImage, TCoordRep>
   moments[4]  = static_cast<ScalarRealType>((c30*c12*c12*c12).real());
   moments[5]  = static_cast<ScalarRealType>((c20*c12*c12).real());
   moments[6]  = static_cast<ScalarRealType>((c30*c12*c12*c12).imag());
- 
+
   // Return result
   return moments;
 }

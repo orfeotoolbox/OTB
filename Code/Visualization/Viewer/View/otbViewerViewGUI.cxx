@@ -109,7 +109,7 @@ ViewerViewGUI
   if( m_ViewerModel->IsJPEG2000File( cfname ) )
     {
     guiJpeg2000Res->clear();
-  
+
     std::vector<unsigned int> res;
     std::vector<std::string> desc;
     m_ViewerModel->GetJPEG2000ResolutionAndInformations( cfname, res, desc );
@@ -124,7 +124,7 @@ ViewerViewGUI
     guiJpeg2000ResSelection->redraw();
     guiJpeg2000ResSelection->show();
     }
-  
+
   else if (m_ViewerModel->IsHDFFile( cfname ))
   {
 
@@ -140,7 +140,7 @@ ViewerViewGUI
    guiHDFFilename->value( cfname );
    guiHDFDatasetSelection->redraw();
    guiHDFDatasetSelection->show();
-   
+
   }
   else
     {
@@ -192,7 +192,7 @@ ViewerViewGUI
 
     //Update the Link Setup
     this->UpdateLinkSetupWindow();
-    
+
   }
 }
 
@@ -255,7 +255,7 @@ ViewerViewGUI
       }
     id++;
     }
-  
+
   if (!isFound)
     {
     itkExceptionMacro( "Unable to find the dataset associated to the description "<<descDataset);
@@ -338,7 +338,7 @@ ViewerViewGUI
   if(guiLinkSetupWindow->shown() != 0)
     if(guiImageList->size() == 0)
       this->LinkSetupOk();
-  
+
   //Erase from the lists
   m_DisplayStatusList.erase( m_DisplayStatusList.begin()+(selectedItem-1));
   m_LinkedDisplayStatusList.erase( m_LinkedDisplayStatusList.begin()+(selectedItem-1));
@@ -467,7 +467,7 @@ ViewerViewGUI
 
    //Udpate the ViewerGUISetup
    this->UpdateViewerSetupWindow(selectedItem);
-   
+
    //Update SelectedImageInformation
    this->UpdateInformation(selectedItem);
 
@@ -835,7 +835,7 @@ ViewerViewGUI
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
 
-  
+
    if (m_ViewerModel->IsComplexFile( m_ViewerModel->GetObjectList().at(selectedItem-1).pFileName ))
      {
      oss<<"Number of bands: "<<objTracked.pReader->GetOutput()->GetNumberOfComponentsPerPixel()/2<<std::endl;
@@ -854,9 +854,9 @@ ViewerViewGUI
    //update band information
    // Select the current rendering function
    RenderingFunctionType::Pointer renderer = objTracked.pRenderFunction;
-   
+
    ChannelListType channels = renderer->GetChannelList();
-   
+
    //complex mode
    switch(objTracked.pViewType ){
       //grayscale mode
@@ -876,7 +876,7 @@ ViewerViewGUI
          oss<<"Displayed channels : R=" << channels[0]+1 << ", G=" << channels[1]+1 << ", B=" << channels[2]+1 << "." << std::endl;
          break;
    }
-   
+
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
  }
@@ -901,7 +901,7 @@ ViewerViewGUI
    guiImaginaryChannelChoice->range(1, nbComponent);
 
    guiViewerSetupWindow->redraw();
-   
+
    if (m_ViewerModel->IsComplexFile( m_ViewerModel->GetObjectList().at(selectedItem-1).pFileName ))
      {
      this->ComplexSet();
@@ -1183,14 +1183,14 @@ ViewerViewGUI
   //Get the view stored in the model
   CurvesWidgetType::Pointer curveWidget     = objTracked.pCurveWidget;
   VisuViewPointerType       currentVisuView = objTracked.pVisuView;
-   
+
   //First get the histogram list
   RenderingFunctionType::Pointer pRenderingFunction = objTracked.pRenderFunction;
-   
+
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-   
+
   //Color Definition
   HistogramCurveType::ColorType Red;
   HistogramCurveType::ColorType Green;
@@ -1201,47 +1201,47 @@ ViewerViewGUI
   Red[0]  = 1.;   Red[3]   = 0.5;
   Green[1]= 1.;   Green[3] = 0.5;
   Blue[2] = 1.;   Blue[3]  = 0.5;
-   
+
   ghistogram->SetHistogramColor(Green);
   ghistogram->SetLabelColor(Green);
   bhistogram->SetHistogramColor(Blue);
   bhistogram->SetLabelColor(Blue);
   rhistogram->SetHistogramColor(Red);
   rhistogram->SetLabelColor(Red);
-   
+
   const unsigned int nbBands = objTracked.pLayer->GetHistogramList()->Size();
-   
+
   curveWidget->ClearAllCurves();
-   
+
   if(  nbBands == 0 )
     {
     itkExceptionMacro("No bands detected in asked m_ViewerModel->GetObjectList() (index "<<m_DiaporamaCurrentIndex<<")");
     }
-   
+
   if(  nbBands >= 1 )
     {
     rhistogram->SetHistogram(objTracked.pLayer->GetHistogramList()->GetNthElement(0));
     curveWidget->AddCurve(rhistogram);
     }
-   
+
   if( nbBands >= 2 )
     {
     ghistogram->SetHistogram(objTracked.pLayer->GetHistogramList()->GetNthElement(1));
     curveWidget->AddCurve(ghistogram);
     }
-   
+
   if( nbBands >= 3 )
     {
     bhistogram->SetHistogram(objTracked.pLayer->GetHistogramList()->GetNthElement(2));
     curveWidget->AddCurve(bhistogram);
     }
-   
+
   curveWidget->SetXAxisLabel("Pixels");
   curveWidget->SetYAxisLabel("Frequency");
-   
+
   //Get the pixelView
   PixelDescriptionViewType::Pointer pixelView = objTracked.pPixelView;
-   
+
   //Edit the Widget
   m_Widget->UnRegisterAll();
   m_Widget->RegisterFullWidget(currentVisuView->GetFullWidget());

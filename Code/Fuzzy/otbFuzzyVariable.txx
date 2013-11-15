@@ -266,7 +266,7 @@ FuzzyVariable<TLabel, TPrecision>
     if(it != labelMap.end())
       out<<", ";
     }
-  
+
   // close the set
   out<<"}";
 

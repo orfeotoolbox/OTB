@@ -42,7 +42,7 @@ ImageIOBase::ImageIOBase() :
   Reset(false);
 }
 
-  
+
 void ImageIOBase::Reset(const bool)
 {
   m_Initialized = false;
@@ -68,7 +68,7 @@ ImageIOBase::GetSupportedWriteExtensions() const
 {
   return this->m_SupportedWriteExtensions;
 }
- 
+
 const ImageIOBase::ArrayOfExtensionsType &
 ImageIOBase::GetSupportedReadExtensions() const
 {
@@ -421,7 +421,7 @@ itkSetPixelType(ImageIOBase *This,
     }
   return false;
 }
-  
+
 //
 // This macro enforces pixel type information to be available for all different
 // pixel types.
@@ -470,7 +470,7 @@ bool ImageIOBase::SetPixelTypeInfo(const std::type_info& ptype)
   this->SetNumberOfComponents(1);
   this->SetPixelType(ImageIOBase::UNKNOWNPIXELTYPE);
   this->SetComponentType(ImageIOBase::UNKNOWNCOMPONENTTYPE);
-  
+
   if (!itkSetPixelType(this,ptype,ImageIOBase::CHAR, char(0) ) &&
       !itkSetPixelType(this,ptype,ImageIOBase::UCHAR, (unsigned char)0) &&
       !itkSetPixelType(this,ptype,ImageIOBase::SHORT,(short)(0)) &&
@@ -660,7 +660,7 @@ unsigned int ImageIOBase::GetPixelSize() const
                        << m_PixelType << ", " << m_ComponentType << ")");
     return 0;
     }
-  
+
   return this->GetComponentSize() * this->GetNumberOfComponents();
 }
 
@@ -853,7 +853,7 @@ void ImageIOBase::WriteBufferAsASCII(std::ostream& os, const void *buffer,
       WriteBuffer(os, buf, numComp);
       }
       break;
-      
+
     case SHORT:
       {
       typedef const short * Type;
@@ -995,7 +995,7 @@ void ImageIOBase::ReadBufferAsASCII(std::istream& is, void *buffer,
       ReadBuffer(is, buf, numComp);
       }
       break;
-    
+
     case UINT:
       {
       unsigned int *buf = reinterpret_cast<unsigned int*>(buffer);
@@ -1030,7 +1030,7 @@ void ImageIOBase::ReadBufferAsASCII(std::istream& is, void *buffer,
       ReadBuffer(is, buf, numComp);
       }
       break;
-    
+
     case DOUBLE:
       {
       double *buf = reinterpret_cast<double*>(buffer);
@@ -1081,8 +1081,8 @@ ImageIOBase::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int number
   // Code from ImageRegionSplitter:GetNumberOfSplits
   int splitAxis;
   const itk::ImageIORegion::SizeType &regionSize = pasteRegion.GetSize();
-  
-  
+
+
   // split on the outermost dimension available
   splitAxis = pasteRegion.GetImageDimension() - 1;
   while (regionSize[splitAxis] == 1)
@@ -1094,12 +1094,12 @@ ImageIOBase::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int number
       return 1;
       }
     }
-  
+
   // determine the actual number of pieces that will be generated
   itk::ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
   int valuesPerPiece = itk::Math::Ceil<int>(range/double(numberOfRequestedSplits));
   int maxPieceUsed = itk::Math::Ceil<int>(range/double(valuesPerPiece)) - 1;
-  
+
   return maxPieceUsed+1;
 }
 
@@ -1134,14 +1134,14 @@ ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
   itk::ImageIORegion splitRegion;
   itk::ImageIORegion::IndexType splitIndex;
   itk::ImageIORegion::SizeType splitSize, regionSize;
-  
+
   // Initialize the splitRegion to the requested region
   splitRegion = pasteRegion;
   splitIndex = splitRegion.GetIndex();
   splitSize = splitRegion.GetSize();
 
   regionSize = pasteRegion.GetSize();
-  
+
   // split on the outermost dimension available
   splitAxis = pasteRegion.GetImageDimension() - 1;
   while (regionSize[splitAxis] == 1)
@@ -1171,7 +1171,7 @@ ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
     // last piece needs to process the "rest" dimension being split
     splitSize[splitAxis] = splitSize[splitAxis] - ithPiece*valuesPerPiece;
     }
-  
+
   // set the split region ivars
   splitRegion.SetIndex( splitIndex );
   splitRegion.SetSize( splitSize );
@@ -1209,12 +1209,12 @@ ImageIOBase
   // say the return ImageIORegion::GetImageSizeInPixels() is equal to
   // the number in the file.
   //
-  
+
   // Since the image in the file may have a lower or higher dimension
   // than the image type over which the ImageFileReader is
   // being instantiated we must choose an image dimension which will
   // represent all the pixels. That is we can trim trailing 1s.
-  
+
   unsigned int minIODimension = this->m_NumberOfDimensions;
   while (minIODimension)
     {

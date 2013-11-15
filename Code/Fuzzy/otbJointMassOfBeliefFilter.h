@@ -43,13 +43,13 @@ public:
   typedef itk::ProcessObject                           Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(JointMassOfBeliefFilter, ProcessObject);
-  
+
   /** Standard class typedefs */
   typedef TMassFunction                                MassFunctionType;
   typedef typename MassFunctionType::Pointer           MassFunctionPointerType;
@@ -79,10 +79,10 @@ public:
 protected:
   /** Constructor */
   JointMassOfBeliefFilter();
-  
+
   /** Destructor */
   ~JointMassOfBeliefFilter() {}
-  
+
   /** GenerateData */
   virtual void GenerateData();
 

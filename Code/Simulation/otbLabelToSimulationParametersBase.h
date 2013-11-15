@@ -69,8 +69,8 @@ public:
    typedef TLabel                                LabelType;
    typedef double                                ParametersValueType;
    typedef itk::Array<ParametersValueType>       ParametersType;
-   
-   
+
+
    /** Standard Macro*/
    itkTypeMacro(LabelToSimulationParametersBase, ProcessObject);
 
@@ -85,17 +85,17 @@ public:
 
    //virtual const ParametersType & GetStep1Parameters() = 0;
    //virtual const ParametersType & GetStep2Parameters() = 0;
-   
+
 protected:
    LabelToSimulationParametersBase(){};
    virtual ~LabelToSimulationParametersBase() {}
-   
+
 
 
 private:
    LabelToSimulationParametersBase(const Self &); //purposely not implemented
    void operator =(const Self&); //purposely not implemented
-   
+
    ParametersType m_Step1Parameters;
    ParametersType m_Step2Parameters;
    LabelType m_Label;

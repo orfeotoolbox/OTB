@@ -74,10 +74,10 @@ public:
   typedef TOutputImage            OutputImageType;
   typedef TMaskImage              MaskImageType;
   typedef TResidueImage           ResidueImageType;
-  
+
   typedef typename OutputImageType::RegionType         RegionType;
   typedef typename OutputImageType::PixelType          DEMPixelType;
-  
+
   // 3D RS transform
   // TODO: Allow to tune precision (i.e. double or float)
   typedef double                  PrecisionType;
@@ -86,34 +86,34 @@ public:
 
   // 3D points
   typedef typename RSTransformType::InputPointType  TDPointType;
-  
+
   typedef otb::LineOfSightOptimizer<PrecisionType>  OptimizerType;
   typedef typename OptimizerType::PointSetType      PointSetType;
   typedef typename PointSetType::PointsContainer    PointsContainer;
   typedef typename PointSetType::PointDataContainer LabelContainer;
-  
+
   typedef otb::ImageKeywordlist                     ImageKeywordListType;
-  
+
   typedef std::map
     <unsigned int,
      itk::ImageRegionConstIterator<DisparityMapType> >   DispMapIteratorList;
-  
+
   typedef std::map
     <unsigned int,
      itk::ImageRegionConstIterator<MaskImageType> >      MaskIteratorList;
-  
+
   /** Set the number of moving images (referred earlier as N) */
   void SetNumberOfMovingImages(unsigned int nb);
-  
+
   /** Get the number of moving images (referred earlier as N) */
   unsigned int GetNumberOfMovingImages();
-  
+
   /** Set horizontal disparity map input corresponding to the moving image 'index' */
   void SetHorizontalDisparityMapInput(unsigned int index, const TDisparityImage * hmap);
-  
+
   /** Set vertical disparity map input corresponding to the moving image 'index'*/
   void SetVerticalDisparityMapInput(unsigned int index, const TDisparityImage * vmap);
-  
+
   /** Set mask associated to disparity maps corresponding to the moving image 'index'
    * (optional, pixels with a null mask value are ignored)
    */
@@ -134,16 +134,16 @@ public:
     this->m_ReferenceKeywordList = kwl;
     this->Modified();
     }
-  
+
   /** Get keywordlist of the reference image */
   const ImageKeywordListType & GetReferenceKeywordList() const
     {
     return this->m_ReferenceKeywordList;
     }
- 
+
    /** Set keywordlist of the moving image 'index' */
   void SetMovingKeywordList(unsigned int index, const ImageKeywordListType kwl);
-  
+
   /** Get keywordlist of the moving image 'index' */
   const ImageKeywordListType & GetMovingKeywordList(unsigned int index) const;
 
@@ -162,23 +162,23 @@ protected:
 
   /** Before threaded generate data */
   virtual void BeforeThreadedGenerateData();
-  
+
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
-  
+
 private:
   MultiDisparityMapTo3DFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Keywordlist of reference sensor image */
   ImageKeywordListType m_ReferenceKeywordList;
-  
+
   /** Keywordlists of moving sensor images */
   std::vector<ImageKeywordListType> m_MovingKeywordLists;
-  
+
   /** Reference sensor image transform */
   RSTransformType::Pointer m_ReferenceToGroundTransform;
-  
+
   /** Moving sensor image transforms */
   std::vector<RSTransformType::Pointer> m_MovingToGroundTransform;
 };

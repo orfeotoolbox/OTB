@@ -76,8 +76,8 @@ public:
   void UpdateGeometryPosition(double tx, double ty);
   void DeleteSelectedGeometry();
   void DeleteSelectedGeometriesInROI(itk::ImageRegion<2> rsRegion);
-    
-  
+
+
 protected:
   /** Constructor */
   VectorDataEditionModel();

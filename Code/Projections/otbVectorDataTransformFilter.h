@@ -60,7 +60,7 @@ public:
 
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2>  OriginType;
-  
+
   typedef typename InputVectorDataType::DataNodePointerType  InputDataNodePointerType;
   typedef typename OutputVectorDataType::DataNodeType        OutputDataNodeType;
   typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
@@ -103,13 +103,13 @@ protected:
   LinePointerType ProcessLine(LinePointerType line) const;
   PolygonPointerType ProcessPolygon(PolygonPointerType polygon) const;
   PolygonListPointerType ProcessPolygonList(PolygonListPointerType polygonList) const;
-  
+
   void GenerateData(void);
 
 private:
   VectorDataTransformFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
+
   GenericTransformPointerType m_Transform;
 };
 

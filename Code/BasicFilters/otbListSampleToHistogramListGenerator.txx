@@ -44,7 +44,7 @@ ListSampleToHistogramListGenerator<TListSample,
 
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
-  
+
   this->itk::ProcessObject::SetNthOutput(0, this->MakeOutput(0).GetPointer());
 }
 
@@ -75,7 +75,7 @@ ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequency
     (this->itk::ProcessObject::GetInput(0) );
 }
 
-// Get the output 
+// Get the output
 template<class TListSample, class THistogramMeasurement, class TFrequencyContainer>
 const typename ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
 ::HistogramListType*
@@ -106,12 +106,12 @@ ListSampleToHistogramListGenerator<TListSample,
     THistogramMeasurement,
     TFrequencyContainer>
 ::GenerateData()
-{  
+{
   otbMsgDebugMacro(<< "ListSampleToHistogramListGenerator::GenerateData(): Entering");
-  
+
   // Get the input ListSample
   const ListSampleType*            inputList = this->GetListSample();
-  
+
   // Get a pointer on the output
   typename HistogramListType::Pointer histogramList = const_cast<HistogramListType*>(this->GetOutput());
 
@@ -223,7 +223,7 @@ ListSampleToHistogramListGenerator<TListSample,
       histogramList->Back()->GetIndex(hvector, index);
       if( (!m_NoDataFlag) || hvector[0]!=m_NoDataValue )
         {
-      
+
 
       if (!histogramList->Back()->IsIndexOutOfBounds(index))
           {

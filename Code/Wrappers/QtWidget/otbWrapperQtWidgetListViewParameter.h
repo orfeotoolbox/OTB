@@ -59,7 +59,7 @@ private:
   QListWidget*               m_ListView;
 
   QHBoxLayout*               m_VLayout;
-  
+
   std::vector<int>           m_SelectedItems;
 
   int                        m_LineHeight;

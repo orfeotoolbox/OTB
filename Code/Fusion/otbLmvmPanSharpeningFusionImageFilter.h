@@ -65,12 +65,12 @@ public:
   /** Internal image type used as Pan smoothing and local standard deviation filter output */
   typedef otb::Image<TInternalPrecision,
     TPanImageType::ImageDimension>                InternalImageType;
-    
+
   /** Single band Xs image type */
   typedef typename TXsImageType::InternalPixelType  XsPixelType;
   typedef otb::Image<XsPixelType,
     TXsImageType::ImageDimension>                XsBandImageType;
-  
+
   /** Internal image type used as Xs smoothing and local standard deviation filter output */
   typedef otb::VectorImage<TInternalPrecision,
     TXsImageType::ImageDimension>                InternalVectorImageType;
@@ -145,7 +145,7 @@ private:
       return output;
     }
   };
-  
+
   class FusionFunctor2
   {
   public:
@@ -187,8 +187,8 @@ private:
 
   /** Pointer to the fusion filter */
   typename FusionStep1FilterType::Pointer      m_FusionStep1Filter;
-  
-  
+
+
   typedef itk::TernaryFunctorImageFilter<TOutputImageType,
                                          InternalVectorImageType,
                                     InternalImageType,
@@ -197,7 +197,7 @@ private:
 
   /** Pointer to the fusion filter */
   typename FusionStep2FilterType::Pointer      m_FusionStep2Filter;
-  
+
 
   /** Typedef of the convolution filter performing Pan smoothing */
   typedef otb::ConvolutionImageFilter
@@ -208,7 +208,7 @@ private:
 
   /** Pointer to the internal Pan convolution filter */
   typename PanConvolutionFilterType::Pointer m_PanConvolutionFilter;
-  
+
   /** Typedef of the convolution filter performing Xs smoothing */
   typedef otb::ConvolutionImageFilter
       <XsBandImageType,
@@ -218,35 +218,35 @@ private:
 
   /** Pointer to the internal Xs convolution filter */
   typename XsConvolutionFilterType::Pointer m_XsConvolutionFilter;
-  
+
   /** Typedef of the Pan local standard deviation filter*/
   typedef itk::NoiseImageFilter
       <TPanImageType, InternalImageType>               PanNoiseFilterType;
-      
+
   /** Pointer to the Pan local standard deviation filter */
   typename PanNoiseFilterType::Pointer m_PanNoiseFilter;
-  
+
   /** Typedef of the Xs local standard deviation filter*/
   typedef itk::NoiseImageFilter
       <XsBandImageType, InternalImageType>               XsNoiseFilterType;
-  
+
   /** Pointer to the Xs local standard deviation filter */
   typename XsNoiseFilterType::Pointer m_XsNoiseFilter;
-  
+
   /** Typedef of a helper filter to apply to a vector image*/
   typedef otb::PerBandVectorImageFilter
       < TXsImageType, InternalVectorImageType, XsConvolutionFilterType> XsVectorConvolutionFilterType;
-  
+
   /** Pointer to the helper vector image filter */
   typename XsVectorConvolutionFilterType::Pointer m_XsVectorConvolutionFilter;
-  
+
   /** Typedef of a helper filter to apply to a vector image*/
   typedef otb::PerBandVectorImageFilter
       < TXsImageType, InternalVectorImageType, XsNoiseFilterType> XsVectorNoiseFilterType;
-  
+
   /** Pointer to the helper vector image filter */
   typename XsVectorNoiseFilterType::Pointer m_XsVectorNoiseFilter;
-  
+
   /** Radius used for the smoothing filter */
   RadiusType m_Radius;
 

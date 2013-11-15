@@ -88,7 +88,7 @@ protected:
 
   /** Generate input requested region method */
   virtual void GenerateOutputInformation();
-  
+
   /** Override VerifyInputInformation() since this filter's inputs do
      * not need to occupy the same physical space.
      *

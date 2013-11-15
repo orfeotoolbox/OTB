@@ -43,10 +43,10 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   // Default radius
   m_Radius.Fill(3);
-  
+
   // Default Tolerance
   m_Tolerance = 0.25;
-  
+
   // Default Thresholds
   m_DiscontinuityThreshold  = 10.0;
   m_DiscontinuityHighThreshold = 30.0;
@@ -249,7 +249,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     e.SetDataObject(canny_edges);
     throw e;
     }
-  
+
   // crop the  region at the largest possible region
   if ( RequestedRegion.Crop(old_disparityPtr->GetLargestPossibleRegion()))
     {
@@ -272,7 +272,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     e.SetDataObject(old_disparityPtr);
     throw e;
     }
-  
+
   // crop the  region at the largest possible region
   if ( RequestedRegion.Crop(old_maskPtr->GetLargestPossibleRegion()))
     {
@@ -295,7 +295,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     e.SetDataObject(old_maskPtr);
     throw e;
     }
-   
+
   // crop the  region at the largest possible region
   if ( RequestedRegion.Crop(canny_disparity->GetLargestPossibleRegion()))
     {
@@ -318,7 +318,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     e.SetDataObject(canny_disparity);
     throw e;
     }
-    
+
   // crop the  region at the largest possible region
   if ( RequestedRegion.Crop(subpixelmaskPtr->GetLargestPossibleRegion()))
     {
@@ -364,7 +364,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   TImage * outputriskedgesPtr = this->GetOutputRiskEdges();
 
   outputriskedgesPtr->FillBuffer(0.0);
-  
+
   int win = m_Radius[0]+1; // should be also equal to m_Radius[1]
   int patch_side = 2*win+1;
   int patch_side_small = 2*(win-1)+1;
@@ -381,7 +381,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   ring.push_back(outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]);
   ring.push_back(-1+outputPtr->GetRequestedRegion().GetSize()[0] + outputPtr->GetRequestedRegion().GetIndex()[0]);
   ring.push_back(-1);
-  
+
 //// Compute incoherences (jumps) of the disparity map in the epipolar direction
 //// disparity_jump = mask of jumps in the epipolar direction:
 //// flags to disparity jump:   1--->jump due to a left border
@@ -393,17 +393,17 @@ AdhesionCorrectionFilter<TImage, TMask>
   disparity_jump->SetRegions(old_disparityPtr->GetRequestedRegion());
   disparity_jump->Allocate();
   disparity_jump->FillBuffer(0);
-  
+
   AuxImagePointerType disparity_jump2 = AuxImageType::New();
   disparity_jump2->SetRegions(old_disparityPtr->GetRequestedRegion());
   disparity_jump2->Allocate();
   disparity_jump2->FillBuffer(0);
-  
+
   AuxImagePointerType aux = AuxImageType::New();
   aux->SetRegions(outputPtr->GetRequestedRegion());
   aux->Allocate();
   aux->FillBuffer(0);
-  
+
   /** input iterators */
   itk::ImageRegionConstIterator<TImage> old_disparityIt(old_disparityPtr,old_disparityPtr->GetRequestedRegion());
   itk::ImageRegionConstIterator<TMask> old_maskIt(old_maskPtr,old_maskPtr->GetRequestedRegion());
@@ -411,7 +411,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   itk::ImageRegionConstIterator<TImage> canny_edgesIt(canny_edges,canny_edges->GetRequestedRegion());
 
   IndexType index, index2, index_pos, index_pos_actual, index_pos_old, index_pos_new, index_pos0;
-  
+
   /** Output iterators */
   itk::ImageRegionIterator<TImage> new_disparityIt(outputPtr,outputPtr->GetRequestedRegion());
   itk::ImageRegionIterator<TMask> new_maskIt(outputmaskPtr,outputPtr->GetRequestedRegion());
@@ -519,7 +519,7 @@ AdhesionCorrectionFilter<TImage, TMask>
           if (canny_disparity->GetPixel(index_pos) > m_DiscontinuityThreshold )
             {
             int pp=0;
-            
+
             for(k=0; k<8; k++)
               {
               index[0]=index_pos[0]+ring[k];
@@ -558,7 +558,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   /** Compute jumps of the disparity map in the epipolar direction not detected by Canny */
 
   new_disparityIt.GoToBegin();
-  
+
   while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
@@ -603,7 +603,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     index[1]=index_pos[1]+1;
     new_disparityIt.SetIndex(index);
     }
-  
+
   /** Compute intersections between jumps */
   /** disparity_jump2 = mask of jumps in the orthogonal epipolar direction: */
 
@@ -656,9 +656,9 @@ AdhesionCorrectionFilter<TImage, TMask>
     }
 
   /** Only keep 1 pixel for each discontinuity */
-  
+
   new_disparityIt.GoToBegin();
-  
+
   while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
@@ -812,7 +812,7 @@ AdhesionCorrectionFilter<TImage, TMask>
     }
 
   /** Find extreme of risk edges : extreme points in the edges have flag 2, an the other edge points have flag = 1 */
-  
+
   new_disparityIt.GoToBegin();
 
   while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
@@ -932,7 +932,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   int big_win = win + 1;
   int half_big_win = (2*big_win +1)*(2*big_win +1) /2;
   double Tol2 = m_Tolerance/2;
-  
+
   new_disparityIt.GoToBegin();
 
   while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
@@ -1007,9 +1007,9 @@ AdhesionCorrectionFilter<TImage, TMask>
     }
 
   /** Remove edges with only 1 or 2 pixels */
-  
+
   new_disparityIt.GoToBegin();
-  
+
   while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1]- 1)
     {
     ++new_disparityIt;
@@ -1044,9 +1044,9 @@ AdhesionCorrectionFilter<TImage, TMask>
     index[1]=index_pos[1]+1;
     new_disparityIt.SetIndex(index);
     }
-  
+
   /** Remove pixels risking adhesion */
-  
+
   new_disparityIt.GoToBegin();
 
   while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1] - 1)
@@ -1351,9 +1351,9 @@ AdhesionCorrectionFilter<TImage, TMask>
     }
 
   /** remove around the  disparity jump if no risk_edge have been found */
-  
+
   new_disparityIt.GoToBegin();
-  
+
   while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1])
     {
     index_pos = new_disparityIt.GetIndex();
@@ -1479,7 +1479,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   /** Vertical lines (perpendicular to epipolar lines) part2 */
 
   new_disparityIt.GoToBegin();
-  
+
   while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] -1)
     {
     int k=0;
@@ -1526,7 +1526,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   /** remove neighborhood if there is an edge near the first disparities */
 
   new_disparityIt.GoToBegin();
-  
+
   while (new_disparityIt.GetIndex()[1]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[1]) + outputPtr->GetRequestedRegion().GetIndex()[1]-1)
     {
     index_pos = new_disparityIt.GetIndex();
@@ -1728,7 +1728,7 @@ AdhesionCorrectionFilter<TImage, TMask>
   /** Reject isolated disparities
    *  ie: In the patch is the only meaningful match
    */
-   
+
   int nb_disp =3;
   new_disparityIt.GoToBegin();
 

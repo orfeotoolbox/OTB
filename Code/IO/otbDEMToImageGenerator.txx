@@ -65,11 +65,11 @@ void DEMToImageGenerator<TDEMImage>
 
 // Get the Output MetaData Dictionary
   itk::MetaDataDictionary& dict = output->GetMetaDataDictionary();
-  
+
   // Encapsulate the   metadata set by the user
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
                                         m_Transform->GetInputProjectionRef());
-  
+
   if (this->GetOutputKeywordList().GetSize() > 0)
     {
     itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,

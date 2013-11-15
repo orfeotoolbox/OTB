@@ -45,23 +45,23 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       typedef SimulationStep1Base   Superclass;
       typedef itk::SmartPointer<Self> Pointer;
       typedef itk::SmartPointer<const Self> ConstPointer;
-      
+
       typedef otb::LeafParameters                   LeafParametersType;
       typedef Superclass::SpectralResponseType      SpectralResponseType;
       typedef Superclass::ParametersType            ParametersType;
-      
+
       /** Standard macros */
       itkNewMacro(Self);
       itkTypeMacro(ProspectModel, SpectrumGeneratorBase);
-      
+
       /** Set/Get Input */
       virtual  void SetInput(const ParametersType &);
       void SetInput(const LeafParametersType *object);
       LeafParametersType * GetInput();
-      
+
       /** GenerateData */
       virtual void GenerateData();
-      
+
       /** Get Output reflectance/transmittance*/
       virtual SpectralResponseType * GetReflectance();
       virtual SpectralResponseType * GetTransmittance();
@@ -73,9 +73,9 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       ~ProspectModel();
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
-      
+
       DataObjectPointer MakeOutput(unsigned int);
-      
+
       /** Compute Transmission of isotropic radiation across an interface between two dielectrics*/
       double Tav(const int theta, double ref);
 

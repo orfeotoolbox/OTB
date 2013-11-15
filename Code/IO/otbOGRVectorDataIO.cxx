@@ -166,7 +166,7 @@ OGRVectorDataIO
     InternalTreeNodeType * documentPtr = const_cast<InternalTreeNodeType *>(tree->GetNode(document));
 
     /** IO class helper to convert ogr layer*/
-   
+
     OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
     OGRConversion->ConvertOGRLayerToDataTreeNode(layer, documentPtr);
 

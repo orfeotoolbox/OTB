@@ -217,7 +217,7 @@ private:
 
   /** Number of key points detected */
   int m_NumberOfPoints;
-  
+
   /** Minimum threshold for determinant of Hessian **/
   double m_DoHThreshold;
 
@@ -235,10 +235,10 @@ private:
 
   /** ImageList*/
   ImageListTypePointer m_ImageList;
-  
+
   /** Number of shifted keypoints*/
   unsigned int m_DifferentSamplePoints;
-  
+
   /** Offsets vector, conveniance datas */
   OffsetType m_Offsets[8];
 };

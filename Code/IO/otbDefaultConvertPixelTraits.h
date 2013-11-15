@@ -26,7 +26,7 @@
 
 namespace otb
 {
-  
+
 /** \class DefaultConvertPixelTraits
  *  \brief Traits class used to by ConvertPixels to convert blocks of pixels.
  *
@@ -47,7 +47,7 @@ public:
   /** Return the number of components per pixel. */
   static unsigned int GetNumberOfComponents()
   { return PixelType::GetNumberOfComponents(); }
-  
+
   /** Return the nth component of the pixel. */
   static ComponentType GetNthComponent(int c, const PixelType& pixel)
   { return pixel.GetNthComponent(c); }
@@ -321,6 +321,6 @@ OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(unsigned long);
 //  End of Traits for the classes deriving from std::complex.
 //
 //
-  
+
 } // end namespace otb
 #endif

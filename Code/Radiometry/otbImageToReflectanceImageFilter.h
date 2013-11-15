@@ -196,7 +196,7 @@ public:
   itkSetMacro(ZenithalSolarAngle, double);
   /** Give the zenithal solar angle. */
   itkGetConstReferenceMacro(ZenithalSolarAngle, double);
-  
+
   /** Set the useClamp flag. */
   itkSetMacro(UseClamp,bool);
   /** Give the useClamp flag. */

@@ -71,13 +71,13 @@ ListSampleGenerator<TImage, TVectorData>
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(4);
-  
+
   // Register the outputs
   this->itk::ProcessObject::SetNthOutput(0, this->MakeOutput(0).GetPointer());
   this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(2, this->MakeOutput(2).GetPointer());
   this->itk::ProcessObject::SetNthOutput(3, this->MakeOutput(3).GetPointer());
-  
+
   m_RandomGenerator = RandomGeneratorType::GetInstance();
 }
 
@@ -194,11 +194,11 @@ void
 ListSampleGenerator<TImage, TVectorData>
 ::GenerateData()
 {
-  // Get the inputs 
+  // Get the inputs
   ImagePointerType image = const_cast<ImageType*>(this->GetInput());
   VectorDataPointerType vectorData = const_cast<VectorDataType*>(this->GetInputVectorData());
 
-  // Get the outputs 
+  // Get the outputs
   ListSamplePointerType trainingListSample   = this->GetTrainingListSample();
   ListLabelPointerType  trainingListLabel    = this->GetTrainingListLabel();
   ListSamplePointerType validationListSample = this->GetValidationListSample();
@@ -218,17 +218,17 @@ ListSampleGenerator<TImage, TVectorData>
 
   // Set MeasurementVectorSize for each sample list
   trainingListSample->SetMeasurementVectorSize(image->GetNumberOfComponentsPerPixel());
-  // stores label as integers,so put the size to 1                                      
-  trainingListLabel->SetMeasurementVectorSize(1); 
+  // stores label as integers,so put the size to 1
+  trainingListLabel->SetMeasurementVectorSize(1);
   validationListSample->SetMeasurementVectorSize(image->GetNumberOfComponentsPerPixel());
-  // stores label as integers,so put the size to 1                                      
+  // stores label as integers,so put the size to 1
   validationListLabel->SetMeasurementVectorSize(1);
-  
+
   m_ClassesSamplesNumberTraining.clear();
   m_ClassesSamplesNumberValidation.clear();
-  
+
   typename ImageType::RegionType imageLargestRegion = image->GetLargestPossibleRegion();
-  
+
   TreeIteratorType itVector(vectorData->GetDataTree());
   for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
     {
@@ -252,12 +252,12 @@ ListSampleGenerator<TImage, TVectorData>
 
       typedef itk::ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
       IteratorType it(image, polygonRegion);
-      
+
       for (it.GoToBegin(); !it.IsAtEnd(); ++it)
         {
         itk::ContinuousIndex<double, 2> point;
         image->TransformIndexToPhysicalPoint(it.GetIndex(), point);
-        
+
         if ( exteriorRing->IsInside(point) ||
              (this->GetPolygonEdgeInclusion() && exteriorRing->IsOnEdge(point)) )
           {
@@ -279,7 +279,7 @@ ListSampleGenerator<TImage, TVectorData>
             {
             continue; // skip this pixel and continue
             }
-              
+
           double randomValue = m_RandomGenerator->GetUniformVariate(0.0, 1.0);
           if (randomValue < m_ClassesProbTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)])
             {
@@ -315,7 +315,7 @@ ListSampleGenerator<TImage, TVectorData>
 
   ImageType* image = const_cast<ImageType*> (this->GetInput());
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
-  
+
   // Compute cumulative area of all polygons of each class
   TreeIteratorType itVector(vectorData->GetDataTree());
   for (itVector.GoToBegin(); !itVector.IsAtEnd(); ++itVector)
@@ -337,7 +337,7 @@ ListSampleGenerator<TImage, TVectorData>
 {
   m_ClassesProbTraining.clear();
   m_ClassesProbValidation.clear();
-  
+
   // Sanity check
   if (m_ClassesSize.empty())
     {
@@ -391,11 +391,11 @@ ListSampleGenerator<TImage, TVectorData>
 ::GetPolygonAreaInPixelsUnits(DataNodeType* polygonDataNode, ImageType* image)
 {
   const double pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
-  
+
   // Compute area of exterior ring in pixels
   PolygonPointerType exteriorRing = polygonDataNode->GetPolygonExteriorRing();
   double area = exteriorRing->GetArea() / pixelArea;
-  
+
   // Remove contribution of all interior rings
   PolygonListPointerType interiorRings = polygonDataNode->GetPolygonInteriorRings();
   for (typename PolygonListType::Iterator interiorRing = interiorRings->Begin();
@@ -404,7 +404,7 @@ ListSampleGenerator<TImage, TVectorData>
   {
     area -= interiorRing.Get()->GetArea() / pixelArea;
   }
-  
+
   return area;
 }
 

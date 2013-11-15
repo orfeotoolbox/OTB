@@ -159,7 +159,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
   double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSpacing()[0])+vcl_abs(m_LeftImage->GetSpacing()[1]));
   //double ratio_x = mean_spacing / vcl_abs(m_LeftImage->GetSpacing()[0]);
   //double ratio_y = mean_spacing / vcl_abs(m_LeftImage->GetSpacing()[1]);
-  
+
   outputSpacing[0]*=mean_spacing;
   outputSpacing[1]*=mean_spacing;
 
@@ -222,7 +222,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
       {
       alpha = otb::CONST_PI + vcl_atan(a);
       }
-    
+
     }
 
   // And compute the unitary vectors of the new axis (equivalent to
@@ -332,7 +332,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
 
   // Use the mean spacing as before
   double mean_spacing=0.5*(vcl_abs(m_LeftImage->GetSpacing()[0])+vcl_abs(m_LeftImage->GetSpacing()[1]));
-  
+
   // Initialize
   currentPoint1 = m_OutputOriginInLeftImage;
   if(m_UseDEM)
@@ -486,7 +486,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
 
     // And we compute the equivalent displacement in right image
     currentPoint2 = m_LeftToRightTransform->TransformPoint(currentPoint1);
-    
+
     // 5 - Finally, we have to handle a special case for beginning of
     // line, since at this position we are able to compute the
     // position of the beginning of next line
@@ -508,7 +508,7 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
         tmpPoint[1] = nextLineStart1[1];
         nextLineStart1[2] = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
         }
-      
+
 
       // By construction, nextLineStart2 is always the image of
       // nextLineStart1 by the left to right transform at the m_AverageElevation

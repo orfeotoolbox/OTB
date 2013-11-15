@@ -46,14 +46,14 @@ ConcatenateSampleListFilter<TSampleList>
  {
  // Retrieve output pointers
  SampleListPointer    outputSampleListPtr = this->GetOutput();
- 
+
  // Clear any previous output
  outputSampleListPtr->Clear();
 
  // Set the measurement vector size (based on the first listsample)
  outputSampleListPtr->SetMeasurementVectorSize(static_cast<SampleListType *>(
                                                  Superclass::ProcessObject::GetInput(0))->GetMeasurementVectorSize());
- 
+
  // Evaluate the total number of samples for progress reporting
  unsigned long totalNumberOfSamples = 0;
 
@@ -62,7 +62,7 @@ ConcatenateSampleListFilter<TSampleList>
   // Retrieve the ListSample
   typename SampleListType::ConstPointer inputPtr = static_cast<SampleListType *>
     (Superclass::ProcessObject::GetInput(inputIndex));
-  
+
   totalNumberOfSamples += inputPtr->Size();
   }
 
