@@ -162,6 +162,7 @@ ImageViewerBase<TPixel, TLabel>
     generator->SetInput(sl->GetNthElement(i));
     typename HistogramGeneratorType::HistogramType::SizeType size;
     //      size.Fill(static_cast<unsigned int>(vcl_ceil(1/m_NormalizationFactor)*10));
+    size.SetSize(sl->GetNthElement(i)->GetMeasurementVectorSize());
     size.Fill(256);
     generator->SetHistogramSize(size);
     generator->Update();
