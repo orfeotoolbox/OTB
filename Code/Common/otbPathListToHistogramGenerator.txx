@@ -135,7 +135,7 @@ PathListToHistogramGenerator<TPath, TFunction>
 
   for (int noPathList = 0; noPathList < nbElementPathList; noPathList++)
     {
-    vertexList = pathList->GetNthElement(noPathList);//(*pathList)[noPathList];
+    vertexList = pathList->GetNthElement(noPathList); //(*pathList)[noPathList];
     function->SetInputPath(vertexList);
 
     ResultFunction[0] = static_cast<MeasurementType>(function->Evaluate());

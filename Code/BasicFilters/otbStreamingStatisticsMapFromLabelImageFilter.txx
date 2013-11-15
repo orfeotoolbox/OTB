@@ -202,7 +202,6 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
   itk::ImageRegionConstIterator<TLabelImage> labelIt(labelInputPtr, labelInputPtr->GetRequestedRegion());
 
 
-
   typename VectorImageType::PixelType value;
   typename LabelImageType::PixelType label;
   // do the work

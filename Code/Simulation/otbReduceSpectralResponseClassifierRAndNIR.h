@@ -110,13 +110,11 @@ namespace otb
           void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
-
           /**
            * \param ValuePrecisionType
            * \return the indice value.
            */
           inline ValuePrecisionType operator()();
-
 
 
         protected:

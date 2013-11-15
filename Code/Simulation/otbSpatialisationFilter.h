@@ -73,7 +73,6 @@ public:
    typedef std::vector<LabelType>    LabelVectorType;
 
 
-
    /** Standard Macro*/
    itkTypeMacro(SpatialisationFilter, LabelMapSource);
    itkNewMacro(Self);
@@ -104,7 +103,6 @@ public:
    {
       m_Labels=v;
    }
-
 
 
 

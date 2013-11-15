@@ -326,30 +326,30 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
     const LabelObjectVectorType & labelObjectContainer = m_TemporaryImages[i]->GetLabelObjects();
 
     for( typename LabelObjectVectorType::const_iterator it = labelObjectContainer.begin();
-	 it != labelObjectContainer.end();
-	 ++it )
+        it != labelObjectContainer.end();
+        ++it )
       {
       LabelObjectType * labelObject = *it;
       if( output->HasLabel( labelObject->GetLabel() ) )
         {
         // merge the lines in the output's object
-	//ITKv4 iterate over the 2 LabelObjects src and output
-	typedef typename LabelObjectType::ConstLineIterator IteratorType;
+       //ITKv4 iterate over the 2 LabelObjects src and output
+       typedef typename LabelObjectType::ConstLineIterator IteratorType;
 
   typename LabelObjectType::LabelObjectType * dest = output->GetLabelObject( labelObject->GetLabel() );
 
-	IteratorType srcIt;
-	srcIt = IteratorType( labelObject );
-	srcIt.GoToBegin();
+       IteratorType srcIt;
+       srcIt = IteratorType( labelObject );
+       srcIt.GoToBegin();
 
-	//ITKv4 Iterate over all lines of the source and add them to the
-	//output labelObject (can use the insert method over the
-	//container anymore (it is now private)
-	while ( !srcIt.IsAtEnd() )
-	  {
-	  dest->AddLine(srcIt.GetLine());
+       //ITKv4 Iterate over all lines of the source and add them to the
+       //output labelObject (can use the insert method over the
+       //container anymore (it is now private)
+       while ( !srcIt.IsAtEnd() )
+         {
+         dest->AddLine(srcIt.GetLine());
     ++srcIt;
-	  }
+         }
         }
       else
         {

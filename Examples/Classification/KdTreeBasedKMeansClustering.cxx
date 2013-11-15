@@ -336,7 +336,6 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef ClassifierType::MembershipFunctionVectorObjectType       MembershipFunctionVectorObjectType;
   MembershipFunctionVectorObjectType::Pointer membershipFunctions =
                                         MembershipFunctionVectorObjectType::New();

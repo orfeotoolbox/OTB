@@ -516,7 +516,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
           c31 += xpiy * xpiy * xpiy * xmiy;
           c40 += xpiy * xpiy * xpiy * xpiy;
           }
-	++lit;
+       ++lit;
         }
 
       // normalize

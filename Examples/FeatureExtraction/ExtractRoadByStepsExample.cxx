@@ -390,7 +390,6 @@ int main(int argc, char * argv[])
   output->FillBuffer(0.0);
   output->SetOrigin(multispectralReader->GetOutput()->GetOrigin());
   output->SetSpacing(multispectralReader->GetOutput()->GetSpacing());
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

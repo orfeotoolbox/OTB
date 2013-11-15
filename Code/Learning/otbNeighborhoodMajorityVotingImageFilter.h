@@ -106,7 +106,6 @@ public:
                       TKernel::NeighborhoodDimension);
 
 
-
   /** Type of the pixels in the Kernel. */
   typedef typename TKernel::PixelType            KernelPixelType;
 
@@ -161,7 +160,6 @@ protected:
   PixelType Evaluate(const NeighborhoodIteratorType &nit,
                      const KernelIteratorType kernelBegin,
                      const KernelIteratorType kernelEnd);
-
 
 
 private:

@@ -140,23 +140,23 @@ protected:
   template<class T>
   bool PixelIsSingle(const T& /*dummy*/)
   {
-		return true;
+              return true;
   }
 
   template<class T>
   bool PixelIsSingle(const itk::VariableLengthVector<T>& /*dummy*/)
   {
-		return false;
+              return false;
   }
 
   void GenerateOutputInformation()
   {
-		Superclass::GenerateOutputInformation();
-		InputPixelType dummy;
-		if (!this->PixelIsSingle(dummy))
-		{
-			this->GetOutput()->SetNumberOfComponentsPerPixel(2 * this->GetInput()->GetNumberOfComponentsPerPixel());
-		}
+              Superclass::GenerateOutputInformation();
+              InputPixelType dummy;
+              if (!this->PixelIsSingle(dummy))
+              {
+                     this->GetOutput()->SetNumberOfComponentsPerPixel(2 * this->GetInput()->GetNumberOfComponentsPerPixel());
+              }
   }
 
 private:

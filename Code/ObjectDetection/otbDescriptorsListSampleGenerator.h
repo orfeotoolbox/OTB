@@ -185,9 +185,9 @@ private:
     for(unsigned int i=0; i<ImageDimension; ++i)
       {
       if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + static_cast<IndexValueType>(m_NeighborhoodRadius) )
-	//Comment this instruction after itkv4 migration (correct
-	//usage of centered-pixel coordinates)
-	//if( index[i] < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
+       //Comment this instruction after itkv4 migration (correct
+       //usage of centered-pixel coordinates)
+       //if( index[i] < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
         {
         return false;
         }

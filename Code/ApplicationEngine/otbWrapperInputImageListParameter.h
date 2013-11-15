@@ -98,7 +98,6 @@ protected:
   virtual ~InputImageListParameter();
 
 
-
   FloatVectorImageListType::Pointer m_ImageList;
   ImageFileReaderListType::Pointer  m_ReaderList;
 

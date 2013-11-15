@@ -90,7 +90,6 @@ class AtmosphericEffects
            //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
-
         private:
            AtmosphericEffects(const Self&); //purposely not implemented
            void operator=(const Self&); //purposely not implemented

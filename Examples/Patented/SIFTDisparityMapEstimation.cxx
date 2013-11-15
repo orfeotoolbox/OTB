@@ -50,7 +50,6 @@
 
 
 
-
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"

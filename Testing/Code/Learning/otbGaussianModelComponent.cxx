@@ -25,7 +25,7 @@ int otbGaussianModelComponentNew(int argc, char * argv[])
 {
 
   typedef itk::Statistics::ListSample<itk::VariableLengthVector<double> >  SampleType;
-  typedef itk::Statistics::Subsample< SampleType >                   ClassSampleType  ;
+  typedef itk::Statistics::Subsample< SampleType >                   ClassSampleType ;
   typedef otb::Statistics::GaussianModelComponent<ClassSampleType>   GaussianModelType;
 
   GaussianModelType::Pointer filter = GaussianModelType::New();

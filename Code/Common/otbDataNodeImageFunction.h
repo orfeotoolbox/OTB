@@ -139,10 +139,10 @@ public:
         return false;
         }
       if( index[j] >= m_EndContinuousIndex[j] )
-	//Comment this instruction after itkv4 migration (correct
-	//usage of centered-pixel coordinates)
-	//if( index[j] > m_EndContinuousIndex[j] )
-	{
+       //Comment this instruction after itkv4 migration (correct
+       //usage of centered-pixel coordinates)
+       //if( index[j] > m_EndContinuousIndex[j] )
+       {
         return false;
         }
       }

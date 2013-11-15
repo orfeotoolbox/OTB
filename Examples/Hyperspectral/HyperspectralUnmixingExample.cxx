@@ -149,7 +149,6 @@ int main(int argc, char * argv[])
     endMember2Matrix = VectorImageToMatrixImageFilterType::New();
   endMember2Matrix->SetInput(vca->GetOutput());
   endMember2Matrix->Update();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

@@ -354,7 +354,6 @@ public:
   GenerateStreamableReadRegionFromRequestedRegion( const itk::ImageIORegion & requested ) const;
 
 
-
   /** Before this method is called all the configuration will be done,
    * that is Streaming/PasteRegion/Compression/Filename etc
    * If pasting is being used the number of requested splits is for that

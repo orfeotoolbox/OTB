@@ -90,7 +90,6 @@ protected:
   virtual ~InputFilenameListParameter();
 
 
-
   StringParameterListType::Pointer  m_FilenameList;
 
 private:

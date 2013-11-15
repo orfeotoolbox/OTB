@@ -78,7 +78,7 @@ SOMClassifier<TSample, TSOMMap, TLabel>
 {
   typename OutputType::Pointer outputPtr = this->GetOutput();
   outputPtr->SetSample(this->GetSample());
-//  outputPtr->Resize(this->GetSample()->Size());//FIXME Check if still required
+//  outputPtr->Resize(this->GetSample()->Size()); //FIXME Check if still required
   typename SOMMapType::SizeType size = this->GetMap()->GetLargestPossibleRegion().GetSize();
   unsigned int                  numberOfClasses = 1;
   for (unsigned int i = 0; i < SOMMapType::ImageDimension; ++i)

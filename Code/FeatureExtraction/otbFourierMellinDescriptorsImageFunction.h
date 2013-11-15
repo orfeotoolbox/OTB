@@ -140,7 +140,6 @@ private:
 
 
 
-
 };
 
 } // namespace otb

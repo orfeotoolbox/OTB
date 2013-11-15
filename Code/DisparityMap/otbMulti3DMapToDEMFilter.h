@@ -250,7 +250,6 @@ protected:
   virtual void VerifyInputInformation() {}
 
 
-
 private:
 
   void SetOutputParametersFromImage();

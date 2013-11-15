@@ -67,7 +67,6 @@ protected:
    virtual ~SimulationStep1Base() {}
 
 
-
 private:
    SimulationStep1Base(const Self &); //purposely not implemented
    void operator =(const Self&); //purposely not implemented

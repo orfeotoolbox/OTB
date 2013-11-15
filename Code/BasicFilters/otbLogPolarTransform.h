@@ -91,13 +91,13 @@ public:
    * \param The Fixed parameters of the transform.
    */
   virtual void SetFixedParameters( const ParametersType & param)
-    { this->m_FixedParameters = param;}
+    { this->m_FixedParameters = param; }
 
   /**
    * Get the Fixed Parameters
    * \return The Fixed parameters of the transform.
    */
-  virtual const ParametersType& GetFixedParameters(void) const{return this->m_FixedParameters;}
+  virtual const ParametersType& GetFixedParameters(void) const{return this->m_FixedParameters; }
   /**
    * Transform a point.
    * \param point The point to transform.

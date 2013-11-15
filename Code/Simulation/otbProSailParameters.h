@@ -47,7 +47,6 @@ class ITK_EXPORT ProSailParameters : public itk::DataObject
       itkNewMacro(Self);
 
 
-
       /** Set/Get Chlorophyll content (ug/cm2)*/
       itkSetMacro(Cab, double);
       itkGetMacro(Cab, double);

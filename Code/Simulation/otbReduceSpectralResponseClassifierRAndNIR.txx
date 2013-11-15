@@ -51,7 +51,6 @@ namespace otb
   }
 
 
-
   template <class TReduceSpectralResponse , class TFunction>
       void
           ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>

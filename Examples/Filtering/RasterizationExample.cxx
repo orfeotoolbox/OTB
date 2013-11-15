@@ -57,7 +57,6 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef unsigned char                 PixelType;
   typedef otb::Image<PixelType, 2>      ImageType;
   typedef otb::VectorData<>             VectorDataType;
@@ -107,7 +106,6 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   projection->SetOutputProjectionRef(projectionRefWkt);
   // Software Guide : EndCodeSnippet
 
@@ -142,7 +140,6 @@ int main(int argc, char * argv[])
   region.SetSize(sizeInUnit);
   region.SetOrigin(origin);
   region.SetRegionProjection(projectionRefWkt);
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -168,12 +165,10 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   vectorDataRendering->SetInput(extractROI->GetOutput());
   vectorDataRendering->SetSize(size);
   vectorDataRendering->SetOrigin(origin);
   vectorDataRendering->SetSpacing(spacing);
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -197,7 +192,6 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::RGBAPixel<unsigned char> RGBAPixelType;
   typedef otb::Image<RGBAPixelType, 2>   RGBAImageType;
   typedef itk::ChangeLabelImageFilter<ImageType,
@@ -215,7 +209,6 @@ int main(int argc, char * argv[])
   changeLabelFilter->SetChange(0, blue);
   changeLabelFilter->SetChange(255, green);
   changeLabelFilter->SetInput(vectorDataRendering->GetOutput());
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -226,7 +219,6 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileWriter<RGBAImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(changeLabelFilter->GetOutput());

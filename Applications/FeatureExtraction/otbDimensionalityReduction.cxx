@@ -247,7 +247,6 @@ private:
         m_InverseFilter = invFilter;
 
 
-
         filter->SetInput(GetParameterFloatVectorImage("in"));
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
         filter->SetUseNormalization(normalize);
@@ -445,7 +444,6 @@ private:
 
       SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
       }
-
 
 
   }

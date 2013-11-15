@@ -92,7 +92,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 
 
-
 // Software Guide : BeginLatex
 //
 // Since the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} is a

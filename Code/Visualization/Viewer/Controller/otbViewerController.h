@@ -90,7 +90,6 @@ public:
   }
 
 
-
 /*   VisuControllerListPointerType GetVisuControllerList() */
 /*   { */
 /*     return m_VisuControllerList; */
