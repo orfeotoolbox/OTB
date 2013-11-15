@@ -177,9 +177,22 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          {
            paramExists = false;
          }
-       if (type == ParameterType_Empty && app->HasUserValue(key))
+
+       std::string emptyValue;
+       if (type == ParameterType_Empty)
          {
-           paramExists = true;
+           EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
+           //Dont use app->HasUserValue which returns false always because of
+           //EmptyParameter::HasValue() is false for EmptyParameter
+           if(eParam->HasUserValue())
+             {
+             paramExists = true;
+             emptyValue = "false";
+             if( eParam->GetActive() )
+               {
+               emptyValue = "true";
+               }
+             }
          }
         if(type  == ParameterType_RAM)
         {
@@ -232,12 +245,8 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
            }
          else if (typeAsString == "Empty")
            {
-           EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
-           value = "false";
-           if( eParam->GetActive() )
-             {
-             value = "true";
-             }
+           //Nothing to do. copy emtpyValue
+           value = emptyValue;
            }
 
          //get only file name

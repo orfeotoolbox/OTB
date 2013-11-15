@@ -77,9 +77,18 @@ QtWidgetModel* QtWidgetParameterBase::GetModel()
 // current widget
 void QtWidgetParameterBase::SetActivationState( bool value )
 {
+  //filter out EmptyParamter
+  if(strcmp(m_Param->GetNameOfClass(), "EmptyParameter") == 0)
+    {
+    //only set user value if there is a change
+    if(value != m_Param->GetActive())
+      m_Param->SetUserValue(true);
+    }
+
   this->setEnabled(value);
   m_Param->SetChecked(value);
   m_Param->SetActive(value);
+
 }
 
 // Slot connected to the signal emitted by the Reset Button
