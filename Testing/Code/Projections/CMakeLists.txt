@@ -305,7 +305,7 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
         -0.5
         31
         N
-        4 # Spacing of the deformation field
+        4 # Spacing of the displacement field
         )
 
 ADD_TEST(prTvOrthoRectificationToulouseXS ${PROJECTIONS_TESTS2}
@@ -1723,11 +1723,11 @@ ${TEMP}/otbRationalTransformOutput.txt
 -10 -10
 )
 
-ADD_TEST(prTvRationalTransformToDeformationFiledSourceTest ${PROJECTIONS_TESTS4}
---compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDeformationFiledSourceTest.hdr
-                        ${TEMP}/prTvRationalTransformToDeformationFiledSourceTest.hdr
-otbRationalTransformToDeformationFiledSourceTest
-${TEMP}/prTvRationalTransformToDeformationFiledSourceTest.hdr
+ADD_TEST(prTvRationalTransformToDisplacementFieldSourceTest ${PROJECTIONS_TESTS4}
+--compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
+                        ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
+otbRationalTransformToDisplacementFieldSourceTest
+${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
 )
 
 #----- otb::GeographicalDistance ---------------------
@@ -1805,7 +1805,7 @@ ADD_TEST(prTvossimElevManagerTest3 ${PROJECTIONS_TESTS5}
 # - differences between plaforms
 # - file descriptor leak
 ADD_TEST(prTvossimElevManagerTest4 ${PROJECTIONS_TESTS5}
---compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest3.tif
+--compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest4
                         ${TEMP}/prTvossimElevManagerTest4.hdr
         otbOssimElevManagerTest4
          ${INPUTDATA}/DEM/srtm_directory
@@ -1936,7 +1936,7 @@ otbGenericRSResampleImageFilter.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbRationalTransform.cxx
-otbRationalTransformToDeformationFieldSource.cxx
+otbRationalTransformToDisplacementFieldSource.cxx
 otbGeographicalDistance.cxx
 otbVectorDataTransformFilter.cxx
 otbGenericRSTransformGenericTest.cxx

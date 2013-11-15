@@ -166,7 +166,7 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
 template<class TInputImage, class TOutputImage>
 void
 PersistentShrinkImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   //std::cout << "outputRegionForThread " << threadId << "  " << outputRegionForThread << std::endl;
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());

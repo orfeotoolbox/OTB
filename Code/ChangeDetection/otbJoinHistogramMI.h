@@ -31,7 +31,8 @@ class JoinHistogramMI
 {
 public:
   typedef double                                                         HistogramFrequencyType;
-  typedef typename itk::Statistics::Histogram<HistogramFrequencyType, 2> HistogramType;
+  typedef typename itk::Statistics::Histogram<HistogramFrequencyType,
+                             itk::Statistics::DenseFrequencyContainer2 > HistogramType;
   JoinHistogramMI() {}
   virtual ~JoinHistogramMI() {}
   inline TOutput operator ()(const TInput1& itA,
@@ -82,7 +83,7 @@ public:
 
         return entropyX + entropyY - jointEntropy; */
 
-    typename HistogramType::MeasurementVectorType sample;
+    typename HistogramType::MeasurementVectorType sample(2);
     for (unsigned long pos = 0; pos < itA.Size(); ++pos)
       {
       double valueA = static_cast<double>(itA.GetPixel(pos));
@@ -91,8 +92,9 @@ public:
       sample[0] = valueA;
       sample[1] = valueB;
 
-      HistogramFrequencyType freq = histogram->GetFrequency(
-        histogram->GetIndex(sample));
+      typename HistogramType::IndexType index;
+      histogram->GetIndex(sample, index);
+      HistogramFrequencyType freq = histogram->GetFrequency(index);
       if (freq > 0)
         {
         jointEntropy += freq * vcl_log(freq);

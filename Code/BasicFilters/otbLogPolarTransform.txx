@@ -30,7 +30,7 @@ namespace otb
 template <class TScalarType>
 LogPolarTransform<TScalarType>
 ::LogPolarTransform()
-  : Superclass(2, 4)
+  : Superclass(4)
 {
   m_Center[0] = 0.0;
   m_Center[1] = 0.0;

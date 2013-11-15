@@ -89,28 +89,28 @@ int otbListSampleToBalancedListSampleFilter(int argc, char * argv[])
 
   filter->Update();
 
-  DoubleSampleListType::ConstIterator outIt = filter->GetOutputSampleList()->Begin();
+  DoubleSampleListType::ConstIterator outIt = filter->GetOutput()->Begin();
 
   ofs<<"Output samples: "<<std::endl;
 
-  while(outIt != filter->GetOutputSampleList()->End())
+  while(outIt != filter->GetOutput()->End())
     {
     ofs<<outIt.GetMeasurementVector()<<std::endl;
     ++outIt;
     }
 
-  IntegerSampleListType::ConstIterator labelIt = filter->GetOutputLabelSampleList()->Begin();
+  IntegerSampleListType::ConstIterator labelIt = filter->GetOutputLabel()->Begin();
   ofs<<"Output Label samples: "<<std::endl;
   
-  while(labelIt != filter->GetOutputLabelSampleList()->End())
+  while(labelIt != filter->GetOutputLabel()->End())
     {
     ofs<<labelIt.GetMeasurementVector()<<std::endl;
     ++labelIt;
     }
   ofs.close();
   
-  std::cout <<"Output balanced SampleList Size         : "<< filter->GetOutputSampleList()->Size()  << std::endl;
-  std::cout <<"Output balanced Labeled SampleList Size : "<< filter->GetOutputLabelSampleList()->Size() << std::endl;
+  std::cout <<"Output balanced SampleList Size         : "<< filter->GetOutput()->Size()  << std::endl;
+  std::cout <<"Output balanced Labeled SampleList Size : "<< filter->GetOutputLabel()->Size() << std::endl;
 
   return EXIT_SUCCESS;
 }

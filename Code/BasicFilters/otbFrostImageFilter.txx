@@ -95,7 +95,7 @@ void FrostImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 template<class TInputImage, class TOutputImage>
 void FrostImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
   const OutputImageRegionType&     outputRegionForThread,
-  int threadId
+  itk::ThreadIdType threadId
   )
 {
   unsigned int                                                        i;

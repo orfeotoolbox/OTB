@@ -21,6 +21,7 @@
 #ifndef __otbWaveletPacketTransform_txx
 #define __otbWaveletPacketTransform_txx
 #include "otbWaveletPacketTransform.h"
+#include "otbMacro.h"
 
 namespace otb {
 
@@ -34,8 +35,7 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD, TCo
   : m_SubsampleImageFactor(2), m_NumberOfFilters(0), m_DepthOfDecomposition(0)
 {
   this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfInputs(1);
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0, OutputImageListType::New());
 
   m_FilterList = FilterListType::New();
@@ -118,8 +118,7 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE,
   : m_SubsampleImageFactor(2), m_NumberOfFilters(0), m_DepthOfDecomposition(0)
 {
   this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfInputs(1);
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0, OutputImageType::New());
 
   m_FilterList = FilterListType::New();
@@ -148,7 +147,7 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE,
     outputSize[i] = inputSize[i] * GetSubsampleImageFactor() * GetDepthOfDecomposition();
     }
 
-  std::cerr << "Output Size [" << outputSize[0] << "," << outputSize[1] << "]\n";
+  otbMsgDevMacro(<< "Output Size [" << outputSize[0] << "," << outputSize[1] << "]");
 
   OutputImageRegionType outputRegion;
   outputRegion.SetIndex(outputIndex);
@@ -171,9 +170,9 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE,
 
   if (m_NumberOfFilters == 0) InterpretRule();
 
-  std::cerr << "nbFilter  = " << m_NumberOfFilters << "\n";
-  std::cerr << "depth     = " << m_DepthOfDecomposition << "\n";
-  std::cerr << "rule size = " << m_WaveletPacketRule.size() << "\n";
+  otbMsgDevMacro(<< "nbFilter  = " << m_NumberOfFilters);
+  otbMsgDevMacro(<< "depth     = " << m_DepthOfDecomposition);
+  otbMsgDevMacro(<< "rule size = " << m_WaveletPacketRule.size);
 
   if (m_NumberOfFilters == 0)
     {
@@ -220,7 +219,9 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE,
 
   if (ruleID == m_WaveletPacketRule.size()) return m_FilterList->Size();
 
-  for (unsigned int i = 0; i < m_FilterList->GetNthElement(filterID)->GetNumberOfInputs(); ++i)
+  const unsigned int filterBankInputSize=1 << InputImageDimension;
+
+  for (unsigned int i = 0; i < filterBankInputSize; ++i)
     {
     if (m_WaveletPacketRule[ruleID++] == true)
       {
@@ -275,7 +276,9 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE,
 
     m_NumberOfFilters++;
 
-    for (unsigned int i = 0; i < filter->GetNumberOfInputs(); ++i)
+    const unsigned int filterBankInputSize = 1 << InputImageDimension;
+
+    for (unsigned int i = 0; i < filterBankInputSize; ++i)
       {
       ruleID++;
       InterpretRule(ruleID, curDepth + 1);

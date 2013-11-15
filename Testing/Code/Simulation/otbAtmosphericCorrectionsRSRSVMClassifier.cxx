@@ -273,7 +273,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
   //SVM Classifier
   SVMClassifierType::Pointer classifier = SVMClassifierType::New();
   classifier->SetModel(estimator->GetModel());
-  classifier->SetSample(sampleList);
+  classifier->SetInput(sampleList);
   classifier->SetNumberOfClasses(dirSR.size());
   classifier->Update();
 

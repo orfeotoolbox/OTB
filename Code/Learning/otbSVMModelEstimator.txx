@@ -40,8 +40,8 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   m_CoarseOptimizationNumberOfSteps = 5;
   m_FineOptimizationNumberOfSteps = 5;
 
-  this->SetNumberOfInputs(0);
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredInputs(0);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0, ModelType::New());
 }
 

@@ -23,7 +23,7 @@
 #include "otbWrapperMapProjectionParametersHandler.h"
 #include "otbSensorModelAdapter.h"
 #include "itkPoint.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbGenericRSTransform.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "ogrsf_frmts.h"
@@ -42,7 +42,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef itk::Point<double,3>                 PointType;
-  typedef itk::Statistics::EuclideanDistance<PointType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PointType> DistanceType;
 
   typedef std::pair<PointType,PointType>       TiePointType;
   typedef std::vector<TiePointType>            TiePointsType;

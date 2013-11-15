@@ -85,6 +85,9 @@ ADD_TEST(obTuMinMaxAttributesLabelMapFilterNew ${OBIA_TESTS1}
     otbMinMaxAttributesLabelMapFilterNew)
 
 ADD_TEST(obTvMinMaxAttributesLabelMapFilter ${OBIA_TESTS1}
+    --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/obTvMinMaxAttributesLabelMapFilter.txt
+    ${TEMP}/obTvMinMaxAttributesLabelMapFilter.txt
     otbMinMaxAttributesLabelMapFilter
     ${INPUTDATA}/maur.tif
     ${INPUTDATA}/maur_labelled.tif
@@ -94,6 +97,9 @@ ADD_TEST(obTuNormalizeAttributesLabelMapFilterNew ${OBIA_TESTS1}
     otbNormalizeAttributesLabelMapFilterNew)
 
 ADD_TEST(obTvNormalizeAttributesLabelMapFilter ${OBIA_TESTS1}
+  --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/obTvNormalizeAttributesLabelMapFilter.txt
+    ${TEMP}/obTvNormalizeAttributesLabelMapFilter.txt
     otbNormalizeAttributesLabelMapFilter
     ${INPUTDATA}/maur.tif
     ${INPUTDATA}/maur_labelled.tif
@@ -178,12 +184,12 @@ ADD_TEST(obTuLabelImageToLabelMapWithAdjacencyFilterNew ${OBIA_TESTS3}
   otbLabelImageToLabelMapWithAdjacencyFilterNew)
 
 ADD_TEST(obTvLabelImageToLabelMapWithAdjacencyFilter ${OBIA_TESTS3}
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
-  ${TEMP}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
-  otbLabelImageToLabelMapWithAdjacencyFilter
-  ${INPUTDATA}/simpleLabelImage.tif
-  ${TEMP}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
+ --compare-ascii ${NOTOL}
+ ${BASELINE_FILES}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
+ ${TEMP}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
+ otbLabelImageToLabelMapWithAdjacencyFilter
+ ${INPUTDATA}/simpleLabelImage.tif
+ ${TEMP}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
 )
 
 ADD_TEST(obTuLabelMapToAttributeImageFilterNew ${OBIA_TESTS1}

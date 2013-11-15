@@ -20,7 +20,7 @@
 
 #include "otbImageLayerBase.h"
 #include "itkVariableLengthVector.h"
-#include "itkDenseFrequencyContainer.h"
+#include "itkDenseFrequencyContainer2.h"
 
 #include "itkExtractImageFilter.h"
 #include "itkListSample.h"
@@ -88,9 +88,9 @@ public:
   typedef itk::Statistics::ListSample<SampleType> ListSampleType;
   typedef typename ListSampleType::Pointer        ListSamplePointerType;
 
-  typedef itk::Statistics::DenseFrequencyContainer DFContainerType;
+  typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
   typedef itk::Statistics::Histogram<
-      typename itk::NumericTraits<ScalarType>::RealType, 1,
+      typename itk::NumericTraits<ScalarType>::RealType,
       DFContainerType>                                    HistogramType;
   typedef typename HistogramType::Pointer     HistogramPointerType;
   typedef ObjectList<HistogramType>           HistogramListType;

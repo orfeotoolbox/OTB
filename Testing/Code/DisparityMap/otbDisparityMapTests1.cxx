@@ -26,14 +26,14 @@ void RegisterTests()
 {
   REGISTER_TEST(otbDisparityMapEstimationMethodNew);
   REGISTER_TEST(otbDisparityMapEstimationMethod);
-  REGISTER_TEST(otbPointSetToDeformationFieldGeneratorNew);
-  REGISTER_TEST(otbNearestPointDeformationFieldGeneratorNew);
-  REGISTER_TEST(otbNearestPointDeformationFieldGenerator);
-  REGISTER_TEST(otbNNearestPointsLinearInterpolateDeformationFieldGeneratorNew);
-  REGISTER_TEST(otbNNearestPointsLinearInterpolateDeformationFieldGenerator);
-  REGISTER_TEST(otbBSplinesInterpolateDeformationFieldGeneratorNew);
-  REGISTER_TEST(otbBSplinesInterpolateDeformationFieldGenerator);
-  REGISTER_TEST(otbPointSetWithTransformToDeformationFieldGeneratorNew);
+  REGISTER_TEST(otbPointSetToDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbNearestPointDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbNearestPointDisplacementFieldGenerator);
+  REGISTER_TEST(otbNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbNNearestPointsLinearInterpolateDisplacementFieldGenerator);
+  REGISTER_TEST(otbBSplinesInterpolateDisplacementFieldGeneratorNew);
+  REGISTER_TEST(otbBSplinesInterpolateDisplacementFieldGenerator);
+  REGISTER_TEST(otbPointSetWithTransformToDisplacementFieldGeneratorNew);
   REGISTER_TEST(otbNCCRegistrationFilterNew);
   REGISTER_TEST(otbNCCRegistrationFilter);
 }

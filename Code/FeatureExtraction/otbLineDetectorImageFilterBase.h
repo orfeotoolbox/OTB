@@ -146,7 +146,7 @@ protected:
    * \sa    ImageToImageFilter::GenerateData()
   */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId);
+                            itk::ThreadIdType threadId);
 
   virtual double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3);
 

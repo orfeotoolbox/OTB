@@ -15,6 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkMacro.h"
 
 #include "otbMorphologicalPyramidAnalysisFilter.h"
 #include "otbOpeningClosingMorphologicalFilter.h"
@@ -72,7 +73,7 @@ int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
 
   int i = 1;
   //      std::stringstream oss;
-  std::stringstream oss;
+  std::ostringstream oss;
   // Writing the results images
   while ((itAnalyse != pyramid->GetOutput()->End())
          && (itSupFilter != pyramid->GetSupFilter()->End())

@@ -23,7 +23,7 @@
 
 #include "itkObject.h"
 #include "itkDataObject.h"
-#include "itkImageRegionSplitter.h"
+#include "itkImageRegionSplitterBase.h"
 #include "otbPipelineMemoryPrintCalculator.h"
 
 namespace otb
@@ -100,8 +100,8 @@ protected:
   RegionType m_Region;
 
   /** The splitter used to compute the different strips */
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)> AbstractSplitterType;
-  typedef typename AbstractSplitterType::Pointer                           AbstractSplitterPointerType;
+  typedef itk::ImageRegionSplitterBase           AbstractSplitterType;
+  typedef typename AbstractSplitterType::Pointer AbstractSplitterPointerType;
   AbstractSplitterPointerType m_Splitter;
 
 private:

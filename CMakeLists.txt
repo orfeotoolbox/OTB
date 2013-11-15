@@ -1,8 +1,4 @@
-# This is the root OTB CMakeLists file.
-# $Id$
-#
-
-IF (BUILD_APPLICATIONS)
+IF(BUILD_APPLICATIONS)
   CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)
 ELSE(BUILD_APPLICATIONS)
   CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
@@ -33,8 +29,8 @@ INCLUDE(SourceStatus)
 
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
-SET(OTB_VERSION_MAJOR "3")
-SET(OTB_VERSION_MINOR "20")
+SET(OTB_VERSION_MAJOR "4")
+SET(OTB_VERSION_MINOR "0")
 SET(OTB_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
@@ -115,16 +111,6 @@ OPTION ( OTB_WRAP_QT "Enable Qt wrappers" OFF )
 
 # Do not release this yet
 #OPTION ( OTB_WRAP_PYQT "Enable PyQt wrappers" OFF )
-
-
-#-----------------------------------------------------------------------------
-# Advanced option to avoid recompiling utilities at each cmake reconfiguration
-OPTION(OTB_DISABLE_UTILITIES_COMPILATION "Disable utilities compilation (developpers only - use at you own risk)" OFF)
-MARK_AS_ADVANCED(OTB_DISABLE_UTILITIES_COMPILATION)
-IF(OTB_DISABLE_UTILITIES_COMPILATION)
-  MESSAGE("Warning: utilities compilation is disabled.")
-  LINK_DIRECTORIES("${OTB_BINARY_DIR}/bin")
-ENDIF(OTB_DISABLE_UTILITIES_COMPILATION)
 
 #-----------------------------------------------------------------------------
 # Output directories
@@ -236,11 +222,6 @@ INCLUDE(ImportTinyXML)
 INCLUDE(ImportMuParser)
 INCLUDE(ImportLibKML)
 INCLUDE(ImportOpenCV)
-
-INCLUDE_DIRECTORIES (
-  ${OTB_BINARY_DIR}
-  ${OTB_INCLUDE_DIRS} )
-
 #-----------------------------------------------------------------------------
 # Option for display all developpment message
 
@@ -288,6 +269,14 @@ INCLUDE_DIRECTORIES(
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
 ADD_SUBDIRECTORY(Utilities)
+
+# Before building OTB specific code, add include dirs from ITK
+# which are deduced after having configured ITK
+INCLUDE_DIRECTORIES(${ITK_INCLUDE_DIRS})
+# Add these paths to OTB_INCLUDE_DIRS_BUILD_TREE since it is used to
+# generate OTBConfig.cmake
+list(APPEND OTB_INCLUDE_DIRS_BUILD_TREE ${ITK_INCLUDE_DIRS})
+
 ADD_SUBDIRECTORY(Code)
 
 IF (BUILD_APPLICATIONS)

@@ -36,7 +36,7 @@ UnaryFunctorObjectListBooleanFilter<TInputList, TOutputList, TFunction>
 template <class TInputList, class TOutputList, class TFunction>
 void
 UnaryFunctorObjectListBooleanFilter<TInputList, TOutputList, TFunction>
-::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId)
+::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId)
 {
 
   InputListPointer inputPtr = this->GetInput();

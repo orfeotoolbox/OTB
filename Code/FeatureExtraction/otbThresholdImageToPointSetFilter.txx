@@ -38,7 +38,7 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 template <class TInputImage, class TOutputPointSet>
 void
 ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
-::ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, int threadId)
+::ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, itk::ThreadIdType threadId)
 {
   this->m_PointsContainerPerThread[threadId] = PointsContainerType::New();
   this->m_PointDataContainerPerThread[threadId] = PointDataContainerType::New();

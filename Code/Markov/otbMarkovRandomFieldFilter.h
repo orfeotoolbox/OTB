@@ -24,8 +24,6 @@
 #include "vnl/vnl_matrix.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
-#include "itkImageClassifierBase.h"
-
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIterator.h"
 
@@ -34,7 +32,6 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkNeighborhood.h"
 #include "itkSize.h"
-#include "itkRandomImageSource.h"
 #include "otbMRFEnergy.h"
 #include "otbMRFOptimizer.h"
 #include "otbMRFSampler.h"
@@ -156,9 +153,6 @@ public:
   itkStaticConstMacro(ClassifiedImageDimension, unsigned int,
                       TClassifiedImage::ImageDimension);
 
-  /** Type definitions for classifier to be used for the MRF lavbelling. */
-  typedef itk::ImageClassifierBase<TInputImage, TClassifiedImage> ClassifierType;
-
   /** Size and value typedef support. */
   typedef typename TInputImage::SizeType SizeType;
 
@@ -199,9 +193,6 @@ public:
 
   /** Typedef for random values. */
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
-
-  /** Set the pointer to the classifer being used. */
-  void SetClassifier(typename ClassifierType::Pointer ptrToClassifier);
 
   /** Set pipeline elements */
   typedef MRFEnergy<TClassifiedImage, TClassifiedImage> EnergyRegularizationType;

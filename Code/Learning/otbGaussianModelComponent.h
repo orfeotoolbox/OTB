@@ -20,9 +20,8 @@
 #ifndef __otbGaussianModelComponent_h
 #define __otbGaussianModelComponent_h
 
-#include "itkMeanCalculator.h"
-#include "itkCovarianceCalculator.h"
-#include "itkGaussianDensityFunction.h"
+#include "itkCovarianceSampleFilter.h"
+#include "itkGaussianMembershipFunction.h"
 
 #include "otbModelComponentBase.h"
 
@@ -64,19 +63,17 @@ public:
   typedef typename Superclass::ParametersType         ParametersType;
 
   /** Type of the membership function. Gaussian density function */
-  typedef itk::Statistics::GaussianDensityFunction<MeasurementVectorType>
+  typedef itk::Statistics::GaussianMembershipFunction<MeasurementVectorType>
   NativeMembershipFunctionType;
+  typedef typename NativeMembershipFunctionType::MeanVectorType  MeanVectorType;
 
   /** Types of the mean and the covariance calculator that will update
    *  this component's distribution parameters */
-  typedef itk::Statistics::MeanCalculator<TSample> MeanEstimatorType;
-  typedef itk::Statistics::CovarianceCalculator<TSample>
-  CovarianceEstimatorType;
+  typedef itk::Statistics::CovarianceSampleFilter<TSample> CovarianceEstimatorType;
 
-  /** types of the mean and covariance to be used by
+  /** types of the covariance to be used by the 
    *  NativeMembershipFunctionType */
-  typedef itk::Array<double>              MeanType;
-  typedef itk::VariableSizeMatrix<double> CovarianceType;
+  typedef typename CovarianceEstimatorType::MatrixType CovarianceType;
 
   /** Sets the input sample */
   virtual void SetSample(const TSample* sample);
@@ -96,13 +93,15 @@ protected:
   void GenerateData();
 
 private:
-  typename NativeMembershipFunctionType::Pointer m_GaussianDensityFunction;
+  GaussianModelComponent(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
+  typename NativeMembershipFunctionType::Pointer m_GaussianMembershipFunction;
   // TODO ajouter un m_GaussianCumulativeFunction
-  typename MeanEstimatorType::Pointer m_MeanEstimator;
   typename CovarianceEstimatorType::Pointer m_CovarianceEstimator;
 
-  MeanType       m_Mean;
-  CovarianceType m_Covariance;
+  MeanVectorType  m_Mean;
+  CovarianceType  m_Covariance;
 
 }; // end of class
 

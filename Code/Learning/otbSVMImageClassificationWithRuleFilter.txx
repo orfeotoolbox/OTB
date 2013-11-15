@@ -75,7 +75,7 @@ SVMImageClassificationWithRuleFilter<TInputImage, TOutputImage, TMaskImage>
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 SVMImageClassificationWithRuleFilter<TInputImage, TOutputImage, TMaskImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Get the input pointers
   InputImageConstPointerType inputPtr      = this->GetInput();

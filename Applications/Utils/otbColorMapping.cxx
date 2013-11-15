@@ -36,7 +36,7 @@
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
 
-#include "itkDenseFrequencyContainer.h"
+#include "itkDenseFrequencyContainer2.h"
 #include "itkVariableLengthVector.h"
 #include "itkHistogram.h"
 #include "otbObjectList.h"
@@ -219,14 +219,16 @@ public:
     <FloatVectorImageType>                            RAMDrivenStrippedStreamingManagerType;
   typedef otb::StreamingShrinkImageFilter
     <FloatVectorImageType, FloatVectorImageType>       ImageSamplingFilterType;
-  typedef itk::Statistics::DenseFrequencyContainer    DFContainerType;
+  typedef itk::Statistics::DenseFrequencyContainer2    DFContainerType;
+
   typedef itk::NumericTraits<PixelType>::RealType     RealScalarType;
   typedef itk::VariableLengthVector<RealScalarType>   InternalPixelType;
   typedef otb::ListSampleToHistogramListGenerator
     <ListSampleType, ScalarType, DFContainerType>     HistogramFilterType;
-  typedef itk::Statistics::Histogram
-    <RealScalarType, 1, DFContainerType>              HistogramType;
-  typedef ObjectList<HistogramType>                   HistogramListType;
+  //typedef itk::Statistics::Histogram 
+  //<RealScalarType, DFContainerType>                 HistogramType;
+  typedef HistogramFilterType::HistogramType          HistogramType;
+  typedef HistogramFilterType::HistogramListType      HistogramListType;
   typedef HistogramType::Pointer                      HistogramPointerType;
   typedef otb::ImageMetadataInterfaceBase             ImageMetadataInterfaceType;
   typedef otb::StreamingStatisticsMapFromLabelImageFilter<FloatVectorImageType, LabelImageType>
@@ -368,13 +370,8 @@ private:
     // Support image LUT
     AddChoice("method.image","Color mapping with look-up table calculated on support image");
     AddParameter(ParameterType_InputImage, "method.image.in", "Support Image");
-    SetParameterDescription("method.image.in", "Support image filename. For each label, the LUT is calculated from the mean pixel value in the support image, over the corresponding labeled areas."
-                                " First of all, the support image is normalized with extrema rejection");
-    AddParameter(ParameterType_Float, "method.image.nodatavalue", "NoData value");
-    SetParameterDescription("method.image.nodatavalue","NoData value for each channel of the support image, which will not be handled in the LUT estimation. If NOT checked, ALL the pixel values of the support image will be handled in the LUT estimation.");
-    MandatoryOff("method.image.nodatavalue");
-    SetParameterFloat("method.image.nodatavalue", 0);
-    DisableParameter("method.image.nodatavalue");
+    SetParameterDescription("method.image.in", "Support image filename. LUT is calculated using the mean af pixel value on the area."
+                            " First of all image is normalized with extrema rejection");
     AddParameter(ParameterType_Int, "method.image.low", "lower quantile");
     SetParameterDescription("method.image.low","lower quantile for image normalization");
     MandatoryOff("method.image.low");
@@ -561,25 +558,12 @@ private:
 
       HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
       histogramFilter->SetListSample(listSample);
-      histogramFilter->SetNumberOfBins(255);
-
-      if (this->IsParameterEnabled("method.image.nodatavalue") == true)
-        {
-        // NoData value extraction for the support image
-        float noDataValue = this->GetParameterFloat("method.image.nodatavalue");
-        otbAppLogINFO(" The NoData value: "<<noDataValue<<" will be rejected from the support image in the LUT estimation."<<std::endl);
-        histogramFilter->SetNoDataValue(noDataValue);
-        histogramFilter->NoDataFlagOn();
-        }
-      else
-        {
-        otbAppLogINFO(" The NoData value of the support image is disabled. Thus, all the values will be handled in the LUT estimation."<<std::endl);
-        histogramFilter->NoDataFlagOff();
-        }
+      histogramFilter->SetNumberOfBins(256);
+      histogramFilter->NoDataFlagOn();
 
       // Generate
       histogramFilter->Update();
-      HistogramListType::Pointer histogramList = histogramFilter->GetOutput(); //
+      const HistogramListType * histogramList = histogramFilter->GetOutput(); //
       // HistogramPointerType histoBand=histogramList->GetNelements(0);
       //  std::cout<<histoBand->GetFrequency(0, 0)<<std::endl;
 
@@ -652,9 +636,9 @@ private:
 
             // Convert the radiometric value to [0, 255]
             // using the clamping from histogram cut
-            // Since an UInt8 output value is expected, the rounding instruction is used (floor(x+0.5) as rounding method)
-            VectorPixelType::ValueType val = vcl_floor(255 * (meanValue[dispIndex] - minVal[dispIndex])
-                                       / (maxVal[dispIndex] - minVal[dispIndex])+0.5);
+
+            VectorPixelType::ValueType val = 255 * (meanValue[dispIndex] - minVal[dispIndex])
+                                       / (maxVal[dispIndex] - minVal[dispIndex]);
             color[RGB] = val < 0.0 ? 0.0 : ( val > 255.0 ? 255.0 : val );
             }
           }

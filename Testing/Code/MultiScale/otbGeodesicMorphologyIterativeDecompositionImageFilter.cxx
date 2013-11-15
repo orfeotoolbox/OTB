@@ -22,8 +22,6 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-#include "itkMacro.h"
-
 int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv[])
 {
   const char *       inputFilename = argv[1];
@@ -67,7 +65,7 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
   WriterType::Pointer writer;
 
   int                i = 1;
-  std::stringstream oss;
+  std::ostringstream oss;
   // Writing the results images
   while ((itAnalyse != decomposition->GetOutput()->End())
          && (itConvexMap != decomposition->GetConvexOutput()->End())

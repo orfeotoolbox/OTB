@@ -229,7 +229,7 @@ template<class TInputImage>
 void
 PersistentMinMaxImageFilter<TInputImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());

@@ -31,9 +31,9 @@ template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 ModulusAndDirectionImageToImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 ModulusAndDirectionImageToImageFilter()
 {
-  this->SetNumberOfInputs(2);
   this->SetNumberOfRequiredInputs(2);
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNumberOfRequiredOutputs(1);
 
   this->SetNthOutput(0, OutputImageType::New());

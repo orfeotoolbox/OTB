@@ -1,0 +1,13 @@
+itk_wrap_class("itk::JoinSeriesImageFilter" POINTER)
+  foreach(d1 ${ITK_WRAP_DIMS})
+    foreach(d2 ${ITK_WRAP_DIMS})
+      if("${d1}" LESS "${d2}")
+        foreach(t ${WRAP_ITK_SCALAR})
+          itk_wrap_template("${ITKM_I${t}${d1}}${ITKM_I${t}${d2}}"
+                        "${ITKT_I${t}${d1}},${ITKT_I${t}${d2}}")
+        endforeach(t)
+      endif("${d1}" LESS "${d2}")
+    endforeach(d2)
+  endforeach(d1)
+
+itk_end_wrap_class()

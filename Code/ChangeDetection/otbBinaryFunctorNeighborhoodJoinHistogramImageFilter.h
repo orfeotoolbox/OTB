@@ -118,7 +118,8 @@ public:
   /** Typedefs for histogram. This should have been defined as
       Histogram<RealType, 2> but a bug in VC++7 produced an internal compiler
       error with such declaration. */
-  typedef typename itk::Statistics::Histogram<double, 2> HistogramType;
+  typedef typename itk::Statistics::Histogram<double,
+             itk::Statistics::DenseFrequencyContainer2 > HistogramType;
   typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;
   typedef typename HistogramType::SizeType               HistogramSizeType;
 
@@ -161,7 +162,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    int threadId);
+                                    itk::ThreadIdType threadId);
 
   /**
    * Pad the inputs requested regions by radius

@@ -138,7 +138,7 @@ int main(int argc, char * argv[])
     {
     if (strcmp(argv[9], "hot") == 0)
       {
-      typedef itk::Functor::HotColormapFunctor<PixelType,
+      typedef itk::Function::HotColormapFunction<PixelType,
           RGBPixelType>
       ColorMapFunctorType;
       ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();

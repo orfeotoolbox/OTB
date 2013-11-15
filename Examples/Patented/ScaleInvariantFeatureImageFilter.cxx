@@ -50,7 +50,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "itkScaleInvariantFeatureImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "itkImageSeriesReader.h"
 #include "itkNumericSeriesFileNames.h"
 #include "itkPointSetToImageFilter.h"
 #include "otbImageFileWriter.h"

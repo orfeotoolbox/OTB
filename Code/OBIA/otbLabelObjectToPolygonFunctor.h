@@ -60,7 +60,9 @@ class LabelObjectToPolygonFunctor
 public:
   /** Template parameters typedefs */
   typedef TLabelObject                                LabelObjectType;
-  typedef typename LabelObjectType::LineContainerType LineContainerType;
+  /** Const iterator over LabelObject lines */
+  typedef typename LabelObjectType::ConstLineIterator  ConstLineIteratorType;
+  
   typedef typename LabelObjectType::LineType          LineType;
   typedef typename LineType::IndexType                IndexType;
   typedef TPolygon                                    PolygonType;
@@ -74,7 +76,7 @@ public:
    * \param labelObject the label object to vectorize
    * \return The vectorized label object as a polygon.
    */
-  inline PolygonType * operator ()(const LabelObjectType * labelObject);
+  inline PolygonType * operator ()(LabelObjectType * labelObject);
 
   /** Get  name of class. */
   const char * GetNameOfClass()

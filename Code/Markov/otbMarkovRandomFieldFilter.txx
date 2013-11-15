@@ -39,7 +39,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
   m_ExternalClassificationSet(false),
   m_StopCondition(MaximumNumberOfIterations)
 {
-  m_Generator = RandomGeneratorType::New();
+  m_Generator = RandomGeneratorType::GetInstance();
   m_Generator->SetSeed();
 
   this->SetNumberOfRequiredInputs(1);

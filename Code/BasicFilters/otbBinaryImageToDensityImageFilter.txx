@@ -107,7 +107,7 @@ BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
 template <class TInputImage, class TOutputImage, class TCountFunction>
 void
 BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
-::ThreadedGenerateData(const InputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const InputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   InputImagePointerType  inputPtr = const_cast<InputImageType *> (this->GetInput());
   OutputImagePointerType outputPtr = this->GetOutput();

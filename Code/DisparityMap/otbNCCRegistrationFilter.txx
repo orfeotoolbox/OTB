@@ -25,24 +25,24 @@ namespace otb
 /*
  * Default constructor
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
-NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
+NCCRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>
 ::NCCRegistrationFilter()
 {
 
   typename NCCRegistrationFunctionType::Pointer drfp;
   drfp = NCCRegistrationFunctionType::New();
 
-  drfp->SetDeformationField(this->GetDeformationField());
+  drfp->SetDisplacementField(this->GetDisplacementField());
 
   this->SetDifferenceFunction(static_cast<FiniteDifferenceFunctionType *>(
                                 drfp.GetPointer()));
 
 }
 
-template <class TFixedImage, class TMovingImage, class TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
 void
-NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
+NCCRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -53,9 +53,9 @@ NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
 /*
  * Set the function state values before each iteration
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
 void
-NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
+NCCRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>
 ::InitializeIteration()
 {
 
@@ -74,11 +74,11 @@ NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
     }
 
   /*
-   * Smooth the deformation field
+   * Smooth the displacement field
 
-  if ( this->GetSmoothDeformationField() )
+  if ( this->GetSmoothDisplacementField() )
     {
-    this->SmoothDeformationField();
+    this->SmoothDisplacementField();
     }
    */
 }
@@ -86,9 +86,9 @@ NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
 /*
  * Get the metric value from the difference function
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
 double
-NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
+NCCRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>
 ::GetMetric() const
 {
 
@@ -109,9 +109,9 @@ NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
 /*
  *
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
-typename NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>::RadiusType
-NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
+typename NCCRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>::RadiusType
+NCCRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>
 ::GetNCCRadius() const
 {
 
@@ -132,9 +132,9 @@ NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
 /*
  *
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
 void
-NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
+NCCRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>
 ::SetNCCRadius(RadiusType radius)
 {
 
@@ -153,9 +153,9 @@ NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
   this->Modified();
 }
 
-template <class TFixedImage, class TMovingImage, class TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
 void
-NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
+NCCRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>
 ::GenerateInputRequestedRegion()
 {
   // get pointers to the input and output
@@ -163,7 +163,7 @@ NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
     const_cast<TFixedImage *>(this->GetFixedImage());
   typename Superclass::MovingImagePointer movingPtr =
     const_cast<TMovingImage *>(this->GetMovingImage());
-  typename TDeformationField::Pointer outputPtr = this->GetOutput();
+  typename TDisplacementField::Pointer outputPtr = this->GetOutput();
 
   if (!fixedPtr || !movingPtr || !outputPtr)
     {
@@ -172,7 +172,7 @@ NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
 
   // get a copy of the input requested region (should equal the output
   // requested region)
-  typename TDeformationField::RegionType requestedRegion;
+  typename TDisplacementField::RegionType requestedRegion;
   requestedRegion = outputPtr->GetRequestedRegion();
 
   // pad the input requested region by the operator radius
@@ -225,9 +225,9 @@ NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
 /*
  * Get the metric value from the difference function
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
 void
-NCCRegistrationFilter<TFixedImage, TMovingImage, TDeformationField>
+NCCRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>
 ::ApplyUpdate(TimeStepType dt)
 {
   // If we smooth the update buffer before applying it, then the are

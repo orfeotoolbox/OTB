@@ -40,7 +40,7 @@ VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
 
   InputImageConstPointerType inputPtr = this->GetInput();

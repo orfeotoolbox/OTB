@@ -49,4 +49,17 @@ RADImageIOFactory::GetDescription() const
   return "RAD ImageIO Factory, permettant le chargement d'image au format RAD dans l'OTB";
 }
 
+// Undocumented API used to register during static initialization.
+// DO NOT CALL DIRECTLY.
+
+static bool RADImageIOFactoryHasBeenRegistered;
+
+void RADImageIOFactoryRegister__Private(void)
+{
+  if( ! RADImageIOFactoryHasBeenRegistered )
+    {
+    RADImageIOFactoryHasBeenRegistered = true;
+    RADImageIOFactory::RegisterOneFactory();
+    }
+}
 } // end namespace otb

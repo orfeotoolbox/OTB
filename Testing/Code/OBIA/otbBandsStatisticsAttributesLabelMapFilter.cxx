@@ -34,10 +34,9 @@ typedef double         PixelType;
 typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>                LabelObjectType;
 typedef itk::LabelMap<LabelObjectType>                                             LabelMapType;
 typedef otb::VectorImage<PixelType, Dimension>                                     VectorImageType;
-typedef otb::Image<unsigned int, 2>                                                 LabeledImageType;
+typedef otb::Image<unsigned int, 2>                                                LabeledImageType;
 
-typedef LabelMapType::LabelObjectContainerType   LabelObjectContainerType;
-typedef LabelObjectContainerType::const_iterator LabelObjectIterator;
+typedef LabelMapType::Iterator                                                     IteratorType;
 
 typedef otb::ImageFileReader<VectorImageType>                                      ReaderType;
 typedef otb::ImageFileReader<LabeledImageType>                                     LabeledReaderType;
@@ -82,12 +81,12 @@ int otbBandsStatisticsAttributesLabelMapFilter(int argc, char* argv[])
 
   // Dump all results in the output file
   std::ofstream outfile(outfname);
-  LabelObjectIterator it = labelMap->GetLabelObjectContainer().begin();
-  LabelObjectIterator end = labelMap->GetLabelObjectContainer().end();
-  for (; it != end; ++it)
+  IteratorType it = IteratorType( labelMap );
+
+  while ( !it.IsAtEnd() )
     {
-    LabelType label = it->first;
-    LabelObjectType::Pointer labelObject = it->second;
+    LabelType label = it.GetLabel();
+    LabelObjectType::Pointer labelObject = it.GetLabelObject();
 
     outfile << "Label " << label << " : " << std::endl;
 
@@ -100,6 +99,7 @@ int otbBandsStatisticsAttributesLabelMapFilter(int argc, char* argv[])
       outfile << "  " << *attrIt << " : "<< std::fixed << std::setprecision(6) << value << std::endl;
       }
     outfile << std::endl;
+    ++it;
     }
 
   return EXIT_SUCCESS;

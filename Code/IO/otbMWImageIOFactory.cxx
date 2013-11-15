@@ -49,4 +49,17 @@ MWImageIOFactory::GetDescription() const
   return "MegaWave ImageIO Factory, permettant le chargement d'image au format MW dans l'OTB";
 }
 
+// Undocumented API used to register during static initialization.
+// DO NOT CALL DIRECTLY.
+
+static bool MWImageIOFactoryHasBeenRegistered;
+
+void MWImageIOFactoryRegister__Private(void)
+{
+  if( ! MWImageIOFactoryHasBeenRegistered )
+    {
+    MWImageIOFactoryHasBeenRegistered = true;
+    MWImageIOFactory::RegisterOneFactory();
+    }
+}
 } // end namespace otb

@@ -69,9 +69,6 @@ public:
   typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
   
-  typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;
-  typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
-
   /** Set/Get the Shifts for this sample list */
   itkSetMacro(Mean, double);
   itkGetMacro(Mean, double);

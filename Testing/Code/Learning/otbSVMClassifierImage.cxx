@@ -23,7 +23,7 @@
 #include "itkListSample.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "itkImageToListAdaptor.h"
+#include "itkImageToListSampleAdaptor.h"
 #include "otbSVMClassifier.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -96,7 +96,7 @@ int otbSVMClassifierImage(int argc, char* argv[])
   reader->SetFileName(imageFilename);
   reader->Update();
 
-  typedef itk::Statistics::ImageToListAdaptor<InputImageType> SampleType;
+  typedef itk::Statistics::ImageToListSampleAdaptor<InputImageType> SampleType;
   SampleType::Pointer sample = SampleType::New();
 
   sample->SetImage(reader->GetOutput());
@@ -119,7 +119,7 @@ int otbSVMClassifierImage(int argc, char* argv[])
 
   classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel(model);
-  classifier->SetSample(sample.GetPointer());
+  classifier->SetInput(sample.GetPointer());
   classifier->Update();
 
   /* Build the class map */
@@ -165,7 +165,7 @@ int otbSVMClassifierImage(int argc, char* argv[])
 
   outIt.GoToBegin();
 
-  otbGenericMsgDebugMacro(<< "Iteration for output image = " << (membershipSample->Size()));
+//otbGenericMsgDebugMacro(<< "Iteration for output image = " << (membershipSample->Size()));
 
   while (m_iter != m_last && !outIt.IsAtEnd())
     {

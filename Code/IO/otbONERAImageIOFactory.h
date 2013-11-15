@@ -41,6 +41,7 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
+  static ONERAImageIOFactory * FactoryNew() { return new ONERAImageIOFactory; }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ONERAImageIOFactory, itk::ObjectFactoryBase);

@@ -19,10 +19,9 @@
 
 
 #include "itkMacro.h"
-#include "itkImage.h"
-#include "itkImageFileWriter.h"
 #include <iostream>
 
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractSegmentsImageFilter.h"

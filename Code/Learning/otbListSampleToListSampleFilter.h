@@ -66,18 +66,18 @@ public:
   /** ListSample is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */
   typedef itk::DataObject::Pointer                             DataObjectPointer;
-  typedef itk::DataObjectDecorator< InputSampleListType >      InputSampleListObjectType;
-  typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
+  //typedef itk::DataObjectDecorator< InputSampleListType >      InputSampleListObjectType;
+  //typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
 
   /** Method to set/get the input list sample */
   void SetInput( const InputSampleListType * inputPtr );
-  void SetInput( const InputSampleListObjectType * inputPtr );
+  //void SetInput( const InputSampleListObjectType * inputPtr );
 
   /** Returns the input sample list */
-  const InputSampleListType * GetInputSampleList() const;
+  //const InputSampleListType * GetInputSampleList() const;
 
   /** Returns the input sample list as a data object */
-  const InputSampleListObjectType * GetInput() const;
+  const InputSampleListType * GetInput() const;
 
 protected:
 

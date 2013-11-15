@@ -70,7 +70,7 @@ namespace otb
  * type of the output image and the type of the deformation field.
  *
  * The input image is set via SetInput. The input deformation field
- * is set via SetDeformationField.
+ * is set via SetDisplacementField.
  *
  * This filter is implemented as a multithreaded filter.
  *
@@ -82,7 +82,7 @@ namespace otb
 template <
   class TInputImage,
   class TOutputImage,
-  class TDeformationField
+  class TDisplacementField
   >
 class ITK_EXPORT WarpImageFilter :
     public itk::ImageToImageFilter<TInputImage, TOutputImage>
@@ -120,15 +120,15 @@ public:
                       TOutputImage::ImageDimension );
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension );
-  itkStaticConstMacro(DeformationFieldDimension, unsigned int,
-                      TDeformationField::ImageDimension );
+  itkStaticConstMacro(DisplacementFieldDimension, unsigned int,
+                      TDisplacementField::ImageDimension );
   /** typedef for base image type at the current ImageDimension */
   typedef itk::ImageBase<itkGetStaticConstMacro(ImageDimension)> ImageBaseType;
 
-  /** Deformation field typedef support. */
-  typedef TDeformationField                        DeformationFieldType;
-  typedef typename DeformationFieldType::Pointer   DeformationFieldPointer;
-  typedef typename DeformationFieldType::PixelType DisplacementType;
+  /** Displacement field typedef support. */
+  typedef TDisplacementField                        DisplacementFieldType;
+  typedef typename DisplacementFieldType::Pointer   DisplacementFieldPointer;
+  typedef typename DisplacementFieldType::PixelType DisplacementType;
 
   /** Interpolator typedef support. */
   typedef double                                                CoordRepType;
@@ -144,10 +144,10 @@ public:
   typedef typename TOutputImage::DirectionType     DirectionType;
 
   /** Set the deformation field. */
-  void SetDeformationField( const DeformationFieldType * field );
+  void SetDisplacementField( const DisplacementFieldType * field );
 
   /** Get a pointer the deformation field. */
-  DeformationFieldType * GetDeformationField(void);
+  DisplacementFieldType * GetDisplacementField(void);
 
   /** Set the interpolator function. */
   itkSetObjectMacro( Interpolator, InterpolatorType );
@@ -223,11 +223,11 @@ public:
   itkConceptMacro(SameDimensionCheck1,
     (itk::Concept::SameDimension<ImageDimension, InputImageDimension>));
   itkConceptMacro(SameDimensionCheck2,
-    (itk::Concept::SameDimension<ImageDimension, DeformationFieldDimension>));
+    (itk::Concept::SameDimension<ImageDimension, DisplacementFieldDimension>));
   /** itkConceptMacro(InputHasNumericTraitsCheck,
     (Concept::HasNumericTraits<typename TInputImage::PixelType>)); */
-  itkConceptMacro(DeformationFieldHasNumericTraitsCheck,
-                  (itk::Concept::HasNumericTraits<typename TDeformationField::PixelType::ValueType>));
+  itkConceptMacro(DisplacementFieldHasNumericTraitsCheck,
+                  (itk::Concept::HasNumericTraits<typename TDisplacementField::PixelType::ValueType>));
   /** End concept checking */
 #endif
 
@@ -240,16 +240,24 @@ protected:
    * As such, it needs to provide and implementation for
    * ThreadedGenerateData(). */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            itk::ThreadIdType threadId );
+
+  /** Override VerifyInputInformation() since this filter's inputs do
+    * not need to occupy the same physical space.
+    *
+    * \sa ProcessObject::VerifyInputInformation
+    */
+   virtual void VerifyInputInformation() {}
 
 private:
+
   WarpImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** This function should be in an interpolator but none of the ITK
    * interpolators at this point handle edge conditions properly
    */
-  DisplacementType EvaluateDeformationAtPhysicalPoint(const PointType &p);
+  DisplacementType EvaluateDisplacementAtPhysicalPoint(const PointType &p);
 
   PixelType                  m_EdgePaddingValue;
   SpacingType                m_OutputSpacing;

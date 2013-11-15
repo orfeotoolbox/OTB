@@ -101,7 +101,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    int threadId);
+                                    itk::ThreadIdType threadId);
 
   /**
    * Since the number of components per pixel depends on the radius range, one must reimplement

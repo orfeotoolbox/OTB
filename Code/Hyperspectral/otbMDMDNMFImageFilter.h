@@ -144,6 +144,7 @@ public:
   typedef typename InputImageType::ConstPointer  InputConstPointerType;
   typedef typename InputImageType::IndexType     InputIndexType;
   typedef typename InputImageType::SizeType      InputSizeType;
+  typedef typename InputImageType::PixelType     InputPixelType;
 
   typedef          TOutputImage                  OutputImageType;
   typedef typename OutputImageType::Pointer      OutputPointerType;
@@ -151,6 +152,7 @@ public:
   typedef typename OutputImageType::OffsetType   OutputOffsetType;
   typedef typename OutputImageType::SizeType     OutputSizeType;
   typedef typename OutputImageType::RegionType   OutputImageRegionType;
+  typedef typename OutputImageType::PixelType    OutputPixelType;
 
   /* Matrix type */
   typedef double                                                       PrecisionType;

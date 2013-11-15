@@ -50,7 +50,7 @@
 
 //  Software Guide : BeginCodeSnippet
 #include "otbSVMImageModelEstimator.h"
-#include "itkImageToListAdaptor.h"
+#include "itkImageToListSampleAdaptor.h"
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
 //  Software Guide : EndCodeSnippet
@@ -189,14 +189,14 @@ int main(int argc, char *argv[])
 //
 // The image has now to be transformed to a sample which
 // is compatible with the classification framework. We will use a
-// \doxygen{itk}{Statistics::ImageToListAdaptor} for this
+// \doxygen{itk}{Statistics::ImageToListSampleAdaptor} for this
 // task. This class is templated over the image type used for
 // storing the measures.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::ImageToListAdaptor<ClassifyImageType> SampleType;
+  typedef itk::Statistics::ImageToListSampleAdaptor<ClassifyImageType> SampleType;
   SampleType::Pointer sample = SampleType::New();
 // Software Guide : EndCodeSnippet
 
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
   int numberOfClasses = model->GetNumberOfClasses();
   classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel(model);
-  classifier->SetSample(sample.GetPointer());
+  classifier->SetInput(sample.GetPointer());
   classifier->Update();
 // Software Guide : EndCodeSnippet
 

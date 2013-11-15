@@ -43,6 +43,7 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
+#include "itkConnectedComponentImageFilter.h"
 #include "itkDanielssonDistanceMapImageFilter.h"
 // Software Guide : EndCodeSnippet
 
@@ -93,8 +94,12 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
+  typedef itk::ConnectedComponentImageFilter<
+    InputImageType, InputImageType> ConnectedType;
+  ConnectedType::Pointer connectedComponents = ConnectedType::New();
+
   typedef itk::DanielssonDistanceMapImageFilter<
-      InputImageType, OutputImageType>  FilterType;
+    InputImageType, OutputImageType, OutputImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -125,7 +130,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput(reader->GetOutput());
+  connectedComponents->SetInput(reader->GetOutput());
+  filter->SetInput(connectedComponents->GetOutput());
   scaler->SetInput(filter->GetOutput());
   writer->SetInput(scaler->GetOutput());
   // Software Guide : EndCodeSnippet
@@ -143,7 +149,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->InputIsBinaryOn();
+  filter->InputIsBinaryOff();
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

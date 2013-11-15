@@ -130,7 +130,7 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
         }
       }
     }
-  std::cout << "Average vectorization time: " << chrono.GetMeanTime() << " s." << std::endl;
+  std::cout << "Average vectorization time: " << chrono.GetMean() << " s." << std::endl;
 
   VectorDataFilterType::Pointer vectorDataProjection = VectorDataFilterType::New();
   vectorDataProjection->SetInputOrigin(lreader->GetOutput()->GetOrigin());

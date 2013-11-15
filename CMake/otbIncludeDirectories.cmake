@@ -60,11 +60,6 @@ IF(OTB_WRAP_QT)
     ${OTB_SOURCE_DIR}/Code/Wrappers/QtWidget )
 ENDIF(OTB_WRAP_QT)
 
-IF(USE_FFTWF OR USE_FFTWD)
-SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-    ${FFTW_INCLUDE_PATH})
-ENDIF(USE_FFTWF OR USE_FFTWD)
-
 IF(OTB_USE_EXTERNAL_BOOST)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
     ${Boost_INCLUDE_DIR} )
@@ -142,41 +137,16 @@ IF(OTB_USE_OPENCV)
      ${OpenCV_INCLUDE_DIRS})
 ENDIF()
 
-#-----------------------------------------------------------------------------
-# Include directories from the ITK build tree.
 IF(OTB_USE_EXTERNAL_ITK)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-    ${ITK_INCLUDE_DIRS} )
-ELSE(OTB_USE_EXTERNAL_ITK)
-	IF(NOT ITK_INSTALL_INCLUDE_DIR)
-  		SET(ITK_INSTALL_INCLUDE_DIR "include/otb/Utilities/ITK")
-	ENDIF(NOT ITK_INSTALL_INCLUDE_DIR)
-#         INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkThirdParty.cmake)
-#  	INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/itkIncludeDirectories.cmake)
-	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Algorithms
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/BasicFilters
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Common
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/IO
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Numerics
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Numerics/FEM
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Numerics/NeuralNetworks
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Numerics/Statistics
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Patented
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Review
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Code/SpatialObject
-        ${OTB_BINARY_DIR}/Utilities/ITK
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/vcl
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/core
-        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/vcl
-        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/core
-        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities
-        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkExtHdrs
-        )
-ENDIF(OTB_USE_EXTERNAL_ITK)
+  	${ITK_INCLUDE_DIRS})
+ELSE()
+   # We add the ITK include dirs in the main CMakeLists.txt
+   # after configuring ITK.
+   # We cannot do it here since ITK is not yet configured
+   # so ITK_INCLUDE_DIRS is empty
+ENDIF()
 
-#For  header file
 IF(OTB_USE_EXTERNAL_FLTK)
         SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
       		${FLTK_INCLUDE_DIRS} )
@@ -302,7 +272,6 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   ObjectDetection
   ApplicationEngine
   Utilities
-  Utilities/ITK
   Utilities/otbsvm
   Utilities/InsightJournal
   Utilities/otb6S
@@ -416,35 +385,14 @@ ENDIF(OTB_USE_EXTERNAL_LIBKML)
 SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
   		${OTB_GLU_INCLUDE_PATH} )
 
-#For ITK header file
-IF(OTB_USE_EXTERNAL_ITK)
-  SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
-        ${ITK_INCLUDE_DIRS} )
-ELSE(OTB_USE_EXTERNAL_ITK)
-
 IF(OTB_USE_OPENCV)
    SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
      ${OpenCV_INCLUDE_DIRS})
 ENDIF()
 
-    #Add prefix path "Utilities/ITK" For ITK_INCLUDE_RELATIVE_DIRS paths
-        SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
-              Utilities/ITK/Algorithms
-              Utilities/ITK/BasicFilters
-              Utilities/ITK/Common
-              Utilities/ITK/IO
-              Utilities/ITK/Numerics
-              Utilities/ITK/Numerics/FEM
-              Utilities/ITK/Numerics/NeuralNetworks
-              Utilities/ITK/Numerics/Statistics
-              Utilities/ITK/Patented
-              Utilities/ITK/Review
-              Utilities/ITK/SpatialObject
-              Utilities/ITK
-              Utilities/ITK/Utilities/vxl/v3p/netlib
-              Utilities/ITK/Utilities/vxl/vcl
-              Utilities/ITK/Utilities/vxl/core
-              Utilities/ITK/Utilities
-              Utilities/ITK/Utilities/itkExtHdrs)
-
+#For ITK header file
+IF(OTB_USE_EXTERNAL_ITK)
+  SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
+        ${ITK_INCLUDE_DIRS} )
+ELSE(OTB_USE_EXTERNAL_ITK)
 ENDIF(OTB_USE_EXTERNAL_ITK)

@@ -18,7 +18,7 @@
 #ifndef __otbTileMapTransform_h
 #define __otbTileMapTransform_h
 
-#include "itkTransform.h"
+#include "otbTransform.h"
 
 // Only for the enum definition
 #include "otbGenericMapProjection.h"
@@ -34,14 +34,14 @@ template <TransformDirection::TransformationDirection TTransformDirection,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
-class ITK_EXPORT TileMapTransform : public itk::Transform<TScalarType,       // Data type for scalars
+class ITK_EXPORT TileMapTransform : public Transform<TScalarType,           // Data type for scalars
       NInputDimensions,                                                     // Number of dimensions in the input space
-      NOutputDimensions>                                                     // Number of dimensions in the output space
+      NOutputDimensions>                                                    // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
   typedef TileMapTransform Self;
-  typedef itk::Transform<TScalarType,
+  typedef Transform<TScalarType,
       NInputDimensions,  NOutputDimensions>  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

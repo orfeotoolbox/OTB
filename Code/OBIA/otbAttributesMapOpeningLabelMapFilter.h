@@ -35,11 +35,10 @@ namespace otb
  *
  * \ingroup ImageEnhancement MathematicalMorphologyImageFilters
  */
-template<class TImage>
+template<class TImage >
 class ITK_EXPORT AttributesMapOpeningLabelMapFilter
-  : public itk::AttributeOpeningLabelMapFilter<TImage,
-      Functor::AttributesMapLabelObjectAccessor<typename TImage::
-          LabelObjectType> >
+  : public itk::AttributeOpeningLabelMapFilter<TImage, 
+      typename otb::Functor::AttributesMapLabelObjectAccessor< typename TImage::LabelObjectType> >
 {
 public:
   /** Standard class typedefs. */
@@ -48,6 +47,8 @@ public:
       Functor::AttributesMapLabelObjectAccessor<typename TImage::LabelObjectType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
+
+  typedef typename Superclass::AttributeAccessorType      AttributeAccessorType;
 
   /** Standard New method. */
   itkNewMacro(Self);
@@ -67,6 +68,17 @@ public:
     return this->GetAccessor().GetAttributeName();
   }
 
+  AttributeAccessorType & GetAccessor()
+  {
+    return m_Accessor;
+  }
+ 
+  void SetAccessor(const AttributeAccessorType& accessor)
+  {
+    m_Accessor = accessor;
+    this->Modified();
+  }
+
 protected:
   /** Constructor */
   AttributesMapOpeningLabelMapFilter()  {}
@@ -76,6 +88,8 @@ protected:
 private:
   AttributesMapOpeningLabelMapFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  AttributeAccessorType  m_Accessor;
 
 }; // end of class
 

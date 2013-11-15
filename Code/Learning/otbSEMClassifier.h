@@ -2,7 +2,7 @@
 #define __otbSEMClassifier_h
 
 #include "itkListSample.h"
-#include "itkSampleClassifier.h"
+#include "itkSampleClassifierFilter.h"
 #include "itkMembershipFunctionBase.h"
 
 #include "otbModelComponentBase.h"
@@ -31,7 +31,7 @@ namespace otb
    * parameters converge.
    *
    * The difference from ExpectationMaximizationMixtureModelEstimator is
-   * that SEMClassifier include the maximum a posteriori decition on each
+   * that SEMClassifier include the maximum a posteriori decision on each
    * sample. The class is to be seen as a classification and not an estimator.
    *
    * <b>Recent API changes:</b>
@@ -41,14 +41,13 @@ namespace otb
  */
 template<class TInputImage, class TOutputImage>
 class ITK_EXPORT SEMClassifier
-  : public itk::Statistics::SampleClassifier<
+  : public itk::Statistics::SampleClassifierFilter<
       typename itk::Statistics::ListSample<typename TInputImage::PixelType> >
 {
 public:
   /** Standard class typedef*/
   typedef SEMClassifier Self;
-  //typedef itk::Object Superclass;
-  typedef itk::Statistics::SampleClassifier<
+  typedef itk::Statistics::SampleClassifierFilter<
       typename itk::Statistics::ListSample<typename TInputImage::PixelType> >
   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;

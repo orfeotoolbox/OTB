@@ -59,7 +59,7 @@ PointSetFileReader<TOutputPointSet>
   //
   if (m_FileName == "")
     {
-    throw itk::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified", ITK_LOCATION);
+    throw ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified", ITK_LOCATION);
     }
 
   this->TestFileExistanceAndReadability();
@@ -88,7 +88,7 @@ PointSetFileReader<TOutputPointSet>
   // Test if the file exists.
   if (!itksys::SystemTools::FileExists(m_FileName.c_str()))
     {
-    itk::ImageFileReaderException e(__FILE__, __LINE__);
+    ImageFileReaderException e(__FILE__, __LINE__);
     std::ostringstream msg;
     msg << "The file doesn't exist. "
         << std::endl << "Filename = " << m_FileName
@@ -108,7 +108,7 @@ PointSetFileReader<TOutputPointSet>
     msg << "The file couldn't be opened for reading. "
         << std::endl << "Filename: " << m_FileName
         << std::endl;
-    itk::ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+    ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
     throw e;
     return;
 

@@ -70,14 +70,14 @@ ListSampleGenerator<TImage, TVectorData>
   m_ClassMinSize(-1)
 {
   this->SetNumberOfRequiredInputs(2);
-  this->SetNumberOfRequiredOutputs(1);
-  //  this->ProcessObject::SetNthOutput( 0, this->MakeOutput(0) );
-  //  this->ProcessObject::SetNthOutput( 1, this->MakeOutput(1) );
-  m_TrainingListSample = ListSampleType::New();
-  m_TrainingListLabel = ListLabelType::New();
-  m_ValidationListSample = ListSampleType::New();
-  m_ValidationListLabel = ListLabelType::New();
-
+  this->SetNumberOfRequiredOutputs(4);
+  
+  // Register the outputs
+  this->itk::ProcessObject::SetNthOutput(0, this->MakeOutput(0).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(2, this->MakeOutput(2).GetPointer());
+  this->itk::ProcessObject::SetNthOutput(3, this->MakeOutput(3).GetPointer());
+  
   m_RandomGenerator = RandomGeneratorType::GetInstance();
 }
 
@@ -126,25 +126,83 @@ ListSampleGenerator<TImage, TVectorData>
   return static_cast<const VectorDataType *>(this->ProcessObject::GetInput(1));
 }
 
-/**
- *
- */
 template <class TImage, class TVectorData>
-void
+typename ListSampleGenerator<TImage, TVectorData>::DataObjectPointer
 ListSampleGenerator<TImage, TVectorData>
-::Update()
+::MakeOutput(unsigned int idx)
 {
-  this->GenerateData();
+  DataObjectPointer output;
+  switch (idx)
+    {
+    case 0:
+      output = static_cast<itk::DataObject*>(ListSampleType::New().GetPointer());
+      break;
+    case 1:
+      output = static_cast<itk::DataObject*>(ListLabelType::New().GetPointer());
+      break;
+    case 2:
+      output = static_cast<itk::DataObject*>(ListSampleType::New().GetPointer());
+      break;
+    case 3:
+      output = static_cast<itk::DataObject*>(ListLabelType::New().GetPointer());
+      break;
+    default:
+      output = static_cast<itk::DataObject*>(ListSampleType::New().GetPointer());
+      break;
+    }
+  return output;
 }
+// Get the Training ListSample
+template <class TImage, class TVectorData>
+typename ListSampleGenerator<TImage, TVectorData>::ListSampleType*
+ListSampleGenerator<TImage, TVectorData>
+::GetTrainingListSample()
+{
+  return dynamic_cast<ListSampleType*>(this->itk::ProcessObject::GetOutput(0));
+}
+// Get the Training label ListSample
+template <class TImage, class TVectorData>
+typename ListSampleGenerator<TImage, TVectorData>::ListLabelType*
+ListSampleGenerator<TImage, TVectorData>
+::GetTrainingListLabel()
+{
+  return dynamic_cast<ListLabelType*>(this->itk::ProcessObject::GetOutput(1));
+}
+
+// Get the validation ListSample
+template <class TImage, class TVectorData>
+typename ListSampleGenerator<TImage, TVectorData>::ListSampleType*
+ListSampleGenerator<TImage, TVectorData>
+::GetValidationListSample()
+{
+  return dynamic_cast<ListSampleType*>(this->itk::ProcessObject::GetOutput(2));
+}
+
+
+// Get the validation label ListSample
+template <class TImage, class TVectorData>
+typename ListSampleGenerator<TImage, TVectorData>::ListLabelType*
+ListSampleGenerator<TImage, TVectorData>
+::GetValidationListLabel()
+{
+  return dynamic_cast<ListLabelType*>(this->itk::ProcessObject::GetOutput(3));
+}
+
 
 template <class TImage, class TVectorData>
 void
 ListSampleGenerator<TImage, TVectorData>
 ::GenerateData()
 {
+  // Get the inputs 
   ImagePointerType image = const_cast<ImageType*>(this->GetInput());
-
   VectorDataPointerType vectorData = const_cast<VectorDataType*>(this->GetInputVectorData());
+
+  // Get the outputs 
+  ListSamplePointerType trainingListSample   = this->GetTrainingListSample();
+  ListLabelPointerType  trainingListLabel    = this->GetTrainingListLabel();
+  ListSamplePointerType validationListSample = this->GetValidationListSample();
+  ListLabelPointerType  validationListLabel  = this->GetValidationListLabel();
 
   // Gather some information about the relative size of the classes
   // We would like to have the same number of samples per class
@@ -153,11 +211,19 @@ ListSampleGenerator<TImage, TVectorData>
   this->ComputeClassSelectionProbability();
 
   // Clear the sample lists
-  m_TrainingListSample->Clear();
-  m_TrainingListLabel->Clear();
-  m_ValidationListSample->Clear();
-  m_ValidationListLabel->Clear();
+  trainingListSample->Clear();
+  trainingListLabel->Clear();
+  validationListSample->Clear();
+  validationListLabel->Clear();
 
+  // Set MeasurementVectorSize for each sample list
+  trainingListSample->SetMeasurementVectorSize(image->GetNumberOfComponentsPerPixel());
+  // stores label as integers,so put the size to 1                                      
+  trainingListLabel->SetMeasurementVectorSize(1); 
+  validationListSample->SetMeasurementVectorSize(image->GetNumberOfComponentsPerPixel());
+  // stores label as integers,so put the size to 1                                      
+  validationListLabel->SetMeasurementVectorSize(1);
+  
   m_ClassesSamplesNumberTraining.clear();
   m_ClassesSamplesNumberValidation.clear();
   
@@ -218,16 +284,16 @@ ListSampleGenerator<TImage, TVectorData>
           if (randomValue < m_ClassesProbTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)])
             {
             //Add the sample to the training list
-            m_TrainingListSample->PushBack(it.Get());
-            m_TrainingListLabel->PushBack(itVector.Get()->GetFieldAsInt(m_ClassKey));
+            trainingListSample->PushBack(it.Get());
+            trainingListLabel->PushBack(itVector.Get()->GetFieldAsInt(m_ClassKey));
             m_ClassesSamplesNumberTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 1;
             }
           else if (randomValue < m_ClassesProbTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)]
                    + m_ClassesProbValidation[itVector.Get()->GetFieldAsInt(m_ClassKey)])
             {
             //Add the sample to the validation list
-            m_ValidationListSample->PushBack(it.Get());
-            m_ValidationListLabel->PushBack(itVector.Get()->GetFieldAsInt(m_ClassKey));
+            validationListSample->PushBack(it.Get());
+            validationListLabel->PushBack(itVector.Get()->GetFieldAsInt(m_ClassKey));
             m_ClassesSamplesNumberValidation[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 1;
             }
           //Note: some samples may not be used at all
@@ -236,8 +302,8 @@ ListSampleGenerator<TImage, TVectorData>
       }
     }
 
-  assert(m_TrainingListSample->Size() == m_TrainingListLabel->Size());
-  assert(m_ValidationListSample->Size() == m_ValidationListLabel->Size());
+  assert(trainingListSample->Size() == trainingListLabel->Size());
+  assert(validationListSample->Size() == validationListLabel->Size());
 }
 
 template <class TImage, class TVectorData>

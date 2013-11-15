@@ -38,7 +38,7 @@ CompositeTransform<TFirstTransform,
     TScalarType,
     NInputDimensions,
     NOutputDimensions>
-::CompositeTransform() : Superclass(SpaceDimension, ParametersDimension)
+::CompositeTransform() : Superclass(ParametersDimension)
 {
   m_FirstTransform = 0;
   m_SecondTransform = 0;

@@ -48,7 +48,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
 {
   Superclass::BeforeThreadedGenerateData();
 
-  for (int i = 0; i < this->GetNumberOfThreads(); ++i)
+  for (itk::ThreadIdType i = 0; i < this->GetNumberOfThreads(); ++i)
     {
     m_FunctorList.push_back(m_Functor);
     }
@@ -114,7 +114,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
 template <class TInputImage, class TOutputImage, class TFunction>
 void
 UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbcOff;

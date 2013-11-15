@@ -31,7 +31,7 @@ template <class TInputImage, class TOutputImage, class TMaskImage>
 SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ::SVMImageClassificationFilter()
 {
-  this->SetNumberOfInputs(2);
+  this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredInputs(1);
   m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();
 }
@@ -71,7 +71,7 @@ SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();

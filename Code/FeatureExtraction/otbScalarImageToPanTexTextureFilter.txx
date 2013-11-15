@@ -33,7 +33,7 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
   m_InputImageMaximum(256)
 {
   // There are 1 output corresponding to the Pan Tex texture indice
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredOutputs(1);
 
   //Fill the offset list for contrast computation
   OffsetType off;
@@ -117,10 +117,10 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, int threadId)
-{
+::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+{  
   // Retrieve the input and output pointers
-  InputImagePointerType  inputPtr             =      const_cast<InputImageType *>(this->GetInput());
+  InputImagePointerType inputPtr = const_cast<InputImageType *> (this->GetInput());
   OutputImagePointerType outputPtr = this->GetOutput();
 
   itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr, outputRegionForThread);
@@ -134,55 +134,102 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
   // Iterate on outputs to compute textures
   while (!outputIt.IsAtEnd())
     {
-    // Find the input region on which texture will be computed
-    InputRegionType                     currentRegion;
-    typename InputRegionType::IndexType currentIndex = outputIt.GetIndex() - m_Radius;
-    typename InputRegionType::SizeType  currentSize;
-
-    for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
-      {
-      // Compute current size before applying offset
-      currentSize[dim] = 2 * m_Radius[dim] + 1;
-      }
-
-    // Fill current region
-    currentRegion.SetIndex(currentIndex);
-    currentRegion.SetSize(currentSize);
-
     // Initialise output value
     double out = itk::NumericTraits<double>::max();
-
+    
     // For each offset
     typename OffsetListType::const_iterator offIt;
     for (offIt = m_OffsetList.begin(); offIt != m_OffsetList.end(); ++offIt)
       {
+      OffsetType currentOffset = *offIt;
+
+      // Compute the region on which co-occurence will be estimated
+      typename InputRegionType::IndexType inputIndex, inputIndexWithTwiceOffset;
+      typename InputRegionType::SizeType inputSize, inputSizeWithTwiceOffset;
+
+      // First, apply offset
+      for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
+        {
+        inputIndex[dim] = std::min(
+                                  static_cast<int>(outputIt.GetIndex()[dim] - m_Radius[dim]),
+                                  static_cast<int>(outputIt.GetIndex()[dim] - m_Radius[dim] + currentOffset[dim])
+                                  );
+        inputSize[dim] = 2 * m_Radius[dim] + 1 + std::abs(currentOffset[dim]);
+
+        inputIndexWithTwiceOffset[dim] = static_cast<int>(outputIt.GetIndex()[dim] - m_Radius[dim] - std::abs(currentOffset[dim]));
+        inputSizeWithTwiceOffset[dim] = inputSize[dim] + std::abs(currentOffset[dim]);
+        }
+
+      // Build the input  region
+      InputRegionType inputRegion;
+      inputRegion.SetIndex(inputIndex);
+      inputRegion.SetSize(inputSize);
+      inputRegion.Crop(inputPtr->GetRequestedRegion());
+
+      InputRegionType inputRegionWithTwiceOffset;
+      inputRegionWithTwiceOffset.SetIndex(inputIndexWithTwiceOffset);
+      inputRegionWithTwiceOffset.SetSize(inputSizeWithTwiceOffset);
+      inputRegionWithTwiceOffset.Crop(inputPtr->GetRequestedRegion());
+
+      /*********************************************************************************/
+      //Local copy of the input image around the processed pixel *outputIt
+      InputImagePointerType localInputImage = InputImageType::New();
+      localInputImage->SetRegions(inputRegionWithTwiceOffset);
+      localInputImage->Allocate();
+      typedef itk::ImageRegionIteratorWithIndex<InputImageType> ImageRegionIteratorType;
+      ImageRegionIteratorType itInputPtr(inputPtr, inputRegionWithTwiceOffset);
+      ImageRegionIteratorType itLocalInputImage(localInputImage, inputRegionWithTwiceOffset);
+      for (itInputPtr.GoToBegin(), itLocalInputImage.GoToBegin(); !itInputPtr.IsAtEnd(); ++itInputPtr, ++itLocalInputImage)
+        {
+        itLocalInputImage.Set(itInputPtr.Get());
+        }
+      /*********************************************************************************/
+
+      InputImagePointerType maskImage = InputImageType::New();
+      maskImage->SetRegions(inputRegionWithTwiceOffset);
+      maskImage->Allocate();
+      maskImage->FillBuffer(0);
+
+      ImageRegionIteratorType itMask(maskImage, inputRegion);
+      for (itMask.GoToBegin(); !itMask.IsAtEnd(); ++itMask)
+        {
+        itMask.Set(1);
+        }
+
+
       // Build the co-occurence matrix generator
       CoocurrenceMatrixGeneratorPointerType coOccurenceMatrixGenerator = CoocurrenceMatrixGeneratorType::New();
-      coOccurenceMatrixGenerator->SetInput(inputPtr);
-      coOccurenceMatrixGenerator->SetOffset((*offIt));
+      coOccurenceMatrixGenerator->SetInput(localInputImage);
+      coOccurenceMatrixGenerator->SetOffset(currentOffset);
       coOccurenceMatrixGenerator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
       coOccurenceMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
 
       // Compute the co-occurence matrix
-      coOccurenceMatrixGenerator->SetRegion(currentRegion);
-      coOccurenceMatrixGenerator->SetNormalize(true);
-      coOccurenceMatrixGenerator->Compute();
+      coOccurenceMatrixGenerator->SetMaskImage(maskImage);
+      coOccurenceMatrixGenerator->SetInsidePixelValue(1);
+      coOccurenceMatrixGenerator->Update();
 
-      typename HistogramType::Pointer histo = coOccurenceMatrixGenerator->GetOutput();
+      typename HistogramType::ConstPointer histo = coOccurenceMatrixGenerator->GetOutput();
 
       double inertia = 0;
-      for (HistogramIterator hit = histo->Begin(); hit != histo->End(); ++hit)
+      typename HistogramType::TotalAbsoluteFrequencyType  totalFrequency = histo->GetTotalFrequency();
+      typename HistogramType::ConstIterator itr = histo->Begin();
+      typename HistogramType::ConstIterator end = histo->End();      
+      for(; itr != end; ++itr )
         {
-        MeasurementType frequency = hit.GetFrequency();
+        MeasurementType frequency = itr.GetFrequency();
         if (frequency == 0)
           {
           continue; // no use doing these calculations if we're just multiplying by zero.
           }
-        typename InputRegionType::IndexType index = histo->GetIndex(hit.GetInstanceIdentifier());
-        inertia += (index[0] - index[1]) * (index[0] - index[1]) * frequency;
+        typename HistogramType::IndexType index = histo->GetIndex(itr.GetInstanceIdentifier());
+        inertia += (index[0] - index[1]) * (index[0] - index[1]) * frequency / totalFrequency;
         }
 
-      if (inertia < out) out = inertia;
+      if (inertia < out)
+        {
+        out = inertia;
+        }
       }
 
     outputIt.Set(out);

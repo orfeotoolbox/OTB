@@ -30,15 +30,15 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 ::StreamingResampleImageFilter()
 {
   // internal filters instanciation
-  m_DeformationFilter = DeformationFieldGeneratorType::New();
+  m_DisplacementFilter = DisplacementFieldGeneratorType::New();
   m_WarpFilter        = WarpImageFilterType::New();
 
-  // Initialize the deformation field spacing to zero : inconsistant
+  // Initialize the displacement field spacing to zero : inconsistant
   // value
-  this->SetDeformationFieldSpacing(itk::NumericTraits<SpacingType>::Zero);
+  this->SetDisplacementFieldSpacing(itk::NumericTraits<SpacingType>::Zero);
 
   // Wire minipipeline
-  m_WarpFilter->SetDeformationField(m_DeformationFilter->GetOutput());
+  m_WarpFilter->SetDisplacementField(m_DisplacementFilter->GetOutput());
 }
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
@@ -78,10 +78,10 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 
   outputPtr->SetLargestPossibleRegion(region);
 
-  // check the output spacing of the deformation field
-  if(this->GetDeformationFieldSpacing()== itk::NumericTraits<SpacingType>::Zero)
+  // check the output spacing of the displacement field
+  if(this->GetDisplacementFieldSpacing()== itk::NumericTraits<SpacingType>::Zero)
     {
-    this->SetDeformationFieldSpacing(2.*this->GetOutputSpacing());
+    this->SetDisplacementFieldSpacing(2.*this->GetOutputSpacing());
     }
 }
 
@@ -100,24 +100,24 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   RegionType requestedRegion = outputPtr->GetRequestedRegion();
   SizeType largestSize       = outputPtr->GetLargestPossibleRegion().GetSize();
 
-  // Set up deformation field filter
-  SizeType deformationFieldLargestSize;
+  // Set up displacement field filter
+  SizeType displacementFieldLargestSize;
   
   for(unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
     {
     // vcl_ceil to avoid numerical problems due to division of
     // spacings
-    // + 1 :  We need to enlarge the deformation field size cause
-    // itk::WarpImageFilter::EvaluateDeformationAtPhysicalPoint needs
+    // + 1 :  We need to enlarge the displacement field size cause
+    // itk::WarpImageFilter::EvaluateDisplacementAtPhysicalPoint needs
     // 4 neighbors and in the edges we can need 1 neighbor pixel
     // outside the field
-    deformationFieldLargestSize[dim] = static_cast<unsigned int>(
+    displacementFieldLargestSize[dim] = static_cast<unsigned int>(
       vcl_ceil( largestSize[dim]*
                 vcl_abs(this->GetOutputSpacing()[dim] /
-                        this->GetDeformationFieldSpacing()[dim]))) + 1;
+                        this->GetDisplacementFieldSpacing()[dim]))) + 1;
     }
-  m_DeformationFilter->SetOutputSize(deformationFieldLargestSize);
-  m_DeformationFilter->SetOutputIndex(this->GetOutputStartIndex());
+  m_DisplacementFilter->SetOutputSize(displacementFieldLargestSize);
+  m_DisplacementFilter->SetOutputIndex(this->GetOutputStartIndex());
   
   // Generate input requested region
   m_WarpFilter->SetInput(inputPtr);

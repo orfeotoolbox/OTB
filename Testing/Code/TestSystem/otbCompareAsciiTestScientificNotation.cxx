@@ -18,7 +18,6 @@
 #include <iostream>
 #include <fstream>
 
-
 #include "otbMacro.h"
 
 int otbCompareAsciiTestScientificNotation(int argc, char * argv[])

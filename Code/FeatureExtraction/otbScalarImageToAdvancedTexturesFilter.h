@@ -19,8 +19,7 @@
 #define __otbScalarImageToAdvancedTexturesFilter_h
 
 #include "itkImageToImageFilter.h"
-
-#include "otbMaskedScalarImageToGreyLevelCoocurenceMatrixGenerator.h"
+#include "itkScalarImageToCooccurrenceMatrixFilter.h"
 #include "otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.h"
 
 namespace otb
@@ -57,8 +56,7 @@ public:
   typedef typename OutputImageType::RegionType OutputRegionType;
 
   /** Co-occurence matrix and textures calculator */
-  typedef otb::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
-  <InputImageType>                                             CoocurrenceMatrixGeneratorType;
+  typedef itk::Statistics::ScalarImageToCooccurrenceMatrixFilter<InputImageType> CoocurrenceMatrixGeneratorType;
   typedef typename CoocurrenceMatrixGeneratorType::Pointer       CoocurrenceMatrixGeneratorPointerType;
   typedef typename CoocurrenceMatrixGeneratorType::OffsetType    OffsetType;
   typedef typename CoocurrenceMatrixGeneratorType::HistogramType HistogramType;
@@ -130,7 +128,7 @@ protected:
   /** Generate the input requested region */
   virtual void GenerateInputRequestedRegion();
   /** Parallel textures extraction */
-  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, int threadId);
+  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
 
 private:
   ScalarImageToAdvancedTexturesFilter(const Self&); //purposely not implemented

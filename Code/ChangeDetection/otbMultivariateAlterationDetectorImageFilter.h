@@ -153,7 +153,7 @@ protected:
   MultivariateAlterationDetectorImageFilter();
   virtual ~MultivariateAlterationDetectorImageFilter() {}
 
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
   virtual void GenerateOutputInformation();
 

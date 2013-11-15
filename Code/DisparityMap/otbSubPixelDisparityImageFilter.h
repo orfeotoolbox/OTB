@@ -51,7 +51,7 @@ namespace otb
  *
  *  \sa PixelWiseBlockMatchingImageFilter
  *  \sa FineRegistrationImageFilter
- *  \sa StereorectificationDeformationFieldSource
+ *  \sa StereorectificationDisplacementFieldSource
  *
  *  \ingroup Streamed
  *  \ingroup Threaded
@@ -217,7 +217,7 @@ protected:
   virtual void BeforeThreadedGenerateData();
   
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
   
   /** After threaded generate data */
   virtual void AfterThreadedGenerateData();
@@ -227,13 +227,13 @@ private:
   void operator=(const Self&); //purposely not implemented
   
   /** parabolic refinement method */
-  void ParabolicRefinement(const RegionType& outputRegionForThread, int threadId);
+  void ParabolicRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
   
   /** triangular refinement method */
-  void TriangularRefinement(const RegionType& outputRegionForThread, int threadId);
+  void TriangularRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
   
   /** dichotomy refinement method */
-  void DichotomyRefinement(const RegionType& outputRegionForThread, int threadId);
+  void DichotomyRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
   
   /** The radius of the blocks */
   SizeType                      m_Radius;

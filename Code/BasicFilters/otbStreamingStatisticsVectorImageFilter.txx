@@ -372,8 +372,8 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
   unsigned int ignoredUserPixelCount = 0;
 
   // Accumulate results from all threads
-  const unsigned int numberOfThreads = this->GetNumberOfThreads();
-  for (unsigned int threadId = 0; threadId < numberOfThreads; ++threadId)
+  const itk::ThreadIdType numberOfThreads = this->GetNumberOfThreads();
+  for (itk::ThreadIdType threadId = 0; threadId < numberOfThreads; ++threadId)
     {
     if (m_EnableMinMax)
       {
@@ -482,7 +482,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 template<class TInputImage, class TPrecision>
 void
 PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
  {
   // Support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());

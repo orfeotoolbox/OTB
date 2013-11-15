@@ -21,11 +21,10 @@
 #ifndef __otbListSampleToVariableDimensionHistogramGenerator_h
 #define __otbListSampleToVariableDimensionHistogramGenerator_h
 
-#include "itkObject.h"
-#include "itkListSampleBase.h"
-#include "itkVariableDimensionHistogram.h"
+#include "itkProcessObject.h"
+#include "itkHistogram.h"
 #include "itkStatisticsAlgorithm.h"
-#include "itkDenseFrequencyContainer.h"
+#include "itkDenseFrequencyContainer2.h"
 #include "itkNumericTraits.h"
 
 namespace otb {
@@ -47,50 +46,51 @@ namespace otb {
  */
 template<class TListSample,
     class THistogramMeasurement,
-    class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
+         class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer2>
 class ITK_EXPORT ListSampleToVariableDimensionHistogramGenerator :
-  public itk::Object
+  public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
   typedef ListSampleToVariableDimensionHistogramGenerator Self;
-  typedef itk::Object                                     Superclass;
+  typedef itk::ProcessObject                              Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ListSampleToVariableDimensionHistogramGenerator, Object);
+  itkTypeMacro(ListSampleToVariableDimensionHistogramGenerator, itk::ProcessObject);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-
+  
+  /** typedef the ListSampleType */
+  typedef TListSample                                  ListSampleType;
+  
   /** Type needed for defining the limits of the histogram bins */
   typedef typename itk::NumericTraits<THistogramMeasurement>::RealType
   HistogramMeasurementRealType;
 
-  typedef itk::Statistics::VariableDimensionHistogram<HistogramMeasurementRealType,
-      TFrequencyContainer> HistogramType;
+  typedef itk::Statistics::Histogram<HistogramMeasurementRealType,
+      TFrequencyContainer>                             HistogramType;
 
   typedef typename HistogramType::SizeType              HistogramSizeType;
   typedef typename HistogramType::MeasurementVectorType MeasurementVectorType;
 
-  /** plug in the ListSample object */
-  void SetListSample(const TListSample* list)
-  {
-    m_List = list;
-  }
+  /** DataObject typedef*/
+  typedef typename Superclass::DataObjectPointer        DataObjectPointer;
 
+  // Set/Get the input list sample
+  void SetListSample(const ListSampleType* inputlist);
+  const ListSampleType* GetListSample() const;
+  
+  // Get the output histogram
+  const HistogramType* GetOutput();
+  
   void SetMarginalScale(float scale)
   { m_MarginalScale = scale; }
 
   void SetNumberOfBins(HistogramSizeType sizes)
   { m_Sizes = sizes; }
-
-  HistogramType* GetOutput() const
-  { return m_Histogram; }
-
-  void Update()
-  { this->GenerateData(); }
 
   itkSetMacro(AutoMinMax, bool);
   itkGetConstReferenceMacro(AutoMinMax, bool);
@@ -112,10 +112,9 @@ protected:
   virtual ~ListSampleToVariableDimensionHistogramGenerator() {}
   void GenerateData();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  DataObjectPointer MakeOutput(unsigned int idx);
 
 private:
-  const TListSample* m_List;
-  typename HistogramType::Pointer m_Histogram;
   HistogramSizeType     m_Sizes;
   float                 m_MarginalScale;
   MeasurementVectorType m_HistogramMin;

@@ -1,0 +1,18 @@
+This directory contains different patches to ITK classes
+that we need for OTB.
+
+The include directory list management in OTB assures that this path
+is included before ITK paths, so that these classes are used
+instead of their ITK equivalent.
+
+This can only concern templated classes.
+
+
+* itkImageToImageFilter
+   https://issues.itk.org/jira/browse/ITK-3214
+   http://review.source.kitware.com/#/c/12863/
+   Integrated in ITK after 4.4.2 release
+
+
+
+

@@ -34,8 +34,8 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::StereoSensorModelToElevationFilter()
 {
   // Filter has two inputs
-  this->SetNumberOfInputs(2);
-  this->SetNumberOfOutputs(2);
+  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(1, OutputImageType::New());
 
   // Default interpolator
@@ -303,7 +303,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 template <class TInputImage, class TOutputHeight>
 void
 StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
-::ThreadedGenerateData(const OutputRegionType & outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve pointers
   const InputImageType* masterPtr  = this->GetMasterInput();

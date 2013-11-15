@@ -88,14 +88,15 @@ public:
   typedef ObjectList< WvltFilterType >                 WvltFilterListType;
   typedef typename WvltFilterListType::Pointer         WvltFilterListPointerType;
 
-  typedef itk::FixedArray< PrecisionType, NumberOfInputImages-1 > AngleType;
+//  typedef itk::FixedArray< PrecisionType, NumberOfInputImages-1 > AngleType;
+  typedef itk::Array< PrecisionType >                             AngleType;
   typedef itk::Statistics::ListSample< AngleType >                AngleListType;
   typedef typename AngleListType::Pointer                         AngleListPointerType;
   typedef SparseWvltToAngleMapperListFilter< InternalImageListType, AngleListType, NumberOfInputImages > AngleListFilterType;
   typedef typename AngleListFilterType::Pointer                   AngleListFilterPointerType;
   typedef typename AngleListFilterType::OutputSampleListType      InternalSampleListType;
 
-  typedef typename itk::Statistics::Histogram< PrecisionType, NumberOfInputImages-1 > HistogramType;
+  typedef typename itk::Statistics::Histogram< PrecisionType > HistogramType;
   typedef typename HistogramType::Pointer               HistogramPointerType;
   typedef typename HistogramType::SizeType              HistogramSizeType;
   typedef typename HistogramType::IndexType             HistogramIndexType;

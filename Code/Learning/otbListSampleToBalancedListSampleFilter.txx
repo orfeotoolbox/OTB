@@ -56,44 +56,31 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
       break;
     case 1:
       {
-      typename LabelSampleListObjectType::Pointer labelListSample = LabelSampleListObjectType::New();
-      labelListSample->Set(LabelSampleListType::New());
-      output = static_cast<itk::DataObject*>(labelListSample.GetPointer());
+      output = static_cast<itk::DataObject*>(LabelSampleListType::New().GetPointer());
       break;
       }
     default:
-      output = static_cast<itk::DataObject*>(InputSampleListObjectType::New().GetPointer());
+      output = static_cast<itk::DataObject*>(InputSampleListType::New().GetPointer());
       break;
     }
   return output;
-}
-
-// Method to set the SampleList
-template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
-void
-ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::SetInputLabel( const LabelSampleListType * label )
-{
-  typename LabelSampleListObjectType::Pointer labelPtr = LabelSampleListObjectType::New();
-  labelPtr->Set(label);
-  this->SetInputLabel(labelPtr);
 }
 
 // Method to set the SampleList as DataObject
 template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
 void
 ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::SetInputLabel( const LabelSampleListObjectType * labelPtr )
+::SetInputLabel( const LabelSampleListType * labelPtr ) 
 {
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(1,
-                                   const_cast< LabelSampleListObjectType* >( labelPtr  ) );
+                                   const_cast< LabelSampleListType* >( labelPtr  ) );
 }
 
 // Method to get the SampleList as DataObject
 template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
 const typename ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::LabelSampleListObjectType *
+::LabelSampleListType *
 ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
 ::GetInputLabel() const
 {
@@ -102,45 +89,18 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
     return 0;
     }
 
-  return static_cast<const  LabelSampleListObjectType* >
+  return static_cast<const  LabelSampleListType* >
     (this->itk::ProcessObject::GetInput(1) );
-}
-
-// Method to get the SampleList
-template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
-const typename ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::LabelSampleListType *
-ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::GetLabelSampleList() const
-{
- if (this->GetNumberOfInputs() < 2)
-    {
-    return 0;
-    }
-
- typename LabelSampleListObjectType::ConstPointer dataObjectPointer = static_cast<const LabelSampleListObjectType * >
-   (this->itk::ProcessObject::GetInput(1) );
-  return dataObjectPointer->Get();
-}
-
-// Get the output label SampleList
-template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
-typename ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::LabelSampleListType *
-ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::GetOutputLabelSampleList()
-{
-  return const_cast<LabelSampleListType*>(this->GetOutputLabel()->Get());
 }
 
 // Get the output label SampleList as DataObject
 template < class TInputSampleList, class TLabelSampleList, class TOutputSampleList >
-typename ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
-::LabelSampleListObjectType *
+typename ListSampleToBalancedListSampleFilter<TInputSampleList,TLabelSampleList,TOutputSampleList>
+::LabelSampleListType *
 ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutputSampleList>
 ::GetOutputLabel()
 {
-  return dynamic_cast<LabelSampleListObjectType*>(this->itk::ProcessObject::GetOutput(1));
+  return dynamic_cast<LabelSampleListType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
 
@@ -154,7 +114,7 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
   LabelValueType   maxLabel = itk::NumericTraits<LabelValueType>::min();
   
   // Number of bins to add to the histogram
-  typename LabelSampleListType::ConstPointer  labelPtr = this->GetLabelSampleList();
+  typename LabelSampleListType::ConstPointer  labelPtr = this->GetInputLabel();
   typename LabelSampleListType::ConstIterator labelIt = labelPtr->Begin();
   
   while(labelIt != labelPtr->End())
@@ -171,8 +131,9 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
   // Prepare histogram with dimension 1 : default template parameters
   typedef typename itk::Statistics::Histogram<unsigned int>    HistogramType;
   typename HistogramType::Pointer histogram = HistogramType::New();
-  typename HistogramType::SizeType  size;
+  typename HistogramType::SizeType  size(1);
   size.Fill(maxLabel +1);
+  histogram->SetMeasurementVectorSize(1); // we need only one dimension
   histogram->Initialize(size);
 
   labelIt = labelPtr->Begin();
@@ -228,27 +189,26 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
   this->ComputeMaxSampleFrequency();
   
   // Retrieve input and output pointers
-  typename InputSampleListObjectType::ConstPointer inputPtr  = this->GetInput();
-  typename LabelSampleListObjectType::ConstPointer labelPtr  = this->GetInputLabel();
-  typename OutputSampleListObjectType::Pointer     outputPtr = this->GetOutput();
-
-  typename LabelSampleListObjectType::Pointer outputLabelPtr  = this->GetOutputLabel();
-  typename LabelSampleListType::Pointer   outputLabel = const_cast<LabelSampleListType*>(outputLabelPtr->Get());
-   
-
-  // Retrieve the ListSample
-   InputSampleListConstPointer inputSampleListPtr = inputPtr->Get();
-   LabelSampleListConstPointer labelSampleListPtr = labelPtr->Get();
-   OutputSampleListPointer outputSampleListPtr    = const_cast<OutputSampleListType *>(outputPtr->Get());
+  InputSampleListConstPointer  inputSampleListPtr  = this->GetInput();
+  LabelSampleListConstPointer labelSampleListPtr  = this->GetInputLabel();
+  OutputSampleListPointer     outputSampleListPtr = this->GetOutput();
+  LabelSampleListPointer      outputLabel         = this->GetOutputLabel();
   
    // Clear any previous output
    outputSampleListPtr->Clear();
+
+   // Set the measurement vectors size
+   outputSampleListPtr->SetMeasurementVectorSize(inputSampleListPtr->GetMeasurementVectorSize());
+   outputLabel->SetMeasurementVectorSize(labelSampleListPtr->GetMeasurementVectorSize());
 
    typename InputSampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
    typename LabelSampleListType::ConstIterator labelIt = labelSampleListPtr->Begin();
    
    // Set-up progress reporting
    itk::ProgressReporter progress(this, 0, inputSampleListPtr->Size());
+
+   // Noising filter
+   GaussianAdditiveNoisePointerType  noisingFilter = GaussianAdditiveNoiseType::New();
 
    // Iterate on the InputSampleList
    while(inputIt != inputSampleListPtr->End() && labelIt != labelSampleListPtr->End())
@@ -262,13 +222,14 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
      // measurement vector to generate noised versions of this
      // measurement vector
      InputSampleListPointer tempListSample = InputSampleListType::New();
+     tempListSample->SetMeasurementVectorSize(inputSampleListPtr->GetMeasurementVectorSize());
      tempListSample->PushBack(currentInputMeasurement);
      
      // Get how many times we have to noise this sample
      unsigned int iterations =  m_MultiplicativeCoefficient[currentLabelMeasurement[0]];
      
      // Noising filter
-     GaussianAdditiveNoisePointerType  noisingFilter = GaussianAdditiveNoiseType::New();
+     //GaussianAdditiveNoisePointerType  noisingFilter = GaussianAdditiveNoiseType::New();
      noisingFilter->SetInput(tempListSample);
      noisingFilter->SetNumberOfIteration(iterations);
      noisingFilter->Update();
@@ -288,9 +249,9 @@ ListSampleToBalancedListSampleFilter<TInputSampleList, TLabelSampleList, TOutput
      outputLabel->PushBack(currentLabelMeasurement);
 
      // Add the noised versions of the current sample to OutputSampleList
-     typename OutputSampleListType::ConstIterator tempIt = noisingFilter->GetOutput()->Get()->Begin();
+     typename OutputSampleListType::ConstIterator tempIt = noisingFilter->GetOutput()->Begin();
      
-     while(tempIt != noisingFilter->GetOutput()->Get()->End())
+     while(tempIt != noisingFilter->GetOutput()->End())
        {
        // Get the noised sample of the current measurement vector
        OutputMeasurementVectorType currentTempMeasurement = tempIt.GetMeasurementVector();

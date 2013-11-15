@@ -71,7 +71,7 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 // Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::EuclideanDistance<VectorType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<VectorType> DistanceType;
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -317,7 +317,7 @@ int main(int argc, char* argv[])
 
   scalarExpand->SetExpandFactors(40);
   scalarExpand->SetInterpolator(interpolator);
-  scalarExpand->SetEdgePaddingValue(255);
+  //scalarExpand->SetEdgePaddingValue(255);
 
   expand->SetFilter(scalarExpand);
 
@@ -434,7 +434,7 @@ int main(int argc, char* argv[])
     expand2->SetInput(somAct->GetOutput());
     expand2->SetExpandFactors(20);
     expand2->SetInterpolator(interpolator2);
-    expand2->SetEdgePaddingValue(255);
+    //expand2->SetEdgePaddingValue(255);
     expand2->UpdateOutputInformation();
 
     actWriter->SetInput(expand2->GetOutput());

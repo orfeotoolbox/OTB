@@ -20,14 +20,14 @@
 
 #include "otbMacro.h"
 
-#include "itkImage.h"
-#include "itkImageFileWriter.h"
 #include <iostream>
 #include "itkParametricPath.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkVectorContainer.h"
 
+#include "otbImage.h"
 #include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "otbImageToPathListAlignFilter.h"
 
 #include "itkPath.h"
@@ -48,22 +48,23 @@ int otbAlignImageToPath(int argc, char * argv[])
   typedef double RealPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
-  typedef itk::Image<RealPixelType,  Dimension>  RealImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<RealPixelType,  Dimension>  RealImageType;
 
   typedef itk::PolyLineParametricPath<Dimension> PathType;
 
   typedef PathType::Pointer PathTypePointer;
   PathType::Pointer ltoto = PathType::New();
 
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   typedef otb::ImageToPathListAlignFilter<InputImageType, PathType> ListAlignFilterType;
   typedef ListAlignFilterType::ValueType                            ValueType;
   typedef ListAlignFilterType::SizeType                             SizeType;
-  typedef itk::ImageFileWriter<OutputImageType>                     WriterType;
+  typedef otb::ImageFileWriter<OutputImageType>                     WriterType;
 
   ReaderType::Pointer     reader = ReaderType::New();
   WriterType::Pointer     writer = WriterType::New();

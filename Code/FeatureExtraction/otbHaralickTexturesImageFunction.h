@@ -21,7 +21,7 @@
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"
 #include "otbMaskedScalarImageToGreyLevelCoocurenceMatrixGenerator.h"
-#include "itkGreyLevelCooccurrenceMatrixTextureCoefficientsCalculator.h"
+#include "itkHistogramToTextureFeaturesFilter.h"
 
 namespace otb
 {
@@ -60,7 +60,7 @@ namespace otb
  * coordinate representation type (e.g. float or double).
  *
  * \sa otb::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
- * \sa itk::GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator
+ * \sa itk::HistogramToTextureFeaturesFilter
  *
  * \ingroup ImageFunctions
  */
@@ -111,7 +111,7 @@ public:
         ::OffsetType                               OffsetType;
     typedef typename CoocurrenceMatrixGeneratorType
         ::HistogramType                            HistogramType;
-    typedef itk::Statistics::GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator
+    typedef itk::Statistics::HistogramToTextureFeaturesFilter
     <HistogramType>                                TextureCoefficientsCalculatorType;
     typedef typename TextureCoefficientsCalculatorType
         ::Pointer                                  TextureCoefficientsCalculatorPointerType;

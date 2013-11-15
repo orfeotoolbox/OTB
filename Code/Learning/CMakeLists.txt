@@ -4,7 +4,7 @@
 FILE(GLOB OTBLearning_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBLearning ${OTBLearning_SRCS})
-TARGET_LINK_LIBRARIES (OTBLearning OTBCommon otbsvm)
+TARGET_LINK_LIBRARIES (OTBLearning OTBCommon ${ITK_LIBRARIES} otbsvm)
 
 IF(OTB_USE_OPENCV)
   TARGET_LINK_LIBRARIES (OTBLearning OTBOpenCVAdapters)

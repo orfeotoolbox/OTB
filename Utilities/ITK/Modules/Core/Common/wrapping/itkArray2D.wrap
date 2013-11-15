@@ -1,0 +1,4 @@
+itk_wrap_class("itk::Array2D")
+  itk_wrap_template("${ITKM_D}" "${ITKT_D}")
+  itk_wrap_template("${ITKM_UI}" "${ITKT_UI}")
+itk_end_wrap_class()

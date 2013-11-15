@@ -28,18 +28,16 @@
 #include "itkTransform.h"
 #include "itkAffineTransform.h"
 
-// Default value
-#include "itkPixelBuilder.h"
 
 int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
 {
   // Images definition
   const unsigned int Dimension = 2;
-  typedef double                                      PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>      ImageType;
+  typedef double                                                  InternalPixelType;
+  typedef otb::VectorImage<InternalPixelType, Dimension>          ImageType;
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType> ImageResamplerType;
 
-  // Istantiate a Resampler
+  // Instantiate a Resampler
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
 
   if (argc== 4)
@@ -49,10 +47,10 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     unsigned int isize    = atoi(argv[2]);
   
     typedef itk::Transform<
-      PixelType, Dimension, Dimension>     TransformType;
+        InternalPixelType, Dimension, Dimension>     TransformType;
 
     typedef itk::AffineTransform<
-      PixelType, Dimension>              AffineTransformType;
+        InternalPixelType, Dimension>              AffineTransformType;
     typedef otb::ImageFileReader<ImageType>         ReaderType;
 
     // Instantiate an affine transformation Pointer
@@ -86,13 +84,13 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
 
     // Default value builder
     ImageType::PixelType defaultValue;
-    itk::PixelBuilder<ImageType::PixelType>::Zero(defaultValue, reader->GetOutput()->GetNumberOfComponentsPerPixel());
-    
+    itk::NumericTraits<ImageType::PixelType>::SetLength(defaultValue, reader->GetOutput()->GetNumberOfComponentsPerPixel());
+
     /** Set the OptResampler Parameters*/
     resampler->SetInput(reader->GetOutput());
     resampler->SetOutputParametersFromImage(reader->GetOutput());
     resampler->SetTransform(affineTransform);
-    resampler->SetDeformationFieldSpacing(5.);
+    resampler->SetDisplacementFieldSpacing(5.);
     resampler->SetOutputSize(size);
     resampler->SetEdgePaddingValue(defaultValue);
     

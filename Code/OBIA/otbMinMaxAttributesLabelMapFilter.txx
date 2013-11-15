@@ -102,25 +102,25 @@ MinMaxAttributesLabelMapFilter<TInputImage>
     maxAttr[*valueIt] = itk::NumericTraits<AttributesValueType>::NonpositiveMin();
     }
 
-  LabelObjectContainerConstIterator it  = this->GetLabelMap()->GetLabelObjectContainer().begin();
-  LabelObjectContainerConstIterator end = this->GetLabelMap()->GetLabelObjectContainer().end();
-  for (; it != end; ++it)
-    {
-    // get the label object
-    LabelObjectType * labelObject = it->second;
 
-    std::vector<std::string>::const_iterator it;
-    for (it = attributes.begin(); it != attributes.end(); ++it)
-      {
-      AttributesValueType val = labelObject->GetAttribute((*it).c_str());
-      // Update min
-      if (val < minAttr[*it])
-        minAttr[*it] = val;
-      //Update max
-      if (val > maxAttr[*it])
-        maxAttr[*it] = val;
-      }
+  for(unsigned int i = 0; i < this->GetLabelMap()->GetNumberOfLabelObjects(); ++i)
+    {
+     LabelObjectType* labelObject =this->GetLabelMap()->GetNthLabelObject(i);
+     std::vector<std::string>::const_iterator it;
+        for (it = attributes.begin(); it != attributes.end(); ++it)
+          {
+          AttributesValueType val = labelObject->GetAttribute((*it).c_str());
+          // Update min
+          if (val < minAttr[*it])
+           minAttr[*it] = val;
+          //Update max
+          if (val > maxAttr[*it])
+            maxAttr[*it] = val;
+          }
+        ++it;
     }
+
+
 }
 
 }// end namespace otb

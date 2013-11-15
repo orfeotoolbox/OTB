@@ -26,17 +26,18 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   unsigned int NbOfBins((unsigned int) ::atoi(argv[1]));
 
   typedef float                                          MeasurementType;
-  typedef itk::Statistics::Histogram<MeasurementType, 1> HistogramType;
+  typedef itk::Statistics::Histogram<MeasurementType, itk::Statistics::DenseFrequencyContainer2> HistogramType;
   HistogramType::Pointer histogram = HistogramType::New();
 
   // initialize histogram
-  HistogramType::SizeType size;
+  HistogramType::SizeType size(1);
   size.Fill(NbOfBins);
-  HistogramType::MeasurementVectorType lowerBound;
-  HistogramType::MeasurementVectorType upperBound;
+  HistogramType::MeasurementVectorType lowerBound(1);
+  HistogramType::MeasurementVectorType upperBound(1);
   lowerBound[0] = 0.0;
   upperBound[0] = NbOfBins;
-
+  
+  histogram->SetMeasurementVectorSize(1);
   histogram->Initialize(size, lowerBound, upperBound);
 
   // create histogram with same value for each frequency

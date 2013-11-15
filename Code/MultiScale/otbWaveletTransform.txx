@@ -25,6 +25,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressAccumulator.h"
+#include "otbMacro.h"
 
 namespace otb {
 
@@ -38,8 +39,8 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
   : m_NumberOfDecompositions(1), m_SubsampleImageFactor(2)
 {
   this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfInputs(1);
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0, OutputImageListType::New());
 
   m_FilterList = FilterListType::New();
@@ -60,11 +61,11 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
   filter->SetInput(this->GetInput());
   filter->SetSubsampleImageFactor(GetSubsampleImageFactor());
 
-  std::cerr << "Allocating " << (1 + GetNumberOfDecompositions() * (filter->GetNumberOfOutputs() - 1)) << " output\n";
+  otbMsgDevMacro(<<"Allocating " << (1 + GetNumberOfDecompositions() * (filter->GetNumberOfOutputs() - 1)) << " output\n");
   this->GetOutput()->Resize(
     1 + GetNumberOfDecompositions() * (filter->GetNumberOfOutputs() - 1));
 
-  std::cerr << "Using " << this->GetOutput()->Size() << " outputs...\n";
+  otbMsgDevMacro(<<"Using " << this->GetOutput()->Size() << " outputs...");
   for (unsigned int idx = 0; idx < this->GetOutput()->Size(); ++idx)
     {
     this->GetOutput()->SetNthElement(idx, OutputImageType::New());
@@ -72,6 +73,7 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
 
   progress->RegisterInternalFilter(filter,
                                    1.f / static_cast<float>(GetNumberOfDecompositions()));
+
   filter->Update();
 
   for (unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); ++idx)
@@ -114,8 +116,8 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
   : m_NumberOfDecompositions(1), m_SubsampleImageFactor(2)
 {
   this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfInputs(1);
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0, OutputImageType::New());
 
   m_FilterList = FilterListType::New();
@@ -157,10 +159,12 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
 ::GenerateData()
 {
   FilterPointerType filter = FilterType::New();
-  m_NumberOfDecompositions = (this->GetInput()->Size() - 1)
-                             / (filter->GetNumberOfInputs() - 1);
 
-  std::cerr << "Found " << m_NumberOfDecompositions << " decompositions\n";
+  const unsigned int filterbankInputSize = 1 << InputImageDimension;
+
+  m_NumberOfDecompositions = (this->GetInput()->Size() - 1)/(filterbankInputSize - 1);
+
+  otbMsgDevMacro(<< "Found " << m_NumberOfDecompositions << " decompositions");
 
   itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
@@ -171,7 +175,7 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
 
   this->GetFilterList()->SetNthElement(0, FilterType::New());
   filter = this->GetNthFilter(0);
-  for (unsigned int i = 0; i < filter->GetNumberOfInputs(); ++i)
+  for (unsigned int i = 0; i < filterbankInputSize; ++i)
     {
     filter->SetInput(i, inputIterator.Get());
     ++inputIterator;
@@ -193,7 +197,7 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
     filter = this->GetNthFilter(idx);
     filter->SetInput(0, this->GetNthFilter(idx - 1)->GetOutput());
 
-    for (unsigned int i = 1; i < filter->GetNumberOfInputs(); ++i)
+    for (unsigned int i = 1; i < filterbankInputSize; ++i)
       {
       filter->SetInput(i, inputIterator.Get());
       ++inputIterator;

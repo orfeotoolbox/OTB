@@ -105,7 +105,7 @@ StandardOneLineFilterWatcher
   // Ensure we don't depend on std::cout configuration
   std::ostringstream elapsedTime;
   elapsedTime.precision(1);
-  elapsedTime << m_TimeProbe.GetMeanTime();
+  elapsedTime << m_TimeProbe.GetMean();
 
   std::cout << " ("
             << elapsedTime.str()

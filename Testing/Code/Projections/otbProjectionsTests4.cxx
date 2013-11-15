@@ -34,7 +34,7 @@ void RegisterTests()
   REGISTER_TEST(otbImageToGenericRSOutputParameters);
   REGISTER_TEST(otbRationalTransformNew);
   REGISTER_TEST(otbRationalTransform);
-  REGISTER_TEST(otbRationalTransformToDeformationFiledSourceTest);
+  REGISTER_TEST(otbRationalTransformToDisplacementFieldSourceTest);
   REGISTER_TEST(otbGeographicalDistanceNew);
   REGISTER_TEST(otbGeographicalDistance);
   REGISTER_TEST(otbVectorDataTransformFilterNew);

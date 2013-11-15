@@ -68,7 +68,7 @@ public:
 
   /** Filters typedef */
   typedef itk::Statistics::ListSample<FloatVectorImageType::PixelType> ListSampleType;
-  typedef itk::Statistics::DenseFrequencyContainer DFContainerType;
+  typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
   typedef ListSampleToHistogramListGenerator<ListSampleType, FloatVectorImageType::InternalPixelType, DFContainerType> HistogramsGeneratorType;
   typedef StreamingShrinkImageFilter<FloatVectorImageType, FloatVectorImageType> ShrinkFilterType;
   typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
@@ -238,6 +238,7 @@ private:
         }
 
       typename ListSampleType::Pointer listSample = ListSampleType::New();
+      listSample->SetMeasurementVectorSize(input->GetNumberOfComponentsPerPixel());
 
       // Now we generate the list of samples
       if (useMask)

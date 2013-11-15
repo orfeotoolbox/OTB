@@ -2,18 +2,16 @@ PROJECT(ImageRegistrationExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(ImageRegistration1 ImageRegistration1.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration1 OTBCommon OTBIO ITKNumerics)
+TARGET_LINK_LIBRARIES(ImageRegistration1 OTBCommon OTBIO ${ITK_LIBRARIES} )
 
 ADD_EXECUTABLE(ImageRegistration2 ImageRegistration2.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration2 OTBCommon OTBIO ITKNumerics)
+TARGET_LINK_LIBRARIES(ImageRegistration2 OTBCommon OTBIO ${ITK_LIBRARIES} )
 
 ADD_EXECUTABLE(ImageRegistration9 ImageRegistration9.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration9 OTBCommon OTBIO ITKNumerics)
-
+TARGET_LINK_LIBRARIES(ImageRegistration9 OTBCommon OTBIO ${ITK_LIBRARIES} )
 
 ADD_EXECUTABLE(ImageRegistration5 ImageRegistration5.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics)
-
+TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ${ITK_LIBRARIES} )
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -75,6 +73,6 @@ ADD_TEST(reTeImageRegistration5Cas2ExampleTest ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests ${ITK_LIBRARIES} OTBCommon OTBIO OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

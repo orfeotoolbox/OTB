@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
+#include "itkMacro.h"
 #include "otbRCC8VertexWithCompacity.h"
 #include "otbMacro.h"
 #include "otbPolygon.h"
@@ -74,7 +74,7 @@ int otbRCC8VertexWithCompacity(int argc, char* argv[])
   // attributes vector set test
   AttributesMapType attr1 = vertex1->GetAttributesMap();
 
-  std::stringstream oss;
+  std::ostringstream oss;
   oss << p1[0];
   otbControlConditionTestMacro(attr1["P0x"].compare(oss.str()) != 0,
                                "Test failed:attr1[\"P0x\"].compare(std::string(p1[0]))!=0");

@@ -93,7 +93,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId);
+                            itk::ThreadIdType threadId);
 private:
   NeighborhoodScalarProductFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

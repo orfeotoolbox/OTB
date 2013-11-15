@@ -28,37 +28,37 @@
 namespace otb
 {
 
-template<class TInputImage, class TOutputImage, class TDeformationField>
-StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
+template<class TInputImage, class TOutputImage, class TDisplacementField>
+StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 ::StreamingWarpImageFilter()
  {
-  // Fill the default maximum deformation
-  m_MaximumDeformation.Fill(1);
+  // Fill the default maximum displacement
+  m_MaximumDisplacement.Fill(1);
  }
 
-template<class TInputImage, class TOutputImage, class TDeformationField>
+template<class TInputImage, class TOutputImage, class TDisplacementField>
 void
-StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
+StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 ::GenerateInputRequestedRegion()
  {
-  // Get the input and deformation field pointers
+  // Get the input and displacement field pointers
   InputImageType         *       inputPtr
   = const_cast<InputImageType *>(this->GetInput());
-  DeformationFieldType   * deformationPtr
-  = const_cast<DeformationFieldType*>(this->GetDeformationField());
+  DisplacementFieldType   * displacementPtr
+  = const_cast<DisplacementFieldType*>(this->GetDisplacementField());
   OutputImageType * outputPtr
   = this->GetOutput();
-  // Check if the input and the deformation field exist
-  if (!inputPtr || !deformationPtr || !outputPtr)
+  // Check if the input and the displacement field exist
+  if (!inputPtr || !displacementPtr || !outputPtr)
     {
     return;
     }
 
-  // Here we are breaking traditional pipeline steps because we need to access the deformation field data
+  // Here we are breaking traditional pipeline steps because we need to access the displacement field data
   // so as to compute the input image requested region
 
-  // 1) First, evaluate the deformation field requested region corresponding to the output requested region
-  // (Here we suppose that the deformation field and the output image are in the same geometry/map projection)
+  // 1) First, evaluate the displacement field requested region corresponding to the output requested region
+  // (Here we suppose that the displacement field and the output image are in the same geometry/map projection)
   typename OutputImageType::RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
   typename OutputImageType::IndexType outIndexStart = outputRequestedRegion.GetIndex();
   typename OutputImageType::IndexType outIndexEnd;
@@ -68,12 +68,12 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
   outputPtr->TransformIndexToPhysicalPoint(outIndexStart, outPointStart);
   outputPtr->TransformIndexToPhysicalPoint(outIndexEnd, outPointEnd);
 
-  typename DeformationFieldType::IndexType defIndexStart, defIndexEnd;
-  deformationPtr->TransformPhysicalPointToIndex(outPointStart, defIndexStart);
-  deformationPtr->TransformPhysicalPointToIndex(outPointEnd, defIndexEnd);
+  typename DisplacementFieldType::IndexType defIndexStart, defIndexEnd;
+  displacementPtr->TransformPhysicalPointToIndex(outPointStart, defIndexStart);
+  displacementPtr->TransformPhysicalPointToIndex(outPointEnd, defIndexEnd);
 
-  typename DeformationFieldType::SizeType defRequestedSize;
-  typename DeformationFieldType::IndexType defRequestedIndex;
+  typename DisplacementFieldType::SizeType defRequestedSize;
+  typename DisplacementFieldType::IndexType defRequestedIndex;
 
   for(unsigned int dim = 0; dim<OutputImageType::ImageDimension; ++dim)
     {
@@ -81,18 +81,18 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
     defRequestedSize[dim] = std::max(defIndexStart[dim], defIndexEnd[dim]) - defRequestedIndex[dim] + 1;
     }
 
-  // Finally, build the deformation field requested region
-  typename DeformationFieldType::RegionType deformationRequestedRegion;
-  deformationRequestedRegion.SetIndex(defRequestedIndex);
-  deformationRequestedRegion.SetSize(defRequestedSize);
+  // Finally, build the displacement field requested region
+  typename DisplacementFieldType::RegionType displacementRequestedRegion;
+  displacementRequestedRegion.SetIndex(defRequestedIndex);
+  displacementRequestedRegion.SetSize(defRequestedSize);
 
   // Avoid extrapolation
-  deformationRequestedRegion.PadByRadius(1);
+  displacementRequestedRegion.PadByRadius(1);
 
   // crop the input requested region at the input's largest possible region
-  if (deformationRequestedRegion.Crop(deformationPtr->GetLargestPossibleRegion()))
+  if (displacementRequestedRegion.Crop(displacementPtr->GetLargestPossibleRegion()))
     {
-    deformationPtr->SetRequestedRegion(deformationRequestedRegion);
+    displacementPtr->SetRequestedRegion(displacementRequestedRegion);
     }
   else
     {
@@ -100,35 +100,35 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
     // possible region).  Throw an exception.
 
     // store what we tried to request (prior to trying to crop)
-    deformationPtr->SetRequestedRegion(deformationRequestedRegion);
+    displacementPtr->SetRequestedRegion(displacementRequestedRegion);
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region of the deformation field.");
+    e.SetDescription("Requested region is (at least partially) outside the largest possible region of the displacement field.");
     e.SetDataObject(inputPtr);
     throw e;
     }
 
-  // 2) If we are still there, we have a correct deformation field requested region.
+  // 2) If we are still there, we have a correct displacement field requested region.
   // This next step breaks pipeline rule but we need to do it to compute the input requested region,
-  // since it depends on deformation value.
+  // since it depends on displacement value.
 
-  // Trigger pipeline update on the deformation field
+  // Trigger pipeline update on the displacement field
 
-  deformationPtr->PropagateRequestedRegion();
-  deformationPtr->UpdateOutputData();
+  displacementPtr->PropagateRequestedRegion();
+  displacementPtr->UpdateOutputData();
 
-  // Walk the loaded deformation field to derive maximum and minimum
-  itk::ImageRegionIteratorWithIndex<DeformationFieldType> defIt(deformationPtr, deformationRequestedRegion);
+  // Walk the loaded displacement field to derive maximum and minimum
+  itk::ImageRegionIteratorWithIndex<DisplacementFieldType> defIt(displacementPtr, displacementRequestedRegion);
   defIt.GoToBegin();
 
   typename InputImageType::PointType currentPoint;
   typename InputImageType::PointType inputStartPoint, inputEndPoint;
 
   // Initialise start and end points
-  deformationPtr->TransformIndexToPhysicalPoint(defIt.GetIndex(), currentPoint);
-  for(unsigned int dim = 0; dim<DeformationFieldType::ImageDimension; ++dim)
+  displacementPtr->TransformIndexToPhysicalPoint(defIt.GetIndex(), currentPoint);
+  for(unsigned int dim = 0; dim<DisplacementFieldType::ImageDimension; ++dim)
     {
     currentPoint[dim]+=defIt.Get()[dim];
     }
@@ -140,8 +140,8 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
   // 3) Now Walk the field and compute the physical bounding box
   while(!defIt.IsAtEnd())
     {
-    deformationPtr->TransformIndexToPhysicalPoint(defIt.GetIndex(), currentPoint);
-    for(unsigned int dim = 0; dim<DeformationFieldType::ImageDimension; ++dim)
+    displacementPtr->TransformIndexToPhysicalPoint(defIt.GetIndex(), currentPoint);
+    for(unsigned int dim = 0; dim<DisplacementFieldType::ImageDimension; ++dim)
       {
       currentPoint[dim]+=defIt.Get()[dim];
       if(inputStartPoint[dim] > currentPoint[dim])
@@ -160,7 +160,7 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
   typename InputImageType::SizeType inputFinalSize;
   typename InputImageType::IndexType inputFinalIndex;
 
-  for(unsigned int dim = 0; dim<DeformationFieldType::ImageDimension; ++dim)
+  for(unsigned int dim = 0; dim<DisplacementFieldType::ImageDimension; ++dim)
     {
     inputFinalIndex[dim] = std::min(inputStartIndex[dim], inputEndIndex[dim]);
     inputFinalSize[dim] = std::max(inputStartIndex[dim], inputEndIndex[dim])-inputFinalIndex[dim]+1;
@@ -203,28 +203,28 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
  }
 
 
-template<class TInputImage, class TOutputImage, class TDeformationField>
+template<class TInputImage, class TOutputImage, class TDisplacementField>
 void
-StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
+StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 ::ThreadedGenerateData(
   const OutputImageRegionType& outputRegionForThread,
-  int threadId )
+  itk::ThreadIdType threadId )
   {
   // the superclass itk::WarpImageFilter is doing the actual warping
   Superclass::ThreadedGenerateData(outputRegionForThread,threadId);
   
-  // second pass on the thread region to mask pixels outside the deformation grid
+  // second pass on the thread region to mask pixels outside the displacement grid
   const PixelType paddingValue = this->GetEdgePaddingValue();
   OutputImagePointerType outputPtr = this->GetOutput();
-  DeformationFieldPointerType fieldPtr = this->GetDeformationField();
+  DisplacementFieldPointerType fieldPtr = this->GetDisplacementField();
   
-  DeformationFieldRegionType defRegion = fieldPtr->GetLargestPossibleRegion();
+  DisplacementFieldRegionType defRegion = fieldPtr->GetLargestPossibleRegion();
   
   itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(
     outputPtr, outputRegionForThread );
   IndexType currentIndex;
   PointType currentPoint;
-  itk::ContinuousIndex<double,DeformationFieldType::ImageDimension> contiIndex;
+  itk::ContinuousIndex<double,DisplacementFieldType::ImageDimension> contiIndex;
   
   while(!outputIt.IsAtEnd())
     {
@@ -233,7 +233,7 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
     outputPtr->TransformIndexToPhysicalPoint(currentIndex,currentPoint);
     fieldPtr->TransformPhysicalPointToContinuousIndex(currentPoint,contiIndex);
     
-    for (unsigned int dim = 0; dim<DeformationFieldType::ImageDimension; ++dim)
+    for (unsigned int dim = 0; dim<DisplacementFieldType::ImageDimension; ++dim)
       {
       if (contiIndex[dim] < static_cast<double>(defRegion.GetIndex(dim)) ||
           contiIndex[dim] > static_cast<double>(defRegion.GetIndex(dim)+defRegion.GetSize(dim)-1))
@@ -244,17 +244,15 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
       }
     ++outputIt;
     }
-  
   }
 
-
-template<class TInputImage, class TOutputImage, class TDeformationField>
+template<class TInputImage, class TOutputImage, class TDisplacementField>
 void
-StreamingWarpImageFilter<TInputImage, TOutputImage, TDeformationField>
+StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
  {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Maximum deformation: " << m_MaximumDeformation << std::endl;
+  os << indent << "Maximum displacement: " << m_MaximumDisplacement << std::endl;
  }
 
 } // end namespace otb

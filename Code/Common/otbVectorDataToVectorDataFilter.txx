@@ -105,7 +105,7 @@ VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
   chrono.Start();
   this->ProcessNode(inputRoot, outputRoot);
   chrono.Stop();
-  otbMsgDevMacro(<< "VectoDataProjectionFilter: features Processed in " << chrono.GetMeanTime() << " seconds.");
+  otbMsgDevMacro(<< "VectoDataProjectionFilter: features Processed in " << chrono.GetMean() << " seconds.");
 }
 
 template <class TInputVectorData, class TOutputVectorData>

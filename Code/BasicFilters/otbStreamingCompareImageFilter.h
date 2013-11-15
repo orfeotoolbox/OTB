@@ -141,7 +141,7 @@ protected:
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType&
                              outputRegionForThread,
-                             int threadId);
+                             itk::ThreadIdType threadId);
 
 private:
   PersistentCompareImageFilter(const Self &); //purposely not implemented

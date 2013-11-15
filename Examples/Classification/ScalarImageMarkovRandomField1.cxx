@@ -51,7 +51,7 @@
 #include "itkFixedArray.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkScalarToArrayCastImageFilter.h"
+#include "itkComposeImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "itkRescaleIntensityImageFilter.h"
@@ -158,12 +158,12 @@ int main(int argc, char * argv[])
 
   typedef otb::Image<ArrayPixelType, Dimension> ArrayImageType;
 
-  typedef itk::ScalarToArrayCastImageFilter<
+  typedef itk::ComposeImageFilter<
       ImageType, ArrayImageType> ScalarToArrayFilterType;
 
   ScalarToArrayFilterType::Pointer
     scalarToArrayFilter = ScalarToArrayFilterType::New();
-  scalarToArrayFilter->SetInput(reader->GetOutput());
+  scalarToArrayFilter->SetInput(0, reader->GetOutput());
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -244,7 +244,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::MinimumDecisionRule DecisionRuleType;
+  typedef itk::Statistics::MinimumDecisionRule DecisionRuleType;
 
   DecisionRuleType::Pointer classifierDecisionRule = DecisionRuleType::New();
 
@@ -268,12 +268,13 @@ int main(int argc, char * argv[])
   typedef MembershipFunctionType::Pointer MembershipFunctionPointer;
 
   double             meanDistance = 0;
-  vnl_vector<double> centroid(1);
+  MembershipFunctionType::CentroidType centroid(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   for (unsigned int i = 0; i < numberOfClasses; ++i)
     {
     MembershipFunctionPointer membershipFunction =
       MembershipFunctionType::New();
-
+    
+    membershipFunction->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
     centroid[0] = atof(argv[i + numberOfArgumentsBeforeMeans]);
 
     membershipFunction->SetCentroid(centroid);

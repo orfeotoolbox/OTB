@@ -175,7 +175,7 @@ template <class TInputImage1, class TInputImage2, class TOutputImage, class TFun
 void
 BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
 
   //unsigned int i;

@@ -84,7 +84,7 @@ template <class TInputImage, class TOutputImage>
 void
 VectorImageTo3DScalarImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   const InputImageType* inputPtr = this->GetInput();
   OutputImageType*      outputPtr = this->GetOutput();

@@ -31,11 +31,11 @@ DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImag
 ::DisparityMapTo3DFilter()
 {
   // Set the number of inputs
-  this->SetNumberOfInputs(5);
+  this->SetNumberOfRequiredInputs(5);
   this->SetNumberOfRequiredInputs(1);
 
   // Set the outputs
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0,TOutputImage::New());
 }
 
@@ -251,7 +251,7 @@ template <class TDisparityImage, class TOutputImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapTo3DFilter<TDisparityImage,TOutputImage,TEpipolarGridImage,TMaskImage>
-::ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId)
 {
   const TDisparityImage * horizDisp = this->GetHorizontalDisparityMapInput();
   const TDisparityImage * vertiDisp = this->GetVerticalDisparityMapInput();

@@ -264,12 +264,12 @@ protected:
                                                  const InputImageRegionType& srcRegion);
 
   /** Generate data redefinition */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
   /** Iterative call to the forward filter bank at each dimension. */
   virtual void ThreadedGenerateDataAtDimensionN(unsigned int idx, unsigned int direction,
                                                 itk::ProgressReporter& reporter,
-                                                const OutputImageRegionType& outputRegionForThread, int threadId);
+                                                const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
   WaveletFilterBank(const Self &);
@@ -447,7 +447,7 @@ protected:
                                                  const InputImageRegionType& srcRegion);
 
   /** Generate data redefinition */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
   /**
    * Iterative call to the forward filter bank at each dimension.
@@ -455,7 +455,7 @@ protected:
    */
   virtual void ThreadedGenerateDataAtDimensionN(unsigned int direction,
                                                 itk::ProgressReporter& reporter,
-                                                const OutputImageRegionType& outputRegionForThread, int threadId);
+                                                const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
   WaveletFilterBank(const Self &);

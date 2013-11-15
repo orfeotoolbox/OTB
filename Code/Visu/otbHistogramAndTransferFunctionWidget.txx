@@ -138,12 +138,14 @@ void
 HistogramAndTransferFunctionWidget<THistogram, TPixel>
 ::HistogramRendering(double binWidth, double binHeightRatio, double maxFrequency)
 {
-  HistogramIteratorType it;
+
   double                startx = m_MarginX;
   // Temporary vertex coordinates
   double x, y;
   // Rendering histogram
-  for (it = m_Histogram->Begin(); it != m_Histogram->End(); ++it, startx += binWidth)
+  typename HistogramType::ConstIterator it = m_Histogram->Begin();
+  typename HistogramType::ConstIterator end = m_Histogram->End();
+  while( it != end )
     {
 
     glBegin(GL_POLYGON);
@@ -161,8 +163,9 @@ HistogramAndTransferFunctionWidget<THistogram, TPixel>
     y = m_MarginY;
     glVertex2d(x, y);
     glEnd();
+    ++it;
+    startx += binWidth;
     }
-
 }
 
 template <class THistogram, class TPixel>
@@ -266,12 +269,14 @@ HistogramAndTransferFunctionWidget<THistogram, TPixel>
 {
   std::vector<unsigned int> outputHistogram(256, 0);
 
-  HistogramIteratorType it;
-  for (it = m_Histogram->Begin(); it != m_Histogram->End(); ++it)
+  typename HistogramType::ConstIterator it = m_Histogram->Begin();
+  typename HistogramType::ConstIterator end = m_Histogram->End();
+  while( it != end )
     {
-    outputHistogram[m_TransferFunction->Map(static_cast < PixelType >
+     outputHistogram[m_TransferFunction->Map(static_cast < PixelType >
                                             (it.GetMeasurementVector()[0]))] += static_cast<unsigned int>(
-      it.GetFrequency());
+     it.GetFrequency());
+     ++it;
     }
   // Setting the extremity to 0 to avoid sides effect
   outputHistogram[0] = 0;
@@ -356,15 +361,17 @@ HistogramAndTransferFunctionWidget<THistogram, TPixel>
   m_Updating = true;
 
   double                maxFrequency = 0;
-  HistogramIteratorType it;
 
   // Computing histogram max frequency
-  for (it = m_Histogram->Begin(); it != m_Histogram->End(); ++it)
+  typename HistogramType::ConstIterator itr = m_Histogram->Begin();
+  typename HistogramType::ConstIterator end = m_Histogram->End();
+  while( itr != end )
     {
-    if (it.GetFrequency() > maxFrequency)
+    if (itr.GetFrequency() > maxFrequency)
       {
-      maxFrequency = it.GetFrequency();
+      maxFrequency = itr.GetFrequency();
       }
+    ++itr;
     }
 
   double binWidth =

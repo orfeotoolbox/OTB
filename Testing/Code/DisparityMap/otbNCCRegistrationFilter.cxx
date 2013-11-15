@@ -37,14 +37,14 @@ int otbNCCRegistrationFilter(int argc, char* argv[])
   const unsigned int ImageDimension = 2;
 
   typedef double                                      PixelType;
-  typedef itk::Vector<double, ImageDimension>         DeformationPixelType;
+  typedef itk::Vector<double, ImageDimension>         DisplacementPixelType;
   typedef double                                      CoordinateRepresentationType;
   typedef double                                      OutputPixelType;
   typedef otb::Image<OutputPixelType, ImageDimension> OutputImageType;
   typedef otb::Image<PixelType, ImageDimension>       MovingImageType;
   typedef otb::Image<PixelType, ImageDimension>       FixedImageType;
-  typedef otb::Image<DeformationPixelType,
-      ImageDimension>       DeformationFieldType;
+  typedef otb::Image<DisplacementPixelType,
+      ImageDimension>       DisplacementFieldType;
 
   typedef otb::ImageFileReader<FixedImageType> FixedReaderType;
   FixedReaderType::Pointer fReader = FixedReaderType::New();
@@ -70,7 +70,7 @@ int otbNCCRegistrationFilter(int argc, char* argv[])
 
   typedef otb::NCCRegistrationFilter<FixedImageType,
       MovingImageType,
-      DeformationFieldType>
+      DisplacementFieldType>
   RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
@@ -89,7 +89,7 @@ int otbNCCRegistrationFilter(int argc, char* argv[])
 
   registrator->SetNumberOfIterations(atoi(argv[6]));
 
-  typedef otb::ImageFileWriter<DeformationFieldType> DFWriterType;
+  typedef otb::ImageFileWriter<DisplacementFieldType> DFWriterType;
   DFWriterType::Pointer dfWriter = DFWriterType::New();
   dfWriter->SetFileName(argv[3]);
   dfWriter->SetInput(registrator->GetOutput());

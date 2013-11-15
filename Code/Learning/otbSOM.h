@@ -21,7 +21,7 @@
 #define __otbSOM_h
 
 #include "itkImageToImageFilter.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 
 #include "otbCzihoSOMLearningBehaviorFunctor.h"
 #include "otbCzihoSOMNeighborhoodBehaviorFunctor.h"

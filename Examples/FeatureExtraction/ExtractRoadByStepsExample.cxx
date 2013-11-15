@@ -55,7 +55,7 @@
 #include "itkAddImageFilter.h"
 #include "itkSubtractImageFilter.h"
 #include "itkRGBPixel.h"
-#include "itkComposeRGBImageFilter.h"
+#include "itkComposeImageFilter.h"
 #include "itkThresholdImageFilter.h"
 #include "itkSigmoidImageFilter.h"
 #include "itkThresholdImageFilter.h"
@@ -388,6 +388,9 @@ int main(int argc, char * argv[])
                      ->GetLargestPossibleRegion());
   output->Allocate();
   output->FillBuffer(0.0);
+  output->SetOrigin(multispectralReader->GetOutput()->GetOrigin());
+  output->SetSpacing(multispectralReader->GetOutput()->GetSpacing());
+
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -439,8 +442,8 @@ int main(int argc, char * argv[])
   RGBPixelType;
   typedef otb::Image<RGBPixelType,
       Dimension>                        RGBImageType;
-  typedef itk::ComposeRGBImageFilter<InternalImageType,
-      RGBImageType>     ComposeRGBFilterType;
+  typedef itk::ComposeImageFilter<InternalImageType,
+      RGBImageType>     ComposeFilterType;
   typedef otb::ImageFileWriter<RGBImageType>
   RGBWriterType;
   typedef itk::BinaryBallStructuringElement<PixelType,
@@ -471,8 +474,8 @@ int main(int argc, char * argv[])
   ThresholdFilterType::Pointer threshold22 = ThresholdFilterType::New();
   ThresholdFilterType::Pointer threshold32 = ThresholdFilterType::New();
 
-  ComposeRGBFilterType::Pointer composer = ComposeRGBFilterType::New();
-  RGBWriterType::Pointer        writer = RGBWriterType::New();
+  ComposeFilterType::Pointer composer = ComposeFilterType::New();
+  RGBWriterType::Pointer writer = RGBWriterType::New();
 
   DilateFilterType::Pointer dilater = DilateFilterType::New();
 
@@ -521,9 +524,9 @@ int main(int argc, char * argv[])
   threshold32->SetOutsideValue(255);
 
   // Compose the output image
-  composer->SetInput1(threshold12->GetOutput());
-  composer->SetInput2(threshold22->GetOutput());
-  composer->SetInput3(threshold32->GetOutput());
+  composer->SetInput(0, threshold12->GetOutput());
+  composer->SetInput(1, threshold22->GetOutput());
+  composer->SetInput(2, threshold32->GetOutput());
 
   // Write the new rgb image
   writer->SetInput(composer->GetOutput());

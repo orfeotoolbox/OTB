@@ -2,35 +2,35 @@ PROJECT(PatentedExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 
-ADD_EXECUTABLE(FuzzyConnectednessImageFilter FuzzyConnectednessImageFilter.cxx )
-TARGET_LINK_LIBRARIES(FuzzyConnectednessImageFilter OTBIO OTBCommon ITKNumerics)
+#ADD_EXECUTABLE(FuzzyConnectednessImageFilter FuzzyConnectednessImageFilter.cxx )
+#TARGET_LINK_LIBRARIES(FuzzyConnectednessImageFilter OTBIO OTBCommon )
 
 #ADD_EXECUTABLE(HybridSegmentationFuzzyVoronoi HybridSegmentationFuzzyVoronoi.cxx )
-#TARGET_LINK_LIBRARIES(HybridSegmentationFuzzyVoronoi OTBIO OTBCommon ITKNumerics)
+#TARGET_LINK_LIBRARIES(HybridSegmentationFuzzyVoronoi OTBIO OTBCommon )
 
 #Examples using SIFT
 IF(OTB_USE_SIFTFAST)
 ADD_EXECUTABLE(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx )
 TARGET_LINK_LIBRARIES(SIFTDisparityMapEstimation OTBFeatureExtraction OTBCommon OTBIO
-ITKIO)
+${ITK_LIBRARIES})
 ENDIF(OTB_USE_SIFTFAST)
 
 ADD_EXECUTABLE(EstimateAffineTransformationExample EstimateAffineTransformationExample.cxx )
 TARGET_LINK_LIBRARIES(EstimateAffineTransformationExample OTBFeatureExtraction OTBCommon OTBIO OTBProjections
-ITKIO)
+${ITK_LIBRARIES})
 
 #Feature extraction examples based on SIFT
 ADD_EXECUTABLE(SIFTExample SIFTExample.cxx)
 TARGET_LINK_LIBRARIES(SIFTExample OTBIO OTBCommon OTBFeatureExtraction
-ITKCommon ITKBasicFilters)
+${ITK_LIBRARIES}  )
 
 IF(OTB_USE_SIFTFAST)
 
   ADD_EXECUTABLE(SIFTFastExample SIFTFastExample.cxx)
-  TARGET_LINK_LIBRARIES(SIFTFastExample OTBIO OTBCommon OTBFeatureExtraction ITKCommon ITKBasicFilters)
+  TARGET_LINK_LIBRARIES(SIFTFastExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES})
 
   ADD_EXECUTABLE(SIFTDensityExample SIFTDensityExample.cxx)
-  TARGET_LINK_LIBRARIES(SIFTDensityExample OTBIO OTBCommon OTBBasicFilters ITKCommon ITKBasicFilters)
+  TARGET_LINK_LIBRARIES(SIFTDensityExample OTBIO OTBCommon OTBBasicFilters ${ITK_LIBRARIES})
 
 ENDIF(OTB_USE_SIFTFAST)
 
@@ -50,15 +50,15 @@ SET(TOL 0.0)
 
 # ------- HybridSegmentationFuzzyVoronoiTest----------
 
-ADD_TEST(paTeHybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
-        --compare-n-images ${TOL} 1
-        ${BASELINE}/HybridSegmentationFuzzyVoronoiOutput.png
-        ${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png
-        HybridSegmentationFuzzyVoronoiTest
-        ${INPUTDATA}/QB_Suburb.png
-        ${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png
-    111 38 75 20 0.5 3.0
-)
+#ADD_TEST(paTeHybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
+#	--compare-n-images ${TOL} 1
+#	${BASELINE}/HybridSegmentationFuzzyVoronoiOutput.png
+#	${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png
+#	HybridSegmentationFuzzyVoronoiTest
+#	${INPUTDATA}/QB_Suburb.png
+#	${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png
+#    111 38 75 20 0.5 3.0
+#)
 
 # -----EstimateAffineTransformationExampleTest---------
 
@@ -122,7 +122,7 @@ ENDIF(OTB_USE_SIFTFAST)
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbPatentedExamplesTests otbPatentedExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbPatentedExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+TARGET_LINK_LIBRARIES(otbPatentedExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 IF(OTB_USE_SIFTFAST)
 ADD_EXECUTABLE(otbPatentedExamplesTests2 otbPatentedExamplesTests2.cxx)

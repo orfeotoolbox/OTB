@@ -35,8 +35,8 @@ VectorDataToRandomLineGenerator<TVectorData>
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 
-  m_RandomGenerator = RandomGeneratorType::New();
-  m_RandomSizeGenerator = RandomGeneratorType::New();
+  m_RandomGenerator = RandomGeneratorType::GetInstance();
+  m_RandomSizeGenerator = RandomGeneratorType::GetInstance();
 }
 
 template <class TVectorData>

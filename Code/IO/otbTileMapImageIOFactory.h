@@ -42,6 +42,7 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
+  static TileMapImageIOFactory * FactoryNew() { return new TileMapImageIOFactory; }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(TileMapImageIOFactory, itk::ObjectFactoryBase);

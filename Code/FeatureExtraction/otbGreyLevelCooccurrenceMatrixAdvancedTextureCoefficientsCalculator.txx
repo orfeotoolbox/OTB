@@ -26,39 +26,23 @@ namespace otb {
 template<class THistogram>
 void
 GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator<THistogram>::
-NormalizeHistogram(void)
-{
-  typename HistogramType::Iterator      hit;
-  typename HistogramType::FrequencyType totalFrequency =
-    m_Histogram->GetTotalFrequency();
-
-  for (hit = m_Histogram->Begin(); hit != m_Histogram->End(); ++hit)
-    {
-    hit.SetFrequency(hit.GetFrequency() / totalFrequency);
-    }
-}
-
-template<class THistogram>
-void
-GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator<THistogram>::
 ComputeMean()
 {
-  // This function takes two passes through the histogram and two passes through
-  // an array of the same length as a histogram axis. This could probably be
-  // cleverly compressed to one pass, but it's not clear that that's necessary.
-  typedef typename HistogramType::Iterator HistogramIterator;
-
   // Initialize everything
-  m_Mean = 0;
+  m_Mean = 0.;
 
   // Ok, now do the first pass through the histogram to get the marginal sums
   // and compute the pixel mean
-  HistogramIterator hit;
-  for (hit = m_Histogram->Begin(); hit != m_Histogram->End(); ++hit)
+  typename HistogramType::Iterator itr = m_Histogram->Begin();
+  typename HistogramType::Iterator end = m_Histogram->End();
+  while( itr != end )
     {
-    MeasurementType frequency = hit.GetFrequency();
-    IndexType       index = m_Histogram->GetIndex(hit.GetInstanceIdentifier());
-    m_Mean += index[0] * frequency;
+    RelativeFrequencyType frequency = static_cast<RelativeFrequencyType>(itr.GetFrequency()) /
+      static_cast<RelativeFrequencyType>(m_Histogram->GetTotalFrequency());
+    
+    IndexType       index = m_Histogram->GetIndex(itr.GetInstanceIdentifier());
+    m_Mean += static_cast<double>(index[0]) * static_cast<double>(frequency);
+    ++itr;
     }
 }
 
@@ -68,16 +52,7 @@ GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator<THistogram>::
 Compute()
 {
   typedef typename HistogramType::Iterator HistogramIterator;
-
-  // First, normalize the histogram if it doesn't look normalized.
-  // This is one pass through the histogram.
-  FrequencyType totalFrequency = m_Histogram->GetTotalFrequency();
-  if ((totalFrequency - itk::NumericTraits<MeasurementType>::One) > 0.0001)
-    {
-    // Doesn't look normalized:
-    this->NormalizeHistogram();
-    }
-
+  
   // Now get the pixel mean.
   this->ComputeMean();
 
@@ -125,13 +100,13 @@ Compute()
   // Compute hx and hy need to compute f12 and f13 texture coefficients
   for (long unsigned int i = 0; i < m_Histogram->GetSize()[0]; ++i)
     {
-    double marginalfreq = m_Histogram->GetFrequency (i, 0);
+    double marginalfreq = static_cast<double>(m_Histogram->GetFrequency (i, 0))/static_cast<double>(m_Histogram->GetTotalFrequency());
     hx += (marginalfreq > 0.0001) ? vcl_log (marginalfreq) * marginalfreq : 0;
     }
 
   for (long unsigned int j = 0; j < m_Histogram->GetSize()[1]; ++j)
     {
-    double marginalfreq = m_Histogram->GetFrequency (j, 1);
+    double marginalfreq = static_cast<double>(m_Histogram->GetFrequency (j, 1))/static_cast<double>(m_Histogram->GetTotalFrequency());
     hy += (marginalfreq > 0.0001) ? vcl_log (marginalfreq) * marginalfreq : 0;
     }
 
@@ -145,17 +120,20 @@ Compute()
   for (HistogramIterator hit = m_Histogram->Begin();
        hit != m_Histogram->End(); ++hit)
     {
-    MeasurementType frequency = hit.GetFrequency();
-
+    double frequency = static_cast<double>(hit.GetFrequency()) 
+      / static_cast<double>(m_Histogram->GetTotalFrequency());
+    
     IndexType index = m_Histogram->GetIndex(hit.GetInstanceIdentifier());
 
-    m_Variance += ((index[0] - m_Mean) * (index[0] - m_Mean)) * frequency;
-    Entropy -= (frequency > 0.0001) ? frequency * vcl_log(frequency) / log2 : 0;
+    m_Variance += ((static_cast<double>(index[0]) - m_Mean) * (static_cast<double>(index[0]) - m_Mean)) * frequency;
+    Entropy -= (frequency > 0.0001) ? frequency * vcl_log(frequency) / log2 : 0.;
 
-    double pipj = m_Histogram->GetFrequency (index[0], 0) * m_Histogram->GetFrequency (index[1], 1);
+    double pipj = 
+      static_cast<double>(m_Histogram->GetFrequency (index[0], 0))/ static_cast<double>(m_Histogram->GetTotalFrequency()) 
+      * static_cast<double>(m_Histogram->GetFrequency (index[1], 1))/  static_cast<double>(m_Histogram->GetTotalFrequency());
 
-    hxy1 -= (pipj > 0.0001) ? frequency * vcl_log(pipj) : 0;
-    hxy2 -= (pipj > 0.0001) ? pipj * vcl_log(pipj) : 0;
+    hxy1 -= (pipj > 0.0001) ? frequency * vcl_log(pipj) : 0.;
+    hxy2 -= (pipj > 0.0001) ? pipj * vcl_log(pipj) : 0.;
     }
 
   //Finally get f12 and f13
@@ -172,14 +150,15 @@ GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator<THistogram>::
 ComputePS(long unsigned int k)
 {
   double            result = 0;
-  IndexType         index;
+  IndexType         index(m_Histogram->GetMeasurementVectorSize());
   long unsigned int start = std::max (static_cast <long unsigned int> (0),  k - m_Histogram->GetSize()[1]);
   long unsigned int end = std::min (k,  m_Histogram->GetSize()[0]);
   for (long unsigned int i = start; i < end; ++i)
     {
     index[0] = i;
     index[1] = k - i;
-    result += m_Histogram->GetFrequency (index);
+    result += static_cast<double>(m_Histogram->GetFrequency (index))
+      /static_cast<double>(m_Histogram->GetTotalFrequency());
     }
   return result;
 }
@@ -191,13 +170,14 @@ GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator<THistogram>::
 ComputePD(long unsigned int k)
 {
   double            result = 0;
-  IndexType         index;
+  IndexType         index(m_Histogram->GetMeasurementVectorSize());
   long unsigned int end = std::min (m_Histogram->GetSize()[0] - k, m_Histogram->GetSize()[1]);
   for (long unsigned int j = 0; j < end; ++j)
     {
     index[0] = j + k;
     index[1] = j;
-    result += m_Histogram->GetFrequency (index);
+    result += static_cast<double>(m_Histogram->GetFrequency (index))
+      /static_cast<double>(m_Histogram->GetTotalFrequency());
     }
   return result;
 }

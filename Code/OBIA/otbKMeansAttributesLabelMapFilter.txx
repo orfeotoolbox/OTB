@@ -38,10 +38,10 @@ KMeansAttributesLabelMapFilter<TInputImage>
 ::Compute()
 {
   m_LabelMapToSampleListFilter->SetInputLabelMap(m_InputLabelMap);
-  m_LabelMapToSampleListFilter->Compute();
+  m_LabelMapToSampleListFilter->Update();
 
-  typename ListSampleType::Pointer listSamples = m_LabelMapToSampleListFilter->GetOutputSampleList();
-  typename TrainingListSampleType::Pointer trainingSamples = m_LabelMapToSampleListFilter->GetOutputTrainingSampleList();
+  typename ListSampleType::Pointer listSamples = const_cast<ListSampleType*>(m_LabelMapToSampleListFilter->GetOutputSampleList());
+  typename TrainingListSampleType::Pointer trainingSamples = const_cast<TrainingListSampleType*>(m_LabelMapToSampleListFilter->GetOutputTrainingSampleList());
 
   // Build the Kd Tree
   typename TreeGeneratorType::Pointer kdTreeGenerator = TreeGeneratorType::New();
@@ -60,11 +60,12 @@ KMeansAttributesLabelMapFilter<TInputImage>
     // For each class, choose a centroid as the first sample of this class encountered
     for (ClassLabelType classLabel = 0; classLabel < m_NumberOfClasses; ++classLabel)
       {
-      typename TrainingListSampleType::ConstIterator it;
+      typename TrainingListSampleType::ConstIterator it = trainingSamples->Begin();
       // Iterate on the label list and stop when classLabel is found
       // TODO: add random initialization ?
       for (it = trainingSamples->Begin(); it != trainingSamples->End(); ++it)
         {
+        std::cout <<" Training Samples is "<<  it.GetMeasurementVector()[0] << std::endl;
         if (it.GetMeasurementVector()[0] == classLabel)
           break;
         }
@@ -84,7 +85,7 @@ KMeansAttributesLabelMapFilter<TInputImage>
   else
     {
     typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
-    RandomGeneratorType::Pointer randomGenerator = RandomGeneratorType::New();
+    RandomGeneratorType::Pointer randomGenerator = RandomGeneratorType::GetInstance();
     unsigned int nbLabelObjects = listSamples->Size();
 
     // Choose arbitrarily OneClassNbCentroids centroids among all available LabelObject

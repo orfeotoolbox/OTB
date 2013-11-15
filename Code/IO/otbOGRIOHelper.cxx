@@ -642,7 +642,7 @@ void OGRIOHelper
     ++counter;
     } //end While feature
   otbMsgDevMacro(
-    << layer->GetFeatureCount() << " features read, average insertion time " << chrono.GetMeanTime() << " s");
+    << layer->GetFeatureCount() << " features read, average insertion time " << chrono.GetMean() << " s");
 }
 
 

@@ -21,14 +21,14 @@
 
 #include "otbImage.h"
 
-#include <otbLabelImageToLabelMapWithAdjacencyFilter.h>
-#include <otbAttributesMapLabelObject.h>
+#include "otbAttributesMapLabelObject.h"
 #include "otbLabelObjectOpeningMuParserFilter.h"
 #include "otbParser.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include <otbShapeAttributesLabelMapFilter.h>
-#include <itkLabelMapToLabelImageFilter.h>
+#include "otbShapeAttributesLabelMapFilter.h"
+#include "itkLabelImageToLabelMapFilter.h"
+#include "itkLabelMapToLabelImageFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 
 int otbLabelObjectOpeningMuParserFilterTest(int argc, char * argv[])
@@ -42,20 +42,20 @@ int otbLabelObjectOpeningMuParserFilterTest(int argc, char * argv[])
   typedef float InputPixelType;
   const unsigned int     Dimension = 2;
 
+  typedef unsigned int LabelType;
+  typedef otb::Image<LabelType, Dimension>              LabelImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension>  InputVectorImageType;
+  typedef otb::ImageFileReader<InputVectorImageType>    ReaderType;
 
-  typedef otb::Image<unsigned int, Dimension>                   LabelImageType;
-  typedef otb::VectorImage<InputPixelType,  Dimension>         InputVectorImageType;
-  typedef otb::ImageFileReader<InputVectorImageType>           ReaderType;
-
-  typedef otb::ImageFileReader<InputVectorImageType>      ImageReaderType;
+  typedef otb::ImageFileReader<InputVectorImageType>  ImageReaderType;
   typedef otb::ImageFileReader<LabelImageType>        LabelImageReaderType;
   typedef otb::ImageFileWriter<LabelImageType>        WriterType;
 
-  typedef otb::AttributesMapLabelObject<unsigned int, Dimension, double>     AttributesMapLabelObjectType;
-  typedef otb::LabelMapWithAdjacency<AttributesMapLabelObjectType>        AttributesLabelMapType;
-  typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType>   FilterType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>    AttributesMapLabelObjectType;
+  typedef itk::LabelMap<AttributesMapLabelObjectType>                    AttributesLabelMapType;
+  typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType>  FilterType;
 
-  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, AttributesLabelMapType> LabelImageToLabelMapFilterType;
+  typedef itk::LabelImageToLabelMapFilter<LabelImageType, AttributesLabelMapType> LabelImageToLabelMapFilterType;
 
   typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType>  ShapeLabelMapFilterType;
 

@@ -18,14 +18,14 @@
 #include "itkMacro.h"
 #include "otbSOMMap.h"
 #include "itkRGBPixel.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 
 int otbSOMMapNew(int argc, char* argv[])
 {
   const unsigned int Dimension = 2;
   typedef float                                           ComponentType;
   typedef itk::RGBPixel<ComponentType>                    PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>   DistanceType;
   typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
 
   // Instantiation

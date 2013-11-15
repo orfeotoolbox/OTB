@@ -43,18 +43,8 @@
 // Software Guide : BeginCodeSnippet
 #include "otbKeyPointSetsMatchingFilter.h"
 #include "otbImageToSIFTKeyPointSetFilter.h"
-
-// Disabling deprecation warning if on visual
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable:4996)
-#endif
-#include "itkDeformationFieldSource.h"
-// Enabling remaining deprecation warning
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 // Software Guide : EndCodeSnippet
+
 
 #include "otbImage.h"
 #include "otbMacro.h"
@@ -134,7 +124,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::EuclideanDistance<RealVectorType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<RealVectorType> DistanceType;
   typedef otb::KeyPointSetsMatchingFilter<PointSetType, DistanceType>
   EuclideanDistanceMatchingFilterType;
   // Software Guide : EndCodeSnippet

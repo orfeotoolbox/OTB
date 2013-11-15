@@ -166,6 +166,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
       std::cout << reduceResponse->GetReduceResponse()->GetResponse()[j].second << " ";
       }
     std::cout << "]" << std::endl;
+    sampleList->SetMeasurementVectorSize(nbBand);
     sampleList->PushBack(sample);
     trainingSample = trainingClasses[i];
     std::cout << "training class : " << trainingSample << std::endl;
@@ -220,7 +221,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   //SVM Classifier
   SVMClassifierType::Pointer classifier = SVMClassifierType::New();
   classifier->SetModel(estimator->GetModel());
-  classifier->SetSample(sampleList);
+  classifier->SetInput(sampleList);
   classifier->SetNumberOfClasses(dirSR.size());
   classifier->Update();
 

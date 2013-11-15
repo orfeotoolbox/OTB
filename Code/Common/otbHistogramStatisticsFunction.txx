@@ -104,7 +104,7 @@ HistogramStatisticsFunction<TInputHistogram, TOutput>
 {
   typename TInputHistogram::ConstPointer histogram = m_InputHistogram;
 
-  unsigned int NumberOfDimension =  histogram->GetSize().GetSizeDimension();
+  unsigned int NumberOfDimension =  histogram->GetSize().GetSize();
   m_mean.resize(NumberOfDimension);
 
   if (histogram->GetTotalFrequency() == 0)
@@ -140,7 +140,7 @@ HistogramStatisticsFunction<TInputHistogram, TOutput>
 
   typename TInputHistogram::ConstPointer histogram = m_InputHistogram;
 
-  unsigned int NumberOfDimension =  histogram->GetSize().GetSizeDimension();
+  unsigned int NumberOfDimension =  histogram->GetSize().GetSize();
   m_covariance.resize(NumberOfDimension * NumberOfDimension);
 
   if (histogram->GetTotalFrequency() == 0)

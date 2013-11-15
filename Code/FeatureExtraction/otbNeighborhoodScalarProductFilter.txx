@@ -39,7 +39,7 @@ NeighborhoodScalarProductFilter<TInputImage, TOutputModulus, TOutputDirection>
 template <class TInputImage, class TOutputModulus, class TOutputDirection>
 void
 NeighborhoodScalarProductFilter<TInputImage, TOutputModulus, TOutputDirection>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // some typedefs
   typedef itk::ConstNeighborhoodIterator<InputImageType>                           NeighborhoodIteratorType;

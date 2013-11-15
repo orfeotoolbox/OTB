@@ -56,11 +56,8 @@ public:
   typedef typename SampleListType::MeasurementVectorType MeasurementVectorType;
   typedef typename MeasurementVectorType::ValueType      ValueType;
   
-  typedef typename Superclass::InputSampleListObjectType       SampleListObjectType;
-
   /** Method to set/get the input list sample */
   void AddInput( const SampleListType * inputPtr );
-  void AddInput( const SampleListObjectType * inputPtr );
 
 protected:
   /** This method causes the filter to generate its output. */

@@ -1126,7 +1126,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 {
   ThreadStruct *str;
   unsigned int total, threadCount;
-  int threadId;
+  itk::ThreadIdType threadId;
 
   threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
   threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;

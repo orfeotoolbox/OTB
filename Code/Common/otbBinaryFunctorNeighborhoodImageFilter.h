@@ -138,7 +138,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    int threadId);
+                                    itk::ThreadIdType threadId);
 
   /**
    * Pad the inputs requested regions by radius

@@ -55,6 +55,9 @@ public:
   /// Typedef of the label object
   typedef TLabelObject LabelObjectType;
 
+  /** Const iterator over LabelObject lines */
+  typedef typename LabelObjectType::ConstLineIterator  ConstLineIteratorType;
+
   /** Constructor */
   StatisticsAttributesLabelObjectFunctor();
 

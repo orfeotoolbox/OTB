@@ -279,7 +279,7 @@ template<class TInputImage>
 void
 PersistentCompareImageFilter<TInputImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   /**
    * Grab the input

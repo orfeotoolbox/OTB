@@ -22,7 +22,7 @@
 #include "itkFixedArray.h"
 #include "itkListSample.h"
 #include "itkFixedArray.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 
 namespace otb
 {
@@ -77,7 +77,7 @@ public:
   typedef itk::FixedArray<ValueType, MaxSampleDimension> SampleType;
   typedef itk::Array<double>                             KMeansParametersType;
   typedef std::map<LabelType, SampleType>                CentroidsMapType;
-  typedef itk::Statistics::EuclideanDistance<SampleType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<SampleType> DistanceType;
 
   /** Set/Get the centroids */
   itkSetMacro(Centroids, KMeansParametersType);
@@ -106,7 +106,7 @@ protected:
   virtual ~KMeansImageClassificationFilter() {}
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
   /** Before threaded generate data */
   virtual void BeforeThreadedGenerateData();
   /**PrintSelf method */

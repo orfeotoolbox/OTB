@@ -19,7 +19,6 @@
 #define __otbOpenCVUtils_h
 
 #include <opencv2/opencv.hpp>
-#include "itkPixelBuilder.h"
 
 namespace otb
 {
@@ -97,7 +96,7 @@ namespace otb
       for(unsigned int i = 0; i < sampleCount; ++i)
        {
          typename T::MeasurementVectorType sample;
-         itk::PixelBuilder<typename T::MeasurementVectorType>::Zero(sample,sampleSize);
+         itk::NumericTraits<typename T::MeasurementVectorType>::SetLength(sample, sampleSize);
 
          unsigned int realSampleSize = sample.Size();
 

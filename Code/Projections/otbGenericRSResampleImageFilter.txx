@@ -53,9 +53,9 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
   m_OutputRpcEstimator= OutputRpcModelEstimatorType::New();
   m_Transform         = GenericRSTransformType::New();
 
-  /** Set number of threads to 1 for Deformation field generator (use for faster access to
+  /** Set number of threads to 1 for Displacement field generator (use for faster access to
     * OSSIM elevation source, which does not handle multithreading when accessing to DEM data) */
-  this->SetDeformationFilterNumberOfThreads(1);
+  this->SetDisplacementFilterNumberOfThreads(1);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -203,7 +203,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
    // Generate input requested region
    m_Resampler->SetInput(inputPtr);
    m_Resampler->SetTransform(m_Transform);
-   m_Resampler->SetDeformationFieldSpacing(this->GetDeformationFieldSpacing());
+   m_Resampler->SetDisplacementFieldSpacing(this->GetDisplacementFieldSpacing());
    m_Resampler->GetOutput()->UpdateOutputInformation();
    m_Resampler->GetOutput()->SetRequestedRegion(requestedRegion);
    m_Resampler->GetOutput()->PropagateRequestedRegion();

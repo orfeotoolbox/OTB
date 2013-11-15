@@ -234,13 +234,13 @@ ViewerModel
   // file name
   if(isJPEG2000)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<otbFilepath<<"?&resol="<<id;
     otbFilepath = oss.str();
     }
   else if(isHDF)
     {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss<<otbFilepath<<"?&sdataidx="<<id;
     otbFilepath = oss.str();
     }
@@ -261,7 +261,7 @@ ViewerModel
 
     if( resSize > 0 )
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss<<filename<<"?&resol="<<resSize-1;
       jpeg2000QLReader->SetFileName(oss.str());
       }

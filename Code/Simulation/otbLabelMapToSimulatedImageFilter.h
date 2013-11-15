@@ -63,6 +63,8 @@ public:
    typedef typename InputLabelMapType::Pointer         InputLabelMapPointer;
    typedef typename InputLabelMapType::ConstPointer    InputLabelMapConstPointer;
    typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
+   typedef typename LabelObjectType::ConstLineIterator ConstLineIteratorType;
+
    typedef typename LabelObjectType::AttributesValueType AttributesValueType;
 
    typedef TOutputImage                              OutputImageType;
@@ -80,12 +82,13 @@ public:
    typedef LabelToProSailParameters<AttributesValueType>    LabelToParametersType;
    typedef typename LabelToParametersType::Pointer          LabelToParametersPointer;
    
-   typedef SpectralResponse<double, double>                  SpectralResponseType;
+   typedef SpectralResponse<double, double>                 SpectralResponseType;
    typedef typename SpectralResponseType::Pointer           SpectralResponsePointer;
-   typedef SatelliteRSR<double, double>                      SatelliteRSRType;
+   typedef SatelliteRSR<double, double>                     SatelliteRSRType;
    typedef typename SatelliteRSRType::Pointer               SatelliteRSRPointer;
+
    typedef ReduceSpectralResponse<SpectralResponseType, SatelliteRSRType> ReduceSpectralResponseType;
-   typedef typename ReduceSpectralResponseType::Pointer                  ReduceSpectralResponsePointer;
+   typedef typename ReduceSpectralResponseType::Pointer                   ReduceSpectralResponsePointer;
    
    typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
    typedef typename RandomGeneratorType::Pointer                  RandomGeneratorPointer;

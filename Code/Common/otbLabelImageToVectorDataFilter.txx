@@ -36,7 +36,7 @@ template <class TInputImage, class TPrecision>
 LabelImageToVectorDataFilter<TInputImage, TPrecision>
 ::LabelImageToVectorDataFilter() : m_FieldName("DN"), m_Use8Connected(false)
 {
-   this->SetNumberOfInputs(2);
+   this->SetNumberOfRequiredInputs(2);
    this->SetNumberOfRequiredInputs(1);
    this->SetNumberOfRequiredOutputs(1);
    

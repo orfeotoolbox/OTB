@@ -20,7 +20,7 @@
 
 #include "vcl_deprecated_header.h"
 
-#include "itkSampleClassifier.h"
+#include "itkSampleClassifierFilter.h"
 #include "otbSVMModel.h"
 #include "itkVectorImage.h"
 #include "itkListSample.h"
@@ -56,12 +56,12 @@ namespace otb
 
 template<class TSample, class TLabel>
 class ITK_EXPORT SVMClassifier :
-  public itk::Statistics::SampleClassifier<TSample>
+  public itk::Statistics::SampleClassifierFilter<TSample>
 {
 public:
   /** Standard class typedef*/
   typedef SVMClassifier                              Self;
-  typedef itk::Statistics::SampleClassifier<TSample> Superclass;
+  typedef itk::Statistics::SampleClassifierFilter<TSample> Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
 
@@ -79,8 +79,8 @@ public:
   typedef typename TSample::MeasurementVectorType MeasurementVectorType;
 
   /** typedefs from Superclass */
-  typedef typename Superclass::MembershipFunctionPointerVector
-  MembershipFunctionPointerVector;
+  typedef typename Superclass::MembershipFunctionVectorObjectPointer
+    MembershipFunctionPointerVector; //FIXME adopt new naming convention
 
   /** typedef for label type */
   typedef TLabel ClassLabelType;

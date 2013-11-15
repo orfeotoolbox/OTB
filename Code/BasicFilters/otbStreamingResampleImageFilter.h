@@ -20,7 +20,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbStreamingWarpImageFilter.h"
-#include "itkTransformToDeformationFieldSource.h"
+#include "itkTransformToDisplacementFieldSource.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkInterpolateImageFunction.h"
 #include "otbImage.h"
@@ -33,14 +33,14 @@ namespace otb
 
 /** \class StreamingResampleImageFilter
  *  \brief This class is a composite filter resampling an input image
- *         by setting a transform. The filter computes a deformation
+ *         by setting a transform. The filter computes a displacement
  *         grid using the transform set and used it to warp the input.
  *
  * The otb::StreamingResampleImageFilter allows to resample a
  * otb::VectorImage using a transformation set with SetTransform()
- * method. First, a deformation grid, with a spacing m_DeformationGridSpacing
+ * method. First, a displacement grid, with a spacing m_DisplacementGridSpacing
  * and a size relative to this spacing, is built. Then, the image is
- * wraped using this deformation grid. The size (SetOuputSize()), the
+ * wraped using this displacement grid. The size (SetOuputSize()), the
  * spacing (SetOuputSpacing()), the start index (SetOutputIndex()) and
  * the  interpolator (SetInterpolator()) and the origin (SetOrigin())
  * can be set using the method between brackets.
@@ -73,25 +73,25 @@ public:
   typedef TInputImage                InputImageType;
   typedef TOutputImage               OutputImageType;
   
-  /** Deformation field used to warp the image*/
+  /** Displacement field used to warp the image*/
   typedef itk::Vector<double,
-                      TOutputImage::ImageDimension>             DeformationType;
-  typedef otb::Image<DeformationType>                           DeformationFieldType;
+                      TOutputImage::ImageDimension>              DisplacementType;
+  typedef otb::Image<DisplacementType>                           DisplacementFieldType;
 
-  /** filter warping input image using deformation field */
+  /** filter warping input image using displacement field */
   typedef StreamingWarpImageFilter<InputImageType,
                                    OutputImageType,
-                                   DeformationFieldType>        WarpImageFilterType;
+                                   DisplacementFieldType>        WarpImageFilterType;
   
   /** Internal filters typedefs*/
-  typedef itk::TransformToDeformationFieldSource<DeformationFieldType,
-                                                 double>        DeformationFieldGeneratorType;
-  typedef typename DeformationFieldGeneratorType::TransformType TransformType;
-  typedef typename DeformationFieldGeneratorType::SizeType      SizeType;
-  typedef typename DeformationFieldGeneratorType::SpacingType   SpacingType;
-  typedef typename DeformationFieldGeneratorType::OriginType    OriginType;
-  typedef typename DeformationFieldGeneratorType::IndexType     IndexType;
-  typedef typename DeformationFieldGeneratorType::RegionType    RegionType;
+  typedef itk::TransformToDisplacementFieldSource<DisplacementFieldType,
+                                                 double>        DisplacementFieldGeneratorType;
+  typedef typename DisplacementFieldGeneratorType::TransformType TransformType;
+  typedef typename DisplacementFieldGeneratorType::SizeType      SizeType;
+  typedef typename DisplacementFieldGeneratorType::SpacingType   SpacingType;
+  typedef typename DisplacementFieldGeneratorType::OriginType    OriginType;
+  typedef typename DisplacementFieldGeneratorType::IndexType     IndexType;
+  typedef typename DisplacementFieldGeneratorType::RegionType    RegionType;
 
   /** Interpolator type */
   typedef itk::InterpolateImageFunction<InputImageType,
@@ -107,27 +107,27 @@ public:
   /** Accessors to internal filters parameters */
   void SetTransform(TransformType * transform)
   {
-    m_DeformationFilter->SetTransform(transform);
+    m_DisplacementFilter->SetTransform(transform);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(DeformationFilter, Transform, const TransformType*);
+  otbGetObjectMemberConstMacro(DisplacementFilter, Transform, const TransformType*);
 
-  /** The Deformation field spacing & size */
-  void SetDeformationFieldSpacing(const SpacingType & spacing)
+  /** The Displacement field spacing & size */
+  void SetDisplacementFieldSpacing(const SpacingType & spacing)
   {
-    m_DeformationFilter->SetOutputSpacing(spacing);
+    m_DisplacementFilter->SetOutputSpacing(spacing);
     this->Modified();
   }
-  const SpacingType & GetDeformationFieldSpacing() const
+  const SpacingType & GetDisplacementFieldSpacing() const
   {
-   return m_DeformationFilter->GetOutputSpacing();
+   return m_DisplacementFilter->GetOutputSpacing();
   }
 
   /** The resampled image parameters */
   // Output Origin
   void SetOutputOrigin(const OriginType & origin)
   {
-    m_DeformationFilter->SetOutputOrigin(origin);
+    m_DisplacementFilter->SetOutputOrigin(origin);
     m_WarpFilter->SetOutputOrigin(origin);
     this->Modified();
   }
@@ -165,9 +165,9 @@ public:
   void SetOutputParametersFromImage(const ImageBaseType * image);
 
   /* Set number of threads for Deformation field generator*/
-  void SetDeformationFilterNumberOfThreads(unsigned int nbThread)
+  void SetDisplacementFilterNumberOfThreads(unsigned int nbThread)
   {
-    m_DeformationFilter->SetNumberOfThreads(nbThread);
+    m_DisplacementFilter->SetNumberOfThreads(nbThread);
   }
 
 protected:
@@ -188,7 +188,7 @@ private:
   StreamingResampleImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  typename DeformationFieldGeneratorType::Pointer   m_DeformationFilter;
+  typename DisplacementFieldGeneratorType::Pointer   m_DisplacementFilter;
   typename WarpImageFilterType::Pointer             m_WarpFilter;
 };
 

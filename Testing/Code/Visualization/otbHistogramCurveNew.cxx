@@ -17,12 +17,12 @@
 =========================================================================*/
 #include "otbHistogramCurve.h"
 #include "itkHistogram.h"
-#include "itkDenseFrequencyContainer.h"
+#include "itkDenseFrequencyContainer2.h"
 
 int otbHistogramCurveNew(int argc, char * argv[])
 {
-  typedef itk::Statistics::Histogram<double, 1,
-      itk::Statistics::DenseFrequencyContainer>  HistogramType;
+  typedef itk::Statistics::Histogram<double,
+      itk::Statistics::DenseFrequencyContainer2>  HistogramType;
   typedef otb::HistogramCurve<HistogramType> HistogramCurveType;
   HistogramCurveType::Pointer curve = HistogramCurveType::New();
 

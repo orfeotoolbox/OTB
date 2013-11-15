@@ -38,7 +38,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
  
-  m_RandomGenerator = RandomGeneratorType::New();
+  m_RandomGenerator = RandomGeneratorType::GetInstance();
 }
 
 template <class TVectorData>
@@ -59,7 +59,7 @@ void
 LabeledSampleLocalizationGenerator<TVectorData>
 ::PushBackInput(const VectorDataType * vectorData)
 {
-  this->Superclass::SetNthInput(this->GetNumberOfInputs(), const_cast<VectorDataType *>(vectorData));
+  this->Superclass::SetNthInput(this->GetNumberOfIndexedInputs(), const_cast<VectorDataType *>(vectorData));
 }
 
 template <class TVectorData>

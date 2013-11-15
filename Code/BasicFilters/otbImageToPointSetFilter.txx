@@ -258,7 +258,7 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
 template <class TInputImage, class TOutputPointSet>
 void
 ImageToPointSetFilter<TInputImage, TOutputPointSet>
-::ThreadedGenerateData(const InputImageRegionType&, int)
+::ThreadedGenerateData(const InputImageRegionType&, itk::ThreadIdType)
 {
   // The following code is equivalent to:
   // itkExceptionMacro("subclass should override this method!!!");
@@ -277,8 +277,9 @@ ITK_THREAD_RETURN_TYPE
 ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThreaderCallback(void *arg)
 {
-  ThreadStruct *str;
-  int           total, threadId, threadCount;
+  ThreadStruct           *str;
+  unsigned int           total, threadCount;
+  itk::ThreadIdType      threadId;
 
   threadId = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->ThreadID;
   threadCount = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->NumberOfThreads;

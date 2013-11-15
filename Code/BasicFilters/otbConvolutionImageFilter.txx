@@ -97,7 +97,7 @@ template<class TInputImage, class TOutputImage, class TBoundaryCondition, class 
 void
 ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   unsigned int i;
 

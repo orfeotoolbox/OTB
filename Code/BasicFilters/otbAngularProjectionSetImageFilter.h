@@ -59,8 +59,7 @@ public:
   /** Dimension */
   itkStaticConstMacro(InputImageDimension,  unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
-  itkStaticConstMacro(NumberOfInputImages,  unsigned int, TAngleList::MeasurementVectorType::Dimension+1);
-
+  //itkStaticConstMacro(NumberOfInputImages,  unsigned int, TAngleList::MeasurementVectorType::Dimension+1);
 
   /** Template parameters typedefs */
   typedef TInputImage                         InputImageType;

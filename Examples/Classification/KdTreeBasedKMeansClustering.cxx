@@ -103,9 +103,9 @@
 // Software Guide : BeginLatex
 //
 // To generate the clusters, we must create k instances of
-// \subdoxygen{itk}{Statistics}{EuclideanDistance} function as the membership
+// \subdoxygen{itk}{Statistics}{EuclideanDistanceMetric} function as the membership
 // functions for each cluster and plug that---along with a sample---into an
-// \subdoxygen{itk}{Statistics}{SampleClassifier} object to get a
+// \subdoxygen{itk}{Statistics}{SampleClassifierFilter} object to get a
 // \subdoxygen{itk}{Statistics}{MembershipSample} that stores pairs of measurement
 // vectors and their associated class labels (k labels).
 //
@@ -113,8 +113,8 @@
 
 // Software Guide : BeginCodeSnippet
 #include "itkMinimumDecisionRule.h"
-#include "itkEuclideanDistance.h"
-#include "itkSampleClassifier.h"
+#include "itkEuclideanDistanceMetric.h"
+#include "itkSampleClassifierFilter.h"
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -277,13 +277,13 @@ int main()
   //
   // Since the k-means algorithm is an minimum distance classifier using
   // the estimated k means and the measurement vectors. We use the
-  // EuclideanDistance class as membership functions. Our choice
+  // EuclideanDistanceMetric class as membership functions. Our choice
   // for the decision rule is the
   // \subdoxygen{itk}{Statistics}{MinimumDecisionRule} that returns the
   // index of the membership functions that have the smallest value for
   // a measurement vector.
   //
-  // After creating a SampleClassifier object and a MinimumDecisionRule
+  // After creating a SampleClassifierFilter object and a MinimumDecisionRule
   // object, we plug-in the \code{decisionRule} and the \code{sample} to the
   // classifier. Then, we must specify the number of classes that will be
   // considered using the \code{SetNumberOfClasses()} method.
@@ -297,24 +297,27 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::EuclideanDistance
-  <MeasurementVectorType> MembershipFunctionType;
-  typedef itk::MinimumDecisionRule DecisionRuleType;
+  typedef itk::Statistics::DistanceToCentroidMembershipFunction< 
+    MeasurementVectorType >   MembershipFunctionType;
+  typedef itk::Statistics::EuclideanDistanceMetric< MeasurementVectorType >  DistanceMetricType;
+
+  typedef itk::Statistics::MinimumDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
 
-  typedef itk::Statistics::SampleClassifier<SampleType> ClassifierType;
+  typedef itk::Statistics::SampleClassifierFilter<SampleType> ClassifierType;
   ClassifierType::Pointer classifier = ClassifierType::New();
 
-  classifier->SetDecisionRule((itk::DecisionRuleBase::Pointer) decisionRule);
-  classifier->SetSample(sample);
+  classifier->SetDecisionRule(decisionRule);
+  classifier->SetInput(sample);
   classifier->SetNumberOfClasses(2);
 
-  std::vector<unsigned int> classLabels;
-  classLabels.resize(2);
-  classLabels[0] = 100;
-  classLabels[1] = 200;
 
-  classifier->SetMembershipFunctionClassLabels(classLabels);
+  typedef ClassifierType::ClassLabelVectorObjectType               ClassLabelVectorObjectType;
+  ClassLabelVectorObjectType::Pointer classLabels  = ClassLabelVectorObjectType::New();
+  classLabels->Get().push_back(100);
+  classLabels->Get().push_back(200);
+
+  classifier->SetClassLabels(classLabels);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -333,22 +336,31 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  std::vector<MembershipFunctionType::Pointer> membershipFunctions;
 
-  MembershipFunctionType::OriginType origin(
+  typedef ClassifierType::MembershipFunctionVectorObjectType       MembershipFunctionVectorObjectType;
+  MembershipFunctionVectorObjectType::Pointer membershipFunctions =
+                                        MembershipFunctionVectorObjectType::New();
+
+//  std::vector<MembershipFunctionType::Pointer> membershipFunctions;
+
+  DistanceMetricType::OriginType origin(
     sample->GetMeasurementVectorSize());
   int index = 0;
   for (unsigned int i = 0; i < 2; ++i)
     {
-    membershipFunctions.push_back(MembershipFunctionType::New());
+    MembershipFunctionType::Pointer membershipFunction1 = MembershipFunctionType::New();
     for (unsigned int j = 0; j < sample->GetMeasurementVectorSize(); ++j)
       {
       origin[j] = estimatedMeans[index++];
       }
-    membershipFunctions[i]->SetOrigin(origin);
-    classifier->AddMembershipFunction(membershipFunctions[i].GetPointer());
+      DistanceMetricType::Pointer distanceMetric = DistanceMetricType::New();
+      distanceMetric->SetOrigin(origin);
+      membershipFunction1->SetDistanceMetric( distanceMetric );
+//    classifier->AddMembershipFunction(membershipFunctions[i].GetPointer());
+      membershipFunctions->Get().push_back(membershipFunction1.GetPointer() );
     }
 
+  classifier->SetMembershipFunctions(membershipFunctions);
   classifier->Update();
   // Software Guide : EndCodeSnippet
 
@@ -360,9 +372,9 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ClassifierType::OutputType* membershipSample =
+  const ClassifierType::MembershipSampleType* membershipSample =
     classifier->GetOutput();
-  ClassifierType::OutputType::ConstIterator iter = membershipSample->Begin();
+  ClassifierType::MembershipSampleType::ConstIterator iter = membershipSample->Begin();
 
   while (iter != membershipSample->End())
     {

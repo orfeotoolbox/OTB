@@ -5,7 +5,6 @@
 
 #include <iostream>
 #include "itkNumericTraits.h"
-
 #include "itkImageIterator.h"
 #include "itkImageRegionIterator.h"
 
@@ -402,7 +401,10 @@ SEMClassifier<TInputImage, TOutputImage>
     typedef otb::Statistics::GaussianModelComponent<ClassSampleType> GaussianType;
 
     for (int componentIndex = 0; componentIndex < m_NbClasses; ++componentIndex)
-      AddComponent(componentIndex, GaussianType::New());
+      {
+      typename GaussianType::Pointer comp = GaussianType::New();
+      AddComponent(componentIndex, comp);
+      }
     }
 
   otbMsgDevMacro(<< "num class   : " << m_NbClasses);
@@ -591,7 +593,8 @@ SEMClassifier<TInputImage, TOutputImage>
   // Class results initialization
   m_Output = OutputType::New();
   m_Output->SetSample(this->GetSampleList());
-  m_Output->Resize(this->GetSampleList()->Size());
+//  m_Output->Resize(this->GetSampleList()->Size()); //FIXME check if
+//  still necessary
   m_Output->SetNumberOfClasses(m_NbClasses);
 
   // Image results classification

@@ -99,15 +99,7 @@ typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFun
 PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GetListSample()
 {
-  return const_cast<ListSampleType*>(this->GetListSampleObject()->Get());
-}
-
-template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::ListSampleObjectType*
-PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
-::GetListSampleObject()
-{
-  return dynamic_cast<ListSampleObjectType*>( this->itk::ProcessObject::GetOutput(1) );
+  return dynamic_cast<ListSampleType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
@@ -115,16 +107,9 @@ typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFun
 PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::GetLabelListSample()
 {
-  return const_cast<LabelListSampleType*>(this->GetLabelListSampleObject()->Get());
+  return dynamic_cast<LabelListSampleType*>( this->itk::ProcessObject::GetOutput(2) );
 }
 
-template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
-typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::LabelListSampleObjectType*
-PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
-::GetLabelListSampleObject()
-{
-  return dynamic_cast<LabelListSampleObjectType*>(this->itk::ProcessObject::GetOutput(2));
-}
 
 template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
 typename PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>::SamplesPositionType&
@@ -155,15 +140,13 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
       break;
     case 1:
       {
-      ListSampleObjectPointerType listSample = ListSampleObjectType::New();
-      listSample->Set(ListSampleType::New());
+      ListSamplePointerType listSample = ListSampleType::New();
       output = static_cast<itk::DataObject*>(listSample.GetPointer());
       break;
       }
     case 2:
       {
-      LabelListSampleObjectPointerType labelListSample = LabelListSampleObjectType::New();
-      labelListSample->Set(LabelListSampleType::New());
+      LabelListSamplePointerType labelListSample = LabelListSampleType::New();
       output = static_cast<itk::DataObject*>(labelListSample.GetPointer());
       break;
       }
@@ -186,13 +169,13 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
 ::Reset()
 {
   m_ThreadListSample = ListSampleArray(this->GetNumberOfThreads());
-  for (int i = 0; i < this->GetNumberOfThreads(); ++i)
+  for (unsigned int i = 0; i < this->GetNumberOfThreads(); ++i)
     {
     m_ThreadListSample[i] = ListSampleType::New();
     }
 
   m_ThreadLabelListSample = LabelListSampleArray(this->GetNumberOfThreads());
-  for (int i = 0; i < this->GetNumberOfThreads(); ++i)
+  for (unsigned int i = 0; i < this->GetNumberOfThreads(); ++i)
     {
     m_ThreadLabelListSample[i] = LabelListSampleType::New();
     }
@@ -210,11 +193,14 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
 ::Synthetize()
 {
   // Merge the ListSample from all the threads
-
   ListSampleType* listSample = this->GetListSample();
   LabelListSampleType* labelListSample = this->GetLabelListSample();
   SamplesPositionType& samplesPosition = this->GetSamplesPositions();
   VectorDataPointType ref;
+  
+  // Get the output list measurement vector sample sizes once
+  listSample->SetMeasurementVectorSize(m_ThreadListSample[0]->GetMeasurementVectorSize());
+  labelListSample->SetMeasurementVectorSize(m_ThreadLabelListSample[0]->GetMeasurementVectorSize());
 
   // Copy the first thread elements into lists
   if( this->GetNumberOfThreads() > 1 )
@@ -232,7 +218,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
     }
 
   // Add the other thread element checking if the point dosn't already exist
-  for (int threadId = 1; threadId < this->GetNumberOfThreads(); ++threadId )
+  for (itk::ThreadIdType threadId = 1; threadId < this->GetNumberOfThreads(); ++threadId )
     {
     ListSampleType* threadListSample = m_ThreadListSample[threadId];
     LabelListSampleType* threadLabelListSample = m_ThreadLabelListSample[threadId];
@@ -311,14 +297,15 @@ template <class TInputImage, class TVectorData, class TFunctionType, class TList
 void
 PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType, TListSample, TLabelListSample>
 ::ThreadedGenerateData(const RegionType&  outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   ListSampleType* listSample = m_ThreadListSample[threadId];
   LabelListSampleType* labelListSample = m_ThreadLabelListSample[threadId];
   SamplesPositionType& samplesPosition = m_ThreadSamplesPosition[threadId];
-
+  
   VectorDataTreeIteratorType vectorDataIt(this->GetSamplesLocations()->GetDataTree());
-
+  bool isInitialized = false;
+  
   for (vectorDataIt.GoToBegin(); !vectorDataIt.IsAtEnd(); ++vectorDataIt)
     {
     if (vectorDataIt.Get()->IsPointFeature())
@@ -335,6 +322,15 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
       paddedRegion.PadByRadius(m_NeighborhoodRadius);
       if (this->IsInsideWithNeighborhoodRadius(paddedRegion, cidx))
         {
+        // Set the Measurement Vector Size of the samplelists, once
+        if(!isInitialized)
+          {
+          // output list sample
+          listSample->SetMeasurementVectorSize(m_DescriptorsFunction->Evaluate(point).Size());
+          labelListSample->SetMeasurementVectorSize(LabelMeasurementVectorType::Length);
+          isInitialized = true;
+          }
+
         SampleMeasurementVectorType sample(m_DescriptorsFunction->Evaluate(point));
         listSample->PushBack( sample );
 
@@ -353,6 +349,7 @@ template <class TInputImage, class TVectorData, class TListSample, class TLabelL
 DescriptorsListSampleGenerator<TInputImage, TVectorData, TListSample, TLabelListSample, TOutputPrecision, TCoordRep>
 ::DescriptorsListSampleGenerator()
 {
+  
 
 }
 

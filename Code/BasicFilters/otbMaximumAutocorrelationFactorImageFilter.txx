@@ -26,6 +26,7 @@
 #include "vnl/algo/vnl_matrix_inverse.h"
 #include "vnl/algo/vnl_generalized_eigensystem.h"
 
+#include "itkChangeInformationImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
@@ -59,6 +60,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
   // Compute Dh and Dv
   typedef otb::MultiChannelExtractROI<typename InputImageType::InternalPixelType, RealType> ExtractFilterType;
   typedef itk::SubtractImageFilter<InternalImageType, InternalImageType, InternalImageType>  DifferenceFilterType;
+  typedef itk::ChangeInformationImageFilter<InternalImageType> ChangeInformationImageFilter;
 
   InputImageRegionType largestInputRegion = inputPtr->GetLargestPossibleRegion();
   InputImageRegionType referenceRegion;
@@ -91,17 +93,30 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
   dhExtract->SetInput(inputPtr);
   dhExtract->SetExtractionRegion(dhRegion);
 
+  typename ChangeInformationImageFilter::Pointer dhExtractShift = ChangeInformationImageFilter::New();
+  dhExtractShift->SetInput(dhExtract->GetOutput());
+  dhExtractShift->SetReferenceImage(referenceExtract->GetOutput());
+  dhExtractShift->SetUseReferenceImage(true);
+  dhExtractShift->SetChangeOrigin(true);
+
   typename ExtractFilterType::Pointer dvExtract = ExtractFilterType::New();
   dvExtract->SetInput(inputPtr);
   dvExtract->SetExtractionRegion(dvRegion);
 
+  typename ChangeInformationImageFilter::Pointer dvExtractShift = ChangeInformationImageFilter::New();
+  dvExtractShift->SetInput(dvExtract->GetOutput());
+  dvExtractShift->SetReferenceImage(referenceExtract->GetOutput());
+  dvExtractShift->SetUseReferenceImage(true);
+  dvExtractShift->SetChangeOrigin(true);
+
+
   typename DifferenceFilterType::Pointer diffh = DifferenceFilterType::New();
   diffh->SetInput1(referenceExtract->GetOutput());
-  diffh->SetInput2(dhExtract->GetOutput());
+  diffh->SetInput2(dhExtractShift->GetOutput());
 
   typename DifferenceFilterType::Pointer diffv = DifferenceFilterType::New();
   diffv->SetInput1(referenceExtract->GetOutput());
-  diffv->SetInput2(dvExtract->GetOutput());
+  diffv->SetInput2(dvExtractShift->GetOutput());
 
   //Compute pooled sigma (using sigmadh and sigmadv)
   m_CovarianceEstimatorH->SetInput(diffh->GetOutput());
@@ -167,7 +182,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve input images pointers
   const TInputImage * inputPtr = this->GetInput();

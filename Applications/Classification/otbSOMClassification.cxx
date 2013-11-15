@@ -21,7 +21,7 @@
 #include "otbSOMMap.h"
 #include "otbSOM.h"
 #include "otbSOMImageClassificationFilter.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"
 #include "itkImageRegionConstIterator.h"
@@ -50,7 +50,7 @@ public:
   typedef UInt16ImageType LabeledImageType;
 
   typedef itk::VariableLengthVector<double> SampleType;
-  typedef itk::Statistics::EuclideanDistance<SampleType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<SampleType> DistanceType;
   typedef otb::SOMMap<SampleType, DistanceType, 2> SOMMapType;
   typedef itk::Statistics::ListSample<SampleType> ListSampleType;
   typedef otb::SOM<ListSampleType, SOMMapType> EstimatorType;
@@ -181,7 +181,7 @@ private:
   {
     // initiating random number generation
     itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer
-        randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::New();
+        randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
     
     FloatVectorImageType::Pointer input = GetParameterImage("in");
     LabeledImageType::Pointer mask;
@@ -228,6 +228,8 @@ private:
     
     // Training sample lists
     ListSampleType::Pointer sampleList = ListSampleType::New();
+    sampleList->SetMeasurementVectorSize(input->GetNumberOfComponentsPerPixel());
+
     const double trainingProb = static_cast<double>(GetParameterFloat("tp"));
     unsigned int nbsamples;
     if (HasValue("ts"))

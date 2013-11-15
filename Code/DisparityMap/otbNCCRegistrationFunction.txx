@@ -32,8 +32,8 @@ namespace otb
 /*
  * Default constructor
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
-NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
+NCCRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>
 ::NCCRegistrationFunction()
 {
 
@@ -66,9 +66,9 @@ NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
 /*
  * Standard "PrintSelf" method.
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
 void
-NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
+NCCRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
 
@@ -88,9 +88,9 @@ NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
 /*
  * Set the function state values before each iteration
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
 void
-NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
+NCCRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>
 ::InitializeIteration()
 {
   if (!this->m_MovingImage || !this->m_FixedImage || !m_MovingImageInterpolator)
@@ -109,7 +109,7 @@ NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
   m_MovingImageInterpolator->SetInputImage(this->m_MovingImage);
 
   otbMsgDevMacro( " total metric " << m_MetricTotal << " field size " <<
-  this->GetDeformationField()->GetLargestPossibleRegion().GetSize() << " image size " <<
+  this->GetDisplacementField()->GetLargestPossibleRegion().GetSize() << " image size " <<
   this->m_FixedImage->GetLargestPossibleRegion().GetSize() );
   m_MetricTotal = 0.0;
 
@@ -118,10 +118,10 @@ NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
 /*
  * Compute update at a non boundary neighbourhood
  */
-template <class TFixedImage, class TMovingImage, class TDeformationField>
-typename NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
+typename NCCRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>
 ::PixelType
-NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
+NCCRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>
 ::ComputeUpdate(const NeighborhoodType& it, void * itkNotUsed(globalData),
                 const FloatOffsetType& itkNotUsed(offset))
 {
@@ -193,14 +193,14 @@ NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
 
       PointType mappedPoint;
 
-      typedef typename TDeformationField::PixelType DeformationPixelType;
+      typedef typename TDisplacementField::PixelType DisplacementPixelType;
 
       // Edited by OTB developers
-      DeformationPixelType vec;
+      DisplacementPixelType vec;
       vec.Fill(0);
-      if (this->GetDeformationField()->GetBufferedRegion().IsInside(index))
+      if (this->GetDisplacementField()->GetBufferedRegion().IsInside(index))
         {
-        vec = this->GetDeformationField()->GetPixel(index);
+        vec = this->GetDisplacementField()->GetPixel(index);
         }
       // End Edited by OTB developers
 

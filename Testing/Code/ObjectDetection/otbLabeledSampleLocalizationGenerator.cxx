@@ -53,10 +53,10 @@ int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
   GeneratorType::Pointer         generator  = GeneratorType::New();
   
   reader1->SetFileName(inputVD1);
-  reader1->Update();
+  //reader1->Update();
 
   reader2->SetFileName(inputVD2);
-  reader2->Update();
+  //reader2->Update();
 
   generator->PushBackInput(reader1->GetOutput());
   generator->PushBackInput(reader2->GetOutput());
@@ -69,7 +69,7 @@ int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
   generator->SetNbMaxIteration(1000);
   generator->SetNumberOfPositiveSamplesPerPoint(2);
 
-  generator->Update();
+  //generator->Update();
 
   writer->SetFileName(outputVD);
   writer->SetInput(generator->GetOutput());

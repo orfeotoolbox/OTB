@@ -22,7 +22,6 @@
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
-#include "itkPixelBuilder.h"
 #include "itkFixedArray.h"
 
 // Elevation handler
@@ -144,20 +143,19 @@ private:
       defSpacing[0] = defScalarSpacing;
       defSpacing[1] = defScalarSpacing;
       
-      resampler->SetDeformationFieldSpacing(defSpacing);
+      resampler->SetDisplacementFieldSpacing(defSpacing);
       }
     else
       {
       FloatVectorImageType::SpacingType defSpacing;
       defSpacing[0]=10*spacing[0];
       defSpacing[1]=10*spacing[1];
-      resampler->SetDeformationFieldSpacing(defSpacing);
+      resampler->SetDisplacementFieldSpacing(defSpacing);
       }
     
     FloatVectorImageType::PixelType defaultValue;
-    itk::PixelBuilder<FloatVectorImageType::PixelType>::Zero(defaultValue,
-                                                             xs->GetNumberOfComponentsPerPixel());
-
+    itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, xs->GetNumberOfComponentsPerPixel());
+    
     resampler->SetInput(xs);
     resampler->SetOutputOrigin(origin);
     resampler->SetOutputSpacing(spacing);

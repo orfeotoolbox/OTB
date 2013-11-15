@@ -102,7 +102,7 @@ template <class TInputImage1, class TInputImage2, class TOutputImage, class TFun
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
 
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage1> nbc1;
@@ -119,7 +119,7 @@ BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputIm
   r2.Fill(m_Radius);
   NeighborhoodIteratorType2 neighInputIt2;
 
-  // This is the main difference from BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId)
+  // This is the main difference from BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, itk::ThreadIdType threadId)
   OutputImagePointer outputPtr = this->GetOutput();
   outputPtr->SetNumberOfComponentsPerPixel(m_Functor.GetNumberOfComponentsPerPixel());
   outputPtr->Allocate();

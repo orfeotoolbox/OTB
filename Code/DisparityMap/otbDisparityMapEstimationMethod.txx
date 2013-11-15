@@ -225,7 +225,7 @@ DisparityMapEstimationMethod<TFixedImage, TMovingImage, TPointSet>
     m_Interpolator->SetInputImage(movingExtractor->GetOutput());
 
     // Perform the registration
-    registration->StartRegistration();
+    registration->Update();
 
     // Retrieve the final parameters
     ParametersType finalParameters = registration->GetLastTransformParameters();
@@ -247,7 +247,7 @@ DisparityMapEstimationMethod<TFixedImage, TMovingImage, TPointSet>
     otbMsgDevMacro(<< "Metric value: " << value);
     otbMsgDevMacro(<< "Transform parameters: " << finalParameters);
     otbMsgDevMacro(
-      << "Deformation: (" << outputPoint[0] - inputPoint[0] << ", " << outputPoint[1] - inputPoint[1] << ")");
+      << "Displacement: (" << outputPoint[0] - inputPoint[0] << ", " << outputPoint[1] - inputPoint[1] << ")");
     otbMsgDevMacro(<< "Final parameters: " << finalParameters);
 
     ParametersType data(finalParameters.GetSize() + 3);

@@ -140,6 +140,7 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
    ImageRegionIteratorType it(imageSimulation->GetOutputReflectanceImage(), imageSimulation->GetOutputReflectanceImage()->GetLargestPossibleRegion());
    it.GoToBegin();
    ListSampleType::Pointer listSample = ListSampleType::New();
+   listSample->SetMeasurementVectorSize(nbBands);
    unsigned int x=0;
    unsigned int classIndex=0;
    while(!it.IsAtEnd())

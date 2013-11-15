@@ -24,7 +24,7 @@
 #include "otbSensorModelAdapter.h"
 #include "otbRPCSolverAdapter.h"
 #include "itkPoint.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbGenericRSTransform.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "ogrsf_frmts.h"
@@ -44,7 +44,7 @@ public:
 
   typedef otb::RPCSolverAdapter::Point3DType              Point3DType;
   typedef otb::RPCSolverAdapter::Point2DType              Point2DType;
-  typedef itk::Statistics::EuclideanDistance<Point3DType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<Point3DType> DistanceType;
 
   typedef otb::RPCSolverAdapter::GCPType           TiePointType;
   typedef otb::RPCSolverAdapter::GCPsContainerType TiePointsType;

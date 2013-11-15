@@ -21,9 +21,8 @@
 
 int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew(int argc, char * argv[])
 {
-  const unsigned int Dimension = 2;
   typedef float                                                  MeasurementType;
-  typedef itk::Statistics::Histogram<MeasurementType, Dimension> HistogramType;
+  typedef itk::Statistics::Histogram<MeasurementType> HistogramType;
   typedef otb::GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator<
       HistogramType> FilterType;
 

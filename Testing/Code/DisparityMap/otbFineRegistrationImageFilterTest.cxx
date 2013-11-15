@@ -60,9 +60,9 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   typedef double      PixelType;
   const unsigned int  Dimension = 2;
 
-  typedef itk::FixedArray<PixelType, Dimension>                                 DeformationValueType;
+  typedef itk::FixedArray<PixelType, Dimension>                                 DisplacementValueType;
   typedef otb::Image< PixelType,  Dimension >                                  ImageType;
-  typedef otb::Image<DeformationValueType, Dimension>                           FieldImageType;
+  typedef otb::Image<DisplacementValueType, Dimension>                           FieldImageType;
   typedef otb::ImageFileReader< ImageType >                                    ReaderType;
   typedef otb::ImageFileWriter< ImageType >                           CorrelWriterType;
   typedef otb::ImageFileWriter< FieldImageType>                       FieldWriterType;
@@ -156,7 +156,7 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   chrono.Start();
   registration->Update();
   chrono.Stop();
-  std::cout<<chrono.GetMeanTime()<<"\t";
+  std::cout<<chrono.GetMean()<<"\t";
 
   CorrelWriterType::Pointer correlWriter = CorrelWriterType::New();
   correlWriter->SetFileName(correlFileName);
@@ -166,7 +166,7 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
 
   FieldWriterType::Pointer fieldWriter = FieldWriterType::New();
   fieldWriter->SetFileName(fieldFileName);
-  fieldWriter->SetInput(registration->GetOutputDeformationField());
+  fieldWriter->SetInput(registration->GetOutputDisplacementField());
   fieldWriter->SetNumberOfDivisionsStrippedStreaming(2);
   fieldWriter->Update();
 

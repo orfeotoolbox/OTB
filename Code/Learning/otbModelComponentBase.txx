@@ -22,7 +22,6 @@
 
 #include <iostream>
 
-
 #include "otbMacro.h"
 #include "otbModelComponentBase.h"
 

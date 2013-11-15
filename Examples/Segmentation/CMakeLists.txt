@@ -6,123 +6,123 @@ PROJECT(ImageSegmentationExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(ConnectedThresholdImageFilter ConnectedThresholdImageFilter.cxx )
-TARGET_LINK_LIBRARIES(ConnectedThresholdImageFilter OTBCommon OTBIO ITKNumerics)
+TARGET_LINK_LIBRARIES(ConnectedThresholdImageFilter OTBCommon OTBIO )
 
 ADD_EXECUTABLE(OtsuThresholdImageFilter OtsuThresholdImageFilter.cxx )
 TARGET_LINK_LIBRARIES(OtsuThresholdImageFilter OTBCommon OTBIO)
 
 ADD_EXECUTABLE(OtsuMultipleThresholdImageFilter OtsuMultipleThresholdImageFilter.cxx )
 TARGET_LINK_LIBRARIES(OtsuMultipleThresholdImageFilter
-                      OTBCommon OTBIO ITKStatistics)
+                      OTBCommon OTBIO ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(ConfidenceConnected ConfidenceConnected.cxx )
-TARGET_LINK_LIBRARIES(ConfidenceConnected OTBCommon OTBIO ITKNumerics)
+TARGET_LINK_LIBRARIES(ConfidenceConnected OTBCommon OTBIO )
 
 ADD_EXECUTABLE(VectorConfidenceConnected VectorConfidenceConnected.cxx )
-TARGET_LINK_LIBRARIES(VectorConfidenceConnected OTBCommon OTBIO ITKNumerics)
+TARGET_LINK_LIBRARIES(VectorConfidenceConnected OTBCommon OTBIO )
 
 ADD_EXECUTABLE(NeighborhoodConnectedImageFilter NeighborhoodConnectedImageFilter.cxx )
 TARGET_LINK_LIBRARIES(NeighborhoodConnectedImageFilter OTBCommon OTBIO
-ITKNumerics)
+)
 
 ADD_EXECUTABLE(IsolatedConnectedImageFilter IsolatedConnectedImageFilter.cxx )
-TARGET_LINK_LIBRARIES(IsolatedConnectedImageFilter OTBCommon OTBIO ITKNumerics)
+TARGET_LINK_LIBRARIES(IsolatedConnectedImageFilter OTBCommon OTBIO )
 
 #ADD_EXECUTABLE(ConnectedThresholdImageFilter ConnectedThresholdImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(ConnectedThresholdImageFilter ITKNumerics)
+#TARGET_LINK_LIBRARIES(ConnectedThresholdImageFilter )
 
 ADD_EXECUTABLE(FastMarchingImageFilter FastMarchingImageFilter.cxx )
-TARGET_LINK_LIBRARIES(FastMarchingImageFilter OTBCommon OTBIO ITKNumerics)
+TARGET_LINK_LIBRARIES(FastMarchingImageFilter OTBCommon OTBIO )
 
 #ADD_EXECUTABLE(GeodesicActiveContourShapePriorLevelSetImageFilter GeodesicActiveContourShapePriorLevelSetImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(GeodesicActiveContourShapePriorLevelSetImageFilter ITKNumerics ITKStatistics)
+#TARGET_LINK_LIBRARIES(GeodesicActiveContourShapePriorLevelSetImageFilter  ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(DeformableModel2 DeformableModel2.cxx )
-#TARGET_LINK_LIBRARIES(DeformableModel2 ITKAlgorithms ITKNumerics)
+#TARGET_LINK_LIBRARIES(DeformableModel2  )
 
 #ADD_EXECUTABLE(GibbsPriorImageFilter1 GibbsPriorImageFilter1.cxx )
-#TARGET_LINK_LIBRARIES(GibbsPriorImageFilter1 ITKAlgorithms ITKNumerics)
+#TARGET_LINK_LIBRARIES(GibbsPriorImageFilter1  )
 
 #ADD_EXECUTABLE(HoughTransform2DCirclesImageFilter HoughTransform2DCirclesImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(HoughTransform2DCirclesImageFilter ITKBasicFilters)
+#TARGET_LINK_LIBRARIES(HoughTransform2DCirclesImageFilter  )
 
 #ADD_EXECUTABLE(HoughTransform2DLinesImageFilter HoughTransform2DLinesImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(HoughTransform2DLinesImageFilter ITKBasicFilters)
+#TARGET_LINK_LIBRARIES(HoughTransform2DLinesImageFilter  )
 
 #ADD_EXECUTABLE(VectorConfidenceConnected VectorConfidenceConnected.cxx )
-#TARGET_LINK_LIBRARIES(VectorConfidenceConnected ITKNumerics)
+#TARGET_LINK_LIBRARIES(VectorConfidenceConnected )
 
 #ADD_EXECUTABLE(RelabelComponentImageFilter RelabelComponentImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(RelabelComponentImageFilter ITKNumerics)
+#TARGET_LINK_LIBRARIES(RelabelComponentImageFilter )
 
 
 #ADD_EXECUTABLE(CannySegmentationLevelSetImageFilter CannySegmentationLevelSetImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(CannySegmentationLevelSetImageFilter ITKNumerics)
+#TARGET_LINK_LIBRARIES(CannySegmentationLevelSetImageFilter )
 
 #ADD_EXECUTABLE(GeodesicActiveContourImageFilter GeodesicActiveContourImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(GeodesicActiveContourImageFilter ITKNumerics)
+#TARGET_LINK_LIBRARIES(GeodesicActiveContourImageFilter )
 
 #ADD_EXECUTABLE(ShapeDetectionLevelSetFilter ShapeDetectionLevelSetFilter.cxx )
-#TARGET_LINK_LIBRARIES(ShapeDetectionLevelSetFilter ITKNumerics)
+#TARGET_LINK_LIBRARIES(ShapeDetectionLevelSetFilter )
 
 #ADD_EXECUTABLE(SegmentationExamples2 SegmentationExamples2.cxx )
-#TARGET_LINK_LIBRARIES(SegmentationExamples2 ITKAlgorithms
-#ITKBasicFilters ITKStatistics)
+#TARGET_LINK_LIBRARIES(SegmentationExamples2 
+#  ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(SegmentationExamples3 SegmentationExamples3.cxx )
-#TARGET_LINK_LIBRARIES(SegmentationExamples3 ITKAlgorithms
-#ITKBasicFilters ITKStatistics)
+#TARGET_LINK_LIBRARIES(SegmentationExamples3 
+#  ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(CurvesLevelSetImageFilter CurvesLevelSetImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(CurvesLevelSetImageFilter ITKNumerics)
+#TARGET_LINK_LIBRARIES(CurvesLevelSetImageFilter )
 
 ADD_EXECUTABLE(WatershedSegmentation WatershedSegmentation.cxx )
-TARGET_LINK_LIBRARIES(WatershedSegmentation OTBCommon OTBIO ITKAlgorithms ITKNumerics)
+TARGET_LINK_LIBRARIES(WatershedSegmentation OTBCommon OTBIO ${ITK_LIBRARIES})
 
 
 #ADD_EXECUTABLE(SegmentationExamples SegmentationExamples.cxx )
-#TARGET_LINK_LIBRARIES(SegmentationExamples ITKAlgorithms
-#ITKBasicFilters)
+#TARGET_LINK_LIBRARIES(SegmentationExamples 
+# )
 
 
 
 #ADD_EXECUTABLE(SegmentationExamples5 SegmentationExamples5.cxx )
-#TARGET_LINK_LIBRARIES(SegmentationExamples5 ITKAlgorithms
-#ITKBasicFilters ITKStatistics)
+#TARGET_LINK_LIBRARIES(SegmentationExamples5 
+#  ${ITK_LIBRARIES})
 
 
 #ADD_EXECUTABLE(SegmentationExamples8 SegmentationExamples8.cxx )
-#TARGET_LINK_LIBRARIES(SegmentationExamples8 ITKAlgorithms
-#ITKBasicFilters ITKStatistics)
+#TARGET_LINK_LIBRARIES(SegmentationExamples8 
+#  ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(SegmentationExamples9 SegmentationExamples9.cxx )
-#TARGET_LINK_LIBRARIES(SegmentationExamples9 ITKAlgorithms
-#ITKBasicFilters ITKStatistics)
+#TARGET_LINK_LIBRARIES(SegmentationExamples9 
+#  ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(CellularSegmentation1 CellularSegmentation1.cxx )
-#TARGET_LINK_LIBRARIES(CellularSegmentation1 ITKAlgorithms ITKNumerics)
+#TARGET_LINK_LIBRARIES(CellularSegmentation1  )
 
 #ADD_EXECUTABLE(DeformableModel1 DeformableModel1.cxx )
-#TARGET_LINK_LIBRARIES(DeformableModel1 ITKAlgorithms ITKNumerics)
+#TARGET_LINK_LIBRARIES(DeformableModel1  )
 
 #ADD_EXECUTABLE(LaplacianSegmentationLevelSetImageFilter LaplacianSegmentationLevelSetImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(LaplacianSegmentationLevelSetImageFilter ITKNumerics)
+#TARGET_LINK_LIBRARIES(LaplacianSegmentationLevelSetImageFilter )
 
 #ADD_EXECUTABLE(ThresholdSegmentationLevelSetImageFilter ThresholdSegmentationLevelSetImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(ThresholdSegmentationLevelSetImageFilter ITKNumerics)
+#TARGET_LINK_LIBRARIES(ThresholdSegmentationLevelSetImageFilter )
 
 #ADD_EXECUTABLE(SegmentationExamples4 SegmentationExamples4.cxx )
-#TARGET_LINK_LIBRARIES(SegmentationExamples4 ITKAlgorithms ITKBasicFiltersITKStatistics)
+#TARGET_LINK_LIBRARIES(SegmentationExamples4   ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(SegmentationExamples6 SegmentationExamples6.cxx )
-#TARGET_LINK_LIBRARIES(SegmentationExamples6 ITKAlgorithms
-#ITKBasicFilters ITKStatistics)
+#TARGET_LINK_LIBRARIES(SegmentationExamples6 
+#  ${ITK_LIBRARIES})
 
 
 
 #ADD_EXECUTABLE(SegmentationExamples7 SegmentationExamples7.cxx )
-#TARGET_LINK_LIBRARIES(SegmentationExamples7 ITKAlgorithms
-#ITKBasicFilters ITKStatistics)
+#TARGET_LINK_LIBRARIES(SegmentationExamples7 
+#  ${ITK_LIBRARIES})
 
 
 ADD_EXECUTABLE(StreamingMeanShiftSegmentation StreamingMeanShiftSegmentation.cxx )
@@ -327,15 +327,19 @@ ADD_TEST(seTeNeighborhoodConnectedImageFilterTest ${EXE_TESTS}
 
 # ------- WatershedSegmentationTest----------
 
-ADD_TEST(seTeWatershedSegmentationTest ${EXE_TESTS}
-        --compare-n-images ${TOL} 1
-        ${BASELINE}/WatershedSegmentation1Output1.png
-        ${TEMP}/WatershedSegmentation1Output1.png
-        WatershedSegmentationTest
-        ${INPUTDATA}/ROI_QB_MUL_3.tif
-        ${TEMP}/WatershedSegmentation1Output1.png
-  2 10 0 0.05 1
-)
+#This first implementation of the WatershedSegmentationTest was commented because
+#it is duplicated below with the same name but with different input parameters.
+#Moreover, NO baseline file for this first implementation is available in the
+#OTB-Data directory.
+#ADD_TEST(seTeWatershedSegmentationTest ${EXE_TESTS}
+#        --compare-n-images ${TOL} 1
+#        ${BASELINE}/WatershedSegmentation1Output1.png
+#        ${TEMP}/WatershedSegmentation1Output1.png
+#        WatershedSegmentationTest
+#        ${INPUTDATA}/ROI_QB_MUL_3.tif
+#        ${TEMP}/WatershedSegmentation1Output1.png
+#  2 10 0 0.05 1
+#)
 
 # ------- WatershedSegmentationTest----------
 
@@ -442,6 +446,11 @@ ADD_TEST(seTeStreamingMeanShiftSegmentationTest ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbSegmentationExamplesTests otbSegmentationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbSegmentationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBOGRAdapters OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting OTBSegmentation)
+TARGET_LINK_LIBRARIES(otbSegmentationExamplesTests   
+  ${ITK_LIBRARIES} OTBBasicFilters 
+  OTBCommon OTBDisparityMap OTBIO 
+  OTBSpatialReasoning OTBChangeDetection 
+  OTBFeatureExtraction  OTBLearning  
+  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

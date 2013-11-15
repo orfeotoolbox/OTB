@@ -89,7 +89,7 @@ protected:
   // The constructor and destructor.
   MRFSamplerRandom()
     {
-    m_Generator = RandomGeneratorType::New();
+    m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
   virtual ~MRFSamplerRandom() {}

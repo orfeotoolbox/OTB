@@ -77,9 +77,9 @@ void
 StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::operator() (LabelObjectType * lo) const
 {
-  typename LabelObjectType::LineContainerType::const_iterator lit;
-  typename LabelObjectType::LineContainerType& lineContainer = lo->GetLineContainer();
-
+  ConstLineIteratorType lit = ConstLineIteratorType(lo);
+  lit.GoToBegin();
+  
   std::ostringstream oss;
 
   FeatureType min = itk::NumericTraits<FeatureType>::max();
@@ -103,10 +103,10 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
   principalMoments.Fill(0);
 
   // iterate over all the lines
-  for (lit = lineContainer.begin(); lit != lineContainer.end(); lit++)
+  while ( !lit.IsAtEnd() )
     {
-    const typename TFeatureImage::IndexType& firstIdx = lit->GetIndex();
-    unsigned long length = lit->GetLength();
+    const typename TFeatureImage::IndexType& firstIdx = lit.GetLine().GetIndex();
+    unsigned long length = lit.GetLine().GetLength();
 
     long endIdx0 = firstIdx[0] + length;
     for (typename TFeatureImage::IndexType idx = firstIdx; idx[0] < endIdx0; idx[0]++)
@@ -152,6 +152,7 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
           }
         }
       }
+    ++lit;
     }
 
   // final computations

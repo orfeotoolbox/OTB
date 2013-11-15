@@ -57,6 +57,10 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
   RListLabelType::Pointer refLabels = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
 
+  // Set the measurement vector size for the list sample lables
+  refLabels->SetMeasurementVectorSize(1);
+  prodLabels->SetMeasurementVectorSize(1);
+
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
 
@@ -103,6 +107,10 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
 
   RListLabelType::Pointer refLabels = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
+
+  // Set the measurement vector size for the list sample lables
+  refLabels->SetMeasurementVectorSize(1);
+  prodLabels->SetMeasurementVectorSize(1);
 
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
@@ -158,6 +166,10 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
 
   RListLabelType::Pointer refLabels = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
+
+  // Set the measurement vector size for the list sample lables
+  refLabels->SetMeasurementVectorSize(1);
+  prodLabels->SetMeasurementVectorSize(1);
 
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
@@ -282,9 +294,6 @@ int otbConfusionMatrixCalculatorComputeWithBaseline(int argc, char* argv[])
   RListLabelType::Pointer refLabels = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
 
-  RListLabelType::Iterator itRefLabels;
-  PListLabelType::Iterator itProdLabels;
-
   int nbSamples = 12;
   int nbClasses = 4;
 
@@ -316,13 +325,19 @@ int otbConfusionMatrixCalculatorComputeWithBaseline(int argc, char* argv[])
     PLabelType plab;
     plab.SetSize(1);
     plab[0] = labelsClassified[i];
+    if (i == 0)
+      {
+      prodLabels->SetMeasurementVectorSize(itk::NumericTraits<PLabelType>::GetLength(plab));
+      }
     refLabels->PushBack(label);
     prodLabels->PushBack(plab);
     }
 
   int k = 0;
-  for (itRefLabels = refLabels->Begin(), itProdLabels = prodLabels->Begin();
-      itRefLabels != refLabels->End(); ++itRefLabels, ++itProdLabels)
+  RListLabelType::ConstIterator itRefLabels(refLabels->Begin());
+  PListLabelType::ConstIterator itProdLabels(prodLabels->Begin());
+
+  for (; itRefLabels != refLabels->End(); ++itRefLabels, ++itProdLabels)
     {
     std::cout << "refLabels[" << k << "] = " << itRefLabels.GetMeasurementVector()[0] << "; prodLabels[" << k
         << "] = " << itProdLabels.GetMeasurementVector()[0] << std::endl;

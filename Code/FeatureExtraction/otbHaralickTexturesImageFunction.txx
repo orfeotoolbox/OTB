@@ -99,15 +99,14 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
 
   // Compute the co-occurence matrix
   coOccurenceMatrixGenerator->SetRegion(inputRegion);
-  coOccurenceMatrixGenerator->SetNormalize(true);
-  coOccurenceMatrixGenerator->Compute();
-
+  coOccurenceMatrixGenerator->Update();
+  
   // Build the texture calculator
   TextureCoefficientsCalculatorPointerType texturesCalculator = TextureCoefficientsCalculatorType::New();
 
   // Compute textures indices
-  texturesCalculator->SetHistogram(coOccurenceMatrixGenerator->GetOutput());
-  texturesCalculator->Compute();
+  texturesCalculator->SetInput(coOccurenceMatrixGenerator->GetOutput());
+  texturesCalculator->Update();
 
   // Fill the output vector
   textures[0]=texturesCalculator->GetEnergy();

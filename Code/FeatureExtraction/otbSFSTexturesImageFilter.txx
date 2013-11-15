@@ -32,9 +32,9 @@ template <class TInputImage, class TOutputImage>
 SFSTexturesImageFilter<TInputImage, TOutputImage>
 ::SFSTexturesImageFilter()
 {
-  this->SetNumberOfInputs(1);
   this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfOutputs(6);
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(6);
   this->SetNumberOfRequiredOutputs(1);
 
   this->SetNthOutput(0, OutputImageType::New());
@@ -259,7 +259,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
                       << ") is lower than Ration Max Consideration Number ("
                       << this->GetRatioMaxConsiderationNumber() << ") what is not allowed.");
     }
-  for (int i = 0; i < this->GetNumberOfThreads(); ++i)
+  for (unsigned int i = 0; i < this->GetNumberOfThreads(); ++i)
     {
     m_FunctorList.push_back(m_Functor);
     }
@@ -336,7 +336,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 SFSTexturesImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
 

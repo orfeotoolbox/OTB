@@ -159,7 +159,7 @@ StandardWriterWatcher
 {
   m_TimeProbe.Stop();
   std::cout << std::endl << "Writing task took "
-            << m_TimeProbe.GetMeanTime()
+            << m_TimeProbe.GetMean()
             << " seconds." << std::endl;
 }
 

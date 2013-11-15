@@ -19,13 +19,13 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {fcDeformationFieldOutput-horizontal.png}, {fcDeformationFieldOutput-vertical.png}, {fcCorrelFieldOutput.png}, {fcDResampledOutput2.png}
+//    OUTPUTS: {fcDisplacementFieldOutput-horizontal.png}, {fcDisplacementFieldOutput-vertical.png}, {fcCorrelFieldOutput.png}, {fcDResampledOutput2.png}
 //    1.0 5 3 0.1
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {fcMRSDDeformationFieldOutput-horizontal.png}, {fcMRSDDeformationFieldOutput-vertical.png}, {fcMRSDCorrelFieldOutput.png}, {fcMRSDDResampledOutput2.png}
+//    OUTPUTS: {fcMRSDDisplacementFieldOutput-horizontal.png}, {fcMRSDDisplacementFieldOutput-vertical.png}, {fcMRSDCorrelFieldOutput.png}, {fcMRSDDResampledOutput2.png}
 //    1.0 5 3 0.1 mrsd
 //  Software Guide : EndCommandLineArgs
 
@@ -71,7 +71,7 @@ int main(int argc, char** argv)
   const unsigned int ImageDimension = 2;
 
   typedef double                              PixelType;
-  typedef itk::Vector<double, ImageDimension> DeformationPixelType;
+  typedef itk::Vector<double, ImageDimension> DisplacementPixelType;
 
   typedef double CoordinateRepresentationType;
 
@@ -89,8 +89,8 @@ int main(int argc, char** argv)
   // Software Guide : BeginCodeSnippet
   typedef otb::Image<PixelType, ImageDimension> InputImageType;
   typedef otb::Image<PixelType, ImageDimension> MetricImageType;
-  typedef otb::Image<DeformationPixelType,
-      ImageDimension>                           DeformationFieldType;
+  typedef otb::Image<DisplacementPixelType,
+      ImageDimension>                           DisplacementFieldType;
   // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<InputImageType> InputReaderType;
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
   // Software Guide : BeginCodeSnippet
   typedef otb::FineRegistrationImageFilter<InputImageType,
       MetricImageType,
-      DeformationFieldType>
+      DisplacementFieldType>
   RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
@@ -226,13 +226,13 @@ int main(int argc, char** argv)
   //
   // Software Guide : EndLatex
 
-  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DeformationFieldType,
+  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType,
       InputImageType>
   ChannelExtractionFilterType;
   ChannelExtractionFilterType::Pointer channelExtractor =
     ChannelExtractionFilterType::New();
 
-  channelExtractor->SetInput(registrator->GetOutputDeformationField());
+  channelExtractor->SetInput(registrator->GetOutputDisplacementField());
   channelExtractor->SetChannel(1);
 
   typedef itk::RescaleIntensityImageFilter<InputImageType,
@@ -255,13 +255,13 @@ int main(int argc, char** argv)
   dfWriter->Update();
 
   typedef otb::WarpImageFilter<InputImageType, InputImageType,
-      DeformationFieldType> WarperType;
+      DisplacementFieldType> WarperType;
   WarperType::Pointer warper = WarperType::New();
 
   InputImageType::PixelType padValue = 4.0;
 
   warper->SetInput(mReader->GetOutput());
-  warper->SetDeformationField(registrator->GetOutputDeformationField());
+  warper->SetDisplacementField(registrator->GetOutputDisplacementField());
   warper->SetEdgePaddingValue(padValue);
 
   typedef itk::RescaleIntensityImageFilter<MetricImageType,
@@ -302,9 +302,9 @@ int main(int argc, char** argv)
   // \includegraphics[width=0.2\textwidth]{fcMRSDCorrelFieldOutput.eps}
   // \includegraphics[width=0.2\textwidth]{fcDResampledOutput2.eps}
   // \includegraphics[width=0.2\textwidth]{fcMRSDDResampledOutput2.eps}
-  // \includegraphics[width=0.2\textwidth]{fcDeformationFieldOutput-horizontal.eps}
-  // \includegraphics[width=0.2\textwidth]{fcMRSDDeformationFieldOutput-horizontal.eps}
-  // \itkcaption[Deformation field and resampling from fine registration]{From left
+  // \includegraphics[width=0.2\textwidth]{fcDisplacementFieldOutput-horizontal.eps}
+  // \includegraphics[width=0.2\textwidth]{fcMRSDDisplacementFieldOutput-horizontal.eps}
+  // \itkcaption[Displacement field and resampling from fine registration]{From left
   // to right and top to bottom: fixed input image, moving image with a low stereo angle,
   // local correlation field, local mean reciprocal square difference field,
   // resampled image based on correlation, resampled image based on mean reciprocal square difference,

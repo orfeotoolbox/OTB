@@ -30,8 +30,8 @@ template <class TInputImage, class TOutputVectorData>
 ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 ::ImageToEnvelopeVectorDataFilter() : m_SamplingRate(0)
 {
-  this->SetNumberOfInputs(1);
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   m_OutputProjectionRef.clear();
 
   // Build output

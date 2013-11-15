@@ -88,11 +88,11 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
  
-  // Deformation Field spacing
+  // Displacement Field spacing
   VectorImageType::SpacingType  gridSpacing;
   gridSpacing[0] = atof(argv[11]);
   gridSpacing[1] = -atof(argv[11]);
-  orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
+  orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
   
   VectorImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   no_data.Fill(0);
@@ -122,7 +122,7 @@ int otbOrthoRectificationComplexFilter(int argc, char* argv[])
   typedef otb::UnaryImageFunctorWithVectorImageFilter<
                         ComplexVectorImageType,
                         ModulusVectorImageType,
-                        itk::Function::ComplexToModulus<
+                        itk::Functor::ComplexToModulus<
                           ComplexVectorImageType::InternalPixelType,
                           ModulusVectorImageType::InternalPixelType
                           >
@@ -170,11 +170,11 @@ int otbOrthoRectificationComplexFilter(int argc, char* argv[])
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
  
-  // Deformation Field spacing
+  // Displacement Field spacing
   ComplexVectorImageType::SpacingType  gridSpacing;
   gridSpacing[0] = atof(argv[11]);
   gridSpacing[1] = -atof(argv[11]);
-  orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
+  orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
   
   
   WriterType::Pointer writer = WriterType::New();

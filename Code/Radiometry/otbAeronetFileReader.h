@@ -21,7 +21,6 @@
 #include <string>
 #include <vector>
 
-
 #include "itkProcessObject.h"
 #include "otbMacro.h"
 

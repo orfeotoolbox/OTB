@@ -89,6 +89,12 @@ int main(int argc, char* argv[])
   TrainingListSampleType::Pointer trainingLabels = TrainingListSampleType::New();
   ListSampleType::Pointer validationSamples = ListSampleType::New();
   TrainingListSampleType::Pointer validationLabels = TrainingListSampleType::New();
+ 
+  // Set the size of the measurement vectors
+  trainingSamples ->SetMeasurementVectorSize(2);
+  trainingLabels->SetMeasurementVectorSize(1);
+  validationSamples->SetMeasurementVectorSize(2);
+  validationLabels->SetMeasurementVectorSize(1);
 
   // Generate training set
   //std::ofstream training("training.csv");
@@ -167,7 +173,7 @@ int main(int argc, char* argv[])
 
   // Classify
   ClassifierType::Pointer validationClassifier = ClassifierType::New();
-  validationClassifier->SetSample(validationSamples);
+  validationClassifier->SetInput(validationSamples);
   validationClassifier->SetNumberOfClasses(2);
   validationClassifier->SetModel(estimator->GetModel());
   validationClassifier->Update();

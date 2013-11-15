@@ -24,8 +24,7 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkImageRegionIterator.h"
 #include "itkListSample.h"
-#include "itkMeanCalculator.h"
-#include "itkCovarianceCalculator.h"
+#include "itkCovarianceSampleFilter.h"
 #include "itkVariableSizeMatrix.h"
 
 namespace otb
@@ -76,11 +75,11 @@ public:
   typedef itk::ImageRegionIterator<OutputImageType>                                                                ImageRegionIteratorType;
 
   /** typedef related to statistics */
-  typedef typename InputImageType::PixelType                    VectorMeasurementType;
-  typedef itk::Statistics::ListSample<VectorMeasurementType>    ListSampleType;
-  typedef itk::Statistics::MeanCalculator<ListSampleType>       MeanCalculatorType;
-  typedef itk::Statistics::CovarianceCalculator<ListSampleType> CovarianceCalculatorType;
-  typedef typename CovarianceCalculatorType::OutputType         MatrixType;
+  typedef typename InputImageType::PixelType                      VectorMeasurementType;
+  typedef itk::Statistics::ListSample<VectorMeasurementType>      ListSampleType;
+  typedef itk::Statistics::CovarianceSampleFilter<ListSampleType> CovarianceCalculatorType;
+  typedef typename CovarianceCalculatorType::MeasurementVectorRealType MeasurementVectorRealType;
+  typedef typename CovarianceCalculatorType::MatrixType                MatrixType;
 
   /** Getter and Setter */
   itkSetMacro(InternalRadius, int);
@@ -92,7 +91,7 @@ public:
   virtual void GenerateInputRequestedRegion();
 //       virtual void GenerateData();
   virtual void BeforeThreadedGenerateData();
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 
 protected:

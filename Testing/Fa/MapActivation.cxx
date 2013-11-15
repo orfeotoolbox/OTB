@@ -77,7 +77,9 @@ int main(int argc, char* argv[])
 
   typedef itk::VariableLengthVector<double>                  MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType> SampleType;
+  
   SampleType::Pointer liste = SampleType::New();
+  liste->SetMeasurementVectorSize(nbcolonnes);
 
   for (int j = 0; j < nblines; ++j)
     {
@@ -92,7 +94,7 @@ int main(int argc, char* argv[])
   //   std::cout<<"liste: "<<liste->GetMeasurementVectorSize()<< " " << liste->GetMeasurementVector(1)
   //   <<" " <<liste->GetMeasurementVector(2)<< " " <<liste->GetMeasurementVector(3)<<std::endl;
 
-  typedef itk::Statistics::EuclideanDistance<MeasurementVectorType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<MeasurementVectorType> DistanceType;
   typedef otb::SOMMap<MeasurementVectorType, DistanceType, 2>       MapType;
 
   typedef otb::SOM<SampleType, MapType> SOMType;
@@ -182,13 +184,17 @@ int main(int argc, char* argv[])
   int nbclass = membershipSample->GetNumberOfClasses();
   std::cout << " nb of classes= " << nbclass << std::endl;
 
-  for (int i = 0; i < nbclass; ++i)
+
+//FIXME methods not available in the new stat framework API
+/*
+  for (int i = 0; i < nbclass; i++)
     {
     if (membershipSample->GetInternalClassLabel(i) != -1)
       {
       std::cout << "classlabel= " << i << "  classSize= " << membershipSample->GetClassSampleSize(i) << std::endl;
       }
     }
+*/
 
   return EXIT_SUCCESS;
 }

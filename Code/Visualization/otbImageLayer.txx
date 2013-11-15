@@ -27,7 +27,6 @@
 #include "otbImageKeywordlist.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "itkMetaDataDictionary.h"
-#include "itkPixelBuilder.h"
 
 #include "vnl/vnl_random.h"
 namespace otb
@@ -129,7 +128,7 @@ ImageLayer<TImage, TOutputImage>
     this->SetRenderedQuicklook(m_QuicklookRenderingFilter->GetOutput());
     probe.Stop();
     otbMsgDevMacro(<< "ImageLayer::RenderImages():" << " (" << this->GetName() << ")"
-                   << " quicklook regenerated (" << probe.GetMeanTime() << " s.)");
+                   << " quicklook regenerated (" << probe.GetMean() << " s.)");
     }
   // If there are pixels to render
   if (this->GetExtractRegion().GetNumberOfPixels() > 0)
@@ -147,7 +146,7 @@ ImageLayer<TImage, TOutputImage>
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
     probe.Stop();
     otbMsgDevMacro(<< "ImageLayer::RenderImages():" << " (" << this->GetName() << ")"
-                   << " extract regenerated (" << probe.GetMeanTime() << " s.)");
+                   << " extract regenerated (" << probe.GetMean() << " s.)");
     this->SetHasExtract(true);
     }
   else
@@ -172,7 +171,7 @@ ImageLayer<TImage, TOutputImage>
     this->SetHasScaledExtract(true);
     probe.Stop();
     otbMsgDevMacro(<< "ImageLayer::RenderImages():" << " (" << this->GetName() << ")"
-                   << " scaled extract regenerated (" << probe.GetMeanTime() << " s.)");
+                   << " scaled extract regenerated (" << probe.GetMean() << " s.)");
     }
   else
     {
@@ -395,7 +394,7 @@ ImageLayer<TImage, TOutputImage>
   this->UpdateListSample();
 
   PixelType pixel;
-  itk::PixelBuilder<PixelType>::Zero(pixel, (m_Image->GetNumberOfComponentsPerPixel()));
+  itk::NumericTraits<PixelType>::SetLength(pixel, m_Image->GetNumberOfComponentsPerPixel());
 
   // Ensure rendering function initialization
   m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary()); //FIXME check, but the call must be done in the generator. To be moved to the layer?

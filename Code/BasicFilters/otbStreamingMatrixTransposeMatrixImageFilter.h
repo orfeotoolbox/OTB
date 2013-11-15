@@ -165,7 +165,7 @@ protected:
   virtual ~PersistentMatrixTransposeMatrixImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Multi-thread version GenerateData. */
-  virtual void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
+  virtual void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
   PersistentMatrixTransposeMatrixImageFilter(const Self &); //purposely not implemented

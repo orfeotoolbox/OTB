@@ -55,18 +55,18 @@ typename LocalHistogramImageFunction<TInputImage, TCoordRep>::OutputType
 LocalHistogramImageFunction<TInputImage, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-
   typename HistogramType::Pointer histogram = HistogramType::New();
 
-  typename HistogramType::SizeType size;
-  size.Fill( this->GetNumberOfHistogramBins() );
+  typename HistogramType::SizeType size(this->GetInputImage()->GetNumberOfComponentsPerPixel());
+  size.Fill(this->GetNumberOfHistogramBins());
 
-  typename HistogramType::MeasurementVectorType lowerBound;
-  typename HistogramType::MeasurementVectorType upperBound;
+  typename HistogramType::MeasurementVectorType lowerBound(this->GetInputImage()->GetNumberOfComponentsPerPixel());
+  typename HistogramType::MeasurementVectorType upperBound(this->GetInputImage()->GetNumberOfComponentsPerPixel());
 
   lowerBound.Fill( static_cast<typename HistogramType::MeasurementType>(this->GetHistogramMin()) );
   upperBound.Fill( static_cast<typename HistogramType::MeasurementType>(this->GetHistogramMax()) );
 
+  histogram->SetMeasurementVectorSize(this->GetInputImage()->GetNumberOfComponentsPerPixel());
   histogram->Initialize(size, lowerBound, upperBound );
   histogram->SetToZero();
 
@@ -121,11 +121,11 @@ LocalHistogramImageFunction<TInputImage, TCoordRep>
         offset[1]=j;
  
         // Get the current value
-        typename HistogramType::MeasurementVectorType sample;
+        typename HistogramType::MeasurementVectorType sample(this->GetInputImage()->GetNumberOfComponentsPerPixel());
         sample[0] = it.GetPixel(offset);
 
         // Populate histogram
-        histogram->IncreaseFrequency(sample, gWeight);
+        histogram->IncreaseFrequencyOfMeasurement(sample, gWeight);
         }
       }
     }

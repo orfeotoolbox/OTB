@@ -22,7 +22,6 @@
 
 #include "otbMacro.h"
 
-
 namespace otb
 {
 
@@ -30,7 +29,7 @@ template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::SensorModelBase() : Superclass(OutputSpaceDimension, 0) //FIXME
+::SensorModelBase() : Superclass(0)
 {
   m_Model = SensorModelAdapter::New();
 }

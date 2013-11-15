@@ -83,15 +83,15 @@ public:
   /** Some convenient typedefs. */
   typedef TLabelMap                                     LabelMapType;
   typedef typename LabelMapType::Pointer                LabelMapPointer;
-  typedef typename LabelMapType::LabelObjectContainerType   LabelObjectContainerType;
-  typedef typename LabelObjectContainerType::const_iterator LabelObjectContainerTypeConstIterator;
+  typedef typename LabelMapType::ConstIterator          ConstIteratorType;
+  typedef typename LabelMapType::Iterator               IteratorType;
   typedef typename LabelMapType::LabelObjectType        LabelObjectType;
   typedef typename LabelObjectType::AttributeType       AttributeType;
   typedef typename LabelObjectType::AttributesValueType AttributesValueType;
   typedef typename LabelMapType::LabelVectorType        LabelVectorType;
   typedef typename LabelMapType::RegionType             ImageRegionType;
 
-  typedef typename LabelObjectType::LineContainerType   LineContainerType;
+  //typedef typename LabelObjectType::LineContainerType   LineContainerType;
   typedef typename LabelObjectType::IndexType           IndexType;
   typedef typename LabelObjectType::LabelType           LabelType;
   
@@ -106,8 +106,8 @@ public:
   void SetMachineSegmentationLabelMap(const LabelMapType *ms);
   
   const LabelMapType* GetGroundTruthLabelMap();
-  const LabelMapType* GetMachineSegmentationLabelMap();
-  
+  LabelMapType* GetMachineSegmentationLabelMap();
+
   LabelMapType* GetOutputGroundTruthLabelMap();
   LabelMapType* GetOutputMachineSegmentationLabelMap();
   

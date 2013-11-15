@@ -35,7 +35,7 @@ LabelImageRegionMergingFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
   this->SetNumberOfRequiredInputs( 2 );
 
-  this->SetNumberOfOutputs(2);
+  this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0, OutputLabelImageType::New());
   this->SetNthOutput(1, OutputClusteredImageType::New());
 

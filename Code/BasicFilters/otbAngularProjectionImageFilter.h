@@ -52,7 +52,7 @@ public:
   /** Dimension */
   itkStaticConstMacro(InputImageDimension,  unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
-  itkStaticConstMacro(NumberOfInputImages,  unsigned int, TAngleArray::Dimension+1);
+  //itkStaticConstMacro(NumberOfInputImages,  unsigned int, TAngleArray::Dimension+1);
 
   /** Template parameters typedefs */
   typedef TInputImage                         InputImageType;
@@ -86,7 +86,7 @@ protected:
   AngularProjectionImageFilter();
   virtual ~AngularProjectionImageFilter() { }
 
-  virtual void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, int threadID );
+  virtual void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID );
   virtual OutputImagePixelType GenerateData ( const ImageRegionConstIteratorVectorType & ) const;
 
 private:

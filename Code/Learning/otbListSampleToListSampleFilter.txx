@@ -34,26 +34,16 @@ ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 template < class TInputSampleList, class TOutputSampleList >
 void
 ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
-::SetInput( const InputSampleListType * input )
-{
-  typename InputSampleListObjectType::Pointer inputPtr = InputSampleListObjectType::New();
-  inputPtr->Set(input);
-  this->SetInput(inputPtr);
-}
-
-template < class TInputSampleList, class TOutputSampleList >
-void
-ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
-::SetInput( const InputSampleListObjectType * inputPtr )
+::SetInput( const InputSampleListType * inputPtr )
 {
   // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(0,
-                                        const_cast< InputSampleListObjectType* >( inputPtr ) );
+                                        const_cast< InputSampleListType* >( inputPtr ) );
 }
 
 template < class TInputSampleList, class TOutputSampleList >
 const typename ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
-::InputSampleListObjectType *
+::InputSampleListType *
 ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 ::GetInput() const
 {
@@ -62,24 +52,8 @@ ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
     return 0;
     }
 
-  return static_cast<const InputSampleListObjectType * >
+  return static_cast<const InputSampleListType * >
     (this->itk::ProcessObject::GetInput(0) );
-}
-
-template < class TInputSampleList, class TOutputSampleList >
-const typename ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
-::InputSampleListType *
-ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
-::GetInputSampleList() const
-{
-  if (this->GetNumberOfInputs() < 1)
-    {
-    return 0;
-    }
-
-  typename InputSampleListObjectType::Pointer dataObjectPointer = static_cast<const InputSampleListObjectType * >
-    (this->itk::ProcessObject::GetInput(0) );
-  return dataObjectPointer->Get();
 }
 
 template < class TInputSampleList, class TOutputSampleList >

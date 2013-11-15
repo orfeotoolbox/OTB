@@ -41,6 +41,7 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
+  static GDALImageIOFactory * FactoryNew() { return new GDALImageIOFactory; }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(GDALImageIOFactory, itk::ObjectFactoryBase);

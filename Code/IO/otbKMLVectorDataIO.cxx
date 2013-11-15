@@ -582,7 +582,7 @@ void KMLVectorDataIO::Write(const itk::DataObject* datag, char ** itkNotUsed(pap
   //std::cout << xml;
 
   chrono.Stop();
-  otbMsgDevMacro(<< "KMLVectorDataIO: file saved in " << chrono.GetMeanTime() << " seconds. (" << m_Kept << " elements)" );
+  otbMsgDevMacro(<< "KMLVectorDataIO: file saved in " << chrono.GetMean() << " seconds. (" << m_Kept << " elements)" );
   otbMsgDevMacro(<< " KMLVectorDataIO::Write()  ");
 
 }

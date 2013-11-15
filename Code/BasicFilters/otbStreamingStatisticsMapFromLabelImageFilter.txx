@@ -22,6 +22,7 @@ for details.
 #define __otbStreamingStatisticsMapFromLabelImageFilter_txx
 #include "otbStreamingStatisticsMapFromLabelImageFilter.h"
 
+#include "itkInputDataObjectIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkNumericTraits.h"
@@ -154,6 +155,36 @@ PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelIm
 ::Reset()
 {
   m_RadiometricValueAccumulator.clear();
+}
+
+template<class TInputVectorImage, class TLabelImage>
+void
+PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>
+::GenerateInputRequestedRegion()
+{
+  // The Requested Regions of all the inputs are set to their Largest Possible Regions
+  this->itk::ProcessObject::GenerateInputRequestedRegion();
+
+  // Iteration over all the inputs of the current filter (this)
+  for( itk::InputDataObjectIterator it( this ); !it.IsAtEnd(); it++ )
+    {
+    // Check whether the input is an image of the appropriate dimension
+    // dynamic_cast of all the input images as itk::ImageBase objects
+    // in order to pass the if ( input ) test whatever the inputImageType (vectorImage or labelImage)
+    ImageBaseType * input = dynamic_cast< ImageBaseType *>( it.GetInput() );
+
+    if ( input )
+      {
+      // Use the function object RegionCopier to copy the output region
+      // to the input.  The default region copier has default implementations
+      // to handle the cases where the input and output are the same
+      // dimension, the input a higher dimension than the output, and the
+      // input a lower dimension than the output.
+      InputImageRegionType inputRegion;
+      this->CallCopyOutputRegionToInputRegion( inputRegion, this->GetOutput()->GetRequestedRegion() );
+      input->SetRequestedRegion(inputRegion);
+      }
+    }
 }
 
 template<class TInputVectorImage, class TLabelImage>

@@ -39,7 +39,7 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
   m_MinimumRegionSize  = 10;
   m_Scale              = 100000.;
 
-  this->SetNumberOfOutputs(4);
+  this->SetNumberOfRequiredOutputs(4);
   this->SetNthOutput(1, OutputImageType::New());
   this->SetNthOutput(2, LabeledOutputType::New());
   this->SetNthOutput(3, LabeledOutputType::New());

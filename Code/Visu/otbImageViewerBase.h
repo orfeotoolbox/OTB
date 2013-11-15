@@ -33,14 +33,16 @@
 #include "otbImageWidgetCircleForm.h"
 #include "itkListSample.h"
 #include "otbObjectList.h"
-#include "itkCovarianceCalculator.h"
+#include "itkCovarianceSampleFilter.h"
 #include "itkMacro.h"
 #include <FL/Fl_Multiline_Output.H>
 #include "otbImage.h"
 #include "otbImageToVectorImageCastFilter.h"
 #include <map>
 #include "itkImageRegionIterator.h"
-#include "itkListSampleToHistogramGenerator.h"
+#include "itkSampleToHistogramFilter.h"
+#include "itkDenseFrequencyContainer2.h"
+#include "itkHistogram.h"
 
 namespace otb
 {
@@ -119,16 +121,17 @@ public:
   typedef itk::Vector<typename itk::NumericTraits<InputPixelType>::RealType, 1> MeasurementVectorType;
   typedef itk::Statistics::ListSample<MeasurementVectorType>                    ListSampleType;
   typedef float                                                                 HistogramMeasurementType;
-  typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType, HistogramMeasurementType,
-      itk::Statistics::DenseFrequencyContainer,
-      1> HistogramGeneratorType;
+
+  typedef itk::Statistics::DenseFrequencyContainer2 FrequencyContainerType;
+  typedef itk::Statistics::Histogram< HistogramMeasurementType, FrequencyContainerType > HistogramType;
+
+  typedef itk::Statistics::SampleToHistogramFilter<ListSampleType, HistogramType> HistogramGeneratorType;
   typedef otb::ObjectList<ListSampleType>
   ListSampleListType;
   typedef otb::ObjectList<HistogramGeneratorType>
   HistogramGeneratorListType;
   typedef typename HistogramGeneratorListType::Pointer
   HistogramGeneratorListPointerType;
-  typedef typename HistogramGeneratorType::HistogramType HistogramType;
   typedef otb::ImageViewerHistogramAndTransferFunctionWidget<HistogramType, InputPixelType,
       LabelType> HistogramWidgetType;
   typedef typename HistogramWidgetType::Pointer

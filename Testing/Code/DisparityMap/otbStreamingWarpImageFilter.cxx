@@ -40,33 +40,33 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   const unsigned int Dimension = 2;
   typedef double                                      PixelType;
   typedef otb::Image<PixelType, Dimension>            ImageType;
-  typedef itk::Vector<PixelType, 2>                   DeformationValueType;
-  typedef otb::Image<DeformationValueType, Dimension> DeformationFieldType;
+  typedef itk::Vector<PixelType, 2>                   DisplacementValueType;
+  typedef otb::Image<DisplacementValueType, Dimension> DisplacementFieldType;
 
   // Warper
-  typedef otb::StreamingWarpImageFilter<ImageType, ImageType, DeformationFieldType> ImageWarperType;
+  typedef otb::StreamingWarpImageFilter<ImageType, ImageType, DisplacementFieldType> ImageWarperType;
 
   // Reader/Writer
   typedef otb::ImageFileReader<ImageType>            ReaderType;
-  typedef otb::ImageFileReader<DeformationFieldType> DeformationReaderType;
+  typedef otb::ImageFileReader<DisplacementFieldType> DisplacementReaderType;
   typedef otb::ImageFileWriter<ImageType>   WriterType;
 
   // Objects creation
-  DeformationReaderType::Pointer deformationReader = DeformationReaderType::New();
+  DisplacementReaderType::Pointer displacementReader = DisplacementReaderType::New();
   ReaderType::Pointer            reader = ReaderType::New();
   WriterType::Pointer            writer = WriterType::New();
   ImageWarperType::Pointer       warper = ImageWarperType::New();
 
   // Reading
   reader->SetFileName(infname);
-  deformationReader->SetFileName(deffname);
+  displacementReader->SetFileName(deffname);
 
   // Warping
-  DeformationValueType maxDeformation;
-  maxDeformation.Fill(maxdef);
-  warper->SetMaximumDeformation(maxDeformation);
+  DisplacementValueType maxDisplacement;
+  maxDisplacement.Fill(maxdef);
+  warper->SetMaximumDisplacement(maxDisplacement);
   warper->SetInput(reader->GetOutput());
-  warper->SetDeformationField(deformationReader->GetOutput());
+  warper->SetDisplacementField(displacementReader->GetOutput());
 
   // Writing
   writer->SetInput(warper->GetOutput());

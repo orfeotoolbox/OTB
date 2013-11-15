@@ -44,7 +44,7 @@ MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterati
       , m_BucketOptimization(false)
 #endif
 {
-  this->SetNumberOfOutputs(4);
+  this->SetNumberOfRequiredOutputs(4);
   this->SetNthOutput(0, OutputImageType::New());
   this->SetNthOutput(1, OutputSpatialImageType::New());
   this->SetNthOutput(2, OutputIterationImageType::New());
@@ -529,9 +529,8 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
 #endif
 
 template<class TInputImage, class TOutputImage, class TKernel, class TOutputIterationImage>
-void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>::ThreadedGenerateData(
-                                                                                                                    const OutputRegionType& outputRegionForThread,
-                                                                                                                    int threadId)
+void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIterationImage>
+::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // at the first iteration
 
@@ -783,7 +782,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
     itk::VariableLengthVector<LabelType> newLabelOffset;
     newLabelOffset.SetSize(this->GetNumberOfThreads());
     newLabelOffset[0] = 0;
-    for (int i = 1; i < this->GetNumberOfThreads(); i++)
+    for (itk::ThreadIdType i = 1; i < this->GetNumberOfThreads(); i++)
       {
       // Retrieve the number of labels in the thread by removing the threadId
       // from the most significant bits
@@ -799,7 +798,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
       LabelType const label = labelIt.Get();
 
       // Get threadId from most significant bits
-      const unsigned int threadId = label >> (sizeof(LabelType) * 8 - m_ThreadIdNumberOfBits);
+      const itk::ThreadIdType threadId = label >> (sizeof(LabelType) * 8 - m_ThreadIdNumberOfBits);
 
       // Relabeling
       // First get the label number by removing the threadId bits

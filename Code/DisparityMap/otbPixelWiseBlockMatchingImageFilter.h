@@ -275,7 +275,7 @@ private:
  *  the initial estimate (global minimum and maximum values are still in use).
  *
  *  \sa FineRegistrationImageFilter
- *  \sa StereorectificationDeformationFieldSource
+ *  \sa StereorectificationDisplacementFieldSource
  *  \sa SubPixelDisparityImageFilter
  *
  *  \ingroup Streamed
@@ -447,7 +447,7 @@ protected:
   virtual void BeforeThreadedGenerateData();
   
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
   
 private:
   PixelWiseBlockMatchingImageFilter(const Self&); //purposely not implemented

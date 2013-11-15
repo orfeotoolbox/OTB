@@ -41,6 +41,7 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
+  static MSTARImageIOFactory * FactoryNew() { return new MSTARImageIOFactory; }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(MSTARImageIOFactory, itk::ObjectFactoryBase);

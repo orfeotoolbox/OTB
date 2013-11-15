@@ -19,14 +19,12 @@
 // and all it expects is that you have a function called RegisterTests
 
 #include <iostream>
-#include "itkTestMain.h"
+#include "otbTestMain.h"
 
 void RegisterTests()
 {
   REGISTER_TEST(ImageLinearIteratorWithIndexTest);
   REGISTER_TEST(ImageRandomConstIteratorWithIndexTest);
-  REGISTER_TEST(ImageRegionIteratorTest);
-  REGISTER_TEST(ImageRegionIteratorWithIndexTest);
   REGISTER_TEST(ImageSliceIteratorWithIndexTest);
 }
 
@@ -37,14 +35,6 @@ void RegisterTests()
 #undef main
 #define main ImageRandomConstIteratorWithIndexTest
 #include "ImageRandomConstIteratorWithIndex.cxx"
-
-#undef main
-#define main ImageRegionIteratorTest
-#include "ImageRegionIterator.cxx"
-
-#undef main
-#define main ImageRegionIteratorWithIndexTest
-#include "ImageRegionIteratorWithIndex.cxx"
 
 #undef main
 #define main ImageSliceIteratorWithIndexTest

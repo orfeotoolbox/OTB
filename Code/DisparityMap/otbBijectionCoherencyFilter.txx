@@ -31,7 +31,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 ::BijectionCoherencyFilter()
 {
   // Set the number of inputs (1 moving image by default -> 3 inputs)
-  this->SetNumberOfInputs(4);
+  this->SetNumberOfRequiredInputs(4);
   this->SetNumberOfRequiredInputs(1);
   this->m_Tolerance = 1.;
   this->m_MinHDisp = -5;
@@ -40,7 +40,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
   this->m_MaxVDisp = 5;
 
   // Set the outputs
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0,TOutputImage::New());
 }
 
@@ -215,7 +215,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 template <class TDisparityImage, class TOutputImage>
 void
 BijectionCoherencyFilter<TDisparityImage,TOutputImage>
-::ThreadedGenerateData(const OutputRegionType & outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId)
 {
   const TDisparityImage * directHmap = this->GetDirectHorizontalDisparityMapInput();
   const TDisparityImage * directVmap = this->GetDirectVerticalDisparityMapInput();

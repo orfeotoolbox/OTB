@@ -19,6 +19,7 @@
 #define __otbNumberOfLinesStrippedStreamingManager_h
 
 #include "otbStreamingManager.h"
+#include "itkImageRegionSplitter.h"
 
 namespace otb
 {

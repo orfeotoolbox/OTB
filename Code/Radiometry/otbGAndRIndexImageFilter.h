@@ -72,7 +72,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /*  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                              int threadId );
+                              itk::ThreadIdType threadId );
   */
 private:
   GAndRIndexImageFilter(const Self &); //purposely not implemented

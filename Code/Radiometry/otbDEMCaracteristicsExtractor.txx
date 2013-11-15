@@ -33,8 +33,8 @@ template <class TInputImage, class TOutputImage>
 DEMCaracteristicsExtractor<TInputImage, TOutputImage>
 ::DEMCaracteristicsExtractor()
 {
-  this->SetNumberOfInputs(1);
-  this->SetNumberOfOutputs(3);
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(3);
 
   this->SetNthOutput(0, OutputImageType::New());
   this->SetNthOutput(1, OutputImageType::New());

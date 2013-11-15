@@ -46,7 +46,7 @@ namespace otb
  *    - the DEM (GetDEMOutput)
  *
  *  \sa FineRegistrationImageFilter
- *  \sa StereorectificationDeformationFieldSource
+ *  \sa StereorectificationDisplacementFieldSource
  *  \sa SubPixelDisparityImageFilter
  *  \sa PixelWiseBlockMatchingImageFilter
  *
@@ -156,11 +156,19 @@ protected:
   virtual void BeforeThreadedGenerateData();
   
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
   
   /** After threaded generate data : sum up temporary DEMs */
   virtual void AfterThreadedGenerateData();
   
+  /** Override VerifyInputInformation() since this filter's inputs do
+    * not need to occupy the same physical space.
+    *
+    * \sa ProcessObject::VerifyInputInformation
+    */
+  virtual void VerifyInputInformation() {}
+
+
 private:
   DisparityMapToDEMFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

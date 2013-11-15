@@ -21,7 +21,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkLabelMapFilter.h"
 #include "otbLabelMapWithClassLabelToLabeledSampleListFilter.h"
 #include "itkListSample.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
 
@@ -71,7 +71,7 @@ public:
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType>         TreeGeneratorType;
   typedef typename TreeGeneratorType::KdTreeType                                   TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>                    EstimatorType;
-  typedef itk::Statistics::EuclideanDistance<VectorType>                           DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<VectorType>                     DistanceType;
   typedef std::vector<VectorType>                                                  CentroidsVectorType;
 
   /** ImageDimension constants */

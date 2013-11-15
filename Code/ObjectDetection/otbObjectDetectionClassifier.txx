@@ -148,7 +148,7 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
   vdata->GetDataTree()->Add(document, root);
   vdata->GetDataTree()->Add(folder, document);
 
-  for (unsigned int threadId = 0; threadId < m_ThreadPointArray.size(); ++threadId)
+  for (itk::ThreadIdType threadId = 0; threadId < m_ThreadPointArray.size(); ++threadId)
     {
     PointArray& pointArray = m_ThreadPointArray[threadId];
     typename PointArray::const_iterator it = pointArray.begin();
@@ -239,7 +239,7 @@ template <class TInputImage, class TOutputVectorData, class TLabel, class TFunct
 void
 PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFunctionType>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   InputImageType* input = static_cast<InputImageType*>(this->itk::ProcessObject::GetInput(0));
   SVMModelType*   model = static_cast<SVMModelType*>(this->itk::ProcessObject::GetInput(1));

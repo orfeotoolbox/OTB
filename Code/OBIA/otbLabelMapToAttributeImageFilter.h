@@ -55,11 +55,8 @@ public:
   /** Some convenient typedefs. */
   typedef TInputImage                                       InputImageType;
   typedef typename InputImageType::LabelObjectType          LabelObjectType;
-  typedef typename InputImageType::LabelObjectContainerType LabelObjectContainerType;
-  typedef typename LabelObjectContainerType::const_iterator LabelObjectContainerConstIterator;
+  typedef typename LabelObjectType::ConstLineIterator       ConstLineIteratorType;
   typedef typename LabelObjectType::AttributesMapType       AttributesMapType;
-  typedef typename LabelObjectType::LineContainerType       LineContainerType;
-  typedef typename LineContainerType::const_iterator        LineContainerConstIterator;
   
   typedef TOutputImage                                OutputImageType;
   typedef typename OutputImageType::PixelType         OutputPixelType;

@@ -79,7 +79,7 @@ template<class TInputImage, class TOutputImage, class TFunction>
 void
 FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
 
   // We use dynamic_cast since inputs are stored as DataObjects.

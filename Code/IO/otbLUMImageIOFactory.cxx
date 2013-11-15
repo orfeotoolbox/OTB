@@ -49,4 +49,17 @@ LUMImageIOFactory::GetDescription() const
   return "LUM ImageIO Factory, permettant le chargement d'image au format LUM dans l'OTB";
 }
 
+// Undocumented API used to register during static initialization.
+// DO NOT CALL DIRECTLY.
+
+static bool LUMImageIOFactoryHasBeenRegistered;
+
+void LUMImageIOFactoryRegister__Private(void)
+{
+  if( ! LUMImageIOFactoryHasBeenRegistered )
+    {
+    LUMImageIOFactoryHasBeenRegistered = true;
+    LUMImageIOFactory::RegisterOneFactory();
+    }
+}
 } // end namespace otb

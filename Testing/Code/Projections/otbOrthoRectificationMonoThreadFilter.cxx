@@ -99,11 +99,11 @@ int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
   utmMapProjection->SetHemisphere(argv[10][0]);
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 
-  // Deformation Field spacing
+  // Displacement Field spacing
   ImageType::SpacingType  gridSpacing;
   gridSpacing[0] = atof(argv[11]);
   gridSpacing[1] = -atof(argv[11]);
-  orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
+  orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
   
   writer->SetInput(orthoRectifFilter->GetOutput());
   writer->SetAutomaticTiledStreaming();

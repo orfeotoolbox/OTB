@@ -40,13 +40,13 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList, TOutputSampleList>
 ::GenerateRandomSequence()
 {
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator GeneratorType;
-  GeneratorType::Pointer   generator   = GeneratorType::New();
+  GeneratorType::Pointer generator = GeneratorType::GetInstance();
 
   // Clear the coefficients vector first
   m_WhiteGaussianNoiseCoefficients.clear();
 
   // Get the size of the measurement vectors
-  unsigned int size = this->GetInput()->Get()->GetMeasurementVectorSize();
+  unsigned int size = this->GetInput()->GetMeasurementVectorSize();
   if(size == 0)
     {
     itkExceptionMacro(<< "MeasurementVector size is  "<<size << " , expected non null size " );
@@ -65,15 +65,14 @@ GaussianAdditiveNoiseSampleListFilter<TInputSampleList, TOutputSampleList>
 ::GenerateData()
 {
   // Retrieve input and output pointers
-  typename InputSampleListObjectType::ConstPointer inputPtr = this->GetInput();
-  typename OutputSampleListObjectType::Pointer     outputPtr = this->GetOutput();
+  InputSampleListConstPointer inputSampleListPtr  = this->GetInput();
+  OutputSampleListPointer     outputSampleListPtr = this->GetOutput();
 
-  // Retrieve the ListSample
-  InputSampleListConstPointer inputSampleListPtr = inputPtr->Get();
-  OutputSampleListPointer outputSampleListPtr    = const_cast<OutputSampleListType *>(outputPtr->Get());
-  
   // Clear any previous output
   outputSampleListPtr->Clear();
+
+  // Set the measurement vector size 
+  outputSampleListPtr->SetMeasurementVectorSize(inputSampleListPtr->GetMeasurementVectorSize());
   
   // Set-up progress reporting
   itk::ProgressReporter progress(this, 0, inputSampleListPtr->Size()*m_NumberOfIteration);

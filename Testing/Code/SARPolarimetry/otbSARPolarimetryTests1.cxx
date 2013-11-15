@@ -25,11 +25,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbPolarimetricSynthesisFunctor);
-  REGISTER_TEST(otbPolarimetricSynthesisFilterNew);
-  REGISTER_TEST(otbPolarimetricSynthesisFilter);
-  REGISTER_TEST(otbHHnHVnVVPolarimetricSynthesisFilter);
-  REGISTER_TEST(otbHHnHVPolarimetricSynthesisFilter);
-  REGISTER_TEST(otbVHnVVPolarimetricSynthesisFilter);
   REGISTER_TEST(otbMultiChannelsPolarimetricSynthesisFilterNew);
   REGISTER_TEST(otbMultiChannelsPolarimetricSynthesisFilter);
   REGISTER_TEST(otbVectorMultiChannelsPolarimetricSynthesisFilter);

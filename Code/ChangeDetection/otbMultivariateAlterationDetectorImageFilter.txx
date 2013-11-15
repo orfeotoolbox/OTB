@@ -270,7 +270,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve input images pointers
   const TInputImage * input1Ptr = this->GetInput1();

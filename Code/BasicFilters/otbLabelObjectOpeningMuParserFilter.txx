@@ -171,16 +171,13 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>::GenerateData()
   // set the background value for the second output - this is not done in the superclasses
   output2->SetBackgroundValue(output->GetBackgroundValue());
 
-  const typename ImageType::LabelObjectContainerType & labelObjectContainer = output->GetLabelObjectContainer();
+  itk::ProgressReporter progress(this, 0, output->GetNumberOfLabelObjects());
+  typename ImageType::Iterator it(output);
 
-  itk::ProgressReporter progress(this, 0, labelObjectContainer.size());
-
-  typename ImageType::LabelObjectContainerType::const_iterator it = labelObjectContainer.begin();
-
-  while (it != labelObjectContainer.end())
+  while (!it.IsAtEnd())
     {
-    typename LabelObjectType::LabelType label = it->first;
-    LabelObjectType * labelObject = it->second;
+    typename LabelObjectType::LabelType label = it.GetLabel();
+    LabelObjectType * labelObject = it.GetLabelObject();
 
     if (!m_Functor(*labelObject))
       {

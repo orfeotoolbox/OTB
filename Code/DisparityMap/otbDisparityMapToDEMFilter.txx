@@ -31,11 +31,11 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 ::DisparityMapToDEMFilter()
 {
   // Set the number of inputs
-  this->SetNumberOfInputs(7);
+  this->SetNumberOfRequiredInputs(7);
   this->SetNumberOfRequiredInputs(1);
 
   // Set the outputs
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0,TOutputDEMImage::New());
   
   // Default DEM reconstruction parameters
@@ -641,7 +641,7 @@ template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
-::ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId)
 {
   const TDisparityImage * horizDisp = this->GetHorizontalDisparityMapInput();
   const TDisparityImage * vertiDisp = this->GetVerticalDisparityMapInput();

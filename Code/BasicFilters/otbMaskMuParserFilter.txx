@@ -168,7 +168,7 @@ void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::BeforeThreadedGen
 template<class TInputImage, class TOutputImage, class TFunction>
 void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(
                                                                                     const OutputImageRegionType &outputRegionForThread,
-                                                                                    int threadId)
+                                                                                    itk::ThreadIdType threadId)
 {
 
   InputImageConstPointer inputPtr = this->GetInput();

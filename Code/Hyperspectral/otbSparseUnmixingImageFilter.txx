@@ -32,7 +32,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 ::SparseUnmixingImageFilter ()
 {
   this->SetNumberOfRequiredInputs( NumberOfInputImages );
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0, OutputImageListType::New());
 
   m_NumberOfComponentsRequired = 0;
@@ -151,7 +151,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 
   while ( angleIter != m_AngleListFilter->GetOutputSampleList()->End() )
   {
-    if ( !m_Histogram->IncreaseFrequency( angleIter.GetMeasurementVector(), 1 ) )
+    if ( !m_Histogram->IncreaseFrequencyOfMeasurement( angleIter.GetMeasurementVector(), 1 ) )
       std::cerr << "Data out of bounds\n";
 
     ++angleIter;
@@ -171,7 +171,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 
     // Is this curIdx a local max ?
     bool isLocalMax = true;
-    for ( unsigned int k = 0; k < m_Histogram->GetSize().GetSizeDimension(); ++k )
+    for ( unsigned int k = 0; k < m_Histogram->GetSize().Size(); ++k )
     {
       HistogramIndexType prevIdx = curIdx;
       if ( prevIdx[k] == 0 )
@@ -211,7 +211,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
   for ( unsigned int i = 0; i < angles->Size(); i++ )
   {
     std::cerr << "Source " << i << ":";
-    for ( unsigned int j = 0; j < m_Histogram->GetSize().GetSizeDimension(); ++j )
+    for ( unsigned int j = 0; j < m_Histogram->GetSize().Size(); ++j )
       std::cout << "\t" << angles->GetMeasurementVector(i)[j];
     std::cout << "\n";
   }

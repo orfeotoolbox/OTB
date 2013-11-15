@@ -37,15 +37,15 @@ namespace Statistics
  * analytical way to update the distribution parameters
  *
  * This class expects that its subclasses (distribution components) should
- * have analytical expressions for updating its paraters using only
+ * have analytical expressions for updating its parameters using only
  * the measurement vectors.
  *
  * The difference from MixtureModelComponentBase is that it does not have
- * the knownledge of a mixture. Hence, no weights have to define.
+ * the knowledge of a mixture. Hence, no weights have to define.
  *
  * This class can be considered as a macro class that encapsulates the
  * storage for the model (subclasses of MembershipFunctionBase) and
- * model parameter estimators (implemenation of analytical expressions).
+ * model parameter estimators (implementation of analytical expressions).
  *
  * Subclasses of this class should define their own distribution specific
  * membership function. For example, GaussianModelComponent class
@@ -95,9 +95,9 @@ public:
   MembershipFunctionType* GetCdfMembershipFunction();
 
   /** stores the pointer to the membership function.
-   * subclasses use this funtion to store their membership function
+   * subclasses use this function to store their membership function
    * object after dynamic creation, when available (the Pdf part is
-   * protected as soon as it consodered to be known for all
+   * protected as soon as it is considered to be known for all
    * ModelComponent)*/
   void SetCdfMembershipFunction(MembershipFunctionType* function);
 
@@ -143,13 +143,15 @@ protected:
   ParametersType m_Parameters;
 
 private:
+  ModelComponentBase(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
   /** target sample data pointer */
   const TSample* m_Sample;
 
 protected:
-  /** SmartPointer to the memberhip function - here density function */
+  /** SmartPointer to the membership function - here density function */
   MembershipFunctionType* m_PdfFunction;
-  /** SmartPointer to the memberhip function - here cumulative function */
+  /** SmartPointer to the membership function - here cumulative function */
   MembershipFunctionType* m_CdfFunction;
   /** indicative flag of membership function's parameter changes */
   int m_SampleModified;

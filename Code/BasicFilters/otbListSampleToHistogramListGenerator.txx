@@ -33,13 +33,71 @@ template<class TListSample,
 ListSampleToHistogramListGenerator<TListSample,
     THistogramMeasurement,
     TFrequencyContainer>
-::ListSampleToHistogramListGenerator() : m_List(), m_Size(), m_MarginalScale(100), m_HistogramMin(), m_HistogramMax(),
-                                         m_AutoMinMax(true), m_HistogramList(), m_NoDataFlag(false), m_NoDataValue(itk::NumericTraits<THistogramMeasurement>::Zero)
+::ListSampleToHistogramListGenerator()
+ : m_Size(10),
+   m_MarginalScale(100),
+   m_AutoMinMax(true),
+   m_NoDataFlag(false),
+   m_NoDataValue(itk::NumericTraits<THistogramMeasurement>::Zero)
 {
-  m_HistogramList = HistogramListType::New();
   m_Size.Fill(255);
+
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
+  
+  this->itk::ProcessObject::SetNthOutput(0, this->MakeOutput(0).GetPointer());
 }
 
+// Set the input ListSample
+template<class TListSample, class THistogramMeasurement, class TFrequencyContainer>
+void
+ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
+::SetListSample(const ListSampleType* inputlist)
+{
+  // Process object is not const-correct so the const_cast is required here
+  this->itk::ProcessObject::SetNthInput(0,
+                                        const_cast<ListSampleType*>(inputlist));
+
+}
+
+// Get the input ListSample
+template<class TListSample, class THistogramMeasurement, class TFrequencyContainer>
+const typename ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
+::ListSampleType*
+ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
+::GetListSample() const
+{
+  if (this->GetNumberOfInputs() < 1)
+    {
+    return 0;
+    }
+  return static_cast<const ListSampleType* >
+    (this->itk::ProcessObject::GetInput(0) );
+}
+
+// Get the output 
+template<class TListSample, class THistogramMeasurement, class TFrequencyContainer>
+const typename ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
+::HistogramListType*
+ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
+::GetOutput()
+{
+  return dynamic_cast<HistogramListType*>(this->itk::ProcessObject::GetOutput(0));
+}
+
+// MakeOutput implementation
+template<class TListSample, class THistogramMeasurement, class TFrequencyContainer>
+typename ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
+::DataObjectPointer
+ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
+::MakeOutput(unsigned int idx)
+{
+  DataObjectPointer output;
+  output = static_cast<itk::DataObject*>(HistogramListType::New().GetPointer());
+  return output;
+}
+
+// GenerateData
 template<class TListSample,
     class THistogramMeasurement,
     class TFrequencyContainer>
@@ -48,38 +106,44 @@ ListSampleToHistogramListGenerator<TListSample,
     THistogramMeasurement,
     TFrequencyContainer>
 ::GenerateData()
-{
+{  
   otbMsgDebugMacro(<< "ListSampleToHistogramListGenerator::GenerateData(): Entering");
+  
+  // Get the input ListSample
+  const ListSampleType*            inputList = this->GetListSample();
+  
+  // Get a pointer on the output
+  typename HistogramListType::Pointer histogramList = const_cast<HistogramListType*>(this->GetOutput());
 
   if (!m_AutoMinMax)
     {
-    if (m_HistogramMin.GetSize() != m_List->GetMeasurementVectorSize())
+    if (m_HistogramMin.GetSize() != inputList->GetMeasurementVectorSize())
       {
       itkExceptionMacro("Sample list measurement vectors and histogram min have different dimensions !");
       }
-    if (m_HistogramMax.GetSize() != m_List->GetMeasurementVectorSize())
+    if (m_HistogramMax.GetSize() != inputList->GetMeasurementVectorSize())
       {
       itkExceptionMacro("Sample list measurement vectors and histogram max have different dimensions !");
       }
     }
-  typename TListSample::MeasurementVectorType lower(m_List->GetMeasurementVectorSize());
-  typename TListSample::MeasurementVectorType upper(m_List->GetMeasurementVectorSize());
+  typename TListSample::MeasurementVectorType lower(inputList->GetMeasurementVectorSize());
+  typename TListSample::MeasurementVectorType upper(inputList->GetMeasurementVectorSize());
 
-  typename TListSample::MeasurementVectorType h_upper(m_List->GetMeasurementVectorSize());
-  typename TListSample::MeasurementVectorType h_lower(m_List->GetMeasurementVectorSize());
+  typename TListSample::MeasurementVectorType h_upper(inputList->GetMeasurementVectorSize());
+  typename TListSample::MeasurementVectorType h_lower(inputList->GetMeasurementVectorSize());
 
   bool clipBinsAtEnds = true;
 
   // must test for the list size to avoid making FindSampleBound() segfault.
   // Also, the min and max can't be found automatically in that case. We can
   // only return an empty histogram
-  if (m_AutoMinMax && m_List->Size() != 0)
+  if (m_AutoMinMax && inputList->Size() != 0)
     {
-    FindSampleBound(m_List.GetPointer (), m_List->Begin(),
-                    m_List->End(), lower, upper);
+    itk::Statistics::Algorithm::FindSampleBound<ListSampleType>(inputList, inputList->Begin(),
+                    inputList->End(), lower, upper);
     float margin;
 
-    for (unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); ++i)
+    for (unsigned int i = 0; i < inputList->GetMeasurementVectorSize(); ++i)
       {
       if (!itk::NumericTraits<THistogramMeasurement>::is_integer)
         {
@@ -124,14 +188,16 @@ ListSampleToHistogramListGenerator<TListSample,
     }
 
   // Clearing previous histograms
-  m_HistogramList->Clear();
+  histogramList->Clear();
 
   // For each dimension
-  for (unsigned int comp = 0; comp < m_List->GetMeasurementVectorSize(); ++comp)
+  for (unsigned int comp = 0; comp < inputList->GetMeasurementVectorSize(); ++comp)
     {
     // initialize the Histogram object using the sizes and
     // the upper and lower bound from the FindSampleBound function
-    typename HistogramType::MeasurementVectorType comp_lower, comp_upper;
+    typename HistogramType::MeasurementVectorType comp_lower(inputList->GetMeasurementVectorSize());
+    typename HistogramType::MeasurementVectorType comp_upper(inputList->GetMeasurementVectorSize());
+
     comp_lower[0] = h_lower[comp];
     comp_upper[0] = h_upper[comp];
 
@@ -139,26 +205,27 @@ ListSampleToHistogramListGenerator<TListSample,
       << "ListSampleToHistogramListGenerator::GenerateData(): Initializing histogram " << comp << " with (size= " <<
       m_Size << ", lower = " << comp_lower << ", upper = " << comp_upper << ")");
 
-    // Create a new histogrma for this component
-    m_HistogramList->PushBack(HistogramType::New());
-    m_HistogramList->Back()->SetClipBinsAtEnds(clipBinsAtEnds);
-    m_HistogramList->Back()->Initialize(m_Size, comp_lower, comp_upper);
+    // Create a new histogrma for this component : size of the
+    // measurement vector is : 1
+    histogramList->PushBack(HistogramType::New());
+    histogramList->Back()->SetMeasurementVectorSize(1);
+    histogramList->Back()->SetClipBinsAtEnds(clipBinsAtEnds);
+    histogramList->Back()->Initialize(m_Size, comp_lower, comp_upper);
 
-    typename TListSample::ConstIterator           iter = m_List->Begin();
-    typename TListSample::ConstIterator           last = m_List->End();
+    typename TListSample::ConstIterator           iter = inputList->Begin();
+    typename TListSample::ConstIterator           last = inputList->End();
     typename HistogramType::IndexType             index;
-    typename HistogramType::MeasurementVectorType hvector;
+    typename HistogramType::MeasurementVectorType hvector(inputList->GetMeasurementVectorSize());
 
     while (iter != last)
       {
       hvector[0] = static_cast<THistogramMeasurement>(iter.GetMeasurementVector()[comp]);
-
+      histogramList->Back()->GetIndex(hvector, index);
       if( (!m_NoDataFlag) || hvector[0]!=m_NoDataValue )
         {
       
-        m_HistogramList->Back()->GetIndex(hvector, index);
 
-        if (!m_HistogramList->Back()->IsIndexOutOfBounds(index))
+      if (!histogramList->Back()->IsIndexOutOfBounds(index))
           {
           // if the measurement vector is out of bound then
           // the GetIndex method has returned an index set to the max size of
@@ -166,7 +233,7 @@ ListSampleToHistogramListGenerator<TListSample,
           // bin value.
           // If the index isn't valid, we don't increase the frequency.
           // See the comments in Histogram->GetIndex() for more info.
-          m_HistogramList->Back()->IncreaseFrequency(index, 1);
+        histogramList->Back()->IncreaseFrequencyOfIndex(index, 1);
           }
         }
       ++iter;

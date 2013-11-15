@@ -51,10 +51,10 @@ SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
 
-  if (m_ReferencePixel == 0)
+  if (m_ReferencePixel.Size() == 0)
     {
     itkExceptionMacro(<< "Reference pixel is not set!");
     }

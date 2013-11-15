@@ -19,7 +19,6 @@
 #define __otbInverseSensorModel_txx
 
 #include "otbInverseSensorModel.h"
-
 #include "otbMacro.h"
 
 namespace otb

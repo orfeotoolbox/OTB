@@ -22,11 +22,10 @@
 #define __otbListSampleToHistogramListGenerator_h
 
 #include "itkObject.h"
-#include "itkListSampleBase.h"
 #include "itkHistogram.h"
 #include "otbObjectList.h"
 #include "itkStatisticsAlgorithm.h"
-#include "itkDenseFrequencyContainer.h"
+#include "itkDenseFrequencyContainer2.h"
 #include "itkNumericTraits.h"
 
 namespace otb {
@@ -42,34 +41,54 @@ namespace otb {
  */
 template<class TListSample,
     class THistogramMeasurement,
-    class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
+         class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer2>
 class ITK_EXPORT ListSampleToHistogramListGenerator :
-  public itk::Object
+  public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
   typedef ListSampleToHistogramListGenerator Self;
-  typedef itk::Object                        Superclass;
+  typedef itk::ProcessObject                 Superclass;
   typedef itk::SmartPointer<Self>            Pointer;
   typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ListSampleToHistogramListGenerator, Object);
+  itkTypeMacro(ListSampleToHistogramListGenerator, itk::ProcessObject);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  /** typedef the input ListSample type */
+  typedef  TListSample                                ListSampleType;
+
   /** Type needed for defining the limits of the histogram bins */
   typedef typename itk::NumericTraits
-  <THistogramMeasurement>::RealType HistogramMeasurementRealType;
-  typedef itk::Statistics::Histogram<HistogramMeasurementRealType, 1,
-      TFrequencyContainer>               HistogramType;
+  <THistogramMeasurement>::RealType                   HistogramMeasurementRealType;
+  typedef itk::Statistics::Histogram<HistogramMeasurementRealType,
+      TFrequencyContainer>                            HistogramType;
   typedef typename HistogramType::SizeType            HistogramSizeType;
   typedef typename TListSample::MeasurementVectorType MeasurementVectorType;
   typedef ObjectList<HistogramType>                   HistogramListType;
   typedef typename HistogramListType::Pointer         HistogramListPointerType;
 
   typedef typename TListSample::ConstPointer ListSampleConstPointerType;
+  
+  /** DataObject typedef*/
+  typedef typename Superclass::DataObjectPointer        DataObjectPointer;
+  
+  // Set/Get the input list sample
+  void SetListSample(const ListSampleType* inputlist);
+  const ListSampleType* GetListSample() const;
+  
+  // Get the output histogram
+  const HistogramListType*  GetOutput();
+  
+
+//   /** plug in the ListSample object */
+//   void SetListSample(const TListSample* list)
+//   {
+//     m_List = list;
+//   }
 
   /** Set the no data value. These value are ignored in histogram
    *  computation if NoDataFlag is On
@@ -96,11 +115,6 @@ public:
    */
   itkBooleanMacro(NoDataFlag);
 
-  /** plug in the ListSample object */
-  void SetListSample(const TListSample* list)
-  {
-    m_List = list;
-  }
 
   void SetMarginalScale(float scale)
   { m_MarginalScale = scale; }
@@ -110,12 +124,9 @@ public:
     m_Size[0] = size;
   }
 
-  HistogramListPointerType GetOutput() const
-  { return m_HistogramList; }
-
-  void Update()
-  { this->GenerateData(); }
-
+//   HistogramListPointerType GetOutput() const
+//   { return m_HistogramList; }
+  
   itkSetMacro(AutoMinMax, bool);
   itkGetConstReferenceMacro(AutoMinMax, bool);
 
@@ -135,16 +146,17 @@ protected:
   ListSampleToHistogramListGenerator();
   virtual ~ListSampleToHistogramListGenerator() {}
   void GenerateData();
+  DataObjectPointer MakeOutput(unsigned int idx);
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ListSampleConstPointerType m_List;
+  //ListSampleConstPointerType m_List;
   HistogramSizeType          m_Size;
   float                      m_MarginalScale;
   MeasurementVectorType      m_HistogramMin;
   MeasurementVectorType      m_HistogramMax;
   bool                       m_AutoMinMax;
-  HistogramListPointerType   m_HistogramList;
+  //HistogramListPointerType   m_HistogramList;
   bool                       m_NoDataFlag;
   THistogramMeasurement      m_NoDataValue;
 

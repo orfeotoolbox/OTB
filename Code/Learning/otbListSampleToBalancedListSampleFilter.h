@@ -84,10 +84,6 @@ public:
   /** DataObject typedef*/
   typedef typename Superclass::DataObjectPointer               DataObjectPointer;
   
-  /** Input & Output sample list as data object */
-  typedef typename Superclass::InputSampleListObjectType       InputSampleListObjectType;
-  typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
-  
   /** Filter adding noise to a ListSample */
   typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter
   <InputSampleListType, OutputSampleListType>                   GaussianAdditiveNoiseType;
@@ -95,19 +91,12 @@ public:
   
   /** Get/Set the label sample list */
   void SetInputLabel( const LabelSampleListType * label );
-  void SetInputLabel( const LabelSampleListObjectType * labelPtr );
-
+  
   /** Returns the label sample list */
-  const LabelSampleListType * GetLabelSampleList() const;
+  const LabelSampleListType * GetInputLabel() const;
   
   /** Returns the label sample list as a data object */
-  const LabelSampleListObjectType * GetInputLabel() const;
-
-  /** Returns the output label samplelist */
-  LabelSampleListType * GetOutputLabelSampleList();
-
-  /** Returns the label sample list as a data object */
-  LabelSampleListObjectType * GetOutputLabel();
+  LabelSampleListType * GetOutputLabel();
   
   /** Set/Get the mean for the white gaussian noise to generate  */
   otbSetObjectMemberMacro(AddGaussianNoiseFilter, Mean, double);
@@ -126,7 +115,7 @@ public:
   
 protected:
   /** This method causes the filter to generate its output. */
-   virtual void GenerateData();
+  virtual void GenerateData();
   
   /** In order to respect the fair data principle, the number of samples for
     * each label must be the same. This method computes the label that

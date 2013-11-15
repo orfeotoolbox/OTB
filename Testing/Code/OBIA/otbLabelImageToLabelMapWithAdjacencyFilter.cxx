@@ -28,8 +28,10 @@
 typedef unsigned short                              LabelType;
 typedef otb::Image<LabelType>                       LabelImageType;
 typedef otb::ImageFileReader<LabelImageType>        LabelReaderType;
-typedef itk::LabelObject<LabelType, 2>               LabelObjectType;
+typedef itk::LabelObject<LabelType, 2>              LabelObjectType;
 typedef otb::LabelMapWithAdjacency<LabelObjectType> LabelMapType;
+typedef LabelMapType::ConstIterator        ConstIteratorType;
+typedef LabelObjectType::ConstLineIterator ConstLineIteratorType;
 typedef otb::LabelImageToLabelMapWithAdjacencyFilter
 < LabelImageType, LabelMapType>                     FilterType;
 
@@ -54,30 +56,28 @@ int otbLabelImageToLabelMapWithAdjacencyFilter(int argc, char * argv[])
 
   std::ofstream ofs(argv[2]);
 
-  // Retrieve the label map
-  LabelMapType::LabelObjectContainerType loContainer = filter->GetOutput()->GetLabelObjectContainer();
-  
+  // Retrieve the label map  
+  ConstIteratorType  lIt = ConstIteratorType( filter->GetOutput() );
+
   ofs<<"Label map: "<<std::endl;
 
-  for(LabelMapType::LabelObjectContainerType::const_iterator lIt = loContainer.begin();
-      lIt!=loContainer.end(); ++lIt)
+  while ( !lIt.IsAtEnd() )
     {
     // Retrieve the label object
-    LabelObjectType::Pointer lo = lIt->second;
+    const LabelObjectType * lo = lIt.GetLabelObject();
     
     // Retrieve the line container
-    LabelObjectType::LineContainerType lineContainer = lo->GetLineContainer();
-
+    ConstLineIteratorType lineIt = ConstLineIteratorType( lo );
+    
     ofs<<"Label: "<<lo->GetLabel()<<", lines: ";
 
-    for(LabelObjectType::LineContainerType::const_iterator lineIt = lineContainer.begin();
-        lineIt!=lineContainer.end(); ++lineIt)
+    while ( !lineIt.IsAtEnd() )
       {
-      ofs<<" { "<<lineIt->GetIndex()<<", "<<lineIt->GetLength()<<"}";
-
+      ofs<<" { "<<lineIt.GetLine().GetIndex()<<", "<<lineIt.GetLine().GetLength()<<"}";
+      ++lineIt;
       }
     ofs<<std::endl;
-
+    ++lIt;
     }
 
   ofs<<"Adjacency map: "<<std::endl;

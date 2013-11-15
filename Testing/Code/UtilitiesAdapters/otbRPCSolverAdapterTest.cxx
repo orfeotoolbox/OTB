@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
 #include "otbGeographicalDistance.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbDEMHandler.h"
 #include "otbSensorModelAdapter.h"
 #include "otbRPCSolverAdapter.h"
@@ -31,7 +31,7 @@ typedef otb::GenericRSTransform<>              RSTranformType;
 typedef otb::RPCSolverAdapter::Point2DType Point2DType;
 typedef otb::RPCSolverAdapter::Point3DType Point3DType;
 typedef otb::GenericRSTransform<double,3,3>    RSTranform3dType;
-typedef itk::Statistics::EuclideanDistance<Point2DType> EuclideanDistanceType;
+typedef itk::Statistics::EuclideanDistanceMetric<Point2DType> EuclideanDistanceType;
 typedef otb::GeographicalDistance<Point2DType> GeoDistanceType;
 
 int otbRPCSolverAdapterTest(int argc, char* argv[])

@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbDEMHandler.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
@@ -30,7 +30,7 @@ typedef otb::VectorImage<double, 2>       ImageType;
 typedef otb::ImageFileReader<ImageType>   ReaderType;
 typedef otb::GenericRSTransform<>         TransformType;
 typedef TransformType::InputPointType     PointType;
-typedef itk::Statistics::EuclideanDistance<ImageType::PointType> DistanceType;
+typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
 typedef itk::Statistics::MersenneTwisterRandomVariateGenerator   RandomGeneratorType;
 
 int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
@@ -90,7 +90,7 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
   wgs2img->InstanciateTransform();
 
   // Random Point Generator
-  RandomGeneratorType::Pointer randomGenerator = RandomGeneratorType::New();
+  RandomGeneratorType::Pointer randomGenerator = RandomGeneratorType::GetInstance();
 
   for (unsigned int testID = 0; testID < nbTestedPoint; testID++)
     {

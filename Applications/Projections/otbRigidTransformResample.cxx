@@ -418,8 +418,7 @@ private:
       }
 
     FloatVectorImageType::PixelType defaultValue;
-    itk::PixelBuilder<FloatVectorImageType::PixelType>::Zero(defaultValue,
-                                                             inputImage->GetNumberOfComponentsPerPixel());
+    itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, inputImage->GetNumberOfComponentsPerPixel());
     m_Resampler->SetEdgePaddingValue(defaultValue);
 
     m_Resampler->UpdateOutputInformation();

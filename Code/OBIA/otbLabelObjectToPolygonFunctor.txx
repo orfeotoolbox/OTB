@@ -43,7 +43,7 @@ template<class TLabelObject, class TPolygon>
 inline typename LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
 ::PolygonType *
 LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
-::operator() (const LabelObjectType * labelObject)
+::operator() (LabelObjectType * labelObject)
   {
   // Clear any previous context
   m_CurrentState = DOWN_LEFT;
@@ -53,37 +53,39 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
   m_Polygon = PolygonType::New();
 
   // Get the internal container
-  LineContainerType lcontainer = labelObject->GetLineContainer();
+  //LineContainerType lcontainer = labelObject->GetLineContainer();
 
-  // Sort it
-  sort(lcontainer.begin(), lcontainer.end(), &LexicographicalLineCompare);
-
+  // Sort it 
+  //sort(lcontainer.begin(), lcontainer.end(), &LexicographicalLineCompare);
+  //Use the Optimize method
+  labelObject->Optimize();
   // Step 1: Fill the internal data set
 
   // Iterates on the line container
-  typename LineContainerType::const_iterator lIt = lcontainer.begin();
-
+  // typename LineContainerType::const_iterator lIt = lcontainer.begin();
+  ConstLineIteratorType lIt = ConstLineIteratorType(labelObject);
+  lIt.GoToBegin();
   // Stores the current line
-  long currentLine = (*lIt).GetIndex()[1];
+  long currentLine = lIt.GetLine().GetIndex()[1];
   long lineIndex = 0;
 
   // Push back the first line of runs
   RunsPerLineType firstRunsPerLine;
   m_InternalDataSet.push_back(firstRunsPerLine);
 
-  while (lIt != lcontainer.end())
+  while ( !lIt.IsAtEnd() )
     {
     // if we are still in the same image line
-    if (currentLine == (*lIt).GetIndex()[1])
+    if (currentLine == lIt.GetLine().GetIndex()[1])
       {
-      m_InternalDataSet.back().push_back(*lIt);
+      m_InternalDataSet.back().push_back(lIt.GetLine());
       }
     else
       {
       ++lineIndex;
-      currentLine = (*lIt).GetIndex()[1];
+      currentLine = lIt.GetLine().GetIndex()[1];
       RunsPerLineType newRunsPerLine;
-      newRunsPerLine.push_back(*lIt);
+      newRunsPerLine.push_back(lIt.GetLine());
       m_InternalDataSet.push_back(newRunsPerLine);
       }
     ++lIt;

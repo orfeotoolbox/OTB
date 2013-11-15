@@ -1,0 +1,16 @@
+set(ITKStatistics_SRC
+itkDenseFrequencyContainer2.cxx
+itkSparseFrequencyContainer2.cxx
+itkChiSquareDistribution.cxx
+itkGaussianDistribution.cxx
+itkTDistribution.cxx
+itkNormalVariateGenerator.cxx
+itkDecisionRule.cxx
+itkMaximumDecisionRule.cxx
+itkMaximumRatioDecisionRule.cxx
+itkMinimumDecisionRule.cxx
+)
+
+add_library(ITKStatistics ${ITKStatistics_SRC})
+target_link_libraries(ITKStatistics  ${ITKCommon_LIBRARIES} ${ITKNetlib_LIBRARIES})
+itk_module_target(ITKStatistics)

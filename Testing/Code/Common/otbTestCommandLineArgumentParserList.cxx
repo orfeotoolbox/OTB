@@ -18,7 +18,6 @@
 
 #include <iostream>
 
-#include "itkMacro.h"
 #include "otbCommandLineArgumentParser.h"
 
 int otbTestCommandLineArgumentParserList(int argc, char * argv[])

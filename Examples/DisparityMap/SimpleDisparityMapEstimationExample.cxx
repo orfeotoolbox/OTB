@@ -26,7 +26,7 @@
 // Software Guide : BeginLatex
 //
 // This example demonstrates the use of the \doxygen{otb}{DisparityMapEstimationMethod}, along with
-// the \doxygen{otb}{NearestPointDeformationFieldGenerator}. The first filter performs deformation estimation
+// the \doxygen{otb}{NearestPointDisplacementFieldGenerator}. The first filter performs deformation estimation
 // according to a given transform, using embedded ITK registration framework. It takes as input a possibly non regular
 // point set and produces a point set with associated point data representing the deformation.
 //
@@ -44,7 +44,7 @@
 #include "itkWindowedSincInterpolateImageFunction.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkGradientDescentOptimizer.h"
-#include "otbBSplinesInterpolateDeformationFieldGenerator.h"
+#include "otbBSplinesInterpolateDisplacementFieldGenerator.h"
 #include "otbWarpImageFilter.h"
 // Software Guide : EndCodeSnippet
 
@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   //  The images are defined using the pixel type and the dimension. Please note that
-  //  the \doxygen{otb}{NearestPointDeformationFieldGenerator} generates a
+  //  the \doxygen{otb}{NearestPointDisplacementFieldGenerator} generates a
   //  \doxygen{otb}{VectorImage} to represent the deformation field in both
   //  image directions.
   //
@@ -332,19 +332,19 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorImage<PixelType, Dimension> DeformationFieldType;
+  typedef otb::VectorImage<PixelType, Dimension> DisplacementFieldType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // For the deformation field estimation, we will use the \doxygen{otb}{BSplinesInterpolateDeformationFieldGenerator}.
+  // For the deformation field estimation, we will use the \doxygen{otb}{BSplinesInterpolateDisplacementFieldGenerator}.
   // This filter will perform a nearest neighbor interpolation on the deformation values in the point set data.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::BSplinesInterpolateDeformationFieldGenerator<PointSetType,
-      DeformationFieldType>
+  typedef otb::BSplinesInterpolateDisplacementFieldGenerator<PointSetType,
+      DisplacementFieldType>
   GeneratorType;
 
   // Software GUide : EndCodeSnippet
@@ -399,11 +399,11 @@ int main(int argc, char* argv[])
   //
   // \relatedClasses
   // \begin{itemize}
-  // \item \doxygen{otb}{NNearestPointsLinearInterpolateDeformationFieldGenerator}
-  // \item \doxygen{otb}{BSplinesInterpolateDeformationFieldGenerator}
-  // \item \doxygen{otb}{NearestTransformDeformationFieldGenerator}
-  // \item \doxygen{otb}{NNearestTransformsLinearInterpolateDeformationFieldGenerator}
-  // \item \doxygen{otb}{BSplinesInterpolateTransformDeformationFieldGenerator}
+  // \item \doxygen{otb}{NNearestPointsLinearInterpolateDisplacementFieldGenerator}
+  // \item \doxygen{otb}{BSplinesInterpolateDisplacementFieldGenerator}
+  // \item \doxygen{otb}{NearestTransformDisplacementFieldGenerator}
+  // \item \doxygen{otb}{NNearestTransformsLinearInterpolateDisplacementFieldGenerator}
+  // \item \doxygen{otb}{BSplinesInterpolateTransformDisplacementFieldGenerator}
   // \end{itemize}
   //
   // Software Guide : EndLatex
@@ -418,7 +418,7 @@ int main(int argc, char* argv[])
   // Software Guide :  BeginCodeSnippet
 
   typedef otb::WarpImageFilter<ImageType, ImageType,
-      DeformationFieldType> ImageWarperType;
+      DisplacementFieldType> ImageWarperType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -434,13 +434,13 @@ int main(int argc, char* argv[])
   // Software Guide  : BeginLatex
   //
   // We set the input image to warp using the \code{SetInput()} method, and the deformation field
-  // using the \code{SetDeformationField()} method.
+  // using the \code{SetDisplacementField()} method.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   warper->SetInput(movingReader->GetOutput());
-  warper->SetDeformationField(generator->GetOutput());
+  warper->SetDisplacementField(generator->GetOutput());
   warper->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
   warper->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
   // Software Guide : EndCodeSnippet
@@ -517,7 +517,7 @@ int main(int argc, char* argv[])
   // \includegraphics[width=0.20\textwidth]{StereoMoving.eps}
   // \includegraphics[width=0.20\textwidth]{deformationFieldOutput.eps}
   // \includegraphics[width=0.20\textwidth]{resampledMovingOutput.eps}
-  // \itkcaption[Deformation field and resampling from disparity map estimation]{From left
+  // \itkcaption[Displacement field and resampling from disparity map estimation]{From left
   // to right and top to bottom: fixed input image, moving image with a sinusoid deformation,
   // estimated deformation field in the horizontal direction, resampled moving image.}
   // \label{fig:SIMPLEDISPARITYMAPESTIMATIONOUTPUT}

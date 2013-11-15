@@ -30,6 +30,7 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "itkResampleImageFilter.h"
+#include "itkAffineTransform.h"
 
 
 int otbFlusserMomentsImageFunctionNew(int argc, char * argv[])

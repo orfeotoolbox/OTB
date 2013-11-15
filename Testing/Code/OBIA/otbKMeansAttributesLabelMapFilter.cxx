@@ -38,11 +38,13 @@ typedef otb::AttributesMapLabelObjectWithClassLabel<LabelType, Dimension, double
                                                                                     LabelObjectType;
 typedef itk::LabelMap<LabelObjectType>                                              LabelMapType;
 typedef otb::VectorImage<PixelType, Dimension>                                      VectorImageType;
-typedef otb::Image<unsigned int, 2>                                                  LabeledImageType;
+typedef otb::Image<unsigned int, 2>                                                 LabeledImageType;
 
+typedef LabelMapType::Iterator                                                      IteratorType;
+  
 typedef otb::ImageFileReader<VectorImageType>                                       ReaderType;
 typedef otb::ImageFileReader<LabeledImageType>                                      LabeledReaderType;
-typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>              LabelMapFilterType;
+typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>             LabelMapFilterType;
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                            ShapeFilterType;
 typedef otb::KMeansAttributesLabelMapFilter<LabelMapType>                           KMeansAttributesLabelMapFilterType;
 
@@ -70,10 +72,12 @@ int otbKMeansAttributesLabelMapFilter(int argc, char * argv[])
   reader->UpdateOutputInformation();
   labeledReader->SetFileName(lfname);
   labeledReader->UpdateOutputInformation();
+  labeledReader->Update();
 
   // Filter
   filter->SetInput(labeledReader->GetOutput());
   filter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
+  filter->Update();
 
   shapeFilter->SetInput(filter->GetOutput());
   shapeFilter->Update();
@@ -81,14 +85,16 @@ int otbKMeansAttributesLabelMapFilter(int argc, char * argv[])
   // Labelize the objects
   LabelMapType::Pointer labelMap = shapeFilter->GetOutput();
 
-  LabelMapType::LabelObjectContainerType& container = labelMap->GetLabelObjectContainer();
-  LabelMapType::LabelObjectContainerType::const_iterator loIt = container.begin();
+  IteratorType loIt = IteratorType( labelMap );
+
   unsigned int labelObjectID = 0;
-  for(loIt = container.begin(); loIt != container.end(); ++loIt )
+  
+  while ( !loIt.IsAtEnd() )
     {
     unsigned int classLabel = labelObjectID % 3;
-    loIt->second->SetClassLabel(classLabel);
+    loIt.GetLabelObject()->SetClassLabel(classLabel);
     ++labelObjectID;
+    ++loIt;
     }
 
   kmeansLabelMapFilter->SetInputLabelMap(labelMap);

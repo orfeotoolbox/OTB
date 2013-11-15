@@ -49,4 +49,17 @@ GDALImageIOFactory::GetDescription() const
   return "GDAL ImageIO Factory, enabling loading gdal images in OTB";
 }
 
+// Undocumented API used to register during static initialization.
+// DO NOT CALL DIRECTLY.
+
+static bool GDALImageIOFactoryHasBeenRegistered;
+
+void GDALImageIOFactoryRegister__Private(void)
+{
+  if( ! GDALImageIOFactoryHasBeenRegistered )
+    {
+    GDALImageIOFactoryHasBeenRegistered = true;
+    GDALImageIOFactory::RegisterOneFactory();
+    }
+}
 } // end namespace otb

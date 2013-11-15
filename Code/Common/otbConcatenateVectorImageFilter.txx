@@ -130,7 +130,7 @@ template <class TInputImage1, class TInputImage2, class TOutputImage>
 void
 ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   // retrieves inputs and output pointer
   InputImage1PointerType input1 = this->GetInput1();

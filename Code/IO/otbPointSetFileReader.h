@@ -19,7 +19,7 @@
 #define __otbPointSetFileReader_h
 
 #include "otbPointSetSource.h"
-#include "itkImageFileReader.h"
+#include "otbImageFileReader.h"
 
 namespace otb
 {

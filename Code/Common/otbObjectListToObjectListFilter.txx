@@ -61,7 +61,7 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
 template <class TInputList, class TOutputList>
 int
 ObjectListToObjectListFilter<TInputList, TOutputList>
-::SplitRequestedRegion(int threadId,
+::SplitRequestedRegion(itk::ThreadIdType threadId,
                        int threadCount,
                        unsigned int requestedElements,
                        unsigned int& startIndex,
@@ -128,7 +128,7 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
 template <class TInputList, class TOutputList>
 void
 ObjectListToObjectListFilter<TInputList, TOutputList>
-::ThreadedGenerateData(unsigned int /*startIndex*/, unsigned int /*stopIndex*/, int /*threadId*/)
+::ThreadedGenerateData(unsigned int /*startIndex*/, unsigned int /*stopIndex*/, itk::ThreadIdType /*threadId*/)
 {
   // The following code is equivalent to:
   // itkExceptionMacro("subclass should override this method!!!");
@@ -148,7 +148,7 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
 ::ThreaderCallback(void *arg)
 {
   ThreadStruct *str;
-  int           threadId, threadCount;
+  itk::ThreadIdType threadId, threadCount;
   unsigned int  total, start, stop;
   unsigned int  requestedElements;
 
@@ -159,7 +159,7 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
   requestedElements = str->Filter->GetInput()->Size();
   total = str->Filter->SplitRequestedRegion(threadId, threadCount, requestedElements, start, stop);
 
-  if (threadId < static_cast<int>(total))
+  if (threadId < static_cast<itk::ThreadIdType>(total))
     {
 
     // For very small list it might occur that start = stop. In this

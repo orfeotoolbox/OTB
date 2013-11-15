@@ -450,9 +450,9 @@ ADD_TEST(leTvSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LE
  ${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
  ${TEMP}/leTvsvm_model_image_one_class)
 
-
-
-
+# Test SVMMargin Sampler
+ADD_TEST(leTuSVMMarginSamplerNew ${LEARNING_TESTS3}
+        otbSVMMarginSamplerNew)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -572,6 +572,11 @@ otbConfusionMatrixConcatenateTest
  ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
  ${INPUTDATA}/Classification/QB_1_ortho_C6.csv)
 
+
+
+# otbGaussianModelComponent
+ADD_TEST(leTuGaussianModelComponentNew ${LEARNING_TESTS4}
+otbGaussianModelComponentNew)
 
 
 # ShiftScaleSampleListFilter tests ----------
@@ -912,6 +917,7 @@ otbSVMModelCopyGenericKernelTest.cxx
 otbSVMModelCopyComposedKernelTest.cxx
 otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest.cxx
 otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest.cxx
+otbSVMMarginSampler.cxx
 )
 
 
@@ -925,6 +931,7 @@ otbExhaustiveExponentialOptimizerTest.cxx
 otbListSampleGeneratorTest.cxx
 otbConfusionMatrixCalculatorTest.cxx
 otbConfusionMatrixMeasurementsTest.cxx
+otbGaussianModelComponent.cxx
 otbShiftScaleSampleListFilter.cxx
 otbGaussianAdditiveNoiseSampleListFilter.cxx
 otbConcatenateSampleListFilter.cxx

@@ -21,9 +21,9 @@
 #include <string>
 #include <vector>
 
-#include "itkWin32Header.h"
+#include "itkMacro.h"
 
-#ifdef _WIN
+#ifdef _WIN32
 #define OTB_FILE_SEPARATOR '\\'
 #else
 #define OTB_FILE_SEPARATOR '/'

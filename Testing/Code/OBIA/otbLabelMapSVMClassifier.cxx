@@ -148,7 +148,7 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
     labelMap2SampleList->GetMeasurementFunctor().AddAttribute((*attrIt).c_str());
     }
 
-  labelMap2SampleList->Compute();
+  labelMap2SampleList->Update();
 
   // Estimate SVM model
   svmEstim->SetInputSampleList(labelMap2SampleList->GetOutputSampleList());

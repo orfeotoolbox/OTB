@@ -151,7 +151,7 @@ template <class TInputImage, class TOutputImage, class TFunction>
 void
 MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
 
   InputImagePointer  inputPtr = this->GetInput();

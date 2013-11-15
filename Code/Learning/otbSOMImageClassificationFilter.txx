@@ -31,7 +31,7 @@ template <class TInputImage, class TOutputImage, class TSOMMap, class TMaskImage
 SOMImageClassificationFilter<TInputImage, TOutputImage, TSOMMap, TMaskImage>
 ::SOMImageClassificationFilter()
 {
-  this->SetNumberOfInputs(2);
+  this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredInputs(1);
   m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();
 }
@@ -71,7 +71,7 @@ SOMImageClassificationFilter<TInputImage, TOutputImage, TSOMMap, TMaskImage>
 template <class TInputImage, class TOutputImage, class TSOMMap, class TMaskImage>
 void
 SOMImageClassificationFilter<TInputImage, TOutputImage, TSOMMap, TMaskImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
@@ -82,6 +82,7 @@ SOMImageClassificationFilter<TInputImage, TOutputImage, TSOMMap, TMaskImage>
   typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
 
   ListSamplePointerType listSample = ListSampleType::New();
+  listSample->SetMeasurementVectorSize(inputPtr->GetNumberOfComponentsPerPixel());
 
   InputIteratorType inIt(inputPtr, outputRegionForThread);
 

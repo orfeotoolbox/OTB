@@ -85,7 +85,7 @@ int otbLabelMapWithClassLabelToLabeledSampleListFilter(int argc, char* argv[])
 
    shapeLabelMapFilter->GetOutput()->GetLabelObject(1)->SetClassLabel(1);
 
-   filter->Compute();
+   filter->Update();
 
   return EXIT_SUCCESS;
 }

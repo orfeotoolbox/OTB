@@ -98,7 +98,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId);
+                            itk::ThreadIdType threadId);
 
 private:
   ImageOfVectorsToMonoChannelExtractROI(const Self &); //purposely not implemented

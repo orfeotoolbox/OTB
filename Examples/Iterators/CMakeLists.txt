@@ -8,46 +8,46 @@ ADD_EXECUTABLE(ImageRandomConstIteratorWithIndex ImageRandomConstIteratorWithInd
 TARGET_LINK_LIBRARIES(ImageRandomConstIteratorWithIndex OTBIO OTBCommon   )
 
 ADD_EXECUTABLE(NeighborhoodIterators4 NeighborhoodIterators4.cxx)
-TARGET_LINK_LIBRARIES(NeighborhoodIterators4 OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(NeighborhoodIterators4 OTBIO OTBCommon)
 
 ADD_EXECUTABLE(NeighborhoodIterators5 NeighborhoodIterators5.cxx)
-TARGET_LINK_LIBRARIES(NeighborhoodIterators5 OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(NeighborhoodIterators5 OTBIO OTBCommon)
 
 ADD_EXECUTABLE(NeighborhoodIterators1 NeighborhoodIterators1.cxx)
-TARGET_LINK_LIBRARIES(NeighborhoodIterators1 OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(NeighborhoodIterators1 OTBIO OTBCommon)
 
 ADD_EXECUTABLE(NeighborhoodIterators2 NeighborhoodIterators2.cxx)
-TARGET_LINK_LIBRARIES(NeighborhoodIterators2 OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(NeighborhoodIterators2 OTBIO OTBCommon)
 
 ADD_EXECUTABLE(NeighborhoodIterators3 NeighborhoodIterators3.cxx)
-TARGET_LINK_LIBRARIES(NeighborhoodIterators3 OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(NeighborhoodIterators3 OTBIO OTBCommon)
 
 ADD_EXECUTABLE(NeighborhoodIterators6 NeighborhoodIterators6.cxx)
-TARGET_LINK_LIBRARIES(NeighborhoodIterators6 ITKAlgorithms ITKBasicFilters OTBIO OTBCommon )
+TARGET_LINK_LIBRARIES(NeighborhoodIterators6 OTBIO OTBCommon)
 
 ADD_EXECUTABLE(ImageRegionIteratorWithIndex ImageRegionIteratorWithIndex.cxx)
-TARGET_LINK_LIBRARIES(ImageRegionIteratorWithIndex OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(ImageRegionIteratorWithIndex OTBIO OTBCommon)
 
 ADD_EXECUTABLE(ImageRegionIterator ImageRegionIterator.cxx)
-TARGET_LINK_LIBRARIES(ImageRegionIterator OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(ImageRegionIterator OTBIO OTBCommon)
 
 ADD_EXECUTABLE(ImageLinearIteratorWithIndex2 ImageLinearIteratorWithIndex2.cxx)
-TARGET_LINK_LIBRARIES(ImageLinearIteratorWithIndex2 OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(ImageLinearIteratorWithIndex2 OTBIO OTBCommon)
 
 ADD_EXECUTABLE(ImageLinearIteratorWithIndex ImageLinearIteratorWithIndex.cxx)
-TARGET_LINK_LIBRARIES(ImageLinearIteratorWithIndex OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(ImageLinearIteratorWithIndex OTBIO OTBCommon)
 
 ADD_EXECUTABLE(ImageSliceIteratorWithIndex ImageSliceIteratorWithIndex.cxx)
-TARGET_LINK_LIBRARIES(ImageSliceIteratorWithIndex OTBIO OTBCommon   )
+TARGET_LINK_LIBRARIES(ImageSliceIteratorWithIndex OTBIO OTBCommon)
 
 ADD_EXECUTABLE(ShapedNeighborhoodIterators1 ShapedNeighborhoodIterators1.cxx)
-TARGET_LINK_LIBRARIES(ShapedNeighborhoodIterators1 ITKAlgorithms ITKBasicFilters OTBIO OTBCommon )
+TARGET_LINK_LIBRARIES(ShapedNeighborhoodIterators1  OTBIO OTBCommon )
 
 ADD_EXECUTABLE(ShapedNeighborhoodIterators2 ShapedNeighborhoodIterators2.cxx)
-TARGET_LINK_LIBRARIES(ShapedNeighborhoodIterators2 ITKAlgorithms ITKBasicFilters OTBIO OTBCommon )
+TARGET_LINK_LIBRARIES(ShapedNeighborhoodIterators2  OTBIO OTBCommon )
 
 ADD_EXECUTABLE(IteratorsExamples IteratorsExamples.cxx )
-TARGET_LINK_LIBRARIES(IteratorsExamples OTBIO OTBCommon ITKBasicFilters )
+TARGET_LINK_LIBRARIES(IteratorsExamples OTBIO OTBCommon OTBTesting)
 
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
@@ -191,6 +191,6 @@ ADD_TEST(itTeShapedNeighborhoodIterators2Test ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbIteratorsExamplesTests otbIteratorsExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbIteratorsExamplesTests ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  OTBTesting)
+TARGET_LINK_LIBRARIES(otbIteratorsExamplesTests OTBBasicFilters OTBDisparityMap OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

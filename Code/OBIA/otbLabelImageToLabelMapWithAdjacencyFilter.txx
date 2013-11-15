@@ -84,7 +84,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   // Clear previous adjacency map
   m_TemporaryAdjacencyMaps.resize( this->GetNumberOfThreads() );
 
-  for( int i=0; i<this->GetNumberOfThreads(); ++i )
+  for( unsigned int i=0; i<this->GetNumberOfThreads(); ++i )
     {
     if( i == 0 )
       {
@@ -96,7 +96,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
       // the other must be created
       m_TemporaryImages[i] = OutputImageType::New();
       }
-      
+
     // set the minimum data needed to create the objects properly
     m_TemporaryImages[i]->SetBackgroundValue( m_BackgroundValue );
 
@@ -107,7 +107,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 template<class TInputImage, class TOutputImage>
 void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
-::AddAdjacency(LabelType label1, LabelType label2, int threadId)
+::AddAdjacency(LabelType label1, LabelType label2, itk::ThreadIdType threadId)
 {
   // Insert label1 in v neighbors
   if(m_TemporaryAdjacencyMaps[threadId].find(label2)!= m_TemporaryAdjacencyMaps[threadId].end())
@@ -136,7 +136,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 template<class TInputImage, class TOutputImage>
 void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
-::ParseLine(const RLEVectorType & line, int threadId)
+::ParseLine(const RLEVectorType & line, itk::ThreadIdType threadId)
 {
   // Get the first label
   typename RLEVectorType::const_iterator it = line.begin();
@@ -151,7 +151,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 
     // Add the adjacency
     this->AddAdjacency(previousLabel, nextLabel, threadId);
-    
+
     // Store previous label
     previousLabel = nextLabel;
     ++it;
@@ -161,7 +161,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 template<class TInputImage, class TOutputImage>
 void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
-::ParseConsecutiveLines(const RLEVectorType& line1, const RLEVectorType & line2, int threadId)
+::ParseConsecutiveLines(const RLEVectorType& line1, const RLEVectorType & line2, itk::ThreadIdType threadId)
 {
   // Provided to disable fully connected if needed
   long offset = 1;
@@ -181,7 +181,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
       long start2 = it2->where[0];
       long end2 = start2 + it2->length-1;
       LabelType label2 = it2->label;
-      
+
       // If labels are different
       if(label1 != label2)
   {
@@ -202,7 +202,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 template<class TInputImage, class TOutputImage>
 void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData( const OutputImageRegionType& regionForThread, int threadId )
+::ThreadedGenerateData( const OutputImageRegionType& regionForThread, itk::ThreadIdType threadId )
 {
   itk::ProgressReporter progress( this, threadId, regionForThread.GetNumberOfPixels() );
 
@@ -213,7 +213,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 
   RLEVectorType currentLine;
   RLEVectorType previousLine;
-  
+
   // Parse previous line if exists
   typename InputImageType::RegionType previousLineRegion;
   typename InputImageType::SizeType previousLineRegionSize;
@@ -221,7 +221,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 
   previousLineRegionIndex = regionForThread.GetIndex();
   previousLineRegionIndex[1]--;
-  
+
   previousLineRegionSize = regionForThread.GetSize();
   previousLineRegionSize[1]=1;
 
@@ -239,7 +239,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
     while( !pIt.IsAtEnd() )
       {
       const InputImagePixelType & v = pIt.Get();
-  
+
       if( v != m_BackgroundValue )
         {
         // We've hit the start of a run
@@ -260,7 +260,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
         }
       }
     }
-  
+
   for( it.GoToBegin(); !it.IsAtEnd(); it.NextLine() )
     {
     // Go to beginning of line
@@ -273,7 +273,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
     while( !it.IsAtEndOfLine() )
       {
       const InputImagePixelType & v = it.Get();
-  
+
       if( v != m_BackgroundValue )
         {
         // We've hit the start of a run
@@ -320,22 +320,36 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 
   // merge the lines from the temporary images in the output image
   // don't use the first image - that's the output image
-  for( int i=1; i<this->GetNumberOfThreads(); ++i )
+  for( unsigned int i=1; i<this->GetNumberOfThreads(); ++i )
     {
-    typedef typename OutputImageType::LabelObjectContainerType LabelObjectContainerType;
-    const LabelObjectContainerType & labelObjectContainer = m_TemporaryImages[i]->GetLabelObjectContainer();
+    typedef typename OutputImageType::LabelObjectVectorType LabelObjectVectorType;
+    const LabelObjectVectorType & labelObjectContainer = m_TemporaryImages[i]->GetLabelObjects();
 
-    for( typename LabelObjectContainerType::const_iterator it = labelObjectContainer.begin();
-      it != labelObjectContainer.end();
-      ++it )
+    for( typename LabelObjectVectorType::const_iterator it = labelObjectContainer.begin();
+	 it != labelObjectContainer.end();
+	 ++it )
       {
-      LabelObjectType * labelObject = it->second;
+      LabelObjectType * labelObject = *it;
       if( output->HasLabel( labelObject->GetLabel() ) )
         {
         // merge the lines in the output's object
-        typename LabelObjectType::LineContainerType & src = labelObject->GetLineContainer();
-        typename LabelObjectType::LineContainerType & dest = output->GetLabelObject( labelObject->GetLabel() )->GetLineContainer();
-        dest.insert( dest.end(), src.begin(), src.end() );
+	//ITKv4 iterate over the 2 LabelObjects src and output
+	typedef typename LabelObjectType::ConstLineIterator IteratorType;
+
+  typename LabelObjectType::LabelObjectType * dest = output->GetLabelObject( labelObject->GetLabel() );
+
+	IteratorType srcIt;
+	srcIt = IteratorType( labelObject );
+	srcIt.GoToBegin();
+
+	//ITKv4 Iterate over all lines of the source and add them to the
+	//output labelObject (can use the insert method over the
+	//container anymore (it is now private)
+	while ( !srcIt.IsAtEnd() )
+	  {
+	  dest->AddLine(srcIt.GetLine());
+    ++srcIt;
+	  }
         }
       else
         {
@@ -344,12 +358,12 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
         }
       }
     }
- 
+
   // Merge adjacency tables
   AdjacencyMapType adjMap = m_TemporaryAdjacencyMaps[0];
 
   // For each remaining thread
-  for(int threadId = 1; threadId < this->GetNumberOfThreads(); ++threadId)
+  for(itk::ThreadIdType threadId = 1; threadId < this->GetNumberOfThreads(); ++threadId)
     {
     // For each label in the thread adjacency map
     for(typename AdjacencyMapType::const_iterator mit = m_TemporaryAdjacencyMaps[threadId].begin();
@@ -385,10 +399,10 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   }
       }
     }
-  
+
   // Set the adjacency map to the output
   output->SetAdjacencyMap(adjMap);
-   
+
   // release the data in the temp images
   m_TemporaryImages.clear();
   m_TemporaryAdjacencyMaps.clear();
@@ -404,6 +418,6 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 
   os << indent << "BackgroundValue: "  << static_cast<typename itk::NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue) << std::endl;
 }
-  
+
 }// end namespace otb
 #endif

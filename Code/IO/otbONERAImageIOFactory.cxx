@@ -49,4 +49,18 @@ ONERAImageIOFactory::GetDescription() const
   return "ONERA ImageIO Factory, permettant le chargement d'image au format ONERA dans l'OTB";
 }
 
+// Undocumented API used to register during static initialization.
+// DO NOT CALL DIRECTLY.
+
+static bool ONERAImageIOFactoryHasBeenRegistered;
+
+void ONERAImageIOFactoryRegister__Private(void)
+{
+  if( ! ONERAImageIOFactoryHasBeenRegistered )
+    {
+    ONERAImageIOFactoryHasBeenRegistered = true;
+    ONERAImageIOFactory::RegisterOneFactory();
+    }
+}
+
 } // end namespace otb

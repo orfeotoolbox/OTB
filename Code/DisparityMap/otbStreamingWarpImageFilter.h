@@ -27,14 +27,14 @@ namespace otb
 /** \class StreamingWarpImageFilter
  * \brief This class acts like the otb::WarpImageFilter, but it does not request the largest possible region of the image to warp.
  *
- * Instead, the user should assess the maximum deformation in the deformation field and set it via the SetMaximumDeformation() method.
+ * Instead, the user should assess the maximum displacement in the displacement field and set it via the SetMaximumDisplacement() method.
  *
- * The filter will then compute an appropriate security margin according to the image spacing, the maximum deformation and the interpolator
+ * The filter will then compute an appropriate security margin according to the image spacing, the maximum displacement and the interpolator
  * radius in otb::StreamingTraits.
  *
  * This security margin is used to stream the input image, making this filter an entirely streamable one.
  *
- * If the maximum deformation is wrong, this filter is likely to request data outside of the input image buffered region. In this case, pixels
+ * If the maximum displacement is wrong, this filter is likely to request data outside of the input image buffered region. In this case, pixels
  * outside the region will be set to Zero according to itk::NumericTraits.
  *
  * \sa itk::WarpImageFilter
@@ -43,16 +43,16 @@ namespace otb
  * \ingroup Threaded
  */
 
-template <class TInputImage, class TOutputImage, class TDeformationField>
+template <class TInputImage, class TOutputImage, class TDisplacementField>
 class ITK_EXPORT StreamingWarpImageFilter
-  :  public otb::WarpImageFilter<TInputImage, TOutputImage, TDeformationField>
+  :  public otb::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingWarpImageFilter                                           Self;
-  typedef otb::WarpImageFilter<TInputImage, TOutputImage, TDeformationField> Superclass;
-  typedef itk::SmartPointer<Self>                                            Pointer;
-  typedef itk::SmartPointer<const Self>                                      ConstPointer;
+  typedef StreamingWarpImageFilter                                            Self;
+  typedef otb::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField> Superclass;
+  typedef itk::SmartPointer<Self>                                             Pointer;
+  typedef itk::SmartPointer<const Self>                                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -61,22 +61,22 @@ public:
   itkTypeMacro(StreamingWarpImageFilter, itk::WarpImageFilter);
 
   /** template parameters typedef */
-  typedef TInputImage                              InputImageType;
-  typedef typename  InputImageType::Pointer        InputImagePointerType;
-  typedef TOutputImage                             OutputImageType;
-  typedef typename OutputImageType::PointType      PointType;
-  typedef typename OutputImageType::IndexType      IndexType;
-  typedef typename OutputImageType::PixelType      PixelType;
-  typedef typename OutputImageType::Pointer        OutputImagePointerType;
-  typedef typename OutputImageType::RegionType     OutputImageRegionType;
-  typedef TDeformationField                        DeformationFieldType;
-  typedef typename DeformationFieldType::PixelType DeformationValueType;
-  typedef typename DeformationFieldType::Pointer   DeformationFieldPointerType;
-  typedef typename DeformationFieldType::RegionType DeformationFieldRegionType;
+  typedef TInputImage                               InputImageType;
+  typedef typename  InputImageType::Pointer         InputImagePointerType;
+  typedef TOutputImage                              OutputImageType;
+  typedef typename OutputImageType::PointType       PointType;
+  typedef typename OutputImageType::IndexType       IndexType;
+  typedef typename OutputImageType::PixelType       PixelType;
+  typedef typename OutputImageType::Pointer         OutputImagePointerType;
+  typedef typename OutputImageType::RegionType      OutputImageRegionType;
+  typedef TDisplacementField                         DisplacementFieldType;
+  typedef typename DisplacementFieldType::PixelType  DisplacementValueType;
+  typedef typename DisplacementFieldType::Pointer    DisplacementFieldPointerType;
+  typedef typename DisplacementFieldType::RegionType DisplacementFieldRegionType;
 
   /** Accessors */
-  itkSetMacro(MaximumDeformation, DeformationValueType);
-  itkGetConstReferenceMacro(MaximumDeformation, DeformationValueType);
+  itkSetMacro(MaximumDisplacement, DisplacementValueType);
+  itkGetConstReferenceMacro(MaximumDisplacement, DisplacementValueType);
 
 protected:
   /** Constructor */
@@ -86,7 +86,7 @@ protected:
   /** PrintSelf */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /**
-   * This filters requires only a part of the input and of the deformation field to
+   * This filters requires only a part of the input and of the displacement field to
    * produce its output. As such, we need to overload the GenerateInputRequestedRegion() method.
    */
   virtual void GenerateInputRequestedRegion();
@@ -95,14 +95,14 @@ protected:
    * Re-implement the method ThreadedGenerateData to mask area outside the deformation grid
    */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            itk::ThreadIdType threadId );
 
 private:
   StreamingWarpImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  // Assesment of the maximum deformation for streaming
-  DeformationValueType m_MaximumDeformation;
+  // Assesment of the maximum displacement for streaming
+  DisplacementValueType m_MaximumDisplacement;
 };
 
 } // end namespace otb

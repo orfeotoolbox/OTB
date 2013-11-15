@@ -27,7 +27,7 @@ JointMassOfBeliefFilter<TMassFunction>
 ::JointMassOfBeliefFilter()
 {
   // Set the number of outputs
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredOutputs(1);
 
   // Build the output
   typename MassFunctionType::Pointer outputPtr = MassFunctionType::New();

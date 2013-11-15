@@ -35,7 +35,7 @@ template <class TInputImage, class TInputROIImage>
 ROIdataConversion<TInputImage, TInputROIImage>
 ::ROIdataConversion()
 {
-  this->SetNumberOfInputs(2);
+  this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredInputs(2);
 }
 
@@ -71,7 +71,9 @@ ROIdataConversion<TInputImage, TInputROIImage>
   typename OutputImageType::Pointer        outputPtr = this->GetOutput();
 
   outputPtr->Allocate();
-  outputPtr->FillBuffer(static_cast<typename InputImageType::PixelType>(0));
+  typename InputImageType::PixelType zero;
+  itk::NumericTraits<typename InputImageType::PixelType>::SetLength(zero, outputPtr->GetNumberOfComponentsPerPixel());
+  outputPtr->FillBuffer(zero);
 
   itk::ImageRegionConstIterator<InputImageType> inputIter
     (inputImagePtr, inputImagePtr->GetRequestedRegion());

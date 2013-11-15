@@ -49,4 +49,18 @@ BSQImageIOFactory::GetDescription() const
   return "BSQ ImageIO Factory, permettant le chargement d'image au format BSQ dans l'OTB";
 }
 
+// Undocumented API used to register during static initialization.
+// DO NOT CALL DIRECTLY.
+
+static bool BSQImageIOFactoryHasBeenRegistered;
+
+void BSQImageIOFactoryRegister__Private(void)
+{
+  if( ! BSQImageIOFactoryHasBeenRegistered )
+    {
+    BSQImageIOFactoryHasBeenRegistered = true;
+    BSQImageIOFactory::RegisterOneFactory();
+    }
+}
+
 } // end namespace otb

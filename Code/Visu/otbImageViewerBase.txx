@@ -159,11 +159,11 @@ ImageViewerBase<TPixel, TLabel>
   for (unsigned int i = 0; i < sl->Size(); ++i)
     {
     typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
-    generator->SetListSample(sl->GetNthElement(i));
+    generator->SetInput(sl->GetNthElement(i));
     typename HistogramGeneratorType::HistogramType::SizeType size;
     //      size.Fill(static_cast<unsigned int>(vcl_ceil(1/m_NormalizationFactor)*10));
     size.Fill(256);
-    generator->SetNumberOfBins(size);
+    generator->SetHistogramSize(size);
     generator->Update();
     m_HistogramGeneratorList->PushBack(generator);
     m_TransferFunctionList->PushBack(AffineTransferFunctionType::New());

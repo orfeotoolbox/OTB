@@ -27,6 +27,10 @@ template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunct
 LabelMapToSampleListFilter<TInputLabelMap, TOutputListSample, TMeasurementFunctor>
 ::LabelMapToSampleListFilter()
 {
+  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredOutputs(1);
+
+  this->itk::ProcessObject::SetNthOutput(0, this->MakeOutput(0).GetPointer());
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
@@ -36,19 +40,81 @@ LabelMapToSampleListFilter<TInputLabelMap, TOutputListSample, TMeasurementFuncto
 }
 
 template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
+typename LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+::DataObjectPointerType
+LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+::MakeOutput(unsigned int idx)
+{
+  DataObjectPointerType output;
+  output = static_cast<itk::DataObject*>(OutputSampleListType::New().GetPointer());
+  return output;
+}
+
+// Set the input labelMap
+template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
 void
 LabelMapToSampleListFilter<TInputLabelMap, TOutputListSample, TMeasurementFunctor>
-::Compute()
+::SetInputLabelMap(const InputLabelMapType * inputLabelMap ) 
 {
-  m_OutputSampleList = OutputSampleListType::New();
-  
-  typename InputLabelMapType::LabelObjectContainerType::const_iterator it
-    = m_InputLabelMap->GetLabelObjectContainer().begin();
+  // Process object is not const-correct so the const_cast is required here
+  this->itk::ProcessObject::SetNthInput(0,
+                                   const_cast<InputLabelMapType*>(inputLabelMap));
+}
 
-  // iterate on label objects
-  while(it != m_InputLabelMap->GetLabelObjectContainer().end())
+//Get the input labelMap
+template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
+const typename LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+::InputLabelMapType *
+LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+::GetInputLabelMap() const
+{
+  if (this->GetNumberOfInputs() < 1)
     {
-    m_OutputSampleList->PushBack(m_MeasurementFunctor(it->second));
+    return 0;
+    }
+
+  return static_cast<const InputLabelMapType* >
+    (this->itk::ProcessObject::GetInput(0) );
+}
+
+// Get the output  SampleList
+template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
+const typename LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+::OutputSampleListType *
+LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+::GetOutputSampleList()
+{
+  return dynamic_cast<OutputSampleListType*>(this->itk::ProcessObject::GetOutput(0));
+}
+
+
+template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunctor>
+void 
+LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
+::GenerateData()
+{
+  // Get the input LabelMap
+  InputLabelMapConstPointerType inputLabelMap = this->GetInputLabelMap();
+
+  // Get the output ListSample
+  OutputSampleListPointerType outputSampleList = const_cast<OutputSampleListType*>(this->GetOutputSampleList());
+
+  ConstIteratorType it = ConstIteratorType( inputLabelMap );
+  
+  // iterate on label objects
+  bool isFirstIteration = true;
+  while( !it.IsAtEnd() )
+    {
+    // Get the measurement vector size of the output samplelist : once
+    // in the begining of the iterator
+    if( isFirstIteration )
+      {
+      typename OutputSampleListType::MeasurementVectorSizeType measurementSize;
+      measurementSize = m_MeasurementFunctor(it.GetLabelObject()).Size();
+      outputSampleList->SetMeasurementVectorSize(measurementSize);
+      isFirstIteration = false;
+      }
+    outputSampleList->PushBack(m_MeasurementFunctor(it.GetLabelObject()));
     ++it;
     }
 }

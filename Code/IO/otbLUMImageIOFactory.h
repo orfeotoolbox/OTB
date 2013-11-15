@@ -41,6 +41,7 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
+  static LUMImageIOFactory * FactoryNew() { return new LUMImageIOFactory; }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(LUMImageIOFactory, itk::ObjectFactoryBase);

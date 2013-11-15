@@ -18,7 +18,7 @@
 #ifndef __otbGeocentricTransform_h
 #define __otbGeocentricTransform_h
 
-#include "itkTransform.h"
+#include "otbTransform.h"
 #include "otbGenericMapProjection.h"
 #include "otbEllipsoidAdapter.h"
 
@@ -34,14 +34,14 @@ template <TransformDirection::TransformationDirection TDirectionOfMapping,
     unsigned int NInputDimensions = 3,
     unsigned int NOutputDimensions = 3>
 class ITK_EXPORT GeocentricTransform :
-    public itk::Transform<TScalarType,  // Data type for scalars
-                          NInputDimensions,  // Number of dimensions in the input space
-                          NOutputDimensions>  // Number of dimensions in the output space
+    public Transform<TScalarType,  // Data type for scalars
+                     NInputDimensions,  // Number of dimensions in the input space
+                     NOutputDimensions>  // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
   typedef GeocentricTransform                                              Self;
-  typedef itk::Transform<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
+  typedef Transform<TScalarType, NInputDimensions, NOutputDimensions>      Superclass;
   typedef itk::SmartPointer<Self>                                          Pointer;
   typedef itk::SmartPointer<const Self>                                    ConstPointer;
 
@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GeocentricTransform, itk::Transform);
+  itkTypeMacro(GeocentricTransform, Transform);
 
   static const TransformDirection::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
 

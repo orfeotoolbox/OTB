@@ -107,7 +107,7 @@ RadiometricMomentsImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 RadiometricMomentsImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
 

@@ -391,7 +391,9 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   inputPtr->Update();
 
   // Fill the output buffer with black pixels
-  outputPtr->FillBuffer(0);
+  OutputPixelType zero = OutputPixelType();
+  itk::NumericTraits<OutputPixelType>::SetLength(zero, outputPtr->GetNumberOfComponentsPerPixel());
+  outputPtr->FillBuffer(zero);
 
   //Adaptation of contribution from A. Huck
   //Convert input image into matrix

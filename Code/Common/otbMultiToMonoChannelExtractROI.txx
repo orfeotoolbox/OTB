@@ -76,7 +76,7 @@ template<class TInputPixelType, class TOutputPixelType>
 void
 MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   itkDebugMacro(<< "Actually executing");
 

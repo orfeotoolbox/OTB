@@ -1,0 +1,28 @@
+itk_wrap_include("set")
+
+# double is always needed by KernelTransform
+UNIQUE(real_types "${WRAP_ITK_REAL};D")
+itk_wrap_class("itk::VectorContainer" POINTER)
+  foreach(d ${ITK_WRAP_DIMS})
+    foreach(t ${real_types})
+      itk_wrap_template("${ITKM_UL}${ITKM_V${t}${d}}" "${ITKT_UL},${ITKT_V${t}${d}}")
+      itk_wrap_template("${ITKM_UL}${ITKM_P${t}${d}}" "${ITKT_UL},${ITKT_P${t}${d}}")
+    endforeach(t)
+  endforeach(d)
+  foreach(d ${ITK_WRAP_DIMS})
+    itk_wrap_template("${ITKM_UC}${ITKM_O${d}}"  "${ITKT_UC},${ITKT_O${d}}")
+    itk_wrap_template("${ITKM_UI}${ITKM_CID${d}}" "${ITKT_UI},${ITKT_CID${d}}")
+  endforeach(d)
+  foreach(t ${WRAP_ITK_REAL})
+    itk_wrap_template("${ITKM_UL}${ITKM_${t}}"    "${ITKT_UL},${ITKT_${t}}")
+    itk_wrap_template("${ITKM_UC}${ITKM_${t}}"    "${ITKT_UC},${ITKT_${t}}")
+  endforeach(t)
+  itk_wrap_template("${ITKM_UC}${ITKM_SS}"    "${ITKT_UC},${ITKT_SS}")
+  # used in FastMarchingExtensionImageFilter
+  itk_wrap_template("${ITKM_UI}${ITKM_VUC1}"    "${ITKT_UI},${ITKT_VUC1}")
+  itk_wrap_template("${ITKM_UL}SUL"    "${ITKT_UL}, std::set< unsigned long >")
+itk_end_wrap_class()
+
+itk_wrap_class("itk::DataObjectDecorator" POINTER)
+  itk_wrap_template("VC${ITKM_UC}${ITKM_D}" "itk::VectorContainer< ${ITKT_UC}, ${ITKT_D} >")
+itk_end_wrap_class()

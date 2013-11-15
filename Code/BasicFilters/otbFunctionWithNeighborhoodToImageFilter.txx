@@ -124,7 +124,7 @@ template<class TInputImage, class TOutputImage, class TFunction>
 void
 FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   // We use dynamic_cast since inputs are stored as DataObjects.
   InputImageConstPointer inputPtr = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));

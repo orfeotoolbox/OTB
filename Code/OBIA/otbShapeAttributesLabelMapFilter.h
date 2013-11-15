@@ -22,7 +22,6 @@
 #define __otbShapeAttributesLabelMapFilter_h
 
 #include "otbLabelMapFeaturesFunctorImageFilter.h"
-#include "itkLabelPerimeterEstimationCalculator.h"
 #include "otbImage.h"
 #include "otbPolygon.h"
 #include "otbLabelObjectToPolygonFunctor.h"
@@ -50,6 +49,8 @@ public:
   /** LabelObject typedef */
   typedef TLabelObject LabelObjectType;
 
+  /** Const iterator over LabelObject lines */
+  typedef typename LabelObjectType::ConstLineIterator  ConstLineIteratorType;
   /** Labeled image type */
   typedef TLabelImage LabelImageType;
 
@@ -61,10 +62,10 @@ public:
   typedef SimplifyPathFunctor<PolygonType,
                               PolygonType> SimplifyPolygonFunctorType;
 
-  /** Perimeter calculator */
-  typedef itk::LabelPerimeterEstimationCalculator
-  <LabelImageType>                         PerimeterCalculatorType;
-
+  /** ImageDimension constants */
+  itkStaticConstMacro(ImageDimension, unsigned int, TLabelObject::ImageDimension);
+  typedef itk::ImageRegion< TLabelObject::ImageDimension > RegionType;
+  typedef itk::Offset< TLabelObject::ImageDimension > OffsetType;
   /** Constructor */
   ShapeAttributesLabelObjectFunctor();
 
@@ -112,13 +113,10 @@ public:
   /** Get the label image */
   const TLabelImage * GetLabelImage() const;
 
-  /** Set the perimeter calculator */
-  void SetPerimeterCalculator(const PerimeterCalculatorType * pc);
-
   /** This is the functor implementation
    *  Calling the functor on a label object
    *  will update its shape attributes */
-  inline void operator ()(LabelObjectType * lo) const;
+  inline void operator ()(LabelObjectType * lo);
 
 private:
   /** Convenience internal method */
@@ -138,7 +136,23 @@ private:
 
   /** Convenience internal method  */
   static double hyperSphereRadiusFromVolume(double volume);
+  
+  double ComputePerimeter(LabelObjectType *labelObject, const RegionType & region);
+  
+  typedef itk::Offset<2>                                                          Offset2Type;
+  typedef itk::Offset<3>                                                          Offset3Type;
+  typedef itk::Vector<double, 2>                                                  Spacing2Type;
+  typedef itk::Vector<double, 3>                                                  Spacing3Type;
+  typedef std::map<Offset2Type, itk::SizeValueType, Offset2Type::LexicographicCompare> MapIntercept2Type;
+  typedef std::map<Offset3Type, itk::SizeValueType, Offset3Type::LexicographicCompare> MapIntercept3Type;
+  
+  template<class TMapIntercept, class TSpacing> double PerimeterFromInterceptCount( TMapIntercept & intercepts, const TSpacing & spacing );
 
+#if ! defined(ITK_DO_NOT_USE_PERIMETER_SPECIALIZATION)
+  double PerimeterFromInterceptCount( MapIntercept2Type & intercepts, const Spacing2Type spacing );
+  double PerimeterFromInterceptCount( MapIntercept3Type & intercepts, const Spacing3Type spacing );
+#endif
+  
   /** Do we compute the feret diameter ? */
   bool m_ComputeFeretDiameter;
 
@@ -153,9 +167,6 @@ private:
 
   /** Compute only a reduced attribute set */
   bool m_ReducedAttributeSet;
-
-  /** The perimeter calculator */
-  typename PerimeterCalculatorType::ConstPointer m_PerimeterCalculator;
 
   /** The label image is used to compute the feret diameter */
   typename LabelImageType::ConstPointer m_LabelImage;
@@ -199,11 +210,10 @@ public:
   /** Template parameters typedefs */
   typedef TImage                              ImageType;
   typedef typename ImageType::LabelObjectType LabelObjectType;
-  typedef typename ImageType::RegionType     InputImageRegionType;
+  typedef typename ImageType::RegionType      InputImageRegionType;
   typedef TLabelImage                         LabelImageType;
   typedef Functor::ShapeAttributesLabelObjectFunctor
   <LabelObjectType, LabelImageType>                      FunctorType;
-  typedef typename FunctorType::PerimeterCalculatorType PerimeterCalculatorType;
 
   /** Standard class typedefs. */
   typedef ShapeAttributesLabelMapFilter Self;

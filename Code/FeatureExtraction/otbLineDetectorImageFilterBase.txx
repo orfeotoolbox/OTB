@@ -43,7 +43,7 @@ template <class TInputImage, class TOutputImage, class TOutputImageDirection, cl
 LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
 ::LineDetectorImageFilterBase()
 {
-  this->SetNumberOfOutputs(2);
+  this->SetNumberOfRequiredOutputs(2);
   this->SetNumberOfRequiredOutputs(1);
   m_Radius.Fill(1);
   m_LengthLine = 1;
@@ -141,7 +141,7 @@ void
 LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
 ::ThreadedGenerateData(
   const OutputImageRegionType&     outputRegionForThread,
-  int threadId
+  itk::ThreadIdType threadId
   )
 {
 
@@ -223,7 +223,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
 
-  bool interiorFace = true;
+  //bool interiorFace = true;
 
   for (fit = faceList.begin(); fit != faceList.end(); ++fit)
     {
@@ -251,14 +251,14 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
 
       // JULIEN :  If the processed region is the center face
       // the input image can be used for the interpolation
-      if (interiorFace)
-        {
-        interpolator->SetInputImage(input);
-        }
+      //if (interiorFace)
+      //  {
+      //  interpolator->SetInputImage(input);
+      //  }
       // else we must feed the interpolator with a partial image corresponding
       // to the boundary conditions
-      else
-        {
+      //else
+      //  {
         typename InputImageType::RegionType tempRegion;
         typename InputImageType::SizeType   tempSize;
         tempSize[0] = 2 * m_FaceList[0] + 1;
@@ -283,7 +283,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
             }
           }
         interpolator->SetInputImage(tempImage);
-        }
+       // }
 
       // Location of the central pixel between zone 1 and zone 2
       Yc12 = Yc - m_WidthLine - 1;
@@ -374,7 +374,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
       ++cit;
       ++it;
       ++itdir;
-      interiorFace = false;
+      //interiorFace = false;
       progress.CompletedPixel();
 
       // ROMAIN

@@ -17,11 +17,7 @@
 =========================================================================*/
 
 
-#include "itkMacro.h"
 #include <iostream>
-
-#include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbHermitianEigenAnalysis.h"
 #include "itkVariableLengthVector.h"
 #include "vnl/algo/vnl_complex_eigensystem.h"

@@ -19,7 +19,6 @@
 #define __otbVectorDataProjectionFilter_h
 
 #include "otbVectorDataToVectorDataFilter.h"
-#include "itkTransform.h"
 #include "otbGenericRSTransform.h"
 #include "otbImageKeywordlist.h"
 
@@ -188,8 +187,6 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   InternalTransformPointerType m_Transform;
-  GenericTransformPointerType  m_InputTransform;
-  GenericTransformPointerType  m_OutputTransform;
   std::string                  m_InputProjectionRef;
   std::string                  m_OutputProjectionRef;
   ImageKeywordlist             m_InputKeywordList;

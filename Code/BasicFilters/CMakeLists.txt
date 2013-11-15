@@ -3,7 +3,41 @@
 FILE(GLOB OTBBasicFilters_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBBasicFilters ${OTBBasicFilters_SRCS})
-TARGET_LINK_LIBRARIES (OTBBasicFilters OTBCommon ITKBasicFilters otbedison ${MUPARSER_LIBRARIES})
+TARGET_LINK_LIBRARIES (OTBBasicFilters OTBCommon otbedison ${MUPARSER_LIBRARIES})
+
+# Explicit link to fftw is required
+# The link of ITKFFT to fftw does not propagate well :
+# in an external project using OTB with FFT features,
+# linking to OTB libraries does not automatically add fftw to
+# the link library list.
+#
+# Possible cause : we mix two different CMake behaviour.
+# ITK uses exported targets, while OTB uses the OTBLibraryDepends file,
+# and there is now a mismatch between target name and lib name for ITK libraries,
+# so that only the ITK library files are linked, not considered as real target
+# with their associated dependencies.
+#
+if(ITK_USE_FFTWD)
+  if(ITK_USE_SYSTEM_FFTW)
+    target_link_libraries(OTBBasicFilters ${FFTWD_LIB})
+    if(FFTWD_THREADS_LIB)
+      target_link_libraries(OTBBasicFilters ${FFTWD_THREADS_LIB})
+    endif()
+  else()
+    message(FATAL "Using ITK internal version of FFTW is not supported (yet)") 
+  endif()
+endif()
+
+if(ITK_USE_FFTWF)
+  if(ITK_USE_SYSTEM_FFTW)
+    target_link_libraries(OTBBasicFilters ${FFTWF_LIB})
+    if(FFTWF_THREADS_LIB)
+      target_link_libraries(OTBBasicFilters ${FFTWF_THREADS_LIB})
+    endif()
+  else()
+    message(FATAL "Using ITK internal version of FFTW is not supported (yet)") 
+  endif()
+endif()
 
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(OTBBasicFilters PROPERTIES ${OTB_LIBRARY_PROPERTIES})

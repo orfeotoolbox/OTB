@@ -111,9 +111,10 @@ public:
   typedef typename HistogramType::Pointer               HistogramPointer;
   typedef typename HistogramType::ConstPointer          HistogramConstPointer;
   typedef typename HistogramType::MeasurementType       MeasurementType;
+  typedef typename HistogramType::RelativeFrequencyType RelativeFrequencyType;
   typedef typename HistogramType::MeasurementVectorType MeasurementVectorType;
   typedef typename HistogramType::IndexType             IndexType;
-  typedef typename HistogramType::FrequencyType         FrequencyType;
+  typedef typename HistogramType::AbsoluteFrequencyType         FrequencyType; //FIXME several type in the new stat framework
 
   /** Connects the GLCM histogram over which the features are going to be computed */
   itkSetObjectMacro(Histogram, HistogramType);
@@ -143,7 +144,6 @@ private:
 
   HistogramPointer m_Histogram;
 
-  void NormalizeHistogram(void);
   void ComputeMean();
   double m_Mean, m_Variance, m_SumAverage, m_SumVariance, m_SumEntropy, m_DifferenceEntropy,
          m_DifferenceVariance, m_IC1, m_IC2;

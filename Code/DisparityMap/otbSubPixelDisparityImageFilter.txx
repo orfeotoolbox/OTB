@@ -27,12 +27,11 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::SubPixelDisparityImageFilter()
 {
-// Set the number of inputs
-  this->SetNumberOfInputs(7);
+// Set the number of required inputs
   this->SetNumberOfRequiredInputs(3);
 
   // Set the outputs
-  this->SetNumberOfOutputs(3);
+  this->SetNumberOfRequiredOutputs(3);
   this->SetNthOutput(0,TDisparityImage::New());
   this->SetNthOutput(1,TDisparityImage::New());
   this->SetNthOutput(2,TOutputMetricImage::New());
@@ -151,7 +150,7 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetLeftInput() const
 {
-  if (this->GetNumberOfInputs()<1)
+  if (this->GetNumberOfIndexedInputs()<1)
     {
     return 0;
     }
@@ -165,7 +164,7 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetRightInput() const
 {
-  if(this->GetNumberOfInputs()<2)
+  if(this->GetNumberOfIndexedInputs()<2)
     {
     return 0;
     }
@@ -179,7 +178,7 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetHorizontalDisparityInput() const
 {
-  if(this->GetNumberOfInputs()<3)
+  if(this->GetNumberOfIndexedInputs()<3)
     {
     return 0;
     }
@@ -193,7 +192,7 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetVerticalDisparityInput() const
 {
-  if(this->GetNumberOfInputs()<4)
+  if(this->GetNumberOfIndexedInputs()<4)
     {
     return 0;
     }
@@ -207,7 +206,7 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetLeftMaskInput() const
 {
-  if(this->GetNumberOfInputs()<5)
+  if(this->GetNumberOfIndexedInputs()<5)
     {
     return 0;
     }
@@ -221,7 +220,7 @@ SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GetRightMaskInput() const
 {
-  if(this->GetNumberOfInputs()<6)
+  if(this->GetNumberOfIndexedInputs()<6)
     {
     return 0;
     }
@@ -584,7 +583,7 @@ class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // choose the refinement method to use
   switch(m_RefineMethod)
@@ -609,7 +608,7 @@ class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::ParabolicRefinement(const RegionType& outputRegionForThread, int threadId)
+::ParabolicRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve pointers
   const TInputImage *     inLeftPtr    = this->GetLeftInput();
@@ -1041,7 +1040,7 @@ class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::TriangularRefinement(const RegionType& outputRegionForThread, int threadId)
+::TriangularRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve pointers
   const TInputImage *     inLeftPtr    = this->GetLeftInput();
@@ -1496,7 +1495,7 @@ class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::DichotomyRefinement(const RegionType& outputRegionForThread, int threadId)
+::DichotomyRefinement(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve pointers
   const TInputImage *     inLeftPtr    = this->GetLeftInput();

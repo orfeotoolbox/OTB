@@ -104,7 +104,7 @@ protected:
     this->m_NumberOfParameters = 1;
     this->m_Parameters.SetSize(1);
     this->m_Parameters[0] = 1.0;
-    m_Generator = RandomGeneratorType::New();
+    m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
   virtual ~MRFOptimizerMetropolis() {}

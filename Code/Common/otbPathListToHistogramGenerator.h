@@ -19,11 +19,15 @@
 #ifndef __otbPathListToHistogramGenerator_h
 #define __otbPathListToHistogramGenerator_h
 
-#include "itkListSampleToHistogramGenerator.h"
-#include "itkObject.h"
+#include "itkSampleToHistogramFilter.h"
+#include "itkHistogram.h"
+#include "itkProcessObject.h"
 #include "itkListSample.h"
 #include "itkVector.h"
-#include "itkDenseFrequencyContainer.h"
+#include "itkDenseFrequencyContainer2.h"
+#include "otbObjectList.h"
+
+//TODO : write a HistogramSource when outputing Histogram
 
 namespace otb
 {
@@ -39,29 +43,26 @@ namespace otb
  */
 
 template<class TPath, class TFunction>
-class PathListToHistogramGenerator : public itk::Object
+class PathListToHistogramGenerator : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
   typedef PathListToHistogramGenerator  Self;
-  typedef itk::Object                   Superclass;
+  typedef itk::ProcessObject            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathListToHistogramGenerator, itk::Object);
+  itkTypeMacro(PathListToHistogramGenerator, itk::ProcessObject);
 
   /** standard New() method support */
   itkNewMacro(Self);
 
-  typedef TPath                      PathType;
-  typedef typename PathType::Pointer PathPointer;
-  typedef std::vector<PathPointer>   PathListType;
+  typedef TPath                         PathType;
+  typedef typename PathType::Pointer    PathPointer;
+  typedef ObjectList<PathType>          PathListType;
 
-  typedef PathListType *       PathListPointer;
-  typedef const PathListType * PathListConstPointer;
-
-  typedef TFunction FunctionType;
+  typedef TFunction                     FunctionType;
 
   typedef typename TFunction::OutputType RealType;
 
@@ -71,33 +72,34 @@ public:
   typedef typename ListSampleType::Pointer                  ListSamplePointer;
   typedef typename ListSampleType::ConstPointer             ListSampleConstPointer;
 
-  typedef itk::Statistics::DenseFrequencyContainer FrequencyContainerType;
+  typedef itk::Statistics::DenseFrequencyContainer2         FrequencyContainerType;
+  typedef itk::Statistics::Histogram< MeasurementType,
+            FrequencyContainerType >                        HistogramType;
 
-  typedef itk::Statistics::ListSampleToHistogramGenerator<
+  typedef itk::Statistics::SampleToHistogramFilter<
       ListSampleType,
-      MeasurementType,
-      FrequencyContainerType, 1>        GeneratorType;
+      HistogramType>                                    GeneratorType;
+  typedef typename GeneratorType::Pointer               GeneratorPointer;
 
-  typedef typename GeneratorType::Pointer GeneratorPointer;
-
-  typedef typename GeneratorType::HistogramType         HistogramType;
   typedef typename HistogramType::Pointer               HistogramPointer;
   typedef typename HistogramType::ConstPointer          HistogramConstPointer;
   typedef typename HistogramType::SizeType              SizeType;
   typedef typename HistogramType::MeasurementVectorType MeasurementVectorType;
 
+  /** DataObject typedef*/
+  typedef typename Superclass::DataObjectPointer        DataObjectPointer;
+
+  void GraftNthOutput(unsigned int idx, itk::DataObject *graft);
+  void GraftOutput(itk::DataObject *graft);
+
 public:
 
-  /** Triggers the Computation of the histogram */
-  void Compute(void);
-
   /** Connects the input PathList for which the histogram is going to be computed */
-  void SetInput(PathListPointer path);
+  void SetInput(const PathListType* path);
+  const PathListType* GetInput() const;
 
-  /** Return the histogram. o00
-   \warning This output is only valid after the Compute() method has been invoked
-   \sa Compute */
-  const HistogramType * GetOutput() const;
+  // Return the output histogram. 
+   const HistogramType * GetOutput() const;
 
   /** Set number of histogram bins */
   void SetNumberOfBins(const SizeType& size);
@@ -111,11 +113,12 @@ public:
 protected:
   PathListToHistogramGenerator();
   virtual ~PathListToHistogramGenerator() {}
+  virtual void GenerateData();
+  DataObjectPointer MakeOutput(unsigned int);
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-
-  PathListPointer  m_PathList;
+  
   GeneratorPointer m_HistogramGenerator;
 
 };

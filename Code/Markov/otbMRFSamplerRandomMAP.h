@@ -158,7 +158,7 @@ protected:
     m_Energy(NULL),
     m_EnergiesInvalid(true)
     {
-    m_Generator = RandomGeneratorType::New();
+    m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
     }
   virtual ~MRFSamplerRandomMAP()

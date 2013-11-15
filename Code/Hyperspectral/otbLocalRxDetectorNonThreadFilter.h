@@ -24,8 +24,7 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkImageRegionIterator.h"
 #include "itkListSample.h"
-#include "itkMeanCalculator.h"
-#include "itkCovarianceCalculator.h"
+#include "itkCovarianceSampleFilter.h"
 #include "itkVariableSizeMatrix.h"
 
 namespace otb
@@ -44,10 +43,10 @@ class ITK_EXPORT LocalRxDetectorNonThreadFilter:
 public:
 
   /** Standard class typedefs. */
-  typedef LocalRxDetectorNonThreadFilter                                                     Self;
-  typedef itk::ImageToImageFilter< TInputImage, TOutputImage >       Superclass;
-  typedef itk::SmartPointer<Self>                                                         Pointer;
-  typedef itk::SmartPointer<const Self>                                             ConstPointer;
+  typedef LocalRxDetectorNonThreadFilter                         Self;
+  typedef itk::ImageToImageFilter< TInputImage, TOutputImage >   Superclass;
+  typedef itk::SmartPointer<Self>                                Pointer;
+  typedef itk::SmartPointer<const Self>                          ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -56,31 +55,31 @@ public:
   itkTypeMacro(LocalRxDetectorNonThreadFilter, ImageToImageFilter);
 
   /** typedef related to input and output images */
-  typedef TInputImage                                                        InputImageType;
-  typedef typename InputImageType::Pointer              InputPointerType;
-  typedef typename InputImageType::ConstPointer       InputConstPointerType;
-  typedef typename InputImageType::IndexType              InputIndexType;
-  typedef typename InputImageType::SizeType              InputSizeType;
+  typedef TInputImage                                InputImageType;
+  typedef typename InputImageType::Pointer           InputPointerType;
+  typedef typename InputImageType::ConstPointer      InputConstPointerType;
+  typedef typename InputImageType::IndexType         InputIndexType;
+  typedef typename InputImageType::SizeType          InputSizeType;
 
-  typedef TOutputImage                                                  OutputImageType;
-  typedef typename OutputImageType::Pointer              OutputPointerType;
-  typedef typename OutputImageType::IndexType              OutputIndexType;
+  typedef TOutputImage                               OutputImageType;
+  typedef typename OutputImageType::Pointer          OutputPointerType;
+  typedef typename OutputImageType::IndexType        OutputIndexType;
   typedef typename OutputImageType::OffsetType       OutputOffsetType;
-  typedef typename OutputImageType::SizeType              OutputSizeType;
+  typedef typename OutputImageType::SizeType         OutputSizeType;
   typedef typename OutputImageType::RegionType       OutputImageRegionType;
 
   /** typedef related to iterators */
-  typedef itk::ConstShapedNeighborhoodIterator<InputImageType>                                           ConstShapedNeighborhoodIteratorType;
-  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>        VectorFaceCalculatorType;
-  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType>        FaceCalculatorType;
-  typedef itk::ImageRegionIterator<OutputImageType>                                                                ImageRegionIteratorType;
+  typedef itk::ConstShapedNeighborhoodIterator<InputImageType>                       ConstShapedNeighborhoodIteratorType;
+  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>   VectorFaceCalculatorType;
+  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType>  FaceCalculatorType;
+  typedef itk::ImageRegionIterator<OutputImageType>                                  ImageRegionIteratorType;
 
   /** typedef related to statistics */
-  typedef typename InputImageType::PixelType                                           VectorMeasurementType;
-  typedef itk::Statistics::ListSample<VectorMeasurementType>               ListSampleType;
-  typedef itk::Statistics::MeanCalculator<ListSampleType>               MeanCalculatorType;
-  typedef itk::Statistics::CovarianceCalculator<ListSampleType>        CovarianceCalculatorType;
-  typedef typename CovarianceCalculatorType::OutputType                                   MatrixType;
+  typedef typename InputImageType::PixelType                      VectorMeasurementType;
+  typedef itk::Statistics::ListSample<VectorMeasurementType>      ListSampleType;
+  typedef itk::Statistics::CovarianceSampleFilter<ListSampleType> CovarianceCalculatorType;
+  typedef typename CovarianceCalculatorType::MeasurementVectorRealType    MeasurementVectorRealType;
+  typedef typename CovarianceCalculatorType::MatrixType                   MatrixType;
 
   /** Getter and Setter */
   itkSetMacro(InternalRadius, int);
@@ -92,7 +91,7 @@ public:
   virtual void GenerateInputRequestedRegion();
   virtual void GenerateData();
 //       virtual void BeforeThreadedGenerateData();
-//       virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+//       virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 
 protected:

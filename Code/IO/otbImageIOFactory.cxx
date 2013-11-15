@@ -114,7 +114,6 @@ ImageIOFactory::RegisterBuiltInFactories()
       firstTime = false;
       }
     }
-
 }
 
 } // end namespace otb

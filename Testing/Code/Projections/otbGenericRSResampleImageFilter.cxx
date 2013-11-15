@@ -24,9 +24,6 @@
 
 #include <ogr_spatialref.h>
 
-// Default value
-#include "itkPixelBuilder.h"
-
 // Extract ROI
 #include "otbMultiChannelExtractROI.h"
 
@@ -92,19 +89,18 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   char * utmRef = NULL;
   oSRS.exportToWkt(&utmRef);
   
-  // Deformation Field spacing
+  // Displacement Field spacing
   SpacingType  gridSpacing;
   gridSpacing[0] = iGridSpacing;
   gridSpacing[1] = -iGridSpacing;
   
   // Default value builder
   ImageType::PixelType defaultValue;
-  itk::PixelBuilder<ImageType::PixelType>::Zero(defaultValue,
-                                                reader->GetOutput()->GetNumberOfComponentsPerPixel());
-    
+  itk::NumericTraits<ImageType::PixelType>::SetLength(defaultValue, reader->GetOutput()->GetNumberOfComponentsPerPixel());
+
   // Set the Resampler Parameters
   resampler->SetInput(reader->GetOutput());
-  resampler->SetDeformationFieldSpacing(gridSpacing);
+  resampler->SetDisplacementFieldSpacing(gridSpacing);
   resampler->SetOutputOrigin(origin);
   resampler->SetOutputSize(size);
   resampler->SetOutputSpacing(spacing);
@@ -158,15 +154,14 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   spacing[0] =  2.5;
   spacing[1] = -2.5;
  
-  // Deformation Field spacing
+  // Displacement Field spacing
   SpacingType  gridSpacing;
   gridSpacing[0] = iGridSpacing;
   gridSpacing[1] = -iGridSpacing;
   
   // Default value builder
   ImageType::PixelType defaultValue;
-  itk::PixelBuilder<ImageType::PixelType>::Zero(defaultValue,
-                                                reader->GetOutput()->GetNumberOfComponentsPerPixel());
+  itk::NumericTraits<ImageType::PixelType>::SetLength(defaultValue, reader->GetOutput()->GetNumberOfComponentsPerPixel());
 
   // Extract a roi centered on the input center
   ImageType::RegionType roi;
@@ -189,7 +184,7 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   
   // Set the Resampler Parameters
   resampler->SetInput(extractor->GetOutput());
-  resampler->SetDeformationFieldSpacing(gridSpacing);
+  resampler->SetDisplacementFieldSpacing(gridSpacing);
   resampler->SetOutputParametersFromMap("UTM", spacing);
   
   if (useInRpc)

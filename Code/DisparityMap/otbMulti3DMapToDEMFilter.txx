@@ -33,12 +33,12 @@ template<class T3DImage, class TMaskImage, class TOutputDEMImage>
 Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::Multi3DMapToDEMFilter()
 {
   // Set the number of inputs (1 image one optional mask)
-  this->SetNumberOfInputs(2);
+  this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
   //this->m_MapKeywordLists.resize(1);
   m_DEMGridStep = 10.0;
   // Set the outputs
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfIndexedOutputs(1);
   this->SetNthOutput(0, TOutputDEMImage::New());
   // Default DEM reconstruction parameters
   m_MapSplitterList = SplitterListType::New();
@@ -65,7 +65,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetNumberOf3D
 {
   if (nb > 0)
     {
-    this->SetNumberOfInputs(2 * nb);
+    this->SetNumberOfIndexedInputs(2 * nb);
     }
 }
 
@@ -522,7 +522,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
 template<class T3DImage, class TMaskImage, class TOutputDEMImage>
 void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGenerateData(
                                                                                         const RegionType & outputRegionForThread,
-                                                                                        int threadId)
+                                                                                        itk::ThreadIdType threadId)
 {
   TOutputDEMImage * outputPtr = this->GetOutput();
 

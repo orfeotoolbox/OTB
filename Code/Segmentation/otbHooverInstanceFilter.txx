@@ -72,10 +72,10 @@ const TLabelMap* HooverInstanceFilter<TLabelMap>
 
 /** Get the input machine segmentation label map */
 template <class TLabelMap>
-const TLabelMap* HooverInstanceFilter<TLabelMap>
+TLabelMap* HooverInstanceFilter<TLabelMap>
 ::GetMachineSegmentationLabelMap()
 {
-  return this->GetInput(1);
+  return const_cast<TLabelMap*> (this->GetInput(1));
 }
 
 /** Get the output ground truth label map */
@@ -121,22 +121,20 @@ void HooverInstanceFilter<TLabelMap>
     
     outputMS->SetBackgroundValue( inputMS->GetBackgroundValue() );
 
-    const LabelObjectContainerType & labelObjectContainer = inputMS->GetLabelObjectContainer();
+    ConstIteratorType  it = ConstIteratorType( inputMS );
 
-    LabelObjectContainerTypeConstIterator  it = labelObjectContainer.begin();
-
-    while( it != labelObjectContainer.end() )
+    while( !it.IsAtEnd() )
       {
-      const LabelObjectType * labeObject = it->second;
+      const LabelObjectType * labeObject = it.GetLabelObject();
 
       assert( labeObject != NULL );
-      assert( labeObject->GetLabel() == it->first );
+      assert( labeObject->GetLabel() == it.GetLabel() );
 
       typename LabelObjectType::Pointer newLabelObject = LabelObjectType::New();
       newLabelObject->CopyAllFrom( labeObject );
       
       outputMS->AddLabelObject( newLabelObject );
-      it++;
+      ++it;
       }
     }
 }
@@ -189,13 +187,14 @@ void HooverInstanceFilter<TLabelMap>
   
   //Fill cardinalities list for MS
   unsigned long i = 0;
-  const LabelObjectContainerType & containerMS = this->GetMachineSegmentationLabelMap()->GetLabelObjectContainer();
-  LabelObjectContainerTypeConstIterator iter;
+  
+  IteratorType  iter = IteratorType( this->GetMachineSegmentationLabelMap() );
+  
   typename LabelObjectType::Pointer blankRegion;
   
-  for (iter = containerMS.begin(); iter != containerMS.end(); iter++)
+  while ( !iter.IsAtEnd() )
     {
-    LabelObjectType *regionMS = iter->second;
+    LabelObjectType *regionMS = iter.GetLabelObject();
     m_CardRegMS[i] = regionMS->Size();
     if (m_CardRegMS[i] == 0)
       {
@@ -226,6 +225,7 @@ void HooverInstanceFilter<TLabelMap>
       regionMS->CopyAttributesFrom(blankRegion);
       }
     i++;
+    ++iter;
     }
   
   m_LabelsGT = this->GetGroundTruthLabelMap()->GetLabels();
@@ -288,11 +288,9 @@ void HooverInstanceFilter<TLabelMap>
   LabelMapType* outMS = this->GetOutput(1);
   
   // Iterators on label object container (to gain efficiency when accessing them)
-  const LabelObjectContainerType & containerGT = outGT->GetLabelObjectContainer();
-  const LabelObjectContainerType & containerMS = outMS->GetLabelObjectContainer();
-  LabelObjectContainerTypeConstIterator iterGT = containerGT.begin();
-  LabelObjectContainerTypeConstIterator iterMS;
-  
+  IteratorType  iterGT = IteratorType( outGT );
+  IteratorType  iterMS = IteratorType( outMS );
+
   // Set of classified regions
   RegionSetType GTindices;
   RegionSetType MSindices;
@@ -320,7 +318,7 @@ void HooverInstanceFilter<TLabelMap>
     
     double tGT = static_cast<double>(m_CardRegGT[row]) * m_Threshold; // card Ri x t
     IsRowEmpty = true;
-    iterMS = containerMS.begin();
+    iterMS.GoToBegin();
     for(unsigned int col=0; col<m_NumberOfRegionsMS; col++, iterMS++)
       {
       // Tij
@@ -346,8 +344,8 @@ void HooverInstanceFilter<TLabelMap>
           {
           otbDebugMacro(<< "1 coef[" << row << "," << col << "]=" << coefT << " #tGT=" << tGT << " #tMS=" << tMS << " -> CD");
           
-          LabelObjectType *regionGT = iterGT->second;
-          LabelObjectType *regionMS = iterMS->second;
+          LabelObjectType *regionGT = iterGT.GetLabelObject();
+          LabelObjectType *regionMS = iterMS.GetLabelObject();
           double scoreRC = m_Threshold * (std::min(coefT / tGT, coefT / tMS));
           bufferRC += scoreRC * static_cast<double>(m_CardRegGT[row]);
           
@@ -367,7 +365,7 @@ void HooverInstanceFilter<TLabelMap>
           {
           otbDebugMacro(<< "2 coef[" << row << "," << col << "]=" << coefT << " #tGT=" << tGT << " #tMS=" << tMS << " -> OSmaybe");
           }
-        objectsOfMS.push_back(iterMS->second); // candidate region for over-segmentation
+        objectsOfMS.push_back(iterMS.GetLabelObject()); // candidate region for over-segmentation
         regionsOfMS.insert(col);
         sumOS += coefT;
         sumScoreRF += coefT*(coefT-1.0);
@@ -386,7 +384,7 @@ void HooverInstanceFilter<TLabelMap>
       else if(regionsOfMS.size()>1)
         {
         otbDebugMacro(<< row << " OS by ");
-        LabelObjectType *regionGT = iterGT->second;
+        LabelObjectType *regionGT = iterGT.GetLabelObject();
         
         double cardRegGT = static_cast<double>(m_CardRegGT[row]);
         double scoreRF = 1.0 - sumScoreRF / (cardRegGT * (cardRegGT - 1.0));
@@ -436,7 +434,7 @@ void HooverInstanceFilter<TLabelMap>
     } // end of line loop
 
   // second pass : loop on MS regions first
-  iterMS = containerMS.begin();
+  iterMS.GoToBegin();
   for(unsigned int col=0; col<m_NumberOfRegionsMS; col++, iterMS++)
     {
     double sumUS = 0.0; // sum of coefT for potential under-segmented regions
@@ -448,7 +446,7 @@ void HooverInstanceFilter<TLabelMap>
          
     double tMS = static_cast<double>(m_CardRegMS[col]) * m_Threshold;
     IsColEmpty = true;
-    iterGT = containerGT.begin();
+    iterGT.GoToBegin();
     for(unsigned int row=0; row<m_NumberOfRegionsGT; row++, iterGT++)
       {
       double coefT = static_cast<double>(m_HooverMatrix(row, col));
@@ -468,7 +466,7 @@ void HooverInstanceFilter<TLabelMap>
         {
         otbDebugMacro(<< "3 coef[" << row << "," << col << "]=" << coefT << " #tGT=" << tGT << " #tMS=" << tMS << " -> USmaybe");
         regionsOfGT.insert(row);
-        objectsOfGT.push_back(iterGT->second);
+        objectsOfGT.push_back(iterGT.GetLabelObject());
         sumUS += coefT;
         sumScoreUS += coefT * (coefT - 1.0);
         sumCardUS += static_cast<double>(m_CardRegGT[row]);
@@ -484,7 +482,7 @@ void HooverInstanceFilter<TLabelMap>
         }
       else if(regionsOfGT.size()>1) // Under Segmentation
         {
-        LabelObjectType *regionMS = iterMS->second;
+        LabelObjectType *regionMS = iterMS.GetLabelObject();
         double scoreRA = 1.0 - sumScoreUS / (sumCardUS * (sumCardUS - 1.0));
         bufferRA += scoreRA * sumCardUS;
         
@@ -533,13 +531,13 @@ void HooverInstanceFilter<TLabelMap>
     } // end of column loop
 
   // check for Missed regions (unregistered regions in GT)
-  iterGT = containerGT.begin();
+  iterGT.GoToBegin();
   for(unsigned int i=0; i<m_NumberOfRegionsGT; ++i , ++iterGT)
     {
     if(GTindices.count(i)==0)
       {
       otbDebugMacro(<< "M " << i);
-      LabelObjectType *regionGT = iterGT->second;
+      LabelObjectType *regionGT = iterGT.GetLabelObject();
       
       bufferRM += static_cast<double>(m_CardRegGT[i]);
       
@@ -555,12 +553,12 @@ void HooverInstanceFilter<TLabelMap>
     }
 
   // check for Noise regions (unregistered regions in MS)
-  iterMS = containerMS.begin();
+  iterMS.GoToBegin();
   for(unsigned int i=0; i<m_NumberOfRegionsMS; ++i , ++iterMS)
     {
     if(MSindices.count(i)==0)
       {
-      LabelObjectType *regionMS = iterMS->second;
+      LabelObjectType *regionMS = iterMS.GetLabelObject();
       
       bufferRN += static_cast<double>(m_CardRegMS[i]);
       

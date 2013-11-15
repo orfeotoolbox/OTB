@@ -33,7 +33,6 @@ bool IsEqual(TPixel output, TPixel expected)
 
   RealType outputReal   = static_cast<RealType>(output);
   RealType expectedReal = static_cast<RealType>(expected);
-
   // avoid division by zero
   return outputReal == expectedReal || (vcl_abs(expectedReal - outputReal) / vcl_abs(expectedReal) < Epsilon);
 }

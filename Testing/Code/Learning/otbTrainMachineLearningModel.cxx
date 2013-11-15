@@ -101,6 +101,7 @@ bool ReadDataFile(const std::string & infname, InputListSampleType * samples, Ta
           }
 
         }
+      samples->SetMeasurementVectorSize(itk::NumericTraits<InputSampleType>::GetLength(sample));
       samples->PushBack(sample);
       labels->PushBack(label);
       }

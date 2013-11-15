@@ -257,7 +257,7 @@ template<class TInputPixelType, class TOutputPixelType>
 void
 MultiChannelExtractROI<TInputPixelType, TOutputPixelType>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   itkDebugMacro(<< "Actually executing");
   // Get the input and output pointers

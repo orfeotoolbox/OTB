@@ -18,11 +18,11 @@
 
 
 
-#include <iostream>
-
-#include "itkMacro.h"
-
 #include "otbImage.h"
+#include "itkMacro.h"
+#include <iostream>
+#include "itkComplexToModulusImageFilter.h"
+#include "itkStreamingImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -32,8 +32,11 @@ int otbImageFileWriterStreamingONERAComplex(int argc, char* argv[])
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef std::complex<float>                      PixelType;
-  typedef otb::Image<PixelType,  2>                ImageType;
+  typedef std::complex<float> PixelType;
+  const unsigned int Dimension = 2;
+
+  typedef otb::Image<PixelType,  Dimension> ImageType;
+
   typedef otb::ImageFileReader<ImageType>          ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 

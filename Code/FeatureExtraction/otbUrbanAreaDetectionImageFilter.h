@@ -28,7 +28,6 @@
 #include "itkBinaryErodeImageFilter.h"
 #include "itkBinaryDilateImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
-#include "itkMaskImageFilter.h"
 
 #include "itkSobelEdgeDetectionImageFilter.h"
 #include "otbEdgeDetectorImageFilter.h"
@@ -195,9 +194,6 @@ public:
       StructuringElementType>  ErodeFilterType;
   typedef typename itk::BinaryDilateImageFilter<OutputImageType, OutputImageType,
       StructuringElementType> DilateFilterType;
-  // MaskImageFilter
-  typedef typename itk::MaskImageFilter<VectorImageType, OutputImageType> MaskImageFilterType;
-  typedef typename MaskImageFilterType::Pointer                           MaskImageFilterPointerType;
   // Intensity
   typedef VectorImageToIntensityImageFilter<VectorImageType, SingleImageType> IntensityFilterType;
   typedef typename IntensityFilterType::Pointer                               IntensityFilterPointerType;
@@ -252,7 +248,6 @@ private:
   SobelDetectorType::Pointer          m_SobelFilter;
   ThresholdFilterPointerType          m_Thresholder;
   UrbanAreaExtrationFilterPointerType m_UrbanAreaExtractionFilter;
-  MaskImageFilterPointerType          m_MaskImageFilter;
   MultiplyImageFilterPointerType      m_MultiplyFilter;
 
   /** Thresholds */

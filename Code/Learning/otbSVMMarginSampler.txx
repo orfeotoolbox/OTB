@@ -28,7 +28,6 @@ template< class TSample, class TModel >
 SVMMarginSampler< TSample, TModel >
 ::SVMMarginSampler()
 {
-  m_Output = OutputType::New();
   m_NumberOfCandidates = 10;
 }
 
@@ -39,15 +38,6 @@ SVMMarginSampler< TSample, TModel >
 {
   Superclass::PrintSelf(os, indent);
 }
-
-template< class TSample, class TModel >
-void
-SVMMarginSampler< TSample, TModel >
-::Update()
-{
-  this->GenerateData();
-}
-
 
 template< class TSample, class TModel >
 void
@@ -64,30 +54,11 @@ SVMMarginSampler< TSample, TModel >
     itkExceptionMacro(<<"SVM model does not contain any support vector, can not perform margin sampling.");
     }
 
-
-  m_Output->SetSample(this->GetSample());
-  m_Output->Resize( this->GetSample()->Size() );
-
-
+  OutputType* output = const_cast<OutputType*>(this->GetOutput());
+  output->SetSample(this->GetInput());
+  
   this->DoMarginSampling();
 }
-
-template< class TSample, class TModel >
-typename SVMMarginSampler< TSample, TModel >::OutputType*
-SVMMarginSampler< TSample, TModel >
-::GetOutput()
-{
-  return m_Output;
-}
-
-template< class TSample, class TModel >
-void
-SVMMarginSampler< TSample, TModel >
-::SetOutput( OutputType * output )
-{
-  m_Output = output;
-}
-
 
 template< class TSample, class TModel >
 void
@@ -95,13 +66,13 @@ SVMMarginSampler< TSample, TModel >
 ::DoMarginSampling()
 {
   IndexAndDistanceVectorType idDistVector;
+  OutputType* output = const_cast<OutputType*>(this->GetOutput());
 
+  typename TSample::ConstIterator iter = this->GetInput()->Begin();
+  typename TSample::ConstIterator end  = this->GetInput()->End();
 
-  typename TSample::ConstIterator iter = this->GetSample()->Begin();
-  typename TSample::ConstIterator end  = this->GetSample()->End();
-
-  typename OutputType::ConstIterator iterO = m_Output->Begin();
-  typename OutputType::ConstIterator endO  = m_Output->End();
+  typename OutputType::ConstIterator iterO = output->Begin();
+  typename OutputType::ConstIterator endO  = output->End();
   typename TSample::MeasurementVectorType measurements;
 
 
@@ -128,9 +99,9 @@ SVMMarginSampler< TSample, TModel >
     for(unsigned int i = 1; i<hdistances.Size(); ++i)
       {
       if(vcl_abs(hdistances[i])<minDistance)
-  {
-  minDistance = vcl_abs(hdistances[i]);
-  }
+        {
+        minDistance = vcl_abs(hdistances[i]);
+        }
       }
     // Keep index and min distance
     IndexAndDistanceType value(iter.GetInstanceIdentifier(), minDistance);

@@ -55,7 +55,7 @@ public:
   typedef typename LabelMapType::LabelObjectType   LabelObjectType;
   typedef typename LabelMapType::LabelVectorType   LabelVectorType;
 
-  typedef typename LabelObjectType::LineContainerType   LineContainerType;
+  //typedef typename LabelObjectType::LineContainerType   LineContainerType;
   typedef typename LabelObjectType::IndexType           IndexType;
   typedef typename LabelObjectType::LabelType           LabelType;
   

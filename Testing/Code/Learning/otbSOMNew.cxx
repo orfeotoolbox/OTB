@@ -19,7 +19,7 @@
 #include "otbSOMMap.h"
 #include "otbSOM.h"
 #include "itkRGBPixel.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "itkListSample.h"
 
 int otbSOMNew(int argc, char* argv[])
@@ -27,7 +27,7 @@ int otbSOMNew(int argc, char* argv[])
   const unsigned int Dimension = 2;
   typedef float                                           ComponentType;
   typedef itk::VariableLengthVector<ComponentType>        PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>   DistanceType;
   typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
   //     typedef itk::Statistics::ImageToListAdaptor<SOMMapType> AdaptorType;
   typedef itk::Statistics::ListSample<PixelType> ListSampleType;

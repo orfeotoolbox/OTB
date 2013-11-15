@@ -23,8 +23,7 @@
 
 #include "otbSOM.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "itkContinuousIndex.h"
-#include "itkRandomImageSource.h"
+#include "itkFixedArray.h"
 #include "otbMacro.h"
 #include "itkImageRegionIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
@@ -81,8 +80,8 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
 
   // typedefs
   typedef itk::ImageRegionIteratorWithIndex<MapType>              IteratorType;
-  typedef itk::ContinuousIndex<double, MapType::ImageDimension>   ContinuousIndexType;
-  typedef itk::Statistics::EuclideanDistance<ContinuousIndexType> DistanceType;
+  typedef itk::FixedArray<double, MapType::ImageDimension>        FixedArrayIndexType;
+  typedef itk::Statistics::EuclideanDistanceMetric<FixedArrayIndexType> DistanceType;
   typename DistanceType::Pointer distance = DistanceType::New();
 
   // winner index in the map
@@ -108,10 +107,17 @@ SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunc
     {
     NeuronType tempNeuron = it.Get();
     NeuronType newNeuron(tempNeuron.Size());
+    
+    FixedArrayIndexType positionFA,indexFA;
+    positionFA[0] = position[0];
+    positionFA[1] = position[1];
+
+    indexFA[0] = it.GetIndex()[0];
+    indexFA[1] = it.GetIndex()[1];
+    
     double tempBeta = beta
                       / (1 +
-                         distance->Evaluate(ContinuousIndexType(position),
-                                            ContinuousIndexType(it.GetIndex())));
+                         distance->Evaluate(positionFA, indexFA));
 
     for (unsigned int i = 0; i < newNeuron.Size(); ++i)
       {

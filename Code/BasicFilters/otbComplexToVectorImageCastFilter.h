@@ -27,7 +27,7 @@ namespace otb
 {
   
 /** \class ComplexToVectorImageCastFilter
- * \brief Transfomr a complex image into a 2 channels vector image.
+ * \brief Transform a complex image into a 2 channels vector image.
  * The first channel is the real part, the second the imaginary one.
  *
  *
@@ -137,12 +137,27 @@ protected:
   ComplexToVectorImageCastFilter() {}
   virtual ~ComplexToVectorImageCastFilter() {}
 
-  void GenerateOutputInformation()
-    {
-      Superclass::GenerateOutputInformation();
+  template<class T>
+  bool PixelIsSingle(const T& /*dummy*/)
+  {
+		return true;
+  }
 
-      this->GetOutput()->SetNumberOfComponentsPerPixel( 2*this->GetInput()->GetNumberOfComponentsPerPixel() );
-    }
+  template<class T>
+  bool PixelIsSingle(const itk::VariableLengthVector<T>& /*dummy*/)
+  {
+		return false;
+  }
+
+  void GenerateOutputInformation()
+  {
+		Superclass::GenerateOutputInformation();
+		InputPixelType dummy;
+		if (!this->PixelIsSingle(dummy))
+		{
+			this->GetOutput()->SetNumberOfComponentsPerPixel(2 * this->GetInput()->GetNumberOfComponentsPerPixel());
+		}
+  }
 
 private:
   ComplexToVectorImageCastFilter(const Self&); //purposely not implemented

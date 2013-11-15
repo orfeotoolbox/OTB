@@ -49,7 +49,7 @@ int otbStandardImageViewer(int argc, char * argv[])
     vdreader->SetFileName(argv[3]);
     vdreader->Update();
     chrono.Stop();
-    std::cout << "VectorData loaded in " << chrono.GetMeanTime() << " s." << std::endl;
+    std::cout << "VectorData loaded in " << chrono.GetMean() << " s." << std::endl;
     viewer->SetVectorData(vdreader->GetOutput());
     }
 
@@ -103,7 +103,7 @@ int otbStandardImageViewerSplitted(int argc, char * argv[])
     vdreader->SetFileName(argv[3]);
     vdreader->Update();
     chrono.Stop();
-    std::cout << "VectorData loaded in " << chrono.GetMeanTime() << " s." << std::endl;
+    std::cout << "VectorData loaded in " << chrono.GetMean() << " s." << std::endl;
     viewer->SetVectorData(vdreader->GetOutput());
     }
 

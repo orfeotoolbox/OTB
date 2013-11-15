@@ -21,7 +21,6 @@
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "itkListSample.h"
-#include "itkSampleClassifier.h"
 #include "otbVectorImage.h"
 #include "otbModelComponentBase.h"
 #include "otbSEMClassifier.h"

@@ -72,7 +72,7 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::GenerateOutputInform
 template<class TInputImage, class TOutputImage, class TMatrix>
 void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData(
   const OutputImageRegionType&     outputRegionForThread,
-  int threadId
+  itk::ThreadIdType threadId
   )
 {
   // images pointer

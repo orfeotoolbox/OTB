@@ -19,12 +19,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbFrostImageFilter.h"
-
-#include "itkMacro.h"
-#include "itkImageFileWriter.h"
 #include "otbImage.h"
-#include "itkRandomImageSource.h"
-#include "itkMeanImageFilter.h"
 
 int otbFrostFilterNew(int argc, char * argv[])
 {

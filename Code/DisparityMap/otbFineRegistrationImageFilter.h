@@ -23,13 +23,13 @@
 #include "itkContinuousIndex.h"
 
 #include "itkTranslationTransform.h"
-#include "itkImageToImageMetric.txx"
+#include "itkImageToImageMetric.h"
 
 namespace otb
 {
 
 /** \class FineRegistrationImageFilter
- * \brief Computes a deformation field between two images using a given metric.
+ * \brief Computes a displacement field between two images using a given metric.
  *
  * This filter tries to find at each location of the fixed image the corresponding best matching
  * patch of radius set by SetRadius() method in the moving image within a search windows whose radius
@@ -43,18 +43,18 @@ namespace otb
  * until sub-pixel accuracy given by the SetSubPixelAccuracy() is reached.
  *
  * The filter proposes two outputs: GetOutput() return the image of the metric optimum at each location, and
- * the GetOutputDeformationField() method returns the corresponding offset.
+ * the GetOutputDisplacementField() method returns the corresponding offset.
  *
- * If the UseSpacingOn() flag is used, the output deformation field takes the input image spacing into account.
- * otherwise, the deformation field is expressed in pixels (default ins On).
+ * If the UseSpacingOn() flag is used, the output displacement field takes the input image spacing into account.
+ * otherwise, the displacement field is expressed in pixels (default ins On).
  *
  * This filter accepts fixed and moving images with different sizes and spacing. Metric and search windows radius
  * are expressed in terms of number of pixels in the fixed image.
  *
  * An initial offset can be used to reduce computation time in case of input and moving images with a significant
- * offset. This offset is taken into account in the output deformation field.
+ * offset. This offset is taken into account in the output displacement field.
  *
- * It is possible to generate an output metric map and deformation field at a coarser resolution by setting
+ * It is possible to generate an output metric map and displacement field at a coarser resolution by setting
  * grid step to value higher than 1 (grid step is expressed in terms of number of fixed image pixels).
  * Default value is 1.
  *
@@ -65,7 +65,7 @@ namespace otb
  * \sa      FastCorrelationImageFilter, DisparityMapEstimationMethod
  * \ingroup IntensityImageFilters, Streamed
  */
-template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
+template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
 class ITK_EXPORT FineRegistrationImageFilter : public itk::ImageToImageFilter<TInputImage, T0utputCorrelation>
 {
 public:
@@ -83,7 +83,7 @@ public:
 
   /** Some convenient typedefs. */
   typedef typename T0utputCorrelation::RegionType                 OutputImageRegionType;
-  typedef typename TOutputDeformationField::PixelType             DeformationValueType;
+  typedef typename TOutputDisplacementField::PixelType             DisplacementValueType;
   typedef typename TInputImage::Pointer                           InputImagePointerType;
   typedef typename TInputImage::RegionType                        InputImageRegionType;
   typedef typename TInputImage::SizeType                          SizeType;
@@ -119,8 +119,8 @@ public:
   const TInputImage * GetFixedInput();
   const TInputImage * GetMovingInput();
 
-  /** Get the output deformation field */
-  TOutputDeformationField * GetOutputDeformationField();
+  /** Get the output displacement field */
+  TOutputDisplacementField * GetOutputDisplacementField();
  
   /** Set the radius of the area on which metric is evaluated */
   itkSetMacro(Radius, SizeType);
@@ -138,7 +138,7 @@ public:
   itkSetMacro(Minimize, bool);
   itkBooleanMacro(Minimize);
 
-  /** True if deformation field takes spacing into account. False otherwise */
+  /** True if displacement field takes spacing into account. False otherwise */
   itkSetMacro(UseSpacing, bool);
   itkBooleanMacro(UseSpacing);
 
@@ -200,7 +200,7 @@ private:
   /** Minimize/maximize metric */
   bool                          m_Minimize;
 
-  /** If true, deformation field uses spacing. Otherwise, uses pixel grid */
+  /** If true, displacement field uses spacing. Otherwise, uses pixel grid */
   bool                          m_UseSpacing;
 
   /** Search step */

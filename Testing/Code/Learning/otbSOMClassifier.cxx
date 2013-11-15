@@ -46,7 +46,7 @@ int otbSOMClassifier(int argc, char* argv[])
   const unsigned int Dimension = 2;
 
   typedef itk::VariableLengthVector<InputPixelType>                  PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType>              DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>              DistanceType;
   typedef otb::SOMMap<PixelType, DistanceType, Dimension>            SOMMapType;
   typedef otb::VectorImage<InputPixelType, Dimension>                InputImageType;
   typedef otb::ImageFileReader<InputImageType>                       ReaderType;
@@ -68,7 +68,8 @@ int otbSOMClassifier(int argc, char* argv[])
   std::cout << "SOM map read" << std::endl;
 
   SampleType::Pointer listSample = SampleType::New();
-
+  listSample->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+  
   itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
   it.GoToBegin();

@@ -172,6 +172,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
         pos = nextpos;
         id++;
       }
+      samples->SetMeasurementVectorSize(itk::NumericTraits<InputSampleType>::GetLength(sample));
       samples->PushBack(sample);
       labels->PushBack(label);
     }

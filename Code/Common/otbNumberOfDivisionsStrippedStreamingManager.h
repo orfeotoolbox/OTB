@@ -19,6 +19,7 @@
 #define __otbNumberOfDivisionsStrippedStreamingManager_h
 
 #include "otbStreamingManager.h"
+#include "itkImageRegionSplitterSlowDimension.h"
 
 namespace otb
 {
@@ -69,7 +70,7 @@ protected:
   virtual ~NumberOfDivisionsStrippedStreamingManager();
 
   /** The splitter type used to generate the different strips */
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)> SplitterType;
+  typedef itk::ImageRegionSplitterSlowDimension SplitterType;
 
   /** The number of lines per strip desired by the user.
    *  This may be different than the one computed by the Splitter */

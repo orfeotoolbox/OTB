@@ -34,7 +34,7 @@ LikelihoodPathListFilter<TPath, TImage>
 {
   m_Key = "Value";
   this->SetNumberOfRequiredInputs(2);
-  this->SetNumberOfInputs(2);
+  this->SetNumberOfRequiredInputs(2);
 }
 template <class TPath, class TImage>
 void

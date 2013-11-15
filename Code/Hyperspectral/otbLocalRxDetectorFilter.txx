@@ -69,7 +69,7 @@ template <class TInputImage, class TOutputImage>
 void
 LocalRxDetectorFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   // Get the input and output pointers
   InputConstPointerType       inputPtr = this->GetInput();
@@ -140,42 +140,33 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
       listSample->PushBack(ci.Get());
       }
 
-    // Compute Mean vector
-    typename MeanCalculatorType::Pointer meanCalculator = MeanCalculatorType::New();
-    meanCalculator->SetInputSample(listSample);
-    meanCalculator->Update();
-
-    typename MeanCalculatorType::OutputType *meanVector;
-    meanVector = meanCalculator->GetOutput();
-
-    // Compute covariance matrix
+    // Compute mean & covariance matrix
     typename CovarianceCalculatorType::Pointer covarianceCalculator = CovarianceCalculatorType::New();
-    covarianceCalculator->SetInputSample(listSample);
-    covarianceCalculator->SetMean(meanVector);
+    covarianceCalculator->SetInput(listSample);
     covarianceCalculator->Update();
 
-    const typename CovarianceCalculatorType::OutputType *covarianceMatrix = covarianceCalculator->GetOutput();
+    MeasurementVectorRealType meanVector = covarianceCalculator->GetMean();
+    MatrixType covarianceMatrix = covarianceCalculator->GetCovarianceMatrix();
 
     // Compute RX value
-    MatrixType invCovMat;
-    invCovMat = covarianceMatrix->GetInverse();
+    typename MatrixType::InternalMatrixType invCovMat = covarianceMatrix.GetInverse();
 
     VectorMeasurementType testPixVec;
     testPixVec = inputPtr->GetPixel(inputIt.GetIndex());
 
-    VectorMeasurementType meanVec(meanVector->GetNumberOfElements());
-    for(unsigned int i = 0; i < meanVector->GetNumberOfElements(); ++i)
+    VectorMeasurementType meanVec(meanVector.GetNumberOfElements());
+    for(unsigned int i = 0; i < meanVector.GetNumberOfElements(); ++i)
       {
-      meanVec.SetElement(i, meanVector->GetElement(i));
+      meanVec.SetElement(i, meanVector.GetElement(i));
       }
 
-    typename MatrixType::InternalMatrixType centeredTestPixMat(meanVector->GetNumberOfElements(), 1);
+    typename MatrixType::InternalMatrixType centeredTestPixMat(meanVector.GetNumberOfElements(), 1);
     for (unsigned int i = 0; i < centeredTestPixMat.rows(); ++i)
       {
-      centeredTestPixMat.put(i, 0, (testPixVec.GetElement(i) - meanVector->GetElement(i)));
+      centeredTestPixMat.put(i, 0, (testPixVec.GetElement(i) - meanVector.GetElement(i)));
       }
 
-    typename MatrixType::InternalMatrixType rxValue = centeredTestPixMat.transpose() * invCovMat.GetVnlMatrix() * centeredTestPixMat;
+    typename MatrixType::InternalMatrixType rxValue = centeredTestPixMat.transpose() * invCovMat * centeredTestPixMat;
 
     outputIt.Set(rxValue.get(0, 0));
     }

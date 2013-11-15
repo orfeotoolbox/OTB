@@ -204,7 +204,7 @@ PersistentMinMaxVectorImageFilter<TInputImage>
 template<class TInputImage>
 void
 PersistentMinMaxVectorImageFilter<TInputImage>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   /**
    * Grab the input

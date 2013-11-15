@@ -41,6 +41,7 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
+  static BSQImageIOFactory * FactoryNew() { return new BSQImageIOFactory; }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(BSQImageIOFactory, itk::ObjectFactoryBase);
@@ -49,7 +50,7 @@ public:
   static void RegisterOneFactory(void)
   {
     BSQImageIOFactory::Pointer BSQFactory = BSQImageIOFactory::New();
-    itk::ObjectFactoryBase::RegisterFactory(BSQFactory);
+    itk::ObjectFactoryBase::RegisterFactoryInternal(BSQFactory);
   }
 
 protected:

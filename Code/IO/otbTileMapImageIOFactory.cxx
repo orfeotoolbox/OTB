@@ -49,4 +49,18 @@ TileMapImageIOFactory::GetDescription() const
   return "TileMap ImageIO Factory, enabling TileMap image format loading in OTB";
 }
 
+// Undocumented API used to register during static initialization.
+// DO NOT CALL DIRECTLY.
+
+static bool TileMapImageIOFactoryHasBeenRegistered;
+
+void TileMapImageIOFactoryRegister__Private(void)
+{
+  if( ! TileMapImageIOFactoryHasBeenRegistered )
+    {
+    TileMapImageIOFactoryHasBeenRegistered = true;
+    TileMapImageIOFactory::RegisterOneFactory();
+    }
+}
+
 } // end namespace otb

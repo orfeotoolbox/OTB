@@ -87,7 +87,7 @@ UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>
 template <class TInputImage, class TOutputImage, class TFunction>
 void
 UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   InputImagePointer  inputPtr = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
   OutputImagePointer outputPtr = this->GetOutput(0);

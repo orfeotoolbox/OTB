@@ -29,7 +29,7 @@ template <class TInputImage, class TOutputImage, class TStructuringElement>
 GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>
 ::GeodesicMorphologyDecompositionImageFilter()
 {
-  this->SetNumberOfOutputs(3);
+  this->SetNumberOfRequiredOutputs(3);
   this->SetNthOutput(0, OutputImageType::New());
   this->SetNthOutput(1, OutputImageType::New());
   this->SetNthOutput(2, OutputImageType::New());

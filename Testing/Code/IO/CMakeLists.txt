@@ -294,17 +294,17 @@ ADD_TEST(ioTuMWImageIOCanReadMW ${IO_TESTS1} otbMWImageIOTestCanRead
         ${BASELINE}/QB_Toulouse_Ortho_PAN.mw)
 
 ADD_TEST(ioTvImageFileReaderMW2TIFIMG ${IO_TESTS1}
-  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN_nogeoinfo.tif
                                 ${TEMP}/ioImageFileReaderMW2TIFIMG.tif
         otbImageFileReaderTestFloat
-        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
         ${TEMP}/ioImageFileReaderMW2TIFIMG.tif )
 
 ADD_TEST(ioTvImageFileReaderMW2TIFMW ${IO_TESTS1}
   --compare-image ${EPSILON_9}        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
                                 ${TEMP}/ioImageFileReaderMW2TIFMW.tif
         otbImageFileReaderTestFloat
-        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
         ${TEMP}/ioImageFileReaderMW2TIFMW.tif )
 
 
@@ -317,7 +317,7 @@ ADD_TEST(ioTuMWImageIOCanWriteIMG ${IO_TESTS1} otbMWImageIOTestCanWrite
 SET_TESTS_PROPERTIES(ioTuMWImageIOCanWriteIMG PROPERTIES WILL_FAIL true)
 
 ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1}
-  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.mw
                                 ${TEMP}/ioImageFileReaderTIF2MW.mw
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
@@ -1526,7 +1526,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS2}
 
 # ---  LUM ----
 ADD_TEST(ioTvMultiChannelROI_IkonosNIR2LUM ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
                      ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
          otbMultiChannelExtractROI
          ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif
@@ -1536,7 +1536,7 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2LUM ${COMMON_TESTS2}
 
 # ---  BSQ ----
 ADD_TEST(ioTvMultiChannelROI_IkonosNIR2BSQ ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+   --compare-image ${EPSILON_9}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
                                 ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
          otbMultiChannelExtractROI
          ${LARGEINPUT}/IKONOS/PARIS/po_79039_nir_0000000.tif

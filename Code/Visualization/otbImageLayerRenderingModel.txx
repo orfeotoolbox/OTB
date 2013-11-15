@@ -232,7 +232,7 @@ ImageLayerRenderingModel<TOutputImage, TLayer>
       otbMsgDevMacro(
         "ImageLayerRenderingModel::RasterizeVisibleLayers(): Previous layer rasterized with layer " <<
         it.Get()->GetName(
-          ) << " ( " << probe.GetMeanTime() << " s.)");
+          ) << " ( " << probe.GetMean() << " s.)");
       }
     ++it;
     ++count;

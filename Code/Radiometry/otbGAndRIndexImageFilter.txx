@@ -72,7 +72,7 @@ template <class TInputImageG, class TInputImageR, class TOutputImage, class TFun
 void
 GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
 ::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,
-                        int threadId)
+                        itk::ThreadIdType threadId)
 {
 
   // We use dynamic_cast since inputs are stored as DataObjects.  The

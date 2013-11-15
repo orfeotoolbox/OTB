@@ -85,12 +85,12 @@ protected:
 
   virtual void AfterThreadedGenerateData() {}
 
-  virtual int SplitRequestedRegion(int threadId, int threadCount, unsigned int requestedElements,
+  virtual int SplitRequestedRegion(itk::ThreadIdType threadId, int threadCount, unsigned int requestedElements,
                                    unsigned int& startIndex, unsigned int& stopIndex);
 
   /** startIndex and stopIndex represent the indices of the Objects
    * to examine in thread threadId */
-  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
+  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId);
 
   /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the

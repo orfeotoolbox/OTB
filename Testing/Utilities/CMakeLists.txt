@@ -284,13 +284,6 @@ ADD_TEST(utTvKmlprintgeometry   ${UTILITIES_TESTS}
 # )
 
 
-# ------- GreyLevelRunLengthMatrixTextureCoefficientsCalculator from Insight Journal  --------------------
-ADD_TEST(ijTuGreyLevelRunLengthMatrixTextureCoefficientsCalculator ${UTILITIES_TESTS}
-          ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest
-          ${INPUTDATA}/Textures/1.1.02.png )
-          
-
-
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
@@ -330,8 +323,8 @@ kmlcirclegen.cc
 kmlsharedstyles.cc
 kmlsimplifylines.cc
 kmlsortplacemarks.cc
-ijObjectLabelAttributeValuesTest.cxx
-ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest.cxx
+#FIXME itkv4
+#ijObjectLabelAttributeValuesTest.cxx
 )
 
 IF(OTB_USE_SIFTFAST)

@@ -28,7 +28,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbGaborFilterGeneratorNew);
   REGISTER_TEST(otbGaborFilterGenerator);
-#if defined(USE_FFTWD)
+#if defined(ITK_USE_FFTWD)
   REGISTER_TEST(otbOverlapSaveConvolutionImageFilterNew);
   REGISTER_TEST(otbOverlapSaveConvolutionImageFilter);
   REGISTER_TEST(otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter);

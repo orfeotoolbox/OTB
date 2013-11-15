@@ -178,7 +178,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId);
+                            itk::ThreadIdType threadId);
 
   /** Computation of the electromagnetic fields Ei Er */
   void ComputeElectromagneticFields();

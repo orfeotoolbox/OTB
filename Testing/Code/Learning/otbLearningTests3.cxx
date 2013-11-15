@@ -42,4 +42,5 @@ void RegisterTests()
   REGISTER_TEST(otbKMeansImageClassificationFilter);
   REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest);
   REGISTER_TEST(otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest);
+  REGISTER_TEST(otbSVMMarginSamplerNew);
 }

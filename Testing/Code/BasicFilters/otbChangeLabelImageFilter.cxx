@@ -19,7 +19,6 @@
 
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "itkRandomImageSource.h"
 #include "otbChangeLabelImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbImageFileWriter.h"
@@ -37,12 +36,10 @@ int otbChangeLabelImageFilter(int argc, char * argv[])
   typedef OutputImageType::PixelType                                   OutputPixelType;
   typedef itk::ImageRegionIteratorWithIndex<InputImageType>            InputIteratorType;
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType>           OutputIteratorType;
-  typedef itk::RandomImageSource<InputImageType>                       SourceType;
   typedef otb::ChangeLabelImageFilter<InputImageType, OutputImageType> FilterType;
   typedef otb::ImageFileWriter<OutputImageType>                        WriterType;
   typedef otb::ImageFileReader<InputImageType>                         ReaderType;
 
-  SourceType::Pointer     source = SourceType::New();
   FilterType::Pointer     filter = FilterType::New();
   InputImageType::Pointer vectImage  = InputImageType::New();
 
@@ -61,7 +58,8 @@ int otbChangeLabelImageFilter(int argc, char * argv[])
   background[1] = itk::NumericTraits<PixelType>::max();
   background[2] = 0;
 
-  filter->SetChange(0, 0);
+  OutputPixelType zero = itk::NumericTraits<OutputPixelType>::ZeroValue(background);
+  filter->SetChange(0, zero);
   for (InputPixelType i = lower; i <= upper; ++i)
     {
     filter->SetChange(i, background);

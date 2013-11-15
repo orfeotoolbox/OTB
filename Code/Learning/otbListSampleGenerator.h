@@ -89,11 +89,10 @@ public:
   void SetInputVectorData(const VectorDataType *);
   const VectorDataType * GetInputVectorData() const;
 
-// Switch to the classic interface once OTB use the new stat framework?
-// ListSample are a full DataObject
-//  typedef itk::DataObject::Pointer DataObjectPointer;
-//  virtual DataObjectPointer MakeOutput(unsigned int idx);
-  virtual void Update();
+  // Build the outputs
+  typedef itk::DataObject::Pointer DataObjectPointer;
+  virtual DataObjectPointer MakeOutput(unsigned int idx);
+  //virtual void Update();
 
   /** Accessors */
   itkGetConstMacro(MaxTrainingSize, long int);
@@ -120,21 +119,26 @@ public:
 
   itkGetStringMacro(ClassKey);
   itkSetStringMacro(ClassKey);
-
   itkGetConstMacro(ClassMinSize, double);
+  
+  /** Returns the Training ListSample as a data object */
+  ListSampleType * GetTrainingListSample();
 
-  itkGetObjectMacro(TrainingListSample, ListSampleType);
-  itkGetObjectMacro(TrainingListLabel, ListLabelType);
-  itkGetObjectMacro(ValidationListSample, ListSampleType);
-  itkGetObjectMacro(ValidationListLabel, ListLabelType);
+  /** Returns the Trainingn label ListSample as a data object */
+  ListLabelType * GetTrainingListLabel();
 
+  /** Returns the label sample list as a data object */
+  ListSampleType * GetValidationListSample();
+
+  /** Returns the label sample list as a data object */
+  ListLabelType * GetValidationListLabel();
+  
+  // Get the map size
   std::map<ClassLabelType, double> GetClassesSize() const
   {
     return m_ClassesSize;
   }
-
-  void GenerateClassStatistics();
-
+  
 protected:
   ListSampleGenerator();
   virtual ~ListSampleGenerator() {}
@@ -142,6 +146,9 @@ protected:
 
   /** Triggers the Computation of the sample list */
   void GenerateData(void);
+   
+  /** Compute the calss statistics*/
+  void GenerateClassStatistics();
 
 private:
   ListSampleGenerator(const Self &); //purposely not implemented
@@ -173,11 +180,6 @@ private:
   std::string    m_ClassKey;
   double         m_ClassMinSize;
   
-  ListSamplePointerType m_TrainingListSample;
-  ListLabelPointerType  m_TrainingListLabel;
-  ListSamplePointerType m_ValidationListSample;
-  ListLabelPointerType  m_ValidationListLabel;
-
   std::map<ClassLabelType, double> m_ClassesSize;
   std::map<ClassLabelType, double> m_ClassesProbTraining;
   std::map<ClassLabelType, double> m_ClassesProbValidation;

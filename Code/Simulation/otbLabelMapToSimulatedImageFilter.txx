@@ -110,18 +110,18 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
   reduceSpectralResponse->SetInputSatRSR(satRSR);
   reduceSpectralResponse->CalculateResponse();
 
-  typename InputLabelMapType::LabelObjectType::LineContainerType::const_iterator lit;
-  typename InputLabelMapType::LabelObjectType::LineContainerType & lineContainer = labelObject->GetLineContainer();
   typename OutputImageType::PixelType pixel;
   pixel.SetSize(m_NumberOfComponentsPerPixel);
 
   //TODO Change with a multithreaded method
-  RandomGeneratorPointer randomGen = RandomGeneratorType::New();
-
-  for (lit = lineContainer.begin(); lit != lineContainer.end(); lit++)
+  RandomGeneratorPointer randomGen = RandomGeneratorType::GetInstance();
+  
+  ConstLineIteratorType lit = ConstLineIteratorType (labelObject);
+  
+  while ( !lit.IsAtEnd() )
     {
-    IndexType idx = lit->GetIndex();
-    unsigned long length = lit->GetLength();
+    IndexType idx = lit.GetLine().GetIndex();
+    unsigned long length = lit.GetLine().GetLength();
     for (unsigned int i = 0; i < length; ++i)
       {
       //add gaussian white noise
@@ -134,6 +134,7 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
       this->GetOutput()->SetPixel(idx, pixel);
       idx[0]++;
       }
+    ++lit;
     }
 }
 

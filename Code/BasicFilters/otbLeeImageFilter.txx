@@ -95,7 +95,7 @@ void LeeImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() t
 template<class TInputImage, class TOutputImage>
 void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
   const OutputImageRegionType&     outputRegionForThread,
-  int threadId
+  itk::ThreadIdType threadId
   )
 {
   unsigned int                                          i;

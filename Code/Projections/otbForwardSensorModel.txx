@@ -19,7 +19,6 @@
 #define __otbForwardSensorModel_txx
 
 #include "otbForwardSensorModel.h"
-
 #include "otbMacro.h"
 
 namespace otb

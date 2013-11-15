@@ -29,7 +29,7 @@ template <class TInputImage, class TOutputImage>
 InnerProductPCAImageFilter<TInputImage, TOutputImage>
 ::InnerProductPCAImageFilter()
 {
-  this->SetNumberOfOutputs(1);
+  this->SetNumberOfRequiredOutputs(1);
   this->SetNthOutput(0, OutputImageType::New());
   m_EstimatePCAFilter  = EstimatePCAFilterType::New();
   m_NormalizePCAFilter  = NormalizePCAFilterType::New();

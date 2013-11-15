@@ -23,7 +23,7 @@
 #include <cstdlib>
 
 #include "otbSVMPointSetModelEstimator.h"
-#include "itkPointSetToListAdaptor.h"
+#include "itkPointSetToListSampleAdaptor.h"
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
 
@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
 
   // Classify
 
-  typedef itk::Statistics::PointSetToListAdaptor<MeasurePointSetType>
+  typedef itk::Statistics::PointSetToListSampleAdaptor<MeasurePointSetType>
   SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetPointSet(tPSet);
@@ -172,7 +172,7 @@ int main(int argc, char* argv[])
 
   classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel(model);
-  classifier->SetSample(sample.GetPointer());
+  classifier->SetInput(sample.GetPointer());
   classifier->Update();
 
   /* Build the class map */

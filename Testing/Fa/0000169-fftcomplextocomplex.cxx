@@ -17,11 +17,13 @@
 =========================================================================*/
 
 #include "itkMacro.h"
+#include "otbImage.h"
 #include "itkFFTComplexToComplexImageFilter.h"
 
 int main(int argc, char * argv[])
 {
-  typedef itk::FFTComplexToComplexImageFilter <float, 2> FFTFilterType;
+  typedef otb::Image< std::complex<float>, 2 > ImageType;
+  typedef itk::FFTComplexToComplexImageFilter <ImageType> FFTFilterType;
 
   FFTFilterType::Pointer fftFilter =    FFTFilterType::New();
   fftFilter->DebugOn();

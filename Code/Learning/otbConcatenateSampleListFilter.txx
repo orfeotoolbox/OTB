@@ -32,20 +32,10 @@ ConcatenateSampleListFilter<TSampleList>
 template <class TSampleList>
 void
 ConcatenateSampleListFilter<TSampleList>
-::AddInput( const SampleListType * input )
- {
- typename SampleListObjectType::Pointer inputPtr = SampleListObjectType::New();
- inputPtr->Set(input);
- this->AddInput(inputPtr);
- }
-
-template <class TSampleList>
-void
-ConcatenateSampleListFilter<TSampleList>
-::AddInput( const SampleListObjectType * inputPtr )
+::AddInput( const SampleListType * inputPtr )
  {
  // Process object is not const-correct so the const_cast is required here
- Superclass::ProcessObject::AddInput(const_cast< SampleListObjectType* >( inputPtr ) );
+ Superclass::ProcessObject::AddInput(const_cast< SampleListType* >( inputPtr ) );
  }
 
 
@@ -55,21 +45,25 @@ ConcatenateSampleListFilter<TSampleList>
 ::GenerateData()
  {
  // Retrieve output pointers
- typename SampleListObjectType::Pointer     outputPtr = this->GetOutput();
- SampleListPointer outputSampleListPtr    = const_cast<SampleListType *>(outputPtr->Get());
-
+ SampleListPointer    outputSampleListPtr = this->GetOutput();
+ 
  // Clear any previous output
  outputSampleListPtr->Clear();
 
+ // Set the measurement vector size (based on the first listsample)
+ outputSampleListPtr->SetMeasurementVectorSize(static_cast<SampleListType *>(
+                                                 Superclass::ProcessObject::GetInput(0))->GetMeasurementVectorSize());
+ 
  // Evaluate the total number of samples for progress reporting
  unsigned long totalNumberOfSamples = 0;
 
  for(unsigned int inputIndex = 0; inputIndex<this->GetNumberOfInputs(); ++inputIndex)
   {
   // Retrieve the ListSample
-  typename SampleListObjectType::ConstPointer inputPtr =
-    static_cast<SampleListObjectType *>(Superclass::ProcessObject::GetInput(inputIndex));
-  totalNumberOfSamples += inputPtr->Get()->Size();
+  typename SampleListType::ConstPointer inputPtr = static_cast<SampleListType *>
+    (Superclass::ProcessObject::GetInput(inputIndex));
+  
+  totalNumberOfSamples += inputPtr->Size();
   }
 
  // Set-up progress reporting
@@ -78,9 +72,8 @@ ConcatenateSampleListFilter<TSampleList>
  for(unsigned int inputIndex = 0; inputIndex<this->GetNumberOfInputs(); ++inputIndex)
  {
   // Retrieve the ListSample
-  typename SampleListObjectType::ConstPointer inputPtr =
-    static_cast<SampleListObjectType *>(Superclass::ProcessObject::GetInput(inputIndex));
-  SampleListConstPointer inputSampleListPtr = inputPtr->Get();
+ typename SampleListType::ConstPointer inputSampleListPtr =  static_cast<SampleListType *>
+   (Superclass::ProcessObject::GetInput(inputIndex));
 
   typename SampleListType::ConstIterator inputIt = inputSampleListPtr->Begin();
 

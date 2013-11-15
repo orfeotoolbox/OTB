@@ -31,7 +31,7 @@ template <class TInputImage, class TOutputImage, class TMaskImage>
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 ::DSFusionOfClassifiersImageFilter()
 {
-  this->SetNumberOfInputs(2);
+  this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
 
   this->m_Universe.clear();
@@ -455,7 +455,7 @@ DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
 DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Get the input pointers
   InputImageConstPointerType inputPtr      = this->GetInput();

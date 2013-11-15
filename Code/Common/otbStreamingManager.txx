@@ -84,7 +84,7 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
   memoryPrintCalculator = otb::PipelineMemoryPrintCalculator::New();
 
   // Trick to avoid having the resampler compute the whole
-  // deformation field
+  // displacement field
   double     regionTrickFactor = 1;
   ImageType* inputImage = dynamic_cast<ImageType*>(input);
 
@@ -181,7 +181,9 @@ template <class TImage>
 typename StreamingManager<TImage>::RegionType
 StreamingManager<TImage>::GetSplit(unsigned int i)
 {
-  return m_Splitter->GetSplit(i, m_ComputedNumberOfSplits, m_Region);
+  typename StreamingManager<TImage>::RegionType region( m_Region );
+  m_Splitter->GetSplit(i, m_ComputedNumberOfSplits, region);
+  return region;
 }
 
 } // End namespace otb

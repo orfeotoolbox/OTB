@@ -23,6 +23,7 @@
 #include "otbOrientationPathFunction.h"
 #include "otbPathListToHistogramGenerator.h"
 #include "otbMath.h"
+#include "otbObjectList.h"
 
 int otbPathListToHistogramGenerator(int argc, char* argv[])
 {
@@ -31,7 +32,8 @@ int otbPathListToHistogramGenerator(int argc, char* argv[])
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef PathType::Pointer                      PathPointer;
-  typedef std::vector<PathPointer>               PathListType;
+  typedef PathType::ConstPointer                 PathConstPointerType;
+  typedef otb::ObjectList<PathType>              PathListType;
 
   typedef otb::OrientationPathFunction<PathType> FunctionType;
 
@@ -41,8 +43,8 @@ int otbPathListToHistogramGenerator(int argc, char* argv[])
   int                           NbAngle = NbOfPointsPerHistogram * NbOfBins;
 
   /* build segments list */
-  PathListType* PathList = new PathListType;
-  PathList->clear();
+  PathListType::Pointer PathList = PathListType::New();
+  PathList->Clear();
 
   for (int i = 0; i < NbAngle; ++i)
     {
@@ -57,18 +59,18 @@ int otbPathListToHistogramGenerator(int argc, char* argv[])
     cindex[1] = 30 + vcl_sin(Theta);
     pathElt->AddVertex(cindex);
 
-    PathList->push_back(pathElt);
+    PathList->PushBack(pathElt);
     }
 
   HistogramGeneratorType::Pointer histogramGenerator = HistogramGeneratorType::New();
 
   typedef HistogramGeneratorType::SizeType HistogramSizeType;
-  HistogramSizeType hsize;
+  HistogramSizeType hsize(1);
   hsize[0] = NbOfBins;  // number of bins for the Red   channel
 
   histogramGenerator->SetInput(PathList);
   histogramGenerator->SetNumberOfBins(hsize);
-  histogramGenerator->Compute();
+  histogramGenerator->Update();
 
   typedef HistogramGeneratorType::HistogramType HistogramType;
 

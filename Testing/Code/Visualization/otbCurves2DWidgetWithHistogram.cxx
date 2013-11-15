@@ -59,6 +59,7 @@ int otbCurves2DWidgetWithHistogram(int argc, char * argv[])
   reader->Update();
 
   itk::ImageRegionConstIterator<VectorImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
+  ls->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
 
   for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {

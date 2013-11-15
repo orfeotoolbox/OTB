@@ -33,11 +33,11 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::PixelWiseBlockMatchingImageFilter()
 {
   // Set the number of inputs
-  this->SetNumberOfInputs(6);
+  this->SetNumberOfRequiredInputs(6);
   this->SetNumberOfRequiredInputs(2);
 
   // Set the outputs
-  this->SetNumberOfOutputs(3);
+  this->SetNumberOfRequiredOutputs(3);
   this->SetNthOutput(0,TOutputMetricImage::New());
   this->SetNthOutput(1,TOutputDisparityImage::New());
   this->SetNthOutput(2,TOutputDisparityImage::New());
@@ -538,7 +538,7 @@ class TOutputDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 PixelWiseBlockMatchingImageFilter<TInputImage,TOutputMetricImage,
 TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve pointers
   const TInputImage *     inLeftPtr    = this->GetLeftInput();

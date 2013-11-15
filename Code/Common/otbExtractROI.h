@@ -75,7 +75,7 @@ public:
                       OutputImageType::ImageDimension);
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId);
+                            itk::ThreadIdType threadId);
 
 protected:
   ExtractROI();

@@ -34,11 +34,11 @@ namespace Statistics {
  * functonnalities. Here, the square root is included in the evaluation...
  *
  * The class can be templated over any container that holds data elements, as
- * for template of EuclideanDistance.
+ * for template of EuclideanDistanceMetric.
  *
  * The only restriction is that elements have to support NaN values.
  *
- * \sa EuclideanDistance
+ * \sa EuclideanDistanceMetric
  * \sa EuclideanDistanceWithMissingValuePow2
  */
 template<class TVector>
@@ -57,7 +57,7 @@ public:
   MeasurementVectorSizeType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(EuclideanDistanceWithMissingValue, EuclideanDistance);
+  itkTypeMacro(EuclideanDistanceWithMissingValue, EuclideanDistanceWithMissingValuePow2);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

@@ -170,7 +170,7 @@ protected:
   virtual ~PersistentHistogramVectorImageFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
   PersistentHistogramVectorImageFilter(const Self &); //purposely not implemented

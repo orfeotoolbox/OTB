@@ -64,8 +64,8 @@ int otbVectorDataRasterizeFilter(int argc, char* argv[])
   
   // rasterize
   RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
-  rasterization->AddVectorData(vdproj->GetOutput());
   rasterization->SetInput(reader->GetOutput());
+  rasterization->AddVectorData(vdproj->GetOutput());
 
   // choose the colors
   ImageType::PixelType outputcolor;

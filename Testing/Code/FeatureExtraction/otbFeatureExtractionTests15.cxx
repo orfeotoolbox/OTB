@@ -28,7 +28,6 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingLineSegmentDetector);
   REGISTER_TEST(otbSqrtSpectralAngleImageFilter);
   REGISTER_TEST(otbScalarImageToTexturesFilterNew);
-  REGISTER_TEST(otbMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew);
   REGISTER_TEST(otbScalarImageToTexturesFilter);
   REGISTER_TEST(otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew);
   REGISTER_TEST(otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator);

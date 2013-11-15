@@ -35,7 +35,7 @@ template<class TImage>
 PersistentImageToOGRDataFilter<TImage>
 ::PersistentImageToOGRDataFilter() : m_FieldName("DN"), m_LayerName("Layer"), m_GeometryType(wkbMultiPolygon)
 {
-   this->SetNumberOfInputs(2);
+   this->SetNumberOfRequiredInputs(2);
    this->SetNumberOfRequiredInputs(2);
    m_StreamSize.Fill(0);
 }

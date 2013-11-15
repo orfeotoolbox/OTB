@@ -45,11 +45,11 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 ::WaveletFilterBank ()
 {
   this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfInputs(1);
+  this->SetNumberOfRequiredInputs(1);
 
   unsigned int numOfOutputs = 1 << InputImageDimension;
 
-  this->SetNumberOfOutputs(numOfOutputs);
+  this->SetNumberOfRequiredOutputs(numOfOutputs);
   for (unsigned int i = 0; i < numOfOutputs; ++i)
     {
     this->SetNthOutput(i, OutputImageType::New());
@@ -374,7 +374,7 @@ template <class TInputImage, class TOutputImage, class TWaveletOperator>
 void
 WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 ::ThreadedGenerateData
-  (const OutputImageRegionType& outputRegionForThread, int threadId)
+  (const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   unsigned int dir = InputImageDimension - 1;
 
@@ -488,7 +488,7 @@ void
 WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 ::ThreadedGenerateDataAtDimensionN
   (unsigned int idx, unsigned int direction, itk::ProgressReporter& reporter,
-  const OutputImageRegionType& outputRegionForThread, int threadId)
+  const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Note that outputRegionForThread correspond to the actual region of input !
   OutputImagePointerType input = this->GetOutput(idx);
@@ -615,8 +615,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 ::WaveletFilterBank ()
 {
   this->SetNumberOfRequiredInputs(1 << InputImageDimension);
-  this->SetNumberOfInputs(1 << InputImageDimension);
-  this->SetNumberOfOutputs(1);
 
   m_UpSampleFilterFactor = 0;
   m_SubsampleImageFactor = 1;
@@ -937,7 +935,7 @@ template <class TInputImage, class TOutputImage, class TWaveletOperator>
 void
 WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 ::ThreadedGenerateData
-  (const OutputImageRegionType& outputRegionForThread, int threadId)
+  (const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   itk::ProgressReporter reporter(this, threadId,
                                  outputRegionForThread.GetNumberOfPixels() * this->GetNumberOfInputs());
@@ -1119,7 +1117,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 ::ThreadedGenerateDataAtDimensionN
   (unsigned int direction,
   itk::ProgressReporter& reporter,
-  const OutputImageRegionType& outputRegionForThread, int threadId)
+  const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   OutputImageRegionType outputImageRegion;
   this->CallCopyInputRegionToOutputRegion(direction, outputImageRegion, outputRegionForThread);

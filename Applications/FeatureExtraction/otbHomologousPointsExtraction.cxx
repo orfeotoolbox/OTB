@@ -32,7 +32,7 @@
 #include "otbKeyPointSetsMatchingFilter.h"
 
 #include "itkPointSet.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbGenericRSTransform.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "ogrsf_frmts.h"
@@ -64,7 +64,7 @@ public:
 
   typedef ImageToSURFKeyPointSetFilter<FloatImageType,PointSetType> SurfFilterType;
 
-  typedef itk::Statistics::EuclideanDistance<RealVectorType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<RealVectorType> DistanceType;
   typedef otb::KeyPointSetsMatchingFilter<PointSetType,
                                           DistanceType>      MatchingFilterType;
 

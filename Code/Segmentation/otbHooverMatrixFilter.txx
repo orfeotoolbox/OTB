@@ -83,8 +83,7 @@ template <class TLabelMap>
 void HooverMatrixFilter<TLabelMap>
 ::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
-  typename LineContainerType::const_iterator lit;
-  LineContainerType & lineContainer = labelObject->GetLineContainer();
+  
   
   unsigned long currentRegionMS = 0;
   unsigned long currentRegionGT = 0;
@@ -100,10 +99,12 @@ void HooverMatrixFilter<TLabelMap>
     }
     
   // loop over the given region
-  for (lit = lineContainer.begin(); lit != lineContainer.end(); lit++)
+  typedef typename LabelObjectType::ConstLineIterator IteratorType;
+  IteratorType lit = IteratorType( labelObject );
+  while ( !lit.IsAtEnd() )
     {
-    IndexType idx = lit->GetIndex();
-    unsigned long length = lit->GetLength();
+    IndexType idx = lit.GetLine().GetIndex();
+    unsigned long length = lit.GetLine().GetLength();
     for (unsigned long i=0; i<length; i++)
       {
       // find the corresponding label in the ms label map
@@ -123,6 +124,7 @@ void HooverMatrixFilter<TLabelMap>
         }
       idx[0]++;
       }
+    ++lit;
     }
 }
 

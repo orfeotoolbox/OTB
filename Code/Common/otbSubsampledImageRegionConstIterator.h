@@ -93,7 +93,8 @@ public:
   typedef typename Superclass::AccessorType AccessorType;
 
   /** Index value used for pixel location */
-  typedef typename Superclass::IndexValueType IndexValueType;
+  //typedef typename Superclass::IndexValueType IndexValueType;
+  typedef typename IndexType::IndexValueType    IndexValueType;
 
   /** Default constructor. Needed since we provide a cast constructor. */
   SubsampledImageRegionConstIterator();
@@ -119,7 +120,7 @@ public:
   SubsampledImageRegionConstIterator(const itk::ImageConstIterator<TImage> &it);
 
   /** Set an isotropic subsampling factor */
-  void SetSubsampleFactor (typename IndexType::IndexValueType factor);
+  void SetSubsampleFactor (IndexValueType factor);
 
   /** Set / Get the subsample factor */
   void SetSubsampleFactor(const IndexType& factor);
@@ -221,7 +222,7 @@ public:
    * No Bound checking is performed when setting the position.
    */
   void SetOffset(const OffsetType& offset);
-  const OffsetType& GetOffset() const
+  const OffsetType GetOffset() const
   {
     return this->m_Offset;
   }
@@ -235,7 +236,7 @@ protected:
   IndexType     m_SubsampleFactor;
   unsigned long m_SubSampledBeginOffset;
   //unsigned long m_SubSampledReverseEndOffset;
-  unsigned long m_SubSampledEndOffset;
+  long          m_SubSampledEndOffset;
   IndexType     m_FirstUsableIndex;
   IndexType     m_LastUsableIndex;
 

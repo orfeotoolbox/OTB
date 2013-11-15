@@ -46,6 +46,7 @@ public:
   typedef typename InputImageType::RegionType          InputImageRegionType;
   typedef typename InputImageType::PixelType           InputImagePixelType;
   typedef typename InputImageType::LabelObjectType     LabelObjectType;
+  typedef typename InputImageType::ConstIterator       ConstIteratorType;
   
   typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
   typedef typename LabelObjectType::AttributesMapType       AttributesMapType;
@@ -94,8 +95,8 @@ private:
   MinMaxAttributesLabelMapFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  typedef typename InputImageType::LabelObjectContainerType   LabelObjectContainerType;
-  typedef typename LabelObjectContainerType::const_iterator   LabelObjectContainerConstIterator;
+  //typedef typename InputImageType::LabelObjectContainerType   LabelObjectContainerType;
+  //typedef typename LabelObjectContainerType::const_iterator   LabelObjectContainerConstIterator;
 
 
 }; // end of class

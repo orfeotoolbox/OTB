@@ -179,7 +179,7 @@ int main()
   // Software Guide : BeginLatex
   //
   // In the following code snippet notice that the template argument
-  // for the MeanCalculator and CovarianceCalculator is
+  // for the MeanSampleFilter and CovarianceSampleFilter is
   // \code{ClassSampleType} (i.e., type of Subsample) instead of
   // \code{SampleType} (i.e., type of ListSample). This is because the
   // parameter estimation algorithms are applied to the class sample.
@@ -254,7 +254,7 @@ int main()
     std::cout << "         " << (components[i])->GetFullParameters()
               << std::endl;
     std::cout << "    Proportion: ";
-    std::cout << "         " << (*estimator->GetProportions())[i] << std::endl;
+    std::cout << "         " << (estimator->GetProportions())[i] << std::endl;
     }
   // Software Guide : EndCodeSnippet
 

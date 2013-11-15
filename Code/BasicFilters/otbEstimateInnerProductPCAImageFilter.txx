@@ -84,7 +84,7 @@ EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   typename InputImageType::ConstPointer inputPtr  = this->GetInput();
   typename OutputImageType::Pointer     outputPtr = this->GetOutput();

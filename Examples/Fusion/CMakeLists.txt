@@ -5,10 +5,10 @@ SET(FUSION_EXAMPLES ${CXX_TEST_PATH}/otbFusionExamplesTests)
 
 
 ADD_EXECUTABLE(BayesianFusionImageFilter BayesianFusionImageFilter.cxx )
-TARGET_LINK_LIBRARIES(BayesianFusionImageFilter OTBFusion OTBCommon OTBIO ITKNumerics)
+TARGET_LINK_LIBRARIES(BayesianFusionImageFilter OTBFusion OTBCommon OTBIO )
 
 ADD_EXECUTABLE(PanSharpeningExample PanSharpeningExample.cxx )
-TARGET_LINK_LIBRARIES(PanSharpeningExample OTBFusion OTBCommon OTBIO ITKNumerics)
+TARGET_LINK_LIBRARIES(PanSharpeningExample OTBFusion OTBCommon OTBIO )
 
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
@@ -53,6 +53,6 @@ ADD_TEST(fuTePanSharpeningExampleTest ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbFusionExamplesTests otbFusionExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFusionExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBTesting)
+TARGET_LINK_LIBRARIES(otbFusionExamplesTests   ${ITK_LIBRARIES}  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

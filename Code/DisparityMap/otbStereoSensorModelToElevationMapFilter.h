@@ -189,13 +189,21 @@ protected:
 
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                                    int threadId);
+                                    itk::ThreadIdType threadId);
 
   /** Generate the input requested regions  */
   virtual void GenerateInputRequestedRegion(void);
 
   /** Things to do before the threaded generate-data */
   virtual void BeforeThreadedGenerateData();
+
+  /** Override VerifyInputInformation() since this filter's inputs do
+      * not need to occupy the same physical space.
+      *
+      * \sa ProcessObject::VerifyInputInformation
+      */
+  virtual void VerifyInputInformation() {}
+
 
 private:
   StereoSensorModelToElevationFilter(const Self&); // purposely not implemented

@@ -33,7 +33,7 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
 ::GeodesicMorphologyIterativeDecompositionImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfOutputs(3);
+  this->SetNumberOfRequiredOutputs(3);
   m_NumberOfIterations  = 2;
   m_InitialValue = 1;
   m_Step = 1;

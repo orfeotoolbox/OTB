@@ -172,6 +172,9 @@ ImageFileWriter<TInputImage>
   m_StreamingManager = streamingManager;
 }
 
+#ifndef ITK_LEGACY_REMOVE
+
+#endif // ITK_LEGACY_REMOVE
 /**
  *
  */

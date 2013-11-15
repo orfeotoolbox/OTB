@@ -31,12 +31,12 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
 ::MultiDisparityMapTo3DFilter()
 {
   // Set the number of inputs (1 moving image by default -> 3 inputs)
-  this->SetNumberOfInputs(3);
+  this->SetNumberOfRequiredInputs(3);
   this->SetNumberOfRequiredInputs(1);
   this->m_MovingKeywordLists.resize(1);
 
   // Set the outputs
-  this->SetNumberOfOutputs(2);
+  this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TOutputImage::New());
   this->SetNthOutput(1,TResidueImage::New());
 }
@@ -55,7 +55,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
 {
   if (nb > 0)
     {
-    this->SetNumberOfInputs(3 * nb);
+    this->SetNumberOfRequiredInputs(3 * nb);
     this->m_MovingKeywordLists.resize(nb);
     }
 }
@@ -75,7 +75,7 @@ void
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::SetHorizontalDisparityMapInput(unsigned int index, const TDisparityImage * hmap)
 {
-  if ((3 * (index + 1)) > this->GetNumberOfInputs())
+  if ((3 * (index + 1)) > this->GetNumberOfRequiredInputs())
     {
     itkExceptionMacro(<<"Index is greater than the number of moving images");
     }
@@ -89,7 +89,7 @@ void
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::SetVerticalDisparityMapInput(unsigned int index, const TDisparityImage * vmap)
 {
-  if ((3 * (index + 1)) > this->GetNumberOfInputs())
+  if ((3 * (index + 1)) > this->GetNumberOfRequiredInputs())
     {
     itkExceptionMacro(<<"Index is greater than the number of moving images");
     }
@@ -103,7 +103,7 @@ void
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::SetDisparityMaskInput(unsigned int index, const TMaskImage * mask)
 {
-  if ((3 * (index + 1)) > this->GetNumberOfInputs())
+  if ((3 * (index + 1)) > this->GetNumberOfRequiredInputs())
     {
     itkExceptionMacro(<<"Index is greater than the number of moving images");
     }
@@ -117,7 +117,7 @@ const TDisparityImage *
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::GetHorizontalDisparityMapInput(unsigned int index) const
 {
-  if ((3 * (index + 1)) > this->GetNumberOfInputs())
+  if ((3 * (index + 1)) > this->GetNumberOfRequiredInputs())
     {
     return 0;
     }
@@ -130,7 +130,7 @@ const TDisparityImage *
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::GetVerticalDisparityMapInput(unsigned int index) const
 {
-  if ((3 * (index + 1)) > this->GetNumberOfInputs())
+  if ((3 * (index + 1)) > this->GetNumberOfRequiredInputs())
     {
     return 0;
     }
@@ -143,7 +143,7 @@ const TMaskImage *
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
 ::GetDisparityMaskInput(unsigned int index) const
 {
-  if ((3 * (index + 1)) > this->GetNumberOfInputs())
+  if ((3 * (index + 1)) > this->GetNumberOfRequiredInputs())
     {
     return 0;
     }
@@ -249,7 +249,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImag
   RegionType requested = this->GetOutput()->GetRequestedRegion();
   RegionType largest = this->GetHorizontalDisparityMapInput(0)->GetLargestPossibleRegion();
   
-  for (unsigned int i=0; i<this->GetNumberOfInputs(); ++i)
+  for (unsigned int i=0; i<this->GetNumberOfRequiredInputs(); ++i)
     {
     unsigned int index  = i % 3;
     unsigned int pos    = i / 3;
@@ -342,7 +342,7 @@ template <class TDisparityImage, class TOutputImage,
 class TMaskImage, class TResidueImage>
 void
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
-::ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId)
 {
   TOutputImage * outputPtr = this->GetOutput();
   TResidueImage * residuePtr = this->GetResidueOutput();

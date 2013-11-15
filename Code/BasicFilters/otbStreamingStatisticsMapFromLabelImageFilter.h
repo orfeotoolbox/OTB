@@ -86,6 +86,9 @@ public:
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
+  typedef itk::ImageBase<InputImageDimension> ImageBaseType;
+  typedef typename ImageBaseType::RegionType InputImageRegionType;
+
   /** Type of DataObjects used for scalar outputs */
   typedef itk::SimpleDataObjectDecorator<MeanValueMapType>  MeanValueMapObjectType;
 
@@ -115,6 +118,10 @@ public:
   void Synthetize(void);
 
   void Reset(void);
+
+  /** Due to heterogeneous input template GenerateInputRequestedRegion must be reimplemented using explicit cast **/
+  /** This new implementation is inspired by the one of itk::ImageToImageFilter **/
+  void GenerateInputRequestedRegion();
 
 protected:
   PersistentStreamingStatisticsMapFromLabelImageFilter();

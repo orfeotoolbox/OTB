@@ -18,7 +18,7 @@
 #ifndef __otbAttributesMapLabelObject_h
 #define __otbAttributesMapLabelObject_h
 
-#include "itkLabelObject.h"
+#include "itkShapeLabelObject.h"
 #include "itkLabelMap.h"
 #include "otbPolygon.h"
 #include <map>
@@ -183,7 +183,6 @@ public:
   typedef typename Superclass::IndexType         IndexType;
   typedef typename Superclass::LineType          LineType;
   typedef typename Superclass::LengthType        LengthType;
-  typedef typename Superclass::LineContainerType LineContainerType;
 
   /// Map container typedefs
   typedef std::map<std::string, AttributesValueType> AttributesMapType;

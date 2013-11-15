@@ -18,11 +18,11 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbStereorectificationDeformationFieldSource.h"
+#include "otbStereorectificationDisplacementFieldSource.h"
 
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
-#include "otbInverseDeformationFieldImageFilter.h"
+#include "itkInverseDisplacementFieldImageFilter.h"
 #include "itkVectorCastImageFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "otbImageList.h"
@@ -44,20 +44,20 @@ public:
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
 
-  typedef otb::StereorectificationDeformationFieldSource
-  <FloatVectorImageType,FloatVectorImageType> DeformationFieldSourceType;
+  typedef otb::StereorectificationDisplacementFieldSource
+  <FloatVectorImageType,FloatVectorImageType> DisplacementFieldSourceType;
 
-  typedef itk::Vector<double,2>               DeformationType;
-  typedef otb::Image<DeformationType>         DeformationFieldType;
+  typedef itk::Vector<double,2>               DisplacementType;
+  typedef otb::Image<DisplacementType>         DisplacementFieldType;
 
   typedef itk::VectorCastImageFilter
   <FloatVectorImageType,
-   DeformationFieldType>                      DeformationFieldCastFilterType;
+   DisplacementFieldType>                      DisplacementFieldCastFilterType;
 
-  typedef otb::InverseDeformationFieldImageFilter
-  <DeformationFieldType,DeformationFieldType> InverseDeformationFieldFilterType;
+  typedef itk::InverseDisplacementFieldImageFilter
+  <DisplacementFieldType,DisplacementFieldType> InverseDisplacementFieldFilterType;
 
-  typedef itk::VectorIndexSelectionCastImageFilter<DeformationFieldType,
+  typedef itk::VectorIndexSelectionCastImageFilter<DisplacementFieldType,
                                                    FloatImageType> IndexSelectionCastFilterType;
 
   typedef otb::ImageList<FloatImageType>      ImageListType;
@@ -77,17 +77,17 @@ private:
   StereoRectificationGridGenerator()
   {
     // Instanciate deformation field source
-    m_DeformationFieldSource = DeformationFieldSourceType::New();
-    m_LeftInvertDeformationFieldFilter = InverseDeformationFieldFilterType::New();
-    m_RightInvertDeformationFieldFilter = InverseDeformationFieldFilterType::New();
+    m_DisplacementFieldSource = DisplacementFieldSourceType::New();
+    m_LeftInvertDisplacementFieldFilter = InverseDisplacementFieldFilterType::New();
+    m_RightInvertDisplacementFieldFilter = InverseDisplacementFieldFilterType::New();
 
-    m_LeftDeformationFieldCaster = DeformationFieldCastFilterType::New();
+    m_LeftDisplacementFieldCaster = DisplacementFieldCastFilterType::New();
     m_LeftIndexSelectionFilter1  = IndexSelectionCastFilterType::New();
     m_LeftIndexSelectionFilter2  = IndexSelectionCastFilterType::New();
     m_LeftImageList              = ImageListType::New();
     m_LeftImageListFilter        = ImageListFilterType::New();
 
-    m_RightDeformationFieldCaster = DeformationFieldCastFilterType::New();
+    m_RightDisplacementFieldCaster = DisplacementFieldCastFilterType::New();
     m_RightIndexSelectionFilter1  = IndexSelectionCastFilterType::New();
     m_RightIndexSelectionFilter2  = IndexSelectionCastFilterType::New();
     m_RightImageList              = ImageListType::New();
@@ -206,10 +206,10 @@ private:
 
   void DoExecute()
   {
-    m_DeformationFieldSource->SetLeftImage(GetParameterImage("io.inleft"));
-    m_DeformationFieldSource->SetRightImage(GetParameterImage("io.inright"));
-    m_DeformationFieldSource->SetGridStep(GetParameterInt("epi.step"));
-    m_DeformationFieldSource->SetScale(GetParameterFloat("epi.scale"));
+    m_DisplacementFieldSource->SetLeftImage(GetParameterImage("io.inleft"));
+    m_DisplacementFieldSource->SetRightImage(GetParameterImage("io.inright"));
+    m_DisplacementFieldSource->SetGridStep(GetParameterInt("epi.step"));
+    m_DisplacementFieldSource->SetScale(GetParameterFloat("epi.scale"));
 
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"epi.elevation");
@@ -218,7 +218,7 @@ private:
         otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this,"epi.elevation") &&
         !IsParameterEnabled("epi.elevation.avgdem.step"))
       {
-      m_DeformationFieldSource->SetUseDEM(true);
+      m_DisplacementFieldSource->SetUseDEM(true);
       }
 
     if(IsParameterEnabled("epi.elevation.avgdem.step"))
@@ -250,27 +250,27 @@ private:
 
       }
 
-    AddProcess(m_DeformationFieldSource, "Computing epipolar grids ...");
+    AddProcess(m_DisplacementFieldSource, "Computing epipolar grids ...");
 
-    m_DeformationFieldSource->Update();
+    m_DisplacementFieldSource->Update();
 
-    SetParameterInt("epi.rectsizex",m_DeformationFieldSource->GetRectifiedImageSize()[0]);
-    SetParameterInt("epi.rectsizey",m_DeformationFieldSource->GetRectifiedImageSize()[1]);
-    SetParameterFloat("epi.baseline",m_DeformationFieldSource->GetMeanBaselineRatio());
+    SetParameterInt("epi.rectsizex",m_DisplacementFieldSource->GetRectifiedImageSize()[0]);
+    SetParameterInt("epi.rectsizey",m_DisplacementFieldSource->GetRectifiedImageSize()[1]);
+    SetParameterFloat("epi.baseline",m_DisplacementFieldSource->GetMeanBaselineRatio());
 
     if(IsParameterEnabled("epi.elevation.avgdem.step"))
       {
       EnableParameter("epi.elevation.avgdem.mindisp");
       std::cout<<m_StatisticsFilter->GetMinimum()<<std::endl;
-      SetParameterFloat("epi.elevation.avgdem.mindisp",(m_StatisticsFilter->GetMinimum()-m_StatisticsFilter->GetMean())*m_DeformationFieldSource->GetMeanBaselineRatio());
+      SetParameterFloat("epi.elevation.avgdem.mindisp",(m_StatisticsFilter->GetMinimum()-m_StatisticsFilter->GetMean())*m_DisplacementFieldSource->GetMeanBaselineRatio());
       EnableParameter("epi.elevation.avgdem.maxdisp");
-      SetParameterFloat("epi.elevation.avgdem.maxdisp",(m_StatisticsFilter->GetMaximum()-m_StatisticsFilter->GetMean())*m_DeformationFieldSource->GetMeanBaselineRatio());
+      SetParameterFloat("epi.elevation.avgdem.maxdisp",(m_StatisticsFilter->GetMaximum()-m_StatisticsFilter->GetMean())*m_DisplacementFieldSource->GetMeanBaselineRatio());
       std::cout<<m_StatisticsFilter->GetMaximum()<<std::endl;
       }
 
 
-    SetParameterOutputImage("io.outleft",m_DeformationFieldSource->GetLeftDeformationFieldOutput());
-    SetParameterOutputImage("io.outright",m_DeformationFieldSource->GetRightDeformationFieldOutput());
+    SetParameterOutputImage("io.outleft",m_DisplacementFieldSource->GetLeftDisplacementFieldOutput());
+    SetParameterOutputImage("io.outright",m_DisplacementFieldSource->GetRightDisplacementFieldOutput());
 
     // Inverse part
     // lots of casting here ...
@@ -278,9 +278,9 @@ private:
     // Left field inversion
     if(IsParameterEnabled("inverse.outleft"))
       {
-      m_LeftDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetLeftDeformationFieldOutput());
+      m_LeftDisplacementFieldCaster->SetInput(m_DisplacementFieldSource->GetLeftDisplacementFieldOutput());
 
-      m_LeftInvertDeformationFieldFilter->SetInput(m_LeftDeformationFieldCaster->GetOutput());
+      m_LeftInvertDisplacementFieldFilter->SetInput(m_LeftDisplacementFieldCaster->GetOutput());
 
       FloatVectorImageType::PointType lorigin = GetParameterImage("io.inleft")->GetOrigin();
       FloatVectorImageType::SpacingType lspacing = GetParameterImage("io.inleft")->GetSpacing();
@@ -295,16 +295,16 @@ private:
       lsize[0]+=1;
       lsize[1]+=1;
 
-      m_LeftInvertDeformationFieldFilter->SetOutputOrigin(lorigin);
-      m_LeftInvertDeformationFieldFilter->SetOutputSpacing(lspacing);
-      m_LeftInvertDeformationFieldFilter->SetSize(lsize);
-      m_LeftInvertDeformationFieldFilter->SetSubsamplingFactor(GetParameterInt("inverse.ssrate"));
-      AddProcess(m_LeftInvertDeformationFieldFilter, "Inverting left deformation field ...");
-      m_LeftInvertDeformationFieldFilter->Update();
+      m_LeftInvertDisplacementFieldFilter->SetOutputOrigin(lorigin);
+      m_LeftInvertDisplacementFieldFilter->SetOutputSpacing(lspacing);
+      m_LeftInvertDisplacementFieldFilter->SetSize(lsize);
+      m_LeftInvertDisplacementFieldFilter->SetSubsamplingFactor(GetParameterInt("inverse.ssrate"));
+      AddProcess(m_LeftInvertDisplacementFieldFilter, "Inverting left deformation field ...");
+      m_LeftInvertDisplacementFieldFilter->Update();
 
-      m_LeftIndexSelectionFilter1->SetInput(m_LeftInvertDeformationFieldFilter->GetOutput());
+      m_LeftIndexSelectionFilter1->SetInput(m_LeftInvertDisplacementFieldFilter->GetOutput());
       m_LeftIndexSelectionFilter1->SetIndex(0);
-      m_LeftIndexSelectionFilter2->SetInput(m_LeftInvertDeformationFieldFilter->GetOutput());
+      m_LeftIndexSelectionFilter2->SetInput(m_LeftInvertDisplacementFieldFilter->GetOutput());
       m_LeftIndexSelectionFilter2->SetIndex(1);
       m_LeftImageList->Clear();
       m_LeftImageList->PushBack(m_LeftIndexSelectionFilter1->GetOutput());
@@ -318,9 +318,9 @@ private:
 
     if(IsParameterEnabled("inverse.outright"))
       {
-      m_RightDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetRightDeformationFieldOutput());
+      m_RightDisplacementFieldCaster->SetInput(m_DisplacementFieldSource->GetRightDisplacementFieldOutput());
 
-      m_RightInvertDeformationFieldFilter->SetInput(m_RightDeformationFieldCaster->GetOutput());
+      m_RightInvertDisplacementFieldFilter->SetInput(m_RightDisplacementFieldCaster->GetOutput());
       FloatVectorImageType::PointType rorigin = GetParameterImage("io.inright")->GetOrigin();
       FloatVectorImageType::SpacingType rspacing = GetParameterImage("io.inright")->GetSpacing();
       FloatVectorImageType::SizeType rsize = GetParameterImage("io.inright")->GetLargestPossibleRegion().GetSize();
@@ -334,17 +334,17 @@ private:
       rsize[0]+=1;
       rsize[1]+=1;
 
-      m_RightInvertDeformationFieldFilter->SetOutputOrigin(rorigin);
-      m_RightInvertDeformationFieldFilter->SetOutputSpacing(rspacing);
-      m_RightInvertDeformationFieldFilter->SetSize(rsize);
-      m_RightInvertDeformationFieldFilter->SetSubsamplingFactor(GetParameterInt("inverse.ssrate"));
+      m_RightInvertDisplacementFieldFilter->SetOutputOrigin(rorigin);
+      m_RightInvertDisplacementFieldFilter->SetOutputSpacing(rspacing);
+      m_RightInvertDisplacementFieldFilter->SetSize(rsize);
+      m_RightInvertDisplacementFieldFilter->SetSubsamplingFactor(GetParameterInt("inverse.ssrate"));
 
-      AddProcess(m_RightInvertDeformationFieldFilter, "Inverting right deformation field ...");
-      m_RightInvertDeformationFieldFilter->Update();
+      AddProcess(m_RightInvertDisplacementFieldFilter, "Inverting right deformation field ...");
+      m_RightInvertDisplacementFieldFilter->Update();
 
-      m_RightIndexSelectionFilter1->SetInput(m_RightInvertDeformationFieldFilter->GetOutput());
+      m_RightIndexSelectionFilter1->SetInput(m_RightInvertDisplacementFieldFilter->GetOutput());
       m_RightIndexSelectionFilter1->SetIndex(0);
-      m_RightIndexSelectionFilter2->SetInput(m_RightInvertDeformationFieldFilter->GetOutput());
+      m_RightIndexSelectionFilter2->SetInput(m_RightInvertDisplacementFieldFilter->GetOutput());
       m_RightIndexSelectionFilter2->SetIndex(1);
       m_RightImageList->Clear();
       m_RightImageList->PushBack(m_RightIndexSelectionFilter1->GetOutput());
@@ -355,16 +355,16 @@ private:
       }
   }
 
-  DeformationFieldSourceType::Pointer          m_DeformationFieldSource;
-  InverseDeformationFieldFilterType::Pointer   m_LeftInvertDeformationFieldFilter;
-  DeformationFieldCastFilterType::Pointer      m_LeftDeformationFieldCaster;
+  DisplacementFieldSourceType::Pointer         m_DisplacementFieldSource;
+  InverseDisplacementFieldFilterType::Pointer  m_LeftInvertDisplacementFieldFilter;
+  DisplacementFieldCastFilterType::Pointer     m_LeftDisplacementFieldCaster;
   IndexSelectionCastFilterType::Pointer        m_LeftIndexSelectionFilter1;
   IndexSelectionCastFilterType::Pointer        m_LeftIndexSelectionFilter2;
   ImageListType::Pointer                       m_LeftImageList;
   ImageListFilterType::Pointer                 m_LeftImageListFilter;
 
-  InverseDeformationFieldFilterType::Pointer   m_RightInvertDeformationFieldFilter;
-  DeformationFieldCastFilterType::Pointer      m_RightDeformationFieldCaster;
+  InverseDisplacementFieldFilterType::Pointer  m_RightInvertDisplacementFieldFilter;
+  DisplacementFieldCastFilterType::Pointer     m_RightDisplacementFieldCaster;
   IndexSelectionCastFilterType::Pointer        m_RightIndexSelectionFilter1;
   IndexSelectionCastFilterType::Pointer        m_RightIndexSelectionFilter2;
   ImageListType::Pointer                       m_RightImageList;

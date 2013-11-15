@@ -36,40 +36,42 @@ int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator(int argc
     //------------------------------------------------------
     const unsigned int Dimension = 2;
     typedef float                                                  MeasurementType;
-    typedef itk::Statistics::Histogram<MeasurementType, Dimension> HistogramType;
+    typedef itk::Statistics::Histogram<MeasurementType> HistogramType;
     HistogramType::Pointer  histogram = HistogramType::New();
-    HistogramType::SizeType size;
+    HistogramType::SizeType size(Dimension);
     size.Fill(HISTOGRAM_AXIS_LEN);
-    HistogramType::MeasurementVectorType lowerBound;
-    HistogramType::MeasurementVectorType upperBound;
+    HistogramType::MeasurementVectorType lowerBound(Dimension);
+    HistogramType::MeasurementVectorType upperBound(Dimension);
     lowerBound[0] = 0;
     lowerBound[1] = 0;
     upperBound[0] = HISTOGRAM_AXIS_LEN + 1;
     upperBound[1] = HISTOGRAM_AXIS_LEN + 1;
+    histogram->SetMeasurementVectorSize(Dimension);
     histogram->Initialize(size, lowerBound, upperBound);
+    histogram->SetToZero();
 
-    HistogramType::IndexType index;
+    HistogramType::IndexType index(Dimension);
     index[0] = 0;
     index[1] = 0;
-    histogram->SetFrequency(index, 0.1);
+    histogram->SetFrequencyOfIndex(index, 10);
     index[0] = 3;
     index[1] = 3;
-    histogram->SetFrequency(index, 0.5);
+    histogram->SetFrequencyOfIndex(index, 50);
     index[0] = 2;
     index[1] = 1;
-    histogram->SetFrequency(index, 0.05);
+    histogram->SetFrequencyOfIndex(index, 5);
     index[0] = 1;
     index[1] = 2;
-    histogram->SetFrequency(index, 0.05);
+    histogram->SetFrequencyOfIndex(index, 5);
     index[0] = 7;
     index[1] = 6;
-    histogram->SetFrequency(index, 0.1);
+    histogram->SetFrequencyOfIndex(index, 10);
     index[0] = 6;
     index[1] = 7;
-    histogram->SetFrequency(index, 0.1);
+    histogram->SetFrequencyOfIndex(index, 10);
     index[0] = 10;
     index[1] = 10;
-    histogram->SetFrequency(index, 0.1);
+    histogram->SetFrequencyOfIndex(index, 10);
 
     typedef otb::GreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator<
         HistogramType>  GLCMCalcType;

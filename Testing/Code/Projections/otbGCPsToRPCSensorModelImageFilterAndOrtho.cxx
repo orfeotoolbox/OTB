@@ -120,13 +120,12 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   ImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   orthoRectifFilter->SetEdgePaddingValue(no_data);
 
-
-  // Deformation Field spacing
+  // Displacement Field spacing
   ImageType::SpacingType  gridSpacing;
   gridSpacing[0] = 16.0 * atof(argv[7]);
   gridSpacing[1] = 16.0 * atof(argv[8]);
-  
-  orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
+
+  orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
 
   writer->SetInput(orthoRectifFilter->GetOutput());
   writer->SetFileName(outfname);

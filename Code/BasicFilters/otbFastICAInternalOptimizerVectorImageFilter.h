@@ -96,7 +96,7 @@ protected:
 
   virtual void GenerateOutputInformation();
   virtual void BeforeThreadedGenerateData ();
-  virtual void ThreadedGenerateData ( const OutputRegionType &, int );
+  virtual void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType );
   virtual void AfterThreadedGenerateData();
 
   unsigned int m_CurrentBandForLoop;

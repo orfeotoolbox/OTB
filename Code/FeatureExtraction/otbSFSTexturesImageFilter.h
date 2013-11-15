@@ -217,7 +217,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void BeforeThreadedGenerateData();
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
   /** Pad the input requested region by radius */
   virtual void GenerateInputRequestedRegion(void);
 

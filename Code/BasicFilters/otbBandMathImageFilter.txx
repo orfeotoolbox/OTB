@@ -245,7 +245,7 @@ void BandMathImageFilter<TImage>
 template< typename TImage >
 void BandMathImageFilter<TImage>
 ::ThreadedGenerateData(const ImageRegionType& outputRegionForThread,
-           int threadId)
+           itk::ThreadIdType threadId)
 {
   double value;
   unsigned int j;

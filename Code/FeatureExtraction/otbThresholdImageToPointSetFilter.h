@@ -81,7 +81,7 @@ protected:
   ThresholdImageToPointSetFilter();
   virtual ~ThresholdImageToPointSetFilter() {}
 
-  virtual void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, itk::ThreadIdType threadId);
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

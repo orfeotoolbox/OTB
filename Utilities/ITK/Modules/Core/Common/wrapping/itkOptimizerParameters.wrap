@@ -1,0 +1,7 @@
+itk_wrap_class("itk::OptimizerParametersHelper")
+  itk_wrap_template("${ITKM_D}" "${ITKT_D}")
+itk_end_wrap_class()
+
+itk_wrap_class("itk::OptimizerParameters")
+  itk_wrap_template("${ITKM_D}" "${ITKT_D}")
+itk_end_wrap_class()

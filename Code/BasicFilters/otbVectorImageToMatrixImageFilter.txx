@@ -132,7 +132,7 @@ PersistentVectorImageToMatrixFilter<TInputImage>
 template<class TInputImage>
 void
 PersistentVectorImageToMatrixFilter<TInputImage>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());

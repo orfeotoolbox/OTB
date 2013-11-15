@@ -73,13 +73,13 @@ public:
   static const unsigned int Dimension = 2;
   typedef double     PixelType;
 
-  typedef itk::FixedArray<PixelType, Dimension>         DeformationValueType;
+  typedef itk::FixedArray<PixelType, Dimension>         DisplacementValueType;
   typedef otb::Image< PixelType,  Dimension >           ScalarImageType;
   typedef otb::VectorImage<PixelType, Dimension>        VectorImageType;
   typedef otb::ImageList<ScalarImageType>               ImageListType;
   typedef otb::ImageListToVectorImageFilter
                 <ImageListType, VectorImageType>        IL2VIFilterType;
-  typedef otb::Image<DeformationValueType, Dimension>   FieldImageType;
+  typedef otb::Image<DisplacementValueType, Dimension>   FieldImageType;
   typedef otb::FineRegistrationImageFilter
     <ScalarImageType, ScalarImageType, FieldImageType>  RegistrationFilterType;
   typedef itk::DiscreteGaussianImageFilter
@@ -362,11 +362,11 @@ private:
       }
     
     m_XExtractor = VectorImageToImageFilterType::New();
-    m_XExtractor->SetInput(m_Registration->GetOutputDeformationField());
+    m_XExtractor->SetInput(m_Registration->GetOutputDisplacementField());
     m_XExtractor->SetIndex(0);
   
     m_YExtractor = VectorImageToImageFilterType::New();
-    m_YExtractor->SetInput(m_Registration->GetOutputDeformationField());
+    m_YExtractor->SetInput(m_Registration->GetOutputDisplacementField());
     m_YExtractor->SetIndex(1);
   
     m_ImgList = ImageListType::New();
@@ -443,7 +443,7 @@ private:
       FloatVectorImageType::Pointer imageToWarp = GetParameterImage("w");
        
       m_Warp = WarpFilterType::New();
-      m_Warp->SetDeformationField(m_Cast->GetOutput());
+      m_Warp->SetDisplacementField(m_Cast->GetOutput());
       m_Warp->SetInput(imageToWarp);
       m_Warp->SetOutputParametersFromImage(refImage);
       

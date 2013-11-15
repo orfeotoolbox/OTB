@@ -63,8 +63,10 @@ SVMClassifier<TSample, TLabel>
     itkExceptionMacro(<< "SVM model does not contain any support vector, can not perform classification.");
     }
 
-  m_Output->SetSample(this->GetSample());
-  m_Output->Resize(this->GetSample()->Size());
+  m_Output->SetSample(this->GetInput());
+//  m_Output->Resize(this->GetSample()->Size());
+  //FIXME check if this is necessary (work at the decision rule
+  //Evaluate() level?)
 
   unsigned int numberOfClasses = this->GetNumberOfClasses();
 
@@ -104,14 +106,18 @@ SVMClassifier<TSample, TLabel>
 {
   itk::TimeProbe probe;
 
-  typename TSample::ConstIterator iter = this->GetSample()->Begin();
-  typename TSample::ConstIterator end  = this->GetSample()->End();
+  typename TSample::ConstIterator iter = this->GetInput()->Begin();
+  typename TSample::ConstIterator end  = this->GetInput()->End();
 
   typename OutputType::ConstIterator      iterO = m_Output->Begin();
   typename OutputType::ConstIterator      endO  = m_Output->End();
   typename TSample::MeasurementVectorType measurements;
 
+  // sample Measurement vector size
   int numberOfComponentsPerSample  = iter.GetMeasurementVector().Size();
+  
+  // The size of the hyperplane distance vector is the number of hyperplanes
+  m_HyperplanesDistancesOutput->SetMeasurementVectorSize(m_Model->GetNumberOfHyperplane());
 
   otbMsgDevMacro(<< "Starting iterations ");
   while (iter != end && iterO != endO)

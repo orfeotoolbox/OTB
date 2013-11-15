@@ -80,7 +80,7 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>
 template <class TInputImage, class TOutputImage, class TFunction>
 void
 UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
   typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();

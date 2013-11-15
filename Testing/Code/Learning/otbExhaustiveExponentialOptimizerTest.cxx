@@ -44,15 +44,16 @@ public:
    itkNewMacro(Self);
 
   /** Type definitions for the quadratic Model. */
-  typedef itk::Array<double>      ModelParametersType;
+  typedef Superclass::MeasureType         MeasureType;
+  typedef Superclass::ParametersType      ParametersType;
+  typedef Superclass::ParametersValueType ParametersValueType;
 
-  /** typedefs */
-  typedef double                  MeasurementType;
-  typedef itk::Array<double>      ParametersType;
-  typedef double                  ParametersValueType;
+  /** Type definitions for the quadratic Model. */
+  typedef ParametersValueType ModelValueType;
+  typedef ParametersType      ModelType;
 
   /** Set the parameters of the quadratic function */
-  void SetFunctionInternalParameters(double aCoef, double bCoef, double cCoef, double dCoef, double eCoef, double fCoef)
+  void SetFunctionInternalParameters(ModelValueType aCoef, ModelValueType bCoef, ModelValueType cCoef, ModelValueType dCoef, ModelValueType eCoef, ModelValueType fCoef)
   {
     m_FunctionInternalParameters[0] =  aCoef;
     m_FunctionInternalParameters[1] =  bCoef;
@@ -61,15 +62,16 @@ public:
     m_FunctionInternalParameters[4] =  eCoef;
     m_FunctionInternalParameters[5] =  fCoef;
   };
-  void SetFunctionInternalParameters(ModelParametersType quadraticModel2D)
+
+  void SetFunctionInternalParameters(ModelType quadraticModel2D)
   {
     this->SetFunctionInternalParameters(quadraticModel2D[0], quadraticModel2D[1], quadraticModel2D[2], quadraticModel2D[3], quadraticModel2D[4], quadraticModel2D[5]);
   };
 
   /** \return The accuracy value corresponding the parameters */
-  virtual double GetValue(const ParametersType& parameters) const
+  virtual MeasureType GetValue(const ParametersType& parameters) const
   {
-    return static_cast<double> ( m_FunctionInternalParameters.GetElement(0) * parameters.GetElement(0) * parameters.GetElement(0) +
+    return static_cast<MeasureType> ( m_FunctionInternalParameters.GetElement(0) * parameters.GetElement(0) * parameters.GetElement(0) +
                                  m_FunctionInternalParameters.GetElement(1) * parameters.GetElement(1) * parameters.GetElement(1) +
                                  m_FunctionInternalParameters.GetElement(2) * parameters.GetElement(0) * parameters.GetElement(1) +
                                  m_FunctionInternalParameters.GetElement(3) * parameters.GetElement(0) +
@@ -86,8 +88,8 @@ public:
   /// Constructor
   Quadratic2DCostFunction()
   {
-  m_FunctionInternalParameters = ModelParametersType(6);
-  m_FunctionInternalParameters.Fill(0.0);
+    m_FunctionInternalParameters = ModelType(6);
+    m_FunctionInternalParameters.Fill(0.0);
   };
   /// Destructor
   virtual ~Quadratic2DCostFunction(){};
@@ -96,7 +98,7 @@ private:
   Quadratic2DCostFunction(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  ModelParametersType m_FunctionInternalParameters;
+  ModelType m_FunctionInternalParameters;
 
 }; // class Quadratic2DCostFunction
 

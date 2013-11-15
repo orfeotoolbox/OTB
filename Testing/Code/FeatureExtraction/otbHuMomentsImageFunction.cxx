@@ -30,6 +30,8 @@
 #include "otbStreamingResampleImageFilter.h"
 #include "itkResampleImageFilter.h"
 
+#include "itkAffineTransform.h"
+
 int otbHuMomentsImageFunctionNew(int argc, char * argv[])
 {
   typedef unsigned char InputPixelType;

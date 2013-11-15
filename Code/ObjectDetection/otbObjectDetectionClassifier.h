@@ -174,7 +174,7 @@ protected:
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType& outputRegionForThread,
-                             int threadId);
+                             itk::ThreadIdType threadId);
 
 private:
   PersistentObjectDetectionClassifier(const Self &); //purposely not implemented
@@ -189,23 +189,20 @@ private:
 
     for(unsigned int i=0; i<ImageDimension; ++i)
       {
-#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
       if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius  + 1 )
-#else
-      if( index[i] < static_cast<TCoordRepType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
-#endif
+	//Comment this instruction after itkv4 migration (correct
+	//usage of centered-pixel coordinates)
+	//if( index[i] < static_cast<TCoordRepType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
         {
         return false;
         }
       // bound is the last valid pixel location
-#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
       const TCoordRepType bound = static_cast<TCoordRepType>(
           region.GetIndex(i) + region.GetSize(i) - 0.5);
-#else
-      const TCoordRepType bound = static_cast<TCoordRepType>(
-          region.GetIndex(i) + static_cast<IndexValueType>(region.GetSize(i)) - 1);
-#endif
-
+      //Comment this instruction after itkv4 migration (correct
+      //usage of centered-pixel coordinates)
+      //const TCoordRepType bound = static_cast<TCoordRepType>(
+      //    region.GetIndex(i) + static_cast<IndexValueType>(region.GetSize(i)) - 1);
       if( index[i] > bound - m_NeighborhoodRadius - 1 )
         {
         return false;

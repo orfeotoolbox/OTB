@@ -57,7 +57,7 @@ template <class TInputImage, class TOutputImage, class TDetector>
 void
 KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
 ::GenerateData()
-//::GenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
+//::GenerateData( const OutputImageRegionType &outputRegionForThread, itk::ThreadIdType threadId )
 {
   typename Superclass::OutputImagePointer outputImage = this->GetOutput();
   InputImagePointerType                   ptr = const_cast<InputImageType *>(this->GetInput());

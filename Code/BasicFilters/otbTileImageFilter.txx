@@ -164,7 +164,7 @@ TileImageFilter<TImage>
 template <class TImage>
 void
 TileImageFilter<TImage>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve output image pointer
   ImageType * outputPtr = this->GetOutput();

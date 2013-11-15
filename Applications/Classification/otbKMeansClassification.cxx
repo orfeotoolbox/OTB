@@ -22,7 +22,7 @@
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbStreamingTraits.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkListSample.h"
@@ -99,7 +99,7 @@ public:
 
 private:
   typedef std::map<TLabel, TSample>                   CentroidMapType;
-  typedef itk::Statistics::EuclideanDistance<TSample> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<TSample> DistanceType;
 
   CentroidMapType m_CentroidsMap;
   typename DistanceType::Pointer m_Distance;
@@ -292,6 +292,7 @@ private:
 
     // Training sample lists
     ListSampleType::Pointer sampleList = ListSampleType::New();
+    sampleList->SetMeasurementVectorSize(m_InImage->GetNumberOfComponentsPerPixel());
 
     //unsigned int init_means_index = 0;
 

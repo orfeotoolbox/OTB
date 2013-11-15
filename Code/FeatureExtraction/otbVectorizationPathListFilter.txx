@@ -32,7 +32,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
 ::VectorizationPathListFilter()
 {
   this->SetNumberOfRequiredInputs(2);
-  this->SetNumberOfInputs(2);
+  this->SetNumberOfRequiredInputs(2);
   m_AmplitudeThreshold = 1.0;
 }
 

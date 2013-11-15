@@ -61,7 +61,7 @@ template <class TInputImage, class TOutputImage, class TFunction>
 void
 UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
 
   InputImageRegionType inputRegionForThread;

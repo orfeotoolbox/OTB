@@ -129,7 +129,7 @@ template <class TInputImage, class TOutputImage>
 void
 ClampImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   itkDebugMacro(<<"Actually executing");
 

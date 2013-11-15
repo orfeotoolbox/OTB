@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkLabelMap.h"
 #include "itkLabelObject.h"
-#include "itkLabelMapFilter.h"
+#include "itkShapeLabelMapFilter.h"
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
 #include "otbLabelImageToLabelMapWithAdjacencyFilter.h"
 #include "otbLabelMapWithAdjacency.h"
@@ -70,7 +70,7 @@ public:
   typedef typename LabelMapType::AdjacentLabelsContainerType                   AdjacentLabelsContainerType;
   
   typedef LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
-  typedef ShapeAttributesLabelMapFilter<LabelMapType>                            ShapeLabelMapFilterType;
+  typedef ShapeAttributesLabelMapFilter<LabelMapType>                             ShapeLabelMapFilterType;
   typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType>   BandStatisticsLabelMapFilterType;
 
   virtual void SetInput( const InputImageType *image);

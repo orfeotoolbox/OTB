@@ -30,7 +30,8 @@ namespace Statistics {
  *  input and returning ListSample.
  *
  *
- *  This filter provides pipeline support for itk::Statistics::ListSample via itk::DataObjectDecorator for
+ *  This filter provides pipeline support since
+ *  itk::Statistics::ListSample is a DataObject
  *  the output sample list.
  *
  */
@@ -61,14 +62,9 @@ public:
   /** ListSample is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */
   typedef itk::DataObject::Pointer                             DataObjectPointer;
-
-  typedef itk::DataObjectDecorator< OutputSampleListType >     OutputSampleListObjectType;
-
-  /** Returns the output sample list */
-  OutputSampleListType * GetOutputSampleList();
-
+  
   /** Returns the output sample list as a data object */
-  OutputSampleListObjectType * GetOutput();
+  OutputSampleListType * GetOutput();
 
 protected:
   /** Standard itk::ProcessObject subclass method. */

@@ -20,8 +20,6 @@
 #include "otbGenericInterpolateImageFunction.h"
 #include "vnl/vnl_math.h"
 
-#include "itkPixelBuilder.h"
-
 namespace otb
 {
 
@@ -292,7 +290,9 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   // Iterate over the neighborhood, taking the correct set
   // of weights in each dimension
   RealType xPixelValue;
-  itk::PixelBuilder<RealType>::Zero(xPixelValue, this->GetInputImage()->GetNumberOfComponentsPerPixel());
+  itk::NumericTraits<RealType>::SetLength(xPixelValue, this->GetInputImage()->GetNumberOfComponentsPerPixel());
+  xPixelValue=static_cast<RealType>(0.0);
+
   for (unsigned int j = 0; j < m_OffsetTableSize; ++j)
     {
     // Get the offset for this neighbor

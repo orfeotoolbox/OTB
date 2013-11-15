@@ -128,7 +128,7 @@ protected:
 
   /** startIndex and stopIndex represent the indeces of the vertex to
   examine in thread threadId */
-  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
+  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId);
 
   /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the

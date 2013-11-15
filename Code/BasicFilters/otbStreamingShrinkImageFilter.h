@@ -218,7 +218,7 @@ protected:
   void  BeforeThreadedGenerateData();
 
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
   void  AfterThreadedGenerateData();
 

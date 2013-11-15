@@ -320,7 +320,7 @@ template<class TInputImage>
 void
 PersistentStatisticsImageFilter<TInputImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   /**
    * Grab the input

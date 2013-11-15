@@ -19,12 +19,11 @@
 
 
 #include "itkMacro.h"
-#include "itkImage.h"
-#include "itkImageFileWriter.h"
 #include "itkLinearInterpolateImageFunction.h"
 
 #include <iostream>
 
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -36,9 +35,9 @@ int otbAssymmetricFusionOfLineDetectorNew(int argc, char * argv[])
   typedef double        OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageDirectionType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageDirectionType;
 
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
 

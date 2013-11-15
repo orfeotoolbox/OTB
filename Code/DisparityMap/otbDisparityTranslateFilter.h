@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otDisparityTranslateFilter_h
-#define __otDisparityTranslateFilter_h
+#ifndef __otbDisparityTranslateFilter_h
+#define __otbDisparityTranslateFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"
@@ -122,8 +122,16 @@ protected:
   virtual void GenerateInputRequestedRegion();
   
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId);
   
+  /** Override VerifyInputInformation() since this filter's inputs do
+    * not need to occupy the same physical space.
+    *
+    * \sa ProcessObject::VerifyInputInformation
+    */
+ virtual void VerifyInputInformation() {}
+
+
 private:
   DisparityTranslateFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

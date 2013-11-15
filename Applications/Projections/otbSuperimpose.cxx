@@ -187,12 +187,11 @@ private:
       if (spacing[0]<0.0) defSpacing[0] *= -1.0;
       if (spacing[1]<0.0) defSpacing[1] *= -1.0;
     
-      m_Resampler->SetDeformationFieldSpacing(defSpacing);
+      m_Resampler->SetDisplacementFieldSpacing(defSpacing);
       }
     
     FloatVectorImageType::PixelType defaultValue;
-    itk::PixelBuilder<FloatVectorImageType::PixelType>::Zero(defaultValue,
-                                                              movingImage->GetNumberOfComponentsPerPixel());
+    itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, movingImage->GetNumberOfComponentsPerPixel());
 
     m_Resampler->SetInput(movingImage);
     m_Resampler->SetInputKeywordList(movingImage->GetImageKeywordlist());

@@ -36,5 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbVCAImageFilterNew);
   REGISTER_TEST(otbVCAImageFilterTestHighSNR);
   REGISTER_TEST(otbSparseUnmixingImageFilterNew);
-  //REGISTER_TEST(otbSparseUnmixingImageFilterTest);
+  REGISTER_TEST(otbSparseUnmixingImageFilterTest);
 }

@@ -22,10 +22,13 @@
 #define __otbVectorRescaleIntensityImageFilter_txx
 
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "itkListSampleToHistogramGenerator.h"
+#include "itkSampleToHistogramFilter.h"
+#include "itkDenseFrequencyContainer2.h"
+#include "itkHistogram.h"
 #include "itkListSample.h"
 #include "otbObjectList.h"
 #include "otbMacro.h"
+#include "itkImageRegionConstIterator.h"
 
 namespace otb
 {
@@ -94,9 +97,9 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
     typedef itk::Vector<typename InputImageType::InternalPixelType, 1> MeasurementVectorType;
     typedef itk::Statistics::ListSample<MeasurementVectorType>         ListSampleType;
     typedef float                                                      HistogramMeasurementType;
-    typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType, HistogramMeasurementType,
-        itk::Statistics::DenseFrequencyContainer,
-        1> HistogramGeneratorType;
+    typedef itk::Statistics::Histogram< HistogramMeasurementType,
+                           itk::Statistics::DenseFrequencyContainer2 > HistogramType;
+    typedef itk::Statistics::SampleToHistogramFilter<ListSampleType, HistogramType> HistogramGeneratorType;
 
     typedef ObjectList<ListSampleType> ListSampleListType;
 
@@ -128,14 +131,19 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
     for (unsigned int i = 0; i < m_InputMaximum.GetSize(); ++i)
       {
       typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
-      generator->SetListSample(sl->GetNthElement(i));
+      generator->SetInput(sl->GetNthElement(i));
       typename HistogramGeneratorType::HistogramType::SizeType size;
+      
+      // Initialize the size of the SizeType size
+      size.SetSize(sl->GetNthElement(i)->GetMeasurementVectorSize());
+      
       if (m_ClampThreshold > 0.)
         size.Fill(static_cast<unsigned int>(vcl_ceil(1 / m_ClampThreshold) * 10));
       else
         size.Fill(256);
 
-      generator->SetNumberOfBins(size);
+      generator->SetHistogramSize(size);
+
       generator->Update();
       m_InputMinimum[i] =
         static_cast<typename InputImageType::InternalPixelType>(generator->GetOutput()->Quantile(0, m_ClampThreshold));

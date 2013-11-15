@@ -40,7 +40,7 @@ namespace Statistics {
   \f$
  *
  * The class can be templated over any container that holds data elements, as
- * for template of EuclideanDistance.
+ * for template of EuclideanDistanceMetric.
  *
  * The only restriction is that elements have to support \code NaN \endcode.
  *

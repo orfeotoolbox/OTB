@@ -63,7 +63,10 @@ public:
 
   typedef typename Superclass::InverseTransformBasePointer InverseTransformBasePointer;
   typedef typename Superclass::ParametersType              ParametersType;
-
+  
+  typedef typename Superclass::ParametersValueType     ParametersValueType;
+  typedef typename Superclass::NumberOfParametersType  NumberOfParametersType;
+  
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -140,9 +143,9 @@ public:
   }
 
   /** Get the number of parameters */
-  virtual unsigned int GetNumberOfParameters() const
+  virtual NumberOfParametersType GetNumberOfParameters() const
   {
-    return (m_NumeratorDegree +1 + m_DenominatorDegree+1)*SpaceDimension;
+    return (static_cast <NumberOfParametersType> ( (m_NumeratorDegree +1 + m_DenominatorDegree+1)*SpaceDimension ));
   }
 
   // Set parameter method
@@ -154,7 +157,7 @@ public:
       itkExceptionMacro(<<"Wrong number of parameters: found "<<params.Size()<<", expected "<<this->GetNumberOfParameters());
       }
     
-    // Set parameters
+    // Set parametersg
     this->m_Parameters = params;
   }
 
@@ -173,7 +176,7 @@ public:
 
 
 protected:
-  RationalTransform() : Superclass(SpaceDimension, 16), m_NumeratorDegree(3), m_DenominatorDegree(3)
+  RationalTransform() : Superclass(16), m_NumeratorDegree(3), m_DenominatorDegree(3)
     {
     this->InitalizeParameters();
     }

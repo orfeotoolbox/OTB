@@ -19,12 +19,11 @@
 
 
 #include "itkMacro.h"
-#include "itkImage.h"
-#include "itkImageFileWriter.h"
 #include "itkLineSpatialObject.h"
 #include <iostream>
 #include <list>
 
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -45,8 +44,8 @@ int otbDrawLineSpatialObject(int argc, char* argv[])
   typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::DrawLineSpatialObjectFilter<InputImageType, OutputImageType> FilterType;
 

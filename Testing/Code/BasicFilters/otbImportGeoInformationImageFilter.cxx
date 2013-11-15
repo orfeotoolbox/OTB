@@ -52,6 +52,9 @@ int otbImportGeoInformationImageFilter(int argc, char * argv[])
   black->FillBuffer(128);
   std::cout << "black: " << black->GetLargestPossibleRegion() << std::endl;
 
+  black->SetOrigin(reader->GetOutput()->GetOrigin());
+  black->SetSpacing(reader->GetOutput()->GetSpacing());
+
   import->SetInput(black);
   import->SetSource(reader->GetOutput());
   //  import->Update();

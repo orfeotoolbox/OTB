@@ -217,7 +217,7 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 template<class TInputImage, class TInputImage2>
 void
 PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   /**
    * Grab the input

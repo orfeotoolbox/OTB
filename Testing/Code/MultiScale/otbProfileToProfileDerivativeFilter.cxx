@@ -66,7 +66,7 @@ int otbProfileToProfileDerivativeFilter(int argc, char * argv[])
   WriterType::Pointer writer;
 
   // std::stringstream oss;
-  std::stringstream oss;
+  std::ostringstream oss;
   // Writing the results images
   for (unsigned int i = 1; i < profileSize; ++i)
     {

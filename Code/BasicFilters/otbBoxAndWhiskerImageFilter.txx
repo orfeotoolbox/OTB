@@ -51,7 +51,7 @@ void
 BoxAndWhiskerImageFilter <TInputImage>
 ::ThreadedGenerateData(
   const OutputImageRegionType& outputRegionForThread,
-  int threadId)
+  itk::ThreadIdType threadId)
 {
   const TInputImage * inputPtr = this->GetInput();
   OutputImageType *   outputPtr = this->GetOutput();

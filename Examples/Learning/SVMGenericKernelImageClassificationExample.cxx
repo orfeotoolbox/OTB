@@ -26,6 +26,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImage.h"
+#include "otbVectorImage.h"
 
 //  Software Guide : BeginLatex
 // This example illustrates the modifications to be added to use the
@@ -40,7 +41,7 @@
 //
 //  Software Guide : EndLatex
 
-#include "itkImageToListAdaptor.h"
+#include "itkImageToListSampleAdaptor.h"
 #include "itkListSample.h"
 
 //  Software Guide : BeginCodeSnippet
@@ -77,7 +78,7 @@ int main(int argc, char* argv[])
   reader->SetFileName(imageFilename);
   reader->Update();
 
-  typedef itk::Statistics::ImageToListAdaptor<InputImageType> SampleType;
+  typedef itk::Statistics::ImageToListSampleAdaptor<InputImageType> SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetImage(reader->GetOutput());
 
@@ -126,7 +127,7 @@ int main(int argc, char* argv[])
   int numberOfClasses = model->GetNumberOfClasses();
   classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel(model);
-  classifier->SetSample(sample.GetPointer());
+  classifier->SetInput(sample.GetPointer());
   classifier->Update();
 
   typedef ClassifierType::ClassLabelType         OutputPixelType;

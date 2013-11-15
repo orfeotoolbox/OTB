@@ -36,7 +36,6 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
   m_EdgeDensityFilter = EdgeDensityFilterType::New();
   m_SobelFilter = SobelDetectorType::New();
   m_Thresholder = ThresholdFilterType::New();
-  m_MaskImageFilter = MaskImageFilterType::New();
   m_UrbanAreaExtractionFilter = UrbanAreaExtractionFilterType::New();
 
   m_MultiplyFilter = MultiplyImageFilterType::New();

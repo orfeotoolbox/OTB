@@ -50,18 +50,18 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::Vector<double,2>         DeformationType;
-  typedef otb::Image<DeformationType>   DeformationFieldType;
+  typedef itk::Vector<double,2>         DisplacementType;
+  typedef otb::Image<DisplacementType>   DisplacementFieldType;
 
   typedef itk::VectorCastImageFilter
   <FloatVectorImageType,
-   DeformationFieldType>                DeformationFieldCastFilterType;
+   DisplacementFieldType>                DisplacementFieldCastFilterType;
   
 
   typedef otb::StreamingWarpImageFilter
   <FloatVectorImageType,
    FloatVectorImageType,
-   DeformationFieldType>                WarpFilterType;
+   DisplacementFieldType>                WarpFilterType;
   typedef otb::MultiToMonoChannelExtractROI
   <FloatVectorImageType::InternalPixelType,
    FloatVectorImageType::InternalPixelType>
@@ -98,7 +98,7 @@ private:
     m_VectorCastX = VectorCastFilterType::New();
     m_VectorCastY = VectorCastFilterType::New();
     m_Concatenate = ConcatenateFilterType::New();
-    m_DeformationFieldCaster = DeformationFieldCastFilterType::New();
+    m_DisplacementFieldCaster = DisplacementFieldCastFilterType::New();
   }
 
  void DoInit()
@@ -127,7 +127,7 @@ private:
     SetParameterDescription("grid.in","The resampling grid");
     AddParameter(ParameterType_Choice,   "grid.type", "Grid Type");
     SetParameterDescription("grid.type","Allows to choose between two grid types");
-    AddChoice("grid.type.def","Deformation  grid: $G(x_out,y_out) = (x_in-x_out, y_in-y_out)$");
+    AddChoice("grid.type.def","Displacement  grid: $G(x_out,y_out) = (x_in-x_out, y_in-y_out)$");
     SetParameterDescription("grid.type.def","A deformation grid contains at each grid position the offset to apply to this position in order to get to the corresponding point in the input image to resample");
     AddChoice("grid.type.loc","Localisation grid: $G(x_out,y_out) = (x_in, y_in)$");
     SetParameterDescription("grid.type.loc","A localisation grid contains at each grid position the corresponding position in the input image to resample");
@@ -218,17 +218,17 @@ void DoExecute()
         m_Concatenate->SetInput1(m_VectorCastX->GetOutput());
         m_VectorCastY->SetInput(m_BandMathY->GetOutput());
         m_Concatenate->SetInput2(m_VectorCastY->GetOutput());
-        m_DeformationFieldCaster->SetInput(m_Concatenate->GetOutput());
+        m_DisplacementFieldCaster->SetInput(m_Concatenate->GetOutput());
         }
       else
         {
         GetLogger()->Info("Grid intepreted as a deformation grid.");
-        m_DeformationFieldCaster->SetInput(inGrid);
+        m_DisplacementFieldCaster->SetInput(inGrid);
         }
 
-      m_DeformationFieldCaster->GetOutput()->UpdateOutputInformation();
+      m_DisplacementFieldCaster->GetOutput()->UpdateOutputInformation();
 
-      m_WarpImageFilter->SetDeformationField(m_DeformationFieldCaster->GetOutput());
+      m_WarpImageFilter->SetDisplacementField(m_DisplacementFieldCaster->GetOutput());
 
       // Set inputs
       m_WarpImageFilter->SetInput(inImage);
@@ -299,7 +299,7 @@ void DoExecute()
   VectorCastFilterType::Pointer  m_VectorCastX;
   VectorCastFilterType::Pointer  m_VectorCastY;
   ConcatenateFilterType::Pointer m_Concatenate;
-  DeformationFieldCastFilterType::Pointer m_DeformationFieldCaster;
+  DisplacementFieldCastFilterType::Pointer m_DisplacementFieldCaster;
 };
 } // End namespace Wrapper
 } // End namepsace otb

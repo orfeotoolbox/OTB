@@ -63,8 +63,9 @@ public:
   typedef  TScalarType ScalarType;
 
   /** Type of the input parameters. */
-  typedef  typename Superclass::ParametersType      ParametersType;
-  typedef  typename Superclass::ParametersValueType ParametersValueType;
+  typedef typename Superclass::ParametersType         ParametersType;
+  typedef typename Superclass::ParametersValueType    ParametersValueType;
+  typedef typename Superclass::NumberOfParametersType NumberOfParametersType;
 
   /** Type of the Jacobian matrix. */
   typedef  itk::Array2D< double > JacobianType;
@@ -183,15 +184,15 @@ public:
     }
 
   /** Return the number of parameters that completely define the Transfom  */
-  virtual unsigned int GetNumberOfParameters(void) const
+  virtual NumberOfParametersType GetNumberOfParameters(void) const
   { return this->m_Parameters.Size(); }
 
 protected:
   Transform(): Superclass::Transform()
   {}
 
-  Transform(unsigned int Dimension, unsigned int NumberOfParameters)
-    : Superclass::Transform(Dimension, NumberOfParameters)
+  Transform(NumberOfParametersType numberOfParameters)
+    : Superclass::Transform(numberOfParameters)
   {}
 
   virtual ~Transform() {}
@@ -199,10 +200,11 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
+#if 0
     os << indent << "Parameters : " << m_Parameters << std::endl;
     os << indent << "FixedParameters : " << m_FixedParameters << std::endl;
     os << indent << "Jacobian : " << m_Jacobian << std::endl;
-
+#endif
   }
 
 

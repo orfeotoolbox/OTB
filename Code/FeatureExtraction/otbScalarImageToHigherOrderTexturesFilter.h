@@ -19,9 +19,7 @@
 #define __otbScalarImageToHigherOrderTexturesFilter_h
 
 #include "itkImageToImageFilter.h"
-
-#include "otbMaskedScalarImageToGreyLevelRunLengthMatrixGenerator.h"
-#include "itkGreyLevelRunLengthMatrixTextureCoefficientsCalculator.h"
+#include "itkScalarImageToRunLengthFeaturesFilter.h"
 
 namespace otb
 {
@@ -43,8 +41,6 @@ namespace otb
  * "Grey-Level Nonuniformity" \f$ = GLN = \frac{1}{n_r} \sum_{i} \left( \sum_{j}{p(i, j)} \right)^2 \f$
  *
  * "Run Length Nonuniformity" \f$ = RLN = \frac{1}{n_r} \sum_{j} \left( \sum_{i}{p(i, j)} \right)^2 \f$
- *
- * "Run Percentage" \f$ = RP = \frac{n_r}{n_p} \f$
  *
  * "Low Grey-Level Run Emphasis" \f$ = LGRE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j)}{i^2} \f$
  *
@@ -96,7 +92,7 @@ public:
   typedef typename OutputImageType::RegionType OutputRegionType;
 
   /** Co-occurence matrix and textures calculator */
-  typedef otb::MaskedScalarImageToGreyLevelRunLengthMatrixGenerator
+/*  typedef otb::MaskedScalarImageToGreyLevelRunLengthMatrixGenerator
     <InputImageType>                                           RunLengthMatrixGeneratorType;
   typedef typename RunLengthMatrixGeneratorType::Pointer       RunLengthMatrixGeneratorPointerType;
   typedef typename RunLengthMatrixGeneratorType::OffsetType    OffsetType;
@@ -104,17 +100,28 @@ public:
   typedef itk::Statistics::GreyLevelRunLengthMatrixTextureCoefficientsCalculator
     <HistogramType>                                            TextureCoefficientsCalculatorType;
   typedef typename TextureCoefficientsCalculatorType::Pointer  TextureCoefficientsCalculatorPointerType;
+  */
+  
+  typedef itk::Statistics::ScalarImageToRunLengthFeaturesFilter
+    <InputImageType> ScalarImageToRunLengthFeaturesFilterType;
+  //typedef typename ImageType::PixelType                PixelType;
+  typedef typename InputImageType::OffsetType          OffsetType;
+  typedef itk::VectorContainer< unsigned char, OffsetType > OffsetVector;
+  typedef typename OffsetVector::Pointer               OffsetVectorPointer;
+  typedef typename OffsetVector::ConstPointer          OffsetVectorConstPointer;
+
 
   /** Set the radius of the window on which textures will be computed */
   itkSetMacro(Radius, SizeType);
   /** Get the radius of the window on which textures will be computed */
   itkGetMacro(Radius, SizeType);
 
-  /** Set the offset for co-occurence computation */
-  itkSetMacro(Offset, OffsetType);
+  /** Get/Set the offset or offsets over which the co-occurrence pairs will be computed.
+      Calling either of these methods clears the previous offsets. */
+  itkSetConstObjectMacro(Offsets, OffsetVector);
+  itkGetConstObjectMacro(Offsets, OffsetVector);
 
-  /** Get the offset for co-occurence computation */
-  itkGetMacro(Offset, OffsetType);
+  void SetOffset(const OffsetType offset);
 
   /** Set the number of bin per axis for histogram generation */
   itkSetMacro(NumberOfBinsPerAxis, unsigned int);
@@ -133,6 +140,11 @@ public:
 
   /** Get the input image maximum */
   itkGetMacro(InputImageMaximum, InputPixelType);
+  
+  /* Enable/Disable fast calculation */
+  itkGetConstMacro(FastCalculations, bool);
+  itkSetMacro(FastCalculations, bool);
+  itkBooleanMacro(FastCalculations);
 
   /** Get the Short Run Emphasis output image */
   OutputImageType * GetShortRunEmphasisOutput();
@@ -175,7 +187,7 @@ protected:
   /** Generate the input requested region */
   virtual void GenerateInputRequestedRegion();
   /** Parallel textures extraction */
-  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, int threadId);
+  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
 
 private:
   ScalarImageToHigherOrderTexturesFilter(const Self&); //purposely not implemented
@@ -188,7 +200,7 @@ private:
   SizeType m_Radius;
 
   /** Offset for co-occurence */
-  OffsetType m_Offset;
+  OffsetVectorConstPointer m_Offsets;
 
   /** Number of bins per axis for histogram generation */
   unsigned int m_NumberOfBinsPerAxis;
@@ -198,6 +210,9 @@ private:
 
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
+  
+  /** Fast calculation */
+  bool m_FastCalculations;
 };
 } // End namespace otb
 

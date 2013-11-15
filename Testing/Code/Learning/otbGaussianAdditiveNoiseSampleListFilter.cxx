@@ -74,11 +74,11 @@ int otbGaussianAdditiveNoiseSampleListFilter(int argc, char * argv[])
 
   filter->Update();
 
-  DoubleSampleListType::ConstIterator outIt = filter->GetOutputSampleList()->Begin();
+  DoubleSampleListType::ConstIterator outIt = filter->GetOutput()->Begin();
 
   ofs<<"Output samples: "<<std::endl;
 
-  while(outIt != filter->GetOutputSampleList()->End())
+  while(outIt != filter->GetOutput()->End())
     {
     ofs<<outIt.GetMeasurementVector()<<std::endl;
     ++outIt;

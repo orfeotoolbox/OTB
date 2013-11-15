@@ -150,6 +150,7 @@ int main(int argc, char *argv[])
   diffusion->SetNumberOfIterations(atoi(argv[4]));
   diffusion->SetConductanceParameter(atof(argv[3]));
   diffusion->SetTimeStep(0.125);
+  diffusion->SetUseImageSpacing(false);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -164,6 +165,7 @@ int main(int argc, char *argv[])
   GradientMagnitudeFilterType::Pointer
     gradient = GradientMagnitudeFilterType::New();
   gradient->SetUsePrincipleComponents(atoi(argv[7]));
+  gradient->SetUseImageSpacingOff();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

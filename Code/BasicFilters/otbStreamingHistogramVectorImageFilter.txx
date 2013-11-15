@@ -212,7 +212,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
 template<class TInputImage>
 void
 PersistentHistogramVectorImageFilter<TInputImage>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   /**
    * Grab the input

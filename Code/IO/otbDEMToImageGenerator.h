@@ -177,7 +177,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId);
+                            itk::ThreadIdType threadId);
   virtual void GenerateOutputInformation();
 
   DEMHandlerType::Pointer m_DEMHandler;

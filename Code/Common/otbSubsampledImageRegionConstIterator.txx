@@ -272,7 +272,7 @@ SubsampledImageRegionConstIterator<TImage>
 {
   // Get the index of the last pixel on the span (row)
   IndexType ind = this->m_Image->ComputeIndex(
-    static_cast<typename Superclass::OffsetValueType>(this->m_Offset));
+    static_cast<typename TImage::OffsetValueType>(this->m_Offset));
 
   const IndexType& startIndex = this->m_Region.GetIndex();
   const SizeType&  size = this->m_Region.GetSize();

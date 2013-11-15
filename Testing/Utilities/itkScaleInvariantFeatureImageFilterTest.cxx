@@ -36,7 +36,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define CROP
 
 #include "itkScaleInvariantFeatureImageFilter.h"
-#include "itkImageSeriesReader.h"
 #include "itkNumericSeriesFileNames.h"
 #include "itkPointSetToImageFilter.h"
 #include "otbImage.h"

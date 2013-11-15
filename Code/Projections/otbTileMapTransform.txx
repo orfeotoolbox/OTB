@@ -28,7 +28,7 @@ namespace otb
 template<TransformDirection::TransformationDirection TTransformDirection, class TScalarType,
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
 TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
-::TileMapTransform() : Superclass(SpaceDimension, ParametersDimension), m_Depth(0)
+::TileMapTransform() : Superclass(ParametersDimension), m_Depth(0)
 {}
 
 template<TransformDirection::TransformationDirection TTransformDirection, class TScalarType,

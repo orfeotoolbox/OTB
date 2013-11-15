@@ -22,7 +22,7 @@ See GETCopyright.txt for details.
 #define __otbSOMMap_h
 
 #include "itkVariableLengthVector.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbVectorImage.h"
 
 namespace otb
@@ -36,7 +36,7 @@ namespace otb
  *
  * This class extends the Image object, where each pixel represents a neuron in the map.
  * It is templated with a distance parameter used to compute the neuron response to an input.
- * Thanks to the extensiong of the Image object, reading and writing is supported through standard image
+ * Thanks to the extension of the Image object, reading and writing is supported through standard image
  * readers and writers.
  *
  * The training is done via the SOM class, and the activation map can be produced with the SOMActivationBuilder
@@ -46,7 +46,7 @@ namespace otb
  * \sa SOMActivationBuilder
  */
 template <class TNeuron = itk::VariableLengthVector<double>,
-    class TDistance = itk::Statistics::EuclideanDistance<TNeuron>,
+          class TDistance = itk::Statistics::EuclideanDistanceMetric<TNeuron>,
     unsigned int VMapDimension = 2>
 class ITK_EXPORT SOMMap
   : public otb::VectorImage<typename TNeuron::ComponentType, VMapDimension>

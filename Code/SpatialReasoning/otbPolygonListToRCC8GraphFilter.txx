@@ -223,7 +223,7 @@ PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
 template <class TPolygonList, class TOutputGraph>
 void
 PolygonListToRCC8GraphFilter<TPolygonList, TOutputGraph>
-::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId)
+::ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId)
 {
   //std::cout<<"Starting thread "<<threadId <<" to work on range ["<<startIndex<<", "<<stopIndex<<"]"<<std::endl;
 

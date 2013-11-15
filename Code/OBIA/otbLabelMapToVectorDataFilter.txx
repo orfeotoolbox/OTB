@@ -94,16 +94,15 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
   output->GetDataTree()->Add(folder1, document);
 
   // Lets begin by declaring the iterator for the objects in the image.
-  typename InputLabelMapType::LabelObjectContainerType::const_iterator it;
-  // And get the object container to reuse it later
-  const typename InputLabelMapType::LabelObjectContainerType& labelObjectContainer = input->GetLabelObjectContainer();
-  for (it = labelObjectContainer.begin(); it != labelObjectContainer.end(); ++it)
+  ConstIteratorType it = ConstIteratorType( input );
+
+  while ( !it.IsAtEnd() )
     {
     /**the label object*/
-    LabelObjectType * labelObject = it->second;
+    const LabelObjectType * labelObject = it.GetLabelObject();
 
     /**Get the polygon image of the labelobject using the functor*/
-    typename PolygonType::Pointer polygon = functor(labelObject);
+    typename PolygonType::Pointer polygon = functor(const_cast <LabelObjectType *> (labelObject));
 
     /**correct polygon if necessary*/
     PolygonPointerType correctPolygon = correctFunctor(polygon);
@@ -118,15 +117,16 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
     node->SetPolygonExteriorRing(correctPolygon);
 
     /** Store additionnal fields given by functor */
-    std::map<std::string, std::string> fields = m_FieldsFunctor(labelObject);
-    std::map<std::string, std::string>::const_iterator it;
-    for ( it = fields.begin(); it != fields.end(); ++it )
+    std::map<std::string, std::string> fields = m_FieldsFunctor(const_cast <LabelObjectType *> (labelObject));
+    std::map<std::string, std::string>::const_iterator it2;
+    for ( it2 = fields.begin(); it2 != fields.end(); ++it2 )
       {
-      node->SetFieldAsString(it->first, it->second);
+      node->SetFieldAsString(it2->first, it2->second);
       }
 
     /**Add the polygon to the VectorData*/
     output->GetDataTree()->Add(node, folder1);
+    ++it;
     }
 }
 

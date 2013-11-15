@@ -34,12 +34,10 @@ ShiftScaleSampleListFilter<TInputSampleList, TOutputSampleList>
 ::GenerateData()
 {
   // Retrieve input and output pointers
-  typename InputSampleListObjectType::ConstPointer inputPtr = this->GetInput();
-  typename OutputSampleListObjectType::Pointer     outputPtr = this->GetOutput();
+  InputSampleListConstPointer  inputSampleListPtr  = this->GetInput();
 
-  // Retrieve the ListSample
-  InputSampleListConstPointer inputSampleListPtr = inputPtr->Get();
-  OutputSampleListPointer outputSampleListPtr    = const_cast<OutputSampleListType *>(outputPtr->Get());
+  OutputSampleListPointer      outputSampleListPtr = this->GetOutput();
+  outputSampleListPtr->SetMeasurementVectorSize(inputSampleListPtr->GetMeasurementVectorSize());
 
   // Check if the inputSampleList is not empty
   if(inputSampleListPtr->Size() == 0)

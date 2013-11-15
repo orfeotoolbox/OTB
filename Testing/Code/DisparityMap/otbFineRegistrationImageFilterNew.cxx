@@ -27,9 +27,9 @@ int otbFineRegistrationImageFilterNew( int argc, char * argv[] )
   typedef double      PixelType;
   const unsigned int  Dimension = 2;
 
-  typedef itk::FixedArray<PixelType, Dimension>                                 DeformationValueType;
+  typedef itk::FixedArray<PixelType, Dimension>                                 DisplacementValueType;
   typedef otb::Image< PixelType>                                               ImageType;
-  typedef otb::Image<DeformationValueType, 2>                                   FieldImageType;
+  typedef otb::Image<DisplacementValueType, 2>                                   FieldImageType;
   typedef otb::FineRegistrationImageFilter<ImageType, ImageType, FieldImageType> RegistrationFilterType;
   
   RegistrationFilterType::Pointer filter = RegistrationFilterType::New();

@@ -64,7 +64,7 @@ int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
   filter->SetInputImageMaximum(255);
 
   // Write outputs
-  std::stringstream oss;
+  std::ostringstream oss;
 
   oss.str("");
   oss << outprefix << "PanTex.tif";

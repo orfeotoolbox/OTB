@@ -163,7 +163,7 @@ int main(int argc, char * argv[])
 // \code{ModelComponentBase} by as many instanciation of
 // \subdoxygen{otb}{Statistics}{GaussianModelComponent} as the number of
 // classes to estimate in the mixture. Nevertheless, the user may add specific
-// distribution into the mixture estimation. It is permited by the use of
+// distribution into the mixture estimation. It is permitted by the use of
 // \code{AddComponent} for the given class number and the specific distribution.
 //  Software Guide : EndLatex
 
@@ -175,7 +175,10 @@ int main(int argc, char * argv[])
     GaussianType;
 
     for (int i = 0; i < numberOfClasses; ++i)
-      classifier->AddComponent(i, GaussianType::New());
+      {
+      GaussianType::Pointer model = GaussianType::New();
+      classifier->AddComponent(i, model);
+      }
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

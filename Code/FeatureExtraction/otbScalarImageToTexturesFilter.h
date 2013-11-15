@@ -20,8 +20,8 @@
 
 #include "itkImageToImageFilter.h"
 
-#include "otbMaskedScalarImageToGreyLevelCoocurenceMatrixGenerator.h"
-#include "itkGreyLevelCooccurrenceMatrixTextureCoefficientsCalculator.h"
+#include "itkScalarImageToCooccurrenceMatrixFilter.h"
+#include "itkHistogramToTextureFeaturesFilter.h"
 
 namespace otb
 {
@@ -95,12 +95,11 @@ public:
   typedef typename OutputImageType::RegionType OutputRegionType;
 
   /** Co-occurence matrix and textures calculator */
-  typedef otb::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
-  <InputImageType>                                             CoocurrenceMatrixGeneratorType;
+  typedef itk::Statistics::ScalarImageToCooccurrenceMatrixFilter<InputImageType> CoocurrenceMatrixGeneratorType;
   typedef typename CoocurrenceMatrixGeneratorType::Pointer       CoocurrenceMatrixGeneratorPointerType;
   typedef typename CoocurrenceMatrixGeneratorType::OffsetType    OffsetType;
   typedef typename CoocurrenceMatrixGeneratorType::HistogramType HistogramType;
-  typedef itk::Statistics::GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator
+  typedef itk::Statistics::HistogramToTextureFeaturesFilter
   <HistogramType>                                                TextureCoefficientsCalculatorType;
   typedef typename TextureCoefficientsCalculatorType::Pointer TextureCoefficientsCalculatorPointerType;
 
@@ -165,7 +164,7 @@ protected:
   /** Generate the input requested region */
   virtual void GenerateInputRequestedRegion();
   /** Parallel textures extraction */
-  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, int threadId);
+  virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
 
 private:
   ScalarImageToTexturesFilter(const Self&); //purposely not implemented

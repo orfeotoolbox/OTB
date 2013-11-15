@@ -18,8 +18,8 @@
 
 
 
-#include "itkPoint.h"
-#include "itkPointSetToListAdaptor.h"
+#include "itkPointSet.h"
+#include "itkPointSetToListSampleAdaptor.h"
 #include "itkSubsample.h"
 #include "otbSVMClassifier.h"
 
@@ -29,7 +29,7 @@ int otbSVMClassifierNew(int argc, char* argv[])
   typedef int                              LabelPixelType;
   typedef itk::PointSet<InputPixelType, 2> PointSetType;
 
-  typedef itk::Statistics::PointSetToListAdaptor<PointSetType>
+  typedef itk::Statistics::PointSetToListSampleAdaptor<PointSetType>
   DataSampleType;
 
   typedef otb::SVMClassifier<DataSampleType, LabelPixelType> ClassifierType;

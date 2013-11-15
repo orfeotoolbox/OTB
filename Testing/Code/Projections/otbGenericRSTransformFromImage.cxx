@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
 #include <ogr_spatialref.h>
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbGeographicalDistance.h"
 #include "otbDEMHandler.h"
 
@@ -36,8 +36,8 @@ typedef TransformType::InputPointType     PointType;
 typedef otb::GenericRSTransform<double,3,3> Transform3DType;
 typedef Transform3DType::InputPointType     Point3DType;
 
-typedef itk::Statistics::EuclideanDistance<ImageType::PointType> DistanceType;
-typedef itk::Statistics::EuclideanDistance<Point3DType> Distance3DType;
+typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
+typedef itk::Statistics::EuclideanDistanceMetric<Point3DType> Distance3DType;
 typedef otb::GeographicalDistance<ImageType::PointType>          GeoDistanceType;
 typedef otb::GeographicalDistance<Point3DType>          GeoDistance3DType;
 

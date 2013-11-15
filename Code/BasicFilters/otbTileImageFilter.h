@@ -81,7 +81,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
   /** Generate input requested region method */
   virtual void GenerateInputRequestedRegion();
@@ -89,6 +89,14 @@ protected:
   /** Generate input requested region method */
   virtual void GenerateOutputInformation();
   
+  /** Override VerifyInputInformation() since this filter's inputs do
+     * not need to occupy the same physical space.
+     *
+     * \sa ProcessObject::VerifyInputInformation
+     */
+  virtual void VerifyInputInformation() {}
+
+
 private:
   TileImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented

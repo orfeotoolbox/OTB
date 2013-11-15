@@ -27,7 +27,7 @@ namespace otb
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::GenericMapProjection() : Superclass(SpaceDimension, ParametersDimension)
+::GenericMapProjection() : Superclass(ParametersDimension)
 {
   m_MapProjection = MapProjectionAdapter::New();
 }

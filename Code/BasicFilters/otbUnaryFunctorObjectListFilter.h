@@ -97,7 +97,7 @@ protected:
 
   /** startIndex and stopIndex represent the indices of the Objects to
   examine in thread threadId */
-  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
+  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, itk::ThreadIdType threadId);
 
   /** End Multi-threading implementation */
 

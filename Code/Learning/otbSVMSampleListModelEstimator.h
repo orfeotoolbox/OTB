@@ -129,9 +129,11 @@ public:
   itkTypeMacro(SVMSampleListModelEstimator, SVMModelEstimator);
 
   /** Type definition for the input image. */
+  typedef TInputSampleList                   InputSampleListType;
   typedef typename TInputSampleList::Pointer InputSampleListPointer;
 
   /** Type definitions for the training image. */
+  typedef TTrainingSampleList                   TrainingSampleListType;
   typedef typename TTrainingSampleList::Pointer TrainingSampleListPointer;
 
   /** Type definition for the vector associated with
@@ -152,16 +154,20 @@ public:
   typedef TMeasurementFunctor MeasurementFunctorType;
 
   /** Set the input image. */
-  itkSetObjectMacro(InputSampleList, TInputSampleList);
+  //itkSetObjectMacro(InputSampleList, TInputSampleList);
+  void SetInputSampleList(const InputSampleListType* inputSampleList);
 
   /** Get the input image. */
-  itkGetObjectMacro(InputSampleList, TInputSampleList);
+  //itkGetObjectMacro(InputSampleList, TInputSampleList);
+  const InputSampleListType* GetInputSampleList();
 
   /** Set the training image. */
-  itkSetMacro(TrainingSampleList, TrainingSampleListPointer);
-
+  //itkSetMacro(TrainingSampleList, TrainingSampleListPointer);
+  void SetTrainingSampleList(const TrainingSampleListType* trainingSampleList);
+  
   /** Get the training image. */
-  itkGetMacro(TrainingSampleList, TrainingSampleListPointer);
+  //itkGetMacro(TrainingSampleList, TrainingSampleListPointer);
+  const TrainingSampleListType* GetTrainingSampleList();
 
 protected:
   /** Constructor */

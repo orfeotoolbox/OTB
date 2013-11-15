@@ -34,7 +34,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   m_InputImageMaximum(256)
 {
   // There are 8 outputs corresponding to the 8 textures indices
-  this->SetNumberOfOutputs(8);
+  this->SetNumberOfRequiredOutputs(8);
 
   // Create the 8 outputs
   this->SetNthOutput(0, OutputImageType::New());
@@ -219,7 +219,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve the input and output pointers
   InputImagePointerType  inputPtr             =      const_cast<InputImageType *>(this->GetInput());
@@ -252,9 +252,9 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   clusterProminenceIt.GoToBegin();
   haralickCorIt.GoToBegin();
 
+
   // Build the co-occurence matrix generator
   CoocurrenceMatrixGeneratorPointerType coOccurenceMatrixGenerator = CoocurrenceMatrixGeneratorType::New();
-  coOccurenceMatrixGenerator->SetInput(inputPtr);
   coOccurenceMatrixGenerator->SetOffset(m_Offset);
   coOccurenceMatrixGenerator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
   coOccurenceMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
@@ -276,28 +276,67 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
          && !haralickCorIt.IsAtEnd())
     {
     // Compute the region on which co-occurence will be estimated
-    typename InputRegionType::IndexType inputIndex = energyIt.GetIndex() - m_Radius;
-    typename InputRegionType::SizeType  inputSize;
+    typename InputRegionType::IndexType inputIndex, inputIndexWithTwiceOffset;
+    typename InputRegionType::SizeType inputSize, inputSizeWithTwiceOffset;
 
     // First, apply offset
     for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
       {
-      inputSize[dim] = 2 * m_Radius[dim] + 1;
+      inputIndex[dim] = std::min(
+                                static_cast<int>(energyIt.GetIndex()[dim] - m_Radius[dim]),
+                                static_cast<int>(energyIt.GetIndex()[dim] - m_Radius[dim] + m_Offset[dim])
+                                );
+      inputSize[dim] = 2 * m_Radius[dim] + 1 + std::abs(m_Offset[dim]);
+
+      inputIndexWithTwiceOffset[dim] = static_cast<int>(energyIt.GetIndex()[dim] - m_Radius[dim] - std::abs(m_Offset[dim]));
+      inputSizeWithTwiceOffset[dim] = inputSize[dim] + std::abs(m_Offset[dim]);
       }
 
     // Build the input  region
     InputRegionType inputRegion;
     inputRegion.SetIndex(inputIndex);
     inputRegion.SetSize(inputSize);
+    inputRegion.Crop(inputPtr->GetRequestedRegion());
+
+    InputRegionType inputRegionWithTwiceOffset;
+    inputRegionWithTwiceOffset.SetIndex(inputIndexWithTwiceOffset);
+    inputRegionWithTwiceOffset.SetSize(inputSizeWithTwiceOffset);
+    inputRegionWithTwiceOffset.Crop(inputPtr->GetRequestedRegion());
+
+    /*********************************************************************************/
+    //Local copy of the input image around the processed pixel *outputIt
+    InputImagePointerType localInputImage = InputImageType::New();
+    localInputImage->SetRegions(inputRegionWithTwiceOffset);
+    localInputImage->Allocate();
+    typedef itk::ImageRegionIteratorWithIndex<InputImageType> ImageRegionIteratorType;
+    ImageRegionIteratorType itInputPtr(inputPtr, inputRegionWithTwiceOffset);
+    ImageRegionIteratorType itLocalInputImage(localInputImage, inputRegionWithTwiceOffset);
+    for (itInputPtr.GoToBegin(), itLocalInputImage.GoToBegin(); !itInputPtr.IsAtEnd(); ++itInputPtr, ++itLocalInputImage)
+      {
+      itLocalInputImage.Set(itInputPtr.Get());
+      }
+    /*********************************************************************************/
+
+    InputImagePointerType maskImage = InputImageType::New();
+    maskImage->SetRegions(inputRegionWithTwiceOffset);
+    maskImage->Allocate();
+    maskImage->FillBuffer(0);
+
+    ImageRegionIteratorType itMask(maskImage, inputRegion);
+    for (itMask.GoToBegin(); !itMask.IsAtEnd(); ++itMask)
+      {
+      itMask.Set(1);
+      }
 
     // Compute the co-occurence matrix
-    coOccurenceMatrixGenerator->SetRegion(inputRegion);
-    coOccurenceMatrixGenerator->SetNormalize(true);
-    coOccurenceMatrixGenerator->Compute();
+    coOccurenceMatrixGenerator->SetInput(localInputImage);
+    coOccurenceMatrixGenerator->SetMaskImage(maskImage);
+    coOccurenceMatrixGenerator->SetInsidePixelValue(1);
+    coOccurenceMatrixGenerator->Update();
 
     // Compute textures indices
-    texturesCalculator->SetHistogram(coOccurenceMatrixGenerator->GetOutput());
-    texturesCalculator->Compute();
+    texturesCalculator->SetInput(coOccurenceMatrixGenerator->GetOutput());
+    texturesCalculator->Update();
 
     // Fill outputs
     energyIt.Set(texturesCalculator->GetEnergy());

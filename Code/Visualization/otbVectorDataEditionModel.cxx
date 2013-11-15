@@ -145,7 +145,7 @@ VectorDataEditionModel::UpdateGeometryPosition(double tx, double ty)
     chrono.Stop();
     // std::cout<< "\tVectorDataEditionModel::UpdateGeometyPosition index "
     //          << m_SearchIndex  <<" with tx: " << tx << " ty: "<< ty
-    //          <<" took " << chrono.GetMeanTime() << " seconds."
+    //          <<" took " << chrono.GetMean() << " seconds."
     //          <<std::endl;
     }
   else
@@ -186,7 +186,7 @@ VectorDataEditionModel::SearchDataNodeIndexFromPoint( PointType srcPoint)
 
   chrono.Stop();
   //std::cout<< "\tVectorDataEditionModel::SearchDataNodeIndexFromPoint "
-  //<< " -> m_SearchIndex "<< m_SearchIndex <<" found in " << chrono.GetMeanTime() << " seconds."
+  //<< " -> m_SearchIndex "<< m_SearchIndex <<" found in " << chrono.GetMean() << " seconds."
   //<<std::endl;
 }
 
@@ -279,7 +279,7 @@ void VectorDataEditionModel
     }
   // chrono.Stop();
   // std::cout<< "\tVectorDataEditionModel::DeleteWithinROI -> "<<  nbGeomDeleted << " geometries deleted / "
-  //          << count <<" in "  << chrono.GetMeanTime() << " seconds." <<std::endl;
+  //          << count <<" in "  << chrono.GetMean() << " seconds." <<std::endl;
 }
 
 }

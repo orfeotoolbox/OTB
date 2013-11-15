@@ -77,7 +77,7 @@ SpatialisationFilter<TLabelMap>
       {
          index[0]=col;
          index[1]=line;
-         this->GetOutput()->SetPixel(index, m_Labels[obj]);
+         this->GetOutput()->AddPixel(index, m_Labels[obj]);
       }
    }
    this->GetOutput()->GetLabelObject(m_Labels[obj])->SetAttribute( "area", m_AreaVector[obj] );

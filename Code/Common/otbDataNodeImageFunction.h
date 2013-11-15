@@ -43,8 +43,8 @@ class TPrecision = double
 >
 class ITK_EXPORT DataNodeImageFunction :
     public DataNodeFunctionBase<DataNode<TCoordRep,
-                                         ::itk::GetImageDimension<TImage>::ImageDimension,
-                                          TPrecision>,
+                                         TImage::ImageDimension,
+                                         TPrecision>,
                                 TOutput>
 {
 public:
@@ -106,7 +106,6 @@ public:
   virtual TOutput Evaluate( const DataNodeType& node ) const = 0;
 
   /** Check if an index is inside the image buffer.
-   * If ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY is on,
    * we take into account the fact that each voxel has its
    * center at the integer coordinate and extends half way
    * to the next integer coordinate.
@@ -139,12 +138,11 @@ public:
         {
         return false;
         }
-#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
       if( index[j] >= m_EndContinuousIndex[j] )
-#else
-      if( index[j] > m_EndContinuousIndex[j] )
-#endif
-      {
+	//Comment this instruction after itkv4 migration (correct
+	//usage of centered-pixel coordinates)	
+	//if( index[j] > m_EndContinuousIndex[j] )
+	{
         return false;
         }
       }

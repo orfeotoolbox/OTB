@@ -34,8 +34,8 @@ FlexibleDistanceWithMissingValue<TVector>
 {
   if (IsEuclidean()) return Superclass::Evaluate(x1, x2);
 
-  if (itk::MeasurementVectorTraits::GetLength(x1) !=
-      itk::MeasurementVectorTraits::GetLength(x2))
+  if (itk::NumericTraits<TVector>::GetLength(x1) !=
+      itk::NumericTraits<TVector>::GetLength(x2))
     {
     itkExceptionMacro(<< "Vector lengths must be equal.");
     }
@@ -69,7 +69,7 @@ FlexibleDistanceWithMissingValue<TVector>
     itkExceptionMacro(<< "Please set the MeasurementVectorSize first");
     }
 
-  itk::MeasurementVectorTraits::Assert(this->m_Origin, measurementVectorSize,
+  itk::Statistics::MeasurementVectorTraits::Assert(this->GetOrigin(), measurementVectorSize,
                                        "EuclideanDistance::Evaluate Origin and input vector have different lengths");
 
   double temp, distance = itk::NumericTraits<double>::Zero;

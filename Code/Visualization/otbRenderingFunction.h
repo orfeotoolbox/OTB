@@ -30,7 +30,7 @@
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
 #include "itkConceptChecking.h"
-#include "itkDenseFrequencyContainer.h"
+#include "itkDenseFrequencyContainer2.h"
 
 #include "itkMetaDataDictionary.h"
 
@@ -74,12 +74,12 @@ public:
   typedef itk::Statistics::ListSample<SampleType> ListSampleType;
   typedef typename ListSampleType::Pointer        ListSamplePointerType;
 
-  typedef itk::Statistics::DenseFrequencyContainer DFContainerType;
-
+  typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
+  typedef itk::Statistics::Histogram< RealScalarType,  DFContainerType> HistogramType;
   typedef otb::ListSampleToHistogramListGenerator
   <ListSampleType, ScalarType, DFContainerType>           HistogramFilterType;
-  typedef itk::Statistics::Histogram<
-      RealScalarType, 1, DFContainerType>         HistogramType;
+
+
   typedef typename HistogramType::Pointer     HistogramPointerType;
   typedef ObjectList<HistogramType>           HistogramListType;
   typedef typename HistogramListType::Pointer HistogramListPointerType;
@@ -187,12 +187,17 @@ protected:
       }
     // Create the histogram generation filter
     ListSamplePointerType pixelRepresentationListSample = ListSampleType::New();
+    
     for (typename ListSampleType::ConstIterator it = m_ListSample->Begin(); it != m_ListSample->End(); ++it)
       {
       PixelType sample;
       VisualizationPixelTraits::Convert(it.GetMeasurementVector(), sample);
       SampleType sampleVector;
       VisualizationPixelTraits::Convert(this->EvaluatePixelRepresentation(sample), sampleVector);
+      // Be sure to set the right MeasurementVectorSize : Get it after
+      // the Convert : Set it once
+      if(it == m_ListSample->Begin())
+        pixelRepresentationListSample->SetMeasurementVectorSize(sampleVector.GetSize());
       pixelRepresentationListSample->PushBack(sampleVector);
       }
 
@@ -208,7 +213,7 @@ protected:
     otbMsgDevMacro(<< "ImageRenderingFunction::RenderHistogram(): Histogram has been updated");
 
     // Retrieve the histogram
-    m_HistogramList = histogramFilter->GetOutput();
+    m_HistogramList = const_cast<HistogramListType*>(histogramFilter->GetOutput());
   }
 
   ListSamplePointerType GetListSample()

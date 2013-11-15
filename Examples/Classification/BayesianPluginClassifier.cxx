@@ -20,7 +20,7 @@
 // Software Guide : BeginLatex
 //
 // \index{Statistics!Bayesian plugin classifier}
-// \index{itk::Statistics::SampleClassifier}
+// \index{itk::Statistics::SampleClassifierFilter}
 // \index{itk::Statistics::GaussianDensityFunction}
 // \index{itk::Statistics::NormalVariateGenerator}
 //
@@ -29,12 +29,12 @@
 // all the components of the classifier system and the data flow. This system
 // differs with the previous k-means clustering algorithms in several
 // ways. The biggest difference is that this classifier uses the
-// \subdoxygen{itk}{Statistics}{GaussianDensityFunction}s as membership functions
+// \subdoxygen{itk}{Statistics}{itkGaussianMembershipFunction} as membership functions
 // instead of the \subdoxygen{itk}{Statistics}{EuclideanDistance}. Since the
 // membership function is different, the membership function requires a
 // different set of parameters, mean vectors and covariance matrices. We
-// choose the \subdoxygen{itk}{Statistics}{MeanCalculator} (sample mean) and the
-// \subdoxygen{itk}{Statistics}{CovarianceCalculator} (sample covariance) for the
+// choose the \subdoxygen{itk}{Statistics}{MeanSampleFilter} (sample mean) and the
+// \subdoxygen{itk}{Statistics}{CovarianceSampleFilter} (sample covariance) for the
 // estimation algorithms of the two parameters. If we want more robust
 // estimation algorithm, we can replace these estimation algorithms with more
 // alternatives without changing other components in the classifier system.
@@ -60,6 +60,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include "itkVector.h"
+#include "itkArray.h"
 #include "itkListSample.h"
 #include "itkSubsample.h"
 // Software Guide : EndCodeSnippet
@@ -71,8 +72,8 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "itkMeanCalculator.h"
-#include "itkCovarianceCalculator.h"
+#include "itkMeanSampleFilter.h"
+#include "itkCovarianceSampleFilter.h"
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -84,9 +85,10 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
+#include "itkDecisionRule.h"
 #include "itkMaximumRatioDecisionRule.h"
-#include "itkGaussianDensityFunction.h"
-#include "itkSampleClassifier.h"
+#include "itkGaussianMembershipFunction.h"
+#include "itkSampleClassifierFilter.h"
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -186,7 +188,7 @@ int main(int,  char *[])
   // Software Guide : BeginLatex
   //
   // In the following code snippet, notice that the template argument for the
-  // MeanCalculator and CovarianceCalculator is \code{ClassSampleType} (i.e.,
+  // MeanSampleFilter and CovarianceFilter is \code{ClassSampleType} (i.e.,
   // type of Subsample) instead of SampleType (i.e., type of ListSample). This
   // is because the parameter estimation algorithms are applied to the class
   // sample.
@@ -194,8 +196,8 @@ int main(int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::MeanCalculator<ClassSampleType> MeanEstimatorType;
-  typedef itk::Statistics::CovarianceCalculator<ClassSampleType>
+  typedef itk::Statistics::MeanSampleFilter<ClassSampleType> MeanEstimatorType;
+  typedef itk::Statistics::CovarianceSampleFilter<ClassSampleType>
   CovarianceEstimatorType;
 
   std::vector<MeanEstimatorType::Pointer>       meanEstimators;
@@ -204,12 +206,12 @@ int main(int,  char *[])
   for (unsigned int i = 0; i < 2; ++i)
     {
     meanEstimators.push_back(MeanEstimatorType::New());
-    meanEstimators[i]->SetInputSample(classSamples[i]);
+    meanEstimators[i]->SetInput(classSamples[i]);
     meanEstimators[i]->Update();
 
     covarianceEstimators.push_back(CovarianceEstimatorType::New());
-    covarianceEstimators[i]->SetInputSample(classSamples[i]);
-    covarianceEstimators[i]->SetMean(meanEstimators[i]->GetOutput());
+    covarianceEstimators[i]->SetInput(classSamples[i]);
+    //covarianceEstimators[i]->SetMean(meanEstimators[i]->GetOutput());
     covarianceEstimators[i]->Update();
     }
   // Software Guide : EndCodeSnippet
@@ -225,15 +227,15 @@ int main(int,  char *[])
     {
     std::cout << "class[" << i << "] " << std::endl;
     std::cout << "    estimated mean : "
-              << *(meanEstimators[i]->GetOutput())
+              << meanEstimators[i]->GetMean()
               << "    covariance matrix : "
-              << *(covarianceEstimators[i]->GetOutput()) << std::endl;
+              << covarianceEstimators[i]->GetCovarianceMatrixOutput()->Get() << std::endl;
     }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // After creating a SampleClassifier object and a
+  // After creating a SampleClassifierFilter object and a
   // MaximumRatioDecisionRule object, we plug in the
   // \code{decisionRule} and the \code{sample} to the classifier. Then,
   // we specify the number of classes that will be considered using
@@ -260,30 +262,35 @@ int main(int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::GaussianDensityFunction
+  typedef itk::Statistics::GaussianMembershipFunction
   <MeasurementVectorType> MembershipFunctionType;
-  typedef itk::MaximumRatioDecisionRule DecisionRuleType;
+  typedef itk::Statistics::MaximumRatioDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
 
-  DecisionRuleType::APrioriVectorType aPrioris;
+  DecisionRuleType::PriorProbabilityVectorType aPrioris;
   aPrioris.push_back(classSamples[0]->GetTotalFrequency()
                      / sample->GetTotalFrequency());
   aPrioris.push_back(classSamples[1]->GetTotalFrequency()
                      / sample->GetTotalFrequency());
-  decisionRule->SetAPriori(aPrioris);
+  decisionRule->SetPriorProbabilities(aPrioris);
 
-  typedef itk::Statistics::SampleClassifier<SampleType> ClassifierType;
+  typedef itk::Statistics::SampleClassifierFilter<SampleType> ClassifierType;
   ClassifierType::Pointer classifier = ClassifierType::New();
 
-  classifier->SetDecisionRule((itk::DecisionRuleBase::Pointer) decisionRule);
-  classifier->SetSample(sample);
+  classifier->SetDecisionRule(dynamic_cast< itk::Statistics::DecisionRule* >( decisionRule.GetPointer()));
+  classifier->SetInput(sample);
   classifier->SetNumberOfClasses(2);
 
-  std::vector<unsigned int> classLabels;
+  std::vector<long unsigned int> classLabels;
   classLabels.resize(2);
   classLabels[0] = 100;
   classLabels[1] = 200;
-  classifier->SetMembershipFunctionClassLabels(classLabels);
+
+  typedef itk::SimpleDataObjectDecorator<std::vector<long unsigned int> >   ClassLabelDecoratedType;
+  ClassLabelDecoratedType::Pointer classLabelsDecorated = ClassLabelDecoratedType::New();
+  classLabelsDecorated->Set(classLabels);
+
+  classifier->SetClassLabels(classLabelsDecorated);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -302,16 +309,27 @@ int main(int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  std::vector<MembershipFunctionType::Pointer> membershipFunctions;
-  for (unsigned int i = 0; i < 2; ++i)
+  typedef ClassifierType::MembershipFunctionType                              MembershipFunctionBaseType;
+  typedef ClassifierType::MembershipFunctionVectorObjectType::ComponentType   ComponentMembershipType;
+  
+  // Vector Containing the membership function used
+  ComponentMembershipType     membershipFunctions;
+  
+  for (unsigned int i = 0; i < 2; i++)
     {
-    membershipFunctions.push_back(MembershipFunctionType::New());
-    membershipFunctions[i]->SetMean(meanEstimators[i]->GetOutput());
-    membershipFunctions[i]->
-    SetCovariance(covarianceEstimators[i]->GetOutput());
-    classifier->AddMembershipFunction(membershipFunctions[i].GetPointer());
+    MembershipFunctionType::Pointer curMemshpFunction =  MembershipFunctionType::New();
+    curMemshpFunction->SetMean(meanEstimators[i]->GetMean());
+    curMemshpFunction->SetCovariance(covarianceEstimators[i]->GetCovarianceMatrix());
+    
+    // cast the GaussianMembershipFunction in a
+    // itk::MembershipFunctionBase 
+    membershipFunctions.push_back(dynamic_cast<const MembershipFunctionBaseType*  >(curMemshpFunction.GetPointer()));
     }
+  
+  ClassifierType::MembershipFunctionVectorObjectPointer membershipVectorObject = ClassifierType::MembershipFunctionVectorObjectType::New();
+  membershipVectorObject->Set(membershipFunctions);
 
+  classifier->SetMembershipFunctions(membershipVectorObject);
   classifier->Update();
   // Software Guide : EndCodeSnippet
 
@@ -323,9 +341,8 @@ int main(int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ClassifierType::OutputType* membershipSample =
-    classifier->GetOutput();
-  ClassifierType::OutputType::ConstIterator iter = membershipSample->Begin();
+  const ClassifierType::MembershipSampleType* membershipSample = classifier->GetOutput();
+  ClassifierType::MembershipSampleType::ConstIterator iter = membershipSample->Begin();
 
   while (iter != membershipSample->End())
     {

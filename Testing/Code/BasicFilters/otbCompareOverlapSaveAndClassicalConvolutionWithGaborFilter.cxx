@@ -94,7 +94,7 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char *
   writer1->Update();
   probe1.Stop();
 
-  std::cout << "Classical convolution algorithm took " << probe1.GetMeanTime() << " seconds." << std::endl;
+  std::cout << "Classical convolution algorithm took " << probe1.GetMean() << " seconds." << std::endl;
 
   OSConvolutionFilterType::Pointer osconvolution = OSConvolutionFilterType::New();
   osconvolution->SetRadius(radius);
@@ -109,7 +109,7 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char *
   writer2->Update();
   probe2.Stop();
 
-  std::cout << "Overlap-save convolution algorithm took " << probe2.GetMeanTime() << " seconds." << std::endl;
+  std::cout << "Overlap-save convolution algorithm took " << probe2.GetMean() << " seconds." << std::endl;
 
   return EXIT_SUCCESS;
 }

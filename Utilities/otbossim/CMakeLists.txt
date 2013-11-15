@@ -29,12 +29,6 @@ INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbossim/include)
 CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.in
                ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h)
 
-
-
-# SUBDIRS(include)
-# ADDED BY OTB DEVELOPPERS TO AVOID INTENSIVE RECOMPILATION
-IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
-
   FILE(GLOB_RECURSE ossim_init_SRCS "src/ossim/init/*.cpp" "src/ossim/init/*.c")
   FILE(GLOB_RECURSE ossim_base_SRCS "src/ossim/base/*.cpp" "src/ossim/base/*.c")
   FILE(GLOB_RECURSE ossim_elevation_SRCS "src/ossim/elevation/*.cpp" "src/ossim/elevation/*.c")
@@ -124,4 +118,3 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
           ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
   ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
 
-ENDIF(NOT OTB_DISABLE_UTILITIES_COMPILATION)

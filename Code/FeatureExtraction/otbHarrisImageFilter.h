@@ -81,9 +81,9 @@ public:
 //  typedef typename InputImageType::SizeType SizeType;
 
   typedef itk::Image<itk::SymmetricSecondRankTensor<
-          typename itk::NumericTraits<InputPixelType>::RealType,
-          ::itk::GetImageDimension<InputImageType>::ImageDimension>,
-      ::itk::GetImageDimension<InputImageType>::ImageDimension>  TensorType;
+                             typename itk::NumericTraits<InputPixelType>::RealType,
+                             InputImageDimension>,
+                     InputImageDimension>  TensorType;
 
   typedef itk::HessianRecursiveGaussianImageFilter<InputImageType, TensorType> HessianFilterType;
 

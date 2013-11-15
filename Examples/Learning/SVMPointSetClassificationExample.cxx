@@ -34,14 +34,14 @@
 // The first thing to do is include the header file for the
 // class. Since the \doxygen{otb}{SVMClassifier} takes
 // \doxygen{itk}{ListSample}s as input, the class
-// \doxygen{itk}{PointSetToListAdaptor} is needed.
+// \doxygen{itk}{PointSetToListSampleAdaptor} is needed.
 //
 // We start by including the needed header files.
 //
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-#include "itkPointSetToListAdaptor.h"
+#include "itkPointSetToListSampleAdaptor.h"
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
 //  Software Guide : EndCodeSnippet
@@ -171,14 +171,14 @@ int main(int argc, char* argv[])
 //
 // Once the pointset is ready, we must transform it to a sample which
 // is compatible with the classification framework. We will use a
-// \doxygen{itk}{Statistics::PointSetToListAdaptor} for this
+// \doxygen{itk}{Statistics::PointSetToListSampleAdaptor} for this
 // task. This class is templated over the point set type used for
 // storing the measures.
 //
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::PointSetToListAdaptor<MeasurePointSetType>
+  typedef itk::Statistics::PointSetToListSampleAdaptor<MeasurePointSetType>
   SampleType;
   SampleType::Pointer sample = SampleType::New();
 // Software Guide : EndCodeSnippet
@@ -247,7 +247,7 @@ int main(int argc, char* argv[])
   int numberOfClasses = model->GetNumberOfClasses();
   classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel(model);
-  classifier->SetSample(sample.GetPointer());
+  classifier->SetInput(sample.GetPointer());
   classifier->Update();
 // Software Guide : EndCodeSnippet
 

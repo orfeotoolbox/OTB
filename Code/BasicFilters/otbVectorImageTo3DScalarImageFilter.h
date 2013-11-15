@@ -77,7 +77,7 @@ protected:
 
   /** Threaded Generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId);
+                            itk::ThreadIdType threadId);
 
   /** Constructor */
   VectorImageTo3DScalarImageFilter();

@@ -41,6 +41,7 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
+  static RADImageIOFactory * FactoryNew() { return new RADImageIOFactory; }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RADImageIOFactory, itk::ObjectFactoryBase);

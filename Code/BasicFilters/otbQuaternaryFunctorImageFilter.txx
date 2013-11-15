@@ -128,7 +128,7 @@ template <class TInputImage1, class TInputImage2, class TInputImage3,
 void
 QuaternaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TInputImage4, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   // We use dynamic_cast since inputs are stored as DataObjects.  The
   // ImageToImageFilter::GetInput(int) always returns a pointer to a

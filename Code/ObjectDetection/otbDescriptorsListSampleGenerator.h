@@ -24,10 +24,10 @@
 #include "itkImageRegion.h"
 
 #include "otbListSampleSource.h"
+#include "itkListSample.h"
 #include "otbVectorData.h"
 
 #include "itkDataObject.h"
-#include "itkDataObjectDecorator.h"
 #include "itkSimpleDataObjectDecorator.h"
 
 #include "otbPersistentImageFilter.h"
@@ -49,7 +49,7 @@ public:
  *  This class inherits PersistentImageFilter and provides the Reset/Synthesize functions,
  *  plus the ThreadedGenerateData function implementing the image function evaluation
  */
-template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabelListSample>
+template <class TInputImage, class TVectorData, class TFunctionType, class TListSample, class TLabel>
 class ITK_EXPORT PersistentDescriptorsListSampleGenerator :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
@@ -86,8 +86,7 @@ public:
 
   /** Input VectorData */
   typedef TVectorData                                     VectorDataType;
-  typedef itk::DataObjectDecorator<VectorDataType>        VectorDataObjectType;
-  typedef typename VectorDataObjectType::Pointer          VectorDataObjectPointerType;
+  typedef typename VectorDataType::Pointer                VectorDataPointerType;
   typedef typename VectorDataType::DataNodeType           VectorDataNodeType;
   typedef typename VectorDataType::DataNodePointerType    VectorDataNodePointerType;
   typedef typename VectorDataType::DataTreeType           VectorDataTreeType;
@@ -109,16 +108,14 @@ public:
   /** ListSample output */
   typedef TListSample                                     ListSampleType;
   typedef typename ListSampleType::Pointer                ListSamplePointerType;
-  typedef itk::DataObjectDecorator<ListSampleType>        ListSampleObjectType;
-  typedef typename ListSampleObjectType::Pointer          ListSampleObjectPointerType;
   typedef typename ListSampleType::MeasurementVectorType  SampleMeasurementVectorType;
   typedef typename ListSampleType::MeasurementType        SampleMeasurementType;
 
   /** LabelListSample output */
-  typedef TLabelListSample                                LabelListSampleType;
+  typedef TLabel                                          LabelType;
+  typedef itk::FixedArray<LabelType,1>                    LabelSampleType;
+  typedef itk::Statistics::ListSample<LabelSampleType>    LabelListSampleType;
   typedef typename LabelListSampleType::Pointer           LabelListSamplePointerType;
-  typedef itk::DataObjectDecorator<LabelListSampleType>   LabelListSampleObjectType;
-  typedef typename LabelListSampleObjectType::Pointer     LabelListSampleObjectPointerType;
   typedef typename LabelListSampleType::MeasurementVectorType LabelMeasurementVectorType;
   typedef typename LabelListSampleType::MeasurementType   LabelMeasurementType;
 
@@ -137,11 +134,9 @@ public:
 
   /** Output sample list */
   ListSampleType*             GetListSample();
-  ListSampleObjectType*       GetListSampleObject();
 
   /** Output label list */
   LabelListSampleType*        GetLabelListSample();
-  LabelListSampleObjectType*  GetLabelListSampleObject();
 
   /** Output sample position list */
   SamplesPositionType&             GetSamplesPositions();
@@ -175,7 +170,7 @@ protected:
 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType& outputRegionForThread,
-                             int threadId);
+                             itk::ThreadIdType threadId);
 
 private:
   PersistentDescriptorsListSampleGenerator(const Self &); //purposely not implemented
@@ -189,22 +184,20 @@ private:
 
     for(unsigned int i=0; i<ImageDimension; ++i)
       {
-#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
       if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + static_cast<IndexValueType>(m_NeighborhoodRadius) )
-#else
-      if( index[i] < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
-#endif
+	//Comment this instruction after itkv4 migration (correct
+	//usage of centered-pixel coordinates)
+	//if( index[i] < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius )
         {
         return false;
         }
       // bound is the last valid pixel location
-#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
       const ContinuousIndexValueType bound = static_cast<ContinuousIndexValueType>(
           region.GetIndex(i) + region.GetSize(i) - 0.5);
-#else
-      const ContinuousIndexValueType bound = static_cast<ContinuousIndexValueType>(
-          region.GetIndex(i) + static_cast<IndexValueType>(region.GetSize(i)) - 1);
-#endif
+      //Comment this instruction after itkv4 migration (correct
+      //usage of centered-pixel coordinates)
+      //const ContinuousIndexValueType bound = static_cast<ContinuousIndexValueType>(
+      //    region.GetIndex(i) + static_cast<IndexValueType>(region.GetSize(i)) - 1);
 
       if( index[i] > bound - m_NeighborhoodRadius )
         {
@@ -240,7 +233,7 @@ private:
  *
  *  This class is streaming capable and multithreaded
  */
-template <class TInputImage, class TVectorData, class TListSample, class TLabelListSample, class TOutputPrecision = double, class TCoordRep = double>
+template <class TInputImage, class TVectorData, class TListSample, class TLabel, class TOutputPrecision = double, class TCoordRep = double>
 class ITK_EXPORT DescriptorsListSampleGenerator :
     public PersistentFilterStreamingDecorator<
               PersistentDescriptorsListSampleGenerator< TInputImage,
@@ -248,7 +241,7 @@ class ITK_EXPORT DescriptorsListSampleGenerator :
                                                         itk::FunctionBase< itk::Point<TCoordRep, 2>,
                                                                            typename DefaultDescriptorsType<TOutputPrecision>::Type >,
                                                         TListSample,
-                                                        TLabelListSample > >
+                                                        TLabel > >
 {
 public:
     /** Standard Self typedef */
@@ -259,7 +252,7 @@ public:
                    TVectorData,
                    itk::FunctionBase< itk::Point<TCoordRep, 2>, typename DefaultDescriptorsType<TOutputPrecision>::Type >,
                    TListSample,
-                   TLabelListSample> >          Superclass;
+                   TLabel> >          Superclass;
     typedef itk::SmartPointer<Self>             Pointer;
     typedef itk::SmartPointer<const Self>       ConstPointer;
 
@@ -272,7 +265,6 @@ public:
     typedef TInputImage                              InputImageType;
     typedef TVectorData                              InputVectorDataType;
     typedef TListSample                              ListSampleType;
-    typedef TLabelListSample                         LabelListSampleType;
     typedef TCoordRep                                CoordRepType;
     typedef TOutputPrecision                         OutputPrecision;
 
@@ -287,8 +279,7 @@ public:
     typedef typename DescriptorsFunctionType::Pointer    DescriptorsFunctionPointerType;
 
     typedef typename Superclass::FilterType                           PersistentFilterType;
-    typedef typename PersistentFilterType::ListSampleObjectType       ListSampleObjectType;
-    typedef typename PersistentFilterType::LabelListSampleObjectType  LabelListSampleObjectType;
+    typedef typename PersistentFilterType::LabelListSampleType        LabelListSampleType;
     typedef typename PersistentFilterType::SamplesPositionObjectType  SamplesPositionObjectType;
     typedef typename PersistentFilterType::SamplesPositionType        SamplesPositionType;
 
@@ -340,20 +331,10 @@ public:
       return this->GetFilter()->GetListSample();
     }
 
-    ListSampleObjectType*       GetListSampleObject()
-    {
-      return this->GetFilter()->GetListSampleObject();
-    }
-
     /** Final label list */
     LabelListSampleType*        GetLabelListSample()
     {
       return this->GetFilter()->GetLabelListSample();
-    }
-
-    LabelListSampleObjectType*        GetLabelListSampleObject()
-    {
-      return this->GetFilter()->GetLabelListSampleObject();
     }
 
     /** Final label list */

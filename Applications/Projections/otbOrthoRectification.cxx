@@ -217,7 +217,7 @@ private:
     AddRAMParameter("opt.ram");
     SetParameterDescription("opt.ram","This allows to set the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
 
-    // Deformation Field Spacing
+    // Displacement Field Spacing
     AddParameter(ParameterType_Float, "opt.gridspacing", "Resampling grid spacing");
     SetDefaultParameterFloat("opt.gridspacing", DefaultGridSpacingMeter);
     SetParameterDescription("opt.gridspacing",
@@ -688,7 +688,7 @@ private:
     otbAppLogINFO("Area outside input image bounds will have a pixel value of " << defaultValue);
 
 
-    // Deformation Field spacing
+    // Displacement Field spacing
     ResampleFilterType::SpacingType gridSpacing;
     if (IsParameterEnabled("opt.gridspacing"))
       {
@@ -722,7 +722,7 @@ private:
             "opt.gridspacing units are the same as outputs.spacing units");
         }
 
-      m_ResampleFilter->SetDeformationFieldSpacing(gridSpacing);
+      m_ResampleFilter->SetDisplacementFieldSpacing(gridSpacing);
       }
 
     // Output Image

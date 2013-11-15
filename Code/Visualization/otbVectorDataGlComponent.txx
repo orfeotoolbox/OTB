@@ -96,7 +96,7 @@ VectorDataGlComponent<TVectorData>
   chrono.Start();
   this->Render(inputRoot, extent, space2ScreenTransform);
   chrono.Stop();
-  otbMsgDevMacro(<< "VectorData component rendered in " << chrono.GetMeanTime() << " s.");
+  otbMsgDevMacro(<< "VectorData component rendered in " << chrono.GetMean() << " s.");
 
   glDisable(GL_LINE_SMOOTH);
   glDisable(GL_BLEND);

@@ -112,7 +112,7 @@ VectorDataExtractROI<TVectorData>
   ProcessNode(inputRoot, outputRoot);
   chrono.Stop();
   otbMsgDevMacro(
-    << "VectorDataExtractROI: " << m_Kept << " Features processed in " << chrono.GetMeanTime() << " seconds.");
+    << "VectorDataExtractROI: " << m_Kept << " Features processed in " << chrono.GetMean() << " seconds.");
 } /*End GenerateData()*/
 
 template <class TVectorData>

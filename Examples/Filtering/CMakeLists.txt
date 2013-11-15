@@ -2,7 +2,7 @@ PROJECT(FilteringExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(CompositeFilterExample CompositeFilterExample.cxx )
-TARGET_LINK_LIBRARIES(CompositeFilterExample OTBCommon OTBIO ITKBasicFilters)
+TARGET_LINK_LIBRARIES(CompositeFilterExample OTBCommon OTBIO  )
 
 ADD_EXECUTABLE(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
 TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter OTBCommon OTBIO)
@@ -42,23 +42,23 @@ TARGET_LINK_LIBRARIES(MathematicalMorphologyGrayscaleFilters OTBCommon
 OTBIO)
 
 ADD_EXECUTABLE(DiscreteGaussianImageFilter DiscreteGaussianImageFilter.cxx )
-TARGET_LINK_LIBRARIES(DiscreteGaussianImageFilter OTBCommon OTBIO ITKBasicFilters)
+TARGET_LINK_LIBRARIES(DiscreteGaussianImageFilter OTBCommon OTBIO  )
 
 ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter1 LaplacianRecursiveGaussianImageFilter1.cxx )
 TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter1 OTBCommon
-OTBIO ITKBasicFilters)
+OTBIO  )
 
 ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter2 LaplacianRecursiveGaussianImageFilter2.cxx )
 TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter2 OTBCommon
-OTBIO ITKBasicFilters)
+OTBIO  )
 
 ADD_EXECUTABLE(GradientAnisotropicDiffusionImageFilter GradientAnisotropicDiffusionImageFilter.cxx )
 TARGET_LINK_LIBRARIES(GradientAnisotropicDiffusionImageFilter
-OTBCommon OTBIO ITKBasicFilters)
+OTBCommon OTBIO  )
 
 ADD_EXECUTABLE(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter.cxx )
 TARGET_LINK_LIBRARIES(DanielssonDistanceMapImageFilter OTBCommon OTBIO
-ITKCommon ITKBasicFilters)
+${ITK_LIBRARIES}  )
 
 ADD_EXECUTABLE(GeometriesFilter GeometriesFilter.cxx)
 TARGET_LINK_LIBRARIES(GeometriesFilter OTBOGRAdapters)
@@ -298,6 +298,6 @@ ADD_TEST(fiTeDerivativeImageFilterTest ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFilteringExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+TARGET_LINK_LIBRARIES(otbFilteringExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

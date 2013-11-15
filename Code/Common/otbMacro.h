@@ -187,7 +187,7 @@ namespace otb
 
 #define otbGenericExceptionMacro(T, x) \
 { \
-  ::itk::OStringStream message; \
+  std::ostringstream message; \
   message << "otb::ERROR: " x; \
   T e_(__FILE__, __LINE__, message.str(),ITK_LOCATION); \
   throw e_;\

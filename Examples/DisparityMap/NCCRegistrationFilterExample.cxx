@@ -65,7 +65,7 @@ int main(int argc, char** argv)
   const unsigned int ImageDimension = 2;
 
   typedef double                              PixelType;
-  typedef itk::Vector<double, ImageDimension> DeformationPixelType;
+  typedef itk::Vector<double, ImageDimension> DisplacementPixelType;
 
   typedef double CoordinateRepresentationType;
 
@@ -83,8 +83,8 @@ int main(int argc, char** argv)
   // Software Guide : BeginCodeSnippet
   typedef otb::Image<PixelType, ImageDimension> MovingImageType;
   typedef otb::Image<PixelType, ImageDimension> FixedImageType;
-  typedef otb::Image<DeformationPixelType,
-      ImageDimension>         DeformationFieldType;
+  typedef otb::Image<DisplacementPixelType,
+      ImageDimension>         DisplacementFieldType;
   // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<FixedImageType> FixedReaderType;
@@ -130,7 +130,7 @@ int main(int argc, char** argv)
   // Software Guide : BeginCodeSnippet
   typedef otb::NCCRegistrationFilter<FixedImageType,
       MovingImageType,
-      DeformationFieldType>
+      DisplacementFieldType>
   RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
@@ -169,7 +169,7 @@ int main(int argc, char** argv)
   // Software Guide : BeginCodeSnippet
   registrator->SetNumberOfIterations(atoi(argv[8]));
 // Software Guide : EndCodeSnippet
-// registrator->GetDeformationField();
+// registrator->GetDisplacementField();
 
   // Software Guide : BeginLatex
   //
@@ -182,7 +182,7 @@ int main(int argc, char** argv)
   //
   // Software Guide : EndLatex
 
-  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DeformationFieldType,
+  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType,
       MovingImageType>
   ChannelExtractionFilterType;
   ChannelExtractionFilterType::Pointer channelExtractor =
@@ -211,13 +211,13 @@ int main(int argc, char** argv)
   dfWriter->Update();
 
   typedef otb::WarpImageFilter<MovingImageType, MovingImageType,
-      DeformationFieldType> WarperType;
+      DisplacementFieldType> WarperType;
   WarperType::Pointer warper = WarperType::New();
 
   MovingImageType::PixelType padValue = 4.0;
 
   warper->SetInput(mReader->GetOutput());
-  warper->SetDeformationField(registrator->GetOutput());
+  warper->SetDisplacementField(registrator->GetOutput());
   warper->SetEdgePaddingValue(padValue);
 
   typedef itk::CastImageFilter<MovingImageType, OutputImageType> CastFilterType;
@@ -242,7 +242,7 @@ int main(int argc, char** argv)
   // \includegraphics[width=0.40\textwidth]{StereoMoving.eps}
   // \includegraphics[width=0.40\textwidth]{deformationFieldOutput-horizontal.eps}
   // \includegraphics[width=0.40\textwidth]{deformationFieldOutput-vertical.eps}
-  // \itkcaption[Deformation field and resampling from NCC registration]{From left
+  // \itkcaption[Displacement field and resampling from NCC registration]{From left
   // to right and top to bottom: fixed input image, moving image with a low stereo angle,
   // estimated deformation field in the horizontal direction, estimated deformation field in the vertical direction.}
   // \label{fig:NCCRegistrationFilterOUTPUT}

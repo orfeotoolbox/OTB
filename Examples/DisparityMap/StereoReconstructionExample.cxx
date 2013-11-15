@@ -42,7 +42,7 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbStereorectificationDeformationFieldSource.h"
+#include "otbStereorectificationDisplacementFieldSource.h"
 #include "otbStreamingWarpImageFilter.h"
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "otbBandMathImageFilter.h"
@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginLatex
 // This example demonstrates the use of the following filters :
 // \begin{itemize}
-// \item \doxygen{otb}{StereorectificationDeformationFieldSource}
+// \item \doxygen{otb}{StereorectificationDisplacementFieldSource}
 // \item \doxygen{otb}{StreamingWarpImageFilter}
 // \item \doxygen{otb}{PixelWiseBlockMatchingImageFilter}
 // \item \doxygen{otb}{otbSubPixelDisparityImageFilter}
@@ -109,20 +109,20 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::StereorectificationDeformationFieldSource
-    <FloatImageType,FloatVectorImageType>     DeformationFieldSourceType;
+  typedef otb::StereorectificationDisplacementFieldSource
+    <FloatImageType,FloatVectorImageType>     DisplacementFieldSourceType;
 
-  typedef itk::Vector<double,2>               DeformationType;
-  typedef otb::Image<DeformationType>         DeformationFieldType;
+  typedef itk::Vector<double,2>               DisplacementType;
+  typedef otb::Image<DisplacementType>         DisplacementFieldType;
 
   typedef itk::VectorCastImageFilter
     <FloatVectorImageType,
-     DeformationFieldType>                    DeformationFieldCastFilterType;
+     DisplacementFieldType>                    DisplacementFieldCastFilterType;
 
   typedef otb::StreamingWarpImageFilter
     <FloatImageType,
      FloatImageType,
-     DeformationFieldType>                    WarpFilterType;
+     DisplacementFieldType>                    WarpFilterType;
 
   typedef otb::BCOInterpolateImageFunction
     <FloatImageType>                          BCOInterpolationType;
@@ -173,7 +173,7 @@ int main(int argc, char* argv[])
 // The image pair is supposed to be in sensor geometry. From two images covering
 // nearly the same area, one can estimate a common epipolar geometry. In this geometry,
 // an altitude variation corresponds to an horizontal shift between the two images.
-// The filter \doxygen{otb}{StereorectificationDeformationFieldSource} computes the
+// The filter \doxygen{otb}{StereorectificationDisplacementFieldSource} computes the
 // deformation grids for each image.
 //
 // These grids are sampled in epipolar geometry. They have two bands, containing
@@ -185,14 +185,14 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  DeformationFieldSourceType::Pointer m_DeformationFieldSource = DeformationFieldSourceType::New();
-  m_DeformationFieldSource->SetLeftImage(leftReader->GetOutput());
-  m_DeformationFieldSource->SetRightImage(rightReader->GetOutput());
-  m_DeformationFieldSource->SetGridStep(4);
-  m_DeformationFieldSource->SetScale(1.0);
-  //m_DeformationFieldSource->SetAverageElevation(avgElevation);
+  DisplacementFieldSourceType::Pointer m_DisplacementFieldSource = DisplacementFieldSourceType::New();
+  m_DisplacementFieldSource->SetLeftImage(leftReader->GetOutput());
+  m_DisplacementFieldSource->SetRightImage(rightReader->GetOutput());
+  m_DisplacementFieldSource->SetGridStep(4);
+  m_DisplacementFieldSource->SetScale(1.0);
+  //m_DisplacementFieldSource->SetAverageElevation(avgElevation);
 
-  m_DeformationFieldSource->Update();
+  m_DisplacementFieldSource->Update();
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
   epipolarSpacing[1] = 1.0;
 
   FloatImageType::SizeType epipolarSize;
-  epipolarSize = m_DeformationFieldSource->GetRectifiedImageSize();
+  epipolarSize = m_DisplacementFieldSource->GetRectifiedImageSize();
 
   FloatImageType::PointType epipolarOrigin;
   epipolarOrigin[0] = 0.0;
@@ -227,32 +227,32 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  DeformationFieldCastFilterType::Pointer m_LeftDeformationFieldCaster = DeformationFieldCastFilterType::New();
-  m_LeftDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetLeftDeformationFieldOutput());
-  m_LeftDeformationFieldCaster->GetOutput()->UpdateOutputInformation();
+  DisplacementFieldCastFilterType::Pointer m_LeftDisplacementFieldCaster = DisplacementFieldCastFilterType::New();
+  m_LeftDisplacementFieldCaster->SetInput(m_DisplacementFieldSource->GetLeftDisplacementFieldOutput());
+  m_LeftDisplacementFieldCaster->GetOutput()->UpdateOutputInformation();
 
   BCOInterpolationType::Pointer leftInterpolator = BCOInterpolationType::New();
   leftInterpolator->SetRadius(2);
 
   WarpFilterType::Pointer m_LeftWarpImageFilter = WarpFilterType::New();
   m_LeftWarpImageFilter->SetInput(leftReader->GetOutput());
-  m_LeftWarpImageFilter->SetDeformationField(m_LeftDeformationFieldCaster->GetOutput());
+  m_LeftWarpImageFilter->SetDisplacementField(m_LeftDisplacementFieldCaster->GetOutput());
   m_LeftWarpImageFilter->SetInterpolator(leftInterpolator);
   m_LeftWarpImageFilter->SetOutputSize(epipolarSize);
   m_LeftWarpImageFilter->SetOutputSpacing(epipolarSpacing);
   m_LeftWarpImageFilter->SetOutputOrigin(epipolarOrigin);
   m_LeftWarpImageFilter->SetEdgePaddingValue(defaultValue);
 
-  DeformationFieldCastFilterType::Pointer m_RightDeformationFieldCaster = DeformationFieldCastFilterType::New();
-  m_RightDeformationFieldCaster->SetInput(m_DeformationFieldSource->GetRightDeformationFieldOutput());
-  m_RightDeformationFieldCaster->GetOutput()->UpdateOutputInformation();
+  DisplacementFieldCastFilterType::Pointer m_RightDisplacementFieldCaster = DisplacementFieldCastFilterType::New();
+  m_RightDisplacementFieldCaster->SetInput(m_DisplacementFieldSource->GetRightDisplacementFieldOutput());
+  m_RightDisplacementFieldCaster->GetOutput()->UpdateOutputInformation();
 
   BCOInterpolationType::Pointer rightInterpolator = BCOInterpolationType::New();
   rightInterpolator->SetRadius(2);
 
   WarpFilterType::Pointer m_RightWarpImageFilter = WarpFilterType::New();
   m_RightWarpImageFilter->SetInput(rightReader->GetOutput());
-  m_RightWarpImageFilter->SetDeformationField(m_RightDeformationFieldCaster->GetOutput());
+  m_RightWarpImageFilter->SetDisplacementField(m_RightDisplacementFieldCaster->GetOutput());
   m_RightWarpImageFilter->SetInterpolator(rightInterpolator);
   m_RightWarpImageFilter->SetOutputSize(epipolarSize);
   m_RightWarpImageFilter->SetOutputSpacing(epipolarSpacing);
@@ -381,8 +381,8 @@ int main(int argc, char* argv[])
   m_DispToElev->SetVerticalDisparityMapInput(m_VMedianFilter->GetOutput());
   m_DispToElev->SetLeftInput(leftReader->GetOutput());
   m_DispToElev->SetRightInput(rightReader->GetOutput());
-  m_DispToElev->SetLeftEpipolarGridInput(m_DeformationFieldSource->GetLeftDeformationFieldOutput());
-  m_DispToElev->SetRightEpipolarGridInput(m_DeformationFieldSource->GetRightDeformationFieldOutput());
+  m_DispToElev->SetLeftEpipolarGridInput(m_DisplacementFieldSource->GetLeftDisplacementFieldOutput());
+  m_DispToElev->SetRightEpipolarGridInput(m_DisplacementFieldSource->GetRightDisplacementFieldOutput());
   m_DispToElev->SetElevationMin(avgElevation-10.0);
   m_DispToElev->SetElevationMax(avgElevation+80.0);
   m_DispToElev->SetDEMGridStep(2.5);

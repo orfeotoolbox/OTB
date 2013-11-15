@@ -2,20 +2,16 @@ PROJECT(DisparityMapExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(SimpleDisparityMapEstimationExample SimpleDisparityMapEstimationExample.cxx )
-TARGET_LINK_LIBRARIES(SimpleDisparityMapEstimationExample OTBFeatureExtraction OTBCommon OTBIO
-ITKIO)
+TARGET_LINK_LIBRARIES(SimpleDisparityMapEstimationExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(NCCRegistrationFilterExample NCCRegistrationFilterExample.cxx )
-TARGET_LINK_LIBRARIES(NCCRegistrationFilterExample OTBFeatureExtraction OTBCommon OTBIO
-ITKIO)
+TARGET_LINK_LIBRARIES(NCCRegistrationFilterExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(FineRegistrationImageFilterExample FineRegistrationImageFilterExample.cxx )
-TARGET_LINK_LIBRARIES(FineRegistrationImageFilterExample OTBFeatureExtraction OTBCommon OTBIO
-ITKIO)
+TARGET_LINK_LIBRARIES(FineRegistrationImageFilterExample OTBFeatureExtraction OTBCommon OTBIO)
 
 ADD_EXECUTABLE(StereoReconstructionExample StereoReconstructionExample.cxx )
-TARGET_LINK_LIBRARIES(StereoReconstructionExample OTBFeatureExtraction OTBCommon OTBIO
-ITKIO)
+TARGET_LINK_LIBRARIES(StereoReconstructionExample OTBFeatureExtraction OTBCommon OTBIO)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -58,6 +54,6 @@ ADD_TEST(dmTeStereoReconstructionExampleTest ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbDisparityMapExamplesTests otbDisparityMapExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbDisparityMapExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+TARGET_LINK_LIBRARIES(otbDisparityMapExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

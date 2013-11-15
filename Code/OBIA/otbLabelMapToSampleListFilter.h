@@ -20,7 +20,7 @@
 
 #include <algorithm>
 
-#include "itkObject.h"
+#include "itkProcessObject.h"
 #include "otbAttributesMapLabelObject.h"
 
 namespace otb
@@ -38,27 +38,28 @@ namespace otb
 template <class TInputLabelMap, class TOutputSampleList,
     class TMeasurementFunctor = Functor::AttributesMapMeasurementFunctor
     <typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType > >
-class ITK_EXPORT LabelMapToSampleListFilter : public itk::Object
+class ITK_EXPORT LabelMapToSampleListFilter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
   typedef LabelMapToSampleListFilter    Self;
-  typedef itk::Object                   Superclass;
+  typedef itk::ProcessObject            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LabelMapToSampleListFilter, Object);
+  itkTypeMacro(LabelMapToSampleListFilter, ProcessObject);
 
   /** template typedefs */
   typedef TInputLabelMap                              InputLabelMapType;
   typedef typename InputLabelMapType::ConstPointer    InputLabelMapConstPointerType;
   typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
    
+  typedef typename InputLabelMapType::ConstIterator   ConstIteratorType;
+
   typedef TOutputSampleList                           OutputSampleListType;
   typedef typename OutputSampleListType::Pointer      OutputSampleListPointerType;
   typedef typename OutputSampleListType
@@ -66,11 +67,16 @@ public:
   
   typedef TMeasurementFunctor                         MeasurementFunctorType;
 
-  /** Set/Get the input label map  */
-  itkSetConstObjectMacro(InputLabelMap, InputLabelMapType);
-  itkGetConstObjectMacro(InputLabelMap, InputLabelMapType);
-  itkGetObjectMacro(OutputSampleList, OutputSampleListType);
+  /** DataObject typedef*/
+  typedef typename Superclass::DataObjectPointer      DataObjectPointerType;
 
+  /** Set/Get the input label map */
+  void SetInputLabelMap(const InputLabelMapType * inputLabelMap);
+  const InputLabelMapType* GetInputLabelMap() const;
+
+  /** Get the output SampleList*/
+  const OutputSampleListType* GetOutputSampleList();
+  
   /** Get a hook on the functor for settings */
   void SetMeasurementFunctor(const MeasurementFunctorType& functor)
   {
@@ -82,23 +88,21 @@ public:
     return m_MeasurementFunctor;
   }
 
-  /** Launch computation (this filter is not a itk::ProcessObject) */
-  virtual void Compute();
-
 protected:
   LabelMapToSampleListFilter();
   virtual ~LabelMapToSampleListFilter();
+
+  virtual void GenerateData();
+
+  /** Make Output */
+  virtual DataObjectPointerType MakeOutput(unsigned int idx);
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   LabelMapToSampleListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-  /** Input and output pointers */
-  InputLabelMapConstPointerType m_InputLabelMap;
-  OutputSampleListPointerType   m_OutputSampleList;
-
+  
   /** The functor used to build the measurement vector */
   MeasurementFunctorType        m_MeasurementFunctor;
 };

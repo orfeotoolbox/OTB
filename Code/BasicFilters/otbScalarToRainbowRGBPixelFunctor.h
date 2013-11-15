@@ -20,7 +20,7 @@
 #define __otbScalarToRainbowRGBPixelFunctor_h
 
 #include "itkRGBPixel.h"
-#include "itkColormapFunctor.h"
+#include "itkColormapFunction.h"
 
 namespace otb
 {
@@ -128,17 +128,17 @@ namespace Functor
  */
 template<class TScalar, class TRGBPixel = itk::RGBPixel<unsigned char> >
 class ITK_EXPORT ScalarToRainbowRGBPixelFunctor
-  : public itk::Functor::ColormapFunctor<TScalar, TRGBPixel>
+  : public itk::Function::ColormapFunction<TScalar, TRGBPixel>
 //      public itk::Functor::ScalarToRGBPixelFunctor<TScalar>
 {
 public:
   ScalarToRainbowRGBPixelFunctor();
   ~ScalarToRainbowRGBPixelFunctor() {}
 
-  typedef ScalarToRainbowRGBPixelFunctor                    Self;
-  typedef itk::Functor::ColormapFunctor<TScalar, TRGBPixel> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef ScalarToRainbowRGBPixelFunctor                      Self;
+  typedef itk::Function::ColormapFunction<TScalar, TRGBPixel> Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

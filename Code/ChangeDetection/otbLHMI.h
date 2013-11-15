@@ -50,7 +50,8 @@ public:
   typedef typename std::vector<VectorType>                               VectorOfVectorType;
   typedef typename VectorOfVectorType::iterator                          VecOfVecIteratorType;
   typedef double                                                         HistogramFrequencyType;
-  typedef typename itk::Statistics::Histogram<HistogramFrequencyType, 2> HistogramType;
+  typedef typename itk::Statistics::Histogram<HistogramFrequencyType,
+                             itk::Statistics::DenseFrequencyContainer2 > HistogramType;
   typedef typename HistogramType::MeasurementVectorType
   MeasurementVectorType;
   typedef typename HistogramType::SizeType HistogramSizeType;
@@ -64,11 +65,11 @@ public:
     HistogramType::Pointer histogram;
 
     /** The histogram size. */
-    HistogramSizeType histogramSize;
+    HistogramSizeType histogramSize(2);
     /** The lower bound for samples in the histogram. */
-    MeasurementVectorType lowerBound;
+    MeasurementVectorType lowerBound(2);
     /** The upper bound for samples in the histogram. */
-    MeasurementVectorType upperBound;
+    MeasurementVectorType upperBound(2);
 
     double upperBoundIncreaseFactor = 0.001;
 
@@ -103,18 +104,19 @@ public:
       maxB + (maxB - minB) * upperBoundIncreaseFactor;
 
     histogram = HistogramType::New();
-
+    
+    histogram->SetMeasurementVectorSize(2);
     histogram->Initialize(histogramSize, lowerBound, upperBound);
 
     for (unsigned long pos = 0; pos < itA.Size(); ++pos)
       {
 
-      typename HistogramType::MeasurementVectorType sample;
+      typename HistogramType::IndexType sample(2);
       sample[0] = itA.GetPixel(pos);
       sample[1] = itB.GetPixel(pos);
       /*if(sample[0]!=NumericTraits<TOutput>::Zero &&
          sample[1]!=NumericTraits<TOutput>::Zero)*/
-      histogram->IncreaseFrequency(sample, 1);
+      histogram->IncreaseFrequencyOfIndex(sample, 1);
 
       }
 

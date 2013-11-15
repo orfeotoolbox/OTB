@@ -94,7 +94,7 @@ protected:
    * Main computation method.
    */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId);
+                            itk::ThreadIdType threadId);
 
   /**
   * Main computation method.

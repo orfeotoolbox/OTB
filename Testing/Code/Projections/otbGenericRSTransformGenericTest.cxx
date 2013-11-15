@@ -19,7 +19,7 @@
 #include "otbGenericRSTransform.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbGeoInformationConversion.h"
 #include "otbGeographicalDistance.h"
 
@@ -27,7 +27,7 @@ typedef otb::Image<unsigned short>      ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef ImageType::PointType            PointType;
 typedef otb::GenericRSTransform<>       TransformType;
-typedef itk::Statistics::EuclideanDistance<PointType> PointEuclideanDistanceType;
+typedef itk::Statistics::EuclideanDistanceMetric<PointType> PointEuclideanDistanceType;
 typedef otb::GeographicalDistance<PointType> GeographicalDistanceType;
 
 int otbGenericRSTransformGenericTest(int argc, char * argv[])

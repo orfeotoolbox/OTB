@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-
-
 #include "otbROIdataConversion.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -31,15 +28,17 @@ int otbROIdataConversion(int argc, char* argv[])
   typedef double PixelType;
   const unsigned int Dimension = 2;
   typedef otb::Image<PixelType,  Dimension>                      InputImageType;
-  typedef otb::ROIdataConversion<InputImageType, InputImageType> ConvertorType;
+  typedef otb::Image<PixelType,  Dimension>                      ROIImageType;
+  typedef otb::ROIdataConversion<InputImageType, ROIImageType> ConvertorType;
   typedef ConvertorType::OutputImageType                         OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileReader<ROIImageType>    ROIReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ConvertorType::Pointer convertor = ConvertorType::New();
   ReaderType::Pointer    readerIm = ReaderType::New();
-  ReaderType::Pointer    readerTr = ReaderType::New();
+  ReaderType::Pointer    readerTr = ROIReaderType::New();
 
   readerIm->SetFileName(argv[1]);
   readerTr->SetFileName(argv[2]);

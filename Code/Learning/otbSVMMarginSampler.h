@@ -18,7 +18,7 @@
 #ifndef __otbSVMMarginSampler_h
 #define __otbSVMMarginSampler_h
 
-#include "itkSampleClassifier.h"
+#include "itkSampleClassifierFilter.h"
 #include "itkVectorImage.h"
 
 namespace otb
@@ -31,21 +31,21 @@ namespace otb
 
 template< class TSample, class TModel >
 class ITK_EXPORT SVMMarginSampler :
-      public itk::Statistics::SampleClassifier< TSample >
+      public itk::Statistics::SampleClassifierFilter< TSample >
 {
 public:
   /** Standard class typedef*/
   typedef SVMMarginSampler Self;
-  typedef itk::Statistics::SampleClassifier< TSample > Superclass;
+  typedef itk::Statistics::SampleClassifierFilter< TSample > Superclass;
   typedef itk::SmartPointer< Self > Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macros */
-  itkTypeMacro(SVMMarginSampler, itk::Statistics::SampleClassifier);
+  itkTypeMacro(SVMMarginSampler, itk::Statistics::SampleClassifierFilter);
   itkNewMacro(Self);
 
   /** Output type for GetClassSample method */
-  typedef itk::Statistics::MembershipSample< TSample > OutputType;
+  typedef typename Superclass::MembershipSampleType   OutputType;
 
   /** typedefs from TSample object */
   typedef typename TSample::MeasurementType MeasurementType;
@@ -60,16 +60,7 @@ public:
       bool resp = l2.second > l1.second;
       return resp;
     }
-
-   
-  /** typedefs from Superclass */
-  typedef typename Superclass::MembershipFunctionPointerVector
-  MembershipFunctionPointerVector;
-
-  /** Returns the margin sampling results */
-  OutputType* GetOutput();
-  void SetOutput(OutputType* output);
-
+  
   /** Type definitions for the SVM Model. */
   typedef TModel                                     SVMModelType;
   typedef typename SVMModelType::Pointer             SVMModelPointer;
@@ -83,8 +74,6 @@ public:
 
   /** Get the number of classes. */
   itkGetObjectMacro(Model, SVMModelType);
-
-  void Update();
 
   const IndexVectorType & GetMarginSamples()
   {
@@ -102,7 +91,7 @@ protected:
 
 private:
   /** Output pointer (MembershipSample) */
-  typename OutputType::Pointer m_Output;
+  //typename OutputType::Pointer m_Output;
 
   SVMModelPointer m_Model;
 

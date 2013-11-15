@@ -99,11 +99,11 @@ public:
   
   typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
   
-  /** The Deformation field spacing & size */
-  otbSetObjectMemberMacro(Resampler, DeformationFieldSpacing, SpacingType);
+  /** The Displacement field spacing & size */
+  otbSetObjectMemberMacro(Resampler, DisplacementFieldSpacing, SpacingType);
 
   otbGetObjectMemberConstReferenceMacro(Resampler,
-                                        DeformationFieldSpacing,
+                                        DisplacementFieldSpacing,
                                         SpacingType);
   
   /** The resampled image parameters */
@@ -258,10 +258,10 @@ public:
   itkGetMacro(EstimateOutputRpcModel, bool);
   itkBooleanMacro(EstimateOutputRpcModel);
   
-  /** Set number of threads for Deformation field generator */
-  void SetDeformationFilterNumberOfThreads(unsigned int nbThread)
+  /** Set number of threads for Displacement field generator */
+  void SetDisplacementFilterNumberOfThreads(unsigned int nbThread)
   {
-    m_Resampler->SetDeformationFilterNumberOfThreads(nbThread);
+    m_Resampler->SetDisplacementFilterNumberOfThreads(nbThread);
   }
 
 protected:

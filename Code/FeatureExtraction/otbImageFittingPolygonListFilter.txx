@@ -33,7 +33,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
 ::ImageFittingPolygonListFilter()
 {
   this->SetNumberOfRequiredInputs(2);
-  this->SetNumberOfInputs(2);
+  this->SetNumberOfRequiredInputs(2);
   m_Radius = 1;
   m_NumberOfIterations = 1;
 }

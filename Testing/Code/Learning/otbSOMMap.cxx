@@ -18,7 +18,7 @@
 #include "itkMacro.h"
 #include "otbSOMMap.h"
 #include "itkRGBPixel.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "itkVariableLengthVector.h"
 
 int otbSOMMap(int argc, char* argv[])
@@ -26,7 +26,7 @@ int otbSOMMap(int argc, char* argv[])
   const unsigned int Dimension = 2;
   typedef float                                           InternalPixelType;
   typedef itk::VariableLengthVector<InternalPixelType>    PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>   DistanceType;
   typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
 
   // Instantiation

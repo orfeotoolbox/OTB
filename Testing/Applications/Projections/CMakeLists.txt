@@ -13,7 +13,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM
                  			 -outputs.spacingx  0.5
                  			 -outputs.spacingy  -0.5
                  			 -map utm
-                 			 -opt.gridspacing 4 # Spacing of the deformation field (equal to 4 meters)
+                 			 -opt.gridspacing 4 # Spacing of the displacement field (equal to 4 meters)
                        -interpolator linear
                      VALID   --compare-image ${EPSILON_4}
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif

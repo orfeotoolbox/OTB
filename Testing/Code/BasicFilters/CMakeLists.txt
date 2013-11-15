@@ -1606,7 +1606,7 @@ ADD_TEST(bfTvGaborFilterGenerator ${BASICFILTERS_TESTS10}
 
 # -------            otb::OverlapSaveConvolutionImageFilter   ----------------------------
 
-IF(USE_FFTWD)
+IF(ITK_USE_FFTWD)
 
   ADD_TEST(bfTuOverlapSaveConvolutionImageFilterNew ${BASICFILTERS_TESTS10}
          otbOverlapSaveConvolutionImageFilterNew)
@@ -1635,7 +1635,7 @@ IF(USE_FFTWD)
                     0
 )
 
-ENDIF(USE_FFTWD)
+ENDIF(ITK_USE_FFTWD)
 
 
 ADD_TEST(bfTvPolygonCompacityFunctor ${BASICFILTERS_TESTS10}
@@ -2079,14 +2079,14 @@ ADD_TEST(bfTuImageAndVectorImageOperationFilterNew ${BASICFILTERS_TESTS12}
 
 ADD_TEST(bfTvImageAndVectorImageOperationFilterTest ${BASICFILTERS_TESTS12}
         --compare-n-images ${NOTOL} 4
-                ${TEMP}/bfTvImageAndVectorImageOperationFilterTestAdd.tif
                 ${BASELINE}/bfTvImageAndVectorImageOperationFilterTestAdd.tif
-                ${TEMP}/bfTvImageAndVectorImageOperationFilterTestSub.tif
+                ${TEMP}/bfTvImageAndVectorImageOperationFilterTestAdd.tif
                 ${BASELINE}/bfTvImageAndVectorImageOperationFilterTestSub.tif
-                ${TEMP}/bfTvImageAndVectorImageOperationFilterTestMul.tif
+                ${TEMP}/bfTvImageAndVectorImageOperationFilterTestSub.tif
                 ${BASELINE}/bfTvImageAndVectorImageOperationFilterTestMul.tif
-                ${TEMP}/bfTvImageAndVectorImageOperationFilterTestDiv.tif
+                ${TEMP}/bfTvImageAndVectorImageOperationFilterTestMul.tif
                 ${BASELINE}/bfTvImageAndVectorImageOperationFilterTestDiv.tif
+                ${TEMP}/bfTvImageAndVectorImageOperationFilterTestDiv.tif
         otbImageAndVectorImageOperationFilterTest
                 ${INPUTDATA}/checkerboard_128_128.png
                 ${INPUTDATA}/poupees_sub.png
@@ -2139,10 +2139,10 @@ ADD_TEST(bfTuComplexToVectorImageCastFilterNew ${BASICFILTERS_TESTS13}
 
 ADD_TEST(bfTuComplexToVectorImageCastFilterTest ${BASICFILTERS_TESTS13}
   --compare-n-images ${NOTOL} 2
+  ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
   ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
-  ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   otbComplexToVectorImageCastFilterTest
     ${INPUTDATA}/monobandComplexDouble
     ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
@@ -2151,8 +2151,8 @@ ADD_TEST(bfTuComplexToVectorImageCastFilterTest ${BASICFILTERS_TESTS13}
 
 ADD_TEST(bfTvotbLog10ThresholdedImageFilterTest ${BASICFILTERS_TESTS13}
   --compare-ascii ${NOTOL}
-  ${TEMP}/bfTvLog10ThresholdedImageFilterTest.txt
   ${BASELINE_FILES}/bfTvLog10ThresholdedImageFilter.txt
+  ${TEMP}/bfTvLog10ThresholdedImageFilterTest.txt
   otbLog10ThresholdedImageFilterTest
     ${TEMP}/bfTvLog10ThresholdedImageFilterTest.txt
 )
@@ -2164,8 +2164,8 @@ ADD_TEST(bfTuMatrixImageFilterNew ${BASICFILTERS_TESTS13}
 
 ADD_TEST(bfTvMatrixImageFilterTest_1 ${BASICFILTERS_TESTS13}
   --compare-image ${NOTOL}
-  ${TEMP}/bfTvMatrixImageFilterTest_1.tif
   ${BASELINE}/bfTvMatrixImageFilterTest_1.tif
+  ${TEMP}/bfTvMatrixImageFilterTest_1.tif
   otbMatrixImageFilterTest
     ${INPUTDATA}/poupees.tif
     ${TEMP}/bfTvMatrixImageFilterTest_1.tif
@@ -2174,8 +2174,8 @@ ADD_TEST(bfTvMatrixImageFilterTest_1 ${BASICFILTERS_TESTS13}
 
 ADD_TEST(bfTvMatrixImageFilterTest_2 ${BASICFILTERS_TESTS13}
   --compare-image ${NOTOL}
-  ${TEMP}/bfTvMatrixImageFilterTest_2.tif
   ${BASELINE}/bfTvMatrixImageFilterTest_2.tif
+  ${TEMP}/bfTvMatrixImageFilterTest_2.tif
   otbMatrixImageFilterTest
     ${INPUTDATA}/poupees.tif
     ${TEMP}/bfTvMatrixImageFilterTest_2.tif
@@ -2185,8 +2185,8 @@ ADD_TEST(bfTvMatrixImageFilterTest_2 ${BASICFILTERS_TESTS13}
 
 ADD_TEST(bfTvMatrixImageFilterTest_3 ${BASICFILTERS_TESTS13}
   --compare-image ${NOTOL}
-  ${TEMP}/bfTvMatrixImageFilterTest_3.tif
   ${BASELINE}/bfTvMatrixImageFilterTest_3.tif
+  ${TEMP}/bfTvMatrixImageFilterTest_3.tif
   otbMatrixImageFilterTest
     ${INPUTDATA}/poupees.tif
     ${TEMP}/bfTvMatrixImageFilterTest_3.tif
@@ -2209,8 +2209,8 @@ ADD_TEST(bfTuMaskMuParserFilterNew ${BASICFILTERS_TESTS13}
 
 ADD_TEST(bfTvMaskMuParserFilterTest ${BASICFILTERS_TESTS13}
   --compare-image ${NOTOL}
-  ${TEMP}/bfTvMaskMuParserFilterTest.tif
   ${BASELINE}/bfTvMaskMuParserFilterTest.tif
+  ${TEMP}/bfTvMaskMuParserFilterTest.tif
         otbMaskMuParserFilterTest
     ${INPUTDATA}/ROI_QB_MUL_4.tif
     ${TEMP}/bfTvMaskMuParserFilterTest.tif
@@ -2618,8 +2618,8 @@ ADD_TEST(bfTuSparseWvltToAngleMapperListFilterNew
 
 ADD_TEST(bfTvConnectedComponentMuParserFunctorTest ${BASICFILTERS_TESTS14}
   --compare-image ${NOTOL}
-  ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_1.tif
   ${BASELINE}/bfTvConnectedComponentMuParserFunctorTest_1.tif
+  ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_1.tif
         otbConnectedComponentMuParserFunctorTest
     ${INPUTDATA}/ROI_QB_MUL_4.tif
     ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_1.tif
@@ -2630,8 +2630,8 @@ ADD_TEST(bfTvConnectedComponentMuParserFunctorTest ${BASICFILTERS_TESTS14}
 
 ADD_TEST(bfTvConnectedComponentMuParserFunctorTestMask ${BASICFILTERS_TESTS14}
   --compare-image ${NOTOL}
-  ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_2.tif
   ${BASELINE}/bfTvConnectedComponentMuParserFunctorTest_2.tif
+  ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_2.tif
         otbConnectedComponentMuParserFunctorTest
     ${INPUTDATA}/ROI_QB_MUL_4.tif
     ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_2.tif
@@ -2649,8 +2649,8 @@ ADD_TEST(bfTuLabelObjectOpeningMuParserFilterNew ${BASICFILTERS_TESTS14}
 
 ADD_TEST(bfTvLabelObjectOpeningMuParserFilterTest ${BASICFILTERS_TESTS14}
   --compare-image ${NOTOL}
-  ${TEMP}/bfTvLabelObjectOpeningMuParserFilterTest.tif
   ${BASELINE}/bfTvLabelObjectOpeningMuParserFilterTest.tif
+  ${TEMP}/bfTvLabelObjectOpeningMuParserFilterTest.tif
         otbLabelObjectOpeningMuParserFilterTest
     ${INPUTDATA}/ROI_QB_MUL_4.tif
     ${INPUTDATA}/ROI_QB_MUL_4_Label.tif
@@ -3091,14 +3091,14 @@ otbPersistentVectorizationFilterNew.cxx
 otbPersistentVectorizationFilter.cxx
 )
 
-IF(USE_FFTWD)
+IF(ITK_USE_FFTWD)
 SET(BasicFilters_SRCS10
 ${BasicFilters_SRCS10}
 otbOverlapSaveConvolutionImageFilterNew.cxx
 otbOverlapSaveConvolutionImageFilter.cxx
 otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
 )
-ENDIF(USE_FFTWD)
+ENDIF(ITK_USE_FFTWD)
 
 SET(BasicFilters_SRCS11
 otbBasicFiltersTests11.cxx
@@ -3206,8 +3206,8 @@ OTB_ADD_EXECUTABLE(otbBasicFiltersTests7 "${BasicFilters_SRCS7}" "OTBBasicFilter
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests8 "${BasicFilters_SRCS8}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests9 "${BasicFilters_SRCS9}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests10 "${BasicFilters_SRCS10}" "OTBBasicFilters;OTBIO;OTBTesting")
-OTB_ADD_EXECUTABLE(otbBasicFiltersTests11 "${BasicFilters_SRCS11}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
-OTB_ADD_EXECUTABLE(otbBasicFiltersTests12 "${BasicFilters_SRCS12}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests11 "${BasicFilters_SRCS11}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests12 "${BasicFilters_SRCS12}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests13 "${BasicFilters_SRCS13}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests14 "${BasicFilters_SRCS14}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests15 "${BasicFilters_SRCS15}" "OTBBasicFilters;OTBIO;OTBTesting;OTBOGRAdapters")

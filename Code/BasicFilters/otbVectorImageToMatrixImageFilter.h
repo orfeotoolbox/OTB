@@ -113,7 +113,7 @@ protected:
   PersistentVectorImageToMatrixFilter();
   virtual ~PersistentVectorImageToMatrixFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
   PersistentVectorImageToMatrixFilter(const Self &); //purposely not implemented

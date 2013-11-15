@@ -74,7 +74,7 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 template <class TInputImage, class TOutputImage>
 void
 FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::ThreadedGenerateData ( const OutputRegionType & outputRegionForThread, int threadId )
+::ThreadedGenerateData ( const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId )
 {
   InputRegionType inputRegion;
   this->CallCopyOutputRegionToInputRegion( inputRegion, outputRegionForThread );
@@ -132,7 +132,7 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   double den = 0.;
   double nbSample = 0;
 
-  for ( int i = 0; i < this->GetNumberOfThreads(); ++i )
+  for ( itk::ThreadIdType i = 0; i < this->GetNumberOfThreads(); ++i )
   {
     beta += m_BetaVector[i];
     den += m_DenVector[i];

@@ -37,7 +37,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
 ::DisparityMapMedianFilter()
 {
   this->SetNumberOfRequiredInputs( 1 );
-  this->SetNumberOfOutputs(4);
+  this->SetNumberOfRequiredOutputs(4);
   this->SetNthOutput(1,TMask::New());
   this->SetNthOutput(2,TOutputImage::New());
   this->SetNthOutput(3,TMask::New());

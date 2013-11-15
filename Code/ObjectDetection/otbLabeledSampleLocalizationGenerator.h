@@ -22,7 +22,7 @@
 #include "otbVectorData.h"
 #include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 
 
 namespace otb
@@ -72,7 +72,7 @@ public:
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
   
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
-  typedef itk::Statistics::EuclideanDistance<PointType>          EuclideanDistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PointType>          EuclideanDistanceType;
   
   /** Connects the VectorDatas from which the localizations are going to be extracted. */
   void PushBackInput(const VectorDataType *);

@@ -95,7 +95,8 @@ protected:
 
 
 private:
-    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6 );
+  //itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
+  static const unsigned int NumberOfComponentsPerPixel = 6;
 
 };
 

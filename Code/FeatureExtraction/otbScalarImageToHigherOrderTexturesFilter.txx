@@ -27,14 +27,15 @@ namespace otb
 {
 template <class TInputImage, class TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::ScalarImageToHigherOrderTexturesFilter() : m_Radius(),
-  m_Offset(),
+::ScalarImageToHigherOrderTexturesFilter() : 
+  m_Radius(),
   m_NumberOfBinsPerAxis(8),
   m_InputImageMinimum(0),
-  m_InputImageMaximum(255)
+  m_InputImageMaximum(255),
+  m_FastCalculations(false)
 {
   // There are 11 outputs corresponding to the 8 textures indices
-  this->SetNumberOfOutputs(11);
+  this->SetNumberOfRequiredOutputs(10);
 
   // Create the 11 outputs
   this->SetNthOutput(0, OutputImageType::New());
@@ -48,7 +49,28 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   this->SetNthOutput(8, OutputImageType::New());
   this->SetNthOutput(9, OutputImageType::New());
   this->SetNthOutput(10, OutputImageType::New());
-  this->SetNthOutput(11, OutputImageType::New());
+  
+  m_Radius.Fill(10);
+  
+  // Set the offset directions to their defaults: half of all the possible
+  // directions 1 pixel away. (The other half is included by symmetry.)
+  // We use a neighborhood iterator to calculate the appropriate offsets.
+  typedef itk::Neighborhood<typename InputImageType::PixelType,
+    InputImageType::ImageDimension> NeighborhoodType;
+  NeighborhoodType hood;
+  hood.SetRadius( 1 );
+  
+  // select all "previous" neighbors that are face+edge+vertex
+  // connected to the current pixel. do not include the center pixel.
+  unsigned int centerIndex = hood.GetCenterNeighborhoodIndex();
+  OffsetVectorPointer offsets = OffsetVector::New();
+  for( unsigned int d = 0; d < centerIndex; d++ )
+    {
+    OffsetType offset = hood.GetOffset( d );
+    offsets->push_back( offset );
+    }
+  this->SetOffsets( offsets );
+  
 }
 
 template <class TInputImage, class TOutputImage>
@@ -202,6 +224,16 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
+::SetOffset( const OffsetType offset )
+{
+  OffsetVectorPointer offsetVector = OffsetVector::New();
+  offsetVector->push_back( offset );
+  this->SetOffsets( offsetVector );
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   // First, call superclass implementation
@@ -220,26 +252,8 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   // We use only the first output since requested regions for all outputs are enforced to be equal
   // by the default GenerateOutputRequestedRegiont() implementation
   OutputRegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
-
-  typename OutputRegionType::IndexType outputIndex = outputRequestedRegion.GetIndex();
-  typename OutputRegionType::SizeType  outputSize   = outputRequestedRegion.GetSize();
-  typename InputRegionType::IndexType  inputIndex;
-  typename InputRegionType::SizeType   inputSize;
-
-  // First, apply offset
-  for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
-    {
-    inputIndex[dim] = std::min(outputIndex[dim], outputIndex[dim] + m_Offset[dim]);
-    inputSize[dim] =
-      std::max(outputIndex[dim] + outputSize[dim], outputIndex[dim] + outputSize[dim] +
-               m_Offset[dim]) - inputIndex[dim];
-    }
-
-  // Build the input requested region
-  InputRegionType inputRequestedRegion;
-  inputRequestedRegion.SetIndex(inputIndex);
-  inputRequestedRegion.SetSize(inputSize);
-
+  InputRegionType inputRequestedRegion = outputRequestedRegion;
+  
   // Apply the radius
   inputRequestedRegion.PadByRadius(m_Radius);
 
@@ -262,7 +276,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve the input and output pointers
   InputImagePointerType  inputPtr  = const_cast<InputImageType *>(this->GetInput());
@@ -270,28 +284,18 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   typedef typename itk::ImageRegionIterator<OutputImageType> IteratorType;
   std::vector<IteratorType> outputImagesIterators;
 
-  for (unsigned int i = 0; i < 11; ++i)
+  for (unsigned int i = 0; i < 10; ++i)
     {
     outputImagesIterators.push_back( IteratorType(this->GetOutput(i), outputRegionForThread) );
     outputImagesIterators[i].GoToBegin();
     }
-
-  // Build the run length matrix generator
-  RunLengthMatrixGeneratorPointerType runlengthMatrixGenerator = RunLengthMatrixGeneratorType::New();
-  runlengthMatrixGenerator->SetInput(inputPtr);
-  runlengthMatrixGenerator->SetOffset(m_Offset);
-  runlengthMatrixGenerator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
-  runlengthMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
 
   // Compute the max possible run length (in physical unit)
   typename InputImageType::PointType  topLeftPoint;
   typename InputImageType::PointType  bottomRightPoint;
   inputPtr->TransformIndexToPhysicalPoint( outputImagesIterators[0].GetIndex() - m_Radius, topLeftPoint );
   inputPtr->TransformIndexToPhysicalPoint( outputImagesIterators[0].GetIndex() + m_Radius, bottomRightPoint );
-  runlengthMatrixGenerator->SetDistanceValueMinMax(0, topLeftPoint.EuclideanDistanceTo(bottomRightPoint));
-
-  // Build the texture calculator
-  TextureCoefficientsCalculatorPointerType texturesCalculator = TextureCoefficientsCalculatorType::New();
+  double maxDistance = topLeftPoint.EuclideanDistanceTo(bottomRightPoint);
 
   // Set-up progress reporting
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -313,34 +317,52 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     InputRegionType inputRegion;
     inputRegion.SetIndex(inputIndex);
     inputRegion.SetSize(inputSize);
-
-    // Compute the run-length matrix
-    runlengthMatrixGenerator->SetRegion(inputRegion);
-    //runlengthMatrixGenerator->SetNormalize(true);
-    runlengthMatrixGenerator->Compute();
-
-    // Compute textures indices
-    texturesCalculator->SetHistogram(runlengthMatrixGenerator->GetOutput());
-    texturesCalculator->Compute();
+    
+    inputRegion.Crop(inputPtr->GetBufferedRegion());
+    
+    // Create a local image corresponding to the input region
+    InputImagePointerType localInputImage = InputImageType::New();
+    localInputImage->SetRegions(inputRegion);
+    localInputImage->Allocate();
+    typedef itk::ImageRegionIteratorWithIndex<InputImageType> ImageRegionIteratorType;
+    ImageRegionIteratorType itInputPtr(inputPtr, inputRegion);
+    ImageRegionIteratorType itLocalInputImage(localInputImage, inputRegion);
+    for (itInputPtr.GoToBegin(), itLocalInputImage.GoToBegin();
+        !itInputPtr.IsAtEnd();
+        ++itInputPtr, ++itLocalInputImage)
+      {
+      itLocalInputImage.Set(itInputPtr.Get());
+      }
+      
+    typename ScalarImageToRunLengthFeaturesFilterType::Pointer runLengthFeatureCalculator = ScalarImageToRunLengthFeaturesFilterType::New();
+    runLengthFeatureCalculator->SetInput(localInputImage);
+    runLengthFeatureCalculator->SetOffsets(m_Offsets);
+    runLengthFeatureCalculator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
+    runLengthFeatureCalculator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
+    runLengthFeatureCalculator->SetDistanceValueMinMax(0, maxDistance);
+    
+    runLengthFeatureCalculator->Update();
+    
+    typename ScalarImageToRunLengthFeaturesFilterType::FeatureValueVector&
+      featuresMeans = *(runLengthFeatureCalculator->GetFeatureMeans().GetPointer());
 
     // Fill outputs
-    outputImagesIterators[0].Set(texturesCalculator->GetShortRunEmphasis());
-    outputImagesIterators[1].Set(texturesCalculator->GetLongRunEmphasis());
-    outputImagesIterators[2].Set(texturesCalculator->GetGreyLevelNonuniformity());
-    outputImagesIterators[3].Set(texturesCalculator->GetRunLengthNonuniformity());
-    outputImagesIterators[4].Set(static_cast<double>(texturesCalculator->GetTotalNumberOfRuns()) / inputRegion.GetNumberOfPixels());
-    outputImagesIterators[5].Set(texturesCalculator->GetLowGreyLevelRunEmphasis());
-    outputImagesIterators[6].Set(texturesCalculator->GetHighGreyLevelRunEmphasis());
-    outputImagesIterators[7].Set(texturesCalculator->GetShortRunLowGreyLevelEmphasis());
-    outputImagesIterators[8].Set(texturesCalculator->GetShortRunHighGreyLevelEmphasis());
-    outputImagesIterators[9].Set(texturesCalculator->GetLongRunLowGreyLevelEmphasis());
-    outputImagesIterators[10].Set(texturesCalculator->GetLongRunHighGreyLevelEmphasis());
+    outputImagesIterators[0].Set(featuresMeans[0]);
+    outputImagesIterators[1].Set(featuresMeans[1]);
+    outputImagesIterators[2].Set(featuresMeans[2]);
+    outputImagesIterators[3].Set(featuresMeans[3]);
+    outputImagesIterators[4].Set(featuresMeans[4]);
+    outputImagesIterators[5].Set(featuresMeans[5]);
+    outputImagesIterators[6].Set(featuresMeans[6]);
+    outputImagesIterators[7].Set(featuresMeans[7]);
+    outputImagesIterators[8].Set(featuresMeans[8]);
+    outputImagesIterators[9].Set(featuresMeans[9]);
 
     // Update progress
     progress.CompletedPixel();
 
     // Increment iterators
-    for (unsigned int i = 0; i < 11; ++i)
+    for (unsigned int i = 0; i < 10; ++i)
       {
       ++outputImagesIterators[i];
       }

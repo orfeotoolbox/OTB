@@ -32,11 +32,11 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 {
   m_NoDataValue = -32768;
   // Set the number of inputs (1 moving image by default -> 3 inputs)
-  this->SetNumberOfInputs(6);
+  this->SetNumberOfRequiredInputs(6);
   this->SetNumberOfRequiredInputs(1);
 
   // Set the outputs
-  this->SetNumberOfOutputs(2);
+  this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0,TDisparityImage::New());
   this->SetNthOutput(1,TDisparityImage::New());
 }
@@ -319,7 +319,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 template <class TDisparityImage, class TGridImage, class TSensorImage, class TMaskImage>
 void
 DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
-::ThreadedGenerateData(const RegionType & outputRegionForThread, int threadId)
+::ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId)
 {
   const TGridImage * leftGrid = this->GetInverseEpipolarLeftGrid();
   const TGridImage * rightGrid = this->GetDirectEpipolarRightGrid();

@@ -56,7 +56,7 @@ void
 PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 ::ThreadedGenerateData(
   const OutputImageRegionType&     outputRegionForThread,
-  int threadId)
+  itk::ThreadIdType threadId)
 {
 //  sleep(threadId);
 //  std::cerr << threadId << " -> " << outputRegionForThread.GetIndex() << std::endl;

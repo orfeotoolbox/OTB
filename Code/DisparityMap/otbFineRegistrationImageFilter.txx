@@ -31,13 +31,13 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
-FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
+template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacementField>
 ::FineRegistrationImageFilter()
  {
   this->SetNumberOfRequiredInputs( 2 );
-  this->SetNumberOfOutputs(2);
-  this->SetNthOutput(1, TOutputDeformationField::New());
+  this->SetNumberOfRequiredOutputs(2);
+  this->SetNthOutput(1, TOutputDisplacementField::New());
 
   // Default radius
   m_Radius.Fill(2);
@@ -69,27 +69,27 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationF
   m_Transform = NULL;
  }
 
-template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
+template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
 void
-FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacementField>
 ::SetFixedInput( const TInputImage * image )
  {
   // Process object is not const-correct so the const casting is required.
   this->SetNthInput(0, const_cast<TInputImage *>( image ));
  }
 
-template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
+template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
 void
-FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacementField>
 ::SetMovingInput( const TInputImage * image)
  {
   // Process object is not const-correct so the const casting is required.
   this->SetNthInput(1, const_cast<TInputImage *>( image ));
  }
 
-template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
+template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
 const TInputImage *
-FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacementField>
 ::GetFixedInput()
  {
   if (this->GetNumberOfInputs()<1)
@@ -99,9 +99,9 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationF
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0));
  }
 
-template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
+template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
 const TInputImage *
-FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacementField>
 ::GetMovingInput()
  {
   if (this->GetNumberOfInputs()<2)
@@ -111,21 +111,21 @@ FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationF
   return static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(1));
  }
 
-template <class TInputImage, class T0utputCorrelation, class TOutputDeformationField>
-TOutputDeformationField *
-FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDeformationField>
-::GetOutputDeformationField()
+template <class TInputImage, class T0utputCorrelation, class TOutputDisplacementField>
+TOutputDisplacementField *
+FineRegistrationImageFilter<TInputImage, T0utputCorrelation, TOutputDisplacementField>
+::GetOutputDisplacementField()
  {
   if (this->GetNumberOfOutputs()<2)
     {
     return 0;
     }
-  return static_cast<TOutputDeformationField *>(this->itk::ProcessObject::GetOutput(1));
+  return static_cast<TOutputDisplacementField *>(this->itk::ProcessObject::GetOutput(1));
  }
 
-template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
 void
-FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
 ::GenerateOutputInformation()
  {
   // Call superclass implementation
@@ -133,7 +133,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationF
 
   // Retrieve output pointers
   TOutputCorrelation * outputPtr = this->GetOutput();
-  TOutputDeformationField *outputFieldPtr = this->GetOutputDeformationField();
+  TOutputDisplacementField *outputFieldPtr = this->GetOutputDisplacementField();
 
   // Update size and spacing according to grid step
   InputImageRegionType largestRegion  = outputPtr->GetLargestPossibleRegion();
@@ -156,9 +156,9 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationF
   outputFieldPtr->SetLargestPossibleRegion(largestRegion);
  }
 
-template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
 void
-FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
 ::GenerateInputRequestedRegion()
  {
   // call the superclass' implementation of this method
@@ -283,9 +283,9 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationF
   return;
  }
 
-template <class TInputImage, class TOutputCorrelation, class TOutputDeformationField>
+template <class TInputImage, class TOutputCorrelation, class TOutputDisplacementField>
 void
-FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationField>
+FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDisplacementField>
 ::GenerateData()
  {
   // Allocate outputs
@@ -295,7 +295,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationF
   const TInputImage * fixedPtr = this->GetFixedInput();
   const TInputImage * movingPtr = this->GetMovingInput();
   TOutputCorrelation * outputPtr = this->GetOutput();
-  TOutputDeformationField * outputDfPtr = this->GetOutputDeformationField();
+  TOutputDisplacementField * outputDfPtr = this->GetOutputDisplacementField();
 
   // Wire currentMetric
   m_Interpolator->SetInputImage(this->GetMovingInput());
@@ -307,7 +307,7 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationF
 
   /** Output iterators */
   itk::ImageRegionIteratorWithIndex<TOutputCorrelation> outputIt(outputPtr, outputPtr->GetRequestedRegion());
-  itk::ImageRegionIterator<TOutputDeformationField> outputDfIt(outputDfPtr, outputPtr->GetRequestedRegion());
+  itk::ImageRegionIterator<TOutputDisplacementField> outputDfIt(outputDfPtr, outputPtr->GetRequestedRegion());
   outputIt.GoToBegin();
   outputDfIt.GoToBegin();
 
@@ -324,10 +324,10 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationF
   // Optimal translation parameters
   typename TranslationType::ParametersType params(2), optParams(2), tmpOptParams(2);
 
-  // Final deformation value
-  DeformationValueType deformationValue;
-  deformationValue[0] = m_InitialOffset[0];
-  deformationValue[1] = m_InitialOffset[1];
+  // Final displacement value
+  DisplacementValueType displacementValue;
+  displacementValue[0] = m_InitialOffset[0];
+  displacementValue[1] = m_InitialOffset[1];
 
   // Local initial offset: enable the possibility of a different initial offset for each pixel
   SpacingType localOffset = m_InitialOffset;
@@ -452,15 +452,15 @@ FineRegistrationImageFilter<TInputImage, TOutputCorrelation, TOutputDeformationF
     outputIt.Set(optMetric);
     if(m_UseSpacing)
       {
-      deformationValue[0] = optParams[0];
-      deformationValue[1] = optParams[1];
+      displacementValue[0] = optParams[0];
+      displacementValue[1] = optParams[1];
       }
     else
       {
-      deformationValue[0] = optParams[0]/fixedSpacing[0];
-      deformationValue[1] = optParams[1]/fixedSpacing[1];
+      displacementValue[0] = optParams[0]/fixedSpacing[0];
+      displacementValue[1] = optParams[1]/fixedSpacing[1];
       }
-    outputDfIt.Set(deformationValue);
+    outputDfIt.Set(displacementValue);
     // Update iterators
     ++outputIt;
     ++outputDfIt;

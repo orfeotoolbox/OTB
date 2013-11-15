@@ -127,7 +127,7 @@ protected :
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
  
   void BeforeThreadedGenerateData();
-  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, int threadId );
+  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
   void AfterThreadedGenerateData();
 
 private :

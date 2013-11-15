@@ -103,7 +103,7 @@ template <class TDEMImage>
 void
 DEMToImageGenerator<TDEMImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
   DEMImagePointerType DEMImage = this->GetOutput();
 

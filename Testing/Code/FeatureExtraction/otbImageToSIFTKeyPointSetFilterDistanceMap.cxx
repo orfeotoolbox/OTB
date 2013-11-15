@@ -34,6 +34,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "itkAffineTransform.h"
 
 typedef itk::VariableLengthVector<float> RealVectorType;
 typedef itk::PointSet<RealVectorType, 2> PointSetType;

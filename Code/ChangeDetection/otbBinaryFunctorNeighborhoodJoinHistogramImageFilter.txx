@@ -33,7 +33,7 @@ namespace otb
 template <class TInputImage1, class TInputImage2,
     class TOutputImage, class TFunction>
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
-::BinaryFunctorNeighborhoodJoinHistogramImageFilter()
+::BinaryFunctorNeighborhoodJoinHistogramImageFilter(): m_HistogramSize(2)
 {
   this->SetNumberOfRequiredInputs(2);
   m_Radius = 3;
@@ -233,6 +233,11 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
     ++miIt;
     }
 
+
+  // Set the size of the upper and lower bounds of the histogram:
+  m_LowerBound.SetSize(2);
+  m_UpperBound.SetSize(2);
+
   // Initialize the upper and lower bounds of the histogram.
   m_LowerBound[0] = minInput1;
   m_LowerBound[1] = minInput2;
@@ -254,7 +259,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
   Input2IteratorType ti2(pInput2Image, input2Region);
 
   typename HistogramType::Pointer histogram = HistogramType::New();
-
+  histogram->SetMeasurementVectorSize(2);
   histogram->Initialize(m_HistogramSize, m_LowerBound, m_UpperBound);
 
   ti1.GoToBegin();
@@ -262,11 +267,11 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
   while (!ti1.IsAtEnd() && !ti2.IsAtEnd())
     {
 
-    typename HistogramType::MeasurementVectorType sample;
+    typename HistogramType::IndexType sample(2);
     sample[0] = ti1.Get();
     sample[1] = ti2.Get();
     if (sample[0] != itk::NumericTraits<Input1ImagePixelType>::Zero &&
-        sample[1] != itk::NumericTraits<Input2ImagePixelType>::Zero) histogram->IncreaseFrequency(sample, 1);
+        sample[1] != itk::NumericTraits<Input2ImagePixelType>::Zero) histogram->IncreaseFrequencyOfIndex(sample, 1);
 
     ++ti1;
     ++ti2;
@@ -283,7 +288,7 @@ template <class TInputImage1, class TInputImage2, class TOutputImage, class TFun
 void
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId)
+                       itk::ThreadIdType threadId)
 {
 
   //this->Initialize();

@@ -26,6 +26,7 @@ int otbListSampleToHistogramListGenerator(int argc, char * argv[])
   typedef double                                       PixelType;
   typedef otb::VectorImage<PixelType>                  VectorImageType;
   typedef VectorImageType::PixelType                   VectorPixelType;
+  typedef VectorImageType::SizeType                    SizeType;
   typedef itk::Statistics::ListSample<VectorPixelType> ListSampleType;
   typedef otb::ListSampleToHistogramListGenerator
   <ListSampleType, PixelType>                         HistogramGeneratorType;
@@ -35,10 +36,13 @@ int otbListSampleToHistogramListGenerator(int argc, char * argv[])
   ReaderType::Pointer             reader    = ReaderType::New();
   HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
   ListSampleType::Pointer         ls = ListSampleType::New();
-
+  
   reader->SetFileName(argv[1]);
   reader->Update();
-
+  
+  // Set the size of the ListSample Measurement Vector
+  ls->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+  
   itk::ImageRegionConstIterator<VectorImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
   for (it.GoToBegin(); !it.IsAtEnd(); ++it)

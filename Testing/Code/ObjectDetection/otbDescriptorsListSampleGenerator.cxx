@@ -54,7 +54,7 @@ typedef otb::DescriptorsListSampleGenerator
            < ImageType,
              VectorDataType,
              ListSampleType,
-             LabelListSampleType,
+             LabelType,
              FunctionPrecisionType,
              CoordRepType > DescriptorsListSampleGeneratorType;
 
@@ -156,7 +156,6 @@ int otbDescriptorsListSampleGenerator(int argc, char* argv[])
   descriptorsGenerator->GetStreamer()->SetNumberOfLinesStrippedStreaming( streaming );
   descriptorsGenerator->Update();
 
-
   ListSampleType::Pointer      samples = descriptorsGenerator->GetListSample();
   LabelListSampleType::Pointer labels  = descriptorsGenerator->GetLabelListSample();
   SamplesPositionType&         positions = descriptorsGenerator->GetSamplesPositions();
@@ -246,7 +245,7 @@ int otbDescriptorsSVMModelCreation(int argc, char* argv[])
   shiftscaleFilter->Update();
 
   SVMEstimatorType::Pointer svmEstimator = SVMEstimatorType::New();
-  svmEstimator->SetInputSampleList(shiftscaleFilter->GetOutputSampleList());
+  svmEstimator->SetInputSampleList(shiftscaleFilter->GetOutput());
   svmEstimator->SetTrainingSampleList(descriptorsGenerator->GetLabelListSample());
   svmEstimator->Update();
   svmEstimator->GetModel()->SaveModel(outputFileName);

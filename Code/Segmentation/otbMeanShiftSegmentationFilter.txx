@@ -31,7 +31,7 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
    m_RegionPruningFilter = RegionPruningFilterType::New();
    m_RelabelFilter = RelabelComponentFilterType::New();
    this->SetMinRegionSize(100);
-   this->SetNumberOfOutputs(2);
+   this->SetNumberOfRequiredOutputs(2);
    this->SetNthOutput(0,TOutputLabelImage::New());
    this->SetNthOutput(1,TOutputClusteredImage::New());
 }

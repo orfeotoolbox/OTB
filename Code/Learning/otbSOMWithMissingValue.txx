@@ -24,11 +24,7 @@
 
 #include "itkNumericTraits.h"
 #include "itkNeighborhoodIterator.h"
-#include "itkImageRegionIteratorWithIndex.h"
-#include "itkContinuousIndex.h"
-#include "itkRandomImageSource.h"
 #include "otbMacro.h"
-#include "itkImageRegionIterator.h"
 
 namespace otb
 {

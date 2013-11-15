@@ -26,6 +26,7 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "itkResampleImageFilter.h"
+#include "itkAffineTransform.h"
 
 
 int otbFourierMellinDescriptorsNew(int argc, char * argv[])

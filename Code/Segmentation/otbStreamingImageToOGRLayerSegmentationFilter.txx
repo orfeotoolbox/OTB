@@ -38,7 +38,7 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
 ::PersistentImageToOGRLayerSegmentationFilter() : m_TileMaxLabel(0), m_StartLabel(0), m_SegmentationFilter(), m_FieldName("DN"), m_Use8Connected(false),
   m_FilterSmallObject(false), m_MinimumObjectSize(1),m_Simplify(false), m_SimplificationTolerance(0.3)
 {
-   this->SetNumberOfInputs(2);
+   this->SetNumberOfRequiredInputs(2);
    this->SetNumberOfRequiredInputs(1);
    m_SegmentationFilter = SegmentationFilterType::New();
    m_TileNumber = 1;
@@ -110,7 +110,7 @@ PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>
      typedef itk::ExtractImageFilter<LabelImageType, LabelImageType> ExtractLabelImageFilterType;
      typename ExtractLabelImageFilterType::Pointer maskExtract = ExtractLabelImageFilterType::New();
      maskExtract->SetInput( this->GetInputMask() );
-     maskExtract->SetExtractionRegion( this->GetInputMask()->GetRequestedRegion() );
+     maskExtract->SetExtractionRegion( this->GetInput()->GetRequestedRegion() );
      maskExtract->Update();
      // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
      maskExtract->GetOutput()->SetMetaDataDictionary(this->GetInputMask()->GetMetaDataDictionary());

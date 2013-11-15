@@ -14,7 +14,7 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
-     =========================================================================*/
+=========================================================================*/
 
 
 
@@ -23,7 +23,7 @@
 #include "itkPoint.h"
 #include "itkPointSet.h"
 
-#include "itkPointSetToListAdaptor.h"
+#include "itkPointSetToListSampleAdaptor.h"
 #include "itkSubsample.h"
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
@@ -81,7 +81,7 @@ int otbSVMClassifierPointSet(int argc, char* argv[])
 
   std::cout << "PointSet built" << std::endl;
 
-  typedef itk::Statistics::PointSetToListAdaptor<MeasurePointSetType>
+  typedef itk::Statistics::PointSetToListSampleAdaptor<MeasurePointSetType>
   SampleType;
   SampleType::Pointer sample = SampleType::New();
   sample->SetPointSet(mPSet);
@@ -105,7 +105,7 @@ int otbSVMClassifierPointSet(int argc, char* argv[])
 
   classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel(model);
-  classifier->SetSample(sample.GetPointer());
+  classifier->SetInput(sample.GetPointer());
   classifier->Update();
 
   /* Build the class map */

@@ -23,7 +23,6 @@
 #include "ogrsf_frmts.h"
 
 #include "itksys/SystemTools.hxx"
-
 #include "itkByteSwapper.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
@@ -292,7 +291,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
     }
 
   chrono.Stop();
-  otbMsgDevMacro( << "OGRVectorDataIO: file saved in " << chrono.GetMeanTime() << " seconds. (" << layerKept <<
+  otbMsgDevMacro( << "OGRVectorDataIO: file saved in " << chrono.GetMean() << " seconds. (" << layerKept <<
   " elements)" );
 
   otbMsgDevMacro(<< " OGRVectorDataIO::Write()  ");

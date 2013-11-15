@@ -48,4 +48,17 @@ MSTARImageIOFactory::GetDescription() const
   return "MSTAR ImageIO Factory, permettant le chargement d'image MSTAR dans l'OTB";
 }
 
+// Undocumented API used to register during static initialization.
+// DO NOT CALL DIRECTLY.
+
+static bool MSTARImageIOFactoryHasBeenRegistered;
+
+void MSTARImageIOFactoryRegister__Private(void)
+{
+  if( ! MSTARImageIOFactoryHasBeenRegistered )
+    {
+    MSTARImageIOFactoryHasBeenRegistered = true;
+    MSTARImageIOFactory::RegisterOneFactory();
+    }
+}
 } // end namespace otb

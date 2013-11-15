@@ -124,18 +124,18 @@ void LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccesso
     outPixel[k] = static_cast<OutputInternalPixelType>(attribute);
     }
 
-  LineContainerConstIterator lit;
-  const LineContainerType & lineContainer = labelObject->GetLineContainer();
+  ConstLineIteratorType lit = ConstLineIteratorType ( labelObject );
 
-  for( lit = lineContainer.begin(); lit != lineContainer.end(); lit++ )
+  while( !lit.IsAtEnd() )
     {
-    IndexType idx = lit->GetIndex();
-    unsigned long length = lit->GetLength();
+    IndexType idx = lit.GetLine().GetIndex();
+    unsigned long length = lit.GetLine().GetLength();
     for( unsigned int i=0; i<length; i++)
       {
       output->SetPixel( idx, outPixel );
       idx[0]++;
       }
+    ++lit;
     }
 }
 

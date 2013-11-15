@@ -45,8 +45,8 @@ namespace otb
  * especially with large kernels.
  *
  * \note ITK must be set to use FFTW (double implementation) for this filter to work properly. If not, exception
- *  will be raised at filter creation. Install fftw and set the variable
- *  USE_FFTWD  to ON in ccmake.
+ *  will be raised at filter creation.
+ *  Install fftw and set the cmake variable ITK_USE_FFTWD to ON.
  *
  * \sa ConvolutionImageFilter
  *
@@ -157,7 +157,7 @@ protected:
    * due to limited thread-safety of FFTW plan creation.
    */
   void GenerateData();
-  // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+  // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
   OverlapSaveConvolutionImageFilter(const Self &); //purposely not implemented

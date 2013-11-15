@@ -31,7 +31,7 @@ template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimensio
 KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimension, TMaskImage>
 ::KMeansImageClassificationFilter()
 {
-  this->SetNumberOfInputs(2);
+  this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredInputs(1);
   m_DefaultLabel = itk::NumericTraits<LabelType>::ZeroValue();
 }
@@ -82,7 +82,7 @@ KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimension, 
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension, class TMaskImage>
 void
 KMeansImageClassificationFilter<TInputImage, TOutputImage, VMaxSampleDimension, TMaskImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   InputImageConstPointerType inputPtr     = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();

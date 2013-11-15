@@ -14,68 +14,6 @@ ADD_TEST(saTuPolarimetricSynthesisFunctor ${SARPOLARIMETRY_TESTS1}
         otbPolarimetricSynthesisFunctor )
 
 
-ADD_TEST(saTuPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
-        otbPolarimetricSynthesisFilterNew )
-
- # Normal Case
-ADD_TEST(saTvPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvPolarimetricSynthesis.tif
-                    ${TEMP}/resPolarimetricSynthesis_HH_VH_HV_VV.tif
-        otbPolarimetricSynthesisFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VH.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/resPolarimetricSynthesis_HH_VH_HV_VV.tif
-         32.0     # PsiI
-         22.0     # KhiI
-         58.0     # PsiR
-         45.0     # KhiR
-        )
-
- # With 3 channels
-ADD_TEST(saTvHHnHVnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvPolarimetricSynthesis_HH_HV_VV.tif
-                    ${TEMP}/resPolarimetricSynthesis_HH_HV_VV.tif
-        otbHHnHVnVVPolarimetricSynthesisFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/resPolarimetricSynthesis_HH_HV_VV.tif
-         32.0
-         22.0
-         58.0
-         45.0
-        )
-
- # With HH and HV channels
-ADD_TEST(saTvHHnHVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvPolarimetricSynthesis_HH_HV.tif
-                    ${TEMP}/resPolarimetricSynthesis_HH_HV.tif
-        otbHHnHVPolarimetricSynthesisFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${TEMP}/resPolarimetricSynthesis_HH_HV.tif
-         32.0
-         22.0
-         58.0
-         45.0
-        )
-
-# With VH and VV channels
-ADD_TEST(saTvVHnVVPolarimetricSynthesisFilter ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvPolarimetricSynthesis_VH_VV.tif
-                    ${TEMP}/resPolarimetricSynthesis_VH_VV.tif
-        otbVHnVVPolarimetricSynthesisFilter
-        ${INPUTDATA}/RSAT_imagery_VH.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/resPolarimetricSynthesis_VH_VV.tif
-         32.0
-         22.0
-         58.0
-         45.0
-        )
-
 ADD_TEST(saTuMultiChannelsPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
         otbMultiChannelsPolarimetricSynthesisFilterNew
         )
@@ -354,11 +292,6 @@ ADD_TEST(saTvPolarimetricDataTest ${SARPOLARIMETRY_TESTS2}
 SET(SARPOLARIMETRY_SRCS1
 otbSARPolarimetryTests1.cxx
 otbPolarimetricSynthesisFunctor.cxx
-otbPolarimetricSynthesisFilterNew.cxx
-otbPolarimetricSynthesisFilter.cxx
-otbHHnHVnVVPolarimetricSynthesisFilter.cxx
-otbHHnHVPolarimetricSynthesisFilter.cxx
-otbVHnVVPolarimetricSynthesisFilter.cxx
 otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx
 otbVectorMultiChannelsPolarimetricSynthesisFilter.cxx

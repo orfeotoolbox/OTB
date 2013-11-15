@@ -34,9 +34,8 @@ PolyLineParametricPathWithValue<TValue, VDimension>
   m_BoundingRegion(), m_BoundingRegionIsValid(false)
 {
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<ValueType>(dict, m_Key, static_cast<ValueType>(0));
-  // The following way seems better but I need to check with a win build
-  //itk::EncapsulateMetaData<ValueType>(dict, m_Key, itk::NumericTraits<ValueType>::ZeroValue());
+  ValueType v;
+  itk::EncapsulateMetaData<ValueType>(dict, m_Key, itk::NumericTraits<ValueType>::ZeroValue(v));
 }
 
 template <class TValue, unsigned int VDimension>

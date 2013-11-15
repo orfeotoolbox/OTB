@@ -67,6 +67,7 @@ public:
 
   typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
 
+  typedef typename InputLabelMapType::ConstIterator   ConstIteratorType;
   typedef typename OutputVectorDataType::DataNodeType DataNodeType;
   typedef typename DataNodeType::Pointer              DataNodePointerType;
   typedef typename DataNodeType::PolygonType          PolygonType;

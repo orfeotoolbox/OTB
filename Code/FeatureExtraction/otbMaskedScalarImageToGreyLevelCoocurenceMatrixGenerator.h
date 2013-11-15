@@ -18,11 +18,14 @@
 #ifndef __otbMaskedScalarImageToGreyLevelCoocurrenceMatrixGenerator_h
 #define __otbMaskedScalarImageToGreyLevelCoocurrenceMatrixGenerator_h
 
-#include "itkMaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator.h"
+#include "itkScalarImageToCooccurrenceMatrixFilter.h"
 #include "otbMacro.h"
 
 namespace otb
 {
+
+//FIXME might be useless now with the new stat framework
+
 /** \class MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
  *  \brief This class extends the ITK version by providing matrix estimation on a sub-region.
  *
@@ -31,15 +34,15 @@ namespace otb
  *
  *  \sa itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
  */
-template <class TImage, class THistogramFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
+template <class TImage, class THistogramFrequencyContainer = itk::Statistics::DenseFrequencyContainer2>
 class MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
-  : public itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator<TImage,
-      THistogramFrequencyContainer>
+  : public itk::Statistics::ScalarImageToCooccurrenceMatrixFilter<TImage,
+      THistogramFrequencyContainer>//FIXME check templates
 {
 public:
   /** Standard class typedef */
   typedef MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator Self;
-  typedef itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
+  typedef itk::Statistics::ScalarImageToCooccurrenceMatrixFilter
   <TImage, THistogramFrequencyContainer>                              Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -49,7 +52,7 @@ public:
 
   /** RTTI */
   itkTypeMacro(MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator,
-               itk::Statistics::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator);
+               itk::Statistics::ScalarImageToCooccurrenceMatrixFilter);
 
   /** Superclass typedefs */
   typedef TImage                          ImageType;

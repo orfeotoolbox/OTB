@@ -29,7 +29,7 @@
 // estimation. The idea here is to match SIFTs extracted from both the
 // fixed and the moving images. The use of SIFTs is demonstrated in
 // section \ref{sec:SIFTDetector}. The
-// \doxygen{itk}{DeformationFieldSource} will be used
+// \doxygen{itk}{DisplacementFieldSource} will be used
 // to generate a deformation field by using
 // interpolation on the deformation values from the point set. More
 // advanced methods for deformation field interpolation are also
@@ -43,17 +43,13 @@
 // Software Guide : BeginCodeSnippet
 #include "otbKeyPointSetsMatchingFilter.h"
 #include "otbSiftFastImageFilter.h"
-// Disabling deprecation warning if on visual
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable:4996)
-#endif
-#include "itkDeformationFieldSource.h"
-// Enabling remaining deprecation warning
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "itkLandmarkDisplacementFieldSource.h"
 // Software Guide : EndCodeSnippet
+
+
+
+
+
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -119,7 +115,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::EuclideanDistance<RealVectorType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<RealVectorType> DistanceType;
   typedef otb::KeyPointSetsMatchingFilter<PointSetType, DistanceType>
   EuclideanDistanceMatchingFilterType;
   // Software Guide : EndCodeSnippet
@@ -294,19 +290,17 @@ int main(int argc, char* argv[])
   //
   // The landmarks are used for building a deformation field. The
   // deformation field is an image of vectors created by the
-  // \doxygen{itk}{DeformationFieldSource} class.
+  // \doxygen{itk}{DisplacementFieldSource} class.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::Vector<RealType, Dimension>   VectorType;
-  typedef   otb::Image<VectorType,  Dimension> DeformationFieldType;
+  typedef   otb::Image<VectorType,  Dimension> DisplacementFieldType;
 
-  typedef itk::DeformationFieldSource<
-      DeformationFieldType
-      >  DeformationSourceType;
+  typedef itk::LandmarkDisplacementFieldSource<DisplacementFieldType>  DisplacementSourceType;
 
-  DeformationSourceType::Pointer deformer = DeformationSourceType::New();
+  DisplacementSourceType::Pointer deformer = DisplacementSourceType::New();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -328,11 +322,11 @@ int main(int argc, char* argv[])
   //
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  typedef DeformationSourceType::LandmarkContainerPointer
+  typedef DisplacementSourceType::LandmarkContainerPointer
   LandmarkContainerPointer;
-  typedef DeformationSourceType::LandmarkContainer
+  typedef DisplacementSourceType::LandmarkContainer
   LandmarkContainerType;
-  typedef DeformationSourceType::LandmarkPointType LandmarkPointType;
+  typedef DisplacementSourceType::LandmarkPointType LandmarkPointType;
 
   LandmarkContainerType::Pointer sourceLandmarks =
     LandmarkContainerType::New();
@@ -381,7 +375,7 @@ int main(int argc, char* argv[])
 
   deformer->UpdateLargestPossibleRegion();
 
-  DeformationFieldType::ConstPointer deformationField =
+  DisplacementFieldType::ConstPointer deformationField =
     deformer->GetOutput();
 
   deformer->Update();
@@ -394,7 +388,7 @@ int main(int argc, char* argv[])
   itk::ImageRegionIterator<ImageType> outIt(outdf,
                                             outdf->GetLargestPossibleRegion());
 
-  itk::ImageRegionIterator<DeformationFieldType> inIt(
+  itk::ImageRegionIterator<DisplacementFieldType> inIt(
     deformer->GetOutput(), deformer->GetOutput()->GetLargestPossibleRegion());
   outIt.GoToBegin();
   inIt.GoToBegin();
@@ -435,7 +429,7 @@ int main(int argc, char* argv[])
   // \includegraphics[width=0.40\textwidth]{ROISpot5.eps}
   // \includegraphics[width=0.40\textwidth]{ROISpot5Warped.eps}
   // \includegraphics[width=0.40\textwidth]{SIFTdeformationFieldOutput.eps}
-  // \itkcaption[Deformation field from SIFT disparity map estimation]{From left
+  // \itkcaption[Displacement field from SIFT disparity map estimation]{From left
   // to right and top to bottom: fixed input image, moving image with a deformation,
   // estimated deformation field in the horizontal direction.}
   // \label{fig:SIFTDME}

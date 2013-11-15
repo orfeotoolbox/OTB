@@ -30,8 +30,8 @@ DifferenceImageFilter<TInputImage, TOutputImage>
   // Initialize statistics about difference image.
   m_MeanDifference.SetSize(0);
   m_TotalDifference.SetSize(0);
-  m_MeanDifference  = itk::NumericTraits<RealType>::Zero(m_MeanDifference);
-  m_TotalDifference = itk::NumericTraits<AccumulateType>::Zero(m_TotalDifference);
+  m_MeanDifference  = itk::NumericTraits<RealType>::ZeroValue(m_MeanDifference);
+  m_TotalDifference = itk::NumericTraits<AccumulateType>::ZeroValue(m_TotalDifference);
   m_NumberOfPixelsWithDifferences = 0;
 }
 
@@ -115,7 +115,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 DifferenceImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& threadRegion, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& threadRegion, itk::ThreadIdType threadId)
 {
   typedef itk::ConstNeighborhoodIterator<InputImageType>                           SmartIterator;
   typedef itk::ImageRegionConstIterator<InputImageType>                            InputIterator;
@@ -230,7 +230,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
       else
         {
         // Difference is below threshold.
-        out.Set(itk::NumericTraits<OutputPixelType>::Zero(minimumDifference));
+        out.Set(itk::NumericTraits<OutputPixelType>::ZeroValue(minimumDifference));
         }
 
       // Update progress.

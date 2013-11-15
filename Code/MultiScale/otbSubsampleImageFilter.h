@@ -125,7 +125,7 @@ protected:
 
   /** Allows multithreading */
   virtual void ThreadedGenerateData
-    (const OutputImageRegionType& outputRegionForThread, int threadId);
+    (const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

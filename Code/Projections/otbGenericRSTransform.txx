@@ -32,7 +32,7 @@ namespace otb
 
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
-::GenericRSTransform() : Superclass(SpaceDimension, ParametersDimension)
+::GenericRSTransform() : Superclass(0)
 {
   m_InputProjectionRef.clear();
   m_OutputProjectionRef.clear();

@@ -31,11 +31,18 @@
    fun:itk__nrrdEncodingRaw_write
 }
 {
-   Some zlib suppressions
+   zlib suppression
    Memcheck:Cond
    fun:longest_match
    fun:deflate_slow
    fun:itk_zlib_deflate
+}
+{
+   zlib suppression
+   Memcheck:Cond
+   fun:inflateReset2
+   fun:inflateInit2_
+   obj:/lib/x86_64-linux-gnu/libz.so.1.2.3.4
 }
 {
    Some dl_relocate_object suppressions
@@ -1020,6 +1027,13 @@
    fun:dlopen*
 }
 {
+   dlopen leak3
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib64/libdl-2.?.so
+   fun:dlopen
+}
+{
    <insert_a_suppression_name_here>
    Memcheck:Leak
    fun:malloc
@@ -1361,4 +1375,428 @@
    obj:/lib/ld-2.10.1.so
    obj:/lib/ld-2.10.1.so
    obj:/lib/ld-2.10.1.so
+}
+{
+   ExitFreeLibC brian.jouy.inra.fr
+   Memcheck:Free
+   fun:free
+   obj:/lib64/libc-2.9.so
+   obj:/lib64/libc-2.9.so
+   fun:_vgnU_freeres
+   fun:exit
+   fun:(below main)
+}
+{
+   ExitFreeLibC brian.jouy.inra.fr
+   Memcheck:Free
+   fun:free
+   obj:/lib64/libc-2.9.so
+   obj:/lib64/libc-2.9.so
+   fun:_vgnU_freeres
+   fun:exit
+   fun:fhdl
+   obj:/lib64/libpthread-2.9.so
+   fun:_Z30itkFloatingPointExceptionsTestiPPc
+   fun:main
+}
+{
+   itkFloatingPointExceptionsTest leak brian.jouy.inra.fr
+   Memcheck:Leak
+   fun:_Znwm
+   fun:_ZNSs4_Rep9_S_createEmmRKSaIcE
+   obj:/usr/lib64/libstdc++.so.6.0.10
+   fun:_ZNSsC1EPKcRKSaIcE
+   fun:_Z30itkFloatingPointExceptionsTestiPPc
+   fun:main
+}
+{
+   CrazyTclError brian.jouy.inra.fr
+   Memcheck:Leak
+   fun:realloc
+   fun:Tcl_Realloc
+   obj:/usr/lib64/libtcl8.6.so.0
+   fun:Tcl_GetUnicodeFromObj
+   obj:/usr/lib64/libtcl8.6.so.0
+   fun:TclNRRunCallbacks
+   obj:/usr/lib64/libtcl8.6.so.0
+   fun:Tcl_FSEvalFileEx
+   fun:Tcl_Main
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:PyList_New
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:Py_BuildValue
+   fun:PyImport_Import
+   fun:PyImport_ImportModule
+   fun:_PyExc_Init
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   obj:/lib64/libdl-2.9.so
+   fun:_dl_catch_error
+   obj:/lib64/libdl-2.9.so
+   fun:dlopen
+   fun:_PyImport_GetDynLoadFunc
+   fun:_PyImport_LoadDynamicModule
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyImport_ImportModuleLevel
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyObject_Call
+   fun:PyEval_CallObjectWithKeywords
+   fun:PyEval_EvalFrameEx
+   fun:PyEval_EvalCodeEx
+   fun:PyEval_EvalCode
+   obj:/usr/lib64/libpython2.6.so.1.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:expand_dynamic_string_token
+   fun:_dl_map_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   obj:/lib64/libdl-2.9.so
+   fun:_dl_catch_error
+   obj:/lib64/libdl-2.9.so
+   fun:dlopen
+   fun:_PyImport_GetDynLoadFunc
+   fun:_PyImport_LoadDynamicModule
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyImport_ImportModuleLevel
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyObject_Call
+   fun:PyEval_CallObjectWithKeywords
+   fun:PyEval_EvalFrameEx
+   fun:PyEval_EvalCodeEx
+   fun:PyEval_EvalCode
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyRun_FileExFlags
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_check_map_versions
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   obj:/lib64/libdl-2.9.so
+   fun:_dl_catch_error
+   obj:/lib64/libdl-2.9.so
+   fun:dlopen
+   fun:_PyImport_GetDynLoadFunc
+   fun:_PyImport_LoadDynamicModule
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyImport_ImportModuleLevel
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyObject_Call
+   fun:PyEval_CallObjectWithKeywords
+   fun:PyEval_EvalFrameEx
+   fun:PyEval_EvalCodeEx
+   fun:PyEval_EvalCode
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyRun_FileExFlags
+   fun:PyRun_SimpleFileExFlags
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:PyThread_allocate_lock
+   fun:PyInterpreterState_New
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   obj:/lib64/libdl-2.9.so
+   fun:_dl_catch_error
+   obj:/lib64/libdl-2.9.so
+   fun:dlopen
+   fun:_PyImport_GetDynLoadFunc
+   fun:_PyImport_LoadDynamicModule
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyImport_ImportModuleLevel
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyObject_Call
+   fun:PyEval_CallObjectWithKeywords
+   fun:PyEval_EvalFrameEx
+   fun:PyEval_EvalCodeEx
+   fun:PyEval_EvalCode
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyRun_FileExFlags
+   fun:PyRun_SimpleFileExFlags
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:Py_GetProgramFullPath
+   fun:_PySys_Init
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyType_Ready
+   fun:_PyExc_Init
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyType_Ready
+   fun:_Py_ReadyTypes
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_new_object
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   obj:/lib64/libdl-2.9.so
+   fun:_dl_catch_error
+   obj:/lib64/libdl-2.9.so
+   fun:dlopen
+   fun:_PyImport_GetDynLoadFunc
+   fun:_PyImport_LoadDynamicModule
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyImport_ImportModuleLevel
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyObject_Call
+   fun:PyEval_CallObjectWithKeywords
+   fun:PyEval_EvalFrameEx
+   fun:PyEval_EvalCodeEx
+   fun:PyEval_EvalCode
+   obj:/usr/lib64/libpython2.6.so.1.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:_PyInt_Init
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:PyStructSequence_InitType
+   fun:_PyFloat_Init
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:PyObject_Malloc
+   fun:_PyObject_GC_Malloc
+   fun:_PyObject_GC_NewVar
+   fun:PyFrame_New
+   fun:PyEval_EvalCodeEx
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyObject_Call
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyObject_Call
+   fun:PyObject_CallFunctionObjArgs
+   fun:PyEval_EvalFrameEx
+   fun:PyEval_EvalCodeEx
+   fun:PyEval_EvalCode
+   fun:PyImport_ExecCodeModuleEx
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyImport_ImportModuleLevel
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyObject_Call
+   fun:PyEval_CallObjectWithKeywords
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib64/libpython2.6.so.1.0
+   fun:PyType_Ready
+   fun:PyType_Ready
+   fun:_Py_ReadyTypes
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:PyObject_Malloc
+   fun:_PyObject_GC_Malloc
+   fun:_PyObject_GC_NewVar
+   fun:PyTuple_New
+   fun:PyType_Ready
+   fun:PyType_Ready
+   fun:_Py_ReadyTypes
+   fun:Py_InitializeEx
+   fun:Py_Main
+   fun:(below main)
+}
+{
+   NRDD String SSE42 1
+   Memcheck:Addr8
+   fun:__strspn_sse42
+   fun:itk_airStrtok
+   ...
+   fun:itk_nrrdRead
+}
+{
+   NRDD String SSE42 2
+   Memcheck:Value8
+   fun:__strspn_sse42
+   fun:itk_airStrtok
+   ...
+   fun:itk_nrrdRead
+}
+{
+   NRDD String SSE42 3
+   Memcheck:Cond
+   fun:__strspn_sse42
+   fun:itk_airStrtok
+   ...
+   fun:itk_nrrdRead
+}
+{
+   NRDD String 1
+   Memcheck:Value8
+   fun:itk_airStrtok
+   fun:itk_airStrntok
+   fun:itk__nrrdSpaceVectorParse
+   ...
+   fun:itk_nrrdRead
+}
+{
+   NRDD String 2
+   Memcheck:Value8
+   fun:strcspn
+   fun:itk_airStrtok
+   fun:itk_airStrntok
+   fun:itk__nrrdSpaceVectorParse
+   ...
+   fun:itk_nrrdRead
+}
+{
+   NRDD String 3
+   Memcheck:Cond
+   fun:itk_airStrntok
+   fun:itk__nrrdSpaceVectorParse
+   ...
+   fun:itk_nrrdRead
+}
+{
+   NRDD String 4
+   Memcheck:Cond
+   fun:itk_airStrlen
+   fun:itk_airStrtok
+   fun:itk_airStrntok
+   fun:itk__nrrdSpaceVectorParse
+   ...
+   fun:itk_nrrdRead
+}
+{
+   NRDD String 5
+   Memcheck:Value8
+   fun:strlen
+   fun:itk_airStrlen
+   fun:itk_airStrtok
+   fun:itk_airStrntok
+   fun:itk__nrrdSpaceVectorParse
+   ...
+   fun:itk_nrrdRead
+}
+{
+   NRRD Direction 1
+   Memcheck:Cond
+   ...
+   fun:_nrrdReadNrrdParse_space_directions
+   fun:_nrrdFormatNRRD_read
+   fun:itk__nrrdRead
+   fun:itk_nrrdRead
+}
+{
+   NRRD Direction 2
+   Memcheck:Value8
+   ...
+   fun:_nrrdReadNrrdParse_space_directions
+   fun:_nrrdFormatNRRD_read
+   fun:itk__nrrdRead
+   fun:itk_nrrdRead
 }

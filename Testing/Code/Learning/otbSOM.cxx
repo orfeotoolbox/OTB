@@ -20,7 +20,7 @@
 #include "otbSOMMap.h"
 #include "otbSOM.h"
 #include "itkRGBPixel.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkListSample.h"
@@ -42,7 +42,7 @@ int otbSOM(int argc, char* argv[])
 
   typedef double                                          ComponentType;
   typedef itk::VariableLengthVector<ComponentType>        PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>   DistanceType;
   typedef otb::SOMMap<PixelType, DistanceType, Dimension> MapType;
   typedef otb::VectorImage<ComponentType, Dimension>      ImageType;
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
@@ -56,7 +56,8 @@ int otbSOM(int argc, char* argv[])
   reader->Update();
 
   ListSampleType::Pointer listSample = ListSampleType::New();
-
+  listSample->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+  
   itk::ImageRegionIterator<ImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
   it.GoToBegin();

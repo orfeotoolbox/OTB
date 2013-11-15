@@ -19,7 +19,7 @@
 #include "otbSOMMap.h"
 #include "otbSOM.h"
 #include "otbSOMActivationBuilder.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "itkListSample.h"
 #include "itkVariableLengthVector.h"
 #include "otbImage.h"
@@ -31,7 +31,7 @@ int otbSOMActivationBuilderNew(int argc, char* argv[])
   typedef float                                         ComponentType;
   typedef unsigned char                                 OutputPixelType;
   typedef itk::VariableLengthVector<ComponentType>      PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType> DistanceType;
 
   typedef otb::SOMMap<PixelType, DistanceType, Dimension>                     MapType;
   typedef otb::VectorImage<ComponentType, Dimension>                          InputImageType;

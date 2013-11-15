@@ -27,7 +27,6 @@
 #include "vnl/vnl_math.h"
 
 #include "itkVariableLengthVector.h"
-#include "itkPixelBuilder.h"
 
 namespace otb
 {
@@ -44,8 +43,8 @@ template <class PixelType> unsigned int PixelSizeFinder(PixelType pix)
 /**
  * Default constructor.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::WarpImageFilter()
 {
   // Setup the number of required inputs
@@ -56,7 +55,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   m_OutputOrigin.Fill( 0.0 );
   m_OutputDirection.SetIdentity();
   m_OutputSize.Fill(0);
-  itk::PixelBuilder<PixelType>::Zero(m_EdgePaddingValue,1);
+  itk::NumericTraits<PixelType>::SetLength(m_EdgePaddingValue, 1);
   m_OutputStartIndex.Fill(0);
   // Setup default interpolator
   typename DefaultInterpolatorType::Pointer interp =
@@ -69,9 +68,9 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 /**
  * Standard PrintSelf method.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
 
@@ -94,9 +93,9 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
  * Set the output image spacing.
  *
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::SetOutputSpacing(
   const double* spacing)
 {
@@ -109,9 +108,9 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
  * Set the output image origin.
  *
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::SetOutputOrigin(
   const double* origin)
 {
@@ -120,9 +119,9 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 }
 
 /** Helper method to set the output parameters based on this image */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::SetOutputParametersFromImage ( const ImageBaseType * image )
 {
   this->SetOutputOrigin ( image->GetOrigin() );
@@ -136,15 +135,15 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
  * Set deformation field as Inputs[1] for this ProcessObject.
  *
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
-::SetDeformationField(
-  const DeformationFieldType * field )
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
+::SetDisplacementField(
+  const DisplacementFieldType * field )
 {
   // const cast is needed because the pipeline is not const-correct.
-  DeformationFieldType * input =
-       const_cast< DeformationFieldType * >( field );
+  DisplacementFieldType * input =
+       const_cast< DisplacementFieldType * >( field );
   this->itk::ProcessObject::SetNthInput( 1, input );
 }
 
@@ -152,13 +151,13 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 /**
  * Return a pointer to the deformation field.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
-typename WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
-::DeformationFieldType *
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
-::GetDeformationField(void)
+template <class TInputImage,class TOutputImage,class TDisplacementField>
+typename WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
+::DisplacementFieldType *
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
+::GetDisplacementField(void)
 {
-  return static_cast<DeformationFieldType *>
+  return static_cast<DisplacementFieldType *>
     ( this->itk::ProcessObject::GetInput( 1 ));
 }
 
@@ -168,9 +167,9 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
  * InterpolatorType::SetInputImage is not thread-safe and hence
  * has to be setup before ThreadedGenerateData
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::BeforeThreadedGenerateData()
 {
 
@@ -178,11 +177,11 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
     {
     itkExceptionMacro(<< "Interpolator not set");
     }
-  DeformationFieldPointer fieldPtr = this->GetDeformationField();
+  DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
 
   // Connect input image to interpolator
   m_Interpolator->SetInputImage( this->GetInput() );
-  typename DeformationFieldType::RegionType defRegion =
+  typename DisplacementFieldType::RegionType defRegion =
     fieldPtr->GetLargestPossibleRegion();
   typename OutputImageType::RegionType outRegion =
     this->GetOutput()->GetLargestPossibleRegion();
@@ -201,9 +200,9 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 /**
  * Setup state of filter after multi-threading.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::AfterThreadedGenerateData()
 {
   // Disconnect input image from interpolator
@@ -211,14 +210,14 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 }
 
 
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 typename WarpImageFilter<TInputImage,
                          TOutputImage,
-                         TDeformationField>::DisplacementType
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
-::EvaluateDeformationAtPhysicalPoint(const PointType &point)
+                         TDisplacementField>::DisplacementType
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
+::EvaluateDisplacementAtPhysicalPoint(const PointType &point)
 {
-  DeformationFieldPointer fieldPtr = this->GetDeformationField();
+  DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
   itk::ContinuousIndex<double,ImageDimension> index;
   fieldPtr->TransformPhysicalPointToContinuousIndex(point,index);
   unsigned int dim;  // index over dimension
@@ -313,17 +312,17 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 /**
  * Compute the output for the region specified by outputRegionForThread.
  */
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::ThreadedGenerateData(
   const OutputImageRegionType& outputRegionForThread,
-  int threadId )
+  itk::ThreadIdType threadId )
 {
 
   InputImageConstPointer inputPtr = this->GetInput();
   OutputImagePointer outputPtr = this->GetOutput();
-  DeformationFieldPointer fieldPtr = this->GetDeformationField();
+  DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -337,7 +336,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   if(this->m_DefFieldSizeSame)
     {
     // iterator for the deformation field
-    itk::ImageRegionIterator<DeformationFieldType>
+    itk::ImageRegionIterator<DisplacementFieldType>
       fieldIt(fieldPtr, outputRegionForThread );
 
     while( !outputIt.IsAtEnd() )
@@ -379,7 +378,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
       index = outputIt.GetIndex();
       outputPtr->TransformIndexToPhysicalPoint( index, point );
 
-      displacement = this->EvaluateDeformationAtPhysicalPoint(point);
+      displacement = this->EvaluateDisplacementAtPhysicalPoint(point);
       // compute the required input image point
       for(unsigned int j = 0; j < ImageDimension; j++ )
         {
@@ -404,9 +403,9 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 }
 
 
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::GenerateInputRequestedRegion()
 {
 
@@ -424,7 +423,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 
   // just propagate up the output requested region for the
   // deformation field.
-  DeformationFieldPointer fieldPtr = this->GetDeformationField();
+  DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
   OutputImagePointer outputPtr = this->GetOutput();
   if(fieldPtr.IsNotNull() )
     {
@@ -437,9 +436,9 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
 }
 
 
-template <class TInputImage,class TOutputImage,class TDeformationField>
+template <class TInputImage,class TOutputImage,class TDisplacementField>
 void
-WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
+WarpImageFilter<TInputImage,TOutputImage,TDisplacementField>
 ::GenerateOutputInformation()
 {
   // call the superclass's implementation of this method
@@ -451,7 +450,7 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
   outputPtr->SetOrigin( m_OutputOrigin );
   outputPtr->SetDirection( m_OutputDirection );
 
-  DeformationFieldPointer fieldPtr = this->GetDeformationField();
+  DisplacementFieldPointer fieldPtr = this->GetDisplacementField();
   if( this->m_OutputSize[0] == 0 &&
       fieldPtr.IsNotNull())
     {

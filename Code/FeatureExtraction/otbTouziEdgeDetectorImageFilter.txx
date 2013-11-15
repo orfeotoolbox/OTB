@@ -21,7 +21,6 @@
 #include "otbTouziEdgeDetectorImageFilter.h"
 
 #include "itkDataObject.h"
-
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodInnerProduct.h"
 #include "itkImageRegionIterator.h"
@@ -123,7 +122,7 @@ void
 TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 ::ThreadedGenerateData(
   const OutputImageRegionType&     outputRegionForThread,
-  int threadId
+  itk::ThreadIdType threadId
   )
 {
   unsigned int                                          i;

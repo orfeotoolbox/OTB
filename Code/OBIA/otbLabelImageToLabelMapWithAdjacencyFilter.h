@@ -60,7 +60,10 @@ public:
   typedef typename OutputImageType::AdjacencyMapType            AdjacencyMapType;
   typedef typename OutputImageType::AdjacentLabelsContainerType AdjacentLabelsContainerType;
   typedef typename OutputImageType::LabelType                   LabelType;
-  
+
+  /** Const iterator over LabelObject lines */
+  typedef typename LabelObjectType::ConstLineIterator           ConstLineIteratorType;
+
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
@@ -122,18 +125,18 @@ protected:
   
   virtual void BeforeThreadedGenerateData();
 
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
   virtual void AfterThreadedGenerateData();
   
   /** Add a new adjacency */
-  void AddAdjacency(LabelType label1, LabelType label2, int threadId);
+  void AddAdjacency(LabelType label1, LabelType label2, itk::ThreadIdType threadId);
 
   /** Parse one line for horizontal adjacency */
-  void ParseLine(const RLEVectorType & line, int threadId);
+  void ParseLine(const RLEVectorType & line, itk::ThreadIdType threadId);
 
   /** Parse two consecutive lines for vertical adjacency */
-  void ParseConsecutiveLines(const RLEVectorType& line1, const RLEVectorType& line2, int threadId);
+  void ParseConsecutiveLines(const RLEVectorType& line1, const RLEVectorType& line2, itk::ThreadIdType threadId);
 
 
 private:

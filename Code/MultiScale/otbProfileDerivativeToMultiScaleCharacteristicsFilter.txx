@@ -30,7 +30,7 @@ template <class TInputImage, class TOutputImage, class TLabeledImage>
 ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage, TOutputImage, TLabeledImage>
 ::ProfileDerivativeToMultiScaleCharacteristicsFilter(void)
 {
-  this->SetNumberOfOutputs(2);
+  this->SetNumberOfRequiredOutputs(2);
   this->SetNthOutput(0, OutputImageType::New());
   this->SetNthOutput(1, LabeledImageType::New());
   m_InitialValue = 0;

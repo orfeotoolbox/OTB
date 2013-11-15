@@ -72,7 +72,7 @@ int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
   filter->SetInputImageMaximum(256);
 
   // Write outputs
-  std::stringstream oss;
+  std::ostringstream oss;
 
   writer->SetNumberOfDivisionsStrippedStreaming(2);
 

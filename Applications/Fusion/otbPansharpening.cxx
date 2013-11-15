@@ -30,7 +30,6 @@
 
 #include "otbLmvmPanSharpeningFusionImageFilter.h"
 
-#include "itkPixelBuilder.h"
 #include "itkFixedArray.h"
 
 // Elevation handler

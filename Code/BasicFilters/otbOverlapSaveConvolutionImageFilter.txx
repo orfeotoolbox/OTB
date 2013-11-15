@@ -51,7 +51,7 @@ void
 OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
   {
-#if defined USE_FFTWD
+#if defined ITK_USE_FFTWD
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
@@ -104,10 +104,10 @@ template<class TInputImage, class TOutputImage, class TBoundaryCondition>
 void
 OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 /* TODO commented out since multi-threading is not supported for the moment
- * ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId) */
+ * ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) */
 ::GenerateData()
 {
-#if defined USE_FFTWD
+#if defined ITK_USE_FFTWD
   // Input/Output pointers
   typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input = this->GetInput();

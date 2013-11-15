@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkImageToImageFilter.h"
-#include "itkVnlFFTRealToComplexConjugateImageFilter.h"
+#include "itkVnlForwardFFTImageFilter.h"
 #include "otbLogPolarTransform.h"
 #include "itkResampleImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -50,8 +50,8 @@ template <class TPixel,
     unsigned int Dimension = 2>
 
 class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
-  public itk::ImageToImageFilter<Image<TPixel, Dimension>,
-      itk::Image<std::complex<TPixel>, Dimension> >
+  public itk::ImageToImageFilter<Image<TPixel, Dimension>, 
+                                 itk::Image<std::complex<TPixel>, Dimension> >
 {
 public:
 
@@ -59,7 +59,7 @@ public:
   typedef Image<TPixel, Dimension> InputImageType;
   /*   typedef otb::Image< std::complex< TPixel > , Dimension >           OutputImageType; */
 
-  typedef typename itk::VnlFFTRealToComplexConjugateImageFilter<TPixel, Dimension> FourierImageFilterType;
+  typedef typename itk::VnlForwardFFTImageFilter<InputImageType>                   FourierImageFilterType;
   typedef typename FourierImageFilterType::OutputImageType                         OutputImageType;
 
   /** Standard class typedefs. */

@@ -41,6 +41,7 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
+  static JPEG2000ImageIOFactory * FactoryNew() { return new JPEG2000ImageIOFactory; }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(JPEG2000ImageIOFactory, itk::ObjectFactoryBase);

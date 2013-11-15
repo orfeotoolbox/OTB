@@ -312,7 +312,7 @@ OTB_TEST_APPLICATION(NAME apTvUtQuicklookSpot5
                              -rsy 200
                              -sr 2
                      VALID   --compare-image ${NOTOL}
-                             ${BASELINE}/apTvUtQuicklookSpot5.png
+                             ${BASELINE}/apTvUtQuicklookSpot5.tif
                              ${TEMP}/apTvUtQuicklookSpot5.tif
                      )
 ENDIF(OTB_DATA_USE_LARGEINPUT)

@@ -28,7 +28,7 @@
 namespace otb
 {
 /** \class DisparityMapEstimationMethod
- *  \brief This class performs an estimation of the local deformation
+ *  \brief This class performs an estimation of the local displacement
  *  modelled by a given transform between the fixed and the moving image,
  *  at each point of the given point set.
  *
@@ -39,8 +39,8 @@ namespace otb
  *
  *  This filters returns the pointset enriched with a set of value as PointData, in order of apparition :
  *  - The final metric value,
- *  - The column deformation value,
- *  - The row deformation value,
+ *  - The column displacement value,
+ *  - The row displacement value,
  *  - The final estimated parameters of the transform.
  *
  *  This class is derived from the MAECENAS code provided by Jordi Inglada,

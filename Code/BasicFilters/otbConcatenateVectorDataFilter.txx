@@ -53,8 +53,15 @@ void
 ConcatenateVectorDataFilter<TVectorData>
 ::AddInput(const VectorDataType * vectorData)
 {
-  this->Superclass::SetNthInput(this->GetNumberOfInputs(),
-                                const_cast<VectorDataType *>(vectorData));
+  for ( unsigned idx = 0; idx < this->GetNumberOfIndexedInputs(); ++idx )
+    {
+    if ( !this->GetInput( idx ) )
+      {
+      this->Superclass::SetNthInput( idx, const_cast<VectorDataType *>(vectorData) );
+      return;
+      }
+    }
+  this->Superclass::SetNthInput( this->GetNumberOfIndexedInputs(), const_cast<VectorDataType *>(vectorData));
 }
 
 template <class TVectorData>

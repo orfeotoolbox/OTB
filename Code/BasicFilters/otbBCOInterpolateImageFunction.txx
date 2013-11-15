@@ -156,7 +156,7 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i;
       neighIndex[1] = baseIndex[1] + j;
-#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
+
       if( neighIndex[0] > this->m_EndIndex[0] )
         {
         neighIndex[0] = this->m_EndIndex[0];
@@ -173,8 +173,6 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
         {
         neighIndex[1] = this->m_StartIndex[1];
         }
-#endif
-
       lineRes[i+radius] = lineRes[i+radius]
         + static_cast<RealType>( this->GetInputImage()->GetPixel( neighIndex ) ) * BCOCoefY[j+radius];
       }
@@ -251,7 +249,6 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i;
       neighIndex[1] = baseIndex[1] + j;
-#ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
       if( neighIndex[0] > this->m_EndIndex[0] )
         {
         neighIndex[0] = this->m_EndIndex[0];
@@ -268,7 +265,6 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
         {
         neighIndex[1] = this->m_StartIndex[1];
         }
-#endif
 
       for( unsigned int k = 0; k<componentNumber; ++k)
         {

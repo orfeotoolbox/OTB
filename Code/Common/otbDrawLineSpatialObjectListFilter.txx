@@ -64,7 +64,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 
 {
   typename InputImageType::ConstPointer input  = this->GetInput();

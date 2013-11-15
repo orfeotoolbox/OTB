@@ -560,7 +560,7 @@ ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS6}
 #)
 
 ADD_TEST(feTvForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS6}
-  --compare-n-images ${EPSILON_8} 2
+  --compare-n-images ${EPSILON_6} 2
        ${BASELINE}/feForwardFourierMellinImageFilterReal.hdr
                      ${TEMP}/feForwardFourierMellinImageFilterReal.hdr
        ${BASELINE}/feForwardFourierMellinImageFilterImag.hdr
@@ -1323,12 +1323,8 @@ ADD_TEST(feTuScalarImageToTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
         otbScalarImageToTexturesFilterNew
 )
 
-ADD_TEST(feTuMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew ${FEATUREEXTRACTION_TESTS15}
-        otbMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew
-)
-
 ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-n-images ${EPSILON_8} 8
+        --compare-n-images ${NOTOL} 8
             ${BASELINE}/feTvScalarImageToTexturesFilterOutputEnergy.tif
             ${TEMP}/feTvScalarImageToTexturesFilterOutputEnergy.tif
             ${BASELINE}/feTvScalarImageToTexturesFilterOutputEntropy.tif
@@ -1363,7 +1359,7 @@ ADD_TEST(feTuScalarImageToAdvancedTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
 )
 
 ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-n-images ${EPSILON_8} 9
+        --compare-n-images ${NOTOL} 9
             ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputVariance.tif
             ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputVariance.tif
             ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputMean.tif
@@ -1393,40 +1389,15 @@ ADD_TEST(feTuScalarImageToHigherOrderTexturesFilterNew ${FEATUREEXTRACTION_TESTS
 )
 
 ADD_TEST(feTvScalarImageToHigherOrderTexturesFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-n-images ${EPSILON_8} 11
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunEmphasis.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunEmphasis.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunEmphasis.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunEmphasis.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputGreyLevelNonuniformity.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputGreyLevelNonuniformity.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputRunLengthNonuniformity.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputRunLengthNonuniformity.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputRunPercentage.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputRunPercentage.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLowGreyLevelRunEmphasis.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputLowGreyLevelRunEmphasis.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputHighGreyLevelRunEmphasis.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputHighGreyLevelRunEmphasis.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunLowGreyLevelEmphasis.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunLowGreyLevelEmphasis.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunHighGreyLevelEmphasis.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunHighGreyLevelEmphasis.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunLowGreyLevelEmphasis.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunLowGreyLevelEmphasis.tif
-            ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunHighGreyLevelEmphasis.tif
-            ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunHighGreyLevelEmphasis.tif
-        otbScalarImageToHigherOrderTexturesFilter
-        ${INPUTDATA}/Mire_Cosinus.png
-        ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutput
-        8 5 1 1)
+       otbScalarImageToHigherOrderTexturesFilter
+        ${INPUTDATA}/Mire_Cosinus.png)
 
 ADD_TEST(feTuScalarImageToPanTexTextureFilterNew ${FEATUREEXTRACTION_TESTS15}
         otbScalarImageToPanTexTextureFilterNew
 )
 
 ADD_TEST(feTvScalarImageToPanTexTextureFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-image ${EPSILON_8}
+        --compare-image ${NOTOL}
             ${BASELINE}/feTvScalarImageToPanTexTextureFilterOutputPanTex.tif
             ${TEMP}/feTvScalarImageToPanTexTextureFilterOutputPanTex.tif
         otbScalarImageToPanTexTextureFilter
@@ -1485,7 +1456,7 @@ ADD_TEST(feTvLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
  otbLocalHistogramImageFunctionTest
  ${INPUTDATA}/pyramide.tif
  ${TEMP}/feLocalHistogramImage.txt
- 127 127 127 0 128 128
+ 127 127 127 0 128
 )
 
 # -------   otb::ImageFunctionAdapter   -------------
@@ -1734,7 +1705,6 @@ SET(BasicFeatureExtraction_SRCS15
 otbFeatureExtractionTests15.cxx
 otbStreamingLineSegmentDetector.cxx
 otbSqrtSpectralAngleImageFilter.cxx
-otbMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew.cxx
 otbScalarImageToTexturesFilterNew.cxx
 otbScalarImageToTexturesFilter.cxx
 otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
@@ -1743,7 +1713,6 @@ otbScalarImageToAdvancedTexturesFilterNew.cxx
 otbScalarImageToAdvancedTexturesFilter.cxx
 otbScalarImageToPanTexTextureFilterNew.cxx
 otbScalarImageToPanTexTextureFilter.cxx
-otbScalarImageToHigherOrderTexturesFilterNew.cxx
 otbScalarImageToHigherOrderTexturesFilter.cxx
 )
 

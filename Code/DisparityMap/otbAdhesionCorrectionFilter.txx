@@ -36,7 +36,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 ::AdhesionCorrectionFilter()
 {
   this->SetNumberOfRequiredInputs( 5 );
-  this->SetNumberOfOutputs(3);
+  this->SetNumberOfRequiredOutputs(3);
 
   this->SetNthOutput(1,TMask::New());
   this->SetNthOutput(2,TImage::New());
@@ -241,7 +241,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
@@ -264,7 +264,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
@@ -287,7 +287,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
@@ -310,7 +310,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
@@ -333,7 +333,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << this->GetNameOfClass()
                 << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());

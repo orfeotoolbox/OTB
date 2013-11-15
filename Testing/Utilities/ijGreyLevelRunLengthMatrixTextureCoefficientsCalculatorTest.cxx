@@ -26,9 +26,9 @@
 
 int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char* argv[] )
 {
-  if (argc < 3)
+  if (argc < 2)
     {
-    std::cerr << "usage : " << argv[0] << " <input_image> <output.txt>" << std::endl;
+    std::cerr << "usage : " << argv[0] << " <input_image> " << std::endl;
     }
 
   typedef int PixelType;
@@ -66,13 +66,13 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
 				generator->SetNumberOfBinsPerAxis( numberOfBins );
 				generator->SetPixelValueMinMax( 0, 255 );
 				generator->SetDistanceValueMinMax( 0, origin.EuclideanDistanceTo( antiorigin ) );
-				generator->Compute();
+				generator->Update();
 		
 				typedef itk::Statistics::GreyLevelRunLengthMatrixTextureCoefficientsCalculator
 						<RunLengthMatrixGeneratorType::HistogramType> CalculatorType;
 				CalculatorType::Pointer calculator = CalculatorType::New();
-				calculator->SetHistogram( generator->GetOutput() );
-				calculator->Compute();
+				calculator->SetInput( generator->GetOutput() );
+				calculator->Update();
 		
 				RealType sre = calculator->GetShortRunEmphasis() 
 						/ static_cast<RealType>( numberOfDirections );
@@ -112,7 +112,40 @@ int ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest( int argc, char*
 				std::cout << "SRHGE: " << srhge << std::endl;
 				std::cout << "LRLGE: " << lrlge << std::endl;
 				std::cout << "LRHGE: " << lrhge << std::endl;
+                                
+                                bool passed = true;
+                                double trueSRE = 0.249999;
+                                double trueRLN = 247518;
+                                
 
+                                if (vnl_math_abs(sre - trueSRE) > 0.001)
+                                  {
+                                  std::cerr << "Error:" << std::endl;
+                                  std::cerr << "SRE calculated wrong. Expected: " << trueSRE << ", got: "
+                                            << sre << std::endl;
+                                  passed = false;
+                                  }
+                                if (vnl_math_abs(rln - trueRLN) > 0.001)
+                                  {
+                                  std::cerr << "Error:" << std::endl;
+                                  std::cerr << "RLN calculated wrong. Expected: " << trueRLN << ", got: "
+                                            << rln << std::endl;
+                                  passed = false;
+                                  }
+                                
+                                if (!passed)
+                                  {
+                                  std::cerr << "Test failed" << std::endl;
+                                  return EXIT_FAILURE;
+                                  }
+                                else
+                                  {
+                                  std::cerr << "Test succeeded" << std::endl;
+                                  return EXIT_SUCCESS;
+                                  }
+                                
+                                
+                                
     return EXIT_SUCCESS;
     }
   catch (...)

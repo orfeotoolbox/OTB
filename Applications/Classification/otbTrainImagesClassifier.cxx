@@ -304,12 +304,12 @@ void TrainImagesClassifier::DoExecute()
   concatenateValidationSamples->Update();
   concatenateValidationLabels->Update();
 
-  if (concatenateTrainingSamples->GetOutputSampleList()->Size() == 0)
+  if (concatenateTrainingSamples->GetOutput()->Size() == 0)
     {
     otbAppLogFATAL("No training samples, cannot perform SVM training.");
     }
 
-  if (concatenateValidationSamples->GetOutputSampleList()->Size() == 0)
+  if (concatenateValidationSamples->GetOutput()->Size() == 0)
     {
     otbAppLogWARNING("No validation samples.");
     }
@@ -339,14 +339,14 @@ void TrainImagesClassifier::DoExecute()
   ListSampleType::Pointer validationListSample=ListSampleType::New();
 
   //Test if the validation test is empty
-  if ( concatenateValidationSamples->GetOutput()->Get()->Size() != 0 )
+  if ( concatenateValidationSamples->GetOutput()->Size() != 0 )
     {
     ShiftScaleFilterType::Pointer validationShiftScaleFilter = ShiftScaleFilterType::New();
     validationShiftScaleFilter->SetInput(concatenateValidationSamples->GetOutput());
     validationShiftScaleFilter->SetShifts(meanMeasurementVector);
     validationShiftScaleFilter->SetScales(stddevMeasurementVector);
     validationShiftScaleFilter->Update();
-    validationListSample = validationShiftScaleFilter->GetOutputSampleList();
+    validationListSample = validationShiftScaleFilter->GetOutput();
     }
 
   ListSampleType::Pointer listSample;
@@ -356,29 +356,29 @@ void TrainImagesClassifier::DoExecute()
   // if (IsParameterEnabled("sample.b"))
   //   {
   //   // Balance the list sample.
-  //   otbAppLogINFO("Number of training samples before balancing: " << concatenateTrainingSamples->GetOutputSampleList()->Size())
+  //   otbAppLogINFO("Number of training samples before balancing: " << concatenateTrainingSamples->GetOutput()->Size())
   //   BalancingListSampleFilterType::Pointer balancingFilter = BalancingListSampleFilterType::New();
-  //   balancingFilter->SetInput(trainingShiftScaleFilter->GetOutput()/*GetOutputSampleList()*/);
-  //   balancingFilter->SetInputLabel(concatenateTrainingLabels->GetOutput()/*GetOutputSampleList()*/);
+  //   balancingFilter->SetInput(trainingShiftScaleFilter->GetOutput());
+  //   balancingFilter->SetInputLabel(concatenateTrainingLabels->GetOutput());
   //   balancingFilter->SetBalancingFactor(GetParameterInt("sample.b"));
   //   balancingFilter->Update();
-  //   listSample = balancingFilter->GetOutputSampleList();
+  //   listSample = balancingFilter->GetOutput();
   //   labelListSample = balancingFilter->GetOutputLabelSampleList();
-  //   otbAppLogINFO("Number of samples after balancing: " << balancingFilter->GetOutputSampleList()->Size());
+  //   otbAppLogINFO("Number of samples after balancing: " << balancingFilter->GetOutput()->Size());
 
   //   }
   // else
   //   {
-  listSample = trainingShiftScaleFilter->GetOutputSampleList();
-  labelListSample = concatenateTrainingLabels->GetOutputSampleList();
-  otbAppLogINFO("Number of training samples: " << concatenateTrainingSamples->GetOutputSampleList()->Size());
+  listSample = trainingShiftScaleFilter->GetOutput();
+  labelListSample = concatenateTrainingLabels->GetOutput();
+  otbAppLogINFO("Number of training samples: " << concatenateTrainingSamples->GetOutput()->Size());
   //  }
   //--------------------------
   // Split the data set into training/validation set
   ListSampleType::Pointer trainingListSample = listSample;
   LabelListSampleType::Pointer trainingLabeledListSample = labelListSample;
 
-  LabelListSampleType::Pointer validationLabeledListSample = concatenateValidationLabels->GetOutputSampleList();
+  LabelListSampleType::Pointer validationLabeledListSample = concatenateValidationLabels->GetOutput();
   otbAppLogINFO("Size of training set: " << trainingListSample->Size());
   otbAppLogINFO("Size of validation set: " << validationListSample->Size());
   otbAppLogINFO("Size of labeled training set: " << trainingLabeledListSample->Size());

@@ -2,7 +2,7 @@ PROJECT(StatisticsExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(KdTreeBasedKMeansClustering KdTreeBasedKMeansClustering.cxx )
-TARGET_LINK_LIBRARIES(KdTreeBasedKMeansClustering OTBCommon ITKStatistics)
+TARGET_LINK_LIBRARIES(KdTreeBasedKMeansClustering OTBCommon ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(ScalarImageKmeansClassifier ScalarImageKmeansClassifier.cxx )
 TARGET_LINK_LIBRARIES(ScalarImageKmeansClassifier OTBIO OTBCommon )
@@ -14,10 +14,10 @@ ADD_EXECUTABLE(ScalarImageKmeansModelEstimator ScalarImageKmeansModelEstimator.c
 TARGET_LINK_LIBRARIES(ScalarImageKmeansModelEstimator  OTBIO OTBCommon )
 
 ADD_EXECUTABLE(BayesianPluginClassifier BayesianPluginClassifier.cxx )
-TARGET_LINK_LIBRARIES(BayesianPluginClassifier OTBIO OTBCommon ITKStatistics)
+TARGET_LINK_LIBRARIES(BayesianPluginClassifier OTBIO OTBCommon ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(ExpectationMaximizationMixtureModelEstimator ExpectationMaximizationMixtureModelEstimator.cxx )
-TARGET_LINK_LIBRARIES(ExpectationMaximizationMixtureModelEstimator OTBIO OTBCommon ITKStatistics)
+TARGET_LINK_LIBRARIES(ExpectationMaximizationMixtureModelEstimator OTBIO OTBCommon ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(ScalarImageMarkovRandomField1 ScalarImageMarkovRandomField1.cxx )
 TARGET_LINK_LIBRARIES(ScalarImageMarkovRandomField1 OTBIO OTBCommon )
@@ -38,10 +38,10 @@ ADD_EXECUTABLE(ClassificationMapRegularizationExample ClassificationMapRegulariz
 TARGET_LINK_LIBRARIES(ClassificationMapRegularizationExample OTBIO OTBCommon)
 
 #ADD_EXECUTABLE( BayesianClassifierInitializer BayesianClassifierInitializer.cxx )
-#TARGET_LINK_LIBRARIES(BayesianClassifierInitializer ITKStatistics)
+#TARGET_LINK_LIBRARIES(BayesianClassifierInitializer ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE( BayesianClassifier BayesianClassifier.cxx )
-#TARGET_LINK_LIBRARIES(BayesianClassifier ITKStatistics)
+#TARGET_LINK_LIBRARIES(BayesianClassifier ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(EuclideanDistance EuclideanDistance.cxx )
 #TARGET_LINK_LIBRARIES(EuclideanDistance)
@@ -51,7 +51,7 @@ TARGET_LINK_LIBRARIES(ClassificationMapRegularizationExample OTBIO OTBCommon)
 #TARGET_LINK_LIBRARIES(GaussianDensityFunction)
 
 #ADD_EXECUTABLE(Histogram Histogram.cxx )
-#TARGET_LINK_LIBRARIES(Histogram ITKStatistics)
+#TARGET_LINK_LIBRARIES(Histogram ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(ImageToListAdaptor ImageToListAdaptor.cxx )
 #TARGET_LINK_LIBRARIES(ImageToListAdaptor)
@@ -64,10 +64,10 @@ TARGET_LINK_LIBRARIES(ClassificationMapRegularizationExample OTBIO OTBCommon)
 #TARGET_LINK_LIBRARIES(ListSample)
 
 #ADD_EXECUTABLE(ListSampleToHistogramFilter ListSampleToHistogramFilter.cxx )
-#TARGET_LINK_LIBRARIES(ListSampleToHistogramFilter ITKStatistics)
+#TARGET_LINK_LIBRARIES(ListSampleToHistogramFilter ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(ListSampleToHistogramGenerator ListSampleToHistogramGenerator.cxx )
-#TARGET_LINK_LIBRARIES(ListSampleToHistogramGenerator ITKStatistics)
+#TARGET_LINK_LIBRARIES(ListSampleToHistogramGenerator ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(MaximumDecisionRule MaximumDecisionRule.cxx )
 #TARGET_LINK_LIBRARIES(MaximumDecisionRule)
@@ -85,7 +85,7 @@ TARGET_LINK_LIBRARIES(ClassificationMapRegularizationExample OTBIO OTBCommon)
 #TARGET_LINK_LIBRARIES(NeighborhoodSampler)
 
 #ADD_EXECUTABLE(NormalVariateGenerator NormalVariateGenerator.cxx )
-#TARGET_LINK_LIBRARIES(NormalVariateGenerator ITKStatistics)
+#TARGET_LINK_LIBRARIES(NormalVariateGenerator ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(PointSetToListAdaptor PointSetToListAdaptor.cxx )
 #TARGET_LINK_LIBRARIES(PointSetToListAdaptor)
@@ -98,7 +98,7 @@ TARGET_LINK_LIBRARIES(ClassificationMapRegularizationExample OTBIO OTBCommon)
 
 #ADD_EXECUTABLE(SampleToHistogramProjectionFilter SampleToHistogramProjectionFilter.cxx )
 #TARGET_LINK_LIBRARIES(SampleToHistogramProjectionFilter
-#                                                        ITKStatistics)
+#                                                        ${ITK_LIBRARIES})
 
 #ADD_EXECUTABLE(SampleSorting SampleSorting.cxx )
 #TARGET_LINK_LIBRARIES(SampleSorting)
@@ -107,19 +107,19 @@ TARGET_LINK_LIBRARIES(ClassificationMapRegularizationExample OTBIO OTBCommon)
 #TARGET_LINK_LIBRARIES(WeightedSampleStatistics)
 
 #ADD_EXECUTABLE(ImageHistogram1 ImageHistogram1.cxx )
-#TARGET_LINK_LIBRARIES(ImageHistogram1 ITKStatistics )
+#TARGET_LINK_LIBRARIES(ImageHistogram1 ${ITK_LIBRARIES} )
 
 #ADD_EXECUTABLE(ImageHistogram2 ImageHistogram2.cxx )
-#TARGET_LINK_LIBRARIES(ImageHistogram2 ITKStatistics )
+#TARGET_LINK_LIBRARIES(ImageHistogram2 ${ITK_LIBRARIES} )
 
 #ADD_EXECUTABLE(ImageHistogram3 ImageHistogram3.cxx )
-#TARGET_LINK_LIBRARIES(ImageHistogram3 ITKStatistics )
+#TARGET_LINK_LIBRARIES(ImageHistogram3 ${ITK_LIBRARIES} )
 
 #ADD_EXECUTABLE(ImageHistogram4 ImageHistogram4.cxx )
-#TARGET_LINK_LIBRARIES(ImageHistogram4 ITKStatistics )
+#TARGET_LINK_LIBRARIES(ImageHistogram4 ${ITK_LIBRARIES} )
 
 #ADD_EXECUTABLE(ImageEntropy1 ImageEntropy1.cxx )
-#TARGET_LINK_LIBRARIES(ImageEntropy1 ITKStatistics)
+#TARGET_LINK_LIBRARIES(ImageEntropy1 ${ITK_LIBRARIES})
 
 
 
@@ -178,6 +178,6 @@ ADD_TEST(clTeNeighborhoodMajorityVotingImageFilterTest ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbClassificationExamplesTests otbClassificationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbClassificationExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+TARGET_LINK_LIBRARIES(otbClassificationExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -359,7 +359,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   chrono.Start();
   this->ProcessNode(inputRoot, outputRoot);
   chrono.Stop();
-  otbMsgDevMacro(<< "VectoDataProjectionFilter: features Processed in " << chrono.GetMeanTime() << " seconds.");
+  otbMsgDevMacro(<< "VectoDataProjectionFilter: features Processed in " << chrono.GetMean() << " seconds.");
 }
 
 } // end namespace otb

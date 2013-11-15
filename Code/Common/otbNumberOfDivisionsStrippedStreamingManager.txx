@@ -46,7 +46,7 @@ NumberOfDivisionsStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataOb
     m_NumberOfDivisions = 1;
     }
 
-  this->m_Splitter = itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
+  this->m_Splitter = itk::ImageRegionSplitterSlowDimension::New();
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, m_NumberOfDivisions);
   otbMsgDevMacro(<< "Computed number of split : " << this->m_ComputedNumberOfSplits)
   // Save the region to generate the splits later

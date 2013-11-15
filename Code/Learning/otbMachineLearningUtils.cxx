@@ -80,6 +80,7 @@ bool ReadDataFile(const char * infname, InputListSampleType * samples, TargetLis
             pos = nextpos;
             }
           }
+        samples->SetMeasurementVectorSize(itk::NumericTraits<InputSampleType>::GetLength(sample));
         samples->PushBack(sample);
         labels->PushBack(label);
         }

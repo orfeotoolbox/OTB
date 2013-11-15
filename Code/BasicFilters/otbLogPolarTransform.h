@@ -18,7 +18,7 @@
 #ifndef __otbLogPolarTransform_h
 #define __otbLogPolarTransform_h
 
-#include "itkTransform.h"
+#include "otbTransform.h"
 
 namespace otb
 {
@@ -42,12 +42,12 @@ namespace otb
  */
 template <class TScalarType>
 class ITK_EXPORT LogPolarTransform
-  : public itk::Transform<TScalarType, 2, 2>
+  : public Transform<TScalarType, 2, 2>
 {
 public:
   /** Standard typedef */
   typedef LogPolarTransform                 Self;
-  typedef itk::Transform<TScalarType, 2, 2> Superclass;
+  typedef Transform<TScalarType, 2, 2> Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
   /** Creation through object factory */
@@ -85,6 +85,19 @@ public:
    * \return The parameters of the transform.
    */
   virtual ParametersType& GetParameters(void) const;
+
+  /**
+   * Set the Fixed Parameters
+   * \param The Fixed parameters of the transform.
+   */
+  virtual void SetFixedParameters( const ParametersType & param) 
+    { this->m_FixedParameters = param;}
+
+  /**
+   * Get the Fixed Parameters
+   * \return The Fixed parameters of the transform.
+   */
+  virtual const ParametersType& GetFixedParameters(void) const{return this->m_FixedParameters;}
   /**
    * Transform a point.
    * \param point The point to transform.

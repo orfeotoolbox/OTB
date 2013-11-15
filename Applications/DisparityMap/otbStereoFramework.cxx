@@ -18,7 +18,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbStereorectificationDeformationFieldSource.h"
+#include "otbStereorectificationDisplacementFieldSource.h"
 #include "otbStreamingWarpImageFilter.h"
 #include "otbPixelWiseBlockMatchingImageFilter.h"
 #include "otbBandMathImageFilter.h"
@@ -36,7 +36,7 @@
 #include "otbBCOInterpolateImageFunction.h"
 
 #include "itkVectorCastImageFilter.h"
-#include "otbInverseDeformationFieldImageFilter.h"
+#include "itkInverseDisplacementFieldImageFilter.h"
 
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbStreamingMinMaxImageFilter.h"
@@ -84,24 +84,24 @@ public:
   /** Filters typedefs */
   typedef FloatImageType::PixelType           FloatPixelType;
 
-  typedef otb::StereorectificationDeformationFieldSource
-    <FloatImageType,FloatVectorImageType>     DeformationFieldSourceType;
+  typedef otb::StereorectificationDisplacementFieldSource
+    <FloatImageType,FloatVectorImageType>     DisplacementFieldSourceType;
 
-  typedef itk::Vector<float,2>               DeformationType;
-  typedef otb::Image<DeformationType>         DeformationFieldType;
+  typedef itk::Vector<float,2>               DisplacementType;
+  typedef otb::Image<DisplacementType>         DisplacementFieldType;
 
   typedef itk::VectorCastImageFilter
     <FloatVectorImageType,
-     DeformationFieldType>                    DeformationFieldCastFilterType;
+     DisplacementFieldType>                    DisplacementFieldCastFilterType;
 
-  typedef otb::InverseDeformationFieldImageFilter
-   <DeformationFieldType,DeformationFieldType> InverseDeformationFieldFilterType;
+  typedef itk::InverseDisplacementFieldImageFilter
+   <DisplacementFieldType,DisplacementFieldType> InverseDisplacementFieldFilterType;
 
 
   typedef otb::StreamingWarpImageFilter
     <FloatImageType,
      FloatImageType,
-     DeformationFieldType>                    ResampleFilterType;
+     DisplacementFieldType>                    ResampleFilterType;
 
   typedef otb::BCOInterpolateImageFunction
     <FloatImageType>                          InterpolatorType;
@@ -175,7 +175,7 @@ public:
     <FloatImageType,
      FloatImageType,
      FloatImageType,
-     DeformationFieldType,
+     DisplacementFieldType,
      FloatImageType>                          DisparityToElevationFilterType;
 
   typedef otb::DEMToImageGenerator
@@ -218,15 +218,15 @@ public:
 
   typedef otb::DisparityTranslateFilter
     <FloatImageType,
-      DeformationFieldType,
+      DisplacementFieldType,
       FloatImageType,
       FloatImageType>                              DisparityTranslateFilter;
 
   typedef otb::DisparityMapTo3DFilter
     <FloatImageType,
-     FloatVectorImageType,DeformationFieldType,FloatImageType>                         DisparityTo3DFilter;
+     FloatVectorImageType,DisplacementFieldType,FloatImageType>                         DisparityTo3DFilter;
 
-  typedef itk::VectorIndexSelectionCastImageFilter<DeformationFieldType,
+  typedef itk::VectorIndexSelectionCastImageFilter<DisplacementFieldType,
                                                      FloatImageType> IndexSelectionCastFilterType;
 
     typedef otb::ImageListToVectorImageFilter<ImageListType,FloatVectorImageType> ImageListFilterType;
@@ -321,7 +321,7 @@ private:
                           "between one or mulitple stereo pair in sensor geometry. The output is projected in "
                           "desired geographic or cartographic map projection (UTM by default). The pipeline is made of the following steps:\n"
                           "for each sensor pair :\n"
-                          "\t- compute the epipolar deformation grids from the stereo pair (direct and inverse)\n"
+                          "\t- compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"
                           "\t- resample the stereo pair into epipolar geometry using BCO interpolation\n"
                           "\t- create masks for each epipolar image : remove black borders and resample"
                           " input masks\n"
@@ -420,8 +420,8 @@ private:
     AddParameter(ParameterType_Group, "stereorect", "Stereorectification Grid parameters");
     SetParameterDescription("stereorect","This group of parameters allows to choose direct and inverse grid subsampling. These parameters are very useful to tune time and memory consumption.");
 
-    AddParameter(ParameterType_Int,"stereorect.fwdgridstep","Step of the deformation grid (in pixels)");
-    SetParameterDescription("stereorect.fwdgridstep","Stereo-rectification deformation grid only varies slowly. Therefore, it is recommended to use a coarser grid (higher step value) in case of large images");
+    AddParameter(ParameterType_Int,"stereorect.fwdgridstep","Step of the displacement grid (in pixels)");
+    SetParameterDescription("stereorect.fwdgridstep","Stereo-rectification displacement grid only varies slowly. Therefore, it is recommended to use a coarser grid (higher step value) in case of large images");
     SetDefaultParameterInt("stereorect.fwdgridstep",16);
     MandatoryOff("stereorect.fwdgridstep");
 
@@ -661,7 +661,7 @@ private:
       FloatImageType::Pointer inright = m_ExtractorList[couple[1]]->GetOutput();
 
       m_MultiDisparityTo3DFilterList[i] = MultiDisparityTo3DFilterType::New();
-      DeformationFieldSourceType::Pointer epipolarGridSource = DeformationFieldSourceType::New();
+      DisplacementFieldSourceType::Pointer epipolarGridSource = DisplacementFieldSourceType::New();
       epipolarGridSource->SetLeftImage(inleft);
       epipolarGridSource->SetRightImage(inright);
       epipolarGridSource->SetGridStep(this->GetParameterInt("stereorect.fwdgridstep"));
@@ -674,9 +674,9 @@ private:
         }
 
       epipolarGridSource->UpdateOutputInformation();
-      // check that deformation grids fit in 1/4 of available RAM
+      // check that displacement grids fit in 1/4 of available RAM
       FloatVectorImageType::SizeType
-          gridSize = epipolarGridSource->GetLeftDeformationFieldOutput()->GetLargestPossibleRegion().GetSize();
+        gridSize = epipolarGridSource->GetLeftDisplacementFieldOutput()->GetLargestPossibleRegion().GetSize();
       double storageSize = static_cast<double> (gridSize[0]) * static_cast<double> (gridSize[1]) * 4.0 * 8.0
           / 1000000.0;
       globalEpiStorageSize += storageSize;
@@ -709,18 +709,18 @@ private:
       otbAppLogINFO(<<"Maximum disparity : "<<maxDisp);
 
       // Compute rectification grids (left/right and left inverse (for disparity translate filter)).
-      DeformationFieldCastFilterType::Pointer leftGridCaster = DeformationFieldCastFilterType::New();
-      leftGridCaster->SetInput(epipolarGridSource->GetLeftDeformationFieldOutput());
+      DisplacementFieldCastFilterType::Pointer leftGridCaster = DisplacementFieldCastFilterType::New();
+      leftGridCaster->SetInput(epipolarGridSource->GetLeftDisplacementFieldOutput());
       leftGridCaster->Update();
 
-      DeformationFieldType::Pointer leftDeformation;
-      leftDeformation = leftGridCaster->GetOutput();
-      leftDeformation->DisconnectPipeline();
-      m_Filters.push_back(leftDeformation.GetPointer());
+      DisplacementFieldType::Pointer leftDisplacement;
+      leftDisplacement = leftGridCaster->GetOutput();
+      leftDisplacement->DisconnectPipeline();
+      m_Filters.push_back(leftDisplacement.GetPointer());
 
-      InverseDeformationFieldFilterType::Pointer
-          leftInverseDeformationFieldFilter = InverseDeformationFieldFilterType::New();
-      leftInverseDeformationFieldFilter->SetInput(leftDeformation);
+      InverseDisplacementFieldFilterType::Pointer
+          leftInverseDisplacementFieldFilter = InverseDisplacementFieldFilterType::New();
+      leftInverseDisplacementFieldFilter->SetInput(leftDisplacement);
 
       FloatVectorImageType::PointType lorigin = inleft->GetOrigin();
       FloatVectorImageType::SpacingType lspacing = inleft->GetSpacing();
@@ -734,21 +734,21 @@ private:
 
       lsize[0] += 1;
       lsize[1] += 1;
-      leftInverseDeformationFieldFilter->SetOutputOrigin(lorigin);
-      leftInverseDeformationFieldFilter->SetOutputSpacing(lspacing);
-      leftInverseDeformationFieldFilter->SetSize(lsize);
+      leftInverseDisplacementFieldFilter->SetOutputOrigin(lorigin);
+      leftInverseDisplacementFieldFilter->SetOutputSpacing(lspacing);
+      leftInverseDisplacementFieldFilter->SetSize(lsize);
       // change value
-      leftInverseDeformationFieldFilter->SetSubsamplingFactor(this->GetParameterInt("stereorect.invgridssrate"));
-      AddProcess(leftInverseDeformationFieldFilter, "Inverting left deformation field ...");
-      leftInverseDeformationFieldFilter->Update();
-      DeformationFieldType::Pointer leftInverseDeformation;
-      leftInverseDeformation = leftInverseDeformationFieldFilter->GetOutput();
-      leftInverseDeformation->DisconnectPipeline();
-      m_Filters.push_back(leftInverseDeformation.GetPointer());
+      leftInverseDisplacementFieldFilter->SetSubsamplingFactor(this->GetParameterInt("stereorect.invgridssrate"));
+      AddProcess(leftInverseDisplacementFieldFilter, "Inverting left displacement field ...");
+      leftInverseDisplacementFieldFilter->Update();
+      DisplacementFieldType::Pointer leftInverseDisplacement;
+      leftInverseDisplacement = leftInverseDisplacementFieldFilter->GetOutput();
+      leftInverseDisplacement->DisconnectPipeline();
+      m_Filters.push_back(leftInverseDisplacement.GetPointer());
 
       ResampleFilterType::Pointer leftResampleFilter = ResampleFilterType::New();
       leftResampleFilter->SetInput(inleft);
-      leftResampleFilter->SetDeformationField(leftDeformation);
+      leftResampleFilter->SetDisplacementField(leftDisplacement);
       leftResampleFilter->SetInterpolator(m_Interpolator);
       leftResampleFilter->SetOutputSize(epiSize);
       leftResampleFilter->SetOutputSpacing(epiSpacing);
@@ -756,18 +756,18 @@ private:
       leftResampleFilter->SetEdgePaddingValue(defaultValue);
       m_Filters.push_back(leftResampleFilter.GetPointer());
 
-      DeformationFieldCastFilterType::Pointer rightGridCaster = DeformationFieldCastFilterType::New();
-      rightGridCaster->SetInput(epipolarGridSource->GetRightDeformationFieldOutput());
+      DisplacementFieldCastFilterType::Pointer rightGridCaster = DisplacementFieldCastFilterType::New();
+      rightGridCaster->SetInput(epipolarGridSource->GetRightDisplacementFieldOutput());
       rightGridCaster->Update();
 
-      DeformationFieldType::Pointer rightDeformation;
-      rightDeformation = rightGridCaster->GetOutput();
-      rightDeformation->DisconnectPipeline();
-      m_Filters.push_back(rightDeformation.GetPointer());
+      DisplacementFieldType::Pointer rightDisplacement;
+      rightDisplacement = rightGridCaster->GetOutput();
+      rightDisplacement->DisconnectPipeline();
+      m_Filters.push_back(rightDisplacement.GetPointer());
 
       ResampleFilterType::Pointer rightResampleFilter = ResampleFilterType::New();
       rightResampleFilter->SetInput(inright);
-      rightResampleFilter->SetDeformationField(rightDeformation);
+      rightResampleFilter->SetDisplacementField(rightDisplacement);
       rightResampleFilter->SetInterpolator(m_Interpolator);
       rightResampleFilter->SetOutputSize(epiSize);
       rightResampleFilter->SetOutputSpacing(epiSpacing);
@@ -795,7 +795,7 @@ private:
         leftmask = this->GetParameterFloatImage("mask.left");
 
         leftMaskResampleFilter->SetInput(leftmask);
-        leftMaskResampleFilter->SetDeformationField(leftDeformation);
+        leftMaskResampleFilter->SetDisplacementField(leftDisplacement);
         leftMaskResampleFilter->SetInterpolator(m_Interpolator);
         leftMaskResampleFilter->SetOutputSize(epiSize);
         leftMaskResampleFilter->SetOutputSpacing(epiSpacing);
@@ -838,7 +838,7 @@ private:
         rightmask = this->GetParameterFloatImage("mask.right");
 
         rightMaskResampleFilter->SetInput(rightmask);
-        rightMaskResampleFilter->SetDeformationField(rightDeformation);
+        rightMaskResampleFilter->SetDisplacementField(rightDisplacement);
         rightMaskResampleFilter->SetInterpolator(m_Interpolator);
         rightMaskResampleFilter->SetOutputSize(epiSize);
         rightMaskResampleFilter->SetOutputSpacing(epiSpacing);
@@ -875,6 +875,7 @@ private:
       if (IsParameterEnabled("postproc.bij"))
         {
         finalMaskFilter = BandMathFilterType::New();
+        finalMaskFilter->SetNthInput(0, lBandMathFilter->GetOutput(), "inmask");
         }
       else
         {
@@ -1058,7 +1059,7 @@ private:
         m_Filters.push_back(bijectFilter.GetPointer());
 
         //finalMaskFilter = BandMathFilterType::New();
-        finalMaskFilter->SetNthInput(0, lBandMathFilter->GetOutput(), "inmask");
+        //finalMaskFilter->SetNthInput(0, lBandMathFilter->GetOutput(), "inmask");
         finalMaskFilter->SetNthInput(1, bijectFilter->GetOutput(), "lrrl");
         finalMaskFilter->SetExpression("if(inmask > 0 and lrrl > 0, 255, 0)");
         //
@@ -1084,8 +1085,8 @@ private:
       DisparityTranslateFilter::Pointer disparityTranslateFilter = DisparityTranslateFilter::New();
       disparityTranslateFilter->SetHorizontalDisparityMapInput(hDispOutput);
       disparityTranslateFilter->SetVerticalDisparityMapInput(subPixelFilterPointer->GetOutput(1));
-      disparityTranslateFilter->SetInverseEpipolarLeftGrid(leftInverseDeformation);
-      disparityTranslateFilter->SetDirectEpipolarRightGrid(rightDeformation);
+      disparityTranslateFilter->SetInverseEpipolarLeftGrid(leftInverseDisplacement);
+      disparityTranslateFilter->SetDirectEpipolarRightGrid(rightDisplacement);
       // disparityTranslateFilter->SetDisparityMaskInput()
       disparityTranslateFilter->SetLeftSensorImageInput(inleft);
       disparityTranslateFilter->SetNoDataValue(-32768);
@@ -1131,8 +1132,8 @@ private:
       m_MultiDisparityTo3DFilterList[i]->SetHorizontalDisparityMapInput(0, hDispOutput2);
       m_MultiDisparityTo3DFilterList[i]->SetVerticalDisparityMapInput(0, vDispOutput2);
       m_MultiDisparityTo3DFilterList[i]->SetMovingKeywordList(0, inright->GetImageKeywordlist());
-      m_MultiDisparityTo3DFilterList[i]->UpdateOutputInformation();
       m_MultiDisparityTo3DFilterList[i]->SetDisparityMaskInput(0, translatedMaskImage);
+      m_MultiDisparityTo3DFilterList[i]->UpdateOutputInformation();
 
       // PARAMETER ESTIMATION
 

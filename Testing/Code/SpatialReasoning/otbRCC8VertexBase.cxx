@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
+#include "itkMacro.h"
 #include "otbRCC8VertexBase.h"
 #include "otbPolygon.h"
 #include "otbMacro.h"

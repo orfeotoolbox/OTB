@@ -134,7 +134,7 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
   outputImage->FillBuffer(0);
 
   itk::ImageRegionConstIteratorWithIndex<InputImageType>  image_it(inputImage,  inputImage->GetRequestedRegion());
-  image_it.Begin();
+  image_it.GoToBegin();
 
   itk::Index<2> index;
 

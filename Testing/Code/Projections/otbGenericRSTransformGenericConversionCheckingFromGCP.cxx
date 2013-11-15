@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 #include "otbGeographicalDistance.h"
 #include "otbDEMHandler.h"
 
@@ -30,7 +30,7 @@ typedef otb::VectorImage<double, 2>       ImageType;
 typedef otb::ImageFileReader<ImageType>   ReaderType;
 typedef otb::GenericRSTransform<>         TransformType;
 typedef TransformType::InputPointType     PointType;
-typedef itk::Statistics::EuclideanDistance<ImageType::PointType> DistanceType;
+typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
 typedef otb::GeographicalDistance<ImageType::PointType>          GeoDistanceType;
 
 int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[])

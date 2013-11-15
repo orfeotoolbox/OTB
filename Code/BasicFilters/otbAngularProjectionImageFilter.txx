@@ -31,8 +31,8 @@ template < class TInputImage, class TOutputImage, class TAngleArray, class TPrec
 AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
 ::AngularProjectionImageFilter ()
 {
-  this->SetNumberOfRequiredInputs(NumberOfInputImages);
-  this->SetNumberOfOutputs(1);
+  //this->SetNumberOfRequiredInputs(NumberOfInputImages);
+  this->SetNumberOfRequiredOutputs(1);
 }
 
 template < class TInputImage, class TOutputImage, class TAngleArray, class TPrecision >
@@ -62,7 +62,7 @@ template < class TInputImage, class TOutputImage, class TAngleArray, class TPrec
 void
 AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
 ::ThreadedGenerateData
-  ( const OutputImageRegionType & outputRegionForThread, int threadId )
+  ( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadId )
 {
   itk::ProgressReporter reporter(this, threadId,
                                  outputRegionForThread.GetNumberOfPixels() );
@@ -71,8 +71,8 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
   this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
 
   bool iteratorsAtEnd = false;
-  ImageRegionConstIteratorVectorType it ( NumberOfInputImages );
-  for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
+  ImageRegionConstIteratorVectorType it ( this->GetNumberOfInputs() );
+  for ( unsigned int i = 0; i < this->GetNumberOfInputs(); ++i )
   {
     it[i] = ImageRegionConstIteratorType( this->GetInput(i), inputRegionForThread );
     it[i].GoToBegin();
@@ -86,10 +86,10 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
 
   while ( !iteratorsAtEnd && !outIter.IsAtEnd() )
   {
-      outIter.Set( GenerateData( it ) );
+    outIter.Set( GenerateData( it ) );
 
     ++outIter;
-    for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
+    for ( unsigned int i = 0; i < this->GetNumberOfInputs(); ++i )
     {
       ++(it[i]);
       if ( it[i].IsAtEnd() )
@@ -108,13 +108,13 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
 {
   PrecisionType output = 0;
 
-  if ( NumberOfInputImages == 2 )
+  if ( this->GetNumberOfInputs() == 2 )
   {
     PrecisionType alpha = static_cast<PrecisionType>( m_AngleArray[0] );
     output = static_cast<PrecisionType>( it[0].Get() ) * vcl_cos( alpha )
               - static_cast<PrecisionType>( it[1].Get() ) * vcl_sin( alpha );
   }
-  else if ( NumberOfInputImages == 3 )
+  else if ( this->GetNumberOfInputs() == 3 )
   {
     PrecisionType alpha = static_cast<PrecisionType>( m_AngleArray[0] );
     PrecisionType beta = static_cast<PrecisionType>( m_AngleArray[1] );
@@ -125,7 +125,7 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
   }
   else
   {
-    unsigned int i = NumberOfInputImages-1;
+    unsigned int i = this->GetNumberOfInputs()-1;
     output = static_cast<PrecisionType>( it[i--].Get() );
 
     do {

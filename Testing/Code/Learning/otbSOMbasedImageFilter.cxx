@@ -21,7 +21,7 @@
 #include "otbSOMMap.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 
 
 int otbSOMbasedImageFilterTest(int argc, char * argv[])
@@ -34,7 +34,7 @@ int otbSOMbasedImageFilterTest(int argc, char * argv[])
 
   typedef double                                          ComponentType;
   typedef itk::VariableLengthVector<ComponentType>         PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>   DistanceType;
   typedef otb::VectorImage<ComponentType, Dimension>      ImageType;
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
   typedef otb::SOMMap<ImageType::PixelType>                                            SOMMapType;

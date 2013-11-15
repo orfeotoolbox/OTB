@@ -21,9 +21,9 @@
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkNeighborhoodIterator.h"
+#include "itkImageRegionIterator.h"
 #include "itkFastMarchingImageFilter.h"
 #include "itkNumericTraits.h"
-#include "itkRandomImageSource.h"
 #include "itkAddImageFilter.h"
 
 //  Software Guide : BeginCommandLineArgs
@@ -113,14 +113,36 @@ int main(int argc, char *argv[])
 
   itk::AddImageFilter<ImageType, ImageType, ImageType>::Pointer adder
     = itk::AddImageFilter<ImageType, ImageType, ImageType>::New();
-  itk::RandomImageSource<ImageType>::Pointer noise
-    = itk::RandomImageSource<ImageType>::New();
+  
+  // Allocate the noise image
+  ImageType::Pointer noise = ImageType::New();
+  ImageType::RegionType noiseRegion;
+  noiseRegion.SetSize(size);
+  noise->SetRegions(noiseRegion);
+  noise->Allocate();
+  
+  // Fill the noise image
+  itk::ImageRegionIterator<ImageType> itNoise(noise, noiseRegion);
+  itNoise.GoToBegin();
 
-  noise->SetSize(size.m_Size);
-  noise->SetMin(-.7);
-  noise->SetMax(.8);
-  noise->SetNumberOfThreads(1);
-  adder->SetInput1(noise->GetOutput());
+  // Random number seed
+  unsigned int sample_seed = 12345;
+  double u    = 0.;
+  double rnd  = 0.;
+  double dMin = -.7;
+  double dMax = .8;
+  
+  while(!itNoise.IsAtEnd())
+    {
+    sample_seed = ( sample_seed * 16807 ) % 2147483647L;
+    u = static_cast< double >( sample_seed ) / 2147483711UL;
+    rnd = ( 1.0 - u ) * dMin + u * dMax;
+
+    itNoise.Set( (PixelType)rnd );
+    ++itNoise;
+    }
+
+  adder->SetInput1(noise);
   adder->SetInput2(fastMarching->GetOutput());
 
   try

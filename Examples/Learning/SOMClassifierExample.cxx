@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>   DistanceType;
   typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
   typedef otb::ImageFileReader<SOMMapType>                SOMReaderType;
 // Software Guide : EndCodeSnippet
@@ -152,6 +152,7 @@ int main(int argc, char* argv[])
                                               reader->GetOutput()->
                                               GetLargestPossibleRegion());
 
+  sample->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   it.GoToBegin();
 
   while (!it.IsAtEnd())

@@ -62,9 +62,10 @@ int otbLocalHistogramImageFunctionTest(int argc, char * argv[])
   outputStream << std::setprecision(10) << std::endl;
   outputStream << "Index: " << index << std::endl;
 
-  for(unsigned int i = 0; i < function->GetNumberOfHistogramBins(); ++i)
+  for (unsigned int i = 0; i < function->GetNumberOfHistogramBins(); ++i)
     {
-    outputStream << "Pos[" <<i <<"] = " << Result->GetMeasurement(i, 0) << " -> " << Result->GetFrequency(i, 0) << std::endl;
+    outputStream << "Bin[" << i << "] = " << "[" << Result->GetBinMin(0, i) << ", " << Result->GetBinMax(0, i)
+        << "[ -> " << Result->GetFrequency(i, 0) << std::endl;
     }
 
   outputStream.close();

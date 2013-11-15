@@ -145,7 +145,7 @@ void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::Generate
 template<class TInputImage, class TOutputImage>
 void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
   const OutputImageRegionType&     outputRegionForThread,
-  int threadId
+  itk::ThreadIdType threadId
   )
 {
 

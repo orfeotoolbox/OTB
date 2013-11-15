@@ -92,7 +92,7 @@ protected:
 
   virtual int SplitRequestedRegion(int i, int num, InputImageRegionType& splitRegion);
 
-  virtual void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, itk::ThreadIdType threadId);
 
   /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the

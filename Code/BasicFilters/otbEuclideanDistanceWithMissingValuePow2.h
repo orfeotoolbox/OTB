@@ -21,7 +21,7 @@
 #ifndef __otbEuclideanDistanceWithMissingValuePow2_h
 #define __otbEuclideanDistanceWithMissingValuePow2_h
 
-#include "itkEuclideanDistance.h"
+#include "itkEuclideanDistanceMetric.h"
 
 namespace otb {
 
@@ -30,33 +30,33 @@ namespace Statistics {
 /** \class EuclideanDistanceWithMissingValuePow2
  * \brief Euclidean comparison distance function facing missing value. The square root is not performed in this class.
  *
- * This class is derived from EuclideanDistance class. In addition
+ * This class is derived from EuclideanDistanceMetric class. In addition
  * to the initial Evaluate method, the class does not perform calculation
  * when a component does not contain any data. The 'no data' case is perform through the \code SetToMissingValue() \endcode
  * which performs a \code Nan \endcode affectation.
  *
  * The class can be templated over any container that holds data elements, as
- * for template of EuclideanDistance.
+ * for template of EuclideanDistanceMetric.
  *
  * The only restriction is that elements have to support NaN values.
  *
- * \sa EuclideanDistance
+ * \sa EuclideanDistanceMetric
  * \sa EuclideanDistanceWithMissingValue
  */
 template<class TVector>
 class ITK_EXPORT EuclideanDistanceWithMissingValuePow2 :
-  public itk::Statistics::EuclideanDistance<TVector>
+  public itk::Statistics::EuclideanDistanceMetric<TVector>
 {
 public:
   /** Standard "Self" typedef. */
   typedef EuclideanDistanceWithMissingValuePow2          Self;
-  typedef itk::Statistics::EuclideanDistance<TVector>    Superclass;
+  typedef itk::Statistics::EuclideanDistanceMetric<TVector>    Superclass;
   typedef itk::SmartPointer<Self>                        Pointer;
   typedef itk::SmartPointer<const Self>                  ConstPointer;
   typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(EuclideanDistanceWithMissingValuePow2, EuclideanDistance);
+  itkTypeMacro(EuclideanDistanceWithMissingValuePow2, EuclideanDistanceMetric);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

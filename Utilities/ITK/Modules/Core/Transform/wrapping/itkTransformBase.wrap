@@ -1,0 +1,20 @@
+itk_wrap_simple_class("itk::TransformBase" POINTER)
+
+itk_wrap_class("itk::Transform" POINTER)
+  foreach(d1 ${ITK_WRAP_DIMS})
+    foreach(d2 ${ITK_WRAP_DIMS})
+      itk_wrap_template("${ITKM_D}${d1}${d2}" "${ITKT_D},${d1},${d2}")
+    endforeach(d2)
+  endforeach(d1)
+itk_end_wrap_class()
+
+itk_wrap_class("itk::DataObjectDecorator" POINTER)
+  foreach(d1 ${ITK_WRAP_DIMS})
+    foreach(d2 ${ITK_WRAP_DIMS})
+      itk_wrap_template("T${ITKM_D}${d1}${d2}" "itk::Transform< ${ITKT_D},${d1},${d2} >")
+    endforeach(d2)
+  endforeach(d1)
+itk_end_wrap_class()
+
+itk_wrap_simple_class("itk::TransformFileReader" POINTER)
+itk_wrap_simple_class("itk::TransformFileWriter" POINTER)

@@ -24,19 +24,19 @@ ADD_EXECUTABLE(CorrelChDet CorrelChDet.cxx)
 TARGET_LINK_LIBRARIES(CorrelChDet OTBIO OTBCommon  )
 
 ADD_EXECUTABLE(LHMIChDet LHMIChDet.cxx)
-TARGET_LINK_LIBRARIES(LHMIChDet OTBIO OTBCommon  ITKStatistics)
+TARGET_LINK_LIBRARIES(LHMIChDet OTBIO OTBCommon  ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(JHMIChDet JHMIChDet.cxx)
-TARGET_LINK_LIBRARIES(JHMIChDet OTBIO OTBCommon  ITKStatistics)
+TARGET_LINK_LIBRARIES(JHMIChDet OTBIO OTBCommon  ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(KullbackLeiblerDistanceChDet KullbackLeiblerDistanceChDet.cxx)
-TARGET_LINK_LIBRARIES(KullbackLeiblerDistanceChDet OTBIO OTBCommon  ITKStatistics)
+TARGET_LINK_LIBRARIES(KullbackLeiblerDistanceChDet OTBIO OTBCommon  ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(KullbackLeiblerProfileChDet KullbackLeiblerProfileChDet.cxx)
-TARGET_LINK_LIBRARIES(KullbackLeiblerProfileChDet OTBIO OTBCommon  ITKStatistics)
+TARGET_LINK_LIBRARIES(KullbackLeiblerProfileChDet OTBIO OTBCommon  ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(KullbackLeiblerSupervizedDistanceChDet KullbackLeiblerSupervizedDistanceChDet.cxx)
-TARGET_LINK_LIBRARIES(KullbackLeiblerSupervizedDistanceChDet OTBIO OTBCommon  ITKStatistics)
+TARGET_LINK_LIBRARIES(KullbackLeiblerSupervizedDistanceChDet OTBIO OTBCommon  ${ITK_LIBRARIES})
 
 ADD_EXECUTABLE(MultivariateAlterationDetector MultivariateAlterationDetector.cxx)
 TARGET_LINK_LIBRARIES(MultivariateAlterationDetector OTBIO OTBCommon  ITKStatistics)
@@ -127,7 +127,7 @@ ADD_TEST(cdTeKullbackLeiblerProfileChDetTest ${EXE_TESTS}
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbChangeDetectionExamplesTests otbChangeDetectionExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbChangeDetectionExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+TARGET_LINK_LIBRARIES(otbChangeDetectionExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

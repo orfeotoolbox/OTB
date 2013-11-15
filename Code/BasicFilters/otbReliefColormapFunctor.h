@@ -18,7 +18,7 @@
 #ifndef __otbReliefColormapFunctor_h
 #define __otbReliefColormapFunctor_h
 
-#include "itkColormapFunctor.h"
+#include "itkColormapFunction.h"
 
 namespace otb {
 
@@ -37,12 +37,12 @@ namespace Functor {
  */
 template<class TScalar, class TRGBPixel>
 class ITK_EXPORT ReliefColormapFunctor
-  : public itk::Functor::ColormapFunctor<TScalar, TRGBPixel>
+  : public itk::Function::ColormapFunction<TScalar, TRGBPixel>
 {
 public:
 
   typedef ReliefColormapFunctor                             Self;
-  typedef itk::Functor::ColormapFunctor<TScalar, TRGBPixel> Superclass;
+  typedef itk::Function::ColormapFunction<TScalar, TRGBPixel> Superclass;
   typedef itk::SmartPointer<Self>                           Pointer;
   typedef itk::SmartPointer<const Self>                     ConstPointer;
 

@@ -210,7 +210,7 @@ void otb::GeometriesToGeometriesFilter::GenerateData(void )
     }
 
   chrono.Stop();
-  otbMsgDevMacro(<< "GeometriesToGeometriesFilter: geometries processed in " << chrono.GetMeanTime() << " seconds.");
+  otbMsgDevMacro(<< "GeometriesToGeometriesFilter: geometries processed in " << chrono.GetMean() << " seconds.");
 }
 
 /*virtual*/
