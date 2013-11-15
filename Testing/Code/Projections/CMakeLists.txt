@@ -1,35 +1,35 @@
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
-SET(PROJECTIONS_TESTS1 ${CXX_TEST_PATH}/otbProjectionsTests1)
-SET(PROJECTIONS_TESTS2 ${CXX_TEST_PATH}/otbProjectionsTests2)
-SET(PROJECTIONS_TESTS3 ${CXX_TEST_PATH}/otbProjectionsTests3)
-SET(PROJECTIONS_TESTS4 ${CXX_TEST_PATH}/otbProjectionsTests4)
-SET(PROJECTIONS_TESTS5 ${CXX_TEST_PATH}/otbProjectionsTests5)
+set(PROJECTIONS_TESTS1 ${CXX_TEST_PATH}/otbProjectionsTests1)
+set(PROJECTIONS_TESTS2 ${CXX_TEST_PATH}/otbProjectionsTests2)
+set(PROJECTIONS_TESTS3 ${CXX_TEST_PATH}/otbProjectionsTests3)
+set(PROJECTIONS_TESTS4 ${CXX_TEST_PATH}/otbProjectionsTests4)
+set(PROJECTIONS_TESTS5 ${CXX_TEST_PATH}/otbProjectionsTests5)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADD_TEST(prTuProjectionBaseNew ${PROJECTIONS_TESTS1}  otbProjectionBaseNew )
+add_test(prTuProjectionBaseNew ${PROJECTIONS_TESTS1}  otbProjectionBaseNew )
 
-ADD_TEST(prTuMapProjectionsNew ${PROJECTIONS_TESTS1}  otbMapProjectionsNew )
+add_test(prTuMapProjectionsNew ${PROJECTIONS_TESTS1}  otbMapProjectionsNew )
 
-ADD_TEST(prTvMapProjection ${PROJECTIONS_TESTS1}
+add_test(prTvMapProjection ${PROJECTIONS_TESTS1}
         --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvMapProjection.txt
         ${TEMP}/prTvMapProjection.txt
         otbMapProjection
         ${TEMP}/prTvMapProjection.txt
 )
 
-ADD_TEST(prTvUtmMapProjection ${PROJECTIONS_TESTS1}
+add_test(prTvUtmMapProjection ${PROJECTIONS_TESTS1}
         --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvUtmMapProjection.txt
         ${TEMP}/prTvUtmMapProjection.txt
         otbUtmMapProjection
         ${TEMP}/prTvUtmMapProjection.txt
 )
 
-ADD_TEST(prTvMapProjectionsTest ${PROJECTIONS_TESTS1}
+add_test(prTvMapProjectionsTest ${PROJECTIONS_TESTS1}
         --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvMapProjectionsTest.txt
         ${TEMP}/prTvMapProjectionsTest.txt
         otbMapProjectionsTest
@@ -37,21 +37,21 @@ ADD_TEST(prTvMapProjectionsTest ${PROJECTIONS_TESTS1}
 )
 
 
-ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS1}  otbSensorModelsNew )
+add_test(prTuSensorModelsNew ${PROJECTIONS_TESTS1}  otbSensorModelsNew )
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS1}
+add_test(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
-ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
+add_test(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
         ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
-ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
+add_test(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvRegionProjectionResamplerToulouse.tif
                           ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
         otbRegionProjectionResampler
@@ -65,7 +65,7 @@ ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS1}
                                 -0.00001
         )
 
-ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
+add_test(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvRegionProjectionResamplerCevennes.tif
                           ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
                                 otbRegionProjectionResampler
@@ -79,7 +79,7 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
                                 -0.00001
         )
 
-ADD_TEST(prTvSensorModelSPOT5 ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelSPOT5 ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelSpot5.txt
          ${TEMP}/prTvSensorModelSpot5.txt
@@ -89,7 +89,7 @@ ADD_TEST(prTvSensorModelSPOT5 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelSpot5.txt
 )
 
-ADD_TEST(prTvSensorModelFORMOSAT2 ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelFORMOSAT2 ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelFORMOSAT.txt
          ${TEMP}/prTvSensorModelFORMOSAT2.txt
@@ -100,7 +100,7 @@ ADD_TEST(prTvSensorModelFORMOSAT2 ${PROJECTIONS_TESTS1}
 )
 
 
-ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelQuickbird.txt
          ${TEMP}/prTvSensorModelQuickbird.txt
@@ -110,7 +110,7 @@ ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelQuickbird.txt
 )
 
-ADD_TEST(prTvSensorModelPleiades-PRE-TIFF ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelPleiades-PRE-TIFF ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelPleiades-PRE-TIFF.txt
          ${TEMP}/prTvSensorModelPleiades-PRE-TIFF_OUT.txt
@@ -120,7 +120,7 @@ ADD_TEST(prTvSensorModelPleiades-PRE-TIFF ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelPleiades-PRE-TIFF_OUT.txt
 )
 
-ADD_TEST(prTvSensorModelPleiades-JP2 ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelPleiades-JP2 ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelPleiades.txt
          ${TEMP}/prTvSensorModelPleiades_OUT.txt
@@ -130,7 +130,7 @@ ADD_TEST(prTvSensorModelPleiades-JP2 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelPleiades_OUT.txt
 )
 
-ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelIkonos.txt
          ${TEMP}/prTvSensorModelIkonos.txt
@@ -140,7 +140,7 @@ ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelIkonos.txt
 )
 
-ADD_TEST(prTvSensorModelRapidEye ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelRapidEye ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelRapidEye.txt
          ${TEMP}/prTvSensorModelRapidEye.txt
@@ -150,7 +150,7 @@ ADD_TEST(prTvSensorModelRapidEye ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelRapidEye.txt
 )
 
-ADD_TEST(prTvSensorModelEnvisatAsar ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelEnvisatAsar ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelEnvisatAsar.txt
          ${TEMP}/prTvSensorModelEnvisatAsar.txt
@@ -159,7 +159,7 @@ ADD_TEST(prTvSensorModelEnvisatAsar ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelEnvisatAsar.txt
 )
 
-ADD_TEST(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${EPSILON_6}
          ${BASELINE_FILES}/prTvSensorModelAlosPalsar.txt
          ${TEMP}/prTvSensorModelAlosPalsar.txt
@@ -168,7 +168,7 @@ ADD_TEST(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelAlosPalsar.txt
 )
 
-ADD_TEST(prTvSensorModelRadarSat1_GOMA ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelRadarSat1_GOMA ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelRadarSat1_GOMA.txt
          ${TEMP}/prTvSensorModelRadarSat1_GOMA.txt
@@ -177,7 +177,7 @@ ADD_TEST(prTvSensorModelRadarSat1_GOMA ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelRadarSat1_GOMA.txt
 )
 
-ADD_TEST(prTvSensorModelRadarSat1_SARDEGNA ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelRadarSat1_SARDEGNA ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelRadarSat1_SARDEGNA.txt
          ${TEMP}/prTvSensorModelRadarSat1_SARDEGNA.txt
@@ -186,7 +186,7 @@ ADD_TEST(prTvSensorModelRadarSat1_SARDEGNA ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelRadarSat1_SARDEGNA.txt
 )
 
-ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelRadarSat2.txt
          ${TEMP}/prTvSensorModelRadarSat2.txt
@@ -196,7 +196,7 @@ ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelRadarSat2.txt
 )
 
-ADD_TEST(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelTerraSarX.txt
          ${TEMP}/prTvSensorModelTerraSarX.txt
@@ -206,7 +206,7 @@ ADD_TEST(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelTerraSarX.txt
 )
 
-ADD_TEST(prTvSensorModelTerraSarX_Upsala ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelTerraSarX_Upsala ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvSensorModelTerraSarX_Upsala.txt
         ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
@@ -215,7 +215,7 @@ ADD_TEST(prTvSensorModelTerraSarX_Upsala ${PROJECTIONS_TESTS1}
          ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
 )
-ADD_TEST(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvSensorModelTerraSarX_Toronto.txt
         ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
@@ -225,7 +225,7 @@ ADD_TEST(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
 )
 
-ADD_TEST(prTvSensorModelErs ${PROJECTIONS_TESTS1}
+add_test(prTvSensorModelErs ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelErs.txt
          ${TEMP}/prTvSensorModelErs.txt
@@ -234,7 +234,7 @@ ADD_TEST(prTvSensorModelErs ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelErs.txt
 )
 
-SET(SARSENSORMODEL_TYPES
+set(SARSENSORMODEL_TYPES
   "RADARSAT1/GOMA/SCENE01/"
   "RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml"
   "ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1"
@@ -242,12 +242,12 @@ SET(SARSENSORMODEL_TYPES
   "TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos"
 )
 
-FOREACH( file ${SARSENSORMODEL_TYPES})
+foreach( file ${SARSENSORMODEL_TYPES})
   # Get the sensor name
-  SET(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
-  STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
+  set(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
+  string(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
   # Tests
-        ADD_TEST(prTvSensorModelGrid_${sensor_name} ${PROJECTIONS_TESTS1}
+        add_test(prTvSensorModelGrid_${sensor_name} ${PROJECTIONS_TESTS1}
           --compare-n-images ${EPSILON_6} 2
                  ${BASELINE}/prTvSensorModelGridDeltaX_${sensor_name}.tif
                  ${TEMP}/prTvSensorModelGridDeltaX_${sensor_name}.tif
@@ -260,7 +260,7 @@ FOREACH( file ${SARSENSORMODEL_TYPES})
                  10 10
                 )
 
-        ADD_TEST(prTvForwardSensorModelGrid_${sensor_name} ${PROJECTIONS_TESTS1}
+        add_test(prTvForwardSensorModelGrid_${sensor_name} ${PROJECTIONS_TESTS1}
           --compare-n-images ${EPSILON_6} 2
                  ${BASELINE}/prTvForwardSensorModelGridX_${sensor_name}.tif
                  ${TEMP}/prTvForwardSensorModelGridX_${sensor_name}.tif
@@ -273,10 +273,10 @@ FOREACH( file ${SARSENSORMODEL_TYPES})
                  10 10
                 )
 
-ENDFOREACH( file ${SARSENSORMODEL_TYPES})
+endforeach( file ${SARSENSORMODEL_TYPES})
 
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -285,12 +285,12 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 # TU pour otb::OrthoRectificationFilterBase otb::OrthoRectificationFilter
-ADD_TEST(prTuOrthoRectificationFilterNew ${PROJECTIONS_TESTS2}
+add_test(prTuOrthoRectificationFilterNew ${PROJECTIONS_TESTS2}
         otbOrthoRectificationFilterNew )
 
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
         otbOrthoRectificationFilter
@@ -308,7 +308,7 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
         4 # Spacing of the displacement field
         )
 
-ADD_TEST(prTvOrthoRectificationToulouseXS ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationToulouseXS ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouseXS_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseXS_UTM.tif
         otbOrthoRectificationFilter
@@ -317,7 +317,7 @@ ADD_TEST(prTvOrthoRectificationToulouseXS ${PROJECTIONS_TESTS2}
         367319 4835740 300 300 2.5608 -2.8452 31 N 4
         )
 
-ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
         otbOrthoRectificationFilter
@@ -334,7 +334,7 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
         4
         )
 
-ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM
@@ -352,7 +352,7 @@ ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}
         0.5
         )
 
-ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM
@@ -372,7 +372,7 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
 
 #========================= Ortho rectif SPOT5 ===============================
 
-ADD_TEST(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM.tif
                           ${TEMP}/prTvOrthoRectificationSPOT5_UTM.tif
         otbOrthoRectificationFilter
@@ -389,7 +389,7 @@ ADD_TEST(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         5
         )
 
- ADD_TEST(prTvOrthoRectificationMonoThreadSPOT5 ${PROJECTIONS_TESTS2}
+ add_test(prTvOrthoRectificationMonoThreadSPOT5 ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationSPOT5_UTM_band1.tif
                           ${TEMP}/prTvOrthoRectificationMonoThreadSPOT5_UTM.tif
         otbOrthoRectificationMonoThreadFilter
@@ -405,10 +405,10 @@ ADD_TEST(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         N
         5
         )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 #============= Test for bug 253 ===============================================
-ADD_TEST(prTvOrthoRectificationCoastalZoneWithSRTMNoData ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationCoastalZoneWithSRTMNoData ${PROJECTIONS_TESTS2}
  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCoastalZoneWithSRTMNoData.tif
                                ${TEMP}/prTvOrthoRectificationCoastalZoneWithSRTMNoData.tif
         otbOrthoRectificationFilterWithDEM
@@ -430,9 +430,9 @@ ADD_TEST(prTvOrthoRectificationCoastalZoneWithSRTMNoData ${PROJECTIONS_TESTS2}
 #========================= Ortho rectif SAR data  ===============================
 
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(prTvOrthoRectificationUTM_RADARDSAT1 ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_RADARDSAT1 ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARDSAT1.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARDSAT1.tif
         otbOrthoRectificationFilter
@@ -442,7 +442,7 @@ ADD_TEST(prTvOrthoRectificationUTM_RADARDSAT1 ${PROJECTIONS_TESTS2}
                 200        200 10 -10 35 S 4
         )
 
-ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_XML ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_RADARSAT2_XML ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2.tif
         otbOrthoRectificationFilter
@@ -451,7 +451,7 @@ ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_XML ${PROJECTIONS_TESTS2}
                 611000.953075 5439991.842531
                 200        200 10 -10 14 N 4
         )
-ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_HH ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_RADARSAT2_HH ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_XML.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_XML.tif
         otbOrthoRectificationFilter
@@ -460,7 +460,7 @@ ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_HH ${PROJECTIONS_TESTS2}
                 611000.953075 5439991.842531
                 200        200 10 -10 14 N 4
         )
-ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_HV ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_RADARSAT2_HV ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_HV.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_HV.tif
         otbOrthoRectificationFilter
@@ -469,7 +469,7 @@ ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_HV ${PROJECTIONS_TESTS2}
                 611000.953075 5439991.842531
                 200        200 10 -10 14 N 4
         )
-ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_VH ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_RADARSAT2_VH ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_VH.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VH.tif
         otbOrthoRectificationFilter
@@ -478,7 +478,7 @@ ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_VH ${PROJECTIONS_TESTS2}
                 611000.953075 5439991.842531
                 200        200 10 -10 14 N 4
         )
-ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_VV ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_RADARSAT2_VV ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_RADARSAT2_VV.tif
                           ${TEMP}/prTvOrthoRectificationUTM_RADARSAT2_VV.tif
         otbOrthoRectificationFilter
@@ -488,7 +488,7 @@ ADD_TEST(prTvOrthoRectificationUTM_RADARSAT2_VV ${PROJECTIONS_TESTS2}
                 200        200 10 -10 14 N 4
         )
 
-ADD_TEST(prTvOrthoRectificationUTM_ENVISAT ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_ENVISAT ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_ENVISAT.tif
                           ${TEMP}/prTvOrthoRectificationUTM_ENVISAT.tif
         otbOrthoRectificationComplexFilter
@@ -498,7 +498,7 @@ ADD_TEST(prTvOrthoRectificationUTM_ENVISAT ${PROJECTIONS_TESTS2}
                 200        200 10 -10 30 N 4
         )
 
-ADD_TEST(prTvOrthoRectificationUTM_PALSAR ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_PALSAR ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_PALSAR.tif
                           ${TEMP}/prTvOrthoRectificationUTM_PALSAR.tif
         otbOrthoRectificationComplexFilter
@@ -508,7 +508,7 @@ ADD_TEST(prTvOrthoRectificationUTM_PALSAR ${PROJECTIONS_TESTS2}
                 200        200 10 -10 54 N 4
         )
 
-ADD_TEST(prTvOrthoRectificationUTM_TERRASARX_HH ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_TERRASARX_HH ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
                           ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_HH.tif
         otbOrthoRectificationComplexFilter
@@ -518,7 +518,7 @@ ADD_TEST(prTvOrthoRectificationUTM_TERRASARX_HH ${PROJECTIONS_TESTS2}
                 200        200 10 -10 49 S 4
         )
 
-ADD_TEST(prTvOrthoRectificationUTM_TERRASARX_VV ${PROJECTIONS_TESTS2}
+add_test(prTvOrthoRectificationUTM_TERRASARX_VV ${PROJECTIONS_TESTS2}
           --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
                           ${TEMP}/prTvOrthoRectificationUTM_TERRASARX_VV.tif
         otbOrthoRectificationComplexFilter
@@ -527,13 +527,13 @@ ADD_TEST(prTvOrthoRectificationUTM_TERRASARX_VV ${PROJECTIONS_TESTS2}
                 591992.001073 9699689.825866
                 200        200 10 -10 49 S 4
         )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 
-ADD_TEST(prTuGCPsToRPCSensorModelImageFilterNew ${PROJECTIONS_TESTS2}
+add_test(prTuGCPsToRPCSensorModelImageFilterNew ${PROJECTIONS_TESTS2}
          otbGCPsToRPCSensorModelImageFilterNew)
 
-ADD_TEST(prTvGCPsToRPCSensorModelImageFilterWithoutDEM ${PROJECTIONS_TESTS2}
+add_test(prTvGCPsToRPCSensorModelImageFilterWithoutDEM ${PROJECTIONS_TESTS2}
   --compare-ascii ${EPSILON_4}
          ${BASELINE_FILES}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
          ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
@@ -646,11 +646,11 @@ ADD_TEST(prTvGCPsToRPCSensorModelImageFilterWithoutDEM ${PROJECTIONS_TESTS2}
 )
 
 
-ADD_TEST(prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithDEM ${PROJECTIONS_TESTS2}
+add_test(prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithDEM ${PROJECTIONS_TESTS2}
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
   -in ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
   -dem ${INPUTDATA}/DEM/srtm_directory
-  -gcp  
+  -gcp
   2000 2000 1.4181 43.6147 135.084
   2000 2050 1.41811 43.6135 134.185
   2000 2100 1.41812 43.6123 135.728
@@ -757,7 +757,7 @@ ADD_TEST(prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithDEM ${PR
   # to detect false reprojections results.
   )
 
-ADD_TEST(prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithoutDEM ${PROJECTIONS_TESTS2}
+add_test(prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithoutDEM ${PROJECTIONS_TESTS2}
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
   -in ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
   -gcp
@@ -867,7 +867,7 @@ ADD_TEST(prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithoutDEM $
   # to detect false reprojections results.
   )
 
-ADD_TEST(prTvGCPsToRPCSensorModelImageFilterAndOrtho ${PROJECTIONS_TESTS2}
+add_test(prTvGCPsToRPCSensorModelImageFilterAndOrtho ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}
          ${BASELINE}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
          ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
@@ -984,10 +984,10 @@ ADD_TEST(prTvGCPsToRPCSensorModelImageFilterAndOrtho ${PROJECTIONS_TESTS2}
          2450 2450 1.43239 43.6034 0
 )
 
-ADD_TEST(prTuLeastSquareAffineTransformEstimatorNew ${PROJECTIONS_TESTS2}
+add_test(prTuLeastSquareAffineTransformEstimatorNew ${PROJECTIONS_TESTS2}
          otbLeastSquareAffineTransformEstimatorNew)
 
-ADD_TEST(prTvLeastSquareAffineTransformEstimator ${PROJECTIONS_TESTS2}
+add_test(prTvLeastSquareAffineTransformEstimator ${PROJECTIONS_TESTS2}
    --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/otbLeastSquareAffineTransformEstimatorOutput.txt
          ${TEMP}/otbLeastSquareAffineTransformEstimatorOutput.txt
@@ -1013,9 +1013,9 @@ ADD_TEST(prTvLeastSquareAffineTransformEstimator ${PROJECTIONS_TESTS2}
 
 #========================= TESTS SINGAPOUR ===============================
 
-#SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
+#set(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
 
-#ADD_TEST(prTvRegionProjectionResamplerSingapour ${PROJECTIONS_TESTS2}
+#add_test(prTvRegionProjectionResamplerSingapour ${PROJECTIONS_TESTS2}
 #                                otbRegionProjectionResampler
 #        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
 #        ${TEMP}/prTvRegionProjectionResamplerSingapour.tif
@@ -1027,7 +1027,7 @@ ADD_TEST(prTvLeastSquareAffineTransformEstimator ${PROJECTIONS_TESTS2}
 #                                 -0.00001
 #        )
 
-#ADD_TEST(prTvOrthoRectificationSingapour ${PROJECTIONS_TESTS2}
+#add_test(prTvOrthoRectificationSingapour ${PROJECTIONS_TESTS2}
 #        otbOrthoRectificationFilter
 #        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
 #        ${TEMP}/prTvOrthoRectificationSingapour_UTM.tif
@@ -1044,21 +1044,21 @@ ADD_TEST(prTvLeastSquareAffineTransformEstimator ${PROJECTIONS_TESTS2}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADD_TEST(prTuCompositeTransformNew ${PROJECTIONS_TESTS3}  otbCompositeTransformNew )
+add_test(prTuCompositeTransformNew ${PROJECTIONS_TESTS3}  otbCompositeTransformNew )
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTvCompositeTransform ${PROJECTIONS_TESTS3}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTvCompositeTransform ${PROJECTIONS_TESTS3}
         --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvCompositeTransform.txt
         ${TEMP}/prTvCompositeTransform.txt
         otbCompositeTransform
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvCompositeTransform.txt
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(prTuGenericMapProjectionNew ${PROJECTIONS_TESTS3}  otbGenericMapProjectionNew )
+add_test(prTuGenericMapProjectionNew ${PROJECTIONS_TESTS3}  otbGenericMapProjectionNew )
 
-ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
+add_test(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
         --compare-ascii ${EPSILON_4}
             ${BASELINE_FILES}/prTvGenericMapProjection.txt
             ${TEMP}/prTvGenericMapProjection.txt
@@ -1066,9 +1066,9 @@ ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
             ${TEMP}/prTvGenericMapProjection.txt
 )
 
-ADD_TEST(prTuGenericRSTransformNew ${PROJECTIONS_TESTS3}  otbGenericRSTransformNew )
+add_test(prTuGenericRSTransformNew ${PROJECTIONS_TESTS3}  otbGenericRSTransformNew )
 
-ADD_TEST(prTvGenericRSTransform ${PROJECTIONS_TESTS3}
+add_test(prTvGenericRSTransform ${PROJECTIONS_TESTS3}
          --compare-ascii ${EPSILON_4}
              ${BASELINE_FILES}/prTvGenericRSTransform.txt
              ${TEMP}/prTvGenericRSTransform.txt
@@ -1078,7 +1078,7 @@ ADD_TEST(prTvGenericRSTransform ${PROJECTIONS_TESTS3}
              ${TEMP}/prTvGenericRSTransform.txt
 )
 
-ADD_TEST(prTvGenericRSTransformWithSRID ${PROJECTIONS_TESTS3}
+add_test(prTvGenericRSTransformWithSRID ${PROJECTIONS_TESTS3}
          --compare-ascii ${EPSILON_4}
              ${BASELINE_FILES}/prTvGenericRSTransform.txt
              ${TEMP}/prTvGenericRSTransform_WithSRID.txt
@@ -1089,12 +1089,12 @@ ADD_TEST(prTvGenericRSTransformWithSRID ${PROJECTIONS_TESTS3}
 )
 
 
-ADD_TEST(prTvGenericRSTransformFromImage ${PROJECTIONS_TESTS3}
+add_test(prTvGenericRSTransformFromImage ${PROJECTIONS_TESTS3}
                otbGenericRSTransformFromImage
                ${INPUTDATA}/WithoutProjRefWithKeywordlist.tif)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTvGenericRSTransformQuickbirdToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTvGenericRSTransformQuickbirdToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
 otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 ${INPUTDATA}/DEM/srtm_directory/
@@ -1109,7 +1109,7 @@ ${INPUTDATA}/DEM/egm96.grd
 
 
 # TODO MSD need to update the tolerance values and used a real pleiades file
-ADD_TEST(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking_PRE ${PROJECTIONS_TESTS3}
+add_test(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking_PRE ${PROJECTIONS_TESTS3}
 otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
 ${LARGEINPUT}/PLEIADES-PRE/TLSE_TIFF_PRIMARY_DIMAPv2_MS_lossly_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20111025_3077-004_R1C1.TIF
 ${INPUTDATA}/DEM/srtm_directory/
@@ -1122,7 +1122,7 @@ ${INPUTDATA}/DEM/egm96.grd
 )
 
 # TODO MSD need to update the tolerance values and used a real pleiades file
-ADD_TEST(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
+add_test(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
 otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
 ${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R2C1.JP2
 ${INPUTDATA}/DEM/srtm_directory/
@@ -1136,7 +1136,7 @@ ${INPUTDATA}/DEM/egm96.grd
 
 
 # Generic Testing
-SET(GenericConversionChecking_INPUTS
+set(GenericConversionChecking_INPUTS
     ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
     #${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
     ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
@@ -1155,7 +1155,7 @@ SET(GenericConversionChecking_INPUTS
     #${LARGEINPUT}/RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif
     )
 
-SET(GenericConversionChecking_TYPES
+set(GenericConversionChecking_TYPES
 	QUICKBIRD
 	#SPOT4
 	SPOT5
@@ -1174,7 +1174,7 @@ SET(GenericConversionChecking_TYPES
 	#RAPIDEYE
 	)
 
-SET(GenericConversionChecking_TOL_PIX
+set(GenericConversionChecking_TOL_PIX
 	24 # according to DigitalGlobe specification
 	#30
 	30
@@ -1193,7 +1193,7 @@ SET(GenericConversionChecking_TOL_PIX
 	#30
 	)
 
-SET(GenericConversionChecking_TOL_M
+set(GenericConversionChecking_TOL_M
 	23 # according to DigitalGlobe specification
 	#30
 	30
@@ -1212,14 +1212,14 @@ SET(GenericConversionChecking_TOL_M
 	#30
 	)
 
-SET( GenericConversionChecking_TESTNB 0)
+set( GenericConversionChecking_TESTNB 0)
 
-FOREACH( file ${GenericConversionChecking_INPUTS} )
-  LIST(GET GenericConversionChecking_TYPES   ${GenericConversionChecking_TESTNB} current_type   )
-  LIST(GET GenericConversionChecking_TOL_PIX ${GenericConversionChecking_TESTNB} current_tol_pix)
-  LIST(GET GenericConversionChecking_TOL_M   ${GenericConversionChecking_TESTNB} current_tol_m  )
-  MATH(EXPR GenericConversionChecking_TESTNB "${GenericConversionChecking_TESTNB} + 1")
-  ADD_TEST(prTvGenericRSTransformGenericConversionCheckingFromGCP_${current_type} ${PROJECTIONS_TESTS3}
+foreach( file ${GenericConversionChecking_INPUTS} )
+  list(GET GenericConversionChecking_TYPES   ${GenericConversionChecking_TESTNB} current_type   )
+  list(GET GenericConversionChecking_TOL_PIX ${GenericConversionChecking_TESTNB} current_tol_pix)
+  list(GET GenericConversionChecking_TOL_M   ${GenericConversionChecking_TESTNB} current_tol_m  )
+  math(EXPR GenericConversionChecking_TESTNB "${GenericConversionChecking_TESTNB} + 1")
+  add_test(prTvGenericRSTransformGenericConversionCheckingFromGCP_${current_type} ${PROJECTIONS_TESTS3}
 	otbGenericRSTransformGenericConversionCheckingFromGCP
 	${file}
 	${INPUTDATA}/DEM/srtm_directory/
@@ -1228,11 +1228,11 @@ FOREACH( file ${GenericConversionChecking_INPUTS} )
 	${current_tol_m}   # Tolerance in meters
 	1                  # Verbose
 )
-ENDFOREACH()
+endforeach()
 
 # Forward / Backward projection consistency checking
 
-SET(FWDBWDChecking_INPUTS
+set(FWDBWDChecking_INPUTS
     ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
     #${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
     ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
@@ -1250,8 +1250,8 @@ SET(FWDBWDChecking_INPUTS
     #${LARGEINPUT}/ONERA/spa3_0215_rad.dat
     #${LARGEINPUT}/RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif
     )
-    
-SET(FWDBWDChecking_TYPES
+
+set(FWDBWDChecking_TYPES
 	QUICKBIRD
 	#SPOT4
 	SPOT5
@@ -1269,12 +1269,12 @@ SET(FWDBWDChecking_TYPES
 	#ONERA
 	#RAPIDEYE
 	)
-SET( FWDBWDChecking_TESTNB 0)
+set( FWDBWDChecking_TESTNB 0)
 
-FOREACH( file ${FWDBWDChecking_INPUTS} )
-  LIST(GET FWDBWDChecking_TYPES   ${FWDBWDChecking_TESTNB} current_type   )
-  MATH(EXPR FWDBWDChecking_TESTNB "${FWDBWDChecking_TESTNB} + 1")
-  ADD_TEST(prTvForwardBackwardProjectionConsistency_${current_type} ${PROJECTIONS_TESTS3}
+foreach( file ${FWDBWDChecking_INPUTS} )
+  list(GET FWDBWDChecking_TYPES   ${FWDBWDChecking_TESTNB} current_type   )
+  math(EXPR FWDBWDChecking_TESTNB "${FWDBWDChecking_TESTNB} + 1")
+  add_test(prTvForwardBackwardProjectionConsistency_${current_type} ${PROJECTIONS_TESTS3}
 	otbForwardBackwardProjectionConsistency
 	${file}
 	${INPUTDATA}/DEM/srtm_directory/
@@ -1283,14 +1283,14 @@ FOREACH( file ${FWDBWDChecking_INPUTS} )
 	1  # Tolerance in pixels
 	1  # Verbose
 )
-ENDFOREACH()
+endforeach()
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
+add_test(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
 #test points
-ADD_TEST(prTvVectorDataProjectionFilterPoints ${PROJECTIONS_TESTS3}
+add_test(prTvVectorDataProjectionFilterPoints ${PROJECTIONS_TESTS3}
         --compare-ogr ${NOTOL}
             ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
             ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
@@ -1300,7 +1300,7 @@ ADD_TEST(prTvVectorDataProjectionFilterPoints ${PROJECTIONS_TESTS3}
 )
 
 #test lines
-ADD_TEST(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
+add_test(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
         --compare-ogr ${NOTOL}
             ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
             ${TEMP}/prTvVectorDataProjectionFilterLines.shp
@@ -1310,7 +1310,7 @@ ADD_TEST(prTvVectorDataProjectionFilterLines ${PROJECTIONS_TESTS3}
 )
 
 # test polygons
-ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
+add_test(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
         --compare-ogr  ${NOTOL}
             ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
             ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
@@ -1321,7 +1321,7 @@ ADD_TEST(prTvVectorDataProjectionFilterPolygons ${PROJECTIONS_TESTS3}
 
 
 #test points
-ADD_TEST(prTvGeometriesProjectionFilterPoints ${PROJECTIONS_TESTS3}
+add_test(prTvGeometriesProjectionFilterPoints ${PROJECTIONS_TESTS3}
         --compare-ogr ${NOTOL}
             ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
             ${TEMP}/prTvGeometriesProjectionFilterPoints.shp
@@ -1331,7 +1331,7 @@ ADD_TEST(prTvGeometriesProjectionFilterPoints ${PROJECTIONS_TESTS3}
 )
 
 #test lines
-ADD_TEST(prTvGeometriesProjectionFilterLines ${PROJECTIONS_TESTS3}
+add_test(prTvGeometriesProjectionFilterLines ${PROJECTIONS_TESTS3}
         --compare-ogr ${NOTOL}
             ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
             ${TEMP}/prTvGeometriesProjectionFilterLines.shp
@@ -1341,7 +1341,7 @@ ADD_TEST(prTvGeometriesProjectionFilterLines ${PROJECTIONS_TESTS3}
 )
 
 # test polygons
-ADD_TEST(prTvGeometriesProjectionFilterPolygons ${PROJECTIONS_TESTS3}
+add_test(prTvGeometriesProjectionFilterPolygons ${PROJECTIONS_TESTS3}
         --compare-ogr  ${NOTOL}
             ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
             ${TEMP}/prTvGeometriesProjectionFilterPolygons.shp
@@ -1353,8 +1353,8 @@ ADD_TEST(prTvGeometriesProjectionFilterPolygons ${PROJECTIONS_TESTS3}
 
 # test to sensor
 # NB: no prj file here as it is in sensor geometry
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
         --compare-ogr  ${NOTOL}
             ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
             ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
@@ -1364,7 +1364,7 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
 )
 
-ADD_TEST(prTvGeometriesProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
+add_test(prTvGeometriesProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
         --compare-ogr  ${NOTOL}
             ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
             ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
@@ -1373,9 +1373,9 @@ ADD_TEST(prTvGeometriesProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
+add_test(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
         --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
@@ -1384,7 +1384,7 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
 )
 
-ADD_TEST(prTvGeometriesProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
+add_test(prTvGeometriesProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
         --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
         ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
@@ -1393,7 +1393,7 @@ ADD_TEST(prTvGeometriesProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
 )
 
-ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
+add_test(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         --compare-ogr ${NOTOL}
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
@@ -1403,7 +1403,7 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
 )
 
-ADD_TEST(prTvGeometriesProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
+add_test(prTvGeometriesProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         --compare-ogr ${NOTOL}
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
         ${TEMP}/prTvGeometriesProjectionFilterFromMapToImage.shp
@@ -1414,7 +1414,7 @@ ADD_TEST(prTvGeometriesProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
 )
 
 # With QGIS the two vectordata are equal
-ADD_TEST(prTuVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
+add_test(prTuVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         #--compare-ascii ${NOTOL}
         #${INPUTDATA}/ToulousePoints-examples.shp
         #${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
@@ -1424,7 +1424,7 @@ ADD_TEST(prTuVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
 )
 
-ADD_TEST(prTuGeometriesProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
+add_test(prTuGeometriesProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         #--compare-ascii ${NOTOL}
         #${INPUTDATA}/ToulousePoints-examples.shp
         #${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
@@ -1434,7 +1434,7 @@ ADD_TEST(prTuGeometriesProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvGeometriesProjectionFilterFromGeoToMap.shp
 )
 
-ADD_TEST(prTvGeometriesProjectionFilterFromMapToEPSG_UTM ${PROJECTIONS_TESTS3}
+add_test(prTvGeometriesProjectionFilterFromMapToEPSG_UTM ${PROJECTIONS_TESTS3}
          --compare-ogr ${NOTOL}
            ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
            ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_UTM.shp
@@ -1443,7 +1443,7 @@ ADD_TEST(prTvGeometriesProjectionFilterFromMapToEPSG_UTM ${PROJECTIONS_TESTS3}
            ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_UTM.shp
            32631 )
 
-ADD_TEST(prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 ${PROJECTIONS_TESTS3}
+add_test(prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 ${PROJECTIONS_TESTS3}
          --compare-ogr ${NOTOL}
            ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
            ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.kml
@@ -1455,8 +1455,8 @@ ADD_TEST(prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 ${PROJECTIONS_TESTS3}
 
 ###################
 # TESTS ABOUT REPROJECTION INTO AN IMAGE OF A VECTORDATA
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(VectorDataIntoImage_FILES
+if(OTB_DATA_USE_LARGEINPUT)
+  set(VectorDataIntoImage_FILES
     ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_withgeom.tif
     ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_withgeom_ENVI.hdr
     ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_withgeom.tif
@@ -1468,43 +1468,43 @@ IF(OTB_DATA_USE_LARGEINPUT)
     ${LARGEINPUT}/QB_EXTRACT/qb_wgs84_worldfile.tif
     )
 
-  SET( VectorDataIntoImage_TESTNB 0)
+  set( VectorDataIntoImage_TESTNB 0)
 
-  FOREACH( file ${VectorDataIntoImage_FILES} )
-    MATH(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
-    ADD_TEST(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} ${PROJECTIONS_TESTS3}
+  foreach( file ${VectorDataIntoImage_FILES} )
+    math(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
+    add_test(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} ${PROJECTIONS_TESTS3}
              otbVectorDataIntoImageProjectionFilterTest
               ${file}
               ${LARGEINPUT}/VECTOR/MidiPyrenees/natural.shp
               ${INPUTDATA}/DEM/srtm_directory
               3 )
-  ENDFOREACH()
+  endforeach()
 
 #  These tests will fail since data does not have geographic/cartographic information
-#  The call SET_TESTS_PROPERTIES(test PROPERTIES WILL_FAIL true) does not do what it is supposed to
+#  The call set_tests_properties(test PROPERTIES WILL_FAIL true) does not do what it is supposed to
 #
-#  SET(VectorDataIntoImage_FILES_NOGEOM
+#  set(VectorDataIntoImage_FILES_NOGEOM
 #    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom.tif
 #    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom_ENVI.hdr
 #    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom.tif
 #    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom_ENVI.hdr)
 #
-#  FOREACH( file ${VectorDataIntoImage_FILES_NOGEOM} )
-#    MATH(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
-#    ADD_TEST(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} ${PROJECTIONS_TESTS3}
+#  foreach( file ${VectorDataIntoImage_FILES_NOGEOM} )
+#    math(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
+#    add_test(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} ${PROJECTIONS_TESTS3}
 #             otbVectorDataIntoImageProjectionFilterTest
 #              ${file}
 #              ${LARGEINPUT}/VECTOR/MidiPyrenees/natural.shp
 #              ${INPUTDATA}/DEM/srtm_directory
 #              3 )
-#    SET_TESTS_PROPERTIES(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB}
+#    set_tests_properties(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB}
 #                         PROPERTIES WILL_FAIL true)
-#  ENDFOREACH()
+#  endforeach()
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 # QB ortho and extract and extract of MidiPyrenees roads file
-# ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef ${PROJECTIONS_TESTS3}
+# add_test(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef ${PROJECTIONS_TESTS3}
 #         otbVectorDataIntoImageProjectionFilterTest
 #           ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
 #           ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
@@ -1514,7 +1514,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #           0
 # )
 
-# ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef1 ${PROJECTIONS_TESTS3}
+# add_test(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef1 ${PROJECTIONS_TESTS3}
 #         otbVectorDataIntoImageProjectionFilterTest
 #           ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
 #           ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
@@ -1524,7 +1524,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #           1
 # )
 
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithSensorModel ${PROJECTIONS_TESTS3}
+#add_test(prTvVectorData_ProjRef_ProjIntoImage_WithSensorModel ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT.HDR
 #          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
@@ -1534,7 +1534,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #          0
 #)
 
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithSensorModel1 ${PROJECTIONS_TESTS3}
+#add_test(prTvVectorData_ProjRef_ProjIntoImage_WithSensorModel1 ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT.HDR
 #          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
@@ -1544,7 +1544,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #          1
 #)
 
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_Index ${PROJECTIONS_TESTS3}
+#add_test(prTvVectorData_ProjRef_ProjIntoImage_Index ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT_INDEX.HDR
 #          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
@@ -1554,7 +1554,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #          0
 #)
 
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_Index1 ${PROJECTIONS_TESTS3}
+#add_test(prTvVectorData_ProjRef_ProjIntoImage_Index1 ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #           ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT_INDEX.HDR
 #          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
@@ -1564,7 +1564,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #          1
 #)
 
-#ADD_TEST(prTvVectorData_NoProjRef_ProjIntoImage_Index ${PROJECTIONS_TESTS3}
+#add_test(prTvVectorData_NoProjRef_ProjIntoImage_Index ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #          ${INPUTDATA}/QB_Toulouse_extract_leftup_400x128_index.hdr
 #          ${INPUTDATA}/QB_Toulouse_extract_leftup_400x128_index.shp
@@ -1573,7 +1573,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #          ${TEMP}/prTvVectorDataNoProjRefProjIntoImageindex.txt
 #          0
 #)
-#ADD_TEST(prTvVectorData_NoProjRef_ProjIntoImage_Index1 ${PROJECTIONS_TESTS3}
+#add_test(prTvVectorData_NoProjRef_ProjIntoImage_Index1 ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
 #          ${INPUTDATA}/QB_Toulouse_extract_leftup_400x128_index.hdr
 #          ${INPUTDATA}/QB_Toulouse_extract_leftup_400x128_index.shp
@@ -1585,53 +1585,53 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 
-ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
+add_test(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
 
 
-ADD_TEST(prTvGeocentricTransform ${PROJECTIONS_TESTS3}
+add_test(prTvGeocentricTransform ${PROJECTIONS_TESTS3}
          --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvGeocentricTransform.txt
         ${TEMP}/prTvGeocentricTransform.txt
         otbGeocentricTransform
         ${TEMP}/prTvGeocentricTransform.txt
 )
 
-ADD_TEST(prTvTileMapTransform ${PROJECTIONS_TESTS3}
+add_test(prTvTileMapTransform ${PROJECTIONS_TESTS3}
          --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvTileMapTransform.txt
         ${TEMP}/prTvTileMapTransform.txt
         otbTileMapTransform
         ${TEMP}/prTvTileMapTransform.txt
 )
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTvVectorDataExtractROIandProjection ${PROJECTIONS_TESTS3}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTvVectorDataExtractROIandProjection ${PROJECTIONS_TESTS3}
    otbVectorDataExtractROIandProjection
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-ADD_TEST(prTuPhysicalToRPCSensorModelImageFilterNew ${PROJECTIONS_TESTS4}
+add_test(prTuPhysicalToRPCSensorModelImageFilterNew ${PROJECTIONS_TESTS4}
   otbPhysicalToRPCSensorModelImageFilter
   )
 
-ADD_TEST(prTvPhysicalToRPCSensorModelImageFilter ${PROJECTIONS_TESTS4}
+add_test(prTvPhysicalToRPCSensorModelImageFilter ${PROJECTIONS_TESTS4}
   otbPhysicalToRPCSensorModelImageFilter
   ${INPUTDATA}/ToulouseExtract_WithGeom.tif
   15
   ${TEMP}/prTvotbPhysicalToRPCSensorModelImageFilter.tif
   )
 
-ADD_TEST(prTuotbGenericRSResampleImageFilterNew ${PROJECTIONS_TESTS4}
+add_test(prTuotbGenericRSResampleImageFilterNew ${PROJECTIONS_TESTS4}
   otbGenericRSResampleImageFilterNew
   )
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 
 
-ADD_TEST(prTvotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
+add_test(prTvotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
   --compare-image ${EPSILON_4}
     ${BASELINE}/prTvotbGenericRSResampleImageFilterOutput.tif
     ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
@@ -1650,18 +1650,18 @@ ADD_TEST(prTvotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
 # TODO : parse it with a cmake file in OTB-Data-LargeInput directory
 # Done here for the moment
 
-SET(SENSOR_TYPES
+set(SENSOR_TYPES
   "QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF"
   "GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif"
   "WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF"
 )
 
-FOREACH( file ${SENSOR_TYPES})
+foreach( file ${SENSOR_TYPES})
   # Get the sensor name
-  SET(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
-  STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
+  set(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
+  string(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
   # Tests
-  ADD_TEST(prTvotbGenericRSResampleImageFilterFromMap_${sensor_name} ${PROJECTIONS_TESTS4}
+  add_test(prTvotbGenericRSResampleImageFilterFromMap_${sensor_name} ${PROJECTIONS_TESTS4}
     --compare-image ${EPSILON_4}
     ${BASELINE}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
     ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
@@ -1671,17 +1671,17 @@ FOREACH( file ${SENSOR_TYPES})
     0
     ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
     )
-ENDFOREACH( file ${SENSOR_TYPES})
+endforeach( file ${SENSOR_TYPES})
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 
 #------ otb::ImageToEnvelopeVectorDataFilter ---------------------
-ADD_TEST(prTuImageToEnvelopeVectorDataFilterNew ${PROJECTIONS_TESTS4}
+add_test(prTuImageToEnvelopeVectorDataFilterNew ${PROJECTIONS_TESTS4}
 otbImageToEnvelopeVectorDataFilterNew)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTvImageToEnvelopeVectorDataFilter ${PROJECTIONS_TESTS4}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTvImageToEnvelopeVectorDataFilter ${PROJECTIONS_TESTS4}
 --compare-ascii ${EPSILON_6}
   ${BASELINE_FILES}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
@@ -1689,15 +1689,15 @@ ADD_TEST(prTvImageToEnvelopeVectorDataFilter ${PROJECTIONS_TESTS4}
   ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 #------ otb::ImageToGenericRSOutputParameters ---------------------
-ADD_TEST(prTuImageToGenericRSOutputParametersNew ${PROJECTIONS_TESTS4}
+add_test(prTuImageToGenericRSOutputParametersNew ${PROJECTIONS_TESTS4}
 otbImageToGenericRSOutputParametersNew)
 
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTvImageToGenericRSOutputParameters ${PROJECTIONS_TESTS4}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTvImageToGenericRSOutputParameters ${PROJECTIONS_TESTS4}
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/prTvImageToGenericRSOutputParametersOutput.txt
   ${TEMP}/prTvImageToGenericRSOutputParametersOutput.txt
@@ -1705,13 +1705,13 @@ ADD_TEST(prTvImageToGenericRSOutputParameters ${PROJECTIONS_TESTS4}
   ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   ${TEMP}/prTvImageToGenericRSOutputParametersOutput.txt
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 #----- otb::RationalTransform ------------------------
-ADD_TEST(prTuRationalTransformNew ${PROJECTIONS_TESTS4}
+add_test(prTuRationalTransformNew ${PROJECTIONS_TESTS4}
 otbRationalTransformNew)
 
-ADD_TEST(prTvRationalTransform ${PROJECTIONS_TESTS4}
+add_test(prTvRationalTransform ${PROJECTIONS_TESTS4}
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/otbRationalTransformOutput.txt
   ${TEMP}/otbRationalTransformOutput.txt
@@ -1723,7 +1723,7 @@ ${TEMP}/otbRationalTransformOutput.txt
 -10 -10
 )
 
-ADD_TEST(prTvRationalTransformToDisplacementFieldSourceTest ${PROJECTIONS_TESTS4}
+add_test(prTvRationalTransformToDisplacementFieldSourceTest ${PROJECTIONS_TESTS4}
 --compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
                         ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
 otbRationalTransformToDisplacementFieldSourceTest
@@ -1731,10 +1731,10 @@ ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
 )
 
 #----- otb::GeographicalDistance ---------------------
-ADD_TEST(prTuGeographicalDistanceNew ${PROJECTIONS_TESTS4}
+add_test(prTuGeographicalDistanceNew ${PROJECTIONS_TESTS4}
   otbGeographicalDistanceNew)
 
-ADD_TEST(prTvGeographicalDistance ${PROJECTIONS_TESTS4}
+add_test(prTvGeographicalDistance ${PROJECTIONS_TESTS4}
   otbGeographicalDistance
   -1.84944 53.14722
    0.14056 52.20444
@@ -1744,11 +1744,11 @@ ADD_TEST(prTvGeographicalDistance ${PROJECTIONS_TESTS4}
 
 
 #----- otb::VectorDataTransformFilter ---------------------
-ADD_TEST(prTuVectorDataTransformFilterNew ${PROJECTIONS_TESTS4}
+add_test(prTuVectorDataTransformFilterNew ${PROJECTIONS_TESTS4}
   otbVectorDataTransformFilterNew)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTvVectorDataTransformFilter ${PROJECTIONS_TESTS4}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTvVectorDataTransformFilter ${PROJECTIONS_TESTS4}
   --compare-ogr ${EPSILON_4}
   ${BASELINE_FILES}/prTvVectorDataTransformFilter_Translation.shp
    ${TEMP}/prTvVectorDataTransformFilter_Translation.shp
@@ -1757,27 +1757,27 @@ ADD_TEST(prTvVectorDataTransformFilter ${PROJECTIONS_TESTS4}
   ${INPUTDATA}/ToulouseRoad-examples.shp
   ${TEMP}/prTvVectorDataTransformFilter_Translation.shp
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 #---- Generic tests on GenericRSTransform -----
-ADD_TEST(prTvGenericRSTransformGenericTestWGS84toEPSG3857 ${PROJECTIONS_TESTS4}
+add_test(prTvGenericRSTransformGenericTestWGS84toEPSG3857 ${PROJECTIONS_TESTS4}
   otbGenericRSTransformGenericTest
   1.48353 43.55968 165145.804154 5397552.58726 EPSG 4326 EPSG 3857 GEO 1e-3 PHYSICAL 1e-3 NOELEV)
 
-ADD_TEST(prTvGenericRSTransformGenericTestEPSG4326toEPSG4326 ${PROJECTIONS_TESTS4}
+add_test(prTvGenericRSTransformGenericTestEPSG4326toEPSG4326 ${PROJECTIONS_TESTS4}
   otbGenericRSTransformGenericTest
   1.35617289802566 43.4876035537 1.35617289802566 43.4876035537 EPSG 4326 EPSG 4326 GEO 1e-6 GEO 1e-6 NOELEV)
 
-ADD_TEST(prTvGenericRSTransformGenericTestEPSG4326toEPSG32631 ${PROJECTIONS_TESTS4}
+add_test(prTvGenericRSTransformGenericTestEPSG4326toEPSG32631 ${PROJECTIONS_TESTS4}
   otbGenericRSTransformGenericTest
   1.3561728980 43.4876035537 367077.72312001337 4816277.086791252 EPSG 4326 EPSG 32631 GEO 1e-3 PHYSICAL 1e-3 NOELEV)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS5 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-IF(NOT OTB_TESTING_STANDALONE)
+if(NOT OTB_TESTING_STANDALONE)
 
-ADD_TEST(prTvossimElevManagerTest ${PROJECTIONS_TESTS5}
+add_test(prTvossimElevManagerTest ${PROJECTIONS_TESTS5}
 --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest.tif
                         ${TEMP}/prTvossimElevManagerTest.tif
         otbOssimElevManagerTest
@@ -1791,7 +1791,7 @@ ADD_TEST(prTvossimElevManagerTest ${PROJECTIONS_TESTS5}
         500
         )
 
-ADD_TEST(prTvossimElevManagerTest3 ${PROJECTIONS_TESTS5}
+add_test(prTvossimElevManagerTest3 ${PROJECTIONS_TESTS5}
 --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest3.tif
                         ${TEMP}/prTvossimElevManagerTest3.tif
         otbOssimElevManagerTest
@@ -1804,7 +1804,7 @@ ADD_TEST(prTvossimElevManagerTest3 ${PROJECTIONS_TESTS5}
 #This test investigate the problem with the ossimElevManager
 # - differences between plaforms
 # - file descriptor leak
-ADD_TEST(prTvossimElevManagerTest4 ${PROJECTIONS_TESTS5}
+add_test(prTvossimElevManagerTest4 ${PROJECTIONS_TESTS5}
 --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest4
                         ${TEMP}/prTvossimElevManagerTest4.hdr
         otbOssimElevManagerTest4
@@ -1814,7 +1814,7 @@ ADD_TEST(prTvossimElevManagerTest4 ${PROJECTIONS_TESTS5}
         )
 
 
-ADD_TEST(prTvossimElevManagerTest2 ${PROJECTIONS_TESTS5}
+add_test(prTvossimElevManagerTest2 ${PROJECTIONS_TESTS5}
 --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/prTvossimElevManagerTest2.txt
                         ${TEMP}/prTvossimElevManagerTest2.txt
         otbOssimElevManagerTest2
@@ -1826,29 +1826,29 @@ ADD_TEST(prTvossimElevManagerTest2 ${PROJECTIONS_TESTS5}
         500
          )
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS5}
+add_test(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOSSIM
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
-ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS5}
+add_test(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOSSIM
         ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
-ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS5}
+add_test(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOTB
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
-ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS5}
+add_test(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOTB
         ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
-ADD_TEST(prTvTileImageFilterGenericRSTransformTest_TLSE_DIMAPv2 ${PROJECTIONS_TESTS5}
+add_test(prTvTileImageFilterGenericRSTransformTest_TLSE_DIMAPv2 ${PROJECTIONS_TESTS5}
          otbTileImageFilterRSTransformTest
          1 3
          ${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2
@@ -1856,7 +1856,7 @@ ADD_TEST(prTvTileImageFilterGenericRSTransformTest_TLSE_DIMAPv2 ${PROJECTIONS_TE
          ${LARGEINPUT}/PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R3C1.JP2
 )
 
-ADD_TEST(prTvTileImageFilterGenericRSTransformTest_LASVEGAS_DIMAPv1 ${PROJECTIONS_TESTS5}
+add_test(prTvTileImageFilterGenericRSTransformTest_LASVEGAS_DIMAPv1 ${PROJECTIONS_TESTS5}
          otbTileImageFilterRSTransformTest
          1 3
          ${LARGEINPUT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R1C1.JP2
@@ -1864,13 +1864,13 @@ ADD_TEST(prTvTileImageFilterGenericRSTransformTest_LASVEGAS_DIMAPv1 ${PROJECTION
          ${LARGEINPUT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R3C1.JP2
 )
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-ENDIF(NOT OTB_TESTING_STANDALONE)
+endif(NOT OTB_TESTING_STANDALONE)
 
 
 #=======================================================================================
-SET(Projections_SRCS1
+set(Projections_SRCS1
 otbProjectionsTests1.cxx
 otbProjectionBaseNew.cxx
 otbMapProjectionsNew.cxx
@@ -1884,7 +1884,7 @@ otbSensorModelGrid.cxx
 otbForwardSensorModelGrid.cxx
 )
 
-SET(Projections_SRCS2
+set(Projections_SRCS2
 otbProjectionsTests2.cxx
 otbOrthoRectificationFilterNew.cxx
 otbOrthoRectificationFilter.cxx
@@ -1898,7 +1898,7 @@ otbLeastSquareAffineTransformEstimator.cxx
 otbGCPsToRPCSensorModelImageFilterCheckRpcModel.cxx
 )
 
-SET(Projections_SRCS3
+set(Projections_SRCS3
 otbProjectionsTests3.cxx
 otbCompositeTransformNew.cxx
 otbCompositeTransform.cxx
@@ -1929,7 +1929,7 @@ otbGeometriesProjectionFilterFromGeoToMap.cxx
 otbGeometriesProjectionFilterFromMapToEPSG.cxx
 )
 
-SET(Projections_SRCS4
+set(Projections_SRCS4
 otbProjectionsTests4.cxx
 otbPhysicalToRPCSensorModelImageFilter.cxx
 otbGenericRSResampleImageFilter.cxx
@@ -1944,8 +1944,8 @@ otbGenericRSTransformGenericTest.cxx
 
 #Tests requiring access to ossim header
 #should not be launched when using an installed version of OTB
-IF(NOT OTB_TESTING_STANDALONE)
-SET(Projections_SRCS5
+if(NOT OTB_TESTING_STANDALONE)
+set(Projections_SRCS5
 otbProjectionsTests5.cxx
 otbOssimElevManagerTest.cxx
 otbOssimElevManagerTest2.cxx
@@ -1954,21 +1954,21 @@ otbCreateProjectionWithOSSIM.cxx
 otbCreateProjectionWithOTB.cxx
 otbTileImageFilterRSTransformTest.cxx
 )
-ENDIF(NOT OTB_TESTING_STANDALONE)
+endif(NOT OTB_TESTING_STANDALONE)
 
-IF(OTB_USE_EXTERNAL_OSSIM)
-  INCLUDE_DIRECTORIES( ${OSSIM_INCLUDE_DIR} )
-ELSE(OTB_USE_EXTERNAL_OSSIM)
-  INCLUDE_DIRECTORIES( ${OTB_SOURCE_DIR}/Utilities/otbossim/include
+if(OTB_USE_EXTERNAL_OSSIM)
+  include_directories( ${OSSIM_INCLUDE_DIR} )
+else(OTB_USE_EXTERNAL_OSSIM)
+  include_directories( ${OTB_SOURCE_DIR}/Utilities/otbossim/include
                        ${OTB_BINARY_DIR}/Utilities/otbossim/include )
-ENDIF(OTB_USE_EXTERNAL_OSSIM)
+endif(OTB_USE_EXTERNAL_OSSIM)
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests2 "${Projections_SRCS2}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests3 "${Projections_SRCS3}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests4 "${Projections_SRCS4}" "OTBProjections;OTBIO;OTBTesting")
-IF(NOT OTB_TESTING_STANDALONE)
+if(NOT OTB_TESTING_STANDALONE)
 OTB_ADD_EXECUTABLE(otbProjectionsTests5 "${Projections_SRCS5}" "OTBProjections;OTBIO;OTBTesting")
-ENDIF(NOT OTB_TESTING_STANDALONE)
+endif(NOT OTB_TESTING_STANDALONE)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

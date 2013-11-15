@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# apps/CMakeLists.txt controls building of libLAS utilities 
+# apps/CMakeLists.txt controls building of libLAS utilities
 #
 # Copyright (c) 2009 Mateusz Loskot <mateusz@loskot.net>
 #
@@ -31,7 +31,7 @@ if(Boost_IOSTREAMS_FOUND)
   set(BIGFILE_BIO_TEST bigfile_boost_iostreams_test)
 endif()
 
-# Set the build type to release if it is not explicitly set by the user and 
+# Set the build type to release if it is not explicitly set by the user and
 # isn't in the cache yet
 if (NOT CMAKE_BUILD_TYPE )
   set(CMAKE_BUILD_TYPE "Release")
@@ -47,7 +47,7 @@ if(ORACLE_FOUND AND GDAL_FOUND)
 endif()
 
 set(LIBLAS_UTILITIES
-    ${LASINFO_OLD} ${LASINFO} ${LASMERGE} ${LAS2LAS} ${LAS2TXT} ${TXT2LAS} 
+    ${LASINFO_OLD} ${LASINFO} ${LASMERGE} ${LAS2LAS} ${LAS2TXT} ${TXT2LAS}
     ${LAS2OGR}  ${LAS2OCI} ${LAS2LAS} ${LAS2LAS_OLD} ${LASBLOCK} ${TS2LAS})
 
 # TODO: Experimental and requires testing --mloskot
@@ -112,7 +112,7 @@ if(LAS2TXT)
     add_executable(${LAS2TXT} ${LAS2TXT_SRC})
     target_link_libraries(${LAS2TXT} ${LIBLAS_C_LIB_NAME})
 endif()
- 
+
 # Build txt2las
 if(TXT2LAS)
     set(TXT2LAS_SRC lascommon.c ${TXT2LAS}.c)
@@ -158,12 +158,12 @@ endif()
 
 if (LASINDEX_TEST)
     add_executable(${LASINDEX_TEST} lasindex_test.cpp)
-    target_link_libraries(${LASINDEX_TEST} ${APPS_CPP_DEPENDENCIES})    
+    target_link_libraries(${LASINDEX_TEST} ${APPS_CPP_DEPENDENCIES})
 endif()
 
 if(BIGFILE_BIO_TEST)
     add_executable(${BIGFILE_BIO_TEST} bigfile_boost_iostreams_test.cpp)
-    target_link_libraries(${BIGFILE_BIO_TEST} ${APPS_CPP_DEPENDENCIES} )    
+    target_link_libraries(${BIGFILE_BIO_TEST} ${APPS_CPP_DEPENDENCIES} )
 endif()
 
 ###############################################################################

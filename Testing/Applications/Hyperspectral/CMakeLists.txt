@@ -6,7 +6,7 @@ OTB_TEST_APPLICATION(NAME  apTvHyHyperspectralUnmixing_UCLS
                      OPTIONS -in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
                 			 -ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
                  			 -out ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif double
-                 			 -ua ucls 
+                 			 -ua ucls
                      VALID   --compare-image ${EPSILON_9}
                               ${BASELINE}/apTvHyHyperspectralUnmixing_UCLS.tif
                   			  ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif)
@@ -16,12 +16,12 @@ OTB_TEST_APPLICATION(NAME  apTvHyHyperspectralUnmixing_NCLS
                      OPTIONS -in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
                 			 -ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
                  			 -out ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif double
-                 			 -ua ncls 
+                 			 -ua ncls
                      VALID   --compare-image ${EPSILON_9}
                               ${BASELINE}/apTvHyHyperspectralUnmixing_NCLS.tif
                   			  ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif)
 
-# Too long !                
+# Too long !
 #add_test(NAME apTvHyHyperspectralUnmixing_ISRA
 #         COMMAND otbTestDriver
 #                 --compare-image ${EPSILON_9}
@@ -47,4 +47,4 @@ OTB_TEST_APPLICATION(NAME  apTvHyVertexComponentAnalysis
                   	             ${TEMP}/apTvHyVertexComponentAnalysis.tif
 )
 
-    
+

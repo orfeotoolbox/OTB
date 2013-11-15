@@ -1,17 +1,17 @@
-MESSAGE(STATUS "Importing OpenCV...")
+message(STATUS "Importing OpenCV...")
 
-OPTION(OTB_USE_OPENCV "Use OpenCV library for classification." OFF)
-MARK_AS_ADVANCED(OTB_USE_OPENCV)
+option(OTB_USE_OPENCV "Use OpenCV library for classification." OFF)
+mark_as_advanced(OTB_USE_OPENCV)
 
-IF(OTB_USE_OPENCV)
-  MESSAGE(STATUS "  Enabling OpenCV support")
-  FIND_PACKAGE(OpenCV
+if(OTB_USE_OPENCV)
+  message(STATUS "  Enabling OpenCV support")
+  find_package(OpenCV
                REQUIRED
                PATHS
                  /opt/local/lib/cmake # MacPort
                )
-  MESSAGE(STATUS "  Found OpenCV ${OpenCV_VERSION_MAJOR}.${OpenCV_VERSION_MINOR}.${OpenCV_VERSION_PATCH}")
-  MESSAGE(STATUS "  OpenCV include directory: ${OpenCV_INCLUDE_DIRS}")
-ELSE()
-  MESSAGE(STATUS "  Disabling OpenCV support (OTB_USE_OPENCV is OFF)")
-ENDIF()
+  message(STATUS "  Found OpenCV ${OpenCV_VERSION_MAJOR}.${OpenCV_VERSION_MINOR}.${OpenCV_VERSION_PATCH}")
+  message(STATUS "  OpenCV include directory: ${OpenCV_INCLUDE_DIRS}")
+else()
+  message(STATUS "  Disabling OpenCV support (OTB_USE_OPENCV is OFF)")
+endif()

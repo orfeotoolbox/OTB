@@ -1,39 +1,39 @@
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
 # Common generic tests
-SET(Fuzzy_TESTS1 ${CXX_TEST_PATH}/otbFuzzyTests1)
+set(Fuzzy_TESTS1 ${CXX_TEST_PATH}/otbFuzzyTests1)
 # Advanced tests
-SET(Fuzzy_TESTS2 ${CXX_TEST_PATH}/otbFuzzyTests2)
-SET(Fuzzy_TESTS3 ${CXX_TEST_PATH}/otbFuzzyTests3)
+set(Fuzzy_TESTS2 ${CXX_TEST_PATH}/otbFuzzyTests2)
+set(Fuzzy_TESTS3 ${CXX_TEST_PATH}/otbFuzzyTests3)
 
 # FuzzyTests1
-ADD_TEST(fzTuFuzzyVariableNew ${Fuzzy_TESTS1}
+add_test(fzTuFuzzyVariableNew ${Fuzzy_TESTS1}
         otbFuzzyVariableNew)
 
-ADD_TEST(fzTvFuzzyVariable2Values ${Fuzzy_TESTS1}
+add_test(fzTvFuzzyVariable2Values ${Fuzzy_TESTS1}
         otbFuzzyVariable2Values)
 
-ADD_TEST(fzTvFuzzyVariableSetValue ${Fuzzy_TESTS1}
+add_test(fzTvFuzzyVariableSetValue ${Fuzzy_TESTS1}
         otbFuzzyVariableSetValue)
 
-ADD_TEST(fzTvFuzzyVariableGetMaxVar ${Fuzzy_TESTS1}
+add_test(fzTvFuzzyVariableGetMaxVar ${Fuzzy_TESTS1}
         otbFuzzyVariableGetMaxVar)
 
-ADD_TEST(fzTvMassOfBelief ${Fuzzy_TESTS1}
+add_test(fzTvMassOfBelief ${Fuzzy_TESTS1}
         otbMassOfBelief)
 
-ADD_TEST(fzTvJointMassOfBeliefFilter ${Fuzzy_TESTS1}
+add_test(fzTvJointMassOfBeliefFilter ${Fuzzy_TESTS1}
         otbJointMassOfBeliefFilter)
 
-ADD_TEST(fzTvJointMassOfBeliefFilterLimit ${Fuzzy_TESTS1}
+add_test(fzTvJointMassOfBeliefFilterLimit ${Fuzzy_TESTS1}
         otbJointMassOfBeliefFilterLimit)
 
 # FuzzyTests2
-ADD_TEST(fzTvFuzzyVariableDSApplied ${Fuzzy_TESTS2}
+add_test(fzTvFuzzyVariableDSApplied ${Fuzzy_TESTS2}
         otbFuzzyVariableDSApplied)
 
-ADD_TEST(fzTvMassOfBeliefDSApplied-H1H2 ${Fuzzy_TESTS2}
+add_test(fzTvMassOfBeliefDSApplied-H1H2 ${Fuzzy_TESTS2}
         otbMassOfBeliefDSApplied
         "H1"  # describe the hypothesis
         "H2"  # here the hypothesis is {H1, H2}
@@ -41,7 +41,7 @@ ADD_TEST(fzTvMassOfBeliefDSApplied-H1H2 ${Fuzzy_TESTS2}
         0.9
         )
 
-ADD_TEST(fzTvMassOfBeliefDSApplied-H1H2_ ${Fuzzy_TESTS2}
+add_test(fzTvMassOfBeliefDSApplied-H1H2_ ${Fuzzy_TESTS2}
         otbMassOfBeliefDSApplied
         "H1"
         "H2_"  # here the hypothesis is {H1, H2_}
@@ -49,7 +49,7 @@ ADD_TEST(fzTvMassOfBeliefDSApplied-H1H2_ ${Fuzzy_TESTS2}
         0.9
         )
 
-ADD_TEST(fzTvMassOfBeliefDSApplied-H1_H2 ${Fuzzy_TESTS2}
+add_test(fzTvMassOfBeliefDSApplied-H1_H2 ${Fuzzy_TESTS2}
         otbMassOfBeliefDSApplied
         "H1_"
         "H2"  # here the hypothesis is {H1_, H2}
@@ -57,7 +57,7 @@ ADD_TEST(fzTvMassOfBeliefDSApplied-H1_H2 ${Fuzzy_TESTS2}
         0.9
         )
 
-ADD_TEST(fzTvMassOfBeliefDSApplied-H1_H2_ ${Fuzzy_TESTS2}
+add_test(fzTvMassOfBeliefDSApplied-H1_H2_ ${Fuzzy_TESTS2}
         otbMassOfBeliefDSApplied
         "H1_"
         "H2_" # here the hypothesis is {H1_, H2_}
@@ -65,13 +65,13 @@ ADD_TEST(fzTvMassOfBeliefDSApplied-H1_H2_ ${Fuzzy_TESTS2}
         0.9
         )
 
-ADD_TEST(fzTuVectorDataToSpecificDescriptionFilterBaseNew ${Fuzzy_TESTS2}
+add_test(fzTuVectorDataToSpecificDescriptionFilterBaseNew ${Fuzzy_TESTS2}
         otbVectorDataToSpecificDescriptionFilterBaseNew)
 
-ADD_TEST(fzTuVectorDataToRoadDescriptionFilterNew ${Fuzzy_TESTS2}
+add_test(fzTuVectorDataToRoadDescriptionFilterNew ${Fuzzy_TESTS2}
         otbVectorDataToRoadDescriptionFilterNew)
 
-ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
+add_test(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
  --compare-ogr ${NOTOL}
  ${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
  ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
@@ -84,10 +84,10 @@ ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
  0
  )
 
-ADD_TEST(fzTuVectorDataToDSValidatedVectorDataFilterNew ${Fuzzy_TESTS2}
+add_test(fzTuVectorDataToDSValidatedVectorDataFilterNew ${Fuzzy_TESTS2}
         otbVectorDataToDSValidatedVectorDataFilterNew)
 
-ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
+add_test(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
  --compare-ogr ${NOTOL}
  ${BASELINE_FILES}/fzTvDSValidatedRoadVectorDataOutput.shp
  ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
@@ -95,73 +95,73 @@ ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
     ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
     ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
 )
-SET_TESTS_PROPERTIES(fzTvVectorDataToDSValidatedVectorDataFilter PROPERTIES DEPENDS fzTvVectorDataToRoadDescriptionFilter)
+set_tests_properties(fzTvVectorDataToDSValidatedVectorDataFilter PROPERTIES DEPENDS fzTvVectorDataToRoadDescriptionFilter)
 
 
-ADD_TEST(fzTuFuzzyDescriptorsModelManagerNew ${Fuzzy_TESTS2}
+add_test(fzTuFuzzyDescriptorsModelManagerNew ${Fuzzy_TESTS2}
   otbFuzzyDescriptorsModelManagerNew)
 
-ADD_TEST(fzTvFuzzyDescriptorsModelManagerTest ${Fuzzy_TESTS2}
+add_test(fzTvFuzzyDescriptorsModelManagerTest ${Fuzzy_TESTS2}
   otbFuzzyDescriptorsModelManagerTest
 ${TEMP}/fzTvFuzzyDescriptorsModelManager.xml
 )
 
-ADD_TEST(fzTuStandardDSCostFunctionNew ${Fuzzy_TESTS2}
+add_test(fzTuStandardDSCostFunctionNew ${Fuzzy_TESTS2}
   otbStandardDSCostFunctionNew)
-  
-ADD_TEST(fzDSFusionTestSimple ${Fuzzy_TESTS3}
+
+add_test(fzDSFusionTestSimple ${Fuzzy_TESTS3}
   otbDempsterShaferFusionTest
  a b c
  )
- 
- ADD_TEST(fzDSFusionTestWithExtraLabels ${Fuzzy_TESTS3}
+
+ add_test(fzDSFusionTestWithExtraLabels ${Fuzzy_TESTS3}
   otbDempsterShaferFusionTest
  a b c d e
  )
- 
- ADD_TEST(fzDSFusionOptTestSimple ${Fuzzy_TESTS3}
+
+ add_test(fzDSFusionOptTestSimple ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptTest
  a b c
  )
- 
-ADD_TEST(fzDSFusionOptTestWithExtraLabels ${Fuzzy_TESTS3}
+
+add_test(fzDSFusionOptTestWithExtraLabels ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptTest
  a b c d e
  )
- 
- ADD_TEST(fzDSFusionOptRecTestSimple ${Fuzzy_TESTS3}
+
+ add_test(fzDSFusionOptRecTestSimple ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecTest
  a b c
  )
- 
-ADD_TEST(fzDSFusionOptRecTestWithExtraLabelsSmall ${Fuzzy_TESTS3}
+
+add_test(fzDSFusionOptRecTestWithExtraLabelsSmall ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecTest
  a b c d e
  )
-  
-ADD_TEST(fzDSFusionOptRecTestWithExtraLabelsBig ${Fuzzy_TESTS3}
+
+add_test(fzDSFusionOptRecTestWithExtraLabelsBig ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecTest
  a b c d e f g h i j k l m
  n o p q r s t u v w x y z
  )
- 
-ADD_TEST(fzDSFusionOptRecTestConfMatTestPrecision ${Fuzzy_TESTS3}
+
+add_test(fzDSFusionOptRecTestConfMatTestPrecision ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecConfMatTest
  PRECISION)
- 
-ADD_TEST(fzDSFusionOptRecTestConfMatTestRecall ${Fuzzy_TESTS3}
+
+add_test(fzDSFusionOptRecTestConfMatTestRecall ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecConfMatTest
  RECALL)
- 
-ADD_TEST(fzDSFusionOptRecTestConfMatTestAccuracy ${Fuzzy_TESTS3}
+
+add_test(fzDSFusionOptRecTestConfMatTestAccuracy ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecConfMatTest
  ACCURACY)
- 
-ADD_TEST(fzDSFusionOptRecTestConfMatTestKappa ${Fuzzy_TESTS3}
+
+add_test(fzDSFusionOptRecTestConfMatTestKappa ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecConfMatTest
  KAPPA)
- 
- ADD_TEST(fzDSFusionTestConfMatFileRCMTestPrecision ${Fuzzy_TESTS3}
+
+ add_test(fzDSFusionTestConfMatFileRCMTestPrecision ${Fuzzy_TESTS3}
   otbDempsterShaferFusionConfMatFileTest
  ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
  ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
@@ -174,8 +174,8 @@ ADD_TEST(fzDSFusionOptRecTestConfMatTestKappa ${Fuzzy_TESTS3}
  ${INPUTDATA}/Classification/QB_1_ortho_C9.csv
  PRECISION
  )
- 
- ADD_TEST(fzDSFusionTestConfMatFileVCMTestPrecision ${Fuzzy_TESTS3}
+
+ add_test(fzDSFusionTestConfMatFileVCMTestPrecision ${Fuzzy_TESTS3}
   otbDempsterShaferFusionConfMatFileTest
  ${INPUTDATA}/Classification/QB_1_ortho_C1_V.csv
  ${INPUTDATA}/Classification/QB_1_ortho_C2_V.csv
@@ -188,8 +188,8 @@ ADD_TEST(fzDSFusionOptRecTestConfMatTestKappa ${Fuzzy_TESTS3}
  ${INPUTDATA}/Classification/QB_1_ortho_C9_V.csv
  PRECISION
  )
- 
- ADD_TEST(fzDSFusionOptRecTestConfMatFileRCMTestPrecision ${Fuzzy_TESTS3}
+
+ add_test(fzDSFusionOptRecTestConfMatFileRCMTestPrecision ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecConfMatFileTest
  ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
  ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
@@ -201,8 +201,8 @@ ADD_TEST(fzDSFusionOptRecTestConfMatTestKappa ${Fuzzy_TESTS3}
  ${INPUTDATA}/Classification/QB_1_ortho_C8.csv
  ${INPUTDATA}/Classification/QB_1_ortho_C9.csv
  PRECISION)
- 
- ADD_TEST(fzDSFusionOptRecTestConfMatFileVCMTestPrecision ${Fuzzy_TESTS3}
+
+ add_test(fzDSFusionOptRecTestConfMatFileVCMTestPrecision ${Fuzzy_TESTS3}
   otbDempsterShaferFusionOptRecConfMatFileTest
  ${INPUTDATA}/Classification/QB_1_ortho_C1_V.csv
  ${INPUTDATA}/Classification/QB_1_ortho_C2_V.csv
@@ -214,30 +214,30 @@ ADD_TEST(fzDSFusionOptRecTestConfMatTestKappa ${Fuzzy_TESTS3}
  ${INPUTDATA}/Classification/QB_1_ortho_C8_V.csv
  ${INPUTDATA}/Classification/QB_1_ortho_C9_V.csv
  PRECISION)
- 
-ADD_TEST(fzTuConfusionMatrixToMassOfBeliefNew ${Fuzzy_TESTS3}
+
+add_test(fzTuConfusionMatrixToMassOfBeliefNew ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefNew)
-  
-ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestPrecision ${Fuzzy_TESTS3}
+
+add_test(fzTvConfusionMatrixToMassOfBeliefTestPrecision ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefTest
  PRECISION)
-  
-ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestRecall ${Fuzzy_TESTS3}
+
+add_test(fzTvConfusionMatrixToMassOfBeliefTestRecall ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefTest
  RECALL)
-   
-ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestAccuracy ${Fuzzy_TESTS3}
+
+add_test(fzTvConfusionMatrixToMassOfBeliefTestAccuracy ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefTest
  ACCURACY)
-   
-ADD_TEST(fzTvConfusionMatrixToMassOfBeliefTestKappa ${Fuzzy_TESTS3}
+
+add_test(fzTvConfusionMatrixToMassOfBeliefTestKappa ${Fuzzy_TESTS3}
   otbConfusionMatrixToMassOfBeliefTest
  KAPPA)
- 
-ADD_TEST(fzTuDSFusionOfClassifiersImageFilterNew ${Fuzzy_TESTS3}
+
+add_test(fzTuDSFusionOfClassifiersImageFilterNew ${Fuzzy_TESTS3}
   otbDSFusionOfClassifiersImageFilterNew)
-  
-ADD_TEST(fzTvDSFusionOfClassifiersImageFilterPrecision ${Fuzzy_TESTS3}
+
+add_test(fzTvDSFusionOfClassifiersImageFilterPrecision ${Fuzzy_TESTS3}
  --compare-image ${NOTOL}
  ${BASELINE}/QB_1_ortho_DS_FUSED_PRECISION.tif
  ${TEMP}/QB_1_ortho_DS_FUSED_PRECISION.tif
@@ -259,8 +259,8 @@ otbDSFusionOfClassifiersImageFilterTest
  7 #LabelForUndecidedPixels
  ${TEMP}/QB_1_ortho_DS_FUSED_PRECISION.tif
  )
- 
- ADD_TEST(fzTvDSFusionOfClassifiersImageFilter9ClkRCMPrecision ${Fuzzy_TESTS3}
+
+ add_test(fzTvDSFusionOfClassifiersImageFilter9ClkRCMPrecision ${Fuzzy_TESTS3}
  --compare-image ${NOTOL}
  ${BASELINE}/QB_1_ortho_DS_FUSED_9_Clk_RCM_PRECISION.tif
  ${TEMP}/QB_1_ortho_DS_FUSED_9_Clk_RCM_PRECISION.tif
@@ -288,8 +288,8 @@ otbDSFusionOfClassifiersImageFilterTest
  7 #LabelForUndecidedPixels
  ${TEMP}/QB_1_ortho_DS_FUSED_9_Clk_RCM_PRECISION.tif
  )
- 
- ADD_TEST(fzTvDSFusionOfClassifiersImageFilter9ClkVCMPrecision ${Fuzzy_TESTS3}
+
+ add_test(fzTvDSFusionOfClassifiersImageFilter9ClkVCMPrecision ${Fuzzy_TESTS3}
  --compare-image ${NOTOL}
  ${BASELINE}/QB_1_ortho_DS_FUSED_9_Clk_VCM_PRECISION.tif
  ${TEMP}/QB_1_ortho_DS_FUSED_9_Clk_VCM_PRECISION.tif
@@ -317,9 +317,9 @@ otbDSFusionOfClassifiersImageFilterTest
  7 #LabelForUndecidedPixels
  ${TEMP}/QB_1_ortho_DS_FUSED_9_Clk_VCM_PRECISION.tif
  )
- 
- 
-ADD_TEST(fzTvDSFusionOfClassifiersImageFilterRecall ${Fuzzy_TESTS3}
+
+
+add_test(fzTvDSFusionOfClassifiersImageFilterRecall ${Fuzzy_TESTS3}
  --compare-image ${NOTOL}
  ${BASELINE}/QB_1_ortho_DS_FUSED_RECALL.tif
  ${TEMP}/QB_1_ortho_DS_FUSED_RECALL.tif
@@ -341,8 +341,8 @@ otbDSFusionOfClassifiersImageFilterTest
  7 #LabelForUndecidedPixels
  ${TEMP}/QB_1_ortho_DS_FUSED_RECALL.tif
  )
- 
- ADD_TEST(fzTvDSFusionOfClassifiersImageFilterAccuracy ${Fuzzy_TESTS3}
+
+ add_test(fzTvDSFusionOfClassifiersImageFilterAccuracy ${Fuzzy_TESTS3}
  --compare-image ${NOTOL}
  ${BASELINE}/QB_1_ortho_DS_FUSED_ACCURACY.tif
  ${TEMP}/QB_1_ortho_DS_FUSED_ACCURACY.tif
@@ -364,8 +364,8 @@ otbDSFusionOfClassifiersImageFilterTest
  7 #LabelForUndecidedPixels
  ${TEMP}/QB_1_ortho_DS_FUSED_ACCURACY.tif
  )
- 
- ADD_TEST(fzTvDSFusionOfClassifiersImageFilterKappa ${Fuzzy_TESTS3}
+
+ add_test(fzTvDSFusionOfClassifiersImageFilterKappa ${Fuzzy_TESTS3}
  --compare-image ${NOTOL}
  ${BASELINE}/QB_1_ortho_DS_FUSED_KAPPA.tif
  ${TEMP}/QB_1_ortho_DS_FUSED_KAPPA.tif
@@ -390,7 +390,7 @@ otbDSFusionOfClassifiersImageFilterTest
 
 
 
-SET(BasicFuzzy_SRCS1
+set(BasicFuzzy_SRCS1
 otbFuzzyTests1.cxx
 otbFuzzyVariableNew.cxx
 otbFuzzyVariable2Values.cxx
@@ -400,7 +400,7 @@ otbMassOfBelief.cxx
 otbJointMassOfBeliefFilter.cxx
 )
 
-SET(BasicFuzzy_SRCS2
+set(BasicFuzzy_SRCS2
 otbFuzzyTests2.cxx
 otbFuzzyVariableDSApplied.cxx
 otbMassOfBeliefDSApplied.cxx
@@ -411,20 +411,20 @@ otbFuzzyDescriptorsModelManager.cxx
 otbStandardDSCostFunction.cxx
 )
 
-SET(BasicFuzzy_SRCS3
+set(BasicFuzzy_SRCS3
 otbFuzzyTests3.cxx
 otbDempsterShaferFusionTests.cxx
 otbConfusionMatrixToMassOfBeliefTest.cxx
 otbDSFusionOfClassifiersImageFilterTest.cxx
 )
 
-ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})
-TARGET_LINK_LIBRARIES(otbFuzzyTests1 OTBIO OTBFuzzy  OTBTesting)
+add_executable(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})
+target_link_libraries(otbFuzzyTests1 OTBIO OTBFuzzy  OTBTesting)
 
-ADD_EXECUTABLE(otbFuzzyTests2 otbFuzzyTests2.cxx ${BasicFuzzy_SRCS2})
-TARGET_LINK_LIBRARIES(otbFuzzyTests2 OTBIO OTBFuzzy OTBTesting)
+add_executable(otbFuzzyTests2 otbFuzzyTests2.cxx ${BasicFuzzy_SRCS2})
+target_link_libraries(otbFuzzyTests2 OTBIO OTBFuzzy OTBTesting)
 
-ADD_EXECUTABLE(otbFuzzyTests3 otbFuzzyTests3.cxx ${BasicFuzzy_SRCS3})
-TARGET_LINK_LIBRARIES(otbFuzzyTests3 OTBIO OTBFuzzy OTBTesting)
+add_executable(otbFuzzyTests3 otbFuzzyTests3.cxx ${BasicFuzzy_SRCS3})
+target_link_libraries(otbFuzzyTests3 OTBIO OTBFuzzy OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

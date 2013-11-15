@@ -1,8 +1,8 @@
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
 # Common generic tests
-SET(OBJECTDETECTION_TESTS1 ${CXX_TEST_PATH}/otbObjectDetectionTests1)
+set(OBJECTDETECTION_TESTS1 ${CXX_TEST_PATH}/otbObjectDetectionTests1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbObjectDetectionTests1 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -10,11 +10,11 @@ SET(OBJECTDETECTION_TESTS1 ${CXX_TEST_PATH}/otbObjectDetectionTests1)
 
 # ------------------  otb::LabeledSampleLocalizationGenerator  -------------------
 
-ADD_TEST(odTuLabeledSampleLocalizationGeneratorNew ${OBJECTDETECTION_TESTS1}
+add_test(odTuLabeledSampleLocalizationGeneratorNew ${OBJECTDETECTION_TESTS1}
   otbLabeledSampleLocalizationGeneratorNew
   )
 
-ADD_TEST(odTvLabeledSampleLocalizationGenerator ${OBJECTDETECTION_TESTS1}
+add_test(odTvLabeledSampleLocalizationGenerator ${OBJECTDETECTION_TESTS1}
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/TvLabeledSampleLocalizationGeneratorOutput.shp
   ${TEMP}/TvLabeledSampleLocalizationGeneratorOutput.shp
@@ -24,11 +24,11 @@ ADD_TEST(odTvLabeledSampleLocalizationGenerator ${OBJECTDETECTION_TESTS1}
   ${TEMP}/TvLabeledSampleLocalizationGeneratorOutput.shp
   )
 
-ADD_TEST(odTuDescriptorsListSampleGeneratorNew ${OBJECTDETECTION_TESTS1}
+add_test(odTuDescriptorsListSampleGeneratorNew ${OBJECTDETECTION_TESTS1}
   otbDescriptorsListSampleGeneratorNew
   )
 
-ADD_TEST(odTvDescriptorsListSampleGeneratorNoStreaming ${OBJECTDETECTION_TESTS1}
+add_test(odTvDescriptorsListSampleGeneratorNoStreaming ${OBJECTDETECTION_TESTS1}
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
   ${TEMP}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
@@ -40,7 +40,7 @@ ADD_TEST(odTvDescriptorsListSampleGeneratorNoStreaming ${OBJECTDETECTION_TESTS1}
   5 # neighborhood radius
   )
 
-ADD_TEST(odTvDescriptorsListSampleGeneratorStreaming ${OBJECTDETECTION_TESTS1}
+add_test(odTvDescriptorsListSampleGeneratorStreaming ${OBJECTDETECTION_TESTS1}
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
   ${TEMP}/TvDescriptorsListSampleGeneratorStreamingOutput.txt
@@ -52,7 +52,7 @@ ADD_TEST(odTvDescriptorsListSampleGeneratorStreaming ${OBJECTDETECTION_TESTS1}
   5 # neighborhood radius
   )
 
-ADD_TEST(odTvDescriptorsSVMModelCreation ${OBJECTDETECTION_TESTS1}
+add_test(odTvDescriptorsSVMModelCreation ${OBJECTDETECTION_TESTS1}
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/TvDescriptorsSVMModelCreation.svm
   ${TEMP}/TvDescriptorsSVMModelCreation.svm
@@ -65,11 +65,11 @@ ADD_TEST(odTvDescriptorsSVMModelCreation ${OBJECTDETECTION_TESTS1}
   5 # neighborhood radius
   )
 
-ADD_TEST(odTuObjectDetectionClassifierNew ${OBJECTDETECTION_TESTS1}
+add_test(odTuObjectDetectionClassifierNew ${OBJECTDETECTION_TESTS1}
   otbObjectDetectionClassifierNew
   )
 
-ADD_TEST(odTvObjectDetectionClassifier ${OBJECTDETECTION_TESTS1}
+add_test(odTvObjectDetectionClassifier ${OBJECTDETECTION_TESTS1}
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.txt
   ${TEMP}/TvObjectDetectionClassifierOutput.txt
@@ -82,7 +82,7 @@ ADD_TEST(odTvObjectDetectionClassifier ${OBJECTDETECTION_TESTS1}
   5 # neighborhood radius
   )
 
-ADD_TEST(odTvObjectDetectionClassifierStreaming ${OBJECTDETECTION_TESTS1}
+add_test(odTvObjectDetectionClassifierStreaming ${OBJECTDETECTION_TESTS1}
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/TvObjectDetectionClassifierOutput.txt
   ${TEMP}/TvObjectDetectionClassifierOutputStreaming.txt
@@ -95,17 +95,17 @@ ADD_TEST(odTvObjectDetectionClassifierStreaming ${OBJECTDETECTION_TESTS1}
   5 # neighborhood radius
   )
 
-ADD_TEST(odTuStandardMetaImageFunctionBuilderNew ${OBJECTDETECTION_TESTS1}
+add_test(odTuStandardMetaImageFunctionBuilderNew ${OBJECTDETECTION_TESTS1}
   otbStandardMetaImageFunctionBuilderNew
   )
 
-ADD_TEST(odTvStandardMetaImageFunctionBuilder ${OBJECTDETECTION_TESTS1}
+add_test(odTvStandardMetaImageFunctionBuilder ${OBJECTDETECTION_TESTS1}
   otbStandardMetaImageFunctionBuilder
   ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01.tif
   )
 
 # A enrichir
-SET(ObjectDetection_SRCS1
+set(ObjectDetection_SRCS1
 otbObjectDetectionTests1.cxx
 otbLabeledSampleLocalizationGenerator.cxx
 otbDescriptorsListSampleGenerator.cxx
@@ -117,4 +117,4 @@ otbStandardMetaImageFunctionBuilder.cxx
 OTB_ADD_EXECUTABLE(otbObjectDetectionTests1 "${ObjectDetection_SRCS1}" "OTBObjectDetection;OTBIO;OTBTesting;OTBLearning")
 
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -5,9 +5,9 @@
 # Copyright (c) 2009 Mateusz Loskot <mateusz@loskot.net>
 #
 ###############################################################################
-SET(LIBLAS_UNIT_TEST liblas_test)
+set(LIBLAS_UNIT_TEST liblas_test)
 
-SET(LIBLAS_UNIT_TEST_SRC
+set(LIBLAS_UNIT_TEST_SRC
     common.cpp
     guid_test.cpp
     lasbounds_test.cpp
@@ -21,17 +21,17 @@ SET(LIBLAS_UNIT_TEST_SRC
     laswriter_test.cpp
     liblas_test_suite.cpp)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     .
     ../../include
     ${GDAL_INCLUDE_DIR}
     ${GEOTIFF_INCLUDE_DIR})
 
-ADD_EXECUTABLE(${LIBLAS_UNIT_TEST} ${LIBLAS_UNIT_TEST_SRC} )
+add_executable(${LIBLAS_UNIT_TEST} ${LIBLAS_UNIT_TEST_SRC} )
 
 set_target_properties(${LIBLAS_UNIT_TEST} PROPERTIES COMPILE_DEFINITIONS LAS_DLL_IMPORT)
 
-TARGET_LINK_LIBRARIES(${LIBLAS_UNIT_TEST} 
+target_link_libraries(${LIBLAS_UNIT_TEST}
     ${LIBLAS_LIB_NAME}
     ${ZLIB_LIBRARIES}
     ${TIFF_LIBRARY}
@@ -39,4 +39,4 @@ TARGET_LINK_LIBRARIES(${LIBLAS_UNIT_TEST}
     ${GDAL_LIBRARY}
     ${SPATIALINDEX_LIBRARY})
 
-ADD_TEST(liblas_test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/liblas_test ${CMAKE_SOURCE_DIR}/test/data)
+add_test(liblas_test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/liblas_test ${CMAKE_SOURCE_DIR}/test/data)

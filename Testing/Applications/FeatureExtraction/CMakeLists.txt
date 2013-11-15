@@ -1,7 +1,7 @@
 
 #--- LineSegmentDetection ---#
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME   apTvFeLineSegmentDetection
                      APP  LineSegmentDetection
@@ -10,7 +10,7 @@ OTB_TEST_APPLICATION(NAME   apTvFeLineSegmentDetection
                      VALID   --compare-ogr ${EPSILON_9}
                              ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI.shp
                              ${TEMP}/feTvLineSegmentDetection_LI.shp)
-    
+
 OTB_TEST_APPLICATION(NAME   apTvFeLineSegmentDetectionNoRescale
                      APP  LineSegmentDetection
                      OPTIONS -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
@@ -19,8 +19,8 @@ OTB_TEST_APPLICATION(NAME   apTvFeLineSegmentDetectionNoRescale
                      VALID   --compare-ogr ${EPSILON_9}
                              ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI_NoRescale.shp
                              ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp)
-  
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+endif(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME  apTvFERadiometricIndices_veg
                      APP  RadiometricIndices
@@ -48,70 +48,70 @@ OTB_TEST_APPLICATION(NAME  apTvFERadiometricIndices_wat
 
 OTB_TEST_APPLICATION(NAME  apTvFEHaralickTextureExtraction
                      APP  HaralickTextureExtraction
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                              -channel 1
-                             -texture simple 
+                             -texture simple
                              -out ${TEMP}/apTvFEHaralickTextureExtraction.tif
                              -parameters.min 127
                              -parameters.max 1578
                      VALID   --compare-image ${EPSILON_15}
                    			 ${BASELINE}/apTvFEHaralickTextureExtraction.tif
                  		     ${TEMP}/apTvFEHaralickTextureExtraction.tif)
-                 		     
+                 		
 OTB_TEST_APPLICATION(NAME  apTvFESFSTextureExtraction
                      APP  SFSTextureExtraction
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
-                             -channel 1 
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -channel 1
                              -out ${TEMP}/apTvFESFSTextureExtraction.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFESFSTextureExtraction.tif
                  		     ${TEMP}/apTvFESFSTextureExtraction.tif)
-                 		     
+                 		
 OTB_TEST_APPLICATION(NAME  apTvFEBinaryMorphologicalOperation
                      APP  BinaryMorphologicalOperation
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif                             
-                             -channel 1 
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
+                             -channel 1
                              -structype ball
                              -structype.ball.xradius 10
                              -filter opening
                              -filter.opening.foreval 1.0
-                             -filter.opening.backval 0.0                      
+                             -filter.opening.backval 0.0
                              -out ${TEMP}/apTvFEBinaryMorphologicalOperation.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEBinaryMorphologicalOperation.tif
-                 		     ${TEMP}/apTvFEBinaryMorphologicalOperation.tif)	     
+                 		     ${TEMP}/apTvFEBinaryMorphologicalOperation.tif)	
 
 OTB_TEST_APPLICATION(NAME  apTvFEGrayScaleMorphologicalOperation
                      APP  GrayScaleMorphologicalOperation
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
-                             -channel 1 
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -channel 1
                              -structype ball
                              -structype.ball.xradius 10
-                             -filter opening                     
+                             -filter opening
                              -out ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEGrayScaleMorphologicalOperation.tif
-                 		     ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif)	  
-                 		     
+                 		     ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif)	
+                 		
 OTB_TEST_APPLICATION(NAME  apTvFELocalStatisticExtraction
                      APP  LocalStatisticExtraction
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
-                             -channel 1 
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -channel 1
                              -radius 3
                              -out ${TEMP}/apTvFELocalStatisticExtraction.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/feTvRadiometricMomentsImageFilter.tif
-                 		     ${TEMP}/apTvFELocalStatisticExtraction.tif)      		        
-                 		     
+                 		     ${TEMP}/apTvFELocalStatisticExtraction.tif)      		
+                 		
 OTB_TEST_APPLICATION(NAME  apTvFEEdgeExtraction
                      APP  EdgeExtraction
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif                             
-                             -channel 1 
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -channel 1
                              -filter sobel
                              -out ${TEMP}/apTvFEEdgeExtraction.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEEdgeExtraction.tif
-                 		     ${TEMP}/apTvFEEdgeExtraction.tif)  
+                 		     ${TEMP}/apTvFEEdgeExtraction.tif)
 
 OTB_TEST_APPLICATION(NAME apTvHomologousPointsExtractionFull
                      APP  HomologousPointsExtraction
@@ -158,4 +158,4 @@ OTB_TEST_APPLICATION(NAME   apTvFEDimensionalityReductionMAF
                      VALID   --compare-image 0.025
                              ${BASELINE}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
                              ${TEMP}/apTvFEDimensionalityReductionMAF.tif)
-                             
+

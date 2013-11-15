@@ -1,4 +1,4 @@
-SET(CPPFILES
+set(CPPFILES
 	CodeEditor.cxx
 	Fl_Function_Type.cxx
 	Fl_Group_Type.cxx
@@ -20,29 +20,29 @@ SET(CPPFILES
 	widget_panel.cxx
 )
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  FOREACH(f ${CPPFILES} )
-        SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS -w )
-  ENDFOREACH(f)
-ELSE(CMAKE_COMPILER_IS_GNUCXX)
-  IF(WIN32)
-    IF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-        FOREACH(f ${CPPFILES} )
-                SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS "/W0" )
-        ENDFOREACH(f)
-    ENDIF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-  ENDIF(WIN32)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  foreach(f ${CPPFILES} )
+        set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS -w )
+  endforeach(f)
+else(CMAKE_COMPILER_IS_GNUCXX)
+  if(WIN32)
+    if(CMAKE_CXX_COMPILER MATCHES "^cl$")
+        foreach(f ${CPPFILES} )
+                set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS "/W0" )
+        endforeach(f)
+    endif(CMAKE_CXX_COMPILER MATCHES "^cl$")
+  endif(WIN32)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 
-ADD_EXECUTABLE(fluid ${CPPFILES})
-INSTALL_TARGETS(/bin fluid)
+add_executable(fluid ${CPPFILES})
+install_targets(/bin fluid)
 
-TARGET_LINK_LIBRARIES(fluid fltk fltk_images fltk_forms ${FLTK_PLATFORM_DEPENDENT_LIBS})
-IF(OPENGL_FOUND)
-	TARGET_LINK_LIBRARIES(fluid fltk_gl)
-#    IF(APPLE)
-#	    TARGET_LINK_LIBRARIES(fluid -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib)
-#    ENDIF(APPLE)
-ENDIF(OPENGL_FOUND)
+target_link_libraries(fluid fltk fltk_images fltk_forms ${FLTK_PLATFORM_DEPENDENT_LIBS})
+if(OPENGL_FOUND)
+	target_link_libraries(fluid fltk_gl)
+#    if(APPLE)
+#	    target_link_libraries(fluid -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib)
+#    endif(APPLE)
+endif(OPENGL_FOUND)
 

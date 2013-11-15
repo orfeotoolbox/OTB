@@ -1,109 +1,109 @@
 
-PROJECT(IOExamples)
+project(IOExamples)
 
-ADD_EXECUTABLE(ImageReadWrite ImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(ImageReadWrite OTBCommon OTBIO)
+add_executable(ImageReadWrite ImageReadWrite.cxx )
+target_link_libraries(ImageReadWrite OTBCommon OTBIO)
 
-ADD_EXECUTABLE(StreamingImageReadWrite StreamingImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(StreamingImageReadWrite OTBCommon OTBIO)
+add_executable(StreamingImageReadWrite StreamingImageReadWrite.cxx )
+target_link_libraries(StreamingImageReadWrite OTBCommon OTBIO)
 
-ADD_EXECUTABLE(ExplicitStreamingExample ExplicitStreamingExample.cxx )
-TARGET_LINK_LIBRARIES(ExplicitStreamingExample OTBCommon OTBIO)
-
-
-ADD_EXECUTABLE(ImageReadCastWrite ImageReadCastWrite.cxx )
-TARGET_LINK_LIBRARIES(ImageReadCastWrite OTBCommon OTBIO)
-
-#ADD_EXECUTABLE(ImageReadExtractWrite ImageReadExtractWrite.cxx )
-#TARGET_LINK_LIBRARIES(ImageReadExtractWrite OTBCommon OTBIO)
-
-ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
-TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite OTBCommon OTBIO)
-ADD_EXECUTABLE(RGBImageReadWrite RGBImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(RGBImageReadWrite OTBCommon OTBIO)
-
-#ADD_EXECUTABLE(CovariantVectorImageWrite CovariantVectorImageWrite.cxx )
-#TARGET_LINK_LIBRARIES(CovariantVectorImageWrite)
-
-#ADD_EXECUTABLE(CovariantVectorImageRead CovariantVectorImageRead.cxx )
-#TARGET_LINK_LIBRARIES(CovariantVectorImageRead)
-
-#ADD_EXECUTABLE(CovariantVectorImageExtractComponent CovariantVectorImageExtractComponent.cxx )
-#TARGET_LINK_LIBRARIES(CovariantVectorImageExtractComponent)
-
-#ADD_EXECUTABLE(VectorImageReadWrite VectorImageReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(VectorImageReadWrite)
-
-ADD_EXECUTABLE(ComplexImageReadWrite ComplexImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(ComplexImageReadWrite OTBCommon OTBIO)
-
-ADD_EXECUTABLE(MultibandImageReadWrite MultibandImageReadWrite.cxx )
-TARGET_LINK_LIBRARIES(MultibandImageReadWrite OTBCommon OTBIO)
-
-ADD_EXECUTABLE(ExtractROI ExtractROI.cxx )
-TARGET_LINK_LIBRARIES(ExtractROI OTBCommon OTBIO)
-
-ADD_EXECUTABLE(ImageSeriesIOExample ImageSeriesIOExample.cxx )
-TARGET_LINK_LIBRARIES(ImageSeriesIOExample OTBCommon OTBIO)
+add_executable(ExplicitStreamingExample ExplicitStreamingExample.cxx )
+target_link_libraries(ExplicitStreamingExample OTBCommon OTBIO)
 
 
-ADD_EXECUTABLE(MetadataExample MetadataExample.cxx )
-TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO)
+add_executable(ImageReadCastWrite ImageReadCastWrite.cxx )
+target_link_libraries(ImageReadCastWrite OTBCommon OTBIO)
 
-ADD_EXECUTABLE(VectorDataIOExample VectorDataIOExample.cxx )
-TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO)
+#add_executable(ImageReadExtractWrite ImageReadExtractWrite.cxx )
+#target_link_libraries(ImageReadExtractWrite OTBCommon OTBIO)
 
-ADD_EXECUTABLE(OGRWrappersExample OGRWrappersExample.cxx )
-TARGET_LINK_LIBRARIES(OGRWrappersExample OTBCommon OTBOGRAdapters)
+add_executable(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
+target_link_libraries(ImageReadRegionOfInterestWrite OTBCommon OTBIO)
+add_executable(RGBImageReadWrite RGBImageReadWrite.cxx )
+target_link_libraries(RGBImageReadWrite OTBCommon OTBIO)
 
-ADD_EXECUTABLE(DEMHandlerExample DEMHandlerExample.cxx )
-TARGET_LINK_LIBRARIES(DEMHandlerExample OTBOssimAdapters OTBCommon OTBIO)
+#add_executable(CovariantVectorImageWrite CovariantVectorImageWrite.cxx )
+#target_link_libraries(CovariantVectorImageWrite)
 
-ADD_EXECUTABLE(DEMToImageGenerator DEMToImageGenerator.cxx )
-TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon )
+#add_executable(CovariantVectorImageRead CovariantVectorImageRead.cxx )
+#target_link_libraries(CovariantVectorImageRead)
 
-IF(OTB_USE_LIBLAS)
-  ADD_EXECUTABLE(LidarReaderExample LidarReaderExample.cxx )
-  TARGET_LINK_LIBRARIES(LidarReaderExample OTBIO OTBCommon )
+#add_executable(CovariantVectorImageExtractComponent CovariantVectorImageExtractComponent.cxx )
+#target_link_libraries(CovariantVectorImageExtractComponent)
 
-  IF(ITK_USE_REVIEW)
-    ADD_EXECUTABLE(LidarToImageExample LidarToImageExample.cxx )
-    TARGET_LINK_LIBRARIES(LidarToImageExample OTBIO OTBCommon )
-  ENDIF(ITK_USE_REVIEW)
-ENDIF(OTB_USE_LIBLAS)
+#add_executable(VectorImageReadWrite VectorImageReadWrite.cxx )
+#target_link_libraries(VectorImageReadWrite)
 
-IF( OTB_USE_CURL )
-  ADD_EXECUTABLE(TileMapImageIOExample TileMapImageIOExample.cxx)
-  TARGET_LINK_LIBRARIES(TileMapImageIOExample OTBIO OTBCommon)
-ENDIF( OTB_USE_CURL )
+add_executable(ComplexImageReadWrite ComplexImageReadWrite.cxx )
+target_link_libraries(ComplexImageReadWrite OTBCommon OTBIO)
 
-ADD_EXECUTABLE(ImageToKmzAndMapFileProductExample ImageToKmzAndMapFileProductExample.cxx)
-TARGET_LINK_LIBRARIES(ImageToKmzAndMapFileProductExample OTBIO)
+add_executable(MultibandImageReadWrite MultibandImageReadWrite.cxx )
+target_link_libraries(MultibandImageReadWrite OTBCommon OTBIO)
 
-ADD_EXECUTABLE(HDFReaderExample HDFReaderExample.cxx)
-TARGET_LINK_LIBRARIES(HDFReaderExample OTBIO)
+add_executable(ExtractROI ExtractROI.cxx )
+target_link_libraries(ExtractROI OTBCommon OTBIO)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+add_executable(ImageSeriesIOExample ImageSeriesIOExample.cxx )
+target_link_libraries(ImageSeriesIOExample OTBCommon OTBIO)
 
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/IO)
-SET(DATA ${OTB_DATA_ROOT}/Input)
+add_executable(MetadataExample MetadataExample.cxx )
+target_link_libraries(MetadataExample OTBCommon OTBIO)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+add_executable(VectorDataIOExample VectorDataIOExample.cxx )
+target_link_libraries(VectorDataIOExample OTBCommon OTBIO)
+
+add_executable(OGRWrappersExample OGRWrappersExample.cxx )
+target_link_libraries(OGRWrappersExample OTBCommon OTBOGRAdapters)
+
+add_executable(DEMHandlerExample DEMHandlerExample.cxx )
+target_link_libraries(DEMHandlerExample OTBOssimAdapters OTBCommon OTBIO)
+
+add_executable(DEMToImageGenerator DEMToImageGenerator.cxx )
+target_link_libraries(DEMToImageGenerator OTBProjections OTBIO OTBCommon )
+
+if(OTB_USE_LIBLAS)
+  add_executable(LidarReaderExample LidarReaderExample.cxx )
+  target_link_libraries(LidarReaderExample OTBIO OTBCommon )
+
+  if(ITK_USE_REVIEW)
+    add_executable(LidarToImageExample LidarToImageExample.cxx )
+    target_link_libraries(LidarToImageExample OTBIO OTBCommon )
+  endif(ITK_USE_REVIEW)
+endif(OTB_USE_LIBLAS)
+
+if( OTB_USE_CURL )
+  add_executable(TileMapImageIOExample TileMapImageIOExample.cxx)
+  target_link_libraries(TileMapImageIOExample OTBIO OTBCommon)
+endif( OTB_USE_CURL )
+
+add_executable(ImageToKmzAndMapFileProductExample ImageToKmzAndMapFileProductExample.cxx)
+target_link_libraries(ImageToKmzAndMapFileProductExample OTBIO)
+
+add_executable(HDFReaderExample HDFReaderExample.cxx)
+target_link_libraries(HDFReaderExample OTBIO)
+
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
-SET(EXE_TESTS1  ${CXX_TEST_PATH}/otbIOExamplesTests1)
-SET(EXE_TESTS2  ${CXX_TEST_PATH}/otbIOExamplesTests2) # Need curl
-SET(EXE_TESTS3  ${CXX_TEST_PATH}/otbIOExamplesTests3) # Need liblas
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/IO)
+set(DATA ${OTB_DATA_ROOT}/Input)
 
-SET(NOTOL 0.0)
-SET(EPSILON_5 0.00001)
-SET(HIGHTOL 10.0)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+
+set(EXE_TESTS1  ${CXX_TEST_PATH}/otbIOExamplesTests1)
+set(EXE_TESTS2  ${CXX_TEST_PATH}/otbIOExamplesTests2) # Need curl
+set(EXE_TESTS3  ${CXX_TEST_PATH}/otbIOExamplesTests3) # Need liblas
+
+set(NOTOL 0.0)
+set(EPSILON_5 0.00001)
+set(HIGHTOL 10.0)
 
 # ------- ExtractROITest----------
 
-ADD_TEST(ioTeExtractROITest ${EXE_TESTS1}
+add_test(ioTeExtractROITest ${EXE_TESTS1}
         --compare-n-images ${NOTOL} 2
         ${BASELINE}/ROI_IMAGERY_RGB.png
         ${TEMP}/ROI_IMAGERY_RGB.png
@@ -117,7 +117,7 @@ ADD_TEST(ioTeExtractROITest ${EXE_TESTS1}
     0 0 100 100
 )
 
-ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
+add_test(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
 --compare-image ${EPSILON_5}  ${BASELINE}/DEMToImageGenerator.tif
                         ${TEMP}/DEMToImageGenerator.tif
         DEMToImageGeneratorTest
@@ -132,7 +132,7 @@ ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
           ${INPUTDATA}/DEM_srtm
          )
 
-ADD_TEST(prTeDEMHandlerExampleTest ${EXE_TESTS1}
+add_test(prTeDEMHandlerExampleTest ${EXE_TESTS1}
   DEMHandlerExampleTest
   ${DATA}/DEM/srtm_directory/
   ${DATA}/DEM/egm96.grd
@@ -145,7 +145,7 @@ ADD_TEST(prTeDEMHandlerExampleTest ${EXE_TESTS1}
 
 # Testing the chain of creating a kmz and MapFilefrom
 # a non georeferenced image
-ADD_TEST(ioTeImageToKmzAndMapFileProductExample ${EXE_TESTS1}
+add_test(ioTeImageToKmzAndMapFileProductExample ${EXE_TESTS1}
          ImageToKmzAndMapFileProductExample
          ${DATA}/Haiti1_sr10.jpeg
          ${TEMP}/ioTeHaitiKmzProduct.kmz
@@ -181,8 +181,8 @@ ADD_TEST(ioTeImageToKmzAndMapFileProductExample ${EXE_TESTS1}
          )
 
 
-IF( OTB_USE_CURL )
-ADD_TEST(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
+if( OTB_USE_CURL )
+add_test(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
 --compare-image ${HIGHTOL}  ${BASELINE}/openStreetMap.png
                         ${TEMP}/openStreetMap.png
          TileMapImageIOExampleTest
@@ -195,7 +195,7 @@ ADD_TEST(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
          )
 
 # Access to NearMap is subject to an "agreement" checkbox ...
-# ADD_TEST(ioTeTileMapImageIOExample2Test ${EXE_TESTS2}
+# add_test(ioTeTileMapImageIOExample2Test ${EXE_TESTS2}
 # --compare-image ${HIGHTOL}  ${BASELINE}/nearMap.jpg
 #                         ${TEMP}/nearMap.jpg
 #          TileMapImageIOExampleTest
@@ -207,12 +207,12 @@ ADD_TEST(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
 #          8
 #          )
 
-ENDIF( OTB_USE_CURL )
+endif( OTB_USE_CURL )
 
 
-IF(OTB_USE_LIBLAS)
-IF(ITK_USE_REVIEW)
-ADD_TEST(ioTeLidarToImageExampleTest ${EXE_TESTS3}
+if(OTB_USE_LIBLAS)
+if(ITK_USE_REVIEW)
+add_test(ioTeLidarToImageExampleTest ${EXE_TESTS3}
 --compare-image ${NOTOL}  ${BASELINE}/lidar-image-4.hdr
                         ${TEMP}/lidar-image-4.hdr
          LidarToImageExampleTest
@@ -223,7 +223,7 @@ ADD_TEST(ioTeLidarToImageExampleTest ${EXE_TESTS3}
          5
          4
          )
-ADD_TEST(ioTeLidarToImageExample2Test ${EXE_TESTS3}
+add_test(ioTeLidarToImageExample2Test ${EXE_TESTS3}
 --compare-image ${NOTOL}  ${BASELINE}/lidar-image-8.hdr
                         ${TEMP}/lidar-image-8.hdr
          LidarToImageExampleTest
@@ -234,28 +234,28 @@ ADD_TEST(ioTeLidarToImageExample2Test ${EXE_TESTS3}
          5
          8
          )
-ENDIF(ITK_USE_REVIEW)
-ENDIF(OTB_USE_LIBLAS)
+endif(ITK_USE_REVIEW)
+endif(OTB_USE_LIBLAS)
 
 
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
-TARGET_LINK_LIBRARIES(otbIOExamplesTests1 OTBIO OTBCommon OTBOssimAdapters OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbIOExamplesTests1 otbIOExamplesTests1.cxx)
+target_link_libraries(otbIOExamplesTests1 OTBIO OTBCommon OTBOssimAdapters OTBTesting)
 
-IF( OTB_USE_CURL )
-  ADD_EXECUTABLE(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
-  TARGET_LINK_LIBRARIES(otbIOExamplesTests2 OTBCommon OTBIO OTBTesting)
-ENDIF( OTB_USE_CURL )
+if( OTB_USE_CURL )
+  add_executable(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
+  target_link_libraries(otbIOExamplesTests2 OTBCommon OTBIO OTBTesting)
+endif( OTB_USE_CURL )
 
-IF(OTB_USE_LIBLAS)
-IF(ITK_USE_REVIEW)
-  ADD_EXECUTABLE(otbIOExamplesTests3 otbIOExamplesTests3.cxx)
-  TARGET_LINK_LIBRARIES(otbIOExamplesTests3 OTBCommon OTBIO OTBTesting)
-ENDIF(ITK_USE_REVIEW)
-ENDIF(OTB_USE_LIBLAS)
-
-
+if(OTB_USE_LIBLAS)
+if(ITK_USE_REVIEW)
+  add_executable(otbIOExamplesTests3 otbIOExamplesTests3.cxx)
+  target_link_libraries(otbIOExamplesTests3 OTBCommon OTBIO OTBTesting)
+endif(ITK_USE_REVIEW)
+endif(OTB_USE_LIBLAS)
 
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+
+
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

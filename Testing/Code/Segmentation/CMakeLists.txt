@@ -1,17 +1,17 @@
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 # Common generic tests
-SET(SEGMENTATION_TESTS1 ${CXX_TEST_PATH}/otbSegmentationTests1)
+set(SEGMENTATION_TESTS1 ${CXX_TEST_PATH}/otbSegmentationTests1)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
 # -------  otb::HooverMatrix &  otb::HooverInstance -------------
 
-ADD_TEST(obTuHooverMatrixFilterNew ${SEGMENTATION_TESTS1}
+add_test(obTuHooverMatrixFilterNew ${SEGMENTATION_TESTS1}
     otbHooverMatrixFilterNew)
 
-ADD_TEST(obTvHooverMatrixFilter ${SEGMENTATION_TESTS1}
+add_test(obTvHooverMatrixFilter ${SEGMENTATION_TESTS1}
     --compare-ascii ${NOTOL}
     ${BASELINE_FILES}/obTvHooverMatrixFilter.txt
     ${TEMP}/obTvHooverMatrixFilter.txt
@@ -21,10 +21,10 @@ ADD_TEST(obTvHooverMatrixFilter ${SEGMENTATION_TESTS1}
     ${TEMP}/obTvHooverMatrixFilter.txt
     )
 
-ADD_TEST(obTuHooverInstanceFilterNew ${SEGMENTATION_TESTS1}
+add_test(obTuHooverInstanceFilterNew ${SEGMENTATION_TESTS1}
     otbHooverInstanceFilterNew)
 
-ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${SEGMENTATION_TESTS1}
+add_test(obTvHooverInstanceFilterToAttributeImage ${SEGMENTATION_TESTS1}
     --compare-image ${EPSILON_9}
     ${BASELINE}/obTvHooverInstanceFilterToAttributeImage.tif
     ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
@@ -34,7 +34,7 @@ ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${SEGMENTATION_TESTS1}
     ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
     )
 
-ADD_TEST(obTuWatershedSegmentationFilter ${SEGMENTATION_TESTS1}
+add_test(obTuWatershedSegmentationFilter ${SEGMENTATION_TESTS1}
       --compare-image ${NOTOL}
       ${BASELINE}/obTuWatershedSegmentationFilterLabelImage.tif
       ${TEMP}/obTuWatershedSegmentationFilterLabelImage.tif
@@ -45,7 +45,7 @@ ADD_TEST(obTuWatershedSegmentationFilter ${SEGMENTATION_TESTS1}
       0.2
       )
 
-ADD_TEST(obTuMeanShiftSegmentationFilter ${SEGMENTATION_TESTS1}
+add_test(obTuMeanShiftSegmentationFilter ${SEGMENTATION_TESTS1}
       otbMeanShiftSegmentationFilter
       ${INPUTDATA}/ROI_QB_MUL_4.tif
       ${TEMP}/obTuMeanShiftSegmentationFilterLabelImage.tif
@@ -56,7 +56,7 @@ ADD_TEST(obTuMeanShiftSegmentationFilter ${SEGMENTATION_TESTS1}
       0.1
       )
 
-ADD_TEST(obTvMorphologicalProfilesSegmentationFilter ${SEGMENTATION_TESTS1}
+add_test(obTvMorphologicalProfilesSegmentationFilter ${SEGMENTATION_TESTS1}
       --compare-image ${NOTOL}
       ${BASELINE}/obTvMorphologicalProfilesSegmentationFilter.tif
       ${TEMP}/obTvMorphologicalProfilesSegmentationFilter.tif
@@ -69,7 +69,7 @@ ADD_TEST(obTvMorphologicalProfilesSegmentationFilter ${SEGMENTATION_TESTS1}
       )
 
 
-ADD_TEST(obTuMeanShiftSegmentationFilterPruning ${SEGMENTATION_TESTS1}
+add_test(obTuMeanShiftSegmentationFilterPruning ${SEGMENTATION_TESTS1}
       otbMeanShiftSegmentationFilter
       ${INPUTDATA}/ROI_QB_MUL_4.tif
       ${TEMP}/obTuMeanShiftSegmentationFilterLabelImagePruning.tif
@@ -82,10 +82,10 @@ ADD_TEST(obTuMeanShiftSegmentationFilterPruning ${SEGMENTATION_TESTS1}
       )
 
 # -------            otb::StreamingVectorizedSegmentation   -------------
-ADD_TEST(obTuStreamingImageToOGRLayerSegmentationFilterNew ${SEGMENTATION_TESTS1}
+add_test(obTuStreamingImageToOGRLayerSegmentationFilterNew ${SEGMENTATION_TESTS1}
     otbStreamingImageToOGRLayerSegmentationFilterNew)
 
-ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilter ${SEGMENTATION_TESTS1}
+add_test(obTvStreamingImageToOGRLayerSegmentationFilter ${SEGMENTATION_TESTS1}
      --compare-ogr  ${EPSILON_8}
      ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutput.sqlite
      ${TEMP}/obTvStreamingVectorizedSegmentationOutput.sqlite
@@ -104,7 +104,7 @@ ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilter ${SEGMENTATION_TESTS1}
      0.2 #Simplification tolerance
      )
 
-ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilterQBOrthoWGS84shp ${SEGMENTATION_TESTS1}
+add_test(obTvStreamingImageToOGRLayerSegmentationFilterQBOrthoWGS84shp ${SEGMENTATION_TESTS1}
      --compare-ogr  ${EPSILON_8}
      ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationOutputQBOrthoWGS84.shp
      ${TEMP}/obTvStreamingVectorizedSegmentationOutputQBOrthoWGS84.shp
@@ -124,7 +124,7 @@ ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilterQBOrthoWGS84shp ${SEGMENT
      )
 
 
-ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilterHalfSpacing ${SEGMENTATION_TESTS1}
+add_test(obTvStreamingImageToOGRLayerSegmentationFilterHalfSpacing ${SEGMENTATION_TESTS1}
      --compare-ogr  ${EPSILON_8}
      ${BASELINE_FILES}/obTvStreamingVectorizedSegmentationHalfSpacingOutput.sqlite
      ${TEMP}/obTvStreamingVectorizedSegmentationHalfSpacingOutput.sqlite
@@ -146,7 +146,7 @@ ADD_TEST(obTvStreamingImageToOGRLayerSegmentationFilterHalfSpacing ${SEGMENTATIO
 
 
 # -------            otb::OGRLayerStreamStitchingFilter   -------------
-ADD_TEST(obTuOGRLayerStreamStitchingFilter ${SEGMENTATION_TESTS1}
+add_test(obTuOGRLayerStreamStitchingFilter ${SEGMENTATION_TESTS1}
     --compare-ogr  ${EPSILON_8}
     ${BASELINE_FILES}/obTvFusionOGRTile.shp
     ${TEMP}/obTvFusionOGRTile.shp
@@ -158,7 +158,7 @@ ADD_TEST(obTuOGRLayerStreamStitchingFilter ${SEGMENTATION_TESTS1}
     )
 
 
-SET(Segmentation_SRCS1
+set(Segmentation_SRCS1
 otbHooverMatrixFilterNew.cxx
 otbHooverMatrixFilter.cxx
 otbHooverInstanceFilterNew.cxx
@@ -170,6 +170,6 @@ otbStreamingImageToOGRLayerSegmentationFilter.cxx
 otbOGRLayerStreamStitchingFilter.cxx
 )
 
-ADD_EXECUTABLE(otbSegmentationTests1 otbSegmentationTests1.cxx ${Segmentation_SRCS1})
-TARGET_LINK_LIBRARIES(otbSegmentationTests1 OTBIO OTBSegmentation  OTBTesting OTBOGRAdapters)
+add_executable(otbSegmentationTests1 otbSegmentationTests1.cxx ${Segmentation_SRCS1})
+target_link_libraries(otbSegmentationTests1 OTBIO OTBSegmentation  OTBTesting OTBOGRAdapters)
 

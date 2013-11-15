@@ -6,21 +6,21 @@
 #   MUPARSER_LIBRARIES   - List of libraries when using MuParser.
 #
 
-IF( MUPARSER_INCLUDE_DIR )
+if( MUPARSER_INCLUDE_DIR )
     # Already in cache, be silent
-    SET( MuParser_FIND_QUIETLY TRUE )
-ENDIF( MUPARSER_INCLUDE_DIR )
+    set( MuParser_FIND_QUIETLY TRUE )
+endif( MUPARSER_INCLUDE_DIR )
 
-FIND_PATH( MUPARSER_INCLUDE_DIR muParser.h
+find_path( MUPARSER_INCLUDE_DIR muParser.h
            PATH_SUFFIXES muParser )
 
-FIND_LIBRARY( MUPARSER_LIBRARIES
+find_library( MUPARSER_LIBRARIES
               NAMES muparser
               PATH_SUFFIXES muparser )
 
 # handle the QUIETLY and REQUIRED arguments and set MUPARSER_FOUND to TRUE if
 # all listed variables are TRUE
-INCLUDE( FindPackageHandleStandardArgs )
+include( FindPackageHandleStandardArgs )
 FIND_PACKAGE_HANDLE_STANDARD_ARGS( MuParser DEFAULT_MSG MUPARSER_LIBRARIES MUPARSER_INCLUDE_DIR )
 
-MARK_AS_ADVANCED( MUPARSER_INCLUDE_DIR MUPARSER_LIBRARIES )
+mark_as_advanced( MUPARSER_INCLUDE_DIR MUPARSER_LIBRARIES )

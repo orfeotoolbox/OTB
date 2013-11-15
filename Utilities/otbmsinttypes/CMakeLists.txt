@@ -1,9 +1,9 @@
-IF(WIN32)
+if(WIN32)
 
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  INSTALL(FILES inttypes.h stdint.h
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  install(FILES inttypes.h stdint.h
           DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbmsinttypes
           COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
-ENDIF(WIN32)
+endif(WIN32)

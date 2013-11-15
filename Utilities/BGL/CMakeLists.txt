@@ -1,4 +1,4 @@
-PROJECT(BGL)
+project(BGL)
 
-ADD_SUBDIRECTORY(boost)
+add_subdirectory(boost)
 

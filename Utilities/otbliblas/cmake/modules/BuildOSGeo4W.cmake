@@ -4,7 +4,7 @@
 #
 ###############################################################################
 
-MESSAGE(STATUS "Building osgeo4w binaries")
+message(STATUS "Building osgeo4w binaries")
 set(OSGEO4W_DIR osgeo4w)
 set(OSGEO4W_LIB_DIR ${OSGEO4W_DIR}/lib)
 set(OSGEO4W_ETC_DIR ${OSGEO4W_DIR}/etc)
@@ -52,7 +52,7 @@ macro (make_directories)
     )
     foreach(directory ${OSGEO4W_DIRECTORIES})
 
-    STRING(REGEX REPLACE "/" "_" target "${directory}" )
+    string(REGEX REPLACE "/" "_" target "${directory}" )
 
     add_custom_command(
         TARGET make_osgeo4w_directories
@@ -70,8 +70,8 @@ add_dependencies( copy make_osgeo4w_directories  )
 
 
 macro(copy_files GLOBPAT DESTINATION  )
-    
-    MESSAGE(STATUS "   Copying ${GLOBPAT} to ${DESTINATION}")
+
+    message(STATUS "   Copying ${GLOBPAT} to ${DESTINATION}")
     file(GLOB_RECURSE COPY_FILES
          RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
         ${GLOBPAT})
@@ -87,8 +87,8 @@ endmacro(copy_files)
 
 
 macro(copy_directory SOURCE DESTINATION  )
-    
-    MESSAGE(STATUS "   Copying ${SOURCE} to ${DESTINATION}")
+
+    message(STATUS "   Copying ${SOURCE} to ${DESTINATION}")
         add_custom_command(
             TARGET copy
             COMMAND ${CMAKE_COMMAND} -E copy_directory ${SOURCE} ${DESTINATION}
@@ -102,8 +102,8 @@ add_dependencies( tar copy  )
 
 macro (tar_directories source destination base_paths)
 
-    MESSAGE(STATUS "   Tarring ${source} to ${destination}")
-    
+    message(STATUS "   Tarring ${source} to ${destination}")
+
     add_custom_command(
         TARGET tar
         COMMAND ${CMAKE_COMMAND} -E chdir ${source} cmake -E tar cjf  ${destination} ${base_paths}

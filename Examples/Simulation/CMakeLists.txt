@@ -2,49 +2,49 @@
 # Examples on the use of segmentation algorithms
 #
 
-PROJECT(ImageSimulationExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(ImageSimulationExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(ProsailModel ProsailModel.cxx )
-TARGET_LINK_LIBRARIES(ProsailModel OTBSimulation)
-
-
-ADD_EXECUTABLE(LAIFromNDVIImageTransform LAIFromNDVIImageTransform.cxx )
-TARGET_LINK_LIBRARIES(LAIFromNDVIImageTransform OTBSimulation)
+add_executable(ProsailModel ProsailModel.cxx )
+target_link_libraries(ProsailModel OTBSimulation)
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+add_executable(LAIFromNDVIImageTransform LAIFromNDVIImageTransform.cxx )
+target_link_libraries(LAIFromNDVIImageTransform OTBSimulation)
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Simulation)
-SET(BASELINE_IMAGES_OTB ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_IMAGES_APPLI ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
 
-SET(INPUTDATA_EXAMPLES ${OTB_DATA_ROOT}/Examples)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbSimulationExamplesTests)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Simulation)
+set(BASELINE_IMAGES_OTB ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+set(BASELINE_IMAGES_APPLI ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
 
-SET(TOL 0.0)
-SET(TOL_3 0.001)
-SET(TOL_8 0.00000001)
+set(INPUTDATA_EXAMPLES ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+set(EXE_TESTS ${CXX_TEST_PATH}/otbSimulationExamplesTests)
+
+set(TOL 0.0)
+set(TOL_3 0.001)
+set(TOL_8 0.00000001)
 
 # tests#
 # ------- ProsailModelExampleTest ----------
 
-ADD_TEST(siTvProsailModelExampleTest ${EXE_TESTS}
+add_test(siTvProsailModelExampleTest ${EXE_TESTS}
      --compare-ascii ${TOL_3} ${BASELINE}/siTvProsailModelExampleTest.txt
                    ${TEMP}/siTvProsailModelExampleTest.txt
      ProsailModel
      30.0 #cab
      10.0 #car
-     0.0 #CBrown 
+     0.0 #CBrown
      0.015 #Cw
      0.009 #Cm
      1.2 #N
      2 #LAI
      50 #Angl
-     1 #PSoil 
+     1 #PSoil
      70 #Skyl
      0.2 #HSpot
      30 #TTS
@@ -54,7 +54,7 @@ ADD_TEST(siTvProsailModelExampleTest ${EXE_TESTS}
 )
 
 
-ADD_TEST(siTvLAIFromNDVIImageTransfromExampleTest  ${EXE_TESTS}
+add_test(siTvLAIFromNDVIImageTransfromExampleTest  ${EXE_TESTS}
  --compare-image ${TOL_8}   ${BASELINE_IMAGES_OTB}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
                   ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
         LAIFromNDVIImageTransform
@@ -66,7 +66,7 @@ ADD_TEST(siTvLAIFromNDVIImageTransfromExampleTest  ${EXE_TESTS}
         4  # nir
 )
 
-ADD_TEST(siTvLAIAndPROSAILToSensorResponseExampleTest  ${EXE_TESTS}
+add_test(siTvLAIAndPROSAILToSensorResponseExampleTest  ${EXE_TESTS}
  --compare-image ${TOL_8}   ${BASELINE_IMAGES_APPLI}/siTvLAIAndPROSAILToSensorResponseSmall.tif
                   ${TEMP}/siTvLAIAndPROSAILToSensorResponseSmall.tif
         LAIAndPROSAILToSensorResponse
@@ -82,8 +82,8 @@ ADD_TEST(siTvLAIAndPROSAILToSensorResponseExampleTest  ${EXE_TESTS}
 )
 
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbSimulationExamplesTests otbSimulationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbSimulationExamplesTests  OTBSimulation OTBCommon OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbSimulationExamplesTests otbSimulationExamplesTests.cxx)
+target_link_libraries(otbSimulationExamplesTests  OTBSimulation OTBCommon OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

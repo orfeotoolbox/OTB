@@ -5,7 +5,7 @@ OTB_CREATE_APPLICATION(NAME           ComputePolylineFeatureFromImage
 OTB_CREATE_APPLICATION(NAME           DSFuzzyModelEstimation
                        SOURCES        otbDSFuzzyModelEstimation.cxx
                        LINK_LIBRARIES OTBIO OTBFeatureExtraction OTBFuzzy)
-                       
+
 OTB_CREATE_APPLICATION(NAME           VectorDataDSValidation
                        SOURCES        otbVectorDataDSValidation.cxx
                        LINK_LIBRARIES OTBIO OTBFeatureExtraction OTBFuzzy)

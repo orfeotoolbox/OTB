@@ -1,61 +1,61 @@
-PROJECT(ImageExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(ImageExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(Image1 Image1.cxx )
-TARGET_LINK_LIBRARIES(Image1 OTBCommon OTBIO )
+add_executable(Image1 Image1.cxx )
+target_link_libraries(Image1 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(Image2 Image2.cxx )
-TARGET_LINK_LIBRARIES(Image2 OTBCommon OTBIO )
+add_executable(Image2 Image2.cxx )
+target_link_libraries(Image2 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(Image3 Image3.cxx )
-TARGET_LINK_LIBRARIES(Image3 OTBCommon OTBIO )
+add_executable(Image3 Image3.cxx )
+target_link_libraries(Image3 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(Image4 Image4.cxx )
-TARGET_LINK_LIBRARIES(Image4 OTBCommon OTBIO )
+add_executable(Image4 Image4.cxx )
+target_link_libraries(Image4 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(Image5 Image5.cxx )
-TARGET_LINK_LIBRARIES(Image5 OTBCommon OTBIO )
+add_executable(Image5 Image5.cxx )
+target_link_libraries(Image5 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(Image6 Image6.cxx )
-TARGET_LINK_LIBRARIES(Image6 OTBCommon OTBIO )
+add_executable(Image6 Image6.cxx )
+target_link_libraries(Image6 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(RGBImage RGBImage.cxx )
-TARGET_LINK_LIBRARIES(RGBImage OTBCommon OTBIO )
+add_executable(RGBImage RGBImage.cxx )
+target_link_libraries(RGBImage OTBCommon OTBIO )
 
-ADD_EXECUTABLE(VectorImage VectorImage.cxx )
-TARGET_LINK_LIBRARIES(VectorImage OTBCommon OTBIO )
+add_executable(VectorImage VectorImage.cxx )
+target_link_libraries(VectorImage OTBCommon OTBIO )
 
-ADD_EXECUTABLE(ImageAdaptor1 ImageAdaptor1.cxx )
-TARGET_LINK_LIBRARIES(ImageAdaptor1 OTBCommon OTBIO )
+add_executable(ImageAdaptor1 ImageAdaptor1.cxx )
+target_link_libraries(ImageAdaptor1 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(ImageAdaptor2 ImageAdaptor2.cxx )
-TARGET_LINK_LIBRARIES(ImageAdaptor2 OTBCommon OTBIO )
+add_executable(ImageAdaptor2 ImageAdaptor2.cxx )
+target_link_libraries(ImageAdaptor2 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(ImageAdaptor3 ImageAdaptor3.cxx )
-TARGET_LINK_LIBRARIES(ImageAdaptor3 OTBCommon OTBIO )
+add_executable(ImageAdaptor3 ImageAdaptor3.cxx )
+target_link_libraries(ImageAdaptor3 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(ImageAdaptor4 ImageAdaptor4.cxx )
-TARGET_LINK_LIBRARIES(ImageAdaptor4 OTBCommon OTBIO )
+add_executable(ImageAdaptor4 ImageAdaptor4.cxx )
+target_link_libraries(ImageAdaptor4 OTBCommon OTBIO )
 
-ADD_EXECUTABLE(ImageListExample ImageListExample.cxx )
-TARGET_LINK_LIBRARIES(ImageListExample OTBCommon OTBIO )
+add_executable(ImageListExample ImageListExample.cxx )
+target_link_libraries(ImageListExample OTBCommon OTBIO )
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/DataRepresentation/Image)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/DataRepresentation/Image)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbImageExamplesTests)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbImageExamplesTests)
 
-SET(TOL 0.0)
+set(TOL 0.0)
 
 
 # ------- ImageAdaptor4Test----------
 
-ADD_TEST(diTeImageAdaptor4Test1 ${EXE_TESTS}
+add_test(diTeImageAdaptor4Test1 ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/ImageAdaptorThresholdingA.png
         ${TEMP}/ImageAdaptorThresholdingA.png
@@ -67,7 +67,7 @@ ADD_TEST(diTeImageAdaptor4Test1 ${EXE_TESTS}
 
 # ------- ImageAdaptor4Test----------
 
-ADD_TEST(diTeImageAdaptor4Test2 ${EXE_TESTS}
+add_test(diTeImageAdaptor4Test2 ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/ImageAdaptorThresholdingB.png
         ${TEMP}/ImageAdaptorThresholdingB.png
@@ -79,7 +79,7 @@ ADD_TEST(diTeImageAdaptor4Test2 ${EXE_TESTS}
 
 # ------- Image5Test----------
 
-ADD_TEST(diTeImage5Test ${EXE_TESTS}
+add_test(diTeImage5Test ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/Image5.png
         ${TEMP}/Image5.png
@@ -89,7 +89,7 @@ ADD_TEST(diTeImage5Test ${EXE_TESTS}
 
 # ------- Image6Test----------
 
-ADD_TEST(diTeImage6Test ${EXE_TESTS}
+add_test(diTeImage6Test ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/Image6.tif
         ${TEMP}/Image6.tif
@@ -97,8 +97,8 @@ ADD_TEST(diTeImage6Test ${EXE_TESTS}
         ${TEMP}/Image6.tif
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbImageExamplesTests otbImageExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbImageExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbImageExamplesTests otbImageExamplesTests.cxx)
+target_link_libraries(otbImageExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

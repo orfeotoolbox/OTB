@@ -6,29 +6,29 @@
 #   LIBKML_LIBRARIES   - List of libraries when using LibKML.
 #
 
-IF( LIBKML_INCLUDE_DIR )
+if( LIBKML_INCLUDE_DIR )
     # Already in cache, be silent
-    SET( LibKML_FIND_QUIETLY TRUE )
-ENDIF( LIBKML_INCLUDE_DIR )
+    set( LibKML_FIND_QUIETLY TRUE )
+endif( LIBKML_INCLUDE_DIR )
 
-FIND_PATH( LIBKML_INCLUDE_DIR kml/dom.h )
+find_path( LIBKML_INCLUDE_DIR kml/dom.h )
 
-FIND_LIBRARY( LIBKML_BASE_LIBRARY
+find_library( LIBKML_BASE_LIBRARY
               NAMES kmlbase )
-FIND_LIBRARY( LIBKML_CONVENIENCE_LIBRARY
+find_library( LIBKML_CONVENIENCE_LIBRARY
               NAMES kmlconvenience )
-FIND_LIBRARY( LIBKML_DOM_LIBRARY
+find_library( LIBKML_DOM_LIBRARY
               NAMES kmldom )
-FIND_LIBRARY( LIBKML_ENGINE_LIBRARY
+find_library( LIBKML_ENGINE_LIBRARY
               NAMES kmlengine )
-FIND_LIBRARY( LIBKML_REGIONATOR_LIBRARY
+find_library( LIBKML_REGIONATOR_LIBRARY
               NAMES kmlregionator )
-FIND_LIBRARY( LIBKML_XSD_LIBRARY
+find_library( LIBKML_XSD_LIBRARY
               NAMES kmlxsd )
-FIND_LIBRARY( LIBKML_MINIZIP_LIBRARY
+find_library( LIBKML_MINIZIP_LIBRARY
               NAMES minizip )
 
-MARK_AS_ADVANCED(   LIBKML_INCLUDE_DIR
+mark_as_advanced(   LIBKML_INCLUDE_DIR
                     LIBKML_BASE_LIBRARY
                     LIBKML_CONVENIENCE_LIBRARY
                     LIBKML_DOM_LIBRARY
@@ -39,7 +39,7 @@ MARK_AS_ADVANCED(   LIBKML_INCLUDE_DIR
 
 # handle the QUIETLY and REQUIRED arguments and set LIBKML_FOUND to TRUE if
 # all listed variables are TRUE
-INCLUDE( FindPackageHandleStandardArgs )
+include( FindPackageHandleStandardArgs )
 FIND_PACKAGE_HANDLE_STANDARD_ARGS( LibKML DEFAULT_MSG
                                     LIBKML_BASE_LIBRARY
                                     LIBKML_CONVENIENCE_LIBRARY
@@ -51,13 +51,13 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS( LibKML DEFAULT_MSG
                                     LIBKML_INCLUDE_DIR
                                      )
 
-IF(LIBKML_FOUND)
-  SET(LIBKML_INCLUDE_DIRS ${LIBKML_INCLUDE_DIR})
-  SET(LIBKML_LIBRARIES ${LIBKML_BASE_LIBRARY}
+if(LIBKML_FOUND)
+  set(LIBKML_INCLUDE_DIRS ${LIBKML_INCLUDE_DIR})
+  set(LIBKML_LIBRARIES ${LIBKML_BASE_LIBRARY}
                        ${LIBKML_CONVENIENCE_LIBRARY}
                        ${LIBKML_DOM_LIBRARY}
                        ${LIBKML_ENGINE_LIBRARY}
                        ${LIBKML_REGIONATOR_LIBRARY}
                        ${LIBKML_XSD_LIBRARY}
                        ${LIBKML_MINIZIP_LIBRARY})
-ENDIF(LIBKML_FOUND)
+endif(LIBKML_FOUND)

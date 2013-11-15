@@ -1,30 +1,30 @@
-PROJECT(ImageRegistrationExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(ImageRegistrationExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(ImageRegistration1 ImageRegistration1.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration1 OTBCommon OTBIO ${ITK_LIBRARIES} )
+add_executable(ImageRegistration1 ImageRegistration1.cxx )
+target_link_libraries(ImageRegistration1 OTBCommon OTBIO ${ITK_LIBRARIES} )
 
-ADD_EXECUTABLE(ImageRegistration2 ImageRegistration2.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration2 OTBCommon OTBIO ${ITK_LIBRARIES} )
+add_executable(ImageRegistration2 ImageRegistration2.cxx )
+target_link_libraries(ImageRegistration2 OTBCommon OTBIO ${ITK_LIBRARIES} )
 
-ADD_EXECUTABLE(ImageRegistration9 ImageRegistration9.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration9 OTBCommon OTBIO ${ITK_LIBRARIES} )
+add_executable(ImageRegistration9 ImageRegistration9.cxx )
+target_link_libraries(ImageRegistration9 OTBCommon OTBIO ${ITK_LIBRARIES} )
 
-ADD_EXECUTABLE(ImageRegistration5 ImageRegistration5.cxx )
-TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ${ITK_LIBRARIES} )
+add_executable(ImageRegistration5 ImageRegistration5.cxx )
+target_link_libraries(ImageRegistration5 OTBCommon OTBIO ${ITK_LIBRARIES} )
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Registration)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Registration)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbRegistrationExamplesTests)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbRegistrationExamplesTests)
 
-SET(TOL 0.0)
+set(TOL 0.0)
 
-ADD_TEST(reTeImageRegistration1ExampleTest ${EXE_TESTS}
+add_test(reTeImageRegistration1ExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/ImageRegistration1Output.png
         ${TEMP}/ImageRegistration1Output.png
@@ -36,7 +36,7 @@ ADD_TEST(reTeImageRegistration1ExampleTest ${EXE_TESTS}
         ${TEMP}/ImageRegistration1DifferenceBefore.png
 )
 
-ADD_TEST(reTeImageRegistration2ExampleTest ${EXE_TESTS}
+add_test(reTeImageRegistration2ExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/ImageRegistration2Output.png
         ${TEMP}/ImageRegistration2Output.png
@@ -48,7 +48,7 @@ ADD_TEST(reTeImageRegistration2ExampleTest ${EXE_TESTS}
         ${TEMP}/ImageRegistration2CheckerboardAfter.png
 )
 
-ADD_TEST(reTeImageRegistration5Cas1ExampleTest ${EXE_TESTS}
+add_test(reTeImageRegistration5Cas1ExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/ImageRegistration5Output1.png
         ${TEMP}/ImageRegistration5Output1.png
@@ -59,7 +59,7 @@ ADD_TEST(reTeImageRegistration5Cas1ExampleTest ${EXE_TESTS}
         ${TEMP}/ImageRegistration5DifferenceBefore1.png
         ${TEMP}/ImageRegistration5DifferenceAfter1.png
 )
-ADD_TEST(reTeImageRegistration5Cas2ExampleTest ${EXE_TESTS}
+add_test(reTeImageRegistration5Cas2ExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/ImageRegistration5Output2.png
         ${TEMP}/ImageRegistration5Output2.png
@@ -71,8 +71,8 @@ ADD_TEST(reTeImageRegistration5Cas2ExampleTest ${EXE_TESTS}
         ${TEMP}/ImageRegistration5DifferenceAfter2.png
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests ${ITK_LIBRARIES} OTBCommon OTBIO OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
+target_link_libraries(otbRegistrationExamplesTests ${ITK_LIBRARIES} OTBCommon OTBIO OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

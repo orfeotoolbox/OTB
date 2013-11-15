@@ -1,120 +1,120 @@
-PROJECT(FeatureExtractionExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(FeatureExtractionExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(AlignmentsExample AlignmentsExample.cxx )
-TARGET_LINK_LIBRARIES(AlignmentsExample OTBFeatureExtraction OTBCommon OTBIO
+add_executable(AlignmentsExample AlignmentsExample.cxx )
+target_link_libraries(AlignmentsExample OTBFeatureExtraction OTBCommon OTBIO
 ${ITK_LIBRARIES})
 
-ADD_EXECUTABLE(TouziEdgeDetectorExample TouziEdgeDetectorExample.cxx )
-TARGET_LINK_LIBRARIES(TouziEdgeDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
+add_executable(TouziEdgeDetectorExample TouziEdgeDetectorExample.cxx )
+target_link_libraries(TouziEdgeDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(HarrisExample HarrisExample.cxx )
-TARGET_LINK_LIBRARIES(HarrisExample OTBFeatureExtraction OTBCommon OTBIO)
+add_executable(HarrisExample HarrisExample.cxx )
+target_link_libraries(HarrisExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(ComplexMomentsImageFunctionExample ComplexMomentsImageFunctionExample.cxx )
-TARGET_LINK_LIBRARIES(ComplexMomentsImageFunctionExample OTBFeatureExtraction OTBCommon OTBIO)
+add_executable(ComplexMomentsImageFunctionExample ComplexMomentsImageFunctionExample.cxx )
+target_link_libraries(ComplexMomentsImageFunctionExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(ComplexMomentPathExample ComplexMomentPathExample.cxx )
-TARGET_LINK_LIBRARIES(ComplexMomentPathExample OTBFeatureExtraction OTBCommon OTBIO)
+add_executable(ComplexMomentPathExample ComplexMomentPathExample.cxx )
+target_link_libraries(ComplexMomentPathExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(HuMomentsImageFunctionExample HuMomentsImageFunctionExample.cxx )
-TARGET_LINK_LIBRARIES(HuMomentsImageFunctionExample OTBFeatureExtraction OTBCommon OTBIO)
+add_executable(HuMomentsImageFunctionExample HuMomentsImageFunctionExample.cxx )
+target_link_libraries(HuMomentsImageFunctionExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(FlusserMomentsImageFunctionExample FlusserMomentsImageFunctionExample.cxx )
-TARGET_LINK_LIBRARIES(FlusserMomentsImageFunctionExample OTBFeatureExtraction OTBCommon OTBIO)
+add_executable(FlusserMomentsImageFunctionExample FlusserMomentsImageFunctionExample.cxx )
+target_link_libraries(FlusserMomentsImageFunctionExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(RatioLineDetectorExample RatioLineDetectorExample.cxx )
-TARGET_LINK_LIBRARIES(RatioLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
+add_executable(RatioLineDetectorExample RatioLineDetectorExample.cxx )
+target_link_libraries(RatioLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(CorrelationLineDetectorExample CorrelationLineDetectorExample.cxx )
-TARGET_LINK_LIBRARIES(CorrelationLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
+add_executable(CorrelationLineDetectorExample CorrelationLineDetectorExample.cxx )
+target_link_libraries(CorrelationLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(AssymmetricFusionOfLineDetectorExample
+add_executable(AssymmetricFusionOfLineDetectorExample
 AssymmetricFusionOfLineDetectorExample.cxx)
-TARGET_LINK_LIBRARIES(AssymmetricFusionOfLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
+target_link_libraries(AssymmetricFusionOfLineDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(LocalHoughExample LocalHoughExample.cxx )
-TARGET_LINK_LIBRARIES(LocalHoughExample OTBIO OTBFeatureExtraction OTBCommon)
+add_executable(LocalHoughExample LocalHoughExample.cxx )
+target_link_libraries(LocalHoughExample OTBIO OTBFeatureExtraction OTBCommon)
 
-ADD_EXECUTABLE(ExtractSegmentsByStepsExample
+add_executable(ExtractSegmentsByStepsExample
 ExtractSegmentsByStepsExample.cxx)
-TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBFeatureExtraction OTBCommon OTBIO)
+target_link_libraries(ExtractSegmentsByStepsExample OTBFeatureExtraction OTBCommon OTBIO)
 
-IF(OTB_USE_MAPNIK)
-ADD_EXECUTABLE(LineSegmentDetectorExample LineSegmentDetectorExample.cxx)
-TARGET_LINK_LIBRARIES(LineSegmentDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
+if(OTB_USE_MAPNIK)
+add_executable(LineSegmentDetectorExample LineSegmentDetectorExample.cxx)
+target_link_libraries(LineSegmentDetectorExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(RightAngleDetectionExample RightAngleDetectionExample.cxx)
-TARGET_LINK_LIBRARIES(RightAngleDetectionExample OTBFeatureExtraction OTBCommon OTBIO)
-ENDIF(OTB_USE_MAPNIK)
+add_executable(RightAngleDetectionExample RightAngleDetectionExample.cxx)
+target_link_libraries(RightAngleDetectionExample OTBFeatureExtraction OTBCommon OTBIO)
+endif(OTB_USE_MAPNIK)
 
-ADD_EXECUTABLE(ExtractSegmentsExample
+add_executable(ExtractSegmentsExample
 ExtractSegmentsExample.cxx)
-TARGET_LINK_LIBRARIES(ExtractSegmentsExample OTBFeatureExtraction OTBCommon OTBIO)
+target_link_libraries(ExtractSegmentsExample OTBFeatureExtraction OTBCommon OTBIO)
 
-ADD_EXECUTABLE(ExtractRoadByStepsExample ExtractRoadByStepsExample.cxx)
-TARGET_LINK_LIBRARIES(ExtractRoadByStepsExample OTBIO OTBCommon OTBFeatureExtraction
+add_executable(ExtractRoadByStepsExample ExtractRoadByStepsExample.cxx)
+target_link_libraries(ExtractRoadByStepsExample OTBIO OTBCommon OTBFeatureExtraction
 ${ITK_LIBRARIES}  )
 
-ADD_EXECUTABLE(ExtractRoadExample ExtractRoadExample.cxx)
-TARGET_LINK_LIBRARIES(ExtractRoadExample OTBIO OTBCommon OTBFeatureExtraction
+add_executable(ExtractRoadExample ExtractRoadExample.cxx)
+target_link_libraries(ExtractRoadExample OTBIO OTBCommon OTBFeatureExtraction
 ${ITK_LIBRARIES}  )
 
-ADD_EXECUTABLE(SeamCarvingExample SeamCarvingExample.cxx)
-TARGET_LINK_LIBRARIES(SeamCarvingExample OTBIO OTBCommon OTBFeatureExtraction
+add_executable(SeamCarvingExample SeamCarvingExample.cxx)
+target_link_libraries(SeamCarvingExample OTBIO OTBCommon OTBFeatureExtraction
 ${ITK_LIBRARIES}  )
 
-ADD_EXECUTABLE(SeamCarvingOtherExample SeamCarvingOtherExample.cxx)
-TARGET_LINK_LIBRARIES(SeamCarvingOtherExample OTBIO OTBCommon OTBFeatureExtraction
+add_executable(SeamCarvingOtherExample SeamCarvingOtherExample.cxx)
+target_link_libraries(SeamCarvingOtherExample OTBIO OTBCommon OTBFeatureExtraction
 ${ITK_LIBRARIES}  )
 
-ADD_EXECUTABLE(ThresholdToPointSetExample ThresholdToPointSetExample.cxx)
-TARGET_LINK_LIBRARIES(ThresholdToPointSetExample OTBIO OTBCommon OTBFeatureExtraction
-${ITK_LIBRARIES}  )
-
-
-ADD_EXECUTABLE(SURFExample SURFExample.cxx)
-TARGET_LINK_LIBRARIES(SURFExample OTBIO OTBCommon OTBFeatureExtraction
+add_executable(ThresholdToPointSetExample ThresholdToPointSetExample.cxx)
+target_link_libraries(ThresholdToPointSetExample OTBIO OTBCommon OTBFeatureExtraction
 ${ITK_LIBRARIES}  )
 
 
-ADD_EXECUTABLE(ParallelLineDetectionExample ParallelLineDetectionExample.cxx)
-TARGET_LINK_LIBRARIES(ParallelLineDetectionExample OTBIO OTBCommon OTBFeatureExtraction
+add_executable(SURFExample SURFExample.cxx)
+target_link_libraries(SURFExample OTBIO OTBCommon OTBFeatureExtraction
 ${ITK_LIBRARIES}  )
 
-ADD_EXECUTABLE(CloudDetectionExample CloudDetectionExample.cxx)
-TARGET_LINK_LIBRARIES(CloudDetectionExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES}  )
 
-ADD_EXECUTABLE(TextureExample TextureExample.cxx)
-TARGET_LINK_LIBRARIES(TextureExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES}  )
+add_executable(ParallelLineDetectionExample ParallelLineDetectionExample.cxx)
+target_link_libraries(ParallelLineDetectionExample OTBIO OTBCommon OTBFeatureExtraction
+${ITK_LIBRARIES}  )
 
-ADD_EXECUTABLE(PanTexExample PanTexExample.cxx)
-TARGET_LINK_LIBRARIES(PanTexExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES}  )
+add_executable(CloudDetectionExample CloudDetectionExample.cxx)
+target_link_libraries(CloudDetectionExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES}  )
 
-ADD_EXECUTABLE(SFSExample SFSExample.cxx)
-TARGET_LINK_LIBRARIES(SFSExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES}  )
+add_executable(TextureExample TextureExample.cxx)
+target_link_libraries(TextureExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES}  )
+
+add_executable(PanTexExample PanTexExample.cxx)
+target_link_libraries(PanTexExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES}  )
+
+add_executable(SFSExample SFSExample.cxx)
+target_link_libraries(SFSExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES}  )
 
 
-ADD_EXECUTABLE(EdgeDensityExample EdgeDensityExample.cxx)
-TARGET_LINK_LIBRARIES(EdgeDensityExample OTBIO OTBCommon OTBBasicFilters ${ITK_LIBRARIES}  )
+add_executable(EdgeDensityExample EdgeDensityExample.cxx)
+target_link_libraries(EdgeDensityExample OTBIO OTBCommon OTBBasicFilters ${ITK_LIBRARIES}  )
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(INPUTDATA_OTB ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA_OTB ${OTB_DATA_ROOT}/Input)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS1 ${CXX_TEST_PATH}/otbFeatureExtractionExamplesTests1)
-SET(EXE_TESTS2 ${CXX_TEST_PATH}/otbFeatureExtractionExamplesTests2)
+set(EXE_TESTS1 ${CXX_TEST_PATH}/otbFeatureExtractionExamplesTests1)
+set(EXE_TESTS2 ${CXX_TEST_PATH}/otbFeatureExtractionExamplesTests2)
 
-SET(TOL 0.0)
+set(TOL 0.0)
 
 
 # ------- CorrelationLineDetectorExampleTest----------
 
-ADD_TEST(feTeCorrelationLineDetectorExampleTest ${EXE_TESTS1}
+add_test(feTeCorrelationLineDetectorExampleTest ${EXE_TESTS1}
         --compare-n-images ${TOL} 2
         ${BASELINE}/amstLineCorrelations.png
         ${TEMP}/amstLineCorrelations.png
@@ -129,7 +129,7 @@ ADD_TEST(feTeCorrelationLineDetectorExampleTest ${EXE_TESTS1}
 
 # ------- LocalHoughExampleTest----------
 
-ADD_TEST(feTeLocalHoughExampleTest ${EXE_TESTS1}
+add_test(feTeLocalHoughExampleTest ${EXE_TESTS1}
         --compare-n-images ${TOL} 1
         ${BASELINE}/detected_local_hough.png
         ${TEMP}/detected_local_hough.png
@@ -141,7 +141,7 @@ ADD_TEST(feTeLocalHoughExampleTest ${EXE_TESTS1}
 
 # ------- HarrisExampleTest----------
 
-ADD_TEST(feTeHarrisExampleTest ${EXE_TESTS1}
+add_test(feTeHarrisExampleTest ${EXE_TESTS1}
         --compare-n-images ${TOL} 1
         ${BASELINE}/ROISpot5Harris.png
         ${TEMP}/ROISpot5Harris.png
@@ -153,7 +153,7 @@ ADD_TEST(feTeHarrisExampleTest ${EXE_TESTS1}
 
 # ------- TouziEdgeDetectorExampleTest----------
 
-ADD_TEST(feTeTouziEdgeDetectorExampleTest ${EXE_TESTS1}
+add_test(feTeTouziEdgeDetectorExampleTest ${EXE_TESTS1}
         --compare-n-images ${TOL} 2
         ${BASELINE}/amstTouziEdges.png
         ${TEMP}/amstTouziEdges.png
@@ -168,7 +168,7 @@ ADD_TEST(feTeTouziEdgeDetectorExampleTest ${EXE_TESTS1}
 
 # ------- ExtractSegmentsByStepsExampleTest----------
 
-ADD_TEST(feTeExtractSegmentsByStepsExampleTest ${EXE_TESTS1}
+add_test(feTeExtractSegmentsByStepsExampleTest ${EXE_TESTS1}
         --compare-n-images ${TOL} 1
         ${BASELINE}/amstSegmentExtractionBySteps.png
         ${TEMP}/amstSegmentExtractionBySteps.png
@@ -180,7 +180,7 @@ ADD_TEST(feTeExtractSegmentsByStepsExampleTest ${EXE_TESTS1}
 
 # ------- AssymmetricFusionOfLineDetectorExampleTest----------
 
-ADD_TEST(feTeAssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
+add_test(feTeAssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
         --compare-n-images ${TOL} 1
         ${BASELINE}/amstLineFusion.png
         ${TEMP}/amstLineFusion.png
@@ -192,7 +192,7 @@ ADD_TEST(feTeAssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
 
 # ------- ExtractSegmentsExampleTest----------
 
-ADD_TEST(feTeExtractSegmentsExampleTest ${EXE_TESTS1}
+add_test(feTeExtractSegmentsExampleTest ${EXE_TESTS1}
         --compare-n-images ${TOL} 1
         ${BASELINE}/amstSegmentExtraction.png
         ${TEMP}/amstSegmentExtraction.png
@@ -204,7 +204,7 @@ ADD_TEST(feTeExtractSegmentsExampleTest ${EXE_TESTS1}
 
 # ------- RatioLineDetectorExampleTest----------
 
-ADD_TEST(feTeRatioLineDetectorExampleTest ${EXE_TESTS1}
+add_test(feTeRatioLineDetectorExampleTest ${EXE_TESTS1}
         --compare-n-images ${TOL} 2
         ${BASELINE}/amstLineRatios.png
         ${TEMP}/amstLineRatios.png
@@ -219,7 +219,7 @@ ADD_TEST(feTeRatioLineDetectorExampleTest ${EXE_TESTS1}
 
 # ------- AlignmentsExampleTest----------
 
-ADD_TEST(feTeAlignmentsExampleTest ${EXE_TESTS1}
+add_test(feTeAlignmentsExampleTest ${EXE_TESTS1}
         --compare-n-images ${TOL} 1
         ${BASELINE}/QB_SuburbAlign.png
         ${TEMP}/QB_SuburbAlign.png
@@ -232,7 +232,7 @@ ADD_TEST(feTeAlignmentsExampleTest ${EXE_TESTS1}
 # ------- RoadExtractionExamplesTest----------
 
 
-ADD_TEST(feTeExtractRoadByStepsExampleTest ${EXE_TESTS2}
+add_test(feTeExtractRoadByStepsExampleTest ${EXE_TESTS2}
         --compare-n-images ${TOL} 2
         ${BASELINE}/qb_ExtractRoad_pretty.png
         ${TEMP}/qb_ExtractRoad_pretty.png
@@ -246,7 +246,7 @@ ADD_TEST(feTeExtractRoadByStepsExampleTest ${EXE_TESTS2}
 )
 
 
-ADD_TEST(feTeExtractRoadExampleTest ${EXE_TESTS2}
+add_test(feTeExtractRoadExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/ExtractRoadExampleOutput.png
         ${TEMP}/ExtractRoadExampleOutput.png
@@ -258,7 +258,7 @@ ADD_TEST(feTeExtractRoadExampleTest ${EXE_TESTS2}
 
 # ------- SeamCarvingExamplesTest----------
 
-ADD_TEST(feTeSeamCarvingExampleTest ${EXE_TESTS2}
+add_test(feTeSeamCarvingExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/SeamCarvingExampleOutput.png
         ${TEMP}/SeamCarvingExampleOutput.png
@@ -268,7 +268,7 @@ ADD_TEST(feTeSeamCarvingExampleTest ${EXE_TESTS2}
         50
 )
 
-ADD_TEST(feTeSeamCarvingOtherExampleTest ${EXE_TESTS2}
+add_test(feTeSeamCarvingOtherExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/SeamCarvingOtherExampleOutput.png
         ${TEMP}/SeamCarvingOtherExampleOutput.png
@@ -278,7 +278,7 @@ ADD_TEST(feTeSeamCarvingOtherExampleTest ${EXE_TESTS2}
         50
 )
 
-#ADD_TEST(feTeImageToSIFTKeyPointSetFilterTest ${EXE_TESTS}
+#add_test(feTeImageToSIFTKeyPointSetFilterTest ${EXE_TESTS}
 #        --compare-image ${TOL}
 #        ${BASELINE}/ImageToSIFTKeyPointSetFilterOutput.png
 #        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
@@ -291,7 +291,7 @@ ADD_TEST(feTeSeamCarvingOtherExampleTest ${EXE_TESTS2}
 
 # ------- CloudDetectionExampleTest----------
 
-ADD_TEST(feTeCloudDetectionExampleTest ${EXE_TESTS2}
+add_test(feTeCloudDetectionExampleTest ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/CloudDetectionOutput.png
         ${TEMP}/PrettyCloudDetectionOutput.png
@@ -303,11 +303,11 @@ ADD_TEST(feTeCloudDetectionExampleTest ${EXE_TESTS2}
         553 467 734 581 0.4 0.6 1.0
 )
 
-IF(OTB_USE_MAPNIK)
+if(OTB_USE_MAPNIK)
 
 # ------- Line Segment Detector test----------
 
-ADD_TEST(feTeLineSegmentDetectorExampleTest  ${EXE_TESTS2}
+add_test(feTeLineSegmentDetectorExampleTest  ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/feTeLineSegmentDetectorExampleOutput.png
         ${TEMP}/feTeLineSegmentDetectorExampleOutput.png
@@ -318,7 +318,7 @@ ADD_TEST(feTeLineSegmentDetectorExampleTest  ${EXE_TESTS2}
 
 # ------- Right Angle Detection test----------
 
-ADD_TEST(feTeRightAngleDetectionExample  ${EXE_TESTS2}
+add_test(feTeRightAngleDetectionExample  ${EXE_TESTS2}
         --compare-image ${TOL}
         ${BASELINE}/feTeRightAngleDetectionExampleOutput.png
         ${TEMP}/feTeRightAngleDetectionExampleOutput.png
@@ -331,14 +331,14 @@ ADD_TEST(feTeRightAngleDetectionExample  ${EXE_TESTS2}
         10.
 )
 
-ENDIF(OTB_USE_MAPNIK)
+endif(OTB_USE_MAPNIK)
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests1   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
+target_link_libraries(otbFeatureExtractionExamplesTests1   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-ADD_EXECUTABLE(otbFeatureExtractionExamplesTests2 otbFeatureExtractionExamplesTests2.cxx)
-TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests2   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+add_executable(otbFeatureExtractionExamplesTests2 otbFeatureExtractionExamplesTests2.cxx)
+target_link_libraries(otbFeatureExtractionExamplesTests2   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

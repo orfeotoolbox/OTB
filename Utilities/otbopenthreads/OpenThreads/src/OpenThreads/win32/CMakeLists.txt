@@ -1,12 +1,12 @@
 # This file should only be included when WIN32
 
-SET(LIB_NAME OpenThreads)
-SET(LIB_PUBLIC_HEADERS ${OpenThreads_PUBLIC_HEADERS})
+set(LIB_NAME OpenThreads)
+set(LIB_PUBLIC_HEADERS ${OpenThreads_PUBLIC_HEADERS})
 
-SOURCE_GROUP("Header Files" FILES ${LIB_PUBLIC_HEADERS})
-SET_SOURCE_FILES_PROPERTIES(${LIB_PUBLIC_HEADERS} PROPERTIES HEADER_FILE_ONLY ON)
+source_group("Header Files" FILES ${LIB_PUBLIC_HEADERS})
+set_source_files_properties(${LIB_PUBLIC_HEADERS} PROPERTIES HEADER_FILE_ONLY ON)
 
-ADD_LIBRARY(${LIB_NAME}
+add_library(${LIB_NAME}
     ${OPENTHREADS_USER_DEFINED_DYNAMIC_OR_STATIC}
     ${LIB_PUBLIC_HEADERS}
 	HandleHolder.h
@@ -22,30 +22,30 @@ ADD_LIBRARY(${LIB_NAME}
 )
 
 
-IF(OPENTHREADS_SONAMES)
-  SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES VERSION ${OPENTHREADS_VERSION} SOVERSION ${OPENTHREADS_SOVERSION})
-ENDIF(OPENTHREADS_SONAMES)
+if(OPENTHREADS_SONAMES)
+  set_target_properties(${LIB_NAME} PROPERTIES VERSION ${OPENTHREADS_VERSION} SOVERSION ${OPENTHREADS_SOVERSION})
+endif(OPENTHREADS_SONAMES)
 
-# Since we're building different platforms binaries in 
-# their respective directories, we need to set the 
+# Since we're building different platforms binaries in
+# their respective directories, we need to set the
 # link directory so it can find this location.
-LINK_DIRECTORIES(
+link_directories(
 	${CMAKE_CURRENT_BINARY_DIR}
 )
 
-IF(NOT OTB_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS ${LIB_NAME}
+if(NOT OTB_INSTALL_NO_LIBRARIES)
+  install(TARGETS ${LIB_NAME}
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+endif(NOT OTB_INSTALL_NO_LIBRARIES)
 
 # OpenThreads headers are not needed by OTB headers, so avoid exporting them
-#IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-#  INSTALL(FILES ${OpenThreads_PUBLIC_HEADERS}
+#if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+#  install(FILES ${OpenThreads_PUBLIC_HEADERS}
 #              DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenthreads/OpenThreads/include/OpenThreads
 #              COMPONENT Development)
-#ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+#endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 
-#commented out# INCLUDE(ModuleInstall OPTIONAL)
+#commented out# include(ModuleInstall OPTIONAL)

@@ -26,7 +26,7 @@ set(LIBLAS_HPP
   ${LIBLAS_HEADERS_DIR}/lasbounds.hpp
   ${LIBLAS_HEADERS_DIR}/lasclassification.hpp
   ${LIBLAS_HEADERS_DIR}/lascolor.hpp
-  ${LIBLAS_HEADERS_DIR}/lasdimension.hpp  
+  ${LIBLAS_HEADERS_DIR}/lasdimension.hpp
   ${LIBLAS_HEADERS_DIR}/laserror.hpp
   ${LIBLAS_HEADERS_DIR}/lasfilter.hpp
   ${LIBLAS_HEADERS_DIR}/lasheader.hpp
@@ -35,7 +35,7 @@ set(LIBLAS_HPP
   ${LIBLAS_HEADERS_DIR}/lasreader.hpp
   ${LIBLAS_HEADERS_DIR}/lasschema.hpp
   ${LIBLAS_HEADERS_DIR}/lasspatialreference.hpp
-  ${LIBLAS_HEADERS_DIR}/lastransform.hpp  
+  ${LIBLAS_HEADERS_DIR}/lastransform.hpp
   ${LIBLAS_HEADERS_DIR}/lasvariablerecord.hpp
   ${LIBLAS_HEADERS_DIR}/lasversion.hpp
   ${LIBLAS_HEADERS_DIR}/laswriter.hpp
@@ -91,10 +91,10 @@ set(LIBLAS_DETAIL_HPP
 set(LIBLAS_DETAIL_INDEX_HPP
   ${LIBLAS_HEADERS_DIR}/detail/index/indexoutput.hpp
   ${LIBLAS_HEADERS_DIR}/detail/index/indexcell.hpp)
-  
+
 set(LIBLAS_DETAIL_READER_HPP
   ${LIBLAS_HEADERS_DIR}/detail/reader/cachedreader.hpp
-  ${LIBLAS_HEADERS_DIR}/detail/reader/reader.hpp  
+  ${LIBLAS_HEADERS_DIR}/detail/reader/reader.hpp
   ${LIBLAS_HEADERS_DIR}/detail/reader/header.hpp
   ${LIBLAS_HEADERS_DIR}/detail/reader/point.hpp)
 
@@ -123,7 +123,7 @@ set(LIBLAS_CPP
 
 set(LIBLAS_DETAIL_CPP
   detail/utility.cpp)
-  
+
 set(LIBLAS_DETAIL_INDEX_CPP
   detail/index/indexcell.cpp
   detail/index/indexoutput.cpp)

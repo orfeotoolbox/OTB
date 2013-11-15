@@ -1,48 +1,48 @@
-PROJECT(BasicFiltersExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(BasicFiltersExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(LeeImageFilter LeeImageFilter.cxx )
-TARGET_LINK_LIBRARIES(LeeImageFilter OTBCommon OTBIO)
+add_executable(LeeImageFilter LeeImageFilter.cxx )
+target_link_libraries(LeeImageFilter OTBCommon OTBIO)
 
-ADD_EXECUTABLE(FrostImageFilter FrostImageFilter.cxx )
-TARGET_LINK_LIBRARIES(FrostImageFilter OTBCommon OTBIO)
+add_executable(FrostImageFilter FrostImageFilter.cxx )
+target_link_libraries(FrostImageFilter OTBCommon OTBIO)
 
-ADD_EXECUTABLE(DEMToRainbowExample DEMToRainbowExample.cxx )
-TARGET_LINK_LIBRARIES(DEMToRainbowExample OTBCommon OTBIO)
+add_executable(DEMToRainbowExample DEMToRainbowExample.cxx )
+target_link_libraries(DEMToRainbowExample OTBCommon OTBIO)
 
-ADD_EXECUTABLE(ScalingFilterExample ScalingFilterExample.cxx )
-TARGET_LINK_LIBRARIES(ScalingFilterExample OTBCommon OTBIO)
+add_executable(ScalingFilterExample ScalingFilterExample.cxx )
+target_link_libraries(ScalingFilterExample OTBCommon OTBIO)
 
-ADD_EXECUTABLE(PrintableImageFilterExample PrintableImageFilterExample.cxx )
-TARGET_LINK_LIBRARIES(PrintableImageFilterExample OTBCommon OTBIO)
+add_executable(PrintableImageFilterExample PrintableImageFilterExample.cxx )
+target_link_libraries(PrintableImageFilterExample OTBCommon OTBIO)
 
-ADD_EXECUTABLE(IndexedToRGBExample IndexedToRGBExample.cxx )
-TARGET_LINK_LIBRARIES(IndexedToRGBExample OTBCommon OTBIO)
+add_executable(IndexedToRGBExample IndexedToRGBExample.cxx )
+target_link_libraries(IndexedToRGBExample OTBCommon OTBIO)
 
-ADD_EXECUTABLE(MeanShiftSegmentationFilterExample MeanShiftSegmentationFilterExample.cxx )
-TARGET_LINK_LIBRARIES(MeanShiftSegmentationFilterExample OTBCommon OTBIO OTBBasicFilters OTBSegmentation)
+add_executable(MeanShiftSegmentationFilterExample MeanShiftSegmentationFilterExample.cxx )
+target_link_libraries(MeanShiftSegmentationFilterExample OTBCommon OTBIO OTBBasicFilters OTBSegmentation)
 
-ADD_EXECUTABLE(HillShadingExample HillShadingExample.cxx )
-TARGET_LINK_LIBRARIES(HillShadingExample OTBCommon OTBIO OTBBasicFilters)
+add_executable(HillShadingExample HillShadingExample.cxx )
+target_link_libraries(HillShadingExample OTBCommon OTBIO OTBBasicFilters)
 
-ADD_EXECUTABLE(BandMathFilterExample BandMathFilterExample.cxx )
-TARGET_LINK_LIBRARIES(BandMathFilterExample OTBCommon OTBIO OTBBasicFilters)
+add_executable(BandMathFilterExample BandMathFilterExample.cxx )
+target_link_libraries(BandMathFilterExample OTBCommon OTBIO OTBBasicFilters)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/BasicFilters)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/BasicFilters)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbBasicFiltersExamplesTests)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbBasicFiltersExamplesTests)
 
-SET(NOTOL 0.0)
+set(NOTOL 0.0)
 
 
 # ------- LeeImageFilterTest----------
 
-ADD_TEST(bfTeLeeImageFilterTest ${EXE_TESTS}
+add_test(bfTeLeeImageFilterTest ${EXE_TESTS}
         --compare-n-images ${NOTOL} 1
         ${BASELINE}/GomaSmallLeeFiltered.png
         ${TEMP}/GomaSmallLeeFiltered.png
@@ -54,7 +54,7 @@ ADD_TEST(bfTeLeeImageFilterTest ${EXE_TESTS}
 
 # ------- FrostImageFilterTest----------
 
-ADD_TEST(bfTeFrostImageFilterTest ${EXE_TESTS}
+add_test(bfTeFrostImageFilterTest ${EXE_TESTS}
         --compare-n-images ${NOTOL} 1
         ${BASELINE}/GomaSmallFrostFiltered.png
         ${TEMP}/GomaSmallFrostFiltered.png
@@ -66,7 +66,7 @@ ADD_TEST(bfTeFrostImageFilterTest ${EXE_TESTS}
 
 # ------- DEMToRainbowExampleTest ----------
 
-ADD_TEST(bfTeDEMToRainbowExampleTest ${EXE_TESTS}
+add_test(bfTeDEMToRainbowExampleTest ${EXE_TESTS}
         --compare-n-images ${NOTOL} 1
         ${BASELINE}/DEMToRainbowImageGenerator.png
         ${TEMP}/DEMToRainbowImageGenerator.png
@@ -78,7 +78,7 @@ ADD_TEST(bfTeDEMToRainbowExampleTest ${EXE_TESTS}
 
 # ------- ScalingFilterExampleTest ----------
 
-ADD_TEST(bfTeScalingFilterExampleTest ${EXE_TESTS}
+add_test(bfTeScalingFilterExampleTest ${EXE_TESTS}
         --compare-n-images ${NOTOL} 2
         ${BASELINE}/QB_Toulouse_Ortho_PAN_rescaled.png
         ${TEMP}/QB_Toulouse_Ortho_PAN_rescaled.png
@@ -92,7 +92,7 @@ ADD_TEST(bfTeScalingFilterExampleTest ${EXE_TESTS}
 
 # ------- PrintableImageFilterTest----------
 
-ADD_TEST(bfTePrintableImageFilterExample1Test ${EXE_TESTS}
+add_test(bfTePrintableImageFilterExample1Test ${EXE_TESTS}
         --compare-n-images ${NOTOL} 1
         ${BASELINE}/PrintableExampleOutput1.png
         ${TEMP}/PrintableExampleOutput1.png
@@ -102,7 +102,7 @@ ADD_TEST(bfTePrintableImageFilterExample1Test ${EXE_TESTS}
     1 2 3
 )
 
-ADD_TEST(bfTePrintableImageFilteExample2rTest ${EXE_TESTS}
+add_test(bfTePrintableImageFilteExample2rTest ${EXE_TESTS}
         --compare-n-images ${NOTOL} 1
         ${BASELINE}/PrintableExampleOutput2.png
         ${TEMP}/PrintableExampleOutput2.png
@@ -114,7 +114,7 @@ ADD_TEST(bfTePrintableImageFilteExample2rTest ${EXE_TESTS}
 
 # ------- IndexedToRGBExampleTest----------
 
-ADD_TEST(bfTeIndexedToRGBExampleTest ${EXE_TESTS}
+add_test(bfTeIndexedToRGBExampleTest ${EXE_TESTS}
         --compare-n-images ${NOTOL} 2
         ${BASELINE}/buildingExtractionRGB.png
         ${TEMP}/buildingExtractionRGB.png
@@ -126,7 +126,7 @@ ADD_TEST(bfTeIndexedToRGBExampleTest ${EXE_TESTS}
         ${TEMP}/buildingExtractionIndexed_scaled.png
 )
 
-ADD_TEST(bfTeMeanShiftSegmentationFilterExampleTest ${EXE_TESTS}
+add_test(bfTeMeanShiftSegmentationFilterExampleTest ${EXE_TESTS}
         --compare-n-images ${NOTOL} 4
         ${BASELINE}/MSClusteredOutput.tif
         ${TEMP}/MSClusteredOutput.tif
@@ -151,7 +151,7 @@ ADD_TEST(bfTeMeanShiftSegmentationFilterExampleTest ${EXE_TESTS}
 
 # ------- HillShadingExampleTest ----------
 
-ADD_TEST(bfTeHillShadingExampleTest ${EXE_TESTS}
+add_test(bfTeHillShadingExampleTest ${EXE_TESTS}
         --compare-n-images ${NOTOL} 2
             ${BASELINE}/HillShadingExample.png
             ${TEMP}/HillShadingExample.png
@@ -163,8 +163,8 @@ ADD_TEST(bfTeHillShadingExampleTest ${EXE_TESTS}
         6.8 45.3 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbBasicFiltersExamplesTests otbBasicFiltersExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbBasicFiltersExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbBasicFiltersExamplesTests otbBasicFiltersExamplesTests.cxx)
+target_link_libraries(otbBasicFiltersExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

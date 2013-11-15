@@ -1,36 +1,36 @@
-PROJECT(ImageRadiometryExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(ImageRadiometryExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx )
-TARGET_LINK_LIBRARIES(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO )
+add_executable(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx )
+target_link_libraries(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO )
 
-ADD_EXECUTABLE(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx )
-TARGET_LINK_LIBRARIES(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO )
+add_executable(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx )
+target_link_libraries(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO )
 
 
-ADD_EXECUTABLE(NDVIRAndNIRVegetationIndexImageFilter NDVIRAndNIRVegetationIndexImageFilter.cxx )
-TARGET_LINK_LIBRARIES(NDVIRAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO )
+add_executable(NDVIRAndNIRVegetationIndexImageFilter NDVIRAndNIRVegetationIndexImageFilter.cxx )
+target_link_libraries(NDVIRAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO )
 
-ADD_EXECUTABLE(AtmosphericCorrectionSequencement AtmosphericCorrectionSequencement.cxx )
-TARGET_LINK_LIBRARIES(AtmosphericCorrectionSequencement OTBRadiometry OTBCommon OTBIO )
+add_executable(AtmosphericCorrectionSequencement AtmosphericCorrectionSequencement.cxx )
+target_link_libraries(AtmosphericCorrectionSequencement OTBRadiometry OTBCommon OTBIO )
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Radiometry)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Radiometry)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbRadiometryExamplesTests)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbRadiometryExamplesTests)
 
 #Tolerance sur diff pixel image
-SET(TOL 0.0)
-SET(EPSILON 0.000000000001)
+set(TOL 0.0)
+set(EPSILON 0.000000000001)
 
 
 # -------            ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
+add_test(raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
   --compare-image ${EPSILON}
                     ${BASELINE}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
                   ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
@@ -49,7 +49,7 @@ ADD_TEST(raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TES
 
 # -------            AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest   ------------------------------
 
-ADD_TEST(raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
+add_test(raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
   #--compare-image ${TOL}
               #${BASELINE}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
               #${TEMP}/AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest.tif
@@ -70,7 +70,7 @@ ADD_TEST(raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TEST
 
 # -------            NDVIRAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(raTeNDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
+add_test(raTeNDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
   --compare-image ${TOL}
                     ${BASELINE}/NDVIRAndNIRVegetationIndex.tif
                   ${TEMP}/NDVIRAndNIRVegetationIndex.tif
@@ -85,7 +85,7 @@ ADD_TEST(raTeNDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
 
 
 
-ADD_TEST(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
+add_test(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
         --compare-image ${EPSILON}
                 ${BASELINE}/Example_RomaniaAtmosphericCorrectionSequencement.tif
                 ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
@@ -117,8 +117,8 @@ ADD_TEST(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
         )
 
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbRadiometryExamplesTests otbRadiometryExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion    ${ITK_LIBRARIES}   OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbRadiometryExamplesTests otbRadiometryExamplesTests.cxx)
+target_link_libraries(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion    ${ITK_LIBRARIES}   OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

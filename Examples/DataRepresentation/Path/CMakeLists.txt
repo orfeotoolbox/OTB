@@ -1,5 +1,5 @@
-PROJECT(PathExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(PathExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(PolyLineParametricPath1 PolyLineParametricPath1.cxx )
-TARGET_LINK_LIBRARIES(PolyLineParametricPath1 OTBCommon OTBIO)
+add_executable(PolyLineParametricPath1 PolyLineParametricPath1.cxx )
+target_link_libraries(PolyLineParametricPath1 OTBCommon OTBIO)

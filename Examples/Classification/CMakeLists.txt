@@ -1,145 +1,145 @@
-PROJECT(StatisticsExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(StatisticsExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(KdTreeBasedKMeansClustering KdTreeBasedKMeansClustering.cxx )
-TARGET_LINK_LIBRARIES(KdTreeBasedKMeansClustering OTBCommon ${ITK_LIBRARIES})
+add_executable(KdTreeBasedKMeansClustering KdTreeBasedKMeansClustering.cxx )
+target_link_libraries(KdTreeBasedKMeansClustering OTBCommon ${ITK_LIBRARIES})
 
-ADD_EXECUTABLE(ScalarImageKmeansClassifier ScalarImageKmeansClassifier.cxx )
-TARGET_LINK_LIBRARIES(ScalarImageKmeansClassifier OTBIO OTBCommon )
+add_executable(ScalarImageKmeansClassifier ScalarImageKmeansClassifier.cxx )
+target_link_libraries(ScalarImageKmeansClassifier OTBIO OTBCommon )
 
-ADD_EXECUTABLE(KMeansImageClassificationExample KMeansImageClassificationExample.cxx )
-TARGET_LINK_LIBRARIES(KMeansImageClassificationExample OTBIO OTBLearning)
+add_executable(KMeansImageClassificationExample KMeansImageClassificationExample.cxx )
+target_link_libraries(KMeansImageClassificationExample OTBIO OTBLearning)
 
-ADD_EXECUTABLE(ScalarImageKmeansModelEstimator ScalarImageKmeansModelEstimator.cxx )
-TARGET_LINK_LIBRARIES(ScalarImageKmeansModelEstimator  OTBIO OTBCommon )
+add_executable(ScalarImageKmeansModelEstimator ScalarImageKmeansModelEstimator.cxx )
+target_link_libraries(ScalarImageKmeansModelEstimator  OTBIO OTBCommon )
 
-ADD_EXECUTABLE(BayesianPluginClassifier BayesianPluginClassifier.cxx )
-TARGET_LINK_LIBRARIES(BayesianPluginClassifier OTBIO OTBCommon ${ITK_LIBRARIES})
+add_executable(BayesianPluginClassifier BayesianPluginClassifier.cxx )
+target_link_libraries(BayesianPluginClassifier OTBIO OTBCommon ${ITK_LIBRARIES})
 
-ADD_EXECUTABLE(ExpectationMaximizationMixtureModelEstimator ExpectationMaximizationMixtureModelEstimator.cxx )
-TARGET_LINK_LIBRARIES(ExpectationMaximizationMixtureModelEstimator OTBIO OTBCommon ${ITK_LIBRARIES})
+add_executable(ExpectationMaximizationMixtureModelEstimator ExpectationMaximizationMixtureModelEstimator.cxx )
+target_link_libraries(ExpectationMaximizationMixtureModelEstimator OTBIO OTBCommon ${ITK_LIBRARIES})
 
-ADD_EXECUTABLE(ScalarImageMarkovRandomField1 ScalarImageMarkovRandomField1.cxx )
-TARGET_LINK_LIBRARIES(ScalarImageMarkovRandomField1 OTBIO OTBCommon )
+add_executable(ScalarImageMarkovRandomField1 ScalarImageMarkovRandomField1.cxx )
+target_link_libraries(ScalarImageMarkovRandomField1 OTBIO OTBCommon )
 
-ADD_EXECUTABLE(SOMImageClassificationExample SOMImageClassificationExample.cxx )
-TARGET_LINK_LIBRARIES(SOMImageClassificationExample OTBIO OTBLearning)
+add_executable(SOMImageClassificationExample SOMImageClassificationExample.cxx )
+target_link_libraries(SOMImageClassificationExample OTBIO OTBLearning)
 
-ADD_EXECUTABLE(SupervisedImageClassificationExample SupervisedImageClassificationExample.cxx )
-TARGET_LINK_LIBRARIES(SupervisedImageClassificationExample OTBIO OTBLearning)
+add_executable(SupervisedImageClassificationExample SupervisedImageClassificationExample.cxx )
+target_link_libraries(SupervisedImageClassificationExample OTBIO OTBLearning)
 
-ADD_EXECUTABLE(MajorityVotingFusionOfClassificationMapsExample MajorityVotingFusionOfClassificationMapsExample.cxx )
-TARGET_LINK_LIBRARIES(MajorityVotingFusionOfClassificationMapsExample OTBIO)
+add_executable(MajorityVotingFusionOfClassificationMapsExample MajorityVotingFusionOfClassificationMapsExample.cxx )
+target_link_libraries(MajorityVotingFusionOfClassificationMapsExample OTBIO)
 
-ADD_EXECUTABLE(DempsterShaferFusionOfClassificationMapsExample DempsterShaferFusionOfClassificationMapsExample.cxx )
-TARGET_LINK_LIBRARIES(DempsterShaferFusionOfClassificationMapsExample OTBIO)
+add_executable(DempsterShaferFusionOfClassificationMapsExample DempsterShaferFusionOfClassificationMapsExample.cxx )
+target_link_libraries(DempsterShaferFusionOfClassificationMapsExample OTBIO)
 
-ADD_EXECUTABLE(ClassificationMapRegularizationExample ClassificationMapRegularizationExample.cxx )
-TARGET_LINK_LIBRARIES(ClassificationMapRegularizationExample OTBIO OTBCommon)
+add_executable(ClassificationMapRegularizationExample ClassificationMapRegularizationExample.cxx )
+target_link_libraries(ClassificationMapRegularizationExample OTBIO OTBCommon)
 
-#ADD_EXECUTABLE( BayesianClassifierInitializer BayesianClassifierInitializer.cxx )
-#TARGET_LINK_LIBRARIES(BayesianClassifierInitializer ${ITK_LIBRARIES})
+#add_executable( BayesianClassifierInitializer BayesianClassifierInitializer.cxx )
+#target_link_libraries(BayesianClassifierInitializer ${ITK_LIBRARIES})
 
-#ADD_EXECUTABLE( BayesianClassifier BayesianClassifier.cxx )
-#TARGET_LINK_LIBRARIES(BayesianClassifier ${ITK_LIBRARIES})
+#add_executable( BayesianClassifier BayesianClassifier.cxx )
+#target_link_libraries(BayesianClassifier ${ITK_LIBRARIES})
 
-#ADD_EXECUTABLE(EuclideanDistance EuclideanDistance.cxx )
-#TARGET_LINK_LIBRARIES(EuclideanDistance)
-
-
-#ADD_EXECUTABLE(GaussianDensityFunction GaussianDensityFunction.cxx )
-#TARGET_LINK_LIBRARIES(GaussianDensityFunction)
-
-#ADD_EXECUTABLE(Histogram Histogram.cxx )
-#TARGET_LINK_LIBRARIES(Histogram ${ITK_LIBRARIES})
-
-#ADD_EXECUTABLE(ImageToListAdaptor ImageToListAdaptor.cxx )
-#TARGET_LINK_LIBRARIES(ImageToListAdaptor)
-
-#ADD_EXECUTABLE(KdTree KdTree.cxx )
-#TARGET_LINK_LIBRARIES(KdTree)
+#add_executable(EuclideanDistance EuclideanDistance.cxx )
+#target_link_libraries(EuclideanDistance)
 
 
-#ADD_EXECUTABLE(ListSample ListSample.cxx )
-#TARGET_LINK_LIBRARIES(ListSample)
+#add_executable(GaussianDensityFunction GaussianDensityFunction.cxx )
+#target_link_libraries(GaussianDensityFunction)
 
-#ADD_EXECUTABLE(ListSampleToHistogramFilter ListSampleToHistogramFilter.cxx )
-#TARGET_LINK_LIBRARIES(ListSampleToHistogramFilter ${ITK_LIBRARIES})
+#add_executable(Histogram Histogram.cxx )
+#target_link_libraries(Histogram ${ITK_LIBRARIES})
 
-#ADD_EXECUTABLE(ListSampleToHistogramGenerator ListSampleToHistogramGenerator.cxx )
-#TARGET_LINK_LIBRARIES(ListSampleToHistogramGenerator ${ITK_LIBRARIES})
+#add_executable(ImageToListAdaptor ImageToListAdaptor.cxx )
+#target_link_libraries(ImageToListAdaptor)
 
-#ADD_EXECUTABLE(MaximumDecisionRule MaximumDecisionRule.cxx )
-#TARGET_LINK_LIBRARIES(MaximumDecisionRule)
+#add_executable(KdTree KdTree.cxx )
+#target_link_libraries(KdTree)
 
-#ADD_EXECUTABLE(MaximumRatioDecisionRule MaximumRatioDecisionRule.cxx )
-#TARGET_LINK_LIBRARIES(MaximumRatioDecisionRule)
 
-#ADD_EXECUTABLE(MembershipSample MembershipSample.cxx )
-#TARGET_LINK_LIBRARIES(MembershipSample)
+#add_executable(ListSample ListSample.cxx )
+#target_link_libraries(ListSample)
 
-#ADD_EXECUTABLE(MinimumDecisionRule MinimumDecisionRule.cxx )
-#TARGET_LINK_LIBRARIES(MinimumDecisionRule)
+#add_executable(ListSampleToHistogramFilter ListSampleToHistogramFilter.cxx )
+#target_link_libraries(ListSampleToHistogramFilter ${ITK_LIBRARIES})
 
-#ADD_EXECUTABLE(NeighborhoodSampler NeighborhoodSampler.cxx )
-#TARGET_LINK_LIBRARIES(NeighborhoodSampler)
+#add_executable(ListSampleToHistogramGenerator ListSampleToHistogramGenerator.cxx )
+#target_link_libraries(ListSampleToHistogramGenerator ${ITK_LIBRARIES})
 
-#ADD_EXECUTABLE(NormalVariateGenerator NormalVariateGenerator.cxx )
-#TARGET_LINK_LIBRARIES(NormalVariateGenerator ${ITK_LIBRARIES})
+#add_executable(MaximumDecisionRule MaximumDecisionRule.cxx )
+#target_link_libraries(MaximumDecisionRule)
 
-#ADD_EXECUTABLE(PointSetToListAdaptor PointSetToListAdaptor.cxx )
-#TARGET_LINK_LIBRARIES(PointSetToListAdaptor)
+#add_executable(MaximumRatioDecisionRule MaximumRatioDecisionRule.cxx )
+#target_link_libraries(MaximumRatioDecisionRule)
 
-#ADD_EXECUTABLE(NormalVariateGenerator NormalVariateGenerator.cxx )
-#TARGET_LINK_LIBRARIES(NormalVariateGenerator)
+#add_executable(MembershipSample MembershipSample.cxx )
+#target_link_libraries(MembershipSample)
 
-#ADD_EXECUTABLE(SampleStatistics SampleStatistics.cxx )
-#TARGET_LINK_LIBRARIES(SampleStatistics)
+#add_executable(MinimumDecisionRule MinimumDecisionRule.cxx )
+#target_link_libraries(MinimumDecisionRule)
 
-#ADD_EXECUTABLE(SampleToHistogramProjectionFilter SampleToHistogramProjectionFilter.cxx )
-#TARGET_LINK_LIBRARIES(SampleToHistogramProjectionFilter
+#add_executable(NeighborhoodSampler NeighborhoodSampler.cxx )
+#target_link_libraries(NeighborhoodSampler)
+
+#add_executable(NormalVariateGenerator NormalVariateGenerator.cxx )
+#target_link_libraries(NormalVariateGenerator ${ITK_LIBRARIES})
+
+#add_executable(PointSetToListAdaptor PointSetToListAdaptor.cxx )
+#target_link_libraries(PointSetToListAdaptor)
+
+#add_executable(NormalVariateGenerator NormalVariateGenerator.cxx )
+#target_link_libraries(NormalVariateGenerator)
+
+#add_executable(SampleStatistics SampleStatistics.cxx )
+#target_link_libraries(SampleStatistics)
+
+#add_executable(SampleToHistogramProjectionFilter SampleToHistogramProjectionFilter.cxx )
+#target_link_libraries(SampleToHistogramProjectionFilter
 #                                                        ${ITK_LIBRARIES})
 
-#ADD_EXECUTABLE(SampleSorting SampleSorting.cxx )
-#TARGET_LINK_LIBRARIES(SampleSorting)
+#add_executable(SampleSorting SampleSorting.cxx )
+#target_link_libraries(SampleSorting)
 
-#ADD_EXECUTABLE(WeightedSampleStatistics WeightedSampleStatistics.cxx )
-#TARGET_LINK_LIBRARIES(WeightedSampleStatistics)
+#add_executable(WeightedSampleStatistics WeightedSampleStatistics.cxx )
+#target_link_libraries(WeightedSampleStatistics)
 
-#ADD_EXECUTABLE(ImageHistogram1 ImageHistogram1.cxx )
-#TARGET_LINK_LIBRARIES(ImageHistogram1 ${ITK_LIBRARIES} )
+#add_executable(ImageHistogram1 ImageHistogram1.cxx )
+#target_link_libraries(ImageHistogram1 ${ITK_LIBRARIES} )
 
-#ADD_EXECUTABLE(ImageHistogram2 ImageHistogram2.cxx )
-#TARGET_LINK_LIBRARIES(ImageHistogram2 ${ITK_LIBRARIES} )
+#add_executable(ImageHistogram2 ImageHistogram2.cxx )
+#target_link_libraries(ImageHistogram2 ${ITK_LIBRARIES} )
 
-#ADD_EXECUTABLE(ImageHistogram3 ImageHistogram3.cxx )
-#TARGET_LINK_LIBRARIES(ImageHistogram3 ${ITK_LIBRARIES} )
+#add_executable(ImageHistogram3 ImageHistogram3.cxx )
+#target_link_libraries(ImageHistogram3 ${ITK_LIBRARIES} )
 
-#ADD_EXECUTABLE(ImageHistogram4 ImageHistogram4.cxx )
-#TARGET_LINK_LIBRARIES(ImageHistogram4 ${ITK_LIBRARIES} )
+#add_executable(ImageHistogram4 ImageHistogram4.cxx )
+#target_link_libraries(ImageHistogram4 ${ITK_LIBRARIES} )
 
-#ADD_EXECUTABLE(ImageEntropy1 ImageEntropy1.cxx )
-#TARGET_LINK_LIBRARIES(ImageEntropy1 ${ITK_LIBRARIES})
-
-
+#add_executable(ImageEntropy1 ImageEntropy1.cxx )
+#target_link_libraries(ImageEntropy1 ${ITK_LIBRARIES})
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Classification)
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbClassificationExamplesTests)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Classification)
 
-SET(TOL 0.0)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+set(EXE_TESTS ${CXX_TEST_PATH}/otbClassificationExamplesTests)
+
+set(TOL 0.0)
 
 
 # ------- ScalarImageMarkovRandomField1Test----------
 
-ADD_TEST(clTeScalarImageMarkovRandomField1Test ${EXE_TESTS}
+add_test(clTeScalarImageMarkovRandomField1Test ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/ScalarImageMarkovRandomField1Output.png
         ${TEMP}/ScalarImageMarkovRandomField1Output.png
@@ -152,7 +152,7 @@ ADD_TEST(clTeScalarImageMarkovRandomField1Test ${EXE_TESTS}
 
 # ------- ScalarImageKmeansClassifierTest----------
 
-ADD_TEST(clTeScalarImageKmeansClassifierTest ${EXE_TESTS}
+add_test(clTeScalarImageKmeansClassifierTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/QB_Suburb_labelled.png
         ${TEMP}/QB_Suburb_labelled.png
@@ -162,7 +162,7 @@ ADD_TEST(clTeScalarImageKmeansClassifierTest ${EXE_TESTS}
     0 4 79.5097 138.136 213.846 25.9395
 )
 
-ADD_TEST(clTeNeighborhoodMajorityVotingImageFilterTest ${EXE_TESTS}
+add_test(clTeNeighborhoodMajorityVotingImageFilterTest ${EXE_TESTS}
        --compare-n-images ${NOTOL}
        ${OTB_DATA_ROOT}/Baseline/OTB/Images/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7.tif
        ${TEMP}/QB_1_ortho_4Cls_N_Classified_OTB_NMV_x2_y5_nodv10_undv7_EX.tif
@@ -176,8 +176,8 @@ ADD_TEST(clTeNeighborhoodMajorityVotingImageFilterTest ${EXE_TESTS}
        7 #LabelForUndecidedPixels
  )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbClassificationExamplesTests otbClassificationExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbClassificationExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbClassificationExamplesTests otbClassificationExamplesTests.cxx)
+target_link_libraries(otbClassificationExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

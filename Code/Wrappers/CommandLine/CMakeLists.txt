@@ -3,16 +3,16 @@ file(GLOB srcs "*.cxx")
 add_library(OTBWrapperCommandLine ${srcs})
 target_link_libraries(OTBWrapperCommandLine OTBApplicationEngine)
 
-IF(OTB_LIBRARY_PROPERTIES)
-  SET_TARGET_PROPERTIES(OTBWrapperCommandLine PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-ENDIF(OTB_LIBRARY_PROPERTIES)
+if(OTB_LIBRARY_PROPERTIES)
+  set_target_properties(OTBWrapperCommandLine PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+endif(OTB_LIBRARY_PROPERTIES)
 
 install(TARGETS OTBWrapperCommandLine
         RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
         ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-        
+
 
 set( SRCS
      otbApplicationLauncherCommandLine.cxx )
@@ -59,7 +59,7 @@ configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.buildtree.in
                 @ONLY )
 file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree/otbcli
      DESTINATION ${CLI_OUPUT_DIR}
-     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
+     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.installtree.in
                 ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli
                 @ONLY )

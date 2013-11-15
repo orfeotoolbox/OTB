@@ -1,12 +1,12 @@
-IF(OTB_USE_VISU_GUI)
-        IF(NOT OTB_USE_EXTERNAL_FLTK)
-            MESSAGE(STATUS "Configuring FLTK...")
-	        ADD_SUBDIRECTORY( FLTK )
-        ENDIF(NOT OTB_USE_EXTERNAL_FLTK)
-ENDIF(OTB_USE_VISU_GUI)
+if(OTB_USE_VISU_GUI)
+        if(NOT OTB_USE_EXTERNAL_FLTK)
+            message(STATUS "Configuring FLTK...")
+	        add_subdirectory( FLTK )
+        endif(NOT OTB_USE_EXTERNAL_FLTK)
+endif(OTB_USE_VISU_GUI)
 
-IF(NOT OTB_USE_EXTERNAL_ITK)
-  MESSAGE(STATUS "Configuring ITK...")
+if(NOT OTB_USE_EXTERNAL_ITK)
+  message(STATUS "Configuring ITK...")
 
   set(ITK_BUILD_ALL_MODULES OFF CACHE INTERNAL "" FORCE)
 
@@ -105,13 +105,13 @@ IF(NOT OTB_USE_EXTERNAL_ITK)
   # When running cmake outside of ctest (developer build)
   # ITKGroup_Core if ON by default, thus requiring ITKTestKernel that we don't want
   set(ITKGroup_Core OFF CACHE BOOL "" FORCE)
-  
+
   # By default activate FFTW, but with an external fftw build
   # These variables are used in ITK to initialize the value of the ITK_USE_FFTW_XXX options
   set(USE_FFTWF ON)
   set(USE_FFTWD ON)
   set(USE_SYSTEM_FFTW ON)
-  
+
   set(ITK_INSTALL_RUNTIME_DIR ${OTB_INSTALL_BIN_DIR})
   set(ITK_INSTALL_LIBRARY_DIR ${OTB_INSTALL_LIB_DIR})
   set(ITK_INSTALL_ARCHIVE_DIR ${OTB_INSTALL_LIB_DIR})
@@ -151,100 +151,100 @@ IF(NOT OTB_USE_EXTERNAL_ITK)
   mark_as_advanced(ITK_WRAP_JAVA)
   mark_as_advanced(ITK_WRAP_PYTHON)
 
-ENDIF(NOT OTB_USE_EXTERNAL_ITK)
+endif(NOT OTB_USE_EXTERNAL_ITK)
 
-IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
-  MESSAGE(STATUS "Configuring otbopenthreads...")
-  ADD_SUBDIRECTORY( otbopenthreads )
-ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+if(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+  message(STATUS "Configuring otbopenthreads...")
+  add_subdirectory( otbopenthreads )
+endif(NOT OTB_USE_EXTERNAL_OPENTHREADS)
 
 
-IF(OTB_USE_LIBLAS)
-IF(NOT OTB_USE_EXTERNAL_LIBLAS)
-  MESSAGE(STATUS "Configuring otbliblas...")
-  ADD_SUBDIRECTORY( otbliblas )
-ENDIF(NOT OTB_USE_EXTERNAL_LIBLAS)
-ENDIF(OTB_USE_LIBLAS)
+if(OTB_USE_LIBLAS)
+if(NOT OTB_USE_EXTERNAL_LIBLAS)
+  message(STATUS "Configuring otbliblas...")
+  add_subdirectory( otbliblas )
+endif(NOT OTB_USE_EXTERNAL_LIBLAS)
+endif(OTB_USE_LIBLAS)
 
-IF(OTB_USE_JPEG2000)
+if(OTB_USE_JPEG2000)
   set(OTB_BUILD_TESTING ${BUILD_TESTING})
   set(BUILD_TESTING OFF CACHE INTERNAL "" FORCE)
 
-  MESSAGE(STATUS "Configuring otbopenjpeg...")
-  ADD_SUBDIRECTORY( otbopenjpeg )
+  message(STATUS "Configuring otbopenjpeg...")
+  add_subdirectory( otbopenjpeg )
 
   set(BUILD_TESTING ${OTB_BUILD_TESTING} CACHE BOOL "Build testing." FORCE)
   set(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS} CACHE BOOL "Build OTB with shared libraries." FORCE)
-ENDIF(OTB_USE_JPEG2000)
+endif(OTB_USE_JPEG2000)
 
 
-IF(NOT OTB_USE_EXTERNAL_EXPAT)
-    MESSAGE(STATUS "Configuring otbexpat...")
-	ADD_SUBDIRECTORY( otbexpat )
-ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
+if(NOT OTB_USE_EXTERNAL_EXPAT)
+    message(STATUS "Configuring otbexpat...")
+	add_subdirectory( otbexpat )
+endif(NOT OTB_USE_EXTERNAL_EXPAT)
 
-IF(NOT OTB_USE_EXTERNAL_BOOST)
-  MESSAGE(STATUS "Configuring internal Boost...")
-  ADD_SUBDIRECTORY(BGL)
-ENDIF(NOT OTB_USE_EXTERNAL_BOOST)
+if(NOT OTB_USE_EXTERNAL_BOOST)
+  message(STATUS "Configuring internal Boost...")
+  add_subdirectory(BGL)
+endif(NOT OTB_USE_EXTERNAL_BOOST)
 
-MESSAGE(STATUS "Configuring otbsvm...")
-ADD_SUBDIRECTORY(otbsvm )
+message(STATUS "Configuring otbsvm...")
+add_subdirectory(otbsvm )
 
-MESSAGE(STATUS "Configuring InsightJournal...")
-ADD_SUBDIRECTORY(InsightJournal)
+message(STATUS "Configuring InsightJournal...")
+add_subdirectory(InsightJournal)
 
-IF(NOT OTB_USE_EXTERNAL_OSSIM)
-  MESSAGE(STATUS "Configuring otbossim...")
-  ADD_SUBDIRECTORY(otbossim)
-ENDIF(NOT OTB_USE_EXTERNAL_OSSIM)
+if(NOT OTB_USE_EXTERNAL_OSSIM)
+  message(STATUS "Configuring otbossim...")
+  add_subdirectory(otbossim)
+endif(NOT OTB_USE_EXTERNAL_OSSIM)
 
-MESSAGE(STATUS "Configuring otbossimplugins...")
-ADD_SUBDIRECTORY(otbossimplugins)
+message(STATUS "Configuring otbossimplugins...")
+add_subdirectory(otbossimplugins)
 
-MESSAGE(STATUS "Configuring otb6S...")
-ADD_SUBDIRECTORY(otb6S)
+message(STATUS "Configuring otb6S...")
+add_subdirectory(otb6S)
 
-IF(NOT OTB_USE_EXTERNAL_TINYXML)
-  MESSAGE(STATUS "Configuring tinyXMLlib...")
-  ADD_SUBDIRECTORY(tinyXMLlib)
-ENDIF(NOT OTB_USE_EXTERNAL_TINYXML)
+if(NOT OTB_USE_EXTERNAL_TINYXML)
+  message(STATUS "Configuring tinyXMLlib...")
+  add_subdirectory(tinyXMLlib)
+endif(NOT OTB_USE_EXTERNAL_TINYXML)
 
-IF(NOT OTB_USE_EXTERNAL_MUPARSER)
-  MESSAGE(STATUS "Configuring otbmuparser...")
-  ADD_SUBDIRECTORY(otbmuparser)
-ENDIF(NOT OTB_USE_EXTERNAL_MUPARSER)
+if(NOT OTB_USE_EXTERNAL_MUPARSER)
+  message(STATUS "Configuring otbmuparser...")
+  add_subdirectory(otbmuparser)
+endif(NOT OTB_USE_EXTERNAL_MUPARSER)
 
-IF(NOT OTB_USE_EXTERNAL_LIBKML)
-  MESSAGE(STATUS "Configuring otbkml...")
-  ADD_SUBDIRECTORY(otbkml)
-ENDIF(NOT OTB_USE_EXTERNAL_LIBKML)
+if(NOT OTB_USE_EXTERNAL_LIBKML)
+  message(STATUS "Configuring otbkml...")
+  add_subdirectory(otbkml)
+endif(NOT OTB_USE_EXTERNAL_LIBKML)
 
-MESSAGE(STATUS "Configuring otbedison...")
-ADD_SUBDIRECTORY(otbedison)
+message(STATUS "Configuring otbedison...")
+add_subdirectory(otbedison)
 
-IF(OTB_USE_SIFTFAST)
-  MESSAGE(STATUS "Configuring otbsiftfast...")
-  ADD_SUBDIRECTORY(otbsiftfast)
-ENDIF(OTB_USE_SIFTFAST)
+if(OTB_USE_SIFTFAST)
+  message(STATUS "Configuring otbsiftfast...")
+  add_subdirectory(otbsiftfast)
+endif(OTB_USE_SIFTFAST)
 
-MESSAGE(STATUS "Configuring otbconfigfile...")
-ADD_SUBDIRECTORY(otbconfigfile)
+message(STATUS "Configuring otbconfigfile...")
+add_subdirectory(otbconfigfile)
 
-IF(WIN32)
-MESSAGE(STATUS "Configuring otbmsinttypes...")
-ADD_SUBDIRECTORY(otbmsinttypes)
-ENDIF(WIN32)
+if(WIN32)
+message(STATUS "Configuring otbmsinttypes...")
+add_subdirectory(otbmsinttypes)
+endif(WIN32)
 
-IF(BUILD_TESTING)
-        ADD_SUBDIRECTORY( Dart )
-ENDIF(BUILD_TESTING)
+if(BUILD_TESTING)
+        add_subdirectory( Dart )
+endif(BUILD_TESTING)
 
 
 #-----------------------------------------------------------------------------
 # Install the UseOTB.cmake file configured from the top-level.
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  INSTALL(FILES ${OTB_BINARY_DIR}/Utilities/OTBConfig.cmake
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  install(FILES ${OTB_BINARY_DIR}/Utilities/OTBConfig.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
     COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)

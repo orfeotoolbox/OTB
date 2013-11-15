@@ -1,29 +1,29 @@
-PROJECT(ImageFusionExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(ImageFusionExamples)
+include_regular_expression("^.*$")
 
-SET(FUSION_EXAMPLES ${CXX_TEST_PATH}/otbFusionExamplesTests)
-
-
-ADD_EXECUTABLE(BayesianFusionImageFilter BayesianFusionImageFilter.cxx )
-TARGET_LINK_LIBRARIES(BayesianFusionImageFilter OTBFusion OTBCommon OTBIO )
-
-ADD_EXECUTABLE(PanSharpeningExample PanSharpeningExample.cxx )
-TARGET_LINK_LIBRARIES(PanSharpeningExample OTBFusion OTBCommon OTBIO )
+set(FUSION_EXAMPLES ${CXX_TEST_PATH}/otbFusionExamplesTests)
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+add_executable(BayesianFusionImageFilter BayesianFusionImageFilter.cxx )
+target_link_libraries(BayesianFusionImageFilter OTBFusion OTBCommon OTBIO )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Fusion)
+add_executable(PanSharpeningExample PanSharpeningExample.cxx )
+target_link_libraries(PanSharpeningExample OTBFusion OTBCommon OTBIO )
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbFusionExamplesTests)
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(TOL 0.0)
-SET(EPSILON 0.00000001)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Fusion)
 
-ADD_TEST(fuTeBayesianFusionImageFilterTest ${EXE_TESTS}
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+set(EXE_TESTS ${CXX_TEST_PATH}/otbFusionExamplesTests)
+
+set(TOL 0.0)
+set(EPSILON 0.00000001)
+
+add_test(fuTeBayesianFusionImageFilterTest ${EXE_TESTS}
         --compare-image ${EPSILON}
         ${BASELINE}/ImageBayesianFusion.tif
         ${TEMP}/ImageBayesianFusion.tif
@@ -39,7 +39,7 @@ ADD_TEST(fuTeBayesianFusionImageFilterTest ${EXE_TESTS}
         0.9999
 )
 
-ADD_TEST(fuTePanSharpeningExampleTest ${EXE_TESTS}
+add_test(fuTePanSharpeningExampleTest ${EXE_TESTS}
     --compare-image ${EPSILON}  ${BASELINE}/PanSharpeningExampleTest.tif
                            ${TEMP}/PanSharpeningExampleTest.tif
         PanSharpeningExampleTest
@@ -51,8 +51,8 @@ ADD_TEST(fuTePanSharpeningExampleTest ${EXE_TESTS}
         ${TEMP}/PanSharpeningExampleTest3.png
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbFusionExamplesTests otbFusionExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFusionExamplesTests   ${ITK_LIBRARIES}  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbFusionExamplesTests otbFusionExamplesTests.cxx)
+target_link_libraries(otbFusionExamplesTests   ${ITK_LIBRARIES}  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

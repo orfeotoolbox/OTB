@@ -1,1 +1,1 @@
-ADD_SUBDIRECTORY(type_traits)
+add_subdirectory(type_traits)

@@ -1,15 +1,15 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-PROJECT(HelloWorld)
+cmake_minimum_required(VERSION 2.6)
+project(HelloWorld)
 
-FIND_PACKAGE(OTB)
-IF(OTB_FOUND)
-  INCLUDE(${OTB_USE_FILE})
-ELSE(OTB_FOUND)
-  MESSAGE(FATAL_ERROR
+find_package(OTB)
+if(OTB_FOUND)
+  include(${OTB_USE_FILE})
+else(OTB_FOUND)
+  message(FATAL_ERROR
           "Cannot build HelloWorld application without OTB.  Please set OTB_DIR.")
-ENDIF(OTB_FOUND)
+endif(OTB_FOUND)
 
 
-ADD_EXECUTABLE(HelloWorld HelloWorld.cxx )
+add_executable(HelloWorld HelloWorld.cxx )
 
-TARGET_LINK_LIBRARIES(HelloWorld OTBIO)
+target_link_libraries(HelloWorld OTBIO)

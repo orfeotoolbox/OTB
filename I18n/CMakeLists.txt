@@ -32,11 +32,11 @@ endmacro(OTB_GET_MO_FILENAME)
 
 
 
-SET(locale_list "fr;")
-SET(po_dir "${OTB_SOURCE_DIR}/I18n")
-SET(po_prefix "otb-")
-SET(mo_build_dir "${OTB_BINARY_DIR}/I18n")
-SET(domain_name "otb")
+set(locale_list "fr;")
+set(po_dir "${OTB_SOURCE_DIR}/I18n")
+set(po_prefix "otb-")
+set(mo_build_dir "${OTB_BINARY_DIR}/I18n")
+set(domain_name "otb")
 
 set(mo_files)
 

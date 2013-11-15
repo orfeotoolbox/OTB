@@ -1,10 +1,10 @@
 
-FILE(GLOB otbconfigfileCreation_SRCS "${OTB_SOURCE_DIR}/CMake/GenerateConfigProperties.cpp")
-SET(otbconfigfile_DEFAULT "${OTB_BINARY_DIR}/otb.conf")
+file(GLOB otbconfigfileCreation_SRCS "${OTB_SOURCE_DIR}/CMake/GenerateConfigProperties.cpp")
+set(otbconfigfile_DEFAULT "${OTB_BINARY_DIR}/otb.conf")
 
-ADD_EXECUTABLE(GenerateConfigProperties ${otbconfigfileCreation_SRCS})
+add_executable(GenerateConfigProperties ${otbconfigfileCreation_SRCS})
 
-ADD_CUSTOM_COMMAND(
+add_custom_command(
           TARGET GenerateConfigProperties
           POST_BUILD
           COMMAND GenerateConfigProperties

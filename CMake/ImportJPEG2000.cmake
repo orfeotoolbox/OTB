@@ -1,22 +1,22 @@
-MESSAGE(STATUS "Importing Jpeg2000...")
+message(STATUS "Importing Jpeg2000...")
 # Use the openjpeg library.
-OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
-MARK_AS_ADVANCED(OTB_USE_JPEG2000)
+option(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
+mark_as_advanced(OTB_USE_JPEG2000)
 
-IF(OTB_USE_JPEG2000)
- MESSAGE(STATUS "  Enabling Jpeg2000 support")
+if(OTB_USE_JPEG2000)
+ message(STATUS "  Enabling Jpeg2000 support")
 
- SET(OPENJPEG_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg)
- SET(OPENJPEG_BINARY_DIR ${OTB_BINARY_DIR}/Utilities/otbopenjpeg)
+ set(OPENJPEG_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg)
+ set(OPENJPEG_BINARY_DIR ${OTB_BINARY_DIR}/Utilities/otbopenjpeg)
 
- SET(OPENJPEG_NAMESPACE "OTBOPENJPEG")
- SET(OPJ_MANGLE_PREFIX "otbopenjpeg")
- SET(OPENJPEG_INSTALL_LIB_DIR ${OTB_INSTALL_LIB_DIR})
+ set(OPENJPEG_NAMESPACE "OTBOPENJPEG")
+ set(OPJ_MANGLE_PREFIX "otbopenjpeg")
+ set(OPENJPEG_INSTALL_LIB_DIR ${OTB_INSTALL_LIB_DIR})
 
-  IF(NOT BUILD_SHARED_LIBS)
-        ADD_DEFINITIONS(-DOPJ_STATIC)
-  ENDIF(NOT BUILD_SHARED_LIBS)
+  if(NOT BUILD_SHARED_LIBS)
+        add_definitions(-DOPJ_STATIC)
+  endif(NOT BUILD_SHARED_LIBS)
 
-ELSE( OTB_USE_JPEG2000 )
-  MESSAGE(STATUS "  Disabling Jpeg2000 support")
-ENDIF(OTB_USE_JPEG2000)
+else( OTB_USE_JPEG2000 )
+  message(STATUS "  Disabling Jpeg2000 support")
+endif(OTB_USE_JPEG2000)

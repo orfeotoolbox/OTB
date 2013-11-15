@@ -1,6 +1,6 @@
-SET(EPSILON_10 0.0000000001)
-SET(BASELINE_EXAMPLE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)
-SET(DEM_DATA   ${OTB_DATA_ROOT}/Input/DEM/srtm_directory)
+set(EPSILON_10 0.0000000001)
+set(BASELINE_EXAMPLE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)
+set(DEM_DATA   ${OTB_DATA_ROOT}/Input/DEM/srtm_directory)
 #--- FineRegistration ---#
 OTB_TEST_APPLICATION(NAME apTvDmFineRegistrationTest
                      APP  FineRegistration
@@ -25,7 +25,7 @@ OTB_TEST_APPLICATION(NAME apTvDmFineRegistrationTest
 #--- StereoRectificationGridGenerator ---#
 OTB_TEST_APPLICATION(NAME apTuDmStereoRectificationGridGeneratorTest
                      APP  StereoRectificationGridGenerator
-                     
+
                      OPTIONS -io.inleft ${EXAMPLEDATA}/sensor_stereo_left.tif
                              -io.inright ${EXAMPLEDATA}/sensor_stereo_right.tif
                              -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
@@ -82,7 +82,7 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
                              -bm.medianfilter.radius 2
                              -bm.medianfilter.incoherence 2.0
                      VALID   --compare-image ${EPSILON_10}
-                     		 ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
+                     		 ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
                      		 ${TEMP}/apTvDmBlockMatchingTest.tif
                      )
 
@@ -90,7 +90,7 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
 #--- DisparityMapToElevationMap ---#
 OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                      APP  DisparityMapToElevationMap
-                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
+                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
                              -io.left ${EXAMPLEDATA}/sensor_stereo_left.tif
                              -io.right ${EXAMPLEDATA}/sensor_stereo_right.tif
                              -io.lgrid ${INPUTDATA}/sensor_stereo_rectif_left.tif
@@ -105,60 +105,60 @@ OTB_TEST_APPLICATION(NAME apTvDmDisparityMapToElevationMap
                              ${BASELINE_EXAMPLE}/elevationOutput.tif
                              ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif
                      )
-                     
-                     
 
-# StereoFramework  
-IF(OTB_DATA_USE_LARGEINPUT)  
+
+
+# StereoFramework
+if(OTB_DATA_USE_LARGEINPUT)
 OTB_TEST_APPLICATION(NAME apTvDmStereoFramework
                      APP  StereoFramework
                      OPTIONS -input.il ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt1.tif
                      			       ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt2.tif
                      			       ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/phr_haiti_xt3.tif
                      			       -input.co "0 1,0 2"
-                                -elev.dem ${DEM_DATA} 
+                                -elev.dem ${DEM_DATA}
                                 -elev.geoid ${OTB_DATA_ROOT}/Input/DEM/egm96.grd
                                 -stereorect.invgridssrate 15
-                                -mask.variancet 100    
-                                -bm.maxhoffset 15 
-                                -bm.minhoffset -15 
-                                -bm.radius 2 
-                                -bm.metric ssdmean  
-                                -postproc.med 1 
-                                -postproc.bij 1 
+                                -mask.variancet 100
+                                -bm.maxhoffset 15
+                                -bm.minhoffset -15
+                                -bm.radius 2
+                                -bm.metric ssdmean
+                                -postproc.med 1
+                                -postproc.bij 1
                                 -output.res 1.
-                                -output.out ${TEMP}/apTvStereoFrameworkHaiti.tif                       
+                                -output.out ${TEMP}/apTvStereoFrameworkHaiti.tif
                      VALID   --compare-image ${EPSILON_10}
                              ${BASELINE}/apTvStereoFrameworkHaiti.tif
                              ${TEMP}/apTvStereoFrameworkHaiti.tif
-                     )  
-                     
-                     
+                     )
+
+
  OTB_TEST_APPLICATION(NAME apTvDmStereoFramework2
                      APP  StereoFramework
                      OPTIONS -input.il ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/master_pan.tif
                      			       ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/slave_pan_1.tif
                      			       ${LARGEINPUT}/PLEIADES/tristereo_Haiti_Pan/slave_pan_2.tif
                      			       -input.co "0 1,0 2"
-                                -elev.dem ${DEM_DATA} 
+                                -elev.dem ${DEM_DATA}
                                 -elev.geoid ${OTB_DATA_ROOT}/Input/DEM/egm96.grd
                                 -stereorect.invgridssrate 15
-                                -mask.variancet 100    
-                                -bm.maxhoffset 15 
-                                -bm.minhoffset -15 
-                                -bm.radius 2 
-                                -bm.metric ssdmean  
-                                -postproc.med 1 
-                                -postproc.bij 1 
+                                -mask.variancet 100
+                                -bm.maxhoffset 15
+                                -bm.minhoffset -15
+                                -bm.radius 2
+                                -bm.metric ssdmean
+                                -postproc.med 1
+                                -postproc.bij 1
                                 -output.res 1.
-                                -output.out ${TEMP}/apTvStereoFrameworkHaiti2.tif                       
+                                -output.out ${TEMP}/apTvStereoFrameworkHaiti2.tif
                       VALID   --compare-image ${EPSILON_10}
                             ${BASELINE}/apTvStereoFrameworkHaiti2.tif
                             ${TEMP}/apTvStereoFrameworkHaiti2.tif
-                     )                      
+                     )
 
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)     
-         
+endif(OTB_DATA_USE_LARGEINPUT)
 
-                     
+
+

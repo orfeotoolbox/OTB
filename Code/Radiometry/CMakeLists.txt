@@ -1,26 +1,26 @@
 
 # Sources of non-templated classes.
-FILE(GLOB OTBRadiometry_SRCS "*.cxx" )
+file(GLOB OTBRadiometry_SRCS "*.cxx" )
 
-ADD_LIBRARY(OTBRadiometry ${OTBRadiometry_SRCS})
+add_library(OTBRadiometry ${OTBRadiometry_SRCS})
 
 #Note: depend on OTBIO instead of otbossim to keep the correct order between gdal and ossim
-TARGET_LINK_LIBRARIES (OTBRadiometry OTBCommon otb6S OTBIO)
-IF(OTB_LIBRARY_PROPERTIES)
-  SET_TARGET_PROPERTIES(OTBRadiometry PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-ENDIF(OTB_LIBRARY_PROPERTIES)
+target_link_libraries(OTBRadiometry OTBCommon otb6S OTBIO)
+if(OTB_LIBRARY_PROPERTIES)
+  set_target_properties(OTBRadiometry PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+endif(OTB_LIBRARY_PROPERTIES)
 
-IF(NOT OTB_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS OTBRadiometry
+if(NOT OTB_INSTALL_NO_LIBRARIES)
+  install(TARGETS OTBRadiometry
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+endif(NOT OTB_INSTALL_NO_LIBRARIES)
 
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-  FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
-  INSTALL(FILES ${__files1} ${__files2}
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+  install(FILES ${__files1} ${__files2}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Radiometry
     COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)

@@ -1,21 +1,21 @@
-MESSAGE(STATUS "Importing Ossim...")
+message(STATUS "Importing Ossim...")
 
-SET(DEFAULT_OTB_USE_EXTERNAL_OSSIM  OFF)
+set(DEFAULT_OTB_USE_EXTERNAL_OSSIM  OFF)
 
 # OSGeo4W provides an "ossim" package : use it otherwise if it is installed and not used by OTB
-# we get conflicts (because OSGeo4W include dir is included for other dependencies 
-IF(WIN32)
-  SET(DEFAULT_OTB_USE_EXTERNAL_OSSIM  ON)
-ENDIF()
+# we get conflicts (because OSGeo4W include dir is included for other dependencies
+if(WIN32)
+  set(DEFAULT_OTB_USE_EXTERNAL_OSSIM  ON)
+endif()
 
-OPTION(OTB_USE_EXTERNAL_OSSIM "Use an outside build of Ossim." ${DEFAULT_OTB_USE_EXTERNAL_OSSIM})
-MARK_AS_ADVANCED(OTB_USE_EXTERNAL_OSSIM)
+option(OTB_USE_EXTERNAL_OSSIM "Use an outside build of Ossim." ${DEFAULT_OTB_USE_EXTERNAL_OSSIM})
+mark_as_advanced(OTB_USE_EXTERNAL_OSSIM)
 
-IF(OTB_USE_EXTERNAL_OSSIM)
-  FIND_PACKAGE(Ossim REQUIRED)
-ELSE(OTB_USE_EXTERNAL_OSSIM)
-  SET(OSSIM_LIBRARIES otbossim)
-  IF (WIN32 AND NOT BUILD_SHARED_LIBS)
-    ADD_DEFINITIONS(-DOSSIM_STATIC)
-  ENDIF()
-ENDIF(OTB_USE_EXTERNAL_OSSIM)
+if(OTB_USE_EXTERNAL_OSSIM)
+  find_package(Ossim REQUIRED)
+else(OTB_USE_EXTERNAL_OSSIM)
+  set(OSSIM_LIBRARIES otbossim)
+  if(WIN32 AND NOT BUILD_SHARED_LIBS)
+    add_definitions(-DOSSIM_STATIC)
+  endif()
+endif(OTB_USE_EXTERNAL_OSSIM)

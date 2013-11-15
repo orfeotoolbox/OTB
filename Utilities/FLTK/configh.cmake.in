@@ -102,7 +102,7 @@
  * USE_QUARTZ:
  *
  * Use Quartz instead of Quickdraw on Apple Mac OS X machines.
- * FLTK was originally ported to Quickdraw which is no longer 
+ * FLTK was originally ported to Quickdraw which is no longer
  * supported by Apple. If USE_QUARTZ is defined, FLTK will be
  * compiled using Quartz instead. This flag has no meaning on
  * other operating systems.

@@ -1,9 +1,9 @@
 
 # Sources of non-templated classes.
-FILE(GLOB OTBBasicFilters_SRCS "*.cxx" )
+file(GLOB OTBBasicFilters_SRCS "*.cxx" )
 
-ADD_LIBRARY(OTBBasicFilters ${OTBBasicFilters_SRCS})
-TARGET_LINK_LIBRARIES (OTBBasicFilters OTBCommon otbedison ${MUPARSER_LIBRARIES})
+add_library(OTBBasicFilters ${OTBBasicFilters_SRCS})
+target_link_libraries(OTBBasicFilters OTBCommon otbedison ${MUPARSER_LIBRARIES})
 
 # Explicit link to fftw is required
 # The link of ITKFFT to fftw does not propagate well :
@@ -24,7 +24,7 @@ if(ITK_USE_FFTWD)
       target_link_libraries(OTBBasicFilters ${FFTWD_THREADS_LIB})
     endif()
   else()
-    message(FATAL "Using ITK internal version of FFTW is not supported (yet)") 
+    message(FATAL "Using ITK internal version of FFTW is not supported (yet)")
   endif()
 endif()
 
@@ -35,25 +35,25 @@ if(ITK_USE_FFTWF)
       target_link_libraries(OTBBasicFilters ${FFTWF_THREADS_LIB})
     endif()
   else()
-    message(FATAL "Using ITK internal version of FFTW is not supported (yet)") 
+    message(FATAL "Using ITK internal version of FFTW is not supported (yet)")
   endif()
 endif()
 
-IF(OTB_LIBRARY_PROPERTIES)
-  SET_TARGET_PROPERTIES(OTBBasicFilters PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-ENDIF(OTB_LIBRARY_PROPERTIES)
+if(OTB_LIBRARY_PROPERTIES)
+  set_target_properties(OTBBasicFilters PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+endif(OTB_LIBRARY_PROPERTIES)
 
-IF(NOT OTB_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS OTBBasicFilters
+if(NOT OTB_INSTALL_NO_LIBRARIES)
+  install(TARGETS OTBBasicFilters
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+endif(NOT OTB_INSTALL_NO_LIBRARIES)
 
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-  FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
-  INSTALL(FILES ${__files1} ${__files2}
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+  install(FILES ${__files1} ${__files2}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/BasicFilters
     COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)

@@ -1,92 +1,92 @@
-PROJECT(FilteringExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(FilteringExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(CompositeFilterExample CompositeFilterExample.cxx )
-TARGET_LINK_LIBRARIES(CompositeFilterExample OTBCommon OTBIO  )
+add_executable(CompositeFilterExample CompositeFilterExample.cxx )
+target_link_libraries(CompositeFilterExample OTBCommon OTBIO  )
 
-ADD_EXECUTABLE(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
-TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter OTBCommon OTBIO)
+add_executable(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
+target_link_libraries(GradientMagnitudeImageFilter OTBCommon OTBIO)
 
-ADD_EXECUTABLE(GradientMagnitudeRecursiveGaussianImageFilter GradientMagnitudeRecursiveGaussianImageFilter.cxx )
-TARGET_LINK_LIBRARIES(GradientMagnitudeRecursiveGaussianImageFilter
+add_executable(GradientMagnitudeRecursiveGaussianImageFilter GradientMagnitudeRecursiveGaussianImageFilter.cxx )
+target_link_libraries(GradientMagnitudeRecursiveGaussianImageFilter
 OTBCommon OTBIO)
 
-ADD_EXECUTABLE(SecondDerivativeRecursiveGaussianImageFilter SecondDerivativeRecursiveGaussianImageFilter.cxx )
-TARGET_LINK_LIBRARIES(SecondDerivativeRecursiveGaussianImageFilter
+add_executable(SecondDerivativeRecursiveGaussianImageFilter SecondDerivativeRecursiveGaussianImageFilter.cxx )
+target_link_libraries(SecondDerivativeRecursiveGaussianImageFilter
 OTBCommon OTBIO)
 
-ADD_EXECUTABLE(BinaryThresholdImageFilter BinaryThresholdImageFilter.cxx )
-TARGET_LINK_LIBRARIES(BinaryThresholdImageFilter OTBCommon OTBIO)
+add_executable(BinaryThresholdImageFilter BinaryThresholdImageFilter.cxx )
+target_link_libraries(BinaryThresholdImageFilter OTBCommon OTBIO)
 
-ADD_EXECUTABLE(ThresholdImageFilter ThresholdImageFilter.cxx )
-TARGET_LINK_LIBRARIES(ThresholdImageFilter OTBCommon OTBIO)
+add_executable(ThresholdImageFilter ThresholdImageFilter.cxx )
+target_link_libraries(ThresholdImageFilter OTBCommon OTBIO)
 
-ADD_EXECUTABLE(CannyEdgeDetectionImageFilter CannyEdgeDetectionImageFilter.cxx )
-TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter OTBCommon OTBIO)
+add_executable(CannyEdgeDetectionImageFilter CannyEdgeDetectionImageFilter.cxx )
+target_link_libraries(CannyEdgeDetectionImageFilter OTBCommon OTBIO)
 
-ADD_EXECUTABLE(DerivativeImageFilter DerivativeImageFilter.cxx )
-TARGET_LINK_LIBRARIES(DerivativeImageFilter OTBCommon OTBIO)
+add_executable(DerivativeImageFilter DerivativeImageFilter.cxx )
+target_link_libraries(DerivativeImageFilter OTBCommon OTBIO)
 
-ADD_EXECUTABLE(MedianImageFilter MedianImageFilter.cxx )
-TARGET_LINK_LIBRARIES(MedianImageFilter OTBCommon OTBIO)
+add_executable(MedianImageFilter MedianImageFilter.cxx )
+target_link_libraries(MedianImageFilter OTBCommon OTBIO)
 
-ADD_EXECUTABLE(MeanImageFilter MeanImageFilter.cxx )
-TARGET_LINK_LIBRARIES(MeanImageFilter OTBCommon OTBIO)
+add_executable(MeanImageFilter MeanImageFilter.cxx )
+target_link_libraries(MeanImageFilter OTBCommon OTBIO)
 
-ADD_EXECUTABLE(MathematicalMorphologyBinaryFilters MathematicalMorphologyBinaryFilters.cxx )
-TARGET_LINK_LIBRARIES(MathematicalMorphologyBinaryFilters OTBCommon
+add_executable(MathematicalMorphologyBinaryFilters MathematicalMorphologyBinaryFilters.cxx )
+target_link_libraries(MathematicalMorphologyBinaryFilters OTBCommon
 OTBIO)
 
-ADD_EXECUTABLE(MathematicalMorphologyGrayscaleFilters MathematicalMorphologyGrayscaleFilters.cxx )
-TARGET_LINK_LIBRARIES(MathematicalMorphologyGrayscaleFilters OTBCommon
+add_executable(MathematicalMorphologyGrayscaleFilters MathematicalMorphologyGrayscaleFilters.cxx )
+target_link_libraries(MathematicalMorphologyGrayscaleFilters OTBCommon
 OTBIO)
 
-ADD_EXECUTABLE(DiscreteGaussianImageFilter DiscreteGaussianImageFilter.cxx )
-TARGET_LINK_LIBRARIES(DiscreteGaussianImageFilter OTBCommon OTBIO  )
+add_executable(DiscreteGaussianImageFilter DiscreteGaussianImageFilter.cxx )
+target_link_libraries(DiscreteGaussianImageFilter OTBCommon OTBIO  )
 
-ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter1 LaplacianRecursiveGaussianImageFilter1.cxx )
-TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter1 OTBCommon
+add_executable(LaplacianRecursiveGaussianImageFilter1 LaplacianRecursiveGaussianImageFilter1.cxx )
+target_link_libraries(LaplacianRecursiveGaussianImageFilter1 OTBCommon
 OTBIO  )
 
-ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter2 LaplacianRecursiveGaussianImageFilter2.cxx )
-TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter2 OTBCommon
+add_executable(LaplacianRecursiveGaussianImageFilter2 LaplacianRecursiveGaussianImageFilter2.cxx )
+target_link_libraries(LaplacianRecursiveGaussianImageFilter2 OTBCommon
 OTBIO  )
 
-ADD_EXECUTABLE(GradientAnisotropicDiffusionImageFilter GradientAnisotropicDiffusionImageFilter.cxx )
-TARGET_LINK_LIBRARIES(GradientAnisotropicDiffusionImageFilter
+add_executable(GradientAnisotropicDiffusionImageFilter GradientAnisotropicDiffusionImageFilter.cxx )
+target_link_libraries(GradientAnisotropicDiffusionImageFilter
 OTBCommon OTBIO  )
 
-ADD_EXECUTABLE(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter.cxx )
-TARGET_LINK_LIBRARIES(DanielssonDistanceMapImageFilter OTBCommon OTBIO
+add_executable(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter.cxx )
+target_link_libraries(DanielssonDistanceMapImageFilter OTBCommon OTBIO
 ${ITK_LIBRARIES}  )
 
-ADD_EXECUTABLE(GeometriesFilter GeometriesFilter.cxx)
-TARGET_LINK_LIBRARIES(GeometriesFilter OTBOGRAdapters)
+add_executable(GeometriesFilter GeometriesFilter.cxx)
+target_link_libraries(GeometriesFilter OTBOGRAdapters)
 
-ADD_EXECUTABLE(GeometriesChangeSpatialReference GeometriesChangeSpatialReference.cxx)
-TARGET_LINK_LIBRARIES(GeometriesChangeSpatialReference OTBOGRAdapters)
+add_executable(GeometriesChangeSpatialReference GeometriesChangeSpatialReference.cxx)
+target_link_libraries(GeometriesChangeSpatialReference OTBOGRAdapters)
 
-IF(OTB_USE_MAPNIK)
-ADD_EXECUTABLE(RasterizationExample RasterizationExample.cxx)
-TARGET_LINK_LIBRARIES(RasterizationExample OTBCommon OTBIO OTBBasicFilters)
-ENDIF(OTB_USE_MAPNIK)
+if(OTB_USE_MAPNIK)
+add_executable(RasterizationExample RasterizationExample.cxx)
+target_link_libraries(RasterizationExample OTBCommon OTBIO OTBBasicFilters)
+endif(OTB_USE_MAPNIK)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Filtering)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Filtering)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbFilteringExamplesTests)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbFilteringExamplesTests)
 
-SET(TOL 0.0)
-SET(PNGTOL 2)
+set(TOL 0.0)
+set(PNGTOL 2)
 
 # ------- MathematicalMorphologyBinaryFiltersTest----------
 
-ADD_TEST(fiTeMathematicalMorphologyBinaryFiltersTest ${EXE_TESTS}
+add_test(fiTeMathematicalMorphologyBinaryFiltersTest ${EXE_TESTS}
         --compare-n-images ${TOL} 2
         ${BASELINE}/MathematicalMorphologyBinaryErosionOutput.png
         ${TEMP}/MathematicalMorphologyBinaryErosionOutput.png
@@ -101,7 +101,7 @@ ADD_TEST(fiTeMathematicalMorphologyBinaryFiltersTest ${EXE_TESTS}
 
 # ------- DanielssonDistanceMapImageFilterTest----------
 
-ADD_TEST(fiTeDanielssonDistanceMapImageFilterTest ${EXE_TESTS}
+add_test(fiTeDanielssonDistanceMapImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 2
         ${BASELINE}/DanielssonDistanceMapImageFilterOutput1.png
         ${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
@@ -115,7 +115,7 @@ ADD_TEST(fiTeDanielssonDistanceMapImageFilterTest ${EXE_TESTS}
 
 # ------- MeanImageFilterTest----------
 
-ADD_TEST(fiTeMeanImageFilterTest ${EXE_TESTS}
+add_test(fiTeMeanImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/MeanImageFilterOutput.png
         ${TEMP}/MeanImageFilterOutput.png
@@ -126,7 +126,7 @@ ADD_TEST(fiTeMeanImageFilterTest ${EXE_TESTS}
 
 # ------- ThresholdImageFilterTest----------
 
-ADD_TEST(fiTeThresholdImageFilterTest ${EXE_TESTS}
+add_test(fiTeThresholdImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 3
         ${BASELINE}/ThresholdImageFilterOutputBelow.png
         ${TEMP}/ThresholdImageFilterOutputBelow.png
@@ -143,7 +143,7 @@ ADD_TEST(fiTeThresholdImageFilterTest ${EXE_TESTS}
 
 # ------- GradientMagnitudeRecursiveGaussianImageFilterTest----------
 
-ADD_TEST(fiTeGradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
+add_test(fiTeGradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
         --compare-n-images ${PNGTOL} 1
         ${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
         ${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
@@ -155,7 +155,7 @@ ADD_TEST(fiTeGradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
 
 # ------- GradientMagnitudeRecursiveGaussianImageFilterTest----------
 
-ADD_TEST(fiTeGradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
+add_test(fiTeGradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput5.png
         ${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput5.png
@@ -167,7 +167,7 @@ ADD_TEST(fiTeGradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
 
 # ------- GradientAnisotropicDiffusionImageFilterTest----------
 
-ADD_TEST(fiTeGradientAnisotropicDiffusionImageFilterTest ${EXE_TESTS}
+add_test(fiTeGradientAnisotropicDiffusionImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/GradientAnisotropicDiffusionImageFilterOutput.png
         ${TEMP}/GradientAnisotropicDiffusionImageFilterOutput.png
@@ -179,7 +179,7 @@ ADD_TEST(fiTeGradientAnisotropicDiffusionImageFilterTest ${EXE_TESTS}
 
 # ------- GradientMagnitudeImageFilterTest----------
 
-ADD_TEST(fiTeGradientMagnitudeImageFilterTest ${EXE_TESTS}
+add_test(fiTeGradientMagnitudeImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/GradientMagnitudeImageFilterOutput.png
         ${TEMP}/GradientMagnitudeImageFilterOutput.png
@@ -190,7 +190,7 @@ ADD_TEST(fiTeGradientMagnitudeImageFilterTest ${EXE_TESTS}
 
 # ------- MathematicalMorphologyGrayscaleFiltersTest----------
 
-ADD_TEST(fiTeMathematicalMorphologyGrayscaleFiltersTest ${EXE_TESTS}
+add_test(fiTeMathematicalMorphologyGrayscaleFiltersTest ${EXE_TESTS}
         --compare-n-images ${TOL} 2
         ${BASELINE}/MathematicalMorphologyGrayscaleErosionOutput.png
         ${TEMP}/MathematicalMorphologyGrayscaleErosionOutput.png
@@ -205,7 +205,7 @@ ADD_TEST(fiTeMathematicalMorphologyGrayscaleFiltersTest ${EXE_TESTS}
 
 # ------- LaplacianRecursiveGaussianImageFilter1Test----------
 
-ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
+add_test(fiTeLaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
         --compare-n-images ${TOL} 2
         ${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
         ${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.hdr
@@ -221,7 +221,7 @@ ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
 
 # ------- LaplacianRecursiveGaussianImageFilter2Test----------
 
-ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
+add_test(fiTeLaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
         --compare-n-images ${TOL} 2
         ${BASELINE}/LaplacianRecursiveGaussianImageFilter2output5.hdr
         ${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.hdr
@@ -236,7 +236,7 @@ ADD_TEST(fiTeLaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
 
 # ------- CannyEdgeDetectionImageFilterTest----------
 
-ADD_TEST(fiTeCannyEdgeDetectionImageFilterTest ${EXE_TESTS}
+add_test(fiTeCannyEdgeDetectionImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/CannyEdgeDetectorImageFilterOutput.png
         ${TEMP}/CannyEdgeDetectorImageFilterOutput.png
@@ -248,7 +248,7 @@ ADD_TEST(fiTeCannyEdgeDetectionImageFilterTest ${EXE_TESTS}
 
 # ------- DiscreteGaussianImageFilterTest----------
 
-ADD_TEST(fiTeDiscreteGaussianImageFilterTest ${EXE_TESTS}
+add_test(fiTeDiscreteGaussianImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/DiscreteGaussianImageFilterOutput.png
         ${TEMP}/DiscreteGaussianImageFilterOutput.png
@@ -260,7 +260,7 @@ ADD_TEST(fiTeDiscreteGaussianImageFilterTest ${EXE_TESTS}
 
 # ------- MedianImageFilterTest----------
 
-ADD_TEST(fiTeMedianImageFilterTest ${EXE_TESTS}
+add_test(fiTeMedianImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/MedianImageFilterOutput.png
         ${TEMP}/MedianImageFilterOutput.png
@@ -271,7 +271,7 @@ ADD_TEST(fiTeMedianImageFilterTest ${EXE_TESTS}
 
 # ------- BinaryThresholdImageFilterTest----------
 
-ADD_TEST(fiTeBinaryThresholdImageFilterTest ${EXE_TESTS}
+add_test(fiTeBinaryThresholdImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/BinaryThresholdImageFilterOutput.png
         ${TEMP}/BinaryThresholdImageFilterOutput.png
@@ -283,7 +283,7 @@ ADD_TEST(fiTeBinaryThresholdImageFilterTest ${EXE_TESTS}
 
 # ------- DerivativeImageFilterTest----------
 
-ADD_TEST(fiTeDerivativeImageFilterTest ${EXE_TESTS}
+add_test(fiTeDerivativeImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 2
         ${BASELINE}/DerivativeImageFilterFloatOutput.hdr
         ${TEMP}/DerivativeImageFilterFloatOutput.hdr
@@ -296,8 +296,8 @@ ADD_TEST(fiTeDerivativeImageFilterTest ${EXE_TESTS}
     1 0
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbFilteringExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
+target_link_libraries(otbFilteringExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -49,7 +49,7 @@ set(ORACLE_OCI_NAMES clntsh libclntsh oci)
 set(ORACLE_NNZ_NAMES nnz10 libnnz10 nnz11 libnnz11 ociw32)
 set(ORACLE_OCCI_NAMES libocci occi oraocci10 oraocci11)
 
-set(ORACLE_LIB_DIR 
+set(ORACLE_LIB_DIR
   ${ORACLE_HOME}/lib
   ${ORACLE_HOME}/OCI/lib/MSVC)
 

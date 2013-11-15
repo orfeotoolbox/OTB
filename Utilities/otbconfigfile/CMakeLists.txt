@@ -1,27 +1,27 @@
-PROJECT(otbconfigfile)
+project(otbconfigfile)
 
-FILE(GLOB otbconfigfilelib_SRCS "ConfigFile.cpp")
-FILE(GLOB otbconfigfilelib_HDRS "ConfigFile.h")
+file(GLOB otbconfigfilelib_SRCS "ConfigFile.cpp")
+file(GLOB otbconfigfilelib_HDRS "ConfigFile.h")
 
-ADD_LIBRARY(otbconfigfile ${otbconfigfilelib_SRCS} )
+add_library(otbconfigfile ${otbconfigfilelib_SRCS} )
 
-IF(OTB_LIBRARY_PROPERTIES)
-  SET_TARGET_PROPERTIES(otbconfigfile PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-ENDIF(OTB_LIBRARY_PROPERTIES)
+if(OTB_LIBRARY_PROPERTIES)
+  set_target_properties(otbconfigfile PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+endif(OTB_LIBRARY_PROPERTIES)
 
 
 
-IF(NOT OTB_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS otbconfigfile
+if(NOT OTB_INSTALL_NO_LIBRARIES)
+  install(TARGETS otbconfigfile
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+endif(NOT OTB_INSTALL_NO_LIBRARIES)
 
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  INSTALL(FILES ${otbconfigfilelib_HDRS}
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  install(FILES ${otbconfigfilelib_HDRS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbconfigfile
     COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 

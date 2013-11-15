@@ -1,23 +1,23 @@
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
-SET(FUSION_TESTS1 ${CXX_TEST_PATH}/otbFusionTests1)
+set(FUSION_TESTS1 ${CXX_TEST_PATH}/otbFusionTests1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFusion1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------            otb::ImageFusionBase   ------------------------------
-ADD_TEST(fuTuFusionImageBaseNew ${FUSION_TESTS1}
+add_test(fuTuFusionImageBaseNew ${FUSION_TESTS1}
         otbFusionImageBaseNew
 )
 # -------            otb::BayesianFusionFilter   ------------------------------
-ADD_TEST(fuTuBayesianFusionFilterNew ${FUSION_TESTS1}
+add_test(fuTuBayesianFusionFilterNew ${FUSION_TESTS1}
         otbBayesianFusionFilterNew
 )
 
-ADD_TEST(fuTvBayesianFusionFilter ${FUSION_TESTS1}
+add_test(fuTvBayesianFusionFilter ${FUSION_TESTS1}
     --compare-image ${NOTOL}  ${BASELINE}/fuTvBayesianFusion.tif
                            ${TEMP}/fuTvBayesianFusion.tif
         otbBayesianFusionFilter
@@ -29,11 +29,11 @@ ADD_TEST(fuTvBayesianFusionFilter ${FUSION_TESTS1}
 
 
 # -------    otb::SimpleRcsPanSharpeningFusionImageFilter   -------------------
-ADD_TEST(fuTuSimpleRcsPanSharpeningFusionImageFilterNew ${FUSION_TESTS1}
+add_test(fuTuSimpleRcsPanSharpeningFusionImageFilterNew ${FUSION_TESTS1}
         otbSimpleRcsPanSharpeningFusionImageFilterNew
 )
 
-ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS1}
+add_test(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS1}
     --compare-image ${EPSILON_8}  ${BASELINE}/fuTvRcsPanSharpeningFusion.tif
                            ${TEMP}/fuTvRcsPanSharpeningFusion.tif
         otbSimpleRcsPanSharpeningFusionImageFilter
@@ -43,11 +43,11 @@ ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS1}
 )
 
 # -------    otb::LmvmPanSharpeningFusionImageFilter   -------------------
-ADD_TEST(fuTuLmvmPanSharpeningFusionImageFilterNew ${FUSION_TESTS1}
+add_test(fuTuLmvmPanSharpeningFusionImageFilterNew ${FUSION_TESTS1}
         otbLmvmPanSharpeningFusionImageFilterNew
 )
 
-ADD_TEST(fuTvLmvmPanSharpeningFusionImageFilter ${FUSION_TESTS1}
+add_test(fuTvLmvmPanSharpeningFusionImageFilter ${FUSION_TESTS1}
     --compare-image ${EPSILON_8}  ${BASELINE}/fuTvLmvmPanSharpeningFusion.tif
                            ${TEMP}/fuTvLmvmPanSharpeningFusion.tif
         otbLmvmPanSharpeningFusionImageFilter
@@ -61,7 +61,7 @@ ADD_TEST(fuTvLmvmPanSharpeningFusionImageFilter ${FUSION_TESTS1}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # A enrichir
-SET(Fusion_SRCS1
+set(Fusion_SRCS1
 otbFusionTests1.cxx
 otbFusionImageBaseNew.cxx
 otbBayesianFusionFilterNew.cxx
@@ -74,5 +74,5 @@ otbLmvmPanSharpeningFusionImageFilter.cxx
 
 OTB_ADD_EXECUTABLE(otbFusionTests1 "${Fusion_SRCS1}" "OTBFusion;OTBIO;OTBTesting")
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

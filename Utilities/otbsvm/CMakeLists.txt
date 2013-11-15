@@ -4,33 +4,33 @@
 # Download site : http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 #
 
-PROJECT(OTBSVM)
+project(OTBSVM)
 
 # source files for otbsvm
-SET(OTBSVM_SRCS
-svm.cpp 
+set(OTBSVM_SRCS
+svm.cpp
 )
 
 # otbsvm needs ITK include dirs (bad design! this is a circular dependency between otbsvm and OTB)
-INCLUDE_DIRECTORIES(${ITK_INCLUDE_DIRS})
+include_directories(${ITK_INCLUDE_DIRS})
 
-ADD_LIBRARY(otbsvm ${OTBSVM_SRCS})
-TARGET_LINK_LIBRARIES (otbsvm ${ITK_LIBRARIES})
-IF(OTB_LIBRARY_PROPERTIES)
-  SET_TARGET_PROPERTIES(otbsvm PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-ENDIF(OTB_LIBRARY_PROPERTIES)
+add_library(otbsvm ${OTBSVM_SRCS})
+target_link_libraries(otbsvm ${ITK_LIBRARIES})
+if(OTB_LIBRARY_PROPERTIES)
+  set_target_properties(otbsvm PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+endif(OTB_LIBRARY_PROPERTIES)
 
-IF(NOT OTB_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS otbsvm
+if(NOT OTB_INSTALL_NO_LIBRARIES)
+  install(TARGETS otbsvm
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+endif(NOT OTB_INSTALL_NO_LIBRARIES)
 
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  FILE(GLOB __files "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-  INSTALL(FILES ${__files}
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  file(GLOB __files "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  install(FILES ${__files}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbsvm
     COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
 

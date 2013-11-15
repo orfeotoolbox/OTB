@@ -1,65 +1,65 @@
-PROJECT(ProjectionsExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(ProjectionsExamples)
+include_regular_expression("^.*$")
 
 # Adjust the compiler flags to avoid problems with multiline comment.
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(
         SensorModelExample.cxx
         PROPERTIES COMPILE_FLAGS -Wno-comment
   )
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 
-ADD_EXECUTABLE(SensorModelExample SensorModelExample.cxx )
-TARGET_LINK_LIBRARIES(SensorModelExample OTBProjections OTBCommon OTBIO)
+add_executable(SensorModelExample SensorModelExample.cxx )
+target_link_libraries(SensorModelExample OTBProjections OTBCommon OTBIO)
 
-ADD_EXECUTABLE(MapProjectionExample MapProjectionExample.cxx )
-TARGET_LINK_LIBRARIES(MapProjectionExample OTBProjections OTBCommon OTBIO)
+add_executable(MapProjectionExample MapProjectionExample.cxx )
+target_link_libraries(MapProjectionExample OTBProjections OTBCommon OTBIO)
 
-ADD_EXECUTABLE(OrthoRectificationExample OrthoRectificationExample.cxx )
-TARGET_LINK_LIBRARIES(OrthoRectificationExample OTBProjections OTBCommon OTBIO)
+add_executable(OrthoRectificationExample OrthoRectificationExample.cxx )
+target_link_libraries(OrthoRectificationExample OTBProjections OTBCommon OTBIO)
 
-IF( OTB_USE_CURL )
-ADD_EXECUTABLE(PlaceNameToLonLatExample PlaceNameToLonLatExample.cxx )
-TARGET_LINK_LIBRARIES(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO )
+if( OTB_USE_CURL )
+add_executable(PlaceNameToLonLatExample PlaceNameToLonLatExample.cxx )
+target_link_libraries(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO )
 
-ADD_EXECUTABLE(CoordinateToNameExample CoordinateToNameExample.cxx )
-TARGET_LINK_LIBRARIES(CoordinateToNameExample OTBProjections OTBCommon OTBIO )
+add_executable(CoordinateToNameExample CoordinateToNameExample.cxx )
+target_link_libraries(CoordinateToNameExample OTBProjections OTBCommon OTBIO )
 
-ENDIF( OTB_USE_CURL )
+endif( OTB_USE_CURL )
 
-ADD_EXECUTABLE(VectorDataProjectionExample VectorDataProjectionExample.cxx )
-TARGET_LINK_LIBRARIES(VectorDataProjectionExample OTBProjections OTBCommon OTBIO)
+add_executable(VectorDataProjectionExample VectorDataProjectionExample.cxx )
+target_link_libraries(VectorDataProjectionExample OTBProjections OTBCommon OTBIO)
 
-ADD_EXECUTABLE(GeometriesProjectionExample GeometriesProjectionExample.cxx )
-TARGET_LINK_LIBRARIES(GeometriesProjectionExample OTBProjections OTBOGRAdapters)
+add_executable(GeometriesProjectionExample GeometriesProjectionExample.cxx )
+target_link_libraries(GeometriesProjectionExample OTBProjections OTBOGRAdapters)
 
-ADD_EXECUTABLE(VectorDataExtractROIExample VectorDataExtractROIExample.cxx )
-TARGET_LINK_LIBRARIES(VectorDataExtractROIExample OTBProjections OTBCommon OTBIO)
+add_executable(VectorDataExtractROIExample VectorDataExtractROIExample.cxx )
+target_link_libraries(VectorDataExtractROIExample OTBProjections OTBCommon OTBIO)
 
-ADD_EXECUTABLE(EstimateRPCSensorModelExample EstimateRPCSensorModelExample.cxx )
-TARGET_LINK_LIBRARIES(EstimateRPCSensorModelExample OTBProjections OTBCommon OTBIO)
+add_executable(EstimateRPCSensorModelExample EstimateRPCSensorModelExample.cxx )
+target_link_libraries(EstimateRPCSensorModelExample OTBProjections OTBCommon OTBIO)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Remote sensing images (large images )
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
+  set(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+endif(OTB_DATA_USE_LARGEINPUT)
 
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbProjectionsExamplesTests)
-SET(EXE_TESTS2 ${CXX_TEST_PATH}/otbProjectionsExamplesTests2)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbProjectionsExamplesTests)
+set(EXE_TESTS2 ${CXX_TEST_PATH}/otbProjectionsExamplesTests2)
 
-SET(TOL 0.0)
-SET(EPSILON_4 0.0001)
+set(TOL 0.0)
+set(EPSILON_4 0.0001)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTeOrthoRectificationExampleTest ${EXE_TESTS}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTeOrthoRectificationExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/panOrthoToul.tif
         ${TEMP}/panOrthoToul.tif
@@ -77,7 +77,7 @@ ADD_TEST(prTeOrthoRectificationExampleTest ${EXE_TESTS}
 
 )
 
-ADD_TEST(prTeOrthoRectificationExampleXSTest ${EXE_TESTS}
+add_test(prTeOrthoRectificationExampleXSTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/xsOrthoToul.tif
         ${TEMP}/xsOrthoToul.tif
@@ -94,9 +94,9 @@ ADD_TEST(prTeOrthoRectificationExampleXSTest ${EXE_TESTS}
         -0.6
 
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(prTeMapProjectionExampleTest ${EXE_TESTS}
+add_test(prTeMapProjectionExampleTest ${EXE_TESTS}
         --compare-ascii ${TOL}
         ${BASELINE}/mapProjectionExample.txt
         ${TEMP}/mapProjectionExample.txt
@@ -104,8 +104,8 @@ ADD_TEST(prTeMapProjectionExampleTest ${EXE_TESTS}
             ${TEMP}/mapProjectionExample.txt
 )
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTeVectorDataProjectionExampleTest ${EXE_TESTS}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTeVectorDataProjectionExampleTest ${EXE_TESTS}
         --compare-ogr ${TOL}
         ${BASELINE}/vectorDataProjectionExample.shp
         ${TEMP}/vectorDataProjectionExample.shp
@@ -114,10 +114,10 @@ ADD_TEST(prTeVectorDataProjectionExampleTest ${EXE_TESTS}
         ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
             ${TEMP}/vectorDataProjectionExample.shp
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTeGeometriesProjectionTest ${EXE_TESTS}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(prTeGeometriesProjectionTest ${EXE_TESTS}
         --compare-ogr ${TOL}
         ${BASELINE}/geometriesProjectionExample.shp
         ${TEMP}/geometriesProjectionExample.shp
@@ -126,11 +126,11 @@ ADD_TEST(prTeGeometriesProjectionTest ${EXE_TESTS}
         ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
             ${TEMP}/geometriesProjectionExample.shp
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 #TODO change the example by using a SPOT4 roamnia
-ADD_TEST(prTeEstimateRPCSensorModelExampleTest ${EXE_TESTS}
+add_test(prTeEstimateRPCSensorModelExampleTest ${EXE_TESTS}
          --compare-ascii ${EPSILON_4}
          ${BASELINE}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
          ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
@@ -156,14 +156,14 @@ ADD_TEST(prTeEstimateRPCSensorModelExampleTest ${EXE_TESTS}
          713 2754 -23.007862 -43.365307 0.
 )
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-IF( OTB_USE_CURL )
-ADD_TEST(prTePlaceNameToLonLatExampleTest ${EXE_TESTS2}
+if( OTB_USE_CURL )
+add_test(prTePlaceNameToLonLatExampleTest ${EXE_TESTS2}
     PlaceNameToLonLatExampleTest
         Toulouse
 )
-ADD_TEST(prTeCoordinateToNameExampleTest ${EXE_TESTS2}
+add_test(prTeCoordinateToNameExampleTest ${EXE_TESTS2}
          --compare-ascii ${TOL}
          ${BASELINE}/CoordinateToNameExample.txt
          ${TEMP}/CoordinateToNameExample.txt
@@ -171,17 +171,17 @@ ADD_TEST(prTeCoordinateToNameExampleTest ${EXE_TESTS2}
          103.78 1.29
          ${TEMP}/CoordinateToNameExample.txt
 )
-ENDIF( OTB_USE_CURL )
+endif( OTB_USE_CURL )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
+target_link_libraries(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections OTBTesting)
 
-IF( OTB_USE_CURL )
-  ADD_EXECUTABLE(otbProjectionsExamplesTests2 otbProjectionsExamplesTests2.cxx)
-  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests2 OTBCommon OTBIO OTBProjections OTBTesting)
-ENDIF( OTB_USE_CURL )
+if( OTB_USE_CURL )
+  add_executable(otbProjectionsExamplesTests2 otbProjectionsExamplesTests2.cxx)
+  target_link_libraries(otbProjectionsExamplesTests2 OTBCommon OTBIO OTBProjections OTBTesting)
+endif( OTB_USE_CURL )
 
 
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

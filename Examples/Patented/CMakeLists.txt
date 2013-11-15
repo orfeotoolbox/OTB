@@ -1,56 +1,56 @@
-PROJECT(PatentedExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(PatentedExamples)
+include_regular_expression("^.*$")
 
 
-#ADD_EXECUTABLE(FuzzyConnectednessImageFilter FuzzyConnectednessImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(FuzzyConnectednessImageFilter OTBIO OTBCommon )
+#add_executable(FuzzyConnectednessImageFilter FuzzyConnectednessImageFilter.cxx )
+#target_link_libraries(FuzzyConnectednessImageFilter OTBIO OTBCommon )
 
-#ADD_EXECUTABLE(HybridSegmentationFuzzyVoronoi HybridSegmentationFuzzyVoronoi.cxx )
-#TARGET_LINK_LIBRARIES(HybridSegmentationFuzzyVoronoi OTBIO OTBCommon )
+#add_executable(HybridSegmentationFuzzyVoronoi HybridSegmentationFuzzyVoronoi.cxx )
+#target_link_libraries(HybridSegmentationFuzzyVoronoi OTBIO OTBCommon )
 
 #Examples using SIFT
-IF(OTB_USE_SIFTFAST)
-ADD_EXECUTABLE(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx )
-TARGET_LINK_LIBRARIES(SIFTDisparityMapEstimation OTBFeatureExtraction OTBCommon OTBIO
+if(OTB_USE_SIFTFAST)
+add_executable(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx )
+target_link_libraries(SIFTDisparityMapEstimation OTBFeatureExtraction OTBCommon OTBIO
 ${ITK_LIBRARIES})
-ENDIF(OTB_USE_SIFTFAST)
+endif(OTB_USE_SIFTFAST)
 
-ADD_EXECUTABLE(EstimateAffineTransformationExample EstimateAffineTransformationExample.cxx )
-TARGET_LINK_LIBRARIES(EstimateAffineTransformationExample OTBFeatureExtraction OTBCommon OTBIO OTBProjections
+add_executable(EstimateAffineTransformationExample EstimateAffineTransformationExample.cxx )
+target_link_libraries(EstimateAffineTransformationExample OTBFeatureExtraction OTBCommon OTBIO OTBProjections
 ${ITK_LIBRARIES})
 
 #Feature extraction examples based on SIFT
-ADD_EXECUTABLE(SIFTExample SIFTExample.cxx)
-TARGET_LINK_LIBRARIES(SIFTExample OTBIO OTBCommon OTBFeatureExtraction
+add_executable(SIFTExample SIFTExample.cxx)
+target_link_libraries(SIFTExample OTBIO OTBCommon OTBFeatureExtraction
 ${ITK_LIBRARIES}  )
 
-IF(OTB_USE_SIFTFAST)
+if(OTB_USE_SIFTFAST)
 
-  ADD_EXECUTABLE(SIFTFastExample SIFTFastExample.cxx)
-  TARGET_LINK_LIBRARIES(SIFTFastExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES})
+  add_executable(SIFTFastExample SIFTFastExample.cxx)
+  target_link_libraries(SIFTFastExample OTBIO OTBCommon OTBFeatureExtraction ${ITK_LIBRARIES})
 
-  ADD_EXECUTABLE(SIFTDensityExample SIFTDensityExample.cxx)
-  TARGET_LINK_LIBRARIES(SIFTDensityExample OTBIO OTBCommon OTBBasicFilters ${ITK_LIBRARIES})
+  add_executable(SIFTDensityExample SIFTDensityExample.cxx)
+  target_link_libraries(SIFTDensityExample OTBIO OTBCommon OTBBasicFilters ${ITK_LIBRARIES})
 
-ENDIF(OTB_USE_SIFTFAST)
+endif(OTB_USE_SIFTFAST)
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Patented)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Patented)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbPatentedExamplesTests)
-SET(EXE_TESTS2 ${CXX_TEST_PATH}/otbPatentedExamplesTests2)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbPatentedExamplesTests)
+set(EXE_TESTS2 ${CXX_TEST_PATH}/otbPatentedExamplesTests2)
 
-SET(TOL 0.0)
+set(TOL 0.0)
 
 
 # ------- HybridSegmentationFuzzyVoronoiTest----------
 
-#ADD_TEST(paTeHybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
+#add_test(paTeHybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
 #	--compare-n-images ${TOL} 1
 #	${BASELINE}/HybridSegmentationFuzzyVoronoiOutput.png
 #	${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png
@@ -62,7 +62,7 @@ SET(TOL 0.0)
 
 # -----EstimateAffineTransformationExampleTest---------
 
-ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
+add_test(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
    --compare-image ${TOL}
          ${BASELINE}/EstimateAffineTransformationOutput.png
          ${TEMP}/AffineTransformationOutput.png
@@ -75,8 +75,8 @@ ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
 )
 
 # -----SIFTDisparityMapEstimationTest---------
-IF(OTB_USE_SIFTFAST)
-ADD_TEST(dmTeSIFTDisparityMapEstimationTest ${EXE_TESTS2}
+if(OTB_USE_SIFTFAST)
+add_test(dmTeSIFTDisparityMapEstimationTest ${EXE_TESTS2}
   --compare-image ${TOL}
    ${BASELINE}/SIFTdeformationFieldOutput.png
    ${TEMP}/SIFTdeformationFieldOutput.png
@@ -85,9 +85,9 @@ SIFTDisparityMapEstimationTest
    ${INPUTDATA}/ROISpot5Warped.png
    ${TEMP}/SIFTdeformationFieldOutput.png
 )
-ENDIF(OTB_USE_SIFTFAST)
+endif(OTB_USE_SIFTFAST)
 
-ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
+add_test(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 4
         ${BASELINE}/ScaleInvariantFeatureImageFilterOutput1.png
         ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
@@ -108,8 +108,8 @@ ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
   1 10 0.5 0
 )
 
-IF(OTB_USE_SIFTFAST)
-ADD_TEST(feTeSIFTFastExampleTest ${EXE_TESTS2}
+if(OTB_USE_SIFTFAST)
+add_test(feTeSIFTFastExampleTest ${EXE_TESTS2}
   --compare-image ${TOL}
    ${BASELINE}/ROISpot5SiftFast.png
    ${TEMP}/ROISpot5SiftFast.png
@@ -118,15 +118,15 @@ ADD_TEST(feTeSIFTFastExampleTest ${EXE_TESTS2}
    ${TEMP}/ROISpot5SiftFast.png
    3
 )
-ENDIF(OTB_USE_SIFTFAST)
+endif(OTB_USE_SIFTFAST)
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbPatentedExamplesTests otbPatentedExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbPatentedExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbPatentedExamplesTests otbPatentedExamplesTests.cxx)
+target_link_libraries(otbPatentedExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-IF(OTB_USE_SIFTFAST)
-ADD_EXECUTABLE(otbPatentedExamplesTests2 otbPatentedExamplesTests2.cxx)
-TARGET_LINK_LIBRARIES(otbPatentedExamplesTests2  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBFeatureExtraction OTBTesting)
-ENDIF(OTB_USE_SIFTFAST)
+if(OTB_USE_SIFTFAST)
+add_executable(otbPatentedExamplesTests2 otbPatentedExamplesTests2.cxx)
+target_link_libraries(otbPatentedExamplesTests2  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBFeatureExtraction OTBTesting)
+endif(OTB_USE_SIFTFAST)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -1,8 +1,8 @@
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
-SET(MULTITEMPORAL_TESTS1 ${CXX_TEST_PATH}/otbMultiTemporalTests1)
+set(MULTITEMPORAL_TESTS1 ${CXX_TEST_PATH}/otbMultiTemporalTests1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MULTITEMPORAL_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -10,44 +10,44 @@ SET(MULTITEMPORAL_TESTS1 ${CXX_TEST_PATH}/otbMultiTemporalTests1)
 
 # -------            otb::testname   ------------------------------
 
-ADD_TEST(mtTvPolynomialTimeSeriesTest1 ${MULTITEMPORAL_TESTS1}
+add_test(mtTvPolynomialTimeSeriesTest1 ${MULTITEMPORAL_TESTS1}
         otbPolynomialTimeSeriesTest
          )
 
-ADD_TEST(mtTuTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
+add_test(mtTuTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorNew
          )
 
-ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
+add_test(mtTvTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorTest
         1 2 3
          )
 
-ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor2 ${MULTITEMPORAL_TESTS1}
+add_test(mtTvTimeSeriesLeastSquaresFittingFunctor2 ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorTest
         10 0.3 3.123
          )
 
-ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctorWeights ${MULTITEMPORAL_TESTS1}
+add_test(mtTvTimeSeriesLeastSquaresFittingFunctorWeights ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorWeightsTest
         1 2 3
          )
 
 
-ADD_TEST(mtTuSavitzkyGolayInterpolationFunctor ${MULTITEMPORAL_TESTS1}
+add_test(mtTuSavitzkyGolayInterpolationFunctor ${MULTITEMPORAL_TESTS1}
         otbSavitzkyGolayInterpolationFunctorNew
          )
 
-ADD_TEST(mtTvSavitzkyGolayInterpolationFunctorTest ${MULTITEMPORAL_TESTS1}
+add_test(mtTvSavitzkyGolayInterpolationFunctorTest ${MULTITEMPORAL_TESTS1}
         otbSavitzkyGolayInterpolationFunctorTest
          )
 
-ADD_TEST(mtTvEnvelopeSavitzkyGolayInterpolationFunctorTest ${MULTITEMPORAL_TESTS1}
+add_test(mtTvEnvelopeSavitzkyGolayInterpolationFunctorTest ${MULTITEMPORAL_TESTS1}
         otbEnvelopeSavitzkyGolayInterpolationFunctorTest
          )
 
 # -------  CXX Source Files -----------------------------------
-SET(BasicMultiTemporal_SRCS1
+set(BasicMultiTemporal_SRCS1
 otbPolynomialTimeSeriesTest.cxx
 otbTimeSeriesLeastSquareFittingFunctorNew.cxx
 otbTimeSeriesLeastSquareFittingFunctorTest.cxx
@@ -57,8 +57,8 @@ otbSavitzkyGolayInterpolationFunctorTest.cxx
 otbEnvelopeSavitzkyGolayInterpolationFunctorTest.cxx
 )
 
-ADD_EXECUTABLE(otbMultiTemporalTests1 otbMultiTemporalTests1.cxx ${BasicMultiTemporal_SRCS1})
-TARGET_LINK_LIBRARIES(otbMultiTemporalTests1 OTBIO OTBMultiTemporal  OTBTesting)
+add_executable(otbMultiTemporalTests1 otbMultiTemporalTests1.cxx ${BasicMultiTemporal_SRCS1})
+target_link_libraries(otbMultiTemporalTests1 OTBIO OTBMultiTemporal  OTBTesting)
 
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

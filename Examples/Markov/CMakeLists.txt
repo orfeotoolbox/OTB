@@ -1,36 +1,36 @@
-PROJECT(ImageMarkovExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(ImageMarkovExamples)
+include_regular_expression("^.*$")
 
-SET(Markov_EXAMPLES ${CXX_TEST_PATH}/otbMarkovExamplesTests)
+set(Markov_EXAMPLES ${CXX_TEST_PATH}/otbMarkovExamplesTests)
 
-ADD_EXECUTABLE(MarkovClassification1Example MarkovClassification1Example.cxx )
-TARGET_LINK_LIBRARIES(MarkovClassification1Example OTBMarkov OTBCommon OTBIO )
+add_executable(MarkovClassification1Example MarkovClassification1Example.cxx )
+target_link_libraries(MarkovClassification1Example OTBMarkov OTBCommon OTBIO )
 
-ADD_EXECUTABLE(MarkovClassification2Example MarkovClassification2Example.cxx )
-TARGET_LINK_LIBRARIES(MarkovClassification2Example OTBMarkov OTBCommon OTBIO )
+add_executable(MarkovClassification2Example MarkovClassification2Example.cxx )
+target_link_libraries(MarkovClassification2Example OTBMarkov OTBCommon OTBIO )
 
-ADD_EXECUTABLE(MarkovClassification3Example MarkovClassification3Example.cxx )
-TARGET_LINK_LIBRARIES(MarkovClassification3Example OTBMarkov OTBCommon OTBIO )
+add_executable(MarkovClassification3Example MarkovClassification3Example.cxx )
+target_link_libraries(MarkovClassification3Example OTBMarkov OTBCommon OTBIO )
 
-ADD_EXECUTABLE(MarkovRestaurationExample MarkovRestaurationExample.cxx )
-TARGET_LINK_LIBRARIES(MarkovRestaurationExample OTBMarkov OTBCommon OTBIO )
+add_executable(MarkovRestaurationExample MarkovRestaurationExample.cxx )
+target_link_libraries(MarkovRestaurationExample OTBMarkov OTBCommon OTBIO )
 
-ADD_EXECUTABLE(MarkovRegularizationExample MarkovRegularizationExample.cxx )
-TARGET_LINK_LIBRARIES(MarkovRegularizationExample OTBMarkov OTBCommon OTBIO )
+add_executable(MarkovRegularizationExample MarkovRegularizationExample.cxx )
+target_link_libraries(MarkovRegularizationExample OTBMarkov OTBCommon OTBIO )
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Markov)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Markov)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbMarkovExamplesTests)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbMarkovExamplesTests)
 
-SET(TOL 0.0)
-SET(EPSILON 0.00000001)
+set(TOL 0.0)
+set(EPSILON 0.00000001)
 
-ADD_TEST(maTeMarkovClassification1ExampleTest ${EXE_TESTS}
+add_test(maTeMarkovClassification1ExampleTest ${EXE_TESTS}
         --compare-image ${EPSILON}
                     ${BASELINE}/MarkovClassification1.png
                     ${TEMP}/MarkovClassification1.png
@@ -43,7 +43,7 @@ ADD_TEST(maTeMarkovClassification1ExampleTest ${EXE_TESTS}
         1 #true to use always the same rand() sample, false otherwise
 )
 
-ADD_TEST(maTeMarkovClassification2ExampleTest ${EXE_TESTS}
+add_test(maTeMarkovClassification2ExampleTest ${EXE_TESTS}
         --compare-image ${EPSILON}
                     ${BASELINE}/MarkovClassification2.png
                     ${TEMP}/MarkovClassification2.png
@@ -55,7 +55,7 @@ ADD_TEST(maTeMarkovClassification2ExampleTest ${EXE_TESTS}
         1 # true to use always the same rand() sample, false otherwise
 )
 
-ADD_TEST(maTeMarkovClassification3ExampleTest ${EXE_TESTS}
+add_test(maTeMarkovClassification3ExampleTest ${EXE_TESTS}
         --compare-image ${EPSILON}
                     ${BASELINE}/MarkovClassification3.png
                     ${TEMP}/MarkovClassification3.png
@@ -66,7 +66,7 @@ ADD_TEST(maTeMarkovClassification3ExampleTest ${EXE_TESTS}
         1.0 20 1.0 1
 )
 
-ADD_TEST(maTeMarkovRestaurationExampleTest ${EXE_TESTS}
+add_test(maTeMarkovRestaurationExampleTest ${EXE_TESTS}
         --compare-image ${EPSILON}
                         ${BASELINE}/MarkovRestauration.png
                         ${TEMP}/MarkovRestauration.png
@@ -81,7 +81,7 @@ ADD_TEST(maTeMarkovRestaurationExampleTest ${EXE_TESTS}
 )
 
 
-ADD_TEST(maTeMarkovRegularizationExampleTest ${EXE_TESTS}
+add_test(maTeMarkovRegularizationExampleTest ${EXE_TESTS}
         --compare-image ${EPSILON}
                       ${BASELINE}/MarkovRegularization-scaled.png
                       ${TEMP}/MarkovRegularization-scaled.png
@@ -95,10 +95,10 @@ ADD_TEST(maTeMarkovRegularizationExampleTest ${EXE_TESTS}
        1 # true to use always the same rand() sample, false otherwis
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbMarkovExamplesTests otbMarkovExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbMarkovExamplesTests   ${ITK_LIBRARIES}  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbMarkovExamplesTests otbMarkovExamplesTests.cxx)
+target_link_libraries(otbMarkovExamplesTests   ${ITK_LIBRARIES}  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov OTBTesting)
 
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 

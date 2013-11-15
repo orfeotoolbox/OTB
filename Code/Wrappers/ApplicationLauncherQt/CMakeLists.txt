@@ -10,7 +10,7 @@ target_link_libraries(otbApplicationLauncherQt
                        OTBWrapperQtWidget
                        OTBApplicationEngine
                        ${QT_LIBRARIES})
-                       
+
 install(TARGETS otbApplicationLauncherQt
         RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
@@ -50,7 +50,7 @@ configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.sh.buildtree.in
                 @ONLY )
 file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree/otbgui
      DESTINATION ${CLI_OUPUT_DIR}
-     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
+     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.sh.installtree.in
                 ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbgui
                 @ONLY )

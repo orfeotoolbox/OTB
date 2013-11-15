@@ -1,129 +1,129 @@
-IF(BUILD_APPLICATIONS)
-  CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)
-ELSE(BUILD_APPLICATIONS)
-  CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-ENDIF(BUILD_APPLICATIONS)
+if(BUILD_APPLICATIONS)
+  cmake_minimum_required(VERSION 2.8.3)
+else(BUILD_APPLICATIONS)
+  cmake_minimum_required(VERSION 2.6)
+endif(BUILD_APPLICATIONS)
 
-IF(COMMAND CMAKE_POLICY)
-  CMAKE_POLICY(SET CMP0003 NEW)
-ENDIF(COMMAND CMAKE_POLICY)
+if(COMMAND CMAKE_POLICY)
+  cmake_policy(SET CMP0003 NEW)
+endif(COMMAND CMAKE_POLICY)
 
 #-----------------------------------------------------------------------------
 # Sanity check -- prevent in-source builds
 #
-INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/CMake/PreventInSourceBuilds.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/PreventInSourceBuilds.cmake)
 
 #For the support of cmake 2.6 which does not have VERSION_LESS
-INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/CMake/CompareVersionStrings.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/CompareVersionStrings.cmake)
 
-PROJECT(OTB)
+project(OTB)
 
 # Path to additional CMake modules
-SET(CMAKE_MODULE_PATH
+set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
 
-INCLUDE(CMakeDependentOption)
+include(CMakeDependentOption)
 
-INCLUDE(SourceStatus)
+include(SourceStatus)
 
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
-SET(OTB_VERSION_MAJOR "4")
-SET(OTB_VERSION_MINOR "0")
-SET(OTB_VERSION_PATCH "0")
+set(OTB_VERSION_MAJOR "4")
+set(OTB_VERSION_MINOR "0")
+set(OTB_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
-SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
+set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
-IF(NOT OTB_NO_LIBRARY_VERSION)
+if(NOT OTB_NO_LIBRARY_VERSION)
   # This setting of SOVERSION assumes that any API change
   # will increment either the minor or major version number of OTB.
-  SET(OTB_LIBRARY_PROPERTIES
+  set(OTB_LIBRARY_PROPERTIES
       VERSION   "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}"
       SOVERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-ENDIF(NOT OTB_NO_LIBRARY_VERSION)
+endif(NOT OTB_NO_LIBRARY_VERSION)
 
 #-----------------------------------------------------------------------------
 # Test for some required system information.
-INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
+include(${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
+include(${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 
 #-----------------------------------------------------------------------------
 # Configure Dart testing support.  This should be done before any
-# MESSAGE(FATAL_ERROR ...) commands are invoked.
+# message(FATAL_ERROR ...) commands are invoked.
 
-OPTION(BUILD_TESTING  "Build testing." OFF)
-OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
-OPTION(BUILD_APPLICATIONS "Build applications" ON)
-OPTION(BUILD_BUG_TRACKER_TESTS "Build failing tests showing bugs" OFF)
-MARK_AS_ADVANCED(BUILD_BUG_TRACKER_TESTS)
-INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
-CONFIGURE_FILE(CMake/CTestCustom.cmake.in CTestCustom.cmake)
-MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
-ENABLE_TESTING()
-IF(BUILD_TESTING)
-  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
-  MARK_AS_ADVANCED(BUILDNAME)
-ENDIF(BUILD_TESTING)
+option(BUILD_TESTING  "Build testing." OFF)
+option(BUILD_EXAMPLES "Build the Examples directory." OFF)
+option(BUILD_APPLICATIONS "Build applications" ON)
+option(BUILD_BUG_TRACKER_TESTS "Build failing tests showing bugs" OFF)
+mark_as_advanced(BUILD_BUG_TRACKER_TESTS)
+include(${CMAKE_ROOT}/Modules/Dart.cmake)
+configure_file(CMake/CTestCustom.cmake.in CTestCustom.cmake)
+mark_as_advanced(TCL_TCLSH DART_ROOT)
+enable_testing()
+if(BUILD_TESTING)
+  set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
+  mark_as_advanced(BUILDNAME)
+endif(BUILD_TESTING)
 
-INCLUDE(CommonDefinitions)
+include(CommonDefinitions)
 
 
 #-----------------------------------------------------------------------------
 # Option to activate deprecated classes
-OPTION(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
-MARK_AS_ADVANCED(OTB_USE_DEPRECATED)
+option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
+mark_as_advanced(OTB_USE_DEPRECATED)
 
 #-----------------------------------------------------------------------------
 # SHOW_ALL_MSG_DEBUG option
-OPTION(OTB_SHOW_ALL_MSG_DEBUG "OTB developers : Show all messages (debug, dev, etc...) use only for otb developers." OFF)
-MARK_AS_ADVANCED(OTB_SHOW_ALL_MSG_DEBUG)
+option(OTB_SHOW_ALL_MSG_DEBUG "OTB developers : Show all messages (debug, dev, etc...) use only for otb developers." OFF)
+mark_as_advanced(OTB_SHOW_ALL_MSG_DEBUG)
 
 #-----------------------------------------------------------------------------
 # Option to define streaming activation in applications
 # Use by otbConfigure.h.in
 # Note: 8*4000*4000 = 128000000 (double 4000x4000 image)
-SET(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 128000000 CACHE STRING "Image size to activate using streaming for applications.")
-MARK_AS_ADVANCED(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING)
-SET(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 128000000 CACHE STRING "Max size buffer for streaming.")
-MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
+set(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 128000000 CACHE STRING "Image size to activate using streaming for applications.")
+mark_as_advanced(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING)
+set(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 128000000 CACHE STRING "Max size buffer for streaming.")
+mark_as_advanced(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
 
 #-----------------------------------------------------------------------------
 # Option for generate Patented examples
-OPTION(OTB_USE_PATENTED "Build patented examples. ITK must be generated whith patented option (ITK_USE_PATENTED = ON)." OFF)
-MARK_AS_ADVANCED(OTB_USE_PATENTED)
+option(OTB_USE_PATENTED "Build patented examples. ITK must be generated whith patented option (ITK_USE_PATENTED = ON)." OFF)
+mark_as_advanced(OTB_USE_PATENTED)
 
 #
 # Setup the option for each laguage
 #
-OPTION ( OTB_WRAP_PYTHON "Wrap Python" OFF )
-OPTION ( OTB_WRAP_JAVA   "Wrap Java"   OFF )
-#OPTION ( OTB_WRAP_LUA    "Wrap Lua"    OFF )
-#OPTION ( OTB_WRAP_RUBY   "Wrap Ruby"   OFF )
-#OPTION ( OTB_WRAP_TCL    "Wrap Tcl"    OFF )
-#OPTION ( OTB_WRAP_CSHARP "Wrap CSharp" OFF )
-#OPTION ( OTB_WRAP_R      "Wrap R"      OFF )
+option( OTB_WRAP_PYTHON "Wrap Python" OFF )
+option( OTB_WRAP_JAVA   "Wrap Java"   OFF )
+#option( OTB_WRAP_LUA    "Wrap Lua"    OFF )
+#option( OTB_WRAP_RUBY   "Wrap Ruby"   OFF )
+#option( OTB_WRAP_TCL    "Wrap Tcl"    OFF )
+#option( OTB_WRAP_CSHARP "Wrap CSharp" OFF )
+#option( OTB_WRAP_R      "Wrap R"      OFF )
 
 # Generate Qt based GUI
-OPTION ( OTB_WRAP_QT "Enable Qt wrappers" OFF )
+option( OTB_WRAP_QT "Enable Qt wrappers" OFF )
 
 # Do not release this yet
-#OPTION ( OTB_WRAP_PYQT "Enable PyQt wrappers" OFF )
+#option( OTB_WRAP_PYQT "Enable PyQt wrappers" OFF )
 
 #-----------------------------------------------------------------------------
 # Output directories
-SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all ARCHIVE products (static libs, import libs)")
-SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all LIBRARY products (so, modules)")
-SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all RUNTIME products (executables, dlls)")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all ARCHIVE products (static libs, import libs)")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all LIBRARY products (so, modules)")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all RUNTIME products (executables, dlls)")
 
 # backward compatibility (TODO: remove these deprecated variables)
-SET(LIBRARY_OUTPUT_PATH "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-SET(EXECUTABLE_OUTPUT_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-SET(OTB_LIBRARY_PATH "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-SET(OTB_EXECUTABLE_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+set(LIBRARY_OUTPUT_PATH "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+set(OTB_LIBRARY_PATH "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+set(OTB_EXECUTABLE_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+set(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 #-----------------------------------------------------------------------------
 # Installation vars.
@@ -136,119 +136,119 @@ SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 # OTB_INSTALL_NO_RUNTIME       - do not install runtime files
 # OTB_INSTALL_NO_DOCUMENTATION - do not install documentation files
 
-IF(NOT OTB_INSTALL_BIN_DIR)
-  SET(OTB_INSTALL_BIN_DIR "bin")
-ENDIF(NOT OTB_INSTALL_BIN_DIR)
+if(NOT OTB_INSTALL_BIN_DIR)
+  set(OTB_INSTALL_BIN_DIR "bin")
+endif(NOT OTB_INSTALL_BIN_DIR)
 
-IF(NOT OTB_INSTALL_LIB_DIR)
-  SET(OTB_INSTALL_LIB_DIR "lib/otb")
-ENDIF(NOT OTB_INSTALL_LIB_DIR)
+if(NOT OTB_INSTALL_LIB_DIR)
+  set(OTB_INSTALL_LIB_DIR "lib/otb")
+endif(NOT OTB_INSTALL_LIB_DIR)
 
-IF(NOT OTB_INSTALL_APP_DIR)
-  SET(OTB_INSTALL_APP_DIR "${OTB_INSTALL_LIB_DIR}/applications")
-ENDIF(NOT OTB_INSTALL_APP_DIR)
+if(NOT OTB_INSTALL_APP_DIR)
+  set(OTB_INSTALL_APP_DIR "${OTB_INSTALL_LIB_DIR}/applications")
+endif(NOT OTB_INSTALL_APP_DIR)
 
-IF(NOT OTB_INSTALL_PYTHON_DIR)
-  SET(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIB_DIR}/python")
-ENDIF(NOT OTB_INSTALL_PYTHON_DIR)
+if(NOT OTB_INSTALL_PYTHON_DIR)
+  set(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIB_DIR}/python")
+endif(NOT OTB_INSTALL_PYTHON_DIR)
 
-IF(NOT OTB_INSTALL_JAVA_DIR)
-  SET(OTB_INSTALL_JAVA_DIR "${OTB_INSTALL_LIB_DIR}/java")
-ENDIF(NOT OTB_INSTALL_JAVA_DIR)
+if(NOT OTB_INSTALL_JAVA_DIR)
+  set(OTB_INSTALL_JAVA_DIR "${OTB_INSTALL_LIB_DIR}/java")
+endif(NOT OTB_INSTALL_JAVA_DIR)
 
-IF(NOT OTB_INSTALL_DATA_DIR)
-  SET(OTB_INSTALL_DATA_DIR "share/otb")
-ENDIF(NOT OTB_INSTALL_DATA_DIR)
+if(NOT OTB_INSTALL_DATA_DIR)
+  set(OTB_INSTALL_DATA_DIR "share/otb")
+endif(NOT OTB_INSTALL_DATA_DIR)
 
-IF(NOT OTB_INSTALL_INCLUDE_DIR)
-  SET(OTB_INSTALL_INCLUDE_DIR "include/otb")
-ENDIF(NOT OTB_INSTALL_INCLUDE_DIR)
+if(NOT OTB_INSTALL_INCLUDE_DIR)
+  set(OTB_INSTALL_INCLUDE_DIR "include/otb")
+endif(NOT OTB_INSTALL_INCLUDE_DIR)
 
-IF(NOT OTB_INSTALL_PACKAGE_DIR)
-  SET(OTB_INSTALL_PACKAGE_DIR ${OTB_INSTALL_LIB_DIR})
-ENDIF(NOT OTB_INSTALL_PACKAGE_DIR)
+if(NOT OTB_INSTALL_PACKAGE_DIR)
+  set(OTB_INSTALL_PACKAGE_DIR ${OTB_INSTALL_LIB_DIR})
+endif(NOT OTB_INSTALL_PACKAGE_DIR)
 
-SET(OTB_INSTALL_CMAKEMODULE_DIR ${OTB_INSTALL_PACKAGE_DIR}/cmakemodules)
+set(OTB_INSTALL_CMAKEMODULE_DIR ${OTB_INSTALL_PACKAGE_DIR}/cmakemodules)
 
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  SET(OTB_INSTALL_NO_DEVELOPMENT 0)
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  set(OTB_INSTALL_NO_DEVELOPMENT 0)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
-IF(NOT OTB_INSTALL_NO_RUNTIME)
-  SET(OTB_INSTALL_NO_RUNTIME 0)
-ENDIF(NOT OTB_INSTALL_NO_RUNTIME)
+if(NOT OTB_INSTALL_NO_RUNTIME)
+  set(OTB_INSTALL_NO_RUNTIME 0)
+endif(NOT OTB_INSTALL_NO_RUNTIME)
 
-IF(NOT OTB_INSTALL_NO_DOCUMENTATION)
-  SET(OTB_INSTALL_NO_DOCUMENTATION 0)
-ENDIF(NOT OTB_INSTALL_NO_DOCUMENTATION)
+if(NOT OTB_INSTALL_NO_DOCUMENTATION)
+  set(OTB_INSTALL_NO_DOCUMENTATION 0)
+endif(NOT OTB_INSTALL_NO_DOCUMENTATION)
 
-SET(OTB_INSTALL_NO_LIBRARIES)
-IF(OTB_BUILD_SHARED_LIBS)
-  IF(OTB_INSTALL_NO_RUNTIME AND OTB_INSTALL_NO_DEVELOPMENT)
-    SET(OTB_INSTALL_NO_LIBRARIES 1)
-  ENDIF(OTB_INSTALL_NO_RUNTIME AND OTB_INSTALL_NO_DEVELOPMENT)
-ELSE(OTB_BUILD_SHARED_LIBS)
-  IF(OTB_INSTALL_NO_DEVELOPMENT)
-    SET(OTB_INSTALL_NO_LIBRARIES 1)
-  ENDIF(OTB_INSTALL_NO_DEVELOPMENT)
-ENDIF(OTB_BUILD_SHARED_LIBS)
+set(OTB_INSTALL_NO_LIBRARIES)
+if(OTB_BUILD_SHARED_LIBS)
+  if(OTB_INSTALL_NO_RUNTIME AND OTB_INSTALL_NO_DEVELOPMENT)
+    set(OTB_INSTALL_NO_LIBRARIES 1)
+  endif(OTB_INSTALL_NO_RUNTIME AND OTB_INSTALL_NO_DEVELOPMENT)
+else(OTB_BUILD_SHARED_LIBS)
+  if(OTB_INSTALL_NO_DEVELOPMENT)
+    set(OTB_INSTALL_NO_LIBRARIES 1)
+  endif(OTB_INSTALL_NO_DEVELOPMENT)
+endif(OTB_BUILD_SHARED_LIBS)
 
-INCLUDE(PreventInstallOnBuildTree)
-INCLUDE(CheckCXXSourceRuns)
+include(PreventInstallOnBuildTree)
+include(CheckCXXSourceRuns)
 
 #-----------------------------------------------------------------------------
 # External libraries
 
-SET(CMAKE_TRY_COMPILE_CONFIGURATION Release)
+set(CMAKE_TRY_COMPILE_CONFIGURATION Release)
 
-FIND_PACKAGE(OSGeo4W)
+find_package(OSGeo4W)
 # Put GDAL first, since on Windows, include dirs for other libs (curl, expat, mapnik)  contain gdal 1.5 includes
-INCLUDE(ImportGdal)
-INCLUDE(ImportLibLAS) # depends on ImportGdal
-INCLUDE(ImportExpat)
-INCLUDE(ImportITK)
-INCLUDE(ImportJPEG2000)
-INCLUDE(ImportFLTK) # depends on ImportGdal
-INCLUDE(ImportCurl)
-INCLUDE(ImportPqxx)
-INCLUDE(ImportBoost)
-INCLUDE(ImportMapnik) # depends on ImportBoost
-INCLUDE(ImportOpenThreads)
-INCLUDE(ImportOssim)
-INCLUDE(ImportQt4)
-INCLUDE(ImportGetText)
-INCLUDE(ImportSiftFast)
-INCLUDE(ImportTinyXML)
-INCLUDE(ImportMuParser)
-INCLUDE(ImportLibKML)
-INCLUDE(ImportOpenCV)
+include(ImportGdal)
+include(ImportLibLAS) # depends on ImportGdal
+include(ImportExpat)
+include(ImportITK)
+include(ImportJPEG2000)
+include(ImportFLTK) # depends on ImportGdal
+include(ImportCurl)
+include(ImportPqxx)
+include(ImportBoost)
+include(ImportMapnik) # depends on ImportBoost
+include(ImportOpenThreads)
+include(ImportOssim)
+include(ImportQt4)
+include(ImportGetText)
+include(ImportSiftFast)
+include(ImportTinyXML)
+include(ImportMuParser)
+include(ImportLibKML)
+include(ImportOpenCV)
 #-----------------------------------------------------------------------------
 # Option for display all developpment message
 
-OPTION(OTB_CPP_CHECK_SOURCE_FILE "OTB developers : Checking cpp source file (use only for otb developers)." OFF)
-MARK_AS_ADVANCED(OTB_CPP_CHECK_SOURCE_FILE)
-IF(OTB_CPP_CHECK_SOURCE_FILE)
-  FIND_PROGRAM(OTB_CPP_CHECK_PROG "")
-ENDIF(OTB_CPP_CHECK_SOURCE_FILE)
+option(OTB_CPP_CHECK_SOURCE_FILE "OTB developers : Checking cpp source file (use only for otb developers)." OFF)
+mark_as_advanced(OTB_CPP_CHECK_SOURCE_FILE)
+if(OTB_CPP_CHECK_SOURCE_FILE)
+  find_program(OTB_CPP_CHECK_PROG "")
+endif(OTB_CPP_CHECK_SOURCE_FILE)
 
-MACRO(OTB_ADD_EXECUTABLE name sources libraries)
-#  MESSAGE(STATUS "name: ${name}")
-#  MESSAGE(STATUS "sources: ${sources}")
-#  MESSAGE(STATUS "libraries: ${libraries}")
-  ADD_EXECUTABLE(${name} ${sources})
-  TARGET_LINK_LIBRARIES(${name}  ${libraries})
-  IF(OTB_CPP_CHECK_SOURCE_FILE)
-    FOREACH( file ${sources})
-      ADD_CUSTOM_COMMAND(   TARGET ${name}
+macro(OTB_ADD_EXECUTABLE name sources libraries)
+#  message(STATUS "name: ${name}")
+#  message(STATUS "sources: ${sources}")
+#  message(STATUS "libraries: ${libraries}")
+  add_executable(${name} ${sources})
+  target_link_libraries(${name}  ${libraries})
+  if(OTB_CPP_CHECK_SOURCE_FILE)
+    foreach( file ${sources})
+      add_custom_command(   TARGET ${name}
                             PRE_BUILD
                             COMMAND ${OTB_CPP_CHECK_PROG}
                             ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${file}
                             DEPENDS ${libraries}
                             COMMENT "============== C++ checking ${file} source file...  =================="
                             VERBATIM )
-    ENDFOREACH(file)
-  ENDIF(OTB_CPP_CHECK_SOURCE_FILE)
-ENDMACRO(OTB_ADD_EXECUTABLE)
+    endforeach(file)
+  endif(OTB_CPP_CHECK_SOURCE_FILE)
+endmacro(OTB_ADD_EXECUTABLE)
 
 
 
@@ -256,46 +256,46 @@ ENDMACRO(OTB_ADD_EXECUTABLE)
 # The entire OTB tree should use the same include path
 
 # Create the list of include directories needed for OTB header files.
-INCLUDE(${OTB_SOURCE_DIR}/CMake/otbIncludeDirectories.cmake)
+include(${OTB_SOURCE_DIR}/CMake/otbIncludeDirectories.cmake)
 
 # This should be the only INCLUDE_DIRECTORIES command in the entire
 # tree, except for the Utilities and Wrapping directories.  We need to
 # do this in one place to make sure the order is correct.
-INCLUDE_DIRECTORIES(
+include_directories(
   ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
 )
 
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
-ADD_SUBDIRECTORY(Utilities)
+add_subdirectory(Utilities)
 
 # Before building OTB specific code, add include dirs from ITK
 # which are deduced after having configured ITK
-INCLUDE_DIRECTORIES(${ITK_INCLUDE_DIRS})
+include_directories(${ITK_INCLUDE_DIRS})
 # Add these paths to OTB_INCLUDE_DIRS_BUILD_TREE since it is used to
 # generate OTBConfig.cmake
 list(APPEND OTB_INCLUDE_DIRS_BUILD_TREE ${ITK_INCLUDE_DIRS})
 
-ADD_SUBDIRECTORY(Code)
+add_subdirectory(Code)
 
-IF (BUILD_APPLICATIONS)
-  ADD_SUBDIRECTORY(Applications)
-ENDIF (BUILD_APPLICATIONS)
+if(BUILD_APPLICATIONS)
+  add_subdirectory(Applications)
+endif(BUILD_APPLICATIONS)
 
-IF (BUILD_TESTING)
-  ADD_SUBDIRECTORY(Testing)
-ENDIF (BUILD_TESTING)
+if(BUILD_TESTING)
+  add_subdirectory(Testing)
+endif(BUILD_TESTING)
 
-IF (BUILD_EXAMPLES)
-  ADD_SUBDIRECTORY(Examples)
-ENDIF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
+  add_subdirectory(Examples)
+endif(BUILD_EXAMPLES)
 
-IF(MINGW)
-  LINK_LIBRARIES(gdi32)
-ENDIF(MINGW)
+if(MINGW)
+  link_libraries(gdi32)
+endif(MINGW)
 
-INCLUDE(CheckTypeSize)
+include(CheckTypeSize)
 
 CHECK_TYPE_SIZE("long long" OTB_SIZEOF_LONG_LONG)
 CHECK_TYPE_SIZE("__int64"   OTB_SIZEOF___INT64)
@@ -304,69 +304,69 @@ CHECK_TYPE_SIZE("short int" OTB_SIZEOF_SHORT_INT)
 
 #-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
-FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
-MARK_AS_ADVANCED(OTB_DATA_ROOT)
+find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
+mark_as_advanced(OTB_DATA_ROOT)
 
-OPTION(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
-MARK_AS_ADVANCED(OTB_DATA_USE_LARGEINPUT)
-IF(OTB_DATA_USE_LARGEINPUT)
-  FIND_PATH(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
-  MARK_AS_ADVANCED(OTB_DATA_LARGEINPUT_ROOT)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+option(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
+mark_as_advanced(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
+  find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
+  mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-OPTION(OTB_DATA_USE_SPOTPHRINPUT "Use PHR data provided by SPOT." OFF)
-MARK_AS_ADVANCED(OTB_DATA_USE_SPOTPHRINPUT)
-IF(OTB_DATA_USE_SPOTPHRINPUT)
-  FIND_PATH(OTB_DATA_SPOTPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_SPOTPHRINPUT_ROOT})
-  MARK_AS_ADVANCED(OTB_DATA_SPOTPHRINPUT_ROOT)
-ENDIF(OTB_DATA_USE_SPOTPHRINPUT)
+option(OTB_DATA_USE_SPOTPHRINPUT "Use PHR data provided by SPOT." OFF)
+mark_as_advanced(OTB_DATA_USE_SPOTPHRINPUT)
+if(OTB_DATA_USE_SPOTPHRINPUT)
+  find_path(OTB_DATA_SPOTPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_SPOTPHRINPUT_ROOT})
+  mark_as_advanced(OTB_DATA_SPOTPHRINPUT_ROOT)
+endif(OTB_DATA_USE_SPOTPHRINPUT)
 
-OPTION(OTB_DATA_USE_CNESPHRINPUT "Use PHR data provided by CNES." OFF)
-MARK_AS_ADVANCED(OTB_DATA_USE_CNESPHRINPUT)
-IF(OTB_DATA_USE_CNESPHRINPUT)
-  FIND_PATH(OTB_DATA_CNESPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_CNESPHRINPUT_ROOT})
-  MARK_AS_ADVANCED(OTB_DATA_CNESPHRINPUT_ROOT)
-ENDIF(OTB_DATA_USE_CNESPHRINPUT)
+option(OTB_DATA_USE_CNESPHRINPUT "Use PHR data provided by CNES." OFF)
+mark_as_advanced(OTB_DATA_USE_CNESPHRINPUT)
+if(OTB_DATA_USE_CNESPHRINPUT)
+  find_path(OTB_DATA_CNESPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_CNESPHRINPUT_ROOT})
+  mark_as_advanced(OTB_DATA_CNESPHRINPUT_ROOT)
+endif(OTB_DATA_USE_CNESPHRINPUT)
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build
 # This must be done after the definition of all options
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/otbConfigure.h.in
+configure_file(${OTB_SOURCE_DIR}/CMake/otbConfigure.h.in
                ${OTB_BINARY_DIR}/otbConfigure.h)
 
 #-----------------------------------------------------------------------------
 # Uninstall cmake use to uninstall OTB.
-#    CONFIGURE_FILE(
+#    configure_file(
 #      "${CMAKE_CURRENT_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
 #      "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
 #      IMMEDIATE @ONLY)
 
-#    ADD_CUSTOM_TARGET(uninstall
+#    add_custom_target(uninstall
 #      "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 #-----------------------------------------------------------------------------
 # Help other projects use OTB.
 
 # Copy the UseOTB.cmake file to the binary tree for backward compatability.
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/UseOTB.cmake.in
+configure_file(${OTB_SOURCE_DIR}/CMake/UseOTB.cmake.in
                ${OTB_BINARY_DIR}/UseOTB.cmake COPYONLY IMMEDIATE)
 
 # Copy the helper macros to the build tree for use from external projects
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/OTBWrapperMacros.cmake
+configure_file(${OTB_SOURCE_DIR}/CMake/OTBWrapperMacros.cmake
                ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/OTBWrapperMacros.cmake COPYONLY IMMEDIATE)
 
 # Save the compiler settings so another project can import them.
-INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
+include(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
 CMAKE_EXPORT_BUILD_SETTINGS(${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
 
 # Save library dependencies.
-EXPORT_LIBRARY_DEPENDENCIES(${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
+export_library_dependencies(${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
 
 # Create the OTBConfig.cmake file containing the OTB configuration.
-INCLUDE (${OTB_SOURCE_DIR}/CMake/otbGenerateOTBConfig.cmake)
+include(${OTB_SOURCE_DIR}/CMake/otbGenerateOTBConfig.cmake)
 
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  INSTALL(FILES
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  install(FILES
     ${OTB_BINARY_DIR}/OTBBuildSettings.cmake
     ${OTB_BINARY_DIR}/OTBLibraryDepends.cmake
     ${OTB_BINARY_DIR}/UseOTB.cmake
@@ -374,11 +374,11 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
     COMPONENT Development)
 
-  INSTALL(FILES ${OTB_BINARY_DIR}/otbConfigure.h
+  install(FILES ${OTB_BINARY_DIR}/otbConfigure.h
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}
     COMPONENT Development)
 
-  INSTALL(FILES
+  install(FILES
     ${OTB_SOURCE_DIR}/CMake/FindFFTW.cmake
     ${OTB_SOURCE_DIR}/CMake/FindEXPAT.cmake
     ${OTB_SOURCE_DIR}/CMake/FindFLTK.cmake
@@ -396,24 +396,24 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${OTB_INSTALL_CMAKEMODULE_DIR}
     COMPONENT Development)
 
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 #-----------------------------------------------------------------------------
 # => Comment for OTB 2.6.0: simplification : copy ITK values
 # OTB requires special compiler flags on some platforms.
-SET(OTB_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS}")
-SET(OTB_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS}")
-SET(OTB_REQUIRED_LINK_FLAGS "${ITK_REQUIRED_LINK_FLAGS}")
+set(OTB_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS}")
+set(OTB_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS}")
+set(OTB_REQUIRED_LINK_FLAGS "${ITK_REQUIRED_LINK_FLAGS}")
 
 #-----------------------------------------------------------------------------
 # Add compiler flags OTB needs to work on this platform.  This must be
 # done AFTER the call to CMAKE_EXPORT_BUILD_SETTINGS.
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OTB_REQUIRED_C_FLAGS}")
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OTB_REQUIRED_CXX_FLAGS}")
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
-SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
-SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OTB_REQUIRED_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OTB_REQUIRED_CXX_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
 
-INCLUDE(OTBCPack)
-INCLUDE(GenerateConfigProperties)
+include(OTBCPack)
+include(GenerateConfigProperties)
 

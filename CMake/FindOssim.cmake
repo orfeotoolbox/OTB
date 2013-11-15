@@ -6,31 +6,31 @@
 #   OSSIM_LIBRARIES    - List of libraries when using Ossim.
 #
 
-IF( OSSIM_INCLUDE_DIR )
+if( OSSIM_INCLUDE_DIR )
     # Already in cache, be silent
-    SET( Ossim_FIND_QUIETLY TRUE )
-ENDIF( OSSIM_INCLUDE_DIR )
+    set( Ossim_FIND_QUIETLY TRUE )
+endif( OSSIM_INCLUDE_DIR )
 
-FIND_PATH( OSSIM_INCLUDE_DIR
-           NAMES ossim/init/ossimInit.h 
+find_path( OSSIM_INCLUDE_DIR
+           NAMES ossim/init/ossimInit.h
            PATHS $ENV{OSSIM_INCLUDE_DIR} /usr/local )
-           
-FIND_LIBRARY(OSSIM_LIBRARY
+
+find_library(OSSIM_LIBRARY
              NAMES ossim
              PATHS /usr/local/lib/ossim)
- 
+
 # handle the QUIETLY and REQUIRED arguments and set OSSIM_FOUND to TRUE if
 # all listed variables are TRUE
-INCLUDE( FindPackageHandleStandardArgs )
+include( FindPackageHandleStandardArgs )
 FIND_PACKAGE_HANDLE_STANDARD_ARGS( Ossim DEFAULT_MSG OSSIM_LIBRARY OSSIM_INCLUDE_DIR )
 
-MARK_AS_ADVANCED( OSSIM_INCLUDE_DIR OSSIM_LIBRARY )
+mark_as_advanced( OSSIM_INCLUDE_DIR OSSIM_LIBRARY )
 
-IF(OSSIM_FOUND)
-  SET(OSSIM_INCLUDE_DIRS ${OSSIM_INCLUDE_DIR})
-  SET(OSSIM_LIBRARIES ${OSSIM_LIBRARY})
-ELSE(OSSIM_FOUND)
-  SET(OSSIM_INCLUDE_DIRS)
-  SET(OSSIM_LIBRARIES)
-ENDIF(OSSIM_FOUND)
+if(OSSIM_FOUND)
+  set(OSSIM_INCLUDE_DIRS ${OSSIM_INCLUDE_DIR})
+  set(OSSIM_LIBRARIES ${OSSIM_LIBRARY})
+else(OSSIM_FOUND)
+  set(OSSIM_INCLUDE_DIRS)
+  set(OSSIM_LIBRARIES)
+endif(OSSIM_FOUND)
 

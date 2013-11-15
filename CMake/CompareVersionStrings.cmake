@@ -15,59 +15,59 @@
 #                          1 : a_in >  b_in
 #
 # Written by James Bigler.
-MACRO(COMPARE_VERSION_STRINGS a_in b_in result_out)
+macro(COMPARE_VERSION_STRINGS a_in b_in result_out)
   # Since SEPARATE_ARGUMENTS using ' ' as the separation token,
   # replace '.' with ' ' to allow easy tokenization of the string.
-  STRING(REPLACE "." " " a ${a_in})
-  STRING(REPLACE "." " " b ${b_in})
-  SEPARATE_ARGUMENTS(a)
-  SEPARATE_ARGUMENTS(b)
+  string(REPLACE "." " " a ${a_in})
+  string(REPLACE "." " " b ${b_in})
+  separate_arguments(a)
+  separate_arguments(b)
 
   # Check the size of each list to see if they are equal.
-  LIST(LENGTH a a_length)
-  LIST(LENGTH b b_length)
+  list(LENGTH a a_length)
+  list(LENGTH b b_length)
 
   # Pad the shorter list with zeros.
 
   # Note that range needs to be one less than the length as the for
   # loop is inclusive (silly CMake).
-  IF(a_length LESS b_length)
+  if(a_length LESS b_length)
     # a is shorter
-    SET(shorter a)
-    MATH(EXPR range "${b_length} - 1")
-    MATH(EXPR pad_range "${b_length} - ${a_length} - 1")
-  ELSE(a_length LESS b_length)
+    set(shorter a)
+    math(EXPR range "${b_length} - 1")
+    math(EXPR pad_range "${b_length} - ${a_length} - 1")
+  else(a_length LESS b_length)
     # b is shorter
-    SET(shorter b)
-    MATH(EXPR range "${a_length} - 1")
-    MATH(EXPR pad_range "${a_length} - ${b_length} - 1")
-  ENDIF(a_length LESS b_length)
+    set(shorter b)
+    math(EXPR range "${a_length} - 1")
+    math(EXPR pad_range "${a_length} - ${b_length} - 1")
+  endif(a_length LESS b_length)
 
   # PAD out if we need to
-  IF(NOT pad_range LESS 0)
-    FOREACH(pad RANGE ${pad_range})
+  if(NOT pad_range LESS 0)
+    foreach(pad RANGE ${pad_range})
       # Since shorter is an alias for b, we need to get to it by by dereferencing shorter.
-      LIST(APPEND ${shorter} 0)
-    ENDFOREACH(pad RANGE ${pad_range})
-  ENDIF(NOT pad_range LESS 0)
+      list(APPEND ${shorter} 0)
+    endforeach(pad RANGE ${pad_range})
+  endif(NOT pad_range LESS 0)
 
-  SET(result 0)
-  FOREACH(index RANGE ${range})
-    IF(result EQUAL 0)
+  set(result 0)
+  foreach(index RANGE ${range})
+    if(result EQUAL 0)
       # Only continue to compare things as long as they are equal
-      LIST(GET a ${index} a_version)
-      LIST(GET b ${index} b_version)
+      list(GET a ${index} a_version)
+      list(GET b ${index} b_version)
       # LESS
-      IF(a_version LESS b_version)
-        SET(result -1)
-      ENDIF(a_version LESS b_version)
+      if(a_version LESS b_version)
+        set(result -1)
+      endif(a_version LESS b_version)
       # GREATER
-      IF(a_version GREATER b_version)
-        SET(result 1)
-      ENDIF(a_version GREATER b_version)
-    ENDIF(result EQUAL 0)
-  ENDFOREACH(index)
+      if(a_version GREATER b_version)
+        set(result 1)
+      endif(a_version GREATER b_version)
+    endif(result EQUAL 0)
+  endforeach(index)
 
   # Copy out the return result
-  SET(${result_out} ${result})
-ENDMACRO(COMPARE_VERSION_STRINGS)
+  set(${result_out} ${result})
+endmacro(COMPARE_VERSION_STRINGS)

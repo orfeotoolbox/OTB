@@ -1,24 +1,24 @@
-MESSAGE(STATUS "Importing Curl...")
-FIND_PACKAGE(CURL)
-IF(CURL_FOUND)
-  OPTION(OTB_USE_CURL "Use curl library." ON)
-ELSE(CURL_FOUND)
-  OPTION(OTB_USE_CURL "Use curl library." OFF)
-ENDIF(CURL_FOUND)
+message(STATUS "Importing Curl...")
+find_package(CURL)
+if(CURL_FOUND)
+  option(OTB_USE_CURL "Use curl library." ON)
+else(CURL_FOUND)
+  option(OTB_USE_CURL "Use curl library." OFF)
+endif(CURL_FOUND)
 
-MARK_AS_ADVANCED(OTB_USE_CURL)
-IF(OTB_USE_CURL)
-    IF(CURL_FOUND)
-      MESSAGE(STATUS "Using CURL external version")
-      TRY_COMPILE(OTB_CURL_MULTI_AVAILABLE
+mark_as_advanced(OTB_USE_CURL)
+if(OTB_USE_CURL)
+    if(CURL_FOUND)
+      message(STATUS "Using CURL external version")
+      try_compile(OTB_CURL_MULTI_AVAILABLE
                     ${CMAKE_CURRENT_BINARY_DIR}/CMake
                     ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestCurlMulti.cxx
                     CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${CURL_INCLUDE_DIRS}" "-DLINK_LIBRARIES:STRING=${CURL_LIBRARIES}"
                     OUTPUT_VARIABLE OUTPUT)
-    ELSE(CURL_FOUND)
-      MESSAGE(FATAL_ERROR "CURL required but not found. "
+    else(CURL_FOUND)
+      message(FATAL_ERROR "CURL required but not found. "
                           "Turn OTB_USE_CURL to OFF to disable CURL support")
-    ENDIF(CURL_FOUND)
-ELSE(OTB_USE_CURL)
-        MESSAGE(STATUS "  Disabling Curl support")
-ENDIF(OTB_USE_CURL)
+    endif(CURL_FOUND)
+else(OTB_USE_CURL)
+        message(STATUS "  Disabling Curl support")
+endif(OTB_USE_CURL)

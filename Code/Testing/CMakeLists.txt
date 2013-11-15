@@ -1,56 +1,56 @@
 
 # Sources of non-templated classes.
-FILE(GLOB OTBTesting_SRCS "*.cxx" )
+file(GLOB OTBTesting_SRCS "*.cxx" )
 
 # Remove the otbTestDriver cause only an executable is nedded
-LIST(REMOVE_ITEM OTBTesting_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbTestDriver.cxx" )
+list(REMOVE_ITEM OTBTesting_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbTestDriver.cxx" )
 
 
-ADD_LIBRARY(OTBTesting ${OTBTesting_SRCS})
-#SET_TARGET_PROPERTIES(OTBTesting
+add_library(OTBTesting ${OTBTesting_SRCS})
+#set_target_properties(OTBTesting
 #    PROPERTIES
 #    LINK_INTERFACE_LIBRARIES ""
 #)
-TARGET_LINK_LIBRARIES (OTBTesting OTBBasicFilters OTBIO OTBCommon OTBOGRAdapters)
-IF(OTB_LIBRARY_PROPERTIES)
-  SET_TARGET_PROPERTIES(OTBTesting PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-ENDIF(OTB_LIBRARY_PROPERTIES)
+target_link_libraries(OTBTesting OTBBasicFilters OTBIO OTBCommon OTBOGRAdapters)
+if(OTB_LIBRARY_PROPERTIES)
+  set_target_properties(OTBTesting PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+endif(OTB_LIBRARY_PROPERTIES)
 
-IF(NOT OTB_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS OTBTesting
+if(NOT OTB_INSTALL_NO_LIBRARIES)
+  install(TARGETS OTBTesting
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+endif(NOT OTB_INSTALL_NO_LIBRARIES)
 
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  FILE(GLOB __files "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-  INSTALL(FILES ${__files}
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  file(GLOB __files "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  install(FILES ${__files}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Testing
     COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 
 
 # Compile otbTestDriver
 # Needed in the OTB-Wrapping project.
 # Has to be compiled even if the BUILD_TEST  are set to OFF
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(otbTestDriver.cxx PROPERTIES COMPILE_FLAGS -w)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(otbTestDriver.cxx PROPERTIES COMPILE_FLAGS -w)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_EXECUTABLE(otbTestDriver otbTestDriver.cxx)
-TARGET_LINK_LIBRARIES(otbTestDriver OTBIO OTBTesting)
-SET(ITK_TEST_DRIVER "${EXECUTABLE_OUTPUT_PATH}/otbTestDriver"
+add_executable(otbTestDriver otbTestDriver.cxx)
+target_link_libraries(otbTestDriver OTBIO OTBTesting)
+set(ITK_TEST_DRIVER "${EXECUTABLE_OUTPUT_PATH}/otbTestDriver"
     CACHE INTERNAL "otbTestDriver path to be used by subprojects")
 
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-  FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
-  INSTALL(FILES ${__files1} ${__files2}
+if(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  file(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+  install(FILES ${__files1} ${__files2}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/IO
     COMPONENT Development)
-  INSTALL(TARGETS otbTestDriver RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  install(TARGETS otbTestDriver RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT Development)
+endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
 

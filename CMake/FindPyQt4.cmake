@@ -22,37 +22,37 @@
 #
 # PYQT4_SIP_FLAGS - The SIP flags used to build PyQt.
 
-IF(EXISTS PYQT4_VERSION)
+if(EXISTS PYQT4_VERSION)
   # Already in cache, be silent
-  SET(PYQT4_FOUND TRUE)
-ELSE(EXISTS PYQT4_VERSION)
+  set(PYQT4_FOUND TRUE)
+else(EXISTS PYQT4_VERSION)
 
-  FIND_FILE(_find_pyqt_py FindPyQt.py PATHS ${CMAKE_MODULE_PATH})
+  find_file(_find_pyqt_py FindPyQt.py PATHS ${CMAKE_MODULE_PATH})
   mark_as_advanced(_find_pyqt_py)
 
-  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_pyqt_py} OUTPUT_VARIABLE pyqt_config)
-  IF(pyqt_config)
-    STRING(REGEX REPLACE "^pyqt_version:([^\n]+).*$" "\\1" PYQT4_VERSION ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_version_str:([^\n]+).*$" "\\1" PYQT4_VERSION_STR ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_version_tag:([^\n]+).*$" "\\1" PYQT4_VERSION_TAG ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_version_num:([^\n]+).*$" "\\1" PYQT4_VERSION_NUM ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_sip_dir:([^\n]+).*$" "\\1" PYQT4_SIP_DIR ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_sip_flags:([^\n]+).*$" "\\1" PYQT4_SIP_FLAGS ${pyqt_config})
-    STRING(REGEX REPLACE ".*\npyqt_bin_dir:([^\n]+).*$" "\\1" PYQT4_BIN_DIR ${pyqt_config})
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} ${_find_pyqt_py} OUTPUT_VARIABLE pyqt_config)
+  if(pyqt_config)
+    string(REGEX REPLACE "^pyqt_version:([^\n]+).*$" "\\1" PYQT4_VERSION ${pyqt_config})
+    string(REGEX REPLACE ".*\npyqt_version_str:([^\n]+).*$" "\\1" PYQT4_VERSION_STR ${pyqt_config})
+    string(REGEX REPLACE ".*\npyqt_version_tag:([^\n]+).*$" "\\1" PYQT4_VERSION_TAG ${pyqt_config})
+    string(REGEX REPLACE ".*\npyqt_version_num:([^\n]+).*$" "\\1" PYQT4_VERSION_NUM ${pyqt_config})
+    string(REGEX REPLACE ".*\npyqt_sip_dir:([^\n]+).*$" "\\1" PYQT4_SIP_DIR ${pyqt_config})
+    string(REGEX REPLACE ".*\npyqt_sip_flags:([^\n]+).*$" "\\1" PYQT4_SIP_FLAGS ${pyqt_config})
+    string(REGEX REPLACE ".*\npyqt_bin_dir:([^\n]+).*$" "\\1" PYQT4_BIN_DIR ${pyqt_config})
 
-    SET(PYQT4_FOUND TRUE)
-  ENDIF(pyqt_config)
+    set(PYQT4_FOUND TRUE)
+  endif(pyqt_config)
 
-  IF(PYQT4_FOUND)
-    IF(NOT PYQT4_FIND_QUIETLY)
-      MESSAGE(STATUS "Found PyQt4 version: ${PYQT4_VERSION_STR}")
-    ENDIF(NOT PYQT4_FIND_QUIETLY)
-  ELSE(PYQT4_FOUND)
-    IF(PYQT4_FIND_REQUIRED)
-      MESSAGE(FATAL_ERROR "Could not find Python")
-    ENDIF(PYQT4_FIND_REQUIRED)
-  ENDIF(PYQT4_FOUND)
+  if(PYQT4_FOUND)
+    if(NOT PYQT4_FIND_QUIETLY)
+      message(STATUS "Found PyQt4 version: ${PYQT4_VERSION_STR}")
+    endif(NOT PYQT4_FIND_QUIETLY)
+  else(PYQT4_FOUND)
+    if(PYQT4_FIND_REQUIRED)
+      message(FATAL_ERROR "Could not find Python")
+    endif(PYQT4_FIND_REQUIRED)
+  endif(PYQT4_FOUND)
 
-ENDIF(EXISTS PYQT4_VERSION)
+endif(EXISTS PYQT4_VERSION)
 
 

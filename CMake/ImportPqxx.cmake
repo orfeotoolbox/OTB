@@ -1,17 +1,17 @@
-MESSAGE(STATUS "Importing Pqxx...")
+message(STATUS "Importing Pqxx...")
 
-OPTION(OTB_USE_PQXX "Use pqxx library (EXPERIMENTAL)." OFF)
-MARK_AS_ADVANCED(OTB_USE_PQXX)
+option(OTB_USE_PQXX "Use pqxx library (EXPERIMENTAL)." OFF)
+mark_as_advanced(OTB_USE_PQXX)
 
-IF(OTB_USE_PQXX)
-  FIND_PACKAGE(Pqxx)
-  IF(PQXX_FOUND)
-    MESSAGE(STATUS "Activating Pqxx support")
-  ELSE(PQXX_FOUND)
+if(OTB_USE_PQXX)
+  find_package(Pqxx)
+  if(PQXX_FOUND)
+    message(STATUS "Activating Pqxx support")
+  else(PQXX_FOUND)
     # Generate an error if no external Pqxx is available
-    MESSAGE(FATAL_ERROR "Pqxx required but not found. "
+    message(FATAL_ERROR "Pqxx required but not found. "
                         "Turn OTB_USE_PQXX to OFF")
-  ENDIF(PQXX_FOUND)
-ELSE(OTB_USE_PQXX)
-  MESSAGE(STATUS "Disabling Pqxx support")
-ENDIF(OTB_USE_PQXX)
+  endif(PQXX_FOUND)
+else(OTB_USE_PQXX)
+  message(STATUS "Disabling Pqxx support")
+endif(OTB_USE_PQXX)

@@ -1,12 +1,12 @@
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE_EXAMPLE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)  
+set(BASELINE_EXAMPLE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)
 
-SET(DISPARITYMAP_TESTS1 ${CXX_TEST_PATH}/otbDisparityMapTests1)
-SET(DISPARITYMAP_TESTS2 ${CXX_TEST_PATH}/otbDisparityMapTests2)
-SET(DISPARITYMAP_TESTS3 ${CXX_TEST_PATH}/otbDisparityMapTests3)
-SET(DISPARITYMAP_TESTS4 ${CXX_TEST_PATH}/otbDisparityMapTests4)
+set(DISPARITYMAP_TESTS1 ${CXX_TEST_PATH}/otbDisparityMapTests1)
+set(DISPARITYMAP_TESTS2 ${CXX_TEST_PATH}/otbDisparityMapTests2)
+set(DISPARITYMAP_TESTS3 ${CXX_TEST_PATH}/otbDisparityMapTests3)
+set(DISPARITYMAP_TESTS4 ${CXX_TEST_PATH}/otbDisparityMapTests4)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -14,10 +14,10 @@ SET(DISPARITYMAP_TESTS4 ${CXX_TEST_PATH}/otbDisparityMapTests4)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------            otb::DisparityMapEstimationMethod   ----------
 
-ADD_TEST(dmTuDisparityMapEstimationMethodNew ${DISPARITYMAP_TESTS1}
+add_test(dmTuDisparityMapEstimationMethodNew ${DISPARITYMAP_TESTS1}
          otbDisparityMapEstimationMethodNew)
 
-ADD_TEST(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS1}
+add_test(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS1}
    --compare-ascii ${NOTOL}
        ${BASELINE_FILES}/dmDisparityMapEstimationOutput.txt
        ${TEMP}/dmDisparityMapEstimationOutput.txt
@@ -28,7 +28,7 @@ ADD_TEST(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS1}
              ${TEMP}/dmDisparityMapEstimationOutput.txt
        2 3
 )
-ADD_TEST(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS1}
+add_test(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS1}
    --compare-ascii ${NOTOL}
        ${BASELINE_FILES}/dmDisparityMapEstimationOutput1.txt
        ${TEMP}/dmDisparityMapEstimationOutput1.txt
@@ -42,15 +42,15 @@ ADD_TEST(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS1}
 
 # -------            otb::PointSetToDisplacementFieldGenerator   ----------
 
-ADD_TEST(dmTuPointSetToDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
+add_test(dmTuPointSetToDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
          otbPointSetToDisplacementFieldGeneratorNew)
 
 # -------            otb::NearestPointDisplacementFieldGenerator   ----------
 
-ADD_TEST(dmTuNearestPointDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
+add_test(dmTuNearestPointDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
          otbNearestPointDisplacementFieldGeneratorNew)
 
-ADD_TEST(dmTvNearestPointDisplacementFieldGenerator ${DISPARITYMAP_TESTS1}
+add_test(dmTvNearestPointDisplacementFieldGenerator ${DISPARITYMAP_TESTS1}
               --compare-image ${EPSILON_10}
                 ${BASELINE}/dmTvNearestPointDeformationField.hdr
                 ${TEMP}/dmTvNearestPointDisplacementField.hdr
@@ -60,10 +60,10 @@ ADD_TEST(dmTvNearestPointDisplacementFieldGenerator ${DISPARITYMAP_TESTS1}
 
 # -------            otb::NCCRegistrationFilter   ----------
 
-ADD_TEST(dmTuNCCRegistrationFilterNew ${DISPARITYMAP_TESTS1}
+add_test(dmTuNCCRegistrationFilterNew ${DISPARITYMAP_TESTS1}
          otbNCCRegistrationFilterNew)
 
-ADD_TEST(dmTvNCCRegistrationFilter ${DISPARITYMAP_TESTS1}
+add_test(dmTvNCCRegistrationFilter ${DISPARITYMAP_TESTS1}
 --compare-image ${EPSILON_10}
                 ${BASELINE}/dmNCCRegistrationFilterOutput.tif
                 ${TEMP}/dmNCCRegistrationFilterOutput.tif
@@ -75,10 +75,10 @@ ADD_TEST(dmTvNCCRegistrationFilter ${DISPARITYMAP_TESTS1}
 
 # -------  otb::NNearestPointsLinearInterpolateDisplacementFieldGenerator   ----------
 
-ADD_TEST(dmTuNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
+add_test(dmTuNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
          otbNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew)
 
-ADD_TEST(dmTvNNearestPointsLinearInterpolateDisplacementFieldGenerator ${DISPARITYMAP_TESTS1}
+add_test(dmTvNNearestPointsLinearInterpolateDisplacementFieldGenerator ${DISPARITYMAP_TESTS1}
               --compare-image ${EPSILON_10}
                 ${BASELINE}/dmTvNNearestPointsLinearInterpolateDeformationField.hdr
                 ${TEMP}/dmTvNNearestPointsLinearInterpolateDisplacementField.hdr
@@ -89,10 +89,10 @@ ADD_TEST(dmTvNNearestPointsLinearInterpolateDisplacementFieldGenerator ${DISPARI
 
 # -------  otb::BSplinesInterpolateDisplacementFieldGenerator   ----------
 
-ADD_TEST(dmTuBSplinesInterpolateDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
+add_test(dmTuBSplinesInterpolateDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
          otbNNearestPointsLinearInterpolateDisplacementFieldGeneratorNew)
 
-ADD_TEST(dmTvBSplinesInterpolateDisplacementFieldGenerator ${DISPARITYMAP_TESTS1}
+add_test(dmTvBSplinesInterpolateDisplacementFieldGenerator ${DISPARITYMAP_TESTS1}
               --compare-image ${EPSILON_10}
                 ${BASELINE}/dmTvBSplinesInterpolateDeformationField.hdr
                 ${TEMP}/dmTvBSplinesInterpolateDisplacementField.hdr
@@ -103,7 +103,7 @@ ADD_TEST(dmTvBSplinesInterpolateDisplacementFieldGenerator ${DISPARITYMAP_TESTS1
 
 # -------            otb::PointSetWithTransformToDisplacementFieldGenerator   ----------
 
-ADD_TEST(dmTuPointSetWithTransformToDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
+add_test(dmTuPointSetWithTransformToDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS1}
          otbPointSetWithTransformToDisplacementFieldGeneratorNew)
 
 
@@ -113,10 +113,10 @@ ADD_TEST(dmTuPointSetWithTransformToDisplacementFieldGeneratorNew ${DISPARITYMAP
 
 # -------            otb::NearestTransformDisplacementFieldGenerator   ----------
 
-ADD_TEST(dmTuNearestTransformDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS2}
+add_test(dmTuNearestTransformDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS2}
          otbNearestTransformDisplacementFieldGeneratorNew)
 
-ADD_TEST(dmTvNearestTransformDisplacementFieldGenerator ${DISPARITYMAP_TESTS2}
+add_test(dmTvNearestTransformDisplacementFieldGenerator ${DISPARITYMAP_TESTS2}
               --compare-image ${EPSILON_10}
                 ${BASELINE}/dmTvNearestTransformDeformationField.hdr
                 ${TEMP}/dmTvNearestTransformDisplacementField.hdr
@@ -127,10 +127,10 @@ ADD_TEST(dmTvNearestTransformDisplacementFieldGenerator ${DISPARITYMAP_TESTS2}
 
 # -------  otb::NNearestTransformsLinearInterpolateDisplacementFieldGenerator   ----------
 
-ADD_TEST(dmTuNNearestTransformsLinearInterpolateDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS2}
+add_test(dmTuNNearestTransformsLinearInterpolateDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS2}
          otbNNearestTransformsLinearInterpolateDisplacementFieldGeneratorNew)
 
-ADD_TEST(dmTvNNearestTransformsLinearInterpolateDisplacementFieldGenerator ${DISPARITYMAP_TESTS2}
+add_test(dmTvNNearestTransformsLinearInterpolateDisplacementFieldGenerator ${DISPARITYMAP_TESTS2}
               --compare-image ${EPSILON_10}
                 ${BASELINE}/dmTvNNearestTransformsLinearInterpolateDeformationField.hdr
                 ${TEMP}/dmTvNNearestTransformsLinearInterpolateDisplacementField.hdr
@@ -140,10 +140,10 @@ ADD_TEST(dmTvNNearestTransformsLinearInterpolateDisplacementFieldGenerator ${DIS
 
 # -------  otb::BSplinesInterpolateTransformDisplacementFieldGenerator ----------
 
-ADD_TEST(dmTuBSplinesInterpolateTransformDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS2}
+add_test(dmTuBSplinesInterpolateTransformDisplacementFieldGeneratorNew ${DISPARITYMAP_TESTS2}
          otbBSplinesInterpolateTransformDisplacementFieldGeneratorNew)
 
-ADD_TEST(dmTvBSplinesInterpolateTransformDisplacementFieldGenerator ${DISPARITYMAP_TESTS2}
+add_test(dmTvBSplinesInterpolateTransformDisplacementFieldGenerator ${DISPARITYMAP_TESTS2}
               --compare-image ${EPSILON_4}
                 ${BASELINE}/dmTvBSplinesInterpolateTransformDeformationFieldGenerator.hdr
                 ${TEMP}/dmTvBSplinesInterpolateTransformDisplacementFieldGenerator.hdr
@@ -161,10 +161,10 @@ ADD_TEST(dmTvBSplinesInterpolateTransformDisplacementFieldGenerator ${DISPARITYM
 # ------- otb::StreamingWarpImageFilter  ----------
 
 
-ADD_TEST(dmTuStreamingWarpImageFilterNew ${DISPARITYMAP_TESTS3}
+add_test(dmTuStreamingWarpImageFilterNew ${DISPARITYMAP_TESTS3}
         otbStreamingWarpImageFilterNew)
 
-ADD_TEST(dmTvStreamingWarpImageFilter ${DISPARITYMAP_TESTS3}
+add_test(dmTvStreamingWarpImageFilter ${DISPARITYMAP_TESTS3}
         --compare-image ${EPSILON_10}
         ${BASELINE}/dmStreamingWarpImageFilterOutput.tif
         ${TEMP}/dmStreamingWarpImageFilterOutput.tif
@@ -177,11 +177,11 @@ ADD_TEST(dmTvStreamingWarpImageFilter ${DISPARITYMAP_TESTS3}
 
 # ------- otb::FineRegistrationImageFilter ----------
 
-ADD_TEST(dmTuFineRegistrationImageFilterNew ${DISPARITYMAP_TESTS3}
+add_test(dmTuFineRegistrationImageFilterNew ${DISPARITYMAP_TESTS3}
         otbFineRegistrationImageFilterNew
 )
 
-ADD_TEST(dmTvFineRegistrationImageFilterTestWithCorrelation ${DISPARITYMAP_TESTS3}
+add_test(dmTvFineRegistrationImageFilterTestWithCorrelation ${DISPARITYMAP_TESTS3}
      --compare-n-images ${EPSILON_10} 2
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
         ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif
@@ -202,7 +202,7 @@ ADD_TEST(dmTvFineRegistrationImageFilterTestWithCorrelation ${DISPARITYMAP_TESTS
             0 0 80 130 # region to proceed
 )
 
-ADD_TEST(dmTvFineRegistrationImageFilterTestWithNormalizedCorrelation ${DISPARITYMAP_TESTS3}
+add_test(dmTvFineRegistrationImageFilterTestWithNormalizedCorrelation ${DISPARITYMAP_TESTS3}
      --compare-n-images ${EPSILON_10} 2
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
         ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif
@@ -223,7 +223,7 @@ ADD_TEST(dmTvFineRegistrationImageFilterTestWithNormalizedCorrelation ${DISPARIT
             0 0 80 130 # region to proceed
 )
 
-ADD_TEST(dmTvFineRegistrationImageFilterTestWithMeanSquare ${DISPARITYMAP_TESTS3}
+add_test(dmTvFineRegistrationImageFilterTestWithMeanSquare ${DISPARITYMAP_TESTS3}
      --compare-n-images ${EPSILON_10} 2
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
         ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
@@ -244,7 +244,7 @@ ADD_TEST(dmTvFineRegistrationImageFilterTestWithMeanSquare ${DISPARITYMAP_TESTS3
             0 0 80 65 # region to proceed
 )
 
-ADD_TEST(dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifference ${DISPARITYMAP_TESTS3}
+add_test(dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifference ${DISPARITYMAP_TESTS3}
      --compare-n-images ${EPSILON_10} 2
         ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
         ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif
@@ -266,11 +266,11 @@ ADD_TEST(dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifference ${DISPA
 )
 
 #--------- otb::StereoSensorModelToElevationFilter -----------------------------------------
-ADD_TEST(dmTuStereoSensorModelToElevationFilterNew ${DISPARITYMAP_TESTS3}
+add_test(dmTuStereoSensorModelToElevationFilterNew ${DISPARITYMAP_TESTS3}
 otbStereoSensorModelToElevationMapFilterNew)
 
 
-ADD_TEST(dmTvStereoSensorModelToElevationFilter ${DISPARITYMAP_TESTS3}
+add_test(dmTvStereoSensorModelToElevationFilter ${DISPARITYMAP_TESTS3}
   --compare-image ${EPSILON_10}
   ${BASELINE}/feTvStereoSensorModelToElevationFilterOutput.tif
   ${TEMP}/feTvStereoSensorModelToElevationFilterOutput.tif
@@ -287,10 +287,10 @@ ${INPUTDATA}/DEM/egm96.grd
 )
 
 #--------- otb::StereorectificationDisplacementFieldSource -----------------------------------------
-ADD_TEST(dmTuStereorectificationDisplacementFieldSourceNew ${DISPARITYMAP_TESTS3}
+add_test(dmTuStereorectificationDisplacementFieldSourceNew ${DISPARITYMAP_TESTS3}
 otbStereorectificationDisplacementFieldSourceNew)
 
-ADD_TEST(dmTvStereorectificationDisplacementFieldSource ${DISPARITYMAP_TESTS3}
+add_test(dmTvStereorectificationDisplacementFieldSource ${DISPARITYMAP_TESTS3}
 --compare-n-images ${EPSILON_10} 2
 ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput1.tif
 ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput1.tif
@@ -311,10 +311,10 @@ ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput2.tif
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbDisparityMapTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #--------- otb::HorizontalPixelWiseBlockMatchingImageFilter -----------------------------------------
-ADD_TEST(dmTuPixelWiseBlockMatchingImageFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuPixelWiseBlockMatchingImageFilterNew ${DISPARITYMAP_TESTS4}
 otbPixelWiseBlockMatchingImageFilterNew)
 
-ADD_TEST(dmTvPixelWiseBlockMatchingImageFilter ${DISPARITYMAP_TESTS4}
+add_test(dmTvPixelWiseBlockMatchingImageFilter ${DISPARITYMAP_TESTS4}
 --compare-n-images ${NOTOL} 2
 ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
 ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
@@ -328,7 +328,7 @@ ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
 2
 -10 +10
 )
-ADD_TEST(dmTvPixelWiseBlockMatchingImageFilterNCC ${DISPARITYMAP_TESTS4}
+add_test(dmTvPixelWiseBlockMatchingImageFilterNCC ${DISPARITYMAP_TESTS4}
 --compare-n-images ${NOTOL} 2
 ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
 ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
@@ -345,11 +345,11 @@ ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
 
 
 # -------            otb::SubPixelDisparityImageFilterr   ----------
-ADD_TEST(dmTuSubPixelDisparityImageFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuSubPixelDisparityImageFilterNew ${DISPARITYMAP_TESTS4}
          otbSubPixelDisparityImageFilterNew)
 
-        
-ADD_TEST(dmTvSubPixelDisparityImageFilterNCC ${DISPARITYMAP_TESTS4}
+
+add_test(dmTvSubPixelDisparityImageFilterNCC ${DISPARITYMAP_TESTS4}
 --compare-n-images ${NOTOL} 3
 ${BASELINE}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
 ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
@@ -374,11 +374,11 @@ ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
 
 # -------            otb::DisparityMapMedianFilter   ----------
 
-ADD_TEST(dmTuDisparityMapMedianFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuDisparityMapMedianFilterNew ${DISPARITYMAP_TESTS4}
          otbDisparityMapMedianFilterNew)
-         
-ADD_TEST(dmTvDisparityMapMedianFilter ${DISPARITYMAP_TESTS4}
---compare-image ${NOTOL} 
+
+add_test(dmTvDisparityMapMedianFilter ${DISPARITYMAP_TESTS4}
+--compare-image ${NOTOL}
 		 ${BASELINE}/dmTvDisparityMapMedianFilterOutput.tif
 		 ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
          otbDisparityMapMedianFilter
@@ -386,14 +386,14 @@ ADD_TEST(dmTvDisparityMapMedianFilter ${DISPARITYMAP_TESTS4}
          ${TEMP}/dmTvDisparityMapMedianFilterOutput.tif
          2
          2.0
-         )         
+         )
 
 # -------            otb::AdhesionCorrectionFilter   ----------
 
-ADD_TEST(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuAdhesionCorrectionFilterNew ${DISPARITYMAP_TESTS4}
          otbAdhesionCorrectionFilterNew)
-         
-ADD_TEST(dmTvAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
+
+add_test(dmTvAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
    --compare-n-images ${EPSILON_4} 3
         ${BASELINE}/dmTuAdhesionCorrectionMethod_Corrected.tif
         ${TEMP}/dmTuAdhesionCorrectionMethod_Corrected.tif
@@ -412,22 +412,22 @@ ADD_TEST(dmTvAdhesionCorrectionFilter ${DISPARITYMAP_TESTS4}
         ${TEMP}/dmTuAdhesionCorrectionMethod_Corrected.tif
         ${TEMP}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
         ${TEMP}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
-        )                 
+        )
 
 # -------            otb::DisparityMapToDEMFilter   ----------
 
-ADD_TEST(dmTuDisparityMapToDEMFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuDisparityMapToDEMFilterNew ${DISPARITYMAP_TESTS4}
          otbDisparityMapToDEMFilterNew)
-         
 
 
 
-ADD_TEST(dmTvDisparityMapToDEMFilter ${DISPARITYMAP_TESTS4}
+
+add_test(dmTvDisparityMapToDEMFilter ${DISPARITYMAP_TESTS4}
 --compare-image ${NOTOL}
 		 ${BASELINE_EXAMPLE}/elevationOutput.tif
 		 ${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
          otbDisparityMapToDEMFilter
-         ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
+         ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
          ${EXAMPLEDATA}/sensor_stereo_left.tif
          ${EXAMPLEDATA}/sensor_stereo_right.tif
          ${INPUTDATA}/sensor_stereo_rectif_left.tif
@@ -438,33 +438,33 @@ ADD_TEST(dmTvDisparityMapToDEMFilter ${DISPARITYMAP_TESTS4}
          140
          2.5
          ${INPUTDATA}/sensor_stereo_dmap_mask.tif
-         )                              
+         )
 
 # -------            otb::DisparityMapTo3DFilter   ----------
 
-ADD_TEST(dmTuDisparityMapTo3DFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuDisparityMapTo3DFilterNew ${DISPARITYMAP_TESTS4}
          otbDisparityMapTo3DFilterNew)
-         
-ADD_TEST(dmTvDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
+
+add_test(dmTvDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvDisparityMapTo3DFilterOutput.tif
      ${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
          otbDisparityMapTo3DFilter
-         ${INPUTDATA}/sensor_stereo_blockmatching_output.tif 
+         ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
          ${EXAMPLEDATA}/sensor_stereo_left.tif
          ${EXAMPLEDATA}/sensor_stereo_right.tif
          ${INPUTDATA}/sensor_stereo_rectif_left.tif
          ${INPUTDATA}/sensor_stereo_rectif_right.tif
          ${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
          ${INPUTDATA}/sensor_stereo_dmap_mask.tif
-         )                              
+         )
 
 # -------            otb::MultiDisparityMapTo3DFilter   ----------
-ADD_TEST(dmTuMultiDisparityMapTo3DFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuMultiDisparityMapTo3DFilterNew ${DISPARITYMAP_TESTS4}
          otbMultiDisparityMapTo3DFilterNew)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(dmTvMultiDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(dmTvMultiDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
 --compare-n-images ${EPSILON_6} 2
      ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
      ${TEMP}/dmTvMultiDisparityMapTo3DFilterOutput.tif
@@ -481,13 +481,13 @@ ADD_TEST(dmTvMultiDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
          ${TEMP}/dmTvMultiDisparityMapTo3DFilterOutput.tif
          ${TEMP}/dmTvMultiDisparityMapTo3DFilterResidue.tif
          )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::BijectionCoherencyFilter   ----------
-ADD_TEST(dmTuBijectionCoherencyFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuBijectionCoherencyFilterNew ${DISPARITYMAP_TESTS4}
          otbBijectionCoherencyFilterNew)
 
-ADD_TEST(dmTvBijectionCoherencyFilter ${DISPARITYMAP_TESTS4}
+add_test(dmTvBijectionCoherencyFilter ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvBijectionCoherencyFilterOutput.tif
      ${TEMP}/dmTvBijectionCoherencyFilterOutput.tif
@@ -502,10 +502,10 @@ ADD_TEST(dmTvBijectionCoherencyFilter ${DISPARITYMAP_TESTS4}
          )
 
 # -------            otb::DisparityTranslateFilter   ----------
-ADD_TEST(dmTuDisparityTranslateFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuDisparityTranslateFilterNew ${DISPARITYMAP_TESTS4}
          otbDisparityTranslateFilterNew)
 
-ADD_TEST(dmTvDisparityTranslateFilter ${DISPARITYMAP_TESTS4}
+add_test(dmTvDisparityTranslateFilter ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvDisparityTranslateFilterOutput.tif
      ${TEMP}/dmTvDisparityTranslateFilterOutput.tif
@@ -518,11 +518,11 @@ ADD_TEST(dmTvDisparityTranslateFilter ${DISPARITYMAP_TESTS4}
          )
 
 # -------            otb::Multi3DMapToDEMFilter   ----------
-ADD_TEST(dmTuMulti3DMapTo3DEMFilterNew ${DISPARITYMAP_TESTS4}
+add_test(dmTuMulti3DMapTo3DEMFilterNew ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilterNew)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(dmTuMulti3DMapToDEMFilterMeanMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(dmTuMulti3DMapToDEMFilterMeanMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilter
          ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
          ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
@@ -530,11 +530,11 @@ ADD_TEST(dmTuMulti3DMapToDEMFilterMeanMultiThreadMultiStream ${DISPARITYMAP_TEST
          ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
 		 ${TEMP}/dmTuMulti3DMapToDEMFilterOutputMeanMultiThreadMultiStream.tif
 		 2.5
-		 2 
+		 2
 		 8
 		 4)
-		 
-ADD_TEST(dmTuMulti3DMapToDEMFilterAccMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
+		
+add_test(dmTuMulti3DMapToDEMFilterAccMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilter
          ${BASELINE}/dmTvMultiDisparityMapTo3DFilterOutput.tif
          ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
@@ -542,14 +542,14 @@ ADD_TEST(dmTuMulti3DMapToDEMFilterAccMultiThreadMultiStream ${DISPARITYMAP_TESTS
          ${LARGEINPUT}/PLEIADES/tristereo_sample/mask_1.tif
 		 ${TEMP}/dmTuMulti3DMapToDEMFilterOutputAccMultiThreadMultiStream.tif
 		 2.5
-		 3 
+		 3
 		 8
-		 4		 
+		 4		
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 
-ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMinROI ${DISPARITYMAP_TESTS4}
+add_test(dmTvMulti3DMapToDEMFilterStadiumMinROI ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMin.tif
      ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMinROI.tif
@@ -561,9 +561,9 @@ ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMinROI ${DISPARITYMAP_TESTS4}
          ${INPUTDATA}/Stadium3DMap3.tif
          ${INPUTDATA}/Stadium3DMapMask3.tif
          ${INPUTDATA}/Stadium3DMap4.tif
-         ${INPUTDATA}/Stadium3DMapMask4.tif 
+         ${INPUTDATA}/Stadium3DMapMask4.tif
          ${INPUTDATA}/Stadium3DMap5.tif
-         ${INPUTDATA}/Stadium3DMapMask5.tif 
+         ${INPUTDATA}/Stadium3DMapMask5.tif
 		 ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMinROI.tif
 		 2.5
 		 0
@@ -573,7 +573,7 @@ ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMinROI ${DISPARITYMAP_TESTS4}
 
 
 
-ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumAcc ${DISPARITYMAP_TESTS4}
+add_test(dmTuMulti3DMapToDEMFilterStadiumAcc ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilter
          ${INPUTDATA}/Stadium3DMap.tif
          ${INPUTDATA}/Stadium3DMapMask.tif
@@ -587,7 +587,7 @@ ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumAcc ${DISPARITYMAP_TESTS4}
 )
 
 
-ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMin ${DISPARITYMAP_TESTS4}
+add_test(dmTvMulti3DMapToDEMFilterStadiumMin ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMin.tif
      ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMin.tif
@@ -606,7 +606,7 @@ ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMin ${DISPARITYMAP_TESTS4}
 
 
 
-ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMax ${DISPARITYMAP_TESTS4}
+add_test(dmTvMulti3DMapToDEMFilterStadiumMax ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMax.tif
      ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMax.tif
@@ -622,7 +622,7 @@ ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMax ${DISPARITYMAP_TESTS4}
 		 1
 )
 
-ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMean ${DISPARITYMAP_TESTS4}
+add_test(dmTvMulti3DMapToDEMFilterStadiumMean ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
      ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
@@ -637,9 +637,9 @@ ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMean ${DISPARITYMAP_TESTS4}
 		 1
 		 1
 )
- 
 
-ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanNoData ${DISPARITYMAP_TESTS4}
+
+add_test(dmTvMulti3DMapToDEMFilterStadiumMeanNoData ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanNoData.tif
      ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanNoData.tif
@@ -657,7 +657,7 @@ ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanNoData ${DISPARITYMAP_TESTS4}
 
 
 
-ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumMeanEPSGUTM31N ${DISPARITYMAP_TESTS4}
+add_test(dmTuMulti3DMapToDEMFilterStadiumMeanEPSGUTM31N ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilterEPSG
          ${INPUTDATA}/Stadium3DMap.tif
          ${INPUTDATA}/Stadium3DMapMask.tif
@@ -679,7 +679,7 @@ ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumMeanEPSGUTM31N ${DISPARITYMAP_TESTS4}
 		 32631
 )
 
-ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanEPSGWGS84 ${DISPARITYMAP_TESTS4}
+add_test(dmTvMulti3DMapToDEMFilterStadiumMeanEPSGWGS84 ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
      ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanEPSGWGS84.tif
@@ -704,7 +704,7 @@ ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanEPSGWGS84 ${DISPARITYMAP_TESTS4}
 		 4326
 )
 
-ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
+add_test(dmTvMulti3DMapToDEMFilterStadiumMeanMultiThreadMultiStream ${DISPARITYMAP_TESTS4}
 --compare-image ${EPSILON_6}
      ${BASELINE}/dmTvMulti3DMapToDEMFilterOutputStadiumMean.tif
      ${TEMP}/dmTvMulti3DMapToDEMFilterOutputStadiumMeanMultiThreadMultiStream.tif
@@ -721,7 +721,7 @@ ADD_TEST(dmTvMulti3DMapToDEMFilterStadiumMeanMultiThreadMultiStream ${DISPARITYM
 )
 
 
-ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumMeanLarge ${DISPARITYMAP_TESTS4}
+add_test(dmTuMulti3DMapToDEMFilterStadiumMeanLarge ${DISPARITYMAP_TESTS4}
          otbMulti3DMapToDEMFilter
          ${INPUTDATA}/Stadium3DMap.tif
          ${INPUTDATA}/Stadium3DMapMask.tif
@@ -736,7 +736,7 @@ ADD_TEST(dmTuMulti3DMapToDEMFilterStadiumMeanLarge ${DISPARITYMAP_TESTS4}
 
 
 # -------       Fichiers sources CXX -----------------------------------
-SET(BasicDisparityMap_SRCS1
+set(BasicDisparityMap_SRCS1
 otbDisparityMapTests1.cxx
 otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapEstimationMethod.cxx
@@ -751,7 +751,7 @@ otbBSplinesInterpolateDisplacementFieldGeneratorNew.cxx
 otbBSplinesInterpolateDisplacementFieldGenerator.cxx
 otbPointSetWithTransformToDisplacementFieldGeneratorNew.cxx
 )
-SET(BasicDisparityMap_SRCS2
+set(BasicDisparityMap_SRCS2
 otbDisparityMapTests2.cxx
 otbNearestTransformDisplacementFieldGeneratorNew.cxx
 otbNearestTransformDisplacementFieldGenerator.cxx
@@ -760,7 +760,7 @@ otbNNearestTransformsLinearInterpolateDisplacementFieldGenerator.cxx
 otbBSplinesInterpolateTransformDisplacementFieldGeneratorNew.cxx
 otbBSplinesInterpolateTransformDisplacementFieldGenerator.cxx
 )
-SET(BasicDisparityMap_SRCS3
+set(BasicDisparityMap_SRCS3
 otbDisparityMapTests3.cxx
 otbStreamingWarpImageFilterNew.cxx
 otbStreamingWarpImageFilter.cxx
@@ -770,7 +770,7 @@ otbStereoSensorModelToElevationMapFilter.cxx
 otbStereorectificationDisplacementFieldSource.cxx
 )
 
-SET(BasicDisparityMap_SRCS4
+set(BasicDisparityMap_SRCS4
 otbDisparityMapTests4.cxx
 otbAdhesionCorrectionFilter.cxx
 otbDisparityMapMedianFilter.cxx
@@ -790,4 +790,4 @@ OTB_ADD_EXECUTABLE(otbDisparityMapTests3 "${BasicDisparityMap_SRCS3}" "OTBDispar
 OTB_ADD_EXECUTABLE(otbDisparityMapTests4 "${BasicDisparityMap_SRCS4}" "OTBDisparityMap;OTBIO;OTBTesting")
 
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

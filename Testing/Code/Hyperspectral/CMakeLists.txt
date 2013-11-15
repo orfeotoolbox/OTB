@@ -1,16 +1,16 @@
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
-SET(Hyperspectral_TESTS1 ${CXX_TEST_PATH}/otbHyperspectralTests1)
-SET(Hyperspectral_TESTS2 ${CXX_TEST_PATH}/otbHyperspectralTests2)
-SET(Hyperspectral_TESTS3 ${CXX_TEST_PATH}/otbHyperspectralTests3)
+set(Hyperspectral_TESTS1 ${CXX_TEST_PATH}/otbHyperspectralTests1)
+set(Hyperspectral_TESTS2 ${CXX_TEST_PATH}/otbHyperspectralTests2)
+set(Hyperspectral_TESTS3 ${CXX_TEST_PATH}/otbHyperspectralTests3)
 
 # HyperspectralTests1
-ADD_TEST(hyTuEigenvalueLikelihoodMaximizationNew
+add_test(hyTuEigenvalueLikelihoodMaximizationNew
          ${Hyperspectral_TESTS1}
          otbEigenvalueLikelihoodMaximizationNewTest)
 
-ADD_TEST(hyTvEigenvalueLikelihoodMaximizationTest
+add_test(hyTvEigenvalueLikelihoodMaximizationTest
          ${Hyperspectral_TESTS1}
            --compare-ascii ${EPSILON_9}
            ${BASELINE_FILES}/hyTvEigenvalueLikelihoodMaximizationTest.txt
@@ -20,11 +20,11 @@ ADD_TEST(hyTvEigenvalueLikelihoodMaximizationTest
          ${TEMP}/hyTvEigenvalueLikelihoodMaximizationTest.txt)
 
 # HyperspectralTests1
-ADD_TEST(hyTuVirtualDimensionalityNew
+add_test(hyTuVirtualDimensionalityNew
          ${Hyperspectral_TESTS1}
          otbVirtualDimensionalityNewTest)
 
-ADD_TEST(hyTvVirtualDimensionalityTest
+add_test(hyTvVirtualDimensionalityTest
          ${Hyperspectral_TESTS1}
            --compare-ascii ${EPSILON_9}
            ${BASELINE_FILES}/hyTvVirtualDimensionalityTest.txt
@@ -34,14 +34,14 @@ ADD_TEST(hyTvVirtualDimensionalityTest
          ${TEMP}/hyTvVirtualDimensionalityTest.txt
          1E-3)
 
-ADD_TEST(hyTuVCAImageFilterNew
+add_test(hyTuVCAImageFilterNew
          ${Hyperspectral_TESTS1}
          otbVCAImageFilterNew
          ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
          ${TEMP}/synthetic_vca_5.hdr
          5 )
 
-ADD_TEST(hyTvVCAImageFilterTest1
+add_test(hyTvVCAImageFilterTest1
          ${Hyperspectral_TESTS1}
            --compare-image ${EPSILON_9}
            ${BASELINE}/TvHyVertexComponentAnalysisImage.tif
@@ -51,22 +51,22 @@ ADD_TEST(hyTvVCAImageFilterTest1
          ${TEMP}/hyTvVCAImageFilterTest.tif
          5 )
 
-ADD_TEST(hyTuSparseUnmixingImageFilterNew
+add_test(hyTuSparseUnmixingImageFilterNew
           ${Hyperspectral_TESTS1}
           otbSparseUnmixingImageFilterNew)
 
 # TODO
-#ADD_TEST(hyTvSparseUnmixingImageFilterTest
+#add_test(hyTvSparseUnmixingImageFilterTest
 #          ${Hyperspectral_TESTS1}
 #          otbSparseUnmixingImageFilterTest
 #          )
 
 
-ADD_TEST(hyTuUnConstrainedLeastSquareImageFilterNew
+add_test(hyTuUnConstrainedLeastSquareImageFilterNew
          ${Hyperspectral_TESTS1}
          otbUnConstrainedLeastSquareImageFilterNewTest)
 
-ADD_TEST(hyTvUnConstrainedLeastSquareImageFilterTest
+add_test(hyTvUnConstrainedLeastSquareImageFilterTest
          ${Hyperspectral_TESTS1}
            --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
@@ -78,11 +78,11 @@ ADD_TEST(hyTvUnConstrainedLeastSquareImageFilterTest
 
 
 
-ADD_TEST(hyTuNCLSUnmixingImageFilterNew
+add_test(hyTuNCLSUnmixingImageFilterNew
          ${Hyperspectral_TESTS1}
          otbNCLSUnmixingImageFilterNewTest)
 
-ADD_TEST(hyTvNCLSUnmixingImageFilterTest
+add_test(hyTvNCLSUnmixingImageFilterTest
          ${Hyperspectral_TESTS1}
            --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvNCLSImageFilterTest.tif
@@ -94,11 +94,11 @@ ADD_TEST(hyTvNCLSUnmixingImageFilterTest
          10)
 
 
-ADD_TEST(hyTuISRAUnmixingImageFilterNew
+add_test(hyTuISRAUnmixingImageFilterNew
          ${Hyperspectral_TESTS1}
          otbISRAUnmixingImageFilterNewTest)
 
-ADD_TEST(hyTvISRAUnmixingImageFilterTest
+add_test(hyTvISRAUnmixingImageFilterTest
          ${Hyperspectral_TESTS1}
            --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvISRAUnmixingImageFilterTest.tif
@@ -110,11 +110,11 @@ ADD_TEST(hyTvISRAUnmixingImageFilterTest
          10)
 
 # HyperspectralTests3
-ADD_TEST(hyTuMDMDNMFImageFilterNew
+add_test(hyTuMDMDNMFImageFilterNew
          ${Hyperspectral_TESTS3}
          otbMDMDNMFImageFilterNewTest)
 
-ADD_TEST(hyTvMDMDNMFImageFilterTest
+add_test(hyTvMDMDNMFImageFilterTest
          ${Hyperspectral_TESTS3}
          --compare-image ${EPSILON_9}
          ${BASELINE}/hyTvMDMDNMFImageFilterTest.tif
@@ -124,7 +124,7 @@ ADD_TEST(hyTvMDMDNMFImageFilterTest
          ${TEMP}/hyTvMDMDNMFImageFilterTest.tif
          100)
 
-ADD_TEST(hyTvMDMDNMFImageFilterTest2
+add_test(hyTvMDMDNMFImageFilterTest2
          ${Hyperspectral_TESTS3}
          otbMDMDNMFImageFilterTest2
          ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
@@ -133,7 +133,7 @@ ADD_TEST(hyTvMDMDNMFImageFilterTest2
          100)
 
 
-SET(Hyperspectral_SRCS1
+set(Hyperspectral_SRCS1
 otbHyperspectralTests1.cxx
 otbEigenvalueLikelihoodMaximization.cxx
 otbUnConstrainedLeastSquareImageFilter.cxx
@@ -145,24 +145,24 @@ otbVCAImageFilter.cxx
 otbVirtualDimensionality.cxx
 )
 
-SET(Hyperspectral_SRCS2
+set(Hyperspectral_SRCS2
 otbHyperspectralTests2.cxx
 otbLocalRxDetectorTest.cxx
 otbLocalRxDetectorRoiTest.cxx
 )
 
-SET(Hyperspectral_SRCS3
+set(Hyperspectral_SRCS3
 otbHyperspectralTests3.cxx
 otbMDMDNMFImageFilter.cxx
 )
 
-ADD_EXECUTABLE(otbHyperspectralTests1 otbHyperspectralTests1.cxx ${Hyperspectral_SRCS1})
-TARGET_LINK_LIBRARIES(otbHyperspectralTests1 OTBIO OTBHyperspectral OTBMultiScale OTBTesting)
+add_executable(otbHyperspectralTests1 otbHyperspectralTests1.cxx ${Hyperspectral_SRCS1})
+target_link_libraries(otbHyperspectralTests1 OTBIO OTBHyperspectral OTBMultiScale OTBTesting)
 
-ADD_EXECUTABLE(otbHyperspectralTests2 otbHyperspectralTests2.cxx ${Hyperspectral_SRCS2})
-TARGET_LINK_LIBRARIES(otbHyperspectralTests2 OTBIO OTBHyperspectral OTBTesting)
+add_executable(otbHyperspectralTests2 otbHyperspectralTests2.cxx ${Hyperspectral_SRCS2})
+target_link_libraries(otbHyperspectralTests2 OTBIO OTBHyperspectral OTBTesting)
 
-ADD_EXECUTABLE(otbHyperspectralTests3 otbHyperspectralTests3.cxx ${Hyperspectral_SRCS3})
-TARGET_LINK_LIBRARIES(otbHyperspectralTests3 OTBIO OTBHyperspectral OTBTesting)
+add_executable(otbHyperspectralTests3 otbHyperspectralTests3.cxx ${Hyperspectral_SRCS3})
+target_link_libraries(otbHyperspectralTests3 OTBIO OTBHyperspectral OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

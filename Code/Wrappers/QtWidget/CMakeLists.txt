@@ -44,9 +44,9 @@ add_library(OTBWrapperQtWidget ${srcs} ${WrappersQtWidget_MOC_SRC})
 target_link_libraries(OTBWrapperQtWidget OTBApplicationEngine ${QT_LIBRARIES})
 
 
-IF(OTB_LIBRARY_PROPERTIES)
-  SET_TARGET_PROPERTIES(OTBWrapperQtWidget PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-ENDIF(OTB_LIBRARY_PROPERTIES)
+if(OTB_LIBRARY_PROPERTIES)
+  set_target_properties(OTBWrapperQtWidget PROPERTIES ${OTB_LIBRARY_PROPERTIES})
+endif(OTB_LIBRARY_PROPERTIES)
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS OTBWrapperQtWidget
@@ -57,7 +57,7 @@ endif(NOT OTB_INSTALL_NO_LIBRARIES)
 
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  
+
   file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*h")
   install(FILES ${__files1} ${__files2}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Wrappers/QtWidget

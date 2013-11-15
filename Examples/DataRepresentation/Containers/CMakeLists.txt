@@ -1,7 +1,7 @@
-PROJECT(ContainersExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(ContainersExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(TreeContainer TreeContainer.cxx )
-TARGET_LINK_LIBRARIES(TreeContainer ${ITK_LIBRARIES})
+add_executable(TreeContainer TreeContainer.cxx )
+target_link_libraries(TreeContainer ${ITK_LIBRARIES})
 
 

@@ -23,28 +23,28 @@
 # This is adapted from the FindITK.cmake distributed with cmake
 # WARNING: the adaptation is not fully tested yet and needs some rework
 
-SET(OTB_DIR_STRING "directory containing OTBConfig.cmake.  This is either the root of the build tree, or PREFIX/lib/otb for an installation.")
+set(OTB_DIR_STRING "directory containing OTBConfig.cmake.  This is either the root of the build tree, or PREFIX/lib/otb for an installation.")
 
 # Search only if the location is not already known.
-IF(NOT OTB_DIR)
+if(NOT OTB_DIR)
   # Get the system search path as a list.
-  IF(UNIX)
-    STRING(REGEX MATCHALL "[^:]+" OTB_DIR_SEARCH1 "$ENV{PATH}")
-  ELSE(UNIX)
-    STRING(REGEX REPLACE "\\\\" "/" OTB_DIR_SEARCH1 "$ENV{PATH}")
-  ENDIF(UNIX)
-  STRING(REGEX REPLACE "/;" ";" OTB_DIR_SEARCH2 ${OTB_DIR_SEARCH1})
+  if(UNIX)
+    string(REGEX MATCHALL "[^:]+" OTB_DIR_SEARCH1 "$ENV{PATH}")
+  else(UNIX)
+    string(REGEX REPLACE "\\\\" "/" OTB_DIR_SEARCH1 "$ENV{PATH}")
+  endif(UNIX)
+  string(REGEX REPLACE "/;" ";" OTB_DIR_SEARCH2 ${OTB_DIR_SEARCH1})
 
   # Construct a set of paths relative to the system search path.
-  SET(OTB_DIR_SEARCH "")
-  FOREACH(dir ${OTB_DIR_SEARCH2})
-    SET(OTB_DIR_SEARCH ${OTB_DIR_SEARCH} "${dir}/../lib/otb")
-  ENDFOREACH(dir)
+  set(OTB_DIR_SEARCH "")
+  foreach(dir ${OTB_DIR_SEARCH2})
+    set(OTB_DIR_SEARCH ${OTB_DIR_SEARCH} "${dir}/../lib/otb")
+  endforeach(dir)
 
   #
   # Look for an installation or build tree.
   #
-  FIND_PATH(OTB_DIR OTBConfig.cmake
+  find_path(OTB_DIR OTBConfig.cmake
     # Look for an environment variable OTB_DIR.
     $ENV{OTB_DIR}
 
@@ -71,19 +71,19 @@ IF(NOT OTB_DIR)
     # Help the user find it if we cannot.
     DOC "The ${OTB_DIR_STRING}"
   )
-ENDIF(NOT OTB_DIR)
+endif(NOT OTB_DIR)
 
 # If OTB was found, load the configuration file to get the rest of the
 # settings.
-IF(OTB_DIR)
-  SET(OTB_FOUND 1)
-  INCLUDE(${OTB_DIR}/OTBConfig.cmake)
+if(OTB_DIR)
+  set(OTB_FOUND 1)
+  include(${OTB_DIR}/OTBConfig.cmake)
 
   # Set USE_OTB_FILE for backward-compatability.
-  SET(USE_OTB_FILE ${OTB_USE_FILE})
-ELSE(OTB_DIR)
-  SET(OTB_FOUND 0)
-  IF(OTB_FIND_REQUIRED)
-    MESSAGE(FATAL_ERROR "Please set OTB_DIR to the ${OTB_DIR_STRING}")
-  ENDIF(OTB_FIND_REQUIRED)
-ENDIF(OTB_DIR)
+  set(USE_OTB_FILE ${OTB_USE_FILE})
+else(OTB_DIR)
+  set(OTB_FOUND 0)
+  if(OTB_FIND_REQUIRED)
+    message(FATAL_ERROR "Please set OTB_DIR to the ${OTB_DIR_STRING}")
+  endif(OTB_FIND_REQUIRED)
+endif(OTB_DIR)

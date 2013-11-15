@@ -25,8 +25,8 @@ OTB_CREATE_APPLICATION(NAME           ClassificationMapRegularization
 set( TrainImagesClassifier_SRC otbTrainImagesClassifier.cxx otbTrainLibSVM.cxx )
 if(OTB_USE_OPENCV)
   # Add source files with OpenCV dependency
-  set( TrainImagesClassifier_SRC ${TrainImagesClassifier_SRC} 
-         otbTrainSVM.cxx  otbTrainBoost.cxx 
+  set( TrainImagesClassifier_SRC ${TrainImagesClassifier_SRC}
+         otbTrainSVM.cxx  otbTrainBoost.cxx
          otbTrainDecisionTree.cxx otbTrainGradientBoostedTree.cxx
          otbTrainNeuralNetwork.cxx otbTrainNormalBayes.cxx
          otbTrainRandomForests.cxx otbTrainKNN.cxx )
@@ -41,4 +41,4 @@ OTB_CREATE_APPLICATION(NAME         ImageClassifier
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
 
 
- 
+

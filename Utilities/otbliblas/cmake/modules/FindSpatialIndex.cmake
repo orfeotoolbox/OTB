@@ -4,7 +4,7 @@
 # On success, the macro sets the following variables:
 # SPATIALINDEX_FOUND       = if the library found
 # SPATIALINDEX_LIBRARY     = full path to the library
-# SPATIALINDEX_INCLUDE_DIR = where to find the library headers 
+# SPATIALINDEX_INCLUDE_DIR = where to find the library headers
 # SPATIALINDEX_VERSION     = version of library which was found, e.g. "1.4.0"
 #
 # Copyright (c) 2009 Mateusz Loskot <mateusz@loskot.net>
@@ -98,4 +98,4 @@ find_package_handle_standard_args(SpatialIndex DEFAULT_MSG SPATIALINDEX_LIBRARY 
 
 # TODO: Do we want to mark these as advanced? --mloskot
 # http://www.cmake.org/cmake/help/cmake2.6docs.html#command:mark_as_advanced
-#MARK_AS_ADVANCED(SPATIALINDEX_LIBRARY SPATIALINDEX_INCLUDE_DIR)
+#mark_as_advanced(SPATIALINDEX_LIBRARY SPATIALINDEX_INCLUDE_DIR)

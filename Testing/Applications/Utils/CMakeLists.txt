@@ -34,7 +34,7 @@ OTB_TEST_APPLICATION(NAME  apTvUtSmoothingTest_InXML
                      OPTIONS -inxml ${INPUTDATA}/apTvUtSmoothingTest_OutXML.xml
                	             -in ${INPUTDATA}/poupees.tif
                	             -out ${TEMP}/apTvUtSmoothingTest_InXML.tif
-                             -type mean                         
+                             -type mean
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtSmoothingTest.tif
                              ${TEMP}/apTvUtSmoothingTest_InXML.tif)
@@ -48,7 +48,7 @@ OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoTest
                              ${BASELINE_FILES}/apTvUtReadImageInfoTest.txt
                 	     ${TEMP}/apTvUtReadImageInfoTest.txt)
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoSpot5
                      APP  ReadImageInfo
@@ -74,7 +74,7 @@ OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoRADARSAT1
                              ${BASELINE_FILES}/apTvUtReadImageInfoRADARSAT1.txt
                 	     ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt)
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 #--- ExtractROI ---#
 
@@ -182,7 +182,7 @@ OTB_TEST_APPLICATION(NAME apTvUtKmzExport
                              -logo ${INPUTDATA}/cnes.png
                              -legend ${INPUTDATA}/otb_big.png
                              -elev.dem ${INPUTDATA}/DEM/srtm_directory)
-SET_PROPERTY(TEST apTvUtKmzExport PROPERTY RESOURCE_LOCK kmz_tmp_dir)
+set_property(TEST apTvUtKmzExport PROPERTY RESOURCE_LOCK kmz_tmp_dir)
 
 OTB_TEST_APPLICATION(NAME apTvUtKmzExport1Band
                      APP KmzExport
@@ -193,9 +193,9 @@ OTB_TEST_APPLICATION(NAME apTvUtKmzExport1Band
                              -legend ${INPUTDATA}/otb_big.png
                              -elev.dem ${INPUTDATA}/DEM/srtm_directory
                              -tilesize 50) # needed to see the bug mantis #773
-SET_PROPERTY(TEST apTvUtKmzExport1Band PROPERTY RESOURCE_LOCK kmz_tmp_dir)
+set_property(TEST apTvUtKmzExport1Band PROPERTY RESOURCE_LOCK kmz_tmp_dir)
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 #--- OSMDownloader ---
 OTB_TEST_APPLICATION(NAME apTvUtOSMDownloader
                      APP OSMDownloader
@@ -240,7 +240,7 @@ OTB_TEST_APPLICATION(NAME apTvUtVectorDataExtractROIApplication
                              ${TEMP}/apTvUtVectorDataExtractROIApplicationTest.shp
                      )
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 #--- Concatenate VectorData ---
 OTB_TEST_APPLICATION(NAME apTvUtConcatenateVectorData
@@ -300,7 +300,7 @@ OTB_TEST_APPLICATION(NAME apTvUtQuicklookROI1Channel
                              ${TEMP}/apTvUtQuicklookROI1Channel.tif
                      )
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 OTB_TEST_APPLICATION(NAME apTvUtQuicklookSpot5
                      APP Quicklook
                      OPTIONS -in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
@@ -315,7 +315,7 @@ OTB_TEST_APPLICATION(NAME apTvUtQuicklookSpot5
                              ${BASELINE}/apTvUtQuicklookSpot5.tif
                              ${TEMP}/apTvUtQuicklookSpot5.tif
                      )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 #--- Pixel Value ---
 OTB_TEST_APPLICATION(NAME apTvUtPixelValue
@@ -365,7 +365,7 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelCustomLUTQB
                 	         ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
                 	         ${TEMP}/apTvUtColorMappingColorToLabelCustomLUTQB.tif)
 
-#SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelCustomLUTQB PROPERTIES DEPENDS apTvUtColorMappingLabelToColorCustomLUTQB)
+#set_tests_properties(apTvUtColorMappingColorToLabelCustomLUTQB PROPERTIES DEPENDS apTvUtColorMappingLabelToColorCustomLUTQB)
 
 
 OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorCustomLUT
@@ -398,7 +398,7 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelOptimalLUTQB
                              ${BASELINE}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif
                              ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUTQB.tif)
 
-#SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelOptimalLUTQB PROPERTIES DEPENDS apTvUtColorMappingLabelToColorOptimalLUTQB)
+#set_tests_properties(apTvUtColorMappingColorToLabelOptimalLUTQB PROPERTIES DEPENDS apTvUtColorMappingLabelToColorOptimalLUTQB)
 
 
 OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorOptimalLUT
@@ -421,7 +421,7 @@ OTB_TEST_APPLICATION(NAME apTvUtColorMappingColorToLabelOptimalLUT
                              ${INPUTDATA}/labelImage_UnsignedChar.tif
                              ${TEMP}/apTvUtColorMappingColorToLabelOptimalLUT.tif)
 
-#SET_TESTS_PROPERTIES(apTvUtColorMappingColorToLabelOptimalLUT PROPERTIES DEPENDS apTvUtColorMappingLabelToLabelOptimalLUT)
+#set_tests_properties(apTvUtColorMappingColorToLabelOptimalLUT PROPERTIES DEPENDS apTvUtColorMappingLabelToLabelOptimalLUT)
 
 OTB_TEST_APPLICATION(NAME apTvUtColorMappingLabelToColorSupportImage
                      APP ColorMapping
@@ -469,7 +469,7 @@ OTB_TEST_APPLICATION(NAME apTvUtTileFusion
 
 #--- Testing Download SRTM tiles application ---
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 OTB_TEST_APPLICATION(NAME apTuUtDownloadSRTMTiles
                      APP  DownloadSRTMTiles
                      OPTIONS -il ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
@@ -477,4 +477,4 @@ OTB_TEST_APPLICATION(NAME apTuUtDownloadSRTMTiles
                              -mode.list.indir ${INPUTDATA}/DEM/srtm_directory
                      )
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)

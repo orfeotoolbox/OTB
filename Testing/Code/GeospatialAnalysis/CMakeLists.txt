@@ -1,20 +1,20 @@
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 
-SET(GEOSPATIALANALYSIS_TESTS ${CXX_TEST_PATH}/otbGeospatialAnalysisTests)
+set(GEOSPATIALANALYSIS_TESTS ${CXX_TEST_PATH}/otbGeospatialAnalysisTests)
 
 # -------------  Transactors ----------------------------
 
-ADD_TEST(gfTuPostGISCreateTableTransactorNew ${GEOSPATIALANALYSIS_TESTS}
+add_test(gfTuPostGISCreateTableTransactorNew ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISCreateTableTransactorNew
         )
 
-ADD_TEST(gfTuPostGISCreateTableTransactorAccessors ${GEOSPATIALANALYSIS_TESTS}
+add_test(gfTuPostGISCreateTableTransactorAccessors ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISCreateTableTransactorAccessors
         )
 
-ADD_TEST(gfTuPostGISCreateTableTransactorCreate ${GEOSPATIALANALYSIS_TESTS}
+add_test(gfTuPostGISCreateTableTransactorCreate ${GEOSPATIALANALYSIS_TESTS}
   otbPostGISCreateTableTransactorCreate
   localhost
   orfeotoolbox_test
@@ -22,13 +22,13 @@ ADD_TEST(gfTuPostGISCreateTableTransactorCreate ${GEOSPATIALANALYSIS_TESTS}
   Bidfeud0
         )
 
-ADD_TEST(gfTuPostGISFromStringTransactorNew ${GEOSPATIALANALYSIS_TESTS}
+add_test(gfTuPostGISFromStringTransactorNew ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISFromStringTransactorNew
         )
 
 
 # -------       CXX source files -----------------------------------
-SET(GEOSPATIALANALYSIS_SRCS
+set(GEOSPATIALANALYSIS_SRCS
 otbGeospatialAnalysisTests.cxx
 otbPostGISCreateTableTransactorNew.cxx
 otbPostGISCreateTableTransactorAccessors.cxx
@@ -38,4 +38,4 @@ otbPostGISFromStringTransactorNew.cxx
 
 OTB_ADD_EXECUTABLE(otbGeospatialAnalysisTests "${GEOSPATIALANALYSIS_SRCS}" "OTBGeospatialAnalysis;OTBTesting;OTBCommon;pq;pqxx")
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

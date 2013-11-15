@@ -1,4 +1,4 @@
-SET(CPPFILES
+set(CPPFILES
   Fl.cxx
   Fl_Adjuster.cxx
   Fl_Bitmap.cxx
@@ -126,7 +126,7 @@ SET(CPPFILES
   fl_vertex.cxx
 	screen_xywh.cxx
   )
-SET(FLCPPFILES
+set(FLCPPFILES
   forms_compatability.cxx
   forms_bitmap.cxx
   forms_free.cxx
@@ -134,7 +134,7 @@ SET(FLCPPFILES
   forms_pixmap.cxx
   forms_timer.cxx
   )
-SET(GLCPPFILES
+set(GLCPPFILES
   Fl_Gl_Choice.cxx
   Fl_Gl_Overlay.cxx
   Fl_Gl_Window.cxx
@@ -147,7 +147,7 @@ SET(GLCPPFILES
   glut_compatability.cxx
   glut_font.cxx
   )
-SET(IMGCPPFILES
+set(IMGCPPFILES
   fl_images_core.cxx
   Fl_BMP_Image.cxx
   Fl_File_Icon2.cxx
@@ -158,7 +158,7 @@ SET(IMGCPPFILES
   Fl_PNM_Image.cxx
   )
 
-SET(CFILES 
+set(CFILES
   fl_call_main.c
   flstring.c
   scandir.c
@@ -166,77 +166,77 @@ SET(CFILES
   vsnprintf.c
   )
 
-# To suppress "ld: cycle in dylib re-exports with /usr/X11R6/lib/libGL.dylib" error on APPLE and SHARED configuration 
-IF(APPLE AND BUILD_SHARED_LIBS)
-      FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
-        SET(CMAKE_SHARED_LINKER_FLAGS${c} "${CMAKE_SHARED_LINKER_FLAGS${c}} -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
-      ENDFOREACH(c)
-ENDIF(APPLE AND BUILD_SHARED_LIBS)
+# To suppress "ld: cycle in dylib re-exports with /usr/X11R6/lib/libGL.dylib" error on APPLE and SHARED configuration
+if(APPLE AND BUILD_SHARED_LIBS)
+      foreach(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+        set(CMAKE_SHARED_LINKER_FLAGS${c} "${CMAKE_SHARED_LINKER_FLAGS${c}} -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
+      endforeach(c)
+endif(APPLE AND BUILD_SHARED_LIBS)
 
 # Suppress warning messages
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 
-ADD_LIBRARY(fltk ${CPPFILES} ${CFILES})
+add_library(fltk ${CPPFILES} ${CFILES})
 # OTB Modifications
-#INSTALL_TARGETS(/lib fltk)
-INSTALL(TARGETS fltk
+#install_targets(/lib fltk)
+install(TARGETS fltk
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-SET_TARGET_PROPERTIES(fltk
+set_target_properties(fltk
   PROPERTIES
   VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
   SOVERSION ${FLTK_VERSION_PATCH})
 
-TARGET_LINK_LIBRARIES(fltk ${FLTK_PLATFORM_DEPENDENT_LIBS} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(fltk ${FLTK_PLATFORM_DEPENDENT_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
-IF(X11_FOUND)
-  TARGET_LINK_LIBRARIES(fltk ${X11_LIBRARIES})
-ENDIF(X11_FOUND)
+if(X11_FOUND)
+  target_link_libraries(fltk ${X11_LIBRARIES})
+endif(X11_FOUND)
 
-IF(OPENGL_FOUND)
-  ADD_LIBRARY(fltk_gl ${GLCPPFILES})
+if(OPENGL_FOUND)
+  add_library(fltk_gl ${GLCPPFILES})
 # OTB Modifications
-#  INSTALL_TARGETS(/lib fltk_gl)
-  INSTALL(TARGETS fltk_gl
+#  install_targets(/lib fltk_gl)
+  install(TARGETS fltk_gl
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-  TARGET_LINK_LIBRARIES(fltk_gl fltk ${OPENGL_LIBRARIES})
-  SET_TARGET_PROPERTIES(fltk_gl
+  target_link_libraries(fltk_gl fltk ${OPENGL_LIBRARIES})
+  set_target_properties(fltk_gl
     PROPERTIES
     VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
     SOVERSION ${FLTK_VERSION_PATCH})
-ENDIF(OPENGL_FOUND)
+endif(OPENGL_FOUND)
 
-ADD_LIBRARY(fltk_forms ${FLCPPFILES})
+add_library(fltk_forms ${FLCPPFILES})
 # OTB Modifications
-#INSTALL_TARGETS(/lib fltk_forms)
-INSTALL(TARGETS fltk_forms
+#install_targets(/lib fltk_forms)
+install(TARGETS fltk_forms
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-TARGET_LINK_LIBRARIES(fltk_forms fltk)
-SET_TARGET_PROPERTIES(fltk_forms
+target_link_libraries(fltk_forms fltk)
+set_target_properties(fltk_forms
   PROPERTIES
   VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
   SOVERSION ${FLTK_VERSION_PATCH})
 
-ADD_LIBRARY(fltk_images ${IMGCPPFILES})
+add_library(fltk_images ${IMGCPPFILES})
 # OTB Modifications
-#INSTALL_TARGETS(/lib fltk_images)
-INSTALL(TARGETS fltk_images
+#install_targets(/lib fltk_images)
+install(TARGETS fltk_images
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-TARGET_LINK_LIBRARIES(fltk_images fltk ${FLTK_PNG_LIBRARIES}
+target_link_libraries(fltk_images fltk ${FLTK_PNG_LIBRARIES}
      ${FLTK_JPEG_LIBRARIES} ${FLTK_ZLIB_LIBRARIES})
-SET_TARGET_PROPERTIES(fltk_images
+set_target_properties(fltk_images
   PROPERTIES
   VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
   SOVERSION ${FLTK_VERSION_PATCH})

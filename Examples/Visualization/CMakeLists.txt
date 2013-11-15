@@ -1,35 +1,35 @@
-PROJECT(VisuExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(VisuExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(VisuExample1 VisuExample1.cxx )
-TARGET_LINK_LIBRARIES(VisuExample1 OTBVisualization OTBGui OTBIO OTBCommon ${OTB_VISU_GUI_LIBRARIES})
+add_executable(VisuExample1 VisuExample1.cxx )
+target_link_libraries(VisuExample1 OTBVisualization OTBGui OTBIO OTBCommon ${OTB_VISU_GUI_LIBRARIES})
 
-IF(OTB_USE_MAPNIK)
-  ADD_EXECUTABLE(VectorDataRendering VectorDataRendering.cxx )
-  TARGET_LINK_LIBRARIES(VectorDataRendering OTBVisualization OTBGui OTBIO OTBCommon ${OTB_VISU_GUI_LIBRARIES})
-ENDIF(OTB_USE_MAPNIK)
+if(OTB_USE_MAPNIK)
+  add_executable(VectorDataRendering VectorDataRendering.cxx )
+  target_link_libraries(VectorDataRendering OTBVisualization OTBGui OTBIO OTBCommon ${OTB_VISU_GUI_LIBRARIES})
+endif(OTB_USE_MAPNIK)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Remote sensing images (large images )
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
+  set(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+endif(OTB_DATA_USE_LARGEINPUT)
 
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbVisualizationExamplesTests)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbVisualizationExamplesTests)
 
-SET(TOL 0.0)
-SET(EPSILON_4 0.0001)
+set(TOL 0.0)
+set(EPSILON_4 0.0001)
 
 # With Font file
-IF(OTB_DATA_USE_LARGEINPUT)
-  IF(OTB_USE_MAPNIK)
-    ADD_TEST(vrTeVectorDataRendering ${EXE_TESTS}
+if(OTB_DATA_USE_LARGEINPUT)
+  if(OTB_USE_MAPNIK)
+    add_test(vrTeVectorDataRendering ${EXE_TESTS}
       VectorDataRenderingTest
       ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
       ${INPUTLARGEDATA}/VECTOR/MidiPyrenees/roads.shp
@@ -37,30 +37,30 @@ IF(OTB_DATA_USE_LARGEINPUT)
       0
       ${INPUTDATA}/DejaVuSans.ttf
       )
-  ENDIF(OTB_USE_MAPNIK)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+  endif(OTB_USE_MAPNIK)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 # Without Font file
-IF(OTB_DATA_USE_LARGEINPUT)
-  IF(OTB_USE_MAPNIK)
-    ADD_TEST(vrTeVectorDataRenderingWithoutFont ${EXE_TESTS}
+if(OTB_DATA_USE_LARGEINPUT)
+  if(OTB_USE_MAPNIK)
+    add_test(vrTeVectorDataRenderingWithoutFont ${EXE_TESTS}
       VectorDataRenderingTest
       ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
       ${INPUTLARGEDATA}/VECTOR/MidiPyrenees/roads.shp
       ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
       0
       )
-  ENDIF(OTB_USE_MAPNIK)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+  endif(OTB_USE_MAPNIK)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 
 # Compile the example only if OTB uses mapnick
 # This file (for tests registration) will be reserved for test using mapnick
-IF(OTB_USE_MAPNIK)
-  ADD_EXECUTABLE(otbVisualizationExamplesTests otbVisualizationExamplesTests.cxx)
-  TARGET_LINK_LIBRARIES(otbVisualizationExamplesTests OTBCommon OTBIO OTBVisualization OTBTesting)
-ENDIF(OTB_USE_MAPNIK)
+if(OTB_USE_MAPNIK)
+  add_executable(otbVisualizationExamplesTests otbVisualizationExamplesTests.cxx)
+  target_link_libraries(otbVisualizationExamplesTests OTBCommon OTBIO OTBVisualization OTBTesting)
+endif(OTB_USE_MAPNIK)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

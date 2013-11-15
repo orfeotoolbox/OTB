@@ -1,4 +1,4 @@
-IF( OTB_DATA_USE_LARGEINPUT )
+if( OTB_DATA_USE_LARGEINPUT )
 
 OTB_TEST_APPLICATION(NAME apTvRsRasterizationLines
                      APP  Rasterization
@@ -46,7 +46,7 @@ OTB_TEST_APPLICATION(NAME apTvRsRasterizationPoints
                               ${BASELINE}/apTvRsRasterizationPoints.tif
                 	      ${TEMP}/apTvRsRasterizationPoints.tif)
 
-ENDIF( OTB_DATA_USE_LARGEINPUT )
+endif( OTB_DATA_USE_LARGEINPUT )
 
 OTB_TEST_APPLICATION(NAME apTvRsRasterizationPolygons
                      APP  Rasterization
@@ -96,4 +96,4 @@ OTB_TEST_APPLICATION(NAME apTvRsRasterizationShadowsSHP
                      VALID   --compare-image ${NOTOL}
                               ${BASELINE}/apTvRsRasterizationShadowsSHP.tif
                 	            ${TEMP}/apTvRsRasterizationShadowsSHP.tif)
-  	      
+  	

@@ -2,35 +2,35 @@
 # Examples on the use of hyperspectral algorithms
 #
 
-PROJECT(HyperspectralExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(HyperspectralExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(HyperspectralUnmixingExample HyperspectralUnmixingExample.cxx )
-TARGET_LINK_LIBRARIES(HyperspectralUnmixingExample OTBCommon OTBIO OTBHyperspectral)
+add_executable(HyperspectralUnmixingExample HyperspectralUnmixingExample.cxx )
+target_link_libraries(HyperspectralUnmixingExample OTBCommon OTBIO OTBHyperspectral)
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Hyperspectral)
-SET(BASELINE_IMAGES_OTB ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Hyperspectral)
+set(BASELINE_IMAGES_OTB ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 
-SET(INPUTDATA_EXAMPLES ${OTB_DATA_ROOT}/Examples)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(INPUTDATA_EXAMPLES ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
+  set(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
+endif(OTB_DATA_USE_LARGEINPUT)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbHyperspectralExamplesTests)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbHyperspectralExamplesTests)
 
-SET(TOL 0.0)
+set(TOL 0.0)
 
 # tests#
 # ------- HyperspectralUnmixingExampleTest ----------
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(siTvHyperspectralExampleTest ${EXE_TESTS}
+add_test(siTvHyperspectralExampleTest ${EXE_TESTS}
      --compare-n-images ${TOL} 3
      ${BASELINE}/siTvHyperspectralUnmixingExampleTestBand1.png
      ${TEMP}/siTvHyperspectralUnmixingExampleTestBand1.png
@@ -46,11 +46,11 @@ ADD_TEST(siTvHyperspectralExampleTest ${EXE_TESTS}
      ${TEMP}/siTvHyperspectralUnmixingExampleTestBand3.png
      16
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 
-ADD_EXECUTABLE(otbHyperspectralExamplesTests otbHyperspectralExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbHyperspectralExamplesTests OTBCommon OTBIO OTBHyperspectral OTBCommon OTBTesting)
+add_executable(otbHyperspectralExamplesTests otbHyperspectralExamplesTests.cxx)
+target_link_libraries(otbHyperspectralExamplesTests OTBCommon OTBIO OTBHyperspectral OTBCommon OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

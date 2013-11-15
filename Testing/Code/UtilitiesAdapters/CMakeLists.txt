@@ -1,15 +1,15 @@
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-ADD_SUBDIRECTORY(OGRAdapters)
+add_subdirectory(OGRAdapters)
 
-SET(UtilitiesAdapters_TESTS1 ${CXX_TEST_PATH}/otbUtilitiesAdaptersTests1)
+set(UtilitiesAdapters_TESTS1 ${CXX_TEST_PATH}/otbUtilitiesAdaptersTests1)
 
-ADD_TEST(uaTvPlatformPositionComputeBaselineNew
+add_test(uaTvPlatformPositionComputeBaselineNew
          ${UtilitiesAdapters_TESTS1}
          otbPlatformPositionComputeBaselineNewTest)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(uaTvPlatformPositionComputeBaselineTest
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(uaTvPlatformPositionComputeBaselineTest
          ${UtilitiesAdapters_TESTS1}
            --compare-ascii ${EPSILON_9}
            ${BASELINE_FILES}/uaTvPlatformPositionComputeBaselineTest.txt
@@ -17,14 +17,14 @@ ADD_TEST(uaTvPlatformPositionComputeBaselineTest
          otbPlatformPositionComputeBaselineTest
          ${LARGEINPUT}/TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml
          ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(uaTvGeometricSarSensorModelAdapterNew
+add_test(uaTvGeometricSarSensorModelAdapterNew
          ${UtilitiesAdapters_TESTS1}
          otbGeometricSarSensorModelAdapterNewTest)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(uaTvGeometricSarSensorModelAdapterTest
+if(OTB_DATA_USE_LARGEINPUT)
+add_test(uaTvGeometricSarSensorModelAdapterTest
          ${UtilitiesAdapters_TESTS1}
            --compare-ascii ${EPSILON_9}
            ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
@@ -33,7 +33,7 @@ ADD_TEST(uaTvGeometricSarSensorModelAdapterTest
          ${LARGEINPUT}/TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml
          ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
 
-ADD_TEST(uaTvRPCSolverAdapterValidationTest
+add_test(uaTvRPCSolverAdapterValidationTest
          ${UtilitiesAdapters_TESTS1}
          otbRPCSolverAdapterTest
          ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -42,7 +42,7 @@ ADD_TEST(uaTvRPCSolverAdapterValidationTest
          ${INPUTDATA}/DEM/egm96.grd
 )
 
-ADD_TEST(uaTvRPCSolverAdapterNoDEMValidationTest
+add_test(uaTvRPCSolverAdapterNoDEMValidationTest
          ${UtilitiesAdapters_TESTS1}
          otbRPCSolverAdapterTest
          ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -51,7 +51,7 @@ ADD_TEST(uaTvRPCSolverAdapterNoDEMValidationTest
          no
 )
 
-ADD_TEST(uaTvRPCSolverAdapterOutGeomTest
+add_test(uaTvRPCSolverAdapterOutGeomTest
          ${UtilitiesAdapters_TESTS1}
   --compare-ascii ${EPSILON_9}
          ${BASELINE_FILES}/uaTvRPCSolverAdapterOutGeomTest.geom
@@ -64,7 +64,7 @@ ADD_TEST(uaTvRPCSolverAdapterOutGeomTest
          ${TEMP}/uaTvRPCSolverAdapterOutGeomTest.geom
 )
 
-ADD_TEST(uaTvRPCSolverAdapterNotEnoughPointsForElevationTest
+add_test(uaTvRPCSolverAdapterNotEnoughPointsForElevationTest
          ${UtilitiesAdapters_TESTS1}
          otbRPCSolverAdapterTest
          ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -73,7 +73,7 @@ ADD_TEST(uaTvRPCSolverAdapterNotEnoughPointsForElevationTest
          no
          )
 
-ADD_TEST(uaTvRPCSolverAdapterNotEnoughPointsTest
+add_test(uaTvRPCSolverAdapterNotEnoughPointsTest
          ${UtilitiesAdapters_TESTS1}
          otbRPCSolverAdapterTest
          ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -81,13 +81,13 @@ ADD_TEST(uaTvRPCSolverAdapterNotEnoughPointsTest
          ${INPUTDATA}/DEM/srtm_directory/
          ${INPUTDATA}/DEM/egm96.grd
          )
-SET_TESTS_PROPERTIES(uaTvRPCSolverAdapterNotEnoughPointsTest PROPERTIES WILL_FAIL TRUE)
+set_tests_properties(uaTvRPCSolverAdapterNotEnoughPointsTest PROPERTIES WILL_FAIL TRUE)
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 # Exhaustive DEM handler testing
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid
+add_test(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -100,7 +100,7 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid
+add_test(uaTvDEMHandler_AboveMSL_SRTM_Geoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -113,7 +113,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid
+add_test(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -126,7 +126,7 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid
+add_test(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -139,7 +139,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_Geoid
+add_test(uaTvDEMHandler_AboveEllipsoid_NoSRTM_Geoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   no
@@ -152,7 +152,7 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_Geoid
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_Geoid
+add_test(uaTvDEMHandler_AboveMSL_NoSRTM_Geoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   no
@@ -166,7 +166,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_Geoid
 )
 
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid
+add_test(uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   no
@@ -179,7 +179,7 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid
+add_test(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   no
@@ -193,7 +193,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid
 )
 
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoData
+add_test(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoData
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -206,7 +206,7 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoData
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoData
+add_test(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoData
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -219,7 +219,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoData
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoData
+add_test(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoData
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -232,7 +232,7 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoData
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData
+add_test(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -245,7 +245,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid_NoData
+add_test(uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid_NoData
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   no
@@ -258,7 +258,7 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid_NoData
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid_NoData
+add_test(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid_NoData
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   no
@@ -272,7 +272,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid_NoData
 )
 
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoSRTMCoverage
+add_test(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoSRTMCoverage
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -285,7 +285,7 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoSRTMCoverage
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoSRTMCoverage
+add_test(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoSRTMCoverage
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -298,7 +298,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoSRTMCoverage
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoSRTMCoverage
+add_test(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoSRTMCoverage
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -311,7 +311,7 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoSRTMCoverage
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoSRTMCoverage
+add_test(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoSRTMCoverage
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -324,7 +324,7 @@ ADD_TEST(uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoSRTMCoverage
   0.001
 )
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid
+add_test(uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/poupeesTIF/
@@ -337,9 +337,9 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid
   0.001
 )
 
-SET_TESTS_PROPERTIES(uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid PROPERTIES WILL_FAIL 1)
+set_tests_properties(uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid PROPERTIES WILL_FAIL 1)
 
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid
+add_test(uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${INPUTDATA}/DEM/srtm_directory/
@@ -352,9 +352,9 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid
   0.001
 )
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 # Test with general elevation images (tif format)
-ADD_TEST(uaTvDEMHandler_AboveEllipsoid_BDALTI_TIF_NoGeoid
+add_test(uaTvDEMHandler_AboveEllipsoid_BDALTI_TIF_NoGeoid
   ${UtilitiesAdapters_TESTS1}
   otbDEMHandlerTest
   ${LARGEINPUT}/BD_ALTI/
@@ -366,9 +366,9 @@ ADD_TEST(uaTvDEMHandler_AboveEllipsoid_BDALTI_TIF_NoGeoid
   869
   1
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
-SET(UtilitiesAdapters_SRCS1
+set(UtilitiesAdapters_SRCS1
 otbUtilitiesAdaptersTests1.cxx
 otbPlatformPositionAdapter.cxx
 otbGeometricSarSensorModelAdapter.cxx
@@ -377,8 +377,8 @@ otbDEMHandlerTest.cxx
 )
 
 
-ADD_EXECUTABLE(otbUtilitiesAdaptersTests1 otbUtilitiesAdaptersTests1.cxx ${UtilitiesAdapters_SRCS1})
-TARGET_LINK_LIBRARIES(otbUtilitiesAdaptersTests1 OTBOssimAdapters OTBTesting)
+add_executable(otbUtilitiesAdaptersTests1 otbUtilitiesAdaptersTests1.cxx ${UtilitiesAdapters_SRCS1})
+target_link_libraries(otbUtilitiesAdaptersTests1 OTBOssimAdapters OTBTesting)
 
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -1,21 +1,21 @@
-SET(MODEL_SRCS
+set(MODEL_SRCS
 Model/otbViewerModel.cxx
 )
 
-SET(CONTROLLER_SRCS
+set(CONTROLLER_SRCS
 Controller/otbViewerController.cxx
 )
 
-SET(VIEW_FL_SRCS
+set(VIEW_FL_SRCS
 View/otbViewerViewGroup.fl
 )
 
-SET(VIEW_SRCS
+set(VIEW_SRCS
 View/otbViewerViewGUI.cxx
 )
 
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${OTB_SOURCE_DIR}/Code/Visualization/Viewer/View
   ${OTB_SOURCE_DIR}/Code/Visualization/Viewer/Model
   ${OTB_SOURCE_DIR}/Code/Visualization/Viewer/Controller
@@ -25,28 +25,28 @@ INCLUDE_DIRECTORIES(
 # Take the list of GUI files, generate .cxx and .h from them and add
 # them to the build process of the target
 
-FLTK_WRAP_UI(otbViewer ${VIEW_FL_SRCS})
+fltk_wrap_ui(otbViewer ${VIEW_FL_SRCS})
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
-IF(CMAKE_COMPILER_IS_GNUCXX)
-      SET_SOURCE_FILES_PROPERTIES(
-            ${MODEL_SRCS} 
-            ${CONTROLLER_SRCS} 
-            ${VIEW_SRCS} 
+if(CMAKE_COMPILER_IS_GNUCXX)
+      set_source_files_properties(
+            ${MODEL_SRCS}
+            ${CONTROLLER_SRCS}
+            ${VIEW_SRCS}
             ${otbViewer_FLTK_UI_SRCS}
             otbViewer.cxx
 	    PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_EXECUTABLE(otbViewer
+add_executable(otbViewer
                    otbViewer.cxx
                    ${VIEW_SRCS} ${CONTROLLER_SRCS} ${MODEL_SRCS}
                    ${otbViewer_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES(otbViewer OTBIO OTBCommon OTBVisualization)
+target_link_libraries(otbViewer OTBIO OTBCommon OTBVisualization)
 
-IF(NOT OTB_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS otbViewer
+if(NOT OTB_INSTALL_NO_LIBRARIES)
+  install(TARGETS otbViewer
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-ENDIF(NOT OTB_INSTALL_NO_LIBRARIES)
+endif(NOT OTB_INSTALL_NO_LIBRARIES)

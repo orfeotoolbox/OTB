@@ -1,75 +1,75 @@
-PROJECT(LearningExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(LearningExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(GenerateTrainingImageExample GenerateTrainingImageExample.cxx )
-TARGET_LINK_LIBRARIES(GenerateTrainingImageExample OTBCommon OTBIO OTBLearning)
+add_executable(GenerateTrainingImageExample GenerateTrainingImageExample.cxx )
+target_link_libraries(GenerateTrainingImageExample OTBCommon OTBIO OTBLearning)
 
-ADD_EXECUTABLE(SVMPointSetExample SVMPointSetExample.cxx )
-TARGET_LINK_LIBRARIES(SVMPointSetExample OTBIO OTBCommon
+add_executable(SVMPointSetExample SVMPointSetExample.cxx )
+target_link_libraries(SVMPointSetExample OTBIO OTBCommon
 ${ITK_LIBRARIES}  OTBLearning)
 
 
-ADD_EXECUTABLE(SVMPointSetModelEstimatorExample SVMPointSetModelEstimatorExample.cxx )
-TARGET_LINK_LIBRARIES(SVMPointSetModelEstimatorExample OTBIO
+add_executable(SVMPointSetModelEstimatorExample SVMPointSetModelEstimatorExample.cxx )
+target_link_libraries(SVMPointSetModelEstimatorExample OTBIO
 OTBCommon  OTBLearning)
 
-ADD_EXECUTABLE(SVMImageModelEstimatorExample SVMImageModelEstimatorExample.cxx )
-TARGET_LINK_LIBRARIES(SVMImageModelEstimatorExample OTBIO
+add_executable(SVMImageModelEstimatorExample SVMImageModelEstimatorExample.cxx )
+target_link_libraries(SVMImageModelEstimatorExample OTBIO
 OTBCommon  OTBLearning)
 
-ADD_EXECUTABLE(SVMPointSetClassificationExample SVMPointSetClassificationExample.cxx )
-TARGET_LINK_LIBRARIES(SVMPointSetClassificationExample OTBIO
+add_executable(SVMPointSetClassificationExample SVMPointSetClassificationExample.cxx )
+target_link_libraries(SVMPointSetClassificationExample OTBIO
 OTBCommon  OTBLearning)
 
-ADD_EXECUTABLE(SVMImageClassificationExample SVMImageClassificationExample.cxx )
-TARGET_LINK_LIBRARIES(SVMImageClassificationExample OTBIO
+add_executable(SVMImageClassificationExample SVMImageClassificationExample.cxx )
+target_link_libraries(SVMImageClassificationExample OTBIO
 OTBCommon  OTBLearning)
 
-ADD_EXECUTABLE(SVMImageEstimatorClassificationMultiExample SVMImageEstimatorClassificationMultiExample.cxx )
-TARGET_LINK_LIBRARIES(SVMImageEstimatorClassificationMultiExample OTBIO
+add_executable(SVMImageEstimatorClassificationMultiExample SVMImageEstimatorClassificationMultiExample.cxx )
+target_link_libraries(SVMImageEstimatorClassificationMultiExample OTBIO
 OTBCommon  OTBLearning)
 
-ADD_EXECUTABLE(SOMExample SOMExample.cxx )
-TARGET_LINK_LIBRARIES(SOMExample OTBIO OTBCommon  OTBLearning)
+add_executable(SOMExample SOMExample.cxx )
+target_link_libraries(SOMExample OTBIO OTBCommon  OTBLearning)
 
-ADD_EXECUTABLE(SOMClassifierExample SOMClassifierExample.cxx )
-TARGET_LINK_LIBRARIES(SOMClassifierExample OTBIO OTBCommon  OTBLearning)
+add_executable(SOMClassifierExample SOMClassifierExample.cxx )
+target_link_libraries(SOMClassifierExample OTBIO OTBCommon  OTBLearning)
 
-ADD_EXECUTABLE(SEMModelEstimatorExample SEMModelEstimatorExample.cxx )
-TARGET_LINK_LIBRARIES(SEMModelEstimatorExample OTBIO OTBCommon  OTBLearning)
+add_executable(SEMModelEstimatorExample SEMModelEstimatorExample.cxx )
+target_link_libraries(SEMModelEstimatorExample OTBIO OTBCommon  OTBLearning)
 
-ADD_EXECUTABLE(SVMGenericKernelImageModelEstimatorExample SVMGenericKernelImageModelEstimatorExample.cxx)
-TARGET_LINK_LIBRARIES(SVMGenericKernelImageModelEstimatorExample OTBLearning OTBCommon OTBIO)
+add_executable(SVMGenericKernelImageModelEstimatorExample SVMGenericKernelImageModelEstimatorExample.cxx)
+target_link_libraries(SVMGenericKernelImageModelEstimatorExample OTBLearning OTBCommon OTBIO)
 
-ADD_EXECUTABLE(SVMGenericKernelImageClassificationExample SVMGenericKernelImageClassificationExample.cxx)
-TARGET_LINK_LIBRARIES(SVMGenericKernelImageClassificationExample OTBLearning OTBCommon OTBIO)
+add_executable(SVMGenericKernelImageClassificationExample SVMGenericKernelImageClassificationExample.cxx)
+target_link_libraries(SVMGenericKernelImageClassificationExample OTBLearning OTBCommon OTBIO)
 
 
 # ------- MachineLearningModel framework examples ----------
-IF(OTB_USE_OPENCV)
-  ADD_EXECUTABLE(TrainMachineLearningModelFromSamplesExample TrainMachineLearningModelFromSamplesExample.cxx)
-  TARGET_LINK_LIBRARIES(TrainMachineLearningModelFromSamplesExample OTBLearning OTBCommon OTBIO)
+if(OTB_USE_OPENCV)
+  add_executable(TrainMachineLearningModelFromSamplesExample TrainMachineLearningModelFromSamplesExample.cxx)
+  target_link_libraries(TrainMachineLearningModelFromSamplesExample OTBLearning OTBCommon OTBIO)
 
-  ADD_EXECUTABLE(TrainMachineLearningModelFromImagesExample TrainMachineLearningModelFromImagesExample.cxx)
-  TARGET_LINK_LIBRARIES(TrainMachineLearningModelFromImagesExample OTBLearning OTBCommon OTBIO)
-ENDIF(OTB_USE_OPENCV)
+  add_executable(TrainMachineLearningModelFromImagesExample TrainMachineLearningModelFromImagesExample.cxx)
+  target_link_libraries(TrainMachineLearningModelFromImagesExample OTBLearning OTBCommon OTBIO)
+endif(OTB_USE_OPENCV)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Learning)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Learning)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbLearningExamplesTests)
+set(EXE_TESTS ${CXX_TEST_PATH}/otbLearningExamplesTests)
 
-SET(TOL 0.0)
+set(TOL 0.0)
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPS 0.001)
+set(EPS 0.001)
 
 # ------- SVMImageClassificationExampleTest----------
 
-ADD_TEST(leTeSVMImageClassificationExampleTest ${EXE_TESTS}
+add_test(leTeSVMImageClassificationExampleTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS.png
         ${TEMP}/ROI_QB_MUL_1_SVN_CLASS.png
@@ -81,7 +81,7 @@ ADD_TEST(leTeSVMImageClassificationExampleTest ${EXE_TESTS}
 
 # ------- SVMImageEstimatorClassificationMultiExampleTest----------
 
-ADD_TEST(leTeSVMImageEstimatorClassificationMultiExampleTest ${EXE_TESTS}
+add_test(leTeSVMImageEstimatorClassificationMultiExampleTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
         ${TEMP}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
@@ -94,7 +94,7 @@ ADD_TEST(leTeSVMImageEstimatorClassificationMultiExampleTest ${EXE_TESTS}
 
 # ------- GenerateTrainingImageExampleTest----------
 
-ADD_TEST(leTeGenerateTrainingImageExampleTest ${EXE_TESTS}
+add_test(leTeGenerateTrainingImageExampleTest ${EXE_TESTS}
         --compare-n-images ${TOL} 1
         ${BASELINE}/ROI_QB_MUL_4_training.png
         ${TEMP}/ROI_QB_MUL_4_training.png
@@ -106,7 +106,7 @@ ADD_TEST(leTeGenerateTrainingImageExampleTest ${EXE_TESTS}
 
 # ------- SVMImageModelEstimatorExampleTest----------
 
-ADD_TEST(leTeSVMImageModelEstimatorExampleTest ${EXE_TESTS}
+add_test(leTeSVMImageModelEstimatorExampleTest ${EXE_TESTS}
         --compare-ascii ${EPS}
         ${BASELINE}/svm_image_model.svn
         ${TEMP}/svm_image_model.svn
@@ -120,7 +120,7 @@ ADD_TEST(leTeSVMImageModelEstimatorExampleTest ${EXE_TESTS}
 
 # ------- SOMExampleTest----------
 
-ADD_TEST(leTeSOMExampleTest ${EXE_TESTS}
+add_test(leTeSOMExampleTest ${EXE_TESTS}
         --compare-n-images ${TOL} 2
         ${BASELINE}/ROI_QB_MUL_SOM.png
         ${TEMP}/ROI_QB_MUL_SOM.png
@@ -135,7 +135,7 @@ ADD_TEST(leTeSOMExampleTest ${EXE_TESTS}
 
 # ------- SOMClassifierExampleTest----------
 
-ADD_TEST(leTeSOMClassifierExampleTest ${EXE_TESTS}
+add_test(leTeSOMClassifierExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/ROI_QB_MUL_extractSOMCLASS.tif
         ${TEMP}/ROI_QB_MUL_extractSOMCLASS.tif
@@ -147,7 +147,7 @@ ADD_TEST(leTeSOMClassifierExampleTest ${EXE_TESTS}
 
 # ------- SEMModelEstimatorExampleTest----------
 
-ADD_TEST(leTeSEMModelEstimatorExampleTest ${EXE_TESTS}
+add_test(leTeSEMModelEstimatorExampleTest ${EXE_TESTS}
 #        --compare-image ${TOL}
 #        ${BASELINE}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
 #        ${TEMP}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
@@ -159,7 +159,7 @@ ADD_TEST(leTeSEMModelEstimatorExampleTest ${EXE_TESTS}
 
 # ------- SVMGenericKernelImageModelEstimatorExampleTest----------
 
-ADD_TEST(leTeSVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
+add_test(leTeSVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
         --compare-ascii ${EPS}
         ${BASELINE}/svm_image_model_generic_kernel.svn
         ${TEMP}/svm_image_model_generic_kernel.svn
@@ -172,7 +172,7 @@ ADD_TEST(leTeSVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
 
 # ------- SVMGenericKernelImageClassificationExampleTest----------
 
-ADD_TEST(leTeSVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
+add_test(leTeSVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
         --compare-image ${EPS}
         ${BASELINE}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
         ${TEMP}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
@@ -182,8 +182,8 @@ ADD_TEST(leTeSVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
         ${INPUTDATA}/svm_image_model_generic_kernel.svn
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbLearningExamplesTests otbLearningExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbLearningExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbLearningExamplesTests otbLearningExamplesTests.cxx)
+target_link_libraries(otbLearningExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

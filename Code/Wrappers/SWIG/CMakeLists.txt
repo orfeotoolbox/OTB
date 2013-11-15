@@ -163,10 +163,10 @@ if ( OTB_WRAP_LUA )
   if ( UNIX )
     target_link_libraries ( otbApplicationLua curses )
   endif()
-  
+
   install(TARGETS otbApplicationLua
-          RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries 
-          LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries 
+          RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+          LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
           ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development )
 
 endif()

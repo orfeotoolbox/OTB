@@ -65,12 +65,12 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Formosat
 
 
 # FIXME toc reflectance computation on a Pleaides MS data over the Maido in La Reunion
-# Optical calibration leads to negative values. It may be due to slope effects which are not 
+# Optical calibration leads to negative values. It may be due to slope effects which are not
 # take into consideration in the process (only altitude can be modified with the atmospheric pressure parameter)
 # TODO Reactivate these tests when we'll add slope effects correction
 
 
-# IF (OTB_DATA_USE_LARGEINPUT)
+# if(OTB_DATA_USE_LARGEINPUT)
 # OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_toa_PHR1A
 #                      APP  OpticalCalibration
 #                      OPTIONS -in ${LARGEDATA}/PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2
@@ -96,4 +96,4 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Formosat
 #                      VALID   --compare-image ${EPSILON_7}
 #                              ${BASELINE}/apTvRaOpticalCalibration_toc_PHR1A.tif
 #                              ${TEMP}/apTvRaOpticalCalibration_toc_PHR1A.tif )
-# ENDIF(OTB_DATA_USE_LARGEINPUT)
+# endif(OTB_DATA_USE_LARGEINPUT)

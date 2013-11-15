@@ -1,36 +1,36 @@
-PROJECT(MultiScaleExamples)
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(MultiScaleExamples)
+include_regular_expression("^.*$")
 
-ADD_EXECUTABLE(MorphologicalPyramidAnalysisFilterExample MorphologicalPyramidAnalysisFilterExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidAnalysisFilterExample OTBCommon OTBIO OTBMultiScale)
+add_executable(MorphologicalPyramidAnalysisFilterExample MorphologicalPyramidAnalysisFilterExample.cxx )
+target_link_libraries(MorphologicalPyramidAnalysisFilterExample OTBCommon OTBIO OTBMultiScale)
 
-ADD_EXECUTABLE(MorphologicalPyramidSynthesisFilterExample MorphologicalPyramidSynthesisFilterExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSynthesisFilterExample OTBCommon OTBIO OTBMultiScale)
+add_executable(MorphologicalPyramidSynthesisFilterExample MorphologicalPyramidSynthesisFilterExample.cxx )
+target_link_libraries(MorphologicalPyramidSynthesisFilterExample OTBCommon OTBIO OTBMultiScale)
 
-ADD_EXECUTABLE(MorphologicalPyramidSegmenterExample MorphologicalPyramidSegmenterExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmenterExample OTBCommon OTBIO OTBMultiScale )
-
-
-ADD_EXECUTABLE(MorphologicalPyramidSegmentationExample MorphologicalPyramidSegmentationExample.cxx )
-TARGET_LINK_LIBRARIES(MorphologicalPyramidSegmentationExample OTBCommon OTBIO OTBMultiScale)
+add_executable(MorphologicalPyramidSegmenterExample MorphologicalPyramidSegmenterExample.cxx )
+target_link_libraries(MorphologicalPyramidSegmenterExample OTBCommon OTBIO OTBMultiScale )
 
 
+add_executable(MorphologicalPyramidSegmentationExample MorphologicalPyramidSegmentationExample.cxx )
+target_link_libraries(MorphologicalPyramidSegmentationExample OTBCommon OTBIO OTBMultiScale)
 
-IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/MultiScale)
 
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
-SET(EXE_TESTS ${CXX_TEST_PATH}/otbMultiScaleExamplesTests)
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/MultiScale)
 
-SET(TOL 0.0)
+set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+set(EXE_TESTS ${CXX_TEST_PATH}/otbMultiScaleExamplesTests)
+
+set(TOL 0.0)
 
 
 # ------- MorphologicalPyramidAnalysisFilterExampleTest ----------
 
-ADD_TEST(msTeMorphologicalPyramidAnalysisFilterExampleTest ${EXE_TESTS}
+add_test(msTeMorphologicalPyramidAnalysisFilterExampleTest ${EXE_TESTS}
         --compare-n-images ${TOL} 20
         ${BASELINE}/suburb2_an_1.jpeg ${TEMP}/suburb2_an_1.jpeg
         ${BASELINE}/suburb2_an_2.jpeg ${TEMP}/suburb2_an_2.jpeg
@@ -69,7 +69,7 @@ ADD_TEST(msTeMorphologicalPyramidAnalysisFilterExampleTest ${EXE_TESTS}
 
 # ------- MorphologicalPyramidSynthesisFilterExampleTest ----------
 
-ADD_TEST(msTeMorphologicalPyramidSynthesisFilterExampleTest ${EXE_TESTS}
+add_test(msTeMorphologicalPyramidSynthesisFilterExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/suburb2_synthesis.jpeg
         ${TEMP}/suburb2_synthesis.jpeg
@@ -81,7 +81,7 @@ ADD_TEST(msTeMorphologicalPyramidSynthesisFilterExampleTest ${EXE_TESTS}
 
 # ------- MorphologicalPyramidSegmenterExampleTest ----------
 
-ADD_TEST(msTeMorphologicalPyramidSegmenterExampleTest ${EXE_TESTS}
+add_test(msTeMorphologicalPyramidSegmenterExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/outputPyrSegmented.tif
         ${TEMP}/outputPyrSegmented.tif
@@ -92,8 +92,8 @@ ADD_TEST(msTeMorphologicalPyramidSegmenterExampleTest ${EXE_TESTS}
         0 0.9 0.9 10
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-ADD_EXECUTABLE(otbMultiScaleExamplesTests otbMultiScaleExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbMultiScaleExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  OTBTesting)
+include_directories(${OTB_SOURCE_DIR}/Testing/Code)
+add_executable(otbMultiScaleExamplesTests otbMultiScaleExamplesTests.cxx)
+target_link_libraries(otbMultiScaleExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale  OTBTesting)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

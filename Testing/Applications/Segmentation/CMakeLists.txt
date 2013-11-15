@@ -1,10 +1,10 @@
 #--- MeanShift ---#
 
 
-# VALIDATION should be enabled (baseline is same same as bfTvMeanShiftSmoothingImageFilterQBSuburbNonOptim) 
+# VALIDATION should be enabled (baseline is same same as bfTvMeanShiftSmoothingImageFilterQBSuburbNonOptim)
 # results should be the same if thres is stored as double
 #OTB_TEST_APPLICATION(NAME apTvSeMeanShiftSmoothing
-OTB_TEST_APPLICATION(NAME apTuSeMeanShiftSmoothing 
+OTB_TEST_APPLICATION(NAME apTuSeMeanShiftSmoothing
                      APP  MeanShiftSmoothing
                      OPTIONS -in  ${INPUTDATA}/QB_Suburb.png
                              -fout ${TEMP}/apTvSeMeanShiftSmoothingFilter_SpectralOutput.tif
@@ -14,7 +14,7 @@ OTB_TEST_APPLICATION(NAME apTuSeMeanShiftSmoothing
                  			 -maxiter 100
                  			 -thres 0.1
                  			 -modesearch 0)
-#                     VALID   --compare-image ${EPSILON_7} 
+#                     VALID   --compare-image ${EPSILON_7}
 #                               ${BASELINE}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBSuburbNonOptim.tif
 #                    		   ${TEMP}/apTvSeMeanShiftSmoothingFilter_SpectralOutput.tif)
 
@@ -41,7 +41,7 @@ OTB_TEST_APPLICATION(NAME  apTvCcConnectedComponentSegmentatioNoMask
                              -obia "SHAPE_Elongation>8"
                      VALID   --compare-ogr ${NOTOL}
                              ${BASELINE_FILES}/apTvCcConnectedComponentSegmentationNoMask.shp
-                             ${TEMP}/apTvCcConnectedComponentSegmentationNoMask.shp)                    		   
+                             ${TEMP}/apTvCcConnectedComponentSegmentationNoMask.shp)                    		
 
 #--- HooverCompareSegmentation ---#
 OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
@@ -56,41 +56,41 @@ OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
                 	      ${TEMP}/apTvSeHooverCompareSegmentationTest.txt
                               --ignore-lines-with 2 outgt: outms:
                      )
-                     
+
 #--- Segmentation ---#
 
 # Segmentation algorithms parameters
-SET(cc_parameters "-filter.cc.expr distance<25")
-SET(edison_parameters "-filter.edison.spatialr 5 -filter.edison.ranger 50 -filter.edison.minsize 10")
-SET(meanshift_parameters "-filter.meanshift.spatialr 5 -filter.meanshift.ranger 50 -filter.meanshift.minsize 10")
-SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ovw")
+set(cc_parameters "-filter.cc.expr distance<25")
+set(edison_parameters "-filter.edison.spatialr 5 -filter.edison.ranger 50 -filter.edison.minsize 10")
+set(meanshift_parameters "-filter.meanshift.spatialr 5 -filter.meanshift.ranger 50 -filter.meanshift.minsize 10")
+set(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ovw")
 
 # validation option
-SET(meanshift_option "--without-threads")
+set(meanshift_option "--without-threads")
 
 # Output type dependning on mode
-SET(raster_output_format ".tif")
-SET(raster_output_option " uint16")
-SET(vector_output_format ".sqlite")
+set(raster_output_format ".tif")
+set(raster_output_option " uint16")
+set(vector_output_format ".sqlite")
 
-# Validation depending on mode 
-SET(vector_comparison --compare-ogr ${NOTOL})
-SET(raster_comparison --compare-image ${NOTOL})
+# Validation depending on mode
+set(vector_comparison --compare-ogr ${NOTOL})
+set(raster_comparison --compare-image ${NOTOL})
 
 # Reference ffiles depending on modes
-SET(vector_ref_path ${BASELINE_FILES})
-SET(raster_ref_path ${BASELINE})
+set(vector_ref_path ${BASELINE_FILES})
+set(raster_ref_path ${BASELINE})
 
 # Loop on modes
-FOREACH(mode "Raster" "Vector")
-STRING(TOLOWER ${mode} lmode)
+foreach(mode "Raster" "Vector")
+string(TOLOWER ${mode} lmode)
 
 # Loop on filters
-FOREACH(filter "Edison" "Meanshift" "CC" "Watershed")
-STRING(TOLOWER ${filter} lfilter)
+foreach(filter "Edison" "Meanshift" "CC" "Watershed")
+string(TOLOWER ${filter} lfilter)
 
 # Derive output file name
-SET(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
+set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                      APP      Segmentation
@@ -103,21 +103,21 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
                               ${${lmode}_ref_path}/${OUTFILE}
-                              ${TEMP}/${OUTFILE}                           
+                              ${TEMP}/${OUTFILE}
                      )
 
-ENDFOREACH(filter)
-ENDFOREACH(mode)
+endforeach(filter)
+endforeach(mode)
 
-SET(filter "CC")
-SET(mode "Vector")
+set(filter "CC")
+set(mode "Vector")
 
-STRING(TOLOWER ${filter} lfilter)
+string(TOLOWER ${filter} lfilter)
 
 # Add a test for ULOVW
-SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulovw")
-                     
-SET(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
+set(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulovw")
+
+set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULOVW
                      APP      Segmentation
@@ -130,15 +130,15 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULOVW
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
                               ${${lmode}_ref_path}/${OUTFILE}
-                              ${TEMP}/${OUTFILE}                           
+                              ${TEMP}/${OUTFILE}
                      )
 
-SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULOVW
+set_tests_properties(apTvSeSegmentation${filter}${mode}_ULOVW
                      PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
                                 RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULU
-SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulu")
+set(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulu")
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                      APP      Segmentation
@@ -151,15 +151,15 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
                               ${${lmode}_ref_path}/${OUTFILE}_ULU
-                              ${TEMP}/${OUTFILE}                           
+                              ${TEMP}/${OUTFILE}
                      )
 
-SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULU
+set_tests_properties(apTvSeSegmentation${filter}${mode}_ULU
                      PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
                                 RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULCO
-SET(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulco")
+set(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulco")
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                      APP      Segmentation
@@ -172,10 +172,10 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
                               ${${lmode}_ref_path}/${OUTFILE}
-                              ${TEMP}/${OUTFILE}                           
+                              ${TEMP}/${OUTFILE}
                      )
 
-SET_TESTS_PROPERTIES(apTvSeSegmentation${filter}${mode}_ULCO
+set_tests_properties(apTvSeSegmentation${filter}${mode}_ULCO
                      PROPERTIES DEPENDS apTvSeSegmentation${filter}${mode}
                                 WILL_FAIL TRUE
                                 RESOURCE_LOCK ${OUTFILE})
@@ -207,13 +207,13 @@ OTB_TEST_APPLICATION(NAME     apTvLSMS2Segmentation
                               -ranger 30
                               -spatialr  5
                               -minsize 0
-                              -tilesizex 100 
+                              -tilesizex 100
                               -tilesizey 100
                      VALID    --compare-image ${NOTOL}
                               ${BASELINE}/apTvLSMS2_Segmentation.tif
                               ${TEMP}/apTvLSMS2_Segmentation.tif
                      )
-SET_TESTS_PROPERTIES(apTvLSMS2Segmentation PROPERTIES DEPENDS apTvLSMS1MeanShiftSmoothingNoModeSearch)
+set_tests_properties(apTvLSMS2Segmentation PROPERTIES DEPENDS apTvLSMS1MeanShiftSmoothingNoModeSearch)
 
 OTB_TEST_APPLICATION(NAME     apTvLSMS2Segmentation_NoSmall
                      APP      LSMSSegmentation
@@ -223,13 +223,13 @@ OTB_TEST_APPLICATION(NAME     apTvLSMS2Segmentation_NoSmall
                               -ranger 30
                               -spatialr  5
                               -minsize 10
-                              -tilesizex 100 
+                              -tilesizex 100
                               -tilesizey 100
                      VALID    --compare-image ${NOTOL}
                               ${BASELINE}/apTvLSMS2_Segmentation_NoSmall.tif
                               ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
                      )
-SET_TESTS_PROPERTIES(apTvLSMS2Segmentation_NoSmall PROPERTIES DEPENDS apTvLSMS1MeanShiftSmoothingNoModeSearch)
+set_tests_properties(apTvLSMS2Segmentation_NoSmall PROPERTIES DEPENDS apTvLSMS1MeanShiftSmoothingNoModeSearch)
 
 OTB_TEST_APPLICATION(NAME     apTvLSMS3SmallRegionsMerging
                      APP      LSMSSmallRegionsMerging
@@ -237,36 +237,36 @@ OTB_TEST_APPLICATION(NAME     apTvLSMS3SmallRegionsMerging
                               -inseg  ${TEMP}/apTvLSMS2_Segmentation.tif
                               -out ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif uint32
                               -minsize 10
-                              -tilesizex 100 
+                              -tilesizex 100
                               -tilesizey 100
                      VALID    --compare-image ${NOTOL}
                               ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
                               ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif
                      )
-SET_TESTS_PROPERTIES(apTvLSMS3SmallRegionsMerging PROPERTIES DEPENDS apTvLSMS2Segmentation)
+set_tests_properties(apTvLSMS3SmallRegionsMerging PROPERTIES DEPENDS apTvLSMS2Segmentation)
 
 OTB_TEST_APPLICATION(NAME     apTvLSMS4Vectorization_SmallMerged
                      APP      LSMSVectorization
                      OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
                               -inseg  ${TEMP}/apTvLSMS3_Segmentation_SmallMerged.tif
                               -out ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
-                              -tilesizex 100 
+                              -tilesizex 100
                               -tilesizey 100
                      VALID    --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/apTvLSMS4_Segmentation_SmallMerged.shp
                               ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
                      )
-SET_TESTS_PROPERTIES(apTvLSMS4Vectorization_SmallMerged PROPERTIES DEPENDS apTvLSMS3SmallRegionsMerging)
+set_tests_properties(apTvLSMS4Vectorization_SmallMerged PROPERTIES DEPENDS apTvLSMS3SmallRegionsMerging)
 
 OTB_TEST_APPLICATION(NAME     apTvLSMS4Vectorization_NoSmall
                      APP      LSMSVectorization
                      OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
                               -inseg  ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
                               -out ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
-                              -tilesizex 100 
+                              -tilesizex 100
                               -tilesizey 100
                      VALID    --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/apTvLSMS4_Segmentation_NoSmall.shp
                               ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
                      )
-SET_TESTS_PROPERTIES(apTvLSMS4Vectorization_NoSmall PROPERTIES DEPENDS apTvLSMS2Segmentation_NoSmall)
+set_tests_properties(apTvLSMS4Vectorization_NoSmall PROPERTIES DEPENDS apTvLSMS2Segmentation_NoSmall)

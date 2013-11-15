@@ -1,4 +1,4 @@
-SUBDIRS(OpenThreads)
+subdirs(OpenThreads)
 
-#INCLUDE_DIRECTORIES("${OTB_SOURCE_DIR}/Utilities/otbopenthreads/OpenThreads/include")
-#INCLUDE_DIRECTORIES("${OTB_SOURCE_DIR}/Utilities/otbopenthreads/OpenThreads/include/OpenThreads")
+#include_directories("${OTB_SOURCE_DIR}/Utilities/otbopenthreads/OpenThreads/include")
+#include_directories("${OTB_SOURCE_DIR}/Utilities/otbopenthreads/OpenThreads/include/OpenThreads")

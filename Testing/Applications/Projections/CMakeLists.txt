@@ -1,5 +1,5 @@
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_UTM
                      APP  OrthoRectification
@@ -89,8 +89,8 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_DEMTIF_UTM_OutXML1
                      VALID   --compare-image ${EPSILON_4}
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
                         ${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_OutXML1.tif)
-                        
-                        
+
+
 OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_DEMTIF_UTM_InXML1
                      APP  OrthoRectification
                      OPTIONS
@@ -123,7 +123,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_WGS84
                      )
 
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME apTvPrRigidTransformResample
                      APP  RigidTransformResample
@@ -186,7 +186,7 @@ OTB_TEST_APPLICATION(NAME apTvPrBundleToPerfectSensor
                      VALID  --compare-image ${EPSILON_7}
                         ${BASELINE}/apTvPrBundleToPerfectSensor.tif
                         ${TEMP}/apTvPrBundleToPerfectSensor.tif)
-                        
+
 OTB_TEST_APPLICATION(NAME apTvPrSuperimpose
                      APP Superimpose
                      OPTIONS -inr  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
@@ -255,7 +255,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToMap2
                               ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToMap2.kml
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.kml)
 
-IF(OTB_DATA_USE_LARGEINPUT)
+if(OTB_DATA_USE_LARGEINPUT)
 OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
@@ -265,7 +265,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      VALID   --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+endif(OTB_DATA_USE_LARGEINPUT)
 
 
 # With QGIS the two vectordata are equal
