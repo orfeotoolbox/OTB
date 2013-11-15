@@ -273,7 +273,7 @@ int main(int argc, char * argv[])
     {
     MembershipFunctionPointer membershipFunction =
       MembershipFunctionType::New();
-    
+
     membershipFunction->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
     centroid[0] = atof(argv[i + numberOfArgumentsBeforeMeans]);
 

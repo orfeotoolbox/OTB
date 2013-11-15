@@ -113,14 +113,14 @@ int main(int argc, char *argv[])
 
   itk::AddImageFilter<ImageType, ImageType, ImageType>::Pointer adder
     = itk::AddImageFilter<ImageType, ImageType, ImageType>::New();
-  
+
   // Allocate the noise image
   ImageType::Pointer noise = ImageType::New();
   ImageType::RegionType noiseRegion;
   noiseRegion.SetSize(size);
   noise->SetRegions(noiseRegion);
   noise->Allocate();
-  
+
   // Fill the noise image
   itk::ImageRegionIterator<ImageType> itNoise(noise, noiseRegion);
   itNoise.GoToBegin();
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
   double rnd  = 0.;
   double dMin = -.7;
   double dMax = .8;
-  
+
   while(!itNoise.IsAtEnd())
     {
     sample_seed = ( sample_seed * 16807 ) % 2147483647L;

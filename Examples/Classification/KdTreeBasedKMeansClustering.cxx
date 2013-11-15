@@ -297,7 +297,7 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::DistanceToCentroidMembershipFunction< 
+  typedef itk::Statistics::DistanceToCentroidMembershipFunction<
     MeasurementVectorType >   MembershipFunctionType;
   typedef itk::Statistics::EuclideanDistanceMetric< MeasurementVectorType >  DistanceMetricType;
 

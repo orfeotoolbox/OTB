@@ -103,13 +103,13 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   //  Software Guide : EndCodeSnippet
 
-  
+
   // This is for rendering in software guide
   typedef otb::PrintableImageFilter<InputImageType,InputImageType>   InputPrintFilterType;
   typedef otb::PrintableImageFilter<OutputImageType,OutputImageType> OutputPrintFilterType;
   typedef InputPrintFilterType::OutputImageType                      VisuImageType;
   typedef otb::ImageFileWriter<VisuImageType>               VisuWriterType;
-  
+
   //  The \doxygen{otb}{MultivariateAlterationDetectorImageFilter} is templated over
   //  the type of the input images and the type of the generated change
   //  image.
@@ -171,11 +171,11 @@ int main(int argc, char* argv[])
     //  And then we can trigger the pipeline update, as usual.
     //
     //  Software Guide : EndLatex
-    
+
     //  Software Guide : BeginCodeSnippet
     writer->Update();
     //  Software Guide : EndCodeSnippet
-    
+
     }
   catch (itk::ExceptionObject& err)
     {

@@ -53,12 +53,12 @@ int main(int argc, char* argv[])
   char * outfname  = argv[2];
   char * inpretty  = argv[3];
   char * outpretty = argv[4];
-  
+
   //  Software Guide : BeginLatex
   //  We then define the types for the input image and the
   //  output image.
   //  Software Guide : EndLatex
-  
+
   //  Software Guide : BeginCodeSnippet
   typedef otb::VectorImage<unsigned short, 2> InputImageType;
   typedef otb::VectorImage<double, 2>         OutputImageType;
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
   //  And then we can trigger the pipeline update, as usual.
   //
   //  Software Guide : EndLatex
-    
+
   //  Software Guide : BeginCodeSnippet
   writer->Update();
   //  Software Guide : EndCodeSnippet

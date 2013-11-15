@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
   typedef otb::Image<InputImageType::InternalPixelType, 2> ImageType;
 
   typedef otb::VectorData<double, 2>                   VectorDataType;
-  
+
   typedef otb::ImageFileReader<InputImageType>         InputReaderType;
   typedef otb::VectorDataFileReader<VectorDataType>    VectorDataReaderType;
 
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 
   InputReaderType::Pointer inputReader = InputReaderType::New();
   inputReader->SetFileName(inputImageFileName);
-  
+
   InputImageType::Pointer image = inputReader->GetOutput();
   image->UpdateOutputInformation();
 

@@ -311,21 +311,21 @@ int main(int,  char *[])
   // Software Guide : BeginCodeSnippet
   typedef ClassifierType::MembershipFunctionType                              MembershipFunctionBaseType;
   typedef ClassifierType::MembershipFunctionVectorObjectType::ComponentType   ComponentMembershipType;
-  
+
   // Vector Containing the membership function used
   ComponentMembershipType     membershipFunctions;
-  
+
   for (unsigned int i = 0; i < 2; i++)
     {
     MembershipFunctionType::Pointer curMemshpFunction =  MembershipFunctionType::New();
     curMemshpFunction->SetMean(meanEstimators[i]->GetMean());
     curMemshpFunction->SetCovariance(covarianceEstimators[i]->GetCovarianceMatrix());
-    
+
     // cast the GaussianMembershipFunction in a
-    // itk::MembershipFunctionBase 
+    // itk::MembershipFunctionBase
     membershipFunctions.push_back(dynamic_cast<const MembershipFunctionBaseType*  >(curMemshpFunction.GetPointer()));
     }
-  
+
   ClassifierType::MembershipFunctionVectorObjectPointer membershipVectorObject = ClassifierType::MembershipFunctionVectorObjectType::New();
   membershipVectorObject->Set(membershipFunctions);
 

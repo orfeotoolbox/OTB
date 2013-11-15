@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
     std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
     }
-  
+
 // Software Guide : BeginLatex
 //
 // We will start by defining the types for the image and the image file
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
-  
+
   otb::DEMHandler::Instance()->OpenDEMDirectory(argv[6]);
 // Software Guide : EndCodeSnippet
 
@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
 
   rpcEstimator->GetOutput()->UpdateOutputInformation();
   std::cout << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
-  
+
 // Software Guide : BeginLatex
 //
 // The last step of the chain, is to export the image to a Google
@@ -202,7 +202,7 @@ int main(int argc, char* argv[])
   mapWriter->SetShapeIndexPath(argv[4]);
   mapWriter->SetCGIPath(argv[5]);
   mapWriter->SetSRID(4326);
-  
+
   mapWriter->Update();
 // Software Guide : EndCodeSnippet
 

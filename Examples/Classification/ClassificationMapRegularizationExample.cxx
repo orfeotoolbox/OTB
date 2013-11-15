@@ -60,7 +60,7 @@ int main(int argc, char * argv[])
   typedef unsigned char IOLabelPixelType; // 8 bits
   const unsigned int Dimension = 2;
 // Software Guide : EndCodeSnippet
-  
+
 // Software Guide : BeginLatex
 //
 // Thus, both input and output images are single band labeled images,
@@ -68,7 +68,7 @@ int main(int argc, char * argv[])
 // (unsigned char).
 //
 // Software Guide : EndLatex
-  
+
 // Software Guide : BeginCodeSnippet
   typedef otb::Image<IOLabelPixelType, Dimension> IOLabelImageType;
 // Software Guide : EndCodeSnippet
@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
 // (\doxygen{itk}{BinaryBallStructuringElement}).
 //
 // Software Guide : EndLatex
-  
+
 // Software Guide : BeginCodeSnippet
   // Neighborhood majority voting filter type
   typedef otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType>
@@ -92,7 +92,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 
 
-  
+
 // Software Guide : BeginLatex
 //
 // Since the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} is a
@@ -104,7 +104,7 @@ int main(int argc, char * argv[])
 // structuring elements such as ovals.
 //
 // Software Guide : EndLatex
-  
+
 // Software Guide : BeginCodeSnippet
   // Binary ball Structuring Element type
   typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
@@ -122,11 +122,11 @@ int main(int argc, char * argv[])
   typedef otb::ImageFileReader<IOLabelImageType> ReaderType;
   typedef otb::ImageFileWriter<IOLabelImageType> WriterType;
 // Software Guide : EndCodeSnippet
-  
-  
+
+
   const char * inputFileName = argv[1];
   const char * outputFileName = argv[2];
-  
+
 
 // Software Guide : BeginLatex
 //
@@ -139,38 +139,38 @@ int main(int argc, char * argv[])
   // Neighborhood majority voting filter
   NeighborhoodMajorityVotingFilterType::Pointer NeighMajVotingFilter;
   NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
-  
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
 // Software Guide : EndCodeSnippet
-  
-  
+
+
   std::string KeepOriginalLabelBoolStr = argv[3];
   unsigned int radiusX = atoi(argv[4]);
   unsigned int radiusY = atoi(argv[5]);
   IOLabelPixelType noDataValue = atoi(argv[6]);
   IOLabelPixelType undecidedValue = atoi(argv[7]);
-  
-  
+
+
 // Software Guide : BeginLatex
 //
 // The ball shaped structuring element seBall is instantiated and its
 // two radii along X and Y are initialized.
 //
 // Software Guide : EndLatex
-  
+
 // Software Guide : BeginCodeSnippet
   StructuringType seBall;
   RadiusType rad;
-  
+
   rad[0] = radiusX;
   rad[1] = radiusY;
 
   seBall.SetRadius(rad);
   seBall.CreateStructuringElement();
 // Software Guide : EndCodeSnippet
-  
-  
+
+
 // Software Guide : BeginLatex
 //
 // Then, this ball shaped neighborhood is used as the kernel structuring element
@@ -208,7 +208,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   NeighMajVotingFilter->SetLabelForUndecidedPixels(undecidedValue);
-  
+
   if (KeepOriginalLabelBoolStr.compare("true") == 0)
   {
     NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
@@ -230,12 +230,12 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   NeighMajVotingFilter->SetInput(reader->GetOutput());
-  
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFileName);
   writer->SetInput(NeighMajVotingFilter->GetOutput());
   writer->Update();
 // Software Guide : EndCodeSnippet
-  
+
   return EXIT_SUCCESS;
 }

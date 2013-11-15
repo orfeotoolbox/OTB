@@ -102,7 +102,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   typedef otb::LineSegmentDetector<ImageType, PrecisionType> LsdFilterType;
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We can finally define the type for the right angle detection
@@ -115,7 +115,7 @@ int main(int argc, char * argv[])
   typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType>
     RightAngleFilterType;
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We instantiate the line segment detector and the right angle detector.
@@ -172,10 +172,10 @@ int main(int argc, char * argv[])
   typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
     ImageType, FunctorType> BlendingFilterType;
   BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
-  
+
   vectorDataRenderer->SetInput(1, lsdFilter->GetOutput());
   vectorDataRenderer->SetInput(rightAngleFilter->GetOutput());
- 
+
   vectorDataRenderer->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
   vectorDataRenderer->SetOrigin(reader->GetOutput()->GetOrigin());
   vectorDataRenderer->SetSpacing(reader->GetOutput()->GetSpacing());

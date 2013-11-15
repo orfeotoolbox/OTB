@@ -76,7 +76,7 @@ int main(int argc, char * argv[])
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We define now the type for the segment detector filter. It is
@@ -93,7 +93,7 @@ int main(int argc, char * argv[])
 
   LsdFilterType::Pointer lsdFilter = LsdFilterType::New();
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // In order to be able to display the results, we will draw the
@@ -117,7 +117,7 @@ int main(int argc, char * argv[])
     ImageType, FunctorType> BlendingFilterType;
   BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We can now define the type for the writer, instantiate it and set
@@ -130,7 +130,7 @@ int main(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We plug the pipeline.
@@ -147,7 +147,7 @@ int main(int argc, char * argv[])
   blendingFilter->SetInput1(reader->GetOutput());
   blendingFilter->SetInput2(vectorDataRenderer->GetOutput());
   blendingFilter->GetFunctor().SetAlpha(0.25);
- 
+
   writer->SetInput(blendingFilter->GetOutput());
   // Software Guide : EndCodeSnippet
 

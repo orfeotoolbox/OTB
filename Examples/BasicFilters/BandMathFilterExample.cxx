@@ -124,7 +124,7 @@ int main( int argc, char* argv[])
 
   reader->UpdateOutputInformation();
 
-  
+
 //  Software Guide : BeginLatex
 //
 //  We need now to extract now each band from the input \doxygen{otb}{VectorImage},
@@ -146,7 +146,7 @@ int main( int argc, char* argv[])
       filter->SetNthInput(j, imageList->GetOutput()->GetNthElement(j));
       }
 // Software Guide : EndCodeSnippet
-  
+
 //  Software Guide : BeginLatex
 //
 //  Now we can define the mathematical expression to perform on the layers (b1, b2, b3, b4).
@@ -197,15 +197,15 @@ int main( int argc, char* argv[])
   typedef otb::Image<unsigned char, 2>                                      OutputPrettyImageType;
   typedef otb::ImageFileWriter<OutputPrettyImageType>            PrettyImageFileWriterType;
   typedef itk::CastImageFilter<OutputImageType, OutputPrettyImageType> CastImageFilterType;
-  
+
   PrettyImageFileWriterType::Pointer prettyWriter = PrettyImageFileWriterType::New();
   CastImageFilterType::Pointer caster = CastImageFilterType::New();
   caster->SetInput(filter->GetOutput());
 
   prettyWriter->SetInput(caster->GetOutput());
   prettyWriter->SetFileName(argv[3]);
-  
+
   prettyWriter->Update();
-  
+
   return EXIT_SUCCESS;
 }

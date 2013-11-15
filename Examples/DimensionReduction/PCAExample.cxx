@@ -142,22 +142,22 @@ int main(int argc, char* argv[])
   // (which may not be square) has to be given.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   typedef otb::PCAImageFilter< ImageType, ImageType,
                                otb::Transform::INVERSE > InvPCAFilterType;
   InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
-  
+
   invFilter->SetInput(pcafilter->GetOutput());
   invFilter->SetTransformationMatrix(pcafilter->GetTransformationMatrix());
-    
+
   WriterType::Pointer invWriter = WriterType::New();
   invWriter->SetFileName(outputInverseFilename );
   invWriter->SetInput(invFilter->GetOutput() );
 
   invWriter->Update();
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:PCA_FILTER} shows the result of applying forward
   // and reverse PCA transformation to a 8 bands Worldview2 image.

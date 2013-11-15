@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   typedef otb::ComplexMomentsImageFunction<InputImageType> CMType;
   typedef CMType::OutputType OutputType;
- 
+
   CMType::Pointer cmFunction = CMType::New();
   // Software Guide : EndCodeSnippet
 

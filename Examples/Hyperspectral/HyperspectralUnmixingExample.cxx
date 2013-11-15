@@ -76,14 +76,14 @@ int main(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>         ReaderType;
   typedef otb::ImageFileWriter<ImageType>         WriterType;
   // Software Guide : EndCodeSnippet
-      
+
   typedef otb::VectorRescaleIntensityImageFilter<ImageType, ImageType> RescalerType;
   typedef otb::StreamingStatisticsVectorImageFilter<ImageType>        StreamingStatisticsVectorImageFilterType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType>              VectorImageToMatrixImageFilterType;
 
   typedef vnl_vector<double> VectorType;
   typedef vnl_matrix<double> MatrixType;
-  
+
   // Software Guide : BeginLatex
   //
   // We instantiate now the image reader and we set the image file name.
@@ -94,9 +94,9 @@ int main(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   // Software Guide : EndCodeSnippet
-  
+
   reader->UpdateOutputInformation();
-  
+
 
   // Software Guide : BeginLatex
   //
@@ -105,17 +105,17 @@ int main(int argc, char * argv[])
   // \doxygen{otb}{VectorRescaleIntensityImageFilter}.
   //
   // Software Guide : EndLatex
- 
+
   // Software Guide : BeginCodeSnippet
   RescalerType::Pointer         rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
-  
+
   ImageType::PixelType minPixel, maxPixel;
   minPixel.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   maxPixel.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   minPixel.Fill(0.);
   maxPixel.Fill(1.);
-  
+
   rescaler->SetOutputMinimum(minPixel);
   rescaler->SetOutputMaximum(maxPixel);
   // Software Guide : EndCodeSnippet
@@ -132,33 +132,33 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   typedef otb::VCAImageFilter<ImageType>                       VCAFilterType;
   VCAFilterType::Pointer vca = VCAFilterType::New();
-  
+
   vca->SetNumberOfEndmembers(estimateNumberOfEndmembers);
   vca->SetInput(rescaler->GetOutput());
   // Software Guide : EndCodeSnippet
 
-  
+
   // Software Guide : BeginLatex
   //
   // We transform the output estimate endmembers to a matrix representation
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   VectorImageToMatrixImageFilterType::Pointer
     endMember2Matrix = VectorImageToMatrixImageFilterType::New();
   endMember2Matrix->SetInput(vca->GetOutput());
   endMember2Matrix->Update();
-  
+
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We can now procedd to the unmixing algorithm.Parameters
   // needed are the input image and the endmembers matrix.
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, double> UCLSUnmixingFilterType;
   UCLSUnmixingFilterType::Pointer
@@ -168,7 +168,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   unmixer->SetNumberOfThreads(1); // FIXME : currently buggy
-     
+
   // Software Guide : BeginLatex
   //
   // We now instantiate the writer and set the file name for the
@@ -182,7 +182,7 @@ int main(int argc, char * argv[])
   writer->SetFileName(outfname);
   writer->Update();
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:UNMIXING_FILTER} shows the result of applying unmixing
   // to an AVIRIS image (220 bands). This dataset is freely available

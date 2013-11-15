@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
   //
   // We now declare the image and pixel types used as input of the MeanShiftFilter.
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   typedef float InputPixelType;
   typedef unsigned int LabelPixelType;
@@ -85,13 +85,13 @@ int main(int argc, char *argv[])
   typedef otb::VectorImage<InputPixelType,  Dimension>          ImageType;
   typedef otb::Image<LabelPixelType,  Dimension>          LabelImageType;
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // Then the mean shift segmentation filter is declared using the Image type declared previsouly.
   // The StreamingVectorizedSegmentation is templated over the mean shift filter, the input image type and the output vector data type
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
   //typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftImageFilterType;
   typedef otb::MeanShiftVectorImageFilter <ImageType, ImageType, LabelImageType>  SegmentationFilterType;
@@ -117,10 +117,10 @@ int main(int argc, char *argv[])
   MaskReaderType::Pointer    maskReader = MaskReaderType::New();
   StreamingVectorizedSegmentationType::Pointer filter = StreamingVectorizedSegmentationType::New();
   // Software Guide : EndCodeSnippet
-  
+
   reader->SetFileName(imageName);
   reader->UpdateOutputInformation();
-  
+
   maskReader->SetFileName(maskName);
   maskReader->UpdateOutputInformation();
 
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
   otb::ogr::DataSource::Pointer ogrDS = otb::ogr::DataSource::New(dataSourceName, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
   // Software Guide : EndCodeSnippet
 
-  
+
   // Software Guide : BeginLatex
   //
   // Next, we will create the layer inside the DataSource that will
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   otb::ogr::Layer ogrLayer = ogrDS->CreateLayer(layerName,&oSRS,wkbMultiPolygon);
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // Last, we need to create a field inside the layer that will hold
@@ -185,8 +185,8 @@ int main(int argc, char *argv[])
   filter->GetSegmentationFilter()->SetRangeRadius(rangeRadius);
   filter->GetSegmentationFilter()->SetMinimumRegionSize(minimumObjectSize);
   // Software Guide : EndCodeSnippet
-  
-  
+
+
   // Software Guide : BeginLatex
   //
   // Then we set parameters to the \doxygen{otb}{StreamingVectorizedSegmentation} filter.
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
   filter->SetSimplify(simplify);
   filter->SetSimplificationTolerance(tolerance);
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // Finally we connect the pipeline
@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
   filter->SetInputMask(maskReader->GetOutput());
   filter->SetOGRLayer(ogrLayer);
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // And call the \code{Initialize()} method (needed to create the output layer in the datasource)
@@ -232,8 +232,8 @@ int main(int argc, char *argv[])
   filter->Initialize();
   filter->Update();
   // Software Guide : EndCodeSnippet
-  
-  
+
+
   // Software Guide : BeginLatex
   //
   // The segmentation is done, but as it works tile by tile, we need to fusion polygons at tile border.
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
   typedef otb::OGRLayerStreamStitchingFilter<ImageType>   FusionFilterType;
   FusionFilterType::Pointer fusionFilter = FusionFilterType::New();
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   // Next we set the input image and the input \doxygen{otb}{ogr}{Layer}.
   // The image is internally used in the filter to compute coordinates of streaming tiles.
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
   fusionFilter->SetInput(reader->GetOutput());
   fusionFilter->SetOGRLayer(ogrLayer);
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   // We set the size of the tile used,
   // which may be different from the one we set in the
@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   fusionFilter->SetStreamSize(filter->GetStreamSize());
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   // Finally we call the \code{GenerateData()} method to launch the processing.
   // Software Guide : EndLatex
