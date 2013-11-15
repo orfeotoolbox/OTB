@@ -138,8 +138,8 @@ public:
   }
   /* If true then variable importance will be calculated and then it can be
   retrieved by CvRTrees::get_var_importance(). */
-  itkGetMacro(CalculateVariableImportance, int);
-  itkSetMacro(CalculateVariableImportance, int);
+  itkGetMacro(CalculateVariableImportance, bool);
+  itkSetMacro(CalculateVariableImportance, bool);
   /* The size of the randomly selected subset of features at each tree node and
   * that are used to find the best split(s). If you set it to 0 then the size will
   be set to the square root of the total number of features. */

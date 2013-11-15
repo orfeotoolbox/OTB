@@ -104,7 +104,7 @@ private:
 
   CvKNearest * m_KNearestModel;
   int m_K;
-  int m_IsRegression;
+  bool m_IsRegression;
 };
 } // end namespace otb
 
