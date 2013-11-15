@@ -61,8 +61,8 @@ set(QT_USE_IMPORTED_TARGETS ON)
 find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtSql QtXml )
 include( ${QT_USE_FILE} )
 if( QT_FOUND )
-  message( "Qt plugins dir: '${QT_PLUGINS_DIR}'" )
-  message( "Qt translations dir: '${QT_TRANSLATIONS_DIR}'" )
+  # message( "Qt plugins dir: '${QT_PLUGINS_DIR}'" )
+  # message( "Qt translations dir: '${QT_TRANSLATIONS_DIR}'" )
 endif( QT_FOUND )
 
 #----------------------------------------------------------------------------
@@ -183,12 +183,19 @@ SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 #----------------------------------------------------------------------------
 # Code location
 add_subdirectory( Code )
+
 # i18n directory must be added after all source files (see add_qt1_i18n_sources).
 add_subdirectory( i18n )
+
 # CPack related files
 add_subdirectory( Packaging )
+
 # Data related files
 add_subdirectory( Data )
+
+# SQL related files.
+add_subdirectory( Sql )
+
 
 #----------------------------------------------------------------------------
 # Enable / Disable testing

@@ -103,6 +103,11 @@ set_target_properties(Monteverdi2_Core
 )
 
 #############################################################################
+if( GENERATE_SQL )
+  add_dependencies( Monteverdi2_Core Monteverdi2_Sql )
+endif( GENERATE_SQL )
+
+#############################################################################
 # INSTALL Common application.
 install(
   TARGETS Monteverdi2_Core
