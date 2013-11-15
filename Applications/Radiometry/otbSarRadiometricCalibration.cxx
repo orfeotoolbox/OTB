@@ -54,7 +54,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    
+
     AddDocTag(Tags::Calibration);
     AddDocTag(Tags::SAR);
 
@@ -63,9 +63,9 @@ private:
 
     AddParameter(ParameterType_ComplexOutputImage,  "out", "Output Image");
     SetParameterDescription("out", "Output calibrated complex image");
-    
+
     AddRAMParameter();
-    
+
     AddParameter(ParameterType_Empty, "noise", "Disable Noise");
     SetParameterDescription("noise", "Flag to disable noise");
     MandatoryOff("noise");

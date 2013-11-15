@@ -51,7 +51,7 @@ private:
     SetDocLimitations("Each image of the set must contain the same bands as the others (i.e. same types, in the same order).");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Documentation of the TrainImagesClassifier application.");
- 
+
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);
 

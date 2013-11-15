@@ -49,7 +49,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-   
+
     AddDocTag("Test");
 
     //std::cout << "TestApplication::DoInit" << std::endl;
@@ -85,12 +85,12 @@ private:
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     MandatoryOff("il");
-    
+
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
     AddChoice("cl.choice1", "cl.choice1");
     AddChoice("cl.choice2", "cl.choice2");
     MandatoryOff("cl");
-    
+
     AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
     AddParameter(ParameterType_ComplexOutputImage,  "cout", "Output Complex Image");
 

@@ -121,10 +121,10 @@ private:
     m_RescaleFilter->SetOutputMinimum( outMin );
     m_RescaleFilter->SetOutputMaximum( outMax );
     m_RescaleFilter->UpdateOutputInformation();
-    
+
     SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
   }
-  
+
   RescaleImageFilterType::Pointer m_RescaleFilter;
   MinMaxFilterType::Pointer       m_MinMaxFilter;
 };

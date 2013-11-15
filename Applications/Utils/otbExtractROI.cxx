@@ -52,7 +52,7 @@ public:
   /** Filters typedef */
   typedef otb::MultiChannelExtractROI<FloatVectorImageType::InternalPixelType,
                                       FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
-  
+
 private:
   void DoInit()
   {
@@ -122,13 +122,13 @@ private:
       {
       ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
       ExtractROIFilterType::InputImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
-      
+
       if (!HasUserValue("sizex")  && !HasUserValue("sizey") )
         {
         SetParameterInt("sizex", largestRegion.GetSize()[0]);
         SetParameterInt("sizey", largestRegion.GetSize()[1]);
         }
-      
+
       // Update the values of the channels to be selected
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
       ClearChoices("cl");
@@ -139,20 +139,20 @@ private:
         item<<"Channel"<<idx+1;
         AddChoice(key.str(), item.str());
         }
-      
+
       // Put the limit of the index and the size relative the image
       SetMinimumParameterIntValue("sizex", 0);
       SetMaximumParameterIntValue("sizex", largestRegion.GetSize(0));
-      
+
       SetMinimumParameterIntValue("sizey", 0);
       SetMaximumParameterIntValue("sizey", largestRegion.GetSize(1));
-      
+
       SetMinimumParameterIntValue("startx", 0);
       SetMaximumParameterIntValue("startx", largestRegion.GetSize(0));
-      
+
       SetMinimumParameterIntValue("starty", 0);
       SetMaximumParameterIntValue("starty", largestRegion.GetSize(1));
-      
+
       // Crop the roi region to be included in the largest possible
       // region
       if(!this->CropRegionOfInterest())
@@ -198,7 +198,7 @@ private:
     region.SetSize(1,  GetParameterInt("sizey"));
     region.SetIndex(0, GetParameterInt("startx"));
     region.SetIndex(1, GetParameterInt("starty"));
-    
+
     if ( HasValue("in") )
       {
         if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
@@ -235,7 +235,7 @@ private:
       rsTransform->InstanciateTransform();
 
       FloatVectorImageType::IndexType uli_ref,uri_ref,lli_ref,lri_ref;
-      
+
       uli_ref = referencePtr->GetLargestPossibleRegion().GetIndex();
       uri_ref = uli_ref;
       uri_ref[0]+=referencePtr->GetLargestPossibleRegion().GetSize()[0];
@@ -293,7 +293,7 @@ private:
       {
       m_ExtractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
       }
-    
+
     SetParameterOutputImage("out", m_ExtractROIFilter->GetOutput());
   }
 

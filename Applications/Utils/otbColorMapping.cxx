@@ -225,7 +225,7 @@ public:
   typedef itk::VariableLengthVector<RealScalarType>   InternalPixelType;
   typedef otb::ListSampleToHistogramListGenerator
     <ListSampleType, ScalarType, DFContainerType>     HistogramFilterType;
-  //typedef itk::Statistics::Histogram 
+  //typedef itk::Statistics::Histogram
   //<RealScalarType, DFContainerType>                 HistogramType;
   typedef HistogramFilterType::HistogramType          HistogramType;
   typedef HistogramFilterType::HistogramListType      HistogramListType;
@@ -474,7 +474,7 @@ private:
     else if (GetParameterInt("method") == 2)
       {
       otbAppLogINFO("Color mapping with an optimized look-up table");
-      
+
       m_CasterToLabelImage = CasterToLabelImageType::New();
       m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
       m_CasterToLabelImage->InPlaceOn();
@@ -592,7 +592,7 @@ private:
         minVal.SetElement(index, static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0, static_cast<float> (this->GetParameterInt("method.image.low"))/ 100.0)));
         maxVal.SetElement(index, static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0, (100.0- static_cast<float> (this->GetParameterInt("method.image.up")))/ 100.0)));
         }
-      
+
       m_CasterToLabelImage = CasterToLabelImageType::New();
       m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
       m_CasterToLabelImage->InPlaceOn();

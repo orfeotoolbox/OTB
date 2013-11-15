@@ -58,7 +58,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ConvertCartoToGeoPoint application, otbObtainUTMZoneFromGeoPoint");
-  
+
     AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_InputImage,  "in",   "Sensor image");
@@ -76,19 +76,19 @@ private:
     SetParameterDescription("output.idx", "Output point longitude coordinate.");
     AddParameter(ParameterType_Float, "output.idy","Output Point Latitude");
     SetParameterDescription("output.idy", "Output point latitude coordinate.");
-    
+
     AddParameter(ParameterType_String,"output.town","Main town near the coordinates computed");
     SetParameterDescription("output.town", "Nearest main town of the computed geographic point.");
     AddParameter(ParameterType_String,"output.country","Country of the image");
     SetParameterDescription("output.country", "Country of the input image");
-    
+
     // Set the parameter role for the output parameters
     SetParameterRole("output.idx", Role_Output );
     SetParameterRole("output.idy", Role_Output );
-    
+
     SetParameterRole("output.town", Role_Output );
     SetParameterRole("output.country", Role_Output );
-    
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in","QB_TOULOUSE_MUL_Extract_500_500.tif");
     SetDocExampleParameterValue("input.idx","200");

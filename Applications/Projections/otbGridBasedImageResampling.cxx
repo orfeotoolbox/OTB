@@ -56,7 +56,7 @@ public:
   typedef itk::VectorCastImageFilter
   <FloatVectorImageType,
    DisplacementFieldType>                DisplacementFieldCastFilterType;
-  
+
 
   typedef otb::StreamingWarpImageFilter
   <FloatVectorImageType,
@@ -121,7 +121,7 @@ private:
     SetParameterDescription("io.in","The input image to resample");
     AddParameter(ParameterType_OutputImage, "io.out", "Output Image");
     SetParameterDescription("io.out","The resampled output image");
-    
+
     AddParameter(ParameterType_Group,"grid","Resampling grid parameters");
     AddParameter(ParameterType_InputImage,"grid.in","Input resampling grid");
     SetParameterDescription("grid.in","The resampling grid");
@@ -132,10 +132,10 @@ private:
     AddChoice("grid.type.loc","Localisation grid: $G(x_out,y_out) = (x_in, y_in)$");
     SetParameterDescription("grid.type.loc","A localisation grid contains at each grid position the corresponding position in the input image to resample");
 
-    
+
     AddParameter(ParameterType_Group, "out", "Output Image parameters");
     SetParameterDescription("out","Parameters of the output image");
-    
+
     AddParameter(ParameterType_Float, "out.ulx", "Upper Left X");
     SetParameterDescription("out.ulx","X Coordinate of the upper-left pixel of the output resampled image");
     SetDefaultParameterFloat("out.ulx",0);
@@ -153,12 +153,12 @@ private:
     AddParameter(ParameterType_Float, "out.spacingy", "Pixel Size Y");
     SetParameterDescription("out.spacingy","Size of each pixel along Y axis");
     SetDefaultParameterFloat("out.spacingy",1.);
-    
+
     AddParameter(ParameterType_Float,"out.default","Default value");
     SetParameterDescription("out.default","The default value to give to pixel that falls outside of the input image.");
     SetDefaultParameterFloat("out.default",0);
 
-    
+
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
     SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
@@ -171,7 +171,7 @@ private:
     SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
     SetParameterString("interpolator","bco");
-    
+
     AddRAMParameter();
 
     // Doc example
@@ -192,7 +192,7 @@ void DoExecute()
     {
       // Get the input image
       FloatVectorImageType* inImage = GetParameterImage("io.in");
-    
+
       // Get the resampling grid
       FloatVectorImageType * inGrid = GetParameterImage("grid.in");
 
@@ -273,7 +273,7 @@ void DoExecute()
     spacing[0] = GetParameterFloat("out.spacingx");
     spacing[1] = GetParameterFloat("out.spacingy");
     m_WarpImageFilter->SetOutputSpacing(spacing);
-    
+
     WarpFilterType::PointType ul;
     ul[0] = GetParameterFloat("out.ulx");
     ul[1] = GetParameterFloat("out.uly");
@@ -288,7 +288,7 @@ void DoExecute()
 
     // Output Image
     SetParameterOutputImage("io.out", m_WarpImageFilter->GetOutput());
-    
+
     }
 
   WarpFilterType::Pointer        m_WarpImageFilter;

@@ -213,7 +213,7 @@ private:
 
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"epi.elevation");
-    
+
     if (otb::Wrapper::ElevationParametersHandler::IsGeoidUsed(this,"epi.elevation") &&
         otb::Wrapper::ElevationParametersHandler::IsDEMUsed(this,"epi.elevation") &&
         !IsParameterEnabled("epi.elevation.avgdem.step"))
@@ -244,7 +244,7 @@ private:
       m_StatisticsFilter->Update();
 
       otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(m_StatisticsFilter->GetMean());
-      
+
       EnableParameter("epi.elevation.avgdem.value");
       SetParameterFloat("epi.elevation.avgdem.value",m_StatisticsFilter->GetMean());
 

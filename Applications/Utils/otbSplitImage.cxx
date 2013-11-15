@@ -88,7 +88,7 @@ private:
     // Get the path/fileWithoutextension/extension of the output images filename
     std::string path, fname, ext;
     std::string ofname = GetParameterString("out");
-    
+
     // Get the extension and the prefix of the filename
     path  = itksys::SystemTools::GetFilenamePath(ofname);
     fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
@@ -102,7 +102,7 @@ private:
       {
       // Set the channel to extract
       m_Filter->SetChannel(i+1);
-      
+
       // build the current output filename
       std::ostringstream oss;
       if (!path.empty())
@@ -110,10 +110,10 @@ private:
         oss <<path<<"/";
         }
       oss <<fname<<"_"<<i<<ext;
-      
+
       // Create an output parameter to write the current output image
       OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
-        
+
       // writer label
       std::ostringstream osswriter;
       osswriter<< "writer (Channel : "<< i<<")";
@@ -139,4 +139,4 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::SplitImage)
- 
+

@@ -234,18 +234,18 @@ private:
 
     AddChoice("bm.subpixel.dichotomy", "Dichotomy");
     SetParameterDescription("bm.subpixel.dichotomy", "Dichotomic search");
-    
+
     AddParameter(ParameterType_Int,"bm.step", "Computation step");
     SetParameterDescription("bm.step", "Location step between computed disparities");
     SetDefaultParameterInt("bm.step",1);
     SetMinimumParameterIntValue("bm.step",1);
     MandatoryOff("bm.step");
-    
+
     AddParameter(ParameterType_Int,"bm.startx","X start index");
     SetParameterDescription("bm.startx","X start index of the subsampled grid (wrt the input image grid)");
     SetDefaultParameterInt("bm.startx",0);
     MandatoryOff("bm.startx");
-    
+
     AddParameter(ParameterType_Int,"bm.starty","Y start index");
     SetParameterDescription("bm.starty","Y start index of the subsampled grid (wrt the input image grid)");
     SetDefaultParameterInt("bm.starty",0);
@@ -367,7 +367,7 @@ private:
     int          minvdisp = GetParameterInt("bm.minvd");
     int          maxvdisp = GetParameterInt("bm.maxvd");
     unsigned int step     = GetParameterInt("bm.step");
-    
+
     FloatImageType::IndexType gridIndex;
     gridIndex[0] = GetParameterInt("bm.startx");
     gridIndex[1] = GetParameterInt("bm.starty");

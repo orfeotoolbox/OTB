@@ -50,7 +50,7 @@ public:
   typedef otb::RPCSolverAdapter::GCPsContainerType TiePointsType;
 
   typedef otb::GenericRSTransform<double,3,3>  RSTransformType;
-  
+
   /** Standard macro */
   itkNewMacro(Self);
   itkTypeMacro(GenerateRPCSensorModel, otb::Application);
@@ -60,7 +60,7 @@ private:
   {
     SetName("GenerateRPCSensorModel");
     SetDescription("Generate a RPC sensor model from a list of Ground Control Points.");
-    
+
     SetDocName("Generate a RPC sensor model");
     SetDocLongDescription("This application generates a RPC sensor model from a list of Ground Control Points. At least 20 points are required for estimation wihtout elevation support, and 40 points for estimation with elevation support. Elevation support will be automatically deactivated if an insufficient amount of points is provided. The application can optionnaly output a file containing accuracy statistics for each point, and a vector file containing segments represening points residues. The map projection parameter allows to define a map projection in which the accuracy is evaluated.");
 
@@ -69,7 +69,7 @@ private:
     SetDocLimitations("None");
     SetDocSeeAlso("OrthoRectication,HomologousPointsExtraction,RefineSensorModel");
     SetDocAuthors("OTB-Team");
-   
+
     AddParameter(ParameterType_OutputFilename,"outgeom","Output geom file");
     SetParameterDescription("outgeom","Geom file containing the generated RPC sensor model");
 
@@ -107,23 +107,23 @@ private:
   void DoExecute()
   {
     OGRMultiLineString mls;
-    
+
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
-    
+
     // Parse the input file for ground control points
     std::ifstream ifs;
     ifs.open(GetParameterString("inpoints").c_str());
-    
+
     TiePointsType tiepoints;
-  
+
   while(!ifs.eof())
     {
     std::string line;
     std::getline(ifs,line);
-    
+
     double x,y,z,lat,lon;
-    
+
     // Avoid commented lines or too short ones
     if (!line.empty() && line[0] != '#')
       {
@@ -140,7 +140,7 @@ private:
       pos = nextpos + 1;
       nextpos = line.find_first_of("\t", pos);
       lat = atof(line.substr(pos, nextpos).c_str());
-      
+
       z = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(lon,lat);
 
       otbAppLogINFO("Adding tie point x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat);
@@ -158,7 +158,7 @@ private:
       }
     }
   ifs.close();
-  
+
   otbAppLogINFO("Optimization in progress ...");
 
   double rms;
@@ -214,7 +214,7 @@ private:
     double gerror = distance->Evaluate(ref,tmpPoint);
     double xerror = ref[0]-tmpPoint[0];
     double yerror = ref[1]-tmpPoint[1];
-    
+
     if(IsParameterEnabled("outstat"))
       ofs<<ref[0]<<"\t"<<ref[1]<<"\t"<<it->first[2]<<"\t"<<tmpPoint[0]<<"\t"<<tmpPoint[1]<<"\t"<<tmpPoint[2]<<"\t"<<xerror<<"\t"<<yerror<<"\t"<<gerror<<std::endl;
 
@@ -265,16 +265,16 @@ if(IsParameterEnabled("outvector"))
   // Create the datasource (for matches export)
   otb::ogr::Layer layer(NULL, false);
   otb::ogr::DataSource::Pointer ogrDS;
-  
+
   ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);
   std::string projref = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map");
   OGRSpatialReference oSRS(projref.c_str());
-  
+
   // and create the layer
   layer = ogrDS->CreateLayer("matches", &oSRS, wkbMultiLineString);
   OGRFeatureDefn & defn = layer.GetLayerDefn();
   ogr::Feature feature(defn);
-  
+
   feature.SetGeometry(&mls);
   layer.CreateFeature(feature);
   }

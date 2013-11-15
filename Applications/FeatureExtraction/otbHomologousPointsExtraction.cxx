@@ -126,7 +126,7 @@ private:
 
     AddParameter(ParameterType_Choice,"algorithm","Keypoints detection algorithm");
     SetParameterDescription("algorithm","Choice of the detection algorithm to use");
-    
+
     AddChoice("algorithm.surf","SURF algorithm");
     AddChoice("algorithm.sift","SIFT algorithm");
 
@@ -160,10 +160,10 @@ private:
     AddParameter(ParameterType_Float,"precision","Estimated precision of the colocalisation function (in pixels).");
     SetParameterDescription("precision","Estimated precision of the colocalisation function in pixels");
     SetDefaultParameterFloat("precision",0.);
-    
+
     AddParameter(ParameterType_Empty,"mfilter","Filter points according to geographical or sensor based colocalisation");
     SetParameterDescription("mfilter","If enabled, this option allows to filter matches according to colocalisation from sensor or geographical information, using the given tolerancy expressed in pixels");
-      
+
     AddParameter(ParameterType_Empty,"2wgs84","If enabled, points from second image will be exported in WGS84");
 
     // Elevation
@@ -198,18 +198,18 @@ private:
       otbAppLogINFO("Using SIFT points");
       SiftFilterType::Pointer sift1 = SiftFilterType::New();
       sift1->SetInput(im1);
-        
+
       SiftFilterType::Pointer sift2 = SiftFilterType::New();
       sift2->SetInput(im2);
-      
+
       sift1->Update();
-    
+
       otbAppLogINFO("Found " << sift1->GetOutput()->GetNumberOfPoints()<<" sift points in image 1.");
-      
+
       sift2->Update();
-      
+
       otbAppLogINFO("Found " << sift2->GetOutput()->GetNumberOfPoints()<<" sift points in image 2.");
-    
+
       matchingFilter->SetInput1(sift1->GetOutput());
       matchingFilter->SetInput2(sift2->GetOutput());
       }
@@ -217,19 +217,19 @@ private:
       {
       SurfFilterType::Pointer surf1 = SurfFilterType::New();
       surf1->SetInput(im1);
-        
+
       SurfFilterType::Pointer surf2 = SurfFilterType::New();
       surf2->SetInput(im2);
-      
+
       otbAppLogINFO("Doing update");
       surf1->Update();
-    
+
       otbAppLogINFO("Found " << surf1->GetOutput()->GetNumberOfPoints()<<" surf points in image 1.");
-      
+
       surf2->Update();
-      
+
       otbAppLogINFO("Found " << surf2->GetOutput()->GetNumberOfPoints()<<" surf points in image 2.");
-    
+
       matchingFilter->SetInput1(surf1->GetOutput());
       matchingFilter->SetInput2(surf2->GetOutput());
       matchingFilter->SetDistanceThreshold(GetParameterFloat("threshold"));
@@ -240,48 +240,48 @@ private:
       {
 
       matchingFilter->Update();
-      
+
       LandmarkListType::Pointer landmarks = matchingFilter->GetOutput();
-    
+
       otbAppLogINFO("Found " << landmarks->Size() <<" homologous points.");
-      
+
       unsigned int discarded  = 0;
-      
+
       for (LandmarkListType::Iterator it = landmarks->Begin();
            it != landmarks->End(); ++it)
         {
         PointType point1 = it.Get()->GetPoint1();
         PointType point2 = it.Get()->GetPoint2();
-        
+
         double error = 0;
         PointType pprime1,pprime2;
-        
+
         bool filtered = false;
-        
+
         if(IsParameterEnabled("mfilter"))
           {
           pprime1 = rsTransform->TransformPoint(point1);
           error = vcl_sqrt((point2[0]-pprime1[0])*(point2[0]-pprime1[0])+(point2[1]-pprime1[1])*(point2[1]-pprime1[1]));
-          
+
           if(error>GetParameterFloat("precision")*vcl_sqrt(vcl_abs(im2->GetSpacing()[0]*im2->GetSpacing()[1])))
             {
             filtered = true;
             }
           }
-        
+
         if(!filtered)
           {
           if(IsParameterEnabled("2wgs84"))
             {
             pprime2 = rsTransform2ToWGS84->TransformPoint(point2);
-            
+
             file<<point1[0]<<"\t"<<point1[1]<<"\t"<<pprime2[0]<<"\t"<<pprime2[1]<<std::endl;
             }
           else
             {
             file<<point1[0]<<"\t"<<point1[1]<<"\t"<<point2[0]<<"\t"<<point2[1]<<std::endl;
             }
-          
+
           if(mls)
             {
              pprime1 = rsTransform1ToWGS84->TransformPoint(point1);
@@ -306,7 +306,7 @@ private:
       // silent catch
       }
   }
- 
+
 
   void DoExecute()
   {
@@ -337,11 +337,11 @@ private:
     ExtractChannelFilterType::Pointer extractChannel1 = ExtractChannelFilterType::New();
     extractChannel1->SetInput(this->GetParameterImage("in1"));
     extractChannel1->SetChannel(GetParameterInt("band1"));
-    
+
     ExtractChannelFilterType::Pointer extractChannel2 = ExtractChannelFilterType::New();
     extractChannel2->SetInput(this->GetParameterImage("in2"));
     extractChannel2->SetChannel(GetParameterInt("band2"));
-    
+
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
@@ -367,7 +367,7 @@ private:
 
       FloatImageType::SpacingType spacing1 = this->GetParameterImage("in1")->GetSpacing();
       FloatImageType::PointType origin1 = this->GetParameterImage("in1")->GetOrigin();
-      
+
       FloatVectorImageType::Pointer image2 = this->GetParameterImage("in2");
 
       for(unsigned int i = 0; i<nb_bins_x; ++i)
@@ -376,7 +376,7 @@ private:
           {
           unsigned int startx = bin_step/2 + i*(bin_size + bin_step);
           unsigned int starty = bin_step/2 + j*(bin_size + bin_step);
-        
+
 
           FloatImageType::SizeType size1;
           FloatImageType::IndexType index1;
@@ -394,10 +394,10 @@ private:
 
           otbAppLogINFO("("<<i+1<<"/"<<nb_bins_x<<", "<<j+1<<"/"<<nb_bins_y<<") Considering region1 : "<<region1.GetIndex()<<", "<<region1.GetSize());
 
-       
+
           extractChannel1->SetExtractionRegion(region1);
-        
-        
+
+
           // We need to find the corresponding region in image 2
           FloatImageType::PointType ul1, ur1, ll1, lr1, p1, p2, p3, p4;
           itk::ContinuousIndex<double,2> i1, i2, i3, i4, i_min, i_max;
@@ -418,7 +418,7 @@ private:
           p2 = rsTransform->TransformPoint(ur1);
           p3 = rsTransform->TransformPoint(lr1);
           p4 = rsTransform->TransformPoint(ll1);
-          
+
           image2->TransformPhysicalPointToContinuousIndex(p1,i1);
           image2->TransformPhysicalPointToContinuousIndex(p2,i2);
           image2->TransformPhysicalPointToContinuousIndex(p3,i3);
@@ -466,16 +466,16 @@ private:
         // Create the datasource (for matches export)
         otb::ogr::Layer layer(NULL, false);
         otb::ogr::DataSource::Pointer ogrDS;
-       
+
         ogrDS = otb::ogr::DataSource::New(GetParameterString("outvector"), otb::ogr::DataSource::Modes::Overwrite);
         std::string projref = "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]";
         OGRSpatialReference oSRS(projref.c_str());
-      
+
         // and create the layer
         layer = ogrDS->CreateLayer("matches", &oSRS, wkbMultiLineString);
         OGRFeatureDefn & defn = layer.GetLayerDefn();
         ogr::Feature feature(defn);
-        
+
         feature.SetGeometry(&mls);
         layer.CreateFeature(feature);
         }

@@ -49,7 +49,7 @@ public:
   typedef UInt8ImageType::SizeType           SizeType;
   typedef UInt8ImageType::SpacingType        SpacingType;
   typedef UInt8ImageType::IndexType          IndexType;
-  
+
   // Misc
   typedef otb::GenericRSTransform<>          RSTransformType;
   typedef otb::PipelineMemoryPrintCalculator MemoryCalculatorType;
@@ -68,72 +68,72 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("For now, support of input dataset with multiple layers having different projection reference system is limited.");
-   
+
     AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_InputFilename,  "in",   "Input vector dataset");
     SetParameterDescription( "in", "The input vector dataset to be rasterized" );
-    
+
     AddParameter(ParameterType_OutputImage,  "out",   "Ouptut image");
     SetParameterDescription( "out", "An output image containing the rasterized vector dataset" );
-    
+
     AddParameter(ParameterType_InputImage,  "im",   "Input reference image");
     SetParameterDescription( "im", "A reference image from which to import output grid and projection reference system information." );
     MandatoryOff("im");
-    
+
     AddParameter(ParameterType_Int,  "szx",   "Output size x");
     SetParameterDescription( "szx", "Output size along x axis (useless if support image is given)" );
     MandatoryOff("szx");
     SetMinimumParameterIntValue("szx",1);
-    
+
     AddParameter(ParameterType_Int,  "szy",   "Output size y");
     SetParameterDescription( "szy", "Output size along y axis (useless if support image is given)" );
     MandatoryOff("szy");
     SetMinimumParameterIntValue("szy",1);
-    
+
     AddParameter(ParameterType_Int,  "epsg",   "Output EPSG code");
     SetParameterDescription( "epsg", "EPSG code for the output projection reference system (EPSG 4326 for WGS84, 32631 for UTM31N...,useless if support image is given)" );
     MandatoryOff("epsg");
-    
+
     AddParameter(ParameterType_Float,  "orx",   "Output Upper-left x");
     SetParameterDescription( "orx", "Output upper-left x coordinate (useless if support image is given)" );
     MandatoryOff("orx");
-    
+
     AddParameter(ParameterType_Float,  "ory",   "Output Upper-left y");
     SetParameterDescription( "ory", "Output upper-left y coordinate (useless if support image is given)" );
     MandatoryOff("ory");
-    
+
     AddParameter(ParameterType_Float,  "spx",   "Spacing (GSD) x");
     SetParameterDescription( "spx", "Spacing (ground sampling distance) along x axis (useless if support image is given)" );
     MandatoryOff("spx");
-    
+
     AddParameter(ParameterType_Float,  "spy",   "Spacing (GSD) y");
     SetParameterDescription( "spy", "Spacing (ground sampling distance) along y axis (useless if support image is given)" );
     MandatoryOff("spy");
-        
+
     AddParameter(ParameterType_Float,"background", "Background value");
     SetParameterDescription("background","Default value for pixels not belonging to any geometry");
     SetDefaultParameterFloat("background",0.);
 
     AddParameter(ParameterType_Choice,"mode","Rasterization mode");
     SetParameterDescription("mode","Choice of rasterization modes");
-    
+
     AddChoice("mode.binary","Binary mode");
     SetParameterDescription("mode.binary","In this mode, pixels within a geometry will hold the user-defined foreground value");
 
     AddParameter(ParameterType_Float,"mode.binary.foreground","Foreground value");
     SetParameterDescription("mode.binary.foreground","Value for pixels inside a geometry");
     SetDefaultParameterFloat("mode.binary.foreground",255);
-    
+
     AddChoice("mode.attribute","Attribute burning mode");
     SetParameterDescription("mode.attribute","In this mode, pixels within a geometry will hold the value of a user-defined field extracted from this geometry.");
 
     AddParameter(ParameterType_String,"mode.attribute.field","The attribute field to burn");
     SetParameterDescription("mode.attribute.field","Name of the attribute field to burn");
     SetParameterString("mode.attribute.field","DN");
-    
+
     AddRAMParameter();
-    
+
     SetDocExampleParameterValue("in","qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("out", "rasterImage.tif");
     SetDocExampleParameterValue("spx","1.");
@@ -144,8 +144,8 @@ private:
     {
     // Nothing to do
     }
-  
-  
+
+
   void DoExecute()
     {
     otb::ogr::DataSource::Pointer ogrDS;
@@ -208,7 +208,7 @@ private:
     SizeType size;
     PointType origin;
     SpacingType spacing;
-  
+
     // reading projection information
     // two choice :
     std::string outputProjectionRef;
@@ -221,14 +221,14 @@ private:
         otbAppLogWARNING("A reference image has been given, other parameters "
                          "regarding the output image will be ignored");
         }
-      
+
       referenceImage = GetParameterUInt8Image("im");
       outputProjectionRef = referenceImage->GetProjectionRef();
-  
+
       size = referenceImage->GetLargestPossibleRegion().GetSize();
-  
+
       origin = referenceImage->GetOrigin();
-  
+
       spacing = referenceImage->GetSpacing();
       }
     else if (HasValue("spx") && HasValue("spy"))
@@ -255,9 +255,9 @@ private:
         {
         origin[0] = (spacing[0] > 0 ? ulx : lrx);
         origin[1] = (spacing[1] > 0 ? uly : lry);
-        
+
         // Transform to output EPSG
-       
+
         if(validInputProjRef)
           {
           RSTransformType::Pointer rsTransform = RSTransformType::New();
@@ -307,14 +307,14 @@ private:
       {
       otbAppLogFATAL("No reference image was given, at least spx and spy parameters must be set.");
       }
-  
+
       m_OGRDataSourceRendering = OGRDataSourceToMapFilterType::New();
       m_OGRDataSourceRendering->AddOGRDataSource(ogrDS);
       m_OGRDataSourceRendering->SetOutputSize(size);
       m_OGRDataSourceRendering->SetOutputOrigin(origin);
       m_OGRDataSourceRendering->SetOutputSpacing(spacing);
       m_OGRDataSourceRendering->SetBackgroundValue(GetParameterFloat("background"));
-      
+
       if(GetParameterString("mode") == "binary")
         {
         m_OGRDataSourceRendering->SetBurnAttributeMode(false);
@@ -330,7 +330,7 @@ private:
         {
         m_OGRDataSourceRendering->SetOutputProjectionRef(outputProjectionRef);
         }
-      
+
       otbAppLogINFO("Output projection reference system is: "<<outputProjectionRef);
 
       otbAppLogINFO("Output origin: "<<origin);
@@ -338,11 +338,11 @@ private:
       otbAppLogINFO("Output spacing: "<<spacing);
 
       SetParameterOutputImage<FloatImageType>("out", m_OGRDataSourceRendering->GetOutput());
-    
+
     }
-  
+
   OGRDataSourceToMapFilterType::Pointer m_OGRDataSourceRendering;
-  
+
 };
 
 }

@@ -55,24 +55,24 @@ private:
   {
     SetName("VectorDataTransform");
     SetDescription("Apply a transform to each vertex of the input VectorData");
-    
+
     SetDocName("Vector Data Transformation");
     SetDocLongDescription("This application performs a transformation of an input vector data transforming each vertex in the vector data. The applied transformation manages translation, rotation and scale, and can be centered or not.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-  
+
     AddDocTag(Tags::Vector);
 
     AddParameter(ParameterType_InputVectorData, "vd", "Input Vector data");
     SetParameterDescription("vd", "Input vector data to transform");
-    
+
     AddParameter(ParameterType_OutputVectorData,"out","Output Vector data");
     SetParameterDescription("out", "Output transformed vector data");
 
     AddParameter(ParameterType_InputImage, "in", "Support image");
     SetParameterDescription("in","Image needed as a support to the vector data");
-  
+
     // Transform Group
     AddParameter(ParameterType_Group, "transform", "Transform parameters");
     SetParameterDescription("transform", "Group of parameters to define the transform");
@@ -83,7 +83,7 @@ private:
     SetParameterDescription("transform.ty","Translation in the Y direction (in pixels)");
     SetDefaultParameterFloat("transform.tx", 0.);
     SetDefaultParameterFloat("transform.ty", 0.);
-      
+
     AddParameter(ParameterType_Float, "transform.ro", "Rotation Angle");
     SetParameterDescription("transform.ro","Angle of the rotation to apply in degrees");
     SetDefaultParameterFloat("transform.ro", 0.);
@@ -115,17 +115,17 @@ private:
   {
     // Get the support image
     FloatVectorImageType*  inImage = GetParameterImage("in");
-    
+
     // Get the VectorData to apply the transform on
     VectorDataType*        vd      = GetParameterVectorData("vd");
-      
+
     // Reproject the VectorData in the image coordinate system
     m_VectorDataProj = VectorDataProjectionFilterType::New();
     m_VectorDataProj->SetInput(vd);
     m_VectorDataProj->SetInputProjectionRef(vd->GetProjectionRef());
     m_VectorDataProj->SetOutputKeywordList(inImage->GetImageKeywordlist());
     m_VectorDataProj->SetOutputProjectionRef(inImage->GetProjectionRef());
-    
+
     // Set up the transform
     m_Transform = TransformType::New();
     TransformType::ParametersType parameters(6);
@@ -137,14 +137,14 @@ private:
     parameters[3] = GetParameterFloat("transform.centery");
     parameters[4] = inImage->GetSpacing()[0] * GetParameterFloat("transform.tx");
     parameters[5] = vcl_abs(inImage->GetSpacing()[1]) * GetParameterFloat("transform.ty");
-    
+
     // Set the parameters to the transform
     m_Transform->SetParameters(parameters);
-    
+
     m_TransformFilter = VectorDataTransformFilterType::New();
     m_TransformFilter->SetInput(m_VectorDataProj->GetOutput());
     m_TransformFilter->SetTransform(m_Transform);
-  
+
     // retransform int the input vector projection
     m_ReverseVectorDataProj = VectorDataProjectionFilterType::New();
     m_ReverseVectorDataProj->SetInput(m_TransformFilter->GetOutput());

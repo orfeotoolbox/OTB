@@ -61,7 +61,7 @@ private:
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image");
-    
+
     AddParameter(ParameterType_Int,"coordx","Col index");
     SetParameterDescription("coordx","Column index of the wanted pixel (starts at 0).");
     SetMinimumParameterIntValue("coordx", 0);
@@ -90,7 +90,7 @@ private:
     if ( HasValue("in") )
       {
       ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
-      
+
       // Update the values of the channels to be selected
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
       ClearChoices("cl");
@@ -101,7 +101,7 @@ private:
         item<<"Channel"<<idx+1;
         AddChoice(key.str(), item.str());
         }
-      
+
       ExtractROIFilterType::InputImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
       SetMaximumParameterIntValue("coordx", largestRegion.GetSize(0)-1);
       SetMaximumParameterIntValue("coordy", largestRegion.GetSize(1)-1);
@@ -112,7 +112,7 @@ private:
   {
     std::ostringstream ossOutput;
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
-      
+
     ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
     extractor->SetInput(inImage);
 
@@ -129,7 +129,7 @@ private:
     region.SetIndex(id);
 
     extractor->SetExtractionRegion(region);
-    
+
     // Extract the channels if needed
     if ( GetParameterByKey("cl")->GetActive() )
       {

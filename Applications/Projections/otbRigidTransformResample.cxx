@@ -277,12 +277,12 @@ private:
       ResampleFilterType::SizeType recomputedSize;
       recomputedSize[0] = inputImage->GetLargestPossibleRegion().GetSize()[0] / scale[0];
       recomputedSize[1] = inputImage->GetLargestPossibleRegion().GetSize()[1] / scale[1];
-      
+
       m_Resampler->SetOutputSize(recomputedSize);
-      
+
       otbAppLogINFO( << "Output image size : " << recomputedSize );
       m_Resampler->SetTransform(transform);
- 
+
       }
       break;
 

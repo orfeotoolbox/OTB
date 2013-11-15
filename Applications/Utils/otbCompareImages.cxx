@@ -57,7 +57,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath application, ImageStatistics");
-  
+
     AddDocTag("Statistics");
 
     AddParameter(ParameterType_Group, "ref", "Reference image properties");
@@ -77,22 +77,22 @@ private:
     SetMinimumParameterIntValue("meas.channel", 1);
 
     AddParameter(ParameterType_Group, "roi", "Region Of Interest (relative to reference image)");
-    
+
     AddParameter(ParameterType_Int,  "roi.startx", "Start X");
     SetDefaultParameterInt("roi.startx", 0);
     SetMinimumParameterIntValue("roi.startx", 0);
     SetParameterDescription("roi.startx", "ROI start x position.");
-    
+
     AddParameter(ParameterType_Int,  "roi.starty", "Start Y");
     SetDefaultParameterInt("roi.starty", 0);
     SetMinimumParameterIntValue("roi.starty", 0);
     SetParameterDescription("roi.starty", "ROI start y position.");
-    
+
     AddParameter(ParameterType_Int,  "roi.sizex",  "Size X");
     SetDefaultParameterInt("roi.sizex",  0);
     SetMinimumParameterIntValue("roi.sizex",  1);
     SetParameterDescription("roi.sizex","Size along x in pixels.");
-    
+
     AddParameter(ParameterType_Int,  "roi.sizey",  "Size Y");
     SetDefaultParameterInt("roi.sizey", 0);
     SetMinimumParameterIntValue("roi.sizey",  1);
@@ -134,28 +134,28 @@ private:
       }
 
     // ROI
-      
+
     if ( HasValue("ref.in") )
       {
       FloatVectorImageType::RegionType largestRegion = this->GetParameterImage("ref.in")->GetLargestPossibleRegion();
-      
+
       // Put the limit of the index and the size relative the image
       SetMinimumParameterIntValue("roi.sizex", 1);
       SetMaximumParameterIntValue("roi.sizex", largestRegion.GetSize(0));
-      
+
       SetMinimumParameterIntValue("roi.sizey", 1);
       SetMaximumParameterIntValue("roi.sizey", largestRegion.GetSize(1));
 
       SetMinimumParameterIntValue("roi.startx", 0);
       SetMaximumParameterIntValue("roi.startx", largestRegion.GetSize(0) - 1);
-      
+
       SetMinimumParameterIntValue("roi.starty", 0);
       SetMaximumParameterIntValue("roi.starty", largestRegion.GetSize(1) - 1);
 
       }
   }
 
-  
+
   void DoExecute()
   {
     // Init filters
@@ -173,7 +173,7 @@ private:
     region.SetIndex(1, GetParameterInt("roi.starty"));
     region.SetSize(0, GetParameterInt("roi.sizex"));
     region.SetSize(1, GetParameterInt("roi.sizey"));
- 
+
     if (region.GetNumberOfPixels() == 0)
       {
       otbAppLogINFO( << "Using whole reference image since the ROI contains no pixels or is not specified" );
@@ -181,7 +181,7 @@ private:
       }
 
     otbAppLogDEBUG( << "Region of interest used for comparison : " << region );
-    
+
     if( !region.Crop(refIm->GetLargestPossibleRegion()) || !region.Crop(measIm->GetLargestPossibleRegion()) )
       {
       otbAppLogFATAL( << "ROI is not contained in the images regions");
@@ -212,8 +212,8 @@ private:
     SetParameterFloat( "mae", m_CompareFilter->GetMAE() );
     SetParameterFloat( "psnr", m_CompareFilter->GetPSNR() );
   }
-  
-  
+
+
   ExtractROIMonoFilterType::Pointer m_ExtractRefFilter;
   ExtractROIMonoFilterType::Pointer m_ExtractMeasFilter;
   StreamingCompareImageFilterType::Pointer m_CompareFilter;

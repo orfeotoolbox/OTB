@@ -731,7 +731,7 @@ private:
 
         AddProcess(fusionFilter, "Stitching polygons");
         fusionFilter->GenerateData();
-      
+
        //REPACK the Layer in case of Shapefile.
        //This request will remove features marked as deleted in the .dbf filename,
        //and recomputed FID for each features (without holes).
@@ -743,7 +743,7 @@ private:
            otbAppLogINFO(<<"REPACK the Shapefile ..."<<std::endl);
            //In Shapefile format, the name of the DaaSource is also the name of the Layer.
            std::string shpLayerName = itksys::SystemTools::GetFilenameWithoutExtension(GetParameterString("mode.vector.out"));
-           
+
            std::string repack("REPACK ");
            repack = repack + shpLayerName;
            ogrDS->ExecuteSQL(repack, NULL, NULL);

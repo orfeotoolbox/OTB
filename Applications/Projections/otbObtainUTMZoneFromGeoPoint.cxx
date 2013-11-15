@@ -39,7 +39,7 @@ public:
   itkNewMacro(Self);
 
   itkTypeMacro(ObtainUTMZoneFromGeoPoint, otb::Application);
-  
+
 private:
   ObtainUTMZoneFromGeoPoint()
   {
@@ -65,32 +65,32 @@ private:
 
     AddParameter(ParameterType_Float,  "lat", "Latitude");
     SetParameterDescription("lat", "Latitude value of desired point.");
-    
+
     AddParameter(ParameterType_Float,  "lon", "Longitude");
     SetParameterDescription("lon", "Longitude value of desired point.");
-    
+
     AddParameter(ParameterType_Int,"utm","UTMZone");
     SetParameterDescription("utm","UTM Zone");
     MandatoryOff("utm");
     SetParameterRole("utm", Role_Output);
-    
+
     SetExampleComment("Obtain a UTM Zone", 0);
     SetDocExampleParameterValue("lat","10.0");
     SetDocExampleParameterValue("lon","124.0");
   }
-  
+
   void DoUpdateParameters()
   {
     // Nothing to do
   }
-  
+
   void DoExecute()
   {
     int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
                                                   GetParameterFloat("lat"));
     SetParameterInt("utm", utmZone);
   }
-  
+
 };
 
 }

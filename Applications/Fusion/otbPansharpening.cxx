@@ -101,12 +101,12 @@ private:
 
     AddChoice("method.lmvm", "LMVM");
     SetParameterDescription("method.lmvm", "Local Mean and Variance Matching (LMVM) Pan sharpening.");
-    
+
     AddParameter(ParameterType_Int, "method.lmvm.radiusx", "X radius" );
     SetParameterDescription("method.lmvm.radiusx","Set the x radius of the sliding window." );
     SetMinimumParameterIntValue("method.lmvm.radiusx", 1);
     SetDefaultParameterInt("method.lmvm.radiusx", 3);
-    
+
     AddParameter(ParameterType_Int, "method.lmvm.radiusy", "Y radius");
     SetParameterDescription("method.lmvm.radiusy", "Set the y radius of the sliding window.");
     SetMinimumParameterIntValue("method.lmvm.radiusy", 1);
@@ -119,12 +119,12 @@ private:
     SetParameterDescription("method.bayes.lambda", "Set the weighting value.");
     SetMinimumParameterFloatValue("method.bayes.lambda", 0);
     SetDefaultParameterFloat("method.bayes.lambda", 0.9999);
-    
+
     AddParameter(ParameterType_Float, "method.bayes.s", "S coefficient");
     SetParameterDescription("method.bayes.s", "Set the S coefficient.");
     SetMinimumParameterFloatValue("method.bayes.s", 1);
     SetDefaultParameterFloat("method.bayes.s", 1);
-    
+
     AddRAMParameter();
 
     // Doc example parameter settings

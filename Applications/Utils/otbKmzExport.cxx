@@ -59,15 +59,15 @@ private:
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
-    
+
     AddParameter(ParameterType_OutputFilename, "out",  "Output .kmz product");
     SetParameterDescription("out", "Output Kmz product directory (with .kmz extension)");
-    
+
     AddParameter(ParameterType_Int, "tilesize",  "Tile Size");
     SetParameterDescription("tilesize", "Size of the tiles in the kmz product, in number of pixels (default = 512).");
     SetDefaultParameterInt("tilesize", 512);
     MandatoryOff("tilesize");
-    
+
     AddParameter(ParameterType_InputImage, "logo",  "Image logo");
     SetParameterDescription("logo", "Path to the image logo to add to the KMZ product.");
     MandatoryOff("logo");
@@ -94,7 +94,7 @@ private:
  void DoExecute()
   {
     typedef otb::KmzProductWriter<FloatVectorImageType> KmzProductWriterType;
-    
+
     // Second part : Image To Kmz
     KmzProductWriterType::Pointer kmzWriter  = KmzProductWriterType::New();
     kmzWriter->SetInput( this->GetParameterImage("in") );
@@ -111,7 +111,7 @@ private:
       else
         itkExceptionMacro(<< "The tile size should be a positive value.");
       }
-    
+
     // Add the logo if any
     if( this->HasValue("logo") )
       {
@@ -123,7 +123,7 @@ private:
       {
       kmzWriter->AddLegend( this->GetParameterImage("legend") );
       }
-  
+
     // trigger the writing
     kmzWriter->Update();
   }

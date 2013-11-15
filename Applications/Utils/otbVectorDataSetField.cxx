@@ -58,7 +58,7 @@ private:
     SetParameterDescription("in", "Input Vector Data");
     AddParameter(ParameterType_OutputVectorData, "out", "Output");
     SetParameterDescription("out", "Output Vector Data");
-    
+
     AddParameter(ParameterType_String, "fn", "Field");
     SetParameterDescription("fn", "Field name");
     AddParameter(ParameterType_String, "fv", "Value");
@@ -75,11 +75,11 @@ private:
   {
     // Nothing to do (for now)
   }
-  
+
   void DoExecute()
   {
     m_InputData = GetParameterVectorData("in");
-    
+
     typedef VectorDataType::DataTreeType            DataTreeType;
     typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
     TreeIteratorType it(m_InputData->GetDataTree());
@@ -92,7 +92,7 @@ private:
     SetParameterOutputVectorData("out", m_InputData);
 
   }
-  
+
   VectorDataType::Pointer m_InputData;
 };
 

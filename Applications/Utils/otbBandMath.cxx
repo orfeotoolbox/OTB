@@ -80,7 +80,7 @@ private:
     SetDocExampleParameterValue("out", "apTvUtBandMathOutput.tif");
     SetDocExampleParameterValue("exp", "\"cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3, im3b4)\"");
   }
-  
+
   void DoUpdateParameters()
   {
     // Check if the expression is correctly set
@@ -95,16 +95,16 @@ private:
     // Initialize a bandMath Filter first
     m_ChannelExtractorList = ExtractROIFilterListType::New();
     m_Filter               = BandMathImageFilterType::New();
-    
+
     FloatVectorImageListType::Pointer inList   = GetParameterImageList("il");
     unsigned int                      nbInputs = inList->Size();
     unsigned int                      imageId  = 0, bandId = 0;
-    
+
     for (unsigned int i = 0; i < nbInputs; i++)
       {
       FloatVectorImageType::Pointer currentImage = inList->GetNthElement(i);
       currentImage->UpdateOutputInformation();
-   
+
       for (unsigned int j = 0; j < currentImage->GetNumberOfComponentsPerPixel(); j++)
         {
         std::ostringstream tmpParserVarName;
@@ -151,7 +151,7 @@ private:
         }
       }
   }
-  
+
   void DoExecute()
   {
     // Get the input image list
@@ -213,5 +213,5 @@ private:
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::BandMath)
 
-  
-  
+
+

@@ -85,21 +85,21 @@ void DoExecute()
 {
   // Load input image
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
-  
+
   // Set temporary tif filename (for ossim)
   std::string ofname = GetParameterString("out");
   std::string path   = itksys::SystemTools::GetFilenamePath(ofname);
   std::string fname  = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
   std::string tempFilename = path+"/"+fname+"_DEMConvert.tif";
   std::string tempFilenameGeom = path+"/"+fname+"_DEMConvert.geom";
-  
+
   // Generate the tif image using OTB while keeping the same  pixel
   // type then the input image
   // Initialize an outputParameter and set its output pixeltype
   OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
   std::ostringstream osswriter;
   osswriter<< "writing temporary tif file";
-  
+
   // Set the filename of the current output image
   paramOut->SetFileName(tempFilename);
   paramOut->SetValue(inImage);
@@ -157,7 +157,7 @@ void DoExecute()
     {
     itkExceptionMacro("Problem while removing the file " << tempFilename);
     }
-  
+
   // remove the geom file if any
   if( itksys::SystemTools::FileExists(tempFilenameGeom.c_str())
       && !itksys::SystemTools::RemoveFile(tempFilenameGeom.c_str()))

@@ -99,20 +99,20 @@ private:
 
   AddParameter(ParameterType_OutputFilename, "out", "Matrix output");
   SetParameterDescription("out", "Filename to store the output matrix (csv format)");
-  
+
   AddParameter(ParameterType_Choice,"ref","Ground truth");
   SetParameterDescription("ref","Choice of ground truth format");
-  
+
   AddChoice("ref.raster","Ground truth as a raster image");
-  
+
   AddChoice("ref.vector","Ground truth as a vector data file");
-  
+
   AddParameter(ParameterType_InputImage,"ref.raster.in","Input reference image");
   SetParameterDescription("ref.raster.in","Input image containing the ground truth labels");
-  
+
   AddParameter(ParameterType_InputFilename,"ref.vector.in","Input reference vector data");
   SetParameterDescription("ref.vector.in", "Input vector data of the ground truth");
-  
+
   AddParameter(ParameterType_String,"ref.vector.field","Field name");
   SetParameterDescription("ref.vector.field","Field name containing the label values");
   SetParameterString("ref.vector.field","Class");
@@ -125,7 +125,7 @@ private:
   SetDefaultParameterInt("nodatalabel",0);
   MandatoryOff("nodatalabel");
   DisableParameter("nodatalabel");
-  
+
   AddRAMParameter();
 
   // Doc example parameter settings

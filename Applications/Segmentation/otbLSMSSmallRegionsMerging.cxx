@@ -51,18 +51,18 @@ public:
   typedef ImageType::InternalPixelType      ImagePixelType;
   typedef UInt32ImageType                   LabelImageType;
   typedef LabelImageType::InternalPixelType LabelImagePixelType;
-  
+
   typedef otb::MultiChannelExtractROI <ImagePixelType,ImagePixelType > MultiChannelExtractROIFilterType;
   typedef otb::ExtractROI<LabelImagePixelType,LabelImagePixelType> ExtractROIFilterType;
-  
+
   typedef otb::StreamingStatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
-  
+
   typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
   typedef itk::ImageRegionConstIterator<ImageType> ImageIterator;
-  
+
   typedef itk::ChangeLabelImageFilter<LabelImageType,LabelImageType> ChangeLabelImageFilterType;
   typedef otb::TileImageFilter<LabelImageType> TileImageFilterType;
-  
+
   itkNewMacro(Self);
   itkTypeMacro(Merging, otb::Application);
 
@@ -86,7 +86,7 @@ private:
     SetParameterDescription( "in", "The input image." );
     AddParameter(ParameterType_InputImage,  "inseg",    "Segmented image");
     SetParameterDescription( "inseg", " The segmented image input. Segmented image input is the segmentation of the input image." );
-   
+
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription( "out", "The output image. The output image is the input image where the minimal regions have been merged." );
 
@@ -123,9 +123,9 @@ private:
   void DoExecute()
   {
     clock_t tic = clock();
-  
+
     unsigned int minSize     = GetParameterInt("minsize");
-    
+
     unsigned long sizeTilesX = GetParameterInt("tilesizex");
     unsigned long sizeTilesY = GetParameterInt("tilesizey");
 
@@ -156,7 +156,7 @@ private:
 
     unsigned int nbTilesX = sizeImageX/sizeTilesX + (sizeImageX%sizeTilesX > 0 ? 1 : 0);
     unsigned int nbTilesY = sizeImageY/sizeTilesY + (sizeImageY%sizeTilesY > 0 ? 1 : 0);
-    
+
     otbAppLogINFO(<<"Number of tiles: "<<nbTilesX<<" x "<<nbTilesY);
 
     //Sums calculation per label
@@ -213,7 +213,7 @@ private:
 
     //Minimal size region suppression
     otbAppLogINFO(<<"Building LUT for small regions merging ...");
-  
+
     for (unsigned int size=1; size<minSize; size++)
       {
       // LUTtmp creation in order to modify the LUT only at the end of the pass
@@ -231,11 +231,11 @@ private:
           {
           std::set<int> minLabel, edgeLabel, labelMerged;
           std::map<int,std::set<int> > adjMap;
-            
+
           unsigned long startX = column*sizeTilesX, startY = row*sizeTilesY;
           unsigned long sizeX = vcl_min(sizeTilesX+size+1,sizeImageX-startX),
             sizeY = vcl_min(sizeTilesY+size+1,sizeImageY-startY);
-            
+
           ExtractROIFilterType::Pointer labelImageROI = ExtractROIFilterType::New();
           labelImageROI->SetInput(labelIn);
           labelImageROI->SetStartX(startX);
@@ -243,15 +243,15 @@ private:
           labelImageROI->SetSizeX(sizeX);
           labelImageROI->SetSizeY(sizeY);
           labelImageROI->Update();
-            
+
           LabelImageType::IndexType pixelIndex;
-            
+
           //"Adjacency map" creation for the region with nbPixels=="size"
           for(pixelIndex[0]=0; pixelIndex[0]<static_cast<long>(sizeX); ++pixelIndex[0])
             for(pixelIndex[1]=0; pixelIndex[1]<static_cast<long>(sizeY); ++pixelIndex[1])
               {
               LabelImagePixelType curLabel = labelImageROI->GetOutput()->GetPixel(pixelIndex);
-              
+
               if(labelMerged.count(LUT[curLabel]))
                 {
                 edgeLabel.insert(LUT[curLabel]);
@@ -264,7 +264,7 @@ private:
                 {
                 edgeLabel.insert(LUT[curLabel]);
                 }
-                
+
               if(pixelIndex[0]==static_cast<long>(sizeX)-1)
                 {
                 if(startX!=(nbTilesX-1)*sizeTilesX) edgeLabel.insert(LUT[curLabel]);
@@ -274,7 +274,7 @@ private:
                 ++pixelIndex[0];
                 LabelImagePixelType adjLabelX = labelImageROI->GetOutput()->GetPixel(pixelIndex);
                 --pixelIndex[0];
-                
+
                 if(LUT[adjLabelX]!=LUT[curLabel])
                   {
                   if((nbPixels[LUT[curLabel]]>0)&&(nbPixels[LUT[curLabel]]==size))
@@ -312,7 +312,7 @@ private:
                   }
                 }
               }
-          
+
           //Searching the "nearest" region
           for(std::set<int>::iterator itMinLabel=minLabel.begin(); itMinLabel!=minLabel.end(); ++itMinLabel)
             {
@@ -343,7 +343,7 @@ private:
                       }
                     }
                   }
-                 
+
                 //Fusion of the two regions
                 if(adjLabel!=curLabel)
                   {
@@ -368,7 +368,7 @@ private:
                 }
               }
             }
-              
+
           for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
             {
             LabelImagePixelType can = label;
@@ -380,7 +380,7 @@ private:
             }
           }
         }
-        
+
       for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
         {
         LUT[label]=LUTtmp[label];

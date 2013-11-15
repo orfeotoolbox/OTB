@@ -66,7 +66,7 @@ public:
   typedef otb::SOMImageClassificationFilter
           <FloatVectorImageType, LabeledImageType, SOMMapType> ClassificationFilterType;
 
-  
+
 private:
   void DoInit()
   {
@@ -85,65 +85,65 @@ private:
 
     AddParameter(ParameterType_InputImage,  "in",   "InputImage");
     SetParameterDescription("in", "Input image to classify.");
-    
+
     AddParameter(ParameterType_OutputImage,  "out",   "OutputImage");
     SetParameterDescription("out", "Output classified image (each pixel contains the index of its corresponding vector in the SOM).");
-    
+
     AddParameter(ParameterType_InputImage,  "vm",   "ValidityMask");
     SetParameterDescription("vm", "Validity mask (only pixels corresponding to a mask value greater than 0 will be used for learning)");
     MandatoryOff("vm");
-    
+
     AddParameter(ParameterType_Float, "tp", "TrainingProbability");
     SetParameterDescription("tp", "Probability for a sample to be selected in the training set");
     MandatoryOff("tp");
-    
+
     AddParameter(ParameterType_Int,  "ts",   "TrainingSetSize");
     SetParameterDescription("ts", "Maximum training set size (in pixels)");
     MandatoryOff("ts");
-    
+
     AddParameter(ParameterType_Int,  "sl",   "StreamingLines");
     SetParameterDescription("sl", "Number of lines in each streaming block (used during data sampling)");
     MandatoryOff("sl");
-    
+
     AddParameter(ParameterType_OutputImage, "som", "SOM Map");
     SetParameterDescription("som","Output image containing the Self-Organizing Map");
     MandatoryOff("som");
-    
+
     AddParameter(ParameterType_Int,  "sx",   "SizeX");
     SetParameterDescription("sx", "X size of the SOM map");
     MandatoryOff("sx");
-    
+
     AddParameter(ParameterType_Int,  "sy",   "SizeY");
     SetParameterDescription("sy", "Y size of the SOM map");
     MandatoryOff("sy");
-    
+
     AddParameter(ParameterType_Int,  "nx",   "NeighborhoodX");
     SetParameterDescription("nx", "X size of the initial neighborhood in the SOM map");
     MandatoryOff("nx");
-    
+
     AddParameter(ParameterType_Int,  "ny",   "NeighborhoodY");
     SetParameterDescription("ny", "Y size of the initial neighborhood in the SOM map");
     MandatoryOff("nx");
-    
+
     AddParameter(ParameterType_Int,  "ni",   "NumberIteration");
     SetParameterDescription("ni", "Number of iterations for SOM learning");
     MandatoryOff("ni");
-    
+
     AddParameter(ParameterType_Float,  "bi",   "BetaInit");
     SetParameterDescription("bi", "Initial learning coefficient");
     MandatoryOff("bi");
-    
+
     AddParameter(ParameterType_Float,  "bf",   "BetaFinal");
     SetParameterDescription("bf", "Final learning coefficient");
     MandatoryOff("bf");
-    
+
     AddParameter(ParameterType_Float,  "iv",   "InitialValue");
     SetParameterDescription("iv", "Maximum initial neuron weight");
     MandatoryOff("iv");
-    
+
     AddRAMParameter();
     // TODO : replace StreamingLines by RAM param ?
-    
+
     AddRANDParameter();
     // Default parameters
     SetDefaultParameterFloat("tp", 1.0);
@@ -155,7 +155,7 @@ private:
     SetDefaultParameterFloat("bi", 1.0);
     SetDefaultParameterFloat("bf", 0.1);
     SetDefaultParameterFloat("iv", 0.0);
-    
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("out","SOMClassification.tif");
@@ -171,18 +171,18 @@ private:
     SetDocExampleParameterValue("bf", "0.1");
     SetDocExampleParameterValue("iv", "0");
   }
-  
+
   void DoUpdateParameters()
   {
     // Nothing to do
   }
-  
+
   void DoExecute()
   {
     // initiating random number generation
     itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer
         randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
-    
+
     FloatVectorImageType::Pointer input = GetParameterImage("in");
     LabeledImageType::Pointer mask;
     m_UseMask = false;
@@ -196,14 +196,14 @@ private:
         }
       m_UseMask = true;
     }
-    
+
     /*******************************************/
     /*           Sampling data                 */
     /*******************************************/
     otbAppLogINFO("-- SAMPLING DATA --");
-    
+
     RegionType largestRegion = input->GetLargestPossibleRegion();
-    
+
     // Setting up local streaming capabilities
     SplitterType::Pointer splitter = SplitterType::New();
     unsigned int numberOfStreamDivisions;
@@ -223,9 +223,9 @@ private:
                                           otb::SET_BUFFER_MEMORY_SIZE,
                                           0, 1048576*GetParameterInt("ram"), 0);
     }
-    
+
     otbAppLogINFO("The images will be streamed into "<<numberOfStreamDivisions<<" parts.");
-    
+
     // Training sample lists
     ListSampleType::Pointer sampleList = ListSampleType::New();
     sampleList->SetMeasurementVectorSize(input->GetNumberOfComponentsPerPixel());
@@ -240,45 +240,45 @@ private:
     {
       nbsamples = largestRegion.GetNumberOfPixels();
     }
-    
+
     // Sample dimension and max dimension
     unsigned int sampleSize = input->GetNumberOfComponentsPerPixel();
     unsigned int totalSamples = 0;
     otbAppLogINFO("The following sample size will be used: "<<sampleSize);
-    
+
     // local streaming variables
     unsigned int piece = 0;
     RegionType streamingRegion;
-    
+
     // create a random permutation to explore
     itk::RandomPermutation randPerm(numberOfStreamDivisions);
     unsigned int index = 0;
-    
+
     // TODO : maybe change the approach: at the moment, the sampling process is able to pick a sample twice or more
     while (totalSamples < nbsamples)
     {
       unsigned int localNbSamples=0;
-    
+
       piece = randPerm[index];
       streamingRegion = splitter->GetSplit(piece, numberOfStreamDivisions, largestRegion);
       //otbAppLogINFO("Processing region: "<<streamingRegion);
-      
+
       input->SetRequestedRegion(streamingRegion);
       input->PropagateRequestedRegion();
       input->UpdateOutputData();
-      
+
       IteratorType it(input, streamingRegion);
       it.GoToBegin();
-      
+
       if (m_UseMask)
       {
         mask->SetRequestedRegion(streamingRegion);
         mask->PropagateRequestedRegion();
         mask->UpdateOutputData();
-        
+
         LabeledIteratorType maskIt(mask, streamingRegion);
         maskIt.GoToBegin();
-        
+
         // Loop on the image and the mask
         while ( !it.IsAtEnd()
             && !maskIt.IsAtEnd()
@@ -338,17 +338,17 @@ private:
         if (index == numberOfStreamDivisions) index = 0;
       }
     }
-    
+
     otbAppLogINFO("The final training set contains "<<totalSamples<<" samples.");
- 
+
 
       /*******************************************/
       /*           Learning                      */
       /*******************************************/
       otbAppLogINFO("-- LEARNING --");
-      
+
       EstimatorType::Pointer estimator = EstimatorType::New();
-      
+
       estimator->SetListSample(sampleList);
       EstimatorType::SizeType size;
       size[0]=GetParameterInt("sx");
@@ -362,29 +362,29 @@ private:
       estimator->SetBetaInit(GetParameterFloat("bi"));
       estimator->SetBetaEnd(GetParameterFloat("bf"));
       estimator->SetMaxWeight(GetParameterFloat("iv"));
-      
+
     AddProcess(estimator,"Learning");
     estimator->Update();
-  
+
     m_SOMMap = estimator->GetOutput();
     if (HasValue("som"))
       {
       otbAppLogINFO("-- Using Leaning image --");
       SetParameterOutputImage<DoubleVectorImageType>("som", m_SOMMap);
       }
-    
+
     /*******************************************/
     /*           Classification                */
     /*******************************************/
     otbAppLogINFO("-- CLASSIFICATION --");
-    
+
     m_Classifier = ClassificationFilterType::New();
     m_Classifier->SetInput(input);
     m_Classifier->SetMap(m_SOMMap);
     if (m_UseMask) m_Classifier->SetInputMask(mask);
-    
+
     AddProcess(m_Classifier,"Classification");
-    
+
     SetParameterOutputImage<LabeledImageType>("out", m_Classifier->GetOutput());
   }
 

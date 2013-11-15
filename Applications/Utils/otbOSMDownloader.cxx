@@ -43,7 +43,7 @@ public:
   itkNewMacro(Self);
 
   itkTypeMacro(OSMDownloader, otb::Application);
-  
+
   /** Filter typedef */
   typedef otb::OSMDataToVectorDataGenerator  VectorDataProviderType;
 
@@ -122,7 +122,7 @@ private:
 
   // Get the support image
   envelopeFilter->SetInput( this->GetParameterImage("support") ); //->Output in WGS84
-  
+
   // Setup the DEM Handler
   otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
@@ -185,14 +185,14 @@ private:
     SetParameterOutputVectorData("out", const_cast<VectorDataType*>(m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"),
                                                                                                           this->GetParameterString("value"))));
 
-    
+
     otbAppLogINFO( << m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"), this->GetParameterString("value"))->Size()-3
                    << " elements retrieved");
     }
   else
     {
     SetParameterOutputVectorData("out", const_cast<VectorDataType*>(m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"))));
-    
+
     otbAppLogINFO( << m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"))->Size()-3
                    << " elements retrieved");
     }

@@ -51,12 +51,12 @@ public:
 
   /** Filters typedef */
   // Images
-  
+
   typedef FloatVectorImageType::PointType                 PointType;
   typedef FloatVectorImageType::IndexType                 IndexType;
   typedef FloatVectorImageType::SizeType                  SizeType;
   typedef FloatVectorImageType::SpacingType               SpacingType;
-  
+
   typedef VectorDataProjectionFilter<
     VectorDataType, VectorDataType>                       VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>            VectorDataExtractROIType;
@@ -80,13 +80,13 @@ private:
 
     AddParameter(ParameterType_Group,"io","Input and output data");
     SetParameterDescription("io", "Group containing input and output parameters");
-    
+
     AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector data");
     SetParameterDescription("io.vd", "Input vector data");
-    
+
     AddParameter(ParameterType_InputImage,      "io.in", "Support image");
     SetParameterDescription("io.in", "Support image that specifies the extracted region");
-    
+
     AddParameter(ParameterType_OutputVectorData,"io.out","Output Vector data");
     SetParameterDescription("io.out", "Output extracted vector data");
 
@@ -109,11 +109,11 @@ private:
     // Get the inputs
     VectorDataType*        vd      = GetParameterVectorData("io.vd");
     FloatVectorImageType*  inImage = GetParameterImage("io.in");
-  
+
     // Extracting the VectorData
     m_VdExtract = VectorDataExtractROIType::New();
     m_VdExtract->SetInput(vd);
-    
+
     // Find the geographic region of interest
     // Get the index of the corner of the image
     IndexType ul, ur, ll, lr;
@@ -141,7 +141,7 @@ private:
     rsOrigin[1] = std::min(pul[1], plr[1]);
     rsSize[0] = vcl_abs(pul[0] - plr[0]);
     rsSize[1] = vcl_abs(pul[1] - plr[1]);
-  
+
     rsRegion.SetOrigin(rsOrigin);
     rsRegion.SetSize(rsSize);
     rsRegion.SetRegionProjection(inImage->GetProjectionRef());
@@ -165,7 +165,7 @@ private:
     // Set the output vectorData
     SetParameterOutputVectorData("io.out", m_VdProj->GetOutput());
   }
-  
+
   VectorDataExtractROIType::Pointer       m_VdExtract;
   VectorDataProjectionFilterType::Pointer m_VdProj;
 };

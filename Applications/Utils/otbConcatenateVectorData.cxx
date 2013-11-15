@@ -67,7 +67,7 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("vd", "ToulousePoints-examples.shp ToulouseRoad-examples.shp");
     SetDocExampleParameterValue("out", "ConcatenatedVectorData.shp");
- 
+
   }
 
 
@@ -80,10 +80,10 @@ private:
   {
     // Get the input VectorData list
     VectorDataListType* vectorDataList = GetParameterVectorDataList("vd");
-    
+
     // Concatenate filter object
     m_ConcatenateFilter = ConcatenateFilterType::New();
-    
+
     for (unsigned int idx = 0; idx < vectorDataList->Size(); idx++)
       {
       m_ConcatenateFilter->AddInput(vectorDataList->GetNthElement(idx));
@@ -92,7 +92,7 @@ private:
     // Set the output
     SetParameterOutputVectorData("out", m_ConcatenateFilter->GetOutput());
   }
-  
+
   ConcatenateFilterType::Pointer m_ConcatenateFilter;
   };
 

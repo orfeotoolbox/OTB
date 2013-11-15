@@ -246,7 +246,7 @@ private:
         PCAInverseFilterType::Pointer invFilter = PCAInverseFilterType::New();
         m_InverseFilter = invFilter;
 
-        
+
 
         filter->SetInput(GetParameterFloatVectorImage("in"));
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
@@ -269,7 +269,7 @@ private:
           }
 
         m_TransformationMatrix = filter->GetTransformationMatrix();
-        
+
         break;
         }
       case 1:
@@ -289,7 +289,7 @@ private:
         NAPCAInverseFilterType::Pointer invFilter = NAPCAInverseFilterType::New();
         m_InverseFilter = invFilter;
 
-        
+
         filter->SetInput(GetParameterFloatVectorImage("in"));
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
         filter->SetUseNormalization(normalize);
@@ -308,7 +308,7 @@ private:
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
           m_TransformationMatrix = invFilter->GetTransformationMatrix();
           }
-        
+
         m_TransformationMatrix = filter->GetTransformationMatrix();
 
         break;
@@ -446,7 +446,7 @@ private:
       SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
       }
 
-    
+
 
   }
 

@@ -58,12 +58,12 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
- 
+
     AddDocTag(Tags::Geometry);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
-    
+
     AddParameter(ParameterType_OutputVectorData,  "out",   "Output Vector Data");
     SetParameterDescription("out", "Vector data file containing the envelope");
 
@@ -72,14 +72,14 @@ private:
     SetDefaultParameterInt("sr",0);
     MandatoryOff("sr");
     DisableParameter("sr");
-    
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
-    
+
     AddParameter(ParameterType_String, "proj",  "Projection");
     SetParameterDescription("proj", "Projection to be used to compute the envelope (default is WGS84)");
     MandatoryOff("proj");
-    
+
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_TOULOUSE_MUL_Extract_500_500.tif");
     SetDocExampleParameterValue("out", "ImageEnvelope.shp");
@@ -93,18 +93,18 @@ private:
   void DoExecute()
   {
     FloatVectorImageType::Pointer input = GetParameterImage("in");
-    
+
     m_Envelope = EnvelopeFilterType::New();
     m_Envelope->SetInput(input);
     m_Envelope->SetSamplingRate(GetParameterInt("sr"));
-    
+
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
     if (HasValue("proj"))
       {
       m_Envelope->SetOutputProjectionRef(GetParameterString("proj"));
       }
-    
+
     SetParameterOutputVectorData("out", m_Envelope->GetOutput());
   }
 

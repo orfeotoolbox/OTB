@@ -141,7 +141,7 @@ private:
     path  = itksys::SystemTools::GetFilenamePath(ofname);
     fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
     ext   = itksys::SystemTools::GetFilenameExtension(ofname);
-    
+
     unsigned int currentLevel = 1;
     unsigned int currentFactor = shrinkFactor;
 
@@ -172,7 +172,7 @@ private:
 
       // Create an output parameter to write the current output image
       OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
-        
+
       // build the current image filename
       std::ostringstream oss;
       if (!path.empty())
@@ -196,7 +196,7 @@ private:
 
       ++currentLevel;
       }
-    
+
     // Disable this parameter since the images have already been produced
     DisableParameter("out");
   }

@@ -64,7 +64,7 @@ public:
      double>                                                      NNInterpolatorType;
   typedef otb::BCOInterpolateImageFunction
     <FloatVectorImageType>                                        BCOInterpolatorType;
-  
+
   typedef otb::GenericRSResampleImageFilter<FloatVectorImageType,
                                             FloatVectorImageType>  ResamplerType;
 
@@ -80,7 +80,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
- 
+
     AddDocTag(Tags::Geometry);
     AddDocTag("Superimposition");
 
@@ -99,25 +99,25 @@ private:
 
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
     SetParameterDescription("out","Output reprojected image.");
-    
+
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
     SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
-    
+
     AddChoice("interpolator.bco",    "Bicubic interpolation");
     SetParameterDescription("interpolator.bco", "Bicubic interpolation leads to very good image quality but is slow.");
-    
+
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
     SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
-    
+
     AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
     SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
-    
+
     AddChoice("interpolator.linear", "Linear interpolation");
     SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
-    
-    
+
+
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -131,16 +131,16 @@ private:
     // Nothing to do here : all parameters are independent
   }
 
-  
+
   void DoExecute()
   {
     // Get the inputs
     FloatVectorImageType* refImage = GetParameterImage("inr");
     FloatVectorImageType* movingImage = GetParameterImage("inm");
-    
+
     // Resample filter
     m_Resampler = ResamplerType::New();
-    
+
     // Get Interpolator
     switch ( GetParameterInt("interpolator") )
       {
@@ -164,11 +164,11 @@ private:
       }
       break;
       }
-    
-    
+
+
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
-    
+
     // Set up output image informations
     FloatVectorImageType::SpacingType spacing = refImage->GetSpacing();
     FloatVectorImageType::IndexType   start   = refImage->GetLargestPossibleRegion().GetIndex();
@@ -183,13 +183,13 @@ private:
 
       defSpacing[0] = defScalarSpacing;
       defSpacing[1] = defScalarSpacing;
-      
+
       if (spacing[0]<0.0) defSpacing[0] *= -1.0;
       if (spacing[1]<0.0) defSpacing[1] *= -1.0;
-    
+
       m_Resampler->SetDisplacementFieldSpacing(defSpacing);
       }
-    
+
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, movingImage->GetNumberOfComponentsPerPixel());
 
@@ -203,7 +203,7 @@ private:
     m_Resampler->SetOutputKeywordList(refImage->GetImageKeywordlist());
     m_Resampler->SetOutputProjectionRef(refImage->GetProjectionRef());
     m_Resampler->SetEdgePaddingValue(defaultValue);
-    
+
     // Set the output image
     SetParameterOutputImage("out", m_Resampler->GetOutput());
   }
@@ -216,4 +216,4 @@ private:
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::Superimpose)
 
-  
+

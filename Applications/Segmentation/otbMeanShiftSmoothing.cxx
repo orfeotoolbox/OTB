@@ -111,7 +111,7 @@ private:
     SetDocExampleParameterValue("maxiter", "100");
 
   }
-  
+
   void DoUpdateParameters()
   {
     // Nothing to do here : all parameters are independent

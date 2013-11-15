@@ -68,7 +68,7 @@ private:
     SetDocLimitations("None.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("http://en.wikipedia.org/wiki/Dempster-Shafer_theory");
-   
+
     AddDocTag(Tags::FeatureExtraction);
 
 
@@ -102,7 +102,7 @@ private:
     SetDocExampleParameterValue("belsup", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");
     SetDocExampleParameterValue("descmod", "DSFuzzyModel.xml");
     SetDocExampleParameterValue("out", "VectorDataDSValidation.shp");
-    
+
   }
 
   void DoUpdateParameters()

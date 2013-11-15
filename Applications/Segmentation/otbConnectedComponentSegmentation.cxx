@@ -53,16 +53,16 @@ public:
   typedef otb::VectorImage<InputPixelType, Dimension> InputVectorImageType;
   typedef otb::Image<unsigned int, Dimension>         LabelImageType;
   typedef otb::Image<unsigned int, Dimension>         MaskImageType;
-  
+
   typedef otb::VectorData<double, Dimension>          VectorDataType;
   typedef VectorDataType::Pointer                     VectorDataPointerType;
-  
+
   typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
     < InputVectorImageType,
       LabelImageType,
       MaskImageType,
       VectorDataType >  SegmentationFilterType;
-      
+
   typedef otb::VectorDataProjectionFilter
         <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
 
@@ -76,22 +76,22 @@ private:
     SetDocLimitations("Due to the tiling scheme in case of large images, some segments can be arbitrarily split across multiple tiles.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
- 
+
     AddDocTag(Tags::Analysis);
     AddDocTag(Tags::Segmentation);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The image to segment.");
-    
+
     AddParameter(ParameterType_OutputVectorData, "out", "Output Shape");
     SetParameterDescription("out", "The segmentation shape.");
-    
-    
+
+
     AddParameter(ParameterType_String, "mask", "Mask expression");
     SetParameterDescription("mask", "Mask mathematical expression (only if support image is given)");
     MandatoryOff("mask");
     DisableParameter("mask");
-    
+
     AddParameter(ParameterType_String, "expr", "Connected Component Expression");
     SetParameterDescription("expr", "Formula used for connected component segmentation");
 
@@ -100,12 +100,12 @@ private:
     SetDefaultParameterInt("minsize", 2);
     SetMinimumParameterIntValue("minsize", 1);
     MandatoryOff("minsize");
-    
+
     AddParameter(ParameterType_String, "obia", "OBIA Expression");
     SetParameterDescription("obia", "OBIA mathematical expression");
     MandatoryOff("obia");
     DisableParameter("obia");
-    
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
@@ -117,32 +117,32 @@ private:
    SetDocExampleParameterValue("obia", "\"SHAPE_Elongation>8\"");
    SetDocExampleParameterValue("out", "ConnectedComponentSegmentation.shp");
   }
-  
+
   void DoUpdateParameters()
   {
     // Nothing to do here for the parameters : all are independent
   }
-  
+
   void DoExecute()
   {
     InputVectorImageType::Pointer inputImage = GetParameterImage("in");
-    
+
     m_Connected  = SegmentationFilterType::FilterType::New();
     m_Connected->GetFilter()->SetInput(inputImage);
-    
+
     if (IsParameterEnabled("mask") && HasValue("mask"))
       m_Connected->GetFilter()->SetMaskExpression(GetParameterString("mask"));
-    
+
     m_Connected->GetFilter()->SetConnectedComponentExpression(GetParameterString("expr"));
-    
+
     m_Connected->GetFilter()->SetMinimumObjectSize(GetParameterInt("minsize"));
-    
+
     if (IsParameterEnabled("obia") && HasValue("obia"))
       m_Connected->GetFilter()->SetOBIAExpression(GetParameterString("obia"));
-    
+
     AddProcess(m_Connected,"Computing segmentation");
     m_Connected->Update();
-    
+
     /*
     * Reprojection of the output VectorData
     *
@@ -151,16 +151,16 @@ private:
     *
     * We need to reproject in WGS84 if the input image is in sensor model geometry
     */
-    
+
     std::string projRef = inputImage->GetProjectionRef();
     ImageKeywordlist kwl = inputImage->GetImageKeywordlist();
-  
+
     VectorDataType::Pointer projectedVD = m_Connected->GetFilter()->GetOutputVectorData();
-  
+
     if ( projRef.empty() && kwl.GetSize() > 0 )
       {
       // image is in sensor model geometry
-      
+
       // Reproject VectorData in image projection
       m_Vproj = VectorDataProjectionFilterType::New();
       m_Vproj->SetInput(m_Connected->GetFilter()->GetOutputVectorData());
@@ -171,10 +171,10 @@ private:
       // Setup the DEM Handler
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
       m_Vproj->Update();
-      
+
       projectedVD = m_Vproj->GetOutput();
       }
-    
+
     SetParameterOutputVectorData("out", projectedVD);
   }
 

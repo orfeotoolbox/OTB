@@ -64,7 +64,7 @@ private:
     SetDocLimitations("All input images must have the same size.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale application, Convert");
-   
+
     AddDocTag(Tags::Manip);
     AddDocTag("Concatenation");
     AddDocTag("Multi-channel");
@@ -78,9 +78,9 @@ private:
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "The concatenated output image");
-    
+
     AddRAMParameter();
- 
+
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "GomaAvant.png GomaApres.png");
     SetDocExampleParameterValue("out", "otbConcatenateImages.tif");
@@ -89,7 +89,7 @@ private:
   void DoUpdateParameters()
   {
     // Nothing to do here for the parameters : all are independent
-    
+
     // Reinitialize the object
     m_Concatener = ListConcatenerFilterType::New();
     m_ImageList = ImageListType::New();
@@ -136,7 +136,7 @@ private:
 
     SetParameterOutputImage("out", m_Concatener->GetOutput());
   }
-  
+
 
   ListConcatenerFilterType::Pointer  m_Concatener;
   ExtractROIFilterListType::Pointer  m_ExtractorList;

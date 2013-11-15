@@ -47,7 +47,7 @@ public:
   itkTypeMacro(ConvertCartoToGeoPoint, otb::Application);
 
   typedef otb::GenericRSTransform<>        TransformType;
-  
+
 private:
   void DoInit()
   {
@@ -60,7 +60,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-  
+
     AddDocTag(Tags::Coordinates);
     AddDocTag(Tags::Geometry);
 
@@ -73,7 +73,7 @@ private:
 
     // Add the MapProjectionParameters
     MapProjectionParametersHandler::AddMapProjectionParameters(this, "mapproj");
-    
+
     AddParameter(ParameterType_Float, "long", "Output long");
     SetParameterDescription("long", "Point longitude coordinates.");
     SetParameterRole("long", Role_Output);
@@ -81,7 +81,7 @@ private:
     AddParameter(ParameterType_Float, "lat", "Output lat");
     SetParameterDescription("lat", "Point latitude coordinates.");
     SetParameterRole("lat", Role_Output);
-  
+
     // Doc example parameter settings
     SetDocExampleParameterValue("carto.x", "367074.625");
     SetDocExampleParameterValue("carto.y", "4835740");

@@ -138,7 +138,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVegetationIndicesFunctor, otbWaterIndicesFunctor and otbSoilIndicesFunctor classes");
- 
+
     AddDocTag("Radiometric Indices");
     AddDocTag(Tags::FeatureExtraction);
 
@@ -152,7 +152,7 @@ private:
 
     AddParameter(ParameterType_Group, "channels", "Channels selection");
     SetParameterDescription("channels", "Channels selection");
-   
+
     AddParameter(ParameterType_Int,  "channels.blue",  "Blue Channel");
     SetParameterDescription("channels.blue", "Blue channel index");
     SetDefaultParameterInt("channels.blue", 1);
@@ -204,7 +204,7 @@ private:
     SetDocExampleParameterValue("out", "RadiometricIndicesImage.tif");
 
     m_Map.clear();
-    
+
     // Add Available choices
     indiceSpec s_NDVI;
     s_NDVI.key   = "list.ndvi";
@@ -453,7 +453,7 @@ private:
     m_ImageList->PushBack( l_##type##Filter->GetOutput() );               \
     otbAppLogINFO(<< m_Map[GetSelectedItems("list")[idx]].item << " added.");\
     }
- 
+
 #define otbRadiometricVegetationIndicesMacro( type )                      \
     {                                                                     \
     type##FilterType::Pointer l_##type##Filter = type##FilterType::New(); \
@@ -586,7 +586,7 @@ private:
       }
 
   }
-  
+
   FilterListType::Pointer                   m_FilterList;
   ImageListType::Pointer                    m_ImageList;
   ImageListToVectorImageFilterType::Pointer m_Concatener;

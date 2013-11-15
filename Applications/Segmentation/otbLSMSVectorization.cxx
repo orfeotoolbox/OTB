@@ -45,19 +45,19 @@ public:
   typedef ImageType::InternalPixelType      ImagePixelType;
   typedef UInt32ImageType                   LabelImageType;
   typedef LabelImageType::InternalPixelType LabelImagePixelType;
-  
+
   typedef otb::ImageFileReader<LabelImageType> LabelImageReaderType;
-  
+
   typedef otb::MultiChannelExtractROI <ImagePixelType,ImagePixelType > MultiChannelExtractROIFilterType;
   typedef otb::ExtractROI<LabelImagePixelType,LabelImagePixelType> ExtractROIFilterType;
-  
+
   typedef otb::StreamingStatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
-  
+
   typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
   typedef itk::ImageRegionConstIterator<ImageType> ImageIterator;
-  
+
   typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType> LabelImageToOGRDataSourceFilterType;
-  
+
 
   itkNewMacro(Self);
 
@@ -112,11 +112,11 @@ private:
     clock_t tic = clock();
 
     const char * shapefile   = GetParameterString("out").c_str();
-    
+
     unsigned long sizeTilesX = GetParameterInt("tilesizex");
     unsigned long sizeTilesY = GetParameterInt("tilesizey");
 
-   
+
     LabelImageType::Pointer labelIn = GetParameterUInt32Image("inseg");
     labelIn->UpdateOutputInformation();
 
@@ -125,7 +125,7 @@ private:
 
     unsigned int nbTilesX = sizeImageX/sizeTilesX + (sizeImageX%sizeTilesX > 0 ? 1 : 0);
     unsigned int nbTilesY = sizeImageY/sizeTilesY + (sizeImageY%sizeTilesY > 0 ? 1 : 0);
-    
+
     otbAppLogINFO(<<"Number of tiles: "<<nbTilesX<<" x "<<nbTilesY);
 
     StatisticsImageFilterType::Pointer stats = StatisticsImageFilterType::New();
@@ -153,7 +153,7 @@ private:
 
     std::vector<ImageType::PixelType>sum(regionCount+1,defaultValue);
     std::vector<ImageType::PixelType>sum2(regionCount+1,defaultValue);
- 
+
     otb::ogr::DataSource::Pointer ogrDS;
     otb::ogr::Layer layer(NULL, false);
 
@@ -170,7 +170,7 @@ private:
     layer.CreateField(labelField, true);
     OGRFieldDefn nbPixelsField("nbPixels", OFTInteger);
     layer.CreateField(nbPixelsField, true);
-  
+
     for(unsigned int comp = 0; comp<numberOfComponentsPerPixel; ++comp){
     std::ostringstream fieldoss;
     fieldoss<<"meanB"<<comp;
@@ -195,7 +195,7 @@ private:
         unsigned long startY = row*sizeTilesY;
         unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
           unsigned long sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
-        
+
         //Tiles extraction of the input image
         MultiChannelExtractROIFilterType::Pointer imageROI = MultiChannelExtractROIFilterType::New();
         imageROI->SetInput(imageIn);
@@ -204,7 +204,7 @@ private:
         imageROI->SetSizeX(sizeX);
         imageROI->SetSizeY(sizeY);
         imageROI->Update();
-          
+
         //Tiles extraction of the segmented image
         ExtractROIFilterType::Pointer labelImageROI = ExtractROIFilterType::New();
         labelImageROI->SetInput(labelIn);
@@ -213,7 +213,7 @@ private:
         labelImageROI->SetSizeX(sizeX);
         labelImageROI->SetSizeY(sizeY);
         labelImageROI->Update();
-          
+
         //Sums calculation for the mean and the variance calculation per label
         LabelImageIterator itLabel( labelImageROI->GetOutput(), labelImageROI->GetOutput()->GetLargestPossibleRegion());
         ImageIterator itImage( imageROI->GetOutput(), imageROI->GetOutput()->GetLargestPossibleRegion());
@@ -260,7 +260,7 @@ private:
     sqloss.str("");
     sqloss<<"SELECT * FROM \""<<layername<<"\" ORDER BY label";
     otb::ogr::Layer layerTmp=ogrDS->ExecuteSQL(sqloss.str().c_str(), NULL, NULL);
- 
+
     bool goesOn = true;
     int nbFeatures = layerTmp.ogr().GetFeatureCount(true);
     int nb = 0;
@@ -271,7 +271,7 @@ private:
     while(firstFeature.addr())
       {
       LabelImagePixelType curLabel = firstFeature.ogr().GetFieldAsInteger("label");
-     
+
       //Creation of a multipolygon where are stored the geometries to be merged
       OGRMultiPolygon geomToMerge;
       geomToMerge.addGeometry(firstFeature.GetGeometry());
@@ -282,12 +282,12 @@ private:
       while(merging)
         {
         nextFeature = layerTmp.ogr().GetNextFeature();
-         
+
         if(nextFeature.addr())
           {
           LabelImagePixelType newLabel = nextFeature.ogr().GetFieldAsInteger("label");
           merging=(newLabel==curLabel);
-             
+
           //Storing of the new geometry if labels are identical
           if(merging)
             {
@@ -329,27 +329,27 @@ private:
         var = (sum2[curLabel][comp]-sum[curLabel][comp]*sum[curLabel][comp]/nbPixels[curLabel])/(nbPixels[curLabel]-1);
       firstFeature.ogr().SetField(fieldoss.str().c_str(),var);
       }
-      
+
       //Geometries simplification
       otb::ogr::UniqueGeometryPtr geom = otb::ogr::Simplify(*firstFeature.GetGeometry(),0);
       firstFeature.SetGeometryDirectly(otb::ogr::Simplify(*geom,0));
-         
+
       layer.SetFeature(firstFeature);
-      
+
       //Next geometry
       firstFeature=nextFeature;
       }
-  
+
     layer.ogr().CommitTransaction();
-  
+
     if(extension=="shp"){
     sqloss.str("");
     sqloss<<"REPACK "<<layername;
     ogrDS->ogr().ExecuteSQL(sqloss.str().c_str(), NULL, NULL);
     }
-  
+
     ogrDS->SyncToDisk();
-  
+
     clock_t toc = clock();
 
     otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");

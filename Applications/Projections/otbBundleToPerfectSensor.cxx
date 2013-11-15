@@ -60,7 +60,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-   
+
     AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Pansharpening);
 
@@ -79,14 +79,14 @@ private:
     AddRAMParameter();
 
     MandatoryOff("lms");
-   
+
     // Doc example parameter settings
     SetDocExampleParameterValue("inp", "QB_Toulouse_Ortho_PAN.tif");
     SetDocExampleParameterValue("inxs", "QB_Toulouse_Ortho_XS.tif");
     SetDocExampleParameterValue("out", "BundleToPerfectSensor.png uchar");
-    
+
   }
-  
+
   void DoUpdateParameters()
   {
     // Nothing to do here : all parameters are independent
@@ -124,7 +124,7 @@ private:
 
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
-    
+
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
@@ -142,7 +142,7 @@ private:
 
       defSpacing[0] = defScalarSpacing;
       defSpacing[1] = defScalarSpacing;
-      
+
       resampler->SetDisplacementFieldSpacing(defSpacing);
       }
     else
@@ -152,10 +152,10 @@ private:
       defSpacing[1]=10*spacing[1];
       resampler->SetDisplacementFieldSpacing(defSpacing);
       }
-    
+
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, xs->GetNumberOfComponentsPerPixel());
-    
+
     resampler->SetInput(xs);
     resampler->SetOutputOrigin(origin);
     resampler->SetOutputSpacing(spacing);
@@ -174,7 +174,7 @@ private:
     fusionFilter->SetPanInput(panchro);
     fusionFilter->SetXsInput(resampler->GetOutput());
     fusionFilter->UpdateOutputInformation();
-    
+
     SetParameterOutputImage("out", fusionFilter->GetOutput());
   }
 

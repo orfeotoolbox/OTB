@@ -75,11 +75,11 @@ public:
   typedef itk::ChangeLabelImageFilter<LabelImageType,LabelImageType> ChangeLabelImageFilterType;
   typedef otb::ImportGeoInformationImageFilter<LabelImageType,ImageType> ImportGeoInformationImageFilterType;
   typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
-    
+
   typedef otb::ConcatenateVectorImageFilter <ImageType,ImageType,ImageType> ConcatenateType;
 
   LSMSSegmentation(): m_FinalReader(),m_ImportGeoInformationFilter(),m_FilesToRemoveAfterExecute(),m_TmpDirCleanup(false){}
-  
+
   virtual ~LSMSSegmentation(){}
 
 private:
@@ -95,12 +95,12 @@ private:
 
     std::stringstream tileOut;
     tileOut<<tilesname<<"_"<<row<<"_"<<column<<"_"<<label<<".tif";
-    
+
     std::vector<std::string> joins;
     if(IsParameterEnabled("tmpdir"))
       {
       std::string tmpdir = GetParameterString("tmpdir");
-      
+
       if(tmpdir.size() > 1 && tmpdir[tmpdir.size()-1] != '/')
         {
         tmpdir.append("/");
@@ -108,16 +108,16 @@ private:
       joins.push_back(tmpdir);
       }
     joins.push_back(tileOut.str());
-    
+
     std::string currentFile = itksys::SystemTools::JoinPath(joins);
 
     return currentFile;
   }
-  
+
   std::string WriteTile(LabelImageType::Pointer img, unsigned int row, unsigned int column, std::string label)
   {
     std::string currentFile = CreateFileName(row,column,label);
-    
+
     LabelImageWriterType::Pointer imageWriter = LabelImageWriterType::New();
     imageWriter->SetInput(img);
     imageWriter->SetFileName(currentFile);
@@ -158,15 +158,15 @@ private:
     ImageType::Pointer imageIn = GetParameterImage("in");
 
     std::string outfname = GetParameterString("out");
-    
+
     std::stringstream vrtfOut;
     vrtfOut<<itksys::SystemTools::GetFilenameWithoutExtension(outfname.c_str())<<".vrt";
-    
+
     std::vector<std::string> joins;
     if(IsParameterEnabled("tmpdir"))
       {
       std::string tmpdir = GetParameterString("tmpdir");
-      
+
       if(tmpdir.size() > 1 && tmpdir[tmpdir.size()-1] != '/')
         {
         tmpdir.append("/");
@@ -174,7 +174,7 @@ private:
       joins.push_back(tmpdir);
       }
     joins.push_back(vrtfOut.str());
-    
+
     std::string vrtfname = itksys::SystemTools::JoinPath(joins);
     otbAppLogINFO(<<"Creating temporary vrt file: "<<vrtfname);
 
@@ -243,7 +243,7 @@ private:
     SetDefaultParameterInt("minsize", 0);
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
-    
+
     AddParameter(ParameterType_Int, "tilesizex", "Size of tiles in pixel (X-axis)");
     SetParameterDescription("tilesizex", "Size of tiles along the X-axis.");
     SetDefaultParameterInt("tilesizex", 500);
@@ -273,7 +273,7 @@ private:
     SetDocExampleParameterValue("minsize","0");
     SetDocExampleParameterValue("tilesizex","256");
     SetDocExampleParameterValue("tilesizey","256");
-    
+
   }
 
   void DoUpdateParameters()
@@ -285,12 +285,12 @@ private:
     m_FilesToRemoveAfterExecute.clear();
 
     clock_t tic = clock();
-  
+
     const float ranger         = GetParameterFloat("ranger");
     const float spatialr       = GetParameterFloat("spatialr");
-    
+
     unsigned int minRegionSize = GetParameterInt("minsize");
-    
+
     unsigned long sizeTilesX   = GetParameterInt("tilesizex");
     unsigned long sizeTilesY   = GetParameterInt("tilesizey");
 
@@ -312,7 +312,7 @@ private:
     // 3-Minimal size region suppression
 
     ImageType::Pointer spatialIn;
-        
+
     if(HasValue("inpos"))
       {
       spatialIn = GetParameterImage("inpos");
@@ -332,11 +332,11 @@ private:
     otbAppLogINFO(<<"Number of tiles: "<<nbTilesX<<" x "<<nbTilesY);
 
     unsigned long regionCount = 0;
-  
+
     //Segmentation by the connected component per tile and label
     //shifting
     otbAppLogINFO(<<"Tile shifting ...");
-      
+
     for(unsigned int row = 0; row < nbTilesY; ++row)
       for(unsigned int column = 0; column < nbTilesX; ++column)
         {
@@ -345,7 +345,7 @@ private:
         unsigned long startY = row*sizeTilesY;
         unsigned long sizeX = vcl_min(sizeTilesX+1,sizeImageX-startX+1);
         unsigned long sizeY = vcl_min(sizeTilesY+1,sizeImageY-startY+1);
-           
+
         //Tiles extraction of :
         //- the input image (filtering image)
         MultiChannelExtractROIFilterType::Pointer extractROIFilter = MultiChannelExtractROIFilterType::New();
@@ -369,19 +369,19 @@ private:
           extractROIFilter2->SetSizeX(sizeX);
           extractROIFilter2->SetSizeY(sizeY);
           extractROIFilter2->Update();
-         
+
           //Concatenation of the two input images
           concat->SetInput1(extractROIFilter->GetOutput());
           concat->SetInput2(extractROIFilter2->GetOutput());
           concat->Update();
-          
+
           ccFilter->SetInput(concat->GetOutput());
           }
         else
           {
          ccFilter->SetInput(extractROIFilter->GetOutput());
           }
-        
+
         //Expression 1 : radiometric distance < ranger
         std::stringstream expr;
         expr<<"sqrt((p1b1-p2b1)*(p1b1-p2b1)";
@@ -395,14 +395,14 @@ private:
           expr<<" and sqrt((p1b"<<nbComp+1<<"-p2b"<<nbComp+1<<")*(p1b"<<nbComp+1<<"-p2b"<<nbComp+1<<")+";
           expr<<"(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<")*(p1b"<<nbComp+2<<"-p2b"<<nbComp+2<<"))"<<"<"<<spatialr;
           }
-        
+
         //Segmentation
         ccFilter->GetFunctor().SetExpression(expr.str());
         ccFilter->Update();
-    
+
         std::stringstream ssexpr;
         ssexpr<<"label+"<<regionCount;
-           
+
         //Shifting
         BandMathImageFilterType::Pointer labelBandMath = BandMathImageFilterType::New();
         labelBandMath->SetNthInput(0,ccFilter->GetOutput(),"label");
@@ -417,7 +417,7 @@ private:
 
         std::string filename = WriteTile(labelBandMath->GetOutput(),row,column,"SEG");
         }
-    
+
 
     // Step 2: create the look-up table for all overlaps
     otbAppLogINFO(<<"LUT creation ...");
@@ -426,7 +426,7 @@ private:
     LUT.resize(regionCount+1);
     for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
       LUT[curLabel] = curLabel;
-      
+
     for(unsigned int row = 0; row < nbTilesY; row++)
       {
       for(unsigned int column = 0; column < nbTilesX; column++)
@@ -435,7 +435,7 @@ private:
         unsigned long startY = row*sizeTilesY;
         unsigned long sizeX = vcl_min(sizeTilesX+1,sizeImageX-startX+1);
         unsigned long sizeY = vcl_min(sizeTilesY+1,sizeImageY-startY+1);
-      
+
         std::string tileIn = CreateFileName(row,column,"SEG");
 
         // Read current tile
@@ -467,7 +467,7 @@ private:
               curCanLabel = LUT[curCanLabel];
               }
            LabelImagePixelType adjCanLabel = tileUpReader->GetOutput()->GetPixel(pixelIndexUp);
-            
+
            while(LUT[adjCanLabel] != adjCanLabel)
               {
               adjCanLabel = LUT[adjCanLabel];
@@ -523,7 +523,7 @@ private:
           }
         }
       }
-    
+
     // Reduce LUT to canonical labels
     for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
       {
@@ -535,7 +535,7 @@ private:
       LUT[label] = can;
       }
     otbAppLogINFO(<<"LUT size: "<<LUT.size()<<" segments");
- 
+
     // These variables will be used to estimate the size of each
     // region on the flow
     std::vector<unsigned long> sizePerRegion(regionCount+1,0);
@@ -562,11 +562,11 @@ private:
         labelImage->SetStartY(0);
         labelImage->SetSizeX(sizeX);
         labelImage->SetSizeY(sizeY);
-        
+
         // Relabel tile according to look-up table
         ChangeLabelImageFilterType::Pointer changeLabel = ChangeLabelImageFilterType::New();
         changeLabel->SetInput(labelImage->GetOutput());
-       
+
         // Fill LUT
         for(LabelImagePixelType label = 1; label<regionCount+1; ++label)
           {
@@ -623,7 +623,7 @@ private:
 
       // Clear sizePerRegion, we do not need it anymore
       sizePerRegion.clear();
-     
+
       for(unsigned int column = 0; column < nbTilesX; ++column)
         {
         for(unsigned int row = 0; row < nbTilesY; ++row)
@@ -642,7 +642,7 @@ private:
               changeLabel->SetChange(label,newLabels[label]);
               }
             }
-          
+
           // Write the relabeled tile
           std::string tmpfile = WriteTile(changeLabel->GetOutput(),row,column,"FINAL");
           m_FilesToRemoveAfterExecute.push_back(tmpfile);
@@ -655,7 +655,7 @@ private:
 
       // Clear newLabels, we do not need it anymore
       newLabels.clear();
-  
+
       // Here we write a temporary vrt file that will be used to
       // stitch together all the tiles
       std::string vrtfile = WriteVRTFile(nbTilesX,nbTilesY,sizeTilesX,sizeTilesY,sizeImageX,sizeImageY);
@@ -663,7 +663,7 @@ private:
       m_FilesToRemoveAfterExecute.push_back(vrtfile);
 
       clock_t toc = clock();
-      
+
       otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
 
       // Final writing
@@ -681,7 +681,7 @@ private:
   {
     // Release input files
     m_FinalReader = 0;
-    
+
     if(IsParameterEnabled("cleanup"))
       {
       otbAppLogINFO(<<"Final clean-up ...");

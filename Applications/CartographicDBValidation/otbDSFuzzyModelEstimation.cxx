@@ -125,7 +125,7 @@ private:
     SetDocLimitations("None.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-  
+
     AddDocTag(Tags::FeatureExtraction);
 
     AddParameter(ParameterType_InputVectorData, "psin", "Input Positive Vector Data");

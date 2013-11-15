@@ -43,7 +43,7 @@ public:
 
   /** Filters typedef */
   typedef UInt16ImageType IOLabelImageType;
-  
+
   // Neighborhood majority voting filter type
   typedef otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType> NeighborhoodMajorityVotingFilterType;
 
@@ -98,7 +98,7 @@ private:
     AddParameter(ParameterType_Int, "ip.undecidedlabel", "Label for the Undecided class");
     SetParameterDescription("ip.undecidedlabel", "Label for the Undecided class. By default, 'ip.undecidedlabel = 0'.");
     SetDefaultParameterInt("ip.undecidedlabel", 0.0);
-    
+
 
     AddRAMParameter();
 
@@ -115,29 +115,29 @@ private:
   {
     // Nothing to do here : all parameters are independent
   }
-  
+
   void DoExecute()
   {
     // Majority Voting
     m_NeighMajVotingFilter = NeighborhoodMajorityVotingFilterType::New();
-    
+
     // Load input labeled image to regularize
     UInt16ImageType::Pointer inImage = GetParameterUInt16Image("io.in");
-    
+
     // Neighborhood majority voting filter settings
     RadiusType rad;
     rad[0] = GetParameterInt("ip.radius");
     rad[1] = GetParameterInt("ip.radius");
-    
+
     StructuringType seBall;
     seBall.SetRadius(rad);
     seBall.CreateStructuringElement();
     m_NeighMajVotingFilter->SetKernel(seBall);
-    
+
     m_NeighMajVotingFilter->SetInput(inImage);
     m_NeighMajVotingFilter->SetLabelForNoDataPixels(GetParameterInt("ip.nodatalabel"));
     m_NeighMajVotingFilter->SetLabelForUndecidedPixels(GetParameterInt("ip.undecidedlabel"));
-    
+
     // Set to Undecided label if NOT unique Majority Voting
     if (IsParameterEnabled("ip.suvbool"))
       {
@@ -148,10 +148,10 @@ private:
       {
       m_NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
       }
-    
+
     /** REGULARIZATION OF CLASSIFICATION */
     SetParameterOutputImage<IOLabelImageType>("io.out", m_NeighMajVotingFilter->GetOutput());
-  
+
   }// END DoExecute()
 
 
