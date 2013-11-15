@@ -193,4 +193,4 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbIteratorsExamplesTests otbIteratorsExamplesTests.cxx)
 target_link_libraries(otbIteratorsExamplesTests OTBBasicFilters OTBDisparityMap OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

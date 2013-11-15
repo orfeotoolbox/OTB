@@ -481,7 +481,7 @@ add_test(dmTvMultiDisparityMapTo3DFilter ${DISPARITYMAP_TESTS4}
          ${TEMP}/dmTvMultiDisparityMapTo3DFilterOutput.tif
          ${TEMP}/dmTvMultiDisparityMapTo3DFilterResidue.tif
          )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # -------            otb::BijectionCoherencyFilter   ----------
 add_test(dmTuBijectionCoherencyFilterNew ${DISPARITYMAP_TESTS4}
@@ -546,7 +546,7 @@ add_test(dmTuMulti3DMapToDEMFilterAccMultiThreadMultiStream ${DISPARITYMAP_TESTS
 		 8
 		 4		
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 add_test(dmTvMulti3DMapToDEMFilterStadiumMinROI ${DISPARITYMAP_TESTS4}
@@ -790,4 +790,4 @@ OTB_ADD_EXECUTABLE(otbDisparityMapTests3 "${BasicDisparityMap_SRCS3}" "OTBDispar
 OTB_ADD_EXECUTABLE(otbDisparityMapTests4 "${BasicDisparityMap_SRCS4}" "OTBDisparityMap;OTBIO;OTBTesting")
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

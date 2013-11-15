@@ -9,7 +9,7 @@
 if( LIBKML_INCLUDE_DIR )
     # Already in cache, be silent
     set( LibKML_FIND_QUIETLY TRUE )
-endif( LIBKML_INCLUDE_DIR )
+endif()
 
 find_path( LIBKML_INCLUDE_DIR kml/dom.h )
 
@@ -60,4 +60,4 @@ if(LIBKML_FOUND)
                        ${LIBKML_REGIONATOR_LIBRARY}
                        ${LIBKML_XSD_LIBRARY}
                        ${LIBKML_MINIZIP_LIBRARY})
-endif(LIBKML_FOUND)
+endif()

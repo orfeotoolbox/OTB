@@ -44,7 +44,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
             ${otbMVCBasicApplication_FLTK_UI_SRCS}
             otbBasicApplicationApplication.cxx
             PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 
 add_library(otbMVCBasicApplication ${VIEW_SRCS} ${otbMVCBasicApplication_FLTK_UI_SRCS} ${MODEL_SRCS} ${CONTROLLER_SRCS} ${COMMON_SRCS})

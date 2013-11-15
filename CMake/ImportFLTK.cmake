@@ -12,14 +12,14 @@ if(OTB_USE_VISU_GUI)
 
         if( NOT OPENGL_FOUND )
                 message(FATAL_ERROR "Unable to find OpenGL on your system.\nCannot build OTB Visu module without OpenGL library.\nInstall OpenGL on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation")
-        endif( NOT OPENGL_FOUND )
+        endif()
         if( NOT OPENGL_GLU_FOUND )
                 message(FATAL_ERROR "Unable to find GLU library on your system.\nCannot build OTB Visu module without GLU library.\nInstall GLU library on your system OR set OTB_USE_VISU_GUI to OFF to disable OTB Visu module generation")
-        endif( NOT OPENGL_GLU_FOUND )
+        endif()
 
         if(OPENGL_INCLUDE_DIR)
                 include_directories(${OPENGL_INCLUDE_DIR})
-        endif(OPENGL_INCLUDE_DIR)
+        endif()
 
         #-------------------------------
         # Display images using textures using video card acceleration
@@ -50,7 +50,7 @@ if(OTB_USE_VISU_GUI)
           if(NOT FLTK_FOUND)
             message(FATAL_ERROR
                   "Cannot build OTB project without FLTK. Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK.")
-          endif(NOT FLTK_FOUND)
+          endif()
 
           # Only if we used a FLTK 1.3.0 because in FLTK 1.1.>=9 is already done
           if(FLTK_USE_FILE)
@@ -64,9 +64,9 @@ if(OTB_USE_VISU_GUI)
             # impossible d'ouvrir le fichier en entrΘe ';.obj'
 
             # include(${FLTK_USE_FILE})
-          endif(FLTK_USE_FILE)
+          endif()
 
-        else(OTB_USE_EXTERNAL_FLTK)
+        else()
 
           # Same Set as ITK
           set(FLTK_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/FLTK)
@@ -83,25 +83,25 @@ if(OTB_USE_VISU_GUI)
           # Needed for version 1.1.>=9
           set(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
 
-        endif(OTB_USE_EXTERNAL_FLTK)
+        endif()
 
         set(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES}")
         if(APPLE)
           set(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES};-Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
-        endif(APPLE)
+        endif()
 
         if(OTB_USE_EXTERNAL_FLTK)
           message(STATUS "  Using FLTK external version ${FLTK_EXTERNAL_VERSION}")
           message(STATUS "  FLTK includes : ${FLTK_INCLUDE_DIR}")
           message(STATUS "  FLTK libraries: ${FLTK_LIBRARIES}")
           message(STATUS "  FLUID executable = ${FLTK_FLUID_EXECUTABLE}")
-        else(OTB_USE_EXTERNAL_FLTK)
+        else()
           message(STATUS "  Using FLTK internal version")
-        endif(OTB_USE_EXTERNAL_FLTK)
+        endif()
 
-else(OTB_USE_VISU_GUI)
+else()
 
   set(OTB_VISU_GUI_LIBRARIES "")
   message(STATUS "  Disabling FLTK support")
 
-endif(OTB_USE_VISU_GUI)
+endif()

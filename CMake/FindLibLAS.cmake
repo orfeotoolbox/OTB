@@ -9,7 +9,7 @@
 if( LIBLAS_INCLUDE_DIR )
     # Already in cache, be silent
     set( LIBLAS_FIND_QUIETLY TRUE )
-endif( LIBLAS_INCLUDE_DIR )
+endif()
 
 find_path( LIBLAS_INCLUDE_DIR liblas/capi/liblas.h )
 
@@ -26,8 +26,8 @@ mark_as_advanced( LIBLAS_INCLUDE_DIR LIBLAS_LIBRARY )
 if(LIBLAS_FOUND)
   set(LIBLAS_INCLUDE_DIRS ${LIBLAS_INCLUDE_DIR})
   set(LIBLAS_LIBRARIES ${LIBLAS_LIBRARY})
-else(LIBLAS_FOUND)
+else()
   set(LIBLAS_INCLUDE_DIRS)
   set(LIBLAS_LIBRARIES)
-endif(LIBLAS_FOUND)
+endif()
 

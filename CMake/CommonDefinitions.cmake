@@ -4,10 +4,10 @@ if(WIN32)
   # do not build shared lib under windows
   set(BUILD_SHARED_LIBS OFF)
   message(STATUS "Disabling build shared lib option on windows like OS.")
-else(WIN32)
+else()
   # on other systems, leave the choice to the user
   option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
-endif(WIN32)
+endif()
 
 set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
@@ -29,21 +29,21 @@ if(WIN32)
             -D_CRT_VCCLRIT_NO_DEPRECATE
             -D_SCL_SECURE_NO_DEPRECATE
             )
-        endif(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
+        endif()
 
         if(MSVC)
           add_definitions(-D_CRT_SECURE_NO_WARNINGS)
           add_definitions(-D_CRT_NONSTDC_NO_WARNING)
-        endif(MSVC)
+        endif()
 
-      endif(NOT MINGW)
-    endif(NOT CYGWIN)
-endif(WIN32)
+      endif()
+    endif()
+endif()
 
 # __CYGWIN__ must be define for ossim (ex: ossimCommon.h, isnan definition, .. )
 #if(CYGWIN)
 #  add_definitions(-D__CYGWIN__)
-#endif(CYGWIN)
+#endif()
 
 
 # Large File Support (> 4Go)
@@ -63,13 +63,13 @@ if(OTB_BUILD_PEDANTIC)
     if(WIN32)
       if(MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-      endif(MSVC)
-    else(WIN32)
+      endif()
+    else()
       if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
-      endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-    endif(WIN32)
-endif(OTB_BUILD_PEDANTIC)
+      endif()
+    endif()
+endif()
 
 
 # Full compilation warning mode
@@ -79,7 +79,7 @@ if(OTB_COMPILE_WITH_FULL_WARNING)
   if(CMAKE_COMPILER_IS_GNUCXX)
     set(OTB_FULL_WARNING_LIST_PARAMETERS "-Wall -Wunused  -Wunused-function  -Wunused-label  -Wunused-parameter -Wunused-value -Wunused-variable -Wuninitialized -Wsign-compare -Wparentheses -Wunknown-pragmas -Wswitch" CACHE STRING "List of compilation parameters.")
     mark_as_advanced(OTB_FULL_WARNING_LIST_PARAMETERS)
-  endif(CMAKE_COMPILER_IS_GNUCXX)
-endif(OTB_COMPILE_WITH_FULL_WARNING)
+  endif()
+endif()
 
 

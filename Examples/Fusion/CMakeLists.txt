@@ -55,4 +55,4 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbFusionExamplesTests otbFusionExamplesTests.cxx)
 target_link_libraries(otbFusionExamplesTests   ${ITK_LIBRARIES}  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

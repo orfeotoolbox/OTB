@@ -13,11 +13,11 @@ if(OTB_USE_EXTERNAL_BOOST)
     if( ${Boost_MINOR_VERSION} LESS 35)
       message(WARNING "Boost >= 1.35 is required. Disabling OTB_USE_EXTERNAL_BOOST")
       set(OTB_USE_EXTERNAL_BOOST  OFF)
-    endif(${Boost_MINOR_VERSION} LESS 35)
-  else(Boost_FOUND)
+    endif()
+  else()
     message(FATAL_ERROR
                   "Cannot build OTB project without boost library.  Please set Boost directories or set OTB_USE_EXTERNAL_BOOST to OFF to use the INTERNAL Boost version")
-  endif(Boost_FOUND)
+  endif()
 
   # Test package completeness
   try_compile(BOOST_IS_COMPLETE
@@ -34,17 +34,17 @@ if(OTB_USE_EXTERNAL_BOOST)
     # needed for automatic linking on msvc platform
     link_directories( ${Boost_LIBRARY_DIRS} )
 
-  else(BOOST_IS_COMPLETE)
+  else()
     message(STATUS "  Testing external Boost library    -- no")
     message(STATUS "  Forcing the OTB_USE_EXTERNAL_BOOST value to OFF")
     set(OTB_USE_EXTERNAL_BOOST OFF CACHE BOOL  "Use an outside build of Boost" FORCE )
-  endif(BOOST_IS_COMPLETE)
-endif(OTB_USE_EXTERNAL_BOOST)
+  endif()
+endif()
 
 
 if(OTB_USE_EXTERNAL_BOOST)
   message(STATUS "  Using Boost external version")
   message(STATUS "  Boost includes : ${Boost_INCLUDE_DIR}")
-else(OTB_USE_EXTERNAL_BOOST)
+else()
   message(STATUS "  Using Boost internal version")
-endif(OTB_USE_EXTERNAL_BOOST)
+endif()

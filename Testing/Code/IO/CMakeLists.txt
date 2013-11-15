@@ -4,11 +4,11 @@ if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 if(OTB_DATA_USE_SPOTPHRINPUT)
   set(SPOTPHRINPUT ${OTB_DATA_SPOTPHRINPUT_ROOT} )
-endif(OTB_DATA_USE_SPOTPHRINPUT)
+endif()
 
 if(OTB_DATA_USE_CNESPHRINPUT)
   set(CNESPHRINPUT ${OTB_DATA_CNESPHRINPUT_ROOT} )
-endif(OTB_DATA_USE_CNESPHRINPUT)
+endif()
 
 set(COMMON_TESTS2 ${CXX_TEST_PATH}/otbCommonTests2)
 set(COMMON_TESTS3 ${CXX_TEST_PATH}/otbCommonTests3)
@@ -27,7 +27,7 @@ set(IO_TESTS12    ${CXX_TEST_PATH}/otbIOTests12)
 
 if(OTB_USE_JPEG2000)
    set(IO_TESTS13    ${CXX_TEST_PATH}/otbIOTests13)
-endif(OTB_USE_JPEG2000)
+endif()
 
 set(IO_TESTS14    ${CXX_TEST_PATH}/otbIOTests14)
 set(IO_TESTS15    ${CXX_TEST_PATH}/otbIOTests15)
@@ -35,20 +35,20 @@ set(IO_TESTS16    ${CXX_TEST_PATH}/otbIOTests16)
 
 if(OTB_USE_LIBLAS)
   set(IO_TESTS17    ${CXX_TEST_PATH}/otbIOTests17)
-endif(OTB_USE_LIBLAS)
+endif()
 
 set(IO_TESTS18    ${CXX_TEST_PATH}/otbIOTests18)
 
 if(OTB_USE_CURL)
   set(IO_TESTS19    ${CXX_TEST_PATH}/otbIOTests19)
-endif(OTB_USE_CURL)
+endif()
 
 set(IO_TESTS20    ${CXX_TEST_PATH}/otbIOTests20)
 set(IO_TESTS21    ${CXX_TEST_PATH}/otbIOTests21)
 
 if(CHECK_GDAL_BUILT_WITH_HDF)
   set(IO_TESTS22    ${CXX_TEST_PATH}/otbIOTests22)
-endif(CHECK_GDAL_BUILT_WITH_HDF)
+endif()
 
 set(IO_TESTS23    ${CXX_TEST_PATH}/otbIOTests23)
 set(IO_TESTS24    ${CXX_TEST_PATH}/otbIOTests24)
@@ -75,7 +75,7 @@ if(OTB_DATA_USE_LARGEINPUT)
       PHR_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits
       PHR_JP2_DIMAPv1_ORTHO_PMS_lossless_12bits
    )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 if(OTB_DATA_USE_SPOTPHRINPUT)
   set(GenericTestPHR_SPOT_DATA_INPUTS
@@ -98,7 +98,7 @@ if(OTB_DATA_USE_SPOTPHRINPUT)
 
    set(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_SPOT_DATA_INPUTS})
    set(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_SPOT_DATA_TYPES})
-endif(OTB_DATA_USE_SPOTPHRINPUT)
+endif()
 
 if(OTB_DATA_USE_CNESPHRINPUT)
   set(GenericTestPHR_CNES_DATA_INPUTS
@@ -115,7 +115,7 @@ if(OTB_DATA_USE_CNESPHRINPUT)
 
   set(GenericTestPHR_DATA_INPUTS ${GenericTestPHR_DATA_INPUTS} ${GenericTestPHR_CNES_DATA_INPUTS})
   set(GenericTestPHR_DATA_TYPES ${GenericTestPHR_DATA_TYPES} ${GenericTestPHR_CNES_DATA_TYPES})
-endif(OTB_DATA_USE_CNESPHRINPUT)
+endif()
 
 # Use in debug to show the variables
 #set( GenericTestPHR_TESTNB 0)
@@ -151,7 +151,7 @@ add_test(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI ${COMMON_TESTS3}
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
          -startX 0 -startY 0 -sizeX ParseHdfSubsetName337 -sizeY 280 )
 set_tests_properties(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI PROPERTIES DEPENDS ioTvMultiMonoChannelROI_RADARSAT2ENVI)
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # ---  ENVI (GDAL) ---
 add_test(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS3}
@@ -218,7 +218,7 @@ add_test(ioTvCompareWritingComplexImage_HDR ${IO_TESTS1}
          ${TEMP}/ioTvImageFileReaderCompareComplexPixelWithFloatPixel_PALSAR.hdr
          0 0 100 100)
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # ------- TEST IO COMMON   ------------------------------
 
@@ -951,7 +951,7 @@ add_test(ioTvImageKeywordlistErs ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistErs.txt
          ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
@@ -978,7 +978,7 @@ if(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRI
 
   endforeach()
 
-endif(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
+endif()
 
 
 add_test(ioTvOssimJpegFileRessourceLeak ${IO_TESTS4}
@@ -986,7 +986,7 @@ add_test(ioTvOssimJpegFileRessourceLeak ${IO_TESTS4}
         ${INPUTDATA}/poupees.jpg
         1200
 )
-endif(NOT OTB_TESTING_STANDALONE)
+endif()
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1070,7 +1070,7 @@ add_test(ioTuGDALImageIOCanRead_COSMOSKYMED2 ${IO_TESTS5} otbGDALImageIOTestCanR
 add_test(ioTuGDALImageIOCanRead_COSMOSKYMED3 ${IO_TESTS5} otbGDALImageIOTestCanRead
         ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS2_GTC_B_S2_08_HH_RD_SF_20110417180326_20110417180333.h5)
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(ioTuGDALImageIOCanRead_SPOT5TIF ${IO_TESTS5} otbGDALImageIOTestCanRead
 # Filename identification is now set in the ImageFileReader class (Fiche 212)
@@ -1158,7 +1158,7 @@ add_test(ioTvONERAImageStreamWriter ${IO_TESTS6}
             ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
             ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
 set_tests_properties(ioTvONERAImageStreamWriter PROPERTIES DEPENDS ioTvONERAImageFileWriterComplex)
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # -------            otb::MSTARImageIO   ------------------------------
 # CanRead()
@@ -1380,7 +1380,7 @@ add_test(coTvCoordinateToNameMultithreadTest ${IO_TESTS8}
          1
 )
 
-endif( OTB_USE_CURL )
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1407,7 +1407,7 @@ add_test(ioTvMultiChannelROI_SPOT42PNG_2 ${COMMON_TESTS2}
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 3 2 1 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # ---  ENVI  ---
 add_test(ioTvMultiChannelROI_ENVI2PNG_2 ${COMMON_TESTS2}
@@ -1563,7 +1563,7 @@ add_test(ioTvMultiChannelROI_QuickbirdXS2TIFF ${COMMON_TESTS2}
          -ushort ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
          )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 #         -channels 1 2 3)
 
 
@@ -1620,7 +1620,7 @@ add_test(ioTvOtbVectorImageTestCOSMOSKYMED ${IO_TESTS9}
         ${LARGEINPUT}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
         ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt)
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(ioTuVectorImageComplexNew ${IO_TESTS9}
   otbVectorImageComplexNew)
@@ -1681,7 +1681,7 @@ if(OTB_DATA_USE_LARGEINPUT)
         otbVectorImageFileReaderWriterTest
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF?&resol=4
         ${TEMP}/ioImageFileReader_RESOLUTION_4.tif )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # ---  otb::StreamingShortImageFileWriterTest  ---
 add_test(ioTvStreamingShortImageFileWriterTest ${IO_TESTS9}
@@ -1990,7 +1990,7 @@ add_test(ioTvDEMToImageGeneratorFromImageTest_SensorModel ${IO_TESTS12}
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract.tif
         2600 4300 512 128
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(ioTvDEMToImageGeneratorFromImageTest ${IO_TESTS12}
     --compare-image ${EPSILON_5}
@@ -2045,7 +2045,7 @@ add_test(ioTuJP2ImageIOCanRead ${IO_TESTS13}
          otbJPEG2000ImageIOTestCanRead
          ${LARGEINPUT}/JPEG2000/QB_multicomp.jpx
          )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #NOTE: baseline generated by openjpeg
 if(OTB_DATA_USE_LARGEINPUT)
@@ -2065,7 +2065,7 @@ add_test(ioTvImageFileReaderWriterJP22TIF ${IO_TESTS2}
          ${LARGEINPUT}/JPEG2000/QB_multicomp_small.jpx
          ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # --------------------------------------------------------------------------------
 # New test suite:
@@ -2114,7 +2114,7 @@ if(OTB_DATA_USE_LARGEINPUT)
           ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
           ${TEMP}/ioTvMultiResolutionReadingInfoOut_tiff2.txt
           )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # Tests which read data in JPEG2000 files.
 # Generate a too big output image to be used in baseline repository (useful only for dev)
@@ -2279,7 +2279,7 @@ add_test(ioTvJPEG2000ImageIO_CacheSize_25000 ${IO_TESTS13}
 #              -time
 #           )
 #
-#endif(OTB_DATA_USE_LARGEINPUT)
+#endif()
 
 # --------------------------------------------------------------------------------
 # Tests about special data (larges files, CNES files, SPOT files)
@@ -2297,7 +2297,7 @@ foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
              otbJPEG2000ImageIOTestCanRead
                 ${current_file}
             )
-  endif(NOT PHR_TIFF_FILE)
+  endif()
 
     # Read info from the input file
     add_test(ioTvVectorImageReadingInfo_${current_type} ${IO_TESTS13}
@@ -2317,7 +2317,7 @@ foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
                 ${current_file}?&resol=5
                 ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
              )
-  endif(NOT PHR_TIFF_FILE)
+  endif()
 
   if(NOT PHR_TIFF_FILE)
     # Extract resolution of input file
@@ -2364,13 +2364,13 @@ foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
                 -channels 1
                 -time
          )
-  endif(NOT PHR_TIFF_FILE)
+  endif()
 
 endforeach()
 
-endif(OTB_DATA_USE_LARGEINPUT OR OTB_DATA_USE_SPOTPHRINPUT OR OTB_DATA_USE_CNESPHRINPUT)
+endif()
 
-endif(OTB_USE_JPEG2000)
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2412,7 +2412,7 @@ add_test(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
                 1000 1000
                 500  500
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS15 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2438,7 +2438,7 @@ add_test(ioTvSHPVectorDataFileReader ${IO_TESTS15}
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
         ${TEMP}/ioSHPVectorDataFileReader.txt
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(ioTvSHPVectorDataFileReader2 ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader2.txt
@@ -2456,7 +2456,7 @@ add_test(ioTvSHPVectorDataFileReader3 ${IO_TESTS15}
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
         ${TEMP}/ioSHPVectorDataFileReader3.txt
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(ioTvKMLVectorDataFileReader ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvKMLVectorDataFileReader.txt
@@ -2518,7 +2518,7 @@ add_test(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
             ${LARGEINPUT}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
         )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(ioTvVectorDataFileGeoReaderWriter ${IO_TESTS15}
         --compare-ogr  ${EPSILON_9}
@@ -2574,7 +2574,7 @@ set(CONNSTRING "PG:dbname=orfeotoolbox_test\ host=localhost\ port=5432\ user=orf
 add_test(ioTuOGRVectorDataIOTestCanReadPostGIS ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
         ${CONNSTRING})
-endif(OTB_USE_PQXX)
+endif()
 
 # CanWrite OGR GML()
 add_test(ioTuOGRVectorDataIOCanWriteGML ${IO_TESTS15}
@@ -2591,7 +2591,7 @@ if(OTB_USE_PQXX)
 add_test(ioTuOGRVectorDataIOCanWritePostGIS ${IO_TESTS15}
         otbOGRVectorDataIOCanWrite
         PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
-endif(OTB_USE_PQXX)
+endif()
 
 add_test(ioTuKMLVectorDataIO ${IO_TESTS15}
         otbKMLVectorDataIONew )
@@ -2660,7 +2660,7 @@ add_test(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
         ${LARGEINPUT}/RAD_CI2/3017_HH.rad
         ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 # Can read a RAD format (cr4)
@@ -2743,7 +2743,7 @@ add_test(ioTvPointSetFileReader2 ${IO_TESTS17}
   ${INPUTDATA}/srs.las
   ${TEMP}/ioPointSetFileReader2.txt)
 
-endif(OTB_USE_LIBLAS)
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS18 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2999,7 +2999,7 @@ add_test(ioTvSarImageMetadataInterfaceTest_TSX1PANGKALANBUUNUsingXmlFile ${IO_TE
 )
 
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(ioTvImageMetadataInterfaceTest ${IO_TESTS18}
          --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
@@ -3055,7 +3055,7 @@ add_test(ioTvTileMapWriter ${IO_TESTS19}
        200 # extract size[0]
        200 # extract size[1]
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 
@@ -3102,7 +3102,7 @@ add_test(ioTvImageToOSMVectorDataGenerator ${IO_TESTS19}
 )
 set_property(TEST ioTvImageToOSMVectorDataGenerator PROPERTY RESOURCE_LOCK web_access)
 
-endif(OTB_USE_CURL)
+endif()
 
 #----------------------------------------------------------------------------------
 
@@ -3135,7 +3135,7 @@ otbImageFileReaderTestSensorPixelValue
        1024
 )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(ioTuDefaultImageMetadataInterfaceFactoryNew ${IO_TESTS20}
         otbDefaultImageMetadataInterfaceFactoryNew )
@@ -3322,7 +3322,7 @@ add_test(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
          ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
          -startX 1400 -startY 3700 -sizeX 100 -sizeY 150
          -channels 1 )
-endif(CHECK_HDF4OPEN_SYMBOL)
+endif()
 
 add_test(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_GSSTF_NCEP_100_20_200_100_channel_1.tif
@@ -3333,7 +3333,7 @@ add_test(ioTvMultiChannelROI_HDF5_2_TIF ${COMMON_TESTS2}
          -startX 100 -startY 20 -sizeX 200 -sizeY 100
          -channels 1 )
 
-endif(CHECK_GDAL_BUILT_WITH_HDF)
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests23 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3408,14 +3408,14 @@ foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
                  otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
                  ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
 
-      else( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+      else()
 
         add_test(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
                  ${IO_TESTS23}
                  otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
                  ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
 
-      endif(  NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+      endif()
 
       # Weird case : need specifications to write the test
       # [missing impl]
@@ -3429,19 +3429,19 @@ foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
                  otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
                  ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
 
-      else( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+      else()
 
         add_test(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
                  ${IO_TESTS23}
                  otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
                  ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
 
-      endif(  NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+      endif()
 
-    endforeach(NBBANDS ${NBBANDS_LIST})
+    endforeach()
 
-  endforeach(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})
-endforeach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+  endforeach()
+endforeach()
 
 
 # Tests with GDAL only to read complex data
@@ -3456,7 +3456,7 @@ add_test(ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} ${IO_TESTS23}
          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands.tif
          1 5 10 2) #old file hdr sans extesions
 
-endforeach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
+endforeach()
 
 # Tests about writing Scalar / Complex data
 
@@ -3510,7 +3510,7 @@ foreach(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   ${NBBANDS}
                )
 
-    else( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
+    else()
 
       add_test(ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
              ${IO_TESTS23}
@@ -3534,8 +3534,8 @@ foreach(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   ${NBBANDS}
                )
 
-    endif(  NOT ${DATA_PIXELTYPE} MATCHES "Short" )
-  endforeach(NBBANDS ${NBBANDS_LIST})
+    endif()
+  endforeach()
 
 ############
 # Tests about Streaming writing Scalar / Complex data
@@ -3615,7 +3615,7 @@ if(OTB_DATA_USE_LARGEINPUT)
     ${LARGEINPUT}/SPOT4/ROMANIA/raTvS4_20020518_Reflectance.img
     ${TEMP}/raTvSpectralSensitivityReaderSpot4Test.txt
     )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
       add_test(ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
@@ -3628,7 +3628,7 @@ endif(OTB_DATA_USE_LARGEINPUT)
                   ${NBBANDS}
                )
 
-    else( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
+    else()
 
       add_test(ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
              ${IO_TESTS23}
@@ -3661,11 +3661,11 @@ add_test(raTuWavelengthSpectralBandsNew ${IO_TESTS23}
                   ${NBBANDS}
                )
 
-    endif(  NOT ${DATA_PIXELTYPE} MATCHES "Short" )
+    endif()
 
-  endforeach(NBBANDS ${NBBANDS_LIST})
+  endforeach()
 
-endforeach(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
+endforeach()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests24 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3806,9 +3806,9 @@ add_test(${test_name} ${IO_TESTS24}
         ${INPUTDATA}/maur_rgb_24bpp.tif
         ${TEMP}/${test_name}.tif?&streaming:type=${type}&streaming:sizemode=${sizemode}&streaming:sizevalue=${streaming_sizevalue_${sizemode}})
 
-endforeach(streaming_sizemode)
+endforeach()
 
-endforeach(streaming_type)
+endforeach()
 
 
 #region size options test
@@ -3869,7 +3869,7 @@ otbIOTests4.cxx
 otbImageKeywordlist.cxx
 otbOssimJpegFileRessourceLeakTest.cxx
 )
-endif(NOT OTB_TESTING_STANDALONE)
+endif()
 
 set(BasicIO_SRCS5
 otbIOTests5.cxx
@@ -3946,7 +3946,7 @@ otbVectorImageTest.cxx
 otbMultiResolutionReadingInfo.cxx
 otbGenerateClassicalQLWithJPEG2000.cxx
 )
-endif(OTB_USE_JPEG2000)
+endif()
 
 
 set(BasicIO_SRCS14
@@ -4026,7 +4026,7 @@ otbTileMapWriter.cxx
 otbOSMDataToVectorDataTests.cxx
 otbImageToOSMVectorDataGenerator.cxx
 )
-endif(OTB_USE_CURL)
+endif()
 
 set(BasicIO_SRCS20
 otbIOTests20.cxx
@@ -4059,7 +4059,7 @@ otbIOTests22.cxx
 otbVectorImageTest.cxx
 otbMultiDatasetReadingInfo.cxx
 )
-endif(CHECK_GDAL_BUILT_WITH_HDF)
+endif()
 
 set(BasicIO_SRCS23
 otbIOTests23.cxx
@@ -4083,10 +4083,10 @@ otbImageFileWriterWithExtendedOptionBox.cxx
 
 if(OTB_USE_EXTERNAL_OSSIM)
   include_directories( ${OSSIM_INCLUDE_DIR} )
-else(OTB_USE_EXTERNAL_OSSIM)
+else()
   include_directories( ${OTB_SOURCE_DIR}/Utilities/otbossim/include
                        ${OTB_BINARY_DIR}/Utilities/otbossim/include )
-endif(OTB_USE_EXTERNAL_OSSIM)
+endif()
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests2 "${BasicIO_SRCS2}" "OTBIO;OTBTesting")
@@ -4094,7 +4094,7 @@ OTB_ADD_EXECUTABLE(otbIOTests3 "${BasicIO_SRCS3}" "OTBIO;OTBTesting")
 
 if(NOT OTB_TESTING_STANDALONE)
 OTB_ADD_EXECUTABLE(otbIOTests4 "${BasicIO_SRCS4}" "OTBIO;OTBTesting")
-endif(NOT OTB_TESTING_STANDALONE)
+endif()
 
 OTB_ADD_EXECUTABLE(otbIOTests5 "${BasicIO_SRCS5}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests6 "${BasicIO_SRCS6}" "OTBIO;OTBTesting")
@@ -4108,10 +4108,10 @@ OTB_ADD_EXECUTABLE(otbIOTests12 "${BasicIO_SRCS12}" "OTBIO;OTBTesting")
 if(OTB_USE_JPEG2000)
    if(NOT BUILD_SHARED_LIBS)
       add_definitions(-DOPJ_STATIC)
-   endif(NOT BUILD_SHARED_LIBS)
+   endif()
 
    OTB_ADD_EXECUTABLE(otbIOTests13 "${BasicIO_SRCS13}" "OTBIO;OTBTesting")
-endif(OTB_USE_JPEG2000)
+endif()
 
 OTB_ADD_EXECUTABLE(otbIOTests14 "${BasicIO_SRCS14}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests15 "${BasicIO_SRCS15}" "OTBIO;OTBTesting")
@@ -4119,23 +4119,23 @@ OTB_ADD_EXECUTABLE(otbIOTests16 "${BasicIO_SRCS16}" "OTBIO;OTBTesting")
 
 if(OTB_USE_LIBLAS)
   OTB_ADD_EXECUTABLE(otbIOTests17 "${BasicIO_SRCS17}" "OTBIO;OTBTesting")
-endif(OTB_USE_LIBLAS)
+endif()
 
 OTB_ADD_EXECUTABLE(otbIOTests18 "${BasicIO_SRCS18}" "OTBIO;OTBTesting")
 
 if(OTB_USE_CURL)
   OTB_ADD_EXECUTABLE(otbIOTests19 "${BasicIO_SRCS19}" "OTBIO;OTBTesting")
-endif(OTB_USE_CURL)
+endif()
 
 OTB_ADD_EXECUTABLE(otbIOTests20 "${BasicIO_SRCS20}" "OTBIO;OTBTesting")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()
 
 OTB_ADD_EXECUTABLE(otbIOTests21 "${BasicIO_SRCS21}" "OTBIO;OTBTesting")
 
 if(CHECK_GDAL_BUILT_WITH_HDF)
   OTB_ADD_EXECUTABLE(otbIOTests22 "${BasicIO_SRCS22}" "OTBIO;OTBTesting")
-endif(CHECK_GDAL_BUILT_WITH_HDF)
+endif()
 
 OTB_ADD_EXECUTABLE(otbIOTests23 "${BasicIO_SRCS23}" "OTBIO;OTBTesting")
 

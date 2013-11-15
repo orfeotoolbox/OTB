@@ -41,7 +41,7 @@ macro(GETTEXT_CREATE_TRANSLATIONS _potFile _firstPoFileArg)
    if(${_firstPoFile} STREQUAL "ALL")
       set(_addToAll "ALL")
       set(_firstPoFile)
-   endif(${_firstPoFile} STREQUAL "ALL")
+   endif()
 
    foreach(_currentPoFile ${_firstPoFile} ${ARGN})
       get_filename_component(_absFile ${_currentPoFile} ABSOLUTE)
@@ -59,20 +59,20 @@ macro(GETTEXT_CREATE_TRANSLATIONS _potFile _firstPoFileArg)
       install(FILES ${_gmoFile} DESTINATION share/locale/${_lang}/LC_MESSAGES RENAME ${_potBasename}.mo)
       set(_gmoFiles ${_gmoFiles} ${_gmoFile})
 
-   endforeach(_currentPoFile )
+   endforeach()
 
    add_custom_target(translations ${_addToAll} DEPENDS ${_gmoFiles})
 
-endmacro(GETTEXT_CREATE_TRANSLATIONS )
+endmacro()
 
 if(GETTEXT_MSGMERGE_EXECUTABLE AND GETTEXT_MSGFMT_EXECUTABLE )
    set(GETTEXT_FOUND TRUE)
-else(GETTEXT_MSGMERGE_EXECUTABLE AND GETTEXT_MSGFMT_EXECUTABLE )
+else()
    set(GETTEXT_FOUND FALSE)
    if(GetText_REQUIRED)
       message(FATAL_ERROR "GetText not found")
-   endif(GetText_REQUIRED)
-endif(GETTEXT_MSGMERGE_EXECUTABLE AND GETTEXT_MSGFMT_EXECUTABLE )
+   endif()
+endif()
 
 
 

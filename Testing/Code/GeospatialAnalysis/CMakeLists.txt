@@ -38,4 +38,4 @@ otbPostGISFromStringTransactorNew.cxx
 
 OTB_ADD_EXECUTABLE(otbGeospatialAnalysisTests "${GEOSPATIALANALYSIS_SRCS}" "OTBGeospatialAnalysis;OTBTesting;OTBCommon;pq;pqxx")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

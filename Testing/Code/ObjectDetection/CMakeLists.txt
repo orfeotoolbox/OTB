@@ -117,4 +117,4 @@ otbStandardMetaImageFunctionBuilder.cxx
 OTB_ADD_EXECUTABLE(otbObjectDetectionTests1 "${ObjectDetection_SRCS1}" "OTBObjectDetection;OTBIO;OTBTesting;OTBLearning")
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

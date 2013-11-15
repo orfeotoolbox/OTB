@@ -9,7 +9,7 @@ set(LEARNING_TESTS4 ${CXX_TEST_PATH}/otbLearningTests4)
 set(LEARNING_TESTS5 ${CXX_TEST_PATH}/otbLearningTests5)
 if(OTB_USE_OPENCV)
 	set(LEARNING_TESTS6 ${CXX_TEST_PATH}/otbLearningTests6)
-endif(OTB_USE_OPENCV)	
+endif()	
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbLearningTESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -415,7 +415,7 @@ foreach(kernelType RANGE 0 18)
       ${TEMP}/leTvSVMKernelTest${kernelType}.txt
       ${kernelType}
   )
-endforeach(kernelType)
+endforeach()
 
 add_test(leTvSVMModelCopy ${LEARNING_TESTS3}
 --compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model
@@ -862,7 +862,7 @@ if(OTB_USE_OPENCV)
     set_tests_properties(leTuKNNMachineLearningModelCanRead
      					PROPERTIES DEPENDS leTvKNearestNeighborsMachineLearningModel)
      					
-endif(OTB_USE_OPENCV)
+endif()
 
 # Testing srcs
 set(BasicLearning_SRCS1
@@ -954,7 +954,7 @@ if(OTB_USE_OPENCV)
 	otbImageClassificationFilter.cxx
 	otbMachineLearningModelCanRead.cxx
 	)
-endif(OTB_USE_OPENCV)
+endif()
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests2 "${BasicLearning_SRCS2}" "OTBLearning;OTBIO;OTBTesting")
@@ -964,10 +964,10 @@ OTB_ADD_EXECUTABLE(otbLearningTests5 "${BasicLearning_SRCS5}" "OTBLearning;OTBIO
 
 if(OTB_USE_OPENCV)
 	OTB_ADD_EXECUTABLE(otbLearningTests6 "${BasicLearning_SRCS6}" "OTBLearning;OTBIO;OTBTesting")
-endif(OTB_USE_OPENCV)
+endif()
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()
 
 
 

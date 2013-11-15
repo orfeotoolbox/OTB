@@ -4,11 +4,11 @@ file(GLOB OTBCommon_SRCS "*.cxx" )
 
 if( NOT OTB_USE_MAPNIK )
     list(REMOVE_ITEM OTBCommon_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbVectorDataStyle.cxx" )
-endif( NOT OTB_USE_MAPNIK )
+endif()
 
 if( NOT OTB_USE_PQXX )
     list(REMOVE_ITEM OTBCommon_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbPostGISConnectionImplementation.cxx" )
-endif( NOT OTB_USE_PQXX )
+endif()
 
 add_library(OTBCommon ${OTBCommon_SRCS})
 #Apparently not supported by opensolaris at least
@@ -19,29 +19,29 @@ add_library(OTBCommon ${OTBCommon_SRCS})
 target_link_libraries(OTBCommon ${ITK_LIBRARIES} otbconfigfile ${MUPARSER_LIBRARIES} ${OGR_LIBRARY} OTBOssimAdapters)
 if(OTB_USE_MAPNIK)
     target_link_libraries(OTBCommon ${MAPNIK_LIBRARY} ${ICUUC_LIBRARY})
-endif(OTB_USE_MAPNIK)
+endif()
 
 if(OTB_USE_PQXX)
     target_link_libraries(OTBCommon ${PQXX_LIBRARY})
-endif(OTB_USE_PQXX)
+endif()
 
 if(OTB_I18N)
     target_link_libraries(OTBCommon ${GETTEXT_LIBRARY})
     if(APPLE OR WIN32)
        target_link_libraries(OTBCommon ${GETTEXT_INTL_LIBRARY})
-    endif(APPLE OR WIN32)
-endif(OTB_I18N)
+    endif()
+endif()
 
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(OTBCommon PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS OTBCommon
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
@@ -50,4 +50,4 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES ${__files1} ${__files2} ${__files3}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Common
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()

@@ -1,12 +1,12 @@
 if(BUILD_APPLICATIONS)
   cmake_minimum_required(VERSION 2.8.3)
-else(BUILD_APPLICATIONS)
+else()
   cmake_minimum_required(VERSION 2.6)
-endif(BUILD_APPLICATIONS)
+endif()
 
 if(COMMAND CMAKE_POLICY)
   cmake_policy(SET CMP0003 NEW)
-endif(COMMAND CMAKE_POLICY)
+endif()
 
 #-----------------------------------------------------------------------------
 # Sanity check -- prevent in-source builds
@@ -43,7 +43,7 @@ if(NOT OTB_NO_LIBRARY_VERSION)
   set(OTB_LIBRARY_PROPERTIES
       VERSION   "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}"
       SOVERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-endif(NOT OTB_NO_LIBRARY_VERSION)
+endif()
 
 #-----------------------------------------------------------------------------
 # Test for some required system information.
@@ -66,7 +66,7 @@ enable_testing()
 if(BUILD_TESTING)
   set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
   mark_as_advanced(BUILDNAME)
-endif(BUILD_TESTING)
+endif()
 
 include(CommonDefinitions)
 
@@ -138,60 +138,60 @@ set(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 if(NOT OTB_INSTALL_BIN_DIR)
   set(OTB_INSTALL_BIN_DIR "bin")
-endif(NOT OTB_INSTALL_BIN_DIR)
+endif()
 
 if(NOT OTB_INSTALL_LIB_DIR)
   set(OTB_INSTALL_LIB_DIR "lib/otb")
-endif(NOT OTB_INSTALL_LIB_DIR)
+endif()
 
 if(NOT OTB_INSTALL_APP_DIR)
   set(OTB_INSTALL_APP_DIR "${OTB_INSTALL_LIB_DIR}/applications")
-endif(NOT OTB_INSTALL_APP_DIR)
+endif()
 
 if(NOT OTB_INSTALL_PYTHON_DIR)
   set(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIB_DIR}/python")
-endif(NOT OTB_INSTALL_PYTHON_DIR)
+endif()
 
 if(NOT OTB_INSTALL_JAVA_DIR)
   set(OTB_INSTALL_JAVA_DIR "${OTB_INSTALL_LIB_DIR}/java")
-endif(NOT OTB_INSTALL_JAVA_DIR)
+endif()
 
 if(NOT OTB_INSTALL_DATA_DIR)
   set(OTB_INSTALL_DATA_DIR "share/otb")
-endif(NOT OTB_INSTALL_DATA_DIR)
+endif()
 
 if(NOT OTB_INSTALL_INCLUDE_DIR)
   set(OTB_INSTALL_INCLUDE_DIR "include/otb")
-endif(NOT OTB_INSTALL_INCLUDE_DIR)
+endif()
 
 if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR ${OTB_INSTALL_LIB_DIR})
-endif(NOT OTB_INSTALL_PACKAGE_DIR)
+endif()
 
 set(OTB_INSTALL_CMAKEMODULE_DIR ${OTB_INSTALL_PACKAGE_DIR}/cmakemodules)
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   set(OTB_INSTALL_NO_DEVELOPMENT 0)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()
 
 if(NOT OTB_INSTALL_NO_RUNTIME)
   set(OTB_INSTALL_NO_RUNTIME 0)
-endif(NOT OTB_INSTALL_NO_RUNTIME)
+endif()
 
 if(NOT OTB_INSTALL_NO_DOCUMENTATION)
   set(OTB_INSTALL_NO_DOCUMENTATION 0)
-endif(NOT OTB_INSTALL_NO_DOCUMENTATION)
+endif()
 
 set(OTB_INSTALL_NO_LIBRARIES)
 if(OTB_BUILD_SHARED_LIBS)
   if(OTB_INSTALL_NO_RUNTIME AND OTB_INSTALL_NO_DEVELOPMENT)
     set(OTB_INSTALL_NO_LIBRARIES 1)
-  endif(OTB_INSTALL_NO_RUNTIME AND OTB_INSTALL_NO_DEVELOPMENT)
-else(OTB_BUILD_SHARED_LIBS)
+  endif()
+else()
   if(OTB_INSTALL_NO_DEVELOPMENT)
     set(OTB_INSTALL_NO_LIBRARIES 1)
-  endif(OTB_INSTALL_NO_DEVELOPMENT)
-endif(OTB_BUILD_SHARED_LIBS)
+  endif()
+endif()
 
 include(PreventInstallOnBuildTree)
 include(CheckCXXSourceRuns)
@@ -229,7 +229,7 @@ option(OTB_CPP_CHECK_SOURCE_FILE "OTB developers : Checking cpp source file (use
 mark_as_advanced(OTB_CPP_CHECK_SOURCE_FILE)
 if(OTB_CPP_CHECK_SOURCE_FILE)
   find_program(OTB_CPP_CHECK_PROG "")
-endif(OTB_CPP_CHECK_SOURCE_FILE)
+endif()
 
 macro(OTB_ADD_EXECUTABLE name sources libraries)
 #  message(STATUS "name: ${name}")
@@ -246,9 +246,9 @@ macro(OTB_ADD_EXECUTABLE name sources libraries)
                             DEPENDS ${libraries}
                             COMMENT "============== C++ checking ${file} source file...  =================="
                             VERBATIM )
-    endforeach(file)
-  endif(OTB_CPP_CHECK_SOURCE_FILE)
-endmacro(OTB_ADD_EXECUTABLE)
+    endforeach()
+  endif()
+endmacro()
 
 
 
@@ -281,19 +281,19 @@ add_subdirectory(Code)
 
 if(BUILD_APPLICATIONS)
   add_subdirectory(Applications)
-endif(BUILD_APPLICATIONS)
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(Testing)
-endif(BUILD_TESTING)
+endif()
 
 if(BUILD_EXAMPLES)
   add_subdirectory(Examples)
-endif(BUILD_EXAMPLES)
+endif()
 
 if(MINGW)
   link_libraries(gdi32)
-endif(MINGW)
+endif()
 
 include(CheckTypeSize)
 
@@ -312,21 +312,21 @@ mark_as_advanced(OTB_DATA_USE_LARGEINPUT)
 if(OTB_DATA_USE_LARGEINPUT)
   find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
   mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 option(OTB_DATA_USE_SPOTPHRINPUT "Use PHR data provided by SPOT." OFF)
 mark_as_advanced(OTB_DATA_USE_SPOTPHRINPUT)
 if(OTB_DATA_USE_SPOTPHRINPUT)
   find_path(OTB_DATA_SPOTPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_SPOTPHRINPUT_ROOT})
   mark_as_advanced(OTB_DATA_SPOTPHRINPUT_ROOT)
-endif(OTB_DATA_USE_SPOTPHRINPUT)
+endif()
 
 option(OTB_DATA_USE_CNESPHRINPUT "Use PHR data provided by CNES." OFF)
 mark_as_advanced(OTB_DATA_USE_CNESPHRINPUT)
 if(OTB_DATA_USE_CNESPHRINPUT)
   find_path(OTB_DATA_CNESPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_CNESPHRINPUT_ROOT})
   mark_as_advanced(OTB_DATA_CNESPHRINPUT_ROOT)
-endif(OTB_DATA_USE_CNESPHRINPUT)
+endif()
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build
@@ -396,7 +396,7 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${OTB_INSTALL_CMAKEMODULE_DIR}
     COMPONENT Development)
 
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()
 
 #-----------------------------------------------------------------------------
 # => Comment for OTB 2.6.0: simplification : copy ITK values

@@ -3,7 +3,7 @@ set(EXAMPLEDATA ${OTB_DATA_ROOT}/Examples)
 
 if(OTB_DATA_USE_LARGEINPUT)
   set(LARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
@@ -46,7 +46,7 @@ add_test(NAME apTvDocAppli_${app}
            ${app}
            $<TARGET_FILE_DIR:otbapp_${app}> )
 
-endforeach(app)
+endforeach()
 
 add_subdirectory(CartographicDBValidation)
 add_subdirectory(ChangeDetection)

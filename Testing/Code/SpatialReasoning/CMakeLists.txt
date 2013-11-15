@@ -248,4 +248,4 @@ otbPolygonListToRCC8GraphFilter.cxx
 OTB_ADD_EXECUTABLE(otbSpatialReasoningTests1 "${BasicSpatialReasoning_SRCS1}" "OTBSpatialReasoning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbSpatialReasoningTests2 "${BasicSpatialReasoning_SRCS2}" "OTBSpatialReasoning;OTBIO;OTBTesting")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

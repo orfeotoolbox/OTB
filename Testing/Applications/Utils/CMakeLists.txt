@@ -74,7 +74,7 @@ OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoRADARSAT1
                              ${BASELINE_FILES}/apTvUtReadImageInfoRADARSAT1.txt
                 	     ${TEMP}/apTvUtReadImageInfoRADARSAT1.txt)
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #--- ExtractROI ---#
 
@@ -240,7 +240,7 @@ OTB_TEST_APPLICATION(NAME apTvUtVectorDataExtractROIApplication
                              ${TEMP}/apTvUtVectorDataExtractROIApplicationTest.shp
                      )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #--- Concatenate VectorData ---
 OTB_TEST_APPLICATION(NAME apTvUtConcatenateVectorData
@@ -315,7 +315,7 @@ OTB_TEST_APPLICATION(NAME apTvUtQuicklookSpot5
                              ${BASELINE}/apTvUtQuicklookSpot5.tif
                              ${TEMP}/apTvUtQuicklookSpot5.tif
                      )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #--- Pixel Value ---
 OTB_TEST_APPLICATION(NAME apTvUtPixelValue
@@ -477,4 +477,4 @@ OTB_TEST_APPLICATION(NAME apTuUtDownloadSRTMTiles
                              -mode.list.indir ${INPUTDATA}/DEM/srtm_directory
                      )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()

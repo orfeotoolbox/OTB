@@ -23,7 +23,7 @@ target_link_libraries(00134-feature_extraction OTBIO OTBCommon OTBBasicFilters O
 if(OTB_USE_VISU_GUI)
 add_executable(0000132-jpg 0000132-jpg.cxx )
 target_link_libraries(0000132-jpg OTBIO OTBVisualization)
-endif(OTB_USE_VISU_GUI)
+endif()
 
 add_executable(0000094-PolygonsVectorization 0000094-PolygonsVectorization.cxx)
 target_link_libraries(0000094-PolygonsVectorization OTBIO OTBCommon)
@@ -55,7 +55,7 @@ target_link_libraries(otbVectorDataToLabelImageFilterWithoutReader OTBBasicFilte
 if(BUILD_APPLICATIONS)
   add_executable(0000436-WrapperInputImage_GetImage 0000436-WrapperInputImage_GetImage.cxx)
   target_link_libraries(0000436-WrapperInputImage_GetImage OTBApplicationEngine)
-endif(BUILD_APPLICATIONS)
+endif()
 
 add_executable(0000437-WriteImageCentOS 0000437-WriteImageCentOS.cxx)
 target_link_libraries(0000437-WriteImageCentOS OTBIO OTBCommon)
@@ -72,4 +72,4 @@ add_subdirectory(Resolved)
 # Add the failing bugs
 if(BUILD_BUG_TRACKER_TESTS)
   add_subdirectory(Failing)
-endif(BUILD_BUG_TRACKER_TESTS)
+endif()

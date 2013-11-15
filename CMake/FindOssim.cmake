@@ -9,7 +9,7 @@
 if( OSSIM_INCLUDE_DIR )
     # Already in cache, be silent
     set( Ossim_FIND_QUIETLY TRUE )
-endif( OSSIM_INCLUDE_DIR )
+endif()
 
 find_path( OSSIM_INCLUDE_DIR
            NAMES ossim/init/ossimInit.h
@@ -29,8 +29,8 @@ mark_as_advanced( OSSIM_INCLUDE_DIR OSSIM_LIBRARY )
 if(OSSIM_FOUND)
   set(OSSIM_INCLUDE_DIRS ${OSSIM_INCLUDE_DIR})
   set(OSSIM_LIBRARIES ${OSSIM_LIBRARY})
-else(OSSIM_FOUND)
+else()
   set(OSSIM_INCLUDE_DIRS)
   set(OSSIM_LIBRARIES)
-endif(OSSIM_FOUND)
+endif()
 

@@ -20,7 +20,7 @@ set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 if(OTB_DATA_USE_LARGEINPUT)
   set(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 set(EXE_TESTS ${CXX_TEST_PATH}/otbHyperspectralExamplesTests)
 
@@ -46,11 +46,11 @@ add_test(siTvHyperspectralExampleTest ${EXE_TESTS}
      ${TEMP}/siTvHyperspectralUnmixingExampleTestBand3.png
      16
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 
 add_executable(otbHyperspectralExamplesTests otbHyperspectralExamplesTests.cxx)
 target_link_libraries(otbHyperspectralExamplesTests OTBCommon OTBIO OTBHyperspectral OTBCommon OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

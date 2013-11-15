@@ -36,20 +36,20 @@ macro(COMPARE_VERSION_STRINGS a_in b_in result_out)
     set(shorter a)
     math(EXPR range "${b_length} - 1")
     math(EXPR pad_range "${b_length} - ${a_length} - 1")
-  else(a_length LESS b_length)
+  else()
     # b is shorter
     set(shorter b)
     math(EXPR range "${a_length} - 1")
     math(EXPR pad_range "${a_length} - ${b_length} - 1")
-  endif(a_length LESS b_length)
+  endif()
 
   # PAD out if we need to
   if(NOT pad_range LESS 0)
     foreach(pad RANGE ${pad_range})
       # Since shorter is an alias for b, we need to get to it by by dereferencing shorter.
       list(APPEND ${shorter} 0)
-    endforeach(pad RANGE ${pad_range})
-  endif(NOT pad_range LESS 0)
+    endforeach()
+  endif()
 
   set(result 0)
   foreach(index RANGE ${range})
@@ -60,14 +60,14 @@ macro(COMPARE_VERSION_STRINGS a_in b_in result_out)
       # LESS
       if(a_version LESS b_version)
         set(result -1)
-      endif(a_version LESS b_version)
+      endif()
       # GREATER
       if(a_version GREATER b_version)
         set(result 1)
-      endif(a_version GREATER b_version)
-    endif(result EQUAL 0)
-  endforeach(index)
+      endif()
+    endif()
+  endforeach()
 
   # Copy out the return result
   set(${result_out} ${result})
-endmacro(COMPARE_VERSION_STRINGS)
+endmacro()

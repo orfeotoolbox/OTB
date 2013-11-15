@@ -74,5 +74,5 @@ otbLmvmPanSharpeningFusionImageFilter.cxx
 
 OTB_ADD_EXECUTABLE(otbFusionTests1 "${Fusion_SRCS1}" "OTBFusion;OTBIO;OTBTesting")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()
 

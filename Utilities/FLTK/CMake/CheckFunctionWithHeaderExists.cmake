@@ -14,11 +14,11 @@ macro(CHECK_FUNCTIONWITHHEADER_EXISTS SYMBOL FILES VARIABLE)
     if(CMAKE_REQUIRED_LIBRARIES)
       set(CHECK_SYMBOL_EXISTS_LIBS
         "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
-    endif(CMAKE_REQUIRED_LIBRARIES)
+    endif()
     foreach(FILE ${FILES})
       set(CHECK_SYMBOL_EXISTS_CONTENT
         "${CHECK_SYMBOL_EXISTS_CONTENT}#include <${FILE}>\n")
-    endforeach(FILE)
+    endforeach()
     set(CHECK_SYMBOL_EXISTS_CONTENT
       "${CHECK_SYMBOL_EXISTS_CONTENT}\nint main()\n{\n${SYMBOL};return 0;\n}\n")
 
@@ -41,7 +41,7 @@ macro(CHECK_FUNCTIONWITHHEADER_EXISTS SYMBOL FILES VARIABLE)
         "exist passed with the following output:\n"
         "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckSymbolExists.c:\n"
         "${CHECK_SYMBOL_EXISTS_CONTENT}\n")
-    else(${VARIABLE})
+    else()
       message(STATUS "Looking for ${SYMBOL} - not found.")
       set(${VARIABLE} "" CACHE INTERNAL "Have symbol ${SYMBOL}")
       file(APPEND ${CMAKE_BINARY_DIR}/CMakeError.log
@@ -49,6 +49,6 @@ macro(CHECK_FUNCTIONWITHHEADER_EXISTS SYMBOL FILES VARIABLE)
         "exist failed with the following output:\n"
         "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckSymbolExists.c:\n"
         "${CHECK_SYMBOL_EXISTS_CONTENT}\n")
-    endif(${VARIABLE})
-  endif("${VARIABLE}" MATCHES "^${VARIABLE}$")
-endmacro(CHECK_FUNCTIONWITHHEADER_EXISTS)
+    endif()
+  endif()
+endmacro()

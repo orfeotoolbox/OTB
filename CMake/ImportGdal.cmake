@@ -12,7 +12,7 @@ if(OTB_USE_EXTERNAL_GDAL)
 
   if(NOT GDAL_FOUND)
      message(FATAL_ERROR "Cannot find GDAL. Set GDAL_INCLUDE_DIR and GDAL_LIBRARY")
-  endif(NOT GDAL_FOUND)
+  endif()
 
   message(STATUS "  GDAL includes : ${GDAL_INCLUDE_DIR}")
   message(STATUS "  GDAL library  : ${GDAL_LIBRARY}")
@@ -20,7 +20,7 @@ if(OTB_USE_EXTERNAL_GDAL)
   if(UNIX)
     if(NOT GDAL_CONFIG)
       message(FATAL_ERROR "Cannot find gdal-config. Set GDAL_CONFIG")
-    endif(NOT GDAL_CONFIG)
+    endif()
 
     execute_process(COMMAND ${GDAL_CONFIG} --version
                     OUTPUT_VARIABLE GDAL_VERSION
@@ -32,17 +32,17 @@ if(OTB_USE_EXTERNAL_GDAL)
                     OUTPUT_STRIP_TRAILING_WHITESPACE )
     if( ${GDAL_FORMATS} MATCHES "hdf" )
        set(CHECK_GDAL_BUILT_WITH_HDF 1 CACHE INTERNAL "GDAL_BUILT_WITH_HDF" FORCE)
-    else( ${GDAL_FORMATS} MATCHES "hdf")
+    else()
        message(STATUS "CHECK_GDAL_BUILT_WITH_HDF test failed : GDAL is not built with hdf support. So the HDF tests will be deactivated. Formats supported by your GDAL: " [ ${GDAL_FORMATS} ] )
        set(CHECK_GDAL_BUILT_WITH_HDF 0 CACHE INTERNAL "GDAL_BUILT_WITH_HDF" FORCE)
-    endif(${GDAL_FORMATS} MATCHES "hdf")
-  else(UNIX)
+    endif()
+  else()
     # For WIN32 platform, we suppose that GDAL is built with HDF support (case with OSGeo4W)
     set(CHECK_GDAL_BUILT_WITH_HDF 1 CACHE INTERNAL "GDAL_BUILT_WITH_HDF" FORCE)
     # GDAL_INCLUDE_DIR has already been checked here
     file(READ "${GDAL_INCLUDE_DIR}/gdal_version.h" _gdal_version_h_CONTENTS)
     string(REGEX REPLACE ".*# *define GDAL_RELEASE_NAME *\"([0-9.]+)\".*" "\\1" GDAL_VERSION "${_gdal_version_h_CONTENTS}")
-  endif(UNIX)
+  endif()
 
   message(STATUS "  GDAL version is " ${GDAL_VERSION})
   set(GDAL_VERSION ${GDAL_VERSION} CACHE STRING "GDAL version" FORCE)
@@ -71,7 +71,7 @@ if(OTB_USE_EXTERNAL_GDAL)
   mark_as_advanced(GEOTIFF_INCLUDE_DIRS)
   if(NOT GEOTIFF_INCLUDE_DIRS)
     message(FATAL_ERROR "Cannot find geotiff headers. Please set GEOTIFF_INCLUDE_DIRS.")
-  endif(NOT GEOTIFF_INCLUDE_DIRS)
+  endif()
 
   # Find tiff headers
   find_path(TIFF_INCLUDE_DIRS tiffio.h
@@ -79,7 +79,7 @@ if(OTB_USE_EXTERNAL_GDAL)
   mark_as_advanced(TIFF_INCLUDE_DIRS)
   if(NOT TIFF_INCLUDE_DIRS)
     message(FATAL_ERROR "Cannot find libtiff headers. Please set TIFF_INCLUDE_DIRS.")
-  endif(NOT TIFF_INCLUDE_DIRS)
+  endif()
 
   # Find jpeg headers
   find_path(JPEG_INCLUDE_DIRS jpeglib.h
@@ -88,7 +88,7 @@ if(OTB_USE_EXTERNAL_GDAL)
   mark_as_advanced(JPEG_INCLUDE_DIRS)
   if(NOT JPEG_INCLUDE_DIRS)
     message(FATAL_ERROR "Cannot find jpeg headers. Please set JPEG_INCLUDE_DIRS.")
-  endif(NOT JPEG_INCLUDE_DIRS)
+  endif()
 
   # Find ogr headers
   find_path(OGR_INCLUDE_DIRS ogrsf_frmts.h
@@ -96,7 +96,7 @@ if(OTB_USE_EXTERNAL_GDAL)
   mark_as_advanced(OGR_INCLUDE_DIRS)
   if(NOT OGR_INCLUDE_DIRS)
     message(FATAL_ERROR "Cannot find ogr headers. Please set OGR_INCLUDE_DIRS.")
-  endif(NOT OGR_INCLUDE_DIRS)
+  endif()
 
   # Check if ${GDAL_LIBRARY} has tiff library
   try_compile(GDAL_HAS_TIFF
@@ -107,14 +107,14 @@ if(OTB_USE_EXTERNAL_GDAL)
   if(GDAL_HAS_TIFF)
     message(STATUS "  Testing if GDAL exposes tiff library symbols      -- yes")
     set(TIFF_LIBRARY ${GDAL_LIBRARY})
-  else(GDAL_HAS_TIFF)
+  else()
     message(STATUS "  Testing if GDAL exposes tiff library symbols      -- no")
     find_library(TIFF_LIBRARY NAMES tiff libtiff_i)
     mark_as_advanced(TIFF_LIBRARY)
     if(NOT TIFF_LIBRARY)
       message(FATAL_ERROR "Cannot find tiff library. Please set TIFF_LIBRARY.")
-    endif(NOT TIFF_LIBRARY)
-  endif(GDAL_HAS_TIFF)
+    endif()
+  endif()
 
   # Check if ${GDAL_LIBRARY} has geotiff library
   try_compile(GDAL_HAS_GEOTIFF
@@ -125,14 +125,14 @@ if(OTB_USE_EXTERNAL_GDAL)
   if(GDAL_HAS_GEOTIFF)
     message(STATUS "  Testing if GDAL exposes geotiff library symbols   -- yes")
     set(GEOTIFF_LIBRARY ${GDAL_LIBRARY})
-  else(GDAL_HAS_GEOTIFF)
+  else()
     message(STATUS "  Testing if GDAL exposes geotiff library symbols   -- no")
     find_library(GEOTIFF_LIBRARY NAMES geotiff geotiff_i)
     mark_as_advanced(GEOTIFF_LIBRARY)
     if(NOT GEOTIFF_LIBRARY)
       message(FATAL_ERROR "Cannot find geotiff library. Please set GEOTIFF_LIBRARY.")
-    endif(NOT GEOTIFF_LIBRARY)
-  endif(GDAL_HAS_GEOTIFF)
+    endif()
+  endif()
 
   # Check if ${GDAL_LIBRARY} has jpeg library
   try_compile(GDAL_HAS_JPEG
@@ -143,14 +143,14 @@ if(OTB_USE_EXTERNAL_GDAL)
   if(GDAL_HAS_JPEG)
     message(STATUS "  Testing if GDAL exposes jpeg library symbols      -- yes")
     set(JPEG_LIBRARY ${GDAL_LIBRARY})
-  else(GDAL_HAS_JPEG)
+  else()
     message(STATUS "  Testing if GDAL exposes jpeg library symbols      -- no")
     find_library(JPEG_LIBRARY NAMES jpeg jpeg_i)
     mark_as_advanced(JPEG_LIBRARY)
     if(NOT JPEG_LIBRARY)
       message(FATAL_ERROR "Cannot find jpeg library. Please set JPEG_LIBRARY.")
-    endif(NOT JPEG_LIBRARY)
-  endif(GDAL_HAS_JPEG)
+    endif()
+  endif()
 
   # Check if ${GDAL_LIBRARY} has ogr library
   try_compile(GDAL_HAS_OGR
@@ -161,15 +161,15 @@ if(OTB_USE_EXTERNAL_GDAL)
   if(GDAL_HAS_OGR)
     message(STATUS "  Testing if GDAL has OGR                           -- yes")
     set(OGR_LIBRARY ${GDAL_LIBRARY})
-  else(GDAL_HAS_OGR)
+  else()
     message(STATUS "  Testing if GDAL has OGR                           -- no")
     message(FATAL_ERROR "OGR MESSAGE: ${OUTPUT}")
     find_library(OGR_LIBRARY ogr PATHS)
     mark_as_advanced(OGR_LIBRARY)
     if(NOT OGR_LIBRARY)
       message(FATAL_ERROR "Cannot find ogr library. Please set OGR_LIBRARY.")
-    endif(NOT OGR_LIBRARY)
-  endif(GDAL_HAS_OGR)
+    endif()
+  endif()
 
 
   # Check for some possible crashes when reading TIFF files, when GDAL embeds geotiff and tiff libraries
@@ -192,7 +192,7 @@ if(OTB_USE_EXTERNAL_GDAL)
     "embeds its own version of libgeotiff and is ABI incompatible with the system libgeotiff\n"
     "You might consider building GDAL yourself without using --with-hide-internal-symbols\n"
     "and pointing GEOTIFF_INCLUDE_DIRS to the geotiff headers included in gdal sources" )
-  endif(NOT CHECK_GDALOPEN_SYMBOL)
+  endif()
 
   # This test is known to fail with the Ubuntu gdal package
   set(CMAKE_REQUIRED_INCLUDES ${GEOTIFF_INCLUDE_DIRS};${TIFF_INCLUDE_DIRS})
@@ -208,8 +208,8 @@ if(OTB_USE_EXTERNAL_GDAL)
     "embeds its own version of libgeotiff and is ABI incompatible with the system libgeotiff\n"
     "You might consider building GDAL yourself without using --with-hide-internal-symbols "
     "and pointing GEOTIFF_INCLUDE_DIRS to the geotiff headers included in gdal sources" )
-  endif(NOT CHECK_XTIFFOPEN_SYMBOL)
-  endif(NOT WIN32)
+  endif()
+  endif()
 
   # This test is known to fail with gdal build with some versions of hdf library
   #  ${OTB_DATA_ROOT}/Input/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf  -> Test KO
@@ -225,11 +225,11 @@ if(OTB_USE_EXTERNAL_GDAL)
             )
     if(NOT CHECK_HDF4OPEN_SYMBOL)
       message(STATUS "CHECK_HDF4OPEN_SYMBOL test failed : your platform exhibits a problem to read HDF4 files. So the tests with HDF4 will be deactivated" )
-    endif(NOT CHECK_HDF4OPEN_SYMBOL)
-  endif(CHECK_GDAL_BUILT_WITH_HDF)
+    endif()
+  endif()
 
-else(OTB_USE_EXTERNAL_GDAL)
+else()
 
   message(FATAL_ERROR "OTB_USE_EXTERNAL_GDAL=OFF is not implemented. Please set OTB_USE_EXTERNAL_GDAL to ON")
 
-endif(OTB_USE_EXTERNAL_GDAL)
+endif()

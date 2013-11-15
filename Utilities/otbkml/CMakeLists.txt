@@ -16,9 +16,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 #include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 if(NOT OTB_USE_EXTERNAL_BOOST)
   include_directories(${OTB_SOURCE_DIR}/Utilities/BGL)
-else(NOT OTB_USE_EXTERNAL_BOOST)
+else()
   include_directories(${Boost_INCLUDE_DIR})
-endif(NOT OTB_USE_EXTERNAL_BOOST)
+endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/include/uriparser)
 
@@ -41,12 +41,12 @@ set(libkmlbase_la_SOURCES
 if(UNIX)
         set(libkmlbase_la_SOURCES ${libkmlbase_la_SOURCES}
 	${libkmlbase_la_SOURCES_DIR}/file_posix.cc )
-else(UNIX)
+else()
         set(libkmlbase_la_SOURCES ${libkmlbase_la_SOURCES}
 	${libkmlbase_la_SOURCES_DIR}/file_win32.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/stdafx.h )
-endif(UNIX)
+endif()
 
 set(libkmlconvenience_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/convenience")
 include_directories(${libkmlconvenience_la_SOURCES_DIR})
@@ -178,10 +178,10 @@ if(WIN32)
                 ${libzlib_src_la_SOURCES_DIR}/uncompr.c
                 ${libzlib_src_la_SOURCES_DIR}/zutil.c )
          set(LIBKML_COMPILE_ZLIB ON)
-      endif(NOT MINGW)
-#    endif(NOT CYGWIN)
-  endif(NOT BORLAND)
-endif(WIN32)
+      endif()
+#    endif()
+  endif()
+endif()
 if(APPLE)
         include_directories("${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
         set(libzlib_src_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib-1.2.3.src")
@@ -199,7 +199,7 @@ if(APPLE)
                 ${libzlib_src_la_SOURCES_DIR}/uncompr.c
                 ${libzlib_src_la_SOURCES_DIR}/zutil.c )
          set(LIBKML_COMPILE_ZLIB ON)
-endif(APPLE)
+endif()
 
 
 set(liburiparser_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/lib")
@@ -240,41 +240,41 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   foreach(f ${libkml_SOURCES} )
 #        set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS -Wall -Werror -ansi -pedantic -fno-rtti )
         set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS -w )
-  endforeach(f)
-else(CMAKE_COMPILER_IS_GNUCXX)
+  endforeach()
+else()
   if(WIN32)
     foreach(f ${libkml_SOURCES} )
       set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS /W0 )
-    endforeach(f)
-  endif(WIN32)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+    endforeach()
+  endif()
+endif()
 if(WIN32)
         if(NOT CYGWIN)
                 add_definitions(-DWIN32 -DUNICODE -D_UNICODE)
-        endif(NOT CYGWIN)
-endif(WIN32)
+        endif()
+endif()
 
 add_library(otbkml ${libkml_SOURCES} )
 target_link_libraries(otbkml ${EXPAT_LIBRARIES})
 
 if(NOT LIBKML_COMPILE_ZLIB)
   target_link_libraries(otbkml ${ZLIB_LIBRARY})
-endif(NOT LIBKML_COMPILE_ZLIB)
+endif()
 
 
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otbkml PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS otbkml
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/kml
           DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbkml/
           FILES_MATCHING PATTERN "*.h")
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()

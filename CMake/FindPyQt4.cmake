@@ -25,7 +25,7 @@
 if(EXISTS PYQT4_VERSION)
   # Already in cache, be silent
   set(PYQT4_FOUND TRUE)
-else(EXISTS PYQT4_VERSION)
+else()
 
   find_file(_find_pyqt_py FindPyQt.py PATHS ${CMAKE_MODULE_PATH})
   mark_as_advanced(_find_pyqt_py)
@@ -41,18 +41,18 @@ else(EXISTS PYQT4_VERSION)
     string(REGEX REPLACE ".*\npyqt_bin_dir:([^\n]+).*$" "\\1" PYQT4_BIN_DIR ${pyqt_config})
 
     set(PYQT4_FOUND TRUE)
-  endif(pyqt_config)
+  endif()
 
   if(PYQT4_FOUND)
     if(NOT PYQT4_FIND_QUIETLY)
       message(STATUS "Found PyQt4 version: ${PYQT4_VERSION_STR}")
-    endif(NOT PYQT4_FIND_QUIETLY)
-  else(PYQT4_FOUND)
+    endif()
+  else()
     if(PYQT4_FIND_REQUIRED)
       message(FATAL_ERROR "Could not find Python")
-    endif(PYQT4_FIND_REQUIRED)
-  endif(PYQT4_FOUND)
+    endif()
+  endif()
 
-endif(EXISTS PYQT4_VERSION)
+endif()
 
 

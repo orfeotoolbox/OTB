@@ -11,12 +11,12 @@ cmake_minimum_required(VERSION 2.6)
 
 if(COMMAND CMAKE_POLICY)
   cmake_policy(SET CMP0003 NEW)
-endif(COMMAND CMAKE_POLICY)
+endif()
 
 if(NOT OPENJPEG_NAMESPACE)
   set(OPENJPEG_NAMESPACE "OPENJPEG")
   set(OPENJPEG_STANDALONE 1)
-endif(NOT OPENJPEG_NAMESPACE)
+endif()
 # In all cases:
 string(TOLOWER ${OPENJPEG_NAMESPACE} OPENJPEG_LIBRARY_NAME)
 
@@ -71,11 +71,11 @@ if(WIN32)
             -D_CRT_VCCLRIT_NO_DEPRECATE
             -D_SCL_SECURE_NO_DEPRECATE
             )
-        endif(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
-      endif(NOT MINGW)
-    endif(NOT CYGWIN)
-  endif(NOT BORLAND)
-endif(WIN32)
+        endif()
+      endif()
+    endif()
+  endif()
+endif()
 
 
 # --------------------------------------------------------------------------
@@ -86,32 +86,32 @@ set(OPENJPEG_INSTALL_SUBDIR "${projectname}-${OPENJPEG_VERSION_MAJOR}.${OPENJPEG
 
 if(NOT OPENJPEG_INSTALL_BIN_DIR)
   set(OPENJPEG_INSTALL_BIN_DIR "bin")
-endif(NOT OPENJPEG_INSTALL_BIN_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_LIB_DIR)
   set(OPENJPEG_INSTALL_LIB_DIR "lib")
-endif(NOT OPENJPEG_INSTALL_LIB_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_DATA_DIR)
   set(OPENJPEG_INSTALL_DATA_DIR "share/${OPENJPEG_INSTALL_SUBDIR}")
-endif(NOT OPENJPEG_INSTALL_DATA_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_INCLUDE_DIR)
   set(OPENJPEG_INSTALL_INCLUDE_DIR "include/")
-endif(NOT OPENJPEG_INSTALL_INCLUDE_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_MAN_DIR)
   set(OPENJPEG_INSTALL_MAN_DIR "share/man/")
-endif(NOT OPENJPEG_INSTALL_MAN_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_DOC_DIR)
   set(OPENJPEG_INSTALL_DOC_DIR "share/doc/${OPENJPEG_INSTALL_SUBDIR}")
-endif(NOT OPENJPEG_INSTALL_DOC_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_PACKAGE_DIR)
   set(OPENJPEG_INSTALL_PACKAGE_DIR ${OPENJPEG_INSTALL_LIB_DIR}/${OPENJPEG_INSTALL_SUBDIR}
     CACHE INTERNAL "")
-endif(NOT OPENJPEG_INSTALL_PACKAGE_DIR)
+endif()
 
 #-----------------------------------------------------------------------------
 # Test for some required system information.
@@ -143,9 +143,9 @@ mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 #set(OPJ_MANGLE_PREFIX "" CACHE STRING "Prefix used to mangle all the symbols")
 if(OPJ_MANGLE_PREFIX)
   set(OPJ_USE_MANGLE_PREFIX ON)
-else(OPJ_MANGLE_PREFIX)
+else()
   set(OPJ_USE_MANGLE_PREFIX OFF)
-endif(OPJ_MANGLE_PREFIX)
+endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
@@ -165,7 +165,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
   # set(CMAKE_C_FLAGS "-Wall -std=c99 ${CMAKE_C_FLAGS}") # FIXME: this setting prevented us from setting a coverage build.
   # Do not use ffast-math for all build, it would produce incorrect results, only set for release:
   set(CMAKE_C_FLAGS_RELEASE "-ffast-math ${CMAKE_C_FLAGS_RELEASE}")
-endif(CMAKE_COMPILER_IS_GNUCC)
+endif()
 
 #-----------------------------------------------------------------------------
 # opj_config.h generation (1/2)
@@ -198,7 +198,7 @@ if(BUILD_CODEC OR BUILD_MJ2 OR BUILD_JPIP)
   option(BUILD_THIRDPARTY "Build the thirdparty executables if it is needed" OFF)
   add_subdirectory(thirdparty)
   add_subdirectory(applications)
-endif(BUILD_CODEC OR BUILD_MJ2 OR BUILD_JPIP)
+endif()
 
 #-----------------------------------------------------------------------------
 # opj_config.h generation (2/2)
@@ -216,7 +216,7 @@ configure_file("${OPENJPEG_SOURCE_DIR}/opj_config.h.cmake.in"
 #option(BUILD_DOC "Build the HTML documentation (with doxygen if available)." OFF)
 if(BUILD_DOC)
     add_subdirectory(doc)
-endif(BUILD_DOC)
+endif()
 
 #-----------------------------------------------------------------------------
 # Buld Testing
@@ -242,15 +242,15 @@ if(BUILD_TESTING)
     if(REF_DECODER_BIN)
       get_filename_component(REF_DECODER_BIN_PATH ${REF_DECODER_BIN} PATH CACHE)
       mark_as_advanced(REF_DECODER_BIN_PATH)
-    endif(REF_DECODER_BIN)
+    endif()
 
     # Add repository where to find tests
     add_subdirectory(tests)
 
-  else(BUILD_CODEC)
+  else()
     message(FATAL_ERROR "You need build codec to run the tests")
-  endif(BUILD_CODEC)
-endif(BUILD_TESTING)
+  endif()
+endif()
 
 #-----------------------------------------------------------------------------
 # install all targets referenced as OPENJPEGTargets

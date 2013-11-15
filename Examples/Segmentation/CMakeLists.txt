@@ -453,4 +453,4 @@ target_link_libraries(otbSegmentationExamplesTests
   OTBFeatureExtraction  OTBLearning
   OTBMultiScale OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

@@ -8,7 +8,7 @@
 if(OTB_BUILD_SETTINGS_FILE)
   include(${CMAKE_ROOT}/Modules/CMakeImportBuildSettings.cmake)
   CMAKE_IMPORT_BUILD_SETTINGS(${OTB_BUILD_SETTINGS_FILE})
-endif(OTB_BUILD_SETTINGS_FILE)
+endif()
 
 # Add compiler flags needed to use OTB.
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OTB_REQUIRED_C_FLAGS}")
@@ -42,10 +42,10 @@ if(OTB_USE_SYSTEM_VXL)
   if(WIN32 OR APPLE)
     string(TOLOWER "${VXL_DIR}" OTB_CHECK_VXL_DIR)
     string(TOLOWER "${OTB_VXL_DIR}" OTB_CHECK_OTB_VXL_DIR)
-  else(WIN32 OR APPLE)
+  else()
     set(OTB_CHECK_VXL_DIR "${VXL_DIR}")
     set(OTB_CHECK_OTB_VXL_DIR "${OTB_VXL_DIR}")
-  endif(WIN32 OR APPLE)
+  endif()
   string(COMPARE EQUAL "${OTB_CHECK_VXL_DIR}" "${OTB_CHECK_OTB_VXL_DIR}"
          OTB_VXL_DIR_MATCH)
   if(VXL_FOUND)
@@ -55,8 +55,8 @@ if(OTB_USE_SYSTEM_VXL)
         "but this project is using VXL from \"${VXL_DIR}\".  "
         "Please set VXL_DIR to match the one used to build OTB."
         )
-    endif(NOT OTB_VXL_DIR_MATCH)
-  else(VXL_FOUND)
+    endif()
+  else()
     if(VXL_DIR)
       if(NOT OTB_VXL_DIR_MATCH)
         message(
@@ -64,20 +64,20 @@ if(OTB_USE_SYSTEM_VXL)
           "but this project has set VXL_DIR to \"${VXL_DIR}\".  "
           "OTB is changing VXL_DIR to match the VXL with which it was built."
           )
-      endif(NOT OTB_VXL_DIR_MATCH)
-    endif(VXL_DIR)
+      endif()
+    endif()
     set(VXL_DIR ${OTB_VXL_DIR})
     find_package(VXL)
     if(VXL_FOUND)
       include(${VXL_CMAKE_DIR}/UseVXL.cmake)
-    else(VXL_FOUND)
+    else()
       message(FATAL_ERROR
         "UseOTB could not load VXL settings from \"${VXL_DIR}\" even through "
         "OTB was built using VXL from this location."
         )
-    endif(VXL_FOUND)
-  endif(VXL_FOUND)
-endif(OTB_USE_SYSTEM_VXL)
+    endif()
+  endif()
+endif()
 
 find_program(OTB_TEST_DRIVER otbTestDriver PATHS
              ${OTB_BINARY_DIRS}
@@ -98,19 +98,19 @@ find_program(OTB_APPLICATION_LAUNCHER otbApplicationLauncherCommandLine PATHS
 if(OTB_USE_EXTERNAL_ITK)
     find_package(ITK REQUIRED)
     include(${ITK_USE_FILE})
-endif(OTB_USE_EXTERNAL_ITK)
+endif()
 
 if(ITK_USE_FFTWF OR ITK_USE_FFTWD)
     find_package(FFTW REQUIRED)
     include_directories(${FFTW_INCLUDE_PATH})
-endif(ITK_USE_FFTWF OR ITK_USE_FFTWD)
+endif()
 
 if(OTB_USE_EXTERNAL_EXPAT)
     find_package(EXPAT REQUIRED)
     include_directories(${EXPAT_INCLUDE_DIR})
-else(OTB_USE_EXTERNAL_EXPAT)
+else()
     add_definitions(-DOTB_USE_INTERNAL_EXPAT)
-endif(OTB_USE_EXTERNAL_EXPAT)
+endif()
 
 
 if(OTB_USE_EXTERNAL_BOOST)
@@ -119,18 +119,18 @@ if(OTB_USE_EXTERNAL_BOOST)
 
   # needed for automatic linking on msvc platform
   link_directories( ${Boost_LIBRARY_DIRS} )
-endif(OTB_USE_EXTERNAL_BOOST)
+endif()
 
 if(OTB_USE_EXTERNAL_GDAL)
   find_package(GDAL REQUIRED)
   include_directories(${GDAL_INCLUDE_DIRS})
-endif(OTB_USE_EXTERNAL_GDAL)
+endif()
 
 if(OTB_USE_EXTERNAL_FLTK)
 	find_package(FLTK REQUIRED)
 	include_directories(${FLTK_INCLUDE_DIRS})
 	link_directories(${FLTK_LIBRARY_DIRS})
-else(OTB_USE_EXTERNAL_FLTK)
+else()
   find_program(FLTK_FLUID_EXECUTABLE fluid PATHS
                ${OTB_BINARY_DIRS}
                ${OTB_BINARY_DIRS}/Release
@@ -138,27 +138,27 @@ else(OTB_USE_EXTERNAL_FLTK)
                ${OTB_BINARY_DIRS}/RelWithDebInfo
                ${OTB_BINARY_DIRS}/Debug
                NO_SYSTEM_PATH)
-endif(OTB_USE_EXTERNAL_FLTK)
+endif()
 
 if(OTB_USE_LIBLAS AND OTB_USE_EXTERNAL_LIBLAS)
   find_package(LibLAS REQUIRED)
   include_directories(${LIBLAS_INCLUDE_DIRS})
-endif(OTB_USE_LIBLAS AND OTB_USE_EXTERNAL_LIBLAS)
+endif()
 
 if(OTB_USE_PQXX)
   find_package(Pqxx REQUIRED)
   include_directories(${PQXX_INCLUDE_DIRS})
-endif(OTB_USE_PQXX)
+endif()
 
 if(OTB_USE_EXTERNAL_LIBKML)
   find_package(LibKML REQUIRED)
   include_directories(${LIBKML_INCLUDE_DIRS})
-endif(OTB_USE_EXTERNAL_LIBKML)
+endif()
 
 if(OTB_USE_EXTERNAL_TINYXML)
   find_package(TinyXML REQUIRED)
   include_directories(${TINYXML_INCLUDE_DIRS})
-endif(OTB_USE_EXTERNAL_TINYXML)
+endif()
 
 if(OTB_USE_OPENCV)
   find_package(OpenCV
@@ -199,38 +199,38 @@ if(OTB_USE_MAPNIK)
         if(NOT MAPNIK_INCLUDE_DIR)
                 message(FATAL_ERROR
                         "Cannot find MAPNIK include directory. Please set MAPNIK_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        endif(NOT MAPNIK_INCLUDE_DIR)
+        endif()
         if(NOT MAPNIK_LIBRARY)
                 message(FATAL_ERROR
                         "Cannot find MAPNIK library. Please set MAPNIK_LIBRARY or set OTB_USE_MAPNIK OFF.")
-        endif(NOT MAPNIK_LIBRARY)
+        endif()
 
         if(NOT FREETYPE2_INCLUDE_DIR)
                 message(FATAL_ERROR
                         "Cannot find FREETYPE2 include directory. Please set FREETYPE2_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        endif(NOT FREETYPE2_INCLUDE_DIR)
+        endif()
 
         if(NOT ICUUC_INCLUDE_DIR)
                 message(FATAL_ERROR
                         "Cannot find ICUUC_INCLUDE_DIR include directory. Please set ICUUC_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        endif(NOT ICUUC_INCLUDE_DIR)
+        endif()
         if(NOT ICUUC_LIBRARY)
                 message(FATAL_ERROR
                         "Cannot find ICUUC library, needed by MAPNIK. Please set ICUUC_LIBRARY or set OTB_USE_MAPNIK OFF.")
-        endif(NOT ICUUC_LIBRARY)
+        endif()
 
         if(NOT LTDL_INCLUDE_DIR)
                 message(FATAL_ERROR
                         "Cannot find LTDL_INCLUDE_DIR include directory. Please set LTDL_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        endif(NOT LTDL_INCLUDE_DIR)
+        endif()
         if(NOT LTDL_LIBRARY)
                 message(FATAL_ERROR
                         "Cannot find ICUUC library, needed by MAPNIK. Please set ICUUC_LIBRARY or set OTB_USE_MAPNIK OFF.")
-        endif(NOT LTDL_LIBRARY)
+        endif()
 
         if(NOT OTB_MAPNIK_SUPPORTS_API20)
           add_definitions(-DOTB_MAPNIK_COMPATIBILITY_API07)
-        endif(NOT OTB_MAPNIK_SUPPORTS_API20)
+        endif()
 
         # Add compiler option
         add_definitions(-DOTB_USE_MAPNIK)
@@ -240,7 +240,7 @@ if(OTB_USE_MAPNIK)
                             ${LTDL_INCLUDE_DIR}
                             ${FREETYPE2_INCLUDE_DIR})
 
-endif(OTB_USE_MAPNIK)
+endif()
 
 include(${OTB_LIBRARY_DIRS}/OTBWrapperMacros.cmake)
 

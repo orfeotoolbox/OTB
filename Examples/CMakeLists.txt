@@ -32,29 +32,29 @@ add_subdirectory(DimensionReduction)
 
 if(BUILD_APPLICATIONS)
 		add_subdirectory(Application)
-endif(BUILD_APPLICATIONS)
+endif()
 
 if(OTB_USE_VISU_GUI)
         add_subdirectory(Visualization)
-endif(OTB_USE_VISU_GUI)
+endif()
 
 if(OTB_USE_PATENTED)
   add_subdirectory( Patented )
-endif(OTB_USE_PATENTED)
+endif()
 
 if(OTB_USE_PQXX)
         add_subdirectory(GeospatialAnalysis)
-endif(OTB_USE_PQXX)
+endif()
 
 #Recopie du fichier README.txt dans l'arborescence BINARY
 if( EXISTS ${OTB_BINARY_DIR}/Examples/README.txt )
-else( EXISTS ${OTB_BINARY_DIR}/Examples/README.txt )
+else()
   configure_file(${OTB_SOURCE_DIR}/Examples/README.txt
     ${OTB_BINARY_DIR}/Examples/README.txt @ONLY IMMEDIATE)
-endif( EXISTS ${OTB_BINARY_DIR}/Examples/README.txt )
+endif()
 
 
-else(OTB_BINARY_DIR)
+else()
   # We are building as a stand-alone project.
   set(LIBRARY_OUTPUT_PATH ${OTBExamples_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
   set(EXECUTABLE_OUTPUT_PATH ${OTBExamples_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
@@ -68,7 +68,7 @@ else(OTB_BINARY_DIR)
   mark_as_advanced(TCL_TCLSH)
   if(BUILD_TESTING)
     enable_testing()
-  endif(BUILD_TESTING)
+  endif()
 
   # Find OTB and load its settings.
   find_package(OTB)
@@ -98,21 +98,21 @@ else(OTB_BINARY_DIR)
 		
 	if(BUILD_APPLICATIONS)	
 		add_subdirectory(Application)
-	endif(BUILD_APPLICATIONS)	
+	endif()	
 		
     if(OTB_USE_VISU_GUI)
         add_subdirectory(Visualization)
-    endif(OTB_USE_VISU_GUI)
+    endif()
 
     if(OTB_USE_PATENTED)
         add_subdirectory(Patented)
-    endif(OTB_USE_PATENTED)
+    endif()
 
     if(OTB_USE_PQXX)
         add_subdirectory(GeospatialAnalysis)
-    endif(OTB_USE_PQXX)
-  else(OTB_FOUND)
+    endif()
+  else()
     message("OTB not found.  Please set OTB_DIR")
-  endif(OTB_FOUND)
-endif(OTB_BINARY_DIR)
+  endif()
+endif()
 

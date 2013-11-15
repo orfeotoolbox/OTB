@@ -46,7 +46,7 @@ target_link_libraries(LineSegmentDetectorExample OTBFeatureExtraction OTBCommon 
 
 add_executable(RightAngleDetectionExample RightAngleDetectionExample.cxx)
 target_link_libraries(RightAngleDetectionExample OTBFeatureExtraction OTBCommon OTBIO)
-endif(OTB_USE_MAPNIK)
+endif()
 
 add_executable(ExtractSegmentsExample
 ExtractSegmentsExample.cxx)
@@ -331,7 +331,7 @@ add_test(feTeRightAngleDetectionExample  ${EXE_TESTS2}
         10.
 )
 
-endif(OTB_USE_MAPNIK)
+endif()
 
 include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbFeatureExtractionExamplesTests1 otbFeatureExtractionExamplesTests1.cxx)
@@ -341,4 +341,4 @@ add_executable(otbFeatureExtractionExamplesTests2 otbFeatureExtractionExamplesTe
 target_link_libraries(otbFeatureExtractionExamplesTests2   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

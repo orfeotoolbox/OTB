@@ -151,7 +151,7 @@ add_test(raTvImageToLuminanceImageFilterAutoFORMOSAT ${RADIOMETRY_TESTS2}
         ${TEMP}/raTvImageToLuminanceImageFilterAutoFormosat.tif
          )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 
@@ -248,7 +248,7 @@ add_test(raTvLuminanceToReflectanceImageFilterAutoFORMOSAT ${RADIOMETRY_TESTS2}
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
          )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # -------            otb::ImageToReflectanceImageFilter   ------------------------------
 add_test(raTuImageToReflectanceImageFilterNew ${RADIOMETRY_TESTS2}
@@ -338,7 +338,7 @@ add_test(raTuImageToReflectanceImageFilterAutoFORMOSAT2 ${RADIOMETRY_TESTS2}
                 ${TEMP}/raTvImageToReflectanceImageFilterAutoFORMOSAT2.tif
          )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -491,7 +491,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 #    ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
 #    ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.txt
 #       )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
   --compare-image ${EPSILON_12}
@@ -1192,7 +1192,7 @@ add_test(raTvTerraSarBrightnessImageComplexFilterTORONTO ${RADIOMETRY_TESTS9}
         0 # results in linear scale
         2000 2000 250 250 # Extract
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # -------            SarParametricMapFunction   ------------------------------
 add_test(raTuSarParametricMapFunction ${RADIOMETRY_TESTS9}
@@ -1321,7 +1321,7 @@ if(OTB_DATA_USE_LARGEINPUT)
                2000 2000 250 250 # Extract
           )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # -------            SarBrightnessFunctor   ------------------------------
 add_test(raTuSarBrightnessFunctor ${RADIOMETRY_TESTS9}
@@ -1387,7 +1387,7 @@ add_test(raTvSarBrightnessToImageWithComplexPixelFilter  ${RADIOMETRY_TESTS9}
                 1000 1000 250 250 # Extract
         )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1827,4 +1827,4 @@ OTB_ADD_EXECUTABLE(otbRadiometryTests8 "${Radiometry_SRCS8}" "OTBRadiometry;OTBI
 OTB_ADD_EXECUTABLE(otbRadiometryTests9 "${Radiometry_SRCS9}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests10 "${Radiometry_SRCS10}" "OTBRadiometry;OTBIO;OTBTesting")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

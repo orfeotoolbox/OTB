@@ -9,7 +9,7 @@
 if( LTDL_INCLUDE_DIR )
     # Already in cache, be silent
     set( LTDL_FIND_QUIETLY TRUE )
-endif( LTDL_INCLUDE_DIR )
+endif()
 
 find_path( LTDL_INCLUDE_DIR ltdl.h )
 
@@ -26,8 +26,8 @@ mark_as_advanced( LTDL_INCLUDE_DIR LTDL_LIBRARY )
 if(LTDL_FOUND)
   set(LTDL_INCLUDE_DIRS ${LTDL_INCLUDE_DIR})
   set(LTDL_LIBRARIES ${LTDL_LIBRARY})
-else(LTDL_FOUND)
+else()
   set(LTDL_INCLUDE_DIRS)
   set(LTDL_LIBRARIES)
-endif(LTDL_FOUND)
+endif()
 

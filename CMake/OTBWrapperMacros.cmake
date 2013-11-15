@@ -97,13 +97,13 @@ macro(OTB_CREATE_APPLICATION)
                       COMPONENT RuntimeLibraries)
           endif()
       endif()
-   #endif(NOT WIN32)
+   #endif()
 
    list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})
    set(OTB_APPLICATIONS_NAME_LIST ${OTB_APPLICATIONS_NAME_LIST}
        CACHE STRING "List of all applications" FORCE)
 
-endmacro(OTB_CREATE_APPLICATION)
+endmacro()
 
 
 
@@ -120,4 +120,4 @@ macro(OTB_TEST_APPLICATION)
               ${TESTAPPLICATION_OPTIONS}
               -testenv ${TESTAPPLICATION_TESTENVOPTIONS})
 
-endmacro(OTB_TEST_APPLICATION)
+endmacro()

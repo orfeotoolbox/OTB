@@ -5,7 +5,7 @@ set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 if(WIN32)
   add_definitions(-DWIN32)
-endif(WIN32)
+endif()
 
 set(OTB_WRAPPER_TESTS ${CXX_TEST_PATH}/otbWrapperTests)
 
@@ -163,7 +163,7 @@ add_test(NAME owTvApplicationHtmlDocGeneratorTest
                     ${TEMP}/owTvOReadImageInfoDoc.html
                     0 # don't show key in the parameterdescription
 )
-endif (BUILD_APPLICATIONS)
+endif ()
 
 # DocExampleStructure
 add_test(owTuDocExampleStructureNew ${OTB_WRAPPER_TESTS}
@@ -210,4 +210,4 @@ include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
 add_executable(otbWrapperTests ${Wrapper_SRCS})
 target_link_libraries(otbWrapperTests OTBApplicationEngine OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

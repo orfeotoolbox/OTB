@@ -1,6 +1,6 @@
 if(NOT FLTK11_FOUND)
   message(FATAL_ERROR "Something went wrong. You are including FLTKUse.cmake but FLTK was not found")
-endif(NOT FLTK11_FOUND)
+endif()
 
 # -------------------------------------------------------------
 # This macro automates wrapping of Fluid files
@@ -19,7 +19,7 @@ macro(FLTK_WRAP_FLUID VARIABLE)
       get_source_file_property(gen ${src} GENERATED)
       if(gen)
         set(fluid_name "${src}")
-      else(gen)
+      else()
         set(fluid_name "${CMAKE_CURRENT_SOURCE_DIR}/${fpath}/${fname}.fl")
         if(NOT EXISTS "${fluid_name}")
           set(fluid_name "${CMAKE_CURRENT_BINARY_DIR}/${fpath}/${fname}.fl")
@@ -27,10 +27,10 @@ macro(FLTK_WRAP_FLUID VARIABLE)
             set(fluid_name "${fpath}/${fname}.fl")
             if(NOT EXISTS "${fluid_name}")
               message(SEND_ERROR "Cannot find Fluid source file: ${fpath}/${fname}.fl")
-            endif(NOT EXISTS "${fluid_name}")
-          endif(NOT EXISTS "${fluid_name}")
-        endif(NOT EXISTS "${fluid_name}")
-      endif(gen)
+            endif()
+          endif()
+        endif()
+      endif()
       set(cxx_name "${CMAKE_CURRENT_BINARY_DIR}/${fname}.cxx")
       set(h_name "${CMAKE_CURRENT_BINARY_DIR}/${fname}.h")
       set(${VARIABLE} "${${VARIABLE}};${cxx_name}")
@@ -44,9 +44,9 @@ macro(FLTK_WRAP_FLUID VARIABLE)
         DEPENDS "${fluid_name}" "${FLUID_COMMAND}"
         COMMAND ${FLUID_COMMAND}
         ARGS -c ${fluid_name})
-    endif("${src}" MATCHES ".fl$")
-  endforeach(src)
-endmacro(FLTK_WRAP_FLUID VARIABLE)
+    endif()
+  endforeach()
+endmacro()
 
 
 # Make FLTK easier to use
@@ -57,7 +57,7 @@ link_directories(${FLTK_LIBRARY_DIRS})
 if(FLTK_BUILD_SETTINGS_FILE)
   include(CMakeImportBuildSettings)
   CMAKE_IMPORT_BUILD_SETTINGS(${FLTK_BUILD_SETTINGS_FILE})
-endif(FLTK_BUILD_SETTINGS_FILE)
+endif()
 
 # Add compiler flags needed to use FLTK.
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${FLTK_REQUIRED_C_FLAGS}")

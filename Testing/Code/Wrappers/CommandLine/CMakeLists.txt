@@ -3,7 +3,7 @@ set(APPLICATIONSPATH ${OTB_BINARY_DIR}/bin)
 
 if(WIN32)
   add_definitions(-DWIN32)
-endif(WIN32)
+endif()
 
 set(OTB_WRAPPER_COMMAND_LINE_TESTS ${CXX_TEST_PATH}/otbWrapperCommandLineTests)
 

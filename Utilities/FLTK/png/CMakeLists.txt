@@ -5,7 +5,7 @@ include_directories(${FLTKZLIB_SOURCE_DIR})
 
 if(ZLIB_INCLUDE_DIR)
   include_directories(${ZLIB_INCLUDE_DIR})
-endif(ZLIB_INCLUDE_DIR)
+endif()
 
 include_directories(${FLTKPNG_SOURCE_DIR})
 include_directories(${FLTKPNG_BINARY_DIR})
@@ -27,7 +27,7 @@ install(TARGETS fltk_png
 
 if(UNIX)
   target_link_libraries(fltk_png ${FLTK_ZLIB_LIBRARIES} -lm)
-else(UNIX)
+else()
   target_link_libraries(fltk_png ${FLTK_ZLIB_LIBRARIES})
-endif(UNIX)
+endif()
 

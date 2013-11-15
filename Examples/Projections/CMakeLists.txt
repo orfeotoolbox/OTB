@@ -7,7 +7,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         SensorModelExample.cxx
         PROPERTIES COMPILE_FLAGS -Wno-comment
   )
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 
 add_executable(SensorModelExample SensorModelExample.cxx )
@@ -26,7 +26,7 @@ target_link_libraries(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO )
 add_executable(CoordinateToNameExample CoordinateToNameExample.cxx )
 target_link_libraries(CoordinateToNameExample OTBProjections OTBCommon OTBIO )
 
-endif( OTB_USE_CURL )
+endif()
 
 add_executable(VectorDataProjectionExample VectorDataProjectionExample.cxx )
 target_link_libraries(VectorDataProjectionExample OTBProjections OTBCommon OTBIO)
@@ -48,7 +48,7 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Remote sensing images (large images )
 if(OTB_DATA_USE_LARGEINPUT)
   set(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
@@ -94,7 +94,7 @@ add_test(prTeOrthoRectificationExampleXSTest ${EXE_TESTS}
         -0.6
 
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(prTeMapProjectionExampleTest ${EXE_TESTS}
         --compare-ascii ${TOL}
@@ -114,7 +114,7 @@ add_test(prTeVectorDataProjectionExampleTest ${EXE_TESTS}
         ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
             ${TEMP}/vectorDataProjectionExample.shp
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 if(OTB_DATA_USE_LARGEINPUT)
 add_test(prTeGeometriesProjectionTest ${EXE_TESTS}
@@ -126,7 +126,7 @@ add_test(prTeGeometriesProjectionTest ${EXE_TESTS}
         ${INPUTLARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
             ${TEMP}/geometriesProjectionExample.shp
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 if(OTB_DATA_USE_LARGEINPUT)
 #TODO change the example by using a SPOT4 roamnia
@@ -156,7 +156,7 @@ add_test(prTeEstimateRPCSensorModelExampleTest ${EXE_TESTS}
          713 2754 -23.007862 -43.365307 0.
 )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 if( OTB_USE_CURL )
 add_test(prTePlaceNameToLonLatExampleTest ${EXE_TESTS2}
@@ -171,7 +171,7 @@ add_test(prTeCoordinateToNameExampleTest ${EXE_TESTS2}
          103.78 1.29
          ${TEMP}/CoordinateToNameExample.txt
 )
-endif( OTB_USE_CURL )
+endif()
 
 include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbProjectionsExamplesTests otbProjectionsExamplesTests.cxx)
@@ -180,8 +180,8 @@ target_link_libraries(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections
 if( OTB_USE_CURL )
   add_executable(otbProjectionsExamplesTests2 otbProjectionsExamplesTests2.cxx)
   target_link_libraries(otbProjectionsExamplesTests2 OTBCommon OTBIO OTBProjections OTBTesting)
-endif( OTB_USE_CURL )
+endif()
 
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

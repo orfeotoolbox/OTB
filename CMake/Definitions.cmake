@@ -2,7 +2,7 @@
 # ensure WIN32 definition
 if(WIN32)
   add_definitions(-DWIN32)
-endif(WIN32)
+endif()
 
 
 # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
@@ -26,8 +26,8 @@ if(WIN32)
         if(MSVC)
           add_definitions(-D_CRT_SECURE_NO_WARNINGS)
           add_definitions(-D_CRT_NONSTDC_NO_WARNING)
-        endif(MSVC)
+        endif()
 
-      endif(NOT MINGW)
-    endif(NOT CYGWIN)
-endif(WIN32)
+      endif()
+    endif()
+endif()

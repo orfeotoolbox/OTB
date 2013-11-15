@@ -14,21 +14,21 @@ add_library(OTBTesting ${OTBTesting_SRCS})
 target_link_libraries(OTBTesting OTBBasicFilters OTBIO OTBCommon OTBOGRAdapters)
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(OTBTesting PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS OTBTesting
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   file(GLOB __files "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
   install(FILES ${__files}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Testing
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()
 
 
 
@@ -37,7 +37,7 @@ endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
 # Has to be compiled even if the BUILD_TEST  are set to OFF
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(otbTestDriver.cxx PROPERTIES COMPILE_FLAGS -w)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_executable(otbTestDriver otbTestDriver.cxx)
 target_link_libraries(otbTestDriver OTBIO OTBTesting)
@@ -51,6 +51,6 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/IO
     COMPONENT Development)
   install(TARGETS otbTestDriver RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()
 
 

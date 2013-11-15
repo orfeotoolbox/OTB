@@ -7,7 +7,7 @@ target_link_libraries(VisuExample1 OTBVisualization OTBGui OTBIO OTBCommon ${OTB
 if(OTB_USE_MAPNIK)
   add_executable(VectorDataRendering VectorDataRendering.cxx )
   target_link_libraries(VectorDataRendering OTBVisualization OTBGui OTBIO OTBCommon ${OTB_VISU_GUI_LIBRARIES})
-endif(OTB_USE_MAPNIK)
+endif()
 
 if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -17,7 +17,7 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Remote sensing images (large images )
 if(OTB_DATA_USE_LARGEINPUT)
   set(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
@@ -37,8 +37,8 @@ if(OTB_DATA_USE_LARGEINPUT)
       0
       ${INPUTDATA}/DejaVuSans.ttf
       )
-  endif(OTB_USE_MAPNIK)
-endif(OTB_DATA_USE_LARGEINPUT)
+  endif()
+endif()
 
 # Without Font file
 if(OTB_DATA_USE_LARGEINPUT)
@@ -50,8 +50,8 @@ if(OTB_DATA_USE_LARGEINPUT)
       ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
       0
       )
-  endif(OTB_USE_MAPNIK)
-endif(OTB_DATA_USE_LARGEINPUT)
+  endif()
+endif()
 
 
 include_directories(${OTB_SOURCE_DIR}/Testing/Code)
@@ -61,6 +61,6 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 if(OTB_USE_MAPNIK)
   add_executable(otbVisualizationExamplesTests otbVisualizationExamplesTests.cxx)
   target_link_libraries(otbVisualizationExamplesTests OTBCommon OTBIO OTBVisualization OTBTesting)
-endif(OTB_USE_MAPNIK)
+endif()
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

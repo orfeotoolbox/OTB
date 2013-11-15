@@ -56,4 +56,4 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbDisparityMapExamplesTests otbDisparityMapExamplesTests.cxx)
 target_link_libraries(otbDisparityMapExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

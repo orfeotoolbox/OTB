@@ -8,7 +8,7 @@ if(WIN32)
                  ${OTB_BINARY_DIR}/BuildContinuous.bat)
   configure_file(${OTB_SOURCE_DIR}/Utilities/Dart/BuildContinuousWithCTest.bat.in
                  ${OTB_BINARY_DIR}/BuildContinuousWithCTest.bat)
-  else(NOT MINGW)
+  else()
     configure_file(${OTB_SOURCE_DIR}/Utilities/Dart/BuildContinuous.sh.in
                    ${OTB_BINARY_DIR}/BuildContinuous.sh
                    @ONLY IMMEDIATE)
@@ -32,8 +32,8 @@ if(WIN32)
     configure_file(${OTB_SOURCE_DIR}/Utilities/Dart/cronentry.in
                    ${OTB_BINARY_DIR}/cronentry
                    @ONLY IMMEDIATE)
-  endif(NOT MINGW)
-endif(WIN32)
+  endif()
+endif()
 if(UNIX)
   configure_file(${OTB_SOURCE_DIR}/Utilities/Dart/BuildContinuous.sh.in
                  ${OTB_BINARY_DIR}/BuildContinuous.sh
@@ -68,4 +68,4 @@ if(UNIX)
                  @ONLY IMMEDIATE)
   exec_program(chmod ARGS 755 \"${OTB_BINARY_DIR}/ChangedSince.csh\"
                  OUTPUT_VARIABLE OTB_EXEC_PLEASE_BE_QUIET)
-endif(UNIX)
+endif()

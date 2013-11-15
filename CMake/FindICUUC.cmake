@@ -9,7 +9,7 @@
 if( ICUUC_INCLUDE_DIR )
     # Already in cache, be silent
     set( ICUUC_FIND_QUIETLY TRUE )
-endif( ICUUC_INCLUDE_DIR )
+endif()
 
 find_path( ICUUC_INCLUDE_DIR unicode/unistr.h )
 
@@ -26,8 +26,8 @@ mark_as_advanced( ICUUC_INCLUDE_DIR ICUUC_LIBRARY )
 if(ICUUC_FOUND)
   set(ICUUC_INCLUDE_DIRS ${ICUUC_INCLUDE_DIR})
   set(ICUUC_LIBRARIES ${ICUUC_LIBRARY})
-else(ICUUC_FOUND)
+else()
   set(ICUUC_INCLUDE_DIRS)
   set(ICUUC_LIBRARIES)
-endif(ICUUC_FOUND)
+endif()
 

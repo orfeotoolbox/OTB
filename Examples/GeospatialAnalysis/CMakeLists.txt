@@ -14,7 +14,7 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 #Remote sensing images (large images )
 if(OTB_DATA_USE_LARGEINPUT)
   set(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
@@ -38,4 +38,4 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbGeospatialAnalysisExamplesTests otbGeospatialAnalysisExamplesTests.cxx)
 target_link_libraries(otbGeospatialAnalysisExamplesTests  OTBCommon OTBIO OTBGeospatialAnalysis OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

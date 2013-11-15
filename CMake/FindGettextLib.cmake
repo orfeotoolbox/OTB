@@ -9,7 +9,7 @@
 if( GETTEXT_INCLUDE_DIR )
     # Already in cache, be silent
     set( GETTEXT_FIND_QUIETLY TRUE )
-endif( GETTEXT_INCLUDE_DIR )
+endif()
 
 find_path( GETTEXT_INCLUDE_DIR libintl.h )
 
@@ -26,8 +26,8 @@ mark_as_advanced( GETTEXT_INCLUDE_DIR GETTEXT_LIBRARY )
 if(GETTEXT_FOUND)
   set(GETTEXT_INCLUDE_DIRS ${GETTEXT_INCLUDE_DIR})
   set(GETTEXT_LIBRARIES ${GETTEXT_LIBRARY})
-else(GETTEXT_FOUND)
+else()
   set(GETTEXT_INCLUDE_DIRS)
   set(GETTEXT_LIBRARIES)
-endif(GETTEXT_FOUND)
+endif()
 

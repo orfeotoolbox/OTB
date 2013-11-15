@@ -170,13 +170,13 @@ set(CFILES
 if(APPLE AND BUILD_SHARED_LIBS)
       foreach(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
         set(CMAKE_SHARED_LINKER_FLAGS${c} "${CMAKE_SHARED_LINKER_FLAGS${c}} -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
-      endforeach(c)
-endif(APPLE AND BUILD_SHARED_LIBS)
+      endforeach()
+endif()
 
 # Suppress warning messages
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 
 add_library(fltk ${CPPFILES} ${CFILES})
@@ -196,7 +196,7 @@ target_link_libraries(fltk ${FLTK_PLATFORM_DEPENDENT_LIBS} ${CMAKE_THREAD_LIBS_I
 
 if(X11_FOUND)
   target_link_libraries(fltk ${X11_LIBRARIES})
-endif(X11_FOUND)
+endif()
 
 if(OPENGL_FOUND)
   add_library(fltk_gl ${GLCPPFILES})
@@ -212,7 +212,7 @@ if(OPENGL_FOUND)
     PROPERTIES
     VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
     SOVERSION ${FLTK_VERSION_PATCH})
-endif(OPENGL_FOUND)
+endif()
 
 add_library(fltk_forms ${FLCPPFILES})
 # OTB Modifications

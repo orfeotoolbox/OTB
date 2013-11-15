@@ -59,10 +59,10 @@ configure_file(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.
       if(NOT CYGWIN)
         if(NOT MINGW)
         set(ossim_init_SRCS ${ossim_init_SRCS} ${ossim_dll_main_SRCS})
-        endif(NOT MINGW)
-      endif(NOT CYGWIN)
-    endif(WIN32)
-  endif(NOT OTB_BUILD_SHARED_LIB)
+        endif()
+      endif()
+    endif()
+  endif()
 
 
   add_executable(version-config src/ossim/version-config.cpp)
@@ -82,7 +82,7 @@ configure_file(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.
   #Specify that we are making DLL here
   if(NOT BUILD_SHARED_LIBS)
     add_definitions(-DNOMINMAX -DOSSIMMAKINGDLL)
-  endif(NOT BUILD_SHARED_LIBS)
+  endif()
 
   add_library(otbossim
   ${ossim_init_SRCS}
@@ -116,5 +116,5 @@ configure_file(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.
           RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
           LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
           ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-  endif(NOT OTB_INSTALL_NO_LIBRARIES)
+  endif()
 

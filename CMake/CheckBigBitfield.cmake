@@ -19,11 +19,11 @@ macro(CHECK_BIG_BITFIELD VARIABLE LOCAL_TEST_DIR)
     file(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
       "Checking to see if this platform supports large bit-fields (>32 bits) passed with "
       "the following output:\n${OUTPUT}\n\n")
-  else(${VARIABLE})
+  else()
     message(STATUS "Checking to see if this platform supports large bit-fields (>32 bits) - no")
     file(APPEND ${CMAKE_BINARY_DIR}/CMakeError.log
       "Checking to see if this platform supports large bit-fields (>32 bits) failed with "
       "the following output:\n${OUTPUT}\n\n")
-  endif(${VARIABLE})
-  endif("HAVE_${VARIABLE}" MATCHES "^HAVE_${VARIABLE}$")
-endmacro(CHECK_BIG_BITFIELD)
+  endif()
+  endif()
+endmacro()

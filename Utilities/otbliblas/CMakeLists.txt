@@ -65,18 +65,18 @@ add_library(otbliblas ${liblas_SRCS} )
 
 #if(NOT GDAL_VERSION VERSION_LESS 1.6)
 #  target_link_libraries(otbliblas ${GDAL_LIBRARY} ${GEOTIFF_LIBRARY} ${TIFF_LIBRARY})
-#endif(NOT GDAL_VERSION VERSION_LESS 1.6)
+#endif()
 
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otbliblas PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS otbliblas
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/include/liblas/*.hpp")
@@ -99,4 +99,4 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES ${__files5}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbliblas/include/liblas/external/property_tree/detail
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()

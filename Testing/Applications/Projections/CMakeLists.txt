@@ -123,7 +123,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrOrthorectification_WGS84
                      )
 
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 OTB_TEST_APPLICATION(NAME apTvPrRigidTransformResample
                      APP  RigidTransformResample
@@ -265,7 +265,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      VALID   --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp)
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 # With QGIS the two vectordata are equal

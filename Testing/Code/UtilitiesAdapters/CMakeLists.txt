@@ -17,7 +17,7 @@ add_test(uaTvPlatformPositionComputeBaselineTest
          otbPlatformPositionComputeBaselineTest
          ${LARGEINPUT}/TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml
          ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(uaTvGeometricSarSensorModelAdapterNew
          ${UtilitiesAdapters_TESTS1}
@@ -83,7 +83,7 @@ add_test(uaTvRPCSolverAdapterNotEnoughPointsTest
          )
 set_tests_properties(uaTvRPCSolverAdapterNotEnoughPointsTest PROPERTIES WILL_FAIL TRUE)
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # Exhaustive DEM handler testing
 
@@ -366,7 +366,7 @@ add_test(uaTvDEMHandler_AboveEllipsoid_BDALTI_TIF_NoGeoid
   869
   1
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 set(UtilitiesAdapters_SRCS1
 otbUtilitiesAdaptersTests1.cxx
@@ -381,4 +381,4 @@ add_executable(otbUtilitiesAdaptersTests1 otbUtilitiesAdaptersTests1.cxx ${Utili
 target_link_libraries(otbUtilitiesAdaptersTests1 OTBOssimAdapters OTBTesting)
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

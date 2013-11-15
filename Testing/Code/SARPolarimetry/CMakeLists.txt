@@ -31,7 +31,7 @@ add_test(saTvVectorMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TES
          0.0     # PsiR
          0.0     # KhiR
         )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 # With 3 images HH, HV and VV channels turned into vectorImage
@@ -331,4 +331,4 @@ otbPolarimetricData.cxx
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests1 "${SARPOLARIMETRY_SRCS1}" "OTBSARPolarimetry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbSARPolarimetryTests2 "${SARPOLARIMETRY_SRCS2}" "OTBSARPolarimetry;OTBIO;OTBTesting")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

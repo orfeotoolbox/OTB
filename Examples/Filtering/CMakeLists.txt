@@ -69,7 +69,7 @@ target_link_libraries(GeometriesChangeSpatialReference OTBOGRAdapters)
 if(OTB_USE_MAPNIK)
 add_executable(RasterizationExample RasterizationExample.cxx)
 target_link_libraries(RasterizationExample OTBCommon OTBIO OTBBasicFilters)
-endif(OTB_USE_MAPNIK)
+endif()
 
 if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -300,4 +300,4 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
 target_link_libraries(otbFilteringExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

@@ -5,7 +5,7 @@ target_link_libraries(OTBWrapperCommandLine OTBApplicationEngine)
 
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(OTBWrapperCommandLine PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 install(TARGETS OTBWrapperCommandLine
         RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries

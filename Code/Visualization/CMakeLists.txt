@@ -11,14 +11,14 @@ add_library(OTBVisualization ${OTBVisualization_SRCS} ${OTBVisualization_FLTK_UI
 target_link_libraries(OTBVisualization OTBGui OTBCommon OTBIO ${OTB_VISU_GUI_LIBRARIES})
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(OTBVisualization PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS OTBVisualization
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
@@ -30,7 +30,7 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
     ${CMAKE_CURRENT_BINARY_DIR}/otbMsgReporterGUI.h
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Visualization
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()
 
 # Add the viewer manager compilation
 add_subdirectory(Viewer)

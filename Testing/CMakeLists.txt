@@ -17,9 +17,9 @@ if(OTB_BINARY_DIR)
 
   if(BUILD_APPLICATIONS)
     add_subdirectory(Applications)
-  endif(BUILD_APPLICATIONS)
+  endif()
 
-else(OTB_BINARY_DIR)
+else()
   # We are building as a stand-alone project.
   cmake_minimum_required(VERSION 2.6)
 
@@ -37,7 +37,7 @@ else(OTB_BINARY_DIR)
   mark_as_advanced(TCL_TCLSH)
   if(BUILD_TESTING)
     enable_testing()
-  endif(BUILD_TESTING)
+  endif()
 
   # Find the data directory.
   find_path(OTB_DATA_ROOT OTBData.readme ${OTBTesting_SOURCE_DIR}/Data $ENV{OTB_DATA_ROOT})
@@ -48,14 +48,14 @@ else(OTB_BINARY_DIR)
   if(OTB_DATA_USE_LARGEINPUT)
     find_path(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
     mark_as_advanced(OTB_DATA_LARGEINPUT_ROOT)
-  endif(OTB_DATA_USE_LARGEINPUT)
+  endif()
 
   option(OTB_DATA_USE_SPOTPHRINPUT "Use PHR data provided by SPOT." OFF)
   mark_as_advanced(OTB_DATA_USE_SPOTPHRINPUT)
   if(OTB_DATA_USE_SPOTPHRINPUT)
     find_path(OTB_DATA_SPOTPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_SPOTPHRINPUT_ROOT})
     mark_as_advanced(OTB_DATA_SPOTPHRINPUT_ROOT)
-  endif(OTB_DATA_USE_SPOTPHRINPUT)
+  endif()
 
   include(${CMAKE_CURRENT_SOURCE_DIR}/TestingHelper.cmake)
 
@@ -64,7 +64,7 @@ else(OTB_BINARY_DIR)
   if(OTB_DATA_USE_CNESPHRINPUT)
     find_path(OTB_DATA_CNESPHRINPUT_ROOT OTB_PHR_Data.readme $ENV{OTB_DATA_CNESPHRINPUT_ROOT})
     mark_as_advanced(OTB_DATA_CNESPHRINPUT_ROOT)
-  endif(OTB_DATA_USE_CNESPHRINPUT)
+  endif()
 
   macro(OTB_ADD_EXECUTABLE name sources libraries)
     add_executable(${name} ${sources})
@@ -78,32 +78,32 @@ else(OTB_BINARY_DIR)
           DEPENDS ${libraries}
           COMMENT "============== C++ checking ${file} source file...  =================="
           VERBATIM )
-      endforeach(file)
-    endif(OTB_CPP_CHECK_SOURCE_FILE)
-  endmacro(OTB_ADD_EXECUTABLE)
+      endforeach()
+    endif()
+  endmacro()
 
   # Find OTB and load its settings.
   find_package(OTB PATHS /usr/lib/otb)
   if(OTB_FOUND)
     include(${OTB_USE_FILE})
     add_subdirectory(Code)
-  else(OTB_FOUND)
+  else()
     message(FATAL_ERROR "OTB not found.  Please set OTB_DIR")
-  endif(OTB_FOUND)
+  endif()
 
   configure_file(../CMake/CTestCustom.cmake.in CTestCustom.cmake)
 
   #Prevents conflicts with visual min/max function
   if(WIN32)
     add_definitions(-DNOMINMAX)
-  endif(WIN32)
+  endif()
 
-endif(OTB_BINARY_DIR)
+endif()
 
 if(OTB_COMPILE_WITH_FULL_WARNING)
   if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OTB_FULL_WARNING_LIST_PARAMETERS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OTB_FULL_WARNING_LIST_PARAMETERS}")
-  endif(CMAKE_COMPILER_IS_GNUCXX)
-endif(OTB_COMPILE_WITH_FULL_WARNING)
+  endif()
+endif()
 

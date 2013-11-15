@@ -34,9 +34,9 @@ otbFltkWriterWatcher.cxx
 if(APPLE)
       foreach(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
         set(CMAKE_EXE_LINKER_FLAGS${c} "${CMAKE_EXE_LINKER_FLAGS${c}} -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
-      endforeach(c)
-endif(APPLE)
+      endforeach()
+endif()
 
 OTB_ADD_EXECUTABLE(otbGuiTests "${Gui_SRCS}" "OTBIO;OTBGui;OTBTesting")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

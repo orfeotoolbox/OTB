@@ -52,7 +52,7 @@ if(OTB_USE_OPENCV)
 
   add_executable(TrainMachineLearningModelFromImagesExample TrainMachineLearningModelFromImagesExample.cxx)
   target_link_libraries(TrainMachineLearningModelFromImagesExample OTBLearning OTBCommon OTBIO)
-endif(OTB_USE_OPENCV)
+endif()
 
 if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -186,4 +186,4 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbLearningExamplesTests otbLearningExamplesTests.cxx)
 target_link_libraries(otbLearningExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

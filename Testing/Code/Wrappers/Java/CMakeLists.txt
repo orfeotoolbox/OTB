@@ -8,7 +8,7 @@ set(TEST_DRIVER otbTestDriver
 set( PATH_SEPARATOR ":")
 if (WIN32)
   set( PATH_SEPARATOR ";")
-endif(WIN32)
+endif()
 
 set( CMAKE_JAVA_INCLUDE_PATH ${OTB_BINARY_DIR}/Code/Wrappers/SWIG/org.otb.application.jar )
 set( JAVA_COMMAND "${Java_JAVA_EXECUTABLE}"

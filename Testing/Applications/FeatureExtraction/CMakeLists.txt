@@ -20,7 +20,7 @@ OTB_TEST_APPLICATION(NAME   apTvFeLineSegmentDetectionNoRescale
                              ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI_NoRescale.shp
                              ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp)
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 OTB_TEST_APPLICATION(NAME  apTvFERadiometricIndices_veg
                      APP  RadiometricIndices

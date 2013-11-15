@@ -202,7 +202,7 @@ add_test(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
         ${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
         20
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # -------            otb::SpatialObjectToImageDrawingFilter   ----------------------------
 
@@ -250,7 +250,7 @@ if(OTB_DATA_USE_LARGEINPUT)
          ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # -------            otb::SpectralAngleDistanceImageFilter   ----------------------------
 
@@ -486,8 +486,8 @@ foreach(inputFileType "UINT8" "UINT16" "INT16" "UINT32" "INT32" "FLOAT" "DOUBLE"
                ${TEMP}/${OUTFILENAME}
                ${TEMP}/${OUTLABELFILENAME}
     )
-  endforeach(sizeType)
-endforeach(inputFileType)
+  endforeach()
+endforeach()
 
 # -------            otb::StreamingCompareImageFilter   ----------------------------
 
@@ -541,7 +541,7 @@ add_test(bfTvStreamingResampleImageFilterWithAffineTransform ${BASICFILTERS_TEST
   500
   ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
   )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 add_test(bfTuStreamingResampleImageFilterNew ${BASICFILTERS_TESTS5}
@@ -1494,7 +1494,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 #        9 9 10 10 0.001 10
 #        )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 add_test(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}
@@ -1635,7 +1635,7 @@ if(ITK_USE_FFTWD)
                     0
 )
 
-endif(ITK_USE_FFTWD)
+endif()
 
 
 add_test(bfTvPolygonCompacityFunctor ${BASICFILTERS_TESTS10}
@@ -3098,7 +3098,7 @@ otbOverlapSaveConvolutionImageFilterNew.cxx
 otbOverlapSaveConvolutionImageFilter.cxx
 otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
 )
-endif(ITK_USE_FFTWD)
+endif()
 
 set(BasicFilters_SRCS11
 otbBasicFiltersTests11.cxx
@@ -3212,4 +3212,4 @@ OTB_ADD_EXECUTABLE(otbBasicFiltersTests13 "${BasicFilters_SRCS13}" "OTBBasicFilt
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests14 "${BasicFilters_SRCS14}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests15 "${BasicFilters_SRCS15}" "OTBBasicFilters;OTBIO;OTBTesting;OTBOGRAdapters")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

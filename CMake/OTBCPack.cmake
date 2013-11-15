@@ -52,8 +52,8 @@ if(OTB_USE_CPACK)
     install(DIRECTORY ${GDAL_LIB_DIR}
             DESTINATION                 lib
             FILES_MATCHING  PATTERN     "*.lib" )
-    endif(WIN32 AND NOT UNIX AND NOT CYGWIN)
+    endif()
 
     include(CPack)
 
-endif(OTB_USE_CPACK)
+endif()

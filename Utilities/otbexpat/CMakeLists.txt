@@ -23,8 +23,8 @@ file(GLOB EXPAT_SRCS "lib/*.c" )
 #if(CMAKE_COMPILER_IS_GNUCC)
 #  foreach(f ${EXPAT_SRCS} )
 #        set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS -w )
-#  endforeach(f)
-#endif(CMAKE_COMPILER_IS_GNUCC)
+#  endforeach()
+#endif()
 
 
 include(CheckIncludeFiles)
@@ -53,10 +53,10 @@ if(WIN32)
     if(NOT CYGWIN)
       if(NOT MINGW)
           add_definitions(-DCOMPILED_FROM_DSP)
-      endif(NOT MINGW)
-    endif(NOT CYGWIN)
-  endif(NOT BORLAND)
-endif(WIN32)
+      endif()
+    endif()
+  endif()
+endif()
 
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake_expat_config.h.in
@@ -67,14 +67,14 @@ add_library(otbexpat ${EXPAT_SRCS} )
 #target_link_libraries(otbkml)
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otbexpat PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS otbexpat
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   set(__files     ${CMAKE_CURRENT_SOURCE_DIR}/otb_expat.h
@@ -87,4 +87,4 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES ${__files2}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbexpat/lib
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()

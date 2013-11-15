@@ -324,4 +324,4 @@ OTB_ADD_EXECUTABLE(otbSimulationTests2 "${Simulation_SRCS2}" "OTBSimulation;OTBI
 OTB_ADD_EXECUTABLE(otbSimulationTests3 "${Simulation_SRCS3}" "OTBSimulation;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbSimulationTests4 "${Simulation_SRCS4}" "OTBSimulation;OTBIO;OTBLearning;OTBTesting")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

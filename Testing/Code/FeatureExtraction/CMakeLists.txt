@@ -1064,7 +1064,7 @@ add_test(feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEA
   6
 )
 
-endif(OTB_USE_SIFTFAST)
+endif()
 
 
 # --------- MatchingFilter ----------------
@@ -1550,7 +1550,7 @@ if(OTB_USE_DEPRECATED)
 set(BasicFeatureExtraction_SRCS1
 ${BasicFeatureExtraction_SRCS1}
 )
-endif(OTB_USE_DEPRECATED)
+endif()
 
 set(BasicFeatureExtraction_SRCS2
 otbFeatureExtractionTests2.cxx
@@ -1672,7 +1672,7 @@ set(BasicFeatureExtraction_SRCS10
       otbImageToFastSIFTKeyPointSetFilterNew.cxx
       otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii.cxx
       otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii.cxx )
-endif(OTB_USE_SIFTFAST)
+endif()
 
 set(BasicFeatureExtraction_SRCS11
 otbFeatureExtractionTests11.cxx
@@ -1744,4 +1744,4 @@ OTB_ADD_EXECUTABLE(otbFeatureExtractionTests14 "${BasicFeatureExtraction_SRCS14}
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests15 "${BasicFeatureExtraction_SRCS15}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests16 "${BasicFeatureExtraction_SRCS16}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

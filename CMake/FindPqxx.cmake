@@ -9,7 +9,7 @@
 if( PQXX_INCLUDE_DIR )
     # Already in cache, be silent
     set( PQXX_FIND_QUIETLY TRUE )
-endif( PQXX_INCLUDE_DIR )
+endif()
 
 find_path( PQXX_INCLUDE_DIR pqxx/pqxx )
 
@@ -27,8 +27,8 @@ mark_as_advanced( PQXX_INCLUDE_DIR PQXX_LIBRARY )
 if(PQXX_FOUND)
   set(PQXX_INCLUDE_DIRS ${PQXX_INCLUDE_DIR})
   set(PQXX_LIBRARIES ${PQXX_LIBRARY})
-else(PQXX_FOUND)
+else()
   set(PQXX_INCLUDE_DIRS)
   set(PQXX_LIBRARIES)
-endif(PQXX_FOUND)
+endif()
 

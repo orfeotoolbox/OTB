@@ -61,4 +61,4 @@ add_executable(otbMultiTemporalTests1 otbMultiTemporalTests1.cxx ${BasicMultiTem
 target_link_libraries(otbMultiTemporalTests1 OTBIO OTBMultiTemporal  OTBTesting)
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

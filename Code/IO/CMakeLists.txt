@@ -9,7 +9,7 @@ if(NOT OTB_USE_JPEG2000)
     list(REMOVE_ITEM OTBIO_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIO.cxx" )
     list(REMOVE_ITEM OTBIO_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbJPEG2000ImageIOFactory.cxx" )
     add_definitions(-DOTB_JPEG2000_DISABLED)
-endif(NOT OTB_USE_JPEG2000)
+endif()
 
 # otbopenjpeg
 if(OTB_USE_JPEG2000)
@@ -17,10 +17,10 @@ if(OTB_USE_JPEG2000)
   if(WIN32)
     if(OTB_BUILD_SHARED_LIBS)
       add_definitions(-DOPJ_EXPORTS)
-    else(OTB_BUILD_SHARED_LIBS)
+    else()
       add_definitions(-DOPJ_STATIC)
-    endif(OTB_BUILD_SHARED_LIBS)
-  endif(WIN32)
+    endif()
+  endif()
 
   # This is the only place where we need to include openjpeg headers
   # Use BEFORE since we can have a conflict with system-installed openjpeg
@@ -29,7 +29,7 @@ if(OTB_USE_JPEG2000)
                       ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg
                       ${OTB_BINARY_DIR}/Utilities/otbopenjpeg )
 
-endif(OTB_USE_JPEG2000)
+endif()
 
 
 add_library(OTBIO ${OTBIO_SRCS})
@@ -45,11 +45,11 @@ target_link_libraries(OTBIO ${ITK_LIBRARIES})
 
 if( OTB_USE_JPEG2000 )
     target_link_libraries(OTBIO otbopenjpeg)
-endif( OTB_USE_JPEG2000 )
+endif()
 
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(OTBIO PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
@@ -57,7 +57,7 @@ if(NOT OTB_INSTALL_NO_LIBRARIES)
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
 
@@ -67,10 +67,10 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   if(NOT OTB_USE_JPEG2000)
      list(REMOVE_ITEM __files1 "${CMAKE_CURRENT_SOURCE_DIR}/otbJpeg2000ImageIOFactory.h" )
      list(REMOVE_ITEM __files1 "${CMAKE_CURRENT_SOURCE_DIR}/otbJpeg2000ImageIO.h" )
-  endif(NOT OTB_USE_JPEG2000)
+  endif()
 
 
   install(FILES ${__files1} ${__files2}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/IO
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()

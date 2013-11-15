@@ -61,7 +61,7 @@ macro (make_directories)
 
     endforeach()
 
-endmacro(make_directories)
+endmacro()
 
 
 
@@ -82,8 +82,8 @@ macro(copy_files GLOBPAT DESTINATION  )
             TARGET copy
             COMMAND ${CMAKE_COMMAND} -E copy ${SRC} ${DST}
         )
-    endforeach(FILENAME)
-endmacro(copy_files)
+    endforeach()
+endmacro()
 
 
 macro(copy_directory SOURCE DESTINATION  )
@@ -93,7 +93,7 @@ macro(copy_directory SOURCE DESTINATION  )
             TARGET copy
             COMMAND ${CMAKE_COMMAND} -E copy_directory ${SOURCE} ${DESTINATION}
         )
-endmacro(copy_directory)
+endmacro()
 
 
 add_custom_target(tar
@@ -110,7 +110,7 @@ macro (tar_directories source destination base_paths)
     )
 
 
-endmacro(tar_directories)
+endmacro()
 
 make_directories()
 copy_files(${LIBLAS_BUILD_OUTPUT_DIRECTORY}/lasinfo.exe ${OSGEO4W_BIN_DIR}/lasinfo.exe  )

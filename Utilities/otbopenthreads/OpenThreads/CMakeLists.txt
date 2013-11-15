@@ -1,12 +1,12 @@
 if(WIN32)
     cmake_minimum_required(VERSION 2.4.6 FATAL_ERROR)
-else(WIN32)
+else()
     if(APPLE)
         cmake_minimum_required(VERSION 2.4.6 FATAL_ERROR)
-    else(APPLE)
+    else()
         cmake_minimum_required(VERSION 2.4.0 FATAL_ERROR)
-    endif(APPLE)
-endif(WIN32)
+    endif()
+endif()
 
 
 project(OpenThreads)
@@ -34,8 +34,8 @@ set(LIB_POSTFIX "")
 if(UNIX AND NOT WIN32 AND NOT APPLE)
   if(CMAKE_SIZEOF_VOID_P MATCHES "8")
       set(LIB_POSTFIX "64")
-  endif(CMAKE_SIZEOF_VOID_P MATCHES "8")
-endif(UNIX AND NOT WIN32 AND NOT APPLE)
+  endif()
+endif()
 
 ################################################################################
 
@@ -61,14 +61,14 @@ add_definitions(-DOPENTHREADS_EXPORTS)
 #option(DYNAMIC_OPENTHREADS "Set to ON to build OpenThreads for dynamic linking.  Use OFF for static." ON)
 #if(DYNAMIC_OPENTHREADS)
 #    set(OPENTHREADS_USER_DEFINED_DYNAMIC_OR_STATIC "SHARED")
-#else(DYNAMIC_OPENTHREADS)
+#else()
 #    set(OPENTHREADS_USER_DEFINED_DYNAMIC_OR_STATIC "STATIC")
-#endif(DYNAMIC_OPENTHREADS)
+#endif()
 if( OTB_BUILD_SHARED_LIBS )
     set(OPENTHREADS_USER_DEFINED_DYNAMIC_OR_STATIC "SHARED")
-else( OTB_BUILD_SHARED_LIBS )
+else()
     set(OPENTHREADS_USER_DEFINED_DYNAMIC_OR_STATIC "STATIC")
-endif( OTB_BUILD_SHARED_LIBS )
+endif()
 
 
 
@@ -102,7 +102,7 @@ set(LIBRARY_OUTPUT_PATH ${OUTPUT_LIBDIR})
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin ${CMAKE_BINARY_DIR}/lib)
-endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+endif()
 
 
 
@@ -122,19 +122,19 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     # to be the workaround.
 #    set(OPENTHREADS_AGGRESSIVE_WARNING_FLAGS "-Wall -Wparentheses -Wformat=2 -Wno-long-long -Wno-import -pedantic -Wnewline-eof -Wreturn-type -Wmissing-braces -Wunknown-pragmas -Wunused -Wshadow -Woverloaded-virtual -fpermissive")
     set(OPENTHREADS_AGGRESSIVE_WARNING_FLAGS "-w -Wparentheses -Wformat=2 -Wno-long-long -Wno-import -pedantic -Wnewline-eof -Wreturn-type -Wmissing-braces -Wunknown-pragmas -Wunused -Wshadow -Woverloaded-virtual -fpermissive")
-else(CMAKE_COMPILER_IS_GNUCXX)
+else()
     if(MSVC)
         # FIXME: What are good aggressive warning flags for Visual Studio?
         # And do we need to further subcase this for different versions of VS?
         # CMake variables: MSVC60, MSVC70, MSVC71, MSVC80, CMAKE_COMPILER_2005
 #        set(OPENTHREADS_AGGRESSIVE_WARNING_FLAGS "/Wall /W4")
         set(OPENTHREADS_AGGRESSIVE_WARNING_FLAGS "/W0")
-    else(MSVC)
+    else()
         # CMake lacks an elseif, so other non-gcc, non-VS compilers need
         # to be listed below. If unhandled, OPENTHREADS_AGGRESSIVE_WARNING_FLAGS should
         # remain unset.
-    endif(MSVC)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+    endif()
+endif()
 
 # This part is for the CMake menu option to toggle the warnings on/off.
 # This will only be made available if we set values for OPENTHREADS_AGGRESSIVE_WARNING_FLAGS.
@@ -147,17 +147,17 @@ if(OPENTHREADS_AGGRESSIVE_WARNING_FLAGS)
             set(OLD_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE INTERNAL "Old CXX flags")
             set(OLD_CMAKE_CXX_FLAGS_WAS_SET 1 CACHE INTERNAL "Old CXX flags was set")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPENTHREADS_AGGRESSIVE_WARNING_FLAGS}" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-        endif(NOT "${OLD_CMAKE_CXX_FLAGS_WAS_SET}")
-    else(OPENTHREADS_USE_AGGRESSIVE_WARNINGS)
+        endif()
+    else()
         # FIXME: This will lose any changes made after OLD_CMAKE_CXX_FLAGS was
         # set. The better way would be to parse the string and remove each
         # option explicitly.
         if("${OLD_CMAKE_CXX_FLAGS_WAS_SET}")
             set(CMAKE_CXX_FLAGS "${OLD_CMAKE_CXX_FLAGS}" CACHE STRING "Flags used by the compiler during all build types." FORCE)
             set(OLD_CMAKE_CXX_FLAGS_WAS_SET 0 CACHE INTERNAL "Old CXX flags was set")
-        endif("${OLD_CMAKE_CXX_FLAGS_WAS_SET}")
-    endif(OPENTHREADS_USE_AGGRESSIVE_WARNINGS)
-endif(OPENTHREADS_AGGRESSIVE_WARNING_FLAGS)
+        endif()
+    endif()
+endif()
 
 
 ###############################################################################
@@ -177,7 +177,7 @@ if(APPLE)
         if(EXISTS /Developer/SDKs/10.5.sdk)
             set(CMAKE_OSX_ARCHITECTURES "ppc;i386;ppc64;x86_64" CACHE STRING "Build architectures for OSX" FORCE)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-        else(EXISTS /Developer/SDKs/10.5.sdk)
+        else()
             if(EXISTS /Developer/SDKs/MacOSX10.4u.sdk)
                 # Unix layer on Tiger is 64-bit clean/ready so I think
                 # it is okay to build 64-bit here. This presumes we
@@ -186,12 +186,12 @@ if(APPLE)
                 set(CMAKE_OSX_ARCHITECTURES "ppc;i386;ppc64;x86_64" CACHE STRING "Build architectures for OSX" FORCE)
                 #set(CMAKE_OSX_ARCHITECTURES "ppc;i386" CACHE STRING "Build architectures for OSX" FORCE)
                 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-            else(EXISTS /Developer/SDKs/MacOSX10.4u.sdk)
+            else()
                 # No Universal Binary support
-            endif(EXISTS /Developer/SDKs/MacOSX10.4u.sdk)
-        endif(EXISTS /Developer/SDKs/10.5.sdk)
-    endif(NOT OPENTHREADS_CONFIG_HAS_BEEN_RUN_BEFORE)
-endif(APPLE)
+            endif()
+        endif()
+    endif()
+endif()
 
 
 
@@ -204,9 +204,9 @@ include(${CMAKE_ROOT}/Modules/Documentation.cmake OPTIONAL)
 if(BUILD_DOCUMENTATION)
     if(DOT)
         set(HAVE_DOT YES)
-    else(DOT)
+    else()
         set(HAVE_DOT NO)
-    endif(DOT)
+    endif()
     # This processes our Doxyfile.in and substitutes paths to generate
     # a final Doxyfile
     configure_file(${PROJECT_SOURCE_DIR}/docs/doxyfile.cmake
@@ -221,13 +221,13 @@ if(BUILD_DOCUMENTATION)
     add_custom_target(DoxygenDoc ${DOXYGEN}
         ${PROJECT_BINARY_DIR}/docs/doxyfile
     )
-endif(BUILD_DOCUMENTATION)
+endif()
 
 
 # This needs to be run very last so other parts of the scripts can take
 # advantage of this.
 if(NOT OPENTHREADS_CONFIG_HAS_BEEN_RUN_BEFORE)
     set(OPENTHREADS_CONFIG_HAS_BEEN_RUN_BEFORE 1 CACHE INTERNAL "Flag to track whether this is the first time running CMake or if CMake has been configured before")
-endif(NOT OPENTHREADS_CONFIG_HAS_BEEN_RUN_BEFORE)
+endif()
 
 

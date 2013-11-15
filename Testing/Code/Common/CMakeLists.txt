@@ -11,10 +11,10 @@ set(COMMON_TESTS7 ${CXX_TEST_PATH}/otbCommonTests7)
 set(COMMON_TESTS8 ${CXX_TEST_PATH}/otbCommonTests8)
 if(OTB_USE_MAPNIK)
   set(COMMON_TESTS9 ${CXX_TEST_PATH}/otbCommonTests9)
-endif(OTB_USE_MAPNIK)
+endif()
 if(OTB_USE_PQXX)
   set(COMMON_TESTS10 ${CXX_TEST_PATH}/otbCommonTests10)
-endif(OTB_USE_PQXX)
+endif()
 set(COMMON_TESTS11 ${CXX_TEST_PATH}/otbCommonTests11)
 set(COMMON_TESTS12 ${CXX_TEST_PATH}/otbCommonTests12)
 set(COMMON_TESTS13 ${CXX_TEST_PATH}/otbCommonTests13)
@@ -413,7 +413,7 @@ add_test(coTvExtractROITestMetaData_HDR ${COMMON_TESTS3}
          ${TEMP}/coTvExtractROITestMetaData1_hdr.txt
          ${TEMP}/coTvExtractROITestMetaData2_hdr.txt
          )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -877,7 +877,7 @@ add_test(coTvVectorDataToImageFilterBinary ${COMMON_TESTS9}
 
 
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 
@@ -893,7 +893,7 @@ add_test(coTvVectorDataToMapFilterSensorModel ${COMMON_TESTS9}
         ${TEMP}/coTvVectorDataToMapFilterSensorModel.png
         ${INPUTDATA}/DejaVuSans.ttf # font
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(coTvVectorDataToMapFilterWorld ${COMMON_TESTS9}
      --compare-image ${NOTOL}
@@ -910,7 +910,7 @@ add_test(coTvVectorDataToMapFilterWorld ${COMMON_TESTS9}
 )
 
 
-endif(OTB_USE_MAPNIK)
+endif()
 
 
 
@@ -991,7 +991,7 @@ otbGISTableSourceNew
 )
 
 
-endif(OTB_USE_PQXX)
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests11 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1406,7 +1406,7 @@ otbVectorDataToMapFilterWorld.cxx
 otbVectorDataToMapFilterNoFonts.cxx
 otbVectorDataToImageFilter.cxx
 )
-endif(OTB_USE_MAPNIK)
+endif()
 
 if(OTB_USE_PQXX)
 set(BasicCommon_SRCS10
@@ -1423,7 +1423,7 @@ otbGISTableToVectorDataFilterNew.cxx
 otbGISTableToVectorDataFilter.cxx
 otbGISTableSourceNew.cxx
 )
-endif(OTB_USE_PQXX)
+endif()
 
 
 set(BasicCommon_SRCS11
@@ -1471,12 +1471,12 @@ OTB_ADD_EXECUTABLE(otbCommonTests7 "${BasicCommon_SRCS7}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests8 "${BasicCommon_SRCS8}" "OTBIO;OTBTesting")
 if(OTB_USE_MAPNIK)
   OTB_ADD_EXECUTABLE(otbCommonTests9 "${BasicCommon_SRCS9}" "OTBIO;OTBTesting;${MAPNIK_LIBRARY};${ICUUC_LIBRARY}")
-endif(OTB_USE_MAPNIK)
+endif()
 if(OTB_USE_PQXX)
   #TODO this line should be refined when we will like to have this capability with windows
 OTB_ADD_EXECUTABLE(otbCommonTests10 "${BasicCommon_SRCS10}" "OTBIO;OTBTesting")
 target_link_libraries(otbCommonTests10 OTBIO  OTBTesting OTBGeospatialAnalysis pq pqxx)
-endif(OTB_USE_PQXX)
+endif()
 add_executable(otbCommonTests11 otbCommonTests11.cxx ${BasicCommon_SRCS11})
 target_link_libraries(otbCommonTests11 OTBIO  OTBTesting itkvcl)
 
@@ -1484,4 +1484,4 @@ OTB_ADD_EXECUTABLE(otbCommonTests12 "${BasicCommon_SRCS12}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests13 "${BasicCommon_SRCS13}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests14 "${BasicCommon_SRCS14}" "OTBIO;OTBTesting;OTBOGRAdapters")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

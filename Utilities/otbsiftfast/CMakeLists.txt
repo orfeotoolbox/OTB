@@ -25,7 +25,7 @@ if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 2.4)
    # Tell them that a more recent version is required.
    if(NOT COMMAND SET_PROPERTY)
       message(FATAL_ERROR "You are using an old version of CMake from cvs, please update to CMake >= 2.6.0 or cvs at least from Feb 20th, 2008")
-   endif(NOT COMMAND SET_PROPERTY)
+   endif()
 
    # CMP0003: add the link paths to the link command as with cmake 2.4
    cmake_policy(SET CMP0003 OLD)
@@ -46,7 +46,7 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
               OUTPUT_VARIABLE OUTPUT)
     if(IS_SIFTFAST_COMPILE)
         message(STATUS "Try to compile libsiftfast.cpp -- yes.")
-    else(IS_SIFTFAST_COMPILE)
+    else()
         message(STATUS "Try to compile libsiftfast.cpp -- no.")
         try_compile(IS_SIFTFAST_COMPILE2
               ${CMAKE_CURRENT_BINARY_DIR}
@@ -55,14 +55,14 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
               OUTPUT_VARIABLE OUTPUT)
         if(IS_SIFTFAST_COMPILE2)
             message(STATUS "Try to compile libsiftfast.cpp with disabling fast functions (add CFLAGS -DOTB_DISABLE_FAST_FUNCTIONS) -- yes.")
-        else(IS_SIFTFAST_COMPILE2)
+        else()
             message(STATUS "Try to compile libsiftfast.cpp with disabling fast functions (add CFLAGS -DOTB_DISABLE_FAST_FUNCTIONS) -- no.")
             message(FATAL_ERROR "Impossible to compile libsiftfast. Contact OTB development team")
-        endif(IS_SIFTFAST_COMPILE2)
+        endif()
         set(OTB_DISABLE_FAST_FUNCTIONS_VALUE 1)
-    else(NOT IS_SIFTFAST_COMPILE)
+    else()
         message(STATUS "Try to compile libsiftfast.cpp done.")
-    endif(IS_SIFTFAST_COMPILE)
+    endif()
 
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g")
   add_definitions(" -Wall -fPIC ")
@@ -91,7 +91,7 @@ endif()
 
 if(OTB_DISABLE_FAST_FUNCTIONS_VALUE)
     add_definitions(-DOTB_DISABLE_FAST_FUNCTIONS)
-endif(OTB_DISABLE_FAST_FUNCTIONS_VALUE)
+endif()
 
 
 include(CheckIncludeFile)
@@ -212,17 +212,17 @@ endif()
 #Install TARGET & FILES for otb-lib
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otbsiftfast PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS otbsiftfast
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES siftfast.h
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbsiftfast
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()

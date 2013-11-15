@@ -7,7 +7,7 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Remote sensing images (large images )
 if(OTB_DATA_USE_LARGEINPUT)
   set(IMAGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 set(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
@@ -46,7 +46,7 @@ add_test(utTvOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
         ${IMAGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_grn_0000000.tif
         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(utTuOssimElevManagerTest ${UTILITIES_TESTS}
         ossimElevManagerTest
@@ -57,7 +57,7 @@ add_test(utTvOssimXmlDocumentTest ${UTILITIES_TESTS}
         ossimXmlDocumentTest
         ${IMAGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
         )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(utTvOssimTileMapModelTestToulouse ${UTILITIES_TESTS}
         --compare-ascii ${NOTOL}
@@ -77,7 +77,7 @@ add_test(utTvOssimpluginsHermiteInterpolationPlateformPositionRadarSat2Test ${UT
         ossimpluginsHermiteInterpolationPlateformPositionTest
         ${IMAGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
     )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 # -------            lib otbsvm   ------------------------------
@@ -171,7 +171,7 @@ add_test(utTvOssimRadarSatSupport ${UTILITIES_TESTS}
         ossimRadarSatSupport
         ${IMAGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
         )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 # -------            lib OpenJpeg   ------------------------------
@@ -187,14 +187,14 @@ endif(OTB_DATA_USE_LARGEINPUT)
 #        ${TEMP}/testjpeg.j2k
 #)
 #set_tests_properties(utTvOpenJpegDecoder PROPERTIES DEPENDS utTvOpenJpegEncoder)
-#endif(OTB_USE_JPEG2000)
+#endif()
 
 # -------            lib expat  ------------------------------
 if(NOT OTB_USE_EXTERNAL_EXPAT)
 add_test(utTvExpatRunTests ${UTILITIES_TESTS}
         expatruntests
         -q)
-endif(NOT OTB_USE_EXTERNAL_EXPAT)
+endif()
 
 # -------            lib OpenThreads  ------------------------------
 if(NOT OTB_USE_EXTERNAL_OPENTHREADS)
@@ -207,7 +207,7 @@ if(NOT OTB_USE_EXTERNAL_OPENTHREADS)
         openthreadsWorkCrew
         1 # [NUM_THREADS]
         )
-endif(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+endif()
 
 # -------            SIFT   -------------------------------------
 add_test(utTv2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
@@ -243,7 +243,7 @@ foreach(id_test createkml helloattrs helloenum hellofolder hellogeometry hellore
         kml${id_test}
         ${TEMP}/utkml${id_test}.txt
         )
-endforeach(id_test)
+endforeach()
 
 
 add_test(utTvKmlhellofeatures   ${UTILITIES_TESTS}
@@ -329,7 +329,7 @@ kmlsortplacemarks.cc
 
 if(OTB_USE_SIFTFAST)
   set(UtilitiesTests_SRCS ${UtilitiesTests_SRCS} siftfast.cpp)
-endif(OTB_USE_SIFTFAST)
+endif()
 
 if(OTB_USE_JPEG2000)
 #  set(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
@@ -344,7 +344,7 @@ if(OTB_USE_JPEG2000)
 
   endif()
 
-endif(OTB_USE_JPEG2000)
+endif()
 
 if(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   set(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}
@@ -352,14 +352,14 @@ if(NOT OTB_USE_EXTERNAL_OPENTHREADS)
         openthreadsThreadReporter.cpp
         openthreadsWorkCrew.cpp
         openthreadsSimpleThreader.cpp )
-endif(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+endif()
 
 if(NOT OTB_USE_EXTERNAL_EXPAT)
   set(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}
         expatchardata.cxx
         expatminicheck.cxx
         expatruntests.cxx )
-endif(NOT OTB_USE_EXTERNAL_EXPAT)
+endif()
 
 
 # -------       Select sources files suppress warning  -----------------------------------
@@ -372,67 +372,67 @@ set(UtilitiesTests_DisableWarning_SRCS
 
 if(OTB_USE_SIFTFAST)
   set(UtilitiesTests_DisableWarning_SRCS ${UtilitiesTests_DisableWarning_SRCS} siftfast.cpp)
-endif(OTB_USE_SIFTFAST)
+endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
       set_source_files_properties( ${UtilitiesTests_DisableWarning_SRCS} PROPERTIES COMPILE_FLAGS -w)
-else(CMAKE_COMPILER_IS_GNUCXX)
+else()
   if(WIN32)
     if(CMAKE_CXX_COMPILER MATCHES "^cl$")
         set_source_files_properties( ${UtilitiesTests_DisableWarning_SRCS} PROPERTIES COMPILE_FLAGS "/W0" )
-    endif(CMAKE_CXX_COMPILER MATCHES "^cl$")
-  endif(WIN32)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+    endif()
+  endif()
+endif()
 
 include_directories("${OTBTesting_BINARY_DIR}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
 if(OTB_USE_EXTERNAL_OSSIM)
   include_directories( ${OSSIM_INCLUDE_DIR} )
-else(OTB_USE_EXTERNAL_OSSIM)
+else()
   include_directories( ${OTB_SOURCE_DIR}/Utilities/otbossim/include
                        ${OTB_BINARY_DIR}/Utilities/otbossim/include )
-endif(OTB_USE_EXTERNAL_OSSIM)
+endif()
 
 if(NOT BUILD_SHARED_LIBS)
   add_definitions(-DOPJ_STATIC)
-endif(NOT BUILD_SHARED_LIBS)
+endif()
 
 add_executable(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
 target_link_libraries(otbUtilitiesTests OTBIO OTBCommon OTBTesting otbsvm otb6S ${TINYXML_LIBRARIES} ${LIBKML_LIBRARIES})
 
 if(OTB_USE_SIFTFAST)
   target_link_libraries(otbUtilitiesTests otbsiftfast)
-endif(OTB_USE_SIFTFAST)
+endif()
 
 if(OTB_USE_JPEG2000)
   target_link_libraries(otbUtilitiesTests otbopenjpeg)
-endif(OTB_USE_JPEG2000)
+endif()
 
 if(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   target_link_libraries(otbUtilitiesTests OpenThreads)
-endif(NOT OTB_USE_EXTERNAL_OPENTHREADS)
+endif()
 
 if(NOT OTB_USE_EXTERNAL_EXPAT)
   target_link_libraries(otbUtilitiesTests ${EXPAT_LIBRARIES})
-endif(NOT OTB_USE_EXTERNAL_EXPAT)
+endif()
 
 if(UNIX)
     target_link_libraries(otbUtilitiesTests m)
-endif(UNIX)
+endif()
 
 # Original 6S main executable in C
 #     add_executable(otb6SMain 6SMainTest.cxx )
 #     target_link_libraries(otb6SMain OTBCommon otb6S)
 #     if(UNIX)
 #         target_link_libraries(otb6SMain m)
-#     endif(UNIX)
+#     endif()
 
 # OTB 6S main executable in C (call 6S main function.
 #     add_executable(otb6SMainWithCallFunction 6SMainOtbWithCallFunctionTest.cxx )
 #     target_link_libraries(otb6SMainWithCallFunction OTBCommon otb6S)
 #     if(UNIX)
 #         target_link_libraries(otb6SMainWithCallFunction m)
-#     endif(UNIX)
+#     endif()
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

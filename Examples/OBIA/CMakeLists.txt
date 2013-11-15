@@ -10,7 +10,7 @@ if(ITK_USE_REVIEW)
 
   add_executable(KeepNObjects KeepNObjects.cxx )
   target_link_libraries(KeepNObjects OTBCommon OTBIO)
-endif(ITK_USE_REVIEW)
+endif()
 
 add_executable(RadiometricAttributesLabelMapFilterExample RadiometricAttributesLabelMapFilterExample.cxx )
 target_link_libraries(RadiometricAttributesLabelMapFilterExample OTBCommon OTBIO OTBBasicFilters OTBSpatialReasoning  OTBFeatureExtraction OTBLearning)
@@ -29,7 +29,7 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 #Remote sensing images (large images )
 if(OTB_DATA_USE_LARGEINPUT)
   set(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
@@ -74,7 +74,7 @@ add_test(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS1}
         50
         1.0
 )
-endif(ITK_USE_REVIEW)
+endif()
 
 add_test(trTeLabelMapToVectorData ${EXE_TESTS}
         LabelMapToVectorDataTest
@@ -91,6 +91,6 @@ target_link_libraries(otbOBIAExamplesTests OTBCommon OTBIO OTBTesting)
 if(ITK_USE_REVIEW)
   add_executable(otbOBIAExamplesTests1 otbOBIAExamplesTests1.cxx)
   target_link_libraries(otbOBIAExamplesTests1 ${ITK_LIBRARIES} OTBCommon OTBIO OTBTesting)
-endif(ITK_USE_REVIEW)
+endif()
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

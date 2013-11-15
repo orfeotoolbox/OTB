@@ -5,14 +5,14 @@ add_library(OTBOGRAdapters ${OTBOGRAdapters_SRCS})
 target_link_libraries(OTBOGRAdapters OTBCommon ${OGR_LIBRARY})
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(OTBOGRAdapters PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS OTBOGRAdapters
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
@@ -23,4 +23,4 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES ${__files1} ${__files2} ${__files3}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/UtilitiesAdapters/OGRAdapters
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()

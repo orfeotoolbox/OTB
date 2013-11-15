@@ -165,4 +165,4 @@ target_link_libraries(otbHyperspectralTests2 OTBIO OTBHyperspectral OTBTesting)
 add_executable(otbHyperspectralTests3 otbHyperspectralTests3.cxx ${Hyperspectral_SRCS3})
 target_link_libraries(otbHyperspectralTests3 OTBIO OTBHyperspectral OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

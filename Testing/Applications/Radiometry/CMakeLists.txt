@@ -96,4 +96,4 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Formosat
 #                      VALID   --compare-image ${EPSILON_7}
 #                              ${BASELINE}/apTvRaOpticalCalibration_toc_PHR1A.tif
 #                              ${TEMP}/apTvRaOpticalCalibration_toc_PHR1A.tif )
-# endif(OTB_DATA_USE_LARGEINPUT)
+# endif()

@@ -29,7 +29,7 @@ if(OTB_USE_VISU_GUI)
 # subdirs(BasicApplication)
 
 
-endif(OTB_USE_VISU_GUI)
+endif()
 
 add_executable(OrthoFusion OrthoFusion.cxx )
 target_link_libraries(OrthoFusion OTBFusion OTBProjections OTBCommon OTBIO)
@@ -42,7 +42,7 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 #Remote sensing images (large images )
 if(OTB_DATA_USE_LARGEINPUT)
   set(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
@@ -118,10 +118,10 @@ add_test( trTeTutorialsOrthoFusionTest ${EXE_TESTS}
         0.6
         -0.6
         )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbTutorialsExamplesTests otbTutorialsExamplesTests.cxx)
 target_link_libraries(otbTutorialsExamplesTests   ${ITK_LIBRARIES}  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

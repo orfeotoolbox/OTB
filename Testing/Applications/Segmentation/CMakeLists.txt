@@ -106,8 +106,8 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                               ${TEMP}/${OUTFILE}
                      )
 
-endforeach(filter)
-endforeach(mode)
+endforeach()
+endforeach()
 
 set(filter "CC")
 set(mode "Vector")

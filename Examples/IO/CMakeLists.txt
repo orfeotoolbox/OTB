@@ -69,13 +69,13 @@ if(OTB_USE_LIBLAS)
   if(ITK_USE_REVIEW)
     add_executable(LidarToImageExample LidarToImageExample.cxx )
     target_link_libraries(LidarToImageExample OTBIO OTBCommon )
-  endif(ITK_USE_REVIEW)
-endif(OTB_USE_LIBLAS)
+  endif()
+endif()
 
 if( OTB_USE_CURL )
   add_executable(TileMapImageIOExample TileMapImageIOExample.cxx)
   target_link_libraries(TileMapImageIOExample OTBIO OTBCommon)
-endif( OTB_USE_CURL )
+endif()
 
 add_executable(ImageToKmzAndMapFileProductExample ImageToKmzAndMapFileProductExample.cxx)
 target_link_libraries(ImageToKmzAndMapFileProductExample OTBIO)
@@ -207,7 +207,7 @@ add_test(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
 #          8
 #          )
 
-endif( OTB_USE_CURL )
+endif()
 
 
 if(OTB_USE_LIBLAS)
@@ -234,8 +234,8 @@ add_test(ioTeLidarToImageExample2Test ${EXE_TESTS3}
          5
          8
          )
-endif(ITK_USE_REVIEW)
-endif(OTB_USE_LIBLAS)
+endif()
+endif()
 
 
 
@@ -246,16 +246,16 @@ target_link_libraries(otbIOExamplesTests1 OTBIO OTBCommon OTBOssimAdapters OTBTe
 if( OTB_USE_CURL )
   add_executable(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
   target_link_libraries(otbIOExamplesTests2 OTBCommon OTBIO OTBTesting)
-endif( OTB_USE_CURL )
+endif()
 
 if(OTB_USE_LIBLAS)
 if(ITK_USE_REVIEW)
   add_executable(otbIOExamplesTests3 otbIOExamplesTests3.cxx)
   target_link_libraries(otbIOExamplesTests3 OTBCommon OTBIO OTBTesting)
-endif(ITK_USE_REVIEW)
-endif(OTB_USE_LIBLAS)
+endif()
+endif()
 
 
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

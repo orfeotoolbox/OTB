@@ -75,4 +75,4 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
 target_link_libraries(otbRegistrationExamplesTests ${ITK_LIBRARIES} OTBCommon OTBIO OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

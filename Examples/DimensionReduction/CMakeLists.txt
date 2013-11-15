@@ -7,7 +7,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         KullbackLeiblerDistanceChDet.cxx
         PROPERTIES COMPILE_FLAGS -Wno-comment
   )
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_executable(NAPCAExample NAPCAExample.cxx )
 target_link_libraries(NAPCAExample OTBCommon OTBIO OTBBasicFilters)

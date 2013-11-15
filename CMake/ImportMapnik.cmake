@@ -5,7 +5,7 @@ mark_as_advanced(OTB_USE_MAPNIK)
 if(OTB_USE_MAPNIK)
         if(NOT OTB_USE_EXTERNAL_BOOST)
           message(FATAL_ERROR "You need to set OTB_USE_EXTERNAL_BOOST to ON when using MAPNIK")
-        endif(NOT OTB_USE_EXTERNAL_BOOST)
+        endif()
 
         find_path(MAPNIK_INCLUDE_DIR mapnik/map.hpp PATHS)
         mark_as_advanced(MAPNIK_INCLUDE_DIR)
@@ -35,34 +35,34 @@ if(OTB_USE_MAPNIK)
         if(NOT MAPNIK_INCLUDE_DIR)
                 message(FATAL_ERROR
                         "Cannot find MAPNIK include directory. Please set MAPNIK_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        endif(NOT MAPNIK_INCLUDE_DIR)
+        endif()
         if(NOT MAPNIK_LIBRARY)
                 message(FATAL_ERROR
                         "Cannot find MAPNIK library. Please set MAPNIK_LIBRARY or set OTB_USE_MAPNIK OFF.")
-        endif(NOT MAPNIK_LIBRARY)
+        endif()
 
         if(NOT FREETYPE2_INCLUDE_DIR)
                 message(FATAL_ERROR
                         "Cannot find FREETYPE2 include directory. Please set FREETYPE2_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        endif(NOT FREETYPE2_INCLUDE_DIR)
+        endif()
 
         if(NOT ICUUC_INCLUDE_DIR)
                 message(FATAL_ERROR
                         "Cannot find ICUUC_INCLUDE_DIR include directory. Please set ICUUC_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        endif(NOT ICUUC_INCLUDE_DIR)
+        endif()
         if(NOT ICUUC_LIBRARY)
                 message(FATAL_ERROR
                         "Cannot find ICUUC library, needed by MAPNIK. Please set ICUUC_LIBRARY or set OTB_USE_MAPNIK OFF.")
-        endif(NOT ICUUC_LIBRARY)
+        endif()
 
         if(NOT LTDL_INCLUDE_DIR)
                 message(FATAL_ERROR
                         "Cannot find LTDL_INCLUDE_DIR include directory. Please set LTDL_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
-        endif(NOT LTDL_INCLUDE_DIR)
+        endif()
         if(NOT LTDL_LIBRARY)
                 message(FATAL_ERROR
                         "Cannot find ICUUC library, needed by MAPNIK. Please set ICUUC_LIBRARY or set OTB_USE_MAPNIK OFF.")
-        endif(NOT LTDL_LIBRARY)
+        endif()
 
 
         # Validating the config
@@ -73,14 +73,14 @@ if(OTB_USE_MAPNIK)
           OUTPUT_VARIABLE OUTPUT)
         if(OTB_MAPNIK_SUPPORTS_API20)
           message(STATUS "  Testing if Mapnik2     -- yes")
-        else(OTB_MAPNIK_SUPPORTS_API20)
+        else()
           message(STATUS "  Testing if Mapnik2     -- no")
           #message(STATUS "Does not support mapnik2 interface: ${OUTPUT}")
           message(STATUS "  Assuming mapnik 0.7")
           # This should be dropped when we don't want to support this any more
           # Estimated date: 02/2013.
           add_definitions(-DOTB_MAPNIK_COMPATIBILITY_API07)
-        endif(OTB_MAPNIK_SUPPORTS_API20)
+        endif()
 
         # Add compiler option
         add_definitions(-DOTB_USE_MAPNIK)
@@ -95,8 +95,8 @@ if(OTB_USE_MAPNIK)
         message(STATUS "  LTDL includes : ${LTDL_INCLUDE_DIR}")
         message(STATUS "  LTDL library  : ${LTDL_LIBRARY}")
 
-else(OTB_USE_MAPNIK)
+else()
 
     message(STATUS "  Disabling Mapnik support")
 
-endif(OTB_USE_MAPNIK)
+endif()

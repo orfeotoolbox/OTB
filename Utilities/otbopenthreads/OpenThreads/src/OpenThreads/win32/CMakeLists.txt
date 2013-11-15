@@ -24,7 +24,7 @@ add_library(${LIB_NAME}
 
 if(OPENTHREADS_SONAMES)
   set_target_properties(${LIB_NAME} PROPERTIES VERSION ${OPENTHREADS_VERSION} SOVERSION ${OPENTHREADS_SOVERSION})
-endif(OPENTHREADS_SONAMES)
+endif()
 
 # Since we're building different platforms binaries in
 # their respective directories, we need to set the
@@ -38,14 +38,14 @@ if(NOT OTB_INSTALL_NO_LIBRARIES)
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 # OpenThreads headers are not needed by OTB headers, so avoid exporting them
 #if(NOT OTB_INSTALL_NO_DEVELOPMENT)
 #  install(FILES ${OpenThreads_PUBLIC_HEADERS}
 #              DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbopenthreads/OpenThreads/include/OpenThreads
 #              COMPONENT Development)
-#endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+#endif()
 
 
 #commented out# include(ModuleInstall OPTIONAL)

@@ -36,7 +36,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
             ${otbViewer_FLTK_UI_SRCS}
             otbViewer.cxx
 	    PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_executable(otbViewer
                    otbViewer.cxx
@@ -49,4 +49,4 @@ if(NOT OTB_INSTALL_NO_LIBRARIES)
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()

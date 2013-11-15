@@ -6,7 +6,7 @@
 #    Mercurial_WC_IDENTIFY(${PROJECT_SOURCE_DIR} Project)
 #    message("Current revision is ${Project_WC_REVISION}")
 #    message("Mercurial version is ${Mercurial_VERSION_HG}")
-#  endif(Mercurial_FOUND)
+#  endif()
 
 
 set(Mercurial_FOUND FALSE)
@@ -44,32 +44,32 @@ if(Mercurial_HG_EXECUTABLE)
 
     if(NOT ${Mercurial_hg_identify_result} EQUAL 0)
       message(SEND_ERROR "Command \"${Mercurial_HG_EXECUTABLE} identify ${dir}\" failed with output:\n${Mercurial_hg_identify_error}")
-    else(NOT ${Mercurial_hg_identify_result} EQUAL 0)
+    else()
 
       string(REGEX REPLACE "^(.*\n)?Mercurial Distributed SCM [(]version ([.0-9]+).*"
         "\\2" Mercurial_VERSION_HG "${Mercurial_VERSION_HG}")
       string(REGEX REPLACE "^(.*\n)?([0-9a-f]+).*"
         "\\2" ${prefix}_WC_REVISION "${${prefix}_WC_IDENTIFY}")
 
-    endif(NOT ${Mercurial_hg_identify_result} EQUAL 0)
+    endif()
 
     # restore the previous LC_ALL
     set(ENV{LC_ALL} ${_Mercurial_SAVED_LC_ALL})
 
-  endmacro(Mercurial_WC_IDENTIFY)
+  endmacro()
 
 
 
-endif(Mercurial_HG_EXECUTABLE)
+endif()
 
 
 
 if(NOT Mercurial_FOUND)
   if(NOT Mercurial_FIND_QUIETLY)
     message(STATUS "Mercurial was not found.")
-  else(NOT Mercurial_FIND_QUIETLY)
+  else()
     if(Mercurial_FIND_REQUIRED)
       message(FATAL_ERROR "Mercurial was not found.")
-    endif(Mercurial_FIND_REQUIRED)
-  endif(NOT Mercurial_FIND_QUIETLY)
-endif(NOT Mercurial_FOUND)
+    endif()
+  endif()
+endif()

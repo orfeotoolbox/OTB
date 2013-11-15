@@ -1,7 +1,7 @@
 if ( OTB_WRAP_QT )
   add_subdirectory(ApplicationLauncherQt)
   add_subdirectory(QtWidget)
-endif( OTB_WRAP_QT )
+endif()
 
 add_subdirectory(SWIG)
 

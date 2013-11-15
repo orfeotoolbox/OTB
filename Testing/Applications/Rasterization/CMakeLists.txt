@@ -46,7 +46,7 @@ OTB_TEST_APPLICATION(NAME apTvRsRasterizationPoints
                               ${BASELINE}/apTvRsRasterizationPoints.tif
                 	      ${TEMP}/apTvRsRasterizationPoints.tif)
 
-endif( OTB_DATA_USE_LARGEINPUT )
+endif()
 
 OTB_TEST_APPLICATION(NAME apTvRsRasterizationPolygons
                      APP  Rasterization

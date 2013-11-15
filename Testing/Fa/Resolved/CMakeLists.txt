@@ -119,7 +119,7 @@ add_test(FA-00006-io_Radarsat_R8_Double2Double ${CXX_TEST_PATH}/otbCommonTests3
          )
 set_tests_properties(FA-00006-io_Radarsat_R8_Double2Double PROPERTIES DEPENDS FA-00006-io_Radarsat_UI2_Double2Double)
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(FA-00012-co_AlignementsQB ${CXX_TEST_PATH}/AlignementsQB
         ${OTB_DATA_ROOT}/Input/poupees.hdr
@@ -147,7 +147,7 @@ add_test(FA-00052-vi_Floating_Point_Exception ${CXX_TEST_PATH}/otbVisuTests1
         ${EXAMPLES_DATA}/ROI_QB_MUL_1.png
         3
          )
-endif(OTB_USE_DEPRECATED)
+endif()
 
 # ---  FA 00060 : Pb Map activation  ---
 add_test(FA-00060-le_Map_Activation ${CXX_TEST_PATH}/MapActivation
@@ -224,18 +224,18 @@ add_test(FA-Spot5SensorModel ${CXX_TEST_PATH}/SensorModelBorder
   ${OTB_DATA_LARGEINPUT_ROOT}/SPOT5/TEHERAN/IMAGERY.TIF
   ${TEMP}/FA-Spot5SensorModel.txt
   )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 if(OTB_USE_VISU_GUI)
 add_test(FA-0000132-jpg ${CXX_TEST_PATH}/0000132-jpg
         ${OTB_DATA_ROOT}/Input/toulouse_auat.jpg
         )
-endif(OTB_USE_VISU_GUI)
+endif()
 
 if(ITK_USE_FFTWD OR ITK_USE_FFTWF)
 add_test(FA-0000169-fftcomplextocomplex ${CXX_TEST_PATH}/0000169-fftcomplextocomplex
   )
-endif(ITK_USE_FFTWD OR ITK_USE_FFTWF)
+endif()
 
 add_test(faTvWriteUnsignedLong ${CXX_TEST_PATH}/WriteUnsignedLong
 ${TEMP}/WriteUnsignedLong.tif
@@ -262,7 +262,7 @@ add_test(FA-0000436-WrapperInputImage_GetImage ${CXX_TEST_PATH}/0000436-WrapperI
 0000436-WrapperInputImage_GetImage
   ${OTB_DATA_ROOT}/Input/scene_8.tif
 )
-endif(BUILD_APPLICATIONS)
+endif()
 # ------- FA 0000437-WriteImageCentOS -------------------------
 add_test(FA-0000437-WriteImageCentOS ${CXX_TEST_PATH}/0000437-WriteImageCentOS
   ${OTB_DATA_ROOT}/Baseline/OTB/Fa/FA-0000437-WriteImageCentOSInput.tif

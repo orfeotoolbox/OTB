@@ -427,4 +427,4 @@ target_link_libraries(otbFuzzyTests2 OTBIO OTBFuzzy OTBTesting)
 add_executable(otbFuzzyTests3 otbFuzzyTests3.cxx ${BasicFuzzy_SRCS3})
 target_link_libraries(otbFuzzyTests3 OTBIO OTBFuzzy OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

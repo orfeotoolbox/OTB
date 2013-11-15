@@ -25,17 +25,17 @@ if(WIN32)
             -DMSDOS
             -DNO_ONEXIT
             )
-#        endif(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
-      else(NOT MINGW)
+#        endif()
+      else()
           add_definitions(
             -DUSE_CLOCK
             -DMSDOS
             -DNO_TRUNCATE  #For generate endfile.c
             )
-      endif(NOT MINGW)
-    endif(NOT CYGWIN)
-  endif(NOT BORLAND)
-endif(WIN32)
+      endif()
+    endif()
+  endif()
+endif()
 
 
 # source files for otb6S
@@ -53,16 +53,16 @@ list(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/iargc_.c" )
 if(CMAKE_COMPILER_IS_GNUCXX)
   foreach(f ${LIBF2C_SRCS} )
         set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS -w )
-  endforeach(f)
-else(CMAKE_COMPILER_IS_GNUCXX)
+  endforeach()
+else()
   if(WIN32)
     if(CMAKE_CXX_COMPILER MATCHES "^cl$")
         foreach(f ${LIBF2C_SRCS} )
                 set_source_files_properties( ${f} PROPERTIES COMPILE_FLAGS "/W0" )
-        endforeach(f)
-    endif(CMAKE_CXX_COMPILER MATCHES "^cl$")
-  endif(WIN32)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+        endforeach()
+    endif()
+  endif()
+endif()
 
 
 # Main code source
@@ -98,9 +98,9 @@ if(CMAKE_COMPILER_IS_GNUCC)
     foreach(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
       string(REGEX REPLACE
         "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} "${CMAKE_C_FLAGS${c}}")
-    endforeach(c)
-  endif("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
-#else(CMAKE_COMPILER_IS_GNUCC)
+    endforeach()
+  endif()
+#else()
 #  if(WIN32)
 #    if(NOT BORLAND)
 #      if(NOT CYGWIN)
@@ -113,28 +113,28 @@ if(CMAKE_COMPILER_IS_GNUCC)
 #                        foreach(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
 #                                string(REGEX REPLACE
 #                                  "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} "${CMAKE_C_FLAGS${c}}")
-#                        endforeach(c)
-#                endif("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
-#        endif(NOT MINGW)
-#      endif(NOT CYGWIN)
-#    endif(NOT BORLAND)
-#  endif(WIN32)
-endif(CMAKE_COMPILER_IS_GNUCC)
+#                        endforeach()
+#                endif()
+#        endif()
+#      endif()
+#    endif()
+#  endif()
+endif()
 
 add_library(otb6S ${LIBF2C_SRCS} ${OTB6S_SRCS} ${OTB6S_MAIN_SRCS})
 if(UNIX)
     target_link_libraries(otb6S m)
-endif(UNIX)
+endif()
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otb6S PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS otb6S
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   file(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
@@ -145,6 +145,6 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES ${__files2}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otb6S/6SV1.0B
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()
 
 

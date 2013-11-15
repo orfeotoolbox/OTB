@@ -12,9 +12,9 @@ if(TINYXML_FOUND)
               COMPILE_DEFINITIONS "-DTIXML_USE_STL"
               OUTPUT_VARIABLE OUTPUT)
 
-else(TINYXML_FOUND)
+else()
   option(OTB_USE_EXTERNAL_TINYXML "Use external TinyXML library." OFF)
   set(TINYXML_LIBRARIES otbtinyXML)
   set(TIXML_USE_STL)
-endif(TINYXML_FOUND)
+endif()
 mark_as_advanced(OTB_USE_EXTERNAL_TINYXML)

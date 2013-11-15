@@ -30,16 +30,16 @@ if(NOT OTB_DIR)
   # Get the system search path as a list.
   if(UNIX)
     string(REGEX MATCHALL "[^:]+" OTB_DIR_SEARCH1 "$ENV{PATH}")
-  else(UNIX)
+  else()
     string(REGEX REPLACE "\\\\" "/" OTB_DIR_SEARCH1 "$ENV{PATH}")
-  endif(UNIX)
+  endif()
   string(REGEX REPLACE "/;" ";" OTB_DIR_SEARCH2 ${OTB_DIR_SEARCH1})
 
   # Construct a set of paths relative to the system search path.
   set(OTB_DIR_SEARCH "")
   foreach(dir ${OTB_DIR_SEARCH2})
     set(OTB_DIR_SEARCH ${OTB_DIR_SEARCH} "${dir}/../lib/otb")
-  endforeach(dir)
+  endforeach()
 
   #
   # Look for an installation or build tree.
@@ -71,7 +71,7 @@ if(NOT OTB_DIR)
     # Help the user find it if we cannot.
     DOC "The ${OTB_DIR_STRING}"
   )
-endif(NOT OTB_DIR)
+endif()
 
 # If OTB was found, load the configuration file to get the rest of the
 # settings.
@@ -81,9 +81,9 @@ if(OTB_DIR)
 
   # Set USE_OTB_FILE for backward-compatability.
   set(USE_OTB_FILE ${OTB_USE_FILE})
-else(OTB_DIR)
+else()
   set(OTB_FOUND 0)
   if(OTB_FIND_REQUIRED)
     message(FATAL_ERROR "Please set OTB_DIR to the ${OTB_DIR_STRING}")
-  endif(OTB_FIND_REQUIRED)
-endif(OTB_DIR)
+  endif()
+endif()

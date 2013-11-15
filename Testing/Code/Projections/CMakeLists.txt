@@ -273,10 +273,10 @@ foreach( file ${SARSENSORMODEL_TYPES})
                  10 10
                 )
 
-endforeach( file ${SARSENSORMODEL_TYPES})
+endforeach()
 
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -405,7 +405,7 @@ add_test(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         N
         5
         )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #============= Test for bug 253 ===============================================
 add_test(prTvOrthoRectificationCoastalZoneWithSRTMNoData ${PROJECTIONS_TESTS2}
@@ -527,7 +527,7 @@ add_test(prTvOrthoRectificationUTM_TERRASARX_VV ${PROJECTIONS_TESTS2}
                 591992.001073 9699689.825866
                 200        200 10 -10 49 S 4
         )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 add_test(prTuGCPsToRPCSensorModelImageFilterNew ${PROJECTIONS_TESTS2}
@@ -1054,7 +1054,7 @@ add_test(prTvCompositeTransform ${PROJECTIONS_TESTS3}
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvCompositeTransform.txt
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(prTuGenericMapProjectionNew ${PROJECTIONS_TESTS3}  otbGenericMapProjectionNew )
 
@@ -1285,7 +1285,7 @@ foreach( file ${FWDBWDChecking_INPUTS} )
 )
 endforeach()
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
@@ -1373,7 +1373,7 @@ add_test(prTvGeometriesProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 add_test(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
         --compare-ascii ${NOTOL}
@@ -1501,7 +1501,7 @@ if(OTB_DATA_USE_LARGEINPUT)
 #                         PROPERTIES WILL_FAIL true)
 #  endforeach()
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # QB ortho and extract and extract of MidiPyrenees roads file
 # add_test(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef ${PROJECTIONS_TESTS3}
@@ -1607,7 +1607,7 @@ add_test(prTvVectorDataExtractROIandProjection ${PROJECTIONS_TESTS3}
    otbVectorDataExtractROIandProjection
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1671,9 +1671,9 @@ foreach( file ${SENSOR_TYPES})
     0
     ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
     )
-endforeach( file ${SENSOR_TYPES})
+endforeach()
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 #------ otb::ImageToEnvelopeVectorDataFilter ---------------------
@@ -1689,7 +1689,7 @@ add_test(prTvImageToEnvelopeVectorDataFilter ${PROJECTIONS_TESTS4}
   ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #------ otb::ImageToGenericRSOutputParameters ---------------------
 add_test(prTuImageToGenericRSOutputParametersNew ${PROJECTIONS_TESTS4}
@@ -1705,7 +1705,7 @@ add_test(prTvImageToGenericRSOutputParameters ${PROJECTIONS_TESTS4}
   ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   ${TEMP}/prTvImageToGenericRSOutputParametersOutput.txt
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #----- otb::RationalTransform ------------------------
 add_test(prTuRationalTransformNew ${PROJECTIONS_TESTS4}
@@ -1757,7 +1757,7 @@ add_test(prTvVectorDataTransformFilter ${PROJECTIONS_TESTS4}
   ${INPUTDATA}/ToulouseRoad-examples.shp
   ${TEMP}/prTvVectorDataTransformFilter_Translation.shp
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #---- Generic tests on GenericRSTransform -----
 add_test(prTvGenericRSTransformGenericTestWGS84toEPSG3857 ${PROJECTIONS_TESTS4}
@@ -1864,9 +1864,9 @@ add_test(prTvTileImageFilterGenericRSTransformTest_LASVEGAS_DIMAPv1 ${PROJECTION
          ${LARGEINPUT}/PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R3C1.JP2
 )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
-endif(NOT OTB_TESTING_STANDALONE)
+endif()
 
 
 #=======================================================================================
@@ -1954,14 +1954,14 @@ otbCreateProjectionWithOSSIM.cxx
 otbCreateProjectionWithOTB.cxx
 otbTileImageFilterRSTransformTest.cxx
 )
-endif(NOT OTB_TESTING_STANDALONE)
+endif()
 
 if(OTB_USE_EXTERNAL_OSSIM)
   include_directories( ${OSSIM_INCLUDE_DIR} )
-else(OTB_USE_EXTERNAL_OSSIM)
+else()
   include_directories( ${OTB_SOURCE_DIR}/Utilities/otbossim/include
                        ${OTB_BINARY_DIR}/Utilities/otbossim/include )
-endif(OTB_USE_EXTERNAL_OSSIM)
+endif()
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests2 "${Projections_SRCS2}" "OTBProjections;OTBIO;OTBTesting")
@@ -1969,6 +1969,6 @@ OTB_ADD_EXECUTABLE(otbProjectionsTests3 "${Projections_SRCS3}" "OTBProjections;O
 OTB_ADD_EXECUTABLE(otbProjectionsTests4 "${Projections_SRCS4}" "OTBProjections;OTBIO;OTBTesting")
 if(NOT OTB_TESTING_STANDALONE)
 OTB_ADD_EXECUTABLE(otbProjectionsTests5 "${Projections_SRCS5}" "OTBProjections;OTBIO;OTBTesting")
-endif(NOT OTB_TESTING_STANDALONE)
+endif()
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

@@ -16,7 +16,7 @@ if(OPENTHREADS_FOUND)
         message(STATUS "  OpenThreads includes : ${OPENTHREADS_INCLUDE_DIR}")
         message(STATUS "  OpenThreads library  : ${OPENTHREADS_LIBRARY}")
 
-else(OPENTHREADS_FOUND)
+else()
 
         add_definitions(-DOTB_USE_INTERNAL_OPENTHREADS)
         set(OTB_USE_EXTERNAL_OPENTHREADS OFF)
@@ -25,8 +25,8 @@ else(OPENTHREADS_FOUND)
         include_directories(${OPENTHREADS_INCLUDE_DIR})
         if(NOT BUILD_SHARED_LIBS)
           add_definitions(-DOT_LIBRARY_STATIC)
-        endif(NOT BUILD_SHARED_LIBS)
+        endif()
 
         message(STATUS "  Using OpenThreads internal version")
 
-endif(OPENTHREADS_FOUND)
+endif()

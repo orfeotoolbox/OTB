@@ -15,7 +15,7 @@ if(OTB_USE_GETTEXT)
       if(APPLE OR WIN32)
         find_library(GETTEXT_INTL_LIBRARY intl DOC "GetText intl library")
         mark_as_advanced(GETTEXT_INTL_LIBRARY)
-      endif(APPLE OR WIN32)
+      endif()
 
       if(GETTEXT_LIBRARY)
           set(OTB_I18N 1)
@@ -24,7 +24,7 @@ if(OTB_USE_GETTEXT)
           set(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
           if(NOT OTB_LANG)
             set(OTB_LANG "en_EN.UTF-8" CACHE STRING "OTB internationalization (Experimental)" FORCE)
-          endif(NOT OTB_LANG)
+          endif()
           set(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
           add_subdirectory(I18n)
           find_path(GETTEXT_INCLUDE_DIR
@@ -34,15 +34,15 @@ if(OTB_USE_GETTEXT)
 
           if(GETTEXT_INCLUDE_DIR)
             include_directories(${GETTEXT_INCLUDE_DIR})
-          endif(GETTEXT_INCLUDE_DIR)
-      endif(GETTEXT_LIBRARY)
+          endif()
+      endif()
 
       #message(STATUS "  Enabling GetText support")
       message(STATUS "  GetText includes: ${GETTEXT_INCLUDE_DIR}")
       message(STATUS "  GetText library : ${GETTEXT_LIBRARY}")
       if(APPLE OR WIN32)
         message(STATUS "  GetText intl library  : ${GETTEXT_INTL_LIBRARY}")
-      endif(APPLE OR WIN32)
+      endif()
 
       if(BUILD_APPLICATIONS AND OTB_WRAP_QT)
             # Check bug 419 : conflict between gettext and Qt on some Ubuntu systems
@@ -58,15 +58,15 @@ if(OTB_USE_GETTEXT)
                   message(FATAL_ERROR "CHECK_QT_GETTEXT_CONFLICT test failed : your platform exhibits a QT/Gettext conflict.\n"
                   "Opening OTB-applications auto generated in QT may generate a crash.\n"
                   "You might consider deactivating the support of Gettext in OTB with the OTB_USE_GETTEXT cmake option.\n")
-            endif(NOT CHECK_QT_GETTEXT_CONFLICT)
-      endif(BUILD_APPLICATIONS AND OTB_WRAP_QT)
+            endif()
+      endif()
 
-    else(GETTEXT_FOUND)
+    else()
       set(OTB_I18N 0)
       message(STATUS
                   "  Gettext not found, internationalization will not be available")
-    endif(GETTEXT_FOUND)
+    endif()
 
-else(OTB_USE_GETTEXT)
+else()
     message(STATUS "  Disabling GetText support")
-endif(OTB_USE_GETTEXT)
+endif()

@@ -51,22 +51,22 @@ if(WIN32)
   if(NOT CYGWIN)
     if(BORLAND)
       set( FLTK_PLATFORM_DEPENDENT_LIBS import32 )
-    else(BORLAND)
+    else()
       set( FLTK_PLATFORM_DEPENDENT_LIBS wsock32 comctl32 )
-    endif(BORLAND)
-  endif(NOT CYGWIN)
-endif(WIN32)
+    endif()
+  endif()
+endif()
 
 if(UNIX)
   include(FindX11)
   find_library(FLTK_MATH_LIBRARY m)
   mark_as_advanced(FLTK_MATH_LIBRARY)
   set( FLTK_PLATFORM_DEPENDENT_LIBS ${X11_LIBRARIES} ${FLTK_MATH_LIBRARY})
-endif(UNIX)
+endif()
 
 if(APPLE)
   set( FLTK_PLATFORM_DEPENDENT_LIBS  "-framework Carbon -framework Cocoa -framework ApplicationServices -lz")
-endif(APPLE)
+endif()
 
 
 # If FLTK has been built using CMake we try to find everything directly (we support only case where
@@ -78,16 +78,16 @@ if(NOT FLTK_DIR)
   # Get the system search path as a list.
   if(UNIX)
     string(REGEX MATCHALL "[^:]+" FLTK_DIR_SEARCH1 "$ENV{PATH}")
-  else(UNIX)
+  else()
     string(REGEX REPLACE "\\\\" "/" FLTK_DIR_SEARCH1 "$ENV{PATH}")
-  endif(UNIX)
+  endif()
   string(REGEX REPLACE "/;" ";" FLTK_DIR_SEARCH2 ${FLTK_DIR_SEARCH1})
 
   # Construct a set of paths relative to the system search path.
   set(FLTK_DIR_SEARCH "")
   foreach(dir ${FLTK_DIR_SEARCH2})
     set(FLTK_DIR_SEARCH ${FLTK_DIR_SEARCH} "${dir}/../lib/fltk")
-  endforeach(dir)
+  endforeach()
 
   #
   # Look for an installation or build tree.
@@ -126,12 +126,12 @@ if(NOT FLTK_DIR)
     DOC "The ${FLTK_DIR_STRING}"
     )
   mark_as_advanced(FLTK_DIR)
-endif(NOT FLTK_DIR)
+endif()
 
 # Check if FLTK was built using CMake
 if(EXISTS ${FLTK_DIR}/FLTKConfig.cmake)
   set(FLTK_BUILT_WITH_CMAKE 1)
-endif(EXISTS ${FLTK_DIR}/FLTKConfig.cmake)
+endif()
 
 #message(STATUS "FLTK_BUILT_WITH_CMAKE= ${FLTK_BUILT_WITH_CMAKE}")
 
@@ -171,7 +171,7 @@ if(FLTK_BUILT_WITH_CMAKE) # FLTK was build using CMak
                FL FLTK_USE_SYSTEM_ZLIB
                )
 
-  else(FLUID_COMMAND)
+  else()
     # If fluid command is not available we try to use the 1.3.0 version
 
     # Create the version string
@@ -194,7 +194,7 @@ if(FLTK_BUILT_WITH_CMAKE) # FLTK was build using CMak
         find_library(FLTK_FORMS_LIBRARY
                      NAMES fltkformsdll fltkformsdlld fltk_forms
                      PATHS ${FLTK_LIB_DIR})
-    else(BUILD_SHARED_LIBS)
+    else()
         find_library(FLTK_BASE_LIBRARY
                      NAMES fltk fltkd
                      PATHS ${FLTK_LIB_DIR})
@@ -207,26 +207,26 @@ if(FLTK_BUILT_WITH_CMAKE) # FLTK was build using CMak
         find_library(FLTK_FORMS_LIBRARY
                      NAMES fltkforms fltkformsd fltk_forms
                      PATHS ${FLTK_LIB_DIR})
-    endif(BUILD_SHARED_LIBS)
+    endif()
 
-  endif(FLUID_COMMAND)
+  endif()
 
 # Disable support for FLTK built with internal version of jpeg/png/zlib
 # Those variable were not used further anyhow.
 #  set(FLTK_IMAGES_LIBS "")
 #  if(FLFLTK_USE_SYSTEM_JPEG)
 #    set(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_jpeg)
-#  endif(FLFLTK_USE_SYSTEM_JPEG)
+#  endif()
 #  if(FLFLTK_USE_SYSTEM_PNG)
 #    set(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_png)
-#  endif(FLFLTK_USE_SYSTEM_PNG)
+#  endif()
 #  if(FLFLTK_USE_SYSTEM_ZLIB)
 #    set(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_zlib)
-#  endif(FLFLTK_USE_SYSTEM_ZLIB)
+#  endif()
 #  set(FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}" CACHE INTERNAL
 #      "Extra libraries for fltk_images library.")
 
-else(FLTK_BUILT_WITH_CMAKE) # FLTK was not build using CMake
+else() # FLTK was not build using CMake
 
   # Find fluid executable.
   find_program(FLTK_FLUID_EXECUTABLE fluid ${FLTK_INCLUDE_DIR}/fluid)
@@ -241,7 +241,7 @@ else(FLTK_BUILT_WITH_CMAKE) # FLTK was not build using CMake
     set(FLTK_LIBRARY_SEARCH_PATH ${FLTK_LIBRARY_SEARCH_PATH}
         ${FLTK_BIN_DIR}/../lib)
     set(FLTK_WRAP_UI 1)
-  endif(FLTK_FLUID_EXECUTABLE)
+  endif()
 
   #
   # Try to find FLTK include dir using fltk-config
@@ -259,7 +259,7 @@ else(FLTK_BUILT_WITH_CMAKE) # FLTK was not build using CMake
             string(STRIP ${_dir} _output)
             list(APPEND _FLTK_POSSIBLE_INCLUDE_DIRS ${_output})
           endforeach()
-        endif(FLTK_CXXFLAGS)
+        endif()
       endif()
     endif()
   endif()
@@ -316,11 +316,11 @@ else(FLTK_BUILT_WITH_CMAKE) # FLTK was not build using CMake
         # the file that originally included this module.  Save the answer.
         set(FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}" CACHE INTERNAL
             "Extra libraries for fltk_images library.")
-      endif("${FLTK_IMAGES_LDFLAGS}" MATCHES "${FLTK_LIBS_EXTRACT_REGEX}")
-    endif(FLTK_CONFIG_SCRIPT)
-  endif(UNIX)
+      endif()
+    endif()
+  endif()
 
-endif(FLTK_BUILT_WITH_CMAKE)
+endif()
 
 # Append all of the required libraries together (by default, everything)
 set(FLTK_LIBRARIES)
@@ -348,9 +348,9 @@ if(FLTK_FOUND)
 
   if(APPLE)
     set(FLTK_LIBRARIES ${FLTK_PLATFORM_DEPENDENT_LIBS} ${FLTK_LIBRARIES})
-  else(APPLE)
+  else()
     set(FLTK_LIBRARIES ${FLTK_LIBRARIES} ${FLTK_PLATFORM_DEPENDENT_LIBS})
-  endif(APPLE)
+  endif()
 
   set(FLTK_INCLUDE_DIRS ${FLTK_INCLUDE_DIR})
 
@@ -359,7 +359,7 @@ if(FLTK_FOUND)
   set(FLTK_INCLUDE_PATH ${FLTK_INCLUDE_DIR})
   set(FLTK_FLUID_EXE ${FLTK_FLUID_EXECUTABLE})
   set(FLTK_LIBRARY ${FLTK_LIBRARIES})
-endif(FLTK_FOUND)
+endif()
 
 #message(STATUS "In (otb)FindFLTK.cmake FLTK_INCLUDE_DIR = ${FLTK_INCLUDE_DIR}")
 #message(STATUS "In (otb)FindFLTK.cmake FLTK_LIBRARIES = ${FLTK_LIBRARIES}")

@@ -7,7 +7,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         KullbackLeiblerDistanceChDet.cxx
         PROPERTIES COMPILE_FLAGS -Wno-comment
   )
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 
 
@@ -48,7 +48,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         otbChangeDetectionExamplesTests.cxx
         PROPERTIES COMPILE_FLAGS -Wno-comment
   )
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/ChangeDetection)
 
@@ -129,5 +129,5 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbChangeDetectionExamplesTests otbChangeDetectionExamplesTests.cxx)
 target_link_libraries(otbChangeDetectionExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()
 

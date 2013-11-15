@@ -13,7 +13,7 @@ macro(OTB_GET_PO_FILENAME varname po_dir po_prefix locale)
 
   set(${varname} "${po_dir}/${po_prefix}${locale}.po")
 
-endmacro(OTB_GET_PO_FILENAME)
+endmacro()
 
 # ---------------------------------------------------------------------------
 # OTB_GET_MO_FILENAME
@@ -28,7 +28,7 @@ macro(OTB_GET_MO_FILENAME varname domain_name mo_build_dir locale)
 
   set(${varname} "${mo_build_dir}/${locale}/LC_MESSAGES/${domain_name}.mo")
 
-endmacro(OTB_GET_MO_FILENAME)
+endmacro()
 
 
 
@@ -55,6 +55,6 @@ foreach(locale ${locale_list})
         COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
         ARGS --output-file=${mo_file} -c -v "${po_file}"
         )
-endforeach(locale ${locale_list})
+endforeach()
 
 add_custom_target(OTBI18N ALL DEPENDS ${mo_files})

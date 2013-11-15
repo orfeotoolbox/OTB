@@ -37,29 +37,29 @@ edge/BgImage.h
 # Suppress deprecated warning
 if(CMAKE_COMPILER_IS_GNUCXX)
       set_source_files_properties(${EDISON_SOURCE} PROPERTIES COMPILE_FLAGS -w)
-else(CMAKE_COMPILER_IS_GNUCXX)
+else()
   if(WIN32)
     if(CMAKE_CXX_COMPILER MATCHES "^cl$")
         set_source_files_properties( ${EDISON_SOURCE} PROPERTIES COMPILE_FLAGS "/W0" )
-    endif(CMAKE_CXX_COMPILER MATCHES "^cl$")
-  endif(WIN32)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+    endif()
+  endif()
+endif()
 
 
 add_library(otbedison ${EDISON_SOURCE})
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(otbedison PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-endif(OTB_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_LIBRARIES)
   install(TARGETS otbedison
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()
 
 if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES ${EDISON_HEADERS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbedison
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()

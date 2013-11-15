@@ -19,18 +19,18 @@ if(OTB_USE_EXTERNAL_ITK)
 
     # Add link directories needed to use ITK.
     link_directories(${ITK_LIBRARY_DIRS})
-  else(ITK_FOUND)
+  else()
         message(FATAL_ERROR
                   "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
-  endif(ITK_FOUND)
+  endif()
 
   # Build shared libraries for otb
   # By default, if otb use an external itk import the option from the ITK configuration
   set(BUILD_SHARED_LIBS ${ITK_BUILD_SHARED})
   message(STATUS "  Using ITK external version")
 
-else(OTB_USE_EXTERNAL_ITK)
+else()
 
   message(STATUS "  Using ITK internal version")
 
-endif(OTB_USE_EXTERNAL_ITK)
+endif()

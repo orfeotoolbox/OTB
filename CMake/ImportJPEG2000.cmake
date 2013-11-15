@@ -15,8 +15,8 @@ if(OTB_USE_JPEG2000)
 
   if(NOT BUILD_SHARED_LIBS)
         add_definitions(-DOPJ_STATIC)
-  endif(NOT BUILD_SHARED_LIBS)
+  endif()
 
-else( OTB_USE_JPEG2000 )
+else()
   message(STATUS "  Disabling Jpeg2000 support")
-endif(OTB_USE_JPEG2000)
+endif()

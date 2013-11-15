@@ -158,7 +158,7 @@ OTB_TEST_APPLICATION(NAME apTvDmStereoFramework
                      )
 
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 
 

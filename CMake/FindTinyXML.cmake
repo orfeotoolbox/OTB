@@ -9,7 +9,7 @@
 if( TINYXML_INCLUDE_DIR )
     # Already in cache, be silent
     set( TinyXML_FIND_QUIETLY TRUE )
-endif( TINYXML_INCLUDE_DIR )
+endif()
 
 find_path( TINYXML_INCLUDE_DIR tinyxml.h
            PATH_SUFFIXES tinyxml )
@@ -30,9 +30,9 @@ if(TINYXML_FOUND)
   set(TINYXML_INCLUDE_DIRS ${TINYXML_INCLUDE_DIR})
   set(TINYXML_LIBRARIES    ${TINYXML_LIBRARY})
 
-else(TINYXML_FOUND)
+else()
 
   set(TINYXML_INCLUDE_DIRS)
   set(TINYXML_LIBRARIES)
 
-endif(TINYXML_FOUND)
+endif()

@@ -192,4 +192,4 @@ OTB_ADD_EXECUTABLE(otbMarkovTests1 "${Markov_SRCS1}" "OTBMarkov;OTBIO;OTBTesting
 OTB_ADD_EXECUTABLE(otbMarkovTests2 "${Markov_SRCS2}" "OTBMarkov;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbMarkovTests3 "${Markov_SRCS3}" "OTBMarkov;OTBIO;OTBTesting")
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

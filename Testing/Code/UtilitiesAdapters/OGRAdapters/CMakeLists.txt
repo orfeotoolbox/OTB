@@ -19,10 +19,10 @@ if(OTB_USE_EXTERNAL_BOOST)
     # message(STATUS "Boost_FILESYSTEM_LIBRARY: ${Boost_FILESYSTEM_LIBRARY}")
     message(STATUS "Boost_UNIT_TEST_FRAMEWORK_LIBRARY: ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}")
     # message(STATUS "Boost_DATE_TIME_LIBRARY: ${Boost_DATE_TIME_LIBRARY}")
-  else(Boost_FOUND)
+  else()
     message(STATUS
       "Cannot build OTB/OGR UT without Boost.  Please set Boost_DIR.")
-  endif(Boost_FOUND)
+  endif()
 
 
   if(Boost_UNIT_TEST_FRAMEWORK_FOUND)
@@ -37,15 +37,15 @@ if(OTB_USE_EXTERNAL_BOOST)
              COMMAND ${OGR_TESTS} coTuOGRDataSourceWrapperNew
              WORKING_DIRECTORY ${TEMP})
 
-  endif(Boost_UNIT_TEST_FRAMEWORK_FOUND)
-else(OTB_USE_EXTERNAL_BOOST)
+  endif()
+else()
   message(STATUS
     "Cannot build OTB/OGR UT without Boost. Please install/enable EXTERNAL BOOST.")
-endif(OTB_USE_EXTERNAL_BOOST)
+endif()
 
 OTB_ADD_EXECUTABLE(otbOGRTestsV "${OGRNon_UT_SRC}" "OTBIO;OTBTesting")
 target_link_libraries(otbOGRTestsV OTBOGRAdapters OTBTesting
   )
 add_test(coTuOGRDataSourceWrapperIO ${CXX_TEST_PATH}/otbOGRTestsV ${INPUTDATA}/ToulousePoints-examples.shp )
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

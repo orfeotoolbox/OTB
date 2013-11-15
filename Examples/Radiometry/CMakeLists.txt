@@ -121,4 +121,4 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbRadiometryExamplesTests otbRadiometryExamplesTests.cxx)
 target_link_libraries(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion    ${ITK_LIBRARIES}   OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

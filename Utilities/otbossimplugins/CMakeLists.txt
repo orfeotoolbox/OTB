@@ -22,12 +22,12 @@ if(OTB_USE_EXTERNAL_OSSIM)
   if(WIN32)
     set(ossimplugins_LIBTYPE SHARED)
     add_definitions(-DOSSIMPLUGINSMAKINGDLL)
-  endif(WIN32)
+  endif()
 
-else(OTB_USE_EXTERNAL_OSSIM)
+else()
   include_directories(${OTB_SOURCE_DIR}/Utilities/otbossim/include)
   include_directories(${OTB_BINARY_DIR}/Utilities/otbossim/include)
-endif(OTB_USE_EXTERNAL_OSSIM)
+endif()
 
 include_directories(AFTER ${GEOTIFF_INCLUDE_DIRS} ${TIFF_INCLUDE_DIRS})
 
@@ -52,4 +52,4 @@ if(NOT OTB_INSTALL_NO_LIBRARIES)
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_LIBRARIES)
+endif()

@@ -3,7 +3,7 @@ if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 # Common generic tests
 set(SEGMENTATION_TESTS1 ${CXX_TEST_PATH}/otbSegmentationTests1)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()
 
 
 # -------  otb::HooverMatrix &  otb::HooverInstance -------------

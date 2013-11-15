@@ -211,7 +211,7 @@ add_test(obTvLabelMapToGISTableFilter ${OBIA_TESTS2}
     labelmaptogis_test_table
     orfeotoolbox_test_user
     Bidfeud0)
-endif(OTB_USE_PQXX)
+endif()
 
 
 # OBIATests3 (need Learning)
@@ -262,7 +262,7 @@ otbLabelMapToGISTableFilterNew.cxx
 otbGISTableToLabelMapFilterNew.cxx
 otbLabelMapToGISTableFilter.cxx
 )
-endif(OTB_USE_PQXX)
+endif()
 
 set(BasicOBIA_SRCS3
 otbLabelMapSVMClassifier.cxx
@@ -275,10 +275,10 @@ target_link_libraries(otbOBIATests1 OTBIO OTBOBIA  OTBTesting OTBOGRAdapters)
 if(OTB_USE_PQXX)
 add_executable(otbOBIATests2 otbOBIATests2.cxx ${BasicOBIA_SRCS2})
 target_link_libraries(otbOBIATests2 OTBIO OTBOBIA OTBTesting OTBGeospatialAnalysis pq pqxx)
-endif(OTB_USE_PQXX)
+endif()
 
 add_executable(otbOBIATests3 otbOBIATests3.cxx ${BasicOBIA_SRCS3})
 target_link_libraries(otbOBIATests3 OTBIO OTBOBIA OTBLearning OTBTesting)
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

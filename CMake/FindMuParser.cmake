@@ -9,7 +9,7 @@
 if( MUPARSER_INCLUDE_DIR )
     # Already in cache, be silent
     set( MuParser_FIND_QUIETLY TRUE )
-endif( MUPARSER_INCLUDE_DIR )
+endif()
 
 find_path( MUPARSER_INCLUDE_DIR muParser.h
            PATH_SUFFIXES muParser )

@@ -26,7 +26,7 @@ ${INPUTDATA}/poupees.png 0
 #otbImageWidget
 #${INPUTDATA}/poupees.png 1
 #)
-#endif(OTB_GL_USE_ACCEL)
+#endif()
 
 
 add_test(vrTvImageWidgetImageDumpWithoutGlAcceleration ${VISUALIZATION_TESTS1}
@@ -50,7 +50,7 @@ ${TEMP}/vrTvImageWidgetImageDumpWithoutGlAcceleration.png
 #1
 #${TEMP}/vrTvImageWidgetImageDumpWithGlAcceleration.png
 #)
-#endif(OTB_GL_USE_ACCEL)
+#endif()
 
 #------------ otb::ImageWidgetActionHandler -------------
 
@@ -128,7 +128,7 @@ ${TEMP}/vrTvImageLayerCheckChannelDisplayScaledExtractOutput.png
 100 1900 #min/max
 100 1900 #min/max
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #------------ otb::StandardRenderingFunction ------------
 
@@ -359,7 +359,7 @@ ${INPUTDATA}/DEM/srtm_directory
 200 500 200 0
 )
 
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #------------ otb::CircleGlComponent ------------
 add_test(vrTuCircleGlComponentNew ${VISUALIZATION_TESTS2}
@@ -401,7 +401,7 @@ ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000
 ${LARGEINPUT}/VECTOR/MidiPyrenees/waterways.shp
 ${INPUTDATA}/DEM/srtm_directory
 )
-endif(OTB_DATA_USE_LARGEINPUT)
+endif()
 
 #---------- otb::WidgetManager and Sons--------
 add_test(vrTuPackedWidgetManagerNew ${VISUALIZATION_TESTS2}
@@ -434,7 +434,7 @@ otbVectorDataModelTest
 ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
 200 500 200 0
 )
-#endif(OTB_DATA_USE_LARGEINPUT)
+#endif()
 
 add_test(vrTvVectorDataModelAddVectorDataTest ${VISUALIZATION_TESTS3}
 otbVectorDataModelAddVectorDataTest
@@ -522,6 +522,6 @@ OTB_ADD_EXECUTABLE(otbVisualizationTests2 "${Visualization_SRCS2}" "OTBVisualiza
 OTB_ADD_EXECUTABLE(otbVisualizationTests3 "${Visualization_SRCS3}" "OTBVisualization;OTBIO;OTBTesting")
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()
 
 add_subdirectory( Viewer )

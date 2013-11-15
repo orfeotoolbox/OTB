@@ -36,4 +36,4 @@ set(FLTK11_USE_FILE "@FLTK_USE_FILE@")
 # The ExodusII library dependencies.
 if(NOT FLTK_NO_LIBRARY_DEPENDS)
   include("@FLTK_LIBRARY_DEPENDS_FILE@")
-endif(NOT FLTK_NO_LIBRARY_DEPENDS)
+endif()

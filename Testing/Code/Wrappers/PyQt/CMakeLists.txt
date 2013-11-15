@@ -11,4 +11,4 @@ add_test(NAME pqTvShow_${app}
               ${CMAKE_CURRENT_SOURCE_DIR}/PyQtTest.py
               ${app})
 
-endforeach(app)
+endforeach()

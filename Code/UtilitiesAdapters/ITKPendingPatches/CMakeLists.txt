@@ -5,4 +5,4 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES ${__files1} ${__files2} ${__files3}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/UtilitiesAdapters/ITKPendingPatches
     COMPONENT Development)
-endif(NOT OTB_INSTALL_NO_DEVELOPMENT)
+endif()

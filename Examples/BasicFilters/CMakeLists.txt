@@ -167,4 +167,4 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbBasicFiltersExamplesTests otbBasicFiltersExamplesTests.cxx)
 target_link_libraries(otbBasicFiltersExamplesTests   ${ITK_LIBRARIES} OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

@@ -133,7 +133,7 @@ if(OTB_USE_OPENCV)
                                   ${TEMP}/${OUTRASTER}
                          )
 
-  endforeach(classifier)
+  endforeach()
 endif()
 
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1

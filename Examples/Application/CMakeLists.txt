@@ -16,4 +16,4 @@ OTB_TEST_APPLICATION(NAME apTeGenerateAnApplicationExample
                      OPTIONS -in ${EXAMPLEDATA}/QB_Suburb.png
                 			 -out ${TEMP}/apTeGenerateAnApplicationExampleOutput.png)
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()

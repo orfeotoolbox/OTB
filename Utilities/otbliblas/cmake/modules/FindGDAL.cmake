@@ -47,7 +47,7 @@ if(WIN32)
             /usr/lib
             c:/msys/local/lib
             ${OSGEO4W_ROOT_DIR}/lib)
-    endif(MINGW)
+    endif()
 
     if(MSVC)
 
@@ -73,7 +73,7 @@ if(WIN32)
         if(GDAL_LIBRARY)
             set(GDAL_LIBRARY;odbc32;odbccp32 CACHE STRING INTERNAL)
         endif()
-    endif(MSVC)
+    endif()
 
 elseif(UNIX)
 
@@ -171,7 +171,7 @@ elseif(UNIX)
 
     else()
         message("FindGDAL.cmake: gdal-config not found. Please set it manually: GDAL_CONFIG=${GDAL_CONFIG}")
-    endif(GDAL_CONFIG)
+    endif()
 
 else()
     message("FindGDAL.cmake: unrecognized or unsupported operating system (use Unix or Windows)")

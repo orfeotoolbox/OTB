@@ -100,5 +100,5 @@ add_executable(otbMarkovExamplesTests otbMarkovExamplesTests.cxx)
 target_link_libraries(otbMarkovExamplesTests   ${ITK_LIBRARIES}  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBMarkov OTBTesting)
 
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()
 

@@ -13,7 +13,7 @@ if(OTB_USE_SIFTFAST)
 add_executable(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx )
 target_link_libraries(SIFTDisparityMapEstimation OTBFeatureExtraction OTBCommon OTBIO
 ${ITK_LIBRARIES})
-endif(OTB_USE_SIFTFAST)
+endif()
 
 add_executable(EstimateAffineTransformationExample EstimateAffineTransformationExample.cxx )
 target_link_libraries(EstimateAffineTransformationExample OTBFeatureExtraction OTBCommon OTBIO OTBProjections
@@ -32,7 +32,7 @@ if(OTB_USE_SIFTFAST)
   add_executable(SIFTDensityExample SIFTDensityExample.cxx)
   target_link_libraries(SIFTDensityExample OTBIO OTBCommon OTBBasicFilters ${ITK_LIBRARIES})
 
-endif(OTB_USE_SIFTFAST)
+endif()
 
 
 if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
@@ -85,7 +85,7 @@ SIFTDisparityMapEstimationTest
    ${INPUTDATA}/ROISpot5Warped.png
    ${TEMP}/SIFTdeformationFieldOutput.png
 )
-endif(OTB_USE_SIFTFAST)
+endif()
 
 add_test(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
         --compare-n-images ${TOL} 4
@@ -118,7 +118,7 @@ add_test(feTeSIFTFastExampleTest ${EXE_TESTS2}
    ${TEMP}/ROISpot5SiftFast.png
    3
 )
-endif(OTB_USE_SIFTFAST)
+endif()
 
 include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbPatentedExamplesTests otbPatentedExamplesTests.cxx)
@@ -127,6 +127,6 @@ target_link_libraries(otbPatentedExamplesTests   ${ITK_LIBRARIES} OTBBasicFilter
 if(OTB_USE_SIFTFAST)
 add_executable(otbPatentedExamplesTests2 otbPatentedExamplesTests2.cxx)
 target_link_libraries(otbPatentedExamplesTests2  OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBFeatureExtraction OTBTesting)
-endif(OTB_USE_SIFTFAST)
+endif()
 
-endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+endif()
