@@ -147,7 +147,6 @@ private:
   void operator=(const Self&);                  //purposely not implemented
 
 
-
 };
 
 } // end namespace otb

@@ -139,7 +139,6 @@ private:
   double       m_Sigma;
 
 
-
 };
 
 } // namespace otb

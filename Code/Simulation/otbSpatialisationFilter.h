@@ -106,7 +106,6 @@ public:
 
 
 
-
 protected:
    SpatialisationFilter();
    virtual ~SpatialisationFilter() {}
