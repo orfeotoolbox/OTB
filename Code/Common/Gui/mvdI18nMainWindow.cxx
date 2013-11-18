@@ -253,7 +253,7 @@ I18nMainWindow
   //
   // Setup initial empty database
   if( isNew )
-    DatabaseConnection::Foo();
+    DatabaseConnection::InitializeDatabase();
 }
 
 /*****************************************************************************/

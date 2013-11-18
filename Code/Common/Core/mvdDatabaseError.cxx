@@ -64,9 +64,14 @@ namespace
 /*****************************************************************************/
 std::string
 DatabaseError
-::whatString( const QSqlError& sqlError, const QString& msg )
+::whatString( const QSqlError& sqlError,
+              const QString& prefix,
+              const QString& suffix )
 {
   std::stringstream strStream( std::ios_base::out );
+
+  if( !prefix.isEmpty() )
+    strStream << ToStdString( prefix );
 
   switch( sqlError.type() )
     {
@@ -124,10 +129,12 @@ DatabaseError
 
   strStream <<
     " " << sqlError.number() <<
-    ": " << ToStdString( sqlError.text() );
+    " '" << ToStdString( sqlError.databaseText() ) <<
+    "'; '" << ToStdString( sqlError.driverText() ) <<
+    "'.";
 
-  if( !msg.isEmpty() )
-    strStream << std::endl << ToStdString( msg );
+  if( !suffix.isEmpty() )
+    strStream << ToStdString( suffix );
 
   return strStream.str();
 }
@@ -137,10 +144,13 @@ DatabaseError
 
 /*******************************************************************************/
 DatabaseError
-::DatabaseError( const QSqlError& sqlError ) :
-  std::runtime_error( whatString( sqlError ) ),
+::DatabaseError( const QSqlError& sqlError,
+                 const QString& prefix,
+                 const QString& suffix ) :
+  std::runtime_error( whatString( sqlError, prefix, suffix ) ),
   m_SqlError( sqlError )
 {
+  qDebug() << what();
 }
 
 /*******************************************************************************/

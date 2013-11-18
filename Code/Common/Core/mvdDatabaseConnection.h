@@ -31,7 +31,8 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtCore>
+// #include <QtCore>
+#include <QtSql>
 
 //
 // System includes (sorted by alphabetic order)
@@ -91,7 +92,7 @@ public:
 
   /**
    */
-  static void Foo();
+  static void InitializeDatabase();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -121,10 +122,58 @@ protected:
 // Private methods.
 private:
 
+  /**
+   */
+  inline static QSqlDatabase SqlDatabase();
+
+  /**
+   */
+  inline static void AddBindValue( QSqlQuery& query,
+                                   const QVariantList& values1,
+                                   const QVariantList& values2 );
+
+  /**
+   */
+  inline static void AddBindValue( QSqlQuery& query,
+                                   const QVariantList& values1,
+                                   const QVariantList& values2,
+                                   const QVariantList& values3 );
+
+  /**
+   */
+  void ExecuteQuery( const QString& sql );
+
+  /**
+   */
+  QSqlQuery BatchQuery( const QString& sql,
+                        const QVariantList& values1,
+                        const QVariantList& values2,
+                        QSqlQuery::BatchExecutionMode mode
+                        = QSqlQuery::ValuesAsRows );
+
+  /**
+   */
+  QSqlQuery BatchQuery( const QString& sql,
+                        const QVariantList& values1,
+                        const QVariantList& values2,
+                        const QVariantList& values3,
+                        QSqlQuery::BatchExecutionMode mode
+                        = QSqlQuery::ValuesAsRows );
+
+  /**
+   */
+  void ExecuteQuery( QSqlQuery& query );
+
+  /**
+   */
+  void TransactQuery( QSqlQuery& query );
 
 //
 // Private attributes.
 private:
+  /**
+   */
+  QSqlDatabase m_SqlDatabase;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -156,6 +205,33 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+void
+DatabaseConnection
+::AddBindValue( QSqlQuery& query,
+                const QVariantList& values1,
+                const QVariantList& values2 )
+{
+  query.addBindValue( values1 );
+  query.addBindValue( values2 );
+}
+
+/*****************************************************************************/
+inline
+void
+DatabaseConnection
+::AddBindValue( QSqlQuery& query,
+                const QVariantList& values1,
+                const QVariantList& values2,
+                const QVariantList& values3 )
+{
+  query.addBindValue( values1 );
+  query.addBindValue( values2 );
+  query.addBindValue( values3 );
+}
+
 } // end namespace 'mvd'
 
 #endif // __mvdDatabaseConnection_h

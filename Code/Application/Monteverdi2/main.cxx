@@ -91,8 +91,8 @@ main( int argc, char* argv[] )
       ),
       QCoreApplication::translate(
 	"Monteverdi2",
-	"Error when creating repository cache-directory:\n"
-	"%1\n"
+	"Error while creating cache repository.\n\n"
+	"%1\n\n"
 	"Application will exit!"
       )
       .arg( exc.what() )

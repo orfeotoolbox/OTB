@@ -81,7 +81,9 @@ class Monteverdi2_EXPORT DatabaseError :
 public:
 
   /** \brief Constructor. */
-  DatabaseError( const QSqlError& sqlError );
+  DatabaseError( const QSqlError& sqlError,
+                 const QString& prefix =QString(),
+                 const QString& suffix =QString() );
 
   /** \brief Destructor. */
   virtual ~DatabaseError() throw();
@@ -102,7 +104,8 @@ protected:
 // Private methods.
 private:
   static std::string whatString( const QSqlError& sqlError,
-                                 const QString& msg =QString() );
+                                 const QString& prefix =QString(),
+                                 const QString& suffix =QString() );
 
 //
 // Private attributes.
