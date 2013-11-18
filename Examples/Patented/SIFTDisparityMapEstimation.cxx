@@ -47,7 +47,6 @@
 // Software Guide : EndCodeSnippet
 
 
-
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"

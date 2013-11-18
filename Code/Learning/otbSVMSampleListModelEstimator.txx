@@ -106,7 +106,6 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
 }
 
 
-
 /*
  * PrintSelf
  */
