@@ -76,13 +76,13 @@ public:
   {
     return TImage::ImageDimension;
   }
-  /** Get the index. This provides a read only reference to the index. */
+  /** Get the index */
   const IndexType GetIndex()
   {
     return m_InternalImageIterator.GetIndex();
   }
   /** Get the pixel value */
-  const PixelType& Get(void) const
+  const PixelType Get(void) const
   {
     return m_InternalImageIterator.Get();
   }
