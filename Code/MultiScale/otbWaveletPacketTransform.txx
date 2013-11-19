@@ -172,7 +172,7 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE,
 
   otbMsgDevMacro(<< "nbFilter  = " << m_NumberOfFilters);
   otbMsgDevMacro(<< "depth     = " << m_DepthOfDecomposition);
-  otbMsgDevMacro(<< "rule size = " << m_WaveletPacketRule.size);
+  otbMsgDevMacro(<< "rule size = " << m_WaveletPacketRule.size());
 
   if (m_NumberOfFilters == 0)
     {
