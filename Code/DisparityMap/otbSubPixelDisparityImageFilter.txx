@@ -394,9 +394,8 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 
   double shiftX = (dispOrigin[0] - leftOrigin[0]) / leftSpacing[0];
   double shiftY = (dispOrigin[1] - leftOrigin[1]) / leftSpacing[1];
-  IndexType gridIndex;
-  this->m_GridIndex[0] = static_cast<int>(vcl_floor(shiftX + 0.5));
-  this->m_GridIndex[1] = static_cast<int>(vcl_floor(shiftY + 0.5));
+  this->m_GridIndex[0] = static_cast<typename IndexType::IndexValueType>(vcl_floor(shiftX + 0.5));
+  this->m_GridIndex[1] = static_cast<typename IndexType::IndexValueType>(vcl_floor(shiftY + 0.5));
 }
 
 template <class TInputImage, class TOutputMetricImage,

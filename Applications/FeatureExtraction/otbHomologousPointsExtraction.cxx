@@ -301,7 +301,7 @@ private:
         }
       otbAppLogINFO(<<discarded<<" points discarded");
       }
-    catch(itk::ExceptionObject & err)
+    catch(itk::ExceptionObject &)
       {
       // silent catch
       }
