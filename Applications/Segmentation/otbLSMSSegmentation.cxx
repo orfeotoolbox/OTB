@@ -582,7 +582,7 @@ private:
 
         // Update region sizes
         LabelImageIterator it( changeLabel->GetOutput(), changeLabel->GetOutput()->GetLargestPossibleRegion());
-       for (it = it.Begin(); !it.IsAtEnd(); ++it)
+        for (it.GoToBegin(); !it.IsAtEnd(); ++it)
           {
           sizePerRegion[it.Value()]+=1;
           }
