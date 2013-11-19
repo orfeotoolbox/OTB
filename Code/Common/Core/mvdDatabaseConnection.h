@@ -147,18 +147,18 @@ private:
    */
   QSqlQuery BatchQuery( const QString& sql,
                         const QVariantList& values1,
-                        const QVariantList& values2,
-                        QSqlQuery::BatchExecutionMode mode
-                        = QSqlQuery::ValuesAsRows );
+                        const QVariantList& values2 );
 
   /**
    */
   QSqlQuery BatchQuery( const QString& sql,
                         const QVariantList& values1,
                         const QVariantList& values2,
-                        const QVariantList& values3,
-                        QSqlQuery::BatchExecutionMode mode
-                        = QSqlQuery::ValuesAsRows );
+                        const QVariantList& values3 );
+
+  /**
+   */
+  // QSqlQuery BatchQuery( const QString& sql, const QVariantList& values1, ... );
 
   /**
    */

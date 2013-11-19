@@ -29,6 +29,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+// #include <cstdarg>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -91,16 +92,14 @@ DatabaseConnection
     "CREATE TABLE dataset( id INTEGER PRIMARY KEY, hash TEXT NOT NULL );" );
   dbc.ExecuteQuery(
     "CREATE UNIQUE INDEX idx_dataset_id ON dataset( id );" );
-  // dbc.ExecuteQuery(
-  //   "CREATE UNIQUE INDEX idx_dataset_hash ON dataset( hash );" );
 
 
   //
   // TAG TABLE.
   dbc.ExecuteQuery(
     "CREATE TABLE tag( "
-    "id INTEGER PRIMARY KEY,"
-    "parent_id INTEGER NOT NULL DEFAULT 0 REFERENCES tag( id ),"
+    "id INTEGER PRIMARY KEY, "
+    "parent_id INTEGER NOT NULL DEFAULT 0 REFERENCES tag( id ), "
     "label TEXT NOT NULL DEFAULT 'Label' );"
   );
   dbc.ExecuteQuery(
@@ -110,22 +109,51 @@ DatabaseConnection
     "CREATE UNIQUE INDEX idx_tag_label ON tag( label );"
   );
   // TAG VALUES.
-  /*
   dbc.BatchQuery(
     "INSERT INTO tag( id, parent_id, label ) VALUES( :id, :parent_id, :label );",
     QVariantList() << 0 << 1,
     QVariantList() << 0 << 0,
-    QVariantList() << "Root" << "Incoming",
-    QSqlQuery::ValuesAsRows
+    QVariantList() << "Root" << "Incoming"
   );
-  */
-  dbc.BatchQuery(
-    "INSERT INTO tag( id, parent_id, label ) VALUES( :id, :parent_id, :label );",
-    QVariantList() << 0 << 1,
-    QVariantList() << 0 << 0,
-    QVariantList() << "Root" << "Incoming",
-    QSqlQuery::ValuesAsRows
+
+
+  //
+  // DATASET MEMBERSHIPS.
+  dbc.ExecuteQuery(
+    "CREATE TABLE dataset_memberships( "
+    "id INTEGER PRIMARY KEY, "
+    "dataset_id INTEGER NOT NULL REFERENCES dataset( id ), "
+    "tag_id INTEGER NOT NULL REFERENCES tag( id ) );"
   );
+  dbc.ExecuteQuery(
+    "CREATE UNIQUE INDEX idx_ds_memberships_dataset_id "
+    "ON dataset_memberships( dataset_id );"
+  );
+  dbc.ExecuteQuery(
+    "CREATE UNIQUE INDEX idx_dsmemberships_dataset_tag_id "
+    "ON dataset_memberships( tag_id );"
+  );
+
+
+  //
+  // DATASET ATTRIBUTES.
+  dbc.ExecuteQuery(
+    "CREATE TABLE dataset_attributes( "
+    "id INTEGER PRIMARY KEY, "
+    "dataset_id INTEGER NOT NULL REFERENCES dataset( id ), "
+    "rank INTEGER NOT NULL, "
+    "name TEXT NOT NULL, "
+    "value TEXT );"
+  );
+  dbc.ExecuteQuery(
+    "CREATE UNIQUE INDEX idx_dataset_attributes_id ON "
+    "dataset_attributes( id );"
+  );
+  dbc.ExecuteQuery(
+    "CREATE INDEX idx_dataset_attributes_dsid "
+    "ON dataset_attributes( dataset_id );"
+  );
+
 
 #if 0
   if( !query.exec( SQL_CREATE_DB ) )
@@ -224,21 +252,19 @@ DatabaseConnection
 }
 
 /*****************************************************************************/
-#define BATCH_QUERY_DEBUG_2( sql, values1, values2, mode )      \
+#define BATCH_QUERY_DEBUG_2( sql, values1, values2 )            \
   qDebug() << this;                                             \
   qDebug() << "\tsql:" << ( sql );                              \
   qDebug() << "\tvalues1:" << ( values1 );                      \
-  qDebug() << "\tvalues2:" << ( values2 );                      \
-  qDebug() << "\tmode:" << ( mode );
+  qDebug() << "\tvalues2:" << ( values2 );
 
 /*****************************************************************************/
-#define BATCH_QUERY_DEBUG_3( sql, values1, values2, values3, mode )     \
+#define BATCH_QUERY_DEBUG_3( sql, values1, values2, values3 )           \
   qDebug() << this;                                                     \
   qDebug() << "\tsql:" << ( sql );                                      \
   qDebug() << "\tvalues1:" << ( values1 );                              \
   qDebug() << "\tvalues2:" << ( values2 );                              \
-  qDebug() << "\tvalues3:" << ( values3 );                              \
-  qDebug() << "\tmode:" << ( mode );
+  qDebug() << "\tvalues3:" << ( values3 );
 
 /*****************************************************************************/
 #define BATCH_QUERY_PREPARE( query, sql )       \
@@ -253,13 +279,13 @@ DatabaseConnection
     }
 
 /*****************************************************************************/
-#define BATCH_QUERY_EXEC( mode )                \
-  if( !query.execBatch( mode ) )                \
-    {                                           \
-    throw DatabaseError(                        \
-      query.lastError(),                        \
+#define BATCH_QUERY_EXEC()                       \
+  if( !query.execBatch() )                       \
+    {                                            \
+    throw DatabaseError(                         \
+      query.lastError(),                         \
       tr( "Failed to execute query: " )          \
-    );                                          \
+    );                                           \
     }
 
 /*****************************************************************************/
@@ -267,10 +293,9 @@ QSqlQuery
 DatabaseConnection
 ::BatchQuery( const QString& sql,
               const QVariantList& values1,
-              const QVariantList& values2,
-              QSqlQuery::BatchExecutionMode mode )
+              const QVariantList& values2 )
 {
-  BATCH_QUERY_DEBUG_2( sql, values1, values2, mode );
+  BATCH_QUERY_DEBUG_2( sql, values1, values2 );
   BATCH_QUERY_PREPARE( query, sql );
 
   DatabaseConnection::AddBindValue(
@@ -279,7 +304,7 @@ DatabaseConnection
     values2
   );
 
-  BATCH_QUERY_EXEC( mode );
+  BATCH_QUERY_EXEC();
 
   return query;
 }
@@ -290,10 +315,9 @@ DatabaseConnection
 ::BatchQuery( const QString& sql,
               const QVariantList& values1,
               const QVariantList& values2,
-              const QVariantList& values3,
-              QSqlQuery::BatchExecutionMode mode )
+              const QVariantList& values3 )
 {
-  BATCH_QUERY_DEBUG_3( sql, values1, values2, values3, mode );
+  BATCH_QUERY_DEBUG_3( sql, values1, values2, values3 );
   BATCH_QUERY_PREPARE( query, sql );
 
   DatabaseConnection::AddBindValue(
@@ -303,10 +327,42 @@ DatabaseConnection
     values3
   );
 
-  BATCH_QUERY_EXEC( mode );
+  BATCH_QUERY_EXEC();
 
   return query;
 }
+
+/*****************************************************************************/
+/*
+QSqlQuery
+DatabaseConnection
+::BatchQuery( const QString& sql,
+              const QVariantList& values1,
+              ... )
+{
+  // BATCH_QUERY_DEBUG_3( sql, values1, values2, values3 );
+  BATCH_QUERY_PREPARE( query, sql );
+
+  query.addBindValue( values1 );
+
+  va_list args;
+
+  va_start( args, values1 );
+
+  for( QVariantList values = va_arg( args, QVariantList );
+       args != NULL;
+       values = va_arg( args, QVariantList ) )
+    {
+    query.addBindValue( values );
+    }
+
+  va_end( args );
+
+  BATCH_QUERY_EXEC();
+
+  return query;
+}
+*/
 
 /*****************************************************************************/
 #if 0
