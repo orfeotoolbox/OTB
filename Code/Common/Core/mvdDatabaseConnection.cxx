@@ -99,7 +99,7 @@ DatabaseConnection
   dbc.ExecuteQuery(
     "CREATE TABLE tag( "
     "id INTEGER PRIMARY KEY, "
-    "parent_id INTEGER NOT NULL DEFAULT 0 REFERENCES tag( id ), "
+    // "parent_id INTEGER NOT NULL DEFAULT 0 REFERENCES tag( id ), "
     "label TEXT NOT NULL DEFAULT 'Label' );"
   );
   dbc.ExecuteQuery(
@@ -109,11 +109,16 @@ DatabaseConnection
     "CREATE UNIQUE INDEX idx_tag_label ON tag( label );"
   );
   // TAG VALUES.
+  // dbc.BatchQuery(
+  //   "INSERT INTO tag( id, parent_id, label ) VALUES( :id, :parent_id, :label );",
+  //   QVariantList() << 0 << 1,
+  //   QVariantList() << 0 << 0,
+  //   QVariantList() << "Root" << "Incoming"
+  // );
   dbc.BatchQuery(
-    "INSERT INTO tag( id, parent_id, label ) VALUES( :id, :parent_id, :label );",
+    "INSERT INTO tag( id, label ) VALUES( :id, :label );",
     QVariantList() << 0 << 1,
-    QVariantList() << 0 << 0,
-    QVariantList() << "Root" << "Incoming"
+    QVariantList() << "Datasets" << "Cached"
   );
 
 
@@ -121,9 +126,10 @@ DatabaseConnection
   // DATASET MEMBERSHIPS.
   dbc.ExecuteQuery(
     "CREATE TABLE dataset_memberships( "
-    "id INTEGER PRIMARY KEY, "
+    // "id INTEGER PRIMARY KEY, "
     "dataset_id INTEGER NOT NULL REFERENCES dataset( id ), "
-    "tag_id INTEGER NOT NULL REFERENCES tag( id ) );"
+    "tag_id INTEGER NOT NULL REFERENCES tag( id ), "
+    "PRIMARY KEY( dataset_id, tag_id ) );"
   );
   dbc.ExecuteQuery(
     "CREATE UNIQUE INDEX idx_ds_memberships_dataset_id "
