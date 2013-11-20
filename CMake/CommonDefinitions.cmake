@@ -47,12 +47,20 @@ endif()
 
 
 # Large File Support (> 4Go)
-add_definitions(
-    -D_LARGEFILE_SOURCE
-    -D_FILE_OFFSET_BITS=64
-    -D_LARGEFILE64_SOURCE
-    -D_LARGE_FILES
-    )
+include(TestLargeFiles)
+OTB_TEST_LARGE_FILES(OTB_HAS_LARGEFILES)
+if (_FILE_OFFSET_BITS)
+  add_definitions(-D_FILE_OFFSET_BITS=${_FILE_OFFSET_BITS})
+endif()
+if (_LARGEFILE_SOURCE)
+  add_definitions(-D_LARGEFILE_SOURCE)
+endif()
+if (_LARGEFILE64_SOURCE)
+  add_definitions(-D_LARGEFILE64_SOURCE)
+endif()
+if (_LARGE_FILES)
+  add_definitions(-D_LARGE_FILES)
+endif()
 
 # Pedantic mode
 set(OTB_BUILD_PEDANTIC OFF CACHE BOOL
