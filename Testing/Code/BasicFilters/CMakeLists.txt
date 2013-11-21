@@ -2494,7 +2494,6 @@ add_test(bfTvNAPCAImageFilter4
 
 
 ### MNF ###
-
 # Test input->MNF->inverse MNF
 add_test(bfTvMNFImageFilter1
          ${BASICFILTERS_TESTS13}
@@ -2530,7 +2529,6 @@ add_test(bfTvMNFImageFilter3
          -out ${TEMP}/bfTvMNFImageFilter3.tif
          -inv ${TEMP}/bfTvMNFImageFilter3Inv.tif
          -norm)
-
 
 # Test the direct transform, reducing dimensionnality
 add_test(bfTvMNFImageFilter4
