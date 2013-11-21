@@ -90,8 +90,6 @@ DatabaseConnection
   // DATASET TABLE.
   dbc.ExecuteQuery(
     "CREATE TABLE dataset( id INTEGER PRIMARY KEY, hash TEXT NOT NULL );" );
-  dbc.ExecuteQuery(
-    "CREATE UNIQUE INDEX idx_dataset_id ON dataset( id );" );
 
 
   //
@@ -100,51 +98,56 @@ DatabaseConnection
     "CREATE TABLE tag( "
     "id INTEGER PRIMARY KEY, "
     // "parent_id INTEGER NOT NULL DEFAULT 0 REFERENCES tag( id ), "
-    "label TEXT NOT NULL DEFAULT 'Label' );"
-  );
-  dbc.ExecuteQuery(
-    "CREATE UNIQUE INDEX idx_tag_id ON tag( id );"
+    "label TEXT NOT NULL );"
   );
   dbc.ExecuteQuery(
     "CREATE UNIQUE INDEX idx_tag_label ON tag( label );"
   );
-  // TAG VALUES.
+  // // TAG VALUES.
   // dbc.BatchQuery(
-  //   "INSERT INTO tag( id, parent_id, label ) VALUES( :id, :parent_id, :label );",
-  //   QVariantList() << 0 << 1,
-  //   QVariantList() << 0 << 0,
-  //   QVariantList() << "Root" << "Incoming"
+  //   "INSERT INTO tag( id, label ) VALUES( :id, :label );",
+  //   QVariantList() << 0 << 1 << 2,
+  //   QVariantList() << "Root" << "Datasets" << "Cached"
   // );
-  dbc.BatchQuery(
-    "INSERT INTO tag( id, label ) VALUES( :id, :label );",
-    QVariantList() << 0 << 1,
-    QVariantList() << "Datasets" << "Cached"
-  );
 
 
   //
-  // DATASET MEMBERSHIPS.
+  // TAG-NODE TABLE.
   dbc.ExecuteQuery(
-    "CREATE TABLE dataset_memberships( "
+    "CREATE TABLE tag_node( "
+    "id INTEGER PRIMARY KEY, "
+    "parent_id INTEGER REFERENCES tag_node( id ), "
+    "tag_id INTEGER NOT NULL REFERENCES tag( id ), "
+    "level INTEGER, "
+    "path TEXT );"
+  );
+  dbc.ExecuteQuery(
+    "CREATE INDEX idx_tag_node_tid ON tag_node( tag_id );"
+  );
+
+  //
+  // DATASET MEMBERSHIP.
+  dbc.ExecuteQuery(
+    "CREATE TABLE dataset_membership( "
     // "id INTEGER PRIMARY KEY, "
     "dataset_id INTEGER NOT NULL REFERENCES dataset( id ), "
     "tag_id INTEGER NOT NULL REFERENCES tag( id ), "
     "PRIMARY KEY( dataset_id, tag_id ) );"
   );
   dbc.ExecuteQuery(
-    "CREATE UNIQUE INDEX idx_ds_memberships_dataset_id "
-    "ON dataset_memberships( dataset_id );"
+    "CREATE UNIQUE INDEX idx_ds_membership_dataset_id "
+    "ON dataset_membership( dataset_id );"
   );
   dbc.ExecuteQuery(
-    "CREATE UNIQUE INDEX idx_dsmemberships_dataset_tag_id "
-    "ON dataset_memberships( tag_id );"
+    "CREATE UNIQUE INDEX idx_dsmembership_dataset_tag_id "
+    "ON dataset_membership( tag_id );"
   );
 
 
   //
-  // DATASET ATTRIBUTES.
+  // DATASET ATTRIBUTE.
   dbc.ExecuteQuery(
-    "CREATE TABLE dataset_attributes( "
+    "CREATE TABLE dataset_attribute( "
     "id INTEGER PRIMARY KEY, "
     "dataset_id INTEGER NOT NULL REFERENCES dataset( id ), "
     "rank INTEGER NOT NULL, "
@@ -152,12 +155,12 @@ DatabaseConnection
     "value TEXT );"
   );
   dbc.ExecuteQuery(
-    "CREATE UNIQUE INDEX idx_dataset_attributes_id ON "
-    "dataset_attributes( id );"
+    "CREATE UNIQUE INDEX idx_dataset_attribute_id ON "
+    "dataset_attribute( id );"
   );
   dbc.ExecuteQuery(
-    "CREATE INDEX idx_dataset_attributes_dsid "
-    "ON dataset_attributes( dataset_id );"
+    "CREATE INDEX idx_dataset_attribute_dsid "
+    "ON dataset_attribute( dataset_id );"
   );
 
 
@@ -192,6 +195,28 @@ DatabaseConnection
     );
     }
   */
+#endif
+}
+
+/*******************************************************************************/
+void
+DatabaseConnection
+::InitializeDatabase2()
+{
+  DatabaseConnection dbc;
+
+  for( int i=0; i<SQL_CREATE_DB_COUNT; ++i )
+    {
+    qDebug() << SQL_CREATE_DB[ i ];
+    dbc.ExecuteQuery( SQL_CREATE_DB[ i ] );
+    }
+
+#if 1
+  for( int i=0; i<SQL_INSERT_ITEMS_COUNT; ++i )
+    {
+    qDebug() << SQL_INSERT_ITEMS[ i ];
+    dbc.ExecuteQuery( SQL_INSERT_ITEMS[ i ] );
+    }
 #endif
 }
 

@@ -66,16 +66,46 @@ fi
 translate_file() {
     local NAME="`basename $1 $SUFFIX | tr -d '[:blank:]' | tr '[:punct:]' '_' | tr '[:lower:]' '[:upper:]'`"
 
+    echo ""
     echo "/****************************************************************************/"
     if [ $DIALECT="C++" ]
     then
         echo "//"
-        echo "// '$NAME' Generated from file '$1'"
+        echo "// '$NAME' Generated from file '`basename $1`'"
     else
-        echo "/* '$NAME' Generated from file '$1'."
+        echo "/* '$NAME' Generated from file '`basename $1`'."
     fi
-    echo "const char* $NAME ="
-    echo "`sed 's/^.*$/\"&\"/g' $1`;"
+    #echo "const char* $NAME ="
+    #echo "`sed 's/^.*$/\"&\"/g' $1`;"
+    awk  -v str_name=$NAME -v int_name=${NAME}_COUNT 'BEGIN {
+    RS=";"
+    FS="\n"
+
+    print "const char* " str_name "[] = {"
+
+    count = 0
+}
+{
+    line = ""
+
+    for( i=1; i<NF; ++i ) {
+        if( $i!="" ) {
+            line = line "\"" $i "\\n\"\n"
+        }
+    }
+
+    if( i>2 ) {
+        line = line "\"" $i ";\","
+
+        print line
+
+        count ++
+    }
+}
+END {
+    print "};\n"
+    print "const int " int_name " = " count ";"
+}' $1
 }
 
 ####

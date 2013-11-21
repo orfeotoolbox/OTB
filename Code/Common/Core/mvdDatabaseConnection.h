@@ -93,6 +93,7 @@ public:
   /**
    */
   static void InitializeDatabase();
+  static void InitializeDatabase2();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
