@@ -66,6 +66,10 @@ public:
   {
     m_InputMaximum = a;
   }
+  void SetGamma(const double& gamma)
+  {
+    m_Gamma = gamma;
+  }
   TOutput GetOutputMaximum()
   {
     return m_OutputMaximum;
@@ -82,6 +86,11 @@ public:
   {
     return m_InputMaximum;
   }
+  double GetGamma()
+  {
+    return m_Gamma;
+  }
+
 
   bool operator !=(const VectorAffineTransform& other) const
   {
@@ -165,9 +174,9 @@ public:
         }
       else
         {
-        const RealType scaledComponent = static_cast<RealType>(x[i] - m_InputMinimum[i])
-                                         * static_cast<RealType> (m_OutputMaximum[i] - m_OutputMinimum[i])
-                                         / static_cast<RealType> (m_InputMaximum[i] - m_InputMinimum[i]);
+        RealType scaledComponent = static_cast<RealType>(x[i] - m_InputMinimum[i])/ static_cast<RealType> (m_InputMaximum[i] - m_InputMinimum[i]);
+        scaledComponent = vcl_pow(scaledComponent,1./m_Gamma);
+        scaledComponent *= static_cast<RealType> (m_OutputMaximum[i] - m_OutputMinimum[i]);
         result[i] = static_cast<typename TOutput::ValueType>(scaledComponent + m_OutputMinimum[i]);
         }
       }
@@ -178,6 +187,7 @@ private:
   TOutput m_OutputMinimum;
   TInput  m_InputMinimum;
   TInput  m_InputMaximum;
+  double  m_Gamma;
 };
 }  // end namespace functor
 
@@ -236,6 +246,9 @@ public:
   itkGetMacro(InputMaximum, InputPixelType);
   itkSetMacro(InputMaximum, InputPixelType);
 
+  itkSetMacro(Gamma,double);
+  itkGetConstReferenceMacro(Gamma,double);
+
   /** Process to execute before entering the multithreaded section */
   void BeforeThreadedGenerateData(void);
 
@@ -262,6 +275,7 @@ private:
   InputPixelType  m_InputMaximum;
   double          m_ClampThreshold;
   bool            m_AutomaticInputMinMaxComputation;
+  double          m_Gamma;
 
 };
 

@@ -40,6 +40,7 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
 ::VectorRescaleIntensityImageFilter()
 {
   m_ClampThreshold = 0.01;
+  m_Gamma = 1.0;
   m_AutomaticInputMinMaxComputation = true;
 }
 
@@ -158,6 +159,7 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
   this->GetFunctor().SetInputMaximum(m_InputMaximum);
   this->GetFunctor().SetOutputMaximum(m_OutputMaximum);
   this->GetFunctor().SetOutputMinimum(m_OutputMinimum);
+  this->GetFunctor().SetGamma(m_Gamma);
 }
 
 /**
