@@ -59,8 +59,18 @@ public:
   /** Initialize user defined functions */
   virtual void InitFun()
   {
-    m_MuParser.DefineFun("ndvi", NDVI);
-    m_MuParser.DefineFun("NDVI", NDVI);
+    m_MuParser.DefineFun("ndvi", Self::NDVI);
+    m_MuParser.DefineFun("NDVI", Self::NDVI);
+
+#ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+    /* Starting with muParser 2.0.0, logical operators have been
+       renamed to "&&" and "||", instead of "and" and "or".
+       Reintroducing pre-2.0.0 operators, so formulas can be
+       defined with "and" and "or" even after 2.0.0
+     */
+    m_MuParser.DefineOprt("and", Self::AND);
+    m_MuParser.DefineOprt("or",  Self::OR);
+#endif
   }
 
   /** Set the expression to be parsed */
@@ -119,7 +129,6 @@ public:
   /**  Check Expression **/
   bool CheckExpr()
   {
-
     try
     {
       m_MuParser.Eval();
@@ -206,6 +215,17 @@ private:
     return (niri-r)/(niri+r);
   }
 
+#ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+  static ValueType AND(ValueType left, ValueType right)
+  {
+    return static_cast<int>(left) && static_cast<int>(right);
+  }
+
+  static ValueType OR(ValueType left, ValueType right)
+  {
+    return static_cast<int>(left) || static_cast<int>(right);
+  }
+#endif
   //----------  User Defined Functions  ----------//END
 }; // end class
 
