@@ -100,13 +100,13 @@ public:
 
     // Constructor used when importing.
     BuildContext( const QString& path,
-		  const QString& name,
+		  const QString& hash,
 		  const QString& alias,
 		  int width,
 		  int height,
 		  bool isForceCreateEnabled =false ) :
       m_Path( path ),
-      m_Name( name ),
+      m_Hash( hash ),
       m_Alias( alias),
       m_Width( width ),
       m_Height( height ),
@@ -117,9 +117,9 @@ public:
 
     // Constructor used when pre-loading.
     BuildContext( const QString& path,
-		  const QString& name ) :
+		  const QString& hash ) :
       m_Path( path ),
-      m_Name( name ),
+      m_Hash( hash ),
       m_Alias(),
       m_Width( -1 ),
       m_Height( -1 ),
@@ -131,7 +131,7 @@ public:
     // Constructor used when selecting.
     BuildContext( int width, int height ) :
       m_Path(),
-      m_Name(),
+      m_Hash(),
       m_Alias(),
       m_Width( width ),
       m_Height( height ),
@@ -144,7 +144,7 @@ public:
     // Public attributes
   public:
     QString m_Path;
-    QString m_Name;
+    QString m_Hash;
     QString m_Alias;
     int m_Width;
     int m_Height;
@@ -172,7 +172,7 @@ public:
 
   /**
    */
-  static bool IsVersionCompliant( const QString& path, const QString& name );
+  static bool IsVersionCompliant( const QString& path, const QString& hash );
 
   //
   // Instance methods.
@@ -196,7 +196,7 @@ public:
 
   /**
    */
-  inline const QString& GetName() const;
+  inline const DatasetHash& GetHash() const;
 
   /**
    */
@@ -365,7 +365,7 @@ private:
 
   /**
    */
-  QString m_Name;
+  QString m_Hash;
 
   /**
    */
@@ -496,11 +496,11 @@ DatasetModel
 
 /*****************************************************************************/
 inline
-const QString&
+const DatasetHash&
 DatasetModel
-::GetName() const
+::GetHash() const
 {
-  return m_Name;
+  return m_Hash;
 }
 
 /*****************************************************************************/

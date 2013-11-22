@@ -842,7 +842,7 @@ DatasetDescriptor
   
   // dataset name element
   QDomElement nameElt(
-    CreateTextNode( model->GetName(), 
+    CreateTextNode( model->GetHash(), 
                     TAG_NAMES[ ELEMENT_DATASET_NAME ] )
     );
   datasetElt.appendChild( nameElt );

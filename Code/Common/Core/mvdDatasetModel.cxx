@@ -74,12 +74,12 @@ const char* DatasetModel::HISTOGRAM_FILE_EXT = ".txt";
 /*****************************************************************************/
 bool
 DatasetModel
-::IsVersionCompliant( const QString& path, const QString& name )
+::IsVersionCompliant( const QString& path, const QString& hash )
 {
   try
     {
     return DatasetDescriptor::IsVersionCompliant(
-      QDir( QFileInfo( path, name ).filePath() )
+      QDir( QFileInfo( path, hash ).filePath() )
       .filePath( DatasetModel::DESCRIPTOR_FILENAME )
       );
     }
@@ -115,7 +115,7 @@ DatasetModel
   AbstractModel( parent ),
   m_Descriptor( NULL ),
   m_Path(),
-  m_Name(),
+  m_Hash(),
   m_Alias( ),
   m_Directory(),
   m_LastPhysicalCenter(),
@@ -325,20 +325,20 @@ DatasetModel
   // Create directory structure, if needed.
   bool isEmpty = I18nCoreApplication::MakeDirTree(
     buildContext->m_Path,
-    buildContext->m_Name
+    buildContext->m_Hash
   );
 
   // Access working directory.
   QDir workingDir( buildContext->m_Path );
-  if( !workingDir.cd( buildContext->m_Name ) )
+  if( !workingDir.cd( buildContext->m_Hash ) )
     throw SystemError(
       ToStdString(
-	QString( "('%1')" ).arg( workingDir.filePath( buildContext->m_Name ) ) )
+	QString( "('%1')" ).arg( workingDir.filePath( buildContext->m_Hash ) ) )
     );    
 
   // Remember access to directory structure.
   m_Path = buildContext->m_Path;
-  m_Name = buildContext->m_Name;
+  m_Hash = buildContext->m_Hash;
   m_Alias = buildContext->m_Alias;
   m_Directory = workingDir;
 

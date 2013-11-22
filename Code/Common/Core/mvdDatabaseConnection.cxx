@@ -211,6 +211,7 @@ DatabaseConnection
     dbc.ExecuteQuery( SQL_CREATE_DB[ i ] );
     }
 
+/*
 #if 1
   for( int i=0; i<SQL_INSERT_ITEMS_COUNT; ++i )
     {
@@ -218,6 +219,7 @@ DatabaseConnection
     dbc.ExecuteQuery( SQL_INSERT_ITEMS[ i ] );
     }
 #endif
+*/
 }
 
 /*****************************************************************************/

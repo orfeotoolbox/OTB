@@ -84,10 +84,6 @@ class Monteverdi2_EXPORT DatabaseModel :
 public:
 
   /**
-   */
-  typedef QString DatasetId;
-
-  /**
    * \class BuildContext
    * \brief WIP.
    */
@@ -124,12 +120,12 @@ public:
   /**
    */
   inline
-    const DatasetModel* FindDatasetModel( const DatasetId& id ) const;
+    const DatasetModel* FindDatasetModel( const DatasetHash& id ) const;
 
   /**
    */
   inline
-    DatasetModel* FindDatasetModel( const DatasetId& id );
+    DatasetModel* FindDatasetModel( const DatasetHash& id );
 
   /**
    */
@@ -143,11 +139,11 @@ public:
 
   /**
    */
-  DatasetModel* SelectDatasetModel( const DatasetId& id );
+  DatasetModel* SelectDatasetModel( const DatasetHash& id );
 
   /**
    */
-  void RemoveDatasetModel( const DatasetId& id );
+  void RemoveDatasetModel( const DatasetHash& id );
 
   //
   // AbstractModel overrides.
@@ -185,7 +181,7 @@ public slots:
 
   /**
    */
-  DatasetId RegisterDatasetModel( DatasetModel* );
+  DatasetHash RegisterDatasetModel( DatasetModel* );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -209,7 +205,7 @@ protected:
 private:
   /**
    */
-  typedef QMap< DatasetId, DatasetModel* > DatasetModelMap;
+  typedef QMap< DatasetHash, DatasetModel* > DatasetModelMap;
 
 //
 // Private methods.
@@ -230,13 +226,13 @@ private:
    */
   inline
     DatasetModelMap::const_iterator
-    DatasetModelIterator( const DatasetId& id ) const;
+    DatasetModelIterator( const DatasetHash& id ) const;
 
   /**
    */
   inline
     DatasetModelMap::iterator
-    DatasetModelIterator( const DatasetId& id );
+    DatasetModelIterator( const DatasetHash& id );
 
   /**
    * \brief Find dataset identified by given key, delete its
@@ -247,12 +243,12 @@ private:
    * \param remove true to remove it from list of registered dataset,
    * false to keep it in.
    */
-  void ReleaseDatasetModel( const DatasetId& id, bool remove );
+  void ReleaseDatasetModel( const DatasetHash& id, bool remove );
 
   /**
    */
   inline
-    void SetSelectedDatasetModel( const DatasetId& id );
+    void SetSelectedDatasetModel( const DatasetHash& id );
 
   /**
    */
@@ -261,7 +257,7 @@ private:
 
   /**
    */
-  DatasetModel* NewDatasetModel( const DatasetId& id );
+  DatasetModel* NewDatasetModel( const DatasetHash& id );
 
 //
 // Private attributes.
@@ -325,7 +321,7 @@ DatabaseModel
 inline
 void
 DatabaseModel
-::SetSelectedDatasetModel( const DatasetId& id )
+::SetSelectedDatasetModel( const DatasetHash& id )
 {
   SetSelectedDatasetModel( FindDatasetModel( id ) );
 }
@@ -347,7 +343,7 @@ DatabaseModel
 inline
 const DatasetModel*
 DatabaseModel
-::FindDatasetModel( const DatasetId& id ) const
+::FindDatasetModel( const DatasetHash& id ) const
 {
   // qDebug() << this << "::FindDatasetModel(" << id << ")";
 
@@ -362,7 +358,7 @@ DatabaseModel
 inline
 DatasetModel*
 DatabaseModel
-::FindDatasetModel( const DatasetId& id )
+::FindDatasetModel( const DatasetHash& id )
 {
   // qDebug() << this << "::FindDatasetModel(" << id << ")";
 
@@ -377,7 +373,7 @@ DatabaseModel
 inline
 DatabaseModel::DatasetModelMap::const_iterator
 DatabaseModel
-::DatasetModelIterator( const QString& id ) const
+::DatasetModelIterator( const DatasetHash& id ) const
 {
   // qDebug() << this << "::DatasetModelIterator(" << id << ")";
 

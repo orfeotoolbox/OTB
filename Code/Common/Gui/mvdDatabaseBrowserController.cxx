@@ -370,7 +370,7 @@ DatabaseBrowserController
   // loop.
   bool areSignalsBlocked = widget->blockSignals( true );
   {
-  widget->SetCurrentDataset( datasetModel->GetName() );
+  widget->SetCurrentDataset( datasetModel->GetHash() );
   }
   widget->blockSignals( areSignalsBlocked );
 }

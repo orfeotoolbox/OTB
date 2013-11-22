@@ -109,7 +109,7 @@ DatabaseModel
     // store alias <-> name
     StringPairType spair;
     spair.first = it.value()->GetAlias();
-    spair.second = it.value()->GetName();
+    spair.second = it.value()->GetHash();
 
     // insert the pair in the list
     list.append( spair);
@@ -122,7 +122,7 @@ DatabaseModel
 /*******************************************************************************/
 DatasetModel*
 DatabaseModel
-::SelectDatasetModel( const DatasetId& id )
+::SelectDatasetModel( const DatasetHash& id )
 {
   // qDebug() << this << "::SelectDatasetModel(" << id << ")";
 
@@ -181,7 +181,7 @@ DatabaseModel
 /*******************************************************************************/
 void
 DatabaseModel
-::RemoveDatasetModel( const DatasetId& id )
+::RemoveDatasetModel( const DatasetHash& id )
 {
   ReleaseDatasetModel( id, true );
 
@@ -221,17 +221,17 @@ DatabaseModel
 }
 
 /*******************************************************************************/
-DatabaseModel::DatasetId
+DatasetHash
 DatabaseModel
 ::RegisterDatasetModel( DatasetModel* model )
 {
   assert( model!=NULL );
 
-  // Construct DatasetId.
-  DatasetId id( model->GetName() );
+  // Construct DatasetHash.
+  DatasetHash hash( model->GetHash() );
 
   // Find possible previously registerd dataset-model...
-  DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
+  DatasetModelMap::iterator it( m_DatasetModels.find( hash ) );
 
   if( it!=m_DatasetModels.end() )
     {
@@ -247,7 +247,7 @@ DatabaseModel
     }
 
   // Insert new dataset-model...
-  it = m_DatasetModels.insert( id, model );
+  it = m_DatasetModels.insert( hash, model );
 
   // Re-parent dataset-model.
   model->setParent( this );
@@ -256,13 +256,13 @@ DatabaseModel
   emit DatabaseChanged();
 
   // Return registered ID.
-  return id;
+  return hash;
 }
 
 /*******************************************************************************/
 void
 DatabaseModel
-::ReleaseDatasetModel( const DatasetId& id, bool remove )
+::ReleaseDatasetModel( const DatasetHash& id, bool remove )
 {
   // qDebug() << this << "::ReleaseDatasetModel(" << id << ")";
 
@@ -296,7 +296,7 @@ DatabaseModel
 /*******************************************************************************/
 DatasetModel*
 DatabaseModel
-::NewDatasetModel( const DatasetId& id )
+::NewDatasetModel( const DatasetHash& id )
 {
   // qDebug() << this << "::NewDatasetModel(" << id << ")";
 
@@ -378,7 +378,7 @@ DatabaseModel
       assert( datasetModel!=NULL );
 
       // by default alias == name
-      m_DatasetModels.insert( datasetModel->GetName(), datasetModel );
+      m_DatasetModels.insert( datasetModel->GetHash(), datasetModel );
       }
     else
       {
