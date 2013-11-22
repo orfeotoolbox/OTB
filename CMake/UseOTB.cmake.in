@@ -35,49 +35,6 @@ set(CMAKE_MODULE_PATH
 #   this way, the OTb specific FindXXX.cmake are only used in this file
 #   and do not pollute the user space
 
-# Load settings for the system VXL with which OTB was built, if any.
-if(OTB_USE_SYSTEM_VXL)
-  # If VXL has already been found, make sure it is the one used to
-  # build OTB.
-  if(WIN32 OR APPLE)
-    string(TOLOWER "${VXL_DIR}" OTB_CHECK_VXL_DIR)
-    string(TOLOWER "${OTB_VXL_DIR}" OTB_CHECK_OTB_VXL_DIR)
-  else()
-    set(OTB_CHECK_VXL_DIR "${VXL_DIR}")
-    set(OTB_CHECK_OTB_VXL_DIR "${OTB_VXL_DIR}")
-  endif()
-  string(COMPARE EQUAL "${OTB_CHECK_VXL_DIR}" "${OTB_CHECK_OTB_VXL_DIR}"
-         OTB_VXL_DIR_MATCH)
-  if(VXL_FOUND)
-    if(NOT OTB_VXL_DIR_MATCH)
-      message(FATAL_ERROR
-        "OTB was built with VXL from \"${OTB_VXL_DIR}\", "
-        "but this project is using VXL from \"${VXL_DIR}\".  "
-        "Please set VXL_DIR to match the one used to build OTB."
-        )
-    endif()
-  else()
-    if(VXL_DIR)
-      if(NOT OTB_VXL_DIR_MATCH)
-        message(
-          "Warning: OTB was built with VXL from \"${OTB_VXL_DIR}\", "
-          "but this project has set VXL_DIR to \"${VXL_DIR}\".  "
-          "OTB is changing VXL_DIR to match the VXL with which it was built."
-          )
-      endif()
-    endif()
-    set(VXL_DIR ${OTB_VXL_DIR})
-    find_package(VXL)
-    if(VXL_FOUND)
-      include(${VXL_CMAKE_DIR}/UseVXL.cmake)
-    else()
-      message(FATAL_ERROR
-        "UseOTB could not load VXL settings from \"${VXL_DIR}\" even through "
-        "OTB was built using VXL from this location."
-        )
-    endif()
-  endif()
-endif()
 
 find_program(OTB_TEST_DRIVER otbTestDriver PATHS
              ${OTB_BINARY_DIRS}
