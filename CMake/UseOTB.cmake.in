@@ -99,9 +99,8 @@ if(OTB_USE_EXTERNAL_ITK)
     find_package(ITK REQUIRED)
     include(${ITK_USE_FILE})
 else()
-  find_package(ITK REQUIRED PATHS
-    ${OTB_INSTALL_PREFIX}/CMake/
-    NO_SYSTEM_PATH) 
+  find_package(ITK REQUIRED
+    HINTS ${OTB_INSTALL_PREFIX})
   include(${ITK_USE_FILE})
 endif()
 
