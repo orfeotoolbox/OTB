@@ -98,6 +98,11 @@ find_program(OTB_APPLICATION_LAUNCHER otbApplicationLauncherCommandLine PATHS
 if(OTB_USE_EXTERNAL_ITK)
     find_package(ITK REQUIRED)
     include(${ITK_USE_FILE})
+else()
+  find_package(ITK REQUIRED PATHS
+    ${OTB_INSTALL_PREFIX}/CMake/
+    NO_SYSTEM_PATH) 
+  include(${ITK_USE_FILE})
 endif()
 
 if(ITK_USE_FFTWF OR ITK_USE_FFTWD)
