@@ -101,6 +101,11 @@ private:
     AddChoice("type.log2", "Log2");
     SetParameterString("type", "none");
 
+    AddParameter(ParameterType_Float,"type.linear.gamma","Gamma correction factor");
+    SetParameterDescription("type.linear.gamma","Gamma correction factor");
+    SetDefaultParameterFloat("type.linear.gamma",1.0);
+    MandatoryOff("type.linear.gamma");
+
     AddParameter(ParameterType_InputImage,  "mask",   "Input mask");
     SetParameterDescription("mask", "The masked pixels won't be used to adapt the dynamic (the mask must have the same dimensions as the input image)");
     MandatoryOff("mask");
@@ -297,6 +302,11 @@ private:
       rescaler->AutomaticInputMinMaxComputationOff();
       rescaler->SetInputMinimum(inputMin);
       rescaler->SetInputMaximum(inputMax);
+
+      if ( rescaleType == "linear")
+        {
+        rescaler->SetGamma(GetParameterFloat("type.linear.gamma"));
+        }
 
       m_TmpFilter = rescaler;
       castIm = rescaler->GetOutput();
