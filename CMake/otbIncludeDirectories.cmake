@@ -272,7 +272,6 @@ set(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   ObjectDetection
   ApplicationEngine
   Utilities
-  Utilities/ITK
   Utilities/otbsvm
   Utilities/InsightJournal
   Utilities/otb6S
