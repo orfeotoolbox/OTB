@@ -88,3 +88,5 @@
 
 #cmakedefine CHECK_HDF4OPEN_SYMBOL
 
+/* MuParser has "&&" and "||" operators (version >= 2.0.0), instead of "and" and "or" (version <2.0.0 version) */
+#cmakedefine OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
