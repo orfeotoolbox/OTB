@@ -66,7 +66,7 @@ void otbParserTest_UserDefinedCst(void)
 {
   ParserType::Pointer parser = ParserType::New();
   parser->SetExpr("ln10");
-  otbParserTest_ThrowIfNotEqual(parser->Eval(), vcl_log(10), "UserDefinedCst");
+  otbParserTest_ThrowIfNotEqual(parser->Eval(), vcl_log(10.0), "UserDefinedCst");
 }
 
 void otbParserTest_UserDefinedFun(void)
@@ -99,7 +99,7 @@ void otbParserTest_Mixed(void)
   ParserType::Pointer parser = ParserType::New();
   parser->SetExpr("(7+10)/2+cos(pi/4)*10-10*ln10+ndvi(100, 10)");
   otbParserTest_ThrowIfNotEqual(parser->Eval(),
-                                (7.0+10.0)/2.0+vcl_cos(otb::CONST_PI/4)*10.0-10.0*vcl_log(10)+(10.0-100.0)/(10.0+100.0),
+                                (7.0+10.0)/2.0+vcl_cos(otb::CONST_PI/4)*10.0-10.0*vcl_log(10.0)+(10.0-100.0)/(10.0+100.0),
                                 "Mixed");
 }
 
