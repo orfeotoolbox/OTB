@@ -26,7 +26,7 @@
 
 #include "otbObjectList.h"
 #include "itkStatisticsAlgorithm.h"
-#include "itkDenseFrequencyContainer.h"
+#include "itkDenseFrequencyContainer2.h"
 #include "itkNumericTraits.h"
 #include "itkHistogram.h"
 
@@ -88,14 +88,14 @@ public:
   typedef typename itk::DataObject::Pointer       DataObjectPointer;
   
   /** Types for histogram */
-  typedef itk::Statistics::DenseFrequencyContainer        DFContainerType;
+  typedef itk::Statistics::DenseFrequencyContainer2        DFContainerType;
 
   typedef
     typename itk::NumericTraits<InternalPixelType>::RealType
     HistogramMeasurementRealType;
 
   typedef
-    itk::Statistics::Histogram<HistogramMeasurementRealType, 1, DFContainerType>
+    itk::Statistics::Histogram<HistogramMeasurementRealType, DFContainerType>
     HistogramType;
 
   typedef itk::VariableLengthVector< unsigned int > CountVectorType;
@@ -181,7 +181,7 @@ protected:
   virtual ~PersistentHistogramVectorImageFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
   PersistentHistogramVectorImageFilter(const Self &); //purposely not implemented

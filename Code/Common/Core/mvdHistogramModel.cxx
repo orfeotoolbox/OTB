@@ -90,7 +90,7 @@ HistogramModel
   Histogram::Pointer histogram( m_Histograms->GetNthElement( band ) );
 
   // Contruct 1D measurement vector.
-  assert( Histogram::MeasurementVectorSize==1 );
+  assert( histogram->GetMeasurementVectorSize()==1 );
   Histogram::MeasurementVectorType measurement( 1 );
   measurement[ 0 ] = intensity;
 
@@ -111,14 +111,14 @@ HistogramModel
   if( !histogram->GetIndex( measurement, index ) )
     throw itk::RangeError( __FILE__, __LINE__ );
 
-  assert( Histogram::IndexType::GetIndexDimension()==1 );
+  assert( index.GetSize()==1 );
 
   // Min/max intensities of bin.
   MeasurementType minI = histogram->GetBinMin( 0, index[ 0 ] );
   MeasurementType maxI = histogram->GetBinMax( 0, index[ 0 ] );
 
   // Frequency of current bin
-  Histogram::FrequencyType frequency( histogram->GetFrequency( index ) );
+  Histogram::AbsoluteFrequencyType frequency( histogram->GetFrequency( index ) );
 
   // Initialize result (contribution of current bin)
   const MeasurementType epsilon = 1.0E-6;
@@ -192,7 +192,7 @@ HistogramModel
   Histogram::SizeType size( histogram->GetSize() );
 
   // Ensure dimension is 1.
-  assert( Histogram::MeasurementVectorSize==1 );
+  assert( histogram->GetMeasurementVectorSize()==1 );
 
   // Initialize bounds.
   assert( std::numeric_limits< double >::has_infinity );
@@ -204,7 +204,7 @@ HistogramModel
   // Traverse samples.
   for( unsigned long bin=0; bin<size[ 0 ]; ++bin )
     {
-    Histogram::FrequencyType f( histogram->GetFrequency( bin, 0 ) );
+    Histogram::AbsoluteFrequencyType f( histogram->GetFrequency( bin, 0 ) );
 
     if( f>yMax )
       yMax = f;
@@ -342,6 +342,7 @@ HistogramModel
   for( CountType i=0; i<size; ++i )
     {
     Histogram::Pointer histogram( Histogram::New() );
+    histogram->SetMeasurementVectorSize(1);
 
     stream >> *histogram;
 

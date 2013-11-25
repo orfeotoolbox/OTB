@@ -68,7 +68,7 @@ namespace mvd
  */
 enum StreamTag
 {
-  STREAM_TAG_SIZE =0,
+  STREAM_TAG_ARRAY = 0,
   STREAM_TAG_VECTOR,
   STREAM_TAG_VARIABLE_LENGTH_VECTOR,
   //
@@ -219,32 +219,32 @@ operator >> ( QTextStream& stream,
 /*****************************************************************************/
 
 /**
- * \brief Write an itk::Size< T > into a QTextStream.
+ * \brief Write an itk::Array< T > into a QTextStream.
  *
  * \param stream QTextStream into which to write data.
- * \param size itk::Size< T > data to write.
+ * \param array itk::Array< T > data to write.
  *
  * \return stream instance.
  */
-template< unsigned int N >
+template< typename T >
 inline
 QTextStream&
 operator << ( QTextStream& stream,
-	      const itk::Size< N >& size );
+	      const itk::Array< T >& array );
 
 /**
- * \brief Read an itk::Size< T > from a QTextStream.
+ * \brief Read an itk::Array< T > from a QTextStream.
  *
  * \param stream QTextStream from which to read data.
- * \param size itk::Size< T > container to read data into.
+ * \param array itk::Array< T > container to read data into.
  *
  * \return stream instance.
  */
-template< unsigned int N >
+template< typename T >
 inline
 QTextStream&
 operator >> ( QTextStream& stream,
-	      itk::Size< N >& size );
+	      itk::Array< T >& array );
 
 /*****************************************************************************/
 
@@ -295,33 +295,33 @@ operator >> ( QTextStream& stream,
 /*****************************************************************************/
 
 /**
- * \brief Write an itk::statistics::Histogram< T, N, FX > into a QTextStream.
+ * \brief Write an itk::statistics::Histogram< T, FC > into a QTextStream.
  *
  * \param stream QTextStream into which to write data.
- * \param histogram itk::statistics::Histogram< T, N, FC > data to write.
+ * \param histogram itk::statistics::Histogram< T, FC > data to write.
  *
  * \return stream instance.
  */
-template< typename T, unsigned int N, typename FC >
+template< typename T, typename FC >
 inline
 QTextStream&
 operator << ( QTextStream& stream,
-	      const itk::Statistics::Histogram< T, N, FC >& histogram );
+	      const itk::Statistics::Histogram< T, FC >& histogram );
 
 /**
- * \brief Read an itk::statistics::Histogram< T, N, FC > from a QTextStream.
+ * \brief Read an itk::statistics::Histogram< T, FC > from a QTextStream.
  *
  * \param stream QTextStream from which to read data.
- * \param histogram itk::statistics::Histogram< T, N, FC > container to
+ * \param histogram itk::statistics::Histogram< T, FC > container to
  * read data into.
  *
  * \return stream instance.
  */
-template< typename T, unsigned int N, typename FC >
+template< typename T, typename FC >
 inline
 QTextStream&
 operator >> ( QTextStream& stream,
-	      itk::Statistics::Histogram< T, N, FC >& histogram );
+	      itk::Statistics::Histogram< T, FC >& histogram );
 
 } // end namespace 'mvd'.
 
@@ -531,20 +531,19 @@ operator >> ( QTextStream& stream,
 }
 
 /*****************************************************************************/
-template< unsigned int N >
+template< typename T >
 inline
 QTextStream&
 operator << ( QTextStream& stream,
-	      const itk::Size< N >& size )
+	      const itk::Array< T >& array )
 {
-  typedef itk::Size< N > Size;
 
-  stream << STREAM_TAG_SIZE << Size::GetSizeDimension();
+  stream << STREAM_TAG_ARRAY << array.GetSize();
   CheckStreamStatus( stream );
 
-  for( CountType i=0; i<Size::GetSizeDimension(); ++i )
+  for( CountType i=0; i<array.GetSize(); ++i )
     {
-    stream << " " << size[ i ];
+    stream << " " << array[ i ];
     CheckStreamStatus( stream );
     }
 
@@ -552,39 +551,38 @@ operator << ( QTextStream& stream,
 }
 
 /*******************************************************************************/
-template< unsigned int N >
+template< typename T >
 inline
 QTextStream&
 operator >> ( QTextStream& stream,
-	      itk::Size< N >& size )
+	      itk::Array< T >& array )
 {
-  typedef itk::Size< N > Size;
 
   CountType dimension = 0;
 
   QString type;
-  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_SIZE ] );
+  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_ARRAY ] );
 
   stream >> dimension;
 
-  if( dimension!=Size::GetSizeDimension() )
+  if( dimension!=array.GetSize() )
     {
     throw std::length_error(
       ToStdString(
 	QCoreApplication::translate(
 	  "mvd::TextStream",
-	  "Size dimension (%1) does not match "
+	  "Array dimension (%1) does not match "
 	  "expected dimension (%2)."
 	)
 	.arg( dimension )
-	.arg( Size::GetSizeDimension() )
+	.arg( array.GetSize() )
       )
     );
     }
 
-  for( CountType i=0; i<Size::GetSizeDimension(); ++i )
+  for( CountType i=0; i<array.GetSize(); ++i )
     {
-    stream >> ws >> size[ i ];
+    stream >> ws >> array[ i ];
     CheckStreamStatus( stream );
     }
 
@@ -699,13 +697,13 @@ operator >> ( QTextStream& stream,
 }
 
 /*******************************************************************************/
-template< typename T, unsigned int N, typename FC >
+template< typename T, typename FC >
 inline
 QTextStream&
 operator << ( QTextStream& stream,
-	      const itk::Statistics::Histogram< T, N, FC >& histogram )
+	      const itk::Statistics::Histogram< T, FC >& histogram )
 {
-  typedef typename itk::Statistics::Histogram< T, N, FC > Histogram;
+  typedef typename itk::Statistics::Histogram< T, FC > Histogram;
 
   WriteStreamTag( stream, "HISTOGRAM", false );
   stream << endl;
@@ -784,15 +782,17 @@ operator << ( QTextStream& stream,
 }
 
 /*******************************************************************************/
-template< typename T, unsigned int N, typename FC >
+template< typename T, typename FC >
 inline
 QTextStream&
 operator >> ( QTextStream& stream,
-	      itk::Statistics::Histogram< T, N, FC >& histogram )
+	      itk::Statistics::Histogram< T, FC >& histogram )
 {
-  typedef itk::Statistics::Histogram< T, N, FC > Histogram;
+  typedef itk::Statistics::Histogram< T, FC > Histogram;
 
   QString string;
+  unsigned int N = histogram.GetMeasurementVectorSize();
+
 
   //
   // Histogram section.
@@ -802,6 +802,8 @@ operator >> ( QTextStream& stream,
   // Measurement-size section.
   ReadStreamTag( stream, string, "MEASUREMENT" );
   typename Histogram::SizeType size;
+  size.SetSize(N);
+
   stream >> size;
 
   // Dimension of size is checked in operator >> ( QTextStream&,
@@ -932,7 +934,7 @@ operator >> ( QTextStream& stream,
       histogram.SetBinMax( dim, bin, max );
 
       // Frequency.
-      typename Histogram::FrequencyType freq( 0 );
+      typename Histogram::AbsoluteFrequencyType freq( 0 );
 
       stream >> freq;
       CheckStreamStatus( stream );
@@ -975,7 +977,7 @@ operator >> ( QTextStream& stream,
   for( ; i<samples; ++i )
     {
     typename Histogram::InstanceIdentifier id( 0 );
-    typename Histogram::FrequencyType freq( 0 );
+    typename Histogram::AbsoluteFrequencyType freq( 0 );
 
     stream >> id >> ws >> freq;
     CheckStreamStatus( stream );

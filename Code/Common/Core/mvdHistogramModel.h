@@ -219,7 +219,7 @@ private:
 private:
 
   /** */
-  typedef itk::Statistics::Histogram< MeasurementType, 1 > Histogram;
+  typedef itk::Statistics::Histogram< MeasurementType > Histogram;
 
   /** */
   typedef otb::ObjectList< Histogram > HistogramList;
@@ -346,7 +346,7 @@ HistogramModel
   Histogram::SizeType size( histogram->GetSize() );
 
   // Ensure dimension is 1.
-  assert( Histogram::MeasurementVectorSize==1 );
+  assert( histogram->GetMeasurementVectorSize()==1 );
 
   // There are twince number of points than number of bins.
 #if HISTOGRAM_CURVE_TYPE==0
