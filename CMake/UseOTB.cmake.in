@@ -57,7 +57,7 @@ if(OTB_USE_EXTERNAL_ITK)
     include(${ITK_USE_FILE})
 else()
   find_package(ITK REQUIRED
-    HINTS ${OTB_INSTALL_PREFIX})
+    HINTS ${OTB_INSTALL_PREFIX} ${OTB_BINARY_DIRS}/../Utilities/ITK)
   include(${ITK_USE_FILE})
 endif()
 
