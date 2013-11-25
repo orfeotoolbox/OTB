@@ -77,14 +77,6 @@ DatabaseConnection
 {
   DatabaseConnection dbc;
 
-#if 0
-  if( !db.transaction() )
-    throw DatabaseError(
-      db.lastError(),
-      tr( "Error while beginning database transaction: " )
-    );
-#endif
-
   dbc.ExecuteQuery( "PRAGMA foreign_keys = ON;" );
 
 
@@ -158,40 +150,6 @@ DatabaseConnection
     "CREATE INDEX idx_dataset_attribute_dsid "
     "ON dataset_attribute( dataset_id );"
   );
-
-
-#if 0
-  if( !query.exec( SQL_CREATE_DB ) )
-    {
-    /*
-    // Do throw exception which would mask main exception. Simply
-    // trace it as a warning.
-    if( !db.rollback() )
-      qWarning()
-        << "Error while rolling database transaction back: "
-        << db.lastError();
-    */
-
-    // Securely close database connection.
-    // db.close();
-
-    // Throw main exception.
-    throw DatabaseError(
-      query.lastError(),
-      tr( "Error when executing database query: " )
-    );
-    }
-
-  /*
-  if( !db.commit() )
-    {
-    throw DatabaseError(
-      db.lastError(),
-      tr( "Error while committing database transaction: " )
-    );
-    }
-  */
-#endif
 }
 
 /*******************************************************************************/
@@ -207,15 +165,13 @@ DatabaseConnection
     dbc.ExecuteQuery( SQL_CREATE_DB[ i ] );
     }
 
-/*
-#if 1
+#if 0
   for( int i=0; i<SQL_INSERT_ITEMS_COUNT; ++i )
     {
     // qDebug() << SQL_INSERT_ITEMS[ i ];
     dbc.ExecuteQuery( SQL_INSERT_ITEMS[ i ] );
     }
 #endif
-*/
 }
 
 /*****************************************************************************/
@@ -410,38 +366,6 @@ DatabaseConnection
 
   return query;
 }
-
-/*****************************************************************************/
-/*
-QSqlQuery
-DatabaseConnection
-::BatchQuery( const QString& sql,
-              const QVariantList& values1,
-              ... )
-{
-  // BATCH_QUERY_DEBUG_3( sql, values1, values2, values3 );
-  BATCH_QUERY_PREPARE( query, sql );
-
-  query.addBindValue( values1 );
-
-  va_list args;
-
-  va_start( args, values1 );
-
-  for( QVariantList values = va_arg( args, QVariantList );
-       args != NULL;
-       values = va_arg( args, QVariantList ) )
-    {
-    query.addBindValue( values );
-    }
-
-  va_end( args );
-
-  BATCH_QUERY_EXEC();
-
-  return query;
-}
-*/
 
 /*****************************************************************************/
 #if 0
