@@ -127,11 +127,15 @@ DatabaseError
       break;
     }
 
-  strStream <<
-    " " << sqlError.number() <<
-    " '" << ToStdString( sqlError.databaseText() ) <<
-    "'; '" << ToStdString( sqlError.driverText() ) <<
-    "'.";
+  strStream << " " << sqlError.number();
+
+  if( !sqlError.databaseText().isEmpty() )
+    strStream << " " << ToStdString( sqlError.databaseText() );
+
+  if( !sqlError.driverText().isEmpty() )
+    strStream << "; " << ToStdString( sqlError.driverText() );
+
+  strStream << ".";
 
   if( !suffix.isEmpty() )
     strStream << ToStdString( suffix );

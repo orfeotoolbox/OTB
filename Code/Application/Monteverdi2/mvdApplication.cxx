@@ -96,6 +96,15 @@ Application
 /*******************************************************************************/
 void
 Application
+::CloseDatabase()
+{
+  // Delete model and release resources.
+  SetModel( NULL );
+}
+
+/*******************************************************************************/
+void
+Application
 ::OpenApplicationsBrowser()
 {
 #ifdef OTB_WRAP_QT

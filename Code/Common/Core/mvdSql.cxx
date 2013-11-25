@@ -53,6 +53,18 @@ const int SQL_CREATE_DB_COUNT = 9;
 
 /****************************************************************************/
 //
+// 'SQL_INSERT_ITEMS' Generated from file 'sql_insert_items.sql'
+const char* SQL_INSERT_ITEMS[] = {
+"-------------------------------------------------------------------------------\n"
+"INSERT INTO tag( id, label ) VALUES( 0, 'Root' );",
+"-------------------------------------------------------------------------------\n"
+"INSERT INTO tag_node VALUES( 0, NULL, 0, 0, '/');",
+};
+
+const int SQL_INSERT_ITEMS_COUNT = 2;
+
+/****************************************************************************/
+//
 // 'SQL_QUERIES' Generated from file 'sql_queries.sql'
 const char* SQL_QUERIES[] = {
 "-------------------------------------------------------------------------------\n"
@@ -73,35 +85,4 @@ const char* SQL_QUERIES[] = {
 };
 
 const int SQL_QUERIES_COUNT = 2;
-
-/****************************************************************************/
-//
-// 'SQL_INSERT_ITEMS' Generated from file 'sql_insert_items.sql'
-const char* SQL_INSERT_ITEMS[] = {
-"-------------------------------------------------------------------------------\n"
-"INSERT INTO dataset( id, hash, alias )\n"
-"VALUES( 0, '4ecf0c9d296cd27b550543980a1da496', 'lena512color' );",
-"INSERT INTO dataset( id, hash, alias )\n"
-"VALUES( 1, 'b622d2129232a1d6103a803077c4038d', 'QB_1_ortho' );",
-"INSERT INTO dataset( id, hash, alias )\n"
-"VALUES( 2, '9e0debeb00975dcc6cec36fbceee55e4', 'Rio de Janeiro (SPOT4)' );",
-"-------------------------------------------------------------------------------\n"
-"INSERT INTO tag( id, label ) VALUES( 0, 'Root' );",
-"-------------------------------------------------------------------------------\n"
-"INSERT INTO tag_node VALUES( 0, NULL, 0, 0, '/');",
-"   -- Root/Datasets/SPOT\n"
-"-------------------------------------------------------------------------------\n"
-" -- Datasets - Rio de Janeiro\n"
-"INSERT INTO dataset_membership( dataset_id, tag_id ) VALUES( 2, 1 );",
-" -- Datasets/SPORT - Rio de Janeiro\n"
-"INSERT INTO dataset_membership( dataset_id, tag_id ) VALUES( 2, 5 );",
-" -- Datasets - lena512color\n"
-"INSERT INTO dataset_membership( dataset_id, tag_id ) VALUES( 0, 1 );",
-" -- Datasets/Cached - lena512color\n"
-"INSERT INTO dataset_membership( dataset_id, tag_id ) VALUES( 1, 2 );",
-" -- Datasets - QB_1_ortho\n"
-"INSERT INTO dataset_membership( dataset_id, tag_id ) VALUES( 1, 1 );",
-};
-
-const int SQL_INSERT_ITEMS_COUNT = 10;
 } // End of anonymous namespace.

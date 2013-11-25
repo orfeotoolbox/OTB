@@ -68,6 +68,8 @@ namespace
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
+int DatabaseConnection::m_InstanceCount = 0;
+
 /*******************************************************************************/
 void
 DatabaseConnection
@@ -97,7 +99,6 @@ DatabaseConnection
   dbc.ExecuteQuery(
     "CREATE TABLE tag( "
     "id INTEGER PRIMARY KEY, "
-    // "parent_id INTEGER NOT NULL DEFAULT 0 REFERENCES tag( id ), "
     "label TEXT NOT NULL );"
   );
   dbc.ExecuteQuery(
@@ -129,7 +130,6 @@ DatabaseConnection
   // DATASET MEMBERSHIP.
   dbc.ExecuteQuery(
     "CREATE TABLE dataset_membership( "
-    // "id INTEGER PRIMARY KEY, "
     "dataset_id INTEGER NOT NULL REFERENCES dataset( id ), "
     "tag_id INTEGER NOT NULL REFERENCES tag( id ), "
     "PRIMARY KEY( dataset_id, tag_id ) );"
@@ -153,10 +153,6 @@ DatabaseConnection
     "rank INTEGER NOT NULL, "
     "name TEXT NOT NULL, "
     "value TEXT );"
-  );
-  dbc.ExecuteQuery(
-    "CREATE UNIQUE INDEX idx_dataset_attribute_id ON "
-    "dataset_attribute( id );"
   );
   dbc.ExecuteQuery(
     "CREATE INDEX idx_dataset_attribute_dsid "
@@ -207,7 +203,7 @@ DatabaseConnection
 
   for( int i=0; i<SQL_CREATE_DB_COUNT; ++i )
     {
-    qDebug() << SQL_CREATE_DB[ i ];
+    // qDebug() << SQL_CREATE_DB[ i ];
     dbc.ExecuteQuery( SQL_CREATE_DB[ i ] );
     }
 
@@ -215,7 +211,7 @@ DatabaseConnection
 #if 1
   for( int i=0; i<SQL_INSERT_ITEMS_COUNT; ++i )
     {
-    qDebug() << SQL_INSERT_ITEMS[ i ];
+    // qDebug() << SQL_INSERT_ITEMS[ i ];
     dbc.ExecuteQuery( SQL_INSERT_ITEMS[ i ] );
     }
 #endif
@@ -228,11 +224,23 @@ QSqlDatabase
 DatabaseConnection
 ::SqlDatabase()
 {
-  QSqlDatabase db( QSqlDatabase::addDatabase( "QSQLITE", "mvd2" ) );
+  if( QSqlDatabase::contains( "mvd2" ) )
+    {
+    qDebug() <<
+      ( QSqlDatabase::database( "mvd2" ).isOpen()
+        ? "Database connection is opened."
+        : "Database connection is closed." );
+
+    return QSqlDatabase::database( "mvd2" );
+    }
 
   QString filename(
     I18nCoreApplication::ConstInstance()->GetCacheDir().filePath( "db.sqlite" )
   );
+
+  qDebug() << "Adding database connection...";
+
+  QSqlDatabase db( QSqlDatabase::addDatabase( "QSQLITE", "mvd2" ) );
 
   db.setDatabaseName( filename );
 
@@ -250,22 +258,56 @@ DatabaseConnection
 ::DatabaseConnection( QObject* parent ) :
   m_SqlDatabase( SqlDatabase() )
 {
-  if( !m_SqlDatabase.open() )
+  if( !m_SqlDatabase.isOpen() )
     {
-    throw DatabaseError(
-      m_SqlDatabase.lastError(),
-      tr( "Failed to open database: " )
-    );
+      qDebug() << "Opening database connection...";
+
+      if( !m_SqlDatabase.open() )
+        {
+        throw DatabaseError(
+          m_SqlDatabase.lastError(),
+          tr( "Failed to open database: " )
+        );
+        }
     }
+
+  assert( DatabaseConnection::m_InstanceCount>=0 );
+
+  ++ DatabaseConnection::m_InstanceCount;
 }
 
 /*******************************************************************************/
 DatabaseConnection
 ::~DatabaseConnection()
 {
-  m_SqlDatabase.close();
+  -- DatabaseConnection::m_InstanceCount;
 
-  m_SqlDatabase = QSqlDatabase();
+  assert( DatabaseConnection::m_InstanceCount>=0 );
+
+  if( m_InstanceCount==0 )
+    {
+    qDebug() << "Closing database connection...";
+
+    m_SqlDatabase.close();
+
+    assert( !m_SqlDatabase.isOpen() );
+
+    m_SqlDatabase = QSqlDatabase();
+
+    qDebug() << "Removing database connection...";
+
+    QSqlDatabase::removeDatabase( "mvd2" );
+    }
+}
+
+/*****************************************************************************/
+void
+DatabaseConnection
+::InsertDataset( const QString& hash )
+{
+  ExecuteQuery(
+    QString( "INSERT INTO dataset( hash ) VALUES( '%1' );" ).arg( hash )
+  );
 }
 
 /*****************************************************************************/
@@ -275,11 +317,14 @@ DatabaseConnection
 {
   QSqlQuery query( m_SqlDatabase );
 
+  qDebug() << sql;
+
   if( !query.exec( sql ) )
     {
     throw DatabaseError(
       query.lastError(),
-      tr( "Failed to execute query: " )
+      tr( "Failed to execute query: " ),
+      QString( "\n'%1'" ).arg( sql )
     );
     }
 }
@@ -307,7 +352,8 @@ DatabaseConnection
     {                                           \
     throw DatabaseError(                        \
       query.lastError(),                        \
-      tr( "Failed to prepare query: " )         \
+      tr( "Failed to prepare query: " ),        \
+      QString( "\n'%1'" ).arg( sql )            \
     );                                          \
     }
 
@@ -317,7 +363,7 @@ DatabaseConnection
     {                                            \
     throw DatabaseError(                         \
       query.lastError(),                         \
-      tr( "Failed to execute query: " )          \
+      tr( "Failed to execute batch query: " )    \
     );                                           \
     }
 

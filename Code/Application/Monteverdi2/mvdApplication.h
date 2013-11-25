@@ -103,6 +103,10 @@ public:
   CountType OpenDatabase();
 
   /**
+   */
+  void CloseDatabase();
+
+  /**
    * \brief Get the OTB application model.
    */
   inline

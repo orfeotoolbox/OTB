@@ -154,11 +154,15 @@ main( int argc, char* argv[] )
 
   // TODO: Correctly manage main-window state via application settings.
   mainWindow.showMaximized();
-  
+
 #endif
 
   // 6. Let's go: run the application and return exit code.
-  return QCoreApplication::instance()->exec();
+  int result = QCoreApplication::instance()->exec();
+
+  application.CloseDatabase();
+
+  return result;
 }
 
 

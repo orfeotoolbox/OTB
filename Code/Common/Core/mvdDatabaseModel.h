@@ -61,6 +61,7 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+class DatabaseConnection;
 class DatasetModel;
 
 /*****************************************************************************/
@@ -262,6 +263,10 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  DatabaseConnection* m_Db;
+
   /**
    */
   DatasetModelMap m_DatasetModels;

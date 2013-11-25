@@ -95,6 +95,10 @@ public:
   static void InitializeDatabase();
   static void InitializeDatabase2();
 
+  /**
+   */
+  void InsertDataset( const QString& hash );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -172,6 +176,10 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  static int m_InstanceCount;
+
   /**
    */
   QSqlDatabase m_SqlDatabase;

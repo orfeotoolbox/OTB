@@ -155,7 +155,7 @@ I18nCoreApplication
 }
 
 /*****************************************************************************/
-void
+QString
 I18nCoreApplication
 ::DatasetPathName( QString& path,
 		   QString& name,
@@ -173,8 +173,14 @@ I18nCoreApplication
     QCryptographicHash::hash( fileInfo.absoluteFilePath().toAscii(), 
 			      QCryptographicHash::Md5 );
 
+  // MD5 hash-code.
+  QString hash( result.toHex() );
+
   // store the md5 + the dataset extension at the end
-  name = result.toHex() + I18nCoreApplication::DATASET_EXT;
+  name = hash + I18nCoreApplication::DATASET_EXT;
+
+  // Return hash-code for further use.
+  return hash;
 }
 
 /*****************************************************************************/

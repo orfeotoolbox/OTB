@@ -274,12 +274,16 @@ public:
    *
    * \param path Resulting path where the Dataset will be stored.
    * \param name Resulting name of the given Dataset.
-   * \param imageFilename The image filename used to compute the path and name of the Dataset.
+   * \param imageFilename The image filename used to compute the path
+   * and name of the Dataset.
+   *
+   * \return The MD5 hash-code generated from to full absolute
+   * pathname of image file.
    */
   static
-    void DatasetPathName( QString& path,
-			  QString& name,
-			  const QString& imageFilename );
+    QString DatasetPathName( QString& path,
+                             QString& name,
+                             const QString& imageFilename );
 
   /**
    * \brief Load a DatasetModel from disk.

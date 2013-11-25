@@ -38,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdDatabaseConnection.h"
 #include "mvdDatasetModel.h"
 #include "mvdI18nCoreApplication.h"
 
@@ -66,6 +67,7 @@ namespace mvd
 DatabaseModel
 ::DatabaseModel( QObject* parent ) :
   AbstractModel( parent ),
+  m_Db( NULL ),
   m_DatasetModels(),
   m_SelectedDatasetModel( NULL )
 {
@@ -75,6 +77,8 @@ DatabaseModel
 DatabaseModel
 ::~DatabaseModel()
 {
+  delete m_Db;
+  m_Db = NULL;
 }
 
 /*******************************************************************************/
@@ -233,7 +237,12 @@ DatabaseModel
   // Find possible previously registerd dataset-model...
   DatasetModelMap::iterator it( m_DatasetModels.find( hash ) );
 
-  if( it!=m_DatasetModels.end() )
+  if( it==m_DatasetModels.end() )
+    {
+    assert( m_Db!=NULL );
+    m_Db->InsertDataset( hash );
+    }
+  else
     {
     // BUGFIX: Clear selected dataset-model if it is to be deleted below.
     if( it.value()==m_SelectedDatasetModel )
@@ -337,6 +346,11 @@ void
 DatabaseModel
 ::virtual_BuildModel( void* context )
 {
+  assert( m_Db==NULL );
+
+  delete m_Db;
+  m_Db = new DatabaseConnection( this );
+
   CountType nbOutdated = InitializeDatasetModels();
 
   if( context!=NULL )
