@@ -129,7 +129,7 @@ PersistentHistogramVectorImageFilter<TInputImage>
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
-  bool clipBins = true;
+  bool clipBins = false;
   
   // if histogram Min and Max have the wrong size : set to default [0, 255]
   if (m_HistogramMin.Size() != numberOfComponent ||
