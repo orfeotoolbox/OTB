@@ -253,11 +253,13 @@ I18nMainWindow
   //
   // Setup initial empty database
   if( isNew )
-#if 0
+    {
+#if 1
     DatabaseConnection::InitializeDatabase();
 #else
     DatabaseConnection::InitializeDatabase2();
 #endif
+    }
 }
 
 /*****************************************************************************/

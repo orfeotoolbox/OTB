@@ -52,6 +52,86 @@ namespace mvd
   Context comment for translator.
 */
 
+/*****************************************************************************/
+/* MACROS                                                                    */
+
+#define USE_DEBUG 0
+
+/*****************************************************************************/
+#if USE_DEBUG
+#define QUERY_DEBUG_0( sql ) qDebug() << ( sql )
+#else
+#define QUERY_DEBUG_0( sql )
+#endif
+
+/*****************************************************************************/
+#if USE_DEBUG
+#define QUERY_DEBUG_1( sql, values1 )           \
+  qDebug()                                      \
+  << "\n" << ( sql )                            \
+  << "\nvalues_1:" << ( values1 )
+#else
+#define QUERY_DEBUG_1( sql, values1 )
+#endif
+
+/*****************************************************************************/
+#if USE_DEBUG
+#define QUERY_DEBUG_2( sql, values1, values2 )                   \
+  qDebug()                                                       \
+  << "\n" << ( sql )                                             \
+  << "\nvalues_1:" << ( values1 )                                \
+  << "\nvalues_2:" << ( values2 )
+#else
+#define QUERY_DEBUG_2( sql, values1, values2 )
+#endif
+
+/*****************************************************************************/
+#if USE_DEBUG
+#define QUERY_DEBUG_3( sql, values1, values2, values3 )                 \
+  qDebug()                                                              \
+  << "\n" << ( sql )                                                    \
+  << "\nvalues_1:" << ( values1 )                                       \
+  << "\nvalues_2:" << ( values2 )                                       \
+  << "\nvalues_3:" << ( values3 )
+#else
+#define QUERY_DEBUG_3( sql, values1, values2, values3 )
+#endif
+
+/*****************************************************************************/
+#define QUERY_PREPARE( qry, sql )               \
+  QSqlQuery query( m_SqlDatabase );             \
+  if( !qry.prepare( sql ) )                     \
+    {                                           \
+    throw DatabaseError(                        \
+      qry.lastError(),                          \
+      tr( "Failed to prepare query: " ),        \
+      QString( "\n\"%1\"" ).arg( sql )          \
+    );                                          \
+    }
+
+/*****************************************************************************/
+#define QUERY_EXEC( qry )                               \
+  if( !qry.exec() )                                     \
+    {                                                   \
+    throw DatabaseError(                                \
+      qry.lastError(),                                  \
+      tr( "Failed to execute query: " ),                \
+      QString( "\n\"%1\"" ).arg( qry.lastQuery() )      \
+    );                                                  \
+    }                                                   \
+  assert( qry.isActive() )
+
+/*****************************************************************************/
+#define BATCH_QUERY_EXEC( qry )                         \
+  if( !qry.execBatch() )                                \
+    {                                                   \
+    throw DatabaseError(                                \
+      qry.lastError(),                                  \
+      tr( "Failed to batch query: " ),                  \
+      QString( "\n\"%1\"" ).arg( qry.lastQuery() )      \
+    );                                                  \
+    }                                                   \
+  assert( qry.isActive() )
 
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
@@ -73,7 +153,7 @@ int DatabaseConnection::m_InstanceCount = 0;
 /*******************************************************************************/
 void
 DatabaseConnection
-::InitializeDatabase()
+::InitializeDatabase2()
 {
   DatabaseConnection dbc;
 
@@ -155,21 +235,19 @@ DatabaseConnection
 /*******************************************************************************/
 void
 DatabaseConnection
-::InitializeDatabase2()
+::InitializeDatabase()
 {
   DatabaseConnection dbc;
 
-  for( int i=0; i<SQL_CREATE_DB_COUNT; ++i )
+  for( int i=0; i<SQL_DB_CREATE_COUNT; ++i )
     {
-    // qDebug() << SQL_CREATE_DB[ i ];
-    dbc.ExecuteQuery( SQL_CREATE_DB[ i ] );
+    dbc.ExecuteQuery( SQL_DB_CREATE[ i ] );
     }
 
-#if 0
-  for( int i=0; i<SQL_INSERT_ITEMS_COUNT; ++i )
+#if 1
+  for( int i=0; i<SQL_DB_SETUP_COUNT; ++i )
     {
-    // qDebug() << SQL_INSERT_ITEMS[ i ];
-    dbc.ExecuteQuery( SQL_INSERT_ITEMS[ i ] );
+    dbc.ExecuteQuery( SQL_DB_SETUP[ i ] );
     }
 #endif
 }
@@ -267,61 +345,117 @@ DatabaseConnection
 }
 
 /*****************************************************************************/
-void
+SqlId
 DatabaseConnection
-::ExecuteQuery( const QString& sql )
+::FindTagIdByName( const QString& label ) const
 {
-  QSqlQuery query( m_SqlDatabase );
+  QSqlQuery query(
+    ExecuteQuery(
+      QString(
+        "SELECT tag.id, tag.label\n"
+        "FROM tag\n"
+        "WHERE tag.label='%1'\n"
+      ).arg( label )
+    )
+  );
 
-  qDebug() << sql;
+  assert( query.size()==0 || query.size()==1 );
 
-  if( !query.exec( sql ) )
-    {
+  if( query.size()==0 )
+    return -1;
+
+  /*
+  if( query.size()!=1 )
+    throw std::runtime_error(
+      ToStdString(
+        tr( "Non-unique tag (label '%1') found in database." ).arg( label )
+      )
+    );
+  */
+
+  if( !query.next() )
     throw DatabaseError(
       query.lastError(),
-      tr( "Failed to execute query: " ),
-      QString( "\n'%1'" ).arg( sql )
+      tr( "Failed to fetch tag-id by tag-label: " )
+    );
+
+  assert( query.value( 0 ).type()==QVariant::Int );
+
+  return query.value( 0 ).toInt();
+}
+
+/*****************************************************************************/
+void
+DatabaseConnection
+::InsertTag( const QString& label, const QString& parent )
+{
+  ExecuteQuery(
+    QString( "INSERT INTO tag( label ) VALUES( '%1' );" ).arg( label )
+  );
+
+  if( !parent.isEmpty() )
+    {
+    ExecuteQuery(
+      SQL_QUERIES_INSERT[ SQLQ_INSERT_TAG_NODE ],
+      QVariantList() << label << parent
     );
     }
 }
 
 /*****************************************************************************/
-#define BATCH_QUERY_DEBUG_2( sql, values1, values2 )            \
-  qDebug() << this;                                             \
-  qDebug() << "\tsql:" << ( sql );                              \
-  qDebug() << "\tvalues1:" << ( values1 );                      \
-  qDebug() << "\tvalues2:" << ( values2 );
+QSqlQuery
+DatabaseConnection
+::ExecuteQuery( const QString& sql ) const
+{
+  QUERY_DEBUG_0( sql );
+  QUERY_PREPARE( query, sql );
+  QUERY_EXEC( query );
+
+  return query;
+}
 
 /*****************************************************************************/
-#define BATCH_QUERY_DEBUG_3( sql, values1, values2, values3 )           \
-  qDebug() << this;                                                     \
-  qDebug() << "\tsql:" << ( sql );                                      \
-  qDebug() << "\tvalues1:" << ( values1 );                              \
-  qDebug() << "\tvalues2:" << ( values2 );                              \
-  qDebug() << "\tvalues3:" << ( values3 );
+QSqlQuery
+DatabaseConnection
+::ExecuteQuery( const QString& sql, const QVariantList& params ) const
+{
+  QUERY_DEBUG_1( sql, params );
+  QUERY_PREPARE( query, sql );
 
-/*****************************************************************************/
-#define BATCH_QUERY_PREPARE( query, sql )       \
-  QSqlQuery query( m_SqlDatabase );             \
-                                                \
-  if( !query.prepare( sql ) )                   \
-    {                                           \
-    throw DatabaseError(                        \
-      query.lastError(),                        \
-      tr( "Failed to prepare query: " ),        \
-      QString( "\n'%1'" ).arg( sql )            \
-    );                                          \
+  int i = 0;
+
+  for( QVariantList::const_iterator it( params.begin() );
+       it!=params.end();
+       ++it, ++i )
+    {
+    // qDebug() << i << ":" << *it;
+
+    query.bindValue( i, *it );
     }
 
+  QUERY_EXEC( query );
+
+  return query;
+}
+
 /*****************************************************************************/
-#define BATCH_QUERY_EXEC()                       \
-  if( !query.execBatch() )                       \
-    {                                            \
-    throw DatabaseError(                         \
-      query.lastError(),                         \
-      tr( "Failed to execute batch query: " )    \
-    );                                           \
-    }
+QSqlQuery
+DatabaseConnection
+::BatchQuery( const QString& sql,
+              const QVariantList& values1 )
+{
+  QUERY_DEBUG_1( sql, values1 );
+  QUERY_PREPARE( query, sql );
+
+  DatabaseConnection::AddBindValue(
+    query,
+    values1
+  );
+
+  BATCH_QUERY_EXEC( query );
+
+  return query;
+}
 
 /*****************************************************************************/
 QSqlQuery
@@ -330,8 +464,8 @@ DatabaseConnection
               const QVariantList& values1,
               const QVariantList& values2 )
 {
-  BATCH_QUERY_DEBUG_2( sql, values1, values2 );
-  BATCH_QUERY_PREPARE( query, sql );
+  QUERY_DEBUG_2( sql, values1, values2 );
+  QUERY_PREPARE( query, sql );
 
   DatabaseConnection::AddBindValue(
     query,
@@ -339,7 +473,7 @@ DatabaseConnection
     values2
   );
 
-  BATCH_QUERY_EXEC();
+  BATCH_QUERY_EXEC( query );
 
   return query;
 }
@@ -352,8 +486,8 @@ DatabaseConnection
               const QVariantList& values2,
               const QVariantList& values3 )
 {
-  BATCH_QUERY_DEBUG_3( sql, values1, values2, values3 );
-  BATCH_QUERY_PREPARE( query, sql );
+  QUERY_DEBUG_3( sql, values1, values2, values3 );
+  QUERY_PREPARE( query, sql );
 
   DatabaseConnection::AddBindValue(
     query,
@@ -362,45 +496,10 @@ DatabaseConnection
     values3
   );
 
-  BATCH_QUERY_EXEC();
+  BATCH_QUERY_EXEC( query );
 
   return query;
 }
-
-/*****************************************************************************/
-#if 0
-void
-DatabaseConnection
-::ExecuteQuery( QSqlDatabase& database, QSqlQuery& query )
-{
-  if( !query.exec() )
-    {
-    // Do throw exception which would mask main exception. Simply
-    // trace it as a warning.
-    if( !database.rollback() )
-      qWarning()
-        << "Error when rolling database transaction back: "
-        << database.lastError();
-
-    // Securely close database connection.
-    database.close();
-
-    // Throw main exception.
-    throw DatabaseError(
-      query.lastError(),
-      tr( "Error when executing database query: " )
-    );
-    }
-
-  if( !database.commit() )
-    {
-    throw DatabaseError(
-      database.lastError(),
-      tr( "Error when committing database transaction: " )
-    );
-    }
-}
-#endif
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

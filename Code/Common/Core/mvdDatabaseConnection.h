@@ -45,6 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -99,6 +100,10 @@ public:
    */
   void InsertDataset( const QString& hash );
 
+  /**
+   */
+  void InsertTag( const QString& label, const QString& parent =QString() );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -124,12 +129,40 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
+// Private types.
+private:
+  enum SqlQueriesInsert
+  {
+    //
+    SQLQ_INSERT_NONE = -1,
+    //
+    SQLQ_INSERT_TAG_NODE = 0,
+    //
+    SQLQ_INSERT_COUNT,
+  };
+
+  enum SqlQueriesSelect
+  {
+    //
+    SQLQ_SELECT_NONE = -1,
+    //
+    SQLQ_FOO = 0,
+    //
+    SQLQ_SELECT_COUNT,
+  };
+
+//
 // Private methods.
 private:
 
   /**
    */
   inline static QSqlDatabase SqlDatabase();
+
+  /**
+   */
+  inline static void AddBindValue( QSqlQuery& query,
+                                   const QVariantList& values1 );
 
   /**
    */
@@ -146,7 +179,17 @@ private:
 
   /**
    */
-  void ExecuteQuery( const QString& sql );
+  QSqlQuery ExecuteQuery( const QString& sql ) const;
+
+  /**
+   */
+  QSqlQuery ExecuteQuery( const QString& sql,
+                          const QVariantList& params ) const;
+
+  /**
+   */
+  QSqlQuery BatchQuery( const QString& sql,
+                        const QVariantList& values );
 
   /**
    */
@@ -163,15 +206,11 @@ private:
 
   /**
    */
-  // QSqlQuery BatchQuery( const QString& sql, const QVariantList& values1, ... );
-
-  /**
-   */
   void ExecuteQuery( QSqlQuery& query );
 
   /**
    */
-  void TransactQuery( QSqlQuery& query );
+  SqlId FindTagIdByName( const QString& label ) const;
 
 //
 // Private attributes.
@@ -214,6 +253,16 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+void
+DatabaseConnection
+::AddBindValue( QSqlQuery& query,
+                const QVariantList& values1 )
+{
+  query.addBindValue( values1 );
+}
 
 /*****************************************************************************/
 inline

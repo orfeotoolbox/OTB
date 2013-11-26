@@ -88,13 +88,13 @@ translate_file() {
 {
     line = ""
 
-    for( i=1; i<NF; ++i ) {
+    for( i=1; i<=NF; ++i ) {
         if( $i!="" ) {
             line = line "\"" $i "\\n\"\n"
         }
     }
 
-    if( i>2 ) {
+    if( i>1 && $(i-1)!="" ) {
         line = line "\"" $i ";\","
 
         print line

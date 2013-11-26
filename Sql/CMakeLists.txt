@@ -4,9 +4,10 @@
 
 # SQL queries source files.
 set( Monteverdi2_SQL_FILES
-  sql_create_db.sql
-  sql_insert_items.sql
-  sql_queries.sql
+  sql_db_create.sql
+  sql_db_setup.sql
+  sql_queries_insert.sql
+  sql_queries_select.sql
 )
 
 # SQL C++ target file
