@@ -292,7 +292,7 @@ typedef std::map< std::string, StringVector > ApplicationsTagContainer;
 /* Type definitions for dataset properties                                     */
 /**
  */
-typedef int SqlId;
+typedef qlonglong SqlId;
 /**
  */
 // typedef SqlId DatasetId;

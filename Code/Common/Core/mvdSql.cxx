@@ -40,8 +40,8 @@ const char* SQL_DB_CREATE[] = {
 "-----------------------------------------------------------------------------\n"
 "CREATE TABLE dataset_membership(\n"
 "        -- id              INTEGER PRIMARY KEY,\n"
-"        dataset_id INTEGER NOT NULL REFERENCES dataset( id ),\n"
-"        tag_id     INTEGER NOT NULL REFERENCES tag( id ),\n"
+"        dataset_id INTEGER NOT NULL REFERENCES dataset( id ) ON DELETE CASCADE,\n"
+"        tag_id     INTEGER NOT NULL REFERENCES tag( id ) ON DELETE CASCADE,\n"
 "        PRIMARY KEY( dataset_id, tag_id )\n"
 ")\n"
 ";",
@@ -79,15 +79,15 @@ const char* SQL_DB_SETUP[] = {
 "-----------------------------------------------------------------------------\n"
 "-- Root\n"
 "INSERT INTO tag_node( id, parent_id, tag_id, level, path )\n"
-"VALUES( 1, NULL, 1, 1, '/')\n"
+"VALUES( 1, NULL, 1, 0, '/')\n"
 ";",
 "-- Root/Datasets\n"
 "INSERT INTO tag_node( id, parent_id, tag_id, level, path )\n"
-"VALUES( 2, 1,    2, 2, '/1' )\n"
+"VALUES( 2, 1,    2, 1, '/1' )\n"
 ";",
 "-- Root/Datasets/Cached\n"
 "INSERT INTO tag_node( id, parent_id, tag_id, level, path )\n"
-"VALUES( 3, 2,    3, 3, '/1/2' )\n"
+"VALUES( 3, 2,    3, 2, '/1/2' )\n"
 ";",
 };
 
@@ -98,6 +98,7 @@ const int SQL_DB_SETUP_COUNT = 6;
 // 'SQL_QUERIES_INSERT' Generated from file 'sql_queries_insert.sql'
 const char* SQL_QUERIES_INSERT[] = {
 "-----------------------------------------------------------------------------\n"
+"-- SQLQ_INSERT_TAG_NODE\n"
 "-- Insert tag-node for tag :child_label under parent-node of tag-node\n"
 "--  :parent_label.\n"
 "INSERT INTO tag_node( parent_id, tag_id, level, path )\n"
@@ -110,45 +111,39 @@ const char* SQL_QUERIES_INSERT[] = {
 "        JOIN   tag ON tag_node.tag_id=tag.id\n"
 "        WHERE  tag.id=(SELECT tag.id FROM tag WHERE tag.label=:parent_label)\n"
 ";",
+"-----------------------------------------------------------------------------\n"
+"-- SQLQ_INSERT_DATASET_MEMBERSHIP\n"
+"-- Add dataset-membership of dataset %1 to each tag related to\n"
+"-- %2 tag-node path list of the form (<id_0>, ...).\n"
+"INSERT INTO dataset_membership( dataset_id, tag_id )\n"
+"       SELECT %1 AS 'dataset_id',\n"
+"              tag_node.tag_id\n"
+"       FROM   tag_node\n"
+"       JOIN   tag ON tag_node.tag_id=tag.id\n"
+"       WHERE  tag_node.id IN (%2)\n"
+";",
 };
 
-const int SQL_QUERIES_INSERT_COUNT = 1;
+const int SQL_QUERIES_INSERT_COUNT = 2;
 
 /****************************************************************************/
 //
 // 'SQL_QUERIES_SELECT' Generated from file 'sql_queries_select.sql'
 const char* SQL_QUERIES_SELECT[] = {
 "-----------------------------------------------------------------------------\n"
-"-- List datasets tagged by given label.\n"
-"SELECT dataset.id, tag.label, dataset.alias, dataset.hash\n"
-"FROM dataset\n"
-"JOIN dataset_membership ON dataset.id=dataset_membership.dataset_id\n"
-"JOIN tag ON dataset_membership.tag_id=tag.id\n"
-"WHERE tag.label='Datasets'\n"
-";",
-"-----------------------------------------------------------------------------\n"
-"-- List tags marking a given dataset ordered by tree level.\n"
-"SELECT tag_node.path, tag_node.level, tag.id AS id, tag.label\n"
-"FROM tag_node\n"
-"JOIN tag ON tag_node.tag_id=tag.id\n"
-"JOIN dataset_membership ON tag.id=dataset_membership.tag_id\n"
-"WHERE dataset_membership.dataset_id=2\n"
-"ORDER BY tag_node.level\n"
-";",
-"-----------------------------------------------------------------------------\n"
-"-- List tag-node given tag-label.\n"
-"SELECT tag.label,\n"
-"       tag_node.id,\n"
+"-- SQLQ_SELECT_TAG_NODE_BY_TAG_LABEL\n"
+"-- Find tag-node given tag-label.\n"
+"SELECT tag_node.id,\n"
 "       tag_node.parent_id,\n"
 "       tag_node.tag_id,\n"
 "       tag_node.level,\n"
-"       tag_node.path\n"
+"       tag_node.path,\n"
+"       tag.label\n"
 "FROM tag_node\n"
 "JOIN tag ON tag_node.tag_id=tag.id\n"
-"WHERE tag_node.tag_id=2\n"
-"ORDER BY tag_node.level\n"
+"WHERE tag_node.tag_id=(SELECT tag.id FROM tag WHERE tag.label=:label)\n"
 ";",
 };
 
-const int SQL_QUERIES_SELECT_COUNT = 3;
+const int SQL_QUERIES_SELECT_COUNT = 1;
 } // End of anonymous namespace.

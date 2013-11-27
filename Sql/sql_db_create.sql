@@ -33,8 +33,8 @@ CREATE INDEX idx_tag_node_tid ON tag_node( tag_id );
 -----------------------------------------------------------------------------
 CREATE TABLE dataset_membership(
         -- id              INTEGER PRIMARY KEY,
-        dataset_id INTEGER NOT NULL REFERENCES dataset( id ),
-        tag_id     INTEGER NOT NULL REFERENCES tag( id ),
+        dataset_id INTEGER NOT NULL REFERENCES dataset( id ) ON DELETE CASCADE,
+        tag_id     INTEGER NOT NULL REFERENCES tag( id ) ON DELETE CASCADE,
         PRIMARY KEY( dataset_id, tag_id )
 );
 

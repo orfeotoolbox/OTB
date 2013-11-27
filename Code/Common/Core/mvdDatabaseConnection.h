@@ -94,11 +94,11 @@ public:
   /**
    */
   static void InitializeDatabase();
-  static void InitializeDatabase2();
+  // static void InitializeDatabase2();
 
   /**
    */
-  void InsertDataset( const QString& hash );
+  void InsertDataset( const QString& hash, const QString& label = QString() );
 
   /**
    */
@@ -131,22 +131,39 @@ protected:
 //
 // Private types.
 private:
+
+  /**
+   */
+  enum TagName
+  {
+    TAG_NAME_ROOT = 0,
+    TAG_NAME_DATASETS,
+    TAG_NAME_CACHED,
+    //
+    TAG_NAMES_COUNT,
+  };
+
+  /**
+   */
   enum SqlQueriesInsert
   {
     //
     SQLQ_INSERT_NONE = -1,
     //
     SQLQ_INSERT_TAG_NODE = 0,
+    SQLQ_INSERT_DATASET_MEMBERSHIP,
     //
     SQLQ_INSERT_COUNT,
   };
 
+  /**
+   */
   enum SqlQueriesSelect
   {
     //
     SQLQ_SELECT_NONE = -1,
     //
-    SQLQ_FOO = 0,
+    SQLQ_SELECT_TAG_NODE_BY_TAG_LABEL = 0,
     //
     SQLQ_SELECT_COUNT,
   };
@@ -210,7 +227,12 @@ private:
 
   /**
    */
-  SqlId FindTagIdByName( const QString& label ) const;
+  QSqlQuery ExecuteSelectQuery( SqlQueriesSelect queryId,
+                                const QVariantList& params ) const;
+
+  /**
+   */
+  SqlId FindTagIdByLabel( const QString& label ) const;
 
 //
 // Private attributes.
@@ -218,6 +240,10 @@ private:
   /**
    */
   static int m_InstanceCount;
+
+  /**
+   */
+  static const char* TAG_NAMES[ DatabaseConnection::TAG_NAMES_COUNT ];
 
   /**
    */
