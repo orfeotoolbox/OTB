@@ -82,6 +82,13 @@ class Monteverdi2_EXPORT DatabaseConnection :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+//
+public:
+  /**
+   */
+  typedef QMap< SqlId, QString > DatasetMap;
+
+//
 // Public methods.
 public:
 
@@ -99,6 +106,10 @@ public:
   /**
    */
   void InsertDataset( const QString& hash, const QString& label = QString() );
+
+  /**
+   */
+  DatasetMap ListAllDatasets() const;
 
   /**
    */

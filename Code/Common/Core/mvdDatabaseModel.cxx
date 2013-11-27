@@ -374,21 +374,28 @@ CountType
 DatabaseModel
 ::InitializeDatasetModels()
 {
-  QStringList datasets( ListAvailableDatasets() );
+  assert( m_Db );
+
+  // (key: ID; value: hash) dataset-map.
+  DatabaseConnection::DatasetMap datasets(
+    m_Db->ListAllDatasets()
+  );
+
+  qDebug() << datasets;
 
   ClearDatasetModels();
 
   CountType nbOutdated = 0;
 
-  for( QStringList::const_iterator it( datasets.begin() );
+  for( DatabaseConnection::DatasetMap::const_iterator it( datasets.begin() );
        it!=datasets.end();
        ++it )
     {
     if( DatasetModel::IsVersionCompliant(
           I18nCoreApplication::ConstInstance()->GetCacheDir().path(),
-          *it ) )
+          it.value() ) )
       {
-      DatasetModel* datasetModel = NewDatasetModel( *it );
+      DatasetModel* datasetModel = NewDatasetModel( it.value() );
       assert( datasetModel!=NULL );
 
       // by default alias == name
@@ -396,7 +403,7 @@ DatabaseModel
       }
     else
       {
-      qWarning() << "Dataset '" << *it << "' is outdated.";
+      qWarning() << "Dataset '" << it.value() << "' is outdated.";
 
       ++ nbOutdated;
       }

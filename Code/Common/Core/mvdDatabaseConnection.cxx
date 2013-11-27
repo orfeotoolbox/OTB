@@ -55,7 +55,7 @@ namespace mvd
 /*****************************************************************************/
 /* MACROS                                                                    */
 
-#define USE_DEBUG 0
+#define USE_DEBUG 1
 #define USE_DEBUG_BINDINGS 1
 #define USE_DEBUG_SIZE 1
 #define USE_DEBUG_VALUES 1
@@ -456,6 +456,31 @@ DatabaseConnection
     QVariantList() << datasetId << QVariant( tagNodeList )
   );
   */
+}
+
+/*****************************************************************************/
+DatabaseConnection::DatasetMap
+DatabaseConnection
+::ListAllDatasets() const
+{
+  QSqlQuery query(
+    ExecuteQuery(
+      "SELECT dataset.id, dataset.hash\n"
+      "FROM dataset;"
+    )
+  );
+
+  DatasetMap datasets;
+
+  while( query.next() )
+    {
+    datasets.insert(
+      query.value( 0 ).toLongLong(),
+      query.value( 1 ).toString()
+    );
+    }
+
+  return datasets;
 }
 
 /*****************************************************************************/
