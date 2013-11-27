@@ -68,7 +68,7 @@ namespace mvd
  */
 enum StreamTag
 {
-  STREAM_TAG_ARRAY = 0,
+  STREAM_TAG_SIZE = 0,
   STREAM_TAG_VECTOR,
   STREAM_TAG_VARIABLE_LENGTH_VECTOR,
   //
@@ -538,7 +538,7 @@ operator << ( QTextStream& stream,
 	      const itk::Array< T >& array )
 {
 
-  stream << STREAM_TAG_ARRAY << array.GetSize();
+  stream << STREAM_TAG_SIZE << array.GetSize();
   CheckStreamStatus( stream );
 
   for( CountType i=0; i<array.GetSize(); ++i )
@@ -561,7 +561,7 @@ operator >> ( QTextStream& stream,
   CountType dimension = 0;
 
   QString type;
-  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_ARRAY ] );
+  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_SIZE ] );
 
   stream >> dimension;
 
