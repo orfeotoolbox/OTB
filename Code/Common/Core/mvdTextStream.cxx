@@ -51,7 +51,7 @@ namespace mvd
 const char*
 STREAM_TAG_NAMES[ STREAM_TAG_COUNT ] =
 {
-  "ARRAY",
+  "SIZE",
   "VECTOR",
   "VARIABLE_LENGTH_VECTOR",
 };
