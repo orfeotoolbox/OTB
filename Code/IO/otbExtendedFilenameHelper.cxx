@@ -25,6 +25,10 @@ void
 ExtendedFilenameHelper
 ::SetExtendedFileName(const char *extFname)
 {
+  if (extFname == NULL)
+  {
+    itkGenericExceptionMacro( << "Filename is NULL" );
+  }
   this->m_ExtendedFileName = extFname;
   std::vector<std::string> tmp1;
   std::vector<std::string> tmp2;
