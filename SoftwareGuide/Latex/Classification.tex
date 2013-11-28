@@ -1,66 +1,74 @@
 \chapter{Classification}
+
 \section{Introduction}
 
-In statistical classification, each object is represented by $d$ features (a
-measurement vector), and the goal of classification becomes finding compact and
-disjoint regions (decision regions\cite{Duda2000}) for classes in a
-$d$-dimensional feature space. Such decision regions are defined by decision
-rules that are known or can be trained.  The simplest configuration of a
-classification consists of a decision rule and multiple membership functions;
-each membership function represents a class. Figure~\ref{fig:simple}
-illustrates this general framework.
+Image classification consists in extracting added-value information from images. 
+Such processing methods classify pixels within images into geographical connected 
+zones with similar properties, and identified by a common class label. The 
+classification can be either unsupervised or supervised.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.7\textwidth]{DudaClassifier.eps}
-  \itkcaption[Simple conceptual classifier]{Simple conceptual classifier.}
-  \label{fig:simple}
-\end{figure}
+Unsupervised classification does not require any additional information about the
+properties of the input image to classify it. On the contrary, supervised methods 
+need a preliminary learning to be computed over training datasets having similar 
+properties than the image to classify, in order to build a classification model.
 
-This framework closely follows that of Duda and
-Hart\cite{Duda2000}. The classification process can be described
-as follows:
+%In statistical classification, each object is represented by $d$ features (a
+%measurement vector), and the goal of classification becomes finding compact and
+%disjoint regions (decision regions\cite{Duda2000}) for classes in a
+%$d$-dimensional feature space. Such decision regions are defined by decision
+%rules that are known or can be trained.  The simplest configuration of a
+%classification consists of a decision rule and multiple membership functions;
+%each membership function represents a class. Figure~\ref{fig:simple}
+%illustrates this general framework.
 
-\begin{enumerate}
-\item{A measurement vector is input to each membership function.}
-\item{Membership functions feed the membership scores to the
-    decision rule.}
-\item{A decision rule compares the membership scores and returns a
-    class label.}
-\end{enumerate}
+%\begin{figure}[h]
+%  \centering
+%  \includegraphics[width=0.7\textwidth]{DudaClassifier.eps}
+%  \itkcaption[Simple conceptual classifier]{Simple conceptual classifier.}
+%  \label{fig:simple}
+%\end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.7\textwidth]{StatisticalClassificationFramework.eps}
-  \itkcaption[Statistical classification framework]{Statistical classification
-framework.}
-  \protect\label{fig:StatisticalClassificationFramework}
-\end{figure}
+%This framework closely follows that of Duda and
+%Hart\cite{Duda2000}. The classification process can be described
+%as follows:
 
-This simple configuration can be used to formulated various classification
-tasks by using different membership functions and incorporating task specific
-requirements and prior knowledge into the decision rule. For example, instead
-of using probability density functions as membership functions, through
-distance functions and a minimum value decision rule (which assigns a class
-from the distance function that returns the smallest value) users can achieve a
-least squared error classifier. As another example, users can add a rejection
-scheme to the decision rule so that even in a situation where the membership
-scores suggest a ``winner'', a measurement vector can be flagged as ill
-defined. Such a rejection scheme can avoid risks of assigning a class label
-without a proper win margin.
+%\begin{enumerate}
+%\item{A measurement vector is input to each membership function.}
+%\item{Membership functions feed the membership scores to the
+%    decision rule.}
+%\item{A decision rule compares the membership scores and returns a
+%    class label.}
+%\end{enumerate}
 
-Note that to use these concepts into your own programs, you might have to link
-to other OTB libraries (edit the \code{TARGET\_LINK\_LIBRARIES} to add them),
-for example OTBLearning, OTBMarkov.
+%\begin{figure}
+%  \centering
+%  \includegraphics[width=0.7\textwidth]{StatisticalClassificationFramework.eps}
+%  \itkcaption[Statistical classification framework]{Statistical classification
+%framework.}
+%  \protect\label{fig:StatisticalClassificationFramework}
+%\end{figure}
 
-\subsection{k-d Tree Based k-Means Clustering}
-\label{sec:KdTreeBasedKMeansClustering}
-\ifitkFullVersion
-\input{KdTreeBasedKMeansClustering.tex}
-\fi
+%This simple configuration can be used to formulated various classification
+%tasks by using different membership functions and incorporating task specific
+%requirements and prior knowledge into the decision rule. For example, instead
+%of using probability density functions as membership functions, through
+%distance functions and a minimum value decision rule (which assigns a class
+%from the distance function that returns the smallest value) users can achieve a
+%least squared error classifier. As another example, users can add a rejection
+%scheme to the decision rule so that even in a situation where the membership
+%scores suggest a ``winner'', a measurement vector can be flagged as ill
+%defined. Such a rejection scheme can avoid risks of assigning a class label
+%without a proper win margin.
+
+%Note that to use these concepts into your own programs, you might have to link
+%to other OTB libraries (edit the \code{TARGET\_LINK\_LIBRARIES} to add them),
+%for example OTBLearning, OTBMarkov.
+
+\section{Unsupervised classification}
 
 \subsection{K-Means Classification}
 \label{sec:KMeansClassifier}
+
 \subsubsection{Simple version}
 \ifitkFullVersion
 \input{ScalarImageKmeansClassifier.tex}
@@ -74,6 +82,33 @@ for example OTBLearning, OTBMarkov.
 \input{KMeansImageClassificationExample.tex}
 \fi
 
+\subsubsection{k-d Tree Based k-Means Clustering}
+\label{sec:KdTreeBasedKMeansClustering}
+\ifitkFullVersion
+\input{KdTreeBasedKMeansClustering.tex}
+\fi
+
+\subsection{Kohonen's Self Organizing Map}
+\label{sec:SOM}
+\input{Kohonen}
+%%%1. Construction SOM
+\subsubsection{Building a color table}
+\label{sec:SOMColorTable}
+\input{SOMExample}
+\subsubsection{SOM Classification}
+\label{sec:SOMClassification}
+\input{SOMClassifierExample}
+
+\subsubsection{Multi-band, streamed classification}
+
+\ifitkFullVersion
+\input{SOMImageClassificationExample.tex}
+\fi
+
+%%%2. Lecture SOM et ensemble de vecteurs autre image pour construire
+%%%ActivationMAP 
+
+%\subsection{Bayesian classification}
 
 \subsection{Bayesian Plug-In Classifier}
 \label{sec:BayesianPluginClassifier}
@@ -89,6 +124,48 @@ for example OTBLearning, OTBMarkov.
 \ifitkFullVersion 
 \input{ExpectationMaximizationMixtureModelEstimator.tex}
 \fi
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Statistical Segmentations}
+\label{sec:StatisticalSegmentations}
+
+%\subsection{Markov Random Fields}
+
+\subsubsection{Stochastic Expectation Maximization}
+\label{sec:SEM}
+
+The Stochastic Expectation Maximization (SEM) approach is a stochastic 
+version of the EM mixture estimation seen on
+section~\ref{sec:ExpectationMaximizationMixtureModelEstimation}. It has been 
+introduced by \cite{CeDi95} to prevent convergence of the EM approach from
+local minima. It avoids the analytical maximization issued by integrating a
+stochastic sampling procedure in the estimation process. It induces an almost
+sure (a.s.) convergence to the algorithm.
+
+From the initial two step formulation of the EM mixture estimation, the SEM
+may be decomposed into 3 steps:
+\begin{enumerate}
+\item \textbf{E-step}, calculates the expected membership values for each 
+measurement vector to each classes.
+\item \textbf{S-step}, performs a stochastic sampling of the membership vector
+to each classes, according to the membership values computed in the E-step.
+\item \textbf{M-step}, updates the parameters of the membership probabilities
+(parameters to be defined through the class
+\subdoxygen{itk}{Statistics}{ModelComponentBase} and its inherited classes).
+\end{enumerate}
+The implementation of the SEM has been turned to a contextual SEM in the sense
+where the evaluation of the membership parameters is conditioned to
+membership values of the spatial neighborhood of each pixels.
+
+\ifitkFullVersion 
+\input{SEMModelEstimatorExample.tex}
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Classification using Markov Random Fields}
 \label{sec:MarkovRandomField}
@@ -149,48 +226,38 @@ own framework.
 \fi 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Statistical Segmentations}
-\label{sec:StatisticalSegmentations}
-
-%\subsection{Markov Random Fields}
-
-\subsection{Stochastic Expectation Maximization}
-\label{sec:SEM}
-
-The Stochastic Expectation Maximization (SEM) approach is a stochastic 
-version of the EM mixture estimation seen on
-section~\ref{sec:ExpectationMaximizationMixtureModelEstimation}. It has been 
-introduced by \cite{CeDi95} to prevent convergence of the EM approach from
-local minima. It avoids the analytical maximization issued by integrating a
-stochastic sampling procedure in the estimation process. It induces an almost
-sure (a.s.) convergence to the algorithm.
-
-From the initial two step formulation of the EM mixture estimation, the SEM
-may be decomposed into 3 steps:
-\begin{enumerate}
-\item \textbf{E-step}, calculates the expected membership values for each 
-measurement vector to each classes.
-\item \textbf{S-step}, performs a stochastic sampling of the membership vector
-to each classes, according to the membership values computed in the E-step.
-\item \textbf{M-step}, updates the parameters of the membership probabilities
-(parameters to be defined through the class
-\subdoxygen{itk}{Statistics}{ModelComponentBase} and its inherited classes).
-\end{enumerate}
-The implementation of the SEM has been turned to a contextual SEM in the sense
-where the evaluation of the membership parameters is conditioned to
-membership values of the spatial neighborhood of each pixels.
-
-\ifitkFullVersion 
-\input{SEMModelEstimatorExample.tex}
-\fi
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Supervised classification}
 
-\section{Support Vector Machines}
+\subsection{Generic machine learning framework}
+\label{sec:MLGenericFramework}
+
+The OTB supervised classification is implemented as a generic Machine Learning 
+framework, supporting several possible machine learning libraries as backends.
+As of now both libSVM (the machine learning library historically integrated in OTB)
+and the machine learning methods of OpenCV library (\cite{opencv_library}) are
+available.
+
+The current list of classifiers available through the same generic interface within the OTB is:
+
+\begin{itemize}
+  \item \textbf{LibSVM}: Support Vector Machines classifier based on libSVM.
+  \item \textbf{SVM}: Support Vector Machines classifier based on OpenCV, itself based on libSVM.
+  \item \textbf{Bayes}: Normal Bayes classifier based on OpenCV.
+  \item \textbf{Boost}: Boost classifier based on OpenCV.
+  \item \textbf{DT}: Decision Tree classifier based on OpenCV.
+  \item \textbf{RF}: Random Forests classifier based on the Random Trees in OpenCV.
+  \item \textbf{GBT}: Gradient Boosted Tree classifier based on OpenCV.
+  \item \textbf{KNN}: K-Nearest Neighbors classifier based on OpenCV.
+  \item \textbf{ANN}: Artificial Neural Network classifier based on OpenCV.
+\end{itemize}
+
+
+\subsection{An example of supervised classification method: Support Vector Machines}
 \label{sec:SupportVectorMachines}
 
+\subsubsection{SVM general description}
 Kernel based learning methods in general and the Support Vector
 Machines (SVM) in particular, have been introduced in the last years
 in learning theory for classification and regression tasks,
@@ -208,10 +275,11 @@ nonlinearly separable, the method uses a kernel expansion in order to make
 projections of the feature space onto higher dimensionality spaces
 where the separation of the classes becomes linear.
 
- \subsection{Mathematical formulation}
 
- This section reminds the basic principles of SVM learning and
- classification. A good tutorial on SVM can be found in, \cite{burges}.
+\subsubsection{SVM mathematical formulation}
+
+This subsection reminds the basic principles of SVM learning and
+classification. A good tutorial on SVM can be found in, \cite{burges}.
  
 We have $N$ samples represented by the couple $(y_i,\mathbf{x}_i),
 i=1\ldots N$ where $y_i \in \{-1,+1\}$ is the class label and
@@ -303,22 +371,46 @@ is the one that we use, the final decision is taken by choosing the
 class which is most often selected by the whole set of SVM.
 
 
-\subsection{Learning With PointSets}
-\label{sec:LearningWithPointSets}
-\input{SVMPointSetModelEstimatorExample}
-\subsection{PointSet Classification}
-\label{sec:PointSetClassification}
-\input{SVMPointSetClassificationExample}
-\subsection{Learning With Images}
-\label{sec:LearningWithImages}
-\input{SVMImageModelEstimatorExample}
-\subsection{Image Classification}
-\label{sec:ImageClassification}
-\input{SVMImageClassificationExample}
-\input{SVMImageEstimatorClassificationMultiExample}
-\subsection{Generic Kernel SVM}
 
-OTB has developed a specific interface for user-defined kernels. A function
+\subsection{Learning from samples}
+\label{ssec:LearningFromSamples}
+\input{TrainMachineLearningModelFromSamplesExample.tex}
+
+\subsection{Learning from images}
+\label{ssec:LearningFromImages}
+\input{TrainMachineLearningModelFromImagesExample.tex}
+
+
+%\subsection{Learning With PointSets}
+%\label{sec:LearningWithPointSets}
+%\input{SVMPointSetModelEstimatorExample}
+
+%\subsection{PointSet Classification}
+%\label{sec:PointSetClassification}
+%\input{SVMPointSetClassificationExample}
+
+%\subsection{Learning With Images}
+%\label{sec:LearningWithImages}
+%\input{SVMImageModelEstimatorExample}
+
+%\subsection{Image Classification}
+%\label{sec:ImageClassification}
+%\input{SVMImageClassificationExample}
+%\input{SVMImageEstimatorClassificationMultiExample}
+
+
+\subsection{Multi-band, streamed classification}
+
+\ifitkFullVersion
+\input{SupervisedImageClassificationExample.tex}
+\fi
+
+
+
+
+\subsection{Generic Kernel SVM}
+OTB has developed a specific interface for user-defined kernels. However, the 
+following functions use a deprecated OTB interface. A function 
 $k(\cdot,\cdot)$ is considered to be a kernel when:
 \begin{align}\label{eqMercer}
         \forall g(\cdot) \in {\cal L}^2(\mathbbm{R}^n) \quad & \text{so 
@@ -386,29 +478,77 @@ presented in section \ref{sec:KullbackLeiblerProfile}.
 \input{SVMGenericKernelImageClassificationExample.tex}
 \fi
 
-\subsection{Multi-band, streamed classification}
 
+
+
+\section{Fusion of Classification maps}
+
+\subsection{General approach of image fusion}
+In order to obtain a relevant image classification it is sometimes necessary to 
+fuse several classification maps coming from different classification methods 
+(SVM, KNN, Random Forest, Artificial Neural Networks,...). The fusion of 
+classification maps combines them in a more robust and precise one. Two methods are 
+available in the OTB: the majority voting and the Demspter Shafer framework.
+
+
+\subsection{Majority voting}
+\subsubsection{General description}
+For each input pixel, the Majority Voting method consists in choosing the more 
+frequent class label among all classification maps to fuse. In case of not unique 
+more frequent class labels, the undecided value is set for such pixels in 
+the fused output image.
+
+\subsubsection{An example of majority voting fusion}
 \ifitkFullVersion
-\input{SVMImageClassifierExample.tex}
+\input{MajorityVotingFusionOfClassificationMapsExample.tex}
 \fi
 
 
-\section{Kohonen's Self Organizing Map}
-\label{sec:SOM}
-\input{Kohonen}
-%%%1. Construction SOM
-\subsection{Building a color table}
-\label{sec:SOMColorTable}
-\input{SOMExample}
-\subsection{SOM Classification}
-\label{sec:SOMClassification}
-\input{SOMClassifierExample}
+\subsection{Dempster Shafer}
 
-\subsection{Multi-band, streamed classification}
+\subsubsection{General description}
+A more adaptive fusion method using the Dempster Shafer theory 
+(\href{http://en.wikipedia.org/wiki/Dempster-Shafer_theory}{http://en.wikipedia.org/wiki/Dempster-Shafer\_theory}) 
+is available within the OTB. This method is adaptive as it is based on the 
+so-called belief function of each class label for each classification map. Thus, 
+each classified pixel is associated to a degree of confidence according to the 
+classifier used. In the Dempster Shafer framework, the expert's point of view 
+(i.e. with a high belief function) is considered as the truth. In order to 
+estimate the belief function of each class label, we use the Dempster Shafer 
+combination of masses of belief for each class label and for each classification 
+map. In this framework, the output fused label of each pixel is the one with the 
+maximal belief function.
 
+Like for the majority voting method, the Dempster Shafer fusion handles not 
+unique class labels with the maximal belief function. In this case, the output 
+fused pixels are set to the undecided value.
+
+The confidence levels of all the class labels are estimated from a comparision of 
+the classification maps to fuse with a ground truth, which results in a 
+confusion matrix. For each classification maps, these confusion matrices are then 
+used to estimate the mass of belief of each class label.
+
+
+\subsubsection{Mathematical formulation of the combination algorithm}
+
+A description of the mathematical formulation of the Dempster Shafer combination 
+algorithm is available in the following OTB Wiki page: 
+\href{http://wiki.orfeo-toolbox.org/index.php/Information_fusion_framework}{http://wiki.orfeo-toolbox.org/index.php/Information\_fusion\_framework}.
+
+\subsubsection{An example of Dempster Shafer fusion}
 \ifitkFullVersion
-\input{SOMImageClassificationExample.tex}
+\input{DempsterShaferFusionOfClassificationMapsExample.tex}
 \fi
 
-%%%2. Lecture SOM et ensemble de vecteurs autre image pour construire
-%%%ActivationMAP 
+
+
+\section{Classification map regularization}
+
+%\subsection{Regularization by neighborhood-based majority voting}
+
+\ifitkFullVersion
+\input{ClassificationMapRegularizationExample.tex}
+\fi
+
+
+

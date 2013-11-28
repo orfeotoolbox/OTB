@@ -1,6 +1,6 @@
-\chapter{Reading and Writing Vector Data}
-\index{vector data}
-\label{sec:ReadingVectorData}
+\chapter{Reading and Writing Auxilary Data}
+\index{Auxilary data}
+\label{sec:ReadingAuxData}
 
 As we have seen in the previous chapter, OTB has a great capability to
 read and process images. However, images are not the only type of data
@@ -18,21 +18,29 @@ this kind of data.
 \label{sec:ReadDEM}
 \input{DEMToImageGenerator.tex}
 
+\section{Elevation management with OTB}
+\ifitkFullVersion
+\label{sec:DEMHandler}
+\fi
+\input{DEMHandlerExample.tex}
+
 More examples about representing DEM are presented in section~\ref{sec:ViewingAltitudeImages}.
 
 \section{Lidar data Files}
-\index{vector data!lidar}
+\index{Auxilary data!lidar}
 \label{sec:ReadLidar}
 \input{LidarReaderExample.tex}
 \input{LidarToImageExample.tex}
 
 \section{Reading and Writing Shapefiles and KML}
-\index{vector data!shapefile}
+\index{Auxilary data!vector data}
+\index{Auxilary data!shapefile}
+\index{Auxilary data!KML}
 \label{sec:ReadVectorData}
 \input{VectorDataIOExample.tex}
 
 \section{Handling large vector data through OGR}
-\index{vector data!OGR}
+\index{Auxilary data!OGR vector data}
 \index{OGR wrappers}
 \index{OGR wrappers!otb::ogr::DataSource}
 \index{OGR wrappers!otb::ogr::Layer}

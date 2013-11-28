@@ -193,6 +193,141 @@ images is the processing of SLC SAR images, which are complex.
 \label{sec:Reading Image Series}
 \input{ImageSeriesIOExample}
 
+
+\section{Extended filename for reader and writer}
+\label{sec:Reading Image Series}
+
+\subsection{Syntax}
+
+The reader and writer extended file name support is based on the same syntax,
+only the options are different.  To benefit from the extended file name
+mecanism, the following syntax is to be used:
+
+\begin{verbatim}
+Path/Image.ext?&key1=<value1>&key2=<value2>
+\end{verbatim}
+
+IMPORTANT: Note that you'll probably need to "quote" the filename.
+
+\subsection{Reader options}
+
+\textbf{Available Options:}
+
+\begin{itemize}
+
+\item \begin{verbatim}&geom=<path/filename.geom>\end{verbatim}
+
+  \begin{itemize}
+  \item Contains the file name of a valid geom file
+  \item Use the content of the specified geom file instead of image-embedded
+    geometric information
+  \item empty by default, use the image-embedded information if available
+  \end{itemize}  
+\item \begin{verbatim}&sdataidx=<(int)idx>\end{verbatim}
+  \begin{itemize}
+  \item Select the sub-dataset to read
+  \item 0 by default
+  \end{itemize}
+\item \begin{verbatim}&resol=<(int)resolution factor>\end{verbatim}
+  \begin{itemize}
+  \item Select the JPEG2000 sub-resolution image to read
+  \item 0 by default
+  \end{itemize}
+\item \begin{verbatim}&skipcarto=<(bool)true>\end{verbatim}
+  \begin{itemize}
+  \item Skip the cartographic information
+  \item Clears the projectionref, set the origin to $[0,0]$ and the spacing to $[1/max(1,resolution factor),1/max(1,resolution factor)]$
+  \item Keeps the keyword list
+  \item false by default 
+  \end{itemize}
+\item \begin{verbatim}&skipgeom=<(bool)true>\end{verbatim}
+  \begin{itemize}
+  \item Skip geometric information
+  \item Clears the keyword list
+  \item Keeps the projectionref and the origin/spacing informations
+  \item false by default. 
+  \end{itemize}
+\end{itemize}
+
+\subsection{Writer options}
+
+\textbf{Available Options:}
+
+\begin{itemize}
+
+\item \begin{verbatim}&writegeom=<(bool)false>\end{verbatim}
+  \begin{itemize}
+  \item To activate writing of external geom file
+  \item true by default
+  \end{itemize}  
+\item \begin{verbatim}&gdal:co:<GDALKEY>=<VALUE>\end{verbatim}
+  \begin{itemize}
+  \item To specify a gdal creation option
+  \item For gdal creation option information, see dedicated gdal documentation
+  \item None by default 
+  \end{itemize}
+\item \begin{verbatim}&streaming:type=<VALUE>\end{verbatim}
+  \begin{itemize}
+  \item Activates configuration of streaming through extended filenames
+  \item Override any previous configuration of streaming
+  \item Allows to configure the kind of streaming to perform
+  \item Available values are:
+    \begin{itemize}
+    \item auto : tiled or stripped streaming mode chosen automatically depending on TileHint read from input files
+    \item tiled : tiled streaming mode
+    \item stripped : stripped streaming mode
+    \item none : explicitly deactivate streaming 
+    \end{itemize}
+  \item Not set by default 
+  \end{itemize}
+\item \begin{verbatim}&streaming:sizemode=<VALUE>\end{verbatim}
+  \begin{itemize}
+  \item Allows to choose how the size of the streaming pieces is computed
+  \item Available values are:
+    \begin{itemize}
+    \item auto  : size is estimated from the available memory setting by evaluating pipeline memory print
+    \item height : size is set by setting height of strips or tiles
+    \item nbsplits : size is computed from a given number of splits 
+    \end{itemize}
+  \item Default is auto 
+  \end{itemize}
+\item \begin{verbatim}&streaming:sizevalue=<VALUE>\end{verbatim}
+\begin{itemize}
+    \item Parameter for size of streaming pieces computation
+    \item Value is :
+      \begin{itemize}
+        \item if sizemode=auto : available memory in Mb
+        \item if sizemode=height : height of the strip or tile in pixels
+        \item if sizemode=nbsplits : number of requested splits for streaming 
+      \end{itemize}
+    \item If not provided, the default value is set to 0 and result in different behaviour depending on sizemode (if set to height or nbsplits, streaming is deactivated, if set to auto, value is fetched from configuration or cmake configuration file) 
+\end{itemize}
+
+\item \begin{verbatim}&box=<startx>:<starty>:<sizex>:<sizey>\end{verbatim}
+\begin{itemize}
+    \item User defined parameters of output image region
+    \item The region must be set with 4 unsigned integers (the separator used is
+      the colon ':'). Values are:
+      \begin{itemize}
+        \item startx: first index on X
+        \item starty: first index on Y
+        \item sizex: size along X
+        \item sizey: size along Y 
+      \end{itemize}
+    \item The definition of the region follows the same convention as itk::Region
+    definition in C++. A region is defined by two classes: the itk::Index and
+    itk::Size classes. The origin of the region within the image with which it
+    is associated is defined by Index 
+\end{itemize}
+
+\end{itemize}
+
+The available syntax for boolean options are:
+
+\begin{itemize}
+    \item ON, On, on, true, True, 1 are available for setting a 'true' boolean value
+    \item OFF, Off, off, false, False, 0 are available for setting a 'false' boolean value
+\end{itemize}
 %% \section{Reading and Writing Image Series}
 
 %% It is still quite common to store 3D medical images in sets of files each one

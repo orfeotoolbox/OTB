@@ -131,17 +131,17 @@ ENDIF(OTB_USE_BMEPS)
 #   ADD_CUSTOM_COMMAND(
 #       SOURCE      "${PATH}/${SOME_IMG}"
 #       COMMAND     ${JPG2PS_EXECUTABLE}
-#       ARGS        "${BASIC_OPTION}" "${PATH}/${SOME_IMG}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}" 
+#       ARGS        "${BASIC_OPTION}" "${PATH}/${SOME_IMG}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
 #       DEPENDS     ${RUN_EXAMPLES_SCRIPT}
 #       OUTPUT      "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
 #   )
 # ENDMACRO(CONVERT_INPUT_COMPRESSED_IMG)
-# 
+#
 # MACRO(CONVERT_COMPRESSED_IMG BASIC_OPTION SOME_IMG EPS_IMG PATH)
 #   ADD_CUSTOM_COMMAND(
 #       SOURCE      "${PATH}/${SOME_IMG}"
 #       COMMAND     ${JPG2PS_EXECUTABLE}
-#       ARGS        "${BASIC_OPTION}" "${PATH}/${SOME_IMG}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}" 
+#       ARGS        "${BASIC_OPTION}" "${PATH}/${SOME_IMG}" "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
 #       DEPENDS     ${RUN_EXAMPLES_SCRIPT} "${SoftwareGuide_BINARY_DIR}/Art/Generated/${SOME_IMG}"
 #       OUTPUT      "${SoftwareGuide_BINARY_DIR}/Art/${EPS_IMG}"
 #   )
@@ -248,6 +248,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/VectorDataIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/OGRWrappersExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/DEMHandlerExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/LidarReaderExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/LidarToImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/TileMapImageIOExample.cxx
@@ -268,7 +269,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Filtering/DanielssonDistanceMapImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyBinaryFilters.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyGrayscaleFilters.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/RasterizationExample.cxx 
+  ${OTB_SOURCE_DIR}/Examples/Filtering/RasterizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/FrostImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/ScalingFilterExample.cxx
@@ -364,13 +365,18 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/SVMImageClassifierExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/SupervisedImageClassificationExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/MajorityVotingFusionOfClassificationMapsExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/DempsterShaferFusionOfClassificationMapsExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/ClassificationMapRegularizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SOMExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SOMClassifierExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/SOMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SEMModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageModelEstimatorExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromImagesExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Visualization/VisuExample1.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ImageToLabelToImage.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ShapeAttributeComputation.cxx
@@ -469,8 +475,8 @@ IF( BUILD_FIGURES )
       SET( ExampleCmakeFile "${Examples_BINARY_DIR}/${EXAMPLE_FILE_BASE}.cmake")
       GET_FILENAME_COMPONENT(TEX_FILE ${example} NAME_WE)
       SET(TEX_FILE ${SoftwareGuide_BINARY_DIR}/Examples/${TEX_FILE}.tex)
-      
-      EXECUTE_PROCESS(COMMAND ${PERL_EXECUTABLE} 
+
+      EXECUTE_PROCESS(COMMAND ${PERL_EXECUTABLE}
                       ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_DIR}/bin ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder} )
       # MESSAGE( ARGS ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder})
       # Include each of the generated .cmake files in dependencies list
