@@ -303,6 +303,11 @@ public:
 				    bool forceCreate );
 
   /**
+   */
+  static
+    void DeleteDatasetModel( const QString& hash );
+
+  /**
    * \brief Get the cache directory.
    *
    * \return Return the cache directory.

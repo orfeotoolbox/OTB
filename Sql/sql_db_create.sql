@@ -1,6 +1,3 @@
--- Enable foreign keys support
-PRAGMA foreign_keys = ON;
-
 -----------------------------------------------------------------------------
 CREATE TABLE dataset
 (
@@ -9,11 +6,13 @@ CREATE TABLE dataset
         alias TEXT
 );
 
+CREATE UNIQUE INDEX idx_dataset_hash ON dataset( hash );
+
 -----------------------------------------------------------------------------
 CREATE TABLE tag
 (
         id    INTEGER PRIMARY KEY AUTOINCREMENT,
-        label TEXT NOT NULL DEFAULT 'Label'
+        label TEXT NOT NULL
 );
 
 CREATE UNIQUE INDEX idx_tag_label ON tag( label );
@@ -22,20 +21,24 @@ CREATE UNIQUE INDEX idx_tag_label ON tag( label );
 CREATE TABLE tag_node
 (
         id        INTEGER PRIMARY KEY AUTOINCREMENT,
-        parent_id INTEGER REFERENCES tag_node( id ),
-        tag_id    INTEGER NOT NULL REFERENCES tag( id ),
+        parent_id INTEGER,
+        tag_id    INTEGER,
         level     INTEGER,
-        path      TEXT
+        path      TEXT,
+        FOREIGN KEY( parent_id ) REFERENCES tag_node( id ),
+        FOREIGN KEY( tag_id )  REFERENCES tag( id )
 );
 
 CREATE INDEX idx_tag_node_tid ON tag_node( tag_id );
+CREATE INDEX idx_tag_node_pid ON tag_node( parent_id );
 
 -----------------------------------------------------------------------------
 CREATE TABLE dataset_membership(
-        -- id              INTEGER PRIMARY KEY,
-        dataset_id INTEGER NOT NULL REFERENCES dataset( id ) ON DELETE CASCADE,
-        tag_id     INTEGER NOT NULL REFERENCES tag( id ) ON DELETE CASCADE,
-        PRIMARY KEY( dataset_id, tag_id )
+       dataset_id       INTEGER,
+       tag_id           INTEGER,
+       PRIMARY KEY( dataset_id, tag_id ),
+       FOREIGN KEY( dataset_id ) REFERENCES dataset( id ) ON DELETE CASCADE,
+       FOREIGN KEY( tag_id ) REFERENCES tag( id ) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_ds_membership_dataset_id ON dataset_membership( dataset_id );

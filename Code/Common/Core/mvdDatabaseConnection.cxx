@@ -136,7 +136,7 @@ namespace mvd
 
 /*****************************************************************************/
 #define QUERY_PREPARE( qry, sql )               \
-  QSqlQuery query( m_SqlDatabase );             \
+  QSqlQuery qry( m_SqlDatabase );               \
   if( !( qry ).prepare( sql ) )                 \
     {                                           \
     throw DatabaseError(                        \
@@ -156,7 +156,19 @@ namespace mvd
       QString( "\n\"%1\"" ).arg( ( qry ).lastQuery() )  \
     );                                                  \
     }                                                   \
-  assert( qry.isActive() )
+  assert( ( qry ).isActive() )
+
+/*****************************************************************************/
+#define QUERY_DIRECT_EXEC( qry, sql )                   \
+  if( !( qry ).exec( sql ) )                            \
+    {                                                   \
+    throw DatabaseError(                                \
+      ( qry ).lastError(),                              \
+      tr( "Failed to execute query: " ),                \
+      QString( "\n\"%1\"" ).arg( ( qry ).lastQuery() )  \
+    );                                                  \
+    }                                                   \
+  assert( ( qry ).isActive() )
 
 /*****************************************************************************/
 #define QUERY_NEXT( query )                             \
@@ -290,15 +302,17 @@ DatabaseConnection
 {
   DatabaseConnection dbc;
 
+  dbc.DirectExecuteQuery( "PRAGMA foreign_keys=1;" );
+
   for( int i=0; i<SQL_DB_CREATE_COUNT; ++i )
     {
-    dbc.ExecuteQuery( SQL_DB_CREATE[ i ] );
+    dbc.DirectExecuteQuery( SQL_DB_CREATE[ i ] );
     }
 
 #if 1
   for( int i=0; i<SQL_DB_SETUP_COUNT; ++i )
     {
-    dbc.ExecuteQuery( SQL_DB_SETUP[ i ] );
+    dbc.DirectExecuteQuery( SQL_DB_SETUP[ i ] );
     }
 #endif
 
@@ -367,6 +381,14 @@ DatabaseConnection
         );
         }
     }
+
+  // Force foreign_keys=ON each time client software connects to
+  // SQLite database because this pragma is not persistent (see sqlite
+  // 3).
+  //
+  // The foreign_keys pragma is needed to ensure integrity
+  // constraints, especially 'ON DELETE CASCADE' ones.
+  DirectExecuteQuery( "PRAGMA foreign_keys=ON;" );
 
   assert( DatabaseConnection::m_InstanceCount>=0 );
 
@@ -459,6 +481,17 @@ DatabaseConnection
 }
 
 /*****************************************************************************/
+void
+DatabaseConnection
+::DeleteDataset( const QString& hash )
+{
+  ExecuteQuery(
+    QString( "DELETE FROM dataset WHERE dataset.hash='%1';" )
+    .arg( hash )
+  );
+}
+
+/*****************************************************************************/
 DatabaseConnection::DatasetMap
 DatabaseConnection
 ::ListAllDatasets() const
@@ -498,6 +531,32 @@ DatabaseConnection
     SQL_QUERIES_INSERT[ SQLQ_INSERT_TAG_NODE ],
     QVariantList() << label << ( parent.isEmpty() ? "Root" : parent )
   );
+}
+
+/*****************************************************************************/
+QSqlQuery
+DatabaseConnection
+::DirectExecuteQuery( const QString& sql ) const
+{
+  QUERY_DEBUG_0( sql );
+
+  QSqlQuery query( m_SqlDatabase );
+
+#if 1
+  QUERY_DIRECT_EXEC( query, sql );
+#else
+  if( !query.exec( sql ) )
+    {
+    throw DatabaseError(
+      query.lastError(),
+      tr( "Failed to execute query: " ),
+      QString( "\n\"%1\"" ).arg( query.lastQuery() )
+    );
+    }
+  assert( query.isActive() );
+#endif
+
+  return query;
 }
 
 /*****************************************************************************/

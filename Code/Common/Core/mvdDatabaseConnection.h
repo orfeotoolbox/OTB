@@ -109,6 +109,10 @@ public:
 
   /**
    */
+  void DeleteDataset( const QString& hash );
+
+  /**
+   */
   DatasetMap ListAllDatasets() const;
 
   /**
@@ -204,6 +208,10 @@ private:
                                    const QVariantList& values1,
                                    const QVariantList& values2,
                                    const QVariantList& values3 );
+
+  /**
+   */
+  QSqlQuery DirectExecuteQuery( const QString& sql ) const;
 
   /**
    */

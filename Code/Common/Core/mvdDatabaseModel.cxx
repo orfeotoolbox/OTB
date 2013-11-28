@@ -103,7 +103,7 @@ StringPairListType
 DatabaseModel
 ::QueryDatasetModels() const
 {
-  StringPairListType   list;
+  StringPairListType list;
 
   // need to send a list of pairs <alias, id> to know what is the
   // corresponding model to each alias in the WidgetTree
@@ -185,43 +185,13 @@ DatabaseModel
 /*******************************************************************************/
 void
 DatabaseModel
-::RemoveDatasetModel( const DatasetHash& id )
+::RemoveDatasetModel( const DatasetHash& hash )
 {
-  ReleaseDatasetModel( id, true );
+  // Release memory resources.
+  ReleaseDatasetModel( hash, true );
 
-  QFileInfo finfo( I18nCoreApplication::ConstInstance()->GetCacheDir(), id );
-  QDir dir( finfo.filePath() );
-  QFileInfoList fileInfos(
-    dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Files )
-  );
-
-  for( QFileInfoList::const_iterator it( fileInfos.begin() );
-       it!=fileInfos.end();
-       ++it )
-    {
-    if( !dir.remove( it->fileName() ) )
-      throw SystemError(
-        ToStdString(
-          tr( "Failed to remove file '%1'." ).arg( it->filePath() )
-        )
-      );
-    }
-
-  QDir parentDir( dir );
-
-  if( !parentDir.cdUp() )
-    throw SystemError(
-      ToStdString(
-        tr( "Failed to access parent directory of '%1'." ).arg( dir.path() )
-      )
-    );
-
-  if( !parentDir.rmdir( id  ) )
-    throw SystemError(
-      ToStdString(
-        tr( "Failed to remove dataset directory '%1'." ).arg( dir.path() )
-      )
-    );
+  // Delete files.
+  I18nCoreApplication::DeleteDatasetModel( hash );
 }
 
 /*******************************************************************************/
@@ -271,12 +241,12 @@ DatabaseModel
 /*******************************************************************************/
 void
 DatabaseModel
-::ReleaseDatasetModel( const DatasetHash& id, bool remove )
+::ReleaseDatasetModel( const DatasetHash& hash, bool remove )
 {
-  // qDebug() << this << "::ReleaseDatasetModel(" << id << ")";
+  // qDebug() << this << "::ReleaseDatasetModel(" << hash << ")";
 
   // Find (key, value) pair.
-  DatasetModelMap::iterator it( DatasetModelIterator( id ) );
+  DatasetModelMap::iterator it( DatasetModelIterator( hash ) );
 
   // Clear selected dataset-model if it is to be deleted below.
   if( it.value()==m_SelectedDatasetModel )
@@ -296,6 +266,10 @@ DatabaseModel
 
     // Safety reset.
     it = m_DatasetModels.end();
+
+    // Delete dataset from database.
+    assert( m_Db!=NULL );
+    m_Db->DeleteDataset( hash );
 
     // Signal database content has changed.
     emit DatabaseChanged();

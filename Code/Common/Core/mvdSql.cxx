@@ -5,9 +5,6 @@ namespace
 //
 // 'SQL_DB_CREATE' Generated from file 'sql_db_create.sql'
 const char* SQL_DB_CREATE[] = {
-"-- Enable foreign keys support\n"
-"PRAGMA foreign_keys = ON\n"
-";",
 "-----------------------------------------------------------------------------\n"
 "CREATE TABLE dataset\n"
 "(\n"
@@ -16,11 +13,13 @@ const char* SQL_DB_CREATE[] = {
 "        alias TEXT\n"
 ")\n"
 ";",
+"CREATE UNIQUE INDEX idx_dataset_hash ON dataset( hash )\n"
+";",
 "-----------------------------------------------------------------------------\n"
 "CREATE TABLE tag\n"
 "(\n"
 "        id    INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-"        label TEXT NOT NULL DEFAULT 'Label'\n"
+"        label TEXT NOT NULL\n"
 ")\n"
 ";",
 "CREATE UNIQUE INDEX idx_tag_label ON tag( label )\n"
@@ -29,20 +28,25 @@ const char* SQL_DB_CREATE[] = {
 "CREATE TABLE tag_node\n"
 "(\n"
 "        id        INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-"        parent_id INTEGER REFERENCES tag_node( id ),\n"
-"        tag_id    INTEGER NOT NULL REFERENCES tag( id ),\n"
+"        parent_id INTEGER,\n"
+"        tag_id    INTEGER,\n"
 "        level     INTEGER,\n"
-"        path      TEXT\n"
+"        path      TEXT,\n"
+"        FOREIGN KEY( parent_id ) REFERENCES tag_node( id ),\n"
+"        FOREIGN KEY( tag_id )  REFERENCES tag( id )\n"
 ")\n"
 ";",
 "CREATE INDEX idx_tag_node_tid ON tag_node( tag_id )\n"
 ";",
+"CREATE INDEX idx_tag_node_pid ON tag_node( parent_id )\n"
+";",
 "-----------------------------------------------------------------------------\n"
 "CREATE TABLE dataset_membership(\n"
-"        -- id              INTEGER PRIMARY KEY,\n"
-"        dataset_id INTEGER NOT NULL REFERENCES dataset( id ) ON DELETE CASCADE,\n"
-"        tag_id     INTEGER NOT NULL REFERENCES tag( id ) ON DELETE CASCADE,\n"
-"        PRIMARY KEY( dataset_id, tag_id )\n"
+"       dataset_id       INTEGER,\n"
+"       tag_id           INTEGER,\n"
+"       PRIMARY KEY( dataset_id, tag_id ),\n"
+"       FOREIGN KEY( dataset_id ) REFERENCES dataset( id ) ON DELETE CASCADE,\n"
+"       FOREIGN KEY( tag_id ) REFERENCES tag( id ) ON DELETE CASCADE\n"
 ")\n"
 ";",
 "CREATE INDEX idx_ds_membership_dataset_id ON dataset_membership( dataset_id )\n"
@@ -63,7 +67,7 @@ const char* SQL_DB_CREATE[] = {
 ";",
 };
 
-const int SQL_DB_CREATE_COUNT = 11;
+const int SQL_DB_CREATE_COUNT = 12;
 
 /****************************************************************************/
 //

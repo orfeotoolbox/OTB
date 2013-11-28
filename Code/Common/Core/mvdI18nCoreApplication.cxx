@@ -243,6 +243,48 @@ I18nCoreApplication
 /*****************************************************************************/
 void
 I18nCoreApplication
+::DeleteDatasetModel( const QString& hash )
+{
+  QFileInfo finfo( I18nCoreApplication::ConstInstance()->GetCacheDir(), hash );
+
+  QDir dir( finfo.filePath() );
+
+  QFileInfoList fileInfos(
+    dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Files )
+  );
+
+  for( QFileInfoList::const_iterator it( fileInfos.begin() );
+       it!=fileInfos.end();
+       ++it )
+    {
+    if( !dir.remove( it->fileName() ) )
+      throw SystemError(
+        ToStdString(
+          tr( "Failed to remove file '%1'." ).arg( it->filePath() )
+        )
+      );
+    }
+
+  QDir parentDir( dir );
+
+  if( !parentDir.cdUp() )
+    throw SystemError(
+      ToStdString(
+        tr( "Failed to access parent directory of '%1'." ).arg( dir.path() )
+      )
+    );
+
+  if( !parentDir.rmdir( hash  ) )
+    throw SystemError(
+      ToStdString(
+        tr( "Failed to remove dataset directory '%1'." ).arg( dir.path() )
+      )
+    );
+}
+
+/*****************************************************************************/
+void
+I18nCoreApplication
 ::HandleQtMessage( QtMsgType type, const char* message )
 {
   switch( type )
