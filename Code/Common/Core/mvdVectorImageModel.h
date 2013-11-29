@@ -290,6 +290,13 @@ public:
      */
     inline const ParametersType& GetGrayDynamicsParams() const;
 
+    /**
+     */
+    inline void SetGamma(int gamma);
+
+    /**
+     */
+    inline int GetGamma() const;
 
     //
     // Private methods.
@@ -361,6 +368,10 @@ public:
      */
     // TODO: Optimize using C++ bitset bool foo:1;
     bool m_IsApplied: 1;
+
+    /**
+     */
+    int m_Gamma;
   };
 
 //
@@ -725,7 +736,8 @@ VectorImageModel::Settings
   m_GrayChannel( 0 ),
   m_GrayDynamicsParams( 6 ),
   m_IsModified( false ),
-  m_IsApplied( false )
+  m_IsApplied( false ),
+  m_Gamma(1)
 {
 }
 
@@ -739,7 +751,8 @@ VectorImageModel::Settings
   m_GrayChannel( other.m_GrayChannel ),
   m_GrayDynamicsParams( 6 ),
   m_IsModified( false ),
-  m_IsApplied( other.m_IsApplied )
+  m_IsApplied( other.m_IsApplied ),
+  m_Gamma( other.m_Gamma)
 {
 }
 
@@ -758,6 +771,7 @@ VectorImageModel::Settings
   m_GrayChannel = other.m_GrayChannel;
   m_GrayDynamicsParams = other.m_GrayDynamicsParams;
   m_IsApplied = other.m_IsApplied;
+  m_Gamma = other.m_Gamma;
 
   return *this;
 }
@@ -1265,6 +1279,22 @@ VectorImageModel::Settings
   m_GrayDynamicsParams[ 0 * 2 + ofs ] = param;
   m_GrayDynamicsParams[ 1 * 2 + ofs ] = param;
   m_GrayDynamicsParams[ 2 * 2 + ofs ] = param;
+}
+
+inline
+void
+VectorImageModel::Settings
+::SetGamma(int value)
+{
+  m_Gamma = value;
+}
+
+inline
+int
+VectorImageModel::Settings
+::GetGamma() const
+{
+  return m_Gamma;
 }
 
 } // end namespace 'mvd'.

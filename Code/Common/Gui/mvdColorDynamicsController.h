@@ -251,6 +251,10 @@ private:
   /**
    */
   void SetNoData();
+  
+  /**
+   */
+  void SetGamma();
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -348,6 +352,14 @@ private slots:
    * \param checked The state of the button.
    */
   void OnLinkToggled( RgbwChannel channel, bool checked );
+
+
+  /**
+   * \brief Slot called when gamma value is changed
+   *
+   * \param value Gamma value
+   */
+  void OnGammaValueChanged(int value);
 
 };
 

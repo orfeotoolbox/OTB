@@ -158,6 +158,14 @@ ColorDynamicsController
 
   QObject::connect(
     colorDynamicsWidget,
+    SIGNAL(GammaValueChanged( int ) ),
+    // to:
+    this,
+    SLOT( OnGammaValueChanged( int ))
+    );
+
+  QObject::connect(
+    colorDynamicsWidget,
     SIGNAL( NoDataButtonPressed() ),
     // to:
     this,
@@ -208,6 +216,7 @@ ColorDynamicsController
 
   // Setup no-data state.
   SetNoData();
+  SetGamma();
 }
 
 /*****************************************************************************/
@@ -618,6 +627,38 @@ ColorDynamicsController
   }
   this->blockSignals( thisSignalsBlocked );
 }
+
+/*****************************************************************************/
+void
+ColorDynamicsController
+::SetGamma()
+{
+  assert( GetModel()==GetModel< VectorImageModel >() );
+  const VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  
+  if( imageModel==NULL )
+    return;
+  
+// Reference settings.
+  const VectorImageModel::Settings& settings = imageModel->GetSettings();
+
+  
+  assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
+  assert( widget!=NULL );
+  
+  bool thisSignalsBlocked = this->blockSignals( true );
+  {
+  bool widgetSignalsBlocked = widget->blockSignals( true );
+  {
+  widget->SetGamma( settings.GetGamma() );
+  }
+  widget->blockSignals( widgetSignalsBlocked );
+  }
+  this->blockSignals( thisSignalsBlocked );  
+
+}
+
 
 /*****************************************************************************/
 void
@@ -1297,6 +1338,30 @@ ColorDynamicsController
 
     emit ModelUpdated();
     }
+}
+
+/*****************************************************************************/
+void
+ColorDynamicsController
+::OnGammaValueChanged(int value)
+{
+  qDebug()
+    << this
+    << "::OnGammaValueChanged("
+    << value
+    <<")";
+
+  // Get image-model.
+  assert( GetModel()==GetModel< VectorImageModel>() );
+  VectorImageModel* imageModel = GetModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+ // Reference settings.
+  VectorImageModel::Settings& settings = imageModel->GetSettings();
+  settings.SetGamma(value);
+
+  // Now, emit this controller's signal to cause display refresh.
+  emit ModelUpdated();
 }
 
 /*****************************************************************************/

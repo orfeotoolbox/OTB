@@ -1020,7 +1020,15 @@ VectorImageModel
   GetSettings().GetSmartChannels( rgb );
 
   renderingFunc->SetChannelList( rgb );
-  renderingFunc->SetParameters( GetSettings().GetSmartDynamicsParams() );
+  
+  ParametersType parameters = GetSettings().GetSmartDynamicsParams();
+  ParametersType parametersWithGamma(parameters.GetSize()+1);
+  for(unsigned int i = 0; i < parameters.GetSize();++i)
+    {
+    parametersWithGamma[i] = parameters[i];
+    }
+  parametersWithGamma[parameters.GetSize()] = static_cast<double>(1+0.005*GetSettings().GetGamma());
+  renderingFunc->SetParameters( parametersWithGamma );
 
   // TODO: Remove temporary hack (Quicklook rendering settings).
   QuicklookModel* quicklookModel = GetQuicklookModel();

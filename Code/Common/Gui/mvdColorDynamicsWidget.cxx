@@ -180,6 +180,24 @@ ColorDynamicsWidget
 /*******************************************************************************/
 void
 ColorDynamicsWidget
+::SetGamma(int value)
+{
+  m_UI->gammaSlider->setValue(value);
+}
+
+
+/*******************************************************************************/
+int 
+ColorDynamicsWidget
+::GetGamma() const
+{
+  return m_UI->gammaSlider->value();
+}
+
+
+/*******************************************************************************/
+void
+ColorDynamicsWidget
 ::ConnectChild( ColorBandDynamicsWidget* child, RgbwChannel channel )
 {
   child->SetChannelLabel( channel );
@@ -316,6 +334,14 @@ ColorDynamicsWidget
     {
     emit NoDataButtonPressed();
     }
+}
+
+/*****************************************************************************/
+void 
+ColorDynamicsWidget
+::on_gammaSlider_valueChanged(int gamma)
+{
+  emit GammaValueChanged(gamma);
 }
 
 } // end namespace 'mvd'
