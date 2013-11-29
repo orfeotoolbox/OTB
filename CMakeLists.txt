@@ -57,6 +57,12 @@ find_package( OpenGL REQUIRED )
 
 #----------------------------------------------------------------------------
 # Qt4
+if(CMAKE_VERSION VERSION_GREATER 2.8.11)
+  # Disable automatic linking to qtmain on windows
+  # as in previous versions of cmake
+  cmake_policy(SET CMP0020 OLD)
+endif()
+
 set(QT_USE_IMPORTED_TARGETS ON)
 find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL QtMain QtSql QtXml )
 include( ${QT_USE_FILE} )
