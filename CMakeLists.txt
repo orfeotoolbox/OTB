@@ -68,17 +68,13 @@ endif( QT_FOUND )
 #----------------------------------------------------------------------------
 # Qwt
 find_package(Qwt REQUIRED)
-if(QWT_FOUND)
-  # message( ${QWT_LIBRARIES} )
-  if(QWT_MAJOR_VERSION GREATER 6)
-    message(FATAL_ERROR "Only Qwt 5 is supported. Found version ${QWT_VERSION_STRING}")
-  endif()
-  if(WIN32)
-    add_definitions(-DQWT_DLL)
-  endif(WIN32)
-else(QWT_FOUND)
-  message(FATAL_ERROR "Qwt not found.")
-endif(QWT_FOUND)
+if(NOT QWT_MAJOR_VERSION EQUAL 5)
+  message(FATAL_ERROR "Only Qwt 5 is supported. Found version ${QWT_VERSION_STRING}")
+endif()
+
+if(WIN32)
+  add_definitions(-DQWT_DLL)
+endif(WIN32)
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
