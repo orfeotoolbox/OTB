@@ -669,8 +669,6 @@ private:
       // Final writing
       m_FinalReader = LabelImageReaderType::New();
       m_FinalReader->SetFileName(vrtfile);
-      m_FinalReader->UpdateOutputInformation();
-      m_FinalReader->GetOutput()->CopyInformation(imageIn);
 
       m_ImportGeoInformationFilter = ImportGeoInformationImageFilterType::New();
       m_ImportGeoInformationFilter->SetInput(m_FinalReader->GetOutput());
