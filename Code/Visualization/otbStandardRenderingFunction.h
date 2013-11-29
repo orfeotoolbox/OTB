@@ -320,17 +320,26 @@ public:
     m_Minimum.clear();
     m_Maximum.clear();
 
-    if (parameters.Size() % 2 != 0)
+    // if (parameters.Size() % 2 != 0)
+    //   {
+    //   itkExceptionMacro(<< "Min And Max should be provided for every band to display");
+    //   }
+
+    unsigned int nbBands = parameters.Size()/2;
+
+    for (unsigned int i = 0; i < nbBands; ++i)
       {
-      itkExceptionMacro(<< "Min And Max should be provided for every band to display");
+      m_Minimum.push_back(parameters[2*i]);
+
+      m_Maximum.push_back(parameters[2*i+1]);
       }
 
-    for (unsigned int i = 0; i < parameters.Size(); ++i)
+    // If number of parameters is odd, there is an additional gamma parameter
+    if(parameters.Size()%2 != 0)
       {
-      m_Minimum.push_back(parameters[i]);
-      ++i;
-      m_Maximum.push_back(parameters[i]);
+      m_Gamma = parameters[2*nbBands];
       }
+
     m_AutoMinMax = false;
     UpdateTransferedMinMax();
     otbMsgDevMacro(<< "StandardRenderingFunction::SetParameters: " << m_Minimum.size() << "; " << m_Maximum.size());
@@ -398,7 +407,8 @@ protected:
   StandardRenderingFunction() : m_TransferedMinimum(), m_TransferedMaximum(),
     m_PixelRepresentationFunction(PixelRepresentationFunctionType::New()), m_UTime(),
     m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_AutoMinMax(true),
-    m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false)
+                                m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false), 
+                                m_Gamma(1.)
   {
   }
   /** Destructor */
@@ -419,9 +429,11 @@ protected:
       }
     else
       {
+      double scaled = (static_cast<double> (input) - static_cast<double> (min))
+        / (static_cast<double> (max) - static_cast<double> (min));
+
       return static_cast<OutputValueType> (vcl_floor(
-                                             255. * (static_cast<double> (input) - static_cast<double> (min))
-                                             / (static_cast<double> (max) - static_cast<double> (min))
+                                             255. * vcl_pow(scaled,1./m_Gamma)
                                              + 0.5));
 
       }
@@ -479,6 +491,9 @@ private:
   double m_AutoMinMaxQuantile;
 
   bool m_DefaultChannelsAreSet;
+
+  /** Gamma value for gamma correction */
+  double m_Gamma;
 };
 } // end namespace Functor
 } // end namespace otb
