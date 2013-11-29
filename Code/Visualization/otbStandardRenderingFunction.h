@@ -407,7 +407,7 @@ protected:
   StandardRenderingFunction() : m_TransferedMinimum(), m_TransferedMaximum(),
     m_PixelRepresentationFunction(PixelRepresentationFunctionType::New()), m_UTime(),
     m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_AutoMinMax(true),
-                                m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false), 
+                                m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false),
                                 m_Gamma(1.)
   {
   }
