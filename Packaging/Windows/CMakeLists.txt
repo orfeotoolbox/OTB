@@ -43,6 +43,8 @@ endif(NOT GDAL_DATA)
 
 
 # Search all the applications available in the OTB install dir
+# Consequently, this part of code only works with an OTB install dir,
+# not with an OB build dir.
 file(GLOB OTB_APPS_LIST ${OTB_DIR}/applications/otbapp_*.dll) # /lib/otb
 
 if(NOT OTB_APPS_LIST)
@@ -71,26 +73,40 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/BundleFixing.cmake.in
 install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleFixing.cmake
                 COMPONENT Runtime)
 
+# The following DLL handling is very specific
+# both to OSGeo4W flavour (32 bit or 64 bit), OSGeo4W package state
+# and the compiler used to make the Monteverdi2 installer (VC2010)
+# Don't expect too much of it without VC2010.
+
 # For some reason, fixup_bundle won't package the msvc runtime dll
 # I guess it's because cpack already handles installing the runtime,
 # but here we build with a particular version of Visual, but
 # some OSGeo4W dependencies are built upon other runtimes
-install(FILES ${OSGEO4W_ROOT}/bin/msvcp60.dll
-              ${OSGEO4W_ROOT}/bin/msvcp70.dll
-              ${OSGEO4W_ROOT}/bin/msvcp71.dll
-              ${OSGEO4W_ROOT}/bin/msvcr71.dll
-              ${OSGEO4W_ROOT}/bin/msvcrt.dll
-        DESTINATION bin
-        COMPONENT Runtime)
+set(MVD2_ADDITIONNAL_DLLS
+        ${OSGEO4W_ROOT}/bin/msvcp60.dll
+        ${OSGEO4W_ROOT}/bin/msvcp70.dll
+        ${OSGEO4W_ROOT}/bin/msvcp71.dll
+        ${OSGEO4W_ROOT}/bin/msvcr71.dll
+        ${OSGEO4W_ROOT}/bin/msvcrt.dll)
         
-# Since an upgrade in OSGeo4W of libpq (around 2013/10)
+# Since an upgrade in OSGeo4W-32bit of libpq (around 2013/10)
 # libpq depends on two additional libs that cmake
 # surprisingly miss during package generation
+# I really don't understand why.
 # Let's add them manually
-install(FILES ${OSGEO4W_ROOT}/bin/libgcc_s_dw2-1.dll
-              ${OSGEO4W_ROOT}/bin/libiconv-2.dll
-        DESTINATION bin
-        COMPONENT Runtime)
+set(MVD2_ADDITIONNAL_DLLS
+        ${MVD2_ADDITIONNAL_DLLS}
+        ${OSGEO4W_ROOT}/bin/libgcc_s_dw2-1.dll
+        ${OSGEO4W_ROOT}/bin/libiconv-2.dll)
+
+foreach(dll ${MVD2_ADDITIONNAL_DLLS})
+  if (EXISTS ${dll})
+     install( FILES ${dll}
+              DESTINATION bin
+              COMPONENT Runtime )
+  endif()
+endforeach()
+
 
 # Need to include csv files provided with OSGeo that contains some needed EPSG definitions
 find_path(GDAL_DATA epsg.wkt $ENV{GDAL_DATA})
@@ -103,14 +119,10 @@ install(FILES ${QT_TRANSLATIONS_FILES}
         DESTINATION  share/qt4/translations
         COMPONENT Resources)
 
-install(FILES ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll
-        DESTINATION lib/qt4/plugins/sqldrivers/
-        COMPONENT Runtime)
-
 install(FILES qt.conf
         DESTINATION  bin
         COMPONENT Resources)
-
+        
 install(FILES ${Monteverdi2_SOURCE_DIR}/Packaging/Windows/monteverdi2.bat
         DESTINATION bin
         COMPONENT Runtime)
