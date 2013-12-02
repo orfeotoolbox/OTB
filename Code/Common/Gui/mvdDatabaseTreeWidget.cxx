@@ -81,10 +81,11 @@ DatabaseTreeWidget
 
   //
   // do some connection
-  QObject::connect(this,
-                   SIGNAL( itemChanged( QTreeWidgetItem * , int ) ),
-                   SLOT( OnItemChanged( QTreeWidgetItem* , int ) )
-    );
+  QObject::connect(
+    this,
+    SIGNAL( itemChanged( QTreeWidgetItem* , int ) ),
+    SLOT( OnItemChanged( QTreeWidgetItem* , int ) )
+  );
 }
 
 /*******************************************************************************/
