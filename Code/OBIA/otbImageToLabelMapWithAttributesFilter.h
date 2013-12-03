@@ -87,6 +87,8 @@ protected:
   /** Destructor */
   virtual ~ImageToLabelMapWithAttributesFilter(){};
 
+  void GenerateInputRequestedRegion();
+
 
 private:
   ImageToLabelMapWithAttributesFilter(const Self&); //purposely not implemented

@@ -34,6 +34,23 @@ ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TO
 template <class TInputImage, class TLabeledImage, class TOutputLabel, class TObjectLabel>
 void
 ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TObjectLabel>
+::GenerateInputRequestedRegion()
+{
+  // call the superclass' superclass implementation of this method
+  Superclass::Superclass::GenerateInputRequestedRegion();
+
+  // We need all the input.
+  typename InputImageType::Pointer input = const_cast< InputImageType * >( this->GetInput() );
+
+  if ( !input )
+        { return; }
+
+  input->SetRequestedRegion( input->GetLargestPossibleRegion() );
+}
+
+template <class TInputImage, class TLabeledImage, class TOutputLabel, class TObjectLabel>
+void
+ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TObjectLabel>
 ::SetInput( const InputImageType *image)
 {
   // Process object is not const-correct so the const_cast is required here
