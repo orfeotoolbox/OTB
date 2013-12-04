@@ -44,8 +44,7 @@ namespace otb
  */
 template <class TInputImage, class TLabeledImage, class TLabel, class TLabelObject >
 class ITK_EXPORT ImageToLabelMapWithAttributesFilter
-  : public itk::LabelMapFilter< LabelMapWithAdjacency<TLabelObject>,
-                                LabelMapWithAdjacency<TLabelObject> >
+  : public itk::ImageToImageFilter< TInputImage, LabelMapWithAdjacency<TLabelObject> >
 {
 
 public:
@@ -53,10 +52,10 @@ public:
   typedef ImageToLabelMapWithAttributesFilter      Self;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
-  typedef itk::LabelMapFilter< LabelMapWithAdjacency<TLabelObject >,
-                               LabelMapWithAdjacency<TLabelObject > > Superclass;
+  typedef itk::ImageToImageFilter< TInputImage, LabelMapWithAdjacency<TLabelObject> > Superclass;
+
   /** Standard type macro */
-  itkTypeMacro(ImageToLabelMapWithAttributesFilter, itk::LabelMapFilter);
+  itkTypeMacro(ImageToLabelMapWithAttributesFilter, itk::ImageToImageFilter);
 
   /** New macro*/
   itkNewMacro(Self);

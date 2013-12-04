@@ -36,16 +36,16 @@ void
 ImageToLabelMapWithAttributesFilter<TInputImage, TLabeledImage, TOutputLabel, TObjectLabel>
 ::GenerateInputRequestedRegion()
 {
-  // call the superclass' superclass implementation of this method
-  Superclass::Superclass::GenerateInputRequestedRegion();
+ // call the superclass' implementation of this method
+ Superclass::GenerateInputRequestedRegion();
 
-  // We need all the input.
-  typename InputImageType::Pointer input = const_cast< InputImageType * >( this->GetInput() );
+ // We need all the input.
+ typename InputImageType::Pointer input = const_cast< InputImageType * >( this->GetInput() );
 
-  if ( !input )
-        { return; }
+ if ( !input )
+       { return; }
 
-  input->SetRequestedRegion( input->GetLargestPossibleRegion() );
+ input->SetRequestedRegion( input->GetLargestPossibleRegion() );
 }
 
 template <class TInputImage, class TLabeledImage, class TOutputLabel, class TObjectLabel>
