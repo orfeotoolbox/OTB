@@ -185,7 +185,7 @@ DatabaseBrowserWidget
 
   item->setFlags( flags );
 
-  // item->setChildIndicatorPolicy( policy );
+  item->setChildIndicatorPolicy( policy );
 
   return item;
 }

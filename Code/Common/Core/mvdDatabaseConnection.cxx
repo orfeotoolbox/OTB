@@ -277,11 +277,17 @@ DatabaseConnection
     dbc.DirectExecuteQuery( SQL_DB_CREATE[ i ] );
     }
 
-#if 1
   for( int i=0; i<SQL_DB_SETUP_COUNT; ++i )
     {
     dbc.DirectExecuteQuery( SQL_DB_SETUP[ i ] );
     }
+
+#if defined( _DEBUG ) || 1
+  dbc.InsertTag( "Quickbird", "Datasets" );
+  dbc.InsertTag( "Pleiades", "Datasets" );
+  dbc.InsertTag( "SPOT", "Datasets" );
+  dbc.InsertTag( "TERASAR", "Datasets" );
+  dbc.InsertTag( "WV2", "Datasets" );
 #endif
 
 #if defined( _DEBUG ) || 0

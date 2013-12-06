@@ -234,30 +234,11 @@ DatabaseBrowserController
   assert( model->GetDatabaseConnection() );
   const DatabaseConnection* db = model->GetDatabaseConnection();
 
-  QSqlQuery query(
-    db->GetTagNodeChildren(
-      tagNodeId < 0
-      ? GetRootTagNodeFields( db->GetRootTagNode() )
-      : tagNodeId
-    )
-  );
-
   typedef QList< QTreeWidgetItem* > TreeWidgetItemList;
-
-#if 1
   typedef QMap< QString, QTreeWidgetItem* > TreeWidgetItemMap;
-  // typedef QHash< QVariant, QTreeWidgetItem* > TreeWidgetItemHash;
-#else
-  typedef QMap< SqlId, QTreeWidgetItem* > TreeWidgetItemMap;
-#endif
 
-#if 0
-  TreeWidgetItemHash nodes;
-  TreeWidgetItemHash leaves;
-#else
   TreeWidgetItemMap nodes;
   TreeWidgetItemMap leaves;
-#endif
   TreeWidgetItemList duplicates;
   TreeWidgetItemList others;
 
@@ -266,33 +247,29 @@ DatabaseBrowserController
     QTreeWidgetItem* child = item->child( i );
     assert( child!=NULL );
 
-#if 0
-    TreeWidgetItemHash* container = NULL;
-#else
     TreeWidgetItemMap* container = NULL;
-#endif
 
     switch( child->type() )
       {
       // Nodes.
-      case QTreeWidgetItem::UserType + 1:
+      case DatabaseBrowserWidget::ITEM_TYPE_NODE:
         // assert( item->data( 1, Qt::UserRole + 1 ).isValid() );
         qDebug()
           << "Node:"
           << item->text( 0 )
           << item->text( 1 )
-          << item->data( 1, Qt::UserRole + 1 );
+          << item->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
         container = &nodes;
         break;
 
       // Leaves.
-      case QTreeWidgetItem::UserType + 2:
+      case DatabaseBrowserWidget::ITEM_TYPE_LEAF:
         // assert( item->data( 1, Qt::UserRole + 1 ).isValid() );
         qDebug()
           << "Leaf:"
           << item->text( 0 )
           << item->text( 1 )
-          << item->data( 1, Qt::UserRole + 1 );
+          << item->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
         container = &leaves;
         break;
 
@@ -307,7 +284,7 @@ DatabaseBrowserController
       {
       TreeWidgetItemMap::iterator it(
         container->insert(
-          item->data( 1, Qt::UserRole + 1 ).toString(),
+          item->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID ).toString(),
           item )
       );
 
@@ -318,30 +295,36 @@ DatabaseBrowserController
           << "Duplicate:"
           << it.value()->text( 0 )
           << it.value()->text( 1 )
-          << it.value()->data( 1, Qt::UserRole + 1 );
+          << it.value()->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
 
         duplicates.push_back( it.value() );
         }
       }
     }
 
+  QSqlQuery query(
+    db->GetTagNodeChildren(
+      tagNodeId < 0
+      ? GetRootTagNodeFields( db->GetRootTagNode() )
+      : tagNodeId
+    )
+  );
+
   while( query.next() )
     {
     QString label;
 
-    SqlId id = GetChildTagNodeFields( query, &label );
-
-    QVariant variantId( id );
+    QVariant id( GetChildTagNodeFields( query, &label ) );
 
     TreeWidgetItemMap::iterator it(
-      nodes.find( variantId.toString() )
+      nodes.find( id.toString() )
     );
 
     QTreeWidgetItem* childItem = NULL;
 
     if( it==nodes.end() )
       {
-      childItem = widget->InsertNodeItem( item, label, variantId );
+      childItem = widget->InsertNodeItem( item, label, id );
       }
     else
       {
@@ -350,10 +333,8 @@ DatabaseBrowserController
 
     nodes.erase( it );
 
-    // TODO: Adde leaves (datasets).
-
     // Recurse.
-    Foo( childItem, id );
+    Foo( childItem, id.toLongLong() );
     }
 }
 
