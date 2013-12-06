@@ -55,11 +55,6 @@ namespace mvd
 /*****************************************************************************/
 /* MACROS                                                                    */
 
-#define USE_DEBUG 1
-#define USE_DEBUG_BINDINGS 1
-#define USE_DEBUG_SIZE 1
-#define USE_DEBUG_VALUES 1
-
 /*****************************************************************************/
 #if USE_DEBUG
 #define QUERY_DEBUG_0( sql ) qDebug() << ( sql )
@@ -118,23 +113,6 @@ namespace mvd
 #endif
 
 /*****************************************************************************/
-#if USE_DEBUG || USE_DEBUG_VALUES
-#define QUERY_DEBUG_FIELDS( query )             \
-  {                                             \
-  QVariant field;                               \
-  int i;                                        \
-  for( i=0, field=( query ).value( i );         \
-       field.isValid();                         \
-       field=( query ).value( ++i ) )           \
-    {                                           \
-    qDebug() << i << field;                     \
-    }                                           \
-  }
-#else
-#define QUERY_DEBUG_FIELDS( query )
-#endif
-
-/*****************************************************************************/
 #define QUERY_PREPARE( qry, sql )               \
   QSqlQuery qry( m_SqlDatabase );               \
   if( !( qry ).prepare( sql ) )                 \
@@ -169,16 +147,6 @@ namespace mvd
     );                                                  \
     }                                                   \
   assert( ( qry ).isActive() )
-
-/*****************************************************************************/
-#define QUERY_NEXT( query )                             \
-  if( !( query ).next() )                               \
-    {                                                   \
-    throw DatabaseError(                                \
-      ( query ).lastError(),                            \
-      tr( "Failed to fetch tag-id by tag-label: " )     \
-    );                                                  \
-    }
 
 /*****************************************************************************/
 #define BATCH_QUERY_EXEC( qry )                         \
@@ -317,15 +285,23 @@ DatabaseConnection
 #endif
 
 #if defined( _DEBUG ) || 0
-  dbc.InsertTag( "Test-1", "Root" );
+  dbc.InsertTag( "Test-1", "Datasets" );
 
-  dbc.InsertTag( "Test-2", "Root" );
+  dbc.InsertTag( "Test-2", "Datasets" );
   dbc.InsertTag( "Test-2.1", "Test-2" );
 
-  dbc.InsertTag( "Test-3", "Root" );
+  dbc.InsertTag( "Test-3", "Datasets" );
   dbc.InsertTag( "Test-3.1", "Test-3" );
   dbc.InsertTag( "Test-3.1.1", "Test-3.1" );
-  dbc.InsertTag( "Test-3.2", "Test-3.1" );
+  dbc.InsertTag( "Test-3.1.2", "Test-3.1" );
+  dbc.InsertTag( "Test-3.2", "Test-3" );
+
+  /*
+  dbc.InsertTag( "Duplicate", "Datasets" );
+  dbc.InsertTag( "Duplicate", "Datasets" );
+  */
+
+  dbc.InsertTag( "Test-4", "Root" );
 #endif
 }
 
@@ -367,6 +343,7 @@ DatabaseConnection
 /*******************************************************************************/
 DatabaseConnection
 ::DatabaseConnection( QObject* parent ) :
+  QObject( parent ),
   m_SqlDatabase( SqlDatabase() )
 {
   if( !m_SqlDatabase.isOpen() )
@@ -455,6 +432,9 @@ DatabaseConnection
     )
   );
 
+  QUERY_NEXT( findTagNode );
+  QUERY_DEBUG_FIELDS( findTagNode );
+
   QVariant datasetId( findDatasetId.value( 0 ) );
   //
   QVariant id( findTagNode.value( 0 ) );
@@ -514,6 +494,35 @@ DatabaseConnection
     }
 
   return datasets;
+}
+
+/*****************************************************************************/
+QSqlQuery
+DatabaseConnection
+::GetRootTagNode() const
+{
+  QSqlQuery query(
+    ExecuteSelectQuery(
+      SQLQ_SELECT_TAG_NODE_ROOT,
+      QVariantList()
+    )
+  );
+
+  QUERY_NEXT( query );
+
+  return query;
+}
+
+/*****************************************************************************/
+QSqlQuery
+DatabaseConnection
+::GetTagNodeChildren( SqlId tagNodeId ) const
+{
+  return
+    ExecuteSelectQuery(
+      SQLQ_SELECT_TAG_NODE_CHILDREN,
+      QVariantList() << tagNodeId
+    );
 }
 
 /*****************************************************************************/
@@ -687,15 +696,7 @@ QSqlQuery
 DatabaseConnection
 ::ExecuteSelectQuery( SqlQueriesSelect queryId, const QVariantList& params ) const
 {
-  QSqlQuery query(
-    ExecuteQuery( SQL_QUERIES_SELECT[ queryId ], params )
-  );
-
-  QUERY_NEXT( query );
-
-  QUERY_DEBUG_FIELDS( query );
-
-  return query;
+  return ExecuteQuery( SQL_QUERIES_SELECT[ queryId ], params );
 }
 
 /*****************************************************************************/

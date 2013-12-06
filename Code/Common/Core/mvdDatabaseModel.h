@@ -116,6 +116,14 @@ public:
 
   /**
    */
+  inline const DatabaseConnection* GetDatabaseConnection() const;
+
+  /**
+   */
+  inline DatabaseConnection* GetDatabaseConnection();
+
+  /**
+   */
   StringPairListType QueryDatasetModels() const;
 
   /**
@@ -303,6 +311,24 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+const DatabaseConnection*
+DatabaseModel
+::GetDatabaseConnection() const
+{
+  return m_Db;
+}
+
+/*****************************************************************************/
+inline
+DatabaseConnection*
+DatabaseModel
+::GetDatabaseConnection()
+{
+  return m_Db;
+}
 
 /*****************************************************************************/
 inline

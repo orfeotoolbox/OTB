@@ -95,6 +95,16 @@ public:
   /** \brief Destructor. */
   virtual ~DatabaseTreeWidget();
 
+  /**
+   */
+  inline const QTreeWidgetItem* GetRootItem() const;
+
+  /**
+   */
+  QTreeWidgetItem* GetRootItem();
+
+  //
+  //
   void mouseMoveEvent( QMouseEvent * event );
   void mousePressEvent( QMouseEvent * event );
   void dragEnterEvent(QDragEnterEvent *event);

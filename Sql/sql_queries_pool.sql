@@ -66,3 +66,10 @@ JOIN tag ON tag_node.tag_id=tag.id
 JOIN tag AS t2 ON tn_2.tag_id=t2.id
 -- WHERE tag_node.tag_id=(SELECT tag.id FROM tag WHERE tag.label='Root')
 ORDER BY tag_node.id;
+
+-----------------------------------------------------------------------------
+-- Select root tag-node.
+SELECT tag_node.id, tag_node.parent_id, tag_node.tag_id, tag_node.level, tag_node.path, tag.label
+FROM tag_node
+JOIN tag ON tag_node.tag_id=tag.id
+WHERE (tag_node.parent_id IS NULL) AND (tag_node.level=0);

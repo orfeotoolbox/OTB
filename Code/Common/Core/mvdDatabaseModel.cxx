@@ -38,9 +38,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdDatabaseConnection.h"
-#include "mvdDatasetModel.h"
-#include "mvdI18nCoreApplication.h"
+#include "Core/mvdDatabaseConnection.h"
+#include "Core/mvdDatasetModel.h"
+#include "Core/mvdI18nCoreApplication.h"
 
 namespace mvd
 {

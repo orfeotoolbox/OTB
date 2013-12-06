@@ -106,6 +106,90 @@ DatabaseBrowserWidget
   m_UI = NULL;
 }
 
+/*****************************************************************************/
+const QTreeWidgetItem*
+DatabaseBrowserWidget
+::GetRootItem() const
+{
+  return m_UI->databaseTreeWidget->invisibleRootItem();
+}
+
+/*****************************************************************************/
+QTreeWidgetItem*
+DatabaseBrowserWidget
+::GetRootItem()
+{
+  return m_UI->databaseTreeWidget->invisibleRootItem();
+}
+
+/*******************************************************************************/
+QTreeWidgetItem*
+DatabaseBrowserWidget
+::InsertNodeItem( QTreeWidgetItem* parent,
+                  const QString& text,
+                  const QVariant& id,
+                  const QStringList& columns )
+{
+  return
+    InsertItem(
+      parent,
+      DatabaseBrowserWidget::ITEM_TYPE_NODE,
+      Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled,
+      QTreeWidgetItem::ShowIndicator,
+      text,
+      id,
+      columns
+    );
+}
+
+/*******************************************************************************/
+QTreeWidgetItem*
+DatabaseBrowserWidget
+::InsertLeafItem( QTreeWidgetItem* parent,
+                  const QString& text,
+                  const QVariant& id,
+                  const QStringList& columns )
+{
+  return
+    InsertItem(
+      parent,
+      DatabaseBrowserWidget::ITEM_TYPE_LEAF,
+      Qt::ItemIsEnabled | Qt::ItemIsSelectable |
+      Qt::ItemIsEditable | Qt::ItemIsDragEnabled,
+      QTreeWidgetItem::DontShowIndicator,
+      text,
+      id,
+      columns
+    );
+}
+
+/*******************************************************************************/
+QTreeWidgetItem*
+DatabaseBrowserWidget
+::InsertItem( QTreeWidgetItem* parent,
+              ItemType type,
+              Qt::ItemFlags flags,
+              QTreeWidgetItem::ChildIndicatorPolicy policy,
+              const QString& text,
+              const QVariant& id,
+              const QStringList& columns )
+{
+  QTreeWidgetItem* item =
+    new QTreeWidgetItem(
+      parent,
+      QStringList() << text << id.toString(),
+      type
+    );
+
+  item->setData( 1, DatabaseBrowserWidget::ITEM_ROLE_ID, id );
+
+  item->setFlags( flags );
+
+  // item->setChildIndicatorPolicy( policy );
+
+  return item;
+}
+
 /*******************************************************************************/
 void
 DatabaseBrowserWidget

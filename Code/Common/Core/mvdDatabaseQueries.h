@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDatabaseBrowserController_h
-#define __mvdDatabaseBrowserController_h
+#ifndef __mvdDatabaseQueries_h
+#define __mvdDatabaseQueries_h
 
 //
 // Configuration include.
@@ -27,6 +27,141 @@
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
+
+//
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+// #include <QtCore>
+#include <QtSql>
+
+//
+// System includes (sorted by alphabetic order)
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdTypes.h"
+
+
+/*****************************************************************************/
+/* MACROS                                                                    */
+
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
+//
+// External classes pre-declaration.
+namespace
+{
+}
+
+namespace mvd
+{
+
+/*****************************************************************************/
+/* FUNCTIONS DEFINITION SECTION                                              */
+
+/**
+ */
+SqlId
+GetRootTagNodeFields( const QSqlQuery& query,
+                      QString* label =NULL,
+                      SqlId* parentId =NULL,
+                      SqlId* tagId =NULL,
+                      int* level =NULL,
+                      QString* path =NULL );
+
+/**
+ */
+SqlId
+GetChildTagNodeFields( const QSqlQuery& query,
+                       QString* label =NULL,
+                       SqlId* parentId =NULL,
+                       SqlId* tagId =NULL,
+                       int* level =NULL,
+                       QString* path =NULL );
+
+//
+// Internal classes pre-declaration.
+
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
+/**
+ * \class DatabaseQueries
+ *
+ * \brief WIP.
+ */
+class Monteverdi2_EXPORT DatabaseQueries :
+    public QObject
+{
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
+  Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public methods.
+public:
+
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
+//
+// Public SLOTS.
+public slots:
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
+
+//
+// Signals.
+signals:
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
+
+//
+// Protected methods.
+protected:
+
+//
+// Protected attributes.
+protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
+//
+// Private types.
+private:
+
+//
+// Private methods.
+private:
+
+  /** \brief Constructor. */
+  DatabaseQueries( QObject* parent =NULL );
+
+  /** \brief Destructor. */
+  virtual ~DatabaseQueries();
+
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+
+//
+// Slots.
+private slots:
+};
+
+} // end namespace 'mvd'.
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -43,166 +178,10 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdAbstractModelController.h"
-#include "Gui/mvdGui.h"
-
-
-/*****************************************************************************/
-/* PRE-DECLARATION SECTION                                                   */
-
-//
-// External classes pre-declaration.
-namespace
-{
-}
 
 namespace mvd
 {
-//
-// Internal classes pre-declaration.
-class DatabaseBrowserWidget;
-class DatasetModel;
 
-/*****************************************************************************/
-/* CLASS DEFINITION SECTION                                                  */
-
-/**
- * \class DatabaseBrowserController
- *
- * \brief Controller of database browser widget (for
- * DatabaseModeleModel objects).
- */
-class Monteverdi2_EXPORT DatabaseBrowserController :
-    public AbstractModelController
-{
-
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
-  Q_OBJECT;
-
-  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-
-//
-// Public methods.
-public:
-
-  /**
-   * \brief Constructor.
-   *
-   * \param widget Controlled widget.
-   * \param parent Parent QObject of this QObject.
-   */
-  DatabaseBrowserController( DatabaseBrowserWidget* widget,
-			     QObject* parent =NULL );
-
-  /**
-   * \brief Destructor.
-   */
-  virtual ~DatabaseBrowserController();
-
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
-
-  /**
-   */
-  void SelectedDatasetFilenameChanged( const QString& );
-
-  void ImageToImportDropped( const QString& );
-
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Slots.
-public slots:
-
-  /**
-   *  \brief
-   */
-  void CheckDatasetsConsistency();
-
-  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
-
-//
-// Protected methods.
-protected:
-
-//
-// Protected attributes.
-protected:
-
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private methods.
-private:
-
-  /**
-   */
-  void ResetDatasetTree( const StringPairListType& datasets );
-
-  /**
-   */
-  void Foo( QTreeWidgetItem* item, SqlId tagNodeId );
-
-  //
-  // AbstractModelController overrides.
-
-  virtual void Connect( AbstractModel* );
-
-  virtual void ClearWidget();
-
-  virtual void ResetWidget();
-
-  virtual void Disconnect( AbstractModel* );
-
-
-//
-// Private attributes.
-private:
-
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
-private slots:
-
-  /**
-   * \brief Slot called when the currently selected dataset has changed.
-   *
-   * \param id The ID of the newly selected dataset.
-   * \param previousId The ID of the previously selected dataset.
-   */
-  void OnCurrentDatasetChanged( const QString& id, const QString& previousId );
-
-  /**
-   */
-  void OnSelectedDatasetModelChanged( DatasetModel* );
-
-  /**
-   */
-  void OnImageDropped( const QString & imagefname );
-
-  /**
-   */
-  void OnDatasetToDeleteSelected( const QString& id );
-
-  //
-  // AbstractModelController overloads.
-
-  virtual void RefreshWidget();
-};
-
-} // end namespace 'mvd'.
-
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
-namespace mvd
-{
 } // end namespace 'mvd'
 
-#endif // __mvdDatabaseBrowserController_h
+#endif // __mvdDatabaseQueries_h

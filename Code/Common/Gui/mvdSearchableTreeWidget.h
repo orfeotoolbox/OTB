@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDatabaseBrowserController_h
-#define __mvdDatabaseBrowserController_h
+#ifndef __mvdSearchableTreeWidget_h
+#define __mvdSearchableTreeWidget_h
 
 //
 // Configuration include.
@@ -31,6 +31,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -43,8 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdAbstractModelController.h"
-#include "Gui/mvdGui.h"
+// #include "Core/mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -58,22 +58,26 @@ namespace
 
 namespace mvd
 {
+
 //
 // Internal classes pre-declaration.
-class DatabaseBrowserWidget;
-class DatasetModel;
+namespace Ui
+{
+class SearchableTreeWidget;
+};
+
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class DatabaseBrowserController
+ * \class SearchableTreeWidget
  *
- * \brief Controller of database browser widget (for
- * DatabaseModeleModel objects).
+ * \brief Database content browser. Presents:
+ * - Cached datasets.
  */
-class Monteverdi2_EXPORT DatabaseBrowserController :
-    public AbstractModelController
+class Monteverdi2_EXPORT SearchableTreeWidget :
+    public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -83,22 +87,24 @@ class Monteverdi2_EXPORT DatabaseBrowserController :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public types.
+public:
+
+//
 // Public methods.
 public:
 
-  /**
-   * \brief Constructor.
-   *
-   * \param widget Controlled widget.
-   * \param parent Parent QObject of this QObject.
-   */
-  DatabaseBrowserController( DatabaseBrowserWidget* widget,
-			     QObject* parent =NULL );
+  /** \brief Constructor. */
+  SearchableTreeWidget( QWidget* parent =NULL, Qt::WindowFlags flags =0 );
 
-  /**
-   * \brief Destructor.
-   */
-  virtual ~DatabaseBrowserController();
+  /** \brief Destructor. */
+  virtual ~SearchableTreeWidget();
+
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
+//
+// Public SLOTS.
+public slots:
 
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
@@ -106,23 +112,6 @@ public:
 //
 // Signals.
 signals:
-
-  /**
-   */
-  void SelectedDatasetFilenameChanged( const QString& );
-
-  void ImageToImportDropped( const QString& );
-
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Slots.
-public slots:
-
-  /**
-   *  \brief
-   */
-  void CheckDatasetsConsistency();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -137,32 +126,29 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
+// Private types.
+private:
+  /**
+   * \brief List of dataset item names displayed under the 'dataset'
+   * root item.
+   */
+  QList< QTreeWidgetItem* > TreeWidgetItemList;
+
+//
 // Private methods.
 private:
-
   /**
+   * \brief Setup UI sub-items.
    */
-  void ResetDatasetTree( const StringPairListType& datasets );
-
-  /**
-   */
-  void Foo( QTreeWidgetItem* item, SqlId tagNodeId );
-
-  //
-  // AbstractModelController overrides.
-
-  virtual void Connect( AbstractModel* );
-
-  virtual void ClearWidget();
-
-  virtual void ResetWidget();
-
-  virtual void Disconnect( AbstractModel* );
-
+  void SetupUI();
 
 //
 // Private attributes.
 private:
+  /**
+   * \brief uic generated.
+   */
+  Ui::SearchableTreeWidget* m_UI;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -171,38 +157,31 @@ private:
 private slots:
 
   /**
-   * \brief Slot called when the currently selected dataset has changed.
+   * \brief Slot called when the current item of the QWidgetTree has
+   * changed.
    *
-   * \param id The ID of the newly selected dataset.
-   * \param previousId The ID of the previously selected dataset.
+   * \param current The newly selected DatasetTreeWidgetItem.
+   * \param previous The previously selected QTreeWidgetItem.
    */
-  void OnCurrentDatasetChanged( const QString& id, const QString& previousId );
+  /*
+  void on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
+						 QTreeWidgetItem* previous );
+  */
 
   /**
    */
-  void OnSelectedDatasetModelChanged( DatasetModel* );
+  // void on_searchLineEdit_textChanged( const QString& text );
 
-  /**
-   */
-  void OnImageDropped( const QString & imagefname );
-
-  /**
-   */
-  void OnDatasetToDeleteSelected( const QString& id );
-
-  //
-  // AbstractModelController overloads.
-
-  virtual void RefreshWidget();
 };
 
-} // end namespace 'mvd'.
+} // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
 namespace mvd
 {
+
 } // end namespace 'mvd'
 
-#endif // __mvdDatabaseBrowserController_h
+#endif // __mvdSearchableTreeWidget_h

@@ -89,6 +89,20 @@ class Monteverdi2_EXPORT DatabaseBrowserWidget :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public types.
+public:
+  enum ItemType
+  {
+    ITEM_TYPE_NODE = QTreeWidgetItem::UserType + 1,
+    ITEM_TYPE_LEAF = QTreeWidgetItem::UserType + 2,
+  };
+
+  enum ItemRole
+  {
+    ITEM_ROLE_ID = Qt::UserRole + 1,
+  };
+
+//
 // Public methods.
 public:
 
@@ -99,12 +113,26 @@ public:
   virtual ~DatabaseBrowserWidget();
 
   /**
-   * \brief Assign the displayed dataset list (under the 'Datasets'
-   * root item).
-   *
-   * \param list List of dataset names.
    */
-  void SetDatasetList( const StringPairListType/*QStringList*/& list );
+  const QTreeWidgetItem* GetRootItem() const;
+
+  /**
+   */
+  QTreeWidgetItem* GetRootItem();
+
+  /**
+   */
+  QTreeWidgetItem* InsertNodeItem( QTreeWidgetItem* parent,
+                                   const QString& text,
+                                   const QVariant& id,
+                                   const QStringList& columns =QStringList() );
+
+  /**
+   */
+  QTreeWidgetItem* InsertLeafItem( QTreeWidgetItem* parent,
+                                   const QString& text,
+                                   const QVariant& id,
+                                   const QStringList& columns =QStringList() );
 
   /**
    * \brief Select the current dataset item of the displayed list.
@@ -115,7 +143,16 @@ public:
 
   /**
    */
+  // TODO: Remove access to child widget which should be hidden by encapsulation.
   DatabaseTreeWidget* GetDatabaseTreeWidget();
+
+  /**
+   * \brief Assign the displayed dataset list (under the 'Datasets'
+   * root item).
+   *
+   * \param list List of dataset names.
+   */
+  void SetDatasetList( const StringPairListType/*QStringList*/& list );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -170,6 +207,16 @@ private:
    * \brief Setup UI sub-items.
    */
   void SetupUI();
+
+  /**
+   */
+  QTreeWidgetItem* InsertItem( QTreeWidgetItem* parent,
+                               ItemType type,
+                               Qt::ItemFlags flags,
+                               QTreeWidgetItem::ChildIndicatorPolicy policy,
+                               const QString& text,
+                               const QVariant& id,
+                               const QStringList& columns =QStringList() );
 
 //
 // Private attributes.

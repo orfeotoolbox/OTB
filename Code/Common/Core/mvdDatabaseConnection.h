@@ -45,8 +45,59 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdTypes.h"
+#include "Core/mvdDatabaseError.h"
+#include "Core/mvdTypes.h"
 
+
+/*****************************************************************************/
+/* MACROS                                                                    */
+
+#define USE_DEBUG 0
+#define USE_DEBUG_BINDINGS 1
+#define USE_DEBUG_SIZE 1
+#define USE_DEBUG_VALUES 1
+
+/*****************************************************************************/
+#define QUERY_NEXT( query )                     \
+  if( !( query ).next() )                       \
+    {                                           \
+    throw DatabaseError(                        \
+      ( query ).lastError(),                    \
+      tr( "Failed to fetch query record #%1." ) \
+      .arg( ( query ).at() )                    \
+    );                                          \
+    }
+
+/*****************************************************************************/
+#define QUERY_NEXT_STATIC( query )                      \
+  if( !( query ).next() )                               \
+    {                                                   \
+    throw DatabaseError(                                \
+      ( query ).lastError(),                            \
+      QCoreApplication::translate(                      \
+        "mvd::DatabaseConnection",                      \
+        "Failed to fetch query record #%1."             \
+      )                                                 \
+      .arg( ( query ).at() )                            \
+    );                                                  \
+    }
+
+/*****************************************************************************/
+#if USE_DEBUG || USE_DEBUG_VALUES
+#define QUERY_DEBUG_FIELDS( query )             \
+  {                                             \
+    QVariant field;                             \
+    int i;                                      \
+    for( i=0, field=( query ).value( i );       \
+         field.isValid();                       \
+         field=( query ).value( ++i ) )         \
+      {                                         \
+      qDebug() << i << field;                   \
+      }                                         \
+  }
+#else
+#define QUERY_DEBUG_FIELDS( query )
+#endif
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -59,6 +110,7 @@ namespace
 
 namespace mvd
 {
+
 //
 // Internal classes pre-declaration.
 
@@ -98,10 +150,16 @@ public:
   /** \brief Destructor. */
   virtual ~DatabaseConnection();
 
+  //
+  // Database related methods.
+
   /**
    */
   static void InitializeDatabase();
   // static void InitializeDatabase2();
+
+  //
+  // Dataset related methods.
 
   /**
    */
@@ -114,6 +172,17 @@ public:
   /**
    */
   DatasetMap ListAllDatasets() const;
+
+  //
+  // Tag and tag-nodes related methods.
+
+  /**
+   */
+  QSqlQuery GetRootTagNode() const;
+
+  /**
+   */
+  QSqlQuery GetTagNodeChildren( SqlId tagNodeId ) const;
 
   /**
    */
@@ -179,6 +248,8 @@ private:
     SQLQ_SELECT_NONE = -1,
     //
     SQLQ_SELECT_TAG_NODE_BY_TAG_LABEL = 0,
+    SQLQ_SELECT_TAG_NODE_ROOT,
+    SQLQ_SELECT_TAG_NODE_CHILDREN,
     //
     SQLQ_SELECT_COUNT,
   };

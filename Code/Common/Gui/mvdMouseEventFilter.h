@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDatabaseBrowserController_h
-#define __mvdDatabaseBrowserController_h
+#ifndef __mvdMouseEventFilter_h
+#define __mvdMouseEventFilter_h
 
 //
 // Configuration include.
@@ -31,6 +31,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -43,8 +44,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdAbstractModelController.h"
-#include "Gui/mvdGui.h"
 
 
 /*****************************************************************************/
@@ -58,22 +57,22 @@ namespace
 
 namespace mvd
 {
+
 //
 // Internal classes pre-declaration.
-class DatabaseBrowserWidget;
-class DatasetModel;
+
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class DatabaseBrowserController
+ * \class MouseEventFilter
  *
- * \brief Controller of database browser widget (for
- * DatabaseModeleModel objects).
+ * \brief Widget template skeleton to copy-paste when adding a new
+ * widget class.
  */
-class Monteverdi2_EXPORT DatabaseBrowserController :
-    public AbstractModelController
+class Monteverdi2_EXPORT MouseEventFilter :
+    public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,20 +85,17 @@ class Monteverdi2_EXPORT DatabaseBrowserController :
 // Public methods.
 public:
 
-  /**
-   * \brief Constructor.
-   *
-   * \param widget Controlled widget.
-   * \param parent Parent QObject of this QObject.
-   */
-  DatabaseBrowserController( DatabaseBrowserWidget* widget,
-			     QObject* parent =NULL );
+  /** \brief Constructor. */
+  MouseEventFilter( QObject* parent =NULL );
 
-  /**
-   * \brief Destructor.
-   */
-  virtual ~DatabaseBrowserController();
+  /** \brief Destructor. */
+  virtual ~MouseEventFilter();
 
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
+//
+// Public SLOTS.
+public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -107,58 +103,21 @@ public:
 // Signals.
 signals:
 
-  /**
-   */
-  void SelectedDatasetFilenameChanged( const QString& );
-
-  void ImageToImportDropped( const QString& );
-
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Slots.
-public slots:
-
-  /**
-   *  \brief
-   */
-  void CheckDatasetsConsistency();
-
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
 //
 // Protected attributes.
 protected:
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
 //
 // Private methods.
 private:
-
-  /**
-   */
-  void ResetDatasetTree( const StringPairListType& datasets );
-
-  /**
-   */
-  void Foo( QTreeWidgetItem* item, SqlId tagNodeId );
-
-  //
-  // AbstractModelController overrides.
-
-  virtual void Connect( AbstractModel* );
-
-  virtual void ClearWidget();
-
-  virtual void ResetWidget();
-
-  virtual void Disconnect( AbstractModel* );
-
 
 //
 // Private attributes.
@@ -169,34 +128,9 @@ private:
 //
 // Slots.
 private slots:
-
-  /**
-   * \brief Slot called when the currently selected dataset has changed.
-   *
-   * \param id The ID of the newly selected dataset.
-   * \param previousId The ID of the previously selected dataset.
-   */
-  void OnCurrentDatasetChanged( const QString& id, const QString& previousId );
-
-  /**
-   */
-  void OnSelectedDatasetModelChanged( DatasetModel* );
-
-  /**
-   */
-  void OnImageDropped( const QString & imagefname );
-
-  /**
-   */
-  void OnDatasetToDeleteSelected( const QString& id );
-
-  //
-  // AbstractModelController overloads.
-
-  virtual void RefreshWidget();
 };
 
-} // end namespace 'mvd'.
+} // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
@@ -205,4 +139,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdDatabaseBrowserController_h
+#endif // __mvdMouseEventFilter_h

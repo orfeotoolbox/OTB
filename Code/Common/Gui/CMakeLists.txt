@@ -33,9 +33,11 @@ set( Common_Gui_SOURCES
   mvdImageModelRenderer.cxx
   mvdImageViewManipulator.cxx
   mvdMainWindowTitleLoader.cxx
+  mvdMouseEventFilter.cxx
   mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
   mvdQuicklookViewManipulator.cxx
+  mvdSearchableTreeWidget.cxx
   mvdStatusBarWidget.cxx
   mvdTaskProgressDialog.cxx
 )
@@ -75,9 +77,11 @@ set( Common_Gui_HEADERS_MOC
   mvdHistogramPlotPicker.h
   mvdHistogramWidget.h
   mvdMainWindowTitleLoader.h
+  mvdMouseEventFilter.h
   mvdMyWidget.h
   mvdPixelDescriptionWidget.h
   mvdQuicklookViewManipulator.h
+  mvdSearchableTreeWidget.h
   mvdStatusBarWidget.h
   mvdTaskProgressDialog.h
 )
@@ -97,6 +101,7 @@ set( Common_Gui_FORMS
   mvdHistogramWidget.ui
   mvdMyWidget.ui
   mvdPixelDescriptionWidget.ui
+  mvdSearchableTreeWidget.ui
   mvdStatusBarWidget.ui
   mvdVideoColorToolBox.ui
 )

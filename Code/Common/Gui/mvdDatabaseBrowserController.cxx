@@ -38,6 +38,8 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 //
+#include "Core/mvdDatabaseConnection.h"
+#include "Core/mvdDatabaseQueries.h"
 #include "Core/mvdDatabaseModel.h"
 #include "Core/mvdVectorImageModel.h"
 //
@@ -207,12 +209,152 @@ DatabaseBrowserController
   //...but force call to valueChanged() slot to force refresh.
   widget->blockSignals( true );
   {
-  // TODO: Fill in widget.
+  // // TODO: Fill in widget.
   widget->SetDatasetList( datasets );
+
+  if( !datasets.isEmpty() )
+    Foo( widget->GetRootItem(), -1 );
   }
   widget->blockSignals( false );
   }
   this->blockSignals( false );
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::Foo( QTreeWidgetItem* item, SqlId tagNodeId )
+{
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+  assert( widget!=NULL );
+
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model );
+
+  assert( model->GetDatabaseConnection() );
+  const DatabaseConnection* db = model->GetDatabaseConnection();
+
+  QSqlQuery query(
+    db->GetTagNodeChildren(
+      tagNodeId < 0
+      ? GetRootTagNodeFields( db->GetRootTagNode() )
+      : tagNodeId
+    )
+  );
+
+  typedef QList< QTreeWidgetItem* > TreeWidgetItemList;
+
+#if 1
+  typedef QMap< QString, QTreeWidgetItem* > TreeWidgetItemMap;
+  // typedef QHash< QVariant, QTreeWidgetItem* > TreeWidgetItemHash;
+#else
+  typedef QMap< SqlId, QTreeWidgetItem* > TreeWidgetItemMap;
+#endif
+
+#if 0
+  TreeWidgetItemHash nodes;
+  TreeWidgetItemHash leaves;
+#else
+  TreeWidgetItemMap nodes;
+  TreeWidgetItemMap leaves;
+#endif
+  TreeWidgetItemList duplicates;
+  TreeWidgetItemList others;
+
+  for( int i=0; i<item->childCount(); ++i )
+    {
+    QTreeWidgetItem* child = item->child( i );
+    assert( child!=NULL );
+
+#if 0
+    TreeWidgetItemHash* container = NULL;
+#else
+    TreeWidgetItemMap* container = NULL;
+#endif
+
+    switch( child->type() )
+      {
+      // Nodes.
+      case QTreeWidgetItem::UserType + 1:
+        // assert( item->data( 1, Qt::UserRole + 1 ).isValid() );
+        qDebug()
+          << "Node:"
+          << item->text( 0 )
+          << item->text( 1 )
+          << item->data( 1, Qt::UserRole + 1 );
+        container = &nodes;
+        break;
+
+      // Leaves.
+      case QTreeWidgetItem::UserType + 2:
+        // assert( item->data( 1, Qt::UserRole + 1 ).isValid() );
+        qDebug()
+          << "Leaf:"
+          << item->text( 0 )
+          << item->text( 1 )
+          << item->data( 1, Qt::UserRole + 1 );
+        container = &leaves;
+        break;
+
+      // Others.
+      default:
+        others.push_back( item );
+        qDebug() << "Other:" << item->text( 0 );
+        break;
+      }
+
+    if( container!=NULL )
+      {
+      TreeWidgetItemMap::iterator it(
+        container->insert(
+          item->data( 1, Qt::UserRole + 1 ).toString(),
+          item )
+      );
+
+      // assert( it==map->end() );
+      if( it!=container->end() )
+        {
+        qDebug()
+          << "Duplicate:"
+          << it.value()->text( 0 )
+          << it.value()->text( 1 )
+          << it.value()->data( 1, Qt::UserRole + 1 );
+
+        duplicates.push_back( it.value() );
+        }
+      }
+    }
+
+  while( query.next() )
+    {
+    QString label;
+
+    SqlId id = GetChildTagNodeFields( query, &label );
+
+    QVariant variantId( id );
+
+    TreeWidgetItemMap::iterator it(
+      nodes.find( variantId.toString() )
+    );
+
+    QTreeWidgetItem* childItem = NULL;
+
+    if( it==nodes.end() )
+      {
+      childItem = widget->InsertNodeItem( item, label, variantId );
+      }
+    else
+      {
+      childItem = it.value();
+      }
+
+    nodes.erase( it );
+
+    // TODO: Adde leaves (datasets).
+
+    // Recurse.
+    Foo( childItem, id );
+    }
 }
 
 /*******************************************************************************/
@@ -243,24 +385,28 @@ DatabaseBrowserController
         dynamic_cast<DatasetTreeWidgetItem*>(
           tree->topLevelItem(topIdx)->child(idx)
           );
-      QString datasetId =  currentDatasetItem->GetId();
 
-      // qDebug() << "Checking dataset:" << currentDatasetItem->GetId();
-
-      const DatasetModel* datasetModel = model->FindDatasetModel( datasetId );
-      assert( datasetModel!=NULL );
-
-      // check consistency
-      if ( !datasetModel->IsConsistent() )
+      if( currentDatasetItem!=NULL )
         {
-        // disable inconsistent dataset
-        currentDatasetItem->setDisabled(true);
+        QString datasetId =  currentDatasetItem->GetId();
 
-        // add forbidden icon
-        currentDatasetItem->setIcon(0, QIcon( ":/icons/forbidden" ));
+        // qDebug() << "Checking dataset:" << currentDatasetItem->GetId();
 
-        // add tootlip
-        currentDatasetItem->setToolTip (0,tr ("Inconsistent Dataset disabled") );
+        const DatasetModel* datasetModel = model->FindDatasetModel( datasetId );
+        assert( datasetModel!=NULL );
+
+        // check consistency
+        if ( !datasetModel->IsConsistent() )
+          {
+          // disable inconsistent dataset
+          currentDatasetItem->setDisabled(true);
+
+          // add forbidden icon
+          currentDatasetItem->setIcon(0, QIcon( ":/icons/forbidden" ));
+
+          // add tootlip
+          currentDatasetItem->setToolTip (0,tr ("Inconsistent Dataset disabled") );
+          }
         }
       }
     }

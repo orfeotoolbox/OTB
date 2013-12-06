@@ -111,6 +111,11 @@ DatabaseTreeWidget
 void 
 DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 {
+#if 0
+  QTreeWidget::mouseMoveEvent( event );
+  return;
+#endif
+
   if ( !(event->buttons() &  Qt::LeftButton ))
     return;
   
@@ -142,7 +147,7 @@ DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 /*******************************************************************************/
 void
 DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
-{   
+{
   if (event->button() == Qt::LeftButton)
      {
      //
@@ -158,6 +163,14 @@ DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 void
 DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
 {
+  qDebug() << this << "::dragEnterEvent(" << event << ") :"
+           << event->mimeData()->formats();
+
+#if 0
+  QTreeWidget::dragEnterEvent( event );
+  return;
+#endif
+
   if (event->mimeData()->hasUrls()/*("text/uri-list")*/)
     {
     event->acceptProposedAction();
@@ -166,23 +179,39 @@ DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
 
 /*******************************************************************************/
 void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
- {
-   //
-   // if the mouse is within the QLabel geometry : allow drops
-   if ( event->answerRect().intersects( this->geometry() ) )
-     {
-     event->acceptProposedAction();
-     }
-   else
+{
+  qDebug() << this << "::dragMoveEvent(" << event << ") :"
+           << event->mimeData()->formats();
+
+#if 0
+  QTreeWidget::dragMoveEvent( event );
+  return;
+#endif
+
+  //
+  // if the mouse is within the QLabel geometry : allow drops
+  if ( event->answerRect().intersects( this->geometry() ) )
+    {
+    event->acceptProposedAction();
+    }
+  else
     {
     event->ignore();
     }
- }
+}
 
 /*******************************************************************************/
 void 
 DatabaseTreeWidget::dropEvent(QDropEvent *event)
 {
+  qDebug() << this << "::dropEvent(" << event << ") :"
+           << event->mimeData()->formats();
+
+#if 0
+  QTreeWidget::dropEvent( event );
+  return;
+#endif
+
   QList<QUrl> urls = event->mimeData()->urls();
 
   // cheking

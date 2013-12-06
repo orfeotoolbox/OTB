@@ -159,7 +159,37 @@ const char* SQL_QUERIES_SELECT[] = {
 "JOIN tag ON tag_node.tag_id=tag.id\n"
 "WHERE tag_node.tag_id=(SELECT tag.id FROM tag WHERE tag.label=:label)\n"
 ";",
+"-----------------------------------------------------------------------------\n"
+"-- SQLQ_SELECT_TAG_NODE_ROOT\n"
+"-- Select root tag-node.\n"
+"SELECT tag_node.id,\n"
+"       tag_node.parent_id,\n"
+"       tag_node.tag_id,\n"
+"       tag_node.level,\n"
+"       tag_node.path,\n"
+"       tag.label\n"
+"FROM tag_node\n"
+"JOIN tag ON tag_node.tag_id=tag.id\n"
+"WHERE (tag_node.parent_id IS NULL) AND (tag_node.level=0)\n"
+";",
+"-----------------------------------------------------------------------------\n"
+"-- SQLQ_SELECT_TAG_NODE_CHILDREN\n"
+"-- List direct children of tag-node identified by :tag_node_id\n"
+"SELECT\n"
+"  -- tag_node_i.*, tag_i.label,\n"
+"  tag_node_ip1.id,\n"
+"  tag_node_ip1.parent_id,\n"
+"  tag_node_ip1.tag_id,\n"
+"  tag_node_ip1.level,\n"
+"  tag_node_ip1.path,\n"
+"  tag_ip1.label\n"
+"FROM tag_node AS tag_node_i\n"
+"JOIN tag_node AS tag_node_ip1 ON tag_node_i.id=tag_node_ip1.parent_id\n"
+"JOIN tag AS tag_i ON tag_node_i.tag_id=tag_i.id\n"
+"JOIN tag AS tag_ip1 ON tag_node_ip1.tag_id=tag_ip1.id\n"
+"WHERE tag_node_i.tag_id=:tag_node_id\n"
+";",
 };
 
-const int SQL_QUERIES_SELECT_COUNT = 1;
+const int SQL_QUERIES_SELECT_COUNT = 3;
 } // End of anonymous namespace.
