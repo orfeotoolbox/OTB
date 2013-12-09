@@ -54,7 +54,7 @@
 
 #define USE_DEBUG 0
 #define USE_DEBUG_BINDINGS 1
-#define USE_DEBUG_SIZE 1
+#define USE_DEBUG_SIZE 0
 #define USE_DEBUG_VALUES 1
 
 /*****************************************************************************/
@@ -63,23 +63,27 @@
     {                                           \
     throw DatabaseError(                        \
       ( query ).lastError(),                    \
-      tr( "Failed to fetch query record #%1." ) \
-      .arg( ( query ).at() )                    \
+      tr( "Failed to fetch query record %1. " ) \
+      .arg( ( query ).at() ),                   \
+      QString( "\n\"%1\"\nwith: %2" )           \
+      .arg( ( query ).lastQuery() )             \
     );                                          \
     }
 
 /*****************************************************************************/
-#define QUERY_NEXT_STATIC( query )                      \
-  if( !( query ).next() )                               \
-    {                                                   \
-    throw DatabaseError(                                \
-      ( query ).lastError(),                            \
-      QCoreApplication::translate(                      \
-        "mvd::DatabaseConnection",                      \
-        "Failed to fetch query record #%1."             \
-      )                                                 \
-      .arg( ( query ).at() )                            \
-    );                                                  \
+#define QUERY_NEXT_STATIC( query )              \
+  if( !( query ).next() )                       \
+    {                                           \
+    throw DatabaseError(                        \
+      ( query ).lastError(),                    \
+      QCoreApplication::translate(              \
+        "mvd::DatabaseConnection",              \
+        "Failed to fetch query record %1. "     \
+      )                                         \
+      .arg( ( query ).at() ),                   \
+      QString( "\n\"%1\"" )                     \
+      .arg( ( query ).lastQuery() )             \
+    );                                          \
     }
 
 /*****************************************************************************/
@@ -222,7 +226,7 @@ private:
   {
     TAG_NAME_ROOT = 0,
     TAG_NAME_DATASETS,
-    TAG_NAME_CACHED,
+    TAG_NAME_TEMPORARY,
     //
     TAG_NAMES_COUNT,
   };

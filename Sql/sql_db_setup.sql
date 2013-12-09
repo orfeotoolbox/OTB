@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 INSERT INTO tag( id, label ) VALUES( 1, 'Root' );
 INSERT INTO tag( id, label ) VALUES( 2, 'Datasets' );
-INSERT INTO tag( id, label ) VALUES( 3, 'Cached' );
+INSERT INTO tag( id, label ) VALUES( 3, 'Temporary' );
 
 -----------------------------------------------------------------------------
 -- Root

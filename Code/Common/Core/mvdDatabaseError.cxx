@@ -154,7 +154,7 @@ DatabaseError
   std::runtime_error( whatString( sqlError, prefix, suffix ) ),
   m_SqlError( sqlError )
 {
-  qDebug() << what();
+  // qDebug() << what();
 }
 
 /*******************************************************************************/

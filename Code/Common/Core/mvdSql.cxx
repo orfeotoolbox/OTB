@@ -90,7 +90,7 @@ const char* SQL_DB_SETUP[] = {
 ";",
 "INSERT INTO tag( id, label ) VALUES( 2, 'Datasets' )\n"
 ";",
-"INSERT INTO tag( id, label ) VALUES( 3, 'Cached' )\n"
+"INSERT INTO tag( id, label ) VALUES( 3, 'Temporary' )\n"
 ";",
 "-----------------------------------------------------------------------------\n"
 "-- Root\n"

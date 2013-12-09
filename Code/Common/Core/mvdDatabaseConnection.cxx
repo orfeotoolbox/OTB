@@ -177,7 +177,11 @@ namespace
 
 int DatabaseConnection::m_InstanceCount = 0;
 
-const char* DatabaseConnection::TAG_NAMES[] = {  "Root", "Datasets", "Cached" };
+const char* DatabaseConnection::TAG_NAMES[] = {
+  "Root",
+  "Datasets",
+  "Temporary"
+};
 
 /*******************************************************************************/
 /*
@@ -424,7 +428,7 @@ DatabaseConnection
   );
 
   QUERY_NEXT( findDatasetId );
-  QUERY_DEBUG_FIELDS( findDatasetId );
+  // QUERY_DEBUG_FIELDS( findDatasetId );
 
   //
   // Get tag path.
@@ -433,13 +437,13 @@ DatabaseConnection
       SQLQ_SELECT_TAG_NODE_BY_TAG_LABEL,
       QVariantList() <<
       ( label.isEmpty()
-        ? TAG_NAMES[ TAG_NAME_CACHED ] :
+        ? TAG_NAMES[ TAG_NAME_TEMPORARY ] :
         label )
     )
   );
 
   QUERY_NEXT( findTagNode );
-  QUERY_DEBUG_FIELDS( findTagNode );
+  // QUERY_DEBUG_FIELDS( findTagNode );
 
   QVariant datasetId( findDatasetId.value( 0 ) );
   //
