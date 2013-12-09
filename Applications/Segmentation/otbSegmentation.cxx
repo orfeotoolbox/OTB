@@ -164,7 +164,9 @@ private:
                           " to segmented region that may have been split by the tiling scheme. ");
 
     SetDocLimitations("In raster mode, the application can not handle large input images. Stitching step of vector mode might become slow with very large input images."
-                     " MeanShift filter results depends on threads number.");
+                     " \nMeanShift filter results depends on the number of threads used. \nWatershed and multiscale geodesic morphology segmentation will be performed on the amplitude "
+                     " of the input image.");
+
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("MeanShiftSegmentation");
 
@@ -685,7 +687,6 @@ private:
           if (segType == "mprofiles")
             {
             otbAppLogINFO(<<"Using multiscale geodesic morphology segmentation."<<std::endl);
-
 
             unsigned int profileSize = GetParameterInt("filter.mprofiles.size");
             unsigned int initialValue = GetParameterInt("filter.mprofiles.start");
