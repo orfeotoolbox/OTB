@@ -1,0 +1,78 @@
+#ifndef otb_ViewSettings_h
+#define otb_ViewSettings_h
+
+#include "itkObject.h"
+#include "itkSmartPointer.h"
+#include "itkPoint.h"
+#include "itkVector.h"
+#include "itkSize.h"
+#include "otbImageKeywordlist.h"
+
+namespace otb
+{
+
+class ViewSettings 
+  : public itk::Object
+{
+public:
+  typedef ViewSettings                                          Self;
+  typedef itk::Object                                           Superclass;
+  typedef itk::SmartPointer<Self>                               Pointer;
+  typedef itk::SmartPointer<const Self>                         ConstPointer;
+
+  typedef itk::Point<double,2>                                  PointType;
+  typedef itk::Vector<double,2>                                 SpacingType;
+  typedef itk::Size<2>                                          SizeType;
+  typedef otb::ImageKeywordlist                                 KeywordListType;
+
+  itkNewMacro(Self);
+
+  itkSetMacro(Origin,PointType);
+  itkGetConstReferenceMacro(Origin,PointType);
+
+  itkSetMacro(Spacing,SpacingType);
+  itkGetConstReferenceMacro(Spacing,SpacingType);
+  
+  itkSetMacro(ViewportSize,SizeType);
+  itkGetConstReferenceMacro(ViewportSize,SizeType);
+
+  // Order of priority is Wkt, then keywordlist, then unknown
+  itkSetStringMacro(Wkt);
+  itkGetStringMacro(Wkt);
+
+  itkSetMacro(UseProjection,bool);
+  itkGetConstReferenceMacro(UseProjection,bool);
+  itkBooleanMacro(UseProjection);
+
+  void SetKeywordList(const KeywordListType& kwl)
+  {
+    m_KeywordList = kwl;
+  }
+
+  itkGetConstReferenceMacro(KeywordList,KeywordListType);
+
+  // Retrieve the current Viewport extent
+  void GetViewportExtent(double & ulx, double & uly, double & lrx, double & lry) const;
+  
+protected:
+  ViewSettings();
+
+  virtual ~ViewSettings();
+
+private:
+  // prevent implementation
+  ViewSettings(const Self&);
+  void operator=(const Self&);
+
+  PointType   m_Origin;
+  SpacingType m_Spacing;
+  SizeType    m_ViewportSize;
+  std::string m_Wkt;
+  KeywordListType m_KeywordList;
+  bool m_UseProjection;
+
+}; // End class ViewSettings
+
+} // End namespace otb
+
+#endif
