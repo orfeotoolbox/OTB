@@ -47,7 +47,7 @@ SELECT
   node_ip1.path
 FROM node AS node_i
 JOIN node AS node_ip1 ON node_i.id=node_ip1.parent_id
-WHERE node_i.tag_id=:node_id;
+WHERE node_i.id=:node_id;
 
 -----------------------------------------------------------------------------
 -- SQLQ_SELECT_NODE_CHILD
@@ -61,4 +61,4 @@ SELECT
   node_ip1.path
 FROM node AS node_i
 JOIN node AS node_ip1 ON node_i.id=node_ip1.parent_id
-WHERE node_i.tag_id=:node_id AND node_ip1.label=:child_label;
+WHERE node_i.id=:node_id AND node_ip1.label=:child_label;

@@ -230,7 +230,7 @@ const char* SQL_QUERIES_SELECT[] = {
 "  node_ip1.path\n"
 "FROM node AS node_i\n"
 "JOIN node AS node_ip1 ON node_i.id=node_ip1.parent_id\n"
-"WHERE node_i.tag_id=:node_id\n"
+"WHERE node_i.id=:node_id\n"
 ";",
 "-----------------------------------------------------------------------------\n"
 "-- SQLQ_SELECT_NODE_CHILD\n"
@@ -244,7 +244,7 @@ const char* SQL_QUERIES_SELECT[] = {
 "  node_ip1.path\n"
 "FROM node AS node_i\n"
 "JOIN node AS node_ip1 ON node_i.id=node_ip1.parent_id\n"
-"WHERE node_i.tag_id=:node_id AND node_ip1.label=:child_label\n"
+"WHERE node_i.id=:node_id AND node_ip1.label=:child_label\n"
 ";",
 };
 

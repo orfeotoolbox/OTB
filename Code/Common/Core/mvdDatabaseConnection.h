@@ -65,7 +65,7 @@
       ( query ).lastError(),                    \
       tr( "Failed to fetch query record %1. " ) \
       .arg( ( query ).at() ),                   \
-      QString( "\n\"%1\"\nwith: %2" )           \
+      QString( "\n\"%1\"" )                     \
       .arg( ( query ).lastQuery() )             \
     );                                          \
     }
@@ -183,6 +183,14 @@ public:
   /**
    */
   QSqlQuery GetRootNode() const;
+
+  /**
+   */
+  QSqlQuery GetDatasetNode() const;
+
+  /**
+   */
+  QSqlQuery GetTemporaryNode() const;
 
   /**
    */
@@ -335,10 +343,6 @@ private:
   QSqlQuery
     ExecuteSelectQuery( SqlQueriesSelect queryId,
                         const QVariantList& params =QVariantList() ) const;
-
-  /**
-   */
-  void InsertTag( const QString& label, const QString& parent =QString() );
 
   /**
    */

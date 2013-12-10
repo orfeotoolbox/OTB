@@ -287,48 +287,13 @@ DatabaseConnection
     dbc.DirectExecuteQuery( SQL_DB_SETUP[ i ] );
     }
 
-/*
-#if defined( _DEBUG ) || 1
-  dbc.InsertTag(
-    "Quickbird", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ]
-  );
-  dbc.InsertTag( "Pleiades", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
-  dbc.InsertTag( "SPOT", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
-  dbc.InsertTag( "TERASAR", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
-  dbc.InsertTag( "WV2", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
-#endif
-
-#if defined( _DEBUG ) || 0
-  dbc.InsertTag( "Test-1", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
-
-  dbc.InsertTag( "Test-2", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
-  dbc.InsertTag( "Test-2.1", "Test-2" );
-
-  dbc.InsertTag( "Test-3", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
-  dbc.InsertTag( "Test-3.1", "Test-3" );
-  dbc.InsertTag( "Test-3.1.1", "Test-3.1" );
-  dbc.InsertTag( "Test-3.1.2", "Test-3.1" );
-  dbc.InsertTag( "Test-3.2", "Test-3" );
-
-  // dbc.InsertTag( "Duplicate", "Datasets" );
-  // dbc.InsertTag( "Duplicate", "Datasets" );
-
-  dbc.InsertTag( "Test-4", DatabaseConnection::TAG_NAMES[ TAG_NAME_ROOT ] );
-#endif
-*/
-
 #if defined( _DEBUG ) || 1
   SqlId rootNodeId(
     GetRootNodeFields( dbc.GetRootNode() )
   );
 
   SqlId datasetNodeId(
-    GetNodeFields(
-      dbc.GetNodeChild(
-        rootNodeId,
-        DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ]
-      )
-    )
+    GetNodeFields( dbc.GetDatasetNode() )
   );
 
   dbc.InsertNode( "Quickbird", datasetNodeId );
@@ -566,6 +531,28 @@ DatabaseConnection
   QUERY_NEXT( query );
 
   return query;
+}
+
+/*****************************************************************************/
+QSqlQuery
+DatabaseConnection
+::GetDatasetNode() const
+{
+  return GetNodeChild(
+    GetRootNodeFields( GetRootNode() ),
+    DatabaseConnection::TAG_NAMES[ DatabaseConnection::TAG_NAME_DATASETS ]
+  );
+}
+
+/*****************************************************************************/
+QSqlQuery
+DatabaseConnection
+::GetTemporaryNode() const
+{
+  return GetNodeChild(
+    GetNodeFields( GetDatasetNode() ),
+    DatabaseConnection::TAG_NAMES[ DatabaseConnection::TAG_NAME_TEMPORARY ]
+  );
 }
 
 /*****************************************************************************/
@@ -830,29 +817,6 @@ DatabaseConnection
   assert( query.value( 0 ).type()==QVariant::LongLong );
 
   return query.value( 0 ).toLongLong();
-}
-
-/*****************************************************************************/
-void
-DatabaseConnection
-::InsertTag( const QString& label, const QString& parent )
-{
-  ExecuteQuery(
-    QString( "INSERT INTO tag( label ) VALUES( '%1' );" ).arg( label )
-  );
-
-  // assert( FindTagIdByName( parent )!=-1 );
-
-  ExecuteQuery(
-    SQL_QUERIES_INSERT[ SQLQ_INSERT_NODE ],
-    QVariantList() <<
-    label <<
-    label <<
-    ( parent.isEmpty()
-      ? DatabaseConnection::TAG_NAMES[ TAG_NAME_ROOT ]
-      : parent
-    )
-  );
 }
 
 /*******************************************************************************/
