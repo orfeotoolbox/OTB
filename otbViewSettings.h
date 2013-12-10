@@ -56,6 +56,8 @@ public:
   
   void ScreenToViewPortTransform(const double & xscreen, const double & yscreen, double & xvp, double & yvp) const;
 
+  void Zoom(const PointType & zoomCenter,double scale = 1.1);
+
 protected:
   ViewSettings();
 

@@ -49,6 +49,24 @@ public:
 
   void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
   {
+    double posx, posy,vpx,vpy;
+
+    glfwGetCursorPos(window,&posx,&posy);
+
+    m_ViewSettings->ScreenToViewPortTransform(posx,posy,vpx,vpy);
+
+    otb::ViewSettings::PointType zoomCenter;
+    zoomCenter[0] = vpx;
+    zoomCenter[1] = vpy;
+
+    if(yoffset>0)
+      {
+      m_ViewSettings->Zoom(zoomCenter,1/1.1);
+      }
+    else if(yoffset < 0)
+      {
+      m_ViewSettings->Zoom(zoomCenter,1.1);
+      }
   }
 
   void mouse_button_callback(GLFWwindow * window, int button, int action, int mode)
@@ -63,6 +81,7 @@ public:
         // std::cout<<posx<<" "<<posy<<std::endl;
         // m_ViewSettings->ScreenToViewPortTransform(posx,posy,m_StartDragX,m_StartDragY);
 
+        // TODO: Move drag to dedicated method in ViewSettings
         otb::ViewSettings::PointType origin = m_ViewSettings->GetOrigin();
         m_OriginDragX = origin[0];
         m_OriginDragY = origin[1];
@@ -152,29 +171,33 @@ public:
       m_ViewSettings->SetOrigin(origin);
       }
 
-    // if(key == GLFW_KEY_KP_ADD )
-    //   {
-    //   m_ZoomCenterX = (m_ULX+m_LRX)*0.5;
-    //   m_ZoomCenterY = (m_ULY+m_LRY)*0.5;
+    if(key == GLFW_KEY_KP_ADD )
+      {
+      otb::ViewSettings::PointType zoomCenter;
+      zoomCenter[0] = 0.5*(ulx+lrx);
+      zoomCenter[1] = 0.5*(uly+lry);
+      m_ViewSettings->Zoom(zoomCenter,1/1.1);
 
-    //   Zoom(1/1.1);
+      }
 
-    //   }
-
-    // if(key == GLFW_KEY_KP_SUBTRACT)
-    //   {
-    //   m_ZoomCenterX = (m_ULX+m_LRX)*0.5;
-    //   m_ZoomCenterY = (m_ULY+m_LRY)*0.5;
-
-    //   Zoom(1.1);
-    //   }
+    if(key == GLFW_KEY_KP_SUBTRACT)
+      {
+      otb::ViewSettings::PointType zoomCenter;
+      zoomCenter[0] = 0.5*(ulx+lrx);
+      zoomCenter[1] = 0.5*(uly+lry);
+      m_ViewSettings->Zoom(zoomCenter,1.1);
+      }
 
     m_KeyEventLock = false;
   }
 
   void framebuffer_size_callback(GLFWwindow* window, int width, int height)
   {
+    otb::ViewSettings::SizeType size;
+    size[0] = width;
+    size[1] = height;
 
+    m_ViewSettings->SetViewportSize(size);
   }
 
 private:
@@ -255,8 +278,6 @@ int main(int argc, char * argv[])
      {
      int width, height;
      glfwGetFramebufferSize(window, &width, &height);
-
-     glView->Resize(width,height);
 
      glView->BeforeRendering();
 
