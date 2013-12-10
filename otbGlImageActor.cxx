@@ -369,14 +369,14 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
 
   itk::ContinuousIndex<double,2> cul,cur,cll,clr;
   
-  cul[0] = region.GetIndex()[0];
-  cul[1] = region.GetIndex()[1];
+  cul[0] = region.GetIndex()[0]-0.5;
+  cul[1] = region.GetIndex()[1]-0.5;
   cur = cul;
-  cur[0]+=region.GetSize()[0];
+  cur[0]+=region.GetSize()[0]+1;
   cll = cul;
-  cll[1]+=region.GetSize()[1];
+  cll[1]+=region.GetSize()[1]+1;
   clr = cur;
-  clr[1]+=region.GetSize()[1];
+  clr[1]+=region.GetSize()[1]+1;
 
   PointType iul, iur,ill,ilr;
 
