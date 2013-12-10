@@ -167,7 +167,7 @@ public:
 
   /**
    */
-  void InsertDataset( const QString& hash, const QString& label = QString() );
+  void InsertDataset( const QString& hash, SqlId nodeId =-1 );
 
   /**
    */
@@ -257,6 +257,7 @@ private:
     SQLQ_INSERT_NODE,
     SQLQ_INSERT_NODE_CHILD,
     SQLQ_INSERT_DATASET_TAG_MEMBERSHIP,
+    SQLQ_INSERT_DATASET_NODE_MEMBERSHIP,
     //
     SQLQ_INSERT_COUNT,
   };

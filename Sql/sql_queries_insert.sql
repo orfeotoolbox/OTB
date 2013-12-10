@@ -37,3 +37,10 @@ INSERT INTO dataset_tag_membership( dataset_id, tag_id )
        FROM   node
        JOIN   tag ON node.tag_id=tag.id
        WHERE  node.id IN (%2);
+
+-----------------------------------------------------------------------------
+-- SQLQ_INSERT_DATASET_NODE_MEMBERSHIP
+-- Add dataset-membership of dataset identified by :dataset_id to node
+-- identified bby :node_id.
+INSERT INTO dataset_node_membership( dataset_id, node_id )
+VALUES( :dataset_id, :node_id );

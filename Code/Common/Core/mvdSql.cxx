@@ -173,9 +173,16 @@ const char* SQL_QUERIES_INSERT[] = {
 "       JOIN   tag ON node.tag_id=tag.id\n"
 "       WHERE  node.id IN (%2)\n"
 ";",
+"-----------------------------------------------------------------------------\n"
+"-- SQLQ_INSERT_DATASET_NODE_MEMBERSHIP\n"
+"-- Add dataset-membership of dataset identified by :dataset_id to node\n"
+"-- identified bby :node_id.\n"
+"INSERT INTO dataset_node_membership( dataset_id, node_id )\n"
+"VALUES( :dataset_id, :node_id )\n"
+";",
 };
 
-const int SQL_QUERIES_INSERT_COUNT = 3;
+const int SQL_QUERIES_INSERT_COUNT = 4;
 
 /****************************************************************************/
 //

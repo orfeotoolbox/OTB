@@ -422,7 +422,7 @@ DatabaseConnection
 /*****************************************************************************/
 void
 DatabaseConnection
-::InsertDataset( const QString& hash, const QString& label )
+::InsertDataset( const QString& hash, SqlId nodeId )
 {
   //
   // Insert dataset entry.
@@ -433,6 +433,7 @@ DatabaseConnection
 
   //
   // Get dataset ID.
+  // TODO: Write accessor method.
   QSqlQuery findDatasetId(
     ExecuteQuery(
       QString( "SELECT dataset.id FROM dataset WHERE dataset.hash='%1'" )
@@ -443,44 +444,41 @@ DatabaseConnection
   QUERY_NEXT( findDatasetId );
   // QUERY_DEBUG_FIELDS( findDatasetId );
 
+  QVariant datasetId( findDatasetId.value( 0 ) );
+
+
   //
   // Get tag path.
-  QSqlQuery findTagNode(
-    ExecuteSelectQuery(
-      SQLQ_SELECT_NODE_BY_TAG_LABEL,
-      QVariantList() <<
-      ( label.isEmpty()
-        ? DatabaseConnection::TAG_NAMES[ TAG_NAME_TEMPORARY ] :
-        label )
-    )
+  QString path;
+
+  SqlId id = GetNodeFields(
+    ( nodeId<0
+      ? GetTemporaryNode()
+      : GetNode( nodeId )
+    ),
+    NULL, NULL, NULL, NULL, &path
   );
 
-  QUERY_NEXT( findTagNode );
-  // QUERY_DEBUG_FIELDS( findTagNode );
+  QStringList nodeList( path.split( "/" ) );
+  qDebug() << "Discard:" << nodeList.first();
+  nodeList.pop_front();
+  nodeList.append( QString( "%1" ).arg( id ) );
+  qDebug() << nodeList;
 
-  QVariant datasetId( findDatasetId.value( 0 ) );
   //
-  QVariant id( findTagNode.value( 0 ) );
-  QVariant path( findTagNode.value( 4 ) );
-
-  QStringList tagNodeList( path.toString().split( "/" ) );
-  qDebug() << "Discard:" << tagNodeList.first();
-  tagNodeList.pop_front();
-  tagNodeList.append( id.toString() );
-  qDebug() << tagNodeList;
-
+  // Add dataset tag membership.
   ExecuteQuery(
     QString( SQL_QUERIES_INSERT[ SQLQ_INSERT_DATASET_TAG_MEMBERSHIP ] )
     .arg( datasetId.toString() )
-    .arg( tagNodeList.join( "," ) )
+    .arg( nodeList.join( "," ) )
   );
 
-  /*
-  BatchQuery(
-    SQL_QUERIES_INSERT[ SQLQ_INSERT_DATASET_MEMBERSHIP ],
-    QVariantList() << datasetId << QVariant( tagNodeList )
+  //
+  // Add dataset node membership.
+  ExecuteQuery(
+    QString( SQL_QUERIES_INSERT[ SQLQ_INSERT_DATASET_NODE_MEMBERSHIP ] ),
+    QVariantList() << datasetId << id
   );
-  */
 }
 
 /*****************************************************************************/
