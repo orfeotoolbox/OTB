@@ -18,22 +18,24 @@ CREATE TABLE tag
 CREATE UNIQUE INDEX idx_tag_label ON tag( label );
 
 -----------------------------------------------------------------------------
-CREATE TABLE tag_node
+CREATE TABLE node
 (
         id        INTEGER PRIMARY KEY AUTOINCREMENT,
         parent_id INTEGER,
         tag_id    INTEGER,
+        label     TEXT,
         level     INTEGER,
         path      TEXT,
-        FOREIGN KEY( parent_id ) REFERENCES tag_node( id ),
+        FOREIGN KEY( parent_id ) REFERENCES node( id ),
         FOREIGN KEY( tag_id )  REFERENCES tag( id )
 );
 
-CREATE INDEX idx_tag_node_tid ON tag_node( tag_id );
-CREATE INDEX idx_tag_node_pid ON tag_node( parent_id );
+CREATE INDEX idx_node_tid ON node( tag_id );
+CREATE INDEX idx_node_label ON node( label );
+CREATE INDEX idx_node_pid ON node( parent_id );
 
 -----------------------------------------------------------------------------
-CREATE TABLE dataset_membership(
+CREATE TABLE dataset_tag_membership(
        dataset_id       INTEGER,
        tag_id           INTEGER,
        PRIMARY KEY( dataset_id, tag_id ),
@@ -41,8 +43,26 @@ CREATE TABLE dataset_membership(
        FOREIGN KEY( tag_id ) REFERENCES tag( id ) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_ds_membership_dataset_id ON dataset_membership( dataset_id );
-CREATE INDEX idx_ds_membership_dataset_tag_id ON dataset_membership( tag_id );
+CREATE INDEX idx_ds_tag_membership_dataset_id
+ON dataset_tag_membership( dataset_id );
+
+CREATE INDEX idx_ds_tag_membership_tag_id
+ON dataset_tag_membership( tag_id );
+
+-----------------------------------------------------------------------------
+CREATE TABLE dataset_node_membership(
+       dataset_id       INTEGER,
+       node_id      INTEGER,
+       PRIMARY KEY( dataset_id, node_id ),
+       FOREIGN KEY( dataset_id ) REFERENCES dataset( id ) ON DELETE CASCADE,
+       FOREIGN KEY( node_id ) REFERENCES node( id ) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_ds_node_membership_dataset_id
+ON dataset_node_membership( dataset_id );
+
+CREATE INDEX idx_ds_node_membership_node_id
+ON dataset_node_membership( node_id );
 
 -----------------------------------------------------------------------------
 CREATE TABLE dataset_attribute

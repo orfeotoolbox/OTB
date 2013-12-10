@@ -52,7 +52,7 @@
 /*****************************************************************************/
 /* MACROS                                                                    */
 
-#define USE_DEBUG 0
+#define USE_DEBUG 1
 #define USE_DEBUG_BINDINGS 1
 #define USE_DEBUG_SIZE 0
 #define USE_DEBUG_VALUES 1
@@ -238,8 +238,8 @@ private:
     //
     SQLQ_INSERT_NONE = -1,
     //
-    SQLQ_INSERT_TAG_NODE = 0,
-    SQLQ_INSERT_DATASET_MEMBERSHIP,
+    SQLQ_INSERT_NODE = 0,
+    SQLQ_INSERT_DATASET_TAG_MEMBERSHIP,
     //
     SQLQ_INSERT_COUNT,
   };
@@ -251,9 +251,9 @@ private:
     //
     SQLQ_SELECT_NONE = -1,
     //
-    SQLQ_SELECT_TAG_NODE_BY_TAG_LABEL = 0,
-    SQLQ_SELECT_TAG_NODE_ROOT,
-    SQLQ_SELECT_TAG_NODE_CHILDREN,
+    SQLQ_SELECT_NODE_BY_TAG_LABEL = 0,
+    SQLQ_SELECT_NODE_ROOT,
+    SQLQ_SELECT_NODE_CHILDREN,
     //
     SQLQ_SELECT_COUNT,
   };

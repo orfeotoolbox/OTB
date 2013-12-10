@@ -287,20 +287,22 @@ DatabaseConnection
     }
 
 #if defined( _DEBUG ) || 1
-  dbc.InsertTag( "Quickbird", "Datasets" );
-  dbc.InsertTag( "Pleiades", "Datasets" );
-  dbc.InsertTag( "SPOT", "Datasets" );
-  dbc.InsertTag( "TERASAR", "Datasets" );
-  dbc.InsertTag( "WV2", "Datasets" );
+  dbc.InsertTag(
+    "Quickbird", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ]
+  );
+  dbc.InsertTag( "Pleiades", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
+  dbc.InsertTag( "SPOT", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
+  dbc.InsertTag( "TERASAR", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
+  dbc.InsertTag( "WV2", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
 #endif
 
 #if defined( _DEBUG ) || 0
-  dbc.InsertTag( "Test-1", "Datasets" );
+  dbc.InsertTag( "Test-1", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
 
-  dbc.InsertTag( "Test-2", "Datasets" );
+  dbc.InsertTag( "Test-2", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
   dbc.InsertTag( "Test-2.1", "Test-2" );
 
-  dbc.InsertTag( "Test-3", "Datasets" );
+  dbc.InsertTag( "Test-3", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ] );
   dbc.InsertTag( "Test-3.1", "Test-3" );
   dbc.InsertTag( "Test-3.1.1", "Test-3.1" );
   dbc.InsertTag( "Test-3.1.2", "Test-3.1" );
@@ -311,7 +313,7 @@ DatabaseConnection
   dbc.InsertTag( "Duplicate", "Datasets" );
   */
 
-  dbc.InsertTag( "Test-4", "Root" );
+  dbc.InsertTag( "Test-4", DatabaseConnection::TAG_NAMES[ TAG_NAME_ROOT ] );
 #endif
 }
 
@@ -434,10 +436,10 @@ DatabaseConnection
   // Get tag path.
   QSqlQuery findTagNode(
     ExecuteSelectQuery(
-      SQLQ_SELECT_TAG_NODE_BY_TAG_LABEL,
+      SQLQ_SELECT_NODE_BY_TAG_LABEL,
       QVariantList() <<
       ( label.isEmpty()
-        ? TAG_NAMES[ TAG_NAME_TEMPORARY ] :
+        ? DatabaseConnection::TAG_NAMES[ TAG_NAME_TEMPORARY ] :
         label )
     )
   );
@@ -457,7 +459,7 @@ DatabaseConnection
   qDebug() << tagNodeList;
 
   ExecuteQuery(
-    QString( SQL_QUERIES_INSERT[ SQLQ_INSERT_DATASET_MEMBERSHIP ] )
+    QString( SQL_QUERIES_INSERT[ SQLQ_INSERT_DATASET_TAG_MEMBERSHIP ] )
     .arg( datasetId.toString() )
     .arg( tagNodeList.join( "," ) )
   );
@@ -513,7 +515,7 @@ DatabaseConnection
 {
   QSqlQuery query(
     ExecuteSelectQuery(
-      SQLQ_SELECT_TAG_NODE_ROOT,
+      SQLQ_SELECT_NODE_ROOT,
       QVariantList()
     )
   );
@@ -530,7 +532,7 @@ DatabaseConnection
 {
   return
     ExecuteSelectQuery(
-      SQLQ_SELECT_TAG_NODE_CHILDREN,
+      SQLQ_SELECT_NODE_CHILDREN,
       QVariantList() << tagNodeId
     );
 }
@@ -547,8 +549,14 @@ DatabaseConnection
   // assert( FindTagIdByName( parent )!=-1 );
 
   ExecuteQuery(
-    SQL_QUERIES_INSERT[ SQLQ_INSERT_TAG_NODE ],
-    QVariantList() << label << ( parent.isEmpty() ? "Root" : parent )
+    SQL_QUERIES_INSERT[ SQLQ_INSERT_NODE ],
+    QVariantList() <<
+    label <<
+    label <<
+    ( parent.isEmpty()
+      ? DatabaseConnection::TAG_NAMES[ TAG_NAME_ROOT ]
+      : parent
+    )
   );
 }
 
