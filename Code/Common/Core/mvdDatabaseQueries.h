@@ -69,23 +69,34 @@ namespace mvd
 
 /**
  */
+inline
 SqlId
-GetRootTagNodeFields( const QSqlQuery& query,
-                      QString* label =NULL,
-                      SqlId* parentId =NULL,
-                      SqlId* tagId =NULL,
-                      int* level =NULL,
-                      QString* path =NULL );
+GetRootNodeFields( const QSqlQuery& query,
+                   QString* label =NULL,
+                   SqlId* parentId =NULL,
+                   SqlId* tagId =NULL,
+                   int* level =NULL,
+                   QString* path =NULL );
 
 /**
  */
 SqlId
-GetChildTagNodeFields( const QSqlQuery& query,
-                       QString* label =NULL,
-                       SqlId* parentId =NULL,
-                       SqlId* tagId =NULL,
-                       int* level =NULL,
-                       QString* path =NULL );
+GetNodeFields( const QSqlQuery& query,
+               QString* label =NULL,
+               SqlId* parentId =NULL,
+               SqlId* tagId =NULL,
+               int* level =NULL,
+               QString* path =NULL );
+
+/**
+ */
+SqlId
+GetChildNodeFields( const QSqlQuery& query,
+                    QString* label =NULL,
+                    SqlId* parentId =NULL,
+                    SqlId* tagId =NULL,
+                    int* level =NULL,
+                    QString* path =NULL );
 
 //
 // Internal classes pre-declaration.
@@ -181,6 +192,19 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+SqlId
+GetRootNodeFields( const QSqlQuery& query,
+                   QString* label,
+                   SqlId* parentId,
+                   SqlId* tagId,
+                   int* level,
+                   QString* path )
+{
+  return GetNodeFields( query, label, parentId, tagId, level, path );
+}
 
 } // end namespace 'mvd'
 

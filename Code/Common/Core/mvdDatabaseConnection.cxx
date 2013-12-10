@@ -40,6 +40,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdDatabaseError.h"
+#include "Core/mvdDatabaseQueries.h"
 #include "Core/mvdI18nCoreApplication.h"
 
 namespace mvd
@@ -286,6 +287,7 @@ DatabaseConnection
     dbc.DirectExecuteQuery( SQL_DB_SETUP[ i ] );
     }
 
+/*
 #if defined( _DEBUG ) || 1
   dbc.InsertTag(
     "Quickbird", DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ]
@@ -308,12 +310,56 @@ DatabaseConnection
   dbc.InsertTag( "Test-3.1.2", "Test-3.1" );
   dbc.InsertTag( "Test-3.2", "Test-3" );
 
-  /*
-  dbc.InsertTag( "Duplicate", "Datasets" );
-  dbc.InsertTag( "Duplicate", "Datasets" );
-  */
+  // dbc.InsertTag( "Duplicate", "Datasets" );
+  // dbc.InsertTag( "Duplicate", "Datasets" );
 
   dbc.InsertTag( "Test-4", DatabaseConnection::TAG_NAMES[ TAG_NAME_ROOT ] );
+#endif
+*/
+
+#if defined( _DEBUG ) || 1
+  SqlId rootNodeId(
+    GetRootNodeFields( dbc.GetRootNode() )
+  );
+
+  SqlId datasetNodeId(
+    GetNodeFields(
+      dbc.GetNodeChild(
+        rootNodeId,
+        DatabaseConnection::TAG_NAMES[ TAG_NAME_DATASETS ]
+      )
+    )
+  );
+
+  dbc.InsertNode( "Quickbird", datasetNodeId );
+  dbc.InsertNode( "Pleiades", datasetNodeId );
+  dbc.InsertNode( "SPOT", datasetNodeId );
+  dbc.InsertNode( "TERASAR", datasetNodeId );
+  dbc.InsertNode( "WV2", datasetNodeId );
+#endif
+
+#if defined( _DEBUG ) || 0
+  // TEST-1
+  dbc.InsertNode( "Test-1", datasetNodeId );
+
+  // TEST-2
+  SqlId test2NodeId = -1;
+  dbc.InsertNode( "Test-2", datasetNodeId, &test2NodeId );
+  dbc.InsertNode( "Test-2.1", test2NodeId );
+  dbc.InsertNode(
+    DatabaseConnection::TAG_NAMES[ TAG_NAME_TEMPORARY ], test2NodeId
+  );
+
+  // TEST-3
+  SqlId test3NodeId = -1;
+  dbc.InsertNode( "Test-3", datasetNodeId, &test3NodeId );
+  SqlId test31NodeId = -1;
+  dbc.InsertNode( "Test-3.1", test3NodeId, &test31NodeId );
+  dbc.InsertNode( "Test-3.1.1", test31NodeId );
+  dbc.InsertNode( "Test-3.1.2", test31NodeId );
+  dbc.InsertNode( "Test-3.2", test3NodeId );
+
+  dbc.InsertNode( "Test-4", rootNodeId );
 #endif
 }
 
@@ -511,13 +557,10 @@ DatabaseConnection
 /*****************************************************************************/
 QSqlQuery
 DatabaseConnection
-::GetRootTagNode() const
+::GetRootNode() const
 {
   QSqlQuery query(
-    ExecuteSelectQuery(
-      SQLQ_SELECT_NODE_ROOT,
-      QVariantList()
-    )
+    ExecuteSelectQuery( SQLQ_SELECT_NODE_ROOT )
   );
 
   QUERY_NEXT( query );
@@ -528,36 +571,69 @@ DatabaseConnection
 /*****************************************************************************/
 QSqlQuery
 DatabaseConnection
-::GetTagNodeChildren( SqlId tagNodeId ) const
+::GetNode( SqlId id ) const
 {
-  return
-    ExecuteSelectQuery(
-      SQLQ_SELECT_NODE_CHILDREN,
-      QVariantList() << tagNodeId
-    );
+  QSqlQuery query(
+    ExecuteSelectQuery( SQLQ_SELECT_NODE )
+  );
+
+  QUERY_NEXT( query );
+
+  return query;
 }
 
 /*****************************************************************************/
 void
 DatabaseConnection
-::InsertTag( const QString& label, const QString& parent )
+::InsertNode( const QString& label, SqlId parentId, SqlId* id )
 {
+  SqlId tagId = FindTagIdByLabel( label );
+
+  if( tagId<0 )
+    {
+    ExecuteQuery(
+      QString( "INSERT INTO tag( label ) VALUES( '%1' );" ).arg( label )
+    );
+    }
+
   ExecuteQuery(
-    QString( "INSERT INTO tag( label ) VALUES( '%1' );" ).arg( label )
+    SQL_QUERIES_INSERT[ SQLQ_INSERT_NODE_CHILD ],
+    QVariantList() << label << label << parentId
   );
 
-  // assert( FindTagIdByName( parent )!=-1 );
+  if( id!=NULL )
+    {
+    *id = GetNodeFields( GetNodeChild( parentId, label ) );
+    }
+}
 
-  ExecuteQuery(
-    SQL_QUERIES_INSERT[ SQLQ_INSERT_NODE ],
-    QVariantList() <<
-    label <<
-    label <<
-    ( parent.isEmpty()
-      ? DatabaseConnection::TAG_NAMES[ TAG_NAME_ROOT ]
-      : parent
+/*****************************************************************************/
+QSqlQuery
+DatabaseConnection
+::GetNodeChildren( SqlId nodeId ) const
+{
+  return
+    ExecuteSelectQuery(
+      SQLQ_SELECT_NODE_CHILDREN,
+      QVariantList() << nodeId
+    );
+}
+
+/*****************************************************************************/
+QSqlQuery
+DatabaseConnection
+::GetNodeChild( SqlId nodeId, const QString& childLabel ) const
+{
+  QSqlQuery query(
+    ExecuteSelectQuery(
+      SQLQ_SELECT_NODE_CHILD,
+      QVariantList() << nodeId << childLabel
     )
   );
+
+  QUERY_NEXT( query );
+
+  return query;
 }
 
 /*****************************************************************************/
@@ -732,10 +808,12 @@ DatabaseConnection
     )
   );
 
+  /*
   assert( query.size()==0 || query.size()==1 );
 
   if( query.size()==0 )
     return -1;
+  */
 
   /*
   if( query.size()!=1 )
@@ -747,14 +825,34 @@ DatabaseConnection
   */
 
   if( !query.next() )
-    throw DatabaseError(
-      query.lastError(),
-      tr( "Failed to fetch tag-id by tag-label: " )
-    );
+    return -1;
 
-  assert( query.value( 0 ).type()==QVariant::Int );
+  assert( query.value( 0 ).type()==QVariant::LongLong );
 
-  return query.value( 0 ).toInt();
+  return query.value( 0 ).toLongLong();
+}
+
+/*****************************************************************************/
+void
+DatabaseConnection
+::InsertTag( const QString& label, const QString& parent )
+{
+  ExecuteQuery(
+    QString( "INSERT INTO tag( label ) VALUES( '%1' );" ).arg( label )
+  );
+
+  // assert( FindTagIdByName( parent )!=-1 );
+
+  ExecuteQuery(
+    SQL_QUERIES_INSERT[ SQLQ_INSERT_NODE ],
+    QVariantList() <<
+    label <<
+    label <<
+    ( parent.isEmpty()
+      ? DatabaseConnection::TAG_NAMES[ TAG_NAME_ROOT ]
+      : parent
+    )
+  );
 }
 
 /*******************************************************************************/

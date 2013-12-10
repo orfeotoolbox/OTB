@@ -182,15 +182,23 @@ public:
 
   /**
    */
-  QSqlQuery GetRootTagNode() const;
+  QSqlQuery GetRootNode() const;
 
   /**
    */
-  QSqlQuery GetTagNodeChildren( SqlId tagNodeId ) const;
+  QSqlQuery GetNode( SqlId id ) const;
 
   /**
    */
-  void InsertTag( const QString& label, const QString& parent =QString() );
+  void InsertNode( const QString& label, SqlId parentId, SqlId* id =NULL );
+
+  /**
+   */
+  QSqlQuery GetNodeChildren( SqlId nodeId ) const;
+
+  /**
+   */
+  QSqlQuery GetNodeChild( SqlId nodeId, const QString& childLabel ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -238,7 +246,8 @@ private:
     //
     SQLQ_INSERT_NONE = -1,
     //
-    SQLQ_INSERT_NODE = 0,
+    SQLQ_INSERT_NODE,
+    SQLQ_INSERT_NODE_CHILD,
     SQLQ_INSERT_DATASET_TAG_MEMBERSHIP,
     //
     SQLQ_INSERT_COUNT,
@@ -253,7 +262,9 @@ private:
     //
     SQLQ_SELECT_NODE_BY_TAG_LABEL = 0,
     SQLQ_SELECT_NODE_ROOT,
+    SQLQ_SELECT_NODE,
     SQLQ_SELECT_NODE_CHILDREN,
+    SQLQ_SELECT_NODE_CHILD,
     //
     SQLQ_SELECT_COUNT,
   };
@@ -321,8 +332,13 @@ private:
 
   /**
    */
-  QSqlQuery ExecuteSelectQuery( SqlQueriesSelect queryId,
-                                const QVariantList& params ) const;
+  QSqlQuery
+    ExecuteSelectQuery( SqlQueriesSelect queryId,
+                        const QVariantList& params =QVariantList() ) const;
+
+  /**
+   */
+  void InsertTag( const QString& label, const QString& parent =QString() );
 
   /**
    */

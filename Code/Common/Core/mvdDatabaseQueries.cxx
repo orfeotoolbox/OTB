@@ -66,59 +66,12 @@ namespace
 /* FUNCTIONS IMPLEMENTATION SECTION                                          */
 /*****************************************************************************/
 SqlId
-GetRootTagNodeFields( const QSqlQuery& query,
-                      QString* label,
-                      SqlId* parentId,
-                      SqlId* tagId,
-                      int* level,
-                      QString* path )
-{
-  QUERY_DEBUG_FIELDS( query );
-
-
-  if( parentId!=NULL )
-    {
-    assert( query.value( 1 ).type()==QVariant::LongLong );
-    *parentId = query.value( 1 ).toLongLong();
-    }
-
-  if( tagId!=NULL )
-    {
-    assert( query.value( 2 ).type()==QVariant::LongLong );
-    *tagId = query.value( 3 ).toLongLong();
-    }
-
-  if( level!=NULL )
-    {
-    assert( query.value( 3 ).type()==QVariant::LongLong );
-    *level = static_cast< int >( query.value( 3 ).toLongLong() );
-    }
-
-  if( path!=NULL )
-    {
-    assert( query.value( 4 ).type()==QVariant::String );
-    *path = query.value( 4 ).toString();
-    }
-
-  if( label!=NULL )
-    {
-    assert( query.value( 5 ).type()==QVariant::String );
-    *label = query.value( 5 ).toString();
-    }
-
-
-  assert( query.value( 0 ).type()==QVariant::LongLong );
-  return query.value( 0 ).toLongLong();
-}
-
-/*****************************************************************************/
-SqlId
-GetChildTagNodeFields( const QSqlQuery& query,
-                       QString* label,
-                       SqlId* parentId,
-                       SqlId* tagId,
-                       int* level,
-                       QString* path )
+GetNodeFields( const QSqlQuery& query,
+               QString* label,
+               SqlId* parentId,
+               SqlId* tagId,
+               int* level,
+               QString* path )
 {
   QUERY_DEBUG_FIELDS( query );
 
@@ -135,22 +88,69 @@ GetChildTagNodeFields( const QSqlQuery& query,
     *tagId = query.value( 2 ).toLongLong();
     }
 
+  if( label!=NULL )
+    {
+    assert( query.value( 3 ).type()==QVariant::String );
+    *label = query.value( 3 ).toString();
+    }
+
   if( level!=NULL )
     {
-    assert( query.value( 3 ).type()==QVariant::LongLong );
-    *level = query.value( 3 ).toInt();
+    assert( query.value( 4 ).type()==QVariant::LongLong );
+    *level = static_cast< int >( query.value( 4 ).toLongLong() );
     }
 
   if( path!=NULL )
     {
-    assert( query.value( 4 ).type()==QVariant::String );
-    *path = query.value( 4 ).toString();
+    assert( query.value( 5 ).type()==QVariant::String );
+    *path = query.value( 5 ).toString();
+    }
+
+
+  assert( query.value( 0 ).type()==QVariant::LongLong );
+  return query.value( 0 ).toLongLong();
+}
+
+/*****************************************************************************/
+SqlId
+GetChildNodeFields( const QSqlQuery& query,
+                    QString* label,
+                    SqlId* parentId,
+                    SqlId* tagId,
+                    int* level,
+                    QString* path )
+{
+  QUERY_DEBUG_FIELDS( query );
+
+
+  if( parentId!=NULL )
+    {
+    assert( query.value( 1 ).type()==QVariant::LongLong );
+    *parentId = query.value( 1 ).toLongLong();
+    }
+
+  if( tagId!=NULL )
+    {
+    assert( query.value( 2 ).type()==QVariant::LongLong );
+    *tagId = query.value( 2 ).toLongLong();
     }
 
   if( label!=NULL )
     {
+    assert( query.value( 3 ).type()==QVariant::String );
+    *label = query.value( 3 ).toString();
+    }
+
+  if( level!=NULL )
+    {
+    assert( query.value( 4 ).type()==QVariant::LongLong );
+    *level = query.value( 4 ).toInt();
+    }
+
+  if( path!=NULL )
+    {
     assert( query.value( 5 ).type()==QVariant::String );
-    *label = query.value( 5 ).toString();
+    *path = query.value( 5 ).toString();
     }
 
   assert( query.value( 0 ).type()==QVariant::LongLong );

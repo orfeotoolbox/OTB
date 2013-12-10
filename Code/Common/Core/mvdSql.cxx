@@ -150,6 +150,19 @@ const char* SQL_QUERIES_INSERT[] = {
 "        WHERE  node.label=:parent_label\n"
 ";",
 "-----------------------------------------------------------------------------\n"
+"-- SQLQ_INSERT_NODE_CHILD\n"
+"-- Insert node labelled as :child_label under parent node :parent_id\n"
+"INSERT INTO node( parent_id, tag_id, label, level, path )\n"
+"        SELECT -- ID (automatic)\n"
+"               node.id AS parent_id,\n"
+"               (SELECT tag.id FROM tag WHERE tag.label=:child_label) AS tag_id,\n"
+"               :child_label AS label,\n"
+"               node.level+1 AS level,\n"
+"               rtrim( node.path, '/' ) || '/' || node.id AS path\n"
+"        FROM   node\n"
+"        WHERE  node.id=:parent_id\n"
+";",
+"-----------------------------------------------------------------------------\n"
 "-- SQLQ_INSERT_DATASET_TAG_MEMBERSHIP\n"
 "-- Add dataset-membership of dataset %1 to each tag related to\n"
 "-- %2 tag-node path list of the form (<id_0>, ...).\n"
@@ -162,7 +175,7 @@ const char* SQL_QUERIES_INSERT[] = {
 ";",
 };
 
-const int SQL_QUERIES_INSERT_COUNT = 2;
+const int SQL_QUERIES_INSERT_COUNT = 3;
 
 /****************************************************************************/
 //
@@ -170,7 +183,7 @@ const int SQL_QUERIES_INSERT_COUNT = 2;
 const char* SQL_QUERIES_SELECT[] = {
 "-----------------------------------------------------------------------------\n"
 "-- SQLQ_SELECT_NODE_BY_TAG_LABEL\n"
-"-- Find tag-node given tag-label.\n"
+"-- Find node given tag label.\n"
 "SELECT node.id,\n"
 "       node.parent_id,\n"
 "       node.tag_id,\n"
@@ -183,35 +196,57 @@ const char* SQL_QUERIES_SELECT[] = {
 ";",
 "-----------------------------------------------------------------------------\n"
 "-- SQLQ_SELECT_NODE_ROOT\n"
-"-- Select root tag-node.\n"
+"-- Find root node.\n"
 "SELECT node.id,\n"
 "       node.parent_id,\n"
 "       node.tag_id,\n"
+"       node.label,\n"
 "       node.level,\n"
-"       node.path,\n"
-"       tag.label\n"
+"       node.path\n"
 "FROM node\n"
-"JOIN tag ON node.tag_id=tag.id\n"
 "WHERE (node.parent_id IS NULL) AND (node.level=0)\n"
 ";",
 "-----------------------------------------------------------------------------\n"
+"-- SQLQ_SELECT_NODE\n"
+"-- Find root node.\n"
+"SELECT node.id,\n"
+"       node.parent_id,\n"
+"       node.tag_id,\n"
+"       node.label,\n"
+"       node.level,\n"
+"       node.path\n"
+"FROM node\n"
+"WHERE node.id=:id\n"
+";",
+"-----------------------------------------------------------------------------\n"
 "-- SQLQ_SELECT_NODE_CHILDREN\n"
-"-- List direct children of tag-node identified by :node_id\n"
+"-- List direct children of node identified by :node_id\n"
 "SELECT\n"
-"  -- node_i.*, tag_i.label,\n"
 "  node_ip1.id,\n"
 "  node_ip1.parent_id,\n"
 "  node_ip1.tag_id,\n"
+"  node_ip1.label,\n"
 "  node_ip1.level,\n"
-"  node_ip1.path,\n"
-"  tag_ip1.label\n"
+"  node_ip1.path\n"
 "FROM node AS node_i\n"
 "JOIN node AS node_ip1 ON node_i.id=node_ip1.parent_id\n"
-"JOIN tag AS tag_i ON node_i.tag_id=tag_i.id\n"
-"JOIN tag AS tag_ip1 ON node_ip1.tag_id=tag_ip1.id\n"
 "WHERE node_i.tag_id=:node_id\n"
+";",
+"-----------------------------------------------------------------------------\n"
+"-- SQLQ_SELECT_NODE_CHILD\n"
+"-- Find child labelled :child_label of node identified by :node_id\n"
+"SELECT\n"
+"  node_ip1.id,\n"
+"  node_ip1.parent_id,\n"
+"  node_ip1.tag_id,\n"
+"  node_ip1.label,\n"
+"  node_ip1.level,\n"
+"  node_ip1.path\n"
+"FROM node AS node_i\n"
+"JOIN node AS node_ip1 ON node_i.id=node_ip1.parent_id\n"
+"WHERE node_i.tag_id=:node_id AND node_ip1.label=:child_label\n"
 ";",
 };
 
-const int SQL_QUERIES_SELECT_COUNT = 3;
+const int SQL_QUERIES_SELECT_COUNT = 5;
 } // End of anonymous namespace.

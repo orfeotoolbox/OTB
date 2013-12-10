@@ -303,9 +303,9 @@ DatabaseBrowserController
     }
 
   QSqlQuery query(
-    db->GetTagNodeChildren(
+    db->GetNodeChildren(
       tagNodeId < 0
-      ? GetRootTagNodeFields( db->GetRootTagNode() )
+      ? GetRootNodeFields( db->GetRootNode() )
       : tagNodeId
     )
   );
@@ -314,7 +314,7 @@ DatabaseBrowserController
     {
     QString label;
 
-    QVariant id( GetChildTagNodeFields( query, &label ) );
+    QVariant id( GetChildNodeFields( query, &label ) );
 
     TreeWidgetItemMap::iterator it(
       nodes.find( id.toString() )
