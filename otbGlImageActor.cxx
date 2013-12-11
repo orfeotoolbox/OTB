@@ -116,8 +116,9 @@ void GlImageActor::UpdateData()
   // corresponding tiles
 
   // First compute needed tiles
-  unsigned int nbTilesX = vcl_ceil(static_cast<double>(requested.GetSize()[0])/m_TileSize);
-  unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
+  unsigned int nbTilesX = vcl_ceil(static_cast<double>(requested.GetIndex()[0] + requested.GetSize()[0])/m_TileSize) -vcl_floor(static_cast<double>(requested.GetIndex()[0])/m_TileSize);
+  unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetIndex()[1] + requested.GetSize()[1])/m_TileSize) -vcl_floor(static_cast<double>(requested.GetIndex()[1])/m_TileSize);
+  //unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
 
