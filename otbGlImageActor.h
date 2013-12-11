@@ -59,6 +59,20 @@ public:
   itkGetConstReferenceMacro(UseShader,bool);
   itkBooleanMacro(UseShader);
 
+  itkSetMacro(MinRed,double);
+  itkSetMacro(MinGreen,double);
+  itkSetMacro(MinBlue,double);
+  itkGetMacro(MinRed,double);
+  itkGetMacro(MinGreen,double);
+  itkGetMacro(MinBlue,double);
+
+  itkSetMacro(MaxRed,double);
+  itkSetMacro(MaxGreen,double);
+  itkSetMacro(MaxBlue,double);
+  itkGetMacro(MaxRed,double);
+  itkGetMacro(MaxGreen,double);
+  itkGetMacro(MaxBlue,double);  
+
 protected:
   GlImageActor();
   
@@ -166,6 +180,7 @@ private:
 
   PointType   m_Origin;
   SpacingType m_Spacing;
+  RegionType  m_LargestRegion;
 
   bool m_UseShader;
   

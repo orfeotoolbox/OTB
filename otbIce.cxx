@@ -17,6 +17,11 @@ public:
     m_ViewSettings = settings;
   }
 
+  void SetActors(const std::vector<otb::GlImageActor::Pointer> & actors)
+  {
+    m_Actors = actors;
+  }
+
   bool IsDragging() const
   {
     return m_Drag;
@@ -128,12 +133,13 @@ public:
 
   void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
   {
-    if(m_KeyEventLock)
+    // We get events twice for some reason
+    if(m_KeyFilter % 2 == 1)
       {
+      ++m_KeyFilter;
       return;
       }
-    
-    m_KeyEventLock = true;
+    ++m_KeyFilter;
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
       glfwSetWindowShouldClose(window, GL_TRUE);
@@ -187,7 +193,25 @@ public:
       m_ViewSettings->Zoom(zoomCenter,1.1);
       }
 
-    m_KeyEventLock = false;
+    if(key == GLFW_KEY_1)
+      {
+      std::cout<<"Key 1 actors size: "<<m_Actors.size()<<std::endl;
+      std::cout<<"Visible: "<<m_Actors[0]->GetVisible()<<std::endl;
+      if(m_Actors.size() > 0)
+        {
+        m_Actors[0]->SetVisible(!m_Actors[0]->GetVisible());
+        }
+      }
+    if(key == GLFW_KEY_2)
+      {
+      std::cout<<"Key 2 actors size: "<<m_Actors.size()<<std::endl;
+      std::cout<<"Visible: "<<m_Actors[1]->GetVisible()<<std::endl;
+      if(m_Actors.size() > 1)
+        {
+        m_Actors[1]->SetVisible(!m_Actors[1]->GetVisible());
+        }
+
+      }
   }
 
   void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -200,16 +224,21 @@ public:
   }
 
 private:
-  bool m_KeyEventLock;
+  unsigned int m_KeyFilter;
 
   Manipulator()
-  {}
+  {
+    m_KeyFilter=0;
+  }
 
   Manipulator(Manipulator const&);
   void operator=(Manipulator const&);
 
   otb::ViewSettings::Pointer m_ViewSettings;
 
+  std::vector<otb::GlImageActor::Pointer> m_Actors;
+
+  otb::GlView::Pointer m_View;
   
   bool   m_Drag;
   double m_StartDragX;
@@ -262,22 +291,52 @@ int main(int argc, char * argv[])
 
    Manipulator::GetInstance().SetViewSettings(glView->GetSettings());
 
-   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
-   actor->Initialize(argv[1]);
-   actor->SetVisible(true);
-   actor->UseShaderOn();
-   std::string label = glView->AddActor(actor);
+   double min = atof(argv[1]);
+   double max = atof(argv[2]);
+
+   std::vector<otb::GlImageActor::Pointer> actors;
+
+   otb::GlImageActor::Pointer mainActor = otb::GlImageActor::New();
+   mainActor->Initialize(argv[3]);
+   mainActor->SetVisible(true);
+   mainActor->UseShaderOn();
+   mainActor->SetMinRed(min);
+   mainActor->SetMinGreen(min);
+   mainActor->SetMinBlue(min);
+   mainActor->SetMaxRed(max);
+   mainActor->SetMaxGreen(max);
+   mainActor->SetMaxBlue(max);
+   glView->AddActor(mainActor);
 
    // Initialize view with respect to first actor
-   glView->GetSettings()->SetOrigin(actor->GetOrigin());
-   glView->GetSettings()->SetSpacing(actor->GetSpacing());
-   glView->GetSettings()->SetWkt(actor->GetWkt());
-   glView->GetSettings()->SetKeywordList(actor->GetKwl());
+   glView->GetSettings()->SetOrigin(mainActor->GetOrigin());
+   glView->GetSettings()->SetSpacing(mainActor->GetSpacing());
+   glView->GetSettings()->SetWkt(mainActor->GetWkt());
+   glView->GetSettings()->SetKeywordList(mainActor->GetKwl());
    glView->GetSettings()->UseProjectionOn();
 
    double ulx,uly,lrx,lry;
 
-   actor->GetExtent(ulx,uly,lrx,lry);
+   mainActor->GetExtent(ulx,uly,lrx,lry);
+   actors.push_back(mainActor);
+
+   for(unsigned int i = 4; i < argc;++i)
+     {
+     otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
+     actor->Initialize(argv[i]);
+     actor->SetVisible(true);
+     actor->UseShaderOn();
+     actor->SetMinRed(min);
+     actor->SetMinGreen(min);
+     actor->SetMinBlue(min);
+     actor->SetMaxRed(max);
+     actor->SetMaxGreen(max);
+     actor->SetMaxBlue(max);
+     glView->AddActor(actor);
+     actors.push_back(actor);
+     }
+
+   Manipulator::GetInstance().SetActors(actors);
 
    otb::ViewSettings::PointType center;
    center[0] = 0.5*(ulx+lrx);

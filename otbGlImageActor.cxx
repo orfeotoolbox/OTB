@@ -84,7 +84,7 @@ void GlImageActor::Initialize(const std::string & filename)
 
   m_CurrentResolution = m_AvailableResolutions.front();
 
-  std::cout<<"Number of resolutions in file: "<<m_AvailableResolutions.size()<<std::endl;
+  // std::cout<<"Number of resolutions in file: "<<m_AvailableResolutions.size()<<std::endl;
 }
 
 void GlImageActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
@@ -212,7 +212,7 @@ void GlImageActor::Render()
     glGetProgramiv(m_StandardShaderProgram,GL_INFO_LOG_LENGTH,&length);
     char * logs = new char[length];
     glGetProgramInfoLog(m_StandardShaderProgram,1000,NULL,logs);
-    std::cout<<logs<<std::endl;
+    // std::cout<<logs<<std::endl;
     delete [] logs;
 
     // Compute shifts and scales
@@ -446,7 +446,7 @@ void GlImageActor::CleanLoadedTiles()
       }
     }
 
-  std::cout<<"GPU memory cleanup: removing "<<m_LoadedTiles.size() - newLoadedTiles.size() << " over "<<m_LoadedTiles.size() <<" tiles"<<std::endl;
+  // std::cout<<"GPU memory cleanup: removing "<<m_LoadedTiles.size() - newLoadedTiles.size() << " over "<<m_LoadedTiles.size() <<" tiles"<<std::endl;
 
   m_LoadedTiles.swap(newLoadedTiles);
 
@@ -622,22 +622,29 @@ void GlImageActor::UpdateResolution()
     }
   rsTransform->InstanciateTransform();
 
-  PointType point;
+  PointType point, nullPoint;
   point[0] = spacing[0];
   point[1] = spacing[1];
+  
+  nullPoint.Fill(0);
 
-  //std::cout<<"Spacing: "<<point<<std::endl;
+  // TODO: This part needs a review
+  // std::cout<<"Spacing: "<<point<<std::endl;
 
   // Transform the spacing vector
   point = rsTransform->TransformPoint(point);
+  nullPoint = rsTransform->TransformPoint(nullPoint);
 
-  //std::cout<<"Spacing: "<<point<<std::endl;
+  point[0]-=nullPoint[0];
+  point[1]-=nullPoint[1];
+
+  // std::cout<<"Spacing: "<<point<<std::endl;
 
   // Last, divide by image spacing to get the resolution
   double resolution = std::min(vcl_abs(m_Spacing[0]/point[0]), 
                                vcl_abs(m_Spacing[1]/point[1]));
 
-  //std::cout<<"Resolution: "<<resolution<<std::endl;
+  // std::cout<<"Resolution: "<<resolution<<std::endl;
   
   // Arbitrary higher than any distance we will compute here
   double minDist       = 50000.;
@@ -656,7 +663,7 @@ void GlImageActor::UpdateResolution()
       }
     }
   
-  std::cout<<"Nearest resolution level: "<<closest<<std::endl;
+  // std::cout<<"Nearest resolution level: "<<closest<<std::endl;
 
   m_CurrentResolution = closest;
 
@@ -687,7 +694,7 @@ void GlImageActor::InitShaders()
 
     // std::string source = "in vec4 Color;\nvoid main()\n{\ngl_FragColor = Color;\n}\0";
 
-    std::cout<<"Shader source: "<<source<<std::endl;
+    // std::cout<<"Shader source: "<<source<<std::endl;
     
     const char * cstr_source = source.c_str();
     GLint source_length = source.size();
