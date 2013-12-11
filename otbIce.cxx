@@ -247,7 +247,7 @@ public:
       
       if(m_Actors.size() > 1)
         {
-        m_SelectedActor = 0;
+        m_SelectedActor = 1;
         std::cout<<"Actor 2 selected"<<std::endl;
         }
       }
@@ -256,7 +256,7 @@ public:
       
       if(m_Actors.size() > 2)
         {
-        m_SelectedActor = 0;
+        m_SelectedActor = 2;
         std::cout<<"Actor 3 selected"<<std::endl;
         }
       }
@@ -265,7 +265,7 @@ public:
       
       if(m_Actors.size() > 3)
         {
-        m_SelectedActor = 0;
+        m_SelectedActor = 3;
         std::cout<<"Actor 4 selected"<<std::endl;
         }
       }
@@ -274,7 +274,7 @@ public:
       
       if(m_Actors.size() > 4)
         {
-        m_SelectedActor = 0;
+        m_SelectedActor = 4;
         std::cout<<"Actor 5 selected"<<std::endl;
         }
       }
