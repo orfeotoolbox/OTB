@@ -55,6 +55,10 @@ public:
   
   ImageKeywordlistType GetKwl() const;
 
+  itkSetMacro(UseShader,bool);
+  itkGetConstReferenceMacro(UseShader,bool);
+  itkBooleanMacro(UseShader);
+
 protected:
   GlImageActor();
   
@@ -80,7 +84,8 @@ protected:
         m_Resolution(1),
         m_RedIdx(1),
         m_GreenIdx(2),
-        m_BlueIdx(3)
+        m_BlueIdx(3),
+        m_UseShader(false)
     {
       m_UL.Fill(0);
       m_UR.Fill(0);
@@ -99,6 +104,7 @@ protected:
     unsigned int m_RedIdx;
     unsigned int m_GreenIdx;
     unsigned int m_BlueIdx;
+    unsigned int m_UseShader;
   };
 
   typedef std::vector<Tile>                                                       TileVectorType;    
@@ -131,6 +137,8 @@ private:
 
   void UpdateResolution();
 
+  static void InitShaders();
+
    unsigned int m_TileSize;
 
   std::string m_FileName;
@@ -158,6 +166,12 @@ private:
 
   PointType   m_Origin;
   SpacingType m_Spacing;
+
+  bool m_UseShader;
+  
+  static unsigned int m_StandardShader;
+  static unsigned int m_StandardShaderProgram;
+  static bool m_ShaderInitialized;
 
 }; // End class GlImageActor
 

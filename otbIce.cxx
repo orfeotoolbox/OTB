@@ -265,6 +265,7 @@ int main(int argc, char * argv[])
    otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
    actor->Initialize(argv[1]);
    actor->SetVisible(true);
+   actor->UseShaderOn();
    std::string label = glView->AddActor(actor);
 
    // Initialize view with respect to first actor

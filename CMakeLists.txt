@@ -41,6 +41,8 @@ else(GLFW_FOUND)
   MESSAGE("GLFW missing")
 endif(GLFW_FOUND)
 
+ADD_DEFINITIONS(-DGL_GLEXT_PROTOTYPES)
+
 ADD_LIBRARY(OTBIce otbGPUTileLoader.cxx otbViewSettings.cxx otbGlView.cxx otbGlActor.cxx otbGlImageActor.cxx)
 TARGET_LINK_LIBRARIES(OTBIce OTBIO ${OPENGL_LIBRARY})
 

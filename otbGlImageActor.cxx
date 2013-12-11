@@ -2,9 +2,15 @@
 #include "otbViewSettings.h"
 #include "otbMath.h"
 #include <GL/gl.h> 
+#include <GL/glext.h>
 
 namespace otb
 {
+
+// Shaders section
+unsigned int GlImageActor::m_StandardShader = 0;
+unsigned int GlImageActor::m_StandardShaderProgram = 0;
+bool GlImageActor::m_ShaderInitialized = false;
 
 GlImageActor::GlImageActor()
   : m_TileSize(256),
@@ -23,7 +29,8 @@ GlImageActor::GlImageActor()
     m_CurrentResolution(1),
     m_AvailableResolutions(),
     m_Origin(),
-    m_Spacing()
+    m_Spacing(),
+    m_UseShader(false)
 {}
 
 GlImageActor::~GlImageActor()
@@ -51,6 +58,9 @@ GlImageActor::ImageKeywordlistType GlImageActor::GetKwl() const
 
 void GlImageActor::Initialize(const std::string & filename)
 {
+  // Initialize shaders
+  InitShaders();
+
   // First, clean up any previous data
   this->ClearLoadedTiles();
 
@@ -159,6 +169,7 @@ void GlImageActor::UpdateData()
       newTile.m_GreenIdx = m_GreenIdx;
       newTile.m_BlueIdx = m_BlueIdx;
       newTile.m_Resolution = m_CurrentResolution;
+      newTile.m_UseShader = m_UseShader;
 
       if(!TileAlreadyLoaded(newTile))
         {
@@ -179,7 +190,8 @@ bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
       return (tile.m_Resolution ==  it->m_Resolution
               && tile.m_RedIdx == it->m_RedIdx
               && tile.m_GreenIdx == it->m_GreenIdx
-              && tile.m_BlueIdx == it->m_BlueIdx);
+              && tile.m_BlueIdx == it->m_BlueIdx
+              && (tile.m_UseShader == m_UseShader));
       
       }
     }
@@ -191,6 +203,33 @@ void GlImageActor::Render()
 {
   // std::cout<<"Render: "<<m_LoadedTiles.size()<<" tiles to process"<<std::endl;
 
+  if(m_UseShader)
+    {
+    // Setup shader
+    glUseProgramObjectARB(m_StandardShaderProgram);
+  
+    int length;
+    glGetProgramiv(m_StandardShaderProgram,GL_INFO_LOG_LENGTH,&length);
+    char * logs = new char[length];
+    glGetProgramInfoLog(m_StandardShaderProgram,1000,NULL,logs);
+    std::cout<<logs<<std::endl;
+    delete [] logs;
+
+    // Compute shifts and scales
+    double shr,shg,shb,scr,scg,scb;
+    shr = -m_MinRed;
+    shg = -m_MinGreen;
+    shb = -m_MinBlue;
+    scr = 1./(m_MaxRed-m_MinRed);
+    scg = 1./(m_MaxGreen-m_MinGreen);
+    scb = 1./(m_MaxBlue-m_MinBlue);
+
+    GLint shader_a= glGetUniformLocation(GlImageActor::m_StandardShaderProgram, "shader_a");
+    glUniform4f(shader_a,scr,scg,scb,1.);
+    GLint shader_b= glGetUniformLocation(GlImageActor::m_StandardShaderProgram, "shader_b");
+    glUniform4f(shader_b,shr,shg,shb,0);
+    }
+  
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
     {
@@ -209,7 +248,11 @@ void GlImageActor::Render()
 
     glDisable(GL_TEXTURE_2D);
     }
-
+  
+  if(m_UseShader)
+    {
+    glUseProgramObjectARB(0);
+    }
 }
 
 void GlImageActor::LoadTile(Tile& tile)
@@ -221,58 +264,60 @@ void GlImageActor::LoadTile(Tile& tile)
   extract->SetChannel(tile.m_GreenIdx);
   extract->SetChannel(tile.m_BlueIdx);
 
-  RescaleFilterType::Pointer rescale = RescaleFilterType::New();
-  rescale->SetInput(extract->GetOutput());
-  rescale->AutomaticInputMinMaxComputationOff();
-  
-  VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
-  
-  mins[0] = m_MinRed;
-  mins[1] = m_MinGreen;
-  mins[2] = m_MinBlue;
-
-  maxs[0] = m_MaxRed;
-  maxs[1] = m_MaxGreen;
-  maxs[2] = m_MaxBlue;
-
-  omins.Fill(0);
-  omaxs.Fill(255);
-
-  rescale->SetInputMinimum(mins);
-  rescale->SetInputMaximum(maxs);
-  rescale->SetOutputMinimum(omins);
-  rescale->SetOutputMaximum(omaxs);
-
-  rescale->Update();
-
-  itk::ImageRegionConstIterator<VectorImageType> it(rescale->GetOutput(),rescale->GetOutput()->GetLargestPossibleRegion());
-
-  unsigned char * buffer = new unsigned char[4*rescale->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
-
-  unsigned int idx = 0;
-
-  for(it.GoToBegin();!it.IsAtEnd();++it)
+  if(!tile.m_UseShader)
     {
-    buffer[idx] = static_cast<unsigned char>(it.Get()[2]);
-    ++idx;
-    buffer[idx] = static_cast<unsigned char>(it.Get()[1]);
-    ++idx;
-    buffer[idx] = static_cast<unsigned char>(it.Get()[0]);
-    ++idx;
-    buffer[idx] = 255;
-    ++idx;
-    }
+    RescaleFilterType::Pointer rescale = RescaleFilterType::New();
+    rescale->SetInput(extract->GetOutput());
+    rescale->AutomaticInputMinMaxComputationOff();
+  
+    VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
+    
+    mins[0] = m_MinRed;
+    mins[1] = m_MinGreen;
+    mins[2] = m_MinBlue;
+    
+    maxs[0] = m_MaxRed;
+    maxs[1] = m_MaxGreen;
+    maxs[2] = m_MaxBlue;
+    
+    omins.Fill(0);
+    omaxs.Fill(255);
+    
+    rescale->SetInputMinimum(mins);
+    rescale->SetInputMaximum(maxs);
+    rescale->SetOutputMinimum(omins);
+    rescale->SetOutputMaximum(omaxs);
+    
+    rescale->Update();
+    
+    itk::ImageRegionConstIterator<VectorImageType> it(rescale->GetOutput(),rescale->GetOutput()->GetLargestPossibleRegion());
 
-  // Now load the texture
-  glGenTextures(1, &(tile.m_TextureId));
-  glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
+    unsigned char * buffer = new unsigned char[4*rescale->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
+    
+    unsigned int idx = 0;
+    
+    for(it.GoToBegin();!it.IsAtEnd();++it)
+      {
+      buffer[idx] = static_cast<unsigned char>(it.Get()[2]);
+      ++idx;
+      buffer[idx] = static_cast<unsigned char>(it.Get()[1]);
+      ++idx;
+      buffer[idx] = static_cast<unsigned char>(it.Get()[0]);
+      ++idx;
+      buffer[idx] = 255;
+      ++idx;
+      }
+    
+    // Now load the texture
+    glGenTextures(1, &(tile.m_TextureId));
+    glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
 #if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 #endif
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 // #if defined(GL_CLAMP_TO_BORDER)      
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
@@ -280,19 +325,76 @@ void GlImageActor::LoadTile(Tile& tile)
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
 // #elif defined (GL_MIRRORED_REPEAT)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
 // #endif
-  glTexImage2D(
-    GL_TEXTURE_2D, 0, GL_RGBA8,
-    rescale->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-    rescale->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
-    0, GL_BGRA, GL_UNSIGNED_BYTE,
-    buffer);
-
-  tile.m_Loaded = true;
+      glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGBA8,
+        rescale->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+        rescale->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
+        0, GL_BGRA, GL_UNSIGNED_BYTE,
+        buffer);
+      
+      tile.m_Loaded = true;
+      tile.m_UseShader = false;
   
-  delete [] buffer;
+      delete [] buffer;
+    }
+  // else !m_UseShader
+  else
+    {
+    extract->Update();
+
+    itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
+
+    float * buffer = new float[4*extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
+    
+    unsigned int idx = 0;
+    
+    for(it.GoToBegin();!it.IsAtEnd();++it)
+      {
+      buffer[idx] = static_cast<float>(it.Get()[2]);
+      ++idx;
+      buffer[idx] = static_cast<float>(it.Get()[1]);
+      ++idx;
+      buffer[idx] = static_cast<float>(it.Get()[0]);
+      ++idx;
+      buffer[idx] = 255.;
+      ++idx;
+      }
+    
+    // Now load the texture
+    glGenTextures(1, &(tile.m_TextureId));
+    glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
+#if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+#endif
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+// #if defined(GL_CLAMP_TO_BORDER)      
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
+// #elif defined (GL_CLAMP_TO_BORDER_EXT)
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
+// #elif defined (GL_MIRRORED_REPEAT)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
+// #endif
+      glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGB32F,
+        extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+        extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
+        0, GL_BGRA, GL_FLOAT,
+        buffer);
+      
+      tile.m_Loaded = true;
+      tile.m_UseShader = true;
+  
+      delete [] buffer;
+    }
 
   // And push to loaded texture
   m_LoadedTiles.push_back(tile);
@@ -332,7 +434,8 @@ void GlImageActor::CleanLoadedTiles()
        || it->m_Resolution != m_CurrentResolution
        || it->m_RedIdx != m_RedIdx
        || it->m_GreenIdx != m_GreenIdx
-       || it->m_BlueIdx != m_BlueIdx)
+       || it->m_BlueIdx != m_BlueIdx
+       || (it->m_UseShader != m_UseShader))
       {     
       // Tile will not be used anymore, unload it from GPU
       UnloadTile(*it);
@@ -567,5 +670,66 @@ void GlImageActor::UpdateResolution()
   m_FileReader->UpdateOutputInformation();
 }
 
+
+void GlImageActor::InitShaders()
+{
+  if(!GlImageActor::m_ShaderInitialized)
+    {
+
+    std::string source = "#version 120 \n"\
+      "uniform sampler2D src;\n"\
+      "uniform vec4 shader_a;\n"\
+      "uniform vec4 shader_b;\n"\
+      "void main (void) {\n"\
+      "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"\
+      "gl_FragColor = clamp((p + shader_b)*shader_a, 0.0, 1.0);\n"\
+      "}";
+
+    // std::string source = "in vec4 Color;\nvoid main()\n{\ngl_FragColor = Color;\n}\0";
+
+    std::cout<<"Shader source: "<<source<<std::endl;
+    
+    const char * cstr_source = source.c_str();
+    GLint source_length = source.size();
+
+    GlImageActor::m_StandardShaderProgram = glCreateProgram();
+    GlImageActor::m_StandardShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource( GlImageActor::m_StandardShader, 1, &cstr_source,&source_length);
+    glCompileShader(GlImageActor::m_StandardShader);
+
+    GLint compiled;
+
+    glGetShaderiv(m_StandardShader, GL_COMPILE_STATUS, &compiled);
+    
+    if(!compiled)
+      {
+      std::cerr<<"Standard shader failed to compile!"<<std::endl;
+
+      int length;
+      glGetShaderiv(m_StandardShader, GL_INFO_LOG_LENGTH , &length);
+
+      char * logs = new char[length];
+      glGetShaderInfoLog(m_StandardShader,1000,&length,logs);
+      std::cerr<<logs<<std::endl;
+      delete [] logs;
+
+      }
+
+    glAttachShader(GlImageActor::m_StandardShaderProgram, GlImageActor::m_StandardShader);
+    glLinkProgram(GlImageActor::m_StandardShaderProgram);
+
+    // // Check that shader is correctly loaded
+    // glUseProgram(m_StandardShaderProgram);
+    
+    // int length;
+    // glGetProgramiv(m_StandardShaderProgram,GL_INFO_LOG_LENGTH,&length);
+    // char * logs = new char[length];
+    // glGetProgramInfoLog(m_StandardShaderProgram,1000,NULL,logs);
+    // std::cout<<logs<<std::endl;
+    // delete [] logs;
+
+    GlImageActor::m_ShaderInitialized = true;
+    }
+}
 
 }
