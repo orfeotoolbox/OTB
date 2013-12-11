@@ -650,27 +650,29 @@ void GlImageActor::UpdateResolution()
     }
   rsTransform->InstanciateTransform();
 
-  PointType point, nullPoint;
-  point[0] = spacing[0];
-  point[1] = spacing[1];
+  PointType pointA, pointB;
+
+  pointA  = settings->GetOrigin();
+  pointB = pointA;
   
-  nullPoint.Fill(0);
+  pointB[0]+=100*spacing[0];
+  pointB[1]+=100*spacing[0];
 
   // TODO: This part needs a review
-  // std::cout<<"Spacing: "<<point<<std::endl;
 
   // Transform the spacing vector
-  point = rsTransform->TransformPoint(point);
-  nullPoint = rsTransform->TransformPoint(nullPoint);
+  pointA = rsTransform->TransformPoint(pointA);
+  pointB = rsTransform->TransformPoint(pointB);
 
-  point[0]-=nullPoint[0];
-  point[1]-=nullPoint[1];
+  SpacingType outSpacing;
+  outSpacing[0] = (pointB[0]-pointA[0])/100;
+  outSpacing[1] = (pointB[1]-pointA[1])/100;
 
-  // std::cout<<"Spacing: "<<point<<std::endl;
+  // std::cout<<"Estimated spacing: "<<outSpacing<<std::endl;
 
   // Last, divide by image spacing to get the resolution
-  double resolution = std::min(vcl_abs(m_Spacing[0]/point[0]), 
-                               vcl_abs(m_Spacing[1]/point[1]));
+  double resolution = std::min(vcl_abs(m_Spacing[0]/spacing[0]), 
+                               vcl_abs(m_Spacing[1]/spacing[1]));
 
   // std::cout<<"Resolution: "<<resolution<<std::endl;
   
