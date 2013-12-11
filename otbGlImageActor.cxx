@@ -671,8 +671,8 @@ void GlImageActor::UpdateResolution()
   // std::cout<<"Estimated spacing: "<<outSpacing<<std::endl;
 
   // Last, divide by image spacing to get the resolution
-  double resolution = std::min(vcl_abs(m_Spacing[0]/spacing[0]), 
-                               vcl_abs(m_Spacing[1]/spacing[1]));
+  double resolution = std::min(vcl_abs(m_Spacing[0]/outSpacing[0]), 
+                               vcl_abs(m_Spacing[1]/outSpacing[1]));
 
   // std::cout<<"Resolution: "<<resolution<<std::endl;
   
@@ -684,6 +684,7 @@ void GlImageActor::UpdateResolution()
   for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
        it != m_AvailableResolutions.end(); ++it)
     {
+    // std::cout<<(*it)<<" "<<(1/((double)(1<<(*it))))<<std::endl;
     double diff = vcl_abs(1/((double)(1<<(*it))) - resolution);
 
     if (diff < minDist)
