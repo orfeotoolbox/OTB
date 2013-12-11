@@ -97,7 +97,7 @@ namespace mvd
 #endif
 
 /*****************************************************************************/
-#if USE_DEBUG || USE_DEBUG_BINDINGS
+#if (USE_DEBUG && USE_DEBUG_BINDINGS) || FORCE_DEBUG_BINDINGS
 #define QUERY_DEBUG_BINDINGS( query )                           \
   qDebug() << "params:" << ( query ).boundValues()
 #else
@@ -105,7 +105,7 @@ namespace mvd
 #endif
 
 /*****************************************************************************/
-#if USE_DEBUG || USE_DEBUG_SIZE
+#if (USE_DEBUG && USE_DEBUG_SIZE) || FORCE_DEBUG_SIZE
 #define QUERY_DEBUG_SIZE( query )                       \
   if( ( query ).isSelect() )                            \
     qDebug() << "size:" << ( query ).size()
@@ -422,12 +422,16 @@ DatabaseConnection
 /*****************************************************************************/
 void
 DatabaseConnection
-::InsertDataset( const QString& hash, SqlId nodeId )
+::InsertDataset( const QString& hash,
+                 const QString& alias,
+                 SqlId nodeId )
 {
   //
   // Insert dataset entry.
   ExecuteQuery(
-    QString( "INSERT INTO dataset( hash ) VALUES( '%1' );" ).arg( hash )
+    QString( "INSERT INTO dataset( hash, alias ) VALUES( '%1', '%2' );" )
+    .arg( hash )
+    .arg( alias )
   );
 
 

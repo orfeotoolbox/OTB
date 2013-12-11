@@ -209,10 +209,12 @@ DatabaseBrowserController
   //...but force call to valueChanged() slot to force refresh.
   widget->blockSignals( true );
   {
+#if 1
   // // TODO: Fill in widget.
   widget->SetDatasetList( datasets );
+#endif
 
-  if( !datasets.isEmpty() )
+  // if( !datasets.isEmpty() )
     Foo( widget->GetRootItem(), -1 );
   }
   widget->blockSignals( false );
@@ -225,14 +227,17 @@ void
 DatabaseBrowserController
 ::Foo( QTreeWidgetItem* item, SqlId tagNodeId )
 {
-  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
-  assert( widget!=NULL );
-
+  assert( GetModel()==GetModel< DatabaseModel >() );
   DatabaseModel* model = GetModel< DatabaseModel >();
-  assert( model );
+
+  if( model==NULL )
+    return;
 
   assert( model->GetDatabaseConnection() );
   const DatabaseConnection* db = model->GetDatabaseConnection();
+
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+  assert( widget!=NULL );
 
   //
   // I. Classify QTreeWidgetNodes (Nodes/Groups, Leaves/Items,
@@ -257,12 +262,12 @@ DatabaseBrowserController
       {
       // Nodes.
       case DatabaseBrowserWidget::ITEM_TYPE_NODE:
-        // assert( item->data( 1, Qt::UserRole + 1 ).isValid() );
+        // assert( child->data( 1, Qt::UserRole + 1 ).isValid() );
         qDebug()
           << "Node:"
-          << item->text( 0 )
-          << item->text( 1 )
-          << item->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
+          << child->text( 0 )
+          << child->text( 1 )
+          << child->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
         container = &nodes;
         break;
 
@@ -271,16 +276,16 @@ DatabaseBrowserController
         // assert( item->data( 1, Qt::UserRole + 1 ).isValid() );
         qDebug()
           << "Leaf:"
-          << item->text( 0 )
-          << item->text( 1 )
-          << item->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
+          << child->text( 0 )
+          << child->text( 1 )
+          << child->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
         container = &leaves;
         break;
 
       // Others.
       default:
-        others.push_back( item );
-        qDebug() << "Other:" << item->text( 0 );
+        others.push_back( child );
+        qDebug() << "Other:" << child->text( 0 );
         break;
       }
 
@@ -288,8 +293,9 @@ DatabaseBrowserController
       {
       TreeWidgetItemMap::iterator it(
         container->insert(
-          item->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID ).toString(),
-          item )
+          child->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID ).toString(),
+          child
+        )
       );
 
       // assert( it==map->end() );
@@ -310,7 +316,7 @@ DatabaseBrowserController
   //
   // Get node id.
 
-  SqlId nodeId = 
+  SqlId safeNodeId = 
     tagNodeId < 0
     ? GetRootNodeFields( db->FindRootNode() )
     : tagNodeId;
@@ -318,7 +324,8 @@ DatabaseBrowserController
   //
   //  Leaves/Items (datasets).
 
-  QSqlQuery datasetsQuery( db->SelectNodeDatasets( nodeId ) );
+#if 1
+  QSqlQuery datasetsQuery( db->SelectNodeDatasets( safeNodeId ) );
 
   while( datasetsQuery.next() )
     {
@@ -327,7 +334,7 @@ DatabaseBrowserController
 
     QVariant id( GetDatasetFields( datasetsQuery, &hash, &alias ) );
 
-    qDebug() << "Dataset:" << id.toLongLong() << hash << alias;
+    qDebug() << "Leaf:" << id.toString() << hash << alias;
 
     TreeWidgetItemMap::iterator it(
       leaves.find( id.toString() )
@@ -352,17 +359,20 @@ DatabaseBrowserController
 
     leaves.erase( it );
     }
+#endif
 
   //
   // Nodes/Groups.
 
-  QSqlQuery nodesQuery( db->SelectNodeChildren( nodeId ) );
+  QSqlQuery nodesQuery( db->SelectNodeChildren( safeNodeId ) );
 
   while( nodesQuery.next() )
     {
     QString label;
 
     QVariant id( GetChildNodeFields( nodesQuery, &label ) );
+
+    qDebug() << "Node:" << id.toString() << label;
 
     TreeWidgetItemMap::iterator it(
       nodes.find( id.toString() )

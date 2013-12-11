@@ -83,6 +83,10 @@ DatabaseBrowserWidget
   m_UI->databaseTreeWidget->headerItem()->setText( 1, "Id" );
 #endif
 
+#if defined( _DEBUG ) && 1
+  m_UI->databaseTreeWidget->headerItem()->setText( 2, "?" );
+#endif
+
   SetupUI();
 
 #if 0
@@ -134,7 +138,7 @@ DatabaseBrowserWidget
     InsertItem(
       parent,
       DatabaseBrowserWidget::ITEM_TYPE_NODE,
-      Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled,
+      Qt::ItemIsEnabled | /*Qt::ItemIsEditable |*/ Qt::ItemIsDropEnabled,
       QTreeWidgetItem::ShowIndicator,
       text,
       id,

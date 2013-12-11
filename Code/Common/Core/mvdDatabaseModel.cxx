@@ -210,7 +210,7 @@ DatabaseModel
   if( it==m_DatasetModels.end() )
     {
     assert( m_Db!=NULL );
-    m_Db->InsertDataset( hash );
+    m_Db->InsertDataset( hash, model->GetAlias() );
     }
   else
     {

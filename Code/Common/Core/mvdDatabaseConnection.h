@@ -53,9 +53,14 @@
 /* MACROS                                                                    */
 
 #define USE_DEBUG 0
-#define USE_DEBUG_BINDINGS 1
+
+#define USE_DEBUG_BINDINGS 0
 #define USE_DEBUG_SIZE 0
-#define USE_DEBUG_VALUES 1
+#define USE_DEBUG_VALUES 0
+
+#define FORCE_DEBUG_BINDINGS 0
+#define FORCE_DEBUG_SIZE 0
+#define FORCE_DEBUG_VALUES 0
 
 /*****************************************************************************/
 #define QUERY_NEXT( query )                     \
@@ -87,7 +92,7 @@
     }
 
 /*****************************************************************************/
-#if USE_DEBUG || USE_DEBUG_VALUES
+#if (USE_DEBUG && USE_DEBUG_VALUES) || USE_DEBUG_VALUES
 #define QUERY_DEBUG_FIELDS( query )             \
   {                                             \
     QVariant field;                             \
@@ -167,7 +172,9 @@ public:
 
   /**
    */
-  void InsertDataset( const QString& hash, SqlId nodeId =-1 );
+  void InsertDataset( const QString& hash,
+                      const QString& alias,
+                      SqlId nodeId =-1 );
 
   /**
    */
