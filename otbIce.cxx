@@ -273,6 +273,16 @@ int main(int argc, char * argv[])
    glView->GetSettings()->SetWkt(actor->GetWkt());
    glView->GetSettings()->SetKeywordList(actor->GetKwl());
 
+   double ulx,uly,lrx,lry;
+
+   actor->GetExtent(ulx,uly,lrx,lry);
+
+   otb::ViewSettings::PointType center;
+   center[0] = 0.5*(ulx+lrx);
+   center[1] = 0.5*(uly+lry);
+   
+   glView->GetSettings()->Center(center);
+
    while (!glfwWindowShouldClose(window))
      {
      int width, height;
