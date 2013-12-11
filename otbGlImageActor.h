@@ -24,13 +24,13 @@ public:
 
   itkNewMacro(Self);
 
-  typedef VectorImage<float>                                                      VectorImageType;
-  typedef VectorImageType::ImageKeywordlistType                                   ImageKeywordlistType;
-  typedef VectorImageType::SizeType                                               SizeType;
-  typedef VectorImageType::IndexType                                              IndexType;
-  typedef VectorImageType::RegionType                                             RegionType;
-  typedef VectorImageType::SpacingType                                            SpacingType;
-  typedef VectorImageType::PointType                                              PointType;
+  typedef VectorImage<float>                              VectorImageType;
+  typedef VectorImageType::ImageKeywordlistType           ImageKeywordlistType;
+  typedef VectorImageType::SizeType                       SizeType;
+  typedef VectorImageType::IndexType                      IndexType;
+  typedef VectorImageType::RegionType                     RegionType;
+  typedef VectorImageType::SpacingType                    SpacingType;
+  typedef VectorImageType::PointType                      PointType;
 
   // Initialize with a new image
   void Initialize(const std::string & filename);
@@ -64,6 +64,7 @@ protected:
   typedef MultiChannelExtractROI<float,float>                                     ExtractROIFilterType;
   typedef VectorRescaleIntensityImageFilter<VectorImageType,VectorImageType>      RescaleFilterType;
   typedef otb::GenericRSTransform<>                                               RSTransformType;
+  typedef std::vector<unsigned int>                                               ResolutionVectorType;
 
   // Internal class to hold tiles
   class Tile
@@ -128,6 +129,8 @@ private:
 
   void ViewportExtentToImageRegion(const double& ulx, const double & uly, const double & lrx, const double & lry, RegionType & region) const;
 
+  void UpdateResolution();
+
    unsigned int m_TileSize;
 
   std::string m_FileName;
@@ -148,6 +151,14 @@ private:
   double m_MaxGreen;
   double m_MinBlue;
   double m_MaxBlue;
+
+  unsigned int m_CurrentResolution;
+
+  ResolutionVectorType m_AvailableResolutions;
+
+  PointType   m_Origin;
+  SpacingType m_Spacing;
+
 }; // End class GlImageActor
 
 } // End namespace otb

@@ -112,7 +112,6 @@ public:
   { 
     double posx, posy, vpx, vpy;
     glfwGetCursorPos(window,&posx,&posy);
-    std::cout<<posx<<" "<<posy<<std::endl;
 
     if(m_Drag)
       {

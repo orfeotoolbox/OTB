@@ -19,7 +19,11 @@ GlImageActor::GlImageActor()
     m_MinGreen(200),
     m_MaxGreen(1200),
     m_MinBlue(200),
-    m_MaxBlue(1200)
+    m_MaxBlue(1200),
+    m_CurrentResolution(1),
+    m_AvailableResolutions(),
+    m_Origin(),
+    m_Spacing()
 {}
 
 GlImageActor::~GlImageActor()
@@ -27,12 +31,12 @@ GlImageActor::~GlImageActor()
 
 const GlImageActor::PointType & GlImageActor::GetOrigin() const
 {
-  return m_FileReader->GetOutput()->GetOrigin();
+  return m_Origin;
 }
 
 const GlImageActor::SpacingType & GlImageActor::GetSpacing() const
 {
-  return m_FileReader->GetOutput()->GetSpacing();
+  return m_Spacing;
 }
 
 std::string GlImageActor::GetWkt() const
@@ -55,6 +59,15 @@ void GlImageActor::Initialize(const std::string & filename)
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(m_FileName);
   m_FileReader->UpdateOutputInformation();
+
+  m_Origin = m_FileReader->GetOutput()->GetOrigin();
+  m_Spacing = m_FileReader->GetOutput()->GetSpacing();
+
+  m_AvailableResolutions = m_FileReader->GetAvailableResolutions();
+
+  m_CurrentResolution = m_AvailableResolutions.front();
+
+  std::cout<<"Number of resolutions in file: "<<m_AvailableResolutions.size()<<std::endl;
 }
 
 void GlImageActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
@@ -76,6 +89,9 @@ void GlImageActor::ProcessViewSettings()
 
 void GlImageActor::UpdateData()
 {
+  // Update resolution needed
+  UpdateResolution();
+
   // First, clean existing tiles
   CleanLoadedTiles();
 
@@ -128,13 +144,13 @@ void GlImageActor::UpdateData()
 
       ImageRegionToViewportQuad(newTile.m_ImageRegion,newTile.m_UL,newTile.m_UR,newTile.m_LL,newTile.m_LR);
 
-      // std::cout<<"Loading tile "<<newTile.m_ImageRegion<<std::endl;
-      // std::cout<<"Mapped to "<<newTile.m_UL<<", "<<newTile.m_UR<<", "<<newTile.m_LL<<", "<<newTile.m_LR<<std::endl;
+       // std::cout<<"Loading tile "<<newTile.m_ImageRegion<<std::endl;
+       // std::cout<<"Mapped to "<<newTile.m_UL<<", "<<newTile.m_UR<<", "<<newTile.m_LL<<", "<<newTile.m_LR<<std::endl;
 
       newTile.m_RedIdx = m_RedIdx;
       newTile.m_GreenIdx = m_GreenIdx;
       newTile.m_BlueIdx = m_BlueIdx;
-      newTile.m_Resolution = 1;
+      newTile.m_Resolution = m_CurrentResolution;
 
       if(!TileAlreadyLoaded(newTile))
         {
@@ -165,7 +181,7 @@ bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
 
 void GlImageActor::Render()
 {
-  std::cout<<"Render: "<<m_LoadedTiles.size()<<" tiles to process"<<std::endl;
+  // std::cout<<"Render: "<<m_LoadedTiles.size()<<" tiles to process"<<std::endl;
 
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
@@ -177,7 +193,7 @@ void GlImageActor::Render()
      glColor3d(1.0f,1.0f,1.0f);
      
      glBegin (GL_QUADS);
-     glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0],it->m_LL[1]);
+     glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
      glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
      glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
      glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
@@ -248,17 +264,17 @@ void GlImageActor::LoadTile(Tile& tile)
 #endif
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  
-#if defined(GL_CLAMP_TO_BORDER)      
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
-#elif defined (GL_CLAMP_TO_BORDER_EXT)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
-#elif defined (GL_MIRRORED_REPEAT)
+  //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+// #if defined(GL_CLAMP_TO_BORDER)      
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
+// #elif defined (GL_CLAMP_TO_BORDER_EXT)
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
+// #elif defined (GL_MIRRORED_REPEAT)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
-#endif
+// #endif
   glTexImage2D(
     GL_TEXTURE_2D, 0, GL_RGBA8,
     rescale->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
@@ -305,6 +321,7 @@ void GlImageActor::CleanLoadedTiles()
 
     // Test if tileRegion intersects requested region
     if(!tileRegion.Crop(requested)
+       || it->m_Resolution != m_CurrentResolution
        || it->m_RedIdx != m_RedIdx
        || it->m_GreenIdx != m_GreenIdx
        || it->m_BlueIdx != m_BlueIdx)
@@ -317,6 +334,9 @@ void GlImageActor::CleanLoadedTiles()
       newLoadedTiles.push_back(*it);
       }
     }
+
+  std::cout<<"GPU memory cleanup: removing "<<m_LoadedTiles.size() - newLoadedTiles.size() << " over "<<m_LoadedTiles.size() <<" tiles"<<std::endl;
+
   m_LoadedTiles.swap(newLoadedTiles);
 
 
@@ -369,14 +389,14 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
 
   itk::ContinuousIndex<double,2> cul,cur,cll,clr;
   
-  cul[0] = region.GetIndex()[0]-0.5;
-  cul[1] = region.GetIndex()[1]-0.5;
+  cul[0] = region.GetIndex()[0];
+  cul[1] = region.GetIndex()[1];
   cur = cul;
-  cur[0]+=region.GetSize()[0]+1;
+  cur[0]+=region.GetSize()[0];
   cll = cul;
-  cll[1]+=region.GetSize()[1]+1;
+  cll[1]+=region.GetSize()[1];
   clr = cur;
-  clr[1]+=region.GetSize()[1]+1;
+  clr[1]+=region.GetSize()[1];
 
   PointType iul, iur,ill,ilr;
 
@@ -468,6 +488,75 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   region.SetIndex(index);
   
   region.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion());
+}
+
+void GlImageActor::UpdateResolution()
+{
+  // Retrieve settings
+  ViewSettings::ConstPointer settings = this->GetSettings();
+
+  // Retrieve viewport spacing
+  ViewSettings::SpacingType spacing = settings->GetSpacing();
+  
+  // Setup RSTransform
+  RSTransformType::Pointer rsTransform = RSTransformType::New();
+  
+  // Set-up RS Transform
+  if(settings->GetUseProjection())
+    {
+    rsTransform->SetInputProjectionRef(settings->GetWkt());
+    rsTransform->SetInputKeywordList(settings->GetKeywordList());
+    rsTransform->SetOutputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
+    rsTransform->SetOutputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
+    }
+  rsTransform->InstanciateTransform();
+
+  PointType point;
+  point[0] = spacing[0];
+  point[1] = spacing[1];
+
+  //std::cout<<"Spacing: "<<point<<std::endl;
+
+  // Transform the spacing vector
+  point = rsTransform->TransformPoint(point);
+
+  //std::cout<<"Spacing: "<<point<<std::endl;
+
+  // Last, divide by image spacing to get the resolution
+  double resolution = std::min(vcl_abs(m_Spacing[0]/point[0]), 
+                               vcl_abs(m_Spacing[1]/point[1]));
+
+  //std::cout<<"Resolution: "<<resolution<<std::endl;
+  
+  // Arbitrary higher than any distance we will compute here
+  double minDist       = 50000.;
+  unsigned int closest = 0;
+
+  // Compute the diff and keep the index that minimize the distance
+  for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
+       it != m_AvailableResolutions.end(); ++it)
+    {
+    double diff = vcl_abs(1/((double)(1<<(*it))) - resolution);
+
+    if (diff < minDist)
+      {
+      minDist = diff;
+      closest = std::distance(m_AvailableResolutions.begin(),it);
+      }
+    }
+  
+  std::cout<<"Nearest resolution level: "<<closest<<std::endl;
+
+  m_CurrentResolution = closest;
+
+  std::ostringstream extFilename;
+  extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
+
+  std::cout<<"Extfname = "<<extFilename.str()<<std::endl;
+
+  m_FileReader = ReaderType::New();
+  m_FileReader->SetFileName(extFilename.str());
+  m_FileReader->UpdateOutputInformation();
 }
 
 
