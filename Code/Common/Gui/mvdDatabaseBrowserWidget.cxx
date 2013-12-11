@@ -155,7 +155,7 @@ DatabaseBrowserWidget
       parent,
       DatabaseBrowserWidget::ITEM_TYPE_LEAF,
       Qt::ItemIsEnabled | Qt::ItemIsSelectable |
-      Qt::ItemIsEditable | Qt::ItemIsDragEnabled,
+      /*Qt::ItemIsEditable |*/ Qt::ItemIsDragEnabled,
       QTreeWidgetItem::DontShowIndicator,
       text,
       id,
@@ -177,7 +177,7 @@ DatabaseBrowserWidget
   QTreeWidgetItem* item =
     new QTreeWidgetItem(
       parent,
-      QStringList() << text << id.toString(),
+      QStringList() << text << id.toString() << columns,
       type
     );
 

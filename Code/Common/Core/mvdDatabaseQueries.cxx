@@ -158,6 +158,32 @@ GetChildNodeFields( const QSqlQuery& query,
 }
 
 /*****************************************************************************/
+SqlId
+GetDatasetFields( const QSqlQuery& query,
+                  QString* hash,
+                  QString* alias )
+{
+  QUERY_DEBUG_FIELDS( query );
+
+
+  if( hash!=NULL )
+    {
+    assert( query.value( 1 ).type()==QVariant::String );
+    *hash = query.value( 1 ).toString();
+    }
+
+  if( alias!=NULL )
+    {
+    assert( query.value( 2 ).type()==QVariant::String );
+    *alias = query.value( 2 ).toString();
+    }
+
+
+  assert( query.value( 0 ).type()==QVariant::LongLong );
+  return query.value( 0 ).toLongLong();
+}
+
+/*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
 /*****************************************************************************/

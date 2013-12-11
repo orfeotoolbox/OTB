@@ -289,11 +289,11 @@ DatabaseConnection
 
 #if defined( _DEBUG ) || 1
   SqlId rootNodeId(
-    GetRootNodeFields( dbc.GetRootNode() )
+    GetRootNodeFields( dbc.FindRootNode() )
   );
 
   SqlId datasetNodeId(
-    GetNodeFields( dbc.GetDatasetNode() )
+    GetNodeFields( dbc.FindDatasetNode() )
   );
 
   dbc.InsertNode( "Quickbird", datasetNodeId );
@@ -453,8 +453,8 @@ DatabaseConnection
 
   SqlId id = GetNodeFields(
     ( nodeId<0
-      ? GetTemporaryNode()
-      : GetNode( nodeId )
+      ? FindTemporaryNode()
+      : FindNode( nodeId )
     ),
     NULL, NULL, NULL, NULL, &path
   );
@@ -520,7 +520,7 @@ DatabaseConnection
 /*****************************************************************************/
 QSqlQuery
 DatabaseConnection
-::GetRootNode() const
+::FindRootNode() const
 {
   QSqlQuery query(
     ExecuteSelectQuery( SQLQ_SELECT_NODE_ROOT )
@@ -534,10 +534,10 @@ DatabaseConnection
 /*****************************************************************************/
 QSqlQuery
 DatabaseConnection
-::GetDatasetNode() const
+::FindDatasetNode() const
 {
-  return GetNodeChild(
-    GetRootNodeFields( GetRootNode() ),
+  return FindNodeChild(
+    GetRootNodeFields( FindRootNode() ),
     DatabaseConnection::TAG_NAMES[ DatabaseConnection::TAG_NAME_DATASETS ]
   );
 }
@@ -545,10 +545,10 @@ DatabaseConnection
 /*****************************************************************************/
 QSqlQuery
 DatabaseConnection
-::GetTemporaryNode() const
+::FindTemporaryNode() const
 {
-  return GetNodeChild(
-    GetNodeFields( GetDatasetNode() ),
+  return FindNodeChild(
+    GetNodeFields( FindDatasetNode() ),
     DatabaseConnection::TAG_NAMES[ DatabaseConnection::TAG_NAME_TEMPORARY ]
   );
 }
@@ -556,7 +556,7 @@ DatabaseConnection
 /*****************************************************************************/
 QSqlQuery
 DatabaseConnection
-::GetNode( SqlId id ) const
+::FindNode( SqlId id ) const
 {
   QSqlQuery query(
     ExecuteSelectQuery( SQLQ_SELECT_NODE )
@@ -588,14 +588,14 @@ DatabaseConnection
 
   if( id!=NULL )
     {
-    *id = GetNodeFields( GetNodeChild( parentId, label ) );
+    *id = GetNodeFields( FindNodeChild( parentId, label ) );
     }
 }
 
 /*****************************************************************************/
 QSqlQuery
 DatabaseConnection
-::GetNodeChildren( SqlId nodeId ) const
+::SelectNodeChildren( SqlId nodeId ) const
 {
   return
     ExecuteSelectQuery(
@@ -607,7 +607,7 @@ DatabaseConnection
 /*****************************************************************************/
 QSqlQuery
 DatabaseConnection
-::GetNodeChild( SqlId nodeId, const QString& childLabel ) const
+::FindNodeChild( SqlId nodeId, const QString& childLabel ) const
 {
   QSqlQuery query(
     ExecuteSelectQuery(
@@ -624,25 +624,28 @@ DatabaseConnection
 /*****************************************************************************/
 QSqlQuery
 DatabaseConnection
+::SelectNodeDatasets( SqlId nodeId ) const
+{
+  QSqlQuery query(
+    ExecuteSelectQuery(
+      SQLQ_SELECT_NODE_DATASETS,
+      QVariantList() << nodeId
+    )
+  );
+
+  return query;
+}
+
+/*****************************************************************************/
+QSqlQuery
+DatabaseConnection
 ::DirectExecuteQuery( const QString& sql ) const
 {
   QUERY_DEBUG_0( sql );
 
   QSqlQuery query( m_SqlDatabase );
 
-#if 1
   QUERY_DIRECT_EXEC( query, sql );
-#else
-  if( !query.exec( sql ) )
-    {
-    throw DatabaseError(
-      query.lastError(),
-      tr( "Failed to execute query: " ),
-      QString( "\n\"%1\"" ).arg( query.lastQuery() )
-    );
-    }
-  assert( query.isActive() );
-#endif
 
   return query;
 }
@@ -658,7 +661,7 @@ DatabaseConnection
 
   QUERY_EXEC( query );
 
-  QUERY_DEBUG_SIZE( query );
+  // QUERY_DEBUG_SIZE( query );
 
   return query;
 }
@@ -687,7 +690,7 @@ DatabaseConnection
 
   QUERY_EXEC( query );
 
-  QUERY_DEBUG_SIZE( query );
+  // QUERY_DEBUG_SIZE( query );
 
   return query;
 }
@@ -711,7 +714,7 @@ DatabaseConnection
 
   BATCH_QUERY_EXEC( query );
 
-  QUERY_DEBUG_SIZE( query );
+  // QUERY_DEBUG_SIZE( query );
 
   return query;
 }
@@ -737,7 +740,7 @@ DatabaseConnection
 
   BATCH_QUERY_EXEC( query );
 
-  QUERY_DEBUG_SIZE( query );
+  // QUERY_DEBUG_SIZE( query );
 
   return query;
 }
@@ -765,7 +768,7 @@ DatabaseConnection
 
   BATCH_QUERY_EXEC( query );
 
-  QUERY_DEBUG_SIZE( query );
+  // QUERY_DEBUG_SIZE( query );
 
   return query;
 }

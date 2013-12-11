@@ -52,7 +52,7 @@
 /*****************************************************************************/
 /* MACROS                                                                    */
 
-#define USE_DEBUG 1
+#define USE_DEBUG 0
 #define USE_DEBUG_BINDINGS 1
 #define USE_DEBUG_SIZE 0
 #define USE_DEBUG_VALUES 1
@@ -178,23 +178,23 @@ public:
   DatasetMap ListAllDatasets() const;
 
   //
-  // Tag and tag-nodes related methods.
+  // Tags and nodes related methods.
 
   /**
    */
-  QSqlQuery GetRootNode() const;
+  QSqlQuery FindRootNode() const;
 
   /**
    */
-  QSqlQuery GetDatasetNode() const;
+  QSqlQuery FindDatasetNode() const;
 
   /**
    */
-  QSqlQuery GetTemporaryNode() const;
+  QSqlQuery FindTemporaryNode() const;
 
   /**
    */
-  QSqlQuery GetNode( SqlId id ) const;
+  QSqlQuery FindNode( SqlId id ) const;
 
   /**
    */
@@ -202,11 +202,15 @@ public:
 
   /**
    */
-  QSqlQuery GetNodeChildren( SqlId nodeId ) const;
+  QSqlQuery SelectNodeChildren( SqlId nodeId ) const;
 
   /**
    */
-  QSqlQuery GetNodeChild( SqlId nodeId, const QString& childLabel ) const;
+  QSqlQuery FindNodeChild( SqlId nodeId, const QString& childLabel ) const;
+
+  /**
+   */
+  QSqlQuery SelectNodeDatasets( SqlId nodeId ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -274,6 +278,7 @@ private:
     SQLQ_SELECT_NODE,
     SQLQ_SELECT_NODE_CHILDREN,
     SQLQ_SELECT_NODE_CHILD,
+    SQLQ_SELECT_NODE_DATASETS,
     //
     SQLQ_SELECT_COUNT,
   };

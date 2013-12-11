@@ -234,6 +234,10 @@ DatabaseBrowserController
   assert( model->GetDatabaseConnection() );
   const DatabaseConnection* db = model->GetDatabaseConnection();
 
+  //
+  // I. Classify QTreeWidgetNodes (Nodes/Groups, Leaves/Items,
+  // Others) and find .
+
   typedef QList< QTreeWidgetItem* > TreeWidgetItemList;
   typedef QMap< QString, QTreeWidgetItem* > TreeWidgetItemMap;
 
@@ -293,6 +297,7 @@ DatabaseBrowserController
         {
         qDebug()
           << "Duplicate:"
+          << child->type()
           << it.value()->text( 0 )
           << it.value()->text( 1 )
           << it.value()->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
@@ -302,19 +307,62 @@ DatabaseBrowserController
       }
     }
 
-  QSqlQuery query(
-    db->GetNodeChildren(
-      tagNodeId < 0
-      ? GetRootNodeFields( db->GetRootNode() )
-      : tagNodeId
-    )
-  );
+  //
+  // Get node id.
 
-  while( query.next() )
+  SqlId nodeId = 
+    tagNodeId < 0
+    ? GetRootNodeFields( db->FindRootNode() )
+    : tagNodeId;
+
+  //
+  //  Leaves/Items (datasets).
+
+  QSqlQuery datasetsQuery( db->SelectNodeDatasets( nodeId ) );
+
+  while( datasetsQuery.next() )
+    {
+    QString hash;
+    QString alias;
+
+    QVariant id( GetDatasetFields( datasetsQuery, &hash, &alias ) );
+
+    qDebug() << "Dataset:" << id.toLongLong() << hash << alias;
+
+    TreeWidgetItemMap::iterator it(
+      leaves.find( id.toString() )
+    );
+
+    QTreeWidgetItem* childItem = NULL;
+
+    if( it==leaves.end() )
+      {
+      childItem = widget->InsertLeafItem(
+        item,
+        alias.isEmpty()
+        ? hash
+        : alias,
+        id,
+        QStringList( hash ) );
+      }
+    else
+      {
+      childItem = it.value();
+      }
+
+    leaves.erase( it );
+    }
+
+  //
+  // Nodes/Groups.
+
+  QSqlQuery nodesQuery( db->SelectNodeChildren( nodeId ) );
+
+  while( nodesQuery.next() )
     {
     QString label;
 
-    QVariant id( GetChildNodeFields( query, &label ) );
+    QVariant id( GetChildNodeFields( nodesQuery, &label ) );
 
     TreeWidgetItemMap::iterator it(
       nodes.find( id.toString() )

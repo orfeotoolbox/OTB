@@ -98,6 +98,13 @@ GetChildNodeFields( const QSqlQuery& query,
                     int* level =NULL,
                     QString* path =NULL );
 
+/**
+ */
+SqlId
+GetDatasetFields( const QSqlQuery& query,
+                  QString* hash =NULL,
+                  QString* alias =NULL );
+
 //
 // Internal classes pre-declaration.
 

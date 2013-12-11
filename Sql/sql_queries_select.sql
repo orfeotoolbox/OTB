@@ -7,9 +7,9 @@ SELECT node.id,
        node.level,
        node.path,
        tag.label
-FROM node
-JOIN tag ON node.tag_id=tag.id
-WHERE node.tag_id=(SELECT tag.id FROM tag WHERE tag.label=:label);
+FROM   node
+JOIN   tag ON node.tag_id=tag.id
+WHERE  node.tag_id=(SELECT tag.id FROM tag WHERE tag.label=:label);
 
 -----------------------------------------------------------------------------
 -- SQLQ_SELECT_NODE_ROOT
@@ -20,8 +20,8 @@ SELECT node.id,
        node.label,
        node.level,
        node.path
-FROM node
-WHERE (node.parent_id IS NULL) AND (node.level=0);
+FROM   node
+WHERE  (node.parent_id IS NULL) AND (node.level=0);
 
 -----------------------------------------------------------------------------
 -- SQLQ_SELECT_NODE
@@ -32,33 +32,41 @@ SELECT node.id,
        node.label,
        node.level,
        node.path
-FROM node
-WHERE node.id=:id;
+FROM   node
+WHERE  node.id=:id;
 
 -----------------------------------------------------------------------------
 -- SQLQ_SELECT_NODE_CHILDREN
 -- List direct children of node identified by :node_id
-SELECT
-  node_ip1.id,
-  node_ip1.parent_id,
-  node_ip1.tag_id,
-  node_ip1.label,
-  node_ip1.level,
-  node_ip1.path
-FROM node AS node_i
-JOIN node AS node_ip1 ON node_i.id=node_ip1.parent_id
-WHERE node_i.id=:node_id;
+SELECT node_ip1.id,
+       node_ip1.parent_id,
+       node_ip1.tag_id,
+       node_ip1.label,
+       node_ip1.level,
+       node_ip1.path
+FROM   node AS node_i
+JOIN   node AS node_ip1 ON node_i.id=node_ip1.parent_id
+WHERE  node_i.id=:node_id;
 
 -----------------------------------------------------------------------------
 -- SQLQ_SELECT_NODE_CHILD
 -- Find child labelled :child_label of node identified by :node_id
-SELECT
-  node_ip1.id,
-  node_ip1.parent_id,
-  node_ip1.tag_id,
-  node_ip1.label,
-  node_ip1.level,
-  node_ip1.path
-FROM node AS node_i
-JOIN node AS node_ip1 ON node_i.id=node_ip1.parent_id
-WHERE node_i.id=:node_id AND node_ip1.label=:child_label;
+SELECT node_ip1.id,
+       node_ip1.parent_id,
+       node_ip1.tag_id,
+       node_ip1.label,
+       node_ip1.level,
+       node_ip1.path
+FROM   node AS node_i
+JOIN   node AS node_ip1 ON node_i.id=node_ip1.parent_id
+WHERE  node_i.id=:node_id AND node_ip1.label=:child_label;
+
+-----------------------------------------------------------------------------
+-- SQLQ_SELECT_NODE_DATASETS
+-- Find datatsets attached to node identified by :node_id.
+SELECT dataset.id,
+       dataset.hash,
+       dataset.alias
+FROM   dataset
+JOIN   dataset_node_membership ON dataset.id=dataset_node_membership.dataset_id
+WHERE  dataset_node_membership.node_id=:node_id;
