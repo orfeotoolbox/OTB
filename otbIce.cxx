@@ -128,7 +128,7 @@ public:
         
         otb::ViewSettings::PointType origin;
         origin[0]=m_OriginDragX-m_DeltaDragX*m_ViewSettings->GetSpacing()[0];
-        origin[1]=m_OriginDragY+m_DeltaDragY*m_ViewSettings->GetSpacing()[1];
+        origin[1]=m_OriginDragY+m_DeltaDragY*vcl_abs(m_ViewSettings->GetSpacing()[1]);
 
         m_ViewSettings->SetOrigin(origin);
 
@@ -155,7 +155,7 @@ public:
 
       otb::ViewSettings::PointType origin;
       origin[0]=m_OriginDragX-m_DeltaDragX*m_ViewSettings->GetSpacing()[0];
-      origin[1]=m_OriginDragY+m_DeltaDragY*m_ViewSettings->GetSpacing()[1];
+      origin[1]=m_OriginDragY+m_DeltaDragY*vcl_abs(m_ViewSettings->GetSpacing()[1]);
       
       m_ViewSettings->SetOrigin(origin);
       } 
