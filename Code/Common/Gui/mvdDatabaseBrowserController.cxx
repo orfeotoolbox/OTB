@@ -324,7 +324,6 @@ DatabaseBrowserController
   //
   //  Leaves/Items (datasets).
 
-#if 1
   QSqlQuery datasetsQuery( db->SelectNodeDatasets( safeNodeId ) );
 
   while( datasetsQuery.next() )
@@ -359,7 +358,17 @@ DatabaseBrowserController
 
     leaves.erase( it );
     }
-#endif
+
+  while( !leaves.empty() )
+    {
+    TreeWidgetItemMap::iterator it( leaves.begin() );
+
+    qDebug() << "Remove leaf:" << it.key() << it.value()->text( 0 );
+
+    delete it.value();
+
+    leaves.erase( it );
+    }
 
   //
   // Nodes/Groups.
@@ -393,6 +402,17 @@ DatabaseBrowserController
 
     // Recurse.
     Foo( childItem, id.toLongLong() );
+    }
+
+  while( !nodes.empty() )
+    {
+    TreeWidgetItemMap::iterator it( nodes.begin() );
+
+    qDebug() << "Remove node:" << it.key() << it.value()->text( 0 );
+
+    delete it.value();
+
+    nodes.erase( it );
     }
 }
 
