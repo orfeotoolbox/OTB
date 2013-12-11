@@ -1,7 +1,9 @@
+#include <stdlib.h>
 #include <GLFW/glfw3.h>
 #include "otbGlView.h"
 #include "otbGlImageActor.h"
 #include "otbViewSettings.h"
+#include "otbDEMHandler.h"
 
 class Manipulator
 {
@@ -283,7 +285,7 @@ public:
       {
       if(m_Actors.size()>m_SelectedActor)
         {
-        std::cout<<"Actor visibility "<<(m_Actors[m_SelectedActor]->GetVisible()?" off":"on")<<std::endl;
+        std::cout<<"Actor visibility "<<(m_Actors[m_SelectedActor]->GetVisible()?"off":"on")<<std::endl;
         m_Actors[m_SelectedActor]->SetVisible(!m_Actors[m_SelectedActor]->GetVisible());
         }
       }
@@ -320,7 +322,7 @@ public:
 
      if(key == GLFW_KEY_S && action == GLFW_PRESS)
        {
-       std::cout<<"Actor shader rendering "<<(m_Actors[m_SelectedActor]->GetUseShader()?" off":"on")<<std::endl;
+       std::cout<<"Actor shader rendering "<<(m_Actors[m_SelectedActor]->GetUseShader()?"off":"on")<<std::endl;
        m_Actors[m_SelectedActor]->SetUseShader(!m_Actors[m_SelectedActor]->GetUseShader());
        }
   }
@@ -379,6 +381,7 @@ int main(int argc, char * argv[])
     {
     std::cerr<<"Usage: "<<argv[0]<<" init_min init_max img1 [img2 img3 img4 img5]"<<std::endl<<std::endl;
     std::cerr<<"Images can be of arbitrary sizes and geometries, as long as OTB knows how to pass from one geometry to the other (projref, keyworlist or homotethic images). The viewport geometry will be the one of the first image."<<std::endl;
+    std::cerr<<"DEM directory and geoid files can be set through the OTB_DEM_DIR and OTB_GEOID_FILE environment variable"<<std::endl;
     std::cerr<<"Hooks:"<<std::endl;
     std::cerr<<"- Mouse drag: navigate"<<std::endl;
     std::cerr<<"- Mouse wheel: zoom in/out"<<std::endl;
@@ -394,6 +397,23 @@ int main(int argc, char * argv[])
     std::cerr<<"- b key: change blue channel of current actor"<<std::endl;
     std::cerr<<"- s key: enable / disable shader rendering (compare speed!)"<<std::endl;
     return EXIT_FAILURE;
+    }
+
+  char * demdir = getenv("OTB_DEM_DIR");
+  char * geoidfile = getenv("OTB_GEOID_FILE");
+
+  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
+  
+  if(demdir != NULL)
+    {
+    std::cout<<"Configuring DEM directory: "<<demdir<<std::endl;
+    demHandler->OpenDEMDirectory(demdir);
+    }
+
+  if(geoidfile != NULL)
+    {
+    std::cout<<"Configuring geoid file: "<<geoidfile<<std::endl;
+    demHandler->OpenGeoidFile(geoidfile);
     }
 
   if(!glfwInit())
