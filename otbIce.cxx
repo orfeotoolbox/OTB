@@ -375,6 +375,27 @@ void error_callback(int error, const char* description)
 
 int main(int argc, char * argv[])
 {
+  if(argc < 4)
+    {
+    std::cerr<<"Usage: "<<argv[0]<<" init_min init_max img1 [img2 img3 img4 img5]"<<std::endl<<std::endl;
+    std::cerr<<"Images can be of arbitrary sizes and geometries, as long as OTB knows how to pass from one geometry to the other (projref, keyworlist or homotethic images). The viewport geometry will be the one of the first image."<<std::endl;
+    std::cerr<<"Hooks:"<<std::endl;
+    std::cerr<<"- Mouse drag: navigate"<<std::endl;
+    std::cerr<<"- Mouse wheel: zoom in/out"<<std::endl;
+    std::cerr<<"- CTRL key presed: fast rendering (no data loading). Useful for fast zoom for instance"<<std::endl;
+    std::cerr<<"- Arrows keys: navigate"<<std::endl;
+    std::cerr<<"- + or - keys: zoom in/out"<<std::endl;
+    std::cerr<<"- 1 to 5 keys: select image actor 1 to 5 (ordered as received in command-line"<<std::endl;
+    std::cerr<<"- SPACE bar: toogle selected actor visiblity"<<std::endl;
+    std::cerr<<"- SHIFT key + mouse wheel: tune intensity of current actor"<<std::endl;
+    std::cerr<<"- ALT key + mouse wheel: tune contrast of current actor"<<std::endl;
+    std::cerr<<"- r key: change red channel of current actor"<<std::endl;
+    std::cerr<<"- g key: change green channel of current actor"<<std::endl;
+    std::cerr<<"- b key: change blue channel of current actor"<<std::endl;
+    std::cerr<<"- s key: enable / disable shader rendering (compare speed!)"<<std::endl;
+    return EXIT_FAILURE;
+    }
+
   if(!glfwInit())
     {
     std::cerr<<"Could not initalize glfw!"<<std::endl;
