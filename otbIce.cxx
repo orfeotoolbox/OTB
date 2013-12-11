@@ -19,9 +19,15 @@ public:
     m_ViewSettings = settings;
   }
 
-  void SetActors(const std::vector<otb::GlImageActor::Pointer> & actors)
+  void SetActors(const std::vector<otb::GlImageActor::Pointer> & actors, const std::vector<std::string> names)
   {
     m_Actors = actors;
+    m_ActorsNames = names;
+  }
+
+  void SetView(otb::GlView * view)
+  {
+    m_View = view;
   }
 
   bool IsDragging() const
@@ -236,12 +242,31 @@ public:
       m_ViewSettings->Zoom(zoomCenter,1.1);
       }
 
+    if(key == GLFW_KEY_PAGE_UP && action == GLFW_PRESS)
+      {
+      //m_View->RotateRenderingOrder(false);
+      std::cout<<"Moving actor to the front"<<std::endl;
+      m_View->MoveActorInRenderingOrder(m_ActorsNames[m_SelectedActor],false);
+      }
+
+    if(key == GLFW_KEY_PAGE_DOWN && action == GLFW_PRESS)
+      {
+      std::cout<<"Moving actor to the back"<<std::endl;
+      //m_View->RotateRenderingOrder(true);
+      m_View->MoveActorInRenderingOrder(m_ActorsNames[m_SelectedActor],true);
+      }
+   
+    if(key == GLFW_KEY_TAB && action == GLFW_PRESS)
+      {
+      m_View->RotateRenderingOrder(true);
+      }
+
     if(key == GLFW_KEY_1 && action == GLFW_PRESS)
       {
       if(m_Actors.size() > 0)
         {
         m_SelectedActor = 0;
-        std::cout<<"Actor 1 selected"<<std::endl;
+        std::cout<<"Actor 1 selected"<<" ("<<m_ActorsNames[0]<<")"<<std::endl;
         }
       }
     if(key == GLFW_KEY_2 && action == GLFW_PRESS)
@@ -250,7 +275,7 @@ public:
       if(m_Actors.size() > 1)
         {
         m_SelectedActor = 1;
-        std::cout<<"Actor 2 selected"<<std::endl;
+        std::cout<<"Actor 2 selected"<<"("<<m_ActorsNames[1]<<")"<<std::endl;
         }
       }
     if(key == GLFW_KEY_3 && action == GLFW_PRESS)
@@ -259,7 +284,7 @@ public:
       if(m_Actors.size() > 2)
         {
         m_SelectedActor = 2;
-        std::cout<<"Actor 3 selected"<<std::endl;
+        std::cout<<"Actor 3 selected"<<"("<<m_ActorsNames[2]<<")"<<std::endl;
         }
       }
     if(key == GLFW_KEY_4 && action == GLFW_PRESS)
@@ -268,7 +293,7 @@ public:
       if(m_Actors.size() > 3)
         {
         m_SelectedActor = 3;
-        std::cout<<"Actor 4 selected"<<std::endl;
+        std::cout<<"Actor 4 selected"<<"("<<m_ActorsNames[3]<<")"<<std::endl;
         }
       }
     if(key == GLFW_KEY_4 && action == GLFW_PRESS)
@@ -277,7 +302,7 @@ public:
       if(m_Actors.size() > 4)
         {
         m_SelectedActor = 4;
-        std::cout<<"Actor 5 selected"<<std::endl;
+        std::cout<<"Actor 5 selected"<<"("<<m_ActorsNames[4]<<")"<<std::endl;
         }
       }
 
@@ -352,6 +377,7 @@ private:
   otb::ViewSettings::Pointer m_ViewSettings;
 
   std::vector<otb::GlImageActor::Pointer> m_Actors;
+  std::vector<std::string> m_ActorsNames;
 
   otb::GlView::Pointer m_View;
   
@@ -395,7 +421,9 @@ int main(int argc, char * argv[])
     std::cerr<<"- r key: change red channel of current actor"<<std::endl;
     std::cerr<<"- g key: change green channel of current actor"<<std::endl;
     std::cerr<<"- b key: change blue channel of current actor"<<std::endl;
-    std::cerr<<"- s key: enable / disable shader rendering (compare speed!)"<<std::endl;
+    std::cerr<<"- s key: enable / disable shader rendering of current actor (compare speed!)"<<std::endl;
+    std::cerr<<"- PAGE_UP/PAGE_DOWN key: move actor backward or forward in rendering order"<<std::endl;
+    std::cerr<<"- TAB key: rotate rendering order"<<std::endl;
     return EXIT_FAILURE;
     }
 
@@ -451,6 +479,7 @@ int main(int argc, char * argv[])
    double max = atof(argv[2]);
 
    std::vector<otb::GlImageActor::Pointer> actors;
+   std::vector<std::string> actorsNames;
 
    otb::GlImageActor::Pointer mainActor = otb::GlImageActor::New();
    mainActor->Initialize(argv[3]);
@@ -462,7 +491,8 @@ int main(int argc, char * argv[])
    mainActor->SetMaxRed(max);
    mainActor->SetMaxGreen(max);
    mainActor->SetMaxBlue(max);
-   glView->AddActor(mainActor);
+   glView->AddActor(mainActor,std::string(argv[3]));
+   actorsNames.push_back(std::string(argv[3]));
 
    // Initialize view with respect to first actor
    glView->GetSettings()->SetOrigin(mainActor->GetOrigin());
@@ -488,11 +518,13 @@ int main(int argc, char * argv[])
      actor->SetMaxRed(max);
      actor->SetMaxGreen(max);
      actor->SetMaxBlue(max);
-     glView->AddActor(actor);
+     glView->AddActor(actor,std::string(argv[i]));
      actors.push_back(actor);
+     actorsNames.push_back(std::string(argv[i]));
      }
 
-   Manipulator::GetInstance().SetActors(actors);
+   Manipulator::GetInstance().SetActors(actors,actorsNames);
+   Manipulator::GetInstance().SetView(glView);
 
    otb::ViewSettings::PointType center;
    center[0] = 0.5*(ulx+lrx);

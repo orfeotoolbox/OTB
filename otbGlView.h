@@ -1,3 +1,4 @@
+
 #ifndef otb_GlView_h
 #define otb_GlView_h
 
@@ -55,6 +56,12 @@ public:
   itkSetObjectMacro(Settings,ViewSettings);
   itkGetObjectMacro(Settings,ViewSettings);
   itkGetConstObjectMacro(Settings,ViewSettings);
+
+  // This will rotate the rendering order (without modifying the order)
+  void RotateRenderingOrder(bool down = false);
+
+  // Move actor in rendering order
+  void MoveActorInRenderingOrder(std::string key, bool down = false);
 
 protected:
   GlView();

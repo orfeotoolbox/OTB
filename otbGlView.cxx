@@ -1,5 +1,6 @@
 #include "otbGlView.h"
 #include <GL/gl.h> 
+#include <algorithm>
 
 namespace otb
 {
@@ -114,8 +115,8 @@ GlView::ActorType::Pointer GlView::GetActor(const std::string & key)
 
 void GlView::LightRender()
 {
-  for(StringVectorType::iterator it = m_RenderingOrder.begin();
-      it!=m_RenderingOrder.end();++it)
+  for(StringVectorType::reverse_iterator it = m_RenderingOrder.rbegin();
+      it!=m_RenderingOrder.rend();++it)
     {
     ActorMapType::iterator actIt = m_Actors.find(*it);
 
@@ -129,8 +130,8 @@ void GlView::LightRender()
 void GlView::HeavyRender()
 {
   // TODO: Light render/ heavy render could be optimized
-  for(StringVectorType::iterator it = m_RenderingOrder.begin();
-      it!=m_RenderingOrder.end();++it)
+  for(StringVectorType::reverse_iterator it = m_RenderingOrder.rbegin();
+      it!=m_RenderingOrder.rend();++it)
     {
     ActorMapType::iterator actIt = m_Actors.find(*it);
 
@@ -143,5 +144,40 @@ void GlView::HeavyRender()
   this->LightRender();
 }
 
+
+void GlView::RotateRenderingOrder(bool down)
+{
+  if(m_RenderingOrder.size()>1)
+    {
+    if(down)
+      {
+      std::rotate(m_RenderingOrder.rbegin(),m_RenderingOrder.rbegin()+1,m_RenderingOrder.rend());
+      }
+    else
+      {
+      std::rotate(m_RenderingOrder.begin(),m_RenderingOrder.begin()+1,m_RenderingOrder.end());
+      }
+    }
+
+
+}
+
+// Move actor in rendering order
+void GlView::MoveActorInRenderingOrder(std::string key, bool down)
+{
+  StringVectorType::iterator it = std::find(m_RenderingOrder.begin(),m_RenderingOrder.end(),key);
+
+  if(it!=m_RenderingOrder.end())
+    {
+    if(down && it+1 != m_RenderingOrder.end())
+      {
+      std::swap(*it,*(it+1));
+      }
+    else if(!down && it != m_RenderingOrder.begin())
+      {
+      std::swap((*it),*(it-1));
+      }
+    }
+}
 
 }
