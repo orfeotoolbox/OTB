@@ -60,6 +60,13 @@ void GlImageActor::Initialize(const std::string & filename)
   m_FileReader->SetFileName(m_FileName);
   m_FileReader->UpdateOutputInformation();
 
+  if(m_FileReader->GetOutput()->GetNumberOfComponentsPerPixel() < 3)
+    {
+    m_RedIdx = 1;
+    m_GreenIdx = 1;
+    m_BlueIdx = 1;
+    }
+
   m_Origin = m_FileReader->GetOutput()->GetOrigin();
   m_Spacing = m_FileReader->GetOutput()->GetSpacing();
 
@@ -104,13 +111,13 @@ void GlImageActor::UpdateData()
 
   settings->GetViewportExtent(ulx,uly,lrx,lry);
 
-  std::cout<<"Viewport extent: "<<ulx<<", "<<uly<<" - "<<lrx<<", "<<lry<<std::endl;
+  // std::cout<<"Viewport extent: "<<ulx<<", "<<uly<<" - "<<lrx<<", "<<lry<<std::endl;
 
   RegionType requested;
 
   this->ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
 
-  std::cout<<"Corresponding image region: "<<requested<<std::endl;
+  // std::cout<<"Corresponding image region: "<<requested<<std::endl;
  
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
@@ -122,7 +129,7 @@ void GlImageActor::UpdateData()
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
 
-  std::cout<<"Required tiles: "<<nbTilesX<<" x "<<nbTilesY<<std::endl;
+  // std::cout<<"Required tiles: "<<nbTilesX<<" x "<<nbTilesY<<std::endl;
 
   SizeType tileSize;
   tileSize.Fill(m_TileSize);
@@ -553,7 +560,7 @@ void GlImageActor::UpdateResolution()
   std::ostringstream extFilename;
   extFilename<<m_FileName<<"?&resol="<<m_CurrentResolution;
 
-  std::cout<<"Extfname = "<<extFilename.str()<<std::endl;
+  // std::cout<<"Extfname = "<<extFilename.str()<<std::endl;
 
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(extFilename.str());
