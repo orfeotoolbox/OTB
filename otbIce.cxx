@@ -27,6 +27,11 @@ public:
     return m_Drag;
   }
 
+  bool IsFastRendering() const
+  {
+    return m_FastRendering;
+  }
+
   static void static_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
   {
     GetInstance().key_callback(window, key, scancode, action, mods);
@@ -64,13 +69,38 @@ public:
     zoomCenter[0] = vpx;
     zoomCenter[1] = vpy;
 
-    if(yoffset>0)
+    if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
       {
-      m_ViewSettings->Zoom(zoomCenter,1/1.1);
+      double delta = yoffset > 0 ? 1/1.1 : 1.1;
+      
+      m_Actors[m_SelectedActor]->SetMinRed(m_Actors[m_SelectedActor]->GetMinRed()*delta);
+      m_Actors[m_SelectedActor]->SetMinGreen(m_Actors[m_SelectedActor]->GetMinGreen()*delta);
+      m_Actors[m_SelectedActor]->SetMinBlue(m_Actors[m_SelectedActor]->GetMinBlue()*delta);
+      m_Actors[m_SelectedActor]->SetMaxRed(m_Actors[m_SelectedActor]->GetMaxRed()*delta);
+      m_Actors[m_SelectedActor]->SetMaxGreen(m_Actors[m_SelectedActor]->GetMaxGreen()*delta);
+      m_Actors[m_SelectedActor]->SetMaxBlue(m_Actors[m_SelectedActor]->GetMaxBlue()*delta);
+    }
+    else if(glfwGetKey(window,GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
+      {
+      double delta = yoffset > 0 ? 1/1.1 : 1.1;
+      
+      m_Actors[m_SelectedActor]->SetMinRed(m_Actors[m_SelectedActor]->GetMinRed()*delta);
+      m_Actors[m_SelectedActor]->SetMinGreen(m_Actors[m_SelectedActor]->GetMinGreen()*delta);
+      m_Actors[m_SelectedActor]->SetMinBlue(m_Actors[m_SelectedActor]->GetMinBlue()*delta);
+      m_Actors[m_SelectedActor]->SetMaxRed(m_Actors[m_SelectedActor]->GetMaxRed()/delta);
+      m_Actors[m_SelectedActor]->SetMaxGreen(m_Actors[m_SelectedActor]->GetMaxGreen()/delta);
+      m_Actors[m_SelectedActor]->SetMaxBlue(m_Actors[m_SelectedActor]->GetMaxBlue()/delta);
       }
-    else if(yoffset < 0)
+    else
       {
-      m_ViewSettings->Zoom(zoomCenter,1.1);
+      if(yoffset>0)
+        {
+        m_ViewSettings->Zoom(zoomCenter,1/1.1);
+        }
+      else if(yoffset < 0)
+        {
+        m_ViewSettings->Zoom(zoomCenter,1.1);
+        }
       }
   }
 
@@ -134,15 +164,26 @@ public:
   void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
   {
     // We get events twice for some reason
-    if(m_KeyFilter % 2 == 1)
-      {
-      ++m_KeyFilter;
-      return;
-      }
-    ++m_KeyFilter;
+    // if(m_KeyFilter % 2 == 1)
+    //   {
+    //   ++m_KeyFilter;
+    //   return;
+    //   }
+    // ++m_KeyFilter;
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
       glfwSetWindowShouldClose(window, GL_TRUE);
+
+    if(key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
+      {
+      std::cout<<"Fast rendering on"<<std::endl;
+      m_FastRendering = true;
+      }
+    else if(key == GLFW_KEY_LEFT_CONTROL && action == GLFW_RELEASE)
+      {
+      std::cout<<"Fast rendering off"<<std::endl;
+      m_FastRendering = false;
+      }
     
     double ulx,uly,lrx,lry;
     m_ViewSettings->GetViewportExtent(ulx,uly,lrx,lry);
@@ -152,25 +193,25 @@ public:
     double deltax = (lrx-ulx)/4;
     double deltay = (lry-uly)/4;
     
-    if(key == GLFW_KEY_LEFT)
+    if(key == GLFW_KEY_LEFT && action == GLFW_PRESS)
       {
       origin[0]-=deltax; 
       m_ViewSettings->SetOrigin(origin);
       }
 
-    if(key == GLFW_KEY_RIGHT)
+    if(key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
       {
       origin[0]+=deltax; 
       m_ViewSettings->SetOrigin(origin);
       }
 
-    if(key == GLFW_KEY_UP)
+    if(key == GLFW_KEY_UP && action == GLFW_PRESS)
       {
       origin[1]+=deltay; 
       m_ViewSettings->SetOrigin(origin);
       }
 
-    if(key == GLFW_KEY_DOWN)
+    if(key == GLFW_KEY_DOWN && action == GLFW_PRESS)
       {
       origin[1]-=deltay; 
       m_ViewSettings->SetOrigin(origin);
@@ -193,26 +234,97 @@ public:
       m_ViewSettings->Zoom(zoomCenter,1.1);
       }
 
-    if(key == GLFW_KEY_1)
+    if(key == GLFW_KEY_1 && action == GLFW_PRESS)
       {
-      std::cout<<"Key 1 actors size: "<<m_Actors.size()<<std::endl;
-      std::cout<<"Visible: "<<m_Actors[0]->GetVisible()<<std::endl;
       if(m_Actors.size() > 0)
         {
-        m_Actors[0]->SetVisible(!m_Actors[0]->GetVisible());
+        m_SelectedActor = 0;
+        std::cout<<"Actor 1 selected"<<std::endl;
         }
       }
-    if(key == GLFW_KEY_2)
+    if(key == GLFW_KEY_2 && action == GLFW_PRESS)
       {
-      std::cout<<"Key 2 actors size: "<<m_Actors.size()<<std::endl;
-      std::cout<<"Visible: "<<m_Actors[1]->GetVisible()<<std::endl;
+      
       if(m_Actors.size() > 1)
         {
-        m_Actors[1]->SetVisible(!m_Actors[1]->GetVisible());
+        m_SelectedActor = 0;
+        std::cout<<"Actor 2 selected"<<std::endl;
         }
-
       }
+    if(key == GLFW_KEY_3 && action == GLFW_PRESS)
+      {
+      
+      if(m_Actors.size() > 2)
+        {
+        m_SelectedActor = 0;
+        std::cout<<"Actor 3 selected"<<std::endl;
+        }
+      }
+    if(key == GLFW_KEY_4 && action == GLFW_PRESS)
+      {
+      
+      if(m_Actors.size() > 3)
+        {
+        m_SelectedActor = 0;
+        std::cout<<"Actor 4 selected"<<std::endl;
+        }
+      }
+    if(key == GLFW_KEY_4 && action == GLFW_PRESS)
+      {
+      
+      if(m_Actors.size() > 4)
+        {
+        m_SelectedActor = 0;
+        std::cout<<"Actor 5 selected"<<std::endl;
+        }
+      }
+
+    if(key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+      {
+      if(m_Actors.size()>m_SelectedActor)
+        {
+        std::cout<<"Actor visibility "<<(m_Actors[m_SelectedActor]->GetVisible()?" off":"on")<<std::endl;
+        m_Actors[m_SelectedActor]->SetVisible(!m_Actors[m_SelectedActor]->GetVisible());
+        }
+      }
+
+     if(key == GLFW_KEY_R && action == GLFW_PRESS)
+      {
+      if(m_Actors.size()>m_SelectedActor)
+        {
+        unsigned int red = 1+(m_Actors[m_SelectedActor]->GetRedIdx())%m_Actors[m_SelectedActor]->GetNumberOfComponents();
+        std::cout<<"Changing actor red component to "<<red<<std::endl;
+        m_Actors[m_SelectedActor]->SetRedIdx(red);
+        }
+      }
+
+     if(key == GLFW_KEY_G && action == GLFW_PRESS)
+      {
+      if(m_Actors.size()>m_SelectedActor)
+        {
+        unsigned int green = 1+(m_Actors[m_SelectedActor]->GetGreenIdx())%m_Actors[m_SelectedActor]->GetNumberOfComponents();
+        std::cout<<"Changing actor red component to "<<green<<std::endl;
+        m_Actors[m_SelectedActor]->SetGreenIdx(green);
+        }
+      }
+
+     if(key == GLFW_KEY_B && action == GLFW_PRESS)
+      {
+      if(m_Actors.size()>m_SelectedActor)
+        {
+        unsigned int blue = 1+(m_Actors[m_SelectedActor]->GetBlueIdx())%m_Actors[m_SelectedActor]->GetNumberOfComponents();
+        std::cout<<"Changing actor red component to "<<blue<<std::endl;
+        m_Actors[m_SelectedActor]->SetBlueIdx(blue);
+        }
+      }
+
+     if(key == GLFW_KEY_S && action == GLFW_PRESS)
+       {
+       std::cout<<"Actor shader rendering "<<(m_Actors[m_SelectedActor]->GetUseShader()?" off":"on")<<std::endl;
+       m_Actors[m_SelectedActor]->SetUseShader(!m_Actors[m_SelectedActor]->GetUseShader());
+       }
   }
+
 
   void framebuffer_size_callback(GLFWwindow* window, int width, int height)
   {
@@ -229,6 +341,7 @@ private:
   Manipulator()
   {
     m_KeyFilter=0;
+    m_FastRendering = false;
   }
 
   Manipulator(Manipulator const&);
@@ -241,6 +354,7 @@ private:
   otb::GlView::Pointer m_View;
   
   bool   m_Drag;
+  bool   m_FastRendering;
   double m_StartDragX;
   double m_StartDragY;
   double m_DeltaDragX;
@@ -249,6 +363,7 @@ private:
   double m_OriginDragY;
   double m_ZoomCenterX;
   double m_ZoomCenterY;
+  unsigned int m_SelectedActor;
 };
 
 
@@ -351,7 +466,7 @@ int main(int argc, char * argv[])
 
      glView->BeforeRendering();
 
-     if(Manipulator::GetInstance().IsDragging())
+     if(Manipulator::GetInstance().IsDragging() || Manipulator::GetInstance().IsFastRendering())
        {
        glView->LightRender();
        }

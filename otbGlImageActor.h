@@ -73,6 +73,17 @@ public:
   itkGetMacro(MaxGreen,double);
   itkGetMacro(MaxBlue,double);  
 
+  itkSetMacro(RedIdx,unsigned int);
+  itkGetMacro(RedIdx,unsigned int);
+  itkSetMacro(GreenIdx,unsigned int);
+  itkGetMacro(GreenIdx,unsigned int);
+  itkSetMacro(BlueIdx,unsigned int);
+  itkGetMacro(BlueIdx,unsigned int);
+
+
+
+  itkGetMacro(NumberOfComponents,unsigned int);
+
 protected:
   GlImageActor();
   
@@ -99,7 +110,13 @@ protected:
         m_RedIdx(1),
         m_GreenIdx(2),
         m_BlueIdx(3),
-        m_UseShader(false)
+        m_UseShader(false),
+        m_MinRed(0),
+        m_MaxRed(0),
+        m_MinGreen(0),
+        m_MaxGreen(0),
+        m_MinBlue(0),
+        m_MaxBlue(0)
     {
       m_UL.Fill(0);
       m_UR.Fill(0);
@@ -119,6 +136,12 @@ protected:
     unsigned int m_GreenIdx;
     unsigned int m_BlueIdx;
     unsigned int m_UseShader;
+    double m_MinRed;
+    double m_MaxRed;
+    double m_MinGreen;
+    double m_MaxGreen;
+    double m_MinBlue;
+    double m_MaxBlue;
   };
 
   typedef std::vector<Tile>                                                       TileVectorType;    
@@ -178,9 +201,10 @@ private:
 
   ResolutionVectorType m_AvailableResolutions;
 
-  PointType   m_Origin;
-  SpacingType m_Spacing;
-  RegionType  m_LargestRegion;
+  PointType    m_Origin;
+  SpacingType  m_Spacing;
+  RegionType   m_LargestRegion;
+  unsigned int m_NumberOfComponents;
 
   bool m_UseShader;
   

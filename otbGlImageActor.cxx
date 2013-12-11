@@ -30,6 +30,7 @@ GlImageActor::GlImageActor()
     m_AvailableResolutions(),
     m_Origin(),
     m_Spacing(),
+    m_NumberOfComponents(0),
     m_UseShader(false)
 {}
 
@@ -79,6 +80,7 @@ void GlImageActor::Initialize(const std::string & filename)
 
   m_Origin = m_FileReader->GetOutput()->GetOrigin();
   m_Spacing = m_FileReader->GetOutput()->GetSpacing();
+  m_NumberOfComponents = m_FileReader->GetOutput()->GetNumberOfComponentsPerPixel();
 
   m_AvailableResolutions = m_FileReader->GetAvailableResolutions();
 
@@ -168,6 +170,12 @@ void GlImageActor::UpdateData()
       newTile.m_RedIdx = m_RedIdx;
       newTile.m_GreenIdx = m_GreenIdx;
       newTile.m_BlueIdx = m_BlueIdx;
+      newTile.m_MinRed = m_MinRed;
+      newTile.m_MinGreen = m_MinGreen;
+      newTile.m_MinBlue = m_MinBlue;
+      newTile.m_MaxRed = m_MaxRed;
+      newTile.m_MaxGreen = m_MaxGreen;
+      newTile.m_MaxBlue = m_MaxBlue;
       newTile.m_Resolution = m_CurrentResolution;
       newTile.m_UseShader = m_UseShader;
 
@@ -187,12 +195,26 @@ bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
     {
     if(it->m_ImageRegion == tile.m_ImageRegion)
       {
-      return (tile.m_Resolution ==  it->m_Resolution
-              && tile.m_RedIdx == it->m_RedIdx
-              && tile.m_GreenIdx == it->m_GreenIdx
-              && tile.m_BlueIdx == it->m_BlueIdx
-              && (tile.m_UseShader == m_UseShader));
-      
+      bool resp = (tile.m_Resolution ==  it->m_Resolution
+                   && tile.m_RedIdx == it->m_RedIdx
+                   && tile.m_GreenIdx == it->m_GreenIdx
+                   && tile.m_BlueIdx == it->m_BlueIdx
+                   && (tile.m_UseShader == m_UseShader));
+
+      if(!m_UseShader)
+        {
+        return resp 
+          &&tile.m_MinRed == m_MinRed
+          &&tile.m_MinGreen == m_MinGreen
+          &&tile.m_MinBlue == m_MinBlue
+          &&tile.m_MaxRed == m_MaxRed
+          &&tile.m_MaxGreen == m_MaxGreen
+          &&tile.m_MaxBlue == m_MaxBlue;
+        }
+      else
+        {
+        return resp;
+        }
       }
     }
 
@@ -435,7 +457,13 @@ void GlImageActor::CleanLoadedTiles()
        || it->m_RedIdx != m_RedIdx
        || it->m_GreenIdx != m_GreenIdx
        || it->m_BlueIdx != m_BlueIdx
-       || (it->m_UseShader != m_UseShader))
+       || (it->m_UseShader != m_UseShader)
+       || (!m_UseShader && it->m_MinRed != m_MinRed)
+       || (!m_UseShader   &&it->m_MinGreen != m_MinGreen)
+       || (!m_UseShader  &&it->m_MinBlue != m_MinBlue)
+       || (!m_UseShader  &&it->m_MaxRed != m_MaxRed)
+       || (!m_UseShader  &&it->m_MaxGreen != m_MaxGreen)
+       || (!m_UseShader  &&it->m_MaxBlue != m_MaxBlue))
       {     
       // Tile will not be used anymore, unload it from GPU
       UnloadTile(*it);
