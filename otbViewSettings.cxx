@@ -29,12 +29,18 @@ void ViewSettings::ScreenToViewPortTransform(const double & xscreen, const doubl
 }
 
 void ViewSettings::Zoom(const PointType & zoomCenter,double scale)
-{
+{ 
   m_Origin[0] = m_Origin[0] + (zoomCenter[0]-m_Origin[0])*(1-scale);
   m_Origin[1] = m_Origin[1] + (zoomCenter[1]-m_Origin[1])*(1-scale);
   
   m_Spacing[0]*=scale;
   m_Spacing[1]*=scale;
+}
+
+void ViewSettings::Center(const PointType & center)
+{
+  m_Origin[0] = center[0] - m_Spacing[0]*m_ViewportSize[0];
+  m_Origin[1] = center[1] - m_Spacing[1]*m_ViewportSize[1];
 }
 
 }

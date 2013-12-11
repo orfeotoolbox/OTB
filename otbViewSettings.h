@@ -58,6 +58,8 @@ public:
 
   void Zoom(const PointType & zoomCenter,double scale = 1.1);
 
+  void Center(const PointType & center);
+
 protected:
   ViewSettings();
 
