@@ -272,6 +272,7 @@ int main(int argc, char * argv[])
    glView->GetSettings()->SetSpacing(actor->GetSpacing());
    glView->GetSettings()->SetWkt(actor->GetWkt());
    glView->GetSettings()->SetKeywordList(actor->GetKwl());
+   glView->GetSettings()->UseProjectionOn();
 
    double ulx,uly,lrx,lry;
 
