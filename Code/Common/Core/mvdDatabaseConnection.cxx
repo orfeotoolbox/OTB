@@ -185,90 +185,6 @@ const char* DatabaseConnection::TAG_NAMES[] = {
 };
 
 /*******************************************************************************/
-/*
-void
-DatabaseConnection
-::InitializeDatabase2()
-{
-  DatabaseConnection dbc;
-
-  dbc.ExecuteQuery( "PRAGMA foreign_keys = ON;" );
-
-
-  //
-  // DATASET TABLE.
-  dbc.ExecuteQuery(
-    "CREATE TABLE dataset( id INTEGER PRIMARY KEY, hash TEXT NOT NULL );" );
-
-
-  //
-  // TAG TABLE.
-  dbc.ExecuteQuery(
-    "CREATE TABLE tag( "
-    "id INTEGER PRIMARY KEY, "
-    "label TEXT NOT NULL );"
-  );
-  dbc.ExecuteQuery(
-    "CREATE UNIQUE INDEX idx_tag_label ON tag( label );"
-  );
-  // // TAG VALUES.
-  // dbc.BatchQuery(
-  //   "INSERT INTO tag( id, label ) VALUES( :id, :label );",
-  //   QVariantList() << 0 << 1 << 2,
-  //   QVariantList() << "Root" << "Datasets" << "Cached"
-  // );
-
-
-  //
-  // TAG-NODE TABLE.
-  dbc.ExecuteQuery(
-    "CREATE TABLE tag_node( "
-    "id INTEGER PRIMARY KEY, "
-    "parent_id INTEGER REFERENCES tag_node( id ), "
-    "tag_id INTEGER NOT NULL REFERENCES tag( id ), "
-    "level INTEGER, "
-    "path TEXT );"
-  );
-  dbc.ExecuteQuery(
-    "CREATE INDEX idx_tag_node_tid ON tag_node( tag_id );"
-  );
-
-  //
-  // DATASET MEMBERSHIP.
-  dbc.ExecuteQuery(
-    "CREATE TABLE dataset_membership( "
-    "dataset_id INTEGER NOT NULL REFERENCES dataset( id ), "
-    "tag_id INTEGER NOT NULL REFERENCES tag( id ), "
-    "PRIMARY KEY( dataset_id, tag_id ) );"
-  );
-  dbc.ExecuteQuery(
-    "CREATE UNIQUE INDEX idx_ds_membership_dataset_id "
-    "ON dataset_membership( dataset_id );"
-  );
-  dbc.ExecuteQuery(
-    "CREATE UNIQUE INDEX idx_dsmembership_dataset_tag_id "
-    "ON dataset_membership( tag_id );"
-  );
-
-
-  //
-  // DATASET ATTRIBUTE.
-  dbc.ExecuteQuery(
-    "CREATE TABLE dataset_attribute( "
-    "id INTEGER PRIMARY KEY, "
-    "dataset_id INTEGER NOT NULL REFERENCES dataset( id ), "
-    "rank INTEGER NOT NULL, "
-    "name TEXT NOT NULL, "
-    "value TEXT );"
-  );
-  dbc.ExecuteQuery(
-    "CREATE INDEX idx_dataset_attribute_dsid "
-    "ON dataset_attribute( dataset_id );"
-  );
-}
-*/
-
-/*******************************************************************************/
 void
 DatabaseConnection
 ::InitializeDatabase()
@@ -303,7 +219,7 @@ DatabaseConnection
   dbc.InsertNode( "WV2", datasetNodeId );
 #endif
 
-#if defined( _DEBUG ) || 0
+#if (defined( _DEBUG ) && 1) || 0
   // TEST-1
   dbc.InsertNode( "Test-1", datasetNodeId );
 

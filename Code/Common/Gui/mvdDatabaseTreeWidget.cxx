@@ -51,7 +51,6 @@ namespace mvd
   Context comment for translator.
 */
 
-
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
@@ -101,17 +100,18 @@ DatabaseTreeWidget
 {
   setContextMenuPolicy(Qt::CustomContextMenu);
   
-  QObject::connect(this,
-                   SIGNAL(customContextMenuRequested(const QPoint&)),
-                   SLOT(OnCustomContextMenuRequested(const QPoint&))
-    );  
+  QObject::connect(
+    this,
+    SIGNAL( customContextMenuRequested( const QPoint& ) ),
+    SLOT( OnCustomContextMenuRequested( const QPoint& ) )
+  );
 }
 
 /*******************************************************************************/
 void 
 DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 {
-#if 0
+#if BYPASS_MOUSE_EVENTS
   QTreeWidget::mouseMoveEvent( event );
   return;
 #endif
@@ -148,6 +148,11 @@ DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 void
 DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 {
+#if BYPASS_MOUSE_EVENTS
+  QTreeWidget::mousePressEvent( event );
+  return;
+#endif
+
   if (event->button() == Qt::LeftButton)
      {
      //
@@ -166,7 +171,7 @@ DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
   qDebug() << this << "::dragEnterEvent(" << event << ") :"
            << event->mimeData()->formats();
 
-#if 0
+#if BYPASS_DRAG_AND_DROP_EVENTS
   QTreeWidget::dragEnterEvent( event );
   return;
 #endif
@@ -183,7 +188,7 @@ void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
   qDebug() << this << "::dragMoveEvent(" << event << ") :"
            << event->mimeData()->formats();
 
-#if 0
+#if BYPASS_DRAG_AND_DROP_EVENTS
   QTreeWidget::dragMoveEvent( event );
   return;
 #endif
@@ -207,7 +212,7 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
   qDebug() << this << "::dropEvent(" << event << ") :"
            << event->mimeData()->formats();
 
-#if 0
+#if BYPASS_DRAG_AND_DROP_EVENTS
   QTreeWidget::dropEvent( event );
   return;
 #endif

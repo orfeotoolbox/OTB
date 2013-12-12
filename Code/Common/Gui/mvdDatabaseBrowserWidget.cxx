@@ -79,27 +79,15 @@ DatabaseBrowserWidget
 {
   m_UI->setupUi( this );
 
-#if defined( _DEBUG ) && ENABLE_DISPLAY_ID
   m_UI->databaseTreeWidget->headerItem()->setText( 1, "Id" );
-#endif
+  m_UI->databaseTreeWidget->headerItem()->setText( 2, "Info" );
 
-#if defined( _DEBUG ) && 1
-  m_UI->databaseTreeWidget->headerItem()->setText( 2, "?" );
+#if (!defined( _DEBUG ) && 1) || 0
+  m_UI->databaseTreeWidget->setColumnHidden( 1, true );
+  m_UI->databaseTreeWidget->setColumnHidden( 2, true );
 #endif
 
   SetupUI();
-
-#if 0
-  //
-  // connect search box changed
-  QObject::connect(
-    m_UI->m_SearchLine,
-    SIGNAL( textChanged( const QString& ) ),
-    // to:
-    this,
-    SLOT( OnSearchBoxChanged( const QString& ) )
-  );
-#endif
 }
 
 /*******************************************************************************/
@@ -138,7 +126,12 @@ DatabaseBrowserWidget
     InsertItem(
       parent,
       DatabaseBrowserWidget::ITEM_TYPE_NODE,
-      Qt::ItemIsEnabled | /*Qt::ItemIsEditable |*/ Qt::ItemIsDropEnabled,
+      Qt::ItemIsEnabled |
+#if BYPASS_MOUSE_EVENTS
+      Qt::ItemIsEditable |
+      Qt::ItemIsDragEnabled |
+#endif
+      Qt::ItemIsDropEnabled,
       QTreeWidgetItem::ShowIndicator,
       text,
       id,
@@ -158,8 +151,10 @@ DatabaseBrowserWidget
     InsertItem(
       parent,
       DatabaseBrowserWidget::ITEM_TYPE_LEAF,
-      Qt::ItemIsEnabled | Qt::ItemIsSelectable |
-      /*Qt::ItemIsEditable |*/ Qt::ItemIsDragEnabled,
+      Qt::ItemIsEnabled |
+      Qt::ItemIsSelectable |
+      Qt::ItemIsEditable |
+      Qt::ItemIsDragEnabled,
       QTreeWidgetItem::DontShowIndicator,
       text,
       id,

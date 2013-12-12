@@ -49,6 +49,9 @@
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
+#define BYPASS_MOUSE_EVENTS 0
+#define BYPASS_DRAG_AND_DROP_EVENTS 0
+
 //
 // External classes pre-declaration.
 namespace
