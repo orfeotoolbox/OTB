@@ -211,7 +211,7 @@ DatabaseBrowserWidget
   // get the currentItem Id if any selected.
   // since all the TreeWidgetItem are deleted next, need to remember
   // it in order to set it back
-  QString currentItemId;
+  QString currentItemHash;
 
   DatasetTreeWidgetItem* selectedItem = 
     dynamic_cast< DatasetTreeWidgetItem* >(
@@ -220,7 +220,7 @@ DatabaseBrowserWidget
 
   if (selectedItem)
     {
-    currentItemId = selectedItem->GetId();
+    currentItemHash = selectedItem->GetHash();
     }
 
   // TODO: Get initial algorithm back (synchronizes two ordered
@@ -253,10 +253,10 @@ DatabaseBrowserWidget
     {
     // current alias
     const StringPairListType::value_type::first_type& alias = it->first;
-    const StringPairListType::value_type::second_type& id = it->second;
+    const StringPairListType::value_type::second_type& hash = it->second;
 
     DatasetTreeWidgetItem* item =
-      new DatasetTreeWidgetItem( m_DatasetRootItem, id, alias );
+      new DatasetTreeWidgetItem( m_DatasetRootItem, hash, alias );
 
     // Item is visible is search-text is empty or if alias contains
     // search-text.
@@ -266,7 +266,7 @@ DatabaseBrowserWidget
     );
 
     // was it the selected item ?
-    if( currentItemId == id )
+    if( currentItemHash == hash )
       {
       // ...add this child item as currentItem
       GetDatabaseTreeWidget()->setCurrentItem( item );
@@ -309,7 +309,7 @@ DatabaseBrowserWidget
 /*****************************************************************************/
 void
 DatabaseBrowserWidget
-::SetCurrentDataset( const QString& id )
+::SetCurrentDataset( const QString& hash )
 {
   // qDebug() << this << "::SetCurrentDataset(" << id << ")";
 
@@ -318,7 +318,7 @@ DatabaseBrowserWidget
 
   QList< QTreeWidgetItem* > items(
     m_UI->databaseTreeWidget->findItems(
-      id,
+      hash,
       Qt::MatchExactly | Qt::MatchRecursive,
       1
     )
@@ -360,29 +360,29 @@ DatabaseBrowserWidget
   // Current
 
   // TODO: Should be DatabaseModel::DatasetId but widgets should not depend on models!!!
-  QString currentId;
+  QString currentHash;
 
   DatasetTreeWidgetItem* currentItem = dynamic_cast< DatasetTreeWidgetItem* >( current );
 
   if( currentItem!=NULL && currentItem->parent()!=NULL )
     // if current is root and not NULL get the Id of the corresponding
     // Dataset.
-    currentId = currentItem->GetId();
+    currentHash = currentItem->GetHash();
 
   //
   // Previous
 
   // TODO: Should be DatabaseModel::DatasetId but widgets should not depend on models!!!
-  QString previousId;
+  QString previousHash;
 
   DatasetTreeWidgetItem* previousItem = dynamic_cast< DatasetTreeWidgetItem* >( previous );
 
   if( previousItem!=NULL )
-    previousId = previousItem->GetId();
+    previousHash = previousItem->GetHash();
 
   //
   // Emit event.
-  emit CurrentDatasetChanged( currentId, previousId );
+  emit CurrentDatasetChanged( currentHash, previousHash );
 }
 
 /*******************************************************************************/

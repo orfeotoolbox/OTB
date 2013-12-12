@@ -284,7 +284,7 @@ DatabaseTreeWidget::OnItemChanged( QTreeWidgetItem* item , int column)
         dynamic_cast<DatasetTreeWidgetItem *>( item );
 
       // send the new alias of the dataset / it identifier
-      emit DatasetRenamed(dsItem->text(column), dsItem->GetId()  );
+      emit DatasetRenamed(dsItem->text(column), dsItem->GetHash()  );
       }
     else
       {
@@ -333,7 +333,7 @@ DatabaseTreeWidget
       DatasetTreeWidgetItem* item 
         = dynamic_cast<DatasetTreeWidgetItem *>( currentItem());
         
-      emit DatasetToDeleteSelected( item->GetId() );
+      emit DatasetToDeleteSelected( item->GetHash() );
 
       break;
       }
@@ -365,7 +365,7 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
     // use a QSignalMapper to bundle parameterless signals and re-emit
     // them with parameters (QString here)
     QSignalMapper *signalMapperDelete = new QSignalMapper( this );
-    signalMapperDelete->setMapping( deleteNodeChild, item->GetId() );
+    signalMapperDelete->setMapping( deleteNodeChild, item->GetHash() );
     
     QObject::connect( deleteNodeChild , 
                       SIGNAL(triggered()), 

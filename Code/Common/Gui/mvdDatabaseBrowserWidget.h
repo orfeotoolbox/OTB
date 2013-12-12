@@ -170,11 +170,13 @@ signals:
   /**
    * \brief Slot emitted when the currently selected dataset has changed.
    *
-   * \param id ID of newly selected dataset.
-   * \param previousId ID of the previously selected dataset.
+   * \param currentHash Hash string (unique name) of newly selected
+   * dataset.
+   * \param previousHash Hash string (unique name) of the previously
+   * selected dataset.
    */
-  void CurrentDatasetChanged( const QString& id,
-			      const QString& previousId =QString() );
+  void CurrentDatasetChanged( const QString& currentHash,
+			      const QString& previousHash =QString() );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

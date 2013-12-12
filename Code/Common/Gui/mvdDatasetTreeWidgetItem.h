@@ -60,7 +60,6 @@ namespace mvd
 
 //
 // Internal classes pre-declaration.
-class BackgroundTask;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -85,7 +84,7 @@ public:
    */
   DatasetTreeWidgetItem( QTreeWidgetItem* parent,
 			 const QString& id, 
-			 const QString& alias,
+			 const QString& text,
 			 const QStringList& columns = QStringList() );
 
   /**
@@ -96,7 +95,7 @@ public:
   /**
    * \brief Get the datasetID 
    */
-  inline QString GetId() const;
+  inline QString GetHash() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -150,7 +149,7 @@ namespace mvd
 inline
 QString
 DatasetTreeWidgetItem
-::GetId() const
+::GetHash() const
 {
   return text( 1 );
 }

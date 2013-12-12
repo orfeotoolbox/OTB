@@ -146,7 +146,7 @@ private:
 
   /**
    */
-  void Foo( QTreeWidgetItem* item, SqlId tagNodeId );
+  void Foo( QTreeWidgetItem* item, SqlId nodeId );
 
   //
   // AbstractModelController overrides.
@@ -173,10 +173,13 @@ private slots:
   /**
    * \brief Slot called when the currently selected dataset has changed.
    *
-   * \param id The ID of the newly selected dataset.
-   * \param previousId The ID of the previously selected dataset.
+   * \param hash The hash string (unique name) of the newly selected
+   * dataset.
+   * \param previousHash The hash string (unique name) of the
+   * previously selected dataset.
    */
-  void OnCurrentDatasetChanged( const QString& id, const QString& previousId );
+  void OnCurrentDatasetChanged( const QString& hash,
+                                const QString& previousHash );
 
   /**
    */
@@ -188,7 +191,7 @@ private slots:
 
   /**
    */
-  void OnDatasetToDeleteSelected( const QString& id );
+  void OnDatasetToDeleteSelected( const QString& hash );
 
   //
   // AbstractModelController overloads.

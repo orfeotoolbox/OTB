@@ -447,11 +447,11 @@ DatabaseBrowserController
 
       if( currentDatasetItem!=NULL )
         {
-        QString datasetId =  currentDatasetItem->GetId();
+        QString datasetHash( currentDatasetItem->GetHash() );
 
         // qDebug() << "Checking dataset:" << currentDatasetItem->GetId();
 
-        const DatasetModel* datasetModel = model->FindDatasetModel( datasetId );
+        const DatasetModel* datasetModel = model->FindDatasetModel( datasetHash );
         assert( datasetModel!=NULL );
 
         // check consistency
@@ -591,7 +591,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::OnDatasetToDeleteSelected( const QString& id )
+::OnDatasetToDeleteSelected( const QString& hash )
 {
   // Access database-model.
   assert( GetModel()==GetModel< DatabaseModel >() );
@@ -599,7 +599,7 @@ DatabaseBrowserController
   assert( databaseModel!=NULL );
 
   // Access selected dataset-model (candidate to deletion).
-  DatasetModel* datasetModel = databaseModel->FindDatasetModel( id );
+  DatasetModel* datasetModel = databaseModel->FindDatasetModel( hash );
   assert( datasetModel!=NULL );
 
   // Pop confirm delete dialog.
@@ -614,7 +614,7 @@ DatabaseBrowserController
   if( button==QMessageBox::No )
     return;
 
-  databaseModel->RemoveDatasetModel( id );
+  databaseModel->RemoveDatasetModel( hash );
 }
 
 } // end namespace 'mvd'
