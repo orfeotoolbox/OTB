@@ -65,19 +65,60 @@ namespace mvd
 /*******************************************************************************/
 TreeWidgetItem
 ::TreeWidgetItem( QTreeWidgetItem* parent,
-                  const QString& id,
-                  const QString& alias,
-                  const QStringList& columns ) :
-  QTreeWidgetItem( parent, QStringList( alias ) << id << columns )
+                  const QString& text,
+                  const QVariant& id,
+                  const QStringList& columns,
+                  TreeWidgetItem::ItemType type ) :
+  QTreeWidgetItem( parent, QStringList( text ) << QString() << columns )
 {
-  assert( !id.isEmpty() );
-  assert( text( 1 )==id );
+  SetId( id );
+
+  switch( type )
+    {
+    case TreeWidgetItem::ITEM_TYPE_NODE:
+      setChildIndicatorPolicy(
+        QTreeWidgetItem::DontShowIndicatorWhenChildless
+      );
+      setFlags(
+        Qt::ItemIsEnabled |
+#if BYPASS_MOUSE_EVENTS
+        Qt::ItemIsEditable |
+        Qt::ItemIsDragEnabled |
+#endif
+        Qt::ItemIsDropEnabled
+      );
+    break;
+
+    case TreeWidgetItem::ITEM_TYPE_LEAF:
+      setChildIndicatorPolicy(
+        QTreeWidgetItem::DontShowIndicator
+      );
+      setFlags(
+        Qt::ItemIsEnabled |
+        Qt::ItemIsSelectable |
+        Qt::ItemIsEditable |
+        Qt::ItemIsDragEnabled
+      );
+      break;
+
+    default:
+      assert( false );
+      break;
+    }
 }
 
 /*******************************************************************************/
 TreeWidgetItem
 ::~TreeWidgetItem()
 {
+}
+
+/*******************************************************************************/
+QTreeWidgetItem*
+TreeWidgetItem
+::clone()
+{
+  return new TreeWidgetItem( *this );
 }
 
 } // end namespace 'mvd'

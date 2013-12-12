@@ -209,7 +209,7 @@ DatabaseBrowserController
   //...but force call to valueChanged() slot to force refresh.
   widget->blockSignals( true );
   {
-#if 1
+#if 0
   // // TODO: Fill in widget.
   widget->SetDatasetList( datasets );
 #endif
@@ -261,24 +261,25 @@ DatabaseBrowserController
     switch( child->type() )
       {
       // Nodes.
-      case DatabaseBrowserWidget::ITEM_TYPE_NODE:
+      case TreeWidgetItem::ITEM_TYPE_NODE:
         // assert( child->data( 1, Qt::UserRole + 1 ).isValid() );
         qDebug()
           << "Node:"
           << child->text( 0 )
           << child->text( 1 )
-          << child->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
+          << child->data( 1, TreeWidgetItem::ITEM_ROLE_ID );
         container = &nodes;
         break;
 
       // Leaves.
-      case DatabaseBrowserWidget::ITEM_TYPE_LEAF:
+      case TreeWidgetItem::ITEM_TYPE_LEAF:
         // assert( item->data( 1, Qt::UserRole + 1 ).isValid() );
         qDebug()
           << "Leaf:"
           << child->text( 0 )
           << child->text( 1 )
-          << child->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
+          << child->data( 1, TreeWidgetItem::ITEM_ROLE_ID )
+          << child->text( 2 );
         container = &leaves;
         break;
 
@@ -293,7 +294,7 @@ DatabaseBrowserController
       {
       TreeWidgetItemMap::iterator it(
         container->insert(
-          child->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID ).toString(),
+          child->data( 1, TreeWidgetItem::ITEM_ROLE_ID ).toString(),
           child
         )
       );
@@ -306,7 +307,7 @@ DatabaseBrowserController
           << child->type()
           << it.value()->text( 0 )
           << it.value()->text( 1 )
-          << it.value()->data( 1, DatabaseBrowserWidget::ITEM_ROLE_ID );
+          << it.value()->data( 1, TreeWidgetItem::ITEM_ROLE_ID );
 
         duplicates.push_back( it.value() );
         }
@@ -438,33 +439,45 @@ DatabaseBrowserController
   for ( int topIdx = 0; topIdx < tree->topLevelItemCount(); topIdx++)
     {
     int nbChild = tree->topLevelItem(topIdx)->childCount();
+
     for ( int idx = 0; idx < nbChild; idx++ )
       {      
-      TreeWidgetItem * currentDatasetItem = 
-        dynamic_cast<TreeWidgetItem*>(
-          tree->topLevelItem(topIdx)->child(idx)
-          );
+      TreeWidgetItem* currentDatasetItem =
+        dynamic_cast< TreeWidgetItem* >(
+          tree->topLevelItem(topIdx)->child( idx )
+        );
 
       if( currentDatasetItem!=NULL )
         {
-        QString datasetHash( currentDatasetItem->GetHash() );
-
-        // qDebug() << "Checking dataset:" << currentDatasetItem->GetId();
-
-        const DatasetModel* datasetModel = model->FindDatasetModel( datasetHash );
-        assert( datasetModel!=NULL );
-
-        // check consistency
-        if ( !datasetModel->IsConsistent() )
+        if( currentDatasetItem->GetType()==TreeWidgetItem::ITEM_TYPE_LEAF )
           {
-          // disable inconsistent dataset
-          currentDatasetItem->setDisabled(true);
+          QString datasetHash( currentDatasetItem->GetHash() );
 
-          // add forbidden icon
-          currentDatasetItem->setIcon(0, QIcon( ":/icons/forbidden" ));
+          qDebug()
+            << "Checking dataset:"
+            << currentDatasetItem->GetText()
+            << currentDatasetItem->GetId()
+            << currentDatasetItem->GetHash();
 
-          // add tootlip
-          currentDatasetItem->setToolTip (0,tr ("Inconsistent Dataset disabled") );
+          const DatasetModel* datasetModel
+            = model->FindDatasetModel( datasetHash );
+
+          assert( datasetModel!=NULL );
+
+          // check consistency
+          if ( !datasetModel->IsConsistent() )
+            {
+            // disable inconsistent dataset
+            currentDatasetItem->setDisabled(true);
+
+            // add forbidden icon
+            currentDatasetItem->setIcon(0, QIcon( ":/icons/forbidden" ));
+
+            // add tootlip
+            currentDatasetItem->setToolTip(
+              0,tr( "Inconsistent Dataset disabled" )
+            );
+            }
           }
         }
       }

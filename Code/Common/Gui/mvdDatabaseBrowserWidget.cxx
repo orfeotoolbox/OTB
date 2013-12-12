@@ -88,6 +88,12 @@ DatabaseBrowserWidget
 #endif
 
   SetupUI();
+
+  /*
+  // Devember 12th, 2013 - Trainee example. 
+  QPushButton* button=new QPushButton ("Click me", this);
+  layout()->addWidget(button);
+  */
 }
 
 /*******************************************************************************/
@@ -125,14 +131,7 @@ DatabaseBrowserWidget
   return
     InsertItem(
       parent,
-      DatabaseBrowserWidget::ITEM_TYPE_NODE,
-      Qt::ItemIsEnabled |
-#if BYPASS_MOUSE_EVENTS
-      Qt::ItemIsEditable |
-      Qt::ItemIsDragEnabled |
-#endif
-      Qt::ItemIsDropEnabled,
-      QTreeWidgetItem::ShowIndicator,
+      TreeWidgetItem::ITEM_TYPE_NODE,
       text,
       id,
       columns
@@ -150,12 +149,7 @@ DatabaseBrowserWidget
   return
     InsertItem(
       parent,
-      DatabaseBrowserWidget::ITEM_TYPE_LEAF,
-      Qt::ItemIsEnabled |
-      Qt::ItemIsSelectable |
-      Qt::ItemIsEditable |
-      Qt::ItemIsDragEnabled,
-      QTreeWidgetItem::DontShowIndicator,
+      TreeWidgetItem::ITEM_TYPE_LEAF,
       text,
       id,
       columns
@@ -166,25 +160,19 @@ DatabaseBrowserWidget
 QTreeWidgetItem*
 DatabaseBrowserWidget
 ::InsertItem( QTreeWidgetItem* parent,
-              ItemType type,
-              Qt::ItemFlags flags,
-              QTreeWidgetItem::ChildIndicatorPolicy policy,
+              TreeWidgetItem::ItemType type,
               const QString& text,
               const QVariant& id,
               const QStringList& columns )
 {
-  QTreeWidgetItem* item =
-    new QTreeWidgetItem(
+  TreeWidgetItem* item =
+    new TreeWidgetItem(
       parent,
-      QStringList() << text << id.toString() << columns,
+      text,
+      id,
+      columns,
       type
     );
-
-  item->setData( 1, DatabaseBrowserWidget::ITEM_ROLE_ID, id );
-
-  item->setFlags( flags );
-
-  item->setChildIndicatorPolicy( policy );
 
   return item;
 }
@@ -256,7 +244,12 @@ DatabaseBrowserWidget
     const StringPairListType::value_type::second_type& hash = it->second;
 
     TreeWidgetItem* item =
-      new TreeWidgetItem( m_DatasetRootItem, hash, alias );
+      new TreeWidgetItem(
+        m_DatasetRootItem,
+        alias,
+        QVariant(),
+        QStringList( hash )
+      );
 
     // Item is visible is search-text is empty or if alias contains
     // search-text.

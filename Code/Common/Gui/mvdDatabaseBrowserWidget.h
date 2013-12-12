@@ -45,7 +45,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdTypes.h"
-
+#include "Gui/mvdTreeWidgetItem.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -60,7 +60,6 @@ namespace mvd
 {
 
 class DatabaseTreeWidget;
-class DatasetTreeWidgetItem;
 //
 // Internal classes pre-declaration.
 namespace Ui
@@ -87,20 +86,6 @@ class Monteverdi2_EXPORT DatabaseBrowserWidget :
   Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-
-//
-// Public types.
-public:
-  enum ItemType
-  {
-    ITEM_TYPE_NODE = QTreeWidgetItem::UserType + 1,
-    ITEM_TYPE_LEAF = QTreeWidgetItem::UserType + 2,
-  };
-
-  enum ItemRole
-  {
-    ITEM_ROLE_ID = Qt::UserRole + 1,
-  };
 
 //
 // Public methods.
@@ -213,9 +198,7 @@ private:
   /**
    */
   QTreeWidgetItem* InsertItem( QTreeWidgetItem* parent,
-                               ItemType type,
-                               Qt::ItemFlags flags,
-                               QTreeWidgetItem::ChildIndicatorPolicy policy,
+                               TreeWidgetItem::ItemType type,
                                const QString& text,
                                const QVariant& id,
                                const QStringList& columns =QStringList() );
