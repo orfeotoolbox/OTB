@@ -215,7 +215,7 @@ DatabaseBrowserController
 #endif
 
   // if( !datasets.isEmpty() )
-    Foo( widget->GetRootItem(), -1 );
+    UpdateTree( widget->GetRootItem(), -1 );
   }
   widget->blockSignals( false );
   }
@@ -225,7 +225,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::Foo( QTreeWidgetItem* item, SqlId nodeId )
+::UpdateTree( QTreeWidgetItem* item, SqlId nodeId )
 {
   assert( GetModel()==GetModel< DatabaseModel >() );
   DatabaseModel* model = GetModel< DatabaseModel >();
@@ -286,7 +286,7 @@ DatabaseBrowserController
       // Others.
       default:
         others.push_back( child );
-        qDebug() << "Other:" << child->text( 0 );
+        qDebug() << "Other:" << child->type() << child->text( 0 );
         break;
       }
 
@@ -334,7 +334,7 @@ DatabaseBrowserController
 
     QVariant id( GetDatasetFields( datasetsQuery, &hash, &alias ) );
 
-    qDebug() << "Leaf:" << id.toString() << hash << alias;
+    qDebug() << "+Leaf:" << id.toString() << hash << alias;
 
     TreeWidgetItemMap::iterator it(
       leaves.find( id.toString() )
@@ -382,7 +382,7 @@ DatabaseBrowserController
 
     QVariant id( GetChildNodeFields( nodesQuery, &label ) );
 
-    qDebug() << "Node:" << id.toString() << label;
+    qDebug() << "+Node:" << id.toString() << label;
 
     TreeWidgetItemMap::iterator it(
       nodes.find( id.toString() )
@@ -402,7 +402,7 @@ DatabaseBrowserController
     nodes.erase( it );
 
     // Recurse.
-    Foo( childItem, id.toLongLong() );
+    UpdateTree( childItem, id.toLongLong() );
     }
 
   while( !nodes.empty() )

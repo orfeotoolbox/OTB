@@ -69,7 +69,7 @@ TreeWidgetItem
                   const QVariant& id,
                   const QStringList& columns,
                   TreeWidgetItem::ItemType type ) :
-  QTreeWidgetItem( parent, QStringList( text ) << QString() << columns )
+  QTreeWidgetItem( parent, QStringList( text ) << QString() << columns, type )
 {
   SetId( id );
 
@@ -105,6 +105,13 @@ TreeWidgetItem
       assert( false );
       break;
     }
+
+  qDebug()
+    << "+Item:"
+    << GetType()
+    << GetId()
+    << GetText()
+    << this->text( 2 );
 }
 
 /*******************************************************************************/
