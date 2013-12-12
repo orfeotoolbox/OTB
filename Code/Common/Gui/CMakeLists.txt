@@ -20,7 +20,6 @@ set( Common_Gui_SOURCES
   mvdDatasetCreationProgressDialog.cxx
   mvdDatasetPropertiesController.cxx
   mvdDatasetPropertiesWidget.cxx
-  mvdDatasetTreeWidgetItem.cxx
   mvdDoubleValidator.cxx
   mvdDropLineEdit.cxx
   mvdGLImageWidget.cxx
@@ -40,6 +39,7 @@ set( Common_Gui_SOURCES
   mvdSearchableTreeWidget.cxx
   mvdStatusBarWidget.cxx
   mvdTaskProgressDialog.cxx
+  mvdTreeWidgetItem.cxx
 )
 
 #############################################################################
@@ -64,7 +64,6 @@ set( Common_Gui_HEADERS_MOC
   mvdDatasetCreationProgressDialog.h
   mvdDatasetPropertiesController.h
   mvdDatasetPropertiesWidget.h
-  #mvdDatasetTreeWidgetItem.h
   mvdDoubleValidator.h
   mvdDropLineEdit.h
   mvdGLImageWidget.h
@@ -84,6 +83,7 @@ set( Common_Gui_HEADERS_MOC
   mvdSearchableTreeWidget.h
   mvdStatusBarWidget.h
   mvdTaskProgressDialog.h
+  #mvdTreeWidgetItem.h
 )
 
 #############################################################################

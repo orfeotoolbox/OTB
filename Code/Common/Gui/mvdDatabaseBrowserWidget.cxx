@@ -40,7 +40,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Gui/mvdDatabaseTreeWidget.h"
-#include "Gui/mvdDatasetTreeWidgetItem.h"
+#include "Gui/mvdTreeWidgetItem.h"
 
 #define ENABLE_DISPLAY_ID 1
 
@@ -213,8 +213,8 @@ DatabaseBrowserWidget
   // it in order to set it back
   QString currentItemHash;
 
-  DatasetTreeWidgetItem* selectedItem = 
-    dynamic_cast< DatasetTreeWidgetItem* >(
+  TreeWidgetItem* selectedItem = 
+    dynamic_cast< TreeWidgetItem* >(
       GetDatabaseTreeWidget()->currentItem()
     );
 
@@ -255,8 +255,8 @@ DatabaseBrowserWidget
     const StringPairListType::value_type::first_type& alias = it->first;
     const StringPairListType::value_type::second_type& hash = it->second;
 
-    DatasetTreeWidgetItem* item =
-      new DatasetTreeWidgetItem( m_DatasetRootItem, hash, alias );
+    TreeWidgetItem* item =
+      new TreeWidgetItem( m_DatasetRootItem, hash, alias );
 
     // Item is visible is search-text is empty or if alias contains
     // search-text.
@@ -287,7 +287,7 @@ DatabaseBrowserWidget
   assert( m_DatasetRootItem->text( 0 ) == tr( "Datasets" ) );
 
 #if 0
-  m_DatasetRootItem->setChildIndicatorPolicy( DatasetTreeWidgetItem::ShowIndicator );
+  m_DatasetRootItem->setChildIndicatorPolicy( TreeWidgetItem::ShowIndicator );
 #endif
 
   m_DatasetRootItem->setExpanded( true );
@@ -362,7 +362,7 @@ DatabaseBrowserWidget
   // TODO: Should be DatabaseModel::DatasetId but widgets should not depend on models!!!
   QString currentHash;
 
-  DatasetTreeWidgetItem* currentItem = dynamic_cast< DatasetTreeWidgetItem* >( current );
+  TreeWidgetItem* currentItem = dynamic_cast< TreeWidgetItem* >( current );
 
   if( currentItem!=NULL && currentItem->parent()!=NULL )
     // if current is root and not NULL get the Id of the corresponding
@@ -375,7 +375,7 @@ DatabaseBrowserWidget
   // TODO: Should be DatabaseModel::DatasetId but widgets should not depend on models!!!
   QString previousHash;
 
-  DatasetTreeWidgetItem* previousItem = dynamic_cast< DatasetTreeWidgetItem* >( previous );
+  TreeWidgetItem* previousItem = dynamic_cast< TreeWidgetItem* >( previous );
 
   if( previousItem!=NULL )
     previousHash = previousItem->GetHash();

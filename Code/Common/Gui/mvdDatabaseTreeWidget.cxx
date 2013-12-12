@@ -38,7 +38,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
-#include "Gui/mvdDatasetTreeWidgetItem.h"
+#include "Gui/mvdTreeWidgetItem.h"
 
 namespace mvd
 {
@@ -280,8 +280,8 @@ DatabaseTreeWidget::OnItemChanged( QTreeWidgetItem* item , int column)
     if (!item->text(column).isEmpty() )
       {
       // dynamic cast to get the id
-      DatasetTreeWidgetItem* dsItem = 
-        dynamic_cast<DatasetTreeWidgetItem *>( item );
+      TreeWidgetItem* dsItem = 
+        dynamic_cast<TreeWidgetItem *>( item );
 
       // send the new alias of the dataset / it identifier
       emit DatasetRenamed(dsItem->text(column), dsItem->GetHash()  );
@@ -330,8 +330,8 @@ DatabaseTreeWidget
       case Qt::Key_Delete:
       {
       // cast to DatasetTreeItem
-      DatasetTreeWidgetItem* item 
-        = dynamic_cast<DatasetTreeWidgetItem *>( currentItem());
+      TreeWidgetItem* item 
+        = dynamic_cast<TreeWidgetItem *>( currentItem());
         
       emit DatasetToDeleteSelected( item->GetHash() );
 
@@ -347,7 +347,7 @@ void
 DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
 {
   // get the item
-  DatasetTreeWidgetItem* item = dynamic_cast<DatasetTreeWidgetItem *>( itemAt(pos) );
+  TreeWidgetItem* item = dynamic_cast<TreeWidgetItem *>( itemAt(pos) );
   
   // if not the root item 
   if ( item && item->parent() ) 

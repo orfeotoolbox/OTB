@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDatasetTreeWidgetItem_h
-#define __mvdDatasetTreeWidgetItem_h
+#ifndef __mvdTreeWidgetItem_h
+#define __mvdTreeWidgetItem_h
 
 //
 // Configuration include.
@@ -65,11 +65,11 @@ namespace mvd
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class DatasetTreeWidgetItem
+ * \class TreeWidgetItem
  *
  * \brief 
  */
-class Monteverdi2_EXPORT DatasetTreeWidgetItem :
+class Monteverdi2_EXPORT TreeWidgetItem :
     public QTreeWidgetItem // not a QObject
 {
 
@@ -82,15 +82,15 @@ public:
   /**
    * \brief Constructor.
    */
-  DatasetTreeWidgetItem( QTreeWidgetItem* parent,
-			 const QString& id, 
-			 const QString& text,
-			 const QStringList& columns = QStringList() );
+  TreeWidgetItem( QTreeWidgetItem* parent,
+                  const QString& id, 
+                  const QString& text,
+                  const QStringList& columns = QStringList() );
 
   /**
    * \brief Destructor.
    */
-  virtual ~DatasetTreeWidgetItem();
+  virtual ~TreeWidgetItem();
 
   /**
    * \brief Get the datasetID 
@@ -148,7 +148,7 @@ namespace mvd
 /*******************************************************************************/
 inline
 QString
-DatasetTreeWidgetItem
+TreeWidgetItem
 ::GetHash() const
 {
   return text( 1 );
@@ -156,4 +156,4 @@ DatasetTreeWidgetItem
 
 } // end namespace 'mvd'
 
-#endif // __mvdDatasetTreeWidgetItem_h
+#endif // __mvdTreeWidgetItem_h

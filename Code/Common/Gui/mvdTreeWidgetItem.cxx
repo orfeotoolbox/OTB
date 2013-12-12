@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdDatasetTreeWidgetItem.h"
+#include "Gui/mvdTreeWidgetItem.h"
 
 
 /*****************************************************************************/
@@ -43,7 +43,7 @@ namespace mvd
 {
 
 /*
-  TRANSLATOR mvd::DatasetTreeWidgetItem
+  TRANSLATOR mvd::TreeWidgetItem
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -63,11 +63,11 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-DatasetTreeWidgetItem
-::DatasetTreeWidgetItem( QTreeWidgetItem* parent,
-			 const QString& id,
-			 const QString& alias,
-			 const QStringList& columns ) :
+TreeWidgetItem
+::TreeWidgetItem( QTreeWidgetItem* parent,
+                  const QString& id,
+                  const QString& alias,
+                  const QStringList& columns ) :
   QTreeWidgetItem( parent, QStringList( alias ) << id << columns )
 {
   assert( !id.isEmpty() );
@@ -75,8 +75,8 @@ DatasetTreeWidgetItem
 }
 
 /*******************************************************************************/
-DatasetTreeWidgetItem
-::~DatasetTreeWidgetItem()
+TreeWidgetItem
+::~TreeWidgetItem()
 {
 }
 

@@ -45,7 +45,7 @@
 //
 #include "Gui/mvdDatabaseBrowserWidget.h"
 #include "Gui/mvdDatabaseTreeWidget.h"
-#include "Gui/mvdDatasetTreeWidgetItem.h"
+#include "Gui/mvdTreeWidgetItem.h"
 
 namespace mvd
 {
@@ -225,7 +225,7 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::Foo( QTreeWidgetItem* item, SqlId tagNodeId )
+::Foo( QTreeWidgetItem* item, SqlId nodeId )
 {
   assert( GetModel()==GetModel< DatabaseModel >() );
   DatabaseModel* model = GetModel< DatabaseModel >();
@@ -317,9 +317,9 @@ DatabaseBrowserController
   // Get node id.
 
   SqlId safeNodeId = 
-    tagNodeId < 0
+    nodeId < 0
     ? GetRootNodeFields( db->FindRootNode() )
-    : tagNodeId;
+    : nodeId;
 
   //
   //  Leaves/Items (datasets).
@@ -440,8 +440,8 @@ DatabaseBrowserController
     int nbChild = tree->topLevelItem(topIdx)->childCount();
     for ( int idx = 0; idx < nbChild; idx++ )
       {      
-      DatasetTreeWidgetItem * currentDatasetItem = 
-        dynamic_cast<DatasetTreeWidgetItem*>(
+      TreeWidgetItem * currentDatasetItem = 
+        dynamic_cast<TreeWidgetItem*>(
           tree->topLevelItem(topIdx)->child(idx)
           );
 
