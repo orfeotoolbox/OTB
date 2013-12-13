@@ -5,7 +5,6 @@
 
 #include "otbVectorImage.h"
 #include "otbMultiChannelExtractROI.h"
-#include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
 
@@ -25,6 +24,7 @@ public:
   itkNewMacro(Self);
 
   typedef VectorImage<float>                              VectorImageType;
+  typedef VectorImageType::PixelType                      PixelType;
   typedef VectorImageType::ImageKeywordlistType           ImageKeywordlistType;
   typedef VectorImageType::SizeType                       SizeType;
   typedef VectorImageType::IndexType                      IndexType;
@@ -78,6 +78,10 @@ public:
 
   itkGetMacro(NumberOfComponents,unsigned int);
 
+  PointType ViewportToImageTransform(const PointType & in, bool physical = true) const;
+  
+  bool GetPixelFromViewport(const PointType & in, PixelType & pixel) const;
+
 protected:
   GlImageActor();
   
@@ -85,7 +89,6 @@ protected:
 
   typedef ImageFileReader<VectorImageType>                                        ReaderType;
   typedef MultiChannelExtractROI<float,float>                                     ExtractROIFilterType;
-  typedef VectorRescaleIntensityImageFilter<VectorImageType,VectorImageType>      RescaleFilterType;
   typedef otb::GenericRSTransform<>                                               RSTransformType;
   typedef std::vector<unsigned int>                                               ResolutionVectorType;
 
@@ -96,6 +99,7 @@ protected:
     Tile()
       : m_Loaded(false),
         m_ImageRegion(),
+        m_Image(),
         m_UL(),
         m_UR(),
         m_LL(),
@@ -114,6 +118,7 @@ protected:
     bool m_Loaded;
     unsigned int m_TextureId;
     RegionType m_ImageRegion;
+    VectorImageType::Pointer m_Image;
     PointType m_UL;
     PointType m_UR;
     PointType m_LL;

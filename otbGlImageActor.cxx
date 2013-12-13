@@ -270,8 +270,9 @@ void GlImageActor::LoadTile(Tile& tile)
   extract->SetChannel(tile.m_RedIdx);
   extract->SetChannel(tile.m_GreenIdx);
   extract->SetChannel(tile.m_BlueIdx);
-
   extract->Update();
+
+  tile.m_Image = extract->GetOutput();
   
   itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
   
@@ -499,6 +500,48 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   
   region.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion());
 }
+
+GlImageActor::PointType GlImageActor::ViewportToImageTransform(const PointType & in, bool physical) const
+{
+  PointType imgPoint = m_ViewportToImageTransform->TransformPoint(in);
+
+  if(!physical)
+    {
+    imgPoint[0]=(imgPoint[0]-m_Origin[0])/m_Spacing[0];
+    imgPoint[1]=(imgPoint[1]-m_Origin[1])/m_Spacing[1];
+    }
+
+  return imgPoint;
+}
+
+bool GlImageActor::GetPixelFromViewport(const PointType & in, PixelType& pixel) const
+{
+  PointType imgPoint = ViewportToImageTransform(in);
+
+  // Transform to index at current resolution
+  IndexType idx;
+  idx[0] = static_cast<unsigned int>(imgPoint[0]-m_FileReader->GetOutput()->GetOrigin()[0])/m_FileReader->GetOutput()->GetSpacing()[0];
+  idx[1] = static_cast<unsigned int>(imgPoint[1]-m_FileReader->GetOutput()->GetOrigin()[1])/m_FileReader->GetOutput()->GetSpacing()[1];
+  
+  // Look-up tiles
+  for (TileVectorType::const_iterator it = m_LoadedTiles.begin();
+       it!=m_LoadedTiles.end();
+       ++it)
+    {
+    if(it->m_ImageRegion.IsInside(idx))
+      {
+      idx[0]-=it->m_ImageRegion.GetIndex()[0];
+      idx[1]-=it->m_ImageRegion.GetIndex()[1];
+      pixel = it->m_Image->GetPixel(idx);
+      
+      return true;
+      }
+    }
+
+  return true;
+}
+
+
 
 void GlImageActor::UpdateResolution()
 {
