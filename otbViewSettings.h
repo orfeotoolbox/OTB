@@ -44,7 +44,12 @@ public:
   }
   itkGetStringMacro(Wkt);
 
-  itkSetMacro(UseProjection,bool);
+  void SetUseProjection(bool usep)
+  {
+    m_UseProjection = usep;
+    m_GeometryChanged = true;
+  }
+
   itkGetConstReferenceMacro(UseProjection,bool);
   itkBooleanMacro(UseProjection);
 
