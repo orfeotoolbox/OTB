@@ -271,8 +271,8 @@ DatabaseBrowserController
           << child->text( 0 )
           << child->text( 1 )
           << child->data( 1, TreeWidgetItem::ITEM_ROLE_ID );
-        container = &nodes;
 #endif
+        container = &nodes;
         break;
 
       // Leaves.
@@ -285,8 +285,8 @@ DatabaseBrowserController
           << child->text( 1 )
           << child->data( 1, TreeWidgetItem::ITEM_ROLE_ID )
           << child->text( 2 );
-        container = &leaves;
 #endif
+        container = &leaves;
         break;
 
       // Others.
