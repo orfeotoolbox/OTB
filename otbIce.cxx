@@ -80,13 +80,21 @@ public:
     if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
       {
       double delta = yoffset > 0 ? 1/1.1 : 1.1;
-      
-      m_Actors[m_SelectedActor]->SetMinRed(m_Actors[m_SelectedActor]->GetMinRed()*delta);
-      m_Actors[m_SelectedActor]->SetMinGreen(m_Actors[m_SelectedActor]->GetMinGreen()*delta);
-      m_Actors[m_SelectedActor]->SetMinBlue(m_Actors[m_SelectedActor]->GetMinBlue()*delta);
-      m_Actors[m_SelectedActor]->SetMaxRed(m_Actors[m_SelectedActor]->GetMaxRed()*delta);
-      m_Actors[m_SelectedActor]->SetMaxGreen(m_Actors[m_SelectedActor]->GetMaxGreen()*delta);
-      m_Actors[m_SelectedActor]->SetMaxBlue(m_Actors[m_SelectedActor]->GetMaxBlue()*delta);
+      if(m_LocalContrastEnhancement)
+        {
+        m_LocalContrastWindow*=delta;
+
+        SetupLocalContrastEnhancement(window);
+        }
+      else
+        {
+        m_Actors[m_SelectedActor]->SetMinRed(m_Actors[m_SelectedActor]->GetMinRed()*delta);
+        m_Actors[m_SelectedActor]->SetMinGreen(m_Actors[m_SelectedActor]->GetMinGreen()*delta);
+        m_Actors[m_SelectedActor]->SetMinBlue(m_Actors[m_SelectedActor]->GetMinBlue()*delta);
+        m_Actors[m_SelectedActor]->SetMaxRed(m_Actors[m_SelectedActor]->GetMaxRed()*delta);
+        m_Actors[m_SelectedActor]->SetMaxGreen(m_Actors[m_SelectedActor]->GetMaxGreen()*delta);
+        m_Actors[m_SelectedActor]->SetMaxBlue(m_Actors[m_SelectedActor]->GetMaxBlue()*delta);
+        }
     }
     else if(glfwGetKey(window,GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
       {
@@ -155,6 +163,11 @@ public:
   { 
     double posx, posy, vpx, vpy;
     glfwGetCursorPos(window,&posx,&posy);
+
+    if(m_LocalContrastEnhancement)
+      {
+      SetupLocalContrastEnhancement(window);
+      }
 
     if(m_Drag)
       {
@@ -345,6 +358,25 @@ public:
         }
       }
      
+     if(key == GLFW_KEY_L && action == GLFW_PRESS)
+       {
+       std::cout<<"Local contrast enhancement "<<(m_LocalContrastEnhancement?"off":"on")<<std::endl;
+       m_LocalContrastEnhancement = !m_LocalContrastEnhancement;
+       if(!m_LocalContrastEnhancement)
+         {
+         m_Actors[m_SelectedActor]->SetMinRed(m_MinRed);
+         m_Actors[m_SelectedActor]->SetMinGreen(m_MinGreen);
+         m_Actors[m_SelectedActor]->SetMinBlue(m_MinBlue);
+         m_Actors[m_SelectedActor]->SetMaxRed(m_MaxRed);
+         m_Actors[m_SelectedActor]->SetMaxGreen(m_MaxGreen);
+         m_Actors[m_SelectedActor]->SetMaxBlue(m_MaxBlue);
+         }
+       else
+         {
+         SetupLocalContrastEnhancement(window);
+         }
+       }
+
      // Not available anymore with GlImageActor (use NonOptGlImageActor)
      // if(key == GLFW_KEY_S && action == GLFW_PRESS)
      //   {
@@ -363,6 +395,42 @@ public:
     m_ViewSettings->SetViewportSize(size);
   }
 
+  void SetupLocalContrastEnhancement(GLFWwindow* window)
+  {
+    double posx, posy, vpx, vpy;
+    glfwGetCursorPos(window,&posx,&posy);
+    glfwGetCursorPos(window,&posx,&posy);
+    
+    m_ViewSettings->ScreenToViewPortTransform(posx,posy,vpx,vpy);
+    
+    otb::ViewSettings::PointType p;
+    p[0] = vpx;
+    p[1] = vpy;
+    
+    
+    otb::GlImageActor::PixelType pixel;
+    bool inside = m_Actors[m_SelectedActor]->GetPixelFromViewport(p,pixel);
+    
+    if(inside)
+      {
+      m_Actors[m_SelectedActor]->SetMinRed(pixel[m_Actors[m_SelectedActor]->GetRedIdx()-1]-m_LocalContrastWindow);
+      m_Actors[m_SelectedActor]->SetMinGreen(pixel[m_Actors[m_SelectedActor]->GetGreenIdx()-1]-m_LocalContrastWindow);
+      m_Actors[m_SelectedActor]->SetMinBlue(pixel[m_Actors[m_SelectedActor]->GetBlueIdx()-1]-m_LocalContrastWindow);
+      m_Actors[m_SelectedActor]->SetMaxRed(pixel[m_Actors[m_SelectedActor]->GetRedIdx()-1]+m_LocalContrastWindow);
+      m_Actors[m_SelectedActor]->SetMaxGreen(pixel[m_Actors[m_SelectedActor]->GetGreenIdx()-1]+m_LocalContrastWindow);
+      m_Actors[m_SelectedActor]->SetMaxBlue(pixel[m_Actors[m_SelectedActor]->GetBlueIdx()-1]+m_LocalContrastWindow);
+      }
+    else
+      {
+      m_Actors[m_SelectedActor]->SetMinRed(m_MinRed);
+      m_Actors[m_SelectedActor]->SetMinGreen(m_MinGreen);
+      m_Actors[m_SelectedActor]->SetMinBlue(m_MinBlue);
+      m_Actors[m_SelectedActor]->SetMaxRed(m_MaxRed);
+      m_Actors[m_SelectedActor]->SetMaxGreen(m_MaxGreen);
+      m_Actors[m_SelectedActor]->SetMaxBlue(m_MaxBlue);
+      }
+  }
+
 private:
   unsigned int m_KeyFilter;
 
@@ -370,6 +438,8 @@ private:
   {
     m_KeyFilter=0;
     m_FastRendering = false;
+    m_LocalContrastEnhancement = false;
+    m_LocalContrastWindow = 100;
   }
 
   Manipulator(Manipulator const&);
@@ -384,6 +454,8 @@ private:
   
   bool   m_Drag;
   bool   m_FastRendering;
+  bool   m_LocalContrastEnhancement;
+  double m_LocalContrastWindow;
   double m_StartDragX;
   double m_StartDragY;
   double m_DeltaDragX;
@@ -392,6 +464,12 @@ private:
   double m_OriginDragY;
   double m_ZoomCenterX;
   double m_ZoomCenterY;
+  double m_MinRed;
+  double m_MinGreen;
+  double m_MinBlue;
+  double m_MaxRed;
+  double m_MaxGreen;
+  double m_MaxBlue;
   unsigned int m_SelectedActor;
 };
 
