@@ -373,6 +373,13 @@ public:
          }
        else
          {
+         m_MinRed = m_Actors[m_SelectedActor]->GetMinRed();
+         m_MinGreen = m_Actors[m_SelectedActor]->GetMinGreen();
+         m_MinBlue = m_Actors[m_SelectedActor]->GetMinBlue();
+         m_MaxRed = m_Actors[m_SelectedActor]->GetMaxRed();
+         m_MaxGreen = m_Actors[m_SelectedActor]->GetMaxGreen();
+         m_MaxBlue = m_Actors[m_SelectedActor]->GetMaxBlue();
+
          SetupLocalContrastEnhancement(window);
          }
        }
