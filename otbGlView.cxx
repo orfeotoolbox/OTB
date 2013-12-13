@@ -71,6 +71,7 @@ void GlView::BeforeRendering()
 
 void GlView::AfterRendering()
 {
+  m_Settings->SetGeometryChanged(false);
   glPopMatrix();
 }
 

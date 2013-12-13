@@ -31,7 +31,9 @@ GlImageActor::GlImageActor()
     m_Origin(),
     m_Spacing(),
     m_NumberOfComponents(0),
-    m_UseShader(false)
+    m_UseShader(false),
+    m_ViewportToImageTransform(RSTransformType::New()),
+    m_ImageToViewportTransform(RSTransformType::New())
 {}
 
 GlImageActor::~GlImageActor()
@@ -86,6 +88,9 @@ void GlImageActor::Initialize(const std::string & filename)
 
   m_CurrentResolution = m_AvailableResolutions.front();
 
+  // Update transforms once data is read
+  UpdateTransforms();
+
   // std::cout<<"Number of resolutions in file: "<<m_AvailableResolutions.size()<<std::endl;
 }
 
@@ -98,12 +103,21 @@ void GlImageActor::GetExtent(double & ulx, double & uly, double & lrx, double & 
 
 void GlImageActor::ProcessViewSettings()
 {
-  for (TileVectorType::iterator it = m_LoadedTiles.begin();
-       it!=m_LoadedTiles.end();
-       ++it)
+  // Is there anything to do ?
+  ViewSettings::ConstPointer settings = this->GetSettings();
+
+  
+  if(settings->GetUseProjection() && settings->GetGeometryChanged())
     {
-    this->ImageRegionToViewportQuad(it->m_ImageRegion,it->m_UL,it->m_UR,it->m_LL,it->m_LR);
-    }
+    UpdateTransforms();
+    
+    for (TileVectorType::iterator it = m_LoadedTiles.begin();
+         it!=m_LoadedTiles.end();
+         ++it)
+      {
+      this->ImageRegionToViewportQuad(it->m_ImageRegion,it->m_UL,it->m_UR,it->m_LL,it->m_LR);
+      }
+    } 
 }
 
 void GlImageActor::UpdateData()
@@ -510,21 +524,8 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
 {
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
-  
-  // Setup RSTransform
-  RSTransformType::Pointer rsTransform = RSTransformType::New();
-  
-  if(settings->GetUseProjection())
-    {
-    rsTransform->SetOutputProjectionRef(settings->GetWkt());
-    rsTransform->SetOutputKeywordList(settings->GetKeywordList());
-    rsTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
-    rsTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
-    }
-  rsTransform->InstanciateTransform();
     
   SpacingType spacing = m_FileReader->GetOutput()->GetSpacing();
-
 
   itk::ContinuousIndex<double,2> cul,cur,cll,clr;
   
@@ -544,10 +545,10 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(cll,ill);
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(clr,ilr);
   
-  PointType pul = rsTransform->TransformPoint(iul);
-  PointType pur = rsTransform->TransformPoint(iur);
-  PointType pll = rsTransform->TransformPoint(ill);
-  PointType plr = rsTransform->TransformPoint(ilr);
+  PointType pul = m_ImageToViewportTransform->TransformPoint(iul);
+  PointType pur = m_ImageToViewportTransform->TransformPoint(iur);
+  PointType pll = m_ImageToViewportTransform->TransformPoint(ill);
+  PointType plr = m_ImageToViewportTransform->TransformPoint(ilr);
 
   ul[0] = pul[0];
   ul[1] = pul[1];
@@ -564,19 +565,6 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
 
-  
-  // Setup RSTransform
-  RSTransformType::Pointer rsTransform = RSTransformType::New();
-  
-  if(settings->GetUseProjection())
-    {
-    rsTransform->SetInputProjectionRef(settings->GetWkt());
-    rsTransform->SetInputKeywordList(settings->GetKeywordList());
-    rsTransform->SetOutputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
-    rsTransform->SetOutputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
-    }
-  rsTransform->InstanciateTransform();
-
   RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
   PointType ul,ur,ll,lr,tul,tur,tll,tlr;
@@ -590,10 +578,10 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   lr[0]=lrx;
   lr[1]=lry;
   
-  tul = rsTransform->TransformPoint(ul);
-  tur = rsTransform->TransformPoint(ur);
-  tll = rsTransform->TransformPoint(ll);
-  tlr = rsTransform->TransformPoint(lr);
+  tul = m_ViewportToImageTransform->TransformPoint(ul);
+  tur = m_ViewportToImageTransform->TransformPoint(ur);
+  tll = m_ViewportToImageTransform->TransformPoint(ll);
+  tlr = m_ViewportToImageTransform->TransformPoint(lr);
 
   itk::ContinuousIndex<double,2> cul,cur,cll,clr;
 
@@ -637,19 +625,6 @@ void GlImageActor::UpdateResolution()
   // Retrieve viewport spacing
   ViewSettings::SpacingType spacing = settings->GetSpacing();
   
-  // Setup RSTransform
-  RSTransformType::Pointer rsTransform = RSTransformType::New();
-  
-  // Set-up RS Transform
-  if(settings->GetUseProjection())
-    {
-    rsTransform->SetInputProjectionRef(settings->GetWkt());
-    rsTransform->SetInputKeywordList(settings->GetKeywordList());
-    rsTransform->SetOutputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
-    rsTransform->SetOutputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
-    }
-  rsTransform->InstanciateTransform();
-
   PointType pointA, pointB;
 
   pointA  = settings->GetOrigin();
@@ -661,8 +636,8 @@ void GlImageActor::UpdateResolution()
   // TODO: This part needs a review
 
   // Transform the spacing vector
-  pointA = rsTransform->TransformPoint(pointA);
-  pointB = rsTransform->TransformPoint(pointB);
+  pointA = m_ViewportToImageTransform->TransformPoint(pointA);
+  pointB = m_ViewportToImageTransform->TransformPoint(pointB);
 
   SpacingType outSpacing;
   outSpacing[0] = (pointB[0]-pointA[0])/100;
@@ -706,6 +681,35 @@ void GlImageActor::UpdateResolution()
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(extFilename.str());
   m_FileReader->UpdateOutputInformation();
+}
+
+void GlImageActor::UpdateTransforms()
+{
+  if(m_FileName == "")
+    {
+    return;
+    }
+
+  // Retrieve settings
+  ViewSettings::ConstPointer settings = this->GetSettings();
+
+  m_ViewportToImageTransform = RSTransformType::New();
+  m_ImageToViewportTransform = RSTransformType::New(); 
+
+  if(settings->GetUseProjection())
+    {
+    m_ViewportToImageTransform->SetInputProjectionRef(settings->GetWkt());
+    m_ViewportToImageTransform->SetInputKeywordList(settings->GetKeywordList());
+    m_ViewportToImageTransform->SetOutputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
+    m_ViewportToImageTransform->SetOutputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
+
+    m_ImageToViewportTransform->SetOutputProjectionRef(settings->GetWkt());
+    m_ImageToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
+    m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
+    m_ImageToViewportTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
+    }
+  m_ViewportToImageTransform->InstanciateTransform();
+  m_ImageToViewportTransform->InstanciateTransform();
 }
 
 

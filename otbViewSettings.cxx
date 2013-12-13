@@ -9,6 +9,7 @@ ViewSettings::ViewSettings()
   m_ViewportSize.Fill(0);
   m_Wkt="";
   m_UseProjection = false;
+  m_GeometryChanged = false;
 }
 
 ViewSettings::~ViewSettings()

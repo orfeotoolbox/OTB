@@ -174,8 +174,10 @@ private:
 
   void UpdateResolution();
 
-  static void InitShaders();
+  void UpdateTransforms();
 
+  static void InitShaders();
+ 
    unsigned int m_TileSize;
 
   std::string m_FileName;
@@ -211,6 +213,9 @@ private:
   static unsigned int m_StandardShader;
   static unsigned int m_StandardShaderProgram;
   static bool m_ShaderInitialized;
+
+  RSTransformType::Pointer m_ViewportToImageTransform;
+  RSTransformType::Pointer m_ImageToViewportTransform;
 
 }; // End class GlImageActor
 

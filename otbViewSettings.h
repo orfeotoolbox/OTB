@@ -37,16 +37,25 @@ public:
   itkGetConstReferenceMacro(ViewportSize,SizeType);
 
   // Order of priority is Wkt, then keywordlist, then unknown
-  itkSetStringMacro(Wkt);
+  void SetWkt(const std::string & wkt)
+  {
+    m_Wkt = wkt;
+    m_GeometryChanged = true;
+  }
   itkGetStringMacro(Wkt);
 
   itkSetMacro(UseProjection,bool);
   itkGetConstReferenceMacro(UseProjection,bool);
   itkBooleanMacro(UseProjection);
 
+  itkSetMacro(GeometryChanged,bool);
+  itkGetMacro(GeometryChanged,bool);
+  itkGetConstReferenceMacro(GeometryChanged,bool);
+
   void SetKeywordList(const KeywordListType& kwl)
   {
     m_KeywordList = kwl;
+    m_GeometryChanged = true;
   }
 
   itkGetConstReferenceMacro(KeywordList,KeywordListType);
@@ -76,6 +85,7 @@ private:
   std::string m_Wkt;
   KeywordListType m_KeywordList;
   bool m_UseProjection;
+  bool m_GeometryChanged;
 
 }; // End class ViewSettings
 
