@@ -1,5 +1,5 @@
-#ifndef otb_GlImageActor_h
-#define otb_GlImageActor_h
+#ifndef otb_NonOptGlImageActor_h
+#define otb_NonOptGlImageActor_h
 
 #include "otbGlActor.h"
 
@@ -13,11 +13,11 @@
 namespace otb
 {
 
-class GlImageActor 
+class NonOptGlImageActor 
   : public GlActor
 {
 public:
-  typedef GlImageActor                                    Self;
+  typedef NonOptGlImageActor                                    Self;
   typedef GlActor                                         Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
@@ -55,6 +55,10 @@ public:
   
   ImageKeywordlistType GetKwl() const;
 
+  itkSetMacro(UseShader,bool);
+  itkGetConstReferenceMacro(UseShader,bool);
+  itkBooleanMacro(UseShader);
+
   itkSetMacro(MinRed,double);
   itkSetMacro(MinGreen,double);
   itkSetMacro(MinBlue,double);
@@ -76,12 +80,14 @@ public:
   itkSetMacro(BlueIdx,unsigned int);
   itkGetMacro(BlueIdx,unsigned int);
 
+
+
   itkGetMacro(NumberOfComponents,unsigned int);
 
 protected:
-  GlImageActor();
+  NonOptGlImageActor();
   
-  virtual ~GlImageActor();
+  virtual ~NonOptGlImageActor();
 
   typedef ImageFileReader<VectorImageType>                                        ReaderType;
   typedef MultiChannelExtractROI<float,float>                                     ExtractROIFilterType;
@@ -103,7 +109,14 @@ protected:
         m_Resolution(1),
         m_RedIdx(1),
         m_GreenIdx(2),
-        m_BlueIdx(3)
+        m_BlueIdx(3),
+        m_UseShader(false),
+        m_MinRed(0),
+        m_MaxRed(0),
+        m_MinGreen(0),
+        m_MaxGreen(0),
+        m_MinBlue(0),
+        m_MaxBlue(0)
     {
       m_UL.Fill(0);
       m_UR.Fill(0);
@@ -122,13 +135,20 @@ protected:
     unsigned int m_RedIdx;
     unsigned int m_GreenIdx;
     unsigned int m_BlueIdx;
+    unsigned int m_UseShader;
+    double m_MinRed;
+    double m_MaxRed;
+    double m_MinGreen;
+    double m_MaxGreen;
+    double m_MinBlue;
+    double m_MaxBlue;
   };
 
   typedef std::vector<Tile>                                                       TileVectorType;    
   
 private:
   // prevent implementation
-  GlImageActor(const Self&);
+  NonOptGlImageActor(const Self&);
   void operator=(const Self&);
 
   // Load tile to GPU
@@ -187,6 +207,8 @@ private:
   SpacingType  m_Spacing;
   RegionType   m_LargestRegion;
   unsigned int m_NumberOfComponents;
+
+  bool m_UseShader;
   
   static unsigned int m_StandardShader;
   static unsigned int m_StandardShaderProgram;
@@ -195,7 +217,7 @@ private:
   RSTransformType::Pointer m_ViewportToImageTransform;
   RSTransformType::Pointer m_ImageToViewportTransform;
 
-}; // End class GlImageActor
+}; // End class NonOptGlImageActor
 
 } // End namespace otb
 

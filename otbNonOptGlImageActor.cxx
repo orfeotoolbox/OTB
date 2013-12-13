@@ -1,4 +1,4 @@
-#include "otbGlImageActor.h"
+#include "otbNonOptGlImageActor.h"
 #include "otbViewSettings.h"
 #include "otbMath.h"
 #include <GL/gl.h> 
@@ -8,11 +8,11 @@ namespace otb
 {
 
 // Shaders section
-unsigned int GlImageActor::m_StandardShader = 0;
-unsigned int GlImageActor::m_StandardShaderProgram = 0;
-bool GlImageActor::m_ShaderInitialized = false;
+unsigned int NonOptGlImageActor::m_StandardShader = 0;
+unsigned int NonOptGlImageActor::m_StandardShaderProgram = 0;
+bool NonOptGlImageActor::m_ShaderInitialized = false;
 
-GlImageActor::GlImageActor()
+NonOptGlImageActor::NonOptGlImageActor()
   : m_TileSize(256),
     m_FileName(),
     m_FileReader(),
@@ -31,34 +31,35 @@ GlImageActor::GlImageActor()
     m_Origin(),
     m_Spacing(),
     m_NumberOfComponents(0),
+    m_UseShader(false),
     m_ViewportToImageTransform(RSTransformType::New()),
     m_ImageToViewportTransform(RSTransformType::New())
 {}
 
-GlImageActor::~GlImageActor()
+NonOptGlImageActor::~NonOptGlImageActor()
 {}
 
-const GlImageActor::PointType & GlImageActor::GetOrigin() const
+const NonOptGlImageActor::PointType & NonOptGlImageActor::GetOrigin() const
 {
   return m_Origin;
 }
 
-const GlImageActor::SpacingType & GlImageActor::GetSpacing() const
+const NonOptGlImageActor::SpacingType & NonOptGlImageActor::GetSpacing() const
 {
   return m_Spacing;
 }
 
-std::string GlImageActor::GetWkt() const
+std::string NonOptGlImageActor::GetWkt() const
 {
   return m_FileReader->GetOutput()->GetProjectionRef();
 }
 
-GlImageActor::ImageKeywordlistType GlImageActor::GetKwl() const
+NonOptGlImageActor::ImageKeywordlistType NonOptGlImageActor::GetKwl() const
 {
   return m_FileReader->GetOutput()->GetImageKeywordlist();
 }
 
-void GlImageActor::Initialize(const std::string & filename)
+void NonOptGlImageActor::Initialize(const std::string & filename)
 {
   // Initialize shaders
   InitShaders();
@@ -93,14 +94,14 @@ void GlImageActor::Initialize(const std::string & filename)
   // std::cout<<"Number of resolutions in file: "<<m_AvailableResolutions.size()<<std::endl;
 }
 
-void GlImageActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
+void NonOptGlImageActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
   RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
   ImageRegionToViewportExtent(largest,ulx,uly,lrx,lry);
 }
 
-void GlImageActor::ProcessViewSettings()
+void NonOptGlImageActor::ProcessViewSettings()
 {
   // Is there anything to do ?
   ViewSettings::ConstPointer settings = this->GetSettings();
@@ -119,7 +120,7 @@ void GlImageActor::ProcessViewSettings()
     } 
 }
 
-void GlImageActor::UpdateData()
+void NonOptGlImageActor::UpdateData()
 {
   // Update resolution needed
   UpdateResolution();
@@ -183,7 +184,14 @@ void GlImageActor::UpdateData()
       newTile.m_RedIdx = m_RedIdx;
       newTile.m_GreenIdx = m_GreenIdx;
       newTile.m_BlueIdx = m_BlueIdx;
+      newTile.m_MinRed = m_MinRed;
+      newTile.m_MinGreen = m_MinGreen;
+      newTile.m_MinBlue = m_MinBlue;
+      newTile.m_MaxRed = m_MaxRed;
+      newTile.m_MaxGreen = m_MaxGreen;
+      newTile.m_MaxBlue = m_MaxBlue;
       newTile.m_Resolution = m_CurrentResolution;
+      newTile.m_UseShader = m_UseShader;
 
       if(!TileAlreadyLoaded(newTile))
         {
@@ -193,7 +201,7 @@ void GlImageActor::UpdateData()
     }
 }
 
-bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
+bool NonOptGlImageActor::TileAlreadyLoaded(const Tile& tile)
 {
     for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it!=m_LoadedTiles.end();
@@ -201,44 +209,62 @@ bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
     {
     if(it->m_ImageRegion == tile.m_ImageRegion)
       {
-      return (tile.m_Resolution ==  it->m_Resolution
-              && tile.m_RedIdx == it->m_RedIdx
-              && tile.m_GreenIdx == it->m_GreenIdx
-              && tile.m_BlueIdx == it->m_BlueIdx);
+      bool resp = (tile.m_Resolution ==  it->m_Resolution
+                   && tile.m_RedIdx == it->m_RedIdx
+                   && tile.m_GreenIdx == it->m_GreenIdx
+                   && tile.m_BlueIdx == it->m_BlueIdx
+                   && (tile.m_UseShader == m_UseShader));
+
+      if(!m_UseShader)
+        {
+        return resp 
+          &&tile.m_MinRed == m_MinRed
+          &&tile.m_MinGreen == m_MinGreen
+          &&tile.m_MinBlue == m_MinBlue
+          &&tile.m_MaxRed == m_MaxRed
+          &&tile.m_MaxGreen == m_MaxGreen
+          &&tile.m_MaxBlue == m_MaxBlue;
+        }
+      else
+        {
+        return resp;
+        }
       }
     }
 
   return false;
 }
 
-void GlImageActor::Render()
+void NonOptGlImageActor::Render()
 {
   // std::cout<<"Render: "<<m_LoadedTiles.size()<<" tiles to process"<<std::endl;
 
-  // Setup shader
-  glUseProgramObjectARB(m_StandardShaderProgram);
+  if(m_UseShader)
+    {
+    // Setup shader
+    glUseProgramObjectARB(m_StandardShaderProgram);
   
-  int length;
-  glGetProgramiv(m_StandardShaderProgram,GL_INFO_LOG_LENGTH,&length);
-  char * logs = new char[length];
-  glGetProgramInfoLog(m_StandardShaderProgram,1000,NULL,logs);
-  // std::cout<<logs<<std::endl;
-  delete [] logs;
-  
-  // Compute shifts and scales
-  double shr,shg,shb,scr,scg,scb;
-  shr = -m_MinRed;
-  shg = -m_MinGreen;
-  shb = -m_MinBlue;
-  scr = 1./(m_MaxRed-m_MinRed);
-  scg = 1./(m_MaxGreen-m_MinGreen);
-  scb = 1./(m_MaxBlue-m_MinBlue);
-  
-  GLint shader_a= glGetUniformLocation(GlImageActor::m_StandardShaderProgram, "shader_a");
-  glUniform4f(shader_a,scr,scg,scb,1.);
-  GLint shader_b= glGetUniformLocation(GlImageActor::m_StandardShaderProgram, "shader_b");
-  glUniform4f(shader_b,shr,shg,shb,0);
+    int length;
+    glGetProgramiv(m_StandardShaderProgram,GL_INFO_LOG_LENGTH,&length);
+    char * logs = new char[length];
+    glGetProgramInfoLog(m_StandardShaderProgram,1000,NULL,logs);
+    // std::cout<<logs<<std::endl;
+    delete [] logs;
 
+    // Compute shifts and scales
+    double shr,shg,shb,scr,scg,scb;
+    shr = -m_MinRed;
+    shg = -m_MinGreen;
+    shb = -m_MinBlue;
+    scr = 1./(m_MaxRed-m_MinRed);
+    scg = 1./(m_MaxGreen-m_MinGreen);
+    scb = 1./(m_MaxBlue-m_MinBlue);
+
+    GLint shader_a= glGetUniformLocation(NonOptGlImageActor::m_StandardShaderProgram, "shader_a");
+    glUniform4f(shader_a,scr,scg,scb,1.);
+    GLint shader_b= glGetUniformLocation(NonOptGlImageActor::m_StandardShaderProgram, "shader_b");
+    glUniform4f(shader_b,shr,shg,shb,0);
+    }
   
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
@@ -259,10 +285,13 @@ void GlImageActor::Render()
     glDisable(GL_TEXTURE_2D);
     }
   
-  glUseProgramObjectARB(0);
+  if(m_UseShader)
+    {
+    glUseProgramObjectARB(0);
+    }
 }
 
-void GlImageActor::LoadTile(Tile& tile)
+void NonOptGlImageActor::LoadTile(Tile& tile)
 {
   ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
   extract->SetInput(m_FileReader->GetOutput());
@@ -271,36 +300,60 @@ void GlImageActor::LoadTile(Tile& tile)
   extract->SetChannel(tile.m_GreenIdx);
   extract->SetChannel(tile.m_BlueIdx);
 
-  extract->Update();
-  
-  itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
-  
-  float * buffer = new float[4*extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
-  
-  unsigned int idx = 0;
-  
-  for(it.GoToBegin();!it.IsAtEnd();++it)
+  if(!tile.m_UseShader)
     {
-    buffer[idx] = static_cast<float>(it.Get()[2]);
-    ++idx;
-    buffer[idx] = static_cast<float>(it.Get()[1]);
-    ++idx;
-    buffer[idx] = static_cast<float>(it.Get()[0]);
-    ++idx;
-    buffer[idx] = 255.;
-    ++idx;
-    }
+    RescaleFilterType::Pointer rescale = RescaleFilterType::New();
+    rescale->SetInput(extract->GetOutput());
+    rescale->AutomaticInputMinMaxComputationOff();
   
-  // Now load the texture
-  glGenTextures(1, &(tile.m_TextureId));
-  glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
+    VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
+    
+    mins[0] = m_MinRed;
+    mins[1] = m_MinGreen;
+    mins[2] = m_MinBlue;
+    
+    maxs[0] = m_MaxRed;
+    maxs[1] = m_MaxGreen;
+    maxs[2] = m_MaxBlue;
+    
+    omins.Fill(0);
+    omaxs.Fill(255);
+    
+    rescale->SetInputMinimum(mins);
+    rescale->SetInputMaximum(maxs);
+    rescale->SetOutputMinimum(omins);
+    rescale->SetOutputMaximum(omaxs);
+    
+    rescale->Update();
+    
+    itk::ImageRegionConstIterator<VectorImageType> it(rescale->GetOutput(),rescale->GetOutput()->GetLargestPossibleRegion());
+
+    unsigned char * buffer = new unsigned char[4*rescale->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
+    
+    unsigned int idx = 0;
+    
+    for(it.GoToBegin();!it.IsAtEnd();++it)
+      {
+      buffer[idx] = static_cast<unsigned char>(it.Get()[2]);
+      ++idx;
+      buffer[idx] = static_cast<unsigned char>(it.Get()[1]);
+      ++idx;
+      buffer[idx] = static_cast<unsigned char>(it.Get()[0]);
+      ++idx;
+      buffer[idx] = 255;
+      ++idx;
+      }
+    
+    // Now load the texture
+    glGenTextures(1, &(tile.m_TextureId));
+    glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
 #if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 #endif
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 // #if defined(GL_CLAMP_TO_BORDER)      
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
@@ -308,25 +361,82 @@ void GlImageActor::LoadTile(Tile& tile)
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
 // #elif defined (GL_MIRRORED_REPEAT)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
 // #endif
-  glTexImage2D(
-    GL_TEXTURE_2D, 0, GL_RGB32F,
-    extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-    extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
-    0, GL_BGRA, GL_FLOAT,
-    buffer);
+      glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGBA8,
+        rescale->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+        rescale->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
+        0, GL_BGRA, GL_UNSIGNED_BYTE,
+        buffer);
+      
+      tile.m_Loaded = true;
+      tile.m_UseShader = false;
   
-  tile.m_Loaded = true;
+      delete [] buffer;
+    }
+  // else !m_UseShader
+  else
+    {
+    extract->Update();
+
+    itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
+
+    float * buffer = new float[4*extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
+    
+    unsigned int idx = 0;
+    
+    for(it.GoToBegin();!it.IsAtEnd();++it)
+      {
+      buffer[idx] = static_cast<float>(it.Get()[2]);
+      ++idx;
+      buffer[idx] = static_cast<float>(it.Get()[1]);
+      ++idx;
+      buffer[idx] = static_cast<float>(it.Get()[0]);
+      ++idx;
+      buffer[idx] = 255.;
+      ++idx;
+      }
+    
+    // Now load the texture
+    glGenTextures(1, &(tile.m_TextureId));
+    glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
+#if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+#endif
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+// #if defined(GL_CLAMP_TO_BORDER)      
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
+// #elif defined (GL_CLAMP_TO_BORDER_EXT)
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
+// #elif defined (GL_MIRRORED_REPEAT)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
+// #endif
+      glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGB32F,
+        extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+        extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
+        0, GL_BGRA, GL_FLOAT,
+        buffer);
+      
+      tile.m_Loaded = true;
+      tile.m_UseShader = true;
   
-  delete [] buffer;
-  
+      delete [] buffer;
+    }
+
   // And push to loaded texture
   m_LoadedTiles.push_back(tile);
 }
 
-void GlImageActor::UnloadTile(Tile& tile)
+void NonOptGlImageActor::UnloadTile(Tile& tile)
 {
   if(tile.m_Loaded)
     {
@@ -335,7 +445,7 @@ void GlImageActor::UnloadTile(Tile& tile)
     }
 }
 
-void GlImageActor::CleanLoadedTiles()
+void NonOptGlImageActor::CleanLoadedTiles()
 {
   TileVectorType newLoadedTiles;
 
@@ -360,7 +470,14 @@ void GlImageActor::CleanLoadedTiles()
        || it->m_Resolution != m_CurrentResolution
        || it->m_RedIdx != m_RedIdx
        || it->m_GreenIdx != m_GreenIdx
-       || it->m_BlueIdx != m_BlueIdx)
+       || it->m_BlueIdx != m_BlueIdx
+       || (it->m_UseShader != m_UseShader)
+       || (!m_UseShader && it->m_MinRed != m_MinRed)
+       || (!m_UseShader   &&it->m_MinGreen != m_MinGreen)
+       || (!m_UseShader  &&it->m_MinBlue != m_MinBlue)
+       || (!m_UseShader  &&it->m_MaxRed != m_MaxRed)
+       || (!m_UseShader  &&it->m_MaxGreen != m_MaxGreen)
+       || (!m_UseShader  &&it->m_MaxBlue != m_MaxBlue))
       {     
       // Tile will not be used anymore, unload it from GPU
       UnloadTile(*it);
@@ -378,7 +495,7 @@ void GlImageActor::CleanLoadedTiles()
 
 }
 
-void GlImageActor::ClearLoadedTiles()
+void NonOptGlImageActor::ClearLoadedTiles()
 {
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it!=m_LoadedTiles.end();++it)
@@ -388,7 +505,7 @@ void GlImageActor::ClearLoadedTiles()
   m_LoadedTiles.clear();
 }
 
-void GlImageActor::ImageRegionToViewportExtent(const RegionType& region, double & ulx, double & uly, double & lrx, double& lry) const
+void NonOptGlImageActor::ImageRegionToViewportExtent(const RegionType& region, double & ulx, double & uly, double & lrx, double& lry) const
 {
   PointType tul,tur,tll,tlr;
   
@@ -403,7 +520,7 @@ void GlImageActor::ImageRegionToViewportExtent(const RegionType& region, double 
   lry = std::max(std::max(tul[1],tur[1]),std::max(tll[1],tlr[1]));
 }
 
-void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointType & ul, PointType & ur, PointType & ll, PointType & lr) const
+void NonOptGlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointType & ul, PointType & ur, PointType & ll, PointType & lr) const
 {
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
@@ -443,7 +560,7 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   lr[1] = plr[1];
 }
 
-void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double & uly, const double & lrx, const double & lry, RegionType & region) const
+void NonOptGlImageActor::ViewportExtentToImageRegion(const double& ulx, const double & uly, const double & lrx, const double & lry, RegionType & region) const
 {
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
@@ -500,7 +617,7 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   region.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion());
 }
 
-void GlImageActor::UpdateResolution()
+void NonOptGlImageActor::UpdateResolution()
 {
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
@@ -566,7 +683,7 @@ void GlImageActor::UpdateResolution()
   m_FileReader->UpdateOutputInformation();
 }
 
-void GlImageActor::UpdateTransforms()
+void NonOptGlImageActor::UpdateTransforms()
 {
   if(m_FileName == "")
     {
@@ -596,9 +713,9 @@ void GlImageActor::UpdateTransforms()
 }
 
 
-void GlImageActor::InitShaders()
+void NonOptGlImageActor::InitShaders()
 {
-  if(!GlImageActor::m_ShaderInitialized)
+  if(!NonOptGlImageActor::m_ShaderInitialized)
     {
 
     std::string source = "#version 120 \n"\
@@ -617,10 +734,10 @@ void GlImageActor::InitShaders()
     const char * cstr_source = source.c_str();
     GLint source_length = source.size();
 
-    GlImageActor::m_StandardShaderProgram = glCreateProgram();
-    GlImageActor::m_StandardShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource( GlImageActor::m_StandardShader, 1, &cstr_source,&source_length);
-    glCompileShader(GlImageActor::m_StandardShader);
+    NonOptGlImageActor::m_StandardShaderProgram = glCreateProgram();
+    NonOptGlImageActor::m_StandardShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource( NonOptGlImageActor::m_StandardShader, 1, &cstr_source,&source_length);
+    glCompileShader(NonOptGlImageActor::m_StandardShader);
 
     GLint compiled;
 
@@ -640,8 +757,8 @@ void GlImageActor::InitShaders()
 
       }
 
-    glAttachShader(GlImageActor::m_StandardShaderProgram, GlImageActor::m_StandardShader);
-    glLinkProgram(GlImageActor::m_StandardShaderProgram);
+    glAttachShader(NonOptGlImageActor::m_StandardShaderProgram, NonOptGlImageActor::m_StandardShader);
+    glLinkProgram(NonOptGlImageActor::m_StandardShaderProgram);
 
     // // Check that shader is correctly loaded
     // glUseProgram(m_StandardShaderProgram);
@@ -653,7 +770,7 @@ void GlImageActor::InitShaders()
     // std::cout<<logs<<std::endl;
     // delete [] logs;
 
-    GlImageActor::m_ShaderInitialized = true;
+    NonOptGlImageActor::m_ShaderInitialized = true;
     }
 }
 

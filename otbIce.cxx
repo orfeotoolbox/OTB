@@ -344,12 +344,13 @@ public:
         m_Actors[m_SelectedActor]->SetBlueIdx(blue);
         }
       }
-
-     if(key == GLFW_KEY_S && action == GLFW_PRESS)
-       {
-       std::cout<<"Actor shader rendering "<<(m_Actors[m_SelectedActor]->GetUseShader()?"off":"on")<<std::endl;
-       m_Actors[m_SelectedActor]->SetUseShader(!m_Actors[m_SelectedActor]->GetUseShader());
-       }
+     
+     // Not available anymore with GlImageActor (use NonOptGlImageActor)
+     // if(key == GLFW_KEY_S && action == GLFW_PRESS)
+     //   {
+     //   std::cout<<"Actor shader rendering "<<(m_Actors[m_SelectedActor]->GetUseShader()?"off":"on")<<std::endl;
+     //   m_Actors[m_SelectedActor]->SetUseShader(!m_Actors[m_SelectedActor]->GetUseShader());
+     //   }
   }
 
 
@@ -421,7 +422,7 @@ int main(int argc, char * argv[])
     std::cerr<<"- r key: change red channel of current actor"<<std::endl;
     std::cerr<<"- g key: change green channel of current actor"<<std::endl;
     std::cerr<<"- b key: change blue channel of current actor"<<std::endl;
-    std::cerr<<"- s key: enable / disable shader rendering of current actor (compare speed!)"<<std::endl;
+    // std::cerr<<"- s key: enable / disable shader rendering of current actor (compare speed!)"<<std::endl;
     std::cerr<<"- PAGE_UP/PAGE_DOWN key: move actor backward or forward in rendering order"<<std::endl;
     std::cerr<<"- TAB key: rotate rendering order"<<std::endl;
     return EXIT_FAILURE;
@@ -484,7 +485,6 @@ int main(int argc, char * argv[])
    otb::GlImageActor::Pointer mainActor = otb::GlImageActor::New();
    mainActor->Initialize(argv[3]);
    mainActor->SetVisible(true);
-   mainActor->UseShaderOn();
    mainActor->SetMinRed(min);
    mainActor->SetMinGreen(min);
    mainActor->SetMinBlue(min);
@@ -511,7 +511,6 @@ int main(int argc, char * argv[])
      otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
      actor->Initialize(argv[i]);
      actor->SetVisible(true);
-     actor->UseShaderOn();
      actor->SetMinRed(min);
      actor->SetMinGreen(min);
      actor->SetMinBlue(min);
