@@ -43,11 +43,8 @@ endif(GLFW_FOUND)
 
 ADD_DEFINITIONS(-DGL_GLEXT_PROTOTYPES)
 
-ADD_LIBRARY(OTBIce otbGPUTileLoader.cxx otbViewSettings.cxx otbGlView.cxx otbGlActor.cxx otbGlImageActor.cxx)
+ADD_LIBRARY(OTBIce otbViewSettings.cxx otbGlView.cxx otbGlActor.cxx otbGlImageActor.cxx)
 TARGET_LINK_LIBRARIES(OTBIce OTBIO ${OPENGL_LIBRARY})
-
-ADD_EXECUTABLE(otbGPUTileLoaderTest otbGPUTileLoaderTest.cxx)
-TARGET_LINK_LIBRARIES(otbGPUTileLoaderTest OTBIce ${GLFW_LIBRARY})
 
 ADD_EXECUTABLE(otbIce otbIce.cxx)
 TARGET_LINK_LIBRARIES(otbIce OTBIce ${GLFW_LIBRARY})
