@@ -129,12 +129,12 @@ public:
   /**
    */
   inline
-    const DatasetModel* FindDatasetModel( const DatasetHash& id ) const;
+    const DatasetModel* FindDatasetModel( const DatasetHash& hash ) const;
 
   /**
    */
   inline
-    DatasetModel* FindDatasetModel( const DatasetHash& id );
+    DatasetModel* FindDatasetModel( const DatasetHash& hash );
 
   /**
    */
@@ -186,7 +186,7 @@ public slots:
 
   /**
    */
-  void OnDatasetRenamed( const QString& alias, const QString & id );
+  void OnDatasetRenamed( const QString& alias, const QString& hash );
 
   /**
    */
@@ -235,13 +235,13 @@ private:
    */
   inline
     DatasetModelMap::const_iterator
-    DatasetModelIterator( const DatasetHash& id ) const;
+    DatasetModelIterator( const DatasetHash& hash ) const;
 
   /**
    */
   inline
     DatasetModelMap::iterator
-    DatasetModelIterator( const DatasetHash& id );
+    DatasetModelIterator( const DatasetHash& hash );
 
   /**
    * \brief Find dataset identified by given key, delete its
@@ -374,12 +374,12 @@ DatabaseModel
 inline
 const DatasetModel*
 DatabaseModel
-::FindDatasetModel( const DatasetHash& id ) const
+::FindDatasetModel( const DatasetHash& hash ) const
 {
-  // qDebug() << this << "::FindDatasetModel(" << id << ")";
+  // qDebug() << this << "::FindDatasetModel(" << hash << ")";
 
   // Find (key, value) pair.
-  DatasetModelMap::const_iterator it( DatasetModelIterator( id ) );
+  DatasetModelMap::const_iterator it( DatasetModelIterator( hash ) );
 
   // Return found element.
   return it.value();
@@ -389,12 +389,12 @@ DatabaseModel
 inline
 DatasetModel*
 DatabaseModel
-::FindDatasetModel( const DatasetHash& id )
+::FindDatasetModel( const DatasetHash& hash )
 {
-  // qDebug() << this << "::FindDatasetModel(" << id << ")";
+  // qDebug() << this << "::FindDatasetModel(" << hash << ")";
 
   // Find (key, value) pair.
-  DatasetModelMap::iterator it( DatasetModelIterator( id ) );
+  DatasetModelMap::iterator it( DatasetModelIterator( hash ) );
 
   // Return found element.
   return it.value();
@@ -404,18 +404,18 @@ DatabaseModel
 inline
 DatabaseModel::DatasetModelMap::const_iterator
 DatabaseModel
-::DatasetModelIterator( const DatasetHash& id ) const
+::DatasetModelIterator( const DatasetHash& hash ) const
 {
-  // qDebug() << this << "::DatasetModelIterator(" << id << ")";
+  // qDebug() << this << "::DatasetModelIterator(" << hash << ")";
 
   // Find (key, value) pair.
-  DatasetModelMap::const_iterator it( m_DatasetModels.find( id ) );
+  DatasetModelMap::const_iterator it( m_DatasetModels.find( hash ) );
 
   // Should be present because it should have been initialized in
   // InitializeDatasetModels().
   if( it==m_DatasetModels.end() )
     throw std::out_of_range(
-      ToStdString( tr( "Dataset '%1' not found." ).arg( id ) )
+      ToStdString( tr( "Dataset '%1' not found." ).arg( hash ) )
     );
 
   // Return found element.
@@ -426,18 +426,18 @@ DatabaseModel
 inline
 DatabaseModel::DatasetModelMap::iterator
 DatabaseModel
-::DatasetModelIterator( const QString& id )
+::DatasetModelIterator( const QString& hash )
 {
-  // qDebug() << this << "::DatasetModelIterator(" << id << ")";
+  // qDebug() << this << "::DatasetModelIterator(" << hash << ")";
 
   // Find (key, value) pair.
-  DatasetModelMap::iterator it( m_DatasetModels.find( id ) );
+  DatasetModelMap::iterator it( m_DatasetModels.find( hash ) );
 
   // Should be present because it should have been initialized in
   // InitializeDatasetModels().
   if( it==m_DatasetModels.end() )
     throw std::out_of_range(
-      ToStdString( tr( "Dataset '%1' not found!" ).arg( id ) )
+      ToStdString( tr( "Dataset '%1' not found!" ).arg( hash ) )
     );
 
   // Return found element.

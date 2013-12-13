@@ -182,6 +182,10 @@ public:
 
   /**
    */
+  void UpdateDatasetAliasFromHash( const QString& hash, const QString& alias );
+
+  /**
+   */
   DatasetMap ListAllDatasets() const;
 
   //

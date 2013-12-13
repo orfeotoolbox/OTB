@@ -413,6 +413,17 @@ DatabaseConnection
 }
 
 /*****************************************************************************/
+void
+DatabaseConnection
+::UpdateDatasetAliasFromHash( const QString& hash, const QString& alias )
+{
+  ExecuteQuery(
+    "UPDATE dataset SET alias=:alias WHERE hash=:id",
+    QVariantList() << alias << hash
+  );
+}
+
+/*****************************************************************************/
 DatabaseConnection::DatasetMap
 DatabaseConnection
 ::ListAllDatasets() const

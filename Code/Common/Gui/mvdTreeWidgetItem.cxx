@@ -96,7 +96,7 @@ TreeWidgetItem
       setFlags(
         Qt::ItemIsEnabled |
         Qt::ItemIsSelectable |
-        Qt::ItemIsEditable |
+        // Qt::ItemIsEditable |
         Qt::ItemIsDragEnabled
       );
       break;
