@@ -538,7 +538,7 @@ bool GlImageActor::GetPixelFromViewport(const PointType & in, PixelType& pixel) 
       }
     }
 
-  return true;
+  return false;
 }
 
 

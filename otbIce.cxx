@@ -500,7 +500,9 @@ int main(int argc, char * argv[])
     std::cerr<<"- r key: change red channel of current actor"<<std::endl;
     std::cerr<<"- g key: change green channel of current actor"<<std::endl;
     std::cerr<<"- b key: change blue channel of current actor"<<std::endl;
-    // std::cerr<<"- s key: enable / disable shader rendering of current actor (compare speed!)"<<std::endl;
+    // std::cerr<<"- s key: enable / disable shader rendering of
+    // current actor (compare speed!)"<<std::endl;
+    std::cerr<<"- L key: activate/deactivate pixel under mouse local contrast enhancement (in this mode, SHIFT + mouse wheel allows to tune the contrast enhancement range"<<std::endl;
     std::cerr<<"- PAGE_UP/PAGE_DOWN key: move actor backward or forward in rendering order"<<std::endl;
     std::cerr<<"- TAB key: rotate rendering order"<<std::endl;
     return EXIT_FAILURE;
