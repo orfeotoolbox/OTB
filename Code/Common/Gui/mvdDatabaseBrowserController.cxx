@@ -223,6 +223,8 @@ DatabaseBrowserController
 }
 
 /*******************************************************************************/
+#define ENABLE_TREE_QDEBUG 0
+
 void
 DatabaseBrowserController
 ::UpdateTree( QTreeWidgetItem* item, SqlId nodeId )
@@ -263,17 +265,20 @@ DatabaseBrowserController
       // Nodes.
       case TreeWidgetItem::ITEM_TYPE_NODE:
         // assert( child->data( 1, Qt::UserRole + 1 ).isValid() );
+#if ENABLE_TREE_QDEBUG
         qDebug()
           << "Node:"
           << child->text( 0 )
           << child->text( 1 )
           << child->data( 1, TreeWidgetItem::ITEM_ROLE_ID );
         container = &nodes;
+#endif
         break;
 
       // Leaves.
       case TreeWidgetItem::ITEM_TYPE_LEAF:
         // assert( item->data( 1, Qt::UserRole + 1 ).isValid() );
+#if ENABLE_TREE_QDEBUG
         qDebug()
           << "Leaf:"
           << child->text( 0 )
@@ -281,6 +286,7 @@ DatabaseBrowserController
           << child->data( 1, TreeWidgetItem::ITEM_ROLE_ID )
           << child->text( 2 );
         container = &leaves;
+#endif
         break;
 
       // Others.
@@ -302,12 +308,14 @@ DatabaseBrowserController
       // assert( it==map->end() );
       if( it!=container->end() )
         {
+#if ENABLE_TREE_QDEBUG
         qDebug()
           << "Duplicate:"
           << child->type()
           << it.value()->text( 0 )
           << it.value()->text( 1 )
           << it.value()->data( 1, TreeWidgetItem::ITEM_ROLE_ID );
+#endif
 
         duplicates.push_back( it.value() );
         }
@@ -334,7 +342,9 @@ DatabaseBrowserController
 
     QVariant id( GetDatasetFields( datasetsQuery, &hash, &alias ) );
 
+#if ENABLE_TREE_QDEBUG
     qDebug() << "+Leaf:" << id.toString() << hash << alias;
+#endif
 
     TreeWidgetItemMap::iterator it(
       leaves.find( id.toString() )
@@ -364,7 +374,9 @@ DatabaseBrowserController
     {
     TreeWidgetItemMap::iterator it( leaves.begin() );
 
-    qDebug() << "Remove leaf:" << it.key() << it.value()->text( 0 );
+#if ENABLE_TREE_QDEBUG
+    qDebug() << "-Leaf:" << it.key() << it.value()->text( 0 );
+#endif
 
     delete it.value();
 
@@ -382,7 +394,9 @@ DatabaseBrowserController
 
     QVariant id( GetChildNodeFields( nodesQuery, &label ) );
 
+#if ENABLE_TREE_QDEBUG
     qDebug() << "+Node:" << id.toString() << label;
+#endif
 
     TreeWidgetItemMap::iterator it(
       nodes.find( id.toString() )
@@ -409,7 +423,9 @@ DatabaseBrowserController
     {
     TreeWidgetItemMap::iterator it( nodes.begin() );
 
-    qDebug() << "Remove node:" << it.key() << it.value()->text( 0 );
+#if ENABLE_TREE_QDEBUG
+    qDebug() << "-Node:" << it.key() << it.value()->text( 0 );
+#endif
 
     delete it.value();
 

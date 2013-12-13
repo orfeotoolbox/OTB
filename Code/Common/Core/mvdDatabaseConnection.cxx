@@ -203,11 +203,7 @@ DatabaseConnection
     dbc.DirectExecuteQuery( SQL_DB_SETUP[ i ] );
     }
 
-#if defined( _DEBUG ) || 1
-  SqlId rootNodeId(
-    GetRootNodeFields( dbc.FindRootNode() )
-  );
-
+#if (defined( _DEBUG ) && 1) || 1
   SqlId datasetNodeId(
     GetNodeFields( dbc.FindDatasetNode() )
   );
@@ -219,7 +215,11 @@ DatabaseConnection
   dbc.InsertNode( "WV2", datasetNodeId );
 #endif
 
-#if (defined( _DEBUG ) && 1) || 0
+#if (defined( _DEBUG ) && 0) || 0
+  SqlId rootNodeId(
+    GetRootNodeFields( dbc.FindRootNode() )
+  );
+
   // TEST-1
   dbc.InsertNode( "Test-1", datasetNodeId );
 
