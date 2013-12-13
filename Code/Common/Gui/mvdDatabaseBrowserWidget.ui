@@ -49,14 +49,6 @@
        <string>Name</string>
       </property>
      </column>
-     <item>
-      <property name="text">
-       <string>Datasets</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsEnabled</set>
-      </property>
-     </item>
     </widget>
    </item>
   </layout>

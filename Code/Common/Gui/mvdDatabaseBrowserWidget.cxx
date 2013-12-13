@@ -79,14 +79,6 @@ DatabaseBrowserWidget
 {
   m_UI->setupUi( this );
 
-  m_UI->databaseTreeWidget->headerItem()->setText( 1, "Id" );
-  m_UI->databaseTreeWidget->headerItem()->setText( 2, "Info" );
-
-#if (!defined( _DEBUG ) && 1) || 0
-  m_UI->databaseTreeWidget->setColumnHidden( 1, true );
-  m_UI->databaseTreeWidget->setColumnHidden( 2, true );
-#endif
-
   SetupUI();
 
   /*
@@ -272,22 +264,33 @@ void
 DatabaseBrowserWidget
 ::SetupUI()
 {
-  // 
-  setAcceptDrops(true);
+  setAcceptDrops( true );
 
-  m_DatasetRootItem = m_UI->databaseTreeWidget->topLevelItem( 0 );
-  assert( m_DatasetRootItem!=NULL );
-  assert( m_DatasetRootItem->text( 0 ) == tr( "Datasets" ) );
+  //
+  // Header columns.
+  m_UI->databaseTreeWidget->headerItem()->setText( 1, "Id" );
+  m_UI->databaseTreeWidget->headerItem()->setText( 2, "Info" );
 
-#if 0
-  m_DatasetRootItem->setChildIndicatorPolicy( TreeWidgetItem::ShowIndicator );
+#if (!defined( _DEBUG ) && 1) || 0
+  m_UI->databaseTreeWidget->setColumnHidden( 1, true );
+  m_UI->databaseTreeWidget->setColumnHidden( 2, true );
 #endif
 
+  //
+  // Dataset root item.
+#if 0
+  m_DatasetRootItem = new QTreeWidgetItem( "Datasets", m_UI->databaseTreeWidget );
+
+  m_DatasetRootItem->setChildIndicatorPolicy(
+    QTreeWidgetItem::DontShowIndicatorWhenChildless
+  );
+
   m_DatasetRootItem->setExpanded( true );
+#endif
 
   // set placeholder text
 #if (QT_VERSION >= 0x407000)
-  m_UI->m_SearchLine->setPlaceholderText( tr("Search Dataset ...") );
+  m_UI->m_SearchLine->setPlaceholderText( tr( "Search Dataset..." ) );
 #endif
 }
 
