@@ -656,7 +656,7 @@ void GlImageActor::UpdateResolution()
   pointB = pointA;
   
   pointB[0]+=100*spacing[0];
-  pointB[1]+=100*spacing[0];
+  pointB[1]+=100*spacing[1];
 
   // TODO: This part needs a review
 
