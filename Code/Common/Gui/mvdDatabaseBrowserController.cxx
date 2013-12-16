@@ -350,11 +350,11 @@ DatabaseBrowserController
       leaves.find( id.toString() )
     );
 
-    QTreeWidgetItem* childItem = NULL;
+    // QTreeWidgetItem* childItem = NULL;
 
     if( it==leaves.end() )
       {
-      childItem = widget->InsertLeafItem(
+      /*childItem = */widget->InsertLeafItem(
         item,
         alias.isEmpty()
         ? hash
@@ -364,7 +364,7 @@ DatabaseBrowserController
       }
     else
       {
-      childItem = it.value();
+      /*childItem = */it.value();
       }
 
     leaves.erase( it );
