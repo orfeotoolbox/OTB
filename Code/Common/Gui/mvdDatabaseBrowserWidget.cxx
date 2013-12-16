@@ -394,6 +394,9 @@ DatabaseBrowserWidget
   // fill the tree with the application
   FillTree();  
 #else
+  if( m_DatasetRootItem==NULL )
+    return;
+
   for( int i=0; i<m_DatasetRootItem->childCount();  ++i )
     {
     QTreeWidgetItem* item = m_DatasetRootItem->child( i );
