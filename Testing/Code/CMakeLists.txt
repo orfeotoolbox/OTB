@@ -30,10 +30,6 @@ if(OTB_USE_VISU_GUI)
         add_subdirectory(Visualization)
 endif()
 
-if(OTB_USE_PQXX)
-        add_subdirectory(GeospatialAnalysis)
-endif()
-
 if(BUILD_APPLICATIONS)
         add_subdirectory(ApplicationEngine)
         add_subdirectory(Wrappers)

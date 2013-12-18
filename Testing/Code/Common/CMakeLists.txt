@@ -12,9 +12,6 @@ set(COMMON_TESTS8 ${CXX_TEST_PATH}/otbCommonTests8)
 if(OTB_USE_MAPNIK)
   set(COMMON_TESTS9 ${CXX_TEST_PATH}/otbCommonTests9)
 endif()
-if(OTB_USE_PQXX)
-  set(COMMON_TESTS10 ${CXX_TEST_PATH}/otbCommonTests10)
-endif()
 set(COMMON_TESTS11 ${CXX_TEST_PATH}/otbCommonTests11)
 set(COMMON_TESTS12 ${CXX_TEST_PATH}/otbCommonTests12)
 set(COMMON_TESTS13 ${CXX_TEST_PATH}/otbCommonTests13)
@@ -913,86 +910,6 @@ add_test(coTvVectorDataToMapFilterWorld ${COMMON_TESTS9}
 endif()
 
 
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# ----------------  PostGIS Interface ---------------------#
-if(OTB_USE_PQXX)
-
-add_test(coTuPostGISConnectionImplementationNew ${COMMON_TESTS10}
-  otbPostGISConnectionImplementationNew
-)
-
-#This test need a runing PostGIS server on the localhost with trusted potgres user and an ecisting testgis base
-add_test(coTvPostGISConnectionImplementationConnectToDB ${COMMON_TESTS10}
-        otbPostGISConnectionImplementationConnectToDB
-        localhost
-        orfeotoolbox_test
-        orfeotoolbox_test_user
-        Bidfeud0
-)
-
-add_test(coTvPostGISConnectionImplementationPerformTransaction ${COMMON_TESTS10}
-        otbPostGISConnectionImplementationPerformTransaction
-        localhost
-        orfeotoolbox_test
-        orfeotoolbox_test_user
-        Bidfeud0
-)
-
-
-add_test(coTuGISTableNew ${COMMON_TESTS10}
-  otbGISTableNew
-)
-
-add_test(coTuPostGISTableNew ${COMMON_TESTS10}
-  otbPostGISTableNew
-)
-
-add_test(coTuVectorDataToGISTableFilterNew ${COMMON_TESTS10}
-  otbVectorDataToGISTableFilterNew
-)
-
-
-# add_test(coTuVectorDataToGISTableFilter ${COMMON_TESTS10}
-# otbVectorDataToGISTableFilter
-# ${INPUTDATA}/ToulousePoints-examples.shp
-# test
-# postgres
-# postgres
-# )
-
-add_test(coTuGISTableToGISTableFilterNew ${COMMON_TESTS10}
-  otbGISTableToGISTableFilterNew
-)
-
-
-add_test(coTuGISTableToVectorDataFilterNew ${COMMON_TESTS10}
-  otbGISTableToVectorDataFilterNew
-)
-
-#need gdal 1.6 for POSTGIS tables connection via OGR string
-add_test(coTvGISTableToVectorDataFilter ${COMMON_TESTS10}
-otbGISTableToVectorDataFilter
-${TEMP}/gistabletovectordatafilter.shp
-orfeotoolbox_test
-labelmaptogis_test_table
-orfeotoolbox_test_user
-Bidfeud0
-)
-
-
-# ----------------  otbGISTableSource  ---------------------#
-add_test(coTuGISTableSourceNew ${COMMON_TESTS10}
-otbGISTableSourceNew
-)
-
-
-endif()
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests11 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1408,24 +1325,6 @@ otbVectorDataToImageFilter.cxx
 )
 endif()
 
-if(OTB_USE_PQXX)
-set(BasicCommon_SRCS10
-otbCommonTests10.cxx
-otbPostGISConnectionImplementationNew.cxx
-otbPostGISConnectionImplementationConnectToDB.cxx
-otbPostGISConnectionImplementationPerformTransaction.cxx
-otbGISTableNew.cxx
-otbPostGISTableNew.cxx
-otbVectorDataToGISTableFilterNew.cxx
-# otbVectorDataToGISTableFilter.cxx
-otbGISTableToGISTableFilterNew.cxx
-otbGISTableToVectorDataFilterNew.cxx
-otbGISTableToVectorDataFilter.cxx
-otbGISTableSourceNew.cxx
-)
-endif()
-
-
 set(BasicCommon_SRCS11
 otbUnaryFunctorWithIndexImageFilterNew.cxx
 otbUnaryFunctorWithIndexImageFilter.cxx
@@ -1471,11 +1370,6 @@ OTB_ADD_EXECUTABLE(otbCommonTests7 "${BasicCommon_SRCS7}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests8 "${BasicCommon_SRCS8}" "OTBIO;OTBTesting")
 if(OTB_USE_MAPNIK)
   OTB_ADD_EXECUTABLE(otbCommonTests9 "${BasicCommon_SRCS9}" "OTBIO;OTBTesting;${MAPNIK_LIBRARY};${ICUUC_LIBRARY}")
-endif()
-if(OTB_USE_PQXX)
-  #TODO this line should be refined when we will like to have this capability with windows
-OTB_ADD_EXECUTABLE(otbCommonTests10 "${BasicCommon_SRCS10}" "OTBIO;OTBTesting")
-target_link_libraries(otbCommonTests10 OTBIO  OTBTesting OTBGeospatialAnalysis pq pqxx)
 endif()
 add_executable(otbCommonTests11 otbCommonTests11.cxx ${BasicCommon_SRCS11})
 target_link_libraries(otbCommonTests11 OTBIO  OTBTesting itkvcl)

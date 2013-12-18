@@ -2566,16 +2566,6 @@ add_test(ioTuOGRVectorDataIOTestCanReadMapInfo ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
         ${INPUTDATA}/LOCALITY_POLYGON.tab)
 
-# CanRead OGR PostGIS()
-if(OTB_USE_PQXX)
-#The original string is PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'"
-#but we need to work with cmake/ctest escaping
-set(CONNSTRING "PG:dbname=orfeotoolbox_test\ host=localhost\ port=5432\ user=orfeotoolbox_test_user\ password=Bidfeud0")
-add_test(ioTuOGRVectorDataIOTestCanReadPostGIS ${IO_TESTS15}
-        otbOGRVectorDataIOTestCanRead
-        ${CONNSTRING})
-endif()
-
 # CanWrite OGR GML()
 add_test(ioTuOGRVectorDataIOCanWriteGML ${IO_TESTS15}
         otbOGRVectorDataIOCanWrite
@@ -2585,13 +2575,6 @@ add_test(ioTuOGRVectorDataIOCanWriteGML ${IO_TESTS15}
 add_test(ioTuOGRVectorDataIOCanWriteMapInfo ${IO_TESTS15}
         otbOGRVectorDataIOCanWrite
         ${INPUTDATA}/LOCALITY_POLYGON.tab)
-
-# Canwrite OGR PostGIS()
-if(OTB_USE_PQXX)
-add_test(ioTuOGRVectorDataIOCanWritePostGIS ${IO_TESTS15}
-        otbOGRVectorDataIOCanWrite
-        PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
-endif()
 
 add_test(ioTuKMLVectorDataIO ${IO_TESTS15}
         otbKMLVectorDataIONew )

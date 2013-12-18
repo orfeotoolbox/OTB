@@ -106,11 +106,6 @@ if(OTB_USE_LIBLAS AND OTB_USE_EXTERNAL_LIBLAS)
   include_directories(${LIBLAS_INCLUDE_DIRS})
 endif()
 
-if(OTB_USE_PQXX)
-  find_package(Pqxx REQUIRED)
-  include_directories(${PQXX_INCLUDE_DIRS})
-endif()
-
 if(OTB_USE_EXTERNAL_LIBKML)
   find_package(LibKML REQUIRED)
   include_directories(${LIBKML_INCLUDE_DIRS})

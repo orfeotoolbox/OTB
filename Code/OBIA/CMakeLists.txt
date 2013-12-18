@@ -14,10 +14,6 @@ if(OTB_USE_MAPNIK)
     target_link_libraries(OTBOBIA ${MAPNIK_LIBRARY} ${ICUUC_LIBRARY})
 endif()
 
-if(OTB_USE_PQXX)
-    target_link_libraries(OTBOBIA ${PQXX_LIBRARY})
-endif()
-
 if(OTB_I18N)
     target_link_libraries(OTBOBIA ${GETTEXT_LIBRARY})
     if(APPLE OR WIN32)

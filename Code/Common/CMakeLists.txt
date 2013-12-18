@@ -6,10 +6,6 @@ if( NOT OTB_USE_MAPNIK )
     list(REMOVE_ITEM OTBCommon_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbVectorDataStyle.cxx" )
 endif()
 
-if( NOT OTB_USE_PQXX )
-    list(REMOVE_ITEM OTBCommon_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbPostGISConnectionImplementation.cxx" )
-endif()
-
 add_library(OTBCommon ${OTBCommon_SRCS})
 #Apparently not supported by opensolaris at least
 #set_target_properties(OTBCommon
@@ -19,10 +15,6 @@ add_library(OTBCommon ${OTBCommon_SRCS})
 target_link_libraries(OTBCommon ${ITK_LIBRARIES} otbconfigfile ${MUPARSER_LIBRARIES} ${OGR_LIBRARY} OTBOssimAdapters)
 if(OTB_USE_MAPNIK)
     target_link_libraries(OTBCommon ${MAPNIK_LIBRARY} ${ICUUC_LIBRARY})
-endif()
-
-if(OTB_USE_PQXX)
-    target_link_libraries(OTBCommon ${PQXX_LIBRARY})
 endif()
 
 if(OTB_I18N)

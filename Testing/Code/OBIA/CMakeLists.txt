@@ -196,24 +196,6 @@ add_test(obTuLabelMapToAttributeImageFilterNew ${OBIA_TESTS1}
     otbLabelMapToAttributeImageFilterNew)
 
 
-# OBIATests2 (need PQXX)
-if(OTB_USE_PQXX)
-add_test(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
-    otbLabelMapToGISTableFilterNew)
-
-add_test(obTuGISTableToLabelMapFilterNew ${OBIA_TESTS2}
-    otbGISTableToLabelMapFilterNew)
-
-add_test(obTvLabelMapToGISTableFilter ${OBIA_TESTS2}
-    otbLabelMapToGISTableFilter
-    ${INPUTDATA}/rcc8_mire1.png
-    orfeotoolbox_test
-    labelmaptogis_test_table
-    orfeotoolbox_test_user
-    Bidfeud0)
-endif()
-
-
 # OBIATests3 (need Learning)
 add_test(obTuLabelMapSVMClassifierNew ${OBIA_TESTS3}
     otbLabelMapSVMClassifierNew)
@@ -254,16 +236,6 @@ otbMeanShiftConnectedComponentSegmentationFilterTest.cxx
 otbLabelMapToAttributeImageFilterNew.cxx
 )
 
-
-
-if(OTB_USE_PQXX)
-set(BasicOBIA_SRCS2
-otbLabelMapToGISTableFilterNew.cxx
-otbGISTableToLabelMapFilterNew.cxx
-otbLabelMapToGISTableFilter.cxx
-)
-endif()
-
 set(BasicOBIA_SRCS3
 otbLabelMapSVMClassifier.cxx
 otbLabelImageToLabelMapWithAdjacencyFilter.cxx
@@ -271,11 +243,6 @@ otbLabelImageToLabelMapWithAdjacencyFilter.cxx
 
 add_executable(otbOBIATests1 otbOBIATests1.cxx ${BasicOBIA_SRCS1})
 target_link_libraries(otbOBIATests1 OTBIO OTBOBIA  OTBTesting OTBOGRAdapters)
-
-if(OTB_USE_PQXX)
-add_executable(otbOBIATests2 otbOBIATests2.cxx ${BasicOBIA_SRCS2})
-target_link_libraries(otbOBIATests2 OTBIO OTBOBIA OTBTesting OTBGeospatialAnalysis pq pqxx)
-endif()
 
 add_executable(otbOBIATests3 otbOBIATests3.cxx ${BasicOBIA_SRCS3})
 target_link_libraries(otbOBIATests3 OTBIO OTBOBIA OTBLearning OTBTesting)

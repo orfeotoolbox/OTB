@@ -42,10 +42,6 @@ if(OTB_USE_PATENTED)
   add_subdirectory( Patented )
 endif()
 
-if(OTB_USE_PQXX)
-        add_subdirectory(GeospatialAnalysis)
-endif()
-
 #Recopie du fichier README.txt dans l'arborescence BINARY
 if( EXISTS ${OTB_BINARY_DIR}/Examples/README.txt )
 else()
@@ -106,10 +102,6 @@ else()
 
     if(OTB_USE_PATENTED)
         add_subdirectory(Patented)
-    endif()
-
-    if(OTB_USE_PQXX)
-        add_subdirectory(GeospatialAnalysis)
     endif()
   else()
     message("OTB not found.  Please set OTB_DIR")

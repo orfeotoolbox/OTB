@@ -78,11 +78,6 @@ if(WIN32)
       ${OTB_SOURCE_DIR}/Utilities/otbmsinttypes )
 endif()
 
-if(OTB_USE_PQXX)
-  set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-    ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis ${PQXX_INCLUDE_DIR})
-endif()
-
 if(OTB_USE_SIFTFAST)
   set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
       ${OTB_SOURCE_DIR}/Utilities/otbsiftfast)

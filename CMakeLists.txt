@@ -210,7 +210,6 @@ include(ImportITK)
 include(ImportJPEG2000)
 include(ImportFLTK) # depends on ImportGdal
 include(ImportCurl)
-include(ImportPqxx)
 include(ImportBoost)
 include(ImportMapnik) # depends on ImportBoost
 include(ImportOpenThreads)
@@ -391,7 +390,6 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
     ${OTB_SOURCE_DIR}/CMake/FindMercurial.cmake
     ${OTB_SOURCE_DIR}/CMake/FindMuParser.cmake
     ${OTB_SOURCE_DIR}/CMake/FindOpenThreads.cmake
-    ${OTB_SOURCE_DIR}/CMake/FindPqxx.cmake
     ${OTB_SOURCE_DIR}/CMake/FindTinyXML.cmake
     DESTINATION ${OTB_INSTALL_CMAKEMODULE_DIR}
     COMPONENT Development)
