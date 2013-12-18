@@ -383,7 +383,6 @@ SET( OTB_EXAMPLES_SRCS
 #   ${OTB_SOURCE_DIR}/Examples/OBIA/KeepNObjects.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/RadiometricAttributesLabelMapFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/HooverMetricsEstimation.cxx
-  ${OTB_SOURCE_DIR}/Examples/GeospatialAnalysis/PostGISCreateTable.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/ImageLinearIteratorWithIndex.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators2.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators5.cxx
