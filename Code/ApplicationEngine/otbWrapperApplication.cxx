@@ -137,6 +137,11 @@ void Application::SetParameterEmpty(std::string parameter, bool value, bool hasU
 
 void Application::SetParameterUserValue(std::string paramKey, bool value)
 {
+  /** UserValue is set/unset parameter must be active.
+  Can't set the m_Active flg in Parameter::SetUserValue() instead of
+  using Application::EnableParameter();
+  **/
+  EnableParameter(paramKey);
   GetParameterByKey(paramKey)->SetUserValue(value);
 }
 
