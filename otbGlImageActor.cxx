@@ -142,6 +142,11 @@ void GlImageActor::UpdateData()
 
   this->ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
 
+  if(!requested.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion()))
+    {
+    return;
+    }
+
   // std::cout<<"Corresponding image region: "<<requested<<std::endl;
  
   // Now we have the requested part of image, we need to find the
