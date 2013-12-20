@@ -41,10 +41,17 @@ else(GLFW_FOUND)
   MESSAGE("GLFW missing")
 endif(GLFW_FOUND)
 
-ADD_DEFINITIONS(-DGL_GLEXT_PROTOTYPES)
+find_package(GLEW REQUIRED)
+
+if(GLEW_FOUND)
+MESSAGE("Glew found")
+include_directories(${GLEW_INCLUDE_DIR})
+else(GLEW_FOUND)
+MESSAGE("Glew missing")
+endif(GLEW_FOUND)
 
 ADD_LIBRARY(OTBIce otbViewSettings.cxx otbGlView.cxx otbGlActor.cxx otbGlImageActor.cxx)
-TARGET_LINK_LIBRARIES(OTBIce OTBIO ${OPENGL_LIBRARY})
+TARGET_LINK_LIBRARIES(OTBIce OTBIO ${OPENGL_LIBRARY} ${GLEW_LIBRARY})
 
 ADD_EXECUTABLE(otbIce otbIce.cxx)
 TARGET_LINK_LIBRARIES(otbIce OTBIce ${GLFW_LIBRARY})

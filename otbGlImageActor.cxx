@@ -18,8 +18,7 @@
 #include "otbGlImageActor.h"
 #include "otbViewSettings.h"
 #include "otbMath.h"
-#include <GL/gl.h> 
-#include <GL/glext.h>
+#include <GL/glew.h>
 
 namespace otb
 {
@@ -665,6 +664,7 @@ void GlImageActor::InitShaders()
 {
   if(!GlImageActor::m_ShaderInitialized)
     {
+    glewInit();
 
     std::string source = "#version 120 \n"\
       "uniform sampler2D src;\n"\
