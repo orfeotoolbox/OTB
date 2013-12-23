@@ -210,8 +210,6 @@ private:
   RegionType   m_LargestRegion;
   unsigned int m_NumberOfComponents;
   
-  static unsigned int m_StandardShader;
-  static unsigned int m_StandardShaderProgram;
   static bool m_ShaderInitialized;
 
   RSTransformType::Pointer m_ViewportToImageTransform;
