@@ -47,6 +47,12 @@ public:
   itkGetMacro(MaxGreen,double);
   itkGetMacro(MaxBlue,double);  
 
+  itkSetMacro(Gamma,double);
+  itkGetMacro(Gamma,double);
+
+  itkSetMacro(Alpha,double);
+  itkGetMacro(Alpha,double);
+
   virtual void SetupShader();
 
   itkNewMacro(Self);
@@ -71,7 +77,8 @@ private:
   double m_MaxGreen;
   double m_MinBlue;
   double m_MaxBlue;
-
+  double m_Gamma;
+  double m_Alpha;
 
 }; // End class StandardShader
 

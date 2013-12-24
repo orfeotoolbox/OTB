@@ -228,6 +228,9 @@ void GlImageActor::Render()
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
     {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
      glEnable(GL_TEXTURE_2D);  
      glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
      
@@ -242,6 +245,7 @@ void GlImageActor::Render()
      glEnd ();
 
     glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
     }
   
   m_Shader->UnloadShader();

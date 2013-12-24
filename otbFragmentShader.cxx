@@ -39,6 +39,7 @@ void FragmentShader::BuildShader()
     }
   catch(itk::ExceptionObject& err)
     {
+    std::cerr<<err<<std::endl;
     // Shader already registered, do nothing
     }
 }

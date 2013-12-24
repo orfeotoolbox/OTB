@@ -128,6 +128,28 @@ public:
       shader->SetMaxGreen(shader->GetMaxGreen()/delta);
       shader->SetMaxBlue(shader->GetMaxBlue()/delta);
       }
+    else if(glfwGetKey(window,GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
+      {
+      if(yoffset>0)
+        {
+        shader->SetGamma(shader->GetGamma()/1.1);
+        }
+      else
+        {
+        shader->SetGamma(shader->GetGamma()*1.1);
+        }
+      }
+    else if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
+      {
+      if(yoffset>0)
+        {
+        shader->SetAlpha(shader->GetAlpha()/1.1);
+        }
+      else
+        {
+        shader->SetAlpha(shader->GetAlpha()*1.1);
+        }
+      }
     else
       {
       if(yoffset>0)
@@ -534,9 +556,11 @@ int main(int argc, char * argv[])
     std::cerr<<"- b key: change blue channel of current actor"<<std::endl;
     // std::cerr<<"- s key: enable / disable shader rendering of
     // current actor (compare speed!)"<<std::endl;
-    std::cerr<<"- L key: activate/deactivate pixel under mouse local contrast enhancement (in this mode, SHIFT + mouse wheel allows to tune the contrast enhancement range"<<std::endl;
+    std::cerr<<"- L key: activate/deactivate pixel under mouse local contrast enhancement (in this mode, SHIFT + mouse wheel allows to tune the contrast enhancement range)"<<std::endl;
     std::cerr<<"- PAGE_UP/PAGE_DOWN key: move actor backward or forward in rendering order"<<std::endl;
     std::cerr<<"- TAB key: rotate rendering order"<<std::endl;
+    std::cerr<<"- RIGHT CTRL + mouse wheel: tune transparency of current actor"<<std::endl;
+    std::cerr<<"-RIGHT SHIFT + mouse wheel: tune gamma correction of current actor"<<std::endl;
     return EXIT_FAILURE;
     }
 
