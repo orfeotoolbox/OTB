@@ -19,6 +19,7 @@
 #include "otbViewSettings.h"
 #include "otbMath.h"
 #include <GL/glew.h>
+#include "otbStandardShader.h"
 
 namespace otb
 {
@@ -31,12 +32,6 @@ GlImageActor::GlImageActor()
     m_RedIdx(1),
     m_GreenIdx(2),
     m_BlueIdx(3),
-    m_MinRed(200),
-    m_MaxRed(1200),
-    m_MinGreen(200),
-    m_MaxGreen(1200),
-    m_MinBlue(200),
-    m_MaxBlue(1200),
     m_CurrentResolution(1),
     m_AvailableResolutions(),
     m_Origin(),
@@ -227,14 +222,6 @@ bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
 
 void GlImageActor::Render()
 {
-
-  m_Shader->SetMinRed(m_MinRed);
-  m_Shader->SetMinBlue(m_MinBlue);
-  m_Shader->SetMinGreen(m_MinGreen);
-  m_Shader->SetMaxRed(m_MaxRed);
-  m_Shader->SetMaxBlue(m_MaxBlue);
-  m_Shader->SetMaxGreen(m_MaxGreen);
-
   m_Shader->LoadShader();
   m_Shader->SetupShader();
 

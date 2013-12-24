@@ -24,7 +24,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
-#include "otbStandardShader.h"
+#include "otbFragmentShader.h"
 
 namespace otb
 {
@@ -72,20 +72,6 @@ public:
   
   ImageKeywordlistType GetKwl() const;
 
-  itkSetMacro(MinRed,double);
-  itkSetMacro(MinGreen,double);
-  itkSetMacro(MinBlue,double);
-  itkGetMacro(MinRed,double);
-  itkGetMacro(MinGreen,double);
-  itkGetMacro(MinBlue,double);
-
-  itkSetMacro(MaxRed,double);
-  itkSetMacro(MaxGreen,double);
-  itkSetMacro(MaxBlue,double);
-  itkGetMacro(MaxRed,double);
-  itkGetMacro(MaxGreen,double);
-  itkGetMacro(MaxBlue,double);  
-
   itkSetMacro(RedIdx,unsigned int);
   itkGetMacro(RedIdx,unsigned int);
   itkSetMacro(GreenIdx,unsigned int);
@@ -98,6 +84,9 @@ public:
   PointType ViewportToImageTransform(const PointType & in, bool physical = true) const;
   
   bool GetPixelFromViewport(const PointType & in, PixelType & pixel) const;
+
+  itkGetObjectMacro(Shader,FragmentShader);
+  itkSetObjectMacro(Shader,FragmentShader);
 
 protected:
   GlImageActor();
@@ -192,13 +181,6 @@ private:
 
   unsigned int m_BlueIdx;
 
-  double m_MinRed;
-  double m_MaxRed;
-  double m_MinGreen;
-  double m_MaxGreen;
-  double m_MinBlue;
-  double m_MaxBlue;
-
   unsigned int m_CurrentResolution;
 
   ResolutionVectorType m_AvailableResolutions;
@@ -208,7 +190,7 @@ private:
   RegionType   m_LargestRegion;
   unsigned int m_NumberOfComponents;
 
-  StandardShader::Pointer m_Shader;
+  FragmentShader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;
   RSTransformType::Pointer m_ImageToViewportTransform;

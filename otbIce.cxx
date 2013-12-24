@@ -21,6 +21,8 @@
 #include "otbGlImageActor.h"
 #include "otbViewSettings.h"
 #include "otbDEMHandler.h"
+#include "otbStandardShader.h"
+
 
 class Manipulator
 {
@@ -90,6 +92,8 @@ public:
 
     m_ViewSettings->ScreenToViewPortTransform(posx,posy,vpx,vpy);
 
+    otb::StandardShader::Pointer shader = dynamic_cast<otb::StandardShader *> (m_Actors[m_SelectedActor]->GetShader());
+
     otb::ViewSettings::PointType zoomCenter;
     zoomCenter[0] = vpx;
     zoomCenter[1] = vpy;
@@ -105,24 +109,24 @@ public:
         }
       else
         {
-        m_Actors[m_SelectedActor]->SetMinRed(m_Actors[m_SelectedActor]->GetMinRed()*delta);
-        m_Actors[m_SelectedActor]->SetMinGreen(m_Actors[m_SelectedActor]->GetMinGreen()*delta);
-        m_Actors[m_SelectedActor]->SetMinBlue(m_Actors[m_SelectedActor]->GetMinBlue()*delta);
-        m_Actors[m_SelectedActor]->SetMaxRed(m_Actors[m_SelectedActor]->GetMaxRed()*delta);
-        m_Actors[m_SelectedActor]->SetMaxGreen(m_Actors[m_SelectedActor]->GetMaxGreen()*delta);
-        m_Actors[m_SelectedActor]->SetMaxBlue(m_Actors[m_SelectedActor]->GetMaxBlue()*delta);
+        shader->SetMinRed(shader->GetMinRed()*delta);
+        shader->SetMinGreen(shader->GetMinGreen()*delta);
+        shader->SetMinBlue(shader->GetMinBlue()*delta);
+        shader->SetMaxRed(shader->GetMaxRed()*delta);
+        shader->SetMaxGreen(shader->GetMaxGreen()*delta);
+        shader->SetMaxBlue(shader->GetMaxBlue()*delta);
         }
     }
     else if(glfwGetKey(window,GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
       {
       double delta = yoffset > 0 ? 1/1.1 : 1.1;
       
-      m_Actors[m_SelectedActor]->SetMinRed(m_Actors[m_SelectedActor]->GetMinRed()*delta);
-      m_Actors[m_SelectedActor]->SetMinGreen(m_Actors[m_SelectedActor]->GetMinGreen()*delta);
-      m_Actors[m_SelectedActor]->SetMinBlue(m_Actors[m_SelectedActor]->GetMinBlue()*delta);
-      m_Actors[m_SelectedActor]->SetMaxRed(m_Actors[m_SelectedActor]->GetMaxRed()/delta);
-      m_Actors[m_SelectedActor]->SetMaxGreen(m_Actors[m_SelectedActor]->GetMaxGreen()/delta);
-      m_Actors[m_SelectedActor]->SetMaxBlue(m_Actors[m_SelectedActor]->GetMaxBlue()/delta);
+      shader->SetMinRed(shader->GetMinRed()*delta);
+      shader->SetMinGreen(shader->GetMinGreen()*delta);
+      shader->SetMinBlue(shader->GetMinBlue()*delta);
+      shader->SetMaxRed(shader->GetMaxRed()/delta);
+      shader->SetMaxGreen(shader->GetMaxGreen()/delta);
+      shader->SetMaxBlue(shader->GetMaxBlue()/delta);
       }
     else
       {
@@ -377,25 +381,27 @@ public:
      
      if(key == GLFW_KEY_L && action == GLFW_PRESS)
        {
+       otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(m_Actors[m_SelectedActor]->GetShader());
+
        std::cout<<"Local contrast enhancement "<<(m_LocalContrastEnhancement?"off":"on")<<std::endl;
        m_LocalContrastEnhancement = !m_LocalContrastEnhancement;
        if(!m_LocalContrastEnhancement)
          {
-         m_Actors[m_SelectedActor]->SetMinRed(m_MinRed);
-         m_Actors[m_SelectedActor]->SetMinGreen(m_MinGreen);
-         m_Actors[m_SelectedActor]->SetMinBlue(m_MinBlue);
-         m_Actors[m_SelectedActor]->SetMaxRed(m_MaxRed);
-         m_Actors[m_SelectedActor]->SetMaxGreen(m_MaxGreen);
-         m_Actors[m_SelectedActor]->SetMaxBlue(m_MaxBlue);
+         shader->SetMinRed(m_MinRed);
+         shader->SetMinGreen(m_MinGreen);
+         shader->SetMinBlue(m_MinBlue);
+         shader->SetMaxRed(m_MaxRed);
+         shader->SetMaxGreen(m_MaxGreen);
+         shader->SetMaxBlue(m_MaxBlue);
          }
        else
          {
-         m_MinRed = m_Actors[m_SelectedActor]->GetMinRed();
-         m_MinGreen = m_Actors[m_SelectedActor]->GetMinGreen();
-         m_MinBlue = m_Actors[m_SelectedActor]->GetMinBlue();
-         m_MaxRed = m_Actors[m_SelectedActor]->GetMaxRed();
-         m_MaxGreen = m_Actors[m_SelectedActor]->GetMaxGreen();
-         m_MaxBlue = m_Actors[m_SelectedActor]->GetMaxBlue();
+         m_MinRed = shader->GetMinRed();
+         m_MinGreen = shader->GetMinGreen();
+         m_MinBlue = shader->GetMinBlue();
+         m_MaxRed = shader->GetMaxRed();
+         m_MaxGreen = shader->GetMaxGreen();
+         m_MaxBlue = shader->GetMaxBlue();
 
          SetupLocalContrastEnhancement(window);
          }
@@ -435,23 +441,25 @@ public:
     otb::GlImageActor::PixelType pixel;
     bool inside = m_Actors[m_SelectedActor]->GetPixelFromViewport(p,pixel);
     
+    otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(m_Actors[m_SelectedActor]->GetShader());
+
     if(inside)
       {
-      m_Actors[m_SelectedActor]->SetMinRed(pixel[m_Actors[m_SelectedActor]->GetRedIdx()-1]-m_LocalContrastWindow);
-      m_Actors[m_SelectedActor]->SetMinGreen(pixel[m_Actors[m_SelectedActor]->GetGreenIdx()-1]-m_LocalContrastWindow);
-      m_Actors[m_SelectedActor]->SetMinBlue(pixel[m_Actors[m_SelectedActor]->GetBlueIdx()-1]-m_LocalContrastWindow);
-      m_Actors[m_SelectedActor]->SetMaxRed(pixel[m_Actors[m_SelectedActor]->GetRedIdx()-1]+m_LocalContrastWindow);
-      m_Actors[m_SelectedActor]->SetMaxGreen(pixel[m_Actors[m_SelectedActor]->GetGreenIdx()-1]+m_LocalContrastWindow);
-      m_Actors[m_SelectedActor]->SetMaxBlue(pixel[m_Actors[m_SelectedActor]->GetBlueIdx()-1]+m_LocalContrastWindow);
+      shader->SetMinRed(pixel[m_Actors[m_SelectedActor]->GetRedIdx()-1]-m_LocalContrastWindow);
+      shader->SetMinGreen(pixel[m_Actors[m_SelectedActor]->GetGreenIdx()-1]-m_LocalContrastWindow);
+      shader->SetMinBlue(pixel[m_Actors[m_SelectedActor]->GetBlueIdx()-1]-m_LocalContrastWindow);
+      shader->SetMaxRed(pixel[m_Actors[m_SelectedActor]->GetRedIdx()-1]+m_LocalContrastWindow);
+      shader->SetMaxGreen(pixel[m_Actors[m_SelectedActor]->GetGreenIdx()-1]+m_LocalContrastWindow);
+      shader->SetMaxBlue(pixel[m_Actors[m_SelectedActor]->GetBlueIdx()-1]+m_LocalContrastWindow);
       }
     else
       {
-      m_Actors[m_SelectedActor]->SetMinRed(m_MinRed);
-      m_Actors[m_SelectedActor]->SetMinGreen(m_MinGreen);
-      m_Actors[m_SelectedActor]->SetMinBlue(m_MinBlue);
-      m_Actors[m_SelectedActor]->SetMaxRed(m_MaxRed);
-      m_Actors[m_SelectedActor]->SetMaxGreen(m_MaxGreen);
-      m_Actors[m_SelectedActor]->SetMaxBlue(m_MaxBlue);
+      shader->SetMinRed(m_MinRed);
+      shader->SetMinGreen(m_MinGreen);
+      shader->SetMinBlue(m_MinBlue);
+      shader->SetMaxRed(m_MaxRed);
+      shader->SetMaxGreen(m_MaxGreen);
+      shader->SetMaxBlue(m_MaxBlue);
       }
   }
 
@@ -588,13 +596,15 @@ int main(int argc, char * argv[])
 
    otb::GlImageActor::Pointer mainActor = otb::GlImageActor::New();
    mainActor->Initialize(argv[3]);
+   otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(mainActor->GetShader());
+
    mainActor->SetVisible(true);
-   mainActor->SetMinRed(min);
-   mainActor->SetMinGreen(min);
-   mainActor->SetMinBlue(min);
-   mainActor->SetMaxRed(max);
-   mainActor->SetMaxGreen(max);
-   mainActor->SetMaxBlue(max);
+   shader->SetMinRed(min);
+   shader->SetMinGreen(min);
+   shader->SetMinBlue(min);
+   shader->SetMaxRed(max);
+   shader->SetMaxGreen(max);
+   shader->SetMaxBlue(max);
    glView->AddActor(mainActor,std::string(argv[3]));
    actorsNames.push_back(std::string(argv[3]));
 
@@ -615,12 +625,15 @@ int main(int argc, char * argv[])
      otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
      actor->Initialize(argv[i]);
      actor->SetVisible(true);
-     actor->SetMinRed(min);
-     actor->SetMinGreen(min);
-     actor->SetMinBlue(min);
-     actor->SetMaxRed(max);
-     actor->SetMaxGreen(max);
-     actor->SetMaxBlue(max);
+     
+     shader = static_cast<otb::StandardShader *>(actor->GetShader());
+
+     shader->SetMinRed(min);
+     shader->SetMinGreen(min);
+     shader->SetMinBlue(min);
+     shader->SetMaxRed(max);
+     shader->SetMaxGreen(max);
+     shader->SetMaxBlue(max);
      glView->AddActor(actor,std::string(argv[i]));
      actors.push_back(actor);
      actorsNames.push_back(std::string(argv[i]));
