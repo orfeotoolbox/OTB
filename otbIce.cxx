@@ -560,7 +560,7 @@ int main(int argc, char * argv[])
     std::cerr<<"- PAGE_UP/PAGE_DOWN key: move actor backward or forward in rendering order"<<std::endl;
     std::cerr<<"- TAB key: rotate rendering order"<<std::endl;
     std::cerr<<"- RIGHT CTRL + mouse wheel: tune transparency of current actor"<<std::endl;
-    std::cerr<<"-RIGHT SHIFT + mouse wheel: tune gamma correction of current actor"<<std::endl;
+    std::cerr<<"- RIGHT SHIFT + mouse wheel: tune gamma correction of current actor"<<std::endl;
     return EXIT_FAILURE;
     }
 
