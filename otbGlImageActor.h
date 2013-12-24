@@ -24,7 +24,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
-
+#include "otbStandardShader.h"
 
 namespace otb
 {
@@ -177,10 +177,8 @@ private:
   void UpdateResolution();
 
   void UpdateTransforms();
-
-  static void InitShaders();
  
-   unsigned int m_TileSize;
+  unsigned int m_TileSize;
 
   std::string m_FileName;
   
@@ -209,8 +207,8 @@ private:
   SpacingType  m_Spacing;
   RegionType   m_LargestRegion;
   unsigned int m_NumberOfComponents;
-  
-  static bool m_ShaderInitialized;
+
+  StandardShader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;
   RSTransformType::Pointer m_ImageToViewportTransform;

@@ -19,13 +19,9 @@
 #include "otbViewSettings.h"
 #include "otbMath.h"
 #include <GL/glew.h>
-#include "otbFragmentShaderRegistry.h"
 
 namespace otb
 {
-
-// Shaders section
-bool GlImageActor::m_ShaderInitialized = false;
 
 GlImageActor::GlImageActor()
   : m_TileSize(256),
@@ -46,6 +42,7 @@ GlImageActor::GlImageActor()
     m_Origin(),
     m_Spacing(),
     m_NumberOfComponents(0),
+    m_Shader(StandardShader::New()),
     m_ViewportToImageTransform(RSTransformType::New()),
     m_ImageToViewportTransform(RSTransformType::New())
 {}
@@ -75,9 +72,6 @@ GlImageActor::ImageKeywordlistType GlImageActor::GetKwl() const
 
 void GlImageActor::Initialize(const std::string & filename)
 {
-  // Initialize shaders
-  InitShaders();
-
   // First, clean up any previous data
   this->ClearLoadedTiles();
 
@@ -234,23 +228,16 @@ bool GlImageActor::TileAlreadyLoaded(const Tile& tile)
 void GlImageActor::Render()
 {
 
-  otb::FragmentShaderRegistry::Instance()->LoadShader("StandardShader");
-  
-  // Compute shifts and scales
-  double shr,shg,shb,scr,scg,scb;
-  shr = -m_MinRed;
-  shg = -m_MinGreen;
-  shb = -m_MinBlue;
-  scr = 1./(m_MaxRed-m_MinRed);
-  scg = 1./(m_MaxGreen-m_MinGreen);
-  scb = 1./(m_MaxBlue-m_MinBlue);
-  
-  GLint shader_a= glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_a");
-  glUniform4f(shader_a,scr,scg,scb,1.);
-  GLint shader_b= glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_b");
-  glUniform4f(shader_b,shr,shg,shb,0);
+  m_Shader->SetMinRed(m_MinRed);
+  m_Shader->SetMinBlue(m_MinBlue);
+  m_Shader->SetMinGreen(m_MinGreen);
+  m_Shader->SetMaxRed(m_MaxRed);
+  m_Shader->SetMaxBlue(m_MaxBlue);
+  m_Shader->SetMaxGreen(m_MaxGreen);
 
-  
+  m_Shader->LoadShader();
+  m_Shader->SetupShader();
+
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
     {
@@ -270,7 +257,7 @@ void GlImageActor::Render()
     glDisable(GL_TEXTURE_2D);
     }
   
-  otb::FragmentShaderRegistry::Instance()->UnloadShader();
+  m_Shader->UnloadShader();
 }
 
 void GlImageActor::LoadTile(Tile& tile)
@@ -648,25 +635,4 @@ void GlImageActor::UpdateTransforms()
   m_ViewportToImageTransform->InstanciateTransform();
   m_ImageToViewportTransform->InstanciateTransform();
 }
-
-
-void GlImageActor::InitShaders()
-{
-  if(!GlImageActor::m_ShaderInitialized)
-    {
-    std::string source = "#version 120 \n"\
-      "uniform sampler2D src;\n"\
-      "uniform vec4 shader_a;\n"\
-      "uniform vec4 shader_b;\n"\
-      "void main (void) {\n"\
-      "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"\
-      "gl_FragColor = clamp((p + shader_b)*shader_a, 0.0, 1.0);\n"\
-      "}";
-
-    otb::FragmentShaderRegistry::Instance()->RegisterShader("StandardShader",source);
-
-    GlImageActor::m_ShaderInitialized = true;
-    }
-}
-
 }

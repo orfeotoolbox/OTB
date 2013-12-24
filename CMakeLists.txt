@@ -50,7 +50,7 @@ else(GLEW_FOUND)
 MESSAGE("Glew missing")
 endif(GLEW_FOUND)
 
-ADD_LIBRARY(OTBIce otbViewSettings.cxx otbGlView.cxx otbGlActor.cxx otbGlImageActor.cxx otbFragmentShaderRegistry.cxx)
+ADD_LIBRARY(OTBIce otbViewSettings.cxx otbGlView.cxx otbGlActor.cxx otbGlImageActor.cxx otbFragmentShaderRegistry.cxx otbFragmentShader.cxx otbStandardShader.cxx)
 TARGET_LINK_LIBRARIES(OTBIce OTBIO ${OPENGL_LIBRARY} ${GLEW_LIBRARY})
 
 ADD_EXECUTABLE(otbIce otbIce.cxx)
