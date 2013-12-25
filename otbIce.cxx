@@ -211,6 +211,10 @@ public:
       {
       SetupLocalContrastEnhancement(window);
       }
+    if(m_LocalTransparency)
+      {
+      SetupLocalTransparency(window);
+      }
 
     if(m_Drag)
       {
@@ -428,6 +432,14 @@ public:
          SetupLocalContrastEnhancement(window);
          }
        }
+       if(key == GLFW_KEY_U && action == GLFW_PRESS)
+       {
+       otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(m_Actors[m_SelectedActor]->GetShader());
+
+       std::cout<<"Local transparency "<<(m_LocalTransparency?"off":"on")<<std::endl;
+       m_LocalTransparency = !m_LocalTransparency;
+       SetupLocalTransparency(window);
+       }
 
      // Not available anymore with GlImageActor (use NonOptGlImageActor)
      // if(key == GLFW_KEY_S && action == GLFW_PRESS)
@@ -435,8 +447,8 @@ public:
      //   std::cout<<"Actor shader rendering "<<(m_Actors[m_SelectedActor]->GetUseShader()?"off":"on")<<std::endl;
      //   m_Actors[m_SelectedActor]->SetUseShader(!m_Actors[m_SelectedActor]->GetUseShader());
      //   }
+       
   }
-
 
   void framebuffer_size_callback(GLFWwindow* window, int width, int height)
   {
@@ -450,7 +462,6 @@ public:
   void SetupLocalContrastEnhancement(GLFWwindow* window)
   {
     double posx, posy, vpx, vpy;
-    glfwGetCursorPos(window,&posx,&posy);
     glfwGetCursorPos(window,&posx,&posy);
     
     m_ViewSettings->ScreenToViewPortTransform(posx,posy,vpx,vpy);
@@ -485,6 +496,35 @@ public:
       }
   }
 
+  void SetupLocalTransparency(GLFWwindow* window)
+  {
+    double posx, posy, vpx, vpy;
+    int width, height;
+    glfwGetCursorPos(window,&posx,&posy);
+    glfwGetFramebufferSize(window, &width, &height);
+    
+    m_ViewSettings->ScreenToViewPortTransform(posx,posy,vpx,vpy);
+    
+    otb::ViewSettings::PointType p;
+    // p[0] = -1 +2*posx/width;
+    // p[1] = -1 +2*posy/height;
+    p[0] = posx;
+    p[1] = height-posy;
+
+    otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(m_Actors[m_SelectedActor]->GetShader());
+
+    if(m_LocalTransparency)
+      {
+      shader->SetLocalTransparency(true);
+      shader->SetCenter(p);
+      }
+    else
+      {
+      shader->SetLocalTransparency(false);
+      }
+  }
+
+
 private:
   unsigned int m_KeyFilter;
 
@@ -509,6 +549,7 @@ private:
   bool   m_Drag;
   bool   m_FastRendering;
   bool   m_LocalContrastEnhancement;
+  bool   m_LocalTransparency;
   double m_LocalContrastWindow;
   double m_StartDragX;
   double m_StartDragY;

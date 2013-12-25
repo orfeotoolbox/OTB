@@ -33,6 +33,8 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
+  typedef itk::Point<float,2>                             PointType;
+
   itkSetMacro(MinRed,double);
   itkSetMacro(MinGreen,double);
   itkSetMacro(MinBlue,double);
@@ -52,6 +54,12 @@ public:
 
   itkSetMacro(Alpha,double);
   itkGetMacro(Alpha,double);
+
+  itkSetMacro(LocalTransparency,bool);
+  itkGetMacro(LocalTransparency,bool);
+
+  itkSetMacro(Center,PointType);
+  itkGetConstReferenceMacro(Center,PointType);
 
   virtual void SetupShader();
 
@@ -79,6 +87,12 @@ private:
   double m_MaxBlue;
   double m_Gamma;
   double m_Alpha;
+
+  PointType m_Center;
+
+  double m_Radius;
+
+  bool m_LocalTransparency;
 
 }; // End class StandardShader
 

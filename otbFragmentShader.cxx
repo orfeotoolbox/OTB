@@ -55,6 +55,19 @@ void FragmentShader::UnloadShader()
 }
 
 void FragmentShader::SetupShader()
-{}
+{
+  // // Default always report corners
+  // GLint shader_ul = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_ul");
+
+  // glUniform2f(shader_ul,m_UL[0],m_UL[1]);
+  // GLint shader_ur = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_ur");
+  // glUniform2f(shader_ur,m_UR[0],m_UR[1]);
+
+  // GLint shader_ll = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_ll");
+  // glUniform2f(shader_ll,m_LL[0],m_LL[1]);
+
+  // GLint shader_lr = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_lr");
+  // glUniform2f(shader_lr,m_LR[0],m_LR[1]);
+}
 
 }

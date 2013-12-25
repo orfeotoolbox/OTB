@@ -19,6 +19,7 @@
 #define otb_FragmentShader_h
 
 #include "itkObject.h"
+#include "itkPoint.h"
 
 namespace otb
 {
@@ -32,11 +33,22 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
+  typedef itk::Point<float,2>                             PointType;
+
   void LoadShader();
 
   virtual void SetupShader();
 
   void UnloadShader();
+
+  itkSetMacro(UL,PointType);
+  itkSetMacro(UR,PointType);
+  itkSetMacro(LL,PointType);
+  itkSetMacro(LR,PointType);
+  itkGetConstReferenceMacro(UL,PointType);
+  itkGetConstReferenceMacro(UR,PointType);
+  itkGetConstReferenceMacro(LL,PointType);
+  itkGetConstReferenceMacro(LR,PointType);
 
 protected:
   FragmentShader();
@@ -53,6 +65,11 @@ private:
   // prevent implementation
   FragmentShader(const Self&);
   void operator=(const Self&);
+
+  PointType m_UL;
+  PointType m_UR;
+  PointType m_LL;
+  PointType m_LR;
 
 }; // End class FragmentShader
 
