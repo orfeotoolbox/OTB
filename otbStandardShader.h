@@ -24,6 +24,15 @@
 namespace otb
 {
 
+typedef enum
+{
+  SHADER_STANDARD,
+  SHADER_LOCAL_CONTRAST,
+  SHADER_LOCAL_ALPHA,
+  SHADER_ALPHA_GRID
+} ShaderType;
+
+
 class StandardShader 
   : public FragmentShader
 {
@@ -35,6 +44,7 @@ public:
 
   typedef itk::Point<float,2>                             PointType;
 
+  
   itkSetMacro(MinRed,double);
   itkSetMacro(MinGreen,double);
   itkSetMacro(MinBlue,double);
@@ -49,14 +59,28 @@ public:
   itkGetMacro(MaxGreen,double);
   itkGetMacro(MaxBlue,double);  
 
+  itkSetMacro(CurrentRed,double);
+  itkSetMacro(CurrentGreen,double);
+  itkSetMacro(CurrentBlue,double);
+
+  itkGetMacro(CurrentRed,double);
+  itkGetMacro(CurrentGreen,double);
+  itkGetMacro(CurrentBlue,double);
+  
+  itkSetMacro(LocalContrastRange,double);
+  itkGetMacro(LocalContrastRange,double);
+
   itkSetMacro(Gamma,double);
   itkGetMacro(Gamma,double);
 
   itkSetMacro(Alpha,double);
   itkGetMacro(Alpha,double);
 
-  itkSetMacro(LocalTransparency,bool);
-  itkGetMacro(LocalTransparency,bool);
+  itkSetMacro(ShaderType,ShaderType);
+  itkGetMacro(ShaderType,ShaderType);
+
+  itkSetMacro(Radius,double);
+  itkGetConstReferenceMacro(Radius,double);
 
   itkSetMacro(Center,PointType);
   itkGetConstReferenceMacro(Center,PointType);
@@ -87,12 +111,16 @@ private:
   double m_MaxBlue;
   double m_Gamma;
   double m_Alpha;
+  double m_CurrentRed;
+  double m_CurrentGreen;
+  double m_CurrentBlue;
+  double m_LocalContrastRange;
 
   PointType m_Center;
 
   double m_Radius;
 
-  bool m_LocalTransparency;
+  ShaderType m_ShaderType;
 
 }; // End class StandardShader
 

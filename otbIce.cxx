@@ -150,6 +150,17 @@ public:
         shader->SetAlpha(shader->GetAlpha()*1.1);
         }
       }
+    else if(glfwGetKey(window,GLFW_KEY_RIGHT_ALT) == GLFW_PRESS)
+      {
+      if(yoffset>0)
+        {
+        shader->SetRadius(shader->GetRadius()/1.1);
+        }
+      else
+        {
+        shader->SetRadius(shader->GetRadius()*1.1);
+        }
+      }
     else
       {
       if(yoffset>0)
@@ -411,26 +422,7 @@ public:
 
        std::cout<<"Local contrast enhancement "<<(m_LocalContrastEnhancement?"off":"on")<<std::endl;
        m_LocalContrastEnhancement = !m_LocalContrastEnhancement;
-       if(!m_LocalContrastEnhancement)
-         {
-         shader->SetMinRed(m_MinRed);
-         shader->SetMinGreen(m_MinGreen);
-         shader->SetMinBlue(m_MinBlue);
-         shader->SetMaxRed(m_MaxRed);
-         shader->SetMaxGreen(m_MaxGreen);
-         shader->SetMaxBlue(m_MaxBlue);
-         }
-       else
-         {
-         m_MinRed = shader->GetMinRed();
-         m_MinGreen = shader->GetMinGreen();
-         m_MinBlue = shader->GetMinBlue();
-         m_MaxRed = shader->GetMaxRed();
-         m_MaxGreen = shader->GetMaxGreen();
-         m_MaxBlue = shader->GetMaxBlue();
-
-         SetupLocalContrastEnhancement(window);
-         }
+       SetupLocalContrastEnhancement(window);
        }
        if(key == GLFW_KEY_U && action == GLFW_PRESS)
        {
@@ -440,6 +432,22 @@ public:
        m_LocalTransparency = !m_LocalTransparency;
        SetupLocalTransparency(window);
        }
+
+       if(key == GLFW_KEY_C && action == GLFW_PRESS)
+       {
+       otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(m_Actors[m_SelectedActor]->GetShader());
+       if(shader->GetShaderType() == otb::SHADER_ALPHA_GRID)
+         {
+         std::cout<<"Alpha grid off"<<std::endl;
+         shader->SetShaderType(otb::SHADER_STANDARD);
+         }
+       else
+         {
+         std::cout<<"Alpha grid on"<<std::endl;
+         shader->SetShaderType(otb::SHADER_ALPHA_GRID);
+         }
+       }
+
 
      // Not available anymore with GlImageActor (use NonOptGlImageActor)
      // if(key == GLFW_KEY_S && action == GLFW_PRESS)
@@ -463,7 +471,8 @@ public:
   {
     double posx, posy, vpx, vpy;
     glfwGetCursorPos(window,&posx,&posy);
-    
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
     m_ViewSettings->ScreenToViewPortTransform(posx,posy,vpx,vpy);
     
     otb::ViewSettings::PointType p;
@@ -473,26 +482,24 @@ public:
     
     otb::GlImageActor::PixelType pixel;
     bool inside = m_Actors[m_SelectedActor]->GetPixelFromViewport(p,pixel);
+
+    p[0] = posx;
+    p[1] = height-posy;
     
     otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(m_Actors[m_SelectedActor]->GetShader());
 
-    if(inside)
+    if(m_LocalContrastEnhancement && inside)
       {
-      shader->SetMinRed(pixel[m_Actors[m_SelectedActor]->GetRedIdx()-1]-m_LocalContrastWindow);
-      shader->SetMinGreen(pixel[m_Actors[m_SelectedActor]->GetGreenIdx()-1]-m_LocalContrastWindow);
-      shader->SetMinBlue(pixel[m_Actors[m_SelectedActor]->GetBlueIdx()-1]-m_LocalContrastWindow);
-      shader->SetMaxRed(pixel[m_Actors[m_SelectedActor]->GetRedIdx()-1]+m_LocalContrastWindow);
-      shader->SetMaxGreen(pixel[m_Actors[m_SelectedActor]->GetGreenIdx()-1]+m_LocalContrastWindow);
-      shader->SetMaxBlue(pixel[m_Actors[m_SelectedActor]->GetBlueIdx()-1]+m_LocalContrastWindow);
+      shader->SetShaderType(otb::SHADER_LOCAL_CONTRAST);
+      shader->SetCurrentRed(pixel[m_Actors[m_SelectedActor]->GetRedIdx()-1]);
+      shader->SetCurrentGreen(pixel[m_Actors[m_SelectedActor]->GetGreenIdx()-1]);
+      shader->SetCurrentBlue(pixel[m_Actors[m_SelectedActor]->GetBlueIdx()-1]);
+      shader->SetLocalContrastRange(m_LocalContrastWindow);
+      shader->SetCenter(p);
       }
     else
       {
-      shader->SetMinRed(m_MinRed);
-      shader->SetMinGreen(m_MinGreen);
-      shader->SetMinBlue(m_MinBlue);
-      shader->SetMaxRed(m_MaxRed);
-      shader->SetMaxGreen(m_MaxGreen);
-      shader->SetMaxBlue(m_MaxBlue);
+      shader->SetShaderType(otb::SHADER_STANDARD);
       }
   }
 
@@ -515,12 +522,12 @@ public:
 
     if(m_LocalTransparency)
       {
-      shader->SetLocalTransparency(true);
+      shader->SetShaderType(otb::SHADER_LOCAL_ALPHA);
       shader->SetCenter(p);
       }
     else
       {
-      shader->SetLocalTransparency(false);
+      shader->SetShaderType(otb::SHADER_STANDARD);
       }
   }
 
@@ -602,6 +609,9 @@ int main(int argc, char * argv[])
     std::cerr<<"- TAB key: rotate rendering order"<<std::endl;
     std::cerr<<"- RIGHT CTRL + mouse wheel: tune transparency of current actor"<<std::endl;
     std::cerr<<"- RIGHT SHIFT + mouse wheel: tune gamma correction of current actor"<<std::endl;
+    std::cerr<<"- u key: Turn on/off local transparency on current actor"<<std::endl;
+    std::cerr<<"- RIGHT ALT + mouse wheel: tune radius of local contrast/local transparency"<<std::endl;
+    std::cerr<<"- c key: turn on/off chessboard transparency of current actor"<<std::endl;
     return EXIT_FAILURE;
     }
 

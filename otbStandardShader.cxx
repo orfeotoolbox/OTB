@@ -31,9 +31,13 @@ StandardShader::StandardShader()
     m_MaxBlue(255),
     m_Gamma(1.),
     m_Alpha(1.),
+    m_CurrentRed(0),
+    m_CurrentGreen(0),
+    m_CurrentBlue(0),
+    m_LocalContrastRange(50),
     m_Center(),
     m_Radius(200),
-    m_LocalTransparency(false)
+    m_ShaderType(SHADER_STANDARD)
 {
   this->BuildShader();
 }
@@ -47,22 +51,37 @@ std::string StandardShader::GetSource() const
     "uniform sampler2D src;\n"                                          \
     "uniform vec4 shader_a;\n"                                          \
     "uniform vec4 shader_b;\n"                                          \
+    "uniform vec3 shader_current;\n"                                    \
     "uniform vec4 shader_gamma;\n"                                      \
     "uniform float shader_alpha;\n"                                     \
     "uniform vec2 shader_center;\n"                                     \
-    "uniform int shader_localt;\n"                                      \
+    "uniform int shader_type;\n"                                        \
     "uniform float shader_radius;\n"                                    \
+    "uniform float shader_localc_range;\n"                              \
     "void main (void) {\n"                                              \
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
     "gl_FragColor = clamp(pow((p + shader_b)*shader_a,shader_gamma), 0.0, 1.0);\n" \
-    "if(shader_localt > 0)\n"                                           \
+    "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
+    "if(shader_type == 1)\n"                                            \
     "{\n"                                                               \
     "float distance = sqrt((gl_FragCoord.x-shader_center[0])*(gl_FragCoord.x-shader_center[0])+(gl_FragCoord.y-shader_center[1])*(gl_FragCoord.y-shader_center[1]));\n" \
-    "gl_FragColor[3] = distance > shader_radius ? 1.0 : 0.0; \n"         \
-    "}\n"                                                               \
-    "else\n"                                                            \
+    "if(distance < shader_radius)\n"                                    \
     "{\n"                                                               \
-    "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
+    "gl_FragColor[0] = clamp((p[0]-(shader_current[0]-shader_localc_range))/(2*shader_localc_range),0.0,1.0);\n" \
+    "gl_FragColor[1] = clamp((p[1]-(shader_current[1]-shader_localc_range))/(2*shader_localc_range),0.0,1.0);\n" \
+    "gl_FragColor[2] = clamp((p[2]-(shader_current[2]-shader_localc_range))/(2*shader_localc_range),0.0,1.0);\n" \
+    "}\n"                                                               \
+    "}\n"                                                               \
+    "else if(shader_type ==2)"                                          \
+    "{\n"                                                               \
+    "float distance = sqrt((gl_FragCoord.x-shader_center[0])*(gl_FragCoord.x-shader_center[0])+(gl_FragCoord.y-shader_center[1])*(gl_FragCoord.y-shader_center[1]));\n" \
+    "gl_FragColor[3] = distance > shader_radius ? 1.0 : 0.0; \n"        \
+    "}\n"                                                               \
+    "else if(shader_type == 3)\n"                                       \
+    "{\n"                                                               \
+    "int size = 256;\n"                                                 \
+  "float alpha = (mod(floor(gl_FragCoord.x / size), 2) == 0) != (mod(floor(gl_FragCoord.y / size), 2) == 1) ? shader_alpha : 0.0;\n" \
+    "gl_FragColor[3] = clamp(alpha,0.0,1.0);\n"                         \
     "}\n"                                                               \
     "}";}
 //     "gl_FragColor[3] = clamp(exp(-sqrt(distance)),0.0,1.0);\n"          \
@@ -108,8 +127,14 @@ void StandardShader::SetupShader()
   GLint shader_center = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_center");
   glUniform2f(shader_center,m_Center[0],m_Center[1]);
   
-  GLint shader_localt = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_localt");
-  glUniform1i(shader_localt,m_LocalTransparency);
+  GLint shader_type = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_type");
+  glUniform1i(shader_type,m_ShaderType);
+
+  GLint shader_current = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_current");
+  glUniform3f(shader_current,m_CurrentRed,m_CurrentGreen,m_CurrentBlue);
+
+  GLint shader_localc_range = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_localc_range");
+  glUniform1f(shader_localc_range,m_LocalContrastRange);
 }
 
 
