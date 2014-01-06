@@ -1,0 +1,10 @@
+
+
+cmake ..\src -DCMAKE_INCLUDE_PATH:PATH="%OSGEO4W_ROOT%\include" -DCMAKE_LIBRARY_PATH:PATH="%OSGEO4W_ROOT%\lib" -DOTB_DIR:PATH=C:\Users\jmalik\Dashboard\build\OTB-vc10-x86-RelWithDebInfo -DGLFW_LIBRARY:PATH=C:\Users\jmalik\Experimental\GLFW\build\src\RelWithDebinfo\glfw3.lib -DGLFW_INCLUDE_DIR:PATH=C:\Users\jmalik\Experimental\GLFW\src\include -DITK_DIR=C:\Users\jmalik\Dashboard\build\ITK-x86-RelDeb -DGLEW_LIBRARY:PATH=C:\Users\jmalik\Experimental\glew-1.10.0-win32\lib\Release\Win32\glew32.lib -DGLEW_INCLUDE_DIR:PATH=C:\Users\jmalik\Experimental\glew-1.10.0-win32\include
+
+cmake --build . --config RelWithDebinfo
+
+set ITK_AUTOLOAD_PATH=
+set PATH=C:\Users\jmalik\Experimental\glew-1.10.0-win32\bin\Release\Win32;%PATH%
+
+Ice.exe 0 255 ..\..\..\babytux.tiff
