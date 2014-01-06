@@ -5,6 +5,13 @@ cmake_minimum_required(VERSION 2.6)
 set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_MODULE_PATH})
+    
+#----------------------------------------------------------------------------
+# ensure WIN32 definition
+if(WIN32)
+  add_definitions(-DWIN32)
+endif(WIN32)
+ 
 #----------------------------------------------------------------------------
 #Prevents conflicts with visual min/max function
 #Add the OSSIMSTATIC flag to prevent from including dclspec(dllimport) from ossim
@@ -53,5 +60,5 @@ endif(GLEW_FOUND)
 ADD_LIBRARY(OTBIce otbViewSettings.cxx otbGlView.cxx otbGlActor.cxx otbGlImageActor.cxx otbFragmentShaderRegistry.cxx otbFragmentShader.cxx otbStandardShader.cxx)
 TARGET_LINK_LIBRARIES(OTBIce OTBIO ${OPENGL_LIBRARY} ${GLEW_LIBRARY})
 
-ADD_EXECUTABLE(otbIce otbIce.cxx)
-TARGET_LINK_LIBRARIES(otbIce OTBIce ${GLFW_LIBRARY})
+ADD_EXECUTABLE(Ice otbIce.cxx)
+TARGET_LINK_LIBRARIES(Ice OTBIce ${GLFW_LIBRARY})

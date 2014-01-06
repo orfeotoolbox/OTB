@@ -18,7 +18,11 @@
 #include "otbGlImageActor.h"
 #include "otbViewSettings.h"
 #include "otbMath.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 #include <GL/glew.h>
+#include "GL/glext.h"
 #include "otbStandardShader.h"
 
 namespace otb
