@@ -86,6 +86,8 @@ public:
 
   void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
   {
+    double factor = (yoffset>0) ? 1/1.1 : 1.1;
+
     double posx, posy,vpx,vpy;
 
     glfwGetCursorPos(window,&posx,&posy);
@@ -100,77 +102,60 @@ public:
 
     if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
       {
-      double delta = yoffset > 0 ? 1/1.1 : 1.1;
       if(m_LocalContrastEnhancement)
         {
-        m_LocalContrastWindow*=delta;
+        m_LocalContrastWindow*=factor;
 
         SetupLocalContrastEnhancement(window);
         }
       else
         {
-        shader->SetMinRed(shader->GetMinRed()*delta);
-        shader->SetMinGreen(shader->GetMinGreen()*delta);
-        shader->SetMinBlue(shader->GetMinBlue()*delta);
-        shader->SetMaxRed(shader->GetMaxRed()*delta);
-        shader->SetMaxGreen(shader->GetMaxGreen()*delta);
-        shader->SetMaxBlue(shader->GetMaxBlue()*delta);
+        shader->SetMinRed(shader->GetMinRed()*factor);
+        shader->SetMinGreen(shader->GetMinGreen()*factor);
+        shader->SetMinBlue(shader->GetMinBlue()*factor);
+        shader->SetMaxRed(shader->GetMaxRed()*factor);
+        shader->SetMaxGreen(shader->GetMaxGreen()*factor);
+        shader->SetMaxBlue(shader->GetMaxBlue()*factor);
         }
     }
     else if(glfwGetKey(window,GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
-      {
-      double delta = yoffset > 0 ? 1/1.1 : 1.1;
-      
-      shader->SetMinRed(shader->GetMinRed()*delta);
-      shader->SetMinGreen(shader->GetMinGreen()*delta);
-      shader->SetMinBlue(shader->GetMinBlue()*delta);
-      shader->SetMaxRed(shader->GetMaxRed()/delta);
-      shader->SetMaxGreen(shader->GetMaxGreen()/delta);
-      shader->SetMaxBlue(shader->GetMaxBlue()/delta);
+      {      
+      shader->SetMinRed(shader->GetMinRed()*factor);
+      shader->SetMinGreen(shader->GetMinGreen()*factor);
+      shader->SetMinBlue(shader->GetMinBlue()*factor);
+      shader->SetMaxRed(shader->GetMaxRed()/factor);
+      shader->SetMaxGreen(shader->GetMaxGreen()/factor);
+      shader->SetMaxBlue(shader->GetMaxBlue()/factor);
       }
     else if(glfwGetKey(window,GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
       {
-      if(yoffset>0)
-        {
-        shader->SetGamma(shader->GetGamma()/1.1);
-        }
-      else
-        {
-        shader->SetGamma(shader->GetGamma()*1.1);
-        }
+      
+      shader->SetGamma(shader->GetGamma()*factor);
       }
     else if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
       {
-      if(yoffset>0)
-        {
-        shader->SetAlpha(shader->GetAlpha()/1.1);
-        }
-      else
-        {
-        shader->SetAlpha(shader->GetAlpha()*1.1);
-        }
+      shader->SetAlpha(shader->GetAlpha()*factor);  
       }
     else if(glfwGetKey(window,GLFW_KEY_RIGHT_ALT) == GLFW_PRESS)
       {
-      if(yoffset>0)
+      otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(m_Actors[m_SelectedActor]->GetShader());
+      
+      if(shader->GetShaderType() == otb::SHADER_LOCAL_ALPHA || shader->GetShaderType() == otb::SHADER_LOCAL_CONTRAST) 
         {
-        shader->SetRadius(shader->GetRadius()/1.1);
+        shader->SetRadius(shader->GetRadius()*factor);
         }
-      else
+      else if(shader->GetShaderType() == otb::SHADER_ALPHA_GRID)
         {
-        shader->SetRadius(shader->GetRadius()*1.1);
+        shader->SetChessboardSize(shader->GetChessboardSize()*factor);
+        }
+      else if(shader->GetShaderType() == otb::SHADER_ALPHA_SLIDER)
+        {
+        shader->SetSliderPosition(shader->GetSliderPosition()*factor);
         }
       }
     else
       {
-      if(yoffset>0)
-        {
-        m_ViewSettings->Zoom(zoomCenter,1/1.1);
-        }
-      else if(yoffset < 0)
-        {
-        m_ViewSettings->Zoom(zoomCenter,1.1);
-        }
+      m_ViewSettings->Zoom(zoomCenter,factor);
       }
   }
 
@@ -447,6 +432,21 @@ public:
          shader->SetShaderType(otb::SHADER_ALPHA_GRID);
          }
        }
+
+       if(key == GLFW_KEY_S && action == GLFW_PRESS)
+         {
+         otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(m_Actors[m_SelectedActor]->GetShader());
+         if(shader->GetShaderType() == otb::SHADER_ALPHA_SLIDER)
+           {
+           std::cout<<"Alpha slider off"<<std::endl;
+           shader->SetShaderType(otb::SHADER_STANDARD);
+           }
+         else
+           {
+           std::cout<<"Alpha slider on"<<std::endl;
+           shader->SetShaderType(otb::SHADER_ALPHA_SLIDER);
+           }         
+         }
 
 
      // Not available anymore with GlImageActor (use NonOptGlImageActor)

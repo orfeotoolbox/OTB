@@ -37,6 +37,9 @@ StandardShader::StandardShader()
     m_LocalContrastRange(50),
     m_Center(),
     m_Radius(200),
+    m_ChessboardSize(256),
+    m_SliderPosition(500),
+    m_VerticalSlider(false),
     m_ShaderType(SHADER_STANDARD)
 {
   this->BuildShader();
@@ -58,6 +61,9 @@ std::string StandardShader::GetSource() const
     "uniform int shader_type;\n"                                        \
     "uniform float shader_radius;\n"                                    \
     "uniform float shader_localc_range;\n"                              \
+    "uniform float shader_chessboard_size;\n"                           \
+    "uniform float shader_slider_pos;\n"                                \
+    "uniform int shader_vertical_slider_flag;\n"                        \
     "void main (void) {\n"                                              \
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
     "gl_FragColor = clamp(pow((p + shader_b)*shader_a,shader_gamma), 0.0, 1.0);\n" \
@@ -79,8 +85,12 @@ std::string StandardShader::GetSource() const
     "}\n"                                                               \
     "else if(shader_type == 3)\n"                                       \
     "{\n"                                                               \
-    "int size = 256;\n"                                                 \
-  "float alpha = (mod(floor(gl_FragCoord.x / size), 2) == 0) != (mod(floor(gl_FragCoord.y / size), 2) == 1) ? shader_alpha : 0.0;\n" \
+    "float alpha = (mod(floor(gl_FragCoord.x / shader_chessboard_size), 2) == 0) != (mod(floor(gl_FragCoord.y / shader_chessboard_size), 2) == 1) ? shader_alpha : 0.0;\n" \
+    "gl_FragColor[3] = clamp(alpha,0.0,1.0);\n"                         \
+    "}\n"                                                               \
+    "else if(shader_type == 4)\n"                                       \
+    "{\n"                                                               \
+    "float alpha = (shader_vertical_slider_flag == 0 && gl_FragCoord.x > shader_slider_pos) || (shader_vertical_slider_flag == 1 && gl_FragCoord.y > shader_slider_pos) ? 1.0 : 0.0;\n" \
     "gl_FragColor[3] = clamp(alpha,0.0,1.0);\n"                         \
     "}\n"                                                               \
     "}";}
@@ -135,6 +145,16 @@ void StandardShader::SetupShader()
 
   GLint shader_localc_range = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_localc_range");
   glUniform1f(shader_localc_range,m_LocalContrastRange);
+
+  GLint shader_chessboard_size = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_chessboard_size");
+  glUniform1f(shader_chessboard_size,m_ChessboardSize);
+
+  GLint shader_slider_pos = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_slider_pos");
+  glUniform1f(shader_slider_pos,m_SliderPosition);
+
+  GLint shader_vertical_slider_flag = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_vertical_slider_flag");
+  glUniform1i(shader_vertical_slider_flag,m_VerticalSlider);
+
 }
 
 

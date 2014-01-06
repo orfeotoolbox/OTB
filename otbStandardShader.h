@@ -29,7 +29,8 @@ typedef enum
   SHADER_STANDARD,
   SHADER_LOCAL_CONTRAST,
   SHADER_LOCAL_ALPHA,
-  SHADER_ALPHA_GRID
+  SHADER_ALPHA_GRID,
+  SHADER_ALPHA_SLIDER,
 } ShaderType;
 
 
@@ -82,6 +83,15 @@ public:
   itkSetMacro(Radius,double);
   itkGetConstReferenceMacro(Radius,double);
 
+  itkSetMacro(ChessboardSize,double);
+  itkGetConstReferenceMacro(ChessboardSize,double);
+  
+  itkSetMacro(SliderPosition,double);
+  itkGetConstReferenceMacro(SliderPosition,double);
+  
+  itkSetMacro(VerticalSlider,bool);
+  itkGetMacro(VerticalSlider,bool);
+
   itkSetMacro(Center,PointType);
   itkGetConstReferenceMacro(Center,PointType);
 
@@ -119,6 +129,12 @@ private:
   PointType m_Center;
 
   double m_Radius;
+
+  double m_ChessboardSize;
+
+  double m_SliderPosition;
+
+  bool m_VerticalSlider;
 
   ShaderType m_ShaderType;
 
