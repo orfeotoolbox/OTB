@@ -88,7 +88,3 @@ OTB_CREATE_APPLICATION(NAME           DownloadSRTMTiles
                        SOURCES        otbDownloadSRTMTiles.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBProjections)
 
-OTB_CREATE_APPLICATION(NAME           ComputeModulusAndPhase 
-                       SOURCES        otbComputeModulusAndPhase.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon)
-
