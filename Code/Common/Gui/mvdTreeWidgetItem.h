@@ -45,7 +45,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 
-
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
@@ -60,6 +59,10 @@ namespace mvd
 
 //
 // Internal classes pre-declaration.
+class TreeWidgetItem;
+
+//
+// Functions declarations.
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -97,9 +100,9 @@ public:
   /**
    * \brief Constructor.
    */
-  TreeWidgetItem( QTreeWidgetItem* parent,
-                  const QString& text,
-                  const QVariant& id /*=QVariant()*/,
+  TreeWidgetItem( QTreeWidgetItem* parent =NULL,
+                  const QString& text =QString(),
+                  const QVariant& id =QVariant(),
                   const QStringList& columns = QStringList(),
                   TreeWidgetItem::ItemType type =TreeWidgetItem::ITEM_TYPE_LEAF );
 
@@ -163,6 +166,16 @@ private:
 
   /**
    */
+  static const int m_MetaTypeId;
+  /**
+   */
+  static const int m_PointerMetaTypeId;
+  /**
+   */
+  static const int m_ConstPointerMetaTypeId;
+
+  /**
+   */
   inline void SetId( const QVariant& id );
 
 //
@@ -179,13 +192,46 @@ private slots:
 
 } // end namespace 'mvd'
 
+/*
+//
+// Declare TreeWidgetItem meta-type so it can be used for drag-and-drop
+// operations.
+Q_DECLARE_METATYPE( mvd::TreeWidgetItem );
+//
+// Pointer and const-pointer must be declared in order to be wrapped
+// by QVariant.
+Q_DECLARE_METATYPE( mvd::TreeWidgetItem* );
+Q_DECLARE_METATYPE( const mvd::TreeWidgetItem* );
+*/
+//
+// Declare Qt tree-widget item pointer types so they can be wrapped by
+// QVariant.
+Q_DECLARE_METATYPE( QTreeWidgetItem* );
+
+
+#define TREE_WIDGET_ITEM_USE_STREAM_OPERATORS 1
+
+#if TREE_WIDGET_ITEM_USE_STREAM_OPERATORS
+
+/**
+ */
+QDataStream&
+operator << ( QDataStream& out, QTreeWidgetItem const * item );
+
+/**
+ */
+QDataStream&
+operator >>( QDataStream& in, QTreeWidgetItem * & item );
+
+#endif // !DATASTREAM_USE_TEMPLATE_OPERATORS
+
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
 namespace mvd
 {
 
-/*******************************************************************************/
+/*****************************************************************************/
 inline
 TreeWidgetItem::ItemType
 TreeWidgetItem
@@ -197,7 +243,7 @@ TreeWidgetItem
     : TreeWidgetItem::ItemType( type() );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 inline
 QVariant
 TreeWidgetItem
@@ -206,7 +252,7 @@ TreeWidgetItem
   return data( 1, TreeWidgetItem::ITEM_ROLE_ID );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 inline
 void
 TreeWidgetItem
@@ -216,7 +262,7 @@ TreeWidgetItem
   setText( 1, id.toString() );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 inline
 QString
 TreeWidgetItem
@@ -225,7 +271,7 @@ TreeWidgetItem
   return text( 0 );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 inline
 QString
 TreeWidgetItem

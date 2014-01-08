@@ -38,6 +38,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
+#include "Core/mvdDataStream.h"
 #include "Gui/mvdTreeWidgetItem.h"
 
 namespace mvd
@@ -69,6 +70,8 @@ DatabaseTreeWidget
   m_DatasetFilename(""),
   m_EditionActive(false)
 {
+  setDefaultDropAction( Qt::MoveAction );
+
   //setMouseTracking(true);
   setDragEnabled(true);
   
@@ -185,8 +188,8 @@ DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
 /*******************************************************************************/
 void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-  qDebug() << this << "::dragMoveEvent(" << event << ") :"
-           << event->mimeData()->formats();
+  // qDebug() << this << "::dragMoveEvent(" << event << ") :"
+  //          << event->mimeData()->formats();
 
 #if BYPASS_DRAG_AND_DROP_EVENTS
   QTreeWidget::dragMoveEvent( event );
@@ -209,11 +212,108 @@ void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
 void 
 DatabaseTreeWidget::dropEvent(QDropEvent *event)
 {
-  qDebug() << this << "::dropEvent(" << event << ") :"
-           << event->mimeData()->formats();
+  qDebug() << this << "::dropEvent(" << event << ")";
 
 #if BYPASS_DRAG_AND_DROP_EVENTS
+  QByteArray byteArray(
+    event->mimeData()->data( "application/x-qabstractitemmodeldatalist" )
+  );
+  QDataStream stream( &byteArray, QIODevice::ReadOnly );
+  int count = 0;
+
+  // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
+
+  typedef QMap< int, QVariant > QIntToVariantMap;
+
+  struct Item
+  {
+    Item() : row( -1 ), col( -1 ), var() {}
+
+    int row;
+    int col;
+    QIntToVariantMap var;
+  };
+
+  while( !stream.atEnd() )
+    {
+    Item item;
+
+    stream >> item.row >> item.col >> item.var;
+
+    qDebug() << item.row << item.col << item.var;
+
+    ++ count;
+  }
+
+  qDebug() << count << "items.";
+
+  QByteArray byteArray2(
+    event->mimeData()->data( "application/x-qtreewidgetitemptrlist" )
+  );
+  QDataStream stream2( &byteArray2, QIODevice::ReadOnly );
+  int count2 = 0;
+
+  // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
+
+  QTreeWidgetItem* ptrItem = NULL;
+  QTreeWidgetItem* varItem = NULL;
+
+  while( !stream2.atEnd() )
+    {
+    QVariant variant;
+    void* pointer = NULL;
+
+    stream2 >> pointer;
+    stream2 >> variant;
+
+    qDebug() << "Pointer:" << pointer;
+    qDebug() << "Variant:" << variant;
+
+    // http://www.qtfr.org/viewtopic.php?id=9630
+
+    ptrItem = static_cast< QTreeWidgetItem* >( pointer );
+
+    qDebug()
+      << "Item (pointer):"
+      << ptrItem
+      << ptrItem->text( 0 )
+      << ptrItem->text( 1 )
+      << ptrItem->text( 2 )
+      << ptrItem->parent();
+
+    varItem = variant.value< QTreeWidgetItem* >();
+
+    qDebug()
+      << "Item (variant):"
+      << varItem
+      << varItem->text( 0 )
+      << varItem->text( 1 )
+      << varItem->text( 2 )
+      << varItem->parent();
+
+    ++ count2;
+  }
+
+  qDebug() << count2 << "items.";
+
   QTreeWidget::dropEvent( event );
+
+  qDebug()
+    << "Item (pointer):"
+    << ptrItem
+    << ptrItem->text( 0 )
+    << ptrItem->text( 1 )
+    << ptrItem->text( 2 )
+    << ptrItem->parent();
+
+  qDebug()
+    << "Item (variant):"
+    << varItem
+    << varItem->text( 0 )
+    << varItem->text( 1 )
+    << varItem->text( 2 )
+    << varItem->parent();
+
   return;
 #endif
 
@@ -233,6 +333,90 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
     {
     emit ImageDropped( fileName );
     }
+}
+
+/*******************************************************************************/
+QStringList
+DatabaseTreeWidget
+::mimeTypes() const
+{
+  // qDebug() << this << "::mimeTypes()";
+
+  QStringList mimeTypes( QTreeWidget::mimeTypes() );
+
+  mimeTypes << "application/x-qtreewidgetitemptrlist";
+
+  return mimeTypes;
+}
+
+/*******************************************************************************/
+QMimeData*
+DatabaseTreeWidget
+::mimeData( const QList< QTreeWidgetItem* > items ) const
+{
+  qDebug() << this << "::mimeData(" << items << ")";
+
+  QMimeData* mimeData = QTreeWidget::mimeData( items );
+
+  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+
+  QByteArray byteArray;
+  QDataStream stream( &byteArray, QIODevice::WriteOnly );
+
+  for( QTreeWidgetItemList::const_iterator it( items.begin() );
+       it!=items.end();
+       ++it )
+    {
+    qDebug()
+      << "QTreeWidgetItem::parent()==" << ( *it )->parent();
+    qDebug()
+      << "Pointer:" << static_cast< void* >( *it );
+    qDebug()
+      << "Variant:" << QVariant::fromValue< QTreeWidgetItem* >( *it );
+
+    // http://www.qtfr.org/viewtopic.php?id=9630
+    stream << *it;
+    stream << QVariant::fromValue< QTreeWidgetItem* >( *it );
+    }
+
+  mimeData->setData( "application/x-qtreewidgetitemptrlist", byteArray );
+
+  /*
+  qDebug() << mimeData->formats();
+
+  for( QTreeWidgetItemList::const_iterator it( items.begin() );
+       it!=items.end();
+       ++it )
+    {
+    QTreeWidgetItem* item = *it;
+
+    qDebug()
+      << item->type() << item->text( 0 ) << item->text( 1 ) << item->text( 2 );
+    }
+  */
+
+  return mimeData;
+}
+
+/*******************************************************************************/
+bool
+DatabaseTreeWidget::dropMimeData( QTreeWidgetItem* parent,
+                                  int index,
+                                  const QMimeData* data,
+                                  Qt::DropAction action )
+{
+  qDebug()
+    << this << "::dropMimeData("
+    << parent << ","
+    << index << ","
+    << data << ","
+    << action << ")";
+
+  bool result = QTreeWidget::dropMimeData( parent, index, data, action );
+
+  qDebug() << "->" << result;
+
+  return result;
 }
 
 /*******************************************************************************/

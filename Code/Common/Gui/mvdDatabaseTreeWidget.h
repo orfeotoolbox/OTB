@@ -49,8 +49,8 @@
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
-#define BYPASS_MOUSE_EVENTS 0
-#define BYPASS_DRAG_AND_DROP_EVENTS 0
+#define BYPASS_MOUSE_EVENTS 1
+#define BYPASS_DRAG_AND_DROP_EVENTS 1
 
 //
 // External classes pre-declaration.
@@ -138,8 +138,8 @@ signals:
   void DatasetRenamed(const QString &, const QString &);
 
   void ImageDropped(const QString &);
-  
-  
+
+ 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -148,16 +148,26 @@ protected:
     
     void InitializeContextualMenu();
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+    //
+    // QTreeWidget overloads.
+    virtual QStringList mimeTypes () const;
+
+    virtual QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const;
+
+    virtual bool dropMimeData( QTreeWidgetItem* parent,
+                               int index,
+                               const QMimeData* data,
+                               Qt::DropAction action );
 
 //
 // Protected attributes.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
 //
 // Private methods.
 private:
-
 //
 // Private attributes.
 private:

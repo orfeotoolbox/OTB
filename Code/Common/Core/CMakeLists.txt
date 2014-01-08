@@ -10,6 +10,7 @@ set( Common_Core_SOURCES
   mvdBackgroundTask.cxx
   mvdCore.cxx
   mvdDatasetDescriptor.cxx
+  mvdDataStream.cxx
   mvdDatabaseConnection.cxx
   mvdDatabaseError.cxx
   mvdDatabaseModel.cxx
