@@ -109,29 +109,12 @@ static const StaticInitializer STATIC_INITIALIZER;
 QDataStream&
 operator << ( QDataStream& out, void const * & pointer )
 {
+  /*
   qDebug()
     << "QDataStream& operator << ( QDataStream&, void const * & );";
+  */
 
   DATA_STREAM_OUT( out, void, pointer );
-
-  /*
-  size_t size = sizeof( void const * );
-
-  int count =
-    out.writeRawData(
-      reinterpret_cast< char const * >( &pointer ),
-      size
-    );
-
-  qDebug()
-    << "Written" << count << "byte(s) as" << typeid( pointer ).name()
-    << "adress" << pointer << "size" << size;
-
-  if( static_cast< size_t >( count )!=size )
-    {
-    throw mvd::SystemError( "Error when writing void* pointer to QDataStream." );
-    }
-  */
 
   return out;
 }
@@ -140,26 +123,12 @@ operator << ( QDataStream& out, void const * & pointer )
 QDataStream&
 operator >>( QDataStream& in, void * & pointer )
 {
+  /*
   qDebug()
     << "QDataStream& operator >> ( QDataStream&, void * & );";
+  */
 
   DATA_STREAM_IN( in, void, pointer );
-
-  /*
-  size_t size = sizeof( void * );
-
-  int count = in.readRawData( reinterpret_cast< char * >( &pointer ), size );
-
-  qDebug()
-    << "Read" << count << "byte(s) as" << typeid( pointer ).name()
-    << "adress" << pointer << "size" << size;
-
-  if( static_cast< size_t >( count )!=size )
-    {
-    throw
-      mvd::SystemError( "Error when reading void* pointer from QDataStream." );
-    }
-  */
 
   return in;
 }

@@ -190,8 +190,10 @@ TreeWidgetItem
 QDataStream&
 operator << ( QDataStream& out, QTreeWidgetItem const * item )
 {
+  /*
   qDebug() <<
     "QDataStream& operator << ( QDataStream&, QTreeWidgetItem const * & );";
+  */
 
 #if DATA_STREAM_USE_TEMPLATE_OPERATORS
   return operator << < QTreeWidgetItem >( out, item );
@@ -201,12 +203,6 @@ operator << ( QDataStream& out, QTreeWidgetItem const * item )
 
   return out;
 
-  /*
-  void const * pointer = item;
-
-  return operator << ( out, pointer );
-  */
-
 #endif // DATA_STREAM_USE_TEMPLATE_OPERATORS
 }
 
@@ -214,22 +210,16 @@ operator << ( QDataStream& out, QTreeWidgetItem const * item )
 QDataStream&
 operator >>( QDataStream& in, QTreeWidgetItem * & item )
 {
+  /*
   qDebug() <<
     "QDataStream& operator >> ( QDataStream&, QTreeWidgetItem * & );";
+  */
 
 #if DATA_STREAM_USE_TEMPLATE_OPERATORS
   return operator >> < QTreeWidgetItem >( in, item );
 
 #else // DATA_STREAM_USE_TEMPLATE_OPERATORS
   DATA_STREAM_IN( in, QTreeWidgetItem, item );
-
-  /*
-  void * pointer = NULL;
-
-  operator >> ( in, pointer );
-
-  item = static_cast< QTreeWidgetItem* >( pointer );
-  */
 
   return in;
 

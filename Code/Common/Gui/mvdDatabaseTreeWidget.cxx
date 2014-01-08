@@ -72,11 +72,10 @@ DatabaseTreeWidget
 {
   setDefaultDropAction( Qt::MoveAction );
 
-  //setMouseTracking(true);
-  setDragEnabled(true);
+  // setMouseTracking(true);
+  setDragEnabled( true );
   
-  // 
-  setAcceptDrops(true);
+  setAcceptDrops( true );
 
   // setup contextual menu
   InitializeContextualMenu();
@@ -116,9 +115,8 @@ DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 {
 #if BYPASS_MOUSE_EVENTS
   QTreeWidget::mouseMoveEvent( event );
-  return;
-#endif
 
+#else // BYPASS_MOUSE_EVENTS
   if ( !(event->buttons() &  Qt::LeftButton ))
     return;
   
@@ -145,6 +143,7 @@ DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 
     drag->exec(Qt::CopyAction | Qt::MoveAction);
     }
+#endif // BYPASS_MOUSE_EVENTS
 }
 
 /*******************************************************************************/
@@ -153,9 +152,8 @@ DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 {
 #if BYPASS_MOUSE_EVENTS
   QTreeWidget::mousePressEvent( event );
-  return;
-#endif
 
+#else // BYPASS_MOUSE_EVENTS
   if (event->button() == Qt::LeftButton)
      {
      //
@@ -165,6 +163,8 @@ DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
      // remember start drag position
      m_StartDragPosition = event->pos();
      }
+
+#endif // BYPASS_MOUSE_EVENTS
 }
 
 /*******************************************************************************/
@@ -176,13 +176,14 @@ DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
 
 #if BYPASS_DRAG_AND_DROP_EVENTS
   QTreeWidget::dragEnterEvent( event );
-  return;
-#endif
 
+#else // BYPASS_DRAG_AND_DROP_EVENTS
   if (event->mimeData()->hasUrls()/*("text/uri-list")*/)
     {
     event->acceptProposedAction();
     }
+
+#endif // BYPASS_DRAG_AND_DROP_EVENTS
 }
 
 /*******************************************************************************/
@@ -193,9 +194,8 @@ void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
 
 #if BYPASS_DRAG_AND_DROP_EVENTS
   QTreeWidget::dragMoveEvent( event );
-  return;
-#endif
 
+#else // BYPASS_DRAG_AND_DROP_EVENTS
   //
   // if the mouse is within the QLabel geometry : allow drops
   if ( event->answerRect().intersects( this->geometry() ) )
@@ -206,6 +206,7 @@ void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
     {
     event->ignore();
     }
+#endif // BYPASS_DRAG_AND_DROP_EVENTS
 }
 
 /*******************************************************************************/
@@ -221,6 +222,7 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
   QDataStream stream( &byteArray, QIODevice::ReadOnly );
   int count = 0;
 
+  //
   // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
 
   typedef QMap< int, QVariant > QIntToVariantMap;
@@ -253,24 +255,26 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
   QDataStream stream2( &byteArray2, QIODevice::ReadOnly );
   int count2 = 0;
 
+  //
   // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
 
-  QTreeWidgetItem* ptrItem = NULL;
+  // QTreeWidgetItem* ptrItem = NULL;
   QTreeWidgetItem* varItem = NULL;
 
   while( !stream2.atEnd() )
     {
     QVariant variant;
-    void* pointer = NULL;
+    // void* pointer = NULL;
 
-    stream2 >> pointer;
+    // stream2 >> pointer;
     stream2 >> variant;
 
-    qDebug() << "Pointer:" << pointer;
+    // qDebug() << "Pointer:" << pointer;
     qDebug() << "Variant:" << variant;
 
     // http://www.qtfr.org/viewtopic.php?id=9630
 
+    /*
     ptrItem = static_cast< QTreeWidgetItem* >( pointer );
 
     qDebug()
@@ -280,6 +284,7 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
       << ptrItem->text( 1 )
       << ptrItem->text( 2 )
       << ptrItem->parent();
+    */
 
     varItem = variant.value< QTreeWidgetItem* >();
 
@@ -298,6 +303,7 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
 
   QTreeWidget::dropEvent( event );
 
+  /*
   qDebug()
     << "Item (pointer):"
     << ptrItem
@@ -305,6 +311,7 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
     << ptrItem->text( 1 )
     << ptrItem->text( 2 )
     << ptrItem->parent();
+  */
 
   qDebug()
     << "Item (variant):"
@@ -314,8 +321,7 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
     << varItem->text( 2 )
     << varItem->parent();
 
-  return;
-#endif
+#else // BYPASS_DRAG_AND_DROP_EVENTS
 
   QList<QUrl> urls = event->mimeData()->urls();
 
@@ -333,6 +339,8 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
     {
     emit ImageDropped( fileName );
     }
+
+#endif // BYPASS_DRAG_AND_DROP_EVENTS
 }
 
 /*******************************************************************************/
@@ -367,15 +375,17 @@ DatabaseTreeWidget
        it!=items.end();
        ++it )
     {
+    /*
     qDebug()
       << "QTreeWidgetItem::parent()==" << ( *it )->parent();
     qDebug()
       << "Pointer:" << static_cast< void* >( *it );
     qDebug()
       << "Variant:" << QVariant::fromValue< QTreeWidgetItem* >( *it );
+    */
 
     // http://www.qtfr.org/viewtopic.php?id=9630
-    stream << *it;
+    // stream << *it;
     stream << QVariant::fromValue< QTreeWidgetItem* >( *it );
     }
 
@@ -587,4 +597,3 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
 }
 
 } // end namespace 'mvd'
-

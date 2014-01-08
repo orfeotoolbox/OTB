@@ -129,6 +129,7 @@ operator >>( QDataStream& in, void * & pointer );
  */
 #define DATA_STREAM_USE_TEMPLATE_OPERATORS 1
 
+
 #if DATA_STREAM_USE_TEMPLATE_OPERATORS
 
 /**
@@ -163,31 +164,14 @@ inline
 QDataStream&
 operator << ( QDataStream& out, T const * & pointer )
 {
+  /*
   qDebug() <<
     "template< T > "
     "QDataStream& operator << ( QDataStream&, T const * & ); "
     "with [ T =" << typeid( T ).name() << "]";
+  */
 
   DATA_STREAM_OUT( out, T, pointer );
-
-  /*
-  size_t size = sizeof( T const * );
-
-  int count =
-    out.writeRawData(
-      reinterpret_cast< char const * >( &pointer ),
-      size
-    );
-
-  qDebug()
-    << "Written" << count << "byte(s) as" << typeid( pointer ).name()
-    << "adress" << pointer << "size" << size;
-
-  if( static_cast< size_t >( count )!=size )
-    {
-    throw mvd::SystemError( "Error when writing T* pointer to QDataStream." );
-    }
-  */
 
   return out;
 }
@@ -198,28 +182,14 @@ inline
 QDataStream&
 operator >>( QDataStream& in, T * & pointer )
 {
+  /*
   qDebug() <<
     "template< T > "
     "QDataStream& operator >> ( QDataStream&, T * & ); "
     "with [ T =" << typeid( T ).name() << "]";
+  */
 
   DATA_STREAM_IN( in, T, pointer );
-
-  /*
-  size_t size = sizeof( T * );
-
-  int count = in.readRawData( reinterpret_cast< char * >( &pointer ), size );
-
-  qDebug()
-    << "Read" << count << "byte(s) as" << typeid( pointer ).name()
-    << "adress" << pointer << "size" << size;
-
-  if( static_cast< size_t >( count )!=size )
-    {
-    throw
-      mvd::SystemError( "Error when reading T* pointer from QDataStream." );
-    }
-  */
 
   return in;
 }
