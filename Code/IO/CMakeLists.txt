@@ -39,7 +39,7 @@ add_library(OTBIO ${OTBIO_SRCS})
 #    LINK_INTERFACE_LIBRARIES ""
 #  )
 target_link_libraries(OTBIO  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY}  ${GDAL_LIBRARY} ${OGR_LIBRARY} ${JPEG_LIBRARY} ${OPENTHREADS_LIBRARY})
-target_link_libraries(OTBIO ${LIBKML_LIBRARIES} ${TINYXML_LIBRARIES} ${LIBLAS_LIBRARIES})
+target_link_libraries(OTBIO ${LIBKML_LIBRARIES} ${TINYXML_LIBRARIES})
 target_link_libraries(OTBIO  OTBCommon OTBBasicFilters OTBCurlAdapters OTBOGRAdapters)
 target_link_libraries(OTBIO ${ITK_LIBRARIES})
 

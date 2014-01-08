@@ -158,14 +158,6 @@ if(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   add_subdirectory( otbopenthreads )
 endif()
 
-
-if(OTB_USE_LIBLAS)
-if(NOT OTB_USE_EXTERNAL_LIBLAS)
-  message(STATUS "Configuring otbliblas...")
-  add_subdirectory( otbliblas )
-endif()
-endif()
-
 if(OTB_USE_JPEG2000)
   set(OTB_BUILD_TESTING ${BUILD_TESTING})
   set(BUILD_TESTING OFF CACHE INTERNAL "" FORCE)

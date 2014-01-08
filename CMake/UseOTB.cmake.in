@@ -101,11 +101,6 @@ else()
                NO_SYSTEM_PATH)
 endif()
 
-if(OTB_USE_LIBLAS AND OTB_USE_EXTERNAL_LIBLAS)
-  find_package(LibLAS REQUIRED)
-  include_directories(${LIBLAS_INCLUDE_DIRS})
-endif()
-
 if(OTB_USE_EXTERNAL_LIBKML)
   find_package(LibKML REQUIRED)
   include_directories(${LIBKML_INCLUDE_DIRS})

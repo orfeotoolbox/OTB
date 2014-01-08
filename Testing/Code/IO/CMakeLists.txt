@@ -33,10 +33,6 @@ set(IO_TESTS14    ${CXX_TEST_PATH}/otbIOTests14)
 set(IO_TESTS15    ${CXX_TEST_PATH}/otbIOTests15)
 set(IO_TESTS16    ${CXX_TEST_PATH}/otbIOTests16)
 
-if(OTB_USE_LIBLAS)
-  set(IO_TESTS17    ${CXX_TEST_PATH}/otbIOTests17)
-endif()
-
 set(IO_TESTS18    ${CXX_TEST_PATH}/otbIOTests18)
 
 if(OTB_USE_CURL)
@@ -2703,31 +2699,6 @@ add_test(ioTvImageSeriesFileReader ${IO_TESTS16}
             ${TEMP}/ioTvImageSeries.png
 )
 
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS17 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-if(OTB_USE_LIBLAS)
-add_test(ioTuPointSetFileReaderNew ${IO_TESTS17}
-        otbPointSetFileReaderNew )
-
-add_test(ioTvPointSetFileReader ${IO_TESTS17}
-        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioPointSetFileReader.txt
-                        ${TEMP}/ioPointSetFileReader.txt
-        otbPointSetFileReader
-  ${INPUTDATA}/srs.las
-  ${TEMP}/ioPointSetFileReader.txt)
-
-add_test(ioTvPointSetFileReader2 ${IO_TESTS17}
-        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioPointSetFileReader2.txt
-                        ${TEMP}/ioPointSetFileReader2.txt
-        otbPointSetFileReader2
-  ${INPUTDATA}/srs.las
-  ${TEMP}/ioPointSetFileReader2.txt)
-
-endif()
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS18 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3976,14 +3947,6 @@ otbImageFileReaderRADComplexDouble.cxx
 otbImageSeriesFileReader.cxx
 )
 
-#Reserved for liblas
-set(BasicIO_SRCS17
-otbIOTests17.cxx
-otbPointSetFileReaderNew.cxx
-otbPointSetFileReader.cxx
-otbPointSetFileReader2.cxx
-)
-
 set(BasicIO_SRCS18
 otbIOTests18.cxx
 otbSpotImageMetadataInterfaceNew.cxx
@@ -4099,10 +4062,6 @@ endif()
 OTB_ADD_EXECUTABLE(otbIOTests14 "${BasicIO_SRCS14}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests15 "${BasicIO_SRCS15}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests16 "${BasicIO_SRCS16}" "OTBIO;OTBTesting")
-
-if(OTB_USE_LIBLAS)
-  OTB_ADD_EXECUTABLE(otbIOTests17 "${BasicIO_SRCS17}" "OTBIO;OTBTesting")
-endif()
 
 OTB_ADD_EXECUTABLE(otbIOTests18 "${BasicIO_SRCS18}" "OTBIO;OTBTesting")
 

@@ -91,16 +91,6 @@ else()
       ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib)
 endif()
 
-if(OTB_USE_LIBLAS)
-  if(OTB_USE_EXTERNAL_LIBLAS)
-    set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-        ${LIBLAS_INCLUDE_DIRS})
-  else()
-    set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-        ${OTB_SOURCE_DIR}/Utilities/otbliblas/include)
-  endif()
-endif()
-
 if(OTB_USE_EXTERNAL_MUPARSER)
   set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
       ${MUPARSER_INCLUDE_DIR})
@@ -336,17 +326,6 @@ if(OTB_USE_EXTERNAL_FLTK)
 else()
         set(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   		        Utilities/FLTK)
-endif()
-
-#For liblas headers
-if(OTB_USE_LIBLAS)
-  if(OTB_USE_EXTERNAL_LIBLAS)
-    set(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
-        ${LIBLAS_INCLUDE_DIRS})
-  else()
-    set(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
-        Utilities/otbliblas/include)
-  endif()
 endif()
 
 #For TinyXML header file

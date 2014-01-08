@@ -62,16 +62,6 @@ target_link_libraries(DEMHandlerExample OTBOssimAdapters OTBCommon OTBIO)
 add_executable(DEMToImageGenerator DEMToImageGenerator.cxx )
 target_link_libraries(DEMToImageGenerator OTBProjections OTBIO OTBCommon )
 
-if(OTB_USE_LIBLAS)
-  add_executable(LidarReaderExample LidarReaderExample.cxx )
-  target_link_libraries(LidarReaderExample OTBIO OTBCommon )
-
-  if(ITK_USE_REVIEW)
-    add_executable(LidarToImageExample LidarToImageExample.cxx )
-    target_link_libraries(LidarToImageExample OTBIO OTBCommon )
-  endif()
-endif()
-
 if( OTB_USE_CURL )
   add_executable(TileMapImageIOExample TileMapImageIOExample.cxx)
   target_link_libraries(TileMapImageIOExample OTBIO OTBCommon)
@@ -95,7 +85,7 @@ set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 set(EXE_TESTS1  ${CXX_TEST_PATH}/otbIOExamplesTests1)
 set(EXE_TESTS2  ${CXX_TEST_PATH}/otbIOExamplesTests2) # Need curl
-set(EXE_TESTS3  ${CXX_TEST_PATH}/otbIOExamplesTests3) # Need liblas
+set(EXE_TESTS3  ${CXX_TEST_PATH}/otbIOExamplesTests3)
 
 set(NOTOL 0.0)
 set(EPSILON_5 0.00001)
@@ -210,33 +200,6 @@ add_test(ioTeTileMapImageIOExampleTest ${EXE_TESTS2}
 endif()
 
 
-if(OTB_USE_LIBLAS)
-if(ITK_USE_REVIEW)
-add_test(ioTeLidarToImageExampleTest ${EXE_TESTS3}
---compare-image ${NOTOL}  ${BASELINE}/lidar-image-4.hdr
-                        ${TEMP}/lidar-image-4.hdr
-         LidarToImageExampleTest
-         ${DATA}/srs.las
-         ${TEMP}/lidar-image-4.hdr
-         ${TEMP}/lidar-image-4.png
-         0.2
-         5
-         4
-         )
-add_test(ioTeLidarToImageExample2Test ${EXE_TESTS3}
---compare-image ${NOTOL}  ${BASELINE}/lidar-image-8.hdr
-                        ${TEMP}/lidar-image-8.hdr
-         LidarToImageExampleTest
-         ${DATA}/srs.las
-         ${TEMP}/lidar-image-8.hdr
-         ${TEMP}/lidar-image-8.png
-         0.2
-         5
-         8
-         )
-endif()
-endif()
-
 
 
 include_directories(${OTB_SOURCE_DIR}/Testing/Code)
@@ -248,11 +211,10 @@ if( OTB_USE_CURL )
   target_link_libraries(otbIOExamplesTests2 OTBCommon OTBIO OTBTesting)
 endif()
 
-if(OTB_USE_LIBLAS)
+
 if(ITK_USE_REVIEW)
   add_executable(otbIOExamplesTests3 otbIOExamplesTests3.cxx)
   target_link_libraries(otbIOExamplesTests3 OTBCommon OTBIO OTBTesting)
-endif()
 endif()
 
 

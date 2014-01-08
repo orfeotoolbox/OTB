@@ -204,7 +204,6 @@ set(CMAKE_TRY_COMPILE_CONFIGURATION Release)
 find_package(OSGeo4W)
 # Put GDAL first, since on Windows, include dirs for other libs (curl, expat, mapnik)  contain gdal 1.5 includes
 include(ImportGdal)
-include(ImportLibLAS) # depends on ImportGdal
 include(ImportExpat)
 include(ImportITK)
 include(ImportJPEG2000)

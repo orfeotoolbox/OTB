@@ -1,5 +1,0 @@
-export LD_LIBRARY_PATH=${libspatialindex}:${libgdal}${libgeos}:${libtiff}:${libgeotiff}:${libspatialite}:${liblas}:${libproj}:${libexpat}
-export DYLD_LIBRARY_PATH=${libspatialindex}:${libgdal}${libgeos}:${libtiff}:${libgeotiff}:${libspatialite}:${liblas}:${libproj}:${libexpat}
-export PATH=$PATH:${bindir}
-export GDAL_DATA=${gdaldata}
-export PROJ_LIB=${projlib}
