@@ -66,16 +66,11 @@ namespace mvd
 /*******************************************************************************/
 DatabaseTreeWidget
 ::DatabaseTreeWidget( QWidget* parent  ):
-  QTreeWidget( parent),
-  m_DatasetFilename(""),
-  m_EditionActive(false)
+  TreeWidget( parent ),
+  m_DatasetFilename(),
+  m_EditionActive( false )
 {
-  setDefaultDropAction( Qt::MoveAction );
-
   // setMouseTracking(true);
-  setDragEnabled( true );
-  
-  setAcceptDrops( true );
 
   // setup contextual menu
   InitializeContextualMenu();
@@ -313,71 +308,6 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
     }
 
 #endif // BYPASS_DRAG_AND_DROP_EVENTS
-}
-
-/*******************************************************************************/
-QStringList
-DatabaseTreeWidget
-::mimeTypes() const
-{
-  // qDebug() << this << "::mimeTypes()";
-
-  QStringList mimeTypes( QTreeWidget::mimeTypes() );
-
-  mimeTypes << "application/x-qtreewidgetitemptrlist";
-
-  return mimeTypes;
-}
-
-/*******************************************************************************/
-QMimeData*
-DatabaseTreeWidget
-::mimeData( const QList< QTreeWidgetItem* > items ) const
-{
-  qDebug() << this << "::mimeData(" << items << ")";
-
-  QMimeData* mimeData = QTreeWidget::mimeData( items );
-
-  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
-
-  QByteArray byteArray;
-  QDataStream stream( &byteArray, QIODevice::WriteOnly );
-
-  for( QTreeWidgetItemList::const_iterator it( items.begin() );
-       it!=items.end();
-       ++it )
-    {
-    /*
-    qDebug()
-      << "QTreeWidgetItem::parent()==" << ( *it )->parent();
-    qDebug()
-      << "Pointer:" << static_cast< void* >( *it );
-    qDebug()
-      << "Variant:" << QVariant::fromValue< QTreeWidgetItem* >( *it );
-    */
-
-    // http://www.qtfr.org/viewtopic.php?id=9630
-    // stream << *it;
-    stream << QVariant::fromValue< QTreeWidgetItem* >( *it );
-    }
-
-  mimeData->setData( "application/x-qtreewidgetitemptrlist", byteArray );
-
-  /*
-  qDebug() << mimeData->formats();
-
-  for( QTreeWidgetItemList::const_iterator it( items.begin() );
-       it!=items.end();
-       ++it )
-    {
-    QTreeWidgetItem* item = *it;
-
-    qDebug()
-      << item->type() << item->text( 0 ) << item->text( 1 ) << item->text( 2 );
-    }
-  */
-
-  return mimeData;
 }
 
 /*******************************************************************************/

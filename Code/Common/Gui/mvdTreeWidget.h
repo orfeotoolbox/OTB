@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdDatabaseTreeWidget_h
-#define __mvdDatabaseTreeWidget_h
+#ifndef __mvdTreeWidget_h
+#define __mvdTreeWidget_h
 
 //
 // Configuration include.
@@ -44,13 +44,10 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdTreeWidget.h"
+
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
-
-#define BYPASS_MOUSE_EVENTS 1
-#define BYPASS_DRAG_AND_DROP_EVENTS 1
 
 //
 // External classes pre-declaration.
@@ -65,7 +62,7 @@ namespace mvd
 // Internal classes pre-declaration.
 namespace Ui
 {
-//class DatabaseTreeWidget;
+//class TreeWidget;
 };
 
 
@@ -73,13 +70,13 @@ namespace Ui
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class DatabaseTreeWidget
+ * \class TreeWidget
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi2_EXPORT DatabaseTreeWidget :
-    public TreeWidget
+class Monteverdi2_EXPORT TreeWidget :
+    public QTreeWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -93,39 +90,16 @@ class Monteverdi2_EXPORT DatabaseTreeWidget :
 public:
 
   /** \brief Constructor. */
-  DatabaseTreeWidget( QWidget* parent =NULL );
+  TreeWidget( QWidget* parent =NULL );
 
   /** \brief Destructor. */
-  virtual ~DatabaseTreeWidget();
-
-  /**
-   */
-  inline const QTreeWidgetItem* GetRootItem() const;
-
-  /**
-   */
-  QTreeWidgetItem* GetRootItem();
-
-  //
-  //
-  void mouseMoveEvent( QMouseEvent * event );
-  void mousePressEvent( QMouseEvent * event );
-  void dragEnterEvent(QDragEnterEvent *event);
-  void dragMoveEvent(QDragMoveEvent *event);
-  void dropEvent(QDropEvent *event);
-  void keyPressEvent( QKeyEvent * event );
+  virtual ~TreeWidget();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
 // Public SLOTS.
 public slots:
-  
-  void OnSelectedDatasetFilenameChanged(const QString& filename);
-  void OnDeleteTriggered(const QString & id);
-  void OnRenameTriggered();
-  void OnCustomContextMenuRequested(const QPoint& pos);
-  void OnItemChanged( QTreeWidgetItem* item , int column);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/  
 
@@ -133,28 +107,19 @@ public slots:
 // Signals.
 signals:
 
-  void DatasetToDeleteSelected( const QString & id );
-
-  void DatasetRenamed(const QString &, const QString &);
-
-  void ImageDropped(const QString &);
-
  
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
-    
-    void InitializeContextualMenu();
 
     //
     // QTreeWidget overloads.
 
-    virtual bool dropMimeData( QTreeWidgetItem* parent,
-                               int index,
-                               const QMimeData* data,
-                               Qt::DropAction action );
+    virtual QStringList mimeTypes() const;
+
+    virtual QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const;
 
 //
 // Protected attributes.
@@ -169,16 +134,6 @@ private:
 // Private attributes.
 private:
 
-  QPoint   m_StartDragPosition;
-  QString  m_DatasetFilename; 
-  QPoint   m_ContextualMenuClickedPosition;
-
-  QTreeWidgetItem * m_ItemToEdit;
-
-  bool              m_EditionActive;
-  QString           m_PreviousItemText;
-  Qt::ItemFlags     m_DefaultItemFlags;
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -188,6 +143,32 @@ private slots:
 
 } // end namespace 'mvd'
 
+
+/*****************************************************************************/
+/* GLOBAL FUNCTIONS DECLARATION                                              */
+
+//
+// Declare Qt tree-widget item pointer types so they can be wrapped by
+// QVariant.
+Q_DECLARE_METATYPE( QTreeWidgetItem* );
+
+
+#define TREE_WIDGET_ITEM_USE_STREAM_OPERATORS 1
+
+#if TREE_WIDGET_ITEM_USE_STREAM_OPERATORS
+
+/**
+ */
+QDataStream&
+operator << ( QDataStream& out, QTreeWidgetItem const * item );
+
+/**
+ */
+QDataStream&
+operator >>( QDataStream& in, QTreeWidgetItem * & item );
+
+#endif // !DATASTREAM_USE_TEMPLATE_OPERATORS
+
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
@@ -195,4 +176,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdDatabaseTreeWidget_h
+#endif // __mvdTreeWidget_h

@@ -38,7 +38,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdDataStream.h"
 
 namespace mvd
 {
@@ -61,50 +60,6 @@ namespace
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
-
-class StaticInitializer
-{
-public:
-  StaticInitializer() :
-    m_QTreeWidgetItemPtrMetaTypeId( -1 )
-  {
-    Initialize();
-  }
-
-  ~StaticInitializer()
-  {
-    Finalize();
-  }
-
-private:
-  inline
-  void
-  Initialize()
-  {
-    //
-    // Call qRegisterMetaType<>() to make type available in
-    // non-template signatures and serialization.
-    StaticInitializer::m_QTreeWidgetItemPtrMetaTypeId =
-      qRegisterMetaType< QTreeWidgetItem* >( "QTreeWidgetItem *" );
-
-    //
-    // Register serialization operators for custom meta-types.
-    qRegisterMetaTypeStreamOperators< QTreeWidgetItem* >();
-  }
-
-  inline
-  void
-  Finalize()
-  {
-  }
-
-  int m_QTreeWidgetItemPtrMetaTypeId;
-};
-
-namespace
-{
-static const StaticInitializer STATIC_INITIALIZER;
-}
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
@@ -180,50 +135,3 @@ TreeWidgetItem
 }
 
 } // end namespace 'mvd'
-
-/*****************************************************************************/
-/* GLOBAL FUNCTIONS IMPLEMENTATION SECTION                                   */
-
-#if TREE_WIDGET_ITEM_USE_STREAM_OPERATORS
-
-/*****************************************************************************/
-QDataStream&
-operator << ( QDataStream& out, QTreeWidgetItem const * item )
-{
-  /*
-  qDebug() <<
-    "QDataStream& operator << ( QDataStream&, QTreeWidgetItem const * & );";
-  */
-
-#if DATA_STREAM_USE_TEMPLATE_OPERATORS
-  return operator << < QTreeWidgetItem >( out, item );
-
-#else // DATA_STREAM_USE_TEMPLATE_OPERATORS
-  DATA_STREAM_OUT( out, QTreeWidgetItem, item );
-
-  return out;
-
-#endif // DATA_STREAM_USE_TEMPLATE_OPERATORS
-}
-
-/*****************************************************************************/
-QDataStream&
-operator >>( QDataStream& in, QTreeWidgetItem * & item )
-{
-  /*
-  qDebug() <<
-    "QDataStream& operator >> ( QDataStream&, QTreeWidgetItem * & );";
-  */
-
-#if DATA_STREAM_USE_TEMPLATE_OPERATORS
-  return operator >> < QTreeWidgetItem >( in, item );
-
-#else // DATA_STREAM_USE_TEMPLATE_OPERATORS
-  DATA_STREAM_IN( in, QTreeWidgetItem, item );
-
-  return in;
-
-#endif // DATA_STREAM_USE_TEMPLATE_OPERATORS
-}
-
-#endif // TREE_WIDGET_ITEM_USE_STREAM_OPERATORS

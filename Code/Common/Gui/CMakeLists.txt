@@ -39,6 +39,7 @@ set( Common_Gui_SOURCES
   mvdSearchableTreeWidget.cxx
   mvdStatusBarWidget.cxx
   mvdTaskProgressDialog.cxx
+  mvdTreeWidget.cxx
   mvdTreeWidgetItem.cxx
 )
 
@@ -83,6 +84,7 @@ set( Common_Gui_HEADERS_MOC
   mvdSearchableTreeWidget.h
   mvdStatusBarWidget.h
   mvdTaskProgressDialog.h
+  mvdTreeWidget.h
   #mvdTreeWidgetItem.h
 )
 

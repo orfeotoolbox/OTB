@@ -197,33 +197,7 @@ private slots:
 // Declare TreeWidgetItem meta-type so it can be used for drag-and-drop
 // operations.
 Q_DECLARE_METATYPE( mvd::TreeWidgetItem );
-//
-// Pointer and const-pointer must be declared in order to be wrapped
-// by QVariant.
-Q_DECLARE_METATYPE( mvd::TreeWidgetItem* );
-Q_DECLARE_METATYPE( const mvd::TreeWidgetItem* );
 */
-//
-// Declare Qt tree-widget item pointer types so they can be wrapped by
-// QVariant.
-Q_DECLARE_METATYPE( QTreeWidgetItem* );
-
-
-#define TREE_WIDGET_ITEM_USE_STREAM_OPERATORS 1
-
-#if TREE_WIDGET_ITEM_USE_STREAM_OPERATORS
-
-/**
- */
-QDataStream&
-operator << ( QDataStream& out, QTreeWidgetItem const * item );
-
-/**
- */
-QDataStream&
-operator >>( QDataStream& in, QTreeWidgetItem * & item );
-
-#endif // !DATASTREAM_USE_TEMPLATE_OPERATORS
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
