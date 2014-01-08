@@ -384,7 +384,6 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
     ${OTB_SOURCE_DIR}/CMake/FindGettextLib.cmake
     ${OTB_SOURCE_DIR}/CMake/FindICUUC.cmake
     ${OTB_SOURCE_DIR}/CMake/FindLibKML.cmake
-    ${OTB_SOURCE_DIR}/CMake/FindLibLAS.cmake
     ${OTB_SOURCE_DIR}/CMake/FindLTDL.cmake
     ${OTB_SOURCE_DIR}/CMake/FindMercurial.cmake
     ${OTB_SOURCE_DIR}/CMake/FindMuParser.cmake
