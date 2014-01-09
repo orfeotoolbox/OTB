@@ -144,7 +144,7 @@ QMimeData*
 TreeWidget
 ::mimeData( const QList< QTreeWidgetItem* > items ) const
 {
-  qDebug() << this << "::mimeData(" << items << ")";
+  // qDebug() << this << "::mimeData(" << items << ")";
 
   QMimeData* mimeData = QTreeWidget::mimeData( items );
 
@@ -188,6 +188,69 @@ TreeWidget
   */
 
   return mimeData;
+}
+
+/*******************************************************************************/
+
+/*******************************************************************************/
+void 
+TreeWidget
+::dropEvent( QDropEvent* event )
+{
+  // qDebug() << this << "::dropEvent(" << event << ")";
+
+  if( event->mimeData()->hasFormat( "application/x-qtreewidgetitemptrlist" ) )
+    {
+    QByteArray byteArray(
+      event->mimeData()->data( "application/x-qtreewidgetitemptrlist" )
+    );
+
+    QDataStream stream( &byteArray, QIODevice::ReadOnly );
+
+    int count = 0;
+
+    //
+    // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
+
+    QTreeWidgetItem* item = NULL;
+
+    while( !stream.atEnd() )
+      {
+      QVariant variant;
+
+      stream >> variant;
+
+      // qDebug() << "Variant:" << variant;
+
+      // http://www.qtfr.org/viewtopic.php?id=9630
+
+      item = variant.value< QTreeWidgetItem* >();
+
+      // qDebug()
+      //   << "Item (variant):"
+      //   << varItem
+      //   << varItem->text( 0 )
+      //   << varItem->text( 1 )
+      //   << varItem->text( 2 )
+      //   << varItem->parent();
+
+      switch( defaultDropAction() )
+        {
+        case Qt::MoveAction:
+          emit ItemMoved( item, count );
+          break;
+
+        default:
+          break;
+        }
+
+      ++ count;
+      }
+
+    // qDebug() << count2 << "items.";
+    }
+
+  QTreeWidget::dropEvent( event );
 }
 
 /*******************************************************************************/

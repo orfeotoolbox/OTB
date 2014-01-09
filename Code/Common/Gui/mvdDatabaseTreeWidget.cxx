@@ -109,7 +109,7 @@ void
 DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 {
 #if BYPASS_MOUSE_EVENTS
-  QTreeWidget::mouseMoveEvent( event );
+  TreeWidget::mouseMoveEvent( event );
 
 #else // BYPASS_MOUSE_EVENTS
   if ( !(event->buttons() &  Qt::LeftButton ))
@@ -146,14 +146,14 @@ void
 DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 {
 #if BYPASS_MOUSE_EVENTS
-  QTreeWidget::mousePressEvent( event );
+  TreeWidget::mousePressEvent( event );
 
 #else // BYPASS_MOUSE_EVENTS
   if (event->button() == Qt::LeftButton)
      {
      //
      // superclass event handling
-     QTreeWidget::mousePressEvent(event);
+     TreeWidget::mousePressEvent(event);
      
      // remember start drag position
      m_StartDragPosition = event->pos();
@@ -166,11 +166,11 @@ DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 void
 DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-  qDebug() << this << "::dragEnterEvent(" << event << ") :"
-           << event->mimeData()->formats();
+  // qDebug() << this << "::dragEnterEvent(" << event << ") :"
+  //          << event->mimeData()->formats();
 
 #if BYPASS_DRAG_AND_DROP_EVENTS
-  QTreeWidget::dragEnterEvent( event );
+  TreeWidget::dragEnterEvent( event );
 
 #else // BYPASS_DRAG_AND_DROP_EVENTS
   if (event->mimeData()->hasUrls()/*("text/uri-list")*/)
@@ -188,7 +188,7 @@ void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
   //          << event->mimeData()->formats();
 
 #if BYPASS_DRAG_AND_DROP_EVENTS
-  QTreeWidget::dragMoveEvent( event );
+  TreeWidget::dragMoveEvent( event );
 
 #else // BYPASS_DRAG_AND_DROP_EVENTS
   //
@@ -208,15 +208,18 @@ void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
 void 
 DatabaseTreeWidget::dropEvent(QDropEvent *event)
 {
-  qDebug() << this << "::dropEvent(" << event << ")";
+  // qDebug() << this << "::dropEvent(" << event << ")";
 
 #if BYPASS_DRAG_AND_DROP_EVENTS
+  /*
   if( event->mimeData()->hasFormat( "application/x-qabstractitemmodeldatalist" ) )
     {
     QByteArray byteArray(
       event->mimeData()->data( "application/x-qabstractitemmodeldatalist" )
     );
+
     QDataStream stream( &byteArray, QIODevice::ReadOnly );
+
     int count = 0;
 
     //
@@ -246,25 +249,29 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
 
     qDebug() << count << "items.";
     }
+  */
 
+  /*
   if( event->mimeData()->hasFormat( "application/x-qtreewidgetitemptrlist" ) )
     {
-    QByteArray byteArray2(
+    QByteArray byteArray(
       event->mimeData()->data( "application/x-qtreewidgetitemptrlist" )
     );
-    QDataStream stream2( &byteArray2, QIODevice::ReadOnly );
-    int count2 = 0;
+
+    QDataStream stream( &byteArray, QIODevice::ReadOnly );
+
+    int count = 0;
 
     //
     // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
 
     QTreeWidgetItem* varItem = NULL;
 
-    while( !stream2.atEnd() )
+    while( !stream.atEnd() )
       {
       QVariant variant;
 
-      stream2 >> variant;
+      stream >> variant;
 
       qDebug() << "Variant:" << variant;
 
@@ -280,13 +287,14 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
         << varItem->text( 2 )
         << varItem->parent();
 
-      ++ count2;
+      ++ count;
       }
 
-    qDebug() << count2 << "items.";
+    qDebug() << count << "items.";
     }
+  */
 
-  QTreeWidget::dropEvent( event );
+  TreeWidget::dropEvent( event );
 
 #else // BYPASS_DRAG_AND_DROP_EVENTS
 
@@ -324,7 +332,7 @@ DatabaseTreeWidget::dropMimeData( QTreeWidgetItem* parent,
     << data << ","
     << action << ")";
 
-  bool result = QTreeWidget::dropMimeData( parent, index, data, action );
+  bool result = TreeWidget::dropMimeData( parent, index, data, action );
 
   qDebug() << "->" << result;
 

@@ -107,7 +107,10 @@ public slots:
 // Signals.
 signals:
 
- 
+  /**
+   */
+  void ItemMoved( QTreeWidgetItem* item, int index =0 );
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
@@ -120,6 +123,8 @@ protected:
     virtual QStringList mimeTypes() const;
 
     virtual QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const;
+
+    virtual void dropEvent( QDropEvent* event );
 
 //
 // Protected attributes.
