@@ -73,9 +73,10 @@ namespace mvd
         size                                                            \
       );                                                                \
                                                                         \
-    qDebug()                                                            \
-      << "Written" << count << "byte(s) as" << typeid( T ).name()       \
-      << "address" << pointer << "size" << size;                        \
+    if( false )                                                         \
+      qDebug()                                                          \
+        << "Written" << count << "byte(s) as" << typeid( T ).name()     \
+        << "address" << pointer << "size" << size;                      \
                                                                         \
     if( static_cast< size_t >( count )!=size )                          \
       throw                                                             \
@@ -97,9 +98,10 @@ namespace mvd
       istream.readRawData(                                              \
         reinterpret_cast< char * >( &pointer ), size );                 \
                                                                         \
-    qDebug()                                                            \
-      << "Read" << count << "byte(s) as" << typeid( T ).name()          \
-      << "address" << pointer << "size" << size;                        \
+    if( false )                                                         \
+      qDebug()                                                          \
+        << "Read" << count << "byte(s) as" << typeid( T ).name()        \
+        << "address" << pointer << "size" << size;                      \
                                                                         \
     if( static_cast< size_t >( count )!=size )                          \
       throw                                                             \
