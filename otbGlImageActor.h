@@ -80,6 +80,7 @@ public:
   itkGetMacro(BlueIdx,unsigned int);
 
   itkGetMacro(NumberOfComponents,unsigned int);
+  itkGetMacro(CurrentResolution,unsigned int);
 
   PointType ViewportToImageTransform(const PointType & in, bool physical = true) const;
   

@@ -22,6 +22,7 @@
 #include "otbViewSettings.h"
 #include "otbDEMHandler.h"
 #include "otbStandardShader.h"
+#include <GL/freeglut.h>
 
 
 class Manipulator
@@ -638,6 +639,8 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
+  glutInit(&argc,argv);
+
   glfwSetErrorCallback(error_callback);
 
 // Open a window and create its OpenGL context
@@ -740,6 +743,54 @@ int main(int argc, char * argv[])
        }
 
      glView->AfterRendering();
+
+     // Draw hud
+     
+     double centerx =0;
+     double centery = 3*height/4;
+
+     double vpcx,vpcy;
+
+     glView->GetSettings()->ScreenToViewPortTransform(centerx,centery,vpcx,vpcy);
+
+     double posx, posy, vpx, vpy;
+     glfwGetCursorPos(window,&posx,&posy);
+     glView->GetSettings()->ScreenToViewPortTransform(posx,posy,vpx,vpy);
+     
+     std::vector<std::string> renderingOrder = glView->GetRenderingOrder();
+
+     std::ostringstream oss;
+     
+     for(std::vector<std::string>::iterator it = renderingOrder.begin();
+         it!=renderingOrder.end();++it)
+       {
+      
+       otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(glView->GetActor(*it).GetPointer());
+       otb::GlImageActor::PointType pin,poutphys,poutidx;
+       pin[0]=vpx;
+       pin[1]=vpy;
+       poutphys = currentActor->ViewportToImageTransform(pin,true);
+       poutidx = currentActor->ViewportToImageTransform(pin,false);
+       otb::GlImageActor::PixelType pixel;
+       bool pixelAvail = currentActor->GetPixelFromViewport(pin,pixel);
+
+       oss<<(*it)<<", resolution: "<<currentActor->GetCurrentResolution()<<std::endl;
+       oss<<"Index: ("<<poutidx[0]<<", "<<poutidx[1]<<"), phys: "<<poutphys[0]<<", "<<poutphys[1]<<")";
+       if(pixelAvail)
+         {
+         oss<<", pixel: ["<<pixel[0];
+         for(unsigned int i = 1; i<pixel.Size();++i)
+           {
+           oss<<", "<<pixel[i];
+           }
+         oss<<"]";
+         }
+       oss<<std::endl;
+       }
+
+     glColor3f(0.0f,1.0f,0.0f);
+     glRasterPos2f(vpcx,vpcy);
+     glutBitmapString(GLUT_BITMAP_8_BY_13,(unsigned char *) oss.str().c_str());
 
     // Swap buffers
     glfwSwapBuffers(window);

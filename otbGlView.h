@@ -73,6 +73,8 @@ public:
   itkGetObjectMacro(Settings,ViewSettings);
   itkGetConstObjectMacro(Settings,ViewSettings);
 
+  itkGetMacro(RenderingOrder,StringVectorType);
+
   // This will rotate the rendering order (without modifying the order)
   void RotateRenderingOrder(bool down = false);
 

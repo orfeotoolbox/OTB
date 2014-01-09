@@ -85,6 +85,8 @@ public:
   // Retrieve the current Viewport extent
   void GetViewportExtent(double & ulx, double & uly, double & lrx, double & lry) const;
   
+  PointType GetViewportCenter() const;
+
   void ScreenToViewPortTransform(const double & xscreen, const double & yscreen, double & xvp, double & yvp) const;
 
   void Zoom(const PointType & zoomCenter,double scale = 1.1);

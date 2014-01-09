@@ -43,7 +43,7 @@ void ViewSettings::GetViewportExtent(double & ulx, double & uly, double & lrx, d
 void ViewSettings::ScreenToViewPortTransform(const double & xscreen, const double & yscreen, double & xvp, double & yvp) const
 {
   xvp = m_Origin[0] + xscreen * m_Spacing[0];
-  yvp = m_Origin[1] + (m_ViewportSize[1] - yscreen) * m_Spacing[1];
+  yvp = m_Origin[1] + yscreen * m_Spacing[1];
 }
 
 void ViewSettings::Zoom(const PointType & zoomCenter,double scale)
@@ -59,6 +59,14 @@ void ViewSettings::Center(const PointType & center)
 {
   m_Origin[0] = center[0] - m_Spacing[0]*m_ViewportSize[0];
   m_Origin[1] = center[1] - m_Spacing[1]*m_ViewportSize[1];
+}
+
+ViewSettings::PointType ViewSettings::GetViewportCenter() const
+{
+  PointType center = m_Origin;
+  center[0]+=m_Spacing[0]*m_ViewportSize[0];
+  center[1]+=m_Spacing[1]*m_ViewportSize[1];
+  return center;
 }
 
 }
