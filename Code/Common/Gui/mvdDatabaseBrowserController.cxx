@@ -109,6 +109,15 @@ DatabaseBrowserController
   //
   QObject::connect(
     widget->GetDatabaseTreeWidget(), 
+    SIGNAL( ItemMoved( QTreeWidgetItem*, int ) ),
+    // to:
+    this,
+    SLOT( OnItemMoved( QTreeWidgetItem*, int ) )
+    );
+
+  //
+  QObject::connect(
+    widget->GetDatabaseTreeWidget(), 
     SIGNAL( DatasetToDeleteSelected( const QString& ) ),
     // to:
     this,
@@ -156,6 +165,14 @@ DatabaseBrowserController
     SLOT( OnCurrentDatasetChanged( const QString&, const QString& ) )
   );
 
+  QObject::disconnect(
+    model,
+    SIGNAL( SelectedDatasetModelChanged( DatasetModel* ) ),
+    // from:
+    this,
+    SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
+  );
+
   //
   QObject::disconnect(
     this, 
@@ -166,12 +183,46 @@ DatabaseBrowserController
     );
 
   //
+  QObject::connect(
+    widget->GetDatabaseTreeWidget(), 
+    SIGNAL( ItemMoved( QTreeWidgetItem*, int ) ),
+    // to:
+    this,
+    SLOT( OnItemMoved( QTreeWidgetItem*, int ) )
+    );
+
+  //
   QObject::disconnect(
     widget->GetDatabaseTreeWidget(), 
     SIGNAL( DatasetToDeleteSelected( const QString & )  ),
     // to:
     this, 
     SLOT( OnDatasetToDeleteSelected(const QString& ) )
+    );
+
+  //
+  QObject::disconnect(
+    widget->GetDatabaseTreeWidget(), 
+    SIGNAL( DatasetRenamed( const QString &, const QString & )  ),
+    // to:
+    model,
+    SLOT( OnDatasetRenamed(const QString&, const QString & ) )
+    );
+
+  //
+  QObject::disconnect(
+    model,
+    SIGNAL( DatabaseChanged() ),
+    this,
+    SLOT( RefreshWidget() )
+    );
+
+  //
+  QObject::disconnect(
+    widget->GetDatabaseTreeWidget(),
+    SIGNAL( ImageDropped(const QString &) ),
+    this,
+    SLOT( OnImageDropped(const QString &) )
     );
 }
 
@@ -644,6 +695,14 @@ DatabaseBrowserController
     return;
 
   databaseModel->RemoveDatasetModel( hash );
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::OnItemMoved( QTreeWidgetItem* item, int index )
+{
+  qDebug() << this << "::OnItemMoved(" << item << "," << index << ");";
 }
 
 } // end namespace 'mvd'

@@ -193,6 +193,10 @@ private slots:
    */
   void OnDatasetToDeleteSelected( const QString& hash );
 
+  /**
+   */
+  void OnItemMoved( QTreeWidgetItem* item, int index );
+
   //
   // AbstractModelController overloads.
 
