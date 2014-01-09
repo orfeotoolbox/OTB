@@ -166,8 +166,7 @@ DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 void
 DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-  // qDebug() << this << "::dragEnterEvent(" << event << ") :"
-  //          << event->mimeData()->formats();
+  qDebug() << this << "::dragEnterEvent(" << event << ")";
 
 #if BYPASS_DRAG_AND_DROP_EVENTS
   TreeWidget::dragEnterEvent( event );
@@ -184,8 +183,7 @@ DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
 /*******************************************************************************/
 void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-  // qDebug() << this << "::dragMoveEvent(" << event << ") :"
-  //          << event->mimeData()->formats();
+  qDebug() << this << "::dragMoveEvent(" << event << ")";
 
 #if BYPASS_DRAG_AND_DROP_EVENTS
   TreeWidget::dragMoveEvent( event );

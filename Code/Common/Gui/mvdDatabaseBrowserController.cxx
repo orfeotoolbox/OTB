@@ -109,10 +109,10 @@ DatabaseBrowserController
   //
   QObject::connect(
     widget->GetDatabaseTreeWidget(), 
-    SIGNAL( ItemMoved( QTreeWidgetItem*, int ) ),
+    SIGNAL( ItemMoved( QTreeWidgetItem* ) ),
     // to:
     this,
-    SLOT( OnItemMoved( QTreeWidgetItem*, int ) )
+    SLOT( OnItemMoved( QTreeWidgetItem* ) )
     );
 
   //
@@ -185,10 +185,10 @@ DatabaseBrowserController
   //
   QObject::connect(
     widget->GetDatabaseTreeWidget(), 
-    SIGNAL( ItemMoved( QTreeWidgetItem*, int ) ),
+    SIGNAL( ItemMoved( QTreeWidgetItem* ) ),
     // to:
     this,
-    SLOT( OnItemMoved( QTreeWidgetItem*, int ) )
+    SLOT( OnItemMoved( QTreeWidgetItem* ) )
     );
 
   //
@@ -700,9 +700,46 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::OnItemMoved( QTreeWidgetItem* item, int index )
+::OnItemMoved( QTreeWidgetItem* item )
 {
-  qDebug() << this << "::OnItemMoved(" << item << "," << index << ");";
+  // Trace.
+  qDebug() << this << "::OnItemMoved(" << item << ");";
+
+  // Check inputs.
+  assert( item!=NULL );
+
+
+  // Access item and parent.
+  assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
+  TreeWidgetItem* childItem = dynamic_cast< TreeWidgetItem* >( item );
+
+  assert( item->parent()==dynamic_cast< TreeWidgetItem* >( item->parent() ) );
+  TreeWidgetItem* parentItem = dynamic_cast< TreeWidgetItem* >( item->parent() );
+
+
+  // Check item type.
+  assert( childItem->GetType()==TreeWidgetItem::ITEM_TYPE_LEAF );
+
+
+  // Access model & database.
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
+  assert( model->GetDatabaseConnection() );
+  DatabaseConnection* db = model->GetDatabaseConnection();
+
+
+  qDebug()
+    << "dataset_node_membership("
+    << childItem->GetId().toLongLong()
+    << parentItem->GetId().toLongLong()
+    << ")";
+
+  // Update database.
+  db->UpdateDatasetNodeMembership(
+    childItem->GetId().toLongLong(),
+    parentItem->GetId().toLongLong()
+  );
 }
 
 } // end namespace 'mvd'

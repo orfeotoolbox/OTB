@@ -169,6 +169,7 @@ public:
 
   //
   // Dataset related methods.
+  //
 
   /**
    */
@@ -186,10 +187,15 @@ public:
 
   /**
    */
+  void UpdateDatasetNodeMembership( SqlId id, SqlId nodeId );
+
+  /**
+   */
   DatasetMap ListAllDatasets() const;
 
   //
   // Tags and nodes related methods.
+  //
 
   /**
    */

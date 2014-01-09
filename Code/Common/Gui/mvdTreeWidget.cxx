@@ -199,6 +199,10 @@ TreeWidget
 {
   // qDebug() << this << "::dropEvent(" << event << ")";
 
+  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+
+  QTreeWidgetItemList items;
+
   if( event->mimeData()->hasFormat( "application/x-qtreewidgetitemptrlist" ) )
     {
     QByteArray byteArray(
@@ -225,6 +229,9 @@ TreeWidget
       // http://www.qtfr.org/viewtopic.php?id=9630
 
       item = variant.value< QTreeWidgetItem* >();
+      assert( item!=NULL );
+
+      items.push_back( item );
 
       // qDebug()
       //   << "Item (variant):"
@@ -234,16 +241,6 @@ TreeWidget
       //   << varItem->text( 2 )
       //   << varItem->parent();
 
-      switch( defaultDropAction() )
-        {
-        case Qt::MoveAction:
-          emit ItemMoved( item, count );
-          break;
-
-        default:
-          break;
-        }
-
       ++ count;
       }
 
@@ -251,6 +248,21 @@ TreeWidget
     }
 
   QTreeWidget::dropEvent( event );
+
+  for( QTreeWidgetItemList::const_iterator it = items.begin();
+       it!=items.end();
+       ++it )
+    {
+      switch( defaultDropAction() )
+        {
+        case Qt::MoveAction:
+          emit ItemMoved( *it );
+          break;
+
+        default:
+          break;
+        }
+    }
 }
 
 /*******************************************************************************/

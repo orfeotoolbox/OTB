@@ -424,6 +424,17 @@ DatabaseConnection
 }
 
 /*****************************************************************************/
+void
+DatabaseConnection
+::UpdateDatasetNodeMembership( SqlId id, SqlId nodeId )
+{
+  ExecuteQuery(
+    "UPDATE dataset_node_membership SET node_id=:node_id WHERE dataset_id=:id;",
+    QVariantList() << nodeId << id
+  );
+}
+
+/*****************************************************************************/
 DatabaseConnection::DatasetMap
 DatabaseConnection
 ::ListAllDatasets() const

@@ -109,7 +109,7 @@ signals:
 
   /**
    */
-  void ItemMoved( QTreeWidgetItem* item, int index =0 );
+  void ItemMoved( QTreeWidgetItem* item );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

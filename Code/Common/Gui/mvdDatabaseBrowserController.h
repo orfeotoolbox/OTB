@@ -195,7 +195,7 @@ private slots:
 
   /**
    */
-  void OnItemMoved( QTreeWidgetItem* item, int index );
+  void OnItemMoved( QTreeWidgetItem* item );
 
   //
   // AbstractModelController overloads.
