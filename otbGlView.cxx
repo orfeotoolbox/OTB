@@ -79,7 +79,7 @@ void GlView::BeforeRendering()
   
   m_Settings->GetViewportExtent(ulx,uly,lrx,lry);
 
-  glOrtho(ulx, lrx, uly, lry, -1, 1);
+  glOrtho(ulx, lrx, lry, uly, -1, 1);
   
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();

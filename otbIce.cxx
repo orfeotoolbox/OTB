@@ -215,7 +215,7 @@ public:
     if(m_Drag)
       {
       m_DeltaDragX = posx - m_StartDragX;
-      m_DeltaDragY = posy - m_StartDragY;
+      m_DeltaDragY = m_StartDragY-posy;
 
       otb::ViewSettings::PointType origin;
       origin[0]=m_OriginDragX-m_DeltaDragX*m_ViewSettings->GetSpacing()[0];
@@ -271,13 +271,13 @@ public:
 
     if(key == GLFW_KEY_UP && action == GLFW_PRESS)
       {
-      origin[1]+=deltay; 
+      origin[1]-=deltay; 
       m_ViewSettings->SetOrigin(origin);
       }
 
     if(key == GLFW_KEY_DOWN && action == GLFW_PRESS)
       {
-      origin[1]-=deltay; 
+      origin[1]+=deltay; 
       m_ViewSettings->SetOrigin(origin);
       }
 
