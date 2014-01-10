@@ -74,5 +74,5 @@ SET(BUILD_SHARED_LIBS ON)
 ADD_LIBRARY(OTBIce otbViewSettings.cxx otbGlView.cxx otbGlActor.cxx otbGlImageActor.cxx otbFragmentShaderRegistry.cxx otbFragmentShader.cxx otbStandardShader.cxx)
 TARGET_LINK_LIBRARIES(OTBIce OTBIO ${OPENGL_LIBRARY} ${GLEW_LIBRARY})
 
-ADD_EXECUTABLE(otbIceClean otbIceClean.cxx otbIceViewer.cxx)
-TARGET_LINK_LIBRARIES(otbIceClean OTBIce ${GLFW_LIBRARY} ${GLUT_LIBRARY})
+ADD_EXECUTABLE(otbIce otbIce.cxx otbIceViewer.cxx)
+TARGET_LINK_LIBRARIES(otbIce OTBIce ${GLFW_LIBRARY} ${GLUT_LIBRARY})
