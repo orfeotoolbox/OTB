@@ -178,85 +178,6 @@ DatabaseBrowserWidget
 
   // remember dataset list
   m_DatasetList = list;
-
-  // Fill Tree
-  FillTree();
-}
-
-/*******************************************************************************/
-void
-DatabaseBrowserWidget
-::FillTree()
-{
-  // get the currentItem Id if any selected.
-  // since all the TreeWidgetItem are deleted next, need to remember
-  // it in order to set it back
-  QString currentItemHash;
-
-  TreeWidgetItem* selectedItem = 
-    dynamic_cast< TreeWidgetItem* >(
-      GetDatabaseTreeWidget()->currentItem()
-    );
-
-  if (selectedItem)
-    {
-    currentItemHash = selectedItem->GetHash();
-    }
-
-  // TODO: Get initial algorithm back (synchronizes two ordered
-  // sequences using QTreeWidget::findItems<>().
-  //
-  // Because:
-  // 1. removing items can provoque selection changes;
-  // 2. it's needed to re-emit signal to keep current selection
-  // active.
-  //
-  // Initial algorithm took care of current-selection and was
-  // optimized to not delete useful items which must be inserted
-  // again.
-
-  // Remove all previously stored dataset child items.
-  while( m_DatasetRootItem->childCount()>0 )
-    {
-    // Remove dataset child item and reference it.
-    QTreeWidgetItem* child = m_DatasetRootItem->takeChild( 0 );
-
-    // Delete it from memory.
-    delete child;
-    child = NULL;
-    }
-
-  // Append full dataset list...
-  for( StringPairListType::const_iterator it( m_DatasetList.begin() );
-       it!=m_DatasetList.end();
-       ++it )
-    {
-    // current alias
-    const StringPairListType::value_type::first_type& alias = it->first;
-    const StringPairListType::value_type::second_type& hash = it->second;
-
-    TreeWidgetItem* item =
-      new TreeWidgetItem(
-        m_DatasetRootItem,
-        alias,
-        QVariant(),
-        QStringList( hash )
-      );
-
-    // Item is visible is search-text is empty or if alias contains
-    // search-text.
-    item->setHidden(
-      !m_SearchText.isEmpty() &&
-      !item->text( 0 ).contains( m_SearchText, Qt::CaseInsensitive )
-    );
-
-    // was it the selected item ?
-    if( currentItemHash == hash )
-      {
-      // ...add this child item as currentItem
-      GetDatabaseTreeWidget()->setCurrentItem( item );
-      }
-    }
 }
 
 /*****************************************************************************/
@@ -269,6 +190,8 @@ DatabaseBrowserWidget
   m_UI->databaseTreeWidget->headerItem()->setText( 1, "Id" );
   m_UI->databaseTreeWidget->headerItem()->setText( 2, "Info" );
 
+// Conditionaly display some usefull columns.
+// #if (!defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
 #if (!defined( _DEBUG ) && 1) || 0
   m_UI->databaseTreeWidget->setColumnHidden( 1, true );
   m_UI->databaseTreeWidget->setColumnHidden( 2, true );
@@ -388,10 +311,6 @@ DatabaseBrowserWidget
   // get the search text
   m_SearchText = search;
 
-#if 0
-  // fill the tree with the application
-  FillTree();  
-#else
   if( m_DatasetRootItem==NULL )
     return;
 
@@ -407,7 +326,6 @@ DatabaseBrowserWidget
       !item->text( 0 ).contains( search, Qt::CaseInsensitive )
     );
     }
-#endif
 }
 
 } // end namespace 'mvd'
