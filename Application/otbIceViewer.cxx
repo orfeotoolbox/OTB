@@ -288,7 +288,7 @@ void IceViewer::DrawHud()
   double x,y;
 
   glEnable(GL_BLEND);
-  glColor4f(0.,0.,0.,0.5);
+  glColor4f(0.,0.,0.,0.75);
   glBegin (GL_QUADS);
   m_View->GetSettings()->ScreenToViewPortTransform(hudposx- 5,hudposy-5-13,x,y);
   glVertex2f(x,y);
@@ -301,7 +301,7 @@ void IceViewer::DrawHud()
   glEnd ();
   glDisable(GL_BLEND);
 
-  glColor3f(0.0f,1.0f,0.0f);
+  glColor3f(1.0f,1.0f,1.0f);
   m_View->GetSettings()->ScreenToViewPortTransform(hudposx,hudposy,hudvpx,hudvpy);
   glRasterPos2f(hudvpx,hudvpy);
   glutBitmapString(GLUT_BITMAP_8_BY_13,(unsigned char *) oss.str().c_str());
