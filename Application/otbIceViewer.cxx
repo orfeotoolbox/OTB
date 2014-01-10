@@ -56,7 +56,6 @@ void IceViewer::AddImage(const std::string & fname, const std::string & name)
   actor->Initialize(fname);
   actor->SetVisible(true);
 
-  // TODO: This part should disappear
   otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(actor->GetShader());
   double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;
 
@@ -663,12 +662,43 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
      otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
      currentActor->SetGreenIdx(1+(currentActor->GetGreenIdx())%currentActor->GetNumberOfComponents());
      }
- if(key == GLFW_KEY_B && action == GLFW_PRESS)
+   if(key == GLFW_KEY_B && action == GLFW_PRESS)
      {
      otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
      currentActor->SetBlueIdx(1+(currentActor->GetBlueIdx())%currentActor->GetNumberOfComponents());
      }
 
+   if(key == GLFW_KEY_F && action == GLFW_PRESS)
+     {
+     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+     otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+
+     double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;     
+     currentActor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue);
+     
+     shader->SetMinRed(minRed);
+     shader->SetMinGreen(minGreen);
+     shader->SetMinBlue(minBlue);
+     shader->SetMaxRed(maxRed);
+     shader->SetMaxGreen(maxGreen);
+     shader->SetMaxBlue(maxBlue);
+     }
+
+if(key == GLFW_KEY_V && action == GLFW_PRESS)
+     {
+     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+     otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+
+     double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;     
+     currentActor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue,false);
+     
+     shader->SetMinRed(minRed);
+     shader->SetMinGreen(minGreen);
+     shader->SetMinBlue(minBlue);
+     shader->SetMaxRed(maxRed);
+     shader->SetMaxGreen(maxGreen);
+     shader->SetMaxBlue(maxBlue);
+     }
    
    // // Change viewport geometry to current actor
    // if(key == GLFW_KEY_P && action == GLFW_PRESS)

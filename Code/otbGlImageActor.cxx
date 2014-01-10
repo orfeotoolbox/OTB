@@ -700,7 +700,7 @@ void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double 
     // Retrieve all tiles
     for(TileVectorType::iterator it = m_LoadedTiles.begin();it!=m_LoadedTiles.end();++it)
     {
-    itk::ImageRegionConstIterator<VectorImageType> imIt(it->m_Image,it->m_ImageRegion);
+    itk::ImageRegionConstIterator<VectorImageType> imIt(it->m_Image,it->m_Image->GetLargestPossibleRegion());
     for(imIt.GoToBegin();!imIt.IsAtEnd();++imIt)
       {
       listSample->PushBack(imIt.Get());
