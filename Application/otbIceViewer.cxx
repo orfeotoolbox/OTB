@@ -215,9 +215,9 @@ void IceViewer::DrawHud()
     
     oss<<(currentActor->GetVisible()?"+ ":"- ");
     oss<<((*it)==m_ReferenceActor?"*":" ");
-    oss<<((*it)==m_SelectedActor?"{":" ");
+    oss<<((*it)==m_SelectedActor?"[":" ");
     oss<<(*it);
-    oss<<((*it)==m_SelectedActor?"}":" ");
+    oss<<((*it)==m_SelectedActor?"]":" ");
     oss<<((*it)==m_ReferenceActor?"*":" ");
     oss<<std::endl;
 
@@ -319,11 +319,37 @@ void IceViewer::DrawHelp()
 
   oss<<"This is ice viewer help page. Press ESC key to exit."<<std::endl;
   oss<<"Here are the main available actions:"<<std::endl;
-  oss<<"- Move with mouse left button drag & drop or keyboard arrows"<<std::endl;
-  oss<<"- Zoom with CTRL + mouse wheel"<<std::endl;
-  oss<<"... exhaustive list"<<std::endl;
+  oss<<std::endl;
 
-  
+  oss<<"General: "<<std::endl;
+  oss<<"- Show/hide image list with D key"<<std::endl;
+  oss<<"- Exit with ESC key"<<std::endl;
+  oss<<std::endl;
+    
+  oss<<"Navigation:"<<std::endl;
+  oss<<"- Move with mouse left button drag & drop or keyboard arrows"<<std::endl;
+  oss<<"- Zoom in/out with CTRL + mouse wheel"<<std::endl;
+  oss<<std::endl;
+
+  oss<<"Multiple images handling:"<<std::endl;
+  oss<<"- Rotate rendering order with mouse wheel (order displayed in image list)"<<std::endl;
+  oss<<"- Change selected image with PAGE UP / PAGE DOWN (note that selected dataset is highlighted with [ ]"<<std::endl;
+  oss<<"- Show/hide image dataset with space bar"<<std::endl;
+  oss<<"- Note that all images are reprojected in the first loaded image geometry (highligthed with * *)"<<std::endl;
+  oss<<std::endl;
+
+  oss<<"Color range:"<<std::endl;
+  oss<<"- Rotate red/green/blue channel of selected image with R, G and B keys"<<std::endl;
+  oss<<"- Reset color range of selected image to 2% histogram clipping of full image with F key"<<std::endl;
+  oss<<"- Reset color range of selected image to 2% histogram clipping of current area with G key"<<std::endl;
+  oss<<"- Hold Right MAJ key + mouse wheel to adjust gamma correction of selected image"<<std::endl;
+  oss<<"- Hol Right CTRM key + mouse wheel to adjust transparency of selected image"<<std::endl;
+  oss<<std::endl;
+
+  oss<<"Shaders of selected image:"<<std::endl;
+  oss<<"- Switch to standard shader with S key. In this mode, use Left SHIFT + mouse wheel and Left ALT + mouse wheel to adjust contrast"<<std::endl;
+  oss<<"- Switch to local contrast enhancement with L key. In this mode, use Right SHIFT + mouse wheel to adjust gain and Left ALT + mouse wheel to adjust circle radius"<<std::endl;
+  oss<<"- Switch to local transparency with U key. "<<std::endl;
   
   // Find the size of the help
   std::string help_string = oss.str();

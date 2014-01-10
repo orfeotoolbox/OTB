@@ -29,7 +29,7 @@ int main(int argc, char * argv[])
 {
   if(argc < 2)
     {
-    std::cerr<<"Usage: "<<argv[0]<<" img1 [img2 img3 img4 img5]"<<std::endl<<std::endl;
+    std::cerr<<"Usage: "<<argv[0]<<" img1 ... imgN"<<std::endl<<std::endl;
     
     return EXIT_FAILURE;
     }
@@ -60,6 +60,8 @@ int main(int argc, char * argv[])
     {
     viewer->AddImage(argv[i],argv[i]);
     }
+
+  std::cout<<"Press F1 for help"<<std::endl;
 
   viewer->Start();
   
