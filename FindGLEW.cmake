@@ -33,7 +33,7 @@ ELSE (WIN32)
 
 	# Prefer the static library.
 	FIND_LIBRARY( GLEW_LIBRARY
-		NAMES libGLEW.a GLEW
+		NAMES libGLEW.so GLEW
 		PATHS
 		/usr/lib64
 		/usr/lib
