@@ -73,7 +73,12 @@ public:
   itkGetObjectMacro(Settings,ViewSettings);
   itkGetConstObjectMacro(Settings,ViewSettings);
 
-  itkGetMacro(RenderingOrder,StringVectorType);
+  //comment this macro (not compiling with OTB 3.X)
+  // Get Rendering order
+  StringVectorType GetRenderingOrder() const
+	{
+    return m_RenderingOrder;
+	};
 
   // This will rotate the rendering order (without modifying the order)
   void RotateRenderingOrder(bool down = false);
