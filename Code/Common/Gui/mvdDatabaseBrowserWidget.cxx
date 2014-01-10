@@ -264,8 +264,6 @@ void
 DatabaseBrowserWidget
 ::SetupUI()
 {
-  setAcceptDrops( true );
-
   //
   // Header columns.
   m_UI->databaseTreeWidget->headerItem()->setText( 1, "Id" );

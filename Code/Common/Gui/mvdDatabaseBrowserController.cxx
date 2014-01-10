@@ -729,11 +729,13 @@ DatabaseBrowserController
   DatabaseConnection* db = model->GetDatabaseConnection();
 
 
+  /*
   qDebug()
     << "dataset_node_membership("
     << childItem->GetId().toLongLong()
     << parentItem->GetId().toLongLong()
     << ")";
+  */
 
   // Update database.
   db->UpdateDatasetNodeMembership(
