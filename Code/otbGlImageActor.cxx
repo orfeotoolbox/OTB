@@ -25,6 +25,9 @@
 #include <GL/glext.h>
 #include "otbStandardShader.h"
 
+#include "itkListSample.h"
+#include "otbListSampleToHistogramListGenerator.h"
+
 namespace otb
 {
 
@@ -79,6 +82,8 @@ void GlImageActor::Initialize(const std::string & filename)
   m_FileReader = ReaderType::New();
   m_FileReader->SetFileName(m_FileName);
   m_FileReader->UpdateOutputInformation();
+
+  m_LargestRegion = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
   if(m_FileReader->GetOutput()->GetNumberOfComponentsPerPixel() < 3)
     {
@@ -629,5 +634,92 @@ void GlImageActor::UpdateTransforms()
     }
   m_ViewportToImageTransform->InstanciateTransform();
   m_ImageToViewportTransform->InstanciateTransform();
+}
+
+void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double & minGreen, double & maxGreen, double & minBlue, double & maxBlue, bool full, double lcp, double hcp)
+{
+  typedef itk::Statistics::ListSample<VectorImageType::PixelType> ListSampleType;
+  typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
+  typedef ListSampleToHistogramListGenerator<ListSampleType, VectorImageType::InternalPixelType, DFContainerType> HistogramsGeneratorType;
+
+  ListSampleType::Pointer listSample = ListSampleType::New();
+  listSample->SetMeasurementVectorSize(3);
+  
+  if(full)
+    {
+    // Retrieve the lowest resolution
+    ReaderType::Pointer reader = ReaderType::New();
+    std::ostringstream extFilename;
+
+    unsigned int nb_pixel_ref = 500 * 500;
+
+    // Compute the diff and keep the index that minimize the distance
+    unsigned int resol = 0;
+    bool found = false;
+
+    for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
+         it != m_AvailableResolutions.end() && !found; ++it,++resol)
+      {
+      unsigned int factor = 1<<(*it);
+      unsigned int sizex = m_LargestRegion.GetSize()[0]/factor;
+      unsigned int sizey = m_LargestRegion.GetSize()[1]/factor;
+
+      unsigned int nb_pixel = sizex * sizey;
+      if(nb_pixel<nb_pixel_ref)
+        {
+        found=true;
+        break;
+        }
+      }
+
+    // If no resolution can give less than nb_pixel_ref pixels, take
+    // the lowest
+    if(!found)
+      {
+      resol = m_AvailableResolutions.size()-1;
+      }
+
+    extFilename<<m_FileName<<"?&resol="<<m_AvailableResolutions[resol];
+    reader->SetFileName(extFilename.str());
+
+    ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
+    extract->SetInput(reader->GetOutput());
+    extract->SetChannel(m_RedIdx);
+    extract->SetChannel(m_GreenIdx);
+    extract->SetChannel(m_BlueIdx);
+    extract->Update();
+    
+    itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
+    for(it.GoToBegin();!it.IsAtEnd();++it)
+      {
+      listSample->PushBack(it.Get());
+      }
+    }
+  else
+    {
+    // Retrieve all tiles
+    for(TileVectorType::iterator it = m_LoadedTiles.begin();it!=m_LoadedTiles.end();++it)
+    {
+    itk::ImageRegionConstIterator<VectorImageType> imIt(it->m_Image,it->m_ImageRegion);
+    for(imIt.GoToBegin();!imIt.IsAtEnd();++imIt)
+      {
+      listSample->PushBack(imIt.Get());
+      }
+    }
+    }
+
+    // Compute the histogram
+    typename HistogramsGeneratorType::Pointer histogramsGenerator = HistogramsGeneratorType::New();
+    histogramsGenerator->SetListSample(listSample);
+    histogramsGenerator->SetNumberOfBins(255);
+    histogramsGenerator->NoDataFlagOn();
+    histogramsGenerator->Update();
+
+    minRed   = histogramsGenerator->GetOutput()->GetNthElement(0)->Quantile(0,lcp);
+    maxRed   = histogramsGenerator->GetOutput()->GetNthElement(0)->Quantile(0,1-hcp);
+    minGreen = histogramsGenerator->GetOutput()->GetNthElement(1)->Quantile(0,lcp);
+    maxGreen = histogramsGenerator->GetOutput()->GetNthElement(1)->Quantile(0,1-hcp);
+    minBlue =  histogramsGenerator->GetOutput()->GetNthElement(2)->Quantile(0,lcp);
+    maxBlue =  histogramsGenerator->GetOutput()->GetNthElement(2)->Quantile(0,1-hcp);   
 }
 }

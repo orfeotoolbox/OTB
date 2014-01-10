@@ -21,8 +21,6 @@
 namespace otb
 {
 
-IceViewer::Pointer IceViewer::Instance;
-
 IceViewer::IceViewer()
   : m_Window(NULL),
     m_View(),
@@ -47,15 +45,6 @@ IceViewer::~IceViewer()
   glfwTerminate();
 }
 
-IceViewer::Pointer IceViewer::GetInstance()
-{
-  if(Instance.IsNull())
-    {
-    Instance = New();
-    }
-  return Instance;
-}
-
 void IceViewer::AddImage(const std::string & fname, const std::string & name)
 {
   if(m_View.IsNull())
@@ -69,12 +58,16 @@ void IceViewer::AddImage(const std::string & fname, const std::string & name)
 
   // TODO: This part should disappear
   otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(actor->GetShader());
-  shader->SetMinRed(200);
-  shader->SetMinGreen(200);
-  shader->SetMinBlue(200);
-  shader->SetMaxRed(1200);
-  shader->SetMaxGreen(1200);
-  shader->SetMaxBlue(1200);
+  double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;
+
+  actor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue);
+
+  shader->SetMinRed(minRed);
+  shader->SetMinGreen(minGreen);
+  shader->SetMinBlue(minBlue);
+  shader->SetMaxRed(maxRed);
+  shader->SetMaxGreen(maxGreen);
+  shader->SetMaxBlue(maxBlue);
   
   // TODO: Implement this
   // actor->UpdateColorBalance();
@@ -112,6 +105,8 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
      }
 
    glfwMakeContextCurrent(m_Window);
+
+   glfwSetWindowUserPointer(m_Window,this);
    
    glfwSetKeyCallback(m_Window, &IceViewer::static_key_callback);
    glfwSetFramebufferSizeCallback(m_Window,&IceViewer::static_framebuffer_size_callback);
@@ -316,27 +311,32 @@ void IceViewer::DrawHud()
 // Static callbacks
 void IceViewer::static_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-  GetInstance()->key_callback(window, key, scancode, action, mods);
+  Self * instance = static_cast<Self*>(glfwGetWindowUserPointer(window));
+  instance->key_callback(window, key, scancode, action, mods);
 }
 
 void IceViewer::static_framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-  GetInstance()->framebuffer_size_callback(window, width, height);
+  Self * instance = static_cast<Self*>(glfwGetWindowUserPointer(window));
+  instance->framebuffer_size_callback(window, width, height);
 }
 
 void IceViewer::static_mouse_button_callback(GLFWwindow * window, int button, int action, int mode)
 {
-  GetInstance()->mouse_button_callback(window,button,action,mode);
+  Self * instance = static_cast<Self*>(glfwGetWindowUserPointer(window));
+  instance->mouse_button_callback(window,button,action,mode);
 }
 
 void IceViewer::static_cursor_pos_callback(GLFWwindow * window, double xpos, double ypos)
 {
-  GetInstance()->cursor_pos_callback(window, xpos, ypos);
+  Self * instance = static_cast<Self*>(glfwGetWindowUserPointer(window));
+  instance->cursor_pos_callback(window, xpos, ypos);
 }
 
 void IceViewer::static_scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
-  GetInstance()->scroll_callback(window,xoffset,yoffset);
+  Self * instance = static_cast<Self*>(glfwGetWindowUserPointer(window));
+  instance->scroll_callback(window,xoffset,yoffset);
 }
 
 void IceViewer::error_callback(int error, const char* description)

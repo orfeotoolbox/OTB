@@ -51,7 +51,7 @@ int main(int argc, char * argv[])
     demHandler->OpenGeoidFile(geoidfile);
     }
 
-  otb::IceViewer::Pointer viewer = otb::IceViewer::GetInstance();
+  otb::IceViewer::Pointer viewer = otb::IceViewer::New();
 
   // Initialize viewer
   viewer->Initialize(800,600);

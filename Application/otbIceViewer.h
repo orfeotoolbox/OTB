@@ -40,7 +40,7 @@ public:
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  static Pointer GetInstance();
+  itkNewMacro(Self);
 
   void AddImage(const std::string & fname, const std::string & name);
 
@@ -51,7 +51,7 @@ public:
   void Start();
 
 protected:
-  itkNewMacro(Self);
+
 
   IceViewer();
 
@@ -80,8 +80,6 @@ private:
   IceViewer(const Self&);
   void operator=(const Self&);
 
-  static Pointer Instance;
-
   GLFWwindow * m_Window;
 
   otb::GlView::Pointer m_View;
@@ -93,7 +91,6 @@ private:
   std::string m_ReferenceActor;
 
   double m_Factor;
-
 
   bool m_Dragging;
 
