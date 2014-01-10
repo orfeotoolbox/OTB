@@ -75,6 +75,9 @@ private:
 
   // Render Hud
   void DrawHud();
+  
+  // Render help
+  void DrawHelp();
 
   // prevent implementation
   IceViewer(const Self&);
@@ -99,6 +102,7 @@ private:
   ViewSettings::PointType m_OriginDrag;
 
   bool m_DisplayHud;
+  bool m_DisplayHelp;
 
 }; // End class IceViewer
 

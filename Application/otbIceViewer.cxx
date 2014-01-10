@@ -32,7 +32,8 @@ IceViewer::IceViewer()
     m_StartDrag(),
     m_DeltaDrag(),
     m_OriginDrag(),
-    m_DisplayHud(true)
+    m_DisplayHud(true),
+    m_DisplayHelp(false)
 {}
 
 IceViewer::~IceViewer()
@@ -136,7 +137,11 @@ void IceViewer::Refresh()
   
   m_View->AfterRendering();  
 
-  if(m_DisplayHud)
+  if(m_DisplayHelp)
+    {
+    DrawHelp();
+    }
+  else if(m_DisplayHud)
     {
     DrawHud();
     }
@@ -304,6 +309,70 @@ void IceViewer::DrawHud()
   glColor3f(1.0f,1.0f,1.0f);
   m_View->GetSettings()->ScreenToViewPortTransform(hudposx,hudposy,hudvpx,hudvpy);
   glRasterPos2f(hudvpx,hudvpy);
+  glutBitmapString(GLUT_BITMAP_8_BY_13,(unsigned char *) oss.str().c_str());
+}
+
+void IceViewer::DrawHelp()
+{
+  
+  std::ostringstream oss;
+
+  oss<<"This is ice viewer help page. Press ESC key to exit."<<std::endl;
+  oss<<"Here are the main available actions:"<<std::endl;
+  oss<<"- Move with mouse left button drag & drop or keyboard arrows"<<std::endl;
+  oss<<"- Zoom with CTRL + mouse wheel"<<std::endl;
+  oss<<"... exhaustive list"<<std::endl;
+
+  
+  
+  // Find the size of the help
+  std::string help_string = oss.str();
+  
+  unsigned int nbline = 0;
+  unsigned int max_line_widh = 0;
+  unsigned int char_count = 0;
+
+  for(std::string::iterator sit = help_string.begin();
+      sit!=help_string.end();++sit)
+    {
+    if((*sit)=='\n')
+      {
+      nbline+=1;
+
+      if(char_count>max_line_widh)
+        {
+        max_line_widh = char_count;
+        }
+
+      char_count = 0;
+      }
+    char_count+=1;
+    }
+  
+  double help_width = 8*max_line_widh;
+  double help_height = 13*nbline;
+  double helpposx = 10;
+  double helpposy = 20;
+  double helpvpx,helpvpy;
+  double x,y;
+
+  glEnable(GL_BLEND);
+  glColor4f(0.,0.,0.,0.75);
+  glBegin (GL_QUADS);
+  m_View->GetSettings()->ScreenToViewPortTransform(helpposx- 5,helpposy-5-13,x,y);
+  glVertex2f(x,y);
+  m_View->GetSettings()->ScreenToViewPortTransform(helpposx + 5 + help_width,helpposy-5-13,x,y);
+  glVertex2f(x,y);
+  m_View->GetSettings()->ScreenToViewPortTransform(helpposx + 5 + help_width, helpposy + help_height + 5,x,y);
+  glVertex2f(x,y);
+  m_View->GetSettings()->ScreenToViewPortTransform(helpposx - 5, helpposy + help_height + 5,x,y);
+  glVertex2f(x,y);
+  glEnd ();
+  glDisable(GL_BLEND);
+
+  glColor3f(1.0f,1.0f,1.0f);
+  m_View->GetSettings()->ScreenToViewPortTransform(helpposx,helpposy,helpvpx,helpvpy);
+  glRasterPos2f(helpvpx,helpvpy);
   glutBitmapString(GLUT_BITMAP_8_BY_13,(unsigned char *) oss.str().c_str());
 }
 
@@ -484,10 +553,19 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
 
 void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+ 
+
   // Exit on escape
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
-    glfwSetWindowShouldClose(m_Window, GL_TRUE);
+    if(m_DisplayHelp)
+      {
+      m_DisplayHelp = false;
+      }
+    else
+      {
+      glfwSetWindowShouldClose(m_Window, GL_TRUE);
+      }
     }
 
   // Fast rendering
@@ -699,7 +777,11 @@ if(key == GLFW_KEY_V && action == GLFW_PRESS)
      shader->SetMaxGreen(maxGreen);
      shader->SetMaxBlue(maxBlue);
      }
-   
+   if(key == GLFW_KEY_F1 && action == GLFW_PRESS)
+     {
+     m_DisplayHelp = true;
+     }
+
    // // Change viewport geometry to current actor
    // if(key == GLFW_KEY_P && action == GLFW_PRESS)
    //   {
