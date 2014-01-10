@@ -73,7 +73,6 @@ DatabaseBrowserWidget
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::DatabaseBrowserWidget() ),
   m_DatasetRootItem( NULL ),
-  m_DatasetList(),
   m_StartDragPosition(),
   m_SearchText()
 {
@@ -167,17 +166,6 @@ DatabaseBrowserWidget
     );
 
   return item;
-}
-
-/*******************************************************************************/
-void
-DatabaseBrowserWidget
-::SetDatasetList( const StringPairListType& list )
-{
-  // qDebug() << this << "::SetDatasetList(" << list << ")";
-
-  // remember dataset list
-  m_DatasetList = list;
 }
 
 /*****************************************************************************/

@@ -131,14 +131,6 @@ public:
   // TODO: Remove access to child widget which should be hidden by encapsulation.
   DatabaseTreeWidget* GetDatabaseTreeWidget();
 
-  /**
-   * \brief Assign the displayed dataset list (under the 'Datasets'
-   * root item).
-   *
-   * \param list List of dataset names.
-   */
-  void SetDatasetList( const StringPairListType/*QStringList*/& list );
-
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -212,11 +204,6 @@ private:
    * \brief Root item of displayed datasets. It is named 'datasets'.
    */
   QTreeWidgetItem* m_DatasetRootItem;
-
-  /**
-   * \brief Root item of displayed datasets. It is named 'datasets'.
-   */
-  StringPairListType m_DatasetList;
 
   /**
    */

@@ -260,11 +260,6 @@ DatabaseBrowserController
   //...but force call to valueChanged() slot to force refresh.
   widget->blockSignals( true );
   {
-#if 0
-  // // TODO: Fill in widget.
-  widget->SetDatasetList( datasets );
-#endif
-
   // if( !datasets.isEmpty() )
     UpdateTree( widget->GetRootItem(), -1 );
   }

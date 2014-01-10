@@ -203,6 +203,8 @@ DatabaseConnection
     dbc.DirectExecuteQuery( SQL_DB_SETUP[ i ] );
     }
 
+// Conditionaly create demonstration groups.
+// #if (!defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
 #if (defined( _DEBUG ) && 1) || 1
   SqlId datasetNodeId(
     GetNodeFields( dbc.FindDatasetNode() )
@@ -215,6 +217,8 @@ DatabaseConnection
   dbc.InsertNode( "WV2", datasetNodeId );
 #endif
 
+// Conditionaly create debug groups.
+// #if (!defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
 #if (defined( _DEBUG ) && 0) || 0
   SqlId rootNodeId(
     GetRootNodeFields( dbc.FindRootNode() )
