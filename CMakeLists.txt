@@ -2,8 +2,12 @@ PROJECT(Ice)
 
 cmake_minimum_required(VERSION 2.6)
 
+set(Ice_VERSION_MAJOR "0")
+set(Ice_VERSION_MINOR "1")
+set(Ice_VERSION_PATCH "0")
+
 set(CMAKE_MODULE_PATH
-    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
     
 #----------------------------------------------------------------------------
@@ -19,10 +23,13 @@ if(WIN32)
   add_definitions(-DNOMINMAX -DOSSIM_STATIC)
 endif(WIN32)
 
+OPTION(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" ON)
+
 #----------------------------------------------------------------------------
 # Orfeo ToolBox
 find_package(OTB REQUIRED)
 if(OTB_FOUND)
+  MESSAGE(STATUS "OTB found")
   include(${OTB_USE_FILE})
 else(OTB_FOUND)
   message(FATAL_ERROR "OTB not found. Please set OTB_DIR")
@@ -33,46 +40,72 @@ endif(OTB_FOUND)
 find_package( OpenGL REQUIRED )
 
 if (OPENGL_FOUND)
-  MESSAGE("OpenGL found")
+  MESSAGE(STATUS "OpenGL found")
   include_directories(${OPENGL_INCLUDE_DIR})
  else (OPENGL_FOUND)
-    MESSAGE("OpenGL missing")
+    MESSAGE(FATAL_ERROR "OpenGL missing")
  endif (OPENGL_FOUND)
-
-find_package(GLFW REQUIRED)
-
-if(GLFW_FOUND)
-  MESSAGE("GLFW found")
-  include_directories(${GLFW_INCLUDE_DIR})
-  MESSAGE(${GLFW_INCLUDE_DIR})
-else(GLFW_FOUND)
-  MESSAGE("GLFW missing")
-endif(GLFW_FOUND)
 
 find_package(GLEW REQUIRED)
 
 if(GLEW_FOUND)
-MESSAGE("Glew found")
+MESSAGE(STATUS "Glew found")
 include_directories(${GLEW_INCLUDE_DIR})
 else(GLEW_FOUND)
-MESSAGE("Glew missing")
+MESSAGE(FATAL_ERROR "Glew missing. Please set glew directories.")
 endif(GLEW_FOUND)
+
+if(BUILD_ICE_APPLICATION)
+
+find_package(GLFW REQUIRED)
+
+if(GLFW_FOUND)
+  MESSAGE(STATUS "GLFW found")
+  include_directories(${GLFW_INCLUDE_DIR})
+else(GLFW_FOUND)
+  MESSAGE(FATAL_ERROR "GLFW missing. Please set glfw directories or deactivate the BUILD_ICE_APPLICATION option.")
+endif(GLFW_FOUND)
 
 find_package(GLUT REQUIRED)
 
 if(GLUT_FOUND)
-MESSAGE("Glut found")
+MESSAGE(STATUS "Glut found")
 include_directories(${GLUT_INCLUDE_DIR})
-MESSAGE(${GLUT_INCLUDE_DIR})
-MESSAGE(${GLUT_LIBRARY})
 else(GLUT_FOUND)
-MESSAGE("Glut missing")
+MESSAGE(FATAL_ERROR "Glut missing. Please set glut directories or deactivate the BUILD_ICE_APPLICATION option.")
 endif(GLUT_FOUND)
 
-SET(BUILD_SHARED_LIBS ON)
+endif(BUILD_ICE_APPLICATION)
 
-ADD_LIBRARY(OTBIce otbViewSettings.cxx otbGlView.cxx otbGlActor.cxx otbGlImageActor.cxx otbFragmentShaderRegistry.cxx otbFragmentShader.cxx otbStandardShader.cxx)
-TARGET_LINK_LIBRARIES(OTBIce OTBIO ${OPENGL_LIBRARY} ${GLEW_LIBRARY})
+SET(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
 
-ADD_EXECUTABLE(otbIce otbIce.cxx otbIceViewer.cxx)
-TARGET_LINK_LIBRARIES(otbIce OTBIce ${GLFW_LIBRARY} ${GLUT_LIBRARY})
+set(Ice_LIBRARY_PROPERTIES
+    VERSION   "${Ice_VERSION_MAJOR}.${Ice_VERSION_MINOR}.${Ice_VERSION_PATCH}"
+    SOVERSION "${Ice_VERSION_MAJOR}.${Ice_VERSION_MINOR}"
+)
+
+# Output directories
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${Ice_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all ARCHIVE products (static libs, import libs)")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${Ice_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all LIBRARY products (so, modules)")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${Ice_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for all RUNTIME products (executables, dlls)")
+
+
+# Install dirs
+if(NOT Ice_INSTALL_BIN_DIR)
+  set(Ice_INSTALL_BIN_DIR "bin")
+endif(NOT Ice_INSTALL_BIN_DIR)
+
+if(NOT Ice_INSTALL_LIB_DIR)
+  set(Ice_INSTALL_LIB_DIR "lib/otb")
+endif(NOT Ice_INSTALL_LIB_DIR)
+
+if(NOT Ice_INSTALL_INCLUDE_DIR)
+  set(Ice_INSTALL_INCLUDE_DIR "include/otb")
+endif(NOT Ice_INSTALL_INCLUDE_DIR)
+
+include_directories(Code)
+add_subdirectory(Code)
+
+if(BUILD_ICE_APPLICATION)
+add_subdirectory(Application)
+endif(BUILD_ICE_APPLICATION)

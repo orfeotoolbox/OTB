@@ -1,7 +1,8 @@
 #include "otbNonOptGlImageActor.h"
 #include "otbViewSettings.h"
 #include "otbMath.h"
-#include <GL/gl.h> 
+
+#include <GL/glew.h>
 #include <GL/glext.h>
 
 namespace otb
