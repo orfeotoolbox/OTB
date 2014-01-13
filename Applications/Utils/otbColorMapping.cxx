@@ -40,7 +40,7 @@
 #include "itkVariableLengthVector.h"
 #include "itkHistogram.h"
 #include "otbObjectList.h"
-#include "otbVisualizationPixelTraits.h"
+#include "itkNumericTraitsVariableLengthVectorPixel.h"
 
 #include "itkImageRegionConstIterator.h"
 #include "otbUnaryFunctorImageFilter.h"
@@ -548,15 +548,17 @@ private:
       ListSampleType::Pointer listSample = ListSampleType::New();
       listSample->Clear();
 
-      unsigned int sampleSize = VisualizationPixelTraits::PixelSize(it.Get());
+      //unsigned int sampleSize = VisualizationPixelTraits::PixelSize(it.Get());
+      unsigned int sampleSize = itk::NumericTraits<SampleType>::GetLength(it.Get());
+
       listSample->SetMeasurementVectorSize(sampleSize);
 
       // Fill the samples list
       for (it.GoToBegin(); !it.IsAtEnd(); ++it)
         {
         SampleType sample(sampleSize);
-        VisualizationPixelTraits::Convert(it.Get(), sample);
-        listSample->PushBack(sample);
+        //VisualizationPixelTraits::Convert(it.Get(), sample);
+        listSample->PushBack(it.Get());
         }
 
       // assign listSample
