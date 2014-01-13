@@ -326,9 +326,10 @@ void IceViewer::DrawHelp()
   std::ostringstream oss;
 
   oss<<"This is ice viewer help page. Press ESC key to exit."<<std::endl;
+  oss<<std::endl;
   oss<<"Here are the main available actions:"<<std::endl;
   oss<<std::endl;
-
+  
   oss<<"General: "<<std::endl;
   oss<<"- Show/hide image list with D key"<<std::endl;
   oss<<"- Exit with ESC key"<<std::endl;
@@ -343,21 +344,23 @@ void IceViewer::DrawHelp()
   oss<<"- Rotate rendering order with mouse wheel (order displayed in image list)"<<std::endl;
   oss<<"- Change selected image with PAGE UP / PAGE DOWN (note that selected dataset is highlighted with [ ]"<<std::endl;
   oss<<"- Show/hide image dataset with space bar"<<std::endl;
-  oss<<"- Note that all images are reprojected in the first loaded image geometry (highligthed with * *)"<<std::endl;
+  oss<<"- Note that all images are reprojected in the first loaded image geometry (highligthed with * *). To change reference geometry to selected image, press P key."<<std::endl;
   oss<<std::endl;
 
   oss<<"Color range:"<<std::endl;
   oss<<"- Rotate red/green/blue channel of selected image with R, G and B keys"<<std::endl;
   oss<<"- Reset color range of selected image to 2% histogram clipping of full image with F key"<<std::endl;
-  oss<<"- Reset color range of selected image to 2% histogram clipping of current area with G key"<<std::endl;
+  oss<<"- Reset color range of selected image to 2% histogram clipping of current area with V key"<<std::endl;
   oss<<"- Hold Right MAJ key + mouse wheel to adjust gamma correction of selected image"<<std::endl;
   oss<<"- Hol Right CTRM key + mouse wheel to adjust transparency of selected image"<<std::endl;
   oss<<std::endl;
 
   oss<<"Shaders of selected image:"<<std::endl;
   oss<<"- Switch to standard shader with S key. In this mode, use Left SHIFT + mouse wheel and Left ALT + mouse wheel to adjust contrast"<<std::endl;
-  oss<<"- Switch to local contrast enhancement with L key. In this mode, use Right SHIFT + mouse wheel to adjust gain and Left ALT + mouse wheel to adjust circle radius"<<std::endl;
-  oss<<"- Switch to local transparency with U key. "<<std::endl;
+  oss<<"- Switch to local contrast enhancement with L key. In this mode, use left SHIFT + mouse wheel to adjust gain and left ALT + mouse wheel to adjust circle radius"<<std::endl;
+  oss<<"- Switch to local transparency with U key. In this mode, use right SHIFT + mouse wheel to adjust gain and left ALT + mouse wheel to adjust circle radius."<<std::endl;
+  oss<<"- Switch to chessboard transparency with C key. In this mode, use left ALT + mouse wheel to change chessboard grid size."<<std::endl;
+  oss<<"- Switch to vertical swipe transparency with S key. Press S again to change to horizontal swipe transparency. In this mode, hoover with mouse to swipe."<<std::endl;
   
   // Find the size of the help
   std::string help_string = oss.str();
@@ -816,18 +819,18 @@ if(key == GLFW_KEY_V && action == GLFW_PRESS)
      m_DisplayHelp = true;
      }
 
-   // // Change viewport geometry to current actor
-   // if(key == GLFW_KEY_P && action == GLFW_PRESS)
-   //   {
-   //   otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+   // Change viewport geometry to current actor
+   if(key == GLFW_KEY_P && action == GLFW_PRESS)
+     {
+     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
      
-   //   m_View->GetSettings()->SetOrigin(currentActor->GetOrigin());
-   //   m_View->GetSettings()->SetSpacing(currentActor->GetSpacing());
-   //   m_View->GetSettings()->SetWkt(currentActor->GetWkt());
-   //   m_View->GetSettings()->SetKeywordList(currentActor->GetKwl());
-   //   m_View->GetSettings()->UseProjectionOn();
-   //   m_ReferenceActor = m_SelectedActor;
-   //   }
+     m_View->GetSettings()->SetOrigin(currentActor->GetOrigin());
+     m_View->GetSettings()->SetSpacing(currentActor->GetSpacing());
+     m_View->GetSettings()->SetWkt(currentActor->GetWkt());
+     m_View->GetSettings()->SetKeywordList(currentActor->GetKwl());
+     m_View->GetSettings()->UseProjectionOn();
+     m_ReferenceActor = m_SelectedActor;
+     }
    
 }
 
