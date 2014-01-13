@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbIceViewer.h"
 #include <algorithm>
+#include <otbImageMetadataInterfaceFactory.h>
 
 namespace otb
 {
@@ -56,6 +57,13 @@ void IceViewer::AddImage(const std::string & fname, const std::string & name)
   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
   actor->Initialize(fname);
   actor->SetVisible(true);
+
+  // Get advised colors
+  ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(actor->GetMetaDataDictionary());
+  
+  actor->SetRedIdx(imi->GetDefaultDisplay()[0]+1);
+  actor->SetGreenIdx(imi->GetDefaultDisplay()[1]+1);
+  actor->SetBlueIdx(imi->GetDefaultDisplay()[2]+1);
 
   otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(actor->GetShader());
   double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;

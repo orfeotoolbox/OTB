@@ -43,6 +43,7 @@ public:
   typedef VectorImage<float>                              VectorImageType;
   typedef VectorImageType::PixelType                      PixelType;
   typedef VectorImageType::ImageKeywordlistType           ImageKeywordlistType;
+  typedef itk::MetaDataDictionary                        MetaDataDictionaryType;
   typedef VectorImageType::SizeType                       SizeType;
   typedef VectorImageType::IndexType                      IndexType;
   typedef VectorImageType::RegionType                     RegionType;
@@ -74,6 +75,8 @@ public:
   std::string GetWkt() const;
   
   ImageKeywordlistType GetKwl() const;
+
+  MetaDataDictionaryType & GetMetaDataDictionary() const;
 
   itkSetMacro(RedIdx,unsigned int);
   itkGetMacro(RedIdx,unsigned int);

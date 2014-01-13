@@ -72,6 +72,12 @@ GlImageActor::ImageKeywordlistType GlImageActor::GetKwl() const
   return m_FileReader->GetOutput()->GetImageKeywordlist();
 }
 
+GlImageActor::MetaDataDictionaryType & GlImageActor::GetMetaDataDictionary() const
+{
+  return m_FileReader->GetOutput()->GetMetaDataDictionary();
+}
+
+
 void GlImageActor::Initialize(const std::string & filename)
 {
   // First, clean up any previous data
