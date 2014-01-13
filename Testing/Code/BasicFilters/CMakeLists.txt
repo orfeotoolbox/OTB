@@ -1034,6 +1034,18 @@ ${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
                     ${TEMP}/bfTvVectorImageToIntensityImageOutput.tif
 )
 
+#------------ otb::AmplitudeFuntor ----------------------
+
+add_test(bfTvAmplitudeFunctorTest ${BASICFILTERS_TESTS7}
+        otbAmplitudeFunctorTest
+)
+
+#------------ otb::AmplitudeFuntor ----------------------
+
+add_test(bfTvPhaseFunctorTest ${BASICFILTERS_TESTS7}
+        otbPhaseFunctorTest
+)
+
 # -------            otb::LabelizeConnectedThresholdImageFilter   ----------------------------
 
   add_test(bfTuLabelizeConnectedThresholdImageFilterNew ${BASICFILTERS_TESTS8}
@@ -3027,6 +3039,8 @@ otbVectorImageToAmplitudeImageFilterNew.cxx
 otbVectorImageToAmplitudeImageFilter.cxx
 otbVectorImageToIntensityImageFilterNew.cxx
 otbVectorImageToIntensityImageFilter.cxx
+otbAmplitudeFunctorTest.cxx
+otbPhaseFunctorTest.cxx
 )
 
 # A enrichir

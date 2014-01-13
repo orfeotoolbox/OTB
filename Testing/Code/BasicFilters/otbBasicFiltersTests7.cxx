@@ -37,4 +37,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageToAmplitudeImageFilter);
   REGISTER_TEST(otbVectorImageToIntensityImageFilterNew);
   REGISTER_TEST(otbVectorImageToIntensityImageFilter);
+  REGISTER_TEST(otbAmplitudeFunctorTest);
+  REGISTER_TEST(otbPhaseFunctorTest);
 }
