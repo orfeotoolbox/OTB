@@ -862,6 +862,18 @@ void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int actio
       m_OriginDrag.Fill(0);
       }
     }
+  else if(button == GLFW_MOUSE_BUTTON_2)
+    {
+    otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    if(action == GLFW_PRESS)
+      {
+      currentActor->SetVisible(!currentActor->GetVisible());
+      }
+    else if(action == GLFW_RELEASE)
+      {
+      currentActor->SetVisible(!currentActor->GetVisible());
+      }
+    }
 }
 
 void IceViewer::framebuffer_size_callback(GLFWwindow* window, int width, int height)
