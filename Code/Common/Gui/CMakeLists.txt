@@ -23,6 +23,7 @@ set( Common_Gui_SOURCES
   mvdDatasetPropertiesWidget.cxx
   mvdDoubleValidator.cxx
   mvdDropLineEdit.cxx
+  mvdFilenameDragAndDropEventFilter.cxx
   mvdGLImageWidget.cxx
   mvdGui.cxx
   mvdHistogramController.cxx
@@ -69,6 +70,7 @@ set( Common_Gui_HEADERS_MOC
   mvdDatasetPropertiesWidget.h
   mvdDoubleValidator.h
   mvdDropLineEdit.h
+  mvdFilenameDragAndDropEventFilter.h
   mvdGLImageWidget.h
   #mvdGui.h
   mvdI18nApplication.h
