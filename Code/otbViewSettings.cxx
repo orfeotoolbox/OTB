@@ -57,15 +57,15 @@ void ViewSettings::Zoom(const PointType & zoomCenter,double scale)
 
 void ViewSettings::Center(const PointType & center)
 {
-  m_Origin[0] = center[0] - m_Spacing[0]*m_ViewportSize[0];
-  m_Origin[1] = center[1] - m_Spacing[1]*m_ViewportSize[1];
+  m_Origin[0] = center[0] - 0.5*m_Spacing[0]*m_ViewportSize[0];
+  m_Origin[1] = center[1] - 0.5*m_Spacing[1]*m_ViewportSize[1];
 }
 
 ViewSettings::PointType ViewSettings::GetViewportCenter() const
 {
   PointType center = m_Origin;
-  center[0]+=m_Spacing[0]*m_ViewportSize[0];
-  center[1]+=m_Spacing[1]*m_ViewportSize[1];
+  center[0]+=0.5*m_Spacing[0]*m_ViewportSize[0];
+  center[1]+=0.5*m_Spacing[1]*m_ViewportSize[1];
   return center;
 }
 
