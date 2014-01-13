@@ -61,9 +61,9 @@ void IceViewer::AddImage(const std::string & fname, const std::string & name)
   // Get advised colors
   ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(actor->GetMetaDataDictionary());
   
-  actor->SetRedIdx(imi->GetDefaultDisplay()[0]+1);
-  actor->SetGreenIdx(imi->GetDefaultDisplay()[1]+1);
-  actor->SetBlueIdx(imi->GetDefaultDisplay()[2]+1);
+  actor->SetRedIdx(std::min(imi->GetDefaultDisplay()[0]+1,actor->GetNumberOfComponents()));
+  actor->SetGreenIdx(std::min(imi->GetDefaultDisplay()[1]+1,actor->GetNumberOfComponents()));
+  actor->SetBlueIdx(std::min(imi->GetDefaultDisplay()[2]+1,actor->GetNumberOfComponents()));
 
   otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(actor->GetShader());
   double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;
