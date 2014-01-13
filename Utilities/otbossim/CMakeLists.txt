@@ -106,7 +106,7 @@ configure_file(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.
 #    LINK_INTERFACE_LIBRARIES ""
 #  )
   #target_link_libraries(otbossim ${GDAL_LIBRARY})#To make sure that gdal appear before geotiff
-  target_link_libraries(otbossim  ${GEOTIFF_LIBRARY} ${TIFF_LIBRARY} ${JPEG_LIBRARY} ${GDAL_LIBRARY} ${OPENTHREADS_LIBRARY})
+  target_link_libraries(otbossim  ${GEOTIFF_LIBRARY} ${TIFF_LIBRARY} ${JPEG_LIBRARY} ${GDAL_LIBRARY} ${OPENTHREADS_LIBRARY} ${CMAKE_DL_LIBS})
   set_target_properties(otbossim
                         PROPERTIES VERSION "${OSSIM_SVN_REVISION}.${OSSIM_OTB_PATCH}.0"
                                    SOVERSION "${OSSIM_SVN_REVISION}.${OSSIM_OTB_PATCH}")
