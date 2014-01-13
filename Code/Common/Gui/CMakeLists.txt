@@ -4,6 +4,7 @@
 # Package GUI (files ordered by lexicographical order i.e. ease of search).
 set( Common_Gui_SOURCES
   mvdAboutDialog.cxx
+  mvdAbstractDragAndDropEventFilter.cxx
   mvdAbstractModelController.cxx
   #mvdAbstractModelRenderer.cxx
   mvdAbstractViewManipulator.cxx
@@ -21,7 +22,6 @@ set( Common_Gui_SOURCES
   mvdDatasetPropertiesController.cxx
   mvdDatasetPropertiesWidget.cxx
   mvdDoubleValidator.cxx
-  mvdDragAndDropEventFilter.cxx
   mvdDropLineEdit.cxx
   mvdGLImageWidget.cxx
   mvdGui.cxx
@@ -50,6 +50,7 @@ set( Common_Gui_SOURCES
 # Package GUI (files ordered by lexicographical order i.e. ease of search).
 set( Common_Gui_HEADERS_MOC
   mvdAboutDialog.h
+  mvdAbstractDragAndDropEventFilter.h
   mvdAbstractModelController.h
   mvdAbstractModelRenderer.h
   mvdAbstractViewManipulator.h
@@ -67,7 +68,6 @@ set( Common_Gui_HEADERS_MOC
   mvdDatasetPropertiesController.h
   mvdDatasetPropertiesWidget.h
   mvdDoubleValidator.h
-  mvdDragAndDropEventFilter.h
   mvdDropLineEdit.h
   mvdGLImageWidget.h
   #mvdGui.h

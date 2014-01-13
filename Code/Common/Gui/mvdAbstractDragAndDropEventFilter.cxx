@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdDragAndDropEventFilter.h"
+#include "mvdAbstractDragAndDropEventFilter.h"
 
 
 /*****************************************************************************/
@@ -42,7 +42,7 @@ namespace mvd
 {
 
 /*
-  TRANSLATOR mvd::DragAndDropEventFilter
+  TRANSLATOR mvd::AbstractDragAndDropEventFilter
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -61,21 +61,51 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
-/*******************************************************************************/
-DragAndDropEventFilter
-::DragAndDropEventFilter( QObject* parent  ) :
+/*****************************************************************************/
+AbstractDragAndDropEventFilter
+::AbstractDragAndDropEventFilter( QObject* parent  ) :
   QObject( parent )
 {
 }
 
-/*******************************************************************************/
-DragAndDropEventFilter
-::~DragAndDropEventFilter()
+/*****************************************************************************/
+AbstractDragAndDropEventFilter
+::~AbstractDragAndDropEventFilter()
 {
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+bool
+AbstractDragAndDropEventFilter
+::eventFilter( QObject* object, QEvent* event )
+{
+  switch( event->type() )
+    {
+    case QEvent::DragEnter:
+      return DragEnterEvent( object, dynamic_cast< QDragEnterEvent* >( event ) );
+      break;
+
+    case QEvent::DragMove:
+      return DragMoveEvent( object, dynamic_cast< QDragMoveEvent* >( event ) );
+      break;
+
+    case QEvent::DragLeave:
+      return DragLeaveEvent( object, dynamic_cast< QDragLeaveEvent* >( event ) );
+      break;
+
+    case QEvent::Drop:
+      return DropEvent( object, dynamic_cast< QDropEvent* >( event ) );
+      break;
+
+    default:
+      break;
+    }
+
+  return QObject::eventFilter( object, event );
+}
+
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 
 } // end namespace 'mvd'
