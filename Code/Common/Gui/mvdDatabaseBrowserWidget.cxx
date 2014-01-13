@@ -72,7 +72,6 @@ DatabaseBrowserWidget
 ::DatabaseBrowserWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
   m_UI( new mvd::Ui::DatabaseBrowserWidget() ),
-  m_DatasetRootItem( NULL ),
   m_StartDragPosition(),
   m_SearchText()
 {
@@ -185,18 +184,6 @@ DatabaseBrowserWidget
   m_UI->databaseTreeWidget->setColumnHidden( 2, true );
 #endif
 
-  //
-  // Dataset root item.
-#if 0
-  m_DatasetRootItem = new QTreeWidgetItem( "Datasets", m_UI->databaseTreeWidget );
-
-  m_DatasetRootItem->setChildIndicatorPolicy(
-    QTreeWidgetItem::DontShowIndicatorWhenChildless
-  );
-
-  m_DatasetRootItem->setExpanded( true );
-#endif
-
   // set placeholder text
 #if (QT_VERSION >= 0x407000)
   m_UI->m_SearchLine->setPlaceholderText( tr( "Search Dataset..." ) );
@@ -238,7 +225,6 @@ DatabaseBrowserWidget
   */
 
 #if 0
-
    m_UI->databaseTreeWidget->setCurrentItem(
     items.isEmpty() ? NULL : items.first(),
     0,
@@ -299,9 +285,10 @@ DatabaseBrowserWidget
   // get the search text
   m_SearchText = search;
 
-  if( m_DatasetRootItem==NULL )
-    return;
-
+  /*
+  //
+  // Obsolete code: it is kept to help re-implement this method.
+  //
   for( int i=0; i<m_DatasetRootItem->childCount();  ++i )
     {
     QTreeWidgetItem* item = m_DatasetRootItem->child( i );
@@ -314,6 +301,7 @@ DatabaseBrowserWidget
       !item->text( 0 ).contains( search, Qt::CaseInsensitive )
     );
     }
+  */
 }
 
 } // end namespace 'mvd'

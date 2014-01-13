@@ -201,11 +201,6 @@ private:
   Ui::DatabaseBrowserWidget* m_UI;
 
   /**
-   * \brief Root item of displayed datasets. It is named 'datasets'.
-   */
-  QTreeWidgetItem* m_DatasetRootItem;
-
-  /**
    */
   QPoint m_StartDragPosition;
 
