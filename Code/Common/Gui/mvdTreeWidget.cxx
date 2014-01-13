@@ -81,12 +81,18 @@ private:
     //
     // Call qRegisterMetaType<>() to make type available in
     // non-template signatures and serialization.
-    StaticInitializer::m_QTreeWidgetItemPtrMetaTypeId =
-      qRegisterMetaType< QTreeWidgetItem* >( "QTreeWidgetItem *" );
+    m_QTreeWidgetItemPtrMetaTypeId =
+      qRegisterMetaType< QTreeWidgetItem* >( "QTreeWidgetItem*" );
 
     //
     // Register serialization operators for custom meta-types.
+#if QT_VERSION >= QT_VERSION_CHECK( 4, 7, 0 )
     qRegisterMetaTypeStreamOperators< QTreeWidgetItem* >();
+#else // QT_VERSION >= QT_VERSION_CHECK( 4, 7, 0 )
+    qRegisterMetaTypeStreamOperators< QTreeWidgetItem* >(
+      QMetaType::typeName( m_QTreeWidgetItemPtrMetaTypeId )
+    );
+#endif // QT_VERSION >= QT_VERSION_CHECK( 4, 7, 0 )
   }
 
   inline
