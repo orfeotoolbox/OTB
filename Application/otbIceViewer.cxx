@@ -106,7 +106,7 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
     glfwDestroyWindow(m_Window);
     }
   
-  m_Window = glfwCreateWindow(w, h,"I see", NULL, NULL);
+  m_Window = glfwCreateWindow(w, h,"OTB viewer for geeks", NULL, NULL);
    if (!m_Window)
      {
      itkExceptionMacro(<<"Could not create glfw window.");
