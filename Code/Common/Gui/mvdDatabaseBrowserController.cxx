@@ -140,14 +140,6 @@ DatabaseBrowserController
     this,
     SLOT( RefreshWidget() )
     );
-
-  //
-  QObject::connect(
-    widget->GetDatabaseTreeWidget(),
-    SIGNAL( ImageDropped(const QString &) ),
-    this,
-    SLOT( OnImageDropped(const QString &) )
-    );
 }
 
 /*******************************************************************************/
@@ -215,14 +207,6 @@ DatabaseBrowserController
     SIGNAL( DatabaseChanged() ),
     this,
     SLOT( RefreshWidget() )
-    );
-
-  //
-  QObject::disconnect(
-    widget->GetDatabaseTreeWidget(),
-    SIGNAL( ImageDropped(const QString &) ),
-    this,
-    SLOT( OnImageDropped(const QString &) )
     );
 }
 
@@ -653,14 +637,6 @@ DatabaseBrowserController
   widget->SetCurrentDataset( datasetModel->GetHash() );
   }
   widget->blockSignals( areSignalsBlocked );
-}
-
-/*******************************************************************************/
-void
-DatabaseBrowserController
-::OnImageDropped( const QString & imagefname )
-{
-  emit ImageToImportDropped( imagefname );
 }
 
 /*******************************************************************************/

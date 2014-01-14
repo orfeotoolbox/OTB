@@ -111,8 +111,6 @@ signals:
    */
   void SelectedDatasetFilenameChanged( const QString& );
 
-  void ImageToImportDropped( const QString& );
-
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -184,10 +182,6 @@ private slots:
   /**
    */
   void OnSelectedDatasetModelChanged( DatasetModel* );
-
-  /**
-   */
-  void OnImageDropped( const QString & imagefname );
 
   /**
    */

@@ -186,10 +186,6 @@ protected slots:
    */
   void OnExecutionDone( int status );
 
-  /**
-   */
-  void OnImageToImportDropped(const QString& fname);
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //

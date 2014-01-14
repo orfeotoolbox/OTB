@@ -50,7 +50,6 @@
 /* PRE-DECLARATION SECTION                                                   */
 
 #define BYPASS_MOUSE_EVENTS 1
-#define BYPASS_DRAG_AND_DROP_EVENTS 1
 
 //
 // External classes pre-declaration.
@@ -110,8 +109,6 @@ public:
   //
   void mouseMoveEvent( QMouseEvent * event );
   void mousePressEvent( QMouseEvent * event );
-  void dragEnterEvent(QDragEnterEvent *event);
-  void dragMoveEvent(QDragMoveEvent *event);
   void dropEvent(QDropEvent *event);
   void keyPressEvent( QKeyEvent * event );
 
@@ -136,8 +133,6 @@ signals:
   void DatasetToDeleteSelected( const QString & id );
 
   void DatasetRenamed(const QString &, const QString &);
-
-  void ImageDropped(const QString &);
 
  
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/

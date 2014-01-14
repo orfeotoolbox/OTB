@@ -163,52 +163,11 @@ DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 }
 
 /*******************************************************************************/
-void
-DatabaseTreeWidget::dragEnterEvent(QDragEnterEvent *event)
-{
-  // qDebug() << this << "::dragEnterEvent(" << event << ")";
-
-#if BYPASS_DRAG_AND_DROP_EVENTS
-  TreeWidget::dragEnterEvent( event );
-
-#else // BYPASS_DRAG_AND_DROP_EVENTS
-  if (event->mimeData()->hasUrls()/*("text/uri-list")*/)
-    {
-    event->acceptProposedAction();
-    }
-
-#endif // BYPASS_DRAG_AND_DROP_EVENTS
-}
-
-/*******************************************************************************/
-void DatabaseTreeWidget::dragMoveEvent(QDragMoveEvent *event)
-{
-  // qDebug() << this << "::dragMoveEvent(" << event << ")";
-
-#if BYPASS_DRAG_AND_DROP_EVENTS
-  TreeWidget::dragMoveEvent( event );
-
-#else // BYPASS_DRAG_AND_DROP_EVENTS
-  //
-  // if the mouse is within the QLabel geometry : allow drops
-  if ( event->answerRect().intersects( this->geometry() ) )
-    {
-    event->acceptProposedAction();
-    }
-  else
-    {
-    event->ignore();
-    }
-#endif // BYPASS_DRAG_AND_DROP_EVENTS
-}
-
-/*******************************************************************************/
 void 
 DatabaseTreeWidget::dropEvent(QDropEvent *event)
 {
   // qDebug() << this << "::dropEvent(" << event << ")";
 
-#if BYPASS_DRAG_AND_DROP_EVENTS
   /*
   if( event->mimeData()->hasFormat( "application/x-qabstractitemmodeldatalist" ) )
     {
@@ -293,27 +252,6 @@ DatabaseTreeWidget::dropEvent(QDropEvent *event)
   */
 
   TreeWidget::dropEvent( event );
-
-#else // BYPASS_DRAG_AND_DROP_EVENTS
-
-  QList<QUrl> urls = event->mimeData()->urls();
-
-  // cheking
-  if (urls.isEmpty())
-    return;
-
-  // get the filename and send 
-  QString fileName = urls.first().toLocalFile();
-  if (fileName.isEmpty())
-    {
-    return;
-    }
-  else
-    {
-    emit ImageDropped( fileName );
-    }
-
-#endif // BYPASS_DRAG_AND_DROP_EVENTS
 }
 
 /*******************************************************************************/

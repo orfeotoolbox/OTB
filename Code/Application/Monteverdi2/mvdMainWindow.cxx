@@ -380,16 +380,6 @@ MainWindow
      m_ImageView->GetImageViewManipulator(),
      SLOT(OnUserZoomFull()));
 
-#if 0
-   // connect image to load image when file dropped in CentralView
-   QObject::connect(
-     m_ImageView,
-     SIGNAL( ImageToImportDropped (const QString &) ),
-     this,
-     SLOT( OnImageToImportDropped(const QString & ) )
-     );
-#endif
-
    // the slot OnModelImageRegionChanged(...) is not implemented for
    // QuicklookViewManipulator, connecting it here instead in
    // mvdGLImageWidget avoid a warning : 
@@ -409,20 +399,6 @@ MainWindow
                                       const PointType&,
                                       double) )
      );
-
-#if 0
-   // Connect databasebrowser drop to import new dataset
-   // need to get the controller to request the application widget
-   DatabaseBrowserController * dbController =
-     m_DatabaseBrowserDock->findChild< DatabaseBrowserController* >();
-  
-   QObject::connect(
-     dbController,
-     SIGNAL( ImageToImportDropped( const QString& ) ),
-     this,
-     SLOT( OnImageToImportDropped( const QString& ) )
-     );
-#endif
 }
 
 /*****************************************************************************/
@@ -1591,14 +1567,6 @@ MainWindow
 
   // update the Quicklook
   qobject_cast< GLImageWidget * >( m_QuicklookViewDock->widget() )->update();
-}
-
-/*****************************************************************************/
-void
-MainWindow
-::OnImageToImportDropped(const QString & fname)
-{
-  ImportImage( fname, false );
 }
 
 /*****************************************************************************/
