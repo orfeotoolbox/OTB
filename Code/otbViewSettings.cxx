@@ -34,10 +34,10 @@ ViewSettings::~ViewSettings()
 
 void ViewSettings::GetViewportExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
-  ulx = std::min(m_Origin[0],m_Origin[0] + m_Spacing[0]*m_ViewportSize[0]);
-  uly = std::min(m_Origin[1],m_Origin[1] + m_Spacing[1]*m_ViewportSize[1]);
-  lrx = std::max(m_Origin[0],m_Origin[0] + m_Spacing[0]*m_ViewportSize[0]);
-  lry = std::max(m_Origin[1],m_Origin[1] + m_Spacing[1]*m_ViewportSize[1]);
+  ulx = m_Origin[0];
+  uly = m_Origin[1];
+  lrx = m_Origin[0] + m_Spacing[0]*m_ViewportSize[0];
+  lry = m_Origin[1] + m_Spacing[1]*m_ViewportSize[1];
 }
 
 void ViewSettings::ScreenToViewPortTransform(const double & xscreen, const double & yscreen, double & xvp, double & yvp) const

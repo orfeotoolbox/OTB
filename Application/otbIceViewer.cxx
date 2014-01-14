@@ -544,7 +544,7 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
     
     otb::ViewSettings::PointType origin;
     origin[0]=m_OriginDrag[0]-m_DeltaDrag[0]*m_View->GetSettings()->GetSpacing()[0];
-    origin[1]=m_OriginDrag[1]+m_DeltaDrag[1]*vcl_abs(m_View->GetSettings()->GetSpacing()[1]);
+    origin[1]=m_OriginDrag[1]+m_DeltaDrag[1]*m_View->GetSettings()->GetSpacing()[1];
     
     m_View->GetSettings()->SetOrigin(origin);
     }
@@ -888,7 +888,7 @@ void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int actio
       m_FastRendering = false;
       otb::ViewSettings::PointType origin;
       origin[0]=m_OriginDrag[0]-m_DeltaDrag[0]*m_View->GetSettings()->GetSpacing()[0];
-      origin[1]=m_OriginDrag[1]+m_DeltaDrag[1]*vcl_abs(m_View->GetSettings()->GetSpacing()[1]);
+      origin[1]=m_OriginDrag[1]+m_DeltaDrag[1]*m_View->GetSettings()->GetSpacing()[1];
       
       m_View->GetSettings()->SetOrigin(origin);
       
