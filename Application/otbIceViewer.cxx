@@ -350,7 +350,7 @@ void IceViewer::DrawHelp()
   oss<<"- Rotate rendering order with mouse wheel (order displayed in image list)"<<std::endl;
   oss<<"- Change selected image with PAGE UP / PAGE DOWN (note that selected dataset is highlighted with [ ]"<<std::endl;
   oss<<"- Show/hide image dataset with space bar"<<std::endl;
-  oss<<"- Note that all images are reprojected in the first loaded image geometry (highligthed with * *)."/**" To change reference geometry to selected image, press P key."*/<<std::endl;
+  oss<<"- Note that all images are reprojected in the first loaded image geometry (highligthed with * *). To change reference geometry to selected image, press P key."<<std::endl;
   oss<<std::endl;
 
   oss<<"Color range:"<<std::endl;
@@ -828,43 +828,43 @@ if(key == GLFW_KEY_V && action == GLFW_PRESS)
    // Change viewport geometry to current actor
    if(key == GLFW_KEY_P && action == GLFW_PRESS)
      {
-     // otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
-     // // First, transform the center
-     // GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
-     // GlImageActor::PointType imCenter = currentActor->ViewportToImageTransform(vpCenter);
+     // First, transform the center
+     GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
+     GlImageActor::PointType imCenter = currentActor->ViewportToImageTransform(vpCenter);
 
-     // // Next, transform the spacing
-     // vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
-     // vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
+     // Next, transform the spacing
+     vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
+     vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
 
-     // GlImageActor::PointType tmpImPt = currentActor->ViewportToImageTransform(vpCenter);
+     GlImageActor::PointType tmpImPt = currentActor->ViewportToImageTransform(vpCenter);
+
+     GlImageActor::SpacingType spacing;
+
+     spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
+     spacing[1]=(tmpImPt[1]-imCenter[1])/1000;
 
      // GlImageActor::SpacingType spacing;
+     // ulx = std::min(imul[0],imlr[0]);
+     // lrx = std::max(imul[0],imlr[0]);
+     // uly = std::min(imul[1],imlr[1]);
+     // lry = std::max(imul[1],imlr[1]);
 
-     // spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
-     // spacing[1]=tmpImPt[1]-imCenter[1]/1000;
+     // origin[0] = ulx;
+     // origin[1] = uly;
 
-     // // GlImageActor::SpacingType spacing;
-     // // ulx = std::min(imul[0],imlr[0]);
-     // // lrx = std::max(imul[0],imlr[0]);
-     // // uly = std::min(imul[1],imlr[1]);
-     // // lry = std::max(imul[1],imlr[1]);
+     // spacing[0] = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
+     // spacing[1] = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
 
-     // // origin[0] = ulx;
-     // // origin[1] = uly;
+     std::cout<<"Center: "<<imCenter<<", spacing: "<<spacing<<std::endl;
 
-     // // spacing[0] = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
-     // // spacing[1] = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
-
-     // std::cout<<"Center: "<<imCenter<<", spacing: "<<spacing<<std::endl;
-
-     // m_View->GetSettings()->SetSpacing(spacing);
-     // m_View->GetSettings()->SetWkt(currentActor->GetWkt());
-     // m_View->GetSettings()->SetKeywordList(currentActor->GetKwl());
-     // m_View->GetSettings()->UseProjectionOn();
-     // m_View->GetSettings()->Center(imCenter);
-     // m_ReferenceActor = m_SelectedActor;
+     m_View->GetSettings()->SetSpacing(spacing);
+     m_View->GetSettings()->SetWkt(currentActor->GetWkt());
+     m_View->GetSettings()->SetKeywordList(currentActor->GetKwl());
+     m_View->GetSettings()->UseProjectionOn();
+     m_View->GetSettings()->Center(imCenter);
+     m_ReferenceActor = m_SelectedActor;
      }
    
 }
