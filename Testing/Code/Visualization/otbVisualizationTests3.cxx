@@ -27,5 +27,4 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataModelNew);
   REGISTER_TEST(otbVectorDataModelTest);
   REGISTER_TEST(otbVectorDataModelAddVectorDataTest);
-  REGISTER_TEST(otbAmplitudeFunctorTest);
 }
