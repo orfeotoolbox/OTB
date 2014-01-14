@@ -1,0 +1,26 @@
+---------------------
+Ice in a nuttshell
+----------------------
+
+ICE is a fast OpenGl rendering API for remote sensing images. This small piece
+of code decomposes into an OTB/OpenGl only library with an API for simple
+rendering of remote sensing images and a GLFW3 example of how to use the API.
+
+---------------------
+Installation
+----------------------
+
+Dependencies:
+
+- OTB (>= 4.0)
+- OpenGl
+- GLFW (>= 3.0)
+
+----------------------
+Command Line Arguments
+----------------------
+ 
+Usage: ./otbIce img1 ... imgN
+
+Press F1 for help
+
