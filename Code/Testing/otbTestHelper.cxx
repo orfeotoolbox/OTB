@@ -1021,7 +1021,7 @@ std::map<std::string, int> TestHelper::RegressionTestBaselines(char *baselineFil
 
   const std::string originalBaseline = itksys::SystemTools::GetFilenameWithoutLastExtension(baselineFilename);
   const unsigned int sizeRef = originalBaseline.size();
-  const bool HasExtension = sizeRef != itksys::SystemTools::GetFilenameName(baselineFilename).size();
+  const bool HasExtension = (sizeRef != itksys::SystemTools::GetFilenameName(baselineFilename).size());
   const std::string blFileExtension = itksys::SystemTools::GetFilenameLastExtension(baselineFilename);
 
   myPath.append("/");
@@ -1041,13 +1041,12 @@ std::map<std::string, int> TestHelper::RegressionTestBaselines(char *baselineFil
       curFilename = itksys::SystemTools::GetFilenameName(myDir.GetFile(i));
       }
 
-    if ( (curFilename.substr(0, sizeRef) == originalBaseline) && (curFileExtension.compare(blFileExtension) == 0) )
+    if ((curFilename.substr(0, sizeRef) == originalBaseline)
+        && reg.find(curFilename.substr(sizeRef, curFilename.size()))
+        && (curFileExtension.compare(blFileExtension) == 0))
       {
-      if (reg.find(curFilename.substr(sizeRef, curFilename.size())))
-        {
-        std::string myFile = myPath;
-        baselines[myFile.append(myDir.GetFile(i))] = 0;
-        }
+      std::string myFile = myPath;
+      baselines[myFile.append(myDir.GetFile(i))] = 0;
       }
     }
 
