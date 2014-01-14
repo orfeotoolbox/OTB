@@ -46,10 +46,8 @@
 # include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"
 #endif
 //
-#include "Core/mvdBackgroundTask.h"
 #include "Core/mvdDatabaseModel.h"
 #include "Core/mvdDatasetModel.h"
-#include "Core/mvdImageImporter.h"
 #include "Core/mvdQuicklookModel.h"
 #include "Core/mvdVectorImageModel.h"
 //
@@ -62,6 +60,7 @@
 #include "Gui/mvdDatabaseBrowserWidget.h"
 #include "Gui/mvdDatasetPropertiesController.h"
 #include "Gui/mvdDatasetPropertiesWidget.h"
+#include "Gui/mvdFilenameDragAndDropEventFilter.h"
 #include "Gui/mvdGLImageWidget.h"
 #include "Gui/mvdHistogramController.h"
 #include "Gui/mvdHistogramWidget.h"
@@ -69,7 +68,6 @@
 #include "Gui/mvdImageViewManipulator.h"
 #include "Gui/mvdQuicklookViewManipulator.h"
 #include "Gui/mvdStatusBarWidget.h"
-#include "Gui/mvdTaskProgressDialog.h"
 #include "Gui/mvdPixelDescriptionWidget.h"
 //
 #include "mvdApplication.h"
@@ -114,9 +112,22 @@ MainWindow
 #endif
   m_ImageView( NULL ),
   m_QuicklookViewDock( NULL ),
-  m_CentralTabWidget( NULL )
+  m_CentralTabWidget( NULL ),
+  m_FilenameDragAndDropEventFilter( NULL )
 {
   m_UI->setupUi( this );
+
+  //
+  // Event filters.
+  m_FilenameDragAndDropEventFilter = new FilenameDragAndDropEventFilter( this );
+
+  QObject::connect(
+    m_FilenameDragAndDropEventFilter,
+    SIGNAL( ImportFilenameRequested( const QString& ) ),
+    // to:
+    this,
+    SLOT( OnImportFilenameRequested( const QString& ) )
+  );
 }
 
 /*****************************************************************************/
@@ -218,6 +229,8 @@ MainWindow
     SLOT( OnHistogramRefreshed() )
   );
 
+  //
+  // OTB application support.
 #ifdef OTB_WRAP_QT
   //
   // Done here cause needed to be done once and only once.
@@ -260,6 +273,30 @@ MainWindow
     SLOT( OnTabCloseRequested( int ) )
   );
 
+
+  //
+  // EVENT FILTERS.
+
+  // Database browser
+  DatabaseBrowserController* dbBrowserController =
+    m_DatabaseBrowserDock->findChild< DatabaseBrowserController* >();
+  assert( dbBrowserController!=NULL );
+
+  assert(
+    dbBrowserController->GetWidget()==
+    dbBrowserController->GetWidget< DatabaseBrowserWidget >()
+  );
+
+  DatabaseBrowserWidget* dbBrowserWidget =
+    dbBrowserController->GetWidget< DatabaseBrowserWidget >();
+
+  dbBrowserWidget->InstallTreeEventFilter( m_FilenameDragAndDropEventFilter );
+
+  // Image view.
+  m_ImageView->installEventFilter( m_FilenameDragAndDropEventFilter );
+
+  //
+  // Image views
   ConnectImageViews();
 }
 
@@ -343,6 +380,7 @@ MainWindow
      m_ImageView->GetImageViewManipulator(),
      SLOT(OnUserZoomFull()));
 
+#if 0
    // connect image to load image when file dropped in CentralView
    QObject::connect(
      m_ImageView,
@@ -350,6 +388,7 @@ MainWindow
      this,
      SLOT( OnImageToImportDropped(const QString & ) )
      );
+#endif
 
    // the slot OnModelImageRegionChanged(...) is not implemented for
    // QuicklookViewManipulator, connecting it here instead in
@@ -371,16 +410,19 @@ MainWindow
                                       double) )
      );
 
+#if 0
    // Connect databasebrowser drop to import new dataset
    // need to get the controller to request the application widget
-   DatabaseBrowserController * dbcontroller =
-     m_DatabaseBrowserDock->findChild<DatabaseBrowserController *>();
+   DatabaseBrowserController * dbController =
+     m_DatabaseBrowserDock->findChild< DatabaseBrowserController* >();
   
-   QObject::connect(dbcontroller,
-                    SIGNAL( ImageToImportDropped(const QString & ) ),
-                    this,
-                    SLOT( OnImageToImportDropped(const QString &) )
+   QObject::connect(
+     dbController,
+     SIGNAL( ImageToImportDropped( const QString& ) ),
+     this,
+     SLOT( OnImageToImportDropped( const QString& ) )
      );
+#endif
 }
 
 /*****************************************************************************/
@@ -852,39 +894,15 @@ void
 MainWindow
 ::ImportImage( const QString& filename, bool forceCreate )
 {
-  //
-  // Background task.
-
-  // New image-importer worker.
-  // It will be auto-deleted by background-task.
-  ImageImporter* importer =
-    new ImageImporter(
+  DatasetModel* datasetModel =
+    ImportImage(
       filename,
-      forceCreate,
-      m_ImageView->width(), m_ImageView->height()
+      m_ImageView->width(),
+      m_ImageView->height(),
+      forceCreate
     );
 
-  // New background-task running worker.
-  // Will be self auto-deleted when worker has finished.
-  BackgroundTask* task = new BackgroundTask( importer, true, this );
-
-  //
-  // Progress dialog.
-  TaskProgressDialog progress(
-    task,
-    this,
-    Qt::CustomizeWindowHint | Qt::WindowTitleHint
-  );
-
-  progress.setWindowModality( Qt::WindowModal );
-  progress.setAutoReset( false );
-  progress.setAutoClose( false );
-  progress.setCancelButton( NULL );
-  progress.setMinimumDuration( 0 );
-
-  //
-  // Result.
-  if( progress.Exec()!=QMessageBox::Accepted )
+  if( datasetModel==NULL )
     return;
 
   assert( Application::Instance() );
@@ -894,15 +912,13 @@ MainWindow
     Application::Instance()->GetModel< DatabaseModel >()
   );
 
-  assert( progress.GetObject< DatasetModel >()!=NULL );
-
   DatabaseModel* databaseModel =
     Application::Instance()->GetModel< DatabaseModel >();
   assert( databaseModel!=NULL );
 
   databaseModel->SelectDatasetModel(
     databaseModel->RegisterDatasetModel(
-      progress.GetObject< DatasetModel >()
+      datasetModel
     )
   );
 }
@@ -1583,6 +1599,14 @@ MainWindow
 ::OnImageToImportDropped(const QString & fname)
 {
   ImportImage( fname, false );
+}
+
+/*****************************************************************************/
+void
+MainWindow
+::OnImportFilenameRequested( const QString& filename )
+{
+  ImportImage( filename, true );
 }
 
 } // end namespace 'mvd'

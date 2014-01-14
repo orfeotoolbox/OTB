@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "Gui/mvdAbstractDragAndDropEventFilter.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -72,7 +72,7 @@ namespace mvd
  * widget class.
  */
 class Monteverdi2_EXPORT FilenameDragAndDropEventFilter :
-    public QObject
+    public AbstractDragAndDropEventFilter
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,16 +85,11 @@ class Monteverdi2_EXPORT FilenameDragAndDropEventFilter :
 // Public methods.
 public:
 
+  /** \brief Constructor. */
+  FilenameDragAndDropEventFilter( QObject* parent =NULL );
+
   /** \brief Destructor. */
   virtual ~FilenameDragAndDropEventFilter();
-
-  //
-  // QObject overloads.
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
-   */
-  virtual bool eventFilter( QObject* watched, QEvent* event );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -108,34 +103,36 @@ public slots:
 // Signals.
 signals:
 
+  /**
+   */
+  void ImportFilenameRequested( const QString& filename );
+
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
 
-  /** \brief Constructor. */
-  FilenameDragAndDropEventFilter( QObject* parent =NULL );
-
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragEnterEvent
    */
-  virtual bool DragEnterEvent( QObject* object, QDragEnterEvent* event ) =0;
+  virtual bool DragEnterEvent( QObject* object, QDragEnterEvent* event );
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragLeaveEvent
    */
-  virtual bool DragLeaveEvent( QObject* object, QDragLeaveEvent* event ) =0;
+  virtual bool DragLeaveEvent( QObject* object, QDragLeaveEvent* event );
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragMoveEvent
    */
-  virtual bool DragMoveEvent( QObject* object, QDragMoveEvent* event ) =0;
+  virtual bool DragMoveEvent( QObject* object, QDragMoveEvent* event );
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dropEvent
    */
-  virtual bool DropEvent( QObject* object, QDropEvent* event ) =0;
+  virtual bool DropEvent( QObject* object, QDropEvent* event );
 
 //
 // Protected attributes.

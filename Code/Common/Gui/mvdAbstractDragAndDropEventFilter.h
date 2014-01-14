@@ -151,6 +151,10 @@ private:
 // Private attributes.
 private:
 
+  /**
+   */
+  bool m_FilterOutEvent : 1;
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //

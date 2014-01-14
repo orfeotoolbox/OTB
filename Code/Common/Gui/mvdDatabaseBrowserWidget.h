@@ -131,6 +131,10 @@ public:
   // TODO: Remove access to child widget which should be hidden by encapsulation.
   DatabaseTreeWidget* GetDatabaseTreeWidget();
 
+  /**
+   */
+  void InstallTreeEventFilter( QObject* eventFilter );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //

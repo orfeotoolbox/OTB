@@ -66,6 +66,7 @@ namespace mvd
 // Core
 class DatasetModel;
 // Gui
+class FilenameDragAndDropEventFilter;
 class GLImageWidget;
 class StatusBarWidget;
 
@@ -129,7 +130,11 @@ signals:
 // Protected methods.
 protected:
 
+  /**
+   */
   void ImportImage( const QString& filename, bool forceCreate );
+
+  using I18nMainWindow::ImportImage;
 
   //
   // QMainWindow overrides.
@@ -294,25 +299,29 @@ private:
   /**
    *  \brief OTB-applications browser dock-widget.
    */
-  QDockWidget*     m_OtbApplicationsBrowserDock;
+  QDockWidget* m_OtbApplicationsBrowserDock;
 #endif
 
   /**
    * \brief Image-view dock-widget.
    */
-  GLImageWidget*   m_ImageView;
+  GLImageWidget* m_ImageView;
 
   /**
    * \brief Quicklook-view dock-widget.
    */
-  QDockWidget*     m_QuicklookViewDock;
+  QDockWidget* m_QuicklookViewDock;
 
   /**
    */
-  QTabWidget*      m_CentralTabWidget;
+  QTabWidget* m_CentralTabWidget;
 
   /** */
   StatusBarWidget* m_StatusBarWidget;
+
+  /**
+   */
+  FilenameDragAndDropEventFilter* m_FilenameDragAndDropEventFilter;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -360,6 +369,11 @@ private slots:
 
   /** */
   void OnUserScaleEditingFinished();
+
+  /**
+   */
+  void OnImportFilenameRequested( const QString& filename );
+
 };
 
 } // end namespace 'mvd'

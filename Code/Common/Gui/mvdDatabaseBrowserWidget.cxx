@@ -239,6 +239,14 @@ DatabaseBrowserWidget
 #endif
 }
 
+/*****************************************************************************/
+void
+DatabaseBrowserWidget
+::InstallTreeEventFilter( QObject* eventFilter )
+{
+  m_UI->databaseTreeWidget->installEventFilter( eventFilter );
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/

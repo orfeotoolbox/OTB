@@ -28,6 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -64,7 +65,7 @@ namespace mvd
 /*****************************************************************************/
 FilenameDragAndDropEventFilter
 ::FilenameDragAndDropEventFilter( QObject* parent  ) :
-  QObject( parent )
+  AbstractDragAndDropEventFilter( parent )
 {
 }
 
@@ -77,31 +78,94 @@ FilenameDragAndDropEventFilter
 /*****************************************************************************/
 bool
 FilenameDragAndDropEventFilter
-::eventFilter( QObject* object, QEvent* event )
+::DragEnterEvent( QObject* object, QDragEnterEvent* event )
 {
-  switch( event->type() )
+  //
+  // Bypass event its MIME data does not contain not URL(s).
+  if( !event->mimeData()->hasUrls() )
+    return false;
+
+  //
+  // Bypass event if MIME data URL(s) are not all local filenames.
+  typedef QList< QUrl > QUrlList;
+
+  QUrlList urls( event->mimeData()->urls() );
+
+  for( QUrlList::const_iterator it( urls.begin() );
+       it!=urls.end();
+       ++it )
     {
-    case QEvent::DragEnter:
-      return DragEnterEvent( object, dynamic_cast< QDragEnterEvent* >( event ) );
-      break;
-
-    case QEvent::DragMove:
-      return DragMoveEvent( object, dynamic_cast< QDragMoveEvent* >( event ) );
-      break;
-
-    case QEvent::DragLeave:
-      return DragLeaveEvent( object, dynamic_cast< QDragLeaveEvent* >( event ) );
-      break;
-
-    case QEvent::Drop:
-      return DropEvent( object, dynamic_cast< QDropEvent* >( event ) );
-      break;
-
-    default:
-      break;
+    if( !it->isLocalFile() )
+      return false;
     }
 
-  return QObject::eventFilter( object, event );
+  //
+  // Accept event if its MIME data contains some URL(s) and they are
+  // all local filenames.
+  event->acceptProposedAction();
+
+  //
+  // Eatup event.
+  return true;
+}
+
+/*****************************************************************************/
+bool
+FilenameDragAndDropEventFilter
+::DragLeaveEvent( QObject* object, QDragLeaveEvent* event )
+{
+  //
+  // Nothing to do: bypass event & let default behaviour occur.
+  return false;
+}
+
+/*****************************************************************************/
+bool
+FilenameDragAndDropEventFilter
+::DragMoveEvent( QObject* object, QDragMoveEvent* event )
+{
+  //
+  // Nothing to do: bypass event & let default behaviour occur.
+  return false;
+}
+
+/*****************************************************************************/
+bool
+FilenameDragAndDropEventFilter
+::DropEvent( QObject* object, QDropEvent* event )
+{
+  assert( event!=NULL );
+  assert( event->mimeData()!=NULL );
+  assert( event->mimeData()->hasUrls() );
+
+  //
+  // Bypass event its MIME data does not contain not URL(s).
+  if( !event->mimeData()->hasUrls() )
+    return false;
+
+  //
+  // Bypass event if MIME data URL(s) are not all local filenames.
+  typedef QList< QUrl > QUrlList;
+
+  QUrlList urls( event->mimeData()->urls() );
+
+  for( QUrlList::const_iterator it( urls.begin() );
+       it!=urls.end();
+       ++it )
+    {
+    if( !it->isLocalFile() )
+      {
+      qWarning() << "Drop non-supported URL" << *it;
+      }
+    else
+      {
+      emit ImportFilenameRequested( it->toLocalFile() );
+      }
+    }
+  
+  //
+  // Eatup event.
+  return true;
 }
 
 /*****************************************************************************/

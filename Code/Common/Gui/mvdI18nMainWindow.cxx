@@ -35,10 +35,13 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdBackgroundTask.h"
 #include "Core/mvdDatabaseConnection.h"
 #include "Core/mvdDatasetModel.h"
+#include "Core/mvdImageImporter.h"
 #include "Gui/mvdAboutDialog.h"
 #include "Gui/mvdI18nApplication.h"
+#include "Gui/mvdTaskProgressDialog.h"
 
 namespace mvd
 {
@@ -153,6 +156,55 @@ I18nMainWindow
 
   //
   return dockWidget;
+}
+
+/*****************************************************************************/
+DatasetModel*
+I18nMainWindow
+::ImportImage( const QString& filename, int width, int height, bool forceCreate )
+{
+  //
+  // Background task.
+
+  // New image-importer worker.
+  // It will be auto-deleted by background-task.
+  ImageImporter* importer =
+    new ImageImporter(
+      filename,
+      forceCreate,
+      width, height
+    );
+
+  // New background-task running worker.
+  // Will be self auto-deleted when worker has finished.
+  BackgroundTask* task = new BackgroundTask( importer, true, this );
+
+  //
+  // Progress dialog.
+  TaskProgressDialog progress(
+    task,
+    this,
+    Qt::CustomizeWindowHint | Qt::WindowTitleHint
+  );
+
+  progress.setWindowModality( Qt::WindowModal );
+  progress.setAutoReset( false );
+  progress.setAutoClose( false );
+  progress.setCancelButton( NULL );
+  progress.setMinimumDuration( 0 );
+
+  //
+  // Result.
+  if( progress.Exec()!=QMessageBox::Accepted )
+    {
+    assert( progress.GetObject< DatasetModel >()==NULL );
+
+    return NULL;
+    }
+
+  assert( progress.GetObject< DatasetModel >()!=NULL );
+
+  return progress.GetObject< DatasetModel >();
 }
 
 /*****************************************************************************/

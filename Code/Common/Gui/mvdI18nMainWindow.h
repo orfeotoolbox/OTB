@@ -61,6 +61,7 @@ namespace mvd
 //
 // Internal class pre-declaration.
 class AbstractModel;
+class DatasetModel;
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -257,6 +258,13 @@ protected:
    * \param model The model to assign to the controller.
    */
   inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
+
+  /**
+   */
+  DatasetModel* ImportImage( const QString& filename,
+                             int width,
+                             int height,
+                             bool forceCreate );
 
 
   //
