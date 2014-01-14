@@ -42,12 +42,12 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbRenderingImageFilter.h"
 #include "otbGenericRSTransform.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAbstractImageModel.h"
+#include "Core/mvdRenderingImageFilter.h"
 #include "Core/mvdTypes.h"
 #include "Gui/mvdColorSetupWidget.h"
 
@@ -580,7 +580,7 @@ private:
    */
   // 
   typedef
-    otb::RenderingImageFilter< SourceImageType, DisplayImageType >
+    mvd::RenderingImageFilter< SourceImageType, DisplayImageType >
     RenderingFilterType;
 
 //
