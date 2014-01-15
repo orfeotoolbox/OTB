@@ -155,11 +155,11 @@ FilenameDragAndDropEventFilter
     {
     if( !it->isLocalFile() )
       {
-      qWarning() << "Drop non-supported URL" << *it;
+      qWarning() << "Dropped URL is not a local filename." << *it;
       }
     else
       {
-      emit ImportFilenameRequested( it->toLocalFile() );
+      emit FilenameDropped( it->toLocalFile() );
       }
     }
   

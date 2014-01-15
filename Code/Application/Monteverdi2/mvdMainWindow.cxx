@@ -123,10 +123,10 @@ MainWindow
 
   QObject::connect(
     m_FilenameDragAndDropEventFilter,
-    SIGNAL( ImportFilenameRequested( const QString& ) ),
+    SIGNAL( FilenameDropped( const QString& ) ),
     // to:
     this,
-    SLOT( OnImportFilenameRequested( const QString& ) )
+    SLOT( OnFilenameDropped( const QString& ) )
   );
 }
 
@@ -1572,7 +1572,7 @@ MainWindow
 /*****************************************************************************/
 void
 MainWindow
-::OnImportFilenameRequested( const QString& filename )
+::OnFilenameDropped( const QString& filename )
 {
   ImportImage( filename, true );
 }

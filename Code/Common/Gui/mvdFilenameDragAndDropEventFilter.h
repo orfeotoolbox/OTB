@@ -105,7 +105,7 @@ signals:
 
   /**
    */
-  void ImportFilenameRequested( const QString& filename );
+  void FilenameDropped( const QString& filename );
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/

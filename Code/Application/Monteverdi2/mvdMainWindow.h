@@ -368,7 +368,7 @@ private slots:
 
   /**
    */
-  void OnImportFilenameRequested( const QString& filename );
+  void OnFilenameDropped( const QString& filename );
 
 };
 
