@@ -698,7 +698,17 @@ void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double 
     itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
     for(it.GoToBegin();!it.IsAtEnd();++it)
       {
-      listSample->PushBack(it.Get());
+      bool nonan = true;
+
+      for(unsigned int i = 0; i < it.Get().Size();++i)
+        {
+        nonan = nonan && !std::isnan(it.Get()[i]);
+        }
+
+      if(nonan)
+        {
+        listSample->PushBack(it.Get());
+        }
       }
     }
   else
@@ -709,7 +719,17 @@ void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double 
     itk::ImageRegionConstIterator<VectorImageType> imIt(it->m_Image,it->m_Image->GetLargestPossibleRegion());
     for(imIt.GoToBegin();!imIt.IsAtEnd();++imIt)
       {
-      listSample->PushBack(imIt.Get());
+      bool nonan = true;
+
+      for(unsigned int i = 0; i < imIt.Get().Size();++i)
+        {
+        nonan = nonan && !std::isnan(imIt.Get()[i]);
+        }
+
+      if(nonan)
+        {
+        listSample->PushBack(imIt.Get());
+        }
       }
     }
     }
