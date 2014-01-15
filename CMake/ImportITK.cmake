@@ -1,6 +1,12 @@
 message(STATUS "Importing ITK...")
 
-option(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." ON)
+# Use an external version of ITK by default except on windows (ITK is not packaged in OSGeo4W)
+set(DEFAULT_OTB_USE_EXTERNAL_ITK ON)
+if(WIN32)
+   set(DEFAULT_OTB_USE_EXTERNAL_ITK OFF)
+endif()
+
+option(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." ${DEFAULT_OTB_USE_EXTERNAL_ITK})
 mark_as_advanced(OTB_USE_EXTERNAL_ITK)
 
 if(OTB_USE_EXTERNAL_ITK)
@@ -20,8 +26,7 @@ if(OTB_USE_EXTERNAL_ITK)
     # Add link directories needed to use ITK.
     link_directories(${ITK_LIBRARY_DIRS})
   else()
-        message(FATAL_ERROR
-                  "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
+    message(FATAL_ERROR "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
   endif()
 
   # Build shared libraries for otb
