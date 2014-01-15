@@ -151,7 +151,6 @@ signals:
                                const PointType&, 
                                double);
   void CentralWidgetUpdated();
-  void ImageToImportDropped(const QString &);
 
   void RenderingContextChanged( const PointType&, double);
 
@@ -167,10 +166,6 @@ protected:
   void wheelEvent( QWheelEvent *event);
   void resizeEvent(QResizeEvent* event);
   void keyPressEvent( QKeyEvent * event );
-
-  void dragEnterEvent(QDragEnterEvent *event);
-  void dragMoveEvent(QDragMoveEvent *event);
-  void dropEvent(QDropEvent *event);
   
 
 //

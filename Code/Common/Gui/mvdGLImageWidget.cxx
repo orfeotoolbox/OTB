@@ -359,55 +359,6 @@ GLImageWidget
 
 /*******************************************************************************/
 void
-GLImageWidget::dragEnterEvent(QDragEnterEvent *event)
-{
-  if( event->mimeData()->hasUrls() )
-    {
-    event->acceptProposedAction();
-    }
-}
-
-/*******************************************************************************/
-void 
-GLImageWidget::dragMoveEvent(QDragMoveEvent *event)
- {
-   //
-   // if the mouse is within the QLabel geometry : allow drops
-   if ( event->answerRect().intersects( this->geometry() ) )
-     {
-     event->acceptProposedAction();
-     }
-   else
-    {
-    event->ignore();
-    }
- }
-
-/*******************************************************************************/
-void 
-GLImageWidget::dropEvent(QDropEvent *event)
-{
-  QList<QUrl> urls = event->mimeData()->urls();
-
-  // cheking
-  if (urls.isEmpty())
-    return;
-
-  // get the filename and send 
-  // TODO : handle several files dropped
-  QString fileName = urls.first().toLocalFile();
-  if (fileName.isEmpty())
-    {
-    return;
-    }
-  else
-    {
-    emit ImageToImportDropped( fileName );
-    }
-}
-
-/*******************************************************************************/
-void
 GLImageWidget
 ::ListGlVersions() const
 {
