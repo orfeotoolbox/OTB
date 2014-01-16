@@ -89,12 +89,16 @@ ApplicationsToolBoxController
 
   //
   // connections
-  QObject::connect(appModel->GetApplicationsBrowser(), 
-                   SIGNAL( AvailableApplicationsTagsChanged(const ApplicationsTagContainer&, 
-                                                            const ApplicationDocNameToNameMap& ) ),
-                   widget,
-                   SLOT( OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer&, 
-                                                            const ApplicationDocNameToNameMap& ) ) );
+  QObject::connect(
+    appModel->GetApplicationsBrowser(), 
+    SIGNAL(
+      AvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
+                                        const ApplicationDocNameToNameMap& ) ),
+    widget,
+    SLOT(
+      OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
+                                          const ApplicationDocNameToNameMap& ) )
+  );
 }
 
 /*******************************************************************************/
@@ -113,12 +117,15 @@ ApplicationsToolBoxController
 
   //
   // disconnect app browser
-  QObject::disconnect(appModel->GetApplicationsBrowser(),
-                      SIGNAL( AvailableApplicationsTagsChanged(const ApplicationsTagContainer&, 
-                                                               const ApplicationDocNameToNameMap& ) ),
-                      widget,
-                      SLOT( OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer&, 
-                                                               const ApplicationDocNameToNameMap& ) )
+  QObject::disconnect(
+    appModel->GetApplicationsBrowser(),
+    SIGNAL(
+      AvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
+                                        const ApplicationDocNameToNameMap& ) ),
+    widget,
+    SLOT(
+      OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
+                                          const ApplicationDocNameToNameMap& ) )
     );
 }
 
@@ -156,23 +163,6 @@ ApplicationsToolBoxController
   // tree...
   model->FillTree();
 }
-
-/*******************************************************************************/
-/*
-QWidget *
-ApplicationsToolBoxController
-::GetSelectedApplicationWidget( const QString& appName )
-{
-#if 0
-  //
-  // Access model.
-  OTBApplicationsModel* model = GetModel< OTBApplicationsModel >();
-  assert( model!=NULL );
-#endif
-
-  return ApplicationLauncher::NewOtbApplicationWidget( appName );
-}
-*/
 
 /*******************************************************************************/
 /* SLOTS                                                                       */

@@ -162,7 +162,7 @@ QtWidgetParameterFactory::CreateQtWidget( otb::Wrapper::Parameter* param,
   CREATEWIDGET(otb::Wrapper::OutputFilenameParameter,
 	       otb::Wrapper::QtWidgetOutputFilenameParameter)
 
-    CREATEWIDGET(otb::Wrapper::DirectoryParameter,
+  CREATEWIDGET(otb::Wrapper::DirectoryParameter,
                otb::Wrapper::QtWidgetDirectoryParameter)
 
   CREATEWIDGET(otb::Wrapper::StringParameter,
