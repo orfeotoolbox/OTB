@@ -95,8 +95,14 @@ FilenameDragAndDropEventFilter
        it!=urls.end();
        ++it )
     {
+#if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
+    if( !it->scheme().compare( "file", Qt::CaseInsensitive ) )
+#else // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
     if( !it->isLocalFile() )
+#endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
+      {
       return false;
+      }
     }
 
   //
@@ -153,7 +159,11 @@ FilenameDragAndDropEventFilter
        it!=urls.end();
        ++it )
     {
+#if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
+    if( !it->scheme().compare( "file", Qt::CaseInsensitive ) )
+#else // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
     if( !it->isLocalFile() )
+#endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
       {
       qWarning() << "Dropped URL is not a local filename." << *it;
       }
