@@ -85,7 +85,6 @@ set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 set(EXE_TESTS1  ${CXX_TEST_PATH}/otbIOExamplesTests1)
 set(EXE_TESTS2  ${CXX_TEST_PATH}/otbIOExamplesTests2) # Need curl
-set(EXE_TESTS3  ${CXX_TEST_PATH}/otbIOExamplesTests3)
 
 set(NOTOL 0.0)
 set(EPSILON_5 0.00001)
@@ -210,14 +209,5 @@ if( OTB_USE_CURL )
   add_executable(otbIOExamplesTests2 otbIOExamplesTests2.cxx)
   target_link_libraries(otbIOExamplesTests2 OTBCommon OTBIO OTBTesting)
 endif()
-
-
-if(ITK_USE_REVIEW)
-  add_executable(otbIOExamplesTests3 otbIOExamplesTests3.cxx)
-  target_link_libraries(otbIOExamplesTests3 OTBCommon OTBIO OTBTesting)
-endif()
-
-
-
 
 endif()
