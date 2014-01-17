@@ -99,7 +99,7 @@ bool RADImageIO::CanReadFile(const char* filename)
     {
     return false;
     }
-  if (System::SetToLower(System::GetExtension(lFileName)) != "rad")
+  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".rad")
     {
     return false;
     }
@@ -449,7 +449,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
     }
 
   // Read FileName information
-  std::string lPathName = System::GetPathName(file_name);
+  std::string lPathName = itksys::SystemTools::GetFilenamePath(file_name);
   m_ChannelsFileName.clear();
   for (unsigned int i = 0; i < m_NbOfChannels; ++i)
     {
@@ -489,7 +489,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
 bool RADImageIO::CanWriteFile(const char* filename)
 {
   std::string lFileName(filename);
-  if (System::SetToLower(System::GetExtension(lFileName)) != "rad")
+  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".rad")
     {
     return false;
     }
@@ -726,7 +726,7 @@ void RADImageIO::WriteImageInformation()
 
   for (unsigned int i = 0; i < m_NbOfChannels; ++i)
     {
-    m_HeaderFile << System::GetShortFileName(this->m_ChannelsFileName[i].c_str()) << std::endl;
+    m_HeaderFile << itksys::SystemTools::GetFilenameName(this->m_ChannelsFileName[i].c_str()) << std::endl;
     }
   m_HeaderFile.close();
 

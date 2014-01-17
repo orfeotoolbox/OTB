@@ -77,12 +77,12 @@ struct ExtensionDriverAssociation
  */
 const ExtensionDriverAssociation k_ExtensionDriverMap[] =
   {
-    {"SHP", "ESRI Shapefile"},
-    {"TAB", "MapInfo File"},
-    {"GML", "GML"},
-    {"GPX", "GPX"},
-    {"SQLITE", "SQLite"},
-    {"KML", "KML"},
+    {".SHP", "ESRI Shapefile"},
+    {".TAB", "MapInfo File"},
+    {".GML", "GML"},
+    {".GPX", "GPX"},
+    {".SQLITE", "SQLite"},
+    {".KML", "KML"},
   };
 /**\ingroup GeometryInternals
  * \brief Returns the OGR driver name associated to a filename.
@@ -99,7 +99,7 @@ char const* DeduceDriverName(std::string filename)
     {
     return "PostgreSQL";
     }
-  const std::string extension = otb::System::GetExtension(filename);
+  const std::string extension = itksys::SystemTools::GetFilenameLastExtension(filename);
   ExtensionDriverAssociation const* whichIt =
     std::find_if(
       boost::begin(k_ExtensionDriverMap), boost::end(k_ExtensionDriverMap),

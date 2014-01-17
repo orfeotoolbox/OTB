@@ -161,9 +161,9 @@ private:
     std::vector<std::string> options;
 
     ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Overwrite);
-    std::string layername = otb::System::GetShortFileName(shapefile);
-    std::string extension = otb::System::GetExtension(shapefile);
-    layername = layername.substr(0,layername.size()-(extension.size()+1));
+    std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
+    std::string extension = itksys::SystemTools::GetFilenameLastExtension(shapefile);
+    layername = layername.substr(0,layername.size()-(extension.size()));
     layer = ogrDS->CreateLayer(layername, &oSRS, wkbMultiPolygon, options);
 
     OGRFieldDefn labelField("label", OFTInteger);
@@ -342,7 +342,7 @@ private:
 
     layer.ogr().CommitTransaction();
 
-    if(extension=="shp"){
+    if(extension==".shp"){
     sqloss.str("");
     sqloss<<"REPACK "<<layername;
     ogrDS->ogr().ExecuteSQL(sqloss.str().c_str(), NULL, NULL);

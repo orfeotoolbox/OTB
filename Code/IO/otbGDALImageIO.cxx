@@ -22,6 +22,7 @@
 #include "otbGDALImageIO.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
+#include "itksys/SystemTools.hxx"
 #include "otbImage.h"
 #include "itkVariableLengthVector.h"
 
@@ -1602,23 +1603,23 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
   std::string gdalDriverShortName;
 
   // Get extension in lowercase
-  extension = otb::System::SetToLower( System::GetExtension(name) );
+  extension = otb::System::SetToLower( itksys::SystemTools::GetFilenameLastExtension(name) );
 
-  if      ( extension == "tif" || extension == "tiff" )
+  if      ( extension == ".tif" || extension == ".tiff" )
     gdalDriverShortName = "GTiff";
-  else if ( extension == "hdr" )
+  else if ( extension == ".hdr" )
     gdalDriverShortName = "ENVI";
-  else if ( extension == "img" )
+  else if ( extension == ".img" )
     gdalDriverShortName = "HFA";
-  else if ( extension == "ntf" )
+  else if ( extension == ".ntf" )
     gdalDriverShortName = "NITF";
-  else if ( extension == "png" )
+  else if ( extension == ".png" )
     gdalDriverShortName="PNG";
-  else if ( extension == "jpg" || extension== "jpeg" )
+  else if ( extension == ".jpg" || extension== ".jpeg" )
     gdalDriverShortName="JPEG";
-  else if ( extension == "pix" )
+  else if ( extension == ".pix" )
     gdalDriverShortName="PCIDSK";
-  else if ( extension == "lbl" || extension == "pds" )
+  else if ( extension == ".lbl" || extension == ".pds" )
     gdalDriverShortName="ISIS2";
   else
     gdalDriverShortName = "NOT-FOUND";

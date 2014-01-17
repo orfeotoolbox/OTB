@@ -87,8 +87,8 @@ bool BSQImageIO::CanReadFile(const char* filename)
 {
   std::fstream header_file;
   std::string  lFileName(filename);
-  std::string  extension = System::GetExtension(filename);
-  if ((extension != "HD") && (extension != "hd"))
+  std::string  extension = itksys::SystemTools::GetFilenameLastExtension(filename);
+  if ((extension != ".HD") && (extension != ".hd"))
     {
     return false;
     }
@@ -96,7 +96,7 @@ bool BSQImageIO::CanReadFile(const char* filename)
     {
     return false;
     }
-  if (System::SetToLower(System::GetExtension(lFileName)) != "hd")
+  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".hd")
     {
     return false;
     }
@@ -467,8 +467,8 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
 bool BSQImageIO::CanWriteFile(const char* filename)
 {
   std::string lFileName(filename);
-  std::string extension = System::GetExtension(filename);
-  if ((extension != "HD") && (extension != "hd"))
+  std::string extension = itksys::SystemTools::GetFilenameLastExtension(filename);
+  if ((extension != ".HD") && (extension != ".hd"))
     {
     return false;
     }
@@ -476,8 +476,8 @@ bool BSQImageIO::CanWriteFile(const char* filename)
     {
     return false;
     }
-  const std::string Extension = System::GetExtension(filename);
-  if ((Extension == "hd") || (Extension == "HD"))
+  const std::string Extension = itksys::SystemTools::GetFilenameLastExtension(filename);
+  if ((Extension == ".hd") || (Extension == ".HD"))
     {
     return true;
     }

@@ -83,8 +83,8 @@ bool LUMImageIO::CanReadFile(const char* filename)
 {
   std::string lFileName(filename);
   // Test the extension
-  std::string extension = System::GetExtension(filename);
-  if ((extension != "LUM") && (extension != "lum"))
+  std::string extension = itksys::SystemTools::GetFilenameLastExtension(filename);
+  if ((extension != ".LUM") && (extension != ".lum"))
     {
     return false;
     }
@@ -310,8 +310,8 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream& file, const bool re
 bool LUMImageIO::CanWriteFile(const char* filename)
 {
   std::string lFileName(filename);
-  std::string extension = System::GetExtension(filename);
-  if ((extension != "LUM") && (extension != "lum"))
+  std::string extension = itksys::SystemTools::GetFilenameLastExtension(filename);
+  if ((extension != ".LUM") && (extension != ".lum"))
     {
     return false;
     }
@@ -319,8 +319,8 @@ bool LUMImageIO::CanWriteFile(const char* filename)
     {
     return false;
     }
-  const std::string Extension = System::GetExtension(filename);
-  if ((Extension == "lum") || (Extension == "LUM"))
+  const std::string Extension = itksys::SystemTools::GetFilenameLastExtension(filename);
+  if ((Extension == ".lum") || (Extension == ".LUM"))
     {
     return true;
     }

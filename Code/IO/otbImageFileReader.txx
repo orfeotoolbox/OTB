@@ -639,8 +639,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     {
     std::string strFileName(filename);
 
-    std::string extension = System::GetExtension(strFileName);
-    if ((extension == "HDR") || (extension == "hdr"))
+    std::string extension = itksys::SystemTools::GetFilenameLastExtension(strFileName);
+    if ((extension == ".HDR") || (extension == ".hdr"))
       {
       //Supprime l'extension
       GdalFileName = System::GetRootName(strFileName);

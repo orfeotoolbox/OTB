@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbAeronetData.h"
 #include "otbAeronetFileReader.h"
-#include "otbSystem.h"
+#include "itksys/SystemTools.hxx"
 
 #include <fstream>
 #include <iomanip>
@@ -40,7 +40,7 @@ int otbAeronetExtractData(int argc, char * argv[])
   std::ofstream fout(argv[8]);
 
   fout << "Aeronet data extracted:" << std::endl;
-  fout << "Input file name: " << otb::System::GetShortFileName(std::string(argv[1])) << std::endl;
+  fout << "Input file name: " << itksys::SystemTools::GetFilenameName(std::string(argv[1])) << std::endl;
   fout << "Inputs user parameters:" << std::endl;
   fout << "    Day:                       " << reader->GetDay() << std::endl;
   fout << "    Month:                     " << reader->GetMonth() << std::endl;

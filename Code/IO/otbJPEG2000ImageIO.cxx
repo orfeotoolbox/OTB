@@ -318,12 +318,12 @@ int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
   // Find the codec file format
   std::string lFileName(filename);
 
-  if (System::SetToLower(System::GetExtension(lFileName)) == "j2k")
+  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".j2k")
     {
     this->m_CodecFormat = CODEC_J2K;
     }
-  else if (System::SetToLower(System::GetExtension(lFileName)) == "jp2"
-           || System::SetToLower(System::GetExtension(lFileName)) == "jpx")
+  else if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".jp2"
+           || System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".jpx")
     {
     this->m_CodecFormat = CODEC_JP2;
     }

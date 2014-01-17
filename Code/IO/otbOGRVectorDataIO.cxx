@@ -315,13 +315,13 @@ OGRVectorDataIO::GetOGRDriverName(std::string name) const
     }
   else
     {
-    extension = System::GetExtension(upperName);
-    if (extension == "SHP") driverOGR = "ESRI Shapefile";
-    else if ((extension == "TAB")) driverOGR = "MapInfo File";
-    else if (extension == "GML") driverOGR = "GML";
-    else if (extension == "GPX") driverOGR = "GPX";
-    else if (extension == "SQLITE") driverOGR = "SQLite";
-     else if (extension=="KML") driverOGR="KML";
+    extension = itksys::SystemTools::GetFilenameLastExtension(upperName);
+    if (extension == ".SHP") driverOGR = "ESRI Shapefile";
+    else if ((extension == ".TAB")) driverOGR = "MapInfo File";
+    else if (extension == ".GML") driverOGR = "GML";
+    else if (extension == ".GPX") driverOGR = "GPX";
+    else if (extension == ".SQLITE") driverOGR = "SQLite";
+     else if (extension==".KML") driverOGR="KML";
     else driverOGR = "NOT-FOUND";
     }
   //std::cout << name << " " << driverOGR <<" "<<upperName<< " "<< upperName.substr(0, 3) << std::endl;

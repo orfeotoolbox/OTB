@@ -31,6 +31,7 @@
 
 #include "otbMacro.h"
 #include "otbSystem.h"
+#include "itksys/SystemTools.hxx"
 #include "otbDataNode.h"
 #include "itkPreOrderTreeIterator.h"
 #include "otbMetaDataKey.h"
@@ -57,7 +58,7 @@ KMLVectorDataIO::CanReadFile(const char* filename) const
     {
     return false;
     }
-  if (System::SetToLower(System::GetExtension(lFileName)) != "kml")
+  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".kml")
     {
     return false;
     }
@@ -503,7 +504,7 @@ bool KMLVectorDataIO::CanWriteFile(const char* filename) const
     {
     return false;
     }
-  if (System::SetToLower(System::GetExtension(lFileName)) != "kml")
+  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".kml")
     {
     return false;
     }
