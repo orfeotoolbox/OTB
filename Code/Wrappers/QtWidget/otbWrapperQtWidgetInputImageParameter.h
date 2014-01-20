@@ -38,6 +38,9 @@ public:
   QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*);
   virtual ~QtWidgetInputImageParameter();
 
+  inline const QLineEdit* GetInput() const;
+  inline QLineEdit* GetInput();
+
 protected slots:
   bool SetFileName( const QString& value );
   void SelectFile();
@@ -58,8 +61,24 @@ private:
   QPushButton * m_Button;
 };
 
+inline
+const QLineEdit*
+QtWidgetInputImageParameter
+::GetInput() const
+{
+  return m_Input;
+}
 
+inline
+QLineEdit*
+QtWidgetInputImageParameter
+::GetInput()
+{
+  return m_Input;
 }
-}
+
+} // Wrapper
+
+} // otb
 
 #endif

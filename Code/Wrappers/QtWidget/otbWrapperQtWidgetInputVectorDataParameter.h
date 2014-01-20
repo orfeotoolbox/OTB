@@ -38,6 +38,9 @@ public:
   QtWidgetInputVectorDataParameter(InputVectorDataParameter*, QtWidgetModel*);
   virtual ~QtWidgetInputVectorDataParameter();
 
+  inline const QLineEdit* GetInput() const;
+  inline QLineEdit* GetInput();
+
 protected slots:
   bool SetFileName( const QString& value );
   void SelectFile();
@@ -59,7 +62,24 @@ private:
 };
 
 
+inline
+const QLineEdit*
+QtWidgetInputVectorDataParameter
+::GetInput() const
+{
+  return m_Input;
 }
+
+inline
+QLineEdit*
+QtWidgetInputVectorDataParameter
+::GetInput()
+{
+  return m_Input;
 }
+
+} // Wrapper
+
+} // otb
 
 #endif

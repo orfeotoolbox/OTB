@@ -25,7 +25,10 @@ namespace Wrapper
 
 QtWidgetInputImageParameter::QtWidgetInputImageParameter(InputImageParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
-  m_InputImageParam(param)
+  m_InputImageParam(param),
+  m_HLayout( NULL ),
+  m_Input( NULL ),
+  m_Button( NULL )
 {
 }
 

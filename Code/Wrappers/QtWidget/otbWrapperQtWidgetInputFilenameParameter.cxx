@@ -19,12 +19,16 @@
 
 namespace otb
 {
+
 namespace Wrapper
 {
 
 QtWidgetInputFilenameParameter::QtWidgetInputFilenameParameter(InputFilenameParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
-  m_FilenameParam(param)
+  m_FilenameParam(param),
+  m_HLayout( NULL ),
+  m_Input( NULL ),
+  m_Button( NULL )
 {
 }
 

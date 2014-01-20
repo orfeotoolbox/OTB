@@ -24,7 +24,10 @@ namespace Wrapper
 
 QtWidgetInputVectorDataParameter::QtWidgetInputVectorDataParameter(InputVectorDataParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(param, m),
-  m_InputVectorDataParam(param)
+  m_InputVectorDataParam(param),
+  m_HLayout( NULL ),
+  m_Input( NULL ),
+  m_Button( NULL )
 {
 }
 
