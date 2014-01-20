@@ -21,11 +21,10 @@
 #include "otbOGRVectorDataIO.h"
 
 #include "ogrsf_frmts.h"
-
+#include "otbSystem.h"
 #include "itksys/SystemTools.hxx"
 #include "itkByteSwapper.h"
 #include "otbMacro.h"
-#include "otbSystem.h"
 #include "otbDataNode.h"
 #include "otbMetaDataKey.h"
 #include "itkTimeProbe.h"

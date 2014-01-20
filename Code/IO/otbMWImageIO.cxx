@@ -17,11 +17,11 @@
 =========================================================================*/
 #include "otbMWImageIO.h"
 #include "itkByteSwapper.h"
+#include "otbSystem.h"
 #include "itksys/SystemTools.hxx"
 
 #include "otbMacro.h"
 
-#include "otbSystem.h"
 
 namespace otb
 {

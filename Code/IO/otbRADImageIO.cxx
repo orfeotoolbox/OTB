@@ -21,11 +21,11 @@
 #include <iostream>
 
 #include "itkByteSwapper.h"
+#include "otbSystem.h"
 #include "itksys/SystemTools.hxx"
 
 #include "otbMacro.h"
 
-#include "otbSystem.h"
 
 namespace otb
 {
@@ -99,7 +99,7 @@ bool RADImageIO::CanReadFile(const char* filename)
     {
     return false;
     }
-  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".rad")
+  if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".rad")
     {
     return false;
     }
@@ -256,7 +256,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
 
   // Read NBCOLONNES information
   file >> lString;
-  lString = System::SetToUpper(lString);
+  lString = itksys::SystemTools::UpperCase(lString);
   if ((lString != "NBCOLONNES") && (lString != "NBCOLUMNS"))
     {
     if (reportError == true)
@@ -272,7 +272,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
 
   // Read NBLIGNES information
   file >> lString;
-  lString = System::SetToUpper(lString);
+  lString = itksys::SystemTools::UpperCase(lString);
   if ((lString != "NBLIGNES") && (lString != "NBLINES"))
     {
     if (reportError == true)
@@ -288,7 +288,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
 
   // Read NBPLANS information
   file >> lString;
-  lString = System::SetToUpper(lString);
+  lString = itksys::SystemTools::UpperCase(lString);
   if ((lString != "NBPLANS") && (lString != "NBBANDS"))
     {
     if (reportError == true)
@@ -306,7 +306,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
 
   // Read TYPECODAGE information
   file >> lString;
-  lString = System::SetToUpper(lString);
+  lString = itksys::SystemTools::UpperCase(lString);
   if ((lString != "TYPECODAGE") && (lString != "TYPE"))
     {
     if (reportError == true)
@@ -320,7 +320,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
     }
   file >> lStrCodePix;
 
-  lStrCodePix = System::SetToUpper(lStrCodePix);
+  lStrCodePix = itksys::SystemTools::UpperCase(lStrCodePix);
   if (lStrCodePix == "OCT")
     {
     m_PixelType = SCALAR;
@@ -419,11 +419,11 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   file >> lString;
   if (lString.empty() == false)
     {
-    lString = System::SetToUpper(lString);
+    lString = itksys::SystemTools::UpperCase(lString);
     if ((lString == "SENSCODAGE") || (lString == "ORDER"))
       {
       file >> lString;
-      lString = System::SetToUpper(lString);
+      lString = itksys::SystemTools::UpperCase(lString);
       if (lString == "INTEL")
         {
         m_FileByteOrder = LittleEndian;
@@ -489,7 +489,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
 bool RADImageIO::CanWriteFile(const char* filename)
 {
   std::string lFileName(filename);
-  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".rad")
+  if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".rad")
     {
     return false;
     }
@@ -614,8 +614,8 @@ void RADImageIO::WriteImageInformation()
   m_HeaderFile << "TYPECODAGE ";
 
   std::string lExtension;
-  std::string lStringPixelType = System::SetToUpper(this->GetPixelTypeAsString(m_PixelType));
-  std::string lStringComponentType = System::SetToUpper(this->GetComponentTypeAsString(this->GetComponentType()));
+  std::string lStringPixelType = itksys::SystemTools::UpperCase(this->GetPixelTypeAsString(m_PixelType));
+  std::string lStringComponentType = itksys::SystemTools::UpperCase(this->GetComponentTypeAsString(this->GetComponentType()));
 
   if (lStringPixelType == "SCALAR")
     {

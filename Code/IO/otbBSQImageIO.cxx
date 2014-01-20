@@ -21,11 +21,11 @@
 #include <iostream>
 
 #include "itkByteSwapper.h"
+#include "otbSystem.h"
 #include "itksys/SystemTools.hxx"
 
 #include "otbMacro.h"
 
-#include "otbSystem.h"
 
 namespace otb
 {
@@ -96,7 +96,7 @@ bool BSQImageIO::CanReadFile(const char* filename)
     {
     return false;
     }
-  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".hd")
+  if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".hd")
     {
     return false;
     }
@@ -250,7 +250,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   std::string lStrCodePix;
   //Read TYPE information
   file >> lString;
-  lString = System::SetToUpper(lString);
+  lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "TYPE")
     {
     if (reportError == true)
@@ -263,7 +263,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
       }
     }
   file >> lStrCodePix;
-  lStrCodePix = System::SetToUpper(lStrCodePix);
+  lStrCodePix = itksys::SystemTools::UpperCase(lStrCodePix);
   if (lStrCodePix == "OCT")
     {
     SetComponentType(CHAR);
@@ -311,7 +311,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
     }
   //Read LABEL information
   file >> lString;
-  lString = System::SetToUpper(lString);
+  lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "LABEL")
     {
     if (reportError == true)
@@ -326,7 +326,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   while ((lString != "CHANNELS") || (file.eof()))
     {
     file >> lString;
-    lString = System::SetToUpper(lString);
+    lString = itksys::SystemTools::UpperCase(lString);
     }
   if (lString != "CHANNELS")
     {
@@ -345,7 +345,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
 
   //Read LINES information
   file >> lString;
-  lString = System::SetToUpper(lString);
+  lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "LINES")
     {
     if (reportError == true)
@@ -360,7 +360,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   file >> m_Dimensions[1];
   //Read COLUMNS information
   file >> lString;
-  lString = System::SetToUpper(lString);
+  lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "COLUMNS")
     {
     if (reportError == true)
@@ -381,7 +381,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   lStrBitsPerPixels = lStrBitsPerPixels + " " + lString;
   file >> lString;
   lStrBitsPerPixels = lStrBitsPerPixels + " " + lString;
-  lStrBitsPerPixels = System::SetToUpper(lStrBitsPerPixels);
+  lStrBitsPerPixels = itksys::SystemTools::UpperCase(lStrBitsPerPixels);
   if (lStrBitsPerPixels != "BITS PER PIXEL")
     {
     if (reportError == true)
@@ -400,11 +400,11 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   file >> lString;
   if (lString.empty() == false)
     {
-    lString = System::SetToUpper(lString);
+    lString = itksys::SystemTools::UpperCase(lString);
     if (lString == "SENSCODAGE")
       {
       file >> lString;
-      lString = System::SetToUpper(lString);
+      lString = itksys::SystemTools::UpperCase(lString);
       if (lString == "INTEL")
         {
         m_FileByteOrder = LittleEndian;

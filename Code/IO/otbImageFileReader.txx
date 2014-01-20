@@ -20,6 +20,7 @@
 
 #include "otbImageFileReader.h"
 
+#include "otbSystem.h"
 #include <itksys/SystemTools.hxx>
 #include <fstream>
 
@@ -32,7 +33,6 @@
 
 #include "otbConvertPixelBuffer.h"
 #include "otbMacro.h"
-#include "otbSystem.h"
 #include "otbImageIOFactory.h"
 #include "otbImageKeywordlist.h"
 #include "otbMetaDataKey.h"

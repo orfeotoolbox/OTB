@@ -1603,7 +1603,7 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
   std::string gdalDriverShortName;
 
   // Get extension in lowercase
-  extension = otb::System::SetToLower( itksys::SystemTools::GetFilenameLastExtension(name) );
+  extension = itksys::SystemTools::LowerCase( itksys::SystemTools::GetFilenameLastExtension(name) );
 
   if      ( extension == ".tif" || extension == ".tiff" )
     gdalDriverShortName = "GTiff";

@@ -58,7 +58,7 @@ KMLVectorDataIO::CanReadFile(const char* filename) const
     {
     return false;
     }
-  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".kml")
+  if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".kml")
     {
     return false;
     }
@@ -504,7 +504,7 @@ bool KMLVectorDataIO::CanWriteFile(const char* filename) const
     {
     return false;
     }
-  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".kml")
+  if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".kml")
     {
     return false;
     }

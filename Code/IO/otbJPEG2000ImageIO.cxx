@@ -22,8 +22,7 @@
 #include <fstream>
 
 #include "otbMacro.h"
-#include "otbSystem.h"
-
+#include "itksys/SystemTools.hxx"
 #include "itkTimeProbe.h"
 #include "itkMacro.h"
 #include "itkMetaDataObject.h"
@@ -318,12 +317,12 @@ int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
   // Find the codec file format
   std::string lFileName(filename);
 
-  if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".j2k")
+  if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".j2k")
     {
     this->m_CodecFormat = CODEC_J2K;
     }
-  else if (System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".jp2"
-           || System::SetToLower(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".jpx")
+  else if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".jp2"
+           || itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) == ".jpx")
     {
     this->m_CodecFormat = CODEC_JP2;
     }
