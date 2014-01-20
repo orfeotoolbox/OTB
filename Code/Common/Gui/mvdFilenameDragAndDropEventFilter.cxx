@@ -142,7 +142,6 @@ FilenameDragAndDropEventFilter
 {
   assert( event!=NULL );
   assert( event->mimeData()!=NULL );
-  assert( event->mimeData()->hasUrls() );
 
   //
   // Bypass event its MIME data does not contain not URL(s).

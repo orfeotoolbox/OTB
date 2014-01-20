@@ -5,6 +5,7 @@
 set( Common_ApplicationsWrapper_SOURCES
   mvdApplicationsBrowser.cxx
   mvdApplicationLauncher.cxx
+  mvdWrapperParameterInitializers.cxx
   mvdWrapperQtWidgetInputImageParameter.cxx
   mvdWrapperQtWidgetParameterFactory.cxx
   mvdWrapperQtWidgetView.cxx

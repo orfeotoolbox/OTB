@@ -96,7 +96,7 @@ public:
    * \return A new instance of the automatically-generated widget of
    * the given OTB application.
    */
-  static Wrapper::QtWidgetView* NewOtbApplicationWidget( const QString& appName );
+  Wrapper::QtWidgetView* NewOtbApplicationWidget( const QString& appName ) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

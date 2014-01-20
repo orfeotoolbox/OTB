@@ -77,7 +77,7 @@ namespace mvd
  * tags of each application are extracted.
  *
  * An association application-tags is then setup and stored in a
- * std::vector to be sent ( via a signal ) to the
+ * std::vector to be sent (via a signal) to the
  * mvd::ApplicationsToolBox or any widget or class connected to this
  * signal.
  *

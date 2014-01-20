@@ -30,7 +30,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtCore>
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -56,7 +56,6 @@ namespace
 
 namespace mvd
 {
-class DropLineEdit;
 
 namespace Wrapper
 {
@@ -89,6 +88,9 @@ public:
   /** \brief Destructor. */
   virtual ~QtWidgetInputImageParameter();
 
+  inline const QLineEdit* GetInput() const;
+  inline QLineEdit* GetInput();
+
 #if 0
   /** \brief drag and drop events reimplementation */
   void dragEnterEvent( QDragEnterEvent * event );
@@ -118,12 +120,29 @@ private:
   otb::Wrapper::InputImageParameter::Pointer m_InputImageParam;
 
   QHBoxLayout* m_HLayout;
-  DropLineEdit* m_Input;
+  QLineEdit* m_Input;
   QPushButton* m_Button;
 };
 
 
+inline
+const QLineEdit*
+QtWidgetInputImageParameter
+::GetInput() const
+{
+  return m_Input;
 }
+
+inline
+QLineEdit*
+QtWidgetInputImageParameter
+::GetInput()
+{
+  return m_Input;
 }
+
+} // Wrapper
+
+} // mvd
 
 #endif

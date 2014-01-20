@@ -37,7 +37,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
-#include "Gui/mvdDropLineEdit.h"
 
 namespace mvd
 {
@@ -77,7 +76,12 @@ QtWidgetInputImageParameter
   //
   m_Button = new QPushButton( this );
   m_HLayout = new QHBoxLayout();
+
+#if 0
   m_Input = new DropLineEdit( this );
+#else
+  m_Input = new QLineEdit( this );
+#endif
 
   QObject::connect(
     m_Input, SIGNAL( textChanged( const QString& ) ),

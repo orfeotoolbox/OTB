@@ -82,7 +82,7 @@ ApplicationLauncher
 /*******************************************************************************/
 Wrapper::QtWidgetView*
 ApplicationLauncher
-::NewOtbApplicationWidget( const QString& appName )
+::NewOtbApplicationWidget( const QString& appName ) const
 {
   // Create module
   otb::Wrapper::Application::Pointer otbApp(

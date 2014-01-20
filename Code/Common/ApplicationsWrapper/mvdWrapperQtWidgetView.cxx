@@ -18,7 +18,6 @@
 =========================================================================*/
 #include "mvdWrapperQtWidgetView.h"
 
-
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -28,40 +27,43 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <functional>
 
 //
 // ITK includes (sorted by alphabetic order)
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbWrapperQtWidgetProgressReport.h"
-#include "otbWrapperQtWidgetSimpleProgressReport.h"
-#include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperApplicationHtmlDocGenerator.h"
-
-#include "otbWrapperTypes.h"
+// #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
-#include "otbWrapperOutputImageParameter.h"
+// #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
-#include "otbWrapperComplexOutputImageParameter.h"
+// #include "otbWrapperQtWidgetOutputImageParameter.h"
+// #include "otbWrapperQtWidgetProgressReport.h"
+#include "otbWrapperQtWidgetSimpleProgressReport.h"
+// #include "otbWrapperTypes.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdWrapperQtWidgetParameterFactory.h"
-//
 #include "Core/mvdI18nCoreApplication.h"
+#include "ApplicationsWrapper/mvdWrapperParameterInitializers.h"
 
 namespace mvd
 {
 namespace Wrapper
 {
 /*
-  TRANSLATOR mvd::ApplicationLauncher
+  TRANSLATOR mvd::Wrapper::QtWidgetView
 
   Necessary for lupdate to be aware of C++ namespaces.
 
   Context comment for translator.
 */
+
+
+/*****************************************************************************/
+/* INTERNAL TYPES                                                            */
 
 
 /*****************************************************************************/
@@ -169,12 +171,24 @@ QtWidgetView
 ::CreateInputWidgets()
 {
   QScrollArea *scrollArea = new QScrollArea;
+
+  QWidget * widget = 
+#if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
+    otb::Wrapper::QtWidgetParameterFactory::CreateQtWidget(
+      m_Model->GetApplication()->GetParameterList(),
+      m_Model
+    );
+
+#else // USE_OTB_QT_WIDGET_PARAMETER_FACTORY
   // Put the main group inside a scroll area
-  QWidget * widgets = 
-    mvd::Wrapper::QtWidgetParameterFactory::CreateQtWidget(m_Model->GetApplication()->GetParameterList(),
-                                                           m_Model);
-  
-  scrollArea->setWidget(widgets);
+    mvd::Wrapper::QtWidgetParameterFactory::CreateQtWidget(
+      m_Model->GetApplication()->GetParameterList(),
+      m_Model
+    );
+
+#endif // USE_OTB_QT_WIDGET_PARAMETER_FACTORY
+
+  scrollArea->setWidget( widget );
   scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setWidgetResizable(true);
@@ -189,10 +203,14 @@ QtWidgetView
     SLOT ( OnApplicationExecutionDone( int ) )
     );
 
+#if 0
   //
   // setup the default output in Widgets OutputImageParameter
-  FillOTBAppDefaultOutputImageParameter(widgets);
-  
+  FillOTBAppDefaultOutputImageParameter( widget );
+#else
+  SetupParameterWidgets( widget );
+#endif
+
   return scrollArea;
 }
 
@@ -267,6 +285,7 @@ QtWidgetView
 }
 
 /*******************************************************************************/
+#if 0
 void 
 QtWidgetView
 ::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
@@ -328,9 +347,23 @@ QtWidgetView
         }
       }
     }
-
 }
+#endif
 
+/*******************************************************************************/
+void
+QtWidgetView
+::SetupParameterWidgets( QWidget* widget )
+{
+  assert( widget!=NULL );
+
+  SetupWidget( widget, InputFilenameInitializer() );
+  SetupWidget( widget, InputImageInitializer() );
+  SetupWidget( widget, InputVectorDataInitializer() );
+#if defined( _DEBUG )
+  SetupWidget( widget, ToolTipInitializer() );
+#endif
+}
 
 /*******************************************************************************/
 QString 
@@ -359,16 +392,6 @@ QtWidgetView
   // Emit a signal to close any widget that this gui belonging to
   emit QuitSignal();
 }
-
-/*******************************************************************************/
-#if 0
-void
-QtWidgetView
-::UpdateMessageAfterExcuteClicked()
-{
-  m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
-}
-#endif
 
 /*******************************************************************************/
 void

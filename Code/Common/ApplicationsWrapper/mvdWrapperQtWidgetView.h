@@ -30,7 +30,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QtCore>
+#include <QtGui>
 
 //
 // System includes (sorted by alphabetic order)
@@ -100,7 +100,7 @@ public:
   void CreateGui();
 
   /** \brief Model Accessor */
-  otb::Wrapper::QtWidgetModel* GetModel()
+  inline otb::Wrapper::QtWidgetModel* GetModel()
   {
     return m_Model;
   }
@@ -158,6 +158,15 @@ private:
   // method to generate an unique identifier
   QString GenerateIdentifier();
 
+  /**
+   */
+  void SetupParameterWidgets( QWidget* widget );
+
+  /**
+   */
+  template< typename F >
+  inline void SetupWidget( QWidget* widget, const F& functor ) const;
+
 //
 // Private attributes.
 
@@ -177,10 +186,6 @@ private:
 //
 // Slots.
 private slots:
-
-#if 0
-  void UpdateMessageAfterExcuteClicked();
-#endif
 
   void UpdateMessageAfterApplicationReady(bool val);
 
@@ -257,6 +262,26 @@ QtWidgetView
 ::OnProgressReportEnd( int status )
 {
   SetClosable( true );
+}
+
+/*******************************************************************************/
+template< typename F >
+inline
+void
+QtWidgetView
+::SetupWidget( QWidget* widget, const F& functor ) const
+{
+  typedef typename F::argument_type Widget;
+  typedef QList< Widget > WidgetList;
+
+  WidgetList list( widget->findChildren< Widget >() );
+  
+  for( typename WidgetList::iterator it( list.begin() );
+       it!=list.end();
+       ++it )
+    {
+    functor( *it );
+    }
 }
 
 } // end namespace 'Wrapper'

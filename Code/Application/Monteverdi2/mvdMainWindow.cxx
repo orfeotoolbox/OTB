@@ -1409,8 +1409,18 @@ MainWindow
 {
 #ifdef OTB_WRAP_QT
 
+  assert( Application::ConstInstance()!=NULL );
+  assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );
+  assert(
+    Application::ConstInstance()->GetOTBApplicationsModel()->GetLauncher()!=NULL
+  );
+
   Wrapper::QtWidgetView* appWidget =
-    ApplicationLauncher::NewOtbApplicationWidget( appName );
+    Application::ConstInstance()
+    ->GetOTBApplicationsModel()
+    ->GetLauncher()
+    ->NewOtbApplicationWidget( appName );
+
   assert( appWidget!=NULL );
 
   //

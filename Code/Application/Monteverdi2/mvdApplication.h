@@ -44,8 +44,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdAbstractModel.h"
-//
 #include "Gui/mvdI18nApplication.h"
 
 /*****************************************************************************/
@@ -59,6 +57,8 @@ namespace
 
 namespace mvd
 {
+class OTBApplicationsModel;
+
 //
 // Class declaration.
 
@@ -110,13 +110,13 @@ public:
    * \brief Get the OTB application model.
    */
   inline
-    const AbstractModel* GetOTBApplicationsModel() const;
+    const OTBApplicationsModel* GetOTBApplicationsModel() const;
 
   /**
    * \brief Get the OTB application model.
    */
   inline
-    AbstractModel* GetOTBApplicationsModel();
+    OTBApplicationsModel* GetOTBApplicationsModel();
 
   //
   // STATIC METHODS.
@@ -173,7 +173,7 @@ private:
 
   /**
    */
-  AbstractModel* m_OTBApplicationsModel;
+  OTBApplicationsModel* m_OTBApplicationsModel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -210,7 +210,7 @@ Application
 
 /*****************************************************************************/
 inline
-const AbstractModel*
+const OTBApplicationsModel*
 Application
 ::GetOTBApplicationsModel() const
 {
@@ -219,7 +219,7 @@ Application
 
 /*****************************************************************************/
 inline
-AbstractModel*
+OTBApplicationsModel*
 Application
 ::GetOTBApplicationsModel()
 {

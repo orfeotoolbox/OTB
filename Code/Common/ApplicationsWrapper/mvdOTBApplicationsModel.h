@@ -98,11 +98,19 @@ public:
 
   /**
    */
-  inline const ApplicationsBrowser* GetApplicationsBrowser() const;
+  inline const ApplicationsBrowser* GetBrowser() const;
 
   /**
    */
-  inline ApplicationsBrowser* GetApplicationsBrowser();
+  inline ApplicationsBrowser* GetBrowser();
+
+  /**
+   */
+  inline const ApplicationLauncher* GetLauncher() const;
+
+  /**
+   */
+  inline ApplicationLauncher* GetLauncher();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -139,7 +147,12 @@ private:
 // Private attributes.
 private:
 
+  /**
+   */
   ApplicationsBrowser* m_ApplicationsBrowser;
+
+  /**
+   */
   ApplicationLauncher* m_ApplicationLauncher;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
@@ -163,7 +176,7 @@ namespace mvd
 inline
 const ApplicationsBrowser*
 OTBApplicationsModel
-::GetApplicationsBrowser() const
+::GetBrowser() const
 {
   return m_ApplicationsBrowser;
 }
@@ -172,9 +185,26 @@ OTBApplicationsModel
 inline
 ApplicationsBrowser*
 OTBApplicationsModel
-::GetApplicationsBrowser()
+::GetBrowser()
 {
   return m_ApplicationsBrowser;
+}  
+/*****************************************************************************/
+inline
+const ApplicationLauncher*
+OTBApplicationsModel
+::GetLauncher() const
+{
+  return m_ApplicationLauncher;
+}
+
+/*****************************************************************************/
+inline
+ApplicationLauncher*
+OTBApplicationsModel
+::GetLauncher()
+{
+  return m_ApplicationLauncher;
 }  
 
 } // end namespace 'mvd'

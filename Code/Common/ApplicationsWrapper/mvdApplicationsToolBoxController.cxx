@@ -90,7 +90,7 @@ ApplicationsToolBoxController
   //
   // connections
   QObject::connect(
-    appModel->GetApplicationsBrowser(), 
+    appModel->GetBrowser(), 
     SIGNAL(
       AvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
                                         const ApplicationDocNameToNameMap& ) ),
@@ -118,7 +118,7 @@ ApplicationsToolBoxController
   //
   // disconnect app browser
   QObject::disconnect(
-    appModel->GetApplicationsBrowser(),
+    appModel->GetBrowser(),
     SIGNAL(
       AvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
                                         const ApplicationDocNameToNameMap& ) ),
