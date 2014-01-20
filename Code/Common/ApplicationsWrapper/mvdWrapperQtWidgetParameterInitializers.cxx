@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdWrapperParameterInitializers.h"
+#include "mvdWrapperQtWidgetParameterInitializers.h"
 
 
 /*****************************************************************************/
@@ -41,7 +41,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::Wrapper::ParameterInitializers
+  TRANSLATOR mvd::Wrapper::QtWidgetParameterInitializers
 
   Necessary for lupdate to be aware of C++ namespaces.
 

@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdParameterInitializers_h
-#define __mvdParameterInitializers_h
+#ifndef __mvdQtWidgetParameterInitializers_h
+#define __mvdQtWidgetParameterInitializers_h
 
 //
 // Configuration include.
@@ -360,4 +360,4 @@ SetupForDatasetDrop( W* widget, const char* text )
 
 } // end namespace 'mvd'
 
-#endif // __mvdParameterInitializers_h
+#endif // __mvdQtWidgetParameterInitializers_h
