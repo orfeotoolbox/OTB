@@ -45,6 +45,7 @@
 // OTB includes (sorted by alphabetic order)
 #include "otbWrapperQtWidgetInputFilenameParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
+#include "otbWrapperQtWidgetOutputImageParameter.h"
 
 #if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
 #include "otbWrapperQtWidgetInputImageParameter.h"
@@ -54,6 +55,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdI18nCoreApplication.h"
+
 #if !USE_OTB_QT_WIDGET_PARAMETER_FACTORY
 #include "mvdWrapperQtWidgetInputImageParameter.h"
 #include "mvdWrapperQtWidgetParameterFactory.h"
@@ -93,6 +96,15 @@ SetupForFilenameDrop( W* widget, const char* text =NULL );
 template< typename W >
 void
 SetupForDatasetDrop( W* widget, const char* text =NULL );
+
+/**
+ */
+template< typename W >
+void
+SetupOutputFilename( W* widget,
+                     const QDir& dir,
+                     const QString& prefix,
+                     const QString& extension );
 
 
 /*****************************************************************************/
@@ -155,6 +167,27 @@ public:
 };
 
 /**
+ * \class OutputImageInitializer
+ *
+ * \brief WIP.
+ */
+class OutputImageInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetOutputImageParameter*,
+  void
+  >
+{
+public:
+  inline OutputImageInitializer( const QString& prefix );
+
+  virtual ~OutputImageInitializer() {}
+
+  inline result_type operator () ( argument_type widget ) const;
+
+private:
+  QString m_Prefix;
+};
+
+/**
  * \class ToolTipInitializer
  *
  * \brief WIP.
@@ -205,6 +238,8 @@ InputImageInitializer::result_type
 InputImageInitializer
 ::operator () ( argument_type widget ) const
 {
+  assert( widget!=NULL );
+
   SetupForFilenameDrop( widget, "You can drop dataset or filename here." );
   SetupForDatasetDrop( widget );
 }
@@ -215,6 +250,8 @@ InputFilenameInitializer::result_type
 InputFilenameInitializer
 ::operator () ( argument_type widget ) const
 {
+  assert( widget!=NULL );
+
   SetupForFilenameDrop( widget );
 }
 
@@ -224,6 +261,8 @@ InputVectorDataInitializer::result_type
 InputVectorDataInitializer
 ::operator () ( argument_type widget ) const
 {
+  assert( widget!=NULL );
+
   SetupForFilenameDrop( widget );
 }
 
@@ -233,6 +272,8 @@ ToolTipInitializer::result_type
 ToolTipInitializer
 ::operator () ( argument_type widget ) const
 {
+  assert( widget!=NULL );
+
 #if defined( _DEBUG )
 
   widget->setToolTip(
@@ -246,10 +287,37 @@ ToolTipInitializer
 }
 
 /*****************************************************************************/
+inline
+OutputImageInitializer
+::OutputImageInitializer( const QString& prefix ) :
+  m_Prefix( prefix )
+{
+}
+
+/*****************************************************************************/
+inline
+OutputImageInitializer::result_type
+OutputImageInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+  assert( I18nCoreApplication::ConstInstance()!=NULL );
+
+  SetupOutputFilename(
+    widget,
+    I18nCoreApplication::ConstInstance()->GetResultsDir(),
+    m_Prefix,
+    ".tif"
+  );
+}
+
+/*****************************************************************************/
 template< typename W >
 void
 SetupForFilenameDrop( W* widget, const char* text )
 {
+  assert( widget!=NULL );
+
   QLineEdit* lineEdit = widget->GetInput();
 
   //
@@ -304,6 +372,8 @@ template< typename W >
 void
 SetupForDatasetDrop( W* widget, const char* text )
 {
+  assert( widget!=NULL );
+
   QLineEdit* lineEdit = widget->GetInput();
 
   //
@@ -355,6 +425,27 @@ SetupForDatasetDrop( W* widget, const char* text )
 #endif
 }
 
+/*****************************************************************************/
+template< typename W >
+void
+SetupOutputFilename( W* widget,
+                     const QDir& dir,
+                     const QString& prefix,
+                     const QString& extension )
+{
+  QString id( QUuid::createUuid().toString() );
+
+  id.replace( QRegExp( "[\\{|\\}]" ), "" );
+
+  if( prefix!=NULL )
+    id.prepend( "_" );
+
+  widget->SetFileName(
+    dir.absoluteFilePath( prefix + id + extension )
+  );
+
+  widget->UpdateGUI();
+}
 
 } // end namespace 'Wrapper'.
 

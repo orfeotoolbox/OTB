@@ -363,6 +363,8 @@ QtWidgetView
 #if defined( _DEBUG )
   SetupWidget( widget, ToolTipInitializer() );
 #endif
+
+  SetupWidget( widget, OutputImageInitializer( m_Application->GetName() ) );
 }
 
 /*******************************************************************************/
