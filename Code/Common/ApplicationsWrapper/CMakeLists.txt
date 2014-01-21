@@ -77,7 +77,7 @@ target_link_libraries(Monteverdi2_ApplicationsWrapper
   OTBWrapperQtWidget
   ${OPENGL_LIBRARIES}
   Qt4::QtGui
-  Qt4::QtOpenGL
+  Qt4::QtOpenGL # Why OpenGL?
 )
 
 set_target_properties(Monteverdi2_ApplicationsWrapper

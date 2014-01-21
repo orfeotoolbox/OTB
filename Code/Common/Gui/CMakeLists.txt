@@ -19,6 +19,7 @@ set( Common_Gui_SOURCES
   mvdDatabaseBrowserWidget.cxx
   mvdDatabaseTreeWidget.cxx
   mvdDatasetCreationProgressDialog.cxx
+  mvdDatasetDragAndDropEventFilter.cxx
   mvdDatasetPropertiesController.cxx
   mvdDatasetPropertiesWidget.cxx
   mvdDoubleValidator.cxx
@@ -43,6 +44,7 @@ set( Common_Gui_SOURCES
   mvdTaskProgressDialog.cxx
   mvdTreeWidget.cxx
   mvdTreeWidgetItem.cxx
+  mvdTreeWidgetItemDragAndDropEventFilter.cxx
 )
 
 #############################################################################
@@ -66,6 +68,7 @@ set( Common_Gui_HEADERS_MOC
   mvdDatabaseBrowserWidget.h
   mvdDatabaseTreeWidget.h
   mvdDatasetCreationProgressDialog.h
+  mvdDatasetDragAndDropEventFilter.h
   mvdDatasetPropertiesController.h
   mvdDatasetPropertiesWidget.h
   mvdDoubleValidator.h
@@ -90,6 +93,7 @@ set( Common_Gui_HEADERS_MOC
   mvdTaskProgressDialog.h
   mvdTreeWidget.h
   #mvdTreeWidgetItem.h
+  mvdTreeWidgetItemDragAndDropEventFilter.h
 )
 
 #############################################################################

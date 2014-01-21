@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdTreeWidget_h
-#define __mvdTreeWidget_h
+#ifndef __mvdTreeWidgetItemDragAndDropEventFilter_h
+#define __mvdTreeWidgetItemDragAndDropEventFilter_h
 
 //
 // Configuration include.
@@ -44,7 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "Gui/mvdAbstractDragAndDropEventFilter.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -58,38 +58,21 @@ namespace
 namespace mvd
 {
 
-/*****************************************************************************/
-/* FUNCTIONS DEFINITION SECTION                                              */
-
-/**
- */
-QMimeData*
-EncodeMimeData( QMimeData* mimeData, const QList< QTreeWidgetItem* >& items );
-
-/**
- */
-int
-DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData );
-
 //
 // Internal classes pre-declaration.
-namespace Ui
-{
-//class TreeWidget;
-};
 
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class TreeWidget
+ * \class TreeWidgetItemDragAndDropEventFilter
  *
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class Monteverdi2_EXPORT TreeWidget :
-    public QTreeWidget
+class Monteverdi2_EXPORT TreeWidgetItemDragAndDropEventFilter :
+    public AbstractDragAndDropEventFilter
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -99,21 +82,14 @@ class Monteverdi2_EXPORT TreeWidget :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
-// Public types and constants.
-public:
-  /**
-   */
-  static const char* ITEM_MIME_TYPE;
-
-//
 // Public methods.
 public:
 
   /** \brief Constructor. */
-  TreeWidget( QWidget* parent =NULL );
+  TreeWidgetItemDragAndDropEventFilter( QObject* parent =NULL );
 
   /** \brief Destructor. */
-  virtual ~TreeWidget();
+  virtual ~TreeWidgetItemDragAndDropEventFilter();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -121,7 +97,7 @@ public:
 // Public SLOTS.
 public slots:
 
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/  
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
@@ -129,7 +105,8 @@ signals:
 
   /**
    */
-  void ItemMoved( QTreeWidgetItem* item );
+  void ItemDropped( QTreeWidgetItem* item );
+
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -137,14 +114,25 @@ signals:
 // Protected methods.
 protected:
 
-    //
-    // QTreeWidget overloads.
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragEnterEvent
+   */
+  virtual bool DragEnterEvent( QObject* object, QDragEnterEvent* event );
 
-    virtual QStringList mimeTypes() const;
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragLeaveEvent
+   */
+  virtual bool DragLeaveEvent( QObject* object, QDragLeaveEvent* event );
 
-    virtual QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const;
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragMoveEvent
+   */
+  virtual bool DragMoveEvent( QObject* object, QDragMoveEvent* event );
 
-    virtual void dropEvent( QDropEvent* event );
+  /**
+   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dropEvent
+   */
+  virtual bool DropEvent( QObject* object, QDropEvent* event );
 
 //
 // Protected attributes.
@@ -155,6 +143,7 @@ protected:
 //
 // Private methods.
 private:
+
 //
 // Private attributes.
 private:
@@ -168,32 +157,6 @@ private slots:
 
 } // end namespace 'mvd'
 
-
-/*****************************************************************************/
-/* GLOBAL FUNCTIONS DECLARATION                                              */
-
-//
-// Declare Qt tree-widget item pointer types so they can be wrapped by
-// QVariant.
-Q_DECLARE_METATYPE( QTreeWidgetItem* );
-
-
-#define TREE_WIDGET_ITEM_USE_STREAM_OPERATORS 1
-
-#if TREE_WIDGET_ITEM_USE_STREAM_OPERATORS
-
-/**
- */
-QDataStream&
-operator << ( QDataStream& out, QTreeWidgetItem const * item );
-
-/**
- */
-QDataStream&
-operator >>( QDataStream& in, QTreeWidgetItem * & item );
-
-#endif // !DATASTREAM_USE_TEMPLATE_OPERATORS
-
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
@@ -201,4 +164,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdTreeWidget_h
+#endif // __mvdTreeWidgetItemDragAndDropEventFilter_h

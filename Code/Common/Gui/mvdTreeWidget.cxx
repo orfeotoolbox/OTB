@@ -55,6 +55,9 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
+const char*
+TreeWidget
+::ITEM_MIME_TYPE = "application/x-qtreewidgetitemptrlist";
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -109,6 +112,106 @@ namespace
 static const StaticInitializer STATIC_INITIALIZER;
 }
 
+/*****************************************************************************/
+QMimeData*
+EncodeMimeData( QMimeData* mimeData, const QList< QTreeWidgetItem* >& items )
+{
+  assert( mimeData!=NULL );
+
+  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+
+  QByteArray byteArray;
+  QDataStream stream( &byteArray, QIODevice::WriteOnly );
+
+  for( QTreeWidgetItemList::const_iterator it( items.begin() );
+       it!=items.end();
+       ++it )
+    {
+    /*
+    qDebug()
+      << "QTreeWidgetItem::parent()==" << ( *it )->parent();
+    qDebug()
+      << "Pointer:" << static_cast< void* >( *it );
+    qDebug()
+      << "Variant:" << QVariant::fromValue< QTreeWidgetItem* >( *it );
+    */
+
+    // http://www.qtfr.org/viewtopic.php?id=9630
+    // stream << *it;
+    stream << QVariant::fromValue< QTreeWidgetItem* >( *it );
+    }
+
+  mimeData->setData( TreeWidget::ITEM_MIME_TYPE, byteArray );
+
+  /*
+  qDebug() << mimeData->formats();
+
+  for( QTreeWidgetItemList::const_iterator it( items.begin() );
+       it!=items.end();
+       ++it )
+    {
+    QTreeWidgetItem* item = *it;
+
+    qDebug()
+      << item->type() << item->text( 0 ) << item->text( 1 ) << item->text( 2 );
+    }
+  */
+
+  return mimeData;
+}
+
+/*****************************************************************************/
+int
+DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
+{
+  assert( mimeData!=NULL );
+
+  if( !mimeData->hasFormat( TreeWidget::ITEM_MIME_TYPE ) )
+    return 0;
+
+  QByteArray byteArray(
+    mimeData->data( TreeWidget::ITEM_MIME_TYPE )
+  );
+
+  QDataStream stream( &byteArray, QIODevice::ReadOnly );
+
+  int count = 0;
+
+  //
+  // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
+
+  QTreeWidgetItem* item = NULL;
+
+  while( !stream.atEnd() )
+    {
+    QVariant variant;
+
+    stream >> variant;
+
+    // qDebug() << "Variant:" << variant;
+
+    // http://www.qtfr.org/viewtopic.php?id=9630
+
+    item = variant.value< QTreeWidgetItem* >();
+    assert( item!=NULL );
+
+    items.push_back( item );
+
+    // qDebug()
+    //   << "Item (variant):"
+    //   << varItem
+    //   << varItem->text( 0 )
+    //   << varItem->text( 1 )
+    //   << varItem->text( 2 )
+    //   << varItem->parent();
+
+    ++ count;
+    }
+
+  // qDebug() << count2 << "items.";
+
+  return count;
+}
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
@@ -140,7 +243,7 @@ TreeWidget
 
   QStringList mimeTypes( QTreeWidget::mimeTypes() );
 
-  mimeTypes << "application/x-qtreewidgetitemptrlist";
+  mimeTypes << TreeWidget::ITEM_MIME_TYPE;
 
   return mimeTypes;
 }
@@ -152,48 +255,7 @@ TreeWidget
 {
   // qDebug() << this << "::mimeData(" << items << ")";
 
-  QMimeData* mimeData = QTreeWidget::mimeData( items );
-
-  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
-
-  QByteArray byteArray;
-  QDataStream stream( &byteArray, QIODevice::WriteOnly );
-
-  for( QTreeWidgetItemList::const_iterator it( items.begin() );
-       it!=items.end();
-       ++it )
-    {
-    /*
-    qDebug()
-      << "QTreeWidgetItem::parent()==" << ( *it )->parent();
-    qDebug()
-      << "Pointer:" << static_cast< void* >( *it );
-    qDebug()
-      << "Variant:" << QVariant::fromValue< QTreeWidgetItem* >( *it );
-    */
-
-    // http://www.qtfr.org/viewtopic.php?id=9630
-    // stream << *it;
-    stream << QVariant::fromValue< QTreeWidgetItem* >( *it );
-    }
-
-  mimeData->setData( "application/x-qtreewidgetitemptrlist", byteArray );
-
-  /*
-  qDebug() << mimeData->formats();
-
-  for( QTreeWidgetItemList::const_iterator it( items.begin() );
-       it!=items.end();
-       ++it )
-    {
-    QTreeWidgetItem* item = *it;
-
-    qDebug()
-      << item->type() << item->text( 0 ) << item->text( 1 ) << item->text( 2 );
-    }
-  */
-
-  return mimeData;
+  return EncodeMimeData( QTreeWidget::mimeData( items ), items );
 }
 
 /*******************************************************************************/
@@ -209,49 +271,7 @@ TreeWidget
 
   QTreeWidgetItemList items;
 
-  if( event->mimeData()->hasFormat( "application/x-qtreewidgetitemptrlist" ) )
-    {
-    QByteArray byteArray(
-      event->mimeData()->data( "application/x-qtreewidgetitemptrlist" )
-    );
-
-    QDataStream stream( &byteArray, QIODevice::ReadOnly );
-
-    int count = 0;
-
-    //
-    // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
-
-    QTreeWidgetItem* item = NULL;
-
-    while( !stream.atEnd() )
-      {
-      QVariant variant;
-
-      stream >> variant;
-
-      // qDebug() << "Variant:" << variant;
-
-      // http://www.qtfr.org/viewtopic.php?id=9630
-
-      item = variant.value< QTreeWidgetItem* >();
-      assert( item!=NULL );
-
-      items.push_back( item );
-
-      // qDebug()
-      //   << "Item (variant):"
-      //   << varItem
-      //   << varItem->text( 0 )
-      //   << varItem->text( 1 )
-      //   << varItem->text( 2 )
-      //   << varItem->parent();
-
-      ++ count;
-      }
-
-    // qDebug() << count2 << "items.";
-    }
+  DecodeMimeData( items, event->mimeData() );
 
   QTreeWidget::dropEvent( event );
 
@@ -259,15 +279,15 @@ TreeWidget
        it!=items.end();
        ++it )
     {
-      switch( defaultDropAction() )
-        {
-        case Qt::MoveAction:
-          emit ItemMoved( *it );
-          break;
+    switch( defaultDropAction() )
+      {
+      case Qt::MoveAction:
+        emit ItemMoved( *it );
+        break;
 
-        default:
-          break;
-        }
+      default:
+        break;
+      }
     }
 }
 
