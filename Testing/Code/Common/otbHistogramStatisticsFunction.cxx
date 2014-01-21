@@ -99,7 +99,7 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
       }
     }
 
-  HistogramStatisticsFunction->Update();
+  HistogramStatisticsFunction->Compute();
 
   Entropy = HistogramStatisticsFunction->GetEntropy()[0];
   std::cout << "Entropy 2 : " << Entropy << std::endl;

@@ -76,6 +76,12 @@ public:
       }
   }
 
+  /** Calculates the thresholds and save them */
+  void Compute() 
+  {
+    this->GenerateData();
+  }
+
 protected:
 
   HistogramStatisticsFunction();
@@ -93,6 +99,8 @@ protected:
 
   /** Calculate covariance value */
   void CalculateCovariance();
+
+  
 
 private:
 
