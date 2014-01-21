@@ -44,7 +44,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdAbstractDragAndDropEventFilter.h"
+#include "Core/mvdDatabaseModel.h"
+#include "Gui/mvdTreeWidgetItemDragAndDropEventFilter.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -72,7 +73,7 @@ namespace mvd
  * widget class.
  */
 class Monteverdi2_EXPORT DatasetDragAndDropEventFilter :
-    public AbstractDragAndDropEventFilter
+    public TreeWidgetItemDragAndDropEventFilter
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,7 +87,7 @@ class Monteverdi2_EXPORT DatasetDragAndDropEventFilter :
 public:
 
   /** \brief Constructor. */
-  DatasetDragAndDropEventFilter( QObject* parent =NULL );
+  DatasetDragAndDropEventFilter( DatabaseModel* model, QObject* parent =NULL );
 
   /** \brief Destructor. */
   virtual ~DatasetDragAndDropEventFilter();
@@ -105,7 +106,11 @@ signals:
 
   /**
    */
-  void FilenameDropped( const QString& filename );
+  void DatasetDropped( DatasetModel* model );
+
+  /**
+   */
+  void ImageFilenameDropped( const QString& filename );
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -113,26 +118,6 @@ signals:
 //
 // Protected methods.
 protected:
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragEnterEvent
-   */
-  virtual bool DragEnterEvent( QObject* object, QDragEnterEvent* event );
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragLeaveEvent
-   */
-  virtual bool DragLeaveEvent( QObject* object, QDragLeaveEvent* event );
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragMoveEvent
-   */
-  virtual bool DragMoveEvent( QObject* object, QDragMoveEvent* event );
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dropEvent
-   */
-  virtual bool DropEvent( QObject* object, QDropEvent* event );
 
 //
 // Protected attributes.
@@ -144,15 +129,27 @@ protected:
 // Private methods.
 private:
 
+  /**
+   */
+  void EmitDatasetDropped( DatasetModel* dataset );
+
 //
 // Private attributes.
 private:
+
+  /**
+   */
+  DatabaseModel* m_DatabaseModel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
+
+  /**
+   */
+  void OnItemDropped( QTreeWidgetItem* item );
 };
 
 } // end namespace 'mvd'

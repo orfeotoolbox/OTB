@@ -55,7 +55,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdI18nCoreApplication.h"
 
 #if !USE_OTB_QT_WIDGET_PARAMETER_FACTORY
 #include "mvdWrapperQtWidgetInputImageParameter.h"
@@ -224,6 +223,9 @@ public:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdDatabaseModel.h"
+#include "Core/mvdI18nCoreApplication.h"
+#include "Gui/mvdDatasetDragAndDropEventFilter.h"
 #include "Gui/mvdFilenameDragAndDropEventFilter.h"
 
 namespace mvd
@@ -410,19 +412,26 @@ SetupForDatasetDrop( W* widget, const char* text )
   //
   // Install event-filters.
 
-#if 0
-  QObject* eventFilter = new DatasetDragAndDropEventFilter( lineEdit );
+  assert(
+    I18nCoreApplication::ConstInstance()->GetModel()==
+    I18nCoreApplication::ConstInstance()->GetModel< DatabaseModel >()
+  );
+
+  QObject* eventFilter =
+    new DatasetDragAndDropEventFilter(
+      I18nCoreApplication::Instance()->GetModel< DatabaseModel >(),
+      lineEdit
+    );
 
   lineEdit->installEventFilter( eventFilter );
 
   QObject::connect(
     eventFilter,
-    SIGNAL( FilenameDropped( const QString& ) ),
+    SIGNAL( ImageFilenameDropped( const QString& ) ),
     // to:
     lineEdit,
     SLOT( setText( const QString& ) )
   );
-#endif
 }
 
 /*****************************************************************************/

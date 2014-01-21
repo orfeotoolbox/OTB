@@ -38,6 +38,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdVectorImageModel.h"
+#include "Gui/mvdTreeWidgetItem.h"
 
 namespace mvd
 {
@@ -64,9 +66,17 @@ namespace mvd
 
 /*****************************************************************************/
 DatasetDragAndDropEventFilter
-::DatasetDragAndDropEventFilter( QObject* parent  ) :
-  AbstractDragAndDropEventFilter( parent )
+::DatasetDragAndDropEventFilter( DatabaseModel* model, QObject* parent  ) :
+  TreeWidgetItemDragAndDropEventFilter( parent ),
+  m_DatabaseModel( model )
 {
+  QObject::connect(
+    this,
+    SIGNAL( ItemDropped( QTreeWidgetItem* ) ),
+    // to:
+    this,
+    SLOT( OnItemDropped( QTreeWidgetItem* ) )
+  );
 }
 
 /*****************************************************************************/
@@ -76,109 +86,56 @@ DatasetDragAndDropEventFilter
 }
 
 /*****************************************************************************/
-bool
+void
 DatasetDragAndDropEventFilter
-::DragEnterEvent( QObject* object, QDragEnterEvent* event )
+::EmitDatasetDropped( DatasetModel* dataset )
 {
-  //
-  // Bypass event its MIME data does not contain not URL(s).
-  if( !event->mimeData()->hasUrls() )
-    return false;
+  assert( dataset!=NULL );
 
-  //
-  // Bypass event if MIME data URL(s) are not all local filenames.
-  typedef QList< QUrl > QUrlList;
+  emit DatasetDropped( dataset );
 
-  QUrlList urls( event->mimeData()->urls() );
+  assert(
+    dataset->GetSelectedImageModel()==
+    dataset->GetSelectedImageModel< VectorImageModel  >()
+  );
 
-  for( QUrlList::const_iterator it( urls.begin() );
-       it!=urls.end();
-       ++it )
-    {
-#if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    if( !it->scheme().compare( "file", Qt::CaseInsensitive ) )
-#else // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    if( !it->isLocalFile() )
-#endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-      {
-      return false;
-      }
-    }
+  VectorImageModel* image =
+    dataset->GetSelectedImageModel< VectorImageModel  >();
 
-  //
-  // Accept event if its MIME data contains some URL(s) and they are
-  // all local filenames.
-  event->acceptProposedAction();
-
-  //
-  // Eatup event.
-  return true;
-}
-
-/*****************************************************************************/
-bool
-DatasetDragAndDropEventFilter
-::DragLeaveEvent( QObject* object, QDragLeaveEvent* event )
-{
-  //
-  // Nothing to do: bypass event & let default behaviour occur.
-  return false;
-}
-
-/*****************************************************************************/
-bool
-DatasetDragAndDropEventFilter
-::DragMoveEvent( QObject* object, QDragMoveEvent* event )
-{
-  //
-  // Nothing to do: bypass event & let default behaviour occur.
-  return false;
-}
-
-/*****************************************************************************/
-bool
-DatasetDragAndDropEventFilter
-::DropEvent( QObject* object, QDropEvent* event )
-{
-  assert( event!=NULL );
-  assert( event->mimeData()!=NULL );
-
-  //
-  // Bypass event its MIME data does not contain not URL(s).
-  if( !event->mimeData()->hasUrls() )
-    return false;
-
-  //
-  // Bypass event if MIME data URL(s) are not all local filenames.
-  typedef QList< QUrl > QUrlList;
-
-  QUrlList urls( event->mimeData()->urls() );
-
-  for( QUrlList::const_iterator it( urls.begin() );
-       it!=urls.end();
-       ++it )
-    {
-#if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    if( !it->scheme().compare( "file", Qt::CaseInsensitive ) )
-#else // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    if( !it->isLocalFile() )
-#endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-      {
-      qWarning() << "Dropped URL is not a local filename." << *it;
-      }
-    else
-      {
-      emit FilenameDropped( it->toLocalFile() );
-      }
-    }
-  
-  //
-  // Eatup event.
-  return true;
+  if( image!=NULL )
+    emit ImageFilenameDropped( image->GetFilename() );
 }
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
+void
+DatasetDragAndDropEventFilter
+::OnItemDropped( QTreeWidgetItem* item )
+{
+  qDebug() << this << "::OnItemDropped(" << item << ")";
+
+  assert( item!=NULL );
+
+  assert( m_DatabaseModel!=NULL );
+
+  assert( dynamic_cast< TreeWidgetItem* >( item )!=NULL );
+  TreeWidgetItem* twi = dynamic_cast< TreeWidgetItem* >( item );
+
+  switch( twi->GetType() )
+    {
+    case TreeWidgetItem::ITEM_TYPE_NODE:
+      break;
+
+    case TreeWidgetItem::ITEM_TYPE_LEAF:
+      EmitDatasetDropped(
+        m_DatabaseModel->FindDatasetModel( twi->GetHash() )
+      );
+      break;
+
+    default:
+      break;
+    }
+}
 
 } // end namespace 'mvd'
