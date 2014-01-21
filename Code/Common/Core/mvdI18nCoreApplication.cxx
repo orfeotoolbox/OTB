@@ -400,7 +400,7 @@ I18nCoreApplication
     {
     throw std::runtime_error(
       ToStdString(
-	"I18nCoreApplication is a singleton class!"
+        tr( "I18nCoreApplication is a singleton class!" )
       )
     );
     }
