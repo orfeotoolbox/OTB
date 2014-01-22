@@ -113,7 +113,7 @@ void
 DatasetDragAndDropEventFilter
 ::OnItemDropped( QTreeWidgetItem* item )
 {
-  qDebug() << this << "::OnItemDropped(" << item << ")";
+  // qDebug() << this << "::OnItemDropped(" << item << ")";
 
   assert( item!=NULL );
 

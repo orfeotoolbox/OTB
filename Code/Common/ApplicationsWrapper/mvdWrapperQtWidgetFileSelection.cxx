@@ -37,7 +37,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAlgorithm.h"
-#include "Gui/mvdDropLineEdit.h"
 
 namespace mvd
 {
@@ -102,11 +101,7 @@ void QtWidgetFileSelection::DoCreateWidget()
   m_Checkbox = new QCheckBox();
   m_HLayout->addWidget(m_Checkbox);
 
-#if 0
-  m_Input = new DropLineEdit( this );
-#else
   m_Input = new QLineEdit( this );
-#endif
   // m_Input->setFrameShape(QFrame::Box);
   m_Input->setToolTip( "Drag and drop a dataset here." );
   // m_Input->setText( tr( "Drag and drop a dataset here." ) );

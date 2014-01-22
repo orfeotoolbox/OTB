@@ -151,13 +151,6 @@ private:
 
   QWidget* CreateDoc();
 
-  // fill the default output image parameter with default
-  // value
-  void FillOTBAppDefaultOutputImageParameter(QWidget * widgets);
-
-  // method to generate an unique identifier
-  QString GenerateIdentifier();
-
   /**
    */
   void SetupParameterWidgets( QWidget* widget );

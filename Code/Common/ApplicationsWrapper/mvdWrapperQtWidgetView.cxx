@@ -203,13 +203,7 @@ QtWidgetView
     SLOT ( OnApplicationExecutionDone( int ) )
     );
 
-#if 0
-  //
-  // setup the default output in Widgets OutputImageParameter
-  FillOTBAppDefaultOutputImageParameter( widget );
-#else
   SetupParameterWidgets( widget );
-#endif
 
   return scrollArea;
 }
@@ -285,72 +279,6 @@ QtWidgetView
 }
 
 /*******************************************************************************/
-#if 0
-void 
-QtWidgetView
-::FillOTBAppDefaultOutputImageParameter( QWidget * widgets)
-{
-  //
-  // Get the cache dir
-  // get the const instance of the application.
-  I18nCoreApplication* app = I18nCoreApplication::Instance();
-
-  //
-  // get the OTB application widget layout
-  QLayout * layout = widgets->layout();
-
-  for (int idx = 0; idx < layout->count(); idx++ )
-    {
-    QWidget * currentWidget = layout->itemAt(idx)->widget();
-
-    // is it a QtWidgetOutputImageParameter ?
-    otb::Wrapper::QtWidgetOutputImageParameter * outParam 
-      = qobject_cast<otb::Wrapper::QtWidgetOutputImageParameter *>(currentWidget);
-    
-    if (outParam)
-      {
-      // generate a default output fname for the current
-      // OutputImageParameter 
-      QString outfname = 
-        app->GetResultsDir().absolutePath() 
-        + "/"+ m_Application->GetName()
-        +"_"+ GenerateIdentifier() +".tif";
-
-      // use it
-      outParam->SetFileName(outfname);
-      outParam->UpdateGUI();
-      } // else is it a {Group/Choice}Parameter Widget containing
-        // QtWidgetOutputImageParameters ?
-    else
-      {
-      // 
-      QList< otb::Wrapper::QtWidgetOutputImageParameter *> outParameterWidget
-        = currentWidget->findChildren<otb::Wrapper::QtWidgetOutputImageParameter*>();
-  
-      QList<otb::Wrapper::QtWidgetOutputImageParameter *>::iterator  it = outParameterWidget.begin();
-
-      // 
-      while(it != outParameterWidget.end())
-        {
-        if (*it)
-          {
-          // generate a default output fname for the current
-          // OutputImageParameter 
-          QString outfname = 
-            app->GetResultsDir().absolutePath() + "/"+ m_Application->GetName()+"_"+GenerateIdentifier()+".tif";
-
-          // use the outfname
-          (*it)->SetFileName(outfname);
-          (*it)->UpdateGUI();
-          }
-        ++it;
-        }
-      }
-    }
-}
-#endif
-
-/*******************************************************************************/
 void
 QtWidgetView
 ::SetupParameterWidgets( QWidget* widget )
@@ -366,20 +294,6 @@ QtWidgetView
 #endif
 
   SetupWidget( widget, OutputImageInitializer( m_Application->GetName() ) );
-}
-
-/*******************************************************************************/
-QString 
-QtWidgetView
-::GenerateIdentifier()
-{
-  //
-  // get an unique identifier  and remove braces
-  QString  identifier = QUuid::createUuid().toString();
-  identifier.replace("{", "");
-  identifier.replace("}", "");
-
-  return identifier;
 }
 
 /*******************************************************************************/
