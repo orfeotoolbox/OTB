@@ -77,7 +77,7 @@ public:
   }
 
   /** Calculates the thresholds and save them */
-  void Compute() 
+  void Compute()
   {
     this->GenerateData();
   }
