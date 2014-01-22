@@ -32,7 +32,7 @@ if(OTB_USE_EXTERNAL_ITK)
   # Build shared libraries for otb
   # By default, if otb use an external itk import the option from the ITK configuration
   set(BUILD_SHARED_LIBS ${ITK_BUILD_SHARED})
-  message(STATUS "  Using ITK external version")
+  message(STATUS "  Using ITK external version " ${ITK_VERSION}) 
 
 else()
 
