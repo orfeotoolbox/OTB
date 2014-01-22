@@ -357,6 +357,7 @@ QtWidgetView
 {
   assert( widget!=NULL );
 
+  SetupWidget( widget, FileSelectionInitializer() );
   SetupWidget( widget, InputFilenameInitializer() );
   SetupWidget( widget, InputImageInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );

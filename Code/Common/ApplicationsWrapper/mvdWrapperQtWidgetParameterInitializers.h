@@ -48,6 +48,7 @@
 #include "otbWrapperQtWidgetOutputImageParameter.h"
 
 #if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
+#include "otbQtFileSelectionWidget.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
@@ -57,6 +58,7 @@
 // Monteverdi includes (sorted by alphabetic order)
 
 #if !USE_OTB_QT_WIDGET_PARAMETER_FACTORY
+#include "mvdWrapperQtWidgetFileSelection.h"
 #include "mvdWrapperQtWidgetInputImageParameter.h"
 #include "mvdWrapperQtWidgetParameterFactory.h"
 #endif
@@ -108,6 +110,28 @@ SetupOutputFilename( W* widget,
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
+
+/**
+ * \class FileSelectionInitializer
+ *
+ * \brief WIP.
+ */
+class FileSelectionInitializer : public std::unary_function<
+#if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
+  otb::Wrapper::QtFileSelectionWidget*,
+#else
+  QtWidgetFileSelection*,
+#endif
+  void
+  >
+{
+public:
+  FileSelectionInitializer() {}
+
+  virtual ~FileSelectionInitializer() {}
+
+  inline result_type operator () ( argument_type widget ) const;
+};
 
 /**
  * \class InputImageInitializer
@@ -233,6 +257,18 @@ namespace mvd
 
 namespace Wrapper
 {
+
+/*****************************************************************************/
+inline
+FileSelectionInitializer::result_type
+FileSelectionInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  SetupForFilenameDrop( widget, "You can drop dataset or filename here." );
+  SetupForDatasetDrop( widget );
+}
 
 /*****************************************************************************/
 inline

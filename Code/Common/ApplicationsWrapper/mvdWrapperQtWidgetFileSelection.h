@@ -51,7 +51,6 @@ namespace
 
 namespace mvd
 {
-class DropLineEdit;
 
 namespace Wrapper
 {
@@ -105,12 +104,8 @@ public:
     m_Input->clear();
   }
 
-  /*
-  DropLineEdit* GetInput()
-  {
-    return m_Input;
-  }
-  */
+  inline const QLineEdit* GetInput() const;
+  inline QLineEdit* GetInput();
 
 signals:
   void textChanged(const QString &);
@@ -143,8 +138,24 @@ private:
   QCheckBox* m_Checkbox;
 };
 
+inline
+const QLineEdit*
+QtWidgetFileSelection
+::GetInput() const
+{
+  return m_Input;
 }
 
+inline
+QLineEdit*
+QtWidgetFileSelection
+::GetInput()
+{
+  return m_Input;
 }
+
+} // Wrapper
+
+} // mvd
 
 #endif
