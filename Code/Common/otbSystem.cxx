@@ -42,118 +42,30 @@
 namespace otb
 {
 
-//GetExtension from uiig library.
-std::string
-System::GetExtension(const std::string& filename)
-{
-
-  // This assumes that the final '.' in a file name is the delimiter
-  // for the file's extension type
-  const std::string::size_type it = filename.find_last_of(".");
-
-  // This determines the file's type by creating a new string
-  // who's value is the extension of the input filename
-  // eg. "myimage.gif" has an extension of "gif"
-  std::string fileExt(filename, it + 1, filename.length());
-
-  return (fileExt);
-}
-
 //GetRootName from uiig library.
 std::string
 System::GetRootName(const std::string& filename)
 {
-  const std::string fileExt = GetExtension(filename);
+  const std::string fileExt = itksys::SystemTools::GetFilenameLastExtension(filename);
 
   // Create a base filename
   // i.e Image.ent --> Image
   if (fileExt.length() > 0)
     {
     const std::string::size_type it = filename.find_last_of(fileExt);
-    std::string                  baseName(filename, 0, it - fileExt.length());
+    std::string                  baseName(filename, 0, it - fileExt.length() + 1);
     return (baseName);
     }
   //Default to return same as input when the extension is nothing (Analyze)
   return (filename);
 }
 
-bool System::IsAFileName(const std::string& pszPath)
-{
-  return (!IsADirName(pszPath));
-}
-
-//GetPathName.
-std::string
-System::GetPathName(const std::string& filename)
-{
-  const std::string::size_type it = filename.find_last_of(OTB_FILE_SEPARATOR);
-  std::string                  pathName(filename, 0, it);
-
-  return (pathName);
-}
-
-//GetExtension from uiig library.
-std::string
-System::GetShortFileName(const std::string& filename)
-{
-  const std::string::size_type it = filename.find_last_of(OTB_FILE_SEPARATOR);
-  std::string                  shortFileName(filename, it + 1, filename.length());
-
-  return (shortFileName);
-}
-
-// Set to upper a string
-std::string System::SetToUpper(const std::string& str)
-{
-  std::string lString(str);
-  for (unsigned int i = 0; i < lString.size(); ++i)
-    {
-    lString[i] = toupper(lString[i]);
-    }
-  return (lString);
-}
-
-// Set to lower a string
-std::string System::SetToLower(const std::string& str)
-{
-  std::string lString(str);
-  for (unsigned int i = 0; i < lString.size(); ++i)
-    {
-    lString[i] = tolower(lString[i]);
-    }
-  return (lString);
-}
 
 #if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)
 
 /*=====================================================================
                    WIN32 / MSVC++ implementation
  *====================================================================*/
-
-bool System::IsADirName(const std::string&  pszPath)
-{
-  struct _finddata_t c_file;
-  long               hFile;
-  bool               isADir(false);
-  std::string        pszFileSpec;
-  std::string        path(pszPath);
-
-  if (pszPath.empty() == true) path = ".";
-
-  pszFileSpec = path + "\\*.*";
-
-  if ((hFile = _findfirst(pszFileSpec.c_str(), &c_file)) != -1L)
-    {
-    isADir = true;
-    _findclose(hFile);
-    }
-  else
-    {
-    isADir = false;
-    }
-
-  return isADir;
-}
 
 std::vector<std::string> System::Readdir(const std::string&  pszPath)
 {
@@ -186,27 +98,6 @@ std::vector<std::string> System::Readdir(const std::string&  pszPath)
 /*=====================================================================
                       POSIX (Unix) implementation
  *====================================================================*/
-
-bool System::IsADirName(const std::string&  pszPath)
-{
-  bool        isADir(false);
-  DIR *       hDir;
-  std::string path(pszPath);
-
-  if (pszPath.empty() == true) path = ".";
-
-  if ((hDir = opendir(path.c_str())) != NULL)
-    {
-    isADir = true;
-    closedir(hDir);
-    }
-  else
-    {
-    isADir = false;
-    }
-
-  return isADir;
-}
 
 /**
  * Read names in a directory.

@@ -20,6 +20,7 @@
 #include <cstdlib>
 
 #include "itkMacro.h"
+#include "itksys/SystemTools.hxx"
 #include "otbSystem.h"
 
 int otbSystemTest(int argc, char* argv[])
@@ -34,21 +35,21 @@ int otbSystemTest(int argc, char* argv[])
   delete var;
   var = NULL;
 
-  if (otb::System::IsAFileName(inputFileName) == false)
+  if (itksys::SystemTools::FileExists(inputFileName, true) == false)
     {
-    itkGenericExceptionMacro(<< "System::IsAFileName() error : the filename " << inputFileName << " is not detected.");
+    itkGenericExceptionMacro(<< "itksys::SystemTools::FileExists() error : the filename " << inputFileName << " is not detected.");
     }
-  if (otb::System::IsADirName(inputFileName) == true)
+  if (itksys::SystemTools::FileIsDirectory(inputFileName) == true)
     {
-    itkGenericExceptionMacro(<< "System::IsADirName() error : the filename " << inputFileName << " is detected.");
+    itkGenericExceptionMacro(<< "itksys::SystemTools::FileIsDirectory() error : the filename " << inputFileName << " is detected.");
     }
-  if (otb::System::IsAFileName(inputDirName) == true)
+  if (itksys::SystemTools::FileExists(inputDirName, true) == true)
     {
-    itkGenericExceptionMacro(<< "System::IsAFileName() error : the dirname " << inputDirName << " is detected!!");
+    itkGenericExceptionMacro(<< "itksys::SystemTools::FileExists() error : the dirname " << inputDirName << " is detected!!");
     }
-  if (otb::System::IsADirName(inputDirName) == false)
+  if (itksys::SystemTools::FileIsDirectory(inputDirName) == false)
     {
-    itkGenericExceptionMacro(<< "System::IsADirName() error : the dirname " << inputDirName << " is not detected!!");
+    itkGenericExceptionMacro(<< "itksys::SystemTools::FileIsDirectory() error : the dirname " << inputDirName << " is not detected!!");
     }
 
   return EXIT_SUCCESS;
