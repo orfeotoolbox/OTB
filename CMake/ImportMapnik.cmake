@@ -65,21 +65,25 @@ if(OTB_USE_MAPNIK)
         endif()
 
 
-        # Validating the config
-        try_compile(OTB_MAPNIK_SUPPORTS_API20
-          ${CMAKE_CURRENT_BINARY_DIR}/CMake
-          ${CMAKE_CURRENT_SOURCE_DIR}/CMake/otbTestCompileMapnik2.cxx
-          CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${MAPNIK_INCLUDE_DIR};${ICUUC_INCLUDE_DIR};${LTDL_INCLUDE_DIR};${FREETYPE2_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${MAPNIK_LIBRARY};${ICUUC_LIBRARY}"
-          OUTPUT_VARIABLE OUTPUT)
-        if(OTB_MAPNIK_SUPPORTS_API20)
-          message(STATUS "  Testing if Mapnik2     -- yes")
-        else()
-          message(STATUS "  Testing if Mapnik2     -- no")
-          #message(STATUS "Does not support mapnik2 interface: ${OUTPUT}")
-          message(STATUS "  Assuming mapnik 0.7")
+        file(READ "${MAPNIK_INCLUDE_DIR}/mapnik/version.hpp" _mapnik_version_hpp_CONTENTS)
+        STRING(REGEX REPLACE ".*#define MAPNIK_MAJOR_VERSION ([0-9]+).*" "\\1" MAPNIK_MAJOR_VERSION  ${_mapnik_version_hpp_CONTENTS})
+        STRING(REGEX REPLACE ".*#define MAPNIK_MINOR_VERSION ([0-9]+).*" "\\1" MAPNIK_MINOR_VERSION  ${_mapnik_version_hpp_CONTENTS})
+        STRING(REGEX REPLACE ".*#define MAPNIK_PATCH_VERSION ([0-9]+).*" "\\1" MAPNIK_PATCH_VERSION  ${_mapnik_version_hpp_CONTENTS})
+        SET(MAPNIK_VERSION ${MAPNIK_MAJOR_VERSION}.${MAPNIK_MINOR_VERSION}.${MAPNIK_PATCH_VERSION})
+        if(${MAPNIK_MAJOR_VERSION} LESS "2")
+          message(STATUS "Does not support mapnik2 interface:  ${MAPNIK_VERSION}")
+          add_definitions(-DOTB_MAPNIK_COMPATIBILITY_API07)
           # This should be dropped when we don't want to support this any more
           # Estimated date: 02/2013.
-          add_definitions(-DOTB_MAPNIK_COMPATIBILITY_API07)
+        else()
+          find_path(AGG2_INCLUDE_DIR agg_pixfmt_rgba.h PATHS /usr/include/)
+          mark_as_advanced(AGG2_INCLUDE_DIR)
+          if(NOT AGG2_INCLUDE_DIR)
+            message(FATAL_ERROR
+              "Cannot find AGG2 library, needed by MAPNIK. Please set AGG2_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
+          endif()
+          include_directories(${AGG2_INCLUDE_DIR})
+          SET(OTB_MAPNIK_SUPPORTS_API20 TRUE)
         endif()
 
         # Add compiler option
@@ -88,6 +92,7 @@ if(OTB_USE_MAPNIK)
         include_directories(${MAPNIK_INCLUDE_DIR} ${ICUUC_INCLUDE_DIR} ${LTDL_INCLUDE_DIR} ${FREETYPE2_INCLUDE_DIR})
 
         message(STATUS "  Enabling Mapnik support")
+        message(STATUS "  Mapnik version: ${MAPNIK_VERSION}")
         message(STATUS "  Mapnik includes : ${MAPNIK_INCLUDE_DIR}")
         message(STATUS "  Mapnik library  : ${MAPNIK_LIBRARY}")
         message(STATUS "  ICU includes : ${ICUUC_INCLUDE_DIR}")
