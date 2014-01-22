@@ -95,7 +95,7 @@ bool RADImageIO::CanReadFile(const char* filename)
 {
   std::fstream header_file;
   std::string  lFileName(filename);
-  if (System::IsADirName(lFileName) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
     {
     return false;
     }
@@ -493,7 +493,7 @@ bool RADImageIO::CanWriteFile(const char* filename)
     {
     return false;
     }
-  if (System::IsADirName(lFileName) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
     {
     return false;
     }

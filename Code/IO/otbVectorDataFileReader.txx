@@ -79,7 +79,7 @@ VectorDataFileReader<TOutputVectorData>
   //Only if m_FileName speciy a filename (not a dirname)
   // FIXME shapefile should be able to open a directory and load the
   // individual shapefiles as layers
-  if (System::IsAFileName(this->m_FileName) == true)
+  if (itksys::SystemTools::FileExists(this->m_FileName.c_str(), true) == true)
     {
     std::ifstream readTester;
     readTester.open(this->m_FileName.c_str());

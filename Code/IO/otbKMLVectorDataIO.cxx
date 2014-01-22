@@ -54,7 +54,7 @@ bool
 KMLVectorDataIO::CanReadFile(const char* filename) const
 {
   std::string lFileName(filename);
-  if (System::IsADirName(lFileName) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
     {
     return false;
     }
@@ -500,7 +500,7 @@ KMLVectorDataIO
 bool KMLVectorDataIO::CanWriteFile(const char* filename) const
 {
   std::string lFileName(filename);
-  if (System::IsADirName(lFileName) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
     {
     return false;
     }

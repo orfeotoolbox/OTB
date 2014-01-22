@@ -88,7 +88,7 @@ bool LUMImageIO::CanReadFile(const char* filename)
     {
     return false;
     }
-  if (System::IsADirName(lFileName) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
     {
     return false;
     }
@@ -315,7 +315,7 @@ bool LUMImageIO::CanWriteFile(const char* filename)
     {
     return false;
     }
-  if (System::IsADirName(lFileName) == true)
+  if (itksys::SystemTools::FileIsDirectory(lFileName.c_str()) == true)
     {
     return false;
     }

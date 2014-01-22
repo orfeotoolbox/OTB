@@ -577,7 +577,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   // Test if the file can be open for reading access.
   //Only if m_FileName specify a filename (not a dirname)
-  if (System::IsAFileName(this->m_FileName) == true)
+  if (itksys::SystemTools::FileExists(this->m_FileName.c_str(), true) == true)
     {
     std::ifstream readTester;
     readTester.open(this->m_FileName.c_str());

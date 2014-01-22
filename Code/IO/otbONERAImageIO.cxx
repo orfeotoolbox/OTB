@@ -86,7 +86,7 @@ bool ONERAImageIO::CanReadFile(const char* FileNameToRead)
     m_Headerfile.close();
     }
 
-  if (System::IsADirName(filename) == true)
+  if (itksys::SystemTools::FileIsDirectory(filename.c_str()) == true)
     {
     return false;
     }
