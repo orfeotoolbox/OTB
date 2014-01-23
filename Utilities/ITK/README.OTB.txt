@@ -61,6 +61,12 @@ rm -rf Utilities/ITK/Utilities/Hooks
 rm -rf Utilities/ITK/Utilities/InstallTest
 rm     Utilities/ITK/Utilities/SetupForDevelopment.sh
 
+# Check that everything is working properly by compiling OTB with internal ITK
+# and run some tests
+
+# Commit those changes in one commit. Use the -A option of hg commit to
+#  add/remove new/old files in ITK  
+
 
 
 
