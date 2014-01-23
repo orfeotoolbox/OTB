@@ -20,6 +20,9 @@
 #include <mapnik/filter_factory.hpp>
 #include <mapnik/rule.hpp>
 #include <mapnik/text_symbolizer.hpp>
+#ifndef OTB_MAPNIK_COMPATIBILITY_API07
+#include <mapnik/feature_type_style.hpp>
+#endif
 
 namespace otb
 {
