@@ -24,7 +24,7 @@ set(COMMON_TESTS14 ${CXX_TEST_PATH}/otbCommonTests14)
 # -------            otb::System  -------------
 add_test(coTuSystemTests_IsA_Methods ${COMMON_TESTS1}
         otbSystemTest
-        ${OTB_DATA_ROOT}/OTBData.readme
+        ${OTB_DATA_ROOT}/README-OTB-Data
         ${OTB_DATA_ROOT}
         )
 
