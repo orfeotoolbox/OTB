@@ -40,7 +40,7 @@ namespace itk
  * \wikiexample{SpectralAnalysis/CrossCorrelationInFourierDomain,Compute the cross-correlation of two images in the Fourier domain}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage=Image< std::complex<typename TInputImage::PixelType>, TInputImage::ImageDimension> >
+template< typename TInputImage, typename TOutputImage=Image< std::complex<typename TInputImage::PixelType>, TInputImage::ImageDimension> >
 class VnlForwardFFTImageFilter:
   public ForwardFFTImageFilter< TInputImage, TOutputImage >
 {
@@ -75,10 +75,10 @@ public:
                       TOutputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( ImageDimensionsMatchCheck,
                    ( Concept::SameDimension< InputImageDimension, OutputImageDimension > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

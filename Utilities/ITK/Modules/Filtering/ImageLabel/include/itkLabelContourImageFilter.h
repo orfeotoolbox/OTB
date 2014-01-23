@@ -52,8 +52,8 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT LabelContourImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class LabelContourImageFilter:
   public InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:

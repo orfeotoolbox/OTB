@@ -25,10 +25,7 @@
 
 namespace itk
 {
-/**
- * Constructor to initialize entire vector to one value.
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 Vector< T, TVectorDimension >
 ::Vector(const ValueType & r)
 {
@@ -38,7 +35,7 @@ Vector< T, TVectorDimension >
     }
 }
 
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 Vector< T, TVectorDimension > &
 Vector< T, TVectorDimension >
 ::operator=(const ValueType r[TVectorDimension])
@@ -47,10 +44,7 @@ Vector< T, TVectorDimension >
   return *this;
 }
 
-/**
- *
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 const typename Vector< T, TVectorDimension >::Self &
 Vector< T, TVectorDimension >
 ::operator+=(const Self & vec)
@@ -62,10 +56,7 @@ Vector< T, TVectorDimension >
   return *this;
 }
 
-/**
- *
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 const typename Vector< T, TVectorDimension >::Self &
 Vector< T, TVectorDimension >
 ::operator-=(const Self & vec)
@@ -77,10 +68,7 @@ Vector< T, TVectorDimension >
   return *this;
 }
 
-/**
- * Returns a temporary copy of a vector
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 Vector< T, TVectorDimension >
 Vector< T, TVectorDimension >
 ::operator-() const
@@ -94,10 +82,7 @@ Vector< T, TVectorDimension >
   return result;
 }
 
-/**
- * Returns a temporary copy of a vector
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 Vector< T, TVectorDimension >
 Vector< T, TVectorDimension >
 ::operator+(const Self & vec) const
@@ -111,10 +96,7 @@ Vector< T, TVectorDimension >
   return result;
 }
 
-/**
- * Returns a temporary copy of a vector
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 Vector< T, TVectorDimension >
 Vector< T, TVectorDimension >
 ::operator-(const Self & vec)  const
@@ -128,10 +110,7 @@ Vector< T, TVectorDimension >
   return result;
 }
 
-/**
- * Returns vector's Squared Euclidean Norm
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 typename Vector< T, TVectorDimension >::RealValueType
 Vector< T, TVectorDimension >
 ::GetSquaredNorm(void) const
@@ -145,10 +124,7 @@ Vector< T, TVectorDimension >
   return sum;
 }
 
-/**
- * Returns vector's Euclidean Norm
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 typename Vector< T, TVectorDimension >::RealValueType
 Vector< T, TVectorDimension >
 ::GetNorm(void) const
@@ -156,10 +132,7 @@ Vector< T, TVectorDimension >
   return RealValueType( vcl_sqrt( double( this->GetSquaredNorm() ) ) );
 }
 
-/**
- * Divide vector's components by vector's norm
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 void
 Vector< T, TVectorDimension >
 ::Normalize(void)
@@ -172,10 +145,7 @@ Vector< T, TVectorDimension >
     }
 }
 
-/**
- * Return a vnl_vector_ref
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 vnl_vector_ref< T >
 Vector< T, TVectorDimension >
 ::GetVnlVector(void)
@@ -183,10 +153,7 @@ Vector< T, TVectorDimension >
   return vnl_vector_ref< T >( TVectorDimension, this->GetDataPointer() );
 }
 
-/**
- * Return a vnl_vector const
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 vnl_vector< T >
 Vector< T, TVectorDimension >
 ::GetVnlVector(void) const
@@ -199,10 +166,7 @@ Vector< T, TVectorDimension >
                               const_cast< T * >( this->GetDataPointer() ) );
 }
 
-/**
- * Set a vnl_vector
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 void
 Vector< T, TVectorDimension >
 ::SetVnlVector(const vnl_vector< T > & v)
@@ -213,10 +177,7 @@ Vector< T, TVectorDimension >
     }
 }
 
-/**
- * Print content to an ostream
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 std::ostream &
 operator<<(std::ostream & os, const Vector< T, TVectorDimension > & vct)
 {
@@ -237,10 +198,7 @@ operator<<(std::ostream & os, const Vector< T, TVectorDimension > & vct)
   return os;
 }
 
-/**
- * Read content from an istream
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 std::istream &
 operator>>(std::istream & is, Vector< T, TVectorDimension > & vct)
 {
@@ -251,10 +209,7 @@ operator>>(std::istream & is, Vector< T, TVectorDimension > & vct)
   return is;
 }
 
-/**
- *
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 typename Vector< T, TVectorDimension >::ValueType
 Vector< T, TVectorDimension >
 ::operator*(const Self & other) const
@@ -268,10 +223,7 @@ Vector< T, TVectorDimension >
 }
 
 #if !defined(ITK_LEGACY_REMOVE)
-/**
- * Set a vnl_vector
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 void
 Vector< T, TVectorDimension >
 ::Set_vnl_vector(const vnl_vector< T > & v)
@@ -282,20 +234,15 @@ Vector< T, TVectorDimension >
     }
 }
 
-/**
- * Return a vnl_vector_ref
- */
-template< class T, unsigned int TVectorDimension >
+template< typename T, unsigned int TVectorDimension >
 vnl_vector_ref< T >
 Vector< T, TVectorDimension >
 ::Get_vnl_vector(void)
 {
   return vnl_vector_ref< T >( TVectorDimension, this->GetDataPointer() );
 }
-/**
- * Return a vnl_vector const
- */
-template< class T, unsigned int TVectorDimension >
+
+template< typename T, unsigned int TVectorDimension >
 vnl_vector< T >
 Vector< T, TVectorDimension >
 ::Get_vnl_vector(void) const

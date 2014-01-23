@@ -62,8 +62,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TSample >
-class ITK_EXPORT WeightedCentroidKdTreeGenerator:
+template< typename TSample >
+class WeightedCentroidKdTreeGenerator:
   public KdTreeGenerator< TSample >
 {
 public:

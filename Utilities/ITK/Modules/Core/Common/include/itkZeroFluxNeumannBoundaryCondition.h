@@ -54,8 +54,8 @@ namespace itk
  * \ingroup ImageObjects
  * \ingroup ITKCommon
  */
-template< class TInputImage, class TOutputImage = TInputImage >
-class ITK_EXPORT ZeroFluxNeumannBoundaryCondition:
+template< typename TInputImage, typename TOutputImage = TInputImage >
+class ZeroFluxNeumannBoundaryCondition:
     public ImageBoundaryCondition< TInputImage, TOutputImage >
 {
 public:

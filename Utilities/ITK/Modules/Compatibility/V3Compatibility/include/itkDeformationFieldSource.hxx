@@ -27,7 +27,7 @@ namespace itk
 /**
  * Initialize new instance
  */
-template< class TOutputImage >
+template< typename TOutputImage >
 DeformationFieldSource< TOutputImage >
 ::DeformationFieldSource()
 {
@@ -47,7 +47,7 @@ DeformationFieldSource< TOutputImage >
  *
  * \todo Add details about this class
  */
-template< class TOutputImage >
+template< typename TOutputImage >
 void
 DeformationFieldSource< TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -61,28 +61,29 @@ DeformationFieldSource< TOutputImage >
   os << indent << "KernelTransform: " << m_KernelTransform.GetPointer() << std::endl;
   os << indent << "Source Landmarks: " << m_SourceLandmarks.GetPointer() << std::endl;
   os << indent << "Target Landmarks: " << m_TargetLandmarks.GetPointer() << std::endl;
-
-  return;
 }
 
 /**
  * Set the output image spacing.
  */
-template< class TOutputImage >
+template< typename TOutputImage >
 void
 DeformationFieldSource< TOutputImage >
 ::SetOutputSpacing(
   const double *spacing)
 {
-  SpacingType s(spacing);
-
+  SpacingType s;
+  for(unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
+    {
+    s[i] = static_cast< typename SpacingType::ValueType >(spacing[i]);
+    }
   this->SetOutputSpacing(s);
 }
 
 /**
  * Set the output image origin.
  */
-template< class TOutputImage >
+template< typename TOutputImage >
 void
 DeformationFieldSource< TOutputImage >
 ::SetOutputOrigin(
@@ -97,7 +98,7 @@ DeformationFieldSource< TOutputImage >
  * Sub-sample the input deformation field and prepare the KernelBase
  * BSpline
  */
-template< class TOutputImage >
+template< typename TOutputImage >
 void
 DeformationFieldSource< TOutputImage >
 ::PrepareKernelBaseSpline()
@@ -127,7 +128,7 @@ DeformationFieldSource< TOutputImage >
 /**
  * GenerateData
  */
-template< class TOutputImage >
+template< typename TOutputImage >
 void
 DeformationFieldSource< TOutputImage >
 ::GenerateData()
@@ -187,14 +188,12 @@ DeformationFieldSource< TOutputImage >
     ++outIt;
     progress.CompletedPixel();
     }
-
-  return;
 }
 
 /**
  * Inform pipeline of required output region
  */
-template< class TOutputImage >
+template< typename TOutputImage >
 void
 DeformationFieldSource< TOutputImage >
 ::GenerateOutputInformation()
@@ -216,14 +215,12 @@ DeformationFieldSource< TOutputImage >
   outputPtr->SetSpacing(m_OutputSpacing);
   outputPtr->SetOrigin(m_OutputOrigin);
   outputPtr->SetDirection(m_OutputDirection);
-
-  return;
 }
 
 /**
  * Verify if any of the components has been modified.
  */
-template< class TOutputImage >
+template< typename TOutputImage >
 unsigned long
 DeformationFieldSource< TOutputImage >
 ::GetMTime(void) const

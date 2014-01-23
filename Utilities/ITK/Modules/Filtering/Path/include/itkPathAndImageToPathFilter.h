@@ -34,8 +34,8 @@ namespace itk
  * \ingroup PathFilters
  * \ingroup ITKPath
  */
-template< class TInputPath, class TInputImage, class TOutputPath >
-class ITK_EXPORT PathAndImageToPathFilter:
+template< typename TInputPath, typename TInputImage, typename TOutputPath >
+class PathAndImageToPathFilter:
   public PathToPathFilter< TInputPath, TOutputPath >
 {
 public:

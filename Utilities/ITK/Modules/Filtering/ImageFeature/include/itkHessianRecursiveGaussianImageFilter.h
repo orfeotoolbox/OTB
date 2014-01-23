@@ -35,7 +35,7 @@ namespace itk
  *
  *
  * \ingroup GradientFilters
- * \ingroup SingelThreaded
+ * \ingroup SingleThreaded
  * \ingroup ITKImageFeature
  */
 // NOTE that the typename macro has to be used here in lieu
@@ -46,7 +46,7 @@ template< typename TInputImage,
                                            typename NumericTraits< typename TInputImage::PixelType >::RealType,
                                            TInputImage::ImageDimension >,
                                          TInputImage::ImageDimension > >
-class ITK_EXPORT HessianRecursiveGaussianImageFilter:
+class HessianRecursiveGaussianImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -144,12 +144,12 @@ public:
   throw( InvalidRequestedRegionError );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< PixelType > ) );
   itkConceptMacro( OutputHasPixelTraitsCheck,
                    ( Concept::HasPixelTraits< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

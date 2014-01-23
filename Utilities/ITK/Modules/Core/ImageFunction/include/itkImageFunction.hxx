@@ -25,7 +25,7 @@ namespace itk
 /**
  * Constructor
  */
-template< class TInputImage, class TOutput, class TCoordRep >
+template< typename TInputImage, typename TOutput, typename TCoordRep >
 ImageFunction< TInputImage, TOutput, TCoordRep >
 ::ImageFunction()
 {
@@ -39,14 +39,14 @@ ImageFunction< TInputImage, TOutput, TCoordRep >
 /**
  * Standard "PrintSelf" method
  */
-template< class TInputImage, class TOutput, class TCoordRep >
+template< typename TInputImage, typename TOutput, typename TCoordRep >
 void
 ImageFunction< TInputImage, TOutput, TCoordRep >
 ::PrintSelf(
   std::ostream & os,
   Indent indent) const
 {
-  Superclass::PrintSelf(os, indent);
+  this->Superclass::PrintSelf(os, indent);
   os << indent << "InputImage: " << m_Image.GetPointer() << std::endl;
   os << indent << "StartIndex: " << m_StartIndex << std::endl;
   os << indent << "EndIndex: " << m_EndIndex << std::endl;
@@ -57,7 +57,7 @@ ImageFunction< TInputImage, TOutput, TCoordRep >
 /**
  * Initialize by setting the input image
  */
-template< class TInputImage, class TOutput, class TCoordRep >
+template< typename TInputImage, typename TOutput, typename TCoordRep >
 void
 ImageFunction< TInputImage, TOutput, TCoordRep >
 ::SetInputImage(

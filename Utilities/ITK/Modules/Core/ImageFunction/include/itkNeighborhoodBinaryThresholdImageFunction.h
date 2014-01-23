@@ -38,8 +38,8 @@ namespace itk
  * \ingroup ImageFunctions
  * \ingroup ITKImageFunction
  */
-template< class TInputImage, class TCoordRep = float >
-class ITK_EXPORT NeighborhoodBinaryThresholdImageFunction:
+template< typename TInputImage, typename TCoordRep = float >
+class NeighborhoodBinaryThresholdImageFunction:
   public BinaryThresholdImageFunction< TInputImage, TCoordRep >
 {
 public:

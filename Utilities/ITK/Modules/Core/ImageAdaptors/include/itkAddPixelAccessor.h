@@ -40,8 +40,8 @@ namespace Accessor
  * \endwiki
  */
 
-template< class TPixel >
-class ITK_EXPORT AddPixelAccessor
+template< typename TPixel >
+class AddPixelAccessor
 {
 public:
   /** Standard class typedefs. */

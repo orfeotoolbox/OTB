@@ -38,8 +38,8 @@ namespace itk
  * \ingroup   PathFilters
  * \ingroup ITKPath
  */
-template< class TImage >
-class ITK_EXPORT ExtractOrthogonalSwath2DImageFilter:public
+template< typename TImage >
+class ExtractOrthogonalSwath2DImageFilter:public
   ImageAndPathToImageFilter< TImage, ParametricPath< 2 >, TImage >
 {
 public:

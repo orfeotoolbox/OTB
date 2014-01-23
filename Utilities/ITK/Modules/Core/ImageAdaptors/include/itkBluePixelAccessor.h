@@ -36,8 +36,8 @@ namespace itk
  * \ingroup ITKImageAdaptors
  */
 
-template< class T >
-class ITK_EXPORT BluePixelAccessor
+template< typename T >
+class BluePixelAccessor
 {
 public:
   /** Standard class typedefs. */

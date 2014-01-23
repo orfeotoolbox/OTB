@@ -46,11 +46,11 @@ namespace itk
  *
  *   \ingroup ITKLevelSetsv4
  */
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 class LevelSetEvolution
 {};
 
-template< class TEquationContainer, class TImage >
+template< typename TEquationContainer, typename TImage >
 class LevelSetEvolution<  TEquationContainer,
                           LevelSetDenseImage< TImage > > :
   public LevelSetEvolutionBase< TEquationContainer, LevelSetDenseImage< TImage > >
@@ -117,6 +117,11 @@ public:
 
   typedef ImageRegionConstIteratorWithIndex< InputImageType > InputImageConstIteratorType;
 
+  /** Set the maximum number of threads to be used. */
+  void SetNumberOfThreads( const ThreadIdType threads );
+  /** Set the maximum number of threads to be used. */
+  ThreadIdType GetNumberOfThreads() const;
+
 protected:
   LevelSetEvolution();
   ~LevelSetEvolution();
@@ -161,7 +166,7 @@ protected:
 };
 
 
-template< class TEquationContainer, typename TOutput, unsigned int VDimension >
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
 class LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > > :
   public LevelSetEvolutionBase< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
 {
@@ -223,6 +228,11 @@ public:
   typedef UpdateWhitakerSparseLevelSet< ImageDimension, LevelSetOutputType, EquationContainerType > UpdateLevelSetFilterType;
   typedef typename UpdateLevelSetFilterType::Pointer                                                UpdateLevelSetFilterPointer;
 
+  /** Set the maximum number of threads to be used. */
+  void SetNumberOfThreads( const ThreadIdType threads );
+  /** Set the maximum number of threads to be used. */
+  ThreadIdType GetNumberOfThreads() const;
+
 protected:
   LevelSetEvolution();
   ~LevelSetEvolution();
@@ -260,7 +270,7 @@ private:
 
 
 // Shi
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 class LevelSetEvolution<
     TEquationContainer,
     ShiSparseLevelSetImage< VDimension > > :
@@ -340,7 +350,7 @@ private:
 };
 
 // Malcolm
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 class LevelSetEvolution< TEquationContainer,
     MalcolmSparseLevelSetImage< VDimension > > :
 public LevelSetEvolutionBase< TEquationContainer, MalcolmSparseLevelSetImage< VDimension > >

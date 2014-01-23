@@ -28,7 +28,7 @@
 
 namespace itk
 {
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >::CannyEdgeDetectionImageFilter()
 {
   unsigned int i;
@@ -82,7 +82,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >::CannyEdgeDetectionIm
   m_OutputImage = 0;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::AllocateUpdateBuffer()
@@ -97,7 +97,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
   m_UpdateBuffer1->Allocate();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
@@ -105,10 +105,9 @@ throw( InvalidRequestedRegionError )
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  return;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::ThreadedCompute2ndDerivative(const OutputImageRegionType &
@@ -159,7 +158,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 typename CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::OutputImagePixelType
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
@@ -215,7 +214,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 }
 
 // Calculate the second derivative
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::Compute2ndDerivative()
@@ -230,7 +229,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
   this->GetMultiThreader()->SingleMethodExecute();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 ITK_THREAD_RETURN_TYPE
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::Compute2ndDerivativeThreaderCallback(void *arg)
@@ -259,7 +258,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
   return ITK_THREAD_RETURN_VALUE;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::GenerateData()
@@ -314,7 +313,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
   this->HysteresisThresholding();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::HysteresisThresholding()
@@ -359,7 +358,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::FollowEdge(IndexType index, const OutputImageType *multiplyImageFilterOutput)
@@ -430,7 +429,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::ThreadedCompute2ndDerivativePos(const OutputImageRegionType & outputRegionForThread, ThreadIdType threadId)
@@ -530,7 +529,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 }
 
 //Calculate the second derivative
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::Compute2ndDerivativePos()
@@ -545,7 +544,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
   this->GetMultiThreader()->SingleMethodExecute();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 ITK_THREAD_RETURN_TYPE
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::Compute2ndDerivativePosThreaderCallback(void *arg)
@@ -575,7 +574,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
   return ITK_THREAD_RETURN_VALUE;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const

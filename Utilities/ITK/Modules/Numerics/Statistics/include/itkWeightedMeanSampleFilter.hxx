@@ -25,19 +25,19 @@ namespace itk
 {
 namespace Statistics
 {
-template< class TSample >
+template< typename TSample >
 WeightedMeanSampleFilter< TSample >
 ::WeightedMeanSampleFilter()
 {
   this->ProcessObject::SetNthInput(1, NULL);
 }
 
-template< class TSample >
+template< typename TSample >
 WeightedMeanSampleFilter< TSample >
 ::~WeightedMeanSampleFilter()
 {}
 
-template< class TSample >
+template< typename TSample >
 void
 WeightedMeanSampleFilter< TSample >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -49,7 +49,7 @@ WeightedMeanSampleFilter< TSample >
   os << indent << "Weighting Function: " << this->GetWeightingFunctionInput() << std::endl;
 }
 
-template< class TSample >
+template< typename TSample >
 void
 WeightedMeanSampleFilter< TSample >
 ::GenerateData()
@@ -76,10 +76,9 @@ WeightedMeanSampleFilter< TSample >
 
   // Otherwise compute the regular mean ( without weight coefficients)
   Superclass::GenerateData();
-  return;
 }
 
-template< class TSample >
+template< typename TSample >
 void
 WeightedMeanSampleFilter< TSample >
 ::ComputeMeanWithWeights()
@@ -152,7 +151,7 @@ WeightedMeanSampleFilter< TSample >
   decoratedOutput->Set(output);
 }
 
-template< class TSample >
+template< typename TSample >
 void
 WeightedMeanSampleFilter< TSample >
 ::ComputeMeanWithWeightingFunction()

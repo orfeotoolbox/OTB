@@ -22,20 +22,16 @@
 #include "itkMetaConverterBase.h"
 #include "itkVesselTubeSpatialObject.h"
 
+namespace itk
+{
+
 /** \class MetaVesselTubeConverter
- *  \brief converts between MetaObject<->SpatialObject
+ *  \brief Converts between MetaObject<->SpatialObject
  *  \sa MetaConverterBase
  *  \ingroup ITKSpatialObjects
  */
-namespace itk
-{
-/** \class MetaVesselTubeConverter
- * \brief This is the MetaVesselTubeConverter class.
- *
- * \ingroup ITKSpatialObjects
- */
 template< unsigned int NDimensions = 3 >
-class ITK_EXPORT MetaVesselTubeConverter :
+class MetaVesselTubeConverter :
     public MetaConverterBase< NDimensions >
 {
 public:

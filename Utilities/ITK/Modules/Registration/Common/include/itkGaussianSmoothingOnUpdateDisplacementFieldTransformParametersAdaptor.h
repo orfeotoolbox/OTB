@@ -29,8 +29,8 @@ namespace itk
  *
  * \ingroup ITKRegistrationCommon
  */
-template<class TTransform>
-class ITK_EXPORT GaussianSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor
+template<typename TTransform>
+class GaussianSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor
 : public DisplacementFieldTransformParametersAdaptor<TTransform>
 {
 public:

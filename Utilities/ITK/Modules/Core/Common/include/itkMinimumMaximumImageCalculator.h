@@ -40,8 +40,8 @@ namespace itk
  * \wikiexample{Developer/OilPaintingImageFilter,Multi-threaded oil painting image filter}
  * \endwiki
  */
-template< class TInputImage >
-class ITK_EXPORT MinimumMaximumImageCalculator:public Object
+template< typename TInputImage >
+class MinimumMaximumImageCalculator:public Object
 {
 public:
   /** Standard class typedefs. */

@@ -44,8 +44,8 @@ namespace itk
  * \wikiexample{EdgesAndGradients/DerivativeImageFilter,Compute the derivative of an image in a particular direction}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT DerivativeImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class DerivativeImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -79,10 +79,10 @@ public:
 
   /** The output pixel type must be signed. */
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SignedOutputPixelType,
                    ( Concept::Signed< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
   /** Standard get/set macros for filter parameters. */

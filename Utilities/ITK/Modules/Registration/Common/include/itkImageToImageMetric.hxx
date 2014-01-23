@@ -26,7 +26,7 @@ namespace itk
 /**
  * Constructor
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::ImageToImageMetric():
   m_UseFixedImageIndexes(false),
@@ -102,32 +102,20 @@ ImageToImageMetric< TFixedImage, TMovingImage >
   */
 }
 
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::~ImageToImageMetric()
 {
-  if ( m_ThreaderNumberOfMovingImageSamples != NULL )
-    {
-    delete[] m_ThreaderNumberOfMovingImageSamples;
-    }
+  delete[] m_ThreaderNumberOfMovingImageSamples;
   m_ThreaderNumberOfMovingImageSamples = NULL;
 
-  if ( m_ThreaderTransform != NULL )
-    {
-    delete[] m_ThreaderTransform;
-    }
+  delete[] m_ThreaderTransform;
   m_ThreaderTransform = NULL;
 
-  if ( this->m_ThreaderBSplineTransformWeights != NULL )
-    {
-    delete[] this->m_ThreaderBSplineTransformWeights;
-    }
+  delete[] this->m_ThreaderBSplineTransformWeights;
   this->m_ThreaderBSplineTransformWeights = NULL;
 
-  if ( this->m_ThreaderBSplineTransformIndices != NULL )
-    {
-    delete[] this->m_ThreaderBSplineTransformIndices;
-    }
+  delete[] this->m_ThreaderBSplineTransformIndices;
   this->m_ThreaderBSplineTransformIndices = NULL;
 }
 
@@ -135,7 +123,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
  * Set the number of threads. This will be clamped by the
  * multithreader, so we must check to see if it is accepted.
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetNumberOfThreads(ThreadIdType numberOfThreads)
@@ -147,7 +135,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Set the parameters that define a unique transform
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetTransformParameters(const ParametersType & parameters) const
@@ -160,7 +148,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 
 }
 
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetNumberOfFixedImageSamples(SizeValueType numSamples)
@@ -176,7 +164,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetFixedImageIndexes(const FixedImageIndexContainer & indexes)
@@ -190,7 +178,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetUseFixedImageIndexes(bool useIndexes)
@@ -209,7 +197,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetFixedImageSamplesIntensityThreshold(const FixedImagePixelType & thresh)
@@ -222,7 +210,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetUseFixedImageSamplesIntensityThreshold(bool useThresh)
@@ -241,7 +229,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetFixedImageRegion(const FixedImageRegionType reg)
@@ -256,7 +244,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetUseAllPixels(bool useAllPixels)
@@ -278,7 +266,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SetUseSequentialSampling(bool useSequential)
@@ -300,7 +288,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Initialize
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::Initialize(void)
@@ -378,7 +366,7 @@ throw ( ExceptionObject )
 /**
  * MultiThreading Initialize
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::MultiThreadingInitialize(void)
@@ -386,31 +374,15 @@ throw ( ExceptionObject )
 {
   this->SetNumberOfThreads(m_NumberOfThreads);
 
-  if ( m_ThreaderNumberOfMovingImageSamples != NULL )
-    {
-    delete[] m_ThreaderNumberOfMovingImageSamples;
-    }
+  delete[] m_ThreaderNumberOfMovingImageSamples;
   m_ThreaderNumberOfMovingImageSamples = new unsigned int[m_NumberOfThreads - 1];
 
   // Allocate the array of transform clones to be used in every thread
-  if ( m_ThreaderTransform != NULL )
-    {
-    delete[] m_ThreaderTransform;
-    }
+  delete[] m_ThreaderTransform;
   m_ThreaderTransform = new TransformPointer[m_NumberOfThreads - 1];
   for ( ThreadIdType ithread = 0; ithread < m_NumberOfThreads - 1; ++ithread )
     {
-    // Create a copy of the main transform to be used in this thread.
-    LightObject::Pointer anotherTransform = this->m_Transform->CreateAnother();
-    // This static_cast should always work since the pointer was created by
-    // CreateAnother() called from the transform itself.
-    TransformType *transformCopy = static_cast< TransformType * >( anotherTransform.GetPointer() );
-    /** Set the fixed parameters first. Some transforms have parameters which depend on
-        the values of the fixed parameters. For instance, the BSplineTransform
-        checks the grid size (part of the fixed parameters) before setting the parameters. */
-    transformCopy->SetFixedParameters( this->m_Transform->GetFixedParameters() );
-    transformCopy->SetParameters( this->m_Transform->GetParameters() );
-    this->m_ThreaderTransform[ithread] = transformCopy;
+    this->m_ThreaderTransform[ithread] = this->m_Transform->Clone();
     }
 
   m_FixedImageSamples.resize(m_NumberOfFixedImageSamples);
@@ -511,16 +483,10 @@ throw ( ExceptionObject )
     this->m_BSplineTransformWeights.SetSize(1);
     this->m_BSplineTransformIndices.SetSize(1);
 
-    if ( this->m_ThreaderBSplineTransformWeights != NULL )
-      {
-      delete[] this->m_ThreaderBSplineTransformWeights;
-      }
+    delete[] this->m_ThreaderBSplineTransformWeights;
     this->m_ThreaderBSplineTransformWeights = NULL;
 
-    if ( this->m_ThreaderBSplineTransformIndices != NULL )
-      {
-      delete[] this->m_ThreaderBSplineTransformIndices;
-      }
+    delete[] this->m_ThreaderBSplineTransformIndices;
     this->m_ThreaderBSplineTransformIndices = NULL;
 
     if ( this->m_UseCachingOfBSplineWeights )
@@ -559,7 +525,7 @@ throw ( ExceptionObject )
 /**
  * Use the indexes that have been passed to the metric
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SampleFixedImageIndexes(FixedImageSampleContainer & samples) const
@@ -593,7 +559,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Sample the fixed image using a random walk
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SampleFixedImageRegion(FixedImageSampleContainer & samples) const
@@ -709,7 +675,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Sample the fixed image domain using all pixels in the Fixed image region
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SampleFullFixedImageRegion(FixedImageSampleContainer & samples) const
@@ -808,7 +774,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Compute the gradient image and assign it to m_GradientImage.
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::ComputeGradient()
@@ -837,7 +803,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 }
 
 // Method to reinitialize the seed of the random number generator
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::ReinitializeSeed()
@@ -846,7 +812,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 }
 
 // Method to reinitialize the seed of the random number generator
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::ReinitializeSeed(int seed)
@@ -858,7 +824,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Cache pre-transformed points, weights and indices.
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::PreComputeTransformValues()
@@ -920,7 +886,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
  * Transform a point from FixedImage domain to MovingImage domain.
  * This function also checks if mapped point is within support region.
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::TransformPoint(unsigned int sampleNumber,
@@ -1037,7 +1003,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
  * Transform a point from FixedImage domain to MovingImage domain.
  * This function also checks if mapped point is within support region.
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::TransformPointWithDerivatives(unsigned int sampleNumber,
@@ -1161,7 +1127,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
  * if we are not using a BSplineInterpolator, which includes
  * derivatives.
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::ComputeImageDerivatives(const MovingImagePointType & mappedPoint,
@@ -1193,7 +1159,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueMultiThreadedPreProcessInitiate(void) const
@@ -1205,7 +1171,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
   m_Threader->SingleMethodExecute();
 }
 
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueMultiThreadedInitiate(void) const
@@ -1222,7 +1188,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueMultiThreadedPostProcessInitiate(void) const
@@ -1235,7 +1201,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Get the match Measure
  */
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 ITK_THREAD_RETURN_TYPE
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueMultiThreadedPreProcess(void *arg)
@@ -1256,7 +1222,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Get the match Measure
  */
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 ITK_THREAD_RETURN_TYPE
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueMultiThreaded(void *arg)
@@ -1277,7 +1243,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Get the match Measure
  */
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 ITK_THREAD_RETURN_TYPE
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueMultiThreadedPostProcess(void *arg)
@@ -1295,7 +1261,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
   return ITK_THREAD_RETURN_VALUE;
 }
 
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueThread(ThreadIdType threadID) const
@@ -1356,7 +1322,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueAndDerivativeMultiThreadedPreProcessInitiate(void) const
@@ -1368,7 +1334,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
   m_Threader->SingleMethodExecute();
 }
 
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueAndDerivativeMultiThreadedInitiate(void) const
@@ -1385,7 +1351,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
     }
 }
 
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueAndDerivativeMultiThreadedPostProcessInitiate(void) const
@@ -1398,7 +1364,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Get the match Measure
  */
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 ITK_THREAD_RETURN_TYPE
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueAndDerivativeMultiThreadedPreProcess(void *arg)
@@ -1419,7 +1385,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Get the match Measure
  */
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 ITK_THREAD_RETURN_TYPE
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueAndDerivativeMultiThreaded(void *arg)
@@ -1440,7 +1406,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * Get the match Measure
  */
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 ITK_THREAD_RETURN_TYPE
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueAndDerivativeMultiThreadedPostProcess(void *arg)
@@ -1458,7 +1424,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
   return ITK_THREAD_RETURN_VALUE;
 }
 
-template< class TFixedImage, class TMovingImage  >
+template< typename TFixedImage, typename TMovingImage  >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::GetValueAndDerivativeThread(ThreadIdType threadID) const
@@ -1527,7 +1493,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
 /**
  * PrintSelf
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -1604,7 +1570,7 @@ ImageToImageMetric< TFixedImage, TMovingImage >
  *  pointer. We are altering the object that m_ThreaderTransform[idx] points at.
  *  This is allowed under C++ const rules.
  */
-template< class TFixedImage, class TMovingImage >
+template< typename TFixedImage, typename TMovingImage >
 void
 ImageToImageMetric< TFixedImage, TMovingImage >
 ::SynchronizeTransforms() const

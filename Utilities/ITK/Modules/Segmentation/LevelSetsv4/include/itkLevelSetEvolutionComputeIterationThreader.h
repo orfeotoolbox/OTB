@@ -35,13 +35,13 @@ namespace itk
  *
  * \ingroup ITKLevelSetsv4
  */
-template< class TLevelSet, class TDomainPartitioner, class TLevelSetEvolution >
+template< typename TLevelSet, typename TDomainPartitioner, typename TLevelSetEvolution >
 class LevelSetEvolutionComputeIterationThreader
 {};
 
 // For dense image level set split by putting part of the level set region in
 // each thread.
-template< class TImage, class TLevelSetEvolution >
+template< typename TImage, typename TLevelSetEvolution >
 class LevelSetEvolutionComputeIterationThreader< LevelSetDenseImage< TImage >, ThreadedImageRegionPartitioner< TImage::ImageDimension >, TLevelSetEvolution >
   : public DomainThreader< ThreadedImageRegionPartitioner< TImage::ImageDimension >, TLevelSetEvolution >
 {
@@ -68,6 +68,9 @@ public:
   typedef typename LevelSetEvolutionType::IdListConstIterator    IdListConstIterator;
   typedef typename LevelSetEvolutionType::InputImageType         InputImageType;
   typedef typename LevelSetEvolutionType::LevelSetType           LevelSetType;
+  typedef typename LevelSetType::IndexType                       IndexType;
+  typedef typename LevelSetType::RegionType                      RegionType;
+  typedef typename LevelSetType::OffsetType                      OffsetType;
   typedef typename LevelSetEvolutionType::LevelSetImageType      LevelSetImageType;
   typedef typename LevelSetEvolutionType::LevelSetDataType       LevelSetDataType;
   typedef typename LevelSetEvolutionType::LevelSetOutputRealType LevelSetOutputRealType;
@@ -86,7 +89,7 @@ private:
 };
 
 // For dense image level set split by putting a level set domain in each thread.
-template< class TImage, class TLevelSetEvolution >
+template< typename TImage, typename TLevelSetEvolution >
 class LevelSetEvolutionComputeIterationThreader< LevelSetDenseImage< TImage >,
       ThreadedIteratorRangePartitioner< typename TLevelSetEvolution::DomainMapImageFilterType::DomainMapType::const_iterator >, TLevelSetEvolution >
   : public DomainThreader< ThreadedIteratorRangePartitioner< typename TLevelSetEvolution::DomainMapImageFilterType::DomainMapType::const_iterator >, TLevelSetEvolution >
@@ -117,6 +120,9 @@ public:
   typedef typename LevelSetEvolutionType::IdListConstIterator    IdListConstIterator;
   typedef typename LevelSetEvolutionType::InputImageType         InputImageType;
   typedef typename LevelSetEvolutionType::LevelSetType           LevelSetType;
+  typedef typename LevelSetType::IndexType                       IndexType;
+  typedef typename LevelSetType::RegionType                      RegionType;
+  typedef typename LevelSetType::OffsetType                      OffsetType;
   typedef typename LevelSetEvolutionType::LevelSetImageType      LevelSetImageType;
   typedef typename LevelSetEvolutionType::LevelSetDataType       LevelSetDataType;
   typedef typename LevelSetEvolutionType::LevelSetOutputRealType LevelSetOutputRealType;
@@ -136,7 +142,7 @@ private:
 
 // For Whitaker sparse level set split by putting part of the level set in each
 // thread.
-template< class TOutput, unsigned int VDimension, class TLevelSetEvolution >
+template< typename TOutput, unsigned int VDimension, typename TLevelSetEvolution >
 class LevelSetEvolutionComputeIterationThreader<
       WhitakerSparseLevelSetImage< TOutput, VDimension >,
       ThreadedIteratorRangePartitioner< typename WhitakerSparseLevelSetImage< TOutput, VDimension >::LayerConstIterator >,
@@ -164,6 +170,9 @@ public:
   /** Types of the associate class. */
   typedef TLevelSetEvolution                                     LevelSetEvolutionType;
   typedef typename LevelSetEvolutionType::LevelSetType           LevelSetType;
+  typedef typename LevelSetType::IndexType                       IndexType;
+  typedef typename LevelSetType::RegionType                      RegionType;
+  typedef typename LevelSetType::OffsetType                      OffsetType;
   typedef typename LevelSetEvolutionType::LevelSetContainerType  LevelSetContainerType;
   typedef typename LevelSetEvolutionType::LevelSetIdentifierType LevelSetIdentifierType;
   typedef typename LevelSetEvolutionType::LevelSetInputType      LevelSetInputType;

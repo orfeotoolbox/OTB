@@ -72,9 +72,9 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage,
-          class TOutputImage = Image< double, TInputImage::ImageDimension > >
-class ITK_EXPORT ImagePCAShapeModelEstimator:
+template< typename TInputImage,
+          typename TOutputImage = Image< double, TInputImage::ImageDimension > >
+class ImagePCAShapeModelEstimator:
   public ImageShapeModelEstimatorBase< TInputImage, TOutputImage >
 {
 public:

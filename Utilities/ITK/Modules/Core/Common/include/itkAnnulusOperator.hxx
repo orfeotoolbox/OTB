@@ -25,7 +25,7 @@
 namespace itk
 {
 /** Create the operator */
-template< class TPixel, unsigned int TDimension, class TAllocator >
+template< typename TPixel, unsigned int TDimension, typename TAllocator >
 void
 AnnulusOperator< TPixel, TDimension, TAllocator >
 ::CreateOperator()
@@ -39,7 +39,7 @@ AnnulusOperator< TPixel, TDimension, TAllocator >
 
 /** This function fills the coefficients into the corresponding
  *  neighborhood. */
-template< class TPixel, unsigned int TDimension, class TAllocator >
+template< typename TPixel, unsigned int TDimension, typename TAllocator >
 void
 AnnulusOperator< TPixel, TDimension, TAllocator >
 ::Fill(const CoefficientVector & coeff)
@@ -58,7 +58,7 @@ AnnulusOperator< TPixel, TDimension, TAllocator >
     }
 }
 
-template< class TPixel, unsigned int TDimension, class TAllocator >
+template< typename TPixel, unsigned int TDimension, typename TAllocator >
 typename AnnulusOperator< TPixel, TDimension, TAllocator >
 ::CoefficientVector
 AnnulusOperator< TPixel, TDimension, TAllocator >
@@ -104,7 +104,6 @@ AnnulusOperator< TPixel, TDimension, TAllocator >
 
   // Walk the neighborhood (this) and evaluate the sphere spatial
   // functions
-  bool         inInner, inOuter;
   double       sumNotExterior = 0.0;
   double       sumNotExteriorSq = 0.0;
   unsigned int countNotExterior = 0;
@@ -128,8 +127,8 @@ AnnulusOperator< TPixel, TDimension, TAllocator >
       }
 
     // evaluate the spheres
-    inInner = innerS->Evaluate(point);
-    inOuter = outerS->Evaluate(point);
+    const bool inInner = innerS->Evaluate(point);
+    const bool inOuter = outerS->Evaluate(point);
 
     // set the coefficients
     if ( !inOuter )

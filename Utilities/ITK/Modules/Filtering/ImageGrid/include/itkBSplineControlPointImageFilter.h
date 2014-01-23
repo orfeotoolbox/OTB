@@ -56,7 +56,7 @@ namespace itk
  * \ingroup ITKImageGrid
  */
 
-template <class TInputImage, class TOutputImage = TInputImage>
+template <typename TInputImage, typename TOutputImage = TInputImage>
 class BSplineControlPointImageFilter
   : public ImageToImageFilter<TInputImage, TOutputImage>
 {
@@ -260,9 +260,7 @@ private:
   DirectionType                                m_Direction;
 
   bool                                         m_DoMultilevel;
-  bool                                         m_GenerateOutputImage;
   unsigned int                                 m_MaximumNumberOfLevels;
-  unsigned int                                 m_CurrentLevel;
   ArrayType                                    m_NumberOfControlPoints;
   ArrayType                                    m_CloseDimension;
   ArrayType                                    m_SplineOrder;

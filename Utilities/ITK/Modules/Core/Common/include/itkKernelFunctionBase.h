@@ -40,7 +40,7 @@ namespace itk
  * \ingroup ITKCommon
  */
 template< typename TRealValueType = double >
-class ITK_EXPORT KernelFunctionBase:public FunctionBase< TRealValueType, TRealValueType >
+class KernelFunctionBase:public FunctionBase< TRealValueType, TRealValueType >
 {
 public:
   /** Standard class typedefs. */
@@ -58,10 +58,10 @@ public:
   virtual TRealValueType Evaluate(const TRealValueType & u) const = 0;
 
 #ifdef ITK_USE_STRICT_CONCEPT_CHECKING
-    /** Begin concept checking */
+    // Begin concept checking
     itkConceptMacro( TRealValueTypeIsFloatingPointCheck,
                          ( Concept::IsFloatingPoint< TRealValueType > ) );
-      /** End concept checking */
+      // End concept checking
 #endif
 
 protected:

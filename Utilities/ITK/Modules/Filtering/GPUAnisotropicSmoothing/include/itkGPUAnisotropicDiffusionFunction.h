@@ -34,8 +34,8 @@ namespace itk
  *
  * \ingroup ITKGPUAnisotropicSmoothing
  */
-template< class TImage >
-class ITK_EXPORT GPUAnisotropicDiffusionFunction :
+template< typename TImage >
+class GPUAnisotropicDiffusionFunction :
   public GPUFiniteDifferenceFunction< TImage >
 {
 public:
@@ -142,7 +142,7 @@ protected:
   }
 
   // GPU buffer for Computing Average Squared Gradient Magnitude
-  typename GPUDataManager::Pointer m_AnisotropicDiffusionFunctionGPUBuffer;
+  typename GPUDataManager::Pointer   m_AnisotropicDiffusionFunctionGPUBuffer;
   typename GPUKernelManager::Pointer m_AnisotropicDiffusionFunctionGPUKernelManager;
 
   // GPU Kernel Handles

@@ -35,8 +35,8 @@ namespace itk
 {
 namespace Functor
 {
-template< class TLabelObject >
-class ITK_EXPORT NumberOfPixelsLabelObjectAccessor
+template< typename TLabelObject >
+class NumberOfPixelsLabelObjectAccessor
 {
 public:
   typedef TLabelObject  LabelObjectType;
@@ -48,8 +48,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT BoundingBoxLabelObjectAccessor
+template< typename TLabelObject >
+class BoundingBoxLabelObjectAccessor
 {
 public:
   typedef TLabelObject                         LabelObjectType;
@@ -61,8 +61,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT PhysicalSizeLabelObjectAccessor
+template< typename TLabelObject >
+class PhysicalSizeLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;
@@ -74,8 +74,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT NumberOfPixelsOnBorderLabelObjectAccessor
+template< typename TLabelObject >
+class NumberOfPixelsOnBorderLabelObjectAccessor
 {
 public:
   typedef TLabelObject  LabelObjectType;
@@ -87,8 +87,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT PerimeterOnBorderLabelObjectAccessor
+template< typename TLabelObject >
+class PerimeterOnBorderLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;
@@ -100,8 +100,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT CentroidLabelObjectAccessor
+template< typename TLabelObject >
+class CentroidLabelObjectAccessor
 {
 public:
   typedef TLabelObject                           LabelObjectType;
@@ -113,8 +113,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT FeretDiameterLabelObjectAccessor
+template< typename TLabelObject >
+class FeretDiameterLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;
@@ -126,8 +126,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT PrincipalMomentsLabelObjectAccessor
+template< typename TLabelObject >
+class PrincipalMomentsLabelObjectAccessor
 {
 public:
   typedef TLabelObject                         LabelObjectType;
@@ -139,8 +139,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT PrincipalAxesLabelObjectAccessor
+template< typename TLabelObject >
+class PrincipalAxesLabelObjectAccessor
 {
 public:
   typedef TLabelObject                         LabelObjectType;
@@ -152,8 +152,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT ElongationLabelObjectAccessor
+template< typename TLabelObject >
+class ElongationLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;
@@ -165,8 +165,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT PerimeterLabelObjectAccessor
+template< typename TLabelObject >
+class PerimeterLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;
@@ -178,8 +178,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT RoundnessLabelObjectAccessor
+template< typename TLabelObject >
+class RoundnessLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;
@@ -191,8 +191,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT EquivalentSphericalRadiusLabelObjectAccessor
+template< typename TLabelObject >
+class EquivalentSphericalRadiusLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;
@@ -204,8 +204,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT EquivalentSphericalPerimeterLabelObjectAccessor
+template< typename TLabelObject >
+class EquivalentSphericalPerimeterLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;
@@ -217,8 +217,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT EquivalentEllipsoidDiameterLabelObjectAccessor
+template< typename TLabelObject >
+class EquivalentEllipsoidDiameterLabelObjectAccessor
 {
 public:
   typedef TLabelObject                         LabelObjectType;
@@ -230,8 +230,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT FlatnessLabelObjectAccessor
+template< typename TLabelObject >
+class FlatnessLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;
@@ -243,8 +243,8 @@ public:
   }
 };
 
-template< class TLabelObject >
-class ITK_EXPORT PerimeterOnBorderRatioLabelObjectAccessor
+template< typename TLabelObject >
+class PerimeterOnBorderRatioLabelObjectAccessor
 {
 public:
   typedef TLabelObject LabelObjectType;

@@ -39,8 +39,8 @@ namespace itk
  * \wikiexample{ImageProcessing/CropImageFilter,Crop an image by specifying the region to throw away}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT CropImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class CropImageFilter:
   public ExtractImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -90,12 +90,12 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputImagePixelType, OutputImagePixelType > ) );
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, OutputImageDimension > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

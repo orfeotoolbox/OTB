@@ -50,8 +50,8 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT BinaryContourImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class BinaryContourImageFilter:
   public InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:

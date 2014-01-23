@@ -27,8 +27,8 @@ namespace itk
 
 namespace Functor {
 
-template< class TLabelObject >
-class ITK_EXPORT AttributeLabelObjectAccessor
+template< typename TLabelObject >
+class AttributeLabelObjectAccessor
 {
 public:
   typedef TLabelObject                                 LabelObjectType;
@@ -66,17 +66,17 @@ public:
  * \ingroup DataRepresentation
  * \ingroup ITKLabelMap
  */
-template < class TLabel, unsigned int VImageDimension, class TAttributeValue >
-class ITK_EXPORT AttributeLabelObject : public LabelObject< TLabel, VImageDimension >
+template < typename TLabel, unsigned int VImageDimension, typename TAttributeValue >
+class AttributeLabelObject : public LabelObject< TLabel, VImageDimension >
 {
 public:
   /** Standard class typedefs */
   typedef AttributeLabelObject                   Self;
   typedef LabelObject< TLabel, VImageDimension > Superclass;
-  typedef SmartPointer<Self>                     Pointer;
-   typedef typename Superclass::LabelObjectType  LabelObjectType;
-  typedef SmartPointer<const Self>               ConstPointer;
-  typedef WeakPointer<const Self>                ConstWeakPointer;
+  typedef SmartPointer< Self >                   Pointer;
+  typedef typename Superclass::LabelObjectType   LabelObjectType;
+  typedef SmartPointer< const Self >             ConstPointer;
+  typedef WeakPointer< const Self >              ConstWeakPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

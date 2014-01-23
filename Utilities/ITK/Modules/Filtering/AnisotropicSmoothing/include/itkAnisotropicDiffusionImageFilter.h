@@ -69,8 +69,8 @@ namespace itk
  * \ingroup ImageEnhancement
  * \ingroup ITKAnisotropicSmoothing
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT AnisotropicDiffusionImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class AnisotropicDiffusionImageFilter:
   public DenseFiniteDifferenceImageFilter< TInputImage, TOutputImage >
 {
 public:

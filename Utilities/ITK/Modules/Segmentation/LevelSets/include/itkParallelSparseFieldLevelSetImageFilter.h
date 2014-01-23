@@ -33,7 +33,7 @@ namespace itk
  * lists of indices and other values.
  * \ingroup ITKLevelSets
  */
-template< class TNodeIndexType >
+template< typename TNodeIndexType >
 class ParallelSparseFieldLevelSetNode
 {
 public:
@@ -71,7 +71,7 @@ public:
  *
  * \ingroup ITKLevelSets
  */
-template< class TNeighborhoodType >
+template< typename TNeighborhoodType >
 class ParallelSparseFieldCityBlockNeighborList
 {
 public:
@@ -245,8 +245,8 @@ private:
  *
  * \ingroup ITKLevelSets
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ParallelSparseFieldLevelSetImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class ParallelSparseFieldLevelSetImageFilter:
   public FiniteDifferenceImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -328,14 +328,14 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputEqualityComparableCheck,
                    ( Concept::EqualityComparable< PixelType > ) );
   itkConceptMacro( DoubleConvertibleToOutputCheck,
                    ( Concept::Convertible< double, PixelType > ) );
   itkConceptMacro( OutputOStreamWritableCheck,
                    ( Concept::OStreamWritable< PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

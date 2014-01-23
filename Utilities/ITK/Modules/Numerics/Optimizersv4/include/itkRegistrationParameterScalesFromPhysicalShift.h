@@ -30,8 +30,8 @@ namespace itk
  *
  * \ingroup ITKOptimizersv4
  */
-template < class TMetric >
-class ITK_EXPORT RegistrationParameterScalesFromPhysicalShift :
+template < typename TMetric >
+class RegistrationParameterScalesFromPhysicalShift :
   public RegistrationParameterScalesFromShiftBase< TMetric >
 {
 public:
@@ -73,7 +73,7 @@ private:
   RegistrationParameterScalesFromPhysicalShift(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  template <class TTransform>
+  template <typename TTransform>
   void ComputeSampleShiftsInternal(const ParametersType &deltaParameters, ScalesType &localShifts);
 
 }; //class RegistrationParameterScalesFromPhysicalShift

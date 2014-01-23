@@ -43,9 +43,9 @@ namespace itk
  * \ingroup Operators
  * \ingroup ITKCommon
  */
-template< class TPixel, unsigned int VDimension = 2,
-          class TAllocator = NeighborhoodAllocator< TPixel > >
-class ITK_EXPORT ImageKernelOperator :
+template< typename TPixel, unsigned int VDimension = 2,
+          typename TAllocator = NeighborhoodAllocator< TPixel > >
+class ImageKernelOperator :
   public NeighborhoodOperator< TPixel, VDimension, TAllocator >
 {
 public:

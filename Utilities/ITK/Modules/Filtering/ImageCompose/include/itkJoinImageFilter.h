@@ -44,7 +44,7 @@ namespace Functor
  * cases, the join value type is promoted to a float.
  * \ingroup ITKImageCompose
  */
-template< class TPixel1, class TPixel2 >
+template< typename TPixel1, typename TPixel2 >
 class JoinFunctor
 {
 public:
@@ -200,8 +200,8 @@ struct MakeJoin {
  * \wikiexample{VectorImages/JoinImageFilter,Join images\, stacking their components}
  * \endwiki
  */
-template< class TInputImage1, class TInputImage2 >
-class ITK_EXPORT JoinImageFilter:
+template< typename TInputImage1, typename TInputImage2 >
+class JoinImageFilter:
   public BinaryFunctorImageFilter< TInputImage1,
                                    TInputImage2,
                                    typename
@@ -240,7 +240,7 @@ public:
   itkTypeMacro(JoinImageFilter, BinaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1HasPixelTraitsCheck,
                    ( Concept::HasPixelTraits< typename TInputImage1::PixelType > ) );
   itkConceptMacro( Input2HasPixelTraitsCheck,
@@ -248,7 +248,7 @@ public:
   itkConceptMacro( Input1Input2HasJoinTraitsCheck,
                    ( Concept::HasJoinTraits< typename PixelTraits< typename TInputImage1::PixelType >::ValueType,
                                              typename PixelTraits< typename TInputImage2::PixelType >::ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

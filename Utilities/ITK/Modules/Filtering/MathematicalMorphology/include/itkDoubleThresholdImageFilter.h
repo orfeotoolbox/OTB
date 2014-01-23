@@ -50,8 +50,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKMathematicalMorphology
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT DoubleThresholdImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class DoubleThresholdImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -116,7 +116,7 @@ public:
   itkBooleanMacro(FullyConnected);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputEqualityComparableCheck,
                    ( Concept::EqualityComparable< OutputPixelType > ) );
   itkConceptMacro( InputComparableCheck,
@@ -125,7 +125,7 @@ public:
                    ( Concept::OStreamWritable< InputPixelType > ) );
   itkConceptMacro( OutputOStreamWritableCheck,
                    ( Concept::OStreamWritable< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

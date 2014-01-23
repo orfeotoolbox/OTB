@@ -31,7 +31,9 @@ namespace itk
  * \class ConnectedComponentImageFilter
  * \brief Label the objects in a binary image
  *
- * ConnectedComponentImageFilter labels the objects in a binary image.
+ * ConnectedComponentImageFilter labels the objects in a binary image
+ * (non-zero pixels are considered to be objects, zero-valued pixels
+ * are considered to be background).
  * Each distinct object is assigned a unique label. The filter experiments
  * with some improvements to the existing implementation, and is based on
  * run length encoding along raster lines.
@@ -43,7 +45,7 @@ namespace itk
  *
  * \sa ImageToImageFilter
  *
- * \ingroup SingelThreaded
+ * \ingroup SingleThreaded
  * \ingroup ITKConnectedComponents
  *
  * \wiki
@@ -51,8 +53,8 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage, class TMaskImage = TInputImage >
-class ITK_EXPORT ConnectedComponentImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TMaskImage = TInputImage >
+class ConnectedComponentImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -151,6 +153,9 @@ public:
   }
 
   /**
+   * Set the pixel intensity to be used for background (non-object)
+   * regions of the image in the output. Note that this does NOT set
+   * the background value to be used in the input image.
    */
   itkSetMacro(BackgroundValue, OutputImagePixelType);
   itkGetConstMacro(BackgroundValue, OutputImagePixelType);

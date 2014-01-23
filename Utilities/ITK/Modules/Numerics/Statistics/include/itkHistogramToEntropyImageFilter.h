@@ -51,7 +51,7 @@ namespace itk
 
 namespace Function
 {
-template< class TInput, class TOutput = double >
+template< typename TInput, typename TOutput = double >
 class HistogramEntropyFunction
 {
 public:
@@ -98,8 +98,8 @@ private:
 };
 }
 
-template< class THistogram, class TImage=Image< double, 3> >
-class ITK_EXPORT HistogramToEntropyImageFilter:
+template< typename THistogram, typename TImage=Image< double, 3> >
+class HistogramToEntropyImageFilter:
   public HistogramToImageFilter< THistogram, TImage,
                                  Function::HistogramEntropyFunction< SizeValueType, typename TImage::PixelType > >
 {

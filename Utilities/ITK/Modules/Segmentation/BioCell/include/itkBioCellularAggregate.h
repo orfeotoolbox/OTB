@@ -34,13 +34,13 @@ namespace bio
 /** \class CellularAggregate
  * \brief Base class for different types of cellular groups,
  * including bacterial colonies and pluricellular organisms
- * 
+ *
  * This class represents an aggregation of bio::Cell objects.
  *
  * \ingroup ITKBioCell
  */
 template< unsigned int NSpaceDimension = 3 >
-class ITK_EXPORT CellularAggregate:public CellularAggregateBase
+class CellularAggregate:public CellularAggregateBase
 {
 public:
   /** Standard class typedefs. */

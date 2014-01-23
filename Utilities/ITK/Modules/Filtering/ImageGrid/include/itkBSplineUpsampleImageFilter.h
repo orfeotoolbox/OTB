@@ -79,9 +79,9 @@ namespace itk
  * \ingroup ITKImageGrid
  */
 
-template< class TInputImage, class TOutputImage, class ResamplerType =
+template< typename TInputImage, typename TOutputImage, typename ResamplerType =
             BSplineResampleImageFilterBase< TInputImage, TOutputImage > >
-class ITK_EXPORT BSplineUpsampleImageFilter:
+class BSplineUpsampleImageFilter:
   public ResamplerType
 {
 public:
@@ -117,10 +117,10 @@ public:
   void GenerateInputRequestedRegion();
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( DoubleConvertibleToOutputCheck,
                    ( Concept::Convertible< double, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

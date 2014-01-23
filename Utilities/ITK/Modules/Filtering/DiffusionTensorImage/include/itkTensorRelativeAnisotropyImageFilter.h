@@ -69,7 +69,7 @@ public:
 template< typename  TInputImage, typename  TOutputImage = Image<
     typename NumericTraits< typename TInputImage::PixelType::ValueType >::RealType,
     TInputImage::Dimension > >
-class ITK_EXPORT TensorRelativeAnisotropyImageFilter:
+class TensorRelativeAnisotropyImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::TensorRelativeAnisotropyFunction<
@@ -102,10 +102,10 @@ public:
   { this->Superclass::PrintSelf(os, indent); }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -62,8 +62,8 @@ namespace itk
  *
  * \ingroup ITKRegistrationCommon
  */
-template<class TTransform>
-class ITK_EXPORT TimeVaryingBSplineVelocityFieldTransformParametersAdaptor
+template<typename TTransform>
+class TimeVaryingBSplineVelocityFieldTransformParametersAdaptor
 : public TransformParametersAdaptor<TTransform>
 {
 public:

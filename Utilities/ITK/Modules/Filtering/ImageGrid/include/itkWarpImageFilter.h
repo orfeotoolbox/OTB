@@ -81,11 +81,11 @@ namespace itk
  * \endwiki
  */
 template<
-  class TInputImage,
-  class TOutputImage,
-  class TDisplacementField
+  typename TInputImage,
+  typename TOutputImage,
+  typename TDisplacementField
   >
-class ITK_EXPORT WarpImageFilter:
+class WarpImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -234,7 +234,7 @@ public:
   virtual void AfterThreadedGenerateData();
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck1,
                    ( Concept::SameDimension< ImageDimension, InputImageDimension > ) );
   itkConceptMacro( SameDimensionCheck2,
@@ -243,7 +243,7 @@ public:
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType > ) );
   itkConceptMacro( DisplacementFieldHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TDisplacementField::PixelType::ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
@@ -259,11 +259,12 @@ protected:
                             ThreadIdType threadId);
 
   /** Override VeriyInputInformation() since this filter's inputs do
-   * not need to occoupy the same physical space.
+   * not need to occoupy the same physical space. But check the that
+   * deformation field has the same number of components as dimensions
    *
    * \sa ProcessObject::VerifyInputInformation
    */
-  virtual void VerifyInputInformation() {}
+  virtual void VerifyInputInformation();
 
 private:
   WarpImageFilter(const Self &); //purposely not implemented
@@ -272,7 +273,7 @@ private:
   /** This function should be in an interpolator but none of the ITK
    * interpolators at this point handle edge conditions properly
    */
-  DisplacementType EvaluateDisplacementAtPhysicalPoint(const PointType & p);
+  void EvaluateDisplacementAtPhysicalPoint(const PointType & p, DisplacementType &output);
 
   PixelType     m_EdgePaddingValue;
   SpacingType   m_OutputSpacing;

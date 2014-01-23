@@ -47,8 +47,8 @@ namespace itk
  * \wikiexample{Images/NeighborhoodOperatorImageFilter,Apply a kernel to every pixel in an image}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage, class TOperatorValueType = typename TOutputImage::PixelType >
-class ITK_EXPORT NeighborhoodOperatorImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TOperatorValueType = typename TOutputImage::PixelType >
+class NeighborhoodOperatorImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -137,7 +137,7 @@ public:
   throw ( InvalidRequestedRegionError );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, ImageDimension > ) );
   itkConceptMacro( OperatorConvertibleToOutputCheck,
@@ -148,7 +148,7 @@ public:
                    ( Concept::MultiplyOperator< OperatorValueType > ) );
   itkConceptMacro( OperatorAdditiveOperatorsCheck,
                    ( Concept::AdditiveOperators< OperatorValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

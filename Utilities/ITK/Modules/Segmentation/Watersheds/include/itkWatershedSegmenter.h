@@ -84,8 +84,8 @@ namespace watershed
  * \ingroup WatershedSegmentation
  * \ingroup ITKWatersheds
  */
-template< class TInputImage >
-class ITK_EXPORT Segmenter:
+template< typename TInputImage >
+class Segmenter:
   public ProcessObject
 {
 public:

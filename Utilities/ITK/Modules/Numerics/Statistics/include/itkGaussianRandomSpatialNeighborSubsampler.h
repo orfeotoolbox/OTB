@@ -41,8 +41,8 @@ namespace Statistics {
  * \ingroup ITKStatistics
  */
 
-template < class TSample, class TRegion >
-  class ITK_EXPORT GaussianRandomSpatialNeighborSubsampler : public UniformRandomSpatialNeighborSubsampler<TSample, TRegion>
+template < typename TSample, typename TRegion >
+  class GaussianRandomSpatialNeighborSubsampler : public UniformRandomSpatialNeighborSubsampler<TSample, TRegion>
 {
 public:
   /** Standard class typedefs */

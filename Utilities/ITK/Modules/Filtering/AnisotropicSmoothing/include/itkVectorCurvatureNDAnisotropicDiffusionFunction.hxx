@@ -22,13 +22,14 @@
 
 namespace itk
 {
-template< class TImage >
+template< typename TImage >
 double VectorCurvatureNDAnisotropicDiffusionFunction< TImage >
 ::m_MIN_NORM = 1.0e-10;
 
-template< class TImage >
+template< typename TImage >
 VectorCurvatureNDAnisotropicDiffusionFunction< TImage >
-::VectorCurvatureNDAnisotropicDiffusionFunction()
+::VectorCurvatureNDAnisotropicDiffusionFunction():
+  m_K( 0.0 )
 {
   unsigned int i, j;
   RadiusType   r;
@@ -76,7 +77,7 @@ VectorCurvatureNDAnisotropicDiffusionFunction< TImage >
   dx_op.CreateDirectional();
 }
 
-template< class TImage >
+template< typename TImage >
 typename VectorCurvatureNDAnisotropicDiffusionFunction< TImage >::PixelType
 VectorCurvatureNDAnisotropicDiffusionFunction< TImage >
 ::ComputeUpdate(const NeighborhoodType & it, void *,

@@ -17,6 +17,7 @@
  *=========================================================================*/
 #ifndef __itkImageSeriesWriter_h
 #define __itkImageSeriesWriter_h
+#include "ITKIOImageBaseExport.h"
 
 #include "itkImageRegion.h"
 #include "itkImageFileWriter.h"
@@ -77,8 +78,8 @@ public:
  * \ingroup IOFilters
  * \ingroup ITKIOImageBase
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ImageSeriesWriter:public ProcessObject
+template< typename TInputImage, typename TOutputImage >
+class ITKIOImageBase_HIDDEN ImageSeriesWriter:public ProcessObject
 {
 public:
   /** Standard class typedefs. */

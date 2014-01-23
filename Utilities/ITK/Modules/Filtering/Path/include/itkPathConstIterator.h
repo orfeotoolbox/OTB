@@ -71,8 +71,8 @@ namespace itk
  * \sa NeighborhoodIterator \sa PathIterator \sa ShapedNeighborhoodIterator
  * \sa SliceIterator \sa ImageConstIteratorWithIndex
  */
-template< class TImage, class TPath >
-class ITK_EXPORT PathConstIterator
+template< typename TImage, typename TPath >
+class PathConstIterator
 {
 public:
   /** Standard class typedefs. */

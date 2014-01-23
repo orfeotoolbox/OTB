@@ -32,10 +32,11 @@ namespace itk
 /**
  * Initialize new instance
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::ResampleImageFilter()
 {
   m_OutputOrigin.Fill(0.0);
@@ -48,10 +49,10 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
   m_OutputStartIndex.Fill(0);
 
   m_Transform =
-    IdentityTransform< TInterpolatorPrecisionType, ImageDimension >::New();
+    IdentityTransform< TTransformPrecisionType, ImageDimension >::New();
 
   m_Interpolator = dynamic_cast< InterpolatorType * >
-                   ( LinearInterpolatorType::New().GetPointer() );
+    ( LinearInterpolatorType::New().GetPointer() );
 
   m_Extrapolator = NULL;
 
@@ -64,11 +65,12 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
  *
  * \todo Add details about this class
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -87,32 +89,36 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
   os << indent << "Extrapolator: " << m_Extrapolator.GetPointer() << std::endl;
   os << indent << "UseReferenceImage: " << ( m_UseReferenceImage ? "On" : "Off" )
      << std::endl;
-  return;
 }
 
 /**
  * Set the output image spacing.
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::SetOutputSpacing(const double *spacing)
 {
-  SpacingType s(spacing);
-
+  SpacingType s;
+  for(unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
+    {
+    s[i] = static_cast< typename SpacingType::ValueType >(spacing[i]);
+    }
   this->SetOutputSpacing(s);
 }
 
 /**
  * Set the output image origin.
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::SetOutputOrigin(const double *origin)
 {
   OriginPointType p(origin);
@@ -121,11 +127,12 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 }
 
 /** Helper method to set the output parameters based on this image */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::SetOutputParametersFromImage(const ImageBaseType *image)
 {
   this->SetOutputOrigin ( image->GetOrigin() );
@@ -140,11 +147,12 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
  * InterpolatorType::SetInputImage is not thread-safe and hence
  * has to be set up before ThreadedGenerateData
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::BeforeThreadedGenerateData()
 {
   if ( !m_Transform )
@@ -168,7 +176,7 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 
   unsigned int nComponents
     = DefaultConvertPixelTraits<PixelType>::GetNumberOfComponents(
-      m_DefaultPixelValue );
+        m_DefaultPixelValue );
 
   if (nComponents == 0)
     {
@@ -187,11 +195,12 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 /**
  * Set up state of filter after multi-threading.
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::AfterThreadedGenerateData()
 {
   // Disconnect input image from the interpolator
@@ -206,11 +215,12 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 /**
  * ThreadedGenerateData
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
                        ThreadIdType threadId)
 {
@@ -247,18 +257,20 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 /**
  * Cast from interpolotor output to pixel type
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
-typename ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
+typename ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::PixelType
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::CastPixelWithBoundsChecking(const InterpolatorOutputType value,
                               const ComponentType minComponent,
                               const ComponentType maxComponent ) const
 {
   const unsigned int nComponents = InterpolatorConvertType::GetNumberOfComponents(value);
-  PixelType outputValue;
+  PixelType          outputValue;
+
   NumericTraits<PixelType>::SetLength( outputValue, nComponents );
 
   for (unsigned int n=0; n<nComponents; n++)
@@ -286,11 +298,12 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 /**
  * NonlinearThreadedGenerateData
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::NonlinearThreadedGenerateData(const OutputImageRegionType &
                                 outputRegionForThread,
                                 ThreadIdType threadId)
@@ -338,12 +351,12 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
     inputPoint = this->m_Transform->TransformPoint(outputPoint);
     inputPtr->TransformPhysicalPointToContinuousIndex(inputPoint, inputIndex);
 
-    PixelType        pixval;
-    OutputType       value;
+    PixelType  pixval;
+    OutputType value;
     // Evaluate input at right position and copy to the output
     if ( m_Interpolator->IsInsideBuffer(inputIndex) )
       {
-      value = m_Interpolator ->EvaluateAtContinuousIndex(inputIndex);
+      value = m_Interpolator->EvaluateAtContinuousIndex(inputIndex);
       pixval = this->CastPixelWithBoundsChecking( value, minOutputValue, maxOutputValue );
       outIt.Set(pixval);
       }
@@ -364,18 +377,17 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
     progress.CompletedPixel();
     ++outIt;
     }
-
-  return;
 }
 
 /**
  * LinearThreadedGenerateData
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::LinearThreadedGenerateData(const OutputImageRegionType &
                              outputRegionForThread,
                              ThreadIdType threadId)
@@ -405,7 +417,7 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
   typedef typename PointType::VectorType VectorType;
   VectorType delta;          // delta in input continuous index coordinate frame
 
-  IndexType  index;
+  IndexType index;
 
   // Support for progress methods/callbacks
   ProgressReporter progress( this,
@@ -503,8 +515,6 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
       }
     outIt.NextLine();
     } //while( !outIt.IsAtEnd() )
-
-  return;
 }
 
 /**
@@ -514,11 +524,12 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
  * when we cannot assume anything about the transform being used.
  * So we do the easy thing and request the entire input image.
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::GenerateInputRequestedRegion()
 {
   // call the superclass's implementation of this method
@@ -535,46 +546,45 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 
   // Request the entire input image
   inputPtr->SetRequestedRegionToLargestPossibleRegion();
-
-  return;
 }
 
 /**
- * Set the smart pointer to the reference image that will provide
- * the grid parameters for the output image.
+ * Get the reference image that will provide the grid parameters for the output image.
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 const typename ResampleImageFilter< TInputImage,
                                     TOutputImage,
-                                    TInterpolatorPrecisionType >
-::OutputImageType *
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+                                    TInterpolatorPrecisionType,
+                                    TTransformPrecisionType >
+::ReferenceImageBaseType *
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::GetReferenceImage() const
 {
   Self *                 surrogate = const_cast< Self * >( this );
-  const OutputImageType *referenceImage =
-    static_cast< const OutputImageType * >( surrogate->ProcessObject::GetInput(1) );
+  const ReferenceImageBaseType *referenceImage =
+    static_cast< const ReferenceImageBaseType * >( surrogate->ProcessObject::GetInput(1) );
 
   return referenceImage;
 }
 
 /**
- * Set the smart pointer to the reference image that will provide
- * the grid parameters for the output image.
+ * Set the reference image that will provide the grid parameters for the output image.
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
-::SetReferenceImage(const TOutputImage *image)
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
+::SetReferenceImage(const ReferenceImageBaseType *image)
 {
   itkDebugMacro("setting input ReferenceImage to " << image);
-  if ( image != static_cast< const TOutputImage * >( this->ProcessObject::GetInput(1) ) )
+  if ( image != static_cast< const ReferenceImageBaseType * >( this->ProcessObject::GetInput(1) ) )
     {
-    this->ProcessObject::SetNthInput( 1, const_cast< TOutputImage * >( image ) );
+    this->ProcessObject::SetNthInput( 1, const_cast< ReferenceImageBaseType * >( image ) );
     this->Modified();
     }
 }
@@ -582,11 +592,12 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 /**
  * Inform pipeline of required output region
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 void
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::GenerateOutputInformation()
 {
   // call the superclass' implementation of this method
@@ -599,7 +610,7 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
     return;
     }
 
-  const OutputImageType *referenceImage = this->GetReferenceImage();
+  const ReferenceImageBaseType *referenceImage = this->GetReferenceImage();
 
   // Set the size of the output region
   if ( m_UseReferenceImage && referenceImage )
@@ -628,18 +639,17 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
     outputPtr->SetOrigin(m_OutputOrigin);
     outputPtr->SetDirection(m_OutputDirection);
     }
-
-  return;
 }
 
 /**
  * Verify if any of the components has been modified.
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType >
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType,
+          typename TTransformPrecisionType >
 ModifiedTimeType
-ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType, TTransformPrecisionType >
 ::GetMTime(void) const
 {
   ModifiedTimeType latestTime = Object::GetMTime();
@@ -662,6 +672,7 @@ ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 
   return latestTime;
 }
+
 } // end namespace itk
 
 #endif

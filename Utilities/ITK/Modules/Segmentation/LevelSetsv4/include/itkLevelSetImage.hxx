@@ -24,15 +24,16 @@
 namespace itk
 {
 // ----------------------------------------------------------------------------
-template< class TInput, unsigned int VDimension, typename TOutput >
+template< typename TInput, unsigned int VDimension, typename TOutput >
 LevelSetImage< TInput, VDimension, TOutput >
 ::LevelSetImage()
 {
   this->m_NeighborhoodScales.Fill( NumericTraits< OutputRealType >::One );
+  this->m_DomainOffset.Fill( NumericTraits< OffsetValueType >::Zero );
 }
 
 // ----------------------------------------------------------------------------
-template< class TInput, unsigned int VDimension, typename TOutput >
+template< typename TInput, unsigned int VDimension, typename TOutput >
 LevelSetImage< TInput, VDimension, TOutput >
 ::~LevelSetImage()
 {

@@ -29,8 +29,8 @@ namespace itk
  * \ingroup QEMeshModifierFunctions
  * \ingroup ITKQuadEdgeMesh
  */
-template< class TMesh, class TQEType >
-class ITK_EXPORT QuadEdgeMeshEulerOperatorJoinFacetFunction:
+template< typename TMesh, typename TQEType >
+class QuadEdgeMeshEulerOperatorJoinFacetFunction:
   public QuadEdgeMeshFunctionBase< TMesh, TQEType * >
 {
 public:

@@ -47,9 +47,9 @@ namespace itk
  * \wikiexample{Images/MaskNeighborhoodOperatorImageFilter,Apply a kernel to every pixel in an image that is non-zero in a mask}
  * \endwiki
  */
-template< class TInputImage, class TMaskImage, class TOutputImage, class TOperatorValueType =
+template< typename TInputImage, typename TMaskImage, typename TOutputImage, typename TOperatorValueType =
             typename TOutputImage::PixelType >
-class ITK_EXPORT MaskNeighborhoodOperatorImageFilter:
+class MaskNeighborhoodOperatorImageFilter:
   public NeighborhoodOperatorImageFilter< TInputImage, TOutputImage, TOperatorValueType >
 {
 public:
@@ -134,7 +134,7 @@ public:
   itkBooleanMacro(UseDefaultValue);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputEqualityComparableCheck,
                    ( Concept::EqualityComparable< OutputPixelType > ) );
   itkConceptMacro( SameDimensionCheck1,
@@ -147,7 +147,7 @@ public:
                    ( Concept::Convertible< OperatorValueType, OutputPixelType > ) );
   itkConceptMacro( OutputOStreamWritable,
                    ( Concept::OStreamWritable< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

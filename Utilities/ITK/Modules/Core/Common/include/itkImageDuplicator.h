@@ -50,8 +50,8 @@ namespace itk
  * \wikiexample{SimpleOperations/ImageDuplicator,Duplicate an image}
  * \endwiki
  */
-template< class TInputImage >
-class ITK_EXPORT ImageDuplicator:public Object
+template< typename TInputImage >
+class ImageDuplicator:public Object
 {
 public:
   /** Standard class typedefs. */

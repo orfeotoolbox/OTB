@@ -47,8 +47,8 @@ namespace itk
  * \ingroup ITKV3Compatibility
  * \sa MultiplyImageFilter
  */
-template <class TInputImage, class TConstant, class TOutputImage>
-class ITK_EXPORT MultiplyByConstantImageFilter :
+template <typename TInputImage, typename TConstant, typename TOutputImage>
+class MultiplyByConstantImageFilter :
       public
 MultiplyImageFilter<TInputImage, Image<TConstant, TInputImage::ImageDimension>, TOutputImage>
 {

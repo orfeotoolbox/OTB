@@ -56,8 +56,8 @@ namespace itk
  * to use this class as a function object.
  * \ingroup ITKLevelSets
  */
-template< class TSparseImageType >
-class ITK_EXPORT NormalVectorDiffusionFunction:
+template< typename TSparseImageType >
+class NormalVectorDiffusionFunction:
   public NormalVectorFunctionBase< TSparseImageType >
 {
 public:

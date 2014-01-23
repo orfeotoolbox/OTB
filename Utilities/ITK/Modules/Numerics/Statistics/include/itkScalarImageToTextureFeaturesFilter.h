@@ -101,9 +101,9 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TImageType,
-          class THistogramFrequencyContainer = DenseFrequencyContainer2 >
-class ITK_EXPORT ScalarImageToTextureFeaturesFilter:public ProcessObject
+template< typename TImageType,
+          typename THistogramFrequencyContainer = DenseFrequencyContainer2 >
+class ScalarImageToTextureFeaturesFilter:public ProcessObject
 {
 public:
   /** Standard typedefs */

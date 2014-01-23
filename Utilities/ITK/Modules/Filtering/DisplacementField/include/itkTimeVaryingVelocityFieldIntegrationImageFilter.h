@@ -34,7 +34,7 @@ namespace itk
  * described by the integral equation:
  *
  * \f[
- * \phi(t_b) = \phi(t_a) + \int_t_a^t_b v(\phi(t),t) dt
+ * \phi(t_b) = \phi(t_a) + \int_{t_a}^{t_b} v(\phi(t),t) dt
  * \f]
  *
  * In this class, the input is the time-varying velocity field and an initial
@@ -49,10 +49,10 @@ namespace itk
  *
  * \ingroup ITKDisplacementField
  */
-template<class TTimeVaryingVelocityField, class TDisplacementField =
+template<typename TTimeVaryingVelocityField, typename TDisplacementField =
  Image<typename TTimeVaryingVelocityField::PixelType,
  TTimeVaryingVelocityField::ImageDimension - 1> >
-class ITK_EXPORT TimeVaryingVelocityFieldIntegrationImageFilter :
+class TimeVaryingVelocityFieldIntegrationImageFilter :
   public ImageToImageFilter<TTimeVaryingVelocityField, TDisplacementField>
 {
 public:
@@ -82,16 +82,17 @@ public:
   typedef typename DisplacementFieldType::Pointer     DisplacementFieldPointer;
   typedef typename DisplacementFieldType::PixelType   VectorType;
   typedef typename VectorType::RealValueType          RealType;
+  typedef typename VectorType::ValueType              ScalarType;
   typedef typename DisplacementFieldType::PointType   PointType;
   typedef typename DisplacementFieldType::RegionType  OutputRegionType;
 
   typedef VectorInterpolateImageFunction
-    <TimeVaryingVelocityFieldType, RealType>    VelocityFieldInterpolatorType;
+    <TimeVaryingVelocityFieldType, ScalarType>    VelocityFieldInterpolatorType;
   typedef typename VelocityFieldInterpolatorType::Pointer
-                                                VelocityFieldInterpolatorPointer;
+                                                  VelocityFieldInterpolatorPointer;
 
-  typedef VectorInterpolateImageFunction<DisplacementFieldType, RealType>   DisplacementFieldInterpolatorType;
-  typedef typename DisplacementFieldInterpolatorType::Pointer               DisplacementFieldInterpolatorPointer;
+  typedef VectorInterpolateImageFunction<DisplacementFieldType, ScalarType>   DisplacementFieldInterpolatorType;
+  typedef typename DisplacementFieldInterpolatorType::Pointer                 DisplacementFieldInterpolatorPointer;
 
   /** Get/Set the time-varying velocity field interpolator.  Default = linear. */
   itkSetObjectMacro( VelocityFieldInterpolator, VelocityFieldInterpolatorType );

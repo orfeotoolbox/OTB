@@ -55,9 +55,9 @@ namespace itk
  * \ingroup Operators
  * \ingroup ITKImageStatistics
  */
-template< class TInputImage,
-          class TBasisImage = Image< double, TInputImage::ImageDimension > >
-class ITK_EXPORT ImagePCADecompositionCalculator:public Object
+template< typename TInputImage,
+          typename TBasisImage = Image< double, TInputImage::ImageDimension > >
+class ImagePCADecompositionCalculator:public Object
 {
 public:
   /** Standard class typedefs. */

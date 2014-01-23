@@ -73,11 +73,11 @@ namespace itk
  * \ingroup ITKImageGrid
  */
 
-template< class TInputImage,
-          class TOutputImage,
-          class TCoordType = typename TInputImage::PixelType,
-          class InterpolatorType = BSplineInterpolateImageFunction< TInputImage, TCoordType > >
-class ITK_EXPORT InterpolateImagePointsFilter:
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TCoordType = typename TInputImage::PixelType,
+          typename InterpolatorType = BSplineInterpolateImageFunction< TInputImage, TCoordType > >
+class InterpolateImagePointsFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -148,10 +148,10 @@ public:
   void GenerateInputRequestedRegion();
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

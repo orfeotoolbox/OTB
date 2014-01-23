@@ -73,7 +73,7 @@ namespace itk
  */
 
 template< typename  TPixel >
-class ITK_EXPORT Hessian3DToVesselnessMeasureImageFilter:public
+class Hessian3DToVesselnessMeasureImageFilter:public
   ImageToImageFilter< Image< SymmetricSecondRankTensor< double, 3 >, 3 >,
                       Image< TPixel, 3 > >
 {
@@ -122,10 +122,10 @@ public:
   itkGetConstMacro(Alpha2, double);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( DoubleConvertibleToOutputCheck,
                    ( Concept::Convertible< double, OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

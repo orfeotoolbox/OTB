@@ -30,7 +30,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput1, class TInput2, class TOutput >
+template< typename TInput1, typename TInput2, typename TOutput >
 class Atan2
 {
 public:
@@ -80,8 +80,8 @@ public:
  * \wikiexample{Math/Trig/Atan2ImageFilter,Compute the arctangent of each pixel.}
  * \endwiki
  */
-template< class TInputImage1, class TInputImage2, class TOutputImage >
-class ITK_EXPORT Atan2ImageFilter:
+template< typename TInputImage1, typename TInputImage2, typename TOutputImage >
+class Atan2ImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage1, TInputImage2, TOutputImage,
                             Functor::Atan2<
@@ -110,14 +110,14 @@ public:
                BinaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1ConvertibleToDoubleCheck,
                    ( Concept::Convertible< typename TInputImage1::PixelType, double > ) );
   itkConceptMacro( Input2ConvertibleToDoubleCheck,
                    ( Concept::Convertible< typename TInputImage2::PixelType, double > ) );
   itkConceptMacro( DoubleConvertibleToOutputCheck,
                    ( Concept::Convertible< double, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

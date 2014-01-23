@@ -66,16 +66,16 @@ namespace itk
  * \wikiexample{ImageProcessing/ManuallyRemovingLabels,Remove labels from a LabelMap}
  * \endwiki
  */
-template< class TLabelObject >
-class ITK_EXPORT LabelMap:public ImageBase<  TLabelObject ::ImageDimension >
+template< typename TLabelObject >
+class LabelMap:public ImageBase< TLabelObject::ImageDimension >
 {
 public:
   /** Standard class typedefs */
-  typedef LabelMap                                                              Self;
-  typedef ImageBase<  TLabelObject ::ImageDimension > Superclass;
-  typedef SmartPointer< Self >                        Pointer;
-  typedef SmartPointer< const Self >                  ConstPointer;
-  typedef WeakPointer< const Self >                   ConstWeakPointer;
+  typedef LabelMap                                  Self;
+  typedef ImageBase< TLabelObject::ImageDimension > Superclass;
+  typedef SmartPointer< Self >                      Pointer;
+  typedef SmartPointer< const Self >                ConstPointer;
+  typedef WeakPointer< const Self >                 ConstWeakPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

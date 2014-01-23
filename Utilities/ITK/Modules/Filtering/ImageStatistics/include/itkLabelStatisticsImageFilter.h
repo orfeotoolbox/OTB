@@ -56,8 +56,8 @@ namespace itk
  * \wikiexample{ImageProcessing/LabelStatisticsImageFilter,Get statistical properties of labeled regions in an image}
  * \endwiki
  */
-template< class TInputImage, class TLabelImage >
-class ITK_EXPORT LabelStatisticsImageFilter:
+template< typename TInputImage, typename TLabelImage >
+class LabelStatisticsImageFilter:
   public ImageToImageFilter< TInputImage, TInputImage >
 {
 public:
@@ -319,10 +319,10 @@ public:
                               RealType upperBound);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

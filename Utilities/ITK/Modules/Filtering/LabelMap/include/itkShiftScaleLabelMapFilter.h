@@ -39,8 +39,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template< class TImage >
-class ITK_EXPORT ShiftScaleLabelMapFilter:
+template< typename TImage >
+class ShiftScaleLabelMapFilter:
   public InPlaceLabelMapFilter< TImage >
 {
 public:
@@ -68,14 +68,14 @@ public:
   itkTypeMacro(ShiftScaleLabelMapFilter, InPlaceLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 /*  itkConceptMacro(InputEqualityComparableCheck,
     (Concept::EqualityComparable<InputImagePixelType>));
   itkConceptMacro(IntConvertibleToInputCheck,
     (Concept::Convertible<int, InputImagePixelType>));
   itkConceptMacro(InputOStreamWritableCheck,
     (Concept::OStreamWritable<InputImagePixelType>));*/
-/** End concept checking */
+// End concept checking
 #endif
 
   itkSetMacro(Shift, double);

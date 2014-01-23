@@ -25,21 +25,21 @@
 namespace itk
 {
 
-template< class TEquationContainer, class TImage >
+template< typename TEquationContainer, typename TImage >
 LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
 ::LevelSetEvolution()
 {
-  this->m_SplitLevelSetComputeIterationThreader = SplitLevelSetComputeIterationThreaderType::New();
+  this->m_SplitLevelSetComputeIterationThreader  = SplitLevelSetComputeIterationThreaderType::New();
   this->m_SplitDomainMapComputeIterationThreader = SplitDomainMapComputeIterationThreaderType::New();
-  this->m_SplitLevelSetUpdateLevelSetsThreader = SplitLevelSetUpdateLevelSetsThreaderType::New();
+  this->m_SplitLevelSetUpdateLevelSetsThreader   = SplitLevelSetUpdateLevelSetsThreaderType::New();
 }
 
-template< class TEquationContainer, class TImage >
+template< typename TEquationContainer, typename TImage >
 LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
 ::~LevelSetEvolution()
 {}
 
-template< class TEquationContainer, class TImage >
+template< typename TEquationContainer, typename TImage >
 void
 LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
 ::AllocateUpdateBuffer()
@@ -48,7 +48,25 @@ LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
   this->m_UpdateBuffer->CopyInformationAndAllocate( this->m_LevelSetContainer, true );
 }
 
-template< class TEquationContainer, class TImage >
+template< typename TEquationContainer, typename TImage >
+void
+LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
+::SetNumberOfThreads( const ThreadIdType numberOfThreads)
+{
+  this->m_SplitLevelSetComputeIterationThreader->SetMaximumNumberOfThreads(  numberOfThreads );
+  this->m_SplitDomainMapComputeIterationThreader->SetMaximumNumberOfThreads( numberOfThreads );
+  this->m_SplitLevelSetUpdateLevelSetsThreader->SetMaximumNumberOfThreads(   numberOfThreads );
+}
+
+template< typename TEquationContainer, typename TImage >
+ThreadIdType
+LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
+::GetNumberOfThreads() const
+{
+  return this->m_SplitDomainMapComputeIterationThreader->GetMaximumNumberOfThreads();
+}
+
+template< typename TEquationContainer, typename TImage >
 void
 LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
 ::ComputeIteration()
@@ -78,6 +96,7 @@ LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
         typedef typename DomainMapImageFilterType::LevelSetDomain LevelSetListImageDomainType;
         const LevelSetListImageDomainType & levelSetListImageDomain = mapIt->second;
         this->m_IdListToProcessWhenThreading = levelSetListImageDomain.GetIdList();
+
         this->m_SplitLevelSetComputeIterationThreader->Execute( this, *(levelSetListImageDomain.GetRegion()) );
         ++mapIt;
         }
@@ -94,7 +113,7 @@ LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
     }
 }
 
-template< class TEquationContainer, class TImage >
+template< typename TEquationContainer, typename TImage >
 void
 LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
 ::ComputeTimeStepForNextIteration()
@@ -107,6 +126,7 @@ LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
       {
       LevelSetOutputRealType contribution = this->m_EquationContainer->ComputeCFLContribution();
 
+      contribution = 1;
       if( contribution > NumericTraits< LevelSetOutputRealType >::epsilon() )
         {
         this->m_Dt = this->m_Alpha / contribution;
@@ -130,7 +150,7 @@ LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
     }
 }
 
-template< class TEquationContainer, class TImage >
+template< typename TEquationContainer, typename TImage >
 void
 LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
 ::UpdateLevelSets()
@@ -151,7 +171,7 @@ LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
   this->ReinitializeToSignedDistance();
 }
 
-template< class TEquationContainer, class TImage >
+template< typename TEquationContainer, typename TImage >
 void
 LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
 ::UpdateEquations()
@@ -159,7 +179,7 @@ LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
   this->InitializeIteration();
 }
 
-template< class TEquationContainer, class TImage >
+template< typename TEquationContainer, typename TImage >
 void
 LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
 ::ReinitializeToSignedDistance()
@@ -194,14 +214,14 @@ LevelSetEvolution< TEquationContainer, LevelSetDenseImage< TImage > >
 
 
 // Whitaker --------------------------------------------------------------------
-template< class TEquationContainer, typename TOutput, unsigned int VDimension >
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
 LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
 ::LevelSetEvolution()
 {
   this->m_SplitLevelSetComputeIterationThreader = SplitLevelSetComputeIterationThreaderType::New();
 }
 
-template< class TEquationContainer, typename TOutput, unsigned int VDimension >
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
 LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
 ::~LevelSetEvolution()
 {
@@ -213,7 +233,23 @@ LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDi
     }
 }
 
-template< class TEquationContainer, typename TOutput, unsigned int VDimension >
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
+void
+LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
+::SetNumberOfThreads( const ThreadIdType numberOfThreads)
+{
+  this->m_SplitLevelSetComputeIterationThreader->SetMaximumNumberOfThreads( numberOfThreads );
+}
+
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
+ThreadIdType
+LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
+::GetNumberOfThreads() const
+{
+  return this->m_SplitLevelSetComputeIterationThreader->GetMaximumNumberOfThreads();
+}
+
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
 void
 LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
 ::AllocateUpdateBuffer()
@@ -242,13 +278,11 @@ LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDi
     }
 }
 
-template< class TEquationContainer, typename TOutput, unsigned int VDimension >
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
 void
 LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
 ::ComputeIteration()
 {
-  typename LevelSetContainerType::Iterator it = this->m_LevelSetContainer->Begin();
-
   this->m_LevelSetContainerIteratorToProcessWhenThreading = this->m_LevelSetContainer->Begin();
 
   while( this->m_LevelSetContainerIteratorToProcessWhenThreading != this->m_LevelSetContainer->End() )
@@ -264,7 +298,7 @@ LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDi
     }
 }
 
-template< class TEquationContainer, typename TOutput, unsigned int VDimension >
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
 void
 LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
 ::ComputeTimeStepForNextIteration()
@@ -299,7 +333,7 @@ LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDi
   }
 }
 
-template< class TEquationContainer, typename TOutput, unsigned int VDimension >
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
 void
 LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
 ::UpdateLevelSets()
@@ -326,7 +360,7 @@ LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDi
     }
 }
 
-template< class TEquationContainer, typename TOutput, unsigned int VDimension >
+template< typename TEquationContainer, typename TOutput, unsigned int VDimension >
 void
 LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDimension > >
 ::UpdateEquations()
@@ -335,18 +369,18 @@ LevelSetEvolution< TEquationContainer, WhitakerSparseLevelSetImage< TOutput, VDi
 }
 
 // Shi
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 LevelSetEvolution< TEquationContainer, ShiSparseLevelSetImage< VDimension > >
 ::LevelSetEvolution()
 {
 }
 
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 LevelSetEvolution< TEquationContainer, ShiSparseLevelSetImage< VDimension > >
 ::~LevelSetEvolution()
 {}
 
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 void LevelSetEvolution< TEquationContainer, ShiSparseLevelSetImage< VDimension > >
 ::UpdateLevelSets()
 {
@@ -370,7 +404,7 @@ void LevelSetEvolution< TEquationContainer, ShiSparseLevelSetImage< VDimension >
     }
 }
 
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 void LevelSetEvolution< TEquationContainer, ShiSparseLevelSetImage< VDimension > >
 ::UpdateEquations()
 {
@@ -378,18 +412,18 @@ void LevelSetEvolution< TEquationContainer, ShiSparseLevelSetImage< VDimension >
 }
 
 // Malcolm
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 LevelSetEvolution< TEquationContainer, MalcolmSparseLevelSetImage< VDimension > >
 ::LevelSetEvolution()
 {
 }
 
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 LevelSetEvolution< TEquationContainer, MalcolmSparseLevelSetImage< VDimension > >
 ::~LevelSetEvolution()
 {}
 
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 void LevelSetEvolution< TEquationContainer, MalcolmSparseLevelSetImage< VDimension > >
 ::UpdateLevelSets()
 {
@@ -414,7 +448,7 @@ void LevelSetEvolution< TEquationContainer, MalcolmSparseLevelSetImage< VDimensi
     }
 }
 
-template< class TEquationContainer, unsigned int VDimension >
+template< typename TEquationContainer, unsigned int VDimension >
 void LevelSetEvolution< TEquationContainer, MalcolmSparseLevelSetImage< VDimension > >
 ::UpdateEquations()
 {

@@ -44,9 +44,9 @@ namespace itk
  * \ingroup ITKImageStatistics
  */
 
-template< class TInputImage,
-          class TOutputImage = Image< double, TInputImage::ImageDimension > >
-class ITK_EXPORT ImageShapeModelEstimatorBase:
+template< typename TInputImage,
+          typename TOutputImage = Image< double, TInputImage::ImageDimension > >
+class ImageShapeModelEstimatorBase:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

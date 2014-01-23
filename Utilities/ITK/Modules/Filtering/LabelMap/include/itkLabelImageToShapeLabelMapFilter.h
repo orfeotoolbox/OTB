@@ -44,10 +44,10 @@ namespace itk
  * \wikiexample{ImageSegmentation/LabelImageToShapeLabelMapFilter,Convert an itk::Image consisting of labeled regions to a ShapeLabelMap}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage =
+template< typename TInputImage, typename TOutputImage =
             LabelMap< ShapeLabelObject< typename TInputImage::PixelType,
                                         TInputImage::ImageDimension > > >
-class ITK_EXPORT LabelImageToShapeLabelMapFilter:
+class LabelImageToShapeLabelMapFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -90,14 +90,14 @@ public:
   itkTypeMacro(LabelImageToShapeLabelMapFilter, ImageToImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputEqualityComparableCheck,
                    ( Concept::EqualityComparable< InputImagePixelType > ) );
   itkConceptMacro( IntConvertibleToInputCheck,
                    ( Concept::Convertible< int, InputImagePixelType > ) );
   itkConceptMacro( InputOStreamWritableCheck,
                    ( Concept::OStreamWritable< InputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
   /**

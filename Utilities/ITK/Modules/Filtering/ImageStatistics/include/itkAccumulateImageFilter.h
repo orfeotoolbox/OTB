@@ -47,11 +47,11 @@ namespace itk
  *
  * \sa GetAverageSliceImageFilter
  *
- * \ingroup   IntensityImageFilters     SingelThreaded
+ * \ingroup   IntensityImageFilters     SingleThreaded
  * \ingroup ITKImageStatistics
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT AccumulateImageFilter:public ImageToImageFilter< TInputImage, TOutputImage >
+template< typename TInputImage, typename TOutputImage >
+class AccumulateImageFilter:public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Standard class typedefs. */
@@ -86,11 +86,11 @@ public:
   /** Input and output images must be the same dimension, or the output's
       dimension must be one less than that of the input. */
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( ImageDimensionCheck,
                    ( Concept::SameDimensionOrMinusOne< itkGetStaticConstMacro(InputImageDimension),
                                                        itkGetStaticConstMacro(OutputImageDimension) > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
   /** Set the direction in which to accumulate the data.  It must be

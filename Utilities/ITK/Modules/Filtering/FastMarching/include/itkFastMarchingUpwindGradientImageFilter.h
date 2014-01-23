@@ -56,9 +56,9 @@ namespace itk
  * \ingroup ITKFastMarching
  */
 template<
-  class TLevelSet,
-  class TSpeedImage = Image< float,  TLevelSet ::ImageDimension > >
-class ITK_EXPORT FastMarchingUpwindGradientImageFilter:
+  typename TLevelSet,
+  typename TSpeedImage = Image< float,  TLevelSet ::ImageDimension > >
+class FastMarchingUpwindGradientImageFilter:
   public FastMarchingImageFilter< TLevelSet, TSpeedImage >
 {
 public:
@@ -178,12 +178,12 @@ public:
     };
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( LevelSetDoubleDivisionOperatorsCheck,
                    ( Concept::DivisionOperators< typename TLevelSet::PixelType, double > ) );
   itkConceptMacro( LevelSetDoubleDivisionAndAssignOperatorsCheck,
                    ( Concept::DivisionAndAssignOperators< typename TLevelSet::PixelType, double > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

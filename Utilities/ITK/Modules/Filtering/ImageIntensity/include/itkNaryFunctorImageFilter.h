@@ -38,8 +38,8 @@ namespace itk
  * \ingroup ITKImageIntensity
  */
 
-template< class TInputImage, class TOutputImage, class TFunction >
-class ITK_EXPORT NaryFunctorImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TFunction >
+class NaryFunctorImageFilter:
   public InPlaceImageFilter< TInputImage, TOutputImage >
 
 {
@@ -95,12 +95,12 @@ public:
     OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, OutputImageDimension > ) );
   itkConceptMacro( OutputHasZeroCheck,
                    ( Concept::HasZero< OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

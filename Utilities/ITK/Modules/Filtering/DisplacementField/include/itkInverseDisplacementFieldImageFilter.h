@@ -61,8 +61,8 @@ namespace itk
  * \ingroup ImageToImageFilter
  * \ingroup ITKDisplacementField
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT InverseDisplacementFieldImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class InverseDisplacementFieldImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -166,10 +166,10 @@ public:
   ModifiedTimeType GetMTime(void) const;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< OutputPixelComponentType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

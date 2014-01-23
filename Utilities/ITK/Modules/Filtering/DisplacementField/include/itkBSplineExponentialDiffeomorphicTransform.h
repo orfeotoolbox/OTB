@@ -52,8 +52,8 @@ namespace itk
  *
  * \ingroup ITKDisplacementField
  */
-template<class TScalar, unsigned int NDimensions>
-class ITK_EXPORT BSplineExponentialDiffeomorphicTransform :
+template<typename TScalar, unsigned int NDimensions>
+class BSplineExponentialDiffeomorphicTransform :
   public ConstantVelocityFieldTransform<TScalar, NDimensions>
 {
 public:

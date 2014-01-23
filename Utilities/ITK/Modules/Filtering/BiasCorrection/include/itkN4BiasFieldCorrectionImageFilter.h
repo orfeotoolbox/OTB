@@ -87,10 +87,10 @@ namespace itk {
  * \ingroup ITKBiasCorrection
  */
 
-template<class TInputImage, class TMaskImage =
+template<typename TInputImage, typename TMaskImage =
   Image<unsigned char, TInputImage::ImageDimension>,
   class TOutputImage = TInputImage>
-class ITK_EXPORT N4BiasFieldCorrectionImageFilter :
+class N4BiasFieldCorrectionImageFilter :
   public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:

@@ -89,9 +89,9 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TImageType,
-          class THistogramFrequencyContainer = DenseFrequencyContainer2 >
-class ITK_EXPORT ScalarImageToCooccurrenceMatrixFilter:public ProcessObject
+template< typename TImageType,
+          typename THistogramFrequencyContainer = DenseFrequencyContainer2 >
+class ScalarImageToCooccurrenceMatrixFilter:public ProcessObject
 {
 public:
   /** Standard typedefs */

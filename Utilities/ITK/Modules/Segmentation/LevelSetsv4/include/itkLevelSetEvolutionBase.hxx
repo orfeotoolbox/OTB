@@ -24,7 +24,7 @@
 
 namespace itk
 {
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::LevelSetEvolutionBase()
 {
@@ -35,12 +35,12 @@ LevelSetEvolutionBase< TEquationContainer, TLevelSet >
   this->m_NumberOfIterations = 0;
 }
 
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::~LevelSetEvolutionBase()
 {}
 
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 void
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::SetTimeStep( const LevelSetOutputRealType& iDt )
@@ -57,7 +57,7 @@ LevelSetEvolutionBase< TEquationContainer, TLevelSet >
     }
 }
 
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 void
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::Update()
@@ -69,7 +69,7 @@ LevelSetEvolutionBase< TEquationContainer, TLevelSet >
   this->InvokeEvent( EndEvent() );
 }
 
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 void
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::CheckSetUp()
@@ -140,7 +140,7 @@ LevelSetEvolutionBase< TEquationContainer, TLevelSet >
   this->m_NumberOfIterations = 0;
 }
 
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 void
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::InitializeIteration()
@@ -204,7 +204,7 @@ LevelSetEvolutionBase< TEquationContainer, TLevelSet >
   this->m_EquationContainer->UpdateInternalEquationTerms();
 }
 
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 void
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::Evolve()
@@ -217,17 +217,22 @@ LevelSetEvolutionBase< TEquationContainer, TLevelSet >
   this->m_StoppingCriterion->SetCurrentIteration( iter );
   this->m_StoppingCriterion->SetLevelSetContainer( this->m_LevelSetContainer );
 
+  // Trigger visualization classes to show initial level-set
+  this->InvokeEvent( IterationEvent() );
+
   while( !this->m_StoppingCriterion->IsSatisfied() )
     {
     this->m_RMSChangeAccumulator = NumericTraits< LevelSetOutputRealType >::Zero;
 
     // one iteration over all container
     // update each level set based on the different equations provided
+    // Input image domain
     this->ComputeIteration();
 
     this->ComputeTimeStepForNextIteration();
 
     this->UpdateLevelSets();
+
     this->UpdateEquations();
 
     ++iter;
@@ -236,25 +241,27 @@ LevelSetEvolutionBase< TEquationContainer, TLevelSet >
     this->m_StoppingCriterion->SetCurrentIteration( iter );
 
     ++this->m_NumberOfIterations;
+
+    // Trigger visualization classes to show updated level-set
     this->InvokeEvent( IterationEvent() );
     }
 }
 
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 void
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::AllocateUpdateBuffer()
 {
 }
 
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 void
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::ComputeIteration()
 {
 }
 
-template< class TEquationContainer, class TLevelSet >
+template< typename TEquationContainer, typename TLevelSet >
 void
 LevelSetEvolutionBase< TEquationContainer, TLevelSet >
 ::ComputeTimeStepForNextIteration()

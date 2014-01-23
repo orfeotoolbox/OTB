@@ -32,8 +32,8 @@ namespace itk
  * \ingroup RegionGrowingSegmentation
  * \ingroup ITKRegionGrowing
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT NeighborhoodConnectedImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class NeighborhoodConnectedImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -101,7 +101,7 @@ public:
                       TOutputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputEqualityComparableCheck,
                    ( Concept::EqualityComparable< InputImagePixelType > ) );
   itkConceptMacro( OutputEqualityComparableCheck,
@@ -112,7 +112,7 @@ public:
                    ( Concept::OStreamWritable< InputImagePixelType > ) );
   itkConceptMacro( OutputOStreamWritableCheck,
                    ( Concept::OStreamWritable< OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

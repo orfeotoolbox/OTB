@@ -52,8 +52,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template< class TInputImage >
-class ITK_EXPORT ChangeRegionLabelMapFilter:public InPlaceLabelMapFilter< TInputImage >
+template< typename TInputImage >
+class ChangeRegionLabelMapFilter:public InPlaceLabelMapFilter< TInputImage >
 {
 public:
   /** Standard class typedefs. */

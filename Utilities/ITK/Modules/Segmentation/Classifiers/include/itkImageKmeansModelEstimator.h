@@ -126,9 +126,9 @@ namespace itk
  * \wikiexample{Statistics/ImageKmeansModelEstimator,Compute kmeans clusters of pixels in an image}
  * \endwiki
  */
-template< class TInputImage,
-          class TMembershipFunction >
-class ITK_EXPORT ImageKmeansModelEstimator:
+template< typename TInputImage,
+          typename TMembershipFunction >
+class ImageKmeansModelEstimator:
   public ImageModelEstimatorBase< TInputImage, TMembershipFunction >
 {
 public:
@@ -268,7 +268,6 @@ private:
   double m_OffsetMultiply;
   int    m_MaxSplitAttempts;
 
-  //SizeValueType       m_NumberOfModels;
   bool   m_ValidInCodebook;
   double m_DoubleMaximum;
   double m_OutputDistortion;
@@ -281,6 +280,7 @@ private:
   CodebookMatrixOfIntegerType m_CodewordHistogram;
   CodebookMatrixOfDoubleType  m_CodewordDistortion;
 }; // class ImageKmeansModelEstimator
+
 } // namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION

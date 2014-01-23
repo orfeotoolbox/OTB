@@ -24,7 +24,7 @@
 namespace itk
 {
 
-template< class TDomainPartitioner, class TImageToImageMetric, class TMeanSquaresMetric >
+template< typename TDomainPartitioner, typename TImageToImageMetric, typename TMeanSquaresMetric >
 bool
 MeanSquaresImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TMeanSquaresMetric >
 ::ProcessPoint( const VirtualIndexType &,
@@ -57,7 +57,7 @@ MeanSquaresImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner
 
   /* Use a pre-allocated jacobian object for efficiency */
   typedef typename TImageToImageMetric::JacobianType & JacobianReferenceType;
-  JacobianReferenceType jacobian = this->m_MovingTransformJacobianPerThread[threadID];
+  JacobianReferenceType jacobian = this->m_GetValueAndDerivativePerThreadVariables[threadID].MovingTransformJacobian;
 
   /** For dense transforms, this returns identity */
   this->m_Associate->GetMovingTransform()->ComputeJacobianWithRespectToParameters( virtualPoint, jacobian );

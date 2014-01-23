@@ -38,8 +38,8 @@ namespace itk
  * \ingroup MeshFilters
  * \ingroup ITKMesh
  */
-template< class TInputMesh, class TOutputMesh, class TTransform >
-class ITK_EXPORT TransformMeshFilter:
+template< typename TInputMesh, typename TOutputMesh, typename TTransform >
+class TransformMeshFilter:
   public MeshToMeshFilter< TInputMesh, TOutputMesh >
 {
 public:

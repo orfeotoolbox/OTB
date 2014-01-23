@@ -39,8 +39,8 @@ namespace itk
  *
  * \ingroup ITKImageFunction
  */
-template< class TInputImage, class TCoordRep = double >
-class ITK_EXPORT VectorLinearInterpolateImageFunction:
+template< typename TInputImage, typename TCoordRep = double >
+class VectorLinearInterpolateImageFunction:
   public VectorInterpolateImageFunction< TInputImage, TCoordRep >
 {
 public:
@@ -75,6 +75,7 @@ public:
 
   /** ContinuousIndex typedef support. */
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+  typedef typename ContinuousIndexType::ValueType  InternalComputationType;
 
   /** Output type is Vector<double,Dimension> */
   typedef typename Superclass::OutputType OutputType;

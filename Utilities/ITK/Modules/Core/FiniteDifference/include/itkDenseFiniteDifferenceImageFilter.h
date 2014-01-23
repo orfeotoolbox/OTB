@@ -65,8 +65,8 @@ namespace itk
  * \sa FiniteDifferenceImageFilter
  * \ingroup ITKFiniteDifference
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT DenseFiniteDifferenceImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class DenseFiniteDifferenceImageFilter:
   public FiniteDifferenceImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -102,7 +102,7 @@ public:
   typedef OutputImageType UpdateBufferType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputTimesDoubleCheck,
                    ( Concept::MultiplyOperator< PixelType, double > ) );
   itkConceptMacro( OutputAdditiveOperatorsCheck,
@@ -111,7 +111,7 @@ public:
                    ( Concept::AdditiveAndAssignOperators< PixelType > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType, PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

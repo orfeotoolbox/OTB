@@ -31,7 +31,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput, class TMask, class TOutput = TInput >
+template< typename TInput, typename TMask, typename TOutput = TInput >
 class MaskInput
 {
 public:
@@ -90,13 +90,13 @@ public:
 
 private:
 
-  template < class TPixelType >
+  template < typename TPixelType >
   void InitializeOutsideValue( TPixelType * )
   {
     this->m_OutsideValue = NumericTraits< TPixelType >::Zero;
   }
 
-  template < class TValueType >
+  template < typename TValueType >
   void InitializeOutsideValue( VariableLengthVector<TValueType> * )
   {
     // set the outside value to be of zero length
@@ -140,8 +140,8 @@ private:
  * \wikiexample{ImageProcessing/MaskImageFilter,Apply a mask to an image}
  * \endwiki
  */
-template< class TInputImage, class TMaskImage, class TOutputImage = TInputImage >
-class ITK_EXPORT MaskImageFilter:
+template< typename TInputImage, typename TMaskImage, typename TOutputImage = TInputImage >
+class MaskImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage, TMaskImage, TOutputImage,
                             Functor::MaskInput<
@@ -225,13 +225,13 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( MaskEqualityComparableCheck,
                    ( Concept::EqualityComparable< typename TMaskImage::PixelType > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType,
                                            typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
@@ -248,10 +248,10 @@ private:
   MaskImageFilter(const Self &); //purposely not implemented
   void operator=(const Self &);  //purposely not implemented
 
-  template < class TPixelType >
+  template < typename TPixelType >
   void CheckOutsideValue( const TPixelType * ) {}
 
-  template < class TValue >
+  template < typename TValue >
   void CheckOutsideValue( const VariableLengthVector< TValue > * )
   {
     // Check to see if the outside value contains only zeros. If so,

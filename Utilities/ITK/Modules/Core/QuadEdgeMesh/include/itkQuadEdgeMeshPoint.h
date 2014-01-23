@@ -31,9 +31,9 @@ namespace itk
  * to an entry in the edge ring.
  * \ingroup ITKQuadEdgeMesh
  */
-template< class TCoordRep, unsigned int VPointDimension, typename TQuadEdge =
+template< typename TCoordRep, unsigned int VPointDimension, typename TQuadEdge =
             GeometricalQuadEdge< unsigned long, unsigned long, bool, bool, true > >
-class ITK_EXPORT QuadEdgeMeshPoint:public Point< TCoordRep, VPointDimension >
+class QuadEdgeMeshPoint:public Point< TCoordRep, VPointDimension >
 {
 public:
   /** Standard typedefs. */
@@ -55,8 +55,8 @@ public:
   typedef ValueType ValueArrayType[itkGetStaticConstMacro(PointDimension)];
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
-  /** End concept checking */
+  // Begin concept checking
+  // End concept checking
 #endif
 
 public:

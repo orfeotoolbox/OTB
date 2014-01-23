@@ -46,7 +46,7 @@ namespace Functor
  * \ingroup ITKConnectedComponents
  */
 
-template< class TInput >
+template< typename TInput >
 class SimilarVectorsFunctor
 {
 public:
@@ -94,8 +94,8 @@ protected:
  *         are similar.  Assumes that vectors are normalized.
  * \ingroup ITKConnectedComponents
  */
-template< class TInputImage, class TOutputImage, class TMaskImage = TInputImage >
-class ITK_EXPORT VectorConnectedComponentImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TMaskImage = TInputImage >
+class VectorConnectedComponentImageFilter:
   public ConnectedComponentFunctorImageFilter< TInputImage, TOutputImage,
                                                Functor::SimilarVectorsFunctor< typename TInputImage::ValueType >,
                                                TMaskImage >
@@ -124,12 +124,12 @@ public:
   { return ( this->GetFunctor().GetDistanceThreshold() ); }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputValueHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputValueType > ) );
   itkConceptMacro( InputValyeTypeIsFloatingCheck,
                    ( Concept::IsFloatingPoint< InputValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

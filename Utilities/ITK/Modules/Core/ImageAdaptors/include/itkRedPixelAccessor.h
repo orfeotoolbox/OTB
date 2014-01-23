@@ -34,8 +34,8 @@ namespace itk
  * \ingroup ITKImageAdaptors
  */
 
-template< class T >
-class ITK_EXPORT RedPixelAccessor
+template< typename T >
+class RedPixelAccessor
 {
 public:
   /** Standard class typedefs. */

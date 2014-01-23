@@ -17,6 +17,7 @@
  *=========================================================================*/
 #ifndef __itkImageSeriesReader_h
 #define __itkImageSeriesReader_h
+#include "ITKIOImageBaseExport.h"
 
 #include "itkSize.h"
 #include <vector>
@@ -40,8 +41,8 @@ namespace itk
  *
  */
 
-template< class TOutputImage >
-class ITK_EXPORT ImageSeriesReader:public ImageSource< TOutputImage >
+template< typename TOutputImage >
+class ITKIOImageBase_HIDDEN ImageSeriesReader:public ImageSource< TOutputImage >
 {
 public:
   /** Standard class typedefs. */
@@ -100,8 +101,7 @@ public:
     this->Modified();
   }
 
-  /** Add a single filename to the list of files. To add a vector of
-   * filenames, use the AddFileNames method. */
+  /** Add a single filename to the list of files. */
   void AddFileName(std::string const & name)
   {
     m_FileNames.push_back(name);

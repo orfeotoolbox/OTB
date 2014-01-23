@@ -99,8 +99,8 @@ namespace itk
  * \sa ImageToImageFilter BinaryErodeImageFilter BinaryDilateImageFilter
  * \ingroup ITKBinaryMathematicalMorphology
  */
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT BinaryMorphologyImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class BinaryMorphologyImageFilter:
   public KernelImageFilter< TInputImage, TOutputImage, TKernel >
 {
 public:

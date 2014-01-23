@@ -23,7 +23,7 @@
 
 namespace itk
 {
-template< class TPixel, unsigned int VDimension, class TAllocator >
+template< typename TPixel, unsigned int VDimension, typename TAllocator >
 void
 NeighborhoodOperator< TPixel, VDimension, TAllocator >
 ::ScaleCoefficients(PixelRealType s)
@@ -34,7 +34,7 @@ NeighborhoodOperator< TPixel, VDimension, TAllocator >
     }
 }
 
-template< class TPixel, unsigned int VDimension, class TAllocator >
+template< typename TPixel, unsigned int VDimension, typename TAllocator >
 void
 NeighborhoodOperator< TPixel, VDimension, TAllocator >
 ::FlipAxes()
@@ -42,12 +42,11 @@ NeighborhoodOperator< TPixel, VDimension, TAllocator >
   // To flip the operator across all of its axes, all we have to do is reverse
   // the order of all coefficients.
   const unsigned size = this->Size();
-  unsigned       i, swap_with;
   PixelType      temp;
 
-  for ( i = 0; i < size / 2; ++i )
+  for ( unsigned i = 0; i < size / 2; ++i )
     {
-    swap_with = size - 1 - i;
+    unsigned swap_with = size - 1 - i;
     temp = this->operator[](i);
 
     this->operator[](i) = this->operator[](swap_with);
@@ -56,7 +55,7 @@ NeighborhoodOperator< TPixel, VDimension, TAllocator >
     }
 }
 
-template< class TPixel, unsigned int VDimension, class TAllocator >
+template< typename TPixel, unsigned int VDimension, typename TAllocator >
 void
 NeighborhoodOperator< TPixel, VDimension, TAllocator >
 ::CreateDirectional()
@@ -80,7 +79,7 @@ NeighborhoodOperator< TPixel, VDimension, TAllocator >
   this->Fill(coefficients);
 }
 
-template< class TPixel, unsigned int VDimension, class TAllocator >
+template< typename TPixel, unsigned int VDimension, typename TAllocator >
 void
 NeighborhoodOperator< TPixel, VDimension, TAllocator >
 ::CreateToRadius(const SizeType & sz)
@@ -92,7 +91,7 @@ NeighborhoodOperator< TPixel, VDimension, TAllocator >
   this->Fill(coefficients);
 }
 
-template< class TPixel, unsigned int VDimension, class TAllocator >
+template< typename TPixel, unsigned int VDimension, typename TAllocator >
 void
 NeighborhoodOperator< TPixel, VDimension, TAllocator >
 ::CreateToRadius(const SizeValueType sz)
@@ -106,7 +105,7 @@ NeighborhoodOperator< TPixel, VDimension, TAllocator >
   this->CreateToRadius(k);
 }
 
-template< class TPixel, unsigned int VDimension, class TAllocator >
+template< typename TPixel, unsigned int VDimension, typename TAllocator >
 void
 NeighborhoodOperator< TPixel, VDimension, TAllocator >
 ::FillCenteredDirectional(const CoefficientVector & coeff)

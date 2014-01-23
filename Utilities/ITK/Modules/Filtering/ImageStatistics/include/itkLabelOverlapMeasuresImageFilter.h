@@ -41,8 +41,8 @@ namespace itk {
  * \ingroup ITKImageStatistics
  * \ingroup MultiThreaded
  */
-template<class TLabelImage>
-class ITK_EXPORT LabelOverlapMeasuresImageFilter :
+template<typename TLabelImage>
+class LabelOverlapMeasuresImageFilter :
     public ImageToImageFilter<TLabelImage, TLabelImage>
 {
 public:
@@ -171,10 +171,10 @@ public:
 
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1HasNumericTraitsCheck,
                    ( Concept::HasNumericTraits<LabelType> ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

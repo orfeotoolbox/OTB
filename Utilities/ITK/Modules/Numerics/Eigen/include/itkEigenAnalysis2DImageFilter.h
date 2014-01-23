@@ -40,8 +40,8 @@ namespace itk
  * \ingroup ITKEigen
  */
 
-template< class TInputImage, class TEigenValueImage, class TEigenVectorImage >
-class ITK_EXPORT EigenAnalysis2DImageFilter:
+template< typename TInputImage, typename TEigenValueImage, typename TEigenVectorImage >
+class EigenAnalysis2DImageFilter:
   public ImageToImageFilter< TInputImage, TEigenValueImage >
 {
 public:
@@ -108,10 +108,10 @@ public:
   DataObject::Pointer MakeOutput(DataObjectPointerArraySizeType idx);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( VectorComponentHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< VectorComponentType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

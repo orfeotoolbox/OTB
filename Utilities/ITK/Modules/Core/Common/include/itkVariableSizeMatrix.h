@@ -39,7 +39,7 @@ namespace itk
  * \ingroup ITKCommon
  */
 
-template< class T >
+template< typename T >
 class VariableSizeMatrix
 {
 public:
@@ -212,8 +212,8 @@ private:
   InternalMatrixType m_Matrix;
 };
 
-template< class T >
-ITK_EXPORT std::ostream & operator<<(std::ostream & os,
+template< typename T >
+std::ostream & operator<<(std::ostream & os,
                                      const VariableSizeMatrix< T > & v)
 {
   os << v.GetVnlMatrix(); return os;
@@ -222,7 +222,7 @@ ITK_EXPORT std::ostream & operator<<(std::ostream & os,
 /**
  *  Comparison
  */
-template< class T >
+template< typename T >
 inline
 bool
 VariableSizeMatrix< T >

@@ -47,8 +47,8 @@ namespace itk
  * \ingroup ITKMultiThreaded
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT GradientToMagnitudeImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class GradientToMagnitudeImageFilter:
   public
   VectorMagnitudeImageFilter< TInputImage, TOutputImage>
 {
@@ -68,10 +68,10 @@ public:
                VectorMagnitudeImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType::ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

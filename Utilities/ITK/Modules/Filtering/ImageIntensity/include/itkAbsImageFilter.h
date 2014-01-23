@@ -29,7 +29,7 @@ namespace Functor
  * \brief Computes the absolute value of a pixel.
  * \ingroup ITKImageIntensity
  */
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class Abs
 {
 public:
@@ -65,8 +65,8 @@ public:
  * \wikiexample{ImageProcessing/AbsImageFilter,Compute the absolute value of an image}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT AbsImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class AbsImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::Abs<
@@ -93,12 +93,12 @@ public:
   typedef typename TOutputImage::PixelType    OutputPixelType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( ConvertibleCheck,
                    ( Concept::Convertible< InputPixelType, OutputPixelType > ) );
   itkConceptMacro( InputGreaterThanIntCheck,
                    ( Concept::GreaterThanComparable< InputPixelType, InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

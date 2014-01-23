@@ -48,8 +48,8 @@ namespace itk
  * \ingroup ITKDisplacementField
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT IterativeInverseDisplacementFieldImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class IterativeInverseDisplacementFieldImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -102,10 +102,13 @@ public:
   itkGetConstMacro(StopValue, double);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< OutputImageValueType > ) );
-  /** End concept checking */
+
+  itkConceptMacro( SameDimensionCheck,
+                   ( Concept::SameDimension< TInputImage::ImageDimension, TOutputImage::ImageDimension > ) );
+  // End concept checking
 #endif
 
 protected:

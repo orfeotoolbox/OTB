@@ -51,8 +51,8 @@ namespace itk
  * \ingroup IntensityImageFilters
  * \ingroup ITKLabelVoting
  */
-template< class TImage >
-class ITK_EXPORT VotingBinaryIterativeHoleFillingImageFilter:
+template< typename TImage >
+class VotingBinaryIterativeHoleFillingImageFilter:
   public ImageToImageFilter< TImage, TImage >
 {
 public:
@@ -130,12 +130,12 @@ public:
   itkGetConstReferenceMacro(NumberOfPixelsChanged, unsigned int);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputEqualityComparableCheck,
                    ( Concept::EqualityComparable< InputPixelType > ) );
   itkConceptMacro( InputOStreamWritableeCheck,
                    ( Concept::OStreamWritable< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

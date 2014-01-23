@@ -17,6 +17,7 @@
  *=========================================================================*/
 #ifndef __itkImageFileWriter_h
 #define __itkImageFileWriter_h
+#include "ITKIOImageBaseExport.h"
 
 #include "itkProcessObject.h"
 #include "itkImageIOBase.h"
@@ -80,8 +81,8 @@ public:
  * \wikiexample{IO/ImageFileWriter,Write an image}
  * \endwiki
  */
-template< class TInputImage >
-class ITK_EXPORT ImageFileWriter:public ProcessObject
+template< typename TInputImage >
+class ITKIOImageBase_HIDDEN ImageFileWriter:public ProcessObject
 {
 public:
   /** Standard class typedefs. */

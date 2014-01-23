@@ -51,8 +51,8 @@ namespace itk
  * \ingroup ITKDistanceMap
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT FastChamferDistanceImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class FastChamferDistanceImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -123,7 +123,7 @@ public:
   NarrowBandPointer GetNarrowBand() const;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< ImageDimension, OutputImageDimension > ) );
   itkConceptMacro( SameTypeCheck,
@@ -142,7 +142,7 @@ public:
                    ( Concept::GreaterThanComparable< float, PixelType > ) );
   itkConceptMacro( FloatLessThanPixelTypeCheck,
                    ( Concept::LessThanComparable< float, PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

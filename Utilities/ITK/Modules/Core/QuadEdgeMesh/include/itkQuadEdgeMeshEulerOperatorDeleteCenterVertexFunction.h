@@ -30,8 +30,8 @@ namespace itk
  * \ingroup QEMeshModifierFunctions
  * \ingroup ITKQuadEdgeMesh
  */
-template< class TMesh, class TQEType >
-class ITK_EXPORT QuadEdgeMeshEulerOperatorDeleteCenterVertexFunction:
+template< typename TMesh, typename TQEType >
+class QuadEdgeMeshEulerOperatorDeleteCenterVertexFunction:
   public QuadEdgeMeshFunctionBase< TMesh, TQEType * >
 {
 public:

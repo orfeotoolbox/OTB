@@ -42,8 +42,8 @@ namespace itk
  * \ingroup RegistrationMetrics
  * \ingroup ITKRegistrationCommon
  */
-template< class TFixedImage, class TMovingImage >
-class ITK_EXPORT MeanReciprocalSquareDifferenceImageToImageMetric:
+template< typename TFixedImage, typename TMovingImage >
+class MeanReciprocalSquareDifferenceImageToImageMetric:
   public ImageToImageMetric< TFixedImage, TMovingImage >
 {
 public:

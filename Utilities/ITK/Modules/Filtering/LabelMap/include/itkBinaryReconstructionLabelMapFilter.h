@@ -40,9 +40,9 @@ namespace itk {
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template<class TImage, class TMarkerImage, class TAttributeAccessor=
+template<typename TImage, typename TMarkerImage, typename TAttributeAccessor=
   typename Functor::AttributeLabelObjectAccessor< typename TImage::LabelObjectType > >
-class ITK_EXPORT BinaryReconstructionLabelMapFilter :
+class BinaryReconstructionLabelMapFilter :
     public InPlaceLabelMapFilter<TImage>
 {
 public:
@@ -79,14 +79,14 @@ public:
                InPlaceLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 /*  itkConceptMacro(InputEqualityComparableCheck,
     (Concept::EqualityComparable<PixelType>));
   itkConceptMacro(IntConvertibleToInputCheck,
     (Concept::Convertible<int, PixelType>));
   itkConceptMacro(InputOStreamWritableCheck,
     (Concept::OStreamWritable<PixelType>));*/
-  /** End concept checking */
+  // End concept checking
 #endif
 
    /** Set the marker image */

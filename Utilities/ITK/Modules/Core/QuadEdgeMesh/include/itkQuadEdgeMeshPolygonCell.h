@@ -34,8 +34,8 @@ namespace itk
  *
  * \ingroup ITKQuadEdgeMesh
  */
-template< class TCellInterface >
-class ITK_EXPORT QuadEdgeMeshPolygonCell:public TCellInterface
+template< typename TCellInterface >
+class QuadEdgeMeshPolygonCell:public TCellInterface
 {
 public:
   /** Standard class typedefs. */

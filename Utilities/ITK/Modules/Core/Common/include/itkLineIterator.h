@@ -52,8 +52,8 @@ namespace itk
  * \wikiexample{Iterators/LineIterator,Iterate over a line through an image}
  * \endwiki
  */
-template< class TImage >
-class ITK_EXPORT LineIterator:public LineConstIterator< TImage >
+template< typename TImage >
+class LineIterator:public LineConstIterator< TImage >
 {
 public:
   /** Standard class typedefs. */

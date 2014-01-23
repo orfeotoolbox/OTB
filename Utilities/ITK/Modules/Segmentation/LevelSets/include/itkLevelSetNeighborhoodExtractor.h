@@ -53,8 +53,8 @@ namespace itk
  *
  * \ingroup ITKLevelSets
  */
-template< class TLevelSet >
-class ITK_EXPORT LevelSetNeighborhoodExtractor:
+template< typename TLevelSet >
+class LevelSetNeighborhoodExtractor:
   public LightProcessObject
 {
 public:

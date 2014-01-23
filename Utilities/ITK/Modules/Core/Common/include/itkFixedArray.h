@@ -76,7 +76,7 @@ public:
    */
   class ReverseIterator
   {
-public:
+  public:
     explicit ReverseIterator(Iterator i):m_Iterator(i) {}
     Iterator operator++()        { return --m_Iterator; }
     Iterator operator++(int)     { return m_Iterator--; }
@@ -87,7 +87,7 @@ public:
     bool operator!=(const ReverseIterator & rit) const { return m_Iterator != rit.m_Iterator; }
     bool operator==(const ReverseIterator & rit) const { return m_Iterator == rit.m_Iterator; }
 
-private:
+  private:
     Iterator m_Iterator;
     friend class ConstReverseIterator;
   };
@@ -98,7 +98,7 @@ private:
    */
   class ConstReverseIterator
   {
-public:
+  public:
     explicit ConstReverseIterator(ConstIterator i):m_Iterator(i) {}
     ConstReverseIterator(const ReverseIterator & rit) { m_Iterator = rit.m_Iterator; }
     ConstIterator operator++()         { return --m_Iterator; }
@@ -110,7 +110,7 @@ public:
     bool operator!=(const ConstReverseIterator & rit) const { return m_Iterator != rit.m_Iterator; }
     bool operator==(const ConstReverseIterator & rit) const { return m_Iterator == rit.m_Iterator; }
 
-private:
+  private:
     ConstIterator m_Iterator;
   };
 
@@ -135,7 +135,7 @@ public:
   FixedArray(const ValueType & r);
 
   /** Constructor to initialize a fixed array from another of any data type */
-  template< class TFixedArrayValueType >
+  template< typename TFixedArrayValueType >
   FixedArray(const FixedArray< TFixedArrayValueType, VLength > & r)
   {
     typename FixedArray< TFixedArrayValueType, VLength >::ConstIterator input = r.Begin();
@@ -145,6 +145,12 @@ public:
       *i++ = static_cast< TValueType >( *input++ );
       }
   }
+
+  template< typename TScalarValue >
+  FixedArray(const TScalarValue *r)
+    {
+      std::copy(r, r + this->Size(), this->GetDataPointer());
+    }
 
   /** This destructor is not virtual for performance reasons. However, this
    * means that subclasses cannot allocate memory.
@@ -160,7 +166,7 @@ public:
    */
 
   /** Operator= defined for a variety of types. */
-  template< class TFixedArrayValueType >
+  template< typename TFixedArrayValueType >
   FixedArray & operator=(const FixedArray< TFixedArrayValueType, VLength > & r)
   {
     if ( (void *)r.Begin() != (void *)m_InternalArray )

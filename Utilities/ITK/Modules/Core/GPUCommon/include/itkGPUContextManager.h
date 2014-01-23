@@ -21,21 +21,17 @@
 #include "itkOpenCLUtil.h"
 #include <itkLightObject.h>
 
-//
-// Singleton class for GPUContextManager
-//
-
+namespace itk
+{
 /** \class GPUContextManager
  *
- * \brief Class to store the GPU context.
+ * \brief Singleton class to store the GPU context.
  *
  *  Won-Ki to write more documentation here...
  *
  * \ingroup ITKGPUCommon
  */
-namespace itk
-{
-class ITK_EXPORT GPUContextManager : public LightObject
+class GPUContextManager : public LightObject
 {
 public:
 

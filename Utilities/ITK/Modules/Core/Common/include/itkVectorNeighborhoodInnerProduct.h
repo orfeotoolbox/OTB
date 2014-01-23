@@ -41,8 +41,8 @@ namespace itk
  *
  * \ingroup ITKCommon
  */
-template< class TImage >
-class ITK_EXPORT VectorNeighborhoodInnerProduct
+template< typename TImage >
+class VectorNeighborhoodInnerProduct
 {
 public:
   /** Standard typedefs */

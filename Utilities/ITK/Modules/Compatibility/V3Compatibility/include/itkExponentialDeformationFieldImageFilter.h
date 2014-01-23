@@ -64,8 +64,8 @@ namespace itk
  * \ingroup ImageToImageFilter
  * \ingroup ITKV3Compatibility
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ExponentialDeformationFieldImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class ExponentialDeformationFieldImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -124,7 +124,7 @@ public:
                       OutputPixelType::Dimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename OutputPixelType::ValueType > ) );
   itkConceptMacro( SameDimensionCheck1,
@@ -133,7 +133,7 @@ public:
                    ( Concept::SameDimension< ImageDimension, PixelDimension > ) );
   itkConceptMacro( SameDimensionCheck3,
                    ( Concept::SameDimension< ImageDimension, OutputPixelDimension > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

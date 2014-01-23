@@ -55,8 +55,8 @@ namespace itk
  *
  * \ingroup ITKDeconvolution
  */
-template< class TInputImage, class TKernelSource, class TOutputImage=TInputImage >
-class ITK_EXPORT ParametricBlindLeastSquaresDeconvolutionImageFilter :
+template< typename TInputImage, typename TKernelSource, typename TOutputImage=TInputImage >
+class ParametricBlindLeastSquaresDeconvolutionImageFilter :
     public IterativeDeconvolutionImageFilter< TInputImage, typename TKernelSource::OutputImageType, TOutputImage >
 {
 public:
@@ -123,7 +123,7 @@ private:
   ParametricBlindLeastSquaresDeconvolutionImageFilter(const Self &); // purposely not implemented
   void operator=(const Self &); // purposely not implemented
 
-  template< class TPixel >
+  template< typename TPixel >
     class ParametricBlindLeastSquaresDeconvolutionDifference
   {
   public:
@@ -148,7 +148,7 @@ private:
     }
   };
 
-  template< class TPixel >
+  template< typename TPixel >
     class ParametricBlindLeastSquaresDeconvolutionImageUpdate
   {
   public:

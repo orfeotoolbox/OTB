@@ -40,8 +40,8 @@ namespace itk
  * \sa StatisticsImageFilter
  * \ingroup ITKImageStatistics
  */
-template< class TInputImage >
-class ITK_EXPORT MinimumMaximumImageFilter:
+template< typename TInputImage >
+class MinimumMaximumImageFilter:
   public ImageToImageFilter< TInputImage, TInputImage >
 {
 public:
@@ -101,14 +101,14 @@ public:
   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( LessThanComparableCheck,
                    ( Concept::LessThanComparable< PixelType > ) );
   itkConceptMacro( GreaterThanComparableCheck,
                    ( Concept::GreaterThanComparable< PixelType > ) );
   itkConceptMacro( OStreamWritableCheck,
                    ( Concept::OStreamWritable< PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

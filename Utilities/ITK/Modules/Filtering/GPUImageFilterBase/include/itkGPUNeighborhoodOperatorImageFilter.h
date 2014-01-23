@@ -43,10 +43,10 @@ namespace itk
 /** Create a helper GPU Kernel class for GPUNeighborhoodOperatorImageFilter */
 itkGPUKernelClassMacro(GPUNeighborhoodOperatorImageFilterKernel);
 
-template< class TInputImage, class TOutputImage,
-          class TOperatorValueType = typename TOutputImage::PixelType,
-          class TParentImageFilter = NeighborhoodOperatorImageFilter< TInputImage, TOutputImage, TOperatorValueType> >
-class ITK_EXPORT GPUNeighborhoodOperatorImageFilter :
+template< typename TInputImage, typename TOutputImage,
+          typename TOperatorValueType = typename TOutputImage::PixelType,
+          typename TParentImageFilter = NeighborhoodOperatorImageFilter< TInputImage, TOutputImage, TOperatorValueType> >
+class GPUNeighborhoodOperatorImageFilter :
   public GPUImageToImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 {
 public:
@@ -135,7 +135,7 @@ public:
   throw ( InvalidRequestedRegionError );*/
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   // itkConceptMacro( SameDimensionCheck,
   //                  ( Concept::SameDimension< InputImageDimension, ImageDimension > ) );
   // itkConceptMacro( OperatorConvertibleToOutputCheck,
@@ -146,7 +146,7 @@ public:
   //                  ( Concept::MultiplyOperator< OperatorValueType > ) );
   // itkConceptMacro( OperatorAdditiveOperatorsCheck,
   //                  ( Concept::AdditiveOperators< OperatorValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

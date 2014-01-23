@@ -26,8 +26,8 @@ else()
     set(test )
   endif()
   ExternalProject_add(GCC_XML
-  URL http://itk.org/files/gccxml/gccxml-2012-08-08.tar.bz2
-  URL_MD5 199924259f913a914f7084213b71d6da
+  URL http://itk.org/files/gccxml/gccxml-2013-11-18.tar.bz2
+  URL_MD5 3b8f72ae76c6946a954bddf3222c201b
   PREFIX gccxml
   CMAKE_ARGS
     -DCMAKE_CXX_COMPILER:STRING=${CMAKE_CXX_COMPILER}
@@ -106,7 +106,7 @@ macro(itk_end_wrap_submodule_gccxml module)
   set(CONFIG_WRAPPER_TYPEDEFS "${GCC_XML_TYPEDEFS}")
   set(CONFIG_WRAPPER_FORCE_INSTANTIATE "${GCC_XML_FORCE_INSTANTIATE}")
   configure_file("${ITK_WRAP_GCCXML_SOURCE_DIR}/wrap_.cxx.in"
-    "${cxx_file}" @ONLY IMMEDIATE)
+    "${cxx_file}" @ONLY)
   set(ADDITIONAL_GCC_XML_FLAGS "")
   if(MSVC90)
     set( ADDITIONAL_GCC_XML_FLAGS "-D\"_HAS_TR1=0\"" )
@@ -182,7 +182,7 @@ macro(itk_wrap_module_gccxml library_name)
     endforeach()
     # and the file.
     configure_file("${ITK_WRAP_GCCXML_SOURCE_DIR}/gcc_xml.inc.in" "${gccxml_inc_file}"
-      @ONLY IMMEDIATE)
+      @ONLY)
   endif()
   set(GCC_XML_OUTPUT_FILES )
 endmacro()

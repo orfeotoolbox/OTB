@@ -61,8 +61,8 @@ namespace itk
  *    slab ends and another slab begins.
  * \ingroup ITKBiasCorrection
  */
-template< class TInputImage >
-class ITK_EXPORT MRASlabIdentifier:public Object
+template< typename TInputImage >
+class MRASlabIdentifier:public Object
 {
 public:
   /** Standard class typedefs. */

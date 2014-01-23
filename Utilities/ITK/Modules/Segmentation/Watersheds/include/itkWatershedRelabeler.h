@@ -60,8 +60,8 @@ namespace watershed
  * \sa itk::watershed::SegmentTree
  * \ingroup ITKWatersheds
  */
-template< class TScalarType, unsigned int TImageDimension >
-class ITK_EXPORT Relabeler:
+template< typename TScalar, unsigned int TImageDimension >
+class Relabeler:
   public ProcessObject
 {
 public:
@@ -70,6 +70,8 @@ public:
   typedef ProcessObject              Superclass;
   typedef SmartPointer< Self >       Pointer;
   typedef SmartPointer< const Self > ConstPointer;
+
+  /** Method for creation through the object factory. */
   itkNewMacro(Self);
   itkTypeMacro(WatershedRelabeler, ProcessObject);
 
@@ -77,7 +79,7 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, TImageDimension);
 
   /** Some convenient typedefs */
-  typedef TScalarType                                       ScalarType;
+  typedef TScalar                                           ScalarType;
   typedef Image< IdentifierType, TImageDimension >          ImageType;
   typedef SegmentTree< ScalarType >                         SegmentTreeType;
   typedef Segmenter< Image< ScalarType, TImageDimension > > SegmenterType;

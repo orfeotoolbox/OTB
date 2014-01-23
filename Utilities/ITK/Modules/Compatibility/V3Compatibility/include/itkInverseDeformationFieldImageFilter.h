@@ -66,8 +66,8 @@ namespace itk
  * \ingroup ImageToImageFilter
  * \ingroup ITKV3Compatibility
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT InverseDeformationFieldImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class InverseDeformationFieldImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -171,10 +171,10 @@ public:
   unsigned long GetMTime(void) const;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< OutputPixelComponentType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

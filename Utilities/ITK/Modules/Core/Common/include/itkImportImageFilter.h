@@ -40,7 +40,7 @@ namespace itk
  * \endwiki
  */
 template< typename TPixel, unsigned int VImageDimension = 2 >
-class ITK_EXPORT ImportImageFilter:
+class ImportImageFilter:
   public ImageSource< Image< TPixel, VImageDimension > >
 {
 public:
@@ -114,11 +114,11 @@ public:
   itkGetConstReferenceMacro(Origin, OriginType);
   itkSetVectorMacro(Origin, const float, VImageDimension);
 
-  typedef Matrix< double, VImageDimension, VImageDimension > DirectionType;
+  typedef Matrix< SpacePrecisionType, VImageDimension, VImageDimension > DirectionType;
 
   /** Set the direction of the image
    * \sa GetDirection() */
-  virtual void SetDirection(const DirectionType direction);
+  virtual void SetDirection(const DirectionType & direction);
 
   /**  Get the direction of the image
    * \sa SetDirection */

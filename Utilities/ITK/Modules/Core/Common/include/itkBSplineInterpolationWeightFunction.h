@@ -44,11 +44,11 @@ namespace itk
  * \ingroup ITKCommon
  */
 template<
-  class TCoordRep = float,
+  typename TCoordRep = float,
   unsigned int VSpaceDimension = 2,
   unsigned int VSplineOrder = 3
   >
-class ITK_EXPORT BSplineInterpolationWeightFunction:
+class BSplineInterpolationWeightFunction:
   public FunctionBase< ContinuousIndex< TCoordRep, VSpaceDimension >,
                        Array< double > >
 {

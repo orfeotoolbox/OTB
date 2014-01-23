@@ -30,8 +30,8 @@ namespace itk
  *
  * \ingroup ITKOptimizersv4
  */
-template < class TMetric >
-class ITK_EXPORT RegistrationParameterScalesFromIndexShift :
+template < typename TMetric >
+class RegistrationParameterScalesFromIndexShift :
   public RegistrationParameterScalesFromShiftBase< TMetric >
 {
 public:
@@ -70,13 +70,13 @@ public:
   typedef typename FixedImageType::PointType             FixedPointType;
   typedef typename FixedImageType::IndexType             FixedIndexType;
   typedef typename FixedImageType::PointValueType        FixedPointValueType;
-  
+
   typedef typename itk::ContinuousIndex< FixedPointValueType, FixedImageType::ImageDimension >          FixedContinuousIndexType;
 
   typedef typename MovingImageType::PointType            MovingPointType;
   typedef typename MovingImageType::IndexType            MovingIndexType;
   typedef typename MovingImageType::PointValueType       MovingPointValueType;
-  
+
   typedef typename itk::ContinuousIndex< MovingPointValueType, MovingImageType::ImageDimension >         MovingContinuousIndexType;
 
 protected:
@@ -87,14 +87,14 @@ protected:
 
   virtual void ComputeSampleShifts(const ParametersType &deltaParameters, ScalesType &localShifts);
 
-  template<class TContinuousIndexType>
+  template<typename TContinuousIndexType>
   void TransformPointToContinuousIndex(const VirtualPointType &point, TContinuousIndexType &mappedIndex);
 
 private:
   RegistrationParameterScalesFromIndexShift(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  template <class TTransform>
+  template <typename TTransform>
   void ComputeSampleShiftsInternal(const ParametersType &deltaParameters, ScalesType &localShifts);
 
 }; //class RegistrationParameterScalesFromIndexShift

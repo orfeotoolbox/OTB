@@ -51,8 +51,8 @@ namespace Statistics
  * \endwiki
  */
 
-template< class TSample, class THistogram >
-class ITK_EXPORT SampleToHistogramFilter:public ProcessObject
+template< typename TSample, typename THistogram >
+class SampleToHistogramFilter:public ProcessObject
 {
 public:
   /** Standard class typedefs */

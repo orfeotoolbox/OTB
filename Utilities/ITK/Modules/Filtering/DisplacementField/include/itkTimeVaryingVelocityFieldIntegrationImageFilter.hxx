@@ -29,7 +29,7 @@ namespace itk
 /*
  * TimeVaryingVelocityFieldIntegrationImageFilter class definitions
  */
-template<class TTimeVaryingVelocityField, class TDisplacementField>
+template<typename TTimeVaryingVelocityField, typename TDisplacementField>
 TimeVaryingVelocityFieldIntegrationImageFilter
   <TTimeVaryingVelocityField, TDisplacementField>
 ::TimeVaryingVelocityFieldIntegrationImageFilter()
@@ -47,7 +47,7 @@ TimeVaryingVelocityFieldIntegrationImageFilter
     }
 
   typedef VectorLinearInterpolateImageFunction<TimeVaryingVelocityFieldType,
-    RealType> DefaultVelocityFieldInterpolatorType;
+    ScalarType> DefaultVelocityFieldInterpolatorType;
 
   typename DefaultVelocityFieldInterpolatorType::Pointer
     velocityFieldInterpolator = DefaultVelocityFieldInterpolatorType::New();
@@ -55,7 +55,7 @@ TimeVaryingVelocityFieldIntegrationImageFilter
   this->m_VelocityFieldInterpolator = velocityFieldInterpolator;
 
   typedef VectorLinearInterpolateImageFunction<DisplacementFieldType,
-    RealType> DefaultDisplacementFieldInterpolatorType;
+    ScalarType> DefaultDisplacementFieldInterpolatorType;
 
   typename DefaultDisplacementFieldInterpolatorType::Pointer
     deformationFieldInterpolator = DefaultDisplacementFieldInterpolatorType::New();
@@ -63,14 +63,14 @@ TimeVaryingVelocityFieldIntegrationImageFilter
   this->m_DisplacementFieldInterpolator = deformationFieldInterpolator;
 }
 
-template<class TTimeVaryingVelocityField, class TDisplacementField>
+template<typename TTimeVaryingVelocityField, typename TDisplacementField>
 TimeVaryingVelocityFieldIntegrationImageFilter
   <TTimeVaryingVelocityField, TDisplacementField>
 ::~TimeVaryingVelocityFieldIntegrationImageFilter()
 {
 }
 
-template<class TTimeVaryingVelocityField, class TDisplacementField>
+template<typename TTimeVaryingVelocityField, typename TDisplacementField>
 void
 TimeVaryingVelocityFieldIntegrationImageFilter
   <TTimeVaryingVelocityField, TDisplacementField>
@@ -130,7 +130,7 @@ TimeVaryingVelocityFieldIntegrationImageFilter
   output->SetRegions( size );
 }
 
-template<class TTimeVaryingVelocityField, class TDisplacementField>
+template<typename TTimeVaryingVelocityField, typename TDisplacementField>
 void
 TimeVaryingVelocityFieldIntegrationImageFilter
   <TTimeVaryingVelocityField, TDisplacementField>
@@ -144,7 +144,7 @@ TimeVaryingVelocityFieldIntegrationImageFilter
     }
 }
 
-template<class TTimeVaryingVelocityField, class TDisplacementField>
+template<typename TTimeVaryingVelocityField, typename TDisplacementField>
 void
 TimeVaryingVelocityFieldIntegrationImageFilter
   <TTimeVaryingVelocityField, TDisplacementField>
@@ -175,7 +175,7 @@ TimeVaryingVelocityFieldIntegrationImageFilter
     }
 }
 
-template<class TTimeVaryingVelocityField, class TDisplacementField>
+template<typename TTimeVaryingVelocityField, typename TDisplacementField>
 typename TimeVaryingVelocityFieldIntegrationImageFilter
   <TTimeVaryingVelocityField, TDisplacementField>::VectorType
 TimeVaryingVelocityFieldIntegrationImageFilter
@@ -342,7 +342,7 @@ TimeVaryingVelocityFieldIntegrationImageFilter
   return displacement;
 }
 
-template<class TTimeVaryingVelocityField, class TDisplacementField>
+template<typename TTimeVaryingVelocityField, typename TDisplacementField>
 void
 TimeVaryingVelocityFieldIntegrationImageFilter
   <TTimeVaryingVelocityField, TDisplacementField>

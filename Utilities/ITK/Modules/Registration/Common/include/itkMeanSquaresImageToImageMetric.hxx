@@ -30,7 +30,7 @@ namespace itk
 /**
  * Constructor
  */
-template <class TFixedImage, class TMovingImage>
+template <typename TFixedImage, typename TMovingImage>
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 ::MeanSquaresImageToImageMetric()
 {
@@ -46,11 +46,10 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
   this->SetUseAllPixels(true);
 }
 
-template <class TFixedImage, class TMovingImage>
+template <typename TFixedImage, typename TMovingImage>
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 ::~MeanSquaresImageToImageMetric()
 {
-  // C++ says if NULL is passed to delete, nothing should happend
   delete[] m_PerThread;
   m_PerThread = NULL;
 }
@@ -58,7 +57,7 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 /**
  * Print out internal information about this class
  */
-template <class TFixedImage, class TMovingImage>
+template <typename TFixedImage, typename TMovingImage>
 void
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -69,7 +68,7 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 /**
  * Initialize
  */
-template <class TFixedImage, class TMovingImage>
+template <typename TFixedImage, typename TMovingImage>
 void
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 ::Initialize(void)
@@ -88,7 +87,7 @@ throw ( ExceptionObject )
     }
 }
 
-template <class TFixedImage, class TMovingImage>
+template <typename TFixedImage, typename TMovingImage>
 inline bool
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 ::GetValueThreadProcessSample(ThreadIdType threadID,
@@ -103,7 +102,7 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
   return true;
 }
 
-template <class TFixedImage, class TMovingImage>
+template <typename TFixedImage, typename TMovingImage>
 typename MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 ::MeasureType
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
@@ -151,7 +150,7 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
   return mse;
 }
 
-template <class TFixedImage, class TMovingImage>
+template <typename TFixedImage, typename TMovingImage>
 inline bool
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 ::GetValueAndDerivativeThreadProcessSample(ThreadIdType threadID,
@@ -204,7 +203,7 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 /**
  * Get the both Value and Derivative Measure
  */
-template <class TFixedImage, class TMovingImage>
+template <typename TFixedImage, typename TMovingImage>
 void
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 ::GetValueAndDerivative(const ParametersType & parameters,
@@ -280,7 +279,7 @@ MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 /**
  * Get the match measure derivative
  */
-template <class TFixedImage, class TMovingImage>
+template <typename TFixedImage, typename TMovingImage>
 void
 MeanSquaresImageToImageMetric<TFixedImage, TMovingImage>
 ::GetDerivative(const ParametersType & parameters,

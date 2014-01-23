@@ -26,7 +26,7 @@
 namespace itk
 {
 /**
- *
+ * \class GPUGradientAnisotropicDiffusionImageFilter
  * This filter performs anisotropic diffusion on a scalar itk::Image using the
  * classic Perona-Malik, gradient magnitude based equation implemented in
  * itkGradientNDAnisotropicDiffusionFunction.  For detailed information on
@@ -41,11 +41,11 @@ namespace itk
  * Please see the description of parameters given in
  * itkAnisotropicDiffusionImageFilter.
  *
- * \ingroup ITKGPUAnistropicSmoothing
+ * \ingroup ITKGPUAnisotropicSmoothing
  */
-template< class TInputImage, class TOutputImage, class TParentImageFilter =
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter =
             GradientAnisotropicDiffusionImageFilter< TInputImage, TOutputImage > >
-class ITK_EXPORT GPUGradientAnisotropicDiffusionImageFilter :
+class GPUGradientAnisotropicDiffusionImageFilter :
   public GPUAnisotropicDiffusionImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 {
 public:
@@ -69,10 +69,10 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, GPUSuperclass::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( UpdateBufferHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename UpdateBufferType::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
@@ -95,8 +95,12 @@ private:
   // implemented
 };
 
-/** Object Factory implemenatation for
-  GPUGradientAnisotropicDiffusionImageFilter */
+/**
+ * \class GPUGradientAnisotropicDiffusionImageFilterFactory
+ * Object Factory implemenatation for GPUGradientAnisotropicDiffusionImageFilter
+ *
+ * \ingroup ITKGPUAnisotropicSmoothing
+ */
 class GPUGradientAnisotropicDiffusionImageFilterFactory : public ObjectFactoryBase
 {
 public:

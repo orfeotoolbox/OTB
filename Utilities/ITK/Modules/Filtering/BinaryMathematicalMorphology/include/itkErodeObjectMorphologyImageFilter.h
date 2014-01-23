@@ -42,8 +42,8 @@ namespace itk
  * \ingroup ImageEnhancement MathematicalMorphologyImageFilters
  * \ingroup ITKBinaryMathematicalMorphology
  */
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT ErodeObjectMorphologyImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class ErodeObjectMorphologyImageFilter:
   public ObjectMorphologyImageFilter< TInputImage, TOutputImage, TKernel >
 {
 public:
@@ -98,10 +98,10 @@ public:
   typedef typename TKernel::PixelType KernelPixelType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( KernelGreaterThanComparableCheck,
                    ( Concept::GreaterThanComparable< KernelPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -38,8 +38,8 @@ namespace itk
 /** Create a helper GPU Kernel class for GPUMeanImageFilter */
 itkGPUKernelClassMacro(GPUMeanImageFilterKernel);
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT GPUMeanImageFilter : //public GPUImageToImageFilter<
+template< typename TInputImage, typename TOutputImage >
+class GPUMeanImageFilter : //public GPUImageToImageFilter<
                                       // TInputImage, TOutputImage,
                                       // MeanImageFilter< TInputImage,
                                       // TOutputImage > >

@@ -83,8 +83,8 @@ namespace itk
  * \ingroup ITKMathematicalMorphology
  */
 
-template< class TInputImage, class TOutputImage, class TKernel, class THistogram >
-class ITK_EXPORT MovingHistogramImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel, typename THistogram >
+class MovingHistogramImageFilter:
   public MovingHistogramImageFilterBase< TInputImage, TOutputImage, TKernel >
 {
 public:

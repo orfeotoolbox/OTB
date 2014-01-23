@@ -86,8 +86,8 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ExtractImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class ExtractImageFilter:
   public InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -221,10 +221,10 @@ public:
   itkGetConstMacro(ExtractionRegion, InputImageRegionType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputCovertibleToOutputCheck,
                    ( Concept::Convertible< InputImagePixelType, OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

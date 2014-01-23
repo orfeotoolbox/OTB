@@ -37,8 +37,8 @@ namespace itk
  * deform ability.
  * \ingroup ITKMesh
  */
-template< class TOutputMesh >
-class ITK_EXPORT SphereMeshSource:public MeshSource< TOutputMesh >
+template< typename TOutputMesh >
+class SphereMeshSource:public MeshSource< TOutputMesh >
 {
 public:
   /** Standard "Self" typedef. */

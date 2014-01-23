@@ -55,10 +55,10 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage,
-          class TOutputImage =
+template< typename TInputImage,
+          typename TOutputImage =
             LabelMap< LabelObject< SizeValueType, TInputImage::ImageDimension > > >
-class ITK_EXPORT BinaryImageToLabelMapFilter:
+class BinaryImageToLabelMapFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

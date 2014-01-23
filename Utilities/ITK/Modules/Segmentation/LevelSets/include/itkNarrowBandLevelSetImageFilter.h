@@ -139,12 +139,12 @@ namespace itk
  *  See LevelSetFunction for more information.
  * \ingroup ITKLevelSets
  */
-template< class TInputImage,
-          class TFeatureImage,
-          class TOutputPixelType = float,
-          class TOutputImage = Image< TOutputPixelType,
+template< typename TInputImage,
+          typename TFeatureImage,
+          typename TOutputPixelType = float,
+          typename TOutputImage = Image< TOutputPixelType,
                                       TInputImage::ImageDimension > >
-class ITK_EXPORT NarrowBandLevelSetImageFilter:
+class NarrowBandLevelSetImageFilter:
   public NarrowBandImageFilterBase< TInputImage, TOutputImage >
 {
 public:
@@ -348,10 +348,10 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
@@ -368,7 +368,7 @@ protected:
   {
     Superclass::InitializeIteration();
     // Estimate the progress of the filter
-    this->SetProgress( (float)( (float)this->GetElapsedIterations()
+    this->UpdateProgress( (float)( (float)this->GetElapsedIterations()
                                 / (float)this->GetNumberOfIterations() ) );
   }
 

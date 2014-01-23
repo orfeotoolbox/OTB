@@ -33,7 +33,7 @@ endif()
 # TODO: file a bug report at opensolaris
 if(CMAKE_SYSTEM MATCHES "SunOS-." AND NOT EXISTS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/64")
   file(MAKE_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-  exec_program(ln ARGS -sf . "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/64")
+  execute_process(COMMAND ln -sf . "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/64")
 endif()
 
 
@@ -59,7 +59,7 @@ if(NOT EXTERNAL_WRAP_ITK_PROJECT)
       set(CONFIG_PYTHON_SWIGLIB_DIR "../../lib/${config}")
       configure_file("${CMAKE_CURRENT_SOURCE_DIR}/itkConfig.py.in"
                      "${ITK_WRAP_PYTHON_BINARY_DIR}/${config}/itkConfig.py"
-                     @ONLY IMMEDIATE)
+                     @ONLY)
     endforeach()
   else()
     set(CONFIG_WRAP_ITK_DATA_ROOT "../Data")
@@ -70,7 +70,7 @@ if(NOT EXTERNAL_WRAP_ITK_PROJECT)
     set(CONFIG_PYTHON_SWIGLIB_DIR "../lib")
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/itkConfig.py.in"
                    "${ITK_WRAP_PYTHON_BINARY_DIR}/itkConfig.py"
-                   @ONLY IMMEDIATE)
+                   @ONLY)
   endif()
 
   set(CONFIG_WRAP_ITK_TEST_ROOT "None")
@@ -79,7 +79,7 @@ if(NOT EXTERNAL_WRAP_ITK_PROJECT)
   set(CONFIG_PYTHON_CONFIGPY_DIR "Configuration")
   configure_file("${CMAKE_CURRENT_SOURCE_DIR}/itkConfig.py.in"
                  "${ITK_WRAP_PYTHON_BINARY_DIR}/InstallOnly/itkConfig.py"
-                @ONLY IMMEDIATE)
+                @ONLY)
 
   WRAP_ITK_BINDINGS_INSTALL(/Python "${ITK_WRAP_PYTHON_BINARY_DIR}/InstallOnly/itkConfig.py")
 
@@ -110,10 +110,11 @@ if(NOT EXTERNAL_WRAP_ITK_PROJECT)
   endforeach()
   configure_file("${CMAKE_CURRENT_SOURCE_DIR}/WrapITKBuildOptionsPython.py.in"
                  "${ITK_WRAP_PYTHON_BINARY_DIR}/WrapITKBuildOptionsPython.py"
-                @ONLY IMMEDIATE)
+                @ONLY)
   WRAP_ITK_BINDINGS_INSTALL(/Python "${ITK_WRAP_PYTHON_BINARY_DIR}/WrapITKBuildOptionsPython.py")
 
-  exec_program(${CMAKE_COMMAND} ARGS -E copy_if_different "\"${CMAKE_CURRENT_SOURCE_DIR}/WrapITKBuildOptionsConfig.py\"" "\"${CMAKE_CURRENT_BINARY_DIR}/Configuration/WrapITKBuildOptionsConfig.py\"")
+  file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/WrapITKBuildOptionsConfig.py"
+       DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/Configuration/")
   WRAP_ITK_BINDINGS_INSTALL(/Python/Configuration "${CMAKE_CURRENT_SOURCE_DIR}/WrapITKBuildOptionsConfig.py")
 
 endif()
@@ -129,7 +130,7 @@ if(NOT EXTERNAL_WRAP_ITK_PROJECT)
   endforeach()
   configure_file("${ITK_WRAP_PYTHON_SOURCE_DIR}/InsightToolkit.py.in"
              "${ITK_WRAP_PYTHON_BINARY_DIR}/InsightToolkit.py"
-             @ONLY IMMEDIATE)
+             @ONLY)
   WRAP_ITK_BINDINGS_INSTALL(/Python "${ITK_WRAP_PYTHON_BINARY_DIR}/InsightToolkit.py")
 endif()
 
@@ -209,27 +210,27 @@ if(CMAKE_CONFIGURATION_TYPES)
     # TODO: We need a better way to do this.
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/WrapITK.pth.in"
                    "${CMAKE_CURRENT_BINARY_DIR}/${config}/WrapITK.pth"
-                   @ONLY IMMEDIATE)
+                   @ONLY)
   endforeach()
 else()
   set(CONFIG_ITK_WRAP_PYTHON_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 
   configure_file("${CMAKE_CURRENT_SOURCE_DIR}/WrapITK.pth.in"
                  "${CMAKE_CURRENT_BINARY_DIR}/WrapITK.pth"
-                 @ONLY IMMEDIATE)
+                 @ONLY)
 
 endif()
 
 set(CONFIG_ITK_WRAP_PYTHON_DIR "${CMAKE_INSTALL_PREFIX}/lib/ITK-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}/Python")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/WrapITK.pth.in"
             "${CMAKE_CURRENT_BINARY_DIR}/InstallOnly/WrapITK.pth"
-            @ONLY IMMEDIATE)
+            @ONLY)
 
 if(PYTHON_EXECUTABLE)
   file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/det_spp.py "try:\n  import distutils.sysconfig; print distutils.sysconfig.get_python_lib(1)\nexcept: pass")
-  exec_program("${PYTHON_EXECUTABLE}"
-    ARGS "\"${CMAKE_CURRENT_BINARY_DIR}/det_spp.py\""
+  execute_process(COMMAND "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_BINARY_DIR}/det_spp.py"
     OUTPUT_VARIABLE py_spp
+    ERROR_VARIABLE py_spp
   )
 endif()
 
@@ -327,7 +328,7 @@ macro(itk_end_wrap_module_python)
   # ITK_WRAP_PYTHON_CONFIGURATION_DEPENDS created earlier
   configure_file("${ITK_WRAP_PYTHON_SOURCE_DIR}/ModuleConfig.py.in"
     "${ITK_WRAP_PYTHON_BINARY_DIR}/Configuration/${WRAPPER_LIBRARY_NAME}Config.py"
-    @ONLY IMMEDIATE)
+    @ONLY)
   WRAP_ITK_BINDINGS_INSTALL("/Python/Configuration"
     "${ITK_WRAP_PYTHON_BINARY_DIR}/Configuration/${WRAPPER_LIBRARY_NAME}Config.py"
   )
@@ -339,7 +340,7 @@ macro(itk_end_wrap_module_python)
   set(CONFIG_LIBRARY_NAME "${WRAPPER_LIBRARY_NAME}")
   configure_file("${ITK_WRAP_PYTHON_SOURCE_DIR}/ModuleLoader.py.in"
     "${ITK_WRAP_PYTHON_BINARY_DIR}/${WRAPPER_LIBRARY_NAME}.py"
-    @ONLY IMMEDIATE)
+    @ONLY)
   WRAP_ITK_BINDINGS_INSTALL("/Python" "${ITK_WRAP_PYTHON_BINARY_DIR}/${WRAPPER_LIBRARY_NAME}.py")
 
 #   add_custom_target(${WRAPPER_LIBRARY_NAME}SwigPython DEPENDS ${cpp_files} ${python_files})
@@ -354,7 +355,7 @@ macro(itk_end_wrap_module_python)
   # ITK_WRAP_PYTHON_LIBRARY_IMPORTS
   configure_file("${ITK_WRAP_PYTHON_SOURCE_DIR}/main_module_ext.i.in"
     "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/python/${WRAPPER_LIBRARY_NAME}_ext.i"
-    @ONLY IMMEDIATE)
+    @ONLY)
   WRAP_ITK_INSTALL("/Configuration/Typedefs/python"
     "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/python/${WRAPPER_LIBRARY_NAME}_ext.i"
   )
@@ -497,7 +498,7 @@ macro(itk_end_wrap_submodule_python group_name)
   # create the python customization for that wrap_*.cmake file.
   configure_file("${ITK_WRAP_PYTHON_SOURCE_DIR}/module_ext.i.in"
   "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/python/${group_name}_ext.i"
-  @ONLY IMMEDIATE)
+  @ONLY)
   WRAP_ITK_INSTALL("/Configuration/Typedefs/python" "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/python/${group_name}_ext.i"
   )
 

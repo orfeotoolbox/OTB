@@ -35,8 +35,8 @@ namespace itk
   \ingroup RegistrationMetrics
  * \ingroup ITKRegistrationCommon
  */
-template< class TFixedImage, class TMovingImage >
-class ITK_EXPORT HistogramImageToImageMetric:
+template< typename TFixedImage, typename TMovingImage >
+class HistogramImageToImageMetric:
   public ImageToImageMetric< TFixedImage, TMovingImage >
 {
 public:

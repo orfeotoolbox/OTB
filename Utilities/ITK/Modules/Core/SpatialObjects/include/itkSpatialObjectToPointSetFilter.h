@@ -30,8 +30,8 @@ namespace itk
  *  The pointset created is in physical space.
  * \ingroup ITKSpatialObjects
  */
-template< class TInputSpatialObject, class TOutputPointSet >
-class ITK_EXPORT SpatialObjectToPointSetFilter:public MeshSource< TOutputPointSet >
+template< typename TInputSpatialObject, typename TOutputPointSet >
+class SpatialObjectToPointSetFilter:public MeshSource< TOutputPointSet >
 {
 public:
   /** Standard class typedefs. */

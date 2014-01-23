@@ -44,8 +44,8 @@ namespace itk
  * \ingroup ITKRegistrationCommon
  */
 
-template< class TFixedPointSet,  class TMovingImage >
-class ITK_EXPORT PointSetToImageMetric:public SingleValuedCostFunction
+template< typename TFixedPointSet,  typename TMovingImage >
+class PointSetToImageMetric:public SingleValuedCostFunction
 {
 public:
   /** Standard class typedefs. */

@@ -48,7 +48,7 @@ namespace itk
 
 namespace Function
 {
-template< class TInputPixel, class TOutputPixel >
+template< typename TInputPixel, typename TOutputPixel >
 class BinaryThresholdAccumulator
 {
 public:
@@ -88,8 +88,8 @@ public:
 };
 } // end namespace Function
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT BinaryThresholdProjectionImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class BinaryThresholdProjectionImageFilter:
   public ProjectionImageFilter< TInputImage, TOutputImage,
                                 Function::BinaryThresholdAccumulator<
                                   typename TInputImage::PixelType,
@@ -137,12 +137,12 @@ public:
   itkGetConstMacro(ThresholdValue, InputPixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputPixelTypeGreaterThanComparable,
                    ( Concept::GreaterThanComparable< InputPixelType > ) );
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

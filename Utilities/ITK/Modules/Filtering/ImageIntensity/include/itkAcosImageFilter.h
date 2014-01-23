@@ -30,7 +30,7 @@ namespace Functor
  * \brief Computes the Acos of a pixel.
  * \ingroup ITKImageIntensity
  */
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class Acos
 {
 public:
@@ -75,8 +75,8 @@ public:
  * \ingroup MultiThreaded
  * \ingroup ITKImageIntensity
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT AcosImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class AcosImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::Acos<
@@ -101,12 +101,12 @@ public:
                UnaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputCovertibleToDoubleCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType, double > ) );
   itkConceptMacro( DoubleConvertibleToOutputCheck,
                    ( Concept::Convertible< double, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

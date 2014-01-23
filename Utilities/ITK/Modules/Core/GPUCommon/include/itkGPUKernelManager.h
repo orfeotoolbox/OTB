@@ -41,8 +41,7 @@ namespace itk
  *
  * \ingroup ITKGPUCommon
  */
-
-class ITK_EXPORT GPUKernelManager : public LightObject
+class GPUKernelManager : public LightObject
 {
 public:
 
@@ -77,10 +76,10 @@ public:
   bool SetKernelArgWithImage(int kernelIdx, cl_uint argIdx, GPUDataManager::Pointer manager);
 
   /** Pass to GPU both the pixel buffer and the buffered region. */
-  //template< class TGPUImageDataManager >
+  //template< typename TGPUImageDataManager >
   //bool SetKernelArgWithImageAndBufferedRegion(int kernelIdx, cl_uint &argIdx,
   //  typename TGPUImageDataManager::Pointer manager);
-  template< class TGPUImageDataManager >
+  template< typename TGPUImageDataManager >
   bool SetKernelArgWithImageAndBufferedRegion(
     int kernelIdx, cl_uint &argIdx,
     TGPUImageDataManager *manager)

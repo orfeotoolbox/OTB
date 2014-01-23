@@ -23,13 +23,13 @@
 namespace itk
 {
 
-template< class TMetric >
+template< typename TMetric >
 RegistrationParameterScalesFromIndexShift< TMetric >
 ::RegistrationParameterScalesFromIndexShift()
 {
 }
 
-template< class TMetric >
+template< typename TMetric >
 void
 RegistrationParameterScalesFromIndexShift< TMetric >
 ::ComputeSampleShifts(const ParametersType &deltaParameters, ScalesType &sampleShifts)
@@ -44,8 +44,8 @@ RegistrationParameterScalesFromIndexShift< TMetric >
     }
 }
 
-template< class TMetric >
-template< class TTransform >
+template< typename TMetric >
+template< typename TTransform >
 void
 RegistrationParameterScalesFromIndexShift< TMetric >
 ::ComputeSampleShiftsInternal(const ParametersType &deltaParameters, ScalesType &sampleShifts)
@@ -54,7 +54,8 @@ RegistrationParameterScalesFromIndexShift< TMetric >
 
   // We save the old parameters and apply the delta parameters to calculate the
   // voxel shift. After it is done, we will reset to the old parameters.
-  TransformBase *transform = const_cast<TransformBase *>(this->GetTransform());
+  TransformBaseTemplate<typename TMetric::MeasureType> *transform =
+                                                  const_cast<TransformBaseTemplate<typename TMetric::MeasureType> *>(this->GetTransform());
   const ParametersType oldParameters = transform->GetParameters();
 
   const SizeValueType numSamples = this->m_SamplePoints.size();
@@ -91,8 +92,8 @@ RegistrationParameterScalesFromIndexShift< TMetric >
 }
 
 /** Transform a physical point to its continuous index */
-template< class TMetric >
-template< class TContinuousIndexType >
+template< typename TMetric >
+template< typename TContinuousIndexType >
 void
 RegistrationParameterScalesFromIndexShift< TMetric >
 ::TransformPointToContinuousIndex(const VirtualPointType &point, TContinuousIndexType &mappedIndex)
@@ -112,7 +113,7 @@ RegistrationParameterScalesFromIndexShift< TMetric >
 }
 
 /** Print the information about this class */
-template< class TMetric >
+template< typename TMetric >
 void
 RegistrationParameterScalesFromIndexShift< TMetric >
 ::PrintSelf(std::ostream& os, Indent indent) const

@@ -55,8 +55,8 @@ namespace itk
  * \ingroup RegionGrowingSegmentation
  * \ingroup ITKRegionGrowing
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT VectorConfidenceConnectedImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class VectorConfidenceConnectedImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -136,14 +136,14 @@ public:
 
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputEqualityComparableCheck,
                    ( Concept::EqualityComparable< OutputImagePixelType > ) );
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename InputImagePixelType::ValueType > ) );
   itkConceptMacro( OutputOStreamWritableCheck,
                    ( Concept::OStreamWritable< OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

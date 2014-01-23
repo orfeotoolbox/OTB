@@ -45,8 +45,8 @@ namespace itk
  * \wikiexample{ImageProcessing/ShapeOpeningLabelMapFilter,Keep only regions that meet a specified threshold of a specified property}
  * \endwiki
  */
-template< class TImage >
-class ITK_EXPORT ShapeOpeningLabelMapFilter:
+template< typename TImage >
+class ShapeOpeningLabelMapFilter:
   public InPlaceLabelMapFilter< TImage >
 {
 public:
@@ -76,14 +76,14 @@ public:
   itkTypeMacro(ShapeOpeningLabelMapFilter, InPlaceLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 /*  itkConceptMacro(InputEqualityComparableCheck,
     (Concept::EqualityComparable<InputImagePixelType>));
   itkConceptMacro(IntConvertibleToInputCheck,
     (Concept::Convertible<int, InputImagePixelType>));
   itkConceptMacro(InputOStreamWritableCheck,
     (Concept::OStreamWritable<InputImagePixelType>));*/
-/** End concept checking */
+// End concept checking
 #endif
 
   /**
@@ -119,7 +119,7 @@ protected:
 
   void GenerateData();
 
-  template< class TAttributeAccessor >
+  template< typename TAttributeAccessor >
   void TemplatedGenerateData(const TAttributeAccessor & accessor)
   {
     // Allocate the output

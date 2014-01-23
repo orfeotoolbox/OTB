@@ -35,7 +35,7 @@ namespace itk
 
 namespace Functor
 {
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class Square
 {
 public:
@@ -60,8 +60,8 @@ public:
   }
 };
 }
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT SquareImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class SquareImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::Square< typename TInputImage::PixelType,
@@ -86,12 +86,12 @@ public:
                UnaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType > ) );
   itkConceptMacro( RealTypeMultiplyOperatorCheck,
                    ( Concept::MultiplyOperator< typename NumericTraits< typename TInputImage::PixelType >::RealType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -33,8 +33,8 @@ namespace Statistics
  *
  * \ingroup ITKStatistics
  */
-template< class TVector >
-class ITK_EXPORT ManhattanDistanceMetric:
+template< typename TVector >
+class ManhattanDistanceMetric:
   public DistanceMetric< TVector >
 {
 public:

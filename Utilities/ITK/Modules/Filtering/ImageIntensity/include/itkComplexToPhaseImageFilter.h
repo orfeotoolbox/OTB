@@ -31,7 +31,7 @@ namespace itk
  */
 namespace Functor
 {
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class ComplexToPhase
 {
 public:
@@ -54,8 +54,8 @@ public:
 };
 }
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ComplexToPhaseImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class ComplexToPhaseImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::ComplexToPhase<
@@ -85,10 +85,10 @@ public:
   typedef typename NumericTraits< InputPixelType >::ValueType InputPixelValueType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputPixelValueType, OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

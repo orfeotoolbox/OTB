@@ -48,8 +48,8 @@ namespace itk
  * \ingroup ITKLevelSets
  */
 
-template< class TSparseImageType >
-class ITK_EXPORT NormalVectorFunctionBase:
+template< typename TSparseImageType >
+class NormalVectorFunctionBase:
   public FiniteDifferenceSparseImageFunction< TSparseImageType >
 {
 public:

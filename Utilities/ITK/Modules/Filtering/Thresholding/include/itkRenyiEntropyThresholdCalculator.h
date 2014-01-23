@@ -47,8 +47,8 @@ namespace itk
  * \ingroup Operators
  * \ingroup ITKThresholding
  */
-template <class THistogram, class TOutput=double>
-class ITK_EXPORT RenyiEntropyThresholdCalculator : public HistogramThresholdCalculator<THistogram, TOutput>
+template <typename THistogram, typename TOutput=double>
+class RenyiEntropyThresholdCalculator : public HistogramThresholdCalculator<THistogram, TOutput>
 {
 public:
   /** Standard class typedefs. */

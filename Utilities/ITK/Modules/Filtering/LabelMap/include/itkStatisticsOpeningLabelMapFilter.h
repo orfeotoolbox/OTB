@@ -41,8 +41,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template< class TImage >
-class ITK_EXPORT StatisticsOpeningLabelMapFilter:
+template< typename TImage >
+class StatisticsOpeningLabelMapFilter:
   public ShapeOpeningLabelMapFilter< TImage >
 {
 public:
@@ -74,14 +74,14 @@ public:
                ShapeOpeningLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 /*  itkConceptMacro(InputEqualityComparableCheck,
     (Concept::EqualityComparable<InputImagePixelType>));
   itkConceptMacro(IntConvertibleToInputCheck,
     (Concept::Convertible<int, InputImagePixelType>));
   itkConceptMacro(InputOStreamWritableCheck,
     (Concept::OStreamWritable<InputImagePixelType>));*/
-/** End concept checking */
+// End concept checking
 #endif
 
 protected:

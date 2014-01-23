@@ -69,8 +69,8 @@ namespace itk
  * \ingroup CannotBeStreamed
  * \ingroup ITKImageFunction
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT BSplineDecompositionImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class BSplineDecompositionImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -109,7 +109,7 @@ public:
   itkGetConstMacro(SplineOrder, int);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( DimensionCheck,
                    ( Concept::SameDimension< ImageDimension, OutputImageDimension > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
@@ -117,7 +117,7 @@ public:
                                            typename TOutputImage::PixelType > ) );
   itkConceptMacro( DoubleConvertibleToOutputCheck,
                    ( Concept::Convertible< double, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

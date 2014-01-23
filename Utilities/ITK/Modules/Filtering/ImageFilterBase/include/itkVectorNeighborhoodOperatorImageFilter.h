@@ -54,8 +54,8 @@ namespace itk
  * \ingroup ITKImageFilterBase
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT VectorNeighborhoodOperatorImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class VectorNeighborhoodOperatorImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -124,12 +124,12 @@ public:
   throw ( InvalidRequestedRegionError );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType::ValueType > ) );
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TOutputImage::PixelType::ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

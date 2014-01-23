@@ -27,7 +27,7 @@ namespace itk
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 StreamingImageFilter< TInputImage, TOutputImage >
 ::StreamingImageFilter()
 {
@@ -41,7 +41,7 @@ StreamingImageFilter< TInputImage, TOutputImage >
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 StreamingImageFilter< TInputImage, TOutputImage >
 ::~StreamingImageFilter()
 {}
@@ -49,7 +49,7 @@ StreamingImageFilter< TInputImage, TOutputImage >
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 StreamingImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -71,7 +71,7 @@ StreamingImageFilter< TInputImage, TOutputImage >
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 StreamingImageFilter< TInputImage, TOutputImage >
 ::PropagateRequestedRegion(DataObject *output)
@@ -112,7 +112,7 @@ StreamingImageFilter< TInputImage, TOutputImage >
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 StreamingImageFilter< TInputImage, TOutputImage >
 ::UpdateOutputData( DataObject *itkNotUsed(output) )
@@ -144,7 +144,7 @@ StreamingImageFilter< TInputImage, TOutputImage >
     return;
     }
   this->SetAbortGenerateData(0);
-  this->SetProgress(0.0);
+  this->UpdateProgress(0.0);
   this->m_Updating = true;
 
   /**

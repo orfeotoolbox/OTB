@@ -41,11 +41,11 @@ namespace itk
  *
  * \sa AccumulateImageFilter
  *
- * \ingroup   IntensityImageFilters     SingelThreaded
+ * \ingroup   IntensityImageFilters     SingleThreaded
  * \ingroup ITKImageStatistics
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT GetAverageSliceImageFilter:public AccumulateImageFilter< TInputImage, TOutputImage >
+template< typename TInputImage, typename TOutputImage >
+class GetAverageSliceImageFilter:public AccumulateImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Standard class typedefs. */

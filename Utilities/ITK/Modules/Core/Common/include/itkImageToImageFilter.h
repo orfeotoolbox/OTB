@@ -98,8 +98,8 @@ namespace itk
  * \wikiexample{Developer/ImageFilterMultipleOutputsDifferentType,Write a filter with multiple outputs of different types.}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ImageToImageFilter:public ImageSource< TOutputImage >
+template< typename TInputImage, typename TOutputImage >
+class ImageToImageFilter:public ImageSource< TOutputImage >
 {
 public:
   /** Standard class typedefs. */

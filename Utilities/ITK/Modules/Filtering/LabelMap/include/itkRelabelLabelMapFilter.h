@@ -42,8 +42,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template< class TImage >
-class ITK_EXPORT RelabelLabelMapFilter:
+template< typename TImage >
+class RelabelLabelMapFilter:
   public AttributeRelabelLabelMapFilter< TImage, typename Functor::LabelLabelObjectAccessor<typename TImage::LabelObjectType> >
 {
 public:
@@ -73,14 +73,14 @@ public:
   itkTypeMacro(RelabelLabelMapFilter, AttributeRelabelLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 /*  itkConceptMacro(InputEqualityComparableCheck,
     (Concept::EqualityComparable<InputImagePixelType>));
   itkConceptMacro(IntConvertibleToInputCheck,
     (Concept::Convertible<int, InputImagePixelType>));
   itkConceptMacro(InputOStreamWritableCheck,
     (Concept::OStreamWritable<InputImagePixelType>));*/
-/** End concept checking */
+// End concept checking
 #endif
 
 protected:

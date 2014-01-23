@@ -60,8 +60,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKMathematicalMorphology
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT GrayscaleGeodesicDilateImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class GrayscaleGeodesicDilateImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -139,14 +139,14 @@ public:
   itkBooleanMacro(FullyConnected);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< MarkerImageDimension, OutputImageDimension > ) );
   itkConceptMacro( InputComparableCheck,
                    ( Concept::Comparable< MarkerImagePixelType > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< MarkerImagePixelType, OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

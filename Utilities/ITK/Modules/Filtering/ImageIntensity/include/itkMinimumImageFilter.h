@@ -29,7 +29,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput1, class TInput2 = TInput1, class TOutput = TInput1 >
+template< typename TInput1, typename TInput2 = TInput1, typename TOutput = TInput1 >
 class Minimum
 {
 public:
@@ -67,8 +67,8 @@ public:
  * \wikiexample{ImageProcessing/MinimumImageFilter,Pixel wise compare two input images and set the output pixel to their min}
  * \endwiki
  */
-template< class TInputImage1, class TInputImage2 = TInputImage1, class TOutputImage = TInputImage1 >
-class ITK_EXPORT MinimumImageFilter:
+template< typename TInputImage1, typename TInputImage2 = TInputImage1, typename TOutputImage = TInputImage1 >
+class MinimumImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage1, TInputImage2, TOutputImage,
                             Functor::Minimum<
@@ -98,7 +98,7 @@ public:
                BinaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1ConvertibleToInput2Check,
                    ( Concept::Convertible< typename TInputImage1::PixelType,
                                            typename TInputImage2::PixelType > ) );
@@ -108,7 +108,7 @@ public:
   itkConceptMacro( Input1LessThanInput2Check,
                    ( Concept::LessThanComparable< typename TInputImage1::PixelType,
                                                   typename TInputImage2::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

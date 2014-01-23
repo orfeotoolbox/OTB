@@ -64,11 +64,6 @@ namespace itk
  * \sa ImageBase
  * \sa ImageContainerInterface
  *
- * \example Image1.cxx
- * \example Image2.cxx
- * \example RGBImage.cxx
- * \example VectorImage.cxx
- *
  * \ingroup ImageObjects
  * \ingroup ITKCommon
  *
@@ -76,8 +71,8 @@ namespace itk
  * \wikiexample{SimpleOperations/SetPixels,Set specified pixels to specified values}
  * \endwiki
  */
-template< class TPixel, unsigned int VImageDimension = 2 >
-class ITK_EXPORT Image:public ImageBase< VImageDimension >
+template< typename TPixel, unsigned int VImageDimension = 2 >
+class Image:public ImageBase< VImageDimension >
 {
 public:
   /** Standard class typedefs */
@@ -165,7 +160,7 @@ public:
    * typedef typename ImageType::template Rebind< float >::Type OutputImageType;
    *
    */
-  template <class UPixelType, unsigned int UImageDimension = VImageDimension>
+  template <typename UPixelType, unsigned int UImageDimension = VImageDimension>
   struct Rebind
     {
       typedef itk::Image<UPixelType, UImageDimension>  Type;

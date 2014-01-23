@@ -26,7 +26,7 @@
 
 namespace itk
 {
-template< class TNeighborhoodType >
+template< typename TNeighborhoodType >
 SparseFieldCityBlockNeighborList< TNeighborhoodType >
 ::SparseFieldCityBlockNeighborList()
 {
@@ -71,7 +71,7 @@ SparseFieldCityBlockNeighborList< TNeighborhoodType >
     }
 }
 
-template< class TNeighborhoodType >
+template< typename TNeighborhoodType >
 void
 SparseFieldCityBlockNeighborList< TNeighborhoodType >
 ::Print(std::ostream & os) const
@@ -85,48 +85,48 @@ SparseFieldCityBlockNeighborList< TNeighborhoodType >
     }
 }
 
-//template<class TInputImage, class TOutputImage>
+//template<typename TInputImage, typename TOutputImage>
 //double SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 //::m_ConstantGradientValue = 1.0;
 
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 typename SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ValueType
 SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::m_ValueOne = 1;
 
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 typename SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>::ValueType
 SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 ::m_ValueZero = 0;
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 typename SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >::StatusType
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::m_StatusNull = NumericTraits< typename SparseFieldLevelSetImageFilter< TInputImage,
                                                                              TOutputImage >::StatusType >::
                  NonpositiveMin();
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 typename SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >::StatusType
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::m_StatusChanging = -1;
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 typename SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >::StatusType
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::m_StatusActiveChangingUp = -2;
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 typename SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >::StatusType
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::m_StatusActiveChangingDown = -3;
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 typename SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >::StatusType
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::m_StatusBoundaryPixel = -4;
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::SparseFieldLevelSetImageFilter()
 {
@@ -140,12 +140,12 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
   m_ConstantGradientValue = 1.0;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::~SparseFieldLevelSetImageFilter()
 {}
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::ApplyUpdate(const TimeStepType& dt)
@@ -218,7 +218,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
   this->PropagateAllLayerValues();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::ProcessOutsideList(LayerType *OutsideList, StatusType ChangeToStatus)
@@ -236,7 +236,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::ProcessStatusList(LayerType *InputList, LayerType *OutputList,
@@ -296,7 +296,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::UpdateActiveLayerValues(TimeStepType dt,
@@ -487,7 +487,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::CopyInputToOutput()
@@ -520,20 +520,18 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
   this->GraftOutput( zeroCrossingFilter->GetOutput() );
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::Initialize()
 {
-  unsigned int i;
-
   this->m_InputImage = this->GetInput();
   this->m_OutputImage = this->GetOutput();
 
   if ( this->GetUseImageSpacing() )
     {
-    double minSpacing = NumericTraits< double >::max();
-    for ( i = 0; i < ImageDimension; i++ )
+    SpacePrecisionType minSpacing = NumericTraits< SpacePrecisionType >::max();
+    for ( unsigned int i = 0; i < ImageDimension; i++ )
       {
       minSpacing = vnl_math_min(minSpacing, this->GetInput()->GetSpacing()[i]);
       }
@@ -583,7 +581,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 
   // Erase all existing layer lists.
-  for ( i = 0; i < m_Layers.size(); ++i )
+  for ( unsigned int i = 0; i < m_Layers.size(); ++i )
     {
     while ( !m_Layers[i]->Empty() )
       {
@@ -613,7 +611,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 
   // Construct the rest of the non-active set layers using the first two
   // layers. Inside layers are odd numbers, outside layers are even numbers.
-  for ( i = 1; i < m_Layers.size() - 2; ++i )
+  for ( unsigned int i = 1; i < m_Layers.size() - 2; ++i )
     {
     this->ConstructLayer(i, i + 2);
     }
@@ -632,7 +630,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::InitializeBackgroundPixels()
@@ -672,7 +670,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::ConstructActiveLayer()
@@ -689,9 +687,6 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
   // set (or the active set itself) is sitting on a boundary pixel location. If
   // this is the case, then we need to do active bounds checking in the solver.
   //
-
-  unsigned int i;
-
   NeighborhoodIterator< OutputImageType >
   shiftedIt( m_NeighborList.GetRadius(), m_ShiftedImage,
              this->m_OutputImage->GetRequestedRegion() );
@@ -722,7 +717,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 
       // Check to see if any of the sparse field touches a boundary.  If so,
       // then activate bounds checking.
-      for ( i = 0; i < ImageDimension; i++ )
+      for ( unsigned int i = 0; i < ImageDimension; i++ )
         {
         if ( center_index[i] + static_cast< OffsetValueType >( m_NumberOfLayers ) >= ( upperBounds[i] - 1 )
              || center_index[i] - static_cast< OffsetValueType >( m_NumberOfLayers ) <= lowerBounds[i] )
@@ -745,7 +740,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 
       // Search the neighborhood pixels for first inside & outside layer
       // members.  Construct these lists and set status list values.
-      for ( i = 0; i < m_NeighborList.GetSize(); ++i )
+      for ( unsigned int i = 0; i < m_NeighborList.GetSize(); ++i )
         {
         offset_index = center_index
                        + m_NeighborList.GetNeighborhoodOffset(i);
@@ -777,7 +772,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::ConstructLayer(StatusType from, StatusType to)
@@ -819,7 +814,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::InitializeActiveLayerValues()
@@ -829,7 +824,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 
   if ( this->GetUseImageSpacing() )
     {
-    double minSpacing = NumericTraits< double >::max();
+    SpacePrecisionType minSpacing = NumericTraits< SpacePrecisionType >::max();
     for ( unsigned int i = 0; i < ImageDimension; i++ )
       {
       minSpacing = vnl_math_min(minSpacing, this->GetInput()->GetSpacing()[i]);
@@ -884,7 +879,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::AllocateUpdateBuffer()
@@ -898,7 +893,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
   m_UpdateBuffer.reserve( m_Layers[0]->Size() );
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 typename
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >::TimeStepType
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
@@ -913,7 +908,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
   ValueType MIN_NORM      = 1.0e-6;
   if ( this->GetUseImageSpacing() )
     {
-    double minSpacing = NumericTraits< double >::max();
+    SpacePrecisionType minSpacing = NumericTraits< SpacePrecisionType >::max();
     for ( i = 0; i < ImageDimension; i++ )
       {
       minSpacing = vnl_math_min(minSpacing, this->GetInput()->GetSpacing()[i]);
@@ -1013,7 +1008,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
   return timeStep;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::PropagateAllLayerValues()
@@ -1033,7 +1028,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::PropagateLayerValues(StatusType from, StatusType to,
@@ -1151,7 +1146,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::PostProcessOutput()
@@ -1188,7 +1183,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const

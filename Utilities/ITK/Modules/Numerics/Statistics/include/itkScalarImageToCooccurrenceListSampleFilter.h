@@ -47,8 +47,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TImage >
-class ITK_EXPORT ScalarImageToCooccurrenceListSampleFilter:
+template< typename TImage >
+class ScalarImageToCooccurrenceListSampleFilter:
   public ProcessObject
 {
 public:

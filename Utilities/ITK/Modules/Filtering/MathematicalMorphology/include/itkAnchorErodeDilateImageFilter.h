@@ -35,9 +35,9 @@ namespace itk
  * morphology classes in itk.
  * \ingroup ITKMathematicalMorphology
  */
-template< class TImage, class TKernel,
-          class TFunction1 >
-class ITK_EXPORT AnchorErodeDilateImageFilter:
+template< typename TImage, typename TKernel,
+          typename TFunction1 >
+class AnchorErodeDilateImageFilter:
   public KernelImageFilter< TImage, TImage, TKernel >
 {
 public:

@@ -49,8 +49,8 @@ namespace itk
  * \wikiexample{ImageProcessing/LaplacianSharpeningImageFilter,Sharpen an image}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT LaplacianSharpeningImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class LaplacianSharpeningImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

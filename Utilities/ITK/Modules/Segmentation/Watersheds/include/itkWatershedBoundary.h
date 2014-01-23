@@ -50,8 +50,8 @@ namespace watershed
  * \ingroup WatershedSegmentation
  * \ingroup ITKWatersheds
  */
-template< class TScalarType, unsigned int TDimension >
-class ITK_EXPORT Boundary:public DataObject
+template< typename TScalar, unsigned int TDimension >
+class Boundary:public DataObject
 {
 public:
   /** The dimensionality of this boundary.  For example, if the boundary
@@ -64,10 +64,10 @@ public:
    * The IndexType.first is the dimension of the face and IndexType.second is a
    * binary value 0 or 1 indicating the LOW face or the HIGH face,
    * respectively.    */
-  typedef std::pair< unsigned, unsigned >                        IndexType;
-  typedef Image< IdentifierType, TDimension >                    ImageType;
-  typedef typename ImageType::IndexType                          ImageIndexType;
-  typedef TScalarType                                            ScalarType;
+  typedef std::pair< unsigned, unsigned >     IndexType;
+  typedef Image< IdentifierType, TDimension > ImageType;
+  typedef typename ImageType::IndexType       ImageIndexType;
+  typedef TScalar                             ScalarType;
 
   /** Data type stored at each pixel in a face.   */
   struct face_pixel_t {
@@ -113,10 +113,11 @@ public:
   /** The face data structure.  This is just an Image of face pixel
       types. */
   typedef Image< face_pixel_t, TDimension > face_t;
+
   /** A hash table holding flat region data structures.   */
-  typedef itksys::hash_map< IdentifierType,             flat_region_t,
-                        itksys::hash< IdentifierType > > flat_hash_t;
-  typedef typename flat_hash_t::value_type FlatHashValueType;
+  typedef itksys::hash_map< IdentifierType, flat_region_t,
+                            itksys::hash< IdentifierType > > flat_hash_t;
+  typedef typename flat_hash_t::value_type                   FlatHashValueType;
 
   /** Itk typedefs and macros defining smart pointer and type identification.
    */

@@ -30,7 +30,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput1, class TInput2, class TOutput >
+template< typename TInput1, typename TInput2, typename TOutput >
 class ConstrainedValueAddition
 {
 public:
@@ -91,8 +91,8 @@ public:
  * \ingroup MultiThreaded
  * \ingroup ITKImageIntensity
  */
-template< class TInputImage1, class TInputImage2, class TOutputImage >
-class ITK_EXPORT ConstrainedValueAdditionImageFilter:
+template< typename TInputImage1, typename TInputImage2, typename TOutputImage >
+class ConstrainedValueAdditionImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage1, TInputImage2, TOutputImage,
                             Functor::ConstrainedValueAddition<
@@ -120,7 +120,7 @@ public:
                BinaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1ConvertibleToDoubleCheck,
                    ( Concept::Convertible< typename TInputImage1::PixelType, double > ) );
   itkConceptMacro( Input2ConvertibleToDoubleCheck,
@@ -129,7 +129,7 @@ public:
                    ( Concept::Convertible< double, typename TOutputImage::PixelType > ) );
   itkConceptMacro( DoubleLessThanOutputCheck,
                    ( Concept::LessThanComparable< double, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

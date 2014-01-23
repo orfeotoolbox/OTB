@@ -63,8 +63,8 @@ namespace itk
  * \ingroup GeometricTransform
  * \ingroup ITKImageGrid
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ExpandImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class ExpandImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -138,12 +138,12 @@ public:
   virtual void GenerateInputRequestedRegion();
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType > ) );
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

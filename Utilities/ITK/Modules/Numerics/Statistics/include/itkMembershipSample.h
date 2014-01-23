@@ -52,8 +52,8 @@ namespace Statistics
  * \endwiki
  */
 
-template< class TSample >
-class ITK_EXPORT MembershipSample:public DataObject
+template< typename TSample >
+class MembershipSample:public DataObject
 {
 public:
   /** Standard class typedefs. */

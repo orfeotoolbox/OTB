@@ -24,7 +24,7 @@
 
 namespace itk
 {
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 OtsuMultipleThresholdsImageFilter< TInputImage, TOutputImage >
 ::OtsuMultipleThresholdsImageFilter()
 {
@@ -32,9 +32,10 @@ OtsuMultipleThresholdsImageFilter< TInputImage, TOutputImage >
   m_NumberOfThresholds = 1;
   m_LabelOffset = NumericTraits< OutputPixelType >::Zero;
   m_Thresholds.clear();
+  m_ValleyEmphasis = false;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 OtsuMultipleThresholdsImageFilter< TInputImage, TOutputImage >
 ::GenerateData()
@@ -52,14 +53,15 @@ OtsuMultipleThresholdsImageFilter< TInputImage, TOutputImage >
   typename OtsuCalculatorType::Pointer otsuHistogramThresholdCalculator = OtsuCalculatorType::New();
   otsuHistogramThresholdCalculator->SetInputHistogram( histogramGenerator->GetOutput() );
   otsuHistogramThresholdCalculator->SetNumberOfThresholds(m_NumberOfThresholds);
-  otsuHistogramThresholdCalculator->Update();
+  otsuHistogramThresholdCalculator->SetValleyEmphasis(m_ValleyEmphasis);
+  otsuHistogramThresholdCalculator->Compute();
 
   m_Thresholds = otsuHistogramThresholdCalculator->GetOutput();
 
   typename ThresholdLabelerImageFilter< TInputImage, TOutputImage >::Pointer threshold =
     ThresholdLabelerImageFilter< TInputImage, TOutputImage >::New();
 
-  progress->RegisterInternalFilter(threshold, .5f);
+  progress->RegisterInternalFilter(threshold, 1.0f);
   threshold->GraftOutput ( this->GetOutput() );
   threshold->SetInput ( this->GetInput() );
   threshold->SetRealThresholds(m_Thresholds);
@@ -69,7 +71,7 @@ OtsuMultipleThresholdsImageFilter< TInputImage, TOutputImage >
   this->GraftOutput( threshold->GetOutput() );
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 OtsuMultipleThresholdsImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
@@ -82,7 +84,7 @@ OtsuMultipleThresholdsImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 OtsuMultipleThresholdsImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const

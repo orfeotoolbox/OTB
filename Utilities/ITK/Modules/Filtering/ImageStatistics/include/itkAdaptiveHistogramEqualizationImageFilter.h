@@ -62,8 +62,8 @@ namespace itk
  * \wikiexample{NeedDemo/ImageProcessing/AdaptiveHistogramEqualizationImageFilter,Adaptive histogram equalization}
  * \endwiki
  */
-template< class TImageType >
-class ITK_EXPORT AdaptiveHistogramEqualizationImageFilter:
+template< typename TImageType >
+class AdaptiveHistogramEqualizationImageFilter:
   public BoxImageFilter< TImageType, TImageType >
 {
 public:

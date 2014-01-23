@@ -48,8 +48,8 @@ namespace itk
  *
  * \ingroup ITKDisplacementField
  */
-template<class TScalar, unsigned int NDimensions>
-class ITK_EXPORT BSplineSmoothingOnUpdateDisplacementFieldTransform :
+template<typename TScalar, unsigned int NDimensions>
+class BSplineSmoothingOnUpdateDisplacementFieldTransform :
   public DisplacementFieldTransform<TScalar, NDimensions>
 {
 public:

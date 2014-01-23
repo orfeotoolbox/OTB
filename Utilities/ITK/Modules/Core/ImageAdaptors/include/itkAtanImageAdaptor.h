@@ -38,8 +38,8 @@ namespace Accessor
  * \ingroup ITKImageAdaptors
  */
 
-template< class TInternalType, class TExternalType >
-class ITK_EXPORT AtanPixelAccessor
+template< typename TInternalType, typename TExternalType >
+class AtanPixelAccessor
 {
 public:
 
@@ -70,8 +70,8 @@ public:
  *
  * \ingroup ITKImageAdaptors
  */
-template< class TImage, class TOutputPixelType >
-class ITK_EXPORT AtanImageAdaptor:public
+template< typename TImage, typename TOutputPixelType >
+class AtanImageAdaptor:public
   ImageAdaptor< TImage,
                 Accessor::AtanPixelAccessor<
                   typename TImage::PixelType,

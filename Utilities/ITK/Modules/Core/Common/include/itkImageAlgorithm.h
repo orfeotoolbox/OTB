@@ -20,12 +20,18 @@
 
 #include "itkImageRegionIterator.h"
 
-#ifdef ITK_HAS_STLTR1_TR1_TYPE_TRAITS
-#  include <tr1/type_traits>
-#elif defined ITK_HAS_STLTR1_TYPE_TRAITS
+#ifdef ITK_HAS_STLTR1_TYPE_TRAITS
 #  include <type_traits>
+#elif defined ITK_HAS_STLTR1_TR1_TYPE_TRAITS
+#  include <tr1/type_traits>
 #else
 #  include "itkIsSame.h"
+#endif
+
+#ifdef ITK_HAS_CPP11_TYPETRAITS
+#  define ITK_STD_TR1_NAMESPACE std
+#else
+#  define ITK_STD_TR1_NAMESPACE std::tr1
 #endif
 
 namespace itk
@@ -48,11 +54,11 @@ struct ImageAlgorithm
 {
 
 #if defined(ITK_HAS_STLTR1_TR1_TYPE_TRAITS) || defined(ITK_HAS_STLTR1_TYPE_TRAITS)
-  typedef std::tr1::true_type  TrueType;
-  typedef std::tr1::false_type FalseType;
+    typedef ITK_STD_TR1_NAMESPACE::true_type  TrueType;
+    typedef ITK_STD_TR1_NAMESPACE::false_type FalseType;
 #else
-  typedef itk::TrueType  TrueType;
-  typedef itk::FalseType FalseType;
+    typedef itk::TrueType  TrueType;
+    typedef itk::FalseType FalseType;
 #endif
 
 /**
@@ -85,7 +91,7 @@ struct ImageAlgorithm
   }
 
 /** \cond HIDE_SPECIALIZATION_DOCUMENTATION */
-  template<class TPixel1, class TPixel2, unsigned int VImageDimension>
+  template<typename TPixel1, typename TPixel2, unsigned int VImageDimension>
   static void Copy( const Image<TPixel1, VImageDimension> * inImage,
                                Image<TPixel2, VImageDimension> * outImage,
                                const typename Image<TPixel1, VImageDimension>::RegionType &inRegion,
@@ -95,8 +101,8 @@ struct ImageAlgorithm
     typedef Image<TPixel2, VImageDimension> _ImageType2;
     ImageAlgorithm::DispatchedCopy( inImage, outImage, inRegion, outRegion
 #if defined(ITK_HAS_STLTR1_TR1_TYPE_TRAITS) || defined(ITK_HAS_STLTR1_TYPE_TRAITS)
-                                    , std::tr1::is_convertible<typename _ImageType1::PixelType,
-                                                               typename _ImageType2::PixelType>()
+                                   , ITK_STD_TR1_NAMESPACE::is_convertible<typename _ImageType1::PixelType,
+                                   typename _ImageType2::PixelType>()
 #else
                                     // note the above trait is
                                     // primarily used to get a better
@@ -106,7 +112,7 @@ struct ImageAlgorithm
       );
   }
 
-  template<class TPixel1, class TPixel2, unsigned int VImageDimension>
+  template<typename TPixel1, typename TPixel2, unsigned int VImageDimension>
   static void Copy( const VectorImage<TPixel1, VImageDimension> * inImage,
                                VectorImage<TPixel2, VImageDimension> * outImage,
                                const typename VectorImage<TPixel1, VImageDimension>::RegionType &inRegion,
@@ -116,8 +122,8 @@ struct ImageAlgorithm
     typedef VectorImage<TPixel2, VImageDimension> _ImageType2;
     ImageAlgorithm::DispatchedCopy( inImage, outImage, inRegion, outRegion
 #if defined(ITK_HAS_STLTR1_TR1_TYPE_TRAITS) || defined(ITK_HAS_STLTR1_TYPE_TRAITS)
-                                    , std::tr1::is_convertible<typename _ImageType1::PixelType,
-                                                               typename _ImageType2::PixelType>()
+                                   , ITK_STD_TR1_NAMESPACE::is_convertible<typename _ImageType1::PixelType,
+                                   typename _ImageType2::PixelType>()
 #else
                                     , TrueType()
 #endif

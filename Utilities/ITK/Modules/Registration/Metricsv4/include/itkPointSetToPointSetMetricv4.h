@@ -66,8 +66,8 @@ namespace itk
  * \ingroup ITKMetricsv4
  */
 
-template<class TFixedPointSet,  class TMovingPointSet>
-class ITK_EXPORT PointSetToPointSetMetricv4
+template<typename TFixedPointSet,  typename TMovingPointSet>
+class PointSetToPointSetMetricv4
 : public ObjectToObjectMetric<TFixedPointSet::PointDimension, TMovingPointSet::PointDimension>
 {
 public:

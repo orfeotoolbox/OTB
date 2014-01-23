@@ -46,8 +46,8 @@ namespace itk
  * \ingroup Numerics Optimizers
  * \ingroup ITKLevelSets
  */
-template< class TFeatureImage, class TOutputPixel >
-class ITK_EXPORT ShapePriorMAPCostFunction:
+template< typename TFeatureImage, typename TOutputPixel >
+class ShapePriorMAPCostFunction:
   public ShapePriorMAPCostFunctionBase< TFeatureImage, TOutputPixel >
 {
 public:

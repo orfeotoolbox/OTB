@@ -49,8 +49,8 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT GrayscaleDilateImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class GrayscaleDilateImageFilter:
   public KernelImageFilter< TInputImage, TOutputImage, TKernel >
 {
 public:
@@ -120,12 +120,12 @@ public:
   virtual void Modified() const;
 
   /** define values used to determine which algorithm to use */
-  enum {
+  enum AlgorithmType {
     BASIC = 0,
     HISTO = 1,
     ANCHOR = 2,
     VHGW = 3
-    } AlgorithmChoice;
+    };
 
   void SetNumberOfThreads(ThreadIdType nb);
 

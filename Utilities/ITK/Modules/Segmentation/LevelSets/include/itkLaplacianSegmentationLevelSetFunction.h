@@ -30,8 +30,8 @@ namespace itk
  * Assumes a strictly POSITIVE feature image
  * \ingroup ITKLevelSets
  */
-template< class TImageType, class TFeatureImageType = TImageType >
-class ITK_EXPORT LaplacianSegmentationLevelSetFunction:
+template< typename TImageType, typename TFeatureImageType = TImageType >
+class LaplacianSegmentationLevelSetFunction:
   public SegmentationLevelSetFunction< TImageType, TFeatureImageType >
 {
 public:

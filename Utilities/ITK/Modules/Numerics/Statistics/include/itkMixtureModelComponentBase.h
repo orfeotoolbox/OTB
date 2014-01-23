@@ -52,8 +52,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TSample >
-class ITK_EXPORT MixtureModelComponentBase:
+template< typename TSample >
+class MixtureModelComponentBase:
   public Object
 {
 public:

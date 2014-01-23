@@ -20,7 +20,10 @@
 
 namespace itk
 {
-/** \class LabelObjectLineComparator
+namespace Functor
+{
+
+  /** \class LabelObjectLineComparator
  *  \brief Performs a comparison of l1 < l2.  Returns true if l1 is strictly less
  *  than l2.
  *
@@ -34,9 +37,7 @@ namespace itk
  * \ingroup LabeledImageObject
  * \ingroup ITKLabelMap
  */
-namespace Functor
-{
-template< class TLabelObjectLine >
+template< typename TLabelObjectLine >
 class LabelObjectLineComparator
 {
 public:
@@ -59,7 +60,8 @@ public:
     return l1.GetLength() < l2.GetLength();
   }
 };
-}
-}
+
+} // end namespace Functor
+} // end namespace itk
 
 #endif

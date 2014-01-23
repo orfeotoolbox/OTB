@@ -45,8 +45,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TSample >
-class ITK_EXPORT StandardDeviationPerComponentSampleFilter:
+template< typename TSample >
+class StandardDeviationPerComponentSampleFilter:
   public ProcessObject
 {
 public:

@@ -85,8 +85,8 @@ namespace itk
  *
  * \ingroup ITKRegistrationMethodsv4
  */
-template<typename TFixedImage, typename TMovingImage, typename TOutputTransform>
-class ITK_EXPORT ImageRegistrationMethodv4
+template<typename TFixedImage, typename TMovingImage, typename TOutputTransform, typename TVirtualImage = TFixedImage>
+class ImageRegistrationMethodv4
 :public ProcessObject
 {
 public:
@@ -114,13 +114,6 @@ public:
   typedef std::vector<MovingImagePointer>                             MovingImagesContainerType;
 
   /** Metric and transform typedefs */
-  typedef ObjectToObjectMetricBase                                    MetricType;
-  typedef typename MetricType::Pointer                                MetricPointer;
-
-  typedef ObjectToObjectMultiMetricv4<ImageDimension, ImageDimension> MultiMetricType;
-  typedef ImageToImageMetricv4<FixedImageType, MovingImageType>       ImageMetricType;
-  typedef typename ImageMetricType::VirtualImageType                  VirtualImageType;
-
   typedef TOutputTransform                                            OutputTransformType;
   typedef typename OutputTransformType::Pointer                       OutputTransformPointer;
   typedef typename OutputTransformType::ScalarType                    RealType;
@@ -132,6 +125,14 @@ public:
 
   typedef CompositeTransform<RealType, ImageDimension>                CompositeTransformType;
   typedef typename CompositeTransformType::Pointer                    CompositeTransformPointer;
+
+  typedef ObjectToObjectMetricBaseTemplate<RealType>                  MetricType;
+  typedef typename MetricType::Pointer                                MetricPointer;
+
+  typedef TVirtualImage                                               VirtualImageType;
+
+  typedef ObjectToObjectMultiMetricv4<ImageDimension, ImageDimension, VirtualImageType, RealType>  MultiMetricType;
+  typedef ImageToImageMetricv4<FixedImageType, MovingImageType, VirtualImageType, RealType>        ImageMetricType;
 
   /**
    * Type for the output: Using Decorator pattern for enabling the transform to be
@@ -154,8 +155,11 @@ public:
   typedef std::vector<TransformParametersAdaptorPointer>              TransformParametersAdaptorsContainerType;
 
   /**  Type of the optimizer. */
-  typedef ObjectToObjectOptimizerBase                                 OptimizerType;
+  typedef ObjectToObjectOptimizerBaseTemplate<RealType>               OptimizerType;
   typedef typename OptimizerType::Pointer                             OptimizerPointer;
+
+  /** Weights type for the optimizer. */
+  typedef typename OptimizerType::ScalesType                          OptimizerWeightsType;
 
   /** enum type for metric sampling strategy */
   enum MetricSamplingStrategyType { NONE, REGULAR, RANDOM };
@@ -188,11 +192,22 @@ public:
 
   /** Set/Get the optimizer. */
   itkSetObjectMacro( Optimizer, OptimizerType );
-  itkGetModifiableObjectMacro(Optimizer, OptimizerType );
+  itkGetModifiableObjectMacro( Optimizer, OptimizerType );
+
+  /**
+   * Set/Get the optimizer weights.  Allows setting of a per-local-parameter
+   * weighting array. If unset, the weights are treated as identity. Weights
+   * are used to mask out a particular parameter during optimzation to hold
+   * it constant. Or they may be used to apply another kind of prior knowledge.
+   * The size of the weights must be equal to the number of the local transformation
+   * parameters.
+   */
+  void SetOptimizerWeights( OptimizerWeightsType & );
+  itkGetConstMacro( OptimizerWeights, OptimizerWeightsType );
 
   /** Set/Get the metric. */
   itkSetObjectMacro( Metric, MetricType );
-  itkGetModifiableObjectMacro(Metric, MetricType );
+  itkGetModifiableObjectMacro( Metric, MetricType );
 
   /** Set/Get the metric sampling strategy. */
   itkSetMacro( MetricSamplingStrategy, MetricSamplingStrategyType );
@@ -207,11 +222,11 @@ public:
 
   /** Set/Get the initial fixed transform. */
   itkSetObjectMacro( FixedInitialTransform, InitialTransformType );
-  itkGetModifiableObjectMacro(FixedInitialTransform, InitialTransformType );
+  itkGetModifiableObjectMacro( FixedInitialTransform, InitialTransformType );
 
   /** Set/Get the initial moving transform. */
   itkSetObjectMacro( MovingInitialTransform, InitialTransformType );
-  itkGetModifiableObjectMacro(MovingInitialTransform, InitialTransformType );
+  itkGetModifiableObjectMacro( MovingInitialTransform, InitialTransformType );
 
   /** Set/Get the transform adaptors. */
   void SetTransformParametersAdaptorsPerLevel( TransformParametersAdaptorsContainerType & );
@@ -354,6 +369,8 @@ protected:
   SizeValueType                                                   m_NumberOfMovingImages;
 
   OptimizerPointer                                                m_Optimizer;
+  OptimizerWeightsType                                            m_OptimizerWeights;
+  bool                                                            m_OptimizerWeightsAreIdentity;
 
   MetricPointer                                                   m_Metric;
   MetricSamplingStrategyType                                      m_MetricSamplingStrategy;

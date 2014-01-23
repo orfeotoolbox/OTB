@@ -50,8 +50,8 @@ namespace itk
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TInternalType, class TExternalType >
-class ITK_EXPORT PixelAccessor
+template< typename TInternalType, typename TExternalType >
+class PixelAccessor
 {
 public:
   /** External typedef. It defines the external aspect

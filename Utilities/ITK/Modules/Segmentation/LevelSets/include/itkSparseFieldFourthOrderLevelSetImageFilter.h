@@ -34,7 +34,7 @@ namespace itk
  *
  * \ingroup ITKLevelSets
  */
-template< class TImageType >
+template< typename TImageType >
 class NormalBandNode
 {
 public:
@@ -152,8 +152,8 @@ public:
  * Users of this class must define the Halt function.
  * \ingroup ITKLevelSets
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT SparseFieldFourthOrderLevelSetImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class SparseFieldFourthOrderLevelSetImageFilter:
   public SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -277,10 +277,10 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

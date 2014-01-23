@@ -65,8 +65,6 @@ namespace itk
  *
  *  \endcode
  *
- * \example  ImageLinearIteratorWithIndex.cxx
- *
  * \par MORE INFORMATION
  * For a complete description of the ITK Image Iterators and their API, please
  * see the Iterators chapter in the ITK Software Guide.  The ITK Software Guide
@@ -100,7 +98,7 @@ namespace itk
  * \ingroup ITKCommon
  */
 template< typename TImage >
-class ITK_EXPORT ImageLinearConstIteratorWithIndex:public ImageConstIteratorWithIndex< TImage >
+class ImageLinearConstIteratorWithIndex:public ImageConstIteratorWithIndex< TImage >
 {
 public:
   /** Standard class typedefs. */
@@ -223,7 +221,7 @@ private:
 //----------------------------------------------------------------------
 //  Go to next line
 //----------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 inline
 void
 ImageLinearConstIteratorWithIndex< TImage >
@@ -261,7 +259,7 @@ ImageLinearConstIteratorWithIndex< TImage >
 //----------------------------------------------------------------------
 //  Pass to the last pixel on the previous line
 //----------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 inline
 void
 ImageLinearConstIteratorWithIndex< TImage >

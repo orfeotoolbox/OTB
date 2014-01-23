@@ -31,7 +31,7 @@ namespace itk
  *
  * \ingroup ITKVideoBridgeOpenCV
  */
-class ITK_EXPORT OpenCVVideoIO:public VideoIOBase
+class OpenCVVideoIO:public VideoIOBase
 {
 public:
   /** Standard class typedefs. */
@@ -152,7 +152,7 @@ private:
 
   /** device index for reading from a camera (may move to base class) */
   int                 m_CameraIndex;
-  
+
 
 };
 } // end namespace itk

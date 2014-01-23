@@ -30,7 +30,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class Add1
 {
 public:
@@ -39,7 +39,7 @@ public:
   ~Add1() {}
   inline TOutput operator()(const std::vector< TInput > & B) const
   {
-    AccumulatorType sum = NumericTraits< TOutput >::Zero;
+    AccumulatorType sum = NumericTraits< TOutput >::ZeroValue();
 
     for ( unsigned int i = 0; i < B.size(); i++ )
       {
@@ -93,8 +93,8 @@ public:
  * \ingroup MultiThreaded
  * \ingroup ITKImageIntensity
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT NaryAddImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class NaryAddImageFilter:
   public
   NaryFunctorImageFilter< TInputImage, TOutputImage,
                           Functor::Add1< typename TInputImage::PixelType,  typename TInputImage::PixelType > >
@@ -118,13 +118,13 @@ public:
                NaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType,
                                            typename TOutputImage::PixelType > ) );
   itkConceptMacro( InputHasZeroCheck,
                    ( Concept::HasZero< typename TInputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

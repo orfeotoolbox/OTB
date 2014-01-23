@@ -39,8 +39,8 @@ namespace itk
  * \wikiexample{Functions/GaussianBlurImageFunctionFilter,GaussianBlurImageFunctionFilter}
  * \endwiki
  */
-template< class TInputImage, class TOutput = double >
-class ITK_EXPORT GaussianBlurImageFunction:
+template< typename TInputImage, typename TOutput = double >
+class GaussianBlurImageFunction:
   public ImageFunction< TInputImage, TOutput >
 {
 public:

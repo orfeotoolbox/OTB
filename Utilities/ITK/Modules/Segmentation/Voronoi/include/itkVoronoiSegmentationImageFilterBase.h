@@ -55,8 +55,8 @@ namespace itk
  * \ingroup HybridSegmentation
  * \ingroup ITKVoronoi
  */
-template< class TInputImage, class TOutputImage, class TBinaryPriorImage = Image< unsigned char, 2 > >
-class ITK_EXPORT VoronoiSegmentationImageFilterBase:
+template< typename TInputImage, typename TOutputImage, typename TBinaryPriorImage = Image< unsigned char, 2 > >
+class VoronoiSegmentationImageFilterBase:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

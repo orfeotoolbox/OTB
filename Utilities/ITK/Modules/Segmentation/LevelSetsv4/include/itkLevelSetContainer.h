@@ -35,7 +35,7 @@ namespace itk
  *
  *  \ingroup ITKLevelSetsv4
  */
-template< class TIdentifier, class TLevelSet >
+template< typename TIdentifier, typename TLevelSet >
 class LevelSetContainer :
 public LevelSetContainerBase< TIdentifier, TLevelSet >
 {
@@ -93,7 +93,7 @@ private:
  *  \brief Container class for dense level sets
  *  \ingroup ITKLevelSetsv4
  */
-template< class TIdentifier, class TImage >
+template< typename TIdentifier, typename TImage >
 class LevelSetContainer< TIdentifier, LevelSetDenseImage< TImage > > :
 public LevelSetContainerBase< TIdentifier, LevelSetDenseImage< TImage > >
 {
@@ -167,6 +167,7 @@ public:
 
         temp_ls->SetImage( image );
         newContainer[ it->first ] = temp_ls;
+        newContainer[ it->first ]->SetDomainOffset( (it->second)->GetDomainOffset() );
         }
       else
         {

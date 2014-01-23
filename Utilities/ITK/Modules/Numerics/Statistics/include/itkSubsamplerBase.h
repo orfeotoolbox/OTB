@@ -42,8 +42,8 @@ namespace Statistics {
  * \ingroup ITKStatistics
  */
 
-template < class TSample >
-class ITK_EXPORT SubsamplerBase : public Object
+template < typename TSample >
+class SubsamplerBase : public Object
 {
 public:
   /** Standard class typedefs */

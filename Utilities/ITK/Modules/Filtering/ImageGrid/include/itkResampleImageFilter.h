@@ -80,10 +80,11 @@ namespace itk
  * \wikiexample{ImageProcessing/ResampleImageFilter,Resample (stretch or compress) an image}
  * \endwiki
  */
-template< class TInputImage,
-          class TOutputImage,
-          class TInterpolatorPrecisionType = double >
-class ITK_EXPORT ResampleImageFilter:
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInterpolatorPrecisionType = double,
+          typename TTransformPrecisionType = TInterpolatorPrecisionType>
+class ResampleImageFilter :
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -118,7 +119,7 @@ public:
   /**
    *  Transform typedef.
    */
-  typedef Transform< TInterpolatorPrecisionType,
+  typedef Transform< TTransformPrecisionType,
                      itkGetStaticConstMacro(ImageDimension),
                      itkGetStaticConstMacro(ImageDimension) >       TransformType;
   typedef typename TransformType::ConstPointer TransformPointerType;
@@ -130,9 +131,9 @@ public:
 
   typedef typename InterpolatorType::OutputType InterpolatorOutputType;
 
-  typedef DefaultConvertPixelTraits< InterpolatorOutputType >        InterpolatorConvertType;
+  typedef DefaultConvertPixelTraits< InterpolatorOutputType > InterpolatorConvertType;
 
-  typedef typename InterpolatorConvertType::ComponentType            ComponentType;
+  typedef typename InterpolatorConvertType::ComponentType ComponentType;
 
   typedef LinearInterpolateImageFunction< InputImageType,
                                           TInterpolatorPrecisionType >   LinearInterpolatorType;
@@ -163,8 +164,8 @@ public:
   typedef typename PixelConvertType::ComponentType PixelComponentType;
 
   /** Input pixel continuous index typdef */
-  typedef ContinuousIndex< TInterpolatorPrecisionType, ImageDimension >
-                                           ContinuousInputIndexType;
+  typedef ContinuousIndex< TTransformPrecisionType, ImageDimension >
+  ContinuousInputIndexType;
 
   /** Typedef to describe the output image region type. */
   typedef typename TOutputImage::RegionType OutputImageRegionType;
@@ -173,6 +174,9 @@ public:
   typedef typename TOutputImage::SpacingType   SpacingType;
   typedef typename TOutputImage::PointType     OriginPointType;
   typedef typename TOutputImage::DirectionType DirectionType;
+
+  /** Typedef the reference image type to be the ImageBase of the OutputImageType */
+  typedef ImageBase<ImageDimension> ReferenceImageBaseType;
 
   /** Get/Set the coordinate transformation.
    * Set the coordinate transform to use for resampling.  Note that this must
@@ -237,15 +241,19 @@ public:
   /** Get the start index of the output largest possible region. */
   itkGetConstReferenceMacro(OutputStartIndex, IndexType);
 
-  /** Copy the output information from another Image.  By default,
-   *  the information is specified with the SetOutputSpacing, Origin,
-   *  and Direction methods. UseReferenceImage must be On and a
-   *  Reference image must be present to override the defaul behavior.
-   */
-  void SetReferenceImage(const TOutputImage *image);
+   /** Set a reference image to use to define the output information.
+    *  By default, output information is specificed through the
+    *  SetOutputSpacing, Origin, and Direction methods.  Alternatively,
+    *  this method can be used to specify an image from which to
+    *  copy the information. UseReferenceImageOn must be set to utilize the
+    *  reference image. */
+  void SetReferenceImage(const ReferenceImageBaseType *image);
 
-  const TOutputImage * GetReferenceImage() const;
+  /** Get the reference image that is defining the output information. */
+  const ReferenceImageBaseType * GetReferenceImage() const;
 
+  /** Turn on/off whether a specified reference image should be used to define
+   *  the output information. */
   itkSetMacro(UseReferenceImage, bool);
   itkBooleanMacro(UseReferenceImage);
   itkGetConstMacro(UseReferenceImage, bool);
@@ -276,24 +284,25 @@ public:
   ModifiedTimeType GetMTime(void) const;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< PixelComponentType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
   ResampleImageFilter();
-  ~ResampleImageFilter() {}
+  ~ResampleImageFilter() {
+  }
   void PrintSelf(std::ostream & os, Indent indent) const;
-
 
   /** Override VeriyInputInformation() since this filter's inputs do
    * not need to occoupy the same physical space.
    *
    * \sa ProcessObject::VerifyInputInformation
    */
-  virtual void VerifyInputInformation() {}
+  virtual void VerifyInputInformation() {
+  }
 
   /** ResampleImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -305,20 +314,20 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   virtual void ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                            ThreadIdType threadId);
+                                    ThreadIdType threadId);
 
   /** Default implementation for resampling that works for any
    * transformation type. */
   virtual void NonlinearThreadedGenerateData(const OutputImageRegionType &
-                                     outputRegionForThread,
-                                     ThreadIdType threadId);
+                                             outputRegionForThread,
+                                             ThreadIdType threadId);
 
   /** Implementation for resampling that works for with linear
    *  transformation types.
    */
   virtual void LinearThreadedGenerateData(const OutputImageRegionType &
-                                  outputRegionForThread,
-                                  ThreadIdType threadId);
+                                          outputRegionForThread,
+                                          ThreadIdType threadId);
 
   virtual PixelType CastPixelWithBoundsChecking( const InterpolatorOutputType value,
                                                  const ComponentType minComponent,
@@ -328,19 +337,19 @@ private:
   ResampleImageFilter(const Self &); //purposely not implemented
   void operator=(const Self &);      //purposely not implemented
 
-  SizeType                m_Size;      // Size of the output image
-  TransformPointerType    m_Transform;         // Transform
-  InterpolatorPointerType m_Interpolator;      // Image function for
-                                               // interpolation
-  ExtrapolatorPointerType m_Extrapolator;      // Image function for
-                                               // extrapolation
-  PixelType m_DefaultPixelValue;               // default pixel value
-                                               // if the point is
-                                               // outside the image
-  SpacingType     m_OutputSpacing;             // output image spacing
-  OriginPointType m_OutputOrigin;              // output image origin
-  DirectionType   m_OutputDirection;           // output image direction cosines
-  IndexType       m_OutputStartIndex;          // output image start index
+  SizeType                m_Size;         // Size of the output image
+  TransformPointerType    m_Transform;    // Transform
+  InterpolatorPointerType m_Interpolator; // Image function for
+                                          // interpolation
+  ExtrapolatorPointerType m_Extrapolator; // Image function for
+                                          // extrapolation
+  PixelType m_DefaultPixelValue;          // default pixel value
+                                          // if the point is
+                                          // outside the image
+  SpacingType     m_OutputSpacing;        // output image spacing
+  OriginPointType m_OutputOrigin;         // output image origin
+  DirectionType   m_OutputDirection;      // output image direction cosines
+  IndexType       m_OutputStartIndex;     // output image start index
   bool            m_UseReferenceImage;
 
 };

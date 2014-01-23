@@ -46,9 +46,9 @@ namespace itk
  * \wikiexample{Images/NormalizedCorrelationImageFilter,Normalized correlation}
  * \endwiki
  */
-template< class TInputImage, class TMaskImage, class TOutputImage, class TOperatorValueType =
+template< typename TInputImage, typename TMaskImage, typename TOutputImage, typename TOperatorValueType =
             typename TOutputImage::PixelType >
-class ITK_EXPORT NormalizedCorrelationImageFilter:
+class NormalizedCorrelationImageFilter:
   public NeighborhoodOperatorImageFilter< TInputImage, TOutputImage, TOperatorValueType >
 {
 public:
@@ -120,7 +120,7 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, MaskImageDimension > ) );
   itkConceptMacro( OutputHasNumericTraitsCheck,
@@ -130,7 +130,7 @@ public:
   // This filter can only operate on data types that are signed.
   itkConceptMacro( SignedOutputPixelType,
                    ( Concept::Signed< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

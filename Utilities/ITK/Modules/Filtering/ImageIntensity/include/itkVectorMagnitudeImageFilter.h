@@ -43,7 +43,7 @@ namespace itk
 
 namespace Functor
 {
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class VectorMagnitude
 {
 public:
@@ -67,8 +67,8 @@ public:
 };
 }
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT VectorMagnitudeImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class VectorMagnitudeImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::VectorMagnitude< typename TInputImage::PixelType,
@@ -93,10 +93,10 @@ public:
                UnaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType::ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

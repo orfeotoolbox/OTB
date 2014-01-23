@@ -39,10 +39,10 @@ namespace itk
  * \ingroup ITKMetricsv4
  */
 template<
-  class    TFixedImageType,
-  class    TMovingImageType,
-  class    TVirtualImageType,
-  typename TCoordRep = typename ObjectToObjectMetricBase::CoordinateRepresentationType
+  typename    TFixedImageType,
+  typename    TMovingImageType,
+  typename    TVirtualImageType,
+  typename TCoordRep = double
   >
 class DefaultImageToImageMetricTraitsv4
 {

@@ -110,7 +110,7 @@ namespace itk
  */
 template< typename TPixel, unsigned int VDimension,
           typename TTraits = QuadEdgeMeshTraits< TPixel, VDimension, bool, bool > >
-class ITK_EXPORT QuadEdgeMesh:public Mesh< TPixel, VDimension, TTraits >
+class QuadEdgeMesh:public Mesh< TPixel, VDimension, TTraits >
 {
 public:
   /** Input template parameters. */
@@ -474,8 +474,8 @@ public:
   PointIdentifier Splice(QEPrimal *a, QEPrimal *b);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
-  /** End concept checking */
+  // Begin concept checking
+  // End concept checking
 #endif
 
   // for reusability of a mesh in the MeshToMesh filter

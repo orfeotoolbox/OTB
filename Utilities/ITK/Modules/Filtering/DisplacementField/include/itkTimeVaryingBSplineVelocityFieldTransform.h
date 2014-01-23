@@ -64,8 +64,8 @@ namespace itk
  * \ingroup Transforms
  * \ingroup ITKDisplacementField
  */
-template<class TScalar, unsigned int NDimensions>
-class ITK_EXPORT TimeVaryingBSplineVelocityFieldTransform :
+template<typename TScalar, unsigned int NDimensions>
+class TimeVaryingBSplineVelocityFieldTransform :
   public VelocityFieldTransform<TScalar, NDimensions>
 {
 public:

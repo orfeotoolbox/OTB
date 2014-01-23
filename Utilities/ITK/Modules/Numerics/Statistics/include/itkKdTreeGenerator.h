@@ -66,8 +66,8 @@ namespace Statistics
  * \endwiki
  */
 
-template< class TSample >
-class ITK_EXPORT KdTreeGenerator:public Object
+template< typename TSample >
+class KdTreeGenerator:public Object
 {
 public:
   /** Standard class typedefs */

@@ -40,8 +40,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TSample >
-class ITK_EXPORT NeighborhoodSampler:public SampleToSubsampleFilter< TSample >
+template< typename TSample >
+class NeighborhoodSampler:public SampleToSubsampleFilter< TSample >
 {
 public:
   /** Standard class typedefs. */

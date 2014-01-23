@@ -33,8 +33,8 @@ namespace itk
  * \ingroup ITKPath
  */
 
-template< class TInputPath, class TOutputPath >
-class ITK_EXPORT PathToPathFilter:public PathSource< TOutputPath >
+template< typename TInputPath, typename TOutputPath >
+class PathToPathFilter:public PathSource< TOutputPath >
 {
 public:
   /** Standard class typedefs. */

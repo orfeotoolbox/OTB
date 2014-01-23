@@ -43,8 +43,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TVector >
-class ITK_EXPORT DistanceMetric:public FunctionBase< TVector, double  >
+template< typename TVector >
+class DistanceMetric:public FunctionBase< TVector, double  >
 {
 public:
   /** Standard typedefs */

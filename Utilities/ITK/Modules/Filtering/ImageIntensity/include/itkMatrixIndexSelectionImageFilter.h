@@ -24,7 +24,7 @@ namespace itk
 {
 namespace Functor
 {
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class MatrixIndexSelection
 {
 public:
@@ -77,8 +77,8 @@ private:
  * \ingroup ITKImageIntensity
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT MatrixIndexSelectionImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class MatrixIndexSelectionImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::MatrixIndexSelection< typename TInputImage::PixelType,
@@ -113,10 +113,10 @@ public:
   { return this->GetFunctor().GetIndices(i, j); }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType::ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -24,13 +24,14 @@
 #include "itkAnchorUtilities.h"
 namespace itk
 {
-template< class TImage, class TKernel, class TFunction1 >
+template< typename TImage, typename TKernel, typename TFunction1 >
 AnchorErodeDilateImageFilter< TImage, TKernel, TFunction1 >
-::AnchorErodeDilateImageFilter()
+::AnchorErodeDilateImageFilter():
+  m_Boundary( NumericTraits< InputImagePixelType >::Zero )
 {
 }
 
-template< class TImage, class TKernel, class TFunction1 >
+template< typename TImage, typename TKernel, typename TFunction1 >
 void
 AnchorErodeDilateImageFilter< TImage, TKernel, TFunction1 >
 ::ThreadedGenerateData(const InputImageRegionType & outputRegionForThread,
@@ -133,7 +134,7 @@ AnchorErodeDilateImageFilter< TImage, TKernel, TFunction1 >
   progress.CompletedPixel();
 }
 
-template< class TImage, class TKernel, class TFunction1 >
+template< typename TImage, typename TKernel, typename TFunction1 >
 void
 AnchorErodeDilateImageFilter< TImage, TKernel, TFunction1 >
 ::PrintSelf(std::ostream & os, Indent indent) const

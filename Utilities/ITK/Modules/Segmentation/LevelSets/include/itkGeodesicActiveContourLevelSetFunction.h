@@ -73,8 +73,8 @@ namespace itk
  * \ingroup FiniteDifferenceFunctions
  * \ingroup ITKLevelSets
  */
-template< class TImageType, class TFeatureImageType = TImageType >
-class ITK_EXPORT GeodesicActiveContourLevelSetFunction:
+template< typename TImageType, typename TFeatureImageType = TImageType >
+class GeodesicActiveContourLevelSetFunction:
   public SegmentationLevelSetFunction< TImageType, TFeatureImageType >
 {
 public:

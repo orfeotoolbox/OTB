@@ -27,7 +27,7 @@ namespace itk
 /**
  * Constructor
  */
-template< class TParametricPath, class TSwathMeritImage >
+template< typename TParametricPath, typename TSwathMeritImage >
 OrthogonalSwath2DPathFilter< TParametricPath, TSwathMeritImage >
 ::OrthogonalSwath2DPathFilter()
 {
@@ -46,19 +46,19 @@ OrthogonalSwath2DPathFilter< TParametricPath, TSwathMeritImage >
 /**
  * Destructor
  */
-template< class TParametricPath, class TSwathMeritImage >
+template< typename TParametricPath, typename TSwathMeritImage >
 OrthogonalSwath2DPathFilter< TParametricPath, TSwathMeritImage >
 ::~OrthogonalSwath2DPathFilter()
 {
-  if ( m_StepValues ) { delete[] m_StepValues; }
-  if ( m_MeritValues ) { delete[] m_MeritValues; }
-  if ( m_OptimumStepsValues ) { delete[] m_OptimumStepsValues; }
+  delete[] m_StepValues;
+  delete[] m_MeritValues;
+  delete[] m_OptimumStepsValues;
 }
 
 /**
  * GenerateData Performs the reflection
  */
-template< class TParametricPath, class TSwathMeritImage >
+template< typename TParametricPath, typename TSwathMeritImage >
 void
 OrthogonalSwath2DPathFilter< TParametricPath, TSwathMeritImage >
 ::GenerateData(void)
@@ -68,9 +68,9 @@ OrthogonalSwath2DPathFilter< TParametricPath, TSwathMeritImage >
 
   // Re-initialize the member variables
   m_SwathSize = swathMeritImage->GetLargestPossibleRegion().GetSize();
-  if ( m_StepValues ) { delete[] m_StepValues; }
-  if ( m_MeritValues ) { delete[] m_MeritValues; }
-  if ( m_OptimumStepsValues ) { delete[] m_OptimumStepsValues; }
+  delete[] m_StepValues;
+  delete[] m_MeritValues;
+  delete[] m_OptimumStepsValues;
   m_StepValues = new int[m_SwathSize[0] * m_SwathSize[1] * m_SwathSize[1]];
   m_MeritValues = new double[m_SwathSize[0] * m_SwathSize[1] * m_SwathSize[1]];
   m_OptimumStepsValues = new int[m_SwathSize[0]];
@@ -194,7 +194,7 @@ OrthogonalSwath2DPathFilter< TParametricPath, TSwathMeritImage >
   outputPtr->SetOrthogonalCorrectionTable(m_FinalOffsetValues);
 }
 
-template< class TParametricPath, class TSwathMeritImage >
+template< typename TParametricPath, typename TSwathMeritImage >
 void
 OrthogonalSwath2DPathFilter< TParametricPath, TSwathMeritImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -207,7 +207,7 @@ OrthogonalSwath2DPathFilter< TParametricPath, TSwathMeritImage >
 }
 
 // The next three functions are private helper functions
-template< class TParametricPath, class TSwathMeritImage >
+template< typename TParametricPath, typename TSwathMeritImage >
 unsigned int
 OrthogonalSwath2DPathFilter< TParametricPath, TSwathMeritImage >
 ::FindAndStoreBestErrorStep(unsigned int x, unsigned int F, unsigned int L)

@@ -29,21 +29,22 @@
 
 namespace itk
 {
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
 ::SignedMaurerDistanceMapImageFilter():
   m_BackgroundValue( NumericTraits< InputPixelType >::Zero ),
+  m_Spacing(0.0),
   m_InsideIsPositive(false),
   m_UseImageSpacing(true),
   m_SquaredDistance(false)
 {}
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
 ::~SignedMaurerDistanceMapImageFilter()
 {}
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 unsigned int
 SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
 ::SplitRequestedRegion(unsigned int i, unsigned int num,
@@ -104,7 +105,7 @@ SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
   return maxThreadIdUsed + 1;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
 ::GenerateData()
@@ -174,7 +175,7 @@ SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
@@ -317,7 +318,7 @@ SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
 ::Voronoi(unsigned int d, OutputIndexType idx, OutputImageType *output)
@@ -439,7 +440,7 @@ SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 bool
 SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
 ::Remove(OutputPixelType d1, OutputPixelType d2, OutputPixelType df,
@@ -459,7 +460,7 @@ SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
 /**
  * Standard "PrintSelf" method
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 SignedMaurerDistanceMapImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const

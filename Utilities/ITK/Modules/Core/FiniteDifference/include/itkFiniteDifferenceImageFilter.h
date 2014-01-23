@@ -128,8 +128,8 @@ namespace itk
  * \sa DenseFiniteDifferenceImageFilter
  * \ingroup ITKFiniteDifference
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT FiniteDifferenceImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class FiniteDifferenceImageFilter:
   public InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -214,10 +214,10 @@ public:
   void SetStateToInitialized() { this->SetIsInitialized( true ); }
 
 #ifdef ITK_USE_STRICT_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputPixelIsFloatingPointCheck,
                    ( Concept::IsFloatingPoint< OutputPixelValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

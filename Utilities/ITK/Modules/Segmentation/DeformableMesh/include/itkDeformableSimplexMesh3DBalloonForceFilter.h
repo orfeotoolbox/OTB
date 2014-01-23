@@ -48,8 +48,8 @@ namespace itk
   *
   * \ingroup ITKDeformableMesh
   */
-template< class TInputMesh, class TOutputMesh >
-class ITK_EXPORT DeformableSimplexMesh3DBalloonForceFilter:public DeformableSimplexMesh3DFilter< TInputMesh,
+template< typename TInputMesh, typename TOutputMesh >
+class DeformableSimplexMesh3DBalloonForceFilter:public DeformableSimplexMesh3DFilter< TInputMesh,
                                                                                                  TOutputMesh >
 {
 public:

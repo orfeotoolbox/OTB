@@ -25,7 +25,7 @@
 namespace itk
 {
 /** Constructor */
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::TriangleMeshToBinaryImageFilter()
 {
@@ -49,13 +49,13 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 }
 
 /** Destructor */
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::~TriangleMeshToBinaryImageFilter()
 {}
 
 /** Set the Input Mesh */
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 void
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::SetInput(TInputMesh *input)
@@ -64,7 +64,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 }
 
 /** Get the input Mesh */
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 typename TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >::InputMeshType *
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::GetInput(void)
@@ -73,7 +73,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 }
 
 /** Get the input Mesh */
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 typename TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >::InputMeshType *
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::GetInput(unsigned int idx)
@@ -83,17 +83,20 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 }
 
 //----------------------------------------------------------------------------
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 void
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::SetSpacing(const double spacing[3])
 {
-  SpacingType s(spacing);
-
+  SpacingType s;
+  for(unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
+    {
+    s[i] = static_cast<SpacePrecisionType>(spacing[i]);
+    }
   this->SetSpacing(s);
 }
 
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 void
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::SetSpacing(const float spacing[3])
@@ -105,7 +108,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 }
 
 //----------------------------------------------------------------------------
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 void
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::SetOrigin(const double origin[3])
@@ -115,7 +118,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
   this->SetOrigin(p);
 }
 
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 void
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::SetOrigin(const float origin[3])
@@ -127,7 +130,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 }
 
 // used by an STL sort
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 bool
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::ComparePoints2D(Point2DType a, Point2DType b)
@@ -144,7 +147,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 }
 
 // used by an STL sort
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 bool
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::ComparePoints1D(Point1D a, Point1D b)
@@ -155,7 +158,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 //----------------------------------------------------------------------------
 
 /** Update */
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 void
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::GenerateData(void)
@@ -245,7 +248,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 
 //----------------------------------------------------------------------------
 /** convert a single polygon/triangle to raster format */
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 int
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::PolygonToImageRaster(PointVector coords, Point1DArray & zymatrix, int extent[6])
@@ -387,7 +390,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 }
 
 /** raterize : Courtesy of Dr D Gobbi of Atamai Inc.*/
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 void
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::RasterizeTriangles()
@@ -566,7 +569,7 @@ TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
     }
 }
 
-template< class TInputMesh, class TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
 void
 TriangleMeshToBinaryImageFilter< TInputMesh, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const

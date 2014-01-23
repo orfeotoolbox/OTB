@@ -26,7 +26,7 @@ namespace itk
 /**
  *
  */
-template< class TPixel, unsigned int VImageDimension >
+template< typename TPixel, unsigned int VImageDimension >
 ImportImageFilter< TPixel, VImageDimension >
 ::ImportImageFilter()
 {
@@ -47,11 +47,11 @@ ImportImageFilter< TPixel, VImageDimension >
 /**
  *
  */
-template< class TPixel, unsigned int VImageDimension >
+template< typename TPixel, unsigned int VImageDimension >
 ImportImageFilter< TPixel, VImageDimension >
 ::~ImportImageFilter()
 {
-  if ( m_ImportPointer && m_FilterManageMemory )
+  if ( m_FilterManageMemory )
     {
     delete[] m_ImportPointer;
     }
@@ -60,7 +60,7 @@ ImportImageFilter< TPixel, VImageDimension >
 /**
  *
  */
-template< class TPixel, unsigned int VImageDimension >
+template< typename TPixel, unsigned int VImageDimension >
 void
 ImportImageFilter< TPixel, VImageDimension >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -100,14 +100,14 @@ ImportImageFilter< TPixel, VImageDimension >
 /**
  *
  */
-template< class TPixel, unsigned int VImageDimension >
+template< typename TPixel, unsigned int VImageDimension >
 void
 ImportImageFilter< TPixel, VImageDimension >
 ::SetImportPointer(TPixel *ptr, SizeValueType num, bool LetFilterManageMemory)
 {
   if ( ptr != m_ImportPointer )
     {
-    if ( m_ImportPointer && m_FilterManageMemory )
+    if ( m_FilterManageMemory )
       {
       delete[] m_ImportPointer;
       }
@@ -121,7 +121,7 @@ ImportImageFilter< TPixel, VImageDimension >
 /**
  *
  */
-template< class TPixel, unsigned int VImageDimension >
+template< typename TPixel, unsigned int VImageDimension >
 TPixel *
 ImportImageFilter< TPixel, VImageDimension >
 ::GetImportPointer()
@@ -132,7 +132,7 @@ ImportImageFilter< TPixel, VImageDimension >
 /**
  *
  */
-template< class TPixel, unsigned int VImageDimension >
+template< typename TPixel, unsigned int VImageDimension >
 void
 ImportImageFilter< TPixel, VImageDimension >
 ::EnlargeOutputRequestedRegion(DataObject *output)
@@ -151,7 +151,7 @@ ImportImageFilter< TPixel, VImageDimension >
 /**
  *
  */
-template< class TPixel, unsigned int VImageDimension >
+template< typename TPixel, unsigned int VImageDimension >
 void
 ImportImageFilter< TPixel, VImageDimension >
 ::GenerateOutputInformation()
@@ -173,7 +173,7 @@ ImportImageFilter< TPixel, VImageDimension >
 /**
  *
  */
-template< class TPixel, unsigned int VImageDimension >
+template< typename TPixel, unsigned int VImageDimension >
 void
 ImportImageFilter< TPixel, VImageDimension >
 ::GenerateData()
@@ -199,10 +199,10 @@ ImportImageFilter< TPixel, VImageDimension >
 }
 
 //----------------------------------------------------------------------------
-template< class TPixel, unsigned int VImageDimension >
+template< typename TPixel, unsigned int VImageDimension >
 void
 ImportImageFilter< TPixel, VImageDimension >
-::SetDirection(const DirectionType direction)
+::SetDirection(const DirectionType & direction)
 {
   bool modified = false;
 

@@ -48,8 +48,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TSample >
-class ITK_EXPORT CovarianceSampleFilter:
+template< typename TSample >
+class CovarianceSampleFilter:
   public ProcessObject
 {
 public:

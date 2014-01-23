@@ -44,8 +44,8 @@ namespace itk
  * \ingroup ITKCommon
  */
 
-template< class TImage, class TOperator = typename TImage::PixelType, class TComputation = TOperator >
-class ITK_EXPORT NeighborhoodInnerProduct
+template< typename TImage, typename TOperator = typename TImage::PixelType, typename TComputation = TOperator >
+class NeighborhoodInnerProduct
 {
 public:
   /** Standard typedefs */

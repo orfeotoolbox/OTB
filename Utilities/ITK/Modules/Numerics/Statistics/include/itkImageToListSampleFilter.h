@@ -51,8 +51,8 @@ namespace Statistics
  * \sa ImageToListSampleAdaptor
  * \ingroup ITKStatistics
  */
-template< class TImage, class TMaskImage = TImage >
-class ITK_EXPORT ImageToListSampleFilter:
+template< typename TImage, typename TMaskImage = TImage >
+class ImageToListSampleFilter:
   public ProcessObject
 {
 public:

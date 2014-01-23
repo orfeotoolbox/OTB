@@ -61,8 +61,8 @@ class ProgressReporter;
  *               Requires the same order of Spline for each dimension.
  * \ingroup ITKImageGrid
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT BSplineCenteredResampleImageFilterBase:
+template< typename TInputImage, typename TOutputImage >
+class BSplineCenteredResampleImageFilterBase:
   public BSplineResampleImageFilterBase< TInputImage, TOutputImage >
 {
 public:

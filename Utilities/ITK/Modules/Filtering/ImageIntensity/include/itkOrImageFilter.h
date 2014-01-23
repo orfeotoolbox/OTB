@@ -30,7 +30,7 @@ namespace Functor
  * \brief bitwise OR functor
  * \ingroup ITKImageIntensity
  */
-template< class TInput1, class TInput2 = TInput1, class TOutput = TInput1 >
+template< typename TInput1, typename TInput2 = TInput1, typename TOutput = TInput1 >
 class OR
 {
 public:
@@ -79,8 +79,8 @@ public:
  * \wikiexample{ImageProcessing/OrImageFilter,Binary OR two images}
  * \endwiki
  */
-template< class TInputImage1, class TInputImage2 = TInputImage1, class TOutputImage = TInputImage1 >
-class ITK_EXPORT OrImageFilter:
+template< typename TInputImage1, typename TInputImage2 = TInputImage1, typename TOutputImage = TInputImage1 >
+class OrImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage1, TInputImage2, TOutputImage,
                             Functor::OR<
@@ -109,12 +109,12 @@ public:
                BinaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1Input2OutputBitwiseOperatorsCheck,
                    ( Concept::BitwiseOperators< typename TInputImage1::PixelType,
                                                 typename TInputImage2::PixelType,
                                                 typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

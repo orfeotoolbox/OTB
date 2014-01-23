@@ -49,8 +49,8 @@ namespace itk {
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template<class TImage>
-class ITK_EXPORT LabelSelectionLabelMapFilter :
+template<typename TImage>
+class LabelSelectionLabelMapFilter :
     public AttributeSelectionLabelMapFilter<TImage, typename Functor::LabelLabelObjectAccessor< typename TImage::LabelObjectType > >
 {
 public:
@@ -85,14 +85,14 @@ public:
                AttributeSelectionLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 /*  itkConceptMacro(InputEqualityComparableCheck,
     (Concept::EqualityComparable<InputImagePixelType>));
   itkConceptMacro(IntConvertibleToInputCheck,
     (Concept::Convertible<int, InputImagePixelType>));
   itkConceptMacro(InputOStreamWritableCheck,
     (Concept::OStreamWritable<InputImagePixelType>));*/
-  /** End concept checking */
+  // End concept checking
 #endif
 
   const AttributeSetType & GetLabelSet() const

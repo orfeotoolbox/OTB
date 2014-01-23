@@ -50,8 +50,8 @@ namespace itk
  *
  * \ingroup ITKRegistrationCommon
  */
-template<class TTransform>
-class ITK_EXPORT TransformParametersAdaptor
+template<typename TTransform>
+class TransformParametersAdaptor
 : public TransformParametersAdaptorBase<TTransform>
 {
 public:

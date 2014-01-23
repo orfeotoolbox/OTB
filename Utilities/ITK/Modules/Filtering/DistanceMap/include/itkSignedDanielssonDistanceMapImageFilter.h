@@ -26,7 +26,7 @@ namespace itk
 {
 namespace Functor
 {
-template< class InputPixelType >
+template< typename InputPixelType >
 class InvertIntensityFunctor
 {
 public:
@@ -84,10 +84,10 @@ namespace itk
  * \ingroup ITKDistanceMap
  */
 
-template< class TInputImage,
-          class TOutputImage,
-          class TVoronoiImage = TInputImage >
-class ITK_EXPORT SignedDanielssonDistanceMapImageFilter:
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TVoronoiImage = TInputImage >
+class SignedDanielssonDistanceMapImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -206,12 +206,12 @@ public:
   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( IntConvertibleToInputCheck,
                    ( Concept::Convertible< int, PixelType > ) );
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

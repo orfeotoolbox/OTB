@@ -24,21 +24,29 @@
 namespace itk
 {
 /** \class OtsuMultipleThresholdsCalculator
- * \brief Computes Otsu's thresholds for a histogram.
+ * \brief Computes Otsu's multiple thresholds for a histogram.
  *
  * You plug in the target histogram using SetInputHistogram method and
  * specify the number of thresholds you want to be computed. Then call
- * the GenerateData method to run the alogithm.
+ * the Compute() method to run the algorithm.
  *
  * The thresholds are computed so that the between-class variance is
  * maximized.
+ *
+ * This calculator also includes an option to use the valley emphasis algorithm from
+ * H.F. Ng, "Automatic thresholding for defect detection", Pattern Recognition Letters, (27): 1644-1649, 2006.
+ * The valley emphasis algorithm is particularly effective when the object to be thresholded is small.
+ * See the following tests for examples:
+ * itkOtsuMultipleThresholdsImageFilterTest3 and itkOtsuMultipleThresholdsImageFilterTest4
+ * To use this algorithm, simple call the setter: SetValleyEmphasis(true)
+ * It is turned off by default.
  *
  * \ingroup Calculators
  * \ingroup ITKThresholding
  */
 
-template< class TInputHistogram >
-class ITK_EXPORT OtsuMultipleThresholdsCalculator:
+template< typename TInputHistogram >
+class OtsuMultipleThresholdsCalculator:
   public HistogramAlgorithmBase< TInputHistogram >
 {
 public:
@@ -53,9 +61,11 @@ public:
 
   typedef typename NumericTraits< MeasurementType >::RealType MeanType;
   typedef typename NumericTraits< MeasurementType >::RealType VarianceType;
+  typedef typename NumericTraits< MeasurementType >::RealType WeightType;
 
   typedef std::vector< MeanType >      MeanVectorType;
   typedef std::vector< FrequencyType > FrequencyVectorType;
+  typedef std::vector< WeightType >    WeightVectorType;
 
   typedef typename TInputHistogram::InstanceIdentifier InstanceIdentifierType;
   typedef std::vector< InstanceIdentifierType >        InstanceIdentifierVectorType;
@@ -74,13 +84,18 @@ public:
   itkSetClampMacro( NumberOfThresholds, SizeValueType, 1, NumericTraits< SizeValueType >::max() );
   itkGetConstMacro(NumberOfThresholds, SizeValueType);
 
+  /** Calculates the thresholds and save them */
+  void Compute();
+
+  /** Set/Get the use of valley emphasis. Default is false. */
+  itkSetMacro(ValleyEmphasis, bool);
+  itkGetConstReferenceMacro(ValleyEmphasis, bool);
+  itkBooleanMacro(ValleyEmphasis);
+
 protected:
   OtsuMultipleThresholdsCalculator();
   virtual ~OtsuMultipleThresholdsCalculator() {}
   void PrintSelf(std::ostream & os, Indent indent) const;
-
-  /** Calculates the thresholds and save them */
-  void GenerateData();
 
   /** Increment the thresholds of one position */
   bool IncrementThresholds(InstanceIdentifierVectorType & thresholdIds,
@@ -92,6 +107,7 @@ private:
   /** Internal thresholds storage */
   SizeValueType m_NumberOfThresholds;
   OutputType    m_Output;
+  bool          m_ValleyEmphasis;
 }; // end of class
 } // end of namespace itk
 

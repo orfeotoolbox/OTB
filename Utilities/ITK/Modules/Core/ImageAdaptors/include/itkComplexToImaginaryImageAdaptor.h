@@ -40,8 +40,8 @@ namespace Accessor
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TInternalType, class TExternalType >
-class ITK_EXPORT ComplexToImaginaryPixelAccessor
+template< typename TInternalType, typename TExternalType >
+class ComplexToImaginaryPixelAccessor
 {
 public:
   /** External typedef. It defines the external aspect
@@ -70,8 +70,8 @@ public:
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TImage, class TOutputPixelType >
-class ITK_EXPORT ComplexToImaginaryImageAdaptor:public
+template< typename TImage, typename TOutputPixelType >
+class ComplexToImaginaryImageAdaptor:public
   ImageAdaptor< TImage,
                 Accessor::ComplexToImaginaryPixelAccessor<
                   typename TImage::PixelType,

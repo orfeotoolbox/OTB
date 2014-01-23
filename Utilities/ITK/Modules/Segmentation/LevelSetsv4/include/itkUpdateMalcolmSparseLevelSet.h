@@ -39,7 +39,7 @@ namespace itk
  *  \ingroup ITKLevelSetsv4
  */
 template< unsigned int VDimension,
-          class TEquationContainer >
+          typename TEquationContainer >
 class UpdateMalcolmSparseLevelSet : public Object
 {
 public:
@@ -60,6 +60,7 @@ public:
   typedef typename LevelSetType::Pointer               LevelSetPointer;
   typedef typename LevelSetType::InputType             LevelSetInputType;
   typedef typename LevelSetType::OutputType            LevelSetOutputType;
+  typedef typename LevelSetType::OffsetType            LevelSetOffsetType;
 
   typedef typename LevelSetType::LabelMapType          LevelSetLabelMapType;
   typedef typename LevelSetType::LabelMapPointer       LevelSetLabelMapPointer;
@@ -147,6 +148,8 @@ private:
 
   // input
   LevelSetPointer   m_InputLevelSet;
+
+  LevelSetOffsetType m_Offset;
 
   typedef std::pair< LevelSetInputType, LevelSetOutputType > NodePairType;
 

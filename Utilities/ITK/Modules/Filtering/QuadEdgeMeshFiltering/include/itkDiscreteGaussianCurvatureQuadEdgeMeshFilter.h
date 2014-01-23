@@ -34,8 +34,8 @@ namespace itk
  * \author: Arnaud Gelas, Alexandre Gouaillard
  * \ingroup ITKQuadEdgeMeshFiltering
  */
-template< class TInputMesh, class TOutputMesh=TInputMesh >
-class ITK_EXPORT DiscreteGaussianCurvatureQuadEdgeMeshFilter:
+template< typename TInputMesh, typename TOutputMesh=TInputMesh >
+class DiscreteGaussianCurvatureQuadEdgeMeshFilter:
   public DiscreteCurvatureQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
 {
 public:
@@ -69,10 +69,10 @@ public:
   itkNewMacro(Self);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputIsFloatingPointCheck,
                    ( Concept::IsFloatingPoint< OutputCurvatureType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

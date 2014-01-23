@@ -39,8 +39,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TSample >
-class ITK_EXPORT WeightedCovarianceSampleFilter:
+template< typename TSample >
+class WeightedCovarianceSampleFilter:
   public CovarianceSampleFilter< TSample >
 {
 public:

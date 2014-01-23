@@ -36,9 +36,9 @@ namespace itk
  * \ingroup ITKMathematicalMorphology
  */
 
-template< class TInputImage, class TOutputImage, class TKernel /*=Neighborhood<bool,
+template< typename TInputImage, typename TOutputImage, typename TKernel /*=Neighborhood<bool,
                                                                  TInputImage::ImageDimension>*/                     >
-class ITK_EXPORT KernelImageFilter:
+class KernelImageFilter:
   public BoxImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -105,7 +105,7 @@ private:
   KernelImageFilter(const Self &); //purposely not implemented
   void operator=(const Self &);    //purposely not implemented
 
-  template<class T> void MakeKernel( const RadiusType & radius, T & kernel )
+  template<typename T> void MakeKernel( const RadiusType & radius, T & kernel )
   {
     kernel.SetRadius( radius );
     for( typename T::Iterator kit=kernel.Begin(); kit != kernel.End(); kit++ )

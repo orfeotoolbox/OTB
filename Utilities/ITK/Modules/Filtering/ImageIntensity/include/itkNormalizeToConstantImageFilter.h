@@ -51,8 +51,8 @@ namespace itk {
  * \wikiexample{ImageProcessing/NormalizeToConstantImageFilter,Scale all pixels so that their sum is a specified constant}
  * \endwiki
  */
-template<class TInputImage, class TOutputImage>
-class ITK_EXPORT NormalizeToConstantImageFilter :
+template<typename TInputImage, typename TOutputImage>
+class NormalizeToConstantImageFilter :
     public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -98,12 +98,12 @@ public:
   itkGetConstMacro(Constant, RealType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro(InputHasPixelTraitsCheck,
     (Concept::HasPixelTraits<InputImagePixelType>));
   itkConceptMacro(InputHasNumericTraitsCheck,
     (Concept::HasNumericTraits<InputImagePixelType>));
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

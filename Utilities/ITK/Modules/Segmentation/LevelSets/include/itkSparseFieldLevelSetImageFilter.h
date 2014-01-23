@@ -32,7 +32,7 @@ namespace itk
  * lists of indices and other values.
  * \ingroup ITKLevelSets
  */
-template< class TValueType >
+template< typename TValueType >
 class SparseFieldLevelSetNode
 {
 public:
@@ -69,7 +69,7 @@ public:
  *
  * \ingroup ITKLevelSets
  */
-template< class TNeighborhoodType >
+template< typename TNeighborhoodType >
 class SparseFieldCityBlockNeighborList
 {
 public:
@@ -225,8 +225,8 @@ private:
  *
  * \ingroup ITKLevelSets
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT SparseFieldLevelSetImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class SparseFieldLevelSetImageFilter:
   public FiniteDifferenceImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -313,14 +313,14 @@ public:
   { this->SetInterpolateSurfaceLocation(false); }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputEqualityComparableCheck,
                    ( Concept::EqualityComparable< typename TOutputImage::PixelType > ) );
   itkConceptMacro( DoubleConvertibleToOutputCheck,
                    ( Concept::Convertible< double, typename TOutputImage::PixelType > ) );
   itkConceptMacro( OutputOStreamWritableCheck,
                    ( Concept::OStreamWritable< typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

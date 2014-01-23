@@ -126,10 +126,10 @@ namespace itk
  *   \sa SparseFieldLevelSetImageFilter
  * \ingroup ITKLevelSets
  */
-template< class TInputImage,
-          class TFeatureImage,
-          class TOutputPixelType = float >
-class ITK_EXPORT CannySegmentationLevelSetImageFilter:
+template< typename TInputImage,
+          typename TFeatureImage,
+          typename TOutputPixelType = float >
+class CannySegmentationLevelSetImageFilter:
   public SegmentationLevelSetImageFilter< TInputImage, TFeatureImage, TOutputPixelType >
 {
 public:
@@ -179,10 +179,10 @@ public:
   { return this->m_CannyFunction->GetCannyImage(); }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< TOutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

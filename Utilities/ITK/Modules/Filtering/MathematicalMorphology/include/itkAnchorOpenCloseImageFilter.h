@@ -47,8 +47,8 @@ namespace itk
  *
  * \ingroup ITKMathematicalMorphology
  */
-template< class TImage, class TKernel, class TCompare1, class TCompare2 >
-class ITK_EXPORT AnchorOpenCloseImageFilter:
+template< typename TImage, typename TKernel, typename TCompare1, typename TCompare2 >
+class AnchorOpenCloseImageFilter:
   public KernelImageFilter< TImage, TImage, TKernel >
 {
 public:
@@ -92,7 +92,8 @@ protected:
   void  ThreadedGenerateData(const InputImageRegionType & outputRegionForThread,
                              ThreadIdType threadId);
 
-  InputImagePixelType m_Boundary1, m_Boundary2;
+  InputImagePixelType m_Boundary1;
+  InputImagePixelType m_Boundary2;
 
 private:
   AnchorOpenCloseImageFilter(const Self &); //purposely not implemented

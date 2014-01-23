@@ -49,8 +49,8 @@ namespace Statistics
  * \endwiki
  */
 
-template< class TImage >
-class ITK_EXPORT ImageToListSampleAdaptor:
+template< typename TImage >
+class ImageToListSampleAdaptor:
   public ListSample< typename MeasurementVectorPixelTraits< typename TImage::PixelType >::MeasurementVectorType >
 {
 public:

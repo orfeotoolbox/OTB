@@ -26,9 +26,9 @@ namespace watershed
 {
 
 
-template< class TScalarType >
+template< typename TScalar >
 void
-SegmentTree< TScalarType >
+SegmentTree< TScalar >
 ::Initialize()
 {
   //
@@ -43,9 +43,9 @@ SegmentTree< TScalarType >
   this->Clear();
 }
 
-template< class TScalarType >
+template< typename TScalar >
 void
-SegmentTree< TScalarType >
+SegmentTree< TScalar >
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

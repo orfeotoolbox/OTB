@@ -36,8 +36,8 @@ namespace Accessor
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TInternalType, class TExternalType >
-class ITK_EXPORT SinPixelAccessor
+template< typename TInternalType, typename TExternalType >
+class SinPixelAccessor
 {
 public:
   /** External typedef. It defines the external aspect
@@ -65,8 +65,8 @@ public:
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TImage, class TOutputPixelType >
-class ITK_EXPORT SinImageAdaptor:public
+template< typename TImage, typename TOutputPixelType >
+class SinImageAdaptor:public
   ImageAdaptor< TImage,
                 Accessor::SinPixelAccessor<
                   typename TImage::PixelType,

@@ -49,8 +49,8 @@ namespace itk
  *
  * \ingroup ITKMetricsv4
  */
-template<class TFixedPointSet, class TMovingPointSet = TFixedPointSet>
-class ITK_EXPORT LabeledPointSetToPointSetMetricv4:
+template<typename TFixedPointSet, typename TMovingPointSet = TFixedPointSet>
+class LabeledPointSetToPointSetMetricv4:
   public PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
 {
 public:

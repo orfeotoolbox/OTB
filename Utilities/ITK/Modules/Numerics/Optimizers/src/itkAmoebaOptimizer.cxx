@@ -39,10 +39,7 @@ AmoebaOptimizer
 AmoebaOptimizer
 ::~AmoebaOptimizer()
 {
-  if( this->m_VnlOptimizer != NULL )
-    {
-    delete m_VnlOptimizer;
-    }
+  delete m_VnlOptimizer;
 }
 
 
@@ -96,7 +93,7 @@ AmoebaOptimizer
 
   if ( m_ScalesInitialized )
     {
-    const ScalesType scales = this->GetScales();
+    const ScalesType & scales = this->GetScales();
     for ( unsigned int i = 0; i < numberOfParameters; i++ )
       {
       parameters[i] *= scales[i];
@@ -153,7 +150,7 @@ void
 AmoebaOptimizer
 ::StartOptimization(void)
 {
-  const ScalesType &scales = GetScales();
+  const ScalesType & scales = GetScales();
   const ParametersType &initialPosition = GetInitialPosition();
   InternalParametersType delta( m_InitialSimplexDelta );
   SingleValuedNonLinearVnlOptimizer::CostFunctionAdaptorType *costFunction =
@@ -172,10 +169,7 @@ AmoebaOptimizer
   CostFunctionAdaptorType *adaptor = GetNonConstCostFunctionAdaptor();
        //get rid of previous instance of the internal optimizer and create a
        //new one
-  if( this->m_VnlOptimizer != NULL )
-    {
-    delete m_VnlOptimizer;
-    }
+  delete m_VnlOptimizer;
   m_VnlOptimizer = new vnl_amoeba( *adaptor );
   m_VnlOptimizer->set_max_iterations( static_cast< int >( m_MaximumNumberOfIterations ) );
   m_VnlOptimizer->set_x_tolerance(m_ParametersConvergenceTolerance);
@@ -279,9 +273,10 @@ AmoebaOptimizer
        // get the results, we scale the parameters down if scales are defined
   if ( m_ScalesInitialized )
     {
-    for ( unsigned int i = 0; i < n; i++ )
+    const ScalesType & invScales = this->GetInverseScales();
+    for ( unsigned int i = 0; i < n; ++i )
       {
-      bestPosition[i] /= scales[i];
+      bestPosition[i] *= invScales[i];
       }
     }
 
@@ -344,7 +339,7 @@ AmoebaOptimizer
   //check that the number of scale factors matches
   if ( m_ScalesInitialized )
     {
-    if( GetScales().Size() != n )
+    if( this->GetScales().Size() != n )
       {
       itkExceptionMacro(<<"cost function and scaling information dimensions mismatch")
       }

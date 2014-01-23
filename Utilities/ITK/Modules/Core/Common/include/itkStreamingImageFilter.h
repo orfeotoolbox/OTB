@@ -40,8 +40,8 @@ namespace itk
  * \ingroup DataProcessing
  * \ingroup ITKCommon
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT StreamingImageFilter:public ImageToImageFilter< TInputImage, TOutputImage >
+template< typename TInputImage, typename TOutputImage >
+class StreamingImageFilter:public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Standard class typedefs. */
@@ -104,12 +104,12 @@ public:
   virtual void PropagateRequestedRegion(DataObject *output);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, OutputImageDimension > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputImagePixelType, OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

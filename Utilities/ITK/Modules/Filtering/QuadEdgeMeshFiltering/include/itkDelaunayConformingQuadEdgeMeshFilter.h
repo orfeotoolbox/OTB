@@ -34,8 +34,8 @@ namespace itk
  *
  * \ingroup ITKQuadEdgeMeshFiltering
  */
-template< class TInputMesh, class TOutputMesh=TInputMesh >
-class ITK_EXPORT DelaunayConformingQuadEdgeMeshFilter:
+template< typename TInputMesh, typename TOutputMesh=TInputMesh >
+class DelaunayConformingQuadEdgeMeshFilter:
   public QuadEdgeMeshToQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
 {
 public:

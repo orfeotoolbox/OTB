@@ -39,7 +39,7 @@ namespace itk
  * RealImageType.
  *
  * \ingroup IntensityImageFilters
- * \ingroup SingelThreaded
+ * \ingroup SingleThreaded
  * \ingroup ITKSmoothing
  *
  * \wiki
@@ -48,7 +48,7 @@ namespace itk
  */
 template< typename TInputImage,
           typename TOutputImage = TInputImage >
-class ITK_EXPORT SmoothingRecursiveGaussianImageFilter:
+class SmoothingRecursiveGaussianImageFilter:
   public InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -143,11 +143,11 @@ public:
   virtual bool CanRunInPlace( void ) const;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   // This concept does not work with variable length vector images
   //itkConceptMacro( InputHasNumericTraitsCheck,
   //( Concept::HasNumericTraits< PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

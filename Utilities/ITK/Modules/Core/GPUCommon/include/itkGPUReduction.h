@@ -25,6 +25,9 @@
 
 namespace itk
 {
+/** Create a helper GPU Kernel class for GPUReduction */
+  itkGPUKernelClassMacro(GPUReductionKernel);
+
 /**
  * \class GPUReduction
  *
@@ -33,12 +36,8 @@ namespace itk
  *
  * \ingroup ITKGPUCommon
  */
-
-/** Create a helper GPU Kernel class for GPUReduction */
-  itkGPUKernelClassMacro(GPUReductionKernel);
-
-template< class TElement >
-class ITK_EXPORT GPUReduction :
+template< typename TElement >
+class GPUReduction :
   public Object
 {
 public:

@@ -47,8 +47,8 @@ namespace itk {
  * \ingroup ITKThresholding
  */
 
-template<class TInputImage, class TOutputImage, class TMaskImage=TOutputImage>
-class ITK_EXPORT TriangleThresholdImageFilter :
+template<typename TInputImage, typename TOutputImage, typename TMaskImage=TOutputImage>
+class TriangleThresholdImageFilter :
     public HistogramThresholdImageFilter<TInputImage, TOutputImage, TMaskImage>
 {
 public:

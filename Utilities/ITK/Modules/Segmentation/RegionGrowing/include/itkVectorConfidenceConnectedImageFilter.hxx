@@ -33,7 +33,7 @@ namespace itk
 /**
  * Constructor
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 ::VectorConfidenceConnectedImageFilter()
 {
@@ -48,7 +48,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 /**
  * Standard PrintSelf method.
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -65,7 +65,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
      << std::endl;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 ::SetSeed(const IndexType & seed)
@@ -74,7 +74,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
   this->AddSeed(seed);
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 ::AddSeed(const IndexType & seed)
@@ -83,7 +83,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
   this->Modified();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 ::ClearSeeds()
@@ -95,7 +95,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
@@ -110,7 +110,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 }
 
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 ::EnlargeOutputRequestedRegion(DataObject *output)
@@ -119,7 +119,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
   output->SetRequestedRegionToLargestPossibleRegion();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 ::GenerateData()
@@ -142,13 +142,6 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
   outputImage->SetBufferedRegion(region);
   outputImage->Allocate();
   outputImage->FillBuffer (NumericTraits< OutputImagePixelType >::Zero);
-
-  if ( m_Seeds.empty() )
-    {
-    // if there are no seeds set then the output will simply be a zero
-    // filled image.
-    return;
-    }
 
   // Compute the statistics of the seed point
   typedef VectorMeanImageFunction< InputImageType > VectorMeanImageFunctionType;
@@ -185,26 +178,39 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 
   typename SeedsContainerType::const_iterator si = m_Seeds.begin();
   typename SeedsContainerType::const_iterator li = m_Seeds.end();
+  SizeValueType seed_cnt = 0;
   while ( si != li )
     {
-    const MeanFunctionVectorType       meanContribution       = meanFunction->EvaluateAtIndex(*si);
-    const CovarianceFunctionMatrixType covarianceContribution = varianceFunction->EvaluateAtIndex(*si);
-    for ( unsigned int ii = 0; ii < dimension; ii++ )
+    if ( region.IsInside(*si) )
       {
-      mean[ii] += meanContribution[ii];
-      for ( unsigned int jj = 0; jj < dimension; jj++ )
+      ++seed_cnt;
+      const MeanFunctionVectorType       meanContribution       = meanFunction->EvaluateAtIndex(*si);
+      const CovarianceFunctionMatrixType covarianceContribution = varianceFunction->EvaluateAtIndex(*si);
+      for ( unsigned int ii = 0; ii < dimension; ii++ )
         {
-        covariance[ii][jj] += covarianceContribution[ii][jj];
+        mean[ii] += meanContribution[ii];
+        for ( unsigned int jj = 0; jj < dimension; jj++ )
+          {
+          covariance[ii][jj] += covarianceContribution[ii][jj];
+          }
         }
       }
     si++;
     }
+
+  if ( seed_cnt == 0 )
+    {
+      this->UpdateProgress(1.0);
+      // no seeds result in zero image
+      return;
+    }
+
   for ( unsigned int ik = 0; ik < dimension; ik++ )
     {
-    mean[ik] /= m_Seeds.size();
+    mean[ik] /= seed_cnt;
     for ( unsigned int jk = 0; jk < dimension; jk++ )
       {
-      covariance[ik][jk] /= m_Seeds.size();
+      covariance[ik][jk] /= seed_cnt;
       }
     }
 
@@ -221,15 +227,19 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
   // the actual
   // region may be grown using a multiplier different from the one specified by
   // the user.
+
   si = m_Seeds.begin();
   li = m_Seeds.end();
   while ( si != li )
     {
-    const double distance =
-      m_ThresholdFunction->EvaluateDistanceAtIndex(*si);
-    if ( distance >  m_Multiplier )
+    if ( region.IsInside(*si) )
       {
-      m_Multiplier = distance;
+      const double distance =
+        m_ThresholdFunction->EvaluateDistanceAtIndex(*si);
+      if ( distance >  m_Multiplier )
+        {
+        m_Multiplier = distance;
+        }
       }
     si++;
     }
@@ -353,7 +363,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 const typename
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >::CovarianceMatrixType &
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
@@ -362,7 +372,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
   return m_ThresholdFunction->GetCovariance();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 const typename
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >::MeanVectorType &
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
@@ -371,7 +381,7 @@ VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
   return m_ThresholdFunction->GetMean();
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 const typename VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >::SeedsContainerType &
 VectorConfidenceConnectedImageFilter< TInputImage, TOutputImage >
 ::GetSeeds() const

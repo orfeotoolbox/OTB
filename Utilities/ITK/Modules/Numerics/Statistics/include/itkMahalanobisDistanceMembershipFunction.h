@@ -58,8 +58,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TVector >
-class ITK_EXPORT MahalanobisDistanceMembershipFunction:
+template< typename TVector >
+class MahalanobisDistanceMembershipFunction:
   public MembershipFunctionBase< TVector >
 {
 public:

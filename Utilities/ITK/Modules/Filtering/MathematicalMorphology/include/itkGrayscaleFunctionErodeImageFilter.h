@@ -46,8 +46,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKMathematicalMorphology
  */
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT GrayscaleFunctionErodeImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class GrayscaleFunctionErodeImageFilter:
   public MorphologyImageFilter< TInputImage, TOutputImage, TKernel >
 {
 public:
@@ -91,7 +91,7 @@ public:
   typedef typename TKernel::PixelType KernelPixelType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck1,
                    ( Concept::SameDimension< InputImageDimension, OutputImageDimension > ) );
   itkConceptMacro( SameDimensionCheck2,
@@ -106,7 +106,7 @@ public:
                    ( Concept::LessThanComparable< PixelType > ) );
   itkConceptMacro( KernelGreaterThanComparableCheck,
                    ( Concept::GreaterThanComparable< KernelPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -28,11 +28,11 @@ namespace itk
  *
  * \ingroup ITKVideoBridgeVXL
  */
-class ITK_EXPORT VXLVideoIOFactory:public ObjectFactoryBase
+class VXLVideoIOFactory:public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef VXLVideoIOFactory       Self;
+  typedef VXLVideoIOFactory          Self;
   typedef ObjectFactoryBase          Superclass;
   typedef SmartPointer< Self >       Pointer;
   typedef SmartPointer< const Self > ConstPointer;

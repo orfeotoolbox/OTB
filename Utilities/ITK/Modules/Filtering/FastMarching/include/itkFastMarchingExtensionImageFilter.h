@@ -49,12 +49,12 @@ namespace itk
  * \ingroup ITKFastMarching
  */
 template<
-  class TLevelSet,
-  class TAuxValue,
+  typename TLevelSet,
+  typename TAuxValue,
   unsigned int VAuxDimension = 1,
-  class TSpeedImage = Image< float,  TLevelSet ::ImageDimension >
+  typename TSpeedImage = Image< float,  TLevelSet ::ImageDimension >
   >
-class ITK_EXPORT FastMarchingExtensionImageFilter:
+class FastMarchingExtensionImageFilter:
   public FastMarchingImageFilter< TLevelSet, TSpeedImage >
 {
 public:
@@ -123,10 +123,10 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( AuxValueHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< TAuxValue > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -39,7 +39,7 @@ namespace itk
 /**
  * ------------------------------------------------
  */
-template< class TInputMesh, class TOutputMesh >
+template< typename TInputMesh, typename TOutputMesh >
 ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 ::ConnectedRegionsMeshFilter()
 {
@@ -50,7 +50,7 @@ ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 /**
  * ------------------------------------------------
  */
-template< class TInputMesh, class TOutputMesh >
+template< typename TInputMesh, typename TOutputMesh >
 void
 ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 ::DeleteSeed(IdentifierType id)
@@ -75,7 +75,7 @@ ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 /**
  * ------------------------------------------------
  */
-template< class TInputMesh, class TOutputMesh >
+template< typename TInputMesh, typename TOutputMesh >
 void
 ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 ::DeleteSpecifiedRegion(IdentifierType id)
@@ -100,7 +100,7 @@ ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 /**
  * ------------------------------------------------
  */
-template< class TInputMesh, class TOutputMesh >
+template< typename TInputMesh, typename TOutputMesh >
 void
 ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -137,7 +137,7 @@ ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 /**
  *
  */
-template< class TInputMesh, class TOutputMesh >
+template< typename TInputMesh, typename TOutputMesh >
 void
 ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 ::GenerateData()
@@ -407,11 +407,9 @@ ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 
   // This prevents unnecessary re-executions of the pipeline.
   output->SetBufferedRegion( output->GetRequestedRegion() );
-
-  return;
 }
 
-template< class TInputMesh, class TOutputMesh >
+template< typename TInputMesh, typename TOutputMesh >
 void
 ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
 ::PropagateConnectedWave()
@@ -459,8 +457,6 @@ ConnectedRegionsMeshFilter< TInputMesh, TOutputMesh >
     m_Wave2 = tmpWave;
     tmpWave->clear();
     } //while wave is propagating
-
-  return;
 }
 } // end namespace itk
 

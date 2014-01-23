@@ -41,8 +41,8 @@ namespace Statistics
  *
  * \ingroup ITKStatistics
  */
-template< class TVector >
-class ITK_EXPORT DistanceToCentroidMembershipFunction:
+template< typename TVector >
+class DistanceToCentroidMembershipFunction:
   public MembershipFunctionBase< TVector >
 {
 public:

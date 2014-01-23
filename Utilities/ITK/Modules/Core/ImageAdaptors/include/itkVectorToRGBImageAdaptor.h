@@ -31,8 +31,8 @@ namespace itk
  *
  * \ingroup ITKImageAdaptors
  */
-template< class TImage >
-class ITK_EXPORT VectorToRGBImageAdaptor:public
+template< typename TImage >
+class VectorToRGBImageAdaptor:public
   ImageAdaptor< TImage,
                 Accessor::VectorToRGBPixelAccessor<
                   typename TImage::PixelType::ValueType

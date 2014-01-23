@@ -42,17 +42,17 @@ namespace itk
  *
  * \ingroup ITKTransform
  */
-template <class TScalarType = double>
+template< typename TScalar = double >
 // Data type for scalars (float or double)
-class ITK_EXPORT VersorRigid3DTransform :
-  public VersorTransform<TScalarType>
+class VersorRigid3DTransform :
+  public VersorTransform< TScalar >
 {
 public:
   /** Standard class typedefs. */
-  typedef VersorRigid3DTransform       Self;
-  typedef VersorTransform<TScalarType> Superclass;
-  typedef SmartPointer<Self>           Pointer;
-  typedef SmartPointer<const Self>     ConstPointer;
+  typedef VersorRigid3DTransform     Self;
+  typedef VersorTransform< TScalar > Superclass;
+  typedef SmartPointer< Self >       Pointer;
+  typedef SmartPointer< const Self > ConstPointer;
 
   /** New macro for creation of through a Smart Pointer. */
   itkNewMacro(Self);

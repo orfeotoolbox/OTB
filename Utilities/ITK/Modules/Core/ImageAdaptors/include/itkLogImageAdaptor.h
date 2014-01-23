@@ -37,8 +37,8 @@ namespace Accessor
  * \ingroup ITKImageAdaptors
  */
 
-template< class TInternalType, class TExternalType >
-class ITK_EXPORT LogPixelAccessor
+template< typename TInternalType, typename TExternalType >
+class LogPixelAccessor
 {
 public:
   /** External typedef. It defines the external aspect
@@ -66,8 +66,8 @@ public:
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TImage, class TOutputPixelType >
-class ITK_EXPORT LogImageAdaptor:public
+template< typename TImage, typename TOutputPixelType >
+class LogImageAdaptor:public
   ImageAdaptor< TImage,
                 Accessor::LogPixelAccessor<
                   typename TImage::PixelType,

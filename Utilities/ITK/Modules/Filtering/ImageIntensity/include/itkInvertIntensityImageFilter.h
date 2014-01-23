@@ -86,7 +86,7 @@ private:
  * \endwiki
  */
 template< typename  TInputImage, typename  TOutputImage = TInputImage >
-class ITK_EXPORT InvertIntensityImageFilter:
+class InvertIntensityImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::InvertIntensityTransform<
@@ -124,10 +124,10 @@ public:
   void BeforeThreadedGenerateData(void);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

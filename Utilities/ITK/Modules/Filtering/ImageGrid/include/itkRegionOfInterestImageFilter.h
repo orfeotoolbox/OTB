@@ -49,8 +49,8 @@ namespace itk
  * \wikiexample{ImageProcessing/RegionOfInterestImageFilter,Extract a portion of an image (region of interest)}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT RegionOfInterestImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class RegionOfInterestImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -87,12 +87,12 @@ public:
                       TOutputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< ImageDimension, OutputImageDimension > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputImagePixelType, OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

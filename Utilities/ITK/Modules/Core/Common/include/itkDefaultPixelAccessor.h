@@ -50,8 +50,8 @@ namespace itk
  * \ingroup ITKCommon
  */
 
-template< class TType >
-class ITK_EXPORT DefaultPixelAccessor
+template< typename TType >
+class DefaultPixelAccessor
 {
 public:
 

@@ -43,8 +43,8 @@ namespace itk
  * \sa DefaultVectorPixelAccessorFunctor
  * \ingroup ITKCommon
  */
-template< class TImageType >
-class ITK_EXPORT DefaultPixelAccessorFunctor
+template< typename TImageType >
+class DefaultPixelAccessorFunctor
 {
 public:
   typedef TImageType                            ImageType;
@@ -58,7 +58,7 @@ public:
    *  todo
    *
    */
-  template <class UImageType>
+  template <typename UImageType>
   struct Rebind
     {
       typedef DefaultPixelAccessorFunctor<UImageType>  Type;

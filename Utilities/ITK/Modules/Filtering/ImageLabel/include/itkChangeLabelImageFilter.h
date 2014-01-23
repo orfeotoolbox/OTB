@@ -22,6 +22,8 @@
 #include "itkConceptChecking.h"
 #include "itkSimpleDataObjectDecorator.h"
 
+#include <map>
+
 namespace itk
 {
 /** \class ChangeLabelImageFilter
@@ -45,12 +47,9 @@ namespace itk
  * \ingroup IntensityImageFilters  MultiThreaded
  * \ingroup ITKImageLabel
  */
-
-#include <map>
-
 namespace Functor
 {
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class ChangeLabel
 {
 public:
@@ -108,8 +107,8 @@ private:
 };
 }
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ChangeLabelImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class ChangeLabelImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::ChangeLabel<
@@ -151,12 +150,12 @@ public:
   void ClearChangeMap();
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputPixelType, OutputPixelType > ) );
   itkConceptMacro( PixelTypeComparable,
                    ( Concept::Comparable< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

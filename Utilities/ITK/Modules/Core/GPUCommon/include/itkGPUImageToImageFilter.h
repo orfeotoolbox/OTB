@@ -23,7 +23,6 @@
 
 namespace itk
 {
-
 /** \class GPUImageToImageFilter
  *
  * \brief class to abstract the behaviour of the GPU filters.
@@ -36,9 +35,9 @@ namespace itk
  *
  * \ingroup ITKGPUCommon
  */
-template< class TInputImage, class TOutputImage, class TParentImageFilter =
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter =
             ImageToImageFilter< TInputImage, TOutputImage > >
-class ITK_EXPORT GPUImageToImageFilter : public TParentImageFilter
+class GPUImageToImageFilter : public TParentImageFilter
 {
 public:
   /** Standard class typedefs. */

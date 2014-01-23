@@ -37,7 +37,7 @@ namespace itk
  *  \tparam TDomain Support of the level-set function (e.g. Image or QuadEdgeMesh)
  *  \ingroup ITKLevelSetsv4
  */
-template< class TInput, unsigned int VDimension, typename TOutput, class TDomain >
+template< typename TInput, unsigned int VDimension, typename TOutput, typename TDomain >
 class LevelSetBase : public DataObject
 {
 public:
@@ -53,11 +53,10 @@ public:
 
   typedef TInput                                           InputType;
   typedef TOutput                                          OutputType;
+  typedef TDomain                                          DomainType;
   typedef typename NumericTraits< OutputType >::RealType   OutputRealType;
   typedef CovariantVector< OutputRealType, VDimension >    GradientType;
   typedef Matrix< OutputRealType, VDimension, VDimension > HessianType;
-
-  typedef TDomain DomainType;
 
   /** Type used to define Regions */
   typedef IdentifierType RegionType;
@@ -82,7 +81,7 @@ public:
    *  to keep track if it has already been computed or not.
    *  \ingroup ITKLevelSetsv4
    */
-  template< class T >
+  template< typename T >
   class DataType
     {
     public:
@@ -171,7 +170,7 @@ public:
   virtual void EvaluateForwardGradient( const InputType& iP, LevelSetDataType& ioData ) const = 0;
   virtual void EvaluateBackwardGradient( const InputType& iP, LevelSetDataType& ioData ) const = 0;
 
-  /** Returns true if iP is inside the level set, i.e. \f$\phi(p) \leqslant 0 \f$ */
+  /** Returns true if iP is inside the level set, i.e. \f$\phi(p) \le 0 \f$ */
   virtual bool IsInside( const InputType& iP ) const;
 
   /** Get the maximum number of regions that this data can be

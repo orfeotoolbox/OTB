@@ -43,8 +43,8 @@ namespace itk {
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template<class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelMapMaskImageFilter :
+template<typename TInputImage, typename TOutputImage>
+class LabelMapMaskImageFilter :
     public LabelMapFilter<TInputImage, TOutputImage>
 {
 public:

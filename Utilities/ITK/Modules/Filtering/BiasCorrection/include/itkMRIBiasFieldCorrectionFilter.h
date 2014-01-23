@@ -43,7 +43,7 @@ namespace itk
  * included for energy value calculation), and the bias field (TBiasField).
  * \ingroup ITKBiasCorrection
  */
-template< class TImage, class TImageMask, class TBiasField >
+template< typename TImage, typename TImageMask, typename TBiasField >
 class MRIBiasEnergyFunction:public SingleValuedCostFunction
 {
 public:
@@ -220,8 +220,8 @@ private:
  * (http://www.cs.unc.edu/~styner/docs/StynerTR97.pdf)
  * \ingroup ITKBiasCorrection
  */
-template< class TInputImage, class TOutputImage, class TMaskImage >
-class ITK_EXPORT MRIBiasFieldCorrectionFilter:
+template< typename TInputImage, typename TOutputImage, typename TMaskImage >
+class MRIBiasFieldCorrectionFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -483,7 +483,7 @@ protected:
 
   /** Converts pixel type, and
    *  copies image data from source to target. */
-  template< class TSource, class TTarget >
+  template< typename TSource, typename TTarget >
   void CopyAndConvertImage(const TSource *source,
                            TTarget *target,
                            typename TTarget::RegionType requestedRegion)

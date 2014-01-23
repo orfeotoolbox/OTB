@@ -29,7 +29,7 @@ namespace Functor
  *
  * \ingroup ITKImageIntensity
  */
-template< class TInput1, class TInput2, class TOutput >
+template< typename TInput1, typename TInput2, typename TOutput >
 class Modulus
 {
 public:
@@ -115,8 +115,8 @@ private:
  *
  * \ingroup ITKImageIntensity
  */
-template< typename  TInputImage1, class TInputImage2 = TInputImage1, class TOutputImage = TInputImage1 >
-class ITK_EXPORT ModulusImageFilter:
+template< typename  TInputImage1, typename TInputImage2 = TInputImage1, typename TOutputImage = TInputImage1 >
+class ModulusImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage1, TInputImage2, TOutputImage,
                             Functor::Modulus<
@@ -152,10 +152,10 @@ public:
 
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

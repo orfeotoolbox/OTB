@@ -59,8 +59,8 @@ namespace itk
  * \ingroup DeformableImageRegistration MultiThreaded
  * \ingroup ITKPDEDeformableRegistration
  */
-template< class TFixedImage, class TMovingImage, class TDisplacementField >
-class ITK_EXPORT DemonsRegistrationFilter:
+template< typename TFixedImage, typename TMovingImage, typename TDisplacementField >
+class DemonsRegistrationFilter:
   public PDEDeformableRegistrationFilter< TFixedImage, TMovingImage,
                                           TDisplacementField >
 {

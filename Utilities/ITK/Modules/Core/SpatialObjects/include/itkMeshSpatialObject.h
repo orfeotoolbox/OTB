@@ -33,8 +33,8 @@ namespace itk
  * \ingroup ITKSpatialObjects
  */
 
-template< class TMesh = Mesh< int > >
-class ITK_EXPORT MeshSpatialObject:
+template< typename TMesh = Mesh< int > >
+class MeshSpatialObject:
   public SpatialObject< TMesh::PointDimension >
 {
 public:

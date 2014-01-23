@@ -22,20 +22,20 @@
 
 namespace itk
 {
-template< class TImage >
+template< typename TImage >
 LevelSetDomainPartitionImageWithKdTree< TImage >
 ::LevelSetDomainPartitionImageWithKdTree() :
   m_KdTree(NULL), m_NumberOfNeighbors( 10 )
 {
 }
 
-template< class TImage >
+template< typename TImage >
 LevelSetDomainPartitionImageWithKdTree< TImage >
 ::~LevelSetDomainPartitionImageWithKdTree()
 {
 }
 
-template< class TImage >
+template< typename TImage >
 void LevelSetDomainPartitionImageWithKdTree< TImage >
 ::PopulateListDomain()
 {
@@ -49,20 +49,22 @@ void LevelSetDomainPartitionImageWithKdTree< TImage >
     }
 }
 
-template< class TImage >
+template< typename TImage >
 void LevelSetDomainPartitionImageWithKdTree< TImage >
 ::PopulateDomainWithKdTree()
 {
+  Superclass::AllocateListDomain();
+
   const ListRegionType region = this->m_ListDomain->GetLargestPossibleRegion();
 
   ListIteratorType lIt(this->m_ListDomain, region);
 
   for ( lIt.GoToBegin(); !lIt.IsAtEnd(); ++lIt )
     {
-    const ListIndexType & ind = lIt.GetIndex();
+    const ListIndexType & index = lIt.GetIndex();
     ListPointType pt;
 
-    this->m_ListDomain->TransformIndexToPhysicalPoint( ind, pt );
+    this->m_ListDomain->TransformIndexToPhysicalPoint( index, pt );
 
     CentroidVectorType queryPoint = pt.GetVectorFromOrigin();
 
@@ -72,8 +74,8 @@ void LevelSetDomainPartitionImageWithKdTree< TImage >
     IdentifierListType identifierList;
     for ( NeighborsIdType i = 0; i < this->m_NumberOfNeighbors; ++i )
       {
-      // this is not yet defined, but it will have to be !!!
-      if ( this->m_LevelSetDataPointerVector[i]->VerifyInsideRegion(ind) )
+      IdentifierType levelSetID = neighbors[i];
+      if ( this->m_LevelSetDomainRegionVector[levelSetID].IsInside( index ) )
         {
         identifierList.push_back(neighbors[i]);
         }

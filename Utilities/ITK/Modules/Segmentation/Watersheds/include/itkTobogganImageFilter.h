@@ -35,8 +35,8 @@ namespace itk
  * \ingroup ITKWatersheds
  */
 
-template< class TInputImage >
-class ITK_EXPORT TobogganImageFilter:
+template< typename TInputImage >
+class TobogganImageFilter:
   public ImageToImageFilter<
     TInputImage,
     Image< IdentifierType, TInputImage::ImageDimension > >
@@ -98,12 +98,12 @@ public:
   NeighborhoodIteratorType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( LessThanComparableCheck,
                    ( Concept::LessThanComparable< InputImagePixelType > ) );
   itkConceptMacro( OStreamWritableCheck,
                    ( Concept::OStreamWritable< InputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

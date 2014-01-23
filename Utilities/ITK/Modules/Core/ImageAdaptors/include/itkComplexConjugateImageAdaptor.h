@@ -31,8 +31,8 @@ namespace Accessor
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TComplexType >
-class ITK_EXPORT ComplexConjugatePixelAccessor
+template< typename TComplexType >
+class ComplexConjugatePixelAccessor
 {
 public:
   typedef TComplexType ExternalType;
@@ -56,8 +56,8 @@ public:
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TImage >
-class ITK_EXPORT ComplexConjugateImageAdaptor:public
+template< typename TImage >
+class ComplexConjugateImageAdaptor:public
   ImageAdaptor< TImage,
                 Accessor::ComplexConjugatePixelAccessor< typename TImage::PixelType > >
 {
@@ -77,12 +77,12 @@ public:
   itkTypeMacro(ComplexConjugateImageAdaptor, ImageAdaptor);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking. */
+  // Begin concept checking. */
   itkConceptMacro( InputConvertibleToComplex,
                    ( Concept::Convertible<
                        std::complex< typename NumericTraits< typename TImage::PixelType >::ValueType >,
                      typename TImage::PixelType > ) );
-  /** End concept checking. */
+  // End concept checking. */
 #endif
 
 protected:

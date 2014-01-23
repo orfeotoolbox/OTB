@@ -88,20 +88,36 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
   typename MultiMetricType::Pointer multiMetric = dynamic_cast<MultiMetricType *>( this->m_Metric.GetPointer() );
   if( multiMetric )
     {
-    virtualDomainImage = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[0].GetPointer() )->GetVirtualImage();
-    fixedImageMask = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[0].GetPointer() )->GetFixedImageMask();
-    movingImageMask = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[0].GetPointer() )->GetMovingImageMask();
+    typename ImageMetricType::Pointer metricQueue = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[0].GetPointer() );
+    if( metricQueue.IsNotNull() )
+      {
+      virtualDomainImage = metricQueue->GetVirtualImage();
+      fixedImageMask = metricQueue->GetFixedImageMask();
+      movingImageMask = metricQueue->GetMovingImageMask();
+      }
+    else
+      {
+      itkExceptionMacro("ERROR: Invalid conversion from the multi metric queue.");
+      }
     }
   else
     {
-    virtualDomainImage = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->GetVirtualImage();
-    fixedImageMask = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->GetFixedImageMask();
-    movingImageMask = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->GetMovingImageMask();
+    typename ImageMetricType::Pointer metric = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() );
+    if( metric.IsNotNull() )
+      {
+      virtualDomainImage = metric->GetVirtualImage();
+      fixedImageMask = metric->GetFixedImageMask();
+      movingImageMask = metric->GetMovingImageMask();
+      }
+    else
+      {
+      itkExceptionMacro("ERROR: Invalid metric conversion.");
+      }
     }
 
   // Monitor the convergence
-  typedef itk::Function::WindowConvergenceMonitoringFunction<double> ConvergenceMonitoringType;
-  ConvergenceMonitoringType::Pointer convergenceMonitoring = ConvergenceMonitoringType::New();
+  typedef itk::Function::WindowConvergenceMonitoringFunction<RealType> ConvergenceMonitoringType;
+  typename ConvergenceMonitoringType::Pointer convergenceMonitoring = ConvergenceMonitoringType::New();
   convergenceMonitoring->SetWindowSize( this->m_ConvergenceWindowSize );
 
   typedef IdentityTransform<RealType, ImageDimension> IdentityTransformType;
@@ -217,25 +233,41 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
       {
       for( unsigned int n = 0; n < multiMetric->GetNumberOfMetrics(); n++ )
         {
-        dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[n].GetPointer() )->SetFixedImage( fixedImages[n] );
-        dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[n].GetPointer() )->SetMovingImage( movingImages[n] );
+        typename ImageMetricType::Pointer metricQueue = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[n].GetPointer() );
+        if( metricQueue.IsNotNull() )
+          {
+          metricQueue->SetFixedImage( fixedImages[n] );
+          metricQueue->SetMovingImage( movingImages[n] );
+          }
+        else
+          {
+          itkExceptionMacro("ERROR: Invalid conversion from the multi metric queue.");
+          }
         }
       multiMetric->SetFixedTransform( const_cast<TransformBaseType *>( fixedTransform ) );
       multiMetric->SetMovingTransform( const_cast<TransformBaseType *>( movingTransform ) );
       }
     else
       {
-      dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetFixedImage( fixedImages[0] );
-      dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetFixedTransform( const_cast<TransformBaseType *>( fixedTransform ) );
-      dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetMovingImage( movingImages[0] );
-      dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetMovingTransform( const_cast<TransformBaseType *>( movingTransform ) );
+      typename ImageMetricType::Pointer metric = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() );
+      if( metric.IsNotNull() )
+        {
+        metric->SetFixedImage( fixedImages[0] );
+        metric->SetFixedTransform( const_cast<TransformBaseType *>( fixedTransform ) );
+        metric->SetMovingImage( movingImages[0] );
+        metric->SetMovingTransform( const_cast<TransformBaseType *>( movingTransform ) );
+        }
+      else
+        {
+        itkExceptionMacro("ERROR: Invalid metric conversion.");
+        }
       }
     }
   else
     {
     for( unsigned int n = 0; n < this->m_MovingSmoothImages.size(); n++ )
       {
-      typedef ResampleImageFilter<MovingImageType, MovingImageType> MovingResamplerType;
+      typedef ResampleImageFilter<MovingImageType, MovingImageType, typename TOutputTransform::ScalarType> MovingResamplerType;
       typename MovingResamplerType::Pointer movingResampler = MovingResamplerType::New();
       movingResampler->SetTransform( movingTransform );
       movingResampler->SetInput( movingImages[n] );
@@ -246,7 +278,7 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
       movingResampler->SetDefaultPixelValue( 0 );
       movingResampler->Update();
 
-      typedef ResampleImageFilter<FixedImageType, FixedImageType> FixedResamplerType;
+      typedef ResampleImageFilter<FixedImageType, FixedImageType, typename TOutputTransform::ScalarType> FixedResamplerType;
       typename FixedResamplerType::Pointer fixedResampler = FixedResamplerType::New();
       fixedResampler->SetTransform( fixedTransform );
       fixedResampler->SetInput( fixedImages[n] );
@@ -259,13 +291,29 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
 
       if( multiMetric )
         {
-        dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[n].GetPointer() )->SetMovingImage( movingResampler->GetOutput() );
-        dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[n].GetPointer() )->SetFixedImage( fixedResampler->GetOutput() );
+        typename ImageMetricType::Pointer metricQueue = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[n].GetPointer() );
+        if( metricQueue.IsNotNull() )
+          {
+          metricQueue->SetMovingImage( movingResampler->GetOutput() );
+          metricQueue->SetFixedImage( fixedResampler->GetOutput() );
+          }
+        else
+          {
+          itkExceptionMacro("ERROR: Invalid conversion from the multi metric queue.");
+          }
         }
       else
         {
-        dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetMovingImage( movingResampler->GetOutput() );
-        dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetFixedImage( fixedResampler->GetOutput() );
+        typename ImageMetricType::Pointer metric = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() );
+        if( metric.IsNotNull() )
+          {
+          metric->SetMovingImage( movingResampler->GetOutput() );
+          metric->SetFixedImage( fixedResampler->GetOutput() );
+          }
+        else
+          {
+          itkExceptionMacro("ERROR: Invalid metric conversion.");
+          }
         }
       }
 
@@ -301,6 +349,21 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
   metricDerivative.Fill( NumericTraits<typename MetricDerivativeType::ValueType>::Zero );
   this->m_Metric->GetValueAndDerivative( value, metricDerivative );
 
+  // Ensure that the size of the optimizer weights is the same as the
+  // number of local transform parameters (=ImageDimension)
+
+  if( !this->m_OptimizerWeightsAreIdentity && this->m_OptimizerWeights.Size() == ImageDimension )
+    {
+    typename MetricDerivativeType::iterator it;
+    for( it = metricDerivative.begin(); it != metricDerivative.end(); it += ImageDimension )
+      {
+      for( unsigned int d = 0; d < ImageDimension; d++ )
+        {
+        *(it + d) *= this->m_OptimizerWeights[d];
+        }
+      }
+    }
+
   // we rescale the update velocity field at each time point.
   // we first need to convert to a displacement field to look
   // at the max norm of the field.
@@ -325,12 +388,18 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
 
   if( mask )
     {
-    typedef ResampleImageFilter<MaskImageType, WeightedMaskImageType> MaskResamplerType;
+      // Before using virtualDomainImage as the reference image, it should be cast to the WeightedMaskImageType that always has a type of double.
+    typedef itk::CastImageFilter<VirtualImageType, WeightedMaskImageType> CastFilterType;
+    typename CastFilterType::Pointer castfilter = CastFilterType::New();
+    castfilter->SetInput(virtualDomainImage);
+    castfilter->Update();
+
+    typedef ResampleImageFilter<MaskImageType, WeightedMaskImageType, typename TOutputTransform::ScalarType> MaskResamplerType;
     typename MaskResamplerType::Pointer maskResampler = MaskResamplerType::New();
     maskResampler->SetTransform( fixedTransform );
     maskResampler->SetInput( dynamic_cast<ImageMaskSpatialObjectType *>( const_cast<FixedImageMaskType *>( mask ) )->GetImage() );
     maskResampler->UseReferenceImageOn();
-    maskResampler->SetReferenceImage( virtualDomainImage );
+    maskResampler->SetReferenceImage( castfilter->GetOutput() );
     maskResampler->SetSize( virtualDomainImage->GetBufferedRegion().GetSize() );
     maskResampler->SetDefaultPixelValue( 0 );
 

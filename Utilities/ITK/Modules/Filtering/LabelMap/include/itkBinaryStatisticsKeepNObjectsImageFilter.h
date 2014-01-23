@@ -42,8 +42,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template< class TInputImage, class TFeatureImage >
-class ITK_EXPORT BinaryStatisticsKeepNObjectsImageFilter:
+template< typename TInputImage, typename TFeatureImage >
+class BinaryStatisticsKeepNObjectsImageFilter:
   public ImageToImageFilter< TInputImage, TInputImage >
 {
 public:
@@ -106,14 +106,14 @@ public:
   itkBooleanMacro(FullyConnected);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputEqualityComparableCheck,
                    ( Concept::EqualityComparable< InputImagePixelType > ) );
   itkConceptMacro( IntConvertibleToInputCheck,
                    ( Concept::Convertible< int, InputImagePixelType > ) );
   itkConceptMacro( InputOStreamWritableCheck,
                    ( Concept::OStreamWritable< InputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
   /**

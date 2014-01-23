@@ -30,7 +30,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class Sqrt
 {
 public:
@@ -61,8 +61,8 @@ public:
  * \ingroup MultiThreaded
  * \ingroup ITKImageIntensity
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT SqrtImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class SqrtImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::Sqrt< typename TInputImage::PixelType,
@@ -87,12 +87,12 @@ public:
                UnaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToDoubleCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType, double > ) );
   itkConceptMacro( DoubleConvertibleToOutputCheck,
                    ( Concept::Convertible< double, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

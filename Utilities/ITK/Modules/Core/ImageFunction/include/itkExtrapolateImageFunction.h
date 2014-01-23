@@ -39,8 +39,8 @@ namespace itk
  *
  * \ingroup ITKImageFunction
  */
-template< class TInputImage, class TCoordRep = float >
-class ITK_EXPORT ExtrapolateImageFunction:
+template< typename TInputImage, typename TCoordRep = float >
+class ExtrapolateImageFunction:
   public ImageFunction< TInputImage,
                         typename NumericTraits< typename TInputImage::PixelType >::RealType, TCoordRep >
 {

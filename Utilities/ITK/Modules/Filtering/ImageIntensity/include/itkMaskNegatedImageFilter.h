@@ -30,7 +30,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput, class TMask, class TOutput = TInput >
+template< typename TInput, typename TMask, typename TOutput = TInput >
 class MaskNegatedInput
 {
 public:
@@ -125,8 +125,8 @@ private:
  * \wikiexample{ImageProcessing/MaskNegatedImageFilter,Apply the inverse of a mask to an image}
  * \endwiki
  */
-template< class TInputImage, class TMaskImage, class TOutputImage = TInputImage >
-class ITK_EXPORT MaskNegatedImageFilter:
+template< typename TInputImage, typename TMaskImage, typename TOutputImage = TInputImage >
+class MaskNegatedImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage, TMaskImage, TOutputImage,
                             Functor::MaskNegatedInput<
@@ -205,13 +205,13 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( MaskEqualityComparableCheck,
                    ( Concept::EqualityComparable< typename TMaskImage::PixelType > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType,
                                            typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

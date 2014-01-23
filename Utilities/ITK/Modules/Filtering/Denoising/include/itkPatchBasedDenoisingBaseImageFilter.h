@@ -90,8 +90,8 @@ namespace itk
  * \sa PatchBasedDenoisingImageFilter
  */
 
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT PatchBasedDenoisingBaseImageFilter :
+template <typename TInputImage, typename TOutputImage>
+class PatchBasedDenoisingBaseImageFilter :
   public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -139,10 +139,10 @@ public:
    */
   typedef ZeroFluxNeumannBoundaryCondition<OutputImageType> BoundaryConditionType;
   typedef typename::itk::Statistics::ImageToNeighborhoodSampleAdaptor<
-      OutputImageType, BoundaryConditionType >                ListAdaptorType;
-  typedef typename ListAdaptorType::NeighborhoodRadiusType PatchRadiusType;
+      OutputImageType, BoundaryConditionType >              ListAdaptorType;
+  typedef typename ListAdaptorType::NeighborhoodRadiusType  PatchRadiusType;
   typedef ConstNeighborhoodIterator<
-      InputImageType, BoundaryConditionType >                 InputImagePatchIterator;
+      InputImageType, BoundaryConditionType >               InputImagePatchIterator;
 
   /** Set/Get the patch radius specified in physical coordinates.
    * Patch radius is preferably set to an even number.
@@ -300,7 +300,7 @@ protected:
   return RIEMANNIAN;
   }
 
-  template <class PixelT>
+  template <typename PixelT>
   ComponentSpaceType DetermineComponentSpace(const PixelT& itkNotUsed(p) )
   {
   return EUCLIDEAN;

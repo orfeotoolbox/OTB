@@ -59,9 +59,9 @@ namespace itk
  * \ingroup GeometricTransform
  * \ingroup ITKV3Compatibility
  */
-template< class TOutputImage,
-          class TTransformPrecisionType = double >
-class ITK_EXPORT TransformToDeformationFieldSource:
+template< typename TOutputImage,
+          typename TTransformPrecisionType = double >
+class TransformToDeformationFieldSource:
   public ImageSource< TOutputImage >
 {
 public:
@@ -168,12 +168,12 @@ public:
   unsigned long GetMTime(void) const;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkStaticConstMacro(PixelDimension, unsigned int,
                       PixelType::Dimension);
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< ImageDimension, PixelDimension > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -48,8 +48,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKMathematicalMorphology
  */
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT ClosingByReconstructionImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class ClosingByReconstructionImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -113,10 +113,10 @@ public:
   itkBooleanMacro(PreserveIntensities);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputImagePixelType, OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

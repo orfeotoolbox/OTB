@@ -43,8 +43,8 @@ namespace itk
  *NormalVectorDiffusionFunction for an example.
  * \ingroup ITKFiniteDifference
  */
-template< class TSparseImageType >
-class ITK_EXPORT FiniteDifferenceSparseImageFunction:
+template< typename TSparseImageType >
+class FiniteDifferenceSparseImageFunction:
   public FiniteDifferenceFunction< TSparseImageType >
 {
 public:

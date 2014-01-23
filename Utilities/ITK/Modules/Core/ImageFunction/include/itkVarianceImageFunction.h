@@ -39,8 +39,8 @@ namespace itk
  * \ingroup ImageFunctions
  * \ingroup ITKImageFunction
  */
-template< class TInputImage, class TCoordRep = float >
-class ITK_EXPORT VarianceImageFunction:
+template< typename TInputImage, typename TCoordRep = float >
+class VarianceImageFunction:
   public ImageFunction< TInputImage, typename NumericTraits< typename TInputImage::PixelType >::RealType,
                         TCoordRep >
 {

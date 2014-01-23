@@ -17,6 +17,7 @@
  *=========================================================================*/
 #ifndef __itkIOTestHelper_h
 #define __itkIOTestHelper_h
+#include "ITKIOImageBaseExport.h"
 #include <string>
 
 #include "itksys/SystemTools.hxx"
@@ -66,7 +67,7 @@ public:
       return image;
     }
 
-  template <class ImageType,class ImageIOType>
+  template <typename ImageType,typename ImageIOType>
   static void
   WriteImage(typename ImageType::Pointer &image ,
              const std::string &filename)
@@ -129,7 +130,7 @@ public:
       return itksys::SystemTools::RemoveFile(fname);
     }
 
-  template <class ImageType>
+  template <typename ImageType>
   static void SetIdentityDirection(typename ImageType::Pointer &im)
     {
       typename ImageType::DirectionType dir;
@@ -137,7 +138,7 @@ public:
       im->SetDirection(dir);
     }
 
-  template <class ImageType>
+  template <typename ImageType>
   static typename ImageType::Pointer
   AllocateImageFromRegionAndSpacing(const typename ImageType::RegionType &region,
                                     const typename ImageType::SpacingType &spacing)
@@ -149,7 +150,7 @@ public:
       rval->Allocate();
       return rval;
     }
-  template <class ImageType>
+  template <typename ImageType>
   static typename ImageType::Pointer
   AllocateImageFromRegionAndSpacing(const typename ImageType::RegionType &region,
                                     const typename ImageType::SpacingType &spacing,

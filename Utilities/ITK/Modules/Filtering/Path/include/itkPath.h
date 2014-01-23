@@ -49,8 +49,8 @@ namespace itk
  * \ingroup PathObjects
  * \ingroup ITKPath
  */
-template< class TInput, class TOutput, unsigned int VDimension >
-class ITK_EXPORT Path: public DataObject
+template< typename TInput, typename TOutput, unsigned int VDimension >
+class Path: public DataObject
 {
 public:
   /** Standard class typedefs. */

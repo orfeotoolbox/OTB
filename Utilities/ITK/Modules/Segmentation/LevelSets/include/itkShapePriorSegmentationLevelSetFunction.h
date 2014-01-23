@@ -51,8 +51,8 @@ namespace itk
  * \ingroup FiniteDifferenceFunctions
  * \ingroup ITKLevelSets
  */
-template< class TImageType, class TFeatureImageType = TImageType >
-class ITK_EXPORT ShapePriorSegmentationLevelSetFunction:
+template< typename TImageType, typename TFeatureImageType = TImageType >
+class ShapePriorSegmentationLevelSetFunction:
   public SegmentationLevelSetFunction< TImageType, TFeatureImageType >
 {
 public:

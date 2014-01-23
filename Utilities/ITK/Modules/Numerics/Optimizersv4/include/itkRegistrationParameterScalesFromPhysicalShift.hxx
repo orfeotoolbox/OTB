@@ -23,13 +23,13 @@
 namespace itk
 {
 
-template< class TMetric >
+template< typename TMetric >
 RegistrationParameterScalesFromPhysicalShift< TMetric >
 ::RegistrationParameterScalesFromPhysicalShift()
 {
 }
 
-template< class TMetric >
+template< typename TMetric >
 void
 RegistrationParameterScalesFromPhysicalShift< TMetric >
 ::ComputeSampleShifts(const ParametersType &deltaParameters, ScalesType &sampleShifts)
@@ -44,8 +44,8 @@ RegistrationParameterScalesFromPhysicalShift< TMetric >
     }
 }
 
-template< class TMetric >
-template< class TTransform >
+template< typename TMetric >
+template< typename TTransform >
 void
 RegistrationParameterScalesFromPhysicalShift< TMetric >
 ::ComputeSampleShiftsInternal(const ParametersType &deltaParameters, ScalesType &sampleShifts)
@@ -54,7 +54,7 @@ RegistrationParameterScalesFromPhysicalShift< TMetric >
 
   // We save the old parameters and apply the delta parameters to calculate the
   // voxel shift. After it is done, we will reset to the old parameters.
-  TransformBase *transform = const_cast<TransformBase *>(this->GetTransform());
+  TransformBaseTemplate<typename TMetric::MeasureType> *transform = const_cast<TransformBaseTemplate<typename TMetric::MeasureType> *>(this->GetTransform());
   const ParametersType oldParameters = transform->GetParameters();
 
   const SizeValueType numSamples = this->m_SamplePoints.size();
@@ -91,7 +91,7 @@ RegistrationParameterScalesFromPhysicalShift< TMetric >
 }
 
 /** Print the information about this class */
-template< class TMetric >
+template< typename TMetric >
 void
 RegistrationParameterScalesFromPhysicalShift< TMetric >
 ::PrintSelf(std::ostream& os, Indent indent) const

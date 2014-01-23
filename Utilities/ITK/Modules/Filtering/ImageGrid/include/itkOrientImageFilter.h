@@ -136,8 +136,8 @@ namespace itk
  * \endcode
  * \ingroup ITKImageGrid
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT OrientImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class OrientImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -254,7 +254,7 @@ public:
   virtual void GenerateOutputInformation();
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutput,
                    ( Concept::Convertible< InputImagePixelType, OutputImagePixelType > ) );
   itkConceptMacro( SameDimension,
@@ -262,7 +262,7 @@ public:
                                              itkGetStaticConstMacro(OutputImageDimension) > ) );
   itkConceptMacro( DimensionShouldBe3,
                    ( Concept::SameDimension< itkGetStaticConstMacro(InputImageDimension), 3 > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

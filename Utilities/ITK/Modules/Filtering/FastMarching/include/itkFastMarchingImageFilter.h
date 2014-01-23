@@ -100,9 +100,9 @@ namespace itk
  * \ingroup ITKFastMarching
  */
 template<
-  class TLevelSet,
-  class TSpeedImage = Image< float,  TLevelSet ::ImageDimension > >
-class ITK_EXPORT FastMarchingImageFilter:
+  typename TLevelSet,
+  typename TSpeedImage = Image< float,  TLevelSet ::ImageDimension > >
+class FastMarchingImageFilter:
   public ImageToImageFilter< TSpeedImage, TLevelSet >
 {
 public:
@@ -317,7 +317,7 @@ private:
   itkBooleanMacro(OverrideOutputInformation);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< SetDimension, SpeedImageDimension > ) );
   itkConceptMacro( SpeedConvertibleToDoubleCheck,
@@ -326,7 +326,7 @@ private:
                    ( Concept::Convertible< double, PixelType > ) );
   itkConceptMacro( LevelSetOStreamWritableCheck,
                    ( Concept::OStreamWritable< PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

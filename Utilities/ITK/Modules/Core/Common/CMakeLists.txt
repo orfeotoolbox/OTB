@@ -45,16 +45,22 @@ check_include_files("sys/types.h" HAVE_SYS_TYPES_H)
 include(CheckSupportForSSERounding)
 
 
+
+# Check for the new C++11 alignas type specifier for future portable alignment
+try_compile( ITK_HAS_CPP11_ALIGNAS
+  ${ITK_BINARY_DIR}/CMakeTmp
+  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/itkCheckHasCPP11Alignas.cxx )
+
 # check of the optional TR1 type_traits, alternative boost
 # implementation could also be searched for
 include(CheckIncludeFileCXX)
 check_include_file_cxx( tr1/type_traits ITK_HAS_STLTR1_TR1_TYPE_TRAITS )
 check_include_file_cxx( type_traits ITK_HAS_STLTR1_TYPE_TRAITS )
 
-# Check for the new C++11 alignas type specifier for future portable alignment
-try_compile( ITK_HAS_CPP11_ALIGNAS
+# Check for C++11 type_traits
+try_compile( ITK_HAS_CPP11_TYPETRAITS
   ${ITK_BINARY_DIR}/CMakeTmp
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/itkCheckHasCPP11Alignas.cxx )
+  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/itkCheckCxx11StlTypeTraits.cxx )
 
 try_compile( ITK_HAS_GNU_ATTRIBUTE_ALIGNED
   ${ITK_BINARY_DIR}/CMakeTmp

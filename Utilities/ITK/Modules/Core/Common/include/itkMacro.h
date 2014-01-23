@@ -40,6 +40,7 @@
 
 #include "itkWin32Header.h"
 #include "itkConfigure.h"
+#include "ITKCommonExport.h"
 
 #include <typeinfo>
 
@@ -101,11 +102,6 @@ namespace itk
 #endif
 
 // Setup symbol exports
-//
-// When a class definition has ITK_EXPORT, the class will be
-// checked automatically, by Utilities/Dart/PrintSelfCheck.tcl
-#define ITK_EXPORT
-
 #if defined( _WIN32 ) || defined ( WIN32 )
   #define ITK_ABI_IMPORT __declspec(dllimport)
   #define ITK_ABI_EXPORT __declspec(dllexport)
@@ -119,25 +115,6 @@ namespace itk
     #define ITK_ABI_IMPORT
     #define ITK_ABI_EXPORT
     #define ITK_ABI_HIDDEN
-  #endif
-#endif
-
-#define ITKCommon_HIDDEN ITK_ABI_HIDDEN
-
-#if !defined( ITKSTATIC )
-  #ifdef ITKCommon_EXPORTS
-    #define ITKCommon_EXPORT ITK_ABI_EXPORT
-  #else
-    #define ITKCommon_EXPORT ITK_ABI_IMPORT
-  #endif  /* ITKCommon_EXPORTS */
-#else
-  /* ITKCommon is build as a static lib */
-  #if __GNUC__ >= 4
-    // Don't hide symbols in the static ITKCommon library in case
-    // -fvisibility=hidden is used
-    #define ITKCommon_EXPORT ITK_ABI_EXPORT
-  #else
-    #define ITKCommon_EXPORT
   #endif
 #endif
 
@@ -333,7 +310,7 @@ extern ITKCommon_EXPORT void OutputWindowDisplayDebugText(const char *);
 
 #define itkDeclareExceptionMacro(newexcp,parentexcp,whatmessage)                        \
 namespace itk {                                                                         \
-class ITK_EXPORT newexcp : public parentexcp                                            \
+class newexcp : public parentexcp                                            \
 {                                                                                       \
 public:                                                                                 \
 newexcp( const char *file, unsigned int lineNumber ) :                                  \
@@ -482,6 +459,18 @@ itkTypeMacro(newexcp, parentexcp);                                              
 // cache lines, false shared can be reduced, and performance
 // increased.
 #define ITK_CACHE_LINE_ALIGNMENT 64
+
+//
+// itkPadStruct will add padding to a structure to ensure a minimum size
+// for ensuring that adjacent structures do not share CACHE lines.
+// Each struct will take up some multiple of cacheline sizes.
+// This is particularly useful for arrays of thread private variables.
+//
+#define itkPadStruct( mincachesize, oldtype, newtype )                        \
+    struct newtype: public oldtype                                            \
+      {                                                                       \
+         char _StructPadding[mincachesize - (sizeof(oldtype)%mincachesize) ]; \
+      };
 
 //
 // itkAlignedTypedef is a macro which creates a new typedef to make a
@@ -1056,6 +1045,10 @@ TTarget itkDynamicCastInDebugMode(TSource x)
   itkGetObjectMacro(name, type)
 #endif // defined ( ITK_FUTURE_LEGACY_REMOVE )
 
+// For backwards compatibility define ITK_EXPORT to nothing
+#define ITK_EXPORT
+
+
 /** Get a const reference to a smart pointer to an object.
  * Creates the member Get"name"() (e.g., GetPoints()). */
 #define itkGetConstReferenceObjectMacro(name, type)                     \
@@ -1127,7 +1120,7 @@ TTarget itkDynamicCastInDebugMode(TSource x)
  * provides the GPU kernel source code as a const char*
  */
 #define itkGPUKernelClassMacro(kernel)   \
-class ITK_EXPORT kernel                  \
+class kernel                  \
   {                                      \
     public:                              \
       static const char* GetOpenCLSource(); \

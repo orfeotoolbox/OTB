@@ -22,22 +22,40 @@
 
 namespace itk
 {
-template< class TImage >
+template< typename TImage >
 LevelSetDomainPartitionImage< TImage >
 ::LevelSetDomainPartitionImage()
 {
 }
 
-template< class TImage >
+template< typename TImage >
 LevelSetDomainPartitionImage< TImage >
 ::~LevelSetDomainPartitionImage()
 {
 }
 
-template< class TImage >
+template< typename TImage >
+void
+LevelSetDomainPartitionImage< TImage >
+::SetLevelSetDomainRegionVector( const LevelSetDomainRegionVectorType& domain )
+{
+  m_LevelSetDomainRegionVector = domain;
+}
+
+template< typename TImage >
+const typename LevelSetDomainPartitionImage< TImage >::LevelSetDomainRegionVectorType&
+LevelSetDomainPartitionImage< TImage >
+::GetLevelSetDomainRegionVector() const
+{
+  return m_LevelSetDomainRegionVector;
+}
+
+template< typename TImage >
 void LevelSetDomainPartitionImage< TImage >
 ::PopulateListDomain()
 {
+  this->AllocateListDomain();
+
   const ListRegionType & region = this->m_ListDomain->GetLargestPossibleRegion();
   ListIteratorType lIt(this->m_ListDomain, region);
 
@@ -48,7 +66,7 @@ void LevelSetDomainPartitionImage< TImage >
     IdentifierType i = NumericTraits< IdentifierType >::Zero;
     while( i < this->m_NumberOfLevelSetFunctions )
       {
-      if ( this->m_LevelSetDataPointerVector[i]->VerifyInsideRegion(listIndex) )
+      if ( this->m_LevelSetDomainRegionVector[i].IsInside( listIndex ) )
         {
         identifierList.push_back(i);
         }
@@ -58,7 +76,7 @@ void LevelSetDomainPartitionImage< TImage >
     }
 }
 
-template< class TImage >
+template< typename TImage >
 void LevelSetDomainPartitionImage< TImage >
 ::AllocateListDomain()
 {

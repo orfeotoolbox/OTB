@@ -48,8 +48,8 @@ namespace itk
  * \ingroup ImageObjects
  * \ingroup ITKCommon
  */
-template< class TInputImage, class TOutputImage = TInputImage >
-class ITK_EXPORT ImageBoundaryCondition
+template< typename TInputImage, typename TOutputImage = TInputImage >
+class ImageBoundaryCondition
 {
 public:
   /** Extract information from the image type */

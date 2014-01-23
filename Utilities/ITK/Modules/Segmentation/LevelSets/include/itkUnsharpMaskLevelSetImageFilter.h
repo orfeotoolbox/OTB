@@ -63,8 +63,8 @@ namespace itk
  * should be in the range [0.1,1] for reasonable results.
  * \ingroup ITKLevelSets
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT UnsharpMaskLevelSetImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class UnsharpMaskLevelSetImageFilter:
   public SparseFieldFourthOrderLevelSetImageFilter< TInputImage, TOutputImage >
 {
 public:

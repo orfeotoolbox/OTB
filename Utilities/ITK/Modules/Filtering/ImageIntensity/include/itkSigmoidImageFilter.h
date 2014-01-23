@@ -46,7 +46,7 @@ namespace itk
 
 namespace Functor
 {
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class Sigmoid
 {
 public:
@@ -134,8 +134,8 @@ private:
 };
 }
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT SigmoidImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class SigmoidImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::Sigmoid<
@@ -222,7 +222,7 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToDoubleCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType, double > ) );
   itkConceptMacro( OutputAdditiveOperatorsCheck,
@@ -233,7 +233,7 @@ public:
                    ( Concept::MultiplyOperator< OutputPixelType, double > ) );
   itkConceptMacro( OutputDoubleAdditiveOperatorsCheck,
                    ( Concept::AdditiveOperators< OutputPixelType, OutputPixelType, double > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

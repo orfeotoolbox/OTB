@@ -63,8 +63,8 @@ namespace itk
  * \ingroup ITKCommon
  */
 
-template< class TNode, unsigned int VImageDimension = 2 >
-class ITK_EXPORT SparseImage:public Image< TNode *, VImageDimension >
+template< typename TNode, unsigned int VImageDimension = 2 >
+class SparseImage:public Image< TNode *, VImageDimension >
 {
 public:
   /** Standard typedefs. */

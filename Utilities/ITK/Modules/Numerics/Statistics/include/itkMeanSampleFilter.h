@@ -44,8 +44,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TSample >
-class ITK_EXPORT MeanSampleFilter:public ProcessObject
+template< typename TSample >
+class MeanSampleFilter:public ProcessObject
 {
 public:
   /**Standard class typedefs. */

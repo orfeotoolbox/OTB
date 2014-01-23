@@ -44,9 +44,9 @@ namespace itk
  * \sa  PolylineMaskImageFilter
  * \ingroup ITKImageIntensity
  */
-template< class TInputImage, class TPolyline,
-          class TOutputImage >
-class ITK_EXPORT PolylineMask2DImageFilter:public ImageToImageFilter< TInputImage, TOutputImage >
+template< typename TInputImage, typename TPolyline,
+          typename TOutputImage >
+class PolylineMask2DImageFilter:public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Standard class typedefs. */
@@ -92,7 +92,7 @@ public:
   void GenerateData(void);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< NDimensions, NOutputDimensions > ) );
   itkConceptMacro( IntConvertibleOutputCheck,
@@ -101,7 +101,7 @@ public:
                    ( Concept::EqualityComparable< OutputImagePixelType > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputImagePixelType, OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

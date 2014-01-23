@@ -36,19 +36,20 @@
 #include "itkOffset.h"
 #include "itkFixedArray.h"
 #include "itkImageHelper.h"
+#include "itkFloatTypes.h"
+
 //HACK:  vnl/vnl_matrix_fixed.txx is needed here?
 //      to avoid undefined symbol vnl_matrix_fixed<double, 8u, 8u>::set_identity()", referenced from
 #include "vnl/vnl_matrix_fixed.txx"
 
-#include "itkImageRegion.h"
 #include "itkImageTransformHelper.h"
-
-/* Forward declaration (ImageTransformHelper include's ImageBase) */
-template< unsigned int NImageDimension, unsigned int R, unsigned int C >
-class ImageTransformHelper;
 
 namespace itk
 {
+
+/* Forward declaration (ImageTransformHelper include's ImageBase) */
+template< unsigned int NImageDimension, unsigned int R, unsigned int C, typename TPointValue, typename TMatrixValue >
+class ImageTransformHelper;
 
 /** \class ImageBase
  * \brief Base class for templated image classes.
@@ -108,7 +109,7 @@ namespace itk
  * \ingroup ITKCommon
  */
 template< unsigned int VImageDimension = 2 >
-class ITK_EXPORT ImageBase:public DataObject
+class ImageBase:public DataObject
 {
 public:
   /** Standard typedefs. */
@@ -149,18 +150,18 @@ public:
    * The spacing is the geometric distance between image samples along
    * each dimension. ITK only supports positive spacing value:
    * negative values may cause undesirable results.  */
-  typedef double                                      SpacingValueType;
+  typedef SpacePrecisionType                          SpacingValueType;
   typedef Vector< SpacingValueType, VImageDimension > SpacingType;
 
   /** Origin typedef support.  The origin is the geometric coordinates
    * of the index (0,0). */
-  typedef double                                   PointValueType;
+  typedef SpacePrecisionType                       PointValueType;
   typedef Point< PointValueType, VImageDimension > PointType;
 
   /** Direction typedef support.  The Direction is a matix of
    * direction cosines that specify the direction in physical space
    * between samples along each dimension. */
-  typedef Matrix< double, VImageDimension, VImageDimension > DirectionType;
+  typedef Matrix< SpacePrecisionType, VImageDimension, VImageDimension > DirectionType;
 
   /** Restore object to initialized state. */
   void Initialize();
@@ -171,7 +172,7 @@ public:
 
   /** Set the origin of the image. The origin is the geometric
    * coordinates of the image origin (pixel [0,0]).  It is stored internally
-   * as double but may be set from float.
+   * as SpacePrecisionType but may be set from float or double.
    * \sa GetOrigin() */
   itkSetMacro(Origin, PointType);
   virtual void SetOrigin(const double origin[VImageDimension]);
@@ -202,7 +203,7 @@ public:
    * http://www.itk.org/Wiki/Proposals:Orientation#Some_notes_on_the_DICOM_convention_and_current_ITK_usage
    *
    * \sa GetDirection() */
-  virtual void SetDirection(const DirectionType direction);
+  virtual void SetDirection(const DirectionType & direction);
 
   /** Get the direction cosines of the image. The direction cosines
    * are vectors that point from one pixel to the next.
@@ -402,20 +403,20 @@ public:
    * Floating point index results are rounded to integers
    * Returns true if the resulting index is within the image, false otherwise
    * \sa Transform */
-  template< class TCoordRep >
+  template< typename TCoordRep >
   bool TransformPhysicalPointToIndex(
     const Point< TCoordRep, VImageDimension > & point,
     IndexType & index) const
   {
-    ImageTransformHelper< VImageDimension, VImageDimension - 1, VImageDimension - 1 >::TransformPhysicalPointToIndex(
-      this->m_PhysicalPointToIndex, this->m_Origin, point, index);
+    ImageTransformHelper< VImageDimension,VImageDimension - 1, VImageDimension - 1, TCoordRep, SpacePrecisionType >
+      ::TransformPhysicalPointToIndex(this->m_PhysicalPointToIndex, this->m_Origin, point, index);
 
     // Now, check to see if the index is within allowed bounds
     const bool isInside = this->GetLargestPossibleRegion().IsInside(index);
     return isInside;
     /* NON TEMPLATE_META_PROGRAMMING_LOOP_UNROLLING data version
      * Leaving here for documentation purposes
-     * template< class TCoordRep >
+     * template< typename TCoordRep >
      * bool TransformPhysicalPointToIndex(
      *   const Point< TCoordRep, VImageDimension > & point,
      *   IndexType & index) const
@@ -440,12 +441,12 @@ public:
    *
    * Returns true if the resulting index is within the image, false otherwise.
    * \sa Transform */
-  template< class TCoordRep >
+  template< typename TCoordRep, typename TIndexRep >
   bool TransformPhysicalPointToContinuousIndex(
     const Point< TCoordRep, VImageDimension > & point,
-    ContinuousIndex< TCoordRep, VImageDimension > & index) const
+    ContinuousIndex< TIndexRep, VImageDimension > & index) const
   {
-    Vector< double, VImageDimension > cvector;
+    Vector< SpacePrecisionType, VImageDimension > cvector;
 
     for ( unsigned int k = 0; k < VImageDimension; k++ )
       {
@@ -454,7 +455,7 @@ public:
     cvector = m_PhysicalPointToIndex * cvector;
     for ( unsigned int i = 0; i < VImageDimension; i++ )
       {
-      index[i] = static_cast< TCoordRep >( cvector[i] );
+      index[i] = static_cast< TIndexRep >( cvector[i] );
       }
 
     // Now, check to see if the index is within allowed bounds
@@ -467,9 +468,9 @@ public:
    * the origin and spacing information comes from)
    * from a continuous index (in the index space)
    * \sa Transform */
-  template< class TCoordRep >
+  template< typename TCoordRep, typename TIndexRep >
   void TransformContinuousIndexToPhysicalPoint(
-    const ContinuousIndex< TCoordRep, VImageDimension > & index,
+    const ContinuousIndex< TIndexRep, VImageDimension > & index,
     Point< TCoordRep, VImageDimension > & point) const
   {
     for ( unsigned int r = 0; r < VImageDimension; r++ )
@@ -488,16 +489,16 @@ public:
    * from a discrete index (in the index space)
    *
    * \sa Transform */
-  template< class TCoordRep >
+  template< typename TCoordRep >
   void TransformIndexToPhysicalPoint(
     const IndexType & index,
     Point< TCoordRep, VImageDimension > & point) const
   {
-    ImageTransformHelper< VImageDimension, VImageDimension - 1, VImageDimension - 1 >::TransformIndexToPhysicalPoint(
-      this->m_IndexToPhysicalPoint, this->m_Origin, index, point);
+    ImageTransformHelper< VImageDimension, VImageDimension - 1, VImageDimension - 1,TCoordRep, SpacePrecisionType >::
+      TransformIndexToPhysicalPoint(this->m_IndexToPhysicalPoint, this->m_Origin, index, point);
     /* NON TEMPLATE_META_PROGRAMMING_LOOP_UNROLLING data version
      * Leaving here for documentation purposes
-     * template< class TCoordRep >
+     * template< typename TCoordRep >
      * void TransformIndexToPhysicalPoint(
      *   const IndexType & index,
      *   Point< TCoordRep, VImageDimension > & point) const
@@ -525,7 +526,7 @@ public:
    *
    * \sa Image
    */
-  template< class TCoordRep >
+  template< typename TCoordRep >
   void TransformLocalVectorToPhysicalVector(
     const FixedArray< TCoordRep, VImageDimension > & inputGradient,
     FixedArray< TCoordRep, VImageDimension > & outputGradient) const
@@ -556,7 +557,7 @@ public:
    * Cosines. The arguments of the method are of type FixedArray to make
    * possible to use this method with both Vector and CovariantVector.
    */
-  template< class TCoordRep >
+  template< typename TCoordRep >
   void TransformPhysicalVectorToLocalVector(
     const FixedArray< TCoordRep, VImageDimension > & inputGradient,
     FixedArray< TCoordRep, VImageDimension > & outputGradient) const
@@ -708,6 +709,21 @@ protected:
 private:
   ImageBase(const Self &);      //purposely not implemented
   void operator=(const Self &); //purposely not implemented
+
+  void InternalSetSpacing(const SpacingValueType spacing[VImageDimension])
+    {
+      SpacingType s(spacing);
+      this->SetSpacing(s);
+    }
+
+  template <typename TSpacingValue>
+  void InternalSetSpacing(const TSpacingValue spacing[VImageDimension])
+    {
+      Vector<TSpacingValue,VImageDimension> sf(spacing);
+      SpacingType                           s;
+      s.CastFrom(sf);
+      this->SetSpacing(s);
+    }
 
   OffsetValueType m_OffsetTable[VImageDimension + 1];
 

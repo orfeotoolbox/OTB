@@ -44,8 +44,8 @@ namespace itk
  * \ingroup DataAccess
  * \ingroup ITKCommon
  */
-template< class T >
-class ITK_EXPORT SmartPointerForwardReference
+template< typename T >
+class SmartPointerForwardReference
 {
 public:
   /** Constructor  */

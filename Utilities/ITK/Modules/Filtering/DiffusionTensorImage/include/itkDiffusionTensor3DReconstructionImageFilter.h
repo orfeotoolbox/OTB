@@ -120,11 +120,11 @@ namespace itk
  * \ingroup ITKDiffusionTensorImage
  */
 
-template< class TReferenceImagePixelType,
-          class TGradientImagePixelType = TReferenceImagePixelType,
-          class TTensorPixelType = double,
-          class TMaskImageType = Image<unsigned char, 3> >
-class ITK_EXPORT DiffusionTensor3DReconstructionImageFilter:
+template< typename TReferenceImagePixelType,
+          typename TGradientImagePixelType = TReferenceImagePixelType,
+          typename TTensorPixelType = double,
+          typename TMaskImageType = Image<unsigned char, 3> >
+class DiffusionTensor3DReconstructionImageFilter:
   public ImageToImageFilter< Image< TReferenceImagePixelType, 3 >,
                              Image< DiffusionTensor3D< TTensorPixelType >, 3 > >
 {
@@ -254,7 +254,7 @@ public:
   itkGetConstReferenceMacro(BValue, TTensorPixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( ReferenceEqualityComparableCheck,
                    ( Concept::EqualityComparable< ReferencePixelType > ) );
   itkConceptMacro( TensorEqualityComparableCheck,
@@ -274,7 +274,7 @@ public:
                    ( Concept::OStreamWritable< ReferencePixelType > ) );
   itkConceptMacro( TensorOStreamWritableCheck,
                    ( Concept::OStreamWritable< TensorPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

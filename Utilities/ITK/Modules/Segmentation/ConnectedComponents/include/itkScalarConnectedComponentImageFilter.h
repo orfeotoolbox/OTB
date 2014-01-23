@@ -49,7 +49,7 @@ namespace itk
 
 namespace Functor
 {
-template< class TInput >
+template< typename TInput >
 class SimilarPixelsFunctor
 {
 public:
@@ -106,8 +106,8 @@ protected:
 };
 } // end namespace Functor
 
-template< class TInputImage, class TOutputImage, class TMaskImage = TInputImage >
-class ITK_EXPORT ScalarConnectedComponentImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TMaskImage = TInputImage >
+class ScalarConnectedComponentImageFilter:
   public ConnectedComponentFunctorImageFilter< TInputImage, TOutputImage,
                                                Functor::SimilarPixelsFunctor< typename TInputImage::ValueType >,
                                                TMaskImage >
@@ -138,7 +138,7 @@ public:
   { return ( this->GetFunctor().GetDistanceThreshold() ); }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputEqualityComparableCheck,
                    ( Concept::EqualityComparable< InputPixelType > ) );
   itkConceptMacro( OutputEqualityComparableCheck,
@@ -147,7 +147,7 @@ public:
                    ( Concept::EqualityComparable< typename TMaskImage::PixelType > ) );
   itkConceptMacro( OutputIncrementDecrementOperatorsCheck,
                    ( Concept::IncrementDecrementOperators< typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

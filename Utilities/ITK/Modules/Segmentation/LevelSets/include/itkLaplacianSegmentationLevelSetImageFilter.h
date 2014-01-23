@@ -98,10 +98,10 @@ namespace itk
  *   \sa SparseFieldLevelSetImageFilter
  * \ingroup ITKLevelSets
  */
-template< class TInputImage,
-          class TFeatureImage,
-          class TOutputPixelType = float >
-class ITK_EXPORT LaplacianSegmentationLevelSetImageFilter:
+template< typename TInputImage,
+          typename TFeatureImage,
+          typename TOutputPixelType = float >
+class LaplacianSegmentationLevelSetImageFilter:
   public SegmentationLevelSetImageFilter< TInputImage, TFeatureImage, TOutputPixelType >
 {
 public:

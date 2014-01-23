@@ -44,8 +44,8 @@ namespace itk
  * \wikiexample{Smoothing/MeanImageFilter,Mean filter an image}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT MeanImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class MeanImageFilter:
   public BoxImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -82,10 +82,10 @@ public:
   typedef typename InputImageType::SizeType InputSizeType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

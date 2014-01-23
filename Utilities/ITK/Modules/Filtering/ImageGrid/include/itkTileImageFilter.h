@@ -48,8 +48,8 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT TileImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class TileImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -117,14 +117,14 @@ public:
   itkGetConstMacro(DefaultPixelValue, OutputPixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputEqualityComparableCheck,
                    ( Concept::EqualityComparable< OutputPixelType > ) );
   itkConceptMacro( SameTypeCheck,
                    ( Concept::SameType< InputPixelType, OutputPixelType > ) );
   itkConceptMacro( OutputOStreamWritableCheck,
                    ( Concept::OStreamWritable< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -31,7 +31,7 @@ namespace itk
 /*
  * InvertDisplacementFieldImageFilter class definitions
  */
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
 ::InvertDisplacementFieldImageFilter() :
  m_MaximumNumberOfIterations( 20 ),
@@ -49,13 +49,13 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
   this->m_EnforceBoundaryCondition = true;
 }
 
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
 ::~InvertDisplacementFieldImageFilter()
 {
 }
 
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 void
 InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
 ::SetInterpolator( InterpolatorType *interpolator )
@@ -72,7 +72,7 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
     }
 }
 
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 void
 InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
 ::GenerateData()
@@ -166,7 +166,7 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
     }
 }
 
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 void
 InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData( const RegionType & region, ThreadIdType itkNotUsed( threadId ) )
@@ -210,13 +210,18 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
     }
   else
     {
+    VectorType inverseSpacing;
+    for( unsigned int d = 0; d < ImageDimension; ++d )
+      {
+      inverseSpacing[d]=1.0/this->m_DisplacementFieldSpacing[d];
+      }
     for( ItE.GoToBegin(), ItS.GoToBegin(); !ItE.IsAtEnd(); ++ItE, ++ItS )
       {
-      VectorType displacement = ItE.Get();
+      const VectorType & displacement = ItE.Get();
       RealType scaledNorm = 0.0;
-      for( unsigned int d = 0; d < ImageDimension; d++ )
+      for( unsigned int d = 0; d < ImageDimension; ++d )
         {
-        scaledNorm += vnl_math_sqr( displacement[d] / this->m_DisplacementFieldSpacing[d] );
+        scaledNorm += vnl_math_sqr( displacement[d] * inverseSpacing[d] );
         }
       scaledNorm = vcl_sqrt( scaledNorm );
 
@@ -232,7 +237,7 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
     }
 }
 
-template<class TInputImage, class TOutputImage>
+template<typename TInputImage, typename TOutputImage>
 void
 InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
 ::PrintSelf( std::ostream& os, Indent indent ) const

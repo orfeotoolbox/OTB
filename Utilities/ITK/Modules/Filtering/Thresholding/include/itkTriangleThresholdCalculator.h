@@ -48,8 +48,8 @@ namespace itk
  * \ingroup Operators
  * \ingroup ITKThresholding
  */
-template <class THistogram, class TOutput=double>
-class ITK_EXPORT TriangleThresholdCalculator : public HistogramThresholdCalculator<THistogram, TOutput>
+template <typename THistogram, typename TOutput=double>
+class TriangleThresholdCalculator : public HistogramThresholdCalculator<THistogram, TOutput>
 {
 public:
   /** Standard class typedefs. */

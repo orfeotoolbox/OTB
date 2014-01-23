@@ -41,8 +41,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKMathematicalMorphology
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT HConvexImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class HConvexImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -95,14 +95,14 @@ public:
   itkBooleanMacro(FullyConnected);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputEqualityComparableCheck,
                    ( Concept::EqualityComparable< InputImagePixelType > ) );
   itkConceptMacro( IntConvertibleToInputCheck,
                    ( Concept::Convertible< int, InputImagePixelType > ) );
   itkConceptMacro( InputOStreamWritableCheck,
                    ( Concept::OStreamWritable< InputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

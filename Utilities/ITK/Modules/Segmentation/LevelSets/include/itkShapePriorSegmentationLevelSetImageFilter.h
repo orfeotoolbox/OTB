@@ -68,10 +68,10 @@ namespace itk
  *
  * \ingroup ITKLevelSets
  */
-template< class TInputImage,
-          class TFeatureImage,
-          class TOutputPixelType = float >
-class ITK_EXPORT ShapePriorSegmentationLevelSetImageFilter:
+template< typename TInputImage,
+          typename TFeatureImage,
+          typename TOutputPixelType = float >
+class ShapePriorSegmentationLevelSetImageFilter:
   public SegmentationLevelSetImageFilter< TInputImage, TFeatureImage,
                                           TOutputPixelType >
 {

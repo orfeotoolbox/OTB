@@ -22,7 +22,7 @@
 
 namespace itk
 {
-template< class TImage >
+template< typename TImage >
 bool
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::InBounds() const
@@ -49,7 +49,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return ans;
 }
 
-template< class TImage >
+template< typename TImage >
 bool
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::IndexInBounds(NeighborIndexType n, OffsetType & internalIndex, OffsetType & offset ) const
@@ -106,7 +106,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
     }
 }
 
-template< class TImage >
+template< typename TImage >
 typename ConstNeighborhoodIteratorWithOnlyIndex< TImage >::OffsetType
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::ComputeInternalIndex(NeighborIndexType n) const
@@ -124,7 +124,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return ans;
 }
 
-template< class TImage >
+template< typename TImage >
 typename ConstNeighborhoodIteratorWithOnlyIndex< TImage >::RegionType
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::GetBoundingBoxAsImageRegion() const
@@ -138,7 +138,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return ans;
 }
 
-template< class TImage >
+template< typename TImage >
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::ConstNeighborhoodIteratorWithOnlyIndex()
 {
@@ -164,7 +164,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   m_IsInBoundsValid = false;
 }
 
-template< class TImage >
+template< typename TImage >
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::ConstNeighborhoodIteratorWithOnlyIndex(const Self & orig):
   Neighborhood< DummyNeighborhoodPixelType, Dimension >(orig)
@@ -188,7 +188,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   m_InnerBoundsHigh = orig.m_InnerBoundsHigh;
 }
 
-template< class TImage >
+template< typename TImage >
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::ConstNeighborhoodIteratorWithOnlyIndex(const SizeType & radius, const ImageType *ptr, const RegionType & region)
 {
@@ -199,7 +199,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
     }
 }
 
-template< class TImage >
+template< typename TImage >
 void
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::SetEndIndex()
@@ -216,7 +216,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
     }
 }
 
-template< class TImage >
+template< typename TImage >
 void
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::GoToBegin()
@@ -224,7 +224,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   this->SetLocation(m_BeginIndex);
 }
 
-template< class TImage >
+template< typename TImage >
 void
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::GoToEnd()
@@ -232,7 +232,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   this->SetLocation(m_EndIndex);
 }
 
-template< class TImage >
+template< typename TImage >
 void ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::Initialize(const SizeType & radius, const ImageType *ptr, const RegionType & region)
 {
@@ -251,14 +251,11 @@ void ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   const IndexType rStart = region.GetIndex();
   const SizeType  rSize  = region.GetSize();
 
-  OffsetValueType overlapLow;
-  OffsetValueType overlapHigh;
-
   m_NeedToUseBoundaryCondition = false;
   for ( DimensionValueType i = 0; i < Dimension; ++i )
     {
-    overlapLow = static_cast< OffsetValueType >( ( rStart[i] - static_cast<OffsetValueType>( radius[i] ) ) - bStart[i] );
-    overlapHigh = static_cast< OffsetValueType >( ( bStart[i] + bSize[i] ) - ( rStart[i] + rSize[i] + static_cast<OffsetValueType>( radius[i] ) ) );
+    const OffsetValueType overlapLow = static_cast< OffsetValueType >( ( rStart[i] - static_cast<OffsetValueType>( radius[i] ) ) - bStart[i] );
+    const OffsetValueType overlapHigh = static_cast< OffsetValueType >( ( bStart[i] + bSize[i] ) - ( rStart[i] + rSize[i] + static_cast<OffsetValueType>( radius[i] ) ) );
 
     if ( overlapLow < 0 ) // out of bounds condition, define a region of
       {
@@ -277,7 +274,7 @@ void ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   m_IsInBounds = false;
 }
 
-template< class TImage >
+template< typename TImage >
 ConstNeighborhoodIteratorWithOnlyIndex< TImage > &
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::operator=(const Self & orig)
@@ -308,7 +305,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return *this;
 }
 
-template< class TImage >
+template< typename TImage >
 bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::operator<(const Self & it) const
 {
@@ -326,7 +323,7 @@ bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return false;
 }
 
-template< class TImage >
+template< typename TImage >
 bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::operator<=(const Self & it) const
 {
@@ -337,7 +334,7 @@ bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return this->operator<( it );
 }
 
-template< class TImage >
+template< typename TImage >
 bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::operator>(const Self & it) const
 {
@@ -355,7 +352,7 @@ bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return false;
 }
 
-template< class TImage >
+template< typename TImage >
 bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::operator>=(const Self & it) const
 {
@@ -366,7 +363,7 @@ bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return this->operator>( it );
 }
 
-template< class TImage >
+template< typename TImage >
 bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::IsAtEnd() const
 {
@@ -386,7 +383,7 @@ bool ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return ( this->GetIndex()[Dimension - 1] == this->m_EndIndex[Dimension - 1] );
 }
 
-template< class TImage >
+template< typename TImage >
 ConstNeighborhoodIteratorWithOnlyIndex< TImage > &
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::operator++()
@@ -416,7 +413,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return *this;
 }
 
-template< class TImage >
+template< typename TImage >
 ConstNeighborhoodIteratorWithOnlyIndex< TImage > &
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::operator--()
@@ -441,7 +438,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return *this;
 }
 
-template< class TImage >
+template< typename TImage >
 void
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -498,7 +495,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   Superclass::PrintSelf( os, indent.GetNextIndent() );
 }
 
-template< class TImage >
+template< typename TImage >
 void ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::SetBound(const SizeType & size)
 {
@@ -517,7 +514,7 @@ void ConstNeighborhoodIteratorWithOnlyIndex< TImage >
     }
 }
 
-template< class TImage >
+template< typename TImage >
 ConstNeighborhoodIteratorWithOnlyIndex< TImage > &
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::operator+=(const OffsetType & idx)
@@ -532,7 +529,7 @@ ConstNeighborhoodIteratorWithOnlyIndex< TImage >
   return *this;
 }
 
-template< class TImage >
+template< typename TImage >
 ConstNeighborhoodIteratorWithOnlyIndex< TImage > &
 ConstNeighborhoodIteratorWithOnlyIndex< TImage >
 ::operator-=(const OffsetType & idx)

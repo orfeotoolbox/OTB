@@ -41,8 +41,8 @@ namespace Function
  *
  * \ingroup ITKColormap
  */
-template< class TScalar, class TRGBPixel >
-class ITK_EXPORT SpringColormapFunction:
+template< typename TScalar, typename TRGBPixel >
+class SpringColormapFunction:
   public ColormapFunction< TScalar, TRGBPixel >
 {
 public:

@@ -29,10 +29,10 @@ namespace itk
  * \ingroup ITKConvolution
  * \sa ConvolutionImageFilter FFTConvolutionImageFilter
  */
-template< class TInputImage,
-          class TKernelImage = TInputImage,
-          class TOutputImage = TInputImage >
-class ITK_EXPORT ConvolutionImageFilterBase :
+template< typename TInputImage,
+          typename TKernelImage = TInputImage,
+          typename TOutputImage = TInputImage >
+class ConvolutionImageFilterBase :
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

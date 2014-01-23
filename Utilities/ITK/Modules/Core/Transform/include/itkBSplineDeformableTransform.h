@@ -24,7 +24,11 @@
 namespace itk
 {
 /** \class BSplineDeformableTransform
+ *
  * \brief Deformable transform using a BSpline representation
+ *
+ * \note BSplineTransform is a newer version of this class, and it is
+ * preferred.
  *
  * This class encapsulates a deformable transform of points from one
  * N-dimensional space to another N-dimensional space.
@@ -100,21 +104,23 @@ namespace itk
  *
  * \ingroup ITKTransform
  *
+ * \sa BSplineTransform
+ *
  * \wiki
  * \wikiexample{Registration/ImageRegistrationMethodBSpline,A global registration of two images}
  * \endwiki
  */
-template <class TScalarType = double, unsigned int NDimensions = 3,
+template <typename TScalar = double, unsigned int NDimensions = 3,
           unsigned int VSplineOrder = 3>
-class ITK_EXPORT BSplineDeformableTransform :
-  public BSplineBaseTransform<TScalarType,NDimensions,VSplineOrder>
+class BSplineDeformableTransform :
+  public BSplineBaseTransform<TScalar,NDimensions,VSplineOrder>
 {
 public:
   /** Standard class typedefs. */
-  typedef BSplineDeformableTransform                                 Self;
-  typedef BSplineBaseTransform<TScalarType,NDimensions,VSplineOrder> Superclass;
-  typedef SmartPointer<Self>                                         Pointer;
-  typedef SmartPointer<const Self>                                   ConstPointer;
+  typedef BSplineDeformableTransform                             Self;
+  typedef BSplineBaseTransform<TScalar,NDimensions,VSplineOrder> Superclass;
+  typedef SmartPointer<Self>                                     Pointer;
+  typedef SmartPointer<const Self>                               ConstPointer;
 
   /** New macro for creation of through the object factory. */
   // Explicit New() method, used here because we need to split the itkNewMacro()
@@ -169,8 +175,8 @@ public:
   typedef typename Superclass::OutputVnlVectorType OutputVnlVectorType;
 
   /** Standard coordinate point type for this class. */
-  typedef Point <TScalarType, itkGetStaticConstMacro( SpaceDimension )> InputPointType;
-  typedef Point <TScalarType, itkGetStaticConstMacro( SpaceDimension )> OutputPointType;
+  typedef Point <TScalar, itkGetStaticConstMacro( SpaceDimension )> InputPointType;
+  typedef Point <TScalar, itkGetStaticConstMacro( SpaceDimension )> OutputPointType;
 
 
   /** This method sets the fixed parameters of the transform.

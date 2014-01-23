@@ -39,8 +39,8 @@ namespace Accessor
  * \ingroup ITKImageAdaptors
  */
 
-template< class T >
-class ITK_EXPORT RGBToVectorPixelAccessor
+template< typename T >
+class RGBToVectorPixelAccessor
 {
 public:
   /** Standard class typedefs. */

@@ -36,7 +36,6 @@
 
 namespace itk
 {
-
 /** \class PatchBasedDenoisingImageFilter
  * \brief Derived class implementing a specific patch-based denoising algorithm, as detailed below.
  *
@@ -58,9 +57,8 @@ namespace itk
  * \ingroup ITKDenoising
  * \sa PatchBasedDenoisingBaseImageFilter
  */
-
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT PatchBasedDenoisingImageFilter :
+template <typename TInputImage, typename TOutputImage>
+class PatchBasedDenoisingImageFilter :
   public PatchBasedDenoisingBaseImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -112,7 +110,7 @@ public:
 
   /** Type definitions for delegate classes. */
   typedef itk::Statistics::RegionConstrainedSubsampler<
-      PatchSampleType, InputImageRegionType >            BaseSamplerType;
+      PatchSampleType, InputImageRegionType >          BaseSamplerType;
   typedef typename BaseSamplerType::Pointer            BaseSamplerPointer;
   typedef typename BaseSamplerType::InstanceIdentifier InstanceIdentifier;
 
@@ -173,7 +171,7 @@ public:
    *  symmetric positive-definite eigensystem analysys will be used. See
    *  Hasan KM, Basser PJ, Parker DL, Alexander AL.
    *  Analytical computation of the eigenvalues and eigenvectors in DT-MRI.
-   *  J Magn Reson 2001; 152: 41–47.
+   *  J Magn Reson 2001; 152: 41-47.
    *  This faster algorithm may be slightly less accurate and possibly less stable in the presence
    *  of noise.  So far in practice it has been shown to work well.
    *
@@ -343,7 +341,7 @@ protected:
       }
   }
 
-  template <class PixelT>
+  template <typename PixelT>
   void ComputeDifferenceAndWeightedSquaredNorm(const PixelT& a,
                                                const PixelT& b,
                                                const RealArrayType& weight,
@@ -375,7 +373,7 @@ protected:
       }
   }
 
-  template <class RealT>
+  template <typename RealT>
   RealType AddUpdate(const RealT& a,
                      const RealType& b)
   {
@@ -458,7 +456,7 @@ protected:
   RealType m_NoiseSigmaSquared;
   bool     m_NoiseSigmaIsSet;
   //
-  BaseSamplerPointer m_Sampler;
+  BaseSamplerPointer                m_Sampler;
   typename ListAdaptorType::Pointer m_SearchSpaceList;
 
 private:

@@ -36,7 +36,7 @@ namespace itk
  * \ingroup Operators
  * \ingroup ITKCommon
  */
-template< class TPixel >
+template< typename TPixel >
 class NeighborhoodAllocator
 {
 public:
@@ -47,8 +47,8 @@ public:
   * itk::Neighborhood makes reference to the allocator, which because it may
   * be vnl or other type, uses the lower case/underscore forms iterator and
   * const_iterator. */
-  typedef TPixel *      iterator;
-  typedef const TPixel *const_iterator;
+  typedef TPixel *       iterator;
+  typedef const TPixel * const_iterator;
 
   /** Default constructor */
   NeighborhoodAllocator():m_ElementCount(0), m_Data(0)  {}
@@ -67,7 +67,7 @@ public:
   /** Deallocates memory using delete[](). */
   void Deallocate()
   {
-    if ( m_Data ) { delete[] m_Data; }
+    delete[] m_Data;
     m_ElementCount = 0;
   }
 
@@ -139,7 +139,7 @@ protected:
   TPixel *     m_Data;
 };
 
-template< class TPixel >
+template< typename TPixel >
 inline std::ostream & operator<<(
   std::ostream & o, const NeighborhoodAllocator< TPixel >
   & a)

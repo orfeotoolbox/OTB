@@ -62,8 +62,8 @@ namespace itk
  * \wikiexample{Morphology/BinaryDilateImageFilter,Dilate a binary image}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT BinaryDilateImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class BinaryDilateImageFilter:
   public BinaryMorphologyImageFilter< TInputImage, TOutputImage, TKernel >
 {
 public:

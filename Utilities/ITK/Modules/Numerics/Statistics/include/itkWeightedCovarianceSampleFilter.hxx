@@ -25,19 +25,19 @@ namespace itk
 {
 namespace Statistics
 {
-template< class TSample >
+template< typename TSample >
 WeightedCovarianceSampleFilter< TSample >
 ::WeightedCovarianceSampleFilter()
 {
   this->ProcessObject::SetNthInput(1, NULL);
 }
 
-template< class TSample >
+template< typename TSample >
 WeightedCovarianceSampleFilter< TSample >
 ::~WeightedCovarianceSampleFilter()
 {}
 
-template< class TSample >
+template< typename TSample >
 void
 WeightedCovarianceSampleFilter< TSample >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -49,7 +49,7 @@ WeightedCovarianceSampleFilter< TSample >
   os << indent << "WeightingFunction: " << this->GetWeightingFunctionInput() << std::endl;
 }
 
-template< class TSample >
+template< typename TSample >
 inline void
 WeightedCovarianceSampleFilter< TSample >
 ::GenerateData()
@@ -77,11 +77,9 @@ WeightedCovarianceSampleFilter< TSample >
   // Otherwise compute the regular covariance matrix ( without weight
   // coefficients)
   Superclass::GenerateData();
-
-  return;
 }
 
-template< class TSample >
+template< typename TSample >
 inline void
 WeightedCovarianceSampleFilter< TSample >
 ::ComputeCovarianceMatrixWithWeightingFunction()
@@ -178,7 +176,7 @@ WeightedCovarianceSampleFilter< TSample >
   decoratedOutput->Set(output);
 }
 
-template< class TSample >
+template< typename TSample >
 inline void
 WeightedCovarianceSampleFilter< TSample >
 ::ComputeCovarianceMatrixWithWeights()
@@ -244,9 +242,9 @@ WeightedCovarianceSampleFilter< TSample >
       }
 
     // updates the covariance matrix
-    for ( unsigned int row = 0; row < measurementVectorSize; row++ )
+    for ( unsigned int row = 0; row < measurementVectorSize; ++row )
       {
-      for ( unsigned int col = 0; col < row + 1; col++ )
+      for ( unsigned int col = 0; col < row + 1; ++col )
         {
         output(row, col) += weight * diff[row] * diff[col];
         }
@@ -256,9 +254,9 @@ WeightedCovarianceSampleFilter< TSample >
     }
 
   // fills the upper triangle using the lower triangle
-  for ( unsigned int row = 1; row < measurementVectorSize; row++ )
+  for ( unsigned int row = 1; row < measurementVectorSize; ++row )
     {
-    for ( unsigned int col = 0; col < row; col++ )
+    for ( unsigned int col = 0; col < row; ++col )
       {
       output(col, row) = output(row, col);
       }

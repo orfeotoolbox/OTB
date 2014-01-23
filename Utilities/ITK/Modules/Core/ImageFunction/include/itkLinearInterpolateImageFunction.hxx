@@ -27,7 +27,7 @@ namespace itk
 /**
  * Define the number of neighbors
  */
-template< class TInputImage, class TCoordRep >
+template< typename TInputImage, typename TCoordRep >
 const unsigned long
 LinearInterpolateImageFunction< TInputImage, TCoordRep >
 ::m_Neighbors = 1 << TInputImage::ImageDimension;
@@ -35,12 +35,12 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
 /**
  * Constructor
  */
-template< class TInputImage, class TCoordRep >
+template< typename TInputImage, typename TCoordRep >
 LinearInterpolateImageFunction< TInputImage, TCoordRep >
 ::LinearInterpolateImageFunction()
 {}
 
-template< class TInputImage, class TCoordRep >
+template< typename TInputImage, typename TCoordRep >
 LinearInterpolateImageFunction< TInputImage, TCoordRep >
 ::~LinearInterpolateImageFunction()
 {}
@@ -48,7 +48,7 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
 /**
  * PrintSelf
  */
-template< class TInputImage, class TCoordRep >
+template< typename TInputImage, typename TCoordRep >
 void
 LinearInterpolateImageFunction< TInputImage, TCoordRep >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -59,7 +59,7 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
 /**
  * Evaluate at image index position
  */
-template< class TInputImage, class TCoordRep >
+template< typename TInputImage, typename TCoordRep >
 typename LinearInterpolateImageFunction< TInputImage, TCoordRep >
 ::OutputType
 LinearInterpolateImageFunction< TInputImage, TCoordRep >
@@ -72,12 +72,12 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
    * Compute distance from point to base index
    */
   IndexType baseIndex;
-  double    distance[ImageDimension];
+  InternalComputationType    distance[ImageDimension];
 
   for ( dim = 0; dim < ImageDimension; dim++ )
     {
     baseIndex[dim] = Math::Floor< IndexValueType >(index[dim]);
-    distance[dim] = index[dim] - static_cast< double >( baseIndex[dim] );
+    distance[dim] = index[dim] - static_cast< InternalComputationType >( baseIndex[dim] );
     }
 
   /**
@@ -95,9 +95,9 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
   InputPixelScalarRealType totalOverlap = NumericTraits< InputPixelScalarRealType >::Zero;
   bool firstOverlap = true;
 
-  for ( unsigned int counter = 0; counter < m_Neighbors; counter++ )
+  for ( unsigned int counter = 0; counter < m_Neighbors; ++counter )
     {
-    double       overlap = 1.0;    // fraction overlap
+    InternalComputationType       overlap = 1.0;    // fraction overlap
     unsigned int upper = counter;  // each bit indicates upper/lower neighbour
     IndexType    neighIndex;
 

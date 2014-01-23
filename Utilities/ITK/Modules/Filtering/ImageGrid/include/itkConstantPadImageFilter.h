@@ -44,8 +44,8 @@ namespace itk
  * \wikiexample{Images/ConstantPadImageFilter,Pad an image with a constant value}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ConstantPadImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class ConstantPadImageFilter:
   public PadImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -96,7 +96,7 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputEqualityComparableCheck,
                    ( Concept::EqualityComparable< OutputImagePixelType > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
@@ -105,7 +105,7 @@ public:
                    ( Concept::SameDimension< ImageDimension, OutputImageDimension > ) );
   itkConceptMacro( OutputOStreamWritableCheck,
                    ( Concept::OStreamWritable< OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

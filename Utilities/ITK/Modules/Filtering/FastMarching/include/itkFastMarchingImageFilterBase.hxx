@@ -28,7 +28,7 @@
 namespace itk
 {
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class
 FastMarchingImageFilterBase< TInput, TOutput >::
     InternalNodeStructure
@@ -49,7 +49,7 @@ public:
 
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 FastMarchingImageFilterBase< TInput, TOutput >::
 FastMarchingImageFilterBase()
   {
@@ -67,12 +67,13 @@ FastMarchingImageFilterBase()
   m_OutputDirection.SetIdentity();
   m_OverrideOutputInformation = false;
 
+  m_InputCache = NULL;
   m_LabelImage = LabelImageType::New();
   }
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 FastMarchingImageFilterBase< TInput, TOutput >::
 ~FastMarchingImageFilterBase()
   {
@@ -80,7 +81,7 @@ FastMarchingImageFilterBase< TInput, TOutput >::
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void
 FastMarchingImageFilterBase< TInput, TOutput >::
 GenerateOutputInformation()
@@ -101,7 +102,7 @@ GenerateOutputInformation()
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void
 FastMarchingImageFilterBase< TInput, TOutput >::
 EnlargeOutputRequestedRegion(
@@ -126,7 +127,7 @@ EnlargeOutputRequestedRegion(
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 IdentifierType
 FastMarchingImageFilterBase< TInput, TOutput >::
 GetTotalNumberOfNodes() const
@@ -136,7 +137,7 @@ GetTotalNumberOfNodes() const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void
 FastMarchingImageFilterBase< TInput, TOutput >::
 SetOutputValue( OutputImageType* oImage,
@@ -148,7 +149,7 @@ SetOutputValue( OutputImageType* oImage,
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 const
 typename
 FastMarchingImageFilterBase< TInput, TOutput >::
@@ -161,7 +162,7 @@ GetOutputValue( OutputImageType* oImage, const NodeType& iNode ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 unsigned char
 FastMarchingImageFilterBase< TInput, TOutput >::
 GetLabelValueForGivenNode( const NodeType& iNode ) const
@@ -172,7 +173,7 @@ GetLabelValueForGivenNode( const NodeType& iNode ) const
 
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void
 FastMarchingImageFilterBase< TInput, TOutput >::
 SetLabelValueForGivenNode( const NodeType& iNode, const LabelType& iLabel )
@@ -182,7 +183,7 @@ SetLabelValueForGivenNode( const NodeType& iNode, const LabelType& iLabel )
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void
 FastMarchingImageFilterBase< TInput, TOutput >::
 UpdateNeighbors( OutputImageType* oImage, const NodeType& iNode )
@@ -224,7 +225,7 @@ UpdateNeighbors( OutputImageType* oImage, const NodeType& iNode )
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void
 FastMarchingImageFilterBase< TInput, TOutput >::
 UpdateValue( OutputImageType* oImage, const NodeType& iNode )
@@ -249,7 +250,7 @@ UpdateValue( OutputImageType* oImage, const NodeType& iNode )
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void
 FastMarchingImageFilterBase< TInput, TOutput >::
 GetInternalNodesUsed( OutputImageType* oImage,
@@ -315,7 +316,7 @@ GetInternalNodesUsed( OutputImageType* oImage,
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 double
 FastMarchingImageFilterBase< TInput, TOutput >::
 Solve( OutputImageType* oImage,
@@ -386,7 +387,7 @@ Solve( OutputImageType* oImage,
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 CheckTopology( OutputImageType* oImage, const NodeType& iNode )
@@ -490,7 +491,7 @@ CheckTopology( OutputImageType* oImage, const NodeType& iNode )
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void FastMarchingImageFilterBase< TInput, TOutput >::
 InitializeOutput( OutputImageType* oImage )
   {
@@ -667,7 +668,7 @@ InitializeOutput( OutputImageType* oImage )
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 DoesVoxelChangeViolateWellComposedness( const NodeType& idx ) const
@@ -687,7 +688,7 @@ DoesVoxelChangeViolateWellComposedness( const NodeType& idx ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 DoesVoxelChangeViolateStrictTopology( const NodeType& idx ) const
@@ -730,7 +731,7 @@ DoesVoxelChangeViolateStrictTopology( const NodeType& idx ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 IsChangeWellComposed2D( const NodeType& idx ) const
@@ -800,7 +801,7 @@ IsChangeWellComposed2D( const NodeType& idx ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 IsCriticalC1Configuration2D( const std::vector<bool>& neighborhood ) const
@@ -812,7 +813,7 @@ IsCriticalC1Configuration2D( const std::vector<bool>& neighborhood ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 IsCriticalC2Configuration2D( const std::vector<bool>& neighborhood ) const
@@ -825,7 +826,7 @@ IsCriticalC2Configuration2D( const std::vector<bool>& neighborhood ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 IsCriticalC3Configuration2D( const std::vector<bool>& neighborhood ) const
@@ -838,7 +839,7 @@ IsCriticalC3Configuration2D( const std::vector<bool>& neighborhood ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 IsCriticalC4Configuration2D( const std::vector<bool>& neighborhood ) const
@@ -851,7 +852,7 @@ IsCriticalC4Configuration2D( const std::vector<bool>& neighborhood ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void
 FastMarchingImageFilterBase< TInput, TOutput >::
 InitializeIndices2D()
@@ -927,7 +928,7 @@ InitializeIndices2D()
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 IsChangeWellComposed3D( const NodeType& idx ) const
@@ -984,7 +985,7 @@ IsChangeWellComposed3D( const NodeType& idx ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 bool
 FastMarchingImageFilterBase< TInput, TOutput >::
 IsCriticalC1Configuration3D( const std::vector<bool>& neighborhood ) const
@@ -997,7 +998,7 @@ IsCriticalC1Configuration3D( const std::vector<bool>& neighborhood ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 unsigned int
 FastMarchingImageFilterBase< TInput, TOutput >::
 IsCriticalC2Configuration3D( const std::vector<bool>& neighborhood ) const
@@ -1036,7 +1037,7 @@ IsCriticalC2Configuration3D( const std::vector<bool>& neighborhood ) const
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 void
 FastMarchingImageFilterBase< TInput, TOutput >::
 InitializeIndices3D()

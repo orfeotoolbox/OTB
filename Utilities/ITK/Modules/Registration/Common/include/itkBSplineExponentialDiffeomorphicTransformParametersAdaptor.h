@@ -29,8 +29,8 @@ namespace itk
  *
  * \ingroup ITKRegistrationCommon
  */
-template<class TTransform>
-class ITK_EXPORT BSplineExponentialDiffeomorphicTransformParametersAdaptor
+template<typename TTransform>
+class BSplineExponentialDiffeomorphicTransformParametersAdaptor
 : public ConstantVelocityFieldTransformParametersAdaptor<TTransform>
 {
 public:

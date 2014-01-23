@@ -34,7 +34,7 @@ namespace Functor
    * NaryFunctionImageFilter.
    * \ingroup ITKImageIntensity
    */
-template< class TInput, class TAccessor >
+template< typename TInput, typename TAccessor >
 class AccessorFunctor
 {
 public:
@@ -119,8 +119,8 @@ private:
  * \ingroup IntensityImageFilters  MultiThreaded
  * \ingroup ITKImageIntensity
  */
-template< class TInputImage, class TOutputImage, class TAccessor >
-class ITK_EXPORT AdaptImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TAccessor >
+class AdaptImageFilter:
   public UnaryFunctorImageFilter< TInputImage, TOutputImage,
                                   Functor::AccessorFunctor< typename TInputImage::PixelType, TAccessor > >
 {

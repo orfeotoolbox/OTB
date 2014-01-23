@@ -27,7 +27,7 @@ namespace itk
 /**
  * Initialize new instance
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 ExponentialDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::ExponentialDisplacementFieldImageFilter()
 {
@@ -51,7 +51,7 @@ ExponentialDisplacementFieldImageFilter< TInputImage, TOutputImage >
  *
  * \todo Add details about this class
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 ExponentialDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -64,14 +64,12 @@ ExponentialDisplacementFieldImageFilter< TInputImage, TOutputImage >
      << m_MaximumNumberOfIterations << std::endl;
   os << indent << "ComputeInverse:   "
      << ( m_ComputeInverse ? "On" : "Off" ) << std::endl;
-
-  return;
 }
 
 /**
  * GenerateData
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 ExponentialDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::GenerateData()

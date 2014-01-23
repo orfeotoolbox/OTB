@@ -34,7 +34,7 @@ namespace itk
  * \ingroup Numerics Optimizers
  * \ingroup ITKOptimizers
  */
-class ITK_EXPORT Optimizer:public Object
+class Optimizer:public Object
 {
 public:
   /** Standard class typedefs. */
@@ -72,6 +72,7 @@ public:
 
   /** Get current parameters scaling. */
   itkGetConstReferenceMacro(Scales, ScalesType);
+  itkGetConstReferenceMacro(InverseScales, ScalesType);
 
   /** Get current position of the optimization. */
   itkGetConstReferenceMacro(CurrentPosition, ParametersType);
@@ -103,6 +104,7 @@ private:
 
   ParametersType m_InitialPosition;
   ScalesType     m_Scales;
+  ScalesType     m_InverseScales;
 };
 } // end namespace itk
 

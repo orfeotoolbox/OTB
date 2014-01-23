@@ -34,8 +34,8 @@ namespace itk
  * \sa ImageFunction
  * \ingroup ITKImageFunction
  */
-template< class TInputImage, class TOutput = double >
-class ITK_EXPORT GaussianDerivativeImageFunction:
+template< typename TInputImage, typename TOutput = double >
+class GaussianDerivativeImageFunction:
   public ImageFunction< TInputImage,
                         Vector< TOutput, TInputImage::ImageDimension >,
                         TOutput >
@@ -69,7 +69,7 @@ public:
   itkStaticConstMacro(ImageDimension2, unsigned int,
                       InputImageType::ImageDimension);
 
-  typedef ContinuousIndex< TOutput, itkGetStaticConstMacro(ImageDimension2) >
+  typedef ContinuousIndex< SpacePrecisionType, itkGetStaticConstMacro(ImageDimension2) >
   ContinuousIndexType;
 
   typedef Neighborhood< InputPixelType, itkGetStaticConstMacro(ImageDimension2) > NeighborhoodType;
@@ -77,7 +77,7 @@ public:
 
   typedef Vector< TOutput, itkGetStaticConstMacro(ImageDimension2) >                         VectorType;
   typedef typename Superclass::OutputType                                                    OutputType;
-  typedef FixedArray< OperatorNeighborhoodType, 2 *itkGetStaticConstMacro(ImageDimension2) > OperatorArrayType;
+  typedef FixedArray< OperatorNeighborhoodType, 2 * itkGetStaticConstMacro(ImageDimension2) > OperatorArrayType;
   typedef NeighborhoodOperatorImageFunction< InputImageType,
                                              TOutput > OperatorImageFunctionType;
   typedef typename OperatorImageFunctionType::Pointer OperatorImageFunctionPointer;
@@ -89,7 +89,8 @@ public:
   typedef typename GaussianFunctionType::Pointer GaussianFunctionPointer;
 
   /** Point typedef support. */
-  typedef Point< TOutput, itkGetStaticConstMacro(ImageDimension2) > PointType;
+  // typedef Point< TOutput, itkGetStaticConstMacro(ImageDimension2) > PointType;
+  typedef typename InputImageType::PointType PointType;
 
   /** Evalutate the  in the given dimension at specified point */
   virtual OutputType Evaluate(const PointType & point) const;

@@ -30,8 +30,8 @@ namespace itk
  *
  * \ingroup ITKCommon
  */
-template< class TImage, class TFunction >
-class ITK_EXPORT FloodFilledImageFunctionConditionalIterator:public FloodFilledImageFunctionConditionalConstIterator<
+template< typename TImage, typename TFunction >
+class FloodFilledImageFunctionConditionalIterator:public FloodFilledImageFunctionConditionalConstIterator<
     TImage, TFunction >
 {
 public:

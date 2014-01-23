@@ -81,12 +81,12 @@ public:
   RGBPixel (const ComponentType & r) { this->Fill(r); }
 
   /** Pass-through constructor for the Array base class. */
-  template< class TRGBPixelValueType >
+  template< typename TRGBPixelValueType >
   RGBPixel(const RGBPixel< TRGBPixelValueType > & r):BaseArray(r) {}
   RGBPixel(const ComponentType r[3]):BaseArray(r) {}
 
   /** Pass-through assignment operator for the Array base class. */
-  template< class TRGBPixelValueType >
+  template< typename TRGBPixelValueType >
   Self & operator=(const RGBPixel< TRGBPixelValueType > & r)
   {
     BaseArray::operator=(r);
@@ -162,11 +162,11 @@ public:
 };
 
 template< typename TComponent  >
-ITK_EXPORT std::ostream & operator<<(std::ostream & os,
+std::ostream & operator<<(std::ostream & os,
                                      const RGBPixel< TComponent > & c);
 
 template< typename TComponent  >
-ITK_EXPORT std::istream & operator>>(std::istream & is,
+std::istream & operator>>(std::istream & is,
                                      RGBPixel< TComponent > & c);
 } // end namespace itk
 

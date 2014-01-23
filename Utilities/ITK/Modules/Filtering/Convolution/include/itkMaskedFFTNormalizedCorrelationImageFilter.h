@@ -135,8 +135,8 @@ namespace itk
  * \ingroup ITKConvolution
  */
 
-template <class TInputImage, class TOutputImage, class TMaskImage=TInputImage >
-class ITK_EXPORT MaskedFFTNormalizedCorrelationImageFilter :
+template <typename TInputImage, typename TOutputImage, typename TMaskImage=TInputImage >
+class MaskedFFTNormalizedCorrelationImageFilter :
     public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -175,6 +175,7 @@ public:
   typedef typename RealImageType::IndexType         RealIndexType;
   typedef typename RealImageType::SizeType          RealSizeType;
   typedef typename RealImageType::RegionType        RealRegionType;
+  typedef typename RealImageType::PointType         RealPointType;
 
   typedef TMaskImage                                MaskImageType;
   typedef typename MaskImageType::Pointer           MaskImagePointer;
@@ -228,31 +229,26 @@ public:
 
   /** Set and get the required fraction of overlapping pixels */
   itkGetMacro(RequiredFractionOfOverlappingPixels,RealPixelType);
-  void SetRequiredFractionOfOverlappingPixels(RealPixelType requiredFractionOfOverlappingPixels)
-  {
-    // The fraction must be between 0 and 1.
-    requiredFractionOfOverlappingPixels = (requiredFractionOfOverlappingPixels < 0.0) ? 0.0 : requiredFractionOfOverlappingPixels;
-    requiredFractionOfOverlappingPixels = (requiredFractionOfOverlappingPixels > 1.0) ? 1.0 : requiredFractionOfOverlappingPixels;
-    m_RequiredFractionOfOverlappingPixels = requiredFractionOfOverlappingPixels;
-  }
+  itkSetClampMacro(RequiredFractionOfOverlappingPixels, RealPixelType, 0.0f, 1.0f);
 
   /** Get the maximum number of overlapping pixels. */
   itkGetMacro(MaximumNumberOfOverlappingPixels,SizeValueType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputPixelTypeIsFloatingPointCheck,
                    ( Concept::IsFloatingPoint< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
-  MaskedFFTNormalizedCorrelationImageFilter()
+  MaskedFFTNormalizedCorrelationImageFilter():m_TotalForwardAndInverseFFTs(12)
   {
     this->SetNumberOfRequiredInputs(2);
     m_RequiredNumberOfOverlappingPixels = 0;
     m_RequiredFractionOfOverlappingPixels = 0;
     m_MaximumNumberOfOverlappingPixels = 0;
+    m_AccumulatedProgress = 0.0;
   }
   virtual ~MaskedFFTNormalizedCorrelationImageFilter() {}
   void PrintSelf(std::ostream& os, Indent indent) const;
@@ -276,33 +272,35 @@ protected:
    * \sa ProcessObject::GenerateOutputRequestedRegion() */
   void GenerateOutputInformation();
 
+  void EnlargeOutputRequestedRegion( DataObject *output );
+
   typename TMaskImage::Pointer PreProcessMask( const InputImageType * inputImage, const MaskImageType * inputMask );
 
-  typename TInputImage::Pointer PreProcessImage( const InputImageType * inputImage, MaskImageType * inputMask );
+  typename TInputImage::Pointer PreProcessImage( const InputImageType * inputImage, const MaskImageType * inputMask );
 
-  template< class LocalInputImageType >
+  template< typename LocalInputImageType >
   typename LocalInputImageType::Pointer RotateImage( LocalInputImageType * inputImage );
 
-  template< class LocalInputImageType, class LocalOutputImageType >
+  template< typename LocalInputImageType, typename LocalOutputImageType >
   typename LocalOutputImageType::Pointer CalculateForwardFFT( LocalInputImageType * inputImage, InputSizeType & FFTImageSize );
 
-  template< class LocalInputImageType, class LocalOutputImageType >
+  template< typename LocalInputImageType, typename LocalOutputImageType >
   typename LocalOutputImageType::Pointer CalculateInverseFFT( LocalInputImageType * inputImage, RealSizeType & combinedImageSize );
 
   // Helper math methods.
-  template< class LocalInputImageType, class LocalOutputImageType >
+  template< typename LocalInputImageType, typename LocalOutputImageType >
   typename LocalOutputImageType::Pointer ElementProduct( LocalInputImageType * inputImage1, LocalInputImageType * inputImage2 );
 
-  template< class LocalInputImageType >
+  template< typename LocalInputImageType >
   typename LocalInputImageType::Pointer ElementQuotient( LocalInputImageType * inputImage1, LocalInputImageType * inputImage2 );
 
-  template< class LocalInputImageType >
+  template< typename LocalInputImageType >
   typename LocalInputImageType::Pointer ElementSubtraction( LocalInputImageType * inputImage1, LocalInputImageType * inputImage2 );
 
-  template< class LocalInputImageType >
+  template< typename LocalInputImageType >
   typename LocalInputImageType::Pointer ElementPositive( LocalInputImageType * inputImage );
 
-  template< class LocalInputImageType, class LocalOutputImageType >
+  template< typename LocalInputImageType, typename LocalOutputImageType >
   typename LocalOutputImageType::Pointer ElementRound( LocalInputImageType * inputImage );
 
   // This function factorizes the image size uses factors of 2, 3, and
@@ -314,7 +312,7 @@ protected:
   // will be a combination of 2s, 3s, and 5s.
   int FindClosestValidDimension( int n );
 
-  template< class LocalInputImageType >
+  template< typename LocalInputImageType >
   double CalculatePrecisionTolerance( LocalInputImageType * inputImage );
 
 private:
@@ -331,6 +329,11 @@ private:
   RealPixelType m_RequiredFractionOfOverlappingPixels;
   /** This is computed internally */
   SizeValueType m_MaximumNumberOfOverlappingPixels;
+
+  /** This is used for the progress reporter */
+  const unsigned int m_TotalForwardAndInverseFFTs;
+  /** The total accumulated progress */
+  float m_AccumulatedProgress;
 };
 } // end namespace itk
 

@@ -58,8 +58,8 @@ namespace itk
  * \ingroup ImageFeatureExtraction
  * \ingroup ITKDistanceMap
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT SignedMaurerDistanceMapImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class SignedMaurerDistanceMapImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

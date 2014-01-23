@@ -71,8 +71,8 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT BilateralImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class BilateralImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -170,10 +170,10 @@ public:
   itkGetConstMacro(NumberOfRangeGaussianSamples, unsigned long);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

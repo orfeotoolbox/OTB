@@ -45,8 +45,8 @@ namespace itk
  * \wikiexample{Statistics/StatisticsImageFilter,Compute min\, max\, variance and mean of an Image.}
  * \endwiki
  */
-template< class TInputImage >
-class ITK_EXPORT StatisticsImageFilter:
+template< typename TInputImage >
+class StatisticsImageFilter:
   public ImageToImageFilter< TInputImage, TInputImage >
 {
 public:
@@ -133,10 +133,10 @@ public:
   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

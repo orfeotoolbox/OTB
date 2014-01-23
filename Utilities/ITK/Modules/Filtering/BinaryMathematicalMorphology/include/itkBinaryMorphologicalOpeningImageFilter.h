@@ -51,8 +51,8 @@ namespace itk
  * \ingroup ITKBinaryMathematicalMorphology
  */
 
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT BinaryMorphologicalOpeningImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class BinaryMorphologicalOpeningImageFilter:
   public KernelImageFilter< TInputImage, TOutputImage, TKernel >
 {
 public:

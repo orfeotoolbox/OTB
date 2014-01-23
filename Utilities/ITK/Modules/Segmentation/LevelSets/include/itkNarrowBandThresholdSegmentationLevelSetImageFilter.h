@@ -80,10 +80,10 @@ namespace itk
  * \sa SparseFieldLevelSetImageFilter
  * \ingroup ITKLevelSets
  */
-template< class TInputImage,
-          class TFeatureImage,
-          class TOutputPixelType = float >
-class ITK_EXPORT NarrowBandThresholdSegmentationLevelSetImageFilter:
+template< typename TInputImage,
+          typename TFeatureImage,
+          typename TOutputPixelType = float >
+class NarrowBandThresholdSegmentationLevelSetImageFilter:
   public NarrowBandLevelSetImageFilter< TInputImage, TFeatureImage,
                                         TOutputPixelType, Image< TOutputPixelType,
                                                                   TInputImage ::
@@ -195,10 +195,10 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< TOutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

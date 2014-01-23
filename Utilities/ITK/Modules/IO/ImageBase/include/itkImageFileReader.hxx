@@ -30,7 +30,7 @@
 
 namespace itk
 {
-template< class TOutputImage, class ConvertPixelTraits >
+template< typename TOutputImage, typename ConvertPixelTraits >
 ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::ImageFileReader()
 {
@@ -40,12 +40,12 @@ ImageFileReader< TOutputImage, ConvertPixelTraits >
   m_UseStreaming = true;
 }
 
-template< class TOutputImage, class ConvertPixelTraits >
+template< typename TOutputImage, typename ConvertPixelTraits >
 ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::~ImageFileReader()
 {}
 
-template< class TOutputImage, class ConvertPixelTraits >
+template< typename TOutputImage, typename ConvertPixelTraits >
 void ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
@@ -65,7 +65,7 @@ void ImageFileReader< TOutputImage, ConvertPixelTraits >
   os << indent << "m_UseStreaming: " << m_UseStreaming << "\n";
 }
 
-template< class TOutputImage, class ConvertPixelTraits >
+template< typename TOutputImage, typename ConvertPixelTraits >
 void
 ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::SetImageIO(ImageIOBase *imageIO)
@@ -79,7 +79,7 @@ ImageFileReader< TOutputImage, ConvertPixelTraits >
   m_UserSpecifiedImageIO = true;
 }
 
-template< class TOutputImage, class ConvertPixelTraits >
+template< typename TOutputImage, typename ConvertPixelTraits >
 void
 ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::GenerateOutputInformation(void)
@@ -248,7 +248,7 @@ ImageFileReader< TOutputImage, ConvertPixelTraits >
   output->SetLargestPossibleRegion(region);
 }
 
-template< class TOutputImage, class ConvertPixelTraits >
+template< typename TOutputImage, typename ConvertPixelTraits >
 void
 ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::TestFileExistanceAndReadability()
@@ -283,7 +283,7 @@ ImageFileReader< TOutputImage, ConvertPixelTraits >
   readTester.close();
 }
 
-template< class TOutputImage, class ConvertPixelTraits >
+template< typename TOutputImage, typename ConvertPixelTraits >
 void
 ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::EnlargeOutputRequestedRegion(DataObject *output)
@@ -347,7 +347,7 @@ ImageFileReader< TOutputImage, ConvertPixelTraits >
   out->SetRequestedRegion(streamableRegion);
 }
 
-template< class TOutputImage, class ConvertPixelTraits >
+template< typename TOutputImage, typename ConvertPixelTraits >
 void ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::GenerateData()
 {
@@ -450,26 +450,20 @@ void ImageFileReader< TOutputImage, ConvertPixelTraits >
     {
     // if an exception is thrown catch it
 
-    if ( loadBuffer )
-      {
-      // clean up
-      delete[] loadBuffer;
-      loadBuffer = 0;
-      }
+    // clean up
+    delete[] loadBuffer;
+    loadBuffer = 0;
 
     // then rethrow
     throw;
     }
 
   // clean up
-  if ( loadBuffer )
-    {
-    delete[] loadBuffer;
-    loadBuffer = 0;
-    }
+  delete[] loadBuffer;
+  loadBuffer = 0;
 }
 
-template< class TOutputImage, class ConvertPixelTraits >
+template< typename TOutputImage, typename ConvertPixelTraits >
 void
 ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::DoConvertBuffer(void *inputData,

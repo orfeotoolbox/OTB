@@ -37,7 +37,7 @@ namespace itk
 
 template< unsigned int VDimension = 3,
           typename TInput = Point< double, VDimension > >
-class ITK_EXPORT FiniteCylinderSpatialFunction:
+class FiniteCylinderSpatialFunction:
   public InteriorExteriorSpatialFunction< VDimension, TInput >
 {
 public:
@@ -81,12 +81,12 @@ public:
   OutputType Evaluate(const InputType & position) const;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( DimensionShouldBe3,
                    ( Concept::SameDimension< VDimension, 3u > ) );
   itkConceptMacro( PointDimensionShouldBe3,
                    ( Concept::SameDimension< InputType::Dimension, 3u > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

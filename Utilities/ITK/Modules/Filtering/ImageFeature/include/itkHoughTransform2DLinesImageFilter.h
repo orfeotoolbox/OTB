@@ -59,7 +59,7 @@ namespace itk
  */
 
 template< typename TInputPixelType, typename TOutputPixelType >
-class ITK_EXPORT HoughTransform2DLinesImageFilter:
+class HoughTransform2DLinesImageFilter:
   public ImageToImageFilter< Image< TInputPixelType, 2 >, Image< TOutputPixelType, 2 > >
 {
 public:
@@ -147,14 +147,14 @@ public:
   itkGetConstMacro(Variance, float);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( IntConvertibleToOutputCheck,
                    ( Concept::Convertible< int, TOutputPixelType > ) );
   itkConceptMacro( InputGreaterThanFloatCheck,
                    ( Concept::GreaterThanComparable< PixelType, float > ) );
   itkConceptMacro( OutputPlusIntCheck,
                    ( Concept::AdditiveOperators< TOutputPixelType, int > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

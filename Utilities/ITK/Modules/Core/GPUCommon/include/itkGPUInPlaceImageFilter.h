@@ -33,9 +33,9 @@ namespace itk
  *
  * \ingroup ITKGPUCommon
  */
-template< class TInputImage, class TOutputImage = TInputImage, class TParentImageFilter =
+template< typename TInputImage, typename TOutputImage = TInputImage, typename TParentImageFilter =
             InPlaceImageFilter< TInputImage, TOutputImage > >
-class ITK_EXPORT GPUInPlaceImageFilter : public GPUImageToImageFilter< TInputImage, TOutputImage, TParentImageFilter >
+class GPUInPlaceImageFilter : public GPUImageToImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 {
 public:
   /** Standard class typedefs. */

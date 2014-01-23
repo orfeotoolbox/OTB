@@ -42,8 +42,8 @@ namespace itk
  * \ingroup DataAccess
  * \ingroup ITKCommon
  */
-template< class TObjectType >
-class ITK_EXPORT AutoPointer
+template< typename TObjectType >
+class AutoPointer
 {
 public:
   /** Extract information from template parameter. */
@@ -70,12 +70,7 @@ public:
   /** Destructor.  */
   ~AutoPointer ()
   {
-    if ( m_IsOwner && m_Pointer )
-      {
-      delete m_Pointer;
-      }
-    m_Pointer = 0;
-    m_IsOwner = false;
+    this->Reset();
   }
 
   /** Overload operator ->.  */
@@ -86,7 +81,7 @@ public:
       is deleted and the pointer is set to null. */
   void Reset(void)
   {
-    if ( m_IsOwner && m_Pointer )
+    if ( m_IsOwner )
       {
       delete m_Pointer;
       }
@@ -101,7 +96,7 @@ public:
   /** Explicitly set the ownership */
   void TakeOwnership(ObjectType *objectptr)
   {
-    if ( m_IsOwner && m_Pointer )
+    if ( m_IsOwner )
       {
       delete m_Pointer; // remove the current one
       }
@@ -112,7 +107,7 @@ public:
   /** Explicitly reject ownership */
   void TakeNoOwnership(ObjectType *objectptr)
   {
-    if ( m_IsOwner && m_Pointer )
+    if ( m_IsOwner )
       {
       delete m_Pointer; // remove the current one
       }
@@ -221,7 +216,7 @@ std::ostream & operator<<(std::ostream & os, AutoPointer< T > p)
     transfer between AutoPointers of Derived class to Base class */
 template< typename TAutoPointerBase, typename TAutoPointerDerived >
 void
-ITK_EXPORT TransferAutoPointer(TAutoPointerBase & pa, TAutoPointerDerived & pb)
+ TransferAutoPointer(TAutoPointerBase & pa, TAutoPointerDerived & pb)
 {
   // give a chance to natural polymorphism
   pa.TakeNoOwnership( pb.GetPointer() );

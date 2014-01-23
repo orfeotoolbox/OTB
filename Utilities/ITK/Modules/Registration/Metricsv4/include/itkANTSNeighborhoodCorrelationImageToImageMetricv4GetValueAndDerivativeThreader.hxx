@@ -23,7 +23,7 @@
 namespace itk
 {
 
-template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborhoodCorrelationMetric >
+template < typename TDomainPartitioner, typename TImageToImageMetric, typename TNeighborhoodCorrelationMetric >
 void
 ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TNeighborhoodCorrelationMetric >
 ::ThreadedExecution_impl(
@@ -46,7 +46,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
   ScanParametersType   scanParameters;
   ScanMemType          scanMem;
 
-  DerivativeType & localDerivativeResult = this->m_LocalDerivativesPerThread[threadId];
+  DerivativeType & localDerivativeResult = this->m_GetValueAndDerivativePerThreadVariables[threadId].LocalDerivatives;
 
   /* Create an iterator over the virtual sub region */
   // this->m_ANTSAssociate->InitializeScanning( virtualImageSubRegion, scanIt, scanMem, scanParameters );
@@ -82,7 +82,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
     /* Assign the results */
     if ( pointIsValid )
       {
-      this->m_NumberOfValidPointsPerThread[threadId]++;
+      this->m_GetValueAndDerivativePerThreadVariables[threadId].NumberOfValidPoints++;
       metricValueSum -= metricValueResult;
       /* Store the result. This depends on what type of
        * transform is being used. */
@@ -97,11 +97,11 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
     }
 
   /* Store metric value result for this thread. */
-  this->m_MeasurePerThread[threadId] = metricValueSum;
+  this->m_GetValueAndDerivativePerThreadVariables[threadId].Measure = metricValueSum;
 }
 
-template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborhoodCorrelationMetric >
-template < class T >
+template < typename TDomainPartitioner, typename TImageToImageMetric, typename TNeighborhoodCorrelationMetric >
+template < typename T >
 void
 ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TNeighborhoodCorrelationMetric >
 ::ThreadedExecution_impl(
@@ -120,7 +120,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
     Superclass::ThreadedExecution(domain, threadId);
 }
 
-template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborhoodCorrelationMetric >
+template < typename TDomainPartitioner, typename TImageToImageMetric, typename TNeighborhoodCorrelationMetric >
 void
 ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TNeighborhoodCorrelationMetric >
 ::UpdateQueuesAtBeginningOfLine( const ScanIteratorType &scanIt, ScanMemType &scanMem, const ScanParametersType &scanParameters, const ThreadIdType ) const
@@ -210,7 +210,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
      }
  }
 
-template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborhoodCorrelationMetric >
+template < typename TDomainPartitioner, typename TImageToImageMetric, typename TNeighborhoodCorrelationMetric >
  void
  ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TNeighborhoodCorrelationMetric >
 ::UpdateQueuesToNextScanWindow( const ScanIteratorType &scanIt, ScanMemType &scanMem, const ScanParametersType &scanParameters, const ThreadIdType ) const
@@ -292,7 +292,7 @@ template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborh
    scanMem.Qcount.pop_front();
 }
 
-template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborhoodCorrelationMetric >
+template < typename TDomainPartitioner, typename TImageToImageMetric, typename TNeighborhoodCorrelationMetric >
 void
 ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TNeighborhoodCorrelationMetric >
 ::InitializeScanning( const ImageRegionType &scanRegion, ScanIteratorType &scanIt,
@@ -329,7 +329,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
   scanMem.mappedMovingPoint.Fill(0.0);
 }
 
-template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborhoodCorrelationMetric >
+template < typename TDomainPartitioner, typename TImageToImageMetric, typename TNeighborhoodCorrelationMetric >
 void
 ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TNeighborhoodCorrelationMetric >
 ::UpdateQueues( const ScanIteratorType &scanIt, ScanMemType &scanMem,
@@ -346,7 +346,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
 }
 
 
-template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborhoodCorrelationMetric >
+template < typename TDomainPartitioner, typename TImageToImageMetric, typename TNeighborhoodCorrelationMetric >
 bool
 ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TNeighborhoodCorrelationMetric >
 ::ComputeInformationFromQueues( const ScanIteratorType &scanIt, ScanMemType &scanMem, const ScanParametersType &, const ThreadIdType ) const
@@ -407,10 +407,10 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
  typename VirtualImageType::IndexType oindex = scanIt.GetIndex();
 
  VirtualPointType        virtualPoint;
- FixedImagePointType    mappedFixedPoint;
+ FixedImagePointType     mappedFixedPoint;
  FixedImagePixelType     fixedImageValue;
  FixedImageGradientType  fixedImageGradient;
- MovingImagePointType   mappedMovingPoint;
+ MovingImagePointType    mappedMovingPoint;
  MovingImagePixelType    movingImageValue;
  MovingImageGradientType movingImageGradient;
  bool pointIsValid;
@@ -464,7 +464,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
  return pointIsValid;
 }
 
-template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborhoodCorrelationMetric >
+template < typename TDomainPartitioner, typename TImageToImageMetric, typename TNeighborhoodCorrelationMetric >
 void
 ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TNeighborhoodCorrelationMetric >
 ::ComputeMovingTransformDerivative( const ScanIteratorType &, ScanMemType &scanMem, const ScanParametersType &, DerivativeType &deriv, MeasureType &localCC, const ThreadIdType threadId) const
@@ -503,7 +503,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
       }
 
     /* Use a pre-allocated jacobian object for efficiency */
-    JacobianType & jacobian = this->m_MovingTransformJacobianPerThread[threadId];
+    JacobianType & jacobian = this->m_GetValueAndDerivativePerThreadVariables[threadId].MovingTransformJacobian;
 
     /** For dense transforms, this returns identity */
     this->m_Associate->GetMovingTransform()->ComputeJacobianWithRespectToParameters( scanMem.virtualPoint, jacobian );
@@ -519,14 +519,13 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
         }
       }
     }
-  return;
 }
 
 /*
  * Specific implementation for sparse threader. It reuse most of the routine from the dense threader by
  * reinitializing the scanning at every point.
  */
-template < class TDomainPartitioner, class TImageToImageMetric, class TNeighborhoodCorrelationMetric >
+template < typename TDomainPartitioner, typename TImageToImageMetric, typename TNeighborhoodCorrelationMetric >
 bool
 ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner, TImageToImageMetric, TNeighborhoodCorrelationMetric >
 ::ProcessVirtualPoint_impl(IdentityHelper<ThreadedIndexedContainerPartitioner> itkNotUsed(self),
@@ -540,7 +539,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
   ScanParametersType   scanParameters;
   ScanMemType          scanMem;
 
-  DerivativeType & localDerivativeResult = this->m_LocalDerivativesPerThread[threadId];
+  DerivativeType & localDerivativeResult = this->m_GetValueAndDerivativePerThreadVariables[threadId].LocalDerivatives;
 
 
   // convert virtualPoint to a single point region
@@ -580,8 +579,8 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
   /* Assign the results */
   if ( pointIsValid )
     {
-    this->m_NumberOfValidPointsPerThread[threadId]++;
-    this->m_MeasurePerThread[threadId] -= metricValueResult;
+    this->m_GetValueAndDerivativePerThreadVariables[threadId].NumberOfValidPoints++;
+    this->m_GetValueAndDerivativePerThreadVariables[threadId].Measure -= metricValueResult;
     /* Store the result. This depends on what type of
      * transform is being used. */
     if( this->GetComputeDerivative() )

@@ -43,8 +43,8 @@ namespace itk
  * \ingroup ITKEigen
  */
 
-template< class TMatrixElement, int VNumberOfRows >
-class ITK_EXPORT SymmetricEigenSystem:public Object
+template< typename TMatrixElement, int VNumberOfRows >
+class SymmetricEigenSystem:public Object
 {
 public:
   /** Standard "Self" typedef. */

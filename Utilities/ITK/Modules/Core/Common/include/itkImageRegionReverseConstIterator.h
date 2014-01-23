@@ -60,10 +60,10 @@ namespace itk
  *
  * \code
  *
- *      it = it.Begin();
+ *      it.GoToBegin();
  *      for (; !it.IsAtEnd(); ++it)
  *         {
- *         *it += 100.0;
+ *         std::cout << it.Value() << std::endl;
  *         }
  *
  *  \endcode
@@ -100,7 +100,7 @@ namespace itk
  * \ingroup ITKCommon
  */
 template< typename TImage >
-class ITK_EXPORT ImageRegionReverseConstIterator:public ImageReverseConstIterator< TImage >
+class ImageRegionReverseConstIterator:public ImageReverseConstIterator< TImage >
 {
 public:
   /** Standard class typedefs. */

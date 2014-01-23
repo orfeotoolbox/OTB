@@ -40,8 +40,8 @@ namespace itk
  * \sa AnisotropicDiffusionFunction
  * \ingroup ITKAnisotropicSmoothing
  */
-template< class TImage >
-class ITK_EXPORT VectorGradientNDAnisotropicDiffusionFunction:
+template< typename TImage >
+class VectorGradientNDAnisotropicDiffusionFunction:
   public VectorAnisotropicDiffusionFunction< TImage >
 {
 public:

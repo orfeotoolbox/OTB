@@ -65,9 +65,9 @@ namespace itk
  * \ingroup Operators
  * \ingroup ITKCommon
  */
-template< class TPixel, unsigned int TDimension = 2,
-          class TAllocator = NeighborhoodAllocator< TPixel > >
-class ITK_EXPORT AnnulusOperator:
+template< typename TPixel, unsigned int TDimension = 2,
+          typename TAllocator = NeighborhoodAllocator< TPixel > >
+class AnnulusOperator:
   public NeighborhoodOperator< TPixel, TDimension, TAllocator >
 {
 public:
@@ -84,23 +84,27 @@ public:
 
   AnnulusOperator():
     NeighborhoodOperator< TPixel, TDimension, TAllocator >(),
-    m_Normalize(false), m_BrightCenter(false),
+    m_InnerRadius(1.0),
+    m_Thickness( 1.0 ),
+    m_Normalize(false),
+    m_BrightCenter(false),
     m_InteriorValue(NumericTraits< PixelType >::Zero),
     m_AnnulusValue(NumericTraits< PixelType >::One),
-    m_ExteriorValue(NumericTraits< PixelType >::Zero)
-  { m_Spacing.Fill(1.0); }
+    m_ExteriorValue(NumericTraits< PixelType >::Zero),
+    m_Spacing( 1.0 )
+  {}
 
   AnnulusOperator(const Self & other):
-    NeighborhoodOperator< TPixel, TDimension, TAllocator >(other)
+    NeighborhoodOperator< TPixel, TDimension, TAllocator >(other),
+    m_InnerRadius( other.m_InnerRadius ),
+    m_Thickness( other.m_Thickness ),
+    m_Normalize( other.m_Normalize ),
+    m_BrightCenter( other.m_BrightCenter ),
+    m_InteriorValue( other.m_InteriorValue ),
+    m_AnnulusValue( other.m_AnnulusValue ),
+    m_ExteriorValue( other.m_ExteriorValue ),
+    m_Spacing( other.m_Spacing )
   {
-    m_InnerRadius = other.m_InnerRadius;
-    m_Thickness = other.m_Thickness;
-    m_Spacing = other.m_Spacing;
-    m_InteriorValue = other.m_InteriorValue;
-    m_AnnulusValue = other.m_AnnulusValue;
-    m_ExteriorValue = other.m_ExteriorValue;
-    m_Normalize = other.m_Normalize;
-    m_BrightCenter = other.m_BrightCenter;
   }
 
   /** This function is called to create the operator.  The radius of

@@ -33,8 +33,8 @@ namespace itk
  *        components.
  * \ingroup ITKQuadEdgeMesh
  */
-template< class TMesh >
-class ITK_EXPORT QuadEdgeMeshBoundaryEdgesMeshFunction:
+template< typename TMesh >
+class QuadEdgeMeshBoundaryEdgesMeshFunction:
   public FunctionBase< TMesh, typename TMesh::EdgeListPointerType >
 {
 public:

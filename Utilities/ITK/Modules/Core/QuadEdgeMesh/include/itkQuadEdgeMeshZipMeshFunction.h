@@ -29,8 +29,8 @@ namespace itk
  * \ingroup QEMeshModifierFunctions
  * \ingroup ITKQuadEdgeMesh
  */
-template< class TMesh, class TQEType >
-class ITK_EXPORT QuadEdgeMeshZipMeshFunction:
+template< typename TMesh, typename TQEType >
+class QuadEdgeMeshZipMeshFunction:
   public QuadEdgeMeshFunctionBase< TMesh, typename TQEType::OriginRefType >
 {
 public:

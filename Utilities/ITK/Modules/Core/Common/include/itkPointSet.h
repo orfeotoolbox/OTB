@@ -64,13 +64,6 @@ namespace itk
  * TMeshTraits =
  *     Type information structure for the point set.
  *
- * \example PointSet1.cxx
- * \example PointSet2.cxx
- * \example PointSet3.cxx
- * \example RGBPointSet.cxx
- * \example PointSetWithVectors.cxx
- * \example PointSetWithCovariantVectors.cxx
- *
  * \ingroup MeshObjects
  * \ingroup DataRepresentation
  * \ingroup ITKCommon
@@ -88,7 +81,7 @@ template<
   unsigned int VDimension = 3,
   typename TMeshTraits = DefaultStaticMeshTraits< TPixelType, VDimension, VDimension >
   >
-class ITK_EXPORT PointSet:public DataObject
+class PointSet:public DataObject
 {
 public:
   /** Standard class typedefs. */

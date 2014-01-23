@@ -139,10 +139,10 @@ namespace itk
  *  See LevelSetFunction for more information.
  * \ingroup ITKLevelSets
  */
-template< class TInputImage,
-          class TFeatureImage,
-          class TOutputPixelType = float >
-class ITK_EXPORT SegmentationLevelSetImageFilter:
+template< typename TInputImage,
+          typename TFeatureImage,
+          typename TOutputPixelType = float >
+class SegmentationLevelSetImageFilter:
   public SparseFieldLevelSetImageFilter< TInputImage, Image< TOutputPixelType,
                                                              TInputImage::ImageDimension > >
 {
@@ -464,10 +464,10 @@ public:
   void GenerateAdvectionImage();
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< TOutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
@@ -481,7 +481,7 @@ protected:
   {
     Superclass::InitializeIteration();
     // Estimate the progress of the filter
-    this->SetProgress( (float)( (float)this->GetElapsedIterations()
+    this->UpdateProgress( (float)( (float)this->GetElapsedIterations()
                                 / (float)this->GetNumberOfIterations() ) );
   }
 

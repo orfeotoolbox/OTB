@@ -44,7 +44,7 @@ namespace itk
 
 namespace Functor
 {
-template< class TInputPixel >
+template< typename TInputPixel >
 class MinimumAccumulator
 {
 public:
@@ -70,8 +70,8 @@ public:
 };
 } // end namespace Function
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT MinimumProjectionImageFilter:public
+template< typename TInputImage, typename TOutputImage >
+class MinimumProjectionImageFilter:public
   ProjectionImageFilter< TInputImage, TOutputImage,
                          Functor::MinimumAccumulator< typename TInputImage::PixelType > >
 {
@@ -94,12 +94,12 @@ public:
   itkNewMacro(Self);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputPixelTypeGreaterThanComparable,
                    ( Concept::LessThanComparable< InputPixelType > ) );
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

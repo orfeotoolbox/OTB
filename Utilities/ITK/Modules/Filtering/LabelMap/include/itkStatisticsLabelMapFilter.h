@@ -37,8 +37,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template< class TImage, class TFeatureImage >
-class ITK_EXPORT StatisticsLabelMapFilter:
+template< typename TImage, typename TFeatureImage >
+class StatisticsLabelMapFilter:
   public ShapeLabelMapFilter< TImage,
                               Image< typename TImage::PixelType,  TImage ::ImageDimension > >
 {
@@ -77,14 +77,14 @@ public:
                ShapeLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 /*  itkConceptMacro(InputEqualityComparableCheck,
     (Concept::EqualityComparable<InputImagePixelType>));
   itkConceptMacro(IntConvertibleToInputCheck,
     (Concept::Convertible<int, InputImagePixelType>));
   itkConceptMacro(InputOStreamWritableCheck,
     (Concept::OStreamWritable<InputImagePixelType>));*/
-/** End concept checking */
+// End concept checking
 #endif
 
   /** Set the feature image */

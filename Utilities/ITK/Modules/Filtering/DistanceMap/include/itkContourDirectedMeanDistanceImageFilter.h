@@ -59,8 +59,8 @@ namespace itk
  *
  * \ingroup ITKDistanceMap
  */
-template< class TInputImage1, class TInputImage2 >
-class ITK_EXPORT ContourDirectedMeanDistanceImageFilter:
+template< typename TInputImage1, typename TInputImage2 >
+class ContourDirectedMeanDistanceImageFilter:
   public ImageToImageFilter< TInputImage1, TInputImage1 >
 {
 public:
@@ -118,10 +118,10 @@ public:
   itkGetConstMacro( UseImageSpacing, bool );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputImage1PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

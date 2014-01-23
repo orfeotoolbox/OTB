@@ -57,10 +57,10 @@ namespace itk
  * \ingroup ITKRegistrationCommon
  * \ingroup ITKTransform
  */
-template< class TTransform,
-          class TFixedImage,
-          class TMovingImage >
-class ITK_EXPORT CenteredTransformInitializer:public Object
+template< typename TTransform,
+          typename TFixedImage,
+          typename TMovingImage >
+class CenteredTransformInitializer:public Object
 {
 public:
   /** Standard class typedefs. */

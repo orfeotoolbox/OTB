@@ -55,10 +55,10 @@ namespace itk
  * \ingroup ImageFeatureExtraction
  * \ingroup ITKDistanceMap
  */
-template< class TInputImage,
-  class TOutputImage,
-  class TVoronoiImage = TInputImage >
-class ITK_EXPORT DanielssonDistanceMapImageFilter:
+template< typename TInputImage,
+  typename TOutputImage,
+  typename TVoronoiImage = TInputImage >
+class DanielssonDistanceMapImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -191,7 +191,7 @@ public:
   itkStaticConstMacro(VoronoiImageDimension, unsigned int,
                       TVoronoiImage::ImageDimension);
 
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputOutputSameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, OutputImageDimension > ) );
   itkConceptMacro( InputVoronoiSameDimensionCheck,
@@ -201,7 +201,7 @@ public:
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputPixelType,
                                            OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

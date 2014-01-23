@@ -35,8 +35,8 @@ namespace itk
 /**
  * Constructor
  */
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::ImageRegistrationMethodv4()
 {
   this->SetNumberOfRequiredOutputs( 1 );
@@ -59,7 +59,7 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
   typename IdentityTransformType::Pointer defaultMovingInitialTransform = IdentityTransformType::New();
   this->m_MovingInitialTransform = defaultMovingInitialTransform;
 
-  typedef MattesMutualInformationImageToImageMetricv4<FixedImageType, MovingImageType> DefaultMetricType;
+  typedef MattesMutualInformationImageToImageMetricv4<FixedImageType, MovingImageType, VirtualImageType, RealType> DefaultMetricType;
   typename DefaultMetricType::Pointer mutualInformationMetric = DefaultMetricType::New();
   mutualInformationMetric->SetNumberOfHistogramBins( 20 );
   mutualInformationMetric->SetUseMovingImageGradientFilter( false );
@@ -72,12 +72,15 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
   scalesEstimator->SetMetric( mutualInformationMetric );
   scalesEstimator->SetTransformForward( true );
 
-  typedef GradientDescentOptimizerv4 DefaultOptimizerType;
+  typedef GradientDescentOptimizerv4Template<RealType> DefaultOptimizerType;
   typename DefaultOptimizerType::Pointer optimizer = DefaultOptimizerType::New();
   optimizer->SetLearningRate( 1.0 );
   optimizer->SetNumberOfIterations( 1000 );
   optimizer->SetScalesEstimator( scalesEstimator );
   this->m_Optimizer = optimizer;
+
+  this->m_OptimizerWeights.SetSize( 0 );
+  this->m_OptimizerWeightsAreIdentity = true;
 
   this->m_OutputTransform = OutputTransformType::New();
 
@@ -111,15 +114,15 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
   this->m_MetricSamplingPercentagePerLevel.Fill( 1.0 );
 }
 
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::~ImageRegistrationMethodv4()
 {
 }
 
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 void
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::SetFixedImage( SizeValueType index, const FixedImageType *image )
 {
   itkDebugMacro( "setting fixed image input " << index << " to " << image );
@@ -134,9 +137,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
     }
 }
 
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
-const typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>::FixedImageType *
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+const typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>::FixedImageType *
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::GetFixedImage( SizeValueType index ) const
 {
   itkDebugMacro( "returning fixed image input " << index << " of "
@@ -144,9 +147,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
   return static_cast<const FixedImageType *>( this->ProcessObject::GetInput( 2 * index ) );
 }
 
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 void
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::SetMovingImage( SizeValueType index, const MovingImageType *image )
 {
   itkDebugMacro( "setting moving image input " << index << " to " << image );
@@ -161,9 +164,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
     }
 }
 
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
-const typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>::MovingImageType *
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+const typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>::MovingImageType *
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::GetMovingImage( SizeValueType index ) const
 {
   itkDebugMacro( "returning moving image input " << index << " of "
@@ -172,11 +175,49 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
 }
 
 /*
+ * Set optimizer weights and do checking for identity.
+ */
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+void
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
+::SetOptimizerWeights( OptimizerWeightsType & weights )
+{
+  if( weights != this->m_OptimizerWeights )
+    {
+    itkDebugMacro( "setting optimizer weights to " << weights );
+
+    this->m_OptimizerWeights = weights;
+
+    // Check to see if optimizer weights are identity to avoid unnecessary
+    // computations.
+
+    this->m_OptimizerWeightsAreIdentity = true;
+    if( this->m_OptimizerWeights.Size() > 0 )
+      {
+      typedef typename OptimizerWeightsType::ValueType OptimizerWeightsValueType;
+      OptimizerWeightsValueType tolerance = static_cast<OptimizerWeightsValueType>( 1e-4 );
+
+      for( unsigned int i = 0; i < this->m_OptimizerWeights.Size(); i++ )
+        {
+        OptimizerWeightsValueType difference =
+          vcl_fabs( NumericTraits<OptimizerWeightsValueType>::OneValue() - this->m_OptimizerWeights[i] );
+        if( difference > tolerance  )
+          {
+          this->m_OptimizerWeightsAreIdentity = false;
+          break;
+          }
+        }
+      }
+    this->Modified();
+    }
+}
+
+/*
  * Initialize by setting the interconnects between components.
  */
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 void
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::InitializeRegistrationAtEachLevel( const SizeValueType level )
 {
   // Sanity checks
@@ -256,6 +297,11 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
     this->m_CompositeTransform->AddTransform( this->m_MovingInitialTransform );
     this->m_CompositeTransform->AddTransform( this->m_OutputTransform );
     this->m_CompositeTransform->FlattenTransformQueue();
+
+    if( this->m_OptimizerWeights.Size() > 0 )
+      {
+      this->m_Optimizer->SetWeights( this->m_OptimizerWeights );
+      }
     }
   this->m_CompositeTransform->SetOnlyMostRecentTransformToOptimizeOn();
 
@@ -276,14 +322,30 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
     multiMetric2->SetVirtualDomainFromImage( shrinkFilter->GetOutput() );
     for( unsigned int n = 0; n < multiMetric2->GetNumberOfMetrics(); n++ )
       {
-      dynamic_cast<ImageMetricType *>( multiMetric2->GetMetricQueue()[n].GetPointer() )->SetVirtualDomainFromImage( shrinkFilter->GetOutput() );
+      typename ImageMetricType::Pointer imageMetric = dynamic_cast<ImageMetricType *>( multiMetric2->GetMetricQueue()[n].GetPointer() );
+      if( imageMetric.IsNotNull() )
+        {
+        imageMetric->SetVirtualDomainFromImage( shrinkFilter->GetOutput() );
+        }
+      else
+        {
+        itkExceptionMacro("ERROR: Invalid metric conversion.");
+        }
       }
     }
   else
     {
-    dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetFixedTransform( this->m_FixedInitialTransform );
-    dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetMovingTransform( this->m_CompositeTransform );
-    dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetVirtualDomainFromImage( shrinkFilter->GetOutput() );
+    typename ImageMetricType::Pointer imageMetric = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() );
+    if( imageMetric.IsNotNull() )
+      {
+      imageMetric->SetFixedTransform( this->m_FixedInitialTransform );
+      imageMetric->SetMovingTransform( this->m_CompositeTransform );
+      imageMetric->SetVirtualDomainFromImage( shrinkFilter->GetOutput() );
+      }
+    else
+      {
+      itkExceptionMacro("ERROR: Invalid metric conversion.");
+      }
     }
 
   this->m_FixedSmoothImages.clear();
@@ -332,13 +394,29 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
     typename MultiMetricType::Pointer multiMetric3 = dynamic_cast<MultiMetricType *>( this->m_Metric.GetPointer() );
     if( multiMetric3 )
       {
-      dynamic_cast<ImageMetricType *>( multiMetric3->GetMetricQueue()[n].GetPointer() )->SetFixedImage( this->m_FixedSmoothImages[n] );
-      dynamic_cast<ImageMetricType *>( multiMetric3->GetMetricQueue()[n].GetPointer() )->SetMovingImage( this->m_MovingSmoothImages[n] );
+      typename ImageMetricType::Pointer metricQueue = dynamic_cast<ImageMetricType *>( multiMetric3->GetMetricQueue()[n].GetPointer() );
+      if( metricQueue.IsNotNull() )
+        {
+        metricQueue->SetFixedImage( this->m_FixedSmoothImages[n] );
+        metricQueue->SetMovingImage( this->m_MovingSmoothImages[n] );
+        }
+      else
+        {
+        itkExceptionMacro("ERROR: Invalid conversion from the multi metric queue.");
+        }
       }
     else
       {
-      dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetFixedImage( this->m_FixedSmoothImages[n] );
-      dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->SetMovingImage( this->m_MovingSmoothImages[n] );
+      typename ImageMetricType::Pointer metric = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() );
+      if( metric.IsNotNull() )
+        {
+        metric->SetFixedImage( this->m_FixedSmoothImages[n] );
+        metric->SetMovingImage( this->m_MovingSmoothImages[n] );
+        }
+      else
+        {
+        itkExceptionMacro("ERROR: Invalid metric conversion.");
+        }
       }
     }
 
@@ -364,9 +442,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
 /*
  * Start the registration
  */
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 void
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::GenerateData()
 {
   for( this->m_CurrentLevel = 0; this->m_CurrentLevel < this->m_NumberOfLevels; this->m_CurrentLevel++ )
@@ -382,9 +460,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
 /**
  * Set the moving transform adaptors per stage
  */
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 void
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::SetTransformParametersAdaptorsPerLevel( TransformParametersAdaptorsContainerType & adaptors )
 {
   if( this->m_NumberOfLevels != adaptors.size() )
@@ -402,9 +480,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
 /**
  * Get the moving transform adaptors per stage
  */
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
-const typename  ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>::TransformParametersAdaptorsContainerType &
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+const typename  ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>::TransformParametersAdaptorsContainerType &
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::GetTransformParametersAdaptorsPerLevel() const
 {
   return this->m_TransformParametersAdaptorsPerLevel;
@@ -413,9 +491,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
 /**
  * Set the number of levels
  */
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 void
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::SetNumberOfLevels( const SizeValueType numberOfLevels )
 {
   if( this->m_NumberOfLevels != numberOfLevels )
@@ -453,9 +531,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
 /**
  * Get the metric samples
  */
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 void
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::SetMetricSamplePoints()
 {
   SizeValueType numberOfLocalMetrics = 1;
@@ -471,11 +549,27 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
   const VirtualDomainImageType * virtualImage;
   if( numberOfLocalMetrics == 1 )
     {
-    virtualImage = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->GetVirtualImage();
+    typename ImageMetricType::Pointer metric = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() );
+    if( metric.IsNotNull() )
+      {
+      virtualImage = metric->GetVirtualImage();
+      }
+    else
+      {
+      itkExceptionMacro("ERROR: Invalid metric conversion.");
+      }
     }
   else
     {
-    virtualImage = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[0].GetPointer() )->GetVirtualImage();
+    typename ImageMetricType::Pointer multimetric = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[0].GetPointer() );
+    if( multimetric.IsNotNull() )
+      {
+      virtualImage = multimetric->GetVirtualImage();
+      }
+    else
+      {
+      itkExceptionMacro("ERROR: Invalid metric conversion.");
+      }
     }
   const VirtualDomainRegionType & virtualDomainRegion = virtualImage->GetRequestedRegion();
   const typename VirtualDomainImageType::SpacingType oneThirdVirtualSpacing = virtualImage->GetSpacing() / 3.0;
@@ -563,9 +657,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
 /*
  * PrintSelf
  */
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 void
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::PrintSelf( std::ostream & os, Indent indent ) const
 {
   Superclass::PrintSelf( os, indent );
@@ -588,6 +682,11 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
     os << indent << indent << "Smoothing sigmas are specified in voxel units." << std::endl;
     }
 
+  if( this->m_OptimizerWeights.Size() > 0 )
+    {
+    os << indent << "Optimizers weights: " << this->m_OptimizerWeights << std::endl;
+    }
+
   os << indent << "Metric sampling strategy: " << this->m_MetricSamplingStrategy << std::endl;
 
   os << indent << "Metric sampling percentage: ";
@@ -601,17 +700,17 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
 /*
  *  Get output transform
  */
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
-const typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>::DecoratedOutputTransformType *
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+const typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>::DecoratedOutputTransformType *
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::GetOutput() const
 {
   return static_cast<const DecoratedOutputTransformType *>( this->ProcessObject::GetOutput( 0 ) );
 }
 
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 DataObject::Pointer
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::MakeOutput( DataObjectPointerArraySizeType output )
 {
   switch ( output )
@@ -625,9 +724,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
     }
 }
 
-template<typename TFixedImage, typename TMovingImage, typename TTransform>
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 void
-ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform>
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::SetMetricSamplingPercentage( const RealType samplingPercentage )
 {
   MetricSamplingPercentageArrayType samplingPercentagePerLevel;

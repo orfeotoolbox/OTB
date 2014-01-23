@@ -6,6 +6,8 @@ include(${_ITKModuleMacros_DIR}/ITKModuleAPI.cmake)
 include(${_ITKModuleMacros_DIR}/ITKModuleDoxygen.cmake)
 include(${_ITKModuleMacros_DIR}/ITKModuleHeaderTest.cmake)
 
+include(GenerateExportHeader)
+
 if(ITK_CPPCHECK_TEST)
   include(${_ITKModuleMacros_DIR}/ITKModuleCPPCheckTest.cmake)
 endif()
@@ -20,13 +22,21 @@ macro(itk_module _name)
   set(ITK_MODULE_${itk-module}_DEPENDS "")
   set(ITK_MODULE_${itk-module-test}_DEPENDS "${itk-module}")
   set(ITK_MODULE_${itk-module}_DESCRIPTION "description")
-  set(ITK_MODULE_${itk-module}_EXCLUDE_FROM_ALL 0)
+  set(ITK_MODULE_${itk-module}_EXCLUDE_FROM_DEFAULT 0)
+  set(ITK_MODULE_${itk-module}_ENABLE_SHARED 0)
   foreach(arg ${ARGN})
     if("${arg}" MATCHES "^(DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT)$")
       set(_doing "${arg}")
-    elseif("${arg}" MATCHES "^EXCLUDE_FROM_ALL$")
+    elseif("${arg}" MATCHES "^EXCLUDE_FROM_DEFAULT$")
       set(_doing "")
-      set(ITK_MODULE_${itk-module}_EXCLUDE_FROM_ALL 1)
+      set(ITK_MODULE_${itk-module}_EXCLUDE_FROM_DEFAULT 1)
+    elseif("${arg}" MATCHES "^EXCLUDE_FROM_ALL$") # To maintain backward compatibility
+      set(_doing "")
+      message(AUTHOR_WARNING "EXCLUDE_FROM_ALL is deprecated, please use EXCLUDE_FROM_DEFAULT.")
+      set(ITK_MODULE_${itk-module}_EXCLUDE_FROM_DEFAULT 1)
+    elseif("${arg}" MATCHES "^ENABLE_SHARED$")
+      set(_doing "")
+      set(ITK_MODULE_${itk-module}_ENABLE_SHARED 1)
     elseif("${arg}" MATCHES "^[A-Z][A-Z][A-Z]$")
       set(_doing "")
       message(AUTHOR_WARNING "Unknown argument [${arg}]")
@@ -126,6 +136,35 @@ macro(itk_module_impl)
   if(EXISTS ${${itk-module}_SOURCE_DIR}/src/CMakeLists.txt AND NOT ${itk-module}_NO_SRC)
     set_property(GLOBAL APPEND PROPERTY ITKTargets_MODULES ${itk-module})
     add_subdirectory(src)
+  endif()
+
+
+  if( ITK_MODULE_${itk-module}_ENABLE_SHARED )
+
+    # Need to use relative path to work around CMake ISSUE 12645 fixed
+    # in CMake 2.8.8, to support older versions
+    set(_export_header_file "${ITKCommon_BINARY_DIR}/${itk-module}Export.h")
+    file(RELATIVE_PATH _export_header_file ${CMAKE_CURRENT_BINARY_DIR} ${_export_header_file} )
+
+    # Generate the export macro header for symbol visibility/Windows DLL declspec
+    generate_export_header(${itk-module}
+      EXPORT_FILE_NAME ${_export_header_file}
+      EXPORT_MACRO_NAME ${itk-module}_EXPORT
+      NO_EXPORT_MACRO_NAME ${itk-module}_HIDDEN
+      STATIC_DEFINE ITK_STATIC )
+    install(FILES
+      ${ITKCommon_BINARY_DIR}/${itk-module}Export.h
+      DESTINATION ${${itk-module}_INSTALL_INCLUDE_DIR}
+      COMPONENT Development
+      )
+
+    if (BUILD_SHARED_LIBS)
+      # export flags are only added when building shared libs, they cause
+      # mismatched visibility warnings when building statically.
+      add_compiler_export_flags(my_abi_flags)
+      set_property(TARGET ${itk-module} APPEND
+        PROPERTY COMPILE_FLAGS "${my_abi_flags}")
+    endif()
   endif()
 
   set(itk-module-EXPORT_CODE-build "${${itk-module}_EXPORT_CODE_BUILD}")

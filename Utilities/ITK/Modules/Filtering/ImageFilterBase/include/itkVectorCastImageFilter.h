@@ -41,7 +41,7 @@ namespace itk
  */
 namespace Functor
 {
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class VectorCast
 {
 public:
@@ -71,8 +71,8 @@ public:
 };
 }
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT VectorCastImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class VectorCastImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::VectorCast< typename TInputImage::PixelType,
@@ -97,7 +97,7 @@ public:
                UnaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType::ValueType > ) );
   itkConceptMacro( OutputHasNumericTraitsCheck,
@@ -105,7 +105,7 @@ public:
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType::ValueType,
                                            typename TOutputImage::PixelType::ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

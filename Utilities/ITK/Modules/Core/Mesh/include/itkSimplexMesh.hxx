@@ -63,10 +63,7 @@ SimplexMesh< TPixelType, VDimension, TMeshTraits >
   while ( pointDataIterator != pointDataEnd )
     {
     SimplexMeshGeometry *geometry = pointDataIterator->Value();
-    if ( geometry )
-      {
-      delete geometry;
-      }
+    delete geometry;
     pointDataIterator++;
     }
   // clear the map
@@ -270,9 +267,10 @@ void
 SimplexMesh< TPixelType, VDimension, TMeshTraits >
 ::SetGeometryData(PointIdentifier pointId, SimplexMeshGeometry *geometryData)
 {
-  if ( m_GeometryData->IndexExists(pointId) )
+  SimplexMeshGeometry* oldGeometryData;
+  if( m_GeometryData->GetElementIfIndexExists(pointId, &oldGeometryData) )
     {
-    delete m_GeometryData->GetElement(pointId);
+    delete oldGeometryData;
     }
   m_GeometryData->InsertElement(pointId, geometryData);
 }

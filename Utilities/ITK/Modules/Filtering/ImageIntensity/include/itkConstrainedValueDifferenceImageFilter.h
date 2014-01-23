@@ -54,7 +54,7 @@ namespace itk
  */
 namespace Functor
 {
-template< class TInput1, class TInput2, class TOutput >
+template< typename TInput1, typename TInput2, typename TOutput >
 class ConstrainedValueDifference
 {
 public:
@@ -86,8 +86,8 @@ public:
 };
 }
 
-template< class TInputImage1, class TInputImage2, class TOutputImage >
-class ITK_EXPORT ConstrainedValueDifferenceImageFilter:
+template< typename TInputImage1, typename TInputImage2, typename TOutputImage >
+class ConstrainedValueDifferenceImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage1, TInputImage2, TOutputImage,
                             Functor::ConstrainedValueDifference<
@@ -115,7 +115,7 @@ public:
                BinaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1ConvertibleToDoubleCheck,
                    ( Concept::Convertible< typename TInputImage1::PixelType, double > ) );
   itkConceptMacro( Input2ConvertibleToDoubleCheck,
@@ -124,7 +124,7 @@ public:
                    ( Concept::Convertible< double, typename TOutputImage::PixelType > ) );
   itkConceptMacro( DoubleGreaterThanOutputCheck,
                    ( Concept::GreaterThanComparable< double, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

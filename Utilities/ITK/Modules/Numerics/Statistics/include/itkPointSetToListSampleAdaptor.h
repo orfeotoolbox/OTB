@@ -42,8 +42,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TPointSet >
-class ITK_EXPORT PointSetToListSampleAdaptor:
+template< typename TPointSet >
+class PointSetToListSampleAdaptor:
   public ListSample< typename TPointSet::PointType >
 {
 public:
@@ -58,10 +58,6 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-
-  /** the number of components in a measurement vector */
-  itkStaticConstMacro(MeasurementVectorSize, unsigned int,
-                      TPointSet::PointDimension);
 
   /** PointSet typedefs */
   typedef TPointSet                                        PointSetType;

@@ -32,8 +32,8 @@ namespace itk
  * appropriate definitions of greater, less and so on
  * \ingroup ITKMathematicalMorphology
  */
-template< class TInputPix, class TCompare >
-class ITK_EXPORT AnchorOpenCloseLine
+template< typename TInputPix, typename TCompare >
+class AnchorOpenCloseLine
 {
 public:
   /** Some convenient typedefs. */

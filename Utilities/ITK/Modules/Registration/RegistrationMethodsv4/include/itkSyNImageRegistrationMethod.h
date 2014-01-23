@@ -27,9 +27,9 @@ namespace itk
 //Forward-declare these because of module dependency conflict.
 //They will soon be moved to a different module, at which
 // time this can be removed.
-template <unsigned int VDimension, class TDataHolder>
+template <unsigned int VDimension, typename TDataHolder>
 class ImageToData;
-template <class TDataHolder>
+template <typename TDataHolder>
 class Array1DToData;
 
 /** \class SyNImageRegistrationMethod
@@ -71,7 +71,7 @@ class Array1DToData;
  */
 template<typename TFixedImage, typename TMovingImage, typename TOutputTransform =
   DisplacementFieldTransform<double, TFixedImage::ImageDimension> >
-class ITK_EXPORT SyNImageRegistrationMethod
+class SyNImageRegistrationMethod
 : public ImageRegistrationMethodv4<TFixedImage, TMovingImage, TOutputTransform>
 {
 public:

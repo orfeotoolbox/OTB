@@ -23,7 +23,7 @@
 
 namespace itk
 {
-template< class TPixel >
+template< typename TPixel >
 class MaxFunctor
 {
 public:
@@ -35,8 +35,8 @@ public:
   }
 };
 
-template< class TImage, class TKernel >
-class ITK_EXPORT VanHerkGilWermanDilateImageFilter:
+template< typename TImage, typename TKernel >
+class VanHerkGilWermanDilateImageFilter:
   public VanHerkGilWermanErodeDilateImageFilter< TImage, TKernel, MaxFunctor< typename TImage::PixelType > >
 {
 public:

@@ -50,8 +50,8 @@ namespace itk
  * \ingroup HybridSegmentation
  * \ingroup ITKVoronoi
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT VoronoiSegmentationRGBImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class VoronoiSegmentationRGBImageFilter:
   public VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage >
 {
 public:
@@ -137,12 +137,12 @@ public:
                       TOutputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, OutputImageDimension > ) );
   itkConceptMacro( IntConvertibleToOutputCheck,
                    ( Concept::Convertible< int, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -35,8 +35,8 @@ namespace itk
  *
  * \ingroup ITKVideoFiltering
  */
-template<class TImageToImageFilter>
-class ITK_EXPORT ImageFilterToVideoFilterWrapper :
+template<typename TImageToImageFilter>
+class ImageFilterToVideoFilterWrapper :
   public VideoToVideoFilter<
           itk::VideoStream<typename TImageToImageFilter::InputImageType>,
           itk::VideoStream<typename TImageToImageFilter::OutputImageType> >

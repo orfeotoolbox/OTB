@@ -33,7 +33,7 @@ namespace itk
  * \ingroup Numerics Optimizers
  * \ingroup ITKOptimizers
  */
-class ITK_EXPORT SingleValuedVnlCostFunctionAdaptor:
+class SingleValuedVnlCostFunctionAdaptor:
   public vnl_cost_function
 {
 public:
@@ -129,9 +129,12 @@ protected:
 
 private:
 
+  /** Get current parameters scaling. */
+  itkGetConstReferenceMacro(InverseScales, ScalesType);
+
   SingleValuedCostFunction::Pointer m_CostFunction;
   bool                              m_ScalesInitialized;
-  ScalesType                        m_Scales;
+  ScalesType                        m_InverseScales;
   bool                              m_NegateCostFunction;
   Object::Pointer                   m_Reporter;
 

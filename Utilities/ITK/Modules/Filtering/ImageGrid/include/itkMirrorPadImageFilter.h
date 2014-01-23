@@ -48,8 +48,8 @@ namespace itk
  * \wikiexample{Images/MirrorPadImageFilter,Pad an image using mirroring over the boundaries}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT MirrorPadImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class MirrorPadImageFilter:
   public PadImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -87,10 +87,10 @@ public:
                       TInputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputImagePixelType, OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

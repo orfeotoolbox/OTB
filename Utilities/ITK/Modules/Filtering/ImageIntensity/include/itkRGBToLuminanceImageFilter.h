@@ -35,7 +35,7 @@ namespace itk
  */
 namespace Functor
 {
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class RGBToLuminance
 {
 public:
@@ -59,8 +59,8 @@ public:
 };
 }
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT RGBToLuminanceImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class RGBToLuminanceImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::RGBToLuminance<
@@ -86,10 +86,10 @@ public:
                UnaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType::ComponentType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

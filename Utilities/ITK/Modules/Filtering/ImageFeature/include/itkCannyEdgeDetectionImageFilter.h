@@ -28,7 +28,7 @@
 
 namespace itk
 {
-template< class TValueType >
+template< typename TValueType >
 class ListNode
 {
 public:
@@ -80,8 +80,8 @@ public:
  * \sa ThresholdImageFilter
  * \ingroup ITKImageFeature
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT CannyEdgeDetectionImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class CannyEdgeDetectionImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -206,7 +206,7 @@ public:
   throw( InvalidRequestedRegionError );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputImagePixelType > ) );
   itkConceptMacro( OutputHasNumericTraitsCheck,
@@ -217,7 +217,7 @@ public:
                    ( Concept::IsFloatingPoint< InputImagePixelType > ) );
   itkConceptMacro( OutputIsFloatingPointCheck,
                    ( Concept::IsFloatingPoint< OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
@@ -344,7 +344,7 @@ private:
   SizeValueType m_Center;
 
   typename ListNodeStorageType::Pointer m_NodeStore;
-  ListPointerType m_NodeList;
+  ListPointerType                       m_NodeList;
 
   const InputImageType *m_InputImage;
   OutputImageType      *m_OutputImage;

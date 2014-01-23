@@ -40,8 +40,8 @@ namespace itk
  * \ingroup DataAccess
  * \ingroup ITKCommon
  */
-template< class TObjectType >
-class ITK_EXPORT WeakPointer
+template< typename TObjectType >
+class WeakPointer
 {
 public:
   /** Extract information from template parameter. */
@@ -117,8 +117,15 @@ public:
   /** Function to print object pointed to.  */
   ObjectType * Print(std::ostream & os) const
   {
-    // This prints the object pointed to by the pointer
-    ( *m_Pointer ).Print(os);
+    if( this->IsNull() )
+      {
+      os << "(null)";
+      }
+    else
+      {
+      // This prints the object pointed to by the pointer
+      ( *m_Pointer ).Print(os);
+      }
     return m_Pointer;
   }
 

@@ -67,9 +67,9 @@ namespace itk
  * \sa ImageConstIteratorWithIndex
  * \ingroup ITKCommon
  */
-template< class TImage,  class TBoundaryCondition =
+template< typename TImage,  typename TBoundaryCondition =
             ZeroFluxNeumannBoundaryCondition< TImage > >
-class ITK_EXPORT ConstShapedNeighborhoodIterator:
+class ConstShapedNeighborhoodIterator:
   private NeighborhoodIterator< TImage, TBoundaryCondition >
 {
 public:
@@ -126,7 +126,7 @@ public:
 
     virtual ~ConstIterator() {}
 
-    const ConstIterator & operator=(const ConstIterator & o)
+    ConstIterator & operator=(const ConstIterator & o)
     {
       m_NeighborhoodIterator = o.m_NeighborhoodIterator;
       m_ListIterator = o.m_ListIterator;

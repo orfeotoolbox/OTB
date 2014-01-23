@@ -46,8 +46,8 @@ namespace itk
  * \sa InverseFFTImageFilter, FFTComplexToComplexImageFilter
  * \ingroup ITKFFT
  */
-template< class TInputImage, class TOutputImage=Image< std::complex<typename TInputImage::PixelType>, TInputImage::ImageDimension> >
-class ITK_EXPORT ForwardFFTImageFilter:
+template< typename TInputImage, typename TOutputImage=Image< std::complex<typename TInputImage::PixelType>, TInputImage::ImageDimension> >
+class ForwardFFTImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

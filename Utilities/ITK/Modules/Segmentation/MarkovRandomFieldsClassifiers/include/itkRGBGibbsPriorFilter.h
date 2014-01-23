@@ -43,8 +43,8 @@ namespace itk
  * \ingroup MRFFilters
  * \ingroup ITKMarkovRandomFieldsClassifiers
  */
-template< class TInputImage, class TClassifiedImage >
-class ITK_EXPORT RGBGibbsPriorFilter:public MRFImageFilter< TInputImage,
+template< typename TInputImage, typename TClassifiedImage >
+class RGBGibbsPriorFilter:public MRFImageFilter< TInputImage,
                                                             TClassifiedImage >
 {
 public:
@@ -175,13 +175,13 @@ protected:
   virtual void ApplyGPImageFilter();
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimension,
                    ( Concept::SameDimension< itkGetStaticConstMacro(InputImageType::ImageDimension),
                                              itkGetStaticConstMacro(ClassifiedImageType::ImageDimension) > ) );
   itkConceptMacro( DimensionShouldBe3,
                    ( Concept::SameDimension< itkGetStaticConstMacro(InputImageType::ImageDimension), 3 > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 private:

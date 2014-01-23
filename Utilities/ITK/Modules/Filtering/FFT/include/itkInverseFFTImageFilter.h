@@ -40,8 +40,8 @@ namespace itk
  * \sa ForwardFFTImageFilter, InverseFFTImageFilter
  * \ingroup ITKFFT
  */
-template< class TInputImage, class TOutputImage=Image< typename TInputImage::PixelType::value_type, TInputImage::ImageDimension> >
-class ITK_EXPORT InverseFFTImageFilter:
+template< typename TInputImage, typename TOutputImage=Image< typename TInputImage::PixelType::value_type, TInputImage::ImageDimension> >
+class InverseFFTImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 
 {

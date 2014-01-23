@@ -30,7 +30,7 @@ namespace itk
 /**
  * Initialize new instance
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::InverseDisplacementFieldImageFilter()
 {
@@ -55,7 +55,7 @@ InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
  *
  * \todo Add details about this class
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -67,19 +67,21 @@ InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
   os << indent << "OutputOrigin:      " << m_OutputOrigin << std::endl;
   os << indent << "KernelTransform:   " << m_KernelTransform.GetPointer() << std::endl;
   os << indent << "SubsamplingFactor: " << m_SubsamplingFactor << std::endl;
-
-  return;
 }
 
 /**
  * Set the output image spacing.
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::SetOutputSpacing(const double *spacing)
 {
-  SpacingType s(spacing);
+  SpacingType s;
+  for(unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
+    {
+    s[i] = static_cast< typename SpacingType::ValueType >(spacing[i]);
+    }
 
   this->SetOutputSpacing(s);
 }
@@ -87,7 +89,7 @@ InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 /**
  * Set the output image origin.
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::SetOutputOrigin(const double *origin)
@@ -101,7 +103,7 @@ InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
  * Sub-sample the input displacement field and prepare the KernelBase
  * BSpline
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::PrepareKernelBaseSpline()
@@ -211,7 +213,7 @@ InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 /**
  * GenerateData
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::GenerateData()
@@ -272,8 +274,6 @@ InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
     ++outIt;
     progress.CompletedPixel();
     }
-
-  return;
 }
 
 /**
@@ -283,7 +283,7 @@ InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
  * when we cannot assume anything about the transform being used.
  * So we do the easy thing and request the entire input image.
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
@@ -304,14 +304,12 @@ InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
   InputImageRegionType inputRegion;
   inputRegion = inputPtr->GetLargestPossibleRegion();
   inputPtr->SetRequestedRegion(inputRegion);
-
-  return;
 }
 
 /**
  * Inform pipeline of required output region
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::GenerateOutputInformation()
@@ -334,14 +332,12 @@ InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
   // Set spacing and origin
   outputPtr->SetSpacing(m_OutputSpacing);
   outputPtr->SetOrigin(m_OutputOrigin);
-
-  return;
 }
 
 /**
  * Verify if any of the components has been modified.
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 ModifiedTimeType
 InverseDisplacementFieldImageFilter< TInputImage, TOutputImage >
 ::GetMTime(void) const

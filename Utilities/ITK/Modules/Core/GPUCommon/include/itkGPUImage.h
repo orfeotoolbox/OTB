@@ -36,8 +36,8 @@ namespace itk
  *
  * \ingroup ITKGPUCommon
  */
-template <class TPixel, unsigned int VImageDimension = 2>
-class ITK_EXPORT GPUImage : public Image<TPixel,VImageDimension>
+template <typename TPixel, unsigned int VImageDimension = 2>
+class GPUImage : public Image<TPixel,VImageDimension>
 {
 public:
   typedef GPUImage                      Self;
@@ -264,14 +264,14 @@ private:
 
 };
 
-template <class T>
+template <typename T>
 class GPUTraits
 {
 public:
   typedef T Type;
 };
 
-template <class TPixelType, unsigned int NDimension>
+template <typename TPixelType, unsigned int NDimension>
 class GPUTraits< Image< TPixelType, NDimension > >
 {
 public:

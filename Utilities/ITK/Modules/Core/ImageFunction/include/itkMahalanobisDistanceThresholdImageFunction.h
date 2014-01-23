@@ -45,8 +45,8 @@ namespace itk
  *
  * \ingroup ITKImageFunction
  */
-template< class TInputImage, class TCoordRep = float >
-class ITK_EXPORT MahalanobisDistanceThresholdImageFunction:
+template< typename TInputImage, typename TCoordRep = float >
+class MahalanobisDistanceThresholdImageFunction:
   public ImageFunction< TInputImage, bool, TCoordRep >
 {
 public:

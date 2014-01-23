@@ -39,7 +39,7 @@ namespace itk
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 ShrinkImageFilter< TInputImage, TOutputImage >
 ::ShrinkImageFilter()
 {
@@ -52,7 +52,7 @@ ShrinkImageFilter< TInputImage, TOutputImage >
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 ShrinkImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -70,7 +70,7 @@ ShrinkImageFilter< TInputImage, TOutputImage >
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 ShrinkImageFilter< TInputImage, TOutputImage >
 ::SetShrinkFactors(unsigned int factor)
@@ -96,7 +96,7 @@ ShrinkImageFilter< TInputImage, TOutputImage >
 }
 
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 ShrinkImageFilter< TInputImage, TOutputImage >
 ::SetShrinkFactor(unsigned int i, unsigned int factor)
@@ -114,7 +114,7 @@ ShrinkImageFilter< TInputImage, TOutputImage >
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 ShrinkImageFilter< TInputImage, TOutputImage >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
@@ -192,7 +192,7 @@ ShrinkImageFilter< TInputImage, TOutputImage >
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 ShrinkImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
@@ -255,15 +255,13 @@ ShrinkImageFilter< TInputImage, TOutputImage >
 
   inputRequestedRegionIndex = outputRequestedRegionStartIndex * factorSize + offsetIndex;
 
-  // Originally this was
-  //  for ( i=0; i < TInputImage::ImageDimension; ++i )
-  //  {
-  //  inputRequestedRegionSize[i] = (outputRequestedRegionSize[i] - 1 ) *
-  // factorSize[i] + 1;
-  //  }
-  // but with centered pixels we may sample edge to edge
-
-  inputRequestedRegionSize = outputRequestedRegionSize * factorSize;
+  // originally this was
+  // inputRequestedRegionSize = outputRequestedRegionSize * factorSize;
+  // but since we don't sample edge to edge, we can reduce the size
+  for ( i=0; i < TInputImage::ImageDimension; ++i )
+    {
+    inputRequestedRegionSize[i] = (outputRequestedRegionSize[i] - 1 ) * factorSize[i] + 1;
+    }
 
   typename TInputImage::RegionType inputRequestedRegion;
   inputRequestedRegion.SetIndex(inputRequestedRegionIndex);
@@ -276,7 +274,7 @@ ShrinkImageFilter< TInputImage, TOutputImage >
 /**
  *
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 ShrinkImageFilter< TInputImage, TOutputImage >
 ::GenerateOutputInformation()
@@ -330,8 +328,8 @@ ShrinkImageFilter< TInputImage, TOutputImage >
 
   // Compute origin offset
   // The physical center's of the input and output should be the same
-  ContinuousIndex< double, TOutputImage::ImageDimension > inputCenterIndex;
-  ContinuousIndex< double, TOutputImage::ImageDimension > outputCenterIndex;
+  ContinuousIndex< SpacePrecisionType, TOutputImage::ImageDimension > inputCenterIndex;
+  ContinuousIndex< SpacePrecisionType, TOutputImage::ImageDimension > outputCenterIndex;
   for ( i = 0; i < TOutputImage::ImageDimension; i++ )
     {
     inputCenterIndex[i] = inputStartIndex[i] + ( inputSize[i] - 1 ) / 2.0;

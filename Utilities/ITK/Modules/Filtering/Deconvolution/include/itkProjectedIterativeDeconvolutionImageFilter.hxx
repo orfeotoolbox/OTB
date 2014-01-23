@@ -23,21 +23,21 @@
 namespace itk
 {
 
-template< class TSuperclass >
+template< typename TSuperclass >
 ProjectedIterativeDeconvolutionImageFilter< TSuperclass >
 ::ProjectedIterativeDeconvolutionImageFilter()
 {
   m_ProjectionFilter = NULL;
 }
 
-template< class TSuperclass >
+template< typename TSuperclass >
 ProjectedIterativeDeconvolutionImageFilter< TSuperclass >
 ::~ProjectedIterativeDeconvolutionImageFilter()
 {
   m_ProjectionFilter = NULL;
 }
 
-template< class TSuperclass >
+template< typename TSuperclass >
 void
 ProjectedIterativeDeconvolutionImageFilter< TSuperclass >
 ::Initialize(ProgressAccumulator * progress, float progressWeight,
@@ -52,7 +52,7 @@ ProjectedIterativeDeconvolutionImageFilter< TSuperclass >
   m_ProjectionFilter->ThresholdBelow( zero );
 }
 
-template< class TSuperclass >
+template< typename TSuperclass >
 void
 ProjectedIterativeDeconvolutionImageFilter< TSuperclass >
 ::Iteration(ProgressAccumulator * progress, float iterationProgressWeight)
@@ -63,8 +63,6 @@ ProjectedIterativeDeconvolutionImageFilter< TSuperclass >
   m_ProjectionFilter->UpdateLargestPossibleRegion();
   this->m_CurrentEstimate = m_ProjectionFilter->GetOutput();
   this->m_CurrentEstimate->DisconnectPipeline();
-
-  progress->ResetFilterProgressAndKeepAccumulatedProgress();
 }
 
 } // end namespace itk

@@ -61,9 +61,9 @@ namespace itk
  * \ingroup Operators
  * \ingroup ITKCommon
  */
-template< class TPixel, unsigned int VDimension,
-          class TAllocator = NeighborhoodAllocator< TPixel > >
-class ITK_EXPORT NeighborhoodOperator:
+template< typename TPixel, unsigned int VDimension,
+          typename TAllocator = NeighborhoodAllocator< TPixel > >
+class NeighborhoodOperator:
   public Neighborhood< TPixel, VDimension, TAllocator >
 {
 public:

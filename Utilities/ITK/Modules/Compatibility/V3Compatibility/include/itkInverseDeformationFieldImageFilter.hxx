@@ -30,7 +30,7 @@ namespace itk
 /**
  * Initialize new instance
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 ::InverseDeformationFieldImageFilter()
 {
@@ -55,7 +55,7 @@ InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
  *
  * \todo Add details about this class
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -67,27 +67,28 @@ InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
   os << indent << "OutputOrigin:      " << m_OutputOrigin << std::endl;
   os << indent << "KernelTransform:   " << m_KernelTransform.GetPointer() << std::endl;
   os << indent << "SubsamplingFactor: " << m_SubsamplingFactor << std::endl;
-
-  return;
 }
 
 /**
  * Set the output image spacing.
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 ::SetOutputSpacing(const double *spacing)
 {
-  SpacingType s(spacing);
-
+  SpacingType s;
+  for(unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
+    {
+    s[i] = static_cast< typename SpacingType::ValueType >( spacing[i] );
+    }
   this->SetOutputSpacing(s);
 }
 
 /**
  * Set the output image origin.
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 ::SetOutputOrigin(const double *origin)
@@ -101,7 +102,7 @@ InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
  * Sub-sample the input deformation field and prepare the KernelBase
  * BSpline
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 ::PrepareKernelBaseSpline()
@@ -208,7 +209,7 @@ InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 /**
  * GenerateData
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 ::GenerateData()
@@ -269,8 +270,6 @@ InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
     ++outIt;
     progress.CompletedPixel();
     }
-
-  return;
 }
 
 /**
@@ -280,7 +279,7 @@ InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
  * when we cannot assume anything about the transform being used.
  * So we do the easy thing and request the entire input image.
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
@@ -301,14 +300,12 @@ InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
   InputImageRegionType inputRegion;
   inputRegion = inputPtr->GetLargestPossibleRegion();
   inputPtr->SetRequestedRegion(inputRegion);
-
-  return;
 }
 
 /**
  * Inform pipeline of required output region
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 ::GenerateOutputInformation()
@@ -331,14 +328,12 @@ InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
   // Set spacing and origin
   outputPtr->SetSpacing(m_OutputSpacing);
   outputPtr->SetOrigin(m_OutputOrigin);
-
-  return;
 }
 
 /**
  * Verify if any of the components has been modified.
  */
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 unsigned long
 InverseDeformationFieldImageFilter< TInputImage, TOutputImage >
 ::GetMTime(void) const

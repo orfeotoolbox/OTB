@@ -50,8 +50,8 @@ namespace itk
  * \ingroup FiniteDifferenceFunctions
  * \ingroup ITKPDEDeformableRegistration
  */
-template< class TFixedImage, class TMovingImage, class TDisplacementField >
-class ITK_EXPORT LevelSetMotionRegistrationFunction:
+template< typename TFixedImage, typename TMovingImage, typename TDisplacementField >
+class LevelSetMotionRegistrationFunction:
   public PDEDeformableRegistrationFunction< TFixedImage,
                                             TMovingImage,
                                             TDisplacementField >

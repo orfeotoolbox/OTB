@@ -120,7 +120,7 @@ private:
  * \ingroup ITKImageIntensity
  */
 template< typename  TInputImage, typename  TOutputImage = TInputImage >
-class ITK_EXPORT SymmetricEigenAnalysisImageFilter:
+class SymmetricEigenAnalysisImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::SymmetricEigenAnalysisFunction<
@@ -181,10 +181,10 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

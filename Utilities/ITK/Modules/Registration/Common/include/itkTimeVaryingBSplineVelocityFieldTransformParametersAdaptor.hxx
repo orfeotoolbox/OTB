@@ -30,7 +30,7 @@
 namespace itk
 {
 
-template<class TTransform>
+template<typename TTransform>
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::TimeVaryingBSplineVelocityFieldTransformParametersAdaptor()
 {
@@ -47,13 +47,13 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
   this->UpdateRequiredFixedParameters();
 }
 
-template<class TTransform>
+template<typename TTransform>
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::~TimeVaryingBSplineVelocityFieldTransformParametersAdaptor()
 {
 }
 
-template<class TTransform>
+template<typename TTransform>
 void
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::SetRequiredTransformDomainOrigin( const OriginType & origin )
@@ -68,7 +68,7 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
     }
 }
 
-template<class TTransform>
+template<typename TTransform>
 void
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::SetRequiredTransformDomainSize( const SizeType & size )
@@ -83,7 +83,7 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
     }
 }
 
-template<class TTransform>
+template<typename TTransform>
 void
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::SetRequiredTransformDomainSpacing( const SpacingType & spacing )
@@ -98,7 +98,7 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
     }
 }
 
-template<class TTransform>
+template<typename TTransform>
 void
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::SetRequiredTransformDomainDirection( const DirectionType & direction )
@@ -113,7 +113,7 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
     }
 }
 
-template<class TTransform>
+template<typename TTransform>
 void
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::SetRequiredTransformDomainMeshSize( const MeshSizeType & meshSize )
@@ -128,7 +128,7 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
     }
 }
 
-template<class TTransform>
+template<typename TTransform>
 void
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::UpdateRequiredFixedParameters()
@@ -188,7 +188,7 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
     }
 }
 
-template<class TTransform>
+template<typename TTransform>
 void
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::SetRequiredFixedParameters( const ParametersType fixedParameters )
@@ -242,7 +242,7 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
     }
 }
 
-template<class TTransform>
+template<typename TTransform>
 void
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::AdaptTransformParameters()
@@ -270,7 +270,7 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 
   //  Resample the coefficient images
   typedef BSplineResampleImageFunction<ComponentImageType, ParametersValueType> CoefficientUpsampleFunctionType;
-  typedef ResampleImageFilter<ComponentImageType, ComponentImageType> UpsampleFilterType;
+  typedef ResampleImageFilter<ComponentImageType, ComponentImageType, ParametersValueType> UpsampleFilterType;
   typedef BSplineDecompositionImageFilter<ComponentImageType, ComponentImageType> DecompositionFilterType;
 
   VectorType zeroVector( 0.0 );
@@ -339,7 +339,7 @@ TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
   this->m_Transform->IntegrateVelocityField();
 }
 
-template<class TTransform>
+template<typename TTransform>
 void
 TimeVaryingBSplineVelocityFieldTransformParametersAdaptor<TTransform>
 ::PrintSelf( std::ostream & os, Indent indent ) const

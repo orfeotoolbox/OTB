@@ -39,8 +39,8 @@ namespace itk
  * \ingroup ITKMathematicalMorphology
  */
 
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT MovingHistogramDilateImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class MovingHistogramDilateImageFilter:
   public MovingHistogramMorphologyImageFilter< TInputImage, TOutputImage, TKernel,
                                                typename Function::MorphologyHistogram< typename TInputImage::PixelType,
                                                                                        typename std::greater< typename

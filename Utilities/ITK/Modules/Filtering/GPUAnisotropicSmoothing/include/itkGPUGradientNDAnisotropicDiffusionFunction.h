@@ -55,8 +55,8 @@ namespace itk
 /** Create a helper GPU Kernel class for GPUGradientNDAnisotropicDiffusionFunction */
 itkGPUKernelClassMacro(GPUGradientNDAnisotropicDiffusionFunctionKernel);
 
-template< class TImage >
-class ITK_EXPORT GPUGradientNDAnisotropicDiffusionFunction :
+template< typename TImage >
+class GPUGradientNDAnisotropicDiffusionFunction :
   public GPUScalarAnisotropicDiffusionFunction< TImage >
 {
 public:

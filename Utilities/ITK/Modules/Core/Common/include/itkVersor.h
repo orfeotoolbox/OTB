@@ -46,7 +46,7 @@ namespace itk
  * \sa Matrix
  * \ingroup ITKCommon
  */
-template< class T >
+template< typename T >
 class Versor
 {
 public:
@@ -260,6 +260,20 @@ public:
   Self Exponential(ValueType exponent) const;
 
 private:
+  /** use different epsilon for float and double */
+  static inline ValueType Epsilon(double *)
+    {
+      return 1e-10;
+    }
+  static inline ValueType Epsilon(float *)
+    {
+      return 1e-7;
+    }
+  static inline ValueType Epsilon()
+    {
+      return Epsilon((ValueType *)0);
+    }
+
   /** Component parallel to x axis.  */
   ValueType m_X;
 
@@ -273,8 +287,8 @@ private:
   ValueType m_W;
 };
 
-template< class T >
-ITK_EXPORT std::ostream & operator<<(std::ostream & os,
+template< typename T >
+std::ostream & operator<<(std::ostream & os,
                                      const Versor< T > & v)
 {
   os << "[ ";
@@ -283,8 +297,8 @@ ITK_EXPORT std::ostream & operator<<(std::ostream & os,
   return os;
 }
 
-template< class T >
-ITK_EXPORT std::istream & operator>>(std::istream & is,
+template< typename T >
+std::istream & operator>>(std::istream & is,
                                      Versor< T > & v);
 } // end namespace itk
 

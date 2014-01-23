@@ -25,13 +25,14 @@
 
 namespace itk
 {
-template< class TImage, class TKernel, class TFunction1 >
+template< typename TImage, typename TKernel, typename TFunction1 >
 VanHerkGilWermanErodeDilateImageFilter< TImage, TKernel, TFunction1 >
-::VanHerkGilWermanErodeDilateImageFilter()
+::VanHerkGilWermanErodeDilateImageFilter():
+  m_Boundary( NumericTraits< InputImagePixelType >::Zero )
 {
 }
 
-template< class TImage, class TKernel, class TFunction1 >
+template< typename TImage, typename TKernel, typename TFunction1 >
 void
 VanHerkGilWermanErodeDilateImageFilter< TImage, TKernel, TFunction1 >
 ::ThreadedGenerateData(const InputImageRegionType & outputRegionForThread,
@@ -122,7 +123,7 @@ VanHerkGilWermanErodeDilateImageFilter< TImage, TKernel, TFunction1 >
   progress.CompletedPixel();
 }
 
-template< class TImage, class TKernel, class TFunction1 >
+template< typename TImage, typename TKernel, typename TFunction1 >
 void
 VanHerkGilWermanErodeDilateImageFilter< TImage, TKernel, TFunction1 >
 ::PrintSelf(std::ostream & os, Indent indent) const

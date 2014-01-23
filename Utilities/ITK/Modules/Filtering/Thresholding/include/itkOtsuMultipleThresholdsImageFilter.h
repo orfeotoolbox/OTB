@@ -37,6 +37,14 @@ namespace itk
  * for the Calculator. The LabelOffset can be set
  * for the ThresholdLabelerImageFilter.
  *
+ * This filter also includes an option to use the valley emphasis algorithm from
+ * H.F. Ng, "Automatic thresholding for defect detection", Pattern Recognition Letters, (27): 1644-1649, 2006.
+ * The valley emphasis algorithm is particularly effective when the object to be thresholded is small.
+ * See the following tests for examples:
+ * itkOtsuMultipleThresholdsImageFilterTest3 and itkOtsuMultipleThresholdsImageFilterTest4
+ * To use this algorithm, simple call the setter: SetValleyEmphasis(true)
+ * It is turned off by default.
+ *
  * \sa ScalarImageToHistogramGenerator
  * \sa OtsuMultipleThresholdsCalculator
  * \sa ThresholdLabelerImageFilter
@@ -44,8 +52,8 @@ namespace itk
  * \ingroup ITKThresholding
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT OtsuMultipleThresholdsImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class OtsuMultipleThresholdsImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -101,6 +109,11 @@ public:
                     NumericTraits< OutputPixelType >::max() );
   itkGetConstMacro(LabelOffset, OutputPixelType);
 
+  /** Set/Get the use of valley emphasis. Default is false. */
+  itkSetMacro(ValleyEmphasis, bool);
+  itkGetConstReferenceMacro(ValleyEmphasis, bool);
+  itkBooleanMacro(ValleyEmphasis);
+
   /** Get the computed threshold. */
   const ThresholdVectorType & GetThresholds() const
   {
@@ -108,12 +121,12 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputComparableCheck,
                    ( Concept::Comparable< OutputPixelType > ) );
   itkConceptMacro( OutputOStreamWritableCheck,
                    ( Concept::OStreamWritable< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
@@ -133,6 +146,7 @@ private:
   SizeValueType       m_NumberOfThresholds;
   OutputPixelType     m_LabelOffset;
   ThresholdVectorType m_Thresholds;
+  bool                m_ValleyEmphasis;
 }; // end of class
 } // end namespace itk
 

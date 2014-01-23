@@ -41,8 +41,8 @@ namespace itk
  */
 namespace Functor
 {
-template< class TInput, class TOutput >
-class ITK_EXPORT ThresholdLabeler
+template< typename TInput, typename TOutput >
+class ThresholdLabeler
 {
 public:
   ThresholdLabeler() { m_LabelOffset = NumericTraits< TOutput >::One; }
@@ -104,7 +104,7 @@ private:
 };
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 class ThresholdLabelerImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
@@ -142,14 +142,14 @@ public:
 
   /** The input and output pixel types must support comparison operators. */
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( PixelTypeComparable,
                    ( Concept::Comparable< InputPixelType > ) );
   itkConceptMacro( OutputPixelTypeComparable,
                    ( Concept::Comparable< OutputPixelType > ) );
   itkConceptMacro( OutputPixelTypeOStreamWritable,
                    ( Concept::OStreamWritable< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
   /** Set the vector of thresholds. */

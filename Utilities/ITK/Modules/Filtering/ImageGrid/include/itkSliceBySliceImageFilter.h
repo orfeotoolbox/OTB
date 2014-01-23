@@ -52,10 +52,11 @@ namespace itk
  * See http://www.itk.org/pipermail/insight-users/2008-May/026112.html for an
  * example of usage of that feature with MaskImageFilter.
  *
- * The requested region is always enlarged by the filter to cover entirely
- * the whole slice - however, only the slice in the requested region are
- * processed (the requested region is not enlarged to the whole image if
- * not needed).
+ * The input requested region is enlarged to cover whole slices,
+ * but not in the slice direction - however, the internal pipeline
+ * only requests the output requested region for that slice (the
+ * requested region per slice is not enlarged to the whole slice
+ * unless done by the internal filters ).
  *
  * The ouput images of SliceBySliceImageFilter must be of the same size than the
  * input images. All the input images must be of the same pixel type. All the
@@ -69,15 +70,15 @@ namespace itk
  * \ingroup ITKImageGrid
  */
 
-template< class TInputImage,
-          class TOutputImage,
-          class TInputFilter = ImageToImageFilter<
+template< typename TInputImage,
+          typename TOutputImage,
+          typename TInputFilter = ImageToImageFilter<
             Image< typename TInputImage::PixelType,  TInputImage::ImageDimension - 1 >,
             Image< typename TOutputImage::PixelType,  TOutputImage ::ImageDimension - 1 > >,
           class TOutputFilter = typename TInputFilter::Superclass,
           class TInternalInputImage = typename TInputFilter::InputImageType,
           class TInternalOutputImage = typename TOutputFilter::OutputImageType >
-class ITK_EXPORT SliceBySliceImageFilter:
+class SliceBySliceImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -158,11 +159,13 @@ protected:
   SliceBySliceImageFilter();
   ~SliceBySliceImageFilter() {}
 
+  void VerifyInputInformation();
+
   void GenerateData();
 
   void PrintSelf(std::ostream & os, Indent indent) const;
 
-  void EnlargeOutputRequestedRegion( DataObject *itkNotUsed(output) );
+  virtual void GenerateInputRequestedRegion();
 
 private:
   SliceBySliceImageFilter(const Self &); //purposely not implemented

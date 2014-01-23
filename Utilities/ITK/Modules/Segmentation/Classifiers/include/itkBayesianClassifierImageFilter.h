@@ -76,9 +76,9 @@ namespace itk
  * \ingroup ClassificationFilters
  * \ingroup ITKClassifiers
  */
-template< class TInputVectorImage, class TLabelsType = unsigned char,
-          class TPosteriorsPrecisionType = double, class TPriorsPrecisionType = double >
-class ITK_EXPORT BayesianClassifierImageFilter:
+template< typename TInputVectorImage, typename TLabelsType = unsigned char,
+          typename TPosteriorsPrecisionType = double, typename TPriorsPrecisionType = double >
+class BayesianClassifierImageFilter:
   public ImageToImageFilter<
     TInputVectorImage, Image< TLabelsType,
                                TInputVectorImage ::ImageDimension > >
@@ -184,7 +184,7 @@ public:
   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( UnsignedIntConvertibleToLabelsCheck,
                    ( Concept::Convertible< unsigned int, TLabelsType > ) );
   itkConceptMacro( PosteriorsAdditiveOperatorsCheck,
@@ -200,7 +200,7 @@ public:
   itkConceptMacro( InputPriorsPosteriorsMultiplyOperatorCheck,
                    ( Concept::MultiplyOperator< typename InputPixelType::ValueType,
                                                 PriorsPixelType, PosteriorsPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

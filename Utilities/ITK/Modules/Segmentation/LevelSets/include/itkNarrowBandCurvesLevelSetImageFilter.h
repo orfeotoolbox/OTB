@@ -97,10 +97,10 @@ namespace itk
  *   \ingroup LevelSetSegmentation
  * \ingroup ITKLevelSets
  */
-template< class TInputImage,
-          class TFeatureImage,
-          class TOutputPixelType = float >
-class ITK_EXPORT NarrowBandCurvesLevelSetImageFilter:
+template< typename TInputImage,
+          typename TFeatureImage,
+          typename TOutputPixelType = float >
+class NarrowBandCurvesLevelSetImageFilter:
   public NarrowBandLevelSetImageFilter< TInputImage, TFeatureImage, TOutputPixelType,
                                         Image< TOutputPixelType,
                                                TInputImage::ImageDimension > >
@@ -143,10 +143,10 @@ public:
   { return m_CurvesFunction->GetDerivativeSigma(); }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< TOutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

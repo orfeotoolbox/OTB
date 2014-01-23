@@ -33,8 +33,8 @@ namespace itk
  * proportion of the time.
  * \ingroup ITKMathematicalMorphology
  */
-template< class TInputPix, class TCompare >
-class ITK_EXPORT AnchorErodeDilateLine
+template< typename TInputPix, typename TCompare >
+class AnchorErodeDilateLine
 {
 public:
   /** Some convenient typedefs. */

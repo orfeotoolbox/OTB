@@ -51,12 +51,12 @@ namespace itk
  * \ingroup ITKImageFunction
  */
 template<
-  class TInputImage,
-  class TOutput,
-  class TCoordRep = float
+  typename TInputImage,
+  typename TOutput,
+  typename TCoordRep = float
   >
-class ITK_EXPORT ImageFunction:
-  public FunctionBase< Point< TCoordRep, TInputImage::ImageDimension >, TOutput >
+class ImageFunction:
+    public FunctionBase< Point< TCoordRep, TInputImage::ImageDimension >, TOutput >
 {
 public:
   /** Dimension underlying input image. */
@@ -65,9 +65,12 @@ public:
 
   /** Standard class typedefs. */
   typedef ImageFunction Self;
+
   typedef FunctionBase<
-    Point< TCoordRep, itkGetStaticConstMacro(ImageDimension) >,
-    TOutput >                                                   Superclass;
+    Point< TCoordRep,
+           itkGetStaticConstMacro(ImageDimension) >,
+           TOutput >                 Superclass;
+
   typedef SmartPointer< Self >       Pointer;
   typedef SmartPointer< const Self > ConstPointer;
 
@@ -94,8 +97,8 @@ public:
   typedef typename InputImageType::IndexValueType IndexValueType;
 
   /** ContinuousIndex Type. */
-  typedef ContinuousIndex< TCoordRep, itkGetStaticConstMacro(ImageDimension) >
-  ContinuousIndexType;
+  typedef ContinuousIndex< TCoordRep,
+                           itkGetStaticConstMacro(ImageDimension) > ContinuousIndexType;
 
   /** Point Type. */
   typedef Point< TCoordRep, itkGetStaticConstMacro(ImageDimension) > PointType;

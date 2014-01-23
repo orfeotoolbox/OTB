@@ -92,11 +92,27 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TOu
   typename MultiMetricType::Pointer multiMetric = dynamic_cast<MultiMetricType *>( this->m_Metric.GetPointer() );
   if( multiMetric )
     {
-    virtualDomainImage = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[0].GetPointer() )->GetVirtualImage();
+    typename ImageMetricType::Pointer metricQueue = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[0].GetPointer() );
+    if( metricQueue.IsNotNull() )
+      {
+      virtualDomainImage = metricQueue->GetVirtualImage();
+      }
+    else
+      {
+      itkExceptionMacro("ERROR: Invalid conversion from the multi metric queue.");
+      }
     }
   else
     {
-    virtualDomainImage = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->GetVirtualImage();
+    typename ImageMetricType::Pointer metric = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() );
+    if( metric.IsNotNull() )
+      {
+      virtualDomainImage = metric->GetVirtualImage();
+      }
+    else
+      {
+      itkExceptionMacro("ERROR: Invalid metric conversion.");
+      }
     }
 
   typedef typename ImageMetricType::DerivativeType MetricDerivativeType;
@@ -113,8 +129,8 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TOu
   updateDerivative.Fill( 0 );
 
   // Monitor the convergence
-  typedef itk::Function::WindowConvergenceMonitoringFunction<double> ConvergenceMonitoringType;
-  ConvergenceMonitoringType::Pointer convergenceMonitoring = ConvergenceMonitoringType::New();
+  typedef itk::Function::WindowConvergenceMonitoringFunction<RealType> ConvergenceMonitoringType;
+  typename ConvergenceMonitoringType::Pointer convergenceMonitoring = ConvergenceMonitoringType::New();
   convergenceMonitoring->SetWindowSize( this->m_ConvergenceWindowSize );
 
   // m_OutputTransform is the velocity field
@@ -186,7 +202,7 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TOu
 
       for( unsigned int n = 0; n < this->m_MovingSmoothImages.size(); n++ )
         {
-        typedef ResampleImageFilter<MovingImageType, VirtualImageType> MovingResamplerType;
+        typedef ResampleImageFilter<MovingImageType, VirtualImageType, RealType> MovingResamplerType;
         typename MovingResamplerType::Pointer movingResampler = MovingResamplerType::New();
         movingResampler->SetTransform( this->m_CompositeTransform );
         movingResampler->SetInput( this->m_MovingSmoothImages[n] );
@@ -197,7 +213,7 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TOu
         movingResampler->SetDefaultPixelValue( 0 );
         movingResampler->Update();
 
-        typedef ResampleImageFilter<FixedImageType, VirtualImageType> FixedResamplerType;
+        typedef ResampleImageFilter<FixedImageType, VirtualImageType, RealType> FixedResamplerType;
         typename FixedResamplerType::Pointer fixedResampler = FixedResamplerType::New();
         fixedResampler->SetTransform( fixedDisplacementFieldTransform );
         fixedResampler->SetInput( this->m_FixedSmoothImages[n] );
@@ -210,8 +226,16 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TOu
 
         if( multiMetric )
           {
-          dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[n].GetPointer() )->SetFixedImage( fixedResampler->GetOutput() );
-          dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[n].GetPointer() )->SetMovingImage( movingResampler->GetOutput() );
+          typename ImageMetricType::Pointer metricQueue = dynamic_cast<ImageMetricType *>( multiMetric->GetMetricQueue()[n].GetPointer() );
+          if( metricQueue.IsNotNull() )
+            {
+            metricQueue->SetFixedImage( fixedResampler->GetOutput() );
+            metricQueue->SetMovingImage( movingResampler->GetOutput() );
+            }
+          else
+            {
+            itkExceptionMacro("ERROR: Invalid conversion from the multi metric queue.");
+            }
           }
         else
           {
@@ -234,6 +258,20 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TOu
 
       metricDerivative.Fill( NumericTraits<typename MetricDerivativeType::ValueType>::Zero );
       this->m_Metric->GetValueAndDerivative( value, metricDerivative );
+
+      // Ensure that the size of the optimizer weights is the same as the
+      // number of local transform parameters (=ImageDimension)
+      if( !this->m_OptimizerWeightsAreIdentity && this->m_OptimizerWeights.Size() == ImageDimension )
+        {
+        typename MetricDerivativeType::iterator it;
+        for( it = metricDerivative.begin(); it != metricDerivative.end(); it += ImageDimension )
+          {
+          for( unsigned int d = 0; d < ImageDimension; d++ )
+            {
+            *(it + d) *= this->m_OptimizerWeights[d];
+            }
+          }
+        }
 
       // Note: we are intentionally ignoring the jacobian determinant.
       // It does not change the direction of the optimization, only

@@ -35,7 +35,7 @@ namespace itk
  *  negative square of normalized cross correlation
  *
  *  \f[
- *  C(f, m) = -\frac{<f-\bar{f}, m-\bar{m} >^2}{|f-\bar{f}}|^2 |m-\bar{m}|^2}
+ *  C(f, m) = -\frac{<f-\bar{f}, m-\bar{m} >^2}{|f-\bar{f}|^2 |m-\bar{m}|^2}
  *  \f]
  *
  *  in which, f, m are the vectors of image pixel intensities, \f$\bar{f}\f$ and
@@ -69,16 +69,20 @@ namespace itk
  *
  * \ingroup ITKMetricsv4
  */
-template <class TFixedImage, class TMovingImage, class TVirtualImage = TFixedImage >
-class ITK_EXPORT CorrelationImageToImageMetricv4 :
-public ImageToImageMetricv4<TFixedImage, TMovingImage, TVirtualImage>
+template <typename TFixedImage, typename TMovingImage, typename TVirtualImage = TFixedImage,
+          typename TInternalComputationValueType = double,
+          typename TMetricTraits = DefaultImageToImageMetricTraitsv4<TFixedImage,TMovingImage,TVirtualImage,TInternalComputationValueType>
+          >
+class CorrelationImageToImageMetricv4 :
+  public ImageToImageMetricv4<TFixedImage, TMovingImage, TVirtualImage, TInternalComputationValueType, TMetricTraits>
 {
 public:
   /** Standard class typedefs. */
-  typedef CorrelationImageToImageMetricv4                                Self;
-  typedef ImageToImageMetricv4<TFixedImage, TMovingImage, TVirtualImage> Superclass;
-  typedef SmartPointer<Self>                                             Pointer;
-  typedef SmartPointer<const Self>                                       ConstPointer;
+  typedef CorrelationImageToImageMetricv4                                           Self;
+  typedef ImageToImageMetricv4<TFixedImage, TMovingImage, TVirtualImage,
+                             TInternalComputationValueType,TMetricTraits>  Superclass;
+  typedef SmartPointer<Self>                                                        Pointer;
+  typedef SmartPointer<const Self>                                                  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

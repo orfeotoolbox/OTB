@@ -66,7 +66,7 @@ class ImageBase;
  * \endwiki
  */
 template< unsigned int VImageDimension >
-class ITK_EXPORT ImageRegion:public Region
+class ImageRegion:public Region
 {
 public:
   /** Standard class typedefs. */
@@ -179,9 +179,7 @@ public:
   bool
   operator==(const Self & region) const
   {
-    bool same = 1;
-
-    same = ( m_Index == region.m_Index );
+    bool same = ( m_Index == region.m_Index );
     same = same && ( m_Size == region.m_Size );
     return same;
   }
@@ -190,9 +188,7 @@ public:
   bool
   operator!=(const Self & region) const
   {
-    bool same = 1;
-
-    same = ( m_Index == region.m_Index );
+    bool same = ( m_Index == region.m_Index );
     same = same && ( m_Size == region.m_Size );
     return !same;
   }

@@ -24,7 +24,7 @@ namespace itk
 {
 namespace Functor
 {
-template< class TScalar >
+template< typename TScalar >
 ScalarToRGBPixelFunctor< TScalar >
 ::ScalarToRGBPixelFunctor()
 {
@@ -38,36 +38,35 @@ ScalarToRGBPixelFunctor< TScalar >
     }
 
 #ifdef ITK_WORDS_BIGENDIAN
-  m_IsBigEndian = true;
+  m_UseMSBForHashing = true;
 #else
-  m_IsBigEndian = false;
+  m_UseMSBForHashing = false;
 #endif
 }
 
-template< class TScalar >
+template< typename TScalar >
 typename ScalarToRGBPixelFunctor< TScalar >::RGBPixelType
 ScalarToRGBPixelFunctor< TScalar >
 ::operator()(const TScalar & v) const
 {
-  unsigned int i;
-  int          j;
-
   TScalar        buf = v;
-  unsigned char *bytes = (unsigned char *)( &buf );
+  const unsigned char *bytes = reinterpret_cast<const unsigned char *>( &buf );
 
-  RGBPixelType ans;
-
-  if ( this->m_IsBigEndian == true )
+  if ( this->m_UseMSBForHashing == true )
     {   // swap bytes
     TScalar tmp;
-    for ( j = sizeof( TScalar ) - 1, i = 0; j >= 0; j--, i++ )
+    unsigned char *tmpbytes = reinterpret_cast<unsigned char *>( &tmp );
+    unsigned int i = 0;
+    for ( int j = sizeof( TScalar ) - 1; j >= 0; j--, i++ )
       {
-      ( (unsigned char *)( &tmp ) )[i] = bytes[j];
+      tmpbytes[i] = bytes[j];
       }
     buf = tmp;
     }
 
-  ans[0] = static_cast< RGBComponentType >( bytes[m_ColorIndex[0]] * 3 );
+  RGBPixelType ans;
+
+  ans[0] = static_cast< RGBComponentType >(   bytes[m_ColorIndex[0]] * 3 );
   ans[1] = static_cast< RGBComponentType >( ( bytes[m_ColorIndex[0]] + bytes[m_ColorIndex[1]] ) * 5 );
   ans[2] = static_cast< RGBComponentType >( ( bytes[m_ColorIndex[0]] + bytes[m_ColorIndex[2]] ) );
 

@@ -51,7 +51,7 @@ namespace itk
  */
 
 template< typename TInputPixelType, typename TOutputPixelType >
-class ITK_EXPORT HoughTransform2DCirclesImageFilter:
+class HoughTransform2DCirclesImageFilter:
   public ImageToImageFilter< Image< TInputPixelType, 2 >, Image< TOutputPixelType, 2 > >
 {
 public:
@@ -150,7 +150,7 @@ public:
   itkGetConstMacro(SweepAngle, float);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( IntConvertibleToOutputCheck,
                    ( Concept::Convertible< int, TOutputPixelType > ) );
   itkConceptMacro( InputGreaterThanDoubleCheck,
@@ -159,7 +159,7 @@ public:
                    ( Concept::AdditiveOperators< TOutputPixelType, int > ) );
   itkConceptMacro( OutputDividedByIntCheck,
                    ( Concept::DivisionOperators< TOutputPixelType, int > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

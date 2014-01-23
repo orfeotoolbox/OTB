@@ -1,3 +1,20 @@
+/*=========================================================================
+ *
+ *  Copyright Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
 #ifndef __itkGPUInPlaceImageFilter_hxx
 #define __itkGPUInPlaceImageFilter_hxx
 
@@ -5,25 +22,19 @@
 
 namespace itk
 {
-/**
- *
- */
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 GPUInPlaceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::GPUInPlaceImageFilter()
 {
 }
 
-/**
- *
- */
-template< class TInputImage, class TOutputImage, class TParentImageFilter  >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter  >
 GPUInPlaceImageFilter< TInputImage, TOutputImage, TParentImageFilter  >
 ::~GPUInPlaceImageFilter()
 {
 }
 
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 void
 GPUInPlaceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -31,7 +42,7 @@ GPUInPlaceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
   GPUSuperclass::PrintSelf(os, indent);
 }
 
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 void
 GPUInPlaceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::ReleaseInputs()
@@ -50,7 +61,7 @@ GPUInPlaceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 */
 }
 
-template< class TInputImage, class TOutputImage, class TParentImageFilter  >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter  >
 void
 GPUInPlaceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::AllocateOutputs()

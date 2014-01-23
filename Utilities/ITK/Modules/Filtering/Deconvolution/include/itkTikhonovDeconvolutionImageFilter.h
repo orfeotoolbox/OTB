@@ -46,8 +46,8 @@ namespace itk
  * \ingroup ITKDeconvolution
  *
  */
-template< class TInputImage, class TKernelImage = TInputImage, class TOutputImage = TInputImage, class TInternalPrecision=double >
-class ITK_EXPORT TikhonovDeconvolutionImageFilter :
+template< typename TInputImage, typename TKernelImage = TInputImage, typename TOutputImage = TInputImage, typename TInternalPrecision=double >
+class TikhonovDeconvolutionImageFilter :
   public InverseDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInternalPrecision >
 {
 public:
@@ -118,7 +118,7 @@ private:
 
 namespace Functor
 {
-template< class TInput1, class TInput2, class TOutput >
+template< typename TInput1, typename TInput2, typename TOutput >
 class TikhonovDeconvolutionFunctor
 {
 public:

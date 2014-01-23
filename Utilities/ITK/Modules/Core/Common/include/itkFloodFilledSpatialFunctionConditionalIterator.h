@@ -31,8 +31,8 @@ namespace itk
  *
  * \ingroup ITKCommon
  */
-template< class TImage, class TFunction >
-class ITK_EXPORT FloodFilledSpatialFunctionConditionalIterator:public
+template< typename TImage, typename TFunction >
+class FloodFilledSpatialFunctionConditionalIterator:public
   FloodFilledSpatialFunctionConditionalConstIterator< TImage, TFunction >
 {
 public:

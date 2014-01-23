@@ -37,8 +37,8 @@ namespace itk
  * \ingroup ITKSpatialObjects
  */
 
-template< class T >
-class ITK_EXPORT SpatialObjectFactory:public SpatialObjectFactoryBase
+template< typename T >
+class SpatialObjectFactory:public SpatialObjectFactoryBase
 {
 public:
 

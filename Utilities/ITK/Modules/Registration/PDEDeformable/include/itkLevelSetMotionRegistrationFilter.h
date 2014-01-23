@@ -87,8 +87,8 @@ namespace itk
  * \ingroup DeformableImageRegistration MultiThreaded
  * \ingroup ITKPDEDeformableRegistration
  */
-template< class TFixedImage, class TMovingImage, class TDisplacementField >
-class ITK_EXPORT LevelSetMotionRegistrationFilter:
+template< typename TFixedImage, typename TMovingImage, typename TDisplacementField >
+class LevelSetMotionRegistrationFilter:
   public PDEDeformableRegistrationFilter< TFixedImage, TMovingImage,
                                           TDisplacementField >
 {

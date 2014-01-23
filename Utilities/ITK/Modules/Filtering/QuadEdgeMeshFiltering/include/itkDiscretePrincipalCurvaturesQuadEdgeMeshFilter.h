@@ -30,8 +30,8 @@ namespace itk
  *
  * \ingroup ITKQuadEdgeMeshFiltering
  */
-template< class TInputMesh, class TOutputMesh=TInputMesh >
-class ITK_EXPORT DiscretePrincipalCurvaturesQuadEdgeMeshFilter:
+template< typename TInputMesh, typename TOutputMesh=TInputMesh >
+class DiscretePrincipalCurvaturesQuadEdgeMeshFilter:
   public DiscreteCurvatureQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
 {
 public:
@@ -64,10 +64,10 @@ public:
   typedef ConformalMatrixCoefficients< OutputMeshType > CoefficientType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputIsFloatingPointCheck,
                    ( Concept::IsFloatingPoint< OutputCurvatureType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

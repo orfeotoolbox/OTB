@@ -31,8 +31,8 @@ namespace itk
  * \ingroup QEMeshModifierFunctions
  * \ingroup ITKQuadEdgeMesh
  */
-template< class TMesh, class TQEType >
-class ITK_EXPORT QuadEdgeMeshEulerOperatorSplitEdgeFunction:
+template< typename TMesh, typename TQEType >
+class QuadEdgeMeshEulerOperatorSplitEdgeFunction:
   public QuadEdgeMeshFunctionBase< TMesh, TQEType * >
 {
 public:

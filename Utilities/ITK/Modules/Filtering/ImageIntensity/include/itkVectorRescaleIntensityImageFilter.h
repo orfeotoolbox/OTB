@@ -89,7 +89,7 @@ private:
  * \endwiki
  */
 template< typename  TInputImage, typename  TOutputImage = TInputImage >
-class ITK_EXPORT VectorRescaleIntensityImageFilter:
+class VectorRescaleIntensityImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::VectorMagnitudeLinearTransform<
@@ -144,12 +144,12 @@ public:
   void PrintSelf(std::ostream & os, Indent indent) const;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputValueType > ) );
   itkConceptMacro( OutputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< OutputValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

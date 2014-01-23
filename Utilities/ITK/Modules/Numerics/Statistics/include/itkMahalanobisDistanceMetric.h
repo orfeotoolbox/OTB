@@ -42,8 +42,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TVector >
-class ITK_EXPORT MahalanobisDistanceMetric:
+template< typename TVector >
+class MahalanobisDistanceMetric:
   public DistanceMetric< TVector >
 {
 public:

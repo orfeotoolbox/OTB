@@ -38,8 +38,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKMathematicalMorphology
  */
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT BlackTopHatImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class BlackTopHatImageFilter:
   public KernelImageFilter< TInputImage, TOutputImage, TKernel >
 {
 public:
@@ -84,12 +84,12 @@ public:
   itkBooleanMacro(SafeBorder);
 
   /** define values used to determine which algorithm to use */
-  enum {
+  enum AlgorithmType {
     BASIC = 0,
     HISTO = 1,
     ANCHOR = 2,
     VHGW = 3
-    } AlgorithmChoice;
+    };
 
   /** Set/Get the backend filter class. */
   itkSetMacro(Algorithm, int);

@@ -53,7 +53,7 @@ namespace itk
  * This filter is intended to be used in the process of Physics-Based
  * Non-Rigid Registration. It computes displacement for selected points based
  * on similarity [M. Bierling, Displacement estimation by hierarchical block
- * matching, Proc. SPIE Vis. Comm. and Image Proc., vol. 1001, pp. 942�951,
+ * matching, Proc. SPIE Vis. Comm. and Image Proc., vol. 1001, pp. 942-951,
  * 1988.].
  *
  * \author Andriy Kot, Center for Real-Time Computing, Old Dominion University,
@@ -65,12 +65,12 @@ namespace itk
  */
 
 template<
-  class TFixedImage,
-  class TMovingImage = TFixedImage,
-  class TFeatures = PointSet< Matrix< double, TFixedImage::ImageDimension, TFixedImage::ImageDimension>, TFixedImage::ImageDimension >,
+  typename TFixedImage,
+  typename TMovingImage = TFixedImage,
+  typename TFeatures = PointSet< Matrix< SpacePrecisionType, TFixedImage::ImageDimension, TFixedImage::ImageDimension>, TFixedImage::ImageDimension >,
   class TDisplacements = PointSet< Vector< typename TFeatures::PointType::ValueType, TFeatures::PointDimension >, TFeatures::PointDimension >,
-  class TSimilarities = PointSet< double, TDisplacements::PointDimension > >
-class ITK_EXPORT BlockMatchingImageFilter:
+  class TSimilarities = PointSet< SpacePrecisionType, TDisplacements::PointDimension > >
+class BlockMatchingImageFilter:
 public MeshToMeshFilter< TFeatures, TDisplacements>
 {
 public:

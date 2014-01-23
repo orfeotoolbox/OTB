@@ -45,7 +45,7 @@ namespace itk
 
 namespace Functor
 {
-template< class TInputPixel >
+template< typename TInputPixel >
 class MaximumAccumulator
 {
 public:
@@ -71,8 +71,8 @@ public:
 };
 } // end namespace Function
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT MaximumProjectionImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class MaximumProjectionImageFilter:
   public ProjectionImageFilter< TInputImage, TOutputImage,
                                 Functor::MaximumAccumulator< typename TInputImage::PixelType > >
 {
@@ -94,12 +94,12 @@ public:
   itkNewMacro(Self);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputPixelTypeGreaterThanComparable,
                    ( Concept::GreaterThanComparable< InputPixelType > ) );
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

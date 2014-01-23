@@ -50,18 +50,19 @@ namespace itk
  *
  * \ingroup ITKOptimizersv4
  */
-template < class TMetric >
-class ITK_EXPORT RegistrationParameterScalesEstimator : public OptimizerParameterScalesEstimator
+template < typename TMetric >
+class RegistrationParameterScalesEstimator
+  : public OptimizerParameterScalesEstimatorTemplate<typename TMetric::ParametersValueType>
 {
 public:
   /** Standard class typedefs. */
-  typedef RegistrationParameterScalesEstimator  Self;
-  typedef OptimizerParameterScalesEstimator     Superclass;
-  typedef SmartPointer<Self>                    Pointer;
-  typedef SmartPointer<const Self>              ConstPointer;
+  typedef RegistrationParameterScalesEstimator                                              Self;
+  typedef OptimizerParameterScalesEstimatorTemplate<typename TMetric::ParametersValueType>  Superclass;
+  typedef SmartPointer<Self>                                                                Pointer;
+  typedef SmartPointer<const Self>                                                          ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( RegistrationParameterScalesEstimator, OptimizerParameterScalesEstimator );
+  itkTypeMacro( RegistrationParameterScalesEstimator, Superclass );
 
   /** Type of scales */
   typedef typename Superclass::ScalesType           ScalesType;
@@ -103,7 +104,7 @@ public:
                  CornerSampling,
                  RandomSampling,
                  CentralRegionSampling,
-                 VirtualDomainPointSetSampling }            SamplingStrategyType;
+                 VirtualDomainPointSetSampling }    SamplingStrategyType;
 
   typedef std::vector<VirtualPointType>             SamplePointContainerType;
 
@@ -176,13 +177,13 @@ protected:
    * transform is a general affine transform that maps a line segment to
    * a line segment.
    */
-  template< class TTransform > bool CheckGeneralAffineTransformTemplated();
+  template< typename TTransform > bool CheckGeneralAffineTransformTemplated();
 
   /** Transform a physical point to a new physical point. */
-  template< class TTargetPointType > void TransformPoint( const VirtualPointType &point, TTargetPointType &mappedPoint);
+  template< typename TTargetPointType > void TransformPoint( const VirtualPointType &point, TTargetPointType &mappedPoint);
 
   /** Transform a point to its continuous index. */
-  template< class TContinuousIndexType > void TransformPointToContinuousIndex( const VirtualPointType &point,TContinuousIndexType &mappedIndex);
+  template< typename TContinuousIndexType > void TransformPointToContinuousIndex( const VirtualPointType &point,TContinuousIndexType &mappedIndex);
 
   /** Compute the transform Jacobian at a physical point. */
   void ComputeSquaredJacobianNorms( const VirtualPointType  & p, ParametersType & squareNorms);
@@ -230,7 +231,7 @@ protected:
   VirtualRegionType GetVirtualDomainCentralRegion();
 
   /** Get the transform in use. */
-  const TransformBase *GetTransform();
+  const TransformBaseTemplate<typename TMetric::MeasureType> *GetTransform();
 
   /** Get the dimension of the target transformed to. */
   SizeValueType GetDimension();
@@ -240,7 +241,7 @@ protected:
   itkGetMacro( SamplingStrategy, SamplingStrategyType )
 
   /** the metric object */
-  MetricPointer            m_Metric;
+  MetricPointer                 m_Metric;
 
   /** the samples in the virtual domain */
   SamplePointContainerType      m_SamplePoints;

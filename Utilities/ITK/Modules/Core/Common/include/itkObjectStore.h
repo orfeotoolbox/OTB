@@ -59,8 +59,8 @@ namespace itk
  * serious problems.
  * \ingroup ITKCommon
  */
-template< class TObjectType >
-class ITK_EXPORT ObjectStore:public Object
+template< typename TObjectType >
+class ObjectStore:public Object
 {
 public:
   /** Standard typedefs. */
@@ -141,7 +141,9 @@ protected:
     ~MemoryBlock()  {}   // Purposely does *not* free memory
 
     void Delete()
-    { if ( Begin != 0 ) { delete[] Begin; } }
+    {
+      delete[] Begin;
+    }
 
     ObjectType *Begin;
     SizeValueType Size;

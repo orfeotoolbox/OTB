@@ -42,8 +42,8 @@ namespace itk
  * \ingroup ImageFunctions ImageInterpolators
  * \ingroup ITKImageFunction
  */
-template< class TInputImage, class TCoordRep = double >
-class ITK_EXPORT VectorInterpolateImageFunction:
+template< typename TInputImage, typename TCoordRep = double >
+class VectorInterpolateImageFunction:
   public ImageFunction<
     TInputImage,
     typename NumericTraits< typename TInputImage::PixelType >::RealType,

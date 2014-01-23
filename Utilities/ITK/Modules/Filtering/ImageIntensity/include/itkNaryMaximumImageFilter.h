@@ -30,7 +30,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class Maximum1
 {
 public:
@@ -100,8 +100,8 @@ public:
  * \ingroup MultiThreaded
  * \ingroup ITKImageIntensity
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT NaryMaximumImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class NaryMaximumImageFilter:
   public
   NaryFunctorImageFilter< TInputImage, TOutputImage,
                           Functor::Maximum1<  typename TInputImage::PixelType,
@@ -126,7 +126,7 @@ public:
                NaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType,
                                            typename TOutputImage::PixelType > ) );
@@ -134,7 +134,7 @@ public:
                    ( Concept::LessThanComparable< typename TInputImage::PixelType > ) );
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

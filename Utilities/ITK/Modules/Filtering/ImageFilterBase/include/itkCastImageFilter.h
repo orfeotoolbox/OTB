@@ -32,7 +32,7 @@ namespace Functor
  * \ingroup ITKImageFilterBase
  */
 
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class Cast
 {
 public:
@@ -93,8 +93,8 @@ public:
  * \wikiexample{ImageProcessing/CastImageFilter,Cast an image from one type to another}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT CastImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class CastImageFilter:
     public UnaryFunctorImageFilter< TInputImage, TOutputImage,
                                     Functor::Cast<
                                       typename TInputImage::PixelType,
@@ -122,11 +122,11 @@ public:
   itkTypeMacro(CastImageFilter, UnaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType,
                                            typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

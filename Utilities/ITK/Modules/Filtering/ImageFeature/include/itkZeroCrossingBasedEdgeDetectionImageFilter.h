@@ -66,8 +66,8 @@ namespace itk
  * \ingroup ImageFeatureExtraction
  * \ingroup ITKImageFeature
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ZeroCrossingBasedEdgeDetectionImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class ZeroCrossingBasedEdgeDetectionImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -135,7 +135,7 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputEqualityComparableCheck,
                    ( Concept::EqualityComparable< OutputImagePixelType > ) );
   itkConceptMacro( SameDimensionCheck,
@@ -146,7 +146,7 @@ public:
                    ( Concept::OStreamWritable< OutputImagePixelType > ) );
   itkConceptMacro( PixelTypeIsFloatingPointCheck,
                    ( Concept::IsFloatingPoint< InputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

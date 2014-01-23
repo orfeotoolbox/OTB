@@ -55,8 +55,8 @@ namespace itk
  * \sa ProjectedLandweberDeconvolutionImageFilter
  *
  */
-template< class TInputImage, class TKernelImage=TInputImage, class TOutputImage=TInputImage, class TInternalPrecision=double >
-class ITK_EXPORT RichardsonLucyDeconvolutionImageFilter :
+template< typename TInputImage, typename TKernelImage=TInputImage, typename TOutputImage=TInputImage, typename TInternalPrecision=double >
+class RichardsonLucyDeconvolutionImageFilter :
     public IterativeDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInternalPrecision >
 {
 public:

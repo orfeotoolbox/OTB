@@ -67,7 +67,6 @@ namespace itk
  * \sa Image
  * \sa ImportImageContainer
  *
- * \example itkVectorImageTest.cxx
  *
  * \ingroup ImageObjects
  * \ingroup ITKCommon
@@ -78,8 +77,8 @@ namespace itk
  * \wikiexample{VectorImages/NeighborhoodIterator,NeighborhoodIterator on a VectorImage}
  * \endwiki
  */
-template< class TPixel, unsigned int VImageDimension = 3 >
-class ITK_EXPORT VectorImage:
+template< typename TPixel, unsigned int VImageDimension = 3 >
+class VectorImage:
   public ImageBase< VImageDimension >
 {
 public:

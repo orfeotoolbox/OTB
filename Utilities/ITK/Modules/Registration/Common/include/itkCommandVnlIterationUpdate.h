@@ -28,8 +28,8 @@ namespace itk {
  * \class CommandVnlIterationUpdate
  * \ingroup ITKRegistrationCommon
  */
-template < class TOptimizer >
-class ITK_EXPORT CommandVnlIterationUpdate : public Command
+template < typename TOptimizer >
+class CommandVnlIterationUpdate : public Command
 {
 public:
   /**

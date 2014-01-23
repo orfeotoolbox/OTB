@@ -45,7 +45,7 @@ namespace itk
 
 namespace Functor
 {
-template< class TInputPixel, class TAccumulate >
+template< typename TInputPixel, typename TAccumulate >
 class MeanAccumulator
 {
 public:
@@ -81,11 +81,11 @@ public:
 };
 } // end namespace Function
 
-template< class TInputImage, class TOutputImage,
-          class TAccumulate =
+template< typename TInputImage, typename TOutputImage,
+          typename TAccumulate =
             typename NumericTraits<
               typename TOutputImage::PixelType >::AccumulateType >
-class ITK_EXPORT MeanProjectionImageFilter:public
+class MeanProjectionImageFilter:public
   ProjectionImageFilter< TInputImage, TOutputImage,
                          Functor::MeanAccumulator< typename TInputImage::PixelType, TAccumulate > >
 {
@@ -111,7 +111,7 @@ public:
   itkNewMacro(Self);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputPixelToOutputPixelTypeGreaterAdditiveOperatorCheck,
                    ( Concept::AdditiveOperators< OutputPixelType,
                                                  InputPixelType,
@@ -119,7 +119,7 @@ public:
 
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

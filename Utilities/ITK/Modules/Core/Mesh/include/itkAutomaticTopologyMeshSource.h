@@ -107,8 +107,8 @@ namespace itk
  * thread safe</b>.
  * \ingroup ITKMesh
  */
-template< class TOutputMesh >
-class ITK_EXPORT AutomaticTopologyMeshSource:public MeshSource< TOutputMesh >
+template< typename TOutputMesh >
+class AutomaticTopologyMeshSource:public MeshSource< TOutputMesh >
 {
 public:
   /** Standard "Self" typedef. */

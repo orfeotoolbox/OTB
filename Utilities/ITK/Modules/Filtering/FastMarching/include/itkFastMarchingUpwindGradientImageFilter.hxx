@@ -29,7 +29,7 @@ namespace itk
 /**
  *
  */
-template< class TLevelSet, class TSpeedImage >
+template< typename TLevelSet, typename TSpeedImage >
 FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
 ::FastMarchingUpwindGradientImageFilter()
 {
@@ -46,7 +46,7 @@ FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
 /**
  *
  */
-template< class TLevelSet, class TSpeedImage >
+template< typename TLevelSet, typename TSpeedImage >
 void
 FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -65,7 +65,7 @@ FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
 /**
  *
  */
-template< class TLevelSet, class TSpeedImage >
+template< typename TLevelSet, typename TSpeedImage >
 void
 FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
 ::Initialize(LevelSetImageType *output)
@@ -100,13 +100,12 @@ FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
   // Need to reset the target value.
   m_TargetValue = 0.0;
 
-  if ( m_TargetReachedMode == SomeTargets || m_TargetReachedMode == AllTargets )
-    {
-    m_ReachedTargetPoints = NodeContainer::New();
-    }
+  // Even if there are no targets, a new NodeContainer should be created
+  // so that querying this structure does not crash.
+  m_ReachedTargetPoints = NodeContainer::New();
 }
 
-template< class TLevelSet, class TSpeedImage >
+template< typename TLevelSet, typename TSpeedImage >
 void
 FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
 ::GenerateData()
@@ -136,7 +135,7 @@ FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
   this->SetStoppingValue(stoppingValue);
 }
 
-template< class TLevelSet, class TSpeedImage >
+template< typename TLevelSet, typename TSpeedImage >
 void
 FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
 ::UpdateNeighbors(
@@ -168,6 +167,7 @@ FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
         node = pointsIter.Value();
         if ( node.GetIndex() == index )
           {
+          m_ReachedTargetPoints->InsertElement(m_ReachedTargetPoints->Size(), node);
           targetReached = true;
           break;
           }
@@ -237,7 +237,7 @@ FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
 /**
  *
  */
-template< class TLevelSet, class TSpeedImage >
+template< typename TLevelSet, typename TSpeedImage >
 void
 FastMarchingUpwindGradientImageFilter< TLevelSet, TSpeedImage >
 ::ComputeGradient(const IndexType & index,

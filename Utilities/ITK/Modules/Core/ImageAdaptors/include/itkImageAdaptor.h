@@ -51,8 +51,8 @@ template <typename TPixelType, unsigned int VImageDimension > class VectorImage;
  * \wikiexample{ImageProcessing/ImageAdaptorExtractVectorComponent,Present an image by first performing an operation}
  * \endwiki
  */
-template< class TImage, class TAccessor >
-class ITK_EXPORT ImageAdaptor:public ImageBase< TImage::ImageDimension >
+template< typename TImage, typename TAccessor >
+class ImageAdaptor:public ImageBase< TImage::ImageDimension >
 {
 public:
   /** Dimension of the image.  This constant is used by functions that are
@@ -130,7 +130,7 @@ public:
    * typedef typename ImageAdaptorType::template Rebind< float >::Type OutputImageType;
    *
    */
-  template <class UPixelType, unsigned int UImageDimension =  TImage::ImageDimension>
+  template <typename UPixelType, unsigned int UImageDimension =  TImage::ImageDimension>
   struct Rebind
     {
       typedef Image<UPixelType, UImageDimension>  Type;
@@ -277,7 +277,7 @@ public:
   virtual void SetOrigin(const float *values /*[ImageDimension]*/);
 
   /** Set the direction of the image. */
-  virtual void SetDirection(const DirectionType direction);
+  virtual void SetDirection(const DirectionType & direction);
 
   /** Get the direction cosines of the image. The direction cosines
    * are vectors that point from one pixel to the next.
@@ -327,7 +327,7 @@ public:
    *
    * Returns true if the resulting index is within the image, false otherwise.
    * \sa Transform */
-  template< class TCoordRep >
+  template< typename TCoordRep >
   bool TransformPhysicalPointToContinuousIndex(
     const Point< TCoordRep,
                  itkGetStaticConstMacro(ImageDimension) > & point,
@@ -341,7 +341,7 @@ public:
    * Floating point index results are truncated to integers.
    * Returns true if the resulting index is within the image, false otherwise
    * \sa Transform */
-  template< class TCoordRep >
+  template< typename TCoordRep >
   bool TransformPhysicalPointToIndex(
     const Point< TCoordRep,
                  itkGetStaticConstMacro(ImageDimension) > & point,
@@ -354,7 +354,7 @@ public:
    * the origin and spacing information comes from)
    * from a continuous index (in the index space)
    * \sa Transform */
-  template< class TCoordRep >
+  template< typename TCoordRep >
   void TransformContinuousIndexToPhysicalPoint(
     const ContinuousIndex< TCoordRep,
                            itkGetStaticConstMacro(ImageDimension) > & index,
@@ -369,7 +369,7 @@ public:
    * from a discrete index (in the index space)
    *
    * \sa Transform */
-  template< class TCoordRep >
+  template< typename TCoordRep >
   void TransformIndexToPhysicalPoint(
     const IndexType & index,
     Point< TCoordRep,
@@ -378,7 +378,7 @@ public:
     m_Image->TransformIndexToPhysicalPoint(index, point);
   }
 
-  template< class TCoordRep >
+  template< typename TCoordRep >
   void TransformLocalVectorToPhysicalVector(
     const FixedArray< TCoordRep, itkGetStaticConstMacro(ImageDimension) > & inputGradient,
     FixedArray< TCoordRep, itkGetStaticConstMacro(ImageDimension) > & outputGradient) const
@@ -386,7 +386,7 @@ public:
     m_Image->TransformLocalVectorToPhysicalVector(inputGradient, outputGradient);
   }
 
-  template< class TCoordRep >
+  template< typename TCoordRep >
   void TransformPhysicalVectorToLocalVector(
     const FixedArray< TCoordRep, itkGetStaticConstMacro(ImageDimension) > & inputGradient,
     FixedArray< TCoordRep, itkGetStaticConstMacro(ImageDimension) > & outputGradient) const
@@ -407,14 +407,14 @@ private:
 
   // a specialized method to update PixelAccessors for VectorImages,
   // to have the correct vector length of the image.
-  template< class TPixelType >
+  template< typename TPixelType >
     void UpdateAccessor( typename ::itk::VectorImage< TPixelType, ImageDimension > * itkNotUsed( dummy ) )
   {
     this->m_PixelAccessor.SetVectorLength( this->m_Image->GetNumberOfComponentsPerPixel() );
   }
 
   // The other image types don't expect an accessor which needs any updates
-  template< class T > void UpdateAccessor( T  *itkNotUsed( dummy ) ) { }
+  template< typename T > void UpdateAccessor( T  *itkNotUsed( dummy ) ) { }
 
   // Adapted image, most of the calls to ImageAdaptor
   // will be delegated to this image

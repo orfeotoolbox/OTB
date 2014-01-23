@@ -35,8 +35,8 @@ namespace itk
  * \wikiexample{Conversions/RGBToVectorImageAdaptor,Present an image of RGBPixel pixels as an image of vectors}
  * \endwiki
  */
-template< class TImage >
-class ITK_EXPORT RGBToVectorImageAdaptor:public
+template< typename TImage >
+class RGBToVectorImageAdaptor:public
   ImageAdaptor< TImage,
                 Accessor::RGBToVectorPixelAccessor<
                   typename TImage::PixelType::ComponentType

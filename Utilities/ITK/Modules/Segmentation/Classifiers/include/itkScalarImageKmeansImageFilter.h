@@ -59,9 +59,9 @@ namespace itk
  * \wikiexample{Statistics/ScalarImageKmeansImageFilter,Cluster the pixels in a greyscale image}
  * \endwiki
  */
-template< class TInputImage,
-          class TOutputImage = Image< unsigned char, TInputImage::ImageDimension > >
-class ITK_EXPORT ScalarImageKmeansImageFilter:
+template< typename TInputImage,
+          typename TOutputImage = Image< unsigned char, TInputImage::ImageDimension > >
+class ScalarImageKmeansImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -144,10 +144,10 @@ public:
   itkGetConstReferenceMacro(ImageRegion, ImageRegionType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

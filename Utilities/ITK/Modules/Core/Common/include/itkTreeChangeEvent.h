@@ -29,7 +29,7 @@ namespace itk
  *
  * \ingroup ITKCommon
  */
-template< class TTreeType >
+template< typename TTreeType >
 class TreeChangeEvent:public ModifiedEvent
 {
 public:
@@ -39,7 +39,9 @@ public:
   typedef ModifiedEvent   Superclass;
 
   /** Constructor */
-  TreeChangeEvent() { m_ChangePosition = NULL; }
+  TreeChangeEvent():
+    m_ChangePosition( NULL )
+    {}
 
   /** Copy constructor */
   TreeChangeEvent(const TreeIteratorBase< TTreeType > & position) { m_ChangePosition = &position; }
@@ -75,7 +77,7 @@ private:
  *          changed node is provided.
  * \ingroup ITKCommon
  */
-template< class TTreeType >
+template< typename TTreeType >
 class TreeNodeChangeEvent:public TreeChangeEvent< TTreeType >
 {
 public:
@@ -103,7 +105,7 @@ private:
  *  \brief Checks if a node has been added to the tree.
  * \ingroup ITKCommon
  */
-template< class TTreeType >
+template< typename TTreeType >
 class TreeAddEvent:public TreeChangeEvent< TTreeType >
 {
 public:
@@ -138,7 +140,7 @@ private:
  *  \brief Checks if a node has been removed from the tree.
  * \ingroup ITKCommon
  */
-template< class TTreeType >
+template< typename TTreeType >
 class TreeRemoveEvent:public TreeChangeEvent< TTreeType >
 {
 public:
@@ -174,7 +176,7 @@ private:
  *         removed. The position of the top-level removed node is provided.
  * \ingroup ITKCommon
  */
-template< class TTreeType >
+template< typename TTreeType >
 class TreePruneEvent:public TreeRemoveEvent< TTreeType >
 {
 public:

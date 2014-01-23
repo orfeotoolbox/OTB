@@ -27,7 +27,7 @@
 namespace itk
 {
 
-template< class TImage >
+template< typename TImage >
 GPUScalarAnisotropicDiffusionFunction< TImage >
 ::GPUScalarAnisotropicDiffusionFunction()
 {
@@ -58,7 +58,7 @@ GPUScalarAnisotropicDiffusionFunction< TImage >
     this->m_AnisotropicDiffusionFunctionGPUKernelManager->CreateKernel("AverageGradientMagnitudeSquared");
 }
 
-template< class TImage >
+template< typename TImage >
 void
 GPUScalarAnisotropicDiffusionFunction< TImage >
 ::GPUCalculateAverageGradientMagnitudeSquared(TImage *ip)
@@ -171,7 +171,7 @@ GPUScalarAnisotropicDiffusionFunction< TImage >
 
   this->SetAverageGradientMagnitudeSquared( (double)( sum / (double)numPixel ) );
 
-  delete [] intermSum;
+  delete[] intermSum;
 }
 
 } // end namespace itk

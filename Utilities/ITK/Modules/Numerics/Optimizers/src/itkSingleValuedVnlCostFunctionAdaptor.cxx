@@ -36,7 +36,19 @@ void
 SingleValuedVnlCostFunctionAdaptor
 ::SetScales(const ScalesType & scales)
 {
-  m_Scales = scales;
+  //Only the inverse is used computes the inverse at each iteration.
+  //provides 1 commone place where the inverse can be computes
+  //and validated.
+  m_InverseScales.SetSize(scales.GetSize());
+
+  for( unsigned int i = 0; i < scales.size(); ++i )
+    {
+    if ( scales[i] <= NumericTraits<double>::epsilon() )
+      {
+      itkGenericExceptionMacro("ERROR: Scales must have value greater than epsilon! Scale[" << i << "] = " << scales[i] );
+      }
+    m_InverseScales[i] = NumericTraits<double>::One / scales[i];
+    }
   m_ScalesInitialized = true;
 }
 
@@ -55,9 +67,10 @@ SingleValuedVnlCostFunctionAdaptor
   ParametersType parameters( inparameters.size() );
   if ( m_ScalesInitialized )
     {
+    const ScalesType & invScales = this->GetInverseScales();
     for ( unsigned int i = 0; i < parameters.size(); i++ )
       {
-      parameters[i] = inparameters[i] / m_Scales[i];
+      parameters[i] = inparameters[i] * invScales[i];
       }
     }
   else
@@ -96,9 +109,10 @@ SingleValuedVnlCostFunctionAdaptor
   ParametersType parameters( inparameters.size() );
   if ( m_ScalesInitialized )
     {
+    const ScalesType & invScales = this->GetInverseScales();
     for ( unsigned int i = 0; i < parameters.size(); i++ )
       {
-      parameters[i] = inparameters[i] / m_Scales[i];
+      parameters[i] = inparameters[i] * invScales[i];
       }
     }
   else
@@ -130,9 +144,10 @@ SingleValuedVnlCostFunctionAdaptor
 
   if ( m_ScalesInitialized )
     {
+    const ScalesType & invScales = this->GetInverseScales();
     for ( unsigned int i = 0; i < parameters.size(); i++ )
       {
-      parameters[i] = x[i] / m_Scales[i];
+      parameters[i] = x[i] * invScales[i];
       }
     }
   else
@@ -174,6 +189,7 @@ SingleValuedVnlCostFunctionAdaptor
   const unsigned int size = input.size();
 
   output = InternalDerivativeType(size);
+  const ScalesType & invScales = this->GetInverseScales();
   for ( unsigned int i = 0; i < size; i++ )
     {
     if ( !m_NegateCostFunction )
@@ -187,7 +203,7 @@ SingleValuedVnlCostFunctionAdaptor
 
     if ( m_ScalesInitialized )
       {
-      output[i] /= m_Scales[i];
+      output[i] *= invScales[i];
       }
     }
 }

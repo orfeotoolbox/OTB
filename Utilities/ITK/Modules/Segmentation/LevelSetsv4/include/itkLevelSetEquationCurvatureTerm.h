@@ -37,15 +37,15 @@ namespace itk
  *
  *  \li CurvatureImage denotes the curvature image set by the user
  *  \li \f$ \kappa( p ) \f$ denotes the mean curvature of the level set function,
- *  i.e. \f$ \kappa( p ) = \text{div} \left( \frac{ \nabla \phi( p ) }{ \left\| \nabla \phi(p) \right\| } \f$
+ *  i.e. \f$ \kappa( p ) = \text{div} \left( \frac{ \nabla \phi( p ) }{ \left\| \nabla \phi(p) \right\| } \right) \f$
  *
  *  \tparam TInput Input Image Type
  *  \tparam TLevelSetContainer Level set function container type
  *  \ingroup ITKLevelSetsv4
  */
-template< class TInput, // Input image or mesh
-          class TLevelSetContainer,
-          class TCurvatureImage = TInput >
+template< typename TInput, // Input image or mesh
+          typename TLevelSetContainer,
+          typename TCurvatureImage = TInput >
 class LevelSetEquationCurvatureTerm :
     public LevelSetEquationTermBase< TInput, TLevelSetContainer >
 {

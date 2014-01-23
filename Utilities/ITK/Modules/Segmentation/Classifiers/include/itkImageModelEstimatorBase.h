@@ -59,9 +59,9 @@ namespace itk
  * \ingroup ClassificationFilters
  * \ingroup ITKClassifiers
  */
-template< class TInputImage,
-          class TMembershipFunction >
-class ITK_EXPORT ImageModelEstimatorBase:public LightProcessObject
+template< typename TInputImage,
+          typename TMembershipFunction >
+class ImageModelEstimatorBase:public LightProcessObject
 {
 public:
   /** Standard class typedefs. */

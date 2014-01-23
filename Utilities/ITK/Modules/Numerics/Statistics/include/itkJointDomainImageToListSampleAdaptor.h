@@ -36,7 +36,7 @@ namespace Statistics
  * \sa JointDomainImageToListSampleAdaptor
  * \ingroup ITKStatistics
  */
-template< class TImage >
+template< typename TImage >
 struct ImageJointDomainTraits {
   typedef ImageJointDomainTraits                     Self;
   typedef PixelTraits< typename TImage::PixelType >  PixelTraitsType;
@@ -87,8 +87,8 @@ struct ImageJointDomainTraits {
  * \ingroup ITKStatistics
  */
 
-template< class TImage >
-class ITK_EXPORT JointDomainImageToListSampleAdaptor:
+template< typename TImage >
+class JointDomainImageToListSampleAdaptor:
   public ListSample< typename ImageJointDomainTraits< TImage >::MeasurementVectorType >
 {
 public:

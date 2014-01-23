@@ -47,8 +47,8 @@ namespace Statistics {
  * \ingroup ITKStatistics
  */
 
-template < class TSample, class TRegion >
-class ITK_EXPORT RegionConstrainedSubsampler : public SubsamplerBase<TSample>
+template < typename TSample, typename TRegion >
+class RegionConstrainedSubsampler : public SubsamplerBase<TSample>
 {
 public:
   /** Standard class typedefs */

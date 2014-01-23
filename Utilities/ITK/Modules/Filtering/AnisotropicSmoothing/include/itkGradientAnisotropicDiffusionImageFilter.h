@@ -46,8 +46,8 @@ namespace itk
  * \ingroup ImageFilters
  * \ingroup ITKAnisotropicSmoothing
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT GradientAnisotropicDiffusionImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class GradientAnisotropicDiffusionImageFilter:
   public AnisotropicDiffusionImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -72,10 +72,10 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( UpdateBufferHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename UpdateBufferType::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

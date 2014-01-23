@@ -32,18 +32,18 @@ namespace itk
  *
  * \ingroup ITKTransform
  */
-template< class TScalarType,         // Data type for scalars (float or double)
+template< typename TScalar,         // Data type for scalars (float or double)
           unsigned int NDimensions = 3 >
 // Number of dimensions
-class ITK_EXPORT ThinPlateR2LogRSplineKernelTransform:
-  public KernelTransform<   TScalarType, NDimensions >
+class ThinPlateR2LogRSplineKernelTransform:
+  public KernelTransform< TScalar, NDimensions >
 {
 public:
   /** Standard class typedefs. */
-  typedef ThinPlateR2LogRSplineKernelTransform           Self;
-  typedef KernelTransform<    TScalarType, NDimensions > Superclass;
-  typedef SmartPointer< Self >                           Pointer;
-  typedef SmartPointer< const Self >                     ConstPointer;
+  typedef ThinPlateR2LogRSplineKernelTransform    Self;
+  typedef KernelTransform< TScalar, NDimensions > Superclass;
+  typedef SmartPointer< Self >                    Pointer;
+  typedef SmartPointer< const Self >              ConstPointer;
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);

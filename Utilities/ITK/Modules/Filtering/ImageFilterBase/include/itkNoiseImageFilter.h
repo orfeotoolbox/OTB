@@ -47,8 +47,8 @@ namespace itk
  * \wikiexample{Statistics/NoiseImageFilter,Compute the local noise in an image}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT NoiseImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class NoiseImageFilter:
   public BoxImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -85,10 +85,10 @@ public:
   typedef typename InputImageType::SizeType InputSizeType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

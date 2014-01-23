@@ -22,8 +22,8 @@
 
 namespace itk
 {
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::ImageKmeansModelEstimator(void)
 {
@@ -33,10 +33,15 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
   m_OffsetAdd        = 0.01;
   m_OffsetMultiply   = 0.01;
   m_MaxSplitAttempts = 10;
+  m_OutputDistortion = 0.0;
+  m_OutputNumberOfEmptyCells = 0;
+  m_VectorDimension   = 1;
+  m_NumberOfCodewords = 1;
+  m_CurrentNumberOfCodewords = 1;
 }
 
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::~ImageKmeansModelEstimator(void)
 {}
@@ -44,8 +49,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 /**
  * PrintSelf
  */
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -65,8 +70,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
   os << indent << "Threshold value :" << m_Threshold << std::endl;
 } // end PrintSelf
 
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::PrintKmeansAlgorithmResults()
@@ -97,8 +102,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 /**
  * Generate data (start the model building process)
  */
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::GenerateData()
@@ -108,8 +113,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 
 // Set the input codebook and allocate memory
 // for the output codebook and other scratch memory
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::SetCodebook(CodebookMatrixOfDoubleType inCodebook)
@@ -126,8 +131,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 
 // Allocate scratch memory
 
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::Allocate()
@@ -185,8 +190,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 //Reallocate various memories and then make a copy of the old data
 //-----------------------------------------------------------------
 
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::Reallocate(int oldSize, int newSize)
@@ -235,8 +240,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 // and variance of the various classes defined in the
 // training set.
 //-----------------------------------------------------------------
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::EstimateModels()
@@ -279,8 +284,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 //-----------------------------------------------------------------
 //Estimate K-means models (private function) for the core function
 //-----------------------------------------------------------------
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::EstimateKmeansModelParameters()
@@ -308,8 +313,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 } // end EstimateKmeansModelParameters
 
 //-----------------------------------------------------------------
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 int
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::WithCodebookUseGLA()
@@ -437,8 +442,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 } // end WithCodebookUseGLA
 
 //-----------------------------------------------------------------
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::NearestNeighborSearchBasic(double *distortion)
@@ -568,8 +573,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 } // End nearest_neighbor_search_basic
 
 //-----------------------------------------------------------------
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::SplitCodewords(int currentSize, int numDesired, int scale)
@@ -597,8 +602,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 } // End splitcodewords
 
 //-----------------------------------------------------------------
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 void
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::Perturb(double *oldCodeword,
@@ -645,8 +650,8 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 }     // End perturb
 
 //-----------------------------------------------------------------
-template< class TInputImage,
-          class TMembershipFunction >
+template< typename TInputImage,
+          typename TMembershipFunction >
 int
 ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
 ::WithoutCodebookUseLBG()

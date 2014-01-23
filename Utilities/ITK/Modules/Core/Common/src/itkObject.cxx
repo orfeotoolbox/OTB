@@ -498,7 +498,8 @@ Object
   LightObject(),
   m_Debug(false),
   m_SubjectImplementation(NULL),
-  m_MetaDataDictionary(NULL)
+  m_MetaDataDictionary(NULL),
+  m_ObjectName()
 {
   this->Modified();
 }
@@ -508,7 +509,7 @@ Object
 {
   itkDebugMacro(<< "Destructing!");
   delete m_SubjectImplementation;
-  delete m_MetaDataDictionary; //Deleting a NULL pointer does nothing.
+  delete m_MetaDataDictionary;
 }
 
 /**
@@ -523,6 +524,7 @@ Object
 
   os << indent << "Modified Time: " << this->GetMTime() << std::endl;
   os << indent << "Debug: " << ( m_Debug ? "On\n" : "Off\n" );
+  os << indent << "Object Name: " << this->GetObjectName() << std::endl;
   os << indent << "Observers: \n";
   if ( !this->PrintObservers( os, indent.GetNextIndent() ) )
     {

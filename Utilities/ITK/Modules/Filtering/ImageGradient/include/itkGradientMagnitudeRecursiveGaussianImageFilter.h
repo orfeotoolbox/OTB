@@ -35,7 +35,7 @@ namespace itk
  * filters
  *
  * \ingroup GradientFilters
- * \ingroup SingelThreaded
+ * \ingroup SingleThreaded
  * \ingroup ITKImageGradient
  *
  * \wiki
@@ -47,7 +47,7 @@ namespace itk
 // on the defaults of template parameters
 template< typename TInputImage,
           typename TOutputImage = TInputImage >
-class ITK_EXPORT GradientMagnitudeRecursiveGaussianImageFilter:
+class GradientMagnitudeRecursiveGaussianImageFilter:
   public InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -134,10 +134,10 @@ public:
   void SetNumberOfThreads(ThreadIdType nb);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:
@@ -171,7 +171,7 @@ private:
 
   class SqrSpacing
   {
-public:
+  public:
     SqrSpacing():m_Spacing(0) {}
     ~SqrSpacing() {}
     bool operator!=(const SqrSpacing & other) const

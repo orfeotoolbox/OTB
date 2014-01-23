@@ -54,8 +54,8 @@ namespace itk
  *  \sa MahalanobisDistanceMembershipFunction
  * \ingroup ITKLevelSets
  */
-template< class TImageType, class TFeatureImageType >
-class ITK_EXPORT VectorThresholdSegmentationLevelSetFunction:
+template< typename TImageType, typename TFeatureImageType >
+class VectorThresholdSegmentationLevelSetFunction:
   public SegmentationLevelSetFunction< TImageType, TFeatureImageType >
 {
 public:

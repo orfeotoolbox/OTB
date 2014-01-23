@@ -37,8 +37,8 @@ namespace itk
  * \wikiexample{Functions/NeighborhoodOperatorImageFunction,Multiply a kernel with an image at a particular location}
  * \endwiki
  */
-template< class TInputImage, class TOutput >
-class ITK_EXPORT NeighborhoodOperatorImageFunction:
+template< typename TInputImage, typename TOutput >
+class NeighborhoodOperatorImageFunction:
   public ImageFunction< TInputImage, TOutput >
 {
 public:

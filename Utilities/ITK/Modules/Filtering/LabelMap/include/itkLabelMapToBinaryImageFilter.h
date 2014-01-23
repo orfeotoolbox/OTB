@@ -42,8 +42,8 @@ namespace itk
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT LabelMapToBinaryImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class LabelMapToBinaryImageFilter:
   public LabelMapFilter< TInputImage, TOutputImage >
 {
 public:

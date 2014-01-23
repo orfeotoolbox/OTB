@@ -52,7 +52,7 @@ namespace METAIO_NAMESPACE {
 
 int META_DEBUG = 0;
 
-char MET_SeperatorChar = '=';
+static char MET_SeperatorChar = '=';
 
 MET_FieldRecordType *
 MET_GetFieldRecord(const char * _fieldName,
@@ -130,7 +130,7 @@ METAIO_STL::string MET_ReadForm(METAIO_STREAM::istream &_fp)
   METAIO_STL::streampos pos = _fp.tellg();
   METAIO_STL::vector<MET_FieldRecordType *> fields;
   MET_FieldRecordType* mF = new MET_FieldRecordType;
-  MET_InitReadField(mF, "Form", MET_STRING, false);
+  MET_InitReadField(mF, "FormTypeName", MET_STRING, false);
   mF->required = false;
   mF->terminateRead = true;
   fields.push_back(mF);
@@ -985,7 +985,7 @@ bool MET_InitReadField(MET_FieldRecordType * _mf,
 //
 //
 //
-bool MET_SkipToVal(METAIO_STREAM::istream &fp)
+static bool MET_SkipToVal(METAIO_STREAM::istream &fp)
   {
   int c;
   if( fp.eof() )
@@ -1020,7 +1020,7 @@ bool MET_SkipToVal(METAIO_STREAM::istream &fp)
 //
 //
 //
-bool MET_IsComplete(METAIO_STL::vector<MET_FieldRecordType *> * fields)
+static bool MET_IsComplete(METAIO_STL::vector<MET_FieldRecordType *> * fields)
   {
   METAIO_STL::vector<MET_FieldRecordType *>::iterator fieldIter;
   for(fieldIter=fields->begin(); fieldIter!=fields->end(); fieldIter++)

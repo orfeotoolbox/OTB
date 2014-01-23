@@ -57,8 +57,8 @@ namespace Statistics
  * \endwiki
  */
 
-template< class TSample >
-class ITK_EXPORT ExpectationMaximizationMixtureModelEstimator:public Object
+template< typename TSample >
+class ExpectationMaximizationMixtureModelEstimator:public Object
 {
 public:
   /** Standard class typedef */

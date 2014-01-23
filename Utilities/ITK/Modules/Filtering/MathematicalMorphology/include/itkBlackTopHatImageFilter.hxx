@@ -26,7 +26,7 @@
 
 namespace itk
 {
-template< class TInputImage, class TOutputImage, class TKernel >
+template< typename TInputImage, typename TOutputImage, typename TKernel >
 BlackTopHatImageFilter< TInputImage, TOutputImage, TKernel >
 ::BlackTopHatImageFilter()
 {
@@ -35,7 +35,7 @@ BlackTopHatImageFilter< TInputImage, TOutputImage, TKernel >
   m_ForceAlgorithm = false;
 }
 
-template< class TInputImage, class TOutputImage, class TKernel >
+template< typename TInputImage, typename TOutputImage, typename TKernel >
 void
 BlackTopHatImageFilter< TInputImage, TOutputImage, TKernel >
 ::GenerateData()
@@ -49,8 +49,8 @@ BlackTopHatImageFilter< TInputImage, TOutputImage, TKernel >
   this->AllocateOutputs();
 
   // Delegate to a closing filter.
-  typename GrayscaleMorphologicalClosingImageFilter< TInputImage, TInputImage, TKernel >::Pointer
-  close = GrayscaleMorphologicalClosingImageFilter< TInputImage, TInputImage, TKernel >::New();
+  typedef GrayscaleMorphologicalClosingImageFilter< TInputImage, TInputImage, TKernel > ClosingFilterType;
+  typename ClosingFilterType::Pointer close = ClosingFilterType::New();
 
   close->SetInput( this->GetInput() );
   close->SetKernel( this->GetKernel() );
@@ -87,7 +87,7 @@ BlackTopHatImageFilter< TInputImage, TOutputImage, TKernel >
   this->GraftOutput( subtract->GetOutput() );
 }
 
-template< class TInputImage, class TOutputImage, class TKernel >
+template< typename TInputImage, typename TOutputImage, typename TKernel >
 void
 BlackTopHatImageFilter< TInputImage, TOutputImage, TKernel >
 ::PrintSelf(std::ostream & os, Indent indent) const

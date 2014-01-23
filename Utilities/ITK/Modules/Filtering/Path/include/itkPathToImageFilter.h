@@ -32,8 +32,8 @@ namespace itk
  * assumed internally to be 1.0).
  * \ingroup ITKPath
  */
-template< class TInputPath, class TOutputImage >
-class ITK_EXPORT PathToImageFilter:public ImageSource< TOutputImage >
+template< typename TInputPath, typename TOutputImage >
+class PathToImageFilter:public ImageSource< TOutputImage >
 {
 public:
   /** Standard class typedefs. */

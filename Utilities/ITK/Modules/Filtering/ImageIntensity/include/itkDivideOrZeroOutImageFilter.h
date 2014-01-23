@@ -26,7 +26,7 @@ namespace itk
 
 namespace Functor {
 
-template< class TNumerator, class TDenominator=TNumerator, class TOutput=TNumerator >
+template< typename TNumerator, typename TDenominator=TNumerator, typename TOutput=TNumerator >
 class DivideOrZeroOut
 {
 public:
@@ -77,7 +77,7 @@ public:
 template< typename TInputImage1,
           typename TInputImage2=TInputImage1,
           typename TOutputImage=TInputImage1 >
-class ITK_EXPORT DivideOrZeroOutImageFilter :
+class DivideOrZeroOutImageFilter :
   public BinaryFunctorImageFilter< TInputImage1, TInputImage2, TOutputImage,
                                    Functor::DivideOrZeroOut<
                                      typename TInputImage1::PixelType,

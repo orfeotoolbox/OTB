@@ -23,7 +23,7 @@
 namespace itk
 {
 
-template< class TInputImage, class TKernelImage, class TOutputImage, class TInternalPrecision >
+template< typename TInputImage, typename TKernelImage, typename TOutputImage, typename TInternalPrecision >
 LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInternalPrecision >
 ::LandweberDeconvolutionImageFilter()
 {
@@ -31,14 +31,14 @@ LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInt
   m_TransformedInput = NULL;
 }
 
-template< class TInputImage, class TKernelImage, class TOutputImage, class TInternalPrecision >
+template< typename TInputImage, typename TKernelImage, typename TOutputImage, typename TInternalPrecision >
 LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInternalPrecision >
 ::~LandweberDeconvolutionImageFilter()
 {
   m_TransformedInput = NULL;
 }
 
-template< class TInputImage, class TKernelImage, class TOutputImage, class TInternalPrecision >
+template< typename TInputImage, typename TKernelImage, typename TOutputImage, typename TInternalPrecision >
 void
 LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInternalPrecision >
 ::Initialize(ProgressAccumulator * progress, float progressWeight,
@@ -52,21 +52,25 @@ LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInt
 
   // Set up minipipeline to compute estimate at each iteration
   m_LandweberFilter = LandweberFilterType::New();
+  m_LandweberFilter->SetNumberOfThreads( this->GetNumberOfThreads() );
   // Transform of current estimate will be set as input 1 in Iteration()
   m_LandweberFilter->SetInput2( this->m_TransferFunction );
   m_LandweberFilter->SetInput3( m_TransformedInput );
   m_LandweberFilter->GetFunctor().m_Alpha = m_Alpha;
+  m_LandweberFilter->ReleaseDataFlagOn();
   progress->RegisterInternalFilter( m_LandweberFilter,
                                     0.3f * iterationProgressWeight );
 
   m_IFFTFilter = IFFTFilterType::New();
+  m_IFFTFilter->SetNumberOfThreads( this->GetNumberOfThreads() );
   m_IFFTFilter->SetActualXDimensionIsOdd( this->GetXDimensionIsOdd() );
   m_IFFTFilter->SetInput( m_LandweberFilter->GetOutput() );
+  m_IFFTFilter->ReleaseDataFlagOn();
   progress->RegisterInternalFilter( m_IFFTFilter,
                                     0.7f * iterationProgressWeight );
 }
 
-template< class TInputImage, class TKernelImage, class TOutputImage, class TInternalPrecision >
+template< typename TInputImage, typename TKernelImage, typename TOutputImage, typename TInternalPrecision >
 void
 LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInternalPrecision >
 ::Iteration(ProgressAccumulator * progress, float iterationProgressWeight)
@@ -86,11 +90,9 @@ LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInt
   // Store the current estimate
   this->m_CurrentEstimate = m_IFFTFilter->GetOutput();
   this->m_CurrentEstimate->DisconnectPipeline();
-
-  progress->ResetFilterProgressAndKeepAccumulatedProgress();
 }
 
-template< class TInputImage, class TKernelImage, class TOutputImage, class TInternalPrecision >
+template< typename TInputImage, typename TKernelImage, typename TOutputImage, typename TInternalPrecision >
 void
 LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInternalPrecision >
 ::Finish(ProgressAccumulator * progress, float progressWeight)
@@ -101,7 +103,7 @@ LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInt
   m_IFFTFilter = NULL;
 }
 
-template< class TInputImage, class TKernelImage, class TOutputImage, class TInternalPrecision >
+template< typename TInputImage, typename TKernelImage, typename TOutputImage, typename TInternalPrecision >
 void
 LandweberDeconvolutionImageFilter< TInputImage, TKernelImage, TOutputImage, TInternalPrecision >
 ::PrintSelf(std::ostream & os, Indent indent) const

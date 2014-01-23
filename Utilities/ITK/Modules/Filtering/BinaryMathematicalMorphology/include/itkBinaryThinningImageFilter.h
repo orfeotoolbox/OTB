@@ -57,8 +57,8 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT BinaryThinningImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class BinaryThinningImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -114,7 +114,7 @@ public:
                       TOutputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, OutputImageDimension > ) );
   itkConceptMacro( InputAdditiveOperatorsCheck,
@@ -125,7 +125,7 @@ public:
                    ( Concept::Convertible< int, PixelType > ) );
   itkConceptMacro( SameTypeCheck,
                    ( Concept::SameType< PixelType, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -54,42 +54,42 @@ namespace itk
  * of the output point with respect to the array of parameters that defines
  * the transform.
  *
- * Subclasses must provide implementations for:
- *   virtual OutputPointType           TransformPoint(const InputPointType  &) const
- *   virtual OutputVectorType          TransformVector(const InputVectorType &) const
- *   virtual OutputVnlVectorType       TransformVector(const InputVnlVectorType &) const
- *   virtual OutputCovariantVectorType TransformCovariantVector(const InputCovariantVectorType &) const
- *   virtual void                      SetParameters(const ParametersType &)
- *   virtual void                      SetFixedParameters(const ParametersType &)
+ * Subclasses must provide implementations for:<br>
+ *   virtual OutputPointType           TransformPoint(const InputPointType  &) const<br>
+ *   virtual OutputVectorType          TransformVector(const InputVectorType &) const<br>
+ *   virtual OutputVnlVectorType       TransformVector(const InputVnlVectorType &) const<br>
+ *   virtual OutputCovariantVectorType TransformCovariantVector(const InputCovariantVectorType &) const<br>
+ *   virtual void                      SetParameters(const ParametersType &)<br>
+ *   virtual void                      SetFixedParameters(const ParametersType &)<br>
  *   virtual void                      ComputeJacobianWithRespectToParameters(
  *                                                             const InputPointType &,
- *                                                             JacobianType &) const
+ *                                                             JacobianType &) const<br>
  *   virtual void                      ComputeJacobianWithRespectToPosition(
  *                                                             const InputPointType & x,
- *                                                             JacobianType &jacobian ) const;
+ *                                                             JacobianType &jacobian ) const;<br>
  *
  * Since TranformVector and TransformCovariantVector have multiple
- * overloaded methods from the base class, subclasses must specify:
- *  using Superclass::TransformVector;
- *  using Superclass::TransformCovariantVector;
+ * overloaded methods from the base class, subclasses must specify:<br>
+ *  using Superclass::TransformVector;<br>
+ *  using Superclass::TransformCovariantVector;<br>
  *
  *
  * \ingroup ITKTransform
  */
-template <class TScalarType,
+template <typename TScalar,
           unsigned int NInputDimensions = 3,
           unsigned int NOutputDimensions = 3>
-class ITK_EXPORT Transform : public TransformBase
+class Transform : public TransformBaseTemplate< TScalar >
 {
 public:
   /** Standard class typedefs. */
-  typedef Transform                Self;
-  typedef TransformBase            Superclass;
-  typedef SmartPointer<Self>       Pointer;
-  typedef SmartPointer<const Self> ConstPointer;
+  typedef Transform                        Self;
+  typedef TransformBaseTemplate< TScalar > Superclass;
+  typedef SmartPointer< Self >             Pointer;
+  typedef SmartPointer< const Self >       ConstPointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(Transform, TransformBase);
+  itkTypeMacro(Transform, TransformBaseTemplate);
 
   /** Dimension of the domain space. */
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
@@ -111,7 +111,7 @@ public:
   }
 
   /** Type of the scalar representing coordinate and vector elements. */
-  typedef  TScalarType ScalarType;
+  typedef  TScalar ScalarType;
 
   /** Type of the input parameters. */
   typedef  typename Superclass::ParametersType      ParametersType;
@@ -122,48 +122,47 @@ public:
   typedef  Array2D<ParametersValueType> JacobianType;
 
   /** Standard vector type for this class. */
-  typedef Vector<TScalarType, NInputDimensions>  InputVectorType;
-  typedef Vector<TScalarType, NOutputDimensions> OutputVectorType;
+  typedef Vector<TScalar, NInputDimensions>  InputVectorType;
+  typedef Vector<TScalar, NOutputDimensions> OutputVectorType;
 
   /** Standard variable length vector type for this class
    *  this provides an interface for the VectorImage class */
-  typedef VariableLengthVector<TScalarType> InputVectorPixelType;
-  typedef VariableLengthVector<TScalarType> OutputVectorPixelType;
+  typedef VariableLengthVector<TScalar> InputVectorPixelType;
+  typedef VariableLengthVector<TScalar> OutputVectorPixelType;
 
   /* Standard symmetric second rank tenosr type for this class */
-  typedef SymmetricSecondRankTensor<TScalarType,NInputDimensions>
+  typedef SymmetricSecondRankTensor<TScalar,NInputDimensions>
     InputSymmetricSecondRankTensorType;
-  typedef SymmetricSecondRankTensor<TScalarType,NOutputDimensions>
+  typedef SymmetricSecondRankTensor<TScalar,NOutputDimensions>
     OutputSymmetricSecondRankTensorType;
 
   /* Standard tensor type for this class */
-  typedef DiffusionTensor3D<TScalarType> InputDiffusionTensor3DType;
-  typedef DiffusionTensor3D<TScalarType> OutputDiffusionTensor3DType;
+  typedef DiffusionTensor3D<TScalar> InputDiffusionTensor3DType;
+  typedef DiffusionTensor3D<TScalar> OutputDiffusionTensor3DType;
 
   /** Standard covariant vector type for this class */
-  typedef CovariantVector<TScalarType, NInputDimensions>
+  typedef CovariantVector<TScalar, NInputDimensions>
   InputCovariantVectorType;
-  typedef CovariantVector<TScalarType, NOutputDimensions>
+  typedef CovariantVector<TScalar, NOutputDimensions>
   OutputCovariantVectorType;
 
   /** Standard vnl_vector type for this class. */
-  typedef vnl_vector_fixed<TScalarType, NInputDimensions> InputVnlVectorType;
-  typedef vnl_vector_fixed<TScalarType, NOutputDimensions>
-  OutputVnlVectorType;
+  typedef vnl_vector_fixed<TScalar, NInputDimensions>  InputVnlVectorType;
+  typedef vnl_vector_fixed<TScalar, NOutputDimensions> OutputVnlVectorType;
 
   /** Standard coordinate point type for this class */
-  typedef Point<TScalarType, NInputDimensions>  InputPointType;
-  typedef Point<TScalarType, NOutputDimensions> OutputPointType;
+  typedef Point<TScalar, NInputDimensions>  InputPointType;
+  typedef Point<TScalar, NOutputDimensions> OutputPointType;
 
   /** Base inverse transform type. This type should not be changed to the
    * concrete inverse transform type or inheritance would be lost. */
   typedef Transform<
-    TScalarType, NOutputDimensions, NInputDimensions> InverseTransformBaseType;
+    TScalar, NOutputDimensions, NInputDimensions> InverseTransformBaseType;
 
   typedef typename InverseTransformBaseType::Pointer
   InverseTransformBasePointer;
 
-  typedef Matrix<TScalarType,
+  typedef Matrix<TScalar,
                  itkGetStaticConstMacro(OutputSpaceDimension),
                  itkGetStaticConstMacro(InputSpaceDimension)>     MatrixType;
 
@@ -180,7 +179,7 @@ public:
                  itkGetStaticConstMacro(InputSpaceDimension)>
   DirectionChangeMatrix;
 
-  typedef Superclass::NumberOfParametersType    NumberOfParametersType;
+  typedef typename Superclass::NumberOfParametersType    NumberOfParametersType;
 
   /**  Method to transform a point.
    * \warning This method must be thread-safe. See, e.g., its use
@@ -388,7 +387,7 @@ public:
    * SetParameters is called at the end of this method, to allow the transform
    * to perform any required operations on the updated parameters - typically
    * a conversion to member variables for use in TransformPoint. */
-  virtual void UpdateTransformParameters( const DerivativeType & update, TScalarType factor = 1.0 );
+  virtual void UpdateTransformParameters( const DerivativeType & update, TScalar factor = 1.0 );
 
   /** Return the number of local parameters that completely defines the
    *  Transform at an individual voxel.
@@ -436,17 +435,19 @@ public:
   /** Generate a platform independent name */
   virtual std::string GetTransformTypeAsString() const;
 
+  typedef typename Superclass::TransformCategoryType    TransformCategoryType;
+
   /** Indicates the category transform.
    *  e.g. an affine transform, or a local one, e.g. a deformation field.
    */
   virtual TransformCategoryType GetTransformCategory() const
   {
-    return UnknownTransformCategory;
+    return Superclass::UnknownTransformCategory;
   }
 
   virtual bool IsLinear() const
   {
-    return ( this->GetTransformCategory() == Linear );
+    return ( this->GetTransformCategory() == Superclass::Linear );
   }
 
 

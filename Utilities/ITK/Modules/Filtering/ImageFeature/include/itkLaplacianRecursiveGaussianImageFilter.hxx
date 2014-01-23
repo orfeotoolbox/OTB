@@ -54,10 +54,13 @@ LaplacianRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 
   m_SmoothingFilters[0]->SetInput( m_DerivativeFilter->GetOutput() );
 
-  for ( unsigned int i = 1; i < NumberOfSmoothingFilters; i++ )
+  if ( NumberOfSmoothingFilters > 1 )
     {
-    m_SmoothingFilters[i]->SetInput(
-      m_SmoothingFilters[i - 1]->GetOutput() );
+    for ( unsigned int i = 1; i < NumberOfSmoothingFilters; i++ )
+      {
+      m_SmoothingFilters[i]->SetInput(
+        m_SmoothingFilters[i - 1]->GetOutput() );
+      }
     }
 
   this->SetSigma(1.0);
@@ -235,9 +238,6 @@ LaplacianRecursiveGaussianImageFilter< TInputImage, TOutputImage >
 
     cumulativeImage = addFilter->GetOutput();
     cumulativeImage->DisconnectPipeline();
-
-    // after each pass reset progress to accumulate next iteration
-    progress->ResetFilterProgressAndKeepAccumulatedProgress();
     }
 
   // Because the output of last filter in the mini-pipeline is not

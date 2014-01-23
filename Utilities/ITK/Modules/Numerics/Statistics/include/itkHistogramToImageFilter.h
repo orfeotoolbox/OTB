@@ -46,8 +46,8 @@ namespace itk
  * \ingroup ITKStatistics
  */
 
-template< class THistogram, class TImage, class TFunction >
-class ITK_EXPORT HistogramToImageFilter:
+template< typename THistogram, typename TImage, typename TFunction >
+class HistogramToImageFilter:
   public ImageSource< TImage >
 {
 public:

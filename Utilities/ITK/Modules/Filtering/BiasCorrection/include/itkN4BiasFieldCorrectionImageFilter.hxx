@@ -37,14 +37,17 @@
 
 namespace itk {
 
-template <class TInputImage, class TMaskImage, class TOutputImage>
+template <typename TInputImage, typename TMaskImage, typename TOutputImage>
 N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
 ::N4BiasFieldCorrectionImageFilter() :
   m_MaskLabel( NumericTraits<MaskPixelType>::One ),
   m_NumberOfHistogramBins( 200 ),
   m_WienerFilterNoise( 0.01 ),
   m_BiasFieldFullWidthAtHalfMaximum( 0.15 ),
+  m_ElapsedIterations( 0 ),
   m_ConvergenceThreshold( 0.001 ),
+  m_CurrentConvergenceMeasurement( NumericTraits<RealType>::Zero ),
+  m_CurrentLevel( 0 ),
   m_SplineOrder( 3 )
 {
   this->SetNumberOfRequiredInputs( 1 );
@@ -58,7 +61,7 @@ N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
   this->m_MaximumNumberOfIterations.Fill( 50 );
 }
 
-template<class TInputImage, class TMaskImage, class TOutputImage>
+template<typename TInputImage, typename TMaskImage, typename TOutputImage>
 void
 N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
 ::GenerateData()
@@ -226,7 +229,7 @@ N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
   this->GraftOutput( divider->GetOutput() );
 }
 
-template<class TInputImage, class TMaskImage, class TOutputImage>
+template<typename TInputImage, typename TMaskImage, typename TOutputImage>
 typename
 N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>::RealImagePointer
 N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
@@ -464,7 +467,7 @@ N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
   return sharpenedImage;
 }
 
-template<class TInputImage, class TMaskImage, class TOutputImage>
+template<typename TInputImage, typename TMaskImage, typename TOutputImage>
 typename
 N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>::RealImagePointer
 N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
@@ -623,7 +626,7 @@ N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
   return smoothField;
 }
 
-template<class TInputImage, class TMaskImage, class TOutputImage>
+template<typename TInputImage, typename TMaskImage, typename TOutputImage>
 typename
 N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>::RealType
 N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
@@ -673,7 +676,7 @@ N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
   return ( sigma / mu );
 }
 
-template<class TInputImage, class TMaskImage, class TOutputImage>
+template<typename TInputImage, typename TMaskImage, typename TOutputImage>
 void
 N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
 ::PrintSelf(std::ostream &os, Indent indent) const
@@ -701,8 +704,15 @@ N4BiasFieldCorrectionImageFilter<TInputImage, TMaskImage, TOutputImage>
   os << indent << "CurrentLevel: " << this->m_CurrentLevel << std::endl;
   os << indent << "ElapsedIterations: "
      << this->m_ElapsedIterations << std::endl;
-  os << indent << "LogBiasFieldControlPointLattice: "
-     << this->m_LogBiasFieldControlPointLattice << std::endl;
+  if ( this->m_LogBiasFieldControlPointLattice )
+    {
+    os << indent << "LogBiasFieldControlPointLattice:" << std::endl;
+    this->m_LogBiasFieldControlPointLattice->Print( os, indent.GetNextIndent() );
+    }
+  else
+    {
+    os << indent << "LogBiasFieldControlPointLattice: " << "(null)" << std::endl;
+    }
 }
 
 } // end namespace itk

@@ -30,7 +30,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput1, class TInput2, class TOutput >
+template< typename TInput1, typename TInput2, typename TOutput >
 class WeightedAdd2
 {
 public:
@@ -109,8 +109,8 @@ private:
  * \ingroup MultiThreaded
  * \ingroup ITKImageIntensity
  */
-template< class TInputImage1, class TInputImage2, class TOutputImage >
-class ITK_EXPORT WeightedAddImageFilter:
+template< typename TInputImage1, typename TInputImage2, typename TOutputImage >
+class WeightedAddImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage1, TInputImage2, TOutputImage,
                             Functor::WeightedAdd2<
@@ -156,7 +156,7 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1HasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage1::PixelType > ) );
   itkConceptMacro( Input1RealTypeMultiplyCheck,
@@ -165,7 +165,7 @@ public:
   itkConceptMacro( Input2RealTypeMultiplyCheck,
                    ( Concept::MultiplyOperator< typename TInputImage2::PixelType,
                                                 RealType, RealType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -48,8 +48,8 @@ namespace itk
  * \ingroup ITKV3Compatibility
  * \sa DivideImageFilter
  */
-template <class TInputImage, class TConstant, class TOutputImage>
-class ITK_EXPORT DivideByConstantImageFilter :
+template <typename TInputImage, typename TConstant, typename TOutputImage>
+class DivideByConstantImageFilter :
     public DivideImageFilter<TInputImage, Image<TConstant, TInputImage::ImageDimension>, TOutputImage>
 {
 public:

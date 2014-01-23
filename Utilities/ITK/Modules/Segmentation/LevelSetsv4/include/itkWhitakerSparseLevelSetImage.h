@@ -82,15 +82,15 @@ public:
 
   /** Returns the value of the level set function at a given location iP */
   using Superclass::Evaluate;
-  virtual OutputType Evaluate( const InputType& iP ) const;
+  virtual OutputType Evaluate( const InputType& inputIndex ) const;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 
   itkConceptMacro( DoubleConvertible,
                     ( Concept::Convertible< OutputRealType, OutputType > ) );
 
-  /** End concept checking */
+  // End concept checking
 #endif // ITK_USE_CONCEPT_CHECKING
 
   static inline LayerIdType MinusThreeLayer() { return -3; }
@@ -102,7 +102,7 @@ public:
   static inline LayerIdType PlusThreeLayer() { return 3; }
 
   /** Return the label object pointer with a given id */
-  template< class TLabel >
+  template< typename TLabel >
   typename LabelObject< TLabel, Dimension >::Pointer
   GetAsLabelObject()
     {

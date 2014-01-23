@@ -67,8 +67,8 @@ public:
  * \author Leila Baghdadi, MICe, Hospital for Sick Childern, Toronto, Canada,
  * \ingroup ITKMesh
  */
-template< class TInputMesh, class TOutputImage >
-class ITK_EXPORT TriangleMeshToBinaryImageFilter:public ImageSource< TOutputImage >
+template< typename TInputMesh, typename TOutputImage >
+class TriangleMeshToBinaryImageFilter:public ImageSource< TOutputImage >
 {
 public:
   /** Standard class typedefs. */

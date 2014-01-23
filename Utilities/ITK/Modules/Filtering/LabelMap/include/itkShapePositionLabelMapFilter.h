@@ -34,8 +34,8 @@ namespace itk {
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template<class TImage>
-class ITK_EXPORT ShapePositionLabelMapFilter :
+template<typename TImage>
+class ShapePositionLabelMapFilter :
     public InPlaceLabelMapFilter<TImage>
 {
 public:
@@ -67,14 +67,14 @@ public:
                InPlaceLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 /*  itkConceptMacro(InputEqualityComparableCheck,
     (Concept::EqualityComparable<InputImagePixelType>));
   itkConceptMacro(IntConvertibleToInputCheck,
     (Concept::Convertible<int, InputImagePixelType>));
   itkConceptMacro(InputOStreamWritableCheck,
     (Concept::OStreamWritable<InputImagePixelType>));*/
-  /** End concept checking */
+  // End concept checking
 #endif
 
   /**
@@ -94,7 +94,7 @@ protected:
 
   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
 
-  template< class TAttributeAccessor >
+  template< typename TAttributeAccessor >
   void TemplatedThreadedProcessLabelObject( const TAttributeAccessor & accessor, bool physical, LabelObjectType * labelObject )
   {
     typedef typename TAttributeAccessor::AttributeValueType AttributeValueType;

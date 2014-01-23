@@ -17,6 +17,7 @@
  *=========================================================================*/
 #ifndef __itkConvertPixelBuffer_h
 #define __itkConvertPixelBuffer_h
+#include "ITKIOImageBaseExport.h"
 
 #include "itkObject.h"
 #include "itkNumericTraits.h"
@@ -39,7 +40,7 @@ namespace itk
 template<
   typename InputPixelType,
   typename OutputPixelType,
-  class OutputConvertTraits
+  typename OutputConvertTraits
   >
 class ConvertPixelBuffer
 {

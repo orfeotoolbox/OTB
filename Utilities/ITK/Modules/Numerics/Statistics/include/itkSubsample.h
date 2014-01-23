@@ -37,8 +37,8 @@ namespace Statistics
  *
  * \ingroup ITKStatistics
  */
-template< class TSample >
-class ITK_EXPORT Subsample:
+template< typename TSample >
+class Subsample:
   public TSample
 {
 public:

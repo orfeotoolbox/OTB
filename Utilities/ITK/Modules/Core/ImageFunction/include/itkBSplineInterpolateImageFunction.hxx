@@ -42,7 +42,7 @@ namespace itk
 /**
  * Constructor
  */
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::BSplineInterpolateImageFunction()
 {
@@ -60,31 +60,24 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
   this->m_UseImageDirection = true;
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::~BSplineInterpolateImageFunction()
 {
-  if ( m_ThreadedEvaluateIndex != NULL )
-    {
-    delete[] m_ThreadedEvaluateIndex;
-    m_ThreadedEvaluateIndex = NULL;
-    }
-  if ( m_ThreadedWeights != NULL )
-    {
-    delete[] m_ThreadedWeights;
-    m_ThreadedWeights = NULL;
-    }
-  if ( m_ThreadedWeightsDerivative != NULL )
-    {
-    delete[] m_ThreadedWeightsDerivative;
-    m_ThreadedWeightsDerivative = NULL;
-    }
+  delete[] m_ThreadedEvaluateIndex;
+  m_ThreadedEvaluateIndex = NULL;
+
+  delete[] m_ThreadedWeights;
+  m_ThreadedWeights = NULL;
+
+  delete[] m_ThreadedWeightsDerivative;
+  m_ThreadedWeightsDerivative = NULL;
 }
 
 /**
  * Standard "PrintSelf" method
  */
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::PrintSelf(
@@ -98,7 +91,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
   os << indent << "NumberOfThreads: " << m_NumberOfThreads  << std::endl;
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::SetInputImage(const TImageType *inputData)
@@ -122,7 +115,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
     }
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::SetSplineOrder(unsigned int SplineOrder)
@@ -143,7 +136,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
   this->GeneratePointsToIndex();
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::SetNumberOfThreads(ThreadIdType numThreads)
@@ -152,7 +145,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
   this->GeneratePointsToIndex();
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 typename
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::OutputType
@@ -209,7 +202,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 #endif
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 typename
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::CovariantVectorType
@@ -291,7 +284,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 #endif
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::EvaluateValueAndDerivativeAtContinuousIndex(const ContinuousIndexType & x,
@@ -385,7 +378,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 #endif
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::SetInterpolationWeights(const ContinuousIndexType & x,
@@ -498,7 +491,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
     }
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::SetDerivativeWeights(const ContinuousIndexType & x,
@@ -625,7 +618,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 }
 
 // Generates m_PointsToIndex;
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::GeneratePointsToIndex()
@@ -633,20 +626,11 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
   // m_PointsToIndex is used to convert a sequential location to an N-dimension
   // index vector.  This is precomputed to save time during the interpolation
   // routine.
-  if ( m_ThreadedEvaluateIndex != NULL )
-    {
-    delete[] m_ThreadedEvaluateIndex;
-    }
+  delete[] m_ThreadedEvaluateIndex;
   m_ThreadedEvaluateIndex = new vnl_matrix< long >[m_NumberOfThreads];
-  if ( m_ThreadedWeights != NULL )
-    {
-    delete[] m_ThreadedWeights;
-    }
+  delete[] m_ThreadedWeights;
   m_ThreadedWeights = new vnl_matrix< double >[m_NumberOfThreads];
-  if ( m_ThreadedWeightsDerivative != NULL )
-    {
-    delete[] m_ThreadedWeightsDerivative;
-    }
+  delete[] m_ThreadedWeightsDerivative;
   m_ThreadedWeightsDerivative = new vnl_matrix< double >[m_NumberOfThreads];
   for ( unsigned int i = 0; i < m_NumberOfThreads; i++ )
     {
@@ -673,7 +657,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
     }
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::DetermineRegionOfSupport(vnl_matrix< long > & evaluateIndex,
@@ -691,7 +675,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
     }
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::ApplyMirrorBoundaryConditions(vnl_matrix< long > & evaluateIndex,
@@ -730,7 +714,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
     }
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 typename
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::OutputType
@@ -767,7 +751,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
   return ( interpolated );
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 void
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::EvaluateValueAndDerivativeAtContinuousIndexInternal(const ContinuousIndexType & x,
@@ -852,7 +836,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 
 }
 
-template< class TImageType, class TCoordRep, class TCoefficientType >
+template< typename TImageType, typename TCoordRep, typename TCoefficientType >
 typename
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::CovariantVectorType

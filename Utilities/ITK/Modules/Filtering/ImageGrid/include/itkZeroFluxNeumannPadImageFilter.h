@@ -57,8 +57,8 @@ namespace itk
  * \ingroup ITKImageGrid
  * \sa WrapPadImageFilter, MirrorPadImageFilter, ConstantPadImageFilter, ZeroFluxNeumannBoundaryCondition
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ZeroFluxNeumannPadImageFilter :
+template< typename TInputImage, typename TOutputImage >
+class ZeroFluxNeumannPadImageFilter :
     public PadImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -98,7 +98,7 @@ public:
                       TOutputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro(OutputEqualityComparableCheck,
     (Concept::EqualityComparable< OutputImagePixelType >));
   itkConceptMacro(InputConvertibleToOutputCheck,
@@ -107,7 +107,7 @@ public:
     (Concept::SameDimension< ImageDimension, OutputImageDimension >));
   itkConceptMacro(OutputOStreamWritableCheck,
     (Concept::OStreamWritable< OutputImagePixelType >));
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

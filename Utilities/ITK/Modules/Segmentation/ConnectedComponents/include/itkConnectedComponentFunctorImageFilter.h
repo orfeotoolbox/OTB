@@ -50,8 +50,8 @@ namespace itk
  * \ingroup ITKConnectedComponents
  */
 
-template< class TInputImage, class TOutputImage, class TFunctor, class TMaskImage = TInputImage >
-class ITK_EXPORT ConnectedComponentFunctorImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TFunctor, typename TMaskImage = TInputImage >
+class ConnectedComponentFunctorImageFilter:
   public ConnectedComponentImageFilter< TInputImage, TOutputImage, TMaskImage >
 {
 public:
@@ -131,7 +131,7 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, ImageDimension > ) );
   itkConceptMacro( InputEqualityComparableCheck,
@@ -148,7 +148,7 @@ public:
                    ( Concept::Convertible< unsigned long, OutputPixelType > ) );
   itkConceptMacro( OutputIncrementDecrementOperatorsCheck,
                    ( Concept::IncrementDecrementOperators< OutputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

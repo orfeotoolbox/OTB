@@ -32,9 +32,9 @@ namespace itk
  *
  * \ingroup ITKGPUFiniteDifference
  * \sa GPUDenseFiniteDifferenceImageFilter */
-template< class TInputImage, class TOutputImage, class TParentImageFilter =
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter =
             FiniteDifferenceImageFilter< TInputImage, TOutputImage > >
-class ITK_EXPORT GPUFiniteDifferenceImageFilter :
+class GPUFiniteDifferenceImageFilter :
   public GPUInPlaceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 {
 public:
@@ -128,10 +128,10 @@ public:
   itkBooleanMacro(ManualReinitialization);
 
 #ifdef ITK_USE_STRICT_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputPixelIsFloatingPointCheck,
                    ( Concept::IsFloatingPoint< OutputPixelValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
   /** Methods to get timers */

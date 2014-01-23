@@ -62,8 +62,8 @@ namespace Statistics {
  * \ingroup ITKStatistics
  */
 
-template< class THistogram >
-class ITK_EXPORT HistogramToRunLengthFeaturesFilter : public ProcessObject
+template< typename THistogram >
+class HistogramToRunLengthFeaturesFilter : public ProcessObject
 {
 public:
   /** Standard typedefs */

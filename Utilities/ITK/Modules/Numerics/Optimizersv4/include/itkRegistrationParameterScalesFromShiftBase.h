@@ -39,8 +39,8 @@ namespace itk
  * \sa RegistrationParameterScalesEstimator
  * \ingroup ITKOptimizersv4
  */
-template < class TMetric >
-class ITK_EXPORT RegistrationParameterScalesFromShiftBase :
+template < typename TMetric >
+class RegistrationParameterScalesFromShiftBase :
   public RegistrationParameterScalesEstimator< TMetric >
 {
 public:

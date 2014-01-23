@@ -55,7 +55,7 @@ namespace itk
  *
  */
 template< typename TImage >
-class ITK_EXPORT ImageScanlineConstIterator:
+class ImageScanlineConstIterator:
     public ImageConstIterator< TImage >
 {
 public:
@@ -235,6 +235,16 @@ public:
   {
     itkAssertInDebugAndIgnoreInReleaseMacro( !this->IsAtEndOfLine() );
     ++this->m_Offset;
+    return *this;
+  }
+
+  /** decrement (prefix) along the scanline the iterator's index.
+   *
+   */
+  Self& operator--()
+  {
+    itkAssertInDebugAndIgnoreInReleaseMacro( !this->IsAtEndOfLine() );
+    --this->m_Offset;
     return *this;
   }
 

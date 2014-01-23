@@ -29,7 +29,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput1, class TInput2 = TInput1, class TOutput = TInput1 >
+template< typename TInput1, typename TInput2 = TInput1, typename TOutput = TInput1 >
 class Mult
 {
 public:
@@ -65,8 +65,8 @@ public:
  * \wikiexample{ImageProcessing/MultiplyByConstantImageFilter,Multiply every pixel in an image by a constant}
  * \endwiki
  */
-template< class TInputImage1, class TInputImage2 = TInputImage1, class TOutputImage = TInputImage1 >
-class ITK_EXPORT MultiplyImageFilter:
+template< typename TInputImage1, typename TInputImage2 = TInputImage1, typename TOutputImage = TInputImage1 >
+class MultiplyImageFilter:
   public
   BinaryFunctorImageFilter< TInputImage1, TInputImage2, TOutputImage,
                             Functor::Mult<
@@ -94,12 +94,12 @@ public:
                BinaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1Input2OutputMultiplyOperatorCheck,
                    ( Concept::MultiplyOperator< typename TInputImage1::PixelType,
                                                 typename TInputImage2::PixelType,
                                                 typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

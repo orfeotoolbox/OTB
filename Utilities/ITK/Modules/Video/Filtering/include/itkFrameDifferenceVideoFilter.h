@@ -32,8 +32,8 @@ namespace itk
  *
  * \ingroup ITKVideoFiltering
  */
-template<class TInputVideoStream, class TOutputVideoStream>
-class ITK_EXPORT FrameDifferenceVideoFilter :
+template<typename TInputVideoStream, typename TOutputVideoStream>
+class FrameDifferenceVideoFilter :
   public VideoToVideoFilter<TInputVideoStream, TOutputVideoStream>
 {
 public:

@@ -107,10 +107,10 @@ namespace itk
  * \ingroup LevelSetSegmentation
  * \ingroup ITKLevelSets
  */
-template< class TInputImage,
-          class TFeatureImage,
-          class TOutputPixelType = float >
-class ITK_EXPORT GeodesicActiveContourShapePriorLevelSetImageFilter:
+template< typename TInputImage,
+          typename TFeatureImage,
+          typename TOutputPixelType = float >
+class GeodesicActiveContourShapePriorLevelSetImageFilter:
   public ShapePriorSegmentationLevelSetImageFilter< TInputImage, TFeatureImage,
                                                     TOutputPixelType >
 {

@@ -30,7 +30,7 @@ namespace Functor
  * \brief
  * \ingroup ITKImageIntensity
  */
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class Sin
 {
 public:
@@ -63,8 +63,8 @@ public:
  * \wikiexample{Math/Trig/SinImageFilter,Compute the sine of each pixel.}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT SinImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class SinImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::Sin<
@@ -90,12 +90,12 @@ public:
                UnaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToDoubleCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType, double > ) );
   itkConceptMacro( DoubleConvertibleToOutputCheck,
                    ( Concept::Convertible< double, typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

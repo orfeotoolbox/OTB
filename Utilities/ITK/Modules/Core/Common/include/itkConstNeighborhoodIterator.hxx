@@ -20,7 +20,7 @@
 #include "itkConstNeighborhoodIterator.h"
 namespace itk
 {
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 bool
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::InBounds() const
@@ -47,7 +47,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   return ans;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 bool
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::IndexInBounds(NeighborIndexType n, OffsetType & internalIndex, OffsetType & offset ) const
@@ -104,7 +104,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
     }
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 typename ConstNeighborhoodIterator< TImage, TBoundaryCondition >::PixelType
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::GetPixel(NeighborIndexType n, bool & IsInBounds) const
@@ -143,7 +143,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
     }
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 typename ConstNeighborhoodIterator< TImage, TBoundaryCondition >::OffsetType
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::ComputeInternalIndex(NeighborIndexType n) const
@@ -161,7 +161,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   return ans;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 typename ConstNeighborhoodIterator< TImage, TBoundaryCondition >::RegionType
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::GetBoundingBoxAsImageRegion() const
@@ -175,7 +175,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   return ans;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::ConstNeighborhoodIterator()
 {
@@ -208,7 +208,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   m_BoundaryCondition = &m_InternalBoundaryCondition;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::ConstNeighborhoodIterator(const Self & orig):
   Neighborhood< InternalPixelType *, Dimension >(orig)
@@ -249,7 +249,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   m_NeighborhoodAccessorFunctor = orig.m_NeighborhoodAccessorFunctor;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 void
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::SetEndIndex()
@@ -267,36 +267,35 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
     }
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 typename ConstNeighborhoodIterator< TImage, TBoundaryCondition >::NeighborhoodType
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::GetNeighborhood() const
 {
   OffsetType            OverlapLow, OverlapHigh, temp, offset;
-  bool                  flag;
 
   const ConstIterator _end = this->End();
   NeighborhoodType    ans;
 
-  typename NeighborhoodType::Iterator ans_it;
-  ConstIterator this_it;
+  typename NeighborhoodType::Iterator ansIt;
+  ConstIterator thisIt;
 
   ans.SetRadius( this->GetRadius() );
 
   if ( m_NeedToUseBoundaryCondition == false )
     {
-    for ( ans_it = ans.Begin(), this_it = this->Begin();
-          this_it < _end; ans_it++, this_it++ )
+    for ( ansIt = ans.Begin(), thisIt = this->Begin();
+          thisIt < _end; ++ansIt, ++thisIt )
       {
-      *ans_it = m_NeighborhoodAccessorFunctor.Get(*this_it);
+      *ansIt = m_NeighborhoodAccessorFunctor.Get(*thisIt);
       }
     }
   else if ( InBounds() )
     {
-    for ( ans_it = ans.Begin(), this_it = this->Begin();
-          this_it < _end; ans_it++, this_it++ )
+    for ( ansIt = ans.Begin(), thisIt = this->Begin();
+          thisIt < _end; ++ansIt, ++thisIt )
       {
-      *ans_it = m_NeighborhoodAccessorFunctor.Get(*this_it);
+      *ansIt = m_NeighborhoodAccessorFunctor.Get(*thisIt);
       }
     }
   else
@@ -312,10 +311,10 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
       }
 
     // Iterate through neighborhood
-    for ( ans_it = ans.Begin(), this_it = this->Begin();
-          this_it < _end; ans_it++, this_it++ )
+    for ( ansIt = ans.Begin(), thisIt = this->Begin();
+          thisIt < _end; ++ansIt, ++thisIt )
       {
-      flag = true;
+      bool flag = true;
 
       // Is this pixel in bounds?
       for ( DimensionValueType i = 0; i < Dimension; ++i )
@@ -340,10 +339,13 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
           }
         }
 
-      if ( flag ) { *ans_it = m_NeighborhoodAccessorFunctor.Get(*this_it); }
+      if ( flag )
+        {
+        *ansIt = m_NeighborhoodAccessorFunctor.Get(*thisIt);
+        }
       else
         {
-        *ans_it = m_NeighborhoodAccessorFunctor.BoundaryCondition(
+        *ansIt = m_NeighborhoodAccessorFunctor.BoundaryCondition(
           temp, offset, this, this->m_BoundaryCondition);
         }
 
@@ -356,14 +358,17 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
           {
           temp[i] = 0;
           }
-        else { break; }
+        else
+          {
+          break;
+          }
         }
       }
     }
   return ans;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 void
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::GoToBegin()
@@ -371,7 +376,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   this->SetLocation(m_BeginIndex);
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 void
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::GoToEnd()
@@ -379,7 +384,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   this->SetLocation(m_EndIndex);
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 void
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::SetRegion(const RegionType & region)
@@ -403,14 +408,11 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   const IndexType rStart = region.GetIndex();
   const SizeType  rSize  = region.GetSize();
 
-  OffsetValueType overlapLow;
-  OffsetValueType overlapHigh;
-
   m_NeedToUseBoundaryCondition = false;
   for ( DimensionValueType i = 0; i < Dimension; ++i )
     {
-    overlapLow = static_cast< OffsetValueType >( ( rStart[i] - static_cast<OffsetValueType>( this->GetRadius(i) ) ) - bStart[i] );
-    overlapHigh = static_cast< OffsetValueType >( ( bStart[i] + bSize[i] )
+    OffsetValueType overlapLow = static_cast< OffsetValueType >( ( rStart[i] - static_cast<OffsetValueType>( this->GetRadius(i) ) ) - bStart[i] );
+    OffsetValueType overlapHigh = static_cast< OffsetValueType >( ( bStart[i] + bSize[i] )
                                        - ( rStart[i] + rSize[i] + static_cast<OffsetValueType>( this->GetRadius(i) ) ) );
 
     if ( overlapLow < 0 ) // out of bounds condition, define a region of
@@ -427,7 +429,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
     }
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 void ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::Initialize(const SizeType & radius, const ImageType *ptr,
              const RegionType & region)
@@ -442,7 +444,7 @@ void ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   m_IsInBounds = false;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 ConstNeighborhoodIterator< TImage, TBoundaryCondition > &
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::operator=(const Self & orig)
@@ -488,7 +490,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   return *this;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 ConstNeighborhoodIterator< TImage, TBoundaryCondition > &
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::operator++()
@@ -523,7 +525,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   return *this;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 ConstNeighborhoodIterator< TImage, TBoundaryCondition > &
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::operator--()
@@ -561,7 +563,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   return *this;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 void
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -626,7 +628,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   Superclass::PrintSelf( os, indent.GetNextIndent() );
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 void ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::SetBound(const SizeType & size)
 {
@@ -653,7 +655,7 @@ void ConstNeighborhoodIterator< TImage, TBoundaryCondition >
                                    // higher dimensions
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 void ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::SetPixelPointers(const IndexType & pos)
 {
@@ -700,7 +702,7 @@ void ConstNeighborhoodIterator< TImage, TBoundaryCondition >
     }
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 ConstNeighborhoodIterator< TImage, TBoundaryCondition > &
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::operator+=(const OffsetType & idx)
@@ -739,7 +741,7 @@ ConstNeighborhoodIterator< TImage, TBoundaryCondition >
   return *this;
 }
 
-template< class TImage, class TBoundaryCondition >
+template< typename TImage, typename TBoundaryCondition >
 ConstNeighborhoodIterator< TImage, TBoundaryCondition > &
 ConstNeighborhoodIterator< TImage, TBoundaryCondition >
 ::operator-=(const OffsetType & idx)

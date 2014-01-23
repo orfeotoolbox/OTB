@@ -30,27 +30,31 @@
 
 namespace itk
 {
-/** \class TransformBase
+/** \class itkTransformBaseTemplate
  *
- * This class is an abstract class to represent the transform
+ * This class is an abstract class to represent a spatial transform.
+ *
+ * This class is templated over the scalar type used to store the transform's
+ * parameters.
  *
  * \ingroup ITKTransform
  */
-class ITK_EXPORT TransformBase:public Object
+template< typename TScalar >
+class TransformBaseTemplate:public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef TransformBase              Self;
+  typedef TransformBaseTemplate      Self;
   typedef Object                     Superclass;
   typedef SmartPointer< Self >       Pointer;
   typedef SmartPointer< const Self > ConstPointer;
 
   /** Type of the input parameters. */
-  typedef  double                                     ParametersValueType;
+  typedef  TScalar                                    ParametersValueType;
   typedef  OptimizerParameters< ParametersValueType > ParametersType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformBase, Object);
+  itkTypeMacro(TransformBaseTemplate, Object);
 
   /** The number of parameters can potentially be very large,
    *  therefore we use here a large capacity integer. */
@@ -102,13 +106,17 @@ public:
   virtual TransformCategoryType GetTransformCategory() const = 0;
 
 protected:
-  TransformBase() {}
-  virtual ~TransformBase() {}
+  TransformBaseTemplate(){}
+  virtual ~TransformBaseTemplate() {}
 
 private:
-  TransformBase(const Self &);  //purposely not implemented
+  TransformBaseTemplate(const Self &);  //purposely not implemented
   void operator=(const Self &); //purposely not implemented
 };
+
+/** This helps to meet backward compatibility */
+typedef TransformBaseTemplate< double > TransformBase;
+
 } // end namespace itk
 
 #endif

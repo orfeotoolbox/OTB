@@ -35,8 +35,8 @@ namespace itk
   Every subdomain (image region) has a consistent set of level sets ids associated with every pixel.
   \ingroup ITKLevelSetsv4
 */
-template < class TInputImage, class TOutputImage >
-class ITK_EXPORT LevelSetDomainMapImageFilter : public ImageToImageFilter< TInputImage, TOutputImage >
+template < typename TInputImage, typename TOutputImage >
+class LevelSetDomainMapImageFilter : public ImageToImageFilter< TInputImage, TOutputImage >
 {
   public:
     typedef LevelSetDomainMapImageFilter                      Self;

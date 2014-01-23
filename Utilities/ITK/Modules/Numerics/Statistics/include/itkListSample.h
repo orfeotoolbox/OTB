@@ -47,8 +47,8 @@ namespace Statistics
  * \endwiki
  */
 
-template< class TMeasurementVector >
-class ITK_EXPORT ListSample:public Sample< TMeasurementVector >
+template< typename TMeasurementVector >
+class ListSample:public Sample< TMeasurementVector >
 {
 public:
   /** Standard class typedef. */

@@ -88,8 +88,6 @@ namespace itk
  *
  * \par MORE INFORMATION
  *
- * \example ImageRegionIteratorWithIndex.cxx
- *
  * For a complete description of the ITK Image Iterators and their API, please
  * see the Iterators chapter in the ITK Software Guide.  The ITK Software Guide
  * is available in print and as a free .pdf download from http://www.itk.org.
@@ -120,14 +118,13 @@ namespace itk
  * \sa ImageConstIteratorWithIndex
  * \ingroup ITKCommon
  *
- * \example itkImageIteratorTest.cxx
  *
  * \wiki
  * \wikiexample{Iterators/ImageRegionConstIteratorWithIndex,Iterate over a region of an image with efficient access to the current index (without write access)}
  * \endwiki
  */
 template< typename TImage >
-class ITK_EXPORT ImageRegionConstIteratorWithIndex:public ImageConstIteratorWithIndex< TImage >
+class ImageRegionConstIteratorWithIndex:public ImageConstIteratorWithIndex< TImage >
 {
 public:
   /** Standard class typedefs. */

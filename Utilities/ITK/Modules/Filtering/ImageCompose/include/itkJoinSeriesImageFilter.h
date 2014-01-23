@@ -46,8 +46,8 @@ namespace itk
  *
  * \ingroup ITKImageCompose
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT JoinSeriesImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class JoinSeriesImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -86,11 +86,11 @@ public:
   itkGetConstMacro(Origin, double);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType,
                                            typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

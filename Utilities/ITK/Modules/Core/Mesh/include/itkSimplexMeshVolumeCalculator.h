@@ -46,8 +46,8 @@ namespace itk
  * \ingroup ITKMesh
  */
 
-template< class TInputMesh >
-class ITK_EXPORT SimplexMeshVolumeCalculator:public Object
+template< typename TInputMesh >
+class SimplexMeshVolumeCalculator:public Object
 {
 public:
   /** Standard "Self" typedef. */

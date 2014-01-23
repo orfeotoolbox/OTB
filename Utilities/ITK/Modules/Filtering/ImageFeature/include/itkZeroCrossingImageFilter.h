@@ -59,8 +59,8 @@ namespace itk
  * \wikiexample{ImageProcessing/ZeroCrossingImageFilter,Find zero crossings in a signed image}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT ZeroCrossingImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class ZeroCrossingImageFilter:
   public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -115,7 +115,7 @@ public:
   itkGetConstMacro(BackgroundValue, OutputImagePixelType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( OutputEqualityComparableCheck,
                    ( Concept::EqualityComparable< OutputImagePixelType > ) );
   itkConceptMacro( SameDimensionCheck,
@@ -124,7 +124,7 @@ public:
                    ( Concept::Comparable< InputImagePixelType > ) );
   itkConceptMacro( OutputOStreamWritableCheck,
                    ( Concept::OStreamWritable< OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

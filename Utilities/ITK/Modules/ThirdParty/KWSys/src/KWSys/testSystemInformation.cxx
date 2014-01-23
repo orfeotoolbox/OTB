@@ -88,14 +88,31 @@ int testSystemInformation(int, char*[])
   printMethod3(info, GetHostMemoryUsed(), "KiB");
   printMethod3(info, GetProcMemoryUsed(), "KiB");
 
-  for (int i = 0; i <= 31; i++)
+  for (long int i = 0; i <= 31; i++)
     {
-    if (info.DoesCPUSupportFeature(1 << i))
+    if (info.DoesCPUSupportFeature(static_cast<long int>(1) << i))
       {
       kwsys_ios::cout << "CPU feature " << i << "\n";
       }
     }
-  //int GetProcessorCacheXSize(long int);
-//  bool DoesCPUSupportFeature(long int);
+
+  /* test stack trace
+  */
+  kwsys_ios::cout
+    << "Program Stack:" << kwsys_ios::endl
+    << kwsys::SystemInformation::GetProgramStack(0,0) << kwsys_ios::endl
+    << kwsys_ios::endl;
+
+  /* test segv handler
+  info.SetStackTraceOnError(1);
+  double *d = (double*)100;
+  *d=0;
+  */
+
+  /* test abort handler
+  info.SetStackTraceOnError(1);
+  abort();
+  */
+
   return 0;
 }

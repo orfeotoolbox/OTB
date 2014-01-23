@@ -56,8 +56,8 @@ namespace itk
  * \ingroup MultiThreaded
  * \ingroup ITKImageCompare
  */
-template< class TInputImage1, class TInputImage2 >
-class ITK_EXPORT SimilarityIndexImageFilter:
+template< typename TInputImage1, typename TInputImage2 >
+class SimilarityIndexImageFilter:
   public ImageToImageFilter< TInputImage1, TInputImage1 >
 {
 public:
@@ -113,12 +113,12 @@ public:
   itkGetConstMacro(SimilarityIndex, RealType);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( Input1HasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputImage1PixelType > ) );
   itkConceptMacro( Input2HasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputImage2PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

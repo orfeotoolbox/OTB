@@ -50,10 +50,10 @@ namespace itk
  * \ingroup LevelSetSegmentation
  * \ingroup ITKFastMarching
  */
-template< class TInput, class TOutput,
+template< typename TInput, typename TOutput,
          typename TAuxValue,
          unsigned int VAuxDimension >
-class ITK_EXPORT FastMarchingExtensionImageFilterBase:
+class FastMarchingExtensionImageFilterBase:
   public FastMarchingImageFilterBase< TInput, TOutput >
 {
 public:
@@ -119,10 +119,10 @@ public:
   itkGetModifiableObjectMacro(AuxiliaryTrialValues, AuxValueContainerType );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( AuxValueHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< TAuxValue > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

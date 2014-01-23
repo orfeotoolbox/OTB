@@ -33,9 +33,9 @@ namespace itk
  * \ingroup ImageToImageFilter
  * \ingroup ITKImageIntensity
  */
-template< class TInputImage, class TPolyline, class TVector,
-          class TOutputImage >
-class ITK_EXPORT PolylineMaskImageFilter:public ImageToImageFilter< TInputImage, TOutputImage >
+template< typename TInputImage, typename TPolyline, typename TVector,
+          typename TOutputImage >
+class PolylineMaskImageFilter:public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Standard class typedefs. */
@@ -114,10 +114,10 @@ public:
   void GenerateData(void);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( VectorHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename VectorType::ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

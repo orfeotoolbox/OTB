@@ -47,8 +47,8 @@ namespace itk
  * \wikiexample{ImageProcessing/LabelShapeKeepNObjectsImageFilter,Keep only regions that rank above a certain level of a particular property}
  * \endwiki
  */
-template< class TInputImage >
-class ITK_EXPORT LabelShapeKeepNObjectsImageFilter:
+template< typename TInputImage >
+class LabelShapeKeepNObjectsImageFilter:
   public ImageToImageFilter< TInputImage, TInputImage >
 {
 public:
@@ -97,14 +97,14 @@ public:
                ImageToImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputEqualityComparableCheck,
                    ( Concept::EqualityComparable< InputImagePixelType > ) );
   itkConceptMacro( IntConvertibleToInputCheck,
                    ( Concept::Convertible< int, InputImagePixelType > ) );
   itkConceptMacro( InputOStreamWritableCheck,
                    ( Concept::OStreamWritable< InputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
   /**

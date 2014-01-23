@@ -51,8 +51,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TMeasurementVector >
-class ITK_EXPORT GaussianMembershipFunction:
+template< typename TMeasurementVector >
+class GaussianMembershipFunction:
   public MembershipFunctionBase< TMeasurementVector >
 {
 public:

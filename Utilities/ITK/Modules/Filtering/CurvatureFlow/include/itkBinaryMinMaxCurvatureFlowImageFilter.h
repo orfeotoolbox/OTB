@@ -72,8 +72,8 @@ namespace itk
  *
  * \ingroup ITKCurvatureFlow
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT BinaryMinMaxCurvatureFlowImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class BinaryMinMaxCurvatureFlowImageFilter:
   public MinMaxCurvatureFlowImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -105,11 +105,11 @@ public:
   itkGetConstMacro(Threshold, double);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< typename TInputImage::PixelType,
                                            typename TOutputImage::PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -46,9 +46,9 @@ namespace itk
  * \wikiexample{ImageProcessing/BinaryFunctorImageFilterCustom,Apply a custom operation to corresponding pixels in two images}
  * \endwiki
  */
-template< class TInputImage1, class TInputImage2,
-          class TOutputImage, class TFunction    >
-class ITK_EXPORT BinaryFunctorImageFilter:
+template< typename TInputImage1, typename TInputImage2,
+          typename TOutputImage, typename TFunction    >
+class BinaryFunctorImageFilter:
   public InPlaceImageFilter< TInputImage1, TOutputImage >
 {
 public:
@@ -158,14 +158,14 @@ public:
     OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck1,
                    ( Concept::SameDimension< itkGetStaticConstMacro(InputImage1Dimension),
                                              itkGetStaticConstMacro(InputImage2Dimension) > ) );
   itkConceptMacro( SameDimensionCheck2,
                    ( Concept::SameDimension< itkGetStaticConstMacro(InputImage1Dimension),
                                              itkGetStaticConstMacro(OutputImageDimension) > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

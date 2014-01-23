@@ -49,8 +49,8 @@ namespace itk
  * \wikiexample{Images/WrapPadImageFilter,Pad an image by wrapping}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT WrapPadImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class WrapPadImageFilter:
   public PadImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -91,10 +91,10 @@ public:
                       TInputImage::ImageDimension);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputImagePixelType, OutputImagePixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

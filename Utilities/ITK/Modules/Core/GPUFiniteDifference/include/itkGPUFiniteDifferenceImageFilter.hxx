@@ -25,7 +25,7 @@
 
 namespace itk
 {
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::GPUFiniteDifferenceImageFilter()
 {
@@ -40,13 +40,13 @@ GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
   this->InPlaceOff();
 }
 
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::~GPUFiniteDifferenceImageFilter()
 {
 }
 
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 void
 GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::GPUGenerateData()
@@ -127,7 +127,7 @@ GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 /**
  *
  */
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 void
 GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::GenerateInputRequestedRegion()
@@ -192,12 +192,12 @@ GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
     }
 }
 
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 typename GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >::TimeStepType
 GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::ResolveTimeStep(const std::vector< TimeStepType >& timeStepList, const std::vector< bool >& valid) const
 {
-  TimeStepType oMin = NumericTraits< TimeStepType >::Zero;;
+  TimeStepType oMin = NumericTraits< TimeStepType >::Zero;
   bool         flag = false;
 
   typename std::vector< TimeStepType >::const_iterator t_it = timeStepList.begin();
@@ -240,7 +240,7 @@ GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
   return oMin;
 }
 
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 bool
 GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::Halt()
@@ -269,7 +269,7 @@ GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
     }
 }
 
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 void
 GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::InitializeFunctionCoefficients()
@@ -303,7 +303,7 @@ GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
   m_DifferenceFunction->SetScaleCoefficients(coeffs);
 }
 
-template< class TInputImage, class TOutputImage, class TParentImageFilter >
+template< typename TInputImage, typename TOutputImage, typename TParentImageFilter >
 void
 GPUFiniteDifferenceImageFilter< TInputImage, TOutputImage, TParentImageFilter >
 ::PrintSelf(std::ostream & os, Indent indent) const

@@ -47,7 +47,7 @@ namespace itk
  * \wikiexample{SimpleOperations/DistanceBetweenIndices,Distance between two indices}
  * \endwiki
  */
-template< class TCoordRep, unsigned int NPointDimension = 3 >
+template< typename TCoordRep, unsigned int NPointDimension = 3 >
 class Point:public FixedArray< TCoordRep, NPointDimension >
 {
 public:
@@ -81,9 +81,13 @@ public:
   Point() {}
 
   /** Pass-through constructors for the Array base class. */
-  template< class TPointValueType >
+  template< typename TPointValueType >
   Point(const Point< TPointValueType, NPointDimension > & r):BaseArray(r) {}
+  template< typename TPointValueType >
+  Point(const TPointValueType r[NPointDimension]):BaseArray(r) {}
   Point(const ValueType r[NPointDimension]):BaseArray(r) {}
+  template< typename TPointValueType >
+  Point(const TPointValueType & v):BaseArray(v) {}
   Point(const ValueType & v):BaseArray(v) {}
 
   /** Pass-through assignment operator for the Array base class. */
@@ -260,12 +264,12 @@ public:
   }
 };
 
-template< class T, unsigned int NPointDimension >
-ITK_EXPORT std::ostream & operator<<(std::ostream & os,
+template< typename T, unsigned int NPointDimension >
+std::ostream & operator<<(std::ostream & os,
                                      const Point< T, NPointDimension > & v);
 
-template< class T, unsigned int NPointDimension >
-ITK_EXPORT std::istream & operator>>(std::istream & is,
+template< typename T, unsigned int NPointDimension >
+std::istream & operator>>(std::istream & is,
                                      Point< T, NPointDimension > & v);
 
 /** \class BarycentricCombination
@@ -293,8 +297,8 @@ ITK_EXPORT std::istream & operator>>(std::istream & is,
  * \ingroup Geometry
  * \ingroup ITKCommon
  */
-template< class TPointContainer, class TWeightContainer >
-ITK_EXPORT class BarycentricCombination
+template< typename TPointContainer, typename TWeightContainer >
+class BarycentricCombination
 {
 public:
   /** Convenient typedefs. */

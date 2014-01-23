@@ -24,7 +24,7 @@ namespace itk
 {
 namespace Functor
 {
-template< class TInput, class TOutput >
+template< typename TInput, typename TOutput >
 class VectorIndexSelectionCast
 {
 public:
@@ -81,8 +81,8 @@ private:
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT VectorIndexSelectionCastImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class VectorIndexSelectionCastImageFilter:
   public
   UnaryFunctorImageFilter< TInputImage, TOutputImage,
                            Functor::VectorIndexSelectionCast< typename TInputImage::PixelType,
@@ -122,10 +122,10 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< typename TInputImage::PixelType::ValueType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

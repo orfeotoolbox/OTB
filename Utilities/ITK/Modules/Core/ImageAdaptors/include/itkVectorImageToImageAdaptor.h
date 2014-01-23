@@ -43,8 +43,8 @@ namespace Accessor
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TType >
-class ITK_EXPORT VectorImageToImagePixelAccessor
+template< typename TType >
+class VectorImageToImagePixelAccessor
   : private DefaultVectorPixelAccessor< TType >
 {
 public:
@@ -123,8 +123,7 @@ private:
  * The class is expected to be templated over a pixel type and dimension. These
  * are the pixel types and dimension of the VectorImage.
  *
- * The component to extract is set with SetExtractComponentIdx() method
- * RGBPixel type.
+ * The component to extract is set with SetExtractComponentIdx() method.
  *
  * \note
  * This work is part of the National Alliance for Medical Image Computing
@@ -139,8 +138,8 @@ private:
  * \wikiexample{VectorImages/VectorImageToImageAdaptor,View a component of a vector image as if it were a scalar image}
  * \endwiki
  */
-template< class TPixelType, unsigned int Dimension >
-class ITK_EXPORT VectorImageToImageAdaptor:public
+template< typename TPixelType, unsigned int Dimension >
+class VectorImageToImageAdaptor:public
   ImageAdaptor< VectorImage< TPixelType, Dimension >,
                 Accessor::VectorImageToImagePixelAccessor< TPixelType > >
 {

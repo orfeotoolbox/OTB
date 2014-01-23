@@ -40,8 +40,8 @@ namespace Statistics
  * \ingroup ITKStatistics
  */
 
-template< class TSample >
-class ITK_EXPORT SampleClassifierFilter:
+template< typename TSample >
+class SampleClassifierFilter:
   public ProcessObject
 {
 public:

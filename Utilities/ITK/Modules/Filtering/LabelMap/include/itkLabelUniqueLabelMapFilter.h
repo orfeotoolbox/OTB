@@ -42,8 +42,8 @@ namespace itk {
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  * \ingroup ITKLabelMap
  */
-template<class TImage>
-class ITK_EXPORT LabelUniqueLabelMapFilter :
+template<typename TImage>
+class LabelUniqueLabelMapFilter :
     public AttributeUniqueLabelMapFilter<TImage, typename Functor::LabelLabelObjectAccessor< typename TImage::LabelObjectType > >
 {
 public:
@@ -76,14 +76,14 @@ public:
                AttributeUniqueLabelMapFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
 /*  itkConceptMacro(InputEqualityComparableCheck,
     (Concept::EqualityComparable<InputImagePixelType>));
   itkConceptMacro(IntConvertibleToInputCheck,
     (Concept::Convertible<int, InputImagePixelType>));
   itkConceptMacro(InputOStreamWritableCheck,
     (Concept::OStreamWritable<InputImagePixelType>));*/
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

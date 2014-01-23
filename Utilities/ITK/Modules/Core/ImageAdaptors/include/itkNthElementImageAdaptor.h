@@ -44,8 +44,8 @@ namespace itk
 // Create a helper class to help the SunPro CC compiler
 // parse the templates for the NthElementImageAdaptor.
 // This is used to define the Super class.  for NthElementImageAdaptor
-template< class TImage, class TOutputPixelType >
-class ITK_EXPORT NthElementImageAdaptorHelper
+template< typename TImage, typename TOutputPixelType >
+class NthElementImageAdaptorHelper
 {
 public:
   typedef  NthElementPixelAccessor<
@@ -55,8 +55,8 @@ public:
   typedef  ImageAdaptor< TImage, PixelAccessor > Super;
 };
 
-template< class TImage, class TOutputPixelType >
-class ITK_EXPORT NthElementImageAdaptor:
+template< typename TImage, typename TOutputPixelType >
+class NthElementImageAdaptor:
   public NthElementImageAdaptorHelper< TImage, TOutputPixelType >::Super
 {
 public:

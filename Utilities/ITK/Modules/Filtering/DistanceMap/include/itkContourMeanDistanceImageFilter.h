@@ -65,8 +65,8 @@ ected
  * \wikiexample{Curves/ContourMeanDistanceImageFilter,Compute the mean distance between all points of two curves}
  * \endwiki
  */
-template< class TInputImage1, class TInputImage2 >
-class ITK_EXPORT ContourMeanDistanceImageFilter:
+template< typename TInputImage1, typename TInputImage2 >
+class ContourMeanDistanceImageFilter:
   public ImageToImageFilter< TInputImage1, TInputImage1 >
 {
 public:
@@ -124,10 +124,10 @@ public:
   itkGetConstMacro( UseImageSpacing, bool );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputHasNumericTraitsCheck,
                    ( Concept::HasNumericTraits< InputImage1PixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

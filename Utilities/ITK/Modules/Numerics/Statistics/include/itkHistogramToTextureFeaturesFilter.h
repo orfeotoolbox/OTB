@@ -99,8 +99,8 @@ namespace Statistics
 * \ingroup ITKStatistics
 */
 
-template< class THistogram >
-class ITK_EXPORT HistogramToTextureFeaturesFilter:public ProcessObject
+template< typename THistogram >
+class HistogramToTextureFeaturesFilter:public ProcessObject
 {
 public:
   /** Standard typedefs */

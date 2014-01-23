@@ -48,8 +48,8 @@ namespace itk
  * \ingroup ITKMathematicalMorphology
  */
 
-template< class TInputImage, class TOutputImage, class TKernel >
-class ITK_EXPORT GrayscaleMorphologicalClosingImageFilter:
+template< typename TInputImage, typename TOutputImage, typename TKernel >
+class GrayscaleMorphologicalClosingImageFilter:
   public KernelImageFilter< TInputImage, TOutputImage, TKernel >
 {
 public:
@@ -69,6 +69,14 @@ public:
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension);
+
+  /** define values used to determine which algorithm to use */
+  enum AlgorithmType {
+    BASIC = 0,
+    HISTO = 1,
+    ANCHOR = 2,
+    VHGW = 3
+    };
 
   /** Image related typedefs. */
   typedef TInputImage                                InputImageType;
@@ -108,20 +116,11 @@ public:
 
   /** Set/Get the backend filter class. */
   void SetAlgorithm(int algo);
-
   itkGetConstMacro(Algorithm, int);
 
   /** GrayscaleMorphologicalClosingImageFilter need to set its internal filters
     as modified */
   virtual void Modified() const;
-
-  /** define values used to determine which algorithm to use */
-  enum {
-    BASIC = 0,
-    HISTO = 1,
-    ANCHOR = 2,
-    VHGW = 3
-    } AlgorithmChoice;
 
   /** A safe border is added to input image to avoid borders effects
    * and remove it once the closing is done */

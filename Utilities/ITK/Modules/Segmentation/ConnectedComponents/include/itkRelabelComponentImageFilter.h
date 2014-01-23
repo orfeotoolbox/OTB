@@ -67,7 +67,7 @@ namespace itk
  *
  * \sa ConnectedComponentImageFilter, BinaryThresholdImageFilter, ThresholdImageFilter
  *
- * \ingroup SingelThreaded
+ * \ingroup SingleThreaded
  * \ingroup ITKConnectedComponents
  *
  * \wiki
@@ -75,8 +75,8 @@ namespace itk
  * \endwiki
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT RelabelComponentImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class RelabelComponentImageFilter:
   public InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -224,7 +224,7 @@ public:
   }
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( InputEqualityComparableCheck,
                    ( Concept::EqualityComparable< InputPixelType > ) );
   itkConceptMacro( UnsignedLongConvertibleToInputCheck,
@@ -235,7 +235,7 @@ public:
                    ( Concept::Convertible< InputPixelType, OutputPixelType > ) );
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, ImageDimension > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

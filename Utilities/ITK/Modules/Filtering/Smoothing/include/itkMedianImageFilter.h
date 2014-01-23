@@ -48,8 +48,8 @@ namespace itk
  * \wikiexample{Smoothing/RGBMedianImageFilter,Median filter an RGB image}
  * \endwiki
  */
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT MedianImageFilter:
+template< typename TInputImage, typename TOutputImage >
+class MedianImageFilter:
   public BoxImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -85,14 +85,14 @@ public:
   typedef typename InputImageType::SizeType InputSizeType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( SameDimensionCheck,
                    ( Concept::SameDimension< InputImageDimension, OutputImageDimension > ) );
   itkConceptMacro( InputConvertibleToOutputCheck,
                    ( Concept::Convertible< InputPixelType, OutputPixelType > ) );
   itkConceptMacro( InputLessThanComparableCheck,
                    ( Concept::LessThanComparable< InputPixelType > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

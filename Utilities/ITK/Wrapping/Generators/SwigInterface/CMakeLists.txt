@@ -189,9 +189,10 @@ macro(itk_end_wrap_module_swig_interface)
 
   # Loop over the extra swig input files and copy them to the Typedefs directory
   foreach(source ${WRAPPER_LIBRARY_SWIG_INPUTS})
+    file(COPY "${source}"
+         DESTINATION "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}")
     get_filename_component(basename ${source} NAME)
     set(dest "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/${basename}")
-    exec_program(${CMAKE_COMMAND} ARGS -E copy_if_different "\"${source}\"" "\"${dest}\"")
     WRAP_ITK_INSTALL("/Configuration/Typedefs" "${dest}")
 #    set(SWIG_INTERFACE_MODULE_CONTENT "${SWIG_INTERFACE_MODULE_CONTENT}%import ${basename}\n")
   endforeach()
@@ -211,8 +212,9 @@ macro(itk_end_wrap_module_swig_interface)
   foreach(swig_lib ${WRAPPER_SWIG_LIBRARY_FILES})
     get_filename_component(basename ${swig_lib} NAME)
     set(swig_libs ${swig_libs} --swig-include ${basename})
+    file(COPY "${swig_lib}"
+      DESTINATION "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}")
     set(dest "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/${basename}")
-    exec_program(${CMAKE_COMMAND} ARGS -E copy_if_different "\"${swig_lib}\"" "\"${dest}\"")
     WRAP_ITK_INSTALL("/Configuration/Typedefs" "${dest}")
   endforeach()
 
@@ -290,7 +292,7 @@ macro(itk_end_wrap_module_swig_interface)
   set(mdx_file "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/${WRAPPER_LIBRARY_NAME}.mdx")
   set(CONFIG_INDEX_FILE_CONTENT "${SWIG_INTERFACE_MDX_CONTENT}")
   configure_file("${ITK_WRAP_SWIGINTERFACE_SOURCE_DIR}/Master.mdx.in" "${mdx_file}"
-     @ONLY IMMEDIATE )
+     @ONLY)
   WRAP_ITK_INSTALL("/Configuration/Typedefs" "${mdx_file}")
 
   set(module_interface_file "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/${WRAPPER_LIBRARY_NAME}.i")
@@ -305,12 +307,12 @@ macro(itk_end_wrap_module_swig_interface)
 #  set(SWIG_INTERFACE_INCLUDES "${deps_includes}#include \"${WRAPPER_LIBRARY_NAME}.includes\"")
   set(CONFIG_MODULE_INTERFACE_CONTENT ) #"${deps_imports}${SWIG_INTERFACE_MODULE_CONTENT}")
   configure_file("${ITK_WRAP_SWIGINTERFACE_SOURCE_DIR}/module.i.in" "${module_interface_file}"
-    @ONLY IMMEDIATE )
+    @ONLY)
   WRAP_ITK_INSTALL("/Configuration/Typedefs/" "${module_interface_file}")
 
 #  set(WRAP_ITK_FILE_CONTENT )
 #  configure_file("${WRAP_ITK_CONFIG_DIR}/empty.in" "${module_interface_ext_file}"
-#    @ONLY IMMEDIATE )
+#    @ONLY)
 #  install(FILES "${module_interface_ext_file}"
 #    DESTINATION "${WRAP_ITK_INSTALL_PREFIX}/Configuration/Typedefs/"
 #  )
@@ -372,7 +374,7 @@ macro(itk_end_wrap_submodule_swig_interface module)
   set(includes_file "${WRAPPER_LIBRARY_OUTPUT_DIR}/${module}SwigInterface.h.in")
   configure_file("${ITK_WRAP_SWIGINTERFACE_SOURCE_DIR}/module.includes.in"
      ${includes_file}
-     @ONLY IMMEDIATE )
+     @ONLY)
   WRAP_ITK_INSTALL("/Configuration/Typedefs/" "${includes_file}")
 
   # the master idx file
@@ -400,7 +402,7 @@ macro(itk_end_wrap_submodule_swig_interface module)
 #  set(interface_ext_file "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/${module}_ext.i")
 #  set(WRAP_ITK_FILE_CONTENT )
 #  configure_file("${WRAP_ITK_CONFIG_DIR}/empty.in" "${interface_ext_file}"
-#    @ONLY IMMEDIATE )
+#    @ONLY)
 #  install(FILES "${interface_ext_file}"
 #    DESTINATION "${WRAP_ITK_INSTALL_PREFIX}/Configuration/Typedefs/"
 #  )

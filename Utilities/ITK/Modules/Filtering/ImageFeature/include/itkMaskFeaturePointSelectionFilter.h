@@ -56,10 +56,10 @@ namespace itk
  */
 
 template<
-  class TImage,
-  class TMask = TImage,
-  class TFeatures = PointSet< Matrix< double, TImage::ImageDimension, TImage::ImageDimension>, TImage::ImageDimension > >
-class ITK_EXPORT MaskFeaturePointSelectionFilter: public ImageToMeshFilter< TImage, TFeatures >
+  typename TImage,
+  typename TMask = TImage,
+  typename TFeatures = PointSet< Matrix< SpacePrecisionType, TImage::ImageDimension, TImage::ImageDimension>, TImage::ImageDimension > >
+class MaskFeaturePointSelectionFilter: public ImageToMeshFilter< TImage, TFeatures >
 {
 public:
   /** Standard class typedefs. */
@@ -131,14 +131,14 @@ public:
   itkGetMacro(SelectFraction, double);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
+  // Begin concept checking
   itkConceptMacro( ImageDimensionShouldBe3,
                    ( Concept::SameDimension< TImage::ImageDimension, 3u > ) );
   itkConceptMacro( MaskDimensionShouldBe3,
                    ( Concept::SameDimension< TMask::ImageDimension, 3u > ) );
   itkConceptMacro( PointDimensionShouldBe3,
                    ( Concept::SameDimension< TFeatures::PointType::PointDimension, 3u > ) );
-  /** End concept checking */
+  // End concept checking
 #endif
 
 protected:

@@ -23,7 +23,7 @@
 
 namespace itk
 {
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 AntiAliasBinaryImageFilter< TInputImage, TOutputImage >
 ::PrintSelf(std::ostream & os, Indent indent) const
@@ -34,7 +34,7 @@ AntiAliasBinaryImageFilter< TInputImage, TOutputImage >
   os << indent << "m_InputImage = " << m_InputImage << std::endl;
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 typename AntiAliasBinaryImageFilter< TInputImage, TOutputImage >::ValueType
 AntiAliasBinaryImageFilter< TInputImage, TOutputImage >
 ::CalculateUpdateValue(const IndexType & idx,   const TimeStepType & dt,
@@ -55,7 +55,7 @@ AntiAliasBinaryImageFilter< TInputImage, TOutputImage >
     }
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 AntiAliasBinaryImageFilter< TInputImage, TOutputImage >
 ::AntiAliasBinaryImageFilter()
 {
@@ -83,9 +83,10 @@ AntiAliasBinaryImageFilter< TInputImage, TOutputImage >
   m_UpperBinaryValue = NumericTraits< BinaryValueType >::One;
   m_LowerBinaryValue = -NumericTraits< BinaryValueType >::One;
   this->SetNumberOfIterations(1000);
+  this->SetUseImageSpacing(false);
 }
 
-template< class TInputImage, class TOutputImage >
+template< typename TInputImage, typename TOutputImage >
 void
 AntiAliasBinaryImageFilter< TInputImage, TOutputImage >
 ::GenerateData()

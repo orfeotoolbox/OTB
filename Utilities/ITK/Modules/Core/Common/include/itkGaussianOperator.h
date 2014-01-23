@@ -62,9 +62,9 @@ namespace itk
  * \wikiexample{Operators/GaussianOperator,Create a Gaussian kernel}
  * \endwiki
  */
-template< class TPixel, unsigned int VDimension = 2,
-          class TAllocator = NeighborhoodAllocator< TPixel > >
-class ITK_EXPORT GaussianOperator:
+template< typename TPixel, unsigned int VDimension = 2,
+          typename TAllocator = NeighborhoodAllocator< TPixel > >
+class GaussianOperator:
   public NeighborhoodOperator< TPixel, VDimension, TAllocator >
 {
 public:

@@ -133,7 +133,7 @@ void ImageIOBase::SetSpacing(unsigned int i, double spacing)
   m_Spacing[i] = spacing;
 }
 
-void ImageIOBase::SetDirection(unsigned int i, std::vector< double > & direction)
+void ImageIOBase::SetDirection(unsigned int i, const std::vector< double > & direction)
 {
   if ( i >= m_Direction.size() )
     {
@@ -148,7 +148,7 @@ void ImageIOBase::SetDirection(unsigned int i, std::vector< double > & direction
   m_Direction[i] = direction;
 }
 
-void ImageIOBase::SetDirection(unsigned int i, vnl_vector< double > & direction)
+void ImageIOBase::SetDirection(unsigned int i, const vnl_vector< double > & direction)
 {
   if ( i >= m_Direction.size() )
     {
@@ -558,7 +558,7 @@ ImageIOBase::IOPixelType ImageIOBase::GetPixelTypeFromString(const std::string &
 
 namespace
 {
-template< class TComponent >
+template< typename TComponent >
 void WriteBuffer(std::ostream & os, const TComponent *buffer, ImageIOBase::SizeType num)
 {
   const TComponent *ptr = buffer;
@@ -664,7 +664,9 @@ void ImageIOBase::WriteBufferAsASCII(std::ostream & os, const void *buffer,
     }
 }
 
-template< class TComponent >
+namespace
+{
+template< typename TComponent >
 void ReadBuffer(std::istream & is, TComponent *buffer, ImageIOBase::SizeType num)
 {
   typedef typename itk::NumericTraits< TComponent >::PrintType PrintType;
@@ -676,7 +678,7 @@ void ReadBuffer(std::istream & is, TComponent *buffer, ImageIOBase::SizeType num
     *ptr = static_cast< TComponent >( temp );
     }
 }
-
+}
 void ImageIOBase::ReadBufferAsASCII(std::istream & is, void *buffer,
                                     IOComponentType ctype,
                                     ImageIOBase::SizeType numComp)

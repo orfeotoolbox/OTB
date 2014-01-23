@@ -43,8 +43,8 @@ namespace itk
  * \ingroup ITKGPUSmoothing
  */
 
-template< class TInputImage, class TOutputImage >
-class ITK_EXPORT GPUDiscreteGaussianImageFilter :
+template< typename TInputImage, typename TOutputImage >
+class GPUDiscreteGaussianImageFilter :
   public GPUImageToImageFilter< TInputImage, TOutputImage, DiscreteGaussianImageFilter< TInputImage, TOutputImage > >
 {
 public:
@@ -114,10 +114,10 @@ private:
   void operator=(const Self &);                 //purposely not implemented
 
   /** Intermediate 1D Gaussian filters */
-  typename FirstFilterType::Pointer m_FirstFilter;
-  typename LastFilterType::Pointer m_LastFilter;
+  typename FirstFilterType::Pointer                       m_FirstFilter;
+  typename LastFilterType::Pointer                        m_LastFilter;
   std::vector< typename IntermediateFilterType::Pointer > m_IntermediateFilters;
-  typename SingleFilterType::Pointer m_SingleFilter;
+  typename SingleFilterType::Pointer                      m_SingleFilter;
 };
 } // end namespace itk
 

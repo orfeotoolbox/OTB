@@ -37,8 +37,8 @@ namespace Accessor
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TInternalType, class TExternalType >
-class ITK_EXPORT RGBToLuminancePixelAccessor
+template< typename TInternalType, typename TExternalType >
+class RGBToLuminancePixelAccessor
 {
 public:
   /** External typedef. It defines the external aspect
@@ -67,8 +67,8 @@ public:
  * \ingroup ImageAdaptors
  * \ingroup ITKImageAdaptors
  */
-template< class TImage, class TOutputPixelType >
-class ITK_EXPORT RGBToLuminanceImageAdaptor:public
+template< typename TImage, typename TOutputPixelType >
+class RGBToLuminanceImageAdaptor:public
   ImageAdaptor< TImage,
                 Accessor::RGBToLuminancePixelAccessor<
                   typename TImage::PixelType,

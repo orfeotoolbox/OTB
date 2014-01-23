@@ -49,8 +49,8 @@ namespace itk
  * \ingroup FiniteDifferenceFunctions
  * \ingroup ITKRegistrationCommon
  */
-template< class TFixedImage, class TMovingImage, class TDisplacementField >
-class ITK_EXPORT MeanSquareRegistrationFunction:
+template< typename TFixedImage, typename TMovingImage, typename TDisplacementField >
+class MeanSquareRegistrationFunction:
   public PDEDeformableRegistrationFunction< TFixedImage,
                                             TMovingImage, TDisplacementField >
 {

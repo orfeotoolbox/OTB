@@ -86,7 +86,7 @@ public:
 
   RandomPermutation &operator=(const RandomPermutation &it)
     {
-      delete [] m_Permutation;
+      delete[] m_Permutation;
       m_Size = it.m_Size;
       m_Permutation = new NodeOfPermutation[m_Size];
       m_Generator = it.m_Generator;
@@ -220,7 +220,7 @@ public:
  * \endwiki
  */
 template< typename TImage >
-class ITK_EXPORT ImageRandomNonRepeatingConstIteratorWithIndex:public ImageConstIteratorWithIndex< TImage >
+class ImageRandomNonRepeatingConstIteratorWithIndex:public ImageConstIteratorWithIndex< TImage >
 {
 public:
   /** Standard class typedefs. */
@@ -246,10 +246,7 @@ public:
   ImageRandomNonRepeatingConstIteratorWithIndex();
   ~ImageRandomNonRepeatingConstIteratorWithIndex()
   {
-    if ( m_Permutation )
-      {
-      delete m_Permutation;
-      }
+    delete m_Permutation;
   }
 
   /** Constructor establishes an iterator to walk a particular image and a

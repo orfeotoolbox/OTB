@@ -24,25 +24,24 @@
 namespace itk
 {
 // ----------------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 LevelSetDenseImage< TImage >
 ::LevelSetDenseImage()
 {}
 
 // ----------------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 LevelSetDenseImage< TImage >
 ::~LevelSetDenseImage()
-{
-}
+{}
 
 // ----------------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 void
 LevelSetDenseImage< TImage >
-::SetImage( ImageType* iImage )
+::SetImage( ImageType* inputImage )
 {
-  this->m_Image = iImage;
+  this->m_Image = inputImage;
   typename ImageType::SpacingType spacing = m_Image->GetSpacing();
 
   for( unsigned int dim = 0; dim < Dimension; dim++ )
@@ -54,23 +53,24 @@ LevelSetDenseImage< TImage >
 }
 
 // ----------------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 typename LevelSetDenseImage< TImage >::OutputType
-LevelSetDenseImage< TImage >::Evaluate( const InputType& iP ) const
+LevelSetDenseImage< TImage >::Evaluate( const InputType& inputIndex ) const
 {
-  return this->m_Image->GetPixel( iP );
+  InputType mapIndex = inputIndex - this->m_DomainOffset;
+  return this->m_Image->GetPixel( mapIndex );
 }
 
 // ----------------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 void
-LevelSetDenseImage< TImage >::Evaluate( const InputType& iP, LevelSetDataType& ioData ) const
+LevelSetDenseImage< TImage >::Evaluate( const InputType& inputIndex, LevelSetDataType& data ) const
 {
-  Superclass::Evaluate( iP, ioData );
+  Superclass::Evaluate( inputIndex, data );
 }
 
 // ----------------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 void
 LevelSetDenseImage< TImage >
 ::Initialize()
@@ -81,7 +81,7 @@ LevelSetDenseImage< TImage >
 }
 
 // ----------------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 void
 LevelSetDenseImage< TImage >
 ::CopyInformation(const DataObject *data)
@@ -112,7 +112,7 @@ LevelSetDenseImage< TImage >
 }
 
 // ----------------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 void
 LevelSetDenseImage< TImage >
 ::Graft( const DataObject* data )
@@ -145,14 +145,14 @@ LevelSetDenseImage< TImage >
 }
 
 // ----------------------------------------------------------------------------
-template< class TImage >
+template< typename TImage >
 bool
 LevelSetDenseImage< TImage >
-::IsInsideDomain(const InputType &iP) const
+::IsInsideDomain(const InputType &inputIndex) const
 {
   const RegionType largestRegion = this->m_Image->GetLargestPossibleRegion();
-
-  return largestRegion.IsInside( iP );
+  InputType mapIndex = inputIndex - this->m_DomainOffset;
+  return largestRegion.IsInside( mapIndex );
 }
 
 }
