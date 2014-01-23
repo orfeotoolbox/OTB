@@ -84,6 +84,7 @@ private:
     AddParameter(ParameterType_Int, "level", "Number Of Levels");
     SetDefaultParameterInt("level", 1);
     SetParameterDescription( "level", "Number of levels in the pyramid (default is 1).");
+    SetMinimumParameterIntValue("level", 1);
 
     AddParameter(ParameterType_Int, "sfactor", "Subsampling factor");
     SetDefaultParameterInt("sfactor", 2);
