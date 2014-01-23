@@ -703,6 +703,8 @@ void
 MainWindow
 ::OnModelChanged( AbstractModel* model )
 {
+  qDebug() << this << "OnModelChanged(" << model << ")";
+
   if( model==NULL )
     return;
 
@@ -720,10 +722,11 @@ MainWindow
 
   //
   // Title  -----------------------------------------------------------------
-  QThread* thread = new QThread;
+  QThread* thread = new QThread();
+
   m_TitleLoader = new MainWindowTitleLoader(vectorImageModel);
   m_TitleLoader->moveToThread(thread);
-  
+ 
   // At thread startup, trigger the processing function
   QObject::connect(thread, SIGNAL(started()), m_TitleLoader, SLOT(LoadTitle()));
 
