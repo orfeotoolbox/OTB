@@ -69,20 +69,33 @@ if(OTB_USE_MAPNIK)
         STRING(REGEX REPLACE ".*#define MAPNIK_MAJOR_VERSION ([0-9]+).*" "\\1" MAPNIK_MAJOR_VERSION  ${_mapnik_version_hpp_CONTENTS})
         STRING(REGEX REPLACE ".*#define MAPNIK_MINOR_VERSION ([0-9]+).*" "\\1" MAPNIK_MINOR_VERSION  ${_mapnik_version_hpp_CONTENTS})
         STRING(REGEX REPLACE ".*#define MAPNIK_PATCH_VERSION ([0-9]+).*" "\\1" MAPNIK_PATCH_VERSION  ${_mapnik_version_hpp_CONTENTS})
-        SET(MAPNIK_VERSION ${MAPNIK_MAJOR_VERSION}.${MAPNIK_MINOR_VERSION}.${MAPNIK_PATCH_VERSION})
-        if(${MAPNIK_MAJOR_VERSION} LESS "2")
+        #make version number as in version.hpp of mapnik
+        #//#define MAPNIK_VERSION (MAPNIK_MAJOR_VERSION*100000) + (MAPNIK_MINOR_VERSION*100) + (MAPNIK_PATCH_VERSION)
+        #if no MAPNIK_MAJOR_VERSION macro is defined then
+        #we read only MAPNIK_VERSION macro which contains the version number. This is for version less than 2.1
+        #as major, minor, patch are introduced in version 2.1
+        #See mapnik commit - https://github.com/mapnik/mapnik/commit/2abe02bd96104988ea76869d1203aa270cf9a68c
+        if(MAPNIK_MAJOR_VERSION)
+          MATH(EXPR OTB_MAPNIK_VERSION "(${MAPNIK_MAJOR_VERSION}*100000) + (${MAPNIK_MINOR_VERSION}*100) + (${MAPNIK_PATCH_VERSION})" )
+          #make MAPNIK_VERSION to have a standard version style eg: 2.2.0 instead of 020020
+          SET(MAPNIK_VERSION ${MAPNIK_MAJOR_VERSION}.${MAPNIK_MINOR_VERSION}.${MAPNIK_PATCH_VERSION})
+       else()
+         STRING(REGEX REPLACE ".*#define MAPNIK_VERSION ([0-9]+).*" "\\1" MAPNIK_VERSION  ${_mapnik_version_hpp_CONTENTS})
+       endif()
+        #should we check for 2.0 here instead of 2.2 to include agg2
+        if(${OTB_MAPNIK_VERSION} LESS "200200")
           message(STATUS "Does not support mapnik2 interface:  ${MAPNIK_VERSION}")
           add_definitions(-DOTB_MAPNIK_COMPATIBILITY_API07)
           # This should be dropped when we don't want to support this any more
           # Estimated date: 02/2013.
         else()
-          find_path(AGG2_INCLUDE_DIR agg_pixfmt_rgba.h PATHS /usr/include/)
-          mark_as_advanced(AGG2_INCLUDE_DIR)
-          if(NOT AGG2_INCLUDE_DIR)
+          find_path(AGG_INCLUDE_DIR agg_pixfmt_rgba.h PATHS /usr/include /usr/include/agg2)
+          mark_as_advanced(AGG_INCLUDE_DIR)
+          if(NOT AGG_INCLUDE_DIR)
             message(FATAL_ERROR
-              "Cannot find AGG2 library, needed by MAPNIK. Please set AGG2_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
+              "Cannot find AGG headers, needed by MAPNIK. Please set AGG_INCLUDE_DIR or set OTB_USE_MAPNIK OFF.")
           endif()
-          include_directories(${AGG2_INCLUDE_DIR})
+          include_directories(${AGG_INCLUDE_DIR})
           SET(OTB_MAPNIK_SUPPORTS_API20 TRUE)
         endif()
 
