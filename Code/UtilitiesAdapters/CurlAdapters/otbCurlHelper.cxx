@@ -353,7 +353,8 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
                                   int maxConnect) const
 {
 #ifdef OTB_USE_CURL
-#ifdef OTB_CURL_MULTI_AVAILABLE
+#if 0
+//#ifdef OTB_CURL_MULTI_AVAILABLE
   otbMsgDevMacro(<< "Using curl multi");
 
   // Initialize curl handle resource
