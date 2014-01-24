@@ -6,6 +6,7 @@ set( Common_Gui_SOURCES
   mvdAboutDialog.cxx
   mvdAbstractDragAndDropEventFilter.cxx
   mvdAbstractModelController.cxx
+  mvdAbstractModelRenderer.cxx
   #mvdAbstractModelRenderer.cxx
   mvdAbstractViewManipulator.cxx
   mvdApplicationsToolBox.cxx

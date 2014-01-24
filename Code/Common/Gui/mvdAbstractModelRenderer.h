@@ -25,6 +25,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -43,6 +47,10 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdTypes.h"
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -51,17 +59,29 @@ namespace
 
 namespace mvd
 {
+
 //
 // Internal classes pre-declaration.
 class Monteverdi2_EXPORT AbstractImageModel;
 
-/** \class AbstractModelRenderer
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
+/**
+ * \class AbstractModelRenderer
  *
+ * \brief TODO.
  */
 class AbstractModelRenderer :
     public QObject
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public types.
@@ -73,58 +93,71 @@ public:
      inline
      RenderingContext( const AbstractImageModel* model =NULL,
                        const ImageRegionType& region =ImageRegionType(),
-                       double zoom = 1.,
-                       unsigned int width = 0,
-                       unsigned int height = 0,
-                       int dx = 0,
-                       int dy = 0,
-                       bool refresh = true) :
+                       double zoom =1.0,
+                       unsigned int width =0,
+                       unsigned int height =0,
+                       int dx =0,
+                       int dy =0,
+                       bool refresh =true ) :
        m_ImageModel( model ),
        m_ImageRegion( region ),
        m_IsotropicZoom( zoom ),
-       m_WidgetWidth(width),
-       m_WidgetHeight(height),
-       m_ForceRefresh(refresh)
+       m_WidgetWidth( width ),
+       m_WidgetHeight( height ),
+       m_ForceRefresh( refresh )
     {
     }
 
     const AbstractImageModel* m_ImageModel;
+
     ImageRegionType m_ImageRegion;
+
     double m_IsotropicZoom;
+
     // TODO: remove unsigned before int (because Qt uses signed int).
     unsigned int m_WidgetWidth;
+
     // TODO: remove unsigned before int (becayse Qt uses signed int).
     unsigned int m_WidgetHeight;
+
     bool m_ForceRefresh;
   };
 
 //
 // Public methods.
 public:
-  /** Constructor */
-  AbstractModelRenderer( QObject* parent = NULL ): QObject(parent)
-  {}
-
   /** Destructor */
-  virtual ~AbstractModelRenderer(){}
+  virtual ~AbstractModelRenderer();
 
   /** */
-  virtual void paintGL( const RenderingContext& context ) = 0;
+  virtual void paintGL( const RenderingContext& context ) =0;
+
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
 public slots:
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // SIGNALS.
 signals:
 
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
+
 //
 // Protected methods.
 protected:
 
+  /** Constructor */
+  AbstractModelRenderer( QObject* parent = NULL );
+
+
 //
 // Protected attributes.
 protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private methods.
@@ -133,6 +166,8 @@ private:
 //
 // Private attributes.
 private:
+
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // SLOTS.

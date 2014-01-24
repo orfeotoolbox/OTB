@@ -136,7 +136,7 @@ void
 GLImageWidget
 ::Initialize( AbstractViewManipulator* manipulator,
 	      AbstractModelRenderer* renderer )
-{   
+{
   assert( manipulator!=NULL );
   assert( renderer!=NULL );
 
