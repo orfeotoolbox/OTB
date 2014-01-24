@@ -19,6 +19,7 @@
 #define __otbHaralickTexturesImageFunction_txx
 
 #include "otbHaralickTexturesImageFunction.h"
+#include "itkImageRegionIteratorWithIndex.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
@@ -76,29 +77,72 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
     return textures;
     }
 
-  // Build the co-occurence matrix generator
-  CoocurrenceMatrixGeneratorPointerType coOccurenceMatrixGenerator = CoocurrenceMatrixGeneratorType::New();
-  coOccurenceMatrixGenerator->SetInput(this->GetInputImage());
-  coOccurenceMatrixGenerator->SetOffset(m_Offset);
-  coOccurenceMatrixGenerator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
-  coOccurenceMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
+
+  // Retrieve the input pointer
+  InputImagePointerType inputPtr = const_cast<InputImageType *> (this->GetInputImage());
 
   // Compute the region on which co-occurence will be estimated
-  typename InputRegionType::IndexType inputIndex = index;
+  typename InputRegionType::IndexType inputIndex, inputIndexWithTwiceOffset;
+  typename InputRegionType::SizeType inputSize, inputSizeWithTwiceOffset;
+
   for(unsigned int dim = 0; dim<InputImageType::ImageDimension; ++dim)
     {
-    inputIndex[dim]-= m_NeighborhoodRadius;
+    inputIndex[dim] = std::min(
+                               (index[dim] - m_NeighborhoodRadius),
+                               (index[dim] - m_NeighborhoodRadius + m_Offset[dim])
+                              );
+    inputSize[dim] = 2 * m_NeighborhoodRadius + 1 + std::abs(m_Offset[dim]);
+
+    inputIndexWithTwiceOffset[dim] = index[dim] - m_NeighborhoodRadius - std::abs(m_Offset[dim]);
+    inputSizeWithTwiceOffset[dim] = inputSize[dim] + std::abs(m_Offset[dim]);
     }
-  typename InputRegionType::SizeType  inputSize;
-  inputSize.Fill(2*m_NeighborhoodRadius+1);
 
   // Build the input  region
   InputRegionType inputRegion;
   inputRegion.SetIndex(inputIndex);
   inputRegion.SetSize(inputSize);
+  inputRegion.Crop(inputPtr->GetRequestedRegion());
 
-  // Compute the co-occurence matrix
-  coOccurenceMatrixGenerator->SetRegion(inputRegion);
+  InputRegionType inputRegionWithTwiceOffset;
+  inputRegionWithTwiceOffset.SetIndex(inputIndexWithTwiceOffset);
+  inputRegionWithTwiceOffset.SetSize(inputSizeWithTwiceOffset);
+  inputRegionWithTwiceOffset.Crop(inputPtr->GetRequestedRegion());
+
+
+  /*********************************************************************************/
+  //Local copy of the input image around the processed pixel index
+  InputImagePointerType localInputImage = InputImageType::New();
+  localInputImage->SetRegions(inputRegionWithTwiceOffset);
+  localInputImage->Allocate();
+  typedef itk::ImageRegionIteratorWithIndex<InputImageType> ImageRegionIteratorType;
+  ImageRegionIteratorType itInputPtr(inputPtr, inputRegionWithTwiceOffset);
+  ImageRegionIteratorType itLocalInputImage(localInputImage, inputRegionWithTwiceOffset);
+  for (itInputPtr.GoToBegin(), itLocalInputImage.GoToBegin(); !itInputPtr.IsAtEnd(); ++itInputPtr, ++itLocalInputImage)
+    {
+    itLocalInputImage.Set(itInputPtr.Get());
+    }
+  /*********************************************************************************/
+
+  // Build the maskImage corresponding to inputRegion included in inputRegionWithTwiceOffset
+  InputImagePointerType maskImage = InputImageType::New();
+  maskImage->SetRegions(inputRegionWithTwiceOffset);
+  maskImage->Allocate();
+  maskImage->FillBuffer(0);
+
+  ImageRegionIteratorType itMask(maskImage, inputRegion);
+  for (itMask.GoToBegin(); !itMask.IsAtEnd(); ++itMask)
+    {
+    itMask.Set(1);
+    }
+
+  // Build the co-occurence matrix generator
+  CoocurrenceMatrixGeneratorPointerType coOccurenceMatrixGenerator = CoocurrenceMatrixGeneratorType::New();
+  coOccurenceMatrixGenerator->SetInput(localInputImage);
+  coOccurenceMatrixGenerator->SetOffset(m_Offset);
+  coOccurenceMatrixGenerator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
+  coOccurenceMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
+  coOccurenceMatrixGenerator->SetMaskImage(maskImage);
+  coOccurenceMatrixGenerator->SetInsidePixelValue(1);
   coOccurenceMatrixGenerator->Update();
 
   // Build the texture calculator

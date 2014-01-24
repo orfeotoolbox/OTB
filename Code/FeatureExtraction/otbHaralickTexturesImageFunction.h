@@ -20,7 +20,7 @@
 
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"
-#include "otbMaskedScalarImageToGreyLevelCoocurenceMatrixGenerator.h"
+#include "itkScalarImageToCooccurrenceMatrixFilter.h"
 #include "itkHistogramToTextureFeaturesFilter.h"
 
 namespace otb
@@ -103,7 +103,7 @@ public:
 
   // Textures tools
   /** Co-occurence matrix and textures calculator */
-    typedef otb::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
+    typedef itk::Statistics::ScalarImageToCooccurrenceMatrixFilter
     <InputImageType>                               CoocurrenceMatrixGeneratorType;
     typedef typename CoocurrenceMatrixGeneratorType
         ::Pointer                                  CoocurrenceMatrixGeneratorPointerType;
