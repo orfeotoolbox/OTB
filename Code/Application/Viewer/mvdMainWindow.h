@@ -64,9 +64,9 @@ namespace mvd
 // Internal class pre-declaration.
 class AbstractModel;
 class AbstractModelController;
-class ImageViewManipulator;
-class QuicklookViewManipulator;
-class ImageModelRenderer;
+class ImageViewManipulator1;
+class QuicklookViewManipulator1;
+class ImageModelRenderer1;
 class StatusBarWidget;
 class MainWindowTitleLoader;
 
@@ -212,22 +212,22 @@ private:
   /**
    * \brief centralView manipulator.
    */
-  ImageViewManipulator*   m_ImageViewManipulator;
+  ImageViewManipulator1*   m_ImageViewManipulator1;
   
   /**
    * \brief centralView manipulator.
    */
-  ImageModelRenderer*     m_ImageModelRenderer;
+  ImageModelRenderer1*     m_ImageModelRenderer1;
 
   /**
    * \brief ql manipulator.
    */
-  QuicklookViewManipulator* m_QLViewManipulator;
+  QuicklookViewManipulator1* m_QLViewManipulator1;
   
   /**
    * \brief ql manipulator.
    */
-  ImageModelRenderer*       m_QLModelRenderer;
+  ImageModelRenderer1*       m_QLModelRenderer1;
 
   StatusBarWidget*          m_StatusBarWidget;
   

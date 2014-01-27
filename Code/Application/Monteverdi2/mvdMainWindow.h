@@ -67,7 +67,7 @@ namespace mvd
 class DatasetModel;
 // Gui
 class FilenameDragAndDropEventFilter;
-class GLImageWidget;
+class GLImageWidget1;
 class StatusBarWidget;
 
 namespace Ui
@@ -199,11 +199,11 @@ private:
 
   /**
    */
-  GLImageWidget* CreateImageWidget( QGLWidget* sharedGlWidget =NULL );
+  GLImageWidget1* CreateImageWidget1( QGLWidget* sharedGlWidget =NULL );
 
   /**
    */
-  GLImageWidget* CreateQuicklookWidget( QGLWidget* sharedGlWidget =NULL );
+  GLImageWidget1* CreateQuicklookWidget1( QGLWidget* sharedGlWidget =NULL );
 
   /**
    */
@@ -220,12 +220,12 @@ private:
   /**
    */
   inline
-    const GLImageWidget* GetQuicklookView() const;
+    const GLImageWidget1* GetQuicklookView1() const;
 
   /**
    */
   inline
-    GLImageWidget* GetQuicklookView();
+    GLImageWidget1* GetQuicklookView1();
 
   /**
    */
@@ -301,7 +301,7 @@ private:
   /**
    * \brief Image-view dock-widget.
    */
-  GLImageWidget* m_ImageView;
+  GLImageWidget1* m_ImageView1;
 
   /**
    * \brief Quicklook-view dock-widget.
@@ -388,7 +388,7 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdGLImageWidget.h"
+#include "Gui/mvdGLImageWidget1.h"
 
 //
 // Some constants.
@@ -398,20 +398,20 @@ namespace mvd
 
 /*****************************************************************************/
 inline
-const GLImageWidget*
+const GLImageWidget1*
 MainWindow
-::GetQuicklookView() const
+::GetQuicklookView1() const
 {
-  return qobject_cast< const GLImageWidget* >( m_QuicklookViewDock->widget() );
+  return qobject_cast< const GLImageWidget1* >( m_QuicklookViewDock->widget() );
 }
 
 /*****************************************************************************/
 inline
-GLImageWidget*
+GLImageWidget1*
 MainWindow
-::GetQuicklookView()
+::GetQuicklookView1()
 {
-  return qobject_cast< GLImageWidget* >( m_QuicklookViewDock->widget() );
+  return qobject_cast< GLImageWidget1* >( m_QuicklookViewDock->widget() );
 }
 
 } // end namespace 'mvd'

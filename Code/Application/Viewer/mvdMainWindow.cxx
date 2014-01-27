@@ -49,11 +49,11 @@
 #include "Gui/mvdColorDynamicsController.h"
 #include "Gui/mvdColorDynamicsWidget.h"
 #include "Gui/mvdColorSetupController.h"
-#include "Gui/mvdGLImageWidget.h"
-#include "Gui/mvdImageModelRenderer.h"
-#include "Gui/mvdImageViewManipulator.h"
+#include "Gui/mvdGLImageWidget1.h"
+#include "Gui/mvdImageModelRenderer1.h"
+#include "Gui/mvdImageViewManipulator1.h"
 #include "Gui/mvdMainWindowTitleLoader.h"
-#include "Gui/mvdQuicklookViewManipulator.h"
+#include "Gui/mvdQuicklookViewManipulator1.h"
 #include "Gui/mvdStatusBarWidget.h"
 
 namespace mvd
@@ -164,38 +164,38 @@ MainWindow
   setWindowTitle( PROJECT_NAME );
 
   // instanciate the manipulator and the renderer relative to this widget
-  m_ImageViewManipulator = new ImageViewManipulator();
-  m_ImageModelRenderer   = new ImageModelRenderer();
+  m_ImageViewManipulator1 = new ImageViewManipulator1();
+  m_ImageModelRenderer1 = new ImageModelRenderer1();
 
   // set the GLImageWidget as the centralWidget in MainWindow.
   setCentralWidget(
-    new GLImageWidget(
-      m_ImageViewManipulator,
-      m_ImageModelRenderer,
+    new GLImageWidget1(
+      m_ImageViewManipulator1,
+      m_ImageModelRenderer1,
       this
     )
   );
   
   // Instanciate the Ql manipulator/renderer.
-  m_QLModelRenderer   = new ImageModelRenderer();
-  m_QLViewManipulator = new QuicklookViewManipulator();
+  m_QLModelRenderer1 = new ImageModelRenderer1();
+  m_QLViewManipulator1 = new QuicklookViewManipulator1();
 
   // Connect centralWidget manipulator to Ql renderer when
   // viewportRegionChanged.
   QObject::connect(
-    m_ImageViewManipulator,
+    m_ImageViewManipulator1,
     SIGNAL( ViewportRegionRepresentationChanged( const PointType&,
 						 const PointType& ) ),
     // to:
-    m_QLModelRenderer,
+    m_QLModelRenderer1,
     SLOT( OnViewportRegionRepresentationChanged( const PointType&,
 						 const PointType& ) )
     );
 
   // Connect ql mousePressEventpressed to centralWidget manipulator.
   QObject::connect(
-    m_QLViewManipulator, SIGNAL( ViewportRegionChanged( double, double ) ), 
-    m_ImageViewManipulator, SLOT( OnViewportRegionChanged( double, double ) )
+    m_QLViewManipulator1, SIGNAL( ViewportRegionChanged( double, double ) ), 
+    m_ImageViewManipulator1, SLOT( OnViewportRegionChanged( double, double ) )
   );
 
   // Add the needed docks.
@@ -257,13 +257,13 @@ MainWindow
 {
   //
   // EXPERIMENTAL QUICKLOOK Widget.
-  assert( qobject_cast< GLImageWidget* >( centralWidget() )!=NULL );
+  assert( qobject_cast< GLImageWidget1* >( centralWidget() )!=NULL );
 
-  GLImageWidget* qlWidget = new GLImageWidget(
-    m_QLViewManipulator,
-    m_QLModelRenderer,
+  GLImageWidget1* qlWidget = new GLImageWidget1(
+    m_QLViewManipulator1,
+    m_QLModelRenderer1,
     this,
-    qobject_cast< GLImageWidget* >( centralWidget() )
+    qobject_cast< GLImageWidget1* >( centralWidget() )
   );
   // TODO: Set better minimum size for quicklook GL widget.
   qlWidget->setMinimumSize(100,100);
@@ -560,10 +560,9 @@ MainWindow
   SetControllerModel( GetColorDynamicsDock(), NULL );
 
   // De-assign models to view after controllers (LIFO disconnect).
-  qobject_cast< GLImageWidget *>( centralWidget() )->SetImageModel( NULL );
-  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
-    NULL
-  );
+  qobject_cast< GLImageWidget1 *>( centralWidget() )->SetImageModel( NULL );
+  qobject_cast< GLImageWidget1 * >( GetQuicklookDock()->widget() )
+    ->SetImageModel( NULL );
 
   //
   //
@@ -635,12 +634,12 @@ MainWindow
   // send the physical point of the clicked point in screen 
   // vectorImageModel is in charge of pixel information computation
     QObject::disconnect(
-    m_QLViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    m_QLViewManipulator1, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
     vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
     );
   
   QObject::disconnect(
-    m_ImageViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    m_ImageViewManipulator1, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
     vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
     );
   //
@@ -662,7 +661,7 @@ MainWindow
   );
 
   QObject::disconnect(
-    m_ImageViewManipulator, 
+    m_ImageViewManipulator1, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
@@ -683,7 +682,7 @@ MainWindow
 
   QObject::disconnect(vectorImageModel,
                    SIGNAL( ViewportRegionChanged(double, double) ),
-                   m_ImageViewManipulator,
+                   m_ImageViewManipulator1,
                    SLOT( OnViewportRegionChanged(double, double) )
     );
 
@@ -805,15 +804,15 @@ MainWindow
   // 
   // send the physical point of the clicked point in screen 
   // vectorImageModel is in charge of pixel information computation
-    QObject::connect(
-    m_QLViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+  QObject::connect(
+    m_QLViewManipulator1, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
     vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
-    );
+  );
   
   QObject::connect(
-    m_ImageViewManipulator, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
+    m_ImageViewManipulator1, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
     vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
-    );
+  );
 
   //
   // connect the statusBar widget to the vectorImage corresponding
@@ -833,7 +832,7 @@ MainWindow
   );
 
   QObject::connect(
-    m_ImageViewManipulator, 
+    m_ImageViewManipulator1, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
@@ -854,7 +853,7 @@ MainWindow
 
   QObject::connect(vectorImageModel,
                    SIGNAL( ViewportRegionChanged(double, double) ),
-                   m_ImageViewManipulator,
+                   m_ImageViewManipulator1,
                    SLOT( OnViewportRegionChanged(double, double) )
     );
 
@@ -867,7 +866,7 @@ MainWindow
   
   QObject::connect(this,
                    SIGNAL( UserScaleEditingFinished(const QString&) ),
-                   m_ImageViewManipulator,
+                   m_ImageViewManipulator1,
                    SLOT( OnUserScaleEditingFinished(const QString&) )
     );
 
@@ -875,7 +874,7 @@ MainWindow
   // MAIN VIEW.
 
   // Assign newly selected model to view.
-  qobject_cast< GLImageWidget *>( centralWidget() )->SetImageModel(
+  qobject_cast< GLImageWidget1 *>( centralWidget() )->SetImageModel(
     vectorImageModel
   );
 
@@ -883,7 +882,7 @@ MainWindow
   // QUICKLOOK VIEW.
   
   // Assign newly selected model to view.
-  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->SetImageModel(
+  qobject_cast< GLImageWidget1* >( GetQuicklookDock()->widget() )->SetImageModel(
     vectorImageModel->GetQuicklookModel()
   );
 }
@@ -899,7 +898,7 @@ MainWindow
   emit UserCoordinatesEditingFinished(coord);
 
   // update the Quicklook
-  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->update();
+  qobject_cast< GLImageWidget1 * >( GetQuicklookDock()->widget() )->update();
 }
 
 /*****************************************************************************/
@@ -913,7 +912,7 @@ MainWindow
   emit UserScaleEditingFinished(scale);
 
   // update the Quicklook
-  qobject_cast< GLImageWidget * >( GetQuicklookDock()->widget() )->update();
+  qobject_cast< GLImageWidget1 * >( GetQuicklookDock()->widget() )->update();
 }
 
 /*****************************************************************************/

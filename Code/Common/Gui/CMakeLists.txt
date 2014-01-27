@@ -6,9 +6,8 @@ set( Common_Gui_SOURCES
   mvdAboutDialog.cxx
   mvdAbstractDragAndDropEventFilter.cxx
   mvdAbstractModelController.cxx
-  mvdAbstractModelRenderer.cxx
-  #mvdAbstractModelRenderer.cxx
-  mvdAbstractViewManipulator.cxx
+  mvdAbstractModelRenderer1.cxx
+  mvdAbstractViewManipulator1.cxx
   mvdApplicationsToolBox.cxx
   mvdCheckableLineEdit.cxx
   mvdColorBandDynamicsWidget.cxx
@@ -26,20 +25,20 @@ set( Common_Gui_SOURCES
   mvdDoubleValidator.cxx
   mvdDropLineEdit.cxx
   mvdFilenameDragAndDropEventFilter.cxx
-  mvdGLImageWidget.cxx
+  mvdGLImageWidget1.cxx
   mvdGui.cxx
   mvdHistogramController.cxx
   mvdHistogramPlotPicker.cxx
   mvdHistogramWidget.cxx
   mvdI18nApplication.cxx
   mvdI18nMainWindow.cxx
-  mvdImageModelRenderer.cxx
-  mvdImageViewManipulator.cxx
+  mvdImageModelRenderer1.cxx
+  mvdImageViewManipulator1.cxx
   mvdMainWindowTitleLoader.cxx
   mvdMouseEventFilter.cxx
   mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
-  mvdQuicklookViewManipulator.cxx
+  mvdQuicklookViewManipulator1.cxx
   mvdSearchableTreeWidget.cxx
   mvdStatusBarWidget.cxx
   mvdTaskProgressDialog.cxx
@@ -56,8 +55,8 @@ set( Common_Gui_HEADERS_MOC
   mvdAboutDialog.h
   mvdAbstractDragAndDropEventFilter.h
   mvdAbstractModelController.h
-  mvdAbstractModelRenderer.h
-  mvdAbstractViewManipulator.h
+  mvdAbstractModelRenderer1.h
+  mvdAbstractViewManipulator1.h
   mvdApplicationsToolBox.h
   mvdCheckableLineEdit.h
   mvdColorBandDynamicsWidget.h
@@ -75,12 +74,12 @@ set( Common_Gui_HEADERS_MOC
   mvdDoubleValidator.h
   mvdDropLineEdit.h
   mvdFilenameDragAndDropEventFilter.h
-  mvdGLImageWidget.h
+  mvdGLImageWidget1.h
   #mvdGui.h
   mvdI18nApplication.h
   mvdI18nMainWindow.h
-  mvdImageModelRenderer.h
-  mvdImageViewManipulator.h
+  mvdImageModelRenderer1.h
+  mvdImageViewManipulator1.h
   mvdHistogramController.h
   mvdHistogramPlotPicker.h
   mvdHistogramWidget.h
@@ -88,7 +87,7 @@ set( Common_Gui_HEADERS_MOC
   mvdMouseEventFilter.h
   mvdMyWidget.h
   mvdPixelDescriptionWidget.h
-  mvdQuicklookViewManipulator.h
+  mvdQuicklookViewManipulator1.h
   mvdSearchableTreeWidget.h
   mvdStatusBarWidget.h
   mvdTaskProgressDialog.h
