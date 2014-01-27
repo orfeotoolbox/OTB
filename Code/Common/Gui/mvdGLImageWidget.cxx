@@ -19,10 +19,14 @@
 
 #include "mvdGLImageWidget.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-//#include <QKeyEvent>
+
 //
 // System includes (sorted by alphabetic order)
 
@@ -48,6 +52,17 @@ namespace mvd
   Context comment for translator.
 */
 
+
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
 /*******************************************************************************/
 GLImageWidget
 ::GLImageWidget( AbstractViewManipulator * manipulator,
@@ -60,15 +75,6 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
-  ListGlVersions();
-
-  // Set focus policy so that the widget gets the focus if it is clicked
-  setMouseTracking(true);
-
-  // Accept drops
-  setAcceptDrops(true);
-
-  setFocusPolicy(Qt::StrongFocus);
   Initialize(manipulator, renderer);
 }
 
@@ -86,14 +92,6 @@ GLImageWidget
   m_ImageModel( NULL )
 {
   ListGlVersions();
-
-  // Set focus policy so that the widget gets the focus if it is clicked
-  setMouseTracking(true);
-  setFocusPolicy(Qt::StrongFocus);
-
-  // Accept drops
-  setAcceptDrops(true);
-
   Initialize(manipulator, renderer);
 }
 
@@ -110,16 +108,6 @@ GLImageWidget
   m_ImageModelRenderer( NULL ),
   m_ImageModel( NULL )
 {
-  ListGlVersions();
-
-  // Set focus policy so that the widget gets the focus if it is clicked
-  setMouseTracking(true);
-  setFocusPolicy(Qt::StrongFocus);
-
-  // Accept drops
-  setAcceptDrops(true);
-
-
   Initialize(manipulator, renderer);
 }
 
@@ -137,6 +125,15 @@ GLImageWidget
 ::Initialize( AbstractViewManipulator* manipulator,
 	      AbstractModelRenderer* renderer )
 {
+  // Test OpenGL.
+  ListGlVersions();
+  // Accept drops
+  setAcceptDrops( true );
+  // Set focus policy so that the widget gets the focus if it is clicked
+  setMouseTracking( true );
+  setFocusPolicy( Qt::StrongFocus );
+
+
   assert( manipulator!=NULL );
   assert( renderer!=NULL );
 

@@ -24,6 +24,10 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
+
 //
 // Qt includes (sorted by alphabetic order)
 #include <QtOpenGL>
@@ -43,6 +47,10 @@
 #include "Gui/mvdAbstractModelRenderer.h"
 #include "Gui/mvdAbstractViewManipulator.h"
 
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
+
 //
 // External classes pre-declaration.
 namespace
@@ -56,13 +64,22 @@ namespace mvd
 class ImageModelRenderer;
 class ImageViewManipulator;
 
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
 /** \class GLImageWidget
  *
  */
 class Monteverdi2_EXPORT GLImageWidget :
     public QGLWidget
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public methods.
@@ -133,10 +150,14 @@ public:
                             const PointType& centerPoint, 
                             double zoomLevel);
 
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+
 //
 // Public SLOTS.
 public slots:
   void OnSpacingChanged(const SpacingType& spacing);
+
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // SIGNALS.
@@ -153,6 +174,8 @@ signals:
   void CentralWidgetUpdated();
 
   void RenderingContextChanged( const PointType&, double);
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
@@ -171,6 +194,8 @@ protected:
 //
 // Protected attributes.
 protected:
+
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private methods.
@@ -199,6 +224,9 @@ private:
   /**
    */
   AbstractImageModel* m_ImageModel;
+
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+private slots:
 };
 
 }// end namespace 'mvd'

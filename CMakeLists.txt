@@ -83,6 +83,10 @@ if(WIN32)
 endif(WIN32)
 
 #----------------------------------------------------------------------------
+# Ice
+find_package(Ice REQUIRED)
+
+#----------------------------------------------------------------------------
 # Include OTB CMake modules path.
 # set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${OTB_SOURCE_DIR}/CMake")
 

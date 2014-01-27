@@ -134,6 +134,8 @@ include_directories(
   #
   ${Monteverdi2_BINARY_DIR}/Code/Common
   ${Monteverdi2_BINARY_DIR}/Code/Common/Gui
+  #
+  ${ICE_INCLUDE_DIRS}
 )
 
 #############################################################################
@@ -168,6 +170,7 @@ target_link_libraries(Monteverdi2_Gui
   Qt4::QtGui
   Qt4::QtOpenGL
   ${QWT_LIBRARIES}
+  ${ICE_LIBRARIES}
 )
 
 set_target_properties(Monteverdi2_Gui
