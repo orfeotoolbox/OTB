@@ -110,8 +110,12 @@ MainWindow
 #ifdef OTB_WRAP_QT
   m_OtbApplicationsBrowserDock(NULL),
 #endif
+#if USE_OLD_IMAGE_VIEW
   m_ImageView1( NULL ),
-  m_QuicklookViewDock( NULL ),
+#endif
+#if USE_OLD_IMAGE_VIEW
+  m_QuicklookViewDock1( NULL ),
+#endif
   m_CentralTabWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL )
 {
@@ -292,18 +296,24 @@ MainWindow
 
   dbBrowserWidget->InstallTreeEventFilter( m_FilenameDragAndDropEventFilter );
 
+#if USE_OLD_IMAGE_VIEW
   // Image view.
   m_ImageView1->installEventFilter( m_FilenameDragAndDropEventFilter );
+#endif // USE_OLD_IMAGE_VIEW
 
   //
   // Image views
-  ConnectImageViews();
+#if USE_OLD_IMAGE_VIEW
+  ConnectImageViews1();
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
+#if USE_OLD_IMAGE_VIEW
+
 void
 MainWindow
-::ConnectImageViews()
+::ConnectImageViews1()
 {
   // Access the quicklook-view.
   GLImageWidget1* quicklookView = GetQuicklookView1();
@@ -401,6 +411,8 @@ MainWindow
      );
 }
 
+#endif // USE_OLD_IMAGE_VIEW
+
 /*****************************************************************************/
 void
 MainWindow
@@ -416,7 +428,9 @@ MainWindow
 
   m_UI->menu_View->addSeparator();
 
-  m_UI->menu_View->addAction( m_QuicklookViewDock->toggleViewAction() );
+#if USE_OLD_IMAGE_VIEW
+  m_UI->menu_View->addAction( m_QuicklookViewDock1->toggleViewAction() );
+#endif
 
   m_UI->menu_View->addSeparator();
 
@@ -440,6 +454,7 @@ MainWindow
 
   if ( vectorImageModel )
     {
+#if USE_OLD_IMAGE_VIEW
     //
     // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
@@ -456,6 +471,7 @@ MainWindow
       vectorImageModel,
       SLOT( OnPhysicalCursorPositionChanged(double, double) )
       );
+#endif // USE_OLD_IMAGE_VIEW
 
     //
     // connect the statusBar widget to the vectorImage corresponding
@@ -483,12 +499,14 @@ MainWindow
 
     }
 
+#if USE_OLD_IMAGE_VIEW
   QObject::connect(
     m_ImageView1->GetImageViewManipulator(),
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
     );
+#endif // USE_OLD_IMAGE_VIEW
 
   // index widget in status bar edited
   QObject::connect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
@@ -504,11 +522,13 @@ MainWindow
                    SLOT( OnUserScaleEditingFinished() )
     );
 
+#if USE_OLD_IMAGE_VIEW
   QObject::connect(this,
                    SIGNAL( UserScaleEditingFinished(const QString&) ),
                    m_ImageView1->GetImageViewManipulator(),
                    SLOT( OnUserScaleEditingFinished(const QString&) )
     );
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -585,6 +605,7 @@ MainWindow
 
   if( vectorImageModel )
     {
+#if USE_OLD_IMAGE_VIEW
     //
     // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
@@ -601,6 +622,7 @@ MainWindow
       vectorImageModel,
       SLOT( OnPhysicalCursorPositionChanged(double, double) )
       );
+#endif // USE_OLD_IMAGE_VIEW
 
     //
     // disconnect the statusBar widget to the vectorImage corresponding
@@ -626,12 +648,14 @@ MainWindow
       );
     }
 
+#if USE_OLD_IMAGE_VIEW
   QObject::disconnect(
     m_ImageView1->GetImageViewManipulator(),
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
     );
+#endif // USE_OLD_IMAGE_VIEW
 
   // index widget in status bar edited
   QObject::disconnect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
@@ -647,12 +671,13 @@ MainWindow
                       SLOT( OnUserScaleEditingFinished() )
     );
 
+#if USE_OLD_IMAGE_VIEW
   QObject::disconnect(this,
                       SIGNAL( UserScaleEditingFinished(const QString&) ),
                       m_ImageView1->GetImageViewManipulator(),
                       SLOT( OnUserScaleEditingFinished(const QString&) )
     );
-
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -714,14 +739,16 @@ MainWindow
   // Right pane.
 
   // Quicklook-view dock-widget
-  assert( m_QuicklookViewDock==NULL );
+#if USE_OLD_IMAGE_VIEW
+  assert( m_QuicklookViewDock1==NULL );
   assert( m_ImageView1!=NULL );
-  m_QuicklookViewDock = AddWidgetToDock(
+  m_QuicklookViewDock1 = AddWidgetToDock(
     CreateQuicklookWidget1( m_ImageView1 ),
     "QUICKLOOK_VIEW",
     tr( "Quicklook view" ),
     Qt::RightDockWidgetArea
   );
+#endif // USE_OLD_IMAGE_VIEW
 
   assert( m_HistogramDock==NULL );
   m_HistogramDock =
@@ -785,6 +812,7 @@ MainWindow
   // Set-it up as central widget.
   setCentralWidget( m_CentralTabWidget );
 
+#if USE_OLD_IMAGE_VIEW
   // Initialize image-view.
   assert( m_ImageView1==NULL );
   m_ImageView1 = CreateImageWidget1();
@@ -794,6 +822,7 @@ MainWindow
     m_ImageView1,
     tr( "Image view" )
   );
+#endif // USE_OLD_IMAGE_VIEW
 
   //
   // access to the quicklook tabBar to remove the close button
@@ -813,6 +842,8 @@ MainWindow
 }
 
 /*****************************************************************************/
+#if USE_OLD_IMAGE_VIEW
+
 GLImageWidget1*
 MainWindow
 ::CreateQuicklookWidget1( QGLWidget* sharedGlWidget )
@@ -838,7 +869,11 @@ MainWindow
   return quicklookView;
 }
 
+#endif // USE_OLD_IMAGE_VIEW
+
 /*****************************************************************************/
+#if USE_OLD_IMAGE_VIEW
+
 GLImageWidget1*
 MainWindow
 ::CreateImageWidget1( QGLWidget* sharedGlWidget )
@@ -865,6 +900,9 @@ MainWindow
   return imageView;
 }
 
+#endif // USE_OLD_IMAGE_VIEW
+
+
 /*****************************************************************************/
 void
 MainWindow
@@ -873,8 +911,12 @@ MainWindow
   DatasetModel* datasetModel =
     ImportImage(
       filename,
+#if USE_OLD_IMAGE_VIEW
       m_ImageView1->width(),
       m_ImageView1->height(),
+#else
+      -1, -1,
+#endif // USE_OLD_IMAGE_VIEW
       forceCreate
     );
 
@@ -961,8 +1003,10 @@ MainWindow
 {
   emit UserZoomIn();
 
+#if USE_OLD_IMAGE_VIEW
   // update the Quicklook
-  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock->widget() )->update();
+  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() )->update();
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -972,8 +1016,10 @@ MainWindow
 {
   emit UserZoomOut();
 
+#if USE_OLD_IMAGE_VIEW
   // update the Quicklook
-  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock->widget() )->update();
+  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() )->update();
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -983,8 +1029,10 @@ MainWindow
 {
   emit UserZoomExtent();
 
+#if USE_OLD_IMAGE_VIEW
   // update the Quicklook
-  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock->widget() )->update();
+  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() )->update();
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -994,8 +1042,10 @@ MainWindow
 {
   emit UserZoomFull();
 
+#if USE_OLD_IMAGE_VIEW
   // update the Quicklook
-  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock->widget() )->update();
+  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() )->update();
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -1126,6 +1176,7 @@ MainWindow
   //
 
   // Update image-view.
+#if USE_OLD_IMAGE_VIEW
   m_ImageView1->SetImageModel( NULL );
 
   // Access quicklook-view.
@@ -1134,6 +1185,8 @@ MainWindow
   // Update quicklook-view.
   assert( quicklookView!=NULL );
   quicklookView->SetImageModel( NULL );
+
+#endif // USE_OLD_IMAGE_VIEW
 
   //
   // MODEL(s).
@@ -1183,6 +1236,8 @@ MainWindow
   // refreshes).
   if( vectorImageModel!=NULL )  // could be null when no dataset selected
     {
+#if USE_OLD_IMAGE_VIEW
+
     // Disconnect previously selected image-model from view.
     QObject::disconnect(
       vectorImageModel,
@@ -1207,7 +1262,7 @@ MainWindow
       vectorImageModel,
       SIGNAL( SettingsUpdated() ),
       // to:
-      m_QuicklookViewDock->widget(),
+      m_QuicklookViewDock1->widget(),
       SLOT( updateGL()  )
       );
 
@@ -1220,7 +1275,10 @@ MainWindow
       m_ImageView1->GetImageViewManipulator(),
       SLOT( OnViewportRegionChanged( double, double ) )
       );
+#endif // USE_OLD_IMAGE_VIEW
     }
+
+#if USE_OLD_IMAGE_VIEW
 
   // Disconnect update of last viewport informations in datasetmodel
   // from the previous ImageView
@@ -1230,6 +1288,8 @@ MainWindow
     datasetModel,
     SLOT(  OnRenderingContextChanged(const PointType&, double ))
   );
+
+#endif // USE_OLD_IMAGE_VIEW
 
   // Disconnect the signals from the previous dataset model
   DisconnectStatusBar( datasetModel );
@@ -1262,10 +1322,13 @@ MainWindow
   ConnectStatusBar( model );
   
   ConnectPixelDescriptionWidget( model );
+
+#if USE_OLD_IMAGE_VIEW
   
   // connect to get the last rendering context (to be written in Descriptor)
   if( vectorImageModel!=NULL )
     {
+
     // update the last viewport centerPoint and zoom in DatasetModel
     QObject::connect(
       m_ImageView1,
@@ -1304,6 +1367,8 @@ MainWindow
     : vectorImageModel->GetQuicklookModel()
   );
 
+#endif // USE_OLD_IMAGE_VIEW
+
   //
   // MODEL(s).
   //
@@ -1316,6 +1381,7 @@ MainWindow
     // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent
     // since Qt may use signal & slot names to connect (see MOC .cxx
     // files). Thus, using m_ImageView saves one indirection call.
+#if USE_OLD_IMAGE_VIEW
 
     QObject::connect(
       vectorImageModel,
@@ -1343,10 +1409,9 @@ MainWindow
       vectorImageModel,
       SIGNAL( SettingsUpdated() ),
       // to:
-      m_QuicklookViewDock->widget(),
+      m_QuicklookViewDock1->widget(),
       SLOT( updateGL()  )
       );
-
     //
     // needed for the status bar update
     // TODO: Remove quicklook temporary hack by better design.
@@ -1357,6 +1422,7 @@ MainWindow
       m_ImageView1->GetImageViewManipulator(),
       SLOT( OnViewportRegionChanged( double, double ) )
       );
+#endif
 
     //
     // trigger the placename computation
@@ -1561,8 +1627,10 @@ MainWindow
   QString coord = m_StatusBarWidget->GetCurrentPixelIndexWidget()->text();
   emit UserCoordinatesEditingFinished(coord);
 
+#if USE_OLD_IMAGE_VIEW
   // update the Quicklook
-  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock->widget() )->update();
+  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() )->update();
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -1575,8 +1643,10 @@ MainWindow
   QString scale = m_StatusBarWidget->GetCurrentScaleWidget()->text();
   emit UserScaleEditingFinished(scale);
 
+#if USE_OLD_IMAGE_VIEW
   // update the Quicklook
-  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock->widget() )->update();
+  qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() )->update();
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/

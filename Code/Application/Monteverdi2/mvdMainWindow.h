@@ -25,6 +25,8 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+#define USE_OLD_IMAGE_VIEW 1
+#define USE_ICE_IMAGE_VIEW 1
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -197,6 +199,7 @@ private:
 // Private methods.
 private:
 
+#if USE_OLD_IMAGE_VIEW
   /**
    */
   GLImageWidget1* CreateImageWidget1( QGLWidget* sharedGlWidget =NULL );
@@ -204,6 +207,7 @@ private:
   /**
    */
   GLImageWidget1* CreateQuicklookWidget1( QGLWidget* sharedGlWidget =NULL );
+#endif // USE_OLD_IMAGE_VIEW
 
   /**
    */
@@ -217,6 +221,7 @@ private:
    */
   void InitializeStatusBarWidgets();
 
+#if USE_OLD_IMAGE_VIEW
   /**
    */
   inline
@@ -229,7 +234,8 @@ private:
 
   /**
    */
-  void ConnectImageViews();
+  void ConnectImageViews1();
+#endif // USE_OLD_IMAGE_VIEW
 
   /**
    */
@@ -298,21 +304,24 @@ private:
   QDockWidget* m_OtbApplicationsBrowserDock;
 #endif
 
+#if USE_OLD_IMAGE_VIEW
   /**
    * \brief Image-view dock-widget.
    */
   GLImageWidget1* m_ImageView1;
+#endif // USE_OLD_IMAGE_VIEW
 
   /**
    * \brief Quicklook-view dock-widget.
    */
-  QDockWidget* m_QuicklookViewDock;
+  QDockWidget* m_QuicklookViewDock1;
 
   /**
    */
   QTabWidget* m_CentralTabWidget;
 
-  /** */
+  /**
+   */
   StatusBarWidget* m_StatusBarWidget;
 
   /**
@@ -396,13 +405,15 @@ private slots:
 namespace mvd
 {
 
+#if USE_OLD_IMAGE_VIEW
+
 /*****************************************************************************/
 inline
 const GLImageWidget1*
 MainWindow
 ::GetQuicklookView1() const
 {
-  return qobject_cast< const GLImageWidget1* >( m_QuicklookViewDock->widget() );
+  return qobject_cast< const GLImageWidget1* >( m_QuicklookViewDock1->widget() );
 }
 
 /*****************************************************************************/
@@ -411,8 +422,10 @@ GLImageWidget1*
 MainWindow
 ::GetQuicklookView1()
 {
-  return qobject_cast< GLImageWidget1* >( m_QuicklookViewDock->widget() );
+  return qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() );
 }
+
+#endif // USE_OLD_IMAGE_VIEW
 
 } // end namespace 'mvd'
 
