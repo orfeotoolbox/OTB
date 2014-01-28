@@ -22,12 +22,6 @@ add_subdirectory(Simulation)
 add_subdirectory(Hyperspectral)
 add_subdirectory(Segmentation)
 
-if(OTB_USE_VISU_GUI)
-        add_subdirectory(Visu)
-        add_subdirectory(Gui)
-        add_subdirectory(Visualization)
-endif()
-
 if(BUILD_APPLICATIONS)
   add_subdirectory(ApplicationEngine)
   add_subdirectory(Wrappers)

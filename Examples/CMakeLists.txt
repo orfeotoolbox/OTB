@@ -34,10 +34,6 @@ if(BUILD_APPLICATIONS)
 		add_subdirectory(Application)
 endif()
 
-if(OTB_USE_VISU_GUI)
-        add_subdirectory(Visualization)
-endif()
-
 if(OTB_USE_PATENTED)
   add_subdirectory( Patented )
 endif()
@@ -95,10 +91,6 @@ else()
 	if(BUILD_APPLICATIONS)
 		add_subdirectory(Application)
 	endif()
-
-    if(OTB_USE_VISU_GUI)
-        add_subdirectory(Visualization)
-    endif()
 
     if(OTB_USE_PATENTED)
         add_subdirectory(Patented)

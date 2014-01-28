@@ -1,10 +1,3 @@
-if(OTB_USE_VISU_GUI)
-        if(NOT OTB_USE_EXTERNAL_FLTK)
-            message(STATUS "Configuring FLTK...")
-	        add_subdirectory( FLTK )
-        endif()
-endif()
-
 if(NOT OTB_USE_EXTERNAL_ITK)
   message(STATUS "Configuring ITK...")
 

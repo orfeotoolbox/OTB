@@ -207,7 +207,6 @@ include(ImportGdal)
 include(ImportExpat)
 include(ImportITK)
 include(ImportJPEG2000)
-include(ImportFLTK) # depends on ImportGdal
 include(ImportCurl)
 include(ImportBoost)
 include(ImportMapnik) # depends on ImportBoost
@@ -379,7 +378,6 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES
     ${OTB_SOURCE_DIR}/CMake/FindFFTW.cmake
     ${OTB_SOURCE_DIR}/CMake/FindEXPAT.cmake
-    ${OTB_SOURCE_DIR}/CMake/FindFLTK.cmake
     ${OTB_SOURCE_DIR}/CMake/FindGettext.cmake
     ${OTB_SOURCE_DIR}/CMake/FindGettextLib.cmake
     ${OTB_SOURCE_DIR}/CMake/FindICUUC.cmake

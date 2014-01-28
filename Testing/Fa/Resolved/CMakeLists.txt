@@ -226,12 +226,6 @@ add_test(FA-Spot5SensorModel ${CXX_TEST_PATH}/SensorModelBorder
   )
 endif()
 
-if(OTB_USE_VISU_GUI)
-add_test(FA-0000132-jpg ${CXX_TEST_PATH}/0000132-jpg
-        ${OTB_DATA_ROOT}/Input/toulouse_auat.jpg
-        )
-endif()
-
 if(ITK_USE_FFTWD OR ITK_USE_FFTWF)
 add_test(FA-0000169-fftcomplextocomplex ${CXX_TEST_PATH}/0000169-fftcomplextocomplex
   )

@@ -19,18 +19,6 @@ target_link_libraries(Multispectral OTBCommon OTBIO)
 add_executable(SmarterFilteringPipeline SmarterFilteringPipeline.cxx )
 target_link_libraries(SmarterFilteringPipeline OTBCommon OTBIO)
 
-if(OTB_USE_VISU_GUI)
-  add_executable(SimpleViewer SimpleViewer.cxx )
-  target_link_libraries(SimpleViewer OTBCommon OTBIO OTBGui OTBVisualization ${OTB_VISU_GUI_LIBRARIES})
-
-# The basic application tutorial makes use of the otbApplicationsCommon library which is built in OTB-Applications package.
-# Therefore this tutorial will not compile until we move the OTBApplcationsCommon lib to the OTB. Until then,
-# the following line will be commented out.
-# subdirs(BasicApplication)
-
-
-endif()
-
 add_executable(OrthoFusion OrthoFusion.cxx )
 target_link_libraries(OrthoFusion OTBFusion OTBProjections OTBCommon OTBIO)
 

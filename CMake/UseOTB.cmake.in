@@ -87,20 +87,6 @@ if(OTB_USE_EXTERNAL_GDAL)
   include_directories(${GDAL_INCLUDE_DIRS})
 endif()
 
-if(OTB_USE_EXTERNAL_FLTK)
-	find_package(FLTK REQUIRED)
-	include_directories(${FLTK_INCLUDE_DIRS})
-	link_directories(${FLTK_LIBRARY_DIRS})
-else()
-  find_program(FLTK_FLUID_EXECUTABLE fluid PATHS
-               ${OTB_BINARY_DIRS}
-               ${OTB_BINARY_DIRS}/Release
-               ${OTB_BINARY_DIRS}/MinSizeRel
-               ${OTB_BINARY_DIRS}/RelWithDebInfo
-               ${OTB_BINARY_DIRS}/Debug
-               NO_SYSTEM_PATH)
-endif()
-
 if(OTB_USE_EXTERNAL_LIBKML)
   find_package(LibKML REQUIRED)
   include_directories(${LIBKML_INCLUDE_DIRS})

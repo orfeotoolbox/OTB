@@ -132,38 +132,12 @@ else()
    # so ITK_INCLUDE_DIRS is empty
 endif()
 
-if(OTB_USE_EXTERNAL_FLTK)
-        set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-      		${FLTK_INCLUDE_DIRS} )
-else()
-        set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-                ${FLTK_SOURCE_DIR}
-            	${FLTK_SOURCE_DIR}/src
-            	${FLTK_BINARY_DIR} )
-endif()
-
 #-----------------------------------------------------------------------------
 # Include directories needed for .cxx files in OTB.  These include
 # directories will NOT be available to user projects.
 set(OTB_INCLUDE_DIRS_BUILD_TREE_CXX)
 
 set(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX} )
-
-#-----------------------------------------------------------------------------
-# Include FLTK variables.
-#if(NOT OTB_USE_EXTERNAL_FLTK)
-#        if(NOT EXISTS "${FLTK_BINARY_DIR}/FLTKConfig.cmake")
-#                message(FATAL_ERROR "Impossible to find the file ${FLTK_BINARY_DIR}/FLTKConfig.cmake. You must generate FLTK with cmake process.")
-#        else()
-#                include(${FLTK_BINARY_DIR}/FLTKConfig.cmake)
-#        endif()
-#else()
-#        if(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake")
-#                include(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
-#        endif()
-#endif()
-
-
 
 #-----------------------------------------------------------------------------
 # Include directories from libraries build tree.
@@ -317,15 +291,6 @@ endif()
 if(OTB_USE_SIFTFAST)
   set(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
       Utilities/otbsiftfast)
-endif()
-
-#For FLTK header file
-if(OTB_USE_EXTERNAL_FLTK)
-        set(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
-  		        ${FLTK_INCLUDE_DIRS})
-else()
-        set(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
-  		        Utilities/FLTK)
 endif()
 
 #For TinyXML header file

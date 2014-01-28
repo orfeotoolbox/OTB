@@ -20,11 +20,6 @@ target_link_libraries(0000041-mean_shift OTBIO OTBCommon OTBBasicFilters)
 add_executable(00134-feature_extraction  00134-feature_extraction.cxx)
 target_link_libraries(00134-feature_extraction OTBIO OTBCommon OTBBasicFilters OTBFeatureExtraction)
 
-if(OTB_USE_VISU_GUI)
-add_executable(0000132-jpg 0000132-jpg.cxx )
-target_link_libraries(0000132-jpg OTBIO OTBVisualization)
-endif()
-
 add_executable(0000094-PolygonsVectorization 0000094-PolygonsVectorization.cxx)
 target_link_libraries(0000094-PolygonsVectorization OTBIO OTBCommon)
 
