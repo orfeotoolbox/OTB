@@ -68,17 +68,10 @@ void QtWidgetStringParameter::DoCreateWidget()
 
 void QtWidgetStringParameter::SetValue(const QString& value)
 {
-
   m_StringParam->SetValue(value.toAscii().constData());
-
-  if (m_StringParam->GetValue() != value.toAscii().constData())
-    {
-    QString key( m_StringParam->GetKey() );
-    emit ParameterChanged(key);
-    }
-  /** moved to ParameterChanged slot in QtWidgetParameterBase:: **/
-  //m_StringParam->SetUserValue(true);
-
+  // notify of value change
+  QString key( m_StringParam->GetKey() );
+  emit ParameterChanged(key);
 }
 
 }
