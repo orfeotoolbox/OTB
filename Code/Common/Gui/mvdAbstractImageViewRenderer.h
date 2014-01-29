@@ -17,8 +17,8 @@
 
 =========================================================================*/
 
-#ifndef __mvdAbstractModelRenderer_h
-#define __mvdAbstractModelRenderer_h
+#ifndef __mvdAbstractImageViewRenderer_h
+#define __mvdAbstractImageViewRenderer_h
 
 //
 // Configuration include.
@@ -45,7 +45,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -69,11 +68,11 @@ class Monteverdi2_EXPORT AbstractImageModel;
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class AbstractModelRenderer
+ * \class AbstractImageViewRenderer
  *
  * \brief TODO.
  */
-class AbstractModelRenderer :
+class AbstractImageViewRenderer :
     public QObject
 {
 
@@ -90,46 +89,24 @@ public:
    */
   struct RenderingContext
   {
-     inline
-     RenderingContext( const AbstractImageModel* model =NULL,
-                       const ImageRegionType& region =ImageRegionType(),
-                       double zoom =1.0,
-                       unsigned int width =0,
-                       unsigned int height =0,
-                       int dx =0,
-                       int dy =0,
-                       bool refresh =true ) :
-       m_ImageModel( model ),
-       m_ImageRegion( region ),
-       m_IsotropicZoom( zoom ),
-       m_WidgetWidth( width ),
-       m_WidgetHeight( height ),
-       m_ForceRefresh( refresh )
+    /**
+     */
+    inline
+    RenderingContext()
     {
     }
-
-    const AbstractImageModel* m_ImageModel;
-
-    ImageRegionType m_ImageRegion;
-
-    double m_IsotropicZoom;
-
-    // TODO: remove unsigned before int (because Qt uses signed int).
-    unsigned int m_WidgetWidth;
-
-    // TODO: remove unsigned before int (becayse Qt uses signed int).
-    unsigned int m_WidgetHeight;
-
-    bool m_ForceRefresh;
   };
 
 //
 // Public methods.
 public:
-  /** Destructor */
-  virtual ~AbstractModelRenderer();
+  /**
+   * Destructor.
+   */
+  virtual ~AbstractImageViewRenderer();
 
-  /** */
+  /**
+   */
   virtual void paintGL( const RenderingContext& context ) =0;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
@@ -149,8 +126,10 @@ signals:
 // Protected methods.
 protected:
 
-  /** Constructor */
-  AbstractModelRenderer( QObject* parent = NULL );
+  /**
+   * Constructor.
+   */
+  AbstractImageViewRenderer( QObject* parent = NULL );
 
 
 //
@@ -176,4 +155,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractModelRenderer_h
+#endif // __mvdAbstractImageViewRenderer_h

@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdAbstractViewManipulator.h"
+#include "mvdAbstractImageViewManipulator.h"
 
 
 /*****************************************************************************/
@@ -41,7 +41,7 @@
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::AbstractViewManipulator
+  TRANSLATOR mvd::AbstractImageViewManipulator
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -53,66 +53,20 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-AbstractViewManipulator
-::AbstractViewManipulator( QObject* parent ) :
-  QObject( parent ),
-  m_NavigationContext(),
-  m_MouseContext(),
-  m_IsotropicZoom( 1.0 )
+AbstractImageViewManipulator
+::AbstractImageViewManipulator( QObject* parent ) :
+  QObject( parent )
 {
-  m_ViewportOrigin.Fill(0);
-  m_Spacing.Fill(1.);
 }
 
 /*******************************************************************************/
-AbstractViewManipulator
-::~AbstractViewManipulator()
+AbstractImageViewManipulator
+::~AbstractImageViewManipulator()
 {
-}
-
-/*****************************************************************************/
-void
-AbstractViewManipulator
-::PropagatePointUnderCursorCoordinates(const QPoint & point )
-{
-  // Compute the physical coordinates of the point under the cursor
-  // and send them to the image manipulator. 
-  IndexType index;
-  index[0] = (unsigned int)( point.x() );
-  index[1] = (unsigned int)( point.y() );
-  PointType physicalPt = ScreenIndexToPhysicalPoint(index);
-  
-  // emit the physical coordinate to be catched by
-  // ImageViewManipulator. Index (for resol 0 of the image)
-  // computation will be done there.
-  emit PhysicalCursorPositionChanged(physicalPt[0], physicalPt[1]);
 }
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 
-/*******************************************************************************/
-void
-AbstractViewManipulator
-::OnViewportOriginChanged(const IndexType& origin)
-{
-  m_ViewportOrigin = origin;
-}
-
-/*******************************************************************************/
-void
-AbstractViewManipulator
-::SetSpacing(const SpacingType& spacing)
-{
-  m_Spacing = spacing;
-}
-
-/*******************************************************************************/
-void
-AbstractViewManipulator
-::SetOrigin(const PointType& origin)
-{
-  m_Origin = origin;
-}
 } // end namespace 'mvd'

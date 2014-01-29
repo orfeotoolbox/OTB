@@ -5,9 +5,11 @@
 set( Common_Gui_SOURCES
   mvdAboutDialog.cxx
   mvdAbstractDragAndDropEventFilter.cxx
+  mvdAbstractImageViewManipulator.cxx
+  mvdAbstractImageViewRenderer.cxx
   mvdAbstractModelController.cxx
   mvdAbstractModelRenderer1.cxx
-  mvdAbstractViewManipulator1.cxx
+  mvdAbstractViewManipulator1.cxx 
   mvdApplicationsToolBox.cxx
   mvdCheckableLineEdit.cxx
   mvdColorBandDynamicsWidget.cxx
@@ -33,7 +35,10 @@ set( Common_Gui_SOURCES
   mvdI18nApplication.cxx
   mvdI18nMainWindow.cxx
   mvdImageModelRenderer1.cxx
+  mvdImageViewManipulator.cxx
   mvdImageViewManipulator1.cxx
+  mvdImageViewRenderer.cxx
+  mvdImageViewWidget.cxx
   mvdMainWindowTitleLoader.cxx
   mvdMouseEventFilter.cxx
   mvdMyWidget.cxx
@@ -54,6 +59,8 @@ set( Common_Gui_SOURCES
 set( Common_Gui_HEADERS_MOC
   mvdAboutDialog.h
   mvdAbstractDragAndDropEventFilter.h
+  mvdAbstractImageViewManipulator.h
+  mvdAbstractImageViewRenderer.h
   mvdAbstractModelController.h
   mvdAbstractModelRenderer1.h
   mvdAbstractViewManipulator1.h
@@ -79,7 +86,10 @@ set( Common_Gui_HEADERS_MOC
   mvdI18nApplication.h
   mvdI18nMainWindow.h
   mvdImageModelRenderer1.h
+  mvdImageViewManipulator.h
   mvdImageViewManipulator1.h
+  mvdImageViewRenderer.h
+  mvdImageViewWidget.h
   mvdHistogramController.h
   mvdHistogramPlotPicker.h
   mvdHistogramWidget.h

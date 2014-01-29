@@ -16,8 +16,9 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __mvdAbstractDragAndDropEventFilter_h
-#define __mvdAbstractDragAndDropEventFilter_h
+
+#ifndef __mvdAbstractImageViewManipulator_h
+#define __mvdAbstractImageViewManipulator_h
 
 //
 // Configuration include.
@@ -57,7 +58,6 @@ namespace
 
 namespace mvd
 {
-
 //
 // Internal classes pre-declaration.
 
@@ -65,13 +65,11 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
 
-/**
- * \class AbstractDragAndDropEventFilter
+/** \class AbstractImageViewManipulator
  *
- * \brief Widget template skeleton to copy-paste when adding a new
- * widget class.
+ *  \brief Base class for QWidget manipulation
  */
-class Monteverdi2_EXPORT AbstractDragAndDropEventFilter :
+class Monteverdi2_EXPORT AbstractImageViewManipulator :
     public QObject
 {
 
@@ -85,18 +83,23 @@ class Monteverdi2_EXPORT AbstractDragAndDropEventFilter :
 // Public methods.
 public:
 
-  /** \brief Destructor. */
-  virtual ~AbstractDragAndDropEventFilter();
+  /** \brief Constructor. */
+  AbstractImageViewManipulator( QObject* parent =NULL );
 
-  //
-  // QObject overloads.
+  /** \brief Destructor. */
+  virtual ~AbstractImageViewManipulator();
 
   /**
-   * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
    */
-  virtual bool eventFilter( QObject* watched, QEvent* event );
+  virtual void mouseMoveEvent( QMouseEvent* event ) = 0;
+  virtual void mousePressEvent( QMouseEvent* event ) = 0;
+  virtual void mouseReleaseEvent( QMouseEvent* event ) = 0;
 
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
+  virtual void wheelEvent( QWheelEvent* event) = 0;
+
+  virtual void keyPressEvent( QKeyEvent * event )  = 0;
+
+  virtual void resizeEvent( QResizeEvent* event ) = 0;
 
 //
 // Public SLOTS.
@@ -105,43 +108,52 @@ public slots:
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
-// Signals.
+// SIGNALS.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
+// Protected types.
+protected:
+  /** Navigation context  */
+  struct NavigationContext
+  {
+    /**
+     * \brief Constructor.
+     *
+     * Default constructor (safely) initializes POD (Plain Old Data)
+     * structure.
+     */
+    NavigationContext()
+    {
+    }
+  };
+
+  /** Mouse context */
+  struct MouseContext
+  {
+    /**
+     * \brief Default constructor.
+     */
+    MouseContext()
+    {
+    }
+  };
+
+//
 // Protected methods.
 protected:
-
-  /** \brief Constructor. */
-  AbstractDragAndDropEventFilter( QObject* parent =NULL );
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragEnterEvent
-   */
-  virtual bool DragEnterEvent( QObject* object, QDragEnterEvent* event ) =0;
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragLeaveEvent
-   */
-  virtual bool DragLeaveEvent( QObject* object, QDragLeaveEvent* event ) =0;
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragMoveEvent
-   */
-  virtual bool DragMoveEvent( QObject* object, QDragMoveEvent* event ) =0;
-
-  /**
-   * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dropEvent
-   */
-  virtual bool DropEvent( QObject* object, QDropEvent* event ) =0;
-
+  
 //
 // Protected attributes.
 protected:
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
+//
+// Private types.
+private:
 
 //
 // Private methods.
@@ -154,7 +166,7 @@ private:
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
-// Slots.
+// SLOTS.
 private slots:
 };
 
@@ -167,4 +179,4 @@ namespace mvd
 {
 } // end namespace 'mvd'
 
-#endif // __mvdAbstractDragAndDropEventFilter_h
+#endif // __mvdAbstractImageViewManipulator_h

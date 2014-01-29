@@ -17,13 +17,17 @@
 
 =========================================================================*/
 
-#ifndef __mvdImageModelRenderer_h
-#define __mvdImageModelRenderer_h
+#ifndef __mvdImageViewRenderer_h
+#define __mvdImageViewRenderer_h
 
 //
 // Configuration include.
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
+
+
+/*****************************************************************************/
+/* INCLUDE SECTION                                                           */
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -41,10 +45,11 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
-#include "Gui/mvdAbstractModelRenderer.h"
+#include "Gui/mvdAbstractImageViewRenderer.h"
 
-#define USE_BYTE_POINTER_bis 1
+
+/*****************************************************************************/
+/* PRE-DECLARATION SECTION                                                   */
 
 //
 // External classes pre-declaration.
@@ -56,53 +61,54 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-class Monteverdi2_EXPORT AbstractImageModel;
 
-/** \class ImageModelRenderer
- *
+
+/*****************************************************************************/
+/* CLASS DEFINITION SECTION                                                  */
+
+/**
+ * \class ImageViewRenderer
  */
-class ImageModelRenderer :
-    public AbstractModelRenderer
+class ImageViewRenderer :
+    public AbstractImageViewRenderer
 {
+
+  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+
   Q_OBJECT;
+
+  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
 // Public types.
 public:
-#if USE_BYTE_POINTER_bis
-  typedef QSharedPointer< unsigned char > BytePointer;
-#endif
 
 //
 // Public methods.
 public:
   /** Constructor */
-  ImageModelRenderer( QObject* parent = NULL );
+  ImageViewRenderer( QObject* parent = NULL );
 
   /** Destructor */
-  virtual ~ImageModelRenderer();
+  virtual ~ImageViewRenderer();
 
-  /** */
+  /**
+   */
   virtual void paintGL( const RenderingContext& context );
+
+  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
 public slots:
-  void onMovingEvent()
-  {
-    m_IsMoving = true;
-  }
 
-  void onReleasedMouse()
-  {
-    m_IsMoving = false;
-  }
-
-  void OnViewportRegionRepresentationChanged(const PointType& ul, const PointType& lr);
+  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // SIGNALS.
 signals:
-  void ViewportOriginChanged(const IndexType origin);
+
+  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
+
 //
 // Protected methods.
 protected:
@@ -111,6 +117,8 @@ protected:
 // Protected attributes.
 protected:
 
+  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
+
 //
 // Private methods.
 private:
@@ -118,25 +126,8 @@ private:
 //
 // Private attributes.
 private:
-#if USE_BYTE_POINTER_bis
-  BytePointer m_Buffer;
-#else
-  unsigned char * m_Buffer;
-#endif
 
-  bool m_IsMoving;
-
-  double m_PreviousOriginX;
-  double m_PreviousOriginY;
-  double m_MovingOriginX;
-  double m_MovingOriginY;
-
-  // 
-  // used for quicklook renderer
-  PointType m_SquarePointUL;
-  PointType m_SquarePointLR;
-
-  unsigned int m_Texture;
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // SLOTS.
@@ -145,4 +136,4 @@ private slots:
 
 } // end namespace 'mvd'
 
-#endif // __mvdImageModelRenderer_h
+#endif // __mvdImageViewRenderer_h

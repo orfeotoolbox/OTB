@@ -44,8 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
-#include "Gui/mvdAbstractViewManipulator.h"
+#include "Gui/mvdAbstractImageViewManipulator.h"
 
 
 /*****************************************************************************/
@@ -69,17 +68,10 @@ namespace mvd
 /**
  * \class ImageViewManipulator
  *
- *  \brief This class handles the event related to a QGLWidget. It also
- *  handles :
- *    - NavigationContext : to store the region of the image to be
- *      rendered.
- *    - MouseContext : to remember the user action as a mouse press,
- *                     mouse drag
- *  
- *   WIP
+ *  \brief TODO.
  */
 class Monteverdi2_EXPORT ImageViewManipulator :
-    public AbstractViewManipulator
+    public AbstractImageViewManipulator
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -98,56 +90,36 @@ public:
   /** \brief Destructor. */
   virtual ~ImageViewManipulator();
 
-  /** */
-  void mouseMoveEvent ( QMouseEvent * event );
-  /** */
-  void mousePressEvent ( QMouseEvent * event );
-  /** */
-  void mouseReleaseEvent ( QMouseEvent * event );
-  /** */
-  void wheelEvent ( QWheelEvent* event);
-  /** */
-  void resizeEvent ( QResizeEvent * event );
-  /** */
-  void keyPressEvent( QKeyEvent * event );
-
-  /** */
-  bool HasZoomChanged() const;
+  /**
+   */
+  virtual void mouseMoveEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void mousePressEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void mouseReleaseEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void wheelEvent( QWheelEvent* event);
+  /**
+   */
+  virtual void resizeEvent( QResizeEvent * event );
+  /**
+   */
+  virtual void keyPressEvent( QKeyEvent * event );
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
 //
 // Public SLOTS.
 public slots:
-  void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-                                 const SpacingType& spacing, 
-                                 const PointType& origin );
-
-  void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-                                 const SpacingType& spacing, 
-                                 const PointType& origin,
-                                 const PointType& centerPoint,
-                                 double zoomLevel);
-
-  void OnViewportRegionChanged(double Xpc, double Ypc);
-
-  void OnUserScaleEditingFinished(const QString & scale);
-
-  void OnUserZoomIn();
-
-  void OnUserZoomOut();
-
-  void OnUserZoomExtent();
-
-  void OnUserZoomFull();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  void ViewportRegionRepresentationChanged(const PointType&, const PointType&);
-  void CurrentScaleUpdated(const QString&);
   
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -155,19 +127,6 @@ signals:
 //
 // Protected methods.
 protected:
-  /** */
-  void ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest);
-
-  /** */
-  void CenterRegion(double scale);
-
-  void KeepMousePosition(double scale);
-
-  /** */
-  void ResizeRegion(unsigned int w, unsigned int h);
-
-  /** */
-  void moveRegion(double dx, double dy);
   
 //
 // Protected attributes.
@@ -182,26 +141,10 @@ private:
 //
 // Private methods.
 private:
-  /** Zoom view by a given factor */
-  void ZoomBy(const double factor);
-
-  /** Zoom to a given scale */
-  void ZoomTo(const double scale);
-
-  /** */
-  void PropagateViewportRegionChanged(const ImageRegionType& region);
-
-  /** */
-  void UpdateScale();
  
 //
 // Private attributes.
 private:
-  /** */
-  double m_PreviousIsotropicZoom;
-
-  /** Zoom multiplier: factor of zoom when zoom actions are triggered */
-  double m_ZoomMultiplier;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

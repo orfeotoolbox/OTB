@@ -16,7 +16,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "mvdAbstractModelRenderer.h"
+#include "mvdImageViewRenderer.h"
 
 
 /*****************************************************************************/
@@ -28,6 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+// necessary for the opengl variables and methods
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -40,9 +41,8 @@
 
 namespace mvd
 {
-
 /*
-  TRANSLATOR mvd::AbstractModelRenderer
+  TRANSLATOR mvd::ImageViewRenderer
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -61,21 +61,28 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
-/*******************************************************************************/
-AbstractModelRenderer
-::AbstractModelRenderer( QObject* parent ) :
-  QObject( parent )
+/*****************************************************************************/
+ImageViewRenderer
+::ImageViewRenderer( QObject* parent ) :
+  AbstractImageViewRenderer( parent )
 {
 }
 
-/*******************************************************************************/
-AbstractModelRenderer
-::~AbstractModelRenderer()
+/*****************************************************************************/
+ImageViewRenderer
+::~ImageViewRenderer()
 {
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+void
+ImageViewRenderer
+::paintGL( const RenderingContext& context )
+{
+}
+
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 
 } // end namespace 'mvd'

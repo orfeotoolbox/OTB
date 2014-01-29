@@ -17,7 +17,7 @@
 
 =========================================================================*/
 
-#include "mvdGLImageWidget.h"
+#include "mvdImageViewWidget.h"
 
 
 /*****************************************************************************/
@@ -32,20 +32,17 @@
 
 //
 // ITK includes (sorted by alphabetic order)
-#include "itkImageRegionConstIteratorWithIndex.h"
 
 //
 // OTB includes (sorted by alphabetic order)
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdAbstractImageModel.h"
-#include "Core/mvdDatasetModel.h"
 
 namespace mvd
 {
 /*
-  TRANSLATOR mvd::GLImageWidget
+  TRANSLATOR mvd::ImageViewWidget
 
   Necessary for lupdate to be aware of C++ namespaces.
 
@@ -64,69 +61,66 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*******************************************************************************/
-GLImageWidget
-::GLImageWidget( AbstractViewManipulator * manipulator,
-                 AbstractModelRenderer * renderer,
-                 QWidget* parent,
-		 const QGLWidget* shareWidget,
-		 Qt::WindowFlags flags ) :
+ImageViewWidget
+::ImageViewWidget( AbstractImageViewManipulator* manipulator,
+                   AbstractImageViewRenderer* renderer,
+                   QWidget* parent,
+                   const QGLWidget* shareWidget,
+                   Qt::WindowFlags flags ) :
   QGLWidget( parent, shareWidget, flags ),
-  m_ImageViewManipulator( NULL ),
-  m_ImageModelRenderer( NULL ),
-  m_ImageModel( NULL )
+  m_Manipulator( NULL ),
+  m_Renderer( NULL )
 {
-  Initialize(manipulator, renderer);
+  Initialize( manipulator, renderer );
 }
 
 /*******************************************************************************/
-GLImageWidget
-::GLImageWidget( AbstractViewManipulator * manipulator,
-                 AbstractModelRenderer * renderer,
+ImageViewWidget
+::ImageViewWidget( AbstractImageViewManipulator * manipulator,
+                 AbstractImageViewRenderer * renderer,
                  QGLContext* context,
 		 QWidget* parent,
 		 const QGLWidget* shareWidget,
 		 Qt::WindowFlags flags ) :
   QGLWidget( context, parent, shareWidget, flags ),
-  m_ImageViewManipulator( NULL ),
-  m_ImageModelRenderer( NULL ),
-  m_ImageModel( NULL )
+  m_Manipulator( NULL ),
+  m_Renderer( NULL )
 {
-  ListGlVersions();
-  Initialize(manipulator, renderer);
+  Initialize( manipulator, renderer );
 }
 
 /*******************************************************************************/
-GLImageWidget
-::GLImageWidget( AbstractViewManipulator * manipulator,
-                 AbstractModelRenderer * renderer,
+ImageViewWidget
+::ImageViewWidget( AbstractImageViewManipulator * manipulator,
+                 AbstractImageViewRenderer * renderer,
                  const QGLFormat& format,
                  QWidget* parent,
                  const QGLWidget* shareWidget,
                  Qt::WindowFlags flags ) :
   QGLWidget( format, parent, shareWidget, flags ),
-  m_ImageViewManipulator( NULL ),
-  m_ImageModelRenderer( NULL ),
-  m_ImageModel( NULL )
+  m_Manipulator( NULL ),
+  m_Renderer( NULL )
 {
-  Initialize(manipulator, renderer);
+  Initialize( manipulator, renderer );
 }
 
 /*******************************************************************************/
-GLImageWidget
-::~GLImageWidget()
+ImageViewWidget
+::~ImageViewWidget()
 {
-  // m_ImageViewManipulator (deleted as a child of a QObjet parent).
-  // m_ImageModelRenderer (deleted as a child of a QObjet parent).
+  // m_Manipulator (deleted as a child of a QObjet parent).
+  // m_Renderer (deleted as a child of a QObjet parent).
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
-::Initialize( AbstractViewManipulator* manipulator,
-	      AbstractModelRenderer* renderer )
+ImageViewWidget
+::Initialize( AbstractImageViewManipulator* manipulator,
+	      AbstractImageViewRenderer* renderer )
 {
   // Test OpenGL.
   ListGlVersions();
+
   // Accept drops
   setAcceptDrops( true );
   // Set focus policy so that the widget gets the focus if it is clicked
@@ -137,226 +131,107 @@ GLImageWidget
   assert( manipulator!=NULL );
   assert( renderer!=NULL );
 
-  m_ImageViewManipulator = manipulator;
-  m_ImageViewManipulator->setParent(this);
+  m_Manipulator = manipulator;
+  m_Manipulator->setParent( this );
 
-  m_ImageModelRenderer = renderer;
-  m_ImageModelRenderer->setParent(this);
-
-  QObject::connect(
-    this, SIGNAL( movingMouse() ),
-    m_ImageModelRenderer, SLOT( onMovingEvent() )
-  );
-
-  QObject::connect(
-    this, SIGNAL( releasingMouse() ),
-    m_ImageModelRenderer, SLOT(onReleasedMouse())
-  );
-
-  // Connect this model region changed.
-  QObject::connect(
-    this,
-    SIGNAL( ModelImageRegionChanged( const ImageRegionType& , 
-                                     const SpacingType&,
-                                     const PointType&) ),
-    // to:
-    m_ImageViewManipulator,
-    SLOT( OnModelImageRegionChanged( const ImageRegionType&, 
-                                     const SpacingType&,
-                                     const PointType&) )
-  );
-
-  // Connect the renderer origin (of extent) changed to the manipulator
-  QObject::connect(
-    m_ImageModelRenderer,
-    SIGNAL( ViewportOriginChanged( const IndexType& ) ),
-    // to:
-    m_ImageViewManipulator,
-    SLOT( OnViewportOriginChanged( const IndexType&) )
-  );
+  m_Renderer = renderer;
+  m_Renderer->setParent( this );
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
+ImageViewWidget
 ::initializeGL()
 {
-  glClearColor(0.0, 0.0, 0.0, 0.0);
-  glShadeModel(GL_FLAT);
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
-::resizeGL(int width, int height)
+ImageViewWidget
+::resizeGL( int width, int height )
 {
-  // TODO: Replace (GLint) casts with safer casts or no cast (if there is no compile-time warning).
-  glViewport(0, 0, (GLint)width, (GLint)height);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(0, (GLint)width, 0, (GLint)height, -1, 1);
+  glViewport(
+    0,
+    0,
+    static_cast< GLint >( width ),
+    static_cast< GLint >( height )
+  );
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
+ImageViewWidget
 ::paintGL()
 {
-  // Clear back-buffer(s) before rendering sub-components.
-  glClear( GL_COLOR_BUFFER_BIT );
+  AbstractImageViewRenderer::RenderingContext context;
 
-  // Get the region to draw from the ImageViewManipulator navigation
-  // context.
-  const ImageRegionType region(
-    m_ImageViewManipulator->GetViewportImageRegion() );
-
-  // Get the zoom 
-  const double isotropicZoom = m_ImageViewManipulator->GetIsotropicZoom();
-
-  // Setup rendering context with image-model and redering information.
-  AbstractModelRenderer::RenderingContext context(
-    m_ImageModel,
-    region, isotropicZoom, 
-    width(), height(),
-    m_ImageViewManipulator->HasZoomChanged()
-  );
-
-  // 
-  // emit an event with viewport center and zoom level (will be stored
-  // in DatasetModel to be written in Descriptor)
-  emit RenderingContextChanged(
-    m_ImageViewManipulator->GetViewportPhysicalCenter(), 
-    isotropicZoom
-    );
-
-  // use the model renderer to paint the requested region of the image.
-  m_ImageModelRenderer->paintGL( context );
+  m_Renderer->paintGL( context );
 }
 
 /*******************************************************************************/
-// Delegate the event to the ImageViewManipulator
 void
-GLImageWidget
+ImageViewWidget
 ::mousePressEvent( QMouseEvent* event )
 {
-  QCursor dragCursor;
-  dragCursor.setShape(Qt::ClosedHandCursor) ;
-  this->setCursor(dragCursor);
+  QGLWidget::mousePressEvent( event );
 
-  //
-  m_ImageViewManipulator->mousePressEvent(event);
-  this->update();
+  m_Manipulator->mousePressEvent( event );
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
+ImageViewWidget
 ::mouseMoveEvent( QMouseEvent* event )
 {
-  // if a button is clicked == drag
-  if ( event->buttons() & Qt::LeftButton  || 
-       event->buttons() & Qt::RightButton ||
-       event->buttons() & Qt::MidButton   ||
-       event->buttons() & Qt::XButton1    ||
-       event->buttons() & Qt::XButton2 )
-    {
-    // emit a signal movingMouse to update the renderer status
-    emit movingMouse();
+  QGLWidget::mouseMoveEvent( event );
 
-    // drag detected
-    m_ImageViewManipulator->mouseMoveEvent(event);
-
-    // repaint the buffer
-    this->update();
-    
-    // emited to update to force the ql widget (if any) to update
-    emit CentralWidgetUpdated();
-    }
-  else
-    {
-    // TODO: Out of the if/else ?
-    m_ImageViewManipulator->mouseMoveEvent(event);
- 
-   // update the mouse cursor position if not dragging (just moving
-    // the mouse )
-    m_ImageViewManipulator->PropagatePointUnderCursorCoordinates(event->pos());
-    }
+  m_Manipulator->mouseMoveEvent( event );
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
+ImageViewWidget
 ::mouseReleaseEvent( QMouseEvent* event )
 {
-  QCursor stdCursor;
-  stdCursor.setShape(Qt::ArrowCursor) ;
-  this->setCursor(stdCursor);
+  QGLWidget::mouseReleaseEvent( event );
 
-  // emit a signal releasingMouse to update the renderer status
-  emit releasingMouse();
-
-  // call paintGL
-  this->update();
-
-  // emited to update to force the ql widget (if any) to update
-  emit CentralWidgetUpdated();
-
-  m_ImageViewManipulator->mouseReleaseEvent(event);
+  m_Manipulator->mouseReleaseEvent(event);
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
+ImageViewWidget
 ::wheelEvent( QWheelEvent* event )
 {
-  // emit a signal releasingMouse to update the renderer status
-  emit releasingMouse();
+  QGLWidget::wheelEvent( event );
 
-  m_ImageViewManipulator->wheelEvent(event);
-
-  // repaint the buffer
-  this->update();
-
-  // emited to update to force the ql widget (if any) to update
-  emit CentralWidgetUpdated();
+  m_Manipulator->wheelEvent(event);
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
+ImageViewWidget
 ::resizeEvent( QResizeEvent* event )
 {
   // First, call superclass implementation
-  QGLWidget::resizeEvent(event);
+  QGLWidget::resizeEvent( event );
 
-  // emit a signal releasingMouse to update the renderer status
-  emit releasingMouse();
-
-  m_ImageViewManipulator->resizeEvent(event);
-
-  // emited to update to force the ql widget (if any) to update
-  emit CentralWidgetUpdated();
+  m_Manipulator->resizeEvent( event );
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
+ImageViewWidget
 ::keyPressEvent( QKeyEvent* event )
 {
-  m_ImageViewManipulator->keyPressEvent(event);
-  this->update();
-  
-  // emited to update to force the ql widget (if any) to update
-  emit CentralWidgetUpdated();
+  QGLWidget::keyPressEvent( event );
+
+  m_Manipulator->keyPressEvent( event );
 }
 
 /*******************************************************************************/
 void
-GLImageWidget
+ImageViewWidget
 ::ListGlVersions() const
 {
 #if QT_VERSION < QT_VERSION_CHECK( 4, 7, 0 )
@@ -422,12 +297,5 @@ GLImageWidget
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /******************************************************************************/
-void
-GLImageWidget
-::OnSpacingChanged(const SpacingType& spacing)
-{
-  m_ImageViewManipulator->SetSpacing(spacing);
-}
-/*******************************************************************************/
 
 }
