@@ -7,7 +7,12 @@ find Utilities/ITK/* -type d | xargs rm -r
 
 # Copy new version
 cp -R /home/jmalik/dev/src/ITK/* Utilities/ITK
+
+# git files 
 rm -rf Utilities/ITK/.git*
+rm -rf Utilities/ITK/Modules/Remote/.gitignore
+rm -rf Utilities/ITK/Modules/External/.gitignore
+rm -rf Utilities/ITK/Modules/ThirdParty/.gitattributes
 
 # Remove ITK module test code
 find Utilities/ITK -type d | grep -v vxl_shared_link_test | grep test$ | xargs rm -rf
