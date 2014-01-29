@@ -103,7 +103,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** */
-  virtual double ComputeEuclideanDistanceToSegment(VertexType q1, VertexType q2, VertexType p) const;
+  virtual double ComputeEuclideanDistanceMetricToSegment(VertexType q1, VertexType q2, VertexType p) const;
 
   /** */
 

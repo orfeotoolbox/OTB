@@ -21,7 +21,7 @@
 #ifndef __otbFlexibleDistanceWithMissingValue_h
 #define __otbFlexibleDistanceWithMissingValue_h
 
-#include "otbEuclideanDistanceWithMissingValuePow2.h"
+#include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 
 namespace otb {
 
@@ -30,7 +30,7 @@ namespace Statistics {
 /** \class FlexibleDistanceWithMissingValue
  * \brief Non-Euclidean distance function facing missing value.
  *
- * This class is derived from EuclideanDistanceWithMissingValuePow2 class to
+ * This class is derived from EuclideanDistanceMetricWithMissingValuePow2 class to
  * deal with missing data. In addition, the initial Evaluate method performs
  * a flexible calculation of distance when a component does contain data.
  *
@@ -44,23 +44,23 @@ namespace Statistics {
  *
  * The only restriction is that elements have to support \code NaN \endcode.
  *
- * \sa EuclideanDistanceWithMissingValuePow2
+ * \sa EuclideanDistanceMetricWithMissingValuePow2
  */
 template<class TVector>
 class ITK_EXPORT FlexibleDistanceWithMissingValue :
-  public otb::Statistics::EuclideanDistanceWithMissingValuePow2<TVector>
+  public otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
 {
 public:
   /** Standard "Self" typedef. */
   typedef FlexibleDistanceWithMissingValue                                Self;
-  typedef otb::Statistics::EuclideanDistanceWithMissingValuePow2<TVector> Superclass;
+  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector> Superclass;
   typedef itk::SmartPointer<Self>                                         Pointer;
   typedef itk::SmartPointer<const Self>                                   ConstPointer;
 
   typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FlexibleDistanceWithMissingValue, EuclideanDistanceWithMissingValuePow2);
+  itkTypeMacro(FlexibleDistanceWithMissingValue, EuclideanDistanceMetricWithMissingValuePow2);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

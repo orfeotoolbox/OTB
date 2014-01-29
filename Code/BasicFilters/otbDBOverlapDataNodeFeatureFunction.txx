@@ -53,7 +53,7 @@ DBOverlapDataNodeFeatureFunction<TCoordRep, TPrecision>
 template <class TCoordRep, class TPrecision>
 double
 DBOverlapDataNodeFeatureFunction<TCoordRep, TPrecision>
-::ComputeEuclideanDistanceToSegment(VertexType q1, VertexType q2, VertexType p) const
+::ComputeEuclideanDistanceMetricToSegment(VertexType q1, VertexType q2, VertexType p) const
 {
   // Length of the segment
   double l2 = q1.SquaredEuclideanDistanceTo(q2);
@@ -102,7 +102,7 @@ DBOverlapDataNodeFeatureFunction<TCoordRep, TPrecision>
           while (j<node.GetLine()->GetVertexList()->Size()-1)
             {
             double dist;
-            dist = this->ComputeEuclideanDistanceToSegment(node.GetLine()->GetVertexList()->GetElement(j),
+            dist = this->ComputeEuclideanDistanceMetricToSegment(node.GetLine()->GetVertexList()->GetElement(j),
                                                      node.GetLine()->GetVertexList()->GetElement(j+1),
                                                      currentGeometry->GetPolygonExteriorRing()->GetVertexList()->GetElement(i));
             //std::cout << "dist: " << dist << std::endl;

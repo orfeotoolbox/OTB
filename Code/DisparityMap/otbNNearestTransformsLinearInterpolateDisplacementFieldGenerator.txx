@@ -56,7 +56,7 @@ NNearestTransformsLinearInterpolateDisplacementFieldGenerator<TPointSet, TDispla
       PointType point;
       point[0] = static_cast<double>(this->GetPointSet()->GetPoints()->GetElement(*indexIt)[0]);
       point[1] = static_cast<double>(this->GetPointSet()->GetPoints()->GetElement(*indexIt)[1]);
-      double distance = this->EuclideanDistance(index, point);
+      double distance = this->EuclideanDistanceMetric(index, point);
       if (distance < EPSILON)
         {
         distance = EPSILON;

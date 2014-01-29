@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::EuclideanDistanceMetric<RealVectorType> DistanceType;
   typedef otb::KeyPointSetsMatchingFilter<PointSetType, DistanceType>
-  EuclideanDistanceMatchingFilterType;
+  EuclideanDistanceMetricMatchingFilterType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
   typedef PointSetType::PointType         PointType;
   typedef std::pair<PointType, PointType> MatchType;
   typedef std::vector<MatchType>          MatchVectorType;
-  typedef EuclideanDistanceMatchingFilterType::LandmarkListType
+  typedef EuclideanDistanceMetricMatchingFilterType::LandmarkListType
   LandmarkListType;
 
   typedef PointSetType::PointsContainer    PointsContainerType;
@@ -172,8 +172,8 @@ int main(int argc, char* argv[])
     ImageToSIFTKeyPointSetFilterType::New();
   ImageToSIFTKeyPointSetFilterType::Pointer filter2 =
     ImageToSIFTKeyPointSetFilterType::New();
-  EuclideanDistanceMatchingFilterType::Pointer euclideanMatcher =
-    EuclideanDistanceMatchingFilterType::New();
+  EuclideanDistanceMetricMatchingFilterType::Pointer euclideanMatcher =
+    EuclideanDistanceMetricMatchingFilterType::New();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //

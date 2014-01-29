@@ -79,7 +79,7 @@ public:
   itkSetMacro(DistanceThreshold, PrecisionType);
 
   /** Method to compute the distance of a point to a segment */
-  double ComputeEuclideanDistanceToSegment(VertexType q1, VertexType q2, VertexType p) const;
+  double ComputeEuclideanDistanceMetricToSegment(VertexType q1, VertexType q2, VertexType p) const;
 
 protected:
   DBOverlapDataNodeFeatureFunction();

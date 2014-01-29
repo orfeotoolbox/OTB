@@ -609,7 +609,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 double
 DataNode<TPrecision, VDimension, TValuePrecision>
-::EuclideanDistance(const DataNode* node)
+::EuclideanDistanceMetric(const DataNode* node)
 {
   // Convert the nodes to OGRGeometries
   OGRGeometry * dstGeomtery     = this->ConvertDataNodeToOGRGeometry(node);
@@ -622,7 +622,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 double
 DataNode<TPrecision, VDimension, TValuePrecision>
-::EuclideanDistance(const PointType point)
+::EuclideanDistanceMetric(const PointType point)
 {
   // Convert Point to point to ogrPoint
   OGRPoint ogrPointSrc;

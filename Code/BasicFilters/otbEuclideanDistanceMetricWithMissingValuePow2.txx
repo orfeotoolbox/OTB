@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbEuclideanDistanceWithMissingValuePow2_txx
-#define __otbEuclideanDistanceWithMissingValuePow2_txx
+#ifndef __otbEuclideanDistanceMetricWithMissingValuePow2_txx
+#define __otbEuclideanDistanceMetricWithMissingValuePow2_txx
 
 #include "itkNumericTraits.h"
 #include "itkMeasurementVectorTraits.h"
@@ -30,7 +30,7 @@ namespace Statistics {
 
 template<class TVector>
 inline double
-EuclideanDistanceWithMissingValuePow2<TVector>
+EuclideanDistanceMetricWithMissingValuePow2<TVector>
 ::Evaluate(const TVector& x1, const TVector& x2) const
 {
   if (itk::NumericTraits<TVector>::GetLength(x1) !=
@@ -55,7 +55,7 @@ EuclideanDistanceWithMissingValuePow2<TVector>
 
 template<class TVector>
 inline double
-EuclideanDistanceWithMissingValuePow2<TVector>
+EuclideanDistanceMetricWithMissingValuePow2<TVector>
 ::Evaluate(const TVector& x) const
 {
   MeasurementVectorSizeType
@@ -65,7 +65,7 @@ EuclideanDistanceWithMissingValuePow2<TVector>
     itkExceptionMacro(<< "Please set the MeasurementVectorSize first");
     }
   itk::Statistics::MeasurementVectorTraits::Assert(this->GetOrigin(), measurementVectorSize,
-                                       "EuclideanDistance::Evaluate Origin and input vector have different lengths");
+                                       "EuclideanDistanceMetric::Evaluate Origin and input vector have different lengths");
 
   double temp, distance = itk::NumericTraits<double>::Zero;
 
@@ -83,7 +83,7 @@ EuclideanDistanceWithMissingValuePow2<TVector>
 
 template<class TVector>
 inline double
-EuclideanDistanceWithMissingValuePow2<TVector>
+EuclideanDistanceMetricWithMissingValuePow2<TVector>
 ::Evaluate(const ValueType& a, const ValueType& b) const
 {
   // FIXME throw NaN exception ??
@@ -96,7 +96,7 @@ EuclideanDistanceWithMissingValuePow2<TVector>
 template<class TVector>
 /*static */
 bool
-EuclideanDistanceWithMissingValuePow2<TVector>
+EuclideanDistanceMetricWithMissingValuePow2<TVector>
 ::IsMissingValue(const ValueType& v)
 {
   return static_cast<bool>(vnl_math_isnan(static_cast<double>(v)));
@@ -105,7 +105,7 @@ EuclideanDistanceWithMissingValuePow2<TVector>
 template<class TVector>
 /* static */
 void
-EuclideanDistanceWithMissingValuePow2<TVector>
+EuclideanDistanceMetricWithMissingValuePow2<TVector>
 ::SetToMissingValue(ValueType& v)
 {
   v = std::numeric_limits<ValueType>::signaling_NaN();

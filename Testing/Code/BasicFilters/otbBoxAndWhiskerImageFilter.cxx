@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
-#include "otbEuclideanDistanceWithMissingValuePow2.h"
+#include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
@@ -59,7 +59,7 @@ int otbBoxAndWhiskerImageFilter(int argc, char * argv[])
   reader->UpdateOutputInformation();
   writer->SetFileName(outputFilename);
 
-  typedef otb::Statistics::EuclideanDistanceWithMissingValuePow2<ImageType::PixelType>   OutlierType;
+  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<ImageType::PixelType>   OutlierType;
 
   filter->SetInput(reader->GetOutput());
   filter->Update();

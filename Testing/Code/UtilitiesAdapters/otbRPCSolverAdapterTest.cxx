@@ -31,7 +31,7 @@ typedef otb::GenericRSTransform<>              RSTranformType;
 typedef otb::RPCSolverAdapter::Point2DType Point2DType;
 typedef otb::RPCSolverAdapter::Point3DType Point3DType;
 typedef otb::GenericRSTransform<double,3,3>    RSTranform3dType;
-typedef itk::Statistics::EuclideanDistanceMetric<Point2DType> EuclideanDistanceType;
+typedef itk::Statistics::EuclideanDistanceMetric<Point2DType> EuclideanDistanceMetricType;
 typedef otb::GeographicalDistance<Point2DType> GeoDistanceType;
 
 int otbRPCSolverAdapterTest(int argc, char* argv[])
@@ -125,7 +125,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   rpcInvTransform->SetOutputKeywordList(rpcKwl);
   rpcInvTransform->InstanciateTransform();
 
-  EuclideanDistanceType::Pointer euclideanDistance = EuclideanDistanceType::New();
+  EuclideanDistanceMetricType::Pointer euclideanDistanceMetric = EuclideanDistanceMetricType::New();
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();
 
   bool fail = false;
@@ -160,7 +160,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
     // Check inverse transform
     imgPoint = rpcInvTransform->TransformPoint(groundPoint2dRef);
 
-    double imgRes = euclideanDistance->Evaluate(imgPoint,it->first);
+    double imgRes = euclideanDistanceMetric->Evaluate(imgPoint,it->first);
 
     if(imgRes>imgTol)
       {

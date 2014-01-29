@@ -92,7 +92,7 @@ private:
  * TMap is a template for the SOM that can be a simple VectorImage.
  *
  * \ingroup Streamed
- * \sa EuclideanDistanceWithMissingValue
+ * \sa EuclideanDistanceMetricWithMissingValue
  */
 template <class TInputImage, class TOutputImage,
     class TDistanceMetric, class TMap>

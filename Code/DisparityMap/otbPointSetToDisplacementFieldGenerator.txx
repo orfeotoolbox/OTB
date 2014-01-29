@@ -108,7 +108,7 @@ PointSetToDisplacementFieldGenerator<TPointSet, TDisplacementField>
     if (vcl_abs(this->GetPointSet()->GetPointData()->GetElement(j)[0]) >= m_MetricThreshold)
       {
 
-      distanceVector.push_back(EuclideanDistance(index, p));
+      distanceVector.push_back(EuclideanDistanceMetric(index, p));
       sortVector.push_back(i);
       indexVector.push_back(j);
       ++i;
@@ -133,7 +133,7 @@ PointSetToDisplacementFieldGenerator<TPointSet, TDisplacementField>
 template <class TPointSet, class TDisplacementField>
 double
 PointSetToDisplacementFieldGenerator<TPointSet, TDisplacementField>
-::EuclideanDistance(IndexType index, PointType p)
+::EuclideanDistanceMetric(IndexType index, PointType p)
 {
   PointType pprime;
   // our point are expressed in index and not in physical coordinates

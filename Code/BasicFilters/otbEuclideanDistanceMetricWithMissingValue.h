@@ -18,19 +18,19 @@
 
 =========================================================================*/
 
-#ifndef __otbEuclideanDistanceWithMissingValue_h
-#define __otbEuclideanDistanceWithMissingValue_h
+#ifndef __otbEuclideanDistanceMetricWithMissingValue_h
+#define __otbEuclideanDistanceMetricWithMissingValue_h
 
-#include "otbEuclideanDistanceWithMissingValuePow2.h"
+#include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 
 namespace otb {
 
 namespace Statistics {
 
-/** \class EuclideanDistanceWithMissingValue
+/** \class EuclideanDistanceMetricWithMissingValue
  * \brief Euclidean distance function facing missing value.
  *
- * This class is derived from EuclideanDistanceWithMissingValuePow2 class that handle the missing value
+ * This class is derived from EuclideanDistanceMetricWithMissingValuePow2 class that handle the missing value
  * functonnalities. Here, the square root is included in the evaluation...
  *
  * The class can be templated over any container that holds data elements, as
@@ -39,16 +39,16 @@ namespace Statistics {
  * The only restriction is that elements have to support NaN values.
  *
  * \sa EuclideanDistanceMetric
- * \sa EuclideanDistanceWithMissingValuePow2
+ * \sa EuclideanDistanceMetricWithMissingValuePow2
  */
 template<class TVector>
-class ITK_EXPORT EuclideanDistanceWithMissingValue :
-  public otb::Statistics::EuclideanDistanceWithMissingValuePow2<TVector>
+class ITK_EXPORT EuclideanDistanceMetricWithMissingValue :
+  public otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
 {
 public:
   /** Standard "Self" typedef. */
-  typedef EuclideanDistanceWithMissingValue Self;
-  typedef otb::Statistics::EuclideanDistanceWithMissingValuePow2<TVector>
+  typedef EuclideanDistanceMetricWithMissingValue Self;
+  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -57,7 +57,7 @@ public:
   MeasurementVectorSizeType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(EuclideanDistanceWithMissingValue, EuclideanDistanceWithMissingValuePow2);
+  itkTypeMacro(EuclideanDistanceMetricWithMissingValue, EuclideanDistanceMetricWithMissingValuePow2);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -92,8 +92,8 @@ public:
   }
 
 protected:
-  EuclideanDistanceWithMissingValue() {}
-  virtual ~EuclideanDistanceWithMissingValue() {}
+  EuclideanDistanceMetricWithMissingValue() {}
+  virtual ~EuclideanDistanceMetricWithMissingValue() {}
 }; // end of class
 
 } // end namespace statistics

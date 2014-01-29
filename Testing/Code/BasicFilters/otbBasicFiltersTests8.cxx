@@ -30,8 +30,8 @@ void RegisterTests()
   REGISTER_TEST(otbLabelizeNeighborhoodConnectedImageFilter);
   REGISTER_TEST(otbLabelizeConfidenceConnectedImageFilterNew);
   REGISTER_TEST(otbLabelizeConfidenceConnectedImageFilter);
-  REGISTER_TEST(otbEuclideanDistanceWithMissingValueNew);
-  REGISTER_TEST(otbEuclideanDistanceWithMissingValue);
+  REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValueNew);
+  REGISTER_TEST(otbEuclideanDistanceMetricWithMissingValue);
   REGISTER_TEST(otbConvolutionImageFilterNew);
   REGISTER_TEST(otbConvolutionImageFilter);
   REGISTER_TEST(otbScalarToRainbowRGBPixelFunctorNew);

@@ -26,10 +26,10 @@ int otbKeyPointSetsMatchingFilterNew(int argc, char * argv[])
 
   typedef itk::VariableLengthVector<RealType>           RealVectorType;
   typedef itk::PointSet<RealVectorType, Dimension>      PointSetType;
-  typedef otb::KeyPointSetsMatchingFilter<PointSetType> EuclideanDistanceMatchingFilterType;
+  typedef otb::KeyPointSetsMatchingFilter<PointSetType> EuclideanDistanceMetricMatchingFilterType;
 
   // Instantiating object
-  EuclideanDistanceMatchingFilterType::Pointer filter = EuclideanDistanceMatchingFilterType::New();
+  EuclideanDistanceMetricMatchingFilterType::Pointer filter = EuclideanDistanceMetricMatchingFilterType::New();
 
   std::cout << filter << std::endl;
 

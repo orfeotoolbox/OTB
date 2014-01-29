@@ -107,7 +107,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   PointVectorType vPoint;
 
   // Euclidean distance
-  typename EuclideanDistanceType::Pointer euclideanDistance = EuclideanDistanceType::New();
+  typename EuclideanDistanceMetricType::Pointer euclideanDistanceMetric = EuclideanDistanceMetricType::New();
 
   // Gathering Information
   RegionType generatorRegion = node->GetPolygonExteriorRing()->GetBoundingRegion();
@@ -165,7 +165,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 
       while(valid && pit!=insiders.end())
         {
-        valid = (euclideanDistance->Evaluate(candidate, *pit) > this->GetInhibitionRadius());
+        valid = (euclideanDistanceMetric->Evaluate(candidate, *pit) > this->GetInhibitionRadius());
         ++pit;
         }
       PointType point;

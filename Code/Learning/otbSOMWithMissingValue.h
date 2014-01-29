@@ -29,16 +29,16 @@ namespace otb
  *  \brief This class implements SOM training with missing value
  *
  *  The distance between vectors that may have missing components is holded
- *  by the EuclideanDistanceWithMissingValue class in the SOMMap distance
+ *  by the EuclideanDistanceMetricWithMissingValue class in the SOMMap distance
  *  template. Nevertheless, this class re-implements the UpdateMap method to
  *  adapt the evaluation of each component of the 'newNeuron' when dealing
  *  with missing values.
  *
- *  TMap has to be templeted with EuclideanDistanceWithMissingValuePow2
+ *  TMap has to be templeted with EuclideanDistanceMetricWithMissingValuePow2
  *
  *  \sa SOMMap
  *  \sa PeriodicSOM
- *  \sa EuclideanDistanceWithMissingValue
+ *  \sa EuclideanDistanceMetricWithMissingValue
  */
 template <class TListSample, class TMap,
     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,

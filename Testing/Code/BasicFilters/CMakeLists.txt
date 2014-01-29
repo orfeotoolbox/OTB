@@ -1062,13 +1062,13 @@ add_test(bfTvPhaseFunctorTest ${BASICFILTERS_TESTS7}
                     80 80
 )
 
-# -------            otb::EuclideanDistanceWithMissingValue   ----------------------------
+# -------            otb::EuclideanDistanceMetricWithMissingValue   ----------------------------
 
-  add_test(bfTuEuclideanDistanceWithMissingValueNew ${BASICFILTERS_TESTS8}
-         otbEuclideanDistanceWithMissingValueNew)
+  add_test(bfTuEuclideanDistanceMetricWithMissingValueNew ${BASICFILTERS_TESTS8}
+         otbEuclideanDistanceMetricWithMissingValueNew)
 
-  add_test(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
-         otbEuclideanDistanceWithMissingValue)
+  add_test(bfTvEuclideanDistanceMetricWithMissingValue ${BASICFILTERS_TESTS8}
+         otbEuclideanDistanceMetricWithMissingValue)
 
 
 # -------            otb::FlexibleDistanceWithMissingValue   ----------------------------
@@ -3052,8 +3052,8 @@ otbLabelizeNeighborhoodConnectedImageFilterNew.cxx
 otbLabelizeNeighborhoodConnectedImageFilter.cxx
 otbLabelizeConfidenceConnectedImageFilterNew.cxx
 otbLabelizeConfidenceConnectedImageFilter.cxx
-otbEuclideanDistanceWithMissingValueNew.cxx
-otbEuclideanDistanceWithMissingValue.cxx
+otbEuclideanDistanceMetricWithMissingValueNew.cxx
+otbEuclideanDistanceMetricWithMissingValue.cxx
 otbConvolutionImageFilterNew.cxx
 otbConvolutionImageFilter.cxx
 otbScalarToRainbowRGBPixelFunctorNew.cxx

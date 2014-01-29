@@ -70,7 +70,7 @@ FlexibleDistanceWithMissingValue<TVector>
     }
 
   itk::Statistics::MeasurementVectorTraits::Assert(this->GetOrigin(), measurementVectorSize,
-                                       "EuclideanDistance::Evaluate Origin and input vector have different lengths");
+                                       "EuclideanDistanceMetric::Evaluate Origin and input vector have different lengths");
 
   double temp, distance = itk::NumericTraits<double>::Zero;
 

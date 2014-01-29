@@ -27,7 +27,7 @@ typedef otb::Image<unsigned short>      ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef ImageType::PointType            PointType;
 typedef otb::GenericRSTransform<>       TransformType;
-typedef itk::Statistics::EuclideanDistanceMetric<PointType> PointEuclideanDistanceType;
+typedef itk::Statistics::EuclideanDistanceMetric<PointType> PointEuclideanDistanceMetricType;
 typedef otb::GeographicalDistance<PointType> GeographicalDistanceType;
 
 int otbGenericRSTransformGenericTest(int argc, char * argv[])
@@ -187,7 +187,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
   std::cout<<std::endl;
 
   // Build metrics
-  PointEuclideanDistanceType::Pointer physDistance = PointEuclideanDistanceType::New();
+  PointEuclideanDistanceMetricType::Pointer physDistance = PointEuclideanDistanceMetricType::New();
   GeographicalDistanceType::Pointer geoDistance = GeographicalDistanceType::New();
 
   // Check precision on output

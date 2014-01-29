@@ -263,9 +263,9 @@ public:
   std::vector<std::string> GetFieldList() const;
 
   /** \return the distance to a point */
-  double EuclideanDistance(const DataNode* node);
+  double EuclideanDistanceMetric(const DataNode* node);
 
-  double EuclideanDistance(const PointType point);
+  double EuclideanDistanceMetric(const PointType point);
 
    /**
     * \return true if the two datanodes intersects

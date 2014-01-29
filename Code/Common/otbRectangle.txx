@@ -58,8 +58,8 @@ Rectangle<TValue>
   corner[1] = middleP[1] - (m_Width / 2) * vcl_cos(m_Orientation);
 
   /** Compute the distance to the orthogonal median of the rectangle*/
-  if (this->ComputeEuclideanDistanceToSegment(p1, p2, point) - (m_Width / 2.) < 1e-10
-      && this->ComputeEuclideanDistanceToSegment(middleP, corner, point) - (lengthSeg / 2.) < 1e-10) return true;
+  if (this->ComputeEuclideanDistanceMetricToSegment(p1, p2, point) - (m_Width / 2.) < 1e-10
+      && this->ComputeEuclideanDistanceMetricToSegment(middleP, corner, point) - (lengthSeg / 2.) < 1e-10) return true;
   else return false;
 }
 
@@ -69,7 +69,7 @@ Rectangle<TValue>
 template<class TValue>
 double
 Rectangle<TValue>
-::ComputeEuclideanDistanceToSegment(VertexType q1, VertexType q2, VertexType p) const
+::ComputeEuclideanDistanceMetricToSegment(VertexType q1, VertexType q2, VertexType p) const
 {
   double Xq1 = q1[0];
   double Yq1 = q1[1];

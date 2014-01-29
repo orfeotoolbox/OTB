@@ -21,13 +21,13 @@
 #include <iostream>
 #include <cstdlib>
 #include "itkVariableLengthVector.h"
-#include "otbEuclideanDistanceWithMissingValue.h"
+#include "otbEuclideanDistanceMetricWithMissingValue.h"
 
-int otbEuclideanDistanceWithMissingValue(int argc, char * argv[])
+int otbEuclideanDistanceMetricWithMissingValue(int argc, char * argv[])
 {
 
   typedef itk::VariableLengthVector<double>                              VectorType;
-  typedef otb::Statistics::EuclideanDistanceWithMissingValue<VectorType> DistanceType;
+  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValue<VectorType> DistanceType;
 
   DistanceType::Pointer dist = DistanceType::New();
 

@@ -132,7 +132,7 @@ protected:
   IndexVectorType GenerateNearestValidPointsPointSet(IndexType index, unsigned int n = 1);
 
   /** Euclidean distance of point to index */
-  double EuclideanDistance(IndexType index, PointType p);
+  double EuclideanDistanceMetric(IndexType index, PointType p);
 
 private:
   PointSetToDisplacementFieldGenerator(const Self &); //purposely not implemented

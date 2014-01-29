@@ -72,7 +72,7 @@ public:
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
 
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
-  typedef itk::Statistics::EuclideanDistanceMetric<PointType>          EuclideanDistanceType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PointType>    EuclideanDistanceMetricType;
 
   /** Connects the VectorDatas from which the localizations are going to be extracted. */
   void PushBackInput(const VectorDataType *);

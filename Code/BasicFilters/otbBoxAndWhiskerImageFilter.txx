@@ -30,7 +30,7 @@
 #include "itkProgressReporter.h"
 
 #include "otbBoxAndWhiskerImageFilter.h"
-#include "otbEuclideanDistanceWithMissingValue.h"
+#include "otbEuclideanDistanceMetricWithMissingValue.h"
 
 namespace otb {
 
@@ -105,7 +105,7 @@ BoxAndWhiskerImageFilter <TInputImage>
 ::PerformBoxAndWhiskerDetection(const PixelType& pixel)
 {
   typedef std::vector<ValueType>                                        VectorType;
-  typedef otb::Statistics::EuclideanDistanceWithMissingValue<PixelType> OutlierType;
+  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValue<PixelType> OutlierType;
 
   unsigned int       i;
   const unsigned int vectorSize = pixel.Size();
