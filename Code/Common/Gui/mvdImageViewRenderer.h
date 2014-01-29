@@ -92,10 +92,6 @@ public:
   /** Destructor */
   virtual ~ImageViewRenderer();
 
-  /**
-   */
-  virtual void paintGL( const RenderingContext& context );
-
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
@@ -122,6 +118,16 @@ protected:
 //
 // Private methods.
 private:
+
+  /**
+   */
+  virtual void virtual_InitializeGL();
+  /**
+   */
+  virtual void virtual_ResizeGL( int width, int height );
+  /**
+   */
+  virtual void virtual_PaintGL( const RenderingContext& context );
 
 //
 // Private attributes.

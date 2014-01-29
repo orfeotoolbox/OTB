@@ -77,7 +77,30 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
-::paintGL( const RenderingContext& context )
+::virtual_InitializeGL()
+{
+}
+
+/*****************************************************************************/
+void
+ImageViewRenderer
+::virtual_ResizeGL( int width, int height )
+{
+  /*
+  // Should be done here and not in OTB-Ice render routine.
+  glViewport(
+    0,
+    0,
+    static_cast< GLint >( width ),
+    static_cast< GLint >( height )
+  );
+  */
+}
+
+/*****************************************************************************/
+void
+ImageViewRenderer
+::virtual_PaintGL( const RenderingContext& context )
 {
 }
 

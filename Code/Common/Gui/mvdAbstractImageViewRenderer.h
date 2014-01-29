@@ -107,7 +107,13 @@ public:
 
   /**
    */
-  virtual void paintGL( const RenderingContext& context ) =0;
+  inline void InitializeGL();
+  /**
+   */
+  inline void ResizeGL( int width, int height );
+  /**
+   */
+  inline void PaintGL( const RenderingContext& context );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -142,6 +148,16 @@ protected:
 // Private methods.
 private:
 
+  /**
+   */
+  virtual void virtual_InitializeGL() =0;
+  /**
+   */
+  virtual void virtual_ResizeGL( int width, int height ) =0;
+  /**
+   */
+  virtual void virtual_PaintGL( const RenderingContext& context ) =0;
+
 //
 // Private attributes.
 private:
@@ -152,6 +168,41 @@ private:
 // SLOTS.
 private slots:
 };
+
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+
+/*****************************************************************************/
+inline
+void
+AbstractImageViewRenderer
+::InitializeGL()
+{
+  virtual_InitializeGL();
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageViewRenderer
+::ResizeGL( int width, int height )
+{
+  virtual_ResizeGL( width, height );
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageViewRenderer
+::PaintGL( const RenderingContext& context )
+{
+  virtual_PaintGL( context );
+}
 
 } // end namespace 'mvd'
 

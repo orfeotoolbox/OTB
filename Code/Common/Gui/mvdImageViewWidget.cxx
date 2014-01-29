@@ -150,12 +150,7 @@ void
 ImageViewWidget
 ::resizeGL( int width, int height )
 {
-  glViewport(
-    0,
-    0,
-    static_cast< GLint >( width ),
-    static_cast< GLint >( height )
-  );
+  m_Renderer->ResizeGL( width, height );
 }
 
 /*******************************************************************************/
@@ -165,7 +160,7 @@ ImageViewWidget
 {
   AbstractImageViewRenderer::RenderingContext context;
 
-  m_Renderer->paintGL( context );
+  m_Renderer->PaintGL( context );
 }
 
 /*******************************************************************************/

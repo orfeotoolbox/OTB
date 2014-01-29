@@ -144,15 +144,15 @@ protected:
   virtual void resizeGL( int widgth, int height );
   virtual void paintGL();
 
-  void mouseMoveEvent( QMouseEvent* event );
-  void mouseReleaseEvent( QMouseEvent* event );
-  void mousePressEvent( QMouseEvent* event );
+  virtual void mouseMoveEvent( QMouseEvent* event );
+  virtual void mouseReleaseEvent( QMouseEvent* event );
+  virtual void mousePressEvent( QMouseEvent* event );
 
-  void wheelEvent( QWheelEvent* event);
+  virtual void wheelEvent( QWheelEvent* event);
 
-  void keyPressEvent( QKeyEvent* event );
+  virtual void keyPressEvent( QKeyEvent* event );
 
-  void resizeEvent( QResizeEvent* event );
+  virtual void resizeEvent( QResizeEvent* event );
 
 
 //
@@ -220,6 +220,6 @@ ImageViewWidget
   return m_Renderer;
 }
 
-}
+} // end of namespace 'mvd'.
 
 #endif // __mvdImageViewWidget_h
