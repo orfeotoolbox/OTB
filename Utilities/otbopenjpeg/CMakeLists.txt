@@ -131,10 +131,10 @@ configure_file(
 
 #-----------------------------------------------------------------------------
 # OpenJPEG build configuration options.
-option(BUILD_SHARED_LIBS "Build OpenJPEG shared library and link executables against it." ON)
-set(EXECUTABLE_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
-set(LIBRARY_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
-mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+#option(BUILD_SHARED_LIBS "Build OpenJPEG shared library and link executables against it." ON)
+#set(EXECUTABLE_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+#set(LIBRARY_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+#mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 #-----------------------------------------------------------------------------
 # configure name mangling to allow multiple libraries to coexist
@@ -194,11 +194,11 @@ add_subdirectory(libopenjpeg)
 #option(BUILD_MJ2 "Build the MJ2 executables." OFF)
 #option(BUILD_JPIP "Build the JPIP library and executables." OFF)
 
-if(BUILD_CODEC OR BUILD_MJ2 OR BUILD_JPIP)
-  option(BUILD_THIRDPARTY "Build the thirdparty executables if it is needed" OFF)
-  add_subdirectory(thirdparty)
-  add_subdirectory(applications)
-endif()
+#if(BUILD_CODEC OR BUILD_MJ2 OR BUILD_JPIP)
+#  option(BUILD_THIRDPARTY "Build the thirdparty executables if it is needed" OFF)
+#  add_subdirectory(thirdparty)
+#  add_subdirectory(applications)
+#endif()
 
 #-----------------------------------------------------------------------------
 # opj_config.h generation (2/2)
