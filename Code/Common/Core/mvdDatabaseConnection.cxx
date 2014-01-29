@@ -204,7 +204,7 @@ DatabaseConnection
     }
 
 // Conditionaly create demonstration groups.
-// #if (!defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
+// #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
 #if (defined( _DEBUG ) && 1) || 1
   SqlId datasetNodeId(
     GetNodeFields( dbc.FindDatasetNode() )
@@ -218,7 +218,7 @@ DatabaseConnection
 #endif
 
 // Conditionaly create debug groups.
-// #if (!defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
+// #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
 #if (defined( _DEBUG ) && 0) || 0
   SqlId rootNodeId(
     GetRootNodeFields( dbc.FindRootNode() )

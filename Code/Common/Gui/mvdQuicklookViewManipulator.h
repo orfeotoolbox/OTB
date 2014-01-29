@@ -45,8 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdTypes.h"
-#include "Gui/mvdAbstractViewManipulator.h"
+#include "Gui/mvdAbstractImageViewManipulator.h"
 
 
 /*****************************************************************************/
@@ -70,17 +69,10 @@ namespace mvd
 /**
  * \class QuicklookViewManipulator
  *
- *  \brief This class handles the event related to a QGLWidget. It also
- *  handles :
- *    - NavigationContext : to store the region of the image to be
- *      rendered.
- *    - MouseContext : to remember the user action as a mouse press,
- *                     mouse drag
- *  
- *   WIP
+ *  \brief TODO.
  */
 class Monteverdi2_EXPORT QuicklookViewManipulator :
-    public AbstractViewManipulator
+    public AbstractImageViewManipulator
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -99,51 +91,42 @@ public:
   /** \brief Destructor. */
   virtual ~QuicklookViewManipulator();
 
-  /** */
-  void mouseMoveEvent ( QMouseEvent * event );
-  /** */
-  void mousePressEvent ( QMouseEvent * event );
-  /** */
-  void mouseReleaseEvent ( QMouseEvent * event );
-  /** */
-  void wheelEvent ( QWheelEvent* event);
-  /** */
-  void resizeEvent ( QResizeEvent * event );
-  /** */
-  void keyPressEvent( QKeyEvent * event );
-
-  /** */
-  bool HasZoomChanged() const;
+  /**
+   */
+  virtual void mouseMoveEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void mousePressEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void mouseReleaseEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void wheelEvent( QWheelEvent* event);
+  /**
+   */
+  virtual void resizeEvent( QResizeEvent * event );
+  /**
+   */
+  virtual void keyPressEvent( QKeyEvent * event );
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
 //
 // Public SLOTS.
 public slots:
-  void OnModelImageRegionChanged(const ImageRegionType & largestRegion, 
-                                 const SpacingType & spacing,
-                                 const PointType& origin);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //
 // Signals.
 signals:
-  void ViewportRegionChanged(double Xpc, double Ypc);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
 // Protected methods.
 protected:
-  /** */
-  void ConstrainRegion( ImageRegionType& region, const ImageRegionType& largest);
-
-  /** */
-  void CenterRegion(double scale);
-
-  /** */
-  void ResizeRegion(unsigned int w, unsigned int h);
 
 //
 // Protected attributes.
@@ -159,17 +142,9 @@ private:
 // Private methods.
 private:
 
-  /** */
-  void Zoom(const double scale);
-
-  /** */
-  void moveRegion(double dx, double dy);
-
 //
 // Private attributes.
 private:
-  // TODO: No zoom for quicklook. Remove when implementation is cleaned.
-  double m_PreviousIsotropicZoom;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

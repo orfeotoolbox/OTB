@@ -25,8 +25,9 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
-#define USE_OLD_IMAGE_VIEW 1
-#define USE_ICE_IMAGE_VIEW 1
+// #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
+#define USE_ICE_IMAGE_VIEW (defined( _DEBUG ) && 1) || 0
+#define USE_OLD_IMAGE_VIEW (!USE_ICE_IMAGE_VIEW  && 1) || 0
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -69,7 +70,12 @@ namespace mvd
 class DatasetModel;
 // Gui
 class FilenameDragAndDropEventFilter;
+#if USE_OLD_IMAGE_VIEW
 class GLImageWidget1;
+#endif // USE_OLD_IMAGE_VIEW
+#if USE_ICE_IMAGE_VIEW
+class ImageViewWidget;
+#endif // USE_ICE_IMAGE_VIEW
 class StatusBarWidget;
 
 namespace Ui
@@ -209,6 +215,16 @@ private:
   GLImageWidget1* CreateQuicklookWidget1( QGLWidget* sharedGlWidget =NULL );
 #endif // USE_OLD_IMAGE_VIEW
 
+#if USE_ICE_IMAGE_VIEW
+  /**
+   */
+  ImageViewWidget* CreateImageViewWidget( QGLWidget* sharedGlWidget =NULL );
+
+  /**
+   */
+  ImageViewWidget* CreateQuicklookViewWidget( QGLWidget* sharedGlWidget =NULL );
+#endif // USE_ICE_IMAGE_VIEW
+
   /**
    */
   void InitializeDockWidgets();
@@ -309,12 +325,25 @@ private:
    * \brief Image-view dock-widget.
    */
   GLImageWidget1* m_ImageView1;
-#endif // USE_OLD_IMAGE_VIEW
 
   /**
    * \brief Quicklook-view dock-widget.
    */
   QDockWidget* m_QuicklookViewDock1;
+#endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
+  /**
+   * \brief Image-view page.
+   */
+  ImageViewWidget* m_ImageView;
+
+  /**
+   * \brief Quicklook-view dock.
+   */
+  QDockWidget* m_QuicklookViewDock;
+
+#endif
 
   /**
    */

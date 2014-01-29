@@ -61,13 +61,27 @@
 #include "Gui/mvdDatasetPropertiesController.h"
 #include "Gui/mvdDatasetPropertiesWidget.h"
 #include "Gui/mvdFilenameDragAndDropEventFilter.h"
+#if USE_OLD_IMAGE_VIEW
 #include "Gui/mvdGLImageWidget1.h"
+#endif // USE_OLD_IMAGE_VIEW
 #include "Gui/mvdHistogramController.h"
 #include "Gui/mvdHistogramWidget.h"
+#if USE_OLD_IMAGE_VIEW
 #include "Gui/mvdImageModelRenderer1.h"
 #include "Gui/mvdImageViewManipulator1.h"
+#endif // USE_OLD_IMAGE_VIEW
+#if USE_ICE_IMAGE_VIEW
+#include "Gui/mvdImageViewManipulator.h"
+#include "Gui/mvdImageViewRenderer.h"
+#include "Gui/mvdImageViewWidget.h"
+#endif
 #include "Gui/mvdPixelDescriptionWidget.h"
+#if USE_ICE_IMAGE_VIEW
+#include "Gui/mvdQuicklookViewManipulator.h"
+#endif // USE_OLD_IMAGE_VIEW
+#if USE_OLD_IMAGE_VIEW
 #include "Gui/mvdQuicklookViewManipulator1.h"
+#endif // USE_OLD_IMAGE_VIEW
 #include "Gui/mvdStatusBarWidget.h"
 //
 #include "mvdApplication.h"
@@ -112,10 +126,12 @@ MainWindow
 #endif
 #if USE_OLD_IMAGE_VIEW
   m_ImageView1( NULL ),
-#endif
-#if USE_OLD_IMAGE_VIEW
   m_QuicklookViewDock1( NULL ),
-#endif
+#endif // USE_OLD_IMAGE_VIEW
+#if USE_ICE_IMAGE_VIEW
+  m_ImageView( NULL ),
+  m_QuicklookViewDock( NULL ),
+#endif // USE_ICE_IMAGE_VIEW
   m_CentralTabWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL )
 {
@@ -745,7 +761,19 @@ MainWindow
   m_QuicklookViewDock1 = AddWidgetToDock(
     CreateQuicklookWidget1( m_ImageView1 ),
     "QUICKLOOK_VIEW",
-    tr( "Quicklook view" ),
+    tr( "Quicklook view (OpenGL)" ),
+    Qt::RightDockWidgetArea
+  );
+#endif // USE_OLD_IMAGE_VIEW
+
+  // Quicklook-view dock-widget
+#if USE_ICE_IMAGE_VIEW
+  assert( m_QuicklookViewDock==NULL );
+  assert( m_ImageView!=NULL );
+  m_QuicklookViewDock = AddWidgetToDock(
+    CreateQuicklookViewWidget( m_ImageView ),
+    "QUICKLOOK_VIEW",
+    tr( "Quicklook view (OTB-Ice)" ),
     Qt::RightDockWidgetArea
   );
 #endif // USE_OLD_IMAGE_VIEW
@@ -812,24 +840,40 @@ MainWindow
   // Set-it up as central widget.
   setCentralWidget( m_CentralTabWidget );
 
+  //
+  // access to the quicklook tabBar to remove the close button
+  QTabBar* tabBar = m_CentralTabWidget->findChild< QTabBar* >();
+
 #if USE_OLD_IMAGE_VIEW
   // Initialize image-view.
   assert( m_ImageView1==NULL );
   m_ImageView1 = CreateImageWidget1();
 
   // Add first tab: image-view.
-  m_CentralTabWidget->addTab(
+  int index1 = m_CentralTabWidget->addTab(
     m_ImageView1,
-    tr( "Image view" )
+    tr( "Image view (OpenGL)" )
   );
+
+  tabBar->setTabButton(index1, QTabBar::RightSide, 0);
+  tabBar->setTabButton(index1, QTabBar::LeftSide, 0);
 #endif // USE_OLD_IMAGE_VIEW
 
-  //
-  // access to the quicklook tabBar to remove the close button
-  QTabBar* tabBar = m_CentralTabWidget->findChild< QTabBar* >();
+#if USE_ICE_IMAGE_VIEW
+  // Initialize image-view.
+  assert( m_ImageView==NULL );
+  m_ImageView = CreateImageViewWidget();
 
-  tabBar->setTabButton(0, QTabBar::RightSide, 0);
-  tabBar->setTabButton(0, QTabBar::LeftSide, 0);
+  // Add first tab: image-view.
+  int index = m_CentralTabWidget->addTab(
+    m_ImageView,
+    tr( "Image view (OTB-Ice)" )
+  );
+
+  tabBar->setTabButton( index, QTabBar::RightSide, 0);
+  tabBar->setTabButton( index, QTabBar::LeftSide, 0);
+
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -902,6 +946,61 @@ MainWindow
 
 #endif // USE_OLD_IMAGE_VIEW
 
+/*****************************************************************************/
+#if USE_ICE_IMAGE_VIEW
+
+ImageViewWidget*
+MainWindow
+::CreateImageViewWidget( QGLWidget* sharedGlWidget )
+{
+  ImageViewManipulator* manipulator =
+    new ImageViewManipulator( this );
+
+  ImageViewRenderer* renderer =
+    new ImageViewRenderer( this );
+
+  ImageViewWidget* imageView = new ImageViewWidget(
+    manipulator, // (will be reparented.)
+    renderer, // (will be reparented.)
+    this,
+    sharedGlWidget
+  );
+
+  imageView->setMinimumWidth( 256 );
+
+  return imageView;
+}
+
+#endif // USE_ICE_IMAGE_VIEW
+
+/*****************************************************************************/
+#if USE_ICE_IMAGE_VIEW
+
+ImageViewWidget*
+MainWindow
+::CreateQuicklookViewWidget( QGLWidget* sharedGlWidget )
+{
+  QuicklookViewManipulator* manipulator =
+    new QuicklookViewManipulator( this );
+
+  ImageViewRenderer* renderer =
+    new ImageViewRenderer( this );
+
+  ImageViewWidget* quicklookView = new ImageViewWidget(
+    manipulator, // (will be reparented.)
+    renderer, // (will be reparented.)
+    this,
+    sharedGlWidget
+  );
+
+  quicklookView->setMinimumSize(  64,  64 );
+  quicklookView->setMaximumSize( 512, 512 );
+  quicklookView->setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
+
+  return quicklookView;
+}
+
+#endif // USE_ICE_IMAGE_VIEW
 
 /*****************************************************************************/
 void

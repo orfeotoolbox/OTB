@@ -43,6 +43,7 @@ set( Common_Gui_SOURCES
   mvdMouseEventFilter.cxx
   mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
+  mvdQuicklookViewManipulator.cxx
   mvdQuicklookViewManipulator1.cxx
   mvdSearchableTreeWidget.cxx
   mvdStatusBarWidget.cxx
@@ -97,6 +98,7 @@ set( Common_Gui_HEADERS_MOC
   mvdMouseEventFilter.h
   mvdMyWidget.h
   mvdPixelDescriptionWidget.h
+  mvdQuicklookViewManipulator.h
   mvdQuicklookViewManipulator1.h
   mvdSearchableTreeWidget.h
   mvdStatusBarWidget.h
