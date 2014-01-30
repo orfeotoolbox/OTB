@@ -136,7 +136,7 @@ set( Common_Gui_RESOURCES
 )
 
 include_directories(
-  ${QWT_INCLUDE_DIRS}
+  ${ICE_INCLUDE_DIRS}
   #
   ${Monteverdi2_BINARY_DIR}
   #
@@ -146,8 +146,12 @@ include_directories(
   ${Monteverdi2_BINARY_DIR}/Code/Common
   ${Monteverdi2_BINARY_DIR}/Code/Common/Gui
   #
-  ${ICE_INCLUDE_DIRS}
+  ${QWT_INCLUDE_DIRS}
 )
+
+# message( "INCLUDE_DIRECTORIES: ${INCLUDE_DIRECTORIES}" )
+# message( "ICE_INCLUDE_DIRS: ${ICE_INCLUDE_DIRS}" )
+# message( "ICE_LIBRARIES: ${ICE_LIBRARIES}" )
 
 #############################################################################
 # Qt4 wrapped files.
@@ -176,12 +180,12 @@ add_library(Monteverdi2_Gui
 #############################################################################
 target_link_libraries(Monteverdi2_Gui
   Monteverdi2_Core
+  ${ICE_LIBRARIES}
   ${OPENGL_LIBRARIES}
   #Qt4::QtCore
   Qt4::QtGui
   Qt4::QtOpenGL
   ${QWT_LIBRARIES}
-  ${ICE_LIBRARIES}
 )
 
 set_target_properties(Monteverdi2_Gui
