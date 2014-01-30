@@ -64,7 +64,8 @@ namespace mvd
 /*****************************************************************************/
 ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
-  AbstractImageViewRenderer( parent )
+  AbstractImageViewRenderer( parent ),
+  m_GlView( otb::GlView::New() )
 {
 }
 
@@ -79,6 +80,9 @@ void
 ImageViewRenderer
 ::virtual_InitializeGL()
 {
+  assert( !m_GlView.IsNull() );
+
+  m_GlView->Initialize( 0, 0 );
 }
 
 /*****************************************************************************/
@@ -95,6 +99,10 @@ ImageViewRenderer
     static_cast< GLint >( height )
   );
   */
+
+  assert( !m_GlView.IsNull() );
+
+  m_GlView->Resize( width, height );
 }
 
 /*****************************************************************************/
@@ -102,6 +110,28 @@ void
 ImageViewRenderer
 ::virtual_PaintGL( const RenderingContext& context )
 {
+  assert( !m_GlView.IsNull() );
+
+  //
+  // Pre-render scene.
+  m_GlView->BeforeRendering();
+  {
+  //
+  // Render scene.
+  switch( context.m_RenderMode )
+    {
+    case RenderingContext::RENDER_MODE_LIGHT:
+      m_GlView->LightRender();
+      break;
+
+    case RenderingContext::RENDER_MODE_FULL:
+      m_GlView->HeavyRender();
+      break;
+    }
+  }
+  //
+  // Post-render scene.
+  m_GlView->AfterRendering();
 }
 
 /*****************************************************************************/

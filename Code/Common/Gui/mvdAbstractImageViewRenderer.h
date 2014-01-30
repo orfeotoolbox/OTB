@@ -92,9 +92,20 @@ public:
     /**
      */
     inline
-    RenderingContext()
+    RenderingContext() :
+      m_RenderMode( RENDER_MODE_FULL )
     {
     }
+
+    /**
+     */
+    enum RenderMode
+    {
+      RENDER_MODE_LIGHT = 0,
+      RENDER_MODE_FULL
+    };
+
+    RenderMode m_RenderMode;
   };
 
 //

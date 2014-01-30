@@ -761,7 +761,7 @@ MainWindow
   m_QuicklookViewDock1 = AddWidgetToDock(
     CreateQuicklookWidget1( m_ImageView1 ),
     "QUICKLOOK_VIEW",
-    tr( "Quicklook view (OpenGL)" ),
+    tr( "Quicklook view (GL)" ),
     Qt::RightDockWidgetArea
   );
 #endif // USE_OLD_IMAGE_VIEW
@@ -773,7 +773,7 @@ MainWindow
   m_QuicklookViewDock = AddWidgetToDock(
     CreateQuicklookViewWidget( m_ImageView ),
     "QUICKLOOK_VIEW",
-    tr( "Quicklook view (OTB-Ice)" ),
+    tr( "Quicklook view (Ice)" ),
     Qt::RightDockWidgetArea
   );
 #endif // USE_OLD_IMAGE_VIEW
@@ -852,7 +852,7 @@ MainWindow
   // Add first tab: image-view.
   int index1 = m_CentralTabWidget->addTab(
     m_ImageView1,
-    tr( "Image view (OpenGL)" )
+    tr( "Image view (GL)" )
   );
 
   tabBar->setTabButton(index1, QTabBar::RightSide, 0);
@@ -867,7 +867,7 @@ MainWindow
   // Add first tab: image-view.
   int index = m_CentralTabWidget->addTab(
     m_ImageView,
-    tr( "Image view (OTB-Ice)" )
+    tr( "Image view (Ice)" )
   );
 
   tabBar->setTabButton( index, QTabBar::RightSide, 0);

@@ -42,6 +42,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbGlView.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -55,6 +56,11 @@
 // External classes pre-declaration.
 namespace
 {
+}
+
+namespace otb
+{
+class GlView;
 }
 
 namespace mvd
@@ -132,6 +138,9 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  otb::GlView::Pointer m_GlView;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
