@@ -84,7 +84,9 @@ endif(WIN32)
 
 #----------------------------------------------------------------------------
 # Ice
-find_package(Ice REQUIRED)
+find_package(OTBIce REQUIRED)
+# message( "ICE_INCLUDE_DIRS: ${ICE_INCLUDE_DIRS}" )
+# message( "ICE_LIBRARIES: ${ICE_LIBRARIES}" )
 
 #----------------------------------------------------------------------------
 # Include OTB CMake modules path.
