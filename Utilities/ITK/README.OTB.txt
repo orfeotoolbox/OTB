@@ -1,6 +1,8 @@
 Update of ITK in OTB source tree
 ================================
 
+#Perhpas better to update internal ITK using the archive .tar.gz
+
 # Remove old version
 find Utilities/ITK -type f -not -name "README.OTB.txt" | xargs rm
 find Utilities/ITK/* -type d | xargs rm -r
