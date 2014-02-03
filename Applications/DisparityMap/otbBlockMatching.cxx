@@ -462,7 +462,7 @@ private:
     std::ostringstream leftBandMathExpression;
     std::ostringstream rightBandMathExpression;
 
-    #if OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+    #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
     leftBandMathExpression << leftBandMathCondition.str() << " ? " << state << " : " << elseState;
     rightBandMathExpression << rightBandMathCondition.str() << " ? " << state << " : " << elseState;
     #else
