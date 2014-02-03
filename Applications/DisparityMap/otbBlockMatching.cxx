@@ -456,8 +456,8 @@ private:
       maskingRight = true;
       }
 
-    std::string state = "255";
-    std::string elseState = "0";
+    const std::string state = "255";
+    const std::string elseState = "0";
 
     std::ostringstream leftBandMathExpression;
     std::ostringstream rightBandMathExpression;
