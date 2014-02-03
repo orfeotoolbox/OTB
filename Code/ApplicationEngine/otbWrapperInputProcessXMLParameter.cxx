@@ -253,6 +253,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     if(updateFromXML)
       {
       param->SetUserValue(true);
+      param->SetActive(true);
 
       TiXmlElement* n_Values = NULL;
       n_Values = n_Parameter->FirstChildElement("values");

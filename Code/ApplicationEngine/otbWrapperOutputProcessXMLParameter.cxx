@@ -213,7 +213,8 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
            pixelTypeAsString = pixelTypeToString(pixType);
          }
          else if( type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
-                  type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
+                  type == ParameterType_InputVectorDataList || type == ParameterType_StringList ||
+                  type == ParameterType_ListView )
            {
            values = app->GetParameterStringList(key);
            hasValueList = true;
@@ -232,8 +233,8 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
          else if ( type == ParameterType_String || type == ParameterType_InputFilename ||
                    type == ParameterType_Directory || type == ParameterType_InputImage ||
                    type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
-                   type == ParameterType_Choice || type == ParameterType_ListView ||
-                   type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
+                   type == ParameterType_Choice || type == ParameterType_OutputVectorData ||
+                   type == ParameterType_OutputFilename)
            {
            value = app->GetParameterString(key);
            }
