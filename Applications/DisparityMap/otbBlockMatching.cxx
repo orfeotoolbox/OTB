@@ -372,11 +372,8 @@ private:
     gridIndex[0] = GetParameterInt("bm.startx");
     gridIndex[1] = GetParameterInt("bm.starty");
 
-    std::ostringstream leftBandMathExpression;
-    leftBandMathExpression<<"if(";
-
-    std::ostringstream rightBandMathExpression;
-    rightBandMathExpression<<"if(";
+    std::ostringstream leftBandMathCondition;
+    std::ostringstream rightBandMathCondition;
 
     unsigned int inputIdLeft = 0;
     unsigned int inputIdRight = 0;
@@ -392,7 +389,7 @@ private:
       m_LBandMathFilter->SetNthInput(inputIdLeft,leftmask,"inmask");
       maskingLeft = true;
       ++inputIdLeft;
-      leftBandMathExpression<<"inmask > 0";
+      leftBandMathCondition<<"inmask > 0";
       }
     if(IsParameterEnabled("mask.inright"))
       {
@@ -400,7 +397,7 @@ private:
       m_RBandMathFilter->SetNthInput(inputIdRight,rightmask,"inmask");
       maskingRight = true;
       ++inputIdRight;
-      rightBandMathExpression<<"inmask > 0";
+      rightBandMathCondition<<"inmask > 0";
       }
 
     // Handle variance threshold if present
@@ -408,11 +405,11 @@ private:
       {
       if(maskingLeft)
         {
-        leftBandMathExpression<<" and ";
+        leftBandMathCondition<<" and ";
         }
       if(maskingRight)
         {
-        rightBandMathExpression<<" and ";
+        rightBandMathCondition<<" and ";
         }
       // Left side
       m_LVarianceFilter->SetInput(leftImage);
@@ -421,7 +418,7 @@ private:
       m_LVarianceFilter->SetRadius(vradius);
 
       m_LBandMathFilter->SetNthInput(inputIdLeft,m_LVarianceFilter->GetOutput(),"variance");
-      leftBandMathExpression<<"variance > "<<GetParameterFloat("mask.variancet");
+      leftBandMathCondition<<"variance > "<<GetParameterFloat("mask.variancet");
       ++inputIdLeft;
 
       // Right side
@@ -429,7 +426,7 @@ private:
       m_RVarianceFilter->SetRadius(vradius);
 
       m_RBandMathFilter->SetNthInput(inputIdRight,m_RVarianceFilter->GetOutput(),"variance");
-      rightBandMathExpression<<"variance > "<<GetParameterFloat("mask.variancet");
+      rightBandMathCondition<<"variance > "<<GetParameterFloat("mask.variancet");
       ++inputIdRight;
 
       maskingLeft = true;
@@ -441,27 +438,39 @@ private:
       {
       if(maskingLeft)
         {
-        leftBandMathExpression<<" and ";
+        leftBandMathCondition<<" and ";
         }
       if(maskingRight)
         {
-        rightBandMathExpression<<" and ";
+        rightBandMathCondition<<" and ";
         }
       // Left side
       m_LBandMathFilter->SetNthInput(inputIdLeft,leftImage,"leftimage");
-      leftBandMathExpression<<"leftimage != "<<GetParameterFloat("mask.nodata");
+      leftBandMathCondition<<"leftimage != "<<GetParameterFloat("mask.nodata");
 
       // Right side
       m_RBandMathFilter->SetNthInput(inputIdRight,rightImage,"rightimage");
-      rightBandMathExpression<<"rightimage != "<<GetParameterFloat("mask.nodata");
+      rightBandMathCondition<<"rightimage != "<<GetParameterFloat("mask.nodata");
 
       maskingLeft = true;
       maskingRight = true;
       }
 
-    leftBandMathExpression<<",255,0)";
-    rightBandMathExpression<<",255,0)";
+    std::string state = "255";
+    std::string elseState = "0";
 
+    std::ostringstream leftBandMathExpression;
+    std::ostringstream rightBandMathExpression;
+
+    #if OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+    leftBandMathExpression << leftBandMathCondition.str() << " ? " << state << " : " << elseState;
+    rightBandMathExpression << rightBandMathCondition.str() << " ? " << state << " : " << elseState;
+    #else
+    leftBandMathExpression << "if(" << leftBandMathCondition.str() << "," << state << "," << elseState << ")";
+    rightBandMathExpression << "if(" << rightBandMathCondition.str() << "," << state << "," << elseState << ")";
+    #endif
+
+    std::cout << leftBandMathCondition << std::endl;
     if(maskingLeft)
       {
       GetLogger()->Info("Masking criterion on left image: " + leftBandMathExpression.str() + '\n');
