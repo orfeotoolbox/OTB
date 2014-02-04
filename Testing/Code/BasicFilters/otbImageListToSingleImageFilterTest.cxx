@@ -92,7 +92,12 @@ int otbImageListToSingleImageFilter(int argc, char * argv[])
   // Use an BandMath with the selected image
   filter3->SetNthInput(0,filter2_1->GetOutput());
   filter3->SetNthInput(1,filter2_2->GetOutput());
+
+  #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+  filter3->SetExpression(" ( b2 > 1.0 ) ? b1/b2 : 0" );
+  #else
   filter3->SetExpression(" if( b2 > 1.0, b1/b2, 0)" );
+  #endif
 
   // Write the result
   writer->SetFileName(outfname1);

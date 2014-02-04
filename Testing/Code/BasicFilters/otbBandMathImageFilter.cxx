@@ -256,13 +256,21 @@ int otbBandMathImageFilterWithIdx( int argc, char* argv[])
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3);
 
+  #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+  filter->SetExpression("(sqrt(idxX*idxX+idxY*idxY) < 50) ? b2 : b3");
+  #else
   filter->SetExpression("if(sqrt(idxX*idxX+idxY*idxY) < 50, b2, b3)");
+  #endif
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname1);
   writer->Update();
 
+  #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+  filter->SetExpression("(sqrt(idxPhyX*idxPhyX+idxPhyY*idxPhyY) < 25) ? b2 : b3");
+  #else
   filter->SetExpression("if(sqrt(idxPhyX*idxPhyX+idxPhyY*idxPhyY) < 25, b2, b3)");
+  #endif
   WriterType::Pointer writer2 = WriterType::New();
   writer2->SetInput(filter->GetOutput());
   writer2->SetFileName(outfname2);

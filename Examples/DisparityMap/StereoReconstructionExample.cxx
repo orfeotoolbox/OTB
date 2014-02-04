@@ -269,12 +269,23 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
   BandMathFilterType::Pointer m_LBandMathFilter = BandMathFilterType::New();
   m_LBandMathFilter->SetNthInput(0,m_LeftWarpImageFilter->GetOutput(),"inleft");
+  #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+  std::string leftExpr = "inleft != 0 ? 255 : 0";
+  #else
   std::string leftExpr = "if(inleft != 0,255,0)";
+  #endif
+  
   m_LBandMathFilter->SetExpression(leftExpr);
 
   BandMathFilterType::Pointer m_RBandMathFilter = BandMathFilterType::New();
   m_RBandMathFilter->SetNthInput(0,m_RightWarpImageFilter->GetOutput(),"inright");
+
+  #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+  std::string rightExpr = "inright != 0 ? 255 : 0";
+  #else
   std::string rightExpr = "if(inright != 0,255,0)";
+  #endif
+
   m_RBandMathFilter->SetExpression(rightExpr);
 // Software Guide : EndCodeSnippet
 
