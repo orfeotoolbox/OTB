@@ -284,7 +284,7 @@ private:
 
        couplesList.push_back(couple);
 
-       otbAppLogINFO(<<couplesList.size()<<"  Stereo couples will be processed");
+       otbAppLogINFO(<<couplesList.size()<<" Stereo couples will be processed");
 
       }
     else
@@ -296,7 +296,7 @@ private:
         }
       const unsigned int couplesNb = (imageListNb)/2;
 
-      otbAppLogINFO(<<couplesNb<<"  Stereo couples will be processed");
+      otbAppLogINFO(<<couplesNb<<" Stereo couples will be processed");
 
       for (unsigned int index = 0; index <= couplesNb; index = index + 2)
         {
