@@ -785,8 +785,8 @@ private:
 
       lBandMathFilter->SetNthInput(inputIdLeft, leftResampleFilter->GetOutput(), "inleft");
       ++inputIdLeft;
-      std::ostringstream leftFormula;
-      leftFormula << "if((inleft > 0)";
+      std::ostringstream leftCondition;
+      leftCondition << "(inleft > 0)";
 
       ResampleFilterType::Pointer leftMaskResampleFilter = ResampleFilterType::New();
 
@@ -804,7 +804,7 @@ private:
 
         lBandMathFilter->SetNthInput(inputIdLeft, leftMaskResampleFilter->GetOutput(), "maskleft");
         ++inputIdLeft;
-        leftFormula << " and (maskleft > 0)";
+        leftCondition << " and (maskleft > 0)";
         }
       // Handle variance threshold if present
       if (IsParameterEnabled("mask.variancet"))
@@ -818,19 +818,29 @@ private:
 
         lBandMathFilter->SetNthInput(inputIdLeft, leftVarianceFilter->GetOutput(), "variance");
         ++inputIdLeft;
-        leftFormula << " and variance > " << GetParameterFloat("mask.variancet");
+        leftCondition << " and variance > " << GetParameterFloat("mask.variancet");
         m_Filters.push_back(leftVarianceFilter.GetPointer());
         }
 
-      leftFormula << ",255,0)";
+      const std::string state = "255";
+      const std::string elseState = "0";
+
+      std::ostringstream leftFormula;
+
+      #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+      leftFormula << leftCondition.str() << " ? " << state << " : " << elseState;
+      #else
+      leftFormula << "if(" << leftCondition.str() << "," << state << "," << elseState << ")";
+      #endif
+
       lBandMathFilter->SetExpression(leftFormula.str());
 
       m_Filters.push_back(leftMaskResampleFilter.GetPointer());
 
       rBandMathFilter->SetNthInput(inputIdRight, rightResampleFilter->GetOutput(), "inright");
       ++inputIdRight;
-      std::ostringstream rightFormula;
-      rightFormula << "if((inright > 0)";
+      std::ostringstream rightCondition;
+      rightCondition << "(inright > 0)";
       ResampleFilterType::Pointer rightMaskResampleFilter = ResampleFilterType::New();
 
       if (IsParameterEnabled("mask.right") && HasValue("mask.right"))
@@ -847,7 +857,7 @@ private:
 
         rBandMathFilter->SetNthInput(inputIdRight, rightMaskResampleFilter->GetOutput(), "maskright");
         ++inputIdRight;
-        rightFormula << " and (maskright > 0)";
+        rightCondition << " and (maskright > 0)";
         }
       if (IsParameterEnabled("mask.variancet"))
         {
@@ -860,11 +870,18 @@ private:
 
         rBandMathFilter->SetNthInput(inputIdRight, rightVarianceFilter->GetOutput(), "variance");
         ++inputIdRight;
-        rightFormula << " and variance > " << GetParameterFloat("mask.variancet");
+        rightCondition << " and variance > " << GetParameterFloat("mask.variancet");
         m_Filters.push_back(rightVarianceFilter.GetPointer());
         }
 
-      rightFormula << ",255,0)";
+      std::ostringstream rightFormula;
+
+      #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+      rightFormula << rightCondition.str() << " ? " << state << " : " << elseState;
+      #else
+      rightFormula << "if(" << rightCondition.str() << "," << state << "," << elseState << ")";
+      #endif
+
       rBandMathFilter->SetExpression(rightFormula.str());
 
       m_Filters.push_back(rightMaskResampleFilter.GetPointer());
@@ -1061,7 +1078,12 @@ private:
         //finalMaskFilter = BandMathFilterType::New();
         //finalMaskFilter->SetNthInput(0, lBandMathFilter->GetOutput(), "inmask");
         finalMaskFilter->SetNthInput(1, bijectFilter->GetOutput(), "lrrl");
+
+        #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+        finalMaskFilter->SetExpression("(inmask > 0 and lrrl > 0) ? 255 : 0");
+        #else
         finalMaskFilter->SetExpression("if(inmask > 0 and lrrl > 0, 255, 0)");
+        #endif
         //
         m_Filters.push_back(finalMaskFilter.GetPointer());
         }
@@ -1195,23 +1217,31 @@ private:
       BandMathFilterType::Pointer dispMaskFilter = BandMathFilterType::New();
       dispMaskFilter->SetNthInput(0, hDispOutput, "hdisp");
       dispMaskFilter->SetNthInput(1, finalMaskImage, "mask");
-      std::ostringstream maskFormula;
-      maskFormula << "if((hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (mask>0";
+      std::ostringstream maskCondition;
+      maskCondition << "(hdisp > " << minDisp << ") and (hdisp < " << maxDisp << ") and (mask>0)";
       if (IsParameterEnabled("postproc.metrict"))
         {
         dispMaskFilter->SetNthInput(2, subPixelFilterPointer->GetOutput(2), "metric");
-        maskFormula << ") and (metric ";
+        maskCondition << " and (metric ";
         if (minimize == true)
           {
-          maskFormula << " < " << this->GetParameterFloat("postproc.metrict");
+          maskCondition << " < " << this->GetParameterFloat("postproc.metrict");
           }
         else
           {
-          maskFormula << " > " << this->GetParameterFloat("postproc.metrict");
-
+          maskCondition << " > " << this->GetParameterFloat("postproc.metrict");
           }
+        maskCondition << ")";
         }
-      maskFormula << "),255,0)";
+
+      std::ostringstream maskFormula;
+
+      #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
+      maskFormula << maskCondition.str() << " ? " << state << " : " << elseState;
+      #else
+      maskFormula << "if(" << maskCondition.str() << "," << state << "," << elseState << ")";
+      #endif
+
       otbAppLogINFO(<<"Disparity mask formula : "<<maskFormula.str());
       dispMaskFilter->SetExpression(maskFormula.str());
       m_Filters.push_back(dispMaskFilter.GetPointer());
