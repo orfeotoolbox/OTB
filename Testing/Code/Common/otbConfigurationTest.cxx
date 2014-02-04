@@ -16,13 +16,11 @@
 
 =========================================================================*/
 #include "otbMacro.h"
-#include "otbI18n.h"
 #include <fstream>
 #include "otbConfigurationFile.h"
 
 int otbConfigurationTest(int argc, char * argv[])
 {
-  otbI18nMacro();
 
 //   std::cout << "begin config test" << std::endl;
   typedef otb::ConfigurationFile ConfigurationType;

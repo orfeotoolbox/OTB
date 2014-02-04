@@ -17,13 +17,6 @@ if(OTB_USE_MAPNIK)
     target_link_libraries(OTBCommon ${MAPNIK_LIBRARY} ${ICUUC_LIBRARY})
 endif()
 
-if(OTB_I18N)
-    target_link_libraries(OTBCommon ${GETTEXT_LIBRARY})
-    if(APPLE OR WIN32)
-       target_link_libraries(OTBCommon ${GETTEXT_INTL_LIBRARY})
-    endif()
-endif()
-
 if(OTB_LIBRARY_PROPERTIES)
   set_target_properties(OTBCommon PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 endif()

@@ -213,7 +213,6 @@ include(ImportMapnik) # depends on ImportBoost
 include(ImportOpenThreads)
 include(ImportOssim)
 include(ImportQt4)
-include(ImportGetText)
 include(ImportSiftFast)
 include(ImportTinyXML)
 include(ImportMuParser)
@@ -378,8 +377,6 @@ if(NOT OTB_INSTALL_NO_DEVELOPMENT)
   install(FILES
     ${OTB_SOURCE_DIR}/CMake/FindFFTW.cmake
     ${OTB_SOURCE_DIR}/CMake/FindEXPAT.cmake
-    ${OTB_SOURCE_DIR}/CMake/FindGettext.cmake
-    ${OTB_SOURCE_DIR}/CMake/FindGettextLib.cmake
     ${OTB_SOURCE_DIR}/CMake/FindICUUC.cmake
     ${OTB_SOURCE_DIR}/CMake/FindLibKML.cmake
     ${OTB_SOURCE_DIR}/CMake/FindLTDL.cmake
