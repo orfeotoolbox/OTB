@@ -1284,8 +1284,8 @@ MainWindow
   // VIEWS.
   //
 
-  // Update image-view.
 #if USE_OLD_IMAGE_VIEW
+  // Update image-view.
   m_ImageView1->SetImageModel( NULL );
 
   // Access quicklook-view.
@@ -1296,6 +1296,15 @@ MainWindow
   quicklookView->SetImageModel( NULL );
 
 #endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
+  // Update image-view.
+  m_ImageView->SetImageList( ImageViewWidget::VectorImageModelList() );
+
+  // Update quicklook-view.
+  assert( GetQuicklookView()!=NULL );
+  GetQuicklookView()->SetImageList( ImageViewWidget::VectorImageModelList() );
+#endif // USE_ICE_IMAGE_VIEW
 
   //
   // MODEL(s).
@@ -1385,7 +1394,30 @@ MainWindow
       SLOT( OnViewportRegionChanged( double, double ) )
       );
 #endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
+
+    // Disconnect previously selected image-model from view.
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( SettingsUpdated() ),
+      // from:
+      m_ImageView,
+      SLOT( updateGL()  )
+      );
     }
+
+    // Disconnect previously selected quicklook-model from view.
+    // TODO: Remove quicklook temporary hack by better design.
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( SettingsUpdated() ),
+      // from:
+      m_QuicklookViewDock->widget(),
+      SLOT( updateGL()  )
+      );
+
+#endif // USE_ICE_IMAGE_VIEW
 
 #if USE_OLD_IMAGE_VIEW
 
@@ -1433,6 +1465,9 @@ MainWindow
   ConnectPixelDescriptionWidget( model );
 
 #if USE_OLD_IMAGE_VIEW
+
+  // Update image-view.
+  assert( m_ImageView1!=NULL );
   
   // connect to get the last rendering context (to be written in Descriptor)
   if( vectorImageModel!=NULL )
@@ -1447,18 +1482,16 @@ MainWindow
       );
     }
 
-  // Update image-view.
-  assert( m_ImageView1!=NULL );
-
   // if a model is set and not the first time, use previous rendering
   // context informations
   if ( model && 
        model->GetLastPhysicalCenter()[0] != -1. &&  
        model->GetLastPhysicalCenter()[1] != -1. )
     {
-    m_ImageView1->SetImageModel( vectorImageModel, 
-                                model->GetLastPhysicalCenter(),
-                                model->GetLastIsotropicZoom() );
+    m_ImageView1->SetImageModel(
+      vectorImageModel, 
+      model->GetLastPhysicalCenter(),
+      model->GetLastIsotropicZoom() );
     }
   else
     {
@@ -1479,12 +1512,14 @@ MainWindow
 #endif // USE_OLD_IMAGE_VIEW
 
 #if USE_ICE_IMAGE_VIEW
-  ImageViewWidget::VectorImageModelList images;
-
   if( vectorImageModel!=NULL )
+    {
+    ImageViewWidget::VectorImageModelList images;
+
     images << vectorImageModel;
 
-  m_ImageView->SetImageList( images );
+    m_ImageView->SetImageList( images );
+    }
 #endif // USE_ICE_IMAGE_VIEW
 
   //
@@ -1541,6 +1576,27 @@ MainWindow
       SLOT( OnViewportRegionChanged( double, double ) )
       );
 #endif
+
+#if USE_ICE_IMAGE_VIEW
+
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( SettingsUpdated() ),
+      // to:
+      m_ImageView,
+      SLOT( updateGL()  )
+      );
+
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( SettingsUpdated() ),
+      // to:
+      m_QuicklookViewDock->widget(),
+      SLOT( updateGL()  )
+      );
+
+#endif // USE_ICE_IMAGE_VIEW
+
 
     //
     // trigger the placename computation

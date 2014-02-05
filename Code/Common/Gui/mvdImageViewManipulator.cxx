@@ -117,7 +117,21 @@ ImageViewManipulator
   assert( !m_ViewSettings.IsNull() );
 
   m_ViewSettings->SetWkt( wkt );
+#if 0
   m_ViewSettings->SetUseProjection( !wkt.empty() );
+#else
+  m_ViewSettings->SetUseProjection( true );
+#endif
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::virtual_SetKeywordList( const DefaultImageType::ImageKeywordlistType& kwl )
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  m_ViewSettings->SetKeywordList( kwl );
 }
 
 /******************************************************************************/

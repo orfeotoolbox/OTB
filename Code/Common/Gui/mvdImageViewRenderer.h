@@ -44,6 +44,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbGlImageActor.h"
 #include "otbGlView.h"
 
 //
@@ -180,6 +181,9 @@ private:
   /**
    */
   otb::GlView::Pointer m_GlView;
+  /**
+   */
+  otb::GlImageActor::Pointer m_ReferenceGlImageActor;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

@@ -137,6 +137,7 @@ ImageViewWidget
   m_Manipulator->SetOrigin( image->GetOrigin() );
   m_Manipulator->SetSpacing( image->GetSpacing() );
   m_Manipulator->SetWkt( image->GetProjectionRef() );
+  m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
 }
 
 /*******************************************************************************/

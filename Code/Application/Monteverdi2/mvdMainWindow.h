@@ -253,6 +253,17 @@ private:
   void ConnectImageViews1();
 #endif // USE_OLD_IMAGE_VIEW
 
+#if USE_ICE_IMAGE_VIEW
+  /**
+   */
+  inline
+    const ImageViewWidget* GetQuicklookView() const;
+  /**
+   */
+  inline
+    ImageViewWidget* GetQuicklookView();
+#endif // USE_OLD_IMAGE_VIEW
+
   /**
    */
   void ConnectViewMenu();
@@ -426,7 +437,12 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#if USE_OLD_IMAGE_VIEW
 #include "Gui/mvdGLImageWidget1.h"
+#endif
+#if USE_ICE_IMAGE_VIEW
+#include "Gui/mvdImageViewWidget.h"
+#endif
 
 //
 // Some constants.
@@ -455,6 +471,28 @@ MainWindow
 }
 
 #endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
+
+/*****************************************************************************/
+inline
+const ImageViewWidget*
+MainWindow
+::GetQuicklookView() const
+{
+  return qobject_cast< const ImageViewWidget* >( m_QuicklookViewDock->widget() );
+}
+
+/*****************************************************************************/
+inline
+ImageViewWidget*
+MainWindow
+::GetQuicklookView()
+{
+  return qobject_cast< ImageViewWidget* >( m_QuicklookViewDock->widget() );
+}
+
+#endif // USE_ICE_IMAGE_VIEW
 
 } // end namespace 'mvd'
 

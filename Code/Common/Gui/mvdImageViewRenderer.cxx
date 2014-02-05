@@ -25,6 +25,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QtOpenGL>
 
 //
 // System includes (sorted by alphabetic order)
@@ -68,7 +69,8 @@ namespace mvd
 ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
   AbstractImageViewRenderer( parent ),
-  m_GlView( otb::GlView::New() )
+  m_GlView( otb::GlView::New() ),
+  m_ReferenceGlImageActor()
 {
   assert( !m_GlView.IsNull() );
 }
@@ -86,8 +88,17 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
+  //
+  // Remove all actors.
   m_GlView->ClearActors();
 
+  //
+  // Return if there is no vector-image model.
+  if( images.isEmpty() )
+    return;
+
+  //
+  // Insert new actors corresponding to vector-image model.
   for( VectorImageModelList::const_iterator it( images.begin() );
        it!=images.end();
        ++it )
@@ -111,6 +122,33 @@ ImageViewRenderer
 
     qDebug() << "Added image-actor:" << FromStdString( actorKey );
     }
+
+  //
+  // Remember first actor as reference actor.
+  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
+  assert( !keys.empty() );
+
+  otb::GlActor::Pointer glActor( m_GlView->GetActor( keys.front() ) );
+  assert( !glActor.IsNull() );
+
+  assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
+
+  m_ReferenceGlImageActor = otb::DynamicCast< otb::GlImageActor >( glActor );
+  assert( !m_ReferenceGlImageActor.IsNull() );
+
+  //
+  // Center view on center of reference actor.
+  otb::ViewSettings::PointType origin;
+  otb::ViewSettings::PointType extent;
+
+  m_ReferenceGlImageActor->GetExtent(
+    origin[ 0 ], origin[ 1 ],
+    extent[ 0 ], extent[ 1 ]
+  );
+
+  origin.SetToMidPoint( origin, extent );
+
+  m_GlView->GetSettings()->Center( origin );
 }
 
 /*****************************************************************************/
@@ -162,6 +200,24 @@ ImageViewRenderer
   assert( !m_GlView.IsNull() );
 
   m_GlView->Resize( width, height );
+
+  /*
+  glViewport(
+    0, 0,
+    static_cast< GLint >( width ), static_cast< GLint >( height )
+  );
+
+  glMatrixMode( GL_MODELVIEW );
+  glLoadIdentity();
+
+  glMatrixMode( GL_PROJECTION );
+  glLoadIdentity();
+  glOrtho(
+    0, static_cast< GLint >( width ),
+    0, static_cast< GLint >( height ),
+    0, 1
+  );
+  */
 }
 
 /*****************************************************************************/

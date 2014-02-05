@@ -102,6 +102,9 @@ public:
   /**
    */
   inline void SetWkt( const std::string& wkt );
+  /**
+   */
+  inline void SetKeywordList( const DefaultImageType::ImageKeywordlistType& kwl );
 
   /**
    */
@@ -200,6 +203,11 @@ protected:
   /**
    */
   virtual void virtual_SetWkt( const std::string& wkt ) = 0;
+  /**
+   */
+  virtual void virtual_SetKeywordList(
+    const DefaultImageType::ImageKeywordlistType& kwl
+  ) = 0;
 
   /**
    */
@@ -311,6 +319,15 @@ AbstractImageViewManipulator
   m_NavigationContext.m_Wkt = wkt;
 
   virtual_SetWkt( wkt );
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageViewManipulator
+::SetKeywordList( const DefaultImageType::ImageKeywordlistType& kwl )
+{
+  virtual_SetKeywordList( kwl );
 }
 
 /*****************************************************************************/

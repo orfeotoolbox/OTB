@@ -128,6 +128,11 @@ protected:
   /**
    */
   virtual void virtual_SetWkt( const std::string& wkt );
+  /**
+   */
+  virtual void virtual_SetKeywordList(
+    const DefaultImageType::ImageKeywordlistType& kwl
+  );
 
   /**
    */
