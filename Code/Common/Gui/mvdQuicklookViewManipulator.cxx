@@ -62,11 +62,24 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*****************************************************************************/
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+
 QuicklookViewManipulator
-::QuicklookViewManipulator( QObject* parent ) :
-  AbstractImageViewManipulator( parent )
+::QuicklookViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
+                            QObject* parent ) :
+  ImageViewManipulator( viewSettings, parent )
 {
 }
+
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+
+QuicklookViewManipulator
+::QuicklookViewManipulator( QObject* parent ) :
+  ImageViewManipulator( parent )
+{
+}
+
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
 /*****************************************************************************/
 QuicklookViewManipulator
@@ -77,41 +90,41 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::mousePressEvent(QMouseEvent * event)
+::virtual_MousePressEvent(QMouseEvent * event)
 {
 }
 
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::mouseMoveEvent( QMouseEvent * event)
+::virtual_MouseMoveEvent( QMouseEvent * event)
 {
 }
 
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::mouseReleaseEvent(  QMouseEvent * event)
+::virtual_MouseReleaseEvent(  QMouseEvent * event)
 {
 }
 
 /******************************************************************************/
 void QuicklookViewManipulator
-::resizeEvent( QResizeEvent * event )
+::virtual_ResizeEvent( QResizeEvent * event )
 {
 }
 
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::wheelEvent(  QWheelEvent * event)
+::virtual_WheelEvent(  QWheelEvent * event)
 {
 }
 
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::keyPressEvent( QKeyEvent * event )
+::virtual_KeyPressEvent( QKeyEvent* event )
 {
 }
 

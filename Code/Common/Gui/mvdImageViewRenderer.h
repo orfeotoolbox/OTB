@@ -25,6 +25,8 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+//
+#define USE_VIEW_SETTINGS_SIDE_EFFECT 0
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -60,7 +62,6 @@ namespace
 
 namespace otb
 {
-class GlView;
 }
 
 namespace mvd
@@ -89,6 +90,25 @@ class ImageViewRenderer :
 // Public types.
 public:
 
+  /**
+   */
+  struct RenderingContext :
+    public AbstractImageViewRenderer::RenderingContext
+  {
+    /**
+     */
+    inline
+    RenderingContext() :
+      AbstractImageViewRenderer::RenderingContext(),
+      m_ViewSettings()
+    {
+    }
+
+    virtual ~RenderingContext() {}
+
+    otb::ViewSettings::Pointer m_ViewSettings;
+  };
+
 //
 // Public methods.
 public:
@@ -97,6 +117,13 @@ public:
 
   /** Destructor */
   virtual ~ImageViewRenderer();
+
+  /**
+   */
+  inline const otb::ViewSettings::Pointer GetViewSettings() const;
+  /**
+   */
+  inline otb::ViewSettings::Pointer GetViewSettings();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -127,13 +154,25 @@ private:
 
   /**
    */
+  virtual void virtual_SetImageList( const VectorImageModelList& images );
+
+  /**
+   */
+  virtual
+  AbstractImageViewRenderer::RenderingContext*
+  virtual_NewRenderingContext() const;
+
+  /**
+   */
   virtual void virtual_InitializeGL();
   /**
    */
   virtual void virtual_ResizeGL( int width, int height );
   /**
    */
-  virtual void virtual_PaintGL( const RenderingContext& context );
+  virtual
+  void 
+  virtual_PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
 
 //
 // Private attributes.
@@ -148,6 +187,36 @@ private:
 // SLOTS.
 private slots:
 };
+
+} // end namespace 'mvd'
+
+/*****************************************************************************/
+/* INLINE SECTION                                                            */
+
+namespace mvd
+{
+
+/*****************************************************************************/
+inline
+const otb::ViewSettings::Pointer
+ImageViewRenderer
+::GetViewSettings() const
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->GetSettings();
+}
+
+/*****************************************************************************/
+inline
+otb::ViewSettings::Pointer
+ImageViewRenderer
+::GetViewSettings()
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->GetSettings();
+}
 
 } // end namespace 'mvd'
 

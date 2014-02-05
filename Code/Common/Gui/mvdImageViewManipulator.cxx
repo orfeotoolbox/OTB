@@ -34,6 +34,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdImageViewRenderer.h"
 
 namespace mvd
 {
@@ -46,11 +47,26 @@ namespace mvd
 */
 
 /*****************************************************************************/
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+
 ImageViewManipulator
-::ImageViewManipulator( QObject* parent ) :
-  AbstractImageViewManipulator( parent )
+::ImageViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
+                        QObject* parent ) :
+  AbstractImageViewManipulator( parent ),
+  m_ViewSettings( viewSettings )
 {
 }
+
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+
+ImageViewManipulator
+::ImageViewManipulator( QObject* parent ) :
+  AbstractImageViewManipulator( parent ),
+  m_ViewSettings( otb::ViewSettings::New() )
+{
+}
+
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
 /*****************************************************************************/
 ImageViewManipulator
@@ -61,41 +77,118 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::mousePressEvent( QMouseEvent* event )
+::virtual_SetViewportSize( int width, int height )
+{
+  SizeType size;
+
+  size[ 0 ] = width;
+  size[ 1 ] = height;
+
+  assert( !m_ViewSettings.IsNull() );
+
+  m_ViewSettings->SetViewportSize( size );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::virtual_SetOrigin( const PointType& origin )
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  m_ViewSettings->SetOrigin( origin );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::virtual_SetSpacing( const SpacingType& spacing )
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  m_ViewSettings->SetSpacing( spacing );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::virtual_SetWkt( const std::string& wkt )
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  m_ViewSettings->SetWkt( wkt );
+  m_ViewSettings->SetUseProjection( !wkt.empty() );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::virtual_SetupRenderingContext(
+  AbstractImageViewRenderer::RenderingContext * const c ) const
+{
+  assert(
+    c==dynamic_cast< ImageViewRenderer::RenderingContext const * >( c )
+  );
+
+  ImageViewRenderer::RenderingContext * const context =
+    dynamic_cast< ImageViewRenderer::RenderingContext * const >( c );
+
+  context->m_RenderMode =
+    AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL;
+
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+  context->m_ViewSettings->SetOrigin( m_ViewSettings->GetOrigin() );
+  context->m_ViewSettings->SetSpacing( m_ViewSettings->GetSpacing() );
+  context->m_ViewSettings->SetViewportSize( m_ViewSettings->GetViewportSize() );
+  context->m_ViewSettings->SetWkt( m_ViewSettings->GetWkt() );
+  context->m_ViewSettings->SetKeywordList( m_ViewSettings->GetKeywordList() );
+  context->m_ViewSettings->SetUseProjection( m_ViewSettings->GetUseProjection() );
+  context->m_ViewSettings->SetGeometryChanged(
+    m_ViewSettings->GetGeometryChanged()
+  );
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::virtual_MousePressEvent( QMouseEvent* event )
 {
 }
 
 /******************************************************************************/
 void
 ImageViewManipulator
-::mouseMoveEvent( QMouseEvent * event)
+::virtual_MouseMoveEvent( QMouseEvent* event)
 {
 }
 
 /******************************************************************************/
 void
 ImageViewManipulator
-::mouseReleaseEvent(  QMouseEvent * event)
-{
-}
-
-/******************************************************************************/
-void ImageViewManipulator
-::resizeEvent( QResizeEvent * event )
+::virtual_MouseReleaseEvent( QMouseEvent* event)
 {
 }
 
 /******************************************************************************/
 void
 ImageViewManipulator
-::wheelEvent(  QWheelEvent * event)
+::virtual_ResizeEvent( QResizeEvent* event )
 {
 }
 
 /******************************************************************************/
 void
 ImageViewManipulator
-::keyPressEvent( QKeyEvent * event )
+::virtual_WheelEvent( QWheelEvent* event )
+{
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::virtual_KeyPressEvent( QKeyEvent* event )
 {
 }
 

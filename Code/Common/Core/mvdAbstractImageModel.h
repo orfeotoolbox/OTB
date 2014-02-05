@@ -251,10 +251,12 @@ public:
    */
   inline CountType GetCurrentLod() const;
 
-  /** */
+  /**
+   */
   inline const SpacingType& GetSpacing() const;
 
-  /** */
+  /**
+   */
   inline const PointType& GetOrigin() const;
 
   /** Release as much memory as possible (default implementation does
@@ -529,20 +531,20 @@ AbstractImageModel
 
 /*****************************************************************************/
 inline
-const SpacingType&
-AbstractImageModel
-::GetSpacing() const
-{
-  return ToImageBase()->GetSpacing();
-}
-
-/*****************************************************************************/
-inline
 const PointType&
 AbstractImageModel
 ::GetOrigin() const
 {
   return ToImageBase()->GetOrigin();
+}
+
+/*****************************************************************************/
+inline
+const SpacingType&
+AbstractImageModel
+::GetSpacing() const
+{
+  return ToImageBase()->GetSpacing();
 }
 
 /*****************************************************************************/

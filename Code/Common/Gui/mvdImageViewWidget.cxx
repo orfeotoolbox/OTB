@@ -38,6 +38,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdVectorImageModel.h"
+#include "Gui/mvdAbstractImageViewManipulator.h"
 
 namespace mvd
 {
@@ -77,11 +79,11 @@ ImageViewWidget
 /*******************************************************************************/
 ImageViewWidget
 ::ImageViewWidget( AbstractImageViewManipulator * manipulator,
-                 AbstractImageViewRenderer * renderer,
-                 QGLContext* context,
-		 QWidget* parent,
-		 const QGLWidget* shareWidget,
-		 Qt::WindowFlags flags ) :
+                   AbstractImageViewRenderer * renderer,
+                   QGLContext* context,
+                   QWidget* parent,
+                   const QGLWidget* shareWidget,
+                   Qt::WindowFlags flags ) :
   QGLWidget( context, parent, shareWidget, flags ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
@@ -92,11 +94,11 @@ ImageViewWidget
 /*******************************************************************************/
 ImageViewWidget
 ::ImageViewWidget( AbstractImageViewManipulator * manipulator,
-                 AbstractImageViewRenderer * renderer,
-                 const QGLFormat& format,
-                 QWidget* parent,
-                 const QGLWidget* shareWidget,
-                 Qt::WindowFlags flags ) :
+                   AbstractImageViewRenderer * renderer,
+                   const QGLFormat& format,
+                   QWidget* parent,
+                   const QGLWidget* shareWidget,
+                   Qt::WindowFlags flags ) :
   QGLWidget( format, parent, shareWidget, flags ),
   m_Manipulator( NULL ),
   m_Renderer( NULL )
@@ -110,6 +112,31 @@ ImageViewWidget
 {
   // m_Manipulator (deleted as a child of a QObjet parent).
   // m_Renderer (deleted as a child of a QObjet parent).
+}
+
+/*******************************************************************************/
+void
+ImageViewWidget
+::SetImageList( const AbstractImageViewRenderer::VectorImageModelList& images )
+{
+  assert( m_Renderer!=NULL );
+
+  m_Renderer->SetImageList( images );
+
+  if( images.isEmpty() )
+    return;
+
+  VectorImageModel* imageModel = images.front();
+  assert( imageModel!=NULL );
+
+  DefaultImageType::Pointer image( imageModel->ToImage() );
+  assert( !image.IsNull() );
+
+  m_Manipulator->SetViewportSize( width(), height() );
+
+  m_Manipulator->SetOrigin( image->GetOrigin() );
+  m_Manipulator->SetSpacing( image->GetSpacing() );
+  m_Manipulator->SetWkt( image->GetProjectionRef() );
 }
 
 /*******************************************************************************/
@@ -158,9 +185,29 @@ void
 ImageViewWidget
 ::paintGL()
 {
-  AbstractImageViewRenderer::RenderingContext context;
+  //
+  // Get new rendering-context.
+  assert( m_Renderer!=NULL );
 
+  AbstractImageViewRenderer::RenderingContext* context =
+    m_Renderer->NewRenderingContext();
+
+  assert( context!=NULL );
+
+  //
+  // Setup new rendering-context.
+  assert( m_Manipulator!=NULL );
+
+  m_Manipulator->SetupRenderingContext( context );
+
+  //
+  // OpenGL paint using new rendering-context.
   m_Renderer->PaintGL( context );
+
+  //
+  // Relase rendering-context.
+  delete context;
+  context = NULL;
 }
 
 /*******************************************************************************/
@@ -170,7 +217,7 @@ ImageViewWidget
 {
   QGLWidget::mousePressEvent( event );
 
-  m_Manipulator->mousePressEvent( event );
+  m_Manipulator->MousePressEvent( event );
 }
 
 /*******************************************************************************/
@@ -180,7 +227,7 @@ ImageViewWidget
 {
   QGLWidget::mouseMoveEvent( event );
 
-  m_Manipulator->mouseMoveEvent( event );
+  m_Manipulator->MouseMoveEvent( event );
 }
 
 /*******************************************************************************/
@@ -190,7 +237,7 @@ ImageViewWidget
 {
   QGLWidget::mouseReleaseEvent( event );
 
-  m_Manipulator->mouseReleaseEvent(event);
+  m_Manipulator->MouseReleaseEvent(event);
 }
 
 /*******************************************************************************/
@@ -200,7 +247,7 @@ ImageViewWidget
 {
   QGLWidget::wheelEvent( event );
 
-  m_Manipulator->wheelEvent(event);
+  m_Manipulator->WheelEvent(event);
 }
 
 /*******************************************************************************/
@@ -211,7 +258,7 @@ ImageViewWidget
   // First, call superclass implementation
   QGLWidget::resizeEvent( event );
 
-  m_Manipulator->resizeEvent( event );
+  m_Manipulator->ResizeEvent( event );
 }
 
 /*******************************************************************************/
@@ -221,7 +268,7 @@ ImageViewWidget
 {
   QGLWidget::keyPressEvent( event );
 
-  m_Manipulator->keyPressEvent( event );
+  m_Manipulator->KeyPressEvent( event );
 }
 
 /*******************************************************************************/

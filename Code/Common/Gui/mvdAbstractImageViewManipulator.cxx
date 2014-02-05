@@ -55,7 +55,8 @@ namespace mvd
 /*******************************************************************************/
 AbstractImageViewManipulator
 ::AbstractImageViewManipulator( QObject* parent ) :
-  QObject( parent )
+  QObject( parent ),
+  m_NavigationContext()
 {
 }
 

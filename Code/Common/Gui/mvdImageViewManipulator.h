@@ -41,10 +41,12 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbViewSettings.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Gui/mvdAbstractImageViewManipulator.h"
+#include "Gui/mvdImageViewRenderer.h"
 
 
 /*****************************************************************************/
@@ -85,29 +87,15 @@ class Monteverdi2_EXPORT ImageViewManipulator :
 public:
 
   /** \brief Constructor. */
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+  ImageViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
+                        QObject* parent =NULL );
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
   ImageViewManipulator( QObject* parent =NULL );
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
   /** \brief Destructor. */
   virtual ~ImageViewManipulator();
-
-  /**
-   */
-  virtual void mouseMoveEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void mousePressEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void mouseReleaseEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void wheelEvent( QWheelEvent* event);
-  /**
-   */
-  virtual void resizeEvent( QResizeEvent * event );
-  /**
-   */
-  virtual void keyPressEvent( QKeyEvent * event );
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
@@ -127,7 +115,46 @@ signals:
 //
 // Protected methods.
 protected:
-  
+
+  /**
+   */
+  virtual void virtual_SetViewportSize( int width, int height );
+  /**
+   */
+  virtual void virtual_SetOrigin( const PointType& origin );
+  /**
+   */
+  virtual void virtual_SetSpacing( const SpacingType& spacing );
+  /**
+   */
+  virtual void virtual_SetWkt( const std::string& wkt );
+
+  /**
+   */
+  virtual
+    void
+    virtual_SetupRenderingContext(
+      AbstractImageViewRenderer::RenderingContext * const ) const;
+
+  /**
+   */
+  virtual void virtual_MouseMoveEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void virtual_MousePressEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void virtual_MouseReleaseEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void virtual_WheelEvent( QWheelEvent* event);
+  /**
+   */
+  virtual void virtual_ResizeEvent( QResizeEvent * event );
+  /**
+   */
+  virtual void virtual_KeyPressEvent( QKeyEvent * event );
+
 //
 // Protected attributes.
 protected:
@@ -145,6 +172,10 @@ private:
 //
 // Private attributes.
 private:
+
+  /**
+   */
+  otb::ViewSettings::Pointer m_ViewSettings;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

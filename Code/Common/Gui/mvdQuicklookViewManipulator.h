@@ -45,7 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdAbstractImageViewManipulator.h"
+#include "Gui/mvdImageViewManipulator.h"
 
 
 /*****************************************************************************/
@@ -72,7 +72,7 @@ namespace mvd
  *  \brief TODO.
  */
 class Monteverdi2_EXPORT QuicklookViewManipulator :
-    public AbstractImageViewManipulator
+    public ImageViewManipulator
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,29 +86,15 @@ class Monteverdi2_EXPORT QuicklookViewManipulator :
 public:
 
   /** \brief Constructor. */
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+  QuicklookViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
+                            QObject* parent =NULL );
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
   QuicklookViewManipulator( QObject* parent =NULL );
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
   /** \brief Destructor. */
   virtual ~QuicklookViewManipulator();
-
-  /**
-   */
-  virtual void mouseMoveEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void mousePressEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void mouseReleaseEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void wheelEvent( QWheelEvent* event);
-  /**
-   */
-  virtual void resizeEvent( QResizeEvent * event );
-  /**
-   */
-  virtual void keyPressEvent( QKeyEvent * event );
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
@@ -127,6 +113,25 @@ signals:
 //
 // Protected methods.
 protected:
+
+  /**
+   */
+  virtual void virtual_MouseMoveEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void virtual_MousePressEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void virtual_MouseReleaseEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void virtual_WheelEvent( QWheelEvent* event);
+  /**
+   */
+  virtual void virtual_ResizeEvent( QResizeEvent * event );
+  /**
+   */
+  virtual void virtual_KeyPressEvent( QKeyEvent * event );
 
 //
 // Protected attributes.

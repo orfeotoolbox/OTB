@@ -61,7 +61,8 @@ namespace mvd
 
 //
 // Internal classes pre-declaration.
-class Monteverdi2_EXPORT AbstractImageModel;
+class AbstractImageModel;
+class VectorImageModel;
 
 
 /*****************************************************************************/
@@ -87,6 +88,10 @@ class AbstractImageViewRenderer :
 public:
   /**
    */
+  typedef QList< VectorImageModel* > VectorImageModelList;
+
+  /**
+   */
   struct RenderingContext
   {
     /**
@@ -96,6 +101,10 @@ public:
       m_RenderMode( RENDER_MODE_FULL )
     {
     }
+
+    /**
+     */
+    virtual ~RenderingContext() {}
 
     /**
      */
@@ -118,13 +127,24 @@ public:
 
   /**
    */
+  inline void SetImageList( const VectorImageModelList& images );
+
+  /**
+   */
+  inline
+    AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const;
+
+  /**
+   */
   inline void InitializeGL();
+
   /**
    */
   inline void ResizeGL( int width, int height );
+
   /**
    */
-  inline void PaintGL( const RenderingContext& context );
+  inline void PaintGL( RenderingContext const * context );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -158,6 +178,15 @@ protected:
 //
 // Private methods.
 private:
+  /**
+   */
+  virtual void virtual_SetImageList( const VectorImageModelList& images ) =0;
+
+  /**
+   */
+  virtual
+    AbstractImageViewRenderer::RenderingContext*
+    virtual_NewRenderingContext() const =0;
 
   /**
    */
@@ -167,7 +196,7 @@ private:
   virtual void virtual_ResizeGL( int width, int height ) =0;
   /**
    */
-  virtual void virtual_PaintGL( const RenderingContext& context ) =0;
+  virtual void virtual_PaintGL( RenderingContext const * context ) =0;
 
 //
 // Private attributes.
@@ -192,6 +221,24 @@ namespace mvd
 inline
 void
 AbstractImageViewRenderer
+::SetImageList( const VectorImageModelList& images )
+{
+  virtual_SetImageList( images );
+}
+
+/*****************************************************************************/
+inline
+AbstractImageViewRenderer::RenderingContext*
+AbstractImageViewRenderer
+::NewRenderingContext() const
+{
+  return virtual_NewRenderingContext();
+}
+
+/*****************************************************************************/
+inline
+void
+AbstractImageViewRenderer
 ::InitializeGL()
 {
   virtual_InitializeGL();
@@ -210,7 +257,7 @@ AbstractImageViewRenderer
 inline
 void
 AbstractImageViewRenderer
-::PaintGL( const RenderingContext& context )
+::PaintGL( RenderingContext const * context )
 {
   virtual_PaintGL( context );
 }

@@ -24,7 +24,6 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
-
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
@@ -44,8 +43,6 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Gui/mvdAbstractImageViewRenderer.h"
-#include "Gui/mvdAbstractImageViewManipulator.h"
-
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -60,7 +57,6 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
-class AbstractImageViewRenderer;
 class AbstractImageViewManipulator;
 
 
@@ -79,6 +75,15 @@ class Monteverdi2_EXPORT ImageViewWidget :
   Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
+
+//
+// Public types.
+public:
+  /**
+   */
+  typedef
+    AbstractImageViewRenderer::VectorImageModelList
+    VectorImageModelList;
 
 //
 // Public methods.
@@ -110,18 +115,8 @@ public:
   virtual ~ImageViewWidget();
 
   /**
-   * \brief Access the abstract view-manipualtor of this image-view.
-   *
-   * \return A pointer to the abstract view-manipulator of this image-view.
    */
-  inline const AbstractImageViewManipulator* GetManipulator() const;
-
-  /**
-   * \brief Access the abstract model-renderer of this image-view.
-   *
-   * \return A pointer to the abstract model-renderer of this image-view.
-   */
-  inline const AbstractImageViewRenderer* GetRenderer() const;
+  void SetImageList( const VectorImageModelList& );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -140,6 +135,10 @@ signals:
 //
 // Protected methods.
 protected:
+
+  //
+  // Qt overloads.
+
   virtual void initializeGL();
   virtual void resizeGL( int widgth, int height );
   virtual void paintGL();
@@ -164,6 +163,23 @@ protected:
 //
 // Private methods.
 private:
+
+#if 0
+  /**
+   * \brief Access the abstract view-manipualtor of this image-view.
+   *
+   * \return A pointer to the abstract view-manipulator of this image-view.
+   */
+  inline const AbstractImageViewManipulator* GetManipulator() const;
+
+  /**
+   * \brief Access the abstract model-renderer of this image-view.
+   *
+   * \return A pointer to the abstract model-renderer of this image-view.
+   */
+  inline const AbstractImageViewRenderer* GetRenderer() const;
+#endif
+
   /** Construction code (factorizes constructors initializations). */
   void Initialize( AbstractImageViewManipulator* manipulator,
                    AbstractImageViewRenderer* renderer );
@@ -202,6 +218,8 @@ private slots:
 
 namespace mvd
 {
+#if 0
+
 /*****************************************************************************/
 inline
 const AbstractImageViewManipulator*
@@ -219,6 +237,8 @@ ImageViewWidget
 {
   return m_Renderer;
 }
+
+#endif
 
 } // end of namespace 'mvd'.
 

@@ -953,11 +953,16 @@ ImageViewWidget*
 MainWindow
 ::CreateImageViewWidget( QGLWidget* sharedGlWidget )
 {
-  ImageViewManipulator* manipulator =
-    new ImageViewManipulator( this );
-
   ImageViewRenderer* renderer =
     new ImageViewRenderer( this );
+
+  ImageViewManipulator* manipulator =
+    new ImageViewManipulator(
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+      renderer->GetViewSettings(),
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
+      this
+    );
 
   ImageViewWidget* imageView = new ImageViewWidget(
     manipulator, // (will be reparented.)
@@ -980,11 +985,16 @@ ImageViewWidget*
 MainWindow
 ::CreateQuicklookViewWidget( QGLWidget* sharedGlWidget )
 {
-  QuicklookViewManipulator* manipulator =
-    new QuicklookViewManipulator( this );
-
   ImageViewRenderer* renderer =
     new ImageViewRenderer( this );
+
+  QuicklookViewManipulator* manipulator =
+    new QuicklookViewManipulator(
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+      renderer->GetViewSettings(),
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
+      this
+    );
 
   ImageViewWidget* quicklookView = new ImageViewWidget(
     manipulator, // (will be reparented.)
@@ -1419,7 +1429,7 @@ MainWindow
   // must be done before the SetImageModel (to be able to receive
   // the signal with zoom level)
   ConnectStatusBar( model );
-  
+
   ConnectPixelDescriptionWidget( model );
 
 #if USE_OLD_IMAGE_VIEW
@@ -1467,6 +1477,15 @@ MainWindow
   );
 
 #endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
+  ImageViewWidget::VectorImageModelList images;
+
+  if( vectorImageModel!=NULL )
+    images << vectorImageModel;
+
+  m_ImageView->SetImageList( images );
+#endif // USE_ICE_IMAGE_VIEW
 
   //
   // MODEL(s).
