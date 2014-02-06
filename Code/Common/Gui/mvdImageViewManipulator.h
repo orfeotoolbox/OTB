@@ -97,6 +97,50 @@ public:
   /** \brief Destructor. */
   virtual ~ImageViewManipulator();
 
+  /**
+   */
+  virtual void SetViewportSize( int width, int height );
+  /**
+   */
+  virtual void SetOrigin( const PointType& origin );
+  /**
+   */
+  virtual void SetSpacing( const SpacingType& spacing );
+  /**
+   */
+  virtual void SetWkt( const std::string& wkt );
+  /**
+   */
+  virtual void SetKeywordList(
+    const DefaultImageType::ImageKeywordlistType& kwl
+  );
+
+  /**
+   */
+  virtual
+    void
+    SetupRenderingContext(
+      AbstractImageViewRenderer::RenderingContext * const ) const;
+
+  /**
+   */
+  virtual void MouseMoveEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void MousePressEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void MouseReleaseEvent( QMouseEvent * event );
+  /**
+   */
+  virtual void WheelEvent( QWheelEvent* event);
+  /**
+   */
+  virtual void ResizeEvent( QResizeEvent * event );
+  /**
+   */
+  virtual void KeyPressEvent( QKeyEvent * event );
+
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
 //
@@ -115,50 +159,6 @@ signals:
 //
 // Protected methods.
 protected:
-
-  /**
-   */
-  virtual void virtual_SetViewportSize( int width, int height );
-  /**
-   */
-  virtual void virtual_SetOrigin( const PointType& origin );
-  /**
-   */
-  virtual void virtual_SetSpacing( const SpacingType& spacing );
-  /**
-   */
-  virtual void virtual_SetWkt( const std::string& wkt );
-  /**
-   */
-  virtual void virtual_SetKeywordList(
-    const DefaultImageType::ImageKeywordlistType& kwl
-  );
-
-  /**
-   */
-  virtual
-    void
-    virtual_SetupRenderingContext(
-      AbstractImageViewRenderer::RenderingContext * const ) const;
-
-  /**
-   */
-  virtual void virtual_MouseMoveEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void virtual_MousePressEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void virtual_MouseReleaseEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void virtual_WheelEvent( QWheelEvent* event);
-  /**
-   */
-  virtual void virtual_ResizeEvent( QResizeEvent * event );
-  /**
-   */
-  virtual void virtual_KeyPressEvent( QKeyEvent * event );
 
 //
 // Protected attributes.

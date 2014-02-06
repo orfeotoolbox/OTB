@@ -84,56 +84,54 @@ class Monteverdi2_EXPORT AbstractImageViewManipulator :
 // Public methods.
 public:
 
-  /** \brief Constructor. */
-  AbstractImageViewManipulator( QObject* parent =NULL );
-
   /** \brief Destructor. */
   virtual ~AbstractImageViewManipulator();
 
   /**
    */
-  inline void SetViewportSize( int width, int height );
+  virtual void SetViewportSize( int width, int height ) =0;
   /**
    */
-  inline void SetOrigin( const PointType& origin );
+  virtual void SetOrigin( const PointType& origin ) =0;
   /**
    */
-  inline void SetSpacing( const SpacingType& spacing );
+  virtual void SetSpacing( const SpacingType& spacing ) =0;
   /**
    */
-  inline void SetWkt( const std::string& wkt );
+  virtual void SetWkt( const std::string& wkt ) =0;
   /**
    */
-  inline void SetKeywordList( const DefaultImageType::ImageKeywordlistType& kwl );
+  virtual
+    void SetKeywordList( const DefaultImageType::ImageKeywordlistType& kwl ) =0;
 
   /**
    */
-  inline
+  virtual
     void
     SetupRenderingContext(
-      AbstractImageViewRenderer::RenderingContext * const ) const;
+      AbstractImageViewRenderer::RenderingContext * const ) const =0;
 
   /**
    */
-  inline void MouseMoveEvent( QMouseEvent* event );
+  virtual void MouseMoveEvent( QMouseEvent* event ) =0;
   /**
    */
-  inline void MousePressEvent( QMouseEvent* event );
+  virtual void MousePressEvent( QMouseEvent* event ) =0;
   /**
    */
-  inline void MouseReleaseEvent( QMouseEvent* event );
+  virtual void MouseReleaseEvent( QMouseEvent* event ) =0;
 
   /**
    */
-  inline void WheelEvent( QWheelEvent* event);
+  virtual void WheelEvent( QWheelEvent* event) =0;
 
   /**
    */
-  inline void KeyPressEvent( QKeyEvent * event );
+  virtual void KeyPressEvent( QKeyEvent * event ) =0;
 
   /**
    */
-  inline void ResizeEvent( QResizeEvent* event );
+  virtual void ResizeEvent( QResizeEvent* event ) =0;
 
 //
 // Public SLOTS.
@@ -159,21 +157,9 @@ protected:
      * Default constructor (safely) initializes POD (Plain Old Data)
      * structure.
      */
-    NavigationContext() :
-      m_Origin(),
-      m_Spacing(),
-      m_ViewportSize(),
-      m_Wkt()
+    NavigationContext()
     {
-      m_Origin.Fill( 0 );
-      m_Spacing.Fill( 1 );
-      m_ViewportSize.Fill( 0 );
     }
-
-    PointType m_Origin;
-    SpacingType m_Spacing;
-    SizeType m_ViewportSize;
-    std::string m_Wkt;
   };
 
   /** Mouse context */
@@ -191,53 +177,8 @@ protected:
 // Protected methods.
 protected:
 
-  /**
-   */
-  virtual void virtual_SetViewportSize( int width, int height ) = 0;
-  /**
-   */
-  virtual void virtual_SetOrigin( const PointType& origin ) = 0;
-  /**
-   */
-  virtual void virtual_SetSpacing( const SpacingType& spacing ) = 0;
-  /**
-   */
-  virtual void virtual_SetWkt( const std::string& wkt ) = 0;
-  /**
-   */
-  virtual void virtual_SetKeywordList(
-    const DefaultImageType::ImageKeywordlistType& kwl
-  ) = 0;
-
-  /**
-   */
-  virtual void virtual_MouseMoveEvent( QMouseEvent* event ) = 0;
-
-  /**
-   */
-  virtual void virtual_MousePressEvent( QMouseEvent* event ) = 0;
-  /**
-   */
-  virtual void virtual_MouseReleaseEvent( QMouseEvent* event ) = 0;
-
-  /**
-   */
-  virtual void virtual_WheelEvent( QWheelEvent* event) = 0;
-
-  /**
-   */
-  virtual void virtual_KeyPressEvent( QKeyEvent * event )  = 0;
-
-  /**
-   */
-  virtual void virtual_ResizeEvent( QResizeEvent* event ) = 0;
-
-  /**
-   */
-  virtual
-    void
-    virtual_SetupRenderingContext(
-      AbstractImageViewRenderer::RenderingContext * const ) const = 0;
+  /** \brief Constructor. */
+  AbstractImageViewManipulator( QObject* parent =NULL );
 
 //
 // Protected attributes.
@@ -257,10 +198,6 @@ private:
 // Private attributes.
 private:
 
-  /**
-   */
-  NavigationContext m_NavigationContext;
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
@@ -275,126 +212,6 @@ private slots:
 
 namespace mvd
 {
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::SetViewportSize( int width, int height )
-{
-  m_NavigationContext.m_ViewportSize[ 0 ] = width;
-  m_NavigationContext.m_ViewportSize[ 1 ] = height;
-
-  virtual_SetViewportSize( width, height );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::SetOrigin( const PointType& origin )
-{
-  m_NavigationContext.m_Origin = origin;
-
-  virtual_SetOrigin( origin );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::SetSpacing( const SpacingType& spacing )
-{
-  m_NavigationContext.m_Spacing = spacing;
-
-  virtual_SetSpacing( spacing );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::SetWkt( const std::string& wkt )
-{
-  m_NavigationContext.m_Wkt = wkt;
-
-  virtual_SetWkt( wkt );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::SetKeywordList( const DefaultImageType::ImageKeywordlistType& kwl )
-{
-  virtual_SetKeywordList( kwl );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::SetupRenderingContext(
-  AbstractImageViewRenderer::RenderingContext * const context ) const
-{
-  assert( context!=NULL );
-
-  virtual_SetupRenderingContext( context );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::MouseMoveEvent( QMouseEvent* event )
-{
-  virtual_MouseMoveEvent( event );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::MousePressEvent( QMouseEvent* event )
-{
-  virtual_MousePressEvent( event );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::MouseReleaseEvent( QMouseEvent* event )
-{
-  virtual_MouseReleaseEvent( event );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::WheelEvent( QWheelEvent* event)
-{
-  virtual_WheelEvent( event );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::KeyPressEvent( QKeyEvent * event )
-{
-  virtual_KeyPressEvent( event );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewManipulator
-::ResizeEvent( QResizeEvent* event )
-{
-  virtual_ResizeEvent( event );
-}
 
 } // end namespace 'mvd'
 
