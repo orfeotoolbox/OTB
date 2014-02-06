@@ -120,6 +120,8 @@ ImageViewRenderer
       )
     );
 
+    imageActor->SetVisible( true );
+
     qDebug() << "Added image-actor:" << FromStdString( actorKey );
     }
 

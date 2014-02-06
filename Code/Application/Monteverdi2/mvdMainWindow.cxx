@@ -1519,6 +1519,11 @@ MainWindow
     images << vectorImageModel;
 
     m_ImageView->SetImageList( images );
+
+    ImageViewWidget* quicklookView = GetQuicklookView();
+    assert( quicklookView!=NULL );
+
+    quicklookView->SetImageList( images );
     }
 #endif // USE_ICE_IMAGE_VIEW
 
