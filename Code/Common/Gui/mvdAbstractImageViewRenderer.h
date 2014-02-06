@@ -127,24 +127,24 @@ public:
 
   /**
    */
-  inline void SetImageList( const VectorImageModelList& images );
+  virtual void SetImageList( const VectorImageModelList& images ) =0;
 
   /**
    */
-  inline
-    AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const;
+  virtual
+    AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const =0;
 
   /**
    */
-  inline void InitializeGL();
+  virtual void InitializeGL() =0;
 
   /**
    */
-  inline void ResizeGL( int width, int height );
+  virtual void ResizeGL( int width, int height ) =0;
 
   /**
    */
-  inline void PaintGL( RenderingContext const * context );
+  virtual void PaintGL( RenderingContext const * context ) =0;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -178,25 +178,6 @@ protected:
 //
 // Private methods.
 private:
-  /**
-   */
-  virtual void virtual_SetImageList( const VectorImageModelList& images ) =0;
-
-  /**
-   */
-  virtual
-    AbstractImageViewRenderer::RenderingContext*
-    virtual_NewRenderingContext() const =0;
-
-  /**
-   */
-  virtual void virtual_InitializeGL() =0;
-  /**
-   */
-  virtual void virtual_ResizeGL( int width, int height ) =0;
-  /**
-   */
-  virtual void virtual_PaintGL( RenderingContext const * context ) =0;
 
 //
 // Private attributes.
@@ -216,51 +197,6 @@ private slots:
 
 namespace mvd
 {
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewRenderer
-::SetImageList( const VectorImageModelList& images )
-{
-  virtual_SetImageList( images );
-}
-
-/*****************************************************************************/
-inline
-AbstractImageViewRenderer::RenderingContext*
-AbstractImageViewRenderer
-::NewRenderingContext() const
-{
-  return virtual_NewRenderingContext();
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewRenderer
-::InitializeGL()
-{
-  virtual_InitializeGL();
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewRenderer
-::ResizeGL( int width, int height )
-{
-  virtual_ResizeGL( width, height );
-}
-
-/*****************************************************************************/
-inline
-void
-AbstractImageViewRenderer
-::PaintGL( RenderingContext const * context )
-{
-  virtual_PaintGL( context );
-}
 
 } // end namespace 'mvd'
 

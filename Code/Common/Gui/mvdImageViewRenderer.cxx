@@ -84,7 +84,7 @@ ImageViewRenderer
 /*******************************************************************************/
 void
 ImageViewRenderer
-::virtual_SetImageList( const VectorImageModelList& images )
+::SetImageList( const VectorImageModelList& images )
 {
   assert( !m_GlView.IsNull() );
 
@@ -154,7 +154,7 @@ ImageViewRenderer
 /*****************************************************************************/
 AbstractImageViewRenderer::RenderingContext*
 ImageViewRenderer
-::virtual_NewRenderingContext() const
+::NewRenderingContext() const
 {
   RenderingContext* context = new ImageViewRenderer::RenderingContext();
 
@@ -175,7 +175,7 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
-::virtual_InitializeGL()
+::InitializeGL()
 {
   assert( !m_GlView.IsNull() );
 
@@ -185,7 +185,7 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
-::virtual_ResizeGL( int width, int height )
+::ResizeGL( int width, int height )
 {
   /*
   // Should be done here and not in OTB-Ice render routine.
@@ -223,7 +223,7 @@ ImageViewRenderer
 /*****************************************************************************/
 void
 ImageViewRenderer
-::virtual_PaintGL( const AbstractImageViewRenderer::RenderingContext* c )
+::PaintGL( const AbstractImageViewRenderer::RenderingContext* c )
 {
   assert( !m_GlView.IsNull() );
 

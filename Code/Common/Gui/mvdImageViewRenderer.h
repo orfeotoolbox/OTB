@@ -126,6 +126,26 @@ public:
    */
   inline otb::ViewSettings::Pointer GetViewSettings();
 
+  /**
+   */
+  virtual void SetImageList( const VectorImageModelList& images );
+
+  /**
+   */
+  virtual
+  AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const;
+
+  /**
+   */
+  virtual void InitializeGL();
+  /**
+   */
+  virtual void ResizeGL( int width, int height );
+  /**
+   */
+  virtual
+  void PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
@@ -152,28 +172,6 @@ protected:
 //
 // Private methods.
 private:
-
-  /**
-   */
-  virtual void virtual_SetImageList( const VectorImageModelList& images );
-
-  /**
-   */
-  virtual
-  AbstractImageViewRenderer::RenderingContext*
-  virtual_NewRenderingContext() const;
-
-  /**
-   */
-  virtual void virtual_InitializeGL();
-  /**
-   */
-  virtual void virtual_ResizeGL( int width, int height );
-  /**
-   */
-  virtual
-  void 
-  virtual_PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
 
 //
 // Private attributes.
