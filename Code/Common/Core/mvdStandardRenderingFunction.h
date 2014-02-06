@@ -54,7 +54,7 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbChannelSelectorFunctor.h"
-#include "otbI18n.h"
+
 #include "otbImageMetadataInterfaceFactory.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbMacro.h"
@@ -325,21 +325,21 @@ public:
 
     InternalPixelType spixelRepresentation = this->EvaluatePixelRepresentation(spixel);
     OutputPixelType   spixelDisplay = this->EvaluateTransferFunction(spixelRepresentation);
-    oss << otbGetTextMacro("Pixel value") << ":     "
+    oss << "Pixel value" << ":     "
         << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(spixel) << std::endl;
-    oss << otbGetTextMacro("Value computed") << ": "
+    oss << "Value computed" << ": "
         << static_cast<typename itk::NumericTraits<InternalPixelType>::PrintType>(spixelRepresentation) << std::endl;
-    oss << otbGetTextMacro("Value displayed") << ": " << std::endl;
-    oss << otbGetTextMacro("R") << " " << std::setw(3)
+    oss << "Value displayed" << ": " << std::endl;
+    oss << "R" << " " << std::setw(3)
         << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[0]) << ", ";
-    oss << otbGetTextMacro("G") << " " << std::setw(3)
+    oss << "G" << " " << std::setw(3)
         << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[1]) << ", ";
-    oss << otbGetTextMacro("B") << " " << std::setw(3)
+    oss << "B" << " " << std::setw(3)
         << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[2]);
     if (spixelDisplay.Size() == 4)
       {
       oss << ", ";
-      oss << otbGetTextMacro("A") << " " << std::setw(3)
+      oss << "A" << " " << std::setw(3)
           << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[3]);
       }
     oss << std::endl;
