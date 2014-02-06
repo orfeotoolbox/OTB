@@ -70,7 +70,7 @@ private:
     SetDefaultParameterFloat("input.idx",0.0);
     AddParameter(ParameterType_Float, "input.idy","Y value of desired point");
     SetParameterDescription("input.idy", "Y coordinate of the point to transform.");
-    SetDefaultParameterFloat("input.idy",0.0); 
+    SetDefaultParameterFloat("input.idy",0.0);
 
     // Output with Output Role
     AddParameter(ParameterType_Group, "output", "Geographic Coordinates");
