@@ -189,7 +189,7 @@ private:
   if(IsParameterEnabled("outstat"))
     {
     ofs.open(GetParameterString("outstat").c_str());
-    ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
+    ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat elevation x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
     }
 
   for(TiePointsType::const_iterator it = tiepoints.begin();
@@ -216,7 +216,7 @@ private:
     double yerror = ref[1]-tmpPoint[1];
 
     if(IsParameterEnabled("outstat"))
-      ofs<<ref[0]<<"\t"<<ref[1]<<"\t"<<it->first[2]<<"\t"<<tmpPoint[0]<<"\t"<<tmpPoint[1]<<"\t"<<tmpPoint[2]<<"\t"<<xerror<<"\t"<<yerror<<"\t"<<gerror<<std::endl;
+      ofs<<ref[0]<<"\t"<<ref[1]<<"\t"<<it->second[2]<<"\t"<<tmpPoint[0]<<"\t"<<tmpPoint[1]<<"\t"<<tmpPoint[2]<<"\t"<<xerror<<"\t"<<yerror<<"\t"<<gerror<<std::endl;
 
     rmse += gerror*gerror;
     rmsex+= xerror*xerror;
