@@ -1405,7 +1405,6 @@ MainWindow
       m_ImageView,
       SLOT( updateGL()  )
       );
-    }
 
     // Disconnect previously selected quicklook-model from view.
     // TODO: Remove quicklook temporary hack by better design.
@@ -1418,6 +1417,7 @@ MainWindow
       );
 
 #endif // USE_ICE_IMAGE_VIEW
+    }
 
 #if USE_OLD_IMAGE_VIEW
 
