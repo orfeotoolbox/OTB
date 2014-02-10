@@ -13,7 +13,6 @@ set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Fusion
   ${OTB_SOURCE_DIR}/Code/Fuzzy
   ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis
-  ${OTB_SOURCE_DIR}/Code/Gui
   ${OTB_SOURCE_DIR}/Code/Hyperspectral
   ${OTB_SOURCE_DIR}/Code/IO
   ${OTB_SOURCE_DIR}/Code/Learning
@@ -35,9 +34,6 @@ set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OGRAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/ITKPendingPatches
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters
-  ${OTB_SOURCE_DIR}/Code/Visu
-  ${OTB_SOURCE_DIR}/Code/Visualization
-  ${OTB_BINARY_DIR}/Code/Visualization
   ${OTB_SOURCE_DIR}/Code/ApplicationEngine
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins
@@ -201,9 +197,6 @@ set(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   MultiTemporal
   SpatialReasoning
   DisparityMap
-  Visu
-  Visualization
-  Gui
   Projections
   Radiometry
   SARPolarimetry
