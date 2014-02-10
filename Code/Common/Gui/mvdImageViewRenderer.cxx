@@ -37,10 +37,12 @@
 //
 // OTB includes (sorted by alphabetic order)
 #include "otbGlImageActor.h"
+#include "otbStandardShader.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdDatasetModel.h"
+#include "Core/mvdTypes.h"
 #include "Core/mvdVectorImageModel.h"
 
 namespace mvd
@@ -70,7 +72,8 @@ ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
   AbstractImageViewRenderer( parent ),
   m_GlView( otb::GlView::New() ),
-  m_ReferenceGlImageActor()
+  m_ReferenceGlImageActor(),
+  m_ImageModelActorPairs()
 {
   assert( !m_GlView.IsNull() );
 }
@@ -92,6 +95,8 @@ ImageViewRenderer
   // Remove all actors.
   m_GlView->ClearActors();
 
+  m_ImageModelActorPairs.clear();
+
   //
   // Return if there is no vector-image model.
   if( images.isEmpty() )
@@ -105,22 +110,29 @@ ImageViewRenderer
     {
     assert( *it!=NULL );
 
-    otb::GlImageActor::Pointer imageActor( otb::GlImageActor::New() );
+    ImageModelActorPair pair(
+      *it,
+      otb::GlImageActor::New()
+    );
 
-    imageActor->Initialize( ToStdString( ( *it )->GetFilename() ));
+    pair.second->Initialize( ToStdString( pair.first->GetFilename() ) );
 
-    DatasetModel* datasetModel = ( *it )->GetDatasetModel();
+    DatasetModel* datasetModel = pair.first->GetDatasetModel();
 
-    std::string actorKey(
+    ActorKey actorKey(
       m_GlView->AddActor(
-        imageActor,
-        datasetModel==NULL
+        pair.second,
+        pair.first==NULL
         ? std::string()
         : ToStdString( datasetModel->GetHash() )
       )
     );
 
-    imageActor->SetVisible( true );
+    pair.second->SetVisible( true );
+
+    m_ImageModelActorPairs.insert(
+      ImageModelActorPairMap::value_type( actorKey, pair )
+    );
 
     qDebug() << "Added image-actor:" << FromStdString( actorKey );
     }
@@ -242,6 +254,10 @@ ImageViewRenderer
   */
 
   //
+  // Apply VectorImageModel::Settings to otb::GlImageActor.
+  UpdateImageActors();
+
+  //
   // Pre-render scene.
   m_GlView->BeforeRendering();
   {
@@ -261,6 +277,56 @@ ImageViewRenderer
   //
   // Post-render scene.
   m_GlView->AfterRendering();
+}
+
+/*****************************************************************************/
+void
+ImageViewRenderer
+::UpdateImageActors()
+{
+  for( ImageModelActorPairMap::const_iterator it(m_ImageModelActorPairs.begin());
+       it!=m_ImageModelActorPairs.end();
+       ++it )
+    {
+    assert( it->second.first!=NULL );
+    assert( !it->second.second.IsNull() );
+
+    const VectorImageModel::Settings& settings =
+      it->second.first->GetSettings();
+
+    //
+    // Apply color-setup.
+    VectorImageModel::Settings::ChannelVector channels;
+
+    settings.GetSmartChannels( channels );
+
+    it->second.second->SetRedIdx( channels[ RGBW_CHANNEL_RED ] + 1 );
+    it->second.second->SetGreenIdx( channels[ RGBW_CHANNEL_GREEN ] + 1 );
+    it->second.second->SetBlueIdx( channels[ RGBW_CHANNEL_BLUE ] + 1 );
+
+    //
+    // Apply color-dynamics.
+    otb::FragmentShader::Pointer fragmentShader( it->second.second->GetShader() );
+
+    assert(
+      fragmentShader==otb::DynamicCast< otb::StandardShader >( fragmentShader )
+    );
+
+    otb::StandardShader::Pointer shader(
+      otb::DynamicCast< otb::StandardShader >( fragmentShader )
+    );
+
+    assert( !shader.IsNull() );
+
+    shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_RED ) );
+    shader->SetMaxRed( settings.GetHighIntensity( RGBW_CHANNEL_RED ) );
+
+    shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_GREEN ) );
+    shader->SetMaxGreen( settings.GetHighIntensity( RGBW_CHANNEL_GREEN ) );
+
+    shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
+    shader->SetMaxBlue( settings.GetHighIntensity( RGBW_CHANNEL_BLUE ) );
+    }
 }
 
 /*****************************************************************************/

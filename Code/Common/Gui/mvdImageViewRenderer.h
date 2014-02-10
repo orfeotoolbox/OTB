@@ -170,8 +170,25 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
+// Private types
+private:
+  /**
+   */
+  typedef
+  std::pair< VectorImageModel*, otb::GlImageActor::Pointer > ImageModelActorPair;
+  /**
+   */
+  typedef std::string ActorKey;
+  /**
+   */
+  typedef std::map< ActorKey, ImageModelActorPair > ImageModelActorPairMap;
+
+//
 // Private methods.
 private:
+  /**
+   */
+  void UpdateImageActors();
 
 //
 // Private attributes.
@@ -182,6 +199,9 @@ private:
   /**
    */
   otb::GlImageActor::Pointer m_ReferenceGlImageActor;
+  /**
+   */
+  ImageModelActorPairMap m_ImageModelActorPairs;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
