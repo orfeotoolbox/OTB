@@ -288,41 +288,6 @@ parameter with \code{SmarterFilteringPipeline -in QB\_Suburb.png -out output.png
 
 
 
-\section{Viewer}
-\label{sec:TutorialViewer}
-
-So far, we had to save the image and use an external viewer every time we wanted
-to see the result of our processing. That is not very convenient, especially for
-some {\em exotic} formats (16 bits, floating point \ldots). Thankfully, OTB
-comes with it's own visualization tool.
-
-This tool is accessible by the class \doxygen{otb}{ImageViewer}. We will now
-design a simple, minimalistic example to illustrate the use for this viewer.
-
-First you need to add the following lines in the \code{CMakeLists.txt} file:
-
-\begin{small}
-\begin{verbatim}
-ADD_EXECUTABLE(SimpleViewer SimpleViewer.cxx )
-TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisualization)
-\end{verbatim}
-\end{small}
-
-Notice that you have to link to 2 other OTB libraries: OTBGui and OTBVisualization.
-In other situations you might have to add other OTB libraries, for example OTBLearning,
-OTBFeatureExtraction, etc. To make a long story short, basically add the library
-when you're using some domain specific filters and if you're getting messages from
-the compiler such as {\em undefined reference to}.
-
-\input{SimpleViewer}
-
-After compiling you can execute the program with \code{SimpleViewer
-QB\_Suburb.png}. The result of the edge detection is displayed. Notice that you
-can call this simple program with a big image (let's say $30000 \times 30000$
-pixels). For all multithreaded filters (filters which implement a
-\code{ThreadedGenerateData()} method), the image is splitted into piece and only
-the piece on display is processed.
-
 \section{Going from raw satellite images to useful products}
 
 Quite often, when you buy satellite images, you end up with several images. In the case of optical satellite, you often have a panchromatic spectral band with the highest spatial resolution and a multispectral product of the same area with a lower resolution. The resolution ratio is likely to be around 4.

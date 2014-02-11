@@ -4,21 +4,6 @@
 After processing your images with OTB, you probably want to see the result. As it is quite straightforward in some situation, if can be a bit trickier in other. For example, some filters will give you a list of polygons as an output. Other can return an image with each region labelled by a unique index. In this section we are going to provide few examples to help you produce beautiful output ready to be included in your publications/presentations.
 
 
-\section{Viewer}
-Even if OTB is not a visualization toolkit as for instance VTK
-(\emph{The Visualization Toolkit} \url{http://www.vtk.org}), some
-simple functionalities for image visualization are given in the
-toolbox. Indeed, for algorithm prototyping, it is sometimes more
-useful to \emph{see} the result on the screen, than saving it to a
-file and then open it in an external viewer.
-
-OTB provides the \doxygen{otb}{ImageViewer} class which is compatible
-with the pipeline and can therefore replace the
-\doxygen{otb}{ImageFileWriter} during prototyping phases.
-
-\input{VisuExample1.tex}
-
-
 \section{Images}
 
 \subsection{Grey Level Images}

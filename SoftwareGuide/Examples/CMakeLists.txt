@@ -249,8 +249,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/OGRWrappersExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMHandlerExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/LidarReaderExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/LidarToImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/TileMapImageIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/ThresholdImageFilter.cxx
@@ -377,7 +375,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromImagesExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Visualization/VisuExample1.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ImageToLabelToImage.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/ShapeAttributeComputation.cxx
 #   ${OTB_SOURCE_DIR}/Examples/OBIA/KeepNObjects.cxx
@@ -409,7 +406,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/FilteringPipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/ScalingPipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/SmarterFilteringPipeline.cxx
-  ${OTB_SOURCE_DIR}/Examples/Tutorials/SimpleViewer.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/OrthoFusion.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Multispectral.cxx
   ${OTB_SOURCE_DIR}/Examples/Simulation/ProsailModel.cxx
