@@ -168,7 +168,7 @@ private:
     SetParameterDescription("normalize", "center AND reduce data before Dimensionality reduction.");
     MandatoryOff("normalize");
 
-    AddParameter(ParameterType_OutputFilename, "outmatrix", "Transformation matrix output");
+    AddParameter(ParameterType_OutputFilename, "outmatrix", "Transformation matrix output (text format)");
     SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");
     MandatoryOff("outmatrix");
 
