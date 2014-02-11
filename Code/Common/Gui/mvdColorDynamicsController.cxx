@@ -28,6 +28,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cmath>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -635,30 +636,36 @@ ColorDynamicsController
 {
   assert( GetModel()==GetModel< VectorImageModel >() );
   const VectorImageModel* imageModel = GetModel< VectorImageModel >();
-  
+
   if( imageModel==NULL )
     return;
-  
-// Reference settings.
-  const VectorImageModel::Settings& settings = imageModel->GetSettings();
 
-  
   assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
   ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
   assert( widget!=NULL );
-  
+
   bool thisSignalsBlocked = this->blockSignals( true );
   {
   bool widgetSignalsBlocked = widget->blockSignals( true );
   {
-  widget->SetGamma( settings.GetGamma() );
+  double gMin = static_cast< double >( widget->GetMinGamma() );
+  double gMax = static_cast< double >( widget->GetMaxGamma() );
+  double gStep = static_cast< double >( widget->GetGammaStep() );
+
+  double gamma = round( gMin + imageModel->GetSettings().GetGamma() * gStep );
+
+  if( gamma>gMax )
+    gamma = gMax;
+
+  if( gamma<gMin )
+    gamma = gMin;
+
+  widget->SetGamma( static_cast< int >( gamma ) );
   }
   widget->blockSignals( widgetSignalsBlocked );
   }
   this->blockSignals( thisSignalsBlocked );  
-
 }
-
 
 /*****************************************************************************/
 void
@@ -1343,7 +1350,7 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::OnGammaValueChanged(int value)
+::OnGammaValueChanged( int value )
 {
   qDebug()
     << this
@@ -1351,14 +1358,23 @@ ColorDynamicsController
     << value
     <<")";
 
+  // Get widget.
+  assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
+  assert( widget!=NULL );
+
+  double gamma =
+    ( static_cast< double >( widget->GetGamma() ) -
+      static_cast< double >( widget->GetMinGamma() ) ) /
+    static_cast< double >( widget->GetGammaStep() );
+
   // Get image-model.
   assert( GetModel()==GetModel< VectorImageModel>() );
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
 
- // Reference settings.
-  VectorImageModel::Settings& settings = imageModel->GetSettings();
-  settings.SetGamma(value);
+  // Apply store.
+  imageModel->GetSettings().SetGamma( gamma );
 
   // Now, emit this controller's signal to cause display refresh.
   emit ModelUpdated();

@@ -326,6 +326,8 @@ ImageViewRenderer
 
     shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
     shader->SetMaxBlue( settings.GetHighIntensity( RGBW_CHANNEL_BLUE ) );
+
+    shader->SetGamma( settings.GetGamma() );
     }
 }
 

@@ -248,7 +248,7 @@ public:
      * \param intensity high-intensity value.
      */
     inline void SetHighIntensity( RgbwChannel channel,
-				 ParametersType::ValueType intensity );
+                                  ParametersType::ValueType intensity );
 
     /**
      */
@@ -292,11 +292,11 @@ public:
 
     /**
      */
-    inline void SetGamma(int gamma);
+    inline void SetGamma( double gamma );
 
     /**
      */
-    inline int GetGamma() const;
+    inline double GetGamma() const;
 
     //
     // Private methods.
@@ -371,7 +371,7 @@ public:
 
     /**
      */
-    int m_Gamma;
+    double m_Gamma;
   };
 
 //
@@ -1058,7 +1058,7 @@ VectorImageModel::Settings
       break;
 
     case RGBW_CHANNEL_WHITE:
-      return GetGrayDynamicsParam( 0 );
+      return GetGrayDynamicsParam( false );
       break;
 
     case RGBW_CHANNEL_RED:
@@ -1269,7 +1269,7 @@ VectorImageModel::Settings
 
   CountType ofs = high ? 1 : 0;
 
-  if( m_GrayDynamicsParams[0 * 2 + ofs ]==param )
+  if( m_GrayDynamicsParams[ 0 * 2 + ofs ]==param )
     return;
 
   SetModified();
@@ -1281,16 +1281,18 @@ VectorImageModel::Settings
   m_GrayDynamicsParams[ 2 * 2 + ofs ] = param;
 }
 
+/*****************************************************************************/
 inline
 void
 VectorImageModel::Settings
-::SetGamma(int value)
+::SetGamma( double value )
 {
   m_Gamma = value;
 }
 
+/*****************************************************************************/
 inline
-int
+double
 VectorImageModel::Settings
 ::GetGamma() const
 {

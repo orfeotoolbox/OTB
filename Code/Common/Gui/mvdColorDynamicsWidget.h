@@ -88,9 +88,21 @@ class Monteverdi2_EXPORT ColorDynamicsWidget :
 	      READ GetNoDataValue
 	      WRITE SetNoDataValue );
 
-  Q_PROPERTY( int gammaValue
+  Q_PROPERTY( int Gamma
 	      READ GetGamma
 	      WRITE SetGamma );
+
+  Q_PROPERTY( int MinGamma
+	      READ GetMinGamma
+	      WRITE SetMinGamma );
+
+  Q_PROPERTY( int Gamma
+	      READ GetMaxGamma
+	      WRITE SetMaxGamma );
+
+  Q_PROPERTY( int GammaStep
+	      READ GetGammaStep
+	      WRITE SetGammaStep );
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -143,6 +155,30 @@ public:
   /**
    */
   int GetGamma() const;
+
+  /**
+   */
+  void SetMinGamma( int value );
+
+  /**
+   */
+  int GetMinGamma() const;
+
+  /**
+   */
+  void SetMaxGamma( int value );
+
+  /**
+   */
+  int GetMaxGamma() const;
+
+  /**
+   */
+  void SetGammaStep( int value );
+
+  /**
+   */
+  int GetGammaStep() const;
 
 //
 // Public slots.
@@ -268,7 +304,7 @@ private slots:
 
   /**
    */
-  void on_gammaSlider_valueChanged(int gamma);
+  void on_gammaSlider_valueChanged( int gamma );
 };
 
 } // end namespace 'mvd'.

@@ -1027,7 +1027,9 @@ VectorImageModel
     {
     parametersWithGamma[i] = parameters[i];
     }
-  parametersWithGamma[parameters.GetSize()] = static_cast<double>(1+0.005*GetSettings().GetGamma());
+
+  parametersWithGamma[ parameters.GetSize() ] = GetSettings().GetGamma();
+
   renderingFunc->SetParameters( parametersWithGamma );
 
   // TODO: Remove temporary hack (Quicklook rendering settings).

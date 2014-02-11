@@ -850,7 +850,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Runtime version of OpenGL used by Qt %1: %2.%3.</source>
-        <translation>Version OpenGL utilisée par Qt %1.%2.%3 durant l&apos;exécution.</translation>
+        <translation type="unfinished">Version OpenGL utilisée par Qt %1 : %2.%3 durant l&apos;exécution.</translation>
     </message>
     <message>
         <source>Version(s) of OpenGL supported by Qt %1:</source>

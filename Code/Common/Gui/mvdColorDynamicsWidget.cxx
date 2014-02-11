@@ -180,11 +180,10 @@ ColorDynamicsWidget
 /*******************************************************************************/
 void
 ColorDynamicsWidget
-::SetGamma(int value)
+::SetGamma( int value )
 {
   m_UI->gammaSlider->setValue(value);
 }
-
 
 /*******************************************************************************/
 int 
@@ -194,6 +193,53 @@ ColorDynamicsWidget
   return m_UI->gammaSlider->value();
 }
 
+/*******************************************************************************/
+void
+ColorDynamicsWidget
+::SetMinGamma( int value )
+{
+  m_UI->gammaSlider->setMinimum( value );
+}
+
+/*******************************************************************************/
+int 
+ColorDynamicsWidget
+::GetMinGamma() const
+{
+  return m_UI->gammaSlider->minimum();
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsWidget
+::SetMaxGamma( int value )
+{
+  m_UI->gammaSlider->setMaximum( value );
+}
+
+/*******************************************************************************/
+int 
+ColorDynamicsWidget
+::GetMaxGamma() const
+{
+  return m_UI->gammaSlider->maximum();
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsWidget
+::SetGammaStep( int value )
+{
+  m_UI->gammaSlider->setPageStep( value );
+}
+
+/*******************************************************************************/
+int 
+ColorDynamicsWidget
+::GetGammaStep() const
+{
+  return m_UI->gammaSlider->pageStep();
+}
 
 /*******************************************************************************/
 void

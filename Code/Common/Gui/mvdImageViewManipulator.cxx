@@ -169,6 +169,32 @@ void
 ImageViewManipulator
 ::MousePressEvent( QMouseEvent* event )
 {
+  assert( event!=NULL );
+
+  switch( event->button() )
+    {
+    case Qt::NoButton:
+      break;
+
+    case Qt::LeftButton:
+      break;
+
+    case Qt::RightButton:
+      break;
+
+    case Qt::MiddleButton:
+      break;
+
+    case Qt::XButton1:
+      break;
+
+    case Qt::XButton2:
+      break;
+
+    default:
+      assert( false && "Unhandled Qt::MouseButton." );
+      break;
+    }
 }
 
 /******************************************************************************/
