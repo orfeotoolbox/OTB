@@ -156,13 +156,6 @@ add_test(coTvExtractROI_RGB ${COMMON_TESTS2}
         ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/coExtractROI_RGB_300_10_200_50.png
         300 10 200 50 )
-add_test(coTvExtractROI_RGB2 ${COMMON_TESTS2}
-  --compare-image ${NOTOL}   ${BASELINE}/coExtractROI_RGB_poupees_302_1_134_330.jpg
-                    ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
-        otbExtractROI_RGB
-        ${INPUTDATA}/poupees.jpg
-        ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg?&gdal:co:QUALITY=95
-        303 2 134 330 )
 
 add_test(coTvExtractROI_QB ${COMMON_TESTS2}
   --compare-image ${NOTOL}
