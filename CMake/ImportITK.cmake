@@ -12,6 +12,11 @@ mark_as_advanced(OTB_USE_EXTERNAL_ITK)
 if(OTB_USE_EXTERNAL_ITK)
   find_package(ITK REQUIRED)
   if(ITK_FOUND)
+    #Check version of external ITK
+    if(${ITK_VERSION} VERSION_LESS "4.5.0")
+      message(FATAL_ERROR "ITK version >= 4.5.0 is required. Please update your external version or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
+    endif()
+
     # This section corresponds to the content of ${ITK_USE_FILE}
     # with the exception that include_directories() is removed
     # and done in otbIncludeDirectories
