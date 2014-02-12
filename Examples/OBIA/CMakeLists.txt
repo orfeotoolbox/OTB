@@ -4,13 +4,12 @@ include_regular_expression("^.*$")
 add_executable(ImageToLabelToImage ImageToLabelToImage.cxx )
 target_link_libraries(ImageToLabelToImage OTBCommon OTBIO)
 
-if(ITK_USE_REVIEW)
-  add_executable(ShapeAttributeComputation ShapeAttributeComputation.cxx )
-  target_link_libraries(ShapeAttributeComputation OTBCommon OTBIO)
 
-  add_executable(KeepNObjects KeepNObjects.cxx )
-  target_link_libraries(KeepNObjects OTBCommon OTBIO)
-endif()
+add_executable(ShapeAttributeComputation ShapeAttributeComputation.cxx )
+target_link_libraries(ShapeAttributeComputation OTBCommon OTBIO)
+
+add_executable(KeepNObjects KeepNObjects.cxx )
+target_link_libraries(KeepNObjects OTBCommon OTBIO)
 
 add_executable(RadiometricAttributesLabelMapFilterExample RadiometricAttributesLabelMapFilterExample.cxx )
 target_link_libraries(RadiometricAttributesLabelMapFilterExample OTBCommon OTBIO OTBBasicFilters OTBSpatialReasoning  OTBFeatureExtraction OTBLearning)
@@ -49,7 +48,6 @@ add_test( trTeOBIAImageToLabelToImageTest ${EXE_TESTS}
         ${TEMP}/OBIAI2L2IOutPretty.png
         1 1108 0
         )
-if(ITK_USE_REVIEW)
 
 add_test(trTeOBIAShapeAttributeComputationTest ${EXE_TESTS1}
         --compare-ascii ${EPS}        ${BASELINE}/OBIAShapeAttribute.txt
@@ -74,7 +72,6 @@ add_test(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS1}
         50
         1.0
 )
-endif()
 
 add_test(trTeLabelMapToVectorData ${EXE_TESTS}
         LabelMapToVectorDataTest
@@ -87,10 +84,8 @@ include_directories(${OTB_SOURCE_DIR}/Testing/Code)
 add_executable(otbOBIAExamplesTests otbOBIAExamplesTests.cxx)
 target_link_libraries(otbOBIAExamplesTests OTBCommon OTBIO OTBTesting)
 
-# Link with ITKReview if used in ITK
-if(ITK_USE_REVIEW)
-  add_executable(otbOBIAExamplesTests1 otbOBIAExamplesTests1.cxx)
-  target_link_libraries(otbOBIAExamplesTests1 ${ITK_LIBRARIES} OTBCommon OTBIO OTBTesting)
-endif()
+add_executable(otbOBIAExamplesTests1 otbOBIAExamplesTests1.cxx)
+target_link_libraries(otbOBIAExamplesTests1 ${ITK_LIBRARIES} OTBCommon OTBIO OTBTesting)
+
 
 endif()

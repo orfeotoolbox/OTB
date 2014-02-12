@@ -188,7 +188,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
-  // Instantiate the  \doxygen{otb}{BandsStatisticsAttributesLabelMapFilter} to
+  // Instantiate the  \doxygen{otb}{RadiometricLabelMapFilterType} to
   // compute statistics of the feature image on each label object.
   //
   //  Software Guide : EndLatex
