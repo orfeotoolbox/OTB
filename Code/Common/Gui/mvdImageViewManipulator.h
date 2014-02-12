@@ -173,7 +173,10 @@ private:
 //
 // Private methods.
 private:
- 
+  /**
+   */
+  void Translate( const QPoint& vector );
+
 //
 // Private attributes.
 private:
@@ -181,6 +184,12 @@ private:
   /**
    */
   otb::ViewSettings::Pointer m_ViewSettings;
+  /**
+   */
+  QPoint m_MousePressPosition;
+  /**
+   */
+  otb::ViewSettings::PointType m_MousePressOrigin;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

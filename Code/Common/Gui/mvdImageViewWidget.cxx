@@ -164,6 +164,12 @@ ImageViewWidget
 
   m_Renderer = renderer;
   m_Renderer->setParent( this );
+
+  QObject::connect(
+    m_Manipulator, SIGNAL( RefreshView() ),
+    // to:
+    this, SLOT( updateGL() )
+  );
 }
 
 /*******************************************************************************/
@@ -216,7 +222,7 @@ void
 ImageViewWidget
 ::mousePressEvent( QMouseEvent* event )
 {
-  QGLWidget::mousePressEvent( event );
+  // QGLWidget::mousePressEvent( event );
 
   m_Manipulator->MousePressEvent( event );
 }
@@ -226,7 +232,7 @@ void
 ImageViewWidget
 ::mouseMoveEvent( QMouseEvent* event )
 {
-  QGLWidget::mouseMoveEvent( event );
+  // QGLWidget::mouseMoveEvent( event );
 
   m_Manipulator->MouseMoveEvent( event );
 }
@@ -236,7 +242,7 @@ void
 ImageViewWidget
 ::mouseReleaseEvent( QMouseEvent* event )
 {
-  QGLWidget::mouseReleaseEvent( event );
+  // QGLWidget::mouseReleaseEvent( event );
 
   m_Manipulator->MouseReleaseEvent(event);
 }

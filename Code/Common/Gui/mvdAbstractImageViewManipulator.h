@@ -142,6 +142,9 @@ public slots:
 //
 // SIGNALS.
 signals:
+  /**
+   */
+  void RefreshView();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

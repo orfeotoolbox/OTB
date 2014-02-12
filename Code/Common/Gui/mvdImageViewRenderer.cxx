@@ -241,6 +241,8 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
+  // qDebug() << this << "::PaintGL(" << c << ")";
+
   /*
   //
   // Get appropriate rendering-context.

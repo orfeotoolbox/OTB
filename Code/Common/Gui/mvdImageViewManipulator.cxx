@@ -53,7 +53,9 @@ ImageViewManipulator
 ::ImageViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
                         QObject* parent ) :
   AbstractImageViewManipulator( parent ),
-  m_ViewSettings( viewSettings )
+  m_ViewSettings( viewSettings ),
+  m_MousePressPosition(),
+  m_MousePressOrigin()
 {
 }
 
@@ -62,7 +64,9 @@ ImageViewManipulator
 ImageViewManipulator
 ::ImageViewManipulator( QObject* parent ) :
   AbstractImageViewManipulator( parent ),
-  m_ViewSettings( otb::ViewSettings::New() )
+  m_ViewSettings( otb::ViewSettings::New() ),
+  m_MousePressPosition(),
+  m_MousePressOrigin()
 {
 }
 
@@ -171,12 +175,86 @@ ImageViewManipulator
 {
   assert( event!=NULL );
 
+  // qDebug() << this << ":" << event;
+
   switch( event->button() )
     {
     case Qt::NoButton:
       break;
 
     case Qt::LeftButton:
+      m_MousePressPosition = event->pos();
+      m_MousePressOrigin = m_ViewSettings->GetOrigin();
+      break;
+
+    case Qt::RightButton:
+      break;
+
+    case Qt::MiddleButton:
+      break;
+
+    case Qt::XButton1:
+      break;
+
+    case Qt::XButton2:
+      break;
+
+    default:
+      assert( false && "Unhandled Qt::MouseButton." );
+      break;
+    }
+
+  /*
+    Qt::NoModifier	0x00000000	No modifier key is pressed.
+    Qt::ShiftModifier	0x02000000	A Shift key on the keyboard is pressed.
+    Qt::ControlModifier	0x04000000	A Ctrl key on the keyboard is pressed.
+    Qt::AltModifier	0x08000000	An Alt key on the keyboard is pressed.
+    Qt::MetaModifier	0x10000000	A Meta key on the keyboard is pressed.
+    Qt::KeypadModifier	0x20000000	A keypad button is pressed.
+    Qt::GroupSwitchModifier
+  */
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::MouseMoveEvent( QMouseEvent* event)
+{
+  assert( event!=NULL );
+
+  /*
+  qDebug() << "------------------------------------------------";
+
+  qDebug() << this << ":" << event;
+  */
+
+  if( ( event->buttons() & Qt::LeftButton )==Qt::LeftButton )
+    {
+    Translate( event->pos() - m_MousePressPosition );
+
+    emit RefreshView();
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::MouseReleaseEvent( QMouseEvent* event)
+{
+  assert( event!=NULL );
+
+  /*
+  qDebug() << this << ":" << event;
+  */
+
+  switch( event->button() )
+    {
+    case Qt::NoButton:
+      break;
+
+    case Qt::LeftButton:
+      m_MousePressPosition = QPoint();
+      m_MousePressOrigin = PointType();
       break;
 
     case Qt::RightButton:
@@ -200,20 +278,6 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::MouseMoveEvent( QMouseEvent* event)
-{
-}
-
-/******************************************************************************/
-void
-ImageViewManipulator
-::MouseReleaseEvent( QMouseEvent* event)
-{
-}
-
-/******************************************************************************/
-void
-ImageViewManipulator
 ::ResizeEvent( QResizeEvent* event )
 {
 }
@@ -230,6 +294,29 @@ void
 ImageViewManipulator
 ::KeyPressEvent( QKeyEvent* event )
 {
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::Translate( const QPoint& vector )
+{
+  // qDebug() << m_MousePressPosition << event->pos() << vector;
+
+  otb::ViewSettings::PointType origin( m_MousePressOrigin );
+  otb::ViewSettings::SpacingType spacing( m_ViewSettings->GetSpacing() );
+
+  origin[ 0 ] -= static_cast< double >( vector.x() ) * spacing[ 0 ];
+  origin[ 1 ] -= static_cast< double >( vector.y() ) * spacing[ 1 ];
+
+  /*
+    qDebug()
+    << "(" << m_MousePressOrigin[ 0 ] << "," << m_MousePressOrigin[ 1 ] << ")"
+    << "(" << spacing[ 0 ] << "," << spacing[ 1 ] << ")"
+    << "(" << origin[ 0 ] << "," << origin[ 1 ] << ")";
+  */
+
+  m_ViewSettings->SetOrigin( origin );
 }
 
 /*****************************************************************************/
