@@ -37,7 +37,6 @@ AttributesMapOpeningLabelMapFilter<TImage>
 }
 
 
-
 /** Set the name of the attribute to perform opening on */
 template<class TImage >
 void
