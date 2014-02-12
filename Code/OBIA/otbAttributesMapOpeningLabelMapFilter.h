@@ -57,33 +57,26 @@ public:
   itkTypeMacro(AttributesMapOpeningLabelMapFilter, itk::AttributeOpeningLabelMapFilter);
 
   /** Set the name of the attribute to perform opening on */
-  void SetAttributeName(const char * name)
-  {
-    this->GetAccessor().SetAttributeName(name);
-  }
+  void SetAttributeName(const char * name);
 
   /** Get the name of the attribute to perform opening on */
-  const char *  GetAttributeName()
-  {
-    return this->GetAccessor().GetAttributeName();
-  }
+  const char * GetAttributeName();
 
-  AttributeAccessorType & GetAccessor()
-  {
-    return m_Accessor;
-  }
+  void SetAccessor(const AttributeAccessorType& accessor);
 
-  void SetAccessor(const AttributeAccessorType& accessor)
-  {
-    m_Accessor = accessor;
-    this->Modified();
-  }
+  AttributeAccessorType & GetAccessor();
+
+  void GenerateData();
+
 
 protected:
   /** Constructor */
-  AttributesMapOpeningLabelMapFilter()  {}
+  AttributesMapOpeningLabelMapFilter();
   /** Destructor */
-  ~AttributesMapOpeningLabelMapFilter() {}
+  ~AttributesMapOpeningLabelMapFilter();
+
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
 
 private:
   AttributesMapOpeningLabelMapFilter(const Self &); //purposely not implemented
@@ -95,4 +88,8 @@ private:
 
 } // end namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbAttributesMapOpeningLabelMapFilter.txx"
 #endif
+
+#endif // __otbAttributesMapOpeningLabelMapFilter_h
