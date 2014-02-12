@@ -55,7 +55,8 @@ ImageViewManipulator
   AbstractImageViewManipulator( parent ),
   m_ViewSettings( viewSettings ),
   m_MousePressPosition(),
-  m_MousePressOrigin()
+  m_MousePressOrigin(),
+  m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL )
 {
 }
 
@@ -66,7 +67,8 @@ ImageViewManipulator
   AbstractImageViewManipulator( parent ),
   m_ViewSettings( otb::ViewSettings::New() ),
   m_MousePressPosition(),
-  m_MousePressOrigin()
+  m_MousePressOrigin(),
+  m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL )
 {
 }
 
@@ -151,8 +153,12 @@ ImageViewManipulator
   ImageViewRenderer::RenderingContext * const context =
     dynamic_cast< ImageViewRenderer::RenderingContext * const >( c );
 
+#if 0
   context->m_RenderMode =
     AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL;
+#else
+  context->m_RenderMode = m_RenderMode;
+#endif
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -232,6 +238,8 @@ ImageViewManipulator
     {
     Translate( event->pos() - m_MousePressPosition );
 
+    SetRenderMode( event );
+
     emit RefreshView();
     }
 }
@@ -255,6 +263,10 @@ ImageViewManipulator
     case Qt::LeftButton:
       m_MousePressPosition = QPoint();
       m_MousePressOrigin = PointType();
+
+      SetRenderMode( NULL );
+
+      emit RefreshView();
       break;
 
     case Qt::RightButton:
@@ -294,6 +306,7 @@ void
 ImageViewManipulator
 ::KeyPressEvent( QKeyEvent* event )
 {
+  // qDebug() << this << "::KeyPressEvent(" << event << ")";
 }
 
 /******************************************************************************/

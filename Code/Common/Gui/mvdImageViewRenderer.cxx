@@ -91,6 +91,8 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
+  // qDebug() << this << "::SetImageList(" << images << ")";
+
   //
   // Remove all actors.
   m_GlView->ClearActors();
@@ -210,6 +212,8 @@ ImageViewRenderer
     static_cast< GLint >( height )
   );
   */
+
+  // qDebug() << this << "::ResizeGL(" << width << "," << height << ")";
 
   assert( !m_GlView.IsNull() );
 

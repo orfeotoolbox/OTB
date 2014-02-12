@@ -177,6 +177,10 @@ private:
    */
   void Translate( const QPoint& vector );
 
+  /**
+   */
+  inline void SetRenderMode( const QInputEvent* event );
+
 //
 // Private attributes.
 private:
@@ -190,6 +194,9 @@ private:
   /**
    */
   otb::ViewSettings::PointType m_MousePressOrigin;
+  /**
+   */
+  AbstractImageViewRenderer::RenderingContext::RenderMode m_RenderMode;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -205,6 +212,23 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+void
+ImageViewManipulator
+::SetRenderMode( const QInputEvent* event )
+{
+  m_RenderMode =
+    ( event!=NULL &&
+      ( event->modifiers() & Qt::ControlModifier )==Qt::ControlModifier
+    )
+    ? AbstractImageViewRenderer::RenderingContext::RENDER_MODE_LIGHT
+    : AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL;
+
+  // qDebug() << "Render-mode:" << m_RenderMode;
+}
+
 } // end namespace 'mvd'
 
 #endif // __mvdImageViewManipulator_h

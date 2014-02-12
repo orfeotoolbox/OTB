@@ -184,6 +184,10 @@ void
 ImageViewWidget
 ::resizeGL( int width, int height )
 {
+  QGLWidget::resizeGL( width, height );
+
+  assert( m_Renderer!=NULL );
+
   m_Renderer->ResizeGL( width, height );
 }
 
@@ -192,6 +196,10 @@ void
 ImageViewWidget
 ::paintGL()
 {
+  QGLWidget::paintGL();
+
+  // qDebug() << this << "::paintGL()";
+
   //
   // Get new rendering-context.
   assert( m_Renderer!=NULL );
@@ -222,7 +230,7 @@ void
 ImageViewWidget
 ::mousePressEvent( QMouseEvent* event )
 {
-  // QGLWidget::mousePressEvent( event );
+  QGLWidget::mousePressEvent( event );
 
   m_Manipulator->MousePressEvent( event );
 }
@@ -232,7 +240,7 @@ void
 ImageViewWidget
 ::mouseMoveEvent( QMouseEvent* event )
 {
-  // QGLWidget::mouseMoveEvent( event );
+  QGLWidget::mouseMoveEvent( event );
 
   m_Manipulator->MouseMoveEvent( event );
 }
@@ -242,7 +250,7 @@ void
 ImageViewWidget
 ::mouseReleaseEvent( QMouseEvent* event )
 {
-  // QGLWidget::mouseReleaseEvent( event );
+  QGLWidget::mouseReleaseEvent( event );
 
   m_Manipulator->MouseReleaseEvent(event);
 }
@@ -262,6 +270,8 @@ void
 ImageViewWidget
 ::resizeEvent( QResizeEvent* event )
 {
+  // qDebug() << this << "::resizeEvent(" << event << ")";
+
   // First, call superclass implementation
   QGLWidget::resizeEvent( event );
 
