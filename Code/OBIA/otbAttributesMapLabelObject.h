@@ -223,7 +223,7 @@ public:
       }
     else
       {
-      itkExceptionMacro(<< "Could not find attribute named " << name << ".");
+      itkExceptionMacro(<< "Could not find attribute named " << name);
       }
   }
 
