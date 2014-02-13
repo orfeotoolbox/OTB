@@ -230,6 +230,8 @@ void
 ImageViewWidget
 ::mousePressEvent( QMouseEvent* event )
 {
+  assert( event!=NULL );
+
   QGLWidget::mousePressEvent( event );
 
   m_Manipulator->MousePressEvent( event );
@@ -240,6 +242,8 @@ void
 ImageViewWidget
 ::mouseMoveEvent( QMouseEvent* event )
 {
+  assert( event!=NULL );
+
   QGLWidget::mouseMoveEvent( event );
 
   m_Manipulator->MouseMoveEvent( event );
@@ -250,6 +254,8 @@ void
 ImageViewWidget
 ::mouseReleaseEvent( QMouseEvent* event )
 {
+  assert( event!=NULL );
+
   QGLWidget::mouseReleaseEvent( event );
 
   m_Manipulator->MouseReleaseEvent(event);
@@ -260,6 +266,8 @@ void
 ImageViewWidget
 ::wheelEvent( QWheelEvent* event )
 {
+  assert( event!=NULL );
+
   QGLWidget::wheelEvent( event );
 
   m_Manipulator->WheelEvent(event);
@@ -270,6 +278,8 @@ void
 ImageViewWidget
 ::resizeEvent( QResizeEvent* event )
 {
+  assert( event!=NULL );
+
   // qDebug() << this << "::resizeEvent(" << event << ")";
 
   // First, call superclass implementation
@@ -283,9 +293,23 @@ void
 ImageViewWidget
 ::keyPressEvent( QKeyEvent* event )
 {
+  assert( event!=NULL );
+
   QGLWidget::keyPressEvent( event );
 
   m_Manipulator->KeyPressEvent( event );
+}
+
+/*******************************************************************************/
+void
+ImageViewWidget
+::keyReleaseEvent( QKeyEvent* event )
+{
+  assert( event!=NULL );
+
+  QGLWidget::keyReleaseEvent( event );
+
+  m_Manipulator->KeyReleaseEvent( event );
 }
 
 /*******************************************************************************/

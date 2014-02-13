@@ -83,6 +83,13 @@ class Monteverdi2_EXPORT ImageViewManipulator :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Constants
+public:
+  /**
+   */
+  static const int DEFAULT_ZOOM_GRANULARITY = 2;
+
+//
 // Public methods.
 public:
 
@@ -124,22 +131,25 @@ public:
 
   /**
    */
-  virtual void MouseMoveEvent( QMouseEvent * event );
+  virtual void MouseMoveEvent( QMouseEvent* event );
   /**
    */
-  virtual void MousePressEvent( QMouseEvent * event );
+  virtual void MousePressEvent( QMouseEvent* event );
   /**
    */
-  virtual void MouseReleaseEvent( QMouseEvent * event );
+  virtual void MouseReleaseEvent( QMouseEvent* event );
   /**
    */
   virtual void WheelEvent( QWheelEvent* event);
   /**
    */
-  virtual void ResizeEvent( QResizeEvent * event );
+  virtual void ResizeEvent( QResizeEvent* event );
   /**
    */
-  virtual void KeyPressEvent( QKeyEvent * event );
+  virtual void KeyPressEvent( QKeyEvent* event );
+  /**
+   */
+  virtual void KeyReleaseEvent( QKeyEvent* event );
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
@@ -176,10 +186,16 @@ private:
   /**
    */
   void Translate( const QPoint& vector );
+  /**
+   */
+  void Scale( const QPoint& center, int degrees );
 
   /**
    */
-  inline void SetRenderMode( const QInputEvent* event );
+  // inline void SetRenderMode( const QInputEvent* event );
+  /**
+   */
+  inline void SetFastRenderMode( bool isEnabled );
 
 //
 // Private attributes.
@@ -197,6 +213,12 @@ private:
   /**
    */
   AbstractImageViewRenderer::RenderingContext::RenderMode m_RenderMode;
+  /**
+   */
+  double m_ZoomFactor;
+  /**
+   */
+  int m_ZoomGranularity;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -214,6 +236,7 @@ namespace mvd
 {
 
 /*****************************************************************************/
+/*
 inline
 void
 ImageViewManipulator
@@ -223,6 +246,21 @@ ImageViewManipulator
     ( event!=NULL &&
       ( event->modifiers() & Qt::ControlModifier )==Qt::ControlModifier
     )
+    ? AbstractImageViewRenderer::RenderingContext::RENDER_MODE_LIGHT
+    : AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL;
+
+  qDebug() << "Render-mode:" << m_RenderMode;
+}
+*/
+
+/*****************************************************************************/
+inline
+void
+ImageViewManipulator
+::SetFastRenderMode( bool isEnabled )
+{
+  m_RenderMode =
+    isEnabled
     ? AbstractImageViewRenderer::RenderingContext::RENDER_MODE_LIGHT
     : AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL;
 

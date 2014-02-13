@@ -127,7 +127,11 @@ public:
 
   /**
    */
-  virtual void KeyPressEvent( QKeyEvent * event ) =0;
+  virtual void KeyPressEvent( QKeyEvent* event ) =0;
+
+  /**
+   */
+  virtual void KeyReleaseEvent( QKeyEvent* event ) =0;
 
   /**
    */

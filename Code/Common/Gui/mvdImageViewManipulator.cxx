@@ -56,7 +56,9 @@ ImageViewManipulator
   m_ViewSettings( viewSettings ),
   m_MousePressPosition(),
   m_MousePressOrigin(),
-  m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL )
+  m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
+  m_ZoomFactor( 1.0 ),
+  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY )
 {
 }
 
@@ -68,7 +70,9 @@ ImageViewManipulator
   m_ViewSettings( otb::ViewSettings::New() ),
   m_MousePressPosition(),
   m_MousePressOrigin(),
-  m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL )
+  m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
+  m_ZoomFactor( 1.0 ),
+  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY )
 {
 }
 
@@ -234,11 +238,13 @@ ImageViewManipulator
   qDebug() << this << ":" << event;
   */
 
-  if( ( event->buttons() & Qt::LeftButton )==Qt::LeftButton )
+  Qt::MouseButtons buttons = event->buttons();
+  Qt::KeyboardModifiers modifiers = event->modifiers();
+
+  if( buttons==Qt::LeftButton &&
+      ( modifiers==Qt::NoModifier || modifiers== Qt::ControlModifier ) )
     {
     Translate( event->pos() - m_MousePressPosition );
-
-    SetRenderMode( event );
 
     emit RefreshView();
     }
@@ -255,6 +261,11 @@ ImageViewManipulator
   qDebug() << this << ":" << event;
   */
 
+  /*
+  Qt::MouseButtons buttons = event->buttons();
+  Qt::KeyboardModifiers modifiers = event->modifiers();
+  */
+
   switch( event->button() )
     {
     case Qt::NoButton:
@@ -263,8 +274,6 @@ ImageViewManipulator
     case Qt::LeftButton:
       m_MousePressPosition = QPoint();
       m_MousePressOrigin = PointType();
-
-      SetRenderMode( NULL );
 
       emit RefreshView();
       break;
@@ -292,6 +301,7 @@ void
 ImageViewManipulator
 ::ResizeEvent( QResizeEvent* event )
 {
+  assert( event!=NULL );
 }
 
 /******************************************************************************/
@@ -299,6 +309,25 @@ void
 ImageViewManipulator
 ::WheelEvent( QWheelEvent* event )
 {
+  assert( event!=NULL );
+
+  Qt::MouseButtons buttons = event->buttons();
+  Qt::KeyboardModifiers modifiers = event->modifiers();
+
+  if( buttons!=Qt::NoButton )
+    return;
+
+  // Delta is rotation distance in number of 8th of degrees (see
+  // http://qt-project.org/doc/qt-4.8/qwheelevent.html#delta).
+  assert( event->delta()!=0 );
+  int degrees = event->delta() / 8;
+
+  if( modifiers==Qt::NoModifier || modifiers==Qt::ControlModifier )
+    {
+    Scale( event->pos(), degrees );
+
+    emit RefreshView();
+    }
 }
 
 /******************************************************************************/
@@ -306,7 +335,40 @@ void
 ImageViewManipulator
 ::KeyPressEvent( QKeyEvent* event )
 {
+  assert( event!=NULL );
+
   // qDebug() << this << "::KeyPressEvent(" << event << ")";
+
+  switch( event->key() )
+    {
+    case Qt::Key_Control:
+      SetFastRenderMode( true );
+      break;
+
+    default:
+      break;
+    }
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::KeyReleaseEvent( QKeyEvent* event )
+{
+  assert( event!=NULL );
+
+  // qDebug() << this << "::KeyPressEvent(" << event << ")";
+
+  switch( event->key() )
+    {
+    case Qt::Key_Control:
+      SetFastRenderMode( false );
+      emit RefreshView();
+      break;
+
+    default:
+      break;
+    }
 }
 
 /******************************************************************************/
@@ -330,6 +392,54 @@ ImageViewManipulator
   */
 
   m_ViewSettings->SetOrigin( origin );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::Scale( const QPoint& center, int degrees )
+{
+  assert( degrees!=0 );
+
+  if( degrees==0 )
+    return;
+
+  otb::ViewSettings::PointType point;
+
+  m_ViewSettings->ScreenToViewPortTransform(
+    center.x(), center.y(),
+    point[ 0 ], point[ 1 ]
+  );
+
+  // See http://qt-project.org/doc/qt-4.8/qwheelevent.html#delta .
+  assert( m_ZoomGranularity!=0 );
+
+  int granularity = m_ZoomGranularity;
+
+  if( granularity==0 )
+    {
+    granularity = 1;
+    }
+
+  double factor = pow(
+    2.0,
+    -static_cast< double >( degrees ) /
+    ( 15.0 * static_cast< double >( granularity ) )
+  );
+
+  m_ZoomFactor *= factor;
+
+  /*
+  qDebug()
+    << "(" << point[ 0 ] << "," << point[ 1 ] << ")"
+    << "g:" << granularity
+    << "d:" << degrees
+    << "s:" << (static_cast< double >( degrees ) / 15.0)
+    << "f:" << factor
+    << "z:" << m_ZoomFactor;
+  */
+
+  m_ViewSettings->Zoom( point, factor );
 }
 
 /*****************************************************************************/
