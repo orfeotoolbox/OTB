@@ -267,7 +267,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Filtering/DanielssonDistanceMapImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyBinaryFilters.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyGrayscaleFilters.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/RasterizationExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/Filtering/RasterizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/FrostImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/ScalingFilterExample.cxx
@@ -301,8 +301,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CorrelationLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AssymmetricFusionOfLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LocalHoughExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LineSegmentDetectorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RightAngleDetectionExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LineSegmentDetectorExample.cxx
+  #${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RightAngleDetectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsByStepsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ParallelLineDetectionExample.cxx
