@@ -33,7 +33,6 @@ The classical OTB powered applications are still available and will still be mai
 \begin{description}
 \item [Monteverdi]{An integrated application giving graphical access to a lot of OTB
 functionalities.}
-\item[OTB-Wrapping]{Calling OTB from Python or Java (see chapter~\ref{chap:wrappings}).}
 \end{description}
 
 There are two ways to install OTB on your system: installing from a binary distribution,
@@ -42,23 +41,22 @@ or compiling from sources (Table~\ref{tab:installation}). What you need depends 
 \begin{center}
 \begin{tiny}
 \begin{table}[!htbp]
-\begin{tabular}{|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|}
+\begin{tabular}{|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|}
 \hline
-& \textbf{OTB library and internal applications} & \textbf{Monteverdi} & \textbf{Wrapping (Java and Python)} \\
+ & \textbf{OTB library and internal applications} & \textbf{Monteverdi} \\
 \hline
 \textbf{Any platform} &
-  Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source})
-& Build from source (see section~\ref{sec:source})\\
+  Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source}) \\
 \hline
-\textbf{Windows 2000/XP/Vista/Seven} & OSGeo4W installer for internal applications & Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries})& OSGeo4W installer (see section~\ref{ssec:windows_binaries}) \\
+\textbf{Windows 2000/XP/Vista/Seven} & OSGeo4W installer for internal applications & Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries}) \\
 \hline
-\textbf{MacOS X 10.6 and higher} & MacPorts (see section~\ref{ssec:mac_binaries}) & app's DMG file (see section~\ref{ssec:mac_binaries}) & \\
+\textbf{MacOS X 10.6 and higher} & MacPorts (see section~\ref{ssec:mac_binaries}) & app's DMG file (see section~\ref{ssec:mac_binaries}) \\
 \hline
-\textbf{Ubuntu Linux 10.04 and higher (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) &  \\
+\textbf{Ubuntu Linux 10.04 and higher (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) \\
 \hline
-\textbf{OpenSuse 11.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) & \\
+\textbf{OpenSuse 11.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) \\
 \hline
-\textbf{CentOS 6.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:centos_binaries}) &  RPM package (see section~\ref{ssec:centos_binaries}) & RPM package (see section~\ref{ssec:centos_binaries})\\
+\textbf{CentOS 6.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:centos_binaries}) &  RPM package (see section~\ref{ssec:centos_binaries}) \\
 \hline
 \end{tabular}
 \caption{Available installation procedures with respect to system configuration and target usage}
@@ -76,13 +74,11 @@ or compiling from sources (Table~\ref{tab:installation}). What you need depends 
 For Windows 2000/XP/Vista/Seven users, there is a classical standalone installation program for Monteverdi, available from the
 \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}. There are another way to install Monteverdi directly through through OSGeo4W. With this new way, you can install other OTB packages as described in the following paragraph.
 
-Since version 3.12, we provide OTB packages through OSGeo4W for Windows 2000/XP/Vista/Seven users. Packages for the OTB applications, Monteverdi and
-OTB-Wrapping are available directly in the OSGeo4W installer with the following names:
+Since version 3.12, we provide OTB packages through OSGeo4W for Windows 2000/XP/Vista/Seven users. Package for Monteverdi is available directly in the OSGeo4W installer with the following names:
 \begin{itemize}
 \item \textbf{otb-bin} for command line and QT applications
 \item \textbf{otb-python} for python applications
 \item \textbf{otb-monteverdi} for the Monteverdi application
-\item \textbf{otb-wrapping} for low level Python/Java bindings.
 \end{itemize}
 Follow the instructions in the installer and select the packages you want to add. The installer will proceed with the installation of selected packages and all their dependencies.
 In the case of \textbf{otb-monteverdi}, Monteverdi will be directly installed in the OSGeo4W repository and a shortcut will be added to your desktop
@@ -115,8 +111,8 @@ Click on the file to launch Monteverdi.
 
 \subsubsection{Ubuntu 10.04 and higher}
 \label{ssec:ubuntu_binaries}
-For Ubuntu 10.04 and higher, OTB, OTB applications, Monteverdi and OTB-Wrapping
-packages may be available as Debian packages through APT repositories.
+For Ubuntu 10.04 and higher, OTB and Monteverdi packages may be available as
+Debian packages through APT repositories.
 
 Since release 3.14.1, OTB packages are available in the
 \href{https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable}{ubuntugis-unstable} repository.
@@ -136,19 +132,9 @@ If you want only OTB libraries, please use:
 sudo aptitude install libotb
 \end{verbatim}
 
-If you want OTB Applications, please use:
-\begin{verbatim}
-sudo aptitude install otb-bin otb-bin-qt python-otb
-\end{verbatim}
-
 If you want monteverdi application, please use:
 \begin{verbatim}
 sudo aptitude install monteverdi
-\end{verbatim}
-
-If you want Python/Java wrapping, please use:
-\begin{verbatim}
-sudo aptitude install otb-wrapping-python otb-wrapping-java
 \end{verbatim}
 
 If you are using \emph{Synaptic}, you can add the repositories, update and install the packages through the
@@ -214,8 +200,8 @@ problem. This warning won't prevent you from installing the packages.
 \subsubsection{OpenSuse 11.X and higher}
 \label{ssec:opensuse_binaries}
 
-For OpenSuse 11.X and higher, OTB, Monteverdi and
-OTB-Wrapping packages are available through \emph{zypper}.
+For OpenSuse 11.X and higher, OTB and Monteverdi packages are available through
+\emph{zypper}.
 
 First, you need to add the appropriate repositories with these command-lines (please replace $11.4$ by your OpenSuse version):
 \begin{verbatim}
@@ -260,7 +246,7 @@ and then add the OTB packages as shown above.
 
 \subsubsection{CentOS 5.5}
 \label{ssec:centos_binaries}
-Since 3.12 version, OTB packages (OTB, monteverdi) are available on CentOS 5.5 distribution. In the following lines, we will describe the way to install OTB and monteverdi packages on this distribution. If you want use OTB-Wrapping, please following the instructions found in this \href{http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.12.0/OTB_packages_on_CentOS_5.5.txt}{file}. Preliminary steps (common to all packages):
+Since 3.12 version, OTB packages (OTB, monteverdi) are available on CentOS 5.5 distribution. In the following lines, we will describe the way to install OTB and monteverdi packages on this distribution. Preliminary steps (common to all packages):
 
 \begin{enumerate}
 
@@ -312,8 +298,8 @@ compilers may have difficulties processing the code. If you are
 currently using an outdated compiler this may be an excellent excuse
 for upgrading this old piece of software!
 
-Please note that though this section only describes how to compile OTB from sources,
-Monteverdi and OTB-Wrapping can be compiled in a similar way.
+Please note that even if this section only describes how to compile OTB from sources,
+Monteverdi can be compiled in a similar way.
 
 \subsection{Getting the OTB source code}
 

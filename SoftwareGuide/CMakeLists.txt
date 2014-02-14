@@ -64,19 +64,6 @@ IF( NOT OTB_SOURCE_DIR )
 ENDIF( NOT OTB_SOURCE_DIR )
 
 
-OPTION(GENERATE_WRAPPING_DOC "Generate wrappings documentation as well" OFF)
-
-IF(GENERATE_WRAPPING_DOC)
-  FIND_PATH(OTB-Wrapping_SOURCE_DIR README-OTB-Wrapping PATHS ${OTB_SOURCE_DIR}/../OTB-Wrapping)
-  IF( NOT OTB-Wrapping_SOURCE_DIR )
-    MESSAGE(FATAL_ERROR "OTB-Wrapping source directory is not set")
-  ENDIF( NOT OTB-Wrapping_SOURCE_DIR )
-  ADD_SUBDIRECTORY(Wrappings)
-  #ELSE(OTB-Wrapping_FOUND)
-  #MESSAGE(FATAL_ERROR "Cannot generate wrappings documentation without OTB-Wrapping.  Please set OTB-Wrapping_DIR or turn off the GENERATE_WRAPPING_DOC option.")
-  #ENDIF(OTB-Wrapping_FOUND)
-ENDIF(GENERATE_WRAPPING_DOC)
-
 #OPTION(GENERATE_MONTEVERDI_DOC "Generate Monteverdi user guide as well" OFF)
 
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
