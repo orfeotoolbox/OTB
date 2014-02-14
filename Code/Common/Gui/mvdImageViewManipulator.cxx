@@ -46,6 +46,20 @@ namespace mvd
   Context comment for translator.
 */
 
+
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
+const int ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY = 2;
+const int ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY = 4;
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+
 /*****************************************************************************/
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 
@@ -58,7 +72,8 @@ ImageViewManipulator
   m_MousePressOrigin(),
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
-  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY )
+  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
+  m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY )
 {
 }
 
@@ -72,7 +87,8 @@ ImageViewManipulator
   m_MousePressOrigin(),
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
-  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY )
+  m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
+  m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY )
 {
 }
 
@@ -244,7 +260,11 @@ ImageViewManipulator
   if( buttons==Qt::LeftButton &&
       ( modifiers==Qt::NoModifier || modifiers== Qt::ControlModifier ) )
     {
-    Translate( event->pos() - m_MousePressPosition );
+    // Cursor moves from press position to current position;
+    // Image moves the same direction, so apply the negative translation.
+    Translate( m_MousePressPosition - event->pos() );
+
+    m_MousePressPosition = event->pos();
 
     emit RefreshView();
     }
@@ -339,8 +359,29 @@ ImageViewManipulator
 
   // qDebug() << this << "::KeyPressEvent(" << event << ")";
 
-  switch( event->key() )
+  QPoint vector( 0, 0 );
+
+  int key = event->key();
+  Qt::KeyboardModifiers modifiers = event->modifiers();
+
+  switch( key )
     {
+    case Qt::Key_Up:
+      vector.setY( -1 );
+      break;
+
+    case Qt::Key_Down:
+      vector.setY( +1 );
+      break;
+
+    case Qt::Key_Left:
+      vector.setX( -1 );
+      break;
+
+    case Qt::Key_Right:
+      vector.setX( +1 );
+      break;
+
     case Qt::Key_Control:
       SetFastRenderMode( true );
       break;
@@ -348,6 +389,28 @@ ImageViewManipulator
     default:
       break;
     }
+
+  assert( !m_ViewSettings.IsNull() );
+
+  otb::ViewSettings::SizeType size( m_ViewSettings->GetViewportSize() );
+
+  if( modifiers==Qt::NoModifier )
+    {
+    size[ 0 ] /= m_ScrollGranularity;
+    size[ 1 ] /= m_ScrollGranularity;
+    }
+  else if( modifiers==Qt::ControlModifier )
+    {
+    size[ 0 ] /= m_ScrollGranularity * 2;
+    size[ 1 ] /= m_ScrollGranularity * 2;
+    }
+
+  vector.rx() *= size[ 0 ];
+  vector.ry() *= size[ 1 ];
+
+  Translate( vector );
+
+  emit RefreshView();
 }
 
 /******************************************************************************/
@@ -376,13 +439,15 @@ void
 ImageViewManipulator
 ::Translate( const QPoint& vector )
 {
-  // qDebug() << m_MousePressPosition << event->pos() << vector;
+  qDebug() << this << "::Translate(" << vector << ")";
 
-  otb::ViewSettings::PointType origin( m_MousePressOrigin );
+  // otb::ViewSettings::PointType origin( m_MousePressOrigin );
+  otb::ViewSettings::PointType origin( m_ViewSettings->GetOrigin() );
+
   otb::ViewSettings::SpacingType spacing( m_ViewSettings->GetSpacing() );
 
-  origin[ 0 ] -= static_cast< double >( vector.x() ) * spacing[ 0 ];
-  origin[ 1 ] -= static_cast< double >( vector.y() ) * spacing[ 1 ];
+  origin[ 0 ] += static_cast< double >( vector.x() ) * spacing[ 0 ];
+  origin[ 1 ] += static_cast< double >( vector.y() ) * spacing[ 1 ];
 
   /*
     qDebug()

@@ -87,7 +87,10 @@ class Monteverdi2_EXPORT ImageViewManipulator :
 public:
   /**
    */
-  static const int DEFAULT_ZOOM_GRANULARITY = 2;
+  static const int DEFAULT_ZOOM_GRANULARITY;
+  /**
+   */
+  static const int DEFAULT_SCROLL_GRANULARITY;
 
 //
 // Public methods.
@@ -162,7 +165,7 @@ public slots:
 //
 // Signals.
 signals:
-  
+
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -219,6 +222,9 @@ private:
   /**
    */
   int m_ZoomGranularity;
+  /**
+   */
+  int m_ScrollGranularity;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
