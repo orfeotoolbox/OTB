@@ -4,6 +4,18 @@ if(WIN32)
   # do not build shared lib under windows
   set(BUILD_SHARED_LIBS OFF)
   message(STATUS "Disabling build shared lib option on windows like OS.")
+  
+  # Since CMake 2.8.11, the size of the stack is not modified by CMake on windows platform, it uses the default size: with visual compiler it is 1Mbyte which is to lower for us (thanks to 6S code).
+
+  if (${CMAKE_VERSION} VERSION_GREATER "2.8.10.2")
+    if("${CMAKE_EXE_LINKER_FLAGS}" MATCHES "/STACK:[0-9]+")
+        message(STATUS "The size of the stack is already defined, so we dont't modified it.")
+    else()
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:10000000" CACHE STRING "Flags used by the linker" FORCE)
+        message(STATUS "Increase the size of the stack to 10Mbytes.")
+    endif()
+  endif()
+ 
 else()
   # on other systems, leave the choice to the user
   option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
