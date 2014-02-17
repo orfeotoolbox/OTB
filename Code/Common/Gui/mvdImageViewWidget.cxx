@@ -153,7 +153,7 @@ ImageViewWidget
   setAcceptDrops( true );
   // Set focus policy so that the widget gets the focus if it is clicked
   setMouseTracking( true );
-  setFocusPolicy( Qt::StrongFocus );
+  setFocusPolicy( Qt::WheelFocus );
 
 
   assert( manipulator!=NULL );

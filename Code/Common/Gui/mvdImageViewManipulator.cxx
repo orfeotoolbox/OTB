@@ -36,6 +36,8 @@
 // Monteverdi includes (sorted by alphabetic order)
 #include "Gui/mvdImageViewRenderer.h"
 
+#define MOUSE_WHEEL_STEP_DEGREES 15
+
 namespace mvd
 {
 /*
@@ -360,6 +362,7 @@ ImageViewManipulator
   // qDebug() << this << "::KeyPressEvent(" << event << ")";
 
   QPoint vector( 0, 0 );
+  int steps = 0;
 
   int key = event->key();
   Qt::KeyboardModifiers modifiers = event->modifiers();
@@ -382,6 +385,14 @@ ImageViewManipulator
       vector.setX( +1 );
       break;
 
+    case Qt::Key_Plus:
+      steps = m_ZoomGranularity;
+      break;
+
+    case Qt::Key_Minus:
+      steps = -m_ZoomGranularity;
+      break;
+
     case Qt::Key_Control:
       SetFastRenderMode( true );
       break;
@@ -394,23 +405,51 @@ ImageViewManipulator
 
   otb::ViewSettings::SizeType size( m_ViewSettings->GetViewportSize() );
 
-  if( modifiers==Qt::NoModifier )
+  bool needsRefresh = false;
+
+  //
+  // Translate
+
+  if( !vector.isNull() )
     {
-    size[ 0 ] /= m_ScrollGranularity;
-    size[ 1 ] /= m_ScrollGranularity;
+    if( modifiers==Qt::NoModifier )
+      {
+      size[ 0 ] /= m_ScrollGranularity;
+      size[ 1 ] /= m_ScrollGranularity;
+      }
+    else if( modifiers==Qt::ControlModifier )
+      {
+      size[ 0 ] /= m_ScrollGranularity * 2;
+      size[ 1 ] /= m_ScrollGranularity * 2;
+      }
+
+    vector.rx() *= size[ 0 ];
+    vector.ry() *= size[ 1 ];
+
+    Translate( vector );
+
+    needsRefresh = true;
     }
-  else if( modifiers==Qt::ControlModifier )
+
+  //
+  // Scale
+
+  if( steps!=0 )
     {
-    size[ 0 ] /= m_ScrollGranularity * 2;
-    size[ 1 ] /= m_ScrollGranularity * 2;
+    // Qt::ControlModifier doest not work with keypard Qt::Key_Plus/Minus keys.
+
+    Scale(
+      QPoint( size[ 0 ] / 2.0, size[ 1 ] / 2.0 ),
+      steps * MOUSE_WHEEL_STEP_DEGREES
+    );
+
+    needsRefresh = true;
     }
 
-  vector.rx() *= size[ 0 ];
-  vector.ry() *= size[ 1 ];
-
-  Translate( vector );
-
-  emit RefreshView();
+  //
+  // Refresh
+  if( needsRefresh )
+    emit RefreshView();
 }
 
 /******************************************************************************/
@@ -439,7 +478,7 @@ void
 ImageViewManipulator
 ::Translate( const QPoint& vector )
 {
-  qDebug() << this << "::Translate(" << vector << ")";
+  // qDebug() << this << "::Translate(" << vector << ")";
 
   // otb::ViewSettings::PointType origin( m_MousePressOrigin );
   otb::ViewSettings::PointType origin( m_ViewSettings->GetOrigin() );
@@ -489,7 +528,7 @@ ImageViewManipulator
   double factor = pow(
     2.0,
     -static_cast< double >( degrees ) /
-    ( 15.0 * static_cast< double >( granularity ) )
+    static_cast< double >( granularity * MOUSE_WHEEL_STEP_DEGREES )
   );
 
   m_ZoomFactor *= factor;
