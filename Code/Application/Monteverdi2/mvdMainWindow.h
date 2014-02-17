@@ -26,8 +26,8 @@
 #include "ConfigureMonteverdi2.h"
 
 // #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
-#define USE_ICE_IMAGE_VIEW (defined( _DEBUG ) && 1) || 0
-#define USE_OLD_IMAGE_VIEW (!USE_ICE_IMAGE_VIEW  && 1) || 0
+#define USE_ICE_IMAGE_VIEW ((defined( _DEBUG ) && 1) || 0)
+#define USE_OLD_IMAGE_VIEW ((!USE_ICE_IMAGE_VIEW  && 1) || 0)
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */

@@ -175,12 +175,7 @@ ImageViewManipulator
   ImageViewRenderer::RenderingContext * const context =
     dynamic_cast< ImageViewRenderer::RenderingContext * const >( c );
 
-#if 0
-  context->m_RenderMode =
-    AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL;
-#else
   context->m_RenderMode = m_RenderMode;
-#endif
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -324,6 +319,16 @@ ImageViewManipulator
 ::ResizeEvent( QResizeEvent* event )
 {
   assert( event!=NULL );
+
+  // qDebug() << this << "::ResizeEvent(" << event << ")";
+
+  /*
+  qDebug() << m_ViewSettings.GetPointer();
+
+  otb::ViewSettings::SizeType size( m_ViewSettings->GetViewportSize() );
+
+  qDebug() << size[ 0 ] << "," << size[ 1 ] << "\t" << event->size();
+  */
 }
 
 /******************************************************************************/

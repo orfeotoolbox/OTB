@@ -195,6 +195,12 @@ ImageViewRenderer
 {
   assert( !m_GlView.IsNull() );
 
+  //
+  // WARNING: This call to otb::GlView::Initialize() allocates a new
+  // otb::ViewSettings() instance. So, the shared pointer between
+  // renderer and manipulator may be unshated depending on order of
+  // calls.
+  //
   m_GlView->Initialize( 0, 0 );
 }
 
@@ -203,6 +209,8 @@ void
 ImageViewRenderer
 ::ResizeGL( int width, int height )
 {
+  // qDebug() << this << "::ResizeGL(" << width << "," << height << ")";
+
   /*
   // Should be done here and not in OTB-Ice render routine.
   glViewport(
@@ -213,9 +221,9 @@ ImageViewRenderer
   );
   */
 
-  // qDebug() << this << "::ResizeGL(" << width << "," << height << ")";
-
   assert( !m_GlView.IsNull() );
+
+  // qDebug() << m_GlView.GetPointer();
 
   m_GlView->Resize( width, height );
 
@@ -246,6 +254,8 @@ ImageViewRenderer
   assert( !m_GlView.IsNull() );
 
   // qDebug() << this << "::PaintGL(" << c << ")";
+
+  // qDebug() << m_GlView.GetPointer();
 
   /*
   //

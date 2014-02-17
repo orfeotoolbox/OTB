@@ -26,7 +26,7 @@
 #include "ConfigureMonteverdi2.h"
 
 //
-#define USE_VIEW_SETTINGS_SIDE_EFFECT 0
+#define USE_VIEW_SETTINGS_SIDE_EFFECT 1
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
