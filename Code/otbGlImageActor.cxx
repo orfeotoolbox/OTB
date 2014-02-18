@@ -522,11 +522,13 @@ bool GlImageActor::GetPixelFromViewport(const PointType & in, PixelType& pixel) 
 {
   PointType imgPoint = ViewportToImageTransform(in);
 
+
+
   // Transform to index at current resolution
   IndexType idx;
-  idx[0] = static_cast<unsigned int>(imgPoint[0]-m_FileReader->GetOutput()->GetOrigin()[0])/m_FileReader->GetOutput()->GetSpacing()[0];
-  idx[1] = static_cast<unsigned int>(imgPoint[1]-m_FileReader->GetOutput()->GetOrigin()[1])/m_FileReader->GetOutput()->GetSpacing()[1];
-  
+  idx[0] = static_cast<unsigned int>((imgPoint[0]-m_FileReader->GetOutput()->GetOrigin()[0])/m_FileReader->GetOutput()->GetSpacing()[0]);
+  idx[1] = static_cast<unsigned int>((imgPoint[1]-m_FileReader->GetOutput()->GetOrigin()[1])/m_FileReader->GetOutput()->GetSpacing()[1]);
+
   // Look-up tiles
   for (TileVectorType::const_iterator it = m_LoadedTiles.begin();
        it!=m_LoadedTiles.end();
