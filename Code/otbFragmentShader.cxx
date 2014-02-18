@@ -30,17 +30,19 @@ void FragmentShader::BuildShader()
 {
   std::string source = this->GetSource();
   std::string name = this->GetName();
-
-  std::cout<<"Name: "<<name<<", source: "<<source<<std::endl;
-
+  
   try
     {
-    otb::FragmentShaderRegistry::Instance()->RegisterShader(name,source);
+    // Assumption here is that each shader has its unique name
+    if(!otb::FragmentShaderRegistry::Instance()->IsShaderRegistered(name))
+      {
+      otb::FragmentShaderRegistry::Instance()->RegisterShader(name,source);
+      }
     }
   catch(itk::ExceptionObject& err)
     {
+    // Log compilation errors if any
     std::cerr<<err<<std::endl;
-    // Shader already registered, do nothing
     }
 }
 
