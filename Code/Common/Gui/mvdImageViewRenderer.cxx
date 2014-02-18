@@ -72,6 +72,7 @@ ImageViewRenderer
 ::ImageViewRenderer( QObject* parent ) :
   AbstractImageViewRenderer( parent ),
   m_GlView( otb::GlView::New() ),
+  m_ReferenceImageModel( NULL ),
   m_ReferenceGlImageActor(),
   m_ImageModelActorPairs()
 {
@@ -98,6 +99,9 @@ ImageViewRenderer
   m_GlView->ClearActors();
 
   m_ImageModelActorPairs.clear();
+
+  m_ReferenceImageModel = NULL;
+  m_ReferenceGlImageActor = otb::GlImageActor::Pointer();
 
   //
   // Return if there is no vector-image model.
@@ -140,6 +144,10 @@ ImageViewRenderer
     }
 
   //
+  // Remember first vector image-model as reference image-model.
+  m_ReferenceImageModel = images.front();
+
+  //
   // Remember first actor as reference actor.
   otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
   assert( !keys.empty() );
@@ -151,20 +159,6 @@ ImageViewRenderer
 
   m_ReferenceGlImageActor = otb::DynamicCast< otb::GlImageActor >( glActor );
   assert( !m_ReferenceGlImageActor.IsNull() );
-
-  //
-  // Center view on center of reference actor.
-  otb::ViewSettings::PointType origin;
-  otb::ViewSettings::PointType extent;
-
-  m_ReferenceGlImageActor->GetExtent(
-    origin[ 0 ], origin[ 1 ],
-    extent[ 0 ], extent[ 1 ]
-  );
-
-  origin.SetToMidPoint( origin, extent );
-
-  m_GlView->GetSettings()->Center( origin );
 }
 
 /*****************************************************************************/
@@ -186,6 +180,35 @@ ImageViewRenderer
 #endif
 
   return context;
+}
+
+/*****************************************************************************/
+const AbstractImageModel*
+ImageViewRenderer
+::GetReferenceImageModel() const
+{
+  return m_ReferenceImageModel;
+}
+
+/*****************************************************************************/
+AbstractImageModel*
+ImageViewRenderer
+::GetReferenceImageModel()
+{
+  return m_ReferenceImageModel;
+}
+
+/*****************************************************************************/
+void
+ImageViewRenderer
+::GetReferenceExtent( PointType& origin, PointType& extent  ) const
+{
+  assert( !m_ReferenceGlImageActor.IsNull() );
+
+  m_ReferenceGlImageActor->GetExtent(
+    origin[ 0 ], origin[ 1 ],
+    extent[ 0 ], extent[ 1 ]
+  );
 }
 
 /*****************************************************************************/

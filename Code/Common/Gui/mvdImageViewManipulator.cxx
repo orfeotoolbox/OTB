@@ -194,6 +194,16 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
+::CenterOn( const PointType& point )
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  m_ViewSettings->Center( point );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
 ::MousePressEvent( QMouseEvent* event )
 {
   assert( event!=NULL );

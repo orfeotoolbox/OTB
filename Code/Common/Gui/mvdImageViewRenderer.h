@@ -126,26 +126,27 @@ public:
    */
   inline otb::ViewSettings::Pointer GetViewSettings();
 
-  /**
-   */
+  //
+  // AbstractImageViewRenderer overloads.
+
+  virtual const AbstractImageModel* GetReferenceImageModel() const;
+
+  virtual AbstractImageModel* GetReferenceImageModel();
+
+  virtual void GetReferenceExtent( PointType& origin,
+                                   PointType& extent ) const;
+
   virtual void SetImageList( const VectorImageModelList& images );
 
-  /**
-   */
   virtual
   AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const;
 
-  /**
-   */
   virtual void InitializeGL();
-  /**
-   */
+
   virtual void ResizeGL( int width, int height );
-  /**
-   */
+
   virtual
   void PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
-
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
@@ -196,6 +197,9 @@ private:
   /**
    */
   otb::GlView::Pointer m_GlView;
+  /**
+   */
+  VectorImageModel* m_ReferenceImageModel;
   /**
    */
   otb::GlImageActor::Pointer m_ReferenceGlImageActor;

@@ -113,6 +113,10 @@ public:
 
   /**
    */
+  virtual void CenterOn( const PointType& point ) =0;
+
+  /**
+   */
   virtual void MouseMoveEvent( QMouseEvent* event ) =0;
   /**
    */

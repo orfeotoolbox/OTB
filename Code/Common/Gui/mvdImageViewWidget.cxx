@@ -119,25 +119,36 @@ void
 ImageViewWidget
 ::SetImageList( const AbstractImageViewRenderer::VectorImageModelList& images )
 {
-  assert( m_Renderer!=NULL );
+  //
+  // Setup image-view settings to reference image-model data.
+  if( !images.isEmpty() )
+    {
+    VectorImageModel* imageModel = images.front();
+    assert( imageModel!=NULL );
 
+    DefaultImageType::Pointer image( imageModel->ToImage() );
+    assert( !image.IsNull() );
+
+    assert( m_Manipulator!=NULL );
+    m_Manipulator->SetViewportSize( width(), height() );
+
+    m_Manipulator->SetOrigin( image->GetOrigin() );
+    m_Manipulator->SetSpacing( image->GetSpacing() );
+    m_Manipulator->SetWkt( image->GetProjectionRef() );
+    m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+    }
+
+  //
+  // Insert image-models into image-view renderer.
+  assert( m_Renderer!=NULL );
   m_Renderer->SetImageList( images );
 
   if( images.isEmpty() )
     return;
 
-  VectorImageModel* imageModel = images.front();
-  assert( imageModel!=NULL );
-
-  DefaultImageType::Pointer image( imageModel->ToImage() );
-  assert( !image.IsNull() );
-
-  m_Manipulator->SetViewportSize( width(), height() );
-
-  m_Manipulator->SetOrigin( image->GetOrigin() );
-  m_Manipulator->SetSpacing( image->GetSpacing() );
-  m_Manipulator->SetWkt( image->GetProjectionRef() );
-  m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+  //
+  // Center view on center of reference image-model.
+  Center();
 }
 
 /*******************************************************************************/
@@ -380,5 +391,29 @@ ImageViewWidget
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /******************************************************************************/
+void
+ImageViewWidget
+::ZoomToExtent()
+{
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::ZoomToFullResolution()
+{
+  assert( m_Renderer!=NULL );
+
+  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
+
+  if( imageModel==NULL )
+    return;
+
+  assert( m_Manipulator!=NULL );
+
+  m_Manipulator->SetSpacing( imageModel->GetSpacing() );
+
+  Center();
+}
 
 }

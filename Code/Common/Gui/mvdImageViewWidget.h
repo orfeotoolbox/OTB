@@ -123,6 +123,12 @@ public:
 //
 // Public SLOTS.
 public slots:
+  /**
+   */
+  void ZoomToExtent();
+  /**
+   */
+  void ZoomToFullResolution();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -189,6 +195,10 @@ private:
    */
   void ListGlVersions() const;
 
+  /**
+   */
+  inline void Center();
+
 //
 // Private attributes.
 private:
@@ -216,6 +226,7 @@ private slots:
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdHistogramModel.h"
+#include "Gui/mvdAbstractImageViewManipulator.h"
 
 namespace mvd
 {
@@ -240,6 +251,27 @@ ImageViewWidget
 }
 
 #endif
+
+/*****************************************************************************/
+inline
+void
+ImageViewWidget
+::Center()
+{
+  assert( m_Renderer!=NULL );
+  assert( m_Renderer->GetReferenceImageModel()!=NULL );
+  assert( m_Manipulator!=NULL );
+
+  PointType origin;
+  PointType extent;
+
+  m_Renderer->GetReferenceExtent( origin, extent );
+
+  origin.SetToMidPoint( origin, extent );
+
+  assert( m_Manipulator!=NULL );
+  m_Manipulator->CenterOn( origin );
+}
 
 } // end of namespace 'mvd'.
 

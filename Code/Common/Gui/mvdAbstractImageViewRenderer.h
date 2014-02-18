@@ -45,7 +45,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
+#include "Core/mvdTypes.h"
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -128,6 +128,19 @@ public:
   /**
    */
   virtual void SetImageList( const VectorImageModelList& images ) =0;
+
+  /**
+   */
+  virtual const AbstractImageModel* GetReferenceImageModel() const =0;
+
+  /**
+   */
+  virtual AbstractImageModel* GetReferenceImageModel() =0;
+
+  /**
+   */
+  virtual void GetReferenceExtent( PointType& origin,
+                                   PointType& extent ) const =0;
 
   /**
    */

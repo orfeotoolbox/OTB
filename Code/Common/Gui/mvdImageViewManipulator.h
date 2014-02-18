@@ -107,51 +107,41 @@ public:
   /** \brief Destructor. */
   virtual ~ImageViewManipulator();
 
-  /**
-   */
+  //
+  // AbstractImageViewManipulator overloads.
+  //
+
   virtual void SetViewportSize( int width, int height );
-  /**
-   */
+
   virtual void SetOrigin( const PointType& origin );
-  /**
-   */
+
   virtual void SetSpacing( const SpacingType& spacing );
-  /**
-   */
+
   virtual void SetWkt( const std::string& wkt );
-  /**
-   */
+
   virtual void SetKeywordList(
     const DefaultImageType::ImageKeywordlistType& kwl
   );
 
-  /**
-   */
   virtual
     void
     SetupRenderingContext(
       AbstractImageViewRenderer::RenderingContext * const ) const;
 
-  /**
-   */
+  virtual void CenterOn( const PointType& point );
+
   virtual void MouseMoveEvent( QMouseEvent* event );
-  /**
-   */
+
   virtual void MousePressEvent( QMouseEvent* event );
-  /**
-   */
+
   virtual void MouseReleaseEvent( QMouseEvent* event );
-  /**
-   */
+
   virtual void WheelEvent( QWheelEvent* event);
-  /**
-   */
+
   virtual void ResizeEvent( QResizeEvent* event );
-  /**
-   */
+
   virtual void KeyPressEvent( QKeyEvent* event );
-  /**
-   */
+
   virtual void KeyReleaseEvent( QKeyEvent* event );
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
@@ -203,7 +193,6 @@ private:
 //
 // Private attributes.
 private:
-
   /**
    */
   otb::ViewSettings::Pointer m_ViewSettings;
