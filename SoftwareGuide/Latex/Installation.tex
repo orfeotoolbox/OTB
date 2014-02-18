@@ -3,14 +3,13 @@
 \index{Installation}
 
 This section describes the process for installing OTB on your system.
-OTB is a toolbox, and as such, once it is installed in your computer, provides by default a set of useful libraries. You can use
+OTB is a toolbox, and as such, once it is installed in your computer, it provides by default a set of useful libraries. You can use
 these libraries to build your own applications based on it. What OTB does provide, besides the toolbox, is a
 large set of test files and examples that will introduce you to OTB concepts
 and will show you how to use OTB in your own projects.
 
 Since the release 3.12, OTB embeds a specific framework to generate applications
-in a more user-friendly way. If you
-activate the specific option \code{BUILD\_APPLICATIONS}, OTB builds for each
+in a more user-friendly way. OTB provides for each
 application one shared library (also known as plugin). This plugin can be
 auto-loaded into appropriate tools without recompiling, and is able to
 fully describe its own parameters, behaviour and documentation.
@@ -27,91 +26,37 @@ following:
   for instance.
 \end{itemize}
 
+Based on a visualisation frammework which used FLTK libraries, Orfeo ToolBox team provides an integrated application which giving graphical access to a lot of OTB
+functionalities: \textbf{Monteverdi}. Since mid-2013, we also provide a new grapical application based on Qt: \textbf{Monteverdi2}. This new application used the OTB-Applications tools as processing framework. 
+   
+There are two ways to install OTB on your system: installing from a binary distribution 
+or compiling from sources. The choice depends on your system, and on what you intend to do.
 
-
-The classical OTB powered applications are still available and will still be maintained:
-\begin{description}
-\item [Monteverdi]{An integrated application giving graphical access to a lot of OTB
-functionalities.}
-\end{description}
-
-There are two ways to install OTB on your system: installing from a binary distribution,
-or compiling from sources (Table~\ref{tab:installation}). What you need depends on your system, and on what you intend to do.
-
-\begin{center}
-\begin{tiny}
-\begin{table}[!htbp]
-\begin{tabular}{|p{0.2\textwidth}|p{0.2\textwidth}|p{0.2\textwidth}|}
-\hline
- & \textbf{OTB library and internal applications} & \textbf{Monteverdi} \\
-\hline
-\textbf{Any platform} &
-  Build from source (see section~\ref{sec:source}) & Build from source (see section~\ref{sec:source}) \\
-\hline
-\textbf{Windows 2000/XP/Vista/Seven} & OSGeo4W installer for internal applications & Windows or OSGeo4W installer (see section~\ref{ssec:windows_binaries}) \\
-\hline
-\textbf{MacOS X 10.6 and higher} & MacPorts (see section~\ref{ssec:mac_binaries}) & app's DMG file (see section~\ref{ssec:mac_binaries}) \\
-\hline
-\textbf{Ubuntu Linux 10.04 and higher (32/64 bits)} & APT repository (see section~\ref{ssec:ubuntu_binaries}) & APT repository (see section~\ref{ssec:ubuntu_binaries}) \\
-\hline
-\textbf{OpenSuse 11.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:opensuse_binaries}) &  RPM package (see section~\ref{ssec:opensuse_binaries}) \\
-\hline
-\textbf{CentOS 6.X and higher (32/64 bits)} & RPM package (see section~\ref{ssec:centos_binaries}) &  RPM package (see section~\ref{ssec:centos_binaries}) \\
-\hline
-\end{tabular}
-\caption{Available installation procedures with respect to system configuration and target usage}
-\label{tab:installation}
-\end{table}
-\end{tiny}
-\end{center}
 
 \section{Installing binary packages}
 \label{sec:install_binaries}
 
-\subsection{Windows 2000/XP/Vista/Seven}
-\label{ssec:windows_binaries}
+You can find all information about the installation of binary packages for OTB-Applications, Monteverdi and Monteverdi2 (if they are available on your platform) into the OTB-Cookbook.
 
-For Windows 2000/XP/Vista/Seven users, there is a classical standalone installation program for Monteverdi, available from the
-\href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}. There are another way to install Monteverdi directly through through OSGeo4W. With this new way, you can install other OTB packages as described in the following paragraph.
-
-Since version 3.12, we provide OTB packages through OSGeo4W for Windows 2000/XP/Vista/Seven users. Package for Monteverdi is available directly in the OSGeo4W installer with the following names:
+The binary packages for OTB library are only available on:
 \begin{itemize}
-\item \textbf{otb-bin} for command line and QT applications
-\item \textbf{otb-python} for python applications
-\item \textbf{otb-monteverdi} for the Monteverdi application
+\item Ubuntu 12.04 and higher
+\item OpenSuse 12.X and higher
+\item MacOSX through MacPorts software  
 \end{itemize}
-Follow the instructions in the installer and select the packages you want to add. The installer will proceed with the installation of selected packages and all their dependencies.
-In the case of \textbf{otb-monteverdi}, Monteverdi will be directly installed in the OSGeo4W repository and a shortcut will be added to your desktop
-and in the start menu (in the OSGeo4W folder). You can now use directly Monteverdi from your desktop, from the start menu and from an OSGeo4W shell with command \texttt{monteverdi}.
-For the \textbf{otb-bin} packages, it will be available directly in the OSGeo4W shell, for example run
-\begin{verbatim}
-otbgui_BandMath.
-\end{verbatim}
- We recommended to use this way to install internal applications of OTB on Windows.
-If you want to use the \textbf{otb-python} package, for example in QGIS, please following the install note found in the \href{http://wiki.orfeo-toolbox.org/index.php/Quantum_GIS_access_to_OTB_applications#Notes_for_Windows_users}{OTB wiki}. You can simply check from an OSGeo4W shell the list of available applications:
-\begin{verbatim}
-python
-import otbApplication
-print str( otbApplication.Registry.GetAvailableApplications() )
-\end{verbatim}
-For more information you can read the OTB Cookbook which provides useful information about these OTB applications.
+
 
 \subsection{MacOS X}
 \label{ssec:mac_binaries}
 
-Orfeo Toolbox is now available on \href{http://http://www.macports.org/}{MacPorts}.
+Orfeo Toolbox library is now available on \href{http://http://www.macports.org/}{MacPorts}.
 The port name is called orfeotoolbox.
 You can follow the \href{ http://guide.macports.org/}{MacPorts documentation} to install MacPorts first, then install the orfeotoolbox port.
 
-A standard DMG package is available for Monteverdi for MacOS X 10.8.
-Please go the the \href{http://sourceforge.net/projects/orfeo-toolbox/}{OTB download page}.
-Click on the file to launch Monteverdi.
 
-\subsection{Linux}
-
-\subsubsection{Ubuntu 10.04 and higher}
+\subsection{Ubuntu 12.04 and higher}
 \label{ssec:ubuntu_binaries}
-For Ubuntu 10.04 and higher, OTB and Monteverdi packages may be available as
+For Ubuntu 12.04 and higher, OTB and Monteverdi packages may be available as
 Debian packages through APT repositories.
 
 Since release 3.14.1, OTB packages are available in the
@@ -132,11 +77,6 @@ If you want only OTB libraries, please use:
 sudo aptitude install libotb
 \end{verbatim}
 
-If you want monteverdi application, please use:
-\begin{verbatim}
-sudo aptitude install monteverdi
-\end{verbatim}
-
 If you are using \emph{Synaptic}, you can add the repositories, update and install the packages through the
 graphical interface.
 
@@ -149,29 +89,6 @@ launchpad page and click on \textbf{Read about installing}.
 %% sudo add-apt-repository ppa:otb/orfeotoolbox-stable
 %% \end{verbatim}
 
-%% If you want to use OTB with bleeding edge versions of gdal and qgis, there is an alternate UbuntuGIS repository.
-%% You can add it by using these command-lines:
-%% \begin{verbatim}
-%% sudo aptitude install add-apt-repository
-%% sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
-%% sudo add-apt-repository ppa:otb/orfeotoolbox-stable-ubuntugis
-%% \end{verbatim}
-%% Now run:
-%% \begin{verbatim}
-%% sudo aptitude update
-%% \end{verbatim}
-%% Following the guidlines for orfeotoolbox ppa install you can select the package you want or install all
-%% \begin{verbatim}
-%% sudo aptitude install libotb monteverdi otb-wrapping-python otb-wrapping-java
-%% \end{verbatim}
-
-%% The orfeotoolbox stable PPA repository is also available and use standard version of the gdal package (with the GTiff crash with current version, see \url{http://bugs.orfeo-toolbox.org/view.php?id=86}{here}).
-
-%% If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
-%% \begin{verbatim}
-%% sudo aptitude install add-apt-repository
-%% sudo add-apt-repository ppa:otb/orfeotoolbox-stable
-%% \end{verbatim}
 
 Moreover, \textbf{nightly} builds for all OTB projects are also available through APT repositories. However you should use it carefully. If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
 
@@ -197,10 +114,10 @@ quit. You can temporarily ignore this error and proceed with the update
 step. Following this, aptitude update will issue a warning about a signature
 problem. This warning won't prevent you from installing the packages.
 
-\subsubsection{OpenSuse 11.X and higher}
+\subsection{OpenSuse 12.X and higher}
 \label{ssec:opensuse_binaries}
 
-For OpenSuse 11.X and higher, OTB and Monteverdi packages are available through
+For OpenSuse 12.X and higher, OTB and Monteverdi packages are available through
 \emph{zypper}.
 
 First, you need to add the appropriate repositories with these command-lines (please replace $11.4$ by your OpenSuse version):
@@ -218,8 +135,6 @@ Now run:
 sudo zypper refresh
 sudo zypper install OrfeoToolbox
 sudo zypper install OrfeoToolbox-devel
-sudo zypper install Monteverdi
-sudo zypper install OrfeoToolbox-python
 \end{verbatim}
 
 Alternatively you can use the One-Click Installer from the \href{http://software.opensuse.org/search?q=Orfeo&baseproject=openSUSE\%3A11.4&lang=en&include_home=true&exclude_debug=true}{openSUSE Download page} or add the above repositories and install through Yast Package Management.
@@ -229,7 +144,6 @@ In case you wish to test the latest version of the packages, you can run:
 sudo zypper refresh
 sudo zypper install OrfeoToolbox-beta
 sudo zypper install OrfeoToolbox-beta-devel
-sudo zypper install Monteverdi-beta
 \end{verbatim}
 
 There is also support for the recently introduced 'rolling' openSUSE distribution named 'Tumbleweed'.
@@ -243,42 +157,6 @@ sudo zypper ar
 http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_Tumbleweed/ tzotsos
 \end{verbatim}
 and then add the OTB packages as shown above.
-
-\subsubsection{CentOS 5.5}
-\label{ssec:centos_binaries}
-Since 3.12 version, OTB packages (OTB, monteverdi) are available on CentOS 5.5 distribution. In the following lines, we will describe the way to install OTB and monteverdi packages on this distribution. Preliminary steps (common to all packages):
-
-\begin{enumerate}
-
-  \item Configure your system to pass through your HTTP(S) proxy,
-
-  \item Add required extra repositories: EPEL, ELGIS and centosplus,
-
-\end{enumerate}
-can be found in the previous file.
-
-So if you want OTB and monteverdi packages, you need to install a standard RPM packages which is available on OTB website:
-   \begin{verbatim}
-   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/
-         gdal-1.8.0-5.i386.rpm
-   yum --nogpgcheck install gdal-1.8.0-5.i386.rpm
-   \end{verbatim}
-We can now get and install (replace version number by the current):
-
-\begin{enumerate}
-\item OTB libraries and applications package:
-   \begin{verbatim}
-   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/
-         OrfeoToolbox-3.11.0-1.i386.rpm
-   yum --nogpgcheck install OrfeoToolbox-3.11.0-1.i386.rpm
-   \end{verbatim}
-\item monteverdi package:
-   \begin{verbatim}
-   wget http://www.orfeo-toolbox.org/packages/centos/5.5/i386/3.11.0/
-         Monteverdi-1.9.0-0.i386.rpm
-   yum --nogpgcheck install Monteverdi-1.9.0-0.i386.rpm
-   \end{verbatim}
-\end{enumerate}
 
 
 \section{Building from sources}
