@@ -458,8 +458,7 @@ void IceViewer::error_callback(int error, const char* description)
 void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
-  otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-  otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+  otb::GlImageActor::Pointer currentImageActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
   // Handle zoom
   if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
@@ -476,7 +475,23 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
     
     m_View->GetSettings()->Zoom(zoomCenter,factor);
     }
-  else if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+  else if(currentImageActor.IsNotNull())
+    {
+    this->scroll_callback_image(window, xoffset, yoffset);
+    }
+   else
+     {
+     m_View->RotateRenderingOrder(yoffset>0);
+     }
+}
+
+void IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, double yoffset)
+{
+  double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
+  otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+  otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+  
+  if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     {
     if(shader->GetShaderType() == SHADER_STANDARD)
       {
@@ -526,10 +541,6 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
      {
      shader->SetAlpha(shader->GetAlpha()/factor);  
      }
-   else
-     {
-     m_View->RotateRenderingOrder(yoffset>0);
-     }
 }
 
 void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypos)
@@ -559,36 +570,41 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
     {
     // Retrieve actor information
     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(*it).GetPointer());
-    otb::GlImageActor::PointType pin;
-    pin[0]=vpx;
-    pin[1]=vpy;
-    otb::GlImageActor::PixelType pixel;
-    bool pixelAvail = currentActor->GetPixelFromViewport(pin,pixel);
 
-    otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
-
-    if(pixelAvail)
+    if(currentActor.IsNotNull())
       {
-      shader->SetCurrentRed(pixel[currentActor->GetRedIdx()-1]);
-      shader->SetCurrentGreen(pixel[currentActor->GetGreenIdx()-1]);
-      shader->SetCurrentBlue(pixel[currentActor->GetBlueIdx()-1]);
-      }
-    
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    pin[0]=posx;
-    pin[1]=height-posy;
-    shader->SetCenter(pin);
 
-    if(shader->GetShaderType() == SHADER_ALPHA_SLIDER)
-      {
-      if(shader->GetVerticalSlider())
+      otb::GlImageActor::PointType pin;
+      pin[0]=vpx;
+      pin[1]=vpy;
+      otb::GlImageActor::PixelType pixel;
+      bool pixelAvail = currentActor->GetPixelFromViewport(pin,pixel);
+      
+      otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+      
+      if(pixelAvail)
         {
-        shader->SetSliderPosition(height-posy);
+        shader->SetCurrentRed(pixel[currentActor->GetRedIdx()-1]);
+        shader->SetCurrentGreen(pixel[currentActor->GetGreenIdx()-1]);
+        shader->SetCurrentBlue(pixel[currentActor->GetBlueIdx()-1]);
         }
-      else
+      
+      int width, height;
+      glfwGetFramebufferSize(window, &width, &height);
+      pin[0]=posx;
+      pin[1]=height-posy;
+      shader->SetCenter(pin);
+      
+      if(shader->GetShaderType() == SHADER_ALPHA_SLIDER)
         {
-        shader->SetSliderPosition(posx);
+        if(shader->GetVerticalSlider())
+          {
+          shader->SetSliderPosition(height-posy);
+          }
+        else
+          {
+          shader->SetSliderPosition(posx);
+          }
         }
       }
     }
@@ -688,6 +704,17 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     m_View->MoveActorInRenderingOrder(m_SelectedActor,true);
     }
 
+  
+  otb::GlImageActor::Pointer currentImageActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+
+  if(currentImageActor.IsNotNull())
+    {
+    this->key_callback_image(window,key,scancode,action,mods);
+    }
+}
+
+void IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
   // Switch shader mode
   if(key == GLFW_KEY_L && action == GLFW_PRESS)
     {
@@ -866,8 +893,8 @@ if(key == GLFW_KEY_V && action == GLFW_PRESS)
      m_View->GetSettings()->Center(imCenter);
      m_ReferenceActor = m_SelectedActor;
      }
-   
 }
+
 
 void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int action, int mode)
 {
@@ -899,7 +926,7 @@ void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int actio
     }
   else if(button == GLFW_MOUSE_BUTTON_2)
     {
-    otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    otb::GlActor::Pointer currentActor = m_View->GetActor(m_SelectedActor);
     if(action == GLFW_PRESS)
       {
       currentActor->SetVisible(!currentActor->GetVisible());
