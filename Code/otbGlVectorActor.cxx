@@ -84,7 +84,11 @@ GlVectorActor::GlVectorActor()
     m_VectorToViewportTransform(),
     m_OGRDataSource(),
     m_InternalFeatures(),
-    m_DisplayList(0)
+    m_DisplayList(0),
+    m_ExtentULX(0),
+    m_ExtentULY(0),
+    m_ExtentLRX(0),
+    m_ExtentLRY(0)
     
 {
   m_Color.Fill(0);
@@ -153,6 +157,7 @@ void GlVectorActor::ProcessViewSettings()
     {
     UpdateTransforms();
     InternalFeaturesTransform();
+    UpdateDisplayList();
     }
 }
 
@@ -168,8 +173,6 @@ void GlVectorActor::UpdateData()
     }
 
   otb::ogr::Layer layer = m_OGRDataSource->GetLayer(0);
-
-  m_InternalFeatures.clear();
 
   // Retrieve the viewport extent
   PointType vpul,vplr,vpur,vpll, ul, lr, ll, ur;
@@ -191,23 +194,37 @@ void GlVectorActor::UpdateData()
   lrx = std::max(std::max(ul[0],lr[0]),std::max(ur[0],ll[0]));
   lry = std::max(std::max(ul[1],lr[1]),std::max(ur[1],ll[1]));
 
-  layer.SetSpatialFilterRect(ulx,uly,lrx,lry);
-
-  otb::ogr::Layer::const_iterator featIt = layer.begin();
-  for(; featIt!=layer.end(); ++featIt)
+  if(m_ExtentULX != ulx
+     || m_ExtentULY != uly
+     || m_ExtentLRX != lrx
+     || m_ExtentLRY != lry)
     {
-    otb::ogr::Feature srcFeature(layer.GetLayerDefn());
-    srcFeature.SetFrom( *featIt, TRUE );
+  
+    m_ExtentULX = ulx;
+    m_ExtentULY = uly;
+    m_ExtentLRX = lrx;
+    m_ExtentLRY = lry;
 
-    InternalFeature newInternalFeature(layer.GetLayerDefn());
-    newInternalFeature.m_SourceFeature = srcFeature.Clone();
-    newInternalFeature.m_RenderedFeature = srcFeature.Clone();
-
-    m_InternalFeatures.push_back(newInternalFeature);
+    layer.SetSpatialFilterRect(ulx,uly,lrx,lry);
+    
+    m_InternalFeatures.clear();
+    
+    otb::ogr::Layer::const_iterator featIt = layer.begin();
+    for(; featIt!=layer.end(); ++featIt)
+      {
+      otb::ogr::Feature srcFeature(layer.GetLayerDefn());
+      srcFeature.SetFrom( *featIt, TRUE );
+      
+      InternalFeature newInternalFeature(layer.GetLayerDefn());
+      newInternalFeature.m_SourceFeature = srcFeature.Clone();
+      newInternalFeature.m_RenderedFeature = srcFeature.Clone();
+      
+      m_InternalFeatures.push_back(newInternalFeature);
+      }
+    
+    InternalFeaturesTransform();
+    UpdateDisplayList();
     }
-
-  InternalFeaturesTransform();
-  UpdateDisplayList();
 }
 
 void GlVectorActor::UpdateDisplayList()
@@ -350,7 +367,6 @@ OGRPoint TransformPoint(OGRPoint * inPoint,otb::GenericRSTransform<> * transform
   in[1] = inPoint->getY();
   
   out = transform->TransformPoint(in);
-  
   
   outPoint.setX(out[0]);
   outPoint.setY(out[1]);

@@ -116,6 +116,11 @@ private:
 
   unsigned int m_DisplayList;
 
+  double m_ExtentULX;
+  double m_ExtentULY;
+  double m_ExtentLRX;
+  double m_ExtentLRY;
+
 }; // End class GlVectorActor
 
 } // End namespace otb
