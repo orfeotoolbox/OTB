@@ -402,6 +402,14 @@ ImageViewWidget
   assert( imageModel!=NULL );
 
   //
+  // Reset spacing of image-view manipulator to image-model spacing.
+  if( zoom==ZOOM_TYPE_FULL ||
+      zoom==ZOOM_TYPE_EXTENT )
+    {
+    m_Manipulator->SetSpacing( imageModel->GetSpacing() );
+    }
+
+  //
   // Get reference extent.
   PointType origin;
   PointType extent;
@@ -410,37 +418,46 @@ ImageViewWidget
 
   //
   // Calculate appropriate spacing regarding zoom-type.
-  switch( zoom )
+  if( zoom==ZOOM_TYPE_EXTENT )
     {
-    case ZOOM_TYPE_NONE:
-      break;
+    SizeType size( m_Manipulator->GetViewportSize() );
 
-    case ZOOM_TYPE_FULL:
-      m_Manipulator->SetSpacing( imageModel->GetSpacing() );
-      break;
+#if 1
+    //
+    // Does work but continues to zoom if called several times
+    // because scaling is relative to current viewport.
+    //
+    // Fix: setting spacing of image-view manipulator before
+    // calculations works.
+    SpacingType spacing( m_Manipulator->GetSpacing() );
 
-    case ZOOM_TYPE_EXTENT:
-    {
-      SizeType size( m_Manipulator->GetViewportSize() );
+    double scale = 
+      std::max(
+        fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
+        fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
+      );
+#else
+    //
+    // Might not work if image is RS-transformed!?
+    SpacingType spacing( imageModel->GetSpacing() );
 
-      SpacingType spacing( m_Manipulator->GetSpacing() );
+    ImageRegionType region( imageModel->GetNativeLargestRegion() );
+    const SizeType& sz = region.GetSize();
 
-      double scale = 
-        std::max(
-          fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
-          fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
-        );
+    double scale = 
+      std::max(
+        static_cast< double >( sz[ 0 ] ) / static_cast< double >( size[ 0 ] ),
+        static_cast< double >( sz[ 1 ] ) / static_cast< double >( size[ 1 ] )
+      );
+#endif
 
-      spacing[ 0 ] *= scale;
-      spacing[ 1 ] *= scale;
+    // qDebug() << "scale:" << scale;
 
-      m_Manipulator->SetSpacing( spacing );
+    spacing[ 0 ] *= scale;
+    spacing[ 1 ] *= scale;
+
+    m_Manipulator->SetSpacing( spacing );
     }
-    break;
-
-    default:
-      break;
-    };
 
   //
   // Calculate middle point.
