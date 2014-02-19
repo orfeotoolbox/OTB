@@ -235,6 +235,8 @@ void IceViewer::DrawHud()
     {
     // Retrieve actor information
     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(*it).GetPointer());
+    otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(*it).GetPointer());
+    // Image part
     if(currentActor.IsNotNull())
       {
       otb::GlImageActor::PointType pin,poutphys,poutidx;
@@ -248,7 +250,7 @@ void IceViewer::DrawHud()
       oss<<(currentActor->GetVisible()?"+ ":"- ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<((*it)==m_SelectedActor?"[":" ");
-      oss<<(*it);
+      oss<<"(image) "<<(*it);
       oss<<((*it)==m_SelectedActor?"]":" ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<std::endl;
@@ -292,12 +294,26 @@ void IceViewer::DrawHud()
         }
       oss<<"\n"<<"\n";
       }
+    else if(currentVectorActor.IsNotNull())
+      {
+      oss<<(currentVectorActor->GetVisible()?"+ ":"- ");
+      oss<<((*it)==m_ReferenceActor?"*":" ");
+      oss<<((*it)==m_SelectedActor?"[":" ");
+      oss<<"(vector) "<<(*it);
+      oss<<((*it)==m_SelectedActor?"]":" ");
+      oss<<((*it)==m_ReferenceActor?"*":" ");
+      oss<<std::endl;
+
+      oss<<"    Fill: "<<(currentVectorActor->GetFill()?"On":"Off")<<"\n";
+      oss<<"\n"<<"\n";
+      }
+
     else
       {
       oss<<(m_View->GetActor(*it)->GetVisible()?"+ ":"- ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<((*it)==m_SelectedActor?"[":" ");
-      oss<<(*it);
+      oss<<"(roi) "<<(*it);
       oss<<((*it)==m_SelectedActor?"]":" ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<"\n"<<"\n";
@@ -641,6 +657,9 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
     }
 }
 
+void IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, double yoffset)
+{}
+
 void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
  
@@ -735,6 +754,16 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     m_View->MoveActorInRenderingOrder(m_SelectedActor,true);
     }
 
+   if(key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+     {
+     otb::GlActor::Pointer currentActor = m_View->GetActor(m_SelectedActor);
+     currentActor->SetVisible(!currentActor->GetVisible());
+     }
+   if(key == GLFW_KEY_D && action == GLFW_PRESS)
+     {
+     m_DisplayHud = !m_DisplayHud;
+     }
+
   
   otb::GlImageActor::Pointer currentImageActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
@@ -742,6 +771,14 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     {
     this->key_callback_image(window,key,scancode,action,mods);
     }
+
+  otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+
+  if(currentVectorActor.IsNotNull())
+    {
+    this->key_callback_vector(window,key,scancode,action,mods);
+    }
+
 }
 
 void IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -820,16 +857,6 @@ void IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, in
     otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
     shader->SetShaderType(SHADER_STANDARD);
     }
-
-   if(key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-     {
-     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-     currentActor->SetVisible(!currentActor->GetVisible());
-     }
-   if(key == GLFW_KEY_D && action == GLFW_PRESS)
-     {
-     m_DisplayHud = !m_DisplayHud;
-     }
 
    if(key == GLFW_KEY_R && action == GLFW_PRESS)
      {
@@ -963,6 +990,16 @@ if(key == GLFW_KEY_V && action == GLFW_PRESS)
      }
 }
 
+void IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+if(key == GLFW_KEY_F && action == GLFW_PRESS)
+  {
+  otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+  currentActor->SetFill(!currentActor->GetFill());
+  }
+
+
+}
 
 void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int action, int mode)
 {
