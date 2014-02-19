@@ -127,12 +127,18 @@ public:
     const DefaultImageType::ImageKeywordlistType& kwl
   );
 
+
   virtual
     void
     SetupRenderingContext(
       AbstractImageViewRenderer::RenderingContext * const ) const;
 
   virtual void CenterOn( const PointType& point );
+
+  virtual void ZoomIn();
+
+  virtual void ZoomOut();
+
 
   virtual void MouseMoveEvent( QMouseEvent* event );
 

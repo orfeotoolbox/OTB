@@ -224,6 +224,32 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
+::ZoomIn()
+{
+  otb::ViewSettings::SizeType size( GetViewportSize() );
+
+  Scale(
+    QPoint( size[ 0 ] / 2, size[ 1 ] / 2 ),
+    m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES
+  );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
+::ZoomOut()
+{
+  otb::ViewSettings::SizeType size( GetViewportSize() );
+
+  Scale(
+    QPoint( size[ 0 ] / 2, size[ 1 ] / 2 ),
+    -m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES
+  );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
 ::MousePressEvent( QMouseEvent* event )
 {
   assert( event!=NULL );
@@ -438,8 +464,6 @@ ImageViewManipulator
 
   assert( !m_ViewSettings.IsNull() );
 
-  otb::ViewSettings::SizeType size( m_ViewSettings->GetViewportSize() );
-
   bool needsRefresh = false;
 
   //
@@ -447,6 +471,8 @@ ImageViewManipulator
 
   if( !vector.isNull() )
     {
+    otb::ViewSettings::SizeType size( m_ViewSettings->GetViewportSize() );
+
     if( modifiers==Qt::NoModifier )
       {
       size[ 0 ] /= m_ScrollGranularity;
@@ -472,6 +498,8 @@ ImageViewManipulator
   if( steps!=0 )
     {
     // Qt::ControlModifier doest not work with keypard Qt::Key_Plus/Minus keys.
+
+    otb::ViewSettings::SizeType size( m_ViewSettings->GetViewportSize() );
 
     Scale(
       QPoint( size[ 0 ] / 2.0, size[ 1 ] / 2.0 ),

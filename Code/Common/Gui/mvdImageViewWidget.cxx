@@ -505,4 +505,30 @@ ImageViewWidget
   updateGL();
 }
 
+/******************************************************************************/
+void
+ImageViewWidget
+::ZoomIn()
+{
+  assert( m_Manipulator!=NULL );
+
+  m_Manipulator->ZoomIn();
+
+  // Refresh view.
+  updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::ZoomOut()
+{
+  assert( m_Manipulator!=NULL );
+
+  m_Manipulator->ZoomOut();
+
+  // Refresh view.
+  updateGL();
+}
+
 }

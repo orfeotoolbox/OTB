@@ -129,6 +129,12 @@ public slots:
   /**
    */
   void ZoomToFullResolution();
+  /**
+   */
+  void ZoomIn();
+  /**
+   */
+  void ZoomOut();
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

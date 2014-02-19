@@ -121,6 +121,12 @@ public:
   /**
    */
   virtual void CenterOn( const PointType& point ) =0;
+  /**
+   */
+  virtual void ZoomIn() =0;
+  /**
+   */
+  virtual void ZoomOut() =0;
 
   /**
    */
