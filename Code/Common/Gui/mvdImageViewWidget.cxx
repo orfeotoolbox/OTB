@@ -395,6 +395,41 @@ void
 ImageViewWidget
 ::ZoomToExtent()
 {
+  assert( m_Renderer!=NULL );
+
+  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
+
+  if( imageModel==NULL )
+    return;
+
+  assert( m_Manipulator!=NULL );
+
+  // Get viewport size.
+  SizeType size( m_Manipulator->GetViewportSize() );
+
+  // Get image-region {index, size}.
+  ImageRegionType region( imageModel->GetNativeLargestRegion() );
+
+  // Calculate scale factor based on viewport-size and image-region
+  // size.
+  double scale = std::min(
+    size[ 0 ] / region.GetSize()[ 0 ],
+    size[ 1 ] / region.GetSize()[ 1 ]
+  );
+
+  // Construct spacing based on scale factor.
+  SpacingType spacing;
+
+  spacing.Fill( scale );
+
+  // Set spacing to viewport.
+  m_Manipulator->SetSpacing( spacing );
+
+  // Reset origin of viewport.
+  m_Manipulator->SetOrigin( imageModel->GetOrigin() );
+
+  // Center view.
+  Center();
 }
 
 /******************************************************************************/

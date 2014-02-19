@@ -113,6 +113,8 @@ public:
 
   virtual void SetViewportSize( int width, int height );
 
+  virtual SizeType GetViewportSize() const;
+
   virtual void SetOrigin( const PointType& origin );
 
   virtual void SetSpacing( const SpacingType& spacing );

@@ -92,6 +92,10 @@ public:
   virtual void SetViewportSize( int width, int height ) =0;
   /**
    */
+  virtual SizeType GetViewportSize() const =0;
+
+  /**
+   */
   virtual void SetOrigin( const PointType& origin ) =0;
   /**
    */

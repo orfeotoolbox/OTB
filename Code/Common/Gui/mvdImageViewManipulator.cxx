@@ -118,6 +118,16 @@ ImageViewManipulator
 }
 
 /******************************************************************************/
+SizeType
+ImageViewManipulator
+::GetViewportSize() const
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  return m_ViewSettings->GetViewportSize();
+}
+
+/******************************************************************************/
 void
 ImageViewManipulator
 ::SetOrigin( const PointType& origin )
