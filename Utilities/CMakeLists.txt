@@ -176,9 +176,6 @@ endif()
 message(STATUS "Configuring otbsvm...")
 add_subdirectory(otbsvm )
 
-message(STATUS "Configuring InsightJournal...")
-add_subdirectory(InsightJournal)
-
 if(NOT OTB_USE_EXTERNAL_OSSIM)
   message(STATUS "Configuring otbossim...")
   add_subdirectory(otbossim)

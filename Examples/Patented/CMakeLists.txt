@@ -87,27 +87,6 @@ SIFTDisparityMapEstimationTest
 )
 endif()
 
-add_test(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS}
-        --compare-n-images ${TOL} 4
-        ${BASELINE}/ScaleInvariantFeatureImageFilterOutput1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
-  ${BASELINE}/ScaleInvariantFeatureImageFilterOutput2.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutput2.png
-  ${BASELINE}/ScaleInvariantFeatureImageFilterOutputKeys1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
-  ${BASELINE}/ScaleInvariantFeatureImageFilterOutputKeys2.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png
-
-        ScaleInvariantFeatureImageFilterTest
-
-        ${INPUTDATA}/Scene.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutput1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutput2.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys1.png
-        ${TEMP}/ScaleInvariantFeatureImageFilterOutputKeys2.png
-  1 10 0.5 0
-)
-
 if(OTB_USE_SIFTFAST)
 add_test(feTeSIFTFastExampleTest ${EXE_TESTS2}
   --compare-image ${TOL}

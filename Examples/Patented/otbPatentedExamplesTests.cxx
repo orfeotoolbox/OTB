@@ -26,7 +26,6 @@ void RegisterTests()
 {
   //REGISTER_TEST(HybridSegmentationFuzzyVoronoiTest);
   REGISTER_TEST(EstimateAffineTransformationExampleTest);
-  REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
 }
 
 //#undef main
@@ -37,6 +36,3 @@ void RegisterTests()
 #define main EstimateAffineTransformationExampleTest
 #include "EstimateAffineTransformationExample.cxx"
 
-#undef main
-#define main ScaleInvariantFeatureImageFilterTest
-#include "ScaleInvariantFeatureImageFilter.cxx"

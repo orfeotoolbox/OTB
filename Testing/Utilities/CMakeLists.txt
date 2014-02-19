@@ -209,34 +209,6 @@ if(NOT OTB_USE_EXTERNAL_OPENTHREADS)
         )
 endif()
 
-# -------            SIFT   -------------------------------------
-add_test(utTv2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
-         itk2DScaleInvariantFeatureImageFilterTest
-         ${INPUTDATA}/carre.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre1.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre2.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre_keys1.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre_keys2.png
-         1 10 0.5 0  )
-
-add_test(utTv2DSiftImageGridSyntheticRotate10 ${UTILITIES_TESTS}
-         itk2DScaleInvariantFeatureImageFilterTest
-         ${INPUTDATA}/damier.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier1.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier2.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys1.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys2.png
-         1 10 0.5 0 )
-
-add_test(utTv2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
-         itk2DScaleInvariantFeatureImageFilterTest
-         ${INPUTDATA}/scene.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene1.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene2.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene_keys1.png
-         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene_keys2.png
-         1 10 0.5 0 )
-
 # -------            lib Kml   ------------------------------
 foreach(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloworld parsekml )
         add_test(utTuKml${id_test} ${UTILITIES_TESTS}
@@ -301,7 +273,6 @@ tinyXMLlibTest.cxx
 svmGenericKernelBasicOperationsTest.cxx
 otbSVMComposedKernelFunctorTest.cxx
 ossimRadarSatSupport.cxx
-itkScaleInvariantFeatureImageFilterTest.cxx
 kmlcreatekml.cc
 kmlhelloattrs.cc
 kmlhelloenum.cc
