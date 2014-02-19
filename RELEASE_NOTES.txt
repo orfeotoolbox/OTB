@@ -1,3 +1,80 @@
+OTB-v.4.0 - Changes since version 3.20 (2013/02/19)
+--------------------------------------------------------
+
+* Library
+
+  * Core
+    * Change OTB API to support ITK with version 4.5 (More information is available in the migration guide at http://wiki.orfeo-toolbox.org/index.php/Migration_guide_OTBv4)
+    * Refactoring otbAttributesMapOpeningLabelMapFilter to be compatible with ITKv4.5.0
+    * Remove Visualization part from OTB: all these projects are now in Monteverdi
+    * Rename EuclideanDistance as EuclideanDistanceMetric
+    * Remove otbMaskedScalarImageToGreyLevelCoocurenceMatrixGenerator
+    * Use local masks in otbHaralickTexturesImageFunction
+    * Remove methods of otbSystem.h which can be replaced by similar ones in itksys/SystemTools.hxx
+    * Move classes about Amplitude and Phase functors from visualzation to basic filter
+    * otbImageToLabelMapWithAttributesFilter inherits from itkImageToImageFilter instead of itkLabelMapFilter
+    * Overload GenerateInputRequestedRegion in otbImageToLabelMapWithAttributesFilter
+    * Override VerifyInputInformation in otbImportGeoInformationImageFilter
+    * Adding a gamma parameter in VectorRescaleIntensityImageFilter to allow for gamma correction
+    * Remove unused OTB_USE_SYSTEM_VXL and OTB_VXL_DIR from OTBConfig and UseOTB
+    * Improve support of VS2013
+    * Improve support of large files
+
+  * Testing
+    * Correct multibaseline support
+    * Move test related to amplitude and phase functor from visualization to basic filters
+
+  * CMake 
+    * Use modern CMake style: no block-end arguments and all CMake command to lower case format
+
+  * ThirdParties
+    * OTB support now ITK with version greater to 4.5.0 (internal and external)
+    * Remove FLTK dependency
+    * Remove GETTEXT dependency
+    * Remove LIBLAS dependency
+    * Remove PQXX dependency
+    * Improve support of muparser 2.0
+    * Deactivate the possibility offered by CURL to download multiple files in parallel
+    * Support mapnik 2.2
+
+* Applications
+
+  * Updated applications :
+    * Remove dependency of Colormapping to Visualization class
+    * Adding gamma correction method the convert application 
+  * Core framework :
+    * Improve the support of XML parameters input/output file
+    * Improve the input VectorData/Image/Filename parameter to give access to m_Input attribute
+
+* Bugs fixed :
+  * OTB-applications
+    * 0000884: InputImage parameter in java wrappers didn't overload the input parameters provided by input XML file
+    * 0000883: InputImageList parameter in pyhton wrappers didn't overload the input parameters provided by input XML file
+    * 0000873: BandMath application in gui mode "Save to xml" option doesn't save "exp" parameter
+    * 0000836: Error in Exact Large-Scale Mean-Shift segmentation, step 2
+    * 0000824: otbgui_Orthorectification : changing the input image does not update UTM parameters
+    * 0000881: GenerateRPCSensorModel application generate stats file with wrong elevation value
+
+  * OTB-lib
+    * 0000878: apTvDmStereoFramework fails with muParser 2.2
+    * 0000850: apTvDmBlockMatchingTest Parser error Unexpected token if
+    * 0000862: Cannot build OTB with mapnik 2.2
+    * 0000858: cannot build otb tests with ITK trunk
+    * 0000851: Build error on test 0000169-fftcomplextocomplex
+    * 0000861: CMake detects mapnik 2.2.0 as mapnik 0.7
+    * 0000859: Unable to compile OTB trunk with external ITK trunk
+
+  * Orfeo Toolbox (OTB)
+    * 0000849: otbgui applications scrambled file names
+    * 0000863: ConvertSensorToGeoPoint  application in GUI mode execute button is not activate even if all parameters seem to be filled
+    * 0000872: Internal ITK 4.4.2 and ITK 4.5.0 source codes are mixed together in the OTB internal ITK source directory
+    * 0000864: MultiResolutionPyramid MTV2 is in an endless loop of generation if the parameter "Number of levels" is set with a negative value
+    * 0000830: otb::PolyLineImageConstIterator returns reference to temporary variable
+    * 0000823: problem with python wrapper for otbApplication 'rasterization'
+
+  * Documentation
+    * 0000838: ITK classes disappeared from doxygen during migration to ITK 4.x
+
 OTB-v.3.20 - Changes since version 3.18.1 (2013/11/13)
 --------------------------------------------------------
 
