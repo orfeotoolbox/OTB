@@ -75,7 +75,8 @@ ImageViewManipulator
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
   m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
-  m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY )
+  m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY ),
+  m_IsMouseDragging( false )
 {
 }
 
@@ -90,7 +91,8 @@ ImageViewManipulator
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
   m_ZoomGranularity( ImageViewManipulator::DEFAULT_ZOOM_GRANULARITY ),
-  m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY )
+  m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY ),
+  m_IsMouseDragging( false )
 {
 }
 
@@ -195,7 +197,10 @@ ImageViewManipulator
   ImageViewRenderer::RenderingContext * const context =
     dynamic_cast< ImageViewRenderer::RenderingContext * const >( c );
 
-  context->m_RenderMode = m_RenderMode;
+  context->m_RenderMode =
+    m_IsMouseDragging
+    ? AbstractImageViewRenderer::RenderingContext::RENDER_MODE_LIGHT
+    : m_RenderMode;
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -264,6 +269,7 @@ ImageViewManipulator
     case Qt::LeftButton:
       m_MousePressPosition = event->pos();
       m_MousePressOrigin = m_ViewSettings->GetOrigin();
+      m_IsMouseDragging = true;
       break;
 
     case Qt::RightButton:
@@ -347,6 +353,7 @@ ImageViewManipulator
     case Qt::LeftButton:
       m_MousePressPosition = QPoint();
       m_MousePressOrigin = PointType();
+      m_IsMouseDragging = false;
 
       emit RefreshView();
       break;

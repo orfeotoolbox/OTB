@@ -224,6 +224,9 @@ private:
   /**
    */
   int m_ScrollGranularity;
+  /**
+   */
+  bool m_IsMouseDragging : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
