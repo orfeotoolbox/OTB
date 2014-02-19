@@ -168,6 +168,21 @@ protected:
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
+// Private types.
+private:
+  /**
+   */
+  enum ZoomType
+  {
+    ZOOM_TYPE_NONE = -1,
+    //
+    ZOOM_TYPE_FULL,
+    ZOOM_TYPE_EXTENT,
+    //
+    ZOOM_TYPE_COUNT
+  };
+
+//
 // Private methods.
 private:
 
@@ -197,7 +212,7 @@ private:
 
   /**
    */
-  inline void Center();
+  void Center( ZoomType zoom =ZOOM_TYPE_NONE );
 
 //
 // Private attributes.
@@ -251,27 +266,6 @@ ImageViewWidget
 }
 
 #endif
-
-/*****************************************************************************/
-inline
-void
-ImageViewWidget
-::Center()
-{
-  assert( m_Renderer!=NULL );
-  assert( m_Renderer->GetReferenceImageModel()!=NULL );
-  assert( m_Manipulator!=NULL );
-
-  PointType origin;
-  PointType extent;
-
-  m_Renderer->GetReferenceExtent( origin, extent );
-
-  origin.SetToMidPoint( origin, extent );
-
-  assert( m_Manipulator!=NULL );
-  m_Manipulator->CenterOn( origin );
-}
 
 } // end of namespace 'mvd'.
 

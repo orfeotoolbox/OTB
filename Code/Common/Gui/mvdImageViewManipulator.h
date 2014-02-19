@@ -119,6 +119,8 @@ public:
 
   virtual void SetSpacing( const SpacingType& spacing );
 
+  virtual SpacingType GetSpacing() const;
+
   virtual void SetWkt( const std::string& wkt );
 
   virtual void SetKeywordList(

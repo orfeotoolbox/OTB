@@ -148,6 +148,16 @@ ImageViewManipulator
 }
 
 /******************************************************************************/
+SpacingType
+ImageViewManipulator
+::GetSpacing() const
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  return m_ViewSettings->GetSpacing();
+}
+
+/******************************************************************************/
 void
 ImageViewManipulator
 ::SetWkt( const std::string& wkt )

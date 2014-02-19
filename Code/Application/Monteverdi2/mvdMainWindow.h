@@ -262,6 +262,10 @@ private:
    */
   inline
     ImageViewWidget* GetQuicklookView();
+
+  /**
+   */
+  void ConnectImageViews();
 #endif // USE_OLD_IMAGE_VIEW
 
   /**

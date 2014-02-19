@@ -388,6 +388,70 @@ ImageViewWidget
 #endif
 }
 
+/*****************************************************************************/
+void
+ImageViewWidget
+::Center( ZoomType zoom )
+{
+  assert( m_Renderer!=NULL );
+  assert( m_Manipulator!=NULL );
+
+  //
+  // Get reference image-model.
+  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
+  assert( imageModel!=NULL );
+
+  //
+  // Get reference extent.
+  PointType origin;
+  PointType extent;
+
+  m_Renderer->GetReferenceExtent( origin, extent );
+
+  //
+  // Calculate appropriate spacing regarding zoom-type.
+  switch( zoom )
+    {
+    case ZOOM_TYPE_NONE:
+      break;
+
+    case ZOOM_TYPE_FULL:
+      m_Manipulator->SetSpacing( imageModel->GetSpacing() );
+      break;
+
+    case ZOOM_TYPE_EXTENT:
+    {
+      SizeType size( m_Manipulator->GetViewportSize() );
+
+      SpacingType spacing( m_Manipulator->GetSpacing() );
+
+      double scale = 
+        std::max(
+          fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
+          fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
+        );
+
+      spacing[ 0 ] *= scale;
+      spacing[ 1 ] *= scale;
+
+      m_Manipulator->SetSpacing( spacing );
+    }
+    break;
+
+    default:
+      break;
+    };
+
+  //
+  // Calculate middle point.
+  PointType middle;
+  middle.SetToMidPoint( origin, extent );
+
+  //
+  // Center on middle point.
+  m_Manipulator->CenterOn( middle );
+}
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /******************************************************************************/
@@ -397,39 +461,14 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
-  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
-
-  if( imageModel==NULL )
+  if( m_Renderer->GetReferenceImageModel()==NULL )
     return;
 
-  assert( m_Manipulator!=NULL );
+  // Scale and center.
+  Center( ImageViewWidget::ZOOM_TYPE_EXTENT );
 
-  // Get viewport size.
-  SizeType size( m_Manipulator->GetViewportSize() );
-
-  // Get image-region {index, size}.
-  ImageRegionType region( imageModel->GetNativeLargestRegion() );
-
-  // Calculate scale factor based on viewport-size and image-region
-  // size.
-  double scale = std::min(
-    size[ 0 ] / region.GetSize()[ 0 ],
-    size[ 1 ] / region.GetSize()[ 1 ]
-  );
-
-  // Construct spacing based on scale factor.
-  SpacingType spacing;
-
-  spacing.Fill( scale );
-
-  // Set spacing to viewport.
-  m_Manipulator->SetSpacing( spacing );
-
-  // Reset origin of viewport.
-  m_Manipulator->SetOrigin( imageModel->GetOrigin() );
-
-  // Center view.
-  Center();
+  // Refresh view.
+  updateGL();
 }
 
 /******************************************************************************/
@@ -439,16 +478,14 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
-  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
-
-  if( imageModel==NULL )
+  if( m_Renderer->GetReferenceImageModel()==NULL )
     return;
 
-  assert( m_Manipulator!=NULL );
+  // Scale and center.
+  Center( ImageViewWidget::ZOOM_TYPE_FULL );
 
-  m_Manipulator->SetSpacing( imageModel->GetSpacing() );
-
-  Center();
+  // Refresh view.
+  updateGL();
 }
 
 }

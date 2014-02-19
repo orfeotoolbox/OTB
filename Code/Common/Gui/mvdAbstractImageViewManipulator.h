@@ -102,6 +102,9 @@ public:
   virtual void SetSpacing( const SpacingType& spacing ) =0;
   /**
    */
+  virtual SpacingType GetSpacing() const =0;
+  /**
+   */
   virtual void SetWkt( const std::string& wkt ) =0;
   /**
    */

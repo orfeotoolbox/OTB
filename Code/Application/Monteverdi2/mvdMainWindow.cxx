@@ -322,6 +322,10 @@ MainWindow
 #if USE_OLD_IMAGE_VIEW
   ConnectImageViews1();
 #endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
+  ConnectImageViews();
+#endif
 }
 
 /*****************************************************************************/
@@ -428,6 +432,46 @@ MainWindow
 }
 
 #endif // USE_OLD_IMAGE_VIEW
+
+/*****************************************************************************/
+#if USE_ICE_IMAGE_VIEW
+
+void
+MainWindow
+::ConnectImageViews()
+{
+  QObject::connect(
+    this,
+    SIGNAL( UserZoomIn() ),
+    // to:
+    m_ImageView,
+    SLOT( ZoomIn() )
+  );
+
+  QObject::connect(
+    this,
+    SIGNAL( UserZoomOut() ),
+    // to:
+    m_ImageView,
+    SLOT( ZoomOut() )
+  );
+
+  QObject::connect(
+    this,
+    SIGNAL( UserZoomExtent() ),
+    m_ImageView,
+    SLOT( ZoomToExtent() )
+  );
+
+  QObject::connect(
+    this,
+    SIGNAL( UserZoomFull() ),
+    m_ImageView,
+    SLOT( ZoomToFullResolution() )
+  );
+}
+
+#endif // USE_ICE_IMAGE_VIEW
 
 /*****************************************************************************/
 void
