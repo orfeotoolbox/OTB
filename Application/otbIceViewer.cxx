@@ -18,6 +18,7 @@
 #include "otbIceViewer.h"
 #include <algorithm>
 #include <otbImageMetadataInterfaceFactory.h>
+#include "otbGlROIActor.h"
 
 namespace otb
 {
@@ -219,60 +220,74 @@ void IceViewer::DrawHud()
     {
     // Retrieve actor information
     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(*it).GetPointer());
-    otb::GlImageActor::PointType pin,poutphys,poutidx;
-    pin[0]=vpx;
-    pin[1]=vpy;
-    poutphys = currentActor->ViewportToImageTransform(pin,true);
-    poutidx = currentActor->ViewportToImageTransform(pin,false);
-    otb::GlImageActor::PixelType pixel;
-    bool pixelAvail = currentActor->GetPixelFromViewport(pin,pixel);
-    
-    oss<<(currentActor->GetVisible()?"+ ":"- ");
-    oss<<((*it)==m_ReferenceActor?"*":" ");
-    oss<<((*it)==m_SelectedActor?"[":" ");
-    oss<<(*it);
-    oss<<((*it)==m_SelectedActor?"]":" ");
-    oss<<((*it)==m_ReferenceActor?"*":" ");
-    oss<<std::endl;
-
-    otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
-
-    oss<<"    Rendering: "<<"R="<<currentActor->GetRedIdx()<<":["<<shader->GetMinRed()<<", "<<shader->GetMaxRed()<<"] G="<<currentActor->GetGreenIdx()<<":["<<shader->GetMinGreen()<<", "<<shader->GetMaxGreen()<<"] B="<<currentActor->GetBlueIdx()<<":["<<shader->GetMinBlue()<<", "<<shader->GetMaxBlue()<<"]"<<"\n";
-    oss<<"    Shader: ";
-
-    switch(shader->GetShaderType())
+    if(currentActor.IsNotNull())
       {
-      case SHADER_STANDARD:
-        oss<<" standard";
-        break;
-      case SHADER_LOCAL_CONTRAST:
-        oss<<" local contrast - radius="<<shader->GetRadius()<<", range=["<<-shader->GetLocalContrastRange()<<", "<<shader->GetLocalContrastRange()<<"]";
-        break;
-      case SHADER_LOCAL_ALPHA:
-        oss<<" local transparency - radius="<<shader->GetRadius();
-        break;
-      case SHADER_ALPHA_GRID:
-        oss<<" chessboard transparency - grid="<<shader->GetChessboardSize();
-        break;
-      case SHADER_ALPHA_SLIDER:
-        oss<<" swipe transparency - "<<(shader->GetVerticalSlider()?"vertical":"horizontal")<<", position="<<shader->GetSliderPosition();
-        break;
-        // Do nothing
-      }
-    oss<<"\n";
-
-    oss<<"    Position - index: ("<<poutidx[0]<<", "<<poutidx[1]<<"), phys: "<<poutphys[0]<<", "<<poutphys[1]<<")";
-    oss<<", resolution: "<<currentActor->GetCurrentResolution()<<"\n";
-    if(pixelAvail)
-      {
-      oss<<"    Pixel value: ["<<pixel[0];
-      for(unsigned int i = 1; i<pixel.Size();++i)
+      otb::GlImageActor::PointType pin,poutphys,poutidx;
+      pin[0]=vpx;
+      pin[1]=vpy;
+      poutphys = currentActor->ViewportToImageTransform(pin,true);
+      poutidx = currentActor->ViewportToImageTransform(pin,false);
+      otb::GlImageActor::PixelType pixel;
+      bool pixelAvail = currentActor->GetPixelFromViewport(pin,pixel);
+      
+      oss<<(currentActor->GetVisible()?"+ ":"- ");
+      oss<<((*it)==m_ReferenceActor?"*":" ");
+      oss<<((*it)==m_SelectedActor?"[":" ");
+      oss<<(*it);
+      oss<<((*it)==m_SelectedActor?"]":" ");
+      oss<<((*it)==m_ReferenceActor?"*":" ");
+      oss<<std::endl;
+      
+      otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+      
+      oss<<"    Rendering: "<<"R="<<currentActor->GetRedIdx()<<":["<<shader->GetMinRed()<<", "<<shader->GetMaxRed()<<"] G="<<currentActor->GetGreenIdx()<<":["<<shader->GetMinGreen()<<", "<<shader->GetMaxGreen()<<"] B="<<currentActor->GetBlueIdx()<<":["<<shader->GetMinBlue()<<", "<<shader->GetMaxBlue()<<"]"<<"\n";
+      oss<<"    Shader: ";
+      
+      switch(shader->GetShaderType())
         {
-        oss<<", "<<pixel[i];
+        case SHADER_STANDARD:
+          oss<<" standard";
+          break;
+        case SHADER_LOCAL_CONTRAST:
+          oss<<" local contrast - radius="<<shader->GetRadius()<<", range=["<<-shader->GetLocalContrastRange()<<", "<<shader->GetLocalContrastRange()<<"]";
+          break;
+        case SHADER_LOCAL_ALPHA:
+          oss<<" local transparency - radius="<<shader->GetRadius();
+          break;
+        case SHADER_ALPHA_GRID:
+          oss<<" chessboard transparency - grid="<<shader->GetChessboardSize();
+          break;
+        case SHADER_ALPHA_SLIDER:
+          oss<<" swipe transparency - "<<(shader->GetVerticalSlider()?"vertical":"horizontal")<<", position="<<shader->GetSliderPosition();
+          break;
+          // Do nothing
         }
-      oss<<"]";
+      oss<<"\n";
+      
+      oss<<"    Position - index: ("<<poutidx[0]<<", "<<poutidx[1]<<"), phys: "<<poutphys[0]<<", "<<poutphys[1]<<")";
+      oss<<", resolution: "<<currentActor->GetCurrentResolution()<<"\n";
+      if(pixelAvail)
+        {
+        oss<<"    Pixel value: ["<<pixel[0];
+        for(unsigned int i = 1; i<pixel.Size();++i)
+          {
+          oss<<", "<<pixel[i];
+          }
+        oss<<"]";
+        }
+      oss<<"\n"<<"\n";
       }
-    oss<<"\n"<<"\n";
+    else
+      {
+      oss<<(m_View->GetActor(*it)->GetVisible()?"+ ":"- ");
+      oss<<((*it)==m_ReferenceActor?"*":" ");
+      oss<<((*it)==m_SelectedActor?"[":" ");
+      oss<<(*it);
+      oss<<((*it)==m_SelectedActor?"]":" ");
+      oss<<((*it)==m_ReferenceActor?"*":" ");
+      oss<<"\n"<<"\n";
+      
+      }
     }
   
   // Find the size of the hud
@@ -350,6 +365,7 @@ void IceViewer::DrawHelp()
   oss<<"- Rotate rendering order with mouse wheel (order displayed in image list)"<<std::endl;
   oss<<"- Change selected image with PAGE UP / PAGE DOWN (note that selected dataset is highlighted with [ ]"<<std::endl;
   oss<<"- Show/hide image dataset with space bar"<<std::endl;
+  oss<<"- Highlight selected image by holding backspace"<<std::endl;
   oss<<"- Note that all images are reprojected in the first loaded image geometry (highligthed with * *). To change reference geometry to selected image, press P key."<<std::endl;
   oss<<std::endl;
 
@@ -892,6 +908,43 @@ if(key == GLFW_KEY_V && action == GLFW_PRESS)
      m_View->GetSettings()->UseProjectionOn();
      m_View->GetSettings()->Center(imCenter);
      m_ReferenceActor = m_SelectedActor;
+     }
+
+   if(key == GLFW_KEY_BACKSPACE)
+     {
+     std::string key = "Current image outline";
+
+     if(action == GLFW_PRESS)
+       {
+       otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+       if(currentActor.IsNotNull())
+         {
+         otb::GlROIActor::Pointer roiActor = otb::GlROIActor::New();
+         roiActor->SetKwl(currentActor->GetKwl());
+         roiActor->SetWkt(currentActor->GetWkt());
+         
+         otb::GlROIActor::PointType ul = currentActor->GetOrigin();
+         ul[0]+=currentActor->GetLargestRegion().GetIndex()[0]*currentActor->GetSpacing()[0];
+         ul[1]+=currentActor->GetLargestRegion().GetIndex()[1]*currentActor->GetSpacing()[1];
+
+         otb::GlROIActor::PointType lr = ul;
+         lr[0]+=currentActor->GetLargestRegion().GetSize()[0]*currentActor->GetSpacing()[0];
+         lr[1]+=currentActor->GetLargestRegion().GetSize()[1]*currentActor->GetSpacing()[1];
+
+         roiActor->SetUL(ul);
+         roiActor->SetLR(lr);
+         roiActor->SetFill(true);
+         roiActor->SetAlpha(0.2);
+
+         m_View->AddActor(roiActor,key);
+         m_View->MoveActorToEndOfRenderingOrder(key,true);
+         }
+       
+       }
+     else if(action == GLFW_RELEASE)
+       {
+       m_View->RemoveActor(key);
+       }
      }
 }
 
