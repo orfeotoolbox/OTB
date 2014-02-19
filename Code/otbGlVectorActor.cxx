@@ -238,6 +238,8 @@ void GlVectorActor::UpdateDisplayList()
   
   glNewList(m_DisplayList, GL_COMPILE);
 
+  gluTessProperty(m_GluTesselator, GLU_TESS_BOUNDARY_ONLY, !m_Fill);
+
   for(std::vector<InternalFeature>::iterator it = m_InternalFeatures.begin();
       it!=m_InternalFeatures.end();++it)
     {
@@ -325,8 +327,6 @@ void GlVectorActor::Render()
    glEnable(GL_LINE_SMOOTH);
    glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Alpha);
    
-   gluTessProperty(m_GluTesselator, GLU_TESS_BOUNDARY_ONLY, !m_Fill);
-
    glCallList(m_DisplayList);
 
    glDisable(GL_LINE_SMOOTH);
