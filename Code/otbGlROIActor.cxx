@@ -55,10 +55,10 @@ void GlROIActor::SetKwl(const ImageKeywordlistType & kwl)
 
 void GlROIActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
-  ulx = std::max(std::max(m_VpUL[0],m_VpUR[0]),std::max(m_VpLL[0],m_VpLR[0]));
-  uly = std::max(std::max(m_VpUL[1],m_VpUR[1]),std::max(m_VpLL[1],m_VpLR[1]));
-  lrx = std::min(std::min(m_VpUL[0],m_VpUR[0]),std::min(m_VpLL[0],m_VpLR[0]));
-  lry = std::min(std::min(m_VpUL[1],m_VpUR[1]),std::min(m_VpLL[1],m_VpLR[1]));
+  lrx = std::max(std::max(m_VpUL[0],m_VpUR[0]),std::max(m_VpLL[0],m_VpLR[0]));
+  lry = std::max(std::max(m_VpUL[1],m_VpUR[1]),std::max(m_VpLL[1],m_VpLR[1]));
+  ulx = std::min(std::min(m_VpUL[0],m_VpUR[0]),std::min(m_VpLL[0],m_VpLR[0]));
+  uly = std::min(std::min(m_VpUL[1],m_VpUR[1]),std::min(m_VpLL[1],m_VpLR[1]));
   
 }
 
@@ -71,20 +71,20 @@ void GlROIActor::ProcessViewSettings()
   if((m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull()) || (settings->GetUseProjection() && settings->GetGeometryChanged()))
     {
     UpdateTransforms();
+
+    PointType ur,ll;
+
+    ur = m_UL;
+    ur[0] = m_LR[0];
+    
+    ll = m_LR;
+    ll[0] = m_UL[0];
+    
+    m_VpUL = m_ImageToViewportTransform->TransformPoint(m_UL);
+    m_VpUR = m_ImageToViewportTransform->TransformPoint(ur);
+    m_VpLL = m_ImageToViewportTransform->TransformPoint(ll);
+    m_VpLR = m_ImageToViewportTransform->TransformPoint(m_LR);
     }
-
-  PointType ur,ll;
-
-  ur = m_UL;
-  ur[0] = m_LR[0];
-
-  ll = m_LR;
-  ll[0] = m_UL[0];
-
-  m_VpUL = m_ImageToViewportTransform->TransformPoint(m_UL);
-  m_VpUR = m_ImageToViewportTransform->TransformPoint(ur);
-  m_VpLL = m_ImageToViewportTransform->TransformPoint(ll);
-  m_VpLR = m_ImageToViewportTransform->TransformPoint(m_LR);
 }
 
 void GlROIActor::UpdateData()
