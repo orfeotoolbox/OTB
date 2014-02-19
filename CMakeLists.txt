@@ -25,6 +25,9 @@ endif(WIN32)
 
 OPTION(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" ON)
 
+# include before OTB includes in case ice is already installed in the system (at otb install location)
+include_directories(Code)
+
 #----------------------------------------------------------------------------
 # Orfeo ToolBox
 find_package(OTB REQUIRED)
@@ -103,7 +106,6 @@ if(NOT Ice_INSTALL_INCLUDE_DIR)
   set(Ice_INSTALL_INCLUDE_DIR "include/otb")
 endif(NOT Ice_INSTALL_INCLUDE_DIR)
 
-include_directories(Code)
 add_subdirectory(Code)
 
 if(BUILD_ICE_APPLICATION)
