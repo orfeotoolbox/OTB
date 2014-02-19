@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <otbImageMetadataInterfaceFactory.h>
 #include "otbGlROIActor.h"
+#include "otbGlVectorActor.h"
 
 namespace otb
 {
@@ -81,6 +82,20 @@ void IceViewer::AddImage(const std::string & fname, const std::string & name)
   // TODO: Implement this
   // actor->UpdateColorBalance();
   
+  m_View->AddActor(actor,name);
+}
+
+void IceViewer::AddVector(const std::string & fname, const std::string & name)
+{
+  if(m_View.IsNull())
+    {
+    itkExceptionMacro("Viewer has not been initialized. Call Initialize method first.");
+    }
+
+  otb::GlVectorActor::Pointer actor = otb::GlVectorActor::New();
+  actor->Initialize(fname);
+  actor->SetVisible(true);
+
   m_View->AddActor(actor,name);
 }
 

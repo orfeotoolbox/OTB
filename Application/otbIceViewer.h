@@ -44,6 +44,8 @@ public:
 
   void AddImage(const std::string & fname, const std::string & name);
 
+  void AddVector(const std::string & fname, const std::string & name);
+
   void Initialize(unsigned int w, unsigned int h, const std::string & name = "OTB viewer for geeks");
 
   void Refresh();

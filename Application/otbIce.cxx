@@ -58,7 +58,21 @@ int main(int argc, char * argv[])
 
   for(unsigned int i = 1; i<argc;++i)
     {
-    viewer->AddImage(argv[i],argv[i]);
+    try
+      {
+      viewer->AddImage(argv[i],argv[i]);
+      }
+    catch(...)
+      {
+      try
+        {
+        viewer->AddVector(argv[i],argv[i]);
+        }
+      catch(...)
+        {
+        std::cerr<<"Could not open file "<<argv[i]<<" as an image or a vector, skipping."<<std::endl;
+        }
+      }
     }
 
   std::cout<<"Press F1 for help"<<std::endl;
