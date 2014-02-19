@@ -118,6 +118,23 @@ std::string GlView::AddActor(ActorType * actor, const std::string& key)
   return newKey;
 }
 
+bool GlView::RemoveActor(const std::string & key)
+{
+  if(m_Actors.count(key) == 0)
+    {
+    return false;
+    }
+
+  m_Actors.erase(key);
+
+  StringVectorType::iterator it = std::find(m_RenderingOrder.begin(),m_RenderingOrder.end(),key);
+
+  if(it!=m_RenderingOrder.end())
+    {
+    m_RenderingOrder.erase(it);
+    }
+}
+
 void GlView::ClearActors()
 {
   m_Actors.clear();
@@ -201,4 +218,24 @@ void GlView::MoveActorInRenderingOrder(std::string key, bool down)
     }
 }
 
+// Move actor to the end of rendering order (either front if front
+// is set to true or back if front is set to false)
+void GlView::MoveActorToEndOfRenderingOrder(std::string key, bool front)
+{
+  StringVectorType::iterator it = std::find(m_RenderingOrder.begin(),m_RenderingOrder.end(),key);
+
+  if(it!=m_RenderingOrder.end())
+    {
+    if(front)
+      {
+      m_RenderingOrder.erase(it);
+      m_RenderingOrder.insert(m_RenderingOrder.begin(),key);
+      }
+    else
+      {
+      m_RenderingOrder.erase(it);
+      m_RenderingOrder.push_back(key);
+      }
+    }
+}
 }

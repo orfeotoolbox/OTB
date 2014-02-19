@@ -48,6 +48,9 @@ public:
   // Add a new actor to the map
   std::string AddActor(ActorType * actor, const std::string & key = "");
 
+  // Remove an actor if exists
+  bool RemoveActor(const std::string & key);
+
   // Clear all actors
   void ClearActors();
 
@@ -85,6 +88,10 @@ public:
 
   // Move actor in rendering order
   void MoveActorInRenderingOrder(std::string key, bool down = false);
+
+  // Move actor to the end of rendering order (either front if front
+  // is set to true or back if front is set to false)
+  void MoveActorToEndOfRenderingOrder(std::string key, bool front = false);
 
 protected:
   GlView();
