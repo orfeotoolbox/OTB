@@ -38,14 +38,15 @@ typedef GLvoid (* FunctionPointerType)();
 
 
 // Static Combine callback for tesselation
-static void TesselationCombineCallback(GLdouble coords[2],
+static void TesselationCombineCallback(GLdouble coords[3],
                                                 GLdouble * /*data*/[4],
                                                 GLfloat /*weights*/[4],
                                                 GLdouble **dataOut)
 {
-  GLdouble * vertex = new GLdouble[2];
+  GLdouble * vertex = new GLdouble[3];
   vertex[0] = coords[0];
   vertex[1] = coords[1];
+  vertex[2] = 0;
   *dataOut = vertex;
 }
 
@@ -82,7 +83,8 @@ GlVectorActor::GlVectorActor()
     m_ViewportToVectorTransform(),
     m_VectorToViewportTransform(),
     m_OGRDataSource(),
-    m_InternalFeatures()
+    m_InternalFeatures(),
+    m_DisplayList(0)
     
 {
   m_Color.Fill(0);
@@ -104,6 +106,13 @@ GlVectorActor::~GlVectorActor()
 {
   // Delete tesselator
   gluDeleteTess(m_GluTesselator);
+
+  // Free the display list
+  if(m_DisplayList)
+    {
+    glDeleteLists(m_DisplayList,1);
+    }
+
 }
 
 void GlVectorActor::Initialize(const std::string & filename)
@@ -198,18 +207,21 @@ void GlVectorActor::UpdateData()
     }
 
   InternalFeaturesTransform();
+  UpdateDisplayList();
 }
 
-void GlVectorActor::Render()
+void GlVectorActor::UpdateDisplayList()
 {
-   glEnable(GL_BLEND);
-   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
-   glEnable(GL_LINE_SMOOTH);
-   glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Alpha);
-   
-   gluTessProperty(m_GluTesselator, GLU_TESS_BOUNDARY_ONLY, !m_Fill);
+  // Build display list
 
-   for(std::vector<InternalFeature>::iterator it = m_InternalFeatures.begin();
+  if(m_DisplayList == 0)
+    {
+    m_DisplayList = glGenLists (1);
+    }
+  
+  glNewList(m_DisplayList, GL_COMPILE);
+
+  for(std::vector<InternalFeature>::iterator it = m_InternalFeatures.begin();
       it!=m_InternalFeatures.end();++it)
     {
     const OGRGeometry * geom = it->m_RenderedFeature.GetGeometry();
@@ -244,9 +256,10 @@ void GlVectorActor::Render()
       
       for(unsigned int i = 0; i < inPolygon->getExteriorRing()->getNumPoints();++i)
         {
-        GLdouble * glp = new GLdouble[2];
+        GLdouble * glp = new GLdouble[3];
         glp[0] = inPolygon->getExteriorRing()->getX(i);
         glp[1] = inPolygon->getExteriorRing()->getY(i);
+        glp[2] = 0;
         vertices.push_back(glp);
 
         gluTessVertex(m_GluTesselator,glp,glp);
@@ -261,9 +274,10 @@ void GlVectorActor::Render()
 
         for(unsigned int i = 0; i < inPolygon->getInteriorRing(j)->getNumPoints();++i)
           {
-          GLdouble * glp = new GLdouble[2];
+          GLdouble * glp = new GLdouble[3];
           glp[0] = inPolygon->getInteriorRing(j)->getX(i);
           glp[1] = inPolygon->getInteriorRing(j)->getY(i);
+          glp[2] = 0;
           vertices.push_back(glp);
           
           gluTessVertex(m_GluTesselator,glp,glp);
@@ -283,6 +297,20 @@ void GlVectorActor::Render()
         }
       }
     }
+
+  glEndList();
+}
+
+void GlVectorActor::Render()
+{
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+   glEnable(GL_LINE_SMOOTH);
+   glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Alpha);
+   
+   gluTessProperty(m_GluTesselator, GLU_TESS_BOUNDARY_ONLY, !m_Fill);
+
+   glCallList(m_DisplayList);
 
    glDisable(GL_LINE_SMOOTH);
    glDisable(GL_BLEND);

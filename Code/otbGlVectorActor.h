@@ -98,6 +98,8 @@ private:
   void InternalFeaturesTransform();
 
   void UpdateTransforms();
+
+  void UpdateDisplayList();
  
   ColorType            m_Color;
   double               m_Alpha;
@@ -111,6 +113,8 @@ private:
   std::vector<InternalFeature> m_InternalFeatures;
 
   GLUtesselator * m_GluTesselator;
+
+  unsigned int m_DisplayList;
 
 }; // End class GlVectorActor
 
