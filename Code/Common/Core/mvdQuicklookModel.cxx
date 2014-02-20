@@ -75,6 +75,27 @@ QuicklookModel
 {
 }
 
+/*****************************************************************************/
+const DatasetModel*
+QuicklookModel
+::GetDatasetModel() const
+{
+  return const_cast< QuicklookModel* >( this )->GetDatasetModel();
+}
+
+/*****************************************************************************/
+DatasetModel*
+QuicklookModel
+::GetDatasetModel()
+{
+  VectorImageModel* imageModel = GetImageModel< VectorImageModel >();
+
+  if( imageModel==NULL )
+    return NULL;
+
+  return imageModel->GetDatasetModel();
+}
+
 /*******************************************************************************/
 void
 QuicklookModel

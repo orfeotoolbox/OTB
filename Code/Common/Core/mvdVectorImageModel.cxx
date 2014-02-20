@@ -102,6 +102,24 @@ VectorImageModel
 }
 
 /*****************************************************************************/
+const DatasetModel*
+VectorImageModel
+::GetDatasetModel() const
+{
+  // assert( GetParentModel()==GetParentModel< DatasetModel >() );
+  return GetParentModel< DatasetModel >();
+}
+
+/*****************************************************************************/
+DatasetModel*
+VectorImageModel
+::GetDatasetModel()
+{
+  // assert( GetParentModel()==GetParentModel< DatasetModel >() );
+  return GetParentModel< DatasetModel >();
+}
+
+/*****************************************************************************/
 void
 VectorImageModel
 ::SetFilename( const QString& filename , int w, int h)

@@ -1558,16 +1558,27 @@ MainWindow
 #if USE_ICE_IMAGE_VIEW
   if( vectorImageModel!=NULL )
     {
+    //
+    // Image-models.
     ImageViewWidget::VectorImageModelList images;
 
     images << vectorImageModel;
 
     m_ImageView->SetImageList( images );
 
+    //
+    // Quicklooks.
+    ImageViewWidget::VectorImageModelList quicklooks;
+
+    assert( vectorImageModel->GetQuicklookModel()!=NULL );
+    quicklooks << vectorImageModel->GetQuicklookModel();
+
+    qDebug() << quicklooks;
+
     ImageViewWidget* quicklookView = GetQuicklookView();
     assert( quicklookView!=NULL );
 
-    quicklookView->SetImageList( images );
+    quicklookView->SetImageList( quicklooks );
     }
 #endif // USE_ICE_IMAGE_VIEW
 

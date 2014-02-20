@@ -389,14 +389,14 @@ public:
    *
    * \return The parent DatasetModel.
    */
-  inline const DatasetModel* GetDatasetModel() const;
+  virtual const DatasetModel* GetDatasetModel() const;
 
   /**
    * \brief Get the parent DatasetModel.
    *
    * \return The parent DatasetModel.
    */
-  inline DatasetModel* GetDatasetModel();
+  virtual DatasetModel* GetDatasetModel();
 
   /** */
   static void EnsureValidImage( const QString& filename );
@@ -1306,24 +1306,6 @@ VectorImageModel::Settings
 
 namespace mvd
 {
-
-/*****************************************************************************/
-const DatasetModel*
-VectorImageModel
-::GetDatasetModel() const
-{
-  // assert( GetParentModel()==GetParentModel< DatasetModel >() );
-  return GetParentModel< DatasetModel >();
-}
-
-/*****************************************************************************/
-DatasetModel*
-VectorImageModel
-::GetDatasetModel()
-{
-  // assert( GetParentModel()==GetParentModel< DatasetModel >() );
-  return GetParentModel< DatasetModel >();
-}
 
 /*****************************************************************************/
 inline
