@@ -395,7 +395,7 @@ ImageViewManipulator
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
-  SetViewportSize( event->size().widget(), event->size().height() );
+  SetViewportSize( event->size().width(), event->size().height() );
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 }
 

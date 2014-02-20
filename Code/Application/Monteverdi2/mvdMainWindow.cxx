@@ -1573,7 +1573,7 @@ MainWindow
     assert( vectorImageModel->GetQuicklookModel()!=NULL );
     quicklooks << vectorImageModel->GetQuicklookModel();
 
-    qDebug() << quicklooks;
+    // qDebug() << quicklooks;
 
     ImageViewWidget* quicklookView = GetQuicklookView();
     assert( quicklookView!=NULL );
