@@ -95,6 +95,7 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
   otb::GlVectorActor::Pointer actor = otb::GlVectorActor::New();
   actor->Initialize(fname);
   actor->SetVisible(true);
+  actor->SetAlpha(0.5);
 
   m_View->AddActor(actor,name);
 }
@@ -257,7 +258,7 @@ void IceViewer::DrawHud()
       
       otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
       
-      oss<<"    Rendering: "<<"R="<<currentActor->GetRedIdx()<<":["<<shader->GetMinRed()<<", "<<shader->GetMaxRed()<<"] G="<<currentActor->GetGreenIdx()<<":["<<shader->GetMinGreen()<<", "<<shader->GetMaxGreen()<<"] B="<<currentActor->GetBlueIdx()<<":["<<shader->GetMinBlue()<<", "<<shader->GetMaxBlue()<<"]"<<"\n";
+      oss<<"    Rendering: "<<"R="<<currentActor->GetRedIdx()<<":["<<shader->GetMinRed()<<", "<<shader->GetMaxRed()<<"] G="<<currentActor->GetGreenIdx()<<":["<<shader->GetMinGreen()<<", "<<shader->GetMaxGreen()<<"] B="<<currentActor->GetBlueIdx()<<":["<<shader->GetMinBlue()<<", "<<shader->GetMaxBlue()<<"]"<<", gam="<<shader->GetGamma()<<", al="<<shader->GetAlpha()<<"\n";
       oss<<"    Shader: ";
       
       switch(shader->GetShaderType())
@@ -304,7 +305,7 @@ void IceViewer::DrawHud()
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<std::endl;
 
-      oss<<"    Fill: "<<(currentVectorActor->GetFill()?"On":"Off")<<"\n";
+      oss<<"    Fill: "<<(currentVectorActor->GetFill()?"On":"Off")<<", Solid border: "<<(currentVectorActor->GetSolidBorder()?"On":"Off")<<", al="<<currentVectorActor->GetAlpha()<<", lw="<<currentVectorActor->GetLineWidth()<<"\n";
       oss<<"\n"<<"\n";
       }
 
@@ -392,7 +393,7 @@ void IceViewer::DrawHelp()
   oss<<"- Zoom in/out with CTRL + mouse wheel"<<std::endl;
   oss<<std::endl;
 
-  oss<<"Multiple images handling:"<<std::endl;
+  oss<<"Multiple images and vectors handling:"<<std::endl;
   oss<<"- Rotate rendering order with mouse wheel (order displayed in image list)"<<std::endl;
   oss<<"- Change selected image with PAGE UP / PAGE DOWN (note that selected dataset is highlighted with [ ]"<<std::endl;
   oss<<"- Show/hide image dataset with space bar"<<std::endl;
@@ -414,6 +415,13 @@ void IceViewer::DrawHelp()
   oss<<"- Switch to local transparency with U key. In this mode, use right SHIFT + mouse wheel to adjust gain and left ALT + mouse wheel to adjust circle radius."<<std::endl;
   oss<<"- Switch to chessboard transparency with C key. In this mode, use left ALT + mouse wheel to change chessboard grid size."<<std::endl;
   oss<<"- Switch to vertical swipe transparency with S key. Press S again to change to horizontal swipe transparency. In this mode, hoover with mouse to swipe."<<std::endl;
+  oss<<std::endl;
+  
+  oss<<"Vector layers controls:"<<std::endl;
+  oss<<"- Enable/disable fill polygon mode with F key"<<std::endl;
+  oss<<"- Enable/disable solid border mode with S key"<<std::endl;
+  oss<<"- Tune alpha (transparancy) value with LEFT CTRL + mouse wheel"<<std::endl;
+  oss<<"- Tune line width with RIGHT SHIFT + mouse wheel"<<std::endl;
   
   // Find the size of the help
   std::string help_string = oss.str();
@@ -605,7 +613,14 @@ bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, doub
   if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
      {
      currentVectorActor->SetAlpha(currentVectorActor->GetAlpha()/factor);
+     return true;
      }
+
+  if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    {
+    currentVectorActor->SetLineWidth(currentVectorActor->GetLineWidth()/factor);
+    return true;
+    }
 
   return false;
 }
@@ -1018,6 +1033,14 @@ if(key == GLFW_KEY_F && action == GLFW_PRESS)
   currentActor->SetFill(!currentActor->GetFill());
   return true;
   }
+
+if(key == GLFW_KEY_S && action == GLFW_PRESS)
+  {
+  otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+  currentActor->SetSolidBorder(!currentActor->GetSolidBorder());
+  return true;
+  }
+
 return false;
 }
 

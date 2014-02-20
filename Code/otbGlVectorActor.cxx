@@ -80,11 +80,14 @@ GlVectorActor::GlVectorActor()
   : m_Color(),
     m_Alpha(1.0),
     m_Fill(true),
+    m_SolidBorder(true),
+    m_LineWidth(1.0),
     m_ViewportToVectorTransform(),
     m_VectorToViewportTransform(),
     m_OGRDataSource(),
     m_InternalFeatures(),
     m_DisplayList(0),
+    m_DisplayListNeedsRebuild(true),
     m_ExtentULX(0),
     m_ExtentULY(0),
     m_ExtentLRX(0),
@@ -117,6 +120,24 @@ GlVectorActor::~GlVectorActor()
     glDeleteLists(m_DisplayList,1);
     }
 
+}
+
+void GlVectorActor::SetFill(bool flag)
+{
+  if(m_Fill != flag)
+    {
+    m_DisplayListNeedsRebuild = true;
+    m_Fill = flag;
+    }
+}
+
+void GlVectorActor::SetSolidBorder(bool flag)
+{
+  if(m_SolidBorder != flag)
+    {
+    m_DisplayListNeedsRebuild = true;
+    m_SolidBorder = flag;
+    }
 }
 
 void GlVectorActor::Initialize(const std::string & filename)
@@ -238,8 +259,6 @@ void GlVectorActor::UpdateDisplayList()
   
   glNewList(m_DisplayList, GL_COMPILE);
 
-  gluTessProperty(m_GluTesselator, GLU_TESS_BOUNDARY_ONLY, !m_Fill);
-
   for(std::vector<InternalFeature>::iterator it = m_InternalFeatures.begin();
       it!=m_InternalFeatures.end();++it)
     {
@@ -265,8 +284,11 @@ void GlVectorActor::UpdateDisplayList()
       }
     else if(inPolygon)
       {
+      
+      
       std::vector<GLdouble *> vertices;
 
+      gluTessProperty(m_GluTesselator, GLU_TESS_BOUNDARY_ONLY, !m_Fill);
       // Begin a new polygon
       gluTessBeginPolygon(m_GluTesselator, NULL);
       
@@ -308,7 +330,55 @@ void GlVectorActor::UpdateDisplayList()
        // End the polygon
       gluTessEndPolygon(m_GluTesselator);
 
+      if(m_SolidBorder)
+        {
+        glDisable(GL_BLEND);
 
+        gluTessProperty(m_GluTesselator, GLU_TESS_BOUNDARY_ONLY, true);
+        // Begin a new polygon
+        gluTessBeginPolygon(m_GluTesselator, NULL);
+        
+        // Render the outer boundary
+        gluTessBeginContour(m_GluTesselator);
+        
+        for(unsigned int i = 0; i < inPolygon->getExteriorRing()->getNumPoints();++i)
+          {
+          GLdouble * glp = new GLdouble[3];
+          glp[0] = inPolygon->getExteriorRing()->getX(i);
+          glp[1] = inPolygon->getExteriorRing()->getY(i);
+          glp[2] = 0;
+          vertices.push_back(glp);
+          
+          gluTessVertex(m_GluTesselator,glp,glp);
+          }
+        
+        // End the outer boundary contour
+        gluTessEndContour(m_GluTesselator);
+      
+        for(unsigned int j = 0; j < inPolygon->getNumInteriorRings();++j)
+          {        
+          gluTessBeginContour(m_GluTesselator);
+          
+          for(unsigned int i = 0; i < inPolygon->getInteriorRing(j)->getNumPoints();++i)
+          {
+          GLdouble * glp = new GLdouble[3];
+          glp[0] = inPolygon->getInteriorRing(j)->getX(i);
+          glp[1] = inPolygon->getInteriorRing(j)->getY(i);
+          glp[2] = 0;
+          vertices.push_back(glp);
+          
+          gluTessVertex(m_GluTesselator,glp,glp);
+          }
+          
+          gluTessEndContour(m_GluTesselator);
+          }
+      // End the polygon
+        gluTessEndPolygon(m_GluTesselator);
+        
+        glEnable(GL_BLEND);
+        
+        }
+      
       // free vertices
       for(std::vector<GLdouble *>::iterator it = vertices.begin();it!=vertices.end();++it)
         {
@@ -316,15 +386,23 @@ void GlVectorActor::UpdateDisplayList()
         }
       }
     }
-
+  
   glEndList();
+  
+  m_DisplayListNeedsRebuild = false;
 }
 
 void GlVectorActor::Render()
 {
+  if(m_DisplayListNeedsRebuild)
+    {
+    UpdateDisplayList();
+    }
+
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
    glEnable(GL_LINE_SMOOTH);
+   glLineWidth(m_LineWidth);
    glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Alpha);
    
    glCallList(m_DisplayList);

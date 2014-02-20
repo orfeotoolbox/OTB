@@ -67,9 +67,16 @@ public:
   itkSetMacro(Alpha,double);
   itkGetConstReferenceMacro(Alpha,double);
 
-  itkSetMacro(Fill,bool);
+  void SetFill(bool flag);
   itkGetMacro(Fill,bool);
   itkBooleanMacro(Fill);
+
+  void SetSolidBorder(bool flag);
+  itkGetMacro(SolidBorder,bool);
+  itkBooleanMacro(SolidBorder);
+
+  itkSetMacro(LineWidth,double);
+  itkGetConstReferenceMacro(LineWidth,double);
 
 protected:
   GlVectorActor();
@@ -104,6 +111,8 @@ private:
   ColorType            m_Color;
   double               m_Alpha;
   bool                 m_Fill;
+  bool                 m_SolidBorder;
+  double               m_LineWidth;
   
   RSTransformType::Pointer m_ViewportToVectorTransform;
   RSTransformType::Pointer m_VectorToViewportTransform;
@@ -115,6 +124,7 @@ private:
   GLUtesselator * m_GluTesselator;
 
   unsigned int m_DisplayList;
+  bool m_DisplayListNeedsRebuild;
 
   double m_ExtentULX;
   double m_ExtentULY;
