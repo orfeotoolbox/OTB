@@ -90,42 +90,11 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
-::virtual_MousePressEvent(QMouseEvent * event)
+::ResizeEvent( QResizeEvent* event )
 {
-}
+  ImageViewManipulator::ResizeEvent( event );
 
-/******************************************************************************/
-void
-QuicklookViewManipulator
-::virtual_MouseMoveEvent( QMouseEvent * event)
-{
-}
-
-/******************************************************************************/
-void
-QuicklookViewManipulator
-::virtual_MouseReleaseEvent(  QMouseEvent * event)
-{
-}
-
-/******************************************************************************/
-void QuicklookViewManipulator
-::virtual_ResizeEvent( QResizeEvent * event )
-{
-}
-
-/******************************************************************************/
-void
-QuicklookViewManipulator
-::virtual_WheelEvent(  QWheelEvent * event)
-{
-}
-
-/******************************************************************************/
-void
-QuicklookViewManipulator
-::virtual_KeyPressEvent( QKeyEvent* event )
-{
+  emit ZoomToExtent();
 }
 
 /*****************************************************************************/

@@ -117,7 +117,8 @@ ImageViewWidget
 /*******************************************************************************/
 void
 ImageViewWidget
-::SetImageList( const AbstractImageViewRenderer::VectorImageModelList& images )
+::SetImageList( const VectorImageModelList& images,
+                ZoomType zoom )
 {
   //
   // Setup image-view settings to reference image-model data.
@@ -148,7 +149,11 @@ ImageViewWidget
 
   //
   // Center view on center of reference image-model.
-  Center();
+  Center( zoom );
+
+  //
+  // Update view.
+  // updateGL();
 }
 
 /*******************************************************************************/
@@ -180,6 +185,18 @@ ImageViewWidget
     m_Manipulator, SIGNAL( RefreshView() ),
     // to:
     this, SLOT( updateGL() )
+  );
+
+  QObject::connect(
+    m_Manipulator, SIGNAL( ZoomToExtent() ),
+    // to:
+    this, SLOT( ZoomToExtent() )
+  );
+
+  QObject::connect(
+    m_Manipulator, SIGNAL( ZoomToFullResolution() ),
+    // to:
+    this, SLOT( ZoomToFullResolution() )
   );
 }
 

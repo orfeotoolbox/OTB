@@ -96,6 +96,10 @@ public:
   /** \brief Destructor. */
   virtual ~QuicklookViewManipulator();
 
+  /**
+   */
+  virtual void ResizeEvent( QResizeEvent * event );
+
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
 //
@@ -113,25 +117,6 @@ signals:
 //
 // Protected methods.
 protected:
-
-  /**
-   */
-  virtual void virtual_MouseMoveEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void virtual_MousePressEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void virtual_MouseReleaseEvent( QMouseEvent * event );
-  /**
-   */
-  virtual void virtual_WheelEvent( QWheelEvent* event);
-  /**
-   */
-  virtual void virtual_ResizeEvent( QResizeEvent * event );
-  /**
-   */
-  virtual void virtual_KeyPressEvent( QKeyEvent * event );
 
 //
 // Protected attributes.

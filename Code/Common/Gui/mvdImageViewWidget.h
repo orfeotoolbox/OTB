@@ -84,6 +84,17 @@ public:
   typedef
     AbstractImageViewRenderer::VectorImageModelList
     VectorImageModelList;
+  /**
+   */
+  enum ZoomType
+  {
+    ZOOM_TYPE_NONE = -1,
+    //
+    ZOOM_TYPE_FULL,
+    ZOOM_TYPE_EXTENT,
+    //
+    ZOOM_TYPE_COUNT
+  };
 
 //
 // Public methods.
@@ -116,7 +127,8 @@ public:
 
   /**
    */
-  void SetImageList( const VectorImageModelList& );
+  void SetImageList( const VectorImageModelList& images,
+                     ZoomType zoom =ZOOM_TYPE_NONE );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -176,17 +188,6 @@ protected:
 //
 // Private types.
 private:
-  /**
-   */
-  enum ZoomType
-  {
-    ZOOM_TYPE_NONE = -1,
-    //
-    ZOOM_TYPE_FULL,
-    ZOOM_TYPE_EXTENT,
-    //
-    ZOOM_TYPE_COUNT
-  };
 
 //
 // Private methods.

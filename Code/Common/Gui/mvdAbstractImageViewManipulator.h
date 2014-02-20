@@ -166,6 +166,12 @@ signals:
   /**
    */
   void RefreshView();
+  /**
+   */
+  void ZoomToExtent();
+  /**
+   */
+  void ZoomToFullResolution();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

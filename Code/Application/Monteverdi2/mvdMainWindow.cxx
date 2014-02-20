@@ -1564,7 +1564,7 @@ MainWindow
 
     images << vectorImageModel;
 
-    m_ImageView->SetImageList( images );
+    m_ImageView->SetImageList( images, ImageViewWidget::ZOOM_TYPE_FULL );
 
     //
     // Quicklooks.
@@ -1578,7 +1578,7 @@ MainWindow
     ImageViewWidget* quicklookView = GetQuicklookView();
     assert( quicklookView!=NULL );
 
-    quicklookView->SetImageList( quicklooks );
+    quicklookView->SetImageList( quicklooks, ImageViewWidget::ZOOM_TYPE_EXTENT );
     }
 #endif // USE_ICE_IMAGE_VIEW
 
