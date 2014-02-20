@@ -506,6 +506,7 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
 {
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
   otb::GlImageActor::Pointer currentImageActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+  otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
   // Handle zoom
   if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
@@ -522,17 +523,17 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
     
     m_View->GetSettings()->Zoom(zoomCenter,factor);
     }
-  else if(currentImageActor.IsNotNull())
-    {
-    this->scroll_callback_image(window, xoffset, yoffset);
-    }
-   else
+  else if(currentImageActor.IsNotNull() && this->scroll_callback_image(window, xoffset, yoffset))
+    {}
+  else if(currentVectorActor.IsNotNull() && this->scroll_callback_vector(window, xoffset, yoffset))
+    {}
+  else    
      {
      m_View->RotateRenderingOrder(yoffset>0);
      }
 }
 
-void IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, double yoffset)
+bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, double yoffset)
 {
   double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
   otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
@@ -548,10 +549,12 @@ void IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
       shader->SetMaxRed(shader->GetMaxRed()*factor);
       shader->SetMaxGreen(shader->GetMaxGreen()*factor);
       shader->SetMaxBlue(shader->GetMaxBlue()*factor);
+      return true;
       }
     else if(shader->GetShaderType() == SHADER_LOCAL_CONTRAST)
       {
       shader->SetLocalContrastRange(shader->GetLocalContrastRange()*factor);
+      return true;
       }
     }
    else if(glfwGetKey(window,GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
@@ -579,16 +582,34 @@ void IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
       //   shader->SetSliderPosition(shader->GetSliderPosition()+(yoffset>0?-25:-25));
       //   break;
       }
+        return true;
     }
    else if(glfwGetKey(window,GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
      {
      shader->SetGamma(shader->GetGamma()/factor);
+     return true;
      }
    else if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
      {
      shader->SetAlpha(shader->GetAlpha()/factor);  
+     return true;
      }
+  return false;
 }
+
+bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, double yoffset)
+{ 
+  double factor = (yoffset>0) ? 1/m_Factor : m_Factor;
+  otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+
+  if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
+     {
+     currentVectorActor->SetAlpha(currentVectorActor->GetAlpha()/factor);
+     }
+
+  return false;
+}
+
 
 void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypos)
 {
@@ -657,8 +678,6 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
     }
 }
 
-void IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, double yoffset)
-{}
 
 void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -781,7 +800,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
 }
 
-void IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods)
+bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
   // Switch shader mode
   if(key == GLFW_KEY_L && action == GLFW_PRESS)
@@ -988,17 +1007,18 @@ if(key == GLFW_KEY_V && action == GLFW_PRESS)
        m_View->RemoveActor(key);
        }
      }
+   return false;
 }
 
-void IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods)
+bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 if(key == GLFW_KEY_F && action == GLFW_PRESS)
   {
   otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
   currentActor->SetFill(!currentActor->GetFill());
+  return true;
   }
-
-
+return false;
 }
 
 void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int action, int mode)
