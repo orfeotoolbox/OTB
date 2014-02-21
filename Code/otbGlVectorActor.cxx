@@ -145,12 +145,13 @@ void GlVectorActor::Initialize(const std::string & filename)
   // Open the data source
   m_OGRDataSource = otb::ogr::DataSource::New(filename,otb::ogr::DataSource::Modes::Read);
 
+  UpdateTransforms();
 }
 
 void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
   PointType ul,lr,ur,ll, vpul,vplr, vpll, vpur;
-  m_OGRDataSource->GetGlobalExtent(ul[0],ul[1],lr[0],lr[1]);
+  m_OGRDataSource->GetGlobalExtent(ul[0],ul[1],lr[0],lr[1],true);
   ur=ul;
   ur[0]=lr[0];
   ll=lr;
@@ -166,6 +167,16 @@ void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double &
   uly = std::min(std::min(vpul[1],vplr[1]),std::min(vpur[1],vpll[1]));
   lrx = std::max(std::max(vpul[0],vplr[0]),std::max(vpur[0],vpll[0]));
   lry = std::max(std::max(vpul[1],vplr[1]),std::max(vpur[1],vpll[1]));
+}
+
+std::string GlVectorActor::GetWkt() const
+{
+  if(m_OGRDataSource.IsNotNull())
+    {
+    return m_OGRDataSource->GetLayer(0).GetProjectionRef();
+    }
+
+  return "";
 }
 
 void GlVectorActor::ProcessViewSettings()

@@ -184,23 +184,42 @@ void IceViewer::Start()
   
   std::string firstActorKey = renderingOrder.front();
   otb::GlImageActor::Pointer firstActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(firstActorKey).GetPointer());
+  otb::GlVectorActor::Pointer firstVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(firstActorKey).GetPointer());
+  
+  double ulx,uly,lrx,lry;
 
-  m_View->GetSettings()->SetOrigin(firstActor->GetOrigin());
-  m_View->GetSettings()->SetSpacing(firstActor->GetSpacing());
-  m_View->GetSettings()->SetWkt(firstActor->GetWkt());
-  m_View->GetSettings()->SetKeywordList(firstActor->GetKwl());
-  m_View->GetSettings()->UseProjectionOn();
+  if(firstActor.IsNotNull())
+    {
+    m_View->GetSettings()->SetOrigin(firstActor->GetOrigin());
+    m_View->GetSettings()->SetSpacing(firstActor->GetSpacing());
+    m_View->GetSettings()->SetWkt(firstActor->GetWkt());
+    m_View->GetSettings()->SetKeywordList(firstActor->GetKwl());
+    m_View->GetSettings()->UseProjectionOn();
+    firstActor->ProcessViewSettings();
+    firstActor->GetExtent(ulx,uly,lrx,lry);
+    }
+  else if(firstVectorActor.IsNotNull())
+    {
+    m_View->GetSettings()->SetWkt(firstVectorActor->GetWkt());
+    m_View->GetSettings()->UseProjectionOn();
+    firstVectorActor->ProcessViewSettings();
+    firstVectorActor->GetExtent(ulx,uly,lrx,lry);
+    }
 
   m_SelectedActor = firstActorKey;
-  m_ReferenceActor = firstActorKey;
- 
-   double ulx,uly,lrx,lry;
-   firstActor->GetExtent(ulx,uly,lrx,lry);
+  m_ReferenceActor = firstActorKey; 
 
    otb::ViewSettings::PointType center;
    center[0] = 0.5*(ulx+lrx);
    center[1] = 0.5*(uly+lry);
+
+   double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
+   double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
    
+   otb::ViewSettings::SpacingType spacing;
+   spacing.Fill(std::min(spacingx,spacingy));
+
+   m_View->GetSettings()->SetSpacing(spacing);
    m_View->GetSettings()->Center(center);
 
    // Start events loop

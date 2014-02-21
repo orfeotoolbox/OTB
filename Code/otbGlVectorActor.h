@@ -78,6 +78,8 @@ public:
   itkSetMacro(LineWidth,double);
   itkGetConstReferenceMacro(LineWidth,double);
 
+  std::string GetWkt() const;
+
 protected:
   GlVectorActor();
   
