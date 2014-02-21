@@ -1,9 +1,9 @@
-OTB-v.4.0 - Changes since version 3.20 (2013/02/19)
+OTB-v.4.0 - Changes since version 3.20 (2013/02/21)
 --------------------------------------------------------
 
-* Library
+* Library:
 
-  * Core
+  * Core:
     * Change OTB API to support ITK with version 4.5 (More information is available in the migration guide at http://wiki.orfeo-toolbox.org/index.php/Migration_guide_OTBv4)
     * Refactoring otbAttributesMapOpeningLabelMapFilter to be compatible with ITKv4.5.0
     * Remove Visualization part from OTB: all these projects are now in Monteverdi
@@ -19,15 +19,16 @@ OTB-v.4.0 - Changes since version 3.20 (2013/02/19)
     * Remove unused OTB_USE_SYSTEM_VXL and OTB_VXL_DIR from OTBConfig and UseOTB
     * Improve support of VS2013
     * Improve support of large files
+    * Support of MacOSX 10.9
 
-  * Testing
+  * Testing:
     * Correct multibaseline support
     * Move test related to amplitude and phase functor from visualization to basic filters
 
-  * CMake 
+  * CMake: 
     * Use modern CMake style: no block-end arguments and all CMake command to lower case format
 
-  * ThirdParties
+  * ThirdParties:
     * OTB support now ITK with version greater to 4.5.0 (internal and external)
     * Remove FLTK dependency
     * Remove GETTEXT dependency
@@ -37,17 +38,24 @@ OTB-v.4.0 - Changes since version 3.20 (2013/02/19)
     * Deactivate the possibility offered by CURL to download multiple files in parallel
     * Support mapnik 2.2
 
-* Applications
+* Applications:
 
-  * Updated applications :
+  * Updated applications:
     * Remove dependency of Colormapping to Visualization class
     * Adding gamma correction method the convert application 
-  * Core framework :
+  * Core framework:
     * Improve the support of XML parameters input/output file
     * Improve the input VectorData/Image/Filename parameter to give access to m_Input attribute
 
-* Bugs fixed :
-  * OTB-applications
+* Monteverdi:
+    * Support OTB-ITKv4 API
+    * Integrate FLTK visualization framework into Monteverdi from OTB and offers the possiblitity to use it into external project.
+    * Support of MacOSX 10.9 compilation
+    * Improve support of Windows platform for otbViewer
+    * Remove intertionalisation test from Monteverdi
+
+* Bugs fixed:
+  * OTB-applications:
     * 0000884: InputImage parameter in java wrappers didn't overload the input parameters provided by input XML file
     * 0000883: InputImageList parameter in pyhton wrappers didn't overload the input parameters provided by input XML file
     * 0000873: BandMath application in gui mode "Save to xml" option doesn't save "exp" parameter
@@ -55,7 +63,7 @@ OTB-v.4.0 - Changes since version 3.20 (2013/02/19)
     * 0000824: otbgui_Orthorectification : changing the input image does not update UTM parameters
     * 0000881: GenerateRPCSensorModel application generate stats file with wrong elevation value
 
-  * OTB-lib
+  * OTB-lib:
     * 0000878: apTvDmStereoFramework fails with muParser 2.2
     * 0000850: apTvDmBlockMatchingTest Parser error Unexpected token if
     * 0000862: Cannot build OTB with mapnik 2.2
@@ -64,7 +72,7 @@ OTB-v.4.0 - Changes since version 3.20 (2013/02/19)
     * 0000861: CMake detects mapnik 2.2.0 as mapnik 0.7
     * 0000859: Unable to compile OTB trunk with external ITK trunk
 
-  * Orfeo Toolbox (OTB)
+  * Orfeo Toolbox (OTB):
     * 0000849: otbgui applications scrambled file names
     * 0000863: ConvertSensorToGeoPoint  application in GUI mode execute button is not activate even if all parameters seem to be filled
     * 0000872: Internal ITK 4.4.2 and ITK 4.5.0 source codes are mixed together in the OTB internal ITK source directory
@@ -72,7 +80,7 @@ OTB-v.4.0 - Changes since version 3.20 (2013/02/19)
     * 0000830: otb::PolyLineImageConstIterator returns reference to temporary variable
     * 0000823: problem with python wrapper for otbApplication 'rasterization'
 
-  * Documentation
+  * Documentation:
     * 0000838: ITK classes disappeared from doxygen during migration to ITK 4.x
 
 OTB-v.3.20 - Changes since version 3.18.1 (2013/11/13)
