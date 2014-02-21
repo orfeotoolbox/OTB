@@ -2495,22 +2495,6 @@ add_test(bfTvNAPCAImageFilter4
 
 ### MNF ###
 
-# Test the direct transform, reducing dimensionnality
-add_test(bfTvMNFImageFilter4
-         ${BASICFILTERS_TESTS13}
-         --compare-n-images ${EPSILON_7} 2
-             ${BASELINE}/bfTvMNFImageFilter4.tif
-             ${TEMP}/bfTvMNFImageFilter4.tif
-             ${BASELINE}/bfTvMNFImageFilter4Inv.tif
-             ${TEMP}/bfTvMNFImageFilter4Inv.tif
-         otbMNFImageFilterTest
-         -in ${INPUTDATA}/cupriteSubHsi.tif
-         -out ${TEMP}/bfTvMNFImageFilter4.tif
-         -inv ${TEMP}/bfTvMNFImageFilter4Inv.tif
-         -norm
-         -n 4)
-
-
 # Test input->MNF->inverse MNF
 add_test(bfTvMNFImageFilter1
          ${BASICFILTERS_TESTS13}
