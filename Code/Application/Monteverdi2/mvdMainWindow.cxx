@@ -1568,6 +1568,12 @@ MainWindow
 
     //
     // Quicklooks.
+    ImageViewWidget* quicklookView = GetQuicklookView();
+    assert( quicklookView!=NULL );
+
+#if 1
+    quicklookView->SetImageList( images, ImageViewWidget::ZOOM_TYPE_EXTENT );
+#else
     ImageViewWidget::VectorImageModelList quicklooks;
 
     assert( vectorImageModel->GetQuicklookModel()!=NULL );
@@ -1575,10 +1581,9 @@ MainWindow
 
     // qDebug() << quicklooks;
 
-    ImageViewWidget* quicklookView = GetQuicklookView();
-    assert( quicklookView!=NULL );
-
     quicklookView->SetImageList( quicklooks, ImageViewWidget::ZOOM_TYPE_EXTENT );
+#endif
+
     }
 #endif // USE_ICE_IMAGE_VIEW
 

@@ -393,7 +393,7 @@ ImageViewManipulator
   qDebug() << size[ 0 ] << "," << size[ 1 ] << "\t" << event->size();
   */
 
-#if USE_VIEW_SETTINGS_SIDE_EFFECT
+#if USE_VIEW_SETTINGS_SIDE_EFFECT 
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
   SetViewportSize( event->size().width(), event->size().height() );
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT

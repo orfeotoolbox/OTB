@@ -423,6 +423,7 @@ ImageViewWidget
   if( zoom==ZOOM_TYPE_FULL ||
       zoom==ZOOM_TYPE_EXTENT )
     {
+    m_Manipulator->SetOrigin( imageModel->GetOrigin() );
     m_Manipulator->SetSpacing( imageModel->GetSpacing() );
     }
 
