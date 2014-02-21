@@ -308,7 +308,7 @@ public:
     return this->GetFilter()->GetInput();
   }
 
-  /** Return the computed Mean. */
+  /** Return the computed Minimum. */
   RealPixelType GetMinimum() const
   {
     return this->GetFilter()->GetMinimumOutput()->Get();
@@ -322,7 +322,7 @@ public:
     return this->GetFilter()->GetMinimumOutput();
   }
 
-  /** Return the computed Mean. */
+  /** Return the computed Maximum. */
   RealPixelType GetMaximum() const
   {
     return this->GetFilter()->GetMaximumOutput()->Get();
@@ -350,7 +350,7 @@ public:
     return this->GetFilter()->GetMeanOutput();
   }
 
-  /** Return the computed Mean. */
+  /** Return the computed Sum. */
   RealPixelType GetSum() const
   {
     return this->GetFilter()->GetSumOutput()->Get();
