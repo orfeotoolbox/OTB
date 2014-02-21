@@ -18,8 +18,8 @@
 #ifndef __otbStreamingResampleImageFilter_txx
 #define __otbStreamingResampleImageFilter_txx
 
-#include "otbImageFileWriter.h"
-
+#include "otbStreamingResampleImageFilter.h"
+#include "itkNumericTraits.h"
 #include "itkProgressAccumulator.h"
 
 namespace otb
@@ -35,7 +35,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 
   // Initialize the displacement field spacing to zero : inconsistant
   // value
-  this->SetDisplacementFieldSpacing(itk::NumericTraits<SpacingType>::Zero);
+  this->SetDisplacementFieldSpacing(itk::NumericTraits<SpacingType>::ZeroValue());
 
   // Wire minipipeline
   m_WarpFilter->SetDisplacementField(m_DisplacementFilter->GetOutput());
@@ -79,7 +79,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   outputPtr->SetLargestPossibleRegion(region);
 
   // check the output spacing of the displacement field
-  if(this->GetDisplacementFieldSpacing()== itk::NumericTraits<SpacingType>::Zero)
+  if(this->GetDisplacementFieldSpacing()== itk::NumericTraits<SpacingType>::ZeroValue())
     {
     this->SetDisplacementFieldSpacing(2.*this->GetOutputSpacing());
     }

@@ -303,7 +303,10 @@ public:                                                                  \
     } \
   static ComponentType GetScalarValue(const TargetType& pixel)           \
     {                                                                    \
-    return std::norm(pixel);                                             \
+      /*issue with std::norm on Mac OS X Mavericks*/  \
+      /*return std::norm(pixel); */ \
+      return static_cast<ComponentType>( pixel.real()*pixel.real() \
+                                         +pixel.imag()*pixel.imag() ); \
     }                                                                    \
 };                                                                       \
 
