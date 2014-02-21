@@ -88,6 +88,43 @@ QuicklookViewManipulator
 }
 
 /******************************************************************************/
+/*
+void
+QuicklookViewManipulator
+::MousePressEvent( QMouseEvent* event )
+{
+  assert( event!=NULL );
+
+  // qDebug() << this << ":" << event;
+}
+*/
+
+/******************************************************************************/
+void
+QuicklookViewManipulator
+::MouseMoveEvent( QMouseEvent* event)
+{
+  assert( event!=NULL );
+
+  // qDebug() << this << ":" << event;
+
+  Qt::MouseButtons buttons = event->buttons();
+  Qt::KeyboardModifiers modifiers = event->modifiers();
+}
+
+/******************************************************************************/
+/*
+void
+QuicklookViewManipulator
+::MouseReleaseEvent( QMouseEvent* event)
+{
+  assert( event!=NULL );
+
+  // qDebug() << this << ":" << event;
+}
+*/
+
+/******************************************************************************/
 void
 QuicklookViewManipulator
 ::ResizeEvent( QResizeEvent* event )
@@ -95,6 +132,34 @@ QuicklookViewManipulator
   ImageViewManipulator::ResizeEvent( event );
 
   emit ZoomToExtent();
+}
+
+/******************************************************************************/
+void
+QuicklookViewManipulator
+::WheelEvent( QWheelEvent* event )
+{
+  assert( event!=NULL );
+}
+
+/******************************************************************************/
+void
+QuicklookViewManipulator
+::KeyPressEvent( QKeyEvent* event )
+{
+  assert( event!=NULL );
+
+  // qDebug() << this << "::KeyPressEvent(" << event << ")";
+}
+
+/******************************************************************************/
+void
+QuicklookViewManipulator
+::KeyReleaseEvent( QKeyEvent* event )
+{
+  assert( event!=NULL );
+
+  // qDebug() << this << "::KeyPressEvent(" << event << ")";
 }
 
 /*****************************************************************************/

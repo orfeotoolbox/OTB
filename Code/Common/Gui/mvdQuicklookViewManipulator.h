@@ -96,9 +96,22 @@ public:
   /** \brief Destructor. */
   virtual ~QuicklookViewManipulator();
 
-  /**
-   */
+  //
+  // ImageViewRenderer overloads.
+
+  virtual void MouseMoveEvent( QMouseEvent* event );
+
+  // virtual void MousePressEvent( QMouseEvent* event );
+
+  // virtual void MouseReleaseEvent( QMouseEvent* event );
+
+  virtual void WheelEvent( QWheelEvent* event);
+
   virtual void ResizeEvent( QResizeEvent * event );
+
+  virtual void KeyPressEvent( QKeyEvent* event );
+
+  virtual void KeyReleaseEvent( QKeyEvent* event );
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
