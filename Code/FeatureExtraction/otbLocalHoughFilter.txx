@@ -19,8 +19,6 @@
 #define __otbLocalHoughFilter_txx
 
 #include "otbLocalHoughFilter.h"
-
-#include "otbImageFileWriter.h"
 #include "otbImage.h"
 
 namespace otb

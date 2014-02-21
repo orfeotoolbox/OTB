@@ -25,7 +25,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
-#include "otbImageFileWriter.h"
 
 namespace otb
 {

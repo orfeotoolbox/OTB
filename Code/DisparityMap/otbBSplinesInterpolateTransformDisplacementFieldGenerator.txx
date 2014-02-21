@@ -25,7 +25,6 @@
 #include "otbImage.h"
 #include "otbMacro.h"
 #include "otbMath.h"
-#include "otbImageFileWriter.h"
 
 namespace otb
 {

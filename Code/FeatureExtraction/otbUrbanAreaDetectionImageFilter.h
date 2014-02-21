@@ -36,10 +36,6 @@
 #include "otbVectorImageToIntensityImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
 
-// POUR TEST
-#include "otbImageFileWriter.h"
-#include "itkMultiplyImageFilter.h"
-
 namespace otb
 {
 
