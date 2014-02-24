@@ -248,7 +248,17 @@ void GlImageActor::Render()
 
      glEnable(GL_TEXTURE_2D);  
      glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
-     
+
+     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
+     if(m_CurrentResolution == 1)
+       {
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+       }
+     else
+       {
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+       }
+
      // Reset color before rendering
      glColor3d(1.0f,1.0f,1.0f);
      
@@ -303,8 +313,6 @@ void GlImageActor::LoadTile(Tile& tile)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 #endif
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 // #if defined(GL_CLAMP_TO_BORDER)      
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
