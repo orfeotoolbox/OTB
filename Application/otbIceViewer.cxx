@@ -388,7 +388,7 @@ void IceViewer::DrawHud()
         ++it;
         }
 
-      oss<<"    Color: "<<(it!=m_ColorMap.end()?it->first:"custom")<<"\n";
+      oss<<"    Color: "<<(it!=m_ColorMap.end()?it->first:"custom");
 
       oss<<"\n"<<"\n";
       }
@@ -431,7 +431,7 @@ void IceViewer::DrawHud()
     }
   
   double hud_width = 8*max_line_widh;
-  double hud_height = 13*nbline;
+  double hud_height = 14*nbline;
   hudposx = 10;
   hudposy = m_View->GetSettings()->GetViewportSize()[1]-hud_height-10;
   
@@ -506,6 +506,7 @@ void IceViewer::DrawHelp()
   oss<<"- Enable/disable solid border mode with S key"<<std::endl;
   oss<<"- Tune alpha (transparancy) value with LEFT CTRL + mouse wheel"<<std::endl;
   oss<<"- Tune line width with RIGHT SHIFT + mouse wheel"<<std::endl;
+  oss<<"- Rotate vector color with LEFT ALT + mouse wheel"<<std::endl;
   
   // Find the size of the help
   std::string help_string = oss.str();
@@ -532,7 +533,7 @@ void IceViewer::DrawHelp()
     }
   
   double help_width = 8*max_line_widh;
-  double help_height = 13*nbline;
+  double help_height = 14*nbline;
   double helpposx = 10;
   double helpposy = 20;
   double helpvpx,helpvpy;
@@ -1097,8 +1098,6 @@ if(key == GLFW_KEY_V && action == GLFW_PRESS)
      // spacing[0] = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
      // spacing[1] = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
 
-     std::cout<<"Center: "<<imCenter<<", spacing: "<<spacing<<std::endl;
-
      m_View->GetSettings()->SetSpacing(spacing);
      m_View->GetSettings()->SetWkt(currentActor->GetWkt());
      m_View->GetSettings()->SetKeywordList(currentActor->GetKwl());
@@ -1161,6 +1160,47 @@ if(key == GLFW_KEY_S && action == GLFW_PRESS)
   currentActor->SetSolidBorder(!currentActor->GetSolidBorder());
   return true;
   }
+
+
+// Change viewport geometry to current actor
+if(key == GLFW_KEY_P && action == GLFW_PRESS)
+  {
+  otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+
+     // First, transform the center
+     GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
+     GlImageActor::PointType imCenter = currentActor->ViewportToVectorTransform(vpCenter);
+
+     // Next, transform the spacing
+     vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
+     vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
+
+     GlImageActor::PointType tmpImPt = currentActor->ViewportToVectorTransform(vpCenter);
+
+     GlImageActor::SpacingType spacing;
+
+     spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
+     spacing[1]=(tmpImPt[1]-imCenter[1])/1000;
+
+     // GlImageActor::SpacingType spacing;
+     // ulx = std::min(imul[0],imlr[0]);
+     // lrx = std::max(imul[0],imlr[0]);
+     // uly = std::min(imul[1],imlr[1]);
+     // lry = std::max(imul[1],imlr[1]);
+
+     // origin[0] = ulx;
+     // origin[1] = uly;
+
+     // spacing[0] = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
+     // spacing[1] = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
+
+     m_View->GetSettings()->SetSpacing(spacing);
+     m_View->GetSettings()->SetWkt(currentActor->GetWkt());
+     m_View->GetSettings()->UseProjectionOn();
+     m_View->GetSettings()->Center(imCenter);
+     m_ReferenceActor = m_SelectedActor;
+     }
+
 
 return false;
 }

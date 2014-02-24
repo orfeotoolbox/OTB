@@ -70,6 +70,8 @@ public:
   // Gl rendering of current state
   virtual void Render();
 
+  PointType ViewportToVectorTransform(const PointType & point);
+
   itkSetMacro(Color,ColorType);
   itkGetConstReferenceMacro(Color,ColorType);
   

@@ -217,6 +217,17 @@ void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double &
   lry = std::max(std::max(vpul[1],vplr[1]),std::max(vpur[1],vpll[1]));
 }
 
+GlVectorActor::PointType GlVectorActor::ViewportToVectorTransform(const PointType & vpPoint)
+{
+  if(m_ViewportToVectorTransform.IsNull())
+    {
+    UpdateTransforms();
+    }
+  
+  return m_ViewportToVectorTransform->TransformPoint(vpPoint);
+
+}
+
 std::string GlVectorActor::GetWkt() const
 {
   if(m_OGRDataSource.IsNotNull())
