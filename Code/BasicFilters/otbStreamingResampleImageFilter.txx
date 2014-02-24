@@ -18,8 +18,6 @@
 #ifndef __otbStreamingResampleImageFilter_txx
 #define __otbStreamingResampleImageFilter_txx
 
-#include "otbStreamingResampleImageFilter.h"
-#include "itkNumericTraits.h"
 #include "itkProgressAccumulator.h"
 
 namespace otb
