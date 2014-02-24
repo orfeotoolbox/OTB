@@ -526,6 +526,19 @@ GlImageActor::PointType GlImageActor::ViewportToImageTransform(const PointType &
   return imgPoint;
 }
 
+GlImageActor::PointType GlImageActor::ImageToViewportTransform(const PointType & in, bool physical) const
+{
+  PointType imgPoint = in;
+
+  if(!physical)
+    {
+    imgPoint[0]=imgPoint[0]*m_Spacing[0]+m_Origin[0];
+    imgPoint[1]=imgPoint[1]*m_Spacing[1]+m_Origin[1];
+    }
+
+  return m_ImageToViewportTransform->TransformPoint(imgPoint);
+}
+
 bool GlImageActor::GetPixelFromViewport(const PointType & in, PixelType& pixel) const
 {
   PointType imgPoint = ViewportToImageTransform(in);

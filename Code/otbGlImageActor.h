@@ -90,6 +90,8 @@ public:
   itkGetMacro(LargestRegion,RegionType);
 
   PointType ViewportToImageTransform(const PointType & in, bool physical = true) const;
+
+  PointType ImageToViewportTransform(const PointType & in, bool physical = true) const;
   
   bool GetPixelFromViewport(const PointType & in, PixelType & pixel) const;
 
