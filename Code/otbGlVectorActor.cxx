@@ -91,7 +91,8 @@ GlVectorActor::GlVectorActor()
     m_ExtentULX(0),
     m_ExtentULY(0),
     m_ExtentLRX(0),
-    m_ExtentLRY(0)
+    m_ExtentLRY(0),
+    m_CurrentLayer(NULL,false)
     
 {
   m_Color.Fill(0);
@@ -140,13 +141,60 @@ void GlVectorActor::SetSolidBorder(bool flag)
     }
 }
 
-void GlVectorActor::Initialize(const std::string & filename)
+void GlVectorActor::Initialize(const std::string & filename, const std::string & layername)
 {
   // Open the data source
   m_OGRDataSource = otb::ogr::DataSource::New(filename,otb::ogr::DataSource::Modes::Read);
 
+  if(m_OGRDataSource->GetLayersCount() == 0)
+    {
+    itkExceptionMacro(<<"No layers found in OGR dataset.");
+    }
+
+  // If no layer specified, get the first one
+  if(layername == "")
+    {
+    m_CurrentLayer = m_OGRDataSource->GetLayer(0);
+    }
+  else
+    {
+    m_CurrentLayer = m_OGRDataSource->GetLayerChecked(layername);
+    }
+ 
   UpdateTransforms();
 }
+
+std::vector<std::string> GlVectorActor::GetAvailableLayers() const
+{
+  std::vector<std::string> resp;
+
+  for(unsigned int i = 0; i<m_OGRDataSource->GetLayersCount();++i)
+    {
+    resp.push_back(m_OGRDataSource->GetLayer(i).GetName());
+    }
+  return resp;
+}
+
+std::string GlVectorActor::GetCurrentLayer() const
+{
+  return m_CurrentLayer.GetName();
+}
+
+std::string GlVectorActor::SetCurrentLayer(const std::string & layername)
+{
+  m_CurrentLayer = m_OGRDataSource->GetLayerChecked(layername);
+  
+  // Clear transforms
+  m_VectorToViewportTransform = NULL;
+  m_ViewportToVectorTransform = NULL;
+
+  // Clear features
+  m_InternalFeatures.clear();
+
+  // Force display list rebuild
+  m_DisplayListNeedsRebuild = true;
+}
+
 
 void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
@@ -173,7 +221,7 @@ std::string GlVectorActor::GetWkt() const
 {
   if(m_OGRDataSource.IsNotNull())
     {
-    return m_OGRDataSource->GetLayer(0).GetProjectionRef();
+    return m_CurrentLayer.GetProjectionRef();
     }
 
   return "";
@@ -197,14 +245,6 @@ void GlVectorActor::UpdateData()
 {
   ViewSettings::ConstPointer settings = this->GetSettings();
 
-  unsigned int nbLayers = m_OGRDataSource->GetLayersCount();
-
-  if(nbLayers == 0)
-    {
-    return;
-    }
-
-  otb::ogr::Layer layer = m_OGRDataSource->GetLayer(0);
 
   // Retrieve the viewport extent
   PointType vpul,vplr,vpur,vpll, ul, lr, ll, ur;
@@ -229,7 +269,8 @@ void GlVectorActor::UpdateData()
   if(m_ExtentULX != ulx
      || m_ExtentULY != uly
      || m_ExtentLRX != lrx
-     || m_ExtentLRY != lry)
+     || m_ExtentLRY != lry
+     || m_InternalFeatures.empty())
     {
   
     m_ExtentULX = ulx;
@@ -237,17 +278,17 @@ void GlVectorActor::UpdateData()
     m_ExtentLRX = lrx;
     m_ExtentLRY = lry;
 
-    layer.SetSpatialFilterRect(ulx,uly,lrx,lry);
+    m_CurrentLayer.SetSpatialFilterRect(ulx,uly,lrx,lry);
     
     m_InternalFeatures.clear();
     
-    otb::ogr::Layer::const_iterator featIt = layer.begin();
-    for(; featIt!=layer.end(); ++featIt)
+    otb::ogr::Layer::const_iterator featIt = m_CurrentLayer.begin();
+    for(; featIt!=m_CurrentLayer.end(); ++featIt)
       {
-      otb::ogr::Feature srcFeature(layer.GetLayerDefn());
+      otb::ogr::Feature srcFeature(m_CurrentLayer.GetLayerDefn());
       srcFeature.SetFrom( *featIt, TRUE );
       
-      InternalFeature newInternalFeature(layer.GetLayerDefn());
+      InternalFeature newInternalFeature(m_CurrentLayer.GetLayerDefn());
       newInternalFeature.m_SourceFeature = srcFeature.Clone();
       newInternalFeature.m_RenderedFeature = srcFeature.Clone();
       
@@ -436,11 +477,11 @@ void GlVectorActor::UpdateTransforms()
     {
     m_ViewportToVectorTransform->SetInputProjectionRef(settings->GetWkt());
     m_ViewportToVectorTransform->SetInputKeywordList(settings->GetKeywordList());
-    m_ViewportToVectorTransform->SetOutputProjectionRef(m_OGRDataSource->GetLayer(0).GetProjectionRef());
+    m_ViewportToVectorTransform->SetOutputProjectionRef(m_CurrentLayer.GetProjectionRef());
 
     m_VectorToViewportTransform->SetOutputProjectionRef(settings->GetWkt());
     m_VectorToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
-    m_VectorToViewportTransform->SetInputProjectionRef(m_OGRDataSource->GetLayer(0).GetProjectionRef());
+    m_VectorToViewportTransform->SetInputProjectionRef(m_CurrentLayer.GetProjectionRef());
     }
   m_ViewportToVectorTransform->InstanciateTransform();
   m_VectorToViewportTransform->InstanciateTransform();

@@ -47,7 +47,16 @@ public:
   itkNewMacro(Self);
   
   // Initialize with a new file
-  void Initialize(const std::string & filename);
+  void Initialize(const std::string & filename, const std::string & layername = "");
+
+  // Get all available layers
+  std::vector<std::string> GetAvailableLayers() const;
+
+  // Get layer name
+  std::string GetCurrentLayer() const;
+
+  // Set layer name
+  std::string SetCurrentLayer(const std::string & layername);
 
   // Retrieve the full extent of the actor
   virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const;
@@ -120,6 +129,7 @@ private:
   RSTransformType::Pointer m_VectorToViewportTransform;
 
   otb::ogr::DataSource::Pointer m_OGRDataSource;
+  otb::ogr::Layer               m_CurrentLayer;
 
   std::vector<InternalFeature> m_InternalFeatures;
 

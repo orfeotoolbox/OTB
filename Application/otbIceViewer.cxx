@@ -98,6 +98,23 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
   actor->SetAlpha(0.5);
 
   m_View->AddActor(actor,name);
+
+  // Add other layers if the dataset contains some
+  std::vector<std::string> layers = actor->GetAvailableLayers();
+
+  if(layers.size() > 1)
+    {
+    for(std::vector<std::string>::const_iterator it = layers.begin()+1;
+        it!=layers.end();++it)
+      {
+      otb::GlVectorActor::Pointer actor = otb::GlVectorActor::New();
+      actor->Initialize(fname,*it);
+      actor->SetVisible(true);
+      actor->SetAlpha(0.5);
+      
+      m_View->AddActor(actor,name);
+      }
+    }
 }
 
 void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & name)
