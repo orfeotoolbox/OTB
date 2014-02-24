@@ -199,7 +199,7 @@ std::string GlVectorActor::SetCurrentLayer(const std::string & layername)
 void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
   PointType ul,lr,ur,ll, vpul,vplr, vpll, vpur;
-  m_OGRDataSource->GetGlobalExtent(ul[0],ul[1],lr[0],lr[1],true);
+  m_CurrentLayer.GetExtent(ul[0],ul[1],lr[0],lr[1],true);
   ur=ul;
   ur[0]=lr[0];
   ll=lr;
