@@ -949,7 +949,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
         currentImageActor->GetExtent(ulx,uly,lrx,lry);
         }
    
-      otb::GlROIActor::PointType ul,lr;
+       otb::GlROIActor::PointType ul,lr;
       ul[0]=ulx;
       ul[1]=uly;
       lr[0]=lrx;
@@ -971,6 +971,58 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
       m_View->RemoveActor(key);
       }
     }
+
+  // Change viewport geometry to current actor
+  if(key == GLFW_KEY_P && action == GLFW_PRESS)
+    {
+    
+    // First, transform the center
+    GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
+    GlImageActor::PointType imCenter;
+    GlImageActor::PointType tmpImPt;
+
+    if(currentImageActor.IsNotNull())
+      {
+      imCenter = currentImageActor->ViewportToImageTransform(vpCenter);
+      
+      // Next, transform the spacing
+      vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
+      vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
+
+      tmpImPt = currentImageActor->ViewportToImageTransform(vpCenter);
+      m_View->GetSettings()->SetWkt(currentImageActor->GetWkt());
+      m_View->GetSettings()->SetKeywordList(currentImageActor->GetKwl());
+      }
+    else if(currentVectorActor.IsNotNull())
+      {
+      imCenter = currentVectorActor->ViewportToVectorTransform(vpCenter);
+
+      // Next, transform the spacing
+      vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
+      vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
+      
+      tmpImPt = currentVectorActor->ViewportToVectorTransform(vpCenter);
+      m_View->GetSettings()->SetWkt(currentVectorActor->GetWkt());
+      }
+    else
+      {
+      itkExceptionMacro(<<"Wrong actor type encountered!");
+      }
+    
+    
+
+    GlImageActor::SpacingType spacing;
+
+    spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
+    spacing[1]=(tmpImPt[1]-imCenter[1])/1000;
+
+    m_View->GetSettings()->SetSpacing(spacing);
+    m_View->GetSettings()->UseProjectionOn();
+    m_View->GetSettings()->Center(imCenter);
+    m_ReferenceActor = m_SelectedActor;
+    }
+
+
 
   if(key == GLFW_KEY_Z && action == GLFW_PRESS)
     {
@@ -1181,47 +1233,6 @@ bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, i
     currentActor->SetSolidBorder(!currentActor->GetSolidBorder());
     return true;
     }
-
-
-// Change viewport geometry to current actor
-  if(key == GLFW_KEY_P && action == GLFW_PRESS)
-    {
-    otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-
-    // First, transform the center
-    GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
-    GlImageActor::PointType imCenter = currentActor->ViewportToVectorTransform(vpCenter);
-
-    // Next, transform the spacing
-    vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
-    vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
-
-    GlImageActor::PointType tmpImPt = currentActor->ViewportToVectorTransform(vpCenter);
-
-    GlImageActor::SpacingType spacing;
-
-    spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
-    spacing[1]=(tmpImPt[1]-imCenter[1])/1000;
-
-    // GlImageActor::SpacingType spacing;
-    // ulx = std::min(imul[0],imlr[0]);
-    // lrx = std::max(imul[0],imlr[0]);
-    // uly = std::min(imul[1],imlr[1]);
-    // lry = std::max(imul[1],imlr[1]);
-
-    // origin[0] = ulx;
-    // origin[1] = uly;
-
-    // spacing[0] = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
-    // spacing[1] = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
-
-    m_View->GetSettings()->SetSpacing(spacing);
-    m_View->GetSettings()->SetWkt(currentActor->GetWkt());
-    m_View->GetSettings()->UseProjectionOn();
-    m_View->GetSettings()->Center(imCenter);
-    m_ReferenceActor = m_SelectedActor;
-    }
-
 
   return false;
 }
