@@ -136,8 +136,6 @@ public:
   virtual void GetReferenceExtent( PointType& origin,
                                    PointType& extent ) const;
 
-  virtual void SetImageList( const VectorImageModelList& images );
-
   virtual
   AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const;
 
@@ -147,6 +145,7 @@ public:
 
   virtual
   void PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
@@ -190,6 +189,13 @@ private:
   /**
    */
   void UpdateImageActors();
+
+  //
+  // AbstractImageViewRenderer overloads.
+
+  virtual void virtual_ClearScene();
+
+  virtual void virtual_SetImageList( const VectorImageModelList& images );
 
 //
 // Private attributes.

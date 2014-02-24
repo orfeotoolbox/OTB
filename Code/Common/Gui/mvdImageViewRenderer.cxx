@@ -36,7 +36,6 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbGlImageActor.h"
 #include "otbStandardShader.h"
 
 //
@@ -83,82 +82,6 @@ ImageViewRenderer
 ImageViewRenderer
 ::~ImageViewRenderer()
 {
-}
-
-/*******************************************************************************/
-void
-ImageViewRenderer
-::SetImageList( const VectorImageModelList& images )
-{
-  assert( !m_GlView.IsNull() );
-
-  // qDebug() << this << "::SetImageList(" << images << ")";
-
-  //
-  // Remove all actors.
-  m_GlView->ClearActors();
-
-  m_ImageModelActorPairs.clear();
-
-  m_ReferenceImageModel = NULL;
-  m_ReferenceGlImageActor = otb::GlImageActor::Pointer();
-
-  //
-  // Return if there is no vector-image model.
-  if( images.isEmpty() )
-    return;
-
-  //
-  // Insert new actors corresponding to vector-image model.
-  for( VectorImageModelList::const_iterator it( images.begin() );
-       it!=images.end();
-       ++it )
-    {
-    assert( *it!=NULL );
-
-    ImageModelActorPair pair(
-      *it,
-      otb::GlImageActor::New()
-    );
-
-    pair.second->Initialize( ToStdString( pair.first->GetFilename() ) );
-
-    DatasetModel* datasetModel = pair.first->GetDatasetModel();
-
-    ActorKey actorKey(
-      m_GlView->AddActor(
-        pair.second,
-        pair.first==NULL
-        ? std::string()
-        : ToStdString( datasetModel->GetHash() )
-      )
-    );
-
-    pair.second->SetVisible( true );
-
-    m_ImageModelActorPairs.insert(
-      ImageModelActorPairMap::value_type( actorKey, pair )
-    );
-
-    qDebug() << "Added image-actor:" << FromStdString( actorKey );
-    }
-
-  //
-  // Remember first vector image-model as reference image-model.
-  m_ReferenceImageModel = images.front();
-
-  //
-  // Remember first actor as reference actor.
-  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
-  assert( !keys.empty() );
-
-  otb::GlActor::Pointer glActor( m_GlView->GetActor( keys.front() ) );
-  assert( !glActor.IsNull() );
-
-  assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
-
-  m_ReferenceGlImageActor = otb::DynamicCast< otb::GlImageActor >( glActor );
-  assert( !m_ReferenceGlImageActor.IsNull() );
 }
 
 /*****************************************************************************/
@@ -368,6 +291,100 @@ ImageViewRenderer
 
     shader->SetGamma( settings.GetGamma() );
     }
+}
+
+/*******************************************************************************/
+void
+ImageViewRenderer
+::virtual_ClearScene()
+{
+  assert( !m_GlView.IsNull() );
+
+  // qDebug() << this << "::virtual_CleraScene()";
+
+  //
+  // Remove all actors.
+  m_GlView->ClearActors();
+
+  // Forget image-model/actors relationships.
+  m_ImageModelActorPairs.clear();
+
+  // Forget reference instances.
+  m_ReferenceImageModel = NULL;
+  m_ReferenceGlImageActor = otb::GlImageActor::Pointer();
+}
+
+/*******************************************************************************/
+void
+ImageViewRenderer
+::virtual_SetImageList( const VectorImageModelList& images )
+{
+  assert( !m_GlView.IsNull() );
+
+  // qDebug() << this << "::virtual_SetImageList(" << images << ")";
+
+  //
+  // Check that references are clear.
+  assert( m_ImageModelActorPairs.empty() );
+  assert( m_ReferenceImageModel==NULL );
+  assert( m_ReferenceGlImageActor.IsNull() );
+
+  //
+  // Return if there is no vector-image model.
+  if( images.isEmpty() )
+    return;
+
+  //
+  // Insert new actors corresponding to vector-image model.
+  for( VectorImageModelList::const_iterator it( images.begin() );
+       it!=images.end();
+       ++it )
+    {
+    assert( *it!=NULL );
+
+    ImageModelActorPair pair(
+      *it,
+      otb::GlImageActor::New()
+    );
+
+    pair.second->Initialize( ToStdString( pair.first->GetFilename() ) );
+
+    DatasetModel* datasetModel = pair.first->GetDatasetModel();
+
+    ActorKey actorKey(
+      m_GlView->AddActor(
+        pair.second,
+        pair.first==NULL
+        ? std::string()
+        : ToStdString( datasetModel->GetHash() )
+      )
+    );
+
+    pair.second->SetVisible( true );
+
+    m_ImageModelActorPairs.insert(
+      ImageModelActorPairMap::value_type( actorKey, pair )
+    );
+
+    qDebug() << "Added image-actor:" << FromStdString( actorKey );
+    }
+
+  //
+  // Remember first vector image-model as reference image-model.
+  m_ReferenceImageModel = images.front();
+
+  //
+  // Remember first actor as reference actor.
+  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
+  assert( !keys.empty() );
+
+  otb::GlActor::Pointer glActor( m_GlView->GetActor( keys.front() ) );
+  assert( !glActor.IsNull() );
+
+  assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
+
+  m_ReferenceGlImageActor = otb::DynamicCast< otb::GlImageActor >( glActor );
+  assert( !m_ReferenceGlImageActor.IsNull() );
 }
 
 /*****************************************************************************/

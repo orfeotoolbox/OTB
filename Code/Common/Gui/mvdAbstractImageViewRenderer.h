@@ -127,7 +127,7 @@ public:
 
   /**
    */
-  virtual void SetImageList( const VectorImageModelList& images ) =0;
+  inline void SetImageList( const VectorImageModelList& images );
 
   /**
    */
@@ -191,6 +191,18 @@ protected:
 //
 // Private methods.
 private:
+  /**
+   */
+  virtual void virtual_ClearScene() {};
+  /**
+   */
+  virtual void virtual_PrepareScene() {};
+  /**
+   */
+  virtual void virtual_SetImageList( const VectorImageModelList& images ) =0;
+  /**
+   */
+  virtual void virtual_FinishScene() {};
 
 //
 // Private attributes.
@@ -210,6 +222,21 @@ private slots:
 
 namespace mvd
 {
+
+/*****************************************************************************/
+inline
+void
+AbstractImageViewRenderer
+::SetImageList( const VectorImageModelList& images )
+{
+  virtual_ClearScene();
+
+  virtual_PrepareScene();
+
+  virtual_SetImageList( images );
+
+  virtual_FinishScene();
+}
 
 } // end namespace 'mvd'
 
