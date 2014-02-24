@@ -22,6 +22,7 @@
 #include <GLFW/glfw3.h>
 #include "otbGlView.h"
 #include "otbGlImageActor.h"
+#include "otbGlVectorActor.h"
 #include "otbViewSettings.h"
 #include "otbDEMHandler.h"
 #include "otbStandardShader.h"
@@ -109,6 +110,9 @@ private:
 
   bool m_DisplayHud;
   bool m_DisplayHelp;
+
+  std::map<std::string,GlVectorActor::ColorType>                 m_ColorMap;
+  std::map<std::string,GlVectorActor::ColorType>::const_iterator m_ColorMapIterator;
 
 }; // End class IceViewer
 

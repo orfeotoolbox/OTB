@@ -24,6 +24,16 @@
 namespace otb
 {
 
+GlVectorActor::ColorType BuildColor(double r, double g, double b)
+{
+  GlVectorActor::ColorType color;
+  color[0] = r;
+  color[1] = g;
+  color[2] = b;
+  
+  return color;
+}
+
 IceViewer::IceViewer()
   : m_Window(NULL),
     m_View(),
@@ -36,8 +46,24 @@ IceViewer::IceViewer()
     m_DeltaDrag(),
     m_OriginDrag(),
     m_DisplayHud(true),
-    m_DisplayHelp(false)
-{}
+    m_DisplayHelp(false),
+    m_ColorMap(),
+    m_ColorMapIterator()
+{
+  // Fill color map
+  // Sources for some colors value: http://prideout.net/archive/colors.php"
+  m_ColorMap["red"]   = BuildColor(1,0,0);
+  m_ColorMap["green"] = BuildColor(0,1,0);
+  m_ColorMap["blue"]  = BuildColor(0,0,1);
+  m_ColorMap["light red"] = BuildColor(0.941, 0.502, 0.502);
+  m_ColorMap["pink"] = BuildColor(1.000, 0.078, 0.576);
+  m_ColorMap["yellow"] = BuildColor(1.000, 1.000, 0.000);
+  m_ColorMap["light green"] = BuildColor(0.565, 0.933, 0.565);
+  m_ColorMap["cyan"] = BuildColor(0.000, 1.000, 1.000);
+  m_ColorMap["purple"] = BuildColor(0.502, 0.000, 0.502);
+
+  m_ColorMapIterator = m_ColorMap.begin();
+}
 
 IceViewer::~IceViewer()
 {
@@ -96,6 +122,13 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
   actor->Initialize(fname);
   actor->SetVisible(true);
   actor->SetAlpha(0.5);
+  actor->SetColor(m_ColorMapIterator->second);
+  
+  ++m_ColorMapIterator;
+  if(m_ColorMapIterator == m_ColorMap.end())
+    {
+    m_ColorMapIterator = m_ColorMap.begin();
+    }
 
   m_View->AddActor(actor,name);
 
@@ -112,6 +145,12 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
       actor->SetVisible(true);
       actor->SetAlpha(0.5);
       
+      ++m_ColorMapIterator;
+      if(m_ColorMapIterator == m_ColorMap.end())
+        {
+        m_ColorMapIterator = m_ColorMap.begin();
+        }
+
       m_View->AddActor(actor,name);
       }
     }
@@ -342,6 +381,15 @@ void IceViewer::DrawHud()
       oss<<std::endl;
 
       oss<<"    Fill: "<<(currentVectorActor->GetFill()?"On":"Off")<<", Solid border: "<<(currentVectorActor->GetSolidBorder()?"On":"Off")<<", al="<<currentVectorActor->GetAlpha()<<", lw="<<currentVectorActor->GetLineWidth()<<"\n";
+      
+      std::map<std::string,GlVectorActor::ColorType>::const_iterator it = m_ColorMap.begin();
+      while(it!=m_ColorMap.end() && it->second!=currentVectorActor->GetColor())
+        {
+        ++it;
+        }
+
+      oss<<"    Color: "<<(it!=m_ColorMap.end()?it->first:"custom")<<"\n";
+
       oss<<"\n"<<"\n";
       }
 
@@ -656,6 +704,43 @@ bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, doub
     {
     currentVectorActor->SetLineWidth(currentVectorActor->GetLineWidth()/factor);
     return true;
+    }
+
+  if(glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
+    {
+    std::map<std::string,GlVectorActor::ColorType>::const_iterator it = m_ColorMap.begin();
+    for(;it!=m_ColorMap.end();++it)
+      {
+      if(it->second == currentVectorActor->GetColor())
+        {
+        if(yoffset<0)
+          {
+          ++it;
+          if(it == m_ColorMap.end())
+            {
+            it = m_ColorMap.begin();
+            }
+          currentVectorActor->SetColor(it->second);
+          }
+        else
+          {
+          if(it == m_ColorMap.begin())
+            {
+            it == m_ColorMap.begin();
+            for(unsigned int i = 0; i < m_ColorMap.size()-1;++i)
+              {
+              ++it;
+              }
+            }
+          else
+            {
+            --it;
+            }
+          currentVectorActor->SetColor(it->second);
+          }
+        return true;
+        }
+      }
     }
 
   return false;
