@@ -336,7 +336,7 @@ void IceViewer::DrawHud()
       oss<<(currentVectorActor->GetVisible()?"+ ":"- ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<((*it)==m_SelectedActor?"[":" ");
-      oss<<"(vector) "<<(*it);
+      oss<<"(vector) "<<(*it)<<", layer: "<<currentVectorActor->GetCurrentLayer();
       oss<<((*it)==m_SelectedActor?"]":" ");
       oss<<((*it)==m_ReferenceActor?"*":" ");
       oss<<std::endl;
