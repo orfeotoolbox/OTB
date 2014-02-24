@@ -17,16 +17,13 @@
 
 =========================================================================*/
 
-#ifndef __mvdImageViewRenderer_h
-#define __mvdImageViewRenderer_h
+#ifndef __mvdQuicklookViewRenderer_h
+#define __mvdQuicklookViewRenderer_h
 
 //
 // Configuration include.
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
-
-//
-#define USE_VIEW_SETTINGS_SIDE_EFFECT 1
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -44,12 +41,11 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbGlImageActor.h"
-#include "otbGlView.h"
+#include "otbGlROIActor.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdAbstractImageViewRenderer.h"
+#include "Gui/mvdImageViewRenderer.h"
 
 
 /*****************************************************************************/
@@ -75,10 +71,10 @@ namespace mvd
 /* CLASS DEFINITION SECTION                                                  */
 
 /**
- * \class ImageViewRenderer
+ * \class QuicklookViewRenderer
  */
-class ImageViewRenderer :
-    public AbstractImageViewRenderer
+class QuicklookViewRenderer :
+    public ImageViewRenderer
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -94,57 +90,27 @@ public:
   /**
    */
   struct RenderingContext :
-    public AbstractImageViewRenderer::RenderingContext
+    public ImageViewRenderer::RenderingContext
   {
     /**
      */
     inline
     RenderingContext() :
-      AbstractImageViewRenderer::RenderingContext(),
-      m_ViewSettings()
+      ImageViewRenderer::RenderingContext()
     {
     }
 
     virtual ~RenderingContext() {}
-
-    otb::ViewSettings::Pointer m_ViewSettings;
   };
 
 //
 // Public methods.
 public:
   /** Constructor */
-  ImageViewRenderer( QObject* parent = NULL );
+  QuicklookViewRenderer( QObject* parent = NULL );
 
   /** Destructor */
-  virtual ~ImageViewRenderer();
-
-  /**
-   */
-  inline const otb::ViewSettings::Pointer GetViewSettings() const;
-  /**
-   */
-  inline otb::ViewSettings::Pointer GetViewSettings();
-
-  //
-  // AbstractImageViewRenderer overloads.
-
-  virtual const AbstractImageModel* GetReferenceImageModel() const;
-
-  virtual AbstractImageModel* GetReferenceImageModel();
-
-  virtual void GetReferenceExtent( PointType& origin,
-                                   PointType& extent ) const;
-
-  virtual
-  AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const;
-
-  virtual void InitializeGL();
-
-  virtual void ResizeGL( int width, int height );
-
-  virtual
-  void PaintGL( const AbstractImageViewRenderer::RenderingContext* context );
+  virtual ~QuicklookViewRenderer();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -166,52 +132,25 @@ protected:
 //
 // Protected attributes.
 protected:
-  /**
-   */
-  otb::GlView::Pointer m_GlView;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
 //
 // Private types
 private:
-  /**
-   */
-  typedef
-  std::pair< VectorImageModel*, otb::GlImageActor::Pointer > ImageModelActorPair;
-  /**
-   */
-  typedef std::string ActorKey;
-  /**
-   */
-  typedef std::map< ActorKey, ImageModelActorPair > ImageModelActorPairMap;
 
 //
 // Private methods.
 private:
-  /**
-   */
-  void UpdateImageActors();
 
   //
   // AbstractImageViewRenderer overloads.
 
-  virtual void virtual_ClearScene();
-
-  virtual void virtual_SetImageList( const VectorImageModelList& images );
+  virtual void virtual_PrepareScene();
 
 //
 // Private attributes.
 private:
-  /**
-   */
-  VectorImageModel* m_ReferenceImageModel;
-  /**
-   */
-  otb::GlImageActor::Pointer m_ReferenceGlImageActor;
-  /**
-   */
-  ImageModelActorPairMap m_ImageModelActorPairs;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -228,28 +167,6 @@ private slots:
 namespace mvd
 {
 
-/*****************************************************************************/
-inline
-const otb::ViewSettings::Pointer
-ImageViewRenderer
-::GetViewSettings() const
-{
-  assert( !m_GlView.IsNull() );
-
-  return m_GlView->GetSettings();
-}
-
-/*****************************************************************************/
-inline
-otb::ViewSettings::Pointer
-ImageViewRenderer
-::GetViewSettings()
-{
-  assert( !m_GlView.IsNull() );
-
-  return m_GlView->GetSettings();
-}
-
 } // end namespace 'mvd'
 
-#endif // __mvdImageViewRenderer_h
+#endif // __mvdQuicklookViewRenderer_h

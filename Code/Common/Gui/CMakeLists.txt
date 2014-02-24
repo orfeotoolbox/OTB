@@ -45,6 +45,7 @@ set( Common_Gui_SOURCES
   mvdPixelDescriptionWidget.cxx
   mvdQuicklookViewManipulator.cxx
   mvdQuicklookViewManipulator1.cxx
+  mvdQuicklookViewRenderer.cxx
   mvdSearchableTreeWidget.cxx
   mvdStatusBarWidget.cxx
   mvdTaskProgressDialog.cxx
@@ -100,6 +101,7 @@ set( Common_Gui_HEADERS_MOC
   mvdPixelDescriptionWidget.h
   mvdQuicklookViewManipulator.h
   mvdQuicklookViewManipulator1.h
+  mvdQuicklookViewRenderer.h
   mvdSearchableTreeWidget.h
   mvdStatusBarWidget.h
   mvdTaskProgressDialog.h
