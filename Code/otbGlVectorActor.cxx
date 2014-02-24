@@ -205,7 +205,6 @@ void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double &
   ll=lr;
   ll[0]=ul[0];
   
-  
   vpul = m_VectorToViewportTransform->TransformPoint(ul);
   vpur = m_VectorToViewportTransform->TransformPoint(ur);
   vplr = m_VectorToViewportTransform->TransformPoint(lr);

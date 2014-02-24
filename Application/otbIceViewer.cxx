@@ -920,21 +920,62 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
      m_DisplayHud = !m_DisplayHud;
      }
 
+   otb::GlImageActor::Pointer currentImageActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+   otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+
+
+   if(key == GLFW_KEY_BACKSPACE)
+     {
+     std::string key = "Current data outline";
+
+     if(action == GLFW_PRESS)
+       {
+       double ulx(0),uly(0),lrx(0),lry(0);
+
+       otb::GlROIActor::Pointer roiActor = GlROIActor::New();
+
+       if(currentVectorActor.IsNotNull())
+         {
+         currentVectorActor->GetExtent(ulx,uly,lrx,lry);
+         }
+       else if(currentImageActor.IsNotNull())
+         {
+         currentImageActor->GetExtent(ulx,uly,lrx,lry);
+         }
+   
+       otb::GlROIActor::PointType ul,lr;
+       ul[0]=ulx;
+       ul[1]=uly;
+       lr[0]=lrx;
+       lr[1]=lry;
+
+       roiActor->SetUL(ul);
+       roiActor->SetLR(lr);
+       roiActor->SetWkt(m_View->GetSettings()->GetWkt());
+       roiActor->SetKwl(m_View->GetSettings()->GetKeywordList());
+       roiActor->SetFill(true);
+       roiActor->SetAlpha(0.2);
+       
+       m_View->AddActor(roiActor,key);
+       m_View->MoveActorToEndOfRenderingOrder(key,true);
+       }
+     
+     else if(action == GLFW_RELEASE)
+       {
+       m_View->RemoveActor(key);
+       }
+     }
   
-  otb::GlImageActor::Pointer currentImageActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+if(currentImageActor.IsNotNull())
+  {
+  this->key_callback_image(window,key,scancode,action,mods);
+  }
 
-  if(currentImageActor.IsNotNull())
-    {
-    this->key_callback_image(window,key,scancode,action,mods);
-    }
 
-  otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-
-  if(currentVectorActor.IsNotNull())
-    {
-    this->key_callback_vector(window,key,scancode,action,mods);
-    }
-
+if(currentVectorActor.IsNotNull())
+  {
+  this->key_callback_vector(window,key,scancode,action,mods);
+  }
 }
 
 bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -1105,44 +1146,6 @@ if(key == GLFW_KEY_V && action == GLFW_PRESS)
      m_View->GetSettings()->Center(imCenter);
      m_ReferenceActor = m_SelectedActor;
      }
-
-   if(key == GLFW_KEY_BACKSPACE)
-     {
-     std::string key = "Current image outline";
-
-     if(action == GLFW_PRESS)
-       {
-       otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-       if(currentActor.IsNotNull())
-         {
-         otb::GlROIActor::Pointer roiActor = otb::GlROIActor::New();
-         roiActor->SetKwl(currentActor->GetKwl());
-         roiActor->SetWkt(currentActor->GetWkt());
-         
-         otb::GlROIActor::PointType ul = currentActor->GetOrigin();
-         ul[0]+=currentActor->GetLargestRegion().GetIndex()[0]*currentActor->GetSpacing()[0];
-         ul[1]+=currentActor->GetLargestRegion().GetIndex()[1]*currentActor->GetSpacing()[1];
-
-         otb::GlROIActor::PointType lr = ul;
-         lr[0]+=currentActor->GetLargestRegion().GetSize()[0]*currentActor->GetSpacing()[0];
-         lr[1]+=currentActor->GetLargestRegion().GetSize()[1]*currentActor->GetSpacing()[1];
-
-         roiActor->SetUL(ul);
-         roiActor->SetLR(lr);
-         roiActor->SetFill(true);
-         roiActor->SetAlpha(0.2);
-
-         m_View->AddActor(roiActor,key);
-         m_View->MoveActorToEndOfRenderingOrder(key,true);
-         }
-       
-       }
-     else if(action == GLFW_RELEASE)
-       {
-       m_View->RemoveActor(key);
-       }
-     }
-   return false;
 }
 
 bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods)
