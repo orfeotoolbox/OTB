@@ -78,6 +78,7 @@
 #include "Gui/mvdPixelDescriptionWidget.h"
 #if USE_ICE_IMAGE_VIEW
 #include "Gui/mvdQuicklookViewManipulator.h"
+#include "Gui/mvdQuicklookViewRenderer.h"
 #endif // USE_OLD_IMAGE_VIEW
 #if USE_OLD_IMAGE_VIEW
 #include "Gui/mvdQuicklookViewManipulator1.h"
@@ -1029,8 +1030,8 @@ ImageViewWidget*
 MainWindow
 ::CreateQuicklookViewWidget( QGLWidget* sharedGlWidget )
 {
-  ImageViewRenderer* renderer =
-    new ImageViewRenderer( this );
+  QuicklookViewRenderer* renderer =
+    new QuicklookViewRenderer( this );
 
   QuicklookViewManipulator* manipulator =
     new QuicklookViewManipulator(
