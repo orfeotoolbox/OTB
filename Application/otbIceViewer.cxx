@@ -180,24 +180,24 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
     }
   
   m_Window = glfwCreateWindow(w, h,"OTB viewer for geeks", NULL, NULL);
-   if (!m_Window)
-     {
-     itkExceptionMacro(<<"Could not create glfw window.");
-     }
+  if (!m_Window)
+    {
+    itkExceptionMacro(<<"Could not create glfw window.");
+    }
 
-   glfwMakeContextCurrent(m_Window);
+  glfwMakeContextCurrent(m_Window);
 
-   glfwSetWindowUserPointer(m_Window,this);
+  glfwSetWindowUserPointer(m_Window,this);
    
-   glfwSetKeyCallback(m_Window, &IceViewer::static_key_callback);
-   glfwSetFramebufferSizeCallback(m_Window,&IceViewer::static_framebuffer_size_callback);
-   glfwSetMouseButtonCallback(m_Window,&IceViewer::static_mouse_button_callback);
-   glfwSetCursorPosCallback(m_Window,&IceViewer::static_cursor_pos_callback);
-   glfwSetScrollCallback(m_Window,&IceViewer::static_scroll_callback);
+  glfwSetKeyCallback(m_Window, &IceViewer::static_key_callback);
+  glfwSetFramebufferSizeCallback(m_Window,&IceViewer::static_framebuffer_size_callback);
+  glfwSetMouseButtonCallback(m_Window,&IceViewer::static_mouse_button_callback);
+  glfwSetCursorPosCallback(m_Window,&IceViewer::static_cursor_pos_callback);
+  glfwSetScrollCallback(m_Window,&IceViewer::static_scroll_callback);
 
-   // Create view
-   m_View = GlView::New();
-   m_View->Initialize(w,h);
+  // Create view
+  m_View = GlView::New();
+  m_View->Initialize(w,h);
 }
 
 void IceViewer::Refresh()
@@ -265,29 +265,29 @@ void IceViewer::Start()
   m_SelectedActor = firstActorKey;
   m_ReferenceActor = firstActorKey; 
 
-   otb::ViewSettings::PointType center;
-   center[0] = 0.5*(ulx+lrx);
-   center[1] = 0.5*(uly+lry);
+  otb::ViewSettings::PointType center;
+  center[0] = 0.5*(ulx+lrx);
+  center[1] = 0.5*(uly+lry);
 
-   double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
-   double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
+  double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
+  double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
    
-   otb::ViewSettings::SpacingType spacing;
-   spacing.Fill(std::min(spacingx,spacingy));
+  otb::ViewSettings::SpacingType spacing;
+  spacing.Fill(std::min(spacingx,spacingy));
 
-   m_View->GetSettings()->SetSpacing(spacing);
-   m_View->GetSettings()->Center(center);
+  m_View->GetSettings()->SetSpacing(spacing);
+  m_View->GetSettings()->Center(center);
 
-   // Start events loop
-   while (!glfwWindowShouldClose(m_Window))
-     {
-     this->Refresh();
+  // Start events loop
+  while (!glfwWindowShouldClose(m_Window))
+    {
+    this->Refresh();
 
-     // Swap buffers
-     glfwSwapBuffers(m_Window);
+    // Swap buffers
+    glfwSwapBuffers(m_Window);
      
-     glfwWaitEvents();
-     }
+    glfwWaitEvents();
+    }
 }
 
 void IceViewer::DrawHud()
@@ -621,9 +621,9 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
   else if(currentVectorActor.IsNotNull() && this->scroll_callback_vector(window, xoffset, yoffset))
     {}
   else    
-     {
-     m_View->RotateRenderingOrder(yoffset>0);
-     }
+    {
+    m_View->RotateRenderingOrder(yoffset>0);
+    }
 }
 
 bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, double yoffset)
@@ -650,7 +650,7 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
       return true;
       }
     }
-   else if(glfwGetKey(window,GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
+  else if(glfwGetKey(window,GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
     {
     switch(shader->GetShaderType())
       {
@@ -671,22 +671,22 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
       case SHADER_ALPHA_GRID:
         shader->SetChessboardSize(shader->GetChessboardSize()/factor);
         break;
-      // case SHADER_ALPHA_SLIDER:
-      //   shader->SetSliderPosition(shader->GetSliderPosition()+(yoffset>0?-25:-25));
-      //   break;
+        // case SHADER_ALPHA_SLIDER:
+        //   shader->SetSliderPosition(shader->GetSliderPosition()+(yoffset>0?-25:-25));
+        //   break;
       }
-        return true;
+    return true;
     }
-   else if(glfwGetKey(window,GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
-     {
-     shader->SetGamma(shader->GetGamma()/factor);
-     return true;
-     }
-   else if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
-     {
-     shader->SetAlpha(shader->GetAlpha()/factor);  
-     return true;
-     }
+  else if(glfwGetKey(window,GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
+    {
+    shader->SetGamma(shader->GetGamma()/factor);
+    return true;
+    }
+  else if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
+    {
+    shader->SetAlpha(shader->GetAlpha()/factor);  
+    return true;
+    }
   return false;
 }
 
@@ -696,10 +696,10 @@ bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, doub
   otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
   if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
-     {
-     currentVectorActor->SetAlpha(currentVectorActor->GetAlpha()/factor);
-     return true;
-     }
+    {
+    currentVectorActor->SetAlpha(currentVectorActor->GetAlpha()/factor);
+    return true;
+    }
 
   if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     {
@@ -883,6 +883,10 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     if(it!=renderingOrder.end())
       {
       unsigned int idx = std::distance(renderingOrder.begin(),it);
+      if(idx == 0)
+        {
+        idx+=renderingOrder.size();
+        }
       m_SelectedActor = renderingOrder.at((idx-1)%renderingOrder.size());
       }
     
@@ -910,72 +914,104 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     m_View->MoveActorInRenderingOrder(m_SelectedActor,true);
     }
 
-   if(key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-     {
-     otb::GlActor::Pointer currentActor = m_View->GetActor(m_SelectedActor);
-     currentActor->SetVisible(!currentActor->GetVisible());
-     }
-   if(key == GLFW_KEY_D && action == GLFW_PRESS)
-     {
-     m_DisplayHud = !m_DisplayHud;
-     }
+  if(key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+    otb::GlActor::Pointer currentActor = m_View->GetActor(m_SelectedActor);
+    currentActor->SetVisible(!currentActor->GetVisible());
+    }
+  if(key == GLFW_KEY_D && action == GLFW_PRESS)
+    {
+    m_DisplayHud = !m_DisplayHud;
+    }
 
-   otb::GlImageActor::Pointer currentImageActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-   otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+  otb::GlImageActor::Pointer currentImageActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+  otb::GlVectorActor::Pointer currentVectorActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
 
-   if(key == GLFW_KEY_BACKSPACE)
-     {
-     std::string key = "Current data outline";
+  if(key == GLFW_KEY_BACKSPACE)
+    {
+    std::string key = "Current data outline";
 
-     if(action == GLFW_PRESS)
-       {
-       double ulx(0),uly(0),lrx(0),lry(0);
+    if(action == GLFW_PRESS)
+      {
+      double ulx(0),uly(0),lrx(0),lry(0);
 
-       otb::GlROIActor::Pointer roiActor = GlROIActor::New();
+      otb::GlROIActor::Pointer roiActor = GlROIActor::New();
 
-       if(currentVectorActor.IsNotNull())
-         {
-         currentVectorActor->GetExtent(ulx,uly,lrx,lry);
-         }
-       else if(currentImageActor.IsNotNull())
-         {
-         currentImageActor->GetExtent(ulx,uly,lrx,lry);
-         }
+      if(currentVectorActor.IsNotNull())
+        {
+        currentVectorActor->GetExtent(ulx,uly,lrx,lry);
+        }
+      else if(currentImageActor.IsNotNull())
+        {
+        currentImageActor->GetExtent(ulx,uly,lrx,lry);
+        }
    
-       otb::GlROIActor::PointType ul,lr;
-       ul[0]=ulx;
-       ul[1]=uly;
-       lr[0]=lrx;
-       lr[1]=lry;
+      otb::GlROIActor::PointType ul,lr;
+      ul[0]=ulx;
+      ul[1]=uly;
+      lr[0]=lrx;
+      lr[1]=lry;
 
-       roiActor->SetUL(ul);
-       roiActor->SetLR(lr);
-       roiActor->SetWkt(m_View->GetSettings()->GetWkt());
-       roiActor->SetKwl(m_View->GetSettings()->GetKeywordList());
-       roiActor->SetFill(true);
-       roiActor->SetAlpha(0.2);
+      roiActor->SetUL(ul);
+      roiActor->SetLR(lr);
+      roiActor->SetWkt(m_View->GetSettings()->GetWkt());
+      roiActor->SetKwl(m_View->GetSettings()->GetKeywordList());
+      roiActor->SetFill(true);
+      roiActor->SetAlpha(0.2);
        
-       m_View->AddActor(roiActor,key);
-       m_View->MoveActorToEndOfRenderingOrder(key,true);
-       }
+      m_View->AddActor(roiActor,key);
+      m_View->MoveActorToEndOfRenderingOrder(key,true);
+      }
      
-     else if(action == GLFW_RELEASE)
-       {
-       m_View->RemoveActor(key);
-       }
-     }
-  
-if(currentImageActor.IsNotNull())
-  {
-  this->key_callback_image(window,key,scancode,action,mods);
-  }
+    else if(action == GLFW_RELEASE)
+      {
+      m_View->RemoveActor(key);
+      }
+    }
+
+  if(key == GLFW_KEY_Z && action == GLFW_PRESS)
+    {
+    double ulx(0),uly(0),lrx(0),lry(0);
+
+    if(currentVectorActor.IsNotNull())
+      {
+      currentVectorActor->GetExtent(ulx,uly,lrx,lry);
+      }
+    else if(currentImageActor.IsNotNull())
+      {
+      currentImageActor->GetExtent(ulx,uly,lrx,lry);
+      }
+     
+    otb::ViewSettings::PointType center;
+    center[0] = 0.5*(ulx+lrx);
+    center[1] = 0.5*(uly+lry);
+     
+    double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
+    double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
+     
+    otb::ViewSettings::SpacingType spacing;
+    spacing.Fill(std::min(spacingx,spacingy));
+     
+    m_View->GetSettings()->SetSpacing(spacing);
+    m_View->GetSettings()->Center(center);
+    }
+
+  if(key == GLFW_KEY_F1 && action == GLFW_PRESS)
+    {
+    m_DisplayHelp = true;
+    }
+
+  if(currentImageActor.IsNotNull())
+    {
+    this->key_callback_image(window,key,scancode,action,mods);
+    }
 
 
-if(currentVectorActor.IsNotNull())
-  {
-  this->key_callback_vector(window,key,scancode,action,mods);
-  }
+  if(currentVectorActor.IsNotNull())
+    {
+    this->key_callback_vector(window,key,scancode,action,mods);
+    }
 }
 
 bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -1048,164 +1084,160 @@ bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, in
       shader->SetSliderPosition(posx);
       }
     }
-   if(key == GLFW_KEY_X && action == GLFW_PRESS)
+  if(key == GLFW_KEY_X && action == GLFW_PRESS)
     {
     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
     otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
     shader->SetShaderType(SHADER_STANDARD);
     }
 
-   if(key == GLFW_KEY_R && action == GLFW_PRESS)
-     {
-     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-     currentActor->SetRedIdx(1+(currentActor->GetRedIdx())%currentActor->GetNumberOfComponents());
-     }
-   if(key == GLFW_KEY_G && action == GLFW_PRESS)
-     {
-     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-     currentActor->SetGreenIdx(1+(currentActor->GetGreenIdx())%currentActor->GetNumberOfComponents());
-     }
-   if(key == GLFW_KEY_B && action == GLFW_PRESS)
-     {
-     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-     currentActor->SetBlueIdx(1+(currentActor->GetBlueIdx())%currentActor->GetNumberOfComponents());
-     }
+  if(key == GLFW_KEY_R && action == GLFW_PRESS)
+    {
+    otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    currentActor->SetRedIdx(1+(currentActor->GetRedIdx())%currentActor->GetNumberOfComponents());
+    }
+  if(key == GLFW_KEY_G && action == GLFW_PRESS)
+    {
+    otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    currentActor->SetGreenIdx(1+(currentActor->GetGreenIdx())%currentActor->GetNumberOfComponents());
+    }
+  if(key == GLFW_KEY_B && action == GLFW_PRESS)
+    {
+    otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    currentActor->SetBlueIdx(1+(currentActor->GetBlueIdx())%currentActor->GetNumberOfComponents());
+    }
 
-   if(key == GLFW_KEY_F && action == GLFW_PRESS)
-     {
-     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-     otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+  if(key == GLFW_KEY_F && action == GLFW_PRESS)
+    {
+    otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
 
-     double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;     
-     currentActor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue);
+    double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;     
+    currentActor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue);
      
-     shader->SetMinRed(minRed);
-     shader->SetMinGreen(minGreen);
-     shader->SetMinBlue(minBlue);
-     shader->SetMaxRed(maxRed);
-     shader->SetMaxGreen(maxGreen);
-     shader->SetMaxBlue(maxBlue);
-     }
+    shader->SetMinRed(minRed);
+    shader->SetMinGreen(minGreen);
+    shader->SetMinBlue(minBlue);
+    shader->SetMaxRed(maxRed);
+    shader->SetMaxGreen(maxGreen);
+    shader->SetMaxBlue(maxBlue);
+    }
 
-if(key == GLFW_KEY_V && action == GLFW_PRESS)
-     {
-     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-     otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+  if(key == GLFW_KEY_V && action == GLFW_PRESS)
+    {
+    otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
 
-     double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;     
-     currentActor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue,false);
+    double minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue;     
+    currentActor->AutoColorAdjustment(minRed,maxRed,minGreen,maxGreen,minBlue,maxBlue,false);
      
-     shader->SetMinRed(minRed);
-     shader->SetMinGreen(minGreen);
-     shader->SetMinBlue(minBlue);
-     shader->SetMaxRed(maxRed);
-     shader->SetMaxGreen(maxGreen);
-     shader->SetMaxBlue(maxBlue);
-     }
-   if(key == GLFW_KEY_F1 && action == GLFW_PRESS)
-     {
-     m_DisplayHelp = true;
-     }
+    shader->SetMinRed(minRed);
+    shader->SetMinGreen(minGreen);
+    shader->SetMinBlue(minBlue);
+    shader->SetMaxRed(maxRed);
+    shader->SetMaxGreen(maxGreen);
+    shader->SetMaxBlue(maxBlue);
+    }
 
-   // Change viewport geometry to current actor
-   if(key == GLFW_KEY_P && action == GLFW_PRESS)
-     {
-     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+  // Change viewport geometry to current actor
+  if(key == GLFW_KEY_P && action == GLFW_PRESS)
+    {
+    otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
-     // First, transform the center
-     GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
-     GlImageActor::PointType imCenter = currentActor->ViewportToImageTransform(vpCenter);
+    // First, transform the center
+    GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
+    GlImageActor::PointType imCenter = currentActor->ViewportToImageTransform(vpCenter);
 
-     // Next, transform the spacing
-     vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
-     vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
+    // Next, transform the spacing
+    vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
+    vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
 
-     GlImageActor::PointType tmpImPt = currentActor->ViewportToImageTransform(vpCenter);
+    GlImageActor::PointType tmpImPt = currentActor->ViewportToImageTransform(vpCenter);
 
-     GlImageActor::SpacingType spacing;
+    GlImageActor::SpacingType spacing;
 
-     spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
-     spacing[1]=(tmpImPt[1]-imCenter[1])/1000;
+    spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
+    spacing[1]=(tmpImPt[1]-imCenter[1])/1000;
 
-     // GlImageActor::SpacingType spacing;
-     // ulx = std::min(imul[0],imlr[0]);
-     // lrx = std::max(imul[0],imlr[0]);
-     // uly = std::min(imul[1],imlr[1]);
-     // lry = std::max(imul[1],imlr[1]);
+    // GlImageActor::SpacingType spacing;
+    // ulx = std::min(imul[0],imlr[0]);
+    // lrx = std::max(imul[0],imlr[0]);
+    // uly = std::min(imul[1],imlr[1]);
+    // lry = std::max(imul[1],imlr[1]);
 
-     // origin[0] = ulx;
-     // origin[1] = uly;
+    // origin[0] = ulx;
+    // origin[1] = uly;
 
-     // spacing[0] = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
-     // spacing[1] = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
+    // spacing[0] = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
+    // spacing[1] = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
 
-     m_View->GetSettings()->SetSpacing(spacing);
-     m_View->GetSettings()->SetWkt(currentActor->GetWkt());
-     m_View->GetSettings()->SetKeywordList(currentActor->GetKwl());
-     m_View->GetSettings()->UseProjectionOn();
-     m_View->GetSettings()->Center(imCenter);
-     m_ReferenceActor = m_SelectedActor;
-     }
+    m_View->GetSettings()->SetSpacing(spacing);
+    m_View->GetSettings()->SetWkt(currentActor->GetWkt());
+    m_View->GetSettings()->SetKeywordList(currentActor->GetKwl());
+    m_View->GetSettings()->UseProjectionOn();
+    m_View->GetSettings()->Center(imCenter);
+    m_ReferenceActor = m_SelectedActor;
+    }
 }
 
 bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-if(key == GLFW_KEY_F && action == GLFW_PRESS)
-  {
-  otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-  currentActor->SetFill(!currentActor->GetFill());
-  return true;
-  }
+  if(key == GLFW_KEY_F && action == GLFW_PRESS)
+    {
+    otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    currentActor->SetFill(!currentActor->GetFill());
+    return true;
+    }
 
-if(key == GLFW_KEY_S && action == GLFW_PRESS)
-  {
-  otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
-  currentActor->SetSolidBorder(!currentActor->GetSolidBorder());
-  return true;
-  }
+  if(key == GLFW_KEY_S && action == GLFW_PRESS)
+    {
+    otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    currentActor->SetSolidBorder(!currentActor->GetSolidBorder());
+    return true;
+    }
 
 
 // Change viewport geometry to current actor
-if(key == GLFW_KEY_P && action == GLFW_PRESS)
-  {
-  otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+  if(key == GLFW_KEY_P && action == GLFW_PRESS)
+    {
+    otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
-     // First, transform the center
-     GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
-     GlImageActor::PointType imCenter = currentActor->ViewportToVectorTransform(vpCenter);
+    // First, transform the center
+    GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
+    GlImageActor::PointType imCenter = currentActor->ViewportToVectorTransform(vpCenter);
 
-     // Next, transform the spacing
-     vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
-     vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
+    // Next, transform the spacing
+    vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
+    vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
 
-     GlImageActor::PointType tmpImPt = currentActor->ViewportToVectorTransform(vpCenter);
+    GlImageActor::PointType tmpImPt = currentActor->ViewportToVectorTransform(vpCenter);
 
-     GlImageActor::SpacingType spacing;
+    GlImageActor::SpacingType spacing;
 
-     spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
-     spacing[1]=(tmpImPt[1]-imCenter[1])/1000;
+    spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
+    spacing[1]=(tmpImPt[1]-imCenter[1])/1000;
 
-     // GlImageActor::SpacingType spacing;
-     // ulx = std::min(imul[0],imlr[0]);
-     // lrx = std::max(imul[0],imlr[0]);
-     // uly = std::min(imul[1],imlr[1]);
-     // lry = std::max(imul[1],imlr[1]);
+    // GlImageActor::SpacingType spacing;
+    // ulx = std::min(imul[0],imlr[0]);
+    // lrx = std::max(imul[0],imlr[0]);
+    // uly = std::min(imul[1],imlr[1]);
+    // lry = std::max(imul[1],imlr[1]);
 
-     // origin[0] = ulx;
-     // origin[1] = uly;
+    // origin[0] = ulx;
+    // origin[1] = uly;
 
-     // spacing[0] = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
-     // spacing[1] = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
+    // spacing[0] = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
+    // spacing[1] = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
 
-     m_View->GetSettings()->SetSpacing(spacing);
-     m_View->GetSettings()->SetWkt(currentActor->GetWkt());
-     m_View->GetSettings()->UseProjectionOn();
-     m_View->GetSettings()->Center(imCenter);
-     m_ReferenceActor = m_SelectedActor;
-     }
+    m_View->GetSettings()->SetSpacing(spacing);
+    m_View->GetSettings()->SetWkt(currentActor->GetWkt());
+    m_View->GetSettings()->UseProjectionOn();
+    m_View->GetSettings()->Center(imCenter);
+    m_ReferenceActor = m_SelectedActor;
+    }
 
 
-return false;
+  return false;
 }
 
 void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int action, int mode)
