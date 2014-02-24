@@ -482,10 +482,12 @@ void IceViewer::DrawHelp()
   oss<<"- Change selected image with PAGE UP / PAGE DOWN (note that selected dataset is highlighted with [ ]"<<std::endl;
   oss<<"- Show/hide image dataset with space bar"<<std::endl;
   oss<<"- Highlight selected image by holding backspace"<<std::endl;
-  oss<<"- Note that all images are reprojected in the first loaded image geometry (highligthed with * *). To change reference geometry to selected image, press P key."<<std::endl;
+  oss<<"- Zoom to full extent of selected dataset with W"<<std::endl;
+  oss<<"- Zoom to full resolution fo selected images with Q (images only, as full resolution has no meaning for vectors)"<<std::endl;
+  oss<<"- Note that all images are reprojected in the first loaded dataset geometry (highligthed with * *). To change reference geometry to selected dataset, press P key."<<std::endl;
   oss<<std::endl;
 
-  oss<<"Color range:"<<std::endl;
+  oss<<"Images color range:"<<std::endl;
   oss<<"- Rotate red/green/blue channel of selected image with R, G and B keys"<<std::endl;
   oss<<"- Reset color range of selected image to 2% histogram clipping of full image with F key"<<std::endl;
   oss<<"- Reset color range of selected image to 2% histogram clipping of current area with V key"<<std::endl;
@@ -501,7 +503,7 @@ void IceViewer::DrawHelp()
   oss<<"- Switch to vertical swipe transparency with S key. Press S again to change to horizontal swipe transparency. In this mode, hoover with mouse to swipe."<<std::endl;
   oss<<std::endl;
   
-  oss<<"Vector layers controls:"<<std::endl;
+  oss<<"Vector controls:"<<std::endl;
   oss<<"- Enable/disable fill polygon mode with F key"<<std::endl;
   oss<<"- Enable/disable solid border mode with S key"<<std::endl;
   oss<<"- Tune alpha (transparancy) value with LEFT CTRL + mouse wheel"<<std::endl;
