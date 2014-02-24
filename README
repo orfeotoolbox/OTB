@@ -24,3 +24,11 @@ Usage: ./otbIce img1 ... imgN
 
 Press F1 for help
 
+----------------------
+Acknowledgement
+----------------------
+
+The authors would like to thank Gabriele Facciolo (CMLA) and the
+authors of pvflip (https://github.com/gfacciol/pvflip/) for the seed
+discussion about float32 OpenGl textures and OpenGl Shading Language
+which greatly contributed to the dawn of Ice.
