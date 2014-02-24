@@ -120,7 +120,7 @@ private:
   void UpdateTransforms();
 
   void UpdateDisplayList();
- 
+
   ColorType            m_Color;
   double               m_Alpha;
   bool                 m_Fill;

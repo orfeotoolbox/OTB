@@ -250,7 +250,7 @@ void GlImageActor::Render()
      glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
 
      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
-     if(m_CurrentResolution == 1)
+     if(m_CurrentResolution == 0)
        {
        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
        }

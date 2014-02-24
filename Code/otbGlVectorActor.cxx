@@ -310,6 +310,153 @@ void GlVectorActor::UpdateData()
     }
 }
 
+
+// Inner helper functions
+namespace ice_internal
+{ 
+void GeometryRender(const OGRPoint * inPoint)
+{
+  
+}
+
+void GeometryRender(const OGRLineString * in)
+{
+  glBegin(GL_LINE_STRIP);
+  
+  for(unsigned int i = 0; i < in->getNumPoints();++i)
+    {
+    glVertex2d(in->getX(i),in->getY(i));
+    }
+  glEnd();
+}
+
+void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill, bool solid)
+{
+   std::vector<GLdouble *> vertices;
+
+      gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, !fill);
+      // Begin a new polygon
+      gluTessBeginPolygon(tesselator, NULL);
+      
+      // Render the outer boundary
+      gluTessBeginContour(tesselator);
+      
+      for(unsigned int i = 0; i < in->getExteriorRing()->getNumPoints();++i)
+        {
+        GLdouble * glp = new GLdouble[3];
+        glp[0] = in->getExteriorRing()->getX(i);
+        glp[1] = in->getExteriorRing()->getY(i);
+        glp[2] = 0;
+        vertices.push_back(glp);
+
+        gluTessVertex(tesselator,glp,glp);
+        }
+
+      // End the outer boundary contour
+      gluTessEndContour(tesselator);
+      
+      for(unsigned int j = 0; j < in->getNumInteriorRings();++j)
+        {        
+        gluTessBeginContour(tesselator);
+
+        for(unsigned int i = 0; i < in->getInteriorRing(j)->getNumPoints();++i)
+          {
+          GLdouble * glp = new GLdouble[3];
+          glp[0] = in->getInteriorRing(j)->getX(i);
+          glp[1] = in->getInteriorRing(j)->getY(i);
+          glp[2] = 0;
+          vertices.push_back(glp);
+          
+          gluTessVertex(tesselator,glp,glp);
+          }
+        
+        gluTessEndContour(tesselator);
+        }
+
+       // End the polygon
+      gluTessEndPolygon(tesselator);
+
+      if(solid)
+        {
+        glDisable(GL_BLEND);
+
+        gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, true);
+        // Begin a new polygon
+        gluTessBeginPolygon(tesselator, NULL);
+        
+        // Render the outer boundary
+        gluTessBeginContour(tesselator);
+        
+        for(unsigned int i = 0; i < in->getExteriorRing()->getNumPoints();++i)
+          {
+          GLdouble * glp = new GLdouble[3];
+          glp[0] = in->getExteriorRing()->getX(i);
+          glp[1] = in->getExteriorRing()->getY(i);
+          glp[2] = 0;
+          vertices.push_back(glp);
+          
+          gluTessVertex(tesselator,glp,glp);
+          }
+        
+        // End the outer boundary contour
+        gluTessEndContour(tesselator);
+      
+        for(unsigned int j = 0; j < in->getNumInteriorRings();++j)
+          {        
+          gluTessBeginContour(tesselator);
+          
+          for(unsigned int i = 0; i < in->getInteriorRing(j)->getNumPoints();++i)
+          {
+          GLdouble * glp = new GLdouble[3];
+          glp[0] = in->getInteriorRing(j)->getX(i);
+          glp[1] = in->getInteriorRing(j)->getY(i);
+          glp[2] = 0;
+          vertices.push_back(glp);
+          
+          gluTessVertex(tesselator,glp,glp);
+          }
+          
+          gluTessEndContour(tesselator);
+          }
+      // End the polygon
+        gluTessEndPolygon(tesselator);
+        
+        glEnable(GL_BLEND);
+        
+        }
+      
+      // free vertices
+      for(std::vector<GLdouble *>::iterator it = vertices.begin();it!=vertices.end();++it)
+        {
+        delete[] (*it);
+        }
+}
+
+void GeometryRender(const OGRMultiPoint * in)
+{
+  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+    {
+    GeometryRender(dynamic_cast<const OGRPoint *>(in->getGeometryRef(i)));   
+    }
+}
+
+void GeometryRender(const OGRMultiLineString * in)
+{
+  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+    {
+    GeometryRender(dynamic_cast<const OGRLineString *>(in->getGeometryRef(i)));
+    }
+}
+
+void GeometryRender(const OGRMultiPolygon * in, GLUtesselator * tesselator, bool fill, bool solid)
+{
+  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+    {
+    GeometryRender(dynamic_cast<const OGRPolygon *>(in->getGeometryRef(i)),tesselator,fill,solid);
+    }
+}
+} // end namespace ice_internal
+
 void GlVectorActor::UpdateDisplayList()
 {
   // Build display list
@@ -324,131 +471,41 @@ void GlVectorActor::UpdateDisplayList()
   for(std::vector<InternalFeature>::iterator it = m_InternalFeatures.begin();
       it!=m_InternalFeatures.end();++it)
     {
-    const OGRGeometry * geom = it->m_RenderedFeature.GetGeometry();
+    const OGRGeometry * geom = it->m_SourceFeature.GetGeometry();
     const OGRPoint * inPoint = dynamic_cast<const OGRPoint *>(geom);
     const OGRLineString * inLineString = dynamic_cast<const OGRLineString *>(geom);
     const OGRPolygon * inPolygon = dynamic_cast<const OGRPolygon *>(geom);
-    
+    const OGRMultiPoint * inMPoints = dynamic_cast<const OGRMultiPoint *>(geom);
+    const OGRMultiLineString * inMLineStrings = dynamic_cast<const OGRMultiLineString *>(geom);
+    const OGRMultiPolygon * inMPolygons = dynamic_cast<const OGRMultiPolygon *>(geom);
+
     if(inPoint)
       {
-      // TODO
+      ice_internal::GeometryRender(const_cast<OGRPoint *>(inPoint));
       }
     else if(inLineString)
       {
-      glBegin(GL_LINE_STRIP);
-
-      for(unsigned int i = 0; i < inLineString->getNumPoints();++i)
-        {
-        glVertex2d(inLineString->getX(i),inLineString->getY(i));
-        }
-
-      glEnd();
+      ice_internal::GeometryRender(inLineString);
       }
     else if(inPolygon)
       {
-      
-      
-      std::vector<GLdouble *> vertices;
-
-      gluTessProperty(m_GluTesselator, GLU_TESS_BOUNDARY_ONLY, !m_Fill);
-      // Begin a new polygon
-      gluTessBeginPolygon(m_GluTesselator, NULL);
-      
-      // Render the outer boundary
-      gluTessBeginContour(m_GluTesselator);
-      
-      for(unsigned int i = 0; i < inPolygon->getExteriorRing()->getNumPoints();++i)
-        {
-        GLdouble * glp = new GLdouble[3];
-        glp[0] = inPolygon->getExteriorRing()->getX(i);
-        glp[1] = inPolygon->getExteriorRing()->getY(i);
-        glp[2] = 0;
-        vertices.push_back(glp);
-
-        gluTessVertex(m_GluTesselator,glp,glp);
-        }
-
-      // End the outer boundary contour
-      gluTessEndContour(m_GluTesselator);
-      
-      for(unsigned int j = 0; j < inPolygon->getNumInteriorRings();++j)
-        {        
-        gluTessBeginContour(m_GluTesselator);
-
-        for(unsigned int i = 0; i < inPolygon->getInteriorRing(j)->getNumPoints();++i)
-          {
-          GLdouble * glp = new GLdouble[3];
-          glp[0] = inPolygon->getInteriorRing(j)->getX(i);
-          glp[1] = inPolygon->getInteriorRing(j)->getY(i);
-          glp[2] = 0;
-          vertices.push_back(glp);
-          
-          gluTessVertex(m_GluTesselator,glp,glp);
-          }
-        
-        gluTessEndContour(m_GluTesselator);
-        }
-
-       // End the polygon
-      gluTessEndPolygon(m_GluTesselator);
-
-      if(m_SolidBorder)
-        {
-        glDisable(GL_BLEND);
-
-        gluTessProperty(m_GluTesselator, GLU_TESS_BOUNDARY_ONLY, true);
-        // Begin a new polygon
-        gluTessBeginPolygon(m_GluTesselator, NULL);
-        
-        // Render the outer boundary
-        gluTessBeginContour(m_GluTesselator);
-        
-        for(unsigned int i = 0; i < inPolygon->getExteriorRing()->getNumPoints();++i)
-          {
-          GLdouble * glp = new GLdouble[3];
-          glp[0] = inPolygon->getExteriorRing()->getX(i);
-          glp[1] = inPolygon->getExteriorRing()->getY(i);
-          glp[2] = 0;
-          vertices.push_back(glp);
-          
-          gluTessVertex(m_GluTesselator,glp,glp);
-          }
-        
-        // End the outer boundary contour
-        gluTessEndContour(m_GluTesselator);
-      
-        for(unsigned int j = 0; j < inPolygon->getNumInteriorRings();++j)
-          {        
-          gluTessBeginContour(m_GluTesselator);
-          
-          for(unsigned int i = 0; i < inPolygon->getInteriorRing(j)->getNumPoints();++i)
-          {
-          GLdouble * glp = new GLdouble[3];
-          glp[0] = inPolygon->getInteriorRing(j)->getX(i);
-          glp[1] = inPolygon->getInteriorRing(j)->getY(i);
-          glp[2] = 0;
-          vertices.push_back(glp);
-          
-          gluTessVertex(m_GluTesselator,glp,glp);
-          }
-          
-          gluTessEndContour(m_GluTesselator);
-          }
-      // End the polygon
-        gluTessEndPolygon(m_GluTesselator);
-        
-        glEnable(GL_BLEND);
-        
-        }
-      
-      // free vertices
-      for(std::vector<GLdouble *>::iterator it = vertices.begin();it!=vertices.end();++it)
-        {
-        delete[] (*it);
-        }
+      ice_internal::GeometryRender(inPolygon,m_GluTesselator,m_Fill, m_SolidBorder);
+      }
+    else if(inMPoints)
+      {
+      ice_internal::GeometryRender(inMPoints);
+      }
+    else if(inMLineStrings)
+      {
+      ice_internal::GeometryRender(inMLineStrings);
+      }
+    else if(inMPolygons)
+      {
+      ice_internal::GeometryRender(inMPolygons,m_GluTesselator,m_Fill, m_SolidBorder);
       }
     }
-  
+
+
   glEndList();
   
   m_DisplayListNeedsRebuild = false;
@@ -498,8 +555,10 @@ void GlVectorActor::UpdateTransforms()
 }
 
 
-// Inner helper function
-OGRPoint TransformPoint(OGRPoint * inPoint,otb::GenericRSTransform<> * transform)
+// Inner helper functions
+namespace ice_internal
+{ 
+OGRPoint GeometryTransform(const OGRPoint * inPoint, typename otb::GenericRSTransform<> * transform)
 {
   OGRPoint outPoint;
   otb::GenericRSTransform<>::InputPointType in,out;
@@ -514,6 +573,99 @@ OGRPoint TransformPoint(OGRPoint * inPoint,otb::GenericRSTransform<> * transform
   return outPoint;
 }
 
+OGRPoint GeometryTransform(OGRPoint * inPoint,otb::GenericRSTransform<> * transform)
+{
+  return GeometryTransform(const_cast<const OGRPoint *>(inPoint),transform);
+}
+
+OGRLineString GeometryTransform(const OGRLineString * in,otb::GenericRSTransform<> * transform)
+{
+  OGRLineString outLineString;
+  
+  for(unsigned int i = 0; i<in->getNumPoints();++i)
+    {
+    OGRPoint p,op;
+    in->getPoint(i,&p);
+    op = GeometryTransform(&p,transform);
+    outLineString.addPoint(&op);
+    }
+  return outLineString;
+}
+
+OGRPolygon GeometryTransform(const OGRPolygon * in,otb::GenericRSTransform<> * transform)
+{
+  OGRPolygon outPolygon;
+  
+  // First process external ring
+  const OGRLinearRing * inExtRing = in->getExteriorRing();
+  OGRLinearRing outExtRing;
+  
+  for(unsigned int i = 0; i<inExtRing->getNumPoints();++i)
+    {
+    OGRPoint p,op;
+    inExtRing->getPoint(i,&p);
+    op = GeometryTransform(&p,transform);
+    outExtRing.addPoint(&op);
+    }
+  outPolygon.addRing(&outExtRing);
+  
+  // Then process any interior ring
+  for(unsigned int j = 0; j<in->getNumInteriorRings();++j)
+    {
+    const OGRLinearRing * inIntRing = in->getInteriorRing(j);
+    OGRLinearRing outIntRing;
+    
+    for(unsigned int i = 0; i<inIntRing->getNumPoints();++i)
+      {
+      OGRPoint p,op;
+      inIntRing->getPoint(i,&p);
+      op = GeometryTransform(&p,transform);
+      outIntRing.addPoint(&op);
+      }
+    outPolygon.addRing(&outIntRing);
+    }
+  return outPolygon;
+}
+
+OGRMultiPoint GeometryTransform(const OGRMultiPoint * in, otb::GenericRSTransform<> * transform)
+{
+  OGRMultiPoint outMultiPoint;
+
+  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+    {
+    OGRPoint p = GeometryTransform(dynamic_cast<const OGRPoint *>(in->getGeometryRef(i)),transform);
+    outMultiPoint.addGeometry(&p);
+    }
+  return outMultiPoint;
+}
+
+
+OGRMultiLineString GeometryTransform(const OGRMultiLineString * in, otb::GenericRSTransform<> * transform)
+{
+ OGRMultiLineString outMultiLineString;
+
+  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+    {
+    OGRLineString l = GeometryTransform(dynamic_cast<const OGRLineString *>(in->getGeometryRef(i)),transform);
+    outMultiLineString.addGeometry(&l);
+    }
+  return outMultiLineString;
+}
+
+OGRMultiPolygon GeometryTransform(const OGRMultiPolygon * in, otb::GenericRSTransform<> * transform)
+{
+OGRMultiPolygon outMultiPolygon;
+
+  for(unsigned int i = 0; i < in->getNumGeometries();++i)
+    {
+    OGRPolygon p = GeometryTransform(dynamic_cast<const OGRPolygon *>(in->getGeometryRef(i)),transform);
+    outMultiPolygon.addGeometry(&p);
+    }
+  return outMultiPolygon;
+
+}
+} // end namespace ice_internal
+
 void GlVectorActor::InternalFeaturesTransform()
 {
   for(std::vector<InternalFeature>::iterator it = m_InternalFeatures.begin();
@@ -523,58 +675,39 @@ void GlVectorActor::InternalFeaturesTransform()
     const OGRPoint * inPoint = dynamic_cast<const OGRPoint *>(geom);
     const OGRLineString * inLineString = dynamic_cast<const OGRLineString *>(geom);
     const OGRPolygon * inPolygon = dynamic_cast<const OGRPolygon *>(geom);
+    const OGRMultiPoint * inMPoints = dynamic_cast<const OGRMultiPoint *>(geom);
+    const OGRMultiLineString * inMLineStrings = dynamic_cast<const OGRMultiLineString *>(geom);
+    const OGRMultiPolygon * inMPolygons = dynamic_cast<const OGRMultiPolygon *>(geom);
 
     if(inPoint)
       {
-      OGRPoint outPoint = TransformPoint(const_cast<OGRPoint *>(inPoint),m_VectorToViewportTransform);
+      OGRPoint outPoint = ice_internal::GeometryTransform(const_cast<OGRPoint *>(inPoint),m_VectorToViewportTransform);
       it->m_RenderedFeature.SetGeometry(&outPoint);
       }
-  else if(inLineString)
+    else if(inLineString)
       {
-      OGRLineString outLineString;
-      
-      for(unsigned int i = 0; i<inLineString->getNumPoints();++i)
-        {
-        OGRPoint p,op;
-        inLineString->getPoint(i,&p);
-        op = TransformPoint(&p,m_VectorToViewportTransform);
-         outLineString.addPoint(&op);
-        }
+      OGRLineString outLineString = ice_internal::GeometryTransform(inLineString,m_VectorToViewportTransform);
       it->m_RenderedFeature.SetGeometry(&outLineString);
       }
-  else if(inPolygon)
-    {
-    OGRPolygon outPolygon;
-    
-    // First process external ring
-    const OGRLinearRing * inExtRing = inPolygon->getExteriorRing();
-    OGRLinearRing outExtRing;
-
-     for(unsigned int i = 0; i<inExtRing->getNumPoints();++i)
-        {
-        OGRPoint p,op;
-        inExtRing->getPoint(i,&p);
-        op = TransformPoint(&p,m_VectorToViewportTransform);
-        outExtRing.addPoint(&op);
-        }
-     outPolygon.addRing(&outExtRing);
-
-     // Then process any interior ring
-     for(unsigned int j = 0; j<inPolygon->getNumInteriorRings();++j)
-       {
-       const OGRLinearRing * inIntRing = inPolygon->getInteriorRing(j);
-       OGRLinearRing outIntRing;
-
-       for(unsigned int i = 0; i<inIntRing->getNumPoints();++i)
-         {
-         OGRPoint p,op;
-         inIntRing->getPoint(i,&p);
-         op = TransformPoint(&p,m_VectorToViewportTransform);
-         outIntRing.addPoint(&op);
-         }
-       outPolygon.addRing(&outIntRing);
-       }
-     it->m_RenderedFeature.SetGeometry(&outPolygon);
+    else if(inPolygon)
+      {
+      OGRPolygon outPolygon = ice_internal::GeometryTransform(inPolygon,m_VectorToViewportTransform);
+      it->m_RenderedFeature.SetGeometry(&outPolygon);
+      }
+    else if(inMPoints)
+      {
+      OGRMultiPoint outMPoints = ice_internal::GeometryTransform(inMPoints,m_VectorToViewportTransform);
+      it->m_RenderedFeature.SetGeometry(&outMPoints);
+      }
+    else if(inMLineStrings)
+      {
+      OGRMultiLineString outMLineStrings = ice_internal::GeometryTransform(inMLineStrings,m_VectorToViewportTransform);
+      it->m_RenderedFeature.SetGeometry(&outMLineStrings);
+      }
+    else if(inMPolygons)
+      {
+      OGRMultiPolygon outMPolygons = ice_internal::GeometryTransform(inMPolygons,m_VectorToViewportTransform);
+      it->m_RenderedFeature.SetGeometry(&outMPolygons);
       }
     }
 }
