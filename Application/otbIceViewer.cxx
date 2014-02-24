@@ -140,10 +140,12 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
     for(std::vector<std::string>::const_iterator it = layers.begin()+1;
         it!=layers.end();++it)
       {
+
       otb::GlVectorActor::Pointer actor = otb::GlVectorActor::New();
       actor->Initialize(fname,*it);
       actor->SetVisible(true);
       actor->SetAlpha(0.5);
+      actor->SetColor(m_ColorMapIterator->second);
       
       ++m_ColorMapIterator;
       if(m_ColorMapIterator == m_ColorMap.end())
@@ -151,7 +153,7 @@ void IceViewer::AddVector(const std::string & fname, const std::string & name)
         m_ColorMapIterator = m_ColorMap.begin();
         }
 
-      m_View->AddActor(actor,name);
+      m_View->AddActor(actor,name+"_"+(*it));
       }
     }
 }
