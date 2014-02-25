@@ -35,15 +35,12 @@
 
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_pointer.hpp>
-
-// Try to comment forward declarations not used in OGR wrapper and not
-// compatible with Mac OS X Mavericks
+#include <boost/detail/container_fwd.hpp>
  
 // forward declarations
-// namespace std {
-// template <typename T, std::size_t N>                                class array;
-// template <typename T, typename TAllocator>                          class vector;
-// } // std namespace
+namespace std {
+template <typename T, std::size_t N>                                class array;
+} // std namespace
 
 namespace boost {
 template <typename T, std::size_t N>                                 class array;
