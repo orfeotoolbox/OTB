@@ -33,11 +33,10 @@ namespace otb
 template <class TInputImage1, class TInputImage2,
     class TOutputImage, class TFunction>
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
-::BinaryFunctorNeighborhoodJoinHistogramImageFilter(): m_HistogramSize(2)
+::BinaryFunctorNeighborhoodJoinHistogramImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
   m_Radius = 3;
-  m_HistogramSize.Fill(256);
   m_UsePaddingValue = false;
   m_UpperBoundIncreaseFactor = 0.001;
 }
@@ -268,8 +267,10 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
   Input2IteratorType ti2(pInput2Image, input2Region);
 
   typename HistogramType::Pointer histogram = HistogramType::New();
+  HistogramSizeType histogramSize(2);
+  histogramSize.Fill(256);
   histogram->SetMeasurementVectorSize(2);
-  histogram->Initialize(m_HistogramSize, lowerBound, upperBound);
+  histogram->Initialize(histogramSize, lowerBound, upperBound);
 
   ti1.GoToBegin();
   ti2.GoToBegin();

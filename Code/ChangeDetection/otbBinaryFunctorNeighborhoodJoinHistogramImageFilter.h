@@ -121,14 +121,8 @@ public:
     this->Modified();
   }
 
+  /** Neighborhood radius */
   itkSetMacro(Radius, RadiusSizeType);
-
-  /** Sets the histogram size. Note this function must be called before
-    \c Initialize(). */
-  itkSetMacro(HistogramSize, HistogramSizeType);
-
-  /** Gets the histogram size. */
-  itkGetConstReferenceMacro(HistogramSize, HistogramSizeType);
 
   /** Factor to increase the upper bound for the samples in the histogram.
       Default value is 0.001 */
@@ -190,9 +184,6 @@ private:
       padding value should be ignored when calculating the similarity
       measure. */
   bool m_UsePaddingValue;
-
-  /** The histogram size. */
-  HistogramSizeType m_HistogramSize;
   
   /** The increase in the upper bound. */
   double m_UpperBoundIncreaseFactor;
