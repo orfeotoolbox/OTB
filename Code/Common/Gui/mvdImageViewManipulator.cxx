@@ -140,6 +140,16 @@ ImageViewManipulator
 }
 
 /******************************************************************************/
+PointType
+ImageViewManipulator
+::GetOrigin() const
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  return m_ViewSettings->GetOrigin();
+}
+
+/******************************************************************************/
 void
 ImageViewManipulator
 ::SetSpacing( const SpacingType& spacing )
@@ -326,6 +336,8 @@ ImageViewManipulator
     m_MousePressPosition = event->pos();
 
     emit RefreshView();
+
+    emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
     }
 }
 
@@ -422,6 +434,8 @@ ImageViewManipulator
     Scale( event->pos(), degrees );
 
     emit RefreshView();
+
+    emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
     }
 }
 
@@ -524,7 +538,11 @@ ImageViewManipulator
   //
   // Refresh
   if( needsRefresh )
+    {
     emit RefreshView();
+
+    emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+    }
 }
 
 /******************************************************************************/

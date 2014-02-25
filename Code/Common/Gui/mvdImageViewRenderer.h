@@ -162,6 +162,13 @@ signals:
 //
 // Protected methods.
 protected:
+  /**
+   */
+  inline otb::GlImageActor::Pointer GetReferenceGlImageActor();
+  /**
+   */
+  virtual
+  void UpdateActors( const AbstractImageViewRenderer::RenderingContext* c );
 
 //
 // Protected attributes.
@@ -248,6 +255,16 @@ ImageViewRenderer
   assert( !m_GlView.IsNull() );
 
   return m_GlView->GetSettings();
+}
+
+
+/*****************************************************************************/
+inline
+otb::GlImageActor::Pointer
+ImageViewRenderer
+::GetReferenceGlImageActor()
+{
+  return m_ReferenceGlImageActor;
 }
 
 } // end namespace 'mvd'

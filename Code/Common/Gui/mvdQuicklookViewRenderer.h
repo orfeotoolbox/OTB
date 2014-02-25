@@ -96,11 +96,16 @@ public:
      */
     inline
     RenderingContext() :
-      ImageViewRenderer::RenderingContext()
+      ImageViewRenderer::RenderingContext(),
+      m_RoiOrigin(),
+      m_RoiExtent()
     {
     }
 
     virtual ~RenderingContext() {}
+
+    PointType m_RoiOrigin;
+    PointType m_RoiExtent;
   };
 
 //
@@ -111,6 +116,12 @@ public:
 
   /** Destructor */
   virtual ~QuicklookViewRenderer();
+
+  //
+  // ImageViewRenderer overloads.
+
+  virtual
+  AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -129,6 +140,12 @@ signals:
 // Protected methods.
 protected:
 
+  //
+  // ImageViewRenderer overloads.
+
+  virtual
+  void UpdateActors( const AbstractImageViewRenderer::RenderingContext* c );
+
 //
 // Protected attributes.
 protected:
@@ -146,11 +163,14 @@ private:
   //
   // AbstractImageViewRenderer overloads.
 
-  virtual void virtual_PrepareScene();
+  virtual void virtual_FinishScene();
 
 //
 // Private attributes.
 private:
+  /**
+   */
+  otb::GlROIActor::Pointer m_GlRoiActor;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

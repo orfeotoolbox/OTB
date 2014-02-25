@@ -30,6 +30,7 @@
 //
 // System includes (sorted by alphabetic order)
 
+
 //
 // ITK includes (sorted by alphabetic order)
 
@@ -38,6 +39,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Gui/mvdQuicklookViewRenderer.h"
 
 namespace mvd
 {
@@ -67,7 +69,9 @@ namespace mvd
 QuicklookViewManipulator
 ::QuicklookViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
                             QObject* parent ) :
-  ImageViewManipulator( viewSettings, parent )
+  ImageViewManipulator( viewSettings, parent ),
+  m_RoiOrigin(),
+  m_RoiExtent()
 {
 }
 
@@ -75,7 +79,9 @@ QuicklookViewManipulator
 
 QuicklookViewManipulator
 ::QuicklookViewManipulator( QObject* parent ) :
-  ImageViewManipulator( parent )
+  ImageViewManipulator( parent ),
+  m_RoiOrigin(),
+  m_RoiExtent()
 {
 }
 
@@ -88,16 +94,25 @@ QuicklookViewManipulator
 }
 
 /******************************************************************************/
-/*
 void
 QuicklookViewManipulator
-::MousePressEvent( QMouseEvent* event )
+::SetupRenderingContext(
+  AbstractImageViewRenderer::RenderingContext * const c ) const
 {
-  assert( event!=NULL );
+  assert(
+    c==dynamic_cast< QuicklookViewRenderer::RenderingContext const * >( c )
+  );
 
-  // qDebug() << this << ":" << event;
+  QuicklookViewRenderer::RenderingContext * const context =
+    dynamic_cast< QuicklookViewRenderer::RenderingContext * const >( c );
+
+  context->m_RoiOrigin = m_RoiOrigin;
+  context->m_RoiExtent = m_RoiExtent;
+
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+#endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 }
-*/
 
 /******************************************************************************/
 void
@@ -165,5 +180,20 @@ QuicklookViewManipulator
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
+void
+QuicklookViewManipulator
+::OnRoiChanged( PointType origin, SizeType size, SpacingType spacing )
+{
+  qDebug() << this << ":OnRoiChanged()";
+
+  m_RoiOrigin = origin;
+
+  m_RoiExtent = origin;
+
+  m_RoiExtent[ 0 ] += static_cast< double >( size[ 0 ] ) * spacing[ 0 ];
+  m_RoiExtent[ 1 ] += static_cast< double >( size[ 1 ] ) * spacing[ 1 ];
+
+  emit RefreshView();
+}
 
 } // end namespace 'mvd'

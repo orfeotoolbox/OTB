@@ -470,6 +470,31 @@ MainWindow
     m_ImageView,
     SLOT( ZoomToFullResolution() )
   );
+
+  //
+  // Connect image-views for ROI-changed events.
+
+  ImageViewWidget* quicklookView = GetQuicklookView();
+  assert( quicklookView!=NULL );
+
+  const AbstractImageViewManipulator* quicklookManipulator =
+    quicklookView->GetManipulator();
+
+  assert( quicklookManipulator!=NULL );
+
+  assert( m_ImageView!=NULL );
+
+  QObject::connect(
+    m_ImageView,
+    SIGNAL(
+      RoiChanged( const PointType&, const SizeType&, const SpacingType& )
+    ),
+    // to:
+    quicklookManipulator,
+    SLOT(
+      OnRoiChanged( const PointType&, const SizeType&, const SpacingType& )
+    )
+  );
 }
 
 #endif // USE_ICE_IMAGE_VIEW

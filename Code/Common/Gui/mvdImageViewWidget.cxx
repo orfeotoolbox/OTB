@@ -188,6 +188,12 @@ ImageViewWidget
   );
 
   QObject::connect(
+    m_Manipulator, SIGNAL( RoiChanged( PointType, SizeType, SpacingType ) ),
+    // to:
+    this, SIGNAL( RoiChanged( PointType, SizeType, SpacingType ) )
+  );
+
+  QObject::connect(
     m_Manipulator, SIGNAL( ZoomToExtent() ),
     // to:
     this, SLOT( ZoomToExtent() )

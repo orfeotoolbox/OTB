@@ -99,6 +99,9 @@ public:
   virtual void SetOrigin( const PointType& origin ) =0;
   /**
    */
+  virtual PointType GetOrigin() const =0;
+  /**
+   */
   virtual void SetSpacing( const SpacingType& spacing ) =0;
   /**
    */
@@ -166,6 +169,9 @@ signals:
   /**
    */
   void RefreshView();
+  /**
+   */
+  void RoiChanged( PointType origin, SizeType size, SpacingType spacing );
   /**
    */
   void ZoomToExtent();

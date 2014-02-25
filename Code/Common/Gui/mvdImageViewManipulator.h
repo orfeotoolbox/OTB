@@ -117,6 +117,8 @@ public:
 
   virtual void SetOrigin( const PointType& origin );
 
+  virtual PointType GetOrigin() const;
+
   virtual void SetSpacing( const SpacingType& spacing );
 
   virtual SpacingType GetSpacing() const;

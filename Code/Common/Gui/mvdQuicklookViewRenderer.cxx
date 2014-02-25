@@ -68,8 +68,10 @@ namespace mvd
 /*****************************************************************************/
 QuicklookViewRenderer
 ::QuicklookViewRenderer( QObject* parent ) :
-  ImageViewRenderer( parent )
+  ImageViewRenderer( parent ),
+  m_GlRoiActor( otb::GlROIActor::New() )
 {
+  assert( !m_GlRoiActor.IsNull() );
 }
 
 /*****************************************************************************/
@@ -78,14 +80,77 @@ QuicklookViewRenderer
 {
 }
 
+/*****************************************************************************/
+AbstractImageViewRenderer::RenderingContext*
+QuicklookViewRenderer
+::NewRenderingContext() const
+{
+  RenderingContext* context = new QuicklookViewRenderer::RenderingContext();
+
+#if USE_VIEW_SETTINGS_SIDE_EFFECT
+#else
+  assert( !m_GlView.IsNull() );
+
+  //
+  // Share otb::GlViewRendering settings with manipulator using
+  // RenderingContext. Manipulator can then setup otb::ViewSettings
+  // directly by side-effect.
+  context->m_ViewSettings = m_GlView->GetSettings();
+#endif
+
+  return context;
+}
+
 /*******************************************************************************/
 void
 QuicklookViewRenderer
-::virtual_PrepareScene()
+::virtual_FinishScene()
 {
   assert( !m_GlView.IsNull() );
 
-  // qDebug() << this << "::virtual_PrepareScene()";
+  qDebug() << this << "::virtual_FinishScene()";
+
+  otb::GlImageActor::Pointer referenceGlImageActor( GetReferenceGlImageActor() );
+
+  if( referenceGlImageActor.IsNull() )
+    return;
+
+  m_GlView->AddActor( m_GlRoiActor );
+
+  m_GlRoiActor->SetVisible( true );
+
+  m_GlRoiActor->SetKwl( referenceGlImageActor->GetKwl() );
+  m_GlRoiActor->SetWkt( referenceGlImageActor->GetWkt() );
+
+  /*
+  ColorType color;
+
+  color.Fill( 1.0 );
+
+  m_GlRoiActor->SetColor( color ); 
+  */
+  m_GlRoiActor->SetFill( true );
+  m_GlRoiActor->SetAlpha( 0.5 );
+}
+
+/*****************************************************************************/
+void
+QuicklookViewRenderer
+::UpdateActors( const AbstractImageViewRenderer::RenderingContext* c )
+{
+  assert( c!=NULL );
+
+  ImageViewRenderer::UpdateActors( c );
+
+  assert(
+    c==dynamic_cast< const QuicklookViewRenderer::RenderingContext * >( c )
+  );
+
+  const QuicklookViewRenderer::RenderingContext * context =
+    dynamic_cast< const QuicklookViewRenderer::RenderingContext * >( c );
+
+  m_GlRoiActor->SetUL( context->m_RoiOrigin );
+  m_GlRoiActor->SetLR( context->m_RoiExtent );
 }
 
 /*****************************************************************************/

@@ -217,7 +217,7 @@ ImageViewRenderer
 
   //
   // Apply VectorImageModel::Settings to otb::GlImageActor.
-  UpdateImageActors();
+  UpdateActors( c );
 
   //
   // Pre-render scene.
@@ -239,6 +239,14 @@ ImageViewRenderer
   //
   // Post-render scene.
   m_GlView->AfterRendering();
+}
+
+/*****************************************************************************/
+void
+ImageViewRenderer
+::UpdateActors( const AbstractImageViewRenderer::RenderingContext* )
+{
+  UpdateImageActors();
 }
 
 /*****************************************************************************/

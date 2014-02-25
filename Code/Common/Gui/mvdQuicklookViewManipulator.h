@@ -97,7 +97,13 @@ public:
   virtual ~QuicklookViewManipulator();
 
   //
-  // ImageViewRenderer overloads.
+  // ImageViewManipulator overloads.
+
+  virtual
+    void
+    SetupRenderingContext(
+      AbstractImageViewRenderer::RenderingContext * const ) const;
+
 
   virtual void MouseMoveEvent( QMouseEvent* event );
 
@@ -148,12 +154,21 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  PointType m_RoiOrigin;
+  /**
+   */
+  PointType m_RoiExtent;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
+  /**
+   */
+  void OnRoiChanged( PointType origin, SizeType size, SpacingType spacing );
 };
 
 } // end namespace 'mvd'

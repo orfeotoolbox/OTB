@@ -130,6 +130,13 @@ public:
   void SetImageList( const VectorImageModelList& images,
                      ZoomType zoom =ZOOM_TYPE_NONE );
 
+  /**
+   * \brief Access the abstract view-manipualtor of this image-view.
+   *
+   * \return A pointer to the abstract view-manipulator of this image-view.
+   */
+  inline const AbstractImageViewManipulator* GetManipulator() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -153,6 +160,9 @@ public slots:
 //
 // SIGNALS.
 signals:
+  /**
+   */
+  void RoiChanged( PointType origin, SizeType size, SpacingType spacing );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -194,13 +204,6 @@ private:
 private:
 
 #if 0
-  /**
-   * \brief Access the abstract view-manipualtor of this image-view.
-   *
-   * \return A pointer to the abstract view-manipulator of this image-view.
-   */
-  inline const AbstractImageViewManipulator* GetManipulator() const;
-
   /**
    * \brief Access the abstract model-renderer of this image-view.
    *
@@ -252,7 +255,6 @@ private slots:
 
 namespace mvd
 {
-#if 0
 
 /*****************************************************************************/
 inline
@@ -264,6 +266,8 @@ ImageViewWidget
 }
 
 /*****************************************************************************/
+#if 0
+
 inline
 const AbstractImageViewRenderer*
 ImageViewWidget
@@ -274,6 +278,6 @@ ImageViewWidget
 
 #endif
 
-} // end of namespace 'mvd'.
+} // End of namespace 'mvd'
 
 #endif // __mvdImageViewWidget_h
