@@ -391,6 +391,7 @@ void IceViewer::DrawHud()
         }
 
       oss<<"    Color: "<<(it!=m_ColorMap.end()?it->first:"custom");
+      oss<<", optimized rendering (large vector): "<<(currentVectorActor->GetOptimizedRendering()?"On":"Off")<<" ("<<(currentVectorActor->GetOptimizedRenderingActive()?"active":"inactive")<<")";
 
       oss<<"\n"<<"\n";
       }
@@ -511,6 +512,7 @@ void IceViewer::DrawHelp()
   oss<<"- Tune alpha (transparancy) value with LEFT CTRL + mouse wheel"<<std::endl;
   oss<<"- Tune line width with RIGHT SHIFT + mouse wheel"<<std::endl;
   oss<<"- Rotate vector color with LEFT ALT + mouse wheel"<<std::endl;
+  oss<<"- Enable/disable optimized rendering for large vector (simplification of geometries, geometries smaller than 100 * viewport pixel sizes are not rendered). Optimized rendering is only active if there are more feature to render than pixels in in the viewport."<<std::endl;
   
   // Find the size of the help
   std::string help_string = oss.str();
@@ -1235,6 +1237,14 @@ bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, i
     currentActor->SetSolidBorder(!currentActor->GetSolidBorder());
     return true;
     }
+
+  if(key == GLFW_KEY_O && action == GLFW_PRESS)
+    {
+    otb::GlVectorActor::Pointer currentActor = dynamic_cast<otb::GlVectorActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    currentActor->SetOptimizedRendering(!currentActor->GetOptimizedRendering());
+    return true;
+    }
+
 
   return false;
 }

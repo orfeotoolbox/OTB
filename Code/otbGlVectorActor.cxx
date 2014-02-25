@@ -92,7 +92,9 @@ GlVectorActor::GlVectorActor()
     m_ExtentULY(0),
     m_ExtentLRX(0),
     m_ExtentLRY(0),
-    m_CurrentLayer(NULL,false)
+    m_CurrentLayer(""),
+    m_OptimizedRendering(true),
+    m_OptimizedRenderingActive(false)
     
 {
   m_Color.Fill(0);
@@ -132,6 +134,17 @@ void GlVectorActor::SetFill(bool flag)
     }
 }
 
+void GlVectorActor::SetOptimizedRendering(bool flag)
+{
+  if(m_OptimizedRendering != flag)
+    {
+    m_DisplayListNeedsRebuild = true;
+    m_InternalFeatures.clear();
+    m_OptimizedRendering = flag;
+    }
+}
+
+
 void GlVectorActor::SetSolidBorder(bool flag)
 {
   if(m_SolidBorder != flag)
@@ -154,11 +167,11 @@ void GlVectorActor::Initialize(const std::string & filename, const std::string &
   // If no layer specified, get the first one
   if(layername == "")
     {
-    m_CurrentLayer = m_OGRDataSource->GetLayer(0);
+    m_CurrentLayer = m_OGRDataSource->GetLayer(0).GetName();
     }
   else
     {
-    m_CurrentLayer = m_OGRDataSource->GetLayerChecked(layername);
+    m_CurrentLayer = m_OGRDataSource->GetLayerChecked(layername).GetName();
     }
  
   UpdateTransforms();
@@ -177,12 +190,12 @@ std::vector<std::string> GlVectorActor::GetAvailableLayers() const
 
 std::string GlVectorActor::GetCurrentLayer() const
 {
-  return m_CurrentLayer.GetName();
+  return m_CurrentLayer;
 }
 
 std::string GlVectorActor::SetCurrentLayer(const std::string & layername)
 {
-  m_CurrentLayer = m_OGRDataSource->GetLayerChecked(layername);
+  m_CurrentLayer = m_OGRDataSource->GetLayerChecked(layername).GetName();
   
   // Clear transforms
   m_VectorToViewportTransform = NULL;
@@ -199,7 +212,7 @@ std::string GlVectorActor::SetCurrentLayer(const std::string & layername)
 void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
   PointType ul,lr,ur,ll, vpul,vplr, vpll, vpur;
-  m_CurrentLayer.GetExtent(ul[0],ul[1],lr[0],lr[1],true);
+  m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetExtent(ul[0],ul[1],lr[0],lr[1],true);
   ur=ul;
   ur[0]=lr[0];
   ll=lr;
@@ -231,7 +244,7 @@ std::string GlVectorActor::GetWkt() const
 {
   if(m_OGRDataSource.IsNotNull())
     {
-    return m_CurrentLayer.GetProjectionRef();
+    return m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetProjectionRef();
     }
 
   return "";
@@ -288,20 +301,55 @@ void GlVectorActor::UpdateData()
     m_ExtentLRX = lrx;
     m_ExtentLRY = lry;
 
-    m_CurrentLayer.SetSpatialFilterRect(ulx,uly,lrx,lry);
+    double areaOfScreenPixel = vcl_abs(lrx-ulx)*vcl_abs(lry-uly)
+      /(settings->GetViewportSize()[0]*settings->GetViewportSize()[1]);
+
+    OGRPolygon spatialFilter;
+    OGRLinearRing spatialFilterRing;
+    OGRPoint ul,ur,lr,ll;
+    ul.setX(ulx);
+    ul.setY(uly);
+    ur.setX(lrx);
+    ur.setY(uly);
+    lr.setX(lrx);
+    lr.setY(lry);
+    ll.setX(ulx);
+    ll.setY(lry);
+
+    spatialFilterRing.addPoint(&ul);
+    spatialFilterRing.addPoint(&ur);
+    spatialFilterRing.addPoint(&lr);
+    spatialFilterRing.addPoint(&ll);
+    spatialFilterRing.closeRings();
+
+    spatialFilter.addRing(&spatialFilterRing);
     
+    otb::ogr::Layer filtered = m_OGRDataSource->GetLayerChecked(m_CurrentLayer);
+    filtered.SetSpatialFilterRect(ulx,uly,lrx,lry);
+
+   m_OptimizedRenderingActive = m_OptimizedRendering && filtered.GetFeatureCount(true)>(settings->GetViewportSize()[0]*settings->GetViewportSize()[1]/100);
+
+    if(m_OptimizedRenderingActive)
+      {
+      std::ostringstream oss;
+      oss<<"SELECT * FROM "<<m_CurrentLayer<<" WHERE OGR_GEOM_AREA>"<<100*areaOfScreenPixel;
+      filtered = m_OGRDataSource->ExecuteSQL(oss.str(), &spatialFilter,NULL);
+      }
+   
     m_InternalFeatures.clear();
     
-    otb::ogr::Layer::const_iterator featIt = m_CurrentLayer.begin();
-    for(; featIt!=m_CurrentLayer.end(); ++featIt)
+    otb::ogr::Layer::const_iterator featIt = filtered.begin();
+    for(; featIt!=filtered.end(); ++featIt)
       {
-      otb::ogr::Feature srcFeature(m_CurrentLayer.GetLayerDefn());
+      otb::ogr::Feature srcFeature(m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetLayerDefn());
       srcFeature.SetFrom( *featIt, TRUE );
       
-      InternalFeature newInternalFeature(m_CurrentLayer.GetLayerDefn());
+      InternalFeature newInternalFeature(m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetLayerDefn());
       newInternalFeature.m_SourceFeature = srcFeature.Clone();
-      newInternalFeature.m_RenderedFeature = srcFeature.Clone();
-      
+      if(m_OptimizedRenderingActive)
+        {
+        newInternalFeature.m_SourceFeature.SetGeometry(srcFeature.GetGeometry()->SimplifyPreserveTopology(vcl_sqrt(areaOfScreenPixel)));
+        }
       m_InternalFeatures.push_back(newInternalFeature);
       }
     
@@ -544,11 +592,11 @@ void GlVectorActor::UpdateTransforms()
     {
     m_ViewportToVectorTransform->SetInputProjectionRef(settings->GetWkt());
     m_ViewportToVectorTransform->SetInputKeywordList(settings->GetKeywordList());
-    m_ViewportToVectorTransform->SetOutputProjectionRef(m_CurrentLayer.GetProjectionRef());
-
+    m_ViewportToVectorTransform->SetOutputProjectionRef((m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetProjectionRef()));
+    
     m_VectorToViewportTransform->SetOutputProjectionRef(settings->GetWkt());
     m_VectorToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
-    m_VectorToViewportTransform->SetInputProjectionRef(m_CurrentLayer.GetProjectionRef());
+    m_VectorToViewportTransform->SetInputProjectionRef((m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetProjectionRef()));
     }
   m_ViewportToVectorTransform->InstanciateTransform();
   m_VectorToViewportTransform->InstanciateTransform();

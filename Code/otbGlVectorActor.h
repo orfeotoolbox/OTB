@@ -86,6 +86,12 @@ public:
   itkGetMacro(SolidBorder,bool);
   itkBooleanMacro(SolidBorder);
 
+  void SetOptimizedRendering(bool flag);
+  itkGetMacro(OptimizedRendering,bool);
+  itkBooleanMacro(OptimizedRendering);
+  
+  itkGetMacro(OptimizedRenderingActive,bool);
+
   itkSetMacro(LineWidth,double);
   itkGetConstReferenceMacro(LineWidth,double);
 
@@ -131,7 +137,7 @@ private:
   RSTransformType::Pointer m_VectorToViewportTransform;
 
   otb::ogr::DataSource::Pointer m_OGRDataSource;
-  otb::ogr::Layer               m_CurrentLayer;
+  std::string                   m_CurrentLayer;
 
   std::vector<InternalFeature> m_InternalFeatures;
 
@@ -144,6 +150,9 @@ private:
   double m_ExtentULY;
   double m_ExtentLRX;
   double m_ExtentLRY;
+
+  bool m_OptimizedRendering;
+  bool m_OptimizedRenderingActive;
 
 }; // End class GlVectorActor
 
