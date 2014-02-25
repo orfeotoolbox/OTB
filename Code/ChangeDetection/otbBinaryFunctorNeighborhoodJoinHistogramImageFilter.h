@@ -72,6 +72,24 @@ public:
 
   typedef itk::ProcessObject ProcessObjectType;
 
+  typedef itk::ConstNeighborhoodIterator<TInputImage1>
+  NeighborhoodIteratorType1;
+  typedef itk::ConstNeighborhoodIterator<TInputImage2>
+  NeighborhoodIteratorType2;
+
+  typedef typename NeighborhoodIteratorType1::RadiusType RadiusType1;
+  typedef typename NeighborhoodIteratorType2::RadiusType RadiusType2;
+
+  typedef unsigned char RadiusSizeType;
+
+  /** Typedefs for histogram. This should have been defined as
+      Histogram<RealType, 2> but a bug in VC++7 produced an internal compiler
+      error with such declaration. */
+  typedef typename itk::Statistics::Histogram<double,
+             itk::Statistics::DenseFrequencyContainer2 > HistogramType;
+  typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;
+  typedef typename HistogramType::SizeType               HistogramSizeType;
+
   /** Connect one of the operands for pixel-wise addition */
   void SetInput1(const TInputImage1 * image1);
 
@@ -103,25 +121,7 @@ public:
     this->Modified();
   }
 
-  typedef itk::ConstNeighborhoodIterator<TInputImage1>
-  NeighborhoodIteratorType1;
-  typedef itk::ConstNeighborhoodIterator<TInputImage2>
-  NeighborhoodIteratorType2;
-
-  typedef typename NeighborhoodIteratorType1::RadiusType RadiusType1;
-  typedef typename NeighborhoodIteratorType2::RadiusType RadiusType2;
-
-  typedef unsigned char RadiusSizeType;
-
   itkSetMacro(Radius, RadiusSizeType);
-
-  /** Typedefs for histogram. This should have been defined as
-      Histogram<RealType, 2> but a bug in VC++7 produced an internal compiler
-      error with such declaration. */
-  typedef typename itk::Statistics::Histogram<double,
-             itk::Statistics::DenseFrequencyContainer2 > HistogramType;
-  typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;
-  typedef typename HistogramType::SizeType               HistogramSizeType;
 
   /** Sets the histogram size. Note this function must be called before
     \c Initialize(). */
@@ -151,6 +151,8 @@ protected:
   BinaryFunctorNeighborhoodJoinHistogramImageFilter();
   virtual ~BinaryFunctorNeighborhoodJoinHistogramImageFilter() {}
 
+  virtual void BeforeThreadedGenerateData();
+
   /** BinaryFunctorNeighborhoodJoinHistogramImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
@@ -173,18 +175,11 @@ protected:
 
   HistogramType::Pointer m_Histogram;
 
-  /** The histogram size. */
-  HistogramSizeType m_HistogramSize;
-  /** The lower bound for samples in the histogram. */
-  mutable MeasurementVectorType m_LowerBound;
-  /** The upper bound for samples in the histogram. */
-  mutable MeasurementVectorType m_UpperBound;
-  /** The increase in the upper bound. */
-  double m_UpperBoundIncreaseFactor;
-
 private:
   BinaryFunctorNeighborhoodJoinHistogramImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  void ComputeHistogram();
 
   FunctorType m_Functor;
 
@@ -196,7 +191,11 @@ private:
       measure. */
   bool m_UsePaddingValue;
 
-  HistogramType::Pointer ComputeHistogram();
+  /** The histogram size. */
+  HistogramSizeType m_HistogramSize;
+  
+  /** The increase in the upper bound. */
+  double m_UpperBoundIncreaseFactor;
 };
 
 } // end namespace otb

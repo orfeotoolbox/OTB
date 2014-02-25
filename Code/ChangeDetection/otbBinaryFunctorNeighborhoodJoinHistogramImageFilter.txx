@@ -171,13 +171,21 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
   return;
 }
 
+template <class TInputImage1, class TInputImage2,
+    class TOutputImage, class TFunction>
+void
+BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
+::BeforeThreadedGenerateData()
+{
+  this->ComputeHistogram();
+}
+
 /**
  * Initialize the histogram
  */
 template <class TInputImage1, class TInputImage2,
     class TOutputImage, class TFunction>
-BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
-::HistogramType::Pointer
+void
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
 ::ComputeHistogram()
 {
@@ -235,15 +243,16 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 
 
   // Set the size of the upper and lower bounds of the histogram:
-  m_LowerBound.SetSize(2);
-  m_UpperBound.SetSize(2);
+  MeasurementVectorType lowerBound, upperBound;
+  lowerBound.SetSize(2);
+  upperBound.SetSize(2);
 
   // Initialize the upper and lower bounds of the histogram.
-  m_LowerBound[0] = minInput1;
-  m_LowerBound[1] = minInput2;
-  m_UpperBound[0] =
+  lowerBound[0] = minInput1;
+  lowerBound[1] = minInput2;
+  upperBound[0] =
     maxInput1 + (maxInput1 - minInput1) * m_UpperBoundIncreaseFactor;
-  m_UpperBound[1] =
+  upperBound[1] =
     maxInput2 + (maxInput2 - minInput2) * m_UpperBoundIncreaseFactor;
 
   typedef itk::ImageRegionConstIteratorWithIndex<Input1ImageType> Input1IteratorType;
@@ -260,7 +269,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 
   typename HistogramType::Pointer histogram = HistogramType::New();
   histogram->SetMeasurementVectorSize(2);
-  histogram->Initialize(m_HistogramSize, m_LowerBound, m_UpperBound);
+  histogram->Initialize(m_HistogramSize, lowerBound, upperBound);
 
   ti1.GoToBegin();
   ti2.GoToBegin();
@@ -277,8 +286,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
     ++ti2;
     }
 
-  return histogram;
-
+  m_Histogram = histogram;
 }
 
 /**
@@ -290,19 +298,12 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        itk::ThreadIdType threadId)
 {
-
-  //this->Initialize();
-
-  typename HistogramType::Pointer histogram = ComputeHistogram();
-
-  //m_Functor->SetHistogram(m_Histogram);
-//  unsigned int i;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage1> nbc1;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage2> nbc2;
 
-// We use dynamic_cast since inputs are stored as DataObjects.  The
-// ImageToJoinHistogramImageFilter::GetInput(int) always returns a pointer to a
-// TInputImage1 so it cannot be used for the second input.
+  // We use dynamic_cast since inputs are stored as DataObjects.  The
+  // ImageToJoinHistogramImageFilter::GetInput(int) always returns a pointer to a
+  // TInputImage1 so it cannot be used for the second input.
   Input1ImageConstPointer inputPtr1
     = dynamic_cast<const TInputImage1*>(ProcessObjectType::GetInput(0));
   Input2ImageConstPointer inputPtr2
@@ -353,7 +354,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
     while (!outputIt.IsAtEnd())
       {
 
-      outputIt.Set(m_Functor(neighInputIt1, neighInputIt2, histogram));
+      outputIt.Set(m_Functor(neighInputIt1, neighInputIt2, m_Histogram));
 
       ++neighInputIt1;
       ++neighInputIt2;
@@ -361,7 +362,6 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
       progress.CompletedPixel();
       }
     }
-
 }
 
 } // end namespace otb
