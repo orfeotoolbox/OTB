@@ -275,40 +275,46 @@ public:                                                                  \
 //  Default traits for the pixel types deriving from std::complex<>
 //
 
-#define OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE( componenttype ) \
-template<>                                                               \
-class DefaultConvertPixelTraits< ::std::complex< componenttype > >       \
-{                                                                        \
-public:                                                                  \
-  typedef ::std::complex< componenttype>  TargetType;                    \
-  typedef componenttype                     ComponentType;               \
-  static unsigned int GetNumberOfComponents()                            \
-    {                                                                    \
-    return 2;                                                  \
-    }                                                                    \
-  static void SetNthComponent(int i, TargetType & pixel, const ComponentType& v)   \
-    {                                                                    \
-    if( i == 0 )                                                            \
-      {                                                                  \
-      pixel = TargetType( v, pixel.imag() );                           \
-      }                                                                  \
-    else                                                                 \
-      {                                                                  \
-      pixel = TargetType( pixel.real(), v );                           \
-      }                                                                  \
-    }                                                                    \
-  static void SetNthComponent(int , TargetType & pixel, const TargetType& v) \
-    { \
-      pixel = v; \
-    } \
-  static ComponentType GetScalarValue(const TargetType& pixel)           \
-    {                                                                    \
-      /*issue with std::norm on Mac OS X Mavericks*/  \
-      /*return std::norm(pixel); */ \
-      return static_cast<ComponentType>( pixel.real()*pixel.real() \
-                                         +pixel.imag()*pixel.imag() ); \
-    }                                                                    \
-};                                                                       \
+#define OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE( componenttype )                   \
+template<>                                                                       \
+class DefaultConvertPixelTraits< ::std::complex< componenttype > >               \
+{                                                                                \
+public:                                                                          \
+  typedef ::std::complex< componenttype>  TargetType;                            \
+  typedef componenttype                     ComponentType;                       \
+  static unsigned int GetNumberOfComponents()                                    \
+    {                                                                            \
+    return 2;                                                                    \
+    }                                                                            \
+  static void SetNthComponent(int i, TargetType & pixel, const ComponentType& v) \
+    {                                                                            \
+    if( i == 0 )                                                                 \
+      {                                                                          \
+      pixel = TargetType( v, pixel.imag() );                                     \
+      }                                                                          \
+    else                                                                         \
+      {                                                                          \
+      pixel = TargetType( pixel.real(), v );                                     \
+      }                                                                          \
+    }                                                                            \
+  static void SetNthComponent(int , TargetType & pixel, const TargetType& v)     \
+    {                                                                            \
+      pixel = v;                                                                 \
+    }                                                                            \
+  static ComponentType GetScalarValue(const TargetType& pixel)                   \
+    {                                                                            \
+      /*                                                                         \
+       * This seems to be dead code, since the complex to scalar                 \
+       * conversion is done by ConvertPixelBuffer                                \
+       *                                                                         \
+       * Historically, it was returning std::norm, which causes                  \
+       * compilation error on MacOSX 10.9.                                       \
+       * Now returns the equivalent implementation of std::norm.                 \
+       */                                                                        \
+      return static_cast<ComponentType>( pixel.real()*pixel.real()               \
+                                         + pixel.imag()*pixel.imag() );          \
+    }                                                                            \
+};                                                                               \
 
 OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(float);
 OTB_DEFAULTCONVERTTRAITS_COMPLEX_TYPE(double);
