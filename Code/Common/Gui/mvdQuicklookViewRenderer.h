@@ -100,6 +100,8 @@ public:
       m_RoiOrigin(),
       m_RoiExtent()
     {
+      m_RoiOrigin.Fill( 0 );
+      m_RoiOrigin.Fill( 0 );
     }
 
     virtual ~RenderingContext() {}

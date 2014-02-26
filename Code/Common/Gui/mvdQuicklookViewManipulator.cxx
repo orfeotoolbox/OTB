@@ -73,6 +73,8 @@ QuicklookViewManipulator
   m_RoiOrigin(),
   m_RoiExtent()
 {
+  m_RoiOrigin.Fill( 0 );
+  m_RoiExtent.Fill( 0 );
 }
 
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -185,6 +187,9 @@ QuicklookViewManipulator
 ::OnRoiChanged( PointType origin, SizeType size, SpacingType spacing )
 {
   qDebug() << this << ":OnRoiChanged()";
+  qDebug() << "origin :" << origin[ 0 ] << "," << origin[ 1 ];
+  qDebug() << "size   :" << size[ 0 ] << "," << size[ 1 ];
+  qDebug() << "spacing:" << spacing[ 0 ] << "," << spacing[ 1 ];
 
   m_RoiOrigin = origin;
 
@@ -192,7 +197,7 @@ QuicklookViewManipulator
 
   m_RoiExtent[ 0 ] += static_cast< double >( size[ 0 ] ) * spacing[ 0 ];
   m_RoiExtent[ 1 ] += static_cast< double >( size[ 1 ] ) * spacing[ 1 ];
-
+ 
   emit RefreshView();
 }
 

@@ -149,6 +149,12 @@ QuicklookViewRenderer
   const QuicklookViewRenderer::RenderingContext * context =
     dynamic_cast< const QuicklookViewRenderer::RenderingContext * >( c );
 
+  qDebug()
+    << "ROI-origin:"
+    << context->m_RoiOrigin[ 0 ] << "," << context->m_RoiOrigin[ 1 ]
+    << "ROI-extent:"
+    << context->m_RoiExtent[ 0 ] << "," << context->m_RoiExtent[ 1 ];
+
   m_GlRoiActor->SetUL( context->m_RoiOrigin );
   m_GlRoiActor->SetLR( context->m_RoiExtent );
 }
