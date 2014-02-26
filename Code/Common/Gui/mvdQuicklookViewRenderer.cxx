@@ -115,7 +115,7 @@ QuicklookViewRenderer
   if( referenceGlImageActor.IsNull() )
     return;
 
-  m_GlView->AddActor( m_GlRoiActor );
+  std::string key( m_GlView->AddActor( m_GlRoiActor ) );
 
   m_GlRoiActor->SetVisible( true );
 
@@ -131,6 +131,8 @@ QuicklookViewRenderer
   */
   m_GlRoiActor->SetFill( true );
   m_GlRoiActor->SetAlpha( 0.5 );
+
+  m_GlView->MoveActorToEndOfRenderingOrder( key, true );
 }
 
 /*****************************************************************************/

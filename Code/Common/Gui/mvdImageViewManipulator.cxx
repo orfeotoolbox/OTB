@@ -234,6 +234,8 @@ ImageViewManipulator
   assert( !m_ViewSettings.IsNull() );
 
   m_ViewSettings->Center( point );
+
+  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
 }
 
 /******************************************************************************/
@@ -247,6 +249,8 @@ ImageViewManipulator
     QPoint( size[ 0 ] / 2, size[ 1 ] / 2 ),
     m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES
   );
+
+  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
 }
 
 /******************************************************************************/
@@ -260,6 +264,8 @@ ImageViewManipulator
     QPoint( size[ 0 ] / 2, size[ 1 ] / 2 ),
     -m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES
   );
+
+  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
 }
 
 /******************************************************************************/
