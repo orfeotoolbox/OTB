@@ -130,7 +130,7 @@ QuicklookViewRenderer
   m_GlRoiActor->SetColor( color ); 
   */
   m_GlRoiActor->SetFill( true );
-  m_GlRoiActor->SetAlpha( 0.5 );
+  m_GlRoiActor->SetAlpha( 0.2 );
 
   m_GlView->MoveActorToEndOfRenderingOrder( key, true );
 }
