@@ -613,11 +613,11 @@ void GlImageActor::UpdateResolution()
        it != m_AvailableResolutions.end(); ++it)
     {
     // std::cout<<(*it)<<" "<<(1/((double)(1<<(*it))))<<std::endl;
-    double diff = vcl_abs(1/((double)(1<<(*it))) - resolution);
+    double diff = 1/((double)(1<<(*it))) - resolution;
 
-    if (diff < minDist)
+    if (diff > 0 && vcl_abs(diff) < minDist)
       {
-      minDist = diff;
+      minDist = vcl_abs(diff);
       closest = std::distance(m_AvailableResolutions.begin(),it);
       }
     }
