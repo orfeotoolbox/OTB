@@ -138,7 +138,25 @@ QuicklookViewManipulator
 
   // qDebug() << this << ":" << event;
 
-  
+
+  Qt::MouseButtons buttons = event->buttons();
+  Qt::KeyboardModifiers modifiers = event->modifiers();
+
+  if( buttons==Qt::LeftButton && modifiers==Qt::NoModifier )
+    {
+    assert( !m_ViewSettings.IsNull() );
+
+    PointType center;
+
+    m_ViewSettings->ScreenToViewPortTransform(
+      static_cast< double >( m_MousePressPosition.x() ),
+      static_cast< double >( m_MousePressPosition.y() ),
+      center[ 0 ],
+      center[ 1 ]
+    );
+
+    emit CenterRoiRequested( center );
+    }
 }
 
 /******************************************************************************/
@@ -155,21 +173,20 @@ QuicklookViewManipulator
 
   if( buttons==Qt::LeftButton && modifiers==Qt::NoModifier )
     {
-    
-    // Cursor moves from press position to current position;
-    // Image moves the same direction, so apply the negative translation.
-    m_RoiOrigin =
-      ImageViewManipulator::Translate(
-        event->pos() - m_MousePressPosition,
-        m_RoiOrigin,
-        m_RoiSpacing
-      );
+    assert( !m_ViewSettings.IsNull() );
+
+    PointType center;
+
+    m_ViewSettings->ScreenToViewPortTransform(
+      static_cast< double >( m_MousePressPosition.x() ),
+      static_cast< double >( m_MousePressPosition.y() ),
+      center[ 0 ],
+      center[ 1 ]
+    );
 
     m_MousePressPosition = event->pos();
 
-    emit RefreshViewRequested();
-
-    emit RoiChanged( m_RoiOrigin, m_RoiSize, m_RoiSpacing );
+    emit CenterRoiRequested( center );
     }
 }
 
@@ -228,7 +245,9 @@ QuicklookViewManipulator
 /*****************************************************************************/
 void
 QuicklookViewManipulator
-::OnRoiChanged( PointType origin, SizeType size, SpacingType spacing )
+::OnRoiChanged( const PointType& origin,
+                const SizeType& size,
+                const SpacingType& spacing )
 {
   qDebug() << this << ":OnRoiChanged()";
   qDebug() << "origin :" << origin[ 0 ] << "," << origin[ 1 ];

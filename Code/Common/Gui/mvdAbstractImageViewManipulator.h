@@ -123,9 +123,6 @@ public:
 
   /**
    */
-  virtual void CenterOn( const PointType& point ) =0;
-  /**
-   */
   virtual void ZoomIn() =0;
   /**
    */
@@ -160,6 +157,9 @@ public:
 //
 // Public SLOTS.
 public slots:
+  /**
+   */
+  virtual void CenterOn( const PointType& point ) =0;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -171,13 +171,18 @@ signals:
   void RefreshViewRequested();
   /**
    */
-  void RoiChanged( PointType origin, SizeType size, SpacingType spacing );
-  /**
-   */
   void ZoomToExtentRequested();
   /**
    */
   void ZoomToFullResolutionRequested();
+  /**
+   */
+  void CenterRoiRequested( const PointType& center );
+  /**
+   */
+  void RoiChanged( const PointType& origin,
+                   const SizeType& size,
+                   const SpacingType& spacing );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

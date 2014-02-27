@@ -474,6 +474,14 @@ MainWindow
   //
   // Connect image-views for ROI-changed events.
 
+  assert( m_ImageView!=NULL );
+
+  const AbstractImageViewManipulator* imageViewManipulator =
+    m_ImageView->GetManipulator();
+
+  assert( imageViewManipulator!=NULL );
+
+
   ImageViewWidget* quicklookView = GetQuicklookView();
   assert( quicklookView!=NULL );
 
@@ -482,7 +490,6 @@ MainWindow
 
   assert( quicklookManipulator!=NULL );
 
-  assert( m_ImageView!=NULL );
 
   QObject::connect(
     m_ImageView,
@@ -494,6 +501,22 @@ MainWindow
     SLOT(
       OnRoiChanged( const PointType&, const SizeType&, const SpacingType& )
     )
+  );
+
+  QObject::connect(
+    quicklookView,
+    SIGNAL( CenterRoiRequested( const PointType& ) ),
+    // to:
+    imageViewManipulator,
+    SLOT( CenterOn( const PointType& ) )
+  );
+
+  QObject::connect(
+    quicklookManipulator,
+    SIGNAL( RefreshViewRequested() ),
+    // to:
+    m_ImageView,
+    SLOT( updateGL() )
   );
 }
 

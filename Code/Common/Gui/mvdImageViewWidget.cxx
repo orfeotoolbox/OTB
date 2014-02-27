@@ -188,9 +188,19 @@ ImageViewWidget
   );
 
   QObject::connect(
-    m_Manipulator, SIGNAL( RoiChanged( PointType, SizeType, SpacingType ) ),
+    m_Manipulator,
+    SIGNAL( CenterRoiRequested( const PointType& ) ),
     // to:
-    this, SIGNAL( RoiChanged( PointType, SizeType, SpacingType ) )
+    this,
+    SIGNAL( CenterRoiRequested( const PointType& ) )
+  );
+
+  QObject::connect(
+    m_Manipulator,
+    SIGNAL( RoiChanged( const PointType&, const SizeType&, const SpacingType& ) ),
+    // to:
+    this,
+    SIGNAL( RoiChanged( const PointType&, const SizeType&, const SpacingType& ) )
   );
 
   QObject::connect(

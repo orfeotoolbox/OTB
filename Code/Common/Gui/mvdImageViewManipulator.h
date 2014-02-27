@@ -186,6 +186,9 @@ protected:
   /**
    */
   QPoint m_MousePressPosition;
+  /**
+   */
+  otb::ViewSettings::Pointer m_ViewSettings;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -213,9 +216,6 @@ private:
 //
 // Private attributes.
 private:
-  /**
-   */
-  otb::ViewSettings::Pointer m_ViewSettings;
   /**
    */
   otb::ViewSettings::PointType m_MousePressOrigin;

@@ -162,7 +162,12 @@ public slots:
 signals:
   /**
    */
-  void RoiChanged( PointType origin, SizeType size, SpacingType spacing );
+  void CenterRoiRequested( const PointType& center );
+  /**
+   */
+  void RoiChanged( const PointType& origin,
+                   const SizeType& size,
+                   const SpacingType& spacing );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
