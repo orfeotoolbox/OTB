@@ -182,7 +182,7 @@ ImageViewWidget
   m_Renderer->setParent( this );
 
   QObject::connect(
-    m_Manipulator, SIGNAL( RefreshView() ),
+    m_Manipulator, SIGNAL( RefreshViewRequested() ),
     // to:
     this, SLOT( updateGL() )
   );
@@ -194,13 +194,13 @@ ImageViewWidget
   );
 
   QObject::connect(
-    m_Manipulator, SIGNAL( ZoomToExtent() ),
+    m_Manipulator, SIGNAL( ZoomToExtentRequested() ),
     // to:
     this, SLOT( ZoomToExtent() )
   );
 
   QObject::connect(
-    m_Manipulator, SIGNAL( ZoomToFullResolution() ),
+    m_Manipulator, SIGNAL( ZoomToFullResolutionRequested() ),
     // to:
     this, SLOT( ZoomToFullResolution() )
   );

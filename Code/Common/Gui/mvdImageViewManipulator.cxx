@@ -341,7 +341,7 @@ ImageViewManipulator
 
     m_MousePressPosition = event->pos();
 
-    emit RefreshView();
+    emit RefreshViewRequested();
 
     emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
     }
@@ -373,7 +373,7 @@ ImageViewManipulator
       m_MousePressOrigin = PointType();
       m_IsMouseDragging = false;
 
-      emit RefreshView();
+      emit RefreshViewRequested();
       break;
 
     case Qt::RightButton:
@@ -439,7 +439,7 @@ ImageViewManipulator
     {
     Scale( event->pos(), degrees );
 
-    emit RefreshView();
+    emit RefreshViewRequested();
 
     emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
     }
@@ -545,7 +545,7 @@ ImageViewManipulator
   // Refresh
   if( needsRefresh )
     {
-    emit RefreshView();
+    emit RefreshViewRequested();
 
     emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
     }
@@ -564,7 +564,7 @@ ImageViewManipulator
     {
     case Qt::Key_Control:
       SetFastRenderMode( false );
-      emit RefreshView();
+      emit RefreshViewRequested();
       break;
 
     default:

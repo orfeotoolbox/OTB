@@ -168,16 +168,16 @@ public slots:
 signals:
   /**
    */
-  void RefreshView();
+  void RefreshViewRequested();
   /**
    */
   void RoiChanged( PointType origin, SizeType size, SpacingType spacing );
   /**
    */
-  void ZoomToExtent();
+  void ZoomToExtentRequested();
   /**
    */
-  void ZoomToFullResolution();
+  void ZoomToFullResolutionRequested();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

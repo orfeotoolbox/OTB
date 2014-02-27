@@ -105,6 +105,8 @@ public:
       AbstractImageViewRenderer::RenderingContext * const ) const;
 
 
+  virtual void MousePressEvent( QMouseEvent* event );
+
   virtual void MouseMoveEvent( QMouseEvent* event );
 
   // virtual void MousePressEvent( QMouseEvent* event );

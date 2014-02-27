@@ -130,6 +130,20 @@ QuicklookViewManipulator
 /******************************************************************************/
 void
 QuicklookViewManipulator
+::MousePressEvent( QMouseEvent* event )
+{
+  ImageViewManipulator::MousePressEvent( event );
+
+  assert( event!=NULL );
+
+  // qDebug() << this << ":" << event;
+
+  
+}
+
+/******************************************************************************/
+void
+QuicklookViewManipulator
 ::MouseMoveEvent( QMouseEvent* event)
 {
   assert( event!=NULL );
@@ -141,6 +155,7 @@ QuicklookViewManipulator
 
   if( buttons==Qt::LeftButton && modifiers==Qt::NoModifier )
     {
+    
     // Cursor moves from press position to current position;
     // Image moves the same direction, so apply the negative translation.
     m_RoiOrigin =
@@ -152,7 +167,7 @@ QuicklookViewManipulator
 
     m_MousePressPosition = event->pos();
 
-    emit RefreshView();
+    emit RefreshViewRequested();
 
     emit RoiChanged( m_RoiOrigin, m_RoiSize, m_RoiSpacing );
     }
@@ -177,7 +192,7 @@ QuicklookViewManipulator
 {
   ImageViewManipulator::ResizeEvent( event );
 
-  emit ZoomToExtent();
+  emit ZoomToExtentRequested();
 }
 
 /******************************************************************************/
@@ -224,7 +239,7 @@ QuicklookViewManipulator
   m_RoiSize = size;
   m_RoiSpacing = spacing;
  
-  emit RefreshView();
+  emit RefreshViewRequested();
 }
 
 } // end namespace 'mvd'
