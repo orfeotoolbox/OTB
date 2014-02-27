@@ -71,10 +71,12 @@ QuicklookViewManipulator
                             QObject* parent ) :
   ImageViewManipulator( viewSettings, parent ),
   m_RoiOrigin(),
-  m_RoiExtent()
+  m_RoiSpacing(),
+  m_RoiSize()
 {
   m_RoiOrigin.Fill( 0 );
-  m_RoiExtent.Fill( 0 );
+  m_RoiSpacing.Fill( 0 );
+  m_RoiSize.Fill( 0 );
 }
 
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -83,8 +85,12 @@ QuicklookViewManipulator
 ::QuicklookViewManipulator( QObject* parent ) :
   ImageViewManipulator( parent ),
   m_RoiOrigin(),
-  m_RoiExtent()
+  m_RoiSpacing(),
+  m_RoiSize()
 {
+  m_RoiOrigin.Fill( 0 );
+  m_RoiSpacing.Fill( 0 );
+  m_RoiSize.Fill( 0 );
 }
 
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -109,7 +115,12 @@ QuicklookViewManipulator
     dynamic_cast< QuicklookViewRenderer::RenderingContext * const >( c );
 
   context->m_RoiOrigin = m_RoiOrigin;
-  context->m_RoiExtent = m_RoiExtent;
+  context->m_RoiExtent = m_RoiOrigin;
+
+  context->m_RoiExtent[ 0 ] +=
+    static_cast< double >( m_RoiSize[ 0 ] ) * m_RoiSpacing[ 0 ];
+  context->m_RoiExtent[ 1 ] +=
+    static_cast< double >( m_RoiSize[ 1 ] ) * m_RoiSpacing[ 1 ];
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -127,6 +138,24 @@ QuicklookViewManipulator
 
   Qt::MouseButtons buttons = event->buttons();
   Qt::KeyboardModifiers modifiers = event->modifiers();
+
+  if( buttons==Qt::LeftButton && modifiers==Qt::NoModifier )
+    {
+    // Cursor moves from press position to current position;
+    // Image moves the same direction, so apply the negative translation.
+    m_RoiOrigin =
+      ImageViewManipulator::Translate(
+        event->pos() - m_MousePressPosition,
+        m_RoiOrigin,
+        m_RoiSpacing
+      );
+
+    m_MousePressPosition = event->pos();
+
+    emit RefreshView();
+
+    emit RoiChanged( m_RoiOrigin, m_RoiSize, m_RoiSpacing );
+    }
 }
 
 /******************************************************************************/
@@ -192,11 +221,8 @@ QuicklookViewManipulator
   qDebug() << "spacing:" << spacing[ 0 ] << "," << spacing[ 1 ];
 
   m_RoiOrigin = origin;
-
-  m_RoiExtent = origin;
-
-  m_RoiExtent[ 0 ] += static_cast< double >( size[ 0 ] ) * spacing[ 0 ];
-  m_RoiExtent[ 1 ] += static_cast< double >( size[ 1 ] ) * spacing[ 1 ];
+  m_RoiSize = size;
+  m_RoiSpacing = spacing;
  
   emit RefreshView();
 }

@@ -159,7 +159,10 @@ private:
   PointType m_RoiOrigin;
   /**
    */
-  PointType m_RoiExtent;
+  SpacingType m_RoiSpacing;
+  /**
+   */
+  SizeType m_RoiSize;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

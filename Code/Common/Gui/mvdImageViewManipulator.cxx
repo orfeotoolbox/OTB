@@ -69,8 +69,8 @@ ImageViewManipulator
 ::ImageViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
                         QObject* parent ) :
   AbstractImageViewManipulator( parent ),
-  m_ViewSettings( viewSettings ),
   m_MousePressPosition(),
+  m_ViewSettings( viewSettings ),
   m_MousePressOrigin(),
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
@@ -85,8 +85,8 @@ ImageViewManipulator
 ImageViewManipulator
 ::ImageViewManipulator( QObject* parent ) :
   AbstractImageViewManipulator( parent ),
-  m_ViewSettings( otb::ViewSettings::New() ),
   m_MousePressPosition(),
+  m_ViewSettings( otb::ViewSettings::New() ),
   m_MousePressOrigin(),
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
@@ -579,13 +579,28 @@ ImageViewManipulator
 {
   // qDebug() << this << "::Translate(" << vector << ")";
 
-  // otb::ViewSettings::PointType origin( m_MousePressOrigin );
-  otb::ViewSettings::PointType origin( m_ViewSettings->GetOrigin() );
+  m_ViewSettings->SetOrigin(
+    ImageViewManipulator::Translate(
+      vector,
+      m_ViewSettings->GetOrigin(),
+      m_ViewSettings->GetSpacing()
+    )
+  );
+}
 
-  otb::ViewSettings::SpacingType spacing( m_ViewSettings->GetSpacing() );
+/******************************************************************************/
+PointType
+ImageViewManipulator
+::Translate( const QPoint& vector,
+             const PointType& origin,
+             const SpacingType& spacing )
+{
+  // qDebug() << this << "::Translate(...)";
 
-  origin[ 0 ] += static_cast< double >( vector.x() ) * spacing[ 0 ];
-  origin[ 1 ] += static_cast< double >( vector.y() ) * spacing[ 1 ];
+  otb::ViewSettings::PointType origin2( origin );
+
+  origin2[ 0 ] += static_cast< double >( vector.x() ) * spacing[ 0 ];
+  origin2[ 1 ] += static_cast< double >( vector.y() ) * spacing[ 1 ];
 
   /*
     qDebug()
@@ -594,7 +609,7 @@ ImageViewManipulator
     << "(" << origin[ 0 ] << "," << origin[ 1 ] << ")";
   */
 
-  m_ViewSettings->SetOrigin( origin );
+  return origin2;
 }
 
 /******************************************************************************/

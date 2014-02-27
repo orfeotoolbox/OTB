@@ -174,10 +174,18 @@ signals:
 //
 // Protected methods.
 protected:
+  /**
+   */
+  static PointType Translate( const QPoint& vector,
+                              const PointType& origin,
+                              const SpacingType& spacing );
 
 //
 // Protected attributes.
 protected:
+  /**
+   */
+  QPoint m_MousePressPosition;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -208,9 +216,6 @@ private:
   /**
    */
   otb::ViewSettings::Pointer m_ViewSettings;
-  /**
-   */
-  QPoint m_MousePressPosition;
   /**
    */
   otb::ViewSettings::PointType m_MousePressOrigin;
