@@ -168,6 +168,11 @@ private:
     SetMinimumParameterIntValue("mode.geobins.binstepy",1);
     MandatoryOff("mode.geobins.binstepy");
 
+    AddParameter(ParameterType_Int,"mode.geobins.margin","Margin from image border to start/end bins (in pixels)");
+    SetParameterDescription("mode.geobins.margin","Margin from image border to start/end bins (in pixels)");
+    SetMinimumParameterIntValue("mode.geobins.margin",0);
+    SetDefaultParameterInt("mode.geobins.margin",10);
+
     AddParameter(ParameterType_Float,"precision","Estimated precision of the colocalisation function (in pixels).");
     SetParameterDescription("precision","Estimated precision of the colocalisation function in pixels");
     SetDefaultParameterFloat("precision",0.);
@@ -374,6 +379,8 @@ private:
       unsigned int bin_size_x = GetParameterInt("mode.geobins.binsize");
       unsigned int bin_size_y = bin_size_x;
 
+      unsigned int image_border_margin = GetParameterInt("mode.geobins.margin");
+
       if(IsParameterEnabled("mode.geobins.binsizey"))
         {
         bin_size_y = GetParameterInt("mode.geobins.binsizey");
@@ -387,8 +394,8 @@ private:
         bin_step_y = GetParameterInt("mode.geobins.binstepy");
         }
       
-      unsigned int nb_bins_x = size[0]/(bin_size_x + bin_step_x);
-      unsigned int nb_bins_y = size[1]/(bin_size_y + bin_step_y);
+      unsigned int nb_bins_x = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[0]-2*image_border_margin)/(bin_size_x + bin_step_x)));
+      unsigned int nb_bins_y = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[1]-2*image_border_margin)/(bin_size_y + bin_step_y)));
 
       FloatImageType::SpacingType spacing1 = this->GetParameterImage("in1")->GetSpacing();
       FloatImageType::PointType origin1 = this->GetParameterImage("in1")->GetOrigin();
@@ -399,8 +406,8 @@ private:
         {
         for(unsigned int j = 0; j<nb_bins_y; ++j)
           {
-          unsigned int startx = bin_step_x/2 + i*(bin_size_x + bin_step_x);
-          unsigned int starty = bin_step_y/2 + j*(bin_size_y + bin_step_y);
+          unsigned int startx = image_border_margin + i*(bin_size_x + bin_step_x);
+          unsigned int starty = image_border_margin + j*(bin_size_y + bin_step_y);
 
 
           FloatImageType::SizeType size1;
@@ -415,7 +422,10 @@ private:
           region1.SetIndex(index1);
           region1.SetSize(size1);
 
-          region1.Crop(this->GetParameterImage("in1")->GetLargestPossibleRegion());
+          FloatImageType::RegionType largestRegion = this->GetParameterImage("in1")->GetLargestPossibleRegion();
+
+          largestRegion.ShrinkByRadius(image_border_margin);
+          region1.Crop(largestRegion);
 
           otbAppLogINFO("("<<i+1<<"/"<<nb_bins_x<<", "<<j+1<<"/"<<nb_bins_y<<") Considering region1 : "<<region1.GetIndex()<<", "<<region1.GetSize());
 
@@ -469,7 +479,10 @@ private:
           region2.SetSize(size2);
           region2.PadByRadius(static_cast<unsigned int>(GetParameterInt("precision")));
 
-          if(region2.Crop(this->GetParameterImage("in2")->GetLargestPossibleRegion()))
+          FloatImageType::RegionType largestRegion2 = this->GetParameterImage("in2")->GetLargestPossibleRegion();
+          largestRegion2.ShrinkByRadius(image_border_margin);
+
+          if(region2.Crop(largestRegion2))
             {
             otbAppLogINFO("Corresponding region2 is "<<region2.GetIndex()<<", "<<region2.GetSize());
 
