@@ -131,6 +131,7 @@ OTB_TEST_APPLICATION(NAME apTvHomologousPointsExtractionGeoBins
                              -mode geobins
                              -mode.geobins.binsize 100
                              -mode.geobins.binstep 25
+                             -mode.geobins.margin 12
                              -mfilter 1
                              -precision 10
                              -2wgs84 1
@@ -151,6 +152,7 @@ OTB_TEST_APPLICATION(NAME apTvHomologousPointsExtractionGeoBinsAnisotropic
                              -mode.geobins.binsizey 150
                              -mode.geobins.binstep 25
                              -mode.geobins.binstepy 10
+                             -mode.geobins.margin 12
                              -mfilter 1
                              -precision 10
                              -2wgs84 1
