@@ -146,7 +146,7 @@ private:
     SetParameterDescription("mode.full","Extract and match all keypoints, loading both images entirely into memory");
 
     AddChoice("mode.geobins","Search keypoints in small spatial bins regularly spread accross first image");
-    SetParameterDescription("mode.geobins","This method allows to retrieve a set of tie points regulary spread accross image 1. Corresponding bins in image 2 are retrieved using sensor and geographical information if available.");
+    SetParameterDescription("mode.geobins","This method allows to retrieve a set of tie points regulary spread accross image 1. Corresponding bins in image 2 are retrieved using sensor and geographical information if available. The first bin position takes into account the margin parameter. Bins are cropped to the largest image region shrinked by the margin parameter for both in1 and in2 images.");
     
     AddParameter(ParameterType_Int,"mode.geobins.binsize","Size of bin");
     SetParameterDescription("mode.geobins.binsize","Radius of the spatial bin in pixels");
