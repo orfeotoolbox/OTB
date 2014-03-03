@@ -447,7 +447,7 @@ private:
           lr1[1] = origin1[1] + (starty+bin_size_y) * spacing1[1];
 
           ll1[0] = origin1[0] + (startx) * spacing1[0];
-          ll1[1] = origin1[1] + (starty+bin_size_x) * spacing1[1];
+          ll1[1] = origin1[1] + (starty+bin_size_y) * spacing1[1];
 
           p1 = rsTransform->TransformPoint(ul1);
           p2 = rsTransform->TransformPoint(ur1);
