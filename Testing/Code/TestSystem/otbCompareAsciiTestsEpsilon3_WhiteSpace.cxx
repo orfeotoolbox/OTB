@@ -34,7 +34,7 @@ int otbCompareAsciiTestsEpsilon3_WhiteSpace(int argc, char * argv[])
   // Transfer to temporary object
   std::string strFileTest;
   std::vector<std::string> listLineFileTest;
-  while (std::getline(fileTestInput, strFileTest) != 0)
+  while (std::getline(fileTestInput, strFileTest))
     {
     listLineFileTest.push_back(strFileTest);
     }

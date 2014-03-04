@@ -101,7 +101,7 @@ int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
     writer->SetInput(itInfDeci.Get());
     writer->SetFileName(oss.str().c_str());
     writer->Update();
-    std::cout << "File " << oss << " written" << std::endl;
+    std::cout << "File " << oss.str() << " written" << std::endl;
     oss.str("");
     oss << outputFilenamePrefix << "_sd_" << i << "." << outputFilenameSuffix;
     writer->SetInput(itSupDeci.Get());
