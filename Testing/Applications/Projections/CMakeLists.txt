@@ -284,7 +284,7 @@ OTB_TEST_APPLICATION(NAME  apTuPrVectorDataReprojectionFromGeoToMap
 OTB_TEST_APPLICATION(NAME  apTvPrRefineSensorModel
                      APP  RefineSensorModel
                      OPTIONS -ingeom    ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.geom
-                             -inpoints  ${BASELINE_FILES}/apTvHomologousPointsExtractionGeoBins.txt
+                             -inpoints  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500_in_tie_points.txt
                  	     -outgeom   ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom
                              -outstat   ${TEMP}/apTvPrRefineSensorModelStatsOutput.txt
                              -outvector ${TEMP}/apTvPrRefineSensorModelVectorOutput.shp
@@ -297,7 +297,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrRefineSensorModel
 
 OTB_TEST_APPLICATION(NAME  apTvPrGenerateRPCSensorModel
                      APP  GenerateRPCSensorModel
-                     OPTIONS -inpoints  ${BASELINE_FILES}/apTvHomologousPointsExtractionGeoBins.txt
+                     OPTIONS -inpoints  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500_in_tie_points.txt
                  	     -outgeom   ${TEMP}/apTvPrGenerateRPCSensorModelGeomOutput.geom
                              -outstat   ${TEMP}/apTvPrGenerateRPCSensorModelStatsOutput.txt
                              -outvector ${TEMP}/apTvPrGenerateRPCSensorModelVectorOutput.shp
