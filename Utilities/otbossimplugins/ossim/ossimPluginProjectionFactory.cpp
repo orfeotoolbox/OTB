@@ -9,7 +9,12 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-
+//***
+// Note to programmer: To add a new model, search this file for "ADD_MODEL"
+// to locate places requiring editing. Functional example below...
+//
+// ADD_MODEL: Include all sensor model headers here:
+//***
 #include "ossimPluginProjectionFactory.h"
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimRefPtr.h>
@@ -24,6 +29,7 @@
 #include "ossimPleiadesModel.h"
 #include <ossim/base/ossimNotifyContext.h>
 #include "ossimTileMapModel.h"
+#include "ossimSpot6Model.h"
 
 //***
 // Define Trace flags for use within this file:
@@ -252,6 +258,49 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
      }
    }
 
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+             << MODULE << " DEBUG: testing ossimSpot6Model" << std::endl;
+   }
+
+   // Spot6
+   if ( !projection )
+   {
+      ossimRefPtr<ossimSpot6Model> model = new ossimSpot6Model();
+      if ( model->open(filename) )
+      {
+         projection = model.get(); 
+      }
+      else
+      {
+         model = 0;
+      }
+   }
+
+   //***
+   // ADD_MODEL: (Please leave this comment for the next programmer)
+   //***
+   //if(traceDebug())
+   //{
+    //  ossimNotify(ossimNotifyLevel_DEBUG)
+     //        << MODULE << " DEBUG: testing MY_NEW_MODEL" << std::endl;
+   //}
+
+   // MY_NEW_MODEL
+   //if ( !projection )
+   //{
+    //  ossimRefPtr<MY_NEW_MODEL> model = new MY_NEW_MODEL();
+     // if ( model->open(filename) )
+      //{
+       //  projection = model.get();
+      //}
+   //   else
+   //   {
+  //       model = 0;
+  //    }
+   //}
+
    return projection.release();
 }
 
@@ -306,6 +355,17 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    {
      return new ossimPleiadesModel;
    }
+   else if (name == STATIC_TYPE_NAME(ossimSpot6Model))
+   {
+     return new ossimSpot6Model;
+   }
+
+   //***
+   // ADD_MODEL: (Please leave this comment for the next programmer)
+   //***
+//   if(name == MY_NEW_MODEL)
+//      return new myNewModel;
+
 
    if(traceDebug())
    {
@@ -405,6 +465,26 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
             result = 0;
          }
       }
+      else if (type == "ossimSpot6Model")
+      {
+         result = new ossimSpot6Model();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+
+   //***
+   // ADD_MODEL: (Please leave this comment for the next programmer)
+   //***
+//      else if (type == "ossimSpot6Model")
+//      {
+//         result = new ossimSpot6Model();
+//         if ( !result->loadState(kwl, prefix) )
+//         {
+//            result = 0;
+//         }
+//      }
 
    }
 
@@ -442,6 +522,12 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
    typeList.push_back(STATIC_TYPE_NAME(ossimFormosatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimPleiadesModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimSpot6Model));
+
+   //***
+   // ADD_MODEL: Please leave this comment for the next programmer. Add above.
+   //***
+   //typeList.push_back(STATIC_TYPE_NAME(MY_NEW_MODEL));
 }
 
 bool ossimPluginProjectionFactory::isTileMap(const ossimFilename& filename)const

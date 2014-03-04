@@ -27,7 +27,7 @@
 #include "otbQuickBirdImageMetadataInterfaceFactory.h"
 #include "otbWorldView2ImageMetadataInterfaceFactory.h"
 #include "otbPleiadesImageMetadataInterfaceFactory.h"
-
+#include "otbSpot6ImageMetadataInterfaceFactory.h"
 
 #include "itkObjectFactoryBase.h"
 #include "itkMutexLock.h"
@@ -91,6 +91,7 @@ OpticalImageMetadataInterfaceFactory
       itk::ObjectFactoryBase::RegisterFactory(QuickBirdImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(WorldView2ImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(PleiadesImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(Spot6ImageMetadataInterfaceFactory::New());
       firstTime = false;
       }
     }

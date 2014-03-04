@@ -25,6 +25,7 @@
 #include "otbIkonosImageMetadataInterfaceFactory.h"
 #include "otbSpotImageMetadataInterfaceFactory.h"
 #include "otbPleiadesImageMetadataInterfaceFactory.h"
+#include "otbSpot6ImageMetadataInterfaceFactory.h"
 #include "otbFormosatImageMetadataInterfaceFactory.h"
 #include "otbQuickBirdImageMetadataInterfaceFactory.h"
 #include "otbWorldView2ImageMetadataInterfaceFactory.h"
@@ -105,6 +106,7 @@ ImageMetadataInterfaceFactory
       itk::ObjectFactoryBase::RegisterFactory(IkonosImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(SpotImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(PleiadesImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(Spot6ImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(FormosatImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(QuickBirdImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(WorldView2ImageMetadataInterfaceFactory::New());
