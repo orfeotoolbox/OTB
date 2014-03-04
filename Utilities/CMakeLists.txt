@@ -105,11 +105,11 @@ if(NOT OTB_USE_EXTERNAL_ITK)
     set(USE_FFTWF OFF)
     set(USE_FFTWD OFF)
     set(USE_SYSTEM_FFTW OFF)
-  else
+  else()
     set(USE_FFTWF ON)
     set(USE_FFTWD ON)
     set(USE_SYSTEM_FFTW ON)  
-  endif
+  endif()
   set(ITK_INSTALL_RUNTIME_DIR ${OTB_INSTALL_BIN_DIR})
   set(ITK_INSTALL_LIBRARY_DIR ${OTB_INSTALL_LIB_DIR})
   set(ITK_INSTALL_ARCHIVE_DIR ${OTB_INSTALL_LIB_DIR})
@@ -118,8 +118,6 @@ if(NOT OTB_USE_EXTERNAL_ITK)
   # set(ITK_INSTALL_DATA_DIR share/ITK-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR})
   # set(ITK_INSTALL_DOC_DIR share/doc/ITK-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR})
   # set(ITK_INSTALL_PACKAGE_DIR "lib/cmake/ITK-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}")
-
-  add_subdirectory(ITK)
 
   # Load the ITKConfig generated at configuration time
   # Be sure to avoid loading an external ITK
