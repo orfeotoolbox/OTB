@@ -101,10 +101,15 @@ if(NOT OTB_USE_EXTERNAL_ITK)
 
   # By default activate FFTW, but with an external fftw build
   # These variables are used in ITK to initialize the value of the ITK_USE_FFTW_XXX options
-  set(USE_FFTWF ON)
-  set(USE_FFTWD ON)
-  set(USE_SYSTEM_FFTW ON)
-
+  if (WIN32)
+    set(USE_FFTWF OFF)
+    set(USE_FFTWD OFF)
+    set(USE_SYSTEM_FFTW OFF)
+  else
+    set(USE_FFTWF ON)
+    set(USE_FFTWD ON)
+    set(USE_SYSTEM_FFTW ON)  
+  endif
   set(ITK_INSTALL_RUNTIME_DIR ${OTB_INSTALL_BIN_DIR})
   set(ITK_INSTALL_LIBRARY_DIR ${OTB_INSTALL_LIB_DIR})
   set(ITK_INSTALL_ARCHIVE_DIR ${OTB_INSTALL_LIB_DIR})
