@@ -7,7 +7,7 @@
 // Description:
 //
 // Sensor Model for Radarsat1 SAR sensor.
-// 
+//
 //*******************************************************************
 //  $Id:$
 
@@ -25,7 +25,10 @@
 #include <ossim/base/ossimLagrangeInterpolator.h>
 #include <ossim/support_data/ossimCeosData.h>
 
-class NEWMAT::Matrix;
+namespace NEWMAT
+{
+class Matrix;
+}
 
 //*****************************************************************************
 // CLASS:  ossimRS1SarModel
@@ -37,7 +40,7 @@ public:
    ossimRS1SarModel(const ossimFilename& imageDir);
 
    virtual ~ossimRS1SarModel();
-   
+
    enum ImagingMode
    {
       UNKNOWN_MODE = 0,
@@ -59,25 +62,25 @@ public:
       ASCENDING,
       DESCENDING
    };
-   
+
    //! Fulfills ossimObject base-class pure virtuals. Saves modeling info to KWL.
    //! Returns true if successful.
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=NULL) const;
-   
+
    //! Fulfills ossimObject base-class pure virtuals. Reads modeling info from KWL.
    //! Returns true if successful.
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=NULL);
 
    //! Establishes geographic 3D point given image line, sample and ellipsoid height.
-   virtual void lineSampleHeightToWorld(const ossimDpt& imagePt, 
-                                        const double& heightAboveEllipsoid, 
+   virtual void lineSampleHeightToWorld(const ossimDpt& imagePt,
+                                        const double& heightAboveEllipsoid,
                                         ossimGpt& worldPt) const;
 
    //! Given an image point, returns a ray originating at some arbitrarily high
    //! point (in this model at the sensor position) and pointing towards the target.
    virtual void imagingRay(const ossimDpt& image_point, ossimEcefRay& image_ray) const;
 
-   inline virtual bool useForward() const { return false; } //!image to ground faster 
+   inline virtual bool useForward() const { return false; } //!image to ground faster
 
    //!  Returns pointer to a new instance, copy of this.
    virtual ossimObject* dup() const { return 0; } // TBR
@@ -93,7 +96,7 @@ protected:
    void establishVehicleSpace();
    void interpolatedScanORP(const ossimDpt& orp, ossimEcefPoint& orp_ecf) const;
    void deallocateMemory();
-   
+
    ossimRefPtr<ossimCeosData> theCeosData;
    ossimRefPtr<ossimLagrangeInterpolator> theArpPosInterp;   // in ECF
    ossimRefPtr<ossimLagrangeInterpolator> theArpVelInterp;   // in ECF
@@ -115,13 +118,13 @@ protected:
    double          theTimePerLine;    // seconds
    DirectionFlag   theDirectionFlag;
    double          theSrGrCoeff[6];
-   ossimDpt        thePixelSpacing; 
+   ossimDpt        thePixelSpacing;
    //***
    // Additional data members used for scan-mode imagery:
    //***
    ossimDblGrid    theLatGrid;
    ossimDblGrid    theLonGrid;
-   
+
    //***
    // Adjustable Parameters:
    //***
@@ -131,7 +134,7 @@ protected:
    double          theLineScale;
    double          theSkew;
    double          theOrientation; // degrees
-   
+
    //***
    // Adjustable model parameters array indexes:
    //***
@@ -150,4 +153,3 @@ protected:
 
 
 #endif
-
