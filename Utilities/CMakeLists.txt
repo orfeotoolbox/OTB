@@ -119,6 +119,8 @@ if(NOT OTB_USE_EXTERNAL_ITK)
   # set(ITK_INSTALL_DOC_DIR share/doc/ITK-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR})
   # set(ITK_INSTALL_PACKAGE_DIR "lib/cmake/ITK-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}")
 
+  add_subdirectory(ITK)
+  
   # Load the ITKConfig generated at configuration time
   # Be sure to avoid loading an external ITK
   find_package(ITK
