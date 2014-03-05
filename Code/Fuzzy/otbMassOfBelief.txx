@@ -373,24 +373,24 @@ MassOfBelief<TLabel, TMass>
   Superclass::PrintSelf(os, indent);
 
   // Display mass of belief universe
-  os << indent << "Mass of belief universe: "
-     << PrintLabelSet(os, this->GetUniverse())
-     << std::endl;
+  os << indent << "Mass of belief universe: ";
+  PrintLabelSet(os, this->GetUniverse());
+  os << std::endl;
 
   // Display mass of belief support
-  os<<indent<<"Mass of belief support: "
-    <<PrintLabelSetOfSet(os, this->GetSupport())
-    <<std::endl;
+  os << indent << "Mass of belief support: ";
+  PrintLabelSetOfSet(os, this->GetSupport());
+  os << std::endl;
 
   // Display individual masses
   for(typename MassMapType::const_iterator it = m_MassesMap.begin();
       it!=m_MassesMap.end(); ++it)
     {
-    os<< indent
-      << PrintLabelSet(os, it->first)
-      << " has mass "<<(it->second)<<std::endl;
+    os<< indent;
+    PrintLabelSet(os, it->first);
+    os << " has mass " << (it->second) << std::endl;
     }
-  os<<indent<<"Other masses are null"<<std::endl;
+  os << indent << "Other masses are null" << std::endl;
 }
 
 template <class TLabel, class TMass>
