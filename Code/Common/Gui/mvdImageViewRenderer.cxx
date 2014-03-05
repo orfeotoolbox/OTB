@@ -248,10 +248,12 @@ ImageViewRenderer
         PointType& out,
         DefaultImageType::PixelType& pixel )
 {
+  /*
   qDebug()
     << this << "::Pick("
     << in[ 0 ] << "," << in[ 1 ]
     << ")";
+  */
 
   if( m_ReferenceGlImageActor.IsNull() )
     return false;

@@ -86,12 +86,14 @@ VectorImageModel
   m_RegionsToLoadVector(),
   m_Filename()
 {
+#if USE_OLD_IMAGE_VIEW
   QObject::connect(
     this,
     SIGNAL( ViewportRegionChanged(double, double) ),
     this,
-    SLOT( OnPhysicalCursorPositionChanged(double, double))
+    SLOT( OnPhysicalCursorPositionChanged1(double, double))
     );
+#endif
 }
 
 /*****************************************************************************/
@@ -1306,6 +1308,12 @@ VectorImageModel
 ::OnPhysicalCursorPositionChanged( const PointType& point,
                                    const DefaultImageType::PixelType& pixel )
 {
+// Pixel is read from otb::GlImageActor (inside ImageViewRender)
+// which does only components contain red, green and blue channel components.
+// Only read, green and blue channel related component are
+// present.
+#define USE_RGB_CHANNELS_LIMIT 1
+
   // stream to fill
   std::ostringstream ossIndex;
   std::ostringstream ossPhysicalX;
@@ -1317,6 +1325,9 @@ VectorImageModel
 
   // emitted current pixel
   QStringList      bandNames;
+#if USE_RGB_CHANNELS_LIMIT
+  QStringList stringList;
+#endif
 
   //emitted current geography
   StringVector     geoVector;
@@ -1476,10 +1487,15 @@ VectorImageModel
       */
 
       ossRadio <<ToStdString( tr("Radiometry") )<<" : [ ";
+#if USE_RGB_CHANNELS_LIMIT
       for (unsigned int idx = 0; idx < rgb.size(); idx++)
         {
         ossRadio << pixel.GetElement(rgb[idx]) << " ";
         }
+#else
+      for( int i=0; i<pixel.GetSize(); ++i)
+        ossRadio << pixel.GetElement( i ) << " ";
+#endif
       ossRadio <<"]";
       }
     /*
@@ -1511,6 +1527,13 @@ VectorImageModel
 
     // update band name for the current position 
     bandNames = GetBandNames( true );
+
+#if USE_RGB_CHANNELS_LIMIT
+    stringList
+      << bandNames.at( RGBW_CHANNEL_RED )
+      << bandNames.at( RGBW_CHANNEL_GREEN )
+      << bandNames.at( RGBW_CHANNEL_BLUE );
+#endif
     }
 
   // update the status bar
@@ -1518,7 +1541,11 @@ VectorImageModel
   emit CurrentPhysicalUpdated( cartoList );
   emit CurrentGeographicUpdated( geoList );
   emit CurrentRadioUpdated( ToQString( ossRadio.str().c_str() ) );
+#if USE_RGB_CHANNELS_LIMIT
+  emit CurrentPixelValueUpdated( pixel,  stringList );
+#else
   emit CurrentPixelValueUpdated( pixel,  bandNames );
+#endif
 }
 
 /*****************************************************************************/

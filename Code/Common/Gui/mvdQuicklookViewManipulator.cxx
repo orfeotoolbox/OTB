@@ -249,10 +249,12 @@ QuicklookViewManipulator
                 const SizeType& size,
                 const SpacingType& spacing )
 {
+  /*
   qDebug() << this << ":OnRoiChanged()";
   qDebug() << "origin :" << origin[ 0 ] << "," << origin[ 1 ];
   qDebug() << "size   :" << size[ 0 ] << "," << size[ 1 ];
   qDebug() << "spacing:" << spacing[ 0 ] << "," << spacing[ 1 ];
+  */
 
   m_RoiOrigin = origin;
   m_RoiSize = size;
