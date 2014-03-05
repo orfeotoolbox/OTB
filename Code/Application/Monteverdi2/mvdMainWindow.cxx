@@ -571,16 +571,47 @@ MainWindow
       m_ImageView1->GetImageViewManipulator(),
       SIGNAL( PhysicalCursorPositionChanged(double, double) ),
       vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged(double, double) )
+      SLOT( OnPhysicalCursorPositionChanged1(double, double) )
       );
 
     QObject::connect(
       GetQuicklookView1()->GetImageViewManipulator(),
       SIGNAL( PhysicalCursorPositionChanged(double, double) ),
       vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged(double, double) )
+      SLOT( OnPhysicalCursorPositionChanged1(double, double) )
       );
 #endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
+    //
+    // send the physical point of the clicked point in screen
+    // vectorImageModel is in charge of pixel information computation
+    QObject::connect(
+      m_ImageView,
+      SIGNAL(
+        PhysicalCursorPositionChanged( const PointType&,
+                                       const DefaultImageType::PixelType& )
+      ),
+      // to:
+      vectorImageModel,
+      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
+                                             const DefaultImageType::PixelType& )
+      )
+    );
+
+    QObject::connect(
+      GetQuicklookView(),
+      SIGNAL(
+        PhysicalCursorPositionChanged( const PointType&,
+                                       const DefaultImageType::PixelType& )
+      ),
+      // to:
+      vectorImageModel,
+      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
+                                             const DefaultImageType::PixelType& )
+      )
+    );
+#endif // USE_ICE_IMAGE_VIEW
 
     //
     // connect the statusBar widget to the vectorImage corresponding
@@ -657,7 +688,6 @@ MainWindow
 
   if ( vectorImageModel && wpixelDescription )
     {
-
     QObject::connect(
       vectorImageModel,
       SIGNAL( CurrentPhysicalUpdated(const QStringList& ) ),
@@ -690,7 +720,6 @@ MainWindow
 {
   // WIP
 
-#if 0 // Fixed warning (unused variable).
   // Access vector-image model.
   const VectorImageModel* vectorImageModel =
     model->GetSelectedImageModel< VectorImageModel >();
@@ -700,7 +729,35 @@ MainWindow
     qobject_cast<PixelDescriptionWidget*>(
       m_PixelDescriptionDock->findChild<PixelDescriptionWidget*>()
     );
-#endif
+
+  if ( vectorImageModel && wpixelDescription )
+    {
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( CurrentPhysicalUpdated( const QStringList& ) ),
+      // to:
+      wpixelDescription,
+      SLOT( OnCurrentPhysicalUpdated( const QStringList& ) )
+    );
+
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( CurrentGeographicUpdated( const QStringList& ) ),
+      // to:
+      wpixelDescription,
+      SLOT( OnCurrentGeographicUpdated( const QStringList& ) )
+    );
+
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( CurrentPixelValueUpdated( const VectorImageType::PixelType&,
+                                        const QStringList& ) ),
+      // to:
+      wpixelDescription,
+      SLOT( OnCurrentPixelValueUpdated( const VectorImageType::PixelType&,
+                                        const QStringList& ) )
+    );
+    }
 }
 
 /*****************************************************************************/
@@ -732,6 +789,37 @@ MainWindow
       SLOT( OnPhysicalCursorPositionChanged(double, double) )
       );
 #endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
+    //
+    // send the physical point of the clicked point in screen
+    // vectorImageModel is in charge of pixel information computation
+    QObject::disconnect(
+      m_ImageView,
+      SIGNAL(
+        PhysicalCursorPositionChanged( const PointType&,
+                                       const DefaultImageType::PixelType& )
+      ),
+      // to:
+      vectorImageModel,
+      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
+                                             const DefaultImageType::PixelType& )
+      )
+    );
+
+    QObject::disconnect(
+      GetQuicklookView(),
+      SIGNAL(
+        PhysicalCursorPositionChanged( const PointType&,
+                                       const DefaultImageType::PixelType& )
+      ),
+      // to:
+      vectorImageModel,
+      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
+                                             const DefaultImageType::PixelType& )
+      )
+    );
+#endif // USE_ICE_IMAGE_VIEW
 
     //
     // disconnect the statusBar widget to the vectorImage corresponding

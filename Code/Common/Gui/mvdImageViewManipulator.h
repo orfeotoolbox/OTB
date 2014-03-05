@@ -111,6 +111,9 @@ public:
   // AbstractImageViewManipulator overloads.
   //
 
+  //
+  // Accessors.
+
   virtual void SetViewportSize( int width, int height );
 
   virtual SizeType GetViewportSize() const;
@@ -129,18 +132,22 @@ public:
     const DefaultImageType::ImageKeywordlistType& kwl
   );
 
+  //
+  // Controls.
 
   virtual
     void
     SetupRenderingContext(
       AbstractImageViewRenderer::RenderingContext * const ) const;
 
-  virtual void CenterOn( const PointType& point );
-
   virtual void ZoomIn();
 
   virtual void ZoomOut();
 
+  virtual const PointType& Transform( PointType&, const QPoint& ) const;
+
+  //
+  // Events.
 
   virtual void MouseMoveEvent( QMouseEvent* event );
 
@@ -161,6 +168,8 @@ public:
 //
 // Public SLOTS.
 public slots:
+
+  virtual void CenterOn( const PointType& point );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

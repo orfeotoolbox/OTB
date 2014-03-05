@@ -87,6 +87,9 @@ public:
   /** \brief Destructor. */
   virtual ~AbstractImageViewManipulator();
 
+  //
+  // Accessors
+
   /**
    */
   virtual void SetViewportSize( int width, int height ) =0;
@@ -114,6 +117,9 @@ public:
   virtual
     void SetKeywordList( const DefaultImageType::ImageKeywordlistType& kwl ) =0;
 
+  //
+  // Controls
+
   /**
    */
   virtual
@@ -124,9 +130,17 @@ public:
   /**
    */
   virtual void ZoomIn() =0;
+
   /**
    */
   virtual void ZoomOut() =0;
+
+  /**
+   */
+  virtual const PointType& Transform( PointType&, const QPoint& ) const =0;
+
+  //
+  // Events
 
   /**
    */

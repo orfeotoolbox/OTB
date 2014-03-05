@@ -291,6 +291,33 @@ ImageViewWidget
   QGLWidget::mouseMoveEvent( event );
 
   m_Manipulator->MouseMoveEvent( event );
+  
+  Qt::MouseButtons buttons = event->buttons();
+  // Qt::KeyboardModifiers modifiers = event->modifiers();
+  
+  if( buttons==Qt::NoButton )
+    {
+    //
+    // Transform coordinates from widget space to viewport space.
+    assert( m_Manipulator!=NULL );
+
+    PointType in;
+
+    m_Manipulator->Transform( in, event->pos() );
+
+    //
+    // Pick pixel of point in viewport space and return point in image
+    // space.
+    assert( m_Renderer!=NULL );
+
+    PointType out;
+    DefaultImageType::PixelType pixel;
+
+    if( m_Renderer->Pick( in, out, pixel  ) )
+      {
+      emit PhysicalCursorPositionChanged( out, pixel );
+      }
+    }  
 }
 
 /*******************************************************************************/

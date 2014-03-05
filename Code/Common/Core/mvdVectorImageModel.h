@@ -498,7 +498,11 @@ public:
 public slots:
   /**
    */
-  void OnPhysicalCursorPositionChanged(double Xpc, double Ypc);
+  void OnPhysicalCursorPositionChanged1(double Xpc, double Ypc);
+  /**
+   */
+  void OnPhysicalCursorPositionChanged( const PointType&,
+                                        const DefaultImageType::PixelType& );
 
   /**
    */

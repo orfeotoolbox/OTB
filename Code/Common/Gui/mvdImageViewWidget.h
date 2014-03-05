@@ -162,6 +162,10 @@ public slots:
 signals:
   /**
    */
+  void PhysicalCursorPositionChanged( const PointType&,
+                                      const DefaultImageType::PixelType& );
+  /**
+   */
   void CenterRoiRequested( const PointType& center );
   /**
    */

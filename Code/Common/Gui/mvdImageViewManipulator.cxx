@@ -269,6 +269,23 @@ ImageViewManipulator
 }
 
 /******************************************************************************/
+const PointType&
+ImageViewManipulator
+::Transform( PointType& viewport, const QPoint& screen ) const
+{
+  assert( !m_ViewSettings.IsNull() );
+
+  m_ViewSettings->ScreenToViewPortTransform(
+    static_cast< double >( screen.x() ),
+    static_cast< double >( screen.y() ),
+    viewport[ 0 ],
+    viewport[ 1 ]
+  );
+
+  return viewport;
+}
+
+/******************************************************************************/
 void
 ImageViewManipulator
 ::MousePressEvent( QMouseEvent* event )
@@ -624,10 +641,7 @@ ImageViewManipulator
 
   otb::ViewSettings::PointType point;
 
-  m_ViewSettings->ScreenToViewPortTransform(
-    center.x(), center.y(),
-    point[ 0 ], point[ 1 ]
-  );
+  Transform( point, center );
 
   // See http://qt-project.org/doc/qt-4.8/qwheelevent.html#delta .
   assert( m_ZoomGranularity!=0 );

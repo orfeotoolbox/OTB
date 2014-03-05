@@ -159,6 +159,12 @@ public:
    */
   virtual void PaintGL( RenderingContext const * context ) =0;
 
+  /**
+   */
+  virtual bool Pick( const PointType& in,
+                     PointType& out,
+                     DefaultImageType::PixelType& pixel ) =0;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots

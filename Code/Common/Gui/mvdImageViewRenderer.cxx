@@ -242,6 +242,30 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
+bool
+ImageViewRenderer
+::Pick( const PointType& in,
+        PointType& out,
+        DefaultImageType::PixelType& pixel )
+{
+  qDebug()
+    << this << "::Pick("
+    << in[ 0 ] << "," << in[ 1 ]
+    << ")";
+
+  if( m_ReferenceGlImageActor.IsNull() )
+    return false;
+
+  //
+  // Compute output/physical point.
+  out = m_ReferenceGlImageActor->ViewportToImageTransform( in, true );
+
+  //
+  // Read pixel value.
+  return m_ReferenceGlImageActor->GetPixelFromViewport( in, pixel );
+}
+
+/*****************************************************************************/
 void
 ImageViewRenderer
 ::UpdateActors( const AbstractImageViewRenderer::RenderingContext* )
