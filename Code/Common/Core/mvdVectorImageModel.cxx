@@ -1342,6 +1342,11 @@ VectorImageModel
   currentIndex[0] = static_cast<unsigned int>( ( point[ 0 ] - GetOrigin()[0] ) / GetNativeSpacing()[0] );
   currentIndex[1] = static_cast<unsigned int>( ( point[ 1 ] - GetOrigin()[1] ) / GetNativeSpacing()[1] );
 
+  //
+  // Display the radiometry of the displayed channels
+  Settings::ChannelVector rgb;
+  GetSettings().GetSmartChannels( rgb );
+
   // show the current pixel description only if the mouse cursor is
   // under the image
   if ( GetNativeLargestRegion().IsInside(currentIndex) )
@@ -1473,11 +1478,6 @@ VectorImageModel
     */
     geoList = ToQStringList( geoVector );
 
-    //
-    // Display the radiometry of the displayed channels
-    Settings::ChannelVector rgb;
-    GetSettings().GetSmartChannels( rgb );
-
     if( true /* ToImage()->GetBufferedRegion().IsInside(currentLodIndex) */ )
       {
       /*
@@ -1535,9 +1535,9 @@ VectorImageModel
 
 #if USE_RGB_CHANNELS_LIMIT
   stringList
-    << bandNames.at( RGBW_CHANNEL_RED )
-    << bandNames.at( RGBW_CHANNEL_GREEN )
-    << bandNames.at( RGBW_CHANNEL_BLUE );
+    << bandNames.at( rgb[ RGBW_CHANNEL_RED ] )
+    << bandNames.at( rgb[ RGBW_CHANNEL_GREEN ] )
+    << bandNames.at( rgb[ RGBW_CHANNEL_BLUE ] );
 
   // qDebug() << "Bands:" << stringList;
 #endif

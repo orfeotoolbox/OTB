@@ -215,7 +215,7 @@ PixelDescriptionWidget
       child = NULL;
       }
 
-    // qDebug() << "Bands:" << bandNames;
+    qDebug() << "Bands:" << bandNames;
 
     // assert( bandNames.size()==currentPixel.GetSize() );
 
