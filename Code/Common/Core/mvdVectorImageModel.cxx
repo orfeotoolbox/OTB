@@ -1486,17 +1486,19 @@ VectorImageModel
       currentPixel = ToImage()->GetPixel(currentLodIndex);
       */
 
-      ossRadio <<ToStdString( tr("Radiometry") )<<" : [ ";
+      ossRadio << ToStdString( tr( "Radiometry: [" ) );
+
 #if USE_RGB_CHANNELS_LIMIT
+      for( unsigned int i=0; i<pixel.GetSize(); ++i )
+        ossRadio << pixel.GetElement( i ) << ", ";
+#else
       for (unsigned int idx = 0; idx < rgb.size(); idx++)
         {
-        ossRadio << pixel.GetElement(rgb[idx]) << " ";
+        ossRadio << pixel.GetElement(rgb[idx]) << ", ";
         }
-#else
-      for( int i=0; i<pixel.GetSize(); ++i)
-        ossRadio << pixel.GetElement( i ) << " ";
 #endif
-      ossRadio <<"]";
+
+      // qDebug() << ossRadio.str().c_str();
       }
     /*
     else
@@ -1524,17 +1526,21 @@ VectorImageModel
         }
       }
     */
+    }
 
-    // update band name for the current position 
-    bandNames = GetBandNames( true );
+  // update band name for the current position 
+  bandNames = GetBandNames( true );
+
+    // qDebug() << bandNames;
 
 #if USE_RGB_CHANNELS_LIMIT
-    stringList
-      << bandNames.at( RGBW_CHANNEL_RED )
-      << bandNames.at( RGBW_CHANNEL_GREEN )
-      << bandNames.at( RGBW_CHANNEL_BLUE );
+  stringList
+    << bandNames.at( RGBW_CHANNEL_RED )
+    << bandNames.at( RGBW_CHANNEL_GREEN )
+    << bandNames.at( RGBW_CHANNEL_BLUE );
+
+  // qDebug() << "Bands:" << stringList;
 #endif
-    }
 
   // update the status bar
   emit CurrentIndexUpdated( ToQString( ossIndex.str().c_str() ) );

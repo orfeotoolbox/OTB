@@ -313,11 +313,17 @@ ImageViewWidget
     PointType out;
     DefaultImageType::PixelType pixel;
 
-    if( m_Renderer->Pick( in, out, pixel  ) )
+#if 0
+    if( m_Renderer->Pick( in, out, pixel ) )
       {
       emit PhysicalCursorPositionChanged( out, pixel );
       }
-    }  
+#else
+    m_Renderer->Pick( in, out, pixel );
+
+    emit PhysicalCursorPositionChanged( out, pixel );
+#endif  
+    }
 }
 
 /*******************************************************************************/
