@@ -660,12 +660,16 @@ MainWindow
     SLOT( setText(const QString &) )
   );
 
+#if USE_OLD_IMAGE_VIEW
+
   QObject::disconnect(
     m_ImageViewManipulator1, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
   );
+
+#endif // USE_OLD_IMAGE_VIEW
 
   // index widget edition
   QObject::disconnect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
@@ -831,12 +835,16 @@ MainWindow
     SLOT( setText(const QString &) )
   );
 
+#if USE_OLD_IMAGE_VIEW
+
   QObject::connect(
     m_ImageViewManipulator1, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
   );
+
+#endif // USE_OLD_IMAGE_VIEW
 
   // index widget in status bar edited
   QObject::connect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
@@ -857,18 +865,24 @@ MainWindow
                    SLOT( OnViewportRegionChanged(double, double) )
     );
 
+#if USE_OLD_IMAGE_VIEW
+
+#pragma message( __FILE__ ":" __LINE__ ": USE_OLD_IMAGE_VIEW: 1")
+
   // scale widget in status bar edited
   QObject::connect(m_StatusBarWidget->GetCurrentScaleWidget(),
                    SIGNAL( editingFinished() ),
                    this,
                    SLOT( OnUserScaleEditingFinished() )
     );
-  
+
   QObject::connect(this,
                    SIGNAL( UserScaleEditingFinished(const QString&) ),
                    m_ImageViewManipulator1,
                    SLOT( OnUserScaleEditingFinished(const QString&) )
     );
+
+#endif // USE_OLD_IMAGE_VIEW
 
   //
   // MAIN VIEW.
@@ -906,6 +920,8 @@ void
 MainWindow
 ::OnUserScaleEditingFinished()
 {
+#if USE_OLD_IMAGE_VIEW
+
   // get the text and send it to the view manipulator to be
   // processed 
   QString scale = m_StatusBarWidget->GetCurrentScaleWidget()->text();
@@ -913,6 +929,8 @@ MainWindow
 
   // update the Quicklook
   qobject_cast< GLImageWidget1 * >( GetQuicklookDock()->widget() )->update();
+
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/

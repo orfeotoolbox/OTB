@@ -172,6 +172,9 @@ signals:
   void RoiChanged( const PointType& origin,
                    const SizeType& size,
                    const SpacingType& spacing );
+  /**
+   */
+  void ScaleChanged( double sx, double sy );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -244,6 +247,9 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 private slots:
+  /**
+   */
+  void OnRoiChanged( const PointType&, const SizeType&, const SpacingType& );
 };
 
 }// end namespace 'mvd'

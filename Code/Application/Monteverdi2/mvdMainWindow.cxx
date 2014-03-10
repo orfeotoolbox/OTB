@@ -441,6 +441,8 @@ void
 MainWindow
 ::ConnectImageViews()
 {
+  assert( m_ImageView!=NULL );
+
   QObject::connect(
     this,
     SIGNAL( UserZoomIn() ),
@@ -473,8 +475,6 @@ MainWindow
 
   //
   // Connect image-views for ROI-changed events.
-
-  assert( m_ImageView!=NULL );
 
   const AbstractImageViewManipulator* imageViewManipulator =
     m_ImageView->GetManipulator();
@@ -557,6 +557,20 @@ void
 MainWindow
 ::ConnectStatusBar( DatasetModel * model)
 {
+  assert( m_StatusBarWidget!=NULL );
+
+#if USE_ICE_IMAGE_VIEW
+  assert( m_ImageView!=NULL );
+
+  QObject::connect(
+    m_ImageView,
+    SIGNAL( ScaleChanged( double, double ) ),
+    // to:
+    m_StatusBarWidget,
+    SLOT( OnScaleChanged( double, double ) )
+  );
+#endif
+
   // Access vector-image model.
   VectorImageModel* vectorImageModel =
     model->GetSelectedImageModel< VectorImageModel >();
@@ -618,25 +632,26 @@ MainWindow
     // signal
     QObject::connect(
       vectorImageModel,
-      SIGNAL( CurrentIndexUpdated(const QString& ) ),
+      SIGNAL( CurrentIndexUpdated( const QString& ) ),
       m_StatusBarWidget->GetCurrentPixelIndexWidget(),
-      SLOT( setText(const QString &) )
-      );
+      SLOT( setText( const QString& ) )
+    );
 
     QObject::connect(
       vectorImageModel,
-      SIGNAL( CurrentRadioUpdated(const QString& ) ),
+      SIGNAL( CurrentRadioUpdated( const QString& ) ),
+      // to:
       m_StatusBarWidget->GetCurrentPixelRadioWidget(),
-      SLOT( setText(const QString &) )
-      );
+      SLOT( setText( const QString & ) )
+    );
 
     QObject::connect(
       this,
-      SIGNAL( UserCoordinatesEditingFinished(const QString&) ),
+      SIGNAL( UserCoordinatesEditingFinished( const QString& ) ),
+      // to:
       vectorImageModel,
-      SLOT( OnUserCoordinatesEditingFinished(const QString&) )
+      SLOT( OnUserCoordinatesEditingFinished( const QString& ) )
       );
-
     }
 
 #if USE_OLD_IMAGE_VIEW
@@ -649,25 +664,34 @@ MainWindow
 #endif // USE_OLD_IMAGE_VIEW
 
   // index widget in status bar edited
-  QObject::connect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
-                   SIGNAL( editingFinished() ),
-                   this,
-                   SLOT( OnUserCoordinatesEditingFinished() )
-    );
-
-  // scale widget in status bar edited
-  QObject::connect(m_StatusBarWidget->GetCurrentScaleWidget(),
-                   SIGNAL( editingFinished() ),
-                   this,
-                   SLOT( OnUserScaleEditingFinished() )
+  QObject::connect(
+    m_StatusBarWidget->GetCurrentPixelIndexWidget(),
+    SIGNAL( editingFinished() ),
+    // to:
+    this,
+    SLOT( OnUserCoordinatesEditingFinished() )
     );
 
 #if USE_OLD_IMAGE_VIEW
-  QObject::connect(this,
-                   SIGNAL( UserScaleEditingFinished(const QString&) ),
-                   m_ImageView1->GetImageViewManipulator(),
-                   SLOT( OnUserScaleEditingFinished(const QString&) )
-    );
+
+// #pragma message( __FILE__ ":" __LINE__ ": USE_OLD_IMAGE_VIEW: 1")
+
+  // scale widget in status bar edited
+  QObject::connect(
+    m_StatusBarWidget->GetCurrentScaleWidget(),
+    SIGNAL( editingFinished() ),
+    // to:
+    this,
+    SLOT( OnUserScaleEditingFinished() )
+  );
+
+  QObject::connect(
+    this,
+    SIGNAL( UserScaleEditingFinished(const QString&) ),
+    m_ImageView1->GetImageViewManipulator(),
+    SLOT( OnUserScaleEditingFinished(const QString&) )
+  );
+
 #endif // USE_OLD_IMAGE_VIEW
 }
 
@@ -861,6 +885,10 @@ MainWindow
                       SLOT( OnUserCoordinatesEditingFinished() )
     );
 
+#if USE_OLD_IMAGE_VIEW
+
+// #pragma message( __FILE__ ":" __LINE__ ": USE_OLD_IMAGE_VIEW: 1")
+
   // scale widget in status bar edited
   QObject::disconnect(m_StatusBarWidget->GetCurrentScaleWidget(),
                       SIGNAL( editingFinished() ),
@@ -868,12 +896,12 @@ MainWindow
                       SLOT( OnUserScaleEditingFinished() )
     );
 
-#if USE_OLD_IMAGE_VIEW
   QObject::disconnect(this,
                       SIGNAL( UserScaleEditingFinished(const QString&) ),
                       m_ImageView1->GetImageViewManipulator(),
                       SLOT( OnUserScaleEditingFinished(const QString&) )
     );
+
 #endif // USE_OLD_IMAGE_VIEW
 }
 
@@ -2014,14 +2042,16 @@ void
 MainWindow
 ::OnUserScaleEditingFinished()
 {
+#if USE_OLD_IMAGE_VIEW
+
   // get the text and send it to the view manipulator to be
   // processed
   QString scale = m_StatusBarWidget->GetCurrentScaleWidget()->text();
   emit UserScaleEditingFinished(scale);
 
-#if USE_OLD_IMAGE_VIEW
   // update the Quicklook
   qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() )->update();
+
 #endif // USE_OLD_IMAGE_VIEW
 }
 

@@ -99,7 +99,10 @@ public:
     */
   QLineEdit * GetCurrentPixelIndexWidget();
   QLabel *    GetCurrentPixelRadioWidget();
+
+#if USE_OLD_IMAGE_VIEW
   QLineEdit * GetCurrentScaleWidget();
+#endif
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -128,6 +131,9 @@ protected:
 //
 // Private methods.
 private:
+  /**
+   */
+  inline static QString ZoomLevel( double scale );
 
 //
 // Private attributes.
@@ -143,11 +149,56 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   */
+  void OnScaleChanged( double sx, double sy );
 };
+
+} // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
+
+//
+// Qt includes (sorted by alphabetic order)
+//// Must be included before system/custom includes.
+
+//
+// System includes (sorted by alphabetic order)
+
+//
+// ITK includes (sorted by alphabetic order)
+
+//
+// OTB includes (sorted by alphabetic order)
+
+//
+// Monteverdi includes (sorted by alphabetic order)
+
+namespace mvd
+{
+
 /*****************************************************************************/
+inline
+QString
+StatusBarWidget
+::ZoomLevel( double scale )
+{
+  if( scale>1 )
+    {
+    return QString( "%1:1" ).arg( scale );
+    }
+  else if( scale<1 )
+    {
+    return QString( "1:%1" ).arg( scale );
+    }
+  else
+    {
+    return "1:1";
+    }
+
+  return QString();
+}
 
 } // end namespace 'mvd'
 

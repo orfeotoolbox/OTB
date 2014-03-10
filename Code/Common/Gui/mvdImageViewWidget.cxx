@@ -204,6 +204,14 @@ ImageViewWidget
   );
 
   QObject::connect(
+    m_Manipulator,
+    SIGNAL( RoiChanged( const PointType&, const SizeType&, const SpacingType& ) ),
+    // to:
+    this,
+    SLOT( OnRoiChanged( const PointType&, const SizeType&, const SpacingType& ) )
+  );
+
+  QObject::connect(
     m_Manipulator, SIGNAL( ZoomToExtentRequested() ),
     // to:
     this, SLOT( ZoomToExtent() )
@@ -596,6 +604,28 @@ ImageViewWidget
 
   // Refresh view.
   updateGL();
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::OnRoiChanged( const PointType& point,
+                const SizeType& size,
+                const SpacingType& spacing )
+{
+  assert( m_Renderer!=NULL );
+
+  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
+  assert( imageModel!=NULL );
+
+  SpacingType nativeSpacing( imageModel->GetNativeSpacing() );
+
+  double sx = nativeSpacing[ 0 ] / spacing[ 0 ];
+  double sy = nativeSpacing[ 1 ] / spacing[ 1 ];
+
+  qDebug() << "scale: (" << sx << "," << sy << ")";
+
+  emit ScaleChanged( sx, sy );
 }
 
 }

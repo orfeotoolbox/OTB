@@ -79,7 +79,7 @@ StatusBarWidget
 }
 
 /*******************************************************************************/
-QLineEdit *
+QLineEdit*
 StatusBarWidget
 ::GetCurrentPixelIndexWidget()
 {
@@ -87,7 +87,7 @@ StatusBarWidget
 }
 
 /*******************************************************************************/
-QLabel *    
+QLabel*
 StatusBarWidget
 ::GetCurrentPixelRadioWidget()
 {
@@ -95,6 +95,8 @@ StatusBarWidget
 }
 
 /*******************************************************************************/
+#if USE_OLD_IMAGE_VIEW
+
 QLineEdit * 
 StatusBarWidget
 ::GetCurrentScaleWidget()
@@ -102,8 +104,23 @@ StatusBarWidget
     return m_UI->m_CurrentScale;
 }
 
+#endif // USE_OLD_IMAGE_VIEW
+
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+void
+StatusBarWidget
+::OnScaleChanged( double sx, double sy )
+{
+  // qDebug() << this << "::OnScaleChanged(" << sx << "," << sy << ")";
+
+  QString zoomLevel( StatusBarWidget::ZoomLevel( sx ) );
+
+  if( sx!=sy )
+    zoomLevel.append( StatusBarWidget::ZoomLevel( sy ) );
+
+  m_UI->m_CurrentScale->setText( zoomLevel );
+}
 
 } // end namespace 'mvd'

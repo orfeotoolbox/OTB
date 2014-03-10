@@ -92,7 +92,7 @@ class Monteverdi2_EXPORT MainWindow
   Q_OBJECT;
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-    
+
 //
 // Public types.
 public:
@@ -105,7 +105,7 @@ public:
 
   /** \brief Destructor. */
   virtual ~MainWindow();
-  
+
   QString SelectCacheDir(bool incorrectCacheDir = false);
 
   void OpenImage( QString filename );
@@ -300,7 +300,7 @@ private slots:
 
   /** */
   void OnUserScaleEditingFinished();
-  
+
   /** */
   void OnOpenImageRequest( QString filename );
 
