@@ -115,6 +115,9 @@ public slots:
 //
 // Signals.
 signals:
+  /**
+   */
+  void ScaleChanged( double );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -149,6 +152,10 @@ private:
 //
 // Slots.
 private slots:
+  /**
+   */
+  void on_scaleLineEdit_textChanged( const QString& text );
+
   /**
    */
   void OnScaleChanged( double sx, double sy );

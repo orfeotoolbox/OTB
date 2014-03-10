@@ -29,6 +29,7 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -38,6 +39,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -108,6 +110,74 @@ StatusBarWidget
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
+/*******************************************************************************/
+void
+StatusBarWidget
+::on_scaleLineEdit_textChanged( const QString& text )
+{
+  //
+  // Cancel if scale text is empty.
+  if( text.isEmpty() )
+    return;
+
+  //
+  // Split scale text.
+  QStringList scale( text.split( ':' ) );
+
+  //
+  // Check scale text format.
+  assert( scale.size()==1 || scale.size()==2 );
+
+  if( scale.size()!=1 && scale.size()!=2 )
+    {
+    throw std::invalid_argument(
+      ToStdString(
+        tr( "Invalid argument: '%1' should be scale of the form <numerator>[:<denominator>] with numerator and denominator being real numbers." )
+      )
+    );
+    }
+
+  //
+  // Convert scale numerator.
+  bool isOk = true;
+  double numerator = scale.front().toDouble( &isOk );
+
+  assert( isOk );
+
+  if( !isOk )
+    {
+    throw std::invalid_argument(
+      ToStdString(
+        tr( "Invalid argument: '%1' should be scale of the form <numerator>[:<denominator>] with numerator and denominator being real numbers." )
+      )
+    );
+    }
+
+  //
+  // Convert scale denominator.
+  double denominator = 1.0;
+
+  if( scale.size()>1 )
+    {
+    denominator = scale.back().toDouble( &isOk );
+
+    assert( !isOk );
+
+    if( !isOk )
+      {
+      throw std::invalid_argument(
+        ToStdString(
+          tr( "Invalid argument: '%1' should be scale of the form <numerator>[:<denominator>] with numerator and denominator being real numbers." )
+        )
+      );
+      }
+    }
+
+  //
+  // Emit scale changed.
+  emit ScaleChanged( numerator / denominator );
+}
+
 /*******************************************************************************/
 void
 StatusBarWidget
