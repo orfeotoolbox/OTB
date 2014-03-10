@@ -241,6 +241,31 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
+::ZoomTo( double scale )
+{
+  assert( scale!=0.0 );
+
+  assert( !m_ViewSettings.IsNull() );
+
+  // Remember center of viewport.
+  otb::ViewSettings::PointType center( m_ViewSettings->GetViewportCenter() );
+
+  // Calculate spacing based on scale.
+  otb::ViewSettings::SpacingType spacing;
+
+  spacing.Fill( 1.0 / scale );
+
+  // Change spacing and center.
+  m_ViewSettings->SetSpacing( spacing );
+  m_ViewSettings->Center( center );
+
+  // Emit ROI changed.
+  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
 ::ZoomIn()
 {
   otb::ViewSettings::SizeType size( GetViewportSize() );

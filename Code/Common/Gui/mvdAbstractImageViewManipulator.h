@@ -174,6 +174,9 @@ public slots:
   /**
    */
   virtual void CenterOn( const PointType& point ) =0;
+  /**
+   */
+  virtual void ZoomTo( double scale ) =0;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

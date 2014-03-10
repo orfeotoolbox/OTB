@@ -169,7 +169,12 @@ public:
 // Public SLOTS.
 public slots:
 
+  //
+  // AbstractImageViewManipulator overloads.
+
   virtual void CenterOn( const PointType& point );
+
+  virtual void ZoomTo( double scale );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

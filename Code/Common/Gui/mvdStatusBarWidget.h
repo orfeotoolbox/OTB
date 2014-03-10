@@ -154,7 +154,7 @@ private:
 private slots:
   /**
    */
-  void on_scaleLineEdit_textChanged( const QString& text );
+  void on_scaleLineEdit_editingFinished();
 
   /**
    */
@@ -197,7 +197,7 @@ StatusBarWidget
     }
   else if( scale<1 )
     {
-    return QString( "1:%1" ).arg( scale );
+    return QString( "1:%1" ).arg( 1.0 / scale );
     }
   else
     {

@@ -113,21 +113,22 @@ StatusBarWidget
 /*******************************************************************************/
 void
 StatusBarWidget
-::on_scaleLineEdit_textChanged( const QString& text )
+::on_scaleLineEdit_editingFinished()
 {
   //
   // Cancel if scale text is empty.
-  if( text.isEmpty() )
+  if( m_UI->scaleLineEdit->text().isEmpty() )
     return;
 
   //
   // Split scale text.
-  QStringList scale( text.split( ':' ) );
+  QStringList scale( m_UI->scaleLineEdit->text().split( ':' ) );
 
   //
   // Check scale text format.
   assert( scale.size()==1 || scale.size()==2 );
 
+  /*
   if( scale.size()!=1 && scale.size()!=2 )
     {
     throw std::invalid_argument(
@@ -136,6 +137,7 @@ StatusBarWidget
       )
     );
     }
+  */
 
   //
   // Convert scale numerator.
@@ -143,7 +145,9 @@ StatusBarWidget
   double numerator = scale.front().toDouble( &isOk );
 
   assert( isOk );
+  assert( numerator!=0.0 );
 
+  /*
   if( !isOk )
     {
     throw std::invalid_argument(
@@ -152,6 +156,7 @@ StatusBarWidget
       )
     );
     }
+  */
 
   //
   // Convert scale denominator.
@@ -161,8 +166,9 @@ StatusBarWidget
     {
     denominator = scale.back().toDouble( &isOk );
 
-    assert( !isOk );
+    assert( isOk );
 
+    /*
     if( !isOk )
       {
       throw std::invalid_argument(
@@ -171,6 +177,7 @@ StatusBarWidget
         )
       );
       }
+    */
     }
 
   //

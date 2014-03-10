@@ -569,6 +569,14 @@ MainWindow
     m_StatusBarWidget,
     SLOT( OnScaleChanged( double, double ) )
   );
+
+  QObject::connect(
+    m_StatusBarWidget,
+    SIGNAL( ScaleChanged( double ) ),
+    // to:
+    m_ImageView->GetManipulator(),
+    SLOT( ZoomTo( double ) )
+  );
 #endif
 
   // Access vector-image model.
