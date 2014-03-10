@@ -83,7 +83,7 @@ QLineEdit*
 StatusBarWidget
 ::GetCurrentPixelIndexWidget()
 {
-  return m_UI->m_CurrentPixelIndex;
+  return m_UI->pixelIndexLineEdit;
 }
 
 /*******************************************************************************/
@@ -91,7 +91,7 @@ QLabel*
 StatusBarWidget
 ::GetCurrentPixelRadioWidget()
 {
-  return m_UI->m_CurrentPixelRadio;
+  return m_UI->pixelRadiometryLabel;
 }
 
 /*******************************************************************************/
@@ -101,7 +101,7 @@ QLineEdit *
 StatusBarWidget
 ::GetCurrentScaleWidget()
 {
-    return m_UI->m_CurrentScale;
+    return m_UI->scaleLineEdit;
 }
 
 #endif // USE_OLD_IMAGE_VIEW
@@ -120,7 +120,7 @@ StatusBarWidget
   if( sx!=sy )
     zoomLevel.append( StatusBarWidget::ZoomLevel( sy ) );
 
-  m_UI->m_CurrentScale->setText( zoomLevel );
+  m_UI->scaleLineEdit->setText( zoomLevel );
 }
 
 } // end namespace 'mvd'

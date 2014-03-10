@@ -52,7 +52,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="m_CurrentPixelIndex">
+    <widget class="QLineEdit" name="pixelIndexLineEdit">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -84,7 +84,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="m_CurrentPixelRadio">
+    <widget class="QLabel" name="pixelRadiometryLabel">
      <property name="minimumSize">
       <size>
        <width>200</width>
@@ -148,7 +148,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="m_CurrentScale">
+    <widget class="QLineEdit" name="scaleLineEdit">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
