@@ -553,31 +553,13 @@ MainWindow
 }
 
 /*****************************************************************************/
+#if USE_OLD_IMAGE_VIEW
+
 void
 MainWindow
-::ConnectStatusBar( DatasetModel * model)
+::ConnectStatusBar1( DatasetModel * model)
 {
   assert( m_StatusBarWidget!=NULL );
-
-#if USE_ICE_IMAGE_VIEW
-  assert( m_ImageView!=NULL );
-
-  QObject::connect(
-    m_ImageView,
-    SIGNAL( ScaleChanged( double, double ) ),
-    // to:
-    m_StatusBarWidget,
-    SLOT( OnScaleChanged( double, double ) )
-  );
-
-  QObject::connect(
-    m_StatusBarWidget,
-    SIGNAL( ScaleChanged( double ) ),
-    // to:
-    m_ImageView->GetManipulator(),
-    SLOT( ZoomTo( double ) )
-  );
-#endif
 
   // Access vector-image model.
   VectorImageModel* vectorImageModel =
@@ -585,7 +567,6 @@ MainWindow
 
   if ( vectorImageModel )
     {
-#if USE_OLD_IMAGE_VIEW
     //
     // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
@@ -602,38 +583,6 @@ MainWindow
       vectorImageModel,
       SLOT( OnPhysicalCursorPositionChanged1(double, double) )
       );
-#endif // USE_OLD_IMAGE_VIEW
-
-#if USE_ICE_IMAGE_VIEW
-    //
-    // send the physical point of the clicked point in screen
-    // vectorImageModel is in charge of pixel information computation
-    QObject::connect(
-      m_ImageView,
-      SIGNAL(
-        PhysicalCursorPositionChanged( const PointType&,
-                                       const DefaultImageType::PixelType& )
-      ),
-      // to:
-      vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
-                                             const DefaultImageType::PixelType& )
-      )
-    );
-
-    QObject::connect(
-      GetQuicklookView(),
-      SIGNAL(
-        PhysicalCursorPositionChanged( const PointType&,
-                                       const DefaultImageType::PixelType& )
-      ),
-      // to:
-      vectorImageModel,
-      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
-                                             const DefaultImageType::PixelType& )
-      )
-    );
-#endif // USE_ICE_IMAGE_VIEW
 
     //
     // connect the statusBar widget to the vectorImage corresponding
@@ -662,14 +611,12 @@ MainWindow
       );
     }
 
-#if USE_OLD_IMAGE_VIEW
   QObject::connect(
     m_ImageView1->GetImageViewManipulator(),
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
     );
-#endif // USE_OLD_IMAGE_VIEW
 
   // index widget in status bar edited
   QObject::connect(
@@ -679,10 +626,6 @@ MainWindow
     this,
     SLOT( OnUserCoordinatesEditingFinished() )
     );
-
-#if USE_OLD_IMAGE_VIEW
-
-// #pragma message( __FILE__ ":" __LINE__ ": USE_OLD_IMAGE_VIEW: 1")
 
   // scale widget in status bar edited
   QObject::connect(
@@ -699,8 +642,109 @@ MainWindow
     m_ImageView1->GetImageViewManipulator(),
     SLOT( OnUserScaleEditingFinished(const QString&) )
   );
+}
 
 #endif // USE_OLD_IMAGE_VIEW
+
+/*****************************************************************************/
+void
+MainWindow
+::ConnectStatusBar( DatasetModel * model)
+{
+  assert( m_StatusBarWidget!=NULL );
+
+  assert( m_ImageView!=NULL );
+
+  QObject::connect(
+    m_ImageView,
+    SIGNAL( ScaleChanged( double, double ) ),
+    // to:
+    m_StatusBarWidget,
+    SLOT( OnScaleChanged( double, double ) )
+  );
+
+  QObject::connect(
+    m_StatusBarWidget,
+    SIGNAL( ScaleChanged( double ) ),
+    // to:
+    m_ImageView->GetManipulator(),
+    SLOT( ZoomTo( double ) )
+  );
+
+  // Access vector-image model.
+  VectorImageModel* vectorImageModel =
+    model->GetSelectedImageModel< VectorImageModel >();
+
+  if ( vectorImageModel )
+    {
+    //
+    // send the physical point of the clicked point in screen
+    // vectorImageModel is in charge of pixel information computation
+    QObject::connect(
+      m_ImageView,
+      SIGNAL(
+        PhysicalCursorPositionChanged( const PointType&,
+                                       const DefaultImageType::PixelType& )
+      ),
+      // to:
+      vectorImageModel,
+      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
+                                             const DefaultImageType::PixelType& )
+      )
+    );
+
+    QObject::connect(
+      GetQuicklookView(),
+      SIGNAL(
+        PhysicalCursorPositionChanged( const PointType&,
+                                       const DefaultImageType::PixelType& )
+      ),
+      // to:
+      vectorImageModel,
+      SLOT( OnPhysicalCursorPositionChanged( const PointType&,
+                                             const DefaultImageType::PixelType& )
+      )
+    );
+
+    //
+    // connect the statusBar widget to the vectorImage corresponding
+    // signal
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( CurrentIndexUpdated( const QString& ) ),
+      m_StatusBarWidget,
+      SLOT( SetPixelIndexText( const QString& ) )
+    );
+
+    QObject::connect(
+      vectorImageModel,
+      SIGNAL( CurrentRadioUpdated( const QString& ) ),
+      // to:
+      m_StatusBarWidget,
+      SLOT( SetPixelRadiometryText( const QString& ) )
+    );
+
+    /*
+    QObject::connect(
+      this,
+      SIGNAL( UserCoordinatesEditingFinished( const QString& ) ),
+      // to:
+      vectorImageModel,
+      SLOT( OnUserCoordinatesEditingFinished( const QString& ) )
+      );
+    */
+    }
+
+  /*
+  // index widget in status bar edited
+  QObject::connect(
+    m_StatusBarWidget->GetCurrentPixelIndexWidget(),
+    SIGNAL( editingFinished() ),
+    // to:
+    this,
+    SLOT( OnUserCoordinatesEditingFinished() )
+    );
+  */
 }
 
 /*****************************************************************************/
@@ -793,9 +837,11 @@ MainWindow
 }
 
 /*****************************************************************************/
+#if USE_OLD_IMAGE_VIEW
+
 void
 MainWindow
-::DisconnectStatusBar( const DatasetModel * model)
+::DisconnectStatusBar1( const DatasetModel * model)
 {
   // Access vector-image model.
   const VectorImageModel* vectorImageModel =
@@ -803,7 +849,6 @@ MainWindow
 
   if( vectorImageModel )
     {
-#if USE_OLD_IMAGE_VIEW
     //
     // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
@@ -820,9 +865,72 @@ MainWindow
       vectorImageModel,
       SLOT( OnPhysicalCursorPositionChanged(double, double) )
       );
+
+    //
+    // disconnect the statusBar widget to the vectorImage corresponding
+    // signal
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( CurrentIndexUpdated(const QString& ) ),
+      m_StatusBarWidget->GetCurrentPixelIndexWidget(),
+      SLOT( setText(const QString &) )
+      );
+
+    QObject::disconnect(
+      vectorImageModel,
+      SIGNAL( CurrentRadioUpdated(const QString& ) ),
+      m_StatusBarWidget->GetCurrentPixelRadioWidget(),
+      SLOT( setText(const QString &) )
+      );
+
+    QObject::disconnect(this,
+                        SIGNAL( UserCoordinatesEditingFinished(const QString&) ),
+                        vectorImageModel,
+                        SLOT( OnUserCoordinatesEditingFinished(const QString&) )
+      );
+    }
+
+  QObject::disconnect(
+    m_ImageView1->GetImageViewManipulator(),
+    SIGNAL( CurrentScaleUpdated(const QString& ) ),
+    m_StatusBarWidget->GetCurrentScaleWidget(),
+    SLOT( setText(const QString&) )
+    );
+
+  // index widget in status bar edited
+  QObject::disconnect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
+                      SIGNAL( editingFinished() ),
+                      this,
+                      SLOT( OnUserCoordinatesEditingFinished() )
+    );
+
+  // scale widget in status bar edited
+  QObject::disconnect(m_StatusBarWidget->GetCurrentScaleWidget(),
+                      SIGNAL( editingFinished() ),
+                      this,
+                      SLOT( OnUserScaleEditingFinished() )
+    );
+
+  QObject::disconnect(this,
+                      SIGNAL( UserScaleEditingFinished(const QString&) ),
+                      m_ImageView1->GetImageViewManipulator(),
+                      SLOT( OnUserScaleEditingFinished(const QString&) )
+    );
+}
+
 #endif // USE_OLD_IMAGE_VIEW
 
-#if USE_ICE_IMAGE_VIEW
+/*****************************************************************************/
+void
+MainWindow
+::DisconnectStatusBar( const DatasetModel * model )
+{
+  // Access vector-image model.
+  const VectorImageModel* vectorImageModel =
+    model->GetSelectedImageModel< VectorImageModel >();
+
+  if( vectorImageModel )
+    {
     //
     // send the physical point of the clicked point in screen
     // vectorImageModel is in charge of pixel information computation
@@ -851,7 +959,6 @@ MainWindow
                                              const DefaultImageType::PixelType& )
       )
     );
-#endif // USE_ICE_IMAGE_VIEW
 
     //
     // disconnect the statusBar widget to the vectorImage corresponding
@@ -859,58 +966,36 @@ MainWindow
     QObject::disconnect(
       vectorImageModel,
       SIGNAL( CurrentIndexUpdated(const QString& ) ),
-      m_StatusBarWidget->GetCurrentPixelIndexWidget(),
-      SLOT( setText(const QString &) )
+      m_StatusBarWidget,
+      SLOT( SetPixelIndexText( const QString & ) )
       );
 
     QObject::disconnect(
       vectorImageModel,
       SIGNAL( CurrentRadioUpdated(const QString& ) ),
-      m_StatusBarWidget->GetCurrentPixelRadioWidget(),
-      SLOT( setText(const QString &) )
+      m_StatusBarWidget,
+      SLOT( SetPixelRadiometryText(const QString &) )
       );
 
-    QObject::disconnect(this,
-                        SIGNAL( UserCoordinatesEditingFinished(const QString&) ),
-                        vectorImageModel,
-                        SLOT( OnUserCoordinatesEditingFinished(const QString&) )
+    /*
+    QObject::disconnect(
+      this,
+      SIGNAL( UserCoordinatesEditingFinished(const QString&) ),
+      vectorImageModel,
+      SLOT( OnUserCoordinatesEditingFinished(const QString&) )
       );
+    */
     }
 
-#if USE_OLD_IMAGE_VIEW
-  QObject::disconnect(
-    m_ImageView1->GetImageViewManipulator(),
-    SIGNAL( CurrentScaleUpdated(const QString& ) ),
-    m_StatusBarWidget->GetCurrentScaleWidget(),
-    SLOT( setText(const QString&) )
-    );
-#endif // USE_OLD_IMAGE_VIEW
-
+  /*
   // index widget in status bar edited
-  QObject::disconnect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
-                      SIGNAL( editingFinished() ),
-                      this,
-                      SLOT( OnUserCoordinatesEditingFinished() )
-    );
-
-#if USE_OLD_IMAGE_VIEW
-
-// #pragma message( __FILE__ ":" __LINE__ ": USE_OLD_IMAGE_VIEW: 1")
-
-  // scale widget in status bar edited
-  QObject::disconnect(m_StatusBarWidget->GetCurrentScaleWidget(),
-                      SIGNAL( editingFinished() ),
-                      this,
-                      SLOT( OnUserScaleEditingFinished() )
-    );
-
-  QObject::disconnect(this,
-                      SIGNAL( UserScaleEditingFinished(const QString&) ),
-                      m_ImageView1->GetImageViewManipulator(),
-                      SLOT( OnUserScaleEditingFinished(const QString&) )
-    );
-
-#endif // USE_OLD_IMAGE_VIEW
+  QObject::disconnect(
+    m_StatusBarWidget->GetCurrentPixelIndexWidget(),
+    SIGNAL( editingFinished() ),
+    this,
+    SLOT( OnUserCoordinatesEditingFinished() )
+  );
+  */
 }
 
 /*****************************************************************************/
@@ -1650,7 +1735,12 @@ MainWindow
 #endif // USE_OLD_IMAGE_VIEW
 
   // Disconnect the signals from the previous dataset model
+#if USE_OLD_IMAGE_VIEW
+  DisconnectStatusBar1( datasetModel );
+#endif // USE_OLD_IMAGE_VIEW
+#if USE_ICE_IMAGE_VIEW
   DisconnectStatusBar( datasetModel );
+#endif
 
   // Disconnect the 
   DisconnectPixelDescriptionWidget( datasetModel );
@@ -1677,7 +1767,13 @@ MainWindow
   // connect the status bar
   // must be done before the SetImageModel (to be able to receive
   // the signal with zoom level)
+#if USE_OLD_IMAGE_VIEW
+  ConnectStatusBar1( model );
+#endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
   ConnectStatusBar( model );
+#endif // USE_ICE_IMAGE_VIEW
 
   ConnectPixelDescriptionWidget( model );
 
@@ -2034,12 +2130,13 @@ void
 MainWindow
 ::OnUserCoordinatesEditingFinished()
 {
+#if USE_OLD_IMAGE_VIEW
+
   // get the text and send it to the vector image model to be
   // processed
   QString coord = m_StatusBarWidget->GetCurrentPixelIndexWidget()->text();
   emit UserCoordinatesEditingFinished(coord);
 
-#if USE_OLD_IMAGE_VIEW
   // update the Quicklook
   qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() )->update();
 #endif // USE_OLD_IMAGE_VIEW

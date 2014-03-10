@@ -270,8 +270,15 @@ private:
 
   /**
    */
-  void ConnectStatusBar(DatasetModel * model);
-  void DisconnectStatusBar(const DatasetModel * model);
+  void ConnectStatusBar1(DatasetModel * model);
+  void DisconnectStatusBar1(const DatasetModel * model);
+
+  /**
+   */
+  void ConnectStatusBar( DatasetModel* model );
+  /**
+   */
+  void DisconnectStatusBar( const DatasetModel* model );
 
   /**
    */

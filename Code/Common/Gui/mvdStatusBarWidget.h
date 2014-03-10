@@ -97,10 +97,9 @@ public:
   /** 
     * accessors to statusBar widgets 
     */
+#if USE_OLD_IMAGE_VIEW
   QLineEdit * GetCurrentPixelIndexWidget();
   QLabel *    GetCurrentPixelRadioWidget();
-
-#if USE_OLD_IMAGE_VIEW
   QLineEdit * GetCurrentScaleWidget();
 #endif
 
@@ -109,6 +108,9 @@ public:
 //
 // Public SLOTS.
 public slots:
+
+  void SetPixelIndexText( const QString& );
+  void SetPixelRadiometryText( const QString& );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -181,6 +183,7 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -191,12 +194,14 @@ QString
 StatusBarWidget
 ::ZoomLevel( double scale )
 {
-  if( scale>1 )
+  if( scale>1.0 )
     {
+    // return ToQString( scale ) + ":1";
     return QString( "%1:1" ).arg( scale );
     }
-  else if( scale<1 )
+  else if( scale<1.0 )
     {
+    // return "1:" + ToQString( 1.0 / scale );
     return QString( "1:%1" ).arg( 1.0 / scale );
     }
   else
@@ -204,7 +209,7 @@ StatusBarWidget
     return "1:1";
     }
 
-  return QString();
+  return QString( ":" );
 }
 
 } // end namespace 'mvd'

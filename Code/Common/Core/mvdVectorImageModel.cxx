@@ -1486,17 +1486,19 @@ VectorImageModel
       currentPixel = ToImage()->GetPixel(currentLodIndex);
       */
 
-      ossRadio << ToStdString( tr( "Radiometry: [" ) );
+      ossRadio << ToStdString( tr( "Radiometry: [ " ) );
 
 #if USE_RGB_CHANNELS_LIMIT
       for( unsigned int i=0; i<pixel.GetSize(); ++i )
-        ossRadio << pixel.GetElement( i ) << ", ";
+        ossRadio << pixel.GetElement( i ) << " ";
 #else
       for (unsigned int idx = 0; idx < rgb.size(); idx++)
         {
-        ossRadio << pixel.GetElement(rgb[idx]) << ", ";
+        ossRadio << pixel.GetElement(rgb[idx]) << " ";
         }
 #endif
+
+      ossRadio << "]";
 
       // qDebug() << ossRadio.str().c_str();
       }
@@ -1581,7 +1583,7 @@ VectorImageModel
   IndexType index;
   index[0] = static_cast<unsigned int>(x);
   index[1] = static_cast<unsigned int>(y);
-    
+
   if ( GetNativeLargestRegion().IsInside(index) )
     {
     // propagate the physical center

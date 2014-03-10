@@ -39,7 +39,6 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -81,6 +80,8 @@ StatusBarWidget
 }
 
 /*******************************************************************************/
+#if USE_OLD_IMAGE_VIEW
+
 QLineEdit*
 StatusBarWidget
 ::GetCurrentPixelIndexWidget()
@@ -88,13 +89,19 @@ StatusBarWidget
   return m_UI->pixelIndexLineEdit;
 }
 
+#endif // USE_OLD_IMAGE_VIEW
+
 /*******************************************************************************/
+#if USE_OLD_IMAGE_VIEW
+
 QLabel*
 StatusBarWidget
 ::GetCurrentPixelRadioWidget()
 {
   return m_UI->pixelRadiometryLabel;
 }
+
+#endif // USE_OLD_IMAGE_VIEW
 
 /*******************************************************************************/
 #if USE_OLD_IMAGE_VIEW
@@ -107,6 +114,22 @@ StatusBarWidget
 }
 
 #endif // USE_OLD_IMAGE_VIEW
+
+/*******************************************************************************/
+void
+StatusBarWidget
+::SetPixelIndexText( const QString& text )
+{
+  m_UI->pixelIndexLineEdit->setText( text );
+}
+
+/*******************************************************************************/
+void
+StatusBarWidget
+::SetPixelRadiometryText( const QString& text )
+{
+  m_UI->pixelRadiometryLabel->setText( text );
+}
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
@@ -194,8 +217,10 @@ StatusBarWidget
 
   QString zoomLevel( StatusBarWidget::ZoomLevel( sx ) );
 
+  /*
   if( sx!=sy )
-    zoomLevel.append( StatusBarWidget::ZoomLevel( sy ) );
+    zoomLevel.append( "/" + StatusBarWidget::ZoomLevel( sy ) );
+  */
 
   m_UI->scaleLineEdit->setText( zoomLevel );
 }

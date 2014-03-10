@@ -642,6 +642,8 @@ MainWindow
     m_ImageViewManipulator1, SIGNAL( PhysicalCursorPositionChanged(double, double) ), 
     vectorImageModel, SLOT( OnPhysicalCursorPositionChanged(double, double) )
     );
+
+#if USE_OLD_IMAGE_VIEW
   //
   // disconnect the statusBar widget to the vectorImage corresponding
   // signal 
@@ -660,8 +662,6 @@ MainWindow
     SLOT( setText(const QString &) )
   );
 
-#if USE_OLD_IMAGE_VIEW
-
   QObject::disconnect(
     m_ImageViewManipulator1, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
@@ -670,6 +670,8 @@ MainWindow
   );
 
 #endif // USE_OLD_IMAGE_VIEW
+
+#if USE_OLD_IMAGE_VIEW
 
   // index widget edition
   QObject::disconnect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
@@ -683,6 +685,8 @@ MainWindow
                    vectorImageModel,
                    SLOT( OnUserCoordinatesEditingFinished(const QString&) )
     );
+
+#endif // USE_OLD_IMAGE_VIEW
 
   QObject::disconnect(vectorImageModel,
                    SIGNAL( ViewportRegionChanged(double, double) ),
@@ -821,6 +825,9 @@ MainWindow
   //
   // connect the statusBar widget to the vectorImage corresponding
   // signal 
+
+#if USE_OLD_IMAGE_VIEW
+
   QObject::connect(
     vectorImageModel, 
     SIGNAL( CurrentIndexUpdated(const QString& ) ),
@@ -835,16 +842,12 @@ MainWindow
     SLOT( setText(const QString &) )
   );
 
-#if USE_OLD_IMAGE_VIEW
-
   QObject::connect(
     m_ImageViewManipulator1, 
     SIGNAL( CurrentScaleUpdated(const QString& ) ),
     m_StatusBarWidget->GetCurrentScaleWidget(),
     SLOT( setText(const QString&) )
   );
-
-#endif // USE_OLD_IMAGE_VIEW
 
   // index widget in status bar edited
   QObject::connect(m_StatusBarWidget->GetCurrentPixelIndexWidget(),
@@ -864,10 +867,6 @@ MainWindow
                    m_ImageViewManipulator1,
                    SLOT( OnViewportRegionChanged(double, double) )
     );
-
-#if USE_OLD_IMAGE_VIEW
-
-#pragma message( __FILE__ ":" __LINE__ ": USE_OLD_IMAGE_VIEW: 1")
 
   // scale widget in status bar edited
   QObject::connect(m_StatusBarWidget->GetCurrentScaleWidget(),
@@ -906,6 +905,8 @@ void
 MainWindow
 ::OnUserCoordinatesEditingFinished()
 {
+#if USE_OLD_IMAGE_VIEW
+
   // get the text and send it to the vector image model to be
   // processed 
   QString coord = m_StatusBarWidget->GetCurrentPixelIndexWidget()->text();
@@ -913,6 +914,8 @@ MainWindow
 
   // update the Quicklook
   qobject_cast< GLImageWidget1 * >( GetQuicklookDock()->widget() )->update();
+
+#endif // USE_OLD_IMAGE_VIEW
 }
 
 /*****************************************************************************/
