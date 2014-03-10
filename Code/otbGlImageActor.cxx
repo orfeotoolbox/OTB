@@ -725,7 +725,7 @@ void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double 
 
       for(unsigned int i = 0; i < it.Get().Size();++i)
         {
-        nonan = nonan && !std::isnan(it.Get()[i]);
+        nonan = nonan && !vnl_math_isnan(it.Get()[i]);
         }
 
       if(nonan)
@@ -746,7 +746,7 @@ void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double 
 
       for(unsigned int i = 0; i < imIt.Get().Size();++i)
         {
-        nonan = nonan && !std::isnan(imIt.Get()[i]);
+        nonan = nonan && !vnl_math_isnan(imIt.Get()[i]);
         }
 
       if(nonan)
