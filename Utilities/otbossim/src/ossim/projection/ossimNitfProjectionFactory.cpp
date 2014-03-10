@@ -282,14 +282,14 @@ ossimProjection* ossimNitfProjectionFactory::makeGeographic(
 
       if (traceDebug() && proj)
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimNitfProjectionFactory::makeGeographic DEBUG:"
-            << "\nUpper left corner:   " << gpts[0]
-            << "\nUpper right corner:  " << gpts[1]
-            << "\nLower right corner:  " << gpts[2]
-            << "\nLower left corner:   " << gpts[3] << endl
-            << proj->print(ossimNotify(ossimNotifyLevel_DEBUG))
-            << std::endl;
+		  ossimNotify(ossimNotifyLevel_DEBUG)
+			  << "ossimNitfProjectionFactory::makeGeographic DEBUG:"
+			  << "\nUpper left corner:   " << gpts[0]
+			  << "\nUpper right corner:  " << gpts[1]
+			  << "\nLower right corner:  " << gpts[2]
+			  << "\nLower left corner:   " << gpts[3] << std::endl;
+		  proj->print(ossimNotify(ossimNotifyLevel_DEBUG));
+		  ossimNotify(ossimNotifyLevel_DEBUG) << std::endl;
       }
       
    } // matches: if (hdr)

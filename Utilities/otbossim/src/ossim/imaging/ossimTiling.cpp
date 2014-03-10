@@ -932,7 +932,8 @@ std::ostream& ossimTiling::print(std::ostream& out) const
 
    if (theMapProjection.valid())
    {
-      out << "\ntheMapProjection:\n" << theMapProjection->print(out);
+	   out << "\ntheMapProjection:\n";
+       theMapProjection->print(out);
    }
    else
    {
