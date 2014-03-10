@@ -56,7 +56,7 @@ public:
   std::string GetCurrentLayer() const;
 
   // Set layer name
-  std::string SetCurrentLayer(const std::string & layername);
+  void SetCurrentLayer(const std::string & layername);
 
   // Retrieve the full extent of the actor
   virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const;

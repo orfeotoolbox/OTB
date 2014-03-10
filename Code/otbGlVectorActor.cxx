@@ -193,7 +193,7 @@ std::string GlVectorActor::GetCurrentLayer() const
   return m_CurrentLayer;
 }
 
-std::string GlVectorActor::SetCurrentLayer(const std::string & layername)
+void GlVectorActor::SetCurrentLayer(const std::string & layername)
 {
   m_CurrentLayer = m_OGRDataSource->GetLayerChecked(layername).GetName();
   
