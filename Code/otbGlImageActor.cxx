@@ -758,7 +758,7 @@ void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double 
     }
 
     // Compute the histogram
-    typename HistogramsGeneratorType::Pointer histogramsGenerator = HistogramsGeneratorType::New();
+    HistogramsGeneratorType::Pointer histogramsGenerator = HistogramsGeneratorType::New();
     histogramsGenerator->SetListSample(listSample);
     histogramsGenerator->SetNumberOfBins(255);
     histogramsGenerator->NoDataFlagOn();

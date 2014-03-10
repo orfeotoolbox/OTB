@@ -606,7 +606,7 @@ void GlVectorActor::UpdateTransforms()
 // Inner helper functions
 namespace ice_internal
 { 
-OGRPoint GeometryTransform(const OGRPoint * inPoint, typename otb::GenericRSTransform<> * transform)
+OGRPoint GeometryTransform(const OGRPoint * inPoint, otb::GenericRSTransform<> * transform)
 {
   OGRPoint outPoint;
   otb::GenericRSTransform<>::InputPointType in,out;
