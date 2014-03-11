@@ -50,7 +50,7 @@ void FragmentShaderRegistry::RegisterShader(const std::string& name, const std::
     itkExceptionMacro(<<"A shader with name "<<name<<" has already been registered!");
     }
 
-  GLint source_length = source.size();
+  GLint source_length = static_cast<GLint>(source.size());
 
   GLuint program = glCreateProgram();
 
@@ -109,6 +109,7 @@ bool FragmentShaderRegistry::LoadShader(const std::string& name)
     return false;
     }
   glUseProgramObjectARB(m_ShaderMap[name].first);
+  return true;
 }
 
 void FragmentShaderRegistry::UnloadShader()

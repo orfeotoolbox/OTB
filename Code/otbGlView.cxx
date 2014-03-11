@@ -133,6 +133,7 @@ bool GlView::RemoveActor(const std::string & key)
     {
     m_RenderingOrder.erase(it);
     }
+  return true;
 }
 
 void GlView::ClearActors()

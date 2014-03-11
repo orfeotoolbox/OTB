@@ -94,7 +94,7 @@ std::string StandardShader::GetSource() const
     "gl_FragColor[3] = clamp(alpha,0.0,1.0);\n"                         \
     "}\n"                                                               \
     "}";}
-//     "gl_FragColor[3] = clamp(exp(-sqrt(distance)),0.0,1.0);\n"          \
+    // "gl_FragColor[3] = clamp(exp(-sqrt(distance)),0.0,1.0);\n"          \
     // "if(distance < shader_radius)\n"                                    \
     // "{\n"                                                               \
     // "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
@@ -103,7 +103,7 @@ std::string StandardShader::GetSource() const
     // "gl_FragColor[3] =0.0;}\n"                                          \
 
     // "gl_FragColor[3] = clamp(exp(-sqrt(distance)),0.0,1.0);\n"  \
-}
+    // }
 
 std::string StandardShader::GetName() const
 {

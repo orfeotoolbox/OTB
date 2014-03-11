@@ -135,7 +135,7 @@ protected:
     unsigned int m_RedIdx;
     unsigned int m_GreenIdx;
     unsigned int m_BlueIdx;
-    unsigned int m_UseShader;
+    bool m_UseShader;
     double m_MinRed;
     double m_MaxRed;
     double m_MinGreen;
