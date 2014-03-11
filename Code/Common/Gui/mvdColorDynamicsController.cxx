@@ -652,7 +652,7 @@ ColorDynamicsController
   double gMax = static_cast< double >( widget->GetMaxGamma() );
   double gStep = static_cast< double >( widget->GetGammaStep() );
 
-  double gamma = round( gMin + imageModel->GetSettings().GetGamma() * gStep );
+  double gamma = itk::Math::Round<double>( gMin + imageModel->GetSettings().GetGamma() * gStep );
 
   if( gamma>gMax )
     gamma = gMax;
