@@ -403,6 +403,10 @@ struct _Hashtable_const_iterator {
 // Note: assumes long is at least 32 bits.
 enum { _stl_num_primes = 31 };
 
+// create a function with a static local to that function that returns
+// the static
+inline const unsigned long* get_stl_prime_list() {
+
 static const unsigned long _stl_prime_list[_stl_num_primes] =
 {
   5ul,          11ul,         23ul,
@@ -413,10 +417,6 @@ static const unsigned long _stl_prime_list[_stl_num_primes] =
   50331653ul,   100663319ul,  201326611ul, 402653189ul, 805306457ul,
   1610612741ul, 3221225473ul, 4294967291ul
 };
-
-// create a function with a static local to that function that returns
-// the static
-inline const unsigned long* get_stl_prime_list() {
 
 return &_stl_prime_list[0]; }
 
