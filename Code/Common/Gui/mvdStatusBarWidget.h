@@ -110,10 +110,13 @@ public:
 // Public SLOTS.
 public slots:
 
+  /**
+   */
   void SetPixelIndex( const IndexType&, bool isInside );
 
-  void SetPixelIndexText( const QString& );
-  void SetPixelRadiometryText( const QString& );
+  /**
+   */
+  void SetScale( double sx, double sy );
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -123,6 +126,9 @@ signals:
   /**
    */
   void ScaleChanged( double );
+  /**
+   */
+  void PixelIndexChanged( const IndexType& );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -159,11 +165,16 @@ private:
 private slots:
   /**
    */
-  void on_scaleLineEdit_editingFinished();
-
+  // void SetPixelIndexText( const QString& );
   /**
    */
-  void OnScaleChanged( double sx, double sy );
+  void SetPixelRadiometryText( const QString& );
+  /**
+   */
+  void on_scaleLineEdit_editingFinished();
+  /**
+   */
+  void on_pixelIndexLineEdit_editingFinished();
 };
 
 } // end namespace 'mvd'

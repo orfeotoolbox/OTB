@@ -660,7 +660,7 @@ MainWindow
     SIGNAL( ScaleChanged( double, double ) ),
     // to:
     m_StatusBarWidget,
-    SLOT( OnScaleChanged( double, double ) )
+    SLOT( SetScale( double, double ) )
   );
 
   QObject::connect(
@@ -965,9 +965,9 @@ MainWindow
     // signal
     QObject::disconnect(
       vectorImageModel,
-      SIGNAL( CurrentIndexUpdated(const QString& ) ),
+      SIGNAL( CurrentIndexUpdated( const IndexType&, bool ) ),
       m_StatusBarWidget,
-      SLOT( SetPixelIndexText( const QString & ) )
+      SLOT( SetPixelIndexText( const IndexType&, bool ) )
       );
 
     QObject::disconnect(

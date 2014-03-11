@@ -61,8 +61,7 @@ namespace mvd
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
-/*******************************************************************************/
+/*****************************************************************************/
 StatusBarWidget
 ::StatusBarWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
@@ -71,7 +70,7 @@ StatusBarWidget
   m_UI->setupUi( this );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 StatusBarWidget
 ::~StatusBarWidget()
 {
@@ -79,7 +78,7 @@ StatusBarWidget
   m_UI = NULL;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 #if USE_OLD_IMAGE_VIEW
 
 QLineEdit*
@@ -91,7 +90,7 @@ StatusBarWidget
 
 #endif // USE_OLD_IMAGE_VIEW
 
-/*******************************************************************************/
+/*****************************************************************************/
 #if USE_OLD_IMAGE_VIEW
 
 QLabel*
@@ -103,7 +102,7 @@ StatusBarWidget
 
 #endif // USE_OLD_IMAGE_VIEW
 
-/*******************************************************************************/
+/*****************************************************************************/
 #if USE_OLD_IMAGE_VIEW
 
 QLineEdit * 
@@ -115,27 +114,50 @@ StatusBarWidget
 
 #endif // USE_OLD_IMAGE_VIEW
 
-/*******************************************************************************/
+/*****************************************************************************/
+/* SLOTS                                                                     */
+/*****************************************************************************/
 void
 StatusBarWidget
 ::SetPixelIndex( const IndexType& pixel, bool isInsideRegion )
 {
-  SetPixelIndexText(
+  m_UI->pixelIndexLineEdit->setText(
     isInsideRegion
     ? QString( "%1, %2" ).arg( pixel[ 0 ] ).arg( pixel[ 1 ] )
     : QString()
   );
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
+void
+StatusBarWidget
+::SetScale( double sx, double sy )
+{
+  // qDebug() << this << "::OnScaleChanged(" << sx << "," << sy << ")";
+
+  QString zoomLevel( StatusBarWidget::ZoomLevel( sx ) );
+
+  /*
+  if( sx!=sy )
+    zoomLevel.append( "/" + StatusBarWidget::ZoomLevel( sy ) );
+  */
+
+  m_UI->scaleLineEdit->setText( zoomLevel );
+}
+
+/*****************************************************************************/
+/* PRIVATE SLOTS                                                             */
+/*****************************************************************************/
+/*
 void
 StatusBarWidget
 ::SetPixelIndexText( const QString& text )
 {
   m_UI->pixelIndexLineEdit->setText( text );
 }
+*/
 
-/*******************************************************************************/
+/*****************************************************************************/
 void
 StatusBarWidget
 ::SetPixelRadiometryText( const QString& text )
@@ -143,9 +165,62 @@ StatusBarWidget
   m_UI->pixelRadiometryLabel->setText( text );
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
+/*****************************************************************************/
+void
+StatusBarWidget
+::on_pixelIndexLineEdit_editingFinished()
+{
+  //
+  // Cancel if pixel-index coordinates text is empty.
+  if( m_UI->pixelIndexLineEdit->text().isEmpty() )
+    return;
+
+  //
+  // Split coordinates.
+  QStringList coordinates( m_UI->pixelIndexLineEdit->text().split( ',' ) );
+
+  //
+  // Check splitted coordinates format.
+  assert( coordinates.size()==1 || coordinates.size()==2 );
+
+  if( coordinates.size()!=1 && coordinates.size()!=2 )
+    return;
+
+  //
+  // Construct resulting pixel-index.
+  IndexType index;
+
+  index.Fill( 0 );
+
+  //
+  // Convert first pixel-index coordinate.
+  bool isOk = true;
+  index[ 0 ] = coordinates.front().toUInt( &isOk );
+
+  assert( isOk );
+
+  if( !isOk )
+    return;
+
+  //
+  // Convert second pixel-index coordinate.
+  if( coordinates.size()>1 )
+    {
+    index[ 1 ] = coordinates.back().toUInt( &isOk );
+
+    assert( isOk );
+
+    if( !isOk )
+      return;
+    }
+
+  //
+  // If both pixel-index coordinates have correctly been converted,
+  // emit pixel-index changed signal.
+  emit PixelIndexChanged( index );
+}
+
+/*****************************************************************************/
 void
 StatusBarWidget
 ::on_scaleLineEdit_editingFinished()
@@ -162,6 +237,9 @@ StatusBarWidget
   //
   // Check scale text format.
   assert( scale.size()==1 || scale.size()==2 );
+
+  if( scale.size()!=1 && scale.size()!=2 )
+    return;
 
   /*
   if( scale.size()!=1 && scale.size()!=2 )
@@ -181,6 +259,9 @@ StatusBarWidget
 
   assert( isOk );
   assert( numerator!=0.0 );
+
+  if( !isOk )
+    return;
 
   /*
   if( !isOk )
@@ -203,6 +284,9 @@ StatusBarWidget
 
     assert( isOk );
 
+    if( !isOk )
+      return;
+
     /*
     if( !isOk )
       {
@@ -218,23 +302,6 @@ StatusBarWidget
   //
   // Emit scale changed.
   emit ScaleChanged( numerator / denominator );
-}
-
-/*******************************************************************************/
-void
-StatusBarWidget
-::OnScaleChanged( double sx, double sy )
-{
-  // qDebug() << this << "::OnScaleChanged(" << sx << "," << sy << ")";
-
-  QString zoomLevel( StatusBarWidget::ZoomLevel( sx ) );
-
-  /*
-  if( sx!=sy )
-    zoomLevel.append( "/" + StatusBarWidget::ZoomLevel( sy ) );
-  */
-
-  m_UI->scaleLineEdit->setText( zoomLevel );
 }
 
 } // end namespace 'mvd'
