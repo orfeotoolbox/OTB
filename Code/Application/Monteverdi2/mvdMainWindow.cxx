@@ -707,13 +707,13 @@ MainWindow
     );
 
     //
-    // connect the statusBar widget to the vectorImage corresponding
-    // signal
+    // Connect the status-bar widget to the vector-image corresponding
+    // signal.
     QObject::connect(
       vectorImageModel,
-      SIGNAL( CurrentIndexUpdated( const QString& ) ),
+      SIGNAL( CurrentIndexUpdated( const IndexType&, bool ) ),
       m_StatusBarWidget,
-      SLOT( SetPixelIndexText( const QString& ) )
+      SLOT( SetPixelIndex( const IndexType&, bool ) )
     );
 
     QObject::connect(

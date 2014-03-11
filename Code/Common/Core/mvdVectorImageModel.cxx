@@ -1315,7 +1315,6 @@ VectorImageModel
 #define USE_RGB_CHANNELS_LIMIT 1
 
   // stream to fill
-  std::ostringstream ossIndex;
   std::ostringstream ossPhysicalX;
   std::ostringstream ossPhysicalY;
   std::ostringstream ossGeographicLong;
@@ -1337,10 +1336,25 @@ VectorImageModel
   StringVector     cartoVector;
   QStringList      cartoList;
 
+  SpacingType nativeSpacing( GetNativeSpacing() );
+
   // physical coordinates to index (at resol 0)
   IndexType currentIndex;
-  currentIndex[0] = static_cast<unsigned int>( ( point[ 0 ] - GetOrigin()[0] ) / GetNativeSpacing()[0] );
-  currentIndex[1] = static_cast<unsigned int>( ( point[ 1 ] - GetOrigin()[1] ) / GetNativeSpacing()[1] );
+
+  currentIndex[ 0 ]
+    = static_cast< unsigned int >(
+      ( point[ 0 ] - GetOrigin()[ 0 ] ) / nativeSpacing[ 0 ]
+    );
+
+  currentIndex[ 1 ] =
+    static_cast< unsigned int >(
+      ( point[ 1 ] - GetOrigin()[ 1 ] ) / nativeSpacing[ 1 ]
+    );
+
+  bool isInsideNativeLargestRegion =
+    GetNativeLargestRegion().IsInside( currentIndex );
+
+  emit CurrentIndexUpdated( currentIndex, isInsideNativeLargestRegion );
 
   //
   // Display the radiometry of the displayed channels
@@ -1349,12 +1363,8 @@ VectorImageModel
 
   // show the current pixel description only if the mouse cursor is
   // under the image
-  if ( GetNativeLargestRegion().IsInside(currentIndex) )
-    {
-    //
-    // get index stream
-    ossIndex<< currentIndex[0] <<","<< currentIndex[1];
-    
+  if ( isInsideNativeLargestRegion )
+    {   
     //
     // get the physical coordinates
     if (!ToImage()->GetProjectionRef().empty())
@@ -1545,7 +1555,6 @@ VectorImageModel
 #endif
 
   // update the status bar
-  emit CurrentIndexUpdated( ToQString( ossIndex.str().c_str() ) );
   emit CurrentPhysicalUpdated( cartoList );
   emit CurrentGeographicUpdated( geoList );
   emit CurrentRadioUpdated( ToQString( ossRadio.str().c_str() ) );

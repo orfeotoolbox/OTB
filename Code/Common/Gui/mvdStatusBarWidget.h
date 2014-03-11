@@ -44,6 +44,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdTypes.h"
 
 
 /*****************************************************************************/
@@ -108,6 +109,8 @@ public:
 //
 // Public SLOTS.
 public slots:
+
+  void SetPixelIndex( const IndexType&, bool isInside );
 
   void SetPixelIndexText( const QString& );
   void SetPixelRadiometryText( const QString& );

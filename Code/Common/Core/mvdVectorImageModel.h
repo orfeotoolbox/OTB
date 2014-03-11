@@ -525,6 +525,7 @@ signals:
   void ViewportRegionChanged(double, double);
 
   /** */
+  void CurrentIndexUpdated( const IndexType&, bool isInside );
   void CurrentIndexUpdated(const QString&);
   void CurrentPhysicalUpdated(const QStringList&);
   void CurrentGeographicUpdated(const QStringList&);

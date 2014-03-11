@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdStatusBarWidget.h"
-#include "Gui/ui_mvdStatusBarWidget.h"
+#include "mvdStatusBarWidget.h"
+#include "ui_mvdStatusBarWidget.h"
 
 
 /*****************************************************************************/
@@ -114,6 +114,18 @@ StatusBarWidget
 }
 
 #endif // USE_OLD_IMAGE_VIEW
+
+/*******************************************************************************/
+void
+StatusBarWidget
+::SetPixelIndex( const IndexType& pixel, bool isInsideRegion )
+{
+  SetPixelIndexText(
+    isInsideRegion
+    ? QString( "%1, %2" ).arg( pixel[ 0 ] ).arg( pixel[ 1 ] )
+    : QString()
+  );
+}
 
 /*******************************************************************************/
 void
