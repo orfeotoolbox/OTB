@@ -1220,6 +1220,7 @@ bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, in
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->Center(vpCenter);
     }
+  return true;
 }
 
 bool IceViewer::key_callback_vector(GLFWwindow* window, int key, int scancode, int action, int mods)
