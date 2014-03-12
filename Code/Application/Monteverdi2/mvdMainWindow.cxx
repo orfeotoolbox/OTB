@@ -671,6 +671,14 @@ MainWindow
     SLOT( ZoomTo( double ) )
   );
 
+  QObject::connect(
+    m_StatusBarWidget,
+    SIGNAL( PixelIndexChanged( const IndexType& ) ),
+    // to:
+    m_ImageView,
+    SLOT( CenterOn( const IndexType& ) )
+  );
+
   // Access vector-image model.
   VectorImageModel* vectorImageModel =
     model->GetSelectedImageModel< VectorImageModel >();
@@ -712,6 +720,7 @@ MainWindow
     QObject::connect(
       vectorImageModel,
       SIGNAL( CurrentIndexUpdated( const IndexType&, bool ) ),
+      // to:
       m_StatusBarWidget,
       SLOT( SetPixelIndex( const IndexType&, bool ) )
     );
@@ -723,16 +732,6 @@ MainWindow
       m_StatusBarWidget,
       SLOT( SetPixelRadiometryText( const QString& ) )
     );
-
-    /*
-    QObject::connect(
-      this,
-      SIGNAL( UserCoordinatesEditingFinished( const QString& ) ),
-      // to:
-      vectorImageModel,
-      SLOT( OnUserCoordinatesEditingFinished( const QString& ) )
-      );
-    */
     }
 
   /*
@@ -925,6 +924,34 @@ void
 MainWindow
 ::DisconnectStatusBar( const DatasetModel * model )
 {
+  assert( m_StatusBarWidget!=NULL );
+
+  assert( m_ImageView!=NULL );
+
+  QObject::disconnect(
+    m_ImageView,
+    SIGNAL( ScaleChanged( double, double ) ),
+    // to:
+    m_StatusBarWidget,
+    SLOT( SetScale( double, double ) )
+  );
+
+  QObject::disconnect(
+    m_StatusBarWidget,
+    SIGNAL( ScaleChanged( double ) ),
+    // to:
+    m_ImageView->GetManipulator(),
+    SLOT( ZoomTo( double ) )
+  );
+
+  QObject::disconnect(
+    m_StatusBarWidget,
+    SIGNAL( PixelIndexChanged( const IndexType& ) ),
+    // to:
+    m_ImageView,
+    SLOT( CenterOn( const IndexType& ) )
+  );
+
   // Access vector-image model.
   const VectorImageModel* vectorImageModel =
     model->GetSelectedImageModel< VectorImageModel >();
@@ -976,26 +1003,7 @@ MainWindow
       m_StatusBarWidget,
       SLOT( SetPixelRadiometryText(const QString &) )
       );
-
-    /*
-    QObject::disconnect(
-      this,
-      SIGNAL( UserCoordinatesEditingFinished(const QString&) ),
-      vectorImageModel,
-      SLOT( OnUserCoordinatesEditingFinished(const QString&) )
-      );
-    */
     }
-
-  /*
-  // index widget in status bar edited
-  QObject::disconnect(
-    m_StatusBarWidget->GetCurrentPixelIndexWidget(),
-    SIGNAL( editingFinished() ),
-    this,
-    SLOT( OnUserCoordinatesEditingFinished() )
-  );
-  */
 }
 
 /*****************************************************************************/

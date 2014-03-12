@@ -144,6 +144,9 @@ public:
 public slots:
   /**
    */
+  void CenterOn( const IndexType& index );
+  /**
+   */
   void ZoomToExtent();
   /**
    */

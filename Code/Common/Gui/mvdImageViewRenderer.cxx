@@ -268,6 +268,22 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
+bool
+ImageViewRenderer
+::Transform( PointType& point, const IndexType& index, bool isPhysical ) const
+{
+  if( m_ReferenceGlImageActor.IsNull() )
+    return false;
+
+  point[ 0 ] = static_cast< double >( index[ 0 ] );
+  point[ 1 ] = static_cast< double >( index[ 1 ] );
+
+  point = m_ReferenceGlImageActor->ImageToViewportTransform( point, isPhysical );
+
+  return true;
+}
+
+/*****************************************************************************/
 void
 ImageViewRenderer
 ::UpdateActors( const AbstractImageViewRenderer::RenderingContext* )

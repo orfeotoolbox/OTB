@@ -549,6 +549,45 @@ ImageViewWidget
 /******************************************************************************/
 void
 ImageViewWidget
+::CenterOn( const IndexType& index )
+{
+  /*
+  assert( m_Renderer!=NULL );
+
+  AbstractImageModel* imageModel = m_Render->GetReferenceImageModel();
+
+  if( imageModel==NULL )
+    return;
+
+  ImageBaseType::Pointer image( imageModel->ToImageBase() );
+  assert( !image.IsNull() );
+
+  PointType point;
+
+  image->TransformIndexToPhysicalPoint( index, point );
+
+  m_Renderer->GetReferenceActor();
+
+  assert( m_Manipulator!=NULL );
+
+  m_Manipulator->CenterOn( point );
+  */
+
+  assert( m_Renderer!=NULL );
+
+  PointType point;
+
+  if( !m_Renderer->Transform( point, index, false ) )
+    return;
+
+  assert( m_Manipulator!=NULL );
+
+  m_Manipulator->CenterOn( point );
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
 ::ZoomToExtent()
 {
   assert( m_Renderer!=NULL );

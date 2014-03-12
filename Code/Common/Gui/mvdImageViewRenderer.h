@@ -150,6 +150,10 @@ public:
                      PointType& out,
                      DefaultImageType::PixelType& pixel );
 
+  virtual bool Transform( PointType& point,
+                          const IndexType&,
+                          bool isPhysical ) const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 // public slots
