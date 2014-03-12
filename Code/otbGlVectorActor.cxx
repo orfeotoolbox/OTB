@@ -34,11 +34,16 @@ namespace otb
 {
 
 // Function pointer typedef
-typedef GLvoid (* FunctionPointerType)();
-
+#ifdef WIN32
+  typedef void (CALLBACK *FunctionPointerType)();
+# define ICE_CALLBACK CALLBACK
+#else
+  typedef GLvoid (* FunctionPointerType)();
+# define ICE_CALLBACK
+#endif
 
 // Static Combine callback for tesselation
-static void TesselationCombineCallback(GLdouble coords[3],
+static void ICE_CALLBACK TesselationCombineCallback(GLdouble coords[3],
                                                 GLdouble * /*data*/[4],
                                                 GLfloat /*weights*/[4],
                                                 GLdouble **dataOut)
@@ -51,7 +56,7 @@ static void TesselationCombineCallback(GLdouble coords[3],
 }
 
 // Static error callback fir tesselation
-static void TesselationErrorCallback(GLenum errorCode)
+static void ICE_CALLBACK TesselationErrorCallback(GLenum errorCode)
 {
   const GLubyte * estring = gluErrorString(errorCode);
   otbMsgDevMacro(<< "Glu Tesselation error: " << estring);
@@ -59,19 +64,19 @@ static void TesselationErrorCallback(GLenum errorCode)
 }
 
 // Static begin callback for tesselation
-static void BeginCallback(GLenum prim)
+static void ICE_CALLBACK BeginCallback(GLenum prim)
 {
   glBegin(prim);
 }
 
 // Static end callback for tesselation
-static void EndCallback()
+static void ICE_CALLBACK EndCallback()
 {
   glEnd();
 }
 
 // static vertex callback for tesselation
-static void VertexCallback(void * data)
+static void ICE_CALLBACK VertexCallback(void * data)
 {
   glVertex3dv((GLdouble*) data);
 }
