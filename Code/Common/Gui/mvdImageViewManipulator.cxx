@@ -333,7 +333,7 @@ ImageViewManipulator
     case Qt::RightButton:
       break;
 
-    case Qt::MiddleButton:
+    case Qt::MidButton:
       break;
 
     case Qt::XButton1:
@@ -421,7 +421,7 @@ ImageViewManipulator
     case Qt::RightButton:
       break;
 
-    case Qt::MiddleButton:
+    case Qt::MidButton:
       break;
 
     case Qt::XButton1:
