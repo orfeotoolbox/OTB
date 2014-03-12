@@ -150,14 +150,15 @@ Later if you want to update your source, from the OTB source directory, just do:
 A simple \texttt{make} in your OTB binary directory will be enough to update the library (recompiling only the necessary stuff).
 
 
-\section{Special issues about compiling from source OTB}
+\section{Special issues about compiling OTB from source}
 \label{sec:FAQInstall}
 
-All information about OTB compilation could be found into the related section. We present only here the special issues which can be encountered by some developers.
+All information about OTB compilation can be found into the related section.
+We present here only the special issues which can be encountered.
 
 \subsubsection{Debian Linux / Ubuntu}
 
-On some Debian / Ubuntu versions, the system gdal library and its tiff internal symbol might conflict with the system Tiff library (bugs.debian.org/558733). This is most likely the case if you get odd segmentation fault whenever trying to open a tiff image. This symbol clash happens when using OTB. A workaround to the issue has been provided in GDAL sources, but is available in the 1.9.0 release.
+On some Debian and Ubuntu versions, the system gdal library and its tiff internal symbol might conflict with the system Tiff library (bugs.debian.org/558733). This is most likely the case if you get odd segmentation fault whenever trying to open a tiff image. This symbol clash happens when using OTB. A workaround to the issue has been provided in GDAL sources, but is available in the 1.9.0 release.
 
 The recommended procedure is to get this recent source and build GDAL from sources, with the following configure command:
   \begin{verbatim}
@@ -167,21 +168,25 @@ The recommended procedure is to get this recent source and build GDAL from sourc
                   --with-rename-internal-libgeotiff-symbol
   \end{verbatim}
 
-\subsubsection{MacOSX 10.9}
-Some developers encounters some issues about the compilation of OTB 4.0 on MacOSX 10.9.
-To fix these issue, you should compile with internal ITK to avoid conflict with libKML. To do this, just switch OTB\_USE\_EXTERNAL\_ITK to OFF.
+\subsubsection{Errors when compiling internal libkml}
+The internal version of libKML cannot be compiled when using an external build of ITK.
+See \url{http://bugs.orfeo-toolbox.org/view.php?id=879} for more details.
+
+To workaround the problem, either use an external build of libkml (it is provided on most systems), or use an internal build of ITK by setting to OFF the CMake variable OTB\_USE\_EXTERNAL\_ITK.
 
 \subsubsection{OTB compilation and Windows platform}
 
-Building the OTB library and applications on Windows is currently quite challenging. You should manage correctly all the dependencies of OTB and install them on your platform. You should take care of
-\begin{itemize}
-\item the version of the library,
-\item building them in release mode as much as possible (or RealWitDebInfo). 
-\end{itemize}
+To build OTB on Windows, we highly recommend using OSGeo4W which provides all the necessary dependencies.
 
-Currently it is not possible to build OTB in Debug when using the dependencies provided by OSGeo4W. If you want to build OTB in Debug for Windows, you will need to build and install manually each dependency needed by OTB (hard work...). You should use the same compiler for all the dependencies, as much as possible.
+Currently it is not possible to build OTB in Debug when using the dependencies provided by OSGeo4W.
+If you want to build OTB in Debug for Windows, you will need to build and install manually each dependency needed by OTB.
+You should use the same compiler for all the dependencies, as much as possible.
 
-Therefore, we highly recommend you to use OSGeo4W shell environment to build OTB. You can use the 32 or 64 bit installer, we provide all the OTB necessary dependencies in the two cases. Please follow carefully the procedure provided in the Software Guide.
+Therefore, we highly recommend you to use OSGeo4W shell environment to build OTB.
+You can use the 32 or 64 bit installer, since OSGeo4W provides all the necessary dependencies in the two cases.
+Please follow carefully the procedure provided in the Software Guide.
+
+Typically, when using the dependencies provided by OSGeo4W, compile OTB in Release or RelWithDebInfo mode.
  
 \section{Using OTB}
 
