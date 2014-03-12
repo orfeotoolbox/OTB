@@ -205,7 +205,7 @@ DatabaseConnection
 
 // Conditionaly create demonstration groups.
 // #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
-#if (defined( _DEBUG ) && 1) || 1
+#if (defined( _DEBUG ) && 0) || 0
   SqlId datasetNodeId(
     GetNodeFields( dbc.FindDatasetNode() )
   );
