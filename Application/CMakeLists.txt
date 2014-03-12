@@ -1,7 +1,7 @@
-ADD_EXECUTABLE(otbIce otbIce.cxx otbIceViewer.cxx)
-TARGET_LINK_LIBRARIES(otbIce OTBIce ${GLFW_LIBRARY} ${GLUT_LIBRARY})
+ADD_EXECUTABLE(otbiceviewer otbIce.cxx otbIceViewer.cxx)
+TARGET_LINK_LIBRARIES(otbiceviewer OTBIce ${GLFW_LIBRARY} ${GLUT_LIBRARY})
 
-install(TARGETS otbIce
+install(TARGETS otbiceviewer
         RUNTIME DESTINATION ${Ice_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${Ice_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
         ARCHIVE DESTINATION ${Ice_INSTALL_LIB_DIR} COMPONENT Development)
