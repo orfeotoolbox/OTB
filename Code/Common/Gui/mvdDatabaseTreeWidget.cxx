@@ -72,9 +72,6 @@ DatabaseTreeWidget
 {
   // setMouseTracking(true);
 
-  // setup contextual menu
-  InitializeContextualMenu();
-
   //
   // do some connection
   QObject::connect(
@@ -82,26 +79,18 @@ DatabaseTreeWidget
     SIGNAL( itemChanged( QTreeWidgetItem* , int ) ),
     SLOT( OnItemChanged( QTreeWidgetItem* , int ) )
   );
+
+  QObject::connect(
+    this,
+    SIGNAL( customContextMenuRequested( const QPoint& ) ),
+    SLOT( OnCustomContextMenuRequested( const QPoint& ) )
+  );
 }
 
 /*******************************************************************************/
 DatabaseTreeWidget
 ::~DatabaseTreeWidget()
 {
-}
-
-/*******************************************************************************/
-void
-DatabaseTreeWidget
-::InitializeContextualMenu()
-{
-  setContextMenuPolicy(Qt::CustomContextMenu);
-  
-  QObject::connect(
-    this,
-    SIGNAL( customContextMenuRequested( const QPoint& ) ),
-    SLOT( OnCustomContextMenuRequested( const QPoint& ) )
-  );
 }
 
 /*******************************************************************************/
@@ -163,7 +152,7 @@ DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 }
 
 /*******************************************************************************/
-void 
+void
 DatabaseTreeWidget::dropEvent(QDropEvent *event)
 {
   // qDebug() << this << "::dropEvent(" << event << ")";
@@ -397,7 +386,7 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
 
     // menu 
     QMenu  menu;
-    
+
     // 
     // create the desired action
     QAction * deleteNodeChild = new QAction(tr ("Delete Dataset") , &menu);
@@ -418,10 +407,12 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
 
     // connect the re-emitted signal to our slot 
     QObject::connect( 
-      signalMapperDelete, 
-      SIGNAL(mapped(const QString &)), 
-      SLOT( OnDeleteTriggered(const QString &)) 
-      );
+      signalMapperDelete,
+      SIGNAL( mapped( const QString& ) ),
+      // to:
+      this,
+      SIGNAL( DatasetToDeleteSelected( const QString& ) )
+    );
 
     // 
     // create the desired action

@@ -140,8 +140,6 @@ signals:
 //
 // Protected methods.
 protected:
-    
-    void InitializeContextualMenu();
 
     //
     // QTreeWidget overloads.
