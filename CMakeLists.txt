@@ -18,9 +18,28 @@ endif(WIN32)
  
 #----------------------------------------------------------------------------
 #Prevents conflicts with visual min/max function
-#Add the OSSIMSTATIC flag to prevent from including dclspec(dllimport) from ossim
 if(WIN32)
-  add_definitions(-DNOMINMAX -DOSSIM_STATIC)
+
+  add_definitions(-DNOMINMAX)
+
+  add_definitions(
+    -D_CRT_FAR_MAPPINGS_NO_DEPRECATE
+    -D_CRT_IS_WCTYPE_NO_DEPRECATE
+    -D_CRT_MANAGED_FP_NO_DEPRECATE
+    -D_CRT_NONSTDC_NO_DEPRECATE
+    -D_CRT_SECURE_NO_DEPRECATE
+    -D_CRT_SECURE_NO_DEPRECATE_GLOBALS
+    -D_CRT_SETERRORMODE_BEEP_SLEEP_NO_DEPRECATE
+    -D_CRT_TIME_FUNCTIONS_NO_DEPRECATE
+    -D_CRT_VCCLRIT_NO_DEPRECATE
+    -D_SCL_SECURE_NO_DEPRECATE
+  )
+  
+  if(MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_CRT_NONSTDC_NO_WARNING)
+  endif()
+  
 endif(WIN32)
 
 OPTION(BUILD_ICE_APPLICATION "Build the Ice application (requires glfw and glut)" ON)
