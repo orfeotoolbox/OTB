@@ -1,25 +1,30 @@
-OTB-v.4.0 - Changes since version 3.20 (2013/02/21)
+OTB-v.4.0.0 - Changes since version 3.20 (2013/03/13)
 --------------------------------------------------------
 
 * Library:
 
   * Core:
-    * Change OTB API to support ITK with version 4.5 (More information is available in the migration guide at http://wiki.orfeo-toolbox.org/index.php/Migration_guide_OTBv4)
-    * Refactoring otbAttributesMapOpeningLabelMapFilter to be compatible with ITKv4.5.0
-    * Remove Visualization part from OTB: all these projects are now in Monteverdi
+    * [Breaking change !] Change OTB implementation and API to support ITK version 4.5
+      * More information at http://wiki.orfeo-toolbox.org/index.php/Migration_guide_OTBv4
+    * Refactor otbAttributesMapOpeningLabelMapFilter to be compatible with ITK 4.5
+    * Remove FLTK based Visualization part from OTB: all these projects are now in Monteverdi
     * Rename EuclideanDistance as EuclideanDistanceMetric
     * Remove otbMaskedScalarImageToGreyLevelCoocurenceMatrixGenerator
     * Use local masks in otbHaralickTexturesImageFunction
     * Remove methods of otbSystem.h which can be replaced by similar ones in itksys/SystemTools.hxx
-    * Move classes about Amplitude and Phase functors from visualzation to basic filter
+    * Move classes about Amplitude and Phase functors from visualization to basic filter
     * otbImageToLabelMapWithAttributesFilter inherits from itkImageToImageFilter instead of itkLabelMapFilter
     * Overload GenerateInputRequestedRegion in otbImageToLabelMapWithAttributesFilter
     * Override VerifyInputInformation in otbImportGeoInformationImageFilter
     * Adding a gamma parameter in VectorRescaleIntensityImageFilter to allow for gamma correction
+    * Clean up JoinHistogramMI code
+    * Fix race condition in BinaryFunctorNeighborhoodJoinHistogramImageFilter
     * Remove unused OTB_USE_SYSTEM_VXL and OTB_VXL_DIR from OTBConfig and UseOTB
-    * Improve support of VS2013
-    * Improve support of large files
-    * Support of MacOSX 10.9
+    * Improve detection of Large Files Support by not unconditionnally defining LFS related macros
+    * Support for Visual Studio 2012
+    * Support for Visual Studio 2013
+    * Support compilation in MacOSX 10.9 with latest XCode
+    * Support for clang 3.5
 
   * Testing:
     * Correct multibaseline support
@@ -41,8 +46,11 @@ OTB-v.4.0 - Changes since version 3.20 (2013/02/21)
 * Applications:
 
   * Updated applications:
-    * Remove dependency of Colormapping to Visualization class
-    * Adding gamma correction method the convert application 
+    * ColorMapping : Remove dependency of ColorMapping to Visualization class
+    * Convert : Adding gamma correction method the convert application
+    * HomologousPointsExtraction : add mode.geobins.binsizey and mode.geobins.binstepy to allow for anisotropic geobins mode
+    * HomologousPointsExtraction : new mode.geobins.margin parameter to only search inside image center.
+    
   * Core framework:
     * Improve the support of XML parameters input/output file
     * Improve the input VectorData/Image/Filename parameter to give access to m_Input attribute
