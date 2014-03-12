@@ -37,7 +37,7 @@ France of PLEIADES the optic component.
 The PLEIADES optic component is composed of two "small satellites"
 (mass of one ton) offering a spatial resolution at nadir of 0.7 m and
 a field of view of 20 km. Their great agility enables a daily access
-all over the world, essentially for defence and civil security
+all over the world, essentially for defense and civil security
 applications, and a coverage capacity necessary for the cartography
 kind of applications at scales better than those accessible to SPOT
 family satellites. Moreover, PLEIADES have stereoscopic
@@ -46,12 +46,12 @@ urban regions, and to bring more information when used with aerial
 photography.
 
 The ORFEO "targeted" acquisition capacities made it a system
-particularly adapted to defence or civil security missions, as well as
+particularly adapted to defense or civil security missions, as well as
 critical geophysical phenomena survey such as volcanic eruptions,
 which require a priority use of the system resources.
 
 With respect to the constraints of the franco-italian agreement,
-cooperations have been set up for the PLEIADES optical component with
+cooperation have been set up for the PLEIADES optical component with
 Sweden, Belgium, Spain and Austria.
 
 \subsubsection{Where can I get more information about ORFEO?}
@@ -97,14 +97,14 @@ needed for the evolution of OTB.
 \subsection{Which is the OTB licence?}
 OTB is distributed under a CeCILL free software licence:\\
 \url{http://www.cecill.info/licences/Licence_CeCILL_V2-en.html} which 
-is recognized by the Free Software Fundation. It can be considered 
+is recognized by the Free Software Foundation. It can be considered 
 similar to the GNU GPL licence. 
 
 \subsection{If I write an application using OTB am I forced to distribute that application?}
 No. The license gives you the option to distribute your application if
 you want to. You do not have to exercise this option in the license.
 
-\subsection{If I write an application using OTB am I forced to contribute the code into the offical repositories?}
+\subsection{If I write an application using OTB am I forced to contribute the code into the official repositories?}
 No. The CeCILL licence impose only to distribute the source of the application to your users.
 
 \subsection{If I wanted to distribute an application using OTB what license would I need to use?}
@@ -128,7 +128,7 @@ Go to \url{http://www.orfeo-toolbox.org}
 source code, to the Software User's Guide and to the Cookbook of the last release. 
 Binary packages are also provided for the current version.
 OTB and Monteverdi are also integrated in OsGeo-Live since version 4.5.
-You can find more informations about the project at \url{http://live.osgeo.org/}. 
+You can find more information about the project at \url{http://live.osgeo.org/}. 
 Moreover you can found the last release of Monteverdi and OTB applications through 
 the OsGeo4W installer. 
 
@@ -150,221 +150,10 @@ Later if you want to update your source, from the OTB source directory, just do:
 A simple \texttt{make} in your OTB binary directory will be enough to update the library (recompiling only the necessary stuff).
 
 
-\section{Compiling and installing OTB from source}
+\section{Special issues about compiling from source OTB}
 \label{sec:FAQInstall}
-\subsection{Which platforms are supported?}
-OTB is a multi-platform library. It has successfully been  compiled and installed from source on
-the following platforms:
-\begin{itemize}
-  \item Linux/Unix with GCC (4.1.X, 4.2.X, 4.3.X, 4.4.X, 4.5.X, 4.6.X, 4.7.X)
-  \item Windows with Microsoft Visual Studio C++ 9.0 .NET 2008
-  \item Windows with Microsoft Visual Express 2008
-  \item Windows with Microsoft Visual Express 2010
-  \item MacOSX 10.6 and higher
-\end{itemize}
 
-\subsection{Which libraries/packages are needed before compiling and installing
- OTB?}
-The following table gathered the library (mandatory or not) used in the OTB. Some of them are included in the OTB but can be used as external libraries.
-
-\begin{center}
-\begin{tiny}
-\begin{table}[!htbp]
-\begin{tabular}{|p{0.15\textwidth}|p{0.45\textwidth}|p{0.1\textwidth}|p{0.15\textwidth}|p{0.1\textwidth}|}
-\hline
-\textbf{Library} & \textbf{Web site} & \textbf{Mandatory} & \textbf{Where} & \textbf{Minimum version} \\
-\hline
-\textbf{CMake} & \url{http://www.cmake.org} & yes & Extern & 2.8 \\
-\hline
-\textbf{ITK} & \url{http://www.itk.org} & yes & Intern & - \\
-\hline
-\textbf{GDAL} & \url{http://www.gdal.org} & yes & Extern & 1.6 \\
-\hline
-\textbf{OSSIM} & \url{http://www.ossim.org} & yes & \textbf{Intern}/Extern & 1.8.6 \\
-\hline
-\textbf{FLTK} & \url{http://www.fltk.org} & no & \textbf{Intern}/Extern & - \\
-\hline
-\textbf{Curl} & \url{http://www.curl.haxx.se} & no & Extern & - \\
-\hline
-\textbf{FFTW} & \url{http://www.fftw.org} & no & Extern & - \\
-\hline
-\textbf{expat} & \url{http://expat.sourceforge.net/} & no & \textbf{Intern}/Extern & - \\
-\hline
-\textbf{zlib} & \url{http://www.zlib.net} & yes & Extern & - \\
-\hline
-\textbf{libpng} & \url{http://www.libpng.org} & yes & Extern & - \\
-\hline
-\textbf{libtiff} & \url{http://www.libtiff.org} & yes & Extern & - \\
-\hline
-\textbf{libgeotiff} & \url{http://trac.osgeo.org/geotiff/} & yes & Extern & - \\
-\hline
-\textbf{libjpeg} & \url{http://www.ijg.org} & yes & Extern & - \\
-\hline
-\textbf{OpenJPEG} & \url{http://code.google.com/p/openjpeg/} & no & Intern & - \\
-\hline
-\textbf{liblas} & \url{http://www.liblas.org} & no & Intern/\textbf{Extern} & - \\
-\hline
-\textbf{boost} & \url{http://www.boost.org} & no & Intern/\textbf{Extern} & - \\
-\hline
-\textbf{openthreads} & \url{http://www.openscenegraph.org} & no & Intern/Extern & - \\
-\hline
-\textbf{gettext} & \url{http://www.gnu.org/s/gettext} & no & Extern & - \\
-\hline
-\textbf{Mapnik} & \url{http://www.mapnik.org} & no & Extern & - \\
-\hline
-\textbf{tinyXML} & \url{http://www.grinninglizard.com/tinyxml} & yes & Intern & - \\
-\hline
-\textbf{KML} & \url{http://libkml.googlecode.com} & yes & Intern & - \\
-\hline
-\textbf{6S} & \url{http://6s.ltdri.org} & yes & intern & - \\
-\hline
-\textbf{edison} & \url{http://www.caip.rutgers.edu/riul/} & yes & Intern & - \\
-\hline
-\textbf{SiftFast} & \url{http://libsift.sourceforge.net} & yes & Intern & - \\
-\hline
-\textbf{MuParser} & \url{http://www.muparser.sourceforge.net} & yes & Intern & - \\
-\hline
-\textbf{libSVM} & \url{http://www.csie.ntu.edu.tw/~cjlin/libsvm} & yes & Intern & - \\
-\hline
-\end{tabular}
-\caption{Libraries used in the OTB. In the column Where, the default behavior during the configuration of OTB is indicated by when the status is bolded. For example, by default internal FLTK library is used.}
-\label{tab:installation2}
-\end{table}
-\end{tiny}
-\end{center}
-
-
-
-\subsection{Main steps}
-In order to compile and install OTB on your system follow these steps (in the
-given order):
-\begin{enumerate}
-  \item Install CMake (binary packages are available for most platforms).
-  \item Install GDAL (binary packages are available for most platforms,
-        on windows, look for osgeo4w \url{http://trac.osgeo.org/osgeo4w/}).
-  \item Compile and install OTB using CMake for the configuration.
-\end{enumerate}
-
-We assume that you will install everything on a directory called
-\texttt{INSTALL\_DIR}, which usually is \texttt{/usr/local}, \texttt{/home/jordi/local} or
-whatever you want. Make sure that you have downloaded the source code for:
-  \begin{itemize}
-  \item CMake (\url{http://www.cmake.org})
-  \item GDAL (\url{http://www.gdal.org})
-  \end{itemize}
-
-\subsubsection{Unix/Linux Platforms}
-
-\textbf{Important note}: on some Linux distributions (eg. Debian, Ubuntu), you should use
-the official packages for CMake, GDAL and Fltk (including the development packages). Once you have installed these
-packages, you can skip to step 4.
-
-\begin{enumerate}
-
-\item Install GDAL from source (or \textbf{use your distribution package})
-  \begin{verbatim}
-      cd INSTALL_DIR
-      gunzip gdal.1.9.2.tar.gz
-      tar xvf gdal.1.9.2.tar
-      cd gdal.1.9.2
-      ./configure --prefix=INSTALL_DIR --with-libtiff=internal \
-                  --with-geotiff=internal \
-                  --with-rename-internal-libtiff-symbols=yes \
-                  --with-rename-internal-libgeotiff-symbols=yes
-      make
-      make install
-      --> check that gdalinfo --version works otherwise set your
-          LD_LIBRARY_PATH to where you have installed GDAL
-  \end{verbatim}
-
-It seems to be a bug in the GDAL install procedure: if you are installing it without root privileges, even if your \texttt{INSTALL\_DIR} is a directory for which you have the write permissions, GDAL tries to copy the python bindings together with the Python site packages, which are usually somewhere in /usr/lib.
-
-Actually, since this is the last step in the GDAL install procedure, when you get the error message, the GDAL libs and header files are already installed, so you can safely ignore the error.
-
-The \texttt{--without-python} option passed to the \texttt{configure} step avoids this. However, some users may want to have Python bindings, so recommending this option for the install may not be OK for everybody.
-
-\item Install CMake from source (or \textbf{use your distribution package})
-  \begin{verbatim}
-      cd INSTALL_DIR
-      gunzip cmake-2.8.8.tar.gz
-      tar xvf cmake-2.8.8.tar
-      cd cmake-2.8.8
-      ./configure --prefix=INSTALL_DIR
-      make
-      make install
-  \end{verbatim}
-      In order to properly use cmake, add \texttt{INSTALL\_DIR/bin} to
-      your path with \texttt{export PATH=\$PATH:INSTALL\_DIR/bin} or
-      something similar.
-
-\item Install Fltk from source (optional) using CMake (do not use the configure script) (or for more simplicity \textbf{use your distribution package})
-  \begin{verbatim}
-      cd INSTALL_DIR
-      bunzip2 fltk-1.3.0-source.tar.bz2 OR
-      gunzip fltk-1.3.0-source.tar.gz
-      tar xvf fltk-1.3.0-source.tar
-      mkdir Fltk-binary
-      cd Fltk-binary
-      ccmake ../fltk-1.3.0
-      --> follow the CMake instructions, in particular:
-          --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
-	  --> set BUILD_EXAMPLES to ON within CMake
-	  --> generate the configuration with 'g'
-      make
-      make install
-      --> check that the examples located in
-      INSTALL_DIR/Fltk-binary/bin work, in particular, the fractals
-      example which makes use of the OpenGL library needed by OTB.
-  \end{verbatim}
-
-   You can also choose to use the FLTK version we included in the source of OTB, in this case, everything will be compile at the same time. To do that, you will have to set the option \texttt{OTB\_USE\_EXTERNAL\_FLTK} to \texttt{OFF}
-
-\item Compile and install OTB from source
-  Please refers to the SoftwareGuide section : Building from sources (\ref{sec:source})
-  If you want to put your OTB in a standard location, you can proceed with:
-
-  \begin{verbatim}
-      make install
-  \end{verbatim}
-
-  but \textbf{this is only optional}.
-
-
-\end{enumerate}
-
-\subsubsection{Microsoft Visual Studio (Express 2008/Express 2010)}
-Windows platforms didn't support to build with shared libraries. If you experience any problem
-with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
-built size might reach 1~GB.
-
-That should be all! Otherwise, subscribe to
-   otb-users@googlegroups.com and you will get some help.
-
-\subsection{Specific platform issues}
-%\subsubsection{SunOS/HP UX}
-%Due to a bug in the tar command shipped with some versions of SunOS,
-%problems may appear when configuring, compiling or installing OTB.
-%
-%See \url{http://www.gnu.org/software/tar/manual/tar.html#Checksumming} for
-%details on the bug characterization.
-
-%The solution is to use the GNU tar command if it is available on your
-%system (gtar).
-
-\subsubsection{Visual Studio 2010/Express 2010}
-Since Visual Studio 2010, OTB can't compile while using the internal libLAS library : disable the use of the library by setting
-the following variables in cmake :  \texttt{OTB\_USE\_LIBLAS = OFF}\\
-Then you will be able to configure and build the project as usual.
-
-\subsubsection{MacOSX 10.6 Snow Leopard}
-Since 10.6 (Snow Leopard), OS X does not support Carbon calls from 64bit code anymore. OTB should be compiled with FLTK 1.3 from the macport fltk-devel and \texttt{OTB\_USE\_EXTERNAL\_FLTK = ON}\\. Moreover, there is a compilation issue with liblas, so liblas must be disabled with \texttt{OTB\_USE\_LIBLAS = OFF}\\.
-
-%\subsubsection{Open Solaris}
-%There are some issues on Open Solaris 2009.06 and before with libLAS (library included
-%in OTB to process LIDAR data). You will need to deactivate it: set the
-%OTB\_USE\_LIBLAS option to OFF.
-%
-%It seems to be fine with the more recent release of Open Solaris.
+All information about OTB compilation could be found into the related section. We present only here the special issues which can be encountered by some developers.
 
 \subsubsection{Debian Linux / Ubuntu}
 
@@ -378,7 +167,22 @@ The recommended procedure is to get this recent source and build GDAL from sourc
                   --with-rename-internal-libgeotiff-symbol
   \end{verbatim}
 
+\subsubsection{MacOSX 10.9}
+Some developers encounters some issues about the compilation of OTB 4.0 on MacOSX 10.9.
+To fix these issue, you should compile with internal ITK to avoid conflict with libKML. To do this, just switch OTB\_USE\_EXTERNAL\_ITK to OFF.
 
+\subsubsection{OTB compilation and Windows platform}
+
+Building the OTB library and applications on Windows is currently quite challenging. You should manage correctly all the dependencies of OTB and install them on your platform. You should take care of
+\begin{itemize}
+\item the version of the library,
+\item building them in release mode as much as possible (or RealWitDebInfo). 
+\end{itemize}
+
+Currently it is not possible to build OTB in Debug when using the dependencies provided by OSGeo4W. If you want to build OTB in Debug for Windows, you will need to build and install manually each dependency needed by OTB (hard work...). You should use the same compiler for all the dependencies, as much as possible.
+
+Therefore, we highly recommend you to use OSGeo4W shell environment to build OTB. You can use the 32 or 64 bit installer, we provide all the OTB necessary dependencies in the two cases. Please follow carefully the procedure provided in the Software Guide.
+ 
 \section{Using OTB}
 
 \subsection{Where to start ?}
@@ -386,36 +190,18 @@ The recommended procedure is to get this recent source and build GDAL from sourc
 OTB presents a large set of features and it is not always easy to start using it.
 After the installation, you can proceed to the tutorials (in the Software Guide).
 This should give you a quick overview of the possibilities of OTB and will teach
-you how to build your own programs.
+you how to build your own programs. You can also found some information in the OTB Cookbook in which we provide some recipes about remote sensing with OTB. 
+
 
 \subsection{What is the image size limitation of OTB ?}
 
-The maximum physical space a user can allocate depends on her platform. Therefore,
-image allocation in OTB is restricted by image dimension, size, pixel type and number
-of bands.
+The maximum physical space a user can allocate depends on her platform. Therefore, image allocation in OTB is restricted by image dimension, size, pixel type and number of bands.
 
-Fortunately, thanks to the streaming mechanism implemented within
-OTB's pipeline (actually ITK's), this limitation can be bypassed. The
-use of the \doxygen{otb}{ImageFileWriter} at the end of the pipeline,
-or the \doxygen{itk}{StreamingImageFilter} at any point of the pipeline will
-seamlessly break the large, problematic data into small pieces whose
-allocation is possible. These pieces are processed one afther the
-other, so that there is not allocation problem anymore. We are often working with
-images of $25000 \times 25000$ pixels.
+Fortunately, thanks to the streaming mechanism implemented within OTB's pipeline (actually ITK's), this limitation can be bypassed. The use of the \doxygen{otb}{ImageFileWriter} at the end of the pipeline, will seamlessly break the large, problematic data into small pieces whose allocation is possible. These pieces are processed one after the other, so that there is not allocation problem anymore. We are often working with images of $25000 \times 25000$ pixels.
 
-For the streaming to work, all the filters in the pipeline must be streaming capable
-(this is the case for most of the filters in OTB). The output image format also need to be
-streamable (not PNG or JPEG, but TIFF or ENVI, for instance).
+For the streaming to work, all the filters in the pipeline must be streaming capable (this is the case for most of the filters in OTB). The output image format also need to be streamable (not PNG or JPEG, but TIFF or ENVI, for instance).
 
-To tune the size of the streaming pieces, the OTB has
-two CMake variables. The first is named
-OTB\_STREAM\_IMAGE\_SIZE\_TO\_ACTIVATE\_STREAMING. It represents the
-minimum size of the image in bytes for which streaming may be helpful. The
-second, OTB\_STREAM\_MAX\_SIZE\_BUFFER\_FOR\_STREAMING, specifies the
-maximum size in bytes a streaming piece should have. It can be used to
-compute the optimal number of pieces to break the input data into.
-
-These two parameters can also be tuned by the user to match his specific needs.
+The class \doxygen{otb}{ImageFileWriter} manage the steaming process following two strategies: by tile or by strip. Different size configuration for these two strategies are available into the interface. The default mode use the information about how the file is streamed on the disk and will try to minimize the memory consumption along the pipeline. More information can be found into the documentation of the class. 
 
 
 \section{Getting help}
@@ -432,6 +218,8 @@ contains tenths of commented examples and a tutorial which should be a good star
 point for any new OTB user. The code source for these examples is
 distributed with the toolbox. Another information source is the
 on-line API documentation which is available at \url{http://www.orfeo-toolbox.org/doxygen}.
+
+You can also find some information about how to use Monteverdi, Monteverdi2 and the OTB-Applications into the Cookbook at \url{http://www.orfeo-toolbox.org/CookBook/}. 
 
 \section{Contributing to OTB}\label{sec:contributing}
 
@@ -472,11 +260,11 @@ for the login use ``anonymous`` with the password ``otb``.  We will be
 informed that something new is in the sandbox, but you can also drop a
 mail at otb-users@googlegroups.com to provide more explanations.
 We will then review the corrections, test them and then merge them
-into the main repository.  You can find more informations about the
+into the main repository.  You can find more information about the
 procedure at
 \url{http://blog.orfeo-toolbox.org/news/contribute-easily-to-otb}.
 
-You can also run the nightly tests so we have a wider range of plateforms to detect
+You can also run the nightly tests so we have a wider range of platforms to detect
 bugs earlier. Look at section \ref{sec:runningTheTests}.
 
 \subsection{What are the benefits of contributing to OTB?}
@@ -526,7 +314,6 @@ Once OTB is built with the tests, you just have to go to the binary directory wh
 
 \subsection{How to get the test data?}\label{sec:FAQTestData}
 
-If you have a problem at the compilation, you can skip this step first.
 Data used for the tests are also versioned using Mercurial (see \ref{sec:FAQMercurial}).
 
 You can get the base doing:
@@ -544,7 +331,7 @@ You can also easily synchronize the directory you retrieve between different com
 
 \subsection{How to submit the results?}
 
-Once you know how to run the tests, you can also help us to detect the bugs or configuration problems specific to your configuration. As mentionned before, the possible combinations between OS, compiler, options, external libraries version is too big to be tested completely, but the more the better.
+Once you know how to run the tests, you can also help us to detect the bugs or configuration problems specific to your configuration. As mentioned before, the possible combinations between OS, compiler, options, external libraries version is too big to be tested completely, but the more the better.
 
 You just have to launch ctest with the \texttt{-D Experimental} switch. Hence:
 \begin{verbatim}
@@ -567,9 +354,9 @@ bugfixes.
 The first version was 1.0.0 in July 2006. Version 1.2.0, 1.4.0 and 1.6.0 were
 released in between. The 2.0.0 major version  was released in December 2007.
 The 2.2.0, 2.4.0 and 2.6.0 ({\em Halloween}) in June, July and November 2008 respectively. The
-2.8.0 ({\em Gong Xi Fa Cai}) came out in January 2009, the 3.0.0 ({\em Manh\~{a} de Carnaval}) in May 2009, the 3.2.0 ({\em 62$^\circ$38${'}$35${''}$S 60$^\circ$14${'}$31${''}$W}) in January 2010, the 3.4.0 ({\em Perl A Rebours}) in July 2010, the 3.6.0 ({\em California Dreamin'}) in October 2010, the 3.8.0 ({\em Pack Ice}) in December 2010, the 3.10.0 ({\em Feli\c{c} aniversari}) in June 2011, the 3.12.0 ({\em $\Pi \lambda \epsilon l \alpha \epsilon \zeta$}) in February 2012, the 3.14.0 ({\em Happy}) in July 2012 and 3.14.1 in October 2012. 
+2.8.0 ({\em Gong Xi Fa Cai}) came out in January 2009, the 3.0.0 ({\em Manh\~{a} de Carnaval}) in May 2009, the 3.2.0 ({\em 62$^\circ$38${'}$35${''}$S 60$^\circ$14${'}$31${''}$W}) in January 2010, the 3.4.0 ({\em Perl A Rebours}) in July 2010, the 3.6.0 ({\em California Dreamin'}) in October 2010, the 3.8.0 ({\em Pack Ice}) in December 2010, the 3.10.0 ({\em Feli\c{c} aniversari}) in June 2011, the 3.12.0 ({\em $\Pi \lambda \epsilon l \alpha \epsilon \zeta$}) in February 2012, the 3.14.0 ({\em Happy}) in July 2012, the 3.14.1 in October 2012, the 3.16 () in February 2013 , the 3.18 ({\em Seven years of Coding}) in July 2013, the 3.18.1 in July 2013 and the 3.20 in November 2013 ({\em ... (and one more for the road)}). 
 
-The current one is 3.16.0.
+The current one is 4.0.0.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
@@ -614,7 +401,7 @@ following:
       \item object detection and recognition,
       \item supervised learning.
       \end{itemize}
-    \item{Version 3.X (2010 and later):}
+    \item{Version 3.X (2010-14):}
       \begin{itemize}
 	\item data fusion,
 	\item spatial reasoning,
@@ -623,7 +410,13 @@ following:
         \item stereo reconstruction
         \item \ldots
       \end{itemize}
+    \item{Version 4.X (2014 and later):}
+      \begin{itemize}
+	\item support of ITK 4.X,
+        \item \ldots
+      \end{itemize}
 
 \end{itemize}
 
+You can find more information into RELEASE\_NOTES.txt .
 %% \subsection{When will feature X or Y be included in OTB?}
