@@ -29,7 +29,7 @@
 
 //
 // System includes (sorted by alphabetic order)
-#include <cassert>
+// #include <cassert>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -197,7 +197,7 @@ StatusBarWidget
   bool isOk = true;
   index[ 0 ] = coordinates.front().toUInt( &isOk );
 
-  assert( isOk );
+  // assert( isOk );
 
   if( !isOk )
     return;
@@ -208,7 +208,7 @@ StatusBarWidget
     {
     index[ 1 ] = coordinates.back().toUInt( &isOk );
 
-    assert( isOk );
+    // assert( isOk );
 
     if( !isOk )
       return;
@@ -236,7 +236,7 @@ StatusBarWidget
 
   //
   // Check scale text format.
-  assert( scale.size()==1 || scale.size()==2 );
+  // assert( scale.size()==1 || scale.size()==2 );
 
   if( scale.size()!=1 && scale.size()!=2 )
     return;
@@ -257,10 +257,10 @@ StatusBarWidget
   bool isOk = true;
   double numerator = scale.front().toDouble( &isOk );
 
-  assert( isOk );
-  assert( numerator!=0.0 );
+  // assert( isOk );
+  // assert( numerator!=0.0 );
 
-  if( !isOk )
+  if( !isOk || numerator==0.0 )
     return;
 
   /*
@@ -282,7 +282,7 @@ StatusBarWidget
     {
     denominator = scale.back().toDouble( &isOk );
 
-    assert( isOk );
+    // assert( isOk );
 
     if( !isOk )
       return;

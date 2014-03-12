@@ -994,7 +994,7 @@ MainWindow
       vectorImageModel,
       SIGNAL( CurrentIndexUpdated( const IndexType&, bool ) ),
       m_StatusBarWidget,
-      SLOT( SetPixelIndexText( const IndexType&, bool ) )
+      SLOT( SetPixelIndex( const IndexType&, bool ) )
       );
 
     QObject::disconnect(
