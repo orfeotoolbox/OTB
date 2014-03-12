@@ -22,12 +22,13 @@
 #include <windows.h>
 #endif
 #include <GL/glew.h>
-#include <GL/glext.h>
 
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
 #else
 #include <GL/glu.h>
+#include <GL/glext.h>
 #endif
 
 namespace otb
