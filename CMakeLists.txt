@@ -85,6 +85,7 @@ endif(WIN32)
 #----------------------------------------------------------------------------
 # Ice
 find_package(OTBIce REQUIRED)
+find_package(GLEW REQUIRED)
 # message( "ICE_INCLUDE_DIRS: ${ICE_INCLUDE_DIRS}" )
 # message( "ICE_LIBRARIES: ${ICE_LIBRARIES}" )
 

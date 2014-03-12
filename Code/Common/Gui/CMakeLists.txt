@@ -184,6 +184,7 @@ target_link_libraries(Monteverdi2_Gui
   Monteverdi2_Core
   ${ICE_LIBRARIES}
   ${OPENGL_LIBRARIES}
+  ${GLEW_LIBRARIES}
   #Qt4::QtCore
   Qt4::QtGui
   Qt4::QtOpenGL
