@@ -109,6 +109,11 @@ private:
   GlView(const Self&);
   void operator=(const Self&);
 
+  static bool SplitVersion( const char * version,
+                            int& major,
+                            int& minor,
+                            int& release );
+
   ViewSettings::Pointer m_Settings;
 
   ActorMapType          m_Actors;

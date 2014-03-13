@@ -23,6 +23,7 @@
 #include <GL/glew.h>
 
 #include <algorithm>
+#include <cstring>
 
 namespace otb
 {
@@ -30,9 +31,111 @@ namespace otb
 
 bool
 GlView
+::SplitVersion( const char * version,
+                int& major,
+                int& minor,
+                int& release )
+{
+  if( version==NULL )
+    return false;
+
+  major = atoi( version );
+
+  if( major<1 )
+    {
+    major = 0;
+
+    return false;
+    }
+
+  minor = 0;
+
+  release = 0;
+
+
+  const char * minorStr = strchr( version, '.' );
+
+  if( minorStr==NULL )
+    return false;
+
+  minor = atoi( ++minorStr );
+
+
+  const char * releaseStr = strchr( minorStr, '.' );
+
+  if( releaseStr!=NULL )
+    release = atoi( ++releaseStr );
+
+
+  return true;
+}
+
+
+bool
+GlView
 ::CheckOpenGLCapabilities()
 {
-  return false;
+  //
+  // Check OpenGL version
+  const GLubyte * glVersionStr = glGetString( GL_VERSION );
+
+  if( glVersionStr==NULL )
+    {
+    std::ostringstream oss;
+
+    oss << "Failed to query OpenGL version string (error: "
+        << glGetError()
+        << ").";
+
+    throw std::runtime_error( oss.str() );
+    }
+
+  int glMajor = -1;
+  int glMinor = -1;
+  int glRelease = -1;
+
+  GlView::SplitVersion(
+    reinterpret_cast< const char * >( glVersionStr ),
+    glMajor,
+    glMinor,
+    glRelease
+  );
+
+  if( glMajor<2 )
+    return false;
+
+
+  //
+  // Check OpenGL shading-language version.
+  const GLubyte * slVersionStr = glGetString( GL_SHADING_LANGUAGE_VERSION );
+
+  if( slVersionStr==NULL )
+    {
+    std::ostringstream oss;
+
+    oss << "Failed to query OpenGL shading language version string (error: "
+        << glGetError()
+        << ").";
+
+    throw std::runtime_error( oss.str() );
+    }
+
+  int slMajor = -1;
+  int slMinor = -1;
+  int slRelease = -1;
+
+  GlView::SplitVersion(
+    reinterpret_cast< const char * >( slVersionStr ),
+    slMajor,
+    slMinor,
+    slRelease
+  );
+
+  // TODO: Check shading-language version here.
+
+  //
+  // Ok.
+  return true;
 }
 
 
