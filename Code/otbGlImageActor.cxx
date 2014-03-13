@@ -23,12 +23,6 @@
 #endif
 #include <GL/glew.h>
 
-#ifdef __APPLE__
-#include <OpenGL/glext.h>
-#else
-#include <GL/glext.h>
-#endif
-
 #include "otbStandardShader.h"
 
 #include "itkListSample.h"

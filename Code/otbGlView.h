@@ -42,6 +42,12 @@ public:
 
   itkNewMacro(Self);
 
+  /**
+   * @return true if OpengGL capabilities of running platform meets
+   * the needs of the library.
+   */
+  static bool CheckOpenGLCapabilities();
+
   // Initialize 
   void Initialize(unsigned int sx, unsigned int sy);
 

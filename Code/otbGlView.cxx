@@ -19,18 +19,23 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
- 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
 
+#include <GL/glew.h>
 
 #include <algorithm>
 
 namespace otb
 {
+
+
+bool
+GlView
+::CheckOpenGLCapabilities()
+{
+  return false;
+}
+
+
 GlView::GlView()
   : m_Settings(ViewSettings::New()),
     m_Actors(),
