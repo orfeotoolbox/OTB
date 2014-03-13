@@ -67,7 +67,7 @@ void GlROIActor::ProcessViewSettings()
   ViewSettings::ConstPointer settings = this->GetSettings();
 
   
-  if((m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull()) || (settings->GetUseProjection() && settings->GetGeometryChanged()))
+  if((m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull()) || (settings->GetUseProjection()))
     {
     UpdateTransforms();
 
