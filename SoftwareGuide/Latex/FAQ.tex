@@ -50,7 +50,7 @@ particularly adapted to defense or civil security missions, as well as
 critical geophysical phenomena survey such as volcanic eruptions,
 which require a priority use of the system resources.
 
-With respect to the constraints of the franco-italian agreement,
+With respect to the constraints of the Franco-Italian agreement,
 cooperation have been set up for the PLEIADES optical component with
 Sweden, Belgium, Spain and Austria.
 
@@ -93,27 +93,27 @@ Toolbox and is responsible for the specification of the library. CNES
 funds the industrial development contracts and research contracts
 needed for the evolution of OTB.
 
-\section{Licence}
-\subsection{Which is the OTB licence?}
-OTB is distributed under a CeCILL free software licence:\\
+\section{License}
+\subsection{Which is the OTB license?}
+OTB is distributed under a CeCILL free software license:\\
 \url{http://www.cecill.info/licences/Licence_CeCILL_V2-en.html} which 
 is recognized by the Free Software Foundation. It can be considered 
-similar to the GNU GPL licence. 
+similar to the GNU GPL license. 
 
 \subsection{If I write an application using OTB am I forced to distribute that application?}
 No. The license gives you the option to distribute your application if
 you want to. You do not have to exercise this option in the license.
 
 \subsection{If I write an application using OTB am I forced to contribute the code into the official repositories?}
-No. The CeCILL licence impose only to distribute the source of the application to your users.
+No. The CeCILL license impose only to distribute the source of the application to your users.
 
 \subsection{If I wanted to distribute an application using OTB what license would I need to use?}
-The CeCILL licence or the GNU GPL licence.
+The CeCILL license or the GNU GPL license.
 
 \subsection{I am a commercial user. Is there any restriction on the
   use of OTB?}
 OTB can be used internally ("in-house") without restriction, but only
-redistributed in other software that is under the CeCILL licence. 
+redistributed in other software that is under the CeCILL license. 
 Moreover you need to distribute the source of your application to your
 users and only them.
 
@@ -127,13 +127,13 @@ Go to \url{http://www.orfeo-toolbox.org}
  and follow the "download OTB" link. You will have access to the OTB
 source code, to the Software User's Guide and to the Cookbook of the last release. 
 Binary packages are also provided for the current version.
-OTB and Monteverdi are also integrated in OsGeo-Live since version 4.5.
+OTB and Monteverdi are also integrated in OSGeo-Live since version 4.5.
 You can find more information about the project at \url{http://live.osgeo.org/}. 
 Moreover you can found the last release of Monteverdi and OTB applications through 
-the OsGeo4W installer. 
+the OSGeo4W installer. 
 
 \subsection{How to get the latest bleeding-edge version?}\label{sec:FAQMercurial}
-You can get the current development version, as our repository is public, using Mercurial (available at \url{http://www.selenic.com/mercurial}). Be aware that, even if the golden rule is {\em what is commited will compile}, this is not always the case. Changes are usually more than ten per day.
+You can get the current development version, as our repository is public, using Mercurial (available at \url{http://www.selenic.com/mercurial}). Be aware that, even if the golden rule is {\em what is committed will compile}, this is not always the case. Changes are usually more than ten per day.
 
 The first time, you can get the source code using:
 \begin{verbatim}
@@ -158,7 +158,7 @@ We present here only the special issues which can be encountered.
 
 \subsubsection{Debian Linux / Ubuntu}
 
-On some Debian and Ubuntu versions, the system gdal library and its tiff internal symbol might conflict with the system Tiff library (bugs.debian.org/558733). This is most likely the case if you get odd segmentation fault whenever trying to open a tiff image. This symbol clash happens when using OTB. A workaround to the issue has been provided in GDAL sources, but is available in the 1.9.0 release.
+On some Debian and Ubuntu versions, the system GDAL library and its tiff internal symbol might conflict with the system Tiff library (bugs.debian.org/558733). This is most likely the case if you get odd segmentation fault whenever trying to open a tiff image. This symbol clash happens when using OTB. A workaround to the issue has been provided in GDAL sources, but is available in the 1.9.0 release.
 
 The recommended procedure is to get this recent source and build GDAL from sources, with the following configure command:
   \begin{verbatim}
@@ -169,7 +169,7 @@ The recommended procedure is to get this recent source and build GDAL from sourc
   \end{verbatim}
 
 \subsubsection{Errors when compiling internal libkml}
-The internal version of libKML cannot be compiled when using an external build of ITK.
+The internal version of libkml cannot be compiled when using an external build of ITK.
 See \url{http://bugs.orfeo-toolbox.org/view.php?id=879} for more details.
 
 To workaround the problem, either use an external build of libkml (it is provided on most systems), or use an internal build of ITK by setting to OFF the CMake variable OTB\_USE\_EXTERNAL\_ITK.
@@ -204,7 +204,9 @@ The maximum physical space a user can allocate depends on her platform. Therefor
 
 Fortunately, thanks to the streaming mechanism implemented within OTB's pipeline (actually ITK's), this limitation can be bypassed. The use of the \doxygen{otb}{ImageFileWriter} at the end of the pipeline, will seamlessly break the large, problematic data into small pieces whose allocation is possible. These pieces are processed one after the other, so that there is not allocation problem anymore. We are often working with images of $25000 \times 25000$ pixels.
 
-For the streaming to work, all the filters in the pipeline must be streaming capable (this is the case for most of the filters in OTB). The output image format also need to be streamable (not PNG or JPEG, but TIFF or ENVI, for instance).
+For the streaming to work, all the filters in the pipeline must be streaming
+capable (this is the case for most of the filters in OTB). The output image
+format also need to be streamable (not PNG or JPEG, but TIFF or ENVI formats, for instance).
 
 The class \doxygen{otb}{ImageFileWriter} manage the steaming process following two strategies: by tile or by strip. Different size configuration for these two strategies are available into the interface. The default mode use the information about how the file is streamed on the disk and will try to minimize the memory consumption along the pipeline. More information can be found into the documentation of the class. 
 
@@ -252,7 +254,7 @@ the references to relevant papers in the software guide. Having algorithms
 published in the form of reproducible research helps science move faster and
 encourages people who needs your algorithms to use them.
 
-You will also benefit from the strengths of OTB: multiplatform, streaming and
+You will also benefit from the strengths of OTB: multi-platform, streaming and
 threading, etc.
 
 \subsection{What functionality can I contribute?}
@@ -278,7 +280,7 @@ you will help us detect problems and fix them early.
 
 For each class, at minimum there is a test which tries to instantiate it and another one which uses the class. The output of each test (image, text file, binary file) is controlled against a baseline to make sure that the result hasn't changed.
 
-All these test are available in the directory \texttt{Testing} and are also good examples on how to use the different classes.
+All OTB tests source code are available in the directory \texttt{Testing} and are also good examples on how to use the different classes.
 
 \subsection{How to run the tests?}
 
