@@ -230,47 +230,20 @@ You can also find some information about how to use Monteverdi, Monteverdi2 and 
 
 \subsection{I want to contribute to OTB, where to begin?}
 
-First, you can send an email to otb@cnes.fr or the the user mailing list (otb-users@googlegroups.com)
+There is many ways to join us in the OTB adventure and the more people
+contribute, the better the library is for everybody!
+
+First, you can send an email the user mailing list (otb-users@googlegroups.com)
 to let us know what functionality
 you would like to introduce in OTB. If the functionality seems important for the
 OTB users, we will then discuss on how to retrieve your code,
 make the necessary adaptions, check with you that the results are correct and finally
 include it in the next release.
 
-To make this process of contribution easier, we also provide a
-``sandbox`` repository for OTB which works as a testing environment that
-isolates untested code changes and outright experimentation from the
-production environment or repository. Here is how it works:
-
-\begin{itemize}
-  \item Clone the main OTB repository:
-    \begin{verbatim}
-    hg clone http://hg.orfeo-toolbox.org/OTB
-    \end{verbatim}
-  \item Set up your mercurial identity, in Linux, edit the ~/.hgrc and put the following lines:
-    \begin{verbatim}
-     [ui]
-     username = Your Name <email-where-we-can@contact.you>
-    \end{verbatim}
-  \item Work as usual, commit locally as you would do for your own project
-    when you are happy, push to the sandbox:
-    \begin{verbatim}
-     [ui]
-     hg push http://hg.orfeo-toolbox.org/OTB-SandBox
-    \end{verbatim}
-\end{itemize}
-
-If necessary, use the -f option (we will sort out the mess). When ask
-for the login use ``anonymous`` with the password ``otb``.  We will be
-informed that something new is in the sandbox, but you can also drop a
-mail at otb-users@googlegroups.com to provide more explanations.
-We will then review the corrections, test them and then merge them
-into the main repository.  You can find more information about the
-procedure at
-\url{http://blog.orfeo-toolbox.org/news/contribute-easily-to-otb}.
-
-You can also run the nightly tests so we have a wider range of platforms to detect
+Then you can also run the nightly tests so we have a wider range of platforms to detect
 bugs earlier. Look at section \ref{sec:runningTheTests}.
+
+You can also find more information about how to contribute at \url{http://orfeo-toolbox.org/otb/contribute.html}
 
 \subsection{What are the benefits of contributing to OTB?}
 
@@ -417,11 +390,12 @@ following:
       \end{itemize}
     \item{Version 4.X (2014 and later):}
       \begin{itemize}
-	\item support of ITK 4.X,
-        \item \ldots
+	\item support of ITK 4.X (internal or external)
+        \item Clean up: migration of FLTK related code from OTB to
+          Monteverdi, remove support for pqxx, gettext and LibLAS.
       \end{itemize}
 
 \end{itemize}
 
-You can find more information into RELEASE\_NOTES.txt .
+You can find more information in the \href{http://hg.orfeo-toolbox.org/OTB/file/b67d0bd93e34/RELEASE_NOTES.txt}{RELEASE\_NOTES.txt}.
 %% \subsection{When will feature X or Y be included in OTB?}
