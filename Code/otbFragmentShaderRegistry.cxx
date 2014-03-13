@@ -76,9 +76,18 @@ void FragmentShaderRegistry::RegisterShader(const std::string& name, const std::
     itkExceptionMacro(<<"Shader "<<name<<" with sources "<<source<<" failed to compile: "<<logs);
 
     delete [] logs;
-    
+    // For safety!
+    logs = NULL;
+
+    // Shader must be destroyed here!
+    glDeleteShader( shader );
+    shader = 0;
+
+    // Program must be destroyed here!
+    glDeleteProgram( program );
+    program = 0;
     }
-  
+
   glAttachShader(program,shader);
   glLinkProgram(program);
 
