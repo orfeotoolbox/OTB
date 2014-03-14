@@ -529,8 +529,9 @@ ImageViewWidget
 
     // qDebug() << "scale:" << scale;
 
-    spacing[ 0 ] *= scale;
-    spacing[ 1 ] *= scale;
+    // Scale is already a spacing, we just need to apply
+    spacing[ 0 ] = (spacing[0]>0?1:-1) * scale;
+    spacing[ 1 ] = (spacing[1]>0?1:-1) * scale;
 
     m_Manipulator->SetSpacing( spacing );
     }
