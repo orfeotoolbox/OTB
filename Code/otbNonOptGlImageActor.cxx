@@ -525,8 +525,6 @@ void NonOptGlImageActor::ImageRegionToViewportQuad(const RegionType & region, Po
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
     
-  SpacingType spacing = m_FileReader->GetOutput()->GetSpacing();
-
   itk::ContinuousIndex<double,2> cul,cur,cll,clr;
   
   cul[0] = region.GetIndex()[0];

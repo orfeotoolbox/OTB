@@ -24,10 +24,10 @@ namespace otb
 
 StandardShader::StandardShader()
   : m_MinRed(0),
-    m_MinGreen(0),
-    m_MinBlue(0),
     m_MaxRed(255),
+    m_MinGreen(0),
     m_MaxGreen(255),
+    m_MinBlue(0),
     m_MaxBlue(255),
     m_Gamma(1.),
     m_Alpha(1.),

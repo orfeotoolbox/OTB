@@ -50,8 +50,6 @@ void FragmentShaderRegistry::RegisterShader(const std::string& name, const std::
     itkExceptionMacro(<<"A shader with name "<<name<<" has already been registered!");
     }
 
-  GLint source_length = static_cast<GLint>(source.size());
-
   GLuint program = glCreateProgram();
 
   GLuint shader  = glCreateShader(GL_FRAGMENT_SHADER);

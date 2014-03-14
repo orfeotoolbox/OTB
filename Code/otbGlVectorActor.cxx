@@ -61,7 +61,7 @@ static void ICE_CALLBACK TesselationErrorCallback(GLenum errorCode)
 {
   const GLubyte * estring = gluErrorString(errorCode);
   otbMsgDevMacro(<< "Glu Tesselation error: " << estring);
-  //estring = 0; // avoid unused variable warning
+  (void)estring;
 }
 
 // Static begin callback for tesselation
@@ -91,6 +91,7 @@ GlVectorActor::GlVectorActor()
     m_ViewportToVectorTransform(),
     m_VectorToViewportTransform(),
     m_OGRDataSource(),
+    m_CurrentLayer(""),
     m_InternalFeatures(),
     m_DisplayList(0),
     m_DisplayListNeedsRebuild(true),
@@ -98,7 +99,6 @@ GlVectorActor::GlVectorActor()
     m_ExtentULY(0),
     m_ExtentLRX(0),
     m_ExtentLRY(0),
-    m_CurrentLayer(""),
     m_OptimizedRendering(true),
     m_OptimizedRenderingActive(false)
     
