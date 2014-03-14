@@ -46,6 +46,12 @@ void ViewSettings::ScreenToViewPortTransform(const double & xscreen, const doubl
   yvp = m_Origin[1] + yscreen * m_Spacing[1];
 }
 
+void ViewSettings::ViewportToScreenTransform(const double & xvp, const double & yvp, double & xscreen, double & yscreen) const
+{
+  xscreen = (xvp - m_Origin[0]) / m_Spacing[0];
+  yscreen = (yvp - m_Origin[1]) / m_Spacing[1];
+}
+
 void ViewSettings::Zoom(const PointType & zoomCenter,double scale)
 { 
   m_Origin[0] = m_Origin[0] + (zoomCenter[0]-m_Origin[0])*(1-scale);

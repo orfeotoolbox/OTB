@@ -89,6 +89,8 @@ public:
 
   void ScreenToViewPortTransform(const double & xscreen, const double & yscreen, double & xvp, double & yvp) const;
 
+  void ViewportToScreenTransform(const double & xvp, const double & yvp, double & xscreen, double & yscreen) const;
+
   void Zoom(const PointType & zoomCenter,double scale = 1.1);
 
   void Center(const PointType & center);
