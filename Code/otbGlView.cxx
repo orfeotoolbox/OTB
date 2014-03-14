@@ -29,6 +29,88 @@ namespace otb
 {
 
 
+const char * GlView::REQUIRED_GL_VERSION = "2.0.0";
+const char * GlView::REQUIRED_GLSL_VERSION = "";
+
+
+const char *
+GlView
+::GLVersion()
+{
+  const GLubyte * glVersionStr = glGetString( GL_VERSION );
+
+  if( glVersionStr==NULL )
+    {
+    std::ostringstream oss;
+
+    oss << "Failed to query OpenGL version string (error: "
+        << glGetError()
+        << ").";
+
+    throw std::runtime_error( oss.str() );
+    }
+
+  return reinterpret_cast< const char * >( glVersionStr );
+}
+
+
+const char *
+GlView
+::GLSLVersion()
+{
+  const GLubyte * slVersionStr = glGetString( GL_SHADING_LANGUAGE_VERSION );
+
+  if( slVersionStr==NULL )
+    {
+    std::ostringstream oss;
+
+    oss << "Failed to query OpenGL shading language version string (error: "
+        << glGetError()
+        << ").";
+
+    throw std::runtime_error( oss.str() );
+    }
+
+  return reinterpret_cast< const char * >( slVersionStr );
+}
+
+
+bool
+GlView
+::CheckGLCapabilities()
+{
+  //
+  // Check OpenGL version
+  const char * glVersionStr = GlView::GLVersion();
+
+  int glMajor = -1;
+  int glMinor = -1;
+  int glRelease = -1;
+
+  GlView::SplitVersion( glVersionStr, glMajor, glMinor, glRelease );
+
+  if( glMajor<2 )
+    return false;
+
+
+  //
+  // Check OpenGL shading-language version.
+  const char * slVersionStr = GlView::GLSLVersion();
+
+  int slMajor = -1;
+  int slMinor = -1;
+  int slRelease = -1;
+
+  GlView::SplitVersion( slVersionStr, slMajor, slMinor, slRelease );
+
+  // TODO: Check shading-language version here.
+
+  //
+  // Ok.
+  return true;
+}
+
+
 bool
 GlView
 ::SplitVersion( const char * version,
@@ -67,74 +149,6 @@ GlView
     release = atoi( ++releaseStr );
 
 
-  return true;
-}
-
-
-bool
-GlView
-::CheckOpenGLCapabilities()
-{
-  //
-  // Check OpenGL version
-  const GLubyte * glVersionStr = glGetString( GL_VERSION );
-
-  if( glVersionStr==NULL )
-    {
-    std::ostringstream oss;
-
-    oss << "Failed to query OpenGL version string (error: "
-        << glGetError()
-        << ").";
-
-    throw std::runtime_error( oss.str() );
-    }
-
-  int glMajor = -1;
-  int glMinor = -1;
-  int glRelease = -1;
-
-  GlView::SplitVersion(
-    reinterpret_cast< const char * >( glVersionStr ),
-    glMajor,
-    glMinor,
-    glRelease
-  );
-
-  if( glMajor<2 )
-    return false;
-
-
-  //
-  // Check OpenGL shading-language version.
-  const GLubyte * slVersionStr = glGetString( GL_SHADING_LANGUAGE_VERSION );
-
-  if( slVersionStr==NULL )
-    {
-    std::ostringstream oss;
-
-    oss << "Failed to query OpenGL shading language version string (error: "
-        << glGetError()
-        << ").";
-
-    throw std::runtime_error( oss.str() );
-    }
-
-  int slMajor = -1;
-  int slMinor = -1;
-  int slRelease = -1;
-
-  GlView::SplitVersion(
-    reinterpret_cast< const char * >( slVersionStr ),
-    slMajor,
-    slMinor,
-    slRelease
-  );
-
-  // TODO: Check shading-language version here.
-
-  //
-  // Ok.
   return true;
 }
 

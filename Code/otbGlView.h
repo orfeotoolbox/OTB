@@ -43,10 +43,30 @@ public:
   itkNewMacro(Self);
 
   /**
+   * Constant containing required OpenGL version for
+   * client-application feedback messages.
+   */
+  static const char * REQUIRED_GL_VERSION;
+
+  /**
+   * Constant containing required shading-language version for
+   * client-application feedback messages.
+   */
+  static const char * REQUIRED_GLSL_VERSION;
+
+  /**
+   */
+  static const char * GLVersion();
+
+  /**
+   */
+  static const char * GLSLVersion();
+
+  /**
    * @return true if OpengGL capabilities of running platform meets
    * the needs of the library.
    */
-  static bool CheckOpenGLCapabilities();
+  static bool CheckGLCapabilities();
 
   // Initialize 
   void Initialize(unsigned int sx, unsigned int sy);
