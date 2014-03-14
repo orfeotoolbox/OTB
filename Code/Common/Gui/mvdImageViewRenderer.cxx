@@ -403,6 +403,12 @@ ImageViewRenderer
       if(m_ReferenceActorShaderMode == "LOCAL_CONTRAST")
         {
         shader->SetShaderType(otb::SHADER_LOCAL_CONTRAST);
+
+        double localRange = 0.05 * std::max(std::max(shader->GetMaxRed()-shader->GetMinRed(),
+                                                     shader->GetMaxGreen()-shader->GetMinGreen()),
+                                            shader->GetMaxBlue()-shader->GetMinBlue());
+        shader->SetLocalContrastRange(localRange);
+
         }
       else
         {
