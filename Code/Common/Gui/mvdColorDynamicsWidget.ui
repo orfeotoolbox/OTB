@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>173</width>
-    <height>165</height>
+    <width>221</width>
+    <height>175</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -139,19 +139,19 @@
       <item>
        <widget class="QSlider" name="gammaSlider">
         <property name="minimum">
-         <number>0</number>
+         <number>-50</number>
         </property>
         <property name="maximum">
-         <number>10000</number>
-        </property>
-        <property name="singleStep">
          <number>100</number>
         </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
         <property name="pageStep">
-         <number>1000</number>
+         <number>1</number>
         </property>
         <property name="value">
-         <number>1000</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

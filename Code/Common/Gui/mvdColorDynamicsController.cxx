@@ -652,7 +652,9 @@ ColorDynamicsController
   double gMax = static_cast< double >( widget->GetMaxGamma() );
   double gStep = static_cast< double >( widget->GetGammaStep() );
 
-  double gamma = itk::Math::Round<double>( gMin + imageModel->GetSettings().GetGamma() * gStep );
+  //  double gamma = itk::Math::Round<double>( gMin + imageModel->GetSettings().GetGamma() + gStep );
+
+  double gamma = itk::Math::Round<double>( -0.25*vcl_log(imageModel->GetSettings().GetGamma())/vcl_log(1.1));
 
   if( gamma>gMax )
     gamma = gMax;
@@ -1363,10 +1365,7 @@ ColorDynamicsController
   ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
   assert( widget!=NULL );
 
-  double gamma =
-    ( static_cast< double >( widget->GetGamma() ) -
-      static_cast< double >( widget->GetMinGamma() ) ) /
-    static_cast< double >( widget->GetGammaStep() );
+  double gamma = vcl_pow(1.1,-0.25*widget->GetGamma());
 
   // Get image-model.
   assert( GetModel()==GetModel< VectorImageModel>() );
