@@ -175,6 +175,11 @@ signals:
    */
   void PhysicalCursorPositionChanged( const PointType&,
                                       const DefaultImageType::PixelType& );
+
+
+  /**
+   */
+  void ReferenceActorShaderModeChanged(const std::string & mode);
   /**
    */
   void CenterRoiRequested( const PointType& center );

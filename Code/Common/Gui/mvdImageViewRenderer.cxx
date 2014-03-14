@@ -73,7 +73,8 @@ ImageViewRenderer
   m_GlView( otb::GlView::New() ),
   m_ReferenceImageModel( NULL ),
   m_ReferenceGlImageActor(),
-  m_ImageModelActorPairs()
+  m_ImageModelActorPairs(),
+  m_ReferenceActorShaderMode("STANDARD")
 {
   assert( !m_GlView.IsNull() );
 }
@@ -395,6 +396,19 @@ ImageViewRenderer
     shader->SetMaxBlue( settings.GetHighIntensity( RGBW_CHANNEL_BLUE ) );
 
     shader->SetGamma( settings.GetGamma() );
+
+    // If reference actor
+    if(m_ReferenceGlImageActor.IsNotNull() && m_ReferenceGlImageActor == it->second.second)
+      {
+      if(m_ReferenceActorShaderMode == "LOCAL_CONTRAST")
+        {
+        shader->SetShaderType(otb::SHADER_LOCAL_CONTRAST);
+        }
+      else
+        {
+        shader->SetShaderType(otb::SHADER_STANDARD);
+        }
+      }
     }
 }
 
@@ -492,8 +506,52 @@ ImageViewRenderer
   assert( !m_ReferenceGlImageActor.IsNull() );
 }
 
+
+
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
+void ImageViewRenderer::OnPhysicalCursorPositionChanged(const PointType& point,
+                                       const DefaultImageType::PixelType& pixel)
+{
+  if(m_ReferenceGlImageActor.IsNotNull())
+    {
 
+    // Get shader of reference actor
+    otb::FragmentShader::Pointer fragmentShader( m_ReferenceGlImageActor->GetShader() );
+    
+    assert(
+      fragmentShader==otb::DynamicCast< otb::StandardShader >( fragmentShader )
+      );
+    
+    otb::StandardShader::Pointer shader(
+      otb::DynamicCast< otb::StandardShader >( fragmentShader )
+      );
+    
+    assert( !shader.IsNull() );
+    
+    shader->SetShaderType(otb::SHADER_LOCAL_CONTRAST);
+
+    if(pixel.Size()>0)
+      {
+      shader->SetCurrentRed(pixel[0]);
+      shader->SetCurrentGreen(pixel[1]);
+      shader->SetCurrentBlue(pixel[2]);
+      }
+
+    PointType p, pscreen;
+    p = m_ReferenceGlImageActor->ImageToViewportTransform(point,true);
+
+    m_GlView->GetSettings()->ViewportToScreenTransform(p[0],p[1], pscreen[0], pscreen[1]);
+
+    pscreen[1] = m_GlView->GetSettings()->GetViewportSize()[1] - pscreen[1];
+
+    shader->SetCenter(pscreen);
+    }
+}
+
+void ImageViewRenderer::OnReferenceActorShaderModeChanged(const std::string & mode)
+{
+  m_ReferenceActorShaderMode = mode;
+}
 } // end namespace 'mvd'

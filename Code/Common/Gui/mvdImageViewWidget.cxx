@@ -223,8 +223,19 @@ ImageViewWidget
     // to:
     this, SLOT( ZoomToFullResolution() )
   );
-}
 
+  QObject::connect(
+    this, SIGNAL(PhysicalCursorPositionChanged(const PointType&,
+                                               const DefaultImageType::PixelType& )),
+                 m_Renderer, SLOT(OnPhysicalCursorPositionChanged(const PointType&,
+                                                                  const DefaultImageType::PixelType& )));
+
+
+ QObject::connect(
+   this, SIGNAL(ReferenceActorShaderModeChanged(const std::string &)),
+   m_Renderer, SLOT(OnReferenceActorShaderModeChanged(const std::string &)));
+
+   }
 /*******************************************************************************/
 void
 ImageViewWidget
@@ -288,6 +299,13 @@ ImageViewWidget
   QGLWidget::mousePressEvent( event );
 
   m_Manipulator->MousePressEvent( event );
+
+  if(event->button() ==  Qt::RightButton)
+    {
+    emit ReferenceActorShaderModeChanged("LOCAL_CONTRAST");
+    updateGL();
+    }
+
 }
 
 /*******************************************************************************/
@@ -304,24 +322,22 @@ ImageViewWidget
   Qt::MouseButtons buttons = event->buttons();
   // Qt::KeyboardModifiers modifiers = event->modifiers();
   
-  if( buttons==Qt::NoButton )
-    {
-    //
-    // Transform coordinates from widget space to viewport space.
-    assert( m_Manipulator!=NULL );
 
-    PointType in;
-
-    m_Manipulator->Transform( in, event->pos() );
-
-    //
-    // Pick pixel of point in viewport space and return point in image
-    // space.
-    assert( m_Renderer!=NULL );
-
-    PointType out;
-    DefaultImageType::PixelType pixel;
-
+  // Transform coordinates from widget space to viewport space.
+  assert( m_Manipulator!=NULL );
+  
+  PointType in;
+  
+  m_Manipulator->Transform( in, event->pos() );
+  
+  //
+  // Pick pixel of point in viewport space and return point in image
+  // space.
+  assert( m_Renderer!=NULL );
+  
+  PointType out;
+  DefaultImageType::PixelType pixel;
+  
 #if 0
     if( m_Renderer->Pick( in, out, pixel ) )
       {
@@ -331,8 +347,10 @@ ImageViewWidget
     m_Renderer->Pick( in, out, pixel );
 
     emit PhysicalCursorPositionChanged( out, pixel );
+
+    updateGL();
+
 #endif  
-    }
 }
 
 /*******************************************************************************/
@@ -345,6 +363,12 @@ ImageViewWidget
   QGLWidget::mouseReleaseEvent( event );
 
   m_Manipulator->MouseReleaseEvent(event);
+
+  if(event->button() ==  Qt::RightButton)
+    {
+    emit ReferenceActorShaderModeChanged("STANDARD");
+    updateGL();
+    }
 }
 
 /*******************************************************************************/

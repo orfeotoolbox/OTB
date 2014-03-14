@@ -72,6 +72,7 @@ QuicklookViewRenderer
   m_GlRoiActor( otb::GlROIActor::New() )
 {
   assert( !m_GlRoiActor.IsNull() );
+  this->SetReferenceActorShaderMode("STANDARD");
 }
 
 /*****************************************************************************/

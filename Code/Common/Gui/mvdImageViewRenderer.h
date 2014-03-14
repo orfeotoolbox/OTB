@@ -123,6 +123,17 @@ public:
    */
   virtual bool CheckGLCapabilities() const;
 
+  // Set/Get reference actor shader mode 
+  void SetReferenceActorShaderMode(const std::string & mode)
+  {
+    m_ReferenceActorShaderMode = mode;
+  }
+
+  std::string GetReferenceActorShaderMode() const
+  {
+    return m_ReferenceActorShaderMode;
+  }
+
   /**
    */
   inline const otb::ViewSettings::Pointer GetViewSettings() const;
@@ -162,6 +173,10 @@ public:
 
 // public slots
 public slots:
+  void OnPhysicalCursorPositionChanged(const PointType&,
+                                       const DefaultImageType::PixelType& );
+
+  void OnReferenceActorShaderModeChanged(const std::string & mode);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
@@ -232,11 +247,16 @@ private:
    */
   ImageModelActorPairMap m_ImageModelActorPairs;
 
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+  /**
+   */ 
+  std::string m_ReferenceActorShaderMode;
 
+  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
+  
 //
 // SLOTS.
 private slots:
+
 };
 
 } // end namespace 'mvd'
