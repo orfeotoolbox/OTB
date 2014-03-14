@@ -99,6 +99,7 @@ public:
 //
 // Public methods.
 public:
+
   /** \brief Constructor. */
   ImageViewWidget( AbstractImageViewManipulator* manipulator,
                    AbstractImageViewRenderer* renderer,
@@ -136,6 +137,13 @@ public:
    * \return A pointer to the abstract view-manipulator of this image-view.
    */
   inline const AbstractImageViewManipulator* GetManipulator() const;
+
+  /**
+   * \brief Access the abstract model-renderer of this image-view.
+   *
+   * \return A pointer to the abstract model-renderer of this image-view.
+   */
+  inline const AbstractImageViewRenderer* GetRenderer() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -218,15 +226,6 @@ private:
 // Private methods.
 private:
 
-#if 0
-  /**
-   * \brief Access the abstract model-renderer of this image-view.
-   *
-   * \return A pointer to the abstract model-renderer of this image-view.
-   */
-  inline const AbstractImageViewRenderer* GetRenderer() const;
-#endif
-
   /** Construction code (factorizes constructors initializations). */
   void Initialize( AbstractImageViewManipulator* manipulator,
                    AbstractImageViewRenderer* renderer );
@@ -284,8 +283,6 @@ ImageViewWidget
 }
 
 /*****************************************************************************/
-#if 0
-
 inline
 const AbstractImageViewRenderer*
 ImageViewWidget
@@ -293,8 +290,6 @@ ImageViewWidget
 {
   return m_Renderer;
 }
-
-#endif
 
 } // End of namespace 'mvd'
 

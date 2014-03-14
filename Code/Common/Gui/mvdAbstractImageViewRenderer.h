@@ -131,6 +131,10 @@ public:
 
   /**
    */
+  virtual bool CheckGLCapabilities() const =0;
+
+  /**
+   */
   virtual const AbstractImageModel* GetReferenceImageModel() const =0;
 
   /**

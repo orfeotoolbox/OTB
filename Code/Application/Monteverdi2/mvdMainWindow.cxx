@@ -160,6 +160,29 @@ MainWindow
 }
 
 /*****************************************************************************/
+bool
+MainWindow
+::CheckGLCapabilities() const
+{
+#if USE_ICE_IMAGE_VIEW
+
+  assert( m_ImageView!=NULL );
+  assert( m_ImageView->GetRenderer()!=NULL );
+
+  if( m_ImageView==NULL ||
+      m_ImageView->GetRenderer()==NULL )
+    return false;
+
+  return m_ImageView->GetRenderer()->CheckGLCapabilities();
+
+#else // USE_ICE_IMAGE_VIEW
+
+  return true;
+
+#endif // USE_ICE_IMAGE_VIEW
+}
+
+/*****************************************************************************/
 void
 MainWindow
 ::virtual_SetupUI()

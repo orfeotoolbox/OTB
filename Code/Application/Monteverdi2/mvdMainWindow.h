@@ -110,6 +110,10 @@ public:
   /** \brief Destructor. */
   virtual ~MainWindow();
 
+  /**
+   */
+  bool CheckGLCapabilities() const;
+
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
 //

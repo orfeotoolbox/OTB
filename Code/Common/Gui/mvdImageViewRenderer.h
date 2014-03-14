@@ -121,6 +121,10 @@ public:
 
   /**
    */
+  virtual bool CheckGLCapabilities() const;
+
+  /**
+   */
   inline const otb::ViewSettings::Pointer GetViewSettings() const;
   /**
    */

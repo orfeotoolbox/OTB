@@ -48,9 +48,15 @@
 #include "mvdApplication.h"
 #include "mvdMainWindow.h"
 
+enum ERROR_CODE
+{
+  ERROR_CODE_CACHE_DIR = -1,
+  ERROR_CODE_DATABASE = -2,
+  ERROR_CODE_GL_VERSION = -3,
+};
+
 /*****************************************************************************/
 /* FUNCTIONS DECLARATION                                                     */
-
 
 /*****************************************************************************/
 /* MAIN                                                                      */
@@ -60,6 +66,7 @@ main( int argc, char* argv[] )
 {
   QApplication qtApp( argc, argv );
 
+  //
   // 0. Splash-screen.
 #if !defined( _DEBUG )
   QPixmap pixmap(QLatin1String( ":/images/application_splash" ));
@@ -68,14 +75,17 @@ main( int argc, char* argv[] )
   qtApp.processEvents();//This is used to accept a click on the screen so that user can cancel the screen
 #endif
 
+  //
   // 1. Initialize application and sync settings.
   mvd::Application application( &qtApp );
   application.Initialize();
 
+  //
   // 2. Initialize main-window (UI).
   mvd::MainWindow mainWindow;
   mainWindow.Initialize();
 
+  //
   // 3. Initialize cache directory.
   try
     {
@@ -98,9 +108,10 @@ main( int argc, char* argv[] )
       .arg( exc.what() )
     );
 
-    return -1;
+    return ERROR_CODE_CACHE_DIR;
     }
 
+  //
   // 4. Initialize database.
   mvd::CountType nb = application.OpenDatabase();
   if( nb > 0 )
@@ -141,9 +152,10 @@ main( int argc, char* argv[] )
       );
       }
 
-    return -2;
+    return ERROR_CODE_DATABASE;
     }
 
+  //
   // 5. Show window.
 #if defined( _DEBUG )
   // Usefull when developping/debugging to avoid overlapping other windows.
@@ -157,7 +169,13 @@ main( int argc, char* argv[] )
 
 #endif
 
-  // 6. Let's go: run the application and return exit code.
+  //
+  // 6. Check OpenGL capabilities
+  if( !mainWindow.CheckGLCapabilities() )
+    return ERROR_CODE_GL_VERSION;
+
+  //
+  // 7. Let's go: run the application and return exit code.
   int result = QCoreApplication::instance()->exec();
 
   application.CloseDatabase();

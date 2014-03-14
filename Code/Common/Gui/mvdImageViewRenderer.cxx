@@ -85,6 +85,61 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
+bool
+ImageViewRenderer
+::CheckGLCapabilities() const
+{
+  qWarning() <<
+    ToStdString(
+      tr( "Required OpenGL version '%1' with GLSL version '%2'." )
+      .arg( otb::GlView::REQUIRED_GL_VERSION )
+      .arg( otb::GlView::REQUIRED_GLSL_VERSION )
+    ).c_str();
+
+  try
+    {
+    qWarning() <<
+      ToStdString(
+        tr( "Runtime OpenGL version '%1' with GLSL version '%2'." )
+        .arg( otb::GlView::GLVersion() )
+        .arg( otb::GlView::GLSLVersion() )
+      ).c_str();
+    }
+  catch( std::exception& exc )
+    {
+    qWarning() << ToQString( exc.what() );
+    }
+
+
+  try
+    {
+    if( otb::GlView::CheckGLCapabilities() )
+      return true;
+
+
+    QMessageBox::critical(
+      qobject_cast< QWidget* >( parent() ),
+      tr( "Monteverdi2 - Critical error!" ),
+      tr( "Current OpenGL version is '%1' supporting GLSL version '%2'.\nRequired OpenGL version is '%3' with Shading-Laguage version '%4'.\nPlease upgrade your graphics driver and hardware for the application to run properly on this platform.\nUsing the application on this platform may lead to unknown behaviour. Would you still like to continue using the application?" )
+      .arg( otb::GlView::GLVersion() )
+      .arg( otb::GlView::GLSLVersion() )
+      .arg( otb::GlView::REQUIRED_GL_VERSION )
+      .arg( otb::GlView::REQUIRED_GLSL_VERSION )
+    );
+    }
+  catch( std::exception& exc )
+    {
+    QMessageBox::critical(
+      qobject_cast< QWidget* >( parent() ),
+      tr( "Monteverdi2 - Critical error!"),
+      ToQString( exc.what() )
+    );
+    }
+
+  return false; 
+}
+
+/*****************************************************************************/
 AbstractImageViewRenderer::RenderingContext*
 ImageViewRenderer
 ::NewRenderingContext() const

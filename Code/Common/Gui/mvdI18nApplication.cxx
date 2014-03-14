@@ -31,6 +31,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbGlView.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
