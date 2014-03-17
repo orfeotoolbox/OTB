@@ -375,7 +375,7 @@ DatabaseTreeWidget
 void
 DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
 {
-  // get the item
+  // Get  item.
   TreeWidgetItem* item = dynamic_cast<TreeWidgetItem *>( itemAt(pos) );
   
   // if not the root item 
@@ -385,8 +385,18 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
     m_ContextualMenuClickedPosition = pos;
 
     // menu 
-    QMenu  menu;
+    QMenu menu;
 
+    QAction * a1 =
+      AddMappedAction(
+        &menu,
+        tr( "Delete dataset" ),
+        item->GetHash(),
+        this,
+        SIGNAL( DatasetToDeleteSelected( const QString& ) )
+      );
+
+    /*
     // 
     // create the desired action
     QAction * deleteNodeChild = new QAction(tr ("Delete Dataset") , &menu);
@@ -413,7 +423,16 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
       this,
       SIGNAL( DatasetToDeleteSelected( const QString& ) )
     );
+    */
 
+    QAction* a2 = AddAction(
+      &menu,
+      tr ("Rename Dataset"),
+      this, 
+      SLOT( OnRenameTriggered() )
+    );
+
+    /*
     // 
     // create the desired action
     QAction * renameNodeChild = new QAction(tr ("Rename Dataset") , &menu);
@@ -427,10 +446,105 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
 
     // add action to the menu
     menu.addAction( renameNodeChild );
+    */
 
     // show menu
     menu.exec( viewport()->mapToGlobal(pos) );
     }
+}
+
+/*******************************************************************************/
+QAction*
+DatabaseTreeWidget::AddAction( QMenu* menu,
+                               const QString& text,
+                               QObject* receiver,
+                               const char* method,
+                               Qt::ConnectionType type )
+{
+  assert( menu!=NULL );
+  assert( receiver!=NULL );
+  assert( method!=NULL );
+
+  QAction* action = menu->addAction( text );
+
+  QObject::connect(
+    action,
+    SIGNAL( triggered() ),
+    // to:
+    receiver,
+    method,
+    // with:
+    type
+  );
+
+  return action;
+}
+
+/*******************************************************************************/
+QAction*
+DatabaseTreeWidget::AddMappedAction( QMenu* menu,
+                                     const QString& text,
+                                     const QString& data,
+                                     QObject* receiver,
+                                     const char* slot,
+                                     Qt::ConnectionType type )
+{
+  assert( menu!=NULL );
+  assert( receiver!=NULL );
+  assert( slot!=NULL );
+
+  // Add signal-mapped action into menu.
+  QSignalMapper* signalMapper = AddMappedAction( menu, text );
+  assert(
+    signalMapper->parent()==qobject_cast< QAction* >( signalMapper->parent() )
+  );
+
+  // Get action back.
+  QAction* action = qobject_cast< QAction* >( signalMapper->parent() );
+  assert( action!=NULL );
+
+  // Set signal mapping.
+  signalMapper->setMapping( action, data );
+
+  // Connect mapped signal.
+  QObject::connect(
+    signalMapper,
+    SIGNAL( mapped( const QString& ) ),
+    // to:
+    receiver,
+    slot,
+    // with:
+    type
+  );
+
+
+  return action;
+}
+
+/*******************************************************************************/
+QSignalMapper *
+DatabaseTreeWidget::AddMappedAction( QMenu* menu,
+                                     const QString& text )
+{
+  assert( menu!=NULL );
+
+  // Add menu action.
+  QAction * action = menu->addAction( text );
+
+  // Pre-create signal-mapper.
+  QSignalMapper* signalMapper = new QSignalMapper( action );
+
+  // Connect menu-action trigger to signal-mapper.
+  QObject::connect(
+    action,
+    SIGNAL( triggered() ),
+    // to:
+    signalMapper,
+    SLOT( map() )
+  );
+
+  // Return parented signal-mapper.
+  return signalMapper;
 }
 
 } // end namespace 'mvd'

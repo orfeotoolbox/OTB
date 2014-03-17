@@ -158,6 +158,26 @@ protected:
 //
 // Private methods.
 private:
+    /**
+     */
+    static QAction* AddAction( QMenu* menu,
+                               const QString& text,
+                               QObject* receiver,
+                               const char* method,
+                               Qt::ConnectionType type =Qt::AutoConnection );
+    /**
+     */
+    static
+      QAction* AddMappedAction( QMenu* menu,
+                                const QString& text,
+                                const QString& data,
+                                QObject* receiver,
+                                const char* method,
+                                Qt::ConnectionType type =Qt::AutoConnection );
+    /**
+     */
+    static QSignalMapper* AddMappedAction( QMenu* menu, const QString& text );
+
 //
 // Private attributes.
 private:
