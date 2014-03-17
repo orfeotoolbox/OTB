@@ -71,10 +71,10 @@ if (OPENGL_FOUND)
 find_package(GLEW REQUIRED)
 
 if(GLEW_FOUND)
-MESSAGE(STATUS "Glew found")
-include_directories(${GLEW_INCLUDE_DIR})
+  MESSAGE(STATUS "Glew found")
+  include_directories(${GLEW_INCLUDE_DIR})
 else(GLEW_FOUND)
-MESSAGE(FATAL_ERROR "Glew missing. Please set glew directories.")
+  MESSAGE(FATAL_ERROR "Glew missing. Please set glew directories.")
 endif(GLEW_FOUND)
 
 if(BUILD_ICE_APPLICATION)
