@@ -396,57 +396,12 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
         SIGNAL( DatasetToDeleteSelected( const QString& ) )
       );
 
-    /*
-    // 
-    // create the desired action
-    QAction * deleteNodeChild = new QAction(tr ("Delete Dataset") , &menu);
-
-    // use a QSignalMapper to bundle parameterless signals and re-emit
-    // them with parameters (QString here)
-    QSignalMapper *signalMapperDelete = new QSignalMapper( this );
-    signalMapperDelete->setMapping( deleteNodeChild, item->GetHash() );
-    
-    QObject::connect( deleteNodeChild , 
-                      SIGNAL(triggered()), 
-                      signalMapperDelete, 
-                      SLOT( map() ) 
-      );
-
-    // add action to the menu
-    menu.addAction( deleteNodeChild );
-
-    // connect the re-emitted signal to our slot 
-    QObject::connect( 
-      signalMapperDelete,
-      SIGNAL( mapped( const QString& ) ),
-      // to:
-      this,
-      SIGNAL( DatasetToDeleteSelected( const QString& ) )
-    );
-    */
-
     QAction* a2 = AddAction(
       &menu,
       tr ("Rename Dataset"),
       this, 
       SLOT( OnRenameTriggered() )
     );
-
-    /*
-    // 
-    // create the desired action
-    QAction * renameNodeChild = new QAction(tr ("Rename Dataset") , &menu);
-
-    // 
-    QObject::connect( renameNodeChild , 
-                      SIGNAL(triggered()), 
-                      this, 
-                      SLOT( OnRenameTriggered( ) ) 
-      );
-
-    // add action to the menu
-    menu.addAction( renameNodeChild );
-    */
 
     // show menu
     menu.exec( viewport()->mapToGlobal(pos) );
