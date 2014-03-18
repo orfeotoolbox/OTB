@@ -246,6 +246,8 @@ void IceViewer::Start()
   
   double ulx,uly,lrx,lry;
 
+  bool shouldHaveNegativeSpacing = false;
+
   if(firstActor.IsNotNull())
     {
     m_View->GetSettings()->SetOrigin(firstActor->GetOrigin());
@@ -255,6 +257,10 @@ void IceViewer::Start()
     m_View->GetSettings()->UseProjectionOn();
     firstActor->ProcessViewSettings();
     firstActor->GetExtent(ulx,uly,lrx,lry);
+    if(firstActor->GetSpacing()[1] < 0)
+      {
+      shouldHaveNegativeSpacing = true;
+      }
     }
   else if(firstVectorActor.IsNotNull())
     {
@@ -262,6 +268,11 @@ void IceViewer::Start()
     m_View->GetSettings()->UseProjectionOn();
     firstVectorActor->ProcessViewSettings();
     firstVectorActor->GetExtent(ulx,uly,lrx,lry);
+
+    if(firstVectorActor->GetWkt() != "")
+      {
+      shouldHaveNegativeSpacing = true;
+      }
     }
 
   m_SelectedActor = firstActorKey;
@@ -275,7 +286,12 @@ void IceViewer::Start()
   double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
    
   otb::ViewSettings::SpacingType spacing;
-  spacing.Fill(std::min(spacingx,spacingy));
+  spacing.Fill(std::min(vcl_abs(spacingx),vcl_abs(spacingy)));
+
+  if(shouldHaveNegativeSpacing)
+    {
+    spacing[1]*=-1;
+    }
 
   m_View->GetSettings()->SetSpacing(spacing);
   m_View->GetSettings()->Center(center);
