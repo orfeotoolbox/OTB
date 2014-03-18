@@ -23,8 +23,10 @@ target_link_libraries(00134-feature_extraction OTBIO OTBCommon OTBBasicFilters O
 add_executable(0000094-PolygonsVectorization 0000094-PolygonsVectorization.cxx)
 target_link_libraries(0000094-PolygonsVectorization OTBIO OTBCommon)
 
+if(ITK_USE_FFTWD OR ITK_USE_FFTWF)
 add_executable(0000169-fftcomplextocomplex  0000169-fftcomplextocomplex.cxx)
 target_link_libraries(0000169-fftcomplextocomplex OTBIO OTBCommon)
+endif(ITK_USE_FFTWD OR ITK_USE_FFTWF)
 
 add_executable(000295-MeanShiftVectorImageFilterWithStreamingShrink 000295-MeanShiftVectorImageFilterWithStreamingShrink.cxx)
 target_link_libraries(000295-MeanShiftVectorImageFilterWithStreamingShrink OTBIO OTBCommon)

@@ -278,6 +278,8 @@ private:
       SetParameterInt("sizex",lri[0]-uli[0]);
       SetParameterInt("sizey",lri[1]-uli[1]);
 
+      std::cout<<"ul: "<<uli<<", lr: "<<lri<<std::endl;
+
       this->CropRegionOfInterest();
       }
 
