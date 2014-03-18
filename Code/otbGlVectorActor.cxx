@@ -525,7 +525,7 @@ void GlVectorActor::UpdateDisplayList()
   for(std::vector<InternalFeature>::iterator it = m_InternalFeatures.begin();
       it!=m_InternalFeatures.end();++it)
     {
-    const OGRGeometry * geom = it->m_SourceFeature.GetGeometry();
+    const OGRGeometry * geom = it->m_RenderedFeature.GetGeometry();
     const OGRPoint * inPoint = dynamic_cast<const OGRPoint *>(geom);
     const OGRLineString * inLineString = dynamic_cast<const OGRLineString *>(geom);
     const OGRPolygon * inPolygon = dynamic_cast<const OGRPolygon *>(geom);
@@ -643,6 +643,7 @@ OGRLineString GeometryTransform(const OGRLineString * in,otb::GenericRSTransform
     op = GeometryTransform(&p,transform);
     outLineString.addPoint(&op);
     }
+
   return outLineString;
 }
 
