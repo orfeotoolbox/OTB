@@ -97,14 +97,6 @@ public:
   /** \brief Destructor. */
   virtual ~DatabaseTreeWidget();
 
-  /**
-   */
-  inline const QTreeWidgetItem* GetRootItem() const;
-
-  /**
-   */
-  QTreeWidgetItem* GetRootItem();
-
   //
   //
   void mouseMoveEvent( QMouseEvent * event );
@@ -117,23 +109,15 @@ public:
 //
 // Public SLOTS.
 public slots:
-  
-  void OnSelectedDatasetFilenameChanged(const QString& filename);
-  void OnDeleteTriggered(const QString & id);
-  void OnRenameTriggered();
-  void OnCustomContextMenuRequested(const QPoint& pos);
-  void OnItemChanged( QTreeWidgetItem* item , int column);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/  
 
 //
 // Signals.
 signals:
-
   void DatasetToDeleteSelected( const QString & id );
-
   void DatasetRenamed(const QString &, const QString &);
-
+  void AddItemRequested( QTreeWidgetItem* parent );
  
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -167,6 +151,18 @@ private:
                                Qt::ConnectionType type =Qt::AutoConnection );
     /**
      */
+    /*
+    static
+      QAction* AddMappedAction( QMenu* menu,
+                                const QString& text,
+                                int data,
+                                QObject* receiver,
+                                const char* method,
+                                Qt::ConnectionType type
+      =Qt::AutoConnection );
+    */
+    /**
+     */
     static
       QAction* AddMappedAction( QMenu* menu,
                                 const QString& text,
@@ -174,6 +170,17 @@ private:
                                 QObject* receiver,
                                 const char* method,
                                 Qt::ConnectionType type =Qt::AutoConnection );
+    /**
+     */
+    /*
+    static
+      QAction* AddMappedAction( QMenu* menu,
+                                const QString& text,
+                                QObject* data,
+                                QObject* receiver,
+                                const char* method,
+                                Qt::ConnectionType type =Qt::AutoConnection );
+    */
     /**
      */
     static QSignalMapper* AddMappedAction( QMenu* menu, const QString& text );
@@ -186,17 +193,22 @@ private:
   QString  m_DatasetFilename; 
   QPoint   m_ContextualMenuClickedPosition;
 
-  QTreeWidgetItem * m_ItemToEdit;
-
-  bool              m_EditionActive;
-  QString           m_PreviousItemText;
-  Qt::ItemFlags     m_DefaultItemFlags;
+  QTreeWidgetItem* m_ItemToEdit;
+  bool m_EditionActive;
+  QString m_PreviousItemText;
+  Qt::ItemFlags m_DefaultItemFlags;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
+  void OnSelectedDatasetFilenameChanged(const QString& filename);
+  void OnDeleteTriggered(const QString & id);
+  void OnRenameTriggered();
+  void OnCustomContextMenuRequested(const QPoint& pos);
+  void OnItemChanged( QTreeWidgetItem* item , int column);
+  void OnAddItemTriggered();
 };
 
 } // end namespace 'mvd'

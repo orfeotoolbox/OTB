@@ -191,6 +191,10 @@ private slots:
    */
   void OnItemMoved( QTreeWidgetItem* item );
 
+  /**
+   */
+  void OnAddItemRequested( QTreeWidgetItem* parent );
+
   //
   // AbstractModelController overloads.
 

@@ -117,7 +117,7 @@ DatabaseBrowserController
 
   //
   QObject::connect(
-    widget->GetDatabaseTreeWidget(), 
+    widget->GetDatabaseTreeWidget(),
     SIGNAL( DatasetToDeleteSelected( const QString& ) ),
     // to:
     this,
@@ -126,11 +126,20 @@ DatabaseBrowserController
 
   //
   QObject::connect(
-    widget->GetDatabaseTreeWidget(), 
+    widget->GetDatabaseTreeWidget(),
     SIGNAL( DatasetRenamed( const QString &, const QString & )  ),
     // to:
     model,
     SLOT( OnDatasetRenamed(const QString&, const QString & ) )
+    );
+
+  //
+  QObject::connect(
+    widget->GetDatabaseTreeWidget(),
+    SIGNAL( AddItemRequested( QTreeWidgetItem* ) ),
+    // to:
+    this,
+    SLOT( OnAddItemRequested( QTreeWidgetItem* ) )
     );
 
   //
@@ -199,6 +208,15 @@ DatabaseBrowserController
     // to:
     model,
     SLOT( OnDatasetRenamed(const QString&, const QString & ) )
+    );
+
+  //
+  QObject::disconnect(
+    widget->GetDatabaseTreeWidget(),
+    SIGNAL( AddItemRequested( QTreeWidgetItem* ) ),
+    // to:
+    this,
+    SLOT( OnAddItemRequested( QTreeWidgetItem* ) )
     );
 
   //
@@ -712,6 +730,52 @@ DatabaseBrowserController
   db->UpdateDatasetNodeMembership(
     childItem->GetId().toLongLong(),
     parentItem->GetId().toLongLong()
+  );
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::OnAddItemRequested( QTreeWidgetItem* parent )
+{
+  // Trace.
+  qDebug() << this << "::OnAddItemRequested(" << parent << ");";
+
+  // Check inputs.
+  assert( parent!=NULL );
+
+  // Access item and parent.
+  assert( parent==dynamic_cast< TreeWidgetItem* >( parent ) );
+  TreeWidgetItem* parentItem = dynamic_cast< TreeWidgetItem* >( parent );
+
+  // Check item type.
+  assert( parentItem->GetType()==TreeWidgetItem::ITEM_TYPE_NODE );
+
+
+  // Access model & database.
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
+  assert( model->GetDatabaseConnection() );
+  DatabaseConnection* db = model->GetDatabaseConnection();
+
+
+  /*
+  qDebug()
+    << "dataset_node_membership("
+    << childItem->GetId().toLongLong()
+    << parentItem->GetId().toLongLong()
+    << ")";
+  */
+
+  // ID of newly created group.
+  SqlId id = -1;
+
+  // Update database.
+  db->InsertNode(
+    "New group",
+    parentItem->GetId().toLongLong(),
+    &id
   );
 }
 

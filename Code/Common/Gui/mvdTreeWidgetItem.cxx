@@ -79,12 +79,12 @@ TreeWidgetItem
     {
     case TreeWidgetItem::ITEM_TYPE_NODE:
       setChildIndicatorPolicy(
-        QTreeWidgetItem::DontShowIndicatorWhenChildless
+        QTreeWidgetItem::ShowIndicator
       );
       setFlags(
         Qt::ItemIsEnabled |
 #if BYPASS_MOUSE_EVENTS
-        // Qt::ItemIsEditable |
+        Qt::ItemIsEditable |
         Qt::ItemIsDragEnabled |
 #endif
         Qt::ItemIsDropEnabled
@@ -98,7 +98,7 @@ TreeWidgetItem
       setFlags(
         Qt::ItemIsEnabled |
         Qt::ItemIsSelectable |
-        // Qt::ItemIsEditable |
+        Qt::ItemIsEditable |
         Qt::ItemIsDragEnabled
       );
       break;
