@@ -83,8 +83,8 @@ TreeWidgetItem
       );
       setFlags(
         Qt::ItemIsEnabled |
-#if BYPASS_MOUSE_EVENTS
         Qt::ItemIsEditable |
+#if BYPASS_MOUSE_EVENTS
         Qt::ItemIsDragEnabled |
 #endif
         Qt::ItemIsDropEnabled

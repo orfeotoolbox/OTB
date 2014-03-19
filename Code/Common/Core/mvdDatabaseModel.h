@@ -154,6 +154,10 @@ public:
    */
   void RemoveDatasetModel( const DatasetHash& id );
 
+  /**
+   */
+  void RenameDataset( const QString& hash, const QString& alias );
+
   //
   // AbstractModel overrides.
 
@@ -183,10 +187,6 @@ signals:
 //
 // Slots.
 public slots:
-
-  /**
-   */
-  void OnDatasetRenamed( const QString& alias, const QString& hash );
 
   /**
    */

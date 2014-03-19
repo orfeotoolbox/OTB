@@ -219,6 +219,14 @@ public:
 
   /**
    */
+  void DeleteNode( SqlId id );
+
+  /**
+   */
+  void UpdateNodeLabel( SqlId id, const QString& label );
+
+  /**
+   */
   QSqlQuery SelectNodeChildren( SqlId nodeId ) const;
 
   /**

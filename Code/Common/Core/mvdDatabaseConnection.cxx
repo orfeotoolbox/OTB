@@ -539,6 +539,22 @@ DatabaseConnection
 }
 
 /*****************************************************************************/
+void
+DatabaseConnection
+::DeleteNode( SqlId id )
+{
+  qDebug() << this << "::DeleteNode(" << id << ")";
+}
+
+/*****************************************************************************/
+void
+DatabaseConnection
+::UpdateNodeLabel( SqlId id, const QString& label )
+{
+  qDebug() << this << "::UpdateNodeLabel(" << id << "," << label << ")";
+}
+
+/*****************************************************************************/
 QSqlQuery
 DatabaseConnection
 ::SelectNodeChildren( SqlId nodeId ) const

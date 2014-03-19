@@ -84,6 +84,41 @@ DatabaseBrowserWidget
   QPushButton* button=new QPushButton ("Click me", this);
   layout()->addWidget(button);
   */
+
+  //
+  // Forward signals.
+
+  QObject::connect(
+    m_UI->databaseTreeWidget,
+    SIGNAL( ItemMoved( QTreeWidgetItem* ) ),
+    // to:
+    this,
+    SIGNAL( ItemMoved( QTreeWidgetItem* ) )
+  );
+
+  QObject::connect(
+    m_UI->databaseTreeWidget,
+    SIGNAL( AddItemRequested( QTreeWidgetItem* ) ),
+    // to:
+    this,
+    SIGNAL( AddItemRequested( QTreeWidgetItem* ) )
+  );
+
+  QObject::connect(
+    m_UI->databaseTreeWidget,
+    SIGNAL( DeleteItemRequested( QTreeWidgetItem* ) ),
+    // to:
+    this,
+    SIGNAL( DeleteItemRequested( QTreeWidgetItem* ) )
+  );
+
+  QObject::connect(
+    m_UI->databaseTreeWidget,
+    SIGNAL( ItemTextChanged( QTreeWidgetItem*, int ) ),
+    // to:
+    this,
+    SIGNAL( ItemTextChanged( QTreeWidgetItem*, int ) )
+  );
 }
 
 /*******************************************************************************/

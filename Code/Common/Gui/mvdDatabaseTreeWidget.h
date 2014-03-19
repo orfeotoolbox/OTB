@@ -117,7 +117,10 @@ public slots:
 signals:
   void DatasetToDeleteSelected( const QString & id );
   void DatasetRenamed(const QString &, const QString &);
+
   void AddItemRequested( QTreeWidgetItem* parent );
+  void DeleteItemRequested( QTreeWidgetItem* item );
+  void ItemTextChanged( QTreeWidgetItem* item, int column );
  
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -185,30 +188,40 @@ private:
      */
     static QSignalMapper* AddMappedAction( QMenu* menu, const QString& text );
 
+    /**
+     */
+    void EditItem( int column =-1 );
+
 //
 // Private attributes.
 private:
+    struct EditionContext;
 
-  QPoint   m_StartDragPosition;
-  QString  m_DatasetFilename; 
-  QPoint   m_ContextualMenuClickedPosition;
+    // QPoint m_StartDragPosition;
+    // QString m_DatasetFilename; 
+    // QPoint m_ContextualMenuClickedPosition;
 
-  QTreeWidgetItem* m_ItemToEdit;
-  bool m_EditionActive;
-  QString m_PreviousItemText;
-  Qt::ItemFlags m_DefaultItemFlags;
+    // QTreeWidgetItem* m_ItemToEdit;
+    // bool m_EditionActive;
+    // QString m_PreviousItemText;
+    // Qt::ItemFlags m_DefaultItemFlags;
+
+    EditionContext* m_EditionContext;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
 // Slots.
 private slots:
-  void OnSelectedDatasetFilenameChanged(const QString& filename);
-  void OnDeleteTriggered(const QString & id);
-  void OnRenameTriggered();
-  void OnCustomContextMenuRequested(const QPoint& pos);
-  void OnItemChanged( QTreeWidgetItem* item , int column);
-  void OnAddItemTriggered();
+    // void OnSelectedDatasetFilenameChanged(const QString& filename);
+    // void OnDeleteTriggered(const QString & id);
+
+    void OnCustomContextMenuRequested( const QPoint& pos );
+    void OnItemChanged( QTreeWidgetItem* item , int column);
+
+    void OnAddItemTriggered();
+    void OnDeleteItemTriggered();
+    void OnRenameItemTriggered();
 };
 
 } // end namespace 'mvd'

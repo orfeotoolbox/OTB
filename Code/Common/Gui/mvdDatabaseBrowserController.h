@@ -161,6 +161,12 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  void DeleteDataset( const QString& hash );
+  /**
+   */
+  void DeleteGroup( SqlId id );
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -185,7 +191,7 @@ private slots:
 
   /**
    */
-  void OnDatasetToDeleteSelected( const QString& hash );
+  // void OnDatasetToDeleteSelected( const QString& hash );
 
   /**
    */
@@ -194,6 +200,14 @@ private slots:
   /**
    */
   void OnAddItemRequested( QTreeWidgetItem* parent );
+
+  /**
+   */
+  void OnDeleteItemRequested( QTreeWidgetItem* item );
+
+  /**
+   */
+  void OnItemTextChanged( QTreeWidgetItem* item, int column );
 
   //
   // AbstractModelController overloads.

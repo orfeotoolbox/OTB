@@ -97,6 +97,7 @@ DatabaseBrowserController
     SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
   );
 
+  /*
   //
   QObject::connect(
     this, 
@@ -105,16 +106,18 @@ DatabaseBrowserController
     widget->GetDatabaseTreeWidget(), 
     SLOT( OnSelectedDatasetFilenameChanged( const QString& ) )
     );
+  */
 
   //
   QObject::connect(
-    widget->GetDatabaseTreeWidget(), 
+    widget, 
     SIGNAL( ItemMoved( QTreeWidgetItem* ) ),
     // to:
     this,
     SLOT( OnItemMoved( QTreeWidgetItem* ) )
     );
 
+  /*
   //
   QObject::connect(
     widget->GetDatabaseTreeWidget(),
@@ -123,7 +126,9 @@ DatabaseBrowserController
     this,
     SLOT( OnDatasetToDeleteSelected( const QString& ) )
     );
+  */
 
+  /*
   //
   QObject::connect(
     widget->GetDatabaseTreeWidget(),
@@ -132,10 +137,11 @@ DatabaseBrowserController
     model,
     SLOT( OnDatasetRenamed(const QString&, const QString & ) )
     );
+  */
 
   //
   QObject::connect(
-    widget->GetDatabaseTreeWidget(),
+    widget,
     SIGNAL( AddItemRequested( QTreeWidgetItem* ) ),
     // to:
     this,
@@ -144,10 +150,20 @@ DatabaseBrowserController
 
   //
   QObject::connect(
-    model,
-    SIGNAL( DatabaseChanged() ),
+    widget,
+    SIGNAL( DeleteItemRequested( QTreeWidgetItem* ) ),
+    // to:
     this,
-    SLOT( RefreshWidget() )
+    SLOT( OnDeleteItemRequested( QTreeWidgetItem* ) )
+    );
+
+  //
+  QObject::connect(
+    widget,
+    SIGNAL( ItemTextChanged( QTreeWidgetItem*, int ) ),
+    // to:
+    this,
+    SLOT( OnItemTextChanged( QTreeWidgetItem*, int ) )
     );
 
   //
@@ -158,6 +174,14 @@ DatabaseBrowserController
     model,
     SIGNAL( DatabaseChanged() )
   );
+
+  //
+  QObject::connect(
+    model,
+    SIGNAL( DatabaseChanged() ),
+    this,
+    SLOT( RefreshWidget() )
+    );
 }
 
 /*******************************************************************************/
@@ -183,6 +207,7 @@ DatabaseBrowserController
     SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
   );
 
+  /*
   //
   QObject::disconnect(
     this, 
@@ -191,16 +216,18 @@ DatabaseBrowserController
     widget->GetDatabaseTreeWidget(), 
     SLOT( OnSelectedDatasetFilenameChanged( const QString& ) )
     );
+  */
 
   //
   QObject::connect(
-    widget->GetDatabaseTreeWidget(), 
+    widget, 
     SIGNAL( ItemMoved( QTreeWidgetItem* ) ),
     // to:
     this,
     SLOT( OnItemMoved( QTreeWidgetItem* ) )
     );
 
+  /*
   //
   QObject::disconnect(
     widget->GetDatabaseTreeWidget(), 
@@ -209,7 +236,9 @@ DatabaseBrowserController
     this, 
     SLOT( OnDatasetToDeleteSelected(const QString& ) )
     );
+  */
 
+  /*
   //
   QObject::disconnect(
     widget->GetDatabaseTreeWidget(), 
@@ -218,10 +247,11 @@ DatabaseBrowserController
     model,
     SLOT( OnDatasetRenamed(const QString&, const QString & ) )
     );
+  */
 
   //
   QObject::disconnect(
-    widget->GetDatabaseTreeWidget(),
+    widget,
     SIGNAL( AddItemRequested( QTreeWidgetItem* ) ),
     // to:
     this,
@@ -230,10 +260,20 @@ DatabaseBrowserController
 
   //
   QObject::disconnect(
-    model,
-    SIGNAL( DatabaseChanged() ),
+    widget,
+    SIGNAL( DeleteItemRequested( QTreeWidgetItem* ) ),
+    // to:
     this,
-    SLOT( RefreshWidget() )
+    SLOT( OnDeleteItemRequested( QTreeWidgetItem* ) )
+    );
+
+  //
+  QObject::disconnect(
+    widget,
+    SIGNAL( ItemTextChanged( QTreeWidgetItem*, int ) ),
+    // to:
+    this,
+    SLOT( OnItemTextChanged( QTreeWidgetItem*, int ) )
     );
 
   //
@@ -244,6 +284,14 @@ DatabaseBrowserController
     model,
     SIGNAL( DatabaseChanged() )
   );
+
+  //
+  QObject::disconnect(
+    model,
+    SIGNAL( DatabaseChanged() ),
+    this,
+    SLOT( RefreshWidget() )
+    );
 }
 
 /*******************************************************************************/
@@ -567,6 +615,56 @@ DatabaseBrowserController
 }
 
 /*******************************************************************************/
+void
+DatabaseBrowserController
+::DeleteDataset( const QString& hash )
+{
+  assert( !hash.isEmpty() );
+
+  // Access model.
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
+  // Access selected dataset-model (candidate to deletion).
+  DatasetModel* datasetModel = model->FindDatasetModel( hash );
+  assert( datasetModel!=NULL );
+
+  // Pop confirm delete dialog.
+  QMessageBox::StandardButton button = QMessageBox::warning(
+    GetWidget(),
+    tr( "Warning!" ),
+    tr( "Are you sure you want to delete dataset '%1'?" )
+    .arg( datasetModel->GetAlias() ),
+    QMessageBox::Yes | QMessageBox::No
+  );
+
+  if( button==QMessageBox::No )
+    return;
+
+  model->RemoveDatasetModel( hash );
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::DeleteGroup( SqlId id )
+{
+  // Access model.
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
+  // Access selected dataset-model (candidate to deletion).
+  DatabaseConnection* dbc = model->GetDatabaseConnection();
+  assert( dbc!=NULL );
+
+  // Delete group from database.
+  dbc->DeleteNode( id );
+
+  // Refresh model.
+  emit ModelUpdated();
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
 void
@@ -676,6 +774,7 @@ DatabaseBrowserController
 }
 
 /*******************************************************************************/
+/*
 void
 DatabaseBrowserController
 ::OnDatasetToDeleteSelected( const QString& hash )
@@ -703,6 +802,7 @@ DatabaseBrowserController
 
   databaseModel->RemoveDatasetModel( hash );
 }
+*/
 
 /*******************************************************************************/
 void
@@ -732,6 +832,7 @@ DatabaseBrowserController
   DatabaseModel* model = GetModel< DatabaseModel >();
   assert( model!=NULL );
 
+  // Access database connection.
   assert( model->GetDatabaseConnection() );
   DatabaseConnection* db = model->GetDatabaseConnection();
 
@@ -749,6 +850,9 @@ DatabaseBrowserController
     childItem->GetId().toLongLong(),
     parentItem->GetId().toLongLong()
   );
+
+  // No need to update model/refresh view because widget has already
+  // been repainted.
 }
 
 /*******************************************************************************/
@@ -766,38 +870,103 @@ DatabaseBrowserController
   assert( parent==dynamic_cast< TreeWidgetItem* >( parent ) );
   TreeWidgetItem* parentItem = dynamic_cast< TreeWidgetItem* >( parent );
 
-  // Check item type.
-  assert( parentItem->GetType()==TreeWidgetItem::ITEM_TYPE_NODE );
+
+  // Access model & database.
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
+  // Access database connection.
+  assert( model->GetDatabaseConnection() );
+  DatabaseConnection* db = model->GetDatabaseConnection();
+
+  if( parentItem->type()!=TreeWidgetItem::ITEM_TYPE_NODE )
+    return;
+
+  // Add group.
+  db->InsertNode(
+    "New group",
+    parentItem->GetId().toLongLong()
+  );
+
+  // Refresh model.
+  emit ModelUpdated();
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::OnDeleteItemRequested( QTreeWidgetItem* item )
+{
+  // Trace.
+  qDebug() << this << "::OnDeleteItemRequested(" << item << ");";
+
+  // Check inputs.
+  assert( item!=NULL );
+
+  // Access item and parent.
+  assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
+  TreeWidgetItem* twi = dynamic_cast< TreeWidgetItem* >( item );
 
 
   // Access model & database.
   DatabaseModel* model = GetModel< DatabaseModel >();
   assert( model!=NULL );
 
-  assert( model->GetDatabaseConnection() );
-  DatabaseConnection* db = model->GetDatabaseConnection();
+  switch( twi->type() )
+    {
+    case TreeWidgetItem::ITEM_TYPE_NONE:
+      break;
 
+    case TreeWidgetItem::ITEM_TYPE_NODE:
+      DeleteGroup( twi->GetId().toLongLong() );
+      break;
 
-  /*
-  qDebug()
-    << "dataset_node_membership("
-    << childItem->GetId().toLongLong()
-    << parentItem->GetId().toLongLong()
-    << ")";
-  */
+    case TreeWidgetItem::ITEM_TYPE_LEAF:
+      DeleteDataset( twi->GetHash() );
+      break;
+    }
+}
 
-  // ID of newly created group.
-  SqlId id = -1;
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::OnItemTextChanged( QTreeWidgetItem* item, int column )
+{
+  // Trace.
+  qDebug() << this << "::OnItemTextChanged(" << item << "," << column << ");";
 
-  // Update database.
-  db->InsertNode(
-    "New group",
-    parentItem->GetId().toLongLong(),
-    &id
-  );
+  // Check inputs.
+  assert( item!=NULL );
+  assert( column>=0 );
 
-  // Refresh.
-  emit ModelUpdated();
+  // Access item and parent.
+  assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
+  TreeWidgetItem* twi = dynamic_cast< TreeWidgetItem* >( item );
+
+  // Access model & database.
+  DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
+  switch( twi->type() )
+    {
+    case TreeWidgetItem::ITEM_TYPE_NONE:
+      break;
+
+    case TreeWidgetItem::ITEM_TYPE_NODE:
+      if( column==0 )
+        {
+        DatabaseConnection* dbc = model->GetDatabaseConnection();
+        assert( dbc!=NULL );
+
+        dbc->UpdateNodeLabel( twi->GetId().toLongLong(), twi->GetText() );
+        }
+      break;
+
+    case TreeWidgetItem::ITEM_TYPE_LEAF:
+      if( column==0 )
+        model->RenameDataset( twi->GetHash(), twi->GetText() );    
+      break;
+    }
 }
 
 } // end namespace 'mvd'

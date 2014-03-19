@@ -195,6 +195,20 @@ DatabaseModel
 }
 
 /*******************************************************************************/
+void
+DatabaseModel
+::RenameDataset( const QString& hash,  const QString& alias )
+{
+  DatasetModel* dataset = FindDatasetModel( hash );
+  assert( dataset!=NULL );
+
+  dataset->SetAlias( alias );
+
+  assert( m_Db!=NULL );
+  m_Db->UpdateDatasetAliasFromHash( hash, alias );
+}
+
+/*******************************************************************************/
 DatasetHash
 DatabaseModel
 ::RegisterDatasetModel( DatasetModel* model )
@@ -405,23 +419,5 @@ DatabaseModel
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-
-/*******************************************************************************/
-void
-DatabaseModel
-::OnDatasetRenamed( const QString& alias, const QString& hash )
-{
-  // Get the model relative to the given hash key.
-  DatasetModelMap::const_iterator it( DatasetModelIterator( hash ) );
-
-  // Update alias in memory and in XML descriptor.
-  assert( it.value()!=NULL );
-  it.value()->SetAlias( alias );
-
-  // Update alias in database .
-  assert( m_Db );
-  m_Db->UpdateDatasetAliasFromHash( hash, alias );
-  // qDebug() << "Updated:" << hash << alias;
-}
 
 } // end namespace 'mvd'

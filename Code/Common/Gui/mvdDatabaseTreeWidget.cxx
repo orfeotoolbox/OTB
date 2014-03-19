@@ -53,6 +53,80 @@ namespace mvd
 */
 
 /*****************************************************************************/
+/* SUB-CLASSES DECLARATION                                                   */
+
+class DatabaseTreeWidget::EditionContext
+{
+  // Q_OBJECT;
+
+public:
+  EditionContext() :
+    m_Item( NULL ),
+    m_Text(),
+    m_Column( -1 )
+  {
+  }
+
+  inline bool IsActive() const
+  {
+    return m_Item!=NULL && m_Column>=0;
+  }
+
+  inline QTreeWidgetItem* GetItem()
+  {
+    return m_Item;
+  }
+
+  inline void SetItem( QTreeWidgetItem* item )
+  {
+    EditItem();
+
+    m_Item = item;
+  }
+
+  inline int GetColumn() const
+  {
+    return m_Column;
+  }
+
+  inline void EditItem( int column =-1 )
+  {
+    if( column<0 )
+      {
+      m_Column = -1;
+      m_Text.clear();
+      }
+    else
+      {
+      assert( m_Item!=NULL );
+      assert( m_Column<0 );
+
+      m_Column = column;
+
+      m_Text = m_Item->text( column );
+      }
+  }
+
+  inline void RestoreItem()
+  {
+    assert( m_Item!=NULL );
+    assert( m_Column>=0 );
+
+    m_Item->setText( m_Column, m_Text );
+
+    m_Column = -1;
+  }
+
+private:
+  QTreeWidgetItem* m_Item;
+  QString m_Text;
+  int m_Column;
+};
+
+/*****************************************************************************/
+/* SUB-CLASSES DEFINITION                                                    */
+
+/*****************************************************************************/
 /* CONSTANTS                                                                 */
 
 
@@ -67,8 +141,9 @@ namespace mvd
 DatabaseTreeWidget
 ::DatabaseTreeWidget( QWidget* parent  ):
   TreeWidget( parent ),
-  m_DatasetFilename(),
-  m_EditionActive( false )
+  // m_DatasetFilename(),
+  // m_EditionActive( false )
+  m_EditionContext( new EditionContext() )
 {
   // setMouseTracking(true);
 
@@ -91,6 +166,8 @@ DatabaseTreeWidget
 DatabaseTreeWidget
 ::~DatabaseTreeWidget()
 {
+  delete m_EditionContext;
+  m_EditionContext = NULL;
 }
 
 /*******************************************************************************/
@@ -265,8 +342,22 @@ DatabaseTreeWidget::dropMimeData( QTreeWidgetItem* parent,
 }
 
 /*******************************************************************************/
+void
+DatabaseTreeWidget
+::EditItem( int column )
+{
+  assert( m_EditionContext!=NULL );
+
+  m_EditionContext->EditItem( column );
+
+  if( m_EditionContext->IsActive() )
+    editItem( m_EditionContext->GetItem(), m_EditionContext->GetColumn() );
+}
+
+/*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
+/*
 void
 DatabaseTreeWidget
 ::OnSelectedDatasetFilenameChanged( const QString& filename )
@@ -278,20 +369,47 @@ DatabaseTreeWidget
   m_DatasetFilename = filename;
 #endif // BYPASS_MOUSE_EVENTS
 }
+*/
 
 /*******************************************************************************/
+/*
 void
 DatabaseTreeWidget::OnDeleteTriggered( const QString & id)
 {
   emit DatasetToDeleteSelected( id );
 }
+*/
 
 /*******************************************************************************/
 void
-DatabaseTreeWidget::OnRenameTriggered()
+DatabaseTreeWidget
+::OnAddItemTriggered()
 {
+  assert( m_EditionContext!=NULL );
+  assert( m_EditionContext->GetItem()!=NULL );
+
+  emit AddItemRequested( m_EditionContext->GetItem() );
+}
+
+/*******************************************************************************/
+void
+DatabaseTreeWidget::OnDeleteItemTriggered()
+{
+  assert( m_EditionContext!=NULL );
+  assert( m_EditionContext->GetItem()!=NULL );
+
+  emit DeleteItemRequested( m_EditionContext->GetItem() );
+}
+
+/*******************************************************************************/
+void
+DatabaseTreeWidget::OnRenameItemTriggered()
+{
+  EditItem( 0 );
+
+  /*
   // find the QTreeWidgetItem and make it editable
-  m_ItemToEdit = itemAt( m_ContextualMenuClickedPosition );
+  m_ItemToEdit = 
   m_PreviousItemText = m_ItemToEdit->text(0);
   // m_DefaultItemFlags  = m_ItemToEdit->flags(); 
   // m_ItemToEdit->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
@@ -300,87 +418,74 @@ DatabaseTreeWidget::OnRenameTriggered()
   // inspired from here:
   // http://www.qtcentre.org/archive/index.php/t-45857.html?s=ad4e7c45bbd9fd4bf5cc32853dd3fe82  
   m_EditionActive = true;
-  editItem(m_ItemToEdit, 0);
+
+  editItem( m_ItemToEdit, 0 );
+  */
 }
 
 /*******************************************************************************/
 void
-DatabaseTreeWidget::OnItemChanged( QTreeWidgetItem* item , int column)
+DatabaseTreeWidget::OnItemChanged( QTreeWidgetItem* item , int column )
 {
-  if (m_EditionActive )
+  assert( m_EditionContext!=NULL );
+
+  if( !m_EditionContext->IsActive() )
+    return;
+
+  if( item->text( column ).isEmpty() )
+    m_EditionContext->RestoreItem();
+  else
     {
-    if (!item->text(column).isEmpty() )
-      {
-      // dynamic cast to get the id
-      TreeWidgetItem* dsItem = 
-        dynamic_cast<TreeWidgetItem *>( item );
+    /*
+    // dynamic cast to get the id
+    TreeWidgetItem* dsItem = 
+      dynamic_cast<TreeWidgetItem *>( item );
 
-      // send the new alias of the dataset / it identifier
-      emit DatasetRenamed(dsItem->text(column), dsItem->GetHash()  );
-      }
-    else
-      {
-      m_ItemToEdit->setText( column, m_PreviousItemText );
-      }
+    // send the new alias of the dataset / it identifier
+    emit DatasetRenamed( dsItem->text( column ), dsItem->GetHash() );
+    */
 
-    // initialize all needed variables
-    m_PreviousItemText.clear();
-    m_EditionActive = false;
+    assert( m_EditionContext->GetItem()==item );
 
-    // set back default item flags
-    // m_ItemToEdit->setFlags( m_DefaultItemFlags );
+    emit ItemTextChanged( item, column );
     }
-}
 
-/*******************************************************************************/
-void
-DatabaseTreeWidget
-::OnAddItemTriggered()
-{
-  QTreeWidgetItem* item =  itemAt( m_ContextualMenuClickedPosition );
-  assert( item!=NULL );
-
-  emit AddItemRequested( item );
+  m_EditionContext->EditItem();
 }
 
 /******************************************************************************/
 void
 DatabaseTreeWidget
-::keyPressEvent( QKeyEvent * event )
+::keyPressEvent( QKeyEvent* event )
 {
-  // triggered only if an item (and not the root one) is selected
-  if ( currentItem() && currentItem()->parent() )
+  assert( currentItem()!=NULL );
+
+  if( currentItem()==NULL )
+    return;
+
+  assert( m_EditionContext!=NULL );
+
+  switch( event->key() )
     {
-    switch (event->key())
-      {
-      case Qt::Key_F2:
-      {
-      // find the QTreeWidgetItem and make it editable
-      m_ItemToEdit = currentItem();
-      m_PreviousItemText = m_ItemToEdit->text(0);
-      // m_DefaultItemFlags  = m_ItemToEdit->flags(); 
-      // m_ItemToEdit->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
-
-      // edit item
-      // inspired from here:
-      // http://www.qtcentre.org/archive/index.php/t-45857.html?s=ad4e7c45bbd9fd4bf5cc32853dd3fe82  
-      m_EditionActive = true;
-      editItem(m_ItemToEdit, 0);
-      
+    case Qt::Key_F2:
+      m_EditionContext->SetItem( currentItem() );
+      m_EditionContext->EditItem( 0 );
       break;
-      }
-      case Qt::Key_Delete:
-      {
-      // cast to DatasetTreeItem
-      TreeWidgetItem* item 
-        = dynamic_cast<TreeWidgetItem *>( currentItem());
+
+    case Qt::Key_Delete:
+      m_EditionContext->SetItem( currentItem() );
+      emit DeleteItemRequested( m_EditionContext->GetItem() );
+      break;
+      /*
+    {
+    // cast to DatasetTreeItem
+    TreeWidgetItem* item 
+      = dynamic_cast<TreeWidgetItem *>( currentItem() );
         
-      emit DatasetToDeleteSelected( item->GetHash() );
-
-      break;
-      }
-      }
-
+    emit DatasetToDeleteSelected( item->GetHash() );
+    break;
+    }
+      */
     }
 }
 
@@ -390,10 +495,13 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
 {
   // Get  item.
   QTreeWidgetItem* qtwi = itemAt( pos );
-  assert( qtwi!=NULL );
+
+  if( qtwi==NULL )
+    return;
 
   TreeWidgetItem* item =
     dynamic_cast< TreeWidgetItem* >( itemAt( pos ) );
+
   assert( item!=NULL );
 
 
@@ -427,7 +535,11 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
   //
   // This is also the reason why delete and rename triggers are
   // duplicated.
-  m_ContextualMenuClickedPosition = pos;
+  // m_ContextualMenuClickedPosition = pos;
+
+  // Remember clicked item.
+  assert( m_EditionContext!=NULL );
+  m_EditionContext->SetItem( item );
 
   // Create context-menu.
   QMenu menu;
@@ -436,6 +548,7 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
   if( item->parent()!=NULL &&
       item->type()==TreeWidgetItem::ITEM_TYPE_LEAF )
     {
+    /*
     AddMappedAction(
       &menu,
       tr( "Delete dataset" ),
@@ -443,13 +556,21 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
       this,
       SIGNAL( DatasetToDeleteSelected( const QString& ) )
     );
+    */
+
+    AddAction(
+      &menu,
+      tr( "Delete dataset" ),
+      this,
+      SLOT( OnDeleteItemTriggered() )
+    );
 
     if( item->flags().testFlag( Qt::ItemIsEditable ) )
       AddAction(
         &menu,
         tr ("Rename dataset"),
         this, 
-        SLOT( OnRenameTriggered() )
+        SLOT( OnRenameItemTriggered() )
       );
     }
 
@@ -462,51 +583,21 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
       SLOT( OnAddItemTriggered() )
     );
 
-    /*
-    AddMappedAction(
+    AddAction(
       &menu,
       tr( "Delete group" ),
-      // Pass ID by string because it is a 'long long' and
-      // QSignalMapper only supports int.
-      item->GetId().toString(),
       this,
-      SIGNAL( DeleteGroupTriggered( const QString& ) )
+      SLOT( OnDeleteItemTriggered() )
     );
-    */
 
-    /*
     if( item->flags().testFlag( Qt::ItemIsEditable ) )
-      AddMappedAction(
+      AddAction(
         &menu,
         tr( "Rename group" ),
-        // Pass ID by string because it is a 'long long' and
-        // QSignalMapper only supports int.
-        item->GetId().toString(),
         this,
-        SLOT( OnRenameGroupTriggered( const QString& ) )
+        SLOT( OnRenameItemTriggered() )
       );
-    */
     }
-
-  /*
-  AddMappedAction(
-    &menu,
-    tr( "Delete" ) + " " + itemType,
-    item,
-    this,
-    SIGNAL( DeletedItemRequested( QTreeWidgetItem* ) )
-  );
-  */
-
-  /*
-  AddAction(
-    &menu,
-    tr( "Rename" ) + " " + itemType,
-    item,
-    this,
-    SLOT( OnEditItemText( QTreeWidgetItem * ) )
-  );
-  */
 
   // Display and activate context-menu.
   menu.exec( viewport()->mapToGlobal( pos ) );

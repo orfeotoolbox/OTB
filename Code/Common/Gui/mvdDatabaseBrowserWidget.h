@@ -128,7 +128,7 @@ public:
 
   /**
    */
-  // TODO: Remove access to child widget which should be hidden by encapsulation.
+  // TODO: Remove access to child widget which should be hidden by encapsulation when CheckDatasetConsistency() has been fixed.
   DatabaseTreeWidget* GetDatabaseTreeWidget();
 
   /**
@@ -159,6 +159,22 @@ signals:
   void CurrentDatasetChanged( const QString& currentHash,
 			      const QString& previousHash =QString() );
 
+  /**
+   */
+  void ItemMoved( QTreeWidgetItem* item );
+
+  /**
+   */
+  void AddItemRequested( QTreeWidgetItem* parent );
+
+  /**
+   */
+  void DeleteItemRequested( QTreeWidgetItem* item );
+
+  /**
+   */
+  void ItemTextChanged( QTreeWidgetItem* item, int column );
+ 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //
