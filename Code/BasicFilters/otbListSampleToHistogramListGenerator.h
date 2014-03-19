@@ -146,7 +146,7 @@ protected:
   ListSampleToHistogramListGenerator();
   virtual ~ListSampleToHistogramListGenerator() {}
   void GenerateData();
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  DataObjectPointer MakeOutput(unsigned int idx);
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

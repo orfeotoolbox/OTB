@@ -90,7 +90,7 @@ template<class TListSample, class THistogramMeasurement, class TFrequencyContain
 typename ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
 ::DataObjectPointer
 ListSampleToHistogramListGenerator<TListSample,THistogramMeasurement, TFrequencyContainer>
-::MakeOutput(DataObjectPointerArraySizeType idx)
+::MakeOutput(unsigned int idx)
 {
   DataObjectPointer output;
   output = static_cast<itk::DataObject*>(HistogramListType::New().GetPointer());
