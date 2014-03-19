@@ -149,6 +149,15 @@ DatabaseBrowserController
     this,
     SLOT( RefreshWidget() )
     );
+
+  //
+  QObject::connect(
+    this,
+    SIGNAL( ModelUpdated() ),
+    // to:
+    model,
+    SIGNAL( DatabaseChanged() )
+  );
 }
 
 /*******************************************************************************/
@@ -226,6 +235,15 @@ DatabaseBrowserController
     this,
     SLOT( RefreshWidget() )
     );
+
+  //
+  QObject::disconnect(
+    this,
+    SIGNAL( ModelUpdated() ),
+    // to:
+    model,
+    SIGNAL( DatabaseChanged() )
+  );
 }
 
 /*******************************************************************************/
@@ -777,6 +795,9 @@ DatabaseBrowserController
     parentItem->GetId().toLongLong(),
     &id
   );
+
+  // Refresh.
+  emit ModelUpdated();
 }
 
 } // end namespace 'mvd'
