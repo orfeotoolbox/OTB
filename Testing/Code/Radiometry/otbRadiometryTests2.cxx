@@ -37,4 +37,13 @@ void RegisterTests()
   REGISTER_TEST(otbImageToReflectanceImageFilterNew);
   REGISTER_TEST(otbImageToReflectanceImageFilter);
   REGISTER_TEST(otbImageToReflectanceImageFilterAuto);
+  REGISTER_TEST(otbLuminanceToImageImageFilterNew);
+  REGISTER_TEST(otbLuminanceToImageImageFilter);
+  REGISTER_TEST(otbLuminanceToImageImageFilterAuto);
+  REGISTER_TEST(otbReflectanceToLuminanceImageFilterNew);
+  REGISTER_TEST(otbReflectanceToLuminanceImageFilter);
+  REGISTER_TEST(otbReflectanceToLuminanceImageFilterAuto);
+  REGISTER_TEST(otbReflectanceToImageImageFilterNew);
+  REGISTER_TEST(otbReflectanceToImageImageFilter);
+  REGISTER_TEST(otbReflectanceToImageImageFilterAuto);
 }
