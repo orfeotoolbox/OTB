@@ -552,6 +552,11 @@ DatabaseConnection
 ::UpdateNodeLabel( SqlId id, const QString& label )
 {
   qDebug() << this << "::UpdateNodeLabel(" << id << "," << label << ")";
+
+  ExecuteQuery(
+    "UPDATE node SET label=:label WHERE id=:id",
+    QVariantList() << label << id
+  );
 }
 
 /*****************************************************************************/
