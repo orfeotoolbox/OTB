@@ -69,7 +69,7 @@ int otbScalarImageToTexturesFilter(int argc, char * argv[])
   otb::StandardFilterWatcher watcher(filter, "Textures filter");
 
   filter->SetInputImageMinimum(0);
-  filter->SetInputImageMaximum(256);
+  filter->SetInputImageMaximum(255);
 
   // Write outputs
   std::ostringstream oss;

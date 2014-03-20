@@ -1324,7 +1324,7 @@ add_test(feTuScalarImageToTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
 )
 
 add_test(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-n-images ${NOTOL} 8
+        --compare-n-images 0.00001 8
             ${BASELINE}/feTvScalarImageToTexturesFilterOutputEnergy.tif
             ${TEMP}/feTvScalarImageToTexturesFilterOutputEnergy.tif
             ${BASELINE}/feTvScalarImageToTexturesFilterOutputEntropy.tif

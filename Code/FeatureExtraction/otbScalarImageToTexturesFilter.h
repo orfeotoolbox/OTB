@@ -1,27 +1,26 @@
 /*=========================================================================
 
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
+Program:   ORFEO Toolbox
+Language:  C++
+Date:      $Date$
+Version:   $Revision$
 
 
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
+Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+See OTBCopyright.txt for details.
 
 
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the above copyright notices for more information.
 
- =========================================================================*/
+=========================================================================*/
+
 #ifndef __otbScalarImageToTexturesFilter_h
 #define __otbScalarImageToTexturesFilter_h
 
 #include "itkImageToImageFilter.h"
-
-#include "itkScalarImageToCooccurrenceMatrixFilter.h"
-#include "itkHistogramToTextureFeaturesFilter.h"
+#include "itkHistogram.h"
 
 namespace otb
 {
@@ -31,7 +30,15 @@ namespace otb
  *  This filter computes the following Haralick textures over a sliding windows with
  *  user defined radius:
  *  (where \f$ g(i, j) \f$ is the element in
- * cell i, j of a normalized GLCM):
+ *  cell i, j of a normalized GLCM):
+ *
+ *  GLCM calculated by ScalarImageToCooccrrenceMatrixFilter defines the
+ *  bottle-neck in haralick texture extraction appplication. This is because the
+ *  above ITK filter we had to create a local copy of the input image and mask
+ *  based on window size around each pixel. Based on the literature GLCHS
+ *  (A.Clausi et al), GLCIL(O.Bastos et al) and the current implementation we
+ *  had come up with a new approach which will reduce the cost of creating GLCM
+ *  and thus improving performance of Haralick textures.
  *
  * "Energy" \f$ = f_1 = \sum_{i, j}g(i, j)^2 \f$
  *
@@ -56,6 +63,25 @@ namespace otb
  *
  * \f$ \sigma =  \f$ (weighted pixel variance) \f$ = \sum_{i, j}(i - \mu)^2 \cdot g(i, j) =
  * \sum_{i, j}(j - \mu)^2 \cdot g(i, j)  \f$  (due to matrix summetry)
+ *
+
+ * Print references:
+ *
+ * Haralick, R.M., K. Shanmugam and I. Dinstein. 1973.  Textural Features for
+ * Image Classification. IEEE Transactions on Systems, Man and Cybernetics.
+ * SMC-3(6):610-620.
+ *
+ * David A. Clausi and Yongping Zhao. 2002. Rapid extraction of image texture by
+ * co-occurrence using a hybrid data structure. Comput. Geosci. 28, 6 (July
+ * 2002), 763-774. DOI=10.1016/S0098-3004(01)00108-X
+ * http://dx.doi.org/10.1016/S0098-3004(01)00108-X
+ *
+ * de O.Bastos, L.; Liatsis, P.; Conci, A., Automatic texture segmentation based
+ * on k-means clustering and efficient calculation of co-occurrence
+ * features. Systems, Signals and Image Processing, 2008. IWSSIP 2008. 15th
+ * International Conference on , vol., no., pp.141,144, 25-28 June 2008
+ * doi: 10.1109/IWSSIP.2008.4604387
+ *
  *
  * Neighborhood size can be set using the SetRadius() method. Offset for co-occurence estimation
  * is set using the SetOffset() method.
@@ -90,18 +116,46 @@ public:
   typedef typename InputImageType::PixelType   InputPixelType;
   typedef typename InputImageType::RegionType  InputRegionType;
   typedef typename InputRegionType::SizeType   SizeType;
+  typedef typename InputImageType::OffsetType   OffsetType;
+
   typedef TOutputImage                         OutputImageType;
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
-  /** Co-occurence matrix and textures calculator */
-  typedef itk::Statistics::ScalarImageToCooccurrenceMatrixFilter<InputImageType> CoocurrenceMatrixGeneratorType;
-  typedef typename CoocurrenceMatrixGeneratorType::Pointer       CoocurrenceMatrixGeneratorPointerType;
-  typedef typename CoocurrenceMatrixGeneratorType::OffsetType    OffsetType;
-  typedef typename CoocurrenceMatrixGeneratorType::HistogramType HistogramType;
-  typedef itk::Statistics::HistogramToTextureFeaturesFilter
-  <HistogramType>                                                TextureCoefficientsCalculatorType;
-  typedef typename TextureCoefficientsCalculatorType::Pointer TextureCoefficientsCalculatorPointerType;
+  typedef typename itk::NumericTraits< InputPixelType >::RealType MeasurementType;
+  typedef itk::Statistics::DenseFrequencyContainer2 THistogramFrequencyContainer;
+  typedef itk::Statistics::Histogram< MeasurementType, THistogramFrequencyContainer > HistogramType;
+  typedef typename HistogramType::Pointer                            HistogramPointer;
+  typedef typename HistogramType::ConstPointer                       HistogramConstPointer;
+  typedef typename HistogramType::MeasurementVectorType              MeasurementVectorType;
+  typedef typename HistogramType::RelativeFrequencyType              RelativeFrequencyType;
+  typedef typename HistogramType::TotalAbsoluteFrequencyType         TotalAbsoluteFrequencyType;
+  typedef typename HistogramType::IndexType                          HistogramIndexType;
+
+
+  /** Lookup array used to store the index of the given pixel pair. This index
+    * is calculated from the HistogramType */
+  typedef itk::Array<int> LookupArrayType;
+
+  /** struct to hold the index of pixel pair and its frequency. The frequnecy is
+    * incremented for the next occurrence of the same pair */
+
+  typedef struct Cooccurrence {
+    HistogramIndexType  index;
+    RelativeFrequencyType frequency;
+  }CooccurrenceType;
+
+  /** array to hold CooccurrenceType. Index of the array where the cooccurrence
+    * is stored is saved in the LookupArrayType. */
+  typedef std::vector<CooccurrenceType> GreyLevelCooccurrenceListType;
+
+  /** std::vector iterator typedef for GreyLevelCooccurrenceListType */
+  typedef typename std::vector<CooccurrenceType>::iterator GreyLevelCooccurrenceListIteratorType;
+
+  /** std::vector const_iterator typedef for GreyLevelCooccurrenceListType */
+  typedef typename std::vector<CooccurrenceType>::const_iterator GreyLevelCooccurrenceListConstIteratorType;
+
+  itkStaticConstMacro(MeasurementVectorSize, int, 2 );
 
   /** Set the radius of the window on which textures will be computed */
   itkSetMacro(Radius, SizeType);
@@ -163,6 +217,10 @@ protected:
   ~ScalarImageToTexturesFilter();
   /** Generate the input requested region */
   virtual void GenerateInputRequestedRegion();
+
+  /** Before ThreadedGenerateData created a single histogram instance **/
+  virtual void BeforeThreadedGenerateData( );
+
   /** Parallel textures extraction */
   virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
 
@@ -176,6 +234,9 @@ private:
   /** Radius of the window on which to compute textures */
   SizeType m_Radius;
 
+  /** Radius of the neighborhood iterator which is minumum of m_Radius */
+  SizeType m_NeighborhoodRadius;
+
   /** Offset for co-occurence */
   OffsetType m_Offset;
 
@@ -187,6 +248,15 @@ private:
 
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
+
+  /** Histogram instance used to get index for the pixel pair */
+  HistogramPointer m_Histogram;
+
+  /** This method is same as ComputeMeansAndVariance in
+    * itkHistogramToTexturesFilter. This has been modified for using new GLCIL */
+  void ComputeMeansAndVariances(GreyLevelCooccurrenceListType& frequencyList, double & pixelMean,
+                                double & marginalMean, double & marginalDevSquared, double & pixelVariance);
+
 };
 } // End namespace otb
 
