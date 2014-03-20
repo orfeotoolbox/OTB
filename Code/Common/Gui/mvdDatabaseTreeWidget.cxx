@@ -67,9 +67,14 @@ public:
   {
   }
 
+  inline bool IsEditable() const
+  {
+    return m_Item!=NULL && m_Item->flags().testFlag( Qt::ItemIsEditable );
+  }
+
   inline bool IsActive() const
   {
-    return m_Item!=NULL && m_Column>=0;
+    return IsEditable() && m_Column>=0;
   }
 
   inline QTreeWidgetItem* GetItem()
@@ -347,6 +352,7 @@ DatabaseTreeWidget
 ::EditItem( int column )
 {
   assert( m_EditionContext!=NULL );
+  assert( m_EditionContext->GetItem()!=NULL );
 
   m_EditionContext->EditItem( column );
 
@@ -460,31 +466,21 @@ DatabaseTreeWidget
 {
   assert( currentItem()!=NULL );
 
-  /*
-  if( currentItem()==NULL )
-    return;
-  */
-
   assert( m_EditionContext!=NULL );
 
-  bool isCurrentItemValid = currentItem()!=NULL && currentItem()->parent()!=NULL;
+  QTreeWidgetItem * item = currentItem();
 
   switch( event->key() )
     {
     case Qt::Key_F2:
-      if( isCurrentItemValid )
-        {
-        m_EditionContext->SetItem( currentItem() );
+        m_EditionContext->SetItem( item );
         EditItem( 0 );
-        }
       break;
 
     case Qt::Key_Delete:
-      if( isCurrentItemValid )
-        {
-        m_EditionContext->SetItem( currentItem() );
-        emit DeleteItemRequested( m_EditionContext->GetItem() );
-        }
+        m_EditionContext->SetItem( item );
+        if( m_EditionContext->IsEditable() )
+          emit DeleteItemRequested( m_EditionContext->GetItem() );
       break;
 
     default:
@@ -597,7 +593,7 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
       SLOT( OnAddItemTriggered() )
     );
 
-    QAction * action =
+    QAction * action2 =
       AddAction(
         &menu,
         tr( "Delete group" ),
@@ -605,15 +601,19 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
         SLOT( OnDeleteItemTriggered() )
       );
 
-    action->setEnabled( item->childCount()<=0 );
+    action2->setEnabled(
+      item->childCount()<=0 && m_EditionContext->IsEditable()
+    );
 
-    if( item->flags().testFlag( Qt::ItemIsEditable ) )
+    QAction * action3 =
       AddAction(
         &menu,
         tr( "Rename group" ),
         this,
         SLOT( OnRenameItemTriggered() )
       );
+
+    action3->setEnabled( m_EditionContext->IsEditable() );
     }
 
   // Display and activate context-menu.

@@ -329,7 +329,7 @@ DatabaseBrowserController
   widget->blockSignals( true );
   {
   // if( !datasets.isEmpty() )
-    UpdateTree( widget->GetRootItem(), -1 );
+  UpdateTree( widget->GetRootItem(), -1, 1 );
   }
   widget->blockSignals( false );
   }
@@ -341,7 +341,7 @@ DatabaseBrowserController
 
 void
 DatabaseBrowserController
-::UpdateTree( QTreeWidgetItem* item, SqlId nodeId )
+::UpdateTree( QTreeWidgetItem* item, SqlId nodeId, int level )
 {
   assert( GetModel()==GetModel< DatabaseModel >() );
   DatabaseModel* model = GetModel< DatabaseModel >();
@@ -521,6 +521,37 @@ DatabaseBrowserController
     if( it==nodes.end() )
       {
       childItem = widget->InsertNodeItem( item, label, id );
+
+      SqlId nodeId = -1;
+
+      switch( level )
+        {
+        // Root-node level.
+        case 0 :
+          nodeId = GetNodeFields( db->FindRootNode() );
+          break;
+
+        // Datasets-node level.
+        case 1 :
+          nodeId = GetNodeFields( db->FindDatasetNode() );
+          break;
+
+        // Temporary-node level.
+        case 2 :
+          nodeId = GetNodeFields( db->FindTemporaryNode() );
+          break;
+        }
+
+      // qDebug() << "CHECKPOINT";
+
+      // qDebug() << level << nodeId << id << childItem->text( 0 );
+
+      if( nodeId==id.toLongLong() )
+        {
+        // qDebug() << level << nodeId << id << childItem->text( 0 );
+      
+        childItem->setFlags( childItem->flags() & ~Qt::ItemIsEditable );
+        }
       }
     else
       {
@@ -530,7 +561,7 @@ DatabaseBrowserController
     nodes.erase( it );
 
     // Recurse.
-    UpdateTree( childItem, id.toLongLong() );
+    UpdateTree( childItem, id.toLongLong(), level + 1 );
     }
 
   while( !nodes.empty() )

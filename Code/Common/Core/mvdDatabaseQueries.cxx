@@ -120,6 +120,10 @@ GetChildNodeFields( const QSqlQuery& query,
                     int* level,
                     QString* path )
 {
+#if 1
+  return GetNodeFields( query, label, parentId, tagId, level, path );
+
+#else
   QUERY_DEBUG_FIELDS( query );
 
 
@@ -155,6 +159,8 @@ GetChildNodeFields( const QSqlQuery& query,
 
   assert( query.value( 0 ).type()==QVariant::LongLong );
   return query.value( 0 ).toLongLong();
+
+#endif
 }
 
 /*****************************************************************************/
