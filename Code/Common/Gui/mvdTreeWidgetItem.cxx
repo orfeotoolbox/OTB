@@ -82,12 +82,12 @@ TreeWidgetItem
         QTreeWidgetItem::ShowIndicator
       );
       setFlags(
-        Qt::ItemIsEnabled |
-        Qt::ItemIsEditable |
 #if BYPASS_MOUSE_EVENTS
         Qt::ItemIsDragEnabled |
 #endif
-        Qt::ItemIsDropEnabled
+        Qt::ItemIsDropEnabled |
+        Qt::ItemIsEditable |
+        Qt::ItemIsEnabled
       );
     break;
 
@@ -96,10 +96,10 @@ TreeWidgetItem
         QTreeWidgetItem::DontShowIndicator
       );
       setFlags(
-        Qt::ItemIsEnabled |
-        Qt::ItemIsSelectable |
+        Qt::ItemIsDragEnabled |
         Qt::ItemIsEditable |
-        Qt::ItemIsDragEnabled
+        Qt::ItemIsEnabled |
+        Qt::ItemIsSelectable
       );
       break;
 

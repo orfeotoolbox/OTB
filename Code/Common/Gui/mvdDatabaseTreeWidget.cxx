@@ -460,21 +460,35 @@ DatabaseTreeWidget
 {
   assert( currentItem()!=NULL );
 
+  /*
   if( currentItem()==NULL )
     return;
+  */
 
   assert( m_EditionContext!=NULL );
+
+  bool isCurrentItemValid = currentItem()!=NULL && currentItem()->parent()!=NULL;
 
   switch( event->key() )
     {
     case Qt::Key_F2:
-      m_EditionContext->SetItem( currentItem() );
-      m_EditionContext->EditItem( 0 );
+      if( isCurrentItemValid )
+        {
+        m_EditionContext->SetItem( currentItem() );
+        EditItem( 0 );
+        }
       break;
 
     case Qt::Key_Delete:
-      m_EditionContext->SetItem( currentItem() );
-      emit DeleteItemRequested( m_EditionContext->GetItem() );
+      if( isCurrentItemValid )
+        {
+        m_EditionContext->SetItem( currentItem() );
+        emit DeleteItemRequested( m_EditionContext->GetItem() );
+        }
+      break;
+
+    default:
+      TreeWidget::keyPressEvent( event );
       break;
       /*
     {
