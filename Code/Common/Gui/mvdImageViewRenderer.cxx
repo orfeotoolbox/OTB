@@ -386,14 +386,29 @@ ImageViewRenderer
 
     assert( !shader.IsNull() );
 
-    shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_RED ) );
-    shader->SetMaxRed( settings.GetHighIntensity( RGBW_CHANNEL_RED ) );
+    if(settings.IsGrayscaleActivated())
+      {
+      shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
+      shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_WHITE  ) );
+      
+      shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
+      shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
+      
+      shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
+      shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
 
-    shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_GREEN ) );
-    shader->SetMaxGreen( settings.GetHighIntensity( RGBW_CHANNEL_GREEN ) );
-
-    shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
-    shader->SetMaxBlue( settings.GetHighIntensity( RGBW_CHANNEL_BLUE ) );
+      }
+    else
+      {
+      shader->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_RED ) );
+      shader->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_RED  ) );
+      
+      shader->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_GREEN ) );
+      shader->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_GREEN ) );
+      
+      shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
+      shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_BLUE ) );
+      }
 
     shader->SetGamma( settings.GetGamma() );
 
