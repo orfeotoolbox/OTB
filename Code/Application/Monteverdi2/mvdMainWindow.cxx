@@ -1820,12 +1820,16 @@ MainWindow
 
 // Connect update of last viewport informations in datasetmodel
     // from the previous ImageView
+
+  if(model)
+    {
     QObject::connect(
       m_ImageView->GetManipulator(),
       SIGNAL( RenderingContextChanged( const PointType&, double ) ),
       model,
       SLOT(  OnRenderingContextChanged(const PointType&, double ))
       );
+    }
 
 #if USE_OLD_IMAGE_VIEW
 
