@@ -583,12 +583,15 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
       SLOT( OnAddItemTriggered() )
     );
 
-    AddAction(
-      &menu,
-      tr( "Delete group" ),
-      this,
-      SLOT( OnDeleteItemTriggered() )
-    );
+    QAction * action =
+      AddAction(
+        &menu,
+        tr( "Delete group" ),
+        this,
+        SLOT( OnDeleteItemTriggered() )
+      );
+
+    action->setEnabled( item->childCount()<=0 );
 
     if( item->flags().testFlag( Qt::ItemIsEditable ) )
       AddAction(

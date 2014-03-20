@@ -436,6 +436,8 @@ DatabaseConnection
     "UPDATE dataset_node_membership SET node_id=:node_id WHERE dataset_id=:id;",
     QVariantList() << nodeId << id
   );
+
+  // WARNING: dataset_tag_membership not yet maintained.
 }
 
 /*****************************************************************************/
@@ -544,6 +546,11 @@ DatabaseConnection
 ::DeleteNode( SqlId id )
 {
   qDebug() << this << "::DeleteNode(" << id << ")";
+ 
+  ExecuteQuery(
+  QString( "DELETE FROM node WHERE node.id='%1';" )
+    .arg( id )
+  );
 }
 
 /*****************************************************************************/
