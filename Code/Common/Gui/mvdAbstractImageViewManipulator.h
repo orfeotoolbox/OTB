@@ -201,6 +201,10 @@ signals:
                    const SizeType& size,
                    const SpacingType& spacing );
 
+
+  // Signal for DatasetModel
+  void RenderingContextChanged(const PointType& center, double zoom);
+
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
 //

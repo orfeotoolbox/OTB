@@ -1748,6 +1748,16 @@ MainWindow
       m_QuicklookViewDock->widget(),
       SLOT( updateGL()  )
       );
+    
+ // Disconnect update of last viewport informations in datasetmodel
+    // from the previous ImageView
+    QObject::disconnect(
+      m_ImageView->GetManipulator(),
+      SIGNAL( RenderingContextChanged( const PointType&, double ) ),
+      datasetModel,
+      SLOT(  OnRenderingContextChanged(const PointType&, double ))
+      );
+
 
 #endif // USE_ICE_IMAGE_VIEW
     }
@@ -1807,6 +1817,15 @@ MainWindow
 #endif // USE_ICE_IMAGE_VIEW
 
   ConnectPixelDescriptionWidget( model );
+
+// Connect update of last viewport informations in datasetmodel
+    // from the previous ImageView
+    QObject::connect(
+      m_ImageView->GetManipulator(),
+      SIGNAL( RenderingContextChanged( const PointType&, double ) ),
+      model,
+      SLOT(  OnRenderingContextChanged(const PointType&, double ))
+      );
 
 #if USE_OLD_IMAGE_VIEW
 

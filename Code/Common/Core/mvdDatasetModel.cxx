@@ -272,6 +272,19 @@ DatasetModel
 	vectorImageModel->GetProperties()
       );
 
+      // Ensure that first position is image center at full res
+      SpacingType spacing = vectorImageModel->ToImage()->GetSpacing();
+      PointType origin = vectorImageModel->ToImage()->GetOrigin();
+      SizeType size = vectorImageModel->ToImage()->GetLargestPossibleRegion().GetSize();
+
+      PointType center = origin;
+      center[0] += 0.5*spacing[0]*size[0];
+      center[1] += 0.5*spacing[1]*size[1];
+
+      m_Descriptor->UpdateViewContext(center,spacing[0]);
+      m_LastPhysicalCenter =  center;
+      m_LastIsotropicZoom = spacing[0];
+
       //
       // 2.4a: Force writing descriptor with newly imported image.
       Save();

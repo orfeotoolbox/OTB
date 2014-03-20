@@ -121,6 +121,8 @@ ImageViewWidget
 ::SetImageList( const VectorImageModelList& images,
                 ZoomType zoom )
 {
+ 
+  
   //
   // Setup image-view settings to reference image-model data.
   if( !images.isEmpty() )
@@ -134,23 +136,30 @@ ImageViewWidget
     assert( m_Manipulator!=NULL );
     m_Manipulator->SetViewportSize( width(), height() );
 
-    m_Manipulator->SetOrigin( image->GetOrigin() );
-    m_Manipulator->SetSpacing( image->GetSpacing() );
+    PointType center = imageModel->GetDatasetModel()->GetLastPhysicalCenter();
+    double zoomValue = imageModel->GetDatasetModel()->GetLastIsotropicZoom();
+
+    SpacingType newSpacing = image->GetSpacing();
+    newSpacing[0]=(newSpacing[0]>0?1:-1)*zoomValue;
+    newSpacing[1]=(newSpacing[1]>0?1:-1)*zoomValue;
+
+    PointType newOrigin = center;
+    newOrigin[0]-=0.5*m_Manipulator->GetViewportSize()[0]*newSpacing[0];
+    newOrigin[1]-=0.5*m_Manipulator->GetViewportSize()[1]*newSpacing[1];
+
+    m_Manipulator->SetOrigin( newOrigin );
+    m_Manipulator->SetSpacing( newSpacing );
     m_Manipulator->SetWkt( image->GetProjectionRef() );
     m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
+
+    // Insert image-models into image-view renderer.
+    assert( m_Renderer!=NULL );
+    m_Renderer->SetImageList( images );
+    
+    // This is only done so that the manipulator will signal the
+    // quicklook for ROI update ...
+    m_Manipulator->CenterOn(center);
     }
-
-  //
-  // Insert image-models into image-view renderer.
-  assert( m_Renderer!=NULL );
-  m_Renderer->SetImageList( images );
-
-  if( images.isEmpty() )
-    return;
-
-  //
-  // Center view on center of reference image-model.
-  Center( zoom );
 
   //
   // Update view.

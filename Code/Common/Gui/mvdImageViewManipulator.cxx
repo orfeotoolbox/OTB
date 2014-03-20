@@ -236,6 +236,8 @@ ImageViewManipulator
   m_ViewSettings->Center( point );
 
   emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+
+  emit RenderingContextChanged(point,GetSpacing()[0]);
 }
 
 /******************************************************************************/
@@ -253,7 +255,8 @@ ImageViewManipulator
   // Calculate spacing based on scale.
   otb::ViewSettings::SpacingType spacing;
 
-  spacing.Fill( 1.0 / scale );
+  spacing[0] = (m_ViewSettings->GetSpacing()[0]>0?1:-1)/scale;
+  spacing[1] = (m_ViewSettings->GetSpacing()[1]>0?1:-1)/scale;
 
   // Change spacing and center.
   m_ViewSettings->SetSpacing( spacing );
@@ -261,6 +264,8 @@ ImageViewManipulator
 
   // Emit ROI changed.
   emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+  
+  emit RenderingContextChanged(center,GetSpacing()[0]);
 }
 
 /******************************************************************************/
@@ -404,6 +409,7 @@ ImageViewManipulator
   Qt::MouseButtons buttons = event->buttons();
   Qt::KeyboardModifiers modifiers = event->modifiers();
   */
+  PointType center;
 
   switch( event->button() )
     {
@@ -414,6 +420,12 @@ ImageViewManipulator
       m_MousePressPosition = QPoint();
       m_MousePressOrigin = PointType();
       m_IsMouseDragging = false;
+
+      
+      center[0] = GetOrigin()[0]+GetViewportSize()[0]*GetSpacing()[0];
+      center[1] = GetOrigin()[1]+GetViewportSize()[1]*GetSpacing()[1];
+      
+      emit RenderingContextChanged(center,GetSpacing()[0]);
 
       emit RefreshViewRequested();
       break;
@@ -477,7 +489,7 @@ ImageViewManipulator
   assert( event->delta()!=0 );
   int degrees = event->delta() / 8;
 
-  if( modifiers==Qt::NoModifier || modifiers==Qt::ControlModifier )
+  if( modifiers==Qt::ControlModifier )
     {
     Scale( event->pos(), degrees );
 
