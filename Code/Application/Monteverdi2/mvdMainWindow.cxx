@@ -670,6 +670,8 @@ MainWindow
 #endif // USE_OLD_IMAGE_VIEW
 
 /*****************************************************************************/
+#if USE_ICE_IMAGE_VIEW
+
 void
 MainWindow
 ::ConnectStatusBar( DatasetModel * model)
@@ -768,6 +770,8 @@ MainWindow
     );
   */
 }
+
+#endif // USE_ICE_IMAGE_VIEW
 
 /*****************************************************************************/
 void
@@ -943,6 +947,9 @@ MainWindow
 #endif // USE_OLD_IMAGE_VIEW
 
 /*****************************************************************************/
+
+#if USE_ICE_IMAGE_VIEW
+
 void
 MainWindow
 ::DisconnectStatusBar( const DatasetModel * model )
@@ -1028,6 +1035,8 @@ MainWindow
       );
     }
 }
+
+#endif // USE_ICE_IMAGE_VIEW
 
 /*****************************************************************************/
 void
@@ -1674,7 +1683,6 @@ MainWindow
   */
   datasetModel->Save();
 
-
   // Access previously selected vector-image model.
   const VectorImageModel* vectorImageModel =
     datasetModel->GetSelectedImageModel< VectorImageModel >();
@@ -1748,16 +1756,6 @@ MainWindow
       m_QuicklookViewDock->widget(),
       SLOT( updateGL()  )
       );
-    
- // Disconnect update of last viewport informations in datasetmodel
-    // from the previous ImageView
-    QObject::disconnect(
-      m_ImageView->GetManipulator(),
-      SIGNAL( RenderingContextChanged( const PointType&, double ) ),
-      datasetModel,
-      SLOT(  OnRenderingContextChanged(const PointType&, double ))
-      );
-
 
 #endif // USE_ICE_IMAGE_VIEW
     }
@@ -1774,6 +1772,19 @@ MainWindow
   );
 
 #endif // USE_OLD_IMAGE_VIEW
+
+#if USE_ICE_IMAGE_VIEW
+
+  // Disconnect update of last viewport informations in datasetmodel
+  // from the previous ImageView
+  QObject::disconnect(
+    m_ImageView->GetManipulator(),
+    SIGNAL( RenderingContextChanged( const PointType&, double ) ),
+    datasetModel,
+    SLOT(  OnRenderingContextChanged(const PointType&, double ))
+  );
+
+#endif // USE_ICE_IMAGE_VIEW
 
   // Disconnect the signals from the previous dataset model
 #if USE_OLD_IMAGE_VIEW
@@ -1818,17 +1829,20 @@ MainWindow
 
   ConnectPixelDescriptionWidget( model );
 
-// Connect update of last viewport informations in datasetmodel
-    // from the previous ImageView
-
-  if(model)
+  if( model!=NULL )
     {
+#if USE_ICE_IMAGE_VIEW
+
+    // Connect update of last viewport informations in datasetmodel
+    // from the previous ImageView
     QObject::connect(
       m_ImageView->GetManipulator(),
       SIGNAL( RenderingContextChanged( const PointType&, double ) ),
       model,
       SLOT(  OnRenderingContextChanged(const PointType&, double ))
-      );
+    );
+
+#endif // USE_ICE_IMAGE_VIEW
     }
 
 #if USE_OLD_IMAGE_VIEW

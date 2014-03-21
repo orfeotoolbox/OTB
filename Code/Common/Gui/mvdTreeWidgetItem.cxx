@@ -82,9 +82,7 @@ TreeWidgetItem
         QTreeWidgetItem::ShowIndicator
       );
       setFlags(
-#if BYPASS_MOUSE_EVENTS
-        Qt::ItemIsDragEnabled |
-#endif
+        // Qt::ItemIsDragEnabled |
         Qt::ItemIsDropEnabled |
         Qt::ItemIsEditable |
         Qt::ItemIsEnabled

@@ -272,17 +272,21 @@ private:
    */
   void ConnectViewMenu();
 
+#if USE_OLD_IMAGE_VIEW
   /**
    */
   void ConnectStatusBar1(DatasetModel * model);
   void DisconnectStatusBar1(const DatasetModel * model);
+#endif // USE_OLD_IMAGE_VIEW
 
+#if USE_ICE_IMAGE_VIEW
   /**
    */
   void ConnectStatusBar( DatasetModel* model );
   /**
    */
   void DisconnectStatusBar( const DatasetModel* model );
+#endif // USE_ICE_IMAGE_VIEW
 
   /**
    */
