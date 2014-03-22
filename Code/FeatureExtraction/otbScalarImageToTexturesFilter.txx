@@ -450,9 +450,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     // Variance is only used in correlation. If variance is 0, then (index[0] - pixelMean) * (index[1] - pixelMean)
     // should be zero as well. In this case, set the variance to 1. in order to
     // avoid NaN correlation.
-
-    const double epsilon = 1E-10;
-    if( pixelVarianceSquared < 0.001)
+    if(pixelVarianceSquared < 0.0001)
       {
       pixelVarianceSquared = 1.;
       }
