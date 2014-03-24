@@ -49,7 +49,7 @@ private:
     SetDescription("Perform mean shift filtering");
 
     // Documentation
-    SetDocName("Mean Shift filtering (can be used as Exact Large-Scale Mean-Shift segmentation, step 1)");
+    SetDocName("Exact Large-Scale Mean-Shift segmentation, step 1 (smoothing)");
     SetDocLongDescription("This application performs mean shift fitlering (multi-threaded).");
     SetDocLimitations("With mode search option, the result will slightly depend on thread number.");
     SetDocAuthors("OTB-Team");
