@@ -6,7 +6,6 @@ set( Common_Core_SOURCES
   mvdAbstractImageModel.cxx
   mvdAbstractModel.cxx
   mvdAbstractWorker.cxx
-  mvdAlgorithm.cxx
   mvdBackgroundTask.cxx
   mvdCore.cxx
   mvdDatasetDescriptor.cxx
