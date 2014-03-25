@@ -20,7 +20,6 @@ set( Common_Core_SOURCES
   mvdImageImporter.cxx
   mvdImagePlacenameLoader.cxx
   mvdImageProperties.cxx
-  mvdMath.cxx
   mvdModifiableInterface.cxx
   mvdMyClass.cxx
   mvdQuicklookModel.cxx
