@@ -207,18 +207,34 @@ ImageViewWidget
 
   QObject::connect(
     m_Manipulator,
-    SIGNAL( RoiChanged( const PointType&, const SizeType&, const SpacingType& ) ),
+    SIGNAL(
+      RoiChanged(
+        const PointType&, const SizeType&, const SpacingType&, const PointType&
+      )
+    ),
     // to:
     this,
-    SIGNAL( RoiChanged( const PointType&, const SizeType&, const SpacingType& ) )
+    SIGNAL(
+      RoiChanged(
+        const PointType&, const SizeType&, const SpacingType&, const PointType&
+      )
+    )
   );
 
   QObject::connect(
     m_Manipulator,
-    SIGNAL( RoiChanged( const PointType&, const SizeType&, const SpacingType& ) ),
+    SIGNAL(
+      RoiChanged(
+        const PointType&, const SizeType&, const SpacingType&, const PointType&
+      )
+    ),
     // to:
     this,
-    SLOT( OnRoiChanged( const PointType&, const SizeType&, const SpacingType& ) )
+    SLOT(
+      OnRoiChanged(
+        const PointType&, const SizeType&, const SpacingType&, const PointType&
+      )
+    )
   );
 
   QObject::connect(
@@ -328,7 +344,7 @@ ImageViewWidget
 
   m_Manipulator->MouseMoveEvent( event );
   
-  Qt::MouseButtons buttons = event->buttons();
+  // Qt::MouseButtons buttons = event->buttons();
   // Qt::KeyboardModifiers modifiers = event->modifiers();
   
 
@@ -685,9 +701,12 @@ void
 ImageViewWidget
 ::OnRoiChanged( const PointType& point,
                 const SizeType& size,
-                const SpacingType& spacing )
+                const SpacingType& spacing,
+                const PointType& center )
 {
   assert( m_Renderer!=NULL );
+
+  emit CenterChanged( center );
 
   AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
   assert( imageModel!=NULL );
@@ -700,6 +719,8 @@ ImageViewWidget
   // qDebug() << "scale: (" << sx << "," << sy << ")";
 
   emit ScaleChanged( sx, sy );
+
+  emit RoiChanged( center, sx, sy );
 }
 
 }

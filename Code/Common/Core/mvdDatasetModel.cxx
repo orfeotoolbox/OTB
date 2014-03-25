@@ -887,8 +887,37 @@ DatasetModel
 /*****************************************************************************/
 void
 DatasetModel
+::OnRoiChanged( const PointType& center,
+                double sx,
+                double sy )
+{
+  qDebug()
+    << this << "::OnRoiChanged("
+    << center[ 0 ] << "," << center[ 1 ] << "," << sx << "," << sy
+    << ")";
+
+  // update the descriptor
+  m_Descriptor->UpdateViewContext( center, sx );
+
+  // update the attribute
+  m_LastPhysicalCenter = center;
+  m_LastIsotropicZoom = sx;
+
+  // write the changes
+#if 0
+  // Do not force saving here because it saves viewing performances
+  // and it will be saved when quitting or changing selection.
+  Save();
+#endif
+}
+
+/*****************************************************************************/
+void
+DatasetModel
 ::OnRenderingContextChanged(const PointType& center, double zoom)
 {
+  qDebug() << this << "::OnRenderingContextChanged()";
+
   // update the descriptor
   m_Descriptor->UpdateViewContext(center, zoom );
 

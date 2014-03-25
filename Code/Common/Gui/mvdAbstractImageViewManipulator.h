@@ -199,7 +199,8 @@ signals:
    */
   void RoiChanged( const PointType& origin,
                    const SizeType& size,
-                   const SpacingType& spacing );
+                   const SpacingType& spacing,
+                   const PointType& center );
 
 
   // Signal for DatasetModel

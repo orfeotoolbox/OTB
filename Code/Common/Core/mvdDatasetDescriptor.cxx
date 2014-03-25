@@ -439,6 +439,11 @@ bool
 DatasetDescriptor
 ::UpdateViewContext(const PointType& center, double zoom)
 {
+  qDebug()
+    << this << "::UpdateViewContext("
+    << center[ 0 ] << "," << center[ 1 ] << "," << zoom
+    << ")";
+
   // Create QString from parameters
   QString scenter( ToQString( center[ 0 ] ) + " " + ToQString( center [ 1 ] ) );
   QString szoom( ToQString( zoom ) );

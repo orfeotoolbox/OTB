@@ -235,7 +235,7 @@ ImageViewManipulator
 
   m_ViewSettings->Center( point );
 
-  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
 
   emit RenderingContextChanged(point,GetSpacing()[0]);
 }
@@ -263,7 +263,7 @@ ImageViewManipulator
   m_ViewSettings->Center( center );
 
   // Emit ROI changed.
-  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), center );
   
   emit RenderingContextChanged(center,GetSpacing()[0]);
 }
@@ -275,12 +275,15 @@ ImageViewManipulator
 {
   otb::ViewSettings::SizeType size( GetViewportSize() );
 
+  PointType point;
+
   Scale(
     QPoint( size[ 0 ] / 2, size[ 1 ] / 2 ),
-    m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES
+    m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES,
+    &point
   );
 
-  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
 }
 
 /******************************************************************************/
@@ -290,12 +293,15 @@ ImageViewManipulator
 {
   otb::ViewSettings::SizeType size( GetViewportSize() );
 
+  PointType point;
+
   Scale(
     QPoint( size[ 0 ] / 2, size[ 1 ] / 2 ),
-    -m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES
+    -m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES,
+    &point
   );
 
-  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+  emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
 }
 
 /******************************************************************************/
@@ -390,7 +396,12 @@ ImageViewManipulator
 
     emit RefreshViewRequested();
 
-    emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+    emit RoiChanged(
+      GetOrigin(),
+      GetViewportSize(),
+      GetSpacing(),
+      m_ViewSettings->GetViewportCenter()
+    );
     }
 }
 
@@ -491,11 +502,13 @@ ImageViewManipulator
 
   if( modifiers==Qt::ControlModifier )
     {
-    Scale( event->pos(), degrees );
+    PointType point;
+
+    Scale( event->pos(), degrees, &point );
 
     emit RefreshViewRequested();
 
-    emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+    emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
     }
 }
 
@@ -601,7 +614,12 @@ ImageViewManipulator
     {
     emit RefreshViewRequested();
 
-    emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing() );
+    emit RoiChanged(
+      GetOrigin(),
+      GetViewportSize(),
+      GetSpacing(),
+      m_ViewSettings->GetViewportCenter()
+    );
     }
 }
 
@@ -669,7 +687,7 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::Scale( const QPoint& center, int degrees )
+::Scale( const QPoint& center, int degrees, PointType* centerPoint )
 {
   assert( degrees!=0 );
 
@@ -679,6 +697,9 @@ ImageViewManipulator
   otb::ViewSettings::PointType point;
 
   Transform( point, center );
+
+  if( centerPoint!=NULL )
+    *centerPoint = point;
 
   // See http://qt-project.org/doc/qt-4.8/qwheelevent.html#delta .
   assert( m_ZoomGranularity!=0 );

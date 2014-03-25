@@ -398,7 +398,7 @@ private:
   QString m_Placename;
 
   QPointer< ImagePlacenameLoader > m_PlacenameLoader;
-  
+
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -415,6 +415,10 @@ private slots:
 
   /** */
   void OnRenderingContextChanged(const PointType&, double );
+
+  /**
+   */
+  void OnRoiChanged( const PointType&, double sx, double sy );
 
   /** */
   void OnPlacenameLoaded( const QString& placename );

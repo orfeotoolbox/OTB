@@ -218,7 +218,7 @@ private:
   void Translate( const QPoint& vector );
   /**
    */
-  void Scale( const QPoint& center, int degrees );
+  void Scale( const QPoint& center, int degrees, PointType* centerPoint =NULL );
 
   /**
    */

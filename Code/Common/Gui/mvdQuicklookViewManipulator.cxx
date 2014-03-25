@@ -247,7 +247,8 @@ void
 QuicklookViewManipulator
 ::OnRoiChanged( const PointType& origin,
                 const SizeType& size,
-                const SpacingType& spacing )
+                const SpacingType& spacing,
+                const PointType& center )
 {
   /*
   qDebug() << this << ":OnRoiChanged()";

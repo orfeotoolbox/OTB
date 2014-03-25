@@ -175,7 +175,8 @@ private slots:
    */
   void OnRoiChanged( const PointType& origin,
                      const SizeType& size,
-                     const SpacingType& spacing );
+                     const SpacingType& spacing,
+                     const PointType& center );
 };
 
 } // end namespace 'mvd'

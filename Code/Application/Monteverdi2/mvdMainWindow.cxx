@@ -517,12 +517,16 @@ MainWindow
   QObject::connect(
     m_ImageView,
     SIGNAL(
-      RoiChanged( const PointType&, const SizeType&, const SpacingType& )
+      RoiChanged(
+        const PointType&, const SizeType&, const SpacingType&, const PointType&
+      )
     ),
     // to:
     quicklookManipulator,
     SLOT(
-      OnRoiChanged( const PointType&, const SizeType&, const SpacingType& )
+      OnRoiChanged(
+        const PointType&, const SizeType&, const SpacingType&, const PointType&
+      )
     )
   );
 
@@ -1775,14 +1779,22 @@ MainWindow
 
 #if USE_ICE_IMAGE_VIEW
 
+  QObject::disconnect(
+    m_ImageView,
+    SIGNAL( RoiChanged( const PointType&, double, double ) ),
+    // to:
+    datasetModel,
+    SLOT( OnRoiChanged( const PointType&, double, double ) )
+  );
+
   // Disconnect update of last viewport informations in datasetmodel
   // from the previous ImageView
-  QObject::disconnect(
-    m_ImageView->GetManipulator(),
-    SIGNAL( RenderingContextChanged( const PointType&, double ) ),
-    datasetModel,
-    SLOT(  OnRenderingContextChanged(const PointType&, double ))
-  );
+  // QObject::disconnect(
+  //   m_ImageView->GetManipulator(),
+  //   SIGNAL( RenderingContextChanged( const PointType&, double ) ),
+  //   datasetModel,
+  //   SLOT(  OnRenderingContextChanged(const PointType&, double ))
+  // );
 
 #endif // USE_ICE_IMAGE_VIEW
 
@@ -1833,14 +1845,22 @@ MainWindow
     {
 #if USE_ICE_IMAGE_VIEW
 
+  QObject::connect(
+    m_ImageView,
+    SIGNAL( RoiChanged( const PointType&, double, double ) ),
+    // to:
+    model,
+    SLOT( OnRoiChanged( const PointType&, double, double ) )
+  );
+
     // Connect update of last viewport informations in datasetmodel
     // from the previous ImageView
-    QObject::connect(
-      m_ImageView->GetManipulator(),
-      SIGNAL( RenderingContextChanged( const PointType&, double ) ),
-      model,
-      SLOT(  OnRenderingContextChanged(const PointType&, double ))
-    );
+    // QObject::connect(
+    //   m_ImageView->GetManipulator(),
+    //   SIGNAL( RenderingContextChanged( const PointType&, double ) ),
+    //   model,
+    //   SLOT(  OnRenderingContextChanged(const PointType&, double ))
+    // );
 
 #endif // USE_ICE_IMAGE_VIEW
     }
