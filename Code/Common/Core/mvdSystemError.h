@@ -38,6 +38,7 @@
 
 //
 // ITK includes (sorted by alphabetic order)
+#include "itksys/SystemTools.hxx"
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -79,21 +80,12 @@ class Monteverdi2_EXPORT SystemError :
 public:
 
   /** \brief Constructor. */
-  SystemError( const std::string& message =std::string() );
-
-  /**
-   */
-  SystemError( int errorCode, const std::string& message =std::string() );
+  SystemError( const std::string& message =std::string() ) :
+    std::runtime_error( itksys::SystemTools::GetLastSystemError() 
+        + ": \n" + message) {};
 
   /** \brief Destructor. */
-  virtual ~SystemError() throw();
-
-  /**
-   * \brief Get the error code (\sa errno) of this system error.
-   *
-   * \return The error code (\sa errno) of this system error.
-   */
-  inline int GetErrorCode() const;
+  virtual ~SystemError() throw() {};
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -112,13 +104,10 @@ protected:
 private:
   /**
    */
-  static std::string whatString( int errorCode, const std::string& message );
 
 //
 // Private attributes.
 private:
-  std::string m_Message;
-  int m_ErrorCode;
 
 };
 
@@ -127,16 +116,5 @@ private:
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
 
-namespace mvd
-{
-
-/*****************************************************************************/
-int
-SystemError::GetErrorCode() const
-{
-  return m_ErrorCode;
-}
-
-} // end namespace 'mvd'
 
 #endif // __mvdSystemError_h

@@ -99,7 +99,6 @@ SerializableInterface
     // morph it into the same SystemError containing filename
     // information.
     syserr = SystemError(
-      syserr.GetErrorCode(),
       ToStdString(
 	QString( "('%1')" ).arg( filename ) )
     );
@@ -143,7 +142,6 @@ SerializableInterface
     // morph it into the same SystemError containing filename
     // information.
     syserr = SystemError(
-      syserr.GetErrorCode(),
       ToStdString(
 	QString( "('%1')" ).arg( filename ) )
     );
