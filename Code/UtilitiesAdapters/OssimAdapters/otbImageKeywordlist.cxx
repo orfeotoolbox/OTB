@@ -28,6 +28,10 @@
 #include "ossim/ossimTileMapModel.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 
+#include "ossim/imaging/ossimTiffTileSource.h"
+#include "ossim/projection/ossimRpcModel.h"
+#include "tiffio.h"
+
 #include "otbSensorModelAdapter.h"
 
 namespace otb
@@ -233,7 +237,98 @@ ReadGeometryFromImage(const std::string& filename)
           otb_kwl.SetKeywordlist(geom_kwl);
           }
         }
-
+      
+      //  try to use GeoTiff RPC tag if present. They will override the 
+      // standard projection found before
+      ossimRefPtr<ossimTiffTileSource> tiffHandler = new ossimTiffTileSource;
+      tiffHandler->setOpenOverviewFlag(true);
+      if ( tiffHandler->open(handler->getFilename()) )
+        {
+        TIFF* tiffPtr = tiffHandler->tiffPtr();
+        unsigned short  count     = 0;
+        void            *tagData  = 0;
+        
+        if (TIFFGetField( tiffPtr, 50844, &count, &tagData) && (count == 92) )
+          {
+          otbMsgDevMacro(<<"RPC Coeff tag found");
+          // read RPC coefficients
+          double *tagValues = static_cast<double*>(tagData);
+          
+          std::vector<double> lineNumCoefs;
+          std::vector<double> lineDenCoefs;
+          std::vector<double> sampNumCoefs;
+          std::vector<double> sampDenCoefs;
+          
+          for (unsigned int k=0 ; k<20 ; ++k)
+            {
+            lineNumCoefs.push_back(*(tagValues + 12 + k));
+            lineDenCoefs.push_back(*(tagValues + 32 + k));
+            sampNumCoefs.push_back(*(tagValues + 52 + k));
+            sampDenCoefs.push_back(*(tagValues + 72 + k));
+            }
+          
+          ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
+          rpcModel->setAttributes( *(tagValues + 3),
+                                   *(tagValues + 2),
+                                   *(tagValues + 8),
+                                   *(tagValues + 7),
+                                   *(tagValues + 4),
+                                   *(tagValues + 5),
+                                   *(tagValues + 6),
+                                   *(tagValues + 9),
+                                   *(tagValues + 10),
+                                   *(tagValues + 11),
+                                   sampNumCoefs,
+                                   sampDenCoefs,
+                                   lineNumCoefs,
+                                   lineDenCoefs);
+          
+          double errorBias = 0.0;
+          double errorRand = 0.0;
+          if (*(tagValues) >= 0.0) errorBias = *(tagValues);
+          if (*(tagValues+1) >= 0.0) errorRand = *(tagValues+1);
+          
+          // setup other metadata
+          rpcModel->setPositionError(errorBias,errorRand,true);
+          ossimDrect rectangle = tiffHandler->getImageRectangle();
+          rpcModel->setImageRect(rectangle);
+          
+          ossimDpt size;
+          size.line = rectangle.height();
+          size.samp = rectangle.width();
+          rpcModel->setImageSize(size);
+          
+          // Compute 4 corners and reference point
+          rpcModel->updateModel();
+          double heightOffset = *(tagValues + 6);
+          ossimGpt ulGpt, urGpt, lrGpt, llGpt;
+          ossimGpt refGndPt;
+          
+          rpcModel->lineSampleHeightToWorld(rectangle.ul(), heightOffset, ulGpt);
+          rpcModel->lineSampleHeightToWorld(rectangle.ur(), heightOffset, urGpt);
+          rpcModel->lineSampleHeightToWorld(rectangle.lr(), heightOffset, lrGpt);
+          rpcModel->lineSampleHeightToWorld(rectangle.ll(), heightOffset, llGpt);
+          rpcModel->setGroundRect(ulGpt,urGpt,lrGpt,llGpt);
+          
+          rpcModel->lineSampleHeightToWorld(rectangle.midPoint(), heightOffset, refGndPt);
+          rpcModel->setRefGndPt(refGndPt);
+          
+          // compute ground sampling distance
+          try
+            {
+            // Method can throw ossimException.
+            rpcModel->computeGsd();
+            }
+          catch (const ossimException& e)
+            {
+            otbMsgDevMacro(<< "OSSIM Compute ground sampling distance FAILED ! ");
+            }
+          
+          hasMetaData = rpcModel->saveState(geom_kwl);
+          otb_kwl.SetKeywordlist(geom_kwl);
+          }
+        }
+      
       // If still no metadata, try the ".geom" file
       if (!hasMetaData && otb_kwl.GetSize() == 0)
         {
