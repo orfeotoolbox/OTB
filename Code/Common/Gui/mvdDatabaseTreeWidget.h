@@ -195,7 +195,7 @@ private:
 //
 // Private attributes.
 private:
-    struct EditionContext;
+    class EditionContext;
 
     // QPoint m_StartDragPosition;
     // QString m_DatasetFilename; 
