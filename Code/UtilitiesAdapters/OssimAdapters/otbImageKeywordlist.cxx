@@ -238,7 +238,7 @@ ReadGeometryFromImage(const std::string& filename)
           }
         }
       
-      //  try to use GeoTiff RPC tag if present. They will override the 
+      //  try to use GeoTiff RPC tag if present. They will override the
       // standard projection found before
       ossimRefPtr<ossimTiffTileSource> tiffHandler = new ossimTiffTileSource;
       tiffHandler->setOpenOverviewFlag(true);
@@ -259,7 +259,7 @@ ReadGeometryFromImage(const std::string& filename)
           std::vector<double> sampNumCoefs;
           std::vector<double> sampDenCoefs;
           
-          for (unsigned int k=0 ; k<20 ; ++k)
+          for (unsigned int k=0; k<20; ++k)
             {
             lineNumCoefs.push_back(*(tagValues + 12 + k));
             lineDenCoefs.push_back(*(tagValues + 32 + k));
