@@ -484,7 +484,23 @@ void GDALImageIO::ReadImageInformation()
 bool GDALImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
 {
   GDALDataset* dataset = m_Dataset->GetDataSet();
-
+  
+  if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+    {
+    // JPEG2000 case : use the number of overviews actually in the dataset
+    // Original resolution
+    res.push_back(0);
+    
+    // available overviews
+    for (unsigned int k=0 ; k<m_NumberOfOverviews ; ++k)
+      {
+      res.push_back(k+1);
+      }
+    
+    return true;
+    }
+  
+  // default case : compute overviews until one of the dimensions is 1
   bool flagStop = false;
   unsigned int resFactor = 0;
   while (!flagStop)
