@@ -108,7 +108,6 @@ DatasetModel
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
-
 /*****************************************************************************/
 DatasetModel
 ::DatasetModel( QObject* parent ) :
@@ -119,7 +118,7 @@ DatasetModel
   m_Alias( ),
   m_Directory(),
   m_LastPhysicalCenter(),
-  m_LastIsotropicZoom(1.),
+  m_LastIsotropicZoom( 1.0 ),
   m_Placename( tr("unknown") ),
   m_PlacenameLoader()
 {
@@ -181,6 +180,36 @@ DatasetModel
     }
 
   return isConsistent;
+}
+
+/*****************************************************************************/
+void
+DatasetModel
+::SetLastPhysicalCenter( const PointType& center )
+{
+  // Should be read directly from descriptor and not duplicated here.
+  m_LastPhysicalCenter = center;
+
+  assert( m_Descriptor!=NULL );
+
+  // Center and zoom level should be independant and stored under
+  // <image> element.
+  m_Descriptor->UpdateViewContext( center, m_LastIsotropicZoom );
+}
+
+/*****************************************************************************/
+void
+DatasetModel
+::SetLastIsotropicZoom( double scale )
+{
+  // Should be read directly from descriptor and not duplicated here.
+  m_LastIsotropicZoom = scale;
+
+  assert( m_Descriptor!=NULL );
+
+  // Center and zoom level should be independant and stored under
+  // <image> element.
+  m_Descriptor->UpdateViewContext( m_LastPhysicalCenter, scale );
 }
 
 /*****************************************************************************/
@@ -272,18 +301,16 @@ DatasetModel
 	vectorImageModel->GetProperties()
       );
 
-      // Ensure that first position is image center at full res
-      SpacingType spacing = vectorImageModel->ToImage()->GetSpacing();
-      PointType origin = vectorImageModel->ToImage()->GetOrigin();
-      SizeType size = vectorImageModel->ToImage()->GetLargestPossibleRegion().GetSize();
-
-      PointType center = origin;
-      center[0] += 0.5*spacing[0]*size[0];
-      center[1] += 0.5*spacing[1]*size[1];
-
-      m_Descriptor->UpdateViewContext(center,spacing[0]);
-      m_LastPhysicalCenter =  center;
-      m_LastIsotropicZoom = spacing[0];
+      // Store center and zoom-level.
+      // center and zoom-level should be in ImageModel and stored in
+      // descriptor under <image> element because it depends on the
+      // image of dataset and not of the latter (several images can be
+      // stored into dataset).
+      m_LastPhysicalCenter = vectorImageModel->GetCenter();
+      m_LastIsotropicZoom = 1.0;
+      m_Descriptor->UpdateViewContext(
+        m_LastPhysicalCenter, m_LastIsotropicZoom
+      );
 
       //
       // 2.4a: Force writing descriptor with newly imported image.

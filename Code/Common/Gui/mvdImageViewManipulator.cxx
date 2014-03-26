@@ -71,6 +71,7 @@ ImageViewManipulator
   AbstractImageViewManipulator( parent ),
   m_MousePressPosition(),
   m_ViewSettings( viewSettings ),
+  m_NativeSpacing(),
   m_MousePressOrigin(),
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
@@ -78,6 +79,7 @@ ImageViewManipulator
   m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY ),
   m_IsMouseDragging( false )
 {
+  m_NativeSpacing.Fill( 1.0 );
 }
 
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -87,6 +89,7 @@ ImageViewManipulator
   AbstractImageViewManipulator( parent ),
   m_MousePressPosition(),
   m_ViewSettings( otb::ViewSettings::New() ),
+  m_NativeSpacing(),
   m_MousePressOrigin(),
   m_RenderMode( AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL ),
   m_ZoomFactor( 1.0 ),
@@ -94,6 +97,7 @@ ImageViewManipulator
   m_ScrollGranularity( ImageViewManipulator::DEFAULT_SCROLL_GRANULARITY ),
   m_IsMouseDragging( false )
 {
+  m_NativeSpacing.Fill( 1.0 );
 }
 
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
@@ -172,6 +176,14 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
+::SetNativeSpacing( const SpacingType& spacing )
+{
+  m_NativeSpacing = spacing;
+}
+
+/******************************************************************************/
+void
+ImageViewManipulator
 ::SetWkt( const std::string& wkt )
 {
   assert( !m_ViewSettings.IsNull() );
@@ -237,7 +249,7 @@ ImageViewManipulator
 
   emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), point );
 
-  emit RenderingContextChanged(point,GetSpacing()[0]);
+  // emit RenderingContextChanged(point,GetSpacing()[0]);
 }
 
 /******************************************************************************/
@@ -245,6 +257,8 @@ void
 ImageViewManipulator
 ::ZoomTo( double scale )
 {
+  qDebug() << this << "::ZoomTo(" << scale << ")";
+
   assert( scale!=0.0 );
 
   assert( !m_ViewSettings.IsNull() );
@@ -253,10 +267,25 @@ ImageViewManipulator
   otb::ViewSettings::PointType center( m_ViewSettings->GetViewportCenter() );
 
   // Calculate spacing based on scale.
-  otb::ViewSettings::SpacingType spacing;
+#if 0
+  otb::ViewSettings::SpacingType spacing( m_ViewSettings->GetSpacing() );
 
-  spacing[0] = (m_ViewSettings->GetSpacing()[0]>0?1:-1)/scale;
-  spacing[1] = (m_ViewSettings->GetSpacing()[1]>0?1:-1)/scale;
+  spacing[ 0 ] = ( spacing[ 0 ]>0.0 ? 1.0 : -1.0 ) / scale;
+  spacing[ 1 ] = ( spacing[ 1 ]>0.0 ? 1.0 : -1.0 ) / scale;
+#else
+  otb::ViewSettings::SpacingType spacing( m_NativeSpacing );
+
+  // Here, one zoom to arbitray scale-factor relative to
+  // viewport spacing.
+  //
+  // If viewport spacing has previously been set to
+  // image-spacing, it zooms to arbitrary scale-factor.
+  //
+  // This is especially usefull to set user-arbitrary scale level
+  // such as when editing scale-level in status-bar.
+  spacing[ 0 ] /= scale;
+  spacing[ 1 ] /= scale;
+#endif
 
   // Change spacing and center.
   m_ViewSettings->SetSpacing( spacing );
@@ -264,8 +293,8 @@ ImageViewManipulator
 
   // Emit ROI changed.
   emit RoiChanged( GetOrigin(), GetViewportSize(), GetSpacing(), center );
-  
-  emit RenderingContextChanged(center,GetSpacing()[0]);
+
+  // emit RenderingContextChanged(center,GetSpacing()[0]);
 }
 
 /******************************************************************************/
@@ -420,7 +449,7 @@ ImageViewManipulator
   Qt::MouseButtons buttons = event->buttons();
   Qt::KeyboardModifiers modifiers = event->modifiers();
   */
-  PointType center;
+  // PointType center;
 
   switch( event->button() )
     {
@@ -432,11 +461,19 @@ ImageViewManipulator
       m_MousePressOrigin = PointType();
       m_IsMouseDragging = false;
 
-      
+      emit RoiChanged(
+        GetOrigin(),
+        GetViewportSize(),
+        GetSpacing(),
+        m_ViewSettings->GetViewportCenter()
+      );
+
+      /*
       center[0] = GetOrigin()[0]+GetViewportSize()[0]*GetSpacing()[0];
       center[1] = GetOrigin()[1]+GetViewportSize()[1]*GetSpacing()[1];
       
       emit RenderingContextChanged(center,GetSpacing()[0]);
+      */
 
       emit RefreshViewRequested();
       break;

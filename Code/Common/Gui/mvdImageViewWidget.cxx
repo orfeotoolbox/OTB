@@ -119,10 +119,39 @@ ImageViewWidget
 void
 ImageViewWidget
 ::SetImageList( const VectorImageModelList& images,
+                const PointType& center,
+                double scale )
+{
+  SetImageList( images );
+
+  if( images.isEmpty() )
+    return;
+
+  Center( center, scale, scale );
+}
+
+/*******************************************************************************/
+void
+ImageViewWidget
+::SetImageList( const VectorImageModelList& images,
                 ZoomType zoom )
 {
- 
-  
+
+  SetImageList( images );
+
+  if( images.isEmpty() )
+    return;
+
+  //
+  // Center view on center of reference image-model.
+  Center( zoom );
+}
+
+/*******************************************************************************/
+void
+ImageViewWidget
+::SetImageList( const VectorImageModelList& images )
+{
   //
   // Setup image-view settings to reference image-model data.
   if( !images.isEmpty() )
@@ -136,34 +165,16 @@ ImageViewWidget
     assert( m_Manipulator!=NULL );
     m_Manipulator->SetViewportSize( width(), height() );
 
-    PointType center = imageModel->GetDatasetModel()->GetLastPhysicalCenter();
-    double zoomValue = imageModel->GetDatasetModel()->GetLastIsotropicZoom();
-
-    SpacingType newSpacing = image->GetSpacing();
-    newSpacing[0]=(newSpacing[0]>0?1:-1)*zoomValue;
-    newSpacing[1]=(newSpacing[1]>0?1:-1)*zoomValue;
-
-    PointType newOrigin = center;
-    newOrigin[0]-=0.5*m_Manipulator->GetViewportSize()[0]*newSpacing[0];
-    newOrigin[1]-=0.5*m_Manipulator->GetViewportSize()[1]*newSpacing[1];
-
-    m_Manipulator->SetOrigin( newOrigin );
-    m_Manipulator->SetSpacing( newSpacing );
+    m_Manipulator->SetOrigin( imageModel->GetOrigin() );
+    m_Manipulator->SetSpacing( imageModel->GetSpacing() );
+    m_Manipulator->SetNativeSpacing( imageModel->GetNativeSpacing() );
     m_Manipulator->SetWkt( image->GetProjectionRef() );
     m_Manipulator->SetKeywordList( image->GetImageKeywordlist() );
-
-    // Insert image-models into image-view renderer.
-    assert( m_Renderer!=NULL );
-    m_Renderer->SetImageList( images );
-    
-    // This is only done so that the manipulator will signal the
-    // quicklook for ROI update ...
-    m_Manipulator->CenterOn(center);
     }
 
-  //
-  // Update view.
-  // updateGL();
+  // Insert image-models into image-view renderer.
+  assert( m_Renderer!=NULL );
+  m_Renderer->SetImageList( images );
 }
 
 /*******************************************************************************/
@@ -515,6 +526,36 @@ ImageViewWidget
 /*****************************************************************************/
 void
 ImageViewWidget
+::Center( const PointType& center, double sx, double sy )
+{
+  qDebug()
+    << this << "::Center("
+    << center[ 0 ] << "," << center[ 1 ] << "," << sx << "," << sy
+    << ")";
+
+  assert( m_Renderer!=NULL );
+  assert( m_Manipulator!=NULL );
+
+  //
+  // Get reference image-model.
+  AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
+  assert( imageModel!=NULL );
+
+  // Scale spacing.
+  SpacingType spacing( imageModel->GetSpacing() );
+
+  spacing[ 0 ] /= sx;
+  spacing[ 1 ] /= sy;
+
+  m_Manipulator->SetSpacing( spacing );
+
+  // Center view.
+  m_Manipulator->CenterOn( center );
+}
+
+/*****************************************************************************/
+void
+ImageViewWidget
 ::Center( ZoomType zoom )
 {
   assert( m_Renderer!=NULL );
@@ -561,6 +602,10 @@ ImageViewWidget
         fabs( extent[ 0 ] - origin[ 0 ] ) / static_cast< double >( size[ 0 ] ),
         fabs( extent[ 1 ] - origin[ 1 ] ) / static_cast< double >( size[ 1 ] )
       );
+
+    // Scale is already a spacing, we just need to apply
+    spacing[ 0 ] = (spacing[0]>0?1:-1) * scale;
+    spacing[ 1 ] = (spacing[1]>0?1:-1) * scale;
 #else
     //
     // Might not work if image is RS-transformed!?
@@ -574,13 +619,12 @@ ImageViewWidget
         static_cast< double >( sz[ 0 ] ) / static_cast< double >( size[ 0 ] ),
         static_cast< double >( sz[ 1 ] ) / static_cast< double >( size[ 1 ] )
       );
+
+    spacing[ 0 ] *= scale;
+    spacing[ 1 ] *= scale;
 #endif
 
     // qDebug() << "scale:" << scale;
-
-    // Scale is already a spacing, we just need to apply
-    spacing[ 0 ] = (spacing[0]>0?1:-1) * scale;
-    spacing[ 1 ] = (spacing[1]>0?1:-1) * scale;
 
     m_Manipulator->SetSpacing( spacing );
     }
@@ -713,14 +757,21 @@ ImageViewWidget
 
   SpacingType nativeSpacing( imageModel->GetNativeSpacing() );
 
-  double sx = nativeSpacing[ 0 ] / spacing[ 0 ];
-  double sy = nativeSpacing[ 1 ] / spacing[ 1 ];
 
-  // qDebug() << "scale: (" << sx << "," << sy << ")";
+  double rsx = nativeSpacing[ 0 ] / spacing[ 0 ];
+  double rsy = nativeSpacing[ 1 ] / spacing[ 1 ];
 
-  emit ScaleChanged( sx, sy );
+  double sx = ( spacing[ 0 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 0 ];
+  double sy = ( spacing[ 1 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 1 ];
 
-  emit RoiChanged( center, sx, sy );
+  qDebug() << "sx:" << sx << "; sy:" << sy;
+  qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
+
+  // Emit absolute scale.
+  emit ScaleChanged( rsx, rsy );
+
+  // Emit zooming scale-factor.
+  emit RoiChanged( center, rsx, rsy );
 }
 
 }

@@ -1645,11 +1645,17 @@ MainWindow
 
 #if USE_ICE_IMAGE_VIEW
   // Update image-view.
-  m_ImageView->SetImageList( ImageViewWidget::VectorImageModelList() );
+  m_ImageView->SetImageList(
+    ImageViewWidget::VectorImageModelList(),
+    ImageViewWidget::ZOOM_TYPE_FULL
+  );
 
   // Update quicklook-view.
   assert( GetQuicklookView()!=NULL );
-  GetQuicklookView()->SetImageList( ImageViewWidget::VectorImageModelList() );
+  GetQuicklookView()->SetImageList(
+    ImageViewWidget::VectorImageModelList(),
+    ImageViewWidget::ZOOM_TYPE_FULL
+  );
 #endif // USE_ICE_IMAGE_VIEW
 
   //
@@ -1869,7 +1875,7 @@ MainWindow
 
   // Update image-view.
   assert( m_ImageView1!=NULL );
-  
+
   // connect to get the last rendering context (to be written in Descriptor)
   if( vectorImageModel!=NULL )
     {
@@ -1921,7 +1927,12 @@ MainWindow
 
     images << vectorImageModel;
 
-    m_ImageView->SetImageList( images, ImageViewWidget::ZOOM_TYPE_FULL );
+    // m_ImageView->SetImageList( images, ImageViewWidget::ZOOM_TYPE_FULL );
+    m_ImageView->SetImageList(
+      images,
+      model->GetLastPhysicalCenter(),
+      model->GetLastIsotropicZoom()
+    );
 
     //
     // Quicklooks.
@@ -1929,8 +1940,10 @@ MainWindow
     assert( quicklookView!=NULL );
 
 #if 1
+    // Use full image for quicklook-view.
     quicklookView->SetImageList( images, ImageViewWidget::ZOOM_TYPE_EXTENT );
 #else
+    // Use quicklook-image for quicklook-view.
     ImageViewWidget::VectorImageModelList quicklooks;
 
     assert( vectorImageModel->GetQuicklookModel()!=NULL );

@@ -111,6 +111,9 @@ public:
   virtual SpacingType GetSpacing() const =0;
   /**
    */
+  virtual void SetNativeSpacing( const SpacingType& spacing ) =0;
+  /**
+   */
   virtual void SetWkt( const std::string& wkt ) =0;
   /**
    */
@@ -204,7 +207,7 @@ signals:
 
 
   // Signal for DatasetModel
-  void RenderingContextChanged(const PointType& center, double zoom);
+  // void RenderingContextChanged(const PointType& center, double zoom);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

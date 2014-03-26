@@ -330,6 +330,13 @@ private:
 
   /**
    */
+  void SetLastPhysicalCenter( const PointType& center );
+  /**
+   */
+  void SetLastIsotropicZoom( double scale );
+
+  /**
+   */
   inline AbstractImageModelList GetImageModels();
 
   /** */

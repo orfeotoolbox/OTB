@@ -128,8 +128,13 @@ public:
 
   /**
    */
+  void SetImageList( const VectorImageModelList& images, ZoomType zoom );
+
+  /**
+   */
   void SetImageList( const VectorImageModelList& images,
-                     ZoomType zoom =ZOOM_TYPE_NONE );
+                     const PointType& center,
+                     double scale );
 
   /**
    * \brief Access the abstract view-manipualtor of this image-view.
@@ -245,6 +250,14 @@ private:
   /**
    */
   void ListGlVersions() const;
+
+  /**
+   */
+  void SetImageList( const VectorImageModelList& images );
+
+  /**
+   */
+  void Center( const PointType& point, double sx, double sy );
 
   /**
    */

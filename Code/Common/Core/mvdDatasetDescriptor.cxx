@@ -439,6 +439,9 @@ bool
 DatasetDescriptor
 ::UpdateViewContext(const PointType& center, double zoom)
 {
+  // TODO: Split center and zoom.
+  // TODO: Moved center and zoom into image properties.
+
   qDebug()
     << this << "::UpdateViewContext("
     << center[ 0 ] << "," << center[ 1 ] << "," << zoom

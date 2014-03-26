@@ -126,6 +126,8 @@ public:
 
   virtual SpacingType GetSpacing() const;
 
+  virtual void SetNativeSpacing( const SpacingType& );
+
   virtual void SetWkt( const std::string& wkt );
 
   virtual void SetKeywordList(
@@ -230,6 +232,9 @@ private:
 //
 // Private attributes.
 private:
+  /**
+   */
+  SpacingType m_NativeSpacing;
   /**
    */
   otb::ViewSettings::PointType m_MousePressOrigin;

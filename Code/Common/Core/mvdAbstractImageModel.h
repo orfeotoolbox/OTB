@@ -259,6 +259,10 @@ public:
    */
   inline const PointType& GetOrigin() const;
 
+  /**
+   */
+  inline PointType GetCenter() const;
+
   /** Release as much memory as possible (default implementation does
    *  nothing). */
   virtual void ReleaseMemory() =0;
@@ -535,6 +539,8 @@ const PointType&
 AbstractImageModel
 ::GetOrigin() const
 {
+  assert( !ToImageBase().IsNull() );
+
   return ToImageBase()->GetOrigin();
 }
 
@@ -544,7 +550,25 @@ const SpacingType&
 AbstractImageModel
 ::GetSpacing() const
 {
+  assert( !ToImageBase().IsNull() );
+
   return ToImageBase()->GetSpacing();
+}
+
+/*****************************************************************************/
+inline
+PointType
+AbstractImageModel
+::GetCenter() const
+{
+  PointType center( GetOrigin() );
+  SpacingType spacing( GetSpacing() );
+  SizeType size( GetNativeLargestRegion().GetSize() );
+
+  center[ 0 ] += 0.5 * spacing[ 0 ] * static_cast< double >( size[ 0 ] );
+  center[ 1 ] += 0.5 * spacing[ 1 ] * static_cast< double >( size[ 1 ] );
+
+  return center;
 }
 
 /*****************************************************************************/
