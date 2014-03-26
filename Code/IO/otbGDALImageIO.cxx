@@ -492,7 +492,7 @@ bool GDALImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
     res.push_back(0);
     
     // available overviews
-    for (unsigned int k=0 ; k<m_NumberOfOverviews ; ++k)
+    for (unsigned int k=0; k<m_NumberOfOverviews; ++k)
       {
       res.push_back(k+1);
       }
