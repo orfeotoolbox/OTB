@@ -33,11 +33,14 @@ namespace otb
 
 template<class TInputImage>
 PersistentHistogramVectorImageFilter<TInputImage>
-::PersistentHistogramVectorImageFilter() : m_HistogramMin(),
-                                           m_HistogramMax(),
-                                           m_NoDataFlag(false),
-                                           m_NoDataValue(itk::NumericTraits<InternalPixelType>::Zero),
-                                           m_SubSamplingRate(1)
+::PersistentHistogramVectorImageFilter() :
+  m_ThreadHistogramList(),
+  m_Size(),
+  m_HistogramMin(),
+  m_HistogramMax(),
+  m_NoDataFlag(false),
+  m_NoDataValue(itk::NumericTraits<InternalPixelType>::Zero),
+  m_SubSamplingRate(1)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
@@ -126,7 +129,8 @@ PersistentHistogramVectorImageFilter<TInputImage>
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
-  bool clipBins = true;
+// TODO which is the good value ? (false in MVD2)
+  bool clipBins = false;
 
   // if histogram Min and Max have the wrong size : set to default [0, 255]
   if (m_HistogramMin.Size() != numberOfComponent ||
@@ -145,16 +149,24 @@ PersistentHistogramVectorImageFilter<TInputImage>
   for (unsigned int k=0; k<numberOfComponent; ++k)
     {
     typename HistogramType::MeasurementVectorType bandMin, bandMax;
-    bandMin[0] = m_HistogramMin[k];
-    bandMax[0] = m_HistogramMax[k];
+    bandMin.SetSize(1);
+    bandMax.SetSize(1);
+    bandMin.Fill(m_HistogramMin[k]);
+    bandMax.Fill(m_HistogramMax[k]);
 
     typename HistogramType::Pointer histogram = HistogramType::New();
     histogram->SetClipBinsAtEnds(clipBins);
-    histogram->Initialize(m_Size, bandMin, bandMax);
+
+    typename HistogramType::SizeType size;
+    size.SetSize(1);
+    size.Fill( m_Size[ k ] );
+    histogram->SetMeasurementVectorSize(1);
+    histogram->Initialize( size, bandMin, bandMax );
+
     outputHisto->PushBack(histogram);
     }
-
-
+  
+  
   // Setup HistogramLists for each thread
   m_ThreadHistogramList.clear();
   for (unsigned int i=0; i<numberOfThreads; ++i)
@@ -164,12 +176,20 @@ PersistentHistogramVectorImageFilter<TInputImage>
     for (unsigned int k=0; k<numberOfComponent; ++k)
       {
       typename HistogramType::MeasurementVectorType bandMin, bandMax;
-      bandMin[0] = m_HistogramMin[k];
-      bandMax[0] = m_HistogramMax[k];
-
+      bandMin.SetSize(1);
+      bandMax.SetSize(1);
+      bandMin.Fill(m_HistogramMin[k]);
+      bandMax.Fill(m_HistogramMax[k]);
+      
       typename HistogramType::Pointer histogram = HistogramType::New();
       histogram->SetClipBinsAtEnds(clipBins);
-      histogram->Initialize(m_Size, bandMin, bandMax);
+
+      typename HistogramType::SizeType size;
+      size.SetSize(1);
+      size.Fill( m_Size[ k ] );
+      histogram->SetMeasurementVectorSize(1);
+      histogram->Initialize(size, bandMin, bandMax );
+
       histoList->PushBack(histogram);
       }
     m_ThreadHistogramList.push_back(histoList);
@@ -251,11 +271,34 @@ PersistentHistogramVectorImageFilter<TInputImage>
       }
 
     PixelType vectorValue = it.Get();
-    for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
+
+	bool skipSampleNoData=false;
+	if(m_NoDataFlag)
       {
-      InternalPixelType value = vectorValue[j];
-      if( (!m_NoDataFlag) || value!=m_NoDataValue )
+      unsigned int itComp=0;
+	  while( itComp < vectorValue.GetSize() )
+	    {
+	    if (vectorValue[itComp]==m_NoDataValue)
+		  {
+          skipSampleNoData=true;
+          itComp++;
+          }
+        else
+          {
+          skipSampleNoData=false;
+          break;
+          }
+	    }
+      }
+
+    if( !skipSampleNoData )
+      {
+      for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
         {
+        typename HistogramType::MeasurementVectorType value;
+        value.SetSize(1);
+        value.Fill(vectorValue[j]);
+
         m_ThreadHistogramList[threadId]->GetNthElement(j)->GetIndex(value, index);
         if (!m_ThreadHistogramList[threadId]->GetNthElement(j)->IsIndexOutOfBounds(index))
           {
@@ -265,10 +308,11 @@ PersistentHistogramVectorImageFilter<TInputImage>
           // bin value.
           // If the index isn't valid, we don't increase the frequency.
           // See the comments in Histogram->GetIndex() for more info.
-          m_ThreadHistogramList[threadId]->GetNthElement(j)->IncreaseFrequency(index, 1);
+          m_ThreadHistogramList[threadId]->GetNthElement(j)->IncreaseFrequencyOfIndex(index, 1);
           }
         }
       }
+      
     ++it;
     progress.CompletedPixel();
     }

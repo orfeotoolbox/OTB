@@ -26,7 +26,7 @@
 
 #include "otbObjectList.h"
 #include "itkStatisticsAlgorithm.h"
-#include "itkDenseFrequencyContainer.h"
+#include "itkDenseFrequencyContainer2.h"
 #include "itkNumericTraits.h"
 #include "itkHistogram.h"
 
@@ -37,11 +37,11 @@ namespace otb
  * \brief Compute the histogram of a large image using streaming
  *
  *  This filter persists its temporary data. It means that if you Update it n times on n different
- * requested regions, the output statistics will be the statitics of the whole set of n regions.
+ * requested regions, the output histogram will be the histogram of the whole set of n regions.
  *
  * To reset the temporary data, one should call the Reset() function.
  *
- * To get the statistics once the regions have been processed via the pipeline, use the Synthetize() method.
+ * To get the histogram once the regions have been processed via the pipeline, use the Synthetize() method.
  *
  * \sa PersistentImageFilter
  * \ingroup Streamed
@@ -88,12 +88,18 @@ public:
   typedef typename itk::DataObject::Pointer       DataObjectPointer;
 
   /** Types for histogram */
-  typedef itk::Statistics::DenseFrequencyContainer        DFContainerType;
-  typedef typename itk::NumericTraits
-    <InternalPixelType>::RealType                         HistogramMeasurementRealType;
-  typedef itk::Statistics::Histogram<HistogramMeasurementRealType, 1,
-      DFContainerType>                                    HistogramType;
-  typedef typename HistogramType::SizeType                HistogramSizeType;
+  typedef itk::Statistics::DenseFrequencyContainer2        DFContainerType;
+
+  typedef
+    typename itk::NumericTraits<InternalPixelType>::RealType
+    HistogramMeasurementRealType;
+
+  typedef
+    itk::Statistics::Histogram<HistogramMeasurementRealType, DFContainerType>
+    HistogramType;
+
+  typedef itk::VariableLengthVector< unsigned int > CountVectorType;
+
   typedef PixelType                                       MeasurementVectorType;
   typedef ObjectList<HistogramType>                       HistogramListType;
   typedef typename HistogramListType::Pointer             HistogramListPointerType;
@@ -125,9 +131,14 @@ public:
    */
   itkBooleanMacro(NoDataFlag);
 
-  void SetNumberOfBins(unsigned int size)
+  inline void SetNumberOfBins( unsigned int i, CountVectorType::ValueType size )
   {
-    m_Size[0] = size;
+    m_Size[ i ] = size;
+  }
+
+  inline void SetNumberOfBins( const CountVectorType& size )
+  {
+    m_Size = size;
   }
 
   /** Return the computed histogram list */
@@ -177,7 +188,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   ArrayHistogramListType   m_ThreadHistogramList;
-  HistogramSizeType        m_Size;
+  CountVectorType          m_Size;
   MeasurementVectorType    m_HistogramMin;
   MeasurementVectorType    m_HistogramMax;
   bool                     m_NoDataFlag;
