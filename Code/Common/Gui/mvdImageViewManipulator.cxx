@@ -257,7 +257,7 @@ void
 ImageViewManipulator
 ::ZoomTo( double scale )
 {
-  qDebug() << this << "::ZoomTo(" << scale << ")";
+  // qDebug() << this << "::ZoomTo(" << scale << ")";
 
   assert( scale!=0.0 );
 
@@ -275,7 +275,7 @@ ImageViewManipulator
 #else
   otb::ViewSettings::SpacingType spacing( m_NativeSpacing );
 
-  // Here, one zoom to arbitray scale-factor relative to
+  // Here, zoom to arbitray scale-factor relative to
   // viewport spacing.
   //
   // If viewport spacing has previously been set to
@@ -401,7 +401,7 @@ ImageViewManipulator
 /******************************************************************************/
 void
 ImageViewManipulator
-::MouseMoveEvent( QMouseEvent* event)
+::MouseMoveEvent( QMouseEvent* event )
 {
   assert( event!=NULL );
 
@@ -461,12 +461,14 @@ ImageViewManipulator
       m_MousePressOrigin = PointType();
       m_IsMouseDragging = false;
 
+      /*
       emit RoiChanged(
         GetOrigin(),
         GetViewportSize(),
         GetSpacing(),
         m_ViewSettings->GetViewportCenter()
       );
+      */
 
       /*
       center[0] = GetOrigin()[0]+GetViewportSize()[0]*GetSpacing()[0];

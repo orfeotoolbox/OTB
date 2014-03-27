@@ -174,7 +174,7 @@ private slots:
   void on_scaleLineEdit_editingFinished();
   /**
    */
-  void on_pixelIndexLineEdit_editingFinished();
+  void on_pixelIndexLineEdit_returnPressed();
 };
 
 } // end namespace 'mvd'

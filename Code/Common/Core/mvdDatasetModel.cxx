@@ -918,10 +918,12 @@ DatasetModel
                 double sx,
                 double sy )
 {
+  /*
   qDebug()
     << this << "::OnRoiChanged("
     << center[ 0 ] << "," << center[ 1 ] << "," << sx << "," << sy
     << ")";
+  */
 
   // update the descriptor
   m_Descriptor->UpdateViewContext( center, sx );
@@ -943,7 +945,9 @@ void
 DatasetModel
 ::OnRenderingContextChanged(const PointType& center, double zoom)
 {
-  qDebug() << this << "::OnRenderingContextChanged()";
+  // TODO: Remove this method.
+
+  // qDebug() << this << "::OnRenderingContextChanged()";
 
   // update the descriptor
   m_Descriptor->UpdateViewContext(center, zoom );

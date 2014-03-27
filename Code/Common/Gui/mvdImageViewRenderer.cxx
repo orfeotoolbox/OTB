@@ -144,7 +144,7 @@ ImageViewRenderer
     .arg( otb::GlView::REQUIRED_GL_VERSION )
     .arg( otb::GlView::REQUIRED_GLSL_VERSION )
   );
-    
+
   //
   // Warn user is check has failed.
   qWarning() << ToStdString( message ).c_str();

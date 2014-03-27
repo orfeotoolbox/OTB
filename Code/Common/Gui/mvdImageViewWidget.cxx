@@ -528,10 +528,12 @@ void
 ImageViewWidget
 ::Center( const PointType& center, double sx, double sy )
 {
+  /*
   qDebug()
     << this << "::Center("
     << center[ 0 ] << "," << center[ 1 ] << "," << sx << "," << sy
     << ")";
+  */
 
   assert( m_Renderer!=NULL );
   assert( m_Manipulator!=NULL );
@@ -750,6 +752,13 @@ ImageViewWidget
 {
   assert( m_Renderer!=NULL );
 
+  /*
+  qDebug()
+    << this << "::OnRoiChanged("
+    << "[" << point[ 0 ] << "," << point[ 1 ] << "]"
+    << "[" << center[ 0 ] << "," << center[ 1 ] << "]";
+  */
+
   emit CenterChanged( center );
 
   AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
@@ -761,11 +770,15 @@ ImageViewWidget
   double rsx = nativeSpacing[ 0 ] / spacing[ 0 ];
   double rsy = nativeSpacing[ 1 ] / spacing[ 1 ];
 
+#if 0
   double sx = ( spacing[ 0 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 0 ];
   double sy = ( spacing[ 1 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 1 ];
+#endif
 
+  /*
   qDebug() << "sx:" << sx << "; sy:" << sy;
   qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
+  */
 
   // Emit absolute scale.
   emit ScaleChanged( rsx, rsy );

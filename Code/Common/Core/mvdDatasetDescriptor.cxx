@@ -442,10 +442,12 @@ DatasetDescriptor
   // TODO: Split center and zoom.
   // TODO: Moved center and zoom into image properties.
 
+  /*
   qDebug()
     << this << "::UpdateViewContext("
     << center[ 0 ] << "," << center[ 1 ] << "," << zoom
     << ")";
+  */
 
   // Create QString from parameters
   QString scenter( ToQString( center[ 0 ] ) + " " + ToQString( center [ 1 ] ) );

@@ -133,7 +133,7 @@ void
 StatusBarWidget
 ::SetScale( double sx, double sy )
 {
-  // qDebug() << this << "::OnScaleChanged(" << sx << "," << sy << ")";
+  // qDebug() << this << "::SetScale(" << sx << "," << sy << ")";
 
   QString zoomLevel( StatusBarWidget::ZoomLevel( sx ) );
 
@@ -168,7 +168,7 @@ StatusBarWidget
 /*****************************************************************************/
 void
 StatusBarWidget
-::on_pixelIndexLineEdit_editingFinished()
+::on_pixelIndexLineEdit_returnPressed()
 {
   //
   // Cancel if pixel-index coordinates text is empty.
