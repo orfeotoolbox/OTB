@@ -110,6 +110,15 @@ ImageViewRenderer
   try
     {
     isOk = otb::GlView::CheckGLCapabilities( glVersion, glslVersion );
+
+    //
+    // Trace runtime OpenGL and GLSL versions.
+    qWarning() <<
+    ToStdString(
+      tr( "Runtime OpenGL version '%1' with GLSL version '%2'." )
+      .arg( glVersion )
+      .arg( glslVersion )
+    ).c_str();
     }
   catch( std::exception& exc )
     {
@@ -124,15 +133,6 @@ ImageViewRenderer
   // Return if check has succeeded.
   if( isOk )
     return true;
-
-  //
-  // Trace runtime OpenGL and GLSL versions.
-  qWarning() <<
-    ToStdString(
-      tr( "Runtime OpenGL version '%1' with GLSL version '%2'." )
-      .arg( glVersion )
-      .arg( glslVersion )
-    ).c_str();
 
   //
   // Construct message.
