@@ -29,7 +29,7 @@ namespace otb
 {
 
 
-const char * GlView::REQUIRED_GL_VERSION = "2.0.0";
+const char * GlView::REQUIRED_GL_VERSION = "3.1.2";
 const char * GlView::REQUIRED_GLSL_VERSION = "";
 
 
@@ -77,36 +77,27 @@ GlView
 
 bool
 GlView
-::CheckGLCapabilities()
+::CheckGLCapabilities( const char * & glVersion, const char * & glslVersion )
 {
-  //
-  // Check OpenGL version
-  const char * glVersionStr = GlView::GLVersion();
+  // Get OpenGL version.
+  glVersion = GlView::GLVersion();
 
-  int glMajor = -1;
-  int glMinor = -1;
-  int glRelease = -1;
+  // If OpenGL version is at least 2.0, get (and return) GLSL version
+  // (before checking against OpenGL required version).
+  if( GlView::VerCmp( glVersion, "2.0" )>=0 )
+    glslVersion = GlView::GLSLVersion();
 
-  GlView::SplitVersion( glVersionStr, glMajor, glMinor, glRelease );
-
-  if( glMajor<2 )
+  // Now, Check OpenGL version against required version.
+  if( GlView::VerCmp( glVersion, GlView::REQUIRED_GL_VERSION )<1 )
     return false;
 
+  //
+  // Then, check OpenGL SL version against required version.
+  if( GlView::VerCmp( glslVersion, GlView::REQUIRED_GLSL_VERSION )<1 )
+    return false;
 
   //
-  // Check OpenGL shading-language version.
-  const char * slVersionStr = GlView::GLSLVersion();
-
-  int slMajor = -1;
-  int slMinor = -1;
-  int slRelease = -1;
-
-  GlView::SplitVersion( slVersionStr, slMajor, slMinor, slRelease );
-
-  // TODO: Check shading-language version here.
-
-  //
-  // Ok.
+  // Finally, Ok.
   return true;
 }
 
@@ -118,8 +109,24 @@ GlView
                 int& minor,
                 int& release )
 {
+  //
+  // Invalid version.
   if( version==NULL )
     return false;
+
+  //
+  // Special case: empty strings returns 0.0.0 and true.
+  if( strlen( version )==0 )
+    {
+    major = 0;
+    minor = 0;
+    release = 0;
+
+    return true;
+    }
+
+  //
+  // Parse major part.
 
   major = atoi( version );
 
@@ -130,10 +137,11 @@ GlView
     return false;
     }
 
+
+  //
+  // Parse minor part.
+
   minor = 0;
-
-  release = 0;
-
 
   const char * minorStr = strchr( version, '.' );
 
@@ -142,14 +150,82 @@ GlView
 
   minor = atoi( ++minorStr );
 
+  //
+  // Parse release part.
+
+  release = 0;
 
   const char * releaseStr = strchr( minorStr, '.' );
 
-  if( releaseStr!=NULL )
-    release = atoi( ++releaseStr );
+  // In this case, it is Ok to return because version of the form
+  // Major.minor are handled.
+  if( releaseStr==NULL )
+    return true;
 
+  release = atoi( ++releaseStr );
 
+  //
+  // Ok.
   return true;
+}
+
+
+int
+GlView
+::VerCmp( const char * version, const char * required )
+{
+  assert( version!=NULL );
+  assert( required!=NULL );
+
+  //
+  // Split version.
+
+  int verMaj = -1;
+  int verMin = -1;
+  int verRel = -1;
+
+  if( !GlView::SplitVersion( version, verMaj, verMin, verRel ) )
+    throw std::invalid_argument( version );
+
+  //
+  // Split required version.
+
+  int reqMaj = -1;
+  int reqMin = -1;
+  int reqRel = -1;
+
+  if( !GlView::SplitVersion( required, reqMaj, reqMin, reqRel ) )
+    throw std::runtime_error( required );
+
+  //
+  // Compare splitted versions.
+
+  if( verMaj<reqMaj )
+    return -1;
+
+  else if( verMaj>reqMaj )
+    return 1;
+
+  else // if( verMaj==reqMaj )
+    {
+    if( verMin<reqMin )
+      return -1;
+
+    else if( verMin>reqMin )
+      return 1;
+
+    else // if( verMin==reqMin )
+      {
+      if( verRel<reqRel)
+        return -1;
+
+      else if( verRel>reqRel )
+        return 1;
+
+      else // if( verRel==reqRel )
+        return 0;
+      }
+    }
 }
 
 

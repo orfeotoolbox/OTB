@@ -55,18 +55,36 @@ public:
   static const char * REQUIRED_GLSL_VERSION;
 
   /**
+   * @return The OpenGL version used at runtime. The call to this
+   * method requires a valid OpenGL rendering context. An
+   * std::runtime_error() is thrown when glGetError() is different
+   * than GL_NO_ERROR.
    */
   static const char * GLVersion();
 
   /**
+   * @return The OpenGL Shading-Language version used at runtime. The
+   * call to this method requires a valid OpenGL rendering context. An
+   * std::runtime_error() is thrown when glGetError() is different
+   * than GL_NO_ERROR. This method uses GL_SHADING_LANGUAGE_VERSION
+   * which is available only if the OpenGL version is greater than
+   * 2.0. (@see
+   * http://www.opengl.org/sdk/docs/man2/xhtml/glGetString.xml).
    */
   static const char * GLSLVersion();
 
   /**
+   * @param glVersion The returned OpenGL version or <code>NULL</code>
+   * if its query has failed.
+   *
+   * @param glslVersion The returned OpenGL Shading-Language version
+   * or <code>NULL</code> if its query has failed.
+   *
    * @return true if OpengGL capabilities of running platform meets
    * the needs of the library.
    */
-  static bool CheckGLCapabilities();
+  static bool CheckGLCapabilities( const char * & glVersion,
+                                   const char * & glslVersion );
 
   // Initialize 
   void Initialize(unsigned int sx, unsigned int sy);
@@ -133,6 +151,8 @@ private:
                             int& major,
                             int& minor,
                             int& release );
+
+  static int VerCmp( const char * version, const char * required );
 
   ViewSettings::Pointer m_Settings;
 
