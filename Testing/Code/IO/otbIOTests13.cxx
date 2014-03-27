@@ -24,10 +24,14 @@
 
 void RegisterTests()
 {
+#ifdef OTB_USE_JPEG2000
   REGISTER_TEST(otbJPEG2000ImageIOTestCanRead);
   REGISTER_TEST(otbJPEG2000ImageIOTestCanWrite);
+#endif
   REGISTER_TEST(otbMultiResolutionReadingInfo);
   REGISTER_TEST(otbVectorImageTest);
   REGISTER_TEST(otbVectorImageLegacyTest);
+#ifdef OTB_USE_JPEG2000
   REGISTER_TEST(otbGenerateClassicalQLWithJPEG2000);
+#endif
 }
