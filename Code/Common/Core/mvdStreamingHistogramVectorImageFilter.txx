@@ -270,14 +270,34 @@ PersistentHistogramVectorImageFilter<TInputImage>
       }
       
     PixelType vectorValue = it.Get();
-    for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
-      {
-      typename HistogramType::MeasurementVectorType value;
-      value.SetSize(1);
-      value.Fill(vectorValue[j]);
+  
+    bool skipSampleNoData=false;
+    if(m_NoDataFlag)
+       {
+      unsigned int itComp=0;
+	  while( itComp < vectorValue.GetSize() )
+	    {
+	    if (vectorValue[itComp]==m_NoDataValue)
+		  {
+          skipSampleNoData=true;
+          itComp++;
+          }
+        else
+          {
+          skipSampleNoData=false;
+          break;
+          }
+	    }
+      }
 
-      if( (!m_NoDataFlag) || value[0]!=m_NoDataValue )
-        {
+    if( !skipSampleNoData )
+      {
+      for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
+         {
+        typename HistogramType::MeasurementVectorType value;
+        value.SetSize(1);
+        value.Fill(vectorValue[j]);
+
         m_ThreadHistogramList[threadId]->GetNthElement(j)->GetIndex(value, index);
         if (!m_ThreadHistogramList[threadId]->GetNthElement(j)->IsIndexOutOfBounds(index))
           {
