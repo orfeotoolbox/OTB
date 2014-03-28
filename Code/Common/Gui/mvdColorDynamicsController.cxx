@@ -1182,9 +1182,12 @@ void
 ColorDynamicsController
 ::OnApplyAllClicked( RgbwChannel channel, double low, double high )
 {
+  /*
   qDebug()
     << this
-    << "::OnApplyAllChanged(" << RGBW_CHANNEL_NAMES[ channel ] << ")";
+    << "::OnApplyAllChanged("
+    << RGBW_CHANNEL_NAMES[ channel ] << "," << low << "," << high << ")";
+  */
 
   // Get image-model.
   VectorImageModel* imageModel = GetModel< VectorImageModel >();

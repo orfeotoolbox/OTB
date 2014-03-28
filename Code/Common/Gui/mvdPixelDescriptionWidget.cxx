@@ -126,6 +126,8 @@ void
 PixelDescriptionWidget
 ::OnCurrentPhysicalUpdated(const QStringList & currentPhysical)
 { 
+  // qDebug() << this << "::OnCurrentPhysicalUpdated(" << currentPhysical << ")";
+
   //m_CartographicItem->setText(1, currentPhysical);
 
   if (!currentPhysical.empty())
@@ -159,6 +161,8 @@ void
 PixelDescriptionWidget
 ::OnCurrentGeographicUpdated(const QStringList&/*const QString &*/ currentGeo)
 {
+  // qDebug() << this << "::OnCurrentGeographicUpdated(" << currentGeo << ")";
+
   if (!currentGeo.empty())
     {
     // remove the previous QTreeWidgetItem  of m_GeographicRootItem
@@ -201,6 +205,8 @@ PixelDescriptionWidget
 ::OnCurrentPixelValueUpdated(const VectorImageType::PixelType & currentPixel, 
                              const QStringList& bandNames)
 {
+  // qDebug() << this << "::OnCurrentPixelValueUpdated(" << bandNames << ")";
+
   if (!bandNames.empty() || currentPixel.GetSize() != 0)
     {
     //

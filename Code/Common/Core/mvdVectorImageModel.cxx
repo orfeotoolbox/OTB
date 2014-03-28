@@ -1363,7 +1363,7 @@ VectorImageModel
 
   // show the current pixel description only if the mouse cursor is
   // under the image
-  if ( isInsideNativeLargestRegion )
+  if( isInsideNativeLargestRegion || 1 )
     {   
     //
     // get the physical coordinates
@@ -1404,7 +1404,7 @@ VectorImageModel
       geoVector.push_back(ToStdString(tr("No geoinfo")));
       }
 
-    if ( ToImage()->GetLargestPossibleRegion().IsInside(currentLodIndex))
+    if( ToImage()->GetLargestPossibleRegion().IsInside(currentLodIndex) || 1 )
       {
       // TODO : Is there a better method to detect no geoinfo available ?
       if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0) 
@@ -1428,6 +1428,8 @@ VectorImageModel
           ossGeographicElevation << elev;
           geoVector.push_back(ossGeographicElevation.str());
           }
+        else
+          geoVector.push_back( "" );
         }
       else
         {
@@ -1436,8 +1438,6 @@ VectorImageModel
         geoVector.push_back("");
         geoVector.push_back("");
         }
-
-      cartoList = ToQStringList( cartoVector );
       }
     /*
     else
@@ -1486,6 +1486,8 @@ VectorImageModel
         }
       }
     */
+
+    cartoList = ToQStringList( cartoVector );
     geoList = ToQStringList( geoVector );
 
     if( true /* ToImage()->GetBufferedRegion().IsInside(currentLodIndex) */ )
