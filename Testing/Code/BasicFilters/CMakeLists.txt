@@ -2897,6 +2897,11 @@ add_test(bfTvTileImageFilter ${BASICFILTERS_TESTS15}
 )
 
 
+#-------- StreamingHistogramVectorImageFilter.cxx ----
+add_test(bfTuStreamingHistogramVIFilterNew ${BASICFILTERS_TESTS15}
+  otbStreamingHistogramVectorImageFilterNew
+)
+
 # A enrichir
 set(BasicFilters_SRCS1
 otbBasicFiltersTests1.cxx
@@ -3192,6 +3197,7 @@ otbThresholdVectorImageFilter.cxx
 otbClampVectorImageFilter.cxx
 otbClampImageFilter.cxx
 otbTileImageFilter.cxx
+otbStreamingHistogramVectorImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")

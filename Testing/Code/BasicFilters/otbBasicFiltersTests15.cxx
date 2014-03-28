@@ -45,4 +45,5 @@ void RegisterTests()
   REGISTER_TEST(otbClampImageFilterTest);
   REGISTER_TEST(otbTileImageFilterNew);
   REGISTER_TEST(otbTileImageFilter);
+  REGISTER_TEST(otbStreamingHistogramVectorImageFilterNew);
 }
