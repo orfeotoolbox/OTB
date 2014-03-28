@@ -175,6 +175,9 @@ private:
 
   std::string FilenameToGdalDriverShortName(const std::string& name) const;
 
+  /** Parse a GML box from a Jpeg2000 file and get the origin */
+  bool GetOriginFromGMLBox(std::vector<double> &origin);
+  
   /** Test whether m_CreationOptions has an option
    *  \param partialOption The beginning of a creation option (for example "QUALITY=")
    */

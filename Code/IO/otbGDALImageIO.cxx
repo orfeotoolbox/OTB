@@ -25,6 +25,7 @@
 #include "itksys/SystemTools.hxx"
 #include "otbImage.h"
 #include "itkVariableLengthVector.h"
+#include "otbTinyXML.h"
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
@@ -821,9 +822,17 @@ void GDALImageIO::InternalReadImageInformation()
       {
       otbMsgDevMacro(<< "Original blockSize: "<< blockSizeX << " x " << blockSizeY );
 
-      // Try to keep the GDAL block memory constant
       blockSizeX = uint_ceildivpow2(blockSizeX,m_ResolutionFactor);
-      blockSizeY = blockSizeY * (1 << m_ResolutionFactor);
+      if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+        {
+        // Jpeg2000 case : use the real block size Y
+        blockSizeY = uint_ceildivpow2(blockSizeY,m_ResolutionFactor);
+        }
+      else
+        {
+        // Try to keep the GDAL block memory constant
+        blockSizeY = blockSizeY * (1 << m_ResolutionFactor);
+        }
 
       otbMsgDevMacro(<< "Decimated blockSize: "<< blockSizeX << " x " << blockSizeY );
 
@@ -840,6 +849,9 @@ void GDALImageIO::InternalReadImageInformation()
   // Default Spacing
   m_Spacing[0] = 1;
   m_Spacing[1] = 1;
+  
+  // flag to detect images in sensor geometry
+  bool isSensor = false;
 
   if (m_NumberOfDimensions == 3) m_Spacing[2] = 1;
 
@@ -889,6 +901,15 @@ void GDALImageIO::InternalReadImageInformation()
       {
       OSRRelease(pSR);
       pSR = NULL;
+      }
+    }
+  else
+    {
+    otbMsgDevMacro( << "No projection => sensor model" );
+    // Special case for Jpeg2000 files : try to read the origin in the GML box
+    if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+      {
+      isSensor = GetOriginFromGMLBox(m_Origin);
       }
     }
 
@@ -953,12 +974,30 @@ void GDALImageIO::InternalReadImageInformation()
 
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
 
-    /// retrieve origin and spacing from the geo transform
-    m_Origin[0] = VadfGeoTransform[0];
-    m_Origin[1] = VadfGeoTransform[3];
-    m_Spacing[0] = VadfGeoTransform[1];
-    m_Spacing[1] = VadfGeoTransform[5];
-
+    if (!isSensor)
+      {
+      /// retrieve origin and spacing from the geo transform
+      m_Origin[0] = VadfGeoTransform[0];
+      m_Origin[1] = VadfGeoTransform[3];
+      m_Spacing[0] = VadfGeoTransform[1];
+      m_Spacing[1] = VadfGeoTransform[5];
+    
+      if ( m_Spacing[0]== 0 || m_Spacing[1] == 0)
+        {
+        // Manage case where axis are not standard
+        if (VadfGeoTransform[2] != 0  && VadfGeoTransform[4] != 0 )
+          {
+          m_Spacing[0] = VadfGeoTransform[2];
+          m_Spacing[1] = VadfGeoTransform[4];
+          }
+        else
+          {
+          otbWarningMacro(<< "Incorrect geotransform  (spacing = 0)!");
+          m_Spacing[0] = 1;
+          m_Spacing[1] = 1;
+          }
+        }
+      }
     }
 
   // Dataset info
@@ -1641,6 +1680,62 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
     gdalDriverShortName = "NOT-FOUND";
 
   return gdalDriverShortName;
+}
+
+bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
+{
+  GDALJP2Metadata jp2Metadata;
+  if (!jp2Metadata.ReadAndParse(m_FileName.c_str()))
+    {
+    return false;
+    }
+  
+  if (!jp2Metadata.papszGMLMetadata)
+    {
+    return false;
+    }
+  
+  std::string gmlString = static_cast<std::string>(jp2Metadata.papszGMLMetadata[0]);
+  gmlString.erase(0,18); // We need to remove first part to create a true xml stream
+  otbMsgDevMacro( << "XML extract from GML box: " << gmlString );
+
+  TiXmlDocument doc;
+  doc.Parse(gmlString.c_str()); // Create xml doc from a string
+
+  TiXmlHandle docHandle( &doc );
+  TiXmlElement* originTag = docHandle.FirstChild( "gml:FeatureCollection" )
+                                     .FirstChild( "gml:featureMember" )
+                                     .FirstChild( "gml:FeatureCollection" )
+                                     .FirstChild( "gml:featureMember" )
+                                     .FirstChild( "gml:GridCoverage" )
+                                     .FirstChild( "gml:gridDomain")
+                                     .FirstChild( "gml:Grid" )
+                                     .FirstChild( "gml:limits" )
+                                     .FirstChild( "gml:GridEnvelope" )
+                                     .FirstChild( "gml:low").ToElement();
+  if(originTag)
+    {
+    otbMsgDevMacro( << "\t Origin (" <<  originTag->Value() <<" tag)= "<<  originTag->GetText());
+    }
+  else
+    {
+    otbMsgDevMacro( << "Didn't find the GML element which indicate the origin!" );
+    return false;
+    }
+
+  std::vector<itksys::String> originValues;
+  originValues = itksys::SystemTools::SplitString(originTag->GetText(),' ', false);
+
+  std::istringstream ss0 (originValues[0]);
+  std::istringstream ss1 (originValues[1]);
+  ss0 >> origin[1];
+  ss1 >> origin[0];
+  origin[0]--;
+  origin[1]--;
+
+  otbMsgDevMacro( << "\t Origin from GML box: " <<  origin[0] << ", " << origin[1] );
+
+  return true;
 }
 
 std::string GDALImageIO::GetGdalWriteImageFileName(const std::string& gdalDriverShortName, const std::string& filename) const
