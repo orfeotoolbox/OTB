@@ -74,8 +74,10 @@ TaskProgressDialog
   m_Object( NULL ),
   m_Exception()
 {
+#if 0
+  // Pleiades days DEMO_MODE
   m_BackgroundTask->setParent( this );
-
+#endif
 
   QObject::connect(
     task->GetWorker(), SIGNAL( ProgressTextChanged( const QString& ) ),
@@ -95,7 +97,6 @@ TaskProgressDialog
     this, SLOT( setRange( int, int ) )
   );
 
-
   QObject::connect(
     task->GetWorker(),
     SIGNAL( Done( QObject* ) ),
@@ -111,12 +112,36 @@ TaskProgressDialog
     this,
     SLOT( OnExceptionRaised( QString ) )
   );
+
+  // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+  // Accept progress-dialog when thread has been signaled as
+  // finished() and not when work object has done it's job (while the
+  // thread is still running when Done() is signalled).
+  QObject::connect(
+    task,
+    SIGNAL( finished() ),
+    // to:
+    this,
+    SLOT( accept() )
+  );
 }
 
 /*******************************************************************************/
 TaskProgressDialog
 ::~TaskProgressDialog()
 {
+  qDebug() << this << "destroyed.";
+
+  if( m_BackgroundTask!=NULL )
+    {
+    if( m_BackgroundTask->isRunning() )
+      {
+      qWarning() << m_BackgroundTask << "has been forced to quit while running!";
+
+      m_BackgroundTask->quit();
+      m_BackgroundTask->wait();
+      }
+    }
 }
 
 /*****************************************************************************/
@@ -142,7 +167,8 @@ TaskProgressDialog
 
   m_BackgroundTask->wait();
 
-  accept();
+  // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+  // accept();
 }
 
 /*******************************************************************************/

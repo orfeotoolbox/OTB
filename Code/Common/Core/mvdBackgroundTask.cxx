@@ -91,7 +91,6 @@ BackgroundTask
     this, SLOT( quit() )
   );
 
-
   QObject::connect(
     worker,
     SIGNAL( destroyed( QObject* ) ),
@@ -122,6 +121,12 @@ BackgroundTask
 BackgroundTask
 ::~BackgroundTask()
 {
+  qDebug() << this << " destroyed.";
+
+  assert( isFinished() );
+
+  if( !isFinished() )
+    qWarning() << this << "is being destroyed while still running!";
 }
 
 /*******************************************************************************/
