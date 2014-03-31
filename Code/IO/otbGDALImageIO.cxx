@@ -531,6 +531,24 @@ bool GDALImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<
 
   unsigned int originalWidth = m_OriginalDimensions[0];
   unsigned int originalHeight = m_OriginalDimensions[1];
+  
+  bool computeBlockSize = false;
+  int blockSizeX = 0;
+  int blockSizeY = 0;
+  // For Jpeg2000 files, retrieve the tile size.
+  // TODO : the image and tile sizes at different resolution should be
+  // read in the GDAL dataset, when available
+  GDALDataset* dataset = m_Dataset->GetDataSet();
+  if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+    {
+    computeBlockSize = true;
+    dataset->GetRasterBand(1)->GetBlockSize(&blockSizeX, &blockSizeY);
+    if (blockSizeX==0 || blockSizeY==0)
+      {
+      computeBlockSize = false;
+      }
+    }
+  
 
   for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
     {
@@ -540,7 +558,17 @@ bool GDALImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<
     unsigned int w = uint_ceildivpow2( originalWidth, *itRes);
     unsigned int h = uint_ceildivpow2( originalHeight, *itRes);
 
-    oss << "Resolution: " << *itRes << " (Image [w x h]: " << w << "x" << h << ", Tile [w x h]: " <<  "not defined x not defined" << ")";
+    oss << "Resolution: " << *itRes << " (Image [w x h]: " << w << "x" << h << ", Tile [w x h]: ";
+    if (computeBlockSize)
+      {
+      unsigned int tw = uint_ceildivpow2( static_cast<unsigned int>(blockSizeX), *itRes);
+      unsigned int th = uint_ceildivpow2( static_cast<unsigned int>(blockSizeY), *itRes);
+      oss << tw << "x" << th << ")";
+      }
+    else
+      {
+      oss <<  "not defined x not defined" << ")";
+      }
 
     desc.push_back(oss.str());
     }
