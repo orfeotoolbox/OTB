@@ -29,6 +29,8 @@ StandardShader::StandardShader()
     m_MaxGreen(255),
     m_MinBlue(0),
     m_MaxBlue(255),
+    m_UseNoData(true),
+    m_NoData(0),
     m_Gamma(1.),
     m_Alpha(1.),
     m_CurrentRed(0),
@@ -54,6 +56,8 @@ std::string StandardShader::GetSource() const
     "uniform sampler2D src;\n"                                          \
     "uniform vec4 shader_a;\n"                                          \
     "uniform vec4 shader_b;\n"                                          \
+    "uniform int shader_use_no_data;\n"                                 \
+    "uniform float shader_no_data;\n"                                   \
     "uniform vec3 shader_current;\n"                                    \
     "uniform vec4 shader_gamma;\n"                                      \
     "uniform float shader_alpha;\n"                                     \
@@ -68,6 +72,9 @@ std::string StandardShader::GetSource() const
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
     "gl_FragColor = clamp(pow((p + shader_b)*shader_a,shader_gamma), 0.0, 1.0);\n" \
     "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
+    "if(shader_use_no_data > 0 && p[0] == shader_no_data && p[1] == shader_no_data && p[2] == shader_no_data){\n" \
+    "gl_FragColor[3] = 0;\n"                                            \
+    "}\n"                                                               \
     "if(shader_type == 1)\n"                                            \
     "{\n"                                                               \
     "float distance = sqrt((gl_FragCoord.x-shader_center[0])*(gl_FragCoord.x-shader_center[0])+(gl_FragCoord.y-shader_center[1])*(gl_FragCoord.y-shader_center[1]));\n" \
@@ -123,8 +130,16 @@ void StandardShader::SetupShader()
   
   GLint shader_a = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_a");
   glUniform4f(shader_a,scr,scg,scb,1.);
+
   GLint shader_b = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_b");
   glUniform4f(shader_b,shr,shg,shb,0);
+
+  GLint shader_use_no_data = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_use_no_data");
+  glUniform1i(shader_use_no_data,m_UseNoData);
+
+  GLint shader_no_data = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_no_data");
+  glUniform1f(shader_no_data,m_NoData);
+
   GLint shader_gamma = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_gamma");
   glUniform4f(shader_gamma,m_Gamma,m_Gamma,m_Gamma,m_Gamma);
 

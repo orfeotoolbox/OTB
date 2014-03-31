@@ -60,6 +60,11 @@ public:
   itkGetMacro(MaxGreen,double);
   itkGetMacro(MaxBlue,double);  
 
+  itkSetMacro(UseNoData,bool);
+  itkGetMacro(UseNoData,bool);
+  itkSetMacro(NoData,double);
+  itkGetMacro(NoData,double);
+
   itkSetMacro(CurrentRed,double);
   itkSetMacro(CurrentGreen,double);
   itkSetMacro(CurrentBlue,double);
@@ -119,6 +124,8 @@ private:
   double m_MaxGreen;
   double m_MinBlue;
   double m_MaxBlue;
+  bool   m_UseNoData;
+  double m_NoData;
   double m_Gamma;
   double m_Alpha;
   double m_CurrentRed;
@@ -137,7 +144,6 @@ private:
   bool m_VerticalSlider;
 
   ShaderType m_ShaderType;
-
 }; // End class StandardShader
 
 } // End namespace otb
