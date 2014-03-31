@@ -1064,6 +1064,34 @@ void GDALImageIO::InternalReadImageInformation()
                                             static_cast<std::string>(papszMetadata[cpt]));
       }
     }
+  
+  /* Special case for JPEG2000, also look in the GML boxes */
+  if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+    {
+    char **gmlMetadata = NULL;
+    GDALJP2Metadata jp2Metadata;
+    if (jp2Metadata.ReadAndParse(m_FileName.c_str()))
+      {
+      gmlMetadata = jp2Metadata.papszGMLMetadata;
+      }
+    
+    if (CSLCount(gmlMetadata) > 0)
+      {
+      std::string key;
+      int cptOffset = CSLCount(papszMetadata);
+      
+      for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
+        {
+        std::ostringstream lStream;
+        lStream << MetaDataKey::MetadataKey << (cpt+cptOffset);
+        key = lStream.str();
+
+        itk::EncapsulateMetaData<std::string>(dict, key,
+                                              static_cast<std::string>(gmlMetadata[cpt]));
+        }
+      }
+    }
+  
 
   /* -------------------------------------------------------------------- */
   /*      Report subdatasets.                                             */
