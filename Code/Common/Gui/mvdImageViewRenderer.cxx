@@ -382,6 +382,9 @@ ImageViewRenderer
     const VectorImageModel::Settings& settings =
       it->second.first->GetSettings();
 
+    const ImageProperties * properties = 
+      it->second.first->GetProperties();
+
     //
     // Apply color-setup.
     VectorImageModel::Settings::ChannelVector channels;
@@ -431,6 +434,9 @@ ImageViewRenderer
       }
 
     shader->SetGamma( settings.GetGamma() );
+    
+    shader->SetUseNoData(properties->IsNoDataEnabled());
+    shader->SetNoData(properties->GetNoData());
 
     // If reference actor
     if(m_ReferenceGlImageActor.IsNotNull() && m_ReferenceGlImageActor == it->second.second)
