@@ -101,8 +101,7 @@ AbstractWorker
     if( result->thread()!=app->thread() )
       result->moveToThread( app->thread() );
 
-    // Emit task/job has been correctly done.
-    emit Done( result );
+   
     }
   catch( std::exception& exc )
     {
@@ -116,6 +115,9 @@ AbstractWorker
 
   // Emit task/job has finished.
   emit Finished();
+
+  // Emit task/job has been correctly done.
+  emit Done( result );
 }
 
 /*******************************************************************************/
