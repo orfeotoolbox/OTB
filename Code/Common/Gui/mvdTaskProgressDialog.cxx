@@ -165,8 +165,6 @@ TaskProgressDialog
 {
   m_Object = result;
 
-  m_BackgroundTask->wait();
-
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
   // accept();
 }

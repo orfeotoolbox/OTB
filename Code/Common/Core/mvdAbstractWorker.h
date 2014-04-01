@@ -129,14 +129,20 @@ signals:
   void ProgressRangeChanged( int min, int max );
 
   /**
-   * \brief Signal emitted when job/task has correctly been done.
+   * \brief Signal emitted when job has correctly been done.
+   *
+   * Use this signal to get resulting object when job has been done.
    *
    * \param result Resulting QObject instance of NULL if none.
    */
   void Done( QObject* result =NULL );
 
   /**
-   *  \brief Signal emitted when job/task has finished correctly or not.
+   *  \brief Signal emitted when task (i.e. thread) has finished
+   *  correctly or incorrectly.
+   *
+   * Use this signal to foward to thead quit() slot when job has
+   * finished.
    */
   void Finished();
 
