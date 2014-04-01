@@ -134,6 +134,9 @@ private:
   /**
    */
   AbstractWorker* m_Worker;
+  /**
+   */
+  bool m_IsAutoDestroyEnabled : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 

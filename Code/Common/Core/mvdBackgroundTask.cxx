@@ -29,6 +29,7 @@
 //
 // System includes (sorted by alphabetic order)
 #include <cassert>
+#include <stdexcept>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -38,7 +39,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "mvdAbstractWorker.h"
+#include "Core/mvdAbstractWorker.h"
+#include "Core/mvdAlgorithm.h"
 
 namespace mvd
 {
@@ -71,26 +73,45 @@ BackgroundTask
   QThread( parent ),
   m_Worker( worker )
 {
-  // Change thread affinity and ownership of managed worker.
+  // Check worker argument.
+  assert( m_Worker!=NULL );
   assert( m_Worker->parent()==NULL );
+
+  if( m_Worker->parent()!=NULL )
+    throw std::invalid_argument(
+      ToStdString(
+        tr(
+          "Worker must not be parented in order to be moved to another thread."
+        )
+      )
+    );
+
+  // Change thread affinity and take ownership of managed worker.
   m_Worker->moveToThread( this );
-  m_Worker->setParent( this );
 
+  // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+  //
+  // Do not re-parent worker to background-task thread here since it
+  // will generate a 'WARNG> QObject::setParent: Cannot set parent,
+  // new parent is in a different thread' warning message from Qt.
+  //
+  // m_Worker->setParent( this );
 
-  // Start.
+  // When thread is started, start doing worker job.
   QObject::connect(
     this, SIGNAL( started() ),
     // to:
     worker, SLOT( Do() )
   );
 
-  // Stop.
+  // When worker has finished its job, quit thread.
   QObject::connect(
     worker, SIGNAL( Finished() ),
     // to:
     this, SLOT( quit() )
   );
 
+  // Keep informed When some object is destroyed.
   QObject::connect(
     worker,
     SIGNAL( destroyed( QObject* ) ),
@@ -99,21 +120,25 @@ BackgroundTask
     SLOT( OnObjectDestroyed( QObject* ) )
   );
 
+  // Conditionaly auto-destroy this background task.
   if( autoDestroy )
     {
-    // Auto-destroy this background task.
+    // When thread has finished.
     QObject::connect(
       this, SIGNAL( finished() ),
       // to:
       this, SLOT( deleteLater() )
     );
 
-    // Auto-destroy worker instance.
-    QObject::connect(
-      this, SIGNAL( finished() ),
-      // to:
-      worker, SLOT( deleteLater() )
-    );
+    // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+    //
+    // NEVER deleteLater() (i.e. asynchronously) worker instance.
+    //
+    // QObject::connect(
+    //   this, SIGNAL( finished() ),
+    //   // to:
+    //   worker, SLOT( deleteLater() )
+    // );
     }
 }
 
@@ -121,12 +146,31 @@ BackgroundTask
 BackgroundTask
 ::~BackgroundTask()
 {
-  qDebug() << this << " destroyed.";
+  // Trace.
+  qDebug() << this << "is being detroyed.";
 
+  // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+  //
+  // Warns if this background-task thread is still running while
+  // destroying instance.
+  //
+  // Thread cannot be forced to quit() & wait() nor terminate()
+  // because it would emit signal while execution of instance
+  // destructor. This could be DANGEROUS.
   assert( isFinished() );
 
-  if( !isFinished() )
+  if( isRunning() )
     qWarning() << this << "is being destroyed while still running!";
+
+  // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+  //
+  // Synchronously delete owned worker instance when this
+  // background-task is being destroyed.
+  delete m_Worker;
+  m_Worker = NULL;
+
+  // Trace.
+  qDebug() << this << "has been destroyed.";
 }
 
 /*******************************************************************************/
@@ -136,10 +180,21 @@ void
 BackgroundTask
 ::OnObjectDestroyed( QObject* object )
 {
+  // NOTE: Won't be called if deleteLater() is used!?
+
+  qDebug() << this << "::OnObjectDestryed(" << object << ")";
+
+  //
+  // If worker instance is destroyed before this instance, simply
+  // forget worker instance.
   assert( object==m_Worker );
 
   if( object==m_Worker )
+    {
+    qDebug() << this << "forgetting" << m_Worker;
+
     m_Worker = NULL;
+    }
 }
 
 } // end namespace 'mvd'

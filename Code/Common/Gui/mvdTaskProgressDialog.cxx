@@ -74,10 +74,12 @@ TaskProgressDialog
   m_Object( NULL ),
   m_Exception()
 {
-#if 0
-  // Pleiades days DEMO_MODE
-  m_BackgroundTask->setParent( this );
-#endif
+  // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+  //
+  // Do not take ownership of background-task to leave display
+  // independant of execution of background-tas.
+  //
+  // m_BackgroundTask->setParent( this );
 
   QObject::connect(
     task->GetWorker(), SIGNAL( ProgressTextChanged( const QString& ) ),
@@ -114,9 +116,11 @@ TaskProgressDialog
   );
 
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+  //
   // Accept progress-dialog when thread has been signaled as
-  // finished() and not when work object has done it's job (while the
-  // thread is still running when Done() is signalled).
+  // finished() and not when worker object has done or finished it's
+  // job (while the thread is still running when Done() or Finished()
+  // is signalled).
   QObject::connect(
     task,
     SIGNAL( finished() ),
@@ -124,24 +128,37 @@ TaskProgressDialog
     this,
     SLOT( accept() )
   );
+
+  // Keep informed When some object is destroyed.
+  QObject::connect(
+    m_BackgroundTask,
+    SIGNAL( destroyed( QObject* ) ),
+    // to:
+    this,
+    SLOT( OnObjectDestroyed( QObject* ) )
+  );
 }
 
 /*******************************************************************************/
 TaskProgressDialog
 ::~TaskProgressDialog()
 {
-  qDebug() << this << "destroyed.";
+  qDebug() << this << "is being destroyed.";
 
-  if( m_BackgroundTask!=NULL )
+
+  // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+  //
+  // Trace (for debugging purposes) if background-task thread is still
+  // running when destroying this dialog.
+#if ( defined( _DEBUG ) && 1 ) || 0
+  if( m_BackgroundTask!=NULL &&
+      m_BackgroundTask->isRunning() )
     {
-    if( m_BackgroundTask->isRunning() )
-      {
-      qWarning() << m_BackgroundTask << "has been forced to quit while running!";
-
-      m_BackgroundTask->quit();
-      m_BackgroundTask->wait();
-      }
+    qDebug() << m_BackgroundTask << "has been forced to quit while running!";
     }
+#endif
+
+  qDebug() << this << "has been destroyed.";
 }
 
 /*****************************************************************************/
@@ -166,6 +183,10 @@ TaskProgressDialog
   m_Object = result;
 
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+  //
+  // Accept is slotted to QThread finished() signal for correct thread
+  // synchronization.
+  //
   // accept();
 }
 
@@ -188,10 +209,20 @@ void
 TaskProgressDialog
 ::OnObjectDestroyed( QObject* object )
 {
+  qDebug() << this << "::OnObjectDestryed(" << object << ")";
+
   assert( object==m_BackgroundTask );
 
   if( object==m_BackgroundTask )
+    {
+    qDebug() << this << "forgetting" << m_BackgroundTask;
+
+    // Forget background-task.
     m_BackgroundTask = NULL;
+
+    // Accept QDialog te prevent locking the UI.
+    accept();
+    }
 }
 
 } // end namespace 'mvd'
