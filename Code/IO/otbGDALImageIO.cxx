@@ -898,6 +898,12 @@ void GDALImageIO::InternalReadImageInformation()
 
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverShortNameKey, driverShortName);
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey,  driverLongName);
+  
+  if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+    {
+    // store the cache size used for Jpeg2000 files
+    itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::CacheSizeInBytes , GDALGetCacheMax64());
+    }
 
   /* -------------------------------------------------------------------- */
   /* Get the projection coordinate system of the image : ProjectionRef  */
