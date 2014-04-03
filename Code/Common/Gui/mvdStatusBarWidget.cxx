@@ -79,42 +79,6 @@ StatusBarWidget
 }
 
 /*****************************************************************************/
-#if USE_OLD_IMAGE_VIEW
-
-QLineEdit*
-StatusBarWidget
-::GetCurrentPixelIndexWidget()
-{
-  return m_UI->pixelIndexLineEdit;
-}
-
-#endif // USE_OLD_IMAGE_VIEW
-
-/*****************************************************************************/
-#if USE_OLD_IMAGE_VIEW
-
-QLabel*
-StatusBarWidget
-::GetCurrentPixelRadioWidget()
-{
-  return m_UI->pixelRadiometryLabel;
-}
-
-#endif // USE_OLD_IMAGE_VIEW
-
-/*****************************************************************************/
-#if USE_OLD_IMAGE_VIEW
-
-QLineEdit * 
-StatusBarWidget
-::GetCurrentScaleWidget()
-{
-    return m_UI->scaleLineEdit;
-}
-
-#endif // USE_OLD_IMAGE_VIEW
-
-/*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
 void

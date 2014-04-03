@@ -66,9 +66,6 @@ namespace mvd
 class DatasetModel;
 // Gui
 class FilenameDragAndDropEventFilter;
-#if USE_OLD_IMAGE_VIEW
-class GLImageWidget1;
-#endif // USE_OLD_IMAGE_VIEW
 #if USE_ICE_IMAGE_VIEW
 class ImageViewWidget;
 #endif // USE_ICE_IMAGE_VIEW
@@ -205,16 +202,6 @@ private:
 // Private methods.
 private:
 
-#if USE_OLD_IMAGE_VIEW
-  /**
-   */
-  GLImageWidget1* CreateImageWidget1( QGLWidget* sharedGlWidget =NULL );
-
-  /**
-   */
-  GLImageWidget1* CreateQuicklookWidget1( QGLWidget* sharedGlWidget =NULL );
-#endif // USE_OLD_IMAGE_VIEW
-
 #if USE_ICE_IMAGE_VIEW
   /**
    */
@@ -237,22 +224,6 @@ private:
    */
   void InitializeStatusBarWidgets();
 
-#if USE_OLD_IMAGE_VIEW
-  /**
-   */
-  inline
-    const GLImageWidget1* GetQuicklookView1() const;
-
-  /**
-   */
-  inline
-    GLImageWidget1* GetQuicklookView1();
-
-  /**
-   */
-  void ConnectImageViews1();
-#endif // USE_OLD_IMAGE_VIEW
-
 #if USE_ICE_IMAGE_VIEW
   /**
    */
@@ -266,18 +237,11 @@ private:
   /**
    */
   void ConnectImageViews();
-#endif // USE_OLD_IMAGE_VIEW
+#endif // USE_ICE_IMAGE_VIEW
 
   /**
    */
   void ConnectViewMenu();
-
-#if USE_OLD_IMAGE_VIEW
-  /**
-   */
-  void ConnectStatusBar1(DatasetModel * model);
-  void DisconnectStatusBar1(const DatasetModel * model);
-#endif // USE_OLD_IMAGE_VIEW
 
 #if USE_ICE_IMAGE_VIEW
   /**
@@ -345,18 +309,6 @@ private:
    */
   QDockWidget* m_OtbApplicationsBrowserDock;
 #endif
-
-#if USE_OLD_IMAGE_VIEW
-  /**
-   * \brief Image-view dock-widget.
-   */
-  GLImageWidget1* m_ImageView1;
-
-  /**
-   * \brief Quicklook-view dock-widget.
-   */
-  QDockWidget* m_QuicklookViewDock1;
-#endif // USE_OLD_IMAGE_VIEW
 
 #if USE_ICE_IMAGE_VIEW
   /**
@@ -426,14 +378,6 @@ private slots:
 
   /**
    */
-  void OnUserCoordinatesEditingFinished();
-
-  /**
-   */
-    void OnUserScaleEditingFinished();
-
-  /**
-   */
   void OnFilenameDropped( const QString& filename );
 
 };
@@ -454,9 +398,6 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#if USE_OLD_IMAGE_VIEW
-#include "Gui/mvdGLImageWidget1.h"
-#endif
 #if USE_ICE_IMAGE_VIEW
 #include "Gui/mvdImageViewWidget.h"
 #endif
@@ -466,28 +407,6 @@ private slots:
 
 namespace mvd
 {
-
-#if USE_OLD_IMAGE_VIEW
-
-/*****************************************************************************/
-inline
-const GLImageWidget1*
-MainWindow
-::GetQuicklookView1() const
-{
-  return qobject_cast< const GLImageWidget1* >( m_QuicklookViewDock1->widget() );
-}
-
-/*****************************************************************************/
-inline
-GLImageWidget1*
-MainWindow
-::GetQuicklookView1()
-{
-  return qobject_cast< GLImageWidget1* >( m_QuicklookViewDock1->widget() );
-}
-
-#endif // USE_OLD_IMAGE_VIEW
 
 #if USE_ICE_IMAGE_VIEW
 

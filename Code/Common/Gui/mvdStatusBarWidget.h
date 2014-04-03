@@ -95,15 +95,6 @@ public:
   /** \brief Destructor. */
   virtual ~StatusBarWidget();
 
-  /** 
-    * accessors to statusBar widgets 
-    */
-#if USE_OLD_IMAGE_VIEW
-  QLineEdit * GetCurrentPixelIndexWidget();
-  QLabel *    GetCurrentPixelRadioWidget();
-  QLineEdit * GetCurrentScaleWidget();
-#endif
-
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
