@@ -58,6 +58,7 @@ enum ERROR_CODE
 /*****************************************************************************/
 /* FUNCTIONS DECLARATION                                                     */
 
+
 /*****************************************************************************/
 /* MAIN                                                                      */
 
@@ -113,44 +114,82 @@ main( int argc, char* argv[] )
 
   //
   // 4. Initialize database.
-  mvd::CountType nb = application.OpenDatabase();
-  if( nb > 0 )
+  try
     {
-    QMessageBox::StandardButton button =
-      QMessageBox::warning(
-	&mainWindow,
-	QCoreApplication::translate(
-	  "Monteverdi2",
-	  "Monteverdi2 - Warning!"
-	),
-	QCoreApplication::translate(
-	  "Monteverdi2",
-	  "There are %1 outdated dataset(s) in cache-directory.\n\n"
-	  "Please remove cache-directory '%2' and restart Monteverdi2\n\n"
-	  "Do you want to delete cache-directory '%2' before quitting Monteverdi2?"
-	).arg( nb ).arg( application.GetCacheDir().path() ),
-	QMessageBox::Yes | QMessageBox::No,
-	QMessageBox::Yes
-      );
+    mvd::CountType nb = application.OpenDatabase();
 
-    if( button==QMessageBox::Yes )
+    if( nb>0 )
       {
-      if( application.GetCacheDir()==QDir::home() )
-	{
-	throw std::runtime_error(
-	  mvd::ToStdString(
-	    QCoreApplication::translate(
-	      "Monteverdi2",
-	      "Tryed to remove home dir."
-	    )
-	  )
-	);
-	}
+      QMessageBox::StandardButton button =
+        QMessageBox::warning(
+          &mainWindow,
+          QCoreApplication::translate(
+            "Monteverdi2",
+            "Monteverdi2 - Warning!"
+          ),
+          QCoreApplication::translate(
+            "Monteverdi2",
+            "There are %1 outdated dataset(s) in cache-directory.\n\n"
+            "Please remove cache-directory '%2' and restart Monteverdi2\n\n"
+            "Do you want to delete cache-directory '%2' before quitting Monteverdi2?"
+          ).arg( nb ).arg( application.GetCacheDir().path() ),
+          QMessageBox::Yes | QMessageBox::No,
+          QMessageBox::Yes
+        );
 
-      itksys::SystemTools::RemoveADirectory(
-	QFile::encodeName( application.GetCacheDir().path() ).constData()
-      );
+      if( button==QMessageBox::Yes )
+        {
+        if( application.GetCacheDir()==QDir::home() )
+          {
+          // throw std::runtime_error(
+          //   mvd::ToStdString(
+          //     QCoreApplication::translate(
+          //       "Monteverdi2",
+          //       "Tryed to remove home dir."
+          //     )
+          //   )
+          // );
+
+          QMessageBox::critical(
+            &mainWindow,
+            QCoreApplication::translate(
+              "Monteverdi2",
+              "Monteverdi2 - Critical error!"
+            ),
+            QCoreApplication::translate(
+              "Monteverdi2",
+              "Your Monteverdi2 cache-directory is set to your home directory '%1'. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.\n\nIt is generally a bad idea to set Monteverdi2 cache-directory to your home directory. Please choose another sub-directory.\n\nApplication will now exit."
+            )
+            .arg( application.GetCacheDir().path() ),
+            QMessageBox::Ok
+          );
+          }
+        else
+          {
+          itksys::SystemTools::RemoveADirectory(
+            QFile::encodeName( application.GetCacheDir().path() ).constData()
+          );
+          }
+        }
+
+      return ERROR_CODE_DATABASE;
       }
+    }
+  catch( std::exception& exc )
+    {
+    QMessageBox::critical(
+      &mainWindow,
+      QCoreApplication::translate(
+        "Monteverdi2",
+        "Monteverdi2 - Critical error!"
+      ),
+      QCoreApplication::translate(
+        "Monteverdi2",
+        "Failed to open Monteverdi2 database.\n\nApplication will now exit!\n\n%2"
+      )
+      .arg( exc.what() ),
+      QMessageBox::Ok
+    );
 
     return ERROR_CODE_DATABASE;
     }
@@ -186,3 +225,4 @@ main( int argc, char* argv[] )
 
 /*****************************************************************************/
 /* FUNCTIONS IMPLEMENTATION                                                  */
+/*****************************************************************************/

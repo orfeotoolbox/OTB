@@ -184,12 +184,27 @@ const char* DatabaseConnection::TAG_NAMES[] = {
   "Temporary"
 };
 
+/*****************************************************************************/
+QFileInfo
+DatabaseConnection
+::SqlDatabaseFileInfo()
+{
+  return
+    QFileInfo(
+      I18nCoreApplication::ConstInstance()->GetCacheDir().filePath( "db.sqlite" )
+    );
+}
+
 /*******************************************************************************/
 void
 DatabaseConnection
 ::InitializeDatabase()
 {
-  DatabaseConnection dbc;
+  // MANTIS-854 (http://bugs.orfeo-toolbox.org/view.php?id=854).
+  // MANTIS-876 (http://bugs.orfeo-toolbox.org/view.php?id=876).
+  //
+  // Added connection-mode.
+  DatabaseConnection dbc( DatabaseConnection::CONNECTION_MODE_OPEN_OR_CREATE );
 
   dbc.DirectExecuteQuery( "PRAGMA foreign_keys=1;" );
 
@@ -249,10 +264,9 @@ DatabaseConnection
 }
 
 /*****************************************************************************/
-inline
 QSqlDatabase
 DatabaseConnection
-::SqlDatabase()
+::SqlDatabase( ConnectionMode mode )
 {
   if( QSqlDatabase::contains( "mvd2" ) )
     {
@@ -264,15 +278,38 @@ DatabaseConnection
     return QSqlDatabase::database( "mvd2" );
     }
 
-  QString filename(
-    I18nCoreApplication::ConstInstance()->GetCacheDir().filePath( "db.sqlite" )
-  );
+  // MANTIS-854 (http://bugs.orfeo-toolbox.org/view.php?id=854).
+  // MANTIS-876 (http://bugs.orfeo-toolbox.org/view.php?id=876).
+  //
+  // When OPEN_ONLY, database file must exists.
+  //
+  // Otherwise, when OPEN_OR_CREATE, database file will be created by
+  // QSqlDatabase.
+  //
+  // BEGIN 
+  // {
+
+  QFileInfo finfo( DatabaseConnection::SqlDatabaseFileInfo() );
+
+  if( mode==DatabaseConnection::CONNECTION_MODE_OPEN_ONLY && !finfo.exists() )
+    throw
+      std::runtime_error(
+        ToStdString(
+          tr( "SQLite database file '%1' not found!" ).arg( finfo.filePath() )
+        )
+      );
+
+  // }
+  // END
+  //
+  // MANTIS-854 (http://bugs.orfeo-toolbox.org/view.php?id=854).
+  // MANTIS-876 (http://bugs.orfeo-toolbox.org/view.php?id=876).
 
   qDebug() << "Adding database connection...";
 
   QSqlDatabase db( QSqlDatabase::addDatabase( "QSQLITE", "mvd2" ) );
 
-  db.setDatabaseName( filename );
+  db.setDatabaseName( finfo.filePath() );
 
   assert( db.driver()!=NULL );
   assert( db.driver()->hasFeature( QSqlDriver::Transactions ) );
@@ -285,9 +322,9 @@ DatabaseConnection
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*******************************************************************************/
 DatabaseConnection
-::DatabaseConnection( QObject* parent ) :
+::DatabaseConnection( ConnectionMode mode, QObject* parent ) :
   QObject( parent ),
-  m_SqlDatabase( SqlDatabase() )
+  m_SqlDatabase( SqlDatabase( mode ) )
 {
   if( !m_SqlDatabase.isOpen() )
     {

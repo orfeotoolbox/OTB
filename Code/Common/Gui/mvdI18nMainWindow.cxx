@@ -251,7 +251,7 @@ void
 I18nMainWindow
 ::SetupCacheDir()
 {
-  if( I18nApplication::ConstInstance()->IsCacheDirValid() )
+  if( I18nCoreApplication::ConstInstance()->IsCacheDirValid() )
     return;
 
   QFileInfo fileInfo( QDir::home(), I18nApplication::DEFAULT_CACHE_DIR_NAME );
@@ -305,13 +305,7 @@ I18nMainWindow
   //
   // Setup initial empty database
   if( isNew )
-    {
-#if 1
     DatabaseConnection::InitializeDatabase();
-#else
-    DatabaseConnection::InitializeDatabase2();
-#endif
-    }
 }
 
 /*****************************************************************************/

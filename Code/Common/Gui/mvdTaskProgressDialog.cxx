@@ -154,7 +154,7 @@ TaskProgressDialog
   if( m_BackgroundTask!=NULL &&
       m_BackgroundTask->isRunning() )
     {
-    qDebug() << m_BackgroundTask << "has been forced to quit while running!";
+    qDebug() << m_BackgroundTask << "is still running!";
     }
 #endif
 

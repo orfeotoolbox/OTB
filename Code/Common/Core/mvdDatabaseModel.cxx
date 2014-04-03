@@ -337,7 +337,12 @@ DatabaseModel
   assert( m_Db==NULL );
 
   delete m_Db;
-  m_Db = new DatabaseConnection( this );
+
+  m_Db =
+    new DatabaseConnection(
+      DatabaseConnection::CONNECTION_MODE_OPEN_ONLY,
+      this
+    );
 
   CountType nbOutdated = InitializeDatasetModels();
 
@@ -369,7 +374,7 @@ DatabaseModel
     m_Db->ListAllDatasets()
   );
 
-  qDebug() << datasets;
+  // qDebug() << datasets;
 
   ClearDatasetModels();
 

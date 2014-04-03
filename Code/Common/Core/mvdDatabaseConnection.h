@@ -149,12 +149,24 @@ public:
    */
   typedef QMap< SqlId, QString > DatasetMap;
 
+  /**
+   */
+  enum ConnectionMode
+  {
+    CONNECTION_MODE_OPEN_ONLY = 0,
+    CONNECTION_MODE_OPEN_OR_CREATE = 1,
+  };
+
 //
 // Public methods.
 public:
 
+  /**
+   */
+  inline static QFileInfo SqlDatabaseFileInfo();
+
   /** \brief Constructor. */
-  DatabaseConnection( QObject* parent =NULL );
+  DatabaseConnection( ConnectionMode mode, QObject* parent =NULL );
 
   /** \brief Destructor. */
   virtual ~DatabaseConnection();
@@ -314,7 +326,7 @@ private:
 
   /**
    */
-  inline static QSqlDatabase SqlDatabase();
+  inline static QSqlDatabase SqlDatabase( ConnectionMode mode );
 
   /**
    */
