@@ -242,8 +242,8 @@ ReadGeometryFromImage(const std::string& filename)
       
       //  try to use GeoTiff RPC tag if present. They will override the
       // standard projection found before
-      // Warning : RPC in subdatasets are not supported 
-      GDALDatasetWrapper::Pointer gdalDatasetWrapper = 
+      // Warning : RPC in subdatasets are not supported
+      GDALDatasetWrapper::Pointer gdalDatasetWrapper =
         GDALDriverManagerWrapper::GetInstance().Open(handler->getFilename());
       
       if (gdalDatasetWrapper.IsNotNull())
