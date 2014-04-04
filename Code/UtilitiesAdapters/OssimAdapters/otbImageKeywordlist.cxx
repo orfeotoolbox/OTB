@@ -21,6 +21,8 @@
 
 #include "otbMacro.h"
 
+#include "otbGDALDriverManagerWrapper.h"
+
 #include "ossim/base/ossimKeywordlist.h"
 #include "ossim/base/ossimString.h"
 #include "ossim/ossimPluginProjectionFactory.h"
@@ -240,6 +242,94 @@ ReadGeometryFromImage(const std::string& filename)
       
       //  try to use GeoTiff RPC tag if present. They will override the
       // standard projection found before
+      // Warning : RPC in subdatasets are not supported 
+      GDALDatasetWrapper::Pointer gdalDatasetWrapper = 
+        GDALDriverManagerWrapper::GetInstance().Open(handler->getFilename());
+      
+      if (gdalDatasetWrapper.IsNotNull())
+        {
+        GDALDataset* dataset = gdalDatasetWrapper->GetDataSet();
+        GDALRPCInfo rpcStruct;
+        if (GDALExtractRPCInfo(dataset->GetMetadata("RPC"),&rpcStruct))
+          {
+          otbMsgDevMacro(<<"RPC Coeff found");
+          std::vector<double> lineNumCoefs;
+          std::vector<double> lineDenCoefs;
+          std::vector<double> sampNumCoefs;
+          std::vector<double> sampDenCoefs;
+          
+          for (unsigned int k=0; k<20; ++k)
+            {
+            lineNumCoefs.push_back(rpcStruct.adfLINE_NUM_COEFF[k]);
+            lineDenCoefs.push_back(rpcStruct.adfLINE_DEN_COEFF[k]);
+            sampNumCoefs.push_back(rpcStruct.adfSAMP_NUM_COEFF[k]);
+            sampDenCoefs.push_back(rpcStruct.adfSAMP_DEN_COEFF[k]);
+            }
+          
+          ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
+          rpcModel->setAttributes( rpcStruct.dfSAMP_OFF,
+                                   rpcStruct.dfLINE_OFF,
+                                   rpcStruct.dfSAMP_SCALE,
+                                   rpcStruct.dfLINE_SCALE,
+                                   rpcStruct.dfLAT_OFF,
+                                   rpcStruct.dfLONG_OFF,
+                                   rpcStruct.dfHEIGHT_OFF,
+                                   rpcStruct.dfLAT_SCALE,
+                                   rpcStruct.dfLONG_SCALE,
+                                   rpcStruct.dfHEIGHT_SCALE,
+                                   sampNumCoefs,
+                                   sampDenCoefs,
+                                   lineNumCoefs,
+                                   lineDenCoefs);
+          
+          double errorBias = 0.0;
+          double errorRand = 0.0;
+          
+          // setup other metadata
+          rpcModel->setPositionError(errorBias,errorRand,true);
+          ossimDrect rectangle(0.0,
+                               0.0,
+                               static_cast<double>(dataset->GetRasterXSize()-1),
+                               static_cast<double>(dataset->GetRasterYSize()-1));
+          rpcModel->setImageRect(rectangle);
+          
+          ossimDpt size;
+          size.line = rectangle.height();
+          size.samp = rectangle.width();
+          rpcModel->setImageSize(size);
+          
+          // Compute 4 corners and reference point
+          rpcModel->updateModel();
+          double heightOffset = rpcStruct.dfHEIGHT_OFF;
+          ossimGpt ulGpt, urGpt, lrGpt, llGpt;
+          ossimGpt refGndPt;
+          
+          rpcModel->lineSampleHeightToWorld(rectangle.ul(), heightOffset, ulGpt);
+          rpcModel->lineSampleHeightToWorld(rectangle.ur(), heightOffset, urGpt);
+          rpcModel->lineSampleHeightToWorld(rectangle.lr(), heightOffset, lrGpt);
+          rpcModel->lineSampleHeightToWorld(rectangle.ll(), heightOffset, llGpt);
+          rpcModel->setGroundRect(ulGpt,urGpt,lrGpt,llGpt);
+          
+          rpcModel->lineSampleHeightToWorld(rectangle.midPoint(), heightOffset, refGndPt);
+          rpcModel->setRefGndPt(refGndPt);
+          
+          // compute ground sampling distance
+          try
+            {
+            // Method can throw ossimException.
+            rpcModel->computeGsd();
+            }
+          catch (const ossimException& e)
+            {
+            otbMsgDevMacro(<< "OSSIM Compute ground sampling distance FAILED ! ");
+            }
+          
+          hasMetaData = rpcModel->saveState(geom_kwl);
+          otb_kwl.SetKeywordlist(geom_kwl);
+          }
+        }
+      
+      /*
       ossimRefPtr<ossimTiffTileSource> tiffHandler = new ossimTiffTileSource;
       tiffHandler->setOpenOverviewFlag(true);
       if ( tiffHandler->open(handler->getFilename()) )
@@ -328,7 +418,7 @@ ReadGeometryFromImage(const std::string& filename)
           otb_kwl.SetKeywordlist(geom_kwl);
           }
         }
-      
+      */
       // If still no metadata, try the ".geom" file
       if (!hasMetaData && otb_kwl.GetSize() == 0)
         {
