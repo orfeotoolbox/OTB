@@ -24,42 +24,6 @@ Specifically, the purpose of these examples is as follows:
    * Make sure that the code is well documented, of consistent style, and
      always up-to-date with the current OTB code.
 
-The following is a list of subdirectories with a description of the code
-found in them.
-
-   * Installation - a very simple example to demonstrate compiling against
-     the OTB libraries and configuring CMake.
-
-   * DataRepresentation - creating images and meshes; shows the basics of
-     creating and executing the pipeline
-
-   * Iterators - iterating over images and meshes.
-   
-   * IO - the basics of reading/writing data.
-
-   * Filtering - examples of image processing and mesh filters.
-
-   * FeatureExtraction - examples of low-level information extraction.
-
-   * ChangeDetection - detecting changes between pairs of images.
-
-   * Learning - Support Vector Machine examples.
-   
-   * MultiScale - Multiscale examples.
-
-   * Classification - simple examples of image classification.
-
-   * Segmentation - a suite of basic segmentation examples.
-
-   * Visu - simple examples for image visualization.
-   
-   * Fusion - Image fusion examples.
-
-   
-
-   
-
-
 To learn the software from these examples, you may wish to refer to the
 "ORFEO Toolbox Software Guide".
 
