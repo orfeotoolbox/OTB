@@ -476,15 +476,8 @@ public:
 public slots:
   /**
    */
-  void OnPhysicalCursorPositionChanged1(double Xpc, double Ypc);
-  /**
-   */
   void OnPhysicalCursorPositionChanged( const PointType&,
                                         const DefaultImageType::PixelType& );
-
-  /**
-   */
-  void OnUserCoordinatesEditingFinished(const QString& coord);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
