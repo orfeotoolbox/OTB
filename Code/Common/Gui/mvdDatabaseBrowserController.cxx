@@ -97,17 +97,6 @@ DatabaseBrowserController
     SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
   );
 
-  /*
-  //
-  QObject::connect(
-    this, 
-    SIGNAL( SelectedDatasetFilenameChanged( const QString& )  ),
-    // to:
-    widget->GetDatabaseTreeWidget(), 
-    SLOT( OnSelectedDatasetFilenameChanged( const QString& ) )
-    );
-  */
-
   //
   QObject::connect(
     widget, 
@@ -116,28 +105,6 @@ DatabaseBrowserController
     this,
     SLOT( OnItemMoved( QTreeWidgetItem* ) )
     );
-
-  /*
-  //
-  QObject::connect(
-    widget->GetDatabaseTreeWidget(),
-    SIGNAL( DatasetToDeleteSelected( const QString& ) ),
-    // to:
-    this,
-    SLOT( OnDatasetToDeleteSelected( const QString& ) )
-    );
-  */
-
-  /*
-  //
-  QObject::connect(
-    widget->GetDatabaseTreeWidget(),
-    SIGNAL( DatasetRenamed( const QString &, const QString & )  ),
-    // to:
-    model,
-    SLOT( OnDatasetRenamed(const QString&, const QString & ) )
-    );
-  */
 
   //
   QObject::connect(
@@ -207,17 +174,6 @@ DatabaseBrowserController
     SLOT( OnSelectedDatasetModelChanged( DatasetModel* ) )
   );
 
-  /*
-  //
-  QObject::disconnect(
-    this, 
-    SIGNAL( SelectedDatasetFilenameChanged( const QString& )  ),
-    // to:
-    widget->GetDatabaseTreeWidget(), 
-    SLOT( OnSelectedDatasetFilenameChanged( const QString& ) )
-    );
-  */
-
   //
   QObject::connect(
     widget, 
@@ -226,28 +182,6 @@ DatabaseBrowserController
     this,
     SLOT( OnItemMoved( QTreeWidgetItem* ) )
     );
-
-  /*
-  //
-  QObject::disconnect(
-    widget->GetDatabaseTreeWidget(), 
-    SIGNAL( DatasetToDeleteSelected( const QString & )  ),
-    // to:
-    this, 
-    SLOT( OnDatasetToDeleteSelected(const QString& ) )
-    );
-  */
-
-  /*
-  //
-  QObject::disconnect(
-    widget->GetDatabaseTreeWidget(), 
-    SIGNAL( DatasetRenamed( const QString &, const QString & )  ),
-    // to:
-    model,
-    SLOT( OnDatasetRenamed(const QString&, const QString & ) )
-    );
-  */
 
   //
   QObject::disconnect(
@@ -803,37 +737,6 @@ DatabaseBrowserController
   }
   widget->blockSignals( areSignalsBlocked );
 }
-
-/*******************************************************************************/
-/*
-void
-DatabaseBrowserController
-::OnDatasetToDeleteSelected( const QString& hash )
-{
-  // Access database-model.
-  assert( GetModel()==GetModel< DatabaseModel >() );
-  DatabaseModel* databaseModel = GetModel< DatabaseModel >();
-  assert( databaseModel!=NULL );
-
-  // Access selected dataset-model (candidate to deletion).
-  DatasetModel* datasetModel = databaseModel->FindDatasetModel( hash );
-  assert( datasetModel!=NULL );
-
-  // Pop confirm delete dialog.
-  QMessageBox::StandardButton button = QMessageBox::warning(
-    GetWidget(),
-    tr( "Warning!" ),
-    tr( "Are you sure you want to delete dataset '%1'?" )
-    .arg( datasetModel->GetAlias() ),
-    QMessageBox::Yes | QMessageBox::No
-  );
-
-  if( button==QMessageBox::No )
-    return;
-
-  databaseModel->RemoveDatasetModel( hash );
-}
-*/
 
 /*******************************************************************************/
 void

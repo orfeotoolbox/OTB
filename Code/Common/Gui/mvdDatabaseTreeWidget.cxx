@@ -179,58 +179,14 @@ DatabaseTreeWidget
 void 
 DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
 {
-#if BYPASS_MOUSE_EVENTS
   TreeWidget::mouseMoveEvent( event );
-
-#else // BYPASS_MOUSE_EVENTS
-  if ( !(event->buttons() &  Qt::LeftButton ))
-    return;
-  
-  //start Drag ?
-  int distance = ( event->pos() - m_StartDragPosition ).manhattanLength();
-  if (distance < QApplication::startDragDistance())
-    return;
-    
-
-  //Get current selection
-  QTreeWidgetItem *selectedItem = currentItem();
-
-  if ( selectedItem && selectedItem->parent() )
-    {
-    //TODO : get the image filename  of the selected dataset
-    QByteArray itemData( ToStdString (m_DatasetFilename ).c_str() );
- 
-    QMimeData *mimeData = new QMimeData;
-    mimeData->setData("application/x-qabstractitemmodeldatalist", itemData);
-
-    //Create drag
-    QDrag *drag = new QDrag(this);
-    drag->setMimeData(mimeData);
-
-    drag->exec(Qt::CopyAction | Qt::MoveAction);
-    }
-#endif // BYPASS_MOUSE_EVENTS
 }
 
 /*******************************************************************************/
 void
 DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
 {
-#if BYPASS_MOUSE_EVENTS
   TreeWidget::mousePressEvent( event );
-
-#else // BYPASS_MOUSE_EVENTS
-  if (event->button() == Qt::LeftButton)
-     {
-     //
-     // superclass event handling
-     TreeWidget::mousePressEvent(event);
-     
-     // remember start drag position
-     m_StartDragPosition = event->pos();
-     }
-
-#endif // BYPASS_MOUSE_EVENTS
 }
 
 /*******************************************************************************/
@@ -362,30 +318,6 @@ DatabaseTreeWidget
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
-/*******************************************************************************/
-/*
-void
-DatabaseTreeWidget
-::OnSelectedDatasetFilenameChanged( const QString& filename )
-{
-#if BYPASS_MOUSE_EVENTS
-#else // BYPASS_MOUSE_EVENTS
-  //
-  // update the dataset image filename to be used in the dragged mime data
-  m_DatasetFilename = filename;
-#endif // BYPASS_MOUSE_EVENTS
-}
-*/
-
-/*******************************************************************************/
-/*
-void
-DatabaseTreeWidget::OnDeleteTriggered( const QString & id)
-{
-  emit DatasetToDeleteSelected( id );
-}
-*/
-
 /*******************************************************************************/
 void
 DatabaseTreeWidget

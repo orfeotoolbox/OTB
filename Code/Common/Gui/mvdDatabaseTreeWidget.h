@@ -49,8 +49,6 @@
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
-#define BYPASS_MOUSE_EVENTS 1
-
 //
 // External classes pre-declaration.
 namespace

@@ -191,10 +191,6 @@ private slots:
 
   /**
    */
-  // void OnDatasetToDeleteSelected( const QString& hash );
-
-  /**
-   */
   void OnItemMoved( QTreeWidgetItem* item );
 
   /**
