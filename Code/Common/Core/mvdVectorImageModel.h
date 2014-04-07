@@ -539,38 +539,6 @@ private:
 // Private methods.
 private:
 
-  /** Compute the linear buffer index according to the 2D region and
-   * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
-   * \param index 2D index
-   * \param region 2D region
-   */
-  static inline
-    unsigned int
-    ComputeBufferIndex(const IndexType& index,
-		       const ImageRegionType& region);
-
-  /** Compute the linear buffer index according to the 2D region and
-   * its 2D index.This method is used when OTB_GL_USE_ACCEL is OFF.
-   * The resulting buffer will be flipped over the X axis.
-   * \param index 2D index
-   * \param region 2D region
-   */
-  static inline
-    unsigned int
-    ComputeXAxisFlippedBufferIndex(const IndexType& index,
-				   const ImageRegionType& region);
-
-  /** Compute the image index according to a linear buffer index and its
-   * 2D region.
-   *
-   * \param index 2D index
-   * \param region 2D region
-   */
-  static inline
-    IndexType
-    ComputeImageIndexFromFlippedBuffer(const unsigned int & index,
-				       const ImageRegionType& region);
-
   /**
     * Helper method to get the best closest Jpeg2K level of detail.
     */
@@ -1284,43 +1252,6 @@ VectorImageModel
 ::GetFilename() const
 {
   return m_Filename;
-}
-
-/*****************************************************************************/
-inline
-unsigned int
-VectorImageModel
-::ComputeBufferIndex(const IndexType& index,
-		     const ImageRegionType& region)
-{
-  return (index[1] - region.GetIndex()[1]) * 4 * region.GetSize()[0] + 4 * (index[0] - region.GetIndex()[0]);
-}
-
-/*****************************************************************************/
-inline
-unsigned int
-VectorImageModel
-::ComputeXAxisFlippedBufferIndex(const IndexType& index,
-				 const ImageRegionType& region)
-{
-  return (region.GetSize()[1] - 1 + region.GetIndex()[1] -
-	  index[1]) * 4 * region.GetSize()[0] + 4 * (index[0] - region.GetIndex()[0]);
-}
-
-/*****************************************************************************/
-inline
-IndexType
-VectorImageModel
-::ComputeImageIndexFromFlippedBuffer(const unsigned int & index,
-				     const ImageRegionType& region)
-{
-  IndexType imageIndex;
-  imageIndex[0] =  ( index % region.GetSize(0) ) + region.GetIndex()[0];
-
-  imageIndex[1] =  region.GetSize()[1] - 1 + region.GetIndex()[1]
-    - static_cast<unsigned int>(vcl_floor( static_cast<double>(index) / static_cast<double>(region.GetSize(0) )));
-
-  return imageIndex;
 }
 
 /*****************************************************************************/
