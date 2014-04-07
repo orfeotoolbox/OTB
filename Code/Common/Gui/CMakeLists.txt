@@ -8,8 +8,6 @@ set( Common_Gui_SOURCES
   mvdAbstractImageViewManipulator.cxx
   mvdAbstractImageViewRenderer.cxx
   mvdAbstractModelController.cxx
-  mvdAbstractModelRenderer1.cxx
-  mvdAbstractViewManipulator1.cxx 
   mvdApplicationsToolBox.cxx
   mvdCheckableLineEdit.cxx
   mvdColorBandDynamicsWidget.cxx
@@ -27,16 +25,13 @@ set( Common_Gui_SOURCES
   mvdDoubleValidator.cxx
   mvdDropLineEdit.cxx
   mvdFilenameDragAndDropEventFilter.cxx
-  mvdGLImageWidget1.cxx
   mvdGui.cxx
   mvdHistogramController.cxx
   mvdHistogramPlotPicker.cxx
   mvdHistogramWidget.cxx
   mvdI18nApplication.cxx
   mvdI18nMainWindow.cxx
-  mvdImageModelRenderer1.cxx
   mvdImageViewManipulator.cxx
-  mvdImageViewManipulator1.cxx
   mvdImageViewRenderer.cxx
   mvdImageViewWidget.cxx
   mvdMainWindowTitleLoader.cxx
@@ -44,7 +39,6 @@ set( Common_Gui_SOURCES
   mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
   mvdQuicklookViewManipulator.cxx
-  mvdQuicklookViewManipulator1.cxx
   mvdQuicklookViewRenderer.cxx
   mvdSearchableTreeWidget.cxx
   mvdStatusBarWidget.cxx
@@ -64,8 +58,6 @@ set( Common_Gui_HEADERS_MOC
   mvdAbstractImageViewManipulator.h
   mvdAbstractImageViewRenderer.h
   mvdAbstractModelController.h
-  mvdAbstractModelRenderer1.h
-  mvdAbstractViewManipulator1.h
   mvdApplicationsToolBox.h
   mvdCheckableLineEdit.h
   mvdColorBandDynamicsWidget.h
@@ -83,13 +75,10 @@ set( Common_Gui_HEADERS_MOC
   mvdDoubleValidator.h
   mvdDropLineEdit.h
   mvdFilenameDragAndDropEventFilter.h
-  mvdGLImageWidget1.h
   #mvdGui.h
   mvdI18nApplication.h
   mvdI18nMainWindow.h
-  mvdImageModelRenderer1.h
   mvdImageViewManipulator.h
-  mvdImageViewManipulator1.h
   mvdImageViewRenderer.h
   mvdImageViewWidget.h
   mvdHistogramController.h
@@ -100,7 +89,6 @@ set( Common_Gui_HEADERS_MOC
   mvdMyWidget.h
   mvdPixelDescriptionWidget.h
   mvdQuicklookViewManipulator.h
-  mvdQuicklookViewManipulator1.h
   mvdQuicklookViewRenderer.h
   mvdSearchableTreeWidget.h
   mvdStatusBarWidget.h

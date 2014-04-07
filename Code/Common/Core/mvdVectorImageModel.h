@@ -47,11 +47,9 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAbstractImageModel.h"
-#include "Core/mvdRenderingImageFilter.h"
 #include "Core/mvdTypes.h"
 #include "Gui/mvdColorSetupWidget.h"
 
-#define USE_BYTE_POINTER 1
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -92,12 +90,6 @@ public:
    * In-memory storage type of source image (from file).
    */
   typedef DefaultImageType SourceImageType;
-
-  /**
-   */
-#if USE_BYTE_POINTER
-  typedef QSharedPointer< unsigned char > BytePointer;
-#endif
 
   /**
    * \brief WIP.
@@ -431,16 +423,6 @@ public:
   /** Get input filename */
   inline QString GetFilename() const;
 
-  /** Rasterize the buffered region in a buffer */
-#if USE_BYTE_POINTER
-  BytePointer
-#else
-  unsigned char *
-#endif
-    RasterizeRegion( const ImageRegionType& region,
-		     const double zoomFactor,
-		     bool refresh );
-
   /**
    * Following the zoom factor, get the best level of detail
    */
@@ -486,10 +468,6 @@ public:
   {
     return m_ImageFileReader->GetImageIO()->GetImageSizeInBytes();
   }
-
-  /** Release as much memory as possible. This implementation will
-  clear the current pipeline and loaded image data */
-  virtual void ReleaseMemory();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -539,9 +517,6 @@ signals:
 // Protected methods.
 protected:
 
-  /** Clear buffer */
-  void ClearBuffer();
-
   //
   // AbstractModel overrides.
 
@@ -553,8 +528,6 @@ protected:
   void InitializeColorSetupSettings();
 
   void InitializeColorDynamicsSettings();
-
-  void InitializeRgbaPipeline();
 
 //
 // Protected attributes.
@@ -568,25 +541,6 @@ protected:
 //
 // Private types.
 private:
-  /**
-   * Display type of source image (to OpenGL).
-   */
-  typedef RGBAImageType DisplayImageType;
-
-  /**
-   * Extract filter.
-   */
-  typedef
-    itk::ExtractImageFilter< SourceImageType, SourceImageType >
-    ExtractFilterType;
-
-  /**
-   * Rendering filter.
-   */
-  // 
-  typedef
-    mvd::RenderingImageFilter< SourceImageType, DisplayImageType >
-    RenderingFilterType;
 
 //
 // Private methods.
@@ -624,20 +578,6 @@ private:
     ComputeImageIndexFromFlippedBuffer(const unsigned int & index,
 				       const ImageRegionType& region);
 
-  /** Dump pixels within the region in argument of the method into the
-  * m_RasterizedBuffer (used for OpenGl rendering)
-  * \param region 2D region
-  */
-  void DumpImagePixelsWithinRegionIntoBuffer(const ImageRegionType& region);
-
-  /** Compute the regions to be loaded and computes the already loaded
-  * region. Four regions are computed here {upper, lower,
-  * right, left} region. Each region with size greater than 0 is added
-  * to the m_RegionsToLoadVector vector.
-  * \param region 2D region
-  */
-  void ComputeRegionsToLoad(const ImageRegionType& region);
-
   /**
     * Helper method to get the best closest Jpeg2K level of detail.
     */
@@ -672,33 +612,10 @@ private:
   // Default image reader
   DefaultImageFileReaderType::Pointer m_ImageFileReader;
 
-#if USE_BYTE_POINTER
-  BytePointer m_RasterizedBuffer;
-#else
-  // Buffer where to store the image pixels needed by the renderer
-  unsigned char* m_RasterizedBuffer;
-#endif
-
-  // Extract filter
-  ExtractFilterType::Pointer m_ExtractFilter;
-  RenderingFilterType::Pointer m_RenderingFilter;
-
   /**
    * User-configurable settings of image-model.
    */
   Settings m_Settings;
-
-  // store the previously requested region
-  ImageRegionType m_PreviousRegion;
-
-  // Store the already loaded region
-  ImageRegionType m_AlreadyLoadedRegion;
-
-  // store the current requested region
-  ImageRegionType m_Region;
-
-  // Vector storing the region to load
-  std::vector< ImageRegionType > m_RegionsToLoadVector;
 
   // store the input image filename
   QString m_Filename;

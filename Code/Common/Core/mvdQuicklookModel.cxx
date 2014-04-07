@@ -158,9 +158,6 @@ QuicklookModel
   // Source stored quicklook image-file.
   // Best fit to 512x512 px² size.
   SetFilename( quicklookFilename, 512, 512 );
-
-  // Initialize RgbaImageModel.
-  InitializeRgbaPipeline();
 }
 
 /*******************************************************************************/

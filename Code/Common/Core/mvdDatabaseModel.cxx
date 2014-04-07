@@ -139,13 +139,6 @@ DatabaseModel
   if( datasetModel==m_SelectedDatasetModel )
     return datasetModel;
 
-#if 1
-  // Release memory from previous model
-  if( m_SelectedDatasetModel!=NULL )
-    {
-    m_SelectedDatasetModel->GetSelectedImageModel()->ReleaseMemory();
-    }
-
   try
     {
     // Load dataset sub-models.
@@ -163,20 +156,6 @@ DatabaseModel
     // ...and forward exception.
     throw;
     }
-
-#else
-  // Load dataset sub-models.
-  datasetModel->LoadImageModels( -1, -1 );
-
-  // Release memory from previous model
-  if( m_SelectedDatasetModel!=NULL )
-    {
-    m_SelectedDatasetModel->GetSelectedImageModel()->ReleaseMemory();
-    }
-
-  // If dataset model has been loaded, select it.
-  SetSelectedDatasetModel( datasetModel );
-#endif
 
   // Return loaded and selected dataset model.
   return datasetModel;

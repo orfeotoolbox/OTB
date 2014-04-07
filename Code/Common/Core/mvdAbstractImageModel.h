@@ -263,10 +263,6 @@ public:
    */
   inline PointType GetCenter() const;
 
-  /** Release as much memory as possible (default implementation does
-   *  nothing). */
-  virtual void ReleaseMemory() =0;
-
 //
 // Public SLOTS.
 public slots:

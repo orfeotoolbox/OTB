@@ -41,7 +41,6 @@
 // ITK includes (sorted by alphabetic order)
 #include <itkArray.h>
 #include <itkImageRegion.h>
-#include <itkRGBAPixel.h>
 
 //
 // OTB includes (sorted by alphabetic order)
@@ -254,17 +253,6 @@ typedef VectorImageType::SizeType SizeType;
 /**
  */
 typedef VectorImageType::PointType PointType;
-
-/*******************************************************************************/
-/* Type definitions for RGBA images (display).                                 */
-
-/**
- */
-typedef itk::RGBAPixel< unsigned char > RGBAPixelType;
-
-/**
- */
-typedef otb::Image< RGBAPixelType, Monteverdi2_DIMENSION > RGBAImageType;
 
 /*******************************************************************************/
 /* Type definitions for application defaults.                                  */
