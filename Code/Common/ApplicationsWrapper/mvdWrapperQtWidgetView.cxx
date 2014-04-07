@@ -173,20 +173,10 @@ QtWidgetView
   QScrollArea *scrollArea = new QScrollArea;
 
   QWidget * widget = 
-#if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
     otb::Wrapper::QtWidgetParameterFactory::CreateQtWidget(
       m_Model->GetApplication()->GetParameterList(),
       m_Model
     );
-
-#else // USE_OTB_QT_WIDGET_PARAMETER_FACTORY
-  // Put the main group inside a scroll area
-    mvd::Wrapper::QtWidgetParameterFactory::CreateQtWidget(
-      m_Model->GetApplication()->GetParameterList(),
-      m_Model
-    );
-
-#endif // USE_OTB_QT_WIDGET_PARAMETER_FACTORY
 
   scrollArea->setWidget( widget );
   scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);

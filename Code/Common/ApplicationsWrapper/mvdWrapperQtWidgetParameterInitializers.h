@@ -24,8 +24,6 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
-#define USE_OTB_QT_WIDGET_PARAMETER_FACTORY 1
-
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -43,25 +41,16 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbWrapperQtWidgetInputFilenameParameter.h"
-#include "otbWrapperQtWidgetInputVectorDataParameter.h"
-#include "otbWrapperQtWidgetOutputImageParameter.h"
-
-#if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
 #include "otbQtFileSelectionWidget.h"
+#include "otbWrapperQtWidgetInputFilenameParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
+#include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
-#endif
+
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-
-#if !USE_OTB_QT_WIDGET_PARAMETER_FACTORY
-#include "mvdWrapperQtWidgetFileSelection.h"
-#include "mvdWrapperQtWidgetInputImageParameter.h"
-#include "mvdWrapperQtWidgetParameterFactory.h"
-#endif
 
 
 /*****************************************************************************/
@@ -117,11 +106,7 @@ SetupOutputFilename( W* widget,
  * \brief WIP.
  */
 class FileSelectionInitializer : public std::unary_function<
-#if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
   otb::Wrapper::QtFileSelectionWidget*,
-#else
-  QtWidgetFileSelection*,
-#endif
   void
   >
 {
@@ -139,11 +124,7 @@ public:
  * \brief WIP.
  */
 class InputImageInitializer : public std::unary_function<
-#if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
   otb::Wrapper::QtWidgetInputImageParameter*,
-#else
-  QtWidgetInputImageParameter*,
-#endif
   void
   >
 {
@@ -360,8 +341,6 @@ SetupForFilenameDrop( W* widget, const char* text )
 
   //
   // Setup widget.
-#if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
-
   bool signalsBlocked = lineEdit->blockSignals( true );
   {
   if( text!=NULL )
@@ -387,7 +366,6 @@ SetupForFilenameDrop( W* widget, const char* text )
   }
   lineEdit->blockSignals( signalsBlocked );
 
-#endif // USE_OTB_QT_WIDGET_PARAMETER_FACTORY
 
   //
   // Install event-filters.
@@ -416,8 +394,6 @@ SetupForDatasetDrop( W* widget, const char* text )
 
   //
   // Setup widget.
-#if USE_OTB_QT_WIDGET_PARAMETER_FACTORY
-
   bool signalsBlocked = lineEdit->blockSignals( true );
   {
   if( text!=NULL )
@@ -442,8 +418,6 @@ SetupForDatasetDrop( W* widget, const char* text )
   );
   }
   lineEdit->blockSignals( signalsBlocked );
-
-#endif // USE_OTB_QT_WIDGET_PARAMETER_FACTORY
 
   //
   // Install event-filters.

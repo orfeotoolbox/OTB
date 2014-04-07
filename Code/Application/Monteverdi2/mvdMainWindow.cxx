@@ -536,17 +536,6 @@ MainWindow
       SLOT( SetPixelRadiometryText( const QString& ) )
     );
     }
-
-  /*
-  // index widget in status bar edited
-  QObject::connect(
-    m_StatusBarWidget->GetCurrentPixelIndexWidget(),
-    SIGNAL( editingFinished() ),
-    // to:
-    this,
-    SLOT( OnUserCoordinatesEditingFinished() )
-    );
-  */
 }
 
 #endif // USE_ICE_IMAGE_VIEW

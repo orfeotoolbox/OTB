@@ -5,14 +5,8 @@
 set( Common_ApplicationsWrapper_SOURCES
   mvdApplicationsBrowser.cxx
   mvdApplicationLauncher.cxx
-  mvdWrapperQtWidgetInputImageParameter.cxx
-  mvdWrapperQtWidgetParameterFactory.cxx
   mvdWrapperQtWidgetView.cxx
-  mvdWrapperQtWidgetParameterGroup.cxx
   mvdWrapperQtWidgetParameterInitializers.cxx
-  mvdWrapperQtWidgetChoiceParameter.cxx  
-  mvdWrapperQtWidgetInputImageListParameter.cxx
-  mvdWrapperQtWidgetFileSelection.cxx
   mvdApplicationsToolBoxController.cxx
   mvdOTBApplicationsModel.cxx
 )
@@ -24,13 +18,8 @@ set( Common_ApplicationsWrapper_SOURCES
 set( Common_ApplicationsWrapper_HEADERS_MOC
   mvdApplicationsBrowser.h
   mvdApplicationLauncher.h
-  mvdWrapperQtWidgetInputImageParameter.h
-  # mvdWrapperQtWidgetParameterFactory.h
   mvdWrapperQtWidgetView.h
-  mvdWrapperQtWidgetParameterGroup.h
-  mvdWrapperQtWidgetChoiceParameter.h
-  mvdWrapperQtWidgetInputImageListParameter.h
-  mvdWrapperQtWidgetFileSelection.h
+  # mvdWrapperQtWidgetParameterInitializers.h
   mvdApplicationsToolBoxController.h
   mvdOTBApplicationsModel.h
 )
