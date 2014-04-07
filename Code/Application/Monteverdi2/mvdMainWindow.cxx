@@ -63,16 +63,12 @@
 #include "Gui/mvdFilenameDragAndDropEventFilter.h"
 #include "Gui/mvdHistogramController.h"
 #include "Gui/mvdHistogramWidget.h"
-#if USE_ICE_IMAGE_VIEW
-# include "Gui/mvdImageViewManipulator.h"
-# include "Gui/mvdImageViewRenderer.h"
-# include "Gui/mvdImageViewWidget.h"
-#endif
+#include "Gui/mvdImageViewManipulator.h"
+#include "Gui/mvdImageViewRenderer.h"
+#include "Gui/mvdImageViewWidget.h"
 #include "Gui/mvdPixelDescriptionWidget.h"
-#if USE_ICE_IMAGE_VIEW
-# include "Gui/mvdQuicklookViewManipulator.h"
-# include "Gui/mvdQuicklookViewRenderer.h"
-#endif // USE_ICE_IMAGE_VIEW
+#include "Gui/mvdQuicklookViewManipulator.h"
+#include "Gui/mvdQuicklookViewRenderer.h"
 #include "Gui/mvdStatusBarWidget.h"
 //
 #include "mvdApplication.h"
@@ -115,10 +111,8 @@ MainWindow
 #ifdef OTB_WRAP_QT
   m_OtbApplicationsBrowserDock(NULL),
 #endif
-#if USE_ICE_IMAGE_VIEW
   m_ImageView( NULL ),
   m_QuicklookViewDock( NULL ),
-#endif // USE_ICE_IMAGE_VIEW
   m_CentralTabWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL )
 {
@@ -150,8 +144,6 @@ bool
 MainWindow
 ::CheckGLCapabilities() const
 {
-#if USE_ICE_IMAGE_VIEW
-
   assert( m_ImageView!=NULL );
   assert( m_ImageView->GetRenderer()!=NULL );
 
@@ -160,12 +152,6 @@ MainWindow
     return false;
 
   return m_ImageView->GetRenderer()->CheckGLCapabilities();
-
-#else // USE_ICE_IMAGE_VIEW
-
-  return true;
-
-#endif // USE_ICE_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -324,14 +310,10 @@ MainWindow
 
   //
   // Image views
-#if USE_ICE_IMAGE_VIEW
   ConnectImageViews();
-#endif
 }
 
 /*****************************************************************************/
-#if USE_ICE_IMAGE_VIEW
-
 void
 MainWindow
 ::ConnectImageViews()
@@ -419,8 +401,6 @@ MainWindow
   );
 }
 
-#endif // USE_ICE_IMAGE_VIEW
-
 /*****************************************************************************/
 void
 MainWindow
@@ -448,8 +428,6 @@ MainWindow
 }
 
 /*****************************************************************************/
-#if USE_ICE_IMAGE_VIEW
-
 void
 MainWindow
 ::ConnectStatusBar( DatasetModel * model)
@@ -537,8 +515,6 @@ MainWindow
     );
     }
 }
-
-#endif // USE_ICE_IMAGE_VIEW
 
 /*****************************************************************************/
 void
@@ -630,8 +606,6 @@ MainWindow
 }
 
 /*****************************************************************************/
-#if USE_ICE_IMAGE_VIEW
-
 void
 MainWindow
 ::DisconnectStatusBar( const DatasetModel * model )
@@ -718,8 +692,6 @@ MainWindow
     }
 }
 
-#endif // USE_ICE_IMAGE_VIEW
-
 /*****************************************************************************/
 void
 MainWindow
@@ -779,7 +751,6 @@ MainWindow
   // Right pane.
 
   // Quicklook-view dock-widget
-#if USE_ICE_IMAGE_VIEW
   assert( m_QuicklookViewDock==NULL );
   assert( m_ImageView!=NULL );
   m_QuicklookViewDock = AddWidgetToDock(
@@ -788,7 +759,6 @@ MainWindow
     tr( "Quicklook view (Ice)" ),
     Qt::RightDockWidgetArea
   );
-#endif // USE_ICE_IMAGE_VIEW
 
   assert( m_HistogramDock==NULL );
   m_HistogramDock =
@@ -856,7 +826,6 @@ MainWindow
   // access to the quicklook tabBar to remove the close button
   QTabBar* tabBar = m_CentralTabWidget->findChild< QTabBar* >();
 
-#if USE_ICE_IMAGE_VIEW
   // Initialize image-view.
   assert( m_ImageView==NULL );
   m_ImageView = CreateImageViewWidget();
@@ -869,8 +838,6 @@ MainWindow
 
   tabBar->setTabButton( index, QTabBar::RightSide, 0);
   tabBar->setTabButton( index, QTabBar::LeftSide, 0);
-
-#endif // USE_ICE_IMAGE_VIEW
 }
 
 /*****************************************************************************/
@@ -883,8 +850,6 @@ MainWindow
 }
 
 /*****************************************************************************/
-#if USE_ICE_IMAGE_VIEW
-
 ImageViewWidget*
 MainWindow
 ::CreateImageViewWidget( QGLWidget* sharedGlWidget )
@@ -912,11 +877,7 @@ MainWindow
   return imageView;
 }
 
-#endif // USE_ICE_IMAGE_VIEW
-
 /*****************************************************************************/
-#if USE_ICE_IMAGE_VIEW
-
 ImageViewWidget*
 MainWindow
 ::CreateQuicklookViewWidget( QGLWidget* sharedGlWidget )
@@ -945,8 +906,6 @@ MainWindow
 
   return quicklookView;
 }
-
-#endif // USE_ICE_IMAGE_VIEW
 
 /*****************************************************************************/
 void
@@ -1200,7 +1159,7 @@ MainWindow
   //
   // VIEWS.
   //
-#if USE_ICE_IMAGE_VIEW
+
   // Update image-view.
   m_ImageView->SetImageList(
     ImageViewWidget::VectorImageModelList(),
@@ -1213,7 +1172,6 @@ MainWindow
     ImageViewWidget::VectorImageModelList(),
     ImageViewWidget::ZOOM_TYPE_FULL
   );
-#endif // USE_ICE_IMAGE_VIEW
 
   //
   // MODEL(s).
@@ -1262,8 +1220,6 @@ MainWindow
   // refreshes).
   if( vectorImageModel!=NULL )  // could be null when no dataset selected
     {
-#if USE_ICE_IMAGE_VIEW
-
     // Disconnect previously selected image-model from view.
     QObject::disconnect(
       vectorImageModel,
@@ -1282,11 +1238,7 @@ MainWindow
       m_QuicklookViewDock->widget(),
       SLOT( updateGL()  )
       );
-
-#endif // USE_ICE_IMAGE_VIEW
     }
-
-#if USE_ICE_IMAGE_VIEW
 
   QObject::disconnect(
     m_ImageView,
@@ -1296,21 +1248,8 @@ MainWindow
     SLOT( OnRoiChanged( const PointType&, double, double ) )
   );
 
-  // Disconnect update of last viewport informations in datasetmodel
-  // from the previous ImageView
-  // QObject::disconnect(
-  //   m_ImageView->GetManipulator(),
-  //   SIGNAL( RenderingContextChanged( const PointType&, double ) ),
-  //   datasetModel,
-  //   SLOT(  OnRenderingContextChanged(const PointType&, double ))
-  // );
-
-#endif // USE_ICE_IMAGE_VIEW
-
   // Disconnect the signals from the previous dataset model
-#if USE_ICE_IMAGE_VIEW
   DisconnectStatusBar( datasetModel );
-#endif
 
   // Disconnect the 
   DisconnectPixelDescriptionWidget( datasetModel );
@@ -1337,37 +1276,21 @@ MainWindow
   // connect the status bar
   // must be done before the SetImageModel (to be able to receive
   // the signal with zoom level)
-#if USE_ICE_IMAGE_VIEW
   ConnectStatusBar( model );
-#endif // USE_ICE_IMAGE_VIEW
 
   ConnectPixelDescriptionWidget( model );
 
   if( model!=NULL )
     {
-#if USE_ICE_IMAGE_VIEW
-
-  QObject::connect(
-    m_ImageView,
-    SIGNAL( RoiChanged( const PointType&, double, double ) ),
-    // to:
-    model,
-    SLOT( OnRoiChanged( const PointType&, double, double ) )
-  );
-
-    // Connect update of last viewport informations in datasetmodel
-    // from the previous ImageView
-    // QObject::connect(
-    //   m_ImageView->GetManipulator(),
-    //   SIGNAL( RenderingContextChanged( const PointType&, double ) ),
-    //   model,
-    //   SLOT(  OnRenderingContextChanged(const PointType&, double ))
-    // );
-
-#endif // USE_ICE_IMAGE_VIEW
+    QObject::connect(
+      m_ImageView,
+      SIGNAL( RoiChanged( const PointType&, double, double ) ),
+      // to:
+      model,
+      SLOT( OnRoiChanged( const PointType&, double, double ) )
+    );
     }
 
-#if USE_ICE_IMAGE_VIEW
   if( vectorImageModel!=NULL )
     {
     //
@@ -1402,9 +1325,7 @@ MainWindow
 
     quicklookView->SetImageList( quicklooks, ImageViewWidget::ZOOM_TYPE_EXTENT );
 #endif
-
     }
-#endif // USE_ICE_IMAGE_VIEW
 
   //
   // MODEL(s).
@@ -1418,8 +1339,6 @@ MainWindow
     // SAT: Using m_TabWidget->index( 0 ) or m_ImageView is equivalent
     // since Qt may use signal & slot names to connect (see MOC .cxx
     // files). Thus, using m_ImageView saves one indirection call.
-#if USE_ICE_IMAGE_VIEW
-
     QObject::connect(
       vectorImageModel,
       SIGNAL( SettingsUpdated() ),
@@ -1435,8 +1354,6 @@ MainWindow
       m_QuicklookViewDock->widget(),
       SLOT( updateGL()  )
       );
-
-#endif // USE_ICE_IMAGE_VIEW
 
 
     //

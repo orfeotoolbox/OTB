@@ -66,9 +66,7 @@ namespace mvd
 class DatasetModel;
 // Gui
 class FilenameDragAndDropEventFilter;
-#if USE_ICE_IMAGE_VIEW
 class ImageViewWidget;
-#endif // USE_ICE_IMAGE_VIEW
 class StatusBarWidget;
 
 namespace Ui
@@ -202,7 +200,6 @@ private:
 // Private methods.
 private:
 
-#if USE_ICE_IMAGE_VIEW
   /**
    */
   ImageViewWidget* CreateImageViewWidget( QGLWidget* sharedGlWidget =NULL );
@@ -210,7 +207,6 @@ private:
   /**
    */
   ImageViewWidget* CreateQuicklookViewWidget( QGLWidget* sharedGlWidget =NULL );
-#endif // USE_ICE_IMAGE_VIEW
 
   /**
    */
@@ -224,7 +220,6 @@ private:
    */
   void InitializeStatusBarWidgets();
 
-#if USE_ICE_IMAGE_VIEW
   /**
    */
   inline
@@ -237,20 +232,17 @@ private:
   /**
    */
   void ConnectImageViews();
-#endif // USE_ICE_IMAGE_VIEW
 
   /**
    */
   void ConnectViewMenu();
 
-#if USE_ICE_IMAGE_VIEW
   /**
    */
   void ConnectStatusBar( DatasetModel* model );
   /**
    */
   void DisconnectStatusBar( const DatasetModel* model );
-#endif // USE_ICE_IMAGE_VIEW
 
   /**
    */
@@ -310,7 +302,6 @@ private:
   QDockWidget* m_OtbApplicationsBrowserDock;
 #endif
 
-#if USE_ICE_IMAGE_VIEW
   /**
    * \brief Image-view page.
    */
@@ -320,8 +311,6 @@ private:
    * \brief Quicklook-view dock.
    */
   QDockWidget* m_QuicklookViewDock;
-
-#endif
 
   /**
    */
@@ -398,17 +387,13 @@ private slots:
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#if USE_ICE_IMAGE_VIEW
 #include "Gui/mvdImageViewWidget.h"
-#endif
 
 //
 // Some constants.
 
 namespace mvd
 {
-
-#if USE_ICE_IMAGE_VIEW
 
 /*****************************************************************************/
 inline
@@ -427,8 +412,6 @@ MainWindow
 {
   return qobject_cast< ImageViewWidget* >( m_QuicklookViewDock->widget() );
 }
-
-#endif // USE_ICE_IMAGE_VIEW
 
 } // end namespace 'mvd'
 

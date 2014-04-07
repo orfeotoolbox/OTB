@@ -149,8 +149,7 @@
 // Options
 
 // #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
-#define USE_ICE_IMAGE_VIEW ((defined( _DEBUG ) && 1) || 1)
-#define USE_OLD_IMAGE_VIEW ((!USE_ICE_IMAGE_VIEW  && 0) || 0)
+#define USE_OPTION_SAMPLE ((defined( _DEBUG )  && 0) || 0)
 
 
 #endif // __ConfigureMonteverdi2_h
