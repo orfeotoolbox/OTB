@@ -21,7 +21,8 @@
 
 #include "otbMacro.h"
 
-#include "otbGDALDriverManagerWrapper.h"
+#include "gdal.h"
+#include "gdal_priv.h"
 
 #include "ossim/base/ossimKeywordlist.h"
 #include "ossim/base/ossimString.h"
@@ -32,7 +33,6 @@
 
 #include "ossim/imaging/ossimTiffTileSource.h"
 #include "ossim/projection/ossimRpcModel.h"
-#include "tiffio.h"
 
 #include "otbSensorModelAdapter.h"
 
@@ -243,12 +243,11 @@ ReadGeometryFromImage(const std::string& filename)
       //  try to use GeoTiff RPC tag if present. They will override the
       // standard projection found before
       // Warning : RPC in subdatasets are not supported
-      GDALDatasetWrapper::Pointer gdalDatasetWrapper =
-        GDALDriverManagerWrapper::GetInstance().Open(handler->getFilename());
+      GDALDatasetH datasetH = GDALOpen(handler->getFilename(), GA_ReadOnly);
       
-      if (gdalDatasetWrapper.IsNotNull())
+      if (datasetH != NULL)
         {
-        GDALDataset* dataset = gdalDatasetWrapper->GetDataSet();
+        GDALDataset* dataset = static_cast<GDALDataset*>(datasetH);
         GDALRPCInfo rpcStruct;
         if (GDALExtractRPCInfo(dataset->GetMetadata("RPC"),&rpcStruct))
           {
