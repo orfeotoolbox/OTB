@@ -48,6 +48,14 @@ OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoTest
                              ${BASELINE_FILES}/apTvUtReadImageInfoTest.txt
                 	     ${TEMP}/apTvUtReadImageInfoTest.txt)
 
+OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoRpcTag
+                     APP  ReadImageInfo
+                     OPTIONS -in ${INPUTDATA}/QB_TOULOUSE_RpcTag_100_100.tif
+                             -outkwl ${TEMP}/apTvUtReadImageInfoRpcTag.geom
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtReadImageInfoRpcTag.geom
+                       ${TEMP}/apTvUtReadImageInfoRpcTag.geom)
+
 if(OTB_DATA_USE_LARGEINPUT)
 
 OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoSpot5
