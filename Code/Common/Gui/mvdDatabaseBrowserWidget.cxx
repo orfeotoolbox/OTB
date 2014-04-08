@@ -324,27 +324,40 @@ void
 DatabaseBrowserWidget
 ::on_m_SearchLine_textChanged( const QString& search )
 {
-  // 
+  // qDebug() << this << "on_m_SearchLine_textChanged(" << search << ")";
+
+  //
   // get the search text
   m_SearchText = search;
 
-  /*
-  //
-  // Obsolete code: it is kept to help re-implement this method.
-  //
-  for( int i=0; i<m_DatasetRootItem->childCount();  ++i )
+  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+
+  QTreeWidgetItemList items(
+    m_UI->databaseTreeWidget->findItems(
+      "*",
+      Qt::MatchWildcard | Qt::MatchRecursive,
+      0
+    )
+  );
+
+  // qDebug() << items;
+
+  for( QTreeWidgetItemList::iterator it( items.begin() );
+       it!=items.end();
+       ++it )
     {
-    QTreeWidgetItem* item = m_DatasetRootItem->child( i );
+    assert( *it==dynamic_cast< TreeWidgetItem* >( *it ) );
+    TreeWidgetItem* item = dynamic_cast< TreeWidgetItem* >( *it );
     assert( item!=NULL );
 
-    // Item is visible if search is empty or if alias contains
-    // search-text.
     item->setHidden(
-      !search.isEmpty() &&
-      !item->text( 0 ).contains( search, Qt::CaseInsensitive )
+      item->GetType()==TreeWidgetItem::ITEM_TYPE_LEAF &&
+      !item->GetText().contains( search, Qt::CaseInsensitive )
     );
+
+    // qDebug()
+    //   << item->text( 0 ) << ":" << ( item->isHidden() ? "HIDDEN" : "VISIBLE" );
     }
-  */
 }
 
 } // end namespace 'mvd'
