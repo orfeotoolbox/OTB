@@ -26,6 +26,7 @@
 #include "otbImage.h"
 #include "itkVariableLengthVector.h"
 #include "otbTinyXML.h"
+#include "otbImageKeywordlist.h"
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
@@ -1692,6 +1693,24 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       dataset->SetMetadataItem(tag.c_str(), value.c_str(), NULL);
       }
     }
+  
+  // Report any RPC coefficients
+  ImageKeywordlist otb_kwl;
+  itk::ExposeMetaData<ImageKeywordlist>(dict,
+                                        MetaDataKey::OSSIMKeywordlistKey,
+                                        otb_kwl);
+  if( otb_kwl.GetSize() != 0 )
+    {
+    GDALRPCInfo gdalRpcStruct;
+    if ( otb_kwl.convertToGDALRPC(gdalRpcStruct) )
+      {
+      char **rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
+      dataset->SetMetadata(rpcMetadata, "RPC");
+      CSLDestroy( rpcMetadata );
+      }
+    }
+  
+  
   // END
 
   // Dataset info

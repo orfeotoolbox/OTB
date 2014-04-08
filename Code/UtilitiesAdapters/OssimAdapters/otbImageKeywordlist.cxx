@@ -21,7 +21,6 @@
 
 #include "otbMacro.h"
 
-#include "gdal.h"
 #include "gdal_priv.h"
 
 #include "ossim/base/ossimKeywordlist.h"
@@ -30,8 +29,6 @@
 #include "ossim/imaging/ossimImageHandlerRegistry.h"
 #include "ossim/ossimTileMapModel.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
-
-#include "ossim/imaging/ossimTiffTileSource.h"
 #include "ossim/projection/ossimRpcModel.h"
 
 #include "otbSensorModelAdapter.h"
@@ -127,6 +124,44 @@ convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
     ossimMap[it->first] = it->second;
     }
   kwl.getMap() = ossimMap;
+}
+
+bool
+ImageKeywordlist::
+convertToGDALRPC(GDALRPCInfo &rpc) const
+{
+  ossimKeywordlist geom_kwl;
+  this->convertToOSSIMKeywordlist(geom_kwl);
+  
+  ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
+  if (rpcModel->loadState(geom_kwl))
+    {
+    ossimRpcModel::rpcModelStruct ossimRpcStruct;
+    rpcModel->getRpcParameters(ossimRpcStruct);
+    
+    if (ossimRpcStruct.type == 'B')
+      {
+      rpc.dfSAMP_OFF = ossimRpcStruct.sampOffset;
+      rpc.dfLINE_OFF = ossimRpcStruct.lineOffset;
+      rpc.dfSAMP_SCALE = ossimRpcStruct.sampScale;
+      rpc.dfLINE_SCALE = ossimRpcStruct.lineScale;
+      rpc.dfLAT_OFF = ossimRpcStruct.latOffset;
+      rpc.dfLONG_OFF = ossimRpcStruct.lonOffset;
+      rpc.dfHEIGHT_OFF = ossimRpcStruct.hgtOffset;
+      rpc.dfLAT_SCALE = ossimRpcStruct.latScale;
+      rpc.dfLONG_SCALE = ossimRpcStruct.lonScale;
+      rpc.dfHEIGHT_SCALE = ossimRpcStruct.hgtScale;
+      
+      memcpy(rpc.adfLINE_NUM_COEFF, ossimRpcStruct.lineNumCoef, sizeof(double) * 20);
+      memcpy(rpc.adfLINE_DEN_COEFF, ossimRpcStruct.lineDenCoef, sizeof(double) * 20);
+      memcpy(rpc.adfSAMP_NUM_COEFF, ossimRpcStruct.sampNumCoef, sizeof(double) * 20);
+      memcpy(rpc.adfSAMP_DEN_COEFF, ossimRpcStruct.sampDenCoef, sizeof(double) * 20);
+      
+      return true;
+      }
+    }
+  
+  return false;    
 }
 
 void

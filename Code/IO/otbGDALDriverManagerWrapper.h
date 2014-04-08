@@ -27,6 +27,7 @@ class GDALDriver;
 #include "gdal.h"
 #include "gdaljp2metadata.h"
 #include "gdal_priv.h"
+#include "gdal_alg.h"
 
 namespace otb
 {

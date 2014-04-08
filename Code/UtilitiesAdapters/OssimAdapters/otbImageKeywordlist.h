@@ -21,6 +21,8 @@
 #include <iostream>
 #include <map>
 
+#include "gdal.h"
+
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
@@ -83,6 +85,10 @@ public:
   virtual void AddKey(const std::string& key, const std::string& value);
 
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
+  
+  /** try to convert the image keywordlist into a GDALRpcInfo structure
+   *  return true if successful, false otherwise */
+  virtual bool convertToGDALRPC(GDALRPCInfo &rpc) const;
 
   virtual void Print(std::ostream& os, itk::Indent indent = 0) const;
 
