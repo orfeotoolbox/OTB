@@ -129,12 +129,12 @@ Spot6ImageMetadataInterface::GetSolarIrradiance() const
 
   if (outputValues.size() > 0)
     {
-    	for (unsigned int i = 0; i < outputValues.size(); ++i)   
-		outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
+           for (unsigned int i = 0; i < outputValues.size(); ++i)
+              outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
     }
   else
     {
-    	itkExceptionMacro("Invalid Physical Irradiance");
+           itkExceptionMacro("Invalid Physical Irradiance");
     }
 
   return outputValuesVariableLengthVector;
@@ -478,12 +478,12 @@ Spot6ImageMetadataInterface
 
   if (outputValues.size() > 0)
     {
-    	for (unsigned int i = 0; i < outputValues.size(); ++i)   
-		outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
+           for (unsigned int i = 0; i < outputValues.size(); ++i)
+              outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
     }
   else
     {
-    	itkExceptionMacro("Invalid Physical Bias");
+           itkExceptionMacro("Invalid Physical Bias");
     }
 
   return outputValuesVariableLengthVector;
@@ -525,12 +525,12 @@ Spot6ImageMetadataInterface
 
   if (outputValues.size() > 0)
     {
-    	for (unsigned int i = 0; i < outputValues.size(); ++i)   
-		outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
+           for (unsigned int i = 0; i < outputValues.size(); ++i)
+              outputValuesVariableLengthVector[i] = outputValues[this->BandIndexToWavelengthPosition(i)];
     }
   else
     {
-    	itkExceptionMacro("Invalid Physical Bias");
+           itkExceptionMacro("Invalid Physical Bias");
     }
 
   return outputValuesVariableLengthVector;
@@ -648,7 +648,7 @@ Spot6ImageMetadataInterface
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
-    	itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+           itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
   VariableLengthVectorType wavel(1);
@@ -3857,9 +3857,9 @@ Spot6ImageMetadataInterface
     {
     wavelengthSpectralBand->PushBack(FilterFunctionValues::New());
     wavelengthSpectralBand->GetNthElement(j)->SetFilterFunctionValues(*it);
-    wavelengthSpectralBand->GetNthElement(j)->SetMinSpectralValue(0.4); 
-    wavelengthSpectralBand->GetNthElement(j)->SetMaxSpectralValue(1.0); 
-    wavelengthSpectralBand->GetNthElement(j)->SetUserStep(0.001); 
+    wavelengthSpectralBand->GetNthElement(j)->SetMinSpectralValue(0.4);
+    wavelengthSpectralBand->GetNthElement(j)->SetMaxSpectralValue(1.0);
+    wavelengthSpectralBand->GetNthElement(j)->SetUserStep(0.001);
     ++j;
     }
   return wavelengthSpectralBand;

@@ -29,11 +29,10 @@
 #include "otbGroundSpacingImageFunction.h"
 #include "vnl/vnl_random.h"
 
-#include <fstream> 
-#include <sstream> 
-#include <vector> 
-#include <itkVariableLengthVector.h> 
-
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <itkVariableLengthVector.h>
 
 
 namespace otb
@@ -80,7 +79,7 @@ public:
                                             DoubleVectorImageType>        LuminanceToReflectanceImageFilterType;
 
   typedef LuminanceToImageImageFilter<DoubleVectorImageType,
-					    DoubleVectorImageType>        LuminanceToImageImageFilterType;
+                                       DoubleVectorImageType>        LuminanceToImageImageFilterType;
 
   typedef ReflectanceToLuminanceImageFilter<DoubleVectorImageType,
                                             DoubleVectorImageType>        ReflectanceToLuminanceImageFilterType;
@@ -131,7 +130,7 @@ private:
 "- solar illuminations, one value for each band (passed by a file).\n\n"
 "For the conversion from DN (for Digital Numbers) to spectral radiance (or 'TOA radiance') L, the following formula is used :\n\n"
 
-"(1)	L(b) = DN(b)/gain(b)+bias(b)	(in W/m²/steradians/micrometers)	with b being a band ID.\n\n"
+"(1)       L(b) = DN(b)/gain(b)+bias(b)       (in W/m²/steradians/micrometers)       with b being a band ID.\n\n"
 
 "These values are provided by the user thanks to a simple txt file with two lines, one for the gains and one for the biases.\n"
 "Each value must be separated with colons (:), with eventual spaces. Blank lines are not allowed. If a line begins with the '#' symbol, then it is considered as comments.\n"
@@ -140,7 +139,7 @@ private:
 
 "In order to convert TOA radiance to TOA reflectance, the following formula is used :\n\n"
 
-"(2)	R(b) = (pi*L(b)*d²) / (ESUN(b)*cos(θ))	(no dimension)	where : \n\n"
+"(2)       R(b) = (pi*L(b)*d²) / (ESUN(b)*cos(θ))       (no dimension)       where : \n\n"
 
 "- L(b) is the spectral radiance for band b \n"
 "- pi is the famous mathematical constant (3.14159...) \n"
@@ -153,7 +152,7 @@ private:
 "These values are provided by the user thanks to a txt file following the same convention as before.\n"
 "Instead of providing the date of acquisition, the user can also provide a flux normalization coefficient 'fn'. "
 "The formula used instead will be the following : \n\n"
-"(3) 	R(b) = (pi*L(b)) / (ESUN(b)*fn²*cos(θ)) \n\n"
+"(3)        R(b) = (pi*L(b)) / (ESUN(b)*fn²*cos(θ)) \n\n"
 "Whatever the formula used (2 or 3), the user should pay attention to the interpretation of the parameters he will provide to the application, "
 "by taking into account the original formula that the metadata files assum.\n\n"
 
@@ -227,7 +226,7 @@ private:
     SetMinimumParameterFloatValue("acquisition.sunelevationangle", 0.);
     SetMaximumParameterFloatValue("acquisition.sunelevationangle", 120.);
     MandatoryOn("acquisition.sunelevationangle");
-    //Gain & bias 
+    //Gain & bias
     AddParameter(ParameterType_InputFilename, "acquisition.gainbias",   "Gains | biases");
     SetParameterDescription("acquisition.gainbias", "Gains | biases");
     MandatoryOff("acquisition.gainbias");
@@ -298,98 +297,98 @@ private:
   {
     std::ostringstream ossOutput;
     string tempName = GetParameterString("in");
-	
+       
     if (!tempName.empty())
-    {  
+    {
 
-	    if (tempName != m_inImageName)
-	    {
-		m_inImageName = tempName;
-		m_update1stTime = true;
-	    }
+           if (tempName != m_inImageName)
+           {
+              m_inImageName = tempName;
+              m_update1stTime = true;
+           }
 
         ossOutput << std::endl << "File: " << m_inImageName << std::endl;
-	    
+           
 
-	    //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
-	    DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
-	    itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
-	    OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+           //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
+           DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
+           itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
+           OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
-	    string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
-	    if ( (IMIName != IMIOptDfltName) && (m_update1stTime) )
-	    {
+           string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
+           if ( (IMIName != IMIOptDfltName) && (m_update1stTime) )
+           {
              ossOutput << std::endl << "Sensor ID: " << lImageMetadataInterface->GetSensorID() << std::endl;
 
-		     itk::VariableLengthVector<double> vlvector;
-		     std::stringstream ss;
-		
-		     vlvector = lImageMetadataInterface->GetPhysicalGain();
-		     for(int k=0; k<vlvector.Size(); k++)
-				ss << vlvector[k] << " ";
-		     ss << " | ";
-		     vlvector = lImageMetadataInterface->GetPhysicalBias();
-		     for(int k=0; k<vlvector.Size(); k++)
-				ss << vlvector[k] << " ";
-		     ss << " (custom values must be passed by a file)";
-		     SetParameterString("acquisition.gainbias",ss.str());
+                   itk::VariableLengthVector<double> vlvector;
+                   std::stringstream ss;
+              
+                   vlvector = lImageMetadataInterface->GetPhysicalGain();
+                   for(int k=0; k<vlvector.Size(); k++)
+                            ss << vlvector[k] << " ";
+                   ss << " | ";
+                   vlvector = lImageMetadataInterface->GetPhysicalBias();
+                   for(int k=0; k<vlvector.Size(); k++)
+                            ss << vlvector[k] << " ";
+                   ss << " (custom values must be passed by a file)";
+                   SetParameterString("acquisition.gainbias",ss.str());
 
-		     ss.str(std::string());
-		     vlvector = lImageMetadataInterface->GetSolarIrradiance();
-		     for(int k=0; k<vlvector.Size(); k++)
-				ss << vlvector[k] << " ";
-		     ss << " (custom values must be passed by a file)";
-		     SetParameterString("acquisition.solarilluminations",ss.str());
+                   ss.str(std::string());
+                   vlvector = lImageMetadataInterface->GetSolarIrradiance();
+                   for(int k=0; k<vlvector.Size(); k++)
+                            ss << vlvector[k] << " ";
+                   ss << " (custom values must be passed by a file)";
+                   SetParameterString("acquisition.solarilluminations",ss.str());
 
 
-		     SetParameterInt("acquisition.day", lImageMetadataInterface->GetDay());
+                   SetParameterInt("acquisition.day", lImageMetadataInterface->GetDay());
              ossOutput << std::endl << "Acquisition Day: " << lImageMetadataInterface->GetDay() << std::endl;
              MandatoryOff("acquisition.day");
              DisableParameter("acquisition.day");
-		     SetParameterInt("acquisition.month", lImageMetadataInterface->GetMonth());
+                   SetParameterInt("acquisition.month", lImageMetadataInterface->GetMonth());
              ossOutput << std::endl << "Acquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl;
              MandatoryOff("acquisition.month");
              DisableParameter("acquisition.month");
-		     SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());
+                   SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());
              MandatoryOff("acquisition.sunelevationangle");
              DisableParameter("acquisition.sunelevationangle");
-             ossOutput << std::endl << "Acquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;	
+             ossOutput << std::endl << "Acquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;
 
-		     m_update1stTime=false;
+                   m_update1stTime=false;
 
-	    }
+           }
 
-	    if ( (IMIName == IMIOptDfltName) && (m_update1stTime) )
-	    {
+           if ( (IMIName == IMIOptDfltName) && (m_update1stTime) )
+           {
             ossOutput << "Sensor ID: Unknown!"<< std::endl;
             ossOutput << "Additional parameters are necessary!"<< std::endl;
 
-			GetLogger()->Info("\n-------------------------------------------------------------\n"
-			"Sensor ID : unknown...\n"
-			"The application didn't manage to find an appropriate metadata interface; " 
-			"custom values must be provided in order to perform TOA conversion.\nPlease, set the following fields :\n"
-			"- day and month of acquisition, or flux normalization coefficient;\n"
-			"- sun elevation angle;\n"
-			"- gains and biases for each band (passed by a file, see documentation);\n"
-			"- solar illuminationss for each band (passed by a file, see documentation).\n"
-			"-------------------------------------------------------------\n");
+                     GetLogger()->Info("\n-------------------------------------------------------------\n"
+                     "Sensor ID : unknown...\n"
+                     "The application didn't manage to find an appropriate metadata interface; "
+                     "custom values must be provided in order to perform TOA conversion.\nPlease, set the following fields :\n"
+                     "- day and month of acquisition, or flux normalization coefficient;\n"
+                     "- sun elevation angle;\n"
+                     "- gains and biases for each band (passed by a file, see documentation);\n"
+                     "- solar illuminationss for each band (passed by a file, see documentation).\n"
+                     "-------------------------------------------------------------\n");
 
-			SetParameterString("acquisition.gainbias","");
-			SetParameterString("acquisition.solarilluminations","");
-			SetParameterInt("acquisition.day", 1);
-		    	SetParameterInt("acquisition.month", 1);
-		    	SetParameterFloat("acquisition.fluxnormalizationcoefficient", 0);
-			SetParameterFloat("acquisition.sunelevationangle", 0);
+                     SetParameterString("acquisition.gainbias","");
+                     SetParameterString("acquisition.solarilluminations","");
+                     SetParameterInt("acquisition.day", 1);
+                         SetParameterInt("acquisition.month", 1);
+                         SetParameterFloat("acquisition.fluxnormalizationcoefficient", 0);
+                     SetParameterFloat("acquisition.sunelevationangle", 0);
 
-		        EnableParameter("acquisition.gainbias");
-			EnableParameter("acquisition.solarilluminations");
-			EnableParameter("acquisition.day");
-			EnableParameter("acquisition.month");
-			DisableParameter("acquisition.fluxnormalizationcoefficient");
-			EnableParameter("acquisition.sunelevationangle");
-			
-		    m_update1stTime=false;
-	    }
+                      EnableParameter("acquisition.gainbias");
+                     EnableParameter("acquisition.solarilluminations");
+                     EnableParameter("acquisition.day");
+                     EnableParameter("acquisition.month");
+                     DisableParameter("acquisition.fluxnormalizationcoefficient");
+                     EnableParameter("acquisition.sunelevationangle");
+                     
+                  m_update1stTime=false;
+           }
         otbAppLogINFO(<< ossOutput.str());
    }
 
@@ -403,7 +402,7 @@ private:
     m_LuminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
     m_ReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
     m_ReflectanceToLuminanceFilter          = ReflectanceToLuminanceImageFilterType::New();
-    m_LuminanceToImageFilter 		    = LuminanceToImageImageFilterType::New();
+    m_LuminanceToImageFilter                   = LuminanceToImageImageFilterType::New();
 
     //Other instanciations
     m_ScaleFilter = ScaleFilterOutDoubleType::New();
@@ -418,140 +417,140 @@ private:
     string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
     if (IMIName != IMIOptDfltName)
     {
-	    // Test if needed data are available : an exception will be thrown
-	    // if one the following Get* return failure. the exception is then
-	    // caught in the Wrapper::Application class which redirect it to
-	    // the logger
-	    
-	    // ImageToLuminance
-	    lImageMetadataInterface->GetPhysicalGain();
-	    lImageMetadataInterface->GetPhysicalBias();
+           // Test if needed data are available : an exception will be thrown
+           // if one the following Get* return failure. the exception is then
+           // caught in the Wrapper::Application class which redirect it to
+           // the logger
+           
+           // ImageToLuminance
+           lImageMetadataInterface->GetPhysicalGain();
+           lImageMetadataInterface->GetPhysicalBias();
 
-	    // LuminanceToReflectance
-	    lImageMetadataInterface->GetDay();
-	    lImageMetadataInterface->GetMonth();
+           // LuminanceToReflectance
+           lImageMetadataInterface->GetDay();
+           lImageMetadataInterface->GetMonth();
 
-	    lImageMetadataInterface->GetSolarIrradiance();
-	    lImageMetadataInterface->GetSunElevation();
+           lImageMetadataInterface->GetSolarIrradiance();
+           lImageMetadataInterface->GetSunElevation();
             lImageMetadataInterface->GetSolarIrradiance();
     }
     else //No metadata interface
     {
-	// Image to luminance / luminance to image
-	GetLogger()->Info("Trying to get gains/biases information...\n");
-	string filename(GetParameterString("acquisition.gainbias"));  
-	if (!filename.empty())
-	{
-		std::ifstream file(filename.c_str(), std::ios::in);
+       // Image to luminance / luminance to image
+       GetLogger()->Info("Trying to get gains/biases information...\n");
+       string filename(GetParameterString("acquisition.gainbias"));
+       if (!filename.empty())
+       {
+              std::ifstream file(filename.c_str(), std::ios::in);
 
-		if(file)  
-		{       
-			 
-			string line; unsigned int numLine = 0;
-		        while (getline(file, line)) 
-			{
-				if (line[0]!='#')
-				{
-					numLine++;
+              if(file)
+              {
+                      
+                     string line; unsigned int numLine = 0;
+                      while (getline(file, line))
+                     {
+                            if (line[0]!='#')
+                            {
+                                   numLine++;
 
-					std::vector<double> values;
-					std::istringstream  iss(line); 
-					string value; double dvalue;
-			    		while ( getline( iss, value, ':' ) )
-			    		{
-						std::istringstream  iss2(value);
-						iss2 >> dvalue;
-						values.push_back(dvalue);
-			    		} 
+                                   std::vector<double> values;
+                                   std::istringstream  iss(line);
+                                   string value; double dvalue;
+                                       while ( getline( iss, value, ':' ) )
+                                       {
+                                          std::istringstream  iss2(value);
+                                          iss2 >> dvalue;
+                                          values.push_back(dvalue);
+                                       }
 
-					itk::VariableLengthVector<double> vlvector;
+                                   itk::VariableLengthVector<double> vlvector;
 
-					vlvector.SetData(values.data(),values.size(),false); 
+                                   vlvector.SetData(values.data(),values.size(),false);
 
-					switch (numLine)
-					{
-						case 1 : m_ImageToLuminanceFilter->SetAlpha(vlvector); 
-						m_LuminanceToImageFilter->SetAlpha(vlvector);
-						GetLogger()->Info("Trying to get gains/biases information... OK (1/2)\n");
-						break;
-						case 2 : m_ImageToLuminanceFilter->SetBeta(vlvector);
-						m_LuminanceToImageFilter->SetBeta(vlvector); 
-						GetLogger()->Info("Trying to get gains/biases information... OK (2/2)\n");
-						break;
-						default : itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
-					}
-				}
-			}
-			file.close(); 	 
+                                   switch (numLine)
+                                   {
+                                          case 1 : m_ImageToLuminanceFilter->SetAlpha(vlvector);
+                                          m_LuminanceToImageFilter->SetAlpha(vlvector);
+                                          GetLogger()->Info("Trying to get gains/biases information... OK (1/2)\n");
+                                          break;
+                                          case 2 : m_ImageToLuminanceFilter->SetBeta(vlvector);
+                                          m_LuminanceToImageFilter->SetBeta(vlvector);
+                                          GetLogger()->Info("Trying to get gains/biases information... OK (2/2)\n");
+                                          break;
+                                          default : itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
+                                   }
+                            }
+                     }
+                     file.close();
 
-		}
-		else  
-		        itkExceptionMacro(<< "File : " << filename << " couldn't be opened");
-	}
-	else
-		itkExceptionMacro(<< "Please, select a file containing gain/bias values for each band");
+              }
+              else
+                      itkExceptionMacro(<< "File : " << filename << " couldn't be opened");
+       }
+       else
+              itkExceptionMacro(<< "Please, select a file containing gain/bias values for each band");
 
-	// Luminance to reflectance / reflectance to Luminance
-	m_LuminanceToReflectanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
-	m_ReflectanceToLuminanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
+       // Luminance to reflectance / reflectance to Luminance
+       m_LuminanceToReflectanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
+       m_ReflectanceToLuminanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
 
-	if ( (IsParameterEnabled("acquisition.day")) && (IsParameterEnabled("acquisition.month")) )
-		{
-			m_LuminanceToReflectanceFilter->SetDay(GetParameterInt("acquisition.day"));
-			m_LuminanceToReflectanceFilter->SetMonth(GetParameterInt("acquisition.month"));
+       if ( (IsParameterEnabled("acquisition.day")) && (IsParameterEnabled("acquisition.month")) )
+              {
+                     m_LuminanceToReflectanceFilter->SetDay(GetParameterInt("acquisition.day"));
+                     m_LuminanceToReflectanceFilter->SetMonth(GetParameterInt("acquisition.month"));
 
-			m_ReflectanceToLuminanceFilter->SetDay(GetParameterInt("acquisition.day"));
-			m_ReflectanceToLuminanceFilter->SetMonth(GetParameterInt("acquisition.month"));
-		}
-	else if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
-	{
-		m_LuminanceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
+                     m_ReflectanceToLuminanceFilter->SetDay(GetParameterInt("acquisition.day"));
+                     m_ReflectanceToLuminanceFilter->SetMonth(GetParameterInt("acquisition.month"));
+              }
+       else if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
+       {
+              m_LuminanceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
 
-		m_ReflectanceToLuminanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
-	}
-	else
-		itkExceptionMacro(<< "Please, set the day and month fields, OR set the flux normalization coefficient field");
+              m_ReflectanceToLuminanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
+       }
+       else
+              itkExceptionMacro(<< "Please, set the day and month fields, OR set the flux normalization coefficient field");
 
-	GetLogger()->Info("Trying to get solar illuminations information...\n");
-	string filename2(GetParameterString("acquisition.solarilluminations"));
-	if(!filename2.empty())
-	{
-		std::ifstream file2(filename2.c_str(), std::ios::in);  
-		if(file2)  
-		{        
-			string line;
-			while (getline(file2, line))
-			{
-				if (line[0]!='#')
-				{
-					std::vector<double> values;
-					std::istringstream  iss(line); 
-					string value; double dvalue;
-			    		while ( getline( iss, value, ':' ) )
-			    		{
-						std::istringstream  iss2(value);
-						iss2 >> dvalue;
+       GetLogger()->Info("Trying to get solar illuminations information...\n");
+       string filename2(GetParameterString("acquisition.solarilluminations"));
+       if(!filename2.empty())
+       {
+              std::ifstream file2(filename2.c_str(), std::ios::in);
+              if(file2)
+              {
+                     string line;
+                     while (getline(file2, line))
+                     {
+                            if (line[0]!='#')
+                            {
+                                   std::vector<double> values;
+                                   std::istringstream  iss(line);
+                                   string value; double dvalue;
+                                       while ( getline( iss, value, ':' ) )
+                                       {
+                                          std::istringstream  iss2(value);
+                                          iss2 >> dvalue;
 
-						values.push_back(dvalue);
-			    		} 
+                                          values.push_back(dvalue);
+                                       }
 
-					itk::VariableLengthVector<double> vlvector;
-					vlvector.SetData(values.data(),values.size(),false); 
+                                   itk::VariableLengthVector<double> vlvector;
+                                   vlvector.SetData(values.data(),values.size(),false);
 
-					m_LuminanceToReflectanceFilter->SetSolarIllumination(vlvector);
-					m_ReflectanceToLuminanceFilter->SetSolarIllumination(vlvector);
+                                   m_LuminanceToReflectanceFilter->SetSolarIllumination(vlvector);
+                                   m_ReflectanceToLuminanceFilter->SetSolarIllumination(vlvector);
 
-					GetLogger()->Info("Trying to get solar illuminations information... OK\n");
-				}
-			}
-			file2.close();  
-		}
-		else  
-			itkExceptionMacro(<< "File : " << filename2 << " couldn't be opened");
-	}
-	else
-		itkExceptionMacro(<< "Please, select a file containing solar illumination values for each band");
-	
+                                   GetLogger()->Info("Trying to get solar illuminations information... OK\n");
+                            }
+                     }
+                     file2.close();
+              }
+              else
+                     itkExceptionMacro(<< "File : " << filename2 << " couldn't be opened");
+       }
+       else
+              itkExceptionMacro(<< "Please, select a file containing solar illumination values for each band");
+       
     }
 
     switch ( GetParameterInt("level") )
@@ -559,149 +558,149 @@ private:
       case Level_IM_TOA:
       {
             GetLogger()->Info("Compute Top of Atmosphere reflectance\n");
-	    
-	    //Pipeline
-	    m_ImageToLuminanceFilter->SetInput(inImage);
-	    m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
-	    m_LuminanceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
-	    m_LuminanceToReflectanceFilter->UpdateOutputInformation();
-	    m_ScaleFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
+           
+           //Pipeline
+           m_ImageToLuminanceFilter->SetInput(inImage);
+           m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
+           m_LuminanceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
+           m_LuminanceToReflectanceFilter->UpdateOutputInformation();
+           m_ScaleFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
       }
       break;
-      case Level_TOA_IM: 
+      case Level_TOA_IM:
       {
 
             GetLogger()->Info("Convert Top of Atmosphere reflectance to image DN\n");
-	    
-	    //Pipeline
-	    m_ReflectanceToLuminanceFilter->SetInput(inImage);
-	    m_LuminanceToImageFilter->SetInput(m_ReflectanceToLuminanceFilter->GetOutput());
-	    m_LuminanceToImageFilter->UpdateOutputInformation();
-	    m_ScaleFilter->SetInput(m_LuminanceToImageFilter->GetOutput());
+           
+           //Pipeline
+           m_ReflectanceToLuminanceFilter->SetInput(inImage);
+           m_LuminanceToImageFilter->SetInput(m_ReflectanceToLuminanceFilter->GetOutput());
+           m_LuminanceToImageFilter->UpdateOutputInformation();
+           m_ScaleFilter->SetInput(m_LuminanceToImageFilter->GetOutput());
 
       }
       break;
       case Level_TOC:
       {
-	    GetLogger()->Info("Convert Top of Canopy reflectance\n");
+           GetLogger()->Info("Convert Top of Canopy reflectance\n");
 
-	    //Pipeline
-	    m_ImageToLuminanceFilter->SetInput(inImage);
-	    m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
-	    m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
-	     
-	    m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-	    m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
-	    m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
-	    m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+           //Pipeline
+           m_ImageToLuminanceFilter->SetInput(inImage);
+           m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
+           m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
+            
+           m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+           m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
+           m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
+           m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
-	      m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
-	      //AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
+             m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
+             //AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
 
-	      switch ( GetParameterInt("atmo.aerosol") )
-		{
-			case Aerosol_Desertic:
-			{
-			// Aerosol_Desertic correspond to 4 in the enum but actually in
-			// the class atmosphericParam it is known as parameter 5
-			m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(5));
-			}
-			break;
-			default:
-			{
-			m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(GetParameterInt("atmo.aerosol")));
-			}
-			break;
-		}
-	      // Set the atmospheric param
-	      m_AtmosphericParam->SetOzoneAmount(GetParameterFloat("atmo.oz"));
-	      m_AtmosphericParam->SetWaterVaporAmount(GetParameterFloat("atmo.wa"));
-	      m_AtmosphericParam->SetAtmosphericPressure(GetParameterFloat("atmo.pressure"));
-	      m_AtmosphericParam->SetAerosolOptical(GetParameterFloat("atmo.opt"));
+             switch ( GetParameterInt("atmo.aerosol") )
+              {
+                     case Aerosol_Desertic:
+                     {
+                     // Aerosol_Desertic correspond to 4 in the enum but actually in
+                     // the class atmosphericParam it is known as parameter 5
+                     m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(5));
+                     }
+                     break;
+                     default:
+                     {
+                     m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(GetParameterInt("atmo.aerosol")));
+                     }
+                     break;
+              }
+             // Set the atmospheric param
+             m_AtmosphericParam->SetOzoneAmount(GetParameterFloat("atmo.oz"));
+             m_AtmosphericParam->SetWaterVaporAmount(GetParameterFloat("atmo.wa"));
+             m_AtmosphericParam->SetAtmosphericPressure(GetParameterFloat("atmo.pressure"));
+             m_AtmosphericParam->SetAerosolOptical(GetParameterFloat("atmo.opt"));
 
-	      // Relative Spectral Response File
-	      if (IsParameterEnabled("rsr"))
-		{
-		m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("rsr"));
-		}
+             // Relative Spectral Response File
+             if (IsParameterEnabled("rsr"))
+              {
+              m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("rsr"));
+              }
 
-	      // Aeronet file
-	      if (IsParameterEnabled("atmo.aeronet"))
-		{
-		GetLogger()->Info("Use aeronet file to retrieve atmospheric parameters");
-		m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("atmo.aeronet"));
-		}
+             // Aeronet file
+             if (IsParameterEnabled("atmo.aeronet"))
+              {
+              GetLogger()->Info("Use aeronet file to retrieve atmospheric parameters");
+              m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("atmo.aeronet"));
+              }
 
-	      m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-	      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
-	      m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
-	      m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
-	      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+             m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+             m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
+             m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+             m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
+             m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
-	      // std::ostringstream oss_atmo;
-	      // oss_atmo << "Atmospheric parameters: " << std::endl;
-	      // oss_atmo << m_AtmosphericParam;
+             // std::ostringstream oss_atmo;
+             // oss_atmo << "Atmospheric parameters: " << std::endl;
+             // oss_atmo << m_AtmosphericParam;
 
-	      // GetLogger()->Info(oss_atmo.str());
+             // GetLogger()->Info(oss_atmo.str());
 
-	      std::ostringstream oss;
-	      oss.str("");
-	      oss << std::endl << m_AtmosphericParam;
+             std::ostringstream oss;
+             oss.str("");
+             oss << std::endl << m_AtmosphericParam;
 
-	      AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
-	      oss << std::endl << std::endl << atmoTerms;
+             AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
+             oss << std::endl << std::endl << atmoTerms;
 
-	      GetLogger()->Info("Atmospheric correction parameters compute by 6S : " + oss.str());
+             GetLogger()->Info("Atmospheric correction parameters compute by 6S : " + oss.str());
 
-	      //Compute adjacency effect
-	      //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
-	      //   = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
+             //Compute adjacency effect
+             //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
+             //   = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
 
-	      //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-	      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
-	      //   SetAtmosphericRadiativeTerms(
-	      //     m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms());
-	      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
-	      //   m_AtmosphericParam->GetViewingZenithalAngle());
-	      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("radius"));
+             //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+             // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+             //   SetAtmosphericRadiativeTerms(
+             //     m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms());
+             // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
+             //   m_AtmosphericParam->GetViewingZenithalAngle());
+             // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("radius"));
 
-	      // //estimate ground spacing in kilometers
-	      // GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
+             // //estimate ground spacing in kilometers
+             // GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
 
-	      // groundSpacing->SetInputImage(inImage);
-	      // IndexType  index;
+             // groundSpacing->SetInputImage(inImage);
+             // IndexType  index;
 
-	      // vnl_random rand;
+             // vnl_random rand;
 
-	      // index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
-	      // index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
-	      // FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
+             // index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
+             // index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
+             // FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
 
-	      // const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
+             // const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
 
-	      // // std::ostringstream oss2;
-	      // //  oss2.str("");
-	      // //  oss2 << spacingInKilometers;
+             // // std::ostringstream oss2;
+             // //  oss2.str("");
+             // //  oss2 << spacingInKilometers;
 
-	      // //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
-	      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
-	      //   SetPixelSpacingInKilometers(spacingInKilometers);
+             // //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
+             // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+             //   SetPixelSpacingInKilometers(spacingInKilometers);
 
-	      // //rescale the surface reflectance in milli-reflectance
-	      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
-	      // //m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->Update();
-	      // m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
-	      if (!IsParameterEnabled("clamp"))
-		{
-			m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-		}
-	      else
-		{
-			GetLogger()->Info("Clamp values between [0, 100]");
-			m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-			m_ClampFilter->ClampOutside(0.0, 1.0);
-			m_ScaleFilter->SetInput(m_ClampFilter->GetOutput());
-		}
+             // //rescale the surface reflectance in milli-reflectance
+             // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
+             // //m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->Update();
+             // m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
+             if (!IsParameterEnabled("clamp"))
+              {
+                     m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+              }
+             else
+              {
+                     GetLogger()->Info("Clamp values between [0, 100]");
+                     m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+                     m_ClampFilter->ClampOutside(0.0, 1.0);
+                     m_ScaleFilter->SetInput(m_ClampFilter->GetOutput());
+              }
       }
       break;
     }
@@ -710,11 +709,11 @@ private:
     double scale = 1.0;
     if (IsParameterEnabled("milli"))
       {
-	      GetLogger()->Info("Use milli-reflectance");
-	      if ( (GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC) )
-	      		scale = 1000.; 
-	      if (GetParameterInt("level") == Level_TOA_IM)
-			scale = 1. / 1000.; 
+             GetLogger()->Info("Use milli-reflectance");
+             if ( (GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC) )
+                           scale = 1000.;
+             if (GetParameterInt("level") == Level_TOA_IM)
+                     scale = 1. / 1000.;
       }
      m_ScaleFilter->SetCoef(scale);
 
@@ -726,7 +725,7 @@ private:
   ImageToLuminanceImageFilterType ::Pointer               m_ImageToLuminanceFilter;
   LuminanceToReflectanceImageFilterType::Pointer          m_LuminanceToReflectanceFilter;
   ReflectanceToLuminanceImageFilterType::Pointer          m_ReflectanceToLuminanceFilter;
-  LuminanceToImageImageFilterType::Pointer		  m_LuminanceToImageFilter;
+  LuminanceToImageImageFilterType::Pointer                m_LuminanceToImageFilter;
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer m_ReflectanceToSurfaceReflectanceFilter;
   ScaleFilterOutDoubleType::Pointer                       m_ScaleFilter;
   AtmosphericCorrectionParametersType::Pointer            m_AtmosphericParam;

@@ -41,7 +41,7 @@ namespace Functor
    * \class ReflectanceToLuminanceImageFunctor
    * \brief Compupute luminance from the reflectance value
    *
-   *  Divide by Pi and multiply by an illumination correction coefficient 
+   *  Divide by Pi and multiply by an illumination correction coefficient
    *  and the given solar illumination.
    *
    *

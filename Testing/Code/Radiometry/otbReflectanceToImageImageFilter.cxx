@@ -178,6 +178,6 @@ LuminanceToImageImageFilterType::Pointer filter2 = LuminanceToImageImageFilterTy
   writer->SetInput(filter2->GetOutput());
   writer->Update();
 
-  return EXIT_SUCCESS;*/
+  return EXIT_SUCCESS; */
 
 }

@@ -319,7 +319,7 @@ protected:
           vcl_cos(m_ZenithalSolarAngle *
                   CONST_PI_180) * m_FluxNormalizationCoefficient * m_FluxNormalizationCoefficient;
         }
-      functor.SetIlluminationCorrectionCoefficient(coefTemp); 
+      functor.SetIlluminationCorrectionCoefficient(coefTemp);
       functor.SetAlpha(m_Alpha[i]);
       functor.SetBeta(m_Beta[i]);
       functor.SetSolarIllumination(m_SolarIllumination[i]);
