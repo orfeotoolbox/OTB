@@ -88,6 +88,13 @@ class Monteverdi2_EXPORT DatabaseBrowserWidget :
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
 //
+// Public types.
+public:
+  /**
+   */
+  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+
+//
 // Public methods.
 public:
 
@@ -129,11 +136,15 @@ public:
   /**
    */
   // TODO: Remove access to child widget which should be hidden by encapsulation when CheckDatasetConsistency() has been fixed.
-  DatabaseTreeWidget* GetDatabaseTreeWidget();
+  // DatabaseTreeWidget* GetDatabaseTreeWidget();
 
   /**
    */
   void InstallTreeEventFilter( QObject* eventFilter );
+
+  /**
+   */
+  QTreeWidgetItemList GetItems() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

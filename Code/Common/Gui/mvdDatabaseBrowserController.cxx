@@ -518,61 +518,74 @@ DatabaseBrowserController
 ::CheckDatasetsConsistency()
 {
   //
-  // access widget.
+  // Access widget.
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
 
   //
-  // access model.
+  // Access model.
   const DatabaseModel* model = GetModel< DatabaseModel >();
   assert( model!=NULL );
 
-  // get the tree
-  QTreeWidget * tree = widget->GetDatabaseTreeWidget();
+  //
+  // Retrieve items.
+  DatabaseBrowserWidget::QTreeWidgetItemList items( widget->GetItems() );
 
-  // iterate on the dataset list, check consistency.
-  // if not consistent add icon and disable QWidgetItem.
-  for ( int topIdx = 0; topIdx < tree->topLevelItemCount(); topIdx++)
+  //
+  // Traverse item list.
+  for( DatabaseBrowserWidget::QTreeWidgetItemList::iterator it( items.begin() );
+       it!=items.end();
+       ++it )
     {
-    int nbChild = tree->topLevelItem(topIdx)->childCount();
+    QTreeWidgetItem* qtwi = *it;
+    assert( qtwi!=NULL );
 
-    for ( int idx = 0; idx < nbChild; idx++ )
-      {      
-      TreeWidgetItem* currentDatasetItem =
-        dynamic_cast< TreeWidgetItem* >(
-          tree->topLevelItem(topIdx)->child( idx )
-        );
+    assert( qtwi==dynamic_cast< TreeWidgetItem* >( qtwi ) );
+    TreeWidgetItem* item = dynamic_cast< TreeWidgetItem* >( qtwi );
 
-      if( currentDatasetItem!=NULL )
+    if( item!=NULL )
+      {
+      if( item->GetType()==TreeWidgetItem::ITEM_TYPE_LEAF )
         {
-        if( currentDatasetItem->GetType()==TreeWidgetItem::ITEM_TYPE_LEAF )
+        QString hash( item->GetHash() );
+
+        // qDebug()
+        //   << "Checking dataset:"
+        //   << item->GetText()
+        //   << item->GetId()
+        //   << item->GetHash();
+
+        bool isConsistent = true;
+
+        // Find database-mode.
+        try
           {
-          QString datasetHash( currentDatasetItem->GetHash() );
-
-          qDebug()
-            << "Checking dataset:"
-            << currentDatasetItem->GetText()
-            << currentDatasetItem->GetId()
-            << currentDatasetItem->GetHash();
-
           const DatasetModel* datasetModel
-            = model->FindDatasetModel( datasetHash );
+            = model->FindDatasetModel( hash );
 
           assert( datasetModel!=NULL );
 
-          // check consistency
-          if ( !datasetModel->IsConsistent() )
-            {
-            // disable inconsistent dataset
-            currentDatasetItem->setDisabled(true);
+          isConsistent = datasetModel->IsConsistent();
+          }
 
-            // add forbidden icon
-            currentDatasetItem->setIcon(0, QIcon( ":/icons/forbidden" ));
+        // If exception is raised, consider dataset-model as NOT consistent.
+        catch( std::exception& exc )
+          {
+          isConsistent = false;
+          }
 
-            // add tootlip
-            currentDatasetItem->setToolTip(
-              0,tr( "Inconsistent Dataset disabled" )
-            );
-            }
+        // Setup item depending on dataset-model consistency.
+        if ( isConsistent )
+          {
+          item->setDisabled( false );
+          item->setIcon( 0, QIcon() );
+          item->setToolTip( 0, QString() );
+          }
+        else
+          {
+          item->setDisabled( true );
+          item->setIcon( 0, QIcon( ":/icons/forbidden" ) );
+          item->setToolTip( 0, tr( "Data is not consistent." )
+          );
           }
         }
       }
@@ -744,7 +757,7 @@ DatabaseBrowserController
 ::OnItemMoved( QTreeWidgetItem* item )
 {
   // Trace.
-  qDebug() << this << "::OnItemMoved(" << item << ");";
+  // qDebug() << this << "::OnItemMoved(" << item << ");";
 
   // Check inputs.
   assert( item!=NULL );
@@ -795,7 +808,7 @@ DatabaseBrowserController
 ::OnAddItemRequested( QTreeWidgetItem* parent )
 {
   // Trace.
-  qDebug() << this << "::OnAddItemRequested(" << parent << ");";
+  // qDebug() << this << "::OnAddItemRequested(" << parent << ");";
 
   // Check inputs.
   assert( parent!=NULL );
@@ -832,7 +845,7 @@ DatabaseBrowserController
 ::OnDeleteItemRequested( QTreeWidgetItem* item )
 {
   // Trace.
-  qDebug() << this << "::OnDeleteItemRequested(" << item << ");";
+  // qDebug() << this << "::OnDeleteItemRequested(" << item << ");";
 
   // Check inputs.
   assert( item!=NULL );
@@ -867,7 +880,7 @@ DatabaseBrowserController
 ::OnItemTextChanged( QTreeWidgetItem* item, int column )
 {
   // Trace.
-  qDebug() << this << "::OnItemTextChanged(" << item << "," << column << ");";
+  // qDebug() << this << "::OnItemTextChanged(" << item << "," << column << ");";
 
   // Check inputs.
   assert( item!=NULL );

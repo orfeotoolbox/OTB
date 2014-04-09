@@ -335,9 +335,10 @@ DatabaseModel
   if( nbOutdated>0 )
     {
     qWarning() <<
-      ToString(
+      ToStdString(
         tr( "%1 outdated datasets. Please clear cache directory." )
-        .arg( nbOutdated ) );
+        .arg( nbOutdated )
+      ).c_str();
     }
 }
 
@@ -375,7 +376,7 @@ DatabaseModel
       }
     else
       {
-      qWarning() << "Dataset '" << it.value() << "' is outdated.";
+      qWarning() << "Dataset " << it.value() << "is outdated.";
 
       ++ nbOutdated;
       }

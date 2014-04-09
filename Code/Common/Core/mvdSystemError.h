@@ -82,7 +82,7 @@ public:
   /** \brief Constructor. */
   SystemError( const std::string& message =std::string() ) :
     std::runtime_error( itksys::SystemTools::GetLastSystemError() 
-        + ": \n" + message) {};
+        + ": " + message) {};
 
   /** \brief Destructor. */
   virtual ~SystemError() throw() {};

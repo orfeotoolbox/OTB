@@ -86,21 +86,24 @@ DatasetModel
 
   catch( std::exception& exc )
     {
-    qWarning()
-      << ToStdString(
-	tr( "Exception caught when checking version of dataset '%1': " )
-	.arg( path ) ).c_str()
-      << exc.what();
+    qWarning() <<
+      ToStdString(
+        tr( "Exception caught when checking version of dataset '%1'." )
+	.arg( hash )
+      ).c_str();
+
+    qWarning() << exc.what();
 
     return false;
     }
 
   catch( ... )
     {
-    qWarning()
-      << ToStdString(
-	tr("Exception caught when checking for version of dataset '%1': " )
-	.arg( path ) ).c_str();
+    qWarning() <<
+      ToStdString(
+        tr( "Exception caught when checking version of dataset '%1'." )
+	.arg( hash )
+      ).c_str();
 
     return false;
     }

@@ -105,6 +105,10 @@ public:
    */
   static const char* ITEM_MIME_TYPE;
 
+  /**
+   */
+  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+
 //
 // Public methods.
 public:

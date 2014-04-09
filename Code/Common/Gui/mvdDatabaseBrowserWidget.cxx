@@ -145,21 +145,16 @@ DatabaseBrowserWidget
   return m_UI->databaseTreeWidget->invisibleRootItem();
 }
 
-/*******************************************************************************/
-QTreeWidgetItem*
+/*****************************************************************************/
+DatabaseBrowserWidget::QTreeWidgetItemList
 DatabaseBrowserWidget
-::InsertNodeItem( QTreeWidgetItem* parent,
-                  const QString& text,
-                  const QVariant& id,
-                  const QStringList& columns )
+::GetItems() const
 {
   return
-    InsertItem(
-      parent,
-      TreeWidgetItem::ITEM_TYPE_NODE,
-      text,
-      id,
-      columns
+    m_UI->databaseTreeWidget->findItems(
+      "*",
+      Qt::MatchWildcard | Qt::MatchRecursive,
+      0
     );
 }
 
@@ -202,6 +197,24 @@ DatabaseBrowserWidget
   return item;
 }
 
+/*******************************************************************************/
+QTreeWidgetItem*
+DatabaseBrowserWidget
+::InsertNodeItem( QTreeWidgetItem* parent,
+                  const QString& text,
+                  const QVariant& id,
+                  const QStringList& columns )
+{
+  return
+    InsertItem(
+      parent,
+      TreeWidgetItem::ITEM_TYPE_NODE,
+      text,
+      id,
+      columns
+    );
+}
+
 /*****************************************************************************/
 void
 DatabaseBrowserWidget
@@ -226,12 +239,14 @@ DatabaseBrowserWidget
 }
 
 /*******************************************************************************/
+/*
 DatabaseTreeWidget*
 DatabaseBrowserWidget
 ::GetDatabaseTreeWidget()
 {
   return m_UI->databaseTreeWidget;
 }
+*/
 
 /*****************************************************************************/
 void
@@ -330,15 +345,7 @@ DatabaseBrowserWidget
   // get the search text
   m_SearchText = search;
 
-  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
-
-  QTreeWidgetItemList items(
-    m_UI->databaseTreeWidget->findItems(
-      "*",
-      Qt::MatchWildcard | Qt::MatchRecursive,
-      0
-    )
-  );
+  QTreeWidgetItemList items( GetItems() );
 
   // qDebug() << items;
 
@@ -346,14 +353,23 @@ DatabaseBrowserWidget
        it!=items.end();
        ++it )
     {
-    assert( *it==dynamic_cast< TreeWidgetItem* >( *it ) );
-    TreeWidgetItem* item = dynamic_cast< TreeWidgetItem* >( *it );
-    assert( item!=NULL );
+    QTreeWidgetItem* qtwi = *it;
+    assert( qtwi!=NULL );
 
-    item->setHidden(
-      item->GetType()==TreeWidgetItem::ITEM_TYPE_LEAF &&
-      !item->GetText().contains( search, Qt::CaseInsensitive )
-    );
+    assert( qtwi==dynamic_cast< TreeWidgetItem* >( qtwi ) );
+    TreeWidgetItem* item = dynamic_cast< TreeWidgetItem* >( qtwi );
+
+    if( item==NULL )
+      {
+      // TODO: Implement general case when needed.
+      }
+    else
+      {
+      item->setHidden(
+        item->GetType()==TreeWidgetItem::ITEM_TYPE_LEAF &&
+        !item->GetText().contains( search, Qt::CaseInsensitive )
+      );
+      }
 
     // qDebug()
     //   << item->text( 0 ) << ":" << ( item->isHidden() ? "HIDDEN" : "VISIBLE" );

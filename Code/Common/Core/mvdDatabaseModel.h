@@ -406,20 +406,22 @@ DatabaseModel::DatasetModelMap::const_iterator
 DatabaseModel
 ::DatasetModelIterator( const DatasetHash& hash ) const
 {
-  // qDebug() << this << "::DatasetModelIterator(" << hash << ")";
+  return const_cast< DatabaseModel* >( this )->DatasetModelIterator( hash );
 
-  // Find (key, value) pair.
-  DatasetModelMap::const_iterator it( m_DatasetModels.find( hash ) );
+  // // qDebug() << this << "::DatasetModelIterator(" << hash << ")";
 
-  // Should be present because it should have been initialized in
-  // InitializeDatasetModels().
-  if( it==m_DatasetModels.end() )
-    throw std::out_of_range(
-      ToStdString( tr( "Dataset '%1' not found." ).arg( hash ) )
-    );
+  // // Find (key, value) pair.
+  // DatasetModelMap::const_iterator it( m_DatasetModels.find( hash ) );
 
-  // Return found element.
-  return it;
+  // // Should be present because it should have been initialized in
+  // // InitializeDatasetModels().
+  // if( it==m_DatasetModels.end() )
+  //   throw std::out_of_range(
+  //     ToStdString( tr( "Dataset '%1' not found." ).arg( hash ) )
+  //   );
+
+  // // Return found element.
+  // return it;
 }
 
 /*****************************************************************************/
