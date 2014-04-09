@@ -179,10 +179,6 @@ private:
     AddParameter(ParameterType_InputImage,  "in",  "Input");
     SetParameterDescription("in", "Input image filename (values in DN)");
 
-    AddParameter(ParameterType_String, "sensor", "Sensor ID");
-    SetParameterDescription("sensor", "Sensor ID");
-    MandatoryOff("sensor");
-
     AddParameter(ParameterType_OutputImage, "out", "Output");
     SetParameterDescription("out","Output calibrated image filename");
 
@@ -213,13 +209,13 @@ private:
     SetParameterDescription("acquisition.day", "Day (1-31)");
     SetMinimumParameterIntValue("acquisition.day", 1);
     SetMaximumParameterIntValue("acquisition.day", 31);
-    MandatoryOff("acquisition.day");
+    MandatoryOn("acquisition.day");
     //Month
     AddParameter(ParameterType_Int, "acquisition.month",   "Month");
     SetParameterDescription("acquisition.month", "Month (1-12)");
     SetMinimumParameterIntValue("acquisition.month", 1);
     SetMaximumParameterIntValue("acquisition.month", 12);
-    MandatoryOff("acquisition.month");
+    MandatoryOn("acquisition.month");
     //Flux normalization coefficient
     AddParameter(ParameterType_Float, "acquisition.fluxnormalizationcoefficient",   "Flux Normalization");
     SetParameterDescription("acquisition.fluxnormalizationcoefficient", "Flux Normalization Coefficient");
@@ -230,7 +226,7 @@ private:
     SetParameterDescription("acquisition.sunelevationangle", "Sun elevation angle");
     SetMinimumParameterFloatValue("acquisition.sunelevationangle", 0.);
     SetMaximumParameterFloatValue("acquisition.sunelevationangle", 120.);
-    MandatoryOff("acquisition.sunelevationangle");
+    MandatoryOn("acquisition.sunelevationangle");
     //Gain & bias 
     AddParameter(ParameterType_InputFilename, "acquisition.gainbias",   "Gains | biases");
     SetParameterDescription("acquisition.gainbias", "Gains | biases");
@@ -300,7 +296,7 @@ private:
 
   void DoUpdateParameters()
   {
-
+    std::ostringstream ossOutput;
     string tempName = GetParameterString("in");
 	
     if (!tempName.empty())
@@ -312,7 +308,8 @@ private:
 		m_update1stTime = true;
 	    }
 
-	    GetLogger()->Info("\nFile : " + m_inImageName + "\n");
+        ossOutput << std::endl << "File: " << m_inImageName << std::endl;
+	    
 
 	    //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
 	    DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
@@ -322,6 +319,8 @@ private:
 	    string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
 	    if ( (IMIName != IMIOptDfltName) && (m_update1stTime) )
 	    {
+             ossOutput << std::endl << "Sensor ID: " << lImageMetadataInterface->GetSensorID() << std::endl;
+
 		     itk::VariableLengthVector<double> vlvector;
 		     std::stringstream ss;
 		
@@ -344,19 +343,27 @@ private:
 
 
 		     SetParameterInt("acquisition.day", lImageMetadataInterface->GetDay());
+             ossOutput << std::endl << "Acquisition Day: " << lImageMetadataInterface->GetDay() << std::endl;
+             MandatoryOff("acquisition.day");
+             DisableParameter("acquisition.day");
 		     SetParameterInt("acquisition.month", lImageMetadataInterface->GetMonth());
-		     SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());	
-
-		     SetParameterString("sensor", lImageMetadataInterface->GetSensorID());  
-		     GetLogger()->Info(  "\n-------------------------------------------------------------\n"
-					"Sensor ID : " + lImageMetadataInterface->GetSensorID() + "\n"
-					"\n-------------------------------------------------------------\n"); 
+             ossOutput << std::endl << "Acquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl;
+             MandatoryOff("acquisition.month");
+             DisableParameter("acquisition.month");
+		     SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());
+             MandatoryOff("acquisition.sunelevationangle");
+             DisableParameter("acquisition.sunelevationangle");
+             ossOutput << std::endl << "Acquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;	
 
 		     m_update1stTime=false;
 
 	    }
+
 	    if ( (IMIName == IMIOptDfltName) && (m_update1stTime) )
 	    {
+            ossOutput << "Sensor ID: Unknown!"<< std::endl;
+            ossOutput << "Additional parameters are necessary!"<< std::endl;
+
 			GetLogger()->Info("\n-------------------------------------------------------------\n"
 			"Sensor ID : unknown...\n"
 			"The application didn't manage to find an appropriate metadata interface; " 
@@ -367,7 +374,6 @@ private:
 			"- solar illuminationss for each band (passed by a file, see documentation).\n"
 			"-------------------------------------------------------------\n");
 
-			SetParameterString("sensor", "Unknown  (see 'Logs' tabs)");
 			SetParameterString("acquisition.gainbias","");
 			SetParameterString("acquisition.solarilluminations","");
 			SetParameterInt("acquisition.day", 1);
@@ -382,9 +388,9 @@ private:
 			DisableParameter("acquisition.fluxnormalizationcoefficient");
 			EnableParameter("acquisition.sunelevationangle");
 			
-
-		m_update1stTime=false;
+		    m_update1stTime=false;
 	    }
+        otbAppLogINFO(<< ossOutput.str());
    }
 
 
