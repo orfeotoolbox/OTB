@@ -36,7 +36,7 @@ set( Common_Gui_SOURCES
   mvdImageViewWidget.cxx
   mvdMainWindowTitleLoader.cxx
   mvdMouseEventFilter.cxx
-  mvdMyWidget.cxx
+  #mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
   mvdQuicklookViewManipulator.cxx
   mvdQuicklookViewRenderer.cxx
@@ -86,7 +86,7 @@ set( Common_Gui_HEADERS_MOC
   mvdHistogramWidget.h
   mvdMainWindowTitleLoader.h
   mvdMouseEventFilter.h
-  mvdMyWidget.h
+  #mvdMyWidget.h
   mvdPixelDescriptionWidget.h
   mvdQuicklookViewManipulator.h
   mvdQuicklookViewRenderer.h
@@ -111,7 +111,7 @@ set( Common_Gui_FORMS
   mvdDatasetCreationProgressDialog.ui
   mvdDatasetPropertiesWidget.ui
   mvdHistogramWidget.ui
-  mvdMyWidget.ui
+  #mvdMyWidget.ui
   mvdPixelDescriptionWidget.ui
   mvdSearchableTreeWidget.ui
   mvdStatusBarWidget.ui
