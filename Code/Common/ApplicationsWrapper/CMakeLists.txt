@@ -6,7 +6,6 @@ set( Common_ApplicationsWrapper_SOURCES
   mvdApplicationsBrowser.cxx
   mvdApplicationLauncher.cxx
   mvdWrapperQtWidgetView.cxx
-  mvdWrapperQtWidgetParameterInitializers.cxx
   mvdApplicationsToolBoxController.cxx
   mvdOTBApplicationsModel.cxx
 )
