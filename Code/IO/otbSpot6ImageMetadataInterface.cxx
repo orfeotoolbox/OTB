@@ -126,8 +126,7 @@ Spot6ImageMetadataInterface::GetSolarIrradiance() const
   VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
-  //In the case of SPOT, the bands are in a different order:
-  // XS3, XS2. XS1, SWIR in the tif file.
+
   if (outputValues.size() > 0)
     {
     	for (unsigned int i = 0; i < outputValues.size(); ++i)   
@@ -477,8 +476,6 @@ Spot6ImageMetadataInterface
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
 
-  //In the case of SPOT, the bands are in a different order:
-  // XS3, XS2. XS1, SWIR in the tif file.
   if (outputValues.size() > 0)
     {
     	for (unsigned int i = 0; i < outputValues.size(); ++i)   
@@ -525,8 +522,6 @@ Spot6ImageMetadataInterface
   VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
-  //In the case of SPOT, the bands are in a different order:
-  // XS3, XS2. XS1, SWIR in the tif file.
 
   if (outputValues.size() > 0)
     {
@@ -695,7 +690,7 @@ Spot6ImageMetadataInterface
     }
   else
     {
-    otbMsgDevMacro(<< "Spot6 detected: band 0 and 2 inverted");
+    otbMsgDevMacro(<< "Spot6 detected: first file component is red band and third component is blue one");
     if (i == 0) return 2;
     if (i == 2) return 0;
     }
@@ -760,66 +755,11 @@ Spot6ImageMetadataInterface
 {
 
   std::vector<unsigned int> rgb(3);
-  rgb[0] = 2;
+  rgb[0] = 0;
   rgb[1] = 1;
-  rgb[2] = 0;
+  rgb[2] = 2;
   return rgb;
 
-
-  /*const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-    {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot6 Image");
-    }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-
-  int nbBands = this->GetNumberOfBands();
-
-  std::string key = "support_data.band_name_list";
-  std::vector<unsigned int> rgb(3);
-
-  // TODO MSD remove this limitation when we get a real Spot6 image
-  // Band order in SPOT6 products seems to be always the same : RGB => keep the flag off
-  bool realProduct = false;
-  if (realProduct)
-    {
-    if (imageKeywordlist.HasKey(key) && (nbBands > 1))
-      {
-      std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey(key);
-      std::vector<std::string> bandNameList;
-      boost::trim(keywordStringBandNameList);
-      boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
-
-      for (int i = 0; i < nbBands && i < 3; i++)
-        {
-        size_t found;
-        found = bandNameList[i].find_first_not_of("B");
-        rgb[i] = lexical_cast<int> (bandNameList[i].at(found));
-        }
-      }
-    else
-      {
-      // Default values
-      rgb[0] = 2;
-      rgb[1] = 1;
-      rgb[2] = 0;
-      }
-    }
-  else
-    {
-    // Default values for simulation product
-    rgb[0] = 0;
-    rgb[1] = 1;
-    rgb[2] = 2;
-    }
-
-  return rgb;*/
 }
 
 Spot6ImageMetadataInterface::WavelengthSpectralBandVectorType
