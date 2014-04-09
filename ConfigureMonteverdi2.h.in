@@ -39,7 +39,7 @@
 // Monteverdi2 data version.
 #define Monteverdi2_DATA_VERSION_MAJOR "0"
 #define Monteverdi2_DATA_VERSION_MINOR "7"
-#define Monteverdi2_DATA_VERSION_PATCH "1"
+#define Monteverdi2_DATA_VERSION_PATCH "2"
 #define Monteverdi2_DATA_VERSION_STRING ( \
   Monteverdi2_DATA_VERSION_MAJOR "."	  \
   Monteverdi2_DATA_VERSION_MINOR "."	  \

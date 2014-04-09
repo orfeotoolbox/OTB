@@ -179,6 +179,14 @@ public:
   static void InitializeDatabase();
   // static void InitializeDatabase2();
 
+  /**
+   */
+  void SetAttribute( const QString& name, const QVariant& value );
+
+  /**
+   */
+  QVariant GetAttribute( const QString& name, SqlId* id =NULL ) const;
+
   //
   // Dataset related methods.
   //
@@ -390,6 +398,10 @@ private:
   /**
    */
   SqlId FindTagIdByLabel( const QString& label ) const;
+
+  /**
+   */
+  void AddAttribute( const QString& name, const QVariant& value );
 
 //
 // Private attributes.

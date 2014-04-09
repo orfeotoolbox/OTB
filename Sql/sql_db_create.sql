@@ -1,4 +1,14 @@
 -----------------------------------------------------------------------------
+CREATE TABLE database_attribute
+(
+        id    INTEGER PRIMARY KEY AUTOINCREMENT,
+        name  TEXT NOT NULL,
+        value TEXT
+);
+
+CREATE UNIQUE INDEX idx_database_attribute_name ON database_attribute( name );
+
+-----------------------------------------------------------------------------
 CREATE TABLE dataset
 (
         id    INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -76,13 +86,3 @@ CREATE TABLE dataset_attribute
 
 CREATE INDEX idx_dataset_attribute_dsid ON dataset_attribute( dataset_id );
 CREATE INDEX idx_dataset_attribute_name ON dataset_attribute( name );
-
------------------------------------------------------------------------------
-CREATE TABLE database_attribute
-(
-        id    INTEGER PRIMARY KEY AUTOINCREMENT,
-        name  TEXT NOT NULL,
-        value TEXT
-);
-
-CREATE UNIQUE INDEX idx_database_attribute_name ON database_attribute( name );

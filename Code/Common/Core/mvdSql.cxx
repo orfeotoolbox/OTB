@@ -6,6 +6,16 @@ namespace
 // 'SQL_DB_CREATE' Generated from file 'sql_db_create.sql'
 const char* SQL_DB_CREATE[] = {
 "-----------------------------------------------------------------------------\n"
+"CREATE TABLE database_attribute\n"
+"(\n"
+"        id    INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+"        name  TEXT NOT NULL,\n"
+"        value TEXT\n"
+")\n"
+";",
+"CREATE UNIQUE INDEX idx_database_attribute_name ON database_attribute( name )\n"
+";",
+"-----------------------------------------------------------------------------\n"
 "CREATE TABLE dataset\n"
 "(\n"
 "        id    INTEGER PRIMARY KEY AUTOINCREMENT,\n"
@@ -86,16 +96,6 @@ const char* SQL_DB_CREATE[] = {
 "CREATE INDEX idx_dataset_attribute_dsid ON dataset_attribute( dataset_id )\n"
 ";",
 "CREATE INDEX idx_dataset_attribute_name ON dataset_attribute( name )\n"
-";",
-"-----------------------------------------------------------------------------\n"
-"CREATE TABLE database_attribute\n"
-"(\n"
-"        id    INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-"        name  TEXT NOT NULL,\n"
-"        value TEXT\n"
-")\n"
-";",
-"CREATE UNIQUE INDEX idx_database_attribute_name ON database_attribute( name )\n"
 ";",
 };
 

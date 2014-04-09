@@ -22,6 +22,8 @@
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
 
+#include "ConfigureMonteverdi2.h"
+
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
@@ -206,13 +208,19 @@ DatabaseConnection
   // Added connection-mode.
   DatabaseConnection dbc( DatabaseConnection::CONNECTION_MODE_OPEN_OR_CREATE );
 
+  // Force FOREIGN KEYS support.
   dbc.DirectExecuteQuery( "PRAGMA foreign_keys=1;" );
 
+  // Create tables.
   for( int i=0; i<SQL_DB_CREATE_COUNT; ++i )
     {
     dbc.DirectExecuteQuery( SQL_DB_CREATE[ i ] );
     }
 
+  // Add database attributes.
+  dbc.AddAttribute( "version", Monteverdi2_DATA_VERSION_STRING );
+
+  // Add some basic entries into tables.
   for( int i=0; i<SQL_DB_SETUP_COUNT; ++i )
     {
     dbc.DirectExecuteQuery( SQL_DB_SETUP[ i ] );
@@ -374,6 +382,63 @@ DatabaseConnection
 
     QSqlDatabase::removeDatabase( "mvd2" );
     }
+}
+
+/*****************************************************************************/
+void
+DatabaseConnection
+::AddAttribute( const QString& name, const QVariant& value )
+{
+  DirectExecuteQuery(
+    QString(
+      "INSERT INTO database_attribute( id, name, value )\n"
+      "VALUES( 1, '%1', '%2' );"
+    )
+    .arg( name )
+    .arg( value.toString() )
+  );
+}
+
+/*****************************************************************************/
+void
+DatabaseConnection
+::SetAttribute( const QString& name, const QVariant& value )
+{
+  DirectExecuteQuery(
+    QString( "UPDATE database_attribute SET value='%2' WHERE name='%1';" )
+    .arg( name )
+    .arg( value.toString() )
+  );
+}
+
+/*****************************************************************************/
+QVariant
+DatabaseConnection
+::GetAttribute( const QString& name, SqlId* id ) const
+{
+  QSqlQuery query(
+    DirectExecuteQuery(
+      QString( "SELECT database_attribute.id, database_attribute.value\n"
+               "FROM database_attribute\n"
+               "WHERE database_attribute.name='%1';"
+      ).arg( name )
+    )
+  );
+
+  //
+  // Get ID, if needed.
+  assert( query.value( 0 ).type()==QVariant::LongLong );
+
+  if( id!=NULL )
+    {
+    *id = query.value( 0 ).toLongLong();
+    }
+
+  //
+  // Return value.
+  assert( query.value( 1 ).type()==QVariant::String );
+
+  return query.value( 1 );
 }
 
 /*****************************************************************************/
