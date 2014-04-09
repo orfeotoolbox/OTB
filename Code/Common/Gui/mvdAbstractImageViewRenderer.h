@@ -123,7 +123,7 @@ public:
   /**
    * Destructor.
    */
-  virtual ~AbstractImageViewRenderer();
+	virtual ~AbstractImageViewRenderer(){};
 
   /**
    */
@@ -195,7 +195,7 @@ protected:
   /**
    * Constructor.
    */
-  AbstractImageViewRenderer( QObject* parent = NULL );
+  AbstractImageViewRenderer( QObject* parent = NULL ):QObject( parent ){};
 
 
 //

@@ -85,7 +85,7 @@ class Monteverdi2_EXPORT AbstractImageViewManipulator :
 public:
 
   /** \brief Destructor. */
-  virtual ~AbstractImageViewManipulator();
+	virtual ~AbstractImageViewManipulator() {};
 
   //
   // Accessors
@@ -244,7 +244,7 @@ protected:
 protected:
 
   /** \brief Constructor. */
-  AbstractImageViewManipulator( QObject* parent =NULL );
+  AbstractImageViewManipulator( QObject* parent =NULL ):QObject( parent ){};
 
 //
 // Protected attributes.
