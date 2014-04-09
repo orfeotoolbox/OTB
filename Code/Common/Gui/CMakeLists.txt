@@ -35,7 +35,6 @@ set( Common_Gui_SOURCES
   mvdImageViewRenderer.cxx
   mvdImageViewWidget.cxx
   mvdMainWindowTitleLoader.cxx
-  mvdMouseEventFilter.cxx
   #mvdMyWidget.cxx
   mvdPixelDescriptionWidget.cxx
   mvdQuicklookViewManipulator.cxx
@@ -85,7 +84,6 @@ set( Common_Gui_HEADERS_MOC
   mvdHistogramPlotPicker.h
   mvdHistogramWidget.h
   mvdMainWindowTitleLoader.h
-  mvdMouseEventFilter.h
   #mvdMyWidget.h
   mvdPixelDescriptionWidget.h
   mvdQuicklookViewManipulator.h
