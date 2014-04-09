@@ -810,7 +810,7 @@ PleiadesImageMetadataInterface
     }
   else
     {
-    otbMsgDevMacro(<< "Pleiades detected: band 0 and 2 inverted");
+    otbMsgDevMacro(<< "Pleiades detected: first file component is red band and third component is blue one");
     if (i == 0) return 2;
     if (i == 2) return 0;
     }
@@ -886,45 +886,12 @@ PleiadesImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  int nbBands = this->GetNumberOfBands();
 
-  std::string key = "support_data.band_name_list";
   std::vector<unsigned int> rgb(3);
 
-  // TODO MSD remove this limitation when we get a real pleiades image
-  // Band order in PHR products seems to be always the same : RGB => keep the flag off
-  bool realProduct = false;
-  if (realProduct)
-    {
-    if (imageKeywordlist.HasKey(key) && (nbBands > 1))
-      {
-      std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey(key);
-      std::vector<std::string> bandNameList;
-      boost::trim(keywordStringBandNameList);
-      boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
-
-      for (int i = 0; i < nbBands && i < 3; i++)
-        {
-        size_t found;
-        found = bandNameList[i].find_first_not_of("B");
-        rgb[i] = lexical_cast<int> (bandNameList[i].at(found));
-        }
-      }
-    else
-      {
-      // Default values
-      rgb[0] = 2;
-      rgb[1] = 1;
-      rgb[2] = 0;
-      }
-    }
-  else
-    {
-    // Default values for simulation product
-    rgb[0] = 0;
-    rgb[1] = 1;
-    rgb[2] = 2;
-    }
+  rgb[0] = 0;
+  rgb[1] = 1;
+  rgb[2] = 2;
 
   return rgb;
 }
