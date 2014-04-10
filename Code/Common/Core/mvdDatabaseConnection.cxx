@@ -420,10 +420,12 @@ DatabaseConnection
     DirectExecuteQuery(
       QString( "SELECT database_attribute.id, database_attribute.value\n"
                "FROM database_attribute\n"
-               "WHERE database_attribute.name='%1';"
+               "WHERE database_attribute.name='%1' COLLATE NOCASE;"
       ).arg( name )
     )
   );
+
+  QUERY_NEXT( query );
 
   //
   // Get ID, if needed.

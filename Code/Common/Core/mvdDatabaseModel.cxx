@@ -38,6 +38,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
+#include "Core/mvdCore.h"
 #include "Core/mvdDatabaseConnection.h"
 #include "Core/mvdDatasetModel.h"
 #include "Core/mvdI18nCoreApplication.h"
@@ -315,6 +316,8 @@ DatabaseModel
 {
   assert( m_Db==NULL );
 
+  //
+  // Create SQL database-connection.
   delete m_Db;
 
   m_Db =
@@ -323,6 +326,26 @@ DatabaseModel
       this
     );
 
+  //
+  // Check database version.
+  QVariant version( m_Db->GetAttribute( "version" ) );
+
+  assert( version.type()==QVariant::String );
+
+  qWarning()
+    << "Database format version:" << ToStdString( version.toString() ).c_str();
+
+  if( !IsVersionGreaterEqual( version.toString(),
+                              Monteverdi2_DATA_VERSION_STRING ) )
+    throw std::runtime_error(
+      ToStdString(
+        tr( "Database format version %1 is not supported anymore." )
+        .arg( version.toString() )
+      )
+    );
+
+  //
+  // Check outdated datasets.
   CountType nbOutdated = InitializeDatasetModels();
 
   if( context!=NULL )
