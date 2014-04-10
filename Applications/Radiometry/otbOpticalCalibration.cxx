@@ -337,20 +337,20 @@ private:
                  
                    vlvector = lImageMetadataInterface->GetPhysicalGain();
                  ossOutput << "\tAcquisition gain (per band): " ;
-                   for(int k=0; k<vlvector.Size(); k++)
+                 for(unsigned int k=0; k<vlvector.Size(); k++)
 				    ossOutput << vlvector[k] << " ";
                  ossOutput << std::endl;
 	
                  vlvector = lImageMetadataInterface->GetPhysicalBias();
                  ossOutput << "\tAcquisition bias (per band): " ;
-                 for(int k=0; k<vlvector.Size(); k++)
+                 for(unsigned int k=0; k<vlvector.Size(); k++)
 				    ossOutput << vlvector[k] << " ";
                  ossOutput << std::endl;
                  MandatoryOff("acquisition.gainbias");
 
                  vlvector = lImageMetadataInterface->GetSolarIrradiance();
                  ossOutput << "\tSolar Irradiance (per band): " ;
-                 for(int k=0; k<vlvector.Size(); k++)
+                 for(unsigned int k=0; k<vlvector.Size(); k++)
 				    ossOutput << vlvector[k] << " ";
                  ossOutput << std::endl;
                  MandatoryOff("acquisition.solarilluminations");
@@ -441,148 +441,149 @@ private:
     m_ScaleFilter->InPlaceOn();
     m_ClampFilter = ClampFilterType::New();
 
-    //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
     DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
-    itk::MetaDataDictionary           dict = inImage->GetMetaDataDictionary();
-    OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
-    string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
-    if (IMIName != IMIOptDfltName)
+    // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters
+    if ( !IsParameterEnabled("acquisition.fluxnormalizationcoefficient") )
+		{
+			m_LuminanceToReflectanceFilter->SetDay(GetParameterInt("acquisition.day"));
+			m_LuminanceToReflectanceFilter->SetMonth(GetParameterInt("acquisition.month"));
+
+			m_ReflectanceToLuminanceFilter->SetDay(GetParameterInt("acquisition.day"));
+			m_ReflectanceToLuminanceFilter->SetMonth(GetParameterInt("acquisition.month"));
+		}
+	else
+	{
+		m_LuminanceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
+
+		m_ReflectanceToLuminanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
+	}
+
+    // Set Sun Elevation Angle to corresponding filters
+	m_LuminanceToReflectanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
+	m_ReflectanceToLuminanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
+
+	
+    // Set Gain and Bias to corresponding filters
+    if (HasValue("acquisition.gainbias"))
     {
-           // Test if needed data are available : an exception will be thrown
-           // if one the following Get* return failure. the exception is then
-           // caught in the Wrapper::Application class which redirect it to
-           // the logger
-           
-           // ImageToLuminance
-           lImageMetadataInterface->GetPhysicalGain();
-           lImageMetadataInterface->GetPhysicalBias();
+      // Try to retrieve information from file provided by user
+      string filename(GetParameterString("acquisition.gainbias"));  
+      
+      std::ifstream file(filename.c_str(), std::ios::in);
+      if(file)  
+      {         
+        string line; 
+        unsigned int numLine = 0;
+        while (getline(file, line)) 
+        {
+          if (line[0]!='#')
+          {
+            numLine++;
+            std::vector<double> values;
+            std::istringstream  iss(line); 
+            string value; double dvalue;
+            while ( getline( iss, value, ':' ) )
+            {
+              std::istringstream  iss2(value);
+              iss2 >> dvalue;
+              values.push_back(dvalue);
+            } 
 
-           // LuminanceToReflectance
-           lImageMetadataInterface->GetDay();
-           lImageMetadataInterface->GetMonth();
+            itk::VariableLengthVector<double> vlvector;
+            vlvector.SetData(values.data(),values.size(),false); 
 
-           lImageMetadataInterface->GetSolarIrradiance();
-           lImageMetadataInterface->GetSunElevation();
-            lImageMetadataInterface->GetSolarIrradiance();
+            switch (numLine)
+            {
+              case 1 : 
+              m_ImageToLuminanceFilter->SetAlpha(vlvector); 
+              m_LuminanceToImageFilter->SetAlpha(vlvector);
+              GetLogger()->Info("Trying to get gains/biases information... OK (1/2)\n");
+              break;
+              
+              case 2 : 
+              m_ImageToLuminanceFilter->SetBeta(vlvector);
+              m_LuminanceToImageFilter->SetBeta(vlvector); 
+              GetLogger()->Info("Trying to get gains/biases information... OK (2/2)\n");
+              break;
+              
+              default : itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
+            }
+          }
+        }
+        file.close();   
+      }
+      else  
+        itkExceptionMacro(<< "File : " << filename << " couldn't be opened");
     }
-    else //No metadata interface
+    else
     {
-       // Image to luminance / luminance to image
-       GetLogger()->Info("Trying to get gains/biases information...\n");
-       string filename(GetParameterString("acquisition.gainbias"));
-       if (!filename.empty())
-       {
-              std::ifstream file(filename.c_str(), std::ios::in);
+      //Try to retrieve information from image metadata
+      itk::MetaDataDictionary           dict = inImage->GetMetaDataDictionary();
+      OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+      string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
+      if (IMIName != IMIOptDfltName)
+      {
+        m_ImageToLuminanceFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
+        m_LuminanceToImageFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
+     
+        m_ImageToLuminanceFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
+        m_LuminanceToImageFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
+      }
+      else
+        itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! "); 
+    }
 
-              if(file)
-              {
-                      
-                     string line; unsigned int numLine = 0;
-                      while (getline(file, line))
-                     {
-                            if (line[0]!='#')
-                            {
-                                   numLine++;
 
-                                   std::vector<double> values;
-                                   std::istringstream  iss(line);
-                                   string value; double dvalue;
-                                       while ( getline( iss, value, ':' ) )
-                                       {
-                                          std::istringstream  iss2(value);
-                                          iss2 >> dvalue;
-                                          values.push_back(dvalue);
-                                       }
+    // Set Solar Illumination to corresponding filters
+    if (HasValue("acquisition.solarilluminations"))
+    {
+      // Try to retrieve information from file provided by user
+      string filename(GetParameterString("acquisition.solarilluminations"));
+      
+      std::ifstream file(filename.c_str(), std::ios::in);
+      if(file)  
+      {         
+        string line; 
+        while (getline(file, line)) 
+        {
+          if (line[0]!='#')
+          {
+            std::vector<double> values;
+            std::istringstream  iss(line); 
+            string value; double dvalue;
+            while ( getline( iss, value, ':' ) )
+            {
+              std::istringstream  iss2(value);
+              iss2 >> dvalue;
+              values.push_back(dvalue);
+            } 
 
-                                   itk::VariableLengthVector<double> vlvector;
+            itk::VariableLengthVector<double> vlvector;
+            vlvector.SetData(values.data(),values.size(),false); 
 
-                                   vlvector.SetData(values.data(),values.size(),false);
-
-                                   switch (numLine)
-                                   {
-                                          case 1 : m_ImageToLuminanceFilter->SetAlpha(vlvector);
-                                          m_LuminanceToImageFilter->SetAlpha(vlvector);
-                                          GetLogger()->Info("Trying to get gains/biases information... OK (1/2)\n");
-                                          break;
-                                          case 2 : m_ImageToLuminanceFilter->SetBeta(vlvector);
-                                          m_LuminanceToImageFilter->SetBeta(vlvector);
-                                          GetLogger()->Info("Trying to get gains/biases information... OK (2/2)\n");
-                                          break;
-                                          default : itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
-                                   }
-                            }
-                     }
-                     file.close();
-
-              }
-              else
-                      itkExceptionMacro(<< "File : " << filename << " couldn't be opened");
-       }
-       else
-              itkExceptionMacro(<< "Please, select a file containing gain/bias values for each band");
-
-       // Luminance to reflectance / reflectance to Luminance
-       m_LuminanceToReflectanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
-       m_ReflectanceToLuminanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
-
-       if ( (IsParameterEnabled("acquisition.day")) && (IsParameterEnabled("acquisition.month")) )
-              {
-                     m_LuminanceToReflectanceFilter->SetDay(GetParameterInt("acquisition.day"));
-                     m_LuminanceToReflectanceFilter->SetMonth(GetParameterInt("acquisition.month"));
-
-                     m_ReflectanceToLuminanceFilter->SetDay(GetParameterInt("acquisition.day"));
-                     m_ReflectanceToLuminanceFilter->SetMonth(GetParameterInt("acquisition.month"));
-              }
-       else if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
-       {
-              m_LuminanceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
-
-              m_ReflectanceToLuminanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
-       }
-       else
-              itkExceptionMacro(<< "Please, set the day and month fields, OR set the flux normalization coefficient field");
-
-       GetLogger()->Info("Trying to get solar illuminations information...\n");
-       string filename2(GetParameterString("acquisition.solarilluminations"));
-       if(!filename2.empty())
-       {
-              std::ifstream file2(filename2.c_str(), std::ios::in);
-              if(file2)
-              {
-                     string line;
-                     while (getline(file2, line))
-                     {
-                            if (line[0]!='#')
-                            {
-                                   std::vector<double> values;
-                                   std::istringstream  iss(line);
-                                   string value; double dvalue;
-                                       while ( getline( iss, value, ':' ) )
-                                       {
-                                          std::istringstream  iss2(value);
-                                          iss2 >> dvalue;
-
-                                          values.push_back(dvalue);
-                                       }
-
-                                   itk::VariableLengthVector<double> vlvector;
-                                   vlvector.SetData(values.data(),values.size(),false);
-
-                                   m_LuminanceToReflectanceFilter->SetSolarIllumination(vlvector);
-                                   m_ReflectanceToLuminanceFilter->SetSolarIllumination(vlvector);
-
-                                   GetLogger()->Info("Trying to get solar illuminations information... OK\n");
-                            }
-                     }
-                     file2.close();
-              }
-              else
-                     itkExceptionMacro(<< "File : " << filename2 << " couldn't be opened");
-       }
-       else
-              itkExceptionMacro(<< "Please, select a file containing solar illumination values for each band");
-       
+            m_LuminanceToReflectanceFilter->SetSolarIllumination(vlvector);
+            m_ReflectanceToLuminanceFilter->SetSolarIllumination(vlvector);
+          }
+        }
+        file.close();   
+      }
+      else  
+        itkExceptionMacro(<< "File : " << filename << " couldn't be opened");
+    }
+    else
+    {
+      //Try to retrieve information from image metadata
+      itk::MetaDataDictionary           dict = inImage->GetMetaDataDictionary();
+      OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+      string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
+      if (IMIName != IMIOptDfltName)
+      {
+        m_LuminanceToReflectanceFilter->SetSolarIllumination(lImageMetadataInterface->GetSolarIrradiance());
+        m_ReflectanceToLuminanceFilter->SetSolarIllumination(lImageMetadataInterface->GetSolarIrradiance());
+      }
+      else
+        itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! ");
     }
 
     switch ( GetParameterInt("level") )
