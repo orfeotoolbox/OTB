@@ -161,7 +161,7 @@ convertToGDALRPC(GDALRPCInfo &rpc) const
       }
     }
   
-  return false;    
+  return false;
 }
 
 void
@@ -267,7 +267,7 @@ ReadGeometryFromImage(const std::string& filename)
   /**********************************************************/
   if (!hasMetaData)
     {
-    // If still no metadata, try the ".geom" file  
+    // If still no metadata, try the ".geom" file
     ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
     otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
     
