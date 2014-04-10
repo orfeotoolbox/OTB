@@ -36,6 +36,15 @@ if(OTB_USE_EXTERNAL_GDAL)
        message(STATUS "CHECK_GDAL_BUILT_WITH_HDF test failed : GDAL is not built with hdf support. So the HDF tests will be deactivated. Formats supported by your GDAL: " [ ${GDAL_FORMATS} ] )
        set(CHECK_GDAL_BUILT_WITH_HDF 0 CACHE INTERNAL "GDAL_BUILT_WITH_HDF" FORCE)
     endif()
+    
+    # Detect if gdal supports JPEG2000 format
+    if ((${GDAL_FORMATS} MATCHES "openjpeg") OR 
+        (${GDAL_FORMATS} MATCHES "jp2kak"))
+      message(STATUS "  GDAL is built with a suitable Jpeg2000 driver (OpenJpeg, Kakadu).")
+    else()
+      message(WARNING "GDAL has no suitable Jpeg2000 driver (compatible drivers are : OpenJpeg, Kakadu).")
+    endif()
+    
   else()
     # For WIN32 platform, we suppose that GDAL is built with HDF support (case with OSGeo4W)
     set(CHECK_GDAL_BUILT_WITH_HDF 1 CACHE INTERNAL "GDAL_BUILT_WITH_HDF" FORCE)
