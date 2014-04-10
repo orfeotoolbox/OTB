@@ -35,6 +35,7 @@
 #include <itkVariableLengthVector.h>
 
 
+
 namespace otb
 {
 
@@ -111,8 +112,8 @@ public:
 
 private:
 
-  bool m_update1stTime;
   string m_inImageName;
+  bool m_currentEnabledStateOfFluxParam;
 
   void DoInit()
   {
@@ -130,7 +131,7 @@ private:
 "- solar illuminations, one value for each band (passed by a file).\n\n"
 "For the conversion from DN (for Digital Numbers) to spectral radiance (or 'TOA radiance') L, the following formula is used :\n\n"
 
-"(1)       L(b) = DN(b)/gain(b)+bias(b)       (in W/m²/steradians/micrometers)       with b being a band ID.\n\n"
+"(1)	L(b) = DN(b)/gain(b)+bias(b)	(in W/m²/steradians/micrometers)	with b being a band ID.\n\n"
 
 "These values are provided by the user thanks to a simple txt file with two lines, one for the gains and one for the biases.\n"
 "Each value must be separated with colons (:), with eventual spaces. Blank lines are not allowed. If a line begins with the '#' symbol, then it is considered as comments.\n"
@@ -139,7 +140,7 @@ private:
 
 "In order to convert TOA radiance to TOA reflectance, the following formula is used :\n\n"
 
-"(2)       R(b) = (pi*L(b)*d²) / (ESUN(b)*cos(θ))       (no dimension)       where : \n\n"
+"(2)	R(b) = (pi*L(b)*d²) / (ESUN(b)*cos(θ))	(no dimension)	where : \n\n"
 
 "- L(b) is the spectral radiance for band b \n"
 "- pi is the famous mathematical constant (3.14159...) \n"
@@ -152,7 +153,7 @@ private:
 "These values are provided by the user thanks to a txt file following the same convention as before.\n"
 "Instead of providing the date of acquisition, the user can also provide a flux normalization coefficient 'fn'. "
 "The formula used instead will be the following : \n\n"
-"(3)        R(b) = (pi*L(b)) / (ESUN(b)*fn²*cos(θ)) \n\n"
+"(3) 	R(b) = (pi*L(b)) / (ESUN(b)*fn²*cos(θ)) \n\n"
 "Whatever the formula used (2 or 3), the user should pay attention to the interpretation of the parameters he will provide to the application, "
 "by taking into account the original formula that the metadata files assum.\n\n"
 
@@ -208,6 +209,7 @@ private:
     SetParameterDescription("acquisition.day", "Day (1-31)");
     SetMinimumParameterIntValue("acquisition.day", 1);
     SetMaximumParameterIntValue("acquisition.day", 31);
+    EnableParameter("acquisition.day");
     MandatoryOn("acquisition.day");
     //Month
     AddParameter(ParameterType_Int, "acquisition.month",   "Month");
@@ -229,11 +231,11 @@ private:
     //Gain & bias
     AddParameter(ParameterType_InputFilename, "acquisition.gainbias",   "Gains | biases");
     SetParameterDescription("acquisition.gainbias", "Gains | biases");
-    MandatoryOff("acquisition.gainbias");
+    MandatoryOn("acquisition.gainbias");
     //Solar illuminations
     AddParameter(ParameterType_InputFilename, "acquisition.solarilluminations",   "Solar illuminations");
     SetParameterDescription("acquisition.solarilluminations", "Solar illuminations (one value per band)");
-    MandatoryOff("acquisition.solarilluminations");
+    MandatoryOn("acquisition.solarilluminations");
 
     //Atmospheric parameters (TOC)
     AddParameter(ParameterType_Group,"atmo","Atmospheric parameters (TOC)");
@@ -289,109 +291,139 @@ private:
     SetDocExampleParameterValue("level", "toa");
     SetDocExampleParameterValue("out", "OpticalCalibration.tif");
 
-    m_update1stTime = true;
     m_inImageName = "";
+    m_currentEnabledStateOfFluxParam=false;
   }
 
   void DoUpdateParameters()
   {
     std::ostringstream ossOutput;
-    string tempName = GetParameterString("in");
-       
-    if (!tempName.empty())
+    //ossOutput << std::endl << "--DoUpdateParameters--" << std::endl;
+
+    // Manage the case where a new input is provided: we should try to retrieve image metadata
+    if (HasValue("in"))
     {
+        bool newInputImage = false;
+        string tempName = GetParameterString("in");
 
-           if (tempName != m_inImageName)
-           {
-              m_inImageName = tempName;
-              m_update1stTime = true;
+        // Check if the input image change
+	    if (tempName != m_inImageName)
+	    {
+		m_inImageName = tempName;
+		newInputImage = true;
            }
 
-        ossOutput << std::endl << "File: " << m_inImageName << std::endl;
+        if (newInputImage)
+        {
+            ossOutput << std::endl << "File: " << m_inImageName << std::endl;
            
+	        //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
+	        DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
+	        itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
+	        OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
-           //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
-           DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
-           itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
-           OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+    	    string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
+    	    if ( (IMIName != IMIOptDfltName))
+    	    {
+                 ossOutput << "Sensor detected: " << lImageMetadataInterface->GetSensorID() << std::endl;
 
-           string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
-           if ( (IMIName != IMIOptDfltName) && (m_update1stTime) )
-           {
-             ossOutput << std::endl << "Sensor ID: " << lImageMetadataInterface->GetSensorID() << std::endl;
+		         itk::VariableLengthVector<double> vlvector;
+		         std::stringstream ss;
 
-                   itk::VariableLengthVector<double> vlvector;
-                   std::stringstream ss;
-              
+                 ossOutput << "Parameters extract from input image: "<< std::endl
+                           << "\tAcquisition Day: " << lImageMetadataInterface->GetDay() << std::endl 
+                           << "\tAcquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl
+                           << "\tAcquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;
+                 
                    vlvector = lImageMetadataInterface->GetPhysicalGain();
+                 ossOutput << "\tAcquisition gain (per band): " ;
                    for(int k=0; k<vlvector.Size(); k++)
-                            ss << vlvector[k] << " ";
-                   ss << " | ";
-                   vlvector = lImageMetadataInterface->GetPhysicalBias();
-                   for(int k=0; k<vlvector.Size(); k++)
-                            ss << vlvector[k] << " ";
-                   ss << " (custom values must be passed by a file)";
-                   SetParameterString("acquisition.gainbias",ss.str());
+				    ossOutput << vlvector[k] << " ";
+                 ossOutput << std::endl;
+	
+                 vlvector = lImageMetadataInterface->GetPhysicalBias();
+                 ossOutput << "\tAcquisition bias (per band): " ;
+                 for(int k=0; k<vlvector.Size(); k++)
+				    ossOutput << vlvector[k] << " ";
+                 ossOutput << std::endl;
+                 MandatoryOff("acquisition.gainbias");
 
-                   ss.str(std::string());
-                   vlvector = lImageMetadataInterface->GetSolarIrradiance();
-                   for(int k=0; k<vlvector.Size(); k++)
-                            ss << vlvector[k] << " ";
-                   ss << " (custom values must be passed by a file)";
-                   SetParameterString("acquisition.solarilluminations",ss.str());
+                 vlvector = lImageMetadataInterface->GetSolarIrradiance();
+                 ossOutput << "\tSolar Irradiance (per band): " ;
+                 for(int k=0; k<vlvector.Size(); k++)
+				    ossOutput << vlvector[k] << " ";
+                 ossOutput << std::endl;
+                 MandatoryOff("acquisition.solarilluminations");
+		         
+                 if (HasUserValue("acquisition.day"))
+                    ossOutput << "Acquisition Day already set by user: no overload" <<std::endl;
+                 else
+                    {
+                    SetParameterInt("acquisition.day", lImageMetadataInterface->GetDay());
+                    if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
+                      DisableParameter("acquisition.day");
+                    }
+                 
+                 if (HasUserValue("acquisition.month"))
+                    ossOutput << "Acquisition Month already set by user: no overload" <<std::endl;
+                 else
+                    {
+                    SetParameterInt("acquisition.month", lImageMetadataInterface->GetMonth());
+                    if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
+                      DisableParameter("acquisition.month");
+                    }
 
+                 if (HasUserValue("acquisition.sunelevationangle"))   
+                    ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" <<std::endl;
+                 else            
+                    SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());
+            }
+	        else
+	        {
+                ossOutput << "Sensor unknown!"<< std::endl;
+                ossOutput << "Additional parameters are necessary, please provide them (cf. documentation)!"<< std::endl;
 
-                   SetParameterInt("acquisition.day", lImageMetadataInterface->GetDay());
-             ossOutput << std::endl << "Acquisition Day: " << lImageMetadataInterface->GetDay() << std::endl;
-             MandatoryOff("acquisition.day");
-             DisableParameter("acquisition.day");
-                   SetParameterInt("acquisition.month", lImageMetadataInterface->GetMonth());
-             ossOutput << std::endl << "Acquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl;
-             MandatoryOff("acquisition.month");
-             DisableParameter("acquisition.month");
-                   SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());
-             MandatoryOff("acquisition.sunelevationangle");
-             DisableParameter("acquisition.sunelevationangle");
-             ossOutput << std::endl << "Acquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;
+			    /*GetLogger()->Info("\n-------------------------------------------------------------\n"
+			    "Sensor ID : unknown...\n"
+			    "The application didn't manage to find an appropriate metadata interface; " 
+			    "custom values must be provided in order to perform TOA conversion.\nPlease, set the following fields :\n"
+			    "- day and month of acquisition, or flux normalization coefficient;\n"
+			    "- sun elevation angle;\n"
+			    "- gains and biases for each band (passed by a file, see documentation);\n"
+			    "- solar illuminationss for each band (passed by a file, see documentation).\n"
+			    "-------------------------------------------------------------\n");*/
 
-                   m_update1stTime=false;
-
-           }
-
-           if ( (IMIName == IMIOptDfltName) && (m_update1stTime) )
-           {
-            ossOutput << "Sensor ID: Unknown!"<< std::endl;
-            ossOutput << "Additional parameters are necessary!"<< std::endl;
-
-                     GetLogger()->Info("\n-------------------------------------------------------------\n"
-                     "Sensor ID : unknown...\n"
-                     "The application didn't manage to find an appropriate metadata interface; "
-                     "custom values must be provided in order to perform TOA conversion.\nPlease, set the following fields :\n"
-                     "- day and month of acquisition, or flux normalization coefficient;\n"
-                     "- sun elevation angle;\n"
-                     "- gains and biases for each band (passed by a file, see documentation);\n"
-                     "- solar illuminationss for each band (passed by a file, see documentation).\n"
-                     "-------------------------------------------------------------\n");
-
-                     SetParameterString("acquisition.gainbias","");
-                     SetParameterString("acquisition.solarilluminations","");
-                     SetParameterInt("acquisition.day", 1);
-                         SetParameterInt("acquisition.month", 1);
-                         SetParameterFloat("acquisition.fluxnormalizationcoefficient", 0);
-                     SetParameterFloat("acquisition.sunelevationangle", 0);
-
-                      EnableParameter("acquisition.gainbias");
-                     EnableParameter("acquisition.solarilluminations");
-                     EnableParameter("acquisition.day");
-                     EnableParameter("acquisition.month");
-                     DisableParameter("acquisition.fluxnormalizationcoefficient");
-                     EnableParameter("acquisition.sunelevationangle");
-                     
-                  m_update1stTime=false;
-           }
-        otbAppLogINFO(<< ossOutput.str());
+			}
+        }
    }
 
+    // Manage the case where fluxnormalizationcoefficient is modified by user
+    if (m_currentEnabledStateOfFluxParam != IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
+    {   
+      if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
+        {
+            ossOutput << std::endl << "Flux Normalization Coefficient will be used" << std::endl;
+            DisableParameter("acquisition.day");
+            DisableParameter("acquisition.month");
+            MandatoryOff("acquisition.day");
+            MandatoryOff("acquisition.month");
+            MandatoryOn("acquisition.fluxnormalizationcoefficient");
+            m_currentEnabledStateOfFluxParam = true;
+        }
+      else
+        {
+            ossOutput << std::endl << "Day and Month will be used" << std::endl;
+            EnableParameter("acquisition.day");
+            EnableParameter("acquisition.month");
+            MandatoryOn("acquisition.day");
+            MandatoryOn("acquisition.month");
+            MandatoryOff("acquisition.fluxnormalizationcoefficient");
+            m_currentEnabledStateOfFluxParam = false;
+        }
+    }
+
+   if (!ossOutput.str().empty())
+     otbAppLogINFO(<< ossOutput.str());
 
  }
 
