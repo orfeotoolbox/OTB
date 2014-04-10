@@ -73,7 +73,7 @@ public:
 
   itkTypeMacro(OpticalCalibration, Application);
 
-  typedef ImageToLuminanceImageFilter<DoubleVectorImageType,
+  typedef ImageToLuminanceImageFilter<FloatVectorImageType,
                                       DoubleVectorImageType>              ImageToLuminanceImageFilterType;
 
   typedef LuminanceToReflectanceImageFilter<DoubleVectorImageType,
@@ -82,7 +82,7 @@ public:
   typedef LuminanceToImageImageFilter<DoubleVectorImageType,
                                             DoubleVectorImageType>        LuminanceToImageImageFilterType;
 
-  typedef ReflectanceToLuminanceImageFilter<DoubleVectorImageType,
+  typedef ReflectanceToLuminanceImageFilter<FloatVectorImageType,
                                             DoubleVectorImageType>        ReflectanceToLuminanceImageFilterType;
 
   typedef otb::MultiplyByScalarImageFilter<DoubleVectorImageType,
@@ -318,7 +318,7 @@ private:
         ossOutput << std::endl << "File: " << m_inImageName << std::endl;
         
         //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
-        DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
+        FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
         itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
         OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
@@ -440,7 +440,7 @@ private:
     m_ScaleFilter->InPlaceOn();
     m_ClampFilter = ClampFilterType::New();
 
-    DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
+     FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
 
     // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters
     if ( !IsParameterEnabled("acquisition.fluxnormalizationcoefficient") )
@@ -531,7 +531,6 @@ private:
       else
         itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! "); 
     }
-
 
     // Set Solar Illumination to corresponding filters
     if (HasValue("acquisition.solarilluminations"))
