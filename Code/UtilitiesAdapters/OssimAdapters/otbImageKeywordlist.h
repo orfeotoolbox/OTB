@@ -120,6 +120,7 @@ std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
 // Free function to handle the keywordlist <-> files
 ImageKeywordlist ReadGeometryFromImage(const std::string& filename);
 ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename);
+ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename);
 void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
 
 } //namespace otb

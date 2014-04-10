@@ -202,269 +202,138 @@ ReadGeometryFromImage(const std::string& filename)
   ossimKeywordlist geom_kwl; // = new ossimKeywordlist();
   ImageKeywordlist otb_kwl;
 
-  // Test the plugins factory
+  /****************************************************/
+  /* First try : test the OSSIM plugins factory       */
+  /****************************************************/
   /** Before, the pluginfactory was tested if the ossim one returned false.
       But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
       thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
       because the default include factory contains ossimQuickbirdTiffTileSource. */
   ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()
                                  ->createProjection(ossimFilename(filename.c_str()), 0);
-
-  if (!projection)
+  if (projection)
     {
-    otbMsgDevMacro(<< "OSSIM Instantiate projection FAILED ! ");
-    }
-  else
-    {
-    otbMsgDevMacro(<< "OSSIM Instantiate projection SUCCESS ! ");
+    otbMsgDevMacro(<< "OSSIM plugin projection instantiated ! ");
 
     hasMetaData = projection->saveState(geom_kwl);
     otb_kwl.SetKeywordlist(geom_kwl);
 
     // Free memory
     delete projection;
+    projection = 0;
     }
 
+  /***********************************************/
+  /* Second try : the OSSIM projection factory   */
+  /***********************************************/
   if (!hasMetaData)
     {
     ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
                                  ->open(ossimFilename(filename.c_str()));
-    if (!handler)
-      {
-      otbMsgDevMacro(<< "OSSIM Open Image FAILED ! ");
-
-      // In some corner cases, ossim is unable to create a ossimImageHandler
-      // instance for the provided file.
-      // This can happen for TIFF+geom files where the ossimTiffTileSource
-      // fails when trying to open the TIFF file (for example
-      // because ossim is compiled with a libtiff without BigTIFF support
-      // and when the actual TIFF file exceeds the Large File limit).
-      // In such cases, we don't actually need ossim to interpret the TIFF file,
-      // and just want a valid ossimKeywordlist corresponding to a sensor model.
-
-      // Here is implemented a shortcut used as a fallback scenario,
-      // where we bypass the ossimImageHandlerRegistry
-      // and directly create a ossimKeywordlist from the ".geom" file.
-
-      // We then verify it is a valid sensor model by using otb::SensorModelAdapter
-      // which uses ossimSensorModelFactory and ossimPluginProjectionFactory internally,
-      // thus by-passing the need for a valid ossimImageHandler.
-
-      // Try to find a ".geom" file next to 'filename'
-      ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
-
-      otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
-      }
-    else
+    if (handler)
       {
       otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
 
       // Add ossimPlugins model
       ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
 
-      //     hasMetaData = handler->getImageGeometry(geom_kwl);
       ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
-
       if (geom.valid())
         {
-        ossimProjection* projection = geom->getProjection();
+        projection = geom->getProjection();
         if (projection)
           {
           hasMetaData = projection->saveState(geom_kwl);
-          otb_kwl.SetKeywordlist(geom_kwl);
           }
         }
       
-      //  try to use GeoTiff RPC tag if present. They will override the
-      // standard projection found before
-      // Warning : RPC in subdatasets are not supported
-      GDALDatasetH datasetH = GDALOpen(handler->getFilename(), GA_ReadOnly);
-      
-      if (datasetH != NULL)
+      // if the handler has found a sensor model, copy the tags found
+      if (hasMetaData && dynamic_cast<ossimSensorModel*>(projection))
         {
-        GDALDataset* dataset = static_cast<GDALDataset*>(datasetH);
-        GDALRPCInfo rpcStruct;
-        if (GDALExtractRPCInfo(dataset->GetMetadata("RPC"),&rpcStruct))
-          {
-          otbMsgDevMacro(<<"RPC Coeff found");
-          std::vector<double> lineNumCoefs;
-          std::vector<double> lineDenCoefs;
-          std::vector<double> sampNumCoefs;
-          std::vector<double> sampDenCoefs;
-          
-          for (unsigned int k=0; k<20; ++k)
-            {
-            lineNumCoefs.push_back(rpcStruct.adfLINE_NUM_COEFF[k]);
-            lineDenCoefs.push_back(rpcStruct.adfLINE_DEN_COEFF[k]);
-            sampNumCoefs.push_back(rpcStruct.adfSAMP_NUM_COEFF[k]);
-            sampDenCoefs.push_back(rpcStruct.adfSAMP_DEN_COEFF[k]);
-            }
-          
-          ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
-          rpcModel->setAttributes( rpcStruct.dfSAMP_OFF,
-                                   rpcStruct.dfLINE_OFF,
-                                   rpcStruct.dfSAMP_SCALE,
-                                   rpcStruct.dfLINE_SCALE,
-                                   rpcStruct.dfLAT_OFF,
-                                   rpcStruct.dfLONG_OFF,
-                                   rpcStruct.dfHEIGHT_OFF,
-                                   rpcStruct.dfLAT_SCALE,
-                                   rpcStruct.dfLONG_SCALE,
-                                   rpcStruct.dfHEIGHT_SCALE,
-                                   sampNumCoefs,
-                                   sampDenCoefs,
-                                   lineNumCoefs,
-                                   lineDenCoefs);
-          
-          double errorBias = 0.0;
-          double errorRand = 0.0;
-          
-          // setup other metadata
-          rpcModel->setPositionError(errorBias,errorRand,true);
-          ossimDrect rectangle(0.0,
-                               0.0,
-                               static_cast<double>(dataset->GetRasterXSize()-1),
-                               static_cast<double>(dataset->GetRasterYSize()-1));
-          rpcModel->setImageRect(rectangle);
-          
-          ossimDpt size;
-          size.line = rectangle.height();
-          size.samp = rectangle.width();
-          rpcModel->setImageSize(size);
-          
-          // Compute 4 corners and reference point
-          rpcModel->updateModel();
-          double heightOffset = rpcStruct.dfHEIGHT_OFF;
-          ossimGpt ulGpt, urGpt, lrGpt, llGpt;
-          ossimGpt refGndPt;
-          
-          rpcModel->lineSampleHeightToWorld(rectangle.ul(), heightOffset, ulGpt);
-          rpcModel->lineSampleHeightToWorld(rectangle.ur(), heightOffset, urGpt);
-          rpcModel->lineSampleHeightToWorld(rectangle.lr(), heightOffset, lrGpt);
-          rpcModel->lineSampleHeightToWorld(rectangle.ll(), heightOffset, llGpt);
-          rpcModel->setGroundRect(ulGpt,urGpt,lrGpt,llGpt);
-          
-          rpcModel->lineSampleHeightToWorld(rectangle.midPoint(), heightOffset, refGndPt);
-          rpcModel->setRefGndPt(refGndPt);
-          
-          // compute ground sampling distance
-          try
-            {
-            // Method can throw ossimException.
-            rpcModel->computeGsd();
-            }
-          catch (const ossimException& e)
-            {
-            otbMsgDevMacro(<< "OSSIM Compute ground sampling distance FAILED ! ");
-            }
-          
-          hasMetaData = rpcModel->saveState(geom_kwl);
-          otb_kwl.SetKeywordlist(geom_kwl);
-          }
+        otbMsgDevMacro(<<"OSSIM sensor projection instantiated ! ");
+        otb_kwl.SetKeywordlist(geom_kwl);
         }
-      
-      /*
-      ossimRefPtr<ossimTiffTileSource> tiffHandler = new ossimTiffTileSource;
-      tiffHandler->setOpenOverviewFlag(true);
-      if ( tiffHandler->open(handler->getFilename()) )
+      else
         {
-        TIFF* tiffPtr = tiffHandler->tiffPtr();
-        unsigned short  count     = 0;
-        void            *tagData  = 0;
-        
-        if (TIFFGetField( tiffPtr, 50844, &count, &tagData) && (count == 92) )
-          {
-          otbMsgDevMacro(<<"RPC Coeff tag found");
-          // read RPC coefficients
-          double *tagValues = static_cast<double*>(tagData);
-          
-          std::vector<double> lineNumCoefs;
-          std::vector<double> lineDenCoefs;
-          std::vector<double> sampNumCoefs;
-          std::vector<double> sampDenCoefs;
-          
-          for (unsigned int k=0; k<20; ++k)
-            {
-            lineNumCoefs.push_back(*(tagValues + 12 + k));
-            lineDenCoefs.push_back(*(tagValues + 32 + k));
-            sampNumCoefs.push_back(*(tagValues + 52 + k));
-            sampDenCoefs.push_back(*(tagValues + 72 + k));
-            }
-          
-          ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
-          rpcModel->setAttributes( *(tagValues + 3),
-                                   *(tagValues + 2),
-                                   *(tagValues + 8),
-                                   *(tagValues + 7),
-                                   *(tagValues + 4),
-                                   *(tagValues + 5),
-                                   *(tagValues + 6),
-                                   *(tagValues + 9),
-                                   *(tagValues + 10),
-                                   *(tagValues + 11),
-                                   sampNumCoefs,
-                                   sampDenCoefs,
-                                   lineNumCoefs,
-                                   lineDenCoefs);
-          
-          double errorBias = 0.0;
-          double errorRand = 0.0;
-          if (*(tagValues) >= 0.0) errorBias = *(tagValues);
-          if (*(tagValues+1) >= 0.0) errorRand = *(tagValues+1);
-          
-          // setup other metadata
-          rpcModel->setPositionError(errorBias,errorRand,true);
-          ossimDrect rectangle = tiffHandler->getImageRectangle();
-          rpcModel->setImageRect(rectangle);
-          
-          ossimDpt size;
-          size.line = rectangle.height();
-          size.samp = rectangle.width();
-          rpcModel->setImageSize(size);
-          
-          // Compute 4 corners and reference point
-          rpcModel->updateModel();
-          double heightOffset = *(tagValues + 6);
-          ossimGpt ulGpt, urGpt, lrGpt, llGpt;
-          ossimGpt refGndPt;
-          
-          rpcModel->lineSampleHeightToWorld(rectangle.ul(), heightOffset, ulGpt);
-          rpcModel->lineSampleHeightToWorld(rectangle.ur(), heightOffset, urGpt);
-          rpcModel->lineSampleHeightToWorld(rectangle.lr(), heightOffset, lrGpt);
-          rpcModel->lineSampleHeightToWorld(rectangle.ll(), heightOffset, llGpt);
-          rpcModel->setGroundRect(ulGpt,urGpt,lrGpt,llGpt);
-          
-          rpcModel->lineSampleHeightToWorld(rectangle.midPoint(), heightOffset, refGndPt);
-          rpcModel->setRefGndPt(refGndPt);
-          
-          // compute ground sampling distance
-          try
-            {
-            // Method can throw ossimException.
-            rpcModel->computeGsd();
-            }
-          catch (const ossimException& e)
-            {
-            otbMsgDevMacro(<< "OSSIM Compute ground sampling distance FAILED ! ");
-            }
-          
-          hasMetaData = rpcModel->saveState(geom_kwl);
-          otb_kwl.SetKeywordlist(geom_kwl);
-          }
+        hasMetaData = false;
         }
-      */
-      // If still no metadata, try the ".geom" file
-      if (!hasMetaData && otb_kwl.GetSize() == 0)
-        {
-        ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
-        otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
-        }
-
+      // Free memory
+      delete handler;
       }
-    // Free memory
-    delete handler;
+    }
+  
+  /**********************************************************/
+  /* Third try : look for external geom file and RPC tags   */
+  /**********************************************************/
+  if (!hasMetaData)
+    {
+    // If still no metadata, try the ".geom" file  
+    ossimFilename ossimGeomFile = ossimFilename(filename).setExtension(".geom");
+    otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
+    
+    // also check any RPC tags
+    ImageKeywordlist rpc_kwl = ReadGeometryFromRPCTag(filename);
+     
+    if (otb_kwl.HasKey("type"))
+      {
+      // external geom has a "type" keyword
+      std::string geomType(otb_kwl.GetMetadataByKey("type"));
+      ossimProjection *testProj = ossimProjectionFactoryRegistry::instance()
+        ->createProjection(ossimString(geomType));
+      if (dynamic_cast<ossimSensorModel*>(testProj))
+        {
+        // "type" keyword corresponds to a sensor model : don't erase it
+        if (rpc_kwl.GetSize() > 0)
+          {
+          rpc_kwl.ClearMetadataByKey("type");
+          }
+        
+        ossimKeywordlist ossim_test_kwl;
+        otb_kwl.convertToOSSIMKeywordlist(ossim_test_kwl);
+        testProj = ossimProjectionFactoryRegistry::instance()
+          ->createProjection(ossim_test_kwl);
+        if (testProj)
+          {
+          // external geom contains a valid sensor geometry
+          hasMetaData = true;
+          }
+        }
+      }
+      
+    // copy keywords found in RPC tags if the external geom is not valid
+    if (!hasMetaData && rpc_kwl.GetSize() > 0)
+      {
+      const ImageKeywordlist::KeywordlistMap &kwlMap = rpc_kwl.GetKeywordlist();
+      for (ImageKeywordlist::KeywordlistMap::const_iterator it = kwlMap.begin();
+          it != kwlMap.end();
+          ++it)
+        {
+        if (it->second != "")
+          {
+          otb_kwl.AddKey(it->first , it->second);
+          }
+        }
+      hasMetaData = true;
+      }
     }
 
+  // In some corner cases, ossim is unable to create a ossimImageHandler
+  // instance for the provided file.
+  // This can happen for TIFF+geom files where the ossimTiffTileSource
+  // fails when trying to open the TIFF file (for example
+  // because ossim is compiled with a libtiff without BigTIFF support
+  // and when the actual TIFF file exceeds the Large File limit).
+  // In such cases, we don't actually need ossim to interpret the TIFF file,
+  // and just want a valid ossimKeywordlist corresponding to a sensor model.
+
+  // Here is implemented a shortcut used as a fallback scenario,
+  // where we bypass the ossimImageHandlerRegistry
+  // and directly create a ossimKeywordlist from the ".geom" file.
+
+  // We then verify it is a valid sensor model by using otb::SensorModelAdapter
+  // which uses ossimSensorModelFactory and ossimPluginProjectionFactory internally,
+  // thus by-passing the need for a valid ossimImageHandler.
+  
   if (!hasMetaData)
     {
     otbMsgDevMacro(<< "OSSIM MetaData not present ! ");
@@ -472,7 +341,7 @@ ReadGeometryFromImage(const std::string& filename)
   else
     {
     otbMsgDevMacro(<< "OSSIM MetaData present ! ");
-    otbMsgDevMacro(<< geom_kwl);
+    //otbMsgDevMacro(<< geom_kwl);
     }
 
   return otb_kwl;
@@ -510,6 +379,104 @@ ReadGeometryFromGEOMFile(const std::string& filename)
 
   otb_kwl.SetKeywordlist(geom_kwl);
 
+  return otb_kwl;
+}
+
+ImageKeywordlist
+ReadGeometryFromRPCTag(const std::string& filename)
+{
+  ossimKeywordlist geom_kwl;
+  ImageKeywordlist otb_kwl;
+  
+  //  try to use GeoTiff RPC tag if present.
+  // Warning : RPC in subdatasets are not supported
+  GDALDatasetH datasetH = GDALOpen(filename.c_str(), GA_ReadOnly);
+  if (datasetH != NULL)
+    {
+    GDALDataset* dataset = static_cast<GDALDataset*>(datasetH);
+    GDALRPCInfo rpcStruct;
+    if (GDALExtractRPCInfo(dataset->GetMetadata("RPC"),&rpcStruct))
+      {
+      otbMsgDevMacro(<<"RPC Coeff found");
+      std::vector<double> lineNumCoefs;
+      std::vector<double> lineDenCoefs;
+      std::vector<double> sampNumCoefs;
+      std::vector<double> sampDenCoefs;
+      
+      for (unsigned int k=0; k<20; ++k)
+        {
+        lineNumCoefs.push_back(rpcStruct.adfLINE_NUM_COEFF[k]);
+        lineDenCoefs.push_back(rpcStruct.adfLINE_DEN_COEFF[k]);
+        sampNumCoefs.push_back(rpcStruct.adfSAMP_NUM_COEFF[k]);
+        sampDenCoefs.push_back(rpcStruct.adfSAMP_DEN_COEFF[k]);
+        }
+      
+      ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
+      rpcModel->setAttributes( rpcStruct.dfSAMP_OFF,
+                              rpcStruct.dfLINE_OFF,
+                              rpcStruct.dfSAMP_SCALE,
+                              rpcStruct.dfLINE_SCALE,
+                              rpcStruct.dfLAT_OFF,
+                              rpcStruct.dfLONG_OFF,
+                              rpcStruct.dfHEIGHT_OFF,
+                              rpcStruct.dfLAT_SCALE,
+                              rpcStruct.dfLONG_SCALE,
+                              rpcStruct.dfHEIGHT_SCALE,
+                              sampNumCoefs,
+                              sampDenCoefs,
+                              lineNumCoefs,
+                              lineDenCoefs);
+      
+      double errorBias = 0.0;
+      double errorRand = 0.0;
+      
+      // setup other metadata
+      rpcModel->setPositionError(errorBias,errorRand,true);
+      ossimDrect rectangle(0.0,
+                          0.0,
+                          static_cast<double>(dataset->GetRasterXSize()-1),
+                          static_cast<double>(dataset->GetRasterYSize()-1));
+      rpcModel->setImageRect(rectangle);
+      
+      ossimDpt size;
+      size.line = rectangle.height();
+      size.samp = rectangle.width();
+      rpcModel->setImageSize(size);
+      
+      // Compute 4 corners and reference point
+      rpcModel->updateModel();
+      double heightOffset = rpcStruct.dfHEIGHT_OFF;
+      ossimGpt ulGpt, urGpt, lrGpt, llGpt;
+      ossimGpt refGndPt;
+      
+      rpcModel->lineSampleHeightToWorld(rectangle.ul(), heightOffset, ulGpt);
+      rpcModel->lineSampleHeightToWorld(rectangle.ur(), heightOffset, urGpt);
+      rpcModel->lineSampleHeightToWorld(rectangle.lr(), heightOffset, lrGpt);
+      rpcModel->lineSampleHeightToWorld(rectangle.ll(), heightOffset, llGpt);
+      rpcModel->setGroundRect(ulGpt,urGpt,lrGpt,llGpt);
+      
+      rpcModel->lineSampleHeightToWorld(rectangle.midPoint(), heightOffset, refGndPt);
+      rpcModel->setRefGndPt(refGndPt);
+      
+      // compute ground sampling distance
+      try
+        {
+        // Method can throw ossimException.
+        rpcModel->computeGsd();
+        }
+      catch (const ossimException& e)
+        {
+        otbMsgDevMacro(<< "OSSIM Compute ground sampling distance FAILED ! ");
+        }
+      
+      if (rpcModel->saveState(geom_kwl))
+        {
+        otb_kwl.SetKeywordlist(geom_kwl);
+        }
+      }
+    GDALClose(datasetH);
+    }
+  
   return otb_kwl;
 }
 
