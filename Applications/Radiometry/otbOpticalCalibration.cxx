@@ -168,8 +168,8 @@ private:
 "# Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
 "1540.494123 : 1826.087443 : 1982.671954 : 1094.747446\n\n"
 
-"Finally, the 'Logs' tab provides usefull messages that can help the user in knowing the process different status."
-);
+"Finally, the 'Logs' tab provides usefull messages that can help the user in knowing the process different status." );
+    
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("The OTB CookBook");
@@ -303,129 +303,128 @@ private:
     // Manage the case where a new input is provided: we should try to retrieve image metadata
     if (HasValue("in"))
     {
-        bool newInputImage = false;
-        string tempName = GetParameterString("in");
+      bool newInputImage = false;
+      string tempName = GetParameterString("in");
 
-        // Check if the input image change
-        if (tempName != m_inImageName)
-        {
+      // Check if the input image change
+      if (tempName != m_inImageName)
+      {
         m_inImageName = tempName;
         newInputImage = true;
-        }
+      }
 
-        if (newInputImage)
-        {
-            ossOutput << std::endl << "File: " << m_inImageName << std::endl;
+      if (newInputImage)
+      {
+        ossOutput << std::endl << "File: " << m_inImageName << std::endl;
         
-            //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
-            DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
-            itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
-            OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+        //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
+        DoubleVectorImageType::Pointer inImage = GetParameterDoubleVectorImage("in");
+        itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
+        OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
-            string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
-            if ( (IMIName != IMIOptDfltName))
-            {
-                 ossOutput << "Sensor detected: " << lImageMetadataInterface->GetSensorID() << std::endl;
+        string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
+        if ( (IMIName != IMIOptDfltName))
+        {
+           ossOutput << "Sensor detected: " << lImageMetadataInterface->GetSensorID() << std::endl;
 
-                 itk::VariableLengthVector<double> vlvector;
-                 std::stringstream ss;
+           itk::VariableLengthVector<double> vlvector;
+           std::stringstream ss;
 
-                 ossOutput << "Parameters extract from input image: "<< std::endl
-                           << "\tAcquisition Day: " << lImageMetadataInterface->GetDay() << std::endl 
-                           << "\tAcquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl
-                           << "\tAcquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;
-                 
-                   vlvector = lImageMetadataInterface->GetPhysicalGain();
-                 ossOutput << "\tAcquisition gain (per band): " ;
-                 for(unsigned int k=0; k<vlvector.Size(); k++)
-                   ossOutput << vlvector[k] << " ";
-                 ossOutput << std::endl;
+           ossOutput << "Parameters extract from input image: "<< std::endl
+                     << "\tAcquisition Day: " << lImageMetadataInterface->GetDay() << std::endl 
+                     << "\tAcquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl
+                     << "\tAcquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;
+         
+           vlvector = lImageMetadataInterface->GetPhysicalGain();
+           ossOutput << "\tAcquisition gain (per band): " ;
+           for(unsigned int k=0; k<vlvector.Size(); k++)
+             ossOutput << vlvector[k] << " ";
+           ossOutput << std::endl;
 
-                 vlvector = lImageMetadataInterface->GetPhysicalBias();
-                 ossOutput << "\tAcquisition bias (per band): " ;
-                 for(unsigned int k=0; k<vlvector.Size(); k++)
-                   ossOutput << vlvector[k] << " ";
-                 ossOutput << std::endl;
-                 MandatoryOff("acquisition.gainbias");
+           vlvector = lImageMetadataInterface->GetPhysicalBias();
+           ossOutput << "\tAcquisition bias (per band): " ;
+           for(unsigned int k=0; k<vlvector.Size(); k++)
+             ossOutput << vlvector[k] << " ";
+           ossOutput << std::endl;
+           MandatoryOff("acquisition.gainbias");
 
-                 vlvector = lImageMetadataInterface->GetSolarIrradiance();
-                 ossOutput << "\tSolar Irradiance (per band): " ;
-                 for(unsigned int k=0; k<vlvector.Size(); k++)
-                   ossOutput << vlvector[k] << " ";
-                 ossOutput << std::endl;
-                 MandatoryOff("acquisition.solarilluminations");
-      
-                 if (HasUserValue("acquisition.day"))
-                    ossOutput << "Acquisition Day already set by user: no overload" <<std::endl;
-                 else
-                    {
-                    SetParameterInt("acquisition.day", lImageMetadataInterface->GetDay());
-                    if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
-                      DisableParameter("acquisition.day");
-                    }
-                 
-                 if (HasUserValue("acquisition.month"))
-                    ossOutput << "Acquisition Month already set by user: no overload" <<std::endl;
-                 else
-                    {
-                    SetParameterInt("acquisition.month", lImageMetadataInterface->GetMonth());
-                    if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
-                      DisableParameter("acquisition.month");
-                    }
+           vlvector = lImageMetadataInterface->GetSolarIrradiance();
+           ossOutput << "\tSolar Irradiance (per band): " ;
+           for(unsigned int k=0; k<vlvector.Size(); k++)
+             ossOutput << vlvector[k] << " ";
+           ossOutput << std::endl;
+           MandatoryOff("acquisition.solarilluminations");
 
-                 if (HasUserValue("acquisition.sunelevationangle"))   
-                    ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" <<std::endl;
-                 else            
-                    SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());
-            }
-            else
-            {
-                ossOutput << "Sensor unknown!"<< std::endl;
-                ossOutput << "Additional parameters are necessary, please provide them (cf. documentation)!"<< std::endl;
+           if (HasUserValue("acquisition.day"))
+             ossOutput << "Acquisition Day already set by user: no overload" <<std::endl;
+           else
+           {
+             SetParameterInt("acquisition.day", lImageMetadataInterface->GetDay());
+             if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
+               DisableParameter("acquisition.day");
+           }
+         
+           if (HasUserValue("acquisition.month"))
+             ossOutput << "Acquisition Month already set by user: no overload" <<std::endl;
+           else
+           {
+             SetParameterInt("acquisition.month", lImageMetadataInterface->GetMonth());
+             if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
+               DisableParameter("acquisition.month");
+           }
 
-                /*GetLogger()->Info("\n-------------------------------------------------------------\n"
-                "Sensor ID : unknown...\n"
-                "The application didn't manage to find an appropriate metadata interface; " 
-                "custom values must be provided in order to perform TOA conversion.\nPlease, set the following fields :\n"
-                "- day and month of acquisition, or flux normalization coefficient;\n"
-                "- sun elevation angle;\n"
-                "- gains and biases for each band (passed by a file, see documentation);\n"
-                "- solar illuminationss for each band (passed by a file, see documentation).\n"
-                "-------------------------------------------------------------\n");*/
-
-            }
+           if (HasUserValue("acquisition.sunelevationangle"))   
+             ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" <<std::endl;
+           else            
+             SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());
         }
-   }
+        else
+        {
+          ossOutput << "Sensor unknown!"<< std::endl;
+          ossOutput << "Additional parameters are necessary, please provide them (cf. documentation)!"<< std::endl;
+
+          /*GetLogger()->Info("\n-------------------------------------------------------------\n"
+          "Sensor ID : unknown...\n"
+          "The application didn't manage to find an appropriate metadata interface; " 
+          "custom values must be provided in order to perform TOA conversion.\nPlease, set the following fields :\n"
+          "- day and month of acquisition, or flux normalization coefficient;\n"
+          "- sun elevation angle;\n"
+          "- gains and biases for each band (passed by a file, see documentation);\n"
+          "- solar illuminationss for each band (passed by a file, see documentation).\n"
+          "-------------------------------------------------------------\n");*/
+        }
+      }
+    }
 
     // Manage the case where fluxnormalizationcoefficient is modified by user
     if (m_currentEnabledStateOfFluxParam != IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
     {   
       if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
-        {
-            ossOutput << std::endl << "Flux Normalization Coefficient will be used" << std::endl;
-            DisableParameter("acquisition.day");
-            DisableParameter("acquisition.month");
-            MandatoryOff("acquisition.day");
-            MandatoryOff("acquisition.month");
-            MandatoryOn("acquisition.fluxnormalizationcoefficient");
-            m_currentEnabledStateOfFluxParam = true;
-        }
+      {
+        ossOutput << std::endl << "Flux Normalization Coefficient will be used" << std::endl;
+        DisableParameter("acquisition.day");
+        DisableParameter("acquisition.month");
+        MandatoryOff("acquisition.day");
+        MandatoryOff("acquisition.month");
+        MandatoryOn("acquisition.fluxnormalizationcoefficient");
+        m_currentEnabledStateOfFluxParam = true;
+      }
       else
-        {
-            ossOutput << std::endl << "Day and Month will be used" << std::endl;
-            EnableParameter("acquisition.day");
-            EnableParameter("acquisition.month");
-            MandatoryOn("acquisition.day");
-            MandatoryOn("acquisition.month");
-            MandatoryOff("acquisition.fluxnormalizationcoefficient");
-            m_currentEnabledStateOfFluxParam = false;
-        }
+      {
+        ossOutput << std::endl << "Day and Month will be used" << std::endl;
+        EnableParameter("acquisition.day");
+        EnableParameter("acquisition.month");
+        MandatoryOn("acquisition.day");
+        MandatoryOn("acquisition.month");
+        MandatoryOff("acquisition.fluxnormalizationcoefficient");
+        m_currentEnabledStateOfFluxParam = false;
+      }
     }
 
-   if (!ossOutput.str().empty())
-     otbAppLogINFO(<< ossOutput.str());
+    if (!ossOutput.str().empty())
+      otbAppLogINFO(<< ossOutput.str());
 
- }
+  }
 
   void DoExecute()
   {
@@ -586,7 +585,7 @@ private:
     }
 
     switch ( GetParameterInt("level") )
-      {
+    {
       case Level_IM_TOA:
       {
         GetLogger()->Info("Compute Top of Atmosphere reflectance\n");
@@ -601,15 +600,13 @@ private:
       break;
       case Level_TOA_IM:
       {
-
-            GetLogger()->Info("Convert Top of Atmosphere reflectance to image DN\n");
+        GetLogger()->Info("Convert Top of Atmosphere reflectance to image DN\n");
     
         //Pipeline
         m_ReflectanceToLuminanceFilter->SetInput(inImage);
         m_LuminanceToImageFilter->SetInput(m_ReflectanceToLuminanceFilter->GetOutput());
         m_LuminanceToImageFilter->UpdateOutputInformation();
         m_ScaleFilter->SetInput(m_LuminanceToImageFilter->GetOutput());
-
       }
       break;
       case Level_TOC:
@@ -629,110 +626,109 @@ private:
         m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
         //AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
 
-          switch ( GetParameterInt("atmo.aerosol") )
+        switch ( GetParameterInt("atmo.aerosol") )
+        {
+          case Aerosol_Desertic:
           {
-            case Aerosol_Desertic:
-            {
             // Aerosol_Desertic correspond to 4 in the enum but actually in
             // the class atmosphericParam it is known as parameter 5
             m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(5));
-            }
-            break;
-            default:
-            {
-            m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(GetParameterInt("atmo.aerosol")));
-            }
-            break;
           }
-          // Set the atmospheric param
-          m_AtmosphericParam->SetOzoneAmount(GetParameterFloat("atmo.oz"));
-          m_AtmosphericParam->SetWaterVaporAmount(GetParameterFloat("atmo.wa"));
-          m_AtmosphericParam->SetAtmosphericPressure(GetParameterFloat("atmo.pressure"));
-          m_AtmosphericParam->SetAerosolOptical(GetParameterFloat("atmo.opt"));
+          break;
+          default:
+          {
+            m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(GetParameterInt("atmo.aerosol")));
+          }
+          break;
+        }
+        
+        // Set the atmospheric param
+        m_AtmosphericParam->SetOzoneAmount(GetParameterFloat("atmo.oz"));
+        m_AtmosphericParam->SetWaterVaporAmount(GetParameterFloat("atmo.wa"));
+        m_AtmosphericParam->SetAtmosphericPressure(GetParameterFloat("atmo.pressure"));
+        m_AtmosphericParam->SetAerosolOptical(GetParameterFloat("atmo.opt"));
 
-          // Relative Spectral Response File
-          if (IsParameterEnabled("rsr"))
+        // Relative Spectral Response File
+        if (IsParameterEnabled("rsr"))
         {
-        m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("rsr"));
+          m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("rsr"));
         }
 
         // Aeronet file
         if (IsParameterEnabled("atmo.aeronet"))
         {
-        GetLogger()->Info("Use aeronet file to retrieve atmospheric parameters");
-        m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("atmo.aeronet"));
+          GetLogger()->Info("Use aeronet file to retrieve atmospheric parameters");
+          m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("atmo.aeronet"));
         }
 
-      m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
-      m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
-      m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
-      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+        m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
+        m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
+        m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+        m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
+        m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
-      // std::ostringstream oss_atmo;
-      // oss_atmo << "Atmospheric parameters: " << std::endl;
-      // oss_atmo << m_AtmosphericParam;
+        // std::ostringstream oss_atmo;
+        // oss_atmo << "Atmospheric parameters: " << std::endl;
+        // oss_atmo << m_AtmosphericParam;
+        // GetLogger()->Info(oss_atmo.str());
 
-      // GetLogger()->Info(oss_atmo.str());
+        std::ostringstream oss;
+        oss.str("");
+        oss << std::endl << m_AtmosphericParam;
 
-      std::ostringstream oss;
-      oss.str("");
-      oss << std::endl << m_AtmosphericParam;
+        AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
+        oss << std::endl << std::endl << atmoTerms;
 
-      AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
-      oss << std::endl << std::endl << atmoTerms;
+        GetLogger()->Info("Atmospheric correction parameters compute by 6S : " + oss.str());
 
-      GetLogger()->Info("Atmospheric correction parameters compute by 6S : " + oss.str());
+        //Compute adjacency effect
+        //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
+        //   = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
 
-      //Compute adjacency effect
-      //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
-      //   = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
+        //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+        //   SetAtmosphericRadiativeTerms(
+        //     m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms());
+        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
+        //   m_AtmosphericParam->GetViewingZenithalAngle());
+        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("radius"));
 
-      //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
-      //   SetAtmosphericRadiativeTerms(
-      //     m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms());
-      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
-      //   m_AtmosphericParam->GetViewingZenithalAngle());
-      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("radius"));
+        //    //estimate ground spacing in kilometers
+        // GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
 
-      // //estimate ground spacing in kilometers
-      // GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
+        // groundSpacing->SetInputImage(inImage);
+        // IndexType  index;
 
-      // groundSpacing->SetInputImage(inImage);
-      // IndexType  index;
+        // vnl_random rand;
 
-      // vnl_random rand;
+        // index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
+        // index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
+        // FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
 
-      // index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
-      // index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
-      // FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
+        // const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
+        //    // std::ostringstream oss2;
+        //    //  oss2.str("");
+        //    //  oss2 << spacingInKilometers;
+        //    //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
+        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+        //   SetPixelSpacingInKilometers(spacingInKilometers);
 
-      // const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
+        //    //rescale the surface reflectance in milli-reflectance
+        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
+        //    //m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->Update();
+        // m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
 
-      // // std::ostringstream oss2;
-      // //  oss2.str("");
-      // //  oss2 << spacingInKilometers;
-
-      // //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
-      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
-      //   SetPixelSpacingInKilometers(spacingInKilometers);
-
-      // //rescale the surface reflectance in milli-reflectance
-      // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
-      // //m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->Update();
-      // m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
-      if (!IsParameterEnabled("clamp"))
-      {   
-        m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-      }
-      else
-      {
-        GetLogger()->Info("Clamp values between [0, 100]");
-        m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-        m_ClampFilter->ClampOutside(0.0, 1.0);
-        m_ScaleFilter->SetInput(m_ClampFilter->GetOutput());
-      }
+        if (!IsParameterEnabled("clamp"))
+        {   
+          m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+        }
+        else
+        {
+          GetLogger()->Info("Clamp values between [0, 100]");
+          m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+          m_ClampFilter->ClampOutside(0.0, 1.0);
+          m_ScaleFilter->SetInput(m_ClampFilter->GetOutput());
+        }
       }
       break;
     }
@@ -740,17 +736,16 @@ private:
     // Output Image
     double scale = 1.0;
     if (IsParameterEnabled("milli"))
-      {
+    {
       GetLogger()->Info("Use milli-reflectance");
       if ( (GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC) )
         scale = 1000.; 
       if (GetParameterInt("level") == Level_TOA_IM)
         scale = 1. / 1000.; 
-      }
-     m_ScaleFilter->SetCoef(scale);
+    }
+    m_ScaleFilter->SetCoef(scale);
 
-     SetParameterOutputImage("out", m_ScaleFilter->GetOutput());
-
+    SetParameterOutputImage("out", m_ScaleFilter->GetOutput());
   }
 
   //Keep object references as a members of the class, else the pipeline will be broken after exiting DoExecute().
