@@ -94,6 +94,7 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   //
   "properties",
   "no_data",
+  "gamma",
   //
   "view",
   "center",
@@ -186,6 +187,13 @@ DatasetDescriptor
   noDataElt.setAttribute( "flag", properties->IsNoDataEnabled() );
   noDataElt.setAttribute( "value", properties->GetNoData() );
   propertiesElt.appendChild( noDataElt );
+
+  // Gamma
+  QDomElement gammaElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_PROPERTIES_GAMMA ] )
+  );
+  gammaElt.setAttribute( "value", properties->GetGamma() );
+  propertiesElt.appendChild( gammaElt );
 
   //
   // Settings node.
@@ -398,6 +406,14 @@ DatasetDescriptor
   noDataElt.setAttribute( "flag", imageProperties->IsNoDataEnabled() );
   noDataElt.setAttribute( "value", imageProperties->GetNoData() );
 
+  // Access gamma.
+  QDomElement gammaElt(
+    propertiesElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_GAMMA ] )
+  );
+  assert( !gammaElt.isNull() );
+
+  gammaElt.setAttribute( "value", imageProperties->GetGamma() );
+
   // if everything went ok
   return true;
 }
@@ -579,6 +595,7 @@ DatasetDescriptor
     );
     assert( !propertiesElt.isNull() );
 
+    // No-data
     QDomElement noDataElt(
       propertiesElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_NO_DATA ] )
     );
@@ -592,6 +609,18 @@ DatasetDescriptor
 
     imageProperties->SetNoData(
       noDataElt.attribute( "value" ).toDouble( &isOk ) );
+    assert( isOk );
+
+    // Gamma
+    QDomElement gammaElt(
+      propertiesElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_GAMMA ] )
+    );
+    assert( !gammaElt.isNull() );
+
+    isOk = true;
+
+    imageProperties->SetNoData(
+      gammaElt.attribute( "value" ).toDouble( &isOk ) );
     assert( isOk );
     }
 

@@ -131,6 +131,14 @@ public:
    */
   inline ComponentType GetNoData() const;
 
+  /**
+   */
+  inline void SetGamma( double );
+
+  /**
+   */
+  inline double GetGamma() const;
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
 //
@@ -187,6 +195,10 @@ private:
   /**
    */
   ComponentType m_NoData;
+
+  /**
+   */
+  double m_Gamma;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -284,6 +296,26 @@ ImageProperties
 ::GetNoData() const
 {
   return m_NoData;
+}
+
+/*****************************************************************************/
+inline
+void
+ImageProperties
+::SetGamma( double value )
+{
+  m_Gamma = value;
+
+  SetModified();
+}
+
+/*****************************************************************************/
+inline
+double
+ImageProperties
+::GetGamma() const
+{
+  return m_Gamma;
 }
 
 } // end namespace 'mvd'

@@ -185,7 +185,7 @@ main( int argc, char* argv[] )
       ),
       QCoreApplication::translate(
         "Monteverdi2",
-        "Failed to open Monteverdi2 database.\n\nApplication will now exit!\n\n%2"
+        "Failed to open Monteverdi2 database.\n\nApplication will now exit!\n\n%2\n\nPlease, remove your Monteverdi2 cache-directory."
       )
       .arg( exc.what() ),
       QMessageBox::Ok
