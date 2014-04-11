@@ -45,6 +45,10 @@ namespace mvd
   Context comment for translator.
 */
 
+
+/*****************************************************************************/
+/* CONSTANTS                                                                 */
+
 const char*
 ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[] = {
   "redWidget",
@@ -53,7 +57,18 @@ ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[] = {
   "whiteWidget"
 };
 
-/*******************************************************************************/
+const double GAMMA_FACTOR = -0.25;
+const double GAMMA_POWER = 1.1;
+
+/*****************************************************************************/
+/* STATIC IMPLEMENTATION SECTION                                             */
+
+
+/*****************************************************************************/
+/* CLASS IMPLEMENTATION SECTION                                              */
+
+
+/*****************************************************************************/
 ColorDynamicsWidget
 ::ColorDynamicsWidget( QWidget* parent, Qt::WindowFlags flags  ):
   QWidget( parent, flags ),
@@ -180,15 +195,50 @@ ColorDynamicsWidget
 /*******************************************************************************/
 void
 ColorDynamicsWidget
-::SetGamma( int value )
+::SetGamma( double value )
 {
-  m_UI->gammaSlider->setValue(value);
+  int gamma =
+    itk::Math::Round< int, double >(
+      GAMMA_FACTOR * vcl_log( value ) / vcl_log( GAMMA_POWER )
+    );
+
+  int min = GetMinGamma();
+
+  if( gamma<min )
+    gamma = min;
+
+  int max = GetMaxGamma();
+
+  if( gamma>max )
+    gamma = max;
+
+  SetGammaCursorPosition( gamma );
 }
 
 /*******************************************************************************/
-int 
+double
 ColorDynamicsWidget
 ::GetGamma() const
+{
+  return
+    vcl_pow(
+      GAMMA_POWER,
+      GAMMA_FACTOR * static_cast< double >( GetGammaCursorPosition() )
+    );
+}
+
+/*******************************************************************************/
+void
+ColorDynamicsWidget
+::SetGammaCursorPosition( int value )
+{
+  m_UI->gammaSlider->setValue( value );
+}
+
+/*******************************************************************************/
+int
+ColorDynamicsWidget
+::GetGammaCursorPosition() const
 {
   return m_UI->gammaSlider->value();
 }
@@ -383,11 +433,13 @@ ColorDynamicsWidget
 }
 
 /*****************************************************************************/
-void 
+void
 ColorDynamicsWidget
-::on_gammaSlider_valueChanged(int gamma)
+::on_gammaSlider_valueChanged( int value )
 {
-  emit GammaValueChanged(gamma);
+  emit GammaCursorPositionChanged( value );
+
+  emit GammaValueChanged( GetGamma() );
 }
 
 } // end namespace 'mvd'

@@ -85,7 +85,7 @@ ImageImporter
 ImageImporter
 ::~ImageImporter()
 {
-  qDebug() << this << "destroyed.";
+  // qDebug() << this << "destroyed.";
 }
 
 /*******************************************************************************/

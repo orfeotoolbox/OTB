@@ -91,10 +91,10 @@ DatasetDescriptor::TAG_NAMES[ ELEMENT_COUNT ] =
   "grayscale",
   "rgb-dynamics",
   "w-dynamics",
+  "gamma",
   //
   "properties",
   "no_data",
-  "gamma",
   //
   "view",
   "center",
@@ -188,13 +188,6 @@ DatasetDescriptor
   noDataElt.setAttribute( "value", properties->GetNoData() );
   propertiesElt.appendChild( noDataElt );
 
-  // Gamma
-  QDomElement gammaElt(
-    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_PROPERTIES_GAMMA ] )
-  );
-  gammaElt.setAttribute( "value", properties->GetGamma() );
-  propertiesElt.appendChild( gammaElt );
-
   //
   // Settings node.
   QDomElement settingsElement(
@@ -252,6 +245,13 @@ DatasetDescriptor
     )
   );
   settingsElement.appendChild( wDynamicsElement );
+
+  // Gamma
+  QDomElement gammaElt(
+    m_DomDocument.createElement( TAG_NAMES[ ELEMENT_GAMMA ] )
+  );
+  gammaElt.setAttribute( "value", settings->GetGamma() );
+  settingsElement.appendChild( gammaElt );
   }
 }
 
@@ -372,6 +372,19 @@ DatasetDescriptor
     );
   }
 
+  //
+  // Gamma
+  {
+  // Access element.
+  QDomElement gammaElt(
+    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_GAMMA ] )
+  );
+  // TODO: Manage XML structure errors.
+  assert( !gammaElt.isNull() );
+  // Store values.
+  gammaElt.setAttribute( "value", settings->GetGamma() );
+  }
+
   // if everything went ok
   return true;
 }
@@ -405,14 +418,6 @@ DatasetDescriptor
 
   noDataElt.setAttribute( "flag", imageProperties->IsNoDataEnabled() );
   noDataElt.setAttribute( "value", imageProperties->GetNoData() );
-
-  // Access gamma.
-  QDomElement gammaElt(
-    propertiesElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_GAMMA ] )
-  );
-  assert( !gammaElt.isNull() );
-
-  gammaElt.setAttribute( "value", imageProperties->GetGamma() );
 
   // if everything went ok
   return true;
@@ -610,18 +615,6 @@ DatasetDescriptor
     imageProperties->SetNoData(
       noDataElt.attribute( "value" ).toDouble( &isOk ) );
     assert( isOk );
-
-    // Gamma
-    QDomElement gammaElt(
-      propertiesElt.firstChildElement( TAG_NAMES[ ELEMENT_PROPERTIES_GAMMA ] )
-    );
-    assert( !gammaElt.isNull() );
-
-    isOk = true;
-
-    imageProperties->SetNoData(
-      gammaElt.attribute( "value" ).toDouble( &isOk ) );
-    assert( isOk );
     }
 
   // TODO: Generalize code section.
@@ -685,6 +678,15 @@ DatasetDescriptor
     DatasetDescriptor::ExtractArrayFromElement( wDynamics, wDynamicsElt );
     assert( wDynamics.GetSize() == 6 );
     settings->SetGrayDynamicsParams( wDynamics );
+
+    // Gamma.
+    QDomElement gammaElt(
+      settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_GAMMA ] )
+    );
+    // TODO: Manage XML structure errors.
+    assert( !gammaElt.isNull() );
+    // Get values.
+    settings->SetGamma( gammaElt.attribute( "value" ).toDouble() );
     }
 }
 

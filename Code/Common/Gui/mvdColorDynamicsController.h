@@ -251,7 +251,7 @@ private:
   /**
    */
   void SetNoData();
-  
+
   /**
    */
   void SetGamma();
@@ -357,9 +357,9 @@ private slots:
   /**
    * \brief Slot called when gamma value is changed
    *
-   * \param value Gamma value
+   * \param value Gamma value.
    */
-  void OnGammaValueChanged(int value);
+  void OnGammaValueChanged( double value );
 
 };
 

@@ -88,21 +88,25 @@ class Monteverdi2_EXPORT ColorDynamicsWidget :
 	      READ GetNoDataValue
 	      WRITE SetNoDataValue );
 
-  Q_PROPERTY( int Gamma
-	      READ GetGamma
-	      WRITE SetGamma );
+  Q_PROPERTY( int GammaCursorPosition
+	      READ GetGammaCursorPosition
+	      WRITE SetGammaCursorPosition );
 
   Q_PROPERTY( int MinGamma
 	      READ GetMinGamma
 	      WRITE SetMinGamma );
 
-  Q_PROPERTY( int Gamma
+  Q_PROPERTY( int MaxGamma
 	      READ GetMaxGamma
 	      WRITE SetMaxGamma );
 
   Q_PROPERTY( int GammaStep
 	      READ GetGammaStep
 	      WRITE SetGammaStep );
+
+  Q_PROPERTY( double Gamma
+              READ GetGamma
+              WRITE SetGamma );
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
@@ -150,11 +154,19 @@ public:
 
   /**
    */
-  void SetGamma( int value );
+  void SetGamma( double value );
 
   /**
    */
-  int GetGamma() const;
+  double GetGamma() const;
+
+  /**
+   */
+  void SetGammaCursorPosition( int value );
+
+  /**
+   */
+  int GetGammaCursorPosition() const;
 
   /**
    */
@@ -235,11 +247,15 @@ signals:
 
   /**
    */
-  void GammaValueChanged(int value );
+  void NoDataButtonPressed();
 
   /**
    */
-  void NoDataButtonPressed();
+  void GammaCursorPositionChanged( int value );
+
+  /**
+   */
+  void GammaValueChanged( double value );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

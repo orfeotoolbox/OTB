@@ -28,7 +28,6 @@
 
 //
 // System includes (sorted by alphabetic order)
-#include <cmath>
 
 //
 // ITK includes (sorted by alphabetic order)
@@ -159,19 +158,19 @@ ColorDynamicsController
 
   QObject::connect(
     colorDynamicsWidget,
-    SIGNAL(GammaValueChanged( int ) ),
-    // to:
-    this,
-    SLOT( OnGammaValueChanged( int ))
-    );
-
-  QObject::connect(
-    colorDynamicsWidget,
     SIGNAL( NoDataButtonPressed() ),
     // to:
     this,
     SLOT( RefreshHistogram() )
   );
+
+  QObject::connect(
+    colorDynamicsWidget,
+    SIGNAL(GammaValueChanged( double ) ),
+    // to:
+    this,
+    SLOT( OnGammaValueChanged( double ))
+    );
 
   //
   // Connect controller to model.
@@ -375,6 +374,14 @@ ColorDynamicsController
     this,
     SLOT( RefreshHistogram() )
   );
+
+  QObject::disconnect(
+    colorDynamicsWidget,
+    SIGNAL( GammaValueChanged( double ) ),
+    // to:
+    this,
+    SLOT( OnGammaValueChanged( double ) )
+    );
 }
 
 /*****************************************************************************/
@@ -640,6 +647,9 @@ ColorDynamicsController
   if( imageModel==NULL )
     return;
 
+  const ImageProperties* imageProperties = imageModel->GetProperties();
+  assert( imageProperties!=NULL );
+
   assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
   ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
   assert( widget!=NULL );
@@ -648,21 +658,7 @@ ColorDynamicsController
   {
   bool widgetSignalsBlocked = widget->blockSignals( true );
   {
-  double gMin = static_cast< double >( widget->GetMinGamma() );
-  double gMax = static_cast< double >( widget->GetMaxGamma() );
-  double gStep = static_cast< double >( widget->GetGammaStep() );
-
-  //  double gamma = itk::Math::Round<double>( gMin + imageModel->GetSettings().GetGamma() + gStep );
-
-  double gamma = itk::Math::Round<double>( -0.25*vcl_log(imageModel->GetSettings().GetGamma())/vcl_log(1.1));
-
-  if( gamma>gMax )
-    gamma = gMax;
-
-  if( gamma<gMin )
-    gamma = gMin;
-
-  widget->SetGamma( static_cast< int >( gamma ) );
+  widget->SetGamma( imageModel->GetSettings().GetGamma() );
   }
   widget->blockSignals( widgetSignalsBlocked );
   }
@@ -1336,11 +1332,11 @@ ColorDynamicsController
 ::OnLinkToggled( RgbwChannel channel, bool checked )
 {
   // Trace.
-  qDebug()
-    << this
-    << "::OnLinkToggled("
-    << RGBW_CHANNEL_NAMES[ channel ] << ", " << checked
-    << ")";
+  // qDebug()
+  //   << this
+  //   << "::OnLinkToggled("
+  //   << RGBW_CHANNEL_NAMES[ channel ] << ", " << checked
+  //   << ")";
 
   ResetIntensityRanges( channel );
 
@@ -1355,30 +1351,28 @@ ColorDynamicsController
 /*****************************************************************************/
 void
 ColorDynamicsController
-::OnGammaValueChanged( int value )
+::OnGammaValueChanged( double value )
 {
-  qDebug()
-    << this
-    << "::OnGammaValueChanged("
-    << value
-    <<")";
-
-  // Get widget.
-  assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
-  ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
-  assert( widget!=NULL );
-
-  double gamma = vcl_pow(1.1,-0.25*widget->GetGamma());
+  // qDebug()
+  //   << this
+  //   << "::OnGammaValueChanged("
+  //   << value
+  //   <<")";
 
   // Get image-model.
   assert( GetModel()==GetModel< VectorImageModel>() );
   VectorImageModel* imageModel = GetModel< VectorImageModel >();
   assert( imageModel!=NULL );
 
-  // Apply store.
-  imageModel->GetSettings().SetGamma( gamma );
+  // Get widget.
+  assert( GetWidget()==GetWidget< ColorDynamicsWidget >() );
+  ColorDynamicsWidget* widget = GetWidget< ColorDynamicsWidget >();
+  assert( widget!=NULL );
 
-  // Now, emit this controller's signal to cause display refresh.
+  // Store gamma into settings.
+  imageModel->GetSettings().SetGamma( widget->GetGamma() );
+
+  // Emit refresh signal.
   emit ModelUpdated();
 }
 

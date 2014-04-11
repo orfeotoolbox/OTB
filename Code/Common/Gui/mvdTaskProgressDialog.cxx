@@ -143,7 +143,7 @@ TaskProgressDialog
 TaskProgressDialog
 ::~TaskProgressDialog()
 {
-  qDebug() << this << "is being destroyed.";
+  // qDebug() << this << "is being destroyed.";
 
 
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
@@ -158,7 +158,7 @@ TaskProgressDialog
     }
 #endif
 
-  qDebug() << this << "has been destroyed.";
+  // qDebug() << this << "has been destroyed.";
 }
 
 /*****************************************************************************/

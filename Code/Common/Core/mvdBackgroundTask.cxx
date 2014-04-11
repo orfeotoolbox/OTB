@@ -147,7 +147,7 @@ BackgroundTask
 ::~BackgroundTask()
 {
   // Trace.
-  qDebug() << this << "is being detroyed.";
+  // qDebug() << this << "is being detroyed.";
 
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
   //
@@ -170,7 +170,7 @@ BackgroundTask
   m_Worker = NULL;
 
   // Trace.
-  qDebug() << this << "has been destroyed.";
+  // qDebug() << this << "has been destroyed.";
 }
 
 /*******************************************************************************/
@@ -182,7 +182,7 @@ BackgroundTask
 {
   // NOTE: Won't be called if deleteLater() is used!?
 
-  qDebug() << this << "::OnObjectDestryed(" << object << ")";
+  // qDebug() << this << "::OnObjectDestryed(" << object << ")";
 
   //
   // If worker instance is destroyed before this instance, simply
@@ -191,7 +191,7 @@ BackgroundTask
 
   if( object==m_Worker )
     {
-    qDebug() << this << "forgetting" << m_Worker;
+    // qDebug() << this << "forgetting" << m_Worker;
 
     m_Worker = NULL;
     }

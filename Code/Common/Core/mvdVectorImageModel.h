@@ -620,7 +620,7 @@ VectorImageModel::Settings
   m_GrayDynamicsParams( 6 ),
   m_IsModified( false ),
   m_IsApplied( false ),
-  m_Gamma(1)
+  m_Gamma( 1.0 )
 {
 }
 
@@ -635,7 +635,7 @@ VectorImageModel::Settings
   m_GrayDynamicsParams( 6 ),
   m_IsModified( false ),
   m_IsApplied( other.m_IsApplied ),
-  m_Gamma( other.m_Gamma)
+  m_Gamma( other.m_Gamma )
 {
 }
 
