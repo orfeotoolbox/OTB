@@ -35,7 +35,6 @@
 #include <itkVariableLengthVector.h>
 
 
-
 namespace otb
 {
 
@@ -331,25 +330,25 @@ private:
            std::stringstream ss;
 
            ossOutput << "Parameters extract from input image: "<< std::endl
-                     << "\tAcquisition Day: " << lImageMetadataInterface->GetDay() << std::endl 
+                     << "\tAcquisition Day: " << lImageMetadataInterface->GetDay() << std::endl
                      << "\tAcquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl
                      << "\tAcquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;
          
            vlvector = lImageMetadataInterface->GetPhysicalGain();
-           ossOutput << "\tAcquisition gain (per band): " ;
+           ossOutput << "\tAcquisition gain (per band): ";
            for(unsigned int k=0; k<vlvector.Size(); k++)
              ossOutput << vlvector[k] << " ";
            ossOutput << std::endl;
 
            vlvector = lImageMetadataInterface->GetPhysicalBias();
-           ossOutput << "\tAcquisition bias (per band): " ;
+           ossOutput << "\tAcquisition bias (per band): ";
            for(unsigned int k=0; k<vlvector.Size(); k++)
              ossOutput << vlvector[k] << " ";
            ossOutput << std::endl;
            MandatoryOff("acquisition.gainbias");
 
            vlvector = lImageMetadataInterface->GetSolarIrradiance();
-           ossOutput << "\tSolar Irradiance (per band): " ;
+           ossOutput << "\tSolar Irradiance (per band): ";
            for(unsigned int k=0; k<vlvector.Size(); k++)
              ossOutput << vlvector[k] << " ";
            ossOutput << std::endl;
@@ -373,9 +372,9 @@ private:
                DisableParameter("acquisition.month");
            }
 
-           if (HasUserValue("acquisition.sunelevationangle"))   
+           if (HasUserValue("acquisition.sunelevationangle"))
              ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" <<std::endl;
-           else            
+           else
              SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());
         }
         else
@@ -385,20 +384,20 @@ private:
 
           /*GetLogger()->Info("\n-------------------------------------------------------------\n"
           "Sensor ID : unknown...\n"
-          "The application didn't manage to find an appropriate metadata interface; " 
+          "The application didn't manage to find an appropriate metadata interface; "
           "custom values must be provided in order to perform TOA conversion.\nPlease, set the following fields :\n"
           "- day and month of acquisition, or flux normalization coefficient;\n"
           "- sun elevation angle;\n"
           "- gains and biases for each band (passed by a file, see documentation);\n"
           "- solar illuminationss for each band (passed by a file, see documentation).\n"
-          "-------------------------------------------------------------\n");*/
+          "-------------------------------------------------------------\n"); */
         }
       }
     }
 
     // Manage the case where fluxnormalizationcoefficient is modified by user
     if (m_currentEnabledStateOfFluxParam != IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
-    {   
+    {
       if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
       {
         ossOutput << std::endl << "Flux Normalization Coefficient will be used" << std::endl;
@@ -466,42 +465,42 @@ private:
     if (HasValue("acquisition.gainbias"))
     {
       // Try to retrieve information from file provided by user
-      string filename(GetParameterString("acquisition.gainbias"));  
+      string filename(GetParameterString("acquisition.gainbias"));
       
       std::ifstream file(filename.c_str(), std::ios::in);
-      if(file)  
-      {         
-        string line; 
+      if(file)
+      {
+        string line;
         unsigned int numLine = 0;
-        while (getline(file, line)) 
+        while (getline(file, line))
         {
           if (line[0]!='#')
           {
             numLine++;
             std::vector<double> values;
-            std::istringstream  iss(line); 
+            std::istringstream  iss(line);
             string value; double dvalue;
             while ( getline( iss, value, ':' ) )
             {
               std::istringstream  iss2(value);
               iss2 >> dvalue;
               values.push_back(dvalue);
-            } 
+            }
 
             itk::VariableLengthVector<double> vlvector;
-            vlvector.SetData(values.data(),values.size(),false); 
+            vlvector.SetData(values.data(),values.size(),false);
 
             switch (numLine)
             {
-              case 1 : 
-              m_ImageToLuminanceFilter->SetAlpha(vlvector); 
+              case 1 :
+              m_ImageToLuminanceFilter->SetAlpha(vlvector);
               m_LuminanceToImageFilter->SetAlpha(vlvector);
               GetLogger()->Info("Trying to get gains/biases information... OK (1/2)\n");
               break;
               
-              case 2 : 
+              case 2 :
               m_ImageToLuminanceFilter->SetBeta(vlvector);
-              m_LuminanceToImageFilter->SetBeta(vlvector); 
+              m_LuminanceToImageFilter->SetBeta(vlvector);
               GetLogger()->Info("Trying to get gains/biases information... OK (2/2)\n");
               break;
               
@@ -509,9 +508,9 @@ private:
             }
           }
         }
-        file.close();   
+        file.close();
       }
-      else  
+      else
         itkExceptionMacro(<< "File : " << filename << " couldn't be opened");
     }
     else
@@ -529,7 +528,7 @@ private:
         m_LuminanceToImageFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
       }
       else
-        itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! "); 
+        itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! ");
     }
 
     // Set Solar Illumination to corresponding filters
@@ -539,33 +538,33 @@ private:
       string filename(GetParameterString("acquisition.solarilluminations"));
       
       std::ifstream file(filename.c_str(), std::ios::in);
-      if(file)  
-      {         
-        string line; 
-        while (getline(file, line)) 
+      if(file)
+      {
+        string line;
+        while (getline(file, line))
         {
           if (line[0]!='#')
           {
             std::vector<double> values;
-            std::istringstream  iss(line); 
+            std::istringstream  iss(line);
             string value; double dvalue;
             while ( getline( iss, value, ':' ) )
             {
               std::istringstream  iss2(value);
               iss2 >> dvalue;
               values.push_back(dvalue);
-            } 
+            }
 
             itk::VariableLengthVector<double> vlvector;
-            vlvector.SetData(values.data(),values.size(),false); 
+            vlvector.SetData(values.data(),values.size(),false);
 
             m_LuminanceToReflectanceFilter->SetSolarIllumination(vlvector);
             m_ReflectanceToLuminanceFilter->SetSolarIllumination(vlvector);
           }
         }
-        file.close();   
+        file.close();
       }
-      else  
+      else
         itkExceptionMacro(<< "File : " << filename << " couldn't be opened");
     }
     else
@@ -718,7 +717,7 @@ private:
         // m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
 
         if (!IsParameterEnabled("clamp"))
-        {   
+        {
           m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
         }
         else
@@ -738,9 +737,9 @@ private:
     {
       GetLogger()->Info("Use milli-reflectance");
       if ( (GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC) )
-        scale = 1000.; 
+        scale = 1000.;
       if (GetParameterInt("level") == Level_TOA_IM)
-        scale = 1. / 1000.; 
+        scale = 1. / 1000.;
     }
     m_ScaleFilter->SetCoef(scale);
 
