@@ -33,7 +33,6 @@ namespace otb
 const char * GlView::REQUIRED_GL_VERSION = "2.0.0";
 const char * GlView::REQUIRED_GLSL_VERSION = "";
 
-
 const char *
 GlView
 ::GLVersion()
@@ -85,16 +84,18 @@ GlView
 
   // If OpenGL version is at least 2.0, get (and return) GLSL version
   // (before checking against OpenGL required version).
-  if( GlView::VerCmp( glVersion, "2.0" )>=0 )
+  if( GlView::VerCmp( glVersion, "2.0" )<0 )
+    glslVersion = NULL;
+  else
     glslVersion = GlView::GLSLVersion();
 
   // Now, Check OpenGL version against required version.
-  if( GlView::VerCmp( glVersion, GlView::REQUIRED_GL_VERSION )<1 )
+  if( GlView::VerCmp( glVersion, GlView::REQUIRED_GL_VERSION )<0 )
     return false;
 
   //
   // Then, check OpenGL SL version against required version.
-  if( GlView::VerCmp( glslVersion, GlView::REQUIRED_GLSL_VERSION )<1 )
+  if( GlView::VerCmp( glslVersion, GlView::REQUIRED_GLSL_VERSION )<0 )
     return false;
 
   //
@@ -111,13 +112,8 @@ GlView
                 int& release )
 {
   //
-  // Invalid version.
-  if( version==NULL )
-    return false;
-
-  //
   // Special case: empty strings returns 0.0.0 and true.
-  if( strlen( version )==0 )
+  if( version==NULL || strlen( version )==0 )
     {
     major = 0;
     minor = 0;
@@ -175,9 +171,6 @@ int
 GlView
 ::VerCmp( const char * version, const char * required )
 {
-  assert( version!=NULL );
-  assert( required!=NULL );
-
   //
   // Split version.
 
