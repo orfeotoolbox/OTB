@@ -31,7 +31,7 @@ namespace otb
 
 
 const char * GlView::REQUIRED_GL_VERSION = "2.0.0";
-const char * GlView::REQUIRED_GLSL_VERSION = "1.2";
+const char * GlView::REQUIRED_GLSL_VERSION = "1.20";
 
 const char *
 GlView
