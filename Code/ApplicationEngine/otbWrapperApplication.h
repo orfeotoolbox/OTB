@@ -707,7 +707,7 @@ protected:
     if (dynamic_cast<InputImageParameter*>(param))
       {
       InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-      ret = paramDown->GetImage<TImageType>();
+      ret = dynamic_cast<TImageType*>(paramDown->GetImage());
       }
 
     //TODO: exception if not found ?
