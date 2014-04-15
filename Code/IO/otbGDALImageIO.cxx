@@ -1258,7 +1258,6 @@ bool GDALImageIO::CanStreamWrite()
     {
     m_CanStreamWrite = false;
     }
-
   return m_CanStreamWrite;
 }
 
@@ -1347,7 +1346,7 @@ void GDALImageIO::Write(const void* buffer)
     m_Dataset->GetDataSet()->FlushCache();
     }
   else
-    {
+  {
     // We only wrote data to the memory dataset
     // Now write it to the real file with CreateCopy()
     std::string gdalDriverShortName = FilenameToGdalDriverShortName(m_FileName);
@@ -1363,8 +1362,15 @@ void GDALImageIO::Write(const void* buffer)
     GDALDataset* hOutputDS = driver->CreateCopy( realFileName.c_str(), m_Dataset->GetDataSet(), FALSE,
                                                  otb::ogr::StringListConverter(creationOptions).to_ogr(),
                                                  NULL, NULL );
-    GDALClose(hOutputDS);
+    if(!hOutputDS)
+    {
+      itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
     }
+    else
+    {
+      GDALClose(hOutputDS);
+    }
+  }
 
 
   if (lFirstLine + lNbLines == m_Dimensions[1]
