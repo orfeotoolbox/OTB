@@ -482,6 +482,9 @@ I18nCoreApplication
   if (!homeDir.exists())
     SystemError( ToStdString( QString( "('%1')" ).arg( homeDir.path() ) ) );
 
+  if (homeDir.dirName() == I18nCoreApplication::DEFAULT_CACHE_DIR_NAME )
+	  qWarning() << tr("The selected directory seems to be an previous mvd2 directory, nevertheless we will create a new mvd2 repository into the selected directory.") ;
+
   //
   // Create cache-dir.
   bool isNew = I18nCoreApplication::MakeDirTree(

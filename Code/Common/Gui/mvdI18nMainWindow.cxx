@@ -306,6 +306,8 @@ I18nMainWindow
   // Setup initial empty database
   if( isNew )
     DatabaseConnection::InitializeDatabase();
+  else
+    qWarning()<<tr("The selected directory already contain a mvd2 directory, no new database will be created"); 
 }
 
 /*****************************************************************************/
