@@ -1,36 +1,36 @@
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_UnknownSensor
                      APP  OpticalCalibration
                      OPTIONS 
-			     -in /home/cpalmann/Desktop/SPOT6/SPOT6_Primary_Pan-sharpened_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_PMS_001_A/SPOT6_500x500.tif?&skipgeom=true 
-			     -out ${TEMP}/apTvRaOpticalCalibration_SPOT6.tif 
+			     -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif?&skipgeom=true 
+			     -out ${TEMP}/apTvRaOpticalCalibration_QB-XS_UnknownSensor_test.tif 
 			     -level toa 
 			     -acquisition.gainbias ${BASELINE}/../Files/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt 
-			     -acquisition.day 3
-			     -acquisition.month 6 
-			     -acquisition.sunelevationangle 63.8861327469 
+			     -acquisition.day 1
+			     -acquisition.month 4 
+			     -acquisition.sunelevationangle 48.6
 			     -acquisition.solarilluminations ${BASELINE}/../Files/apTvRaOpticalCalibrationUnknownSensorSolarIllumations.txt
 			     -milli true 
 			     -clamp false
                      VALID   --compare-image ${EPSILON_6}
-                             ${BASELINE}/apTvRaOpticalCalibration_SPOT6.tif
-                             ${TEMP}/apTvRaOpticalCalibration_SPOT6.tif )
+                             ${BASELINE}/apTvRaOpticalCalibration_QB-XS_UnknownSensor.tif
+                             ${TEMP}/apTvRaOpticalCalibration_QB-XS_UnknownSensor_test.tif )
 
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Reverse_UnknownSensor
                      APP  OpticalCalibration
                      OPTIONS 
-			     -in ${BASELINE}/apTvRaOpticalCalibration_SPOT6.tif  
-			     -out ${TEMP}/apTvRaOpticalCalibration_Rev_SPOT6.tif
+			     -in ${BASELINE}/apTvRaOpticalCalibration_QB-XS_UnknownSensor.tif 
+			     -out ${TEMP}/apTvRaOpticalCalibration_Rev_QB-XS_UnknownSensor_test.tif
 			     -level toatoim 
 			     -acquisition.gainbias ${BASELINE}/../Files/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt
-			     -acquisition.day 3
-			     -acquisition.month 6 
-			     -acquisition.sunelevationangle 63.8861327469 
+			     -acquisition.day 1
+			     -acquisition.month 4 
+			     -acquisition.sunelevationangle 48.6 
 			     -acquisition.solarilluminations ${BASELINE}/../Files/apTvRaOpticalCalibrationUnknownSensorSolarIllumations.txt
 		             -milli true
 			     -clamp false
                      VALID   --compare-image ${EPSILON_6}
-                             /home/cpalmann/Desktop/SPOT6/SPOT6_Primary_Pan-sharpened_12_bits/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_PMS_001_A/SPOT6_500x500.tif
-                             ${TEMP}/apTvRaOpticalCalibration_Rev_SPOT6.tif )
+                             ${BASELINE}/apTvRaOpticalCalibration_Rev_QB-XS_UnknownSensor.tif 
+                             ${TEMP}/apTvRaOpticalCalibration_Rev_QB-XS_UnknownSensor_test.tif )
 
 
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_QuickbirdPAN
