@@ -188,6 +188,7 @@ private:
 
       // Set the filename of the current output image
       paramOut->SetFileName(oss.str());
+      otbAppLogINFO(<< "File: "<<paramOut->GetFileName() << " will be written.");
       paramOut->SetValue(m_ShrinkFilter->GetOutput());
       paramOut->SetPixelType(this->GetParameterOutputImagePixelType("out"));
       // Add the current level to be written
