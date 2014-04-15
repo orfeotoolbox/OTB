@@ -1311,7 +1311,7 @@ MainWindow
     ImageViewWidget* quicklookView = GetQuicklookView();
     assert( quicklookView!=NULL );
 
-#if 1
+#if 0
     // Use full image for quicklook-view.
     quicklookView->SetImageList( images, ImageViewWidget::ZOOM_TYPE_EXTENT );
 #else

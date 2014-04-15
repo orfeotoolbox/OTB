@@ -209,13 +209,13 @@ void
 TaskProgressDialog
 ::OnObjectDestroyed( QObject* object )
 {
-  qDebug() << this << "::OnObjectDestryed(" << object << ")";
+  // qDebug() << this << "::OnObjectDestryed(" << object << ")";
 
   assert( object==m_BackgroundTask );
 
   if( object==m_BackgroundTask )
     {
-    qDebug() << this << "forgetting" << m_BackgroundTask;
+    // qDebug() << this << "forgetting" << m_BackgroundTask;
 
     // Forget background-task.
     m_BackgroundTask = NULL;

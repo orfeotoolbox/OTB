@@ -419,7 +419,6 @@ ImageViewRenderer
       
       shader->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
       shader->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
-
       }
     else
       {
@@ -434,9 +433,16 @@ ImageViewRenderer
       }
 
     shader->SetGamma( settings.GetGamma() );
-    
-    shader->SetUseNoData(properties->IsNoDataEnabled());
-    shader->SetNoData(properties->GetNoData());
+
+    if( properties==NULL )
+      {
+      shader->SetUseNoData( false );
+      }
+    else
+      {
+      shader->SetUseNoData(properties->IsNoDataEnabled());
+      shader->SetNoData(properties->GetNoData());
+      }
 
     // If reference actor
     if(m_ReferenceGlImageActor.IsNotNull() && m_ReferenceGlImageActor == it->second.second)

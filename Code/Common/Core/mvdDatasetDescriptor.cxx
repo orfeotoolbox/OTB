@@ -377,9 +377,8 @@ DatasetDescriptor
   {
   // Access element.
   QDomElement gammaElt(
-    settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_GAMMA ] )
+    OptionalElement( TAG_NAMES[ ELEMENT_GAMMA ], settingsElt )
   );
-  // TODO: Manage XML structure errors.
   assert( !gammaElt.isNull() );
   // Store values.
   gammaElt.setAttribute( "value", settings->GetGamma() );
@@ -683,10 +682,12 @@ DatasetDescriptor
     QDomElement gammaElt(
       settingsElt.firstChildElement( TAG_NAMES[ ELEMENT_GAMMA ] )
     );
-    // TODO: Manage XML structure errors.
-    assert( !gammaElt.isNull() );
     // Get values.
-    settings->SetGamma( gammaElt.attribute( "value" ).toDouble() );
+    settings->SetGamma(
+      gammaElt.isNull()
+      ? 1.0
+      : gammaElt.attribute( "value" ).toDouble()
+    );
     }
 }
 

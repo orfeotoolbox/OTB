@@ -289,6 +289,11 @@ private:
    */
   inline void Read( const QString& filename );
 
+  /**
+   */
+  inline
+    QDomElement OptionalElement( const char* name, QDomElement& parent );
+
   //
   // SerializableInterface overrides.
   //
@@ -598,6 +603,27 @@ DatasetDescriptor
     QVariant v = stringList[i];
     array[i] = v.value<T>();
   }
+}
+
+/*****************************************************************************/
+inline
+QDomElement
+DatasetDescriptor
+::OptionalElement( const char* name, QDomElement& parent )
+{
+  QDomElement elt( parent.firstChildElement( name ) );
+
+  if( elt.isNull() )
+    {
+    elt = m_DomDocument.createElement( name );
+
+    // TODO: Manage XML error here.
+    assert( !elt.isNull() );
+    }
+
+  parent.appendChild( elt );
+
+  return elt;
 }
 
 } // end namespace 'mvd'
