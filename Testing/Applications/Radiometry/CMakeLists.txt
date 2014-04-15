@@ -4,11 +4,11 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_UnknownSensor
 			     -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif?&skipgeom=true 
 			     -out ${TEMP}/apTvRaOpticalCalibration_QB-XS_UnknownSensor_test.tif 
 			     -level toa 
-			     -acquisition.gainbias ${BASELINE}/../Files/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt 
+			     -acquisition.gainbias ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt 
 			     -acquisition.day 1
 			     -acquisition.month 4 
 			     -acquisition.sunelevationangle 48.6
-			     -acquisition.solarilluminations ${BASELINE}/../Files/apTvRaOpticalCalibrationUnknownSensorSolarIllumations.txt
+			     -acquisition.solarilluminations ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorSolarIllumations.txt
 			     -milli true 
 			     -clamp false
                      VALID   --compare-image ${EPSILON_6}
@@ -21,11 +21,11 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Reverse_UnknownSensor
 			     -in ${BASELINE}/apTvRaOpticalCalibration_QB-XS_UnknownSensor.tif 
 			     -out ${TEMP}/apTvRaOpticalCalibration_Rev_QB-XS_UnknownSensor_test.tif
 			     -level toatoim 
-			     -acquisition.gainbias ${BASELINE}/../Files/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt
+			     -acquisition.gainbias ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt
 			     -acquisition.day 1
 			     -acquisition.month 4 
 			     -acquisition.sunelevationangle 48.6 
-			     -acquisition.solarilluminations ${BASELINE}/../Files/apTvRaOpticalCalibrationUnknownSensorSolarIllumations.txt
+			     -acquisition.solarilluminations ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorSolarIllumations.txt
 		             -milli true
 			     -clamp false
                      VALID   --compare-image ${EPSILON_6}
