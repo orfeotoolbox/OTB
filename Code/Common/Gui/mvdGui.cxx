@@ -66,6 +66,31 @@ namespace
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
+QMessageBox &
+CustomizeMessageBox( QMessageBox & messageBox, QWidget * widget )
+{
+  assert( widget!=NULL );
+
+  assert(
+    messageBox.layout()==qobject_cast< QGridLayout * >( messageBox.layout() )
+  );
+
+  QGridLayout * gridLayout =
+    qobject_cast< QGridLayout * >( messageBox.layout() );
+  assert( gridLayout!=NULL );
+
+  /*
+  qDebug() << layout;
+  qDebug() << layout->itemAt( layout->count() - 2 )->widget()->layout();
+  qDebug() << layout->itemAt( layout->count() - 1 )->widget()->layout();
+  */
+
+  // Add custom widget into message-box layout.
+  gridLayout->addWidget( widget, 1, 1 );
+
+  // Return input message-box to chain function calls, if needed.
+  return messageBox;
+}
 
 /*****************************************************************************/
 

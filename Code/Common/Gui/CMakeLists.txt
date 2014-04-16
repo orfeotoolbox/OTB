@@ -22,7 +22,7 @@ set( Common_Gui_SOURCES
   mvdDoubleValidator.cxx
   mvdDropLineEdit.cxx
   mvdFilenameDragAndDropEventFilter.cxx
-  #mvdGui.cxx
+  mvdGui.cxx
   mvdHistogramController.cxx
   mvdHistogramPlotPicker.cxx
   mvdHistogramWidget.cxx

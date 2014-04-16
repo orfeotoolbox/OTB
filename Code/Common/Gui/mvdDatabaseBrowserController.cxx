@@ -42,6 +42,7 @@
 #include "Core/mvdDatabaseQueries.h"
 #include "Core/mvdDatabaseModel.h"
 #include "Core/mvdVectorImageModel.h"
+#include "Core/mvdSystemError.h"
 //
 #include "Gui/mvdDatabaseBrowserWidget.h"
 #include "Gui/mvdDatabaseTreeWidget.h"
@@ -607,19 +608,71 @@ DatabaseBrowserController
   DatasetModel* datasetModel = model->FindDatasetModel( hash );
   assert( datasetModel!=NULL );
 
-  // Pop confirm delete dialog.
-  QMessageBox::StandardButton button = QMessageBox::warning(
-    GetWidget(),
+  VectorImageModel* imageModel =
+    datasetModel->GetSelectedImageModel< VectorImageModel >();
+  assert( imageModel!=NULL );
+
+  QFileInfo imgFInfo( imageModel->GetFilename() );
+  QFileInfo ovrFInfo( imageModel->GetFilename() + ".ovr" );
+  QFileInfo geoFInfo( imgFInfo.dir(), imgFInfo.completeBaseName() + ".geom" );
+
+  /*
+  qDebug() << imgFInfo.filePath();
+  qDebug() << ovrFInfo.filePath();
+  qDebug() << geoFInfo.filePath();
+  */
+
+  // Create question message-box
+  QMessageBox messageBox(
+    QMessageBox::Question,
     tr( "Warning!" ),
     tr( "Are you sure you want to delete dataset '%1'?" )
     .arg( datasetModel->GetAlias() ),
-    QMessageBox::Yes | QMessageBox::No
+    QMessageBox::Yes | QMessageBox::No,
+    GetWidget()
   );
 
-  if( button==QMessageBox::No )
+  messageBox.setDefaultButton( QMessageBox::No );
+
+  // Customize message-box if there are alternate files.
+  QCheckBox * checkBox = NULL;
+
+  if( ovrFInfo.exists() || geoFInfo.exists() )
+    {
+    QString files;
+
+    if( imgFInfo.exists() )
+      files.append( tr( "\n- '%1'" ).arg( imgFInfo.filePath() ) );
+
+    if( ovrFInfo.exists() )
+      files.append( tr( "\n- '%1'" ).arg( ovrFInfo.filePath() ) );
+
+    if( geoFInfo.exists() )
+      files.append( tr( "\n- '%1'" ).arg( geoFInfo.filePath() ) );
+
+    // Filenames could have been appended directly to message but it's
+    // better for translation like this.
+    QString message( tr( "Delete:%1" ).arg( files ) );
+
+    checkBox = new QCheckBox( message, &messageBox );
+
+    CustomizeMessageBox( messageBox, checkBox );
+    }
+
+  // Pop confirm delete dialog.
+  if( messageBox.exec()==QMessageBox::No )
     return;
 
+  // Remove dataset.
   model->RemoveDatasetModel( hash );
+
+  // Remove alternate files, if any.
+  if( checkBox!=NULL && checkBox->isChecked() )
+    {
+    DeleteFile( imgFInfo );
+    DeleteFile( ovrFInfo );
+    DeleteFile( geoFInfo );
+    }
 }
 
 /*******************************************************************************/
@@ -640,6 +693,28 @@ DatabaseBrowserController
 
   // Refresh model.
   emit ModelUpdated();
+}
+
+/*******************************************************************************/
+bool
+DatabaseBrowserController
+::DeleteFile( const QFileInfo& finfo )
+{
+  if( !finfo.exists() )
+    return false;
+
+  if( !finfo.dir().remove( finfo.fileName() ) )
+    {
+    QMessageBox::warning(
+      GetWidget(),
+      tr( "Error!" ),
+      tr( "Failed to remove '%1'." ).arg( finfo.filePath() )
+    );
+
+    return false;
+    }
+
+  return true;
 }
 
 /*******************************************************************************/

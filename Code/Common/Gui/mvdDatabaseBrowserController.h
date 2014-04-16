@@ -168,6 +168,10 @@ private:
    */
   void DeleteGroup( SqlId id );
 
+  /**
+   */
+  bool DeleteFile( const QFileInfo& finfo );
+
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
 //
