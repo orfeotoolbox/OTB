@@ -1343,6 +1343,16 @@ add_test(ioTvImageReaderWriterRgbPNG2PNG ${IO_TESTS7}
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2PNG_poupees.png )
 
+#reader writer with box parameter (extract roi)
+add_test(ioTvImageReaderWriterRgbPNG2PNGBox ${IO_TESTS7}
+  --compare-image ${NOTOL}
+  ${BASELINE}/coTvExtractROI_QB.png
+  ${TEMP}/coTvExtractROI_QB_Box.png
+    otbImageFileReaderRGBTest
+  ${INPUTDATA}/QB_Suburb.png
+  ${TEMP}/coTvExtractROI_QB_Box.png?&box=0:0:70:70
+  )
+
 add_test(ioTvImageReaderWriterRgbPNG2TIF ${IO_TESTS7}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.png
                      ${TEMP}/ioImageReaderWriterRgbPNG2TIF_poupees.tif
