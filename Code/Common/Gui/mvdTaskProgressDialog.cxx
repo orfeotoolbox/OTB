@@ -196,7 +196,7 @@ TaskProgressDialog
 ::OnExceptionRaised( QString what )
 {
   QMessageBox::warning(
-    this,
+    this->parentWidget(),
     tr( "%1 - Warning!" ).arg( PROJECT_NAME ),
     what
   );
