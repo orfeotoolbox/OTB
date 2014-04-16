@@ -490,11 +490,9 @@ QtWidgetView
   QMessageBox::information(
     this,
     PROJECT_NAME,
-    tr( "'%1' has succeeded with return status %2.\n"
-	"Result(s) will be imported as dataset(s).\n"
-	"Please check '%1' log tab." )
-    .arg( otbApp->GetName() )
-    .arg( status ),
+    tr( "'%1' has succeeded.\n"
+	"Result(s) will be imported as dataset(s).\n")
+    .arg( otbApp->GetName() ),
     QMessageBox::Ok
   );
 
