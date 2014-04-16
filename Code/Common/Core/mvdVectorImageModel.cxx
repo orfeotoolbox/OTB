@@ -332,6 +332,9 @@ VectorImageModel
   // Remember image properties.
   if( buildContext->m_Properties!=NULL )
     SetProperties( *buildContext->m_Properties );
+
+  // Apply settings to child QuicklookModel.
+  ApplySettings();
 }
 
 /*****************************************************************************/
