@@ -177,7 +177,7 @@ I18nMainWindow
 
   // New background-task running worker.
   // Will be self auto-deleted when worker has finished.
-  BackgroundTask* task = new BackgroundTask( importer, true, this );
+  BackgroundTask* task = new BackgroundTask( importer, false, this );
 
   //
   // Progress dialog.
@@ -195,7 +195,15 @@ I18nMainWindow
 
   //
   // Result.
-  if( progress.Exec()!=QMessageBox::Accepted )
+  int button = progress.Exec();
+
+  // MANTIS-921 (synchronize deletion of BackgroungTask).
+  task->wait();
+  delete task;
+  task = NULL;
+
+  // MANTIS-921 (then, process result).
+  if( button!=QDialog::Accepted )
     {
     assert( progress.GetObject< DatasetModel >()==NULL );
 
