@@ -51,15 +51,11 @@ GDALDriverManagerWrapper::GDALDriverManagerWrapper()
     
     GDALDriver* driver = 0;
     
-    // Ignore incompatible Jpeg2000 drivers (Jasper, ECW)
+    // Ignore incompatible Jpeg2000 drivers (Jasper)
     driver = GetGDALDriverManager()->GetDriverByName( "JPEG2000" );
     if (driver)
       GetGDALDriverManager()->DeregisterDriver( driver );
     
-    driver = GetGDALDriverManager()->GetDriverByName( "JP2ECW" );
-    if (driver)
-      GetGDALDriverManager()->DeregisterDriver( driver );
-
 #ifndef CHECK_HDF4OPEN_SYMBOL
     // Get rid of the HDF4 driver when it is buggy
     driver = GetGDALDriverManager()->GetDriverByName( "hdf4" );
