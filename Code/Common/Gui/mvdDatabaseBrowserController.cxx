@@ -608,20 +608,6 @@ DatabaseBrowserController
   DatasetModel* datasetModel = model->FindDatasetModel( hash );
   assert( datasetModel!=NULL );
 
-  VectorImageModel* imageModel =
-    datasetModel->GetSelectedImageModel< VectorImageModel >();
-  assert( imageModel!=NULL );
-
-  QFileInfo imgFInfo( imageModel->GetFilename() );
-  QFileInfo ovrFInfo( imageModel->GetFilename() + ".ovr" );
-  QFileInfo geoFInfo( imgFInfo.dir(), imgFInfo.completeBaseName() + ".geom" );
-
-  /*
-  qDebug() << imgFInfo.filePath();
-  qDebug() << ovrFInfo.filePath();
-  qDebug() << geoFInfo.filePath();
-  */
-
   // Create question message-box
   QMessageBox messageBox(
     QMessageBox::Question,
@@ -634,29 +620,49 @@ DatabaseBrowserController
 
   messageBox.setDefaultButton( QMessageBox::No );
 
-  // Customize message-box if there are alternate files.
+  VectorImageModel* imageModel =
+    datasetModel->GetSelectedImageModel< VectorImageModel >();
+
+  QFileInfo imgFInfo;
+  QFileInfo ovrFInfo;
+  QFileInfo geoFInfo;
+
   QCheckBox * checkBox = NULL;
 
-  if( ovrFInfo.exists() || geoFInfo.exists() )
+  // Customize message-box if there are alternate files.
+  if( imageModel!=NULL )
     {
-    QString files;
+    imgFInfo = QFileInfo( imageModel->GetFilename() );
+    ovrFInfo = QFileInfo( imageModel->GetFilename() + ".ovr" );
+    geoFInfo = QFileInfo( imgFInfo.dir(), imgFInfo.completeBaseName() + ".geom" );
 
-    if( imgFInfo.exists() )
-      files.append( tr( "\n- '%1'" ).arg( imgFInfo.filePath() ) );
+    /*
+    qDebug() << imgFInfo.filePath();
+    qDebug() << ovrFInfo.filePath();
+    qDebug() << geoFInfo.filePath();
+    */
 
-    if( ovrFInfo.exists() )
-      files.append( tr( "\n- '%1'" ).arg( ovrFInfo.filePath() ) );
+    if( imgFInfo.exists() || ovrFInfo.exists() || geoFInfo.exists() )
+      {
+      QString files;
 
-    if( geoFInfo.exists() )
-      files.append( tr( "\n- '%1'" ).arg( geoFInfo.filePath() ) );
+      if( imgFInfo.exists() )
+        files.append( tr( "\n- '%1'" ).arg( imgFInfo.filePath() ) );
 
-    // Filenames could have been appended directly to message but it's
-    // better for translation like this.
-    QString message( tr( "Delete:%1" ).arg( files ) );
+      if( ovrFInfo.exists() )
+        files.append( tr( "\n- '%1'" ).arg( ovrFInfo.filePath() ) );
 
-    checkBox = new QCheckBox( message, &messageBox );
+      if( geoFInfo.exists() )
+        files.append( tr( "\n- '%1'" ).arg( geoFInfo.filePath() ) );
 
-    CustomizeMessageBox( messageBox, checkBox );
+      // Filenames could have been appended directly to message but it's
+      // better for translation like this.
+      QString message( tr( "Delete:%1" ).arg( files ) );
+
+      checkBox = new QCheckBox( message, &messageBox );
+
+      CustomizeMessageBox( messageBox, checkBox );
+      }
     }
 
   // Pop confirm delete dialog.
