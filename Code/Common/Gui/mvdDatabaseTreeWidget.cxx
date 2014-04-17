@@ -508,12 +508,17 @@ DatabaseTreeWidget::OnCustomContextMenuRequested(const QPoint& pos)
     );
 
     if( item->flags().testFlag( Qt::ItemIsEditable ) )
-      AddAction(
-        &menu,
-        tr ("Rename dataset"),
-        this, 
-        SLOT( OnRenameItemTriggered() )
-      );
+      {
+      QAction * action =
+        AddAction(
+          &menu,
+          tr ("Rename dataset"),
+          this, 
+          SLOT( OnRenameItemTriggered() )
+        );
+
+      action->setEnabled( !item->isDisabled() );
+      }
     }
 
   if( item->type()==TreeWidgetItem::ITEM_TYPE_NODE )
