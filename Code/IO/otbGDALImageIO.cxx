@@ -1763,6 +1763,40 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
     gdalDriverShortName="PCIDSK";
   else if ( extension == ".lbl" || extension == ".pds" )
     gdalDriverShortName="ISIS2";
+  else if ( extension == ".j2k" || extension == ".jp2" || extension == ".jpx")
+  {
+    // Try different JPEG2000 drivers
+    GDALDriver *driver = NULL;
+    driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName("JP2OpenJPEG");
+    if (driver)
+      {
+      gdalDriverShortName = "JP2OpenJPEG";
+      }
+    
+    if (!driver)
+      {
+      driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName("JP2KAK");
+      if (driver)
+        {
+        gdalDriverShortName = "JP2KAK";
+        }
+      }
+    
+    if (!driver)
+      {
+      driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName("JP2ECW");
+      if (driver)
+        {
+        gdalDriverShortName = "JP2ECW";
+        }
+      }
+    
+    if (!driver)
+      {
+      gdalDriverShortName = "NOT-FOUND";
+      }
+  }
+    
   else
     gdalDriverShortName = "NOT-FOUND";
 
