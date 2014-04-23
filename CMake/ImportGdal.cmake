@@ -38,10 +38,12 @@ if(OTB_USE_EXTERNAL_GDAL)
     endif()
     
     # Detect if gdal supports JPEG2000 format
+    set(GDAL_HAS_J2K OFF)
     if ((${GDAL_FORMATS} MATCHES "openjpeg") OR 
         (${GDAL_FORMATS} MATCHES "jp2kak") OR
         (${GDAL_FORMATS} MATCHES "ecw"))
       message(STATUS "  GDAL is built with a suitable Jpeg2000 driver (OpenJpeg, Kakadu, ECW).")
+      set(GDAL_HAS_J2K ON)
     else()
       message(WARNING "GDAL has no suitable Jpeg2000 driver (compatible drivers are : OpenJpeg, Kakadu, ECW).")
     endif()
