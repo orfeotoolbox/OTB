@@ -390,7 +390,7 @@ ReadGeometryFromRPCTag(const std::string& filename)
   
   //  try to use GeoTiff RPC tag if present.
   // Warning : RPC in subdatasets are not supported
-  GDALDatasetH identifyDriverH = GDALIdentifyDriver(filename.c_str(), NULL);
+  GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), NULL);
   if(identifyDriverH == NULL)
     {
     // If no driver has identified the dataset, don't try to open it and exit
