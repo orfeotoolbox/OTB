@@ -442,7 +442,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   ImageKeywordlist otb_kwl;
   if (!m_FilenameHelper->ExtGEOMFileNameIsSet())
     {
-    otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist);
+    otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist,!m_FilenameHelper->GetSkipRpcTag());
     otbMsgDevMacro(<< "Loading internal kwl");
     }
   else
