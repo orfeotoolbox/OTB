@@ -62,6 +62,7 @@ public:
     std::pair< bool, unsigned int >  resolutionFactor;
     std::pair< bool, bool         >  skipCarto;
     std::pair< bool, bool         >  skipGeom;
+    std::pair< bool, bool         >  skipRpcTag;
     std::vector<std::string>         optionList;
   };
 
@@ -80,6 +81,8 @@ public:
   bool GetSkipCarto () const;
   bool SkipGeomIsSet () const;
   bool GetSkipGeom () const;
+  bool SkipRpcTagIsSet () const;
+  bool GetSkipRpcTag () const;
 
 protected:
   ExtendedFilenameToReaderOptions();

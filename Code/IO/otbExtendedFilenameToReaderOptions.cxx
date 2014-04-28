@@ -43,12 +43,16 @@ ExtendedFilenameToReaderOptions
 
   m_Options.skipGeom.first  = false;
   m_Options.skipGeom.second = false;
+  
+  m_Options.skipRpcTag.first  = false;
+  m_Options.skipRpcTag.second = false;
 
   m_Options.optionList.push_back("geom");
   m_Options.optionList.push_back("sdataidx");
   m_Options.optionList.push_back("resol");
   m_Options.optionList.push_back("skipcarto");
   m_Options.optionList.push_back("skipgeom");
+  m_Options.optionList.push_back("skiprpctag");
 }
 
 void
@@ -105,6 +109,20 @@ ExtendedFilenameToReaderOptions
       }
     }
 
+  if (!map["skiprpctag"].empty())
+    {
+    m_Options.skipRpcTag.first = true;
+    if (   map["skiprpctag"] == "On"
+        || map["skiprpctag"] == "on"
+        || map["skiprpctag"] == "ON"
+        || map["skiprpctag"] == "true"
+        || map["skiprpctag"] == "True"
+        || map["skiprpctag"] == "1"   )
+      {
+      m_Options.skipRpcTag.second = true;
+      }
+    }
+  
   //Option Checking
   MapIteratorType it;
   for ( it=map.begin(); it != map.end(); it++ )
@@ -196,6 +214,19 @@ ExtendedFilenameToReaderOptions
 ::GetSkipGeom () const
 {
   return m_Options.skipGeom.second;
+}
+
+bool
+ExtendedFilenameToReaderOptions
+::SkipRpcTagIsSet () const
+{
+  return m_Options.skipRpcTag.first;
+}
+bool
+ExtendedFilenameToReaderOptions
+::GetSkipRpcTag () const
+{
+  return m_Options.skipRpcTag.second;
 }
 
 } // end namespace otb
