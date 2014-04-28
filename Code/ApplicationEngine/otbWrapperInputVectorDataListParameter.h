@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #ifndef __otbWrapperInputVectorDataListParameter_h
-#define __otbWrapperInputvectorDataListParameter_h
+#define __otbWrapperInputVectorDataListParameter_h
 
 #include "otbVectorDataFileReader.h"
 
