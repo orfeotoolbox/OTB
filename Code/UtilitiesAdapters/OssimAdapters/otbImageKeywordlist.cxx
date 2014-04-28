@@ -195,7 +195,7 @@ ReadGeometry(const std::string& filename)
 }
 
 ImageKeywordlist
-ReadGeometryFromImage(const std::string& filename)
+ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 {
   // Trying to read ossim MetaData
   bool             hasMetaData = false;
@@ -272,7 +272,11 @@ ReadGeometryFromImage(const std::string& filename)
     otb_kwl = ReadGeometryFromGEOMFile(ossimGeomFile);
     
     // also check any RPC tags
-    ImageKeywordlist rpc_kwl = ReadGeometryFromRPCTag(filename);
+    ImageKeywordlist rpc_kwl;
+    if (checkRpcTag)
+      {
+      rpc_kwl = ReadGeometryFromRPCTag(filename);
+      }
      
     if (otb_kwl.HasKey("type"))
       {
