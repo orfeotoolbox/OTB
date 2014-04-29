@@ -883,6 +883,8 @@ DatabaseBrowserController
   assert( item->parent()==dynamic_cast< TreeWidgetItem* >( item->parent() ) );
   TreeWidgetItem* parentItem = dynamic_cast< TreeWidgetItem* >( item->parent() );
 
+  if( parentItem==NULL )
+    return;
 
   // Check item type.
   assert( childItem->GetType()==TreeWidgetItem::ITEM_TYPE_LEAF );

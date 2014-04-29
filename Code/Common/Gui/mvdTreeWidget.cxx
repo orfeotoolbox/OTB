@@ -260,12 +260,25 @@ TreeWidget
 }
 
 /*******************************************************************************/
+void 
+TreeWidget
+::dragMoveEvent( QDragMoveEvent* event )
+{
+  assert( event!=NULL );
+
+  // qDebug() << this << "::dragMoveEvent(" << event << ")";
+
+  if( itemAt( event->pos() )==NULL )
+    event->ignore();
+}
 
 /*******************************************************************************/
 void 
 TreeWidget
 ::dropEvent( QDropEvent* event )
 {
+  assert( event!=NULL );
+
   // qDebug() << this << "::dropEvent(" << event << ")";
 
   typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;

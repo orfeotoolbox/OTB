@@ -148,6 +148,7 @@ protected:
 
     virtual QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const;
 
+    virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 
 //
