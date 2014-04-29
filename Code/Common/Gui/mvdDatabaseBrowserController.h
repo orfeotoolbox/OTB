@@ -109,7 +109,7 @@ signals:
 
   /**
    */
-  void SelectedDatasetFilenameChanged( const QString& );
+  // void SelectedDatasetFilenameChanged( const QString& );
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

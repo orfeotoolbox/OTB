@@ -278,6 +278,9 @@ void
 DatabaseBrowserController
 ::UpdateTree( QTreeWidgetItem* item, SqlId nodeId, int level )
 {
+  // qDebug()
+  //   << this << "::UpdateTree(" << item << "," << nodeId << "," << level << ")";
+
   assert( GetModel()==GetModel< DatabaseModel >() );
   DatabaseModel* model = GetModel< DatabaseModel >();
 
@@ -317,9 +320,10 @@ DatabaseBrowserController
 #if ENABLE_TREE_QDEBUG
         qDebug()
           << "Node:"
-          << child->text( 0 )
-          << child->text( 1 )
-          << child->data( 1, TreeWidgetItem::ITEM_ROLE_ID );
+          << child->text( TreeWidgetItem::COLUMN_INDEX_TEXT )
+          << child->text( TreeWidgetItem::COLUMN_INDEX_ID )
+          << child->data( TreeWidgetItem::COLUMN_INDEX_ID,
+                          TreeWidgetItem::ITEM_ROLE_ID );
 #endif
         container = &nodes;
         break;
@@ -330,10 +334,11 @@ DatabaseBrowserController
 #if ENABLE_TREE_QDEBUG
         qDebug()
           << "Leaf:"
-          << child->text( 0 )
-          << child->text( 1 )
-          << child->data( 1, TreeWidgetItem::ITEM_ROLE_ID )
-          << child->text( 2 );
+          << child->text( TreeWidgetItem::COLUMN_INDEX_TEXT )
+          << child->text( TreeWidgetItem::COLUMN_INDEX_ID )
+          << child->data( TreeWidgetItem::COLUMN_INDEX_ID,
+                          TreeWidgetItem::ITEM_ROLE_ID )
+          << child->text( TreeWidgetItem::COLUMN_INDEX_HASH );
 #endif
         container = &leaves;
         break;
@@ -341,7 +346,10 @@ DatabaseBrowserController
       // Others.
       default:
         others.push_back( child );
-        qDebug() << "Other:" << child->type() << child->text( 0 );
+        qDebug()
+          << "Other:"
+          << child->type()
+          << child->text( TreeWidgetItem::COLUMN_INDEX_TEXT );
         break;
       }
 
@@ -349,7 +357,10 @@ DatabaseBrowserController
       {
       TreeWidgetItemMap::iterator it(
         container->insert(
-          child->data( 1, TreeWidgetItem::ITEM_ROLE_ID ).toString(),
+          child->data(
+            TreeWidgetItem::COLUMN_INDEX_ID,
+            TreeWidgetItem::ITEM_ROLE_ID
+          ).toString(),
           child
         )
       );
@@ -361,9 +372,10 @@ DatabaseBrowserController
         qDebug()
           << "Duplicate:"
           << child->type()
-          << it.value()->text( 0 )
-          << it.value()->text( 1 )
-          << it.value()->data( 1, TreeWidgetItem::ITEM_ROLE_ID );
+          << it.value()->text( TreeWidgetItem::COLUMN_INDEX_TEXT )
+          << it.value()->text( TreeWidgetItem::COLUMN_INDEX_ID )
+          << it.value()->data( TreeWidgetItem::COLUMN_INDEX_ID,
+                               TreeWidgetItem::ITEM_ROLE_ID );
 #endif
 
         duplicates.push_back( it.value() );
@@ -424,7 +436,10 @@ DatabaseBrowserController
     TreeWidgetItemMap::iterator it( leaves.begin() );
 
 #if ENABLE_TREE_QDEBUG
-    qDebug() << "-Leaf:" << it.key() << it.value()->text( 0 );
+    qDebug()
+      << "-Leaf:"
+      << it.key()
+      << it.value()->text( TreeWidgetItem::COLUMN_INDEX_TEXT );
 #endif
 
     delete it.value();
@@ -504,7 +519,10 @@ DatabaseBrowserController
     TreeWidgetItemMap::iterator it( nodes.begin() );
 
 #if ENABLE_TREE_QDEBUG
-    qDebug() << "-Node:" << it.key() << it.value()->text( 0 );
+    qDebug()
+      << "-Node:"
+      << it.key()
+      << it.value()->text( TreeWidgetItem::COLUMN_INDEX_TEXT );
 #endif
 
     delete it.value();
@@ -735,7 +753,13 @@ DatabaseBrowserController
   if( id.isEmpty() )
     return;
 
+  assert( GetModel()==GetModel< DatabaseModel >() );
   DatabaseModel* model = GetModel< DatabaseModel >();
+  assert( model!=NULL );
+
+  assert( GetWidget()==GetWidget< DatabaseBrowserWidget >() );
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+  assert( widget!=NULL );
 
   try
     {
@@ -758,7 +782,9 @@ DatabaseBrowserController
     GetWidget< DatabaseBrowserWidget >()->SetCurrentDataset( previousId );
     */
 
-    emit SelectedDatasetFilenameChanged( QString() );
+    // emit SelectedDatasetFilenameChanged( QString() );
+
+    widget->SetCurrentDataset( QString() );
 
     return;
     }
@@ -776,11 +802,14 @@ DatabaseBrowserController
     GetWidget< DatabaseBrowserWidget >()->SetCurrentDataset( previousId );
     */
 
-    emit SelectedDatasetFilenameChanged( QString() );
+    // emit SelectedDatasetFilenameChanged( QString() );
+
+    widget->SetCurrentDataset( QString() );
 
     return;
     }
 
+  /*
   // emit selected dataset image filename
   VectorImageModel * imageModel
     =  qobject_cast< VectorImageModel *>(
@@ -791,6 +820,9 @@ DatabaseBrowserController
   // this signal is used to pass the current dataset input filename.
   // it is connected to the DatabaseBrowserWidget custom QTreeWidget
   emit SelectedDatasetFilenameChanged( imageModel->GetFilename() );
+  */
+
+  widget->SetCurrentDataset( id );
 }
 
 /*******************************************************************************/

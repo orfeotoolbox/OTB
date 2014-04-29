@@ -222,6 +222,7 @@ TreeWidget
   QTreeWidget( parent )
 {
   setDefaultDropAction( Qt::MoveAction );
+  // setDefaultDropAction( Qt::CopyAction );
 
   setDragEnabled( true );
 

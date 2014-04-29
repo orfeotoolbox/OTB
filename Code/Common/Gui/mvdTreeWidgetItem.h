@@ -81,6 +81,13 @@ class Monteverdi2_EXPORT TreeWidgetItem :
 //
 // Public types.
 public:
+  enum ColumnIndex
+  {
+    COLUMN_INDEX_TEXT = 0,
+    COLUMN_INDEX_ID = 1,
+    COLUMN_INDEX_HASH = 2,
+  };
+
   enum ItemType
   {
     ITEM_TYPE_NONE = QTreeWidgetItem::UserType,
@@ -223,7 +230,7 @@ QVariant
 TreeWidgetItem
 ::GetId() const
 {
-  return data( 1, TreeWidgetItem::ITEM_ROLE_ID );
+  return data( COLUMN_INDEX_ID, TreeWidgetItem::ITEM_ROLE_ID );
 }
 
 /*****************************************************************************/
@@ -232,8 +239,8 @@ void
 TreeWidgetItem
 ::SetId( const QVariant& id )
 {
-  setData( 1, TreeWidgetItem::ITEM_ROLE_ID, id );
-  setText( 1, id.toString() );
+  setData( COLUMN_INDEX_ID, TreeWidgetItem::ITEM_ROLE_ID, id );
+  setText( COLUMN_INDEX_ID, id.toString() );
 }
 
 /*****************************************************************************/
@@ -242,7 +249,7 @@ QString
 TreeWidgetItem
 ::GetText() const
 {
-  return text( 0 );
+  return text( COLUMN_INDEX_TEXT );
 }
 
 /*****************************************************************************/
@@ -251,7 +258,7 @@ QString
 TreeWidgetItem
 ::GetHash() const
 {
-  return text( 2 );
+  return text( COLUMN_INDEX_HASH );
 }
 
 } // end namespace 'mvd'

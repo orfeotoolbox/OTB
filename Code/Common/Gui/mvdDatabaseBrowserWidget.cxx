@@ -253,7 +253,7 @@ void
 DatabaseBrowserWidget
 ::SetCurrentDataset( const QString& hash )
 {
-  // qDebug() << this << "::SetCurrentDataset(" << id << ")";
+  // qDebug() << this << "::SetCurrentDataset(" << hash << ")";
 
   assert( m_UI!=NULL );
   assert( m_UI->databaseTreeWidget!=NULL );
@@ -262,31 +262,25 @@ DatabaseBrowserWidget
     m_UI->databaseTreeWidget->findItems(
       hash,
       Qt::MatchExactly | Qt::MatchRecursive,
-      1
+      TreeWidgetItem::COLUMN_INDEX_HASH
     )
   );
 
   assert( items.isEmpty() || items.size() == 1 );
 
-  /*
   qDebug()
     << ( items.isEmpty() ? "NONE" : items.first()->text( 0 ) )
     << m_UI->databaseTreeWidget->selectionModel()->selectedIndexes().size();
-  */
 
-#if 0
-   m_UI->databaseTreeWidget->setCurrentItem(
-    items.isEmpty() ? NULL : items.first(),
-    0,
+  m_UI->databaseTreeWidget->setCurrentItem(
+    items.isEmpty()
+    ? NULL
+    : items.first(),
+    TreeWidgetItem::COLUMN_INDEX_TEXT,
     QItemSelectionModel::Clear |
+    QItemSelectionModel::Select |
     QItemSelectionModel::Current
   );
-#else
-  if( items.isEmpty() )
-    return;
-
-  m_UI->databaseTreeWidget->setCurrentItem( items.first() );
-#endif
 }
 
 /*****************************************************************************/
