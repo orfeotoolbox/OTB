@@ -182,7 +182,7 @@ private:
   {
               if (HasValue("in"))
               {
-                     FloatVectorImageType::Pointer inImage = this->GetParameterImage<FloatVectorImageType> ("in");
+                     FloatVectorImageType::Pointer inImage = this->GetParameterImage("in");
                      inImage->UpdateOutputInformation();
 
                      // Update the values of the channels to be selected
@@ -211,7 +211,7 @@ private:
                      }
                      this->DisableParameter("outmatrix");
 
-                     FloatVectorImageType::Pointer inImage = this->GetParameterImage<FloatVectorImageType> ("in");
+                     FloatVectorImageType::Pointer inImage = this->GetParameterImage("in");
                      inImage->UpdateOutputInformation();
 
                      // Update the values of the channels to be selected

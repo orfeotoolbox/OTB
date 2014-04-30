@@ -216,7 +216,7 @@ private:
 
   void DoExecute()
   {
-    Int32ImageType* input = this->GetParameterImage<Int32ImageType> ("in");
+    Int32ImageType* input = this->GetParameterInt32Image("in");
 
     std::string field;
     int nodata = this->GetParameterInt("nodatalabel");
@@ -228,7 +228,7 @@ private:
 
     if (GetParameterString("ref") == "raster")
       {
-      reference = this->GetParameterImage<Int32ImageType> ("ref.raster.in");
+      reference = this->GetParameterInt32Image("ref.raster.in");
       }
     else
       {

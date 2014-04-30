@@ -224,7 +224,7 @@ private:
       // Setup the DEM Handler
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"mode.fit.elev");
 
-      FloatVectorImageType::Pointer referencePtr = this->GetParameterImage<FloatVectorImageType>("mode.fit.ref");
+      FloatVectorImageType::Pointer referencePtr = this->GetParameterImage("mode.fit.ref");
       referencePtr->UpdateOutputInformation();
 
       RSTransformType::Pointer rsTransform = RSTransformType::New();

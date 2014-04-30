@@ -150,8 +150,8 @@ private:
   {
     m_ProcessObjects.clear();
 
-    DoubleVectorImageType::Pointer inputImage = GetParameterImage<DoubleVectorImageType>("in");
-    DoubleVectorImageType::Pointer endmembersImage = GetParameterImage<DoubleVectorImageType>("ie");
+    DoubleVectorImageType::Pointer inputImage = GetParameterDoubleVectorImage("in");
+    DoubleVectorImageType::Pointer endmembersImage = GetParameterDoubleVectorImage("ie");
 
     /*
      * Transform Endmembers image to matrix representation

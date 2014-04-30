@@ -88,7 +88,7 @@ private:
 
   void DoExecute()
   {
-    DoubleVectorImageType::Pointer inputImage = GetParameterImage<DoubleVectorImageType>("in");
+    DoubleVectorImageType::Pointer inputImage = GetParameterDoubleVectorImage("in");
     DoubleVectorImageType::Pointer endmembersImage;
 
     const unsigned int nbEndmembers = GetParameterInt("ne");

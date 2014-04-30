@@ -188,7 +188,7 @@ private:
     m_UseMask = false;
     if (HasValue("vm"))
     {
-      mask = GetParameterImage<LabeledImageType>("vm");
+      mask = GetParameterUInt16Image("vm");
       if (input->GetLargestPossibleRegion()
         != mask->GetLargestPossibleRegion())
         {

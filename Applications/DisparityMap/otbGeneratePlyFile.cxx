@@ -98,10 +98,10 @@ private:
   {
     std::string outfname = GetParameterString("out");
 
-    FloatVectorImageType::Pointer demPtr = this->GetParameterImage<FloatVectorImageType>("indem");
+    FloatVectorImageType::Pointer demPtr = this->GetParameterImage("indem");
     demPtr->Update();
 
-    FloatVectorImageType::Pointer colorPtr = this->GetParameterImage<FloatVectorImageType>("incolor");
+    FloatVectorImageType::Pointer colorPtr = this->GetParameterImage("incolor");
 
     // First, find the footprint in the color image
 
