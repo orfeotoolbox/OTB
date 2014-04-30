@@ -48,7 +48,7 @@
         <source>Error when creating repository cache-directory:
 %1
 Application will exit!</source>
-        <translation>Une erreur s&apos;est produite lors de la création du répertoire de cache :
+        <translation type="obsolete">Une erreur s&apos;est produite lors de la création du répertoire de cache :
 %1
 L&apos;application va se terminer !</translation>
     </message>
@@ -70,7 +70,47 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Tryed to remove home dir.</source>
-        <translation>Tentative de suppression du compte utilisateur.</translation>
+        <translation type="obsolete">Tentative de suppression du compte utilisateur.</translation>
+    </message>
+    <message>
+        <source>Error while creating cache repository.
+
+%1
+
+Application will exit!</source>
+        <translation>Erreur durant la création du répertoire de cache.
+
+%1
+
+L&apos;application va se terminer !</translation>
+    </message>
+    <message>
+        <source>Your Monteverdi2 cache-directory is set to your home directory &apos;%1&apos;. Deletion of cache-directory is aborted to avoid unrecoverable loss of all your account data.
+
+It is generally a bad idea to set Monteverdi2 cache-directory to your home directory. Please choose another sub-directory.
+
+Application will now exit.</source>
+        <translation>Le répertoire de cache Monteverdi2 est défini comme étant votre répertoire d&apos;accueil &apos;%1&apos;. La suppression du répertoire de cache est annulée pour éviter toute perte irrémédiable de données.
+
+Il n&apos;est générallement pas conseillé de définir le répertoire de cache de Monteverdi2 comment étant votre répertoire d&apos;accueil. Veuillez, s&apos;il vous plait, choisir un autre sous-répertoire.
+
+L&apos;apllication va se terminer.</translation>
+    </message>
+    <message>
+        <source>Failed to open Monteverdi2 database.
+
+Application will now exit!
+
+%2
+
+Please, remove your Monteverdi2 cache-directory.</source>
+        <translation>Échec lors de l&apos;ouverture de la base de données Monteverdi2.
+
+L&apos;application va se terminer !
+
+%2
+
+Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2.</translation>
     </message>
 </context>
 <context>
@@ -110,6 +150,14 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     <message>
         <source>Version M.m.pl (codename)</source>
         <translation>Version M.m.pl (nom_de_code)</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::AbstractDragAndDropEventFilter</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -231,6 +279,10 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
+    <message>
+        <source>Uncategorized</source>
+        <translation>Sans catégorie</translation>
+    </message>
 </context>
 <context>
     <name>mvd::ApplicationsToolBox</name>
@@ -267,16 +319,16 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
+    <message>
+        <source>Worker must not be parented in order to be moved to another thread.</source>
+        <translation>La tâche (worker) doit ne pas être parenté afin d&apos;être déplacé dans un autre fil d&apos;exécution.</translation>
+    </message>
 </context>
 <context>
     <name>mvd::CheckableLineEdit</name>
     <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Enabled</source>
-        <translation>Activé</translation>
+        <translation type="obsolete">Activé</translation>
     </message>
     <message>
         <source></source>
@@ -451,6 +503,10 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
+    <message>
+        <source>Gamma:</source>
+        <translation>Gamma :</translation>
+    </message>
 </context>
 <context>
     <name>mvd::ColorSetupController</name>
@@ -577,6 +633,14 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
 </context>
 <context>
+    <name>mvd::DataStream</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>mvd::DatabaseBrowserController</name>
     <message>
         <source></source>
@@ -585,7 +649,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Inconsistent Dataset disabled</source>
-        <translation>Jeu de données inconsistent désactivé</translation>
+        <translation type="obsolete">Jeu de données inconsistent désactivé</translation>
     </message>
     <message>
         <source>Warning!</source>
@@ -608,12 +672,33 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
 </source>
         <translation>Échec lors du chargement du jeu de données.</translation>
     </message>
+    <message>
+        <source>Data is not consistent.</source>
+        <translation>Les données sont incohérentes.</translation>
+    </message>
+    <message>
+        <source>
+- &apos;%1&apos;</source>
+        <translation>- &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Delete:%1</source>
+        <translation>Supprimer : %1</translation>
+    </message>
+    <message>
+        <source>Error!</source>
+        <translation>Erreur !</translation>
+    </message>
+    <message>
+        <source>Failed to remove &apos;%1&apos;.</source>
+        <translation>Impossible de supprimer &apos;%1&apos;.</translation>
+    </message>
 </context>
 <context>
     <name>mvd::DatabaseBrowserWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source>Name</source>
@@ -621,7 +706,7 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Datasets</source>
-        <translation>Jeux de données</translation>
+        <translation type="obsolete">Jeux de données</translation>
     </message>
     <message>
         <source></source>
@@ -630,7 +715,67 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Search Dataset ...</source>
-        <translation>Rechercher un jeu de données...</translation>
+        <translation type="obsolete">Rechercher un jeu de données...</translation>
+    </message>
+    <message>
+        <source>Search Dataset...</source>
+        <translation>Rechercher jeu de données...</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatabaseConnection</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>SQLite database file &apos;%1&apos; not found!</source>
+        <translation>Fichier de base de données SQLite &apos;%1&apos; non trouvé !</translation>
+    </message>
+    <message>
+        <source>Failed to open database: </source>
+        <translation>Échec lors de l&apos;ouverture de la base de données :</translation>
+    </message>
+    <message>
+        <source>Failed to prepare query: </source>
+        <translation>Échec lors de la préparation de la requête :</translation>
+    </message>
+    <message>
+        <source>Failed to execute query: </source>
+        <translation>Échec de lors de l&apos;exécution de la requête :</translation>
+    </message>
+    <message>
+        <source>Failed to batch query: </source>
+        <translation>Échec lors de l&apos;exécution d&apos;une requête de traitement par lot :</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatabaseError</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>No database error</source>
+        <translation>Pas d&apos;erreur de base de données</translation>
+    </message>
+    <message>
+        <source>Database connection error</source>
+        <translation>Erreur de connexion à la base de données</translation>
+    </message>
+    <message>
+        <source>SQL statement syntax error</source>
+        <translation>Erreur de syntaxe de la requête SQL</translation>
+    </message>
+    <message>
+        <source>Database transaction failed error</source>
+        <translation>Erreur durant la transaction avec la base de données</translation>
+    </message>
+    <message>
+        <source>Unknown database error</source>
+        <translation>Erreur inconnue (base de données)</translation>
     </message>
 </context>
 <context>
@@ -642,19 +787,31 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Failed to remove file &apos;%1&apos;.</source>
-        <translation>Échec de la suppression du fichier &apos;%1&apos;.</translation>
+        <translation type="obsolete">Échec de la suppression du fichier &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to access parent directory of &apos;%1&apos;.</source>
-        <translation>Echec de l&apos;accès au répertoire parent &apos;%1&apos;.</translation>
+        <translation type="obsolete">Echec de l&apos;accès au répertoire parent &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to remove dataset directory &apos;%1&apos;.</source>
-        <translation>Echec lors de la suppression du répertoire du dataset &apos;%1&apos;.</translation>
+        <translation type="obsolete">Echec lors de la suppression du répertoire du dataset &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>%1 outdated datasets. Please clear cache directory.</source>
         <translation>%1 datasets obsolètes. Veuillez vider votre répertoire de cache.</translation>
+    </message>
+    <message>
+        <source>Database format version %1 is not supported anymore.</source>
+        <translation>La version &apos;%1&apos; du format de la base de données n&apos;est plus supportée.</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatabaseQueries</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -666,11 +823,31 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Delete Dataset</source>
-        <translation>Supprimer dataset</translation>
+        <translation type="obsolete">Supprimer dataset</translation>
     </message>
     <message>
         <source>Rename Dataset</source>
-        <translation>Renommer dataset</translation>
+        <translation type="obsolete">Renommer dataset</translation>
+    </message>
+    <message>
+        <source>Delete dataset</source>
+        <translation>Supprimer le jeu de données</translation>
+    </message>
+    <message>
+        <source>Rename dataset</source>
+        <translation>Renommer le jeu de données</translation>
+    </message>
+    <message>
+        <source>Add group</source>
+        <translation>Ajouter un groupe</translation>
+    </message>
+    <message>
+        <source>Delete group</source>
+        <translation>Supprimer un groupe</translation>
+    </message>
+    <message>
+        <source>Rename group</source>
+        <translation>Renommer un groupe</translation>
     </message>
 </context>
 <context>
@@ -703,6 +880,14 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
 </context>
 <context>
     <name>mvd::DatasetDescriptor</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatasetDragAndDropEventFilter</name>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
@@ -778,11 +963,15 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Exception caught when checking version of dataset &apos;%1&apos;: </source>
-        <translation>Exception rattrapée lors de la vérification de la version du jeu de données &apos;%1&apos;:</translation>
+        <translation type="obsolete">Exception rattrapée lors de la vérification de la version du jeu de données &apos;%1&apos;:</translation>
     </message>
     <message>
         <source>Exception caught when checking for version of dataset &apos;%1&apos;: </source>
-        <translation>Exception rattrapée lors de la vérification de la version du dataset &apos;%1&apos;:</translation>
+        <translation type="obsolete">Exception rattrapée lors de la vérification de la version du dataset &apos;%1&apos;:</translation>
+    </message>
+    <message>
+        <source>Exception caught when checking version of dataset &apos;%1&apos;.</source>
+        <translation>Exception rattrapée lors de la vérification de la version du jeu de données &apos;%1&apos;.</translation>
     </message>
 </context>
 <context>
@@ -838,6 +1027,14 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
 </context>
 <context>
+    <name>mvd::FilenameDragAndDropEventFilter</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>mvd::GLImageWidget</name>
     <message>
         <source></source>
@@ -846,15 +1043,15 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
     </message>
     <message>
         <source>Unable to list suppored OpenGL versions using QGLFormat. Qt version is %1. Please upgrade to Qt 4.7.0 or newer.</source>
-        <translation>Impossible de lister les version OpenGL supportés via QGLFormat. Qt version is %1. Veuillez actualiser Qt à la version 4.7.0 ou plus.  </translation>
+        <translation type="obsolete">Impossible de lister les version OpenGL supportés via QGLFormat. Qt version is %1. Veuillez actualiser Qt à la version 4.7.0 ou plus.  </translation>
     </message>
     <message>
         <source>Runtime version of OpenGL used by Qt %1: %2.%3.</source>
-        <translation type="unfinished">Version OpenGL utilisée par Qt %1 : %2.%3 durant l&apos;exécution.</translation>
+        <translation type="obsolete">Version OpenGL utilisée par Qt %1 : %2.%3 durant l&apos;exécution.</translation>
     </message>
     <message>
         <source>Version(s) of OpenGL supported by Qt %1:</source>
-        <translation>Version(s) OpenGL supportées par Qt %1:</translation>
+        <translation type="obsolete">Version(s) OpenGL supportées par Qt %1:</translation>
     </message>
 </context>
 <context>
@@ -1123,6 +1320,26 @@ Voulez-vous supprimer le répertoire de cache &apos;%2&apos; avant de quitter Mo
         <source>An error occured while loading the DEM directory, no DEM will be used: </source>
         <translation>Une erreur s&apos;est produite lors du chargement depuis le répertoire MNT, aucun MNT ne sera utilisé : </translation>
     </message>
+    <message>
+        <source>Failed to remove file &apos;%1&apos;.</source>
+        <translation>Échec de la suppression du fichier &apos;%1&apos;.</translation>
+    </message>
+    <message>
+        <source>Failed to access parent directory of &apos;%1&apos;.</source>
+        <translation>Echec de l&apos;accès au répertoire parent &apos;%1&apos;.</translation>
+    </message>
+    <message>
+        <source>Failed to remove dataset directory &apos;%1&apos;.</source>
+        <translation>Echec lors de la suppression du répertoire du jeu de données &apos;%1&apos;.</translation>
+    </message>
+    <message>
+        <source>I18nCoreApplication is a singleton class!</source>
+        <translation>I18nCoreApplication est une classe singleton !</translation>
+    </message>
+    <message>
+        <source>The selected directory seems to be an previous mvd2 directory, nevertheless we will create a new mvd2 repository into the selected directory.</source>
+        <translation>Le répertoire sélectionné semble être un répertoire mvd2 antérieur ; néanmoins nous allons créer un nouveau dépôt mvd2 à l&apos;intérieur du répertoire sélectionné.</translation>
+    </message>
 </context>
 <context>
     <name>mvd::I18nMainWindow</name>
@@ -1173,6 +1390,10 @@ Attention :
         <source>Welcome new Monteverdi2 user!</source>
         <translation>Bienvenu, nouvel utilisateur Monteverdi2 !</translation>
     </message>
+    <message>
+        <source>The selected directory already contain a mvd2 directory, no new database will be created</source>
+        <translation>The répertoire sélectionné contien déjà un répertoire mvd2 ; aucune nouvelle base de données ne va être créée</translation>
+    </message>
 </context>
 <context>
     <name>mvd::ImageImporter</name>
@@ -1219,6 +1440,60 @@ Attention :
     </message>
 </context>
 <context>
+    <name>mvd::ImageViewRenderer</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Required OpenGL version &apos;%1&apos; with GLSL version &apos;%2&apos;.</source>
+        <translation>Version OpenGL nécessaire &apos;%1&apos; avec GLSL version &apos;%2&apos;.</translation>
+    </message>
+    <message>
+        <source>Runtime OpenGL version &apos;%1&apos; with GLSL version &apos;%2&apos;.</source>
+        <translation>Version OpenGL &apos;%1&apos; détectée avec GLSL version &apos;%2&apos;.</translation>
+    </message>
+    <message>
+        <source>Monteverdi2 - Critical error!</source>
+        <translation>Monteverdi2 - Erreur critique !</translation>
+    </message>
+    <message>
+        <source>Current OpenGL version is &apos;%1&apos; supporting OpenGL Shading-Language (GLSL) version &apos;%2&apos;.
+Required OpenGL version is at least &apos;%3&apos; with GLSL version at least &apos;%4&apos;.
+Please upgrade your graphics driver and/or hardware for the application to run properly on this platform.
+If you are running the application under some remote-desktop service, runtime OpenGL and GLSL versions may differ from those running directly on remote platform.
+Please contact your system administrator.
+Application will now exit!</source>
+        <translation>La version OpenGL détectée est &apos;%1&apos; et supporte OpenGL Shading Language (GLSL) version &apos;%2&apos;.
+La version OpenGL nécessaire est (au-moins) &apos;%3&apos; avec GLSL (au-moins) égal &apos;%4&apos;.
+Veuillez, s&apos;il vous plait, mettre à jour vos pilotes de périphériques graphiques et/ou changer de carte graphiques pour que l&apos;appliquation puisse s&apos;exécuter correctement sur cette plateforme.
+Si vous exécutez l&apos;application en utilisant un service de bureau à distance ou de connexion à distance, les versions OpenGL et GLSL détectées peuvent différer de celles qui sont exécutées de manières natives sur la plateforme distante.
+Veuillez, s&apos;il vous plait, contacter votre administrateur système.
+L&apos;application va se terminer !</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::ImageViewWidget</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Unable to list suppored OpenGL versions using QGLFormat. Qt version is %1. Please upgrade to Qt 4.7.0 or newer.</source>
+        <translation>Impossible de lister les version OpenGL supportés via QGLFormat. Qt version is %1. Veuillez actualiser Qt à la version 4.7.0 ou plus.  </translation>
+    </message>
+    <message>
+        <source>Runtime version of OpenGL used by Qt %1: %2.%3.</source>
+        <translation>Version OpenGL utilisée par Qt %1 : %2.%3 durant l&apos;exécution.</translation>
+    </message>
+    <message>
+        <source>Version(s) of OpenGL supported by Qt %1:</source>
+        <translation>Version(s) OpenGL supportées par Qt %1:</translation>
+    </message>
+</context>
+<context>
     <name>mvd::MainWindow</name>
     <message>
         <source>Open file...</source>
@@ -1250,15 +1525,15 @@ Attention :
     </message>
     <message>
         <source>&amp;Open...</source>
-        <translation>&amp;Ouvrir...</translation>
+        <translation type="obsolete">&amp;Ouvrir...</translation>
     </message>
     <message>
         <source>Open...</source>
-        <translation>Ouvrir...</translation>
+        <translation type="obsolete">Ouvrir...</translation>
     </message>
     <message>
         <source>Open file.</source>
-        <translation>Ouvrir fichier.</translation>
+        <translation type="obsolete">Ouvrir fichier.</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
@@ -1299,27 +1574,27 @@ Attention :
     </message>
     <message>
         <source>Quicklook</source>
-        <translation>Aperçu</translation>
+        <translation type="obsolete">Aperçu</translation>
     </message>
     <message>
         <source>Quicklook (show/hide).</source>
-        <translation>Aperçu (montrer/cacher).</translation>
+        <translation type="obsolete">Aperçu (montrer/cacher).</translation>
     </message>
     <message>
         <source>Video color setup</source>
-        <translation>Choix des canaux</translation>
+        <translation type="obsolete">Choix des canaux</translation>
     </message>
     <message>
         <source>Video color setup (show/hide).</source>
-        <translation>Choix des canaux (montrer/cacher).</translation>
+        <translation type="obsolete">Choix des canaux (montrer/cacher).</translation>
     </message>
     <message>
         <source>Video color dynamics</source>
-        <translation>Réglage de la dynamique</translation>
+        <translation type="obsolete">Réglage de la dynamique</translation>
     </message>
     <message>
         <source>Video color dynamics (show/hide).</source>
-        <translation>Réglage de la dynamique (montrer/cacher).</translation>
+        <translation type="obsolete">Réglage de la dynamique (montrer/cacher).</translation>
     </message>
     <message>
         <source> bands, </source>
@@ -1327,12 +1602,12 @@ Attention :
     </message>
     <message>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation type="obsolete">Attention</translation>
     </message>
     <message>
         <source>This repository seems incorrect to store the cache directory.
 Please choose another one.</source>
-        <translation>Ce répertoire semble incorrect pour stocker le répertoire de cache.
+        <translation type="obsolete">Ce répertoire semble incorrect pour stocker le répertoire de cache.
 Merci d&apos;en choisir un autre.</translation>
     </message>
     <message>
@@ -1341,7 +1616,7 @@ Merci d&apos;en choisir un autre.</translation>
 Warning:
 You need to have write access to this directory.
 Be aware that this directory can grow and consume a significant disk space.</source>
-        <translation>Monteverdi2 maintient un répertoire pour stocker des données additionnelles liées à chaque image (réglage d&apos;affichage, histogrammes, aperçus...).
+        <translation type="obsolete">Monteverdi2 maintient un répertoire pour stocker des données additionnelles liées à chaque image (réglage d&apos;affichage, histogrammes, aperçus...).
 
 Attention:
 Vous devez posséder les droits d&apos;écriture sur ce répertoire.
@@ -1350,21 +1625,21 @@ Soyez conscients que ce répertoire peut grossir and consommer un espace disque 
     <message>
         <source>Do you want to specify a custom location ?
 (No will use the default location: %1)</source>
-        <translation>Voulez-vous spécifier un emplacement personnalisé ?
+        <translation type="obsolete">Voulez-vous spécifier un emplacement personnalisé ?
 (&apos;Non&apos; utilisera l&apos;emplacement par défaut : %1)</translation>
     </message>
     <message>
         <source>Select the repository to store the cache repository for Monteverdi2</source>
-        <translation>Sélectionnez le répertoire où stocker le cache de Monteverdi2</translation>
+        <translation type="obsolete">Sélectionnez le répertoire où stocker le cache de Monteverdi2</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation type="obsolete">Erreur</translation>
     </message>
     <message>
         <source>Dataset has been modified.
 Do you want to save settings before quitting?</source>
-        <translation>Jeu de données modifié.
+        <translation type="obsolete">Jeu de données modifié.
 Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
@@ -1417,7 +1692,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Quicklook view</source>
-        <translation>Aperçu</translation>
+        <translation type="obsolete">Aperçu</translation>
     </message>
     <message>
         <source>Color setup</source>
@@ -1429,7 +1704,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Image view</source>
-        <translation>Vue image</translation>
+        <translation type="obsolete">Vue image</translation>
     </message>
     <message>
         <source>Tab cannot be closed while OTB application is running.</source>
@@ -1437,7 +1712,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Welcome new Montevedi2 user !</source>
-        <translation>Bienvenu, nouvel utilisateur Monteverdi2 !</translation>
+        <translation type="obsolete">Bienvenu, nouvel utilisateur Monteverdi2 !</translation>
     </message>
     <message>
         <source>Import image-file.</source>
@@ -1466,6 +1741,14 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     <message>
         <source>Histogram</source>
         <translation>Histogramme</translation>
+    </message>
+    <message>
+        <source>Quicklook view (Ice)</source>
+        <translation>Apperçu (Ice)</translation>
+    </message>
+    <message>
+        <source>Image view (Ice)</source>
+        <translation>Vue image (Ice)</translation>
     </message>
 </context>
 <context>
@@ -1509,10 +1792,6 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
 </context>
 <context>
     <name>mvd::MyWidget</name>
-    <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
@@ -1612,16 +1891,16 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Select the repository to store the cache repository for Monteverdi2</source>
-        <translation>Sélectionnez le répertoire où stocker le cache de Monteverdi2</translation>
+        <translation type="obsolete">Sélectionnez le répertoire où stocker le cache de Monteverdi2</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation type="obsolete">Attention</translation>
     </message>
     <message>
         <source>This repository &apos;%1&apos; seems incorrect to store the cache directory.
 Please choose another one.</source>
-        <translation>Le répertoire &apos;%1&apos; semble incorrect pour stocker le cache.
+        <translation type="obsolete">Le répertoire &apos;%1&apos; semble incorrect pour stocker le cache.
 Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
@@ -1679,6 +1958,26 @@ Merci d&apos;en sélectionner un autre.</translation>
 </context>
 <context>
     <name>mvd::QuicklookViewManipulator</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::QuicklookViewRenderer</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::SearchableTreeWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source></source>
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
@@ -1770,6 +2069,30 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
 </context>
 <context>
+    <name>mvd::TreeWidget</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::TreeWidgetItem</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>mvd::TreeWidgetItemDragAndDropEventFilter</name>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>mvd::Types</name>
     <message>
         <source></source>
@@ -1794,7 +2117,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     </message>
     <message>
         <source>Radiometry</source>
-        <translation>Radiométrie</translation>
+        <translation type="obsolete">Radiométrie</translation>
     </message>
     <message>
         <source>The ImageIO used to read this file doesn&apos;t support Overviews.</source>
@@ -1860,6 +2183,10 @@ La navigation en résolution sera plus lente.</translation>
         <source>File &apos;%1&apos; cannot be read by OTB.</source>
         <translation>OTB ne peut pas lire le fichier &apos;%1&apos;.</translation>
     </message>
+    <message>
+        <source>Radiometry: [ </source>
+        <translation>Radiométrie : [ </translation>
+    </message>
 </context>
 <context>
     <name>mvd::VideoColorToolBox</name>
@@ -1887,7 +2214,7 @@ La navigation en résolution sera plus lente.</translation>
     <name>mvd::Wrapper::QtWidgetInputImageParameter</name>
     <message>
         <source>Drag and drop a dataset here.</source>
-        <translation>Glisser-déposer un jeu de données ici.</translation>
+        <translation type="obsolete">Glisser-déposer un jeu de données ici.</translation>
     </message>
 </context>
 <context>
@@ -1906,9 +2233,21 @@ Veuillez, s&apos;il vous plait, vous référer à la documentation de &apos;%1&a
         <source>&apos;%1&apos; has succeeded with return status %2.
 Result(s) will be imported as dataset(s).
 Please check &apos;%1&apos; log tab.</source>
-        <translation>L&apos;exécution de &apos;%1&apos; a réussi avec le code de retour %2.
+        <translation type="obsolete">L&apos;exécution de &apos;%1&apos; a réussi avec le code de retour %2.
 Les résultats seront importés en tant que jeu de données.
 Veuillez, s&apos;il vous plait, vérifier l&apos;onglet du journal de &apos;%1&apos;.</translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&apos;%1&apos; has succeeded.
+Result(s) will be imported as dataset(s).
+</source>
+        <translation>&apos;%1&apos; exécuté avec succès.
+Le(s) résultat(s) vont être importés en tant que jeu de données.</translation>
     </message>
 </context>
 </TS>
