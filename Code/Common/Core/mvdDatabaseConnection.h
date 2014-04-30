@@ -68,7 +68,10 @@
     {                                           \
     throw DatabaseError(                        \
       ( query ).lastError(),                    \
-      tr( "Failed to fetch query record %1. " ) \
+      QCoreApplication::translate(              \
+        "mvd::DatabaseConnection",              \
+        "Failed to fetch query record %1. "     \
+      )                                         \
       .arg( ( query ).at() ),                   \
       QString( "\n\"%1\"" )                     \
       .arg( ( query ).lastQuery() )             \

@@ -122,7 +122,10 @@ namespace mvd
     {                                           \
     throw DatabaseError(                        \
       ( qry ).lastError(),                      \
-      tr( "Failed to prepare query: " ),        \
+      QCoreApplication::translate( \
+        "mvd::DatabaseConnection", \
+        "Failed to prepare query: " \
+      ),                                        \
       QString( "\n\"%1\"" ).arg( sql )          \
     );                                          \
     }
@@ -133,7 +136,10 @@ namespace mvd
     {                                                   \
     throw DatabaseError(                                \
       ( qry ).lastError(),                              \
-      tr( "Failed to execute query: " ),                \
+      QCoreApplication::translate( \
+        "mvd::DatabaseConnection" , \
+        "Failed to execute query: " \
+      ),                                                \
       QString( "\n\"%1\"" ).arg( ( qry ).lastQuery() )  \
     );                                                  \
     }                                                   \
@@ -145,7 +151,10 @@ namespace mvd
     {                                                   \
     throw DatabaseError(                                \
       ( qry ).lastError(),                              \
-      tr( "Failed to execute query: " ),                \
+      QCoreApplication::translate( \
+        "mvd::DatabaseConnection", \
+        "Failed to execute query: " \
+      ),                                                \
       QString( "\n\"%1\"" ).arg( ( qry ).lastQuery() )  \
     );                                                  \
     }                                                   \
@@ -157,7 +166,10 @@ namespace mvd
     {                                                   \
     throw DatabaseError(                                \
       ( qry ).lastError(),                              \
-      tr( "Failed to batch query: " ),                  \
+      QCoreApplication::translate( \
+        "mvd::DatabaseConnection", \
+        "Failed to batch query: " \
+      ),                                                \
       QString( "\n\"%1\"" ).arg( ( qry ).lastQuery() )  \
     );                                                  \
     }                                                   \
