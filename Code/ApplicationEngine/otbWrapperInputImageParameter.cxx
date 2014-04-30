@@ -17,9 +17,6 @@
 =========================================================================*/
 #include "otbWrapperInputImageParameter.h"
 #include "itksys/SystemTools.hxx"
-#include "otbImageFileReader.h"
-#include "itkCastImageFilter.h"
-#include "otbImageToVectorImageCastFilter.h"
 #include "otbWrapperTypes.h"
 
 #include <boost/algorithm/string.hpp>
@@ -111,41 +108,32 @@ otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
 
 
-template <class TInputImage, class TOutputImage>
-TOutputImage*
-InputImageParameter::SimpleCastImage()
+void
+InputImageParameter::SetImage(FloatVectorImageType* image)
 {
-  TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
-
-  typedef itk::CastImageFilter<TInputImage, TOutputImage> CasterType;
-  typename CasterType::Pointer caster = CasterType::New();
-
-  caster->SetInput(realInputImage);
-  caster->UpdateOutputInformation();
-
-  m_Image = caster->GetOutput();
-  m_Caster = caster;
-
-  return caster->GetOutput();
+  m_UseFilename = false;
+  this->SetImage<FloatVectorImageType>( image );
 }
 
 
-template <class TInputImage, class TOutputImage>
-TOutputImage*
-InputImageParameter::CastVectorImageFromImage()
+bool
+InputImageParameter::HasValue() const
 {
-  TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
+  if( m_FileName.empty() && m_Image.IsNull() )
+    return false;
+  else
+    return true;
+}
 
-  typedef ImageToVectorImageCastFilter<TInputImage, TOutputImage> CasterType;
-  typename CasterType::Pointer caster = CasterType::New();
-
-  caster->SetInput(realInputImage);
-  caster->UpdateOutputInformation();
-
-  m_Image = caster->GetOutput();
-  m_Caster = caster;
-
-  return caster->GetOutput();
+void
+InputImageParameter::ClearValue()
+{
+ m_Image  = NULL;
+ m_Reader = NULL;
+ m_Caster = NULL;
+ m_FileName = "";
+ m_PreviousFileName="";
+ m_UseFilename = true;
 }
 
 
@@ -200,44 +188,6 @@ otbGenericCastImageMacro(Int32ImageType, CastVectorImageFromImage, Vector)
 otbGenericCastImageMacro(UInt32ImageType, CastVectorImageFromImage, Vector)
 otbGenericCastImageMacro(FloatImageType, CastVectorImageFromImage, Vector)
 otbGenericCastImageMacro(DoubleImageType, CastVectorImageFromImage, Vector)
-
-
-void
-InputImageParameter::SetImage(FloatVectorImageType* image)
-{
-  m_UseFilename = false;
-  this->SetImage<FloatVectorImageType>( image );
-}
-
-
-template <class TInputImage>
-void
-InputImageParameter::SetImage(TInputImage* image)
-{
-  m_UseFilename = false;
-  m_Image = image;
-}
-
-
-bool
-InputImageParameter::HasValue() const
-{
-  if( m_FileName.empty() && m_Image.IsNull() )
-    return false;
-  else
-    return true;
-}
-
-void
-InputImageParameter::ClearValue()
-{
- m_Image  = NULL;
- m_Reader = NULL;
- m_Caster = NULL;
- m_FileName = "";
- m_PreviousFileName="";
- m_UseFilename = true;
-}
 
 
 }

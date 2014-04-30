@@ -78,144 +78,7 @@ public:
 
   /** Get the input image as templated image type. */
   template <class TImageType>
-    TImageType* GetImage()
-  {
-  otbMsgDevMacro(<< "GetImage()");
-
-  // Used m_PreviousFileName because if not, when the user call twice GetImage,
-  // it without changing the filename, it returns 2 different
-  // image pointers
-  // Only one image type can be used
-
-  // 2 cases : the user set a filename vs. the user set an image
-  if (m_UseFilename)
-    {
-    if( m_PreviousFileName!=m_FileName && !m_FileName.empty() )
-      {
-      //////////////////////// Filename case:
-      // A new valid filename has been given : a reader is created
-      m_PreviousFileName = m_FileName;
-      typedef otb::ImageFileReader<TImageType> ReaderType;
-      typename ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(m_FileName);
-
-      try
-        {
-        reader->UpdateOutputInformation();
-        }
-      catch (itk::ExceptionObject &)
-        {
-        this->ClearValue();
-        }
-
-      m_Image = reader->GetOutput();
-      m_Reader = reader;
-
-      // Pay attention, don't return m_Image because it is a ImageBase...
-      return reader->GetOutput();
-      }
-    else
-      {
-      // In this case, the reader and the image should already be there
-      if (m_Image.IsNull())
-        {
-        itkExceptionMacro("No input image or filename detected...");
-        }
-      else
-        {
-        // Check if the image type asked here is the same as the one used for the reader
-        if (dynamic_cast<TImageType*> (m_Image.GetPointer()))
-          {
-          return dynamic_cast<TImageType*> (m_Image.GetPointer());
-          }
-        else
-          {
-          itkExceptionMacro("Cannot ask a different image type");
-          }
-        }
-      }
-    }
-  else
-    {
-    //////////////////////// Image case:
-    if (m_Image.IsNull())
-      {
-      itkExceptionMacro("No input image or filename detected...");
-      }
-    else
-      {
-      if (dynamic_cast<UInt8ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt8ImageType, TImageType> ();
-        }
-      else if (dynamic_cast<Int16ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int16ImageType, TImageType> ();
-        }
-      else if (dynamic_cast<UInt16ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt16ImageType, TImageType> ();
-        }
-      else if (dynamic_cast<Int32ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int32ImageType, TImageType> ();
-        }
-      else if (dynamic_cast<UInt32ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt32ImageType, TImageType> ();
-        }
-      else if (dynamic_cast<FloatImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<FloatImageType, TImageType> ();
-        }
-      else if (dynamic_cast<DoubleImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<DoubleImageType, TImageType> ();
-        }
-      else if (dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt8VectorImageType, TImageType> ();
-        }
-      else if (dynamic_cast<Int16VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int16VectorImageType, TImageType> ();
-        }
-      else if (dynamic_cast<UInt16VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt16VectorImageType, TImageType> ();
-        }
-      else if (dynamic_cast<Int32VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int32VectorImageType, TImageType> ();
-        }
-      else if (dynamic_cast<UInt32VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt32VectorImageType, TImageType> ();
-        }
-      else if (dynamic_cast<FloatVectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<FloatVectorImageType, TImageType> ();
-        }
-      else if (dynamic_cast<DoubleVectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<DoubleVectorImageType, TImageType> ();
-        }
-      else if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt8RGBAImageType, TImageType> ();
-        }
-      else if (dynamic_cast<UInt8RGBImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt8RGBImageType, TImageType> ();
-        }
-      else
-        {
-        itkExceptionMacro("Unknown image type");
-        }
-      }
-    }
-  }
-
+    TImageType* GetImage();
 
   /** Set a FloatVectorImageType image.*/
   void SetImage(FloatVectorImageType* image);
@@ -225,13 +88,10 @@ public:
     void SetImage(TImageType* image);
 
 
-    /** Generic cast method that will be specified for each image type. */
+  /** Generic cast method that will be specified for each image type. */
   template <class TInputImage, class TOutputImage>
-    TOutputImage* CastImage()
-  {
-    itkExceptionMacro("Cast from "<<typeid(TInputImage).name()<<" to "<<typeid(TInputImage).name()<<" not authorized.");
-  }
-
+    TOutputImage* CastImage();
+    
   /** Cast an image to an image of the same type
   * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
   template <class TInputImage, class TOutputImage>
@@ -295,7 +155,68 @@ private:
 
 }; // End class InputImage Parameter
 
+
+// template specializations of CastImage<> should be declared in header
+// so that the linker knows they exist when building OTB Applications
+
+#define otbDeclareCastImageMacro(InputImageType, OutputImageType)   \
+  template<> OutputImageType *                                          \
+  InputImageParameter::CastImage<InputImageType , OutputImageType>();    \
+
+#define otbGenericDeclareCastImageMacro(InputImageType, prefix)     \
+  otbDeclareCastImageMacro(InputImageType, UInt8##prefix##ImageType) \
+  otbDeclareCastImageMacro(InputImageType, UInt16##prefix##ImageType) \
+  otbDeclareCastImageMacro(InputImageType, Int16##prefix##ImageType) \
+  otbDeclareCastImageMacro(InputImageType, UInt32##prefix##ImageType) \
+  otbDeclareCastImageMacro(InputImageType, Int32##prefix##ImageType) \
+  otbDeclareCastImageMacro(InputImageType, Float##prefix##ImageType) \
+  otbDeclareCastImageMacro(InputImageType, Double##prefix##ImageType)
+
+  
+/*********************************************************************
+********************** Image -> Image
+**********************************************************************/
+otbGenericDeclareCastImageMacro(UInt8ImageType, )
+otbGenericDeclareCastImageMacro(Int16ImageType, )
+otbGenericDeclareCastImageMacro(UInt16ImageType, )
+otbGenericDeclareCastImageMacro(Int32ImageType, )
+otbGenericDeclareCastImageMacro(UInt32ImageType, )
+otbGenericDeclareCastImageMacro(FloatImageType, )
+otbGenericDeclareCastImageMacro(DoubleImageType, )
+
+
+/*********************************************************************
+********************** VectorImage -> VectorImage
+**********************************************************************/
+otbGenericDeclareCastImageMacro(UInt8VectorImageType, Vector)
+otbGenericDeclareCastImageMacro(Int16VectorImageType, Vector)
+otbGenericDeclareCastImageMacro(UInt16VectorImageType, Vector)
+otbGenericDeclareCastImageMacro(Int32VectorImageType, Vector)
+otbGenericDeclareCastImageMacro(UInt32VectorImageType, Vector)
+otbGenericDeclareCastImageMacro(FloatVectorImageType, Vector)
+otbGenericDeclareCastImageMacro(DoubleVectorImageType, Vector)
+
+
+/*********************************************************************
+********************** Image -> VectorImage
+**********************************************************************/
+otbGenericDeclareCastImageMacro(UInt8ImageType, Vector)
+otbGenericDeclareCastImageMacro(Int16ImageType, Vector)
+otbGenericDeclareCastImageMacro(UInt16ImageType, Vector)
+otbGenericDeclareCastImageMacro(Int32ImageType, Vector)
+otbGenericDeclareCastImageMacro(UInt32ImageType, Vector)
+otbGenericDeclareCastImageMacro(FloatImageType, Vector)
+otbGenericDeclareCastImageMacro(DoubleImageType, Vector)
+
+#undef otbDeclareCastImageMacro
+#undef otbGenericDeclareCastImageMacro
+
+
 } // End namespace Wrapper
 } // End namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbWrapperInputImageParameter.txx"
+#endif
 
 #endif
