@@ -31,7 +31,7 @@ namespace Wrapper
 
 
 template <class TImageType>
-TImageType* 
+TImageType*
 InputImageParameter::GetImage()
 {
   otbMsgDevMacro(<< "GetImage()");
