@@ -354,7 +354,7 @@ void GDALImageIO::Read(void* buffer)
                                      0);
     if (lCrGdal == CE_Failure)
       {
-      itkExceptionMacro(<< "Error while reading image (GDAL format) '" 
+      itkExceptionMacro(<< "Error while reading image (GDAL format) '"
         << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
       }
     // Interpret index as color
@@ -425,7 +425,7 @@ void GDALImageIO::Read(void* buffer)
     // Check if gdal call succeed
     if (lCrGdal == CE_Failure)
       {
-      itkExceptionMacro(<< "Error while reading image (GDAL format) '" 
+      itkExceptionMacro(<< "Error while reading image (GDAL format) '"
         << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
       return;
       }
@@ -1342,7 +1342,7 @@ void GDALImageIO::Write(const void* buffer)
     // Check if writing succeed
     if (lCrGdal == CE_Failure)
       {
-      itkExceptionMacro(<< "Error while writing image (GDAL format) '" 
+      itkExceptionMacro(<< "Error while writing image (GDAL format) '"
         << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
       }
     // Flush dataset cache
@@ -1367,7 +1367,7 @@ void GDALImageIO::Write(const void* buffer)
                                                  NULL, NULL );
     if(!hOutputDS)
     {
-      itkExceptionMacro(<< "Error while writing image (GDAL format) '" 
+      itkExceptionMacro(<< "Error while writing image (GDAL format) '"
         << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
     }
     else
