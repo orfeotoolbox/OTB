@@ -354,7 +354,8 @@ void GDALImageIO::Read(void* buffer)
                                      0);
     if (lCrGdal == CE_Failure)
       {
-      itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
+      itkExceptionMacro(<< "Error while reading image (GDAL format) '" 
+        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
       }
     // Interpret index as color
     std::streamoff cpt(0);
@@ -424,7 +425,8 @@ void GDALImageIO::Read(void* buffer)
     // Check if gdal call succeed
     if (lCrGdal == CE_Failure)
       {
-      itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str() << ".");
+      itkExceptionMacro(<< "Error while reading image (GDAL format) '" 
+        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
       return;
       }
     //printDataBuffer(p, m_PxType->pixType, m_NbBands, lNbColumnsRegion*lNbLinesRegion);
@@ -1340,7 +1342,8 @@ void GDALImageIO::Write(const void* buffer)
     // Check if writing succeed
     if (lCrGdal == CE_Failure)
       {
-      itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
+      itkExceptionMacro(<< "Error while writing image (GDAL format) '" 
+        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
       }
     // Flush dataset cache
     m_Dataset->GetDataSet()->FlushCache();
@@ -1364,7 +1367,8 @@ void GDALImageIO::Write(const void* buffer)
                                                  NULL, NULL );
     if(!hOutputDS)
     {
-      itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str() << ".");
+      itkExceptionMacro(<< "Error while writing image (GDAL format) '" 
+        << m_FileName.c_str() << "' : " << CPLGetLastErrorMsg());
     }
     else
     {
@@ -1586,7 +1590,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   if (m_Dataset.IsNull())
     {
     itkExceptionMacro(
-      << "GDAL Writing failed : Impossible to create the image file name '" << m_FileName << "'.");
+      << "GDAL Writing failed : Impossible to create the image file name '"
+      << m_FileName << "' : " << CPLGetLastErrorMsg() );
     }
 
   /*----------------------------------------------------------------------*/
