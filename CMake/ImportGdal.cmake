@@ -45,7 +45,7 @@ if(OTB_USE_EXTERNAL_GDAL)
       message(STATUS "  GDAL is built with a suitable Jpeg2000 driver (OpenJpeg, Kakadu, ECW).")
       set(GDAL_HAS_J2K ON)
     else()
-      message(WARNING "GDAL has no suitable Jpeg2000 driver (compatible drivers are : OpenJpeg, Kakadu, ECW).")
+      message(STATUS "  GDAL has no suitable Jpeg2000 driver (compatible drivers are : OpenJpeg, Kakadu, ECW).")
     endif()
     
   else()
