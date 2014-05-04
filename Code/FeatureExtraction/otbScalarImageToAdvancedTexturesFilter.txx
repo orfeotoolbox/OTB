@@ -423,14 +423,14 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
       totalFrequency = totalFrequency + 2;
     }
 
-    MeasurementType m_Mean            				= itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_Variance        				= itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumAverage      				= itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumEntropy      				= itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumVariance     				= itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_Mean                                        = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_Variance                                    = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_SumAverage                                  = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_SumEntropy                                  = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_SumVariance                                 = itk::NumericTraits< MeasurementType >::Zero;
     MeasurementType m_DifferenceEntropy       = itk::NumericTraits< MeasurementType >::Zero;
     MeasurementType m_DifferenceVariance      = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_IC1        	            = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_IC1                           = itk::NumericTraits< MeasurementType >::Zero;
     MeasurementType m_IC2                     = itk::NumericTraits< MeasurementType >::Zero;
 
     double Entropy = 0;
@@ -510,9 +510,9 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     double PSSquareCumul = 0;
     for(long unsigned int k = histSize; k < twiceHistSize; k++)
       {
-    	m_SumAverage += k * pdxy[k];
-    	m_SumEntropy -= (pdxy[k] > 0.0001) ? pdxy[k] * vcl_log(pdxy[k]) / log2 : 0;
-    	PSSquareCumul += k * k * pdxy[k];
+           m_SumAverage += k * pdxy[k];
+           m_SumEntropy -= (pdxy[k] > 0.0001) ? pdxy[k] * vcl_log(pdxy[k]) / log2 : 0;
+           PSSquareCumul += k * k * pdxy[k];
       }
     m_SumVariance = PSSquareCumul - m_SumAverage * m_SumAverage;
 
@@ -541,7 +541,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
      * to compute hxy1. This need to force an iterator over entire histogram.
        Processing time is propotional to the m_NumberOfBins */
     double hxy2 = 0;
-		for(long unsigned int i = 0; i < histSize; ++i)
+              for(long unsigned int i = 0; i < histSize; ++i)
       {
       for(long unsigned int j = 0; j < histSize; ++j)
         {
