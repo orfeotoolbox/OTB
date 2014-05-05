@@ -90,6 +90,11 @@ bool
 ImageViewRenderer
 ::CheckGLCapabilities() const
 {
+#if USE_REMOTE_DESKTOP_DISABLED_RENDERING
+  return true;
+
+#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
+
   //
   // Trace required OpenGL and GLSL versions.
   qWarning() <<
@@ -157,7 +162,9 @@ ImageViewRenderer
 
   //
   // KO.
-  return false; 
+  return false;
+
+#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
 
 /*****************************************************************************/
@@ -202,12 +209,19 @@ void
 ImageViewRenderer
 ::GetReferenceExtent( PointType& origin, PointType& extent  ) const
 {
+#if USE_REMOTE_DESKTOP_DISABLED_RENDERING
+  extent[ 0 ] = 0.0;
+  extent[ 1 ] = 0.0;
+
+#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
   assert( !m_ReferenceGlImageActor.IsNull() );
 
   m_ReferenceGlImageActor->GetExtent(
     origin[ 0 ], origin[ 1 ],
     extent[ 0 ], extent[ 1 ]
   );
+
+#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
 
 /*****************************************************************************/
@@ -291,6 +305,9 @@ ImageViewRenderer
   m_GlView->SetSettings( context->m_ViewSettings );
   */
 
+#if USE_REMOTE_DESKTOP_DISABLED_RENDERING && 0
+
+#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
   //
   // Apply VectorImageModel::Settings to otb::GlImageActor.
   UpdateActors( c );
@@ -315,6 +332,8 @@ ImageViewRenderer
   //
   // Post-render scene.
   m_GlView->AfterRendering();
+
+#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
 
 /*****************************************************************************/
@@ -514,6 +533,15 @@ ImageViewRenderer
     {
     assert( *it!=NULL );
 
+#if USE_REMOTE_DESKTOP_DISABLED_RENDERING
+
+    ImageModelActorPair pair(
+      *it,
+      otb::GlImageActor::Pointer()
+    );
+
+#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
+
     ImageModelActorPair pair(
       *it,
       otb::GlImageActor::New()
@@ -539,11 +567,16 @@ ImageViewRenderer
     );
 
     qDebug() << "Added image-actor:" << FromStdString( actorKey );
+
+#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
     }
 
   //
   // Remember first vector image-model as reference image-model.
   m_ReferenceImageModel = images.front();
+
+#if USE_REMOTE_DESKTOP_DISABLED_RENDERING
+#else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 
   //
   // Remember first actor as reference actor.
@@ -554,11 +587,11 @@ ImageViewRenderer
   assert( !glActor.IsNull() );
 
   assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
-
   m_ReferenceGlImageActor = otb::DynamicCast< otb::GlImageActor >( glActor );
   assert( !m_ReferenceGlImageActor.IsNull() );
-}
 
+#endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
+}
 
 
 /*****************************************************************************/
