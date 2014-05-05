@@ -36,6 +36,8 @@ namespace otb
  *
  * "Sum of squares: Variance" \f$ = f_4 = \sum_{i, j}(i - \mu)^2 g(i, j) \f$
  *
+ * "Dissimilarity" \f$ = f_5 = \sum_{i, j}(i - j) g(i, j)^2 \f$
+ *
  * "Sum average" \f$ = f_6 = -\sum_{i}i g_{x+y}(i)
  *
  * "Sum Variance" \f$ = f_7 = \sum_{i}(i - f_8)^2 g_{x+y}(i) \f$
@@ -177,6 +179,9 @@ public:
 
   /** Get the variance output image */
   OutputImageType * GetVarianceOutput();
+
+  /** Get the dissimilarity output image */
+  OutputImageType * GetDissimilarityOutput();
 
   /** Get the sum average output image */
   OutputImageType * GetSumAverageOutput();

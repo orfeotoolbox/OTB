@@ -28,8 +28,6 @@
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 
-#include "itkTimeProbe.h"
-
 namespace otb
 {
 namespace Wrapper
@@ -239,6 +237,7 @@ void DoExecute()
     m_AdvTexFilter->SetNumberOfBinsPerAxis(GetParameterInt("parameters.nbbin"));
     m_AdvImageList->PushBack(m_AdvTexFilter->GetMeanOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetVarianceOutput());
+    m_AdvImageList->PushBack(m_AdvTexFilter->GetDissimilarityOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetSumAverageOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetSumVarianceOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetSumEntropyOutput());

@@ -37,10 +37,10 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   m_InputImageMinimum(0),
   m_InputImageMaximum(255)
 {
-  // There are 9 outputs corresponding to the 8 textures indices
-  this->SetNumberOfRequiredOutputs(9);
+  // There are 10 outputs corresponding to the 9 textures indices
+  this->SetNumberOfRequiredOutputs(10);
 
-  // Create the 9 outputs
+  // Create the 10 outputs
   this->SetNthOutput(0, OutputImageType::New());
   this->SetNthOutput(1, OutputImageType::New());
   this->SetNthOutput(2, OutputImageType::New());
@@ -50,18 +50,18 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   this->SetNthOutput(6, OutputImageType::New());
   this->SetNthOutput(7, OutputImageType::New());
   this->SetNthOutput(8, OutputImageType::New());
+  this->SetNthOutput(9, OutputImageType::New());
 }
 
 template <class TInputImage, class TOutputImage>
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::~ScalarImageToAdvancedTexturesFilter()
 {}
-
 template <class TInputImage, class TOutputImage>
 typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::GetVarianceOutput()
+::GetMeanOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
     {
@@ -74,7 +74,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::GetSumAverageOutput()
+::GetVarianceOutput()
 {
   if (this->GetNumberOfOutputs() < 2)
     {
@@ -87,7 +87,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::GetSumVarianceOutput()
+::GetDissimilarityOutput()
 {
   if (this->GetNumberOfOutputs() < 3)
     {
@@ -100,7 +100,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::GetSumEntropyOutput()
+::GetSumAverageOutput()
 {
   if (this->GetNumberOfOutputs() < 4)
     {
@@ -113,7 +113,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::GetDifferenceEntropyOutput()
+::GetSumVarianceOutput()
 {
   if (this->GetNumberOfOutputs() < 5)
     {
@@ -126,7 +126,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::GetDifferenceVarianceOutput()
+::GetSumEntropyOutput()
 {
   if (this->GetNumberOfOutputs() < 6)
     {
@@ -139,7 +139,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::GetIC1Output()
+::GetDifferenceEntropyOutput()
 {
   if (this->GetNumberOfOutputs() < 7)
     {
@@ -152,7 +152,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::GetIC2Output()
+::GetDifferenceVarianceOutput()
 {
   if (this->GetNumberOfOutputs() < 8)
     {
@@ -165,13 +165,26 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::GetMeanOutput()
+::GetIC1Output()
 {
-  if (this->GetNumberOfOutputs() < 1)
+  if (this->GetNumberOfOutputs() < 9)
     {
     return 0;
     }
   return static_cast<OutputImageType *>(this->GetOutput(8));
+}
+
+template <class TInputImage, class TOutputImage>
+typename ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
+::OutputImageType *
+ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
+::GetIC2Output()
+{
+  if (this->GetNumberOfOutputs() < 10)
+    {
+    return 0;
+    }
+  return static_cast<OutputImageType *>(this->GetOutput(9));
 }
 
 template <class TInputImage, class TOutputImage>
@@ -275,6 +288,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   InputImagePointerType  inputPtr              =      const_cast<InputImageType *>(this->GetInput());
   OutputImagePointerType meanPtr               =      this->GetMeanOutput();
   OutputImagePointerType variancePtr           =      this->GetVarianceOutput();
+  OutputImagePointerType dissimilarityPtr      =      this->GetDissimilarityOutput();
   OutputImagePointerType sumAveragePtr         =      this->GetSumAverageOutput();
   OutputImagePointerType sumVariancePtr        =      this->GetSumVarianceOutput();
   OutputImagePointerType sumEntropytPtr        =      this->GetSumEntropyOutput();
@@ -286,6 +300,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   // Build output iterators
   itk::ImageRegionIteratorWithIndex<OutputImageType> varianceIt(variancePtr, outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>          meanIt(meanPtr, outputRegionForThread);
+  itk::ImageRegionIterator<OutputImageType>          dissimilarityIt(dissimilarityPtr, outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>          sumAverageIt(sumAveragePtr, outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>          sumVarianceIt(sumVariancePtr, outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType>          sumEntropytIt(sumEntropytPtr, outputRegionForThread);
@@ -297,6 +312,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   // Go to begin
   varianceIt.GoToBegin();
   meanIt.GoToBegin();
+  dissimilarityIt.GoToBegin();
   sumAverageIt.GoToBegin();
   sumVarianceIt.GoToBegin();
   sumEntropytIt.GoToBegin();
@@ -313,6 +329,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   // Iterate on outputs to compute textures
   while (!varianceIt.IsAtEnd()
          && !meanIt.IsAtEnd()
+         && !dissimilarityIt.IsAtEnd()
          && !sumAverageIt.IsAtEnd()
          && !sumVarianceIt.IsAtEnd()
          && !sumEntropytIt.IsAtEnd()
@@ -349,6 +366,8 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 
     GreyLevelCooccurrenceListType glcList;
     TotalAbsoluteFrequencyType totalFrequency = 0;
+
+    const double minSizeHist = std::min (m_Histogram->GetSize()[0], m_Histogram->GetSize()[1]);
 
     neighborIt = NeighborhoodIteratorType(m_NeighborhoodRadius, inputPtr, inputRegion);
     for ( neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt )
@@ -423,14 +442,15 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
       totalFrequency = totalFrequency + 2;
     }
 
-    MeasurementType m_Mean                                        = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_Variance                                    = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumAverage                                  = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumEntropy                                  = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumVariance                                 = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_Mean            				= itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_Variance        				= itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_Dissimilarity    				= itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_SumAverage      				= itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_SumEntropy      				= itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_SumVariance     				= itk::NumericTraits< MeasurementType >::Zero;
     MeasurementType m_DifferenceEntropy       = itk::NumericTraits< MeasurementType >::Zero;
     MeasurementType m_DifferenceVariance      = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_IC1                           = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_IC1                     = itk::NumericTraits< MeasurementType >::Zero;
     MeasurementType m_IC2                     = itk::NumericTraits< MeasurementType >::Zero;
 
     double Entropy = 0;
@@ -488,8 +508,6 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
       ++vectorIt;
       }
 
-    double minSizeHist = std::min (m_Histogram->GetSize()[0], m_Histogram->GetSize()[1]);
-
     //second pass over normalized co-occurrence list to find variance and pipj.
     //pipj is needed to calculate f11
     vectorIt = glcList.begin();
@@ -539,14 +557,23 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 
     /* pipj computed below is totally different from earlier one which was used
      * to compute hxy1. This need to force an iterator over entire histogram.
-       Processing time is propotional to the m_NumberOfBins */
+       Processing time is propotional to the histogram bin size */
     double hxy2 = 0;
-              for(long unsigned int i = 0; i < histSize; ++i)
+		for(int i = 0; i < histSize; ++i)
       {
-      for(long unsigned int j = 0; j < histSize; ++j)
+      for(int j = 0; j < histSize; ++j)
         {
         double pipj = hx[j] * hy[i];
         hxy2 -= (pipj > 0.0001) ? pipj * vcl_log(pipj) : 0.;
+        double frequency = 0;
+        int instanceId = i * m_Histogram->GetSize()[0] + j;
+        if (instanceId < lookupArray.size())
+          {
+          int findex = lookupArray[instanceId];
+          if(findex > -1 )
+            frequency = glcList[findex].frequency;
+          }
+        m_Dissimilarity+= ( j - i ) * (frequency * frequency);
         }
       }
 
@@ -556,8 +583,9 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     m_IC2 = (m_IC2 >= 0) ? vcl_sqrt (m_IC2) : 0;
 
     // Fill outputs
-    varianceIt.Set(m_Variance);
     meanIt.Set(m_Mean);
+    varianceIt.Set(m_Variance);
+    dissimilarityIt.Set(m_Dissimilarity);
     sumAverageIt.Set(m_SumAverage);
     sumVarianceIt.Set(m_SumVariance);
     sumEntropytIt.Set(m_SumEntropy);
@@ -572,6 +600,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     // Increment iterators
     ++varianceIt;
     ++meanIt;
+    ++dissimilarityIt;
     ++sumAverageIt;
     ++sumVarianceIt;
     ++sumEntropytIt;
