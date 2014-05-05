@@ -24,8 +24,15 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 
+#include "otbPleiadesImageMetadataInterface.h"
+
+#include "itkScalableAffineTransform.h"
+
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
+
+#include "otbDateTimeAdapter.h"
+#include "otbStreamingResampleImageFilter.h"
 
 namespace otb
 {
@@ -68,6 +75,14 @@ public:
   typedef otb::GenericRSResampleImageFilter<FloatVectorImageType,
                                             FloatVectorImageType>  ResamplerType;
 
+  typedef itk::ScalableAffineTransform<double, 2>                 TransformType;
+  
+  typedef otb::ImageKeywordlist                                   ImageKeywordlistType;
+  
+  typedef otb::StreamingResampleImageFilter
+    <FloatVectorImageType,
+     FloatVectorImageType>                                        BasicResamplerType;
+  
 private:
   void DoInit()
   {
@@ -117,7 +132,10 @@ private:
     AddChoice("interpolator.linear", "Linear interpolation");
     SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
 
-
+    AddParameter(ParameterType_Empty, "phroptim", "PHR optimised method");
+    SetParameterDescription("phroptim", "Use an optimised method for Pleiade bundle P+XS");
+    DisableParameter("phroptim");
+    
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -128,7 +146,29 @@ private:
 
   void DoUpdateParameters()
   {
-    // Nothing to do here : all parameters are independent
+    if (!HasUserValue("phroptim") &&
+        HasValue("inr") &&
+        HasValue("inm"))
+    {
+      FloatVectorImageType* refImage = GetParameterImage("inr");
+      FloatVectorImageType* movingImage = GetParameterImage("inm");
+      bool isRefPHR = false;
+      bool isMovingPHR = false;
+      
+      otb::PleiadesImageMetadataInterface::Pointer phrIMI = 
+        otb::PleiadesImageMetadataInterface::New();
+      phrIMI->SetMetaDataDictionary(refImage->GetMetaDataDictionary());
+      isRefPHR = phrIMI->CanRead();
+      
+      phrIMI->SetMetaDataDictionary(movingImage->GetMetaDataDictionary());
+      isMovingPHR = phrIMI->CanRead();
+      
+      if (isRefPHR && isMovingPHR)
+      {
+        EnableParameter("phroptim");
+        otbAppLogINFO(" Enable the PHR optimization");
+      } 
+    }
   }
 
 
@@ -140,6 +180,8 @@ private:
 
     // Resample filter
     m_Resampler = ResamplerType::New();
+    
+    m_BasicResampler = BasicResamplerType::New();
 
     // Get Interpolator
     switch ( GetParameterInt("interpolator") )
@@ -148,12 +190,14 @@ private:
       {
       LinInterpolatorType::Pointer interpolator = LinInterpolatorType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_BasicResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_NNeighbor:
       {
       NNInterpolatorType::Pointer interpolator = NNInterpolatorType::New();
       m_Resampler->SetInterpolator(interpolator);
+      m_BasicResampler->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_BCO:
@@ -161,6 +205,7 @@ private:
       BCOInterpolatorType::Pointer interpolator = BCOInterpolatorType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_Resampler->SetInterpolator(interpolator);
+      m_BasicResampler->SetInterpolator(interpolator);
       }
       break;
       }
@@ -174,41 +219,135 @@ private:
     FloatVectorImageType::IndexType   start   = refImage->GetLargestPossibleRegion().GetIndex();
     FloatVectorImageType::SizeType    size    = refImage->GetLargestPossibleRegion().GetSize();
     FloatVectorImageType::PointType   origin  = refImage->GetOrigin();
-
-    if(IsParameterEnabled("lms"))
-      {
-      float defScalarSpacing = vcl_abs(GetParameterFloat("lms"));
-      otbAppLogDEBUG("Generating coarse deformation field (spacing="<<defScalarSpacing<<")");
-      FloatVectorImageType::SpacingType defSpacing;
-
-      defSpacing[0] = defScalarSpacing;
-      defSpacing[1] = defScalarSpacing;
-
-      if (spacing[0]<0.0) defSpacing[0] *= -1.0;
-      if (spacing[1]<0.0) defSpacing[1] *= -1.0;
-
-      m_Resampler->SetDisplacementFieldSpacing(defSpacing);
-      }
-
+    
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, movingImage->GetNumberOfComponentsPerPixel());
+    
+    if (IsParameterEnabled("phroptim"))
+      {
+      // Setup a simple affine transform using PHR support data
+      
+      ImageKeywordlistType kwlPan;
+      ImageKeywordlistType kwlXS;
+      
+      itk::ExposeMetaData<ImageKeywordlistType>(
+        refImage->GetMetaDataDictionary(),
+        MetaDataKey::OSSIMKeywordlistKey,
+        kwlPan);
+      
+      itk::ExposeMetaData<ImageKeywordlistType>(
+        movingImage->GetMetaDataDictionary(),
+        MetaDataKey::OSSIMKeywordlistKey,
+        kwlXS);
+      
+      // Compute time delta
+      std::string strStartTimePan = kwlPan.GetMetadataByKey("support_data.time_range_start");
+      std::string strStartTimeXS = kwlXS.GetMetadataByKey("support_data.time_range_start");
+      
+      DateTimeAdapter::Pointer startTimePan = DateTimeAdapter::New();
+      DateTimeAdapter::Pointer startTimeXS = DateTimeAdapter::New();
+      
+      startTimePan->SetFromIso8601(strStartTimePan);
+      startTimeXS->SetFromIso8601(strStartTimeXS);
+      
+      double timeDelta = startTimeXS->GetDeltaInSeconds(startTimePan);
+      
+      // Retrieve line period in Pan
+      std::string tmpStr = kwlPan.GetMetadataByKey("support_data.line_period");
+      double linePeriodPan = atof(tmpStr.c_str());
+      
+      // Retrieve column start
+      tmpStr = kwlPan.GetMetadataByKey("support_data.swath_first_col");
+      int colStartPan = atoi(tmpStr.c_str());
+      tmpStr = kwlXS.GetMetadataByKey("support_data.swath_first_col");
+      int colStartXS = atoi(tmpStr.c_str());
+      
+      // Compute shift between MS and P (in Pan pixels)
+      int lineShift_MS_P =int(vcl_floor((timeDelta/(linePeriodPan/1000))  + 0.5));
+      int colShift_MS_P = colStartXS*4 - colStartPan;
+      
+      // Apply the scaling
+      TransformType::Pointer transform = TransformType::New();
+      transform->Scale(4.0);
+      
+      // Resample filter assumes the origin is attached to the pixel center
+      // in order to keep the top left corners unchanged, apply a 3/2 pixels
+      // shift in each direction
+      TransformType::OutputVectorType offset;
+      offset[0] = 1.5 - static_cast<double>(colShift_MS_P);
+      offset[1] = 1.5 - static_cast<double>(lineShift_MS_P);
+      transform->Translate(offset);
+      
+      // Invert the transform as the resampler filter expect an output-to-input
+      // transform (we have computed the input-to-output transform)
+      TransformType::Pointer realTransform = TransformType::New();
+      transform->GetInverse(realTransform);
+      m_BasicResampler->SetTransform(realTransform);
+      
+      m_BasicResampler->SetInput(movingImage);
+    
+      m_BasicResampler->SetOutputOrigin(origin);
+      m_BasicResampler->SetOutputSpacing(spacing);
+      m_BasicResampler->SetOutputSize(size);
+      m_BasicResampler->SetOutputStartIndex(start);
+      
+      m_BasicResampler->SetEdgePaddingValue(defaultValue);
 
-    m_Resampler->SetInput(movingImage);
-    m_Resampler->SetInputKeywordList(movingImage->GetImageKeywordlist());
-    m_Resampler->SetInputProjectionRef(movingImage->GetProjectionRef());
-    m_Resampler->SetOutputOrigin(origin);
-    m_Resampler->SetOutputSpacing(spacing);
-    m_Resampler->SetOutputSize(size);
-    m_Resampler->SetOutputStartIndex(start);
-    m_Resampler->SetOutputKeywordList(refImage->GetImageKeywordlist());
-    m_Resampler->SetOutputProjectionRef(refImage->GetProjectionRef());
-    m_Resampler->SetEdgePaddingValue(defaultValue);
+      // Set the output image
+      SetParameterOutputImage("out", m_BasicResampler->GetOutput());
+      
+      // DEBUG
+      otbAppLogINFO("Panchro start (in s) : "<< startTimePan->GetSeconds());
+      otbAppLogINFO("MS start (in s)      : "<< startTimeXS->GetSeconds());
+      otbAppLogINFO(" Time delta (in s)   : "<< timeDelta);
+      otbAppLogINFO("Line period P (in ms): "<< linePeriodPan);
+      otbAppLogINFO("Line shift           : "<< lineShift_MS_P);
+      otbAppLogINFO("Col shift            : "<< colShift_MS_P);
+      //DisableParameter("out");
+      //return;
+      }
+    else
+      {
+      if(IsParameterEnabled("lms"))
+        {
+        float defScalarSpacing = vcl_abs(GetParameterFloat("lms"));
+        otbAppLogDEBUG("Generating coarse deformation field (spacing="<<defScalarSpacing<<")");
+        FloatVectorImageType::SpacingType defSpacing;
 
-    // Set the output image
-    SetParameterOutputImage("out", m_Resampler->GetOutput());
+        defSpacing[0] = defScalarSpacing;
+        defSpacing[1] = defScalarSpacing;
+
+        if (spacing[0]<0.0) defSpacing[0] *= -1.0;
+        if (spacing[1]<0.0) defSpacing[1] *= -1.0;
+
+        m_Resampler->SetDisplacementFieldSpacing(defSpacing);
+        }
+      
+      // Setup transform through projRef and Keywordlist
+      m_Resampler->SetInputKeywordList(movingImage->GetImageKeywordlist());
+      m_Resampler->SetInputProjectionRef(movingImage->GetProjectionRef());
+      
+      m_Resampler->SetOutputKeywordList(refImage->GetImageKeywordlist());
+      m_Resampler->SetOutputProjectionRef(refImage->GetProjectionRef());
+      
+      m_Resampler->SetInput(movingImage);
+      
+      m_Resampler->SetOutputOrigin(origin);
+      m_Resampler->SetOutputSpacing(spacing);
+      m_Resampler->SetOutputSize(size);
+      m_Resampler->SetOutputStartIndex(start);
+      
+      m_Resampler->SetEdgePaddingValue(defaultValue);
+
+      // Set the output image
+      SetParameterOutputImage("out", m_Resampler->GetOutput());
+      }
   }
 
   ResamplerType::Pointer           m_Resampler;
+  
+  BasicResamplerType::Pointer      m_BasicResampler;
+  
 };
 
 } // end namespace Wrapper
