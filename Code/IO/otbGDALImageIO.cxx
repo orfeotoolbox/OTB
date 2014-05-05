@@ -44,6 +44,8 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include "otbOGRHelpers.h"
 
+#include "stdint.h" //needed for uintptr_t
+
 inline unsigned int uint_ceildivpow2(unsigned int a, unsigned int b) {
   return (a + (1 << b) - 1) >> b;
 }
@@ -488,22 +490,22 @@ void GDALImageIO::ReadImageInformation()
 bool GDALImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
 {
   GDALDataset* dataset = m_Dataset->GetDataSet();
-  
+
   if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
     {
     // JPEG2000 case : use the number of overviews actually in the dataset
     // Original resolution
     res.push_back(0);
-    
+
     // available overviews
     for (unsigned int k=0; k<m_NumberOfOverviews; ++k)
       {
       res.push_back(k+1);
       }
-    
+
     return true;
     }
-  
+
   // default case : compute overviews until one of the dimensions is 1
   bool flagStop = false;
   unsigned int resFactor = 0;
@@ -534,7 +536,7 @@ bool GDALImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<
 
   unsigned int originalWidth = m_OriginalDimensions[0];
   unsigned int originalHeight = m_OriginalDimensions[1];
-  
+
   bool computeBlockSize = false;
   int blockSizeX = 0;
   int blockSizeY = 0;
@@ -551,7 +553,7 @@ bool GDALImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<
       computeBlockSize = false;
       }
     }
-  
+
 
   for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
     {
@@ -880,7 +882,7 @@ void GDALImageIO::InternalReadImageInformation()
   // Default Spacing
   m_Spacing[0] = 1;
   m_Spacing[1] = 1;
-  
+
   // flag to detect images in sensor geometry
   bool isSensor = false;
 
@@ -901,7 +903,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverShortNameKey, driverShortName);
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey,  driverLongName);
-  
+
   if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
     {
     // store the cache size used for Jpeg2000 files
@@ -1018,7 +1020,7 @@ void GDALImageIO::InternalReadImageInformation()
       m_Origin[1] = VadfGeoTransform[3];
       m_Spacing[0] = VadfGeoTransform[1];
       m_Spacing[1] = VadfGeoTransform[5];
-    
+
       if ( m_Spacing[0]== 0 || m_Spacing[1] == 0)
         {
         // Manage case where axis are not standard
@@ -1073,7 +1075,7 @@ void GDALImageIO::InternalReadImageInformation()
                                             static_cast<std::string>(papszMetadata[cpt]));
       }
     }
-  
+
   /* Special case for JPEG2000, also look in the GML boxes */
   if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
     {
@@ -1083,12 +1085,12 @@ void GDALImageIO::InternalReadImageInformation()
       {
       gmlMetadata = jp2Metadata.papszGMLMetadata;
       }
-    
+
     if (CSLCount(gmlMetadata) > 0)
       {
       std::string key;
       int cptOffset = CSLCount(papszMetadata);
-      
+
       for (int cpt = 0; gmlMetadata[cpt] != NULL; ++cpt)
         {
         std::ostringstream lStream;
@@ -1100,7 +1102,7 @@ void GDALImageIO::InternalReadImageInformation()
         }
       }
     }
-  
+
 
   /* -------------------------------------------------------------------- */
   /*      Report subdatasets.                                             */
@@ -1573,9 +1575,11 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     // doesn't begin with 0x, the address in not interpreted as
     // hexadecimal but alpha numeric value, then the conversion to
     // integer make us pointing to an non allowed memory block => Crash.
+    //use intptr_t to cast void* to unsigned long. included stdint.h for
+    // uintptr_t typedef.
     std::ostringstream stream;
     stream << "MEM:::"
-           <<  "DATAPOINTER=" << (unsigned long)(buffer) << ","
+           <<  "DATAPOINTER=" << (uintptr_t)(buffer) << ","
            <<  "PIXELS=" << m_Dimensions[0] << ","
            <<  "LINES=" << m_Dimensions[1] << ","
            <<  "BANDS=" << m_NbBands << ","
@@ -1704,7 +1708,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       dataset->SetMetadataItem(tag.c_str(), value.c_str(), NULL);
       }
     }
-  
+
   // Report any RPC coefficients
   ImageKeywordlist otb_kwl;
   itk::ExposeMetaData<ImageKeywordlist>(dict,
@@ -1720,8 +1724,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       CSLDestroy( rpcMetadata );
       }
     }
-  
-  
+
+
   // END
 
   // Dataset info
@@ -1777,7 +1781,7 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
       {
       gdalDriverShortName = "JP2OpenJPEG";
       }
-    
+
     if (!driver)
       {
       driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName("JP2KAK");
@@ -1786,7 +1790,7 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
         gdalDriverShortName = "JP2KAK";
         }
       }
-    
+
     if (!driver)
       {
       driver = GDALDriverManagerWrapper::GetInstance().GetDriverByName("JP2ECW");
@@ -1795,13 +1799,13 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
         gdalDriverShortName = "JP2ECW";
         }
       }
-    
+
     if (!driver)
       {
       gdalDriverShortName = "NOT-FOUND";
       }
   }
-    
+
   else
     gdalDriverShortName = "NOT-FOUND";
 
@@ -1815,12 +1819,12 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
     {
     return false;
     }
-  
+
   if (!jp2Metadata.papszGMLMetadata)
     {
     return false;
     }
-  
+
   std::string gmlString = static_cast<std::string>(jp2Metadata.papszGMLMetadata[0]);
   gmlString.erase(0,18); // We need to remove first part to create a true xml stream
   otbMsgDevMacro( << "XML extract from GML box: " << gmlString );
