@@ -89,6 +89,12 @@ int otbScalarImageToAdvancedTexturesFilter(int argc, char * argv[])
   writer->Update();
 
   oss.str("");
+  oss << outprefix << "Dissimilarity.tif";
+  writer->SetInput(filter->GetDissimilarityOutput());
+  writer->SetFileName(oss.str());
+  writer->Update();
+
+  oss.str("");
   oss << outprefix << "SumAverage.tif";
   writer->SetInput(filter->GetSumAverageOutput());
   writer->SetFileName(oss.str());

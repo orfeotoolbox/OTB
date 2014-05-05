@@ -1359,11 +1359,13 @@ add_test(feTuScalarImageToAdvancedTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
 )
 
 add_test(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-n-images ${NOTOL} 9
+        --compare-n-images ${NOTOL} 10
             ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputVariance.tif
             ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputVariance.tif
             ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputMean.tif
             ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputMean.tif
+            ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputDissimilarity.tif
+            ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputDissimilarity.tif
             ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputSumAverage.tif
             ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputSumAverage.tif
             ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputSumVariance.tif
