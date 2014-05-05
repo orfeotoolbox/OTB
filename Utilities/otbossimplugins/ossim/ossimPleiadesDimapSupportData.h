@@ -152,7 +152,13 @@ namespace ossimplugins
          double getLatScale()        const {return theLatScale;};
          double getLonScale()        const {return theLonScale;};
          double getHeightScale()     const {return theHeightScale;};
-
+         
+         
+         ossimString    getTimeRangeStart() const {return theTimeRangeStart;};
+         ossimString    getTimeRangeEnd()   const {return theTimeRangeEnd;};
+         ossim_float64  getLinePeriod()     const {return theLinePeriod;};
+         ossim_int32    getSwathFirstCol()  const {return theSwathFirstCol;};
+         ossim_int32    getSwathLastCol()   const {return theSwathLastCol;}; 
 
 
       private:
@@ -221,6 +227,14 @@ namespace ossimplugins
          std::vector<double> theLineDenCoeff;
          std::vector<double> theSampNumCoeff;
          std::vector<double> theSampDenCoeff;
+         
+         // Additional metadata used to enhance pansharpening
+         ossimString    theTimeRangeStart;
+         ossimString    theTimeRangeEnd;
+         ossim_float64  theLinePeriod;
+         ossim_int32    theSwathFirstCol;
+         ossim_int32    theSwathLastCol;
+         
 
 
          //--- TODO MSD Check if it is necessary to keep that
