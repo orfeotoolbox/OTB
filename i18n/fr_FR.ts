@@ -986,7 +986,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
     <name>mvd::DatasetPropertiesWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulaire</translation>
     </message>
     <message>
         <source>Property</source>
@@ -1138,7 +1138,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
     <name>mvd::HistogramWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulaire</translation>
     </message>
     <message>
         <source>Zoom to full intensity range.</source>
@@ -1976,7 +1976,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     <name>mvd::SearchableTreeWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Formulaire</translation>
     </message>
     <message>
         <source></source>

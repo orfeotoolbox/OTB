@@ -40,7 +40,7 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #ifdef OTB_WRAP_QT
-# include  "ApplicationsWrapper/mvdApplicationLauncher.h"
+# include "ApplicationsWrapper/mvdApplicationLauncher.h"
 # include "ApplicationsWrapper/mvdApplicationsToolBoxController.h"
 # include "ApplicationsWrapper/mvdOTBApplicationsModel.h"
 # include "ApplicationsWrapper/mvdWrapperQtWidgetView.h"

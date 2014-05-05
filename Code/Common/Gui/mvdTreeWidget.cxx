@@ -270,6 +270,8 @@ TreeWidget
 
   if( itemAt( event->pos() )==NULL )
     event->ignore();
+  else
+    event->accept();
 }
 
 /*******************************************************************************/
