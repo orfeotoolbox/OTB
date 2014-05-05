@@ -52,7 +52,7 @@ StandardShader::~StandardShader()
 
 std::string StandardShader::GetSource() const
 {
-  return "#version 120 \n"                                              \
+  return "#version 110 \n"                                              \
     "uniform sampler2D src;\n"                                          \
     "uniform vec4 shader_a;\n"                                          \
     "uniform vec4 shader_b;\n"                                          \
