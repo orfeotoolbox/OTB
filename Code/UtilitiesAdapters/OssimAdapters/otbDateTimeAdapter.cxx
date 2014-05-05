@@ -68,7 +68,7 @@ DateTimeAdapter::GetMinute()
 double
 DateTimeAdapter::GetSeconds()
 {
-  return static_cast<double>(m_LocalTm->getSec()) 
+  return static_cast<double>(m_LocalTm->getSec())
     + m_LocalTm->getFractionalSecond();
 }
 

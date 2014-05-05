@@ -442,12 +442,12 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
       totalFrequency = totalFrequency + 2;
     }
 
-    MeasurementType m_Mean            				= itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_Variance        				= itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_Dissimilarity    				= itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumAverage      				= itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumEntropy      				= itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumVariance     				= itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_Mean                                        = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_Variance                                    = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_Dissimilarity                                = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_SumAverage                                  = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_SumEntropy                                  = itk::NumericTraits< MeasurementType >::Zero;
+    MeasurementType m_SumVariance                                 = itk::NumericTraits< MeasurementType >::Zero;
     MeasurementType m_DifferenceEntropy       = itk::NumericTraits< MeasurementType >::Zero;
     MeasurementType m_DifferenceVariance      = itk::NumericTraits< MeasurementType >::Zero;
     MeasurementType m_IC1                     = itk::NumericTraits< MeasurementType >::Zero;
@@ -559,7 +559,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
      * to compute hxy1. This need to force an iterator over entire histogram.
        Processing time is propotional to the histogram bin size */
     double hxy2 = 0;
-		for(int i = 0; i < histSize; ++i)
+              for(int i = 0; i < histSize; ++i)
       {
       for(int j = 0; j < histSize; ++j)
         {
