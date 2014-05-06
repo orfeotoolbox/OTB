@@ -44,6 +44,12 @@ enum
   Interpolator_Linear
 };
 
+enum
+{
+  Mode_Default,
+  Mode_PHR
+};
+
 namespace Wrapper
 {
 
@@ -115,6 +121,19 @@ private:
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
     SetParameterDescription("out","Output reprojected image.");
 
+    // Superposition mode
+    AddParameter(ParameterType_Choice,"mode", "Mode");
+    SetParameterDescription("mode", "Superimposition mode");
+    
+    AddChoice("mode.default", "Default mode");
+    SetParameterDescription("mode.default", "Default superimposition mode : "
+      "uses any projection reference or sensor model found in the images");
+    
+    AddChoice("mode.phr", "Pleiades mode");
+    SetParameterDescription("mode.phr", "Pleiades superimposition mode, "
+      "designed for the case of a P+XS bundle in SENSOR geometry. It uses"
+      " a simple transform : a scaling and a residual translation.");
+    
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
     SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
@@ -131,10 +150,6 @@ private:
 
     AddChoice("interpolator.linear", "Linear interpolation");
     SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
-
-    AddParameter(ParameterType_Empty, "phroptim", "PHR optimised method");
-    SetParameterDescription("phroptim", "Use an optimised method for Pleiade bundle P+XS");
-    DisableParameter("phroptim");
     
     AddRAMParameter();
 
@@ -146,10 +161,10 @@ private:
 
   void DoUpdateParameters()
   {
-    if (!HasUserValue("phroptim") &&
+    if (!HasUserValue("mode") &&
         HasValue("inr") &&
         HasValue("inm"))
-    {
+      {
       FloatVectorImageType* refImage = GetParameterImage("inr");
       FloatVectorImageType* movingImage = GetParameterImage("inm");
       bool isRefPHR = false;
@@ -164,11 +179,32 @@ private:
       isMovingPHR = phrIMI->CanRead();
       
       if (isRefPHR && isMovingPHR)
-      {
-        EnableParameter("phroptim");
-        otbAppLogINFO(" Enable the PHR optimization");
-      } 
-    }
+        {
+        ImageKeywordlistType kwlPan;
+        ImageKeywordlistType kwlXS;
+        
+        itk::ExposeMetaData<ImageKeywordlistType>(
+          refImage->GetMetaDataDictionary(),
+          MetaDataKey::OSSIMKeywordlistKey,
+          kwlPan);
+        
+        itk::ExposeMetaData<ImageKeywordlistType>(
+          movingImage->GetMetaDataDictionary(),
+          MetaDataKey::OSSIMKeywordlistKey,
+          kwlXS);
+        
+        // Get geometric processing
+        std::string panProcessing = kwlPan.GetMetadataByKey("support_data.processing_level");
+        std::string xsProcessing = kwlXS.GetMetadataByKey("support_data.processing_level");
+        
+        if (panProcessing.compare("SENSOR") == 0 && 
+            xsProcessing.compare("SENSOR") == 0)
+          {
+          SetParameterInt("mode",Mode_PHR);
+          otbAppLogINFO("Enable the PHR mode");
+          }
+        } 
+      }
   }
 
 
@@ -223,7 +259,46 @@ private:
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, movingImage->GetNumberOfComponentsPerPixel());
     
-    if (IsParameterEnabled("phroptim"))
+    switch ( GetParameterInt("mode") )
+    {
+    case Mode_Default:
+      {
+      if(IsParameterEnabled("lms"))
+        {
+        float defScalarSpacing = vcl_abs(GetParameterFloat("lms"));
+        otbAppLogDEBUG("Generating coarse deformation field (spacing="<<defScalarSpacing<<")");
+        FloatVectorImageType::SpacingType defSpacing;
+
+        defSpacing[0] = defScalarSpacing;
+        defSpacing[1] = defScalarSpacing;
+
+        if (spacing[0]<0.0) defSpacing[0] *= -1.0;
+        if (spacing[1]<0.0) defSpacing[1] *= -1.0;
+
+        m_Resampler->SetDisplacementFieldSpacing(defSpacing);
+        }
+      
+      // Setup transform through projRef and Keywordlist
+      m_Resampler->SetInputKeywordList(movingImage->GetImageKeywordlist());
+      m_Resampler->SetInputProjectionRef(movingImage->GetProjectionRef());
+      
+      m_Resampler->SetOutputKeywordList(refImage->GetImageKeywordlist());
+      m_Resampler->SetOutputProjectionRef(refImage->GetProjectionRef());
+      
+      m_Resampler->SetInput(movingImage);
+      
+      m_Resampler->SetOutputOrigin(origin);
+      m_Resampler->SetOutputSpacing(spacing);
+      m_Resampler->SetOutputSize(size);
+      m_Resampler->SetOutputStartIndex(start);
+      
+      m_Resampler->SetEdgePaddingValue(defaultValue);
+
+      // Set the output image
+      SetParameterOutputImage("out", m_Resampler->GetOutput());
+      }
+      break;
+    case Mode_PHR:
       {
       // Setup a simple affine transform using PHR support data
       
@@ -273,8 +348,9 @@ private:
       // Resample filter assumes the origin is attached to the pixel center
       // in order to keep the top left corners unchanged, apply a 3/2 pixels
       // shift in each direction
+      // TODO : clarify formula, the '-1.0' for columns is strange
       TransformType::OutputVectorType offset;
-      offset[0] = 1.5 - static_cast<double>(colShift_MS_P);
+      offset[0] = 1.5 - (static_cast<double>(colShift_MS_P) - 1.0);
       offset[1] = 1.5 - static_cast<double>(lineShift_MS_P);
       transform->Translate(offset);
       
@@ -285,7 +361,7 @@ private:
       m_BasicResampler->SetTransform(realTransform);
       
       m_BasicResampler->SetInput(movingImage);
-    
+      
       m_BasicResampler->SetOutputOrigin(origin);
       m_BasicResampler->SetOutputSpacing(spacing);
       m_BasicResampler->SetOutputSize(size);
@@ -299,49 +375,19 @@ private:
       // DEBUG
       otbAppLogINFO("Panchro start (in s) : "<< startTimePan->GetSeconds());
       otbAppLogINFO("MS start (in s)      : "<< startTimeXS->GetSeconds());
-      otbAppLogINFO(" Time delta (in s)   : "<< timeDelta);
+      otbAppLogINFO("Time delta (in s)    : "<< timeDelta);
       otbAppLogINFO("Line period P (in ms): "<< linePeriodPan);
-      otbAppLogINFO("Line shift           : "<< lineShift_MS_P);
-      otbAppLogINFO("Col shift            : "<< colShift_MS_P);
-      //DisableParameter("out");
-      //return;
+      otbAppLogINFO("Line shift (in pix)  : "<< lineShift_MS_P);
+      otbAppLogINFO("Col shift (in pix)   : "<< colShift_MS_P);
       }
-    else
+      break;
+    default:
       {
-      if(IsParameterEnabled("lms"))
-        {
-        float defScalarSpacing = vcl_abs(GetParameterFloat("lms"));
-        otbAppLogDEBUG("Generating coarse deformation field (spacing="<<defScalarSpacing<<")");
-        FloatVectorImageType::SpacingType defSpacing;
-
-        defSpacing[0] = defScalarSpacing;
-        defSpacing[1] = defScalarSpacing;
-
-        if (spacing[0]<0.0) defSpacing[0] *= -1.0;
-        if (spacing[1]<0.0) defSpacing[1] *= -1.0;
-
-        m_Resampler->SetDisplacementFieldSpacing(defSpacing);
-        }
-      
-      // Setup transform through projRef and Keywordlist
-      m_Resampler->SetInputKeywordList(movingImage->GetImageKeywordlist());
-      m_Resampler->SetInputProjectionRef(movingImage->GetProjectionRef());
-      
-      m_Resampler->SetOutputKeywordList(refImage->GetImageKeywordlist());
-      m_Resampler->SetOutputProjectionRef(refImage->GetProjectionRef());
-      
-      m_Resampler->SetInput(movingImage);
-      
-      m_Resampler->SetOutputOrigin(origin);
-      m_Resampler->SetOutputSpacing(spacing);
-      m_Resampler->SetOutputSize(size);
-      m_Resampler->SetOutputStartIndex(start);
-      
-      m_Resampler->SetEdgePaddingValue(defaultValue);
-
-      // Set the output image
-      SetParameterOutputImage("out", m_Resampler->GetOutput());
+      otbAppLogWARNING("Unknown mode");
       }
+      break;
+    }
+   
   }
 
   ResamplerType::Pointer           m_Resampler;
