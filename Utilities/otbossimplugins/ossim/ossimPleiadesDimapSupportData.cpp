@@ -345,7 +345,7 @@ namespace ossimplugins
          << "\n     theErrRand: " << theErrRand
          << "\n"
          
-         << "\n  Acquisition time parameters:"
+         << "\n  Acquisition time parameters (only valid for SENSOR product):"
          << "\n     TimeRangeStart: "<< theTimeRangeStart
          << "\n     TimeRangeEnd: "<< theTimeRangeEnd
          << "\n     LinePeriod: "<< theLinePeriod
@@ -922,29 +922,33 @@ namespace ossimplugins
               tempString,
               true);
       
-      kwl.add(prefix,
-              "time_range_start",
-              theTimeRangeStart,
-              true);
+      // Some geometric parameters exist only in the case of a SENSOR image
+      if (theProcessingLevelString == "SENSOR")
+      {
+        kwl.add(prefix,
+                "time_range_start",
+                theTimeRangeStart,
+                true);
 
-      kwl.add(prefix,
-              "time_range_end",
-              theTimeRangeEnd,
-              true);
-      
-      kwl.add(prefix,
-              "line_period",
-              ossimString::toString(theLinePeriod),
-              true);
-      
-      kwl.add(prefix,
-              "swath_first_col",
-              theSwathFirstCol,
-              true);
-      kwl.add(prefix,
-              "swath_last_col",
-              theSwathLastCol,
-              true);
+        kwl.add(prefix,
+                "time_range_end",
+                theTimeRangeEnd,
+                true);
+        
+        kwl.add(prefix,
+                "line_period",
+                ossimString::toString(theLinePeriod),
+                true);
+        
+        kwl.add(prefix,
+                "swath_first_col",
+                theSwathFirstCol,
+                true);
+        kwl.add(prefix,
+                "swath_last_col",
+                theSwathLastCol,
+                true);
+      }
       
       return true;
    }
@@ -1112,11 +1116,15 @@ namespace ossimplugins
          }
       }
       
-      theTimeRangeStart = ossimString(kwl.find(prefix,"time_range_start"));
-      theTimeRangeEnd   = ossimString(kwl.find(prefix,"time_range_end"));
-      theLinePeriod     = ossimString(kwl.find(prefix,"line_period")).toDouble();
-      theSwathFirstCol  = ossimString(kwl.find(prefix,"swath_first_col")).toInt32();
-      theSwathLastCol   = ossimString(kwl.find(prefix,"swath_last_col")).toInt32();
+      // Some geometric parameters exist only in the case of a SENSOR image
+      if (theProcessingLevelString == "SENSOR")
+      {
+        theTimeRangeStart = ossimString(kwl.find(prefix,"time_range_start"));
+        theTimeRangeEnd   = ossimString(kwl.find(prefix,"time_range_end"));
+        theLinePeriod     = ossimString(kwl.find(prefix,"line_period")).toDouble();
+        theSwathFirstCol  = ossimString(kwl.find(prefix,"swath_first_col")).toInt32();
+        theSwathLastCol   = ossimString(kwl.find(prefix,"swath_last_col")).toInt32();
+      }
 
       return true;
    }
@@ -2378,7 +2386,7 @@ namespace ossimplugins
 
    bool  ossimPleiadesDimapSupportData::parseGeometricData(ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
-      ossimString xpath;
+      ossimString xpath, nodeValue;
       vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       xml_nodes.clear();
@@ -2515,7 +2523,99 @@ namespace ossimplugins
 
          ++node;
       }
-
+      
+      if (theProcessingLevelString == "SENSOR")
+      {
+        // check that this product is SENSOR (some tags are not present in ORTHO)
+        //---
+        // Fetch the time stamp of the first line:
+        //---
+        if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+        {
+          xpath = "/Geometric_Data/Sensor_Model_Characteristics/UTC_Sensor_Model_Range/START";
+        }
+        else
+        {
+          xpath = "/Geometric_Data/Refined_Model/Time/Time_Range/START";
+        }
+        xpath = theXmlDocumentRoot + xpath;
+        if (!readOneXmlNode(xmlDocument, xpath, theTimeRangeStart))
+        {
+            return false;
+        }
+        
+        //---
+        // Fetch the time stamp of the last line:
+        //---
+        if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+        {
+          xpath = "/Geometric_Data/Sensor_Model_Characteristics/UTC_Sensor_Model_Range/END";
+        }
+        else
+        {
+          xpath = "/Geometric_Data/Refined_Model/Time/Time_Range/END";
+        }
+        xpath = theXmlDocumentRoot + xpath;
+        if (!readOneXmlNode(xmlDocument, xpath, theTimeRangeEnd))
+        {
+            return false;
+        }
+        
+        //---
+        // Fetch the line period:
+        //---
+        if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+        {
+          xpath = "/Geometric_Data/Sensor_Model_Characteristics/SENSOR_LINE_PERIOD";
+        }
+        else
+        {
+          xpath = "/Geometric_Data/Refined_Model/Time/Time_Stamp/LINE_PERIOD";
+        }
+        xpath = theXmlDocumentRoot + xpath;
+        if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+        {
+            return false;
+        }
+        theLinePeriod = nodeValue.toDouble();
+        
+        //---
+        // Fetch the swath first col:
+        //---
+        if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+        {
+          xpath = "/Geometric_Data/Sensor_Model_Characteristics/Sensor_Viewing_Model/Position_In_Retina/FIRST_COL";
+        }
+        else
+        {
+          xpath = "/Geometric_Data/Refined_Model/Geometric_Calibration/Instrument_Calibration/Swath_Range/FIRST_COL";
+        }
+        xpath = theXmlDocumentRoot + xpath;
+        if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+        {
+            return false;
+        }
+        theSwathFirstCol = nodeValue.toInt32();
+        
+        //---
+        // Fetch the swath last col:
+        //---
+        if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+        {
+          xpath = "/Geometric_Data/Sensor_Model_Characteristics/Sensor_Viewing_Model/Position_In_Retina/LAST_COL";
+        }
+        else
+        {
+          xpath = "/Geometric_Data/Refined_Model/Geometric_Calibration/Instrument_Calibration/Swath_Range/LAST_COL";
+        }
+        xpath = theXmlDocumentRoot + xpath;
+        if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+        {
+            return false;
+        }
+        theSwathLastCol = nodeValue.toInt32();
+      }
+      
       return true;
    }
 
@@ -2664,59 +2764,6 @@ namespace ossimplugins
         }
 
         theAcquisitionDate = firstLineImagingDate + "T" + firstLineImagingTime;
-        
-        //---
-        // Fetch the time stamp of the first line:
-        //---
-        xpath = "/Geometric_Data/Refined_Model/Time/Time_Range/START";
-        xpath = theXmlDocumentRoot + xpath;
-        if (!readOneXmlNode(xmlDocument, xpath, theTimeRangeStart))
-        {
-           return false;
-        }
-        
-        //---
-        // Fetch the time stamp of the last line:
-        //---
-        xpath = "/Geometric_Data/Refined_Model/Time/Time_Range/END";
-        xpath = theXmlDocumentRoot + xpath;
-        if (!readOneXmlNode(xmlDocument, xpath, theTimeRangeEnd))
-        {
-           return false;
-        }
-        
-        //---
-        // Fetch the line period:
-        //---
-        xpath = "/Geometric_Data/Refined_Model/Time/Time_Stamp/LINE_PERIOD";
-        xpath = theXmlDocumentRoot + xpath;
-        if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
-        {
-           return false;
-        }
-        theLinePeriod = nodeValue.toDouble();
-        
-        //---
-        // Fetch the swath first col:
-        //---
-        xpath = "/Geometric_Data/Refined_Model/Geometric_Calibration/Instrument_Calibration/Swath_Range/FIRST_COL";
-        xpath = theXmlDocumentRoot + xpath;
-        if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
-        {
-           return false;
-        }
-        theSwathFirstCol = nodeValue.toInt32();
-        
-        //---
-        // Fetch the swath last col:
-        //---
-        xpath = "/Geometric_Data/Refined_Model/Geometric_Calibration/Instrument_Calibration/Swath_Range/LAST_COL";
-        xpath = theXmlDocumentRoot + xpath;
-        if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
-        {
-           return false;
-        }
-        theSwathLastCol = nodeValue.toInt32();
         
       }
 
