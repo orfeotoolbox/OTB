@@ -209,6 +209,8 @@ I18nMainWindow
 
     return NULL;
     }
+  
+  // qDebug() << "datasetModel:" << progress.GetObject< DatasetModel >();
 
   assert( progress.GetObject< DatasetModel >()!=NULL );
 

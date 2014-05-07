@@ -939,11 +939,15 @@ MainWindow
     Application::Instance()->GetModel< DatabaseModel >();
   assert( databaseModel!=NULL );
 
-  databaseModel->SelectDatasetModel(
+  DatasetHash hash( 
     databaseModel->RegisterDatasetModel(
       datasetModel
     )
   );
+
+  qDebug() << "hash:" << hash;
+
+  databaseModel->SelectDatasetModel( hash );
 }
 
 /*****************************************************************************/

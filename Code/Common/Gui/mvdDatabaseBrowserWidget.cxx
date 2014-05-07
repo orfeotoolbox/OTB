@@ -255,6 +255,9 @@ DatabaseBrowserWidget
 {
   // qDebug() << this << "::SetCurrentDataset(" << hash << ")";
 
+#if QT_VERSION < QT_VERSION_CHECK( 4, 8, 1 )
+  // Workaround for MANTIS-934 (crash/memory corruption after having imported second image).
+#else
   assert( m_UI!=NULL );
   assert( m_UI->databaseTreeWidget!=NULL );
 
@@ -268,9 +271,9 @@ DatabaseBrowserWidget
 
   assert( items.isEmpty() || items.size() == 1 );
 
-  qDebug()
-    << ( items.isEmpty() ? "NONE" : items.first()->text( 0 ) )
-    << m_UI->databaseTreeWidget->selectionModel()->selectedIndexes().size();
+  // qDebug()
+  //   << ( items.isEmpty() ? "NONE" : items.first()->text( 0 ) )
+  //   << m_UI->databaseTreeWidget->selectionModel()->selectedIndexes().size();
 
   m_UI->databaseTreeWidget->setCurrentItem(
     items.isEmpty()
@@ -281,6 +284,7 @@ DatabaseBrowserWidget
     QItemSelectionModel::Select |
     QItemSelectionModel::Current
   );
+#endif
 }
 
 /*****************************************************************************/

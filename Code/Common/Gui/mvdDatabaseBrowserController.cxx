@@ -279,7 +279,7 @@ DatabaseBrowserController
 ::UpdateTree( QTreeWidgetItem* item, SqlId nodeId, int level )
 {
   // qDebug()
-  //   << this << "::UpdateTree(" << item << "," << nodeId << "," << level << ")";
+  //    << this << "::UpdateTree(" << item << "," << nodeId << "," << level << ")";
 
   assert( GetModel()==GetModel< DatabaseModel >() );
   DatabaseModel* model = GetModel< DatabaseModel >();
