@@ -300,7 +300,7 @@ private:
       {
       otbAppLogINFO("Using the PHR mode");
       
-      // Setup a simple affine transform using PHR support data 
+      // Setup a simple affine transform using PHR support data
       ImageKeywordlist kwlPan;
       ImageKeywordlist kwlXS;
       

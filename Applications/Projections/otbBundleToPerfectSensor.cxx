@@ -122,7 +122,7 @@ private:
       bool isRefPHR = false;
       bool isMovingPHR = false;
       
-      otb::PleiadesImageMetadataInterface::Pointer phrIMI = 
+      otb::PleiadesImageMetadataInterface::Pointer phrIMI =
         otb::PleiadesImageMetadataInterface::New();
       phrIMI->SetMetaDataDictionary(refImage->GetMetaDataDictionary());
       isRefPHR = phrIMI->CanRead();
@@ -149,12 +149,12 @@ private:
         std::string panProcessing = kwlPan.GetMetadataByKey("support_data.processing_level");
         std::string xsProcessing = kwlXS.GetMetadataByKey("support_data.processing_level");
         
-        if (panProcessing.compare("SENSOR") == 0 && 
+        if (panProcessing.compare("SENSOR") == 0 &&
             xsProcessing.compare("SENSOR") == 0)
           {
           SetParameterInt("mode",Mode_PHR);
           }
-        } 
+        }
       }
   }
 
