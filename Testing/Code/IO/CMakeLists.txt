@@ -2349,8 +2349,9 @@ foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
 
     # Read info from the input file
     add_test(ioTvVectorImageReadingInfo_${current_type} ${IO_TESTS13}
-             --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
+             --ignore-order --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}.txt
                                        ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
+             --ignore-lines-with 3 CacheSizeInBytes Driver Corner[ 
              otbVectorImageTest
                 ${current_file}?&resol=0
                 ${TEMP}/ioTvMultiResolutionReading_${current_type}_OUT.txt
@@ -2359,8 +2360,9 @@ foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
   if(NOT PHR_TIFF_FILE)
     # Read info from the input file (res=5)
     add_test(ioTvVectorImageReadingInfo_${current_type}_res5 ${IO_TESTS13}
-             --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
+             --ignore-order --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading_${current_type}_res5.txt
                                        ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
+             --ignore-lines-with 3 CacheSizeInBytes Driver Corner[
              otbVectorImageTest
                 ${current_file}?&resol=5
                 ${TEMP}/ioTvMultiResolutionReading_${current_type}_res5_OUT.txt
