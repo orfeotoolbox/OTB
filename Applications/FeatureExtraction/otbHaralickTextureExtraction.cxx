@@ -211,9 +211,9 @@ void DoExecute()
     m_HarTexFilter->SetInput(const_cast<FloatImageType*>(m_ClampFilter->GetOutput()));
     m_HarTexFilter->SetRadius(radius);
     m_HarTexFilter->SetOffset(offset);
-    m_HarTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
-    m_HarTexFilter->SetInputImageMaximum(GetParameterFloat("parameters.max"));
-    m_HarTexFilter->SetNumberOfBinsPerAxis(GetParameterInt("parameters.nbbin"));
+    m_HarTexFilter->SetBinsAndMinMax(GetParameterInt("parameters.nbbin"),
+                                     GetParameterFloat("parameters.min"),
+                                     GetParameterFloat("parameters.max"));
     m_HarTexFilter->UpdateOutputInformation();
     m_HarImageList->PushBack(m_HarTexFilter->GetEnergyOutput());
     m_HarImageList->PushBack(m_HarTexFilter->GetEntropyOutput());
@@ -232,9 +232,9 @@ void DoExecute()
     m_AdvTexFilter->SetInput(const_cast<FloatImageType*>(m_ClampFilter->GetOutput()));
     m_AdvTexFilter->SetRadius(radius);
     m_AdvTexFilter->SetOffset(offset);
-    m_AdvTexFilter->SetInputImageMinimum(GetParameterFloat("parameters.min"));
-    m_AdvTexFilter->SetInputImageMaximum(GetParameterFloat("parameters.max"));
-    m_AdvTexFilter->SetNumberOfBinsPerAxis(GetParameterInt("parameters.nbbin"));
+    m_AdvTexFilter->SetBinsAndMinMax(GetParameterInt("parameters.nbbin"),
+                                     GetParameterFloat("parameters.min"),
+                                     GetParameterFloat("parameters.max"));
     m_AdvImageList->PushBack(m_AdvTexFilter->GetMeanOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetVarianceOutput());
     m_AdvImageList->PushBack(m_AdvTexFilter->GetDissimilarityOutput());
