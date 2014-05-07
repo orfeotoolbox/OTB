@@ -62,14 +62,12 @@ int otbScalarImageToTexturesFilter(int argc, char * argv[])
   offset[1] = offsety;
 
   filter->SetInput(reader->GetOutput());
-  filter->SetNumberOfBinsPerAxis(nbBins);
   filter->SetRadius(sradius);
   filter->SetOffset(offset);
 
   otb::StandardFilterWatcher watcher(filter, "Textures filter");
 
-  filter->SetInputImageMinimum(0);
-  filter->SetInputImageMaximum(255);
+  filter->SetBinsAndMinMax(nbBins, 0, 255);
 
   // Write outputs
   std::ostringstream oss;
