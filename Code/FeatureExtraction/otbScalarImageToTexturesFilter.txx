@@ -25,7 +25,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkProgressReporter.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
-//#include "vnl/vnl_math.h"
 
 namespace otb
 {
@@ -162,7 +161,6 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   return static_cast<OutputImageType *>(this->GetOutput(7));
 }
 
-
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToTexturesFilter<TInputImage, TOutputImage>
@@ -197,7 +195,6 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   m_HistSize.Fill(m_NumberOfBinsPerAxis);
   m_Histogram->Initialize(m_HistSize, lowerBound, upperBound);
 }
-
 
 template <class TInputImage, class TOutputImage>
 void
