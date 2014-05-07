@@ -83,8 +83,6 @@ public:
 
   typedef itk::ScalableAffineTransform<double, 2>                 TransformType;
   
-  typedef otb::ImageKeywordlist                                   ImageKeywordlistType;
-  
   typedef otb::StreamingResampleImageFilter
     <FloatVectorImageType,
      FloatVectorImageType>                                        BasicResamplerType;
@@ -162,6 +160,7 @@ private:
   void DoUpdateParameters()
   {
     if (!HasUserValue("mode") &&
+        GetParameterInt("mode") == Mode_Default &&
         HasValue("inr") &&
         HasValue("inm"))
       {
@@ -180,15 +179,15 @@ private:
       
       if (isRefPHR && isMovingPHR)
         {
-        ImageKeywordlistType kwlPan;
-        ImageKeywordlistType kwlXS;
+        ImageKeywordlist kwlPan;
+        ImageKeywordlist kwlXS;
         
-        itk::ExposeMetaData<ImageKeywordlistType>(
+        itk::ExposeMetaData<ImageKeywordlist>(
           refImage->GetMetaDataDictionary(),
           MetaDataKey::OSSIMKeywordlistKey,
           kwlPan);
         
-        itk::ExposeMetaData<ImageKeywordlistType>(
+        itk::ExposeMetaData<ImageKeywordlist>(
           movingImage->GetMetaDataDictionary(),
           MetaDataKey::OSSIMKeywordlistKey,
           kwlXS);
@@ -201,7 +200,6 @@ private:
             xsProcessing.compare("SENSOR") == 0)
           {
           SetParameterInt("mode",Mode_PHR);
-          otbAppLogINFO("Enable the PHR mode");
           }
         }
       }
@@ -300,17 +298,18 @@ private:
       break;
     case Mode_PHR:
       {
-      // Setup a simple affine transform using PHR support data
+      otbAppLogINFO("Using the PHR mode");
       
-      ImageKeywordlistType kwlPan;
-      ImageKeywordlistType kwlXS;
+      // Setup a simple affine transform using PHR support data 
+      ImageKeywordlist kwlPan;
+      ImageKeywordlist kwlXS;
       
-      itk::ExposeMetaData<ImageKeywordlistType>(
+      itk::ExposeMetaData<ImageKeywordlist>(
         refImage->GetMetaDataDictionary(),
         MetaDataKey::OSSIMKeywordlistKey,
         kwlPan);
       
-      itk::ExposeMetaData<ImageKeywordlistType>(
+      itk::ExposeMetaData<ImageKeywordlist>(
         movingImage->GetMetaDataDictionary(),
         MetaDataKey::OSSIMKeywordlistKey,
         kwlXS);
@@ -339,7 +338,7 @@ private:
       
       // Compute shift between MS and P (in Pan pixels)
       int lineShift_MS_P =int(vcl_floor((timeDelta/(linePeriodPan/1000))  + 0.5));
-      int colShift_MS_P = colStartXS*4 - colStartPan;
+      int colShift_MS_P = colStartXS*4 - colStartPan - 4;
       
       // Apply the scaling
       TransformType::Pointer transform = TransformType::New();
@@ -348,10 +347,9 @@ private:
       // Resample filter assumes the origin is attached to the pixel center
       // in order to keep the top left corners unchanged, apply a 3/2 pixels
       // shift in each direction
-      // TODO : clarify formula, the '-1.0' for columns is strange
       TransformType::OutputVectorType offset;
-      offset[0] = 1.5 - (static_cast<double>(colShift_MS_P) - 1.0);
-      offset[1] = 1.5 - static_cast<double>(lineShift_MS_P);
+      offset[0] = 1.5 + static_cast<double>(colShift_MS_P);
+      offset[1] = 1.5 + static_cast<double>(lineShift_MS_P);
       transform->Translate(offset);
       
       // Invert the transform as the resampler filter expect an output-to-input
@@ -372,11 +370,6 @@ private:
       // Set the output image
       SetParameterOutputImage("out", m_BasicResampler->GetOutput());
       
-      // DEBUG
-      otbAppLogINFO("Panchro start (in s) : "<< startTimePan->GetSeconds());
-      otbAppLogINFO("MS start (in s)      : "<< startTimeXS->GetSeconds());
-      otbAppLogINFO("Time delta (in s)    : "<< timeDelta);
-      otbAppLogINFO("Line period P (in ms): "<< linePeriodPan);
       otbAppLogINFO("Line shift (in pix)  : "<< lineShift_MS_P);
       otbAppLogINFO("Col shift (in pix)   : "<< colShift_MS_P);
       }
