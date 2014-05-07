@@ -19,6 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbScalarImageToTexturesFilter_h
 #define __otbScalarImageToTexturesFilter_h
 
+#include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageToImageFilter.h"
 #include "itkHistogram.h"
 
@@ -130,30 +131,18 @@ public:
   typedef typename HistogramType::MeasurementVectorType              MeasurementVectorType;
   typedef typename HistogramType::RelativeFrequencyType              RelativeFrequencyType;
   typedef typename HistogramType::TotalAbsoluteFrequencyType         TotalAbsoluteFrequencyType;
-  typedef typename HistogramType::IndexType                          HistogramIndexType;
+  typedef typename HistogramType::SizeType                           HistogramSizeType;
+  typedef typename HistogramType::IndexType                          CooccurrenceIndexType;
 
+  typedef GreyLevelCooccurrenceIndexedList< HistogramType >   CooccurrenceIndexedListType;
+  typedef typename CooccurrenceIndexedListType::Pointer       CooccurrenceIndexedListPointerType;
+  typedef typename CooccurrenceIndexedListType::ConstPointer  CooccurrenceIndexedListConstPointerType;
 
-  /** Lookup array used to store the index of the given pixel pair. This index
-    * is calculated from the HistogramType */
-  typedef itk::Array<int> LookupArrayType;
+  typedef typename CooccurrenceIndexedListType::VectorType VectorType;
+  typedef typename VectorType::iterator                    VectorIteratorType;
+  typedef typename VectorType::const_iterator              VectorConstIteratorType;
 
-  /** struct to hold the index of pixel pair and its frequency. The frequnecy is
-    * incremented for the next occurrence of the same pair */
-
-  typedef struct Cooccurrence {
-    HistogramIndexType  index;
-    RelativeFrequencyType frequency;
-  }CooccurrenceType;
-
-  /** array to hold CooccurrenceType. Index of the array where the cooccurrence
-    * is stored is saved in the LookupArrayType. */
-  typedef std::vector<CooccurrenceType> GreyLevelCooccurrenceListType;
-
-  /** std::vector iterator typedef for GreyLevelCooccurrenceListType */
-  typedef typename std::vector<CooccurrenceType>::iterator GreyLevelCooccurrenceListIteratorType;
-
-  /** std::vector const_iterator typedef for GreyLevelCooccurrenceListType */
-  typedef typename std::vector<CooccurrenceType>::const_iterator GreyLevelCooccurrenceListConstIteratorType;
+  void SetBinsAndMinMax(unsigned int bins, InputPixelType min, InputPixelType max);
 
   itkStaticConstMacro(MeasurementVectorSize, int, 2 );
 
@@ -217,10 +206,6 @@ protected:
   ~ScalarImageToTexturesFilter();
   /** Generate the input requested region */
   virtual void GenerateInputRequestedRegion();
-
-  /** Before ThreadedGenerateData created a single histogram instance **/
-  virtual void BeforeThreadedGenerateData( );
-
   /** Parallel textures extraction */
   virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
 
@@ -252,9 +237,11 @@ private:
   /** Histogram instance used to get index for the pixel pair */
   HistogramPointer m_Histogram;
 
+  HistogramSizeType m_HistSize;
+
   /** This method is same as ComputeMeansAndVariance in
     * itkHistogramToTexturesFilter. This has been modified for using new GLCIL */
-  void ComputeMeansAndVariances(GreyLevelCooccurrenceListType& frequencyList, double & pixelMean,
+  void ComputeMeansAndVariances(VectorType& frequencyList, double & pixelMean,
                                 double & marginalMean, double & marginalDevSquared, double & pixelVariance);
 
 };

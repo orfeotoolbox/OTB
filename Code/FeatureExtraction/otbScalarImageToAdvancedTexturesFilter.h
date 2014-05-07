@@ -18,10 +18,9 @@
 #ifndef __otbScalarImageToAdvancedTexturesFilter_h
 #define __otbScalarImageToAdvancedTexturesFilter_h
 
+#include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageToImageFilter.h"
 #include "itkHistogram.h"
-#include "itkArray.h"
-#include <vector>
 
 namespace otb
 {
@@ -119,29 +118,16 @@ public:
   typedef typename HistogramType::MeasurementVectorType                                MeasurementVectorType;
   typedef typename HistogramType::RelativeFrequencyType                                RelativeFrequencyType;
   typedef typename HistogramType::TotalAbsoluteFrequencyType                           TotalAbsoluteFrequencyType;
-  typedef typename HistogramType::IndexType                                            HistogramIndexType;
+  typedef typename HistogramType::SizeType                                             HistogramSizeType;
+  typedef typename HistogramType::IndexType                                            CooccurrenceIndexType;
 
-  /** Lookup array used to store the index of the given pixel pair. This index
-    * is calculated from the HistogramType */
-  typedef itk::Array<int> LookupArrayType;
+  typedef GreyLevelCooccurrenceIndexedList< HistogramType >   CooccurrenceIndexedListType;
+  typedef typename CooccurrenceIndexedListType::Pointer       CooccurrenceIndexedListPointerType;
+  typedef typename CooccurrenceIndexedListType::ConstPointer  CooccurrenceIndexedListConstPointerType;
 
-  /** struct to hold the index of pixel pair and its frequency. The frequnecy is
-    * incremented for the next occurrence of the same pair */
-
-  typedef struct Cooccurrence {
-    HistogramIndexType  index;
-    RelativeFrequencyType frequency;
-  }CooccurrenceType;
-
-  /** array to hold CooccurrenceType. Index of the array where the cooccurrence
-    * is stored is saved in the LookupArrayType. */
-  typedef std::vector<CooccurrenceType> GreyLevelCooccurrenceListType;
-
-  /** std::vector iterator typedef for GreyLevelCooccurrenceListType */
-  typedef typename std::vector<CooccurrenceType>::iterator GreyLevelCooccurrenceListIteratorType;
-
-  /** std::vector const_iterator typedef for GreyLevelCooccurrenceListType */
-  typedef typename std::vector<CooccurrenceType>::const_iterator GreyLevelCooccurrenceListConstIteratorType;
+  typedef typename CooccurrenceIndexedListType::VectorType VectorType;
+  typedef typename VectorType::iterator                    VectorIteratorType;
+  typedef typename VectorType::const_iterator              VectorConstIteratorType;
 
   itkStaticConstMacro(MeasurementVectorSize, int, 2 );
 
@@ -173,6 +159,8 @@ public:
 
   /** Get the input image maximum */
   itkGetMacro(InputImageMaximum, InputPixelType);
+
+  void SetBinsAndMinMax(unsigned int bins, InputPixelType min, InputPixelType max);
 
   /** Get the mean output image */
   OutputImageType * GetMeanOutput();
@@ -209,13 +197,8 @@ protected:
   ScalarImageToAdvancedTexturesFilter();
   /** Destructor */
   ~ScalarImageToAdvancedTexturesFilter();
-
-  /** Before ThreadedGenerateData created a single histogram instance **/
-  virtual void BeforeThreadedGenerateData( );
-
   /** Generate the input requested region */
   virtual void GenerateInputRequestedRegion();
-
   /** Parallel textures extraction */
   virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
 
@@ -246,6 +229,8 @@ private:
 
   /** Histogram instance used to get index for the pixel pair */
   HistogramPointer m_Histogram;
+
+  HistogramSizeType m_HistSize;
 
 };
 } // End namespace otb

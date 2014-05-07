@@ -31,11 +31,13 @@ namespace otb
 {
 template <class TInputImage, class TOutputImage>
 ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::ScalarImageToTexturesFilter() : m_Radius(),
-  m_Offset(),
-  m_NumberOfBinsPerAxis(8),
-  m_InputImageMinimum(0),
-  m_InputImageMaximum(255)
+::ScalarImageToTexturesFilter()
+: m_Radius()
+, m_Offset()
+, m_HistSize(2)
+, m_NumberOfBinsPerAxis(8)
+, m_InputImageMinimum(0)
+, m_InputImageMaximum(255)
 {
   // There are 8 outputs corresponding to the 8 textures indices
   this->SetNumberOfRequiredOutputs(8);
@@ -160,6 +162,43 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   return static_cast<OutputImageType *>(this->GetOutput(7));
 }
 
+
+template <class TInputImage, class TOutputImage>
+void
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>
+::SetBinsAndMinMax(unsigned int numberOfBinsPerAxis,
+                   InputPixelType inputImageMinimum,
+                   InputPixelType inputImageMaximum)
+{
+  /** calulate minimum offset and set it as neigborhood radius **/
+  unsigned int minRadius = 0;
+  for ( unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++ )
+    {
+    unsigned int distance = vcl_abs(m_Offset[i]);
+    if ( distance > minRadius )
+      {
+      minRadius = distance;
+      }
+    }
+  m_NeighborhoodRadius.Fill(minRadius);
+
+  /** Initalize m_Histogram with given min, max and number of bins  **/
+  MeasurementVectorType lowerBound;
+  MeasurementVectorType upperBound;
+  m_InputImageMinimum = inputImageMinimum;
+  m_InputImageMaximum = inputImageMaximum;
+  m_NumberOfBinsPerAxis = numberOfBinsPerAxis;
+  m_Histogram = HistogramType::New();
+  m_Histogram->SetMeasurementVectorSize( MeasurementVectorSize );
+  lowerBound.SetSize( MeasurementVectorSize );
+  upperBound.SetSize( MeasurementVectorSize );
+  lowerBound.Fill(m_InputImageMinimum);
+  upperBound.Fill(m_InputImageMaximum+1);
+  m_HistSize.Fill(m_NumberOfBinsPerAxis);
+  m_Histogram->Initialize(m_HistSize, lowerBound, upperBound);
+}
+
+
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToTexturesFilter<TInputImage, TOutputImage>
@@ -218,38 +257,6 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     e.SetDataObject(inputPtr);
     throw e;
     }
-}
-
-template <class TInputImage, class TOutputImage>
-void
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::BeforeThreadedGenerateData()
-{
-  /** Initalize m_Histogram with given min, max and number of bins  **/
-  MeasurementVectorType m_LowerBound;
-  MeasurementVectorType m_UpperBound;
-  m_Histogram = HistogramType::New();
-  m_Histogram->SetMeasurementVectorSize( MeasurementVectorSize );
-  m_LowerBound.SetSize( MeasurementVectorSize );
-  m_UpperBound.SetSize( MeasurementVectorSize );
-  m_LowerBound.Fill(m_InputImageMinimum);
-  m_UpperBound.Fill(m_InputImageMaximum+1);
-  typename HistogramType::SizeType size( MeasurementVectorSize );
-  size.Fill(m_NumberOfBinsPerAxis);
-  m_Histogram->Initialize(size, m_LowerBound, m_UpperBound);
-
-  /** calulate minimum offset and set it as neigborhood radius **/
-  unsigned int minRadius = 0;
-  for ( unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++ )
-    {
-    unsigned int distance = vcl_abs(m_Offset[i]);
-    if ( distance > minRadius )
-      {
-      minRadius = distance;
-      }
-    }
-  m_NeighborhoodRadius.Fill(minRadius);
-
 }
 
 template <class TInputImage, class TOutputImage>
@@ -321,20 +328,12 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     inputRegion.SetSize(inputSize);
     inputRegion.Crop(inputPtr->GetRequestedRegion());
 
+    CooccurrenceIndexedListPointerType m_GLCIList = CooccurrenceIndexedListType::New();
+    m_GLCIList->Initialize(m_HistSize);
+
     typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
     NeighborhoodIteratorType neighborIt;
-
-    //initalize lookup array.
-    //unsigned int historamSize = m_Histogram->GetSize(0);
-    LookupArrayType lookupArray(m_NumberOfBinsPerAxis * m_NumberOfBinsPerAxis);
-
-    lookupArray.Fill(-1);
-
-    GreyLevelCooccurrenceListType glcList;
-    TotalAbsoluteFrequencyType totalFrequency = 0;
-
     neighborIt = NeighborhoodIteratorType(m_NeighborhoodRadius, inputPtr, inputRegion);
-
     for ( neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt )
     {
 
@@ -363,68 +362,19 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
                   // is out-of-bounds.
         }
 
-      unsigned int instanceId = 0;
-      HistogramIndexType instanceIndex;
+      CooccurrenceIndexType instanceIndex;
       MeasurementVectorType measurement( MeasurementVectorSize );
       measurement[0] = centerPixelIntensity;
       measurement[1] = pixelIntensity;
-
       //Get Index of the histogram for the given pixel pair;
       m_Histogram->GetIndex(measurement, instanceIndex);
-
-      //Find the 1D index of the historam index. This index is used to check the
-      //entry in lookup array.
-      instanceId = instanceIndex[1] * m_NumberOfBinsPerAxis + instanceIndex[0];
-
-      if( lookupArray[instanceId] < 0)
-        {
-        lookupArray[instanceId] = glcList.size();
-        CooccurrenceType cooccur;
-        cooccur.index = instanceIndex;
-        cooccur.frequency = 1;
-        glcList.push_back(cooccur);
-        }
-      else
-        {
-        int vindex = lookupArray[instanceId];
-        glcList[vindex].frequency++;
-        }
-
-      //For symmetry store the same pixel pair.
-      measurement[1] = centerPixelIntensity;
-      measurement[0] = pixelIntensity;
-      m_Histogram->GetIndex(measurement, instanceIndex);
-      instanceId = instanceIndex[1] * m_NumberOfBinsPerAxis + instanceIndex[0];
-
-      if( lookupArray[instanceId] < 0)
-        {
-        lookupArray[instanceId] = glcList.size();
-        CooccurrenceType cooccur;
-        cooccur.index = instanceIndex;
-        cooccur.frequency = 1;
-        glcList.push_back(cooccur);
-        }
-      else
-        {
-        int vindex = lookupArray[instanceId];
-        glcList[vindex].frequency = glcList[vindex].frequency + 1;
-        }
-
-      // Increment total frequency by two as we consider symmetry of
-      // cooccurrence pairs
-      totalFrequency = totalFrequency + 2;
+      m_GLCIList->AddPairToList(instanceIndex);
     }
 
-    GreyLevelCooccurrenceListIteratorType vectorIt;
-    GreyLevelCooccurrenceListConstIteratorType covectorIt;
 
-    //Normalize the GreyLevelCooccurrenceListType
-    vectorIt = glcList.begin();
-    while( vectorIt != glcList.end())
-      {
-      (*vectorIt).frequency = (*vectorIt).frequency / totalFrequency;
-      ++vectorIt;
-      }
+    m_GLCIList->Normalize();
+    VectorConstIteratorType constVectorIt;
+    VectorType glcList = m_GLCIList->GetVector();
 
     double pixelMean;
     double marginalMean;
@@ -456,11 +406,11 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       }
 
     //Compute textures
-    covectorIt = glcList.begin();
-    while( covectorIt != glcList.end())
+    constVectorIt = glcList.begin();
+    while( constVectorIt != glcList.end())
       {
-      HistogramIndexType index = (*covectorIt).index;
-      RelativeFrequencyType frequency = (*covectorIt).frequency;
+      CooccurrenceIndexType index = (*constVectorIt).index;
+      RelativeFrequencyType frequency = (*constVectorIt).frequency;
       energy += frequency * frequency;
       entropy -= ( frequency > 0.0001 ) ? frequency *vcl_log(frequency) / log2:0;
       correlation += ( ( index[0] - pixelMean ) * ( index[1] - pixelMean ) * frequency ) / pixelVarianceSquared;
@@ -469,7 +419,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       clusterShade += vcl_pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 3 ) * frequency;
       clusterProminence += vcl_pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 4 ) * frequency;
       haralickCorrelation += index[0] * index[1] * frequency;
-      ++covectorIt;
+      ++constVectorIt;
       }
 
     //todo avoid division by zero also here?
@@ -502,11 +452,10 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>::ComputeMeansAndVariances(GreyLevelCooccurrenceListType& frequencyVector,
-                                                                                  double & pixelMean,
-                                                                                  double & marginalMean,
-                                                                                  double & marginalDevSquared,
-                                                                                  double & pixelVariance)
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>::
+ComputeMeansAndVariances(VectorType& frequencyVector, double & pixelMean,
+                         double & marginalMean, double & marginalDevSquared,
+                         double & pixelVariance)
 {
   // This function takes two passes through the histogram and two passes through
   // an array of the same length as a histogram axis. This could probably be
@@ -524,15 +473,15 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>::ComputeMeansAndVariances
 
   // Ok, now do the first pass through the histogram to get the marginal sums
   // and compute the pixel mean
-  GreyLevelCooccurrenceListConstIteratorType covectorIt;
-  covectorIt = frequencyVector.begin();
-  while( covectorIt != frequencyVector.end())
+  VectorConstIteratorType constVectorIt;
+  constVectorIt = frequencyVector.begin();
+  while( constVectorIt != frequencyVector.end())
     {
-    RelativeFrequencyType frequency = (*covectorIt).frequency;
-    HistogramIndexType        index = (*covectorIt).index;
+    RelativeFrequencyType frequency = (*constVectorIt).frequency;
+    CooccurrenceIndexType     index = (*constVectorIt).index;
     pixelMean += index[0] * frequency;
     marginalSums[index[0]] += frequency;
-    ++covectorIt;
+    ++constVectorIt;
     }
 
   /*  Now get the mean and deviaton of the marginal sums.
@@ -564,13 +513,13 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>::ComputeMeansAndVariances
   marginalDevSquared = marginalDevSquared / m_NumberOfBinsPerAxis;
 
   pixelVariance = 0;
-  covectorIt = frequencyVector.begin();
-  while( covectorIt != frequencyVector.end())
+  constVectorIt = frequencyVector.begin();
+  while( constVectorIt != frequencyVector.end())
     {
-    RelativeFrequencyType frequency = (*covectorIt).frequency;
-    HistogramIndexType        index = (*covectorIt).index;
+    RelativeFrequencyType frequency = (*constVectorIt).frequency;
+    CooccurrenceIndexType        index = (*constVectorIt).index;
     pixelVariance += ( index[0] - pixelMean ) * ( index[0] - pixelMean ) * frequency;
-    ++covectorIt;
+    ++constVectorIt;
     }
 
   delete[] marginalSums;

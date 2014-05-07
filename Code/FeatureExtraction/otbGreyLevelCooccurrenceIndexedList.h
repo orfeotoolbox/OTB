@@ -107,6 +107,9 @@ public:
   /** Get std::vector containing non-zero co-occurrence pairs */
   VectorType GetVector();
 
+  /** Normailze the GLCIL */
+  void Normalize();
+
   /** Add the CooccurrencePairType to list. Next occurrence of same index is
     * checked via m_LookupArray value and the correspoding frequency value is
     * incremented. If m_Symmetry is true the co-occurrence pair is added again */

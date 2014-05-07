@@ -44,6 +44,20 @@ GreyLevelCooccurrenceIndexedList<THistogram>
 }
 
 template <class THistogram >
+void
+GreyLevelCooccurrenceIndexedList<THistogram>
+::Normalize()
+{
+  //Normalize the co-occurrence indexed list
+  typename VectorType::iterator it = m_Vector.begin();
+  while( it != m_Vector.end())
+    {
+    (*it).frequency = (*it).frequency / m_TotalFrequency;
+    ++it;
+    }
+}
+
+template <class THistogram >
 typename GreyLevelCooccurrenceIndexedList<THistogram>::RelativeFrequencyType
 GreyLevelCooccurrenceIndexedList<THistogram>::
 GetFrequency(IndexValueType i, IndexValueType j)
