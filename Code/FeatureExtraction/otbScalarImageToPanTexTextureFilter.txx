@@ -20,8 +20,10 @@
 
 #include "otbScalarImageToPanTexTextureFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
+#include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {
@@ -29,8 +31,9 @@ template <class TInputImage, class TOutputImage>
 ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
 ::ScalarImageToPanTexTextureFilter() : m_Radius(),
   m_NumberOfBinsPerAxis(8),
+  m_HistSize(2),
   m_InputImageMinimum(0),
-  m_InputImageMaximum(256)
+  m_InputImageMaximum(255)
 {
   // There are 1 output corresponding to the Pan Tex texture indice
   this->SetNumberOfRequiredOutputs(1);
@@ -66,6 +69,29 @@ template <class TInputImage, class TOutputImage>
 ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
 ::~ScalarImageToPanTexTextureFilter()
 {}
+
+template <class TInputImage, class TOutputImage>
+void
+ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
+::SetBinsAndMinMax(unsigned int numberOfBinsPerAxis,
+                   InputPixelType inputImageMinimum,
+                   InputPixelType inputImageMaximum)
+{
+  /** Initalize m_Histogram with given min, max and number of bins  **/
+  MeasurementVectorType lowerBound;
+  MeasurementVectorType upperBound;
+  m_InputImageMinimum = inputImageMinimum;
+  m_InputImageMaximum = inputImageMaximum;
+  m_NumberOfBinsPerAxis = numberOfBinsPerAxis;
+  m_Histogram = HistogramType::New();
+  m_Histogram->SetMeasurementVectorSize( MeasurementVectorSize );
+  lowerBound.SetSize( MeasurementVectorSize );
+  upperBound.SetSize( MeasurementVectorSize );
+  lowerBound.Fill(m_InputImageMinimum);
+  upperBound.Fill(m_InputImageMaximum+1);
+  m_HistSize.Fill(m_NumberOfBinsPerAxis);
+  m_Histogram->Initialize(m_HistSize, lowerBound, upperBound);
+}
 
 template <class TInputImage, class TOutputImage>
 void
@@ -144,86 +170,90 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
       OffsetType currentOffset = *offIt;
 
       // Compute the region on which co-occurence will be estimated
-      typename InputRegionType::IndexType inputIndex, inputIndexWithTwiceOffset;
-      typename InputRegionType::SizeType inputSize, inputSizeWithTwiceOffset;
+      typename InputRegionType::IndexType inputIndex;
+      typename InputRegionType::SizeType inputSize;
 
-      // First, apply offset
+      // First, create an window for neighborhood iterator based on m_Radius
+      // For example, if xradius and yradius is 2. window size is 5x5 (2 *
+      // radius + 1).
       for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
         {
-        inputIndex[dim] = std::min(
-                                  static_cast<int>(outputIt.GetIndex()[dim] - m_Radius[dim]),
-                                  static_cast<int>(outputIt.GetIndex()[dim] - m_Radius[dim] + currentOffset[dim])
-                                  );
-        inputSize[dim] = 2 * m_Radius[dim] + 1 + std::abs(currentOffset[dim]);
-
-        inputIndexWithTwiceOffset[dim] = static_cast<int>(outputIt.GetIndex()[dim] - m_Radius[dim] - std::abs(currentOffset[dim]));
-        inputSizeWithTwiceOffset[dim] = inputSize[dim] + std::abs(currentOffset[dim]);
+        inputIndex[dim] = outputIt.GetIndex()[dim] - m_Radius[dim];
+        inputSize[dim] = 2 * m_Radius[dim] + 1;
         }
-
       // Build the input  region
       InputRegionType inputRegion;
       inputRegion.SetIndex(inputIndex);
       inputRegion.SetSize(inputSize);
       inputRegion.Crop(inputPtr->GetRequestedRegion());
 
-      InputRegionType inputRegionWithTwiceOffset;
-      inputRegionWithTwiceOffset.SetIndex(inputIndexWithTwiceOffset);
-      inputRegionWithTwiceOffset.SetSize(inputSizeWithTwiceOffset);
-      inputRegionWithTwiceOffset.Crop(inputPtr->GetRequestedRegion());
+      CooccurrenceIndexedListPointerType m_GLCIList = CooccurrenceIndexedListType::New();
+      m_GLCIList->Initialize(m_HistSize);
 
-      /*********************************************************************************/
-      //Local copy of the input image around the processed pixel *outputIt
-      InputImagePointerType localInputImage = InputImageType::New();
-      localInputImage->SetRegions(inputRegionWithTwiceOffset);
-      localInputImage->Allocate();
-      typedef itk::ImageRegionIteratorWithIndex<InputImageType> ImageRegionIteratorType;
-      ImageRegionIteratorType itInputPtr(inputPtr, inputRegionWithTwiceOffset);
-      ImageRegionIteratorType itLocalInputImage(localInputImage, inputRegionWithTwiceOffset);
-      for (itInputPtr.GoToBegin(), itLocalInputImage.GoToBegin(); !itInputPtr.IsAtEnd(); ++itInputPtr, ++itLocalInputImage)
+      SizeType neighborhoodRadius;
+      /** calulate minimum offset and set it as neigborhood radius **/
+      unsigned int minRadius = 0;
+      for ( unsigned int i = 0; i < currentOffset.GetOffsetDimension(); i++ )
         {
-        itLocalInputImage.Set(itInputPtr.Get());
-        }
-      /*********************************************************************************/
-
-      InputImagePointerType maskImage = InputImageType::New();
-      maskImage->SetRegions(inputRegionWithTwiceOffset);
-      maskImage->Allocate();
-      maskImage->FillBuffer(0);
-
-      ImageRegionIteratorType itMask(maskImage, inputRegion);
-      for (itMask.GoToBegin(); !itMask.IsAtEnd(); ++itMask)
-        {
-        itMask.Set(1);
-        }
-
-
-      // Build the co-occurence matrix generator
-      CoocurrenceMatrixGeneratorPointerType coOccurenceMatrixGenerator = CoocurrenceMatrixGeneratorType::New();
-      coOccurenceMatrixGenerator->SetInput(localInputImage);
-      coOccurenceMatrixGenerator->SetOffset(currentOffset);
-      coOccurenceMatrixGenerator->SetNumberOfBinsPerAxis(m_NumberOfBinsPerAxis);
-      coOccurenceMatrixGenerator->SetPixelValueMinMax(m_InputImageMinimum, m_InputImageMaximum);
-
-      // Compute the co-occurence matrix
-      coOccurenceMatrixGenerator->SetMaskImage(maskImage);
-      coOccurenceMatrixGenerator->SetInsidePixelValue(1);
-      coOccurenceMatrixGenerator->Update();
-
-      typename HistogramType::ConstPointer histo = coOccurenceMatrixGenerator->GetOutput();
-
-      double inertia = 0;
-      typename HistogramType::TotalAbsoluteFrequencyType  totalFrequency = histo->GetTotalFrequency();
-      typename HistogramType::ConstIterator itr = histo->Begin();
-      typename HistogramType::ConstIterator end = histo->End();
-      for(; itr != end; ++itr )
-        {
-        MeasurementType frequency = itr.GetFrequency();
-        if (frequency == 0)
+        unsigned int distance = vcl_abs(currentOffset[i]);
+        if ( distance > minRadius )
           {
-          continue; // no use doing these calculations if we're just multiplying by zero.
+          minRadius = distance;
           }
-        typename HistogramType::IndexType index = histo->GetIndex(itr.GetInstanceIdentifier());
-        inertia += (index[0] - index[1]) * (index[0] - index[1]) * frequency / totalFrequency;
+        }
+      neighborhoodRadius.Fill(minRadius);
+
+      typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
+      NeighborhoodIteratorType neighborIt;
+      neighborIt = NeighborhoodIteratorType(neighborhoodRadius, inputPtr, inputRegion);
+      for ( neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt )
+        {
+        const InputPixelType centerPixelIntensity = neighborIt.GetCenterPixel();
+        if ( centerPixelIntensity < m_InputImageMinimum
+             || centerPixelIntensity > m_InputImageMaximum )
+          {
+          continue; // don't put a pixel in the histogram if the value
+          // is out-of-bounds.
+          }
+
+        bool            pixelInBounds;
+        const InputPixelType pixelIntensity =
+          neighborIt.GetPixel(currentOffset, pixelInBounds);
+
+        if ( !pixelInBounds )
+          {
+          continue; // don't put a pixel in the histogram if it's out-of-bounds.
+          }
+
+        if ( pixelIntensity < m_InputImageMinimum
+             || pixelIntensity > m_InputImageMaximum )
+          {
+          continue; // don't put a pixel in the histogram if the value
+          // is out-of-bounds.
+          }
+
+        CooccurrenceIndexType instanceIndex;
+        MeasurementVectorType measurement( MeasurementVectorSize );
+        measurement[0] = centerPixelIntensity;
+        measurement[1] = pixelIntensity;
+        //Get Index of the histogram for the given pixel pair;
+        m_Histogram->GetIndex(measurement, instanceIndex);
+        m_GLCIList->AddPairToList(instanceIndex);
+        }
+
+      m_GLCIList->Normalize();
+      VectorConstIteratorType constVectorIt;
+      VectorType glcList = m_GLCIList->GetVector();
+
+      //Compute inertia aka contrast
+      double inertia = 0;
+      constVectorIt = glcList.begin();
+      while( constVectorIt != glcList.end())
+        {
+        CooccurrenceIndexType index = (*constVectorIt).index;
+        RelativeFrequencyType frequency = (*constVectorIt).frequency;
+        inertia += ( index[0] - index[1] ) * ( index[0] - index[1] ) * frequency;
+        ++constVectorIt;
         }
 
       if (inertia < out)

@@ -55,13 +55,11 @@ int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
   sradius.Fill(radius);
 
   filter->SetInput(reader->GetOutput());
-  filter->SetNumberOfBinsPerAxis(nbBins);
   filter->SetRadius(sradius);
 
   otb::StandardFilterWatcher watcher(filter, "Textures filter");
 
-  filter->SetInputImageMinimum(0);
-  filter->SetInputImageMaximum(255);
+  filter->SetBinsAndMinMax(nbBins, 0, 255);
 
   // Write outputs
   std::ostringstream oss;
