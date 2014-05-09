@@ -33,10 +33,10 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::ScalarImageToAdvancedTexturesFilter()
 : m_Radius()
 , m_Offset()
-, m_HistSize(2)
 , m_NumberOfBinsPerAxis(8)
 , m_InputImageMinimum(0)
 , m_InputImageMaximum(255)
+, m_HistSize(2)
 {
   // There are 10 outputs corresponding to the 9 textures indices
   this->SetNumberOfRequiredOutputs(10);
@@ -519,14 +519,14 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
      * to compute hxy1. This need to force an iterator over entire histogram.
        Processing time is propotional to the histogram bin size */
     double hxy2 = 0;
-    for(int i = 0; i < histSize0; ++i)
+    for(unsigned int i = 0; i < histSize0; ++i)
       {
-      for(int j = 0; j < histSize1; ++j)
+      for(unsigned int j = 0; j < histSize1; ++j)
         {
         double pipj = hx[j] * hy[i];
         hxy2 -= (pipj > 0.0001) ? pipj * vcl_log(pipj) : 0.;
         double frequency = m_GLCIList->GetFrequency(i,j, glcList);
-        m_Dissimilarity+= ( j - i ) * (frequency * frequency);
+        m_Dissimilarity+= ( static_cast<double>(j) - static_cast<double>(i) ) * (frequency * frequency);
         }
       }
 

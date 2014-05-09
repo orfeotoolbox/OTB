@@ -33,10 +33,10 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 ::ScalarImageToTexturesFilter()
 : m_Radius()
 , m_Offset()
-, m_HistSize(2)
 , m_NumberOfBinsPerAxis(8)
 , m_InputImageMinimum(0)
 , m_InputImageMaximum(255)
+, m_HistSize(2)
 {
   // There are 8 outputs corresponding to the 8 textures indices
   this->SetNumberOfRequiredOutputs(8);
