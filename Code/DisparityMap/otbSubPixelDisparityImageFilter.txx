@@ -357,6 +357,63 @@ class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
 void
 SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
 TDisparityImage,TMaskImage,TBlockMatchingFunctor>
+::VerifyInputInformation()
+{
+  // Retrieve input pointers
+  const TInputImage *     inLeftPtr       = this->GetLeftInput();
+  const TInputImage *     inRightPtr      = this->GetRightInput();
+  const TMaskImage *      inLeftMaskPtr   = this->GetLeftMaskInput();
+  const TMaskImage *      inRightMaskPtr  = this->GetRightMaskInput();
+  const TDisparityImage * inHDispPtr      = this->GetHorizontalDisparityInput();
+  const TDisparityImage * inVDispPtr      = this->GetVerticalDisparityInput();
+
+  const TOutputMetricImage *  outMetricPtr  = this->GetMetricOutput();
+  const TDisparityImage *     outHDispPtr   = this->GetHorizontalDisparityOutput();
+  const TDisparityImage *     outVDispPtr   = this->GetVerticalDisparityOutput();
+
+  // Check pointers before using them
+  if(!inLeftPtr || !inRightPtr)
+    {
+    itkExceptionMacro(<<"Missing input, need left and right input images.");
+    }
+  
+  if (!inHDispPtr)
+    {
+    itkExceptionMacro(<<"Input horizontal disparity map is missing");
+    }
+
+  // Now, we impose that both inputs have the same size
+  if(inLeftPtr->GetLargestPossibleRegion()
+     != inRightPtr->GetLargestPossibleRegion())
+    {
+    itkExceptionMacro(<<"Left and right images do not have the same size ! Left largest region: "<<inLeftPtr->GetLargestPossibleRegion()<<", right largest region: "<<inRightPtr->GetLargestPossibleRegion());
+    }
+
+  // We also check that left mask image has same size if present
+  if(inLeftMaskPtr && inLeftPtr->GetLargestPossibleRegion() != inLeftMaskPtr->GetLargestPossibleRegion())
+    {
+    itkExceptionMacro(<<"Left and mask images do not have the same size ! Left largest region: "<<inLeftPtr->GetLargestPossibleRegion()<<", mask largest region: "<<inLeftMaskPtr->GetLargestPossibleRegion());
+    }
+
+  // We also check that right mask image has same size if present
+  if(inRightMaskPtr && inRightPtr->GetLargestPossibleRegion() != inRightMaskPtr->GetLargestPossibleRegion())
+    {
+    itkExceptionMacro(<<"Right and mask images do not have the same size ! Right largest region: "<<inRightPtr->GetLargestPossibleRegion()<<", mask largest region: "<<inRightMaskPtr->GetLargestPossibleRegion());
+    }
+
+  // We check that the input initial disparity maps have the same size if present
+  if (inHDispPtr && inVDispPtr && inHDispPtr->GetLargestPossibleRegion() != inVDispPtr->GetLargestPossibleRegion())
+    {
+    itkExceptionMacro(<<"Initial horizontal and vertical disparity maps don't have the same size ! Horizontal disparity largest region: "<<inHDispPtr->GetLargestPossibleRegion()<<", vertical disparity largest region: "<<inVDispPtr->GetLargestPossibleRegion());
+    }
+  
+}
+
+template <class TInputImage, class TOutputMetricImage,
+class TDisparityImage, class TMaskImage, class TBlockMatchingFunctor>
+void
+SubPixelDisparityImageFilter<TInputImage,TOutputMetricImage,
+TDisparityImage,TMaskImage,TBlockMatchingFunctor>
 ::GenerateOutputInformation()
 {
   // Retrieve input pointers
@@ -366,12 +423,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TDisparityImage * outHDispPtr = this->GetHorizontalDisparityOutput();
   TDisparityImage * outVDispPtr = this->GetVerticalDisparityOutput();
-
-  if (!inHDispPtr)
-    {
-    itkExceptionMacro(<<"Input horizontal disparity map is missing");
-    }
-
+  
   outMetricPtr->CopyInformation(inHDispPtr);
   outHDispPtr->CopyInformation(inHDispPtr);
   outVDispPtr->CopyInformation(inHDispPtr);
@@ -419,38 +471,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TDisparityImage * outHDispPtr = this->GetHorizontalDisparityOutput();
   TDisparityImage * outVDispPtr = this->GetVerticalDisparityOutput();
-
-  // Check pointers before using them
-  if(!inLeftPtr || !inRightPtr || !outMetricPtr || !outHDispPtr || !outVDispPtr)
-    {
-    return;
-    }
-
-  // Now, we impose that both inputs have the same size
-  if(inLeftPtr->GetLargestPossibleRegion()
-     != inRightPtr->GetLargestPossibleRegion())
-    {
-    itkExceptionMacro(<<"Left and right images do not have the same size ! Left largest region: "<<inLeftPtr->GetLargestPossibleRegion()<<", right largest region: "<<inRightPtr->GetLargestPossibleRegion());
-    }
-
-  // We also check that left mask image has same size if present
-  if(inLeftMaskPtr && inLeftPtr->GetLargestPossibleRegion() != inLeftMaskPtr->GetLargestPossibleRegion())
-    {
-    itkExceptionMacro(<<"Left and mask images do not have the same size ! Left largest region: "<<inLeftPtr->GetLargestPossibleRegion()<<", mask largest region: "<<inLeftMaskPtr->GetLargestPossibleRegion());
-    }
-
-  // We also check that right mask image has same size if present
-  if(inRightMaskPtr && inRightPtr->GetLargestPossibleRegion() != inRightMaskPtr->GetLargestPossibleRegion())
-    {
-    itkExceptionMacro(<<"Right and mask images do not have the same size ! Right largest region: "<<inRightPtr->GetLargestPossibleRegion()<<", mask largest region: "<<inRightMaskPtr->GetLargestPossibleRegion());
-    }
-
-  // We check that the input initial disparity maps have the same size if present
-  if (inHDispPtr && inVDispPtr && inHDispPtr->GetLargestPossibleRegion() != inVDispPtr->GetLargestPossibleRegion())
-    {
-    itkExceptionMacro(<<"Initial horizontal and vertical disparity maps don't have the same size ! Horizontal disparity largest region: "<<inHDispPtr->GetLargestPossibleRegion()<<", vertical disparity largest region: "<<inVDispPtr->GetLargestPossibleRegion());
-    }
-
+  
   // Retrieve requested region (TODO: check if we need to handle
   // region for outHDispPtr)
   RegionType outputRequestedRegion = outHDispPtr->GetRequestedRegion();
