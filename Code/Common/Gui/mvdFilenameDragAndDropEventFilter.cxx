@@ -130,6 +130,8 @@ bool
 FilenameDragAndDropEventFilter
 ::DragMoveEvent( QObject* object, QDragMoveEvent* event )
 {
+  // qDebug() << this << "::DragMoveEvent(" << object << "," << event << ");";
+
   //
   // Nothing to do: bypass event & let default behaviour occur.
   return false;
@@ -171,7 +173,7 @@ FilenameDragAndDropEventFilter
       emit FilenameDropped( it->toLocalFile() );
       }
     }
-  
+ 
   //
   // Eatup event.
   return true;
