@@ -208,7 +208,7 @@ protected:
   virtual ~SubPixelDisparityImageFilter();
 
   /** \brief Verify that the input images are compatible
-   * 
+   *
    * This method needs to be re-implemented from ImageToImageFilter since
    * the initial images and disparity maps may not have the same size
    */
