@@ -28,7 +28,7 @@ namespace otb
    *
    * Call VarSol main function
    *
-   * [1] Vermote, E., Tanré, D., Deuze, J., Herman, M., Morcette, J., 1997.
+   * [1] Vermote, E., Tanre, D., Deuze, J., Herman, M., Morcette, J., 1997. 
    * Second simulation of the satellite signal in the solar spectrum, 6S: An overview.
    * IEEE Transactions on Geoscience and Remote Sensing 35
    * \ingroup Radiometry
