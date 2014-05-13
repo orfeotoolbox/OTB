@@ -28,8 +28,8 @@ namespace otb
    *
    * Call VarSol main function
    *
-   * [1] Vermote, E., Tanré, D., Deuze, J., Herman, M., Morcette, J., 1997. 
-   * Second simulation of the satellite signal in the solar spectrum, 6S: An overview. 
+   * [1] Vermote, E., Tanré, D., Deuze, J., Herman, M., Morcette, J., 1997.
+   * Second simulation of the satellite signal in the solar spectrum, 6S: An overview.
    * IEEE Transactions on Geoscience and Remote Sensing 35
    * \ingroup Radiometry
    *
@@ -37,20 +37,17 @@ namespace otb
   class ITK_EXPORT VarSol
   {
   public:
-    
+
     /** Call the varSol function*/
     static double GetVarSol(const int day, const int month)
     {
       /* System generated locals */
       double d__1;
-      
-      /* Builtin functions */
-      //double acos(double), cos(double);
-      
+
       /* Local variables */
       int j;
       double om;
-      
+
       /* calculation of the variability of the solar constant during the year. */
       /* day is the number of the day in the month */
       if (month <= 2) 
@@ -59,7 +56,7 @@ namespace otb
         j = (month - 1) * 31 - (month - 2) / 2 - 2 + day;
       else
         j = (month - 1) * 31 - (month - 1) / 2 - 2 + day;
-      
+
       om = (double) (j - 4) * .9856 * CONST_PI_180;
       /* Computing 2nd power */
       d__1 = 1. - vcl_cos(om) * .01673;
@@ -68,4 +65,3 @@ namespace otb
   };
 } //end namespace otb
 #endif
-
