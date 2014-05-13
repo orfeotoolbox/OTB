@@ -19,14 +19,17 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __otbGreyLevelCooccurrenceIndexedList_h
 #define __otbGreyLevelCooccurrenceIndexedList_h
 
+#include "itkNumericTraits.h"
+#include "itkObjectFactory.h"
 #include "itkLightObject.h"
 #include "itkArray.h"
-#include "itkHistogram.h"
+#include "itkIndex.h"
+#include "itkSize.h"
+#include <utility>
 #include <vector>
 
 namespace otb
 {
-
 /** \class GreyLevelCooccurrenceIndexedList
 * \brief This class holds unique non-zero co-occurrence pairs called
 * CooccurrenceIndexedList (GLCIL) instead of GLCM.
@@ -36,9 +39,7 @@ namespace otb
 * which uses it. The lookup array stores the position of each pixel pair in an
 * std::vector. A pixel pair is a combination of (Center, Offset)
 * Pixels. A -1 value in the lookup array indicates zero existance of pixel
-* pair. Index stored in the CooccurrencePairType is the index of the pixel pair
-* calculated from the histogram. Histogram instance is created outside this
-* class.
+* pair.
 *
 * Print references:
 * David A. Clausi and Yongping Zhao. 2002. Rapid extraction of image texture by
@@ -53,7 +54,7 @@ namespace otb
 * doi: 10.1109/IWSSIP.2008.4604387
 */
 
-template <class THistogram >
+template <class TPixel>
 class ITK_EXPORT GreyLevelCooccurrenceIndexedList : public itk::LightObject
 {
 public:
@@ -70,24 +71,41 @@ public:
   /** RTTI */
   itkTypeMacro(GreyLevelCooccurrenceIndexedList, itk::LightObject);
 
-  typedef THistogram                                          HistogramType;
-  typedef typename HistogramType::RelativeFrequencyType       RelativeFrequencyType;
-  typedef typename HistogramType::TotalAbsoluteFrequencyType  TotalAbsoluteFrequencyType;
-  typedef typename HistogramType::IndexType                   IndexType;
-  typedef typename HistogramType::SizeType                    SizeType;
-  typedef typename IndexType::ValueType                       IndexValueType;
-  typedef typename HistogramType::InstanceIdentifier          InstanceIdentifier;
+  typedef TPixel PixelType;
 
-  /** struct to hold non-zero frequency and its index in the histogram */
-  struct CooccurrencePairType
-  {
-    IndexType index;
-    RelativeFrequencyType frequency;
-  };
+  itkStaticConstMacro(PixelPairSize, unsigned int, 2);
+
+  typedef itk::Index<PixelPairSize>  IndexType;
+  typedef itk::Size<PixelPairSize>   SizeType;
+  typedef itk::IdentifierType   InstanceIdentifier;
+  typedef itk::IndexValueType    IndexValueType;
+
+  // do we need to use itk::IdentifierType instead?
+  typedef unsigned int  FrequencyType;
+  typedef unsigned long int  TotalFrequencyType;
+  typedef double  RelativeFrequencyType;
+
+/*
+   typedef IdentifierType InstanceIdentifier;
+   typedef InstanceIdentifier AbsoluteFrequencyType;
+   typedef NumericTraits< AbsoluteFrequencyType >::RealType RelativeFrequencyType;
+   typedef NumericTraits< AbsoluteFrequencyType >::AccumulateType TotalAbsoluteFrequencyType;
+   typedef NumericTraits< RelativeFrequencyType >::AccumulateType TotalRelativeFrequencyType;
+*/
+
+  typedef typename itk::NumericTraits< PixelType >::RealType PixelValueType;
+  typedef itk::FixedArray<PixelValueType, PixelPairSize> PixelPairType;
+  // lower bound of each bin
+  std::vector< std::vector< PixelValueType > > m_Min;
+  // upper bound of each bin
+  std::vector< std::vector< PixelValueType > > m_Max;
+
+  /* std::pair to hold pixel pair and its frequency count */
+  typedef std::pair<IndexType, FrequencyType> CooccurrencePairType;
 
   /** Lookup array used to store the index of the given pixel pair. Size of
     * LookupAray is equal to the nbins * nbins. Values in the array represents 1D
-    * index of the elements in the Histogram */
+    * index of the IndexType*/
   typedef itk::Array<int> LookupArrayType;
 
   /** std::vector to hold CooccurrencePairType. Index of the array where the
@@ -95,14 +113,10 @@ public:
   typedef std::vector<CooccurrencePairType> VectorType;
 
   /** Get the total frequency of Co-occurrence pairs. */
-  itkGetMacro(TotalFrequency, TotalAbsoluteFrequencyType);
+  itkGetMacro(TotalFrequency, TotalFrequencyType);
 
-  GreyLevelCooccurrenceIndexedList();
-
-  ~GreyLevelCooccurrenceIndexedList() { }
-
-  /** Fill m_LookupArray with -1 and set m_TotalFreqency to zero */
-  void Initialize(SizeType size, bool symmetry = true);
+  /** Get the total frequency of Co-occurrence pairs. */
+  itkGetMacro(Symmetry, bool);
 
   /** Get std::vector containing non-zero co-occurrence pairs */
   VectorType GetVector();
@@ -110,13 +124,14 @@ public:
   /** Normailze the GLCIL */
   void Normalize();
 
-  /** Add the CooccurrencePairType to list. Next occurrence of same index is
-    * checked via m_LookupArray value and the correspoding frequency value is
-    * incremented. If m_Symmetry is true the co-occurrence pair is added again */
-  void AddPairToList(IndexType index);
+  /** Initialize the lowerbound and upper bound vecotor, Fill m_LookupArray with
+    * -1 and set m_TotalFreqency to zero */
+  void Initialize(const unsigned int nbins, const PixelValueType min,
+                  const PixelValueType max, const bool symmetry = true);
 
-  /** Update frequency of the pair with given index */
-  void AddIndex(IndexType index);
+  //check if both pixel values fall between m_InputImageMinimum and
+  //m_InputImageMaximum. If so add to m_Vector via AddPairToVector method */
+  void AddPixelPair(const PixelValueType& pixelvalue1, const PixelValueType& pixelvalue2);
 
   /* Get the frequency value from Vector with index =[j,i] */
   RelativeFrequencyType GetFrequency(IndexValueType i, IndexValueType j);
@@ -125,10 +140,32 @@ public:
    * vector. This is used if we have a copy of m_Vector normalized. */
   RelativeFrequencyType GetFrequency(IndexValueType i, IndexValueType j, const VectorType& vect) const;
 
+protected:
+  GreyLevelCooccurrenceIndexedList();
+  ~GreyLevelCooccurrenceIndexedList() { }
+
+  /** create a cooccurrence pair with given index and frequency = 1
+    * value. Next occurrence of same index is checked via m_LookupArray and the
+    * correspoding frequency value is incremented. If m_Symmetry is true the
+    * co-occurrence pair is added again with index values swapped */
+  void AddPairToVector(IndexType index);
+
+  void SetBinMin(const unsigned int dimension, const InstanceIdentifier nbin,
+                 PixelValueType min);
+
+  void SetBinMax(const unsigned int dimension, const InstanceIdentifier nbin,
+                 PixelValueType max);
+
+  /** Get index of the pixelPair combination and save the result in index **/
+  bool GetIndex(const PixelPairType & pixelPair, IndexType & index) const;
+
 private:
 
+  GreyLevelCooccurrenceIndexedList(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
   /* Store the total frequency of co-occurrence pairs in GreyLevelCooccureneIndexedList class */
-  TotalAbsoluteFrequencyType m_TotalFrequency;
+  TotalFrequencyType m_TotalFrequency;
 
   /** LookupArray instance */
   LookupArrayType m_LookupArray;
@@ -139,7 +176,16 @@ private:
   /* Size instance */
   SizeType m_Size;
 
+  /** booleab to check if co-occurrene list is a symmtrical. true by default */
   bool m_Symmetry;
+
+  /** boolean to check pixel values fall under m_InputImageMinimum and
+    * m_InputImageMaximum. Used in GetIndex method. false by default */
+  bool m_ClipBinsAtEnds;
+
+  PixelValueType m_InputImageMinimum;
+
+  PixelValueType m_InputImageMaximum;
 };
 
 } // End namespace otb

@@ -21,10 +21,11 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbScalarImageToTexturesFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
+#include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
-#include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
+#include <vector>
 
 namespace otb
 {
@@ -33,10 +34,10 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 ::ScalarImageToTexturesFilter()
 : m_Radius()
 , m_Offset()
+, m_NeighborhoodRadius()
 , m_NumberOfBinsPerAxis(8)
 , m_InputImageMinimum(0)
 , m_InputImageMaximum(255)
-, m_HistSize(2)
 {
   // There are 8 outputs corresponding to the 8 textures indices
   this->SetNumberOfRequiredOutputs(8);
@@ -164,41 +165,6 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::SetBinsAndMinMax(unsigned int numberOfBinsPerAxis,
-                   InputPixelType inputImageMinimum,
-                   InputPixelType inputImageMaximum)
-{
-  /** calulate minimum offset and set it as neigborhood radius **/
-  unsigned int minRadius = 0;
-  for ( unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++ )
-    {
-    unsigned int distance = vcl_abs(m_Offset[i]);
-    if ( distance > minRadius )
-      {
-      minRadius = distance;
-      }
-    }
-  m_NeighborhoodRadius.Fill(minRadius);
-
-  /** Initalize m_Histogram with given min, max and number of bins  **/
-  MeasurementVectorType lowerBound;
-  MeasurementVectorType upperBound;
-  m_InputImageMinimum = inputImageMinimum;
-  m_InputImageMaximum = inputImageMaximum;
-  m_NumberOfBinsPerAxis = numberOfBinsPerAxis;
-  m_Histogram = HistogramType::New();
-  m_Histogram->SetMeasurementVectorSize( MeasurementVectorSize );
-  lowerBound.SetSize( MeasurementVectorSize );
-  upperBound.SetSize( MeasurementVectorSize );
-  lowerBound.Fill(m_InputImageMinimum);
-  upperBound.Fill(m_InputImageMaximum+1);
-  m_HistSize.Fill(m_NumberOfBinsPerAxis);
-  m_Histogram->Initialize(m_HistSize, lowerBound, upperBound);
-}
-
-template <class TInputImage, class TOutputImage>
-void
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   // First, call superclass implementation
@@ -254,6 +220,23 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     e.SetDataObject(inputPtr);
     throw e;
     }
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>
+::BeforeThreadedGenerateData()
+{
+  unsigned int minRadius = 0;
+  for ( unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++ )
+    {
+    unsigned int distance = vcl_abs(m_Offset[i]);
+    if ( distance > minRadius )
+      {
+      minRadius = distance;
+      }
+    }
+  m_NeighborhoodRadius.Fill(minRadius);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -325,91 +308,114 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     inputRegion.SetSize(inputSize);
     inputRegion.Crop(inputPtr->GetRequestedRegion());
 
-    CooccurrenceIndexedListPointerType m_GLCIList = CooccurrenceIndexedListType::New();
-    m_GLCIList->Initialize(m_HistSize);
+    CooccurrenceIndexedListPointerType GLCIList = CooccurrenceIndexedListType::New();
+    GLCIList->Initialize(m_NumberOfBinsPerAxis, m_InputImageMinimum, m_InputImageMaximum);
 
     typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
     NeighborhoodIteratorType neighborIt;
     neighborIt = NeighborhoodIteratorType(m_NeighborhoodRadius, inputPtr, inputRegion);
     for ( neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt )
-    {
-
-    const InputPixelType centerPixelIntensity = neighborIt.GetCenterPixel();
-
-    if ( centerPixelIntensity < m_InputImageMinimum
-         || centerPixelIntensity > m_InputImageMaximum )
       {
-      continue; // don't put a pixel in the histogram if the value
-                // is out-of-bounds.
-      }
-
-      bool            pixelInBounds;
-      const InputPixelType pixelIntensity =
-        neighborIt.GetPixel(m_Offset, pixelInBounds);
-
+      const InputPixelType centerPixelIntensity = neighborIt.GetCenterPixel();
+      bool pixelInBounds;
+      const InputPixelType pixelIntensity =  neighborIt.GetPixel(m_Offset, pixelInBounds);
       if ( !pixelInBounds )
         {
         continue; // don't put a pixel in the histogram if it's out-of-bounds.
         }
+      GLCIList->AddPixelPair(centerPixelIntensity, pixelIntensity);
+      }
 
-      if ( pixelIntensity < m_InputImageMinimum
-           || pixelIntensity > m_InputImageMaximum )
-        {
-        continue; // don't put a pixel in the histogram if the value
-                  // is out-of-bounds.
-        }
-
-      CooccurrenceIndexType instanceIndex;
-      MeasurementVectorType measurement( MeasurementVectorSize );
-      measurement[0] = centerPixelIntensity;
-      measurement[1] = pixelIntensity;
-      //Get Index of the histogram for the given pixel pair;
-      m_Histogram->GetIndex(measurement, instanceIndex);
-      m_GLCIList->AddPairToList(instanceIndex);
-    }
-
-
-    m_GLCIList->Normalize();
-    VectorConstIteratorType constVectorIt;
-    VectorType glcList = m_GLCIList->GetVector();
-
-    double pixelMean;
+    double pixelMean = 0.;
     double marginalMean;
-    double marginalDevSquared;
-    double pixelVariance;
+    double marginalDevSquared = 0.;
+    double pixelVariance = 0.;
 
-    //Initalize texture variables;
-    MeasurementType energy      = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType entropy     = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType correlation = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType inverseDifferenceMoment      = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType inertia             = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType clusterShade        = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType clusterProminence   = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType haralickCorrelation = itk::NumericTraits< MeasurementType >::Zero;
+    //Create and Intialize marginalSums
+    std::vector<double> marginalSums(m_NumberOfBinsPerAxis, 0);
 
-    //Compute mean,variances of the normalized GLCIL.
-    this->ComputeMeansAndVariances( glcList, pixelMean, marginalMean, marginalDevSquared,
-                                   pixelVariance);
+    //get co-occurrence vector and totalfrequency
+    VectorType glcVector = GLCIList->GetVector();
+    double totalFrequency = static_cast<double> (GLCIList->GetTotalFrequency());
+
+    //Normalize the co-occurrence indexed list and compute mean, marginalSum
+    typename VectorType::iterator it = glcVector.begin();
+    while( it != glcVector.end())
+      {
+      double frequency = (*it).second / totalFrequency;
+      CooccurrenceIndexType index = (*it).first;
+      pixelMean += index[0] * frequency;
+      marginalSums[index[0]] += frequency;
+      ++it;
+      }
+
+    /* Now get the mean and deviaton of the marginal sums.
+       Compute incremental mean and SD, a la Knuth, "The  Art of Computer
+       Programming, Volume 2: Seminumerical Algorithms",  section 4.2.2.
+       Compute mean and standard deviation using the recurrence relation:
+       M(1) = x(1), M(k) = M(k-1) + (x(k) - M(k-1) ) / k
+       S(1) = 0, S(k) = S(k-1) + (x(k) - M(k-1)) * (x(k) - M(k))
+       for 2 <= k <= n, then
+       sigma = vcl_sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
+       population SD).
+     */
+
+    std::vector<double>::const_iterator msIt = marginalSums.begin();
+    marginalMean = *msIt;
+
+    //Increment iterator to start with index 1
+    ++msIt;
+    for(int k= 2; msIt != marginalSums.end(); ++k, ++msIt)
+      {
+      double M_k_minus_1 = marginalMean;
+      double S_k_minus_1 = marginalDevSquared;
+      double x_k = *msIt;
+      double M_k = M_k_minus_1 + ( x_k - M_k_minus_1 ) / k;
+      double S_k = S_k_minus_1 + ( x_k - M_k_minus_1 ) * ( x_k - M_k );
+      marginalMean = M_k;
+      marginalDevSquared = S_k;
+      }
+
+    marginalDevSquared = marginalDevSquared / m_NumberOfBinsPerAxis;
+
+    VectorConstIteratorType constVectorIt;
+    constVectorIt = glcVector.begin();
+    while( constVectorIt != glcVector.end())
+    {
+    RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
+    CooccurrenceIndexType        index = (*constVectorIt).first;
+    pixelVariance += ( index[0] - pixelMean ) * ( index[0] - pixelMean ) * frequency;
+    ++constVectorIt;
+    }
 
     double pixelVarianceSquared = pixelVariance * pixelVariance;
 
     // Variance is only used in correlation. If variance is 0, then (index[0] - pixelMean) * (index[1] - pixelMean)
     // should be zero as well. In this case, set the variance to 1. in order to
     // avoid NaN correlation.
-    if(pixelVarianceSquared < 0.0001)
+    if(pixelVarianceSquared < m_PixelValueTolerance)
       {
       pixelVarianceSquared = 1.;
       }
 
+    //Initalize texture variables;
+    PixelValueType energy      = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType entropy     = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType correlation = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType inverseDifferenceMoment      = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType inertia             = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType clusterShade        = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType clusterProminence   = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType haralickCorrelation = itk::NumericTraits< PixelValueType >::Zero;
+
     //Compute textures
-    constVectorIt = glcList.begin();
-    while( constVectorIt != glcList.end())
+    constVectorIt = glcVector.begin();
+    while( constVectorIt != glcVector.end())
       {
-      CooccurrenceIndexType index = (*constVectorIt).index;
-      RelativeFrequencyType frequency = (*constVectorIt).frequency;
+      CooccurrenceIndexType index = (*constVectorIt).first;
+      RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
       energy += frequency * frequency;
-      entropy -= ( frequency > 0.0001 ) ? frequency *vcl_log(frequency) / log2:0;
+      entropy -= ( frequency > m_PixelValueTolerance ) ? frequency *vcl_log(frequency) / log2:0;
       correlation += ( ( index[0] - pixelMean ) * ( index[1] - pixelMean ) * frequency ) / pixelVarianceSquared;
       inverseDifferenceMoment += frequency / ( 1.0 + ( index[0] - index[1] ) * ( index[0] - index[1] ) );
       inertia += ( index[0] - index[1] ) * ( index[0] - index[1] ) * frequency;
@@ -419,8 +425,9 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       ++constVectorIt;
       }
 
-    //todo avoid division by zero also here?
-    haralickCorrelation = ( haralickCorrelation - marginalMean * marginalMean )  / marginalDevSquared;
+    //Use epsilon check here?
+    haralickCorrelation = (marginalDevSquared != 0) ? ( haralickCorrelation - marginalMean * marginalMean )  / marginalDevSquared : 0;
+//   haralickCorrelation = ( haralickCorrelation - marginalMean * marginalMean )  / marginalDevSquared;
 
     // Fill outputs
     energyIt.Set(energy);
@@ -446,82 +453,6 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     ++haralickCorIt;
     }
 }
-
-template <class TInputImage, class TOutputImage>
-void
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>::
-ComputeMeansAndVariances(VectorType& frequencyVector, double & pixelMean,
-                         double & marginalMean, double & marginalDevSquared,
-                         double & pixelVariance)
-{
-  // This function takes two passes through the histogram and two passes through
-  // an array of the same length as a histogram axis. This could probably be
-  // cleverly compressed to one pass, but it's not clear that that's necessary.
-
-  // Initialize everything
-  unsigned int nb = m_NumberOfBinsPerAxis * m_NumberOfBinsPerAxis;
-  double *marginalSums = new double[m_NumberOfBinsPerAxis];
-  for ( double *ms_It = marginalSums;
-        ms_It < marginalSums + m_NumberOfBinsPerAxis; ms_It++ )
-    {
-    *ms_It = 0;
-    }
-  pixelMean = 0;
-
-  // Ok, now do the first pass through the histogram to get the marginal sums
-  // and compute the pixel mean
-  VectorConstIteratorType constVectorIt;
-  constVectorIt = frequencyVector.begin();
-  while( constVectorIt != frequencyVector.end())
-    {
-    RelativeFrequencyType frequency = (*constVectorIt).frequency;
-    CooccurrenceIndexType     index = (*constVectorIt).index;
-    pixelMean += index[0] * frequency;
-    marginalSums[index[0]] += frequency;
-    ++constVectorIt;
-    }
-
-  /*  Now get the mean and deviaton of the marginal sums.
-      Compute incremental mean and SD, a la Knuth, "The  Art of Computer
-      Programming, Volume 2: Seminumerical Algorithms",  section 4.2.2.
-      Compute mean and standard deviation using the recurrence relation:
-      M(1) = x(1), M(k) = M(k-1) + (x(k) - M(k-1) ) / k
-      S(1) = 0, S(k) = S(k-1) + (x(k) - M(k-1)) * (x(k) - M(k))
-      for 2 <= k <= n, then
-      sigma = vcl_sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
-      population SD).
-  */
-
-  marginalMean = marginalSums[0];
-  marginalDevSquared = 0;
-  for ( unsigned int arrayIndex = 1; arrayIndex < m_NumberOfBinsPerAxis; arrayIndex++ )
-    {
-    int    k = arrayIndex + 1;
-    double M_k_minus_1 = marginalMean;
-    double S_k_minus_1 = marginalDevSquared;
-    double x_k = marginalSums[arrayIndex];
-
-    double M_k = M_k_minus_1 + ( x_k - M_k_minus_1 ) / k;
-    double S_k = S_k_minus_1 + ( x_k - M_k_minus_1 ) * ( x_k - M_k );
-
-    marginalMean = M_k;
-    marginalDevSquared = S_k;
-    }
-  marginalDevSquared = marginalDevSquared / m_NumberOfBinsPerAxis;
-
-  pixelVariance = 0;
-  constVectorIt = frequencyVector.begin();
-  while( constVectorIt != frequencyVector.end())
-    {
-    RelativeFrequencyType frequency = (*constVectorIt).frequency;
-    CooccurrenceIndexType        index = (*constVectorIt).index;
-    pixelVariance += ( index[0] - pixelMean ) * ( index[0] - pixelMean ) * frequency;
-    ++constVectorIt;
-    }
-
-  delete[] marginalSums;
-}
-
 
 } // End namespace otb
 

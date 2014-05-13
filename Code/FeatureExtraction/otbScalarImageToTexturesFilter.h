@@ -21,7 +21,6 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageToImageFilter.h"
-#include "itkHistogram.h"
 
 namespace otb
 {
@@ -32,14 +31,6 @@ namespace otb
  *  user defined radius:
  *  (where \f$ g(i, j) \f$ is the element in
  *  cell i, j of a normalized GLCM):
- *
- *  GLCM calculated by ScalarImageToCooccrrenceMatrixFilter defines the
- *  bottle-neck in haralick texture extraction appplication. This is because the
- *  above ITK filter we had to create a local copy of the input image and mask
- *  based on window size around each pixel. Based on the literature GLCHS
- *  (A.Clausi et al), GLCIL(O.Bastos et al) and the current implementation we
- *  had come up with a new approach which will reduce the cost of creating GLCM
- *  and thus improving performance of Haralick textures.
  *
  * "Energy" \f$ = f_1 = \sum_{i, j}g(i, j)^2 \f$
  *
@@ -123,28 +114,16 @@ public:
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
-  typedef typename itk::NumericTraits< InputPixelType >::RealType MeasurementType;
-  typedef itk::Statistics::DenseFrequencyContainer2 THistogramFrequencyContainer;
-  typedef itk::Statistics::Histogram< MeasurementType, THistogramFrequencyContainer > HistogramType;
-  typedef typename HistogramType::Pointer                            HistogramPointer;
-  typedef typename HistogramType::ConstPointer                       HistogramConstPointer;
-  typedef typename HistogramType::MeasurementVectorType              MeasurementVectorType;
-  typedef typename HistogramType::RelativeFrequencyType              RelativeFrequencyType;
-  typedef typename HistogramType::TotalAbsoluteFrequencyType         TotalAbsoluteFrequencyType;
-  typedef typename HistogramType::SizeType                           HistogramSizeType;
-  typedef typename HistogramType::IndexType                          CooccurrenceIndexType;
-
-  typedef GreyLevelCooccurrenceIndexedList< HistogramType >   CooccurrenceIndexedListType;
+  typedef GreyLevelCooccurrenceIndexedList< InputPixelType >   CooccurrenceIndexedListType;
   typedef typename CooccurrenceIndexedListType::Pointer       CooccurrenceIndexedListPointerType;
   typedef typename CooccurrenceIndexedListType::ConstPointer  CooccurrenceIndexedListConstPointerType;
+  typedef typename CooccurrenceIndexedListType::IndexType              CooccurrenceIndexType;
+  typedef typename CooccurrenceIndexedListType::PixelValueType         PixelValueType;
+  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType  RelativeFrequencyType;
+  typedef typename CooccurrenceIndexedListType::VectorType             VectorType;
 
-  typedef typename CooccurrenceIndexedListType::VectorType VectorType;
   typedef typename VectorType::iterator                    VectorIteratorType;
   typedef typename VectorType::const_iterator              VectorConstIteratorType;
-
-  void SetBinsAndMinMax(unsigned int bins, InputPixelType min, InputPixelType max);
-
-  itkStaticConstMacro(MeasurementVectorSize, int, 2 );
 
   /** Set the radius of the window on which textures will be computed */
   itkSetMacro(Radius, SizeType);
@@ -206,6 +185,8 @@ protected:
   ~ScalarImageToTexturesFilter();
   /** Generate the input requested region */
   virtual void GenerateInputRequestedRegion();
+  /** Before Parallel textures extraction */
+  virtual void BeforeThreadedGenerateData();
   /** Parallel textures extraction */
   virtual void ThreadedGenerateData(const OutputRegionType& outputRegion, itk::ThreadIdType threadId);
 
@@ -234,15 +215,7 @@ private:
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
 
-  /** Histogram instance used to get index for the pixel pair */
-  HistogramPointer m_Histogram;
-
-  HistogramSizeType m_HistSize;
-
-  /** This method is same as ComputeMeansAndVariance in
-    * itkHistogramToTexturesFilter. This has been modified for using new GLCIL */
-  void ComputeMeansAndVariances(VectorType& frequencyList, double & pixelMean,
-                                double & marginalMean, double & marginalDevSquared, double & pixelVariance);
+  static const double m_PixelValueTolerance = 0.0001;
 
 };
 } // End namespace otb
