@@ -22,7 +22,7 @@
 #ifndef __otbLuminanceToReflectanceImageFilter_h
 #define __otbLuminanceToReflectanceImageFilter_h
 
-#include "otb_6S.h"
+#include "otbVarSol.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbMath.h"
@@ -297,12 +297,8 @@ protected:
         {
         if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13)
           {
-          otb_6s_doublereal dsol = 0.;
-          otb_6s_integer    day = static_cast<otb_6s_integer>(m_Day);
-          otb_6s_integer    month = static_cast<otb_6s_integer>(m_Month);
-          //int               cr(0);
-          otb_6s_varsol_(&day, &month, &dsol);
-          coefTemp = vcl_cos(m_ZenithalSolarAngle * CONST_PI_180) * static_cast<double>(dsol);
+          double dsol = VarSol::GetVarSol(m_Day, m_Month);
+          coefTemp = vcl_cos(m_ZenithalSolarAngle * CONST_PI_180) * dsol;
           }
         else
           {
