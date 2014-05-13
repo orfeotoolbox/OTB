@@ -221,12 +221,16 @@ TreeWidget
 ::TreeWidget( QWidget* parent  ):
   QTreeWidget( parent )
 {
-  setDefaultDropAction( Qt::MoveAction );
+  setSelectionBehavior( QAbstractItemView::SelectRows );
+
+  // setDefaultDropAction( Qt::MoveAction );
   // setDefaultDropAction( Qt::CopyAction );
+  // setDefaultDropAction( Qt::LinkAction );
 
+  setDragDropMode( QAbstractItemView::InternalMove );
   setDragEnabled( true );
-
   setAcceptDrops( true );
+  setDragDropMode( QAbstractItemView::DragDrop );
 }
 
 /*******************************************************************************/
@@ -260,18 +264,57 @@ TreeWidget
 }
 
 /*******************************************************************************/
+void
+TreeWidget
+::dragEnterEvent( QDragEnterEvent* event )
+{
+  qDebug() << this << "::dragEnterEvent(" << event << ")";
+
+  // event->acceptProposedAction();
+
+  QTreeWidget::dragEnterEvent( event );
+}
+
+/*******************************************************************************/
 void 
 TreeWidget
 ::dragMoveEvent( QDragMoveEvent* event )
 {
   assert( event!=NULL );
 
-  // qDebug() << this << "::dragMoveEvent(" << event << ")";
+  qDebug() << this << "::dragMoveEvent(" << event << ")";
+  qDebug() << this << itemAt( event->pos() );
 
+  QTreeWidgetItem* item = itemAt( event->pos() );
+  const QMimeData * mimeData = event->mimeData();
+
+  if( !event->mimeData()->hasFormat( TreeWidget::ITEM_MIME_TYPE ) ||
+      item==NULL )
+  {
+    event->ignore();
+  }
+
+  if( event->source()==this )
+    event->setDropAction( Qt::MoveAction );
+
+  /*
   if( itemAt( event->pos() )==NULL )
     event->ignore();
   else
     event->accept();
+  */
+
+  QTreeWidget::dragMoveEvent( event );
+}
+
+/*******************************************************************************/
+void
+TreeWidget
+::dragLeaveEvent( QDragLeaveEvent* event )
+{
+  qDebug() << this << "::dragLeaveEvent(" << event << ")";
+
+  QTreeWidget::dragLeaveEvent( event );
 }
 
 /*******************************************************************************/
@@ -288,6 +331,9 @@ TreeWidget
   QTreeWidgetItemList items;
 
   DecodeMimeData( items, event->mimeData() );
+
+  if( event->source()==this )
+    event->setDropAction( Qt::MoveAction );
 
   QTreeWidget::dropEvent( event );
 

@@ -44,6 +44,13 @@
 #include "mvdSystemError.h"
 #include "mvdVectorImageModel.h"
 
+
+#define FORCE_QDEBUG 1
+#define FORCE_QWARNING 1
+#define FORCE_QCRITICAL 1
+#define FORCE_QFATAL 1
+
+
 namespace mvd
 {
 /*
@@ -292,13 +299,11 @@ I18nCoreApplication
     //
     // DEBUG
     case QtDebugMsg:
-#if ECHO_QDEBUG
-/*
+#if (ECHO_QDEBUG) || FORCE_QDEBUG
 #if _WIN32
       OutputDebugString( message );
       OutputDebugString( "\n" );
 #endif
-*/
       fprintf( stderr, "%s\n", message );
 #endif
 #if LOG_QDEBUG
@@ -308,14 +313,12 @@ I18nCoreApplication
     //
     // WARNING
     case QtWarningMsg:
-#if ECHO_QWARNING
-/*
+#if (ECHO_QWARNING) || FORCE_QWARNING
 #if _WIN32
       OutputDebugString( "WARNG> " );
       OutputDebugString( message );
       OutputDebugString( "\n" );
 #endif
-*/
       fprintf( stderr, tr( "WARNG> %s\n" ).toLatin1().constData(), message );
 #endif
 #if LOG_QWARNING
@@ -325,14 +328,12 @@ I18nCoreApplication
     //
     // CRITICAL
     case QtCriticalMsg:
-#if ECHO_QCRITICAL
-/*
+#if (ECHO_QCRITICAL) || FORCE_QCRITICAL
 #if _WIN32
       OutputDebugString( "ERROR> " );
       OutputDebugString( message );
       OutputDebugString( "\n" );
 #endif
-*/
       fprintf( stderr, tr( "ERROR> %s\n" ).toLatin1().constData(), message );
 #endif
 #if LOG_QCRITICAL
@@ -350,14 +351,12 @@ I18nCoreApplication
     //
     // FATAL
     case QtFatalMsg:
-#if ECHO_QFATAL
-/*
+#if (ECHO_QFATAL) || FORCE_QFATAL
 #if _WIN32
       OutputDebugString( "FATAL> " );
       OutputDebugString( message );
       OutputDebugString( "\n" );
 #endif
-*/
       fprintf(
 	stderr,
 	tr( "FATAL> %s\n" ).toLatin1().constData(),
