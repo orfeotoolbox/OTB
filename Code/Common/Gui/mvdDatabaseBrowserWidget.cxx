@@ -256,7 +256,8 @@ DatabaseBrowserWidget
   // qDebug() << this << "::SetCurrentDataset(" << hash << ")";
 
 #if QT_VERSION < QT_VERSION_CHECK( 4, 8, 1 )
-  // Workaround for MANTIS-934 (crash/memory corruption after having imported second image).
+  // Workaround for MANTIS-934 (crash/memory corruption after having
+  // imported second image).
 #else
   assert( m_UI!=NULL );
   assert( m_UI->databaseTreeWidget!=NULL );
