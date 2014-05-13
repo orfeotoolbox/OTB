@@ -85,32 +85,23 @@ public:
     double       contribution = 0.;
     TOutput      outPixel;
     outPixel.SetSize(it.GetCenterPixel().Size());
-    std::ostringstream oss;
-    oss << std::fixed << std::setprecision(3);
 
     // Loop over each component
     const unsigned int size = outPixel.GetSize();
     for (unsigned int j = 0; j < size; ++j)
-      {
-      oss.str("");
+    {
       contribution = 0;
       // Load the current channel ponderation value matrix
       WeightingMatrixType TempChannelWeighting = m_WeightingValues[j];
       // Loop over the neighborhood
       for (unsigned int i = 0; i < neighborhoodSize; ++i)
-        {
+      {
         // Current neighborhood pixel index calculation
         unsigned int RowIdx = 0;
         unsigned int ColIdx = 0;
         RowIdx = i / TempChannelWeighting.Cols();
-        if (RowIdx != 0)
-          {
-          ColIdx = (i + 1) - RowIdx*TempChannelWeighting.Cols() - 1;
-          }
-        else
-          {
-          ColIdx = i;
-          }
+        ColIdx = i - RowIdx*TempChannelWeighting.Cols();
+   
         // Extract the current neighborhood pixel ponderation
         double idVal = TempChannelWeighting(RowIdx, ColIdx);
         // Extract the current neighborhood pixel value
@@ -119,12 +110,9 @@ public:
         contribution += static_cast<double>(tempPix[j]) * idVal;
 
         }
-      double temp = static_cast<double>(it.GetCenterPixel()[j]) * m_UpwardTransmittanceRatio[j] + contribution *
-                    m_DiffuseRatio[j];
-      oss << temp;
-      outPixel[j] = static_cast<RealValueType>(atof(oss.str().c_str()));
-
-      //outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j];
+        
+        outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j]) *m_UpwardTransmittanceRatio[j] 
+                        + contribution * m_DiffuseRatio[j];
       }
     return outPixel;
   }
@@ -149,14 +137,12 @@ private:
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SurfaceAdjacencyEffect6SCorrectionSchemeFilter :
-  public UnaryFunctorNeighborhoodImageFilter<TInputImage,
+  public UnaryFunctorNeighborhoodImageFilter<
+      TInputImage,
       TOutputImage,
       typename Functor::ComputeNeighborhoodContributionFunctor<itk::
-          ConstNeighborhoodIterator
-          <TInputImage>,
-          typename
-          TOutputImage
-          ::PixelType> >
+          ConstNeighborhoodIterator <TInputImage>,
+      typename TOutputImage::PixelType> >
 {
 public:
   /** "typedef" to simplify the variables definition and the declaration. */
@@ -262,7 +248,7 @@ public:
 
   /** Compute the functor parameters */
   void ComputeParameters();
-  /** Compute radiative terms if necessary and then updtae functors attibuts. */
+  /** Compute radiative terms if necessary and then update functors attibuts. */
   void GenerateParameters();
   /** Fill AtmosphericRadiativeTerms using image metadata*/
   void UpdateAtmosphericRadiativeTerms();
@@ -272,11 +258,8 @@ protected:
   virtual ~SurfaceAdjacencyEffect6SCorrectionSchemeFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** GenerateOutputInformation method */
-  virtual void GenerateOutputInformation();
-
-  /** Initialize some accumulators before the threads run. */
-  //virtual void BeforeThreadedGenerateData();
+  /** Initialize the parameters of the functor before the threads run. */
+  virtual void BeforeThreadedGenerateData();
 
   /** If modified, we need to compute the parameters again */
   virtual void Modified();
@@ -301,12 +284,8 @@ private:
   std::string m_AeronetFileName;
   /** Path to an filter function values file. */
   std::string m_FilterFunctionValuesFileName;
-  /** Contains the filter function values (each element is a vector and represnts the values for each channel) */
+  /** Contains the filter function values (each element is a vector and reprsents the values for each channel) */
   FilterFunctionCoefVectorType m_FilterFunctionCoef;
-  /** Enable/Disable GenerateParameters in GenerateOutputInformation.
-   *  Usefull for image view that call GenerateOutputInformation each time you move the full area.
-   */
-  bool m_UseGenerateParameters;
 };
 
 } // end namespace otb

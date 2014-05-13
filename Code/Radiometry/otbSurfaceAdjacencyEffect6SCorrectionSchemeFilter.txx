@@ -46,6 +46,7 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::SurfaceAdjacencyEffect6SCorrectionSchemeFilter()
 {
   m_WindowRadius = 1;
+  m_ParametersHaveBeenComputed=false;
   m_PixelSpacingInKilometers = 1.;
   m_ZenithalViewingAngle = 361.;
   m_AtmosphericRadiativeTerms = AtmosphericRadiativeTermsType::New();
@@ -54,22 +55,16 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
   m_AeronetFileName = "";
   m_FilterFunctionValuesFileName = "";
   m_FilterFunctionCoef.clear();
-  m_UseGenerateParameters = true;
 }
 
 template <class TInputImage, class TOutputImage>
 void
 SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
-::GenerateOutputInformation()
+::BeforeThreadedGenerateData()
 {
-  Superclass::GenerateOutputInformation();
-  typename InputImageType::Pointer  inputPtr = const_cast<TInputImage *>(this->GetInput());
-  typename OutputImageType::Pointer outputPtr = const_cast<TOutputImage *>(this->GetOutput());
+  Superclass::BeforeThreadedGenerateData();
 
-  if (!inputPtr || !outputPtr) return;
-
-  outputPtr->SetNumberOfComponentsPerPixel(inputPtr->GetNumberOfComponentsPerPixel());
-  if (m_UseGenerateParameters) this->GenerateParameters();
+  this->GenerateParameters();
 
   if (!m_ParametersHaveBeenComputed)
     {
@@ -211,10 +206,10 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 
   for (unsigned int band = 0; band < inputPtr->GetNumberOfComponentsPerPixel(); ++band)
     {
-    WeightingMatrixType currentWeightingMatrix(2*m_WindowRadius + 1, 2*m_WindowRadius + 1);
     double rayleigh = m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForRayleigh(band);
     double aerosol =  m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForAerosol(band);
-
+    
+    WeightingMatrixType currentWeightingMatrix(2*m_WindowRadius + 1, 2*m_WindowRadius + 1);
     currentWeightingMatrix.Fill(0.);
 
     for (unsigned int i = 0; i < 2 * m_WindowRadius + 1; ++i)
@@ -224,11 +219,13 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
         double notUsed1, notUsed2;
         double factor = 1;
         double palt = 1000.;
-        SIXSTraits::ComputeEnvironmentalContribution(rayleigh, aerosol,
-                                                     radiusMatrix(i,
-                                                                  j), palt,
-                                                     vcl_cos(
-                                                       m_ZenithalViewingAngle * CONST_PI_180), notUsed1, notUsed2,
+        SIXSTraits::ComputeEnvironmentalContribution(rayleigh, 
+                                                     aerosol,
+                                                     radiusMatrix(i,j),
+                                                     palt,
+                                                     vcl_cos(m_ZenithalViewingAngle * CONST_PI_180),
+                                                     notUsed1,
+                                                     notUsed2,
                                                      factor);                                                                                                        //Call to 6S
         currentWeightingMatrix(i, j) = factor;
         }
