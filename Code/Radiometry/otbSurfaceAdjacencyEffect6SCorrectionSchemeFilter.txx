@@ -219,7 +219,7 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
         double notUsed1, notUsed2;
         double factor = 1;
         double palt = 1000.;
-        SIXSTraits::ComputeEnvironmentalContribution(rayleigh, 
+        SIXSTraits::ComputeEnvironmentalContribution(rayleigh,
                                                      aerosol,
                                                      radiusMatrix(i,j),
                                                      palt,

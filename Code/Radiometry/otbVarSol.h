@@ -28,7 +28,7 @@ namespace otb
    *
    * Call VarSol main function
    *
-   * [1] Vermote, E., Tanre, D., Deuze, J., Herman, M., Morcette, J., 1997. 
+   * [1] Vermote, E., Tanre, D., Deuze, J., Herman, M., Morcette, J., 1997.
    * Second simulation of the satellite signal in the solar spectrum, 6S: An overview.
    * IEEE Transactions on Geoscience and Remote Sensing 35
    * \ingroup Radiometry
@@ -50,9 +50,9 @@ namespace otb
 
       /* calculation of the variability of the solar constant during the year. */
       /* day is the number of the day in the month */
-      if (month <= 2) 
+      if (month <= 2)
         j = (month - 1) * 31 + day;
-      else if (month > 8) 
+      else if (month > 8)
         j = (month - 1) * 31 - (month - 2) / 2 - 2 + day;
       else
         j = (month - 1) * 31 - (month - 1) / 2 - 2 + day;

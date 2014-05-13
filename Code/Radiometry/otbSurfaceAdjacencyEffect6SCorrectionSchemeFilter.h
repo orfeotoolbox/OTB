@@ -111,7 +111,7 @@ public:
 
         }
         
-        outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j]) *m_UpwardTransmittanceRatio[j] 
+        outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j]) *m_UpwardTransmittanceRatio[j]
                         + contribution * m_DiffuseRatio[j];
       }
     return outPixel;
