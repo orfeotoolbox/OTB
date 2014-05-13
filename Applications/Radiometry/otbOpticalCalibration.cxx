@@ -100,7 +100,7 @@ public:
   typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<DoubleVectorImageType,DoubleVectorImageType>
   SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
 
-  typedef otb::GroundSpacingImageFunction<DoubleVectorImageType> GroundSpacingImageType;
+  typedef otb::GroundSpacingImageFunction<FloatVectorImageType> GroundSpacingImageType;
 
   typedef DoubleVectorImageType::IndexType   IndexType;
   typedef GroundSpacingImageType::FloatType  FloatType;
@@ -284,6 +284,7 @@ private:
     SetParameterDescription("atmo.radius","Window radius for adjacency effects corrections");
     MandatoryOff("atmo.radius");
     SetDefaultParameterInt("atmo.radius", 2);
+    DisableParameter("atmo.radius");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
@@ -439,7 +440,7 @@ private:
     m_ScaleFilter->InPlaceOn();
     m_ClampFilter = ClampFilterType::New();
 
-     FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
+    FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
 
     // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters
     if ( !IsParameterEnabled("acquisition.fluxnormalizationcoefficient") )
@@ -647,9 +648,9 @@ private:
         m_AtmosphericParam->SetAerosolOptical(GetParameterFloat("atmo.opt"));
 
         // Relative Spectral Response File
-        if (IsParameterEnabled("rsr"))
+        if (IsParameterEnabled("atmo.rsr"))
         {
-          m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("rsr"));
+          m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("atmo.rsr"));
         }
 
         // Aeronet file
@@ -679,51 +680,62 @@ private:
 
         GetLogger()->Info("Atmospheric correction parameters compute by 6S : " + oss.str());
 
-        //Compute adjacency effect
-        //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
-        //   = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
+        bool adjComputation=false;
+        if (IsParameterEnabled("atmo.radius"))
+        {
+          adjComputation=true;
+          //Compute adjacency effect
+          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
+            = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
 
-        //   m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
-        //   SetAtmosphericRadiativeTerms(
-        //     m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms());
-        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
-        //   m_AtmosphericParam->GetViewingZenithalAngle());
-        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("radius"));
+          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+            SetAtmosphericRadiativeTerms(
+              m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms());
+          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
+            m_AtmosphericParam->GetViewingZenithalAngle());
+          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("atmo.radius"));
 
-        //    //estimate ground spacing in kilometers
-        // GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
+          //Estimate ground spacing in kilometers
+          GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
 
-        // groundSpacing->SetInputImage(inImage);
-        // IndexType  index;
+          groundSpacing->SetInputImage(inImage);
+          IndexType  index;
+          vnl_random rand;
 
-        // vnl_random rand;
+          index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
+          index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
+          FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
 
-        // index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
-        // index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
-        // FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
+          const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
+            // std::ostringstream oss2;
+            //  oss2.str("");
+            //  oss2 << spacingInKilometers;
+            //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
+          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+            SetPixelSpacingInKilometers(spacingInKilometers);
 
-        // const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
-        //    // std::ostringstream oss2;
-        //    //  oss2.str("");
-        //    //  oss2 << spacingInKilometers;
-        //    //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
-        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
-        //   SetPixelSpacingInKilometers(spacingInKilometers);
+        
+          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
+        }
 
-        //    //rescale the surface reflectance in milli-reflectance
-        // m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
-        //    //m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->Update();
-        // m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
-
+        //Rescale the surface reflectance in milli-reflectance
         if (!IsParameterEnabled("clamp"))
         {
-          m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+          if (!adjComputation)
+            m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+          else
+            m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
         }
         else
         {
           GetLogger()->Info("Clamp values between [0, 100]");
-          m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+          
+          if (!adjComputation)
+            m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+          else
+            m_ClampFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
+          
           m_ClampFilter->ClampOutside(0.0, 1.0);
           m_ScaleFilter->SetInput(m_ClampFilter->GetOutput());
         }
