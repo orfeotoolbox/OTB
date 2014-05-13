@@ -49,21 +49,20 @@ namespace otb
       
       /* Local variables */
       int j;
-      double pi, om;
+      double om;
       
       /* calculation of the variability of the solar constant during the year. */
       /* day is the number of the day in the month */
       if (month <= 2) 
-	j = (month - 1) * 31 + day;
+        j = (month - 1) * 31 + day;
       else if (month > 8) 
-	j = (month - 1) * 31 - (month - 2) / 2 - 2 + day;
+        j = (month - 1) * 31 - (month - 2) / 2 - 2 + day;
       else
-	j = (month - 1) * 31 - (month - 1) / 2 - 2 + day;
+        j = (month - 1) * 31 - (month - 1) / 2 - 2 + day;
       
-      pi = acos(0.) * 2.;
-      om = (double) (j - 4) * .9856 * pi / 180.;
+      om = (double) (j - 4) * .9856 * CONST_PI_180;
       /* Computing 2nd power */
-      d__1 = 1. - cos(om) * .01673;
+      d__1 = 1. - vcl_cos(om) * .01673;
       return 1. / (d__1 * d__1);
     }
   };
