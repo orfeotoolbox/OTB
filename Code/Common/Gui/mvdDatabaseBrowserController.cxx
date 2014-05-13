@@ -587,7 +587,7 @@ DatabaseBrowserController
           }
 
         // If exception is raised, consider dataset-model as NOT consistent.
-        catch( std::exception& exc )
+        catch( std::exception& )
           {
           isConsistent = false;
           }
