@@ -82,7 +82,6 @@ public:
   typedef typename VectorType::const_iterator              VectorConstIteratorType;
 
 
-
   /** Set the radius of the window on which textures will be computed */
   itkSetMacro(Radius, SizeType);
   /** Get the radius of the window on which textures will be computed */
