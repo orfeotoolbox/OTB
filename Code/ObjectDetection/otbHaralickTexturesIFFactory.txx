@@ -43,9 +43,9 @@ HaralickTexturesIFFactory<TImageType, TCoordRep, TPrecision>
 
   function->SetInputImage(image);
   function->GetInternalImageFunction()->SetNeighborhoodRadius(param[0]);
-  function->GetInternalImageFunction()->SetInputImageMinimum(param[1]);
-  function->GetInternalImageFunction()->SetInputImageMaximum(param[2]);
-  function->GetInternalImageFunction()->SetNumberOfBinsPerAxis(param[3]);
+  function->SetInputImageMinimum(param[1]);
+  function->SetInputImageMaximum(param[2]);
+  function->SetNumberOfBinsPerAxis(param[3]);
 
   OffsetType offset;
   offset.Fill(param[4]);

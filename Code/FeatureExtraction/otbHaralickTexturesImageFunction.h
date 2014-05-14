@@ -18,10 +18,11 @@
 #ifndef __otbHaralickTexturesImageFunction_h
 #define __otbHaralickTexturesImageFunction_h
 
+#include "otbGreyLevelCooccurrenceIndexedList.h"
+#include "itkImageToImageFilter.h"
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"
-#include "itkScalarImageToCooccurrenceMatrixFilter.h"
-#include "itkHistogramToTextureFeaturesFilter.h"
+#include "itkHistogram.h"
 
 namespace otb
 {
@@ -99,27 +100,23 @@ public:
   typedef typename InputImageType::Pointer         InputImagePointerType;
   typedef typename InputImageType::PixelType       InputPixelType;
   typedef typename InputImageType::RegionType      InputRegionType;
+  typedef typename InputImageType::OffsetType   OffsetType;
   typedef typename InputRegionType::SizeType       SizeType;
-
-  // Textures tools
-  /** Co-occurence matrix and textures calculator */
-    typedef itk::Statistics::ScalarImageToCooccurrenceMatrixFilter
-    <InputImageType>                               CoocurrenceMatrixGeneratorType;
-    typedef typename CoocurrenceMatrixGeneratorType
-        ::Pointer                                  CoocurrenceMatrixGeneratorPointerType;
-    typedef typename CoocurrenceMatrixGeneratorType
-        ::OffsetType                               OffsetType;
-    typedef typename CoocurrenceMatrixGeneratorType
-        ::HistogramType                            HistogramType;
-    typedef itk::Statistics::HistogramToTextureFeaturesFilter
-    <HistogramType>                                TextureCoefficientsCalculatorType;
-    typedef typename TextureCoefficientsCalculatorType
-        ::Pointer                                  TextureCoefficientsCalculatorPointerType;
 
   // Output typedef support
   typedef typename Superclass::OutputType          OutputType;
   typedef typename OutputType::ValueType           ScalarRealType;
+  // Textures tools
+  typedef GreyLevelCooccurrenceIndexedList< InputPixelType >   CooccurrenceIndexedListType;
+  typedef typename CooccurrenceIndexedListType::Pointer       CooccurrenceIndexedListPointerType;
+  typedef typename CooccurrenceIndexedListType::ConstPointer  CooccurrenceIndexedListConstPointerType;
+  typedef typename CooccurrenceIndexedListType::IndexType              CooccurrenceIndexType;
+  typedef typename CooccurrenceIndexedListType::PixelValueType         PixelValueType;
+  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType  RelativeFrequencyType;
+  typedef typename CooccurrenceIndexedListType::VectorType             VectorType;
 
+  typedef typename VectorType::iterator                    VectorIteratorType;
+  typedef typename VectorType::const_iterator              VectorConstIteratorType;
   // Coord rep
   typedef TCoordRep                                CoordRepType;
 
@@ -154,7 +151,7 @@ public:
      * Get the radius of the neighborhood over which the
      * statistics are evaluated
      */
-    itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
 
   /** Set the offset for co-occurence computation */
   itkSetMacro(Offset, OffsetType);
@@ -203,6 +200,9 @@ private:
 
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
+
+  static const double m_PixelValueTolerance = 0.0001;
+
 };
 
 } // namespace otb
@@ -212,4 +212,3 @@ private:
 #endif
 
 #endif
-
