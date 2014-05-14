@@ -78,8 +78,7 @@ namespace otb
  * Neighborhood size can be set using the SetRadius() method. Offset for co-occurence estimation
  * is set using the SetOffset() method.
  *
- * \sa otb::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
- * \sa itk::GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator
+ * \sa otb::GreyLevelCooccurrenceIndexedList
  *
  * \ingroup Streamed
  * \ingroup Threaded

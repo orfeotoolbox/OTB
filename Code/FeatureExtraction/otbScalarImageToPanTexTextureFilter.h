@@ -37,9 +37,7 @@ namespace otb
  * Vol1, NO3.
  *
  *
- * \sa ScalarImageToGreyLevelCooccurrenceMatrixGenerator
- * \sa GreyLevelCooccurrenceMatrixTextureCoefficientsCalculator
- * \sa ScalarImageTextureCalculator
+ * \sa otb::GreyLevelCooccurrenceIndexedList
  *
  */
 
