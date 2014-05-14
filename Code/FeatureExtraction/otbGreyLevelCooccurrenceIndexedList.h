@@ -77,21 +77,12 @@ public:
 
   typedef itk::Index<PixelPairSize>  IndexType;
   typedef itk::Size<PixelPairSize>   SizeType;
-  typedef itk::IdentifierType   InstanceIdentifier;
-  typedef itk::IndexValueType    IndexValueType;
+  typedef typename itk::IndexValueType    IndexValueType;
 
-  // do we need to use itk::IdentifierType instead?
-  typedef unsigned int  FrequencyType;
-  typedef unsigned long int  TotalFrequencyType;
-  typedef double  RelativeFrequencyType;
-
-/*
-   typedef IdentifierType InstanceIdentifier;
-   typedef InstanceIdentifier AbsoluteFrequencyType;
-   typedef NumericTraits< AbsoluteFrequencyType >::RealType RelativeFrequencyType;
-   typedef NumericTraits< AbsoluteFrequencyType >::AccumulateType TotalAbsoluteFrequencyType;
-   typedef NumericTraits< RelativeFrequencyType >::AccumulateType TotalRelativeFrequencyType;
-*/
+  typedef typename itk::IdentifierType InstanceIdentifier;
+  typedef InstanceIdentifier FrequencyType;
+  typedef typename itk::NumericTraits< FrequencyType >::RealType RelativeFrequencyType;
+  typedef typename itk::NumericTraits< FrequencyType >::AccumulateType TotalFrequencyType;
 
   typedef typename itk::NumericTraits< PixelType >::RealType PixelValueType;
   typedef itk::FixedArray<PixelValueType, PixelPairSize> PixelPairType;
@@ -155,6 +146,8 @@ protected:
 
   /** Get index of the pixelPair combination and save the result in index **/
   bool GetIndex(const PixelPairType & pixelPair, IndexType & index) const;
+
+  void PrintSelf(std::ostream & os, itk::Indent indent) const;
 
 private:
 

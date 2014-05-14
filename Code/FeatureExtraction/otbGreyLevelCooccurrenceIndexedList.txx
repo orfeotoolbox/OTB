@@ -306,6 +306,24 @@ GreyLevelCooccurrenceIndexedList<TPixel>
   m_TotalFrequency = m_TotalFrequency + 1;
 }
 
+template <class TPixel>
+void
+GreyLevelCooccurrenceIndexedList<TPixel>
+::PrintSelf(std::ostream & os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+  os << indent << "Symmetry: " << this->m_Symmetry << std::endl;
+  os << indent << "TotalFrequency: " << this->m_TotalFrequency << std::endl;
+  os << indent << "Size: " << m_Size;
+  os << indent << "CooccurrenceIndexedList: " << std::endl;
+  typename VectorType::const_iterator it;
+  for (it = m_Vector.begin(); it != m_Vector.end(); ++it)
+    {
+    std::cerr << "index=" << (*it).first << ", frequency=" << (*it).second << std::endl;
+    }
+  std::cerr << std::endl;
+}
+
 } //end namespace otb
 
 #endif
