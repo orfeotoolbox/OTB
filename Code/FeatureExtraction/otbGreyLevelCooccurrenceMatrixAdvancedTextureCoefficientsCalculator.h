@@ -18,6 +18,8 @@
 #ifndef __otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator_h
 #define __otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator_h
 
+#include "vcl_deprecated_header.h"
+
 #include "itkHistogram.h"
 #include "itkMacro.h"
 
