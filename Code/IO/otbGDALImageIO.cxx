@@ -1709,7 +1709,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       }
     }
 
-  // Report any RPC coefficients
+#if GDAL_VERSION_NUM >= 1100000
+  // Report any RPC coefficients (feature available since GDAL 1.10.0)
   ImageKeywordlist otb_kwl;
   itk::ExposeMetaData<ImageKeywordlist>(dict,
                                         MetaDataKey::OSSIMKeywordlistKey,
@@ -1724,7 +1725,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       CSLDestroy( rpcMetadata );
       }
     }
-
+#endif
 
   // END
 
