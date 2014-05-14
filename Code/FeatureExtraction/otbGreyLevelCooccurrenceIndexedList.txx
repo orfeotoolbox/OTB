@@ -244,20 +244,6 @@ AddPixelPair(const PixelValueType& pixelvalue1, const PixelValueType& pixelvalue
 }
 
 template <class TPixel>
-void
-GreyLevelCooccurrenceIndexedList<TPixel>
-::Normalize()
-{
-  //Normalize the co-occurrence indexed list
-  typename VectorType::iterator it = m_Vector.begin();
-  while( it != m_Vector.end())
-    {
-    (*it).second = (*it).second / m_TotalFrequency;
-    ++it;
-    }
-}
-
-template <class TPixel>
 typename GreyLevelCooccurrenceIndexedList<TPixel>::RelativeFrequencyType
 GreyLevelCooccurrenceIndexedList<TPixel>::
 GetFrequency(IndexValueType i, IndexValueType j)

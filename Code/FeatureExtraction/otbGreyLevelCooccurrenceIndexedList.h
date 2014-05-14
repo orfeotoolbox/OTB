@@ -121,9 +121,6 @@ public:
   /** Get std::vector containing non-zero co-occurrence pairs */
   VectorType GetVector();
 
-  /** Normailze the GLCIL */
-  void Normalize();
-
   /** Initialize the lowerbound and upper bound vecotor, Fill m_LookupArray with
     * -1 and set m_TotalFreqency to zero */
   void Initialize(const unsigned int nbins, const PixelValueType min,

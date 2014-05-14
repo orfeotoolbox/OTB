@@ -20,7 +20,6 @@
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkImageToImageFilter.h"
-#include "itkHistogram.h"
 
 namespace otb
 {
@@ -68,34 +67,23 @@ public:
   typedef typename InputImageType::RegionType  InputRegionType;
   typedef typename InputRegionType::SizeType   SizeType;
   typedef typename InputImageType::OffsetType   OffsetType;
+  typedef typename std::vector< OffsetType>  OffsetListType;
   typedef TOutputImage                         OutputImageType;
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
-  typedef typename itk::NumericTraits< InputPixelType >::RealType MeasurementType;
-  typedef itk::Statistics::DenseFrequencyContainer2 THistogramFrequencyContainer;
-  typedef itk::Statistics::Histogram< MeasurementType, THistogramFrequencyContainer > HistogramType;
-  typedef typename HistogramType::Pointer                            HistogramPointer;
-  typedef typename HistogramType::ConstPointer                       HistogramConstPointer;
-  typedef typename HistogramType::MeasurementVectorType              MeasurementVectorType;
-  typedef typename HistogramType::RelativeFrequencyType              RelativeFrequencyType;
-  typedef typename HistogramType::TotalAbsoluteFrequencyType         TotalAbsoluteFrequencyType;
-  typedef typename HistogramType::SizeType                           HistogramSizeType;
-  typedef typename HistogramType::IndexType                          CooccurrenceIndexType;
-
-  typedef GreyLevelCooccurrenceIndexedList< HistogramType >   CooccurrenceIndexedListType;
+  typedef GreyLevelCooccurrenceIndexedList< InputPixelType >   CooccurrenceIndexedListType;
   typedef typename CooccurrenceIndexedListType::Pointer       CooccurrenceIndexedListPointerType;
   typedef typename CooccurrenceIndexedListType::ConstPointer  CooccurrenceIndexedListConstPointerType;
+  typedef typename CooccurrenceIndexedListType::IndexType              CooccurrenceIndexType;
+  typedef typename CooccurrenceIndexedListType::PixelValueType         PixelValueType;
+  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType  RelativeFrequencyType;
+  typedef typename CooccurrenceIndexedListType::VectorType             VectorType;
 
-  typedef typename CooccurrenceIndexedListType::VectorType VectorType;
   typedef typename VectorType::iterator                    VectorIteratorType;
   typedef typename VectorType::const_iterator              VectorConstIteratorType;
 
-  typedef typename std::vector<OffsetType>                       OffsetListType;
 
-  void SetBinsAndMinMax(unsigned int bins, InputPixelType min, InputPixelType max);
-
-  itkStaticConstMacro(MeasurementVectorSize, int, 2 );
 
   /** Set the radius of the window on which textures will be computed */
   itkSetMacro(Radius, SizeType);
@@ -153,9 +141,9 @@ private:
   InputPixelType m_InputImageMaximum;
 
   /** Histogram instance used to get index for the pixel pair */
-  HistogramPointer m_Histogram;
+//  HistogramPointer m_Histogram;
 
-  HistogramSizeType m_HistSize;
+//  HistogramSizeType m_HistSize;
 
 };
 } // End namespace otb

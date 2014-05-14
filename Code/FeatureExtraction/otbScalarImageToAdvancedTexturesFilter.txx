@@ -33,10 +33,10 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 ::ScalarImageToAdvancedTexturesFilter()
 : m_Radius()
 , m_Offset()
+, m_NeighborhoodRadius()
 , m_NumberOfBinsPerAxis(8)
 , m_InputImageMinimum(0)
 , m_InputImageMaximum(255)
-, m_HistSize(2)
 {
   // There are 10 outputs corresponding to the 9 textures indices
   this->SetNumberOfRequiredOutputs(10);
@@ -251,11 +251,8 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
-::SetBinsAndMinMax(unsigned int numberOfBinsPerAxis,
-                   InputPixelType inputImageMinimum,
-                   InputPixelType inputImageMaximum)
+::BeforeThreadedGenerateData()
 {
-  /** calulate minimum offset and set it as neigborhood radius **/
   unsigned int minRadius = 0;
   for ( unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++ )
     {
@@ -266,21 +263,6 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
       }
     }
   m_NeighborhoodRadius.Fill(minRadius);
-
-  /** Initalize m_Histogram with given min, max and number of bins  **/
-  MeasurementVectorType lowerBound;
-  MeasurementVectorType upperBound;
-  m_InputImageMinimum = inputImageMinimum;
-  m_InputImageMaximum = inputImageMaximum;
-  m_NumberOfBinsPerAxis = numberOfBinsPerAxis;
-  m_Histogram = HistogramType::New();
-  m_Histogram->SetMeasurementVectorSize( MeasurementVectorSize );
-  lowerBound.SetSize( MeasurementVectorSize );
-  upperBound.SetSize( MeasurementVectorSize );
-  lowerBound.Fill(m_InputImageMinimum);
-  upperBound.Fill(m_InputImageMaximum+1);
-  m_HistSize.Fill(m_NumberOfBinsPerAxis);
-  m_Histogram->Initialize(m_HistSize, lowerBound, upperBound);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -326,9 +308,10 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   ic2It.GoToBegin();
 
   const double log2 = vcl_log(2.0);
-  const itk::SizeValueType histSize0 = m_HistSize[0];
-  const itk::SizeValueType histSize1 = m_HistSize[1];
-  const double minSizeHist = std::min (histSize0, histSize1);
+
+  const itk::SizeValueType histSize0 = m_NumberOfBinsPerAxis;
+  const itk::SizeValueType histSize1 = m_NumberOfBinsPerAxis;
+  const double minSizeHist = m_NumberOfBinsPerAxis;
 
   // Set-up progress reporting
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -363,8 +346,8 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     inputRegion.SetSize(inputSize);
     inputRegion.Crop(inputPtr->GetRequestedRegion());
 
-    CooccurrenceIndexedListPointerType m_GLCIList = CooccurrenceIndexedListType::New();
-    m_GLCIList->Initialize(m_HistSize);
+    CooccurrenceIndexedListPointerType GLCIList = CooccurrenceIndexedListType::New();
+    GLCIList->Initialize(m_NumberOfBinsPerAxis, m_InputImageMinimum, m_InputImageMaximum);
 
     typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
     NeighborhoodIteratorType neighborIt;
@@ -372,49 +355,29 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     for ( neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt )
     {
     const InputPixelType centerPixelIntensity = neighborIt.GetCenterPixel();
-    if ( centerPixelIntensity < m_InputImageMinimum
-         || centerPixelIntensity > m_InputImageMaximum )
-      {
-      continue; // don't put a pixel in the histogram if the value
-                // is out-of-bounds.
-      }
-
-    bool            pixelInBounds;
-    const InputPixelType pixelIntensity = neighborIt.GetPixel(m_Offset, pixelInBounds);
+    bool pixelInBounds;
+    const InputPixelType pixelIntensity =  neighborIt.GetPixel(m_Offset, pixelInBounds);
     if ( !pixelInBounds )
-        {
-        continue; // don't put a pixel in the histogram if it's out-of-bounds.
-        }
-    if ( pixelIntensity < m_InputImageMinimum
-         || pixelIntensity > m_InputImageMaximum )
       {
-      continue; // don't put a pixel in the histogram if the value
-      // is out-of-bounds.
+      continue; // don't put a pixel in the histogram if it's out-of-bounds.
       }
-
-      CooccurrenceIndexType instanceIndex;
-      MeasurementVectorType measurement( MeasurementVectorSize );
-      measurement[0] = centerPixelIntensity;
-      measurement[1] = pixelIntensity;
-      //Get Index of the histogram for the given pixel pair;
-      m_Histogram->GetIndex(measurement, instanceIndex);
-      m_GLCIList->AddPairToList(instanceIndex);
+    GLCIList->AddPixelPair(centerPixelIntensity, pixelIntensity);
     }
 
-    MeasurementType m_Mean                    = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_Variance                = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_Dissimilarity           = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumAverage              = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumEntropy              = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_SumVariance             = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_DifferenceEntropy       = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_DifferenceVariance      = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_IC1                     = itk::NumericTraits< MeasurementType >::Zero;
-    MeasurementType m_IC2                     = itk::NumericTraits< MeasurementType >::Zero;
+    PixelValueType m_Mean                    = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType m_Variance                = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType m_Dissimilarity           = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType m_SumAverage              = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType m_SumEntropy              = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType m_SumVariance             = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType m_DifferenceEntropy       = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType m_DifferenceVariance      = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType m_IC1                     = itk::NumericTraits< PixelValueType >::Zero;
+    PixelValueType m_IC2                     = itk::NumericTraits< PixelValueType >::Zero;
 
     double Entropy = 0;
 
-    long unsigned int twiceHistSize = histSize0 + histSize1;
+    long unsigned int twiceHistSize = 2 * m_NumberOfBinsPerAxis;
     typedef itk::Array<double> DoubleArrayType;
     DoubleArrayType hx(histSize0);
     DoubleArrayType hy(histSize0);
@@ -434,21 +397,23 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     /*   hx.Fill(0.0);    hy.Fill(0.0);    pdxy.Fill(0.0);   */
     double hxy1 = 0;
 
-    VectorType glcList = m_GLCIList->GetVector();
-    TotalAbsoluteFrequencyType totalFrequency = m_GLCIList->GetTotalFrequency();
+    //get co-occurrence vector and totalfrequency
+    VectorType glcVector = GLCIList->GetVector();
+    double totalFrequency = static_cast<double> (GLCIList->GetTotalFrequency());
 
     VectorIteratorType vectorIt;
     //Normalize the GreyLevelCooccurrenceListType
     //Compute Mean, Entropy (f12), hx, hy, pdxy
-    vectorIt = glcList.begin();
-    while( vectorIt != glcList.end())
+    vectorIt = glcVector.begin();
+    while( vectorIt != glcVector.end())
       {
-      CooccurrenceIndexType index = (*vectorIt).index;
-      double frequency = static_cast<double>((*vectorIt).frequency) / static_cast<double>(totalFrequency);
+      CooccurrenceIndexType index = (*vectorIt).first;
+      double frequency = static_cast<double>((*vectorIt).second) / static_cast<double>(totalFrequency);
       m_Mean += static_cast<double>(index[0]) * frequency;
       Entropy -= (frequency > 0.0001) ? frequency * vcl_log(frequency) / log2 : 0.;
+
       //update normalized frequency
-      (*vectorIt).frequency = frequency;
+//      (*vectorIt).second = frequency;
 
       unsigned int i = index[1];
       unsigned int j = index[0];
@@ -470,11 +435,11 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     VectorConstIteratorType constVectorIt;
     //second pass over normalized co-occurrence list to find variance and pipj.
     //pipj is needed to calculate f11
-    constVectorIt = glcList.begin();
-    while( constVectorIt != glcList.end())
+    constVectorIt = glcVector.begin();
+    while( constVectorIt != glcVector.end())
       {
-      double frequency = (*constVectorIt).frequency;
-      CooccurrenceIndexType index = (*constVectorIt).index;
+      double frequency = (*constVectorIt).second / totalFrequency;
+      CooccurrenceIndexType index = (*constVectorIt).first;
       unsigned int i = index[1];
       unsigned int j = index[0];
       double index0 = static_cast<double>(index[0]);
@@ -525,7 +490,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
         {
         double pipj = hx[j] * hy[i];
         hxy2 -= (pipj > 0.0001) ? pipj * vcl_log(pipj) : 0.;
-        double frequency = m_GLCIList->GetFrequency(i,j, glcList);
+        double frequency = GLCIList->GetFrequency(i,j, glcVector) / totalFrequency;
         m_Dissimilarity+= ( static_cast<double>(j) - static_cast<double>(i) ) * (frequency * frequency);
         }
       }
