@@ -24,6 +24,7 @@
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
 #include <complex>
+#include <cmath>
 
 namespace otb
 {
@@ -163,10 +164,8 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
      sigma = vcl_sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
      population SD).
   */
-
   std::vector<double>::const_iterator msIt = marginalSums.begin();
   marginalMean = *msIt;
-
   //Increment iterator to start with index 1
   ++msIt;
   for(int k= 2; msIt != marginalSums.end(); ++k, ++msIt)
@@ -179,7 +178,6 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
     marginalMean = M_k;
     marginalDevSquared = S_k;
     }
-
   marginalDevSquared = marginalDevSquared / m_NumberOfBinsPerAxis;
 
   VectorConstIteratorType constVectorIt;
@@ -193,7 +191,6 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
     }
 
   double pixelVarianceSquared = pixelVariance * pixelVariance;
-
   // Variance is only used in correlation. If variance is 0, then (index[0] - pixelMean) * (index[1] - pixelMean)
   // should be zero as well. In this case, set the variance to 1. in order to
   // avoid NaN correlation.
@@ -228,10 +225,7 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
     textures[7] += index[0] * index[1] * frequency;
     ++constVectorIt;
     }
-
-  //Use epsilon check here?
-  textures[7] = (marginalDevSquared != 0) ? ( textures[7] - marginalMean * marginalMean )  / marginalDevSquared : 0;
-  // haralickCorrelation = ( haralickCorrelation - marginalMean * marginalMean )  / marginalDevSquared;
+  textures[7] = (fabs(marginalDevSquared) > 1E-8) ?  ( textures[7] - marginalMean * marginalMean )  / marginalDevSquared : 0;
 
   // Return result
   return textures;

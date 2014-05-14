@@ -51,9 +51,6 @@ int otbHaralickTexturesImageFunction(int argc, char * argv[])
   HaralickTexturesImageFunctionType::Pointer haralick = HaralickTexturesImageFunctionType::New();
   haralick->SetInputImage(reader->GetOutput());
   haralick->SetNeighborhoodRadius(10);
-  haralick->SetNumberOfBinsPerAxis(8);
-  haralick->SetInputImageMinimum(0);
-  haralick->SetInputImageMaximum(255);
 
   HaralickTexturesImageFunctionType::OffsetType offset;
   offset.Fill(1);

@@ -308,10 +308,8 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
   ic2It.GoToBegin();
 
   const double log2 = vcl_log(2.0);
-
-  const itk::SizeValueType histSize0 = m_NumberOfBinsPerAxis;
-  const itk::SizeValueType histSize1 = m_NumberOfBinsPerAxis;
-  const double minSizeHist = m_NumberOfBinsPerAxis;
+  const unsigned int histSize = m_NumberOfBinsPerAxis;
+  const long unsigned int twiceHistSize = 2 * m_NumberOfBinsPerAxis;
 
   // Set-up progress reporting
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -377,19 +375,18 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 
     double Entropy = 0;
 
-    long unsigned int twiceHistSize = 2 * m_NumberOfBinsPerAxis;
     typedef itk::Array<double> DoubleArrayType;
-    DoubleArrayType hx(histSize0);
-    DoubleArrayType hy(histSize0);
+    DoubleArrayType hx(histSize);
+    DoubleArrayType hy(histSize);
     DoubleArrayType pdxy(twiceHistSize);
 
-    for(long unsigned int i = 0; i < histSize0; i++)
+    for(long unsigned int i = 0; i < histSize; i++)
       {
       hx[i] = 0.0;
       hy[i] = 0.0;
       pdxy[i] = 0.0;
       }
-    for(long unsigned int i = histSize0; i < twiceHistSize; i++)
+    for(long unsigned int i = histSize; i < twiceHistSize; i++)
       {
       pdxy[i] = 0.0;
       }
@@ -401,26 +398,22 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     VectorType glcVector = GLCIList->GetVector();
     double totalFrequency = static_cast<double> (GLCIList->GetTotalFrequency());
 
-    VectorIteratorType vectorIt;
+    VectorConstIteratorType constVectorIt;
     //Normalize the GreyLevelCooccurrenceListType
     //Compute Mean, Entropy (f12), hx, hy, pdxy
-    vectorIt = glcVector.begin();
-    while( vectorIt != glcVector.end())
+    constVectorIt = glcVector.begin();
+    while( constVectorIt != glcVector.end())
       {
-      CooccurrenceIndexType index = (*vectorIt).first;
-      double frequency = static_cast<double>((*vectorIt).second) / static_cast<double>(totalFrequency);
+      CooccurrenceIndexType index = (*constVectorIt).first;
+      double frequency = (*constVectorIt).second / totalFrequency;
       m_Mean += static_cast<double>(index[0]) * frequency;
       Entropy -= (frequency > 0.0001) ? frequency * vcl_log(frequency) / log2 : 0.;
-
-      //update normalized frequency
-//      (*vectorIt).second = frequency;
-
       unsigned int i = index[1];
       unsigned int j = index[0];
       hx[j] += frequency;
       hy[i] += frequency;
 
-      if( i+j > histSize0-1)
+      if( i+j > histSize-1)
         {
         pdxy[i+j] += frequency;
         }
@@ -428,11 +421,9 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
         {
         pdxy[j-i] += frequency;
         }
-
-      ++vectorIt;
+      ++constVectorIt;
       }
 
-    VectorConstIteratorType constVectorIt;
     //second pass over normalized co-occurrence list to find variance and pipj.
     //pipj is needed to calculate f11
     constVectorIt = glcVector.begin();
@@ -451,7 +442,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
 
     //iterate histSize to compute sumEntropy
     double PSSquareCumul = 0;
-    for(long unsigned int k = histSize0; k < twiceHistSize; k++)
+    for(long unsigned int k = histSize; k < twiceHistSize; k++)
       {
       m_SumAverage += k * pdxy[k];
       m_SumEntropy -= (pdxy[k] > 0.0001) ? pdxy[k] * vcl_log(pdxy[k]) / log2 : 0;
@@ -464,7 +455,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     double hxCumul = 0;
     double hyCumul = 0;
 
-    for (long unsigned int i = 0; i < minSizeHist; ++i)
+    for (long unsigned int i = 0; i < histSize; ++i)
       {
       double pdTmp = pdxy[i];
       PDCumul += i * pdTmp;
@@ -484,9 +475,9 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
      * to compute hxy1. This need to force an iterator over entire histogram.
        Processing time is propotional to the histogram bin size */
     double hxy2 = 0;
-    for(unsigned int i = 0; i < histSize0; ++i)
+    for(unsigned int i = 0; i < histSize; ++i)
       {
-      for(unsigned int j = 0; j < histSize1; ++j)
+      for(unsigned int j = 0; j < histSize; ++j)
         {
         double pipj = hx[j] * hy[i];
         hxy2 -= (pipj > 0.0001) ? pipj * vcl_log(pipj) : 0.;

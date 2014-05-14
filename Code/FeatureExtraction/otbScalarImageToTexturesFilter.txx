@@ -26,6 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkProgressReporter.h"
 #include "itkNumericTraits.h"
 #include <vector>
+#include <cmath>
 
 namespace otb
 {
@@ -359,10 +360,8 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
        sigma = vcl_sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
        population SD).
      */
-
     std::vector<double>::const_iterator msIt = marginalSums.begin();
     marginalMean = *msIt;
-
     //Increment iterator to start with index 1
     ++msIt;
     for(int k= 2; msIt != marginalSums.end(); ++k, ++msIt)
@@ -375,7 +374,6 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       marginalMean = M_k;
       marginalDevSquared = S_k;
       }
-
     marginalDevSquared = marginalDevSquared / m_NumberOfBinsPerAxis;
 
     VectorConstIteratorType constVectorIt;
@@ -389,7 +387,6 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     }
 
     double pixelVarianceSquared = pixelVariance * pixelVariance;
-
     // Variance is only used in correlation. If variance is 0, then (index[0] - pixelMean) * (index[1] - pixelMean)
     // should be zero as well. In this case, set the variance to 1. in order to
     // avoid NaN correlation.
@@ -415,7 +412,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       CooccurrenceIndexType index = (*constVectorIt).first;
       RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
       energy += frequency * frequency;
-      entropy -= ( frequency > m_PixelValueTolerance ) ? frequency *vcl_log(frequency) / log2:0;
+      entropy -= ( frequency > m_PixelValueTolerance ) ? frequency *vcl_log(frequency) / log2 : 0;
       correlation += ( ( index[0] - pixelMean ) * ( index[1] - pixelMean ) * frequency ) / pixelVarianceSquared;
       inverseDifferenceMoment += frequency / ( 1.0 + ( index[0] - index[1] ) * ( index[0] - index[1] ) );
       inertia += ( index[0] - index[1] ) * ( index[0] - index[1] ) * frequency;
@@ -425,9 +422,8 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       ++constVectorIt;
       }
 
-    //Use epsilon check here?
-    haralickCorrelation = (marginalDevSquared != 0) ? ( haralickCorrelation - marginalMean * marginalMean )  / marginalDevSquared : 0;
-//   haralickCorrelation = ( haralickCorrelation - marginalMean * marginalMean )  / marginalDevSquared;
+    haralickCorrelation = (fabs(marginalDevSquared) > 1E-8) ?
+      ( haralickCorrelation - marginalMean * marginalMean )  / marginalDevSquared : 0;
 
     // Fill outputs
     energyIt.Set(energy);
