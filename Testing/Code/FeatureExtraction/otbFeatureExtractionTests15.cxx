@@ -31,6 +31,7 @@ void RegisterTests()
   REGISTER_TEST(otbScalarImageToTexturesFilter);
   REGISTER_TEST(otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew);
   REGISTER_TEST(otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator);
+  REGISTER_TEST(otbGreyLevelCooccurrenceIndexedListNew);
   REGISTER_TEST(otbScalarImageToAdvancedTexturesFilterNew);
   REGISTER_TEST(otbScalarImageToAdvancedTexturesFilter);
   REGISTER_TEST(otbScalarImageToPanTexTextureFilterNew);

@@ -1350,6 +1350,9 @@ add_test(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator
          otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew
 )
 
+add_test(feTuotbGreyLevelCooccurrenceIndexedListNew ${FEATUREEXTRACTION_TESTS15}
+         otbGreyLevelCooccurrenceIndexedListNew
+)
 add_test(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator ${FEATUREEXTRACTION_TESTS15}
          otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator
 )
@@ -1709,6 +1712,7 @@ otbStreamingLineSegmentDetector.cxx
 otbSqrtSpectralAngleImageFilter.cxx
 otbScalarImageToTexturesFilterNew.cxx
 otbScalarImageToTexturesFilter.cxx
+otbGreyLevelCooccurrenceIndexedListNew.cxx
 otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
 otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.cxx
 otbScalarImageToAdvancedTexturesFilterNew.cxx
