@@ -1346,8 +1346,12 @@ add_test(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
             ${TEMP}/feTvScalarImageToTexturesFilterOutput
             8 3 2 2)
 
-add_test(feTuotbGreyLevelCooccurrenceIndexedListNew ${FEATUREEXTRACTION_TESTS15}
-         otbGreyLevelCooccurrenceIndexedListNew
+add_test(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew ${FEATUREEXTRACTION_TESTS15}
+         otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew
+)
+
+add_test(feTuotbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator ${FEATUREEXTRACTION_TESTS15}
+         otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator
 )
 
 add_test(feTuScalarImageToAdvancedTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
@@ -1705,7 +1709,8 @@ otbStreamingLineSegmentDetector.cxx
 otbSqrtSpectralAngleImageFilter.cxx
 otbScalarImageToTexturesFilterNew.cxx
 otbScalarImageToTexturesFilter.cxx
-otbGreyLevelCooccurrenceIndexedListNew.cxx
+otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew.cxx
+otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.cxx
 otbScalarImageToAdvancedTexturesFilterNew.cxx
 otbScalarImageToAdvancedTexturesFilter.cxx
 otbScalarImageToPanTexTextureFilterNew.cxx
