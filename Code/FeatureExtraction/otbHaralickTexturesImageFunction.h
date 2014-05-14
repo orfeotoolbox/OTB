@@ -22,7 +22,6 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageFunction.h"
 #include "itkFixedArray.h"
-#include "itkHistogram.h"
 
 namespace otb
 {
