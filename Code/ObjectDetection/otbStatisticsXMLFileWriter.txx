@@ -105,7 +105,13 @@ StatisticsXMLFileWriter<TMeasurementVector>
     }
 
   // Finally, write the file
-  doc.SaveFile( m_FileName.c_str() );
+  if (! doc.SaveFile( m_FileName.c_str() ) )
+    {
+    itkExceptionMacro(<<"Unable to write the XML file in "
+                      << itksys::SystemTools::GetFilenamePath(m_FileName)
+                      << " (permission issue? Directory does not exist?)." );
+    }
+
 }
 
 
