@@ -110,7 +110,7 @@ int otbGreyLevelCooccurrenceIndexedList(int, char* [] )
     std::vector<FrequencyType> avector (out1, out1 + sizeof(out1) / sizeof(out1[0]) );
 
     static const FrequencyType out2[] = {18,24,24,18,18,24,24,18,18,24,24,18,12,16,16,12};
-    std::vector< TotalFrequencyType> tavector(out2, out2 + sizeof(out2) / sizeof(out2[0]) );;
+    std::vector< TotalFrequencyType> tavector(out2, out2 + sizeof(out2) / sizeof(out2[0]) ); ;
 
     InputImageType::OffsetType offset = {{0, 1}};
 

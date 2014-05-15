@@ -229,7 +229,7 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     itkWarningMacro( << "Input XML was generated for a different application( " <<
                        app_Name << ") while application loaded is:" <<this_->GetName());
 
-		fclose(fp);
+              fclose(fp);
     return -1;
     }
 

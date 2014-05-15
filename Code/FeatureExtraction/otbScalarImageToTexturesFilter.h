@@ -226,7 +226,7 @@ private:
   InputPixelType m_InputImageMaximum;
 
   //TODO: should we use constexpr? only c++11 and problem for msvc
-  const double GetPixelValueTolerance() const {return 0.0001;}
+  const double GetPixelValueTolerance() const {return 0.0001; }
 
 };
 } // End namespace otb
