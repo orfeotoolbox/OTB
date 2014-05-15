@@ -29,9 +29,9 @@ GreyLevelCooccurrenceIndexedList():
 m_Size(),
 m_Symmetry(true),
 m_TotalFrequency(0),
+m_ClipBinsAtEnds(true),
 m_InputImageMinimum(0),
-m_InputImageMaximum(255),
-m_ClipBinsAtEnds(true)
+m_InputImageMaximum(255)
 {
 
 }

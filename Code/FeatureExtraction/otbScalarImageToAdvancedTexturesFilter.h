@@ -201,11 +201,11 @@ private:
   /** Radius of the window on which to compute textures */
   SizeType m_Radius;
 
-  /** Radius of the neighborhood iterator which is minumum of m_Radius */
-  SizeType m_NeighborhoodRadius;
-
   /** Offset for co-occurence */
   OffsetType m_Offset;
+
+  /** Radius of the neighborhood iterator which is minumum of m_Radius */
+  SizeType m_NeighborhoodRadius;
 
   /** Number of bins per axis for histogram generation */
   unsigned int m_NumberOfBinsPerAxis;

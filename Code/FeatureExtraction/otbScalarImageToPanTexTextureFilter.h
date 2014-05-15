@@ -137,11 +137,6 @@ private:
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
 
-  /** Histogram instance used to get index for the pixel pair */
-//  HistogramPointer m_Histogram;
-
-//  HistogramSizeType m_HistSize;
-
 };
 } // End namespace otb
 

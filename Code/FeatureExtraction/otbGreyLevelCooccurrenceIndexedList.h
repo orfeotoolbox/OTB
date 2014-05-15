@@ -154,9 +154,6 @@ private:
   GreyLevelCooccurrenceIndexedList(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /* Store the total frequency of co-occurrence pairs in GreyLevelCooccureneIndexedList class */
-  TotalFrequencyType m_TotalFrequency;
-
   /** LookupArray instance */
   LookupArrayType m_LookupArray;
 
@@ -169,12 +166,17 @@ private:
   /** booleab to check if co-occurrene list is a symmtrical. true by default */
   bool m_Symmetry;
 
+  /* Store the total frequency of co-occurrence pairs in GreyLevelCooccureneIndexedList class */
+  TotalFrequencyType m_TotalFrequency;
+
   /** boolean to check pixel values fall under m_InputImageMinimum and
     * m_InputImageMaximum. Used in GetIndex method. false by default */
   bool m_ClipBinsAtEnds;
 
+  /** Input image minimum */
   PixelValueType m_InputImageMinimum;
 
+  /** Input image maximum */
   PixelValueType m_InputImageMaximum;
 };
 

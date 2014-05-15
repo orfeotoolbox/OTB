@@ -30,9 +30,9 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>
 ::ScalarImageToPanTexTextureFilter() : m_Radius(),
-  m_NumberOfBinsPerAxis(8),
-  m_InputImageMinimum(0),
-  m_InputImageMaximum(255)
+ m_NumberOfBinsPerAxis(8),
+ m_InputImageMinimum(0),
+ m_InputImageMaximum(255)
 {
   // There are 1 output corresponding to the Pan Tex texture indice
   this->SetNumberOfRequiredOutputs(1);
