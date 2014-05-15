@@ -357,7 +357,8 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     const InputPixelType pixelIntensity =  neighborIt.GetPixel(m_Offset, pixelInBounds);
     if ( !pixelInBounds )
       {
-      continue; // don't put a pixel in the histogram if it's out-of-bounds.
+      continue; // don't put a pixel in the co-occurrence list if the value is
+               // out of bounds
       }
     GLCIList->AddPixelPair(centerPixelIntensity, pixelIntensity);
     }
@@ -472,8 +473,7 @@ ScalarImageToAdvancedTexturesFilter<TInputImage, TOutputImage>
     m_DifferenceVariance = PDSquareCumul - PDCumul * PDCumul;
 
     /* pipj computed below is totally different from earlier one which was used
-     * to compute hxy1. This need to force an iterator over entire histogram.
-       Processing time is propotional to the histogram bin size */
+     * to compute hxy1. */
     double hxy2 = 0;
     for(unsigned int i = 0; i < histSize; ++i)
       {

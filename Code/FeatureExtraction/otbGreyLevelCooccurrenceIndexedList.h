@@ -31,15 +31,18 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class GreyLevelCooccurrenceIndexedList
-* \brief This class holds unique non-zero co-occurrence pairs called
-* CooccurrenceIndexedList (GLCIL) instead of GLCM.
+* \brief This class holds a VectorType of CooccurrencePairType with each pair is
+* a combination of pixel index and frequency.
+*
 * GreyLevelCooccurrenceIndexedList instance is created for every neighborhood
 * iteration over the given input image. This class keep an internal itk::Array
-* as a lookup array with the same size of the histogram created in the Filter
-* which uses it. The lookup array stores the position of each pixel pair in an
-* std::vector. A pixel pair is a combination of (Center, Offset)
-* Pixels. A -1 value in the lookup array indicates zero existance of pixel
-* pair.
+* as a lookup array with size as [nbbins x nbbins]. The lookup array stores
+* position CooccurrencePairType in the VectorType. It ensures us that all elements
+* in Vector are unqiue in terms of the index value in the pair. For any given
+* pixel index, -1 value indicates zero existance of the index in the
+* VectorType. This avoid searching all elements in VectorType for each pixel
+* index added during neighborhood iterator. It is also used to decide wheather
+* to update the frequency of pair or to insert a new element in the vector.
 *
 * Print references:
 * David A. Clausi and Yongping Zhao. 2002. Rapid extraction of image texture by

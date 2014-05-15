@@ -24,13 +24,23 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-/** \class ScalarImageToTexturesFilter
- *  \brief This class compute 8 local Haralick textures features.
+/**
+ * \class ScalarImageToTexturesFilter
+ * \brief This class compute 8 local Haralick textures features. The 8 output
+ * image channels are: Energy, Entropy, Correlation, Inverse Difference Moment,
+ * Inertia, Cluster Shade, Cluster Prominence and Haralick Correlation. They
+ * are provided in this exact order in the output image. Thus, this application
+ * computes the following Haralick textures over a neighborhood with user
+ * defined radius.
  *
- *  This filter computes the following Haralick textures over a sliding windows with
- *  user defined radius:
- *  (where \f$ g(i, j) \f$ is the element in
- *  cell i, j of a normalized GLCM):
+ * To improve the speed of computation, a variant of Grey Level Co-occurrence
+ * Matrix(GLCM) called Grey Level Co-occurrence Indexed List (GLCIL) is
+ * used. Given below is the mathematical explanation on the computation of each
+ * textures. Here $ g(i, j) $ is the frequency of element in the GLCIL whose
+ * index is i, j. GLCIL stores a pair of frequency of two pixels from the given
+ * offset and the cell index (i, j) of the pixel in the neighborhood
+ * window. :(where each element in GLCIL is a pair of pixel index and it's
+ * frequency, $ g(i, j) $ is the frequency value of the pair having index is i, j).
  *
  * "Energy" \f$ = f_1 = \sum_{i, j}g(i, j)^2 \f$
  *
@@ -74,11 +84,12 @@ namespace otb
  * International Conference on , vol., no., pp.141,144, 25-28 June 2008
  * doi: 10.1109/IWSSIP.2008.4604387
  *
- *
  * Neighborhood size can be set using the SetRadius() method. Offset for co-occurence estimation
  * is set using the SetOffset() method.
  *
  * \sa otb::GreyLevelCooccurrenceIndexedList
+ * \sa otb::ScalarImageToAdvancedTexturesFiler
+ * \sa otb::ScalarImageToHigherOrderTexturesFilter
  *
  * \ingroup Streamed
  * \ingroup Threaded
@@ -135,10 +146,10 @@ public:
   /** Get the offset for co-occurence computation */
   itkGetMacro(Offset, OffsetType);
 
-  /** Set the number of bin per axis for histogram generation */
+  /** Set the number of bin per axis */
   itkSetMacro(NumberOfBinsPerAxis, unsigned int);
 
-  /** Get the number of bin per axis for histogram generation */
+  /** Get the number of bin per axis */
   itkGetMacro(NumberOfBinsPerAxis, unsigned int);
 
   /** Set the input image minimum */
@@ -205,7 +216,7 @@ private:
   /** Radius of the neighborhood iterator which is minumum of m_Radius */
   SizeType m_NeighborhoodRadius;
 
-  /** Number of bins per axis for histogram generation */
+  /** Number of bins per axis */
   unsigned int m_NumberOfBinsPerAxis;
 
   /** Input image minimum */

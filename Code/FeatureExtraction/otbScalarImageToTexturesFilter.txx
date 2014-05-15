@@ -322,7 +322,8 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       const InputPixelType pixelIntensity =  neighborIt.GetPixel(m_Offset, pixelInBounds);
       if ( !pixelInBounds )
         {
-        continue; // don't put a pixel in the histogram if it's out-of-bounds.
+        continue; // don't put a pixel in the co-occurrence list if the value is
+                  // out of bounds
         }
       GLCIList->AddPixelPair(centerPixelIntensity, pixelIntensity);
       }

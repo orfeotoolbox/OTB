@@ -25,10 +25,20 @@ namespace otb
 {
 /**
  * \class ScalarImageToAdvancedTexturesFilter
- *  \brief This class computes 9 haralick textures from the given input image.
+ * \brief In this case, 10 advanced texture features will be processed. The 10
+ * output image channels are: Mean, Variance, Dissimilarity, Sum Average, Sum
+ * Variance, Sum Entropy, Difference of Entropies, Difference of Variances, IC1
+ * and IC2. They are provided in this exact order in the output image. The
+ * textures are computed over a sliding window with user defined radius.
  *
- *  The textures are computed over a sliding window with user defined radius:
- *  (where \f$ g(i, j) \f$ is the element in cell i, j of a normalized GLCIL):
+ * To improve the speed of computation, a variant of Grey Level Co-occurrence
+ * Matrix(GLCM) called Grey Level Co-occurrence Indexed List (GLCIL) is
+ * used. Given below is the mathematical explanation on the computation of each
+ * textures. Here $ g(i, j) $ is the frequency of element in the GLCIL whose
+ * index is i, j. GLCIL stores a pair of frequency of two pixels from the given
+ * offset and the cell index (i, j) of the pixel in the neighborhood
+ * window. :(where each element in GLCIL is a pair of pixel index and it's
+ * frequency, $ g(i, j) $ is the frequency value of the pair having index is i, j).
  *
  * "Mean" \f$ = \sum_{i, j}i g(i, j) \f$
  *
@@ -77,8 +87,11 @@ namespace otb
  * Neighborhood size can be set using the SetRadius() method. Offset for co-occurence estimation
  * is set using the SetOffset() method.
  *
- * \sa ScalarImageToCooccurrenceIndexedList
- * \sa ScalarImageToTexturesFiler
+ * \sa otb::ScalarImageToCooccurrenceIndexedList
+ * \sa otb::ScalarImageToTexturesFiler
+ * \sa otb::ScalarImageToHigherOrderTexturesFilter
+ * \ingroup Streamed
+ * \ingroup Threaded
  *
  */
 template<class TInpuImage, class TOutputImage>
@@ -131,10 +144,10 @@ public:
   /** Get the offset for co-occurence computation */
   itkGetMacro(Offset, OffsetType);
 
-  /** Set the number of bin per axis for histogram generation */
+  /** Set the number of bin per axis */
   itkSetMacro(NumberOfBinsPerAxis, unsigned int);
 
-  /** Get the number of bin per axis for histogram generation */
+  /** Get the number of bin per axis*/
   itkGetMacro(NumberOfBinsPerAxis, unsigned int);
 
   /** Set the input image minimum */
@@ -207,7 +220,7 @@ private:
   /** Radius of the neighborhood iterator which is minumum of m_Radius */
   SizeType m_NeighborhoodRadius;
 
-  /** Number of bins per axis for histogram generation */
+  /** Number of bins per axis */
   unsigned int m_NumberOfBinsPerAxis;
 
   /** Input image minimum */

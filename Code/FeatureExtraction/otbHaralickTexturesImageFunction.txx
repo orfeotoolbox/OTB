@@ -125,7 +125,7 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
     const InputPixelType pixelIntensity =  neighborIt.GetPixel(m_Offset, pixelInBounds);
     if ( !pixelInBounds )
       {
-      continue; // don't put a pixel in the histogram if it's out-of-bounds.
+      continue; // don't put a pixel in the value if it's out-of-bounds.
       }
     GLCIList->AddPixelPair(centerPixelIntensity, pixelIntensity);
     }

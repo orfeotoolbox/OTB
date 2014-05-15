@@ -29,9 +29,14 @@ namespace otb
  * \class HaralickTexturesImageFunction
  * \brief Compute the 8 Haralick texture indices on the neighborhood of the point
  *
- * This class computes the 8 Haralick texture indices on the neighborhood of the point
- * (where \f$ g(i, j) \f$ is the element in
- * cell i, j of a normalized GLCM):
+ * To improve the speed of computation, a variant of Grey Level Co-occurrence
+ * Matrix(GLCM) called Grey Level Co-occurrence Indexed List (GLCIL) is
+ * used. Given below is the mathematical explanation on the computation of each
+ * textures. Here $ g(i, j) $ is the frequency of element in the GLCIL whose
+ * index is i, j. GLCIL stores a pair of frequency of two pixels from the given
+ * offset and the cell index (i, j) of the pixel in the neighborhood
+ * window. :(where each element in GLCIL is a pair of pixel index and it's
+ * frequency, $ g(i, j) $ is the frequency value of the pair having index is i, j).
  *
  * "Energy" \f$ = f_1 = \sum_{i, j}g(i, j)^2 \f$
  *
@@ -56,14 +61,29 @@ namespace otb
  *
  * \f$ \sigma =  \f$ (weighted pixel variance) \f$ = \sum_{i, j}(i - \mu)^2 \cdot g(i, j) =
  * \sum_{i, j}(j - \mu)^2 \cdot g(i, j)  \f$  (due to matrix summetry)
- * This class is templated over the input image type and the
- * coordinate representation type (e.g. float or double).
  *
- * \sa otb::MaskedScalarImageToGreyLevelCooccurrenceMatrixGenerator
- * \sa itk::HistogramToTextureFeaturesFilter
+ * Print references:
+ *
+ * Haralick, R.M., K. Shanmugam and I. Dinstein. 1973.  Textural Features for
+ * Image Classification. IEEE Transactions on Systems, Man and Cybernetics.
+ * SMC-3(6):610-620.
+ *
+ * David A. Clausi and Yongping Zhao. 2002. Rapid extraction of image texture by
+ * co-occurrence using a hybrid data structure. Comput. Geosci. 28, 6 (July
+ * 2002), 763-774. DOI=10.1016/S0098-3004(01)00108-X
+ * http://dx.doi.org/10.1016/S0098-3004(01)00108-X
+ *
+ * de O.Bastos, L.; Liatsis, P.; Conci, A., Automatic texture segmentation based
+ * on k-means clustering and efficient calculation of co-occurrence
+ * features. Systems, Signals and Image Processing, 2008. IWSSIP 2008. 15th
+ * International Conference on , vol., no., pp.141,144, 25-28 June 2008
+ * doi: 10.1109/IWSSIP.2008.4604387
+ *
+ * \sa otb::GreyLevelCo-occurrenceIndexedList
  *
  * \ingroup ImageFunctions
  */
+
 
 template <class TInputImage, class TCoordRep = double >
 class ITK_EXPORT HaralickTexturesImageFunction :
@@ -158,10 +178,10 @@ public:
     /** Get the offset for co-occurence computation */
     itkGetMacro(Offset, OffsetType);
 
-    /** Set the number of bin per axis for histogram generation */
+    /** Set the number of bin per axis */
     itkSetMacro(NumberOfBinsPerAxis, unsigned int);
 
-    /** Get the number of bin per axis for histogram generation */
+    /** Get the number of bin per axis */
     itkGetMacro(NumberOfBinsPerAxis, unsigned int);
 
     /** Set the input image minimum */
@@ -191,7 +211,7 @@ private:
   /** Offset for co-occurences generation */
   OffsetType   m_Offset;
 
-  /** Number of bins per axis for histogram generation */
+  /** Number of bins per axis */
   unsigned int m_NumberOfBinsPerAxis;
 
   /** Input image minimum */

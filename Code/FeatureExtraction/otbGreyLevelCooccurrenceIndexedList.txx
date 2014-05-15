@@ -212,14 +212,14 @@ AddPixelPair(const PixelValueType& pixelvalue1, const PixelValueType& pixelvalue
   if ( pixelvalue1 < m_InputImageMinimum
        || pixelvalue1 > m_InputImageMaximum )
     {
-    return; // don't put a pixel in the histogram if the value
+    return; // don't put a pixel in the co-occurrence list if pixelvalue1
             // is out-of-bounds.
     }
 
   if ( pixelvalue2 < m_InputImageMinimum
        || pixelvalue2 > m_InputImageMaximum )
     {
-    return; // don't put a pixel in the histogram if the value
+    return; // don't put a pixel in the co-occurrence list if the pixelvalue2
            // is out-of-bounds.
     }
 
@@ -228,7 +228,7 @@ AddPixelPair(const PixelValueType& pixelvalue1, const PixelValueType& pixelvalue
   ppair[0] = pixelvalue1;
   ppair[1] = pixelvalue2;
 
-  //Get Index of the histogram for the given pixel pair;
+  //Get Index of the given pixel pair;
   this->GetIndex(ppair, index);
   //Add the index and set/update the frequency of the pixel pair. if m_Symmetry
   //is true the index is swapped and added to vector again.
