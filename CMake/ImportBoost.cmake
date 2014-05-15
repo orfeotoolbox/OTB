@@ -6,17 +6,13 @@ mark_as_advanced(OTB_USE_EXTERNAL_BOOST)
 
 if(OTB_USE_EXTERNAL_BOOST)
   # Import the package
-  find_package(Boost)
+  find_package(Boost 1.35.0)
   mark_as_advanced(Boost_DIR)
   if(Boost_FOUND)
     message(STATUS "  Found Boost version ${Boost_VERSION}")
-    if( ${Boost_MINOR_VERSION} LESS 35)
-      message(WARNING "Boost >= 1.35 is required. Disabling OTB_USE_EXTERNAL_BOOST")
-      set(OTB_USE_EXTERNAL_BOOST  OFF)
-    endif()
   else()
     message(FATAL_ERROR
-                  "Cannot build OTB project without boost library.  Please set Boost directories or set OTB_USE_EXTERNAL_BOOST to OFF to use the INTERNAL Boost version")
+                  "Cannot build OTB project without boost library (>1.35.0). Please set Boost directories or set OTB_USE_EXTERNAL_BOOST to OFF to use the INTERNAL Boost version")
   endif()
 
   # Test package completeness
