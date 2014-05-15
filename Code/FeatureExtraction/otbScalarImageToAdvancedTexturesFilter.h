@@ -36,13 +36,13 @@ namespace otb
  *
  * "Dissimilarity" \f$ = f_5 = \sum_{i, j}(i - j) g(i, j)^2 \f$
  *
- * "Sum average" \f$ = f_6 = -\sum_{i}i g_{x+y}(i)
+ * "Sum average" \f$ = f_6 = -\sum_{i}i g_{x+y}(i) \f$
  *
  * "Sum Variance" \f$ = f_7 = \sum_{i}(i - f_8)^2 g_{x+y}(i) \f$
  *
  * "Sum Entropy" \f$= f_8 = -\sum_{i}g_{x+y}(i) log (g_{x+y}(i)) \f$
  *
- * "Difference variance" \f$ = f_10 = variance of g_{x-y}(i)
+ * "Difference variance" \f$ = f_10 = variance of g_{x-y}(i) \f$
  *
  * "Difference entropy" \f$ = f_11 = -\sum_{i}g_{x-y}(i) log (g_{x-y}(i)) \f$
  *
