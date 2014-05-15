@@ -89,7 +89,7 @@ endif()
 
 if(OTB_USE_EXTERNAL_LIBKML)
   find_package(LibKML REQUIRED)
-  include_directories(${LIBKML_INCLUDE_DIRS})
+  include_directories(${LIBKML_INCLUDE_DIR})
 endif()
 
 if(OTB_USE_EXTERNAL_TINYXML)

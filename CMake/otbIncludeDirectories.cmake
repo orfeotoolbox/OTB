@@ -97,7 +97,7 @@ endif()
 
 if(OTB_USE_EXTERNAL_LIBKML)
   set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-      ${LIBKML_INCLUDE_DIRS})
+      ${LIBKML_INCLUDE_DIR})
 else()
   set(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
       ${OTB_SOURCE_DIR}/Utilities/otbkml/src)
@@ -296,7 +296,7 @@ endif()
 #For LibKML header file
 if(OTB_USE_EXTERNAL_LIBKML)
         set(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
-                ${LIBKML_INCLUDE_DIRS})
+                ${LIBKML_INCLUDE_DIR})
 else()
         set(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
                 Utilities/otbkml)
