@@ -39,13 +39,17 @@ std::string PrepareExpressionFromXML(std::string filename)
   // Open the xml file
   TiXmlDocument doc;
 
-  FILE* fp = fopen( filename.c_str (), "rb" ); //must be changed TiXmlFileOpen
-                                               //from tinyxml.cpp
+  //Use itksys::SystemTools::FOpen() and close it below because
+  //TiXmlDocument::TiXmlFileOpen( ) is not exposed from tinyXML library. Even
+  //though its available in the TiXmlDocument::SaveFile().
+  FILE* fp =  itksys::SystemTools::Fopen(filename.c_str(), "rb");
 
   if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
     {
     std::cerr << "Can't open file " << filename << std::endl;
+    fclose(fp);
     exit(1);
+
     }
 
   TiXmlHandle handle(&doc);
@@ -57,6 +61,7 @@ std::string PrepareExpressionFromXML(std::string filename)
   {
     std::string info = "Input XML file " + filename + " is invalid.";
     std::cerr << info  << std::endl;
+    fclose(fp);
     exit(1);
   }
 
@@ -134,6 +139,9 @@ std::string PrepareExpressionFromXML(std::string filename)
         }
       }
     }
+
+  fclose(fp);
+
   return expression;
 }
 

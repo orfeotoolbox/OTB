@@ -150,11 +150,15 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
   // Open the xml file
   TiXmlDocument doc;
 
-  FILE* fp = TiXmlFOpen( m_FileName.c_str (), "rb" );
+  //Use itksys::SystemTools::FOpen() and close it below because
+  //TiXmlDocument::TiXmlFileOpen( ) is not exposed from tinyXML library. Even
+  //though its available in the TiXmlDocument::SaveFile().
+  FILE* fp =  itksys::SystemTools::Fopen(m_FileName.c_str(), "rb");
 
   if (!doc.LoadFile(fp , TIXML_ENCODING_UTF8))
     {
     itkExceptionMacro(<< "Can't open file " << m_FileName);
+    fclose(fp);
     }
 
   TiXmlHandle handle(&doc);
@@ -221,12 +225,11 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     /*
     std::string message = "Input XML was generated for a different application( "
         + app_Name + ") while application loaded is:" + this_->GetName();
-
-    std::cerr << message << "\n\n";
     */
     itkWarningMacro( << "Input XML was generated for a different application( " <<
                        app_Name << ") while application loaded is:" <<this_->GetName());
 
+		fclose(fp);
     return -1;
     }
 
@@ -390,6 +393,9 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
     //choice also comes as setint and setstring why??
     }
   ret = 0; //resetting return to zero, we dont use it anyway for now.
+
+  fclose(fp);
+
   return ret;
 }
 
