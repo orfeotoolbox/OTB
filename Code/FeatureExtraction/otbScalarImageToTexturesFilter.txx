@@ -390,7 +390,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     // Variance is only used in correlation. If variance is 0, then (index[0] - pixelMean) * (index[1] - pixelMean)
     // should be zero as well. In this case, set the variance to 1. in order to
     // avoid NaN correlation.
-    if(pixelVarianceSquared < m_PixelValueTolerance)
+    if(pixelVarianceSquared < GetPixelValueTolerance())
       {
       pixelVarianceSquared = 1.;
       }
@@ -412,7 +412,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
       CooccurrenceIndexType index = (*constVectorIt).first;
       RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
       energy += frequency * frequency;
-      entropy -= ( frequency > m_PixelValueTolerance ) ? frequency *vcl_log(frequency) / log2 : 0;
+      entropy -= ( frequency > GetPixelValueTolerance() ) ? frequency *vcl_log(frequency) / log2 : 0;
       correlation += ( ( index[0] - pixelMean ) * ( index[1] - pixelMean ) * frequency ) / pixelVarianceSquared;
       inverseDifferenceMoment += frequency / ( 1.0 + ( index[0] - index[1] ) * ( index[0] - index[1] ) );
       inertia += ( index[0] - index[1] ) * ( index[0] - index[1] ) * frequency;

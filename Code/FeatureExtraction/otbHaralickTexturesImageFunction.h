@@ -200,7 +200,8 @@ private:
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
 
-  static const double m_PixelValueTolerance = 0.0001;
+  //TODO: should we use constexpr? only c++11 and problem for msvc
+  const double GetPixelValueTolerance() const {return 0.0001;}
 
 };
 
