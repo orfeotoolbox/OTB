@@ -56,6 +56,7 @@ namespace mvd
 
 namespace
 {
+int count = 0;
 }
 
 /*****************************************************************************/
@@ -108,18 +109,38 @@ TreeWidgetItem
 
   /*
   qDebug()
-    << "+Item:"
-    << GetType()
-    << GetId()
-    << GetText()
-    << this->text( 2 );
+    << "NEW Item:" << count << "\n"
+    << "type:" << GetType() << "\n"
+    << "id:" << GetId() << "\n"
+    << "text:" << GetText() << "\n"
+    << "hash:" << this->text( 2 ) << "\n"
+    << "parent:" << this->parent() << "\n"
+    << "text[ 0 ]:" << parent->text( 0 );
   */
+
+  ++ count;
+
+  qDebug() << "Item count:" << count;
 }
 
 /*******************************************************************************/
 TreeWidgetItem
 ::~TreeWidgetItem()
 {
+  /*
+  qDebug()
+    << "DELETE Item:" << "\n"
+    << "type:" << GetType() << "\n"
+    << "id:" << GetId() << "\n"
+    << "text:" << GetText() << "\n"
+    << "hash:" << text( 2 ) << "\n"
+    << "parent:" << parent() << "\n"
+    << "text[ 0 ]:" << (parent()==NULL ? "" : parent()->text( 0 ));
+  */
+
+  -- count;
+
+  qDebug() << "Item count:" << count;
 }
 
 /*******************************************************************************/

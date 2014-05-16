@@ -195,7 +195,7 @@ private slots:
 
   /**
    */
-  void OnItemMoved( QTreeWidgetItem* item );
+  void OnItemMoved( QTreeWidgetItem * item, QTreeWidgetItem * target );
 
   /**
    */

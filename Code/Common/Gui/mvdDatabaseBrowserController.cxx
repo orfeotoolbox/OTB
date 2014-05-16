@@ -101,10 +101,10 @@ DatabaseBrowserController
   //
   QObject::connect(
     widget, 
-    SIGNAL( ItemMoved( QTreeWidgetItem* ) ),
+    SIGNAL( ItemMoved( QTreeWidgetItem*, QTreeWidgetItem* ) ),
     // to:
     this,
-    SLOT( OnItemMoved( QTreeWidgetItem* ) )
+    SLOT( OnItemMoved( QTreeWidgetItem*, QTreeWidgetItem* ) )
     );
 
   //
@@ -178,10 +178,10 @@ DatabaseBrowserController
   //
   QObject::connect(
     widget, 
-    SIGNAL( ItemMoved( QTreeWidgetItem* ) ),
+    SIGNAL( ItemMoved( QTreeWidgetItem*, QTreeWidgetItem* ) ),
     // to:
     this,
-    SLOT( OnItemMoved( QTreeWidgetItem* ) )
+    SLOT( OnItemMoved( QTreeWidgetItem*, QTreeWidgetItem* ) )
     );
 
   //
@@ -867,24 +867,66 @@ DatabaseBrowserController
 /*******************************************************************************/
 void
 DatabaseBrowserController
-::OnItemMoved( QTreeWidgetItem* item )
+::OnItemMoved( QTreeWidgetItem * item, QTreeWidgetItem * target )
 {
   // Trace.
-  // qDebug() << this << "::OnItemMoved(" << item << ");";
+  qDebug() << this << "::OnItemMoved(" << item << "," << target << ");";
 
   // Check inputs.
   assert( item!=NULL );
-
 
   // Access item and parent.
   assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
   TreeWidgetItem* childItem = dynamic_cast< TreeWidgetItem* >( item );
 
-  assert( item->parent()==dynamic_cast< TreeWidgetItem* >( item->parent() ) );
-  TreeWidgetItem* parentItem = dynamic_cast< TreeWidgetItem* >( item->parent() );
+#if 0
+  QTreeWidgetItem * parent = item->parent();
 
+#if 1
+  qDebug()
+    << "Item (parent):"
+    << parent << "\n"
+    << "text[ 0 ]:" << parent->text( 0 ) << "\n"
+    << "text[ 1 ]:" << parent->text( 1 ) << "\n"
+    << "text[ 2 ]:" << parent->text( 2 ) << "\n"
+    << "parent:" << parent->parent() << "\n"
+    << "text[ 0 ]:" << parent->parent()->text( 0 ) << "\n"
+    << "text[ 1 ]:" << parent->parent()->text( 1 );
+#endif
+#else
+  // Find parent-item by climbing parent hierarchy based on
+  // drop-enabled flag.
+  //
+  // N.B.: item->parent() may not be updated yet by QTreeWidget.
+  QTreeWidgetItem * parent = target;
+
+  while( !parent->flags().testFlag( Qt::ItemIsDropEnabled ) )
+    {
+    parent = parent->parent();
+    assert( parent!=NULL ); 
+
+#if 1
+    qDebug()
+      << "Item (parent):"
+      << parent << "\n"
+      << "text[ 0 ]:" << parent->text( 0 ) << "\n"
+      << "text[ 1 ]:" << parent->text( 1 ) << "\n"
+      << "text[ 2 ]:" << parent->text( 2 ) << "\n"
+      << "parent:" << parent->parent() << "\n"
+      << "text[ 0 ]:" << parent->parent()->text( 0 ) << "\n"
+      << "text[ 1 ]:" << parent->parent()->text( 1 );
+#endif
+    }
+#endif
+
+  // Access item-parent.
+  assert( parent==dynamic_cast< TreeWidgetItem* >( parent ) );
+  TreeWidgetItem* parentItem = dynamic_cast< TreeWidgetItem* >( parent );
+
+  /*
   if( parentItem==NULL )
     return;
+  */
 
   // Check item type.
   assert( childItem->GetType()==TreeWidgetItem::ITEM_TYPE_LEAF );

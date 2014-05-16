@@ -136,6 +136,25 @@ EncodeMimeData( QMimeData* mimeData, const QList< QTreeWidgetItem* >& items )
       << "Variant:" << QVariant::fromValue< QTreeWidgetItem* >( *it );
     */
 
+#if 1
+    QTreeWidgetItem * item = *it;
+
+    qDebug()
+      << "Item (encoded):"
+      << item << "\n"
+      << "text[ 0 ]:" << item->text( 0 ) << "\n"
+      << "text[ 1 ]:" << item->text( 1 ) << "\n"
+      << "text[ 2 ]:" << item->text( 2 ) << "\n";
+
+    if( item->parent()!=NULL )
+      {
+      qDebug()
+        << "parent:" << item->parent() << "\n"
+        << "text[ 0 ]:" << item->parent()->text( 0 ) << "\n"
+        << "text[ 1 ]:" << item->parent()->text( 1 );
+      }
+#endif
+
     // http://www.qtfr.org/viewtopic.php?id=9630
     // stream << *it;
     stream << QVariant::fromValue< QTreeWidgetItem* >( *it );
@@ -197,13 +216,22 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
 
     items.push_back( item );
 
-    // qDebug()
-    //   << "Item (variant):"
-    //   << varItem
-    //   << varItem->text( 0 )
-    //   << varItem->text( 1 )
-    //   << varItem->text( 2 )
-    //   << varItem->parent();
+#if 1
+    qDebug()
+      << "Item (decoded):"
+      << item << "\n"
+      << "text[ 0 ]:" << item->text( 0 ) << "\n"
+      << "text[ 1 ]:" << item->text( 1 ) << "\n"
+      << "text[ 2 ]:" << item->text( 2 ) << "\n";
+
+      if( item->parent()!=NULL )
+        {
+        qDebug()
+          << "parent:" << item->parent() << "\n"
+          << "text[ 0 ]:" << item->parent()->text( 0 ) << "\n"
+          << "text[ 1 ]:" << item->parent()->text( 1 );
+        }
+#endif
 
     ++ count;
     }
@@ -223,10 +251,17 @@ TreeWidget
 {
   setSelectionBehavior( QAbstractItemView::SelectRows );
 
+  // MANTIS-929: Leave default behaviour
+  //
   // setDefaultDropAction( Qt::MoveAction );
   // setDefaultDropAction( Qt::CopyAction );
   // setDefaultDropAction( Qt::LinkAction );
 
+  // MANTIS-929: Setting inspired from QGis; don't understand why
+  // there is one call with InternalMode and another with DragDrop but
+  // think it might change setting drag-enabled and accept-drop
+  // behaviour.
+  //
   setDragDropMode( QAbstractItemView::InternalMove );
   setDragEnabled( true );
   setAcceptDrops( true );
@@ -285,17 +320,30 @@ TreeWidget
   qDebug() << this << "::dragMoveEvent(" << event << ")";
   qDebug() << this << itemAt( event->pos() );
 
+  QTreeWidget::dragMoveEvent( event );
+
   QTreeWidgetItem* item = itemAt( event->pos() );
-  const QMimeData * mimeData = event->mimeData();
+  // const QMimeData * mimeData = event->mimeData();
 
-  if( !event->mimeData()->hasFormat( TreeWidget::ITEM_MIME_TYPE ) ||
-      item==NULL )
-  {
+  if( event->mimeData()->hasFormat( TreeWidget::ITEM_MIME_TYPE ) &&
+      item!=NULL )
+    {
+    qDebug() << "ACCEPT";
+    event->accept();
+    }
+  else
+    {
+    qDebug() << "IGNORE";
     event->ignore();
-  }
+    }
 
+  /*
   if( event->source()==this )
+    {
     event->setDropAction( Qt::MoveAction );
+    event->accept();
+    }
+  */
 
   /*
   if( itemAt( event->pos() )==NULL )
@@ -303,8 +351,6 @@ TreeWidget
   else
     event->accept();
   */
-
-  QTreeWidget::dragMoveEvent( event );
 }
 
 /*******************************************************************************/
@@ -333,24 +379,63 @@ TreeWidget
   DecodeMimeData( items, event->mimeData() );
 
   if( event->source()==this )
+    {
     event->setDropAction( Qt::MoveAction );
+    // event->accept();
+    }
+
+  qDebug() << "dropAction:" << event->dropAction();
 
   QTreeWidget::dropEvent( event );
 
+  qDebug() << "dropAction:" << event->dropAction();
+
+  /*
+  QTreeWidgetItem * item = itemAt( event->pos() );
+
+  while( !item->flags().testFlag( Qt::ItemIsDropEnabled ) )
+    {
+    item = item->parent();
+    assert( item!=NULL ); 
+
+#if 1
+    qDebug()
+      << "Item (target):"
+      << item << "\n"
+      << "text[ 0 ]:" << item->text( 0 ) << "\n"
+      << "text[ 1 ]:" << item->text( 1 ) << "\n"
+      << "text[ 2 ]:" << item->text( 2 ) << "\n"
+      << "parent:" << item->parent() << "\n"
+      << "text[ 0 ]:" << item->parent()->text( 0 ) << "\n"
+      << "text[ 1 ]:" << item->parent()->text( 1 );
+#endif
+    }
+  */
+
+  /*
   for( QTreeWidgetItemList::const_iterator it = items.begin();
        it!=items.end();
        ++it )
     {
-    switch( defaultDropAction() )
+    switch( event->dropAction() )
       {
       case Qt::MoveAction:
-        emit ItemMoved( *it );
+        emit ItemMoved( *it, itemAt( event->pos() ) );
         break;
 
       default:
         break;
       }
     }
+  */
+
+  QTreeWidgetItem * target = itemAt( event->pos() );
+
+  if( event->source()==this )
+    for( QTreeWidgetItemList::const_iterator it = items.begin();
+         it!=items.end();
+         ++it )
+      emit ItemMoved( *it, target );
 }
 
 /*******************************************************************************/

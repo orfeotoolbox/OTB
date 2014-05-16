@@ -90,10 +90,10 @@ DatabaseBrowserWidget
 
   QObject::connect(
     m_UI->databaseTreeWidget,
-    SIGNAL( ItemMoved( QTreeWidgetItem* ) ),
+    SIGNAL( ItemMoved( QTreeWidgetItem*, QTreeWidgetItem* ) ),
     // to:
     this,
-    SIGNAL( ItemMoved( QTreeWidgetItem* ) )
+    SIGNAL( ItemMoved( QTreeWidgetItem*, QTreeWidgetItem* ) )
   );
 
   QObject::connect(
