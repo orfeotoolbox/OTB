@@ -948,6 +948,16 @@ add_test(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADI
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
 )
 
+# New test
+add_test(raTvAtmosphericCorrectionParametersToAtmosphericRadiativeTerms ${RADIOMETRY_TESTS4}
+--compare-ascii ${EPSILON_4}
+                ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
+                ${TEMP}/raTvCorrectionTo6SRadiative.txt
+        otbAtmosphericCorrectionParametersToAtmosphericRadiativeTerms
+                ${INPUTDATA}/in6S_otb
+                ${TEMP}/raTvCorrectionTo6SRadiative.txt
+)
+
 add_test(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}
         --compare-image ${EPSILON_10}
                 ${BASELINE}/raTvRomaniaAtmosphericCorrectionSequencement.tif
@@ -2122,6 +2132,7 @@ set(Radiometry_SRCS4
 otbRadiometryTests4.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.cxx
+otbAtmosphericCorrectionParametersToAtmosphericRadiativeTerms.cxx
 otbAtmosphericCorrectionSequencement.cxx
 otbEVIRAndBAndNIRVegetationIndexImageFilter.cxx
 otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx

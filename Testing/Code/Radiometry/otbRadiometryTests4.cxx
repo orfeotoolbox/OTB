@@ -26,6 +26,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew);
   REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms);
+  REGISTER_TEST(otbAtmosphericCorrectionParametersToAtmosphericRadiativeTerms);
   REGISTER_TEST(otbAtmosphericCorrectionSequencementTest);
   REGISTER_TEST(otbEVIRAndBAndNIRVegetationIndexImageFilter);
   REGISTER_TEST(otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter);
