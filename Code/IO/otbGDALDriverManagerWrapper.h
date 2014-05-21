@@ -52,6 +52,11 @@ public:
   /** Easy access to the internal GDALDataset object.
    *  Don't close it, it will be automatic */
   GDALDataset* GetDataSet() const;
+  
+  /** Test if the dataset corresponds to a Jpeg2000 file format
+   *  Return true if the dataset exists and has a JPEG2000 driver
+   *  Return false in all other cases */
+  bool IsJPEG2000() const;
 
 protected :
   GDALDatasetWrapper();

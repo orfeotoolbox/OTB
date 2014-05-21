@@ -491,7 +491,7 @@ bool GDALImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
 {
   GDALDataset* dataset = m_Dataset->GetDataSet();
 
-  if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+  if (m_Dataset->IsJPEG2000())
     {
     // JPEG2000 case : use the number of overviews actually in the dataset
     // Original resolution
@@ -544,7 +544,7 @@ bool GDALImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<
   // TODO : the image and tile sizes at different resolution should be
   // read in the GDAL dataset, when available
   GDALDataset* dataset = m_Dataset->GetDataSet();
-  if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+  if (m_Dataset->IsJPEG2000())
     {
     computeBlockSize = true;
     dataset->GetRasterBand(1)->GetBlockSize(&blockSizeX, &blockSizeY);
@@ -856,7 +856,7 @@ void GDALImageIO::InternalReadImageInformation()
       otbMsgDevMacro(<< "Original blockSize: "<< blockSizeX << " x " << blockSizeY );
 
       blockSizeX = uint_ceildivpow2(blockSizeX,m_ResolutionFactor);
-      if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+      if (m_Dataset->IsJPEG2000())
         {
         // Jpeg2000 case : use the real block size Y
         blockSizeY = uint_ceildivpow2(blockSizeY,m_ResolutionFactor);
@@ -904,7 +904,7 @@ void GDALImageIO::InternalReadImageInformation()
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverShortNameKey, driverShortName);
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey,  driverLongName);
 
-  if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+  if (m_Dataset->IsJPEG2000())
     {
     // store the cache size used for Jpeg2000 files
     itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::CacheSizeInBytes , GDALGetCacheMax64());
@@ -946,7 +946,7 @@ void GDALImageIO::InternalReadImageInformation()
     {
     otbMsgDevMacro( << "No projection => sensor model" );
     // Special case for Jpeg2000 files : try to read the origin in the GML box
-    if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+    if (m_Dataset->IsJPEG2000())
       {
       isSensor = GetOriginFromGMLBox(m_Origin);
       }
@@ -1077,7 +1077,7 @@ void GDALImageIO::InternalReadImageInformation()
     }
 
   /* Special case for JPEG2000, also look in the GML boxes */
-  if (strcmp(dataset->GetDriver()->GetDescription(),"JP2OpenJPEG") == 0)
+  if (m_Dataset->IsJPEG2000())
     {
     char **gmlMetadata = NULL;
     GDALJP2Metadata jp2Metadata;
