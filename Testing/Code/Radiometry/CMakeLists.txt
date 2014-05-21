@@ -780,6 +780,11 @@ add_test(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS3}
         otbAtmosphericCorrectionParametersNew
 )
 
+# -------            otb::ImageMetadataCorrectionParameters   ------------------------------
+add_test(raTuImageMetadataCorrectionParametersNew ${RADIOMETRY_TESTS3}
+        otbImageMetadataCorrectionParametersNew
+)
+
 ##########           otb::FilterFunctionValues -------------------
 # in otbAtmosphericCorrectionParameters.h/.cxx
 add_test(raTuFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
@@ -2119,6 +2124,7 @@ otbRadiometryTests3.cxx
 otbDEMCaracteristicsExtractorNew.cxx
 otbDEMCaracteristicsExtractor.cxx
 otbAtmosphericCorrectionParametersNew.cxx
+otbImageMetadataCorrectionParametersNew.cxx
 otbFilterFunctionValues.cxx
 otbSIXSTraitsTest.cxx
 otbSIXSTraitsComputeAtmosphericParameters.cxx
