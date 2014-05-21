@@ -130,7 +130,8 @@ private:
     AddChoice("mode.phr", "Pleiades mode");
     SetParameterDescription("mode.phr", "Pleiades superimposition mode, "
       "designed for the case of a P+XS bundle in SENSOR geometry. It uses"
-      " a simple transform : a scaling and a residual translation.");
+      " a simple transform on the XS image : a scaling and a residual "
+      "translation.");
     
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");

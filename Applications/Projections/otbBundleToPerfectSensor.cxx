@@ -93,7 +93,8 @@ private:
     AddChoice("mode.phr", "Pleiades mode");
     SetParameterDescription("mode.phr", "Pleiades superimposition mode, "
       "designed for the case of a P+XS bundle in SENSOR geometry. It uses"
-      " a simple transform : a scaling and a residual translation.");
+      " a simple transform on the XS image : a scaling and a residual "
+      "translation.");
     
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
     SetParameterDescription("lms"," Spacing of the deformation field. Default is 10 times the PAN image spacing.");
