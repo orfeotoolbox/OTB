@@ -1,3 +1,31 @@
+OTB-v.4.2.0 - Changes since version 4.0 (2014/03/12)
+--------------------------------------------------------
+
+* Library:
+
+  * Core:
+    * Support Jpeg2000 images through GDAL drivers (can use OpenJpeg, Kakadu, ECW)
+    * Reading/Writing RPC coefficients in GeoTIFF tags
+    * Cleaning of ITK pending patches
+    * Support SPOT6 metadata
+    * Integrate improvements from Monteverdi2
+    * Support clang 3.5.1
+
+* Applications:
+  * Updated applications :
+    * Superimpose and BundleToPerfectSensor : Add a specific reprojection mode for PHR bundle
+    * OpticalCalibration : parameters more flexible, allow users to overwrite metadata values
+
+* Monteverdi:
+
+* Bugs fixed:
+  * OTB-lib:
+    * 0000936: Sub-pixel disparity filter is not compatible with disparity maps over subsampled grids
+
+  * Orfeo Toolbox (OTB)
+    * 0000926: OTB does not compile with clang 5.1
+
+
 OTB-v.4.0.0 - Changes since version 3.20 (2013/03/13)
 --------------------------------------------------------
 
