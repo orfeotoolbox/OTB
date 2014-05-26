@@ -671,9 +671,12 @@ void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::SetFileName(const char* extendedFileName)
 {
-  this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
-  this->m_FileName = this->m_FilenameHelper->GetSimpleFileName();
-  this->Modified();
+  if (extendedFileName)
+    {
+    this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
+    this->m_FileName = this->m_FilenameHelper->GetSimpleFileName();
+    this->Modified();
+    }
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
