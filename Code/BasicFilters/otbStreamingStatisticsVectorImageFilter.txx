@@ -452,12 +452,20 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     const RealPixelType& mean = this->GetMeanOutput()->Get();
 
     double regul = 1.0;
+    double regulComponent = 1.0;
 
-    if( m_UseUnbiasedEstimator && nbPixels>1 )
+    if( m_UseUnbiasedEstimator && nbRelevantPixels>1 )
       {
       regul =
        static_cast< double >( nbRelevantPixels ) /
        ( static_cast< double >( nbRelevantPixels ) - 1.0 );
+      }
+    
+    if( m_UseUnbiasedEstimator && (nbRelevantPixels * numberOfComponent) > 1 )
+      {
+      regulComponent = 
+        static_cast< double >(nbRelevantPixels * numberOfComponent) /
+       ( static_cast< double >(nbRelevantPixels * numberOfComponent) - 1.0 );
       }
 
     MatrixType cov  = cor;
@@ -473,8 +481,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     this->GetComponentMeanOutput()->Set(streamFirstOrderComponentAccumulator / (nbRelevantPixels * numberOfComponent));
     this->GetComponentCorrelationOutput()->Set(streamSecondOrderComponentAccumulator / (nbRelevantPixels * numberOfComponent));
     this->GetComponentCovarianceOutput()->Set(
-        (nbRelevantPixels * numberOfComponent) / (nbRelevantPixels * numberOfComponent - 1)
-        * (this->GetComponentCorrelation()
+        regulComponent * (this->GetComponentCorrelation()
            - (this->GetComponentMean() * this->GetComponentMean())));
     }
 }
