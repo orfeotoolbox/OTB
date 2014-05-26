@@ -1536,6 +1536,8 @@ void TestHelper::AddWhiteSpace(const std::string& strIn, std::string &strOut) co
   keys.push_back("=");
   keys.push_back(":");
   keys.push_back(";");
+  keys.push_back("</");
+  keys.push_back(">");
 
   std::vector<std::string> keysOut;
   keysOut.push_back("[ ");
@@ -1546,6 +1548,9 @@ void TestHelper::AddWhiteSpace(const std::string& strIn, std::string &strOut) co
   keysOut.push_back(" = ");
   keysOut.push_back(" : ");
   keysOut.push_back(" , ");
+  keysOut.push_back(" </");
+  keysOut.push_back("> ");
+  
 
   for (unsigned int it = 0; it < keys.size(); ++it)
     {
@@ -1725,37 +1730,33 @@ bool TestHelper::CompareLines(const std::string& strfileref,
           etatPrec = etatCour;
           ++i;
           }
-
-        // Simpliest case : string characters or numeric value between 2 separators
-        if (!chgt)
+        
+        // test last part
+        if (etatCour == ETAT_CHAR)
           {
-          if (isNumeric(strRef))
+          if (strCharRef != strCharTest)
             {
-
-            if ((strRef != strTest) && (vcl_abs(atof(strRef.c_str())) > m_EpsilonBoundaryChecking)
-                && (vcl_abs(atof(strRef.c_str()) - atof(strTest.c_str()))
-                    > epsilon * vcl_abs(atof(strRef.c_str()))))    //epsilon as relative error
+            if (m_ReportErrors)
               {
-              if (m_ReportErrors)
-                {
-                fluxfilediff << "Diff at line " << numLine << " : vcl_abs( (" << strRef << ") - (" << strTest
-                             << ") ) > " << epsilon << std::endl;
-                differenceFoundInCurrentLine = true;
-                }
-              nbdiff++;
+              fluxfilediff << "Diff at line " << numLine << " : " << strCharRef << " != " << strCharTest << std::endl;
+              differenceFoundInCurrentLine = true;
               }
+            nbdiff++;
             }
-          else
+          }
+        else
+          {
+          if ((strNumRef != strNumTest) && (vcl_abs(atof(strNumRef.c_str())) > m_EpsilonBoundaryChecking)
+              && (vcl_abs(atof(strNumRef.c_str()) - atof(strNumTest.c_str()))
+                  > epsilon * vcl_abs(atof(strNumRef.c_str()))))    //epsilon as relative error
             {
-            if (strRef != strTest)
+            if (m_ReportErrors)
               {
-              if (m_ReportErrors)
-                {
-                fluxfilediff << "Diff at line " << numLine << " : " << strRef << " != " << strTest << std::endl;
-                differenceFoundInCurrentLine = true;
-                }
-              nbdiff++;
+              fluxfilediff << "Diff at line " << numLine << " : vcl_abs( (" << strNumRef << ") - (" << strNumTest
+                            << ") ) > " << epsilon << std::endl;
+              differenceFoundInCurrentLine = true;
               }
+            nbdiff++;
             }
           }
         } // else
