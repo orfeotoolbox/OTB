@@ -463,7 +463,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     
     if( m_UseUnbiasedEstimator && (nbRelevantPixels * numberOfComponent) > 1 )
       {
-      regulComponent = 
+      regulComponent =
         static_cast< double >(nbRelevantPixels * numberOfComponent) /
        ( static_cast< double >(nbRelevantPixels * numberOfComponent) - 1.0 );
       }
