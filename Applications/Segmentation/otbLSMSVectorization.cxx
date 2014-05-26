@@ -111,7 +111,7 @@ private:
   {
     clock_t tic = clock();
 
-    const char * shapefile   = GetParameterString("out").c_str();
+    std::string shapefile(GetParameterString("out"));
 
     unsigned long sizeTilesX = GetParameterInt("tilesizex");
     unsigned long sizeTilesY = GetParameterInt("tilesizey");
@@ -161,8 +161,8 @@ private:
     std::vector<std::string> options;
 
     ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Overwrite);
-    std::string layername = itksys::SystemTools::GetFilenameName(shapefile);
-    std::string extension = itksys::SystemTools::GetFilenameLastExtension(shapefile);
+    std::string layername = itksys::SystemTools::GetFilenameName(shapefile.c_str());
+    std::string extension = itksys::SystemTools::GetFilenameLastExtension(shapefile.c_str());
     layername = layername.substr(0,layername.size()-(extension.size()));
     layer = ogrDS->CreateLayer(layername, &oSRS, wkbMultiPolygon, options);
 
