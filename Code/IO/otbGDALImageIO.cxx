@@ -335,8 +335,8 @@ void GDALImageIO::Read(void* buffer)
     // TODO: This is a very special case and seems to be working only
     // for unsigned char pixels. There might be a gdal method to do
     // the work in a cleaner way
-    std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumns))
-                             * (static_cast<std::streamoff>(lNbLines));
+    std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColumnsRegion))
+                             * (static_cast<std::streamoff>(lNbLinesRegion));
     std::streamoff lBufferSize = static_cast<std::streamoff>(m_BytePerPixel) * lNbPixels;
     itk::VariableLengthVector<unsigned char> value(lBufferSize);
 
