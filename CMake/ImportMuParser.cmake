@@ -1,11 +1,14 @@
 message(STATUS "Importing MuParser...")
+find_package(MuParser)
 
-option(OTB_USE_EXTERNAL_MUPARSER "Use external MuParser library." ON)
+if(MUPARSER_FOUND)
+  option(OTB_USE_EXTERNAL_MUPARSER "Use external MuParser library." ON)
+else()
+  option(OTB_USE_EXTERNAL_MUPARSER "Use external MuParser library." OFF)
+endif()
 mark_as_advanced(OTB_USE_EXTERNAL_MUPARSER)
 
 if(OTB_USE_EXTERNAL_MUPARSER)
-  find_package(MuParser)
-
   if(MUPARSER_FOUND)
     # Starting with muparser 2.0.0,
     #  intrinsic operators "and", "or", "xor" have been removed
@@ -26,18 +29,23 @@ if(OTB_USE_EXTERNAL_MUPARSER)
     unset(CMAKE_REQUIRED_DEFINES)
 
     if(OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS)
-      message(STATUS "  Testing if muParser has '&&' operator -- yes")
+      message(STATUS "  MuParser version is >= 2.0.0 : "
+                     "uses '&&' and '||' logical operators, and C++ like "
+                     "ternary if-then-else operator")
     else()
-      message(STATUS "  Testing if muParser has '&&' operator -- no")
+      message(STATUS "  MuParser version is < 2.0.0  : "
+                     "uses 'and' and 'or' logical operators, and ternary "
+                     "operator 'if( ; ; )'")
     endif()
   else()
-    message(FATAL_ERROR "Can't build OTB without MuParser. Instal MuParser on your system, or disable the option OTB_USE_EXTERNAL_MUPARSER")
+    message(FATAL_ERROR "Can't build OTB without MuParser. Instal it "
+                        "on your system, or disable the option "
+                        "OTB_USE_EXTERNAL_MUPARSER to use internal one")
   endif()
-
 else()
-
   set(MUPARSER_LIBRARIES otbmuparser)
   unset(OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS) # internal version is < 2.0.0
-  message(STATUS "  Using MuParser internal version (no '&&' operator)")
+  message(STATUS "  Using MuParser internal version : uses 'and' and 'or' "
+                 "logical operators, and ternary operator 'if( ; ; )' ")
 endif()
 
