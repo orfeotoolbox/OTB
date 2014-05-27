@@ -601,12 +601,23 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 ::BeforeThreadedGenerateData()
 {
   const TDisparityImage * horizDisp = this->GetHorizontalDisparityMapInput();
+  const TInputImage * leftSensor = this->GetLeftInput();
+  const TInputImage * rightSensor = this->GetRightInput();
 
   const TOutputDEMImage * outputDEM = this->GetDEMOutput();
 
   typename DisparityMapType::RegionType requestedRegion = horizDisp->GetRequestedRegion();
 
   m_UsedInputSplits = m_InputSplitter->GetNumberOfSplits(requestedRegion, this->GetNumberOfThreads());
+  
+  m_LeftToGroundTransform = RSTransformType::New();
+  m_RightToGroundTransform = RSTransformType::New();
+
+  m_LeftToGroundTransform->SetInputKeywordList(leftSensor->GetImageKeywordlist());
+  m_RightToGroundTransform->SetInputKeywordList(rightSensor->GetImageKeywordlist());
+
+  m_LeftToGroundTransform->InstanciateTransform();
+  m_RightToGroundTransform->InstanciateTransform();
 
   // ensure empty regions are not processed
   if (requestedRegion.GetSize(0) == 0 && requestedRegion.GetSize(1) == 0)
@@ -652,15 +663,6 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   const TMaskImage * disparityMask = this->GetDisparityMaskInput();
 
   const TOutputDEMImage * outputDEM = this->GetDEMOutput();
-
-  RSTransformType::Pointer leftToGroundTransform = RSTransformType::New();
-  RSTransformType::Pointer rightToGroundTransform = RSTransformType::New();
-
-  leftToGroundTransform->SetInputKeywordList(leftSensor->GetImageKeywordlist());
-  rightToGroundTransform->SetInputKeywordList(rightSensor->GetImageKeywordlist());
-
-  leftToGroundTransform->InstanciateTransform();
-  rightToGroundTransform->InstanciateTransform();
 
   const TEpipolarGridImage * leftGrid = this->GetLeftEpipolarGridInput();
   const TEpipolarGridImage * rightGrid = this->GetRightEpipolarGridInput();
@@ -775,10 +777,10 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     sensorPoint[0] = cPixel[0];
     sensorPoint[1] = cPixel[1];
     sensorPoint[2] = m_ElevationMin;
-    leftGroundHmin = leftToGroundTransform->TransformPoint(sensorPoint);
+    leftGroundHmin = m_LeftToGroundTransform->TransformPoint(sensorPoint);
 
     sensorPoint[2] = m_ElevationMax;
-    leftGroundHmax = leftToGroundTransform->TransformPoint(sensorPoint);
+    leftGroundHmax = m_LeftToGroundTransform->TransformPoint(sensorPoint);
 
     // compute right ray
     itk::ContinuousIndex<double,2> rightIndexEstimate;
@@ -828,10 +830,10 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     sensorPoint[0] = cPixel[0];
     sensorPoint[1] = cPixel[1];
     sensorPoint[2] = m_ElevationMin;
-    rightGroundHmin = rightToGroundTransform->TransformPoint(sensorPoint);
+    rightGroundHmin = m_RightToGroundTransform->TransformPoint(sensorPoint);
 
     sensorPoint[2] = m_ElevationMax;
-    rightGroundHmax = rightToGroundTransform->TransformPoint(sensorPoint);
+    rightGroundHmax = m_RightToGroundTransform->TransformPoint(sensorPoint);
 
     // Compute ray intersection (mid-point method), TODO : implement non-iterative method from Hartley & Sturm
     double a = (leftGroundHmax[0] - leftGroundHmin[0]) * (leftGroundHmax[0] - leftGroundHmin[0]) +

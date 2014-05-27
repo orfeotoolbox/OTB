@@ -169,7 +169,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
   TOutputDEMImage * outputPtr = this->GetDEMOutput();
 
   // Set-up a transform to use the DEMHandler
-  typedef otb::GenericRSTransform<> RSTransform2DType;
 
   // DEM BBox
   itk::NumericTraits<DEMPixelType>::max();
@@ -516,6 +515,13 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
     m_TempDEMAccumulatorRegions.push_back(tmpImg2);
     }
 
+  if (!this->m_IsGeographic)
+    {
+    m_GroundTransform = RSTransform2DType::New();
+    m_GroundTransform->SetInputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
+    m_GroundTransform->SetOutputProjectionRef(m_ProjectionRef);
+    m_GroundTransform->InstanciateTransform();
+    }
 
 }
 
@@ -547,8 +553,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
   InputInternalPixelType maxLong = std::max(regionLong1, regionLong2);
   InputInternalPixelType maxLat = std::max(regionLat1, regionLat2);
 
-  typedef otb::GenericRSTransform<> RSTransform2DType;
-
   TOutputDEMImage * tmpDEM = NULL;
   AccumulatorImageType *tmpAcc = NULL;
   typename TOutputDEMImage::RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
@@ -570,18 +574,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
       origin = imgPtr->GetOrigin();
       typename InputMapType::SpacingType spacing;
       spacing = imgPtr->GetSpacing();
-      RSTransform2DType::Pointer groundTransform;
-      if (!this->m_IsGeographic)
-        {
-        groundTransform = RSTransform2DType::New();
-        ImageKeywordListType imageKWL = imgPtr->GetImageKeywordlist();
-        //groundTransform->SetInputKeywordList(imageKWL);
-        groundTransform->SetInputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
-        groundTransform->SetOutputProjectionRef(m_ProjectionRef);
-        //groundTransform->SetInputOrigin(origin);
-        //groundTransform->SetInputSpacing(spacing);
-        groundTransform->InstanciateTransform();
-        }
 
       if (static_cast<unsigned int> (threadId) < m_NumberOfSplit[k])
         {
@@ -624,7 +616,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
             typename RSTransform2DType::InputPointType tmpPoint;
             tmpPoint[0] = position[0];
             tmpPoint[1] = position[1];
-            RSTransform2DType::OutputPointType groundPosition = groundTransform->TransformPoint(tmpPoint);
+            RSTransform2DType::OutputPointType groundPosition = m_GroundTransform->TransformPoint(tmpPoint);
             position[0] = groundPosition[0];
             position[1] = groundPosition[1];
             }

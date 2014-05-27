@@ -120,6 +120,9 @@ public:
   // 3D points
   typedef typename RSTransformType::InputPointType  TDPointType;
 
+  // 2D Transform
+  typedef otb::GenericRSTransform<>                 RSTransform2DType;
+
   typedef otb::ImageKeywordlist                     ImageKeywordListType;
 
   typedef std::map
@@ -303,7 +306,9 @@ private:
 
   int           m_OutputParametersFrom3DMap;
   bool          m_IsGeographic;
-
+  
+  /** internal transform between WGS84 and user's ProjRef */
+  RSTransform2DType::Pointer m_GroundTransform;
 
 };
 } // end namespace otb

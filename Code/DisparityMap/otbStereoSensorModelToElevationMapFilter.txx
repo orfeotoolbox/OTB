@@ -298,6 +298,15 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
     outputIt.Set(otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(geoPoint));
     }
 
+  const InputImageType* masterPtr  = this->GetMasterInput();
+  const InputImageType* slavePtr   = this->GetSlaveInput();
+
+  // Set-up the forward-inverse sensor model transform
+  m_MasterToSlave = GenericRSTransform3DType::New();
+  m_MasterToSlave->SetInputKeywordList(masterPtr->GetImageKeywordlist());
+  m_MasterToSlave->SetOutputKeywordList(slavePtr->GetImageKeywordlist());
+  m_MasterToSlave->InstanciateTransform();
+
 }
 
 template <class TInputImage, class TOutputHeight>
@@ -310,12 +319,6 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   const InputImageType* slavePtr   = this->GetSlaveInput();
   OutputImageType* outputPtr  = this->GetOutput();
   OutputImageType* correlPtr = this->GetCorrelationOutput();
-
-  // Set-up the forward-inverse sensor model transform
-  typename GenericRSTransform3DType::Pointer transform = GenericRSTransform3DType::New();
-  transform->SetInputKeywordList(masterPtr->GetImageKeywordlist());
-  transform->SetOutputKeywordList(slavePtr->GetImageKeywordlist());
-
 
   // TODO: Uncomment when model optimization pushed
   // // GCP refinement
@@ -374,9 +377,6 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   itk::ConstNeighborhoodIterator<InputImageType> inputIt(m_Radius, masterPtr, outputRegionForThread);
   itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr, outputRegionForThread);
   itk::ImageRegionIteratorWithIndex<OutputImageType> correlIt(correlPtr, outputRegionForThread);
-
-  // Transform elevation set-up
-  transform->InstanciateTransform();
 
   // Start visiting buffer again
   outputIt.GoToBegin();
@@ -458,7 +458,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
             in3DPoint[2] = height;
 
             // Transform to slave
-            out3DPoint = transform->TransformPoint(in3DPoint);
+            out3DPoint = m_MasterToSlave->TransformPoint(in3DPoint);
             outPoint[0] = out3DPoint[0];
             outPoint[1] = out3DPoint[1];
 

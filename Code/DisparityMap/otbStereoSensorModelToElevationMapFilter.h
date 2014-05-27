@@ -242,6 +242,10 @@ private:
    *  difference between the estimated elevation and the initial
    *  one. If set to false, elevation is absolute. Default is false. */
   bool m_SubtractInitialElevation;
+  
+  /** Master to slave transform */
+  GenericRSTransform3DType::Pointer m_MasterToSlave;
+  
 };
 } // End namespace otb
 

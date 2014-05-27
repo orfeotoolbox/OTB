@@ -190,6 +190,13 @@ private:
 
   /** Temporary DEMs for mutlithreading */
   std::vector<typename DEMImageType::Pointer> m_TempDEMRegions;
+  
+  /** Left sensor image transform */
+  RSTransformType::Pointer m_LeftToGroundTransform;
+  
+  /** Right sensor image transform */
+  RSTransformType::Pointer m_RightToGroundTransform;
+  
 };
 } // end namespace otb
 
