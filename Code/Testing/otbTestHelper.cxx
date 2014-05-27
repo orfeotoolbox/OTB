@@ -1609,7 +1609,6 @@ bool TestHelper::CompareLines(const std::string& strfileref,
     buffstreamTest >> strTest;
     //otbMsgDevMacro(<< "sub comparison of the line, strRef: " << strRef << " || strTest: " << strTest);
 
-    bool        chgt = false;
     std::string charTmpRef = "";
     std::string charTmpTest = "";
 
@@ -1688,7 +1687,6 @@ bool TestHelper::CompareLines(const std::string& strfileref,
             strCharTest = "";
             strNumRef = charTmpRef;
             strNumTest = charTmpTest;
-            chgt = true;
             }
           // Case where there's a character after numbers.
           else if ((etatCour == ETAT_CHAR) && (etatPrec == ETAT_NUM))
@@ -1711,7 +1709,6 @@ bool TestHelper::CompareLines(const std::string& strfileref,
             strNumTest = "";
             strCharRef = charTmpRef;
             strCharTest = charTmpTest;
-            chgt = true;
             }
           else if (etatCour == etatPrec)
             {
