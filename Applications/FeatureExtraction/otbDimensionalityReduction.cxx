@@ -234,7 +234,7 @@ private:
     bool normalize = IsParameterEnabled("normalize");
     bool rescale = IsParameterEnabled("rescale");
 
-    bool invTransform = HasValue("outinv");
+    bool invTransform = HasValue("outinv") && IsParameterEnabled("outinv");
     switch (GetParameterInt("method"))
       {
       // PCA Algorithm
