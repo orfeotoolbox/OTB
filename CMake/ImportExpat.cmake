@@ -13,14 +13,14 @@ mark_as_advanced(OTB_USE_EXTERNAL_EXPAT)
 # Setup
 if(OTB_USE_EXTERNAL_EXPAT)
     if(EXPAT_FOUND)
-      message(STATUS "Using EXPAT external version")
+      message(STATUS "  Using EXPAT external version")
     else()
       # Generate an error if no external EXPAT is available
       message(FATAL_ERROR "EXPAT required but not found. "
                           "Turn OTB_USE_EXTERNAL_EXPAT to OFF to use the internal version.")
     endif()
 else()
-    message(STATUS "Using EXPAT internal version")
+    message(STATUS "  Using EXPAT internal version")
 
     set(EXPAT_LIBRARIES otbexpat)
     add_definitions(-DOTB_USE_INTERNAL_EXPAT)

@@ -9,7 +9,7 @@ endif()
 mark_as_advanced(OTB_USE_CURL)
 if(OTB_USE_CURL)
     if(CURL_FOUND)
-      message(STATUS "Using CURL external version")
+      message(STATUS "  Using CURL external version")
       try_compile(OTB_CURL_MULTI_AVAILABLE
                     ${CMAKE_CURRENT_BINARY_DIR}/CMake
                     ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestCurlMulti.cxx
