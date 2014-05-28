@@ -34,7 +34,7 @@ class QtWidgetParameterBase;
 /** \class ImageIOFactory
  * \brief Create instances of ImageIO objects using an object factory.
  */
-class ITK_EXPORT QtWidgetParameterFactory : public itk::Object
+class ITK_ABI_EXPORT QtWidgetParameterFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */

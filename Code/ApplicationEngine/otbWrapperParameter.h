@@ -55,7 +55,7 @@ enum DefaultValueMode
  *  wrapper framework. It should be subclassed to represent different
  *  kinds of parameters
  */
-class Parameter
+class ITK_ABI_EXPORT Parameter
   : public itk::Object
 {
 public:

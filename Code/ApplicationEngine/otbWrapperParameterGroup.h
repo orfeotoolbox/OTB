@@ -30,7 +30,7 @@ namespace Wrapper
 /**
  * \class Group
  */
-class ITK_EXPORT ParameterGroup
+class ITK_ABI_EXPORT ParameterGroup
   : public Parameter
 {
 public:

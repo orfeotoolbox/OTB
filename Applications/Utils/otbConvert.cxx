@@ -156,7 +156,8 @@ private:
 
     if( rescaleType == "none" )
       {
-      castIm = this->GetParameterImage<TImageType>("in");
+    //  castIm = this->GetParameterImage<TImageType>("in");
+      castIm =  dynamic_cast<TImageType*>(this->GetParameterImage("in"));
       }
     else
       {

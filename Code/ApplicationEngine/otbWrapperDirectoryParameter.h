@@ -31,7 +31,7 @@ namespace Wrapper
 /** \class DirectoryParameter
  *  \brief This class represent a string parameter for the wrapper framework
  */
-class DirectoryParameter
+class ITK_ABI_EXPORT DirectoryParameter
   : public Parameter
 {
 public:

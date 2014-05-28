@@ -38,7 +38,7 @@ namespace Wrapper
  *
  */
 
-class ElevationParametersHandler
+class ITK_ABI_EXPORT ElevationParametersHandler
 {
 public:
   /**

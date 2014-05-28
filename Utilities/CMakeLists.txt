@@ -218,7 +218,7 @@ endif()
 message(STATUS "Configuring otbconfigfile...")
 add_subdirectory(otbconfigfile)
 
-if(WIN32)
+if(MSVC)
 message(STATUS "Configuring otbmsinttypes...")
 add_subdirectory(otbmsinttypes)
 endif()

@@ -1,6 +1,6 @@
 # This file contains the common build definitions and flags used by default when building all targets
 
-if(WIN32)
+if(MSVC)
   # do not build shared lib under windows
   set(BUILD_SHARED_LIBS OFF)
   message(STATUS "Disabling build shared lib option on windows like OS.")

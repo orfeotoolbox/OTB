@@ -31,7 +31,7 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetInputProcessXMLParameter : public QtWidgetParameterBase
+class ITK_ABI_EXPORT QtWidgetInputProcessXMLParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:

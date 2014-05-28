@@ -43,7 +43,7 @@ enum
  * This class allow creating a Group with several mapProjection
  * parameters
  */
-class MapProjectionParametersHandler
+class ITK_ABI_EXPORT MapProjectionParametersHandler
 {
 public:
   /**

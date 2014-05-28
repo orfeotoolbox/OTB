@@ -33,7 +33,7 @@ namespace Wrapper
  * method GetSelectedItems() allow the user to access to this method.
  *
  */
-class ListViewParameter
+class ITK_ABI_EXPORT ListViewParameter
   : public Parameter
 {
 public:

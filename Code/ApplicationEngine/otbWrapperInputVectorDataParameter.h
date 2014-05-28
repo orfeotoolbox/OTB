@@ -29,7 +29,7 @@ namespace Wrapper
  *  \brief This class represents a InputVectorData parameter
  */
 
-class ITK_EXPORT InputVectorDataParameter : public Parameter
+class ITK_ABI_EXPORT InputVectorDataParameter : public Parameter
 {
 public:
   /** Standard class typedef */

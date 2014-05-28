@@ -32,7 +32,7 @@ namespace Wrapper
  *  \brief This class represents a list of InputFilename parameter
  */
 
-class ITK_EXPORT InputFilenameListParameter : public Parameter
+class ITK_ABI_EXPORT InputFilenameListParameter : public Parameter
 {
 public:
   /** Standard class typedef */

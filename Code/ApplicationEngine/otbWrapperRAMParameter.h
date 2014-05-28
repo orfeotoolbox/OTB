@@ -28,7 +28,7 @@ namespace Wrapper
 /** \class RAMParameter
  *  \brief This class represent a RAM parameter for the wrapper framework
  */
-class RAMParameter : public Parameter
+class ITK_ABI_EXPORT RAMParameter : public Parameter
 {
 public:
   /** Standard class typedef */

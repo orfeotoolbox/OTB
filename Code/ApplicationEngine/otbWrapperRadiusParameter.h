@@ -28,7 +28,7 @@ namespace Wrapper
 /** \class StringParameter
  *  \brief This class represent a radius parameter for the wrapper framework
  */
-class RadiusParameter
+class ITK_ABI_EXPORT RadiusParameter
   : public IntParameter
 {
 public:

@@ -34,7 +34,7 @@ namespace Wrapper
  *  The constructor accepts a string key constructed as follow : parent.me.child.
  *  It implements some key manipulation as described in the code.
  */
-class ITK_EXPORT ParameterKey
+class ITK_ABI_EXPORT ParameterKey
 {
 public:
 

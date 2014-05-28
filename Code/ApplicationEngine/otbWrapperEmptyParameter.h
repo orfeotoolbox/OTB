@@ -28,7 +28,7 @@ namespace Wrapper
 /** \class EmptyParameter
  *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
  */
-class EmptyParameter
+class ITK_ABI_EXPORT EmptyParameter
   : public Parameter
 {
 public:

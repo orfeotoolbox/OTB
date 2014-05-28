@@ -29,7 +29,7 @@ namespace Wrapper
 /** \class OutputFilenameParameter
  *  \brief This class represent a string parameter for the wrapper framework
  */
-class OutputFilenameParameter
+class ITK_ABI_EXPORT OutputFilenameParameter
   : public Parameter
 {
 public:

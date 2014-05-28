@@ -29,7 +29,7 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetParameterLabel : public QWidget
+class ITK_ABI_EXPORT QtWidgetParameterLabel : public QWidget
 {
   Q_OBJECT
 public:

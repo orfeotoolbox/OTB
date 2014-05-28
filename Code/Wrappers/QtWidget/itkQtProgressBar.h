@@ -22,7 +22,7 @@
 
 namespace itk {
 
-class QtProgressBar : public ::QProgressBar
+class ITK_ABI_EXPORT QtProgressBar : public ::QProgressBar
 {
   Q_OBJECT
 public:

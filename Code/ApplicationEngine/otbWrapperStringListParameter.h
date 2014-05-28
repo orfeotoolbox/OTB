@@ -29,7 +29,7 @@ namespace Wrapper
 /** \class StringListParameter
  *  \brief This class represent a list of string parameter for the wrapper framework
  */
-class StringListParameter
+class ITK_ABI_EXPORT StringListParameter
   : public Parameter
 {
 public:

@@ -31,7 +31,7 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetStringListParameter : public QtWidgetParameterBase
+class ITK_ABI_EXPORT QtWidgetStringListParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:

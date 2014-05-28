@@ -32,7 +32,9 @@
 #include "kml/base/file.h"
 #include <windows.h>
 #include <tchar.h>
+#ifndef __MINGW32__
 #include <xstring>
+#endif
 #include <algorithm>
 
 namespace kmlbase {
@@ -40,7 +42,11 @@ namespace kmlbase {
 // Internal to the win32 file class. We need a conversion from string to
 // LPCWSTR.
 static std::wstring Str2Wstr(const string& str) {
-  std::wstring wstr(str.length(), L'');
+#ifndef __MINGW32__
+   std::wstring wstr(str.length(), L'');
+#else
+	std::wstring wstr(str.length(), L' ');
+#endif
   std::copy(str.begin(), str.end(), wstr.begin());
   return wstr;
 }

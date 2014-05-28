@@ -30,7 +30,7 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetEmptyParameter : public QtWidgetParameterBase
+class ITK_ABI_EXPORT QtWidgetEmptyParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 

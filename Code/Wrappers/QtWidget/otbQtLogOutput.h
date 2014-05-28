@@ -32,7 +32,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT QtLogOutput : public QObject, public itk::LogOutput
+class ITK_ABI_EXPORT QtLogOutput : public QObject, public itk::LogOutput
 {
 Q_OBJECT
 public:

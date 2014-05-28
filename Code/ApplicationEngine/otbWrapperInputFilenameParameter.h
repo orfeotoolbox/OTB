@@ -29,7 +29,7 @@ namespace Wrapper
 /** \class InputFilenameParameter
  *  \brief This class represent a string parameter for the wrapper framework
  */
-class InputFilenameParameter
+class ITK_ABI_EXPORT InputFilenameParameter
   : public Parameter
 {
 public:

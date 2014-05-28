@@ -15,7 +15,7 @@ endif()
 if(OTB_USE_JPEG2000)
 
   if(WIN32)
-    if(OTB_BUILD_SHARED_LIBS)
+    if(BUILD_SHARED_LIBS)
       add_definitions(-DOPJ_EXPORTS)
     else()
       add_definitions(-DOPJ_STATIC)

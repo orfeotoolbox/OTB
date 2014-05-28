@@ -27,7 +27,7 @@ namespace Wrapper
 {
 
 template < class TApplication >
-class ApplicationFactory : public itk::ObjectFactoryBase
+class ITK_ABI_EXPORT ApplicationFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

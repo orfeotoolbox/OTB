@@ -31,7 +31,7 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtStringSelectionWidget : public QWidget
+class ITK_ABI_EXPORT QtStringSelectionWidget : public QWidget
 {
   Q_OBJECT
 

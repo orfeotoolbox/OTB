@@ -32,7 +32,7 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtFileSelectionWidget : public QWidget
+class ITK_ABI_EXPORT QtFileSelectionWidget : public QWidget
 {
   Q_OBJECT
 public:

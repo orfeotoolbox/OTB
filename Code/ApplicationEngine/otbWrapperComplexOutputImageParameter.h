@@ -30,7 +30,7 @@ namespace Wrapper
  *  \brief This class represents a ComplexOutputImage parameter
  */
 
-class ITK_EXPORT ComplexOutputImageParameter : public Parameter
+class ITK_ABI_EXPORT ComplexOutputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */

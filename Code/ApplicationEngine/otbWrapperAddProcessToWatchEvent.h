@@ -31,7 +31,7 @@ namespace Wrapper
  *  itk::ProcessObject and a string describing the process.
  *
  */
-class ITK_EXPORT AddProcessToWatchEvent: public itk::EventObject
+class ITK_ABI_EXPORT AddProcessToWatchEvent: public itk::EventObject
 {
 public:
 

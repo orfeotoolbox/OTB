@@ -36,7 +36,7 @@ namespace Wrapper
  * After the attribut key, if the user give several values (expression without \"--\" separated by space), it will automacally be interpreted as a list.
  */
 
-class ITK_EXPORT CommandLineParser : public itk::Object
+class ITK_ABI_EXPORT CommandLineParser : public itk::Object
 {
 public:
   /** Standard class typedefs. */

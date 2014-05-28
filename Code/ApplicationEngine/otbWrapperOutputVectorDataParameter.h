@@ -31,7 +31,7 @@ namespace Wrapper
  *  \brief This class represents a OutputVectorData parameter
  */
 
-class ITK_EXPORT OutputVectorDataParameter : public Parameter
+class ITK_ABI_EXPORT OutputVectorDataParameter : public Parameter
 {
 public:
   /** Standard class typedef */

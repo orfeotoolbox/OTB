@@ -28,7 +28,7 @@ namespace otb
 namespace Wrapper
 {
 
-class AppliThread : public QThread
+class ITK_ABI_EXPORT AppliThread : public QThread
 {
  Q_OBJECT
 

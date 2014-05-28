@@ -30,7 +30,7 @@ namespace Wrapper
  *  \brief This class represents a numerical parameter
  */
 template <class T>
-class ITK_EXPORT NumericalParameter : public Parameter
+class ITK_ABI_EXPORT NumericalParameter : public Parameter
 {
 public:
   /** Standard class typedef */

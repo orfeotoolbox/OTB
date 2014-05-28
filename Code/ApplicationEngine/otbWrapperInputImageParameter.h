@@ -30,7 +30,7 @@ namespace Wrapper
  *  \brief This class represents a InputImage parameter
  */
 
-class ITK_EXPORT InputImageParameter : public Parameter
+class ITK_ABI_EXPORT InputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */

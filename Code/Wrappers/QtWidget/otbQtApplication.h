@@ -21,11 +21,12 @@
 
 #include <QtGui>
 #include <QString>
+#include "itkMacro.h"
 namespace otb
 {
 namespace Wrapper
 {
-class QtApplication : public QApplication
+class ITK_ABI_EXPORT QtApplication : public QApplication
 {
   Q_OBJECT
 

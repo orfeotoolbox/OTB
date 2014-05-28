@@ -29,7 +29,7 @@ namespace Wrapper
  *  class doc attributes.
  */
 
-class ITK_EXPORT ApplicationHtmlDocGenerator
+class ITK_ABI_EXPORT ApplicationHtmlDocGenerator
 {
 public:
  /** Standard class typedef */

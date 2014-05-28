@@ -32,7 +32,7 @@ namespace Wrapper
  *  Represents an enumerated parameter.
  *  The different values of the enumeration can be associated with a parameter
  */
-class ChoiceParameter
+class ITK_ABI_EXPORT ChoiceParameter
   : public Parameter
 {
 public:

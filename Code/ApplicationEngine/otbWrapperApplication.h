@@ -45,7 +45,7 @@ namespace Wrapper
  *  TODO
  *
  */
-class ITK_EXPORT Application: public itk::Object
+class ITK_ABI_EXPORT Application: public itk::Object
 {
 public:
   /** Standard class typedefs. */

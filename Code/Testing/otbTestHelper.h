@@ -39,7 +39,7 @@ namespace otb
  * \class TestHelper
  * \brief Helper class to perform the baseline comparisons during the tests
  */
-class /*ITK_EXPORT*/ TestHelper : public itk::Object
+class ITK_ABI_EXPORT TestHelper : public itk::Object
 {
 public:
 

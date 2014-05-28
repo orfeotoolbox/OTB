@@ -2,7 +2,7 @@
 # Sources of non-templated classes.
 file(GLOB OTBApplicationEngine_SRCS "*.cxx" )
 
-if(WIN32)
+if(MSVC)
   set(CMAKE_C_FLAGS   "/bigobj ${CMAKE_CXX_FLAGS}")
   set(CMAKE_CXX_FLAGS "/bigobj ${CMAKE_CXX_FLAGS}")
 endif()

@@ -11,7 +11,7 @@ namespace Wrapper
 /** \class OutputProcessXMLParameter
  *  \brief This class represent a xml filename parameter for the wrapper framework to save otb application.
  */
-class OutputProcessXMLParameter
+class ITK_ABI_EXPORT OutputProcessXMLParameter
   : public Parameter
 {
 public:

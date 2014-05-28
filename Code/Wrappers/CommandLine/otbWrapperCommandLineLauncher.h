@@ -49,7 +49,7 @@ namespace Wrapper
  * interpreted as a list.
  */
 
-class ITK_EXPORT CommandLineLauncher : public itk::Object
+class ITK_ABI_EXPORT CommandLineLauncher : public itk::Object
 {
 public:
   /** Standard class typedefs. */

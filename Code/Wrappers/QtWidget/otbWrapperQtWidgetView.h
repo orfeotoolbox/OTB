@@ -31,7 +31,7 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetView : public QWidget
+class ITK_ABI_EXPORT QtWidgetView : public QWidget
 {
   Q_OBJECT
 public:

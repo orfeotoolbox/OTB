@@ -29,7 +29,7 @@ namespace otb
  * This class is available only for testing purposes
  *
  */
-class ITK_EXPORT CurlHelperStub : public CurlHelperInterface
+class ITK_ABI_EXPORT CurlHelperStub : public CurlHelperInterface
 {
 public:
   /** Standard class typedefs. */

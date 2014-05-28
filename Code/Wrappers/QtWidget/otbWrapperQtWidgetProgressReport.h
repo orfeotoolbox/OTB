@@ -36,7 +36,7 @@ namespace Wrapper
  * \brief Create a widget reporting the progress of the application
  *        process.
  */
-class QtWidgetProgressReport : public QWidget
+class ITK_ABI_EXPORT QtWidgetProgressReport : public QWidget
 {
   Q_OBJECT
 public:

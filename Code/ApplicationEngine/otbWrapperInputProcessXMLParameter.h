@@ -12,7 +12,7 @@ namespace Wrapper
 /** \class InputProcessXMLParameter
  *  \brief This class represent a xml filename parameter for the wrapper framework to load otb application.
  */
-class InputProcessXMLParameter
+class ITK_ABI_EXPORT InputProcessXMLParameter
   : public Parameter
 {
 public:
