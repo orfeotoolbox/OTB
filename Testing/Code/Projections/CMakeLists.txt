@@ -121,7 +121,7 @@ add_test(prTvSensorModelPleiades-PRE-TIFF ${PROJECTIONS_TESTS1}
 )
 
 add_test(prTvSensorModelPleiades-JP2 ${PROJECTIONS_TESTS1}
-  --ignore-order --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${EPSILON_9}
          ${BASELINE_FILES}/prTvSensorModelPleiades.txt
          ${TEMP}/prTvSensorModelPleiades_OUT.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
