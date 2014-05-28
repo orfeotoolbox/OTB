@@ -242,8 +242,8 @@ bool JPEG2000MetadataReader::GetOriginFromGMLBox (std::vector<double> &origin)
   std::istringstream ss1 (originValues[1]);
   ss0 >> origin[1];
   ss1 >> origin[0];
-  origin[0]--;
-  origin[1]--;
+  origin[0] += -1.0 + 0.5;
+  origin[1] += -1.0 + 0.5;
 
   otbMsgDevMacro( << "\t Origin from GML box: " <<  origin[0] << ", " << origin[1] );
 
@@ -761,8 +761,8 @@ JPEG2000ImageIO::JPEG2000ImageIO()
   m_Spacing[0] = 1.0;
   m_Spacing[1] = 1.0;
   // Set default origin to zero
-  m_Origin[0] = 0.0;
-  m_Origin[1] = 0.0;
+  m_Origin[0] = 0.5;
+  m_Origin[1] = 0.5;
 
   m_BytePerPixel = 1;
   m_ResolutionFactor = 0; // Full resolution by default
@@ -1255,8 +1255,8 @@ void JPEG2000ImageIO::ReadImageInformation()
       std::cout << std::endl; */
 
       // Retrieve origin and spacing from the geo transform
-      m_Origin[0] = geoTransform[0];
-      m_Origin[1] = geoTransform[3];
+      m_Origin[0] = geoTransform[0] + 0.5*geoTransform[1] + 0.5*geoTransform[2];
+      m_Origin[1] = geoTransform[3] + 0.5*geoTransform[4] + 0.5*geoTransform[5];
       m_Spacing[0] = geoTransform[1];
       m_Spacing[1] = geoTransform[5];
 
@@ -1365,7 +1365,7 @@ void JPEG2000ImageIO::ReadImageInformation()
     else
       {
       otbMsgDevMacro( << "NO PROJECTION IN GML BOX => SENSOR MODEL " );
-      m_Origin[0] = 0; m_Origin[1] = 0;
+      m_Origin[0] = 0.5; m_Origin[1] = 0.5;
       m_Spacing[0] = 1; m_Spacing[1] = 1;
 
       lJP2MetadataReader.GetOriginFromGMLBox(m_Origin);
@@ -1378,8 +1378,8 @@ void JPEG2000ImageIO::ReadImageInformation()
   else
     {
     otbMsgDevMacro( << "JPEG2000 file has NO metadata available!");
-    m_Origin[0] = 0;
-    m_Origin[1] = 0;
+    m_Origin[0] = 0.5;
+    m_Origin[1] = 0.5;
     m_Spacing[0] = 1;
     m_Spacing[1] = 1;
     }
