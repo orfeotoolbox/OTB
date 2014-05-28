@@ -139,8 +139,8 @@ GDALImageIO::GDALImageIO()
   m_Spacing[0] = 1.0;
   m_Spacing[1] = 1.0;
   // Set default origin to zero
-  m_Origin[0] = 0.0;
-  m_Origin[1] = 0.0;
+  m_Origin[0] = 0.5;
+  m_Origin[1] = 0.5;
 
   m_IsIndexed   = false;
   m_DatasetNumber = 0;
@@ -1016,8 +1016,8 @@ void GDALImageIO::InternalReadImageInformation()
     if (!isSensor)
       {
       /// retrieve origin and spacing from the geo transform
-      m_Origin[0] = VadfGeoTransform[0];
-      m_Origin[1] = VadfGeoTransform[3];
+      m_Origin[0] = VadfGeoTransform[0] + 0.5*VadfGeoTransform[1] + 0.5*VadfGeoTransform[2];
+      m_Origin[1] = VadfGeoTransform[3] + 0.5*VadfGeoTransform[4] + 0.5*VadfGeoTransform[5];
       m_Spacing[0] = VadfGeoTransform[1];
       m_Spacing[1] = VadfGeoTransform[5];
 
@@ -1615,10 +1615,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   const double Epsilon = 1E-10;
   if (projectionRef.empty()
-      &&  (vcl_abs(m_Origin[0]) > Epsilon
-           || vcl_abs(m_Origin[1]) > Epsilon
-           || vcl_abs(m_Spacing[0] - 1) > Epsilon
-           || vcl_abs(m_Spacing[1] - 1) > Epsilon) )
+      &&  (vcl_abs(m_Origin[0] - 0.5) > Epsilon
+           || vcl_abs(m_Origin[1] - 0.5) > Epsilon
+           || vcl_abs(m_Spacing[0] - 1.0) > Epsilon
+           || vcl_abs(m_Spacing[1] - 1.0) > Epsilon) )
     {
     // See issue #303 :
     // If there is no ProjectionRef, and the GeoTransform is not the identity,
@@ -1677,8 +1677,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   itk::VariableLengthVector<double> geoTransform(6);
   /// Reporting origin and spacing
-  geoTransform[0] = m_Origin[0];
-  geoTransform[3] = m_Origin[1];
+  geoTransform[0] = m_Origin[0] - 0.5*m_Spacing[0];
+  geoTransform[3] = m_Origin[1] - 0.5*m_Spacing[1];
   geoTransform[1] = m_Spacing[0];
   geoTransform[5] = m_Spacing[1];
 
@@ -1861,8 +1861,8 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
   std::istringstream ss1 (originValues[1]);
   ss0 >> origin[1];
   ss1 >> origin[0];
-  origin[0]--;
-  origin[1]--;
+  origin[0] += -1.0 + 0.5;
+  origin[1] += -1.0 + 0.5;
 
   otbMsgDevMacro( << "\t Origin from GML box: " <<  origin[0] << ", " << origin[1] );
 
