@@ -1016,8 +1016,6 @@ void GDALImageIO::InternalReadImageInformation()
     if (!isSensor)
       {
       /// retrieve origin and spacing from the geo transform
-      m_Origin[0] = VadfGeoTransform[0] + 0.5*VadfGeoTransform[1] + 0.5*VadfGeoTransform[2];
-      m_Origin[1] = VadfGeoTransform[3] + 0.5*VadfGeoTransform[4] + 0.5*VadfGeoTransform[5];
       m_Spacing[0] = VadfGeoTransform[1];
       m_Spacing[1] = VadfGeoTransform[5];
 
@@ -1036,6 +1034,9 @@ void GDALImageIO::InternalReadImageInformation()
           m_Spacing[1] = 1;
           }
         }
+      // Geotransforms with a non-null rotation are not supported
+      m_Origin[0] = VadfGeoTransform[0] + 0.5*m_Spacing[0];
+      m_Origin[1] = VadfGeoTransform[3] + 0.5*m_Spacing[1];
       }
     }
 

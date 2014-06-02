@@ -1255,8 +1255,6 @@ void JPEG2000ImageIO::ReadImageInformation()
       std::cout << std::endl; */
 
       // Retrieve origin and spacing from the geo transform
-      m_Origin[0] = geoTransform[0] + 0.5*geoTransform[1] + 0.5*geoTransform[2];
-      m_Origin[1] = geoTransform[3] + 0.5*geoTransform[4] + 0.5*geoTransform[5];
       m_Spacing[0] = geoTransform[1];
       m_Spacing[1] = geoTransform[5];
 
@@ -1275,6 +1273,9 @@ void JPEG2000ImageIO::ReadImageInformation()
           m_Spacing[1] = 1;
           }
         }
+      // Geotransforms with a non-null rotation are not supported
+      m_Origin[0] = geoTransform[0] + 0.5*m_Spacing[0];
+      m_Origin[1] = geoTransform[3] + 0.5*m_Spacing[1];
       }
 
     /* GCPs */
