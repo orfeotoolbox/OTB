@@ -133,7 +133,7 @@ public:
   }
 
   /** get the solar irradiance */
-  SpectralResponsePointerType GetSolarIrradiance()
+  SpectralResponseType* GetSolarIrradiance()
   {
     return m_SolarIrradiance;
   }
