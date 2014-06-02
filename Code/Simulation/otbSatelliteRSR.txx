@@ -28,6 +28,7 @@ SatelliteRSR<TPrecision, TValuePrecision>::SatelliteRSR()
 {
   //m_RSR = VectorType::New();
   m_SortBands = true;
+  m_SolarIrradiance = SpectralResponseType::New();
 }
 
 template<class TPrecision, class TValuePrecision>
