@@ -50,13 +50,15 @@ void SatelliteRSR<TPrecision, TValuePrecision>::Load(const std::string & filenam
     m_RSR.push_back(RSRBand);
     }
   PrecisionType currentLambda;
-  PrecisionType zenithalAngle;
+  PrecisionType solarIrradiance;
   while (!fin.eof())
     {
     //Parse the 6S.txt file
     fin >> currentLambda;
-    fin >> zenithalAngle;
+    fin >> solarIrradiance;
 
+    m_SolarIrradiance->GetResponse().push_back(std::make_pair(currentLambda,
+                                                              solarIrradiance));
     //for each band add a pair of values (wavelength and % response)
     for (unsigned int i = 0; i < m_NbBands; ++i)
       {
