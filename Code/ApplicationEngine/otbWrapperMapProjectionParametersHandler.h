@@ -43,21 +43,21 @@ enum
  * This class allow creating a Group with several mapProjection
  * parameters
  */
-class ITK_ABI_EXPORT MapProjectionParametersHandler
+class MapProjectionParametersHandler
 {
 public:
   /**
     * Add a Group containing several choices for map projections
     *
     */
-  static void AddMapProjectionParameters(Application::Pointer app, const std::string & key);
+  static ITK_ABI_EXPORT void AddMapProjectionParameters(Application::Pointer app, const std::string & key);
 
   /**
     * Helper method : Compute the ProjectionRef knowing the map
     * projection picked up by the user
     *
     */
-  static const std::string GetProjectionRefFromChoice(const Application::Pointer app,
+  static ITK_ABI_EXPORT const std::string GetProjectionRefFromChoice(const Application::Pointer app,
                                                       const std::string & key);
 
 
@@ -67,7 +67,7 @@ public:
     *       The key must be totally if the InputImageParameter belongs
     *       to a ParamaterGroup, ie set io.in
     */
-  static void InitializeUTMParameters(Application::Pointer app,
+  static ITK_ABI_EXPORT void InitializeUTMParameters(Application::Pointer app,
                                       const std::string & imageKey,
                                       const std::string & mapKey );
 

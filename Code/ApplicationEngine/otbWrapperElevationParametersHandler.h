@@ -38,23 +38,23 @@ namespace Wrapper
  *
  */
 
-class ITK_ABI_EXPORT ElevationParametersHandler
+class ElevationParametersHandler
 {
 public:
   /**
     * Add a Group containing several choices for map projections
     *
     */
-  static void AddElevationParameters(Application::Pointer app, const std::string & key);
+  static ITK_ABI_EXPORT void AddElevationParameters(Application::Pointer app, const std::string & key);
 
   /** Method for getting the value of the elevation mode selected */
-  static float GetDefaultElevation(const Application::Pointer app, const std::string& key);
-  static const std::string GetGeoidFile(const Application::Pointer app, const std::string& key);
-  static const std::string GetDEMDirectory(const Application::Pointer app, const std::string& key);
-  static bool IsGeoidUsed(const Application::Pointer app, const std::string& key);
-  static bool IsDEMUsed(const Application::Pointer app, const std::string & key);
+  static ITK_ABI_EXPORT float GetDefaultElevation(const Application::Pointer app, const std::string& key);
+  static ITK_ABI_EXPORT const std::string GetGeoidFile(const Application::Pointer app, const std::string& key);
+  static ITK_ABI_EXPORT const std::string GetDEMDirectory(const Application::Pointer app, const std::string& key);
+  static ITK_ABI_EXPORT bool IsGeoidUsed(const Application::Pointer app, const std::string& key);
+  static ITK_ABI_EXPORT bool IsDEMUsed(const Application::Pointer app, const std::string & key);
 
-  static void SetupDEMHandlerFromElevationParameters(const Application::Pointer app, const std::string& key);
+  static ITK_ABI_EXPORT void SetupDEMHandlerFromElevationParameters(const Application::Pointer app, const std::string& key);
 
 protected:
   ElevationParametersHandler(); // not implemented
