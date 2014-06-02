@@ -165,8 +165,10 @@ The recommended procedure is to get this recent source and build GDAL from sourc
       ./configure --prefix=INSTALL_DIR --with-libtiff=internal
                   --with-geotiff=internal
                   --with-rename-internal-libtiff-symbols=yes
-                  --with-rename-internal-libgeotiff-symbol
+                  --with-rename-internal-libgeotiff-symbol=yes
   \end{verbatim}
+
+See section~\ref{sec:gdal} of Software Guide for more information on this issue.
 
 \subsubsection{Errors when compiling internal libkml}
 The internal version of libkml cannot be compiled when using an external build of ITK.
