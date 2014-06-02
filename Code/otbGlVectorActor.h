@@ -154,6 +154,8 @@ private:
   bool m_OptimizedRendering;
   bool m_OptimizedRenderingActive;
 
+  unsigned int m_PointMarkerSize;
+
 }; // End class GlVectorActor
 
 } // End namespace otb

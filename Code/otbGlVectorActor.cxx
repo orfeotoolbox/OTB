@@ -100,7 +100,8 @@ GlVectorActor::GlVectorActor()
     m_ExtentLRX(0),
     m_ExtentLRY(0),
     m_OptimizedRendering(true),
-    m_OptimizedRenderingActive(false)
+    m_OptimizedRenderingActive(false),
+    m_PointMarkerSize(5)
     
 {
   m_Color.Fill(0);
@@ -368,9 +369,14 @@ void GlVectorActor::UpdateData()
 // Inner helper functions
 namespace ice_internal
 { 
-void GeometryRender(const OGRPoint * inPoint)
+void GeometryRender(const OGRPoint * inPoint,const ViewSettings * settings, const unsigned int& size)
 {
-  
+  glBegin(GL_LINES);
+  glVertex2d(inPoint->getX()-size*settings->GetSpacing()[0],inPoint->getY());
+  glVertex2d(inPoint->getX()+size*settings->GetSpacing()[0],inPoint->getY());
+  glVertex2d(inPoint->getX(),inPoint->getY()-size*settings->GetSpacing()[1]);
+  glVertex2d(inPoint->getX(),inPoint->getY()+size*settings->GetSpacing()[1]);
+  glEnd();
 }
 
 void GeometryRender(const OGRLineString * in)
@@ -486,11 +492,11 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
         }
 }
 
-void GeometryRender(const OGRMultiPoint * in)
+void GeometryRender(const OGRMultiPoint * in, const ViewSettings * settings, const unsigned int & size)
 {
   for(unsigned int i = 0; i < in->getNumGeometries();++i)
     {
-    GeometryRender(dynamic_cast<const OGRPoint *>(in->getGeometryRef(i)));   
+    GeometryRender(dynamic_cast<const OGRPoint *>(in->getGeometryRef(i)),settings,size);   
     }
 }
 
@@ -535,7 +541,7 @@ void GlVectorActor::UpdateDisplayList()
 
     if(inPoint)
       {
-      ice_internal::GeometryRender(const_cast<OGRPoint *>(inPoint));
+      ice_internal::GeometryRender(const_cast<OGRPoint *>(inPoint),this->GetSettings(),m_PointMarkerSize);
       }
     else if(inLineString)
       {
@@ -547,7 +553,7 @@ void GlVectorActor::UpdateDisplayList()
       }
     else if(inMPoints)
       {
-      ice_internal::GeometryRender(inMPoints);
+      ice_internal::GeometryRender(inMPoints,this->GetSettings(),m_PointMarkerSize);
       }
     else if(inMLineStrings)
       {
