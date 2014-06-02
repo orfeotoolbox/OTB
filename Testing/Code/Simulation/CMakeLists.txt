@@ -49,6 +49,24 @@ add_test(siTuSatelliteRSR ${Simulation_TESTS2}
         2 #num band
         )
 
+add_test(siTuSatelliteRSRCheckValue ${Simulation_TESTS2}
+        otbSatelliteRSRCheckValue
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
+        4 #nb band
+        0.50 #lambda
+        0 #num band
+        0.557 #expected
+        )
+
+add_test(siTuSatelliteRSRCheckValue2 ${Simulation_TESTS2}
+        otbSatelliteRSRCheckValue
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
+        4 #nb band
+        0.68 #lambda
+        1 #num band
+        0.717 #expected
+        )            
+
 add_test(siTuReduceSpectralResponseNew ${Simulation_TESTS2}
         otbReduceSpectralResponseNew
         )
