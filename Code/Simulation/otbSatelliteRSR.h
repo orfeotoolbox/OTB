@@ -132,6 +132,12 @@ public:
     return m_RSR;
   }
 
+  /** get the solar irradiance */
+  SpectralResponseType* GetSolarIrradiance()
+  {
+    return m_SolarIrradiance;
+  }
+
 protected:
   /** Constructor */
   SatelliteRSR();
@@ -151,6 +157,9 @@ private:
 
   /** Vector of SpectralResponse */
   RSRVectorType m_RSR;
+
+  /** Solar irradiance vector */
+  SpectralResponsePointerType m_SolarIrradiance;
   /** Number of bands*/
   unsigned int m_NbBands;
 };
