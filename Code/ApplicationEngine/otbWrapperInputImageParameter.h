@@ -90,7 +90,7 @@ public:
 
   /** Generic cast method that will be specified for each image type. */
   template <class TInputImage, class TOutputImage>
-    TOutputImage* ITK_ABI_EXPORT CastImage();
+  ITK_ABI_EXPORT TOutputImage*  CastImage();
     
   /** Cast an image to an image of the same type
   * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
