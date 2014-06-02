@@ -125,11 +125,16 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
   OutputVectorDataPointer outputPtr = this->GetOutput();
 
   // Compute corners as index
-  typename InputImageType::IndexType ul, ur, lr, ll;
-  ul = inputPtr->GetLargestPossibleRegion().GetIndex();
-  ur = ul;
-  ll=ul;
-  lr=ul;
+  itk::ContinuousIndex<double,2> ul(
+    inputPtr->GetLargestPossibleRegion().GetIndex());
+  // move 'ul' to the corner of the first pixel
+  ul[0] += -0.5;
+  ul[1] += -0.5;
+
+  itk::ContinuousIndex<double,2> ur(ul);
+  itk::ContinuousIndex<double,2> lr(ul);
+  itk::ContinuousIndex<double,2> ll(ul);
+
   typename InputImageType::SizeType size = inputPtr->GetLargestPossibleRegion().GetSize();
   ur[0]+=size[0];
   ll[1]+=size[1];
@@ -138,14 +143,14 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 
   // Get corners as physical points
   typename InputImageType::PointType ulp, urp, lrp, llp, current;
-  inputPtr->TransformIndexToPhysicalPoint(ul, ulp);
-  inputPtr->TransformIndexToPhysicalPoint(ur, urp);
-  inputPtr->TransformIndexToPhysicalPoint(lr, lrp);
-  inputPtr->TransformIndexToPhysicalPoint(ll, llp);
+  inputPtr->TransformContinuousIndexToPhysicalPoint(ul, ulp);
+  inputPtr->TransformContinuousIndexToPhysicalPoint(ur, urp);
+  inputPtr->TransformContinuousIndexToPhysicalPoint(lr, lrp);
+  inputPtr->TransformContinuousIndexToPhysicalPoint(ll, llp);
 
   this->InstantiateTransform();
 
-  typename InputImageType::IndexType edgeIndex;
+  itk::ContinuousIndex<double,2> edgeIndex;
   typename InputImageType::PointType edgePoint;
 
   // Build envelope polygon
@@ -162,7 +167,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
     edgeIndex[0]+=m_SamplingRate;
     while (edgeIndex[0]<ur[0])
       {
-      inputPtr->TransformIndexToPhysicalPoint(edgeIndex, edgePoint);
+      inputPtr->TransformContinuousIndexToPhysicalPoint(edgeIndex, edgePoint);
       current = m_Transform->TransformPoint(edgePoint);
       vertex[0] = current[0];
       vertex[1] = current[1];
@@ -182,7 +187,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
     edgeIndex[1]+=m_SamplingRate;
     while (edgeIndex[1]<lr[1])
       {
-      inputPtr->TransformIndexToPhysicalPoint(edgeIndex, edgePoint);
+      inputPtr->TransformContinuousIndexToPhysicalPoint(edgeIndex, edgePoint);
       current = m_Transform->TransformPoint(edgePoint);
       vertex[0] = current[0];
       vertex[1] = current[1];
@@ -202,7 +207,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
     edgeIndex[0]-=m_SamplingRate;
     while (edgeIndex[0]>ll[0])
       {
-      inputPtr->TransformIndexToPhysicalPoint(edgeIndex, edgePoint);
+      inputPtr->TransformContinuousIndexToPhysicalPoint(edgeIndex, edgePoint);
       current = m_Transform->TransformPoint(edgePoint);
       vertex[0] = current[0];
       vertex[1] = current[1];
@@ -222,7 +227,7 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
     edgeIndex[1]-=m_SamplingRate;
     while (edgeIndex[1]>ul[1])
       {
-      inputPtr->TransformIndexToPhysicalPoint(edgeIndex, edgePoint);
+      inputPtr->TransformContinuousIndexToPhysicalPoint(edgeIndex, edgePoint);
       current = m_Transform->TransformPoint(edgePoint);
       vertex[0] = current[0];
       vertex[1] = current[1];
