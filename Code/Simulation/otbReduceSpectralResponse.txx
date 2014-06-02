@@ -27,7 +27,7 @@ namespace otb
 
 template <class TSpectralResponse , class TRSR>
 ReduceSpectralResponse <TSpectralResponse , TRSR>
-::ReduceSpectralResponse()
+::ReduceSpectralResponse() : m_ReflectanceMode(false)
 {
     m_ReduceResponse = InputSpectralResponseType::New();
 }
