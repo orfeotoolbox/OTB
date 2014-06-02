@@ -16,6 +16,16 @@ Dependencies:
 - OpenGl
 - GLFW (>= 3.0)
 
+-------------------------
+Platform specific issues
+-------------------------
+
+OSX (10.9) Mavericks Requires:
+XQuartz (http://xquartz.macosforge.org/landing/) because it includes freeGLUT. Therefore
+in cmake, the following variables need to point to the correct places:
+GLUT_INCLUDE_DIR=/usr/X11R6/include
+GLUT_glut_LIBRARY=/usr/X11R6/lib/libglut.dylib
+
 ----------------------
 Command Line Arguments
 ----------------------
