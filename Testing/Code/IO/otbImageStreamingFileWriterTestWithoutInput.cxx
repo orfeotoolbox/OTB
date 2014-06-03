@@ -60,6 +60,15 @@ int otbImageScalarStreamingFileWriterTestWithoutInputGeneric(int argc, char* arg
   region.SetSize(size);
   region.SetIndex(orig);
 
+  typedef typename ImageType::PointType        PointType;
+  typedef typename ImageType::SpacingType      SpacingType;
+  PointType origin;
+  origin.Fill(0.5);
+  SpacingType spacing;
+  spacing.Fill(1.0);
+  image->SetOrigin(origin);
+  image->SetSpacing(spacing);
+
   image->SetRegions(region);
   image->Allocate();
 
@@ -130,6 +139,15 @@ int otbImageComplexStreamingFileWriterTestWithoutInputGeneric(int argc, char* ar
   RegionType region;
   region.SetSize(size);
   region.SetIndex(orig);
+
+  typedef typename ImageType::PointType        PointType;
+  typedef typename ImageType::SpacingType      SpacingType;
+  PointType origin;
+  origin.Fill(0.5);
+  SpacingType spacing;
+  spacing.Fill(1.0);
+  image->SetOrigin(origin);
+  image->SetSpacing(spacing);
 
   image->SetRegions(region);
   image->Allocate();

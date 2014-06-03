@@ -67,6 +67,15 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, cha
   region.SetSize(size);
   region.SetIndex(orig);
 
+  typedef typename ImageType::PointType        PointType;
+  typedef typename ImageType::SpacingType      SpacingType;
+  PointType origin;
+  origin.Fill(0.5);
+  SpacingType spacing;
+  spacing.Fill(1.0);
+  image->SetOrigin(origin);
+  image->SetSpacing(spacing);
+
   image->SetRegions(region);
   image->SetNumberOfComponentsPerPixel(atoi(argv[3]));
   image->Allocate();
@@ -160,6 +169,15 @@ int otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric(int argc, ch
 
   region.SetSize(size);
   region.SetIndex(orig);
+
+  typedef typename ImageType::PointType        PointType;
+  typedef typename ImageType::SpacingType      SpacingType;
+  PointType origin;
+  origin.Fill(0.5);
+  SpacingType spacing;
+  spacing.Fill(1.0);
+  image->SetOrigin(origin);
+  image->SetSpacing(spacing);
 
   image->SetRegions(region);
   image->SetNumberOfComponentsPerPixel(atoi(argv[3]));
