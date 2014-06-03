@@ -119,6 +119,11 @@ public:
     virtual void SetParameters( const ParametersType & )
     { itkExceptionMacro( << "Subclasses should override this method (SetParameters)" ) }
 
+  virtual void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const
+  {
+    itkExceptionMacro(<<  "Subclasses should override this method (ComputeJacobianWithRespectToParamters)" );
+  }
+
   /** Set the transformation parameters and update internal transformation.
    * This method forces the transform to copy the parameters.  The
    * default implementation is to call SetParameters.  This call must

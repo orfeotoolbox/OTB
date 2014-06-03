@@ -173,8 +173,10 @@ public:
   virtual InverseTransformBasePointer GetInverseTransform() const;
 
   // Dummy set parameter method
-  virtual void SetParameters(const typename Superclass::ParametersType &)
-  {}
+  virtual void SetParameters(const typename Superclass::ParametersType &)  {}
+
+  // Dummy ComputeJacobianWithRespectToParameters method
+  virtual void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const {}
 
 protected:
   GenericRSTransform();
