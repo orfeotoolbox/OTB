@@ -60,6 +60,7 @@ public:
   //@}
 
   typedef typename Superclass::ScalarType           ScalarType;
+  typedef typename Superclass::JacobianType         JacobianType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
