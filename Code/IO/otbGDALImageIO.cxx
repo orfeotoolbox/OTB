@@ -138,7 +138,7 @@ GDALImageIO::GDALImageIO()
   // Set default spacing to one
   m_Spacing[0] = 1.0;
   m_Spacing[1] = 1.0;
-  // Set default origin to zero
+  // Set default origin to half a pixel (centered pixel convention)
   m_Origin[0] = 0.5;
   m_Origin[1] = 0.5;
 
@@ -1035,6 +1035,8 @@ void GDALImageIO::InternalReadImageInformation()
           }
         }
       // Geotransforms with a non-null rotation are not supported
+      // Beware : GDAL origin is at the corner of the top-left pixel
+      // whereas OTB/ITK origin is at the centre of the top-left pixel
       m_Origin[0] = VadfGeoTransform[0] + 0.5*m_Spacing[0];
       m_Origin[1] = VadfGeoTransform[3] + 0.5*m_Spacing[1];
       }
@@ -1678,6 +1680,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   itk::VariableLengthVector<double> geoTransform(6);
   /// Reporting origin and spacing
+  // Beware : GDAL origin is at the corner of the top-left pixel
+  // whereas OTB/ITK origin is at the centre of the top-left pixel
   geoTransform[0] = m_Origin[0] - 0.5*m_Spacing[0];
   geoTransform[3] = m_Origin[1] - 0.5*m_Spacing[1];
   geoTransform[1] = m_Spacing[0];
