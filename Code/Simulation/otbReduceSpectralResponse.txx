@@ -84,9 +84,9 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
       while (pit != pairs.end())
         {
         totalArea += ((*pit).second)*(*solarIrradiance)((*pit).first);
-        ++pit;        
+        ++pit;
         }
-      }    
+      }
 
     while (it != pairs.end() - 1)
       {
@@ -295,7 +295,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
    for(typename VectorPairType::const_iterator it = m_ReduceResponse->GetResponse().begin(); it != m_ReduceResponse->GetResponse().end(); ++it)
    {
      os <<indent << "Band Nb : "<< it - m_ReduceResponse->GetResponse().begin() << ": [" << (*it).first << ","<< (*it).second << "]" << std::endl;
-   }   
+   }
 }
 
 } // end namespace otb

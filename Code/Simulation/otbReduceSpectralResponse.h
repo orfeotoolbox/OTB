@@ -33,7 +33,7 @@ namespace otb
    *
    * It takes the spectral response of an object and the relative spectral
    * response of a satellite (one response per band) to compute the satellite spectral bands.
-   * 
+   *
    * There are 2 operating modes:
    * - luminance mode (default): integrates the spectral response over each band
    * - reflectance mode (needs to call SetReflectanceMode(true)): takes into account the solar irradiance in the integration
