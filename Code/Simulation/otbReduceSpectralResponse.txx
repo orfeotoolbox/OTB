@@ -279,14 +279,19 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
    os<<std::endl;
    os << "spectre " << m_InputSpectralResponse <<std::endl;
    os << "Sat RSR " << m_InputSatRSR <<std::endl;
+   os<<std::endl;
+   
    if(m_ReflectanceMode)
      {
      os << "Solar irradiance " << std::endl;
      this->m_InputSatRSR->GetSolarIrradiance()->PrintSelf(os, indent);
+     os<<std::endl;
+     os <<indent << "[Center Wavelength (micrometers), Reflectance (percent)]" << std::endl;
      }
-
-   os<<std::endl;
+   else{
    os <<indent << "[Center Wavelength (micrometers), Luminance (percent)]" << std::endl;
+   }
+   
    for(typename VectorPairType::const_iterator it = m_ReduceResponse->GetResponse().begin(); it != m_ReduceResponse->GetResponse().end(); ++it)
    {
      os <<indent << "Band Nb : "<< it - m_ReduceResponse->GetResponse().begin() << ": [" << (*it).first << ","<< (*it).second << "]" << std::endl;
