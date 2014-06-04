@@ -71,10 +71,22 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
     PrecisionType lambdaMin=(this->m_InputSatRSR->GetRSR())[numBand]->GetInterval().first;
     PrecisionType lambdaMax=(this->m_InputSatRSR->GetRSR())[numBand]->GetInterval().second;
 
-    ValuePrecisionType totalArea = static_cast<ValuePrecisionType> (0);
-    totalArea =lambdaMax - lambdaMin;
+    ValuePrecisionType totalArea = static_cast<ValuePrecisionType> (lambdaMax - lambdaMin);
     if (totalArea == 0) return static_cast<ValuePrecisionType> (0.0);
 
+    typename InputRSRType::SpectralResponseType* solarIrradiance;
+    if(m_ReflectanceMode)
+      {
+      // In the case of reflectances, the normalization is done using the solar irradiance integrated over the spectral band
+      totalArea = 0.0;
+      solarIrradiance = this->m_InputSatRSR->GetSolarIrradiance();
+      typename VectorPairType::const_iterator pit = pairs.begin();
+      while (pit != pairs.end())
+        {
+        totalArea += ((*pit).second)*(*solarIrradiance)((*pit).first);
+        ++pit;        
+        }
+      }    
 
     while (it != pairs.end() - 1)
       {
@@ -85,6 +97,12 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
         {
         inputSatRSR1 = (*it).second;
         inputSatRSR2 = (*(it + 1)).second;
+        if(m_ReflectanceMode)
+          {
+          // We multiply the spectral sensitivity by the solar irradiance
+          inputSatRSR1 *= (*solarIrradiance)((*it).first);
+          inputSatRSR2 *= (*solarIrradiance)((*(it + 1)).first);
+          }
 
         inputRSR1 = (*m_InputSpectralResponse)(lambda1);
         inputRSR2 = (*m_InputSpectralResponse)(lambda2);
