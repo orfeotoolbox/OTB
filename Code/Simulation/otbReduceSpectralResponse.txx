@@ -286,7 +286,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
      }
 
    os<<std::endl;
-   os <<indent << "[Center Wavelength (micrometers), Reflectance (percent)]" << std::endl;
+   os <<indent << "[Center Wavelength (micrometers), Luminance (percent)]" << std::endl;
    for(typename VectorPairType::const_iterator it = m_ReduceResponse->GetResponse().begin(); it != m_ReduceResponse->GetResponse().end(); ++it)
    {
      os <<indent << "Band Nb : "<< it - m_ReduceResponse->GetResponse().begin() << ": [" << (*it).first << ","<< (*it).second << "]" << std::endl;
