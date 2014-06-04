@@ -33,6 +33,10 @@ namespace otb
    *
    * It takes the spectral response of an object and the relative spectral
    * response of a satellite (one response per band) to compute the satellite spectral bands.
+   * 
+   * There are 2 operating modes:
+   * - luminance mode (default): integrates the spectral response over each band
+   * - reflectance mode (needs to call SetReflectanceMode(true)): takes into account the solar irradiance in the integration
    *
    * The two templates indicate:
    * - the SpectralResponse input (from the JPL ASTER spectral library for example)
@@ -90,6 +94,9 @@ public:
   itkGetObjectMacro(ReduceResponse, InputSpectralResponseType)
 ;
 
+  itkSetMacro(ReflectanceMode, bool);
+  itkGetConstMacro(ReflectanceMode, bool);
+  
   /** Clear the vector data  */
   virtual bool Clear();
 
@@ -134,6 +141,9 @@ private:
 
   /** the computed response */
   InputSpectralResponsePointerType m_ReduceResponse;
+
+  /** Choose between reflectance or luminance mode */
+  bool m_ReflectanceMode;
 };
 
 }// end namespace otb

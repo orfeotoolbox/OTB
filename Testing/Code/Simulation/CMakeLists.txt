@@ -92,8 +92,17 @@ add_test(siTuReduceSpectralResponse ${Simulation_TESTS2}
         ${SPECTRUM_DB}/jpl/beckman/minerals/Arsenate/txt/A01Ac.txt
         ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb band
+        0 #reflectance mode
         )
 
+add_test(siTuReduceSpectralResponseReflectanceMode ${Simulation_TESTS2}
+        otbReduceSpectralResponse
+        ${SPECTRUM_DB}/jpl/beckman/minerals/Arsenate/txt/A01Ac.txt
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
+        4 #nb band
+        1 #reflectance mode
+        )
+      
 add_test(siTvReduceSpectralResponse ${Simulation_TESTS2}
     --compare-ascii ${NOTOL} ${BASELINE_FILES}/Simulation/siTvReduceSpectralResponse.txt
                    ${TEMP}/siTvReduceSpectralResponse.txt
@@ -101,8 +110,18 @@ add_test(siTvReduceSpectralResponse ${Simulation_TESTS2}
         ${INPUTDATA}/SpectralResponse1.txt
         ${INPUTDATA}/Radiometry/Test/rep6S.dat
         4 #nb band
+        0 #reflectance mode
         ${TEMP}/siTvReduceSpectralResponse.txt
         )
+
+add_test(siTvReduceSpectralResponseReflectanceMode ${Simulation_TESTS2}
+        otbReduceSpectralResponse
+        ${INPUTDATA}/SpectralResponse1.txt
+        ${INPUTDATA}/Radiometry/Test/rep6S.dat
+        4 #nb band
+        1 #reflectance mode
+        ${TEMP}/siTvReduceSpectralResponseReflectanceMode.txt
+        )      
 
 add_test(siTuReduceSpectralResponseClassifierRAndNIR ${Simulation_TESTS2}
         otbReduceSpectralResponseClassifierRAndNIR
