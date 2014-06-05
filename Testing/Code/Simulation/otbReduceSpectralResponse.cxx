@@ -129,7 +129,7 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
   if(!check_spectral_response(spectralResponse, spectrum.begin(),
                               spectrum.end(), tolerance))
     {
-    std::cout << "Error detected in stored spectral response (wit guess)"
+    std::cout << "Error detected in stored spectral response (with guess)"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -142,7 +142,7 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
   const ResponseType::PrecisionType lambdaMaxB0(0.65);
   const ResponseType::PrecisionType lambdaMinB1(0.75);
   const ResponseType::PrecisionType lambdaMaxB1(0.85);
-  const ResponseType::ValuePrecisionType rsrValueB0(0.9);
+  const ResponseType::ValuePrecisionType rsrValueB0(0.5);
   const ResponseType::ValuePrecisionType rsrValueB1(1.0);
   const ResponseType::ValuePrecisionType solarIrradianceB0(2.0);
   const ResponseType::ValuePrecisionType solarIrradianceB1(4.0);
@@ -189,12 +189,11 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
 
   ResponseType::PrecisionType deltaLambda = lambdaMaxB0-lambdaMinB0;
   ResponseType::PrecisionType centralLambda = 0.5*(lambdaMaxB0+lambdaMinB0);
-  ResponseType::ValuePrecisionType b0Expected =
-    deltaLambda*rsrValueB0*((*spectralResponse)(centralLambda));
+  ResponseType::ValuePrecisionType b0Expected = ((*spectralResponse)(centralLambda));
 
   if(fabs(b0Result-b0Expected)>tolerance)
     {
-    std::cout << "Wrong value for B0: expected " << b0Expected
+    std::cout << "Wrong value for B0: expected eq. luminance = " << b0Expected
               << "; got " << b0Result
               << std::endl;
     return EXIT_FAILURE;
@@ -204,27 +203,46 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
   ResponseType::ValuePrecisionType b1Result = (*myReduceResponse)(1);
   deltaLambda = lambdaMaxB1-lambdaMinB1;
   centralLambda = 0.5*(lambdaMaxB1+lambdaMinB1);
-  ResponseType::ValuePrecisionType b1Expected =
-    deltaLambda*rsrValueB1*((*spectralResponse)(centralLambda));
+  ResponseType::ValuePrecisionType b1Expected = ((*spectralResponse)(centralLambda));
 
   if(fabs(b1Result-b1Expected)>tolerance)
     {
-    std::cout << "Wrong value for B1: expected " << b1Expected
+    std::cout << "Wrong value for B1: expected eq. luminance = " << b1Expected
               << "; got " << b1Result
               << std::endl;
     return EXIT_FAILURE;
     }
-    
-  myReduceResponse->SetReflectanceMode(true);
 
-// /** Print the Reduce SR*/
-  // std::cout << myReduceResponse << std::endl;
-  // if (argc == 6)
-  //   {
-  //   char * outputName = argv[5];
-  //   std::ofstream outputFile(outputName, std::ios::out);
-  //   outputFile << myReduceResponse << std::endl;
-  //   }
-  // else std::cout << myReduceResponse << std::endl;
+  // check now in reflectance mode
+  myReduceResponse->SetReflectanceMode(true);
+  myReduceResponse->CalculateResponse();
+  
+  //check B0
+  b0Result = (*myReduceResponse)(0);
+  centralLambda = 0.5*(lambdaMaxB0+lambdaMinB0);
+  b0Expected = ((*spectralResponse)(centralLambda));
+
+  if(fabs(b0Result-b0Expected)>tolerance)
+    {
+    std::cout << "Wrong value for B0: expected eq. reflectance = " << b0Expected
+              << "; got " << b0Result
+              << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  //check B1
+  b1Result = (*myReduceResponse)(0);
+  centralLambda = 0.5*(lambdaMaxB1+lambdaMinB1);
+  b1Expected = ((*spectralResponse)(centralLambda));
+
+  if(fabs(b1Result-b1Expected)>tolerance)
+    {
+    std::cout << "Wrong value for B1: expected eq. reflectance = " << b1Expected
+              << "; got " << b1Result
+              << std::endl;
+    return EXIT_FAILURE;
+    }
+  
+
   return EXIT_SUCCESS;
 }

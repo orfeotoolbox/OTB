@@ -70,22 +70,21 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
 {
   if (numBand >= m_InputSatRSR->GetNbBands())
     {
-    itkExceptionMacro(<< "There is no band num " << numBand << " in the RSR vector!(Size of the current RSR vector is " << m_InputSatRSR->GetNbBands() << ")" );
+    itkExceptionMacro(<< "There is no band num " << numBand
+                      << " in the RSR vector!(Size of the current RSR vector is "
+                      << m_InputSatRSR->GetNbBands() << ")" );
     }
   else
     {
     ValuePrecisionType res = itk::NumericTraits<ValuePrecisionType>::ZeroValue();
-
     typename InputRSRType::SpectralResponseType* solarIrradiance;
     if(m_ReflectanceMode)
       solarIrradiance = this->m_InputSatRSR->GetSolarIrradiance();
-
-
     typename VectorPairType::const_iterator it;
     VectorPairType pairs = (m_InputSatRSR->GetRSR())[numBand]->GetResponse();
     it = pairs.begin();
     ValuePrecisionType totalArea(0);
-    //start with the second value for the numeical integration
+    //start with the second value for the numerical integration
     ++it;
     while (it != pairs.end())
       {
@@ -110,18 +109,16 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
         }
       rsr1 *= solarIrradiance1;
       rsr2 *= solarIrradiance2;
-
-      totalArea += trapezoid_area(lambda1, lambda2,
-                                  solarIrradiance1, solarIrradiance2);
       res += trapezoid_area(lambda1, lambda2,
                             rsr1*spectrum1,
                             rsr2*spectrum2);
-
+      totalArea += trapezoid_area(lambda1, lambda2,
+                                  rsr1,
+                                  rsr2);
       ++it;
       }    
     return res / totalArea;
     }
-
 }
 
 template <class TSpectralResponse , class TRSR>
