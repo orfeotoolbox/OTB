@@ -31,16 +31,23 @@ namespace otb
 /** \class ReduceSpectralResponse
    * \brief This class computes the reduced spectral response of each band of a sensor
    *
-   * It takes the spectral response of an object and the relative spectral
-   * response of a satellite (one response per band) to compute the satellite spectral bands.
+   * It takes the spectral response of an object and the relative
+   * spectral response of a satellite (one response per band) to
+   * compute the satellite spectral bands.
    * 
    * There are 2 operating modes:
    * - luminance mode (default): integrates the spectral response over each band
-   * - reflectance mode (needs to call SetReflectanceMode(true)): takes into account the solar irradiance in the integration
+   * - reflectance mode (needs to call SetReflectanceMode(true)): takes into account
+   *   the solar irradiance in the integration
    *
    * The two templates indicate:
-   * - the SpectralResponse input (from the JPL ASTER spectral library for example)
+   * - the SpectralResponse input 
    * - the relative spectral response (RSR) of a sensor
+   *
+   * The computation assumes that the RSR of the sensor has a
+   * wavelength resolution similar or better than the spectral
+   * response to be reduced. If this is not the case, it is wise to
+   * oversample it (by linear interpolation, for instance).
    *
    * The method CalculateResponse must be called.
    *
@@ -105,7 +112,7 @@ public:
 
   /**
    * \param PrecisionType
-   * \return The integrate value of the RSR for the input spectral response.
+   * \return The integrated value of the RSR for the input spectral response.
    */
   inline ValuePrecisionType operator()(const unsigned int numBand);
 
