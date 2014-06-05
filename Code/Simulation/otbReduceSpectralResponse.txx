@@ -94,7 +94,8 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
       PrecisionType deltaLambda = lambda2-lambda1;
       ValuePrecisionType rsr1 = (*(it-1)).second;
       ValuePrecisionType rsr2 = (*it).second;
-
+      ValuePrecisionType spectrum1 = (*m_InputSpectralResponse)(lambda1);
+      ValuePrecisionType spectrum2 = (*m_InputSpectralResponse)(lambda2);
       /*
         In order to simplify the calculations for the reflectance mode,
         we introduce the solar irradiance in the general formula with
@@ -110,12 +111,14 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
       rsr1 *= solarIrradiance1;
       rsr2 *= solarIrradiance2;
 
-      totalArea += trapezoid_area(lambda1, lambda2, solarIrradiance1, solarIrradiance2);
-      res += trapezoid_area(lambda1, lambda2, rsr1, rsr2);
-        
-      ++it;
-      }
+      totalArea += trapezoid_area(lambda1, lambda2,
+                                  solarIrradiance1, solarIrradiance2);
+      res += trapezoid_area(lambda1, lambda2,
+                            rsr1*spectrum1,
+                            rsr2*spectrum2);
 
+      ++it;
+      }    
     return res / totalArea;
     }
 
