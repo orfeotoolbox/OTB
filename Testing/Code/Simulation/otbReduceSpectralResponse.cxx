@@ -149,7 +149,7 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
   currentLambda = lambdaMin;
   while(currentLambda < lambdaMax)
     {
-    Responsetype::ValuePrecisionType solarIrradiance(0);
+    ResponseType::ValuePrecisionType solarIrradiance(0);
     ResponseType::ValuePrecisionType rsrB0(0);
     ResponseType::ValuePrecisionType rsrB1(0);
     // B0

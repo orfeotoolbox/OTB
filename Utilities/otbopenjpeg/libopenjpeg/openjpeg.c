@@ -174,7 +174,7 @@ opj_bool opj_seek_from_file (OPJ_OFF_T p_nb_bytes, FILE * p_user_data)
 
 /* ---------------------------------------------------------------------- */
 #ifdef _WIN32
-#ifndef OPJ_STATIC
+#if !defined(OPJ_STATIC) && !defined(__MINGW32__)
 BOOL APIENTRY
 DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
 

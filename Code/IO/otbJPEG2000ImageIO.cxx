@@ -1274,6 +1274,8 @@ void JPEG2000ImageIO::ReadImageInformation()
           }
         }
       // Geotransforms with a non-null rotation are not supported
+      // Beware : GDAL origin is at the corner of the top-left pixel
+      // whereas OTB/ITK origin is at the centre of the top-left pixel
       m_Origin[0] = geoTransform[0] + 0.5*m_Spacing[0];
       m_Origin[1] = geoTransform[3] + 0.5*m_Spacing[1];
       }
