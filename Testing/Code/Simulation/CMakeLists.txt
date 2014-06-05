@@ -87,6 +87,12 @@ add_test(siTuReduceSpectralResponseNew ${Simulation_TESTS2}
         otbReduceSpectralResponseNew
         )
 
+      
+add_test(siTuReduceSpectralResponseSimpleValues ${Simulation_TESTS2}
+        otbReduceSpectralResponseSimpleValues
+        ${TEMP}/siTuReduceSpectralResponseSimpleValuesRSR.txt
+        )
+      
 add_test(siTuReduceSpectralResponse ${Simulation_TESTS2}
         otbReduceSpectralResponse
         ${SPECTRUM_DB}/jpl/beckman/minerals/Arsenate/txt/A01Ac.txt

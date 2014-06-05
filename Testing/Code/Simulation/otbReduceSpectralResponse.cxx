@@ -22,6 +22,15 @@
 #include "otbSatelliteRSR.h"
 #include "otbReduceSpectralResponse.h"
 
+typedef otb::SpectralResponse<double, double> ResponseType;
+typedef ResponseType::Pointer ResponsePointerType;
+typedef typename ResponseType::VectorPairType SpectrumType;
+typedef typename ResponseType::PairType PairType;
+typedef otb::SatelliteRSR<double, double> SatRSRType;
+typedef SatRSRType::Pointer SatRSRPointerType;
+typedef otb::ReduceSpectralResponse<ResponseType, SatRSRType> ReduceResponseType;
+typedef ReduceResponseType::Pointer ReduceResponseTypePointerType;
+
 int otbReduceSpectralResponse(int argc, char * argv[])
 {
   if ((argc != 5) && (argc != 6))
@@ -31,12 +40,7 @@ int otbReduceSpectralResponse(int argc, char * argv[])
     std::cout << "\t" << "<reflectance mode>" << "\t" << "(<Output_filename>)" << std::endl;
     return EXIT_FAILURE;
     }
-  typedef otb::SpectralResponse<double, double> ResponseType;
-  typedef ResponseType::Pointer ResponsePointerType;
-  typedef otb::SatelliteRSR<double, double> SatRSRType;
-  typedef SatRSRType::Pointer SatRSRPointerType;
-  typedef otb::ReduceSpectralResponse<ResponseType, SatRSRType> ReduceResponseType;
-  typedef ReduceResponseType::Pointer ReduceResponseTypePointerType;
+
   const std::string spectreFile(argv[1]);
   const std::string RSRfile(argv[2]);
   unsigned int nbBand = atoi(argv[3]);
@@ -68,5 +72,159 @@ int otbReduceSpectralResponse(int argc, char * argv[])
     outputFile << myReduceResponse << std::endl;
     }
   else std::cout << myReduceResponse << std::endl;
+  return EXIT_SUCCESS;
+}
+
+bool check_spectral_response(ResponsePointerType spectralResponse,
+                             SpectrumType::const_iterator first,
+                             SpectrumType::const_iterator last,
+                             ResponseType::ValuePrecisionType tolerance)
+{
+  while( first != last )
+    {
+    typename ResponseType::ValuePrecisionType expected = (*first).second;
+    typename ResponseType::ValuePrecisionType actual = (*spectralResponse)((*first).first);
+    if(fabs(expected - actual) > tolerance) return false;
+    ++first;
+    }
+  return true;
+}
+
+int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
+{
+  if (argc != 2)
+    {
+    std::cout << argv[0] << "\t <temporary spectral response filename>";
+    std::cout << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  // let's create a spectral response
+  const ResponseType::PrecisionType lambdaMin(0.4);
+  const ResponseType::PrecisionType lambdaMax(1.4);
+  const ResponseType::PrecisionType lambdaStep(0.001);
+  ResponseType::PrecisionType currentLambda(lambdaMin);
+  SpectrumType spectrum;
+  while(currentLambda < lambdaMax)
+    {
+    PairType spectralValue;
+    spectralValue.first = currentLambda;
+    spectralValue.second = typename ResponseType::ValuePrecisionType(1.0);
+    spectrum.push_back(spectralValue);
+    currentLambda += lambdaStep;
+    }
+  ResponsePointerType spectralResponse = ResponseType::New();
+  spectralResponse->SetResponse(spectrum);
+
+  // Check that the spectral response is OK
+  const typename ResponseType::ValuePrecisionType tolerance = 10e-6;
+  if(!check_spectral_response(spectralResponse, spectrum.begin(),
+                              spectrum.end(), tolerance))
+    {
+    std::cout << "Error detected in stored spectral response (without guess)"
+              << std::endl;
+    return EXIT_FAILURE;
+    }
+  spectralResponse->SetUsePosGuess(true);
+  if(!check_spectral_response(spectralResponse, spectrum.begin(),
+                              spectrum.end(), tolerance))
+    {
+    std::cout << "Error detected in stored spectral response (wit guess)"
+              << std::endl;
+    return EXIT_FAILURE;
+    }
+ 
+  // Let's create a satellite RSR with 2 bands and constant solar irradiance per band
+  // Disjoint bands and B0 is shorter wavelength than B1 for simplicity
+  const std::string RSRfileName(argv[1]);
+  std::ofstream satFile(RSRfileName);
+  const ResponseType::PrecisionType lambdaMinB0(0.45);
+  const ResponseType::PrecisionType lambdaMaxB0(0.65);
+  const ResponseType::PrecisionType lambdaMinB1(0.75);
+  const ResponseType::PrecisionType lambdaMaxB1(0.85);
+  const ResponseType::ValuePrecisionType rsrValueB0(0.9);
+  const ResponseType::ValuePrecisionType rsrValueB1(1.0);
+  const ResponseType::ValuePrecisionType solarIrradianceB0(2.0);
+  const ResponseType::ValuePrecisionType solarIrradianceB1(4.0);
+  currentLambda = lambdaMin;
+  while(currentLambda < lambdaMax)
+    {
+    Responsetype::ValuePrecisionType solarIrradiance(0);
+    ResponseType::ValuePrecisionType rsrB0(0);
+    ResponseType::ValuePrecisionType rsrB1(0);
+    // B0
+    if(currentLambda >= lambdaMinB0 && currentLambda <= lambdaMaxB0)
+      {
+      solarIrradiance = solarIrradianceB0;
+      rsrB0 = rsrValueB0;
+      }
+    // B1
+    if(currentLambda >= lambdaMinB1 && currentLambda <= lambdaMaxB1)
+      {
+      solarIrradiance = solarIrradianceB1;
+      rsrB1 = rsrValueB1;
+      }
+    satFile.setf( std::ios::fixed, std:: ios::floatfield );
+    satFile.precision(4);
+    satFile << currentLambda << "\t"
+           << solarIrradiance << "\t"
+           << rsrB0 << "\t"
+           << rsrB1 << "\t" << std::endl;
+    currentLambda += lambdaStep;
+    }
+  satFile.close();
+
+  SatRSRPointerType myRSR = SatRSRType::New();
+  myRSR->SetNbBands(2);
+  myRSR->Load(RSRfileName);
+
+  ReduceResponseTypePointerType myReduceResponse = ReduceResponseType::New();
+  myReduceResponse->SetInputSatRSR(myRSR);
+  myReduceResponse->SetInputSpectralResponse(spectralResponse);
+  myReduceResponse->SetReflectanceMode(false);
+  myReduceResponse->CalculateResponse();
+
+  //check B0
+  ResponseType::ValuePrecisionType b0Result = (*myReduceResponse)(0);
+
+  ResponseType::PrecisionType deltaLambda = lambdaMaxB0-lambdaMinB0;
+  ResponseType::PrecisionType centralLambda = 0.5*(lambdaMaxB0+lambdaMinB0);
+  ResponseType::ValuePrecisionType b0Expected =
+    deltaLambda*rsrValueB0*((*spectralResponse)(centralLambda));
+
+  if(fabs(b0Result-b0Expected)>tolerance)
+    {
+    std::cout << "Wrong value for B0: expected " << b0Expected
+              << "; got " << b0Result
+              << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  //check B1
+  ResponseType::ValuePrecisionType b1Result = (*myReduceResponse)(1);
+  deltaLambda = lambdaMaxB1-lambdaMinB1;
+  centralLambda = 0.5*(lambdaMaxB1+lambdaMinB1);
+  ResponseType::ValuePrecisionType b1Expected =
+    deltaLambda*rsrValueB1*((*spectralResponse)(centralLambda));
+
+  if(fabs(b1Result-b1Expected)>tolerance)
+    {
+    std::cout << "Wrong value for B1: expected " << b1Expected
+              << "; got " << b1Result
+              << std::endl;
+    return EXIT_FAILURE;
+    }
+    
+  myReduceResponse->SetReflectanceMode(true);
+
+// /** Print the Reduce SR*/
+  // std::cout << myReduceResponse << std::endl;
+  // if (argc == 6)
+  //   {
+  //   char * outputName = argv[5];
+  //   std::ofstream outputFile(outputName, std::ios::out);
+  //   outputFile << myReduceResponse << std::endl;
+  //   }
+  // else std::cout << myReduceResponse << std::endl;
   return EXIT_SUCCESS;
 }
