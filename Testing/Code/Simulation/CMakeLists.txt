@@ -108,17 +108,6 @@ add_test(siTuReduceSpectralResponseReflectanceMode ${Simulation_TESTS2}
         4 #nb band
         1 #reflectance mode
         )
-      
-add_test(siTvReduceSpectralResponse ${Simulation_TESTS2}
-    --compare-ascii ${NOTOL} ${BASELINE_FILES}/Simulation/siTvReduceSpectralResponse.txt
-                   ${TEMP}/siTvReduceSpectralResponse.txt
-        otbReduceSpectralResponse
-        ${INPUTDATA}/SpectralResponse1.txt
-        ${INPUTDATA}/Radiometry/Test/rep6S.dat
-        4 #nb band
-        0 #reflectance mode
-        ${TEMP}/siTvReduceSpectralResponse.txt
-        )
 
 add_test(siTvReduceSpectralResponseReflectanceMode ${Simulation_TESTS2}
         otbReduceSpectralResponse
