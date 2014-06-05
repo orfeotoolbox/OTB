@@ -90,7 +90,14 @@ add_test(siTuReduceSpectralResponseNew ${Simulation_TESTS2}
       
 add_test(siTuReduceSpectralResponseSimpleValues ${Simulation_TESTS2}
         otbReduceSpectralResponseSimpleValues
-        ${TEMP}/siTuReduceSpectralResponseSimpleValuesRSR.txt
+        ${TEMP}/siTuReduceSpectralResponseSimpleValuesRSRLum.txt
+        0 # reflectance mode
+        )
+
+add_test(siTuReduceSpectralResponseSimpleValuesReflectance ${Simulation_TESTS2}
+        otbReduceSpectralResponseSimpleValues
+        ${TEMP}/siTuReduceSpectralResponseSimpleValuesRSRRefl.txt
+        1 # reflectance mode
         )
       
 add_test(siTuReduceSpectralResponse ${Simulation_TESTS2}

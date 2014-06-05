@@ -92,9 +92,10 @@ bool check_spectral_response(ResponsePointerType spectralResponse,
 
 int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
 {
-  if (argc != 2)
+  if (argc != 3)
     {
     std::cout << argv[0] << "\t <temporary spectral response filename>";
+    std::cout << "\t <reflectance mode>";
     std::cout << std::endl;
     return EXIT_FAILURE;
     }
@@ -181,12 +182,11 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
   ReduceResponseTypePointerType myReduceResponse = ReduceResponseType::New();
   myReduceResponse->SetInputSatRSR(myRSR);
   myReduceResponse->SetInputSpectralResponse(spectralResponse);
-  myReduceResponse->SetReflectanceMode(false);
+  myReduceResponse->SetReflectanceMode(static_cast<bool>(atoi(argv[2])));
   myReduceResponse->CalculateResponse();
 
   //check B0
   ResponseType::ValuePrecisionType b0Result = (*myReduceResponse)(0);
-
   ResponseType::PrecisionType deltaLambda = lambdaMaxB0-lambdaMinB0;
   ResponseType::PrecisionType centralLambda = 0.5*(lambdaMaxB0+lambdaMinB0);
   ResponseType::ValuePrecisionType b0Expected = ((*spectralResponse)(centralLambda));
@@ -212,37 +212,5 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
               << std::endl;
     return EXIT_FAILURE;
     }
-
-  // check now in reflectance mode
-  myReduceResponse->SetReflectanceMode(true);
-  myReduceResponse->CalculateResponse();
-  
-  //check B0
-  b0Result = (*myReduceResponse)(0);
-  centralLambda = 0.5*(lambdaMaxB0+lambdaMinB0);
-  b0Expected = ((*spectralResponse)(centralLambda));
-
-  if(fabs(b0Result-b0Expected)>tolerance)
-    {
-    std::cout << "Wrong value for B0: expected eq. reflectance = " << b0Expected
-              << "; got " << b0Result
-              << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  //check B1
-  b1Result = (*myReduceResponse)(0);
-  centralLambda = 0.5*(lambdaMaxB1+lambdaMinB1);
-  b1Expected = ((*spectralResponse)(centralLambda));
-
-  if(fabs(b1Result-b1Expected)>tolerance)
-    {
-    std::cout << "Wrong value for B1: expected eq. reflectance = " << b1Expected
-              << "; got " << b1Result
-              << std::endl;
-    return EXIT_FAILURE;
-    }
-  
-
   return EXIT_SUCCESS;
 }
