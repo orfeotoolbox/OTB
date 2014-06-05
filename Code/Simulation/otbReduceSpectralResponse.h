@@ -41,7 +41,7 @@ namespace otb
    *   the solar irradiance in the integration
    *
    * The two templates indicate:
-   * - the SpectralResponse input 
+   * - the SpectralResponse input
    * - the relative spectral response (RSR) of a sensor
    *
    * The computation assumes that the RSR of the sensor has a

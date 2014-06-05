@@ -119,7 +119,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
                                   rsr1,
                                   rsr2);
       ++it;
-      }    
+      }
     return res / totalArea;
     }
 }
