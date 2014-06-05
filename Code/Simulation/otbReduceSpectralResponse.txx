@@ -96,9 +96,12 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
       ValuePrecisionType spectrum1 = (*m_InputSpectralResponse)(lambda1);
       ValuePrecisionType spectrum2 = (*m_InputSpectralResponse)(lambda2);
       /*
-        In order to simplify the calculations for the reflectance mode,
+        In order to simplify the computation for the reflectance mode,
         we introduce the solar irradiance in the general formula with
         a value of 1.0 for the luminance case.
+
+        In this way the formula is the same if we weight the RSR by
+        the solar irradiance before the integration.
       */
       ValuePrecisionType solarIrradiance1(1.0);
       ValuePrecisionType solarIrradiance2(1.0);
