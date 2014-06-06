@@ -402,8 +402,8 @@ VectorDataToImageFilter<TVectorData, TImage>
           sizePhy[1] = size[1] * m_Spacing[1];
           rsRegion.SetSize(sizePhy);
           OriginType              origin;
-          origin[0] = m_Origin[0] + index[0] * m_Spacing[0];
-          origin[1] = m_Origin[1] + index[1] * m_Spacing[1];
+          origin[0] = m_Origin[0] + (static_cast<double>(index[0]) - 0.5) * m_Spacing[0];
+          origin[1] = m_Origin[1] + (static_cast<double>(index[1]) - 0.5) * m_Spacing[1];
           rsRegion.SetOrigin(origin);
           rsRegion.SetRegionProjection(m_VectorDataProjectionWKT);
 
@@ -470,12 +470,16 @@ VectorDataToImageFilter<TVectorData, TImage>
       m_Maps[tileIdx].removeLayer(i);
       }
     m_Maps[tileIdx].resize(m_TilingRegions[tileIdx].GetSize()[0], m_TilingRegions[tileIdx].GetSize()[1]);
+  
+    RemoteSensingRegionType rsRegion;
 
     for (unsigned int vdIdx = 0; vdIdx < this->GetNumberOfInputs(); ++vdIdx)
       {
       if (this->GetInput(vdIdx))
         {
         datasource_ptr mDatasource = datasource_ptr(new mapnik::memory_datasource);
+
+        rsRegion = m_VectorDataExtractors[tileIdx][vdIdx]->GetRegion();
 
         m_VectorDataExtractors[tileIdx][vdIdx]->Update();
         VectorDataConstPointer input = m_VectorDataExtractors[tileIdx][vdIdx]->GetOutput();
@@ -501,12 +505,10 @@ VectorDataToImageFilter<TVectorData, TImage>
     assert((m_SensorModelFlip == 1) || (m_SensorModelFlip == -1));
 
     mapnik_otb::box2d envelope(
-      m_Origin[0] + m_TilingRegions[tileIdx].GetIndex()[0]*m_Spacing[0],
-      m_SensorModelFlip*(m_Origin[1] + m_TilingRegions[tileIdx].GetIndex()[1] * m_Spacing[1]
-                         + m_TilingRegions[tileIdx].GetSize()[1] * m_Spacing[1]),
-      m_Origin[0] + m_TilingRegions[tileIdx].GetIndex()[0] * m_Spacing[0]
-      + m_TilingRegions[tileIdx].GetSize()[0] * m_Spacing[0],
-      m_SensorModelFlip*(m_Origin[1] + m_TilingRegions[tileIdx].GetIndex()[1] * m_Spacing[1])
+      rsRegion.GetOrigin(0),
+      m_SensorModelFlip*(rsRegion.GetOrigin(1) + rsRegion.GetSize(1)),
+      rsRegion.GetOrigin(0) + rsRegion.GetSize(0),
+      m_SensorModelFlip*(rsRegion.GetOrigin(1))
       );
 
     mapnik_otb::zoom_to_box(&m_Maps[tileIdx], envelope);

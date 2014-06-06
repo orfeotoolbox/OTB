@@ -213,8 +213,8 @@ OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateData()
   OutputIndexType  bufferIndexOrigin = bufferedRegion.GetIndex();
   OutputOriginType bufferOrigin;
   this->GetOutput()->TransformIndexToPhysicalPoint(bufferIndexOrigin, bufferOrigin);
-  geoTransform[0] = bufferOrigin[0];
-  geoTransform[3] = bufferOrigin[1];
+  geoTransform[0] = bufferOrigin[0] - 0.5 * this->GetOutput()->GetSpacing()[0];
+  geoTransform[3] = bufferOrigin[1] - 0.5 * this->GetOutput()->GetSpacing()[1];
   geoTransform[1] = this->GetOutput()->GetSpacing()[0];
   geoTransform[5] = this->GetOutput()->GetSpacing()[1];
 
