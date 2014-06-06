@@ -24,8 +24,8 @@
 
 typedef otb::SpectralResponse<double, double> ResponseType;
 typedef ResponseType::Pointer ResponsePointerType;
-typedef typename ResponseType::VectorPairType SpectrumType;
-typedef typename ResponseType::PairType PairType;
+typedef ResponseType::VectorPairType SpectrumType;
+typedef ResponseType::PairType PairType;
 typedef otb::SatelliteRSR<double, double> SatRSRType;
 typedef SatRSRType::Pointer SatRSRPointerType;
 typedef otb::ReduceSpectralResponse<ResponseType, SatRSRType> ReduceResponseType;
@@ -82,8 +82,8 @@ bool check_spectral_response(ResponsePointerType spectralResponse,
 {
   while( first != last )
     {
-    typename ResponseType::ValuePrecisionType expected = (*first).second;
-    typename ResponseType::ValuePrecisionType actual = (*spectralResponse)((*first).first);
+    ResponseType::ValuePrecisionType expected = (*first).second;
+    ResponseType::ValuePrecisionType actual = (*spectralResponse)((*first).first);
     if(fabs(expected - actual) > tolerance) return false;
     ++first;
     }
@@ -110,7 +110,7 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
     {
     PairType spectralValue;
     spectralValue.first = currentLambda;
-    spectralValue.second = typename ResponseType::ValuePrecisionType(1.0);
+    spectralValue.second = ResponseType::ValuePrecisionType(1.0);
     spectrum.push_back(spectralValue);
     currentLambda += lambdaStep;
     }
@@ -118,7 +118,7 @@ int otbReduceSpectralResponseSimpleValues(int argc, char * argv[])
   spectralResponse->SetResponse(spectrum);
 
   // Check that the spectral response is OK
-  const typename ResponseType::ValuePrecisionType tolerance = 10e-6;
+  const ResponseType::ValuePrecisionType tolerance = 10e-6;
   if(!check_spectral_response(spectralResponse, spectrum.begin(),
                               spectrum.end(), tolerance))
     {
