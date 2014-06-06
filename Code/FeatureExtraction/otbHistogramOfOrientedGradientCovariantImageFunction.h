@@ -126,7 +126,6 @@ public:
   itkSetMacro( NumberOfOrientationBins, unsigned int );
   itkGetConstReferenceMacro( NumberOfOrientationBins, unsigned int );
 
-  itkGetMacro(PrincipalOrientation,double);
 
 protected:
   HistogramOfOrientedGradientCovariantImageFunction();
@@ -142,8 +141,6 @@ private:
 
   // Number of bins in the orientation
   unsigned int m_NumberOfOrientationBins;
-
-  mutable double m_PrincipalOrientation;
 };
 
 } // namespace otb
