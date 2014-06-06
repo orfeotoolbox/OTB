@@ -265,14 +265,6 @@ private:
       genericRSEstimator->Compute();
 
       // Fill the Gui with the computed parameters
-      if (!HasUserValue("outputs.ulx"))
-        {
-        SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
-        }
-
-      if (!HasUserValue("outputs.uly"))
-        SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1]);
-
       if (!HasUserValue("outputs.sizex"))
         SetParameterInt("outputs.sizex", genericRSEstimator->GetOutputSize()[0]);
 
@@ -284,6 +276,12 @@ private:
 
       if (!HasUserValue("outputs.spacingy"))
         SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
+
+      if (!HasUserValue("outputs.ulx"))
+        SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
+
+      if (!HasUserValue("outputs.uly"))
+        SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
 
       if (!HasUserValue("outputs.lrx"))
        SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
@@ -380,8 +378,8 @@ private:
         SetParameterInt("outputs.sizey", genericRSEstimator->GetOutputSize()[1]);
 
         // Reset Origin to default
-        SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
-        SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1]);
+        SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
+        SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
 
         // Update lower right
         SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
@@ -434,8 +432,8 @@ private:
         SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
 
         // Reset Origin to default
-        SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
-        SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1]);
+        SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0] - 0.5 * genericRSEstimator->GetOutputSpacing()[0]);
+        SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1] - 0.5 * genericRSEstimator->GetOutputSpacing()[1]);
 
         // Update lower right
         SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
@@ -535,8 +533,8 @@ private:
             SetParameterInt("outputs.sizey",size[1]);
             SetParameterFloat("outputs.spacingx",spacing[0]);
             SetParameterFloat("outputs.spacingy",spacing[1]);
-            SetParameterFloat("outputs.ulx", orig[0]);
-            SetParameterFloat("outputs.uly", orig[1]);
+            SetParameterFloat("outputs.ulx", orig[0] - 0.5 * spacing[0]);
+            SetParameterFloat("outputs.uly", orig[1] - 0.5 * spacing[1]);
             // Update lower right
             SetParameterFloat("outputs.lrx", GetParameterFloat("outputs.ulx") + GetParameterFloat("outputs.spacingx") * static_cast<double>(GetParameterInt("outputs.sizex")));
             SetParameterFloat("outputs.lry", GetParameterFloat("outputs.uly") + GetParameterFloat("outputs.spacingy") * static_cast<double>(GetParameterInt("outputs.sizey")));
@@ -674,11 +672,11 @@ private:
     m_ResampleFilter->SetOutputSpacing(spacing);
     otbAppLogINFO("Generating output with pixel spacing = " << spacing);
 
-    ResampleFilterType::OriginType ul;
-    ul[0] = GetParameterFloat("outputs.ulx");
-    ul[1] = GetParameterFloat("outputs.uly");
-    m_ResampleFilter->SetOutputOrigin(ul);
-    otbAppLogINFO("Generating output with origin = " << ul);
+    ResampleFilterType::OriginType origin;
+    origin[0] = GetParameterFloat("outputs.ulx") + 0.5 * GetParameterFloat("outputs.spacingx");
+    origin[1] = GetParameterFloat("outputs.uly") + 0.5 * GetParameterFloat("outputs.spacingy");
+    m_ResampleFilter->SetOutputOrigin(origin);
+    otbAppLogINFO("Generating output with origin = " << origin);
 
     // Build the default pixel
     FloatVectorImageType::PixelType defaultValue;
