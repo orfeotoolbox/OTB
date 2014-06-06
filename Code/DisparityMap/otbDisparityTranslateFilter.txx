@@ -245,12 +245,12 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
   IndexType corners[4];
   corners[0] = requested.GetIndex();
   corners[1] = requested.GetIndex();
-  corners[1][0] += requested.GetSize()[0];
+  corners[1][0] += static_cast<IndexValueType>(requested.GetSize()[0]) - 1;
   corners[2] = requested.GetIndex();
-  corners[2][1] += requested.GetSize()[1];
+  corners[2][1] += static_cast<IndexValueType>(requested.GetSize()[1]) - 1;
   corners[3] = requested.GetIndex();
-  corners[3][0] += requested.GetSize()[0];
-  corners[3][1] += requested.GetSize()[1];
+  corners[3][0] += static_cast<IndexValueType>(requested.GetSize()[0]) - 1;
+  corners[3][1] += static_cast<IndexValueType>(requested.GetSize()[1]) - 1;
   for (unsigned int k=0; k<4; ++k)
     {
     PointType pointSensor;

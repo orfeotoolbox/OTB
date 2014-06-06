@@ -263,39 +263,54 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 
   // left image
   typename SensorImageType::SizeType inputSize = leftImgPtr->GetLargestPossibleRegion().GetSize();
-  typename SensorImageType::PointType tmpPoint;
-  tmpPoint = leftImgPtr->GetOrigin();
-  RSTransform2DType::OutputPointType left_ul = leftToGroundTransform->TransformPoint(tmpPoint);
+  typename SensorImageType::PointType ulp, urp, llp, lrp;
+  itk::ContinuousIndex<double,2> ul(leftImgPtr->GetLargestPossibleRegion().GetIndex());
+  ul[0] += -0.5;
+  ul[1] += -0.5;
 
-  tmpPoint[0] = (leftImgPtr->GetOrigin())[0] + (leftImgPtr->GetSpacing())[0] * static_cast<double>(inputSize[0]);
-  tmpPoint[1] = (leftImgPtr->GetOrigin())[1];
-  RSTransform2DType::OutputPointType left_ur = leftToGroundTransform->TransformPoint(tmpPoint);
+  itk::ContinuousIndex<double,2> ur(ul);
+  itk::ContinuousIndex<double,2> lr(ul);
+  itk::ContinuousIndex<double,2> ll(ul);
+  ur[0] += static_cast<double>(inputSize[0]);
+  lr[0] += static_cast<double>(inputSize[0]);
+  lr[1] += static_cast<double>(inputSize[1]);
+  ll[1] += static_cast<double>(inputSize[1]);
 
-  tmpPoint[0] = (leftImgPtr->GetOrigin())[0] + (leftImgPtr->GetSpacing())[0] * static_cast<double>(inputSize[0]);
-  tmpPoint[1] = (leftImgPtr->GetOrigin())[1] + (leftImgPtr->GetSpacing())[1] * static_cast<double>(inputSize[1]);
-  RSTransform2DType::OutputPointType left_lr = leftToGroundTransform->TransformPoint(tmpPoint);
+  leftImgPtr->TransformContinuousIndexToPhysicalPoint(ul,ulp);
+  leftImgPtr->TransformContinuousIndexToPhysicalPoint(ur,urp);
+  leftImgPtr->TransformContinuousIndexToPhysicalPoint(ll,llp);
+  leftImgPtr->TransformContinuousIndexToPhysicalPoint(lr,lrp);
 
-  tmpPoint[0] = (leftImgPtr->GetOrigin())[0];
-  tmpPoint[1] = (leftImgPtr->GetOrigin())[1] + (leftImgPtr->GetSpacing())[1] * static_cast<double>(inputSize[1]);
-  RSTransform2DType::OutputPointType left_ll = leftToGroundTransform->TransformPoint(tmpPoint);
+  RSTransform2DType::OutputPointType left_ul, left_ur, left_ll, left_lr;
+  left_ul = leftToGroundTransform->TransformPoint(ulp);
+  left_ur = leftToGroundTransform->TransformPoint(urp);
+  left_ll = leftToGroundTransform->TransformPoint(llp);
+  left_lr = leftToGroundTransform->TransformPoint(lrp);
 
   // right image
   inputSize = rightImgPtr->GetLargestPossibleRegion().GetSize();
-  tmpPoint = rightImgPtr->GetOrigin();
-  RSTransform2DType::OutputPointType right_ul = rightToGroundTransform->TransformPoint(tmpPoint);
-
-  tmpPoint[0] = (rightImgPtr->GetOrigin())[0] + (rightImgPtr->GetSpacing())[0] * static_cast<double>(inputSize[0]);
-  tmpPoint[1] = (rightImgPtr->GetOrigin())[1];
-  RSTransform2DType::OutputPointType right_ur = rightToGroundTransform->TransformPoint(tmpPoint);
-
-  tmpPoint[0] = (rightImgPtr->GetOrigin())[0] + (rightImgPtr->GetSpacing())[0] * static_cast<double>(inputSize[0]);
-  tmpPoint[1] = (rightImgPtr->GetOrigin())[1] + (rightImgPtr->GetSpacing())[1] * static_cast<double>(inputSize[1]);
-  RSTransform2DType::OutputPointType right_lr = rightToGroundTransform->TransformPoint(tmpPoint);
-
-  tmpPoint[0] = (rightImgPtr->GetOrigin())[0];
-  tmpPoint[1] = (rightImgPtr->GetOrigin())[1] + (rightImgPtr->GetSpacing())[1] * static_cast<double>(inputSize[1]);
-  RSTransform2DType::OutputPointType right_ll = rightToGroundTransform->TransformPoint(tmpPoint);
-
+  ul = rightImgPtr->GetLargestPossibleRegion().GetIndex();
+  ul[0] += -0.5;
+  ul[1] += -0.5;
+  ur = ul;
+  lr = ul;
+  ll = ul;
+  ur[0] += static_cast<double>(inputSize[0]);
+  lr[0] += static_cast<double>(inputSize[0]);
+  lr[1] += static_cast<double>(inputSize[1]);
+  ll[1] += static_cast<double>(inputSize[1]);
+  
+  rightImgPtr->TransformContinuousIndexToPhysicalPoint(ul,ulp);
+  rightImgPtr->TransformContinuousIndexToPhysicalPoint(ur,urp);
+  rightImgPtr->TransformContinuousIndexToPhysicalPoint(ll,llp);
+  rightImgPtr->TransformContinuousIndexToPhysicalPoint(lr,lrp);
+  
+  RSTransform2DType::OutputPointType right_ul, right_ur, right_lr, right_ll;
+  right_ul = rightToGroundTransform->TransformPoint(ulp);
+  right_ur = rightToGroundTransform->TransformPoint(urp);
+  right_ll = rightToGroundTransform->TransformPoint(llp);
+  right_lr = rightToGroundTransform->TransformPoint(lrp);
+  
   double left_xmin = std::min(std::min(std::min(left_ul[0],left_ur[0]),left_lr[0]),left_ll[0]);
   double left_xmax = std::max(std::max(std::max(left_ul[0],left_ur[0]),left_lr[0]),left_ll[0]);
   double left_ymin = std::min(std::min(std::min(left_ul[1],left_ur[1]),left_lr[1]),left_ll[1]);
@@ -316,18 +331,18 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     itkExceptionMacro(<<"Wrong reconstruction area, images don't overlap, check image corners");
     }
 
-  // Choose origin
-  typename TOutputDEMImage::PointType outOrigin;
-  outOrigin[0] = box_xmin;
-  outOrigin[1] = box_ymax;
-  outputPtr->SetOrigin(outOrigin);
-
   // Compute step :
   // TODO : use a clean RS transform instead
   typename TOutputDEMImage::SpacingType outSpacing;
   outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * vcl_cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
   outSpacing[1] = -57.295779513 * m_DEMGridStep / 6378137.0;
   outputPtr->SetSpacing(outSpacing);
+
+  // Choose origin
+  typename TOutputDEMImage::PointType outOrigin;
+  outOrigin[0] = box_xmin + 0.5 * outSpacing[0];
+  outOrigin[1] = box_ymax + 0.5 * outSpacing[1];
+  outputPtr->SetOrigin(outOrigin);
 
   // Compute output size
   typename DEMImageType::RegionType outRegion;
@@ -391,32 +406,32 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
 
   // up left at elevation min
   TDPointType corners[8];
-  corners[0][0]= outOrigin[0] + outSpacing[0] * outRegion.GetIndex(0);
-  corners[0][1]= outOrigin[1] + outSpacing[1] * outRegion.GetIndex(1);
+  corners[0][0]= outOrigin[0] + outSpacing[0] * (-0.5 + static_cast<double>(outRegion.GetIndex(0)));
+  corners[0][1]= outOrigin[1] + outSpacing[1] * (-0.5 + static_cast<double>(outRegion.GetIndex(1)));
   corners[0][2]= m_ElevationMin;
   // up left at elevation max
   corners[1][0]= corners[0][0];
   corners[1][1]= corners[0][1];
   corners[1][2]= m_ElevationMax;
   // up right at elevation min
-  corners[2][0]= outOrigin[0] + outSpacing[0] * (outRegion.GetIndex(0) + outRegion.GetSize(0));
-  corners[2][1]= outOrigin[1] + outSpacing[1] * outRegion.GetIndex(1);
+  corners[2][0]= corners[0][0] + outSpacing[0] * static_cast<double>(outRegion.GetSize(0));
+  corners[2][1]= corners[0][1];
   corners[2][2]= m_ElevationMin;
   // up right at elevation max
   corners[3][0]= corners[2][0];
   corners[3][1]= corners[2][1];
   corners[3][2]= m_ElevationMax;
   // low right at elevation min
-  corners[4][0]= outOrigin[0] + outSpacing[0] * (outRegion.GetIndex(0) + outRegion.GetSize(0));
-  corners[4][1]= outOrigin[1] + outSpacing[1] * (outRegion.GetIndex(1) + outRegion.GetSize(1));
+  corners[4][0]= corners[0][0] + outSpacing[0] * static_cast<double>(outRegion.GetSize(0));
+  corners[4][1]= corners[0][1] + outSpacing[1] * static_cast<double>(outRegion.GetSize(1));
   corners[4][2]= m_ElevationMin;
   // low right at elevation max
   corners[5][0]= corners[4][0];
   corners[5][1]= corners[4][1];
   corners[5][2]= m_ElevationMax;
   // low left at elevation min
-  corners[6][0]= outOrigin[0] + outSpacing[0] * outRegion.GetIndex(0);
-  corners[6][1]= outOrigin[1] + outSpacing[1] * (outRegion.GetIndex(1) + outRegion.GetSize(1));
+  corners[6][0]= corners[0][0];
+  corners[6][1]= corners[0][1] + outSpacing[1] * static_cast<double>(outRegion.GetSize(1));
   corners[6][2]= m_ElevationMin;
   // low left at elevation max
   corners[7][0]= corners[6][0];
@@ -540,8 +555,8 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
     }
 
   typename DisparityMapType::RegionType inputDisparityRegion;
-  inputDisparityRegion.SetIndex(0, static_cast<int>(vcl_floor(epiIndexMin[0])));
-  inputDisparityRegion.SetIndex(1, static_cast<int>(vcl_floor(epiIndexMin[1])));
+  inputDisparityRegion.SetIndex(0, static_cast<int>(vcl_floor(epiIndexMin[0] + 0.5)));
+  inputDisparityRegion.SetIndex(1, static_cast<int>(vcl_floor(epiIndexMin[1] + 0.5)));
   inputDisparityRegion.SetSize(0, 1 + static_cast<unsigned int>(vcl_floor(epiIndexMax[0] - epiIndexMin[0] + 0.5)));
   inputDisparityRegion.SetSize(1, 1 + static_cast<unsigned int>(vcl_floor(epiIndexMax[1] - epiIndexMin[1] + 0.5)));
 

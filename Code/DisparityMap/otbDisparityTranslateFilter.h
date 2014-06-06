@@ -69,6 +69,7 @@ public:
   typedef typename DispMapType::IndexType    IndexType;
   typedef typename DispMapType::SpacingType  SpacingType;
   typedef typename DispMapType::PointType    PointType;
+  typedef typename DispMapType::IndexValueType IndexValueType;
 
   typedef typename GridType::RegionType      GridRegionType;
 

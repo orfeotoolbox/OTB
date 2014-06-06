@@ -193,21 +193,29 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
 
     typename InputMapType::SizeType inputSize = imgPtr->GetLargestPossibleRegion().GetSize();
 
-    typename InputMapType::PointType tmpPoint;
-    tmpPoint = imgPtr->GetOrigin();
-    RSTransform2DType::OutputPointType ul = mapToGroundTransform->TransformPoint(tmpPoint);
+    typename InputMapType::PointType ulPt, urPt, llPt, lrPt;
+    itk::ContinuousIndex<double,2> ulIdx(imgPtr->GetLargestPossibleRegion().GetIndex());
+    ulIdx[0] += -0.5;
+    ulIdx[1] += -0.5;
 
-    tmpPoint[0] = (imgPtr->GetOrigin())[0] + (imgPtr->GetSpacing())[0] * static_cast<double> (inputSize[0]);
-    tmpPoint[1] = (imgPtr->GetOrigin())[1];
-    RSTransform2DType::OutputPointType ur = mapToGroundTransform->TransformPoint(tmpPoint);
+    itk::ContinuousIndex<double,2> urIdx(ulIdx);
+    itk::ContinuousIndex<double,2> lrIdx(ulIdx);
+    itk::ContinuousIndex<double,2> llIdx(ulIdx);
+    urIdx[0] += static_cast<double>(inputSize[0]);
+    lrIdx[0] += static_cast<double>(inputSize[0]);
+    lrIdx[1] += static_cast<double>(inputSize[1]);
+    llIdx[1] += static_cast<double>(inputSize[1]);
 
-    tmpPoint[0] = (imgPtr->GetOrigin())[0] + (imgPtr->GetSpacing())[0] * static_cast<double> (inputSize[0]);
-    tmpPoint[1] = (imgPtr->GetOrigin())[1] + (imgPtr->GetSpacing())[1] * static_cast<double> (inputSize[1]);
-    RSTransform2DType::OutputPointType lr = mapToGroundTransform->TransformPoint(tmpPoint);
+    imgPtr->TransformContinuousIndexToPhysicalPoint(ulIdx,ulPt);
+    imgPtr->TransformContinuousIndexToPhysicalPoint(urIdx,urPt);
+    imgPtr->TransformContinuousIndexToPhysicalPoint(llIdx,llPt);
+    imgPtr->TransformContinuousIndexToPhysicalPoint(lrIdx,lrPt);
 
-    tmpPoint[0] = (imgPtr->GetOrigin())[0];
-    tmpPoint[1] = (imgPtr->GetOrigin())[1] + (imgPtr->GetSpacing())[1] * static_cast<double> (inputSize[1]);
-    RSTransform2DType::OutputPointType ll = mapToGroundTransform->TransformPoint(tmpPoint);
+    RSTransform2DType::OutputPointType ul, ur, lr, ll;
+    ul = mapToGroundTransform->TransformPoint(ulPt);
+    ur = mapToGroundTransform->TransformPoint(urPt);
+    ll = mapToGroundTransform->TransformPoint(llPt);
+    lr = mapToGroundTransform->TransformPoint(lrPt);
 
     double xmin = std::min(std::min(std::min(ul[0], ur[0]), lr[0]), ll[0]);
     double xmax = std::max(std::max(std::max(ul[0], ur[0]), lr[0]), ll[0]);
@@ -227,12 +235,6 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
 
     }
 
-  // Choose origin
-  typename TOutputDEMImage::PointType outOrigin;
-  outOrigin[0] = box_xmin;
-  outOrigin[1] = box_ymax;
-  outputPtr->SetOrigin(outOrigin);
-
   // Compute step :
   // TODO : use a clean RS transform instead
   typename TOutputDEMImage::SpacingType outSpacing;
@@ -240,6 +242,13 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
   outSpacing[0] = 57.295779513 * m_DEMGridStep / (6378137.0 * vcl_cos((box_ymin + box_ymax) * 0.5 * 0.01745329251));
   outSpacing[1] = -57.295779513 * m_DEMGridStep / 6378137.0;
   outputPtr->SetSpacing(outSpacing);
+
+  // Choose origin
+  typename TOutputDEMImage::PointType outOrigin;
+  outOrigin[0] = box_xmin + 0.5 * outSpacing[0];
+  outOrigin[1] = box_ymax + 0.5 * outSpacing[1];
+  outputPtr->SetOrigin(outOrigin);
+  
   // Compute output size
   typename TOutputDEMImage::RegionType outRegion;
   outRegion.SetIndex(0, 0);
@@ -346,32 +355,32 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
 
   // up left at elevation min
   TDPointType corners[8];
-  corners[0][0] = outOrigin[0] + outSpacing[0] * outRegion.GetIndex(0);
-  corners[0][1] = outOrigin[1] + outSpacing[1] * outRegion.GetIndex(1);
+  corners[0][0] = outOrigin[0] + outSpacing[0] * (-0.5 + static_cast<double>(outRegion.GetIndex(0)));
+  corners[0][1] = outOrigin[1] + outSpacing[1] * (-0.5 + static_cast<double>(outRegion.GetIndex(1)));
   corners[0][2] = m_ElevationMin;
   // up left at elevation max
   corners[1][0] = corners[0][0];
   corners[1][1] = corners[0][1];
   corners[1][2] = m_ElevationMax;
   // up right at elevation min
-  corners[2][0] = outOrigin[0] + outSpacing[0] * (outRegion.GetIndex(0) + outRegion.GetSize(0));
-  corners[2][1] = outOrigin[1] + outSpacing[1] * outRegion.GetIndex(1);
+  corners[2][0] = corners[0][0] + outSpacing[0] * static_cast<double>(outRegion.GetSize(0));
+  corners[2][1] = corners[0][1];
   corners[2][2] = m_ElevationMin;
   // up right at elevation max
   corners[3][0] = corners[2][0];
   corners[3][1] = corners[2][1];
   corners[3][2] = m_ElevationMax;
   // low right at elevation min
-  corners[4][0] = outOrigin[0] + outSpacing[0] * (outRegion.GetIndex(0) + outRegion.GetSize(0));
-  corners[4][1] = outOrigin[1] + outSpacing[1] * (outRegion.GetIndex(1) + outRegion.GetSize(1));
+  corners[4][0] = corners[0][0] + outSpacing[0] * static_cast<double>(outRegion.GetSize(0));
+  corners[4][1] = corners[0][1] + outSpacing[1] * static_cast<double>(outRegion.GetSize(1));
   corners[4][2] = m_ElevationMin;
   // low right at elevation max
   corners[5][0] = corners[4][0];
   corners[5][1] = corners[4][1];
   corners[5][2] = m_ElevationMax;
   // low left at elevation min
-  corners[6][0] = outOrigin[0] + outSpacing[0] * outRegion.GetIndex(0);
-  corners[6][1] = outOrigin[1] + outSpacing[1] * (outRegion.GetIndex(1) + outRegion.GetSize(1));
+  corners[6][0] = corners[0][0];
+  corners[6][1] = corners[0][1] + outSpacing[1] * static_cast<double>(outRegion.GetSize(1));
   corners[6][2] = m_ElevationMin;
   // low left at elevation max
   corners[7][0] = corners[6][0];
@@ -633,10 +642,11 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGener
           itk::ContinuousIndex<double, 2> continuousIndex;
 
           //std::cout<<"point2D "<<point2D<<std::endl;
+          // The DEM cell at index 'n' contains continuous indexes from 'n-0.5' to 'n+0.5'
           outputPtr->TransformPhysicalPointToContinuousIndex(point2D, continuousIndex);
           typename OutputImageType::IndexType cellIndex;
-          cellIndex[0] = static_cast<int> (vcl_floor(continuousIndex[0]));
-          cellIndex[1] = static_cast<int> (vcl_floor(continuousIndex[1]));
+          cellIndex[0] = static_cast<int> (vcl_floor(continuousIndex[0] + 0.5));
+          cellIndex[1] = static_cast<int> (vcl_floor(continuousIndex[1] + 0.5));
           //std::cout<<"cellindex "<<cellIndex<<std::endl;
           //index from physical
           /** -Wunused-variable
