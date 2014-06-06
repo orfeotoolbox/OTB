@@ -370,6 +370,8 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject, TOutputImage>
 
   if (originspecified)
     {
+    origine[0] += 0.5 * m_Spacing[0];
+    origine[1] += 0.5 * m_Spacing[1];
     OutputImage->SetOrigin(origine);     //   and origin
     m_Origin[0] = OutputImage->GetOrigin()[0];
     m_Origin[1] = OutputImage->GetOrigin()[1];
