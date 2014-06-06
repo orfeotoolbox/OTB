@@ -119,6 +119,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
 
   typedef typename ImageType::IndexType       IndexType;
   typedef typename ImageType::PointType       PointType;
+  typedef typename ImageType::SizeType       SizeType;
 
   if (m_InputImage.IsNull())
     {
@@ -132,24 +133,28 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   std::cout << "ProjRef of the input vector data: "<< this->GetInput()->GetProjectionRef() << std::endl; */
 
   // Get the index of the corner of the image
-  IndexType ul, ur, ll, lr;
   PointType pul, pur, pll, plr;
-  ul = m_InputImage->GetLargestPossibleRegion().GetIndex();
-  ur = ul;
-  ll = ul;
-  lr = ul;
-  ur[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[0] += m_InputImage->GetLargestPossibleRegion().GetSize()[0];
-  lr[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
-  ll[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
+  itk::ContinuousIndex<double,2> ul(m_InputImage->GetLargestPossibleRegion().GetIndex());
+  ul[0] += -0.5;
+  ul[1] += -0.5;
+
+  itk::ContinuousIndex<double,2> ur(ul);
+  itk::ContinuousIndex<double,2> ll(ul);
+  itk::ContinuousIndex<double,2> lr(ul);
+
+  SizeType size = m_InputImage->GetLargestPossibleRegion().GetSize();
+  ur[0] += size[0];
+  lr[0] += size[0];
+  lr[1] += size[1];
+  ll[1] += size[1];
 
   //std::cout << "bounding box of the input image (pixel): "<< ur << ", " << ul << ", " << lr << ", " << ll << std::endl;
 
   // Transform to physical point
-  m_InputImage->TransformIndexToPhysicalPoint(ul, pul);
-  m_InputImage->TransformIndexToPhysicalPoint(ur, pur);
-  m_InputImage->TransformIndexToPhysicalPoint(ll, pll);
-  m_InputImage->TransformIndexToPhysicalPoint(lr, plr);
+  m_InputImage->TransformContinuousIndexToPhysicalPoint(ul, pul);
+  m_InputImage->TransformContinuousIndexToPhysicalPoint(ur, pur);
+  m_InputImage->TransformContinuousIndexToPhysicalPoint(ll, pll);
+  m_InputImage->TransformContinuousIndexToPhysicalPoint(lr, plr);
   //std::cout << "bounding box of the input image (physical): "<< pur << ", " << pul << ", " << plr << ", " << pll << std::endl;
 
   // Build the cartographic region

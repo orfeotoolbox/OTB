@@ -21,6 +21,7 @@
 
 #include "otbImageToGenericRSOutputParameters.h"
 #include "itkMacro.h"
+#include "itkContinuousIndex.h"
 
 namespace otb {
 
@@ -56,15 +57,15 @@ ImageToGenericRSOutputParameters<TImage>
   // Estimate the Output image Extent
   this->EstimateOutputImageExtent();
 
-  // Estimate the Output Origin
-  this->EstimateOutputOrigin();
-
   // Estimate the Output Spacing
   if(!m_ForceSpacing)
     this->EstimateOutputSpacing();
 
   // Finally Estimate the Output Size
   this->EstimateOutputSize();
+
+  // Estimate the Output Origin
+  this->EstimateOutputOrigin();
 }
 
 
@@ -94,25 +95,24 @@ ImageToGenericRSOutputParameters<TImage>
   m_Transform->GetInverse(invTransform);
 
   // Compute the 4 corners in the cartographic coordinate system
-  std::vector<IndexType>       vindex;
+  std::vector< itk::ContinuousIndex<double,2> > vindex;
   std::vector<PointType> voutput;
 
-  IndexType index1, index2, index3, index4;
-  SizeType  size;
+  itk::ContinuousIndex<double,2> index1(m_Input->GetLargestPossibleRegion().GetIndex());
+  index1[0] += -0.5;
+  index1[1] += -0.5;
+  itk::ContinuousIndex<double,2> index2(index1);
+  itk::ContinuousIndex<double,2> index3(index1);
+  itk::ContinuousIndex<double,2> index4(index1);
 
   // Image size
-  size = m_Input->GetLargestPossibleRegion().GetSize();
+  SizeType size = m_Input->GetLargestPossibleRegion().GetSize();
 
   // project the 4 corners
-  index1 = m_Input->GetLargestPossibleRegion().GetIndex();
-  index2 = m_Input->GetLargestPossibleRegion().GetIndex();
-  index3 = m_Input->GetLargestPossibleRegion().GetIndex();
-  index4 = m_Input->GetLargestPossibleRegion().GetIndex();
-
-  index2[0] += size[0] - 1;
-  index3[0] += size[0] - 1;
-  index3[1] += size[1] - 1;
-  index4[1] += size[1] - 1;
+  index2[0] += size[0];
+  index3[0] += size[0];
+  index3[1] += size[1];
+  index4[1] += size[1];
 
   vindex.push_back(index1);
   vindex.push_back(index2);
@@ -122,7 +122,7 @@ ImageToGenericRSOutputParameters<TImage>
   for (unsigned int i = 0; i < vindex.size(); ++i)
     {
     PointType physicalPoint;
-    m_Input->TransformIndexToPhysicalPoint(vindex[i], physicalPoint);
+    m_Input->TransformContinuousIndexToPhysicalPoint(vindex[i], physicalPoint);
     voutput.push_back(invTransform->TransformPoint(physicalPoint));
     }
 
@@ -168,8 +168,8 @@ ImageToGenericRSOutputParameters<TImage>
   // Set the output orgin in carto
   // projection
   PointType   origin;
-  origin[0] = m_OutputExtent.minX;
-  origin[1] = m_OutputExtent.maxY;
+  origin[0] = m_OutputExtent.minX + 0.5 * this->GetOutputSpacing()[0];
+  origin[1] = m_OutputExtent.maxY + 0.5 * this->GetOutputSpacing()[1];
   this->SetOutputOrigin(origin);
 }
 
@@ -187,8 +187,8 @@ ImageToGenericRSOutputParameters<TImage>
   double sizeCartoY = vcl_abs(m_OutputExtent.minY - m_OutputExtent.maxY);
 
   PointType o, oX, oY;
-  o[0] = this->GetOutputOrigin()[0];
-  o[1] = this->GetOutputOrigin()[1];
+  o[0] = m_OutputExtent.minX;
+  o[1] = m_OutputExtent.maxY;
 
   oX = o;
   oY = o;
