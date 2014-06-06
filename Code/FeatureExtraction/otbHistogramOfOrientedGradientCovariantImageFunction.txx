@@ -33,7 +33,7 @@ namespace otb
 template <class TInputImage, class TOutputPrecision, class TCoordRep>
 HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision, TCoordRep>
 ::HistogramOfOrientedGradientCovariantImageFunction() : m_NeighborhoodRadius(8),
-                                                        m_NumberOfOrientationBins(18)
+                                                        m_NumberOfOrientationBins(72)
 {}
 
 template <class TInputImage, class TOutputPrecision, class TCoordRep>
@@ -56,12 +56,14 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   // Check for input image
   if( !this->GetInputImage() )
     {
+    std::cerr<<"No input image."<<std::endl;
     return hog;
     }
 
   // Check for out of buffer
   if ( !this->IsInsideBuffer( index ) )
     {
+    std::cerr<<"Outside of image buffer (idx="<<index<<")"<<std::endl;
     return hog;
     }
 
@@ -120,11 +122,11 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 
         // Determine the bin index (shift of otb::CONST_PI since atan2 values
         // lies in [-pi, pi]
-        unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
+        unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth+0.5);
 
-        // Handle special case where angle = pi, and binIndex is out-of-bound
+        //Handle special case where angle = pi, and binIndex is out-of-bound
         if(binIndex == m_NumberOfOrientationBins)
-          binIndex=m_NumberOfOrientationBins-1;
+          binIndex= 0;
 
          // Cumulate values
         globalOrientationHistogram[binIndex]+= magnitude * gWeight;
@@ -142,6 +144,8 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
     // Retrieve current value
     double currentValue = globalOrientationHistogram[i];
 
+    std::cout<<i<<"\t"<<currentValue<<"\t"<<maxOrientationHistogramValue<<std::endl;
+
     // Look for new maximum
     if(maxOrientationHistogramValue<currentValue)
       {
@@ -150,8 +154,10 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
       }
     }
 
+  std::cout<<"bin: "<<maxOrientationHistogramBin<<", "<<orientationBinWidth<<", "<<maxOrientationHistogramBin * orientationBinWidth<<std::endl;
+
   // Derive principal orientation
-  double principalOrientation = maxOrientationHistogramBin * orientationBinWidth - otb::CONST_PI;
+  m_PrincipalOrientation = (maxOrientationHistogramBin) * orientationBinWidth - otb::CONST_PI;
 
   // Initialize the five spatial bins
   std::vector<TOutputPrecision> centerHistogram(m_NumberOfOrientationBins, 0.);
@@ -181,7 +187,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         InputPixelType gradient = it.GetPixel(offset);
 
         // Then, compute the compensated gradient orientation
-        double angle = vcl_atan2(gradient[1], gradient[0]) - principalOrientation;
+        double angle = vcl_atan2(gradient[1], gradient[0]) - m_PrincipalOrientation;
 
         // Angle is supposed to lie with [-pi, pi], so we ensure that
         // compenstation did not introduce out-of-range values
@@ -199,13 +205,13 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 
         // Determine the bin index (shift of otb::CONST_PI since atan2 values
         // lies in [-pi, pi]
-        unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
+        unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth + 0.5);
 
         if(binIndex == m_NumberOfOrientationBins)
           binIndex=m_NumberOfOrientationBins-1;
 
         // Compute the angular position
-        double angularPosition = vcl_atan2((double)j, (double)i) - principalOrientation;
+        double angularPosition = otb::CONST_PI + vcl_atan2((double)j, (double)i) - m_PrincipalOrientation;
 
         // Angle is supposed to lie within [-pi, pi], so we ensure that
         // the compensation did not introduce out-of-range values
@@ -247,9 +253,35 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
           }
 
         // Cumulate values
-        globalOrientationHistogram[binIndex]+= magnitude * gWeight;
+        // globalOrientationHistogram[binIndex]+= magnitude * gWeight;
         }
       }
+    }
+
+  bool m_SymetryCheck = true;
+
+  if(m_SymetryCheck)
+    {
+    // Use the formula to check for symmetry
+    unsigned int sym_idx = 0;
+    double sym_max = 0;
+
+    for(unsigned int i = 0; i < m_NumberOfOrientationBins/2;++i)
+      {
+      double current_sym_value = 0;
+
+      for(unsigned int j = 0; j < m_NumberOfOrientationBins/2;++j)
+        {
+        current_sym_value+=globalOrientationHistogram[(i+j)%m_NumberOfOrientationBins]*globalOrientationHistogram[(i-j)%m_NumberOfOrientationBins];
+        }
+
+      if(current_sym_value > sym_max)
+        {
+        sym_idx = i;
+        sym_max = current_sym_value;
+        }
+      }
+    m_PrincipalOrientation = (sym_idx+0.5) * orientationBinWidth - otb::CONST_PI;
     }
 
   // Build the final output
@@ -258,6 +290,13 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   hog.push_back(upperRightHistogram);
   hog.push_back(lowerRightHistogram);
   hog.push_back(lowerLeftHistogram);
+
+
+  
+
+  hog.push_back(globalOrientationHistogram);
+
+ 
 
   // Normalize each histogram
   for(typename OutputType::iterator oIt = hog.begin(); oIt!=hog.end(); ++oIt)
@@ -277,8 +316,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
       (*vIt)*=scale;
       }
     }
-
-
+  
   // Return result
   return hog;
 }
