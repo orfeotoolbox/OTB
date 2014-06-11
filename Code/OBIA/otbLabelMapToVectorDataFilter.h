@@ -40,7 +40,11 @@ namespace otb {
    * "An algorithm for the rapid computation of boundaries of run-length
    * encoded regions", Francis K. H. Queck, in Pattern Recognition 33
    * (2000), p 1637-1649.
- *
+   * 
+   * Note : the output vector data contains index coordinates (not physical coordinates).
+   * For instance, a polygon around the pixel at index (0,0) would have the following
+   * points : [-0.5,-0.5] , [0.5,-0.5] , [0.5,0.5] , [-0.5,0.5]
+   *
    * \sa VectorDataSource
  * \ingroup GeoSpatialAnalysis
  */

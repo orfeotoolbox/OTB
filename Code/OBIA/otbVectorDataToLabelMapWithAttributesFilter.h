@@ -48,6 +48,12 @@ namespace otb
  * The first Label is set using SetInitialLabel (by default it is 0), and increases 1 by 1.
  * The vector data attributes are also assigned to the object in the label map.
  *
+ * When AutomaticSizeComputation=True, the spacing from the vector data object 
+ * is used. Then the size and origin are computed so that the image extent 
+ * covers exactly the vector data bounding region.
+ * 
+ * Note : the coordinates in the vector data are assumed to be physical coordinates.  
+ *
  * \sa LabelMapSource
  */
 
