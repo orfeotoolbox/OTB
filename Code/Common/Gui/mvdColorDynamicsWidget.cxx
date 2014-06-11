@@ -440,6 +440,9 @@ ColorDynamicsWidget
   emit GammaCursorPositionChanged( value );
 
   emit GammaValueChanged( GetGamma() );
+
+  //Display Gamma value as a tooltip when value changed 
+  QToolTip::showText(mapToGlobal(m_UI->gammaSlider->pos()),tr("Gamma : ") % QString::number(GetGamma()) );
 }
 
 } // end namespace 'mvd'
