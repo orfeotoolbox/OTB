@@ -146,7 +146,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
     SizeType size;
     SpacingType spacing = this->GetInput()->GetSpacing();
     OriginType origin = m_VectorDataProperties->GetBoundingRegion().GetOrigin();
-    for (unsigned int i=0 ; i<2 ; ++i)
+    for (unsigned int i=0; i<2; ++i)
       {
       if (spacing[i] < 0.0)
         {
@@ -350,7 +350,7 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         physCorners[2][0] += polygonExtRingBoundReg.GetSize(0);
         physCorners[3][0] += polygonExtRingBoundReg.GetSize(0);
         
-        for (unsigned int k=0 ; k<4 ; ++k)
+        for (unsigned int k=0; k<4; ++k)
           {
           this->GetOutput()->TransformPhysicalPointToIndex(physCorners[k],tmpIdx);
           if (k == 0)
@@ -385,9 +385,9 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         
         OriginType tmpPoint;
         VertexType vertex;
-        for (IndexValueType j=startIdx[1] ; j<=endIdx[1] ; ++j)
+        for (IndexValueType j=startIdx[1]; j<=endIdx[1]; ++j)
           {
-          for (IndexValueType i=startIdx[0] ; i<=endIdx[0] ; ++i)
+          for (IndexValueType i=startIdx[0]; i<=endIdx[0]; ++i)
             {
             tmpIdx[0] = i;
             tmpIdx[1] = j;
