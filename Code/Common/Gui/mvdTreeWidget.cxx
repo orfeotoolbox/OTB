@@ -299,6 +299,32 @@ TreeWidget
 }
 
 /*******************************************************************************/
+Qt::DropActions
+TreeWidget
+::supportedDropActions() const
+{
+  // This method is overloaded only to spy/debug Qt behavior.
+
+  Qt::DropActions actions = QTreeWidget::supportedDropActions();
+
+  qDebug() << this << "::supportedDropActions():" << actions;
+
+  return actions;
+}
+
+/*******************************************************************************/
+void
+TreeWidget
+::startDrag( Qt::DropActions supportedActions )
+{
+  // This method is overloaded only to spy/debug Qt behavior.
+
+  qDebug() << this << "::startDrag(" << supportedActions << ")";
+
+  QTreeWidget::startDrag( supportedActions );
+}
+
+/*******************************************************************************/
 void
 TreeWidget
 ::dragEnterEvent( QDragEnterEvent* event )
