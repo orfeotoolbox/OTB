@@ -145,7 +145,9 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Triggers the Computation of the sample list */
-  void GenerateData(void);
+  virtual void GenerateData(void);
+
+  virtual void GenerateInputRequestedRegion(void);
 
   /** Compute the calss statistics*/
   void GenerateClassStatistics();
