@@ -188,6 +188,27 @@ ListSampleGenerator<TImage, TVectorData>
   return dynamic_cast<ListLabelType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
+template <class TImage, class TVectorData>
+void
+ListSampleGenerator<TImage, TVectorData>
+::GenerateInputRequestedRegion()
+{
+  ImagePointerType img = static_cast<ImageType *>(this->ProcessObject::GetInput(0));
+
+  if(img.IsNotNull())
+    {
+
+    // Requested regions will be generated during GenerateData
+    // call. For now request an empty region so as to avoid requesting
+    // the largest possible region (fixes bug #943 )
+    typename ImageType::RegionType dummyRegion;
+    typename ImageType::SizeType dummySize;
+    dummySize.Fill(0);
+    dummyRegion.SetSize(dummySize);
+    img->SetRequestedRegion(dummyRegion);
+    }
+}
+
 
 template <class TImage, class TVectorData>
 void
