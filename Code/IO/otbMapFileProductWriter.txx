@@ -365,38 +365,35 @@ MapFileProductWriter<TInputImage>
         m_Transform->InstanciateTransform();
 
         InputPointType  inputPoint;
-        IndexType       indexTile;
         SizeType        sizeTile;
         sizeTile = extractSize;
 
         /** GX LAT LON **/
+        // Compute upper left corner
+        itk::ContinuousIndex<double, 2> indexTile(extractIndex);
+        indexTile[0] += -0.5;
+        indexTile[1] += -0.5;
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
+        OutputPointType upperLeftCorner = m_Transform->TransformPoint(inputPoint);
+        //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " upperLeftCorner "<< upperLeftCorner  << std::endl;
+        
         // Compute lower left corner
-        indexTile[0] = extractIndex[0];
-        indexTile[1] = extractIndex[1] + sizeTile[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile[1] += static_cast<double>(sizeTile[1]);
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         OutputPointType lowerLeftCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " lowerLeftCorner "<<  lowerLeftCorner << std::endl;
 
         // Compute lower right corner
-        indexTile[0] = extractIndex[0] + sizeTile[0];
-        indexTile[1] = extractIndex[1] + sizeTile[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile[0] += static_cast<double>(sizeTile[0]);
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         OutputPointType lowerRightCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " lowerRightCorner   "<< lowerRightCorner  << std::endl;
 
         // Compute upper right corner
-        indexTile[0] = extractIndex[0]+ sizeTile[0];
-        indexTile[1] = extractIndex[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile[1] -= static_cast<double>(sizeTile[1]);
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         OutputPointType upperRightCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " upperRightCorner "<< upperRightCorner  << std::endl;
-
-        // Compute upper left corner
-        indexTile[0] = extractIndex[0];
-        indexTile[1] = extractIndex[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        OutputPointType upperLeftCorner = m_Transform->TransformPoint(inputPoint);
-        //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " upperLeftCorner "<< upperLeftCorner  << std::endl;
 
         // Build The indexTile
         this->AddBBoxToIndexTile(lowerLeftCorner,

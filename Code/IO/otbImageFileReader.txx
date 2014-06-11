@@ -403,7 +403,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
       // spacing, origin and direction for the final (degenerate) dimensions.
       dimSize[i] = 1;
       spacing[i] = 1.0;
-      origin[i] = 0.0;
+      origin[i] = 0.5;
       for (unsigned j = 0; j < TOutputImage::ImageDimension; ++j)
         {
         if (i == j)
@@ -422,7 +422,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     {
     for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
       {
-      origin[i] = 0.0;
       if ( m_FilenameHelper->GetResolutionFactor() != 0 )
         {
         spacing[i] = 1.0*vcl_pow((double)2, (double)m_FilenameHelper->GetResolutionFactor());
@@ -431,6 +430,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
         {
         spacing[i] = 1.0;
         }
+      origin[i] = 0.5*spacing[i];
       }
     }
 
@@ -480,8 +480,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 
     const double Epsilon = 1.0E-12;
     if ( projRef.empty()
-         && vcl_abs(origin[0]) > Epsilon
-         && vcl_abs(origin[1]) > Epsilon
+         && vcl_abs(origin[0] - 0.5) > Epsilon
+         && vcl_abs(origin[1] - 0.5) > Epsilon
          && vcl_abs(spacing[0] - 1) > Epsilon
          && vcl_abs(spacing[1] - 1) > Epsilon)
       {

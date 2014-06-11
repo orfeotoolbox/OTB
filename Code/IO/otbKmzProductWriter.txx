@@ -447,78 +447,77 @@ KmzProductWriter<TInputImage>
 
         InputPointType  inputPoint;
         OutputPointType outputPoint;
-        IndexType       indexTile;
-        SizeType        sizeTile, demiSizeTile;
+        double          sizeTile[2];
+        double          halfSizeTile[2];
 
-        sizeTile = extractSize;
-        demiSizeTile[0] = (sizeTile[0] / 2) - 1;
-        demiSizeTile[1] = (sizeTile[1] / 2) - 1;
+        sizeTile[0] = static_cast<double>(extractSize[0]);
+        sizeTile[1] = static_cast<double>(extractSize[1]);
+        halfSizeTile[0] = sizeTile[0] / 2.0;
+        halfSizeTile[1] = sizeTile[1] / 2.0;
+
+        itk::ContinuousIndex<double, 2> indexRef(extractIndex);
+        indexRef[0] += -0.5;
+        indexRef[1] += -0.5;
+        itk::ContinuousIndex<double, 2> indexTile(indexRef);
 
         // Compute North value
-        indexTile[0] = extractIndex[0] + demiSizeTile[0];
-        indexTile[1] = extractIndex[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile[0] += halfSizeTile[0];
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         double north = outputPoint[1];
 
         // Compute South value
-        indexTile[0] = extractIndex[0] + demiSizeTile[0];
-        indexTile[1] = extractIndex[1] + sizeTile[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile[1] += sizeTile[1];
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         double south = outputPoint[1];
 
-        // Compute East value
-        indexTile[0] = extractIndex[0] + sizeTile[0];
-        indexTile[1] = extractIndex[1] + demiSizeTile[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        outputPoint = m_Transform->TransformPoint(inputPoint);
-        double east = outputPoint[0];
-
         // Compute West value
-        indexTile[0] = extractIndex[0];
-        indexTile[1] = extractIndex[1] + demiSizeTile[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile = indexRef;
+        indexTile[1] += halfSizeTile[1];
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         double west = outputPoint[0];
 
+        // Compute East value
+        indexTile[0] += sizeTile[0];
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
+        outputPoint = m_Transform->TransformPoint(inputPoint);
+        double east = outputPoint[0];
+        
         // Compute center value (lat / long)
-        indexTile[0] = extractIndex[0] + demiSizeTile[0];
-        indexTile[1] = extractIndex[1] + demiSizeTile[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile = indexRef;
+        indexTile[0] += halfSizeTile[0];
+        indexTile[1] += halfSizeTile[1];
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         double centerLat = outputPoint[1];
         double centerLong = outputPoint[0];
 
         /** GX LAT LON **/
+        // Compute upper left corner
+        indexTile = indexRef;
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
+        outputPoint = m_Transform->TransformPoint(inputPoint);
+        OutputPointType upperLeftCorner = outputPoint;
+        
         // Compute lower left corner
-        indexTile[0] = extractIndex[0];
-        indexTile[1] = extractIndex[1] + sizeTile[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile[1] += sizeTile[1];
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType lowerLeftCorner = outputPoint;
 
         // Compute lower right corner
-        indexTile[0] = extractIndex[0] + sizeTile[0];
-        indexTile[1] = extractIndex[1] + sizeTile[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile[0] += sizeTile[0];
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType lowerRightCorner = outputPoint;
 
         // Compute upper right corner
-        indexTile[0] = extractIndex[0] + sizeTile[0];
-        indexTile[1] = extractIndex[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
+        indexTile[1] -= sizeTile[1];
+        m_ResampleVectorImage->TransformContinuousIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
         OutputPointType upperRightCorner = outputPoint;
-
-        // Compute upper left corner
-        indexTile[0] = extractIndex[0];
-        indexTile[1] = extractIndex[1];
-        m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        outputPoint = m_Transform->TransformPoint(inputPoint);
-        OutputPointType upperLeftCorner = outputPoint;
-
         /** END GX LAT LON */
 
         // Create KML - Filename - PathName - tile number - North - South - East - West
