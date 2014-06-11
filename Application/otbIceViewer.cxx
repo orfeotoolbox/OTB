@@ -749,7 +749,7 @@ bool IceViewer::scroll_callback_vector(GLFWwindow * window, double xoffset, doub
           {
           if(it == m_ColorMap.begin())
             {
-            it == m_ColorMap.begin();
+            it = m_ColorMap.begin();
             for(unsigned int i = 0; i < m_ColorMap.size()-1;++i)
               {
               ++it;
