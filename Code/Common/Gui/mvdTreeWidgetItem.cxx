@@ -146,7 +146,7 @@ TreeWidgetItem
 /*******************************************************************************/
 QTreeWidgetItem*
 TreeWidgetItem
-::clone()
+::clone() const
 {
   qDebug() << this << "::clone()";
 

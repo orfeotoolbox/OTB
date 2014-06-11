@@ -141,7 +141,7 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qtreewidgetitem.html#clone
    */
-  virtual QTreeWidgetItem* clone();
+  virtual QTreeWidgetItem* clone() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
