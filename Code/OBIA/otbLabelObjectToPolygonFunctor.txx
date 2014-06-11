@@ -490,26 +490,26 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
   switch (state)
     {
     case UP_RIGHT:
-      offset[1] = 1;
+      offset[1] = 0.5;
       break;
     case UP_LEFT:
-      offset[1] = 1;
+      offset[1] = 0.5;
       break;
     case DOWN_RIGHT:
-      offset[1] = 0;
+      offset[1] = -0.5;
       break;
     case DOWN_LEFT:
-      offset[1] = 0;
+      offset[1] = -0.5;
       break;
     }
 
   switch (m_PositionFlag)
     {
     case LEFT_END:
-      offset[0] = 0;
+      offset[0] = -0.5;
       break;
     case RIGHT_END:
-      offset[0] = 1;
+      offset[0] = 0.5;
       break;
     }
   typename PolygonType::VertexType newPoint;
@@ -564,20 +564,20 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
   switch (state)
     {
     case UP_RIGHT:
-      offset[0] = 1;
-      offset[1] = 1;
+      offset[0] = 0.5;
+      offset[1] = 0.5;
       break;
     case UP_LEFT:
-      offset[0] = 0;
-      offset[1] = 1;
+      offset[0] = -0.5;
+      offset[1] = 0.5;
       break;
     case DOWN_RIGHT:
-      offset[0] = 1;
-      offset[1] = 0;
+      offset[0] = 0.5;
+      offset[1] = -0.5;
       break;
     case DOWN_LEFT:
-      offset[0] = 0;
-      offset[1] = 0;
+      offset[0] = -0.5;
+      offset[1] = -0.5;
       break;
     }
 
@@ -622,8 +622,10 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
   VertexType resp;
 
   // Apply origin and spacing
-  resp[0] = (index[0] - m_StartIndex[0]) * m_Spacing[0] + m_Origin[0];
-  resp[1] = (index[1] - m_StartIndex[1]) * m_Spacing[1] + m_Origin[1];
+  //resp[0] = (index[0] - m_StartIndex[0]) * m_Spacing[0] + m_Origin[0];
+  //resp[1] = (index[1] - m_StartIndex[1]) * m_Spacing[1] + m_Origin[1];
+  resp[0] = index[0] * m_Spacing[0] + m_Origin[0];
+  resp[1] = index[1] * m_Spacing[1] + m_Origin[1];
 
   return resp;
 }

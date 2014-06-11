@@ -135,25 +135,36 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
      outputPtr->SetDirection(m_Direction);
   }
   else
-  {
-      typename PolygonType::RegionType  region;
-      OriginType origin;
-      m_VectorDataProperties->SetVectorDataObject(this->GetInput());
-      m_VectorDataProperties->SetBoundingRegion(region);
-      //Compute the global bounding box of the vectordata
-      m_VectorDataProperties->ComputeBoundingRegion();
-      origin[0] = m_VectorDataProperties->GetBoundingRegion().GetImageRegion().GetIndex(0);
-      origin[1] = m_VectorDataProperties->GetBoundingRegion().GetImageRegion().GetIndex(1);
+    {
+    //typename PolygonType::RegionType  region;
+    m_VectorDataProperties->SetVectorDataObject(this->GetInput());
+    //m_VectorDataProperties->SetBoundingRegion(region);
+    //Compute the global bounding box of the vectordata
+    m_VectorDataProperties->ComputeBoundingRegion();
+    
+    // Compute origin and size
+    SizeType size;
+    SpacingType spacing = this->GetInput()->GetSpacing();
+    OriginType origin = m_VectorDataProperties->GetBoundingRegion().GetOrigin();
+    for (unsigned int i=0 ; i<2 ; ++i)
+      {
+      if (spacing[i] < 0.0)
+        {
+        origin[i] += m_VectorDataProperties->GetBoundingRegion().GetSize(i);
+        }
+      origin[i] += (0.5 - m_StartIndex[i]) * spacing[i];
+      size[i] = static_cast<unsigned long>(vcl_ceil(vcl_abs(
+        m_VectorDataProperties->GetBoundingRegion().GetSize(i)/spacing[i])));
+      }
+    
+    outputLargestPossibleRegion.SetSize(size);
+    outputLargestPossibleRegion.SetIndex(m_StartIndex);
 
-      // Set spacing and origin
-      outputLargestPossibleRegion.SetSize(m_VectorDataProperties->GetBoundingRegion().GetImageRegion().GetSize());
-      outputLargestPossibleRegion.SetIndex(m_StartIndex);
-
-      outputPtr->SetLargestPossibleRegion(outputLargestPossibleRegion);
-      outputPtr->SetSpacing(this->GetInput()->GetSpacing());
-      outputPtr->SetOrigin(origin);
-      outputPtr->SetDirection(m_Direction);
-  }
+    outputPtr->SetLargestPossibleRegion(outputLargestPossibleRegion);
+    outputPtr->SetSpacing(spacing);
+    outputPtr->SetOrigin(origin);
+    outputPtr->SetDirection(m_Direction);
+    }
   return;
 }
 /*
@@ -298,9 +309,11 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         otbGenericMsgDebugMacro(<< "Insert Point from vectorData");
         IndexType index;
         this->GetOutput()->TransformPhysicalPointToIndex(dataNode->GetPoint(), index);
-
-        this->GetOutput()->SetPixel(index, m_lab);
-        m_lab += 1;
+        if (this->GetOutput()->GetLargestPossibleRegion().IsInside(index))
+          {
+          this->GetOutput()->SetPixel(index, m_lab);
+          m_lab += 1;
+          }
         break;
         }
       case otb::FEATURE_LINE:
@@ -317,55 +330,91 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         CorrectFunctorType correct;
         PolygonPointerType correctPolygonExtRing = correct(dataNode->GetPolygonExteriorRing());
 
-        typedef typename DataNodeType::PolygonType PolygonType;
-        typedef typename PolygonType::RegionType   RegionType;
+        //typedef typename DataNodeType::PolygonType PolygonType;
+        typedef typename PolygonType::RegionType   RSRegionType;
         typedef typename PolygonType::VertexType   VertexType;
         typedef typename IndexType::IndexValueType IndexValueType;
         typedef typename VertexType::ValueType     VertexValueType;
-        RegionType polygonExtRingBoundReg = correctPolygonExtRing->GetBoundingRegion();
-
-        VertexType vertex;
-
-        // For each position in the bounding region of the polygon
-        for (double i = polygonExtRingBoundReg.GetOrigin(0);
-             i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0);
-             i += this->GetOutput()->GetSpacing()[0])
+        RSRegionType polygonExtRingBoundReg = correctPolygonExtRing->GetBoundingRegion();
+        
+        IndexType startIdx,endIdx,tmpIdx;
+        OriginType physCorners[4];
+        physCorners[0][0] = polygonExtRingBoundReg.GetOrigin(0);
+        physCorners[0][1] = polygonExtRingBoundReg.GetOrigin(1);
+        physCorners[1] = physCorners[0];
+        physCorners[2] = physCorners[0];
+        physCorners[3] = physCorners[0];
+        
+        physCorners[1][1] += polygonExtRingBoundReg.GetSize(1);
+        physCorners[2][1] += polygonExtRingBoundReg.GetSize(1);
+        physCorners[2][0] += polygonExtRingBoundReg.GetSize(0);
+        physCorners[3][0] += polygonExtRingBoundReg.GetSize(0);
+        
+        for (unsigned int k=0 ; k<4 ; ++k)
           {
-          vertex[0] = static_cast<VertexValueType>(i);
-          for (double j = polygonExtRingBoundReg.GetOrigin(1);
-               j < polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1);
-               j += this->GetOutput()->GetSpacing()[1])
+          this->GetOutput()->TransformPhysicalPointToIndex(physCorners[k],tmpIdx);
+          if (k == 0)
             {
-            vertex[1] = static_cast<VertexValueType>(j);
-
+            startIdx = tmpIdx;
+            endIdx = tmpIdx;
+            }
+          else
+            {
+            startIdx[0] = std::min(startIdx[0],tmpIdx[0]);
+            startIdx[1] = std::min(startIdx[1],tmpIdx[1]);
+            endIdx[0] = std::max(endIdx[0],tmpIdx[0]);
+            endIdx[1] = std::max(endIdx[1],tmpIdx[1]);
+            }
+          }
+        // Check that the polygon intersects the largest possible region
+        RegionType polyRegion;
+        polyRegion.SetIndex(startIdx);
+        polyRegion.SetSize(0,endIdx[0] - startIdx[0] + 1);
+        polyRegion.SetSize(1,endIdx[1] - startIdx[1] + 1);
+        if (polyRegion.Crop(this->GetOutput()->GetLargestPossibleRegion()))
+          {
+          startIdx = polyRegion.GetIndex();
+          endIdx[0] = startIdx[0] - 1 + polyRegion.GetSize(0);
+          endIdx[1] = startIdx[1] - 1 + polyRegion.GetSize(1);
+          }
+        else
+          {
+          // No intersection
+          break;
+          }
+        
+        OriginType tmpPoint;
+        VertexType vertex;
+        for (IndexValueType j=startIdx[1] ; j<=endIdx[1] ; ++j)
+          {
+          for (IndexValueType i=startIdx[0] ; i<=endIdx[0] ; ++i)
+            {
+            tmpIdx[0] = i;
+            tmpIdx[1] = j;
+            this->GetOutput()->TransformIndexToPhysicalPoint(tmpIdx,tmpPoint);
+            vertex[0] = tmpPoint[0];
+            vertex[1] = tmpPoint[1];
             if (correctPolygonExtRing->IsInside(vertex) || correctPolygonExtRing->IsOnEdge (vertex))
               {
-              IndexType index;
-//               index[0] = static_cast<IndexValueType>(vertex[0] - polygonExtRingBoundReg.GetOrigin(0));
-//               index[1] = static_cast<IndexValueType>(vertex[1] - polygonExtRingBoundReg.GetOrigin(1));
-                 index[0] = static_cast<IndexValueType>(vertex[0]-this->GetOutput()->GetOrigin()[0]);
-                 index[1] = static_cast<IndexValueType>(vertex[1]-this->GetOutput()->GetOrigin()[1]);
-//               index[0] += this->GetOutput()->GetOrigin()[0];
-//               index[1] += this->GetOutput()->GetOrigin()[1];
-//               std::cout << "index " << index << std::endl;
+              // TODO : should also test interior rings
               if (this->GetOutput()->HasLabel(m_lab))
                 {
-                if (!this->GetOutput()->GetLabelObject(m_lab)->HasIndex(index))
+                if (!this->GetOutput()->GetLabelObject(m_lab)->HasIndex(tmpIdx))
                   { //Add a pixel to the current labelObject
-                  this->GetOutput()->SetPixel(index, m_lab);
+                  this->GetOutput()->SetPixel(tmpIdx, m_lab);
                   }
                 }
               else
                 {
                 //Add a pixel to the current labelObject
-                this->GetOutput()->SetPixel(index, m_lab);
-                }
+                this->GetOutput()->SetPixel(tmpIdx, m_lab);
                 //add attributes
                 AttributesValueType fieldValue;
                 for(unsigned int ii=0; ii<dataNode->GetFieldList().size(); ii++)
-                {
+                  {
                   fieldValue = static_cast<AttributesValueType>( dataNode->GetFieldAsString(dataNode->GetFieldList()[ii]) );
                   this->GetOutput()->GetLabelObject(m_lab)->SetAttribute( dataNode->GetFieldList()[ii].c_str(), fieldValue );
+                  }
                 }
               }
             }
