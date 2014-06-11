@@ -80,6 +80,8 @@ bool
 FilenameDragAndDropEventFilter
 ::DragEnterEvent( QObject* object, QDragEnterEvent* event )
 {
+  qDebug() << this << "::DragEnterEvent(" << object << "," << event << ")";
+
   //
   // Bypass event its MIME data does not contain not URL(s).
   if( !event->mimeData()->hasUrls() )
@@ -120,6 +122,8 @@ bool
 FilenameDragAndDropEventFilter
 ::DragLeaveEvent( QObject* object, QDragLeaveEvent* event )
 {
+  qDebug() << this << "::DragLeaveEvent(" << object << "," << event << ")";
+
   //
   // Nothing to do: bypass event & let default behaviour occur.
   return false;
@@ -142,6 +146,8 @@ bool
 FilenameDragAndDropEventFilter
 ::DropEvent( QObject* object, QDropEvent* event )
 {
+  qDebug() << this << "::DropEvent(" << object << "," << event << ")";
+
   assert( event!=NULL );
   assert( event->mimeData()!=NULL );
 

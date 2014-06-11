@@ -888,34 +888,42 @@ DatabaseBrowserController
     << parent << "\n"
     << "text[ 0 ]:" << parent->text( 0 ) << "\n"
     << "text[ 1 ]:" << parent->text( 1 ) << "\n"
-    << "text[ 2 ]:" << parent->text( 2 ) << "\n"
-    << "parent:" << parent->parent() << "\n"
-    << "text[ 0 ]:" << parent->parent()->text( 0 ) << "\n"
-    << "text[ 1 ]:" << parent->parent()->text( 1 );
+    << "text[ 2 ]:" << parent->text( 2 );
+
+  if( parent->parent()!=NULL )
+    qDebug()
+      << "parent:" << parent->parent() << "\n"
+      << "text[ 0 ]:" << parent->parent()->text( 0 ) << "\n"
+      << "text[ 1 ]:" << parent->parent()->text( 1 );
 #endif
+
 #else
   // Find parent-item by climbing parent hierarchy based on
   // drop-enabled flag.
   //
   // N.B.: item->parent() may not be updated yet by QTreeWidget.
   QTreeWidgetItem * parent = target;
+  assert( parent!=NULL );
 
   while( !parent->flags().testFlag( Qt::ItemIsDropEnabled ) )
     {
-    parent = parent->parent();
-    assert( parent!=NULL ); 
-
 #if 1
     qDebug()
       << "Item (parent):"
       << parent << "\n"
       << "text[ 0 ]:" << parent->text( 0 ) << "\n"
       << "text[ 1 ]:" << parent->text( 1 ) << "\n"
-      << "text[ 2 ]:" << parent->text( 2 ) << "\n"
-      << "parent:" << parent->parent() << "\n"
-      << "text[ 0 ]:" << parent->parent()->text( 0 ) << "\n"
-      << "text[ 1 ]:" << parent->parent()->text( 1 );
+      << "text[ 2 ]:" << parent->text( 2 );
+
+    if( parent->parent()!=NULL )
+      qDebug()
+        << "parent:" << parent->parent() << "\n"
+        << "text[ 0 ]:" << parent->parent()->text( 0 ) << "\n"
+        << "text[ 1 ]:" << parent->parent()->text( 1 );
 #endif
+
+    parent = parent->parent();
+    assert( parent!=NULL ); 
     }
 #endif
 

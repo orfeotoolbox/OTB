@@ -222,7 +222,7 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
       << item << "\n"
       << "text[ 0 ]:" << item->text( 0 ) << "\n"
       << "text[ 1 ]:" << item->text( 1 ) << "\n"
-      << "text[ 2 ]:" << item->text( 2 ) << "\n";
+      << "text[ 2 ]:" << item->text( 2 );
 
       if( item->parent()!=NULL )
         {
