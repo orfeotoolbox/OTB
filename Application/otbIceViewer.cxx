@@ -696,6 +696,8 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
         // case SHADER_ALPHA_SLIDER:
         //   shader->SetSliderPosition(shader->GetSliderPosition()+(yoffset>0?-25:-25));
         //   break;
+      default:
+        break;
       }
     return true;
     }
