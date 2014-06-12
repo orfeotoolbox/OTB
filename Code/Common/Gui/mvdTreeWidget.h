@@ -46,6 +46,9 @@
 // Monteverdi includes (sorted by alphabetic order)
 
 
+#define USE_CUSTOM_MIME_DATA 1
+
+
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
 
@@ -144,17 +147,17 @@ protected:
     //
     // QTreeWidget overloads.
 
-    virtual QStringList mimeTypes() const;
+  virtual QStringList mimeTypes() const;
 
-    virtual QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const;
+  virtual QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const;
 
-    virtual void dragEnterEvent( QDragEnterEvent* event );
-    virtual void dragMoveEvent( QDragMoveEvent* event );
-    virtual void dragLeaveEvent( QDragLeaveEvent* event );
-    virtual void dropEvent( QDropEvent* event );
+  virtual void dragEnterEvent( QDragEnterEvent* event );
+  virtual void dragMoveEvent( QDragMoveEvent* event );
+  virtual void dragLeaveEvent( QDragLeaveEvent* event );
+  virtual void dropEvent( QDropEvent* event );
     
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual void startDrag( Qt::DropActions supportedActions );
+  virtual Qt::DropActions supportedDropActions() const;
+  virtual void startDrag( Qt::DropActions supportedActions );
 
 //
 // Protected attributes.
@@ -182,6 +185,8 @@ private slots:
 /*****************************************************************************/
 /* GLOBAL FUNCTIONS DECLARATION                                              */
 
+#if USE_CUSTOM_MIME_DATA
+
 //
 // Declare Qt tree-widget item pointer types so they can be wrapped by
 // QVariant.
@@ -203,6 +208,8 @@ QDataStream&
 operator >>( QDataStream& in, QTreeWidgetItem * & item );
 
 #endif // !DATASTREAM_USE_TEMPLATE_OPERATORS
+
+#endif // USE_CUSTOM_MIME_DATA
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */

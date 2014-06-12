@@ -62,6 +62,8 @@ TreeWidget
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 
+#if USE_CUSTOM_MIME_DATA
+
 class StaticInitializer
 {
 public:
@@ -112,10 +114,14 @@ namespace
 static const StaticInitializer STATIC_INITIALIZER;
 }
 
+#endif // USE_CUSTOM_MIME_DATA
+
 /*****************************************************************************/
 QMimeData*
 EncodeMimeData( QMimeData* mimeData, const QList< QTreeWidgetItem* >& items )
 {
+#if USE_CUSTOM_MIME_DATA
+
   assert( mimeData!=NULL );
 
   typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
@@ -176,6 +182,8 @@ EncodeMimeData( QMimeData* mimeData, const QList< QTreeWidgetItem* >& items )
     }
   */
 
+#endif // USE_CUSTOM_MIME_DATA
+
   return mimeData;
 }
 
@@ -185,6 +193,10 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
 {
   assert( mimeData!=NULL );
 
+  int count = 0;
+
+#if USE_CUSTOM_MIME_DATA
+
   if( !mimeData->hasFormat( TreeWidget::ITEM_MIME_TYPE ) )
     return 0;
 
@@ -193,8 +205,6 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
   );
 
   QDataStream stream( &byteArray, QIODevice::ReadOnly );
-
-  int count = 0;
 
   //
   // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
@@ -237,6 +247,29 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
     }
 
   // qDebug() << count2 << "items.";
+
+#else // USE_CUSTOM_MIME_DATA
+
+  if( !mimeData->hasFormat( "application/x-qabstractitemmodeldatalist" ) )
+    return 0;
+
+  QByteArray byteArray(
+    mimeData->data( "application/x-qabstractitemmodeldatalist" )
+  );
+
+  QDataStream stream( &byteArray, QIODevice::ReadOnly );
+
+  //
+  // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
+
+  QTreeWidgetItem* item = NULL;
+
+  while( !stream.atEnd() )
+    {
+    ++ count;
+    }
+
+#endif // USE_CUSTOM_MIME_DATA
 
   return count;
 }
@@ -283,7 +316,11 @@ TreeWidget
 
   QStringList mimeTypes( QTreeWidget::mimeTypes() );
 
+#if USE_CUSTOM_MIME_DATA
+
   mimeTypes << TreeWidget::ITEM_MIME_TYPE;
+
+#endif // USE_CUSTOM_MIME_DATA
 
   return mimeTypes;
 }
@@ -456,6 +493,8 @@ TreeWidget
   */
 
   QTreeWidgetItem * target = itemAt( event->pos() );
+
+  qDebug() << "itemAt(" << event->pos() << "):" << target;
 
   if( event->source()==this )
     for( QTreeWidgetItemList::const_iterator it = items.begin();
