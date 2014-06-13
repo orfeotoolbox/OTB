@@ -594,7 +594,7 @@ void ConvBuffer(float* buf, float* kernel, int bufsize, int ksize)
 typedef vector<float*> LISTBUF;
 static LISTBUF  s_listconvbuf; //TODO, make 16 byte aligned
 static int s_convbufsize = 0; // the size of all the buffers in s_listconvbuf
-static int SIFT_ALIGNED16(s_convmask[4]) = {0xffffffff,0xffffffff,0xffffffff,0};
+static int SIFT_ALIGNED16(s_convmask[4]) = {static_cast<int>(0xffffffff),static_cast<int>(0xffffffff),static_cast<int>(0xffffffff),0};
 
 struct myaccum { float SIFT_ALIGNED16(faccum[2][4]); };
 
@@ -1750,7 +1750,7 @@ vec_float4 C-style expressions
 
 DEF_CONST(CF4_0,        0.0f) 
 DEF_CONST(CF4_2,        2.0f) 
-DEI_CONST(CI4_SIGN,     0x80000000u)
+DEI_CONST(CI4_SIGN,     static_cast<int>(0x80000000u))
 DEF_CONST(CF4__1,       -1.0f) 
 DEF_CONST(CF4_1,        1.0f) 
 DEF_CONST(CF4_SMALL,    1.0E-35f) 
