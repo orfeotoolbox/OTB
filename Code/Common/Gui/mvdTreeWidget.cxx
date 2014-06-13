@@ -250,6 +250,7 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
 
 #else // USE_CUSTOM_MIME_DATA
 
+  /*
   if( !mimeData->hasFormat( "application/x-qabstractitemmodeldatalist" ) )
     return 0;
 
@@ -268,6 +269,7 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
     {
     ++ count;
     }
+  */
 
 #endif // USE_CUSTOM_MIME_DATA
 
@@ -388,8 +390,12 @@ TreeWidget
   QTreeWidgetItem* item = itemAt( event->pos() );
   // const QMimeData * mimeData = event->mimeData();
 
+#if USE_CUSTOM_MIME_DATA
   if( event->mimeData()->hasFormat( TreeWidget::ITEM_MIME_TYPE ) &&
       item!=NULL )
+#else // USE_CUSTOM_MIME_DATA
+  if( item!=NULL )
+#endif // USE_CUSTOM_MIME_DATA
     {
     qDebug() << "ACCEPT";
     event->accept();
@@ -512,6 +518,8 @@ TreeWidget
 /*****************************************************************************/
 /* GLOBAL FUNCTIONS IMPLEMENTATION SECTION                                   */
 
+#if USE_CUSTOM_MIME_DATA
+
 #if TREE_WIDGET_ITEM_USE_STREAM_OPERATORS
 
 /*****************************************************************************/
@@ -552,6 +560,9 @@ operator >>( QDataStream& in, QTreeWidgetItem * & item )
   return in;
 
 #endif // DATA_STREAM_USE_TEMPLATE_OPERATORS
+
 }
 
 #endif // TREE_WIDGET_ITEM_USE_STREAM_OPERATORS
+
+#endif // USE_CUSTOM_MIME_DATA
