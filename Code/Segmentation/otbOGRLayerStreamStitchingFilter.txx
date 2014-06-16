@@ -19,6 +19,7 @@
 #define __otbOGRLayerStreamStitchingFilter_txx
 
 #include "otbOGRLayerStreamStitchingFilter.h"
+#include "itkContinuousIndex.h"
 
 #include <iomanip>
 #include "ogrsf_frmts.h"
@@ -133,29 +134,27 @@ OGRLayerStreamStitchingFilter<TInputImage>
 
         //Compute Stream line
         OGRLineString streamLine;
-        IndexType startIndex;
-        IndexType endIndex;
+        itk::ContinuousIndex<double,2> startIndex;
+        itk::ContinuousIndex<double,2> endIndex;
         if(!line)
         {
-          // Treat Row stream
-          //Compute the spatial filter of the upper stream
-          startIndex[0] = x*m_StreamSize[0];
-          startIndex[1] = m_StreamSize[1]*(y-1);
-          endIndex[0] = m_StreamSize[0]*x;
-          endIndex[1] = m_StreamSize[1]*y;
+          // Treat vertical stream line
+          startIndex[0] = static_cast<double>(m_StreamSize[0] * x) - 0.5;
+          startIndex[1] = static_cast<double>(m_StreamSize[1] * (y-1)) - 0.5;
+          endIndex = startIndex;
+          endIndex[1] += static_cast<double>(m_StreamSize[1]);
         }
         else
-        {  // Treat Column stream
-          //Compute the spatial filter of the left stream
-          startIndex[0] = (x-1)*m_StreamSize[0];
-          startIndex[1] = m_StreamSize[1]*y;
-          endIndex[0] = m_StreamSize[0]*x;
-          endIndex[1] = m_StreamSize[1]*y; //-1 to stop just before stream line
+        {  // Treat horizontal stream line
+          startIndex[0] = static_cast<double>(m_StreamSize[0] * (x-1)) - 0.5;
+          startIndex[1] = static_cast<double>(m_StreamSize[1] * y) - 0.5;
+          endIndex = startIndex;
+          endIndex[0] += static_cast<double>(m_StreamSize[0]);
         }
         OriginType  startPoint;
-        inputImage->TransformIndexToPhysicalPoint(startIndex, startPoint);
+        inputImage->TransformContinuousIndexToPhysicalPoint(startIndex, startPoint);
         OriginType  endPoint;
-        inputImage->TransformIndexToPhysicalPoint(endIndex, endPoint);
+        inputImage->TransformContinuousIndexToPhysicalPoint(endIndex, endPoint);
         streamLine.addPoint(startPoint[0], startPoint[1]);
         streamLine.addPoint(endPoint[0], endPoint[1]);
 
@@ -171,19 +170,19 @@ OGRLayerStreamStitchingFilter<TInputImage>
             // Treat Row stream
             //Compute the spatial filter of the upper stream
             UpperLeftCorner[0] = x*m_StreamSize[0] - 1 - m_Radius;
-            UpperLeftCorner[1] = m_StreamSize[1]*(y-1) + 1;
+            UpperLeftCorner[1] = m_StreamSize[1]*(y-1);
 
-            LowerRightCorner[0] = m_StreamSize[0]*x - 1 - 1;
-            LowerRightCorner[1] = m_StreamSize[1]*y - 1 - 1;
+            LowerRightCorner[0] = m_StreamSize[0]*x - 1;
+            LowerRightCorner[1] = m_StreamSize[1]*y - 1;
          }
          else
          {  // Treat Column stream
             //Compute the spatial filter of the left stream
-            UpperLeftCorner[0] = (x-1)*m_StreamSize[0] + 1;
-            UpperLeftCorner[1] = m_StreamSize[1]*y - 1 - 1 - m_Radius;
+            UpperLeftCorner[0] = (x-1)*m_StreamSize[0];
+            UpperLeftCorner[1] = m_StreamSize[1]*y - 1 - m_Radius;
 
-            LowerRightCorner[0] = m_StreamSize[0]*x - 1 - 1;
-            LowerRightCorner[1] = m_StreamSize[1]*y - 1 - 1; //-1 to stop just before stream line
+            LowerRightCorner[0] = m_StreamSize[0]*x - 1;
+            LowerRightCorner[1] = m_StreamSize[1]*y - 1; //-1 to stop just before stream line
          }
 
          OriginType  ulCorner;
@@ -211,20 +210,20 @@ OGRLayerStreamStitchingFilter<TInputImage>
          if(!line)
          {
             //Compute the spatial filter of the lower stream
-            UpperLeftCorner[0] = x*m_StreamSize[0] + 1;
-            UpperLeftCorner[1] = m_StreamSize[1]*(y-1) + 1;
+            UpperLeftCorner[0] = x*m_StreamSize[0];
+            UpperLeftCorner[1] = m_StreamSize[1]*(y-1);
 
-            LowerRightCorner[0] = m_StreamSize[0]*x + 1 + m_Radius;
-            LowerRightCorner[1] = m_StreamSize[1]*y - 1 - 1;
+            LowerRightCorner[0] = m_StreamSize[0]*x + m_Radius;
+            LowerRightCorner[1] = m_StreamSize[1]*y - 1;
          }
          else
          {
             //Compute the spatial filter of the right stream
-            UpperLeftCorner[0] = (x-1)*m_StreamSize[0] + 1;
-            UpperLeftCorner[1] = m_StreamSize[1]*y + 1;
+            UpperLeftCorner[0] = (x-1)*m_StreamSize[0];
+            UpperLeftCorner[1] = m_StreamSize[1]*y;
 
-            LowerRightCorner[0] = m_StreamSize[0]*x - 1 - 1;
-            LowerRightCorner[1] = m_StreamSize[1]*y + 1 + m_Radius;
+            LowerRightCorner[0] = m_StreamSize[0]*x - 1;
+            LowerRightCorner[1] = m_StreamSize[1]*y + m_Radius;
          }
 
          inputImage->TransformIndexToPhysicalPoint(UpperLeftCorner, ulCorner);
