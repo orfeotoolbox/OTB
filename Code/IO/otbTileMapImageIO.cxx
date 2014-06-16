@@ -54,7 +54,7 @@ TileMapImageIO::TileMapImageIO()
   // Set default spacing to one
   m_Spacing[0] = 1.0;
   m_Spacing[1] = 1.0;
-  // Set default origin to [0.5 , 0.5] 
+  // Set default origin to [0.5 , 0.5]
   // (consistency between ImageIO, see Mantis #942)
   m_Origin[0] = 0.5;
   m_Origin[1] = 0.5;
