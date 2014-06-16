@@ -314,10 +314,6 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
       ContinuousIndexType cidx;
       this->GetInput()->TransformPhysicalPointToContinuousIndex(point, cidx);
 
-      // OGR convention : vector data are recorded with a 0.5 shift
-      cidx[0] -= 0.5;
-      cidx[1] -= 0.5;
-
       RegionType paddedRegion = outputRegionForThread;
       paddedRegion.PadByRadius(m_NeighborhoodRadius);
       if (this->IsInsideWithNeighborhoodRadius(paddedRegion, cidx))
