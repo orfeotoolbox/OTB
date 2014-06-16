@@ -54,9 +54,10 @@ TileMapImageIO::TileMapImageIO()
   // Set default spacing to one
   m_Spacing[0] = 1.0;
   m_Spacing[1] = 1.0;
-  // Set default origin to zero
-  m_Origin[0] = 0.0;
-  m_Origin[1] = 0.0;
+  // Set default origin to [0.5 , 0.5] 
+  // (consistency between ImageIO, see Mantis #942)
+  m_Origin[0] = 0.5;
+  m_Origin[1] = 0.5;
 
   m_NbBands = 3;
   m_FlagWriteImageInformation = true;
@@ -412,8 +413,8 @@ void TileMapImageIO::ReadImageInformation()
   // Default Spacing
   m_Spacing[0] = 1;
   m_Spacing[1] = 1;
-  m_Origin[0] = 0;
-  m_Origin[1] = 0;
+  m_Origin[0] = 0.5;
+  m_Origin[1] = 0.5;
 
 
   if (m_FileName.empty() == true)
@@ -657,8 +658,8 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
     imageIO->SetDimensions(1, m_TileSize);
     imageIO->SetSpacing(0, 1);
     imageIO->SetSpacing(1, 1);
-    imageIO->SetOrigin(0, 0);
-    imageIO->SetOrigin(1, 0);
+    imageIO->SetOrigin(0, 0.5);
+    imageIO->SetOrigin(1, 0.5);
     imageIO->SetNumberOfComponents(3);
 
     vnl_vector<double> axisDirection(2);
