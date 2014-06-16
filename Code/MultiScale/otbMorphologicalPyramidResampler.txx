@@ -19,7 +19,7 @@
 #define __otbMorphologicalPyramidResampler_txx
 #include "otbMorphologicalPyramidResampler.h"
 #include "itkResampleImageFilter.h"
-#include "itkScaleTransform.h"
+#include "itkScalableAffineTransform.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkProgressAccumulator.h"
@@ -123,7 +123,7 @@ Resampler<TInputImage, TOutputImage>
 
   // Filters typedefs
   typedef itk::ResampleImageFilter<InputImageType, OutputImageType>   ResampleFilterType;
-  typedef itk::ScaleTransform<double, InputImageType::ImageDimension> TransformType;
+  typedef itk::ScalableAffineTransform<double, InputImageType::ImageDimension> TransformType;
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
   typedef itk::ImageRegionConstIterator<OutputImageType>              ConstIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType>                   IteratorType;
@@ -134,13 +134,18 @@ Resampler<TInputImage, TOutputImage>
   typename TransformType::Pointer      transform = TransformType::New();
 
   // Scale parameters computation
-  typename TransformType::ParametersType scales(2);
+  typename TransformType::InputVectorType scales;
   typename InputImageType::SizeType    inputSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
   typename InputImageType::SpacingType inputSpacing = this->GetInput()->GetSpacing();
-  scales[0] = static_cast<double>(inputSize[0] - 1) / static_cast<double>(m_Size[0] - 1);
-  scales[1] = static_cast<double>(inputSize[1] - 1) / static_cast<double>(m_Size[1] - 1);
-  transform->SetParameters(scales);
+  scales[0] = static_cast<double>(inputSize[0]) / static_cast<double>(m_Size[0]);
+  scales[1] = static_cast<double>(inputSize[1]) / static_cast<double>(m_Size[1]);
+  transform->SetScale(scales);
   transform->SetCenter(this->GetInput()->GetOrigin());
+  typename TransformType::OutputVectorType translation;
+  translation[0] = 0.5 * inputSpacing[0] * (scales[0] - 1.0);
+  translation[1] = 0.5 * inputSpacing[1] * (scales[1] - 1.0);
+  transform->SetTranslation(translation);
+  
 
   // Resampling filter set up
   resampler->SetTransform(transform);
