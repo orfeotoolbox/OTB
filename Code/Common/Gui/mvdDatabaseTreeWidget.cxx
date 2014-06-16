@@ -176,20 +176,6 @@ DatabaseTreeWidget
 }
 
 /*******************************************************************************/
-void 
-DatabaseTreeWidget::mouseMoveEvent( QMouseEvent * event )
-{
-  TreeWidget::mouseMoveEvent( event );
-}
-
-/*******************************************************************************/
-void
-DatabaseTreeWidget::mousePressEvent(QMouseEvent *event)
-{
-  TreeWidget::mousePressEvent( event );
-}
-
-/*******************************************************************************/
 void
 DatabaseTreeWidget::dropEvent(QDropEvent *event)
 {

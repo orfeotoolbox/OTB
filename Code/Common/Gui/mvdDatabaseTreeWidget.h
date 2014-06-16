@@ -97,8 +97,6 @@ public:
 
   //
   //
-  void mouseMoveEvent( QMouseEvent * event );
-  void mousePressEvent( QMouseEvent * event );
   void dropEvent(QDropEvent *event);
   void keyPressEvent( QKeyEvent * event );
 
