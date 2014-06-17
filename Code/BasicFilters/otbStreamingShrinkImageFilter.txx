@@ -129,18 +129,24 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
   typename OutputImageType::RegionType  shrinkedOutputLargestPossibleRegion;
   typename OutputImageType::SizeType    shrinkedOutputSize;
   typename OutputImageType::IndexType   shrinkedOutputStartIndex;
+  typename OutputImageType::PointType   shrinkedOutputOrigin;
 
   for (unsigned int i = 0; i < OutputImageType::ImageDimension; ++i)
     {
     shrinkedOutputSpacing[i] = inputSpacing[i] * static_cast<double>(m_ShrinkFactor);
     shrinkedOutputSize[i] = inputSize[i] > m_ShrinkFactor ? inputSize[i] / m_ShrinkFactor : 1;
+    
+    shrinkedOutputOrigin[i] = inputPtr->GetOrigin()[i] + inputSpacing[i] * 
+      (static_cast<double>(inputPtr->GetLargestPossibleRegion().GetIndex(i)) - 0.5)
+      + shrinkedOutputSpacing[i] * 0.5;
 
-    // TODO : don't know what to do here.
-    // dividing the input index by the shrink factor does not make a lot of sense...
+    // we choose to output a region with a start index [0,0]
+    // the origin is set accordingly
     shrinkedOutputStartIndex[i] = 0;
     }
 
   m_ShrinkedOutput->SetSpacing(shrinkedOutputSpacing);
+  m_ShrinkedOutput->SetOrigin(shrinkedOutputOrigin);
 
   shrinkedOutputLargestPossibleRegion.SetSize(shrinkedOutputSize);
   shrinkedOutputLargestPossibleRegion.SetIndex(shrinkedOutputStartIndex);
@@ -176,6 +182,7 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
   for(inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt, progress.CompletedPixel())
     {
     const IndexType& inIndex = inIt.GetIndex();
+    // TODO the pixel value should be taken near the centre of the cell, not at the corners
     if (inIndex[0] % m_ShrinkFactor == 0
         && inIndex[1] % m_ShrinkFactor == 0 )
       {
