@@ -136,7 +136,7 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
     shrinkedOutputSpacing[i] = inputSpacing[i] * static_cast<double>(m_ShrinkFactor);
     shrinkedOutputSize[i] = inputSize[i] > m_ShrinkFactor ? inputSize[i] / m_ShrinkFactor : 1;
     
-    shrinkedOutputOrigin[i] = inputPtr->GetOrigin()[i] + inputSpacing[i] * 
+    shrinkedOutputOrigin[i] = inputPtr->GetOrigin()[i] + inputSpacing[i] *
       (static_cast<double>(inputPtr->GetLargestPossibleRegion().GetIndex(i)) - 0.5)
       + shrinkedOutputSpacing[i] * 0.5;
 
