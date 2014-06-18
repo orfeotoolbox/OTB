@@ -896,9 +896,9 @@ DatabaseBrowserController
 
   DatabaseBrowserWidgetTest * widget = GetWidget< DatabaseBrowserWidgetTest >();
 #else // ENABLE_TREE_WIDGET_TEST
-  assert( GetWidget()==GetWidget< DatabaseBrowserWidgetTest >() );
+  assert( GetWidget()==GetWidget< DatabaseBrowserWidget >() );
 
-  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidgetTest >();
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
 #endif // ENABLE_TREE_WIDGET_TEST
 
   //
