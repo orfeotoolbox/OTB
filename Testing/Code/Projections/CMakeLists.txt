@@ -1376,7 +1376,7 @@ add_test(prTvGeometriesProjectionFilterFromMapToSensor ${PROJECTIONS_TESTS3}
 endif()
 
 add_test(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
-        --compare-ascii ${NOTOL}
+        --compare-ogr ${NOTOL}
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
         otbVectorDataProjectionFilterFromMapToGeo
@@ -1385,7 +1385,7 @@ add_test(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
 )
 
 add_test(prTvGeometriesProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
-        --compare-ascii ${NOTOL}
+        --compare-ogr ${NOTOL}
         ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
         ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.kml
         otbGeometriesProjectionFilterFromMapToGeo

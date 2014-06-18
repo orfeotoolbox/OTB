@@ -239,7 +239,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrVectorDataReprojectionFromMapToMap
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.kml
                              -out.proj user
                              -out.proj.user.map  lambert93
-                     VALID   --compare-ascii ${NOTOL}
+                     VALID   --compare-ogr ${NOTOL}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.kml
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.kml)
 
