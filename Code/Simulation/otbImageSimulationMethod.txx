@@ -158,6 +158,8 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 
   m_LabelMapToLabelImageFilter->SetInput(m_Spatialisation->GetOutput());
 
+  m_LabelMapToSimulatedImageFilter->UpdateOutputInformation();
+
   for (unsigned int i = 0; i < m_NumberOfComponentsPerPixel; ++i)
     {
 

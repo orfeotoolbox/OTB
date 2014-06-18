@@ -201,15 +201,15 @@ public:
     TOutput val = itk::NumericTraits<TOutput>::Zero;
     if (A != itk::NumericTraits<TInput>::Zero && vcl_abs(A) != static_cast<TInput>(m_Radius) && m_Radius != 0)
       {
-      double ival = static_cast<double>(originalProfileSize) * static_cast<double>(vcl_abs(A)) /
+      double ival = static_cast<double>(originalProfileSize - 1) * static_cast<double>(vcl_abs(A)) /
                     static_cast<double>(m_Radius);
       double ivalFloor = vcl_floor(ival);
       double left = ival - ivalFloor;
 
-      if (ivalFloor < originalProfileSize - 1)
+      if (static_cast<unsigned int>(ivalFloor) + 1 < originalProfileSize)
         {
-        val = left * m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] +
-              (1 - left) * m_OriginalProfile[static_cast<unsigned int>(ivalFloor) + 1];
+        val = (1.0 - left) * m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] +
+              left * m_OriginalProfile[static_cast<unsigned int>(ivalFloor) + 1];
         }
       else
         {
