@@ -46,7 +46,7 @@
 #include "Gui/mvdAbstractModelController.h"
 #include "Gui/mvdGui.h"
 
-#define ENABLE_TREE_WIDGET_TEST ((defined( _DEBUG ) && 1) || 0)
+#define ENABLE_TREE_WIDGET_TEST ((defined( _DEBUG ) && 0) || 0)
 
 
 /*****************************************************************************/
