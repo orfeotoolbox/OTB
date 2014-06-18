@@ -45,12 +45,14 @@
 #include "Core/mvdSystemError.h"
 //
 #if ENABLE_TREE_WIDGET_TEST
-#include "Gui/mvdDatabaseBrowserWidgetTest.h"
+#  include "Gui/mvdDatabaseBrowserWidgetTest.h"
 #else // ENABLE_TREE_WIDGET_TEST
-#include "Gui/mvdDatabaseBrowserWidget.h"
+// #  include "Gui/mvdDatabaseTreeWidget.h"
+#  include "Gui/mvdDatabaseBrowserWidget.h"
 #endif // ENABLE_TREE_WIDGET_TEST
-#include "Gui/mvdDatabaseTreeWidget.h"
-#include "Gui/mvdTreeWidgetItem.h"
+#if !DISABLE_CUSTOM_TW_ITEM
+#  include "Gui/mvdTreeWidgetItem.h"
+#endif // !DISABLE_CUSTOM_TW_ITEM
 
 namespace mvd
 {
@@ -340,7 +342,11 @@ DatabaseBrowserController
     switch( child->type() )
       {
       // Nodes.
+#if DISABLE_CUSTOM_TW_ITEM
+      case DatabaseBrowserWidgetTest::ITEM_TYPE_NODE:
+#else // DISABLE_CUSTOM_TW_ITEM
       case TreeWidgetItem::ITEM_TYPE_NODE:
+#endif // DISABLE_CUSTOM_TW_ITEM
         // assert( child->data( 1, Qt::UserRole + 1 ).isValid() );
 #if ENABLE_TREE_QDEBUG
         qDebug()
@@ -354,7 +360,11 @@ DatabaseBrowserController
         break;
 
       // Leaves.
+#if DISABLE_CUSTOM_TW_ITEM
+      case DatabaseBrowserWidgetTest::ITEM_TYPE_LEAF:
+#else // DISABLE_CUSTOM_TW_ITEM
       case TreeWidgetItem::ITEM_TYPE_LEAF:
+#endif // DISABLE_CUSTOM_TW_ITEM
         // assert( item->data( 1, Qt::UserRole + 1 ).isValid() );
 #if ENABLE_TREE_QDEBUG
         qDebug()
@@ -374,7 +384,11 @@ DatabaseBrowserController
         qDebug()
           << "Other:"
           << child->type()
+#if DISABLE_CUSTOM_TW_ITEM
+          << child->text( DatabaseBrowserWidgetTest::COLUMN_INDEX_TEXT );
+#else // DISABLE_CUSOM_TW_ITEM
           << child->text( TreeWidgetItem::COLUMN_INDEX_TEXT );
+#endif // DISABLE_CUSOM_TW_ITEM
         break;
       }
 
@@ -383,8 +397,13 @@ DatabaseBrowserController
       TreeWidgetItemMap::iterator it(
         container->insert(
           child->data(
+#if DISABLE_CUSTOM_TW_ITEM
+            DatabaseBrowserWidgetTest::COLUMN_INDEX_ID,
+            DatabaseBrowserWidgetTest::ITEM_ROLE_ID
+#else // DISABLE_CUSOM_TW_ITEM
             TreeWidgetItem::COLUMN_INDEX_ID,
             TreeWidgetItem::ITEM_ROLE_ID
+#endif // DISABLE_CUSOM_TW_ITEM
           ).toString(),
           child
         )
@@ -397,10 +416,17 @@ DatabaseBrowserController
         qDebug()
           << "Duplicate:"
           << child->type()
+#if DISABLE_CUSTOM_TW_ITEM
+          << it.value()->text( DatabaseBrowserWidgetTest::COLUMN_INDEX_TEXT )
+          << it.value()->text( DatabaseBrowserWidgetTest::COLUMN_INDEX_ID )
+          << it.value()->data( DatabaseBrowserWidgetTest::COLUMN_INDEX_ID,
+                               DatabaseBrowserWidgetTest::ITEM_ROLE_ID );
+#else // DISABLE_CUSOM_TW_ITEM
           << it.value()->text( TreeWidgetItem::COLUMN_INDEX_TEXT )
           << it.value()->text( TreeWidgetItem::COLUMN_INDEX_ID )
           << it.value()->data( TreeWidgetItem::COLUMN_INDEX_ID,
                                TreeWidgetItem::ITEM_ROLE_ID );
+#endif // DISABLE_CUSOM_TW_ITEM
 #endif
 
         duplicates.push_back( it.value() );
@@ -595,6 +621,8 @@ DatabaseBrowserController
     QTreeWidgetItem* qtwi = *it;
     assert( qtwi!=NULL );
 
+#if DISABLE_CUSTOM_TW_ITEM
+#else // DISABLE_CUSTOM_TW_ITEM
     assert( qtwi==dynamic_cast< TreeWidgetItem* >( qtwi ) );
     TreeWidgetItem* item = dynamic_cast< TreeWidgetItem* >( qtwi );
 
@@ -645,6 +673,7 @@ DatabaseBrowserController
           }
         }
       }
+#endif // DISABLE_CUSTOM_TW_ITEM
     }
 }
 
@@ -923,6 +952,8 @@ DatabaseBrowserController
   // Check inputs.
   assert( item!=NULL );
 
+#if USE_CUSTOM_TW_ITEM
+
   // Access item and parent.
   assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
   TreeWidgetItem* childItem = dynamic_cast< TreeWidgetItem* >( item );
@@ -1013,6 +1044,8 @@ DatabaseBrowserController
 
   // No need to update model/refresh view because widget has already
   // been repainted.
+
+#endif // USE_CUSTOM_TW_ITEM
 }
 
 /*******************************************************************************/
@@ -1025,6 +1058,8 @@ DatabaseBrowserController
 
   // Check inputs.
   assert( parent!=NULL );
+
+#if USE_CUSTOM_TW_ITEM
 
   // Access item and parent.
   assert( parent==dynamic_cast< TreeWidgetItem* >( parent ) );
@@ -1050,6 +1085,8 @@ DatabaseBrowserController
 
   // Refresh model.
   emit ModelUpdated();
+
+#endif // USE_CUSTOM_TW_ITEM
 }
 
 /*******************************************************************************/
@@ -1062,6 +1099,8 @@ DatabaseBrowserController
 
   // Check inputs.
   assert( item!=NULL );
+
+#if USE_CUSTOM_TW_ITEM
 
   // Access item and parent.
   assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
@@ -1085,6 +1124,8 @@ DatabaseBrowserController
       DeleteDataset( twi->GetHash() );
       break;
     }
+
+#endif // USE_CUSTOM_TW_ITEM
 }
 
 /*******************************************************************************/
@@ -1098,6 +1139,8 @@ DatabaseBrowserController
   // Check inputs.
   assert( item!=NULL );
   assert( column>=0 );
+
+#if USE_CUSTOM_TW_ITEM
 
   // Access item and parent.
   assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
@@ -1127,6 +1170,8 @@ DatabaseBrowserController
         model->RenameDataset( twi->GetHash(), twi->GetText() );    
       break;
     }
+
+#endif // USE_CUSTOM_TW_ITEM
 }
 
 } // end namespace 'mvd'

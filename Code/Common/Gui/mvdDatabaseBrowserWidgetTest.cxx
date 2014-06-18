@@ -39,8 +39,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#include "Gui/mvdDatabaseTreeWidget.h"
-#include "Gui/mvdTreeWidgetItem.h"
+#if !DISABLE_CUSTOM_TW_TEST
+#  include "Gui/mvdTreeWidgetItem.h"
+#endif
 
 #define ENABLE_DISPLAY_ID 1
 
@@ -169,7 +170,11 @@ DatabaseBrowserWidgetTest
   return
     InsertItem(
       parent,
+#if DISABLE_CUSTOM_TW_ITEM
+      ITEM_TYPE_LEAF,
+#else // DISABLE_CUSTOM_TW_ITEM
       TreeWidgetItem::ITEM_TYPE_LEAF,
+#endif // DISABLE_CUSTOM_TW_ITEM
       text,
       id,
       columns
@@ -180,11 +185,54 @@ DatabaseBrowserWidgetTest
 QTreeWidgetItem*
 DatabaseBrowserWidgetTest
 ::InsertItem( QTreeWidgetItem* parent,
+#if DISABLE_CUSTOM_TW_ITEM
+              ItemType type,
+#else // DISABLE_CUSTOM_TW_ITEM
               TreeWidgetItem::ItemType type,
+#endif // DISABLE_CUSTOM_TW_ITEM
               const QString& text,
               const QVariant& id,
               const QStringList& columns )
 {
+#if DISABLE_CUSTOM_TW_ITEM
+  QTreeWidgetItem * item =
+    new QTreeWidgetItem( parent, QStringList( text ) << QString() << columns, type );
+
+  item->setData( COLUMN_INDEX_ID, ITEM_ROLE_ID, id );
+  item->setText( COLUMN_INDEX_ID, id.toString() );
+
+  switch( type )
+    {
+    case ITEM_TYPE_NODE:
+      item->setChildIndicatorPolicy(
+        QTreeWidgetItem::ShowIndicator
+      );
+      item->setFlags(
+        // Qt::ItemIsDragEnabled |
+        Qt::ItemIsDropEnabled |
+        Qt::ItemIsEditable |
+        Qt::ItemIsEnabled
+      );
+    break;
+
+    case ITEM_TYPE_LEAF:
+      item->setChildIndicatorPolicy(
+        QTreeWidgetItem::DontShowIndicator
+      );
+      item->setFlags(
+        Qt::ItemIsDragEnabled |
+        Qt::ItemIsEditable |
+        Qt::ItemIsEnabled |
+        Qt::ItemIsSelectable
+      );
+      break;
+
+    default:
+      assert( false && "Unhandled ItemType." );
+      break;
+    }
+
+#else // DISABLE_CUSTOM_TW_ITEM
   TreeWidgetItem* item =
     new TreeWidgetItem(
       parent,
@@ -193,7 +241,7 @@ DatabaseBrowserWidgetTest
       columns,
       type
     );
-
+#endif // DISABLE_CUSTOM_TW_ITEM
   return item;
 }
 
@@ -208,7 +256,11 @@ DatabaseBrowserWidgetTest
   return
     InsertItem(
       parent,
+#if DISABLE_CUSTOM_TW_ITEM
+      ITEM_TYPE_NODE,
+#else // DISABLE_CUSTOM_TW_ITEM
       TreeWidgetItem::ITEM_TYPE_NODE,
+#endif // DISABLE_CUSTOM_TW_ITEM
       text,
       id,
       columns
@@ -318,12 +370,18 @@ DatabaseBrowserWidgetTest
   // TODO: Should be DatabaseModel::DatasetId but widgets should not depend on models!!!
   QString currentHash;
 
+#if DISABLE_CUSTOM_TW_ITEM
+  if( current!=NULL && current->parent()!=NULL )
+    currentHash = current->text( COLUMN_INDEX_HASH );
+
+#else // DISABLE_CUSTOM_TW_ITEM
   TreeWidgetItem* currentItem = dynamic_cast< TreeWidgetItem* >( current );
 
   if( currentItem!=NULL && currentItem->parent()!=NULL )
     // if current is root and not NULL get the Id of the corresponding
     // Dataset.
     currentHash = currentItem->GetHash();
+#endif // DISABLE_CUSTOM_TW_ITEM
 
   //
   // Previous
@@ -331,10 +389,16 @@ DatabaseBrowserWidgetTest
   // TODO: Should be DatabaseModel::DatasetId but widgets should not depend on models!!!
   QString previousHash;
 
+#if DISABLE_CUSTOM_TW_ITEM
+  if( previous!=NULL )
+    previousHash = previous->text( COLUMN_INDEX_HASH );
+
+#else // DISABLE_CUSTOM_TW_ITEM
   TreeWidgetItem* previousItem = dynamic_cast< TreeWidgetItem* >( previous );
 
   if( previousItem!=NULL )
     previousHash = previousItem->GetHash();
+#endif // DISABLE_CUSTOM_TW_ITEM
 
   //
   // Emit event.
@@ -352,6 +416,9 @@ DatabaseBrowserWidgetTest
   // get the search text
   m_SearchText = search;
 
+#if DISABLE_CUSTOM_TW_ITEM
+
+#else // DISABLE_CUSTOM_TW_ITEM
   QTreeWidgetItemList items( GetItems() );
 
   // qDebug() << items;
@@ -381,6 +448,7 @@ DatabaseBrowserWidgetTest
     // qDebug()
     //   << item->text( 0 ) << ":" << ( item->isHidden() ? "HIDDEN" : "VISIBLE" );
     }
+#endif // DISABLE_CUSTOM_TW_ITEM
 }
 
 } // end namespace 'mvd'

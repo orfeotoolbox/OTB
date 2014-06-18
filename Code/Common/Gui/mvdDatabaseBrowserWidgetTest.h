@@ -24,6 +24,17 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+//
+// This file is included if and only if ENABLE_TREE_WIDGET_TEST is
+// true but its definition is not included here (see
+// mvdDatabaseBrowserController.h).
+#ifndef ENABLE_TREE_WIDGET_TEST
+#  define ENABLE_TREE_WIDGET_TEST 1
+#endif // ENABLE_TREE_WIDGET_TEST
+//
+// Put this line before #include directives for conditional file
+// includes.
+#define DISABLE_CUSTOM_TW_ITEM ((defined( ENABLE_TREE_WIDGET_TEST ) && 1) || 0)
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
@@ -45,7 +56,9 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdTypes.h"
-#include "Gui/mvdTreeWidgetItem.h"
+#if !DISABLE_CUSTOM_TW_ITEM
+#  include "Gui/mvdTreeWidgetItem.h"
+#endif // !DISABLE_CUSTOM_TW_ITEM
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -93,6 +106,29 @@ public:
   /**
    */
   typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+
+#if DISABLE_CUSTOM_TW_ITEM
+
+  enum ColumnIndex
+  {
+    COLUMN_INDEX_TEXT = 0,
+    COLUMN_INDEX_ID = 1,
+    COLUMN_INDEX_HASH = 2,
+  };
+
+  enum ItemType
+  {
+    ITEM_TYPE_NONE = QTreeWidgetItem::UserType,
+    ITEM_TYPE_NODE = QTreeWidgetItem::UserType + 1,
+    ITEM_TYPE_LEAF = QTreeWidgetItem::UserType + 2,
+  };
+
+  enum ItemRole
+  {
+    ITEM_ROLE_ID = Qt::UserRole + 1,
+  };
+
+#endif // DISABLE_CUSTOM_TW_ITEM
 
 //
 // Public methods.
@@ -218,7 +254,11 @@ private:
   /**
    */
   QTreeWidgetItem* InsertItem( QTreeWidgetItem* parent,
+#if DISABLE_CUSTOM_TW_ITEM
+                               ItemType,
+#else // DISABLE_CUSTOM_TW_ITEM
                                TreeWidgetItem::ItemType type,
+#endif // DISABLE_CUSTOM_TW_ITEM
                                const QString& text,
                                const QVariant& id,
                                const QStringList& columns =QStringList() );
