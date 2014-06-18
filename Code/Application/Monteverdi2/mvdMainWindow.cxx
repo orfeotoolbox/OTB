@@ -57,7 +57,11 @@
 #include "Gui/mvdColorDynamicsController.h"
 #include "Gui/mvdColorDynamicsWidget.h"
 #include "Gui/mvdDatabaseBrowserController.h"
+#if ENABLE_TREE_WIDGET_TEST
+#include "Gui/mvdDatabaseBrowserWidgetTest.h"
+#else // ENABLE_TREE_WIDGET_TEST
 #include "Gui/mvdDatabaseBrowserWidget.h"
+#endif // ENABLE_TREE_WIDGET_TEST
 #include "Gui/mvdDatasetPropertiesController.h"
 #include "Gui/mvdDatasetPropertiesWidget.h"
 #include "Gui/mvdFilenameDragAndDropEventFilter.h"
@@ -298,6 +302,16 @@ MainWindow
     m_DatabaseBrowserDock->findChild< DatabaseBrowserController* >();
   assert( dbBrowserController!=NULL );
 
+#if ENABLE_TREE_WIDGET_TEST
+  assert(
+    dbBrowserController->GetWidget()==
+    dbBrowserController->GetWidget< DatabaseBrowserWidgetTest >()
+  );
+
+  DatabaseBrowserWidgetTest* dbBrowserWidget =
+    dbBrowserController->GetWidget< DatabaseBrowserWidgetTest >();
+
+#else // ENABLE_TREE_WIDGET_TEST
   assert(
     dbBrowserController->GetWidget()==
     dbBrowserController->GetWidget< DatabaseBrowserWidget >()
@@ -305,6 +319,7 @@ MainWindow
 
   DatabaseBrowserWidget* dbBrowserWidget =
     dbBrowserController->GetWidget< DatabaseBrowserWidget >();
+#endif // ENABLE_TREE_WIDGET_TEST
 
   dbBrowserWidget->InstallTreeEventFilter( m_FilenameDragAndDropEventFilter );
 
@@ -716,6 +731,15 @@ MainWindow
 
   // Database-browser.
   assert( m_DatabaseBrowserDock==NULL );
+#if ENABLE_TREE_WIDGET_TEST
+  m_DatabaseBrowserDock =
+    AddDockWidget
+    < DatabaseBrowserWidgetTest, DatabaseBrowserController, QDockWidget >
+    ( "DATABASE_BROWSER",
+      tr( "Database browser (test)" ),
+      Qt::LeftDockWidgetArea
+    );
+#else // ENABLE_TREE_WIDGET_TEST
   m_DatabaseBrowserDock =
     AddDockWidget
     < DatabaseBrowserWidget, DatabaseBrowserController, QDockWidget >
@@ -723,6 +747,7 @@ MainWindow
       tr( "Database browser" ),
       Qt::LeftDockWidgetArea
     );
+#endif // ENABLE_TREE_WIDGET_TEST
 
   // Dataset-properties.
   assert( m_DatasetPropertiesDock==NULL );

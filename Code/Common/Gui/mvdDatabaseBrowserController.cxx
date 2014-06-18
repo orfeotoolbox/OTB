@@ -44,7 +44,11 @@
 #include "Core/mvdVectorImageModel.h"
 #include "Core/mvdSystemError.h"
 //
+#if ENABLE_TREE_WIDGET_TEST
+#include "Gui/mvdDatabaseBrowserWidgetTest.h"
+#else // ENABLE_TREE_WIDGET_TEST
 #include "Gui/mvdDatabaseBrowserWidget.h"
+#endif // ENABLE_TREE_WIDGET_TEST
 #include "Gui/mvdDatabaseTreeWidget.h"
 #include "Gui/mvdTreeWidgetItem.h"
 
@@ -64,7 +68,12 @@ namespace mvd
 
 /*******************************************************************************/
 DatabaseBrowserController
+#if ENABLE_TREE_WIDGET_TEST
+::DatabaseBrowserController( DatabaseBrowserWidgetTest * widget,
+                             QObject* parent ) :
+#else // #if ENABLE_TREE_WIDGET_TEST
 ::DatabaseBrowserController( DatabaseBrowserWidget* widget, QObject* parent ) :
+#endif // #if ENABLE_TREE_WIDGET_TEST
   AbstractModelController( widget, parent )
 {
 }
@@ -80,7 +89,11 @@ void
 DatabaseBrowserController
 ::Connect( AbstractModel* model )
 {
+#if ENABLE_TREE_WIDGET_TEST
+  DatabaseBrowserWidgetTest * widget = GetWidget< DatabaseBrowserWidgetTest >();
+#else // ENABLE_TREE_WIDGET_TEST
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+#endif // ENABLE_TREE_WIDGET_TEST
 
   QObject::connect(
     widget,
@@ -157,7 +170,11 @@ void
 DatabaseBrowserController
 ::Disconnect( AbstractModel* model )
 {
+#if ENABLE_TREE_WIDGET_TEST
+  DatabaseBrowserWidgetTest* widget = GetWidget< DatabaseBrowserWidgetTest >();
+#else // ENABLE_TREE_WIDGET_TEST
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+#endif // ENABLE_TREE_WIDGET_TEST
 
   QObject::disconnect(
     widget,
@@ -252,7 +269,11 @@ DatabaseBrowserController
 {
   //
   // Access widget.
+#if ENABLE_TREE_WIDGET_TEST
+  DatabaseBrowserWidgetTest * widget = GetWidget< DatabaseBrowserWidgetTest >();
+#else // ENABLE_TREE_WIDGET_TEST
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+#endif // ENABLE_TREE_WIDGET_TEST
 
   // Block this controller's signals to prevent display refreshes
   // but let let widget(s) signal their changes so linked values
@@ -290,7 +311,11 @@ DatabaseBrowserController
   assert( model->GetDatabaseConnection() );
   const DatabaseConnection* db = model->GetDatabaseConnection();
 
+#if ENABLE_TREE_WIDGET_TEST
+  DatabaseBrowserWidgetTest * widget = GetWidget< DatabaseBrowserWidgetTest >();
+#else // ENABLE_TREE_WIDGET_TEST
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+#endif // ENABLE_TREE_WIDGET_TEST
   assert( widget!=NULL );
 
   //
@@ -538,7 +563,11 @@ DatabaseBrowserController
 {
   //
   // Access widget.
+#if ENABLE_TREE_WIDGET_TEST
+  DatabaseBrowserWidgetTest * widget = GetWidget< DatabaseBrowserWidgetTest >();
+#else // ENABLE_TREE_WIDGET_TEST
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+#endif // ENABLE_TREE_WIDGET_TEST
 
   //
   // Access model.
@@ -547,11 +576,19 @@ DatabaseBrowserController
 
   //
   // Retrieve items.
+#if ENABLE_TREE_WIDGET_TEST
+  DatabaseBrowserWidgetTest::QTreeWidgetItemList items( widget->GetItems() );
+#else // ENABLE_TREE_WIDGET_TEST
   DatabaseBrowserWidget::QTreeWidgetItemList items( widget->GetItems() );
+#endif // ENABLE_TREE_WIDGET_TEST
 
   //
   // Traverse item list.
+#if ENABLE_TREE_WIDGET_TEST
+  for( DatabaseBrowserWidgetTest::QTreeWidgetItemList::iterator it( items.begin() );
+#else // ENABLE_TREE_WIDGET_TEST
   for( DatabaseBrowserWidget::QTreeWidgetItemList::iterator it( items.begin() );
+#endif // ENABLE_TREE_WIDGET_TEST
        it!=items.end();
        ++it )
     {
@@ -757,8 +794,13 @@ DatabaseBrowserController
   DatabaseModel* model = GetModel< DatabaseModel >();
   assert( model!=NULL );
 
+#if ENABLE_TREE_WIDGET_TEST
+  assert( GetWidget()==GetWidget< DatabaseBrowserWidgetTest >() );
+  DatabaseBrowserWidgetTest * widget = GetWidget< DatabaseBrowserWidgetTest >();
+#else // ENABLE_TREE_WIDGET_TEST
   assert( GetWidget()==GetWidget< DatabaseBrowserWidget >() );
   DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+#endif // ENABLE_TREE_WIDGET_TEST
   assert( widget!=NULL );
 
   try
@@ -849,9 +891,15 @@ DatabaseBrowserController
     return;
 
   assert( GetWidget()!=NULL );
-  assert( GetWidget()==GetWidget< DatabaseBrowserWidget >() );
+#if ENABLE_TREE_WIDGET_TEST
+  assert( GetWidget()==GetWidget< DatabaseBrowserWidgetTest >() );
 
-  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+  DatabaseBrowserWidgetTest * widget = GetWidget< DatabaseBrowserWidgetTest >();
+#else // ENABLE_TREE_WIDGET_TEST
+  assert( GetWidget()==GetWidget< DatabaseBrowserWidgetTest >() );
+
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidgetTest >();
+#endif // ENABLE_TREE_WIDGET_TEST
 
   //
   // Block widget's signals here to avoid recursive

@@ -46,6 +46,8 @@
 #include "Gui/mvdAbstractModelController.h"
 #include "Gui/mvdGui.h"
 
+#define ENABLE_TREE_WIDGET_TEST ((defined( _DEBUG )  && 0)|| 0)
+
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -60,7 +62,11 @@ namespace mvd
 {
 //
 // Internal classes pre-declaration.
+#if ENABLE_TREE_WIDGET_TEST
+class DatabaseBrowserWidgetTest;
+#else // ENABLE_TREE_WIDGET_TEST
 class DatabaseBrowserWidget;
+#endif // ENABLE_TREE_WIDGET_TEST
 class DatasetModel;
 
 /*****************************************************************************/
@@ -92,8 +98,13 @@ public:
    * \param widget Controlled widget.
    * \param parent Parent QObject of this QObject.
    */
+#if ENABLE_TREE_WIDGET_TEST
+  DatabaseBrowserController( DatabaseBrowserWidgetTest * widget,
+			     QObject* parent =NULL );
+#else // #if ENABLE_TREE_WIDGET_TEST
   DatabaseBrowserController( DatabaseBrowserWidget* widget,
 			     QObject* parent =NULL );
+#endif // #if ENABLE_TREE_WIDGET_TEST
 
   /**
    * \brief Destructor.

@@ -151,5 +151,4 @@
 // #if (defined( _DEBUG ) && FORCE_DISABLE) || FORCE_ENABLE
 #define USE_OPTION_SAMPLE ((defined( _DEBUG )  && 0) || 0)
 
-
 #endif // __ConfigureMonteverdi2_h

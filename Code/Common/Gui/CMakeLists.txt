@@ -14,6 +14,7 @@ set( Common_Gui_SOURCES
   mvdColorSetupWidget.cxx
   mvdDatabaseBrowserController.cxx
   mvdDatabaseBrowserWidget.cxx
+  mvdDatabaseBrowserWidgetTest.cxx
   mvdDatabaseTreeWidget.cxx
   mvdDatasetCreationProgressDialog.cxx
   mvdDatasetDragAndDropEventFilter.cxx
@@ -62,6 +63,7 @@ set( Common_Gui_HEADERS_MOC
   mvdColorSetupWidget.h
   mvdDatabaseBrowserController.h
   mvdDatabaseBrowserWidget.h
+  mvdDatabaseBrowserWidgetTest.h
   mvdDatabaseTreeWidget.h
   mvdDatasetCreationProgressDialog.h
   mvdDatasetDragAndDropEventFilter.h
@@ -101,6 +103,7 @@ set( Common_Gui_FORMS
   mvdColorDynamicsWidget.ui
   mvdColorSetupWidget.ui
   mvdDatabaseBrowserWidget.ui
+  mvdDatabaseBrowserWidgetTest.ui
   mvdDatasetCreationProgressDialog.ui
   mvdDatasetPropertiesWidget.ui
   mvdHistogramWidget.ui
