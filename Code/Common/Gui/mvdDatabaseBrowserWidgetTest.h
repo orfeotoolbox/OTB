@@ -188,6 +188,10 @@ public:
 // Public SLOTS.
 public slots:
 
+  /**
+   */
+  void Clear();
+
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 

@@ -160,6 +160,14 @@ DatabaseBrowserWidgetTest
 }
 
 /*******************************************************************************/
+void
+DatabaseBrowserWidgetTest
+::Clear()
+{
+  m_UI->databaseTreeWidget->clear();
+}
+
+/*******************************************************************************/
 QTreeWidgetItem*
 DatabaseBrowserWidgetTest
 ::InsertLeafItem( QTreeWidgetItem* parent,
