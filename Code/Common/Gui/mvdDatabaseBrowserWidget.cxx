@@ -160,7 +160,7 @@ DatabaseBrowserWidget
 
 /*******************************************************************************/
 void
-DatabaseBrowserWidgetTest
+DatabaseBrowserWidget
 ::Clear()
 {
   m_UI->databaseTreeWidget->clear();
