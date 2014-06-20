@@ -156,6 +156,7 @@ private:
   /**
    */
   void UpdateTree( QTreeWidgetItem* item, SqlId nodeId, int level );
+  void UpdateTree2( QTreeWidgetItem* item, SqlId nodeId, int level );
 
   //
   // AbstractModelController overrides.

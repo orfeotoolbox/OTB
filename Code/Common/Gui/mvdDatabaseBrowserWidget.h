@@ -24,6 +24,17 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi2.h"
 
+//
+// This file is included if and only if ENABLE_TREE_WIDGET_TEST is
+// false but its definition is not included here (see
+// mvdDatabaseBrowserController.h).
+#ifndef ENABLE_TREE_WIDGET_TEST
+#  define ENABLE_TREE_WIDGET_TEST 0
+#endif // ENABLE_TREE_WIDGET_TEST
+//
+// Put this line before #include directives for conditional file
+// includes.
+#define DISABLE_CUSTOM_TW_ITEM ((ENABLE_TREE_WIDGET_TEST && 1) || 0)
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */

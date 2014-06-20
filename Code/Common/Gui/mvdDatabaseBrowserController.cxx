@@ -286,8 +286,13 @@ DatabaseBrowserController
   //...but force call to valueChanged() slot to force refresh.
   widget->blockSignals( true );
   {
+#if 1
   // if( !datasets.isEmpty() )
   UpdateTree( widget->GetRootItem(), -1, 1 );
+#else
+  widget->Clear();
+  UpdateTree2( widget->GetRootItem(), -1, 1 );
+#endif
   }
   widget->blockSignals( false );
   }
@@ -579,6 +584,117 @@ DatabaseBrowserController
     delete it.value();
 
     nodes.erase( it );
+    }
+}
+
+/*******************************************************************************/
+void
+DatabaseBrowserController
+::UpdateTree2( QTreeWidgetItem* item, SqlId nodeId, int level )
+{
+  qDebug()
+    << this << "::UpdateTree2(" << item << "," << nodeId << "," << level << ")";
+
+  assert( GetModel()==GetModel< DatabaseModel >() );
+  DatabaseModel* model = GetModel< DatabaseModel >();
+
+  if( model==NULL )
+    return;
+
+  assert( model->GetDatabaseConnection() );
+  const DatabaseConnection* db = model->GetDatabaseConnection();
+
+#if ENABLE_TREE_WIDGET_TEST
+  DatabaseBrowserWidgetTest * widget = GetWidget< DatabaseBrowserWidgetTest >();
+#else // ENABLE_TREE_WIDGET_TEST
+  DatabaseBrowserWidget* widget = GetWidget< DatabaseBrowserWidget >();
+#endif // ENABLE_TREE_WIDGET_TEST
+  assert( widget!=NULL );
+
+  //
+  // Get node id.
+
+  SqlId safeNodeId = 
+    nodeId < 0
+    ? GetRootNodeFields( db->FindRootNode() )
+    : nodeId;
+
+  //
+  //  Leaves/Items (datasets).
+
+  QSqlQuery datasetsQuery( db->SelectNodeDatasets( safeNodeId ) );
+
+  while( datasetsQuery.next() )
+    {
+    QString hash;
+    QString alias;
+
+    QVariant id( GetDatasetFields( datasetsQuery, &hash, &alias ) );
+
+#if ENABLE_TREE_QDEBUG
+    qDebug() << "+Leaf:" << id.toString() << hash << alias;
+#endif
+
+    /*childItem = */widget->InsertLeafItem(
+      item,
+      alias.isEmpty()
+      ? hash
+      : alias,
+      id,
+      QStringList( hash )
+    );
+    }
+
+  //
+  // Nodes/Groups.
+
+  QSqlQuery nodesQuery( db->SelectNodeChildren( safeNodeId ) );
+
+  while( nodesQuery.next() )
+    {
+    QString label;
+
+    QVariant id( GetChildNodeFields( nodesQuery, &label ) );
+
+#if ENABLE_TREE_QDEBUG
+    qDebug() << "+Node:" << id.toString() << label;
+#endif
+
+    QTreeWidgetItem * childItem = widget->InsertNodeItem( item, label, id );
+
+    SqlId nodeId = -1;
+
+    switch( level )
+      {
+      // Root-node level.
+      case 0 :
+        nodeId = GetNodeFields( db->FindRootNode() );
+        break;
+
+        // Datasets-node level.
+      case 1 :
+        nodeId = GetNodeFields( db->FindDatasetNode() );
+        break;
+
+        // Temporary-node level.
+      case 2 :
+        nodeId = GetNodeFields( db->FindTemporaryNode() );
+        break;
+      }
+
+    // qDebug() << "CHECKPOINT";
+
+    // qDebug() << level << nodeId << id << childItem->text( 0 );
+
+    if( nodeId==id.toLongLong() )
+      {
+      // qDebug() << level << nodeId << id << childItem->text( 0 );
+      
+      childItem->setFlags( childItem->flags() & ~Qt::ItemIsEditable );
+      }
+
+    // Recurse.
+    UpdateTree( childItem, id.toLongLong(), level + 1 );
     }
 }
 
@@ -952,7 +1068,9 @@ DatabaseBrowserController
   // Check inputs.
   assert( item!=NULL );
 
-#if USE_CUSTOM_TW_ITEM
+#if DISABLE_CUSTOM_TW_ITEM
+
+#else // DISABLE_CUSTOM_TW_ITEM
 
   // Access item and parent.
   assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
@@ -1045,7 +1163,7 @@ DatabaseBrowserController
   // No need to update model/refresh view because widget has already
   // been repainted.
 
-#endif // USE_CUSTOM_TW_ITEM
+#endif // DISABLE_CUSTOM_TW_ITEM
 }
 
 /*******************************************************************************/
@@ -1059,7 +1177,9 @@ DatabaseBrowserController
   // Check inputs.
   assert( parent!=NULL );
 
-#if USE_CUSTOM_TW_ITEM
+#if DISABLE_CUSTOM_TW_ITEM
+
+#else // DISABLE_CUSTOM_TW_ITEM
 
   // Access item and parent.
   assert( parent==dynamic_cast< TreeWidgetItem* >( parent ) );
@@ -1086,7 +1206,7 @@ DatabaseBrowserController
   // Refresh model.
   emit ModelUpdated();
 
-#endif // USE_CUSTOM_TW_ITEM
+#endif // DISABLE_CUSTOM_TW_ITEM
 }
 
 /*******************************************************************************/
@@ -1100,7 +1220,9 @@ DatabaseBrowserController
   // Check inputs.
   assert( item!=NULL );
 
-#if USE_CUSTOM_TW_ITEM
+#if DISABLE_CUSTOM_TW_ITEM
+
+#else // DISABLE_CUSTOM_TW_ITEM
 
   // Access item and parent.
   assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
@@ -1125,7 +1247,7 @@ DatabaseBrowserController
       break;
     }
 
-#endif // USE_CUSTOM_TW_ITEM
+#endif // DISABLE_CUSTOM_TW_ITEM
 }
 
 /*******************************************************************************/
@@ -1140,7 +1262,9 @@ DatabaseBrowserController
   assert( item!=NULL );
   assert( column>=0 );
 
-#if USE_CUSTOM_TW_ITEM
+#if DISABLE_CUSTOM_TW_ITEM
+
+#else // DISABLE_CUSTOM_TW_ITEM
 
   // Access item and parent.
   assert( item==dynamic_cast< TreeWidgetItem* >( item ) );
@@ -1171,7 +1295,7 @@ DatabaseBrowserController
       break;
     }
 
-#endif // USE_CUSTOM_TW_ITEM
+#endif // DISABLE_CUSTOM_TW_ITEM
 }
 
 } // end namespace 'mvd'

@@ -34,7 +34,7 @@
 //
 // Put this line before #include directives for conditional file
 // includes.
-#define DISABLE_CUSTOM_TW_ITEM ((defined( ENABLE_TREE_WIDGET_TEST ) && 1) || 0)
+#define DISABLE_CUSTOM_TW_ITEM ((ENABLE_TREE_WIDGET_TEST && 1) || 0)
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
