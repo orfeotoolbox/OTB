@@ -322,6 +322,14 @@ private:
       basicResampler->SetEdgePaddingValue(defaultValue);
       
       fusionFilter->SetXsInput(basicResampler->GetOutput());
+
+      // Set the profRef & Keywordlist from Pan into the resampled XS image
+      basicResampler->UpdateOutputInformation();
+      itk::MetaDataDictionary& dict = basicResampler->GetOutput()->GetMetaDataDictionary();
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
+                                            panchro->GetProjectionRef());
+      itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
+                                                 panchro->GetImageKeywordlist());
       }
       break;
     default:
