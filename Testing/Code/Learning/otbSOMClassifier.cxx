@@ -87,6 +87,8 @@ int otbSOMClassifier(int argc, char* argv[])
 
   OutputImageType::Pointer outputImage = OutputImageType::New();
   outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
+  outputImage->SetOrigin(reader->GetOutput()->GetOrigin());
+  outputImage->SetSpacing(reader->GetOutput()->GetSpacing());
   outputImage->Allocate();
 
   ClassifierType::OutputType*               membershipSample = classifier->GetOutput();
