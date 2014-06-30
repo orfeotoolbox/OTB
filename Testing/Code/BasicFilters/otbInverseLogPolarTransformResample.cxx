@@ -41,7 +41,7 @@ int otbInverseLogPolarTransformResample(int argc, char* argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
-  reader->Update();
+  reader->UpdateOutputInformation();
 
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
   interpolator->SetInputImage(reader->GetOutput());
@@ -72,6 +72,16 @@ int otbInverseLogPolarTransformResample(int argc, char* argv[])
   resampler->SetInterpolator(interpolator);
   resampler->SetDefaultPixelValue(0);
   resampler->SetSize(size);
+
+  ImageType::PointType origin;
+  origin[0] = 0.5;
+  origin[1] = 0.5;
+  resampler->SetOutputOrigin(origin);
+
+  ImageType::SpacingType spacing;
+  spacing[0] = 1.0;
+  spacing[1] = 1.0;
+  resampler->SetOutputSpacing(spacing);
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFileName);
