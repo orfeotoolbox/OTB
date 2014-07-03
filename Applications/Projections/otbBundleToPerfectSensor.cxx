@@ -153,6 +153,7 @@ private:
         if (panProcessing.compare("SENSOR") == 0 &&
             xsProcessing.compare("SENSOR") == 0)
           {
+          otbAppLogWARNING("Force PHR mode with PHR data. You need to add \"-mode default\" to force the default mode with PHR images.");
           SetParameterInt("mode",Mode_PHR);
           }
         }
