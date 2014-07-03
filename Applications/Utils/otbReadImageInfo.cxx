@@ -281,7 +281,7 @@ private:
     SetParameterFloat("originx", inImage->GetOrigin()[0]);
     SetParameterFloat("originy", inImage->GetOrigin()[1]);
 
-    ossOutput << "\tOrigin :  [" << GetParameterFloat("originx") << "," << GetParameterInt("originy") << "]" << std::endl;
+    ossOutput << "\tOrigin :  [" << GetParameterFloat("originx") << "," << GetParameterFloat("originy") << "]" << std::endl;
 
     //Get image spacing
     SetParameterFloat("spacingx", inImage->GetSpacing()[0]);
