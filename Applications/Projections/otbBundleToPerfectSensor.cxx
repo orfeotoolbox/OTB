@@ -307,6 +307,8 @@ private:
       offset[0] = 1.5 + static_cast<double>(colShift_MS_P);
       offset[1] = 1.5 + static_cast<double>(lineShift_MS_P);
       transform->Translate(offset);
+
+      otbAppLogINFO(<< "Offset computed between MS and P (in Pan pixels) in PHR mode= "<< offset << std::endl);
       
       // Invert the transform as the resampler filter expect an output-to-input
       // transform (we have computed the input-to-output transform)
