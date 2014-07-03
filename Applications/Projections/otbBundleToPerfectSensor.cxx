@@ -301,12 +301,12 @@ private:
       transform->Scale(4.0);
       
       // Resample filter assumes the origin is attached to the pixel center
-      // in order to keep the top left corners unchanged, apply a 3/2 pixels
+      // in order to keep the top left corners unchanged, apply a -(3/2) pixels
       // shift in each direction
-      // TODO : clarify formula, the '-1.0' for columns is strange
+      // TODO : clarify formula
       TransformType::OutputVectorType offset;
-      offset[0] = 1.5 + static_cast<double>(colShift_MS_P);
-      offset[1] = 1.5 + static_cast<double>(lineShift_MS_P);
+      offset[0] = -1.5 + static_cast<double>(colShift_MS_P);
+      offset[1] = -1.5 + static_cast<double>(lineShift_MS_P);
       transform->Translate(offset);
 
       otbAppLogINFO(<< "Offset computed between MS and P (in Pan pixels) in PHR mode= "<< offset << std::endl);
