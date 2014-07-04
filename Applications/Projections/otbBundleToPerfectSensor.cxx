@@ -18,7 +18,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "itkVectorIndexSelectionCastImageFilter.h"
+#include "otbMultiToMonoChannelExtractROI.h"
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
@@ -170,11 +170,11 @@ private:
 
     // Transform the PAN image to otb::Image
     typedef otb::Image<FloatVectorImageType::InternalPixelType> FloatImageType;
-    typedef itk::VectorIndexSelectionCastImageFilter<FloatVectorImageType, FloatImageType> VectorIndexSelectionCastImageFilterType;
+    typedef otb::MultiToMonoChannelExtractROI<float,float> ExtractFilterType;
 
-    VectorIndexSelectionCastImageFilterType::Pointer channelSelect = VectorIndexSelectionCastImageFilterType::New();
+    ExtractFilterType::Pointer channelSelect = ExtractFilterType::New();
     m_Ref.push_back(channelSelect.GetPointer());
-    channelSelect->SetIndex(0);
+    channelSelect->SetChannel(1);
     channelSelect->SetInput(panchroV);
     channelSelect->UpdateOutputInformation();
     FloatImageType::Pointer panchro = channelSelect->GetOutput();
