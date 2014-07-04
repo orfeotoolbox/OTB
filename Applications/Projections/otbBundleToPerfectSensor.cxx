@@ -219,6 +219,7 @@ private:
     {
     case Mode_Default:
       {
+      otbAppLogINFO("Using the default mode");
       if(IsParameterEnabled("lms") && HasValue("lms"))
         {
         double defScalarSpacing = GetParameterFloat("lms");
