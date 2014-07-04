@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbAtmosphericCorrectionParameters_h
-#define __otbAtmosphericCorrectionParameters_h
+#ifndef __otbImageMetadataCorrectionParameters_h
+#define __otbImageMetadataCorrectionParameters_h
 
 #include "itkObject.h"
 #include "itkMacro.h"
