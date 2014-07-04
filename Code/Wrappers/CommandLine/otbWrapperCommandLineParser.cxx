@@ -40,6 +40,24 @@ CommandLineParser::~CommandLineParser()
 }
 
 std::string
+CommandLineParser::GetPathsAsString(std::vector<std::string> & vexp )
+{
+  std::string res;
+  // The first element must be the module name, non " -" allowed.
+  // The module path list element are the strings between the first
+  // element and the first key (ie. " -" string).
+  std::vector<std::string>::iterator it = vexp.begin();
+  ++it; // first element is module name
+
+  while (it->find("-") != std::string::npos)
+  {
+    ++it;
+  }
+
+  return res;
+}
+
+std::string
 CommandLineParser::GetPathsAsString( const std::string & exp )
 {
   std::string res;
@@ -66,6 +84,34 @@ CommandLineParser::GetPathsAsString( const std::string & exp )
     }
 
   return res;
+}
+
+CommandLineParser::ParseResultType
+CommandLineParser::GetPaths( std::vector<std::string> & paths, std::vector<std::string> & exp )
+{
+  // The first element must be the module name, non " -" allowed.
+  // The module path list elements are the strings between the first
+  // element and the first key (ie. string which begins with "-").
+  std::vector<std::string>::iterator it = exp.begin();
+  ++it; // first element is module name
+
+  std::vector<itksys::String> pathlist;
+
+  while (it->find("-") == std::string::npos)
+  {
+    std::string fullPath = itksys::SystemTools::CollapseFullPath((*it).c_str());
+
+    if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
+    {
+      std::cerr<<"Invalid module path: "<<fullPath<<std::endl;
+      return INVALIDMODULEPATH;
+    }
+    paths.push_back(fullPath);
+
+    ++it;
+  }
+  
+  return OK;
 }
 
 CommandLineParser::ParseResultType
@@ -118,6 +164,29 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
   return OK;
 }
 
+CommandLineParser::ParseResultType 
+CommandLineParser::GetModuleName( std::string & modName, std::vector<std::string> & exp )
+{
+  itksys::RegularExpression reg;
+  reg.compile("([^0-9a-zA-Z])");
+  // The first element must be the module path, non " -" allowed.
+  if( exp[0].find(" -") != std::string::npos)
+    {
+    return NOMODULENAME;
+    }
+  
+  // It must contain only alphanumerical character
+  if(reg.find(exp[0]))
+    {
+    return INVALIDMODULENAME;
+    }
+  else
+    {
+    modName = exp[0];
+    }
+      
+  return OK;
+}
 
 CommandLineParser::ParseResultType
 CommandLineParser::GetModuleName( std::string & modName, const std::string & exp )
@@ -162,6 +231,45 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
   return OK;
 }
 
+std::vector<std::string>
+CommandLineParser::GetAttribut( const std::string & key, std::vector<std::string> & exp )
+{
+     std::cout << "here1" << std::endl;
+ std::vector<std::string> res;
+ if (!this->IsAttributExists(key,exp))
+  return res;
+
+ std::cout << "here2: " << exp.size()<< std::endl;
+
+ bool foundKey=false;
+ std::vector<std::string>::iterator it = exp.begin();
+ while(it!=exp.end() )
+   {
+   std::cout << key << "//" << *it<< std::endl;
+
+   if (foundKey)
+    {
+    if (it->find("-") == 0)
+      {
+        std::cout << res.size() << std::endl;
+        return res;
+      }
+      else
+        res.push_back(*it);
+    }
+   
+   if (it->find(key) != std::string::npos)
+     { foundKey=true;
+   std::cout << "foundkey true" << std::endl; 
+   }
+   else
+   {
+   std::cout << "foundkey false" << std::endl; 
+   }
+   ++it;
+   }
+ return res;  
+}
 
 std::vector<std::string>
 CommandLineParser::GetAttribut( const std::string & key, const std::string & exp )
@@ -253,6 +361,36 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
   return res;
 }
 
+std::string 
+CommandLineParser::GetAttributAsString( const std::string & key, std::vector<std::string> & exp )
+{
+  std::string res("");
+  std::vector<std::string> values = this->GetAttribut( key, exp );
+
+  if( values.size() == 0 )
+    {
+    return "";
+    }
+  else if( values.size() == 1 && values[0] == " " )
+    {
+    return "";
+    }
+
+  for( unsigned int i=0; i<values.size(); i++)
+    {
+    if( i<values.size()-1 )
+      {
+      res.append(values[i]);
+      res.append(" ");
+      }
+    else
+      {
+      res.append(values[i]);
+      }
+    }
+  return res;
+}
+
 std::string
 CommandLineParser::GetAttributAsString( const std::string & key, const std::string & exp )
 {
@@ -296,6 +434,31 @@ CommandLineParser::IsAttributExists( const std::string key, const std::string & 
   return (found != std::string::npos);
 }
 
+bool
+CommandLineParser::IsAttributExists( const std::string key, std::vector<std::string> & exp  )
+{
+  for (std::vector<std::string>::iterator it = exp.begin() ; it != exp.end(); ++it)
+  {
+    if (it->find(key) != std::string::npos)
+      return true;
+  }
+  return false;
+}
+
+std::vector<std::string>
+CommandLineParser::GetKeyList(  std::vector<std::string> & exp  )
+{
+   std::vector<std::string> keyList;
+   for (std::vector<std::string>::iterator it = exp.begin() ; it != exp.end(); ++it)
+    {
+      if (it->find("-") == 0 && this->IsAValidKey(*it))
+      {
+        keyList.push_back(*it);
+      }
+    }
+
+   return keyList;
+}
 
 std::vector<std::string>
 CommandLineParser::GetKeyList( const std::string & exp  )

@@ -18,6 +18,7 @@
 
 #include "otbWrapperCommandLineLauncher.h"
 #include "otbTinyXML.h"
+#include <vector>
 
 const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
 std::string PrepareExpressionFromXML(std::string filename);
@@ -153,6 +154,8 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
+  std::vector<std::string> vexp;
+    
   std::string exp;
   if (strcmp(argv[1], "-inxml") == 0)
     {
@@ -163,7 +166,7 @@ int main(int argc, char* argv[])
     // Construct the string expression
     for (int i = 1; i < argc; i++)
       {
-      if (i != argc - 1)
+      /*if (i != argc - 1)
         {
         exp.append(argv[i]);
         exp.append(" ");
@@ -171,16 +174,19 @@ int main(int argc, char* argv[])
       else
         {
         exp.append(argv[i]);
-        }
+        }*/
+      std::string strarg (argv[i]);
+      std::cout << strarg << std::endl;
+      vexp.push_back(strarg); 
       }
-
     }
   //  std::cerr << exp << ":\n";
 
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();
 
-  if (launcher->Load(exp) == true)
+  //if (launcher->Load(exp) == true)
+    if (launcher->Load(vexp) == true)
     {
     if (launcher->ExecuteAndWriteOutput() == false)
       {

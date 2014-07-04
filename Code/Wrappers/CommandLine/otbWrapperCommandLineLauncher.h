@@ -33,6 +33,8 @@
 
 #include "itkCommand.h"
 
+#include <vector>
+
 namespace otb
 {
 namespace Wrapper
@@ -84,6 +86,9 @@ public:
 
   /** same as Load method but set the expression before. */
   bool Load( const std::string & exp );
+  
+    /** same as Load method but set the expression before. */
+  bool Load( std::vector<std::string> vexp);
 
   /** Launch the process, using the Execute application method
    * The method will check if the user asked for help (looking at
@@ -168,7 +173,8 @@ private:
   std::string                       m_Path;
 
   Application::Pointer              m_Application;
-  std::string                       m_Expression;
+  //std::string                       m_Expression;
+  std::vector<std::string>          m_VExpression;
   CommandLineParser::Pointer        m_Parser;
 
   WatcherListType                   m_WatcherList;

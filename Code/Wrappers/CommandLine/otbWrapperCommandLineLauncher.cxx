@@ -58,7 +58,7 @@ namespace Wrapper
 {
 
 CommandLineLauncher::CommandLineLauncher() :
-  m_Expression(""), m_WatcherList(), m_ReportProgress(true), m_MaxKeySize(0)
+  /*m_Expression(""),*/ m_WatcherList(), m_ReportProgress(true), m_MaxKeySize(0),m_VExpression()
 {
   m_Application = NULL;
   m_Parser = CommandLineParser::New();
@@ -70,8 +70,8 @@ CommandLineLauncher::CommandLineLauncher() :
   m_AddProcessCommand->SetCallbackFunction(this, &CommandLineLauncher::LinkWatchers);
 }
 
-CommandLineLauncher::CommandLineLauncher(const char * exp) :
-  m_Expression(exp)
+CommandLineLauncher::CommandLineLauncher(const char * exp) /*:
+  m_Expression(exp)*/
 {
   m_Application = NULL;
   m_Parser = CommandLineParser::New();
@@ -94,15 +94,23 @@ void CommandLineLauncher::DeleteWatcherList()
 
 bool CommandLineLauncher::Load(const std::string & exp)
 {
-  m_Expression = exp;
+  /*m_Expression = exp;
+  return this->Load();*/
+  return false;
+}
+
+bool CommandLineLauncher::Load(std::vector<std::string> vexp)
+{
+  m_VExpression = vexp;
   return this->Load();
 }
+
 
 bool CommandLineLauncher::Load()
 {
   // Add a space to clarify output logs
   std::cerr << std::endl;
-  if (m_Expression == "")
+  if (m_VExpression.empty())
     {
     itkExceptionMacro("No expression specified...");
     }
@@ -121,9 +129,9 @@ bool CommandLineLauncher::Load()
 
   if (this->LoadPath() == false)
     {
-    if (m_Parser->GetPathsAsString(m_Expression).size() != 0)
+    if (m_Parser->GetPathsAsString(m_VExpression).size() != 0)
       {
-      std::cerr << "ERROR: At least one specified path within \"" << m_Parser->GetPathsAsString(m_Expression)
+      std::cerr << "ERROR: At least one specified path within \"" << m_Parser->GetPathsAsString(m_VExpression)
                 << "\" is invalid or doesn't exist..." << std::endl;
       return false;
       }
@@ -193,7 +201,7 @@ bool CommandLineLauncher::BeforeExecute()
   // Check if there's keys in the expression if the application takes
   // at least 1 mandatory parameter
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
-  std::vector<std::string> keyList = m_Parser->GetKeyList( m_Expression );
+  std::vector<std::string> keyList = m_Parser->GetKeyList( m_VExpression );
 
   if( appKeyList.size()!=0 && keyList.size()==0 )
     {
@@ -203,21 +211,21 @@ bool CommandLineLauncher::BeforeExecute()
     }
 
   // if help is asked...
-  if (m_Parser->IsAttributExists("-help", m_Expression) == true)
+  if (m_Parser->IsAttributExists("-help", m_VExpression) == true)
     {
     this->DisplayHelp();
     return false;
     }
 
   //display OTB version
-  if (m_Parser->IsAttributExists("-version", m_Expression) == true)
+  if (m_Parser->IsAttributExists("-version", m_VExpression) == true)
     {
     std::cerr << "This is the "<<m_Application->GetName() << " application, version " << OTB_VERSION_STRING <<std::endl;
     return false;
     }
 
   // if we want to load test environnement
-  if (m_Parser->IsAttributExists("-testenv", m_Expression) == true)
+  if (m_Parser->IsAttributExists("-testenv", m_VExpression) == true)
     {
     this->LoadTestEnv();
     }
@@ -256,10 +264,10 @@ bool CommandLineLauncher::BeforeExecute()
     }
 
   // Check for the progress report
-  if (m_Parser->IsAttributExists("-progress", m_Expression) == true)
+  if (m_Parser->IsAttributExists("-progress", m_VExpression) == true)
     {
     std::vector<std::string> val;
-    val = m_Parser->GetAttribut("-progress", m_Expression);
+    val = m_Parser->GetAttribut("-progress", m_VExpression);
     if (val.size() != 1)
       {
       std::cerr << "ERROR: Invalid progress argument, must be unique value..." << std::endl;
@@ -292,7 +300,8 @@ bool CommandLineLauncher::LoadPath()
 {
   std::vector<std::string> pathList;
   // If users has set path...
-  if (m_Parser->GetPaths(pathList, m_Expression) == CommandLineParser::OK)
+  //if (m_Parser->GetPaths(pathList, m_Expression) == CommandLineParser::OK)
+  if (m_Parser->GetPaths(pathList, m_VExpression) == CommandLineParser::OK)
     {
     for (unsigned i = 0; i < pathList.size(); i++)
       {
@@ -311,7 +320,8 @@ void CommandLineLauncher::LoadApplication()
 {
   // Look for the module name
   std::string moduleName;
-  if (m_Parser->GetModuleName(moduleName, m_Expression) != CommandLineParser::OK)
+  //if (m_Parser->GetModuleName(moduleName, m_Expression) != CommandLineParser::OK)
+  if (m_Parser->GetModuleName(moduleName, m_VExpression) != CommandLineParser::OK)
     {
     std::cerr << "ERROR: LoadApplication, no module found..." << std::endl;
     return;
@@ -365,11 +375,11 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
    */
   const char *inXMLKey =  "inxml";
   const char *attrib   = "-inxml";
-  const bool paramInXMLExists(m_Parser->IsAttributExists(attrib, m_Expression));
+  const bool paramInXMLExists(m_Parser->IsAttributExists(attrib, m_VExpression));
   if(paramInXMLExists)
     {
     std::vector<std::string> inXMLValues;
-    inXMLValues = m_Parser->GetAttribut(attrib, m_Expression);
+    inXMLValues = m_Parser->GetAttribut(attrib, m_VExpression);
     m_Application->SetParameterString(inXMLKey, inXMLValues[0]);
     m_Application->UpdateParameters();
     }
@@ -384,13 +394,13 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     Parameter::Pointer param = m_Application->GetParameterByKey(paramKey);
     ParameterType type = m_Application->GetParameterType(paramKey);
 
-    const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_Expression));
+    const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression));
 
     // if param is a Group, dont do anything, ParamGroup dont have values
     if (type != ParameterType_Group)
       {
       // Get the attribute relative to this key as vector
-      values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_Expression);
+      values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
 
       // If the param does not exists in the cli, dont try to set a
       // value on it, an exception will be thrown later in this function
@@ -430,7 +440,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                 if (type == ParameterType_String)
                   {
                   dynamic_cast<StringParameter *> (param.GetPointer())->SetValue(
-                    m_Parser->GetAttributAsString(std::string("-").append(paramKey), m_Expression) );
+                    m_Parser->GetAttributAsString(std::string("-").append(paramKey), m_VExpression) );
                   }
                 else
                   if (type == ParameterType_OutputImage)
@@ -586,7 +596,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         }
       else
         {
-        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_Expression);
+        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
         if (values.size() == 0 && !m_Application->HasValue(paramKey))
           {
           std::cerr << "ERROR: Missing mandatory parameter: " << paramKey << std::endl;
@@ -599,7 +609,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
       {
       if( paramExists )
         {
-        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_Expression);
+        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_VExpression);
         if (values.size() == 0)
           {
           std::cerr << "ERROR: Missing non-mandatory parameter: " << paramKey << std::endl;
@@ -708,7 +718,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   //  - The param is not root and belonging to a Mandatory Group
   //    wich is activated
   bool isMissing = false;
-  if (!m_Parser->IsAttributExists(std::string("-").append(paramKey), m_Expression))
+  if (!m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression))
     {
     if (!m_Application->HasValue(paramKey))
       {
@@ -847,7 +857,8 @@ bool CommandLineLauncher::CheckUnicity()
 {
   bool res = true;
   // Extract expression keys
-  std::vector<std::string> keyList = m_Parser->GetKeyList(m_Expression);
+  //std::vector<std::string> keyList = m_Parser->GetKeyList(m_Expression);
+  std::vector<std::string> keyList = m_Parser->GetKeyList(m_VExpression);
 
   // Check Unicity
   for (unsigned int i = 0; i < keyList.size(); i++)
@@ -872,21 +883,22 @@ bool CommandLineLauncher::CheckUnicity()
 
 bool CommandLineLauncher::CheckParametersPrefix()
 {
-  bool res = true;
-  // Check if the chain " --" appears in the expression, could be a common mistake
-  if (m_Expression.find(" --") != std::string::npos )
+  // Check if the chain " --" appears in the args, could be a common mistake
+  for (std::vector<std::string>::iterator it = m_VExpression.begin() ; it != m_VExpression.end(); ++it)
     {
-    res = false;
+    if (it->find("--") != std::string::npos )
+      {
+      return false;
+      }
     }
-
-  return res;
+  return true;
 }
 
 bool CommandLineLauncher::CheckKeyValidity(std::string& refKey)
 {
   bool res = true;
   // Extract expression keys
-  std::vector<std::string> expKeyList = m_Parser->GetKeyList(m_Expression);
+  std::vector<std::string> expKeyList = m_Parser->GetKeyList(m_VExpression);
 
   // Extract application keys
   std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
@@ -895,13 +907,18 @@ bool CommandLineLauncher::CheckKeyValidity(std::string& refKey)
   appKeyList.push_back("testenv");
   appKeyList.push_back("version");
 
+  std::cout<< "toto" << std::endl;
+
   // Check if each key in the expression exists in the application
   for (unsigned int i = 0; i < expKeyList.size(); i++)
     {
-    refKey = expKeyList[i];
+    //remove first character
+    std::cout<< "expKey= " <<  expKeyList[i] << std::endl;
+    refKey = expKeyList[i].substr(1,expKeyList[i].length()-1);
     bool keyExist = false;
     for (unsigned int j = 0; j < appKeyList.size(); j++)
       {
+      std::cout<< "appKey= " <<  appKeyList[j] << std::endl;
       if (refKey == appKeyList[j])
         {
         keyExist = true;
@@ -935,9 +952,9 @@ void CommandLineLauncher::DisplayOutputParameters()
     }
 
 
-  if ( m_Parser->IsAttributExists("-testenv", m_Expression) )
+  if ( m_Parser->IsAttributExists("-testenv", m_VExpression) )
     {
-    std::vector<std::string> val = m_Parser->GetAttribut("-testenv", m_Expression);
+    std::vector<std::string> val = m_Parser->GetAttribut("-testenv", m_VExpression);
     if( val.size() == 1 )
       {
       std::ofstream ofs(val[0].c_str());

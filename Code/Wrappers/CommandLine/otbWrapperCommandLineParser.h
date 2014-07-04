@@ -57,22 +57,30 @@ public:
 
   /** Get the attribut associatd to a key (list of element after the key and before the next "--") as a vector of string. */
   std::vector<std::string> GetAttribut( const std::string & key, const std::string & exp );
+  std::vector<std::string> GetAttribut( const std::string & key, std::vector<std::string> & exp );
   /** Get the attribut associatd to a key (list of element after the key and before the next "--") as a string separated by spaces. */
   std::string GetAttributAsString( const std::string & key, const std::string & exp );
-
+std::string GetAttributAsString( const std::string & key, std::vector<std::string> & exp );
   /** Look if a given key is in an expression. */
   bool IsAttributExists(const std::string key, const std::string & exp );
-
+bool IsAttributExists(const std::string key, std::vector<std::string> & exp);
+ 
   /** Get the paths executables in an expression. Store the list in a vector of string. */
   CommandLineParser::ParseResultType GetPaths( std::vector<std::string> & paths, const std::string & exp );
+  CommandLineParser::ParseResultType GetPaths( std::vector<std::string> & paths, std::vector<std::string> & exp );
+
   /** Get the paths executables in an expression. Store the list in a vector of string. */
   std::string GetPathsAsString( const std::string & exp );
+  std::string GetPathsAsString( std::vector<std::string> & vexp );
+ 
 
   /** Get the module name in an expression. It can be the first element of the expression (if the expression doesn't start with a "--" or the attribut associated to the key m_ModuleNameKey). */
   CommandLineParser::ParseResultType GetModuleName( std::string & modName, const std::string & exp );
-
+CommandLineParser::ParseResultType GetModuleName( std::string & modName, std::vector<std::string> & exp );
+ 
   /** Get the list of keys in an expression. That is to say each word starting by "--". */
   std::vector<std::string> GetKeyList( const std::string & exp );
+std::vector<std::string> GetKeyList(  std::vector<std::string> & exp);
 
 protected:
   /** Constructor */
