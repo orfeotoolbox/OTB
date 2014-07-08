@@ -26,7 +26,7 @@
 
 namespace otb {
 
-bool 
+bool
 PleiadesPToXSAffineTransformCalculator
 ::CanCompute(const itk::ImageBase<2> * panchromaticImage, const itk::ImageBase<2> * xsImage)
 {

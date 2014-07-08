@@ -27,23 +27,23 @@ namespace otb {
 /**
  * \class PleiadesPToXSAffineTransformCalculator
  * \brief Compute the affine transform linking P and XS pixel position for Pleiades sensor bundles
- * 
+ *
  * Pleiades sensor bundle are exactly homotetic, it is therefore
  * possible to corregister the pancrhomatic and multispectral images
  * with a simple affine transform without using any sensor
  * modelling. This yelds a very accurate corregistration and avoid the
  * use of a DSM which may cause registration errors due to height errors.
- * 
+ *
  * This calculator is a helper class to build the affine transform. It
  * consists in only two static methods: one to check if the transform
  * calculation applies to the given pair of images, the other to
  * actually estimate the transfrom.
- * 
+ *
  * The estimated transform returned by the latter transforms
  * pancrhomatic image positions to multispectral image positions. If
  * the inverse transform is needed, one can call the GetInverse()
  * method of the transform to retrieve it.
- * 
+ *
  */
 class ITK_EXPORT PleiadesPToXSAffineTransformCalculator
   : public itk::LightObject
@@ -58,7 +58,7 @@ public:
   
   typedef itk::ScalableAffineTransform<double,2> TransformType;
   
-  /** 
+  /**
    * This function checks if the transform calculation applies to the
    * given pair of images. Checked items are:
    * - Both images are sucessfully undertood by OTB as Pleiades images,
@@ -73,10 +73,10 @@ public:
    * This function computes the transform for a pair of image. Note
    * that the CanCompute() method is first called, and that an
    * exception will be raised if computation can not be done.
-   * 
+   *
    * This function reads both images support data and builds a
    * transform that will exactly coregister the images.
-   * 
+   *
    * \return The computed transform
    */
   static TransformType::Pointer Compute(const itk::ImageBase<2> * panchromaticImage, const itk::ImageBase<2> * xsImage);
