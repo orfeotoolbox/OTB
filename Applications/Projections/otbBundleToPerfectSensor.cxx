@@ -162,6 +162,8 @@ private:
   void DoExecute()
   {
     FloatVectorImageType* panchroV = GetParameterImage("inp");
+    FloatVectorImageType* xs = GetParameterImage("inxs");
+
     if ( panchroV->GetNumberOfComponentsPerPixel() != 1 )
       {
       itkExceptionMacro(<< "The panchromatic image must be a single channel image")
@@ -179,7 +181,7 @@ private:
     FloatImageType::Pointer panchro = channelSelect->GetOutput();
 
 
-    FloatVectorImageType* xs = GetParameterImage("inxs");
+   
 
     typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> InterpolatorType;
     typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  ResamplerType;
@@ -292,8 +294,8 @@ private:
       int colStartXS = atoi(tmpStr.c_str());
       
       // Compute shift between MS and P (in Pan pixels)
-      int lineShift_MS_P =int(vcl_floor((timeDelta/(linePeriodPan/1000))  + 0.5));
-      int colShift_MS_P = colStartXS*4 - colStartPan - 4;
+      int lineShift_MS_P =int(vcl_floor((timeDelta/(linePeriodPan/1000))  + 0.5))+0.375;
+      int colShift_MS_P = colStartXS*4 - colStartPan-4+0.375;
       
       // Apply the scaling
       typedef itk::ScalableAffineTransform<double, 2>  TransformType;
@@ -305,8 +307,8 @@ private:
       // shift in each direction
       // TODO : clarify formula
       TransformType::OutputVectorType offset;
-      offset[0] = -1.5 + static_cast<double>(colShift_MS_P);
-      offset[1] = -1.5 + static_cast<double>(lineShift_MS_P);
+      offset[0] = static_cast<double>(colShift_MS_P);
+      offset[1] = static_cast<double>(lineShift_MS_P);
       transform->Translate(offset);
 
       otbAppLogINFO(<< "Offset computed between MS and P (in Pan pixels) in PHR mode= "<< offset << std::endl);

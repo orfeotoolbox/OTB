@@ -338,8 +338,8 @@ private:
       int colStartXS = atoi(tmpStr.c_str());
       
       // Compute shift between MS and P (in Pan pixels)
-      int lineShift_MS_P =int(vcl_floor((timeDelta/(linePeriodPan/1000))  + 0.5));
-      int colShift_MS_P = colStartXS*4 - colStartPan - 4;
+      int lineShift_MS_P =int(vcl_floor((timeDelta/(linePeriodPan/1000))  + 0.5)) + 0.375;
+      int colShift_MS_P = colStartXS*4 - colStartPan - 4 + 0.375;
       
       // Apply the scaling
       TransformType::Pointer transform = TransformType::New();
