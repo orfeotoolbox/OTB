@@ -258,8 +258,8 @@ namespace ossimplugins
       theErrBiasX = 0.0;
       theErrBiasY = 0.0;
       theErrRand = 0.0;
-      theLineOffset = 0;
-      theSampOffset = 0;
+      theLineOffset = 0.0;
+      theSampOffset = 0.0;
       theLatOffset = 0.0;
       theLonOffset = 0.0;
       theHeightOffset = 0.0;
@@ -1797,7 +1797,10 @@ namespace ossimplugins
       {
          return false;
       }
-      theSampOffset = nodeValue.toInt32();
+      // Pleiades metadata assume that the coordinate of the center of
+      // the upper-left pixel is (1,1), so we remove 1 to get back to
+      // OSSIM convention.
+      theSampOffset = nodeValue.toDouble()-1;
 
       if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
       {
@@ -1827,7 +1830,10 @@ namespace ossimplugins
       {
          return false;
       }
-      theLineOffset = nodeValue.toInt32();
+      // Pleiades metadata assume that the coordinate of the center of
+      // the upper-left pixel is (1,1), so we remove 1 to get back to
+      // OSSIM convention.
+      theLineOffset = nodeValue.toDouble()-1;
 
       return true;
    }

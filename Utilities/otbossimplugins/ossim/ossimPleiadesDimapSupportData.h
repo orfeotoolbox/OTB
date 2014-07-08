@@ -212,8 +212,8 @@ namespace ossimplugins
          double    theErrBiasX;
          double    theErrBiasY;
          double    theErrRand;
-         ossim_int32 theLineOffset;
-         ossim_int32 theSampOffset;
+         double    theLineOffset;
+         double    theSampOffset;
          double    theLatOffset;
          double    theLonOffset;
          double    theHeightOffset;
