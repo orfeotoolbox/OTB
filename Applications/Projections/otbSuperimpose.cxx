@@ -24,15 +24,10 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 
-#include "otbPleiadesImageMetadataInterface.h"
-
-#include "itkScalableAffineTransform.h"
-
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
-
-#include "otbDateTimeAdapter.h"
 #include "otbStreamingResampleImageFilter.h"
+#include "otbPleiadesPToXSAffineTransformCalculator.h"
 
 namespace otb
 {
@@ -42,12 +37,6 @@ enum
   Interpolator_BCO,
   Interpolator_NNeighbor,
   Interpolator_Linear
-};
-
-enum
-{
-  Mode_Default,
-  Mode_PHR
 };
 
 namespace Wrapper
@@ -160,49 +149,10 @@ private:
 
   void DoUpdateParameters()
   {
-    if (!HasUserValue("mode") &&
-        GetParameterInt("mode") == Mode_Default &&
-        HasValue("inr") &&
-        HasValue("inm"))
+    if(HasValue("inr") && HasValue("inm") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inr"),GetParameterImage("inm")))
       {
-      FloatVectorImageType* refImage = GetParameterImage("inr");
-      FloatVectorImageType* movingImage = GetParameterImage("inm");
-      bool isRefPHR = false;
-      bool isMovingPHR = false;
-      
-      otb::PleiadesImageMetadataInterface::Pointer phrIMI =
-        otb::PleiadesImageMetadataInterface::New();
-      phrIMI->SetMetaDataDictionary(refImage->GetMetaDataDictionary());
-      isRefPHR = phrIMI->CanRead();
-      
-      phrIMI->SetMetaDataDictionary(movingImage->GetMetaDataDictionary());
-      isMovingPHR = phrIMI->CanRead();
-      
-      if (isRefPHR && isMovingPHR)
-        {
-        ImageKeywordlist kwlPan;
-        ImageKeywordlist kwlXS;
-        
-        itk::ExposeMetaData<ImageKeywordlist>(
-          refImage->GetMetaDataDictionary(),
-          MetaDataKey::OSSIMKeywordlistKey,
-          kwlPan);
-        
-        itk::ExposeMetaData<ImageKeywordlist>(
-          movingImage->GetMetaDataDictionary(),
-          MetaDataKey::OSSIMKeywordlistKey,
-          kwlXS);
-        
-        // Get geometric processing
-        std::string panProcessing = kwlPan.GetMetadataByKey("support_data.processing_level");
-        std::string xsProcessing = kwlXS.GetMetadataByKey("support_data.processing_level");
-        
-        if (panProcessing.compare("SENSOR") == 0 &&
-            xsProcessing.compare("SENSOR") == 0)
-          {
-          SetParameterInt("mode",Mode_PHR);
-          }
-        }
+      otbAppLogWARNING("Forcing PHR mode with PHR data. You need to add \"-mode default\" to force the default mode with PHR images.");
+      SetParameterString("mode","phr");
       }
   }
 
@@ -257,10 +207,9 @@ private:
     
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, movingImage->GetNumberOfComponentsPerPixel());
+
     
-    switch ( GetParameterInt("mode") )
-    {
-    case Mode_Default:
+    if(GetParameterString("mode")=="default")
       {
       if(IsParameterEnabled("lms"))
         {
@@ -296,68 +245,15 @@ private:
       // Set the output image
       SetParameterOutputImage("out", m_Resampler->GetOutput());
       }
-      break;
-    case Mode_PHR:
+    else if(GetParameterString("mode")=="phr")
       {
       otbAppLogINFO("Using the PHR mode");
       
-      // Setup a simple affine transform using PHR support data
-      ImageKeywordlist kwlPan;
-      ImageKeywordlist kwlXS;
-      
-      itk::ExposeMetaData<ImageKeywordlist>(
-        refImage->GetMetaDataDictionary(),
-        MetaDataKey::OSSIMKeywordlistKey,
-        kwlPan);
-      
-      itk::ExposeMetaData<ImageKeywordlist>(
-        movingImage->GetMetaDataDictionary(),
-        MetaDataKey::OSSIMKeywordlistKey,
-        kwlXS);
-      
-      // Compute time delta
-      std::string strStartTimePan = kwlPan.GetMetadataByKey("support_data.time_range_start");
-      std::string strStartTimeXS = kwlXS.GetMetadataByKey("support_data.time_range_start");
-      
-      DateTimeAdapter::Pointer startTimePan = DateTimeAdapter::New();
-      DateTimeAdapter::Pointer startTimeXS = DateTimeAdapter::New();
-      
-      startTimePan->SetFromIso8601(strStartTimePan);
-      startTimeXS->SetFromIso8601(strStartTimeXS);
-      
-      double timeDelta = startTimeXS->GetDeltaInSeconds(startTimePan);
-      
-      // Retrieve line period in Pan
-      std::string tmpStr = kwlPan.GetMetadataByKey("support_data.line_period");
-      double linePeriodPan = atof(tmpStr.c_str());
-      
-      // Retrieve column start
-      tmpStr = kwlPan.GetMetadataByKey("support_data.swath_first_col");
-      int colStartPan = atoi(tmpStr.c_str());
-      tmpStr = kwlXS.GetMetadataByKey("support_data.swath_first_col");
-      int colStartXS = atoi(tmpStr.c_str());
-      
-      // Compute shift between MS and P (in Pan pixels)
-      int lineShift_MS_P =int(vcl_floor((timeDelta/(linePeriodPan/1000))  + 0.5)) + 0.375;
-      int colShift_MS_P = colStartXS*4 - colStartPan - 4 + 0.375;
-      
-      // Apply the scaling
-      TransformType::Pointer transform = TransformType::New();
-      transform->Scale(4.0);
-      
-      // Resample filter assumes the origin is attached to the pixel center
-      // in order to keep the top left corners unchanged, apply a 3/2 pixels
-      // shift in each direction
-      TransformType::OutputVectorType offset;
-      offset[0] = 1.5 + static_cast<double>(colShift_MS_P);
-      offset[1] = 1.5 + static_cast<double>(lineShift_MS_P);
-      transform->Translate(offset);
-      
-      // Invert the transform as the resampler filter expect an output-to-input
-      // transform (we have computed the input-to-output transform)
-      TransformType::Pointer realTransform = TransformType::New();
-      transform->GetInverse(realTransform);
-      m_BasicResampler->SetTransform(realTransform);
+      otb::PleiadesPToXSAffineTransformCalculator::TransformType::Pointer transform
+        = otb::PleiadesPToXSAffineTransformCalculator::Compute(GetParameterImage("inr"),
+                                                               GetParameterImage("inm"));
+
+      m_BasicResampler->SetTransform(transform);
       
       m_BasicResampler->SetInput(movingImage);
       
@@ -370,20 +266,13 @@ private:
 
       // Set the output image
       SetParameterOutputImage("out", m_BasicResampler->GetOutput());
-      
-      otbAppLogINFO("Line shift (in pix)  : "<< lineShift_MS_P);
-      otbAppLogINFO("Col shift (in pix)   : "<< colShift_MS_P);
       }
-      break;
-    default:
+    else
       {
       otbAppLogWARNING("Unknown mode");
       }
-      break;
-    }
-   
   }
-
+   
   ResamplerType::Pointer           m_Resampler;
   
   BasicResamplerType::Pointer      m_BasicResampler;

@@ -23,26 +23,17 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "itkFixedArray.h"
-#include "itkScalableAffineTransform.h"
 
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
 
-#include "otbDateTimeAdapter.h"
 #include "otbStreamingResampleImageFilter.h"
-#include "otbPleiadesImageMetadataInterface.h"
+#include "otbPleiadesPToXSAffineTransformCalculator.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-
-enum
-{
-  Mode_Default,
-  Mode_PHR
-};
-
 class BundleToPerfectSensor : public Application
 {
 public:
@@ -113,49 +104,10 @@ private:
 
   void DoUpdateParameters()
   {
-    if (!HasUserValue("mode") &&
-        GetParameterInt("mode") == Mode_Default &&
-        HasValue("inp") &&
-        HasValue("inxs"))
+    if(HasValue("inp") && HasValue("inxs") && otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inp"),GetParameterImage("inxs")))
       {
-      FloatVectorImageType* refImage = GetParameterImage("inp");
-      FloatVectorImageType* movingImage = GetParameterImage("inxs");
-      bool isRefPHR = false;
-      bool isMovingPHR = false;
-      
-      otb::PleiadesImageMetadataInterface::Pointer phrIMI =
-        otb::PleiadesImageMetadataInterface::New();
-      phrIMI->SetMetaDataDictionary(refImage->GetMetaDataDictionary());
-      isRefPHR = phrIMI->CanRead();
-      
-      phrIMI->SetMetaDataDictionary(movingImage->GetMetaDataDictionary());
-      isMovingPHR = phrIMI->CanRead();
-      
-      if (isRefPHR && isMovingPHR)
-        {
-        ImageKeywordlist kwlPan;
-        ImageKeywordlist kwlXS;
-        
-        itk::ExposeMetaData<ImageKeywordlist>(
-          refImage->GetMetaDataDictionary(),
-          MetaDataKey::OSSIMKeywordlistKey,
-          kwlPan);
-        
-        itk::ExposeMetaData<ImageKeywordlist>(
-          movingImage->GetMetaDataDictionary(),
-          MetaDataKey::OSSIMKeywordlistKey,
-          kwlXS);
-        
-        // Get geometric processing
-        std::string panProcessing = kwlPan.GetMetadataByKey("support_data.processing_level");
-        std::string xsProcessing = kwlXS.GetMetadataByKey("support_data.processing_level");
-        
-        if (panProcessing.compare("SENSOR") == 0 &&
-            xsProcessing.compare("SENSOR") == 0)
-          {
-          SetParameterInt("mode",Mode_PHR);
-          }
-        }
+      otbAppLogWARNING("Forcing PHR mode with PHR data. You need to add \"-mode default\" to force the default mode with PHR images.");
+      SetParameterString("mode","phr");
       }
   }
 
@@ -179,9 +131,6 @@ private:
     channelSelect->SetInput(panchroV);
     channelSelect->UpdateOutputInformation();
     FloatImageType::Pointer panchro = channelSelect->GetOutput();
-
-
-   
 
     typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> InterpolatorType;
     typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  ResamplerType;
@@ -216,9 +165,7 @@ private:
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, xs->GetNumberOfComponentsPerPixel());
 
-    switch ( GetParameterInt("mode") )
-    {
-    case Mode_Default:
+    if(GetParameterString("mode") == "default")
       {
       otbAppLogINFO("Using the default mode");
       if(IsParameterEnabled("lms") && HasValue("lms"))
@@ -226,10 +173,10 @@ private:
         double defScalarSpacing = GetParameterFloat("lms");
         otbAppLogINFO(<< "Generating coarse deformation field (spacing="<<defScalarSpacing<<")" << std::endl);
         FloatVectorImageType::SpacingType defSpacing;
-
+        
         defSpacing[0] = defScalarSpacing;
         defSpacing[1] = defScalarSpacing;
-
+        
         resampler->SetDisplacementFieldSpacing(defSpacing);
         }
       else
@@ -248,78 +195,17 @@ private:
       resampler->SetOutputKeywordList(panchro->GetImageKeywordlist());
       resampler->SetOutputProjectionRef(panchro->GetProjectionRef());
       resampler->SetEdgePaddingValue(defaultValue);
-      //resampler->UpdateOutputInformation();
-      // TODO : set the Input keywordlist and ProjRef manually ??
       fusionFilter->SetXsInput(resampler->GetOutput());
-      //fusionFilter->UpdateOutputInformation();
       }
-      break;
-    case Mode_PHR:
+    else if(GetParameterString("mode")=="phr")
       {
       otbAppLogINFO("Using the PHR mode");
-      // Setup a simple affine transform using PHR support data
-      ImageKeywordlist kwlPan;
-      ImageKeywordlist kwlXS;
       
-      itk::ExposeMetaData<ImageKeywordlist>(
-        panchroV->GetMetaDataDictionary(),
-        MetaDataKey::OSSIMKeywordlistKey,
-        kwlPan);
-      
-      itk::ExposeMetaData<ImageKeywordlist>(
-        xs->GetMetaDataDictionary(),
-        MetaDataKey::OSSIMKeywordlistKey,
-        kwlXS);
-      
-      // Compute time delta
-      std::string strStartTimePan = kwlPan.GetMetadataByKey("support_data.time_range_start");
-      std::string strStartTimeXS = kwlXS.GetMetadataByKey("support_data.time_range_start");
-      
-      DateTimeAdapter::Pointer startTimePan = DateTimeAdapter::New();
-      DateTimeAdapter::Pointer startTimeXS = DateTimeAdapter::New();
-      
-      startTimePan->SetFromIso8601(strStartTimePan);
-      startTimeXS->SetFromIso8601(strStartTimeXS);
-      
-      double timeDelta = startTimeXS->GetDeltaInSeconds(startTimePan);
-      
-      // Retrieve line period in Pan
-      std::string tmpStr = kwlPan.GetMetadataByKey("support_data.line_period");
-      double linePeriodPan = atof(tmpStr.c_str());
-      
-      // Retrieve column start
-      tmpStr = kwlPan.GetMetadataByKey("support_data.swath_first_col");
-      int colStartPan = atoi(tmpStr.c_str());
-      tmpStr = kwlXS.GetMetadataByKey("support_data.swath_first_col");
-      int colStartXS = atoi(tmpStr.c_str());
-      
-      // Compute shift between MS and P (in Pan pixels)
-      int lineShift_MS_P =int(vcl_floor((timeDelta/(linePeriodPan/1000))  + 0.5))+0.375;
-      int colShift_MS_P = colStartXS*4 - colStartPan-4+0.375;
-      
-      // Apply the scaling
-      typedef itk::ScalableAffineTransform<double, 2>  TransformType;
-      TransformType::Pointer transform = TransformType::New();
-      transform->Scale(4.0);
-      
-      // Resample filter assumes the origin is attached to the pixel center
-      // in order to keep the top left corners unchanged, apply a -(3/2) pixels
-      // shift in each direction
-      // TODO : clarify formula
-      TransformType::OutputVectorType offset;
-      offset[0] = static_cast<double>(colShift_MS_P);
-      offset[1] = static_cast<double>(lineShift_MS_P);
-      transform->Translate(offset);
+      otb::PleiadesPToXSAffineTransformCalculator::TransformType::Pointer transform
+        = otb::PleiadesPToXSAffineTransformCalculator::Compute(panchro, xs);
 
-      otbAppLogINFO(<< "Offset computed between MS and P (in Pan pixels) in PHR mode= "<< offset << std::endl);
-      
-      // Invert the transform as the resampler filter expect an output-to-input
-      // transform (we have computed the input-to-output transform)
-      TransformType::Pointer realTransform = TransformType::New();
-      transform->GetInverse(realTransform);
-      basicResampler->SetTransform(realTransform);
-      
       basicResampler->SetInput(xs);
+      basicResampler->SetTransform(transform);
       basicResampler->SetOutputOrigin(origin);
       basicResampler->SetOutputSpacing(spacing);
       basicResampler->SetOutputSize(size);
@@ -336,13 +222,10 @@ private:
       itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
                                                  panchro->GetImageKeywordlist());
       }
-      break;
-    default:
+    else
       {
       otbAppLogWARNING("Unknown mode");
       }
-      break;
-    }
     
     SetParameterOutputImage("out", fusionFilter->GetOutput());
   }
