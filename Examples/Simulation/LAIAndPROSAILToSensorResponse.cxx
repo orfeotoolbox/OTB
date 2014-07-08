@@ -335,7 +335,9 @@ public:
 
     // Software Guide : BeginLatex
     //
-    // Satellite RSR is initialized and set with \code{aResponse}.
+    // Satellite RSR is initialized and set with \code{aResponse}. Reflectance
+    // mode is used in this case to take into account solar irradiance into
+    // spectral response reduction.
     //
     // Software Guide : EndLatex
 
@@ -343,6 +345,9 @@ public:
     ReduceResponseTypePointerType reduceResponse = ReduceResponseType::New();
     reduceResponse->SetInputSatRSR(m_SatRSR);
     reduceResponse->SetInputSpectralResponse(aResponse);
+    
+    reduceResponse->SetReflectanceMode(true);
+
     reduceResponse->CalculateResponse();
     VectorPairType reducedResponse =
         reduceResponse->GetReduceResponse()->GetResponse();
