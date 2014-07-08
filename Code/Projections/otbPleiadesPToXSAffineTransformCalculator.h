@@ -61,7 +61,7 @@ public:
   /** 
    * This function checks if the transform calculation applies to the
    * given pair of images. Checked items are:
-   * - Both images are sucessfully undertood by OTB as Pléiades images,
+   * - Both images are sucessfully undertood by OTB as Pleiades images,
    * - Both images processing level is SENSOR",
    * - XS and Pan ids (except last 4 letters) are equal.
    * \return True if the calculation applies
