@@ -26,7 +26,7 @@
 #include "itkMacro.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbComplexMomentPathFloat(int argc, char * argv[])
+int otbComplexMomentPathFloat(int itkNotUsed(argc), char * argv[])
 {
   unsigned int p((unsigned int) ::atoi(argv[1]));
   unsigned int q((unsigned int) ::atoi(argv[2]));

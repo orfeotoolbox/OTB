@@ -28,7 +28,7 @@
 
 #include "itkLinearInterpolateImageFunction.h"
 
-int otbLineCorrelationDetectorLinear(int argc, char* argv[])
+int otbLineCorrelationDetectorLinear(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename1 = argv[2];

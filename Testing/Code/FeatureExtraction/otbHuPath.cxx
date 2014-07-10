@@ -26,7 +26,7 @@
 #include "itkPolyLineParametricPath.h"
 #include "itkMacro.h"
 
-int otbHuPath(int argc, char * argv[])
+int otbHuPath(int itkNotUsed(argc), char * argv[])
 {
   unsigned int       Number;
   const unsigned int Dimension = 2;

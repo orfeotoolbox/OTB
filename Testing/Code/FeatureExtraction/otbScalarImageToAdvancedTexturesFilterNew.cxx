@@ -20,7 +20,7 @@
 #include "otbScalarImageToAdvancedTexturesFilter.h"
 #include "otbImage.h"
 
-int otbScalarImageToAdvancedTexturesFilterNew(int argc, char * argv[])
+int otbScalarImageToAdvancedTexturesFilterNew(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                                                         PixelType;

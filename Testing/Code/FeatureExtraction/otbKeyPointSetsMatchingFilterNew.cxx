@@ -19,7 +19,7 @@
 #include "itkVariableLengthVector.h"
 #include "otbKeyPointSetsMatchingFilter.h"
 
-int otbKeyPointSetsMatchingFilterNew(int argc, char * argv[])
+int otbKeyPointSetsMatchingFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef float RealType;
   const unsigned int Dimension = 2;

@@ -394,7 +394,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
 template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType>
 double
 LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
-::ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3)
+::ComputeMeasure(std::vector<double>* itkNotUsed(m1), std::vector<double>* itkNotUsed(m2), std::vector<double>* itkNotUsed(m3))
 {
   return 0;
 }

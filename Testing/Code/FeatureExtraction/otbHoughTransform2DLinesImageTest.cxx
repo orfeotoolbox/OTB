@@ -47,7 +47,7 @@ struct houghPoint
 };
 
 /** Main program */
-int otbHoughTransform2DLinesImageTest(int argc, char* argv[])
+int otbHoughTransform2DLinesImageTest(int itkNotUsed(argc), char* argv[])
 {
 
   const char * outputFilename =  argv[1];

@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbAssociativeSymmetricalSumImageFilter.h"
 
-int otbAssociativeSymmetricalSum(int argc, char* argv[])
+int otbAssociativeSymmetricalSum(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];

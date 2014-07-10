@@ -23,7 +23,7 @@
 
 #include "otbLineDetectorImageFilterBase.h"
 
-int otbLineDetectorBaseNew(int argc, char* argv[])
+int otbLineDetectorBaseNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;

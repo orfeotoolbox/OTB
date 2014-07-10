@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include <fstream>
 
-int otbLikelihoodPathListFilter(int argc, char * argv[])
+int otbLikelihoodPathListFilter(int itkNotUsed(argc), char * argv[])
 {
 
   std::cout << std::endl;

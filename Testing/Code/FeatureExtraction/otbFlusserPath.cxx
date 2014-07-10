@@ -25,7 +25,7 @@
 #include "itkPolyLineParametricPath.h"
 #include "itkMacro.h"
 
-int otbFlusserPath(int argc, char * argv[])
+int otbFlusserPath(int itkNotUsed(argc), char * argv[])
 {
   unsigned int       Number;
   const unsigned int Dimension = 2;

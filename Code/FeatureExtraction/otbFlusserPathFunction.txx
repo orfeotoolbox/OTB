@@ -51,7 +51,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision>
 template <class TInputPath, class TOutput, class TPrecision>
 typename FlusserPathFunction<TInputPath, TOutput, TPrecision>::RealType
 FlusserPathFunction<TInputPath, TOutput, TPrecision>
-::Evaluate(const PathType& path) const
+::Evaluate(const PathType& itkNotUsed(path)) const
 {
   typedef ComplexMomentPathFunction<PathType> FunctionType;
   typedef typename FunctionType::ComplexType  ComplexType;

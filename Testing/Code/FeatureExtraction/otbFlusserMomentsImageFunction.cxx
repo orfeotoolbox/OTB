@@ -33,7 +33,7 @@
 #include "itkAffineTransform.h"
 
 
-int otbFlusserMomentsImageFunctionNew(int argc, char * argv[])
+int otbFlusserMomentsImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
@@ -49,7 +49,7 @@ int otbFlusserMomentsImageFunctionNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbFlusserMomentsImageFunction(int argc, char * argv[])
+int otbFlusserMomentsImageFunction(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];
@@ -91,7 +91,7 @@ int otbFlusserMomentsImageFunction(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
+int otbFlusserMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
 
@@ -168,7 +168,7 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
+int otbFlusserMomentsImageFunctionRotationInvariant(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const double angleInDegrees = atoi(argv[2]);

@@ -20,7 +20,7 @@
 #include "otbImageToHessianDeterminantImageFilter.h"
 #include "otbImage.h"
 
-int otbImageToHessianDeterminantImageFilterNew(int argc, char * argv[])
+int otbImageToHessianDeterminantImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                                          PixelType;

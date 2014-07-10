@@ -38,7 +38,7 @@ typedef GradientFilterType::OutputImageType                                     
 typedef otb::HistogramOfOrientedGradientCovariantImageFunction<CovariantImageType> FunctionType;
 
 
-int otbHistogramOfOrientedGradientCovariantImageFunctionNew(int argc, char * argv[])
+int otbHistogramOfOrientedGradientCovariantImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();
@@ -49,7 +49,7 @@ int otbHistogramOfOrientedGradientCovariantImageFunctionNew(int argc, char * arg
 }
 
 
-int otbHistogramOfOrientedGradientCovariantImageFunction(int argc, char * argv[])
+int otbHistogramOfOrientedGradientCovariantImageFunction(int itkNotUsed(argc), char * argv[])
 {
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
@@ -88,4 +88,3 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int argc, char * argv[]
 
   return EXIT_SUCCESS;
 }
-

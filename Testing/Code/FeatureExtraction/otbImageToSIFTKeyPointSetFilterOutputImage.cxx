@@ -27,7 +27,7 @@
 #include <iostream>
 #include <fstream>
 
-int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
+int otbImageToSIFTKeyPointSetFilterOutputImage(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outputImageFilename = argv[2];

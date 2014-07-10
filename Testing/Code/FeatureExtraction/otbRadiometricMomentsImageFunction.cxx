@@ -27,7 +27,7 @@
 #include "otbImageFileReader.h"
 #include "otbRadiometricMomentsImageFunction.h"
 
-int otbRadiometricMomentsImageFunctionNew(int argc, char * argv[])
+int otbRadiometricMomentsImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
@@ -44,7 +44,7 @@ int otbRadiometricMomentsImageFunctionNew(int argc, char * argv[])
 }
 
 
-int otbRadiometricMomentsImageFunction(int argc, char * argv[])
+int otbRadiometricMomentsImageFunction(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];

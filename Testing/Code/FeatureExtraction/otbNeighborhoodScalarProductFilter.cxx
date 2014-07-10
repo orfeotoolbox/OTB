@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
 
-int otbNeighborhoodScalarProductFilter(int argc, char * argv[])
+int otbNeighborhoodScalarProductFilter(int itkNotUsed(argc), char * argv[])
 {
 
   const char * infname = argv[1];

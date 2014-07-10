@@ -25,7 +25,7 @@
 
 #include "otbLocalHoughFilter.h"
 
-int otbLocalHoughNew(int argc, char* argv[])
+int otbLocalHoughNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;

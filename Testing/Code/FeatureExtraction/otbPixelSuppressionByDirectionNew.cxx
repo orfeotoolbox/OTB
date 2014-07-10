@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbPixelSuppressionByDirectionImageFilter.h"
 
-int otbPixelSuppressionByDirectionNew(int argc, char* argv[])
+int otbPixelSuppressionByDirectionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double InputPixelType;
   typedef double OutputPixelType;

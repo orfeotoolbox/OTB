@@ -32,7 +32,7 @@
 
 #include "itkAffineTransform.h"
 
-int otbHuMomentsImageFunctionNew(int argc, char * argv[])
+int otbHuMomentsImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;
@@ -48,7 +48,7 @@ int otbHuMomentsImageFunctionNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbHuMomentsImageFunction(int argc, char * argv[])
+int otbHuMomentsImageFunction(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename  = argv[2];
@@ -89,7 +89,7 @@ int otbHuMomentsImageFunction(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
+int otbHuMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename   = argv[1];
 
@@ -166,7 +166,7 @@ int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
+int otbHuMomentsImageFunctionRotationInvariant(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const double angleInDegrees = atoi(argv[2]);

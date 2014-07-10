@@ -23,7 +23,7 @@
 #include "itkPolyLineParametricPath.h"
 #include "itkMacro.h"
 
-int otbOrientationPathNew(int argc, char * argv[])
+int otbOrientationPathNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;

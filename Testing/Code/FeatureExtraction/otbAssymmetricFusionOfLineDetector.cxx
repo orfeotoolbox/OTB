@@ -27,7 +27,7 @@
 #include "otbImageFileWriter.h"
 #include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
 
-int otbAssymmetricFusionOfLineDetector(int argc, char * argv[])
+int otbAssymmetricFusionOfLineDetector(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

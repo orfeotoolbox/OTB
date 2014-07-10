@@ -21,7 +21,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
-int otbSFSTexturesImageFilterNew(int argc, char * argv[])
+int otbSFSTexturesImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                 PixelType;

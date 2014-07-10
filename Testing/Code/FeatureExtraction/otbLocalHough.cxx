@@ -31,7 +31,7 @@
 #include <iostream>
 #include <fstream>
 
-int otbLocalHough(int argc, char* argv[])
+int otbLocalHough(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outfname  = argv[2];

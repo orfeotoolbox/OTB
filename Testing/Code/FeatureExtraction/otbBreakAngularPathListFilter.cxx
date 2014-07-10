@@ -24,7 +24,7 @@
 #include "otbMath.h"
 #include <cstdlib>
 
-int otbBreakAngularPathListFilter(int argc, char * argv[])
+int otbBreakAngularPathListFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * outfname = argv[1];
 

@@ -27,7 +27,7 @@
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbMath.h"
 
-int otbRoadExtractionFilter(int argc, char * argv[])
+int otbRoadExtractionFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double, Dimension>                     InputImageType;

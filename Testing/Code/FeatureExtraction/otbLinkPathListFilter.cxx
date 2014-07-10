@@ -23,7 +23,7 @@
 #include <fstream>
 #include <cstdlib>
 
-int otbLinkPathListFilter(int argc, char * argv[])
+int otbLinkPathListFilter(int itkNotUsed(argc), char * argv[])
 {
 
   std::cout << std::endl;

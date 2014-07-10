@@ -33,7 +33,7 @@
 #include "otbLocalHistogramImageFunction.h"
 
 
-int otbImageFunctionAdaptorNew(int argc, char * argv[])
+int otbImageFunctionAdaptorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double InputPixelType;
   typedef double PrecisionType;
@@ -76,7 +76,7 @@ int otbImageFunctionAdaptorNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbImageFunctionAdaptor(int argc, char * argv[])
+int otbImageFunctionAdaptor(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
 
@@ -407,4 +407,3 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-

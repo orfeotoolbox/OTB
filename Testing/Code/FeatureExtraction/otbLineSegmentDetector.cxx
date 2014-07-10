@@ -23,7 +23,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbImageFileWriter.h"
 
-int otbLineSegmentDetectorNew(int argc, char * argv[])
+int otbLineSegmentDetectorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef float InputPixelType;
@@ -98,7 +98,7 @@ int otbLineSegmentDetector(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbLineSegmentDetector_8b_16b_compare(int argc, char * argv[])
+int otbLineSegmentDetector_8b_16b_compare(int itkNotUsed(argc), char * argv[])
 {
   const char * infname8    = argv[1];
   const char * infname16   = argv[2];

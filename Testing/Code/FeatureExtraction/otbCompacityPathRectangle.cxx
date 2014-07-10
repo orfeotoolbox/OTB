@@ -23,7 +23,7 @@
 #include "itkMacro.h"
 #include "otbMath.h"
 
-int otbCompacityPathRectangle(int argc, char * argv[])
+int otbCompacityPathRectangle(int itkNotUsed(argc), char * argv[])
 {
   double A ((double) ::atof(argv[1]));
   double B ((double) ::atof(argv[2]));

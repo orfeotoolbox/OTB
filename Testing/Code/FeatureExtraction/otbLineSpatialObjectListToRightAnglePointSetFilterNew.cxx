@@ -21,7 +21,7 @@
 #include "otbLineSpatialObjectList.h"
 #include "itkPointSet.h"
 
-int otbLineSpatialObjectListToRightAnglePointSetFilterNew(int argc, char * argv[])
+int otbLineSpatialObjectListToRightAnglePointSetFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef float PixelType;

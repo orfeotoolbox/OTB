@@ -19,7 +19,7 @@
 #include "otbVectorImage.h"
 #include "otbCloudDetectionFilter.h"
 
-int otbCloudDetectionFilterNew(int argc, char * argv[])
+int otbCloudDetectionFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension                                  = 2;
   typedef double                                                PixelType;

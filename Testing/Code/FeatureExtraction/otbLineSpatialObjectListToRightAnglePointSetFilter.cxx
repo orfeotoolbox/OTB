@@ -26,7 +26,7 @@
 #include <iostream>
 #include <fstream>
 
-int otbLineSpatialObjectListToRightAnglePointSetFilter(int argc, char * argv[])
+int otbLineSpatialObjectListToRightAnglePointSetFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname   = argv[1];
   const char * outfname  = argv[2];

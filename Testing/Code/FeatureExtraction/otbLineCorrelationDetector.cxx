@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbLineCorrelationDetectorImageFilter.h"
 
-int otbLineCorrelationDetector(int argc, char* argv[])
+int otbLineCorrelationDetector(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

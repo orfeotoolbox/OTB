@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbHarrisImageFilter.h"
 
-int otbHarrisImage(int argc, char * argv[])
+int otbHarrisImage(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

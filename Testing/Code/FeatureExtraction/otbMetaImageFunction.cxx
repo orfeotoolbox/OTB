@@ -36,14 +36,14 @@ typedef otb::MetaImageFunction<PrecisionType, double>                 MetaImageF
 typedef MetaImageFunctionType::PointType                              PointType;
 typedef MetaImageFunctionType::OutputType                             OutputType;
 
-int otbMetaImageFunctionNew(int argc, char * argv[])
+int otbMetaImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   MetaImageFunctionType::Pointer function = MetaImageFunctionType::New();
 
   return EXIT_SUCCESS;
 }
 
-int otbMetaImageFunction(int argc, char * argv[])
+int otbMetaImageFunction(int itkNotUsed(argc), char * argv[])
 {
   // Read the input image
   ReaderType::Pointer   reader = ReaderType::New();

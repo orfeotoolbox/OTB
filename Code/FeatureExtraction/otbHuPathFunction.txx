@@ -52,7 +52,7 @@ HuPathFunction<TInputPath, TOutput, TPrecision>
 template <class TInputPath, class TOutput, class TPrecision>
 typename HuPathFunction<TInputPath, TOutput, TPrecision>::RealType
 HuPathFunction<TInputPath, TOutput, TPrecision>
-::Evaluate(const PathType& path) const
+::Evaluate(const PathType& itkNotUsed(path)) const
 {
   typedef ComplexMomentPathFunction<PathType> FunctionType;
   typedef typename FunctionType::ComplexType  ComplexType;

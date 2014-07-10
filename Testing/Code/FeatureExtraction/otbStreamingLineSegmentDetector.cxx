@@ -24,7 +24,7 @@
 #include "otbPersistentImageToVectorDataFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 
-int otbStreamingLineSegmentDetectorNew(int argc, char * argv[])
+int otbStreamingLineSegmentDetectorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef float InputPixelType;
   const unsigned int Dimension = 2;
@@ -40,7 +40,7 @@ int otbStreamingLineSegmentDetectorNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbStreamingLineSegmentDetector(int argc, char * argv[])
+int otbStreamingLineSegmentDetector(int itkNotUsed(argc), char * argv[])
 {
 
   typedef float InputPixelType;

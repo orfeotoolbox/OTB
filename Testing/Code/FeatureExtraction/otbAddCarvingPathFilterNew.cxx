@@ -22,7 +22,7 @@
 #include "otbAddCarvingPathFilter.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbAddCarvingPathFilterNew(int argc, char* argv[])
+int otbAddCarvingPathFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;

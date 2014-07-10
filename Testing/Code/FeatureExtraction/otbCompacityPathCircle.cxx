@@ -23,7 +23,7 @@
 #include "itkMacro.h"
 #include "otbMath.h"
 
-int otbCompacityPathCircle(int argc, char * argv[])
+int otbCompacityPathCircle(int itkNotUsed(argc), char * argv[])
 {
   unsigned int NbOfPoints((unsigned int) ::atoi(argv[1]));
 

@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbExtractSegmentsImageFilter.h"
 
-int otbExtractSegmentsNew(int argc, char * argv[])
+int otbExtractSegmentsNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double        InputPixelType;
   typedef unsigned char OutputPixelType;

@@ -24,7 +24,7 @@
 #include "itkPolyLineParametricPath.h"
 #include "itkMacro.h"
 
-int otbOrientationPath(int argc, char * argv[])
+int otbOrientationPath(int itkNotUsed(argc), char * argv[])
 {
   double Theta((double) ::atof(argv[1]));
 

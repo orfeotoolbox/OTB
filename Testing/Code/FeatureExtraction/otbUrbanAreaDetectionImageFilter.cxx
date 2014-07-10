@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "otbUrbanAreaDetectionImageFilter.h"
 
-int otbUrbanAreaDetectionImageFilter(int argc, char * argv[])
+int otbUrbanAreaDetectionImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                                 PixelType;

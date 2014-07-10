@@ -32,14 +32,14 @@ typedef otb::HaralickTexturesImageFunction<
 typedef HaralickTexturesImageFunctionType::PointType                  PointType;
 typedef HaralickTexturesImageFunctionType::OutputType                 OutputType;
 
-int otbHaralickTexturesImageFunctionNew(int argc, char * argv[])
+int otbHaralickTexturesImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   HaralickTexturesImageFunctionType::Pointer function = HaralickTexturesImageFunctionType::New();
 
   return EXIT_SUCCESS;
 }
 
-int otbHaralickTexturesImageFunction(int argc, char * argv[])
+int otbHaralickTexturesImageFunction(int itkNotUsed(argc), char * argv[])
 {
   // Read the input image
   ReaderType::Pointer   reader = ReaderType::New();

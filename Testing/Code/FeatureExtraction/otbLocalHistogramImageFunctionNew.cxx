@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include "otbLocalHistogramImageFunction.h"
 
-int otbLocalHistogramImageFunctionNew(int argc, char * argv[])
+int otbLocalHistogramImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;

@@ -27,7 +27,7 @@
 
 #include "otbMath.h"
 
-int otbVectorDataToRightAngleVectorDataFilterNew(int argc, char * argv[])
+int otbVectorDataToRightAngleVectorDataFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   /** Typedefs */
   typedef otb::VectorData< >                    VectorDataType;
@@ -42,7 +42,7 @@ int otbVectorDataToRightAngleVectorDataFilterNew(int argc, char * argv[])
 }
 
 
-int otbVectorDataToRightAngleVectorDataFilter(int argc, char * argv[])
+int otbVectorDataToRightAngleVectorDataFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname  = argv[1];
   const char * outfname = argv[2];
@@ -71,4 +71,3 @@ int otbVectorDataToRightAngleVectorDataFilter(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-

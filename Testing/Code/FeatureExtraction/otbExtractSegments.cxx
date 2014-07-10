@@ -28,7 +28,7 @@
 #include "otbExtractSegmentsImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int otbExtractSegments(int argc, char * argv[])
+int otbExtractSegments(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];

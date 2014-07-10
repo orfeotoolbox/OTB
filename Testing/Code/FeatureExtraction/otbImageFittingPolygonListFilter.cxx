@@ -29,7 +29,7 @@
 #include <fstream>
 #include <cstdlib>
 
-int otbImageFittingPolygonListFilter(int argc, char * argv[])
+int otbImageFittingPolygonListFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * imageFileName = argv[1];
   const char * polyFileName = argv[2];

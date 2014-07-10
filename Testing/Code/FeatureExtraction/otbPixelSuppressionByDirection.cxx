@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbPixelSuppressionByDirectionImageFilter.h"
 
-int otbPixelSuppressionByDirection(int argc, char* argv[])
+int otbPixelSuppressionByDirection(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];

@@ -25,7 +25,7 @@
 #include "otbDrawPathListFilter.h"
 #include "otbImageFileWriter.h"
 
-int otbVectorizationPathListFilter(int argc, char * argv[])
+int otbVectorizationPathListFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * modfname = argv[1];
   const char * dirfname = argv[2];

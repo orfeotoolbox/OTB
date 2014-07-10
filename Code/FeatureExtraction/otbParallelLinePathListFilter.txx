@@ -212,7 +212,7 @@ ParallelLinePathListFilter<TPath>
 template <class TPath>
 bool
 ParallelLinePathListFilter<TPath>
-::VerifyMaxDistanceCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4)
+::VerifyMaxDistanceCondition(VertexType v1, VertexType v2, VertexType v3, VertexType itkNotUsed(v4))
 {
   // Compute the direction vector of the first line
   VertexType vectorDir12;

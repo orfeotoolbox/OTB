@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageToEdgePathFilter(int argc, char * argv[])
+int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename  = argv[1];
   const char *       outputFilename = argv[2];

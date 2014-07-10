@@ -35,7 +35,7 @@ typedef RunLengthFeaturesFilterType::OffsetType          OffsetType;
 typedef RunLengthFeaturesFilterType::OffsetVector        OffsetVector;
 typedef RunLengthFeaturesFilterType::OffsetVectorPointer OffsetVectorPointer;
 
-int otbScalarImageToHigherOrderTexturesFilterNew(int argc, char * argv[])
+int otbScalarImageToHigherOrderTexturesFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   TexturesFilterType::Pointer filter = TexturesFilterType::New();
 

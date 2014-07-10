@@ -29,7 +29,7 @@
 #include "itkAffineTransform.h"
 
 
-int otbFourierMellinDescriptorsNew(int argc, char * argv[])
+int otbFourierMellinDescriptorsNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double     InputPixelType;
@@ -45,7 +45,7 @@ int otbFourierMellinDescriptorsNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbFourierMellinDescriptors(int argc, char * argv[])
+int otbFourierMellinDescriptors(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   unsigned int p((unsigned int) ::atoi(argv[2]));
@@ -93,7 +93,7 @@ int otbFourierMellinDescriptors(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbFourierMellinDescriptorsScaleInvariant(int argc, char * argv[])
+int otbFourierMellinDescriptorsScaleInvariant(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   unsigned int p((unsigned int) ::atoi(argv[2]));
@@ -180,7 +180,7 @@ int otbFourierMellinDescriptorsScaleInvariant(int argc, char * argv[])
 }
 
 
-int otbFourierMellinDescriptorsRotationInvariant(int argc, char * argv[])
+int otbFourierMellinDescriptorsRotationInvariant(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   unsigned int p((unsigned int) ::atoi(argv[2]));

@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbRemoveIsolatedByDirectionFilter(int argc, char * argv[])
+int otbRemoveIsolatedByDirectionFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                                                                PixelType;

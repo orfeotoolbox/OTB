@@ -20,7 +20,7 @@
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 
-int otbImageToFastSIFTKeyPointSetFilterNew(int argc, char * argv[])
+int otbImageToFastSIFTKeyPointSetFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef float RealType;
   const unsigned int Dimension = 2;

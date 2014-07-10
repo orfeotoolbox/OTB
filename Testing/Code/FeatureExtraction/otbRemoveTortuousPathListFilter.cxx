@@ -22,7 +22,7 @@
 #include <fstream>
 #include <cstdlib>
 
-int otbRemoveTortuousPathListFilter(int argc, char * argv[])
+int otbRemoveTortuousPathListFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * outfname = argv[1];
   const double threshold = atof(argv[2]);

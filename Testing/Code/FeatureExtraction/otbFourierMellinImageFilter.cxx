@@ -29,7 +29,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int otbFourierMellinImageFilter(int argc, char* argv[])
+int otbFourierMellinImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputRealFilename = argv[2];

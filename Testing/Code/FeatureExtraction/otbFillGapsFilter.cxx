@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 
-int otbFillGapsFilter(int argc, char * argv[])
+int otbFillGapsFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

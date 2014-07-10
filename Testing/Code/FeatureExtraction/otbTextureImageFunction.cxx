@@ -28,7 +28,7 @@
 #include "otbTextureFunctors.h"
 
 template<class TInputImage, class TOutputImage, class TFunctor>
-int generic_TextureImageFunction(int argc, char * argv[])
+int generic_TextureImageFunction(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

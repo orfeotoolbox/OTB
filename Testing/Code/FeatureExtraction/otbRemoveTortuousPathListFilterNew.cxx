@@ -21,7 +21,7 @@
 #include "itkPolyLineParametricPath.h"
 #include <cstdlib>
 
-int otbRemoveTortuousPathListFilterNew(int argc, char * argv[])
+int otbRemoveTortuousPathListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension>      PathType;

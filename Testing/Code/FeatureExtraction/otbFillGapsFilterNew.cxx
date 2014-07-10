@@ -21,7 +21,7 @@
 #include "itkMacro.h"
 #include "otbFillGapsFilter.h"
 
-int otbFillGapsFilterNew(int argc, char * argv[])
+int otbFillGapsFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::FillGapsFilter FillGapsFilterType;
   FillGapsFilterType::Pointer filter = FillGapsFilterType::New();

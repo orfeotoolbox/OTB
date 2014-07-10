@@ -20,7 +20,7 @@
 #include "otbImageToEdgePathFilter.h"
 #include "otbImage.h"
 
-int otbImageToEdgePathFilterNew(int argc, char * argv[])
+int otbImageToEdgePathFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                          PixelType;

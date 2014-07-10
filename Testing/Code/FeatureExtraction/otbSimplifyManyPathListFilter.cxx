@@ -27,7 +27,7 @@
  * of the otb::UnaryFunctorObjectListFilter
  */
 
-int otbSimplifyManyPathListFilter(int argc, char * argv[])
+int otbSimplifyManyPathListFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * outfname = argv[1];
   const double tolerance = atof(argv[2]);

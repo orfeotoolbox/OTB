@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbCloudDetectionFilter(int argc, char * argv[])
+int otbCloudDetectionFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension                                                   = 2;
   typedef double                                                             PixelType;

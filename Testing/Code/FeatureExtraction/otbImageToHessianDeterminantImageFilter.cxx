@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageToHessianDeterminantImageFilter(int argc, char * argv[])
+int otbImageToHessianDeterminantImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * ifname   = argv[1];
   const char * outfname = argv[2];

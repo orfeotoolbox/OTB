@@ -34,7 +34,7 @@ bool CMPData(std::vector<float>  a, std::vector<float>  b)
   return lexicographical_compare(a.begin(), a.begin() + 2, b.begin(), b.begin() + 2);
 }
 
-int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * argv[])
+int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];

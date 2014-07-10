@@ -25,7 +25,7 @@
 #include <iostream>
 #include <fstream>
 
-int otbKeyPointSetsMatchingFilter(int argc, char* argv[])
+int otbKeyPointSetsMatchingFilter(int itkNotUsed(argc), char* argv[])
 {
 
   const char * outfname = argv[1];

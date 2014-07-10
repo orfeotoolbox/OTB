@@ -28,7 +28,7 @@
 #include "itkRGBPixel.h"
 #include "itkImageRegionIterator.h"
 
-int otbImageToSIFTKeyPointSetFilterOutputAscii(int argc, char * argv[])
+int otbImageToSIFTKeyPointSetFilterOutputAscii(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];

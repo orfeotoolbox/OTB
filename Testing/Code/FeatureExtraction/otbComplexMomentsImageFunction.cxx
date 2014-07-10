@@ -30,7 +30,7 @@
 #include "otbStreamingResampleImageFilter.h"
 
 
-int otbComplexMomentsImageFunctionNew(int argc, char * argv[])
+int otbComplexMomentsImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double     InputPixelType;
@@ -46,7 +46,7 @@ int otbComplexMomentsImageFunctionNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbComplexMomentsImageFunction(int argc, char * argv[])
+int otbComplexMomentsImageFunction(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   unsigned int p((unsigned int) ::atoi(argv[2]));
@@ -97,7 +97,7 @@ int otbComplexMomentsImageFunction(int argc, char * argv[])
 }
 
 
-int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
+int otbComplexMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   unsigned int p((unsigned int) ::atoi(argv[2]));

@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbVectorizationPathListFilterNew(int argc, char * argv[])
+int otbVectorizationPathListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                                           PixelType;

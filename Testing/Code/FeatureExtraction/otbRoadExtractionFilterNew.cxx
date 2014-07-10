@@ -21,7 +21,7 @@
 #include "otbVectorImage.h"
 #include "otbRoadExtractionFilter.h"
 
-int otbRoadExtractionFilterNew(int argc, char * argv[])
+int otbRoadExtractionFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double, Dimension>    InputImageType;

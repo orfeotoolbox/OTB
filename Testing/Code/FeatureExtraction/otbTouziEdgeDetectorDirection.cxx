@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbTouziEdgeDetectorImageFilter.h"
 
-int otbTouziEdgeDetectorDirection(int argc, char* argv[])
+int otbTouziEdgeDetectorDirection(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

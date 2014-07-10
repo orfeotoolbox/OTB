@@ -25,7 +25,7 @@
 #include "otbThresholdImageToPointSetFilter.h"
 #include "itkPointSet.h"
 
-int otbThresholdImageToPointSetTest(int argc, char * argv[])
+int otbThresholdImageToPointSetTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
