@@ -31,7 +31,6 @@ int otbKeyPointDensityImageFilterNew(int, char*[])
   typedef float PixelType;
 
   typedef otb::Image<PixelType, Dimension>                           ImageType;
-  typedef ImageType::IndexType                                       IndexType;
   typedef itk::VariableLengthVector<PixelType>                       RealVectorType;
   typedef itk::PointSet<RealVectorType, Dimension>                   PointSetType;
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType> DetectorType;

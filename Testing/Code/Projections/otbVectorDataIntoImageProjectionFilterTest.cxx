@@ -120,8 +120,6 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int argc, char * argv[
   typedef otb::VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
   typedef VectorDataExtractROIType::RegionType            RemoteSensingRegionType;
 
-  typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType> TreeIteratorType;
-
   std::string imageInputFilename = argv[1];
   std::string vectorDataInputFilename = argv[2];
   std::string demDirectory = argv[3];

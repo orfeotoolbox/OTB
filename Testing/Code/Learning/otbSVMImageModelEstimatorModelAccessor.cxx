@@ -68,7 +68,6 @@ int otbSVMImageModelEstimatorModelAccessor(int argc, char* argv[])
   svmEstimator->Update();
 
   typedef EstimatorType::SVMModelPointer SVMModelPointer;
-  typedef EstimatorType::SVMModelType    SVMModelType;
   SVMModelPointer ptrModel = svmEstimator->GetModel();
 
   std::ofstream f;

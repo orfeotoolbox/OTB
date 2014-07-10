@@ -144,13 +144,9 @@ int main(int argc, char* argv[])
   spacing[0]=1;
   spacing[1]=1;
 
-
   rasterization->SetOutputSize(size);
   rasterization->SetOutputOrigin(origin);
   rasterization->SetOutputSpacing(spacing);
-
-  otb::StandardOneLineFilterWatcher * watch = new otb::StandardOneLineFilterWatcher(rasterization.GetPointer(),
-                                                                          "rasterization");
 
   WriterType::Pointer writer  = WriterType::New();
   writer->SetFileName(argv[1]);

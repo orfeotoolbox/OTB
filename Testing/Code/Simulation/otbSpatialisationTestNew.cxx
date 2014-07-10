@@ -27,7 +27,6 @@ int otbSpatialisationTestNew(int argc, char * argv[])
 {
   typedef unsigned short LabelType;
   const unsigned int Dimension = 2;
-  typedef otb::Image<LabelType, Dimension> ImageType;
   typedef otb::AttributesMapLabelObject<LabelType, Dimension, std::string>    LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                                      LabelMapType;
   typedef otb::SpatialisationFilter<LabelMapType>                             FilterType;

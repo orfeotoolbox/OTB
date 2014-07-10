@@ -428,7 +428,6 @@ MassOfBelief<TLabel, TMass>
                      const LabelSetOfSetType & labelSet)
 {
   // Define an iterator on the label set
-  typedef std::set<TLabel> LabelSetType;
   typename LabelSetOfSetType::const_iterator it = labelSet.begin();
 
   // Open the set

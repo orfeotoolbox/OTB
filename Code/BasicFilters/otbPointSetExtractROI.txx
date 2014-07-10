@@ -54,11 +54,6 @@ PointSetExtractROI<TInputPointSet, TOutputPointSet>
 ::GenerateData(void)
 {
   typedef typename TInputPointSet::PointsContainer  InputPointsContainer;
-  typedef typename TOutputPointSet::PointsContainer OutputPointsContainer;
-
-  typedef typename TInputPointSet::PointDataContainer  InputPointDataContainer;
-  typedef typename TOutputPointSet::PointDataContainer OutputPointDataContainer;
-
   typedef typename TInputPointSet::PointsContainerPointer  InputPointsContainerPointer;
   typedef typename TOutputPointSet::PointsContainerPointer OutputPointsContainerPointer;
 

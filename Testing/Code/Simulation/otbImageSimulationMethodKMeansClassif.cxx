@@ -57,8 +57,6 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
    typedef otb::VectorData<double, Dimension>                                         VectorDataType;
    typedef otb::AttributesMapLabelObject<LabelType, Dimension, std::string>           LabelObjectType;
    typedef itk::LabelMap<LabelObjectType>                                             LabelMapType;
-   typedef otb::VectorDataFileReader<VectorDataType>                                  VectorDataFileReaderType;
-
    typedef otb::SpatialisationFilter<LabelMapType>                                    SpatialisationFilterType;
    typedef otb::ProspectModel                                                         SimulationStep1Type;
    typedef otb::SailModel                                                             SimulationStep2Type;
@@ -73,8 +71,6 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
    typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>            EstimatorType;
 
    typedef otb::KMeansImageClassificationFilter<OutputImageType, LabelImageType, nbClasses> ClassificationFilterType;
-   typedef ClassificationFilterType::KMeansParametersType                    KMeansParametersType;
-
    typedef itk::ImageRegionIterator<OutputImageType> ImageRegionIteratorType;
 
 
@@ -198,5 +194,3 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
 
    return EXIT_SUCCESS;
 }
-
-

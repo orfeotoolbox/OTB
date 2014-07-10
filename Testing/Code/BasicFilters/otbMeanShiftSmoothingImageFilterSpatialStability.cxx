@@ -53,14 +53,11 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char * argv[])
 
   const unsigned int Dimension = 2;
   typedef float                                            PixelType;
-  typedef double                                           KernelType;
   typedef otb::VectorImage<PixelType, Dimension>           ImageType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
   typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> FilterType;
-  typedef FilterType::OutputIterationImageType             IterationImageType;
   typedef FilterType::OutputSpatialImageType               SpatialImageType;
   typedef SpatialImageType::InternalPixelType                      SpatialPixelType;
-  typedef FilterType::OutputLabelImageType                 LabelImageType;
   typedef otb::MultiChannelExtractROI<PixelType,PixelType>  ExtractROIFilterType;
   typedef otb::MultiChannelExtractROI<SpatialPixelType,SpatialPixelType>  SpatialExtractROIFilterType;
 

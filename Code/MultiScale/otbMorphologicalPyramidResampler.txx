@@ -125,8 +125,6 @@ Resampler<TInputImage, TOutputImage>
   typedef itk::ResampleImageFilter<InputImageType, OutputImageType>   ResampleFilterType;
   typedef itk::ScalableAffineTransform<double, InputImageType::ImageDimension> TransformType;
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
-  typedef itk::ImageRegionConstIterator<OutputImageType>              ConstIteratorType;
-  typedef itk::ImageRegionIterator<OutputImageType>                   IteratorType;
 
   // Resampling filter creation
   typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
@@ -145,7 +143,7 @@ Resampler<TInputImage, TOutputImage>
   translation[0] = 0.5 * inputSpacing[0] * (scales[0] - 1.0);
   translation[1] = 0.5 * inputSpacing[1] * (scales[1] - 1.0);
   transform->SetTranslation(translation);
-  
+
 
   // Resampling filter set up
   resampler->SetTransform(transform);

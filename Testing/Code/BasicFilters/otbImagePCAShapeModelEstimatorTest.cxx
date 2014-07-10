@@ -77,11 +77,6 @@ int otbImagePCAShapeModelEstimatorTest(int itkNotUsed(argc), char* argv[])
   //------------------------------------------------------
   typedef otb::Image<double, NDIMENSION> InputImageType;
   typedef otb::Image<double, NDIMENSION> OutputImageType;
-  typedef
-  itk::ImageRegionIterator<InputImageType> InputImageIterator;
-
-  typedef
-  itk::ImageRegionIterator<OutputImageType> OutputImageIterator;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

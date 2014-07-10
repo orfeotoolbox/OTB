@@ -67,9 +67,6 @@ int otbVectorDataToLabelImageFilter(int itkNotUsed(argc), char * argv[])
   rasterization->SetOutputParametersFromImage(reader->GetOutput());
   rasterization->SetBurnAttribute("DN");
 
-  otb::StandardOneLineFilterWatcher * watch = new otb::StandardOneLineFilterWatcher(rasterization.GetPointer(),
-                                                                          "rasterization");
-
   WriterType::Pointer writer  = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(rasterization->GetOutput());

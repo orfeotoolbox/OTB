@@ -35,7 +35,6 @@ int otbFourierMellinImageFilter(int itkNotUsed(argc), char* argv[])
   const char * outputRealFilename = argv[2];
   const char * outputImaginaryFilename = argv[3];
   typedef double               InputPixelType;
-  typedef std::complex<double> OutputPixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType, Dimension> InputImageType;

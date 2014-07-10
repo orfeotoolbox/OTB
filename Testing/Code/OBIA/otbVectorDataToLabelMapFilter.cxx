@@ -79,9 +79,6 @@ int otbVectorDataToLabelMapFilter(int argc, char * argv[])
   p->SetVectorDataObject(reader->GetOutput());
   typedef VectorDataType::DataNodeType::PolygonType::RegionType RegionType;
   RegionType region;
-  typedef RegionType::IndexType index;
-  typedef RegionType::SizeType  size;
-
   p->SetBoundingRegion(region);
 
   //Compute the global bounding box of the vectordata

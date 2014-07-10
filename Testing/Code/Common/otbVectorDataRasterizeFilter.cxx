@@ -76,9 +76,6 @@ int otbVectorDataRasterizeFilter(int itkNotUsed(argc), char * argv[])
   outputcolor[3] = 0.;
   rasterization->AddColor(outputcolor);
 
-  otb::StandardOneLineFilterWatcher * watch = new otb::StandardOneLineFilterWatcher(rasterization.GetPointer(),
-                                                                          "rasterization");
-
   WriterType::Pointer writer  = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(rasterization->GetOutput());

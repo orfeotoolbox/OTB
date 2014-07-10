@@ -603,7 +603,7 @@ BOOST_AUTO_TEST_CASE(OGRDataSource_sqlite_overwrite)
   ogr::Layer l = ds -> CreateLayer(layer1, 0, wkbPoint);
   BOOST_CHECK_EQUAL(l.GetFeatureCount(true), 0);
 
-  OGRFeatureDefn & defn = l.GetLayerDefn();
+//  OGRFeatureDefn & defn = l.GetLayerDefn();
   l.CreateField(k_f0);
   l.CreateField(k_f1);
 

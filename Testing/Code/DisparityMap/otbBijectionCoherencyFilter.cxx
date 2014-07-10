@@ -42,7 +42,6 @@ int otbBijectionCoherencyFilterNew(int argc, char* argv[])
 
 int otbBijectionCoherencyFilter(int argc, char* argv[])
 {
-  typedef otb::ImageFileReader<FloatImageType>    ReaderType;
 
   typedef otb::ImageFileReader
     <FloatVectorImageType>                        ReaderVectorType;

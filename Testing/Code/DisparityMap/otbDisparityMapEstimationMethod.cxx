@@ -48,9 +48,7 @@ int otbDisparityMapEstimationMethod(int argc, char* argv[])
   typedef otb::ImageFileReader<ImageType>                                       ReaderType;
   typedef otb::ThresholdImageToPointSetFilter<ImageType, PointSetType>          PointSetSourceType;
   typedef PointSetType::PointsContainer::Iterator                               PointSetIteratorType;
-  typedef PointSetType::PointsContainer                                         PointsContainerType;
   typedef PointSetType::PointDataContainer::Iterator                            PointDataIteratorType;
-  typedef PointSetType::PointDataContainer                                      PointDataContainerType;
 
   //Input images reading
   ReaderType::Pointer fixedReader = ReaderType::New();

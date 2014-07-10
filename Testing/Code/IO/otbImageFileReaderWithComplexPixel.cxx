@@ -90,7 +90,6 @@ int otbVectorImageFileReaderWithComplexPixelTest(int argc, char* argv[])
   typedef std::complex<float>                            PixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<PixelType,  Dimension>              ImageType;
   typedef otb::VectorImage<PixelType, Dimension>         CplVectorImageType;
 
   typedef otb::ImageFileReader<CplVectorImageType>  ReaderType;

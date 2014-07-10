@@ -260,10 +260,6 @@ private:
     sqloss.str("");
     sqloss<<"SELECT * FROM \""<<layername<<"\" ORDER BY label";
     otb::ogr::Layer layerTmp=ogrDS->ExecuteSQL(sqloss.str().c_str(), NULL, NULL);
-
-    bool goesOn = true;
-    int nbFeatures = layerTmp.ogr().GetFeatureCount(true);
-    int nb = 0;
     otb::ogr::Feature firstFeature = layerTmp.ogr().GetNextFeature();
 
     //Geometry fusion
@@ -360,5 +356,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::LSMSVectorization)
-
-

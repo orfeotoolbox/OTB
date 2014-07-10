@@ -72,8 +72,6 @@ int main(int ac, char* av[])
   double epsilonBoundary(0.0);
 
   typedef otb::TestHelper::StringList   StringList;
-  typedef otb::TestHelper::StringListIt StringListIt;
-
   StringList baselineFilenamesBinary;
   StringList testFilenamesBinary;
   StringList baselineFilenamesMetaData;

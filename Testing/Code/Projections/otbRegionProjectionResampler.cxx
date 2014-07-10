@@ -66,8 +66,6 @@ int otbRegionProjectionResampler(int argc, char* argv[])
   typedef itk::LinearInterpolateImageFunction<ImageType, double>     InterpolatorType;
   typedef itk::RescaleIntensityImageFilter<ImageType, CharImageType> RescalerType;
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType>    ResamplerType;
-  typedef itk::TranslationTransform<double, 2>                       TransformType;
-  typedef otb::CompositeTransform<ModelType, TransformType>          CompositeType;
 
   ImageType::IndexType   start;
   ImageType::SizeType    size;

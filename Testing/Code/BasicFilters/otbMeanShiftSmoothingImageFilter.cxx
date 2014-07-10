@@ -51,7 +51,6 @@ int otbMeanShiftSmoothingImageFilter(int argc, char * argv[])
 
   const unsigned int Dimension = 2;
   typedef float                                            PixelType;
-  typedef double                                           KernelType;
   typedef otb::VectorImage<PixelType, Dimension>           ImageType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
   typedef otb::ImageFileWriter<ImageType>                  WriterType;

@@ -27,10 +27,8 @@ int otbVectorDataFileWriterMultiPolygons(int itkNotUsed(argc), char * argv[])
   typedef otb::VectorData<double, 2>                VectorDataType;
   typedef VectorDataType::DataNodeType              DataNodeType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
-  typedef DataNodeType::PointType                   PointType;
   typedef DataNodeType::LineType                    LineType;
   typedef DataNodeType::PolygonType                 PolygonType;
-  typedef DataNodeType::PolygonListType             PolygonListType;
   typedef LineType::VertexType                      VertexType;
 
   //Instantiation

@@ -41,7 +41,6 @@ int otbEdgeDensityImageFilter(int itkNotUsed(argc), char* argv[])
   typedef float PixelType;
 
   typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef ImageType::IndexType             IndexType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<ImageType>  WriterType;
 

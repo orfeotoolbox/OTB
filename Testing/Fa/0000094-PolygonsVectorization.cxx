@@ -50,25 +50,19 @@
 int main(int argc, char * argv[])
 {
 
-  typedef unsigned char PixelType;
   typedef unsigned long LabelPixelType;
   typedef unsigned char PixelTypeOutput;
 
-  typedef otb::Image<PixelType, 2>       SingleImageType;
   typedef otb::Image<LabelPixelType, 2>  LabeledImageType;
   typedef otb::Image<PixelTypeOutput, 2> OutputImageType;
-
   typedef itk::ImageRegionIterator<LabeledImageType> IteratorType;
-
   typedef otb::Polygon<double>             PolygonType;
-  typedef PolygonType::Pointer             PolygonPointerType;
-  typedef PolygonType::ContinuousIndexType PolygonIndexType;
   typedef otb::ObjectList<PolygonType>     PolygonListType;
   typedef PolygonListType::Pointer         PolygonListPointerType;
   typedef itk::ImageRegion<2>              ImageRegionType;
 
   typedef otb::PersistentVectorizationImageFilter<LabeledImageType, PolygonType> PersistentVectorizationFilterType;
-  typedef itk::RelabelComponentImageFilter<LabeledImageType, LabeledImageType>   RelabelFilterType;
+
   typedef itk::ConnectedComponentImageFilter<LabeledImageType, LabeledImageType> ConnectedFilterType;
   typedef itk::RescaleIntensityImageFilter<LabeledImageType, OutputImageType>    RescalerType;
 /*

@@ -37,7 +37,6 @@ int otbPolygonizationRasterizationTest(int itkNotUsed(argc), char * argv[])
   typedef otb::ImageFileReader<ImageType>                       ReaderType;
 
   typedef otb::VectorData<>                                     VectorDataType;
-  typedef otb::VectorDataFileReader<VectorDataType>             VDReaderType;
 
   typedef otb::LabelImageToVectorDataFilter<ImageType>          LabelImageToVDFilterType;
   typedef otb::VectorDataToLabelImageFilter<VectorDataType,

@@ -41,7 +41,6 @@ int otbImageFileReaderRADComplexFloatExtract(int itkNotUsed(argc), char* argv[])
 
   typedef otb::Image<InputPixelType,  Dimension> InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputCplxImageType;
-  typedef otb::Image<float, Dimension>             OutputScalarImageType;
   typedef otb::VectorImage<float, Dimension>       OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

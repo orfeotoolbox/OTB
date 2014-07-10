@@ -25,7 +25,6 @@ int otbMatrixTransposeMatrixImageFilterNew(int itkNotUsed(argc), char ** itkNotU
 {
   const unsigned int Dimension = 2;
   typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
 
   typedef otb::VectorImage<InputPixelType, Dimension> InputImage1Type;
   typedef otb::VectorImage<InputPixelType, Dimension> InputImage2Type;

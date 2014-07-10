@@ -380,12 +380,6 @@ private:
   GenericApplySegmentation(otb::StreamingImageToOGRLayerSegmentationFilter<TInputImage,
                            TSegmentationFilter> * streamingVectorizedFilter, TInputImage * inputImage, const otb::ogr::Layer& layer, const unsigned int outputNb)
   {
-    typedef  TSegmentationFilter             SegmentationFilterType;
-    typedef  typename SegmentationFilterType::Pointer SegmentationFilterPointerType;
-    typedef otb::StreamingImageToOGRLayerSegmentationFilter
-      <TInputImage,
-       SegmentationFilterType>          StreamingVectorizedSegmentationOGRType;
-
     // Retrieve tile size parameter
     const unsigned int tileSize = static_cast<unsigned int> (this->GetParameterInt("mode.vector.tilesize"));
     // Retrieve the 8-connected option

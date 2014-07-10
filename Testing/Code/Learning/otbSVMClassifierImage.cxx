@@ -85,7 +85,6 @@ int otbSVMClassifierImage(int argc, char* argv[])
   /** Read the input image and build the sample */
 
   typedef double                      InputPixelType;
-  typedef std::vector<InputPixelType> InputVectorType;
   typedef int                         LabelPixelType;
   const unsigned int Dimension = 2;
 

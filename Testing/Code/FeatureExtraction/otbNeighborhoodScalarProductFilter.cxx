@@ -39,7 +39,6 @@ int otbNeighborhoodScalarProductFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::NeighborhoodScalarProductFilter<VectorImageType, ImageType, ImageType> FilterType;
   typedef otb::ImageFileReader<ImageType>                                             ReaderType;
   typedef otb::ImageFileWriter<ImageType>                                             WriterType;
-  typedef otb::ImageFileWriter<VectorImageType>                                       TempWriter;
   typedef itk::GradientRecursiveGaussianImageFilter<ImageType, VectorImageType>       GradientFilterType;
 
   // Instantiating object

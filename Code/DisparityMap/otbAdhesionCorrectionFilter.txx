@@ -571,7 +571,7 @@ AdhesionCorrectionFilter<TImage, TMask>
       }
     index_pos = new_disparityIt.GetIndex();
     old_disparityIt.SetIndex(index_pos);
-    double disp = old_disparityIt.Get();
+//    double disp = old_disparityIt.Get();
     while (new_disparityIt.GetIndex()[0]<static_cast<int>(outputPtr->GetRequestedRegion().GetSize()[0]) + outputPtr->GetRequestedRegion().GetIndex()[0] - 1)
       {
       index_pos = new_disparityIt.GetIndex();
@@ -930,7 +930,7 @@ AdhesionCorrectionFilter<TImage, TMask>
 
   int Count;
   int big_win = win + 1;
-  int half_big_win = (2*big_win +1)*(2*big_win +1) /2;
+//  int half_big_win = (2*big_win +1)*(2*big_win +1) /2;
   double Tol2 = m_Tolerance/2;
 
   new_disparityIt.GoToBegin();

@@ -53,7 +53,6 @@ int otbConfigurationTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
 
 int otbConfigurationTestDEM(int argc, char *argv[])
 {
-  typedef otb::ConfigurationFile ConfigurationType;
   std::string demDir = otb::ConfigurationFile::GetInstance()->GetDEMDirectory();
 
   if (argc > 1)

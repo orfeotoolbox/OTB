@@ -48,7 +48,6 @@ int otbMeanShiftSegmentationFilter(int argc, char * argv[])
 
   const unsigned int Dimension = 2;
   typedef float                                            PixelType;
-  typedef double                                           KernelType;
   typedef otb::VectorImage<PixelType, Dimension>           ImageType;
   typedef otb::Image<unsigned int, Dimension>              LabelImageType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;

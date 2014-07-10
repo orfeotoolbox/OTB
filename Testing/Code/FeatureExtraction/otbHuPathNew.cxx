@@ -27,7 +27,6 @@ int otbHuPathNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::HuPathFunction<PathType>          FunctionType;
-  typedef FunctionType::RealType                 RealType;
 
   FunctionType::Pointer function = FunctionType::New();
 

@@ -31,10 +31,7 @@ int otbImageToLabelMapWithAttributesFilter(int argc, char* argv[])
 
   // Convenient typedefs
   typedef otb::VectorImage<double, 2>                           ImageType;
-  typedef ImageType::IndexType         IndexType;
-
   typedef otb::Image<unsigned int, 2>                           LabeledImageType;
-
   typedef otb::AttributesMapLabelObjectWithClassLabel<double, 2, double, double> LabelObjectType;
 
   typedef otb::ImageToLabelMapWithAttributesFilter<ImageType,

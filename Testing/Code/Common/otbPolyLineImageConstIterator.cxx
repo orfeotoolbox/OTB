@@ -39,8 +39,6 @@ int otbPolyLineImageConstIterator(int argc, char * argv[])
   typedef otb::Image<PixelType, Dimension>                ImageType;
   typedef itk::PolyLineParametricPath<Dimension>          PathType;
   typedef PathType::VertexType                            VertexType;
-  typedef otb::PolyLineImageIterator<ImageType, PathType> IteratorType;
-
   typedef otb::PolyLineImageConstIterator<ImageType, PathType> ConstIteratorType;
 
   ImageType::SizeType size;

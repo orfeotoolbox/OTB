@@ -37,7 +37,6 @@ int otbSarParametricMapFunctionTest(int argc, char* argv[])
   typedef InputImageType::PixelType                       InputPixelType;
   typedef otb::ImageFileReader<InputImageType>            ReaderType;
   typedef otb::SarParametricMapFunction<InputImageType>   FunctionType;
-  typedef FunctionType::PointType                         PointType;
   typedef FunctionType::PointSetType                      PointSetType;
 
   /**Instantiation ofa Smart Pointer*/
@@ -106,4 +105,3 @@ int otbSarParametricMapFunctionTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

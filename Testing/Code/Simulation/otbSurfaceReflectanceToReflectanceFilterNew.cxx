@@ -51,7 +51,7 @@ int otbSurfaceReflectanceToReflectanceFilterTest(int argc, char * argv[])
   typedef double                                PixelType;
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  typedef itk::ImageRegionIterator< ImageType > IteratorType;
+//  typedef itk::ImageRegionIterator< ImageType > IteratorType;
   //typedef ResponseType::PairType    PairType;
   //typedef otb::ObjectList< PairType > PairListType;
   //   PairListType::Pointer pairList = PairListType::New();

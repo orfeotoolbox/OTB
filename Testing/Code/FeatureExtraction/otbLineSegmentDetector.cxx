@@ -110,13 +110,11 @@ int otbLineSegmentDetector_8b_16b_compare(int itkNotUsed(argc), char * argv[])
   typedef otb::Image<PixelType8>                                      ImageType8;
   typedef otb::ImageFileReader<ImageType8>                            ReaderType8;
   typedef otb::LineSegmentDetector<ImageType8, double>                LSDFilterType8;
-  typedef otb::ImageFileWriter<ImageType8>                            WriterType8;
 
   typedef unsigned short                                              PixelType16;
   typedef otb::Image<PixelType16>                                     ImageType16;
   typedef otb::ImageFileReader<ImageType16>                           ReaderType16;
   typedef otb::LineSegmentDetector<ImageType16, double>               LSDFilterType16;
-  typedef otb::ImageFileWriter<ImageType16>                           WriterType16;
 
   typedef LSDFilterType8::VectorDataType                              VectorDataType;
   typedef otb::VectorDataFileWriter<VectorDataType>                   VectorDataWriterType;

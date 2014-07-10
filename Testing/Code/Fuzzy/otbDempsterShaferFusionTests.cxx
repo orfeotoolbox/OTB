@@ -1360,7 +1360,7 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
     vectorAllLabels.push_back(argv[it]);
     }
 
-  unsigned int nbClasses = vectorAllLabels.size();
+//  unsigned int nbClasses = vectorAllLabels.size();
 
   MassOfBeliefFunctionType::LabelSetType universe, labelSet;
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
@@ -1947,7 +1947,7 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
   unsigned int nbParameters = 1;
   unsigned int nbClassifiers = (argc - 1 - nbParameters);
 
-  IntLabelPixelType undefinedValue = 0;
+//  IntLabelPixelType undefinedValue = 0;
 
   std::string massOfBeliefDefMethodStr = argv[argc - 4];
   MassOfBeliefDefinitionMethod massOfBeliefDefMethod;
@@ -2067,7 +2067,7 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
     }
 
   // Number of classes in the universe
-  unsigned int nbClasses = universe.size();
+//  unsigned int nbClasses = universe.size();
 
 
   IntMassOfBeliefFunctionType::LabelSetType universeSet, labelSet;

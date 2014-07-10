@@ -26,7 +26,6 @@ int otbListSampleToHistogramListGenerator(int itkNotUsed(argc), char * argv[])
   typedef double                                       PixelType;
   typedef otb::VectorImage<PixelType>                  VectorImageType;
   typedef VectorImageType::PixelType                   VectorPixelType;
-  typedef VectorImageType::SizeType                    SizeType;
   typedef itk::Statistics::ListSample<VectorPixelType> ListSampleType;
   typedef otb::ListSampleToHistogramListGenerator
   <ListSampleType, PixelType>                         HistogramGeneratorType;

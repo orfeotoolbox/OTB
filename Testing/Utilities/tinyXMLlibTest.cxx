@@ -910,8 +910,8 @@ int tinyXMLlibTest(int argc, char *argv[] )
 	// Long filenames crashing STL version
 	{
 		TiXmlDocument doc( "midsummerNightsDreamWithAVeryLongFilenameToConfuseTheStringHandlingRoutines.xml" );
-		bool loadOkay = doc.LoadFile();
-		loadOkay = true;	// get rid of compiler warning.
+//		bool loadOkay = doc.LoadFile();
+//		loadOkay = true;	// get rid of compiler warning.
 		// Won't pass on non-dev systems. Just a "no crash" check.
 		//XmlTest(file, "Long filename. ", true, loadOkay );
 	}
@@ -1316,5 +1316,3 @@ int tinyXMLlibTest(int argc, char *argv[] )
         if( gFail == 0 ) return EXIT_SUCCESS;
         else return EXIT_FAILURE;
 }
-
-

@@ -27,7 +27,6 @@
 
 int otbRationalTransformToDisplacementFieldSourceTest(int argc, char* argv[])
 {
-  typedef otb::RationalTransform<> RationalTransformType;
 
   /** Check command line arguments. */
   if( argc < 2 )
@@ -42,7 +41,6 @@ int otbRationalTransformToDisplacementFieldSourceTest(int argc, char* argv[])
   const unsigned int  Dimension = 2;
   typedef float       ScalarPixelType;
   typedef double      CoordRepresentationType;
-  const unsigned int  SplineOrder = 3;
 
   typedef itk::Vector<ScalarPixelType, Dimension >    VectorPixelType;
   typedef otb::Image<VectorPixelType, Dimension >     DisplacementFieldImageType;
@@ -58,7 +56,6 @@ int otbRationalTransformToDisplacementFieldSourceTest(int argc, char* argv[])
   typedef DisplacementFieldGeneratorType::SpacingType    SpacingType;
   typedef DisplacementFieldGeneratorType::OriginType     OriginType;
   typedef DisplacementFieldGeneratorType::IndexType      IndexType;
-  typedef DisplacementFieldGeneratorType::RegionType     RegionType;
   typedef otb::ImageFileWriter<DisplacementFieldImageType >   WriterType;
 
   /** Create output information. */

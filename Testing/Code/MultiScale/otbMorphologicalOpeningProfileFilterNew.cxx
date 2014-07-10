@@ -25,10 +25,8 @@ int otbMorphologicalOpeningProfileFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
-  typedef double OutputPixelType;
 
   typedef otb::Image<InputPixelType, Dimension>  InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
   typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType>

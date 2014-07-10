@@ -46,7 +46,6 @@ int otbLabelImageToOGRDataSourceFilter(int argc, char * argv[])
     return EXIT_FAILURE;
     }
   const char * infname = argv[1];
-  const char * outfname = argv[2];
 
   const unsigned int Dimension = 2;
   typedef unsigned short LabelType;

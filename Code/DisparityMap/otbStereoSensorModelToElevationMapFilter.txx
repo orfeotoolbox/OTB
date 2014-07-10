@@ -316,7 +316,6 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 {
   // Retrieve pointers
   const InputImageType* masterPtr  = this->GetMasterInput();
-  const InputImageType* slavePtr   = this->GetSlaveInput();
   OutputImageType* outputPtr  = this->GetOutput();
   OutputImageType* correlPtr = this->GetCorrelationOutput();
 

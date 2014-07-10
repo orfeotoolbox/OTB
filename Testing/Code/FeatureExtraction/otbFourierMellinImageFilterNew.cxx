@@ -29,7 +29,6 @@ int otbFourierMellinImageFilterNew(int itkNotUsed(argc), char* argv[])
   const unsigned int Dimension = 2;
 
   typedef otb::Image<PixelType, Dimension> InputImageType;
-  typedef otb::Image<PixelType, Dimension> OutputImageType;
 
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
   typedef otb::ForwardFourierMellinTransformImageFilter<PixelType,

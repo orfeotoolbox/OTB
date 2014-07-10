@@ -34,7 +34,6 @@ int otbVectorDataFileReader(int itkNotUsed(argc), char * argv[])
   typedef DataNodeType::Pointer                   DataNodePointerType;
   typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
 
-  typedef itk::DataObject dataobjectType;
   itk::Indent indent;
 
   reader->SetFileName(argv[1]);

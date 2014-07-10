@@ -31,8 +31,6 @@ int otbLmvmPanSharpeningFusionImageFilterNew(int argc, char * argv[])
 
   typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
   typedef otb::Image<PixelType, Dimension>       PanchroImageType;
-  typedef otb::ImageFileReader<VectorImageType>  VectorReaderType;
-  typedef otb::ImageFileReader<PanchroImageType> ImageReaderType;
   typedef otb::LmvmPanSharpeningFusionImageFilter
   <PanchroImageType, VectorImageType, VectorImageType> FilterType;
 

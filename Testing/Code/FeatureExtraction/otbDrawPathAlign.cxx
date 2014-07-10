@@ -41,7 +41,6 @@ int otbDrawPathAlign(int itkNotUsed(argc), char * argv[])
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef itk::PolyLineParametricPath<Dimension> PathType;
-  typedef PathType::Pointer                      PathPointerType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

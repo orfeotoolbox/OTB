@@ -545,8 +545,6 @@ private:
                              TMetricFunctor>*subPixelFilter, TInputImage * leftImage, TInputImage * rightImage,TInputImage * leftMask,TInputImage * rightMask,TInputImage * finalMask, const bool minimize,double minDisp,double maxDisp)
     {
     typedef TMetricFunctor MetricFunctorType;
-    typedef otb::PixelWiseBlockMatchingImageFilter<TInputImage, TInputImage, TInputImage, TInputImage,
-        MetricFunctorType> BlockMatchingFilterType;
     typedef otb::SubPixelDisparityImageFilter<TInputImage, TInputImage, TInputImage, TInputImage, MetricFunctorType>
         SubPixelFilterType;
 

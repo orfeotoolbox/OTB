@@ -45,7 +45,6 @@ int otbLabelObjectOpeningMuParserFilterTest(int itkNotUsed(argc), char * argv[])
   typedef unsigned int LabelType;
   typedef otb::Image<LabelType, Dimension>              LabelImageType;
   typedef otb::VectorImage<InputPixelType,  Dimension>  InputVectorImageType;
-  typedef otb::ImageFileReader<InputVectorImageType>    ReaderType;
 
   typedef otb::ImageFileReader<InputVectorImageType>  ImageReaderType;
   typedef otb::ImageFileReader<LabelImageType>        LabelImageReaderType;

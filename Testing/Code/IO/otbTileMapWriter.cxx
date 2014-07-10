@@ -45,15 +45,11 @@ int otbTileMapWriter(int argc, char *argv[])
   int depth = 14;
 
   typedef otb::Image<unsigned int, 2>  ImageType;
-  typedef otb::Image<unsigned char, 2> CharImageType;
   typedef otb::Image<double, 2>        DoubleImageType;
 
   typedef otb::VectorImage<unsigned int, 2>  VectorImageType;
   typedef otb::VectorImage<unsigned char, 2> CharVectorImageType;
   typedef otb::VectorImage<double, 2>        DoubleVectorImageType;
-
-  typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2>  RGBImageType;
 
   typedef otb::ImageFileReader<VectorImageType> VectorReaderType;
   VectorReaderType::Pointer readerXS = VectorReaderType::New();

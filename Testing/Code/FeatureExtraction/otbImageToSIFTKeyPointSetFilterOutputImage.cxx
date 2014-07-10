@@ -68,8 +68,6 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int itkNotUsed(argc), char * argv
   ImageType::OffsetType r = {{-1, 0}};
 
   typedef unsigned char            PixelType;
-  typedef otb::Image<PixelType, 2> UCharImageType;
-
   typedef itk::RGBPixel<PixelType>    RGBPixelType;
   typedef otb::Image<RGBPixelType, 2> OutputImageType;
 

@@ -62,7 +62,6 @@ BSplinesInterpolateTransformDisplacementFieldGenerator<TPointSet, TDisplacementF
 
   typedef otb::ObjectList<BSplinerType>                         SPlineInterpolatorListType;
   typedef typename PointSetType::PointsContainer::ConstIterator PointSetIteratorType;
-  typedef typename PointSetType::PointsContainer                PointsContainerType;
 
   // Initialization of the splines interpolator
   typename SPlineInterpolatorListType::Pointer splineIntList = SPlineInterpolatorListType::New();

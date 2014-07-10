@@ -636,8 +636,6 @@ private:
       otbAppLogINFO("The map contains :"<<labelToMeanIntensityMap.size()<<" labels."<<std::endl);
       VectorPixelType color(3);
 
-      typedef itk::NumericTraits<FloatVectorImageType::InternalPixelType> NumericTraitsType;
-
       for (mapIt = labelToMeanIntensityMap.begin();
            mapIt != labelToMeanIntensityMap.end();
            ++mapIt)
@@ -827,5 +825,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::ColorMapping)
-
-

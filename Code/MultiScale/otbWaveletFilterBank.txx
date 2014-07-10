@@ -960,7 +960,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
   // typedef for the iterations over the input image
   typedef itk::ConstNeighborhoodIterator<OutputImageType>                                    NeighborhoodIteratorType;
   typedef itk::NeighborhoodInnerProduct<OutputImageType>                                     InnerProductType;
-  typedef itk::ImageRegionIterator<OutputImageType>                                          IteratorType;
 
   // Faces iterations
   typename NeighborhoodIteratorType::RadiusType radiusMax;
@@ -1137,8 +1136,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
   // typedef for the iterations over the input image
   typedef itk::ConstNeighborhoodIterator<OutputImageType>                                    NeighborhoodIteratorType;
   typedef itk::NeighborhoodInnerProduct<OutputImageType>                                     InnerProductType;
-  typedef itk::ImageRegionIterator<OutputImageType>                                          IteratorType;
-
   // Faces iterations
   typename NeighborhoodIteratorType::RadiusType radiusMax;
   for (unsigned int i = 0; i < InputImageDimension; ++i)

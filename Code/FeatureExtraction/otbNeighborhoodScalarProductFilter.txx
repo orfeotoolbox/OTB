@@ -45,7 +45,6 @@ NeighborhoodScalarProductFilter<TInputImage, TOutputModulus, TOutputDirection>
   typedef itk::ConstNeighborhoodIterator<InputImageType>                           NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::RadiusType                            RadiusType;
   typedef typename NeighborhoodIteratorType::OffsetType                            OffsetType;
-  typedef itk::ZeroFluxNeumannBoundaryCondition<InputImageType>                    BoundaryConditionType;
   typedef itk::ImageRegionIterator<OutputModulusType>                              OutputIteratorType;
   typedef itk::ImageRegionIterator<OutputDirectionType>                            OutputDirectionIteratorType;
   typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> BoundaryFacesCalculatorType;

@@ -28,7 +28,6 @@ int otbSimplePointCountStrategyTest(int argc, char * argv[])
   typedef float RealType;
 
   typedef otb::Image<RealType, Dimension>     ImageType;
-  typedef ImageType::PointType                PointType;
   typedef itk::VariableLengthVector<RealType> RealVectorType;
 
   typedef itk::PointSet<RealVectorType, Dimension> PointSetType;

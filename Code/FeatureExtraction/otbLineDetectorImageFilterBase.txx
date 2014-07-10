@@ -155,8 +155,6 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType off;
   itk::ImageRegionIterator<OutputImageType>                           it;
   itk::ImageRegionIterator<OutputImageType>                           itdir;
-  typedef  itk::ImageRegionIterator<InputImageType>     InputIteratorType;
-  typedef itk::ImageRegionConstIterator<InputImageType> ConstInputIteratorType;
 
   // Allocate output
   typename OutputImageType::Pointer output = this->GetOutput();

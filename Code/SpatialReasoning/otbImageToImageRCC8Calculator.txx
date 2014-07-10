@@ -337,7 +337,7 @@ ImageToImageRCC8Calculator<TInputImage>
 {
   /// Definition of the filters used
   typedef itk::AndImageFilter<BoolImageType, BoolImageType, BoolImageType> AndFilterType;
-  typedef itk::MinimumMaximumImageCalculator<BoolImageType>                MinMaxCalculatorType;
+
   /// Declaration and instantiation
   typename AndFilterType::Pointer andFilter = AndFilterType::New();
   /// The exterior is the inverted input image

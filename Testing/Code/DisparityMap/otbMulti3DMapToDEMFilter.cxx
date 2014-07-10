@@ -52,17 +52,8 @@ int otbMulti3DMapToDEMFilterEPSG(int argc, char* argv[])
 
   typedef otb::ImageFileReader
     <VectorImageType>                        ReaderVectorType;
-
-
   typedef otb::ImageFileWriter
     <ImageType>                              WriterType;
-
-  typedef otb::ImageList<ImageType>          ImageListType;
-
-  typedef otb::VectorImageToImageListFilter
-    <VectorImageType,
-     ImageListType>                               VectorToListFilterType;
-
   typedef otb::ObjectList<ReaderType>            MaskReaderListType;
   typedef otb::ObjectList<ReaderVectorType>      MapReaderListType;
 
@@ -319,12 +310,6 @@ typedef otb::ImageFileReader
 typedef otb::ImageFileWriter
   <ImageType>                              WriterType;
 
-typedef otb::ImageList<ImageType>          ImageListType;
-
-typedef otb::VectorImageToImageListFilter
-  <VectorImageType,
-   ImageListType>                               VectorToListFilterType;
-
 typedef otb::ObjectList<ReaderType>            MaskReaderListType;
 typedef otb::ObjectList<ReaderVectorType>      MapReaderListType;
 
@@ -499,20 +484,10 @@ int otbMulti3DMapToDEMFilter(int argc, char* argv[])
 
   typedef otb::ImageFileReader
     <VectorImageType>                        ReaderVectorType;
-
-
   typedef otb::ImageFileWriter
     <ImageType>                              WriterType;
-
-  typedef otb::ImageList<ImageType>          ImageListType;
-
-  typedef otb::VectorImageToImageListFilter
-    <VectorImageType,
-     ImageListType>                               VectorToListFilterType;
-
   typedef otb::ObjectList<ReaderType>            MaskReaderListType;
   typedef otb::ObjectList<ReaderVectorType>      MapReaderListType;
-
 
   if ((argc-6)%2 !=0)
     {

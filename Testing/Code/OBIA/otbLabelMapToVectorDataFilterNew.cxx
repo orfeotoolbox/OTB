@@ -23,8 +23,6 @@
 int otbLabelMapToVectorDataFilterNew(int argc, char * argv[])
 {
   const int dim = 2;
-  typedef unsigned char PType;
-
   typedef otb::VectorData<> VectorDataType;
 
   typedef itk::AttributeLabelObject<unsigned long, dim, double> LabelObjectType;

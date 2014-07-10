@@ -667,13 +667,10 @@ template <class TDisparityImage, class TInputImage, class TOutputDEMImage,
 class TEpipolarGridImage, class TMaskImage>
 void
 DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGridImage,TMaskImage>
-::ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId)
+::ThreadedGenerateData(const RegionType & itkNotUsed(outputRegionForThread), itk::ThreadIdType threadId)
 {
   const TDisparityImage * horizDisp = this->GetHorizontalDisparityMapInput();
   const TDisparityImage * vertiDisp = this->GetVerticalDisparityMapInput();
-
-  const TInputImage * leftSensor = this->GetLeftInput();
-  const TInputImage * rightSensor = this->GetRightInput();
 
   const TMaskImage * disparityMask = this->GetDisparityMaskInput();
 

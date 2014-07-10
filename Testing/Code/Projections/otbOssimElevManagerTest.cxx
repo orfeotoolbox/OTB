@@ -41,7 +41,6 @@ int otbOssimElevManagerTest(int argc, char* argv[])
   typedef otb::ImageFileWriter<ImageType>              WriterType;
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
 
-  typedef ImageType::PointType   PoinType;
   typedef ImageType::RegionType  RegionType;
   typedef ImageType::SpacingType SpacingType;
   typedef RegionType::IndexType  IndexType;

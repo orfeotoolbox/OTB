@@ -26,7 +26,6 @@ int otbMRFEnergyEdgeFidelityNew(int argc, char * argv[])
   typedef int    PixelType2;
 
   typedef otb::Image<PixelType, 2>                         ImageType;
-  typedef otb::Image<PixelType2, 2>                        ImageType2;
   typedef otb::MRFEnergyEdgeFidelity<ImageType, ImageType> MRFEnergyType;
 
   MRFEnergyType::Pointer object  = MRFEnergyType::New();

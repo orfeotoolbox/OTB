@@ -27,8 +27,6 @@ int otbEdgeDensityImageFilterNew(int, char*[])
   typedef float PixelType;
 
   typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef ImageType::IndexType             IndexType;
-
   typedef otb::BinaryImageDensityFunction<ImageType>               CountFunctionType;
   typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType> CannyDetectorType;
 

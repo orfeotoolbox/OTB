@@ -44,8 +44,6 @@ PolygonType::VertexType Vertex(double i,double j)
 
 int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
 {
-  const unsigned int Dimension = 2;
-
   char * outfile = argv[1];
 
   PolygonListType::Pointer regions = PolygonListType::New();

@@ -39,7 +39,6 @@ int otbMDMDNMFImageFilterTest(int argc, char * argv[])
   typedef otb::MDMDNMFImageFilter<ImageType, ImageType>  MDMDNMFImageFilterType;
   typedef otb::ImageFileReader<ImageType>                ReaderType;
   typedef otb::ImageFileWriter<ImageType>       WriterType;
-  typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 
   const char * inputImage = argv[1];
   const char * outputImage = argv[2];

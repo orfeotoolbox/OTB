@@ -34,8 +34,6 @@ int otbChangeLabelImageFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::VectorImage<PixelType, ImageDimension>                  OutputImageType;
   typedef InputImageType::PixelType                                    InputPixelType;
   typedef OutputImageType::PixelType                                   OutputPixelType;
-  typedef itk::ImageRegionIteratorWithIndex<InputImageType>            InputIteratorType;
-  typedef itk::ImageRegionIteratorWithIndex<OutputImageType>           OutputIteratorType;
   typedef otb::ChangeLabelImageFilter<InputImageType, OutputImageType> FilterType;
   typedef otb::ImageFileWriter<OutputImageType>                        WriterType;
   typedef otb::ImageFileReader<InputImageType>                         ReaderType;

@@ -33,7 +33,6 @@ int otbSOMClassifierNew(int argc, char* argv[])
   typedef itk::VariableLengthVector<InputPixelType>                  PixelType;
   typedef itk::Statistics::EuclideanDistanceMetric<PixelType>              DistanceType;
   typedef otb::SOMMap<PixelType, DistanceType, Dimension>            SOMMapType;
-  typedef otb::VectorImage<InputPixelType, Dimension>                InputImageType;
   typedef itk::Statistics::ListSample<PixelType>                     SampleType;
   typedef otb::SOMClassifier<SampleType, SOMMapType, LabelPixelType> ClassifierType;
 

@@ -47,7 +47,6 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest(int argc, 
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
   typedef otb::Image<int,  Dimension>                  TrainingImageType;
-  typedef std::vector<double>                          VectorType;
   typedef otb::SVMImageModelEstimator<InputImageType,
       TrainingImageType> EstimatorType;
   typedef otb::ImageFileReader<InputImageType>    InputReaderType;

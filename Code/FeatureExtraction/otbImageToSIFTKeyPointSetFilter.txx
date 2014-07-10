@@ -892,8 +892,7 @@ void
 ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  typedef typename TOutputPointSet::PointsContainerConstIterator PointsIteratorType;
-  typedef typename TOutputPointSet::PointDataContainerIterator   PointsDataIteratorType;
+
   typedef itk::ProcessObject                                     ProcessObjectType;
   const OutputPointSetType* output = dynamic_cast<const OutputPointSetType*>(this->ProcessObjectType::GetOutput(0));
 

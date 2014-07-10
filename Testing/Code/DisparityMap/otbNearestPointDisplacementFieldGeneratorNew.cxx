@@ -25,7 +25,6 @@ int otbNearestPointDisplacementFieldGeneratorNew(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef double                                           PixelType;
   typedef otb::VectorImage<PixelType, Dimension>           ImageType;
-  typedef ImageType::PointType                             PointType;
   typedef itk::FixedArray<double,3>                        PointDataType;
   typedef itk::PointSet<PointDataType, Dimension>          PointSetType;
   typedef otb::NearestPointDisplacementFieldGenerator

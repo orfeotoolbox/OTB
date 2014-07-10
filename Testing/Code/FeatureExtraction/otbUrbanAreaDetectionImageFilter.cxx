@@ -29,8 +29,6 @@ int otbUrbanAreaDetectionImageFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::VectorImage<PixelType, Dimension> InputVectorImageType;
   typedef otb::Image<unsigned char, Dimension>   OutputImageType;
 
-  typedef otb::Image<double, Dimension> SingleImageType;
-
   typedef otb::ImageFileReader<InputVectorImageType> ReaderType;
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

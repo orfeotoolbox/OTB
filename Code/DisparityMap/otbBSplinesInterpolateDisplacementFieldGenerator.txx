@@ -45,7 +45,6 @@ BSplinesInterpolateDisplacementFieldGenerator<TPointSet, TDisplacementField>
   typedef itk::Vector<ValueType, 2>                                      VectorType;
   typedef otb::Image<VectorType, DisplacementFieldType::ImageDimension>  ImageType;
   typedef itk::LandmarkDisplacementFieldSource<ImageType>                DisplacementFieldSourceType;
-  typedef typename DisplacementFieldSourceType::LandmarkContainerPointer LandmarkContainerPointer;
   typedef typename DisplacementFieldSourceType::LandmarkContainer        LandmarkContainerType;
   typedef typename DisplacementFieldSourceType::LandmarkPointType        LandmarkPointType;
   typedef typename PointSetType::PointsContainer                         PointsContainer;

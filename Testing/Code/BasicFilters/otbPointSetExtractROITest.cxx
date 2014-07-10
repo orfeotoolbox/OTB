@@ -26,7 +26,6 @@ int otbPointSetExtractROITest(int, char*[])
   typedef float                                PixelType;
   typedef itk::PointSet<PixelType, 2>          PointSetType;
   typedef PointSetType::PointsContainer        PointsContainerType;
-  typedef PointSetType::PointsContainerPointer PointsContainerPointer;
   typedef PointSetType::PointType              PointType;
 
   typedef otb::RandomPointSetSource<PointSetType> PointSetSource;

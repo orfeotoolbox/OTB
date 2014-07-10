@@ -58,7 +58,6 @@ int otbListSampleGenerator(int argc, char* argv[])
   std::string classKey = "Class";
 
   typedef double                          PixelType;
-  typedef int                             LabeledPixelType;
   typedef otb::VectorImage<PixelType, 2>  ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 

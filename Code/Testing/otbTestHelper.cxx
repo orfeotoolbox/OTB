@@ -594,8 +594,6 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
   // Use the factory mechanism to read the test and baseline files and convert them to double
 
   typedef otb::VectorImage<double, 2>        ImageType;
-  typedef otb::VectorImage<unsigned char, 2> OutputType;
-  typedef otb::VectorImage<unsigned char, 2> DiffOutputType;
   typedef otb::ImageFileReader<ImageType>    ReaderType;
 
   // Read the baseline file
@@ -662,7 +660,6 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
   if (status.GetSquaredNorm() > 0 && m_ReportErrors)
     {
     typedef otb::PrintableImageFilter<ImageType>               RescaleType;
-    typedef RescaleType::OutputImageType                       OutputType;
     typedef otb::ImageFileWriter<RescaleType::OutputImageType> WriterType;
 
     RescaleType::Pointer rescale = RescaleType::New();

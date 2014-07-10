@@ -28,9 +28,7 @@ int otbSVMModelNew(int argc, char* argv[])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char LabelPixelType;
-  const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension>        InputImageType;
   typedef otb::SVMModel<InputPixelType, LabelPixelType> ModelType;
 
   ModelType::Pointer svmModel = ModelType::New();

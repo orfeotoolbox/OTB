@@ -32,7 +32,6 @@ int otbPathListToHistogramGenerator(int itkNotUsed(argc), char * argv[])
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef PathType::Pointer                      PathPointer;
-  typedef PathType::ConstPointer                 PathConstPointerType;
   typedef otb::ObjectList<PathType>              PathListType;
 
   typedef otb::OrientationPathFunction<PathType> FunctionType;

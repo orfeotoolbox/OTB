@@ -213,7 +213,6 @@ StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>
     {
     double a = (leftEpiLineEnd[1] - leftEpiLineStart[1])
              / (leftEpiLineEnd[0] - leftEpiLineStart[0]);
-    double b = leftEpiLineStart[1] - a * leftEpiLineStart[0];
     if (leftEpiLineEnd[0] > leftEpiLineStart[0])
       {
       alpha = vcl_atan(a);

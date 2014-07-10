@@ -43,7 +43,6 @@ int otbVectorMultiChannelsPolarimetricSynthesisFilter(int argc, char * argv[])
   typedef otb::Image<OutputPixelType, Dimension>                                         OutputImageType;
   typedef otb::ImageFileReader<InputImageType>                                           ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                                          WriterType;
-  typedef itk::FixedArray<int, 4>                                                        IndexArrayType;
   typedef otb::MultiChannelsPolarimetricSynthesisFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer polarimetricSynthesis = FilterType::New();

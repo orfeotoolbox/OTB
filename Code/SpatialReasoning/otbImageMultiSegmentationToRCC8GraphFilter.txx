@@ -149,7 +149,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   typedef PolygonToPolygonRCC8Calculator<PathType>           RCC8CalculatorType;
   typedef RCC8VertexIterator<OutputGraphType>                VertexIteratorType;
   typedef RCC8InEdgeIterator<OutputGraphType>                InEdgeIteratorType;
-  typedef RCC8OutEdgeIterator<OutputGraphType>               OutEdgeIteratorType;
+
 
   // Vector of label
   std::vector<PixelType> maxLabelVector;

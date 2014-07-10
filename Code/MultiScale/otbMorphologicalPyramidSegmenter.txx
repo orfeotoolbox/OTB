@@ -159,7 +159,6 @@ Segmenter<TInputImage, TOutputImage>
   typedef itk::PointSet<InputPixelType, InputImageType::ImageDimension>     PointSetType;
   typedef otb::ThresholdImageToPointSetFilter<InputImageType, PointSetType> PointSetFilterType;
   typedef typename PointSetType::PointsContainer::Iterator                  PointSetIteratorType;
-  typedef typename PointSetType::PointType                                  PointType;
 
   // Typedefs for segmentation
   typedef itk::ConnectedThresholdImageFilter<InputImageType, InputImageType>  ConnectedFilterType;
@@ -169,7 +168,6 @@ Segmenter<TInputImage, TOutputImage>
 
   // Typedefs for statistics computation
   typedef itk::Statistics::ScalarImageToHistogramGenerator<InputImageType> HistGeneratorType;
-  typedef typename HistGeneratorType::HistogramType                        HistogramType;
 
   /////////////////////////////////////
   //// Details image enhancement //////

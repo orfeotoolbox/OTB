@@ -289,7 +289,6 @@ template<class InternalType>
 int otbMonobandComplexToVectorImageScalarGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
-  typedef std::complex<RealType>              ComplexType;
 
   typedef otb::VectorImage<RealType, 2>       ImageType;
   typedef typename ImageType::PixelType       PixelType;
@@ -524,8 +523,6 @@ template<class InternalType>
 int otbMultibandComplexToVectorImageScalarGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
-  typedef std::complex<RealType>              ComplexType;
-
   typedef otb::VectorImage<RealType, 2>       ImageType;
   typedef typename ImageType::PixelType       PixelType;
 

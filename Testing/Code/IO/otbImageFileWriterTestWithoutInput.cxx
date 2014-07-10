@@ -41,7 +41,6 @@ int otbImageScalarFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* 
 
   typedef InternalType                         PixelType;
   typedef otb::Image<PixelType, 2>             ImageType;
-  typedef typename ImageType::PixelType        ImagePixelType;
   typedef typename ImageType::RegionType       RegionType;
   typedef typename ImageType::SizeType         SizeType;
   typedef typename ImageType::IndexType        IndexType;
@@ -120,7 +119,6 @@ int otbImageComplexFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char*
 
   typedef std::complex<InternalType>           PixelType;
   typedef otb::Image<PixelType, 2>             ImageType;
-  typedef typename ImageType::PixelType        ImagePixelType;
   typedef typename ImageType::RegionType       RegionType;
   typedef typename ImageType::SizeType         SizeType;
   typedef typename ImageType::IndexType        IndexType;

@@ -51,10 +51,7 @@ int otbLabelMapToVectorDataFilter(int argc, char * argv[])
   typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>             LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                                          LabelMapType;
   typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>         LabelMapFilterType;
-  typedef otb::Polygon<double>                                                    PolygonType;
-  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType, PolygonType> FunctorType;
   typedef otb::VectorData<double, 2>                                              VectorDataType;
-  typedef VectorDataType::DataNodeType                                            DataNodeType;
   typedef otb::VectorDataFileWriter<VectorDataType>                               WriterType;
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType>         VectorDataFilterType;
 

@@ -117,7 +117,6 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
 {
   m_VdExtractFilter->SetInput(this->GetInput());
 
-  typedef typename ImageType::IndexType       IndexType;
   typedef typename ImageType::PointType       PointType;
   typedef typename ImageType::SizeType       SizeType;
 

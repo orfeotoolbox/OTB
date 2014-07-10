@@ -35,10 +35,6 @@ int otbPixelSuppressionByDirectionNew(int itkNotUsed(argc), char ** itkNotUsed(a
   typedef otb::Image<InputPixelType,  Dimension> InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType1;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType2;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-
   typedef otb::PixelSuppressionByDirectionImageFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();

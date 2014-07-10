@@ -98,11 +98,9 @@ int otbSinclairReciprocalImageFilter(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef std::complex <double> InputPixelType;
   typedef std::complex <double> OutputPixelType;
-  typedef double                OutputRealPixelType;
 
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
-  typedef otb::VectorImage<OutputRealPixelType, Dimension> OutputRealImageType;
 
   std::string strArgv(argv[1]);
   argc--;

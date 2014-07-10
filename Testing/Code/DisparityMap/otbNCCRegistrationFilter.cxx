@@ -38,9 +38,6 @@ int otbNCCRegistrationFilter(int argc, char* argv[])
 
   typedef double                                      PixelType;
   typedef itk::Vector<double, ImageDimension>         DisplacementPixelType;
-  typedef double                                      CoordinateRepresentationType;
-  typedef double                                      OutputPixelType;
-  typedef otb::Image<OutputPixelType, ImageDimension> OutputImageType;
   typedef otb::Image<PixelType, ImageDimension>       MovingImageType;
   typedef otb::Image<PixelType, ImageDimension>       FixedImageType;
   typedef otb::Image<DisplacementPixelType,

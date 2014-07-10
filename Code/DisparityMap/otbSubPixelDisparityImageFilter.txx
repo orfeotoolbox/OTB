@@ -367,10 +367,6 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   const TDisparityImage * inHDispPtr      = this->GetHorizontalDisparityInput();
   const TDisparityImage * inVDispPtr      = this->GetVerticalDisparityInput();
 
-  const TOutputMetricImage *  outMetricPtr  = this->GetMetricOutput();
-  const TDisparityImage *     outHDispPtr   = this->GetHorizontalDisparityOutput();
-  const TDisparityImage *     outVDispPtr   = this->GetVerticalDisparityOutput();
-
   // Check pointers before using them
   if(!inLeftPtr || !inRightPtr)
     {
@@ -468,9 +464,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TDisparityImage * inHDispPtr = const_cast<TDisparityImage * >(this->GetHorizontalDisparityInput());
   TDisparityImage * inVDispPtr = const_cast<TDisparityImage * >(this->GetVerticalDisparityInput());
 
-  TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TDisparityImage * outHDispPtr = this->GetHorizontalDisparityOutput();
-  TDisparityImage * outVDispPtr = this->GetVerticalDisparityOutput();
 
   // Retrieve requested region (TODO: check if we need to handle
   // region for outHDispPtr)

@@ -37,7 +37,6 @@ int otbRoadExtractionFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::ImageFileReader<InputImageType>                                ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                               WriterType;
   typedef otb::RoadExtractionFilter<InputImageType, PathType>                 RoadExtractionFilterType;
-  typedef RoadExtractionFilterType::OutputPathListType                        OutputPathListType;
   typedef RoadExtractionFilterType::InputPixelType                            InputPixelType;
   typedef otb::DrawPathListFilter<OutputImageType, PathType, OutputImageType> DrawPathFilterType;
 

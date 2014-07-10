@@ -30,7 +30,6 @@ int otbImageToPointSetFilterTest(int itkNotUsed(argc), char **itkNotUsed(argv))
 
   typedef otb::Image<PixelType, Dimension>                    ImageType;
   typedef itk::PointSet<PixelType, Dimension>                 PointSetType;
-  typedef otb::ImageToPointSetFilter<ImageType, PointSetType> FunctionType;
 
   //FunctionType::Pointer function = FunctionType::New();
 

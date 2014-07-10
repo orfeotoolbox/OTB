@@ -37,8 +37,6 @@ int otbOssimElevManagerTest2(int argc, char* argv[])
   const ossimFilename srtmDir(argv[1]);
   const char *        outfname = argv[2];
 
-  typedef double PixelType;
-
   typedef itk::Point<double, 2> PointType;
   PointType origin;
   double    spacing;

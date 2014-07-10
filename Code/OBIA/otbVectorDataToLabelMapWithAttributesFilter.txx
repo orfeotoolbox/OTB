@@ -141,7 +141,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
     //m_VectorDataProperties->SetBoundingRegion(region);
     //Compute the global bounding box of the vectordata
     m_VectorDataProperties->ComputeBoundingRegion();
-    
+
     // Compute origin and size
     SizeType size;
     SpacingType spacing = this->GetInput()->GetSpacing();
@@ -156,7 +156,7 @@ void VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
       size[i] = static_cast<unsigned long>(vcl_ceil(vcl_abs(
         m_VectorDataProperties->GetBoundingRegion().GetSize(i)/spacing[i])));
       }
-    
+
     outputLargestPossibleRegion.SetSize(size);
     outputLargestPossibleRegion.SetIndex(m_StartIndex);
 
@@ -334,9 +334,8 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         typedef typename PolygonType::RegionType   RSRegionType;
         typedef typename PolygonType::VertexType   VertexType;
         typedef typename IndexType::IndexValueType IndexValueType;
-        typedef typename VertexType::ValueType     VertexValueType;
         RSRegionType polygonExtRingBoundReg = correctPolygonExtRing->GetBoundingRegion();
-        
+
         IndexType startIdx,endIdx,tmpIdx;
         OriginType physCorners[4];
         physCorners[0][0] = polygonExtRingBoundReg.GetOrigin(0);
@@ -344,12 +343,12 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
         physCorners[1] = physCorners[0];
         physCorners[2] = physCorners[0];
         physCorners[3] = physCorners[0];
-        
+
         physCorners[1][1] += polygonExtRingBoundReg.GetSize(1);
         physCorners[2][1] += polygonExtRingBoundReg.GetSize(1);
         physCorners[2][0] += polygonExtRingBoundReg.GetSize(0);
         physCorners[3][0] += polygonExtRingBoundReg.GetSize(0);
-        
+
         for (unsigned int k=0; k<4; ++k)
           {
           this->GetOutput()->TransformPhysicalPointToIndex(physCorners[k],tmpIdx);
@@ -382,7 +381,7 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
           // No intersection
           break;
           }
-        
+
         OriginType tmpPoint;
         VertexType vertex;
         for (IndexValueType j=startIdx[1]; j<=endIdx[1]; ++j)

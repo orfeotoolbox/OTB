@@ -46,9 +46,6 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     const char * outfname = argv[3];
     unsigned int isize    = atoi(argv[2]);
 
-    typedef itk::Transform<
-        InternalPixelType, Dimension, Dimension>     TransformType;
-
     typedef itk::AffineTransform<
         InternalPixelType, Dimension>              AffineTransformType;
     typedef otb::ImageFileReader<ImageType>         ReaderType;

@@ -44,7 +44,6 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
   typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,
       OutputImageType>
   ReflectanceToSurfaceReflectanceImageFilterType;
-  typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
   typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   CorrectionParametersTo6SRadiativeTermsType;
   typedef otb::AtmosphericCorrectionParameters                 CorrectionParametersType;

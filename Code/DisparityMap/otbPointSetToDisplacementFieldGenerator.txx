@@ -98,7 +98,7 @@ PointSetToDisplacementFieldGenerator<TPointSet, TDisplacementField>
   unsigned int       j = 0;
 
   typedef typename PointSetType::PointsContainer::ConstIterator PointSetIteratorType;
-  typedef typename PointSetType::PointsContainer                PointsContainerType;
+
   PointSetIteratorType it = this->GetPointSet()->GetPoints()->Begin();
   for (; it != this->GetPointSet()->GetPoints()->End(); ++it)
     {

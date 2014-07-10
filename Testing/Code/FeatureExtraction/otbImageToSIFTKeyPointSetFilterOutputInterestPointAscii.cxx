@@ -49,8 +49,6 @@ int otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii(int itkNotUsed(argc)
 
   typedef PointSetType::PointsContainer    PointsContainerType;
   typedef PointsContainerType::Iterator    PointsIteratorType;
-  typedef PointSetType::PointDataContainer PointDataContainerType;
-  typedef PointDataContainerType::Iterator PointDataIteratorType;
 
   // Instantiating object
   ReaderType::Pointer                       reader = ReaderType::New();

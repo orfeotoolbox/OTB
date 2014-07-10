@@ -57,7 +57,6 @@ int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
 
   typedef PathType::VertexType                    VertexType;
   typedef PathType::VertexListType                VertexListType;
-  typedef PathType::VertexListType::ConstIterator VertexListConstIterator;
   typedef VertexListType::ConstPointer            VertexListTypePointer;
 
   VertexListTypePointer vertexList;

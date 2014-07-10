@@ -44,11 +44,6 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<InputImageType,
       OutputImageType>
   SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
-  typedef SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::WeightingMatrixType WeightingMatrixType;
-  typedef SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::WeightingValuesContainerType
-  WeightingValuesContainerType;
-
-  typedef otb::AtmosphericRadiativeTerms::DataVectorType                    DataVectorType;
   typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms CorrectionParametersTo6SRadiativeTermsType;
   typedef otb::AtmosphericCorrectionParameters                              CorrectionParametersType;
   typedef otb::AtmosphericRadiativeTerms                                    RadiativeTermsType;

@@ -26,8 +26,6 @@ int otbRectangle(int itkNotUsed(argc), char * argv[])
 
   typedef otb::Rectangle<>                   RectangleType;
   typedef RectangleType::ContinuousIndexType ContinuousIndexType;
-  typedef RectangleType::VertexListType      VertexListType;
-  typedef VertexListType::ConstIterator      IteratorType;
 
   // Instantiating object
   RectangleType::Pointer rectangle1 = RectangleType::New();

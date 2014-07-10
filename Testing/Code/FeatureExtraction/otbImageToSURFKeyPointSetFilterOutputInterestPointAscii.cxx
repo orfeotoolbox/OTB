@@ -56,8 +56,6 @@ int otbImageToSURFKeyPointSetFilterOutputInterestPointAscii(int argc, char * arg
   typedef otb::ImageToSURFKeyPointSetFilter<ImageType, PointSetType> ImageToSURFKeyPointSetFilterType;
   typedef PointSetType::PointsContainer    PointsContainerType;
   typedef PointsContainerType::Iterator    PointsIteratorType;
-  typedef PointSetType::PointDataContainer PointDataContainerType;
-  typedef PointDataContainerType::Iterator PointDataIteratorType;
 
   // Instantiating object
   ReaderType::Pointer                       reader = ReaderType::New();
