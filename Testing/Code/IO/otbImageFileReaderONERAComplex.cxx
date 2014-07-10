@@ -27,7 +27,7 @@
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
 
-int otbImageFileReaderONERAComplex(int argc, char* argv[])
+int otbImageFileReaderONERAComplex(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

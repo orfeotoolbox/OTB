@@ -28,7 +28,7 @@
 #include "itkComplexToPhaseImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
 
-int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
+int otbAmplitudePhaseToRGBFunctor(int itkNotUsed(argc), char * argv[])
 {
   typedef float                    PixelType;
   typedef otb::Image<PixelType, 2> ImageType;

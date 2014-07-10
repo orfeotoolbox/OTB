@@ -24,7 +24,7 @@
 #include "otbVectorImage.h"
 #include "otbImageAndVectorImageOperationFilter.h"
 
-int otbImageAndVectorImageOperationFilterNew(int argc, char * argv[])
+int otbImageAndVectorImageOperationFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double                                                                                     PixelType;
   typedef otb::Image<PixelType, 2>                                                                   ScalarImageType;

@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "otbOverlapSaveConvolutionImageFilter.h"
 
-int otbOverlapSaveConvolutionImageFilter(int argc, char * argv[])
+int otbOverlapSaveConvolutionImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName = argv[1];
   const char * outputFileName = argv[2];

@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbImageRegionTileMapSplitter.h"
 
-int otbImageRegionTileMapSplitterNew(int argc, char * argv[])
+int otbImageRegionTileMapSplitterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const int Dimension = 2;
   typedef otb::ImageRegionTileMapSplitter<Dimension> FilterType;

@@ -134,7 +134,7 @@ StatisticsXMLFileReader<TMeasurementVector>
 template < class TMeasurementVector >
 void
 StatisticsXMLFileReader<TMeasurementVector>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+::PrintSelf(std::ostream& itkNotUsed(os), itk::Indent itkNotUsed(indent)) const
 {
   // Call superclass implementation
   //Superclass::PrintSelf(os, indent);

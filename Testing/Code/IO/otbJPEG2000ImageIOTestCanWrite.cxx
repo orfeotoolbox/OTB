@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbJPEG2000ImageIOTestCanWrite(int argc, char* argv[])
+int otbJPEG2000ImageIOTestCanWrite(int itkNotUsed(argc), char* argv[])
 {
   otb::JPEG2000ImageIO::Pointer lJPEG2000ImageIO = otb::JPEG2000ImageIO::New();
   bool                          lCanWrite = lJPEG2000ImageIO->CanWriteFile(argv[1]);

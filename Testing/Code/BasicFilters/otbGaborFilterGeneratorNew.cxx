@@ -18,7 +18,7 @@
 
 #include "otbGaborFilterGenerator.h"
 
-int otbGaborFilterGeneratorNew(int argc, char * argv[])
+int otbGaborFilterGeneratorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double                                   PrecisionType;
   typedef otb::GaborFilterGenerator<PrecisionType> GaborGeneratorType;

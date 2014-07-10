@@ -686,7 +686,7 @@ void otb::ogr::DataSource::PrintSelf(
     }
 }
 
-/*virtual*/ void otb::ogr::DataSource::Graft(const itk::DataObject * data)
+/*virtual*/ void otb::ogr::DataSource::Graft(const itk::DataObject * itkNotUsed(data))
 {
   assert(! "Disabled to check if it makes sense...");
 }

@@ -22,7 +22,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
-int otbImageToVectorImageCastFilter(int argc, char * argv[])
+int otbImageToVectorImageCastFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       infilename = argv[1];
   const char *       outfilename = argv[2];

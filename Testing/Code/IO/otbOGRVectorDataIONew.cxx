@@ -19,7 +19,7 @@
 #include "otbOGRVectorDataIO.h"
 #include "otbVectorData.h"
 
-int otbOGRVectorDataIONew(int argc, char * argv[])
+int otbOGRVectorDataIONew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::OGRVectorDataIO OGRVectorDataIOType;
   OGRVectorDataIOType::Pointer object = OGRVectorDataIOType::New();

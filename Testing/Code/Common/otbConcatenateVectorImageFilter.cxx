@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "otbConcatenateVectorImageFilter.h"
 
-int otbConcatenateVectorImageFilter(int argc, char * argv[])
+int otbConcatenateVectorImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       filename1 = argv[1];
   const char *       filename2 = argv[2];

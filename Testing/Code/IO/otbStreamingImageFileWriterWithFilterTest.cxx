@@ -28,7 +28,7 @@
 #include "otbImageFileWriter.h"
 #include "itkMeanImageFilter.h"
 
-int otbImageFileWriterWithFilterTest(int argc, char* argv[])
+int otbImageFileWriterWithFilterTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

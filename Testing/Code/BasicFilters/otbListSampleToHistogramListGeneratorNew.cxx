@@ -19,7 +19,7 @@
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
 
-int otbListSampleToHistogramListGeneratorNew(int argc, char * argv[])
+int otbListSampleToHistogramListGeneratorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef double                                       PixelType;

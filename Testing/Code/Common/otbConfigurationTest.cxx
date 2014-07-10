@@ -19,7 +19,7 @@
 #include <fstream>
 #include "otbConfigurationFile.h"
 
-int otbConfigurationTest(int argc, char * argv[])
+int otbConfigurationTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
 //   std::cout << "begin config test" << std::endl;
@@ -51,7 +51,7 @@ int otbConfigurationTest(int argc, char * argv[])
 }
 
 
-int otbConfigurationTestDEM(int argc, char * argv[])
+int otbConfigurationTestDEM(int argc, char *argv[])
 {
   typedef otb::ConfigurationFile ConfigurationType;
   std::string demDir = otb::ConfigurationFile::GetInstance()->GetDEMDirectory();
@@ -93,4 +93,3 @@ int otbConfigurationTestDEM(int argc, char * argv[])
     }
   return EXIT_SUCCESS;
 }
-

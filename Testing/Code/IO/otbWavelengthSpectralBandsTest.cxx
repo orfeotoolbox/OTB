@@ -21,7 +21,7 @@
 
 using namespace otb;
 
-int otbFilterFunctionValuesNew(int argc, char* argv[])
+int otbFilterFunctionValuesNew(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
 
   FilterFunctionValues::Pointer spectSen = FilterFunctionValues::New();
@@ -29,11 +29,10 @@ int otbFilterFunctionValuesNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbWavelengthSpectralBandsNew(int argc, char* argv[])
+int otbWavelengthSpectralBandsNew(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
 
   WavelengthSpectralBands::Pointer spectSen = WavelengthSpectralBands::New();
 
   return EXIT_SUCCESS;
 }
-

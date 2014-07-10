@@ -376,7 +376,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     {
     itkExceptionMacro(<<"Missing input, need left and right input images.");
     }
-  
+
   if (!inHDispPtr)
     {
     itkExceptionMacro(<<"Input horizontal disparity map is missing");
@@ -406,7 +406,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
     {
     itkExceptionMacro(<<"Initial horizontal and vertical disparity maps don't have the same size ! Horizontal disparity largest region: "<<inHDispPtr->GetLargestPossibleRegion()<<", vertical disparity largest region: "<<inVDispPtr->GetLargestPossibleRegion());
     }
-  
+
 }
 
 template <class TInputImage, class TOutputMetricImage,
@@ -423,7 +423,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TDisparityImage * outHDispPtr = this->GetHorizontalDisparityOutput();
   TDisparityImage * outVDispPtr = this->GetVerticalDisparityOutput();
-  
+
   outMetricPtr->CopyInformation(inHDispPtr);
   outHDispPtr->CopyInformation(inHDispPtr);
   outVDispPtr->CopyInformation(inHDispPtr);
@@ -471,7 +471,7 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
   TOutputMetricImage    * outMetricPtr = this->GetMetricOutput();
   TDisparityImage * outHDispPtr = this->GetHorizontalDisparityOutput();
   TDisparityImage * outVDispPtr = this->GetVerticalDisparityOutput();
-  
+
   // Retrieve requested region (TODO: check if we need to handle
   // region for outHDispPtr)
   RegionType outputRequestedRegion = outHDispPtr->GetRequestedRegion();

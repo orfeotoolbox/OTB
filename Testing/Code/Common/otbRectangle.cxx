@@ -20,7 +20,7 @@
 #include <iostream>
 #include <fstream>
 
-int otbRectangle(int argc, char * argv[])
+int otbRectangle(int itkNotUsed(argc), char * argv[])
 {
   const char * outfname = argv[1];
 

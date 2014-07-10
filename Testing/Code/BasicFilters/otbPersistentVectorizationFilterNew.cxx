@@ -21,7 +21,7 @@
 #include "otbPolygon.h"
 #include "otbPersistentVectorizationImageFilter.h"
 
-int otbPersistentVectorizationFilterNew(int argc, char * argv[])
+int otbPersistentVectorizationFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int ImageDimension = 2;
   typedef unsigned short LabelType;

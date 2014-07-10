@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbBSQImageIOTestCanRead(int argc, char* argv[])
+int otbBSQImageIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   otb::BSQImageIO::Pointer lBSQImageIO = otb::BSQImageIO::New();
   bool                     lCanRead = lBSQImageIO->CanReadFile(argv[1]);

@@ -27,7 +27,7 @@
 
 
 template<class InternalVectorPixelType>
-int generic_StreamingStatisticsMapFromLabelImageFilterTest(int argc, char * argv[])
+int generic_StreamingStatisticsMapFromLabelImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   typedef unsigned int LabelPixelType;
 

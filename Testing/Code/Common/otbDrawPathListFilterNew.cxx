@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbDrawPathListFilterNew(int argc, char * argv[])
+int otbDrawPathListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                                           PixelType;

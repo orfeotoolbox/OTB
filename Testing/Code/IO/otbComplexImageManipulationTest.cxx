@@ -117,7 +117,7 @@ ReadRegion(const char* filename, TImagePointerType& image, unsigned int w, unsig
  * out : real = in, imag = 0
  ***********/
 template<class InternalType>
-int otbMonobandScalarToImageComplexGeneric(int argc, char * argv[])
+int otbMonobandScalarToImageComplexGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
   typedef std::complex<RealType>              ComplexType;
@@ -172,7 +172,7 @@ int otbMonobandScalarToImageComplexShort(int argc, char * argv[])
  * out : norm(in)
  ***********/
 template<class InternalType>
-int otbMonobandComplexToImageScalarGeneric(int argc, char * argv[])
+int otbMonobandComplexToImageScalarGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                                              InputType;
   typedef std::complex<InputType>                                   ComplexType;
@@ -232,7 +232,7 @@ int otbMonobandComplexToImageScalarShort(int argc, char * argv[])
  * out : in
  ***********/
 template<class InternalType>
-int otbMonobandComplexToImageComplexGeneric(int argc, char * argv[])
+int otbMonobandComplexToImageComplexGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
   typedef std::complex<RealType>              ComplexType;
@@ -286,7 +286,7 @@ int otbMonobandComplexToImageComplexShort(int argc, char * argv[])
  * out : [0]=in.real(), [1]=in.imag()
  ***********/
 template<class InternalType>
-int otbMonobandComplexToVectorImageScalarGeneric(int argc, char * argv[])
+int otbMonobandComplexToVectorImageScalarGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
   typedef std::complex<RealType>              ComplexType;
@@ -345,7 +345,7 @@ int otbMonobandComplexToVectorImageScalarShort(int argc, char * argv[])
  * out : [0]=in
  ***********/
 template<class InternalType>
-int otbMonobandComplexToVectorImageComplexGeneric(int argc, char * argv[])
+int otbMonobandComplexToVectorImageComplexGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
   typedef std::complex<RealType>              ComplexType;
@@ -403,7 +403,7 @@ int otbMonobandComplexToVectorImageComplexShort(int argc, char * argv[])
  * out : out.real=in[0], out.imag=in[1]
  ***********/
 template<class InternalType>
-int otbMultibandScalarToImageComplexGeneric(int argc, char * argv[])
+int otbMultibandScalarToImageComplexGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
   typedef std::complex<RealType>              ComplexType;
@@ -461,7 +461,7 @@ int otbMultibandScalarToImageComplexShort(int argc, char * argv[])
  * out : (out[0].real=in[0], out[0].imag=0), (out[1].real=in[1], out[1].imag=0), ...
  ***********/
 template<class InternalType>
-int otbMultibandScalarToVectorImageComplexGeneric(int argc, char * argv[])
+int otbMultibandScalarToVectorImageComplexGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
   typedef std::complex<RealType>              ComplexType;
@@ -521,7 +521,7 @@ int otbMultibandScalarToVectorImageComplexShort(int argc, char * argv[])
  * out : out[0]=in[0].real, out[1]=in[0].imag, out[2]=in[0].real, out[3]=in[0].imag, ...
  ***********/
 template<class InternalType>
-int otbMultibandComplexToVectorImageScalarGeneric(int argc, char * argv[])
+int otbMultibandComplexToVectorImageScalarGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
   typedef std::complex<RealType>              ComplexType;
@@ -585,7 +585,7 @@ int otbMultibandComplexToVectorImageScalarShort(int argc, char * argv[])
  * out : out[0]=in[0], out[1]=in[1], ...
  ***********/
 template<class InternalType>
-int otbMultibandComplexToVectorImageComplexGeneric(int argc, char * argv[])
+int otbMultibandComplexToVectorImageComplexGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
   typedef std::complex<RealType>              ComplexType;
@@ -649,7 +649,7 @@ int otbMultibandComplexToVectorImageComplexInt(int argc, char * argv[])
  * out : out[0].real=in, out[0].imag=0
  ***********/
 template<class InternalType>
-int otbMonobandScalarToVectorImageComplexGeneric(int argc, char * argv[])
+int otbMonobandScalarToVectorImageComplexGeneric(int itkNotUsed(argc), char * argv[])
 {
   typedef InternalType                        RealType;
   typedef std::complex<RealType>              ComplexType;
@@ -707,7 +707,7 @@ int otbMonobandScalarToVectorImageComplexInt(int argc, char * argv[])
  * out : ???
  ***********/
 template<class InternalType>
-int otbMultibandComplexToImageScalarGeneric(int argc, char * argv[])
+int otbMultibandComplexToImageScalarGeneric(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   // This case is not handled yet.
   // We need more time to decide what we want to do with this case. ( perhaps return exception ???)
@@ -736,4 +736,3 @@ int otbMultibandComplexToImageScalarInt(int argc, char * argv[])
 {
   return otbMultibandComplexToImageScalarGeneric<int>(argc, argv);
 }
-

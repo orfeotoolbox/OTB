@@ -26,7 +26,7 @@
 #include "otbBandMathImageFilter.h"
 #include "otbImageFileWriter.h"
 
-int otbBandMathImageFilterNew( int argc, char* argv[])
+int otbBandMathImageFilterNew( int itkNotUsed(argc), char** itkNotUsed(argv))
 {
   typedef double                                            PixelType;
   //typedef float                                             PixelType;
@@ -38,7 +38,7 @@ int otbBandMathImageFilterNew( int argc, char* argv[])
    return EXIT_SUCCESS;
 }
 
-int otbBandMathImageFilter( int argc, char* argv[])
+int otbBandMathImageFilter( int itkNotUsed(argc), char** itkNotUsed(argv))
 {
   typedef double                                            PixelType;
   //typedef float                                             PixelType;
@@ -178,7 +178,7 @@ int otbBandMathImageFilter( int argc, char* argv[])
 }
 
 
-int otbBandMathImageFilterWithIdx( int argc, char* argv[])
+int otbBandMathImageFilterWithIdx( int itkNotUsed(argc), char* argv[])
 {
   const char * outfname1       = argv[1];
   const char * outfname2       = argv[2];

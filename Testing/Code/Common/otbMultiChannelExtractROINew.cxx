@@ -19,7 +19,7 @@
 #include "itkMacro.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbMultiChannelExtractROINew(int argc, char * argv[])
+int otbMultiChannelExtractROINew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   //        typedef unsigned char                                    InputPixelType;
   //        typedef unsigned char                                    OutputPixelType;

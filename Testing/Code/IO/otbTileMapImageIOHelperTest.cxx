@@ -19,7 +19,7 @@
 #include <fstream>
 #include "otbTileMapImageIOHelper.h"
 
-int otbTileMapImageIOHelperNew(int argc, char * argv[])
+int otbTileMapImageIOHelperNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   otb::TileMapImageIOHelper::Pointer myTileMapImageIOHelper;
@@ -27,7 +27,7 @@ int otbTileMapImageIOHelperNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbTileMapImageIOHelperTest(int argc, char * argv[])
+int otbTileMapImageIOHelperTest(int itkNotUsed(argc), char * argv[])
 {
   otb::TileMapImageIOHelper::Pointer myTileMapImageIOHelper;
   myTileMapImageIOHelper = otb::TileMapImageIOHelper::New();

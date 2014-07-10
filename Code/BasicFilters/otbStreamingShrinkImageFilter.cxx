@@ -59,7 +59,7 @@ StreamingShrinkImageRegionSplitter
 
 StreamingShrinkImageRegionSplitter::RegionType
 StreamingShrinkImageRegionSplitter
-::GetSplit(unsigned int i, unsigned int numberOfPieces, const RegionType& region)
+::GetSplit(unsigned int i, unsigned int itkNotUsed(numberOfPieces), const RegionType& region)
 {
   RegionType splitRegion;
   IndexType  splitIndex;

@@ -22,7 +22,7 @@
 #include "otbMacro.h"
 #include <vector>
 
-int otbObjectList2(int argc, char * argv[])
+int otbObjectList2(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef otb::Polygon<double>         PolygonType;

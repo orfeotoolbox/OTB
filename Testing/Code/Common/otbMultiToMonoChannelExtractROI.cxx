@@ -23,7 +23,7 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 
 template <typename  InputPixelType, typename OutputPixelType>
-int generic_otbMultiToMonoChannelExtractROI(int argc,
+int generic_otbMultiToMonoChannelExtractROI(int itkNotUsed(argc),
                                             char * argv[],
                                             const char * inputFilename,
                                             const char * outputFilename)

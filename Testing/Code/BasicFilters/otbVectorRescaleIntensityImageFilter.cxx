@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbVectorRescaleIntensityImageFilter(int argc, char * argv[])
+int otbVectorRescaleIntensityImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *        infname = argv[1];
   const char *        outfname = argv[2];

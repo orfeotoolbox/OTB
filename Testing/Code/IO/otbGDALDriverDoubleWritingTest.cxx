@@ -20,7 +20,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
-int otbGDALDriverDoubleWritingTest(int argc, char * argv[])
+int otbGDALDriverDoubleWritingTest(int itkNotUsed(argc), char * argv[])
 {
   const char * infname1 = argv[1];
   const char * infname2 = argv[2];

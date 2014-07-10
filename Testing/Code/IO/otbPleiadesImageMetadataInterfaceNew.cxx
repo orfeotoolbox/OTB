@@ -24,7 +24,7 @@
 
 #include "otbPleiadesImageMetadataInterface.h"
 
-int otbPleiadesImageMetadataInterfaceNew(int argc, char* argv[])
+int otbPleiadesImageMetadataInterfaceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   otb::PleiadesImageMetadataInterface::Pointer object = otb::PleiadesImageMetadataInterface::New();
 

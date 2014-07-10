@@ -29,7 +29,7 @@
 
 #include "otbDrawLineSpatialObjectFilter.h"
 
-int otbDrawLineSpatialObject(int argc, char* argv[])
+int otbDrawLineSpatialObject(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

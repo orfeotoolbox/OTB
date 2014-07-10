@@ -26,7 +26,7 @@
 
 #include "otbSobelVectorImageFilter.h"
 
-int otbSobelVectorImageFilterNewTest ( int argc, char *argv[] )
+int otbSobelVectorImageFilterNewTest ( int itkNotUsed(argc), char ** itkNotUsed(argv) )
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -94,4 +94,3 @@ int otbSobelVectorImageFilterTest ( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-

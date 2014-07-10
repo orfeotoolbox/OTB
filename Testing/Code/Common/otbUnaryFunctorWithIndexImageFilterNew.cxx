@@ -30,14 +30,14 @@ public:
 
   typedef itk::Index<2> IndexType;
 
-  inline TOutput operator ()(const TInput& inPix, IndexType index)
+  inline TOutput operator ()(const TInput& inPix, IndexType itkNotUsed(index))
   {
     return (static_cast<TOutput>(inPix));
   }
 };
 }
 
-int otbUnaryFunctorWithIndexImageFilterNew(int argc, char * argv[])
+int otbUnaryFunctorWithIndexImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double                                                                        InputPixelType;
   typedef otb::Image<InputPixelType, 2>                                                 ImageType;

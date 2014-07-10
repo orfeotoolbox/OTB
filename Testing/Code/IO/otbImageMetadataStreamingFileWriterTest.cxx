@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageMetadataStreamingFileWriterTest(int argc, char* argv[])
+int otbImageMetadataStreamingFileWriterTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

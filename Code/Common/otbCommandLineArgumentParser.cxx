@@ -33,7 +33,7 @@ CommandLineArgumentParseResult::CommandLineArgumentParseResult() {}
 CommandLineArgumentParseResult::~CommandLineArgumentParseResult() {}
 
 void CommandLineArgumentParseResult
-::PrintSelf(std::ostream& itkNotUsed(os), itk::Indent indent) const
+::PrintSelf(std::ostream& itkNotUsed(os), itk::Indent itkNotUsed(indent)) const
 {
 
 }

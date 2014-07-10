@@ -27,7 +27,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-int otbVectorImageComplexNew(int argc, char* argv[])
+int otbVectorImageComplexNew(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
   typedef std::complex<float>            PixelType;
   typedef otb::VectorImage<PixelType, 2> ImageType;
@@ -39,7 +39,7 @@ int otbVectorImageComplexNew(int argc, char* argv[])
 
 
 template<class InternalType>
-int otbVectorImageComplexGenericTest(int argc, char* argv[])
+int otbVectorImageComplexGenericTest(int itkNotUsed(argc), char* argv[])
 {
   typedef std::complex<InternalType>      PixelType;
   typedef otb::VectorImage<PixelType, 2>  ImageType;
@@ -80,7 +80,7 @@ int otbVectorImageComplexDoubleTest(int argc, char* argv[])
 }
 
 template<class InternalType>
-int otbImageComplexGenericTest(int argc, char* argv[])
+int otbImageComplexGenericTest(int itkNotUsed(argc), char* argv[])
 {
   typedef std::complex<InternalType>      PixelType;
   typedef otb::Image<PixelType, 2>        ImageType;
@@ -135,7 +135,7 @@ int otbImageComplexDoubleTest(int argc, char* argv[])
 
 
 template<class InternalType>
-int otbVectorImageComplexIntoRealGenericTest(int argc, char* argv[])
+int otbVectorImageComplexIntoRealGenericTest(int itkNotUsed(argc), char* argv[])
 {
   typedef InternalType                    PixelType;
   typedef otb::VectorImage<PixelType, 2>  ImageType;

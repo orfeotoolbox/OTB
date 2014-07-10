@@ -22,7 +22,7 @@
 #include "otbImageList.h"
 #include "otbImage.h"
 
-int otbVectorImageToImageListFilterNew(int argc, char * argv[])
+int otbVectorImageToImageListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
 

@@ -332,7 +332,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 template <class TImage, class TInternalImage>
 void
 ImageSeriesFileReaderBase<TImage, TInternalImage>
-::GenerateData(unsigned int idx)
+::GenerateData(unsigned int itkNotUsed(idx))
 {
   std::ostringstream msg;
   msg << "Something wrong... Check the template definition of this class in the program...\n";

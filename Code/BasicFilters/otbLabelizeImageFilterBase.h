@@ -98,7 +98,7 @@ protected:
   virtual void GenerateData();
 
   /** Region growing */
-  virtual void RegionGrowing(const IndexType indexSeed) {}
+  virtual void RegionGrowing(const IndexType itkNotUsed(indexSeed)) {}
 
   /** Instance region growing filter*/
   RegionGrowingFilterPointerType m_RegionGrowingFilter;

@@ -22,7 +22,7 @@
 #include "otbVectorImage.h"
 #include "otbMacro.h"
 
-int otbReadingComplexDataIntoComplexImageTest(int argc, char * argv[])
+int otbReadingComplexDataIntoComplexImageTest(int itkNotUsed(argc), char * argv[])
 {
   typedef double                                RealType;
   typedef std::complex<RealType>                PixelType;

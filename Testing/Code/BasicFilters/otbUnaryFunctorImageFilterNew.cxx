@@ -20,7 +20,7 @@
 #include "otbPhaseFunctor.h"
 #include "otbUnaryFunctorImageFilter.h"
 
-int otbUnaryFunctorImageFilterNew(int argc, char * argv[])
+int otbUnaryFunctorImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                         PixelType;

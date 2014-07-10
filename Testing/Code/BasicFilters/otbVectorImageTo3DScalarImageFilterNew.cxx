@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "otbVectorImageTo3DScalarImageFilter.h"
 
-int otbVectorImageTo3DScalarImageFilterNew(int argc, char * argv[])
+int otbVectorImageTo3DScalarImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int BiDimension  = 2;
   const unsigned int TriDimension  = 3;

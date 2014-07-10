@@ -319,7 +319,7 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
 template <class TDisparityImage, class TGridImage, class TSensorImage, class TMaskImage>
 void
 DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
-::ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId)
+::ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
 {
   const TGridImage * leftGrid = this->GetInverseEpipolarLeftGrid();
   const TGridImage * rightGrid = this->GetDirectEpipolarRightGrid();

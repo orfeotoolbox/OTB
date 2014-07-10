@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "otbContinuousMinimumMaximumImageCalculator.h"
 
-int otbContinuousMinimumMaximumImageCalculatorNew(int argc, char * argv[])
+int otbContinuousMinimumMaximumImageCalculatorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int ImageDimension = 2;
 

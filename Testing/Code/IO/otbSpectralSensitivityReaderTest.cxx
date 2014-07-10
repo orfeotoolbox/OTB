@@ -23,7 +23,7 @@
 
 using namespace otb;
 
-int otbSpectralSensitivityReaderNew(int argc, char* argv[])
+int otbSpectralSensitivityReaderNew(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
 
   SpectralSensitivityReader::Pointer spectSen = SpectralSensitivityReader::New();
@@ -33,7 +33,7 @@ int otbSpectralSensitivityReaderNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbSpectralSensitivityReaderTest(int argc, char* argv[])
+int otbSpectralSensitivityReaderTest(int itkNotUsed(argc), char* argv[])
 {
   const char * dataPath  = argv[1];
   const char * imageName = argv[2];
@@ -60,7 +60,7 @@ int otbSpectralSensitivityReaderTest(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbSpectralSensitivityReaderGenericTest(int argc, char* argv[])
+int otbSpectralSensitivityReaderGenericTest(int itkNotUsed(argc), char* argv[])
 {
   const char * sensitivityFileName = argv[1];
   const char * imageName = argv[2];
@@ -87,4 +87,3 @@ int otbSpectralSensitivityReaderGenericTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

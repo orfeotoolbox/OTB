@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbLeeImageFilter.h"
 
-int otbLeeFilter(int argc, char * argv[])
+int otbLeeFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

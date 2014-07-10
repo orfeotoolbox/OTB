@@ -22,7 +22,7 @@
 #include "otbInnerProductPCAImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 
-int otbInnerProductPCAImageFilter(int argc, char* argv[])
+int otbInnerProductPCAImageFilter(int itkNotUsed(argc), char* argv[])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;

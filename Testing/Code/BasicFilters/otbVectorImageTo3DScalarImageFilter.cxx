@@ -24,7 +24,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageSliceConstIteratorWithIndex.h"
 
-int otbVectorImageTo3DScalarImageFilter(int argc, char * argv[])
+int otbVectorImageTo3DScalarImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int BiDimension  = 2;
   const unsigned int TriDimension  = 3;

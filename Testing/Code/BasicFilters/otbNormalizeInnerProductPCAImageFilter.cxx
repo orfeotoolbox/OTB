@@ -20,7 +20,7 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
 
-int otbNormalizeInnerProductPCAImageFilter(int argc, char* argv[])
+int otbNormalizeInnerProductPCAImageFilter(int itkNotUsed(argc), char* argv[])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;

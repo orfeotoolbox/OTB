@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbPerBandVectorImageFilterWithSobelFilter(int argc, char * argv[])
+int otbPerBandVectorImageFilterWithSobelFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];

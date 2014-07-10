@@ -55,7 +55,7 @@ public:
   /** Set the nth component of the pixel. */
   static void SetNthComponent(int c, PixelType& pixel, const ComponentType& v)
   { pixel.SetNthComponent(c, v); }
-  static void SetNthComponent(int c, PixelType & pixel, const PixelType& v)
+  static void SetNthComponent(int itkNotUsed(c), PixelType & pixel, const PixelType& v)
   { pixel = v; }
 
   /** Return a single scalar value from this pixel. */

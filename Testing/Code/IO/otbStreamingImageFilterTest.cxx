@@ -27,7 +27,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbStreamingImageFilterTest(int argc, char* argv[])
+int otbStreamingImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

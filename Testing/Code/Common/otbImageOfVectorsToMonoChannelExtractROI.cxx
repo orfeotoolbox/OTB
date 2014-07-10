@@ -20,7 +20,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbImageOfVectorsToMonoChannelExtractROI(int argc, char * argv[])
+int otbImageOfVectorsToMonoChannelExtractROI(int itkNotUsed(argc), char * argv[])
 {
   const int Dimension = 2;
   typedef unsigned char                         ScalarPixelType;

@@ -214,7 +214,7 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialisation()
 
 /*virtual*/
 OGRSpatialReference* otb::GeometriesProjectionFilter::DoDefineNewLayerSpatialReference(
-  ogr::Layer const& source) const
+  ogr::Layer const& itkNotUsed(source)) const
 {
   if (!m_OutputProjectionRef.empty())
     {

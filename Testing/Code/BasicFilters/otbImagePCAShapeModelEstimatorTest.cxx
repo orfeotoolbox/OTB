@@ -52,7 +52,7 @@ public:
   itk::LightProcessObject::Pointer m_Process;
 };
 
-int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[])
+int otbImagePCAShapeModelEstimatorTest(int itkNotUsed(argc), char* argv[])
 {
   /*    const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[1]));
       const unsigned int numberOfTrainingImages(atoi(argv[2]));

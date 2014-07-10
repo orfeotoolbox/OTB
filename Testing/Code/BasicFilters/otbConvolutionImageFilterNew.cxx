@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "otbConvolutionImageFilter.h"
 
-int otbConvolutionImageFilterNew(int argc, char * argv[])
+int otbConvolutionImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double InputPixelType;
   typedef double OutputPixelType;

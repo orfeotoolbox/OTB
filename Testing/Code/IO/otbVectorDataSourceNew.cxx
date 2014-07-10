@@ -19,7 +19,7 @@
 #include "otbVectorDataSource.h"
 #include "otbVectorData.h"
 
-int otbVectorDataSourceNew(int argc, char * argv[])
+int otbVectorDataSourceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::VectorData<>                     VectorDataType;
   typedef otb::VectorDataSource<VectorDataType> VectorDataSourceType;

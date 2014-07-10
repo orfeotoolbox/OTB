@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-int otbLabelImageToOGRDataSourceFilterNew(int argc, char * argv[])
+int otbLabelImageToOGRDataSourceFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned short LabelType;
@@ -47,7 +47,6 @@ int otbLabelImageToOGRDataSourceFilter(int argc, char * argv[])
     }
   const char * infname = argv[1];
   const char * outfname = argv[2];
-
 
   const unsigned int Dimension = 2;
   typedef unsigned short LabelType;

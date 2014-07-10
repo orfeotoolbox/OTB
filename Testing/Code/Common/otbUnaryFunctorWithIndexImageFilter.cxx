@@ -32,14 +32,14 @@ public:
 
   typedef itk::Index<2> IndexType;
 
-  inline TOutput operator ()(const TInput& inPix, IndexType index)
+  inline TOutput operator ()(const TInput& inPix, IndexType itkNotUsed(index))
   {
     return (static_cast<TOutput>(inPix));
   }
 };
 }
 
-int otbUnaryFunctorWithIndexImageFilter(int argc, char * argv[])
+int otbUnaryFunctorWithIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

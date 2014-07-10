@@ -35,7 +35,7 @@ typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
 typedef otb::ClampImageFilter<InputImageType, OutputImageType>    FilterType;
 
-int otbClampImageFilterNew(int argc, char* argv[])
+int otbClampImageFilterNew(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
   /** instantiating the filter */
   FilterType::Pointer filter = FilterType::New();
@@ -43,7 +43,7 @@ int otbClampImageFilterNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbClampImageFilterTest(int argc, char* argv[])
+int otbClampImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

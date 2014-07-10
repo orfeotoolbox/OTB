@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbONERAImageIOTestCanRead(int argc, char* argv[])
+int otbONERAImageIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   otb::ONERAImageIO::Pointer lONERAImageIO = otb::ONERAImageIO::New();
   bool                       lCanRead = lONERAImageIO->CanReadFile(argv[1]);

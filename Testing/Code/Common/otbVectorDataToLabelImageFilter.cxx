@@ -38,13 +38,13 @@ typedef otb::ImageFileWriter<ImageType>              WriterType;
 typedef otb::VectorDataToLabelImageFilter<VectorDataType,
                                           ImageType>          RasterizationFilterType;
 
-int otbVectorDataToLabelImageFilterNew(int argc, char* argv[])
+int otbVectorDataToLabelImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
   return EXIT_SUCCESS;
 }
 
-int otbVectorDataToLabelImageFilter(int argc, char* argv[])
+int otbVectorDataToLabelImageFilter(int itkNotUsed(argc), char * argv[])
 {
 
   ReaderType::Pointer reader = ReaderType::New();

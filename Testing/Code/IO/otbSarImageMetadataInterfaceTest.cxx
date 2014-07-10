@@ -44,7 +44,7 @@ void printPointSet(otb::SarImageMetadataInterface::PointSetPointer pointSet, std
     }
 }
 
-int otbSarImageMetadataInterfaceTest(int argc, char* argv[])
+int otbSarImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

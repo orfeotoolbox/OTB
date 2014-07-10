@@ -31,7 +31,7 @@
 
 #include "otbSparseWvltToAngleMapperListFilter.h"
 
-int otbSparseWvltToAngleMapperListFilterNew ( int argc, char * argv[] )
+int otbSparseWvltToAngleMapperListFilterNew ( int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   const unsigned int SpaceDimension = 3;
@@ -51,4 +51,3 @@ int otbSparseWvltToAngleMapperListFilterNew ( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-

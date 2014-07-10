@@ -64,7 +64,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
 
 {
   typename InputImageType::ConstPointer input  = this->GetInput();
@@ -280,7 +280,7 @@ void
 DrawLineSpatialObjectListFilter<TInputImage, TOutput>
 ::CropSegment(OutputIndexType *indexToCrop,
               OutputIndexType *otherIndex,
-              const OutputImageRegionType *outputRegionForThread) const
+              const OutputImageRegionType *itkNotUsed(outputRegionForThread)) const
 
 {
   OutputIndexType tempIndex;

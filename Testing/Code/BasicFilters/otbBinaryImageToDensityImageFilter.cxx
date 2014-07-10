@@ -22,7 +22,7 @@
 #include "otbBinaryImageDensityFunction.h"
 #include "otbBinaryImageToDensityImageFilter.h"
 
-int otbBinaryImageToDensityImageFilter(int argc, char* argv[])
+int otbBinaryImageToDensityImageFilter(int itkNotUsed(argc), char* argv[])
 {
 
   const char *       infname        = argv[1];

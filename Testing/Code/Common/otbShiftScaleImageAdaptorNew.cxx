@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbShiftScaleImageAdaptor.h"
 
-int otbShiftScaleImageAdaptorNew(int argc, char * argv[])
+int otbShiftScaleImageAdaptorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double                                                 InputPixelType;
   typedef otb::VectorImage<InputPixelType, 2>                    ImageType;

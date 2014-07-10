@@ -20,7 +20,7 @@
 #include "otbShiftScaleVectorImageFilter.h"
 #include "otbVectorImage.h"
 
-int otbShiftScaleVectorImageFilterNew(int argc, char * argv[])
+int otbShiftScaleVectorImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                                                  InputPixelType;

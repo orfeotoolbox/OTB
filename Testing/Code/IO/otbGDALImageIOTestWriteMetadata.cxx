@@ -23,6 +23,7 @@
 #include "gdal_priv.h"
 #include "cpl_string.h"
 #include "ogr_spatialref.h"
+#include "itkMacro.h"
 
 // Class to store ProjRef, GEOTransform and GCP info
 class DatasetInfoGDAL
@@ -128,7 +129,7 @@ void testWriteMetadata(std::string filenameTIFF,
                        std::ostream& os);
 ///////
 // MAIN
-int otbGDALImageIOTestWriteMetadata(int argc, char * argv[])
+int otbGDALImageIOTestWriteMetadata(int itkNotUsed(argc), char * argv[])
 {
   // Parameters
   std::string filenameTIFF = argv[1];

@@ -31,7 +31,7 @@
 #include "itkLabelMapToLabelImageFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 
-int otbLabelObjectOpeningMuParserFilterTest(int argc, char * argv[])
+int otbLabelObjectOpeningMuParserFilterTest(int itkNotUsed(argc), char * argv[])
 {
 
   const char * imageInputFilename  = argv[1];

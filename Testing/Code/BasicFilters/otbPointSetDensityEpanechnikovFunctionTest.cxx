@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-int otbPointSetDensityEpanechnikovFunctionTest(int argc, char* argv[])
+int otbPointSetDensityEpanechnikovFunctionTest(int itkNotUsed(argc), char* argv[])
 {
 
   const char * outfname = argv[1];

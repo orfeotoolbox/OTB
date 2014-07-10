@@ -20,7 +20,7 @@
 #include "otbFunctionToImageFilter.h"
 #include "itkVarianceImageFunction.h"
 
-int otbFunctionToImageFilterNew(int argc, char * argv[])
+int otbFunctionToImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                PixelType;

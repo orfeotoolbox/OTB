@@ -32,7 +32,7 @@
 
 #include "boost/algorithm/string.hpp"
 
-int otbExtractROITestMetaData(int argc, char * argv[])
+int otbExtractROITestMetaData(int itkNotUsed(argc), char * argv[])
 {
   typedef float PixelType;
 

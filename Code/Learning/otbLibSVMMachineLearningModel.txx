@@ -94,7 +94,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::Save(const std::string & filename, const std::string & name)
+::Save(const std::string & filename, const std::string & itkNotUsed(name))
 {
   m_SVMestimator->GetModel()->SaveModel(filename.c_str());
 }
@@ -102,7 +102,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::Load(const std::string & filename, const std::string & name)
+::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
   m_SVMestimator->GetModel()->LoadModel(filename.c_str());
 }
@@ -139,7 +139,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 bool
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const std::string & file)
+::CanWriteFile(const std::string & itkNotUsed(file))
 {
   return false;
 }

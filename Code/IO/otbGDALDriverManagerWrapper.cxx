@@ -66,16 +66,16 @@ GDALDatasetWrapper::IsJPEG2000() const
 GDALDriverManagerWrapper::GDALDriverManagerWrapper()
 {
     GDALAllRegister();
-    
+
     GDALDriver* driver = 0;
-    
+
     // Ignore incompatible Jpeg2000 drivers (Jasper)
     /*
     driver = GetGDALDriverManager()->GetDriverByName( "JPEG2000" );
     if (driver)
       GetGDALDriverManager()->DeregisterDriver( driver );
     */
-    
+
 #ifndef CHECK_HDF4OPEN_SYMBOL
     // Get rid of the HDF4 driver when it is buggy
     driver = GetGDALDriverManager()->GetDriverByName( "hdf4" );
@@ -94,7 +94,7 @@ GDALDatasetWrapper::Pointer
 GDALDriverManagerWrapper::Open( std::string filename ) const
 {
   GDALDatasetWrapper::Pointer datasetWrapper;
-  
+
   // first : test if a driver can identify the dataset
   GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), NULL);
   if(identifyDriverH == NULL)
@@ -102,9 +102,9 @@ GDALDriverManagerWrapper::Open( std::string filename ) const
     // don't try to open it and exit
     return datasetWrapper;
     }
-  
+
   GDALDriver *identifyDriver = static_cast<GDALDriver*>(identifyDriverH);
-      
+
   // check if Jasper will be used
   if (strcmp(identifyDriver->GetDescription(),"JPEG2000") == 0)
     {
@@ -113,7 +113,7 @@ GDALDriverManagerWrapper::Open( std::string filename ) const
       "(which fails on OTB). Try setting the environment variable GDAL_SKIP"
       " in order to avoid this driver.");
     }
-  
+
   GDALDatasetH dataset = GDALOpen(filename.c_str(), GA_ReadOnly);
 
   if (dataset != NULL)
@@ -211,7 +211,7 @@ void GDALOverviewsBuilder::GetGDALResamplingMethod(std::string &resamplingMethod
 extern "C"
 {
   static int CPL_STDCALL otb_UpdateGDALProgress(double dfComplete,
-                                                const char *pszMessage,
+                                                const char *itkNotUsed(pszMessage),
                                                 void * pProgressArg)
   {
     otb::GDALOverviewsBuilder* _this = (otb::GDALOverviewsBuilder*)pProgressArg;
@@ -272,4 +272,3 @@ void GDALOverviewsBuilder::Update()
 }
 
 } // end namespace otb
-

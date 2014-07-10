@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-int otbPointSetDensityGaussianFunctionTest(int argc, char* argv[])
+int otbPointSetDensityGaussianFunctionTest(int itkNotUsed(argc), char* argv[])
 {
 
   const char * outfname = argv[1];

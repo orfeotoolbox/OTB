@@ -21,7 +21,7 @@
 
 #include "otbVectorImage.h"
 
-int otbApplyTransitionMatrixImageFilterNew(int argc, char * argv[])
+int otbApplyTransitionMatrixImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double InputPixelType;
   typedef float OutputPixelType;

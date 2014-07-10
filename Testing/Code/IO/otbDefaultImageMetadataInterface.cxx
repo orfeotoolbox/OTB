@@ -21,7 +21,7 @@
 #include "itkMacro.h"
 #include "otbDefaultImageMetadataInterface.h"
 
-int otbDefaultImageMetadataInterface(int argc, char* argv[])
+int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
   typedef otb::DefaultImageMetadataInterface ObjectType;
 

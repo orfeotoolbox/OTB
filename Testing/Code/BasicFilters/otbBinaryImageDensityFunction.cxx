@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include <iostream>
 
-int otbBinaryImageDensityFunction(int argc, char* argv[])
+int otbBinaryImageDensityFunction(int itkNotUsed(argc), char* argv[])
 {
 
   const char * infname  = argv[1];

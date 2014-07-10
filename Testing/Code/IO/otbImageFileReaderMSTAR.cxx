@@ -26,7 +26,7 @@
 
 #include "itkRescaleIntensityImageFilter.h"
 
-int otbImageFileReaderMSTAR(int argc, char* argv[])
+int otbImageFileReaderMSTAR(int itkNotUsed(argc), char* argv[])
 {
   typedef float         InputPixelType;
   typedef unsigned char OutputPixelType;

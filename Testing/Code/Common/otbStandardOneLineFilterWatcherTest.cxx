@@ -22,7 +22,7 @@
 #include "otbStandardOneLineFilterWatcher.h"
 #include "itkGradientMagnitudeImageFilter.h"
 
-int otbStandardOneLineFilterWatcherTest(int argc, char * argv[])
+int otbStandardOneLineFilterWatcherTest(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                    PixelType;

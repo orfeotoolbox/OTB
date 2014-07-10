@@ -28,7 +28,7 @@
 #include "otbComplexToVectorImageCastFilter.h"
 
 
-int otbImageFileReaderRADComplexFloatExtract(int argc, char* argv[])
+int otbImageFileReaderRADComplexFloatExtract(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

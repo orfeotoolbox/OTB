@@ -23,7 +23,7 @@
 #include "otbConvolutionImageFilter.h"
 #include "itkConstantBoundaryCondition.h"
 
-int otbConvolutionImageFilter(int argc, char * argv[])
+int otbConvolutionImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName = argv[1];
   const char * outputFileName = argv[2];

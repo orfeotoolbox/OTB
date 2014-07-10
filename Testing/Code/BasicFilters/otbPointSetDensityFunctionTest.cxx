@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-int otbPointSetDensityFunctionTest(int argc, char* argv[])
+int otbPointSetDensityFunctionTest(int itkNotUsed(argc), char* argv[])
 {
 
   const char * outfname = argv[1];

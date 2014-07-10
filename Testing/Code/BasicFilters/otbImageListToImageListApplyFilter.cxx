@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageListToImageListApplyFilter(int argc, char * argv[])
+int otbImageListToImageListApplyFilter(int itkNotUsed(argc), char * argv[])
 {
   char * infname1  = argv[1];
   char * infname2  = argv[2];

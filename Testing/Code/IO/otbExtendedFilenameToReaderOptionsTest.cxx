@@ -21,7 +21,7 @@
 
 typedef otb::ExtendedFilenameToReaderOptions FilenameHelperType;
 
-int otbExtendedFilenameToReaderOptions(int argc, char* argv[])
+int otbExtendedFilenameToReaderOptions(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputExtendedFilename  = argv[1];

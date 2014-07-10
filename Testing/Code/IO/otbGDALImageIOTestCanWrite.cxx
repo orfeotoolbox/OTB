@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbGDALImageIOTestCanWrite(int argc, char* argv[])
+int otbGDALImageIOTestCanWrite(int itkNotUsed(argc), char* argv[])
 {
   otb::GDALImageIO::Pointer lGDALImageIO = otb::GDALImageIO::New();
   bool                      lCanWrite = lGDALImageIO->CanWriteFile(argv[1]);

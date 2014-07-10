@@ -28,7 +28,7 @@
 #include "itkResampleImageFilter.h"
 
 
-int otbStreamingResampleImageFilterCompareWithITK(int argc, char * argv[])
+int otbStreamingResampleImageFilterCompareWithITK(int itkNotUsed(argc), char * argv[])
 {
   const char*  inputFilename = argv[1];
   unsigned int sizeXOutputImage = atoi(argv[2]);

@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbFunctionToImageFilter(int argc, char * argv[])
+int otbFunctionToImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                                                                    PixelType;

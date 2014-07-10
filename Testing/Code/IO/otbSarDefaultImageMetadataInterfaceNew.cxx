@@ -22,7 +22,7 @@
 
 #include "otbSarDefaultImageMetadataInterface.h"
 
-int otbSarDefaultImageMetadataInterfaceNew(int argc, char* argv[])
+int otbSarDefaultImageMetadataInterfaceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::SarDefaultImageMetadataInterface ObjectType;
 

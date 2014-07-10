@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbVectorImageToImageListFilter(int argc, char * argv[])
+int otbVectorImageToImageListFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   char *             infname   = argv[1];
@@ -71,7 +71,7 @@ int otbVectorImageToImageListFilter(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbVectorImageToImageListFilterIterator(int argc, char * argv[])
+int otbVectorImageToImageListFilterIterator(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   const char *       infname   = argv[1];

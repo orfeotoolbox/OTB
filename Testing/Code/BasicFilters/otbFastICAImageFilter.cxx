@@ -25,7 +25,7 @@
 #include "otbFastICAImageFilter.h"
 #include "otbFastICAInternalOptimizerVectorImageFilter.h"
 
-int otbFastICAInternalOptimizerVectorImageFilterNewTest ( int argc, char* argv[] )
+int otbFastICAInternalOptimizerVectorImageFilterNewTest ( int itkNotUsed(argc), char** itkNotUsed(argv) )
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -35,7 +35,7 @@ int otbFastICAInternalOptimizerVectorImageFilterNewTest ( int argc, char* argv[]
   return EXIT_SUCCESS;
 }
 
-int otbFastICAImageFilterNewTest ( int argc, char* argv[] )
+int otbFastICAImageFilterNewTest ( int itkNotUsed(argc), char** itkNotUsed(argv) )
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -143,5 +143,3 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

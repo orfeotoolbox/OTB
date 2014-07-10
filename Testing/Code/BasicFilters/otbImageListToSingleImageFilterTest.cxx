@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbBandMathImageFilter.h"
 
-int otbImageListToSingleImageFilterNew(int argc, char * argv[])
+int otbImageListToSingleImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
 
@@ -46,7 +46,7 @@ int otbImageListToSingleImageFilterNew(int argc, char * argv[])
 
 
 
-int otbImageListToSingleImageFilter(int argc, char * argv[])
+int otbImageListToSingleImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   char *             infname   = argv[1];

@@ -19,7 +19,7 @@
 #include "itkMacro.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 
-int otbMultiToMonoChannelExtractROINew(int argc, char * argv[])
+int otbMultiToMonoChannelExtractROINew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   //        typedef unsigned char                                    InputPixelType;

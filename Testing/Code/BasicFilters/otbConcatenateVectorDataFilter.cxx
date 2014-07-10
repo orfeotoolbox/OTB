@@ -32,7 +32,7 @@ typedef otb::VectorDataFileReader<VectorDataType>         ReaderType;
 typedef otb::VectorDataFileWriter<VectorDataType>         WriterType;
 typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType;
 
-int otbConcatenateVectorDataFilterNew (int argc, char * argv[])
+int otbConcatenateVectorDataFilterNew (int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
   return EXIT_SUCCESS;

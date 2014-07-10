@@ -24,7 +24,7 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbMeanFunctor.h"
 
-int otbMeanFunctorImageTest(int argc, char * argv[])
+int otbMeanFunctorImageTest(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];

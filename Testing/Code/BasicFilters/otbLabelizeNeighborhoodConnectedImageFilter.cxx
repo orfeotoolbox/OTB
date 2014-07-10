@@ -28,7 +28,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbLabelizeNeighborhoodConnectedImageFilter(int argc, char * argv[])
+int otbLabelizeNeighborhoodConnectedImageFilter(int itkNotUsed(argc), char * argv[])
 {
   // Arguments
   char* inputImageName = argv[1];

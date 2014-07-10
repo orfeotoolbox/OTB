@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageList.h"
 
-int otbBinaryImageMinimalBoundingRegionCalculator(int argc, char* argv[])
+int otbBinaryImageMinimalBoundingRegionCalculator(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
 

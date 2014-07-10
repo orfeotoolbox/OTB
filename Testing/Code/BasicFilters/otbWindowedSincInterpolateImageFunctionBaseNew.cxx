@@ -44,7 +44,7 @@ public:
 
 }
 
-int otbWindowedSincInterpolateImageFunctionBaseNew(int argc, char * argv[])
+int otbWindowedSincInterpolateImageFunctionBaseNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::Image<double, 2>                                                  ImageType;
   typedef Function::SameFunction<double, double>                                 FunctionType;

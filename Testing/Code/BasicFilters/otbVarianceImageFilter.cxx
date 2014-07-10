@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbVarianceImageFilter(int argc, char * argv[])
+int otbVarianceImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;

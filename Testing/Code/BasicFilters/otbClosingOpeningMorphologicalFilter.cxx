@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbClosingOpeningMorphologicalFilter(int argc, char * argv[])
+int otbClosingOpeningMorphologicalFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   const unsigned int Radius = atoi(argv[3]);

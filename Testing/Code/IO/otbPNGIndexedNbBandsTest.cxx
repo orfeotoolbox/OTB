@@ -24,7 +24,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbPNGIndexedNbBandsTest(int argc, char* argv[])
+int otbPNGIndexedNbBandsTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char *       inputFilename    = argv[1];

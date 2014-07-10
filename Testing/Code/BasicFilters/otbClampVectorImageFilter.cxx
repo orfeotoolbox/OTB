@@ -35,7 +35,7 @@ typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
 typedef otb::ClampVectorImageFilter<InputImageType, OutputImageType>  FilterType;
 
-int otbClampVectorImageFilterNew(int argc, char* argv[])
+int otbClampVectorImageFilterNew(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
   /** instantiating the filter */
   FilterType::Pointer filter = FilterType::New();
@@ -43,7 +43,7 @@ int otbClampVectorImageFilterNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbClampVectorImageFilterTest(int argc, char* argv[])
+int otbClampVectorImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;

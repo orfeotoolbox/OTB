@@ -87,7 +87,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::Criterion(const MatrixType & X,
             const MatrixType & A,
             const MatrixType & S,
-            const double &m_Delt,
+            const double &itkNotUsed(m_Delt),
             const double &m_LambdS,
             const double &m_LambdD)
 {
@@ -164,7 +164,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::EvalGradS(const MatrixType &X,
             const MatrixType &A,
             const MatrixType &S,
-            const double &m_Delt,
+            const double &itkNotUsed(m_Delt),
             const double &m_LambdS,
             MatrixType & gradS)
 {
@@ -185,7 +185,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::EvalGradA(const MatrixType &X,
             const MatrixType &A,
             const MatrixType &S,
-            const double &m_Delt,
+            const double &itkNotUsed(m_Delt),
             const double &m_LambdD,
             MatrixType &gradA)
 {

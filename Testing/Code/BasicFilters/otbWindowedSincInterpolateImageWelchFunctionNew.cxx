@@ -20,7 +20,7 @@
 #include "otbWindowedSincInterpolateImageWelchFunction.h"
 #include "otbImage.h"
 
-int otbWindowedSincInterpolateImageWelchFunctionNew(int argc, char * argv[])
+int otbWindowedSincInterpolateImageWelchFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::Image<double, 2>                                     ImageType;
   typedef otb::WindowedSincInterpolateImageWelchFunction<ImageType> InterpolatorType;

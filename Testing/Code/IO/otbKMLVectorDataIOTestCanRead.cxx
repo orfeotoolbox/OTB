@@ -19,7 +19,7 @@
 #include "otbKMLVectorDataIO.h"
 #include <iostream>
 
-int otbKMLVectorDataIOTestCanRead(int argc, char* argv[])
+int otbKMLVectorDataIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::KMLVectorDataIO KMLVectorDataIOType;
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();

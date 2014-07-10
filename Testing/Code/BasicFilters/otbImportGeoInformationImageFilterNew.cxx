@@ -20,7 +20,7 @@
 #include "otbImportGeoInformationImageFilter.h"
 #include "otbImage.h"
 
-int otbImportGeoInformationImageFilterNew(int argc, char * argv[])
+int otbImportGeoInformationImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                                              PixelType;

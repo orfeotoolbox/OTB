@@ -28,7 +28,7 @@
 #include "otbImage.h"
 #include "otbVectorDataToMapFilter.h"
 
-int otbVectorDataToMapFilter(int argc, char * argv[])
+int otbVectorDataToMapFilter(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   if (argc < 4)
@@ -106,7 +106,7 @@ int otbVectorDataToMapFilter(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbVectorDataToMapFilterBinary(int argc, char * argv[])
+int otbVectorDataToMapFilterBinary(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   if (argc < 3)

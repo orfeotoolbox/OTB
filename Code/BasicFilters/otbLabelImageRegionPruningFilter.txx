@@ -151,7 +151,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage, class TOutputClusteredImage>
 void
 LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabelImage, TOutputClusteredImage>
-::EnlargeOutputRequestedRegion( itk::DataObject *output )
+::EnlargeOutputRequestedRegion( itk::DataObject *itkNotUsed(output) )
  {
   // This filter requires all of the output images in the buffer.
   for ( unsigned int j = 0; j < this->GetNumberOfOutputs(); j++ )

@@ -20,7 +20,7 @@
 #include "otbImageList.h"
 #include "otbImage.h"
 
-int otbImageListNew(int argc, char * argv[])
+int otbImageListNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   const unsigned int Dimension = 2;

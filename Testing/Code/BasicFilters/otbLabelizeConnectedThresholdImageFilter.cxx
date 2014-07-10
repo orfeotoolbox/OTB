@@ -28,7 +28,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbLabelizeConnectedThresholdImageFilter(int argc, char * argv[])
+int otbLabelizeConnectedThresholdImageFilter(int itkNotUsed(argc), char * argv[])
 {
   // Arguments
   char* inputImageName = argv[1];

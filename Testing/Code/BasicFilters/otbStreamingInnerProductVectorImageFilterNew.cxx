@@ -18,7 +18,7 @@
 #include "otbStreamingInnerProductVectorImageFilter.h"
 #include "otbVectorImage.h"
 
-int otbStreamingInnerProductVectorImageFilterNew(int argc, char* argv[])
+int otbStreamingInnerProductVectorImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;

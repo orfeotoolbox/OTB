@@ -143,7 +143,7 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
 
 template <class TInputImage, class TOutputImage, class TLabeledOutput, class TBufferConverter>
 void
-MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter>::EnlargeOutputRequestedRegion( itk::DataObject *output )
+MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter>::EnlargeOutputRequestedRegion( itk::DataObject *itkNotUsed(output) )
 {
 
   // This filter requires all of the output images in the buffer.

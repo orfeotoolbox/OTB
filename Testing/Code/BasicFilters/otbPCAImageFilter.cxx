@@ -24,7 +24,7 @@
 
 #include "otbPCAImageFilter.h"
 
-int otbPCAImageFilterNewTest ( int argc, char* argv[] )
+int otbPCAImageFilterNewTest ( int itkNotUsed(argc), char** itkNotUsed(argv) )
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -129,8 +129,3 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
-
-
-

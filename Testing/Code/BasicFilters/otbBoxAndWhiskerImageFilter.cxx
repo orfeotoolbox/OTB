@@ -26,7 +26,7 @@
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
-int otbBoxAndWhiskerImageFilter(int argc, char * argv[])
+int otbBoxAndWhiskerImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

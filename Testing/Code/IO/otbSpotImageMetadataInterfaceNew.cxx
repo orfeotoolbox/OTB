@@ -24,7 +24,7 @@
 
 #include "otbSpotImageMetadataInterface.h"
 
-int otbSpotImageMetadataInterfaceNew(int argc, char* argv[])
+int otbSpotImageMetadataInterfaceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   otb::SpotImageMetadataInterface::Pointer object = otb::SpotImageMetadataInterface::New();
 

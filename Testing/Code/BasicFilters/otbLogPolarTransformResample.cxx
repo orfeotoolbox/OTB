@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbLogPolarTransformResample(int argc, char* argv[])
+int otbLogPolarTransformResample(int itkNotUsed(argc), char* argv[])
 {
   char * inputFileName = argv[1];
   char * outputFileName = argv[2];

@@ -29,7 +29,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbLabelizeConfidenceConnectedImageFilter(int argc, char * argv[])
+int otbLabelizeConfidenceConnectedImageFilter(int itkNotUsed(argc), char * argv[])
 {
   // Arguments
   char* inputImageName = argv[1];

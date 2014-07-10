@@ -35,7 +35,7 @@ template <class PixelType> unsigned int PixelSizeFinder(itk::VariableLengthVecto
 {
   return pix.Size();
 }
-template <class PixelType> unsigned int PixelSizeFinder(PixelType pix)
+template <class PixelType> unsigned int PixelSizeFinder(PixelType itkNotUsed(pix))
 {
   return PixelType::Dimension;
 }

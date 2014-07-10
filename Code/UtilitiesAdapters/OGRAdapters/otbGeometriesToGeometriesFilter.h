@@ -181,7 +181,7 @@ struct FieldCopyTransformation
    * \param[in] inoutFeature  \c Feature to change.
    * \throw Nothing
    */
-  void fieldsTransform(ogr::Feature const& inoutFeature) const
+    void fieldsTransform(ogr::Feature const& itkNotUsed(inoutFeature)) const
     {
     // default => do nothing for in-place transformation
     }

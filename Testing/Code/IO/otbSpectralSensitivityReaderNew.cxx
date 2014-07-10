@@ -20,7 +20,7 @@
 
 using namespace otb;
 
-int otbSpectralSensitivityReaderNew(int argc, char* argv[])
+int otbSpectralSensitivityReaderNew(int itkNotUsed(argc) char ** itkNotUsed(argv))
 {
 
   SpectralSensitivityReader::Pointer spectSen = SpectralSensitivityReader::New();

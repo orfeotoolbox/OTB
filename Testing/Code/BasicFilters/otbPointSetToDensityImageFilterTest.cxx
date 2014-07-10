@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImageToSIFTKeyPointSetFilter.h"
 
-int otbPointSetToDensityImageFilterTest(int argc, char* argv[])
+int otbPointSetToDensityImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
 
   const char *       infname = argv[1];

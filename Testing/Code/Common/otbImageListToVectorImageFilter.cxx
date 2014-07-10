@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageListToVectorImageFilter(int argc, char * argv[])
+int otbImageListToVectorImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;

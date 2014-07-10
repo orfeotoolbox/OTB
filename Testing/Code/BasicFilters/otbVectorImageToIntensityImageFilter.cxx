@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorImageToIntensityImageFilter.h"
 
-int otbVectorImageToIntensityImageFilter(int argc, char * argv[])
+int otbVectorImageToIntensityImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                                                                  PixelType;

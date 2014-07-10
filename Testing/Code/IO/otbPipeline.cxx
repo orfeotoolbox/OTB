@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbPipeline(int argc, char * argv[])
+int otbPipeline(int itkNotUsed(argc), char * argv[])
 {
   typedef otb::Image<unsigned char, 2>    ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;

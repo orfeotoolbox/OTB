@@ -24,7 +24,7 @@
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 
-int otbVectorDataFileGeoReaderWriter(int argc, char * argv[])
+int otbVectorDataFileGeoReaderWriter(int itkNotUsed(argc), char * argv[])
 {
 
   typedef otb::VectorData<double, 2>                VectorDataType;

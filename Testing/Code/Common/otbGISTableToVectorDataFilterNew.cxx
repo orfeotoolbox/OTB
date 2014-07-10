@@ -23,7 +23,7 @@
 #include "otbGISTableToVectorDataFilter.h"
 #include "otbPostGISConnectionImplementation.h"
 
-int otbGISTableToVectorDataFilterNew(int argc, char * argv[])
+int otbGISTableToVectorDataFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef unsigned char                               PType;

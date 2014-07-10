@@ -23,7 +23,7 @@
 #include "otbImage.h"
 #include "otbMacro.h"
 
-int otbWritingComplexDataWithComplexImageTest(int argc, char * argv[])
+int otbWritingComplexDataWithComplexImageTest(int itkNotUsed(argc), char * argv[])
 {
   typedef double                                RealType;
   typedef std::complex<RealType>                PixelType;

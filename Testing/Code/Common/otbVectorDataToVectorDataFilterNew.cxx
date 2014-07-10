@@ -19,7 +19,7 @@
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbVectorData.h"
 
-int otbVectorDataToVectorDataFilterNew(int argc, char * argv[])
+int otbVectorDataToVectorDataFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef otb::VectorData<double>           InputVectorDataType;

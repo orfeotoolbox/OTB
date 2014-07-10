@@ -25,7 +25,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbImageFileReaderRGBTest(int argc, char* argv[])
+int otbImageFileReaderRGBTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

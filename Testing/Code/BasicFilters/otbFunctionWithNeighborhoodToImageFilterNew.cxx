@@ -55,7 +55,7 @@ private:
   OffsetType m_Offset;
 };
 
-int otbFunctionWithNeighborhoodToImageFilterNew(int argc, char * argv[])
+int otbFunctionWithNeighborhoodToImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                    PixelType;

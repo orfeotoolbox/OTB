@@ -153,7 +153,7 @@ protected:
    * order to add the appropriated path
    */
   virtual void TestFileExistanceAndReadability(std::string& file, FileType fileType);
-  virtual void TestBandSelection(std::vector<unsigned int>& bands) {}
+  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
 
   virtual void GenerateData(void);
 

@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImageAndVectorImageOperationFilter.h"
 
-int otbImageAndVectorImageOperationFilterTest(int argc, char * argv[])
+int otbImageAndVectorImageOperationFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * infname       = argv[1];
   const char * invectfname   = argv[2];

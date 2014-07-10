@@ -25,7 +25,7 @@
 #include "itkComplexToImaginaryImageFilter.h"
 #include "otbStreamingCompareImageFilter.h"
 
-int otbImaginaryImageToComplexImageFilterTest(int argc, char * argv[])
+int otbImaginaryImageToComplexImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
 

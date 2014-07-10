@@ -102,7 +102,7 @@ public:
     return m_Vcondopt;
   }
 
-  inline TOutput operator ()(const TInputMultiSpectral& ms,
+  inline TOutput operator ()(const TInputMultiSpectral& itkNotUsed(ms),
                              const TInputMultiSpectralInterp& msi,
                              const TInputPanchro& p)
   {

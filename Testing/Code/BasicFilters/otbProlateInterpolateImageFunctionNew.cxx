@@ -20,7 +20,7 @@
 #include "otbProlateInterpolateImageFunction.h"
 #include "otbImage.h"
 
-int otbProlateInterpolateImageFunctionNew(int argc, char * argv[])
+int otbProlateInterpolateImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::Image<double, 2>                           ImageType;
   typedef otb::ProlateInterpolateImageFunction<ImageType> ProlateInterpolatorType;

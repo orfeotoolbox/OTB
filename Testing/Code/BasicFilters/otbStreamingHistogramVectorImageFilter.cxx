@@ -24,11 +24,11 @@ typedef otb::StreamingHistogramVectorImageFilter<VectorImageType>               
 
 
 
-int otbStreamingHistogramVectorImageFilterNew(int argc, char * argv[])
+int otbStreamingHistogramVectorImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
-  
+
   SHVIFType::Pointer SHVIFFilter = SHVIFType::New();
-  
+
   std::cout << SHVIFFilter << std::endl;
 
   return EXIT_SUCCESS;

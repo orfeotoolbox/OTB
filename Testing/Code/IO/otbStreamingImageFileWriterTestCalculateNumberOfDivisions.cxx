@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageFileWriterTestCalculateNumberOfDivisions(int argc, char* argv[])
+int otbImageFileWriterTestCalculateNumberOfDivisions(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

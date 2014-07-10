@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbMWImageIOTestCanWrite(int argc, char* argv[])
+int otbMWImageIOTestCanWrite(int itkNotUsed(argc), char* argv[])
 {
   otb::MWImageIO::Pointer lMWImageIO = otb::MWImageIO::New();
   bool                    lCanRead = lMWImageIO->CanWriteFile(argv[1]);

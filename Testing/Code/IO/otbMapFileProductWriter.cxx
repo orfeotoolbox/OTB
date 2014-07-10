@@ -21,7 +21,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-int otbMapFileProductWriter(int argc, char* argv[])
+int otbMapFileProductWriter(int itkNotUsed(argc), char* argv[])
 {
   const char * infname = argv[1];
   const char * path = argv[2];
@@ -52,4 +52,3 @@ int otbMapFileProductWriter(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

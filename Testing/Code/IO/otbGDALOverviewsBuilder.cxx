@@ -22,7 +22,7 @@
 
 using namespace otb;
 
-int otbGDALOverviewsBuilderNew(int argc, char* argv[])
+int otbGDALOverviewsBuilderNew(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
   typedef otb::GDALOverviewsBuilder GDALOverviewsBuilderType;
   GDALOverviewsBuilderType::Pointer object = GDALOverviewsBuilderType::New();
@@ -32,7 +32,7 @@ int otbGDALOverviewsBuilderNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbGDALOverviewsBuilder(int argc, char* argv[])
+int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename  = argv[1];
   int nbResolution = atoi(argv[2]);

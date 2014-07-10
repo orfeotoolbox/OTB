@@ -34,7 +34,7 @@
  * Write Image<scalar> with an ImageFileWriter<scalar>
  ***********/
 template<class InternalType>
-int otbImageScalarFileWriterTestWithoutInputGeneric(int argc, char* argv[])
+int otbImageScalarFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * outputFilename = argv[1];
@@ -113,7 +113,7 @@ int otbImageScalarFileWriterTestWithoutInputDouble(int argc, char * argv[])
  * Write Image<scalar> with an ImageFileWriter<scalar>
  ***********/
 template<class InternalType>
-int otbImageComplexFileWriterTestWithoutInputGeneric(int argc, char* argv[])
+int otbImageComplexFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * outputFilename = argv[1];

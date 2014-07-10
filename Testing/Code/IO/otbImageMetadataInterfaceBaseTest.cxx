@@ -27,7 +27,7 @@
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
 
-int otbImageMetadataInterfaceBaseTest(int argc, char* argv[])
+int otbImageMetadataInterfaceBaseTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

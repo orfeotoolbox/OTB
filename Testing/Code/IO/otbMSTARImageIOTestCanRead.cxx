@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbMSTARImageIOTestCanRead(int argc, char* argv[])
+int otbMSTARImageIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   otb::MSTARImageIO::Pointer lMSTARImageIO = otb::MSTARImageIO::New();
   bool                       lCanRead = lMSTARImageIO->CanReadFile(argv[1]);

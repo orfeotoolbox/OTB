@@ -21,7 +21,7 @@
 #include "otbGISTable.h"
 #include "otbVectorData.h"
 
-int otbVectorDataToGISTableFilterNew(int argc, char * argv[])
+int otbVectorDataToGISTableFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;

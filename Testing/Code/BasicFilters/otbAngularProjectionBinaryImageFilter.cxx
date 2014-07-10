@@ -27,7 +27,7 @@
 
 #include "otbAngularProjectionBinaryImageFilter.h"
 
-int otbAngularProjectionBinaryImageFilterNewTest ( int argc, char * argv[] )
+int otbAngularProjectionBinaryImageFilterNewTest ( int itkNotUsed(argc), char * argv[] )
 {
   const unsigned int Dimension = 2;
   typedef float PixelType;
@@ -40,7 +40,7 @@ int otbAngularProjectionBinaryImageFilterNewTest ( int argc, char * argv[] )
   return EXIT_SUCCESS;
 }
 
-int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
+int otbAngularProjectionBinaryImageFilterTest ( int itkNotUsed(argc), char * argv[] )
 {
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
@@ -120,6 +120,3 @@ int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
   }
   return EXIT_SUCCESS;
 }
-
-
-

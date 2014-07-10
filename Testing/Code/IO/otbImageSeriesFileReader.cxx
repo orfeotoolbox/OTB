@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "itksys/SystemTools.hxx"
 
-int otbImageSeriesFileReader(int argc, char* argv[])
+int otbImageSeriesFileReader(int itkNotUsed(argc), char* argv[])
 {
   const char * enviMetaFile = argv[1];
   const char * outputFile   = argv[2];

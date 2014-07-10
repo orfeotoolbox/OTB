@@ -342,7 +342,7 @@ template <class TDisparityImage, class TOutputImage,
 class TMaskImage, class TResidueImage>
 void
 MultiDisparityMapTo3DFilter<TDisparityImage,TOutputImage,TMaskImage,TResidueImage>
-::ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId)
+::ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
 {
   TOutputImage * outputPtr = this->GetOutput();
   TResidueImage * residuePtr = this->GetResidueOutput();

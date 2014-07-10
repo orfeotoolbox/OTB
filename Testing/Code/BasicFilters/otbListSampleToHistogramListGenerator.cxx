@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include "itkImageRegionIterator.h"
 
-int otbListSampleToHistogramListGenerator(int argc, char * argv[])
+int otbListSampleToHistogramListGenerator(int itkNotUsed(argc), char * argv[])
 {
   typedef double                                       PixelType;
   typedef otb::VectorImage<PixelType>                  VectorImageType;

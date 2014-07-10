@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbEdgeDensityImageFilter(int argc, char* argv[])
+int otbEdgeDensityImageFilter(int itkNotUsed(argc), char* argv[])
 {
 
   const char *       infname       = argv[1];

@@ -25,7 +25,7 @@
 #include "otbComplexToIntensityImageFilter.h"
 #include "otbStreamingCompareImageFilter.h"
 
-int otbResampleSLCImage(int argc, char * argv[])
+int otbResampleSLCImage(int itkNotUsed(argc), char * argv[])
 {
   const char* inputFilename = argv[1];
 

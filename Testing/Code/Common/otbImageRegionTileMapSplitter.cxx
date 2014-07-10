@@ -18,7 +18,7 @@
 #include "otbImageRegionTileMapSplitter.h"
 #include <fstream>
 
-int otbImageRegionTileMapSplitter(int argc, char * argv[])
+int otbImageRegionTileMapSplitter(int itkNotUsed(argc), char * argv[])
 {
 
   const int Dimension = 2;

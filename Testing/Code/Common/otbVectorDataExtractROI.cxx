@@ -22,7 +22,7 @@
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-int otbVectorDataExtractROI(int argc, char * argv[])
+int otbVectorDataExtractROI(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];

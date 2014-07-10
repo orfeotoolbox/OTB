@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
 
-int otbImageFileReaderRADComplexDouble(int argc, char* argv[])
+int otbImageFileReaderRADComplexDouble(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

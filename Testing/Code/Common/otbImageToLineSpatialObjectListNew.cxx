@@ -24,7 +24,7 @@
 #include "otbImage.h"
 #include "otbImageToLineSpatialObjectListFilter.h"
 
-int otbImageToLineSpatialObjectListNew(int argc, char* argv[])
+int otbImageToLineSpatialObjectListNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;

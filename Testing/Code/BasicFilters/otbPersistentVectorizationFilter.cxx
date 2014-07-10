@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include <fstream>
 
-int otbPersistentVectorizationFilter(int argc, char * argv[])
+int otbPersistentVectorizationFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname  = argv[1];
   const char * outfname = argv[2];

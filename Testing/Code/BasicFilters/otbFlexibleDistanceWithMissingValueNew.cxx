@@ -23,7 +23,7 @@
 #include "itkVariableLengthVector.h"
 #include "otbFlexibleDistanceWithMissingValue.h"
 
-int otbFlexibleDistanceWithMissingValueNew(int argc, char * argv[])
+int otbFlexibleDistanceWithMissingValueNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef itk::VariableLengthVector<double>                             VectorType;

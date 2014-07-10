@@ -20,7 +20,7 @@
 #include "otbVectorDataSource.h"
 #include "otbVectorData.h"
 
-int otbVectorDataSourceNew(int argc, char * argv[])
+int otbVectorDataSourceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                     InputPixelType;

@@ -20,7 +20,7 @@
 #include "otbConcatenateVectorImageFilter.h"
 #include "otbVectorImage.h"
 
-int otbConcatenateVectorImageFilterNew(int argc, char * argv[])
+int otbConcatenateVectorImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                                                      PixelType;

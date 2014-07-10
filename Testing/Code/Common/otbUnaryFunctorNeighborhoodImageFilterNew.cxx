@@ -37,7 +37,7 @@ public:
 };
 }
 
-int otbUnaryFunctorNeighborhoodImageFilterNew(int argc, char * argv[])
+int otbUnaryFunctorNeighborhoodImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double InputPixelType;
   const int Dimension = 2;

@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbImageIOFactoryNew(int argc, char* argv[])
+int otbImageIOFactoryNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   otb::ImageIOFactory *lImageIOFactory;
   lImageIOFactory = NULL;

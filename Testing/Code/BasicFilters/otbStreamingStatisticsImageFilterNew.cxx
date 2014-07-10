@@ -20,7 +20,7 @@
 #include "otbStreamingStatisticsImageFilter.h"
 #include "otbImage.h"
 
-int otbStreamingStatisticsImageFilterNew(int argc, char * argv[])
+int otbStreamingStatisticsImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;

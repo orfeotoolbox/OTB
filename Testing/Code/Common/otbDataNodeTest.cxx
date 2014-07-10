@@ -21,7 +21,7 @@
 
 #include "otbDataNode.h"
 
-int otbDataNodeTest(int argc, char * argv[])
+int otbDataNodeTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::DataNode<double, 2>  DataNodeType;
   typedef DataNodeType::PointType   PointType;

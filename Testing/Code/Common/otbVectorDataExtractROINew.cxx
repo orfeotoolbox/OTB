@@ -18,7 +18,7 @@
 #include "otbVectorData.h"
 #include "otbVectorDataExtractROI.h"
 
-int otbVectorDataExtractROINew(int argc, char * argv[])
+int otbVectorDataExtractROINew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataExtractROI<VectorDataType> FilterType;

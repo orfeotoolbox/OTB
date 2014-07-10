@@ -23,7 +23,7 @@
 #include "itksys/SystemTools.hxx"
 #include "otbSystem.h"
 
-int otbSystemTest(int argc, char* argv[])
+int otbSystemTest(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFileName  = argv[1];
   const char *       inputDirName   = argv[2];
@@ -56,7 +56,7 @@ int otbSystemTest(int argc, char* argv[])
 }
 
 
-int otbParseHdfSubsetName(int argc, char* argv [])
+int otbParseHdfSubsetName(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   std::string input("");
   std::string key("");
@@ -74,7 +74,7 @@ int otbParseHdfSubsetName(int argc, char* argv [])
   return EXIT_SUCCESS;
 }
 
-int otbParseHdfFileName(int argc, char* argv [])
+int otbParseHdfFileName(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   std::string id("");
   std::string file("");

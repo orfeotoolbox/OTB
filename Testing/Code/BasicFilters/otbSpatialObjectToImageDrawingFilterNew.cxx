@@ -21,7 +21,7 @@
 #include "itkGroupSpatialObject.h"
 #include "otbImage.h"
 
-int otbSpatialObjectToImageDrawingFilterNew(int argc, char * argv[])
+int otbSpatialObjectToImageDrawingFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                                                        PixelType;

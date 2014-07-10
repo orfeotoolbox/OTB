@@ -299,18 +299,18 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   lr[0] += static_cast<double>(inputSize[0]);
   lr[1] += static_cast<double>(inputSize[1]);
   ll[1] += static_cast<double>(inputSize[1]);
-  
+
   rightImgPtr->TransformContinuousIndexToPhysicalPoint(ul,ulp);
   rightImgPtr->TransformContinuousIndexToPhysicalPoint(ur,urp);
   rightImgPtr->TransformContinuousIndexToPhysicalPoint(ll,llp);
   rightImgPtr->TransformContinuousIndexToPhysicalPoint(lr,lrp);
-  
+
   RSTransform2DType::OutputPointType right_ul, right_ur, right_lr, right_ll;
   right_ul = rightToGroundTransform->TransformPoint(ulp);
   right_ur = rightToGroundTransform->TransformPoint(urp);
   right_ll = rightToGroundTransform->TransformPoint(llp);
   right_lr = rightToGroundTransform->TransformPoint(lrp);
-  
+
   double left_xmin = std::min(std::min(std::min(left_ul[0],left_ur[0]),left_lr[0]),left_ll[0]);
   double left_xmax = std::max(std::max(std::max(left_ul[0],left_ur[0]),left_lr[0]),left_ll[0]);
   double left_ymin = std::min(std::min(std::min(left_ul[1],left_ur[1]),left_lr[1]),left_ll[1]);
@@ -624,7 +624,7 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   typename DisparityMapType::RegionType requestedRegion = horizDisp->GetRequestedRegion();
 
   m_UsedInputSplits = m_InputSplitter->GetNumberOfSplits(requestedRegion, this->GetNumberOfThreads());
-  
+
   m_LeftToGroundTransform = RSTransformType::New();
   m_RightToGroundTransform = RSTransformType::New();
 

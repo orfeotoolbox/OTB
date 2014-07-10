@@ -22,7 +22,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorDataFileReader.h"
 
-int otbVectorDataFileReaderWriter(int argc, char * argv[])
+int otbVectorDataFileReaderWriter(int itkNotUsed(argc), char * argv[])
 {
 
   typedef otb::VectorData<double, 2>                VectorDataType;

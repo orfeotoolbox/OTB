@@ -24,7 +24,7 @@
 
 #include "otbSystem.h"
 
-int otbTestMultiExtractMultiUpdate(int argc, char * argv[])
+int otbTestMultiExtractMultiUpdate(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                                                        InternPixelType;

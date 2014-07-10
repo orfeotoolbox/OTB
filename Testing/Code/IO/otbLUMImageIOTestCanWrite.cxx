@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbLUMImageIOTestCanWrite(int argc, char* argv[])
+int otbLUMImageIOTestCanWrite(int itkNotUsed(argc), char* argv[])
 {
   otb::LUMImageIO::Pointer lLUMImageIO = otb::LUMImageIO::New();
   bool                     lCanRead = lLUMImageIO->CanWriteFile(argv[1]);

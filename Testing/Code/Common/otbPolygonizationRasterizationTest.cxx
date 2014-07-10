@@ -30,7 +30,7 @@
 #include "itkNumericTraits.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
-int otbPolygonizationRasterizationTest(int argc, char* argv[])
+int otbPolygonizationRasterizationTest(int itkNotUsed(argc), char * argv[])
 {
   typedef unsigned int                                          PixelType;
   typedef otb::Image<PixelType, 2>                              ImageType;

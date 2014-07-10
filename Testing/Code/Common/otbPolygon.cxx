@@ -21,7 +21,7 @@
 
 #include "otbPolygon.h"
 
-int otbPolygon(int argc, char * argv[])
+int otbPolygon(int itkNotUsed(argc), char * argv[])
 {
   typedef otb::Polygon<>                   PolygonType;
   typedef PolygonType::ContinuousIndexType ContinuousIndexType;

@@ -215,7 +215,7 @@ BijectionCoherencyFilter<TDisparityImage,TOutputImage>
 template <class TDisparityImage, class TOutputImage>
 void
 BijectionCoherencyFilter<TDisparityImage,TOutputImage>
-::ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId)
+::ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType itkNotUsed(threadId))
 {
   const TDisparityImage * directHmap = this->GetDirectHorizontalDisparityMapInput();
   const TDisparityImage * directVmap = this->GetDirectVerticalDisparityMapInput();

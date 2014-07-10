@@ -18,7 +18,7 @@
 
 #include "otbRemoteSensingRegion.h"
 
-int otbRemoteSensingRegionNew(int argc, char * argv[])
+int otbRemoteSensingRegionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef   double                         Type;

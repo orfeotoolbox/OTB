@@ -248,7 +248,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
   outOrigin[0] = box_xmin + 0.5 * outSpacing[0];
   outOrigin[1] = box_ymax + 0.5 * outSpacing[1];
   outputPtr->SetOrigin(outOrigin);
-  
+
   // Compute output size
   typename TOutputDEMImage::RegionType outRegion;
   outRegion.SetIndex(0, 0);
@@ -536,8 +536,8 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::BeforeThreade
 
 template<class T3DImage, class TMaskImage, class TOutputDEMImage>
 void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::ThreadedGenerateData(
-                                                                                        const RegionType & outputRegionForThread,
-                                                                                        itk::ThreadIdType threadId)
+  const RegionType & itkNotUsed(outputRegionForThread),
+  itk::ThreadIdType threadId)
 {
   TOutputDEMImage * outputPtr = this->GetOutput();
 

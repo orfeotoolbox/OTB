@@ -21,7 +21,7 @@
 #include "otbScalarBufferToImageFileWriter.h"
 
 
-int otbScalarBufferToImageFileWriterTest(int argc, char* argv[])
+int otbScalarBufferToImageFileWriterTest(int itkNotUsed(argc), char* argv[])
 {
        unsigned int nbCh = atoi(argv[1]);
        unsigned int sizeX = atoi(argv[2]);

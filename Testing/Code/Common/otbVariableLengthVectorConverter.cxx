@@ -21,7 +21,7 @@
 
 #include "otbVariableLengthVectorConverter.h"
 
-int otbVariableLengthVectorConverterNew(int argc, char * argv[])
+int otbVariableLengthVectorConverterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef itk::VariableLengthVector<double>                      InputType0;
   typedef std::vector< std::vector< double > >                   InputType1;

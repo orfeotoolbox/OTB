@@ -22,7 +22,7 @@
 
 #include "otbOpticalDefaultImageMetadataInterfaceFactory.h"
 
-int otbOpticalDefaultImageMetadataInterfaceFactoryNew(int argc, char* argv[])
+int otbOpticalDefaultImageMetadataInterfaceFactoryNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::OpticalDefaultImageMetadataInterfaceFactory ObjectType;
 

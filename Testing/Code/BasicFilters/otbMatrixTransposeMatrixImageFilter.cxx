@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingMatrixTransposeMatrixImageFilter.h"
 
-int otbMatrixTransposeMatrixImageFilter(int argc, char * argv[])
+int otbMatrixTransposeMatrixImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname1 = argv[1];
   const char * infname2 = argv[2];

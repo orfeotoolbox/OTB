@@ -24,7 +24,7 @@
 #include "itkDataObject.h"
 #include "otbDataNode.h"
 
-int otbVectorDataFileReader(int argc, char * argv[])
+int otbVectorDataFileReader(int itkNotUsed(argc), char * argv[])
 {
   typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;

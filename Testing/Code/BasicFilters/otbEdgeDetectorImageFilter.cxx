@@ -21,7 +21,7 @@
 #include "otbImageFileWriter.h"
 #include "itkSobelEdgeDetectionImageFilter.h"
 
-int otbEdgeDetectorImageFilter(int argc, char* argv[])
+int otbEdgeDetectorImageFilter(int itkNotUsed(argc), char* argv[])
 {
   typedef double                          PixelType;
   typedef otb::Image<PixelType, 2>        ImageType;

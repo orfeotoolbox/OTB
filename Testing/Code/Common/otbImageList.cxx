@@ -22,7 +22,7 @@
 #include "otbImageList.h"
 #include "otbImage.h"
 
-int otbImageList(int argc, char * argv[])
+int otbImageList(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename = argv[1];
   const char *       outputFilename = argv[2];

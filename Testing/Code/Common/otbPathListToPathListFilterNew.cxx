@@ -21,7 +21,7 @@
 #include "otbPathListToPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbPathListToPathListFilterNew(int argc, char * argv[])
+int otbPathListToPathListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension>  PathType;

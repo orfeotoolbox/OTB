@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbSpatialObjectToImageDrawingFilter(int argc, char * argv[])
+int otbSpatialObjectToImageDrawingFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       outputFilename = argv[1];
   const double       radiusx = atof(argv[2]);

@@ -19,7 +19,7 @@
 #include "otbImage.h"
 #include "otbBinaryImageMinimalBoundingRegionCalculator.h"
 
-int otbBinaryImageMinimalBoundingRegionCalculatorNew(int argc, char* argv[])
+int otbBinaryImageMinimalBoundingRegionCalculatorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
 

@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include "otbMath.h"
 
-int otbInverseLogPolarTransform(int argc, char* argv[])
+int otbInverseLogPolarTransform(int itkNotUsed(argc), char* argv[])
 {
   double       radialStep = atof(argv[1]);
   double       angularStep = atof(argv[2]);

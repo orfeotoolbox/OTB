@@ -18,7 +18,7 @@
 #include "otbInverseLogPolarTransform.h"
 #include <cstdlib>
 
-int otbInverseLogPolarTransformNew(int argc, char* argv[])
+int otbInverseLogPolarTransformNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double                                       PrecisionType;
   typedef otb::InverseLogPolarTransform<PrecisionType> InverseLogPolarTransformType;

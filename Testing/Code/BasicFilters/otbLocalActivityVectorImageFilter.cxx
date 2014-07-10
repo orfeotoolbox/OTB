@@ -26,7 +26,7 @@
 
 #include "otbLocalActivityVectorImageFilter.h"
 
-int otbLocalActivityVectorImageFilterNewTest ( int argc, char* argv[] )
+int otbLocalActivityVectorImageFilterNewTest ( int itkNotUsed(argc), char** itkNotUsed(argv) )
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -106,4 +106,3 @@ int otbLocalActivityVectorImageFilterTest ( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-

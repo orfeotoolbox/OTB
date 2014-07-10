@@ -26,7 +26,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
-int otbImageTest(int argc, char* argv[])
+int otbImageTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

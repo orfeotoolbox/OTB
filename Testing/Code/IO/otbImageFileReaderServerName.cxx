@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbTileMapImageIO.h"
 
-int otbImageFileReaderServerName(int argc, char* argv[])
+int otbImageFileReaderServerName(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];

@@ -21,7 +21,7 @@
 #include "itkHistogram.h"
 #include "otbHistogramStatisticsFunction.h"
 
-int otbHistogramStatisticsFunction(int argc, char* argv[])
+int otbHistogramStatisticsFunction(int itkNotUsed(argc), char * argv[])
 {
   unsigned int NbOfBins((unsigned int) ::atoi(argv[1]));
 

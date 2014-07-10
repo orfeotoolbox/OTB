@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "itkTranslationTransform.h"
 
-int otbStreamingResampleImageFilter(int argc, char * argv[])
+int otbStreamingResampleImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char* inputFilename = argv[1];
   const char* outputFilename = argv[2];

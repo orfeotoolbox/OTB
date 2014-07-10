@@ -22,7 +22,7 @@
 #include <fstream>
 #include <cstdlib>
 
-int otbLogPolarTransform(int argc, char* argv[])
+int otbLogPolarTransform(int itkNotUsed(argc), char* argv[])
 {
   double       radialStep = atof(argv[1]);
   double       angularStep = atof(argv[2]);

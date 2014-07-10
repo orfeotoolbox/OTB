@@ -21,7 +21,7 @@
 #include "otbLineSpatialObjectList.h"
 #include <list>
 
-int otbLineSpatialObjectList(int argc, char * argv[])
+int otbLineSpatialObjectList(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::LineSpatialObjectList                         LineSpatialObjectListType;
   typedef LineSpatialObjectListType::LineType                LineSpatialObjecType;

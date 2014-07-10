@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageKeywordlist.h"
 
-int otbImportGeoInformationImageFilterWithKeywordList(int argc, char * argv[])
+int otbImportGeoInformationImageFilterWithKeywordList(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outputAsciiFilenameOtbImage = argv[2];

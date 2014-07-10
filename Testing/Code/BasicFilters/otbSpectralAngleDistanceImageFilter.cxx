@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
 
-int otbSpectralAngleDistanceImageFilter(int argc, char * argv[])
+int otbSpectralAngleDistanceImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                                                                 PixelType;

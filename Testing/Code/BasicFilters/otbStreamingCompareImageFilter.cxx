@@ -24,7 +24,7 @@
 #include <fstream>
 #include "otbStreamingTraits.h"
 
-int otbStreamingCompareImageFilterNew(int argc, char * argv[])
+int otbStreamingCompareImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;
@@ -40,7 +40,7 @@ int otbStreamingCompareImageFilterNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbStreamingCompareImageFilter(int argc, char * argv[])
+int otbStreamingCompareImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];

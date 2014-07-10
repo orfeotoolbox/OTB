@@ -21,7 +21,7 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
 
-int otbVectorDataFileWriter(int argc, char * argv[])
+int otbVectorDataFileWriter(int itkNotUsed(argc), char * argv[])
 {
 
   typedef otb::VectorData<double, 2>                VectorDataType;

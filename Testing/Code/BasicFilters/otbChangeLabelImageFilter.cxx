@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 
-int otbChangeLabelImageFilter(int argc, char * argv[])
+int otbChangeLabelImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int ImageDimension = 2;
   const char *       inputFilename(argv[1]);

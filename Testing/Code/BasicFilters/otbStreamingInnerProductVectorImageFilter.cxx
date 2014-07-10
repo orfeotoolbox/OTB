@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include <fstream>
 
-int otbStreamingInnerProductVectorImageFilter(int argc, char* argv[])
+int otbStreamingInnerProductVectorImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFileName = argv[1];
   const char * outfname = argv[2];

@@ -21,7 +21,7 @@
 
 #include "otbMapProjectionAdapter.h"
 
-int otbMapProjectionAdapterTest(int argc, char* argv[])
+int otbMapProjectionAdapterTest(int itkNotUsed(argc), char* argv[])
 {
   const char *  outFileName = argv[1];
   std::ofstream file;

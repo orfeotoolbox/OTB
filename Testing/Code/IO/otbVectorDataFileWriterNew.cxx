@@ -19,7 +19,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorData.h"
 
-int otbVectorDataFileWriterNew(int argc, char * argv[])
+int otbVectorDataFileWriterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::VectorData<double, 2>                VectorDataType;
   typedef VectorDataType::DataNodeType              DataNodeType;

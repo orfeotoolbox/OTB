@@ -28,7 +28,7 @@
 #include "otbImage.h"
 #include "otbVectorDataToMapFilter.h"
 
-int otbVectorDataToMapFilterNoFonts(int argc, char * argv[])
+int otbVectorDataToMapFilterNoFonts(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   if (argc < 3)

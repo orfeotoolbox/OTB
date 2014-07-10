@@ -26,7 +26,7 @@
 
 #include "otbLocalActivityVectorImageFilter.h"
 
-int otbNAPCAImageFilterNewTest ( int argc, char* argv[] )
+int otbNAPCAImageFilterNewTest ( int itkNotUsed(argc), char** itkNotUsed(argv) )
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -148,8 +148,3 @@ int otbNAPCAImageFilterTest ( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
-
-
-

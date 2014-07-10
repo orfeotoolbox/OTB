@@ -20,7 +20,7 @@
 
 #include "otbExtractROI.h"
 
-int otbExtractROINew(int argc, char * argv[])
+int otbExtractROINew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef std::complex<float>  InputPixelType;
   typedef std::complex<double> OutputPixelType;

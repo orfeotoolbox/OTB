@@ -561,7 +561,7 @@ std::vector<typename ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>:
 ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
 ::ComputeKeyPointOrientations(const NeighborhoodIteratorType& currentScale,
                               const unsigned int scale,
-                              const PixelType translation)
+                              const PixelType itkNotUsed(translation))
 {
   // radius of the neighborhood
   unsigned int radius = 4;

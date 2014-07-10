@@ -26,7 +26,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
-int otbParserConditionDataNodeFeatureFunctionNew(int argc, char* argv[])
+int otbParserConditionDataNodeFeatureFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double CoordRepType;
   typedef double PrecisionType;
@@ -42,7 +42,7 @@ int otbParserConditionDataNodeFeatureFunctionNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbParserConditionDataNodeFeatureFunction(int argc, char* argv[])
+int otbParserConditionDataNodeFeatureFunction(int itkNotUsed(argc), char* argv[])
 {
   const char * inputVD = argv[1];
   const char * inputImg = argv[2];
@@ -131,4 +131,3 @@ int otbParserConditionDataNodeFeatureFunction(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

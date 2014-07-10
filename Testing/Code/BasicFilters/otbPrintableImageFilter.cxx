@@ -25,7 +25,7 @@
 
 #include "otbPrintableImageFilter.h"
 
-int otbPrintableImageFilter(int argc, char * argv[])
+int otbPrintableImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

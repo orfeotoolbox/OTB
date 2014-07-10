@@ -26,7 +26,7 @@
 #include "itkComplexToImaginaryImageFilter.h"
 #include "otbStreamingCompareImageFilter.h"
 
-int otbRealAndImaginaryImageToComplexImageFilterTest(int argc, char * argv[])
+int otbRealAndImaginaryImageToComplexImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilenameRealPart  = argv[1];
   const char * inputFilenameImagPart = argv[2];

@@ -20,7 +20,7 @@
 
 #include "otbPolyLineParametricPathWithValue.h"
 
-int otbPolyLineParametricPathWithValueNew(int argc, char * argv[])
+int otbPolyLineParametricPathWithValueNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                                     ValueType;

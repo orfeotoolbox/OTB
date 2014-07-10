@@ -22,7 +22,7 @@
 #include "itkChangeLabelImageFilter.h"
 #include "otbImage.h"
 
-int otbChangeLabelImageFilterNew(int argc, char * argv[])
+int otbChangeLabelImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int ImageDimension = 2;
 

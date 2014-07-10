@@ -27,7 +27,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
-int otbSpectralAngleDataNodeFeatureFunctionNew(int argc, char* argv[])
+int otbSpectralAngleDataNodeFeatureFunctionNew(int itkNotUsed(argc), char* argv[])
 {
   typedef double CoordRepType;
   typedef double PrecisionType;
@@ -42,7 +42,7 @@ int otbSpectralAngleDataNodeFeatureFunctionNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbSpectralAngleDataNodeFeatureFunction(int argc, char* argv[])
+int otbSpectralAngleDataNodeFeatureFunction(int itkNotUsed(argc), char* argv[])
 {
   const char * inputVD  = argv[1];
   const char * inputImg = argv[2];

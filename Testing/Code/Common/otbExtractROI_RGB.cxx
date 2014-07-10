@@ -23,7 +23,7 @@
 #include "otbExtractROI.h"
 #include "itkRGBPixel.h"
 
-int otbExtractROI_RGB(int argc, char * argv[])
+int otbExtractROI_RGB(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

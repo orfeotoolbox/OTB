@@ -23,7 +23,7 @@
 
 #include "otbExtractROI.h"
 
-int otbExtractROI2(int argc, char * argv[])
+int otbExtractROI2(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

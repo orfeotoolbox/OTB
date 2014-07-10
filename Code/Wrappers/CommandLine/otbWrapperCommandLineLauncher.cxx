@@ -612,7 +612,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
   return OKPARAM;
 }
 
-void CommandLineLauncher::LinkWatchers(itk::Object * caller, const itk::EventObject & event)
+void CommandLineLauncher::LinkWatchers(itk::Object * itkNotUsed(caller), const itk::EventObject & event)
 {
   // Report the progress only if asked
   if (m_ReportProgress)

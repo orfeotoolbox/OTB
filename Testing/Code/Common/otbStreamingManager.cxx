@@ -50,7 +50,7 @@ ImageType::Pointer makeImage(ImageType::RegionType region)
   return image;
 }
 
-int otbStreamingManagerNew(int argc, char * argv[])
+int otbStreamingManagerNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   NbLinesStrippedStreamingManagerType::Pointer streamingManager1 = NbLinesStrippedStreamingManagerType::New();
   std::cout << streamingManager1 << std::endl;
@@ -71,7 +71,7 @@ int otbStreamingManagerNew(int argc, char * argv[])
 }
 
 
-int otbNumberOfLinesStrippedStreamingManager(int argc, char * argv[])
+int otbNumberOfLinesStrippedStreamingManager(int itkNotUsed(argc), char * argv[])
 {
   std::ofstream outfile(argv[1]);
 
@@ -103,7 +103,7 @@ int otbNumberOfLinesStrippedStreamingManager(int argc, char * argv[])
 }
 
 
-int otbRAMDrivenStrippedStreamingManager(int argc, char * argv[])
+int otbRAMDrivenStrippedStreamingManager(int itkNotUsed(argc), char * argv[])
 {
   std::ofstream outfile(argv[1]);
 
@@ -135,7 +135,7 @@ int otbRAMDrivenStrippedStreamingManager(int argc, char * argv[])
 
 }
 
-int otbTileDimensionTiledStreamingManager(int argc, char * argv[])
+int otbTileDimensionTiledStreamingManager(int itkNotUsed(argc), char * argv[])
 {
   std::ofstream outfile(argv[1]);
 
@@ -166,7 +166,7 @@ int otbTileDimensionTiledStreamingManager(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbRAMDrivenTiledStreamingManager(int argc, char * argv[])
+int otbRAMDrivenTiledStreamingManager(int itkNotUsed(argc), char * argv[])
 {
   std::ofstream outfile(argv[1]);
 
@@ -198,7 +198,7 @@ int otbRAMDrivenTiledStreamingManager(int argc, char * argv[])
 }
 
 
-int otbRAMDrivenAdaptativeStreamingManager(int argc, char * argv[])
+int otbRAMDrivenAdaptativeStreamingManager(int itkNotUsed(argc), char * argv[])
 {
   std::ofstream outfile(argv[1]);
 

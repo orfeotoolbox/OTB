@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbStreamingShrinkImageFilter.h"
 
-int otbStreamingShrinkImageFilter(int argc, char * argv[])
+int otbStreamingShrinkImageFilter(int itkNotUsed(argc), char * argv[])
 {
   char *             inputFilename = argv[1];
   char *             outputFilename = argv[2];

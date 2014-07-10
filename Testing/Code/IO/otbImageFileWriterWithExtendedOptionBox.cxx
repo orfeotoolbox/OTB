@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbImageFileWriterWithExtendedOptionBox(int argc, char* argv[])
+int otbImageFileWriterWithExtendedOptionBox(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const std::string inputFilename = argv[1];

@@ -23,7 +23,7 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbScalarToRainbowRGBPixelFunctor.h"
 
-int otbScalarToRainbowRGBPixelFunctorNew(int argc, char * argv[])
+int otbScalarToRainbowRGBPixelFunctorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef unsigned char               PixelType;

@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbVectorImageFileReaderWriterTest(int argc, char* argv[])
+int otbVectorImageFileReaderWriterTest(int itkNotUsed(argc), char* argv[])
 {
 
   // Verify the number of parameters in the command line

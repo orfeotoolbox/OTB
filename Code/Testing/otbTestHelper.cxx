@@ -1550,7 +1550,7 @@ void TestHelper::AddWhiteSpace(const std::string& strIn, std::string &strOut) co
   keysOut.push_back(" , ");
   keysOut.push_back(" </");
   keysOut.push_back("> ");
-  
+
 
   for (unsigned int it = 0; it < keys.size(); ++it)
     {
@@ -1727,7 +1727,7 @@ bool TestHelper::CompareLines(const std::string& strfileref,
           etatPrec = etatCour;
           ++i;
           }
-        
+
         // test last part
         if (etatCour == ETAT_CHAR)
           {

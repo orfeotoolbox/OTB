@@ -20,7 +20,7 @@
 #include "otbDEMToImageGenerator.h"
 #include "otbImage.h"
 
-int otbDEMToImageGeneratorNew(int argc, char * argv[])
+int otbDEMToImageGeneratorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef otb::Image<unsigned char, Dimension> ImageType;

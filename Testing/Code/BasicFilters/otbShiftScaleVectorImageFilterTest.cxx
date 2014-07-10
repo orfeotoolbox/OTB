@@ -26,7 +26,7 @@
 #include "otbVectorImageToImageListFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
 
-int otbShiftScaleVectorImageFilterTest(int argc, char * argv[])
+int otbShiftScaleVectorImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char *        infname = argv[1];
   const char *        outfname = argv[2];

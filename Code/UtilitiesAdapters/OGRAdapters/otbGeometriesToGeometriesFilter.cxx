@@ -215,7 +215,7 @@ void otb::GeometriesToGeometriesFilter::GenerateData(void )
 
 /*virtual*/
 OGRSpatialReference* otb::GeometriesToGeometriesFilter::DoDefineNewLayerSpatialReference(
-  ogr::Layer const& source) const
+  ogr::Layer const& itkNotUsed(source)) const
 {
   return 0;
 }
@@ -229,7 +229,7 @@ OGRwkbGeometryType otb::GeometriesToGeometriesFilter::DoDefineNewLayerGeometryTy
 
 /*virtual*/
 std::vector<std::string> otb::GeometriesToGeometriesFilter::DoDefineNewLayerOptions(
-  ogr::Layer const& source) const
+  ogr::Layer const& itkNotUsed(source)) const
 {
   return std::vector<std::string>();
 }

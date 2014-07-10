@@ -26,7 +26,7 @@
 #include "otbStreamingResampleImageFilter.h"
 
 
-int otbBCOInterpolateImageFunctionNew(int argc, char * argv[])
+int otbBCOInterpolateImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::Image<double, 2>                                           ImageType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
@@ -99,7 +99,7 @@ int otbBCOInterpolateImageFunction(int argc, char * argv[])
 }
 
 
-int otbBCOInterpolateImageFunctionOverVectorImageNew(int argc, char * argv[])
+int otbBCOInterpolateImageFunctionOverVectorImageNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::VectorImage<double, 2>                                     ImageType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
@@ -171,7 +171,7 @@ int otbBCOInterpolateImageFunctionOverVectorImage(int argc, char * argv[])
 }
 
 
-int otbBCOInterpolateImageFunctionTest(int argc, char * argv[])
+int otbBCOInterpolateImageFunctionTest(int itkNotUsed(argc), char * argv[])
 {
 
   const char * infname      = argv[1];
@@ -214,7 +214,7 @@ int otbBCOInterpolateImageFunctionTest(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbBCOInterpolateImageFunctionVectorImageTest(int argc, char * argv[])
+int otbBCOInterpolateImageFunctionVectorImageTest(int itkNotUsed(argc), char * argv[])
 {
 
   const char * infname      = argv[1];

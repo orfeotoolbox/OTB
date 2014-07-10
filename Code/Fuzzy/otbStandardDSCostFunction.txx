@@ -148,7 +148,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
 template <class TDSValidationFilter>
 void
 StandardDSCostFunction<TDSValidationFilter>
-::GetDerivative(const ParametersType & parameters, DerivativeType & derivative) const
+::GetDerivative(const ParametersType & itkNotUsed(parameters), DerivativeType & itkNotUsed(derivative)) const
  {
   //Not necessary for Amoeba Optimizer
   itkExceptionMacro(<< "Not Supposed to be used when using Amoeba Optimizer!")

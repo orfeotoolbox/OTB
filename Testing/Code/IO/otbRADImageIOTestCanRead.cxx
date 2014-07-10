@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbRADImageIOTestCanRead(int argc, char* argv[])
+int otbRADImageIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   otb::RADImageIO::Pointer lRADImageIO = otb::RADImageIO::New();
   bool                     lCanRead = lRADImageIO->CanReadFile(argv[1]);

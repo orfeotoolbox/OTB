@@ -20,7 +20,7 @@
 
 #include "otbVectorData.h"
 
-int otbVectorDataNew(int argc, char * argv[])
+int otbVectorDataNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef otb::VectorData<double, 2> VectorDataType;

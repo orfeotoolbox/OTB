@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "itkCastImageFilter.h"
 
-int otbUnaryImageFunctorWithVectorImageFilter(int argc, char * argv[])
+int otbUnaryImageFunctorWithVectorImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

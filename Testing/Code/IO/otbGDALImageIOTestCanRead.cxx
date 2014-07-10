@@ -22,7 +22,7 @@
 #include "itkMacro.h"
 #include <iostream>
 
-int otbGDALImageIOTestCanRead(int argc, char* argv[])
+int otbGDALImageIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   otb::GDALImageIO::Pointer lGDALImageIO = otb::GDALImageIO::New();
   bool                      lCanRead = lGDALImageIO->CanReadFile(argv[1]);

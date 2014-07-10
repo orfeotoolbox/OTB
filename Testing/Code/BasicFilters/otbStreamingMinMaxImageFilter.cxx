@@ -24,7 +24,7 @@
 #include "otbStreamingTraits.h"
 #include "otbStandardFilterWatcher.h"
 
-int otbStreamingMinMaxImageFilter(int argc, char * argv[])
+int otbStreamingMinMaxImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];

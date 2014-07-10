@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbStreamingResampleImageFilter.h"
 
-int otbProlateValidationTest(int argc, char * argv[])
+int otbProlateValidationTest(int itkNotUsed(argc), char * argv[])
 {
   const char *       infname = argv[1];
   const char *       outfname = argv[2];

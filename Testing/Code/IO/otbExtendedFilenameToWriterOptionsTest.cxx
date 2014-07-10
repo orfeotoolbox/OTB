@@ -21,7 +21,7 @@
 
 typedef otb::ExtendedFilenameToWriterOptions FilenameHelperType;
 
-int otbExtendedFilenameToWriterOptions(int argc, char* argv[])
+int otbExtendedFilenameToWriterOptions(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputExtendedFilename  = argv[1];

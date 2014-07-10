@@ -23,7 +23,7 @@
 
 #include "otbPrintableImageFilter.h"
 
-int otbPrintableImageFilterWithMask(int argc, char * argv[])
+int otbPrintableImageFilterWithMask(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * masktFilename  = argv[2];

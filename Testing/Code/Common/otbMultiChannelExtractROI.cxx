@@ -28,7 +28,7 @@
 
 
 template <typename  InputPixelType /*= unsigned char */, typename OutputPixelType /*= unsigned char*/>
-int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inputFilename, const char * outputFilename)
+int generic_otbMultiChannelExtractROI(int itkNotUsed(argc), char * argv[], const char * inputFilename, const char * outputFilename)
 {
   typedef otb::MultiChannelExtractROI<InputPixelType,
       OutputPixelType>  ExtractROIFilterType;

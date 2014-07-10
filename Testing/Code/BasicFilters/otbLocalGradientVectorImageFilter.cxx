@@ -26,7 +26,7 @@
 
 #include "otbLocalGradientVectorImageFilter.h"
 
-int otbLocalGradientVectorImageFilterNewTest ( int argc, char * argv[] )
+int otbLocalGradientVectorImageFilterNewTest ( int itkNotUsed(argc), char ** itkNotUsed(argv) )
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -97,4 +97,3 @@ int otbLocalGradientVectorImageFilterTest ( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-

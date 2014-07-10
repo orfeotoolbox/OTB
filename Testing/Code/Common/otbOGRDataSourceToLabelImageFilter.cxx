@@ -32,13 +32,13 @@ typedef otb::ImageFileReader<ImageType>                       ReaderType;
 typedef otb::ImageFileWriter<ImageType>              WriterType;
 typedef otb::OGRDataSourceToLabelImageFilter<ImageType>       RasterizationFilterType;
 
-int otbOGRDataSourceToLabelImageFilterNew(int argc, char* argv[])
+int otbOGRDataSourceToLabelImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
   return EXIT_SUCCESS;
 }
 
-int otbOGRDataSourceToLabelImageFilter(int argc, char* argv[])
+int otbOGRDataSourceToLabelImageFilter(int itkNotUsed(argc), char * argv[])
 {
 
   ReaderType::Pointer reader = ReaderType::New();
