@@ -22,8 +22,6 @@
 
 int otbExtractROINew(int argc, char * argv[])
 {
-  otbUnusedMacro(argc);
-  otbUnusedMacro(argv);
   typedef std::complex<float>  InputPixelType;
   typedef std::complex<double> OutputPixelType;
 
