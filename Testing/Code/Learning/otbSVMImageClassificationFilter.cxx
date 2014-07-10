@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbSVMImageClassificationFilter(int argc, char * argv[])
+int otbSVMImageClassificationFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * modelfname = argv[2];

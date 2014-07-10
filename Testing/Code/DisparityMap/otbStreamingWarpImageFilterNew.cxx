@@ -19,7 +19,7 @@
 #include "itkVector.h"
 #include "otbStreamingWarpImageFilter.h"
 
-int otbStreamingWarpImageFilterNew(int argc, char* argv[])
+int otbStreamingWarpImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   // Images definition
   const unsigned int Dimension = 2;

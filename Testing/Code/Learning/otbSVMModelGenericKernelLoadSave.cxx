@@ -63,7 +63,7 @@ protected:
 
 }
 
-int otbSVMModelGenericKernelLoadSave(int argc, char* argv[])
+int otbSVMModelGenericKernelLoadSave(int itkNotUsed(argc), char* argv[])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char LabelPixelType;

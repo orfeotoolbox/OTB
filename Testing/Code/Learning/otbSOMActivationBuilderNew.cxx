@@ -25,7 +25,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-int otbSOMActivationBuilderNew(int argc, char* argv[])
+int otbSOMActivationBuilderNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef float                                         ComponentType;

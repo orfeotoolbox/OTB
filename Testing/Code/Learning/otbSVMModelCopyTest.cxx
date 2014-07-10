@@ -16,15 +16,13 @@
 
 =========================================================================*/
 
-
-
 #include "itkMacro.h"
 #include "otbImage.h"
 #include <iostream>
 
 #include "otbSVMModel.h"
 
-int otbSVMModelCopyTest(int argc, char* argv[])
+int otbSVMModelCopyTest(int itkNotUsed(argc), char* argv[])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char LabelPixelType;

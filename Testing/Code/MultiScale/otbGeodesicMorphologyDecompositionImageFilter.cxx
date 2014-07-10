@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "itkBinaryBallStructuringElement.h"
 
-int otbGeodesicMorphologyDecompositionImageFilter(int argc, char * argv[])
+int otbGeodesicMorphologyDecompositionImageFilter(int itkNotUsed(argc), char * argv[])
 {
 
   const char *       infname = argv[1];

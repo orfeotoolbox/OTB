@@ -27,7 +27,7 @@
 
 #include "itkMacro.h"
 
-int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
+int otbMultiScaleConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename = argv[1];
   const char *       outputFilename = argv[2];

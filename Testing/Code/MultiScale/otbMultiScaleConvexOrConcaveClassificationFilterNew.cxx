@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "itkMacro.h"
 
-int otbMultiScaleConvexOrConcaveClassificationFilterNew(int argc, char * argv[])
+int otbMultiScaleConvexOrConcaveClassificationFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double         InputPixelType;

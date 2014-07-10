@@ -142,7 +142,7 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &m
 
 
 
-int otbConfusionMatrixMeasurementsNew(int argc, char* argv[])
+int otbConfusionMatrixMeasurementsNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   /*typedef unsigned long                                   ConfusionMatrixEltType;
   typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
@@ -172,7 +172,7 @@ int otbConfusionMatrixMeasurementsNew(int argc, char* argv[])
 }
 
 
-int otbConfusionMatrixMeasurementsTest(int argc, char* argv[])
+int otbConfusionMatrixMeasurementsTest(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
   /*typedef unsigned long                                   ConfusionMatrixEltType;
   typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;

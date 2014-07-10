@@ -114,7 +114,7 @@ int otbImageScalarStreamingFileWriterTestWithoutInputDouble(int argc, char * arg
  * Write Image<scalar> with an ImageFileWriter<scalar>
  ***********/
 template<class InternalType>
-int otbImageComplexStreamingFileWriterTestWithoutInputGeneric(int argc, char* argv[])
+int otbImageComplexStreamingFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * outputFilename = argv[1];

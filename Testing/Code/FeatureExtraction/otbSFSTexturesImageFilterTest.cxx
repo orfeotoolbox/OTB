@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbSFSTexturesImageFilterTest(int argc, char * argv[])
+int otbSFSTexturesImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;

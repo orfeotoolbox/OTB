@@ -23,7 +23,7 @@
 #include "itkSubsample.h"
 #include "otbSVMClassifier.h"
 
-int otbSVMClassifierNew(int argc, char* argv[])
+int otbSVMClassifierNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double                           InputPixelType;
   typedef int                              LabelPixelType;

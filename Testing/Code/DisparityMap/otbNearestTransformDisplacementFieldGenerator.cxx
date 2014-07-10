@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "itkEuler2DTransform.h"
 
-int otbNearestTransformDisplacementFieldGenerator(int argc, char * argv[])
+int otbNearestTransformDisplacementFieldGenerator(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   const char *       outfname = argv[1];

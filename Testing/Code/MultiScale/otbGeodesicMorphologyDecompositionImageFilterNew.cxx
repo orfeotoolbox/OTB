@@ -19,7 +19,7 @@
 #include "otbImage.h"
 #include "itkBinaryBallStructuringElement.h"
 
-int otbGeodesicMorphologyDecompositionImageFilterNew(int argc, char * argv[])
+int otbGeodesicMorphologyDecompositionImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::Image<double, 2> ImageType;
   typedef itk::BinaryBallStructuringElement<double,

@@ -31,7 +31,7 @@ typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter
 <FloatSampleListType, DoubleSampleListType> GaussianFilterType;
 
 
-int otbGaussianAdditiveNoiseSampleListFilterNew(int argc, char * argv[])
+int otbGaussianAdditiveNoiseSampleListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   GaussianFilterType::Pointer filter = GaussianFilterType::New();
   return EXIT_SUCCESS;
@@ -88,5 +88,3 @@ int otbGaussianAdditiveNoiseSampleListFilter(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-
-

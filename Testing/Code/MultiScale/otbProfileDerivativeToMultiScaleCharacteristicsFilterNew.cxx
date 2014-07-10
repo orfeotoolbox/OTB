@@ -19,7 +19,7 @@
 #include "otbImage.h"
 #include "itkMacro.h"
 
-int otbProfileDerivativeToMultiScaleCharacteristicsFilterNew(int argc, char * argv[])
+int otbProfileDerivativeToMultiScaleCharacteristicsFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double         InputPixelType;

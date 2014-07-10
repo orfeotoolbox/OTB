@@ -27,7 +27,7 @@
 
 #include "otbImageFileReader.h"
 
-int otbSVMImageModelEstimatorTrain(int argc, char* argv[])
+int otbSVMImageModelEstimatorTrain(int itkNotUsed(argc), char* argv[])
 {
   // Force the pseudo-random number generator to always output
   // the same sequence of random numbers

@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbGeodesicMorphologyLevelingFilter(int argc, char * argv[])
+int otbGeodesicMorphologyLevelingFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname     = argv[1];
   const char * inconvfname = argv[2];

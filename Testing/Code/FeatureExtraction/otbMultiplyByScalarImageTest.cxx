@@ -23,7 +23,7 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbMultiplyByScalarImageFilter.h"
 
-int otbMultiplyByScalarImageFilterTest(int itkNotUsed(argc), char * argv[])
+int otbMultiplyByScalarImageFilterTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   // Define the dimension of the images
   const unsigned int ImageDimension = 2;

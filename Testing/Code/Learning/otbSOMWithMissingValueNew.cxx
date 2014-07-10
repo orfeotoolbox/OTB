@@ -29,7 +29,7 @@
 
 #include "otbFlexibleDistanceWithMissingValue.h"
 
-int otbSOMWithMissingValueNew(int argc, char * argv[])
+int otbSOMWithMissingValueNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                 PixelType;

@@ -21,7 +21,7 @@
 #include "otbBSplinesInterpolateDisplacementFieldGenerator.h"
 #include "otbImageFileWriter.h"
 
-int otbBSplinesInterpolateDisplacementFieldGenerator(int argc, char * argv[])
+int otbBSplinesInterpolateDisplacementFieldGenerator(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   const char *       outfname = argv[1];

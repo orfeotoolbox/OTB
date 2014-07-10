@@ -26,7 +26,7 @@
 #include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
 
-int otbWaveletFilterBank(int argc, char * argv[])
+int otbWaveletFilterBank(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFileName = argv[1];
   const unsigned int decimFactor = atoi(argv[2]); // 1 for multiscale, 2 for multiresolution

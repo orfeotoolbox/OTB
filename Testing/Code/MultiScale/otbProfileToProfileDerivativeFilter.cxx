@@ -24,7 +24,7 @@
 
 #include "itkMacro.h"
 
-int otbProfileToProfileDerivativeFilter(int argc, char * argv[])
+int otbProfileToProfileDerivativeFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename = argv[1];
   const char *       outputFilenamePrefix = argv[2];

@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
+int otbMorphologicalPyramidMRToMSConverter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename = argv[1];
   const char *       outputFilename1 = argv[2];

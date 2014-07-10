@@ -24,7 +24,7 @@
 
 #include "otbListSampleGenerator.h"
 
-int otbListSampleGeneratorNew(int argc, char* argv[])
+int otbListSampleGeneratorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::VectorImage<float, 2>                          ImageType;
   typedef otb::VectorData<double, 2>                          VectorDataType;

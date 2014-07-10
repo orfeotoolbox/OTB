@@ -21,7 +21,7 @@
 #include "otbNNearestPointsLinearInterpolateDisplacementFieldGenerator.h"
 #include "otbImageFileWriter.h"
 
-int otbNNearestPointsLinearInterpolateDisplacementFieldGenerator(int argc, char * argv[])
+int otbNNearestPointsLinearInterpolateDisplacementFieldGenerator(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   const char *       outfname = argv[1];

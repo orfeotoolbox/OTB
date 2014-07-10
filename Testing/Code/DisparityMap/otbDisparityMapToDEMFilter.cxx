@@ -46,7 +46,7 @@
 
   typedef otb::DisparityMapToDEMFilter <FloatImageType, FloatVectorImageType>      DisparityToElevationFilterType;
 
-int otbDisparityMapToDEMFilterNew(int argc, char* argv[])
+int otbDisparityMapToDEMFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   // Instantiation
@@ -115,5 +115,3 @@ int otbDisparityMapToDEMFilter(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-
-

@@ -29,7 +29,7 @@ typedef otb::StereorectificationDisplacementFieldSource
 typedef otb::ImageFileReader<ImageType>                     ReaderType;
 typedef otb::ImageFileWriter<DisplacementFieldType> WriterType;
 
-int otbStereorectificationDisplacementFieldSourceNew(int argc, char * argv[])
+int otbStereorectificationDisplacementFieldSourceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   // Instantiation
   DisplacementFieldSourceType::Pointer dfSource = DisplacementFieldSourceType::New();
@@ -37,7 +37,7 @@ int otbStereorectificationDisplacementFieldSourceNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbStereorectificationDisplacementFieldSource(int argc, char * argv[])
+int otbStereorectificationDisplacementFieldSource(int itkNotUsed(argc), char * argv[])
 {
   char * infname1  = argv[1];
   char * infname2  = argv[2];

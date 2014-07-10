@@ -16,8 +16,6 @@
 
 =========================================================================*/
 
-
-
 #include "itkListSample.h"
 #include "itkVariableLengthVector.h"
 #include "otbConcatenateSampleListFilter.h"
@@ -29,14 +27,14 @@ typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 
 typedef otb::Statistics::ConcatenateSampleListFilter<DoubleSampleListType> ConcatenateFilterType;
 
-int otbConcatenateSampleListFilterNew(int argc, char * argv[])
+int otbConcatenateSampleListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
  ConcatenateFilterType::Pointer instance = ConcatenateFilterType::New();
 
  return EXIT_SUCCESS;
 }
 
-int otbConcatenateSampleListFilter(int argc, char * argv[])
+int otbConcatenateSampleListFilter(int itkNotUsed(argc), char * argv[])
 {
  // Compute the number of samples
  const char * outfname = argv[1];
@@ -106,5 +104,3 @@ int otbConcatenateSampleListFilter(int argc, char * argv[])
 
  return EXIT_SUCCESS;
 }
-
-

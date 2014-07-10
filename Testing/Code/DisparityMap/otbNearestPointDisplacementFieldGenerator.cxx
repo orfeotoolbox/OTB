@@ -21,7 +21,7 @@
 #include "otbNearestPointDisplacementFieldGenerator.h"
 #include "otbImageFileWriter.h"
 
-int otbNearestPointDisplacementFieldGenerator(int argc, char * argv[])
+int otbNearestPointDisplacementFieldGenerator(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   const char *       outfname = argv[1];

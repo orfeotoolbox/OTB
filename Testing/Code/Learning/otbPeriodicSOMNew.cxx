@@ -22,7 +22,7 @@
 #include "itkEuclideanDistanceMetric.h"
 #include "itkListSample.h"
 
-int otbPeriodicSOMNew(int argc, char* argv[])
+int otbPeriodicSOMNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef float                                           ComponentType;

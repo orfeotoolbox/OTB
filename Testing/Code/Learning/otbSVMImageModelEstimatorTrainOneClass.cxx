@@ -27,7 +27,7 @@
 
 #include "otbImageFileReader.h"
 
-int otbSVMImageModelEstimatorTrainOneClass(int argc, char* argv[])
+int otbSVMImageModelEstimatorTrainOneClass(int itkNotUsed(argc), char* argv[])
 {
   const char* inputImageFileName = argv[1];
   const char* trainingImageFileName = argv[2];

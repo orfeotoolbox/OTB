@@ -24,7 +24,7 @@
 #include "itkEuclideanDistanceMetric.h"
 
 
-int otbSOMbasedImageFilterTest(int argc, char * argv[])
+int otbSOMbasedImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * somfname = argv[2];

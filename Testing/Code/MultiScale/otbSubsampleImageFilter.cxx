@@ -25,7 +25,7 @@
 
 #include "otbSubsampleImageFilter.h"
 
-int otbSubsampleImageFilter(int argc, char * argv[])
+int otbSubsampleImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName = argv[1];
   const char * outputFileName1 = argv[2];

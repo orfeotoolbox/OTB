@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbPointSetWithTransformToDisplacementFieldGenerator.h"
 
-int otbPointSetWithTransformToDisplacementFieldGeneratorNew(int argc, char * argv[])
+int otbPointSetWithTransformToDisplacementFieldGeneratorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                                                         PixelType;

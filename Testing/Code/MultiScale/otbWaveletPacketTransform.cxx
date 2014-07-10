@@ -29,7 +29,7 @@
 #include "otbWaveletPacketDecompositionCosts.h"
 
 template<otb::Wavelet::Wavelet TWavelet>
-int otbWaveletPacketTransform_generic(int argc, char * argv[])
+int otbWaveletPacketTransform_generic(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFileName = argv[1];
   const char *       outputFileName = argv[2];

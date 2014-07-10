@@ -26,7 +26,7 @@
 #include "itkListSample.h"
 #include "itkImageRegionIterator.h"
 
-int otbPeriodicSOMTest(int argc, char* argv[])
+int otbPeriodicSOMTest(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
   char *             inputFileName = argv[1];

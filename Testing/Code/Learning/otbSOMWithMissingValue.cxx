@@ -30,7 +30,7 @@
 
 
 
-int otbSOMWithMissingValueTest(int argc, char* argv[])
+int otbSOMWithMissingValueTest(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
   char *             inputFileName = argv[1];

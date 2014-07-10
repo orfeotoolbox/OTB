@@ -23,7 +23,7 @@
 #include "itkImageRegionIterator.h"
 #include <iostream>
 
-int otbROIdataConversion(int argc, char* argv[])
+int otbROIdataConversion(int itkNotUsed(argc), char* argv[])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;

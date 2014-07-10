@@ -24,9 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-#include "itkMacro.h"
-
-int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
+int otbMorphologicalPyramidAnalysisFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename = argv[1];
   const char *       outputFilenamePrefix = argv[2];

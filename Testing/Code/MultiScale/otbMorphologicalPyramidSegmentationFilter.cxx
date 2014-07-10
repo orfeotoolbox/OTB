@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
+int otbMorphologicalPyramidSegmentationFilter(int itkNotUsed(argc), char * argv[])
 {
   const char*        inputFilename = argv[1];
   const char*        outputFilenamePrefix = argv[2];

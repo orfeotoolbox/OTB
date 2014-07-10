@@ -30,7 +30,7 @@
  typedef otb::DisparityMapMedianFilter<FloatImageType,FloatImageType,FloatImageType>   DisparityMapMedianFilterType;
 
 
-int otbDisparityMapMedianFilterNew(int argc, char* argv[])
+int otbDisparityMapMedianFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
    // Instantiation
   DisparityMapMedianFilterType::Pointer filter = DisparityMapMedianFilterType::New();

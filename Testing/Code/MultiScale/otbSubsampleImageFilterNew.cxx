@@ -25,7 +25,7 @@
 
 #include "otbSubsampleImageFilter.h"
 
-int otbSubsampleImageFilterNew(int argc, char * argv[])
+int otbSubsampleImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                           PixelType;

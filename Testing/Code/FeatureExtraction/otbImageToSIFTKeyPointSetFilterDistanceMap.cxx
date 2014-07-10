@@ -225,8 +225,8 @@ ImageType::Pointer contrast(ImageType::Pointer input,
 }
 
 OutputImageType::Pointer invContrast(OutputImageType::Pointer input,
-                                     const unsigned int contrastMin,
-                                     const unsigned int contrastMax)
+                                     const unsigned int itkNotUsed(contrastMin),
+                                     const unsigned int itkNotUsed(contrastMax))
 {
   return input;
 }

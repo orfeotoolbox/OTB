@@ -18,7 +18,7 @@
 #include "otbGeodesicMorphologyLevelingFilter.h"
 #include "otbImage.h"
 
-int otbGeodesicMorphologyLevelingFilterNew(int argc, char * argv[])
+int otbGeodesicMorphologyLevelingFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::Image<double, 2>                                                  ImageType;
   typedef otb::GeodesicMorphologyLevelingFilter<ImageType, ImageType, ImageType> FilterType;

@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbMorphologicalPyramidSynthesisFilter(int argc, char * argv[])
+int otbMorphologicalPyramidSynthesisFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename = argv[1];
   const char *       outputFilename = argv[2];

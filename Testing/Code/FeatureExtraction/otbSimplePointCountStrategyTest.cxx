@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include "itkVariableLengthVector.h"
 
-int otbSimplePointCountStrategyTest(int argc, char * argv[])
+int otbSimplePointCountStrategyTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   const unsigned int Dimension = 2;

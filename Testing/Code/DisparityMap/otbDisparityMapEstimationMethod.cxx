@@ -25,7 +25,7 @@
 #include "otbThresholdImageToPointSetFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"
 
-int otbDisparityMapEstimationMethod(int argc, char* argv[])
+int otbDisparityMapEstimationMethod(int itkNotUsed(argc), char* argv[])
 {
   const char*        fixedFileName = argv[1];
   const char*        movingFileName = argv[2];

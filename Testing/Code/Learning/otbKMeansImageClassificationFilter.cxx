@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbKMeansImageClassificationFilter(int argc, char * argv[])
+int otbKMeansImageClassificationFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       infname = argv[1];
   const char *       outfname = argv[2];

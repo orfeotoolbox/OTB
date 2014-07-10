@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageFileReaderWithExtendedFilename(int argc, char* argv[])
+int otbImageFileReaderWithExtendedFilename(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
@@ -57,7 +57,7 @@ int otbImageFileReaderWithExtendedFilename(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbImageFileWriterWithExtendedFilename(int argc, char* argv[])
+int otbImageFileWriterWithExtendedFilename(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
@@ -81,4 +81,3 @@ int otbImageFileWriterWithExtendedFilename(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

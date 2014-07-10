@@ -35,7 +35,7 @@ typedef otb::Statistics::ListSampleToBalancedListSampleFilter
 <FloatSampleListType, IntegerSampleListType, DoubleSampleListType> BalancingFilterType;
 
 
-int otbListSampleToBalancedListSampleFilterNew(int argc, char * argv[])
+int otbListSampleToBalancedListSampleFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   BalancingFilterType::Pointer filter = BalancingFilterType::New();
   return EXIT_SUCCESS;

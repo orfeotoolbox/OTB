@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv[])
+int otbGeodesicMorphologyIterativeDecompositionImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename = argv[1];
   const char *       outputFilenamePrefix = argv[2];

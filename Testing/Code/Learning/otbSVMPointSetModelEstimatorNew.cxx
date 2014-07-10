@@ -24,7 +24,7 @@
 
 #include "otbSVMPointSetModelEstimator.h"
 
-int otbSVMPointSetModelEstimatorNew(int argc, char* argv[])
+int otbSVMPointSetModelEstimatorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef std::vector<double> InputPixelType;
   typedef double              LabelPixelType;

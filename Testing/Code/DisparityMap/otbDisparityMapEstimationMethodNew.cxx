@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "itkTranslationTransform.h"
 
-int otbDisparityMapEstimationMethodNew(int argc, char* argv[])
+int otbDisparityMapEstimationMethodNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                                                         PixelType;

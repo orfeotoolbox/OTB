@@ -22,7 +22,7 @@
 #include "otbForwardFourierMellinTransformImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
 
-int otbFourierMellinImageFilterNew(int itkNotUsed(argc), char* argv[])
+int otbFourierMellinImageFilterNew(int itkNotUsed(argc), char** itkNotUsed(argv))
 {
 
   typedef double PixelType;

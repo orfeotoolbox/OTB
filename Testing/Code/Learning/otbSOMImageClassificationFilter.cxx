@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbSOMImageClassificationFilter(int argc, char * argv[])
+int otbSOMImageClassificationFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * somfname = argv[2];

@@ -21,7 +21,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbMorphologicalPyramidResampler(int argc, char * argv[])
+int otbMorphologicalPyramidResampler(int itkNotUsed(argc), char * argv[])
 {
   const char*        inputFilename = argv[1];
   const char*        outputFilename1 = argv[2];

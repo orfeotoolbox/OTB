@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbConvexOrConcaveClassificationFilter(int argc, char * argv[])
+int otbConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * levelingfname = argv[2];

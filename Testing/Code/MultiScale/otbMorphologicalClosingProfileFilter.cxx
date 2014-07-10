@@ -23,7 +23,7 @@
 
 #include "itkMacro.h"
 
-int otbMorphologicalClosingProfileFilter(int argc, char * argv[])
+int otbMorphologicalClosingProfileFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename = argv[1];
   const char *       outputFilenamePrefix = argv[2];

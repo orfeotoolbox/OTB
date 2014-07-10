@@ -23,7 +23,7 @@
 
 #include "itkMacro.h"
 
-int otbMorphologicalOpeningProfileFilter(int argc, char * argv[])
+int otbMorphologicalOpeningProfileFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *       inputFilename = argv[1];
   const char *       outputFilenamePrefix = argv[2];

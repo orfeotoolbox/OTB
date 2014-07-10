@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbNearestPointDisplacementFieldGenerator.h"
 
-int otbNearestPointDisplacementFieldGeneratorNew(int argc, char * argv[])
+int otbNearestPointDisplacementFieldGeneratorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef double                                           PixelType;

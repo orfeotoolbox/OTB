@@ -21,7 +21,7 @@
 #include "otbWaveletFilterBank.h"
 #include "otbWaveletTransform.h"
 
-int otbWaveletTransformNew(int argc, char * argv[])
+int otbWaveletTransformNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const int Dimension = 2;
   typedef double                           PixelType;

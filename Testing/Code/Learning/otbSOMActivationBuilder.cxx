@@ -27,7 +27,7 @@
 #include "otbVectorImage.h"
 #include "itkImageRegionIterator.h"
 
-int otbSOMActivationBuilder(int argc, char* argv[])
+int otbSOMActivationBuilder(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
   char *             vectorSetFileName = argv[1];

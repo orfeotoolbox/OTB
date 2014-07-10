@@ -21,7 +21,7 @@
 #include "otbGaussianModelComponent.h"
 #include "itkVariableLengthVector.h"
 
-int otbGaussianModelComponentNew(int argc, char * argv[])
+int otbGaussianModelComponentNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   typedef itk::Statistics::ListSample<itk::VariableLengthVector<double> >  SampleType;

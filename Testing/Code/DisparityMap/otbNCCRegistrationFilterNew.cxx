@@ -18,7 +18,7 @@
 #include "otbNCCRegistrationFilter.h"
 #include "otbImage.h"
 
-int otbNCCRegistrationFilterNew(int argc, char* argv[])
+int otbNCCRegistrationFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int ImageDimension = 2;
 

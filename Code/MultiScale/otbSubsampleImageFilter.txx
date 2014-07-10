@@ -148,7 +148,7 @@ template <class TInputImage, class TOutputImage,
 void
 SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+                       itk::ThreadIdType itkNotUsed(threadId))
 {
   OutputImagePointerType output = this->GetOutput();
 

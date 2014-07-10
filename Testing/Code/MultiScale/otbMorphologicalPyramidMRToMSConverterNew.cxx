@@ -20,7 +20,7 @@
 #include "otbMorphologicalPyramidMRToMSConverter.h"
 #include "otbImage.h"
 
-int otbMorphologicalPyramidMRToMSConverterNew(int argc, char * argv[])
+int otbMorphologicalPyramidMRToMSConverterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   const unsigned int Dimension = 2;
   typedef unsigned char InputPixelType;

@@ -36,7 +36,7 @@ typedef otb::ImageFileWriter<MaskType>                       MaskWriterType;
 
 typedef otb::AdhesionCorrectionFilter<ImageType, MaskType> AdhesionCorrectionFilterType;
 
-int otbAdhesionCorrectionFilterNew(int argc, char* argv[])
+int otbAdhesionCorrectionFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   // Instantiation
@@ -131,5 +131,3 @@ int otbAdhesionCorrectionFilter(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-
-

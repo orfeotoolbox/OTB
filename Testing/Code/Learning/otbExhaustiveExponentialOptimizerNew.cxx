@@ -22,7 +22,7 @@
 
 #include "otbExhaustiveExponentialOptimizer.h"
 
-int otbExhaustiveExponentialOptimizerNew(int argc, char* argv[])
+int otbExhaustiveExponentialOptimizerNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   otb::ExhaustiveExponentialOptimizer::Pointer opt = otb::ExhaustiveExponentialOptimizer::New();
 

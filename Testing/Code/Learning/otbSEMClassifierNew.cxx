@@ -27,7 +27,7 @@
 
 #include <iostream>
 
-int otbSEMClassifierNew(int argc, char* argv[])
+int otbSEMClassifierNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef double                                            PixelType;
   typedef otb::VectorImage<PixelType, 2>                    ImageType;

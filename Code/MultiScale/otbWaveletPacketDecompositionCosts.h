@@ -57,7 +57,7 @@ public:
   static unsigned int NumberOfAllowedDecompositions;
 
   /** Evaluate the cost */
-  bool Evaluate(unsigned int decomposition, const ImageType * image)
+  bool Evaluate(unsigned int decomposition, const ImageType * itkNotUsed(image))
   {
     return (decomposition < NumberOfAllowedDecompositions);
   }

@@ -83,7 +83,7 @@ public:
   virtual unsigned int GetNumberOfParameters(void) const {return 2; };
 
   /** \return The accuracy derivative corresponding to the parameters */
-  virtual void GetDerivative(const ParametersType& parameters, DerivativeType& derivative) const {};
+  virtual void GetDerivative(const ParametersType& itkNotUsed(parameters), DerivativeType& itkNotUsed(derivative)) const {};
 
   /// Constructor
   Quadratic2DCostFunction()
@@ -103,7 +103,7 @@ private:
 }; // class Quadratic2DCostFunction
 
 
-int otbExhaustiveExponentialOptimizerTest(int argc, char* argv[])
+int otbExhaustiveExponentialOptimizerTest(int itkNotUsed(argc), char* argv[])
 {
   Quadratic2DCostFunction::Pointer costFunction = Quadratic2DCostFunction::New();
 

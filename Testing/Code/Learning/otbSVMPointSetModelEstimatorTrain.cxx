@@ -24,7 +24,7 @@
 
 #include "otbSVMPointSetModelEstimator.h"
 
-int otbSVMPointSetModelEstimatorTrain(int argc, char* argv[])
+int otbSVMPointSetModelEstimatorTrain(int itkNotUsed(argc), char* argv[])
 {
   const char* outputModelFileName = argv[1];
 

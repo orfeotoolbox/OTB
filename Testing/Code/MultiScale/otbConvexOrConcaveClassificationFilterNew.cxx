@@ -18,7 +18,7 @@
 #include "otbConvexOrConcaveClassificationFilter.h"
 #include "otbImage.h"
 
-int otbConvexOrConcaveClassificationFilterNew(int argc, char * argv[])
+int otbConvexOrConcaveClassificationFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
   typedef otb::Image<double, 2>        InputImageType;
   typedef otb::Image<unsigned char, 2> OutputImageType;

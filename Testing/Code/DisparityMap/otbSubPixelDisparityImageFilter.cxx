@@ -56,7 +56,7 @@
   typedef otb::ImageFileReader<FloatImageType>               ReaderType;
   typedef otb::ImageFileWriter<FloatImageType>      WriterType;
 
-int otbSubPixelDisparityImageFilterNew(int argc, char* argv[])
+int otbSubPixelDisparityImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
 {
 
   // Instantiation
@@ -201,12 +201,3 @@ int otbSubPixelDisparityImageFilter(int argc, char* argv[])
 
   return EXIT_FAILURE;
 }
-
-
-
-
-
-
-
-
-
