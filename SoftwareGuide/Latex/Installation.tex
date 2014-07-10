@@ -194,7 +194,7 @@ If do not yet have a Gdal library or suspect that the library you have will not 
 \begin{verbatim}
 $ export GDAL_INSTALL_DIR=$HOME/local
 $ ./configure --prefix=$GDAL_INSTALL_DIR \
-  --lib-geotiff=internal  \
+  --with-geotiff=internal  \
   --with-rename-internal-libtiff-symbols=yes \
   --with-rename-internal-libgeotiff-symbols=yes
 $ make install
