@@ -20,7 +20,7 @@
 
 enum WheatTypes { WinterWheat, SummerWheat };
 
-int otbDecisionTreeNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbDecisionTreeNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   typedef bool AttributeValueType;

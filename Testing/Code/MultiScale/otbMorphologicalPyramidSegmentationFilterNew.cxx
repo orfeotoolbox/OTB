@@ -19,7 +19,7 @@
 #include "otbMorphologicalPyramidSegmentationFilter.h"
 #include "otbImage.h"
 
-int otbMorphologicalPyramidSegmentationFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbMorphologicalPyramidSegmentationFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char  InputPixelType;

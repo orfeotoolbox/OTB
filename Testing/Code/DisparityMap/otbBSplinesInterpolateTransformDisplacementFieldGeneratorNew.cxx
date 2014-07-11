@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbBSplinesInterpolateTransformDisplacementFieldGenerator.h"
 
-int otbBSplinesInterpolateTransformDisplacementFieldGeneratorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbBSplinesInterpolateTransformDisplacementFieldGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef double                                                                              PixelType;

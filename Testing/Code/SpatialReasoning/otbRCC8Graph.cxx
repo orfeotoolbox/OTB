@@ -25,7 +25,7 @@
 #include "otbMacro.h"
 #include "otbPolygon.h"
 
-int otbRCC8Graph(int argc, char* argv[])
+int otbRCC8Graph(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int nbVertices = 2;
   typedef otb::Polygon<>                          PathType;

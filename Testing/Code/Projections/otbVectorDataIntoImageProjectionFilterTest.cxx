@@ -37,7 +37,7 @@
 * prTvVectorDataIntoImageProjectionFilterTest_4 failed because of the bug http://bugs.orfeo-toolbox.org/view.php?id=333.
 */
 
-int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
+int otbVectorDataIntoImageProjectionFilterTest(int itkNotUsed(argc), char * argv[])
 {
   typedef float                                           PixelType;
   typedef otb::VectorImage<PixelType, 2>                  VectorImageType;
@@ -99,7 +99,7 @@ int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
 
 
 
-int otbVectorDataIntoImageProjectionFilterCompareImplTest(int argc, char * argv[])
+int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), char * argv[])
 {
   typedef float                                           PixelType;
   typedef otb::VectorImage<PixelType, 2>                  VectorImageType;

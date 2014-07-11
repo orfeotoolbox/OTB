@@ -22,7 +22,7 @@
 #include "otbRCC8GraphFileWriter.h"
 #include "otbPolygon.h"
 
-int otbRCC8GraphIOEndToEnd(int argc, char* argv[])
+int otbRCC8GraphIOEndToEnd(int itkNotUsed(argc), char* argv[])
 {
   char * inputFilename = argv[1];
   char * outputFilename = argv[2];

@@ -24,7 +24,7 @@
 
 #include "otbLineSpatialObjectListToPointSetFilter.h"
 
-int otbLineSpatialObjectListToPointSetFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLineSpatialObjectListToPointSetFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef float                         InputPixelType;
   typedef otb::LineSpatialObjectList    LinesListType;

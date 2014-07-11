@@ -38,7 +38,7 @@ typedef GradientFilterType::OutputImageType                                     
 typedef otb::HistogramOfOrientedGradientCovariantImageFunction<CovariantImageType> FunctionType;
 
 
-int otbHistogramOfOrientedGradientCovariantImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbHistogramOfOrientedGradientCovariantImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   // Instantiating object
   FunctionType::Pointer function       = FunctionType::New();

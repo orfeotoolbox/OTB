@@ -24,7 +24,7 @@
 #include "otbImageToModulusAndDirectionImageFilter.h"
 #include "otbModulusAndDirectionImageToImageFilter.h"
 
-int otbModulusAndDirectionImageFiltersNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbModulusAndDirectionImageFiltersNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;

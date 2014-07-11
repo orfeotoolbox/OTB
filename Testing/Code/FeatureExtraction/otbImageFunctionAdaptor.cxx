@@ -33,7 +33,7 @@
 #include "otbLocalHistogramImageFunction.h"
 
 
-int otbImageFunctionAdaptorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbImageFunctionAdaptorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double InputPixelType;
   typedef double PrecisionType;

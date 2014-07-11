@@ -50,7 +50,7 @@ ImageType::Pointer makeImage(ImageType::RegionType region)
   return image;
 }
 
-int otbStreamingManagerNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbStreamingManagerNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   NbLinesStrippedStreamingManagerType::Pointer streamingManager1 = NbLinesStrippedStreamingManagerType::New();
   std::cout << streamingManager1 << std::endl;

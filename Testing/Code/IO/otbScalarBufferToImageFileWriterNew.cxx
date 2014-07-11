@@ -21,7 +21,7 @@
 #include "otbScalarBufferToImageFileWriter.h"
 
 
-int otbScalarBufferToImageFileWriterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbScalarBufferToImageFileWriterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::ScalarBufferToImageFileWriter<int, double> FilterType;
   FilterType::Pointer filter = FilterType::New();

@@ -22,7 +22,7 @@
 #include "otbPostGISConnectionImplementation.h"
 #include "otbGISTableToGISTableFilter.h"
 
-int otbGISTableToGISTableFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbGISTableToGISTableFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::PostGISConnectionImplementation                      GISConnectionType;
   typedef otb::GISTable<GISConnectionType, double, 2>               GISTableType;

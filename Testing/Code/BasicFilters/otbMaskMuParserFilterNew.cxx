@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "otbMaskMuParserFilter.h"
 
-int otbMaskMuParserFilterNew( int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbMaskMuParserFilterNew( int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   typedef float InputPixelType;

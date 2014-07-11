@@ -20,7 +20,7 @@
 #include "otbRCC8VertexBase.h"
 #include "otbPolygon.h"
 
-int otbRCC8GraphNew(int argc, char* argv[])
+int otbRCC8GraphNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Polygon<>                PathType;
   typedef otb::RCC8VertexBase<PathType> VertexType;

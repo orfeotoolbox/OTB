@@ -24,7 +24,7 @@
 
 #include "otbSVMModel.h"
 
-int otbSVMModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbSVMModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char LabelPixelType;

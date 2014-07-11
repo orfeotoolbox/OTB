@@ -22,7 +22,7 @@
 #include "otbImageListToRCC8GraphFilter.h"
 #include "otbPolygon.h"
 
-int otbImageListToRCC8GraphFilterNew(int argc, char* argv[])
+int otbImageListToRCC8GraphFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned short                        LabelPixelType;

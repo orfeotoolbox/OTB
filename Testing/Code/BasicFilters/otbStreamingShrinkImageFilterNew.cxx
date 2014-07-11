@@ -18,7 +18,7 @@
 #include "otbVectorImage.h"
 #include "otbStreamingShrinkImageFilter.h"
 
-int otbStreamingShrinkImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbStreamingShrinkImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
 

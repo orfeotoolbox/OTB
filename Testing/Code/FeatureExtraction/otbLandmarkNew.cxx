@@ -22,7 +22,7 @@
 #include "itkVariableLengthVector.h"
 #include "itkPoint.h"
 
-int otbLandmarkNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLandmarkNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef itk::Point<double, 2>                           PointType;
   typedef itk::VariableLengthVector<double>               PointDataType;

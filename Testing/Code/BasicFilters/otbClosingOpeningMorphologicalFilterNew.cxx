@@ -21,7 +21,7 @@
 #include "itkBinaryBallStructuringElement.h"
 #include "otbImage.h"
 
-int otbClosingOpeningMorphologicalFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbClosingOpeningMorphologicalFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                                                InputPixelType;

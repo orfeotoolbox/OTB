@@ -19,7 +19,7 @@
 #include "otbRCC8VertexWithCompacity.h"
 #include "otbPolygon.h"
 
-int otbRCC8VertexWithCompacityNew(int argc, char* argv[])
+int otbRCC8VertexWithCompacityNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Polygon<>                                        PathType;
   typedef float                                                 PrecisionType;

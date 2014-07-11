@@ -20,7 +20,7 @@
 #include "otbImageListToImageListFilter.h"
 #include "otbImage.h"
 
-int otbImageListToImageListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbImageListToImageListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                                                    InputPixelType;

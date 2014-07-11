@@ -20,7 +20,7 @@
 #include "otbStreamingMinMaxImageFilter.h"
 #include "otbImage.h"
 
-int otbStreamingMinMaxImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbStreamingMinMaxImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;

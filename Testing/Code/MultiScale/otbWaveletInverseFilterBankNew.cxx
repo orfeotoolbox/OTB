@@ -20,7 +20,7 @@
 #include "otbWaveletOperator.h"
 #include "otbWaveletFilterBank.h"
 
-int otbWaveletInverseFilterBankNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbWaveletInverseFilterBankNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const int Dimension = 2;
   typedef double                           PixelType;

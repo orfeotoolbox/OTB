@@ -28,14 +28,14 @@
 typedef otb::VectorImage<double, 2>       ImageType;
 typedef otb::ImageToGenericRSOutputParameters<ImageType>  FilterType;
 
-int otbImageToGenericRSOutputParametersNew (int argc, char * argv[])
+int otbImageToGenericRSOutputParametersNew (int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
 
-int otbImageToGenericRSOutputParameters (int argc, char * argv[])
+int otbImageToGenericRSOutputParameters (int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];

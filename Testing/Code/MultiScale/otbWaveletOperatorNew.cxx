@@ -20,7 +20,7 @@
 
 #include "otbWaveletOperator.h"
 
-int otbWaveletOperatorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbWaveletOperatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const otb::Wavelet::WaveletDirection directionID = otb::Wavelet::INVERSE;
   const otb::Wavelet::Wavelet          wvltID = otb::Wavelet::SPLINE_BIORTHOGONAL_4_4;

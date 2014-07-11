@@ -37,7 +37,7 @@ public:
 };
 }
 
-int otbUnaryFunctorWithIndexImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbUnaryFunctorWithIndexImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double                                                                        InputPixelType;
   typedef otb::Image<InputPixelType, 2>                                                 ImageType;

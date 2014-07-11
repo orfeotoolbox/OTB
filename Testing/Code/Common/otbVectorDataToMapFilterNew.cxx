@@ -21,7 +21,7 @@
 #include "otbVectorData.h"
 #include "otbVectorDataToMapFilter.h"
 
-int otbVectorDataToMapFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorDataToMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   typedef otb::VectorData<>             VectorDataType;

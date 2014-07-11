@@ -20,7 +20,7 @@
 
 typedef otb::Parser ParserType;
 
-int otbParserTestNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbParserTestNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   // Instantiating object
   ParserType::Pointer parser = ParserType::New();
@@ -112,7 +112,7 @@ void otbParserTest_LogicalOperator(void)
   otbParserTest_ThrowIfNotEqual(static_cast<int>(parser->Eval()), 1, "LogicalOperator or");
 }
 
-int otbParserTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbParserTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   otbParserTest_Numerical();
   otbParserTest_BuildInFun();

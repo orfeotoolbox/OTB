@@ -26,7 +26,7 @@ typedef otb::ImageFileReader<ImageType>    ReaderType;
 typedef otb::ImageFileWriter<OutputImageType> WriterType;
 typedef otb::MaximumAutocorrelationFactorImageFilter<ImageType, OutputImageType> MADFilterType;
 
-int otbMaximumAutocorrelationFactorImageFilterNew(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbMaximumAutocorrelationFactorImageFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   MADFilterType::Pointer  madFilter = MADFilterType::New();
 

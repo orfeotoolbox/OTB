@@ -19,7 +19,7 @@
 #include "otbRCC8Edge.h"
 #include <cstdlib>
 
-int otbRCC8Edge(int argc, char* argv[])
+int otbRCC8Edge(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::RCC8Edge               RCC8EdgeType;
   typedef RCC8EdgeType::RCC8ValueType RCC8ValueType;

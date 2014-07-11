@@ -20,7 +20,7 @@
 #include "otbMacro.h"
 #include "otbPolygon.h"
 
-int otbRCC8VertexWithCompacity(int argc, char* argv[])
+int otbRCC8VertexWithCompacity(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Polygon<> PathType;
   typedef double         PrecisionType;

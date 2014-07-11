@@ -21,7 +21,7 @@
 
 #include "otbRGBAPixelConverter.h"
 
-int otbRGBAPixelConverterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbRGBAPixelConverterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char                                          PixelType0;
   typedef double                                                 PixelType1;
@@ -47,7 +47,7 @@ int otbRGBAPixelConverterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
   return EXIT_SUCCESS;
 }
 
-int otbRGBAPixelConverter(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbRGBAPixelConverter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned int                                           PixelType0;
   typedef double                                                 PixelType1;

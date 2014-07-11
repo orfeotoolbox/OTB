@@ -19,7 +19,7 @@
 #include "otbVectorDataFileReader.h"
 #include "otbVectorData.h"
 
-int otbVectorDataFileReaderNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorDataFileReaderNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;

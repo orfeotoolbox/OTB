@@ -23,7 +23,7 @@
 #include "otbGenericRSTransform.h"
 #include <ogr_spatialref.h>
 
-int otbGenericRSTransform(int argc, char* argv[])
+int otbGenericRSTransform(int itkNotUsed(argc), char* argv[])
 {
   OGRSpatialReference oSRS;
 

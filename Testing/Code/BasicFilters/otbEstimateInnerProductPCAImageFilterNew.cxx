@@ -18,7 +18,7 @@
 #include "otbEstimateInnerProductPCAImageFilter.h"
 #include "otbVectorImage.h"
 
-int otbEstimateInnerProductPCAImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbEstimateInnerProductPCAImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;

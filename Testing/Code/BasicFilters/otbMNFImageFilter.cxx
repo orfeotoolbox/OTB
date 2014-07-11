@@ -26,7 +26,7 @@
 
 #include "otbLocalActivityVectorImageFilter.h"
 
-int otbMNFImageFilterNewTest ( int itkNotUsed(argc), char** itkNotUsed(argv) )
+int otbMNFImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;

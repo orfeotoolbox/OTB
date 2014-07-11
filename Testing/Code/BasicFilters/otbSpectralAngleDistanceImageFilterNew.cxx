@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
 
-int otbSpectralAngleDistanceImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbSpectralAngleDistanceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef double                                                                 PixelType;

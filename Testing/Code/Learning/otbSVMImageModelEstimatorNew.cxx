@@ -25,7 +25,7 @@
 
 #include "otbSVMImageModelEstimator.h"
 
-int otbSVMImageModelEstimatorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbSVMImageModelEstimatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double InputPixelType;
   const unsigned int Dimension = 2;

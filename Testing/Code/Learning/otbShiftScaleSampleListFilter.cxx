@@ -32,7 +32,7 @@ typedef itk::Statistics::ListSample<FloatSampleType> FloatSampleListType;
 typedef otb::Statistics::ShiftScaleSampleListFilter<FloatSampleListType, DoubleSampleListType> ShiftScaleFilterType;
 
 
-int otbShiftScaleSampleListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbShiftScaleSampleListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
  ShiftScaleFilterType::Pointer instance = ShiftScaleFilterType::New();
 

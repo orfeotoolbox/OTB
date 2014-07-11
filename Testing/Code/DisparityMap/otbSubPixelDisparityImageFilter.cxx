@@ -56,7 +56,7 @@
   typedef otb::ImageFileReader<FloatImageType>               ReaderType;
   typedef otb::ImageFileWriter<FloatImageType>      WriterType;
 
-int otbSubPixelDisparityImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbSubPixelDisparityImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   // Instantiation

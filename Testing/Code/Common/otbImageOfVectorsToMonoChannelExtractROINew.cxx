@@ -18,7 +18,7 @@
 #include "otbImageOfVectorsToMonoChannelExtractROI.h"
 #include "otbImage.h"
 
-int otbImageOfVectorsToMonoChannelExtractROINew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbImageOfVectorsToMonoChannelExtractROINew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const int Dimension = 2;
   typedef unsigned char                  ScalarPixelType;

@@ -19,7 +19,7 @@
 #include <fstream>
 #include "otbConfigurationFile.h"
 
-int otbConfigurationTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbConfigurationTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
 //   std::cout << "begin config test" << std::endl;

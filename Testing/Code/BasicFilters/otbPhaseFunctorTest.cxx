@@ -22,7 +22,7 @@
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 
-int otbPhaseFunctorTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbPhaseFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double                   ScalarType;
 

@@ -24,7 +24,7 @@
 
 #include "otbNormalizeVectorImageFilter.h"
 
-int otbNormalizeVectorImageFilterNewTest ( int itkNotUsed(argc), char** itkNotUsed(argv) )
+int otbNormalizeVectorImageFilterNewTest ( int itkNotUsed(argc), char* itkNotUsed(argv) [] )
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;

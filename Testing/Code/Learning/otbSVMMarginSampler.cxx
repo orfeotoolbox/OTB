@@ -25,7 +25,7 @@
 #include "otbSVMMarginSampler.h"
 #include "otbSVMModel.h"
 
-int otbSVMMarginSamplerNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbSVMMarginSamplerNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef itk::VariableLengthVector<double>                 SampleType;
   typedef itk::Statistics::ListSample<SampleType>           SampleListType;

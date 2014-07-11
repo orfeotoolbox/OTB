@@ -20,7 +20,7 @@
 #include "otbRationalTransform.h"
 #include <fstream>
 
-int otbRationalTransformNew(int argc, char* argv[])
+int otbRationalTransformNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::RationalTransform<> RationalTransformType;
 
@@ -96,4 +96,3 @@ int otbRationalTransform(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

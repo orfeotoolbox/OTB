@@ -24,7 +24,7 @@
 
 #include "otbFormosatImageMetadataInterface.h"
 
-int otbFormosatImageMetadataInterfaceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbFormosatImageMetadataInterfaceNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   otb::FormosatImageMetadataInterface::Pointer object = otb::FormosatImageMetadataInterface::New();

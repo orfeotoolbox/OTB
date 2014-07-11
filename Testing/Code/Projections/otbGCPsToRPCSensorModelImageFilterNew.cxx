@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 
-int otbGCPsToRPCSensorModelImageFilterNew(int argc, char* argv[])
+int otbGCPsToRPCSensorModelImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Image<float, 2>                            ImageType;
   typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPToSensorModelFilterType;

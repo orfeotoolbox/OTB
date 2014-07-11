@@ -24,7 +24,7 @@
 #include "otbWaveletPacketTransform.h"
 #include "otbWaveletPacketDecompositionCosts.h"
 
-int otbWaveletPacketInverseTransformNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbWaveletPacketInverseTransformNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const int Dimension = 2;
   typedef double                           PixelType;

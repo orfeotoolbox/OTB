@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbRegionImageToRectangularPathListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbRegionImageToRectangularPathListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned short InputPixelType;
   const unsigned int Dimension = 2;

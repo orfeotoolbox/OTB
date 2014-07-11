@@ -20,7 +20,7 @@
 #include "otbLabelImageToVectorDataFilter.h"
 #include "otbImage.h"
 
-int otbLabelImageToVectorDataFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLabelImageToVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned short LabelType;

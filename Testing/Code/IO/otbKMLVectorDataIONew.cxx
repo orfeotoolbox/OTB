@@ -18,7 +18,7 @@
 
 #include "otbKMLVectorDataIO.h"
 
-int otbKMLVectorDataIONew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbKMLVectorDataIONew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::KMLVectorDataIO KMLVectorDataIOType;
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();

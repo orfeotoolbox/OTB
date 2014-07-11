@@ -19,7 +19,7 @@
 #include "otbVectorImage.h"
 #include "otbMeanShiftSmoothingImageFilter.h"
 
-int otbMeanShiftSmoothingImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbMeanShiftSmoothingImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef short                                           PixelType;

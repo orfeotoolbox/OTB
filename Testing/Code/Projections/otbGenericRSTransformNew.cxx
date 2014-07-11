@@ -22,7 +22,7 @@
 
 #include "otbGenericRSTransform.h"
 
-int otbGenericRSTransformNew(int argc, char* argv[])
+int otbGenericRSTransformNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
 
   typedef otb::GenericRSTransform<> TransformType;

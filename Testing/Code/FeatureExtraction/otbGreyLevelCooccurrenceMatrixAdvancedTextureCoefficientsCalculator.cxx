@@ -22,7 +22,7 @@
 
 #include "otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.h"
 
-int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   try   // the rest of the function is in the try block...

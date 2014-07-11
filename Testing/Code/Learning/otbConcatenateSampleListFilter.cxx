@@ -27,7 +27,7 @@ typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 
 typedef otb::Statistics::ConcatenateSampleListFilter<DoubleSampleListType> ConcatenateFilterType;
 
-int otbConcatenateSampleListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbConcatenateSampleListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
  ConcatenateFilterType::Pointer instance = ConcatenateFilterType::New();
 

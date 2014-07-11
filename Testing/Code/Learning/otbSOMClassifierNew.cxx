@@ -24,7 +24,7 @@
 #include "itkListSample.h"
 #include "otbVectorImage.h"
 
-int otbSOMClassifierNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbSOMClassifierNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double InputPixelType;
   typedef int    LabelPixelType;

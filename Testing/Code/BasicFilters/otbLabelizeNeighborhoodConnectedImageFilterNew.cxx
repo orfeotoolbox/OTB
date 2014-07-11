@@ -20,7 +20,7 @@
 #include "otbLabelizeNeighborhoodConnectedImageFilter.h"
 #include "otbImage.h"
 
-int otbLabelizeNeighborhoodConnectedImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLabelizeNeighborhoodConnectedImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;

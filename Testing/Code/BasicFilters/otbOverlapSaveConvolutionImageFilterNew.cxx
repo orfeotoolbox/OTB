@@ -20,7 +20,7 @@
 #include "otbImage.h"
 #include "otbOverlapSaveConvolutionImageFilter.h"
 
-int otbOverlapSaveConvolutionImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbOverlapSaveConvolutionImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double InputPixelType;
   typedef double OutputPixelType;

@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include <complex>
 
-int otbMatrixImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbMatrixImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef std::complex<double> PixelType;
 

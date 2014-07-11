@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "otbRadiometricMomentsImageFilter.h"
 
-int otbRadiometricMomentsImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbRadiometricMomentsImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef float InputPixelType;
   const unsigned int Dimension = 2;

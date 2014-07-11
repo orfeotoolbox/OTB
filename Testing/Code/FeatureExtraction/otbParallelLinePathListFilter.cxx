@@ -21,7 +21,7 @@
 #include "itkPolyLineParametricPath.h"
 #include <cstdlib>
 
-int otbParallelLinePathListFilter(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbParallelLinePathListFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   // We create some lines

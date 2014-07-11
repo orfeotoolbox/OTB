@@ -19,7 +19,7 @@
 #include "otbMapFileProductWriter.h"
 #include "otbVectorImage.h"
 
-int otbMapFileProductWriterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbMapFileProductWriterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   typedef otb::VectorImage<double>               ImageType;

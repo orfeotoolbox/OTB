@@ -22,7 +22,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorDataToRandomLineGenerator.h"
 
-int otbVectorDataToRandomLineGeneratorNew(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbVectorDataToRandomLineGeneratorNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef otb::VectorData<>                                        VectorDataType;
   typedef otb::VectorDataToRandomLineGenerator<VectorDataType>     GeneratorType;

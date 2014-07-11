@@ -41,7 +41,7 @@ typedef ImageResamplerType::SpacingType             SpacingType;
 typedef otb::ImageFileReader<ImageType>             ReaderType;
 typedef otb::ImageFileWriter<ImageType>    WriterType;
 
-int otbGenericRSResampleImageFilterNew(int argc, char* argv[])
+int otbGenericRSResampleImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   // SmartPointer instanciation
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
@@ -49,7 +49,7 @@ int otbGenericRSResampleImageFilterNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbGenericRSResampleImageFilter(int argc, char* argv[])
+int otbGenericRSResampleImageFilter(int itkNotUsed(argc), char* argv[])
 {
 
   // SmartPointer instanciation
@@ -132,7 +132,7 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
 }
 
 
-int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
+int otbGenericRSResampleImageFilterFromMap(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::MultiChannelExtractROI<PixelType, PixelType>  ExtractROIType;
 
@@ -205,4 +205,3 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

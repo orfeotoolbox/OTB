@@ -20,7 +20,7 @@
 #include "otbStreamingResampleImageFilter.h"
 #include "otbImage.h"
 
-int otbStreamingResampleImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbStreamingResampleImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef double                                 InputPixelType;

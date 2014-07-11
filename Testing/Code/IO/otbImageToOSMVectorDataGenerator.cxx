@@ -35,7 +35,7 @@ typedef otb::ImageFileReader<ImageType>             ReaderType;
 typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
 
 
-int otbImageToOSMVectorDataGeneratorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbImageToOSMVectorDataGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   FilterType::Pointer vdgenerator = FilterType::New();
 

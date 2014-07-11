@@ -23,7 +23,7 @@
 #include "itkVariableLengthVector.h"
 #include "otbEuclideanDistanceMetricWithMissingValue.h"
 
-int otbEuclideanDistanceMetricWithMissingValue(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbEuclideanDistanceMetricWithMissingValue(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   typedef itk::VariableLengthVector<double>                              VectorType;

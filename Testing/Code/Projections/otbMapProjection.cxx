@@ -23,7 +23,7 @@
 #include "otbImage.h"
 #include "otbMapProjections.h"
 
-int otbMapProjection(int argc, char* argv[])
+int otbMapProjection(int itkNotUsed(argc), char* argv[])
 {
   const char *  outFileName = argv[1];
   std::ofstream file;

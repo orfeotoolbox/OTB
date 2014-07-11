@@ -56,7 +56,7 @@ int otbSystemTest(int itkNotUsed(argc), char * argv[])
 }
 
 
-int otbParseHdfSubsetName(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbParseHdfSubsetName(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   std::string input("");
   std::string key("");
@@ -74,7 +74,7 @@ int otbParseHdfSubsetName(int itkNotUsed(argc), char ** itkNotUsed(argv))
   return EXIT_SUCCESS;
 }
 
-int otbParseHdfFileName(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbParseHdfFileName(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   std::string id("");
   std::string file("");

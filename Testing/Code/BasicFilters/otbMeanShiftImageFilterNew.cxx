@@ -19,7 +19,7 @@
 #include "otbImage.h"
 #include "otbMeanShiftImageFilter.h"
 
-int otbMeanShiftImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbMeanShiftImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef short                                           PixelType;

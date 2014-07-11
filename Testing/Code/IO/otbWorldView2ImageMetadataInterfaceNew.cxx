@@ -24,7 +24,7 @@
 
 #include "otbWorldView2ImageMetadataInterface.h"
 
-int otbWorldView2ImageMetadataInterfaceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbWorldView2ImageMetadataInterfaceNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   otb::WorldView2ImageMetadataInterface::Pointer object = otb::WorldView2ImageMetadataInterface::New();
 

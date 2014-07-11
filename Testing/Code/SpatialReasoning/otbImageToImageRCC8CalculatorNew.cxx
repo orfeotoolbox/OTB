@@ -19,7 +19,7 @@
 #include "otbImageToImageRCC8Calculator.h"
 #include "otbImage.h"
 
-int otbImageToImageRCC8CalculatorNew(int argc, char* argv[])
+int otbImageToImageRCC8CalculatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   //    const unsigned int Dimension = 2;
   //     typedef unsigned char PixelType;

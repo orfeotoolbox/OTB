@@ -18,7 +18,7 @@
 #include "otbLogPolarTransform.h"
 #include <cstdlib>
 
-int otbLogPolarTransformNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLogPolarTransformNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double                                PrecisionType;
   typedef otb::LogPolarTransform<PrecisionType> LogPolarTransformType;

@@ -32,7 +32,7 @@ typedef otb::HaralickTexturesImageFunction<
 typedef HaralickTexturesImageFunctionType::PointType                  PointType;
 typedef HaralickTexturesImageFunctionType::OutputType                 OutputType;
 
-int otbHaralickTexturesImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbHaralickTexturesImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   HaralickTexturesImageFunctionType::Pointer function = HaralickTexturesImageFunctionType::New();
 

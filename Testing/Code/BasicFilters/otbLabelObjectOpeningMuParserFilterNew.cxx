@@ -20,7 +20,7 @@
 #include "otbAttributesMapLabelObject.h"
 #include "otbLabelObjectOpeningMuParserFilter.h"
 
-int otbLabelObjectOpeningMuParserFilterNew( int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLabelObjectOpeningMuParserFilterNew( int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   const unsigned int     Dimension = 2;

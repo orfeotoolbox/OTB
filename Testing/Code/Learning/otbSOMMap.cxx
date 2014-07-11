@@ -21,7 +21,7 @@
 #include "itkEuclideanDistanceMetric.h"
 #include "itkVariableLengthVector.h"
 
-int otbSOMMap(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbSOMMap(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef float                                           InternalPixelType;

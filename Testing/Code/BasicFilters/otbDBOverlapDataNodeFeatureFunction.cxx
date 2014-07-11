@@ -24,7 +24,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
-int otbDBOverlapDataNodeFeatureFunctionNew(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbDBOverlapDataNodeFeatureFunctionNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef double CoordRepType;
   typedef double PrecisionType;

@@ -21,7 +21,7 @@
 #include "otbImageList.h"
 #include "otbImageFileReader.h"
 
-int otbImageToImageRCC8Calculator(int argc, char* argv[])
+int otbImageToImageRCC8Calculator(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
 

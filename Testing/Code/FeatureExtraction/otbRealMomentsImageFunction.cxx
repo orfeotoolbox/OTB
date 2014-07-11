@@ -27,7 +27,7 @@
 #include "otbImageFileReader.h"
 #include "otbRealMomentsImageFunction.h"
 
-int otbRealMomentsImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbRealMomentsImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;

@@ -20,7 +20,7 @@
 #include "itkRGBPixel.h"
 #include "itkEuclideanDistanceMetric.h"
 
-int otbSOMMapNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbSOMMapNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef float                                           ComponentType;

@@ -20,7 +20,7 @@
 
 enum WheatTypes { WinterWheat, SummerWheat };
 
-int otbDecisionTreeWithRealValues(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbDecisionTreeWithRealValues(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
 /** We build the following decision tree
 

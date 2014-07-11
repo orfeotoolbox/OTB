@@ -21,7 +21,7 @@
 #include "otbMapProjections.h"
 #include "otbOrthoRectificationFilter.h"
 
-int otbOrthoRectificationFilterNew(int argc, char* argv[])
+int otbOrthoRectificationFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Image<double, 2>                                                     ImageType;
   typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;

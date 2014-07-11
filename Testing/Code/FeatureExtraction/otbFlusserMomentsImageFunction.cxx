@@ -33,7 +33,7 @@
 #include "itkAffineTransform.h"
 
 
-int otbFlusserMomentsImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbFlusserMomentsImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;

@@ -24,7 +24,7 @@
 #include <fstream>
 #include <iostream>
 
-int otbVectorDataExtractROIandProjection(int argc, char * argv[])
+int otbVectorDataExtractROIandProjection(int itkNotUsed(argc), char * argv[])
 {
 
   //Read the vector data

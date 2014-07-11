@@ -22,7 +22,7 @@
 #include "otbRCC8VertexBase.h"
 #include "otbPolygonListToRCC8GraphFilter.h"
 
-int otbPolygonListToRCC8GraphFilterNew(int argc, char* argv[])
+int otbPolygonListToRCC8GraphFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   // typedefs
   typedef otb::Polygon<>                   PolygonType;

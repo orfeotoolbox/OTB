@@ -35,7 +35,7 @@ typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
 typedef otb::ThresholdVectorImageFilter<InputImageType, OutputImageType>  FilterType;
 
-int otbThresholdVectorImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbThresholdVectorImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   /** instantiating the filter */
   FilterType::Pointer filter = FilterType::New();

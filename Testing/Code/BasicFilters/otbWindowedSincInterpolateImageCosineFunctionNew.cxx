@@ -20,7 +20,7 @@
 #include "otbWindowedSincInterpolateImageCosineFunction.h"
 #include "otbImage.h"
 
-int otbWindowedSincInterpolateImageCosineFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbWindowedSincInterpolateImageCosineFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Image<double, 2>                                      ImageType;
   typedef otb::WindowedSincInterpolateImageCosineFunction<ImageType> InterpolatorType;

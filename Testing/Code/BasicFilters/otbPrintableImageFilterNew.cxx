@@ -22,7 +22,7 @@
 
 #include "otbPrintableImageFilter.h"
 
-int otbPrintableImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbPrintableImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double InputPixelType;
   const unsigned int Dimension = 2;

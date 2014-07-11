@@ -20,7 +20,7 @@
 
 #include "otbWaveletOperator.h"
 
-int otbWaveletOperator(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbWaveletOperator(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const otb::Wavelet::WaveletDirection directionID = otb::Wavelet::FORWARD;
   const otb::Wavelet::Wavelet          wvltID = otb::Wavelet::HAAR;

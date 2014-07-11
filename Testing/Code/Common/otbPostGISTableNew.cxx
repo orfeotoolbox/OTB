@@ -21,7 +21,7 @@
 #include "otbPostGISTable.h"
 #include "otbPostGISConnectionImplementation.h"
 
-int otbPostGISTableNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbPostGISTableNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::PostGISConnectionImplementation GISConnectionType;
 

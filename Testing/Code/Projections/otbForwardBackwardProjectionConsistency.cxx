@@ -33,7 +33,7 @@ typedef TransformType::InputPointType     PointType;
 typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
 typedef itk::Statistics::MersenneTwisterRandomVariateGenerator   RandomGeneratorType;
 
-int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
+int otbForwardBackwardProjectionConsistency(int itkNotUsed(argc), char* argv[])
 {
   std::string infname   = argv[1];
   std::string demDir    = argv[2];

@@ -24,7 +24,7 @@
 #include "otbImageToEdgePathFilter.h"
 #include "otbSimplifyPathListFilter.h"
 
-int otbPolygonToPolygonRCC8Calculator(int argc, char* argv[])
+int otbPolygonToPolygonRCC8Calculator(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
 

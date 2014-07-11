@@ -22,7 +22,7 @@
 
 #include "otbMapProjections.h"
 
-int otbProjectionBaseNew(int argc, char* argv[])
+int otbProjectionBaseNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   otb::AlbersInverseProjection::Pointer      lAlbersProjection = otb::AlbersInverseProjection::New();
   otb::AzimEquDistForwardProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistForwardProjection::New();

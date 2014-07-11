@@ -19,7 +19,7 @@
 #include "otbObjectList.h"
 #include "otbImage.h"
 
-int otbObjectListNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbObjectListNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                    PixelType;

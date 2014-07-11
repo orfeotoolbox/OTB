@@ -20,7 +20,7 @@
 #include "otbWindowedSincInterpolateImageBlackmanFunction.h"
 #include "otbImage.h"
 
-int otbWindowedSincInterpolateImageBlackmanFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbWindowedSincInterpolateImageBlackmanFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Image<double, 2>                                        ImageType;
   typedef otb::WindowedSincInterpolateImageBlackmanFunction<ImageType> InterpolatorType;

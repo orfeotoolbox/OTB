@@ -22,7 +22,7 @@
 #include "otbGISTable.h"
 #include "otbPostGISConnectionImplementation.h"
 
-int otbGISTableSourceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbGISTableSourceNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   typedef otb::PostGISConnectionImplementation        GISConnectionType;

@@ -25,7 +25,7 @@
 #include "otbGISTableToVectorDataFilter.h"
 #include "otbPostGISConnectionImplementation.h"
 
-int otbGISTableToVectorDataFilter(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbGISTableToVectorDataFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   /** Read a PostGIS table and write it in a VectorData. The Filter is based on the OGR reader/writer factory*/
   if (argc != 6)

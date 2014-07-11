@@ -27,7 +27,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
-int otbNDVIDataNodeFeatureFunctionNew(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbNDVIDataNodeFeatureFunctionNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef double CoordRepType;
   typedef double PrecisionType;

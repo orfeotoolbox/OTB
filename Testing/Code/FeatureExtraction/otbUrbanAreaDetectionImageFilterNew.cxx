@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbUrbanAreaDetectionImageFilter.h"
 
-int otbUrbanAreaDetectionImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbUrbanAreaDetectionImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   const unsigned int Dimension = 2;

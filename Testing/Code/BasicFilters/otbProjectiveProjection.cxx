@@ -44,7 +44,7 @@ typedef otb::StreamingStatisticsImageFilter<ImageType> StreamingStatisticsImageF
 
 typedef StreamingStatisticsVectorImageFilterType::MatrixType MatrixType;
 
-int otbProjectiveProjectionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbProjectiveProjectionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   ProjectiveProjectionImageFilterType::Pointer filter = ProjectiveProjectionImageFilterType::New();
   std::cout << filter << std::endl;

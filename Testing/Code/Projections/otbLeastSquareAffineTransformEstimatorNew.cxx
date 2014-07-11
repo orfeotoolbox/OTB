@@ -20,7 +20,7 @@
 #include "otbLeastSquareAffineTransformEstimator.h"
 #include "itkPoint.h"
 
-int otbLeastSquareAffineTransformEstimatorNew(int argc, char* argv[])
+int otbLeastSquareAffineTransformEstimatorNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef itk::Point<float,   2>                              PointType;
   typedef otb::LeastSquareAffineTransformEstimator<PointType> EstimatorType;

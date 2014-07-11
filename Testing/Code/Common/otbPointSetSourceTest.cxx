@@ -22,7 +22,7 @@
 #include "otbPointSetSource.h"
 #include "itkMacro.h"
 
-int otbPointSetSourceTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbPointSetSourceTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   // Declare the PointSet pixel type.
   // Those are the values associated

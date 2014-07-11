@@ -24,7 +24,7 @@
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
 
-int otbSensorModelsNew(int argc, char* argv[])
+int otbSensorModelsNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::SensorModelBase<double> SensorModelBaseType;
   SensorModelBaseType::Pointer lSensorModelBase = SensorModelBaseType::New();

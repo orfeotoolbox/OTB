@@ -32,7 +32,7 @@ typedef otb::BijectionCoherencyFilter
     FloatImageType>                             BijectionFilterType;
 
 
-int otbBijectionCoherencyFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbBijectionCoherencyFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   // Instantiation
   BijectionFilterType::Pointer bijectFilter = BijectionFilterType::New();

@@ -24,7 +24,7 @@
 #include "otbMapProjections.h"
 #include "otbInverseSensorModel.h"
 
-int otbCompositeTransformNew(int argc, char* argv[])
+int otbCompositeTransformNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::UtmInverseProjection       MapProjectionType;
   typedef otb::InverseSensorModel<double> SensorModelType;

@@ -26,7 +26,7 @@
 
 #include "otbAngularProjectionImageFilter.h"
 
-int otbAngularProjectionImageFilterNew ( int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbAngularProjectionImageFilterNew ( int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
 

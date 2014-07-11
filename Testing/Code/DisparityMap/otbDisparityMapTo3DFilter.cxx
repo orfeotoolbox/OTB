@@ -33,7 +33,7 @@ typedef otb::DisparityMapTo3DFilter
     FloatVectorImageType,
     FloatImageType>                              StereoFilterType;
 
-int otbDisparityMapTo3DFilterNew(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbDisparityMapTo3DFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   // Instantiation
   StereoFilterType::Pointer filter = StereoFilterType::New();

@@ -20,7 +20,7 @@
 #include "otbBSplineInterpolateImageFunction.h"
 #include "otbImage.h"
 
-int otbBSplineInterpolateImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbBSplineInterpolateImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Image<double, 2>                                           ImageType;
   typedef otb::BSplineInterpolateImageFunction<ImageType, double, double> InterpolatorType;

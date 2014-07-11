@@ -21,7 +21,7 @@
 #include "otbVectorImageToASImageAdaptor.h"
 #include "otbVectorImage.h"
 
-int otbVectorImageToASImageAdaptorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorImageToASImageAdaptorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::VectorImage<double, 2>                 ImageType;
   typedef otb::VectorImageToASImageAdaptor<ImageType> FilterType;

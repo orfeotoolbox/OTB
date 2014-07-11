@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkMacro.h"
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 
-int otbGreyLevelCooccurrenceIndexedListNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbGreyLevelCooccurrenceIndexedListNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef float                                         PixelType;
   typedef otb::GreyLevelCooccurrenceIndexedList< PixelType > CooccurrenceIndexedListType;

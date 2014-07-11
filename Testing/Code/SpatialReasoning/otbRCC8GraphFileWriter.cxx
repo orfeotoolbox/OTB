@@ -21,7 +21,7 @@
 #include "otbRCC8GraphFileWriter.h"
 #include "otbPolygon.h"
 
-int otbRCC8GraphFileWriter(int argc, char* argv[])
+int otbRCC8GraphFileWriter(int itkNotUsed(argc), char* argv[])
 {
   const char * outputFile = argv[1];
 

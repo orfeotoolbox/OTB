@@ -20,7 +20,7 @@
 #include "otbLabelizeConfidenceConnectedImageFilter.h"
 #include "otbImage.h"
 
-int otbLabelizeConfidenceConnectedImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLabelizeConfidenceConnectedImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;

@@ -19,7 +19,7 @@
 #include "otbPolygonToPolygonRCC8Calculator.h"
 #include "otbPolygon.h"
 
-int otbPolygonToPolygonRCC8CalculatorNew(int argc, char* argv[])
+int otbPolygonToPolygonRCC8CalculatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Polygon<>                                   PolygonType;
   typedef otb::PolygonToPolygonRCC8Calculator<PolygonType> CalculatorType;

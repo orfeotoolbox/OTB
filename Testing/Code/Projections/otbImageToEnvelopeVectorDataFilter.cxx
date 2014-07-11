@@ -30,7 +30,7 @@ typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 typedef otb::ImageToEnvelopeVectorDataFilter
     <ImageType, VectorDataType>                    FilterType;
 
-int otbImageToEnvelopeVectorDataFilterNew(int argc, char* argv[])
+int otbImageToEnvelopeVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   // Instantiation
   FilterType::Pointer filter = FilterType::New();
@@ -38,7 +38,7 @@ int otbImageToEnvelopeVectorDataFilterNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbImageToEnvelopeVectorDataFilter(int argc, char* argv[])
+int otbImageToEnvelopeVectorDataFilter(int itkNotUsed(argc), char* argv[])
 {
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);

@@ -20,7 +20,7 @@
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
 
-int otbVectorRescaleIntensityImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorRescaleIntensityImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef double                                                                  InputPixelType;

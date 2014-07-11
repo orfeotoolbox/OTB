@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "itkMeanImageFilter.h"
 
-int otbPerBandVectorImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbPerBandVectorImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                              PixelType;

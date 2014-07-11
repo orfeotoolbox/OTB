@@ -44,7 +44,7 @@ public:
 
 }
 
-int otbGenericInterpolateImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbGenericInterpolateImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   typedef double InputPixelType;

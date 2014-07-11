@@ -25,7 +25,7 @@
 #include "otbPostGISConnectionImplementation.h"
 #include "otbPostGISTable.h"
 
-int otbVectorDataToGISTableFilter(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorDataToGISTableFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   if (argc != 5)
     {

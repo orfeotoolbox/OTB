@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "itkPointSet.h"
 
-int otbImageToPointSetFilterTest(int itkNotUsed(argc), char **itkNotUsed(argv))
+int otbImageToPointSetFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
 

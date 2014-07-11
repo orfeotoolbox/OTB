@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbVectorImageToIntensityImageFilter.h"
 
-int otbPipelineMemoryPrintCalculatorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbPipelineMemoryPrintCalculatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   otb::PipelineMemoryPrintCalculator::Pointer calculator = otb::PipelineMemoryPrintCalculator::New();
 

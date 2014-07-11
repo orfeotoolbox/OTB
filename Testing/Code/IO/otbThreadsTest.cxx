@@ -20,7 +20,7 @@
 #include "otbThreads.h"
 #include "itkMacro.h"
 
-int otbThreadsTest(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbThreadsTest(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   otb::Threads::Sleep(10);
   return EXIT_SUCCESS;

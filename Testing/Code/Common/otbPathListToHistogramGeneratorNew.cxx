@@ -23,7 +23,7 @@
 #include "otbOrientationPathFunction.h"
 #include "otbPathListToHistogramGenerator.h"
 
-int otbPathListToHistogramGeneratorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbPathListToHistogramGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;

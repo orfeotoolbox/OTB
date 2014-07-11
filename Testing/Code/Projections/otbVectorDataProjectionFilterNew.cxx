@@ -19,7 +19,7 @@
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorData.h"
 
-int otbVectorDataProjectionFilterNew(int argc, char * argv[])
+int otbVectorDataProjectionFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
 
   typedef otb::VectorData<double> InputVectorDataType;

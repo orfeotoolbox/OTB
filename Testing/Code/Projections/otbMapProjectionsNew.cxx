@@ -24,7 +24,7 @@
 #include "otbImage.h"
 #include "otbMapProjections.h"
 
-int otbMapProjectionsNew(int argc, char* argv[])
+int otbMapProjectionsNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   otb::AlbersInverseProjection::Pointer      lAlbersProjection = otb::AlbersInverseProjection::New();
   otb::AlbersForwardProjection::Pointer      lAlbersProjection2 = otb::AlbersForwardProjection::New();
@@ -115,7 +115,7 @@ int otbMapProjectionsNew(int argc, char* argv[])
 
 
 //Test the specific accessors for some map projection
-int otbMapProjectionsTest(int argc, char * argv[])
+int otbMapProjectionsTest(int itkNotUsed(argc), char * argv[])
 {
   char * filename = argv[1];
   std::ofstream file;

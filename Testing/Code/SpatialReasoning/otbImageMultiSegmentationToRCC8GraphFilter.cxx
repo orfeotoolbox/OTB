@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbRCC8GraphFileWriter.h"
 
-int otbImageMultiSegmentationToRCC8GraphFilter(int argc, char* argv[])
+int otbImageMultiSegmentationToRCC8GraphFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
   char *             outputFilename = argv[1];

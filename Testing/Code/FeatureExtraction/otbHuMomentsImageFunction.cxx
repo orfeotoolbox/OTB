@@ -32,7 +32,7 @@
 
 #include "itkAffineTransform.h"
 
-int otbHuMomentsImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbHuMomentsImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   const unsigned int Dimension = 2;

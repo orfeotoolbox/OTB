@@ -32,13 +32,13 @@ typedef otb::VectorData<>                      VectorDataType;
 typedef otb::VectorDataTransformFilter
         <VectorDataType, VectorDataType>       VectorDataTransformType;
 
-int otbVectorDataTransformFilterNew (int argc, char * argv[])
+int otbVectorDataTransformFilterNew (int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   VectorDataTransformType::Pointer transformFilter = VectorDataTransformType::New();
   return EXIT_SUCCESS;
 }
 
-int otbVectorDataTransformFilter (int argc, char * argv[])
+int otbVectorDataTransformFilter (int itkNotUsed(argc), char * argv[])
 {
   typedef otb::VectorImage<double, 2>             ImageType;
   typedef otb::VectorData<>                      VectorDataType;

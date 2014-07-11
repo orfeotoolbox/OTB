@@ -28,7 +28,7 @@
 #include "otbImage.h"
 #include "otbVectorDataToImageFilter.h"
 
-int otbVectorDataToImageFilter(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorDataToImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   if (argc < 4)
@@ -106,7 +106,7 @@ int otbVectorDataToImageFilter(int itkNotUsed(argc), char ** itkNotUsed(argv))
   return EXIT_SUCCESS;
 }
 
-int otbVectorDataToImageFilterBinary(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorDataToImageFilterBinary(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   if (argc < 3)

@@ -24,7 +24,7 @@
 #include "otbImage.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 
-int otbDrawLineSpatialObjectListNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbDrawLineSpatialObjectListNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double        InputPixelType;
   typedef unsigned char OutputPixelType;

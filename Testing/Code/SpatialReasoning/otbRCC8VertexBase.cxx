@@ -20,7 +20,7 @@
 #include "otbPolygon.h"
 #include "otbMacro.h"
 
-int otbRCC8VertexBase(int argc, char* argv[])
+int otbRCC8VertexBase(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Polygon<> PathType;
   unsigned int imageLevel = atoi(argv[1]);

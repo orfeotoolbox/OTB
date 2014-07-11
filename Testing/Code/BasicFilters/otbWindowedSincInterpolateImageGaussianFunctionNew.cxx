@@ -20,7 +20,7 @@
 #include "otbWindowedSincInterpolateImageGaussianFunction.h"
 #include "otbImage.h"
 
-int otbWindowedSincInterpolateImageGaussianFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbWindowedSincInterpolateImageGaussianFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Image<double, 2>                                        ImageType;
   typedef otb::WindowedSincInterpolateImageGaussianFunction<ImageType> InterpolatorType;

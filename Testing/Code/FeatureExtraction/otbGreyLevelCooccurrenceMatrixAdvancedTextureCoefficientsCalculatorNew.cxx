@@ -19,7 +19,7 @@
 
 #include "otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculator.h"
 
-int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbGreyLevelCooccurrenceMatrixAdvancedTextureCoefficientsCalculatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef float                                                  MeasurementType;
   typedef itk::Statistics::Histogram<MeasurementType> HistogramType;

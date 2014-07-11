@@ -24,7 +24,7 @@
 
 #include "otbTouziEdgeDetectorImageFilter.h"
 
-int otbTouziEdgeDetectorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbTouziEdgeDetectorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;

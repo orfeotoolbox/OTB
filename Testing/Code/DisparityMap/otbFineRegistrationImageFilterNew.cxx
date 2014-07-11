@@ -22,7 +22,7 @@
 #include "otbFineRegistrationImageFilter.h"
 
 
-int otbFineRegistrationImageFilterNew( int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbFineRegistrationImageFilterNew( int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double      PixelType;
   const unsigned int  Dimension = 2;

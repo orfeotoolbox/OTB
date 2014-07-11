@@ -24,7 +24,7 @@
 #include "otbMacro.h"
 #include "otbPolygon.h"
 
-int otbRCC8GraphFileReader(int argc, char* argv[])
+int otbRCC8GraphFileReader(int itkNotUsed(argc), char* argv[])
 {
   char * inputFilename = argv[1];
   typedef otb::Polygon<>                          PathType;

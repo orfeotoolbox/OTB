@@ -22,7 +22,7 @@
 #include "otbComplexMomentPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbComplexMomentPathNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbComplexMomentPathNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
 

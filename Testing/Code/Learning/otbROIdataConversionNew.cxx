@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-int otbROIdataConversionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbROIdataConversionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;

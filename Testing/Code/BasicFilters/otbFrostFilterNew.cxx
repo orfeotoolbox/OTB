@@ -21,7 +21,7 @@
 #include "otbFrostImageFilter.h"
 #include "otbImage.h"
 
-int otbFrostFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbFrostFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;

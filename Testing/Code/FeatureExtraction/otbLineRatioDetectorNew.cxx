@@ -24,7 +24,7 @@
 #include "otbImage.h"
 #include "otbLineRatioDetectorImageFilter.h"
 
-int otbLineRatioDetectorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLineRatioDetectorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;

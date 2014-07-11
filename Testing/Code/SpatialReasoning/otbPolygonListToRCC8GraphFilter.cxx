@@ -42,7 +42,7 @@ PolygonType::VertexType Vertex(double i,double j)
 }
 
 
-int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
+int otbPolygonListToRCC8GraphFilter(int itkNotUsed(argc), char* argv[])
 {
   char * outfile = argv[1];
 

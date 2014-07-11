@@ -27,7 +27,7 @@
 
 #include "otbMath.h"
 
-int otbVectorDataToRightAngleVectorDataFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorDataToRightAngleVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   /** Typedefs */
   typedef otb::VectorData< >                    VectorDataType;

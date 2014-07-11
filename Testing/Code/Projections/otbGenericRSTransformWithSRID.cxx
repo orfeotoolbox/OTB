@@ -28,7 +28,7 @@
   * except using the SRID to build the wkt.
   */
 
-int otbGenericRSTransformWithSRID(int argc, char* argv[])
+int otbGenericRSTransformWithSRID(int itkNotUsed(argc), char* argv[])
 {
   OGRSpatialReference oSRS;
 

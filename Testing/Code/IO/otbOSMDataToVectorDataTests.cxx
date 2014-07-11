@@ -24,7 +24,7 @@ typedef otb::OSMDataToVectorDataGenerator                     FilterType;
 typedef otb::VectorDataFileWriter<FilterType::VectorDataType> VectorDataFileWriterType;
 
 
-int otbOSMToVectorDataGeneratorNew (int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbOSMToVectorDataGeneratorNew (int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   FilterType::Pointer filter = FilterType::New();
 

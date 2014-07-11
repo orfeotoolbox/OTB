@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include <cstdlib>
 
-int otbImageFittingPolygonListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbImageFittingPolygonListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef otb::Polygon<double>          PolygonType;

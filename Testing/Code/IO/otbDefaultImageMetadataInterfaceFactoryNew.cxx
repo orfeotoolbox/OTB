@@ -22,7 +22,7 @@
 
 #include "otbDefaultImageMetadataInterfaceFactory.h"
 
-int otbDefaultImageMetadataInterfaceFactoryNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbDefaultImageMetadataInterfaceFactoryNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::DefaultImageMetadataInterfaceFactory ObjectType;
 

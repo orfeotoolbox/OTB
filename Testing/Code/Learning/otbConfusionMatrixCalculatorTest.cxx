@@ -19,7 +19,7 @@
 #include "itkListSample.h"
 #include "otbConfusionMatrixCalculator.h"
 
-int otbConfusionMatrixCalculatorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbConfusionMatrixCalculatorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   typedef itk::VariableLengthVector<int>          PLabelType;
@@ -278,7 +278,7 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
 }
 
 
-int otbConfusionMatrixCalculatorComputeWithBaseline(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbConfusionMatrixCalculatorComputeWithBaseline(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef char                                                           ClassLabelType;
   typedef itk::VariableLengthVector<ClassLabelType>                      PLabelType;

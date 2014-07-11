@@ -20,7 +20,7 @@
 #include "otbLabelizeConnectedThresholdImageFilter.h"
 #include "otbImage.h"
 
-int otbLabelizeConnectedThresholdImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLabelizeConnectedThresholdImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;

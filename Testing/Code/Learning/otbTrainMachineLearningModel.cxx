@@ -112,7 +112,7 @@ bool ReadDataFile(const std::string & infname, InputListSampleType * samples, Ta
   return true;
 }
 
-int otbLibSVMMachineLearningModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbLibSVMMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::LibSVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
   SVMType::Pointer svmclassifier = SVMType::New();
@@ -194,7 +194,7 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbSVMMachineLearningModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbSVMMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::SVMMachineLearningModel<InputValueType,TargetValueType> SVMType;
   SVMType::Pointer svmclassifier = SVMType::New();
@@ -276,7 +276,7 @@ int otbSVMMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbKNearestNeighborsMachineLearningModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbKNearestNeighborsMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::KNearestNeighborsMachineLearningModel<InputValueType,TargetValueType> KNearestNeighborsType;
   KNearestNeighborsType::Pointer knnclassifier = KNearestNeighborsType::New();
@@ -358,7 +358,7 @@ int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbRandomForestsMachineLearningModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbRandomForestsMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::RandomForestsMachineLearningModel<InputValueType,TargetValueType> RandomForestType;
   RandomForestType::Pointer rfclassifier = RandomForestType::New();
@@ -449,7 +449,7 @@ int otbRandomForestsMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbBoostMachineLearningModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbBoostMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::BoostMachineLearningModel<InputValueType,TargetValueType> BoostType;
   BoostType::Pointer classifier = BoostType::New();
@@ -540,7 +540,7 @@ int otbBoostMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbANNMachineLearningModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbANNMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::NeuralNetworkMachineLearningModel<InputValueType, TargetValueType> ANNType;
   ANNType::Pointer classifier = ANNType::New();
@@ -635,7 +635,7 @@ int otbANNMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbNormalBayesMachineLearningModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbNormalBayesMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::NormalBayesMachineLearningModel<InputValueType,TargetValueType> NormalBayesType;
   NormalBayesType::Pointer classifier = NormalBayesType::New();
@@ -717,7 +717,7 @@ int otbNormalBayesMachineLearningModel(int argc, char * argv[])
     }
 }
 
-int otbDecisionTreeMachineLearningModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbDecisionTreeMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::DecisionTreeMachineLearningModel<InputValueType,TargetValueType> DecisionTreeType;
   DecisionTreeType::Pointer classifier = DecisionTreeType::New();
@@ -800,7 +800,7 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
 }
 
 
-int otbGradientBoostedTreeMachineLearningModelNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbGradientBoostedTreeMachineLearningModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType,TargetValueType> GBTreeType;
   GBTreeType::Pointer classifier = GBTreeType::New();

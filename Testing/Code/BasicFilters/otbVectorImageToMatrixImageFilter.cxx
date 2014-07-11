@@ -27,14 +27,14 @@ typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef VectorImageToMatrixImageFilterType::MatrixType MatrixType;
 
-int otbVectorImageToMatrixNewTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorImageToMatrixNewTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   VectorImageToMatrixImageFilterType::Pointer vim2matrix = VectorImageToMatrixImageFilterType::New();
   std::cout << vim2matrix << std::endl;
   return EXIT_SUCCESS;
 }
 
-int otbVectorImageToMatrixTest(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbVectorImageToMatrixTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   ImageType::Pointer image = ImageType::New();
 

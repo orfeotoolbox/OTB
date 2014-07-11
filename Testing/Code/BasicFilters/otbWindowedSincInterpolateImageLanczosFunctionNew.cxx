@@ -20,7 +20,7 @@
 #include "otbWindowedSincInterpolateImageLanczosFunction.h"
 #include "otbImage.h"
 
-int otbWindowedSincInterpolateImageLanczosFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbWindowedSincInterpolateImageLanczosFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Image<double, 2>                                       ImageType;
   typedef otb::WindowedSincInterpolateImageLanczosFunction<ImageType> InterpolatorType;

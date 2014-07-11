@@ -23,7 +23,7 @@
 #include "itkTernaryFunctorImageFilter.h"
 #include "otbAmplitudePhaseToRGBFunctor.h"
 
-int otbAmplitudePhaseToRGBFunctorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbAmplitudePhaseToRGBFunctorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
 
   typedef double                   PixelType;

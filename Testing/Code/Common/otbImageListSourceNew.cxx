@@ -20,7 +20,7 @@
 #include "otbImageListSource.h"
 #include "otbImage.h"
 
-int otbImageListSourceNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbImageListSourceNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                         InputPixelType;

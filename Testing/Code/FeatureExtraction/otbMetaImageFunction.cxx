@@ -36,7 +36,7 @@ typedef otb::MetaImageFunction<PrecisionType, double>                 MetaImageF
 typedef MetaImageFunctionType::PointType                              PointType;
 typedef MetaImageFunctionType::OutputType                             OutputType;
 
-int otbMetaImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbMetaImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   MetaImageFunctionType::Pointer function = MetaImageFunctionType::New();
 

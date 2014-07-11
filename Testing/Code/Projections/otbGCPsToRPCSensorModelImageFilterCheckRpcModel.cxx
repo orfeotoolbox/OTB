@@ -23,7 +23,7 @@
 #include "otbGenericRSTransform.h"
 #include "otbGeographicalDistance.h"
 
-int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
+int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
 {
   // Set command line arguments
   typedef otb::CommandLineArgumentParser ParserType;

@@ -20,7 +20,7 @@
 
 #include "otbPolygon.h"
 
-int otbPolygonNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbPolygonNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Polygon<> PolygonType;
 

@@ -27,7 +27,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-int otbVectorImageComplexNew(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbVectorImageComplexNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef std::complex<float>            PixelType;
   typedef otb::VectorImage<PixelType, 2> ImageType;

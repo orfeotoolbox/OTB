@@ -24,7 +24,7 @@
 
 #include "otbAssociativeSymmetricalSumImageFilter.h"
 
-int otbAssociativeSymmetricalSumNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbAssociativeSymmetricalSumNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef double InputPixelType;
   typedef double OutputPixelType;

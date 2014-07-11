@@ -26,7 +26,7 @@
 #include "otbStreamingResampleImageFilter.h"
 
 
-int otbBCOInterpolateImageFunctionNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbBCOInterpolateImageFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Image<double, 2>                                           ImageType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;
@@ -99,7 +99,7 @@ int otbBCOInterpolateImageFunction(int argc, char * argv[])
 }
 
 
-int otbBCOInterpolateImageFunctionOverVectorImageNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbBCOInterpolateImageFunctionOverVectorImageNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::VectorImage<double, 2>                                     ImageType;
   typedef otb::BCOInterpolateImageFunction<ImageType, double>             InterpolatorType;

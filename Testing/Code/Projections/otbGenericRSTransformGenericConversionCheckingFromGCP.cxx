@@ -33,7 +33,7 @@ typedef TransformType::InputPointType     PointType;
 typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
 typedef otb::GeographicalDistance<ImageType::PointType>          GeoDistanceType;
 
-int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[])
+int otbGenericRSTransformGenericConversionCheckingFromGCP(int itkNotUsed(argc), char* argv[])
 {
   std::string infname   = argv[1];
   std::string demDir    = argv[2];

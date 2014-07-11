@@ -22,7 +22,7 @@
 
 #include "otbGenericMapProjection.h"
 
-int otbGenericMapProjectionNew(int argc, char* argv[])
+int otbGenericMapProjectionNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
 
   typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> MapProjectionType;

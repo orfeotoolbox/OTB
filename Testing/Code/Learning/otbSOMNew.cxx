@@ -22,7 +22,7 @@
 #include "itkEuclideanDistanceMetric.h"
 #include "itkListSample.h"
 
-int otbSOMNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbSOMNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef float                                           ComponentType;

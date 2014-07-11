@@ -26,7 +26,7 @@
 
 #include "otbHorizontalSobelVectorImageFilter.h"
 
-int otbHorizontalSobelVectorImageFilterNewTest ( int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbHorizontalSobelVectorImageFilterNewTest ( int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;

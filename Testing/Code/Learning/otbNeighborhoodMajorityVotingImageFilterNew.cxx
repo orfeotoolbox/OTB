@@ -22,7 +22,7 @@
 #include "itkBinaryBallStructuringElement.h"
 #include "otbNeighborhoodMajorityVotingImageFilter.h"
 
-int otbNeighborhoodMajorityVotingImageFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbNeighborhoodMajorityVotingImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputLabelPixelType; // 8 bits
   typedef unsigned short OutputLabelPixelType; // 16 bits

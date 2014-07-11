@@ -18,7 +18,7 @@
 
 #include "otbRectangle.h"
 
-int otbRectangleNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbRectangleNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::Rectangle<> RectangleType;
 

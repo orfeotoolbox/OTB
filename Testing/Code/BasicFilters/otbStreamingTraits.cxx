@@ -33,7 +33,7 @@ void TestInstanciate()
   std::cout << instance << std::endl;
 }
 
-int otbStreamingTraitsImage(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbStreamingTraitsImage(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   // Images definition
   typedef otb::Image<PixelType, Dimension>      ImageType;
@@ -55,7 +55,7 @@ int otbStreamingTraitsImage(int itkNotUsed(argc), char** itkNotUsed(argv))
   return EXIT_SUCCESS;
 }
 
-int otbStreamingTraitsVectorImage(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbStreamingTraitsVectorImage(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   // Images definition
   typedef otb::VectorImage<PixelType, Dimension>      ImageType;

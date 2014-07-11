@@ -704,7 +704,7 @@ int otbMonobandScalarToVectorImageComplexInt(int argc, char * argv[])
  * out : ???
  ***********/
 template<class InternalType>
-int otbMultibandComplexToImageScalarGeneric(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbMultibandComplexToImageScalarGeneric(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   // This case is not handled yet.
   // We need more time to decide what we want to do with this case. ( perhaps return exception ???)

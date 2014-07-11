@@ -20,7 +20,7 @@
 #include "otbNonMaxRemovalByDirectionFilter.h"
 #include "otbImage.h"
 
-int otbNonMaxRemovalByDirectionFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbNonMaxRemovalByDirectionFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef double                                                               PixelType;

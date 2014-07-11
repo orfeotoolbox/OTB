@@ -22,7 +22,7 @@
 
 using namespace otb;
 
-int otbGDALOverviewsBuilderNew(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbGDALOverviewsBuilderNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef otb::GDALOverviewsBuilder GDALOverviewsBuilderType;
   GDALOverviewsBuilderType::Pointer object = GDALOverviewsBuilderType::New();

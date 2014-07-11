@@ -25,7 +25,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
-int otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew(int itkNotUsed(argc), char** itkNotUsed(argv))
+int otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   typedef double CoordRepType;
   typedef double PrecisionType;

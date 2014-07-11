@@ -20,7 +20,7 @@
 #include "otbMorphologicalPyramidSynthesisFilter.h"
 #include "otbImage.h"
 
-int otbMorphologicalPyramidSynthesisFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbMorphologicalPyramidSynthesisFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char InputPixelType;

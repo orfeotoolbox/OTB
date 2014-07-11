@@ -22,7 +22,7 @@
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbPolygon.h"
 
-int otbObjectListToObjectListFilterNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbObjectListToObjectListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::PolyLineParametricPathWithValue<std::complex<int>, 2> InputObjectType;
   typedef otb::Polygon<unsigned char>                                OutputObjectType;

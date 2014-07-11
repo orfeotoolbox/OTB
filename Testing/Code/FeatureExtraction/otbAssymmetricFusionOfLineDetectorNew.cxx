@@ -29,7 +29,7 @@
 
 #include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
 
-int otbAssymmetricFusionOfLineDetectorNew(int itkNotUsed(argc), char ** itkNotUsed(argv))
+int otbAssymmetricFusionOfLineDetectorNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;

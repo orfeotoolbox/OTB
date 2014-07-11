@@ -21,7 +21,7 @@
 
 #include "otbGenericMapProjection.h"
 
-int otbGenericMapProjection(int argc, char* argv[])
+int otbGenericMapProjection(int itkNotUsed(argc), char* argv[])
 {
   const char *  outFileName = argv[1];
   std::ofstream file;

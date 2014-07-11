@@ -24,7 +24,7 @@
 #include "otbImage.h"
 #include "otbGeocentricTransform.h"
 
-int otbGeocentricTransform(int argc, char* argv[])
+int otbGeocentricTransform(int itkNotUsed(argc), char* argv[])
 {
   const char *  outFileName = argv[1];
   std::ofstream file;

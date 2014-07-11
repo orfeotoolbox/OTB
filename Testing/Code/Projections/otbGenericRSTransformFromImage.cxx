@@ -41,7 +41,7 @@ typedef itk::Statistics::EuclideanDistanceMetric<Point3DType> Distance3DType;
 typedef otb::GeographicalDistance<ImageType::PointType>          GeoDistanceType;
 typedef otb::GeographicalDistance<Point3DType>          GeoDistance3DType;
 
-int otbGenericRSTransformFromImage(int argc, char* argv[])
+int otbGenericRSTransformFromImage(int itkNotUsed(argc), char* argv[])
 {
   /*
    * This test checks if we can instanciate a GenericRSTransform from the image information
@@ -76,7 +76,7 @@ int otbGenericRSTransformFromImage(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int argc, char* argv[])
+int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int itkNotUsed(argc), char* argv[])
 {
   std::string infname = argv[1];
   std::string demdir = argv[2];
