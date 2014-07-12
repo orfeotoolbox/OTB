@@ -41,7 +41,8 @@ using kmldom::PointPtr;
 int kmlcreatekml(int argc, char* argv[]) {
   // Get the factory singleton to create KML elements.
   KmlFactory* factory = KmlFactory::GetFactory();
-
+  if(argc > 0) //silence warning!
+    std::cerr << "Running " << argv[0] << std::endl;
   // Create <coordinates>.
   CoordinatesPtr coordinates = factory->CreateCoordinates();
   // Create <coordinates>-122.0816695,37.42052549<coordinates>
