@@ -21,7 +21,7 @@
 #include "otbJointMassOfBeliefFilter.h"
 #include "otbMath.h"
 
-int otbJointMassOfBeliefFilter(int argc, char* argv[])
+int otbJointMassOfBeliefFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef otb::MassOfBelief<std::string> MassOfBeliefFunctionType;
   typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> JointMassOfBeliefFilterType;
@@ -111,7 +111,7 @@ int otbJointMassOfBeliefFilter(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbJointMassOfBeliefFilterLimit(int argc, char* argv[])
+int otbJointMassOfBeliefFilterLimit(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef otb::MassOfBelief<std::string> MassOfBeliefFunctionType;
   typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> JointMassOfBeliefFilterType;

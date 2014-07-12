@@ -22,7 +22,7 @@
 
 #include "otbMacro.h"
 
-int otbCompareAsciiTestsEpsilon3_WhiteSpace(int argc, char * argv[])
+int otbCompareAsciiTestsEpsilon3_WhiteSpace(int itkNotUsed(argc), char * argv[])
 {
   std::cout << "ASCII COMPARISON TEST: it will use directly the baseline and input files in OTB-Data "
       "to avoid problem with otb-bot." << std::endl;

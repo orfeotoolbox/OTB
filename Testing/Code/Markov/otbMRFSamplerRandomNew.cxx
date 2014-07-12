@@ -20,7 +20,7 @@
 #include "otbMRFSamplerRandom.h"
 #include "otbImage.h"
 
-int otbMRFSamplerRandomNew(int argc, char * argv[])
+int otbMRFSamplerRandomNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                                      PixelType;
   typedef otb::Image<PixelType, 2>                    ImageType;

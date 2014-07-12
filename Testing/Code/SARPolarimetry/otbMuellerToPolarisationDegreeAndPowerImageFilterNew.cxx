@@ -23,7 +23,7 @@
 #include "otbVectorImage.h"
 #include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
 
-int otbMuellerToPolarisationDegreeAndPowerImageFilterNew(int argc, char * argv[])
+int otbMuellerToPolarisationDegreeAndPowerImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
 

@@ -22,7 +22,7 @@
 #include "otbVectorData.h"
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
 
-int otbStandardDSCostFunctionNew(int argc, char* argv[])
+int otbStandardDSCostFunctionNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                          PrecisionType;
   typedef otb::VectorData<PrecisionType>  VectorDataType;

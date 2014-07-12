@@ -22,7 +22,7 @@
 #include "otbRAndBAndNIRIndexImageFilter.h"
 #include "otbImage.h"
 
-int otbRAndBAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
+int otbRAndBAndNIRVegetationIndexImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                    PixelType;

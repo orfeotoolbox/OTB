@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include <fstream>
 
-int otbMRFEnergyFisherClassificationNew(int argc, char * argv[])
+int otbMRFEnergyFisherClassificationNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                        PixelTypeInput;
   typedef int                           PixelTypeLabel;
@@ -38,7 +38,7 @@ int otbMRFEnergyFisherClassificationNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbMRFEnergyFisherClassification(int argc, char * argv[])
+int otbMRFEnergyFisherClassification(int itkNotUsed(argc), char * argv[])
 {
   const char * outputFile = argv[1];
 

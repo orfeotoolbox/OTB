@@ -21,7 +21,7 @@
 
 #include "otbPolarimetricData.h"
 
-int otbPolarimetricDataNew(int argc, char * argv[])
+int otbPolarimetricDataNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   otb::PolarimetricData::Pointer  data = otb::PolarimetricData::New();
 
@@ -30,7 +30,7 @@ int otbPolarimetricDataNew(int argc, char * argv[])
 
 
 
-int otbPolarimetricDataTest(int argc, char * argv[])
+int otbPolarimetricDataTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   otb::PolarimetricData::Pointer  data = otb::PolarimetricData::New();
 

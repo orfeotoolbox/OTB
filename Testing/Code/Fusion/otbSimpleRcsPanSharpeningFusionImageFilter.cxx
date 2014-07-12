@@ -24,7 +24,7 @@
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
-int otbSimpleRcsPanSharpeningFusionImageFilter(int argc, char * argv[])
+int otbSimpleRcsPanSharpeningFusionImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * panchro = argv[1];
   const char * multispect = argv[2];

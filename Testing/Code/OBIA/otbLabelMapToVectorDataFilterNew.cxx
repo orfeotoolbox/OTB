@@ -20,7 +20,7 @@
 #include "otbVectorData.h"
 #include "itkAttributeLabelObject.h"
 
-int otbLabelMapToVectorDataFilterNew(int argc, char * argv[])
+int otbLabelMapToVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const int dim = 2;
   typedef otb::VectorData<> VectorDataType;

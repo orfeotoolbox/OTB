@@ -5,7 +5,7 @@
 #include "otbLocalRxDetectorFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int LocalRXDetectorNewTest(int argc, char * argv[])
+int LocalRXDetectorNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
        typedef double PixelType;
        typedef otb::VectorImage<PixelType, 2> VectorImageType;
@@ -16,7 +16,7 @@ int LocalRXDetectorNewTest(int argc, char * argv[])
         return EXIT_SUCCESS;
 }
 
-int LocalRXDetectorTest(int argc, char * argv[])
+int LocalRXDetectorTest(int itkNotUsed(argc), char * argv[])
 {
        typedef double PixelType;
        typedef otb::VectorImage<PixelType, 2> VectorImageType;
@@ -62,5 +62,3 @@ int LocalRXDetectorTest(int argc, char * argv[])
 
        return EXIT_SUCCESS;
 }
-
-

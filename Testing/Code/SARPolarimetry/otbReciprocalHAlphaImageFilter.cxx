@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbReciprocalHAlphaImageFilter.h"
 
-int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
+int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

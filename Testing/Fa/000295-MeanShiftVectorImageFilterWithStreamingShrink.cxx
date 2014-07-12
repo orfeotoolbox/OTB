@@ -23,7 +23,7 @@
 #include "otbStreamingShrinkImageFilter.h"
 
 
-int main(int argc, char * argv[])
+int main(int itkNotUsed(argc), char * argv[])
 {
   const char *       infname                = argv[1];
   const unsigned int spatialRadius          = atoi(argv[2]);

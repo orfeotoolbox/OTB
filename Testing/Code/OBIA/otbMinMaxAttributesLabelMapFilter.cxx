@@ -43,13 +43,13 @@ typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType, LabelMapT
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                        ShapeFilterType;
 typedef otb::MinMaxAttributesLabelMapFilter<LabelMapType>                       MinMaxAttributesLabelMapFilterType;
 
-int otbMinMaxAttributesLabelMapFilterNew(int argc, char * argv[])
+int otbMinMaxAttributesLabelMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   MinMaxAttributesLabelMapFilterType::Pointer radiometricLabelMapFilter = MinMaxAttributesLabelMapFilterType::New();
   return EXIT_SUCCESS;
 }
 
-int otbMinMaxAttributesLabelMapFilter(int argc, char * argv[])
+int otbMinMaxAttributesLabelMapFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * lfname  = argv[2];

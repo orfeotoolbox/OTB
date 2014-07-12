@@ -20,7 +20,7 @@
 #include "otbMRFEnergyGaussian.h"
 #include "otbImage.h"
 
-int otbMRFEnergyGaussianNew(int argc, char * argv[])
+int otbMRFEnergyGaussianNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                                       PixelType;
   typedef otb::Image<PixelType, 2>                     ImageType;

@@ -19,7 +19,7 @@
 
 #include "otbFuzzyVariable.h"
 
-int otbFuzzyVariableNew(int argc, char* argv[])
+int otbFuzzyVariableNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef float PrecisionType;
   typedef unsigned short LabelType;

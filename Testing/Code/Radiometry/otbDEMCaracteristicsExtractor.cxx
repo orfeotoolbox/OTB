@@ -22,7 +22,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 
-int otbDEMCaracteristicsExtractor(int argc, char * argv[])
+int otbDEMCaracteristicsExtractor(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputSlotFileName = argv[6];

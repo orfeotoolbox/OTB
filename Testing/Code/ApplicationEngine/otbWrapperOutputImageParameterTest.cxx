@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbWrapperTypes.h"
 
-int otbWrapperOutputImageParameterNew(int argc, char* argv[])
+int otbWrapperOutputImageParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::OutputImageParameter OutputImageParameterType;
   OutputImageParameterType::Pointer parameter = OutputImageParameterType::New();
@@ -32,7 +32,7 @@ int otbWrapperOutputImageParameterNew(int argc, char* argv[])
 }
 
 
-int otbWrapperOutputImageParameterTest1(int argc, char* argv[])
+int otbWrapperOutputImageParameterTest1(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::OutputImageParameter OutputImageParameterType;
   OutputImageParameterType::Pointer param = OutputImageParameterType::New();

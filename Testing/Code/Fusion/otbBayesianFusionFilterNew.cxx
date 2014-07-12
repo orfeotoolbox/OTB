@@ -24,7 +24,7 @@
 
 #include "otbBayesianFusionFilter.h"
 
-int otbBayesianFusionFilterNew(int argc, char * argv[])
+int otbBayesianFusionFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;

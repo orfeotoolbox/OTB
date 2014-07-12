@@ -26,8 +26,6 @@
 #include "itksys/SystemTools.hxx"
 #include "otbSpectralResponse.h"
 
-
-
 int otbFilterFunctionValuesSpectralResponseTest(int argc, char * argv[])
 {
 
@@ -123,7 +121,7 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
+int otbFilterFunctionValuesDigitalGlobeTest(int itkNotUsed(argc), char * argv[])
 {
   const char *       infname   = argv[1];
   const char *       outname   = argv[2];

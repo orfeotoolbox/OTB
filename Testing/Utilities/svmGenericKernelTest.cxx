@@ -52,12 +52,10 @@ protected:
  * image.  We write the output to an image for
  * comparison.
  */
-int svmGenericKernelTest( int argc, char *argv[] )
+int svmGenericKernelTest( int itkNotUsed(argc), char *argv[] )
 {
-
   try
     {
-
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
         otb::LinearKernelFunctor lFunctor;
@@ -93,18 +91,3 @@ int svmGenericKernelTest( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

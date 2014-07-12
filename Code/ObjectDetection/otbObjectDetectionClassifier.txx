@@ -245,8 +245,6 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
   SVMModelType*   model = static_cast<SVMModelType*>(this->itk::ProcessObject::GetInput(1));
 
   typedef typename RegionType::IndexType      IndexType;
-  typedef typename RegionType::IndexValueType IndexValueType;
-
   IndexType begin = outputRegionForThread.GetIndex();
   IndexType end = begin;
   end[0] += outputRegionForThread.GetSize(0);

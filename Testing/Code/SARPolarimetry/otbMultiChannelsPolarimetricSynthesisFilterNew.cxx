@@ -24,7 +24,7 @@
 #include "otbVectorImage.h"
 #include "otbMultiChannelsPolarimetricSynthesisFilter.h"
 
-int otbMultiChannelsPolarimetricSynthesisFilterNew(int argc, char * argv[])
+int otbMultiChannelsPolarimetricSynthesisFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double InputPixelType;
   typedef double OutputPixelType;

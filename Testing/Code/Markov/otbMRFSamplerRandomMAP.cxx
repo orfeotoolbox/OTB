@@ -24,7 +24,7 @@
 
 #include <fstream>
 
-int otbMRFSamplerRandomMAP(int argc, char * argv[])
+int otbMRFSamplerRandomMAP(int itkNotUsed(argc), char * argv[])
 {
   const char * inputImage = argv[1];
   const char * labelImage = argv[2];

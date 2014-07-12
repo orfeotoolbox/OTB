@@ -19,7 +19,7 @@
 #include "otbAeronetFileReader.h"
 #include "otbSystem.h"
 
-int otbAeronetExtractDataBadData(int argc, char * argv[])
+int otbAeronetExtractDataBadData(int itkNotUsed(argc), char * argv[])
 {
   otb::AeronetFileReader::Pointer reader = otb::AeronetFileReader::New();
 

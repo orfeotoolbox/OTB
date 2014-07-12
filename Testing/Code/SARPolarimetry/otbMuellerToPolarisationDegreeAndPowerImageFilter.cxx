@@ -28,7 +28,7 @@
 #include "otbSinclairToMuellerMatrixFunctor.h"
 
 
-int otbMuellerToPolarisationDegreeAndPowerImageFilter(int argc, char * argv[])
+int otbMuellerToPolarisationDegreeAndPowerImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

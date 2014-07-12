@@ -25,7 +25,7 @@
 #include "otbMuellerToReciprocalCovarianceImageFilter.h"
 #include "otbExtractROI.h"
 
-int otbMuellerToReciprocalCovarianceImageFilter(int argc, char * argv[])
+int otbMuellerToReciprocalCovarianceImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

@@ -21,7 +21,7 @@
 
 #include "otbVectorData.h"
 
-int otbVectorDataToSpecificDescriptionFilterBaseNew(int argc, char* argv[])
+int otbVectorDataToSpecificDescriptionFilterBaseNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef float                           PrecisionType;
   typedef otb::VectorData<PrecisionType>  VectorDataType;

@@ -88,7 +88,7 @@ VectorImageType::Pointer makeVectorImage(IndexValueType startX, IndexValueType s
   return im;
 }
 
-int otbITKExtractImageFilterROITestRegion(int argc, char * argv[])
+int otbITKExtractImageFilterROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   ImageType::Pointer in;
   RegionType extractionRegion;
@@ -140,7 +140,7 @@ int otbITKExtractImageFilterROITestRegion(int argc, char * argv[])
 }
 
 
-int otbITKVectorIndexSelectionCastTestRegion(int argc, char * argv[])
+int otbITKVectorIndexSelectionCastTestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   VectorImageType::Pointer in;
   RegionType extractionRegion;
@@ -180,7 +180,7 @@ int otbITKVectorIndexSelectionCastTestRegion(int argc, char * argv[])
 }
 
 
-int otbMultiToMonoChannelExtractROITestRegion(int argc, char * argv[])
+int otbMultiToMonoChannelExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   VectorImageType::Pointer in;
   RegionType extractionRegion;
@@ -233,7 +233,7 @@ int otbMultiToMonoChannelExtractROITestRegion(int argc, char * argv[])
 
 
 
-int otbMultiChannelExtractROITestRegion(int argc, char * argv[])
+int otbMultiChannelExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   VectorImageType::Pointer in;
   RegionType extractionRegion;
@@ -285,7 +285,7 @@ int otbMultiChannelExtractROITestRegion(int argc, char * argv[])
 }
 
 
-int otbExtractROITestRegion(int argc, char * argv[])
+int otbExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   ImageType::Pointer in;
   RegionType extractionRegion;
@@ -415,4 +415,3 @@ int main(int argc, char * argv[])
   return finalResult;
 
 }
-

@@ -36,7 +36,7 @@ std::ostream& operator <<(std::ostream& os, const MassOfBeliefFunctionType::Labe
   return os;
 }
 
-int otbMassOfBeliefDSApplied(int argc, char* argv[])
+int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
 {
   const char * hyp_1  = argv[1];
   const char * hyp_2  = argv[2];

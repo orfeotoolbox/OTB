@@ -24,7 +24,7 @@
 #include "otbSoilIndicesFunctor.h"
 
 template<class TInputGImage, class TInputRImage, class TOutputImage, class TFunction>
-int generic_GAndRIndexImageFilter(int argc, char * argv[])
+int generic_GAndRIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   typedef otb::ImageFileReader<TInputGImage> GReaderType;
   typedef otb::ImageFileReader<TInputRImage> RReaderType;

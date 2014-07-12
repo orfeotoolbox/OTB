@@ -22,7 +22,7 @@
 
 #include <cstdlib>
 
-int otbAtmosphericCorrectionParametersNew(int argc, char * argv[])
+int otbAtmosphericCorrectionParametersNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
   typedef otb::FilterFunctionValues            FilterFunctionValuesType;

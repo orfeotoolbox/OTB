@@ -19,7 +19,7 @@
 
 #include "otbFuzzyVariable.h"
 
-int otbFuzzyVariableSetValue(int argc, char* argv[])
+int otbFuzzyVariableSetValue(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef float PrecisionType;
   typedef otb::FuzzyVariable<std::string, PrecisionType> FuzzyVarType;

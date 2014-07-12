@@ -23,7 +23,7 @@
 //TODO change the bug tracker url
 //http://bugs.orfeo-toolbox.org/view.php?id=406
 
-int main(int argc, char *argv[])
+int main(int itkNotUsed(argc), char *argv[])
 {
   char * filename = argv[1];
 

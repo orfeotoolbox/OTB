@@ -43,7 +43,7 @@ template <class TInputLabelMap, class TOutputListSample, class TMeasurementFunct
 typename LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
 ::DataObjectPointerType
 LabelMapToSampleListFilter<TInputLabelMap,TOutputListSample,TMeasurementFunctor>
-::MakeOutput(unsigned int idx)
+::MakeOutput(unsigned int itkNotUsed(idx))
 {
   DataObjectPointerType output;
   output = static_cast<itk::DataObject*>(OutputSampleListType::New().GetPointer());

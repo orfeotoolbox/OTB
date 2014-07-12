@@ -22,7 +22,7 @@
 #include "otbVectorImageToMatrixImageFilter.h"
 #include "otbStandardWriterWatcher.h"
 
-int otbMDMDNMFImageFilterNewTest(int argc, char * argv[])
+int otbMDMDNMFImageFilterNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                                                    PixelType;
   typedef otb::VectorImage<PixelType, 2>                            VectorImageType;
@@ -32,7 +32,7 @@ int otbMDMDNMFImageFilterNewTest(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbMDMDNMFImageFilterTest(int argc, char * argv[])
+int otbMDMDNMFImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   typedef double                                         PixelType;
   typedef otb::VectorImage<PixelType, 2>                 ImageType;
@@ -72,7 +72,7 @@ int otbMDMDNMFImageFilterTest(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbMDMDNMFImageFilterTest2(int argc, char * argv[])
+int otbMDMDNMFImageFilterTest2(int itkNotUsed(argc), char * argv[])
 {
   typedef double                                         PixelType;
   typedef otb::VectorImage<PixelType, 2>                 ImageType;

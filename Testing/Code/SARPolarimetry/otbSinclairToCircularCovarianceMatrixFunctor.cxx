@@ -19,7 +19,7 @@
 #include "otbSinclairToCircularCovarianceMatrixFunctor.h"
 #include "itkVariableLengthVector.h"
 
-int otbSinclairToCircularCovarianceMatrixFunctor(int argc, char * argv[])
+int otbSinclairToCircularCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<ComplexType> OutputType;

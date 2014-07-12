@@ -21,7 +21,7 @@
 
 #include "otbWrapperParameterGroup.h"
 
-int otbWrapperParameterListNew(int argc, char* argv[])
+int otbWrapperParameterListNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   using otb::Wrapper::ParameterGroup;
   ParameterGroup::Pointer parameters = ParameterGroup::New();

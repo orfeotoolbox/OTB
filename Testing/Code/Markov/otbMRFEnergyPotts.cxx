@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include <fstream>
 
-int otbMRFEnergyPotts(int argc, char * argv[])
+int otbMRFEnergyPotts(int itkNotUsed(argc), char * argv[])
 {
   const char * outputFile = argv[1];
 

@@ -28,7 +28,7 @@
 #include "otbAttributesMapLabelObject.h"
 #include "otbImageFileReader.h"
 
-int otbImageSimulationMethodWithVectorDataTest(int argc, char * argv[])
+int otbImageSimulationMethodWithVectorDataTest(int itkNotUsed(argc), char * argv[])
 {
    const char * infilename  = argv[1];
    const char * satRSRFilename = argv[2];

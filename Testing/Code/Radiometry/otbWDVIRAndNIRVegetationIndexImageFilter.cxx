@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbVegetationIndicesFunctor.h"
 
-int otbWDVIRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
+int otbWDVIRAndNIRVegetationIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                           PixelType;

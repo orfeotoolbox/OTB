@@ -21,7 +21,7 @@
 #include "otbVectorDataToLabelMapFilter.h"
 #include "otbAttributesMapLabelObject.h"
 
-int otbVectorDataToLabelMapFilterNew(int argc, char * argv[])
+int otbVectorDataToLabelMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef unsigned short LabelType;
   const unsigned int Dimension = 2;

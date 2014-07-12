@@ -22,7 +22,7 @@
 #include "otbMRFSamplerMAP.h"
 #include "otbImage.h"
 
-int otbMRFSamplerMAPNew(int argc, char * argv[])
+int otbMRFSamplerMAPNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                                   PixelType;
   typedef otb::Image<PixelType, 2>                 ImageType;

@@ -19,7 +19,7 @@
 #include "otbSinclairToCoherencyMatrixFunctor.h"
 #include "itkVariableLengthVector.h"
 
-int otbSinclairToCoherencyMatrixFunctor(int argc, char * argv[])
+int otbSinclairToCoherencyMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<ComplexType> OutputType;

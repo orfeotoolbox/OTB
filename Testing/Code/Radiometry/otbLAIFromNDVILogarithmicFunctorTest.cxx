@@ -18,7 +18,7 @@
 #include "itkMacro.h"
 #include "otbVegetationIndicesFunctor.h"
 
-int otbLAIFromNDVILogarithmic(int argc, char * argv[])
+int otbLAIFromNDVILogarithmic(int itkNotUsed(argc), char * argv[])
 {
   typedef double                           PixelType;
 

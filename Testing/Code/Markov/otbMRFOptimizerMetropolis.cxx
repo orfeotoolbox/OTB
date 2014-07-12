@@ -21,7 +21,7 @@
 #include <fstream>
 #include <cstdlib>
 
-int otbMRFOptimizerMetropolis(int argc, char * argv[])
+int otbMRFOptimizerMetropolis(int itkNotUsed(argc), char * argv[])
 {
   const char * outputFile = argv[1];
 

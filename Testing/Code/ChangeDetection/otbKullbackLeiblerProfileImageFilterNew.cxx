@@ -20,7 +20,7 @@
 #include "otbVectorImage.h"
 #include "otbKullbackLeiblerProfileImageFilter.h"
 
-int otbKullbackLeiblerProfileImageFilterNew(int argc, char * argv[])
+int otbKullbackLeiblerProfileImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;

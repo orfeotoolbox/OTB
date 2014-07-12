@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbAtmosphericRadiativeTerms.h"
 
-int otbReflectanceToSurfaceReflectanceImageFilterNew(int argc, char * argv[])
+int otbReflectanceToSurfaceReflectanceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef double                                 PixelType;
@@ -42,7 +42,7 @@ int otbReflectanceToSurfaceReflectanceImageFilterNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbReflectanceToSurfaceReflectanceImageFilterTest(int argc, char * argv[])
+int otbReflectanceToSurfaceReflectanceImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -101,7 +101,7 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest(int argc, char * argv[])
 }
 
 //Check the correct generation of the atmospheric parameters
-int otbReflectanceToSurfaceReflectanceImageFilterTest2(int argc, char * argv[])
+int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

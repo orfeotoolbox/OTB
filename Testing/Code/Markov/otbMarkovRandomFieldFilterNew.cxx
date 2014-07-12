@@ -20,7 +20,7 @@
 #include "otbMarkovRandomFieldFilter.h"
 #include "otbImage.h"
 
-int otbMarkovRandomFieldFilterNew(int argc, char * argv[])
+int otbMarkovRandomFieldFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                                             PixelType;
   typedef otb::Image<PixelType, 2>                           ImageType;

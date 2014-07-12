@@ -172,18 +172,3 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

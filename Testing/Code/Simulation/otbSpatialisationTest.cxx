@@ -23,7 +23,7 @@
 #include "otbImage.h"
 #include "otbAttributesMapLabelObject.h"
 
-int otbSpatialisationTest(int argc, char * argv[])
+int otbSpatialisationTest(int itkNotUsed(argc), char * argv[])
 {
   const char * outfilename  = argv[1];
 

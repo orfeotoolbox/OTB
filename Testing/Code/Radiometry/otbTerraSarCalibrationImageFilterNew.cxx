@@ -20,7 +20,7 @@
 #include "otbTerraSarCalibrationImageFilter.h"
 #include "otbImage.h"
 
-int otbTerraSarCalibrationImageFilterNew(int argc, char * argv[])
+int otbTerraSarCalibrationImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Image<double, 2>               ImageType;
   typedef otb::Image<std::complex<double>, 2> ComplexImageType;

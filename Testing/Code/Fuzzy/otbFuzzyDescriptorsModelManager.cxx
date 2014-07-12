@@ -20,16 +20,16 @@
 #include "otbFuzzyDescriptorsModelManager.h"
 #include <iostream>
 #include <stdlib.h>
+#include "itkMacro.h"
 
-
-int otbFuzzyDescriptorsModelManagerNew(int argc, char* argv[])
+int otbFuzzyDescriptorsModelManagerNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   otb::FuzzyDescriptorsModelManager mng;
   return EXIT_SUCCESS;
 }
 
 
-int otbFuzzyDescriptorsModelManagerTest(int argc, char* argv[])
+int otbFuzzyDescriptorsModelManagerTest(int itkNotUsed(argc), char* argv[])
 {
   otb::FuzzyDescriptorsModelManager::DescriptorsModelType model;
   otb::FuzzyDescriptorsModelManager::ParameterType        param;

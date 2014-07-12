@@ -32,14 +32,14 @@ typedef otb::FullyConstrainedLeastSquareImageFilter<ImageType, ImageType, double
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<ImageType> WriterType;
 
-int otbFullyConstrainedLeastSquareImageFilterNewTest(int argc, char * argv[])
+int otbFullyConstrainedLeastSquareImageFilterNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   FullyConstrainedLeastSquareSolverType::Pointer filter = FullyConstrainedLeastSquareSolverType::New();
   std::cout << filter << std::endl;
   return EXIT_SUCCESS;
 }
 
-int otbFullyConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
+int otbFullyConstrainedLeastSquareImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputImage = argv[1];
   const char * inputEndmembers = argv[2];

@@ -19,7 +19,7 @@
 
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
 
-int otbAttributesMapLabelObjectWithClassLabelNew(int argc, char* argv[])
+int otbAttributesMapLabelObjectWithClassLabelNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::AttributesMapLabelObjectWithClassLabel<unsigned short, 2, double, unsigned short> LabelObjectType;
 

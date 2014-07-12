@@ -21,7 +21,7 @@
 #include "otbTimeSeriesLeastSquareFittingFunctor.h"
 #include "otbTimeSeries.h"
 
-int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
+int otbTimeSeriesLeastSquareFittingFunctorTest(int itkNotUsed(argc), char* argv[])
 {
 
   const unsigned int Degree = 2;

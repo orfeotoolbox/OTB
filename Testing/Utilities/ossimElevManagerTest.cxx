@@ -14,13 +14,14 @@
 #include <fstream>
 #include <cstdlib>
 
+#include "itkMacro.h"
 #include "ossim/elevation/ossimElevManager.h"
 
 // this is the most important class and is called as the first line of all applications.
 // without this alll the important factories are not created.
 #include "ossim/init/ossimInit.h"
 
-int ossimElevManagerTest(int argc, char* argv[])
+int ossimElevManagerTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
    ossimElevManager * ElevManager(NULL);
    ElevManager=ossimElevManager::instance();
@@ -35,6 +36,3 @@ int ossimElevManagerTest(int argc, char* argv[])
    }
 
 }
-
-
-

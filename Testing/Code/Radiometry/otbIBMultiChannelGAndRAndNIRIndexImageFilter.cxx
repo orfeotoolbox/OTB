@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbSoilIndicesFunctor.h"
 
-int otbIBMultiChannelGAndRAndNIRIndexImageFilter(int argc, char * argv[])
+int otbIBMultiChannelGAndRAndNIRIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double, Dimension>   InputImageType;

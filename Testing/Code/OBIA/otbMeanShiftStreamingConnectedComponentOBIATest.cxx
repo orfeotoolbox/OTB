@@ -50,7 +50,7 @@ typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
 typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftFilterType;
 
 
-int otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(int argc, char * argv[])
+int otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(int itkNotUsed(argc), char * argv[])
 {
 
   /* mean shift parameters */

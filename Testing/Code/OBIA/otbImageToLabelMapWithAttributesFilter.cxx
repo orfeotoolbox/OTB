@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbAttributesMapLabelObjectWithClassLabel.h"
 
-int otbImageToLabelMapWithAttributesFilter(int argc, char* argv[])
+int otbImageToLabelMapWithAttributesFilter(int itkNotUsed(argc), char* argv[])
 {
   const char * infname = argv[1];
   const char * lfname  = argv[2];

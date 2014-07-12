@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbBuiltUpIndicesFunctor.h"
 
-int otbISUMultiChannelRAndNIRIndexImageFilter(int argc, char * argv[])
+int otbISUMultiChannelRAndNIRIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double, Dimension>   InputImageType;

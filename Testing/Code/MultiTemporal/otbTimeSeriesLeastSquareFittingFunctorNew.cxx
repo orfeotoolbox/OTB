@@ -21,7 +21,7 @@
 #include "otbTimeSeriesLeastSquareFittingFunctor.h"
 #include "otbTimeSeries.h"
 
-int otbTimeSeriesLeastSquareFittingFunctorNew(int argc, char* argv[])
+int otbTimeSeriesLeastSquareFittingFunctorNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
   typedef float PixelType;

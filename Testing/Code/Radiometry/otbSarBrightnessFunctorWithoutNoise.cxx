@@ -19,7 +19,7 @@
 
 #include "otbSarBrightnessFunctor.h"
 
-int otbSarBrightnessFunctorWithoutNoise(int argc, char * argv[])
+int otbSarBrightnessFunctorWithoutNoise(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                   ScalarType;
 

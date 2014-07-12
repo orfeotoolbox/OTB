@@ -26,7 +26,7 @@
 #include <vector>
 #include <algorithm>
 
-int otbLandsatTMThinCloudTest(int argc, char * argv[])
+int otbLandsatTMThinCloudTest(int itkNotUsed(argc), char * argv[])
 {
 
   typedef double InputPixelType;

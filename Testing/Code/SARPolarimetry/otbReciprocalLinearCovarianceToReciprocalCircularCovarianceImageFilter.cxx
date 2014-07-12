@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.h"
 
-int otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter(int argc, char * argv[])
+int otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

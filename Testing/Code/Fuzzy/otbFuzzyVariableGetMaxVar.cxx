@@ -19,7 +19,7 @@
 
 #include "otbFuzzyVariable.h"
 
-int otbFuzzyVariableGetMaxVar(int argc, char* argv[])
+int otbFuzzyVariableGetMaxVar(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef float PrecisionType;
   typedef otb::FuzzyVariable<std::string, PrecisionType> FuzzyVarType;

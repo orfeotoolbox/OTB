@@ -21,7 +21,7 @@
 #include "itkLabelMap.h"
 #include "otbAttributesMapLabelObject.h"
 
-int otbLabelMapSourceNew(int argc, char * argv[])
+int otbLabelMapSourceNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef unsigned short LabelType;

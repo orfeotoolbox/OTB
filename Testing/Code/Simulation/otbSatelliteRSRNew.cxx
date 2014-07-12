@@ -20,7 +20,7 @@
 
 #include "otbSatelliteRSR.h"
 
-int otbSatelliteRSRNew(int argc, char * argv[])
+int otbSatelliteRSRNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::SatelliteRSR< double, double>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;

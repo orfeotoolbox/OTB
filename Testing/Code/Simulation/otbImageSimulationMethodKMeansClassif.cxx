@@ -35,7 +35,7 @@
 #include "otbKMeansImageClassificationFilter.h"
 #include "itkImageRegionIterator.h"
 
-int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
+int otbImageSimulationMethodKMeansClassif(int itkNotUsed(argc), char * argv[])
 {
    const char * satRSRFilename = argv[1];
    unsigned int nbBands = static_cast<unsigned int>(atoi(argv[2]));

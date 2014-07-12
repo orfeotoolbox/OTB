@@ -23,7 +23,7 @@
 #include "otbImage.h"
 #include "otbAttributesMapLabelObject.h"
 
-int otbSpatialisationTestNew(int argc, char * argv[])
+int otbSpatialisationTestNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef unsigned short LabelType;
   const unsigned int Dimension = 2;

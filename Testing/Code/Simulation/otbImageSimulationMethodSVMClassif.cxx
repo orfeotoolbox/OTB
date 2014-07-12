@@ -33,7 +33,7 @@
 #include "otbSVMImageClassificationFilter.h"
 #include "otbImageFileReader.h"
 
-int otbImageSimulationMethodSVMClassif(int argc, char * argv[])
+int otbImageSimulationMethodSVMClassif(int itkNotUsed(argc), char * argv[])
 {
    const char * satRSRFilename = argv[1];
    unsigned int nbBands = static_cast<unsigned int>(atoi(argv[2]));

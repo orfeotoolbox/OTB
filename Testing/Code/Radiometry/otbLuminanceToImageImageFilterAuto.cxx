@@ -25,7 +25,7 @@
 #include "otbMultiChannelExtractROI.h"
 
 //Test the retrieval of parameters from the image metadata
-int otbLuminanceToImageImageFilterAuto(int argc, char * argv[])
+int otbLuminanceToImageImageFilterAuto(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * inputFileName2  = argv[2];
@@ -39,7 +39,6 @@ int otbLuminanceToImageImageFilterAuto(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>                              ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
   typedef otb::LuminanceToImageImageFilter<InputImageType, OutputImageType> LuminanceToImageImageFilterType;
-  typedef LuminanceToImageImageFilterType::VectorType                       VectorType;
   typedef otb::MultiChannelExtractROI<PixelType, PixelType>                 RoiFilterType;
 
   ReaderType::Pointer reader  = ReaderType::New();

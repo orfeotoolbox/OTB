@@ -19,7 +19,7 @@
 
 #include "otbFuzzyVariable.h"
 
-int otbFuzzyVariableDSApplied(int argc, char* argv[])
+int otbFuzzyVariableDSApplied(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef float PrecisionType;
 

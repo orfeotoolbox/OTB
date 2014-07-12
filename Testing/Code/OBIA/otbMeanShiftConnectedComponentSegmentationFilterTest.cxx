@@ -40,7 +40,7 @@ typedef otb::MeanShiftConnectedComponentSegmentationFilter
 typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftFilterType;
 
 
-int otbMeanShiftConnectedComponentSegmentationFilter(int argc, char * argv[])
+int otbMeanShiftConnectedComponentSegmentationFilter(int itkNotUsed(argc), char * argv[])
 {
 
   /* mean shift parameters */

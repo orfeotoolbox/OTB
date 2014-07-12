@@ -21,7 +21,7 @@
 
 #include "otbWrapperNumericalParameter.h"
 
-int otbWrapperNumericalParameterNew(int argc, char* argv[])
+int otbWrapperNumericalParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::NumericalParameter <int> NumericalParameterType;
   NumericalParameterType::Pointer parameter = NumericalParameterType::New();
@@ -30,7 +30,7 @@ int otbWrapperNumericalParameterNew(int argc, char* argv[])
 }
 
 
-int otbWrapperNumericalParameterTest1(int argc, char* argv[])
+int otbWrapperNumericalParameterTest1(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::NumericalParameter <double> NumericalParameterType;
   NumericalParameterType::Pointer numParam = NumericalParameterType::New();

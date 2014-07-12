@@ -21,7 +21,7 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
-int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew(int argc, char * argv[])
+int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef double                                 PixelType;

@@ -24,7 +24,7 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include <algorithm>
 
-int otbLandsatTMSpectralRuleBasedClassifierTest(int argc, char * argv[])
+int otbLandsatTMSpectralRuleBasedClassifierTest(int itkNotUsed(argc), char * argv[])
 {
 
   typedef double InputPixelType;

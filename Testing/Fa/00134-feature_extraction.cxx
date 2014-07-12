@@ -31,7 +31,7 @@
 #include "otbMultiChannelRAndNIRIndexImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
   const char *       inputName   = argv[1];
   const char *       outputName  = argv[2];

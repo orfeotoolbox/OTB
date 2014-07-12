@@ -52,7 +52,7 @@ protected:
  * image.  We write the output to an image for
  * comparison.
  */
-int svmGenericKernelFunctor( int argc, char *argv[] )
+int svmGenericKernelFunctor( int itkNotUsed(argc), char *itkNotUsed(argv)[] )
 {
 
   try
@@ -92,18 +92,3 @@ int svmGenericKernelFunctor( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

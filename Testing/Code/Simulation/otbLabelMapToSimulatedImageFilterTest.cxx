@@ -25,7 +25,7 @@
 #include "otbProspectModel.h"
 #include "otbSailModel.h"
 
-int otbLabelMapToSimulatedImageFilterTest(int argc, char * argv[])
+int otbLabelMapToSimulatedImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
    const char * infilename  = argv[1];
    const char * satRSRFilename = argv[2];

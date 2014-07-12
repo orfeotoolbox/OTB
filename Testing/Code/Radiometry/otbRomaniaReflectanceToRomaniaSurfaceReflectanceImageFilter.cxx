@@ -27,7 +27,7 @@
 #include <fstream>
 #include <iostream>
 
-int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char * argv[])
+int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char *              inputFileName  = argv[1];
   const char *              outputFileName = argv[2];

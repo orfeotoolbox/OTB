@@ -20,7 +20,7 @@
 #include "otbMRFOptimizerICM.h"
 #include <cstdlib>
 
-int otbMRFOptimizerICMNew(int argc, char * argv[])
+int otbMRFOptimizerICMNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::MRFOptimizerICM MRFOptimizerType;
 

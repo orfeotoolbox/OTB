@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbTerraSarBrightnessImageFilterTest(int argc, char * argv[])
+int otbTerraSarBrightnessImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

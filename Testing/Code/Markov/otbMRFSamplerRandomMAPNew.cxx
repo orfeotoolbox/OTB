@@ -20,7 +20,7 @@
 #include "otbMRFSamplerRandomMAP.h"
 #include "otbImage.h"
 
-int otbMRFSamplerRandomMAPNew(int argc, char * argv[])
+int otbMRFSamplerRandomMAPNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                                         PixelType;
   typedef otb::Image<PixelType, 2>                       ImageType;

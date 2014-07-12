@@ -18,7 +18,7 @@
 
 #include "otbSIXSTraits.h"
 
-int otbSIXSTraitsTest(int argc, char * argv[])
+int otbSIXSTraitsTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   otb::SIXSTraits *var(NULL);
   var = new otb::SIXSTraits();

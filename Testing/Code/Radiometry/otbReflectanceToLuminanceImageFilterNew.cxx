@@ -20,7 +20,7 @@
 #include "otbReflectanceToLuminanceImageFilter.h"
 #include "otbVectorImage.h"
 
-int otbReflectanceToLuminanceImageFilterNew(int argc, char * argv[])
+int otbReflectanceToLuminanceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef double                                 PixelType;

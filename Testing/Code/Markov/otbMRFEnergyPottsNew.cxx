@@ -20,7 +20,7 @@
 #include "otbMRFEnergyPotts.h"
 #include "otbImage.h"
 
-int otbMRFEnergyPottsNew(int argc, char * argv[])
+int otbMRFEnergyPottsNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                                    PixelType;
   typedef otb::Image<PixelType, 2>                  ImageType;

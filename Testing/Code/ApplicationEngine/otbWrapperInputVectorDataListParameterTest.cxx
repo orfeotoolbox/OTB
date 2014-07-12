@@ -21,7 +21,7 @@
 
 #include "otbWrapperInputVectorDataListParameter.h"
 
-int otbWrapperInputVectorDataListParameterNew(int argc, char* argv[])
+int otbWrapperInputVectorDataListParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::InputVectorDataListParameter ParameterType;
   ParameterType::Pointer parameter = ParameterType::New();
@@ -30,7 +30,7 @@ int otbWrapperInputVectorDataListParameterNew(int argc, char* argv[])
 }
 
 
-int otbWrapperInputVectorDataListParameterTest1(int argc, char* argv[])
+int otbWrapperInputVectorDataListParameterTest1(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::InputVectorDataListParameter ParameterType;
   ParameterType::Pointer param = ParameterType::New();

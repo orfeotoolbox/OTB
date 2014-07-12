@@ -25,7 +25,7 @@
 #include "otbMultiChannelExtractROI.h"
 
 //Test the retrieval of parameters from the image metadata
-int otbImageToLuminanceImageFilterAuto(int argc, char * argv[])
+int otbImageToLuminanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

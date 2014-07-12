@@ -22,7 +22,7 @@
 #include "otbWrapperCommandLineLauncher.h"
 
 
-int otbWrapperCommandLineLauncherNew(int argc, char* argv[])
+int otbWrapperCommandLineLauncherNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();
@@ -62,5 +62,3 @@ int otbWrapperCommandLineLauncherTest(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-
-

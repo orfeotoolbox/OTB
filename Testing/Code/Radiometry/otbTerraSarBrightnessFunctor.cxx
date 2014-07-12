@@ -21,7 +21,7 @@
 
 #include "otbTerraSarBrightnessFunctor.h"
 
-int otbTerraSarBrightnessFunctor(int argc, char * argv[])
+int otbTerraSarBrightnessFunctor(int itkNotUsed(argc), char * argv[])
 {
   char * outFilename = argv[5];
   double calFact =  atof(argv[4]);

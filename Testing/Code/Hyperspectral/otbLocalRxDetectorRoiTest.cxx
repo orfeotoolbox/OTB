@@ -7,7 +7,7 @@
 #include "otbExtractROI.h"
 
 
-int LocalRXDetectorROITest(int argc, char * argv[])
+int LocalRXDetectorROITest(int itkNotUsed(argc), char * argv[])
 {
        typedef double PixelType;
        typedef otb::VectorImage<PixelType, 2> VectorImageType;
@@ -74,5 +74,3 @@ int LocalRXDetectorROITest(int argc, char * argv[])
 
        return EXIT_SUCCESS;
 }
-
-

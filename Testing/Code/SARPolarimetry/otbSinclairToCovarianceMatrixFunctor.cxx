@@ -20,7 +20,7 @@
 #include "otbSinclairToCovarianceMatrixFunctor.h"
 #include "itkVariableLengthVector.h"
 
-int otbSinclairToCovarianceMatrixFunctor(int argc, char * argv[])
+int otbSinclairToCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<ComplexType> OutputType;

@@ -34,7 +34,7 @@
 
 
 
-int otbVectorDataToRoadDescriptionFilterNew(int argc, char* argv[])
+int otbVectorDataToRoadDescriptionFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                          PrecisionType;
   typedef otb::VectorData<PrecisionType>  VectorDataType;
@@ -51,7 +51,7 @@ int otbVectorDataToRoadDescriptionFilterNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
+int otbVectorDataToRoadDescriptionFilter(int itkNotUsed(argc), char* argv[])
 {
   const char * inputVD  = argv[1];
   const char * inputImg = argv[2];

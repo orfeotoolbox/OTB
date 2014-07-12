@@ -22,7 +22,7 @@
 #include "otbSatelliteRSR.h"
 #include "otbReduceSpectralResponse.h"
 
-int otbReduceSpectralResponseNew(int argc, char * argv[])
+int otbReduceSpectralResponseNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::SpectralResponse< double, double>  ResponseType;
   //typedef ResponseType::Pointer  ResponsePointerType;

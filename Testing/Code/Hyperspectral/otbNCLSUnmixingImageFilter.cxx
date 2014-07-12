@@ -32,14 +32,14 @@ typedef otb::NCLSUnmixingImageFilter<ImageType, ImageType, PixelType> UnmixingIm
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<ImageType> WriterType;
 
-int otbNCLSUnmixingImageFilterNewTest(int argc, char * argv[])
+int otbNCLSUnmixingImageFilterNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   UnmixingImageFilterType::Pointer filter = UnmixingImageFilterType::New();
   std::cout << filter << std::endl;
   return EXIT_SUCCESS;
 }
 
-int otbNCLSUnmixingImageFilterTest(int argc, char * argv[])
+int otbNCLSUnmixingImageFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputImage = argv[1];
   const char * inputEndmembers = argv[2];

@@ -28,7 +28,7 @@
 #include "otbAttributesMapLabelObject.h"
 #include "otbImageFileReader.h"
 
-int otbImageSimulationMethodWithSpatialisationTest(int argc, char * argv[])
+int otbImageSimulationMethodWithSpatialisationTest(int itkNotUsed(argc), char * argv[])
 {
    const char * satRSRFilename = argv[1];
    unsigned int nbBands = static_cast<unsigned int>(atoi(argv[2]));

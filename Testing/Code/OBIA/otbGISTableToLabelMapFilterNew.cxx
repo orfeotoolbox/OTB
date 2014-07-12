@@ -21,7 +21,7 @@
 #include "otbGISTable.h"
 #include "itkAttributeLabelObject.h"
 
-int otbGISTableToLabelMapFilterNew(int argc, char * argv[])
+int otbGISTableToLabelMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const int Dimension = 2;
   typedef double PType;

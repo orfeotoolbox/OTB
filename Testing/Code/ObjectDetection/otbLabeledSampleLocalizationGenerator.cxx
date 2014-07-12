@@ -22,7 +22,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbLabeledSampleLocalizationGenerator.h"
 
-int otbLabeledSampleLocalizationGeneratorNew(int argc, char* argv[])
+int otbLabeledSampleLocalizationGeneratorNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef otb::VectorData<>                                        VectorDataType;
   typedef otb::LabeledSampleLocalizationGenerator<VectorDataType>  GeneratorType;
@@ -35,7 +35,7 @@ int otbLabeledSampleLocalizationGeneratorNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
+int otbLabeledSampleLocalizationGenerator(int itkNotUsed(argc), char* argv[])
 {
   const char * inputVD1  = argv[1];
   const char * inputVD2  = argv[2];

@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbWaterIndicesFunctor.h"
 
-int otbNDWIMultiChannelWaterIndexImageFilter(int argc, char * argv[])
+int otbNDWIMultiChannelWaterIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double, Dimension>   InputImageType;

@@ -20,7 +20,7 @@
 #include "otbMRFOptimizerMetropolis.h"
 #include <cstdlib>
 
-int otbMRFOptimizerMetropolisNew(int argc, char * argv[])
+int otbMRFOptimizerMetropolisNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::MRFOptimizerMetropolis MRFOptimizerType;
 

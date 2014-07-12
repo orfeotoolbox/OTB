@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbBuiltUpIndicesFunctor.h"
 
-int otbISURAndNIRIndexImageFilter(int argc, char * argv[])
+int otbISURAndNIRIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                           PixelType;

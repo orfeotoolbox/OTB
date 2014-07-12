@@ -20,7 +20,7 @@
 #include "otbTerraSarBrightnessImageFilter.h"
 #include "otbImage.h"
 
-int otbTerraSarBrightnessImageFilterNew(int argc, char * argv[])
+int otbTerraSarBrightnessImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Image<double, 2>               ImageType;
   typedef otb::Image<std::complex<double>, 2> ComplexImageType;

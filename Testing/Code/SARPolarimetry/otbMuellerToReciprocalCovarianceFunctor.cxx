@@ -21,7 +21,7 @@
 #include "itkVariableLengthVector.h"
 #include <complex>
 
-int otbMuellerToReciprocalCovarianceFunctor(int argc, char * argv[])
+int otbMuellerToReciprocalCovarianceFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef std::complex<double>                   ComplexType;
  typedef itk::VariableLengthVector<double> VectorDoubleType;

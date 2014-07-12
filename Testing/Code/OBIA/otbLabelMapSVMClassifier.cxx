@@ -76,13 +76,13 @@ LabelObjectType::Pointer makeTrainingSample(LabelMapType* labelMap, LabelType la
   return newLabelObject;
 }
 
-int otbLabelMapSVMClassifierNew(int argc, char * argv[])
+int otbLabelMapSVMClassifierNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   ClassifierType::Pointer classifier = ClassifierType::New();
   return EXIT_SUCCESS;
 }
 
-int otbLabelMapSVMClassifier(int argc, char * argv[])
+int otbLabelMapSVMClassifier(int itkNotUsed(argc), char * argv[])
 {
   const char * infname  = argv[1];
   const char * lfname   = argv[2];
@@ -176,5 +176,3 @@ int otbLabelMapSVMClassifier(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-
-

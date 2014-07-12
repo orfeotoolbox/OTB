@@ -23,7 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbWaterSqrtSpectralAngleImageFilter(int argc, char * argv[])
+int otbWaterSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double, Dimension> InputImageType;

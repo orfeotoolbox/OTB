@@ -24,7 +24,7 @@
 #include "itkPointSet.h"
 
 
-int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
+int otbSarParametricMapFunctionToImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef float                                                                     PixelType;

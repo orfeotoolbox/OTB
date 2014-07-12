@@ -24,7 +24,7 @@
 #include "otbSurfaceReflectanceToReflectanceFilter.h"
 #include "otbAtmosphericRadiativeTerms.h"
 
-int otbSurfaceReflectanceToReflectanceFilterNew(int argc, char * argv[])
+int otbSurfaceReflectanceToReflectanceFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int                            Dimension = 2;
   typedef double                                PixelType;

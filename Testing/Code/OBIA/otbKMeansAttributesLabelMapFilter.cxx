@@ -48,13 +48,13 @@ typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>         
 typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                            ShapeFilterType;
 typedef otb::KMeansAttributesLabelMapFilter<LabelMapType>                           KMeansAttributesLabelMapFilterType;
 
-int otbKMeansAttributesLabelMapFilterNew(int argc, char * argv[])
+int otbKMeansAttributesLabelMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   KMeansAttributesLabelMapFilterType::Pointer radiometricLabelMapFilter = KMeansAttributesLabelMapFilterType::New();
   return EXIT_SUCCESS;
 }
 
-int otbKMeansAttributesLabelMapFilter(int argc, char * argv[])
+int otbKMeansAttributesLabelMapFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * lfname  = argv[2];

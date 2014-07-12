@@ -21,7 +21,7 @@
 
 #include "otbWrapperRAMParameter.h"
 
-int otbWrapperRAMParameterNew(int argc, char* argv[])
+int otbWrapperRAMParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::RAMParameter RAMParameterType;
   RAMParameterType::Pointer parameter = RAMParameterType::New();

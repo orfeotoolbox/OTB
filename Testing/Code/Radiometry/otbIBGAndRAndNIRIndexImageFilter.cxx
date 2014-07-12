@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbSoilIndicesFunctor.h"
 
-int otbIBGAndRAndNIRIndexImageFilter(int argc, char * argv[])
+int otbIBGAndRAndNIRIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                           PixelType;

@@ -20,7 +20,7 @@
 #include "itkFixedArray.h"
 #include "otbTimeSeries.h"
 
-int otbPolynomialTimeSeriesTest(int argc, char* argv[])
+int otbPolynomialTimeSeriesTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
   typedef double CoefficientPrecisionType;

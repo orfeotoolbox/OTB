@@ -19,7 +19,7 @@
 #include "vcl_cmath.h"
 #include "otbPolarimetricSynthesisFunctor.h"
 
-int otbPolarimetricSynthesisFunctor(int argc, char * argv[])
+int otbPolarimetricSynthesisFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef std::complex<double>                   ComplexType;
 

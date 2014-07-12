@@ -24,7 +24,7 @@
 #include "itkVariableLengthVector.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbImageToReflectanceImageFilterAuto(int argc, char * argv[])
+int otbImageToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -36,7 +36,7 @@ int otbImageToReflectanceImageFilterAuto(int argc, char * argv[])
   typedef otb::ImageFileReader<InputImageType>                                ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                               WriterType;
   typedef otb::ImageToReflectanceImageFilter<InputImageType, OutputImageType> ImageToReflectanceImageFilterType;
-  typedef ImageToReflectanceImageFilterType::VectorType                       VectorType;
+
   typedef otb::MultiChannelExtractROI<PixelType, PixelType>                   RoiFilterType;
 
   ReaderType::Pointer reader  = ReaderType::New();

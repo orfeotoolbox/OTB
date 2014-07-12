@@ -112,5 +112,3 @@ int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

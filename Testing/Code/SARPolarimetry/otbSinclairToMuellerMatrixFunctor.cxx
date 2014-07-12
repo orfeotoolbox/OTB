@@ -20,7 +20,7 @@
 #include "otbSinclairToMuellerMatrixFunctor.h"
 #include "itkVariableLengthVector.h"
 
-int otbSinclairToMuellerMatrixFunctor(int argc, char * argv[])
+int otbSinclairToMuellerMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<double>  OutputType;

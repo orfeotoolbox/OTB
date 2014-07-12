@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include <iostream>
 
-int otbSarBrightnessFunction(int argc, char* argv[])
+int otbSarBrightnessFunction(int itkNotUsed(argc), char* argv[])
 {
 
   const char * infname  = argv[1];

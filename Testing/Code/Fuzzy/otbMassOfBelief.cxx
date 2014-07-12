@@ -27,7 +27,7 @@ std::ostream& operator <<(std::ostream& os, const MassOfBeliefFunctionType::Labe
   return os;
 }
 
-int otbMassOfBelief(int argc, char* argv[])
+int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   // Instantiate function
   MassOfBeliefFunctionType::Pointer massFunction = MassOfBeliefFunctionType::New();

@@ -21,7 +21,7 @@
 #include "itkLabelMap.h"
 #include "otbVectorImage.h"
 
-int otbLabelMapToAttributeImageFilterNew(int argc, char* argv[])
+int otbLabelMapToAttributeImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::AttributesMapLabelObject<unsigned int, 2, float> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                        LabelMapType;

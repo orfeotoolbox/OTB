@@ -24,7 +24,7 @@
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
-int otbSimpleRcsPanSharpeningFusionImageFilterNew(int argc, char * argv[])
+int otbSimpleRcsPanSharpeningFusionImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;

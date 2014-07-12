@@ -22,7 +22,7 @@
 #include <fstream>
 #include <iomanip>
 
-int otbAeronetExtractData(int argc, char * argv[])
+int otbAeronetExtractData(int itkNotUsed(argc), char * argv[])
 {
   otb::AeronetFileReader::Pointer reader = otb::AeronetFileReader::New();
 

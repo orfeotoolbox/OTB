@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbVegetationIndicesFunctor.h"
 
-int otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * argv[])
+int otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double, Dimension>   InputImageType;

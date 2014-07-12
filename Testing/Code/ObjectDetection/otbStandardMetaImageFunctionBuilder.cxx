@@ -30,7 +30,7 @@
 #include "otbHaralickTexturesImageFunction.h"
 
 
-int otbStandardMetaImageFunctionBuilderNew(int argc, char* argv[])
+int otbStandardMetaImageFunctionBuilderNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef double                                                PrecisionType;
   typedef otb::StandardMetaImageFunctionBuilder<PrecisionType>  BuilderType;
@@ -43,7 +43,7 @@ int otbStandardMetaImageFunctionBuilderNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbStandardMetaImageFunctionBuilder(int argc, char* argv[])
+int otbStandardMetaImageFunctionBuilder(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename  = argv[1];
 

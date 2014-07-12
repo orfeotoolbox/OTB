@@ -23,7 +23,7 @@
 #include "itkVariableLengthVector.h"
 #include "itkListSample.h"
 
-int otbLabelMapToSampleListFilterNew(int argc, char* argv[])
+int otbLabelMapToSampleListFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::AttributesMapLabelObject<unsigned short, 2, double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                         LabelMapType;

@@ -19,7 +19,7 @@
 #include "itkFixedArray.h"
 #include "otbLandsatTMIndices.h"
 
-int otbLandsatTMIndexVis(int argc, char * argv[])
+int otbLandsatTMIndexVis(int itkNotUsed(argc), char * argv[])
 {
   typedef double                           OutputPixelType;
   typedef itk::FixedArray< double, 8 >     InputPixelType;

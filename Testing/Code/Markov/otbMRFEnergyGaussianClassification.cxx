@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include <fstream>
 
-int otbMRFEnergyGaussianClassification(int argc, char * argv[])
+int otbMRFEnergyGaussianClassification(int itkNotUsed(argc), char * argv[])
 {
   const char * outputFile = argv[1];
 

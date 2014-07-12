@@ -331,7 +331,7 @@ int computeRules(double TM1, double TM2, double TM3, double TM4, double TM5, dou
 
 }
 
-int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
+int otbLandsatTMKernelSpectralRules(int itkNotUsed(argc), char * argv[])
 {
   double TM1 = (::atof(argv[1]));
   double TM2 = (::atof(argv[2]));
@@ -347,7 +347,7 @@ int otbLandsatTMKernelSpectralRules(int argc, char * argv[])
 }
 
 
-int otbLandsatTMKernelSpectralRulesWithImage(int argc, char * argv[])
+int otbLandsatTMKernelSpectralRulesWithImage(int itkNotUsed(argc), char * argv[])
 {
 
   typedef double InputPixelType;
@@ -401,6 +401,3 @@ int otbLandsatTMKernelSpectralRulesWithImage(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-
-
-

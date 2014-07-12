@@ -20,7 +20,7 @@
 
 #include "otbSpectralResponse.h"
 
-int otbSpectralResponseNew(int argc, char * argv[])
+int otbSpectralResponseNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::SpectralResponse< double, double>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;

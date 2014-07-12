@@ -21,7 +21,7 @@
 
 #include "otbWrapperChoiceParameter.h"
 
-int otbWrapperChoiceParameterNew(int argc, char* argv[])
+int otbWrapperChoiceParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::ChoiceParameter ChoiceParameterType;
   ChoiceParameterType::Pointer parameter = ChoiceParameterType::New();
@@ -29,7 +29,7 @@ int otbWrapperChoiceParameterNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbWrapperChoiceParameterTest1(int argc, char* argv[])
+int otbWrapperChoiceParameterTest1(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   // TODO
   return EXIT_FAILURE;

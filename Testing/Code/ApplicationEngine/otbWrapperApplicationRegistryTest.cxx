@@ -21,7 +21,7 @@
 
 #include "otbWrapperApplicationRegistry.h"
 
-int otbWrapperApplicationRegistry(int argc, char* argv[])
+int otbWrapperApplicationRegistry(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   using otb::Wrapper::ApplicationRegistry;
   std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();

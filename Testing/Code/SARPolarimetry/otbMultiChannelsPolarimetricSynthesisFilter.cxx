@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelsPolarimetricSynthesisFilter.h"
 
-int otbMultiChannelsPolarimetricSynthesisFilter(int argc, char * argv[])
+int otbMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename1  = argv[1];
   const char * inputFilename2  = argv[2];

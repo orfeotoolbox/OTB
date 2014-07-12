@@ -29,7 +29,7 @@
 
 #include "otbOGRDataSourceWrapper.h"
 
-int otbStreamingImageToOGRLayerSegmentationFilterNew(int argc, char * argv[])
+int otbStreamingImageToOGRLayerSegmentationFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef float InputPixelType;
   const unsigned int Dimension = 2;

@@ -20,7 +20,7 @@
 
 #include "otbConfusionMatrixToMassOfBelief.h"
 
-int otbConfusionMatrixToMassOfBeliefNew(int argc, char* argv[])
+int otbConfusionMatrixToMassOfBeliefNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef unsigned long                                   ConfusionMatrixEltType;
   typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
@@ -51,7 +51,7 @@ int otbConfusionMatrixToMassOfBeliefNew(int argc, char* argv[])
 }
 
 
-int otbConfusionMatrixToMassOfBeliefTest(int argc, char* argv[])
+int otbConfusionMatrixToMassOfBeliefTest(int itkNotUsed(argc), char* argv[])
 {
   typedef unsigned long                                   ConfusionMatrixEltType;
   typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;

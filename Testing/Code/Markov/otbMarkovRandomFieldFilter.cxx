@@ -29,7 +29,7 @@
 #include "otbMRFOptimizerMetropolis.h"
 #include "otbMRFSamplerRandom.h"
 
-int otbMarkovRandomFieldFilter(int argc, char* argv[])
+int otbMarkovRandomFieldFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
 

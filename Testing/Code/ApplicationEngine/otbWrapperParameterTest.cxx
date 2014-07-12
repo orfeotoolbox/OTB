@@ -21,7 +21,7 @@
 
 #include "otbWrapperParameter.h"
 
-int otbWrapperParameterNew(int argc, char* argv[])
+int otbWrapperParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::Parameter ParameterBaseType;
   ParameterBaseType::Pointer parameter = ParameterBaseType::New();
@@ -31,7 +31,7 @@ int otbWrapperParameterNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbWrapperParameterTest1(int argc, char* argv[])
+int otbWrapperParameterTest1(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::Parameter ParameterBaseType;
   ParameterBaseType::Pointer parameter = ParameterBaseType::New();

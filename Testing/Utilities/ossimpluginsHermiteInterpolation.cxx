@@ -25,8 +25,7 @@
 #include "ossim/otb/HermiteInterpolator.h"
 #include "itkTimeProbe.h"
 
-
-int ossimpluginsHermiteInterpolationTest(int argc, char * argv[])
+int ossimpluginsHermiteInterpolationTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   double epsilon = 0.0000001;
 

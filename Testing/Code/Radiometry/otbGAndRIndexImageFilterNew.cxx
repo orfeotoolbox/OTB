@@ -23,7 +23,7 @@
 #include "otbImage.h"
 #include "otbImage.h"
 
-int otbGAndRIndexImageFilterNew(int argc, char * argv[])
+int otbGAndRIndexImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char                    PixelType;

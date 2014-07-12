@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbPlatformPositionAdapter.h"
 
-int otbPlatformPositionComputeBaselineNewTest(int argc, char* argv[])
+int otbPlatformPositionComputeBaselineNewTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef otb::PlatformPositionAdapter PlatformType;
   PlatformType::Pointer masterPlatform = PlatformType::New();

@@ -26,7 +26,7 @@
 #include <vector>
 #include <algorithm>
 
-int otbLandsatTMVegetationTest(int argc, char * argv[])
+int otbLandsatTMVegetationTest(int itkNotUsed(argc), char * argv[])
 {
 
   typedef double InputPixelType;

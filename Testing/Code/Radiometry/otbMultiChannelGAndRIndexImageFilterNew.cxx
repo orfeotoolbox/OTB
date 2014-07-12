@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-int otbMultiChannelGAndRIndexImageFilterNew(int argc, char * argv[])
+int otbMultiChannelGAndRIndexImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<unsigned char, Dimension>                              InputImageType;

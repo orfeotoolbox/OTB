@@ -23,7 +23,7 @@
 #include "otbVectorImage.h"
 #include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
 
-int otbReciprocalCoherencyToReciprocalMuellerImageFilterNew(int argc, char * argv[])
+int otbReciprocalCoherencyToReciprocalMuellerImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
 

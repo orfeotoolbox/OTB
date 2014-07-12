@@ -20,7 +20,7 @@
 #include "otbAttributesMapLabelObject.h"
 #include <cstdlib>
 
-int otbLabelObjectToPolygonFunctorNew(int argc, char * argv[])
+int otbLabelObjectToPolygonFunctorNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef unsigned short LabelType;

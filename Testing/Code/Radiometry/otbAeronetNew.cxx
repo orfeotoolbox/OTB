@@ -18,7 +18,7 @@
 #include "otbAeronetData.h"
 #include "otbAeronetFileReader.h"
 
-int otbAeronetNew(int argc, char * argv[])
+int otbAeronetNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   otb::AeronetData::Pointer       data = otb::AeronetData::New();
   otb::AeronetFileReader::Pointer reader = otb::AeronetFileReader::New();

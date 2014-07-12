@@ -23,7 +23,7 @@
 #include "otbSarParametricMapFunction.h"
 #include "itkPointSet.h"
 
-int otbSarParametricMapFunctionTest(int argc, char* argv[])
+int otbSarParametricMapFunctionTest(int itkNotUsed(argc), char* argv[])
 {
 
   const char * infname  = argv[1];

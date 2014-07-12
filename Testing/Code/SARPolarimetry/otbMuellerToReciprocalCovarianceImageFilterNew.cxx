@@ -23,7 +23,7 @@
 #include "otbVectorImage.h"
 #include "otbMuellerToReciprocalCovarianceImageFilter.h"
 
-int otbMuellerToReciprocalCovarianceImageFilterNew(int argc, char * argv[])
+int otbMuellerToReciprocalCovarianceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
 

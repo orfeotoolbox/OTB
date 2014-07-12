@@ -23,7 +23,7 @@
 
 typedef otb::Wrapper::CommandLineParser ParserType;
 
-int otbWrapperCommandLineParserNew(int argc, char* argv[])
+int otbWrapperCommandLineParserNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   ParserType::Pointer parser = ParserType::New();
 
@@ -69,7 +69,7 @@ int CheckReturn(ParserType::ParseResultType res)
 }
 
 
-int otbWrapperCommandLineParserTest1(int argc, char* argv[])
+int otbWrapperCommandLineParserTest1(int itkNotUsed(argc), char* argv[])
 {
   ParserType::Pointer parser = ParserType::New();
 
@@ -123,7 +123,7 @@ int otbWrapperCommandLineParserTest2(int argc, char* argv[])
   return CheckReturn(res);
 }
 
-int otbWrapperCommandLineParserTest3(int argc, char* argv[])
+int otbWrapperCommandLineParserTest3(int itkNotUsed(argc), char* argv[])
 {
   ParserType::Pointer parser = ParserType::New();
 
@@ -135,7 +135,7 @@ int otbWrapperCommandLineParserTest3(int argc, char* argv[])
 }
 
 
-int otbWrapperCommandLineParserTest4(int argc, char* argv[])
+int otbWrapperCommandLineParserTest4(int itkNotUsed(argc), char* argv[])
 {
   ParserType::Pointer parser = ParserType::New();
 
@@ -145,4 +145,3 @@ int otbWrapperCommandLineParserTest4(int argc, char* argv[])
     }
   return EXIT_FAILURE;
 }
-

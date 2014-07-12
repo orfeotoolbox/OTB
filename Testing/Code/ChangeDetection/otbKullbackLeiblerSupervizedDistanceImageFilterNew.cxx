@@ -19,7 +19,7 @@
 #include "otbImage.h"
 #include "otbKullbackLeiblerSupervizedDistanceImageFilter.h"
 
-int otbKullbackLeiblerSupervizedDistanceImageFilterNew(int argc, char * argv[])
+int otbKullbackLeiblerSupervizedDistanceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef double        PixelType;

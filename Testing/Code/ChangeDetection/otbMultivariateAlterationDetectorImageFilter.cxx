@@ -27,7 +27,7 @@ typedef otb::ImageFileWriter<OutputImageType> WriterType;
 typedef otb::MultivariateAlterationDetectorImageFilter<ImageType, OutputImageType> MADFilterType;
 
 
-int otbMultivariateAlterationDetectorImageFilterNew(int argc, char* argv[])
+int otbMultivariateAlterationDetectorImageFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   MADFilterType::Pointer  madFilter = MADFilterType::New();
 
@@ -35,7 +35,7 @@ int otbMultivariateAlterationDetectorImageFilterNew(int argc, char* argv[])
 }
 
 
-int otbMultivariateAlterationDetectorImageFilter(int argc, char* argv[])
+int otbMultivariateAlterationDetectorImageFilter(int itkNotUsed(argc), char* argv[])
 {
   char * infname1 = argv[1];
   char * infname2 = argv[2];

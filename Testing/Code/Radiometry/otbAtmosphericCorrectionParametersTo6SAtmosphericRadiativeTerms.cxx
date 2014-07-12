@@ -25,7 +25,7 @@
 #include <iomanip>
 #include <cstdlib>
 
-int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, char * argv[])
+int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int itkNotUsed(argc), char * argv[])
 {
   const char * wavelenghFile  = argv[1];
   const char * outputFile     = argv[2];

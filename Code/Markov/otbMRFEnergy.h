@@ -78,7 +78,7 @@ public:
     this->Modified();
   }
 
-  virtual double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2)
+  virtual double GetSingleValue(const InputImagePixelType& itkNotUsed(value1), const LabelledImagePixelType& itkNotUsed(value2))
   {
     itkExceptionMacro(<< "GetSingleValue() has to be declared in child classes.");
   }
@@ -181,7 +181,7 @@ public:
     this->Modified();
   }
 
-  virtual double GetSingleValue(const LabelledImagePixelType& value1, const LabelledImagePixelType& value2)
+  virtual double GetSingleValue(const LabelledImagePixelType& itkNotUsed(value1), const LabelledImagePixelType& itkNotUsed(value2))
   {
     itkExceptionMacro(<< "GetSingleValue() has to be declared in child classes.");
   }

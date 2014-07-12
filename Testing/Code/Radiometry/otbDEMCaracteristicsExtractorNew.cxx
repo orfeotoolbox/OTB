@@ -20,7 +20,7 @@
 #include "otbDEMCaracteristicsExtractor.h"
 #include "otbImage.h"
 
-int otbDEMCaracteristicsExtractorNew(int argc, char * argv[])
+int otbDEMCaracteristicsExtractorNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
   typedef double                                                          PixelType;

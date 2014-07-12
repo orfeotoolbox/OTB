@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include <fstream>
 
-int otbMRFEnergyGaussian(int argc, char * argv[])
+int otbMRFEnergyGaussian(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                    PixelType;
   typedef int                       PixelType2;

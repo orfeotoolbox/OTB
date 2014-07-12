@@ -21,7 +21,7 @@
 
 #include "otbWrapperParameterKey.h"
 
-int otbWrapperParameterKey(int argc, char* argv[])
+int otbWrapperParameterKey(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
   std::string theKey = "parent.current.child";

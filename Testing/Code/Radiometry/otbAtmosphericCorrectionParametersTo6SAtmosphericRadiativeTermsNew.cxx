@@ -19,7 +19,7 @@
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
 #include <cstdlib>
 
-int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew(int argc, char * argv[])
+int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType;

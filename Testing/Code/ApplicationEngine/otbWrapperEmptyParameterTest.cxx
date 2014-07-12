@@ -21,7 +21,7 @@
 
 #include "otbWrapperEmptyParameter.h"
 
-int otbWrapperEmptyParameterNew(int argc, char* argv[])
+int otbWrapperEmptyParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::EmptyParameter EmptyParameterType;
   EmptyParameterType::Pointer parameter = EmptyParameterType::New();

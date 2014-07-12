@@ -23,7 +23,7 @@
 #include "itksys/SystemTools.hxx"
 #include <fstream>
 
-int otbWrapperDocExampleStructureNew(int argc, char* argv[])
+int otbWrapperDocExampleStructureNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::DocExampleStructure DocExampleStructureType;
   DocExampleStructureType::Pointer docStruct = DocExampleStructureType::New();
@@ -32,7 +32,7 @@ int otbWrapperDocExampleStructureNew(int argc, char* argv[])
 }
 
 
-int otbWrapperDocExampleStructureTest(int argc, char* argv[])
+int otbWrapperDocExampleStructureTest(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::DocExampleStructure DocExampleStructureType;
   DocExampleStructureType::Pointer docStruct = DocExampleStructureType::New();

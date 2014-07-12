@@ -29,7 +29,7 @@
 #define Malloc(type,n) new type[n]
 #endif
 
-int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
+int otbSVMComposedKernelFunctorTest( int itkNotUsed(argc), char* argv[] )
 {
   typedef unsigned char                                   InputPixelType;
   typedef unsigned char                                   LabelPixelType;
@@ -161,7 +161,3 @@ int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
-
-

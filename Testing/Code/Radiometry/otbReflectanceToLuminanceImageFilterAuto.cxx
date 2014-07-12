@@ -24,7 +24,7 @@
 #include "itkVariableLengthVector.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbReflectanceToLuminanceImageFilterAuto(int argc, char * argv[])
+int otbReflectanceToLuminanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
 {
 
 const char * inputFileName  = argv[1];
@@ -38,7 +38,6 @@ const char * inputFileName  = argv[1];
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
   typedef otb::ReflectanceToLuminanceImageFilter<OutputImageType,
       OutputImageType> ReflectanceToLuminanceImageFilterType;
-  typedef ReflectanceToLuminanceImageFilterType::VectorType       VectorType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -48,7 +47,7 @@ const char * inputFileName  = argv[1];
 
   // Instantiating object
   ReflectanceToLuminanceImageFilterType::Pointer filterToLuminance = ReflectanceToLuminanceImageFilterType::New();
-  
+
   filterToLuminance->SetInput(reader->GetOutput());
   writer->SetInput(filterToLuminance->GetOutput());
   writer->Update();

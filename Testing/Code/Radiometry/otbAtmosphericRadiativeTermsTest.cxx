@@ -23,7 +23,7 @@
 #include "otbAtmosphericRadiativeTerms.h"
 #include <cstdlib>
 
-int otbAtmosphericRadiativeTermsNew(int argc, char * argv[])
+int otbAtmosphericRadiativeTermsNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::AtmosphericRadiativeTerms AtmosphericRadiativeTermsType;
 
@@ -33,7 +33,7 @@ int otbAtmosphericRadiativeTermsNew(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbAtmosphericRadiativeTermsSingleChannelNew(int argc, char * argv[])
+int otbAtmosphericRadiativeTermsSingleChannelNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::AtmosphericRadiativeTermsSingleChannel AtmosphericRadiativeTermsType;
 
@@ -60,7 +60,7 @@ std::ostream& operator<<(std::ostream& os, const otb::AtmosphericRadiativeTerms:
   return os;
 }
 
-int otbAtmosphericRadiativeTermsTest(int argc, char * argv[])
+int otbAtmosphericRadiativeTermsTest(int itkNotUsed(argc), char * argv[])
 {
   char * filename = argv[1];
   std::ofstream file;

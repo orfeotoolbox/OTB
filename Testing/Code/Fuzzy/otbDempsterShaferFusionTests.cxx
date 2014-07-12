@@ -183,7 +183,7 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &m
 
 
 // OPTIMIZED RECURSIVE DS FUSION WITH CONFUSION MATRICES
-int otbDempsterShaferFusionOptRecConfMatTest(int argc, char * argv[])
+int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[])
 {
   unsigned int nbClassifiers = 6;
 

@@ -73,7 +73,7 @@ bool XmlTest( FILE* ptrfile, const char* testString, int expected, int found, bo
 // and show how to add and remove nodes.
 //
 
-int tinyXMLlibTest(int argc, char *argv[] )
+int tinyXMLlibTest(int itkNotUsed(argc), char *argv[] )
 {
         const char * inputUtf8TestFilename = argv[1];
         const char * inputUtf8TestVerifyFilename = argv[2];

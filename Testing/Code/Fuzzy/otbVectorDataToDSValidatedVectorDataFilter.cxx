@@ -25,7 +25,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbFuzzyDescriptorsModelManager.h"
 
-int otbVectorDataToDSValidatedVectorDataFilterNew(int argc, char* argv[])
+int otbVectorDataToDSValidatedVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef float                           PrecisionType;
   typedef otb::VectorData<PrecisionType>  VectorDataType;
@@ -41,7 +41,7 @@ int otbVectorDataToDSValidatedVectorDataFilterNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
+int otbVectorDataToDSValidatedVectorDataFilter(int itkNotUsed(argc), char* argv[])
 {
   const char * inputVD  = argv[1];
   const char * outputVD = argv[2];

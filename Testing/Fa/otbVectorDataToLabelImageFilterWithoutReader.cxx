@@ -40,7 +40,7 @@ typedef DataNodeType::LineType                    LineType;
 typedef DataNodeType::PolygonType                 PolygonType;
 typedef LineType::VertexType                      VertexType;
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
 
   //OGRRegisterAll();

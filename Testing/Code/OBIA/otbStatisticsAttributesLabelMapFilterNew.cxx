@@ -22,7 +22,7 @@
 #include "otbStatisticsAttributesLabelMapFilter.h"
 #include "otbImage.h"
 
-int otbStatisticsAttributesLabelMapFilterNew(int argc, char* argv[])
+int otbStatisticsAttributesLabelMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Image<double, 2>                                   ImageType;
   typedef otb::AttributesMapLabelObject<unsigned short, 2, double> LabelObjectType;

@@ -40,7 +40,7 @@ typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
     MaskImageType,
     VectorDataType >  ConnectedComponentSegmentationOBIAToVectorDataFilterType;
 
-int otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew(int argc, char * argv[])
+int otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer connected
     = ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
@@ -49,7 +49,7 @@ int otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew(int argc
   return EXIT_SUCCESS;
 }
 
-int otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(int argc, char * argv[])
+int otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename          = argv[1];
   const char * outputFilename         = argv[2];

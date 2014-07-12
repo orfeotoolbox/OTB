@@ -4,7 +4,7 @@
 #include "otbStreamingStatisticsImageFilter.h"
 #include "otbVectorImageTo3DScalarImageFilter.h"
 
-int main(int argc, char ** argv)
+int main(int itkNotUsed(argc), char ** argv)
 {
   typedef otb::Image<double, 3>                 Image3DType;
   typedef otb::VectorImage<double, 2>           VectorImageType;

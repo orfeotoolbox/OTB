@@ -26,7 +26,7 @@
 #include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
 
 
-int otbReciprocalCoherencyToReciprocalMuellerImageFilter(int argc, char * argv[])
+int otbReciprocalCoherencyToReciprocalMuellerImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];

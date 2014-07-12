@@ -23,7 +23,7 @@
 #include "otbVectorImage.h"
 #include "otbReciprocalHAlphaImageFilter.h"
 
-int otbReciprocalHAlphaImageFilterNew(int argc, char * argv[])
+int otbReciprocalHAlphaImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const unsigned int Dimension = 2;
 

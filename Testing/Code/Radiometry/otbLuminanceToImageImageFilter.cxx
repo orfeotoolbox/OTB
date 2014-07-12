@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "itkVariableLengthVector.h"
 
-int otbLuminanceToImageImageFilter(int argc, char * argv[])
+int otbLuminanceToImageImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

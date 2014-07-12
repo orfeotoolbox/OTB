@@ -25,7 +25,7 @@
 #include <vector>
 #include <algorithm>
 
-int otbLandsatTMBrightTest(int argc, char * argv[])
+int otbLandsatTMBrightTest(int itkNotUsed(argc), char * argv[])
 {
 
   typedef float InputPixelType;

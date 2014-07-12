@@ -52,7 +52,7 @@ protected:
  * image.  We write the output to an image for
  * comparison.
  */
-int svmTest( int argc, char *argv[] )
+int svmTest( int itkNotUsed(argc), char *argv[] )
 {
 
   try
@@ -91,18 +91,3 @@ int svmTest( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -21,7 +21,7 @@
 #include "itkLabelMap.h"
 #include "otbShapeAttributesLabelMapFilter.h"
 
-int otbShapeAttributesLabelMapFilterNew(int argc, char* argv[])
+int otbShapeAttributesLabelMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::AttributesMapLabelObject<unsigned short, 2, double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                         LabelMapType;

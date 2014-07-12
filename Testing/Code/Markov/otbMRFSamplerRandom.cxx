@@ -23,7 +23,7 @@
 #include "otbMRFEnergyPotts.h"
 #include <fstream>
 
-int otbMRFSamplerRandom(int argc, char * argv[])
+int otbMRFSamplerRandom(int itkNotUsed(argc), char * argv[])
 {
   const char * inputImage = argv[1];
   const char * labelImage = argv[2];

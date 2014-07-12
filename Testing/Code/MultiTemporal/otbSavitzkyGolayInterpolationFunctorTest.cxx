@@ -21,7 +21,7 @@
 #include "otbSavitzkyGolayInterpolationFunctor.h"
 #include "otbTimeSeries.h"
 
-int otbSavitzkyGolayInterpolationFunctorTest(int argc, char* argv[])
+int otbSavitzkyGolayInterpolationFunctorTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
   typedef float PixelType;

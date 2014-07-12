@@ -20,11 +20,9 @@
 #include "otbMRFEnergyEdgeFidelity.h"
 #include "otbImage.h"
 
-int otbMRFEnergyEdgeFidelityNew(int argc, char * argv[])
+int otbMRFEnergyEdgeFidelityNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double PixelType;
-  typedef int    PixelType2;
-
   typedef otb::Image<PixelType, 2>                         ImageType;
   typedef otb::MRFEnergyEdgeFidelity<ImageType, ImageType> MRFEnergyType;
 

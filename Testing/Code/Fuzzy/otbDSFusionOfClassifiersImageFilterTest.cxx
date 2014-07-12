@@ -157,7 +157,7 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &m
 
 
 
-int otbDSFusionOfClassifiersImageFilterNew(int argc, char* argv[])
+int otbDSFusionOfClassifiersImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   const  unsigned int Dimension = 2;
 

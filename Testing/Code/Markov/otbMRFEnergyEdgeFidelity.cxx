@@ -21,7 +21,7 @@
 #include "otbImage.h"
 #include <fstream>
 
-int otbMRFEnergyEdgeFidelity(int argc, char * argv[])
+int otbMRFEnergyEdgeFidelity(int itkNotUsed(argc), char * argv[])
 {
   const char * outputFile = argv[1];
 

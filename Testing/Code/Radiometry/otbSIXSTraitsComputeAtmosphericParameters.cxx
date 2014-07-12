@@ -24,7 +24,7 @@
 #include <iomanip>
 #include <cstdlib>
 
-int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
+int otbSIXSTraitsComputeAtmosphericParametersTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inname   = argv[1];
   const char * outname  = argv[2];

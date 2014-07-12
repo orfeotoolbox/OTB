@@ -24,7 +24,7 @@
 
 #include "otbBayesianFusionFilter.h"
 
-int otbBayesianFusionFilter(int argc, char * argv[])
+int otbBayesianFusionFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * multispect = argv[1];
   const char * multispectinterp = argv[2];

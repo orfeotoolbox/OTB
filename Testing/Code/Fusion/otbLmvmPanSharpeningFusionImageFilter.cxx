@@ -24,7 +24,7 @@
 
 #include "otbLmvmPanSharpeningFusionImageFilter.h"
 
-int otbLmvmPanSharpeningFusionImageFilter(int argc, char * argv[])
+int otbLmvmPanSharpeningFusionImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * panchro = argv[1];
   const char * multispect = argv[2];

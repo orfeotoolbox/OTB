@@ -25,7 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbComplexToVectorImageCastFilter.h"
 
-int otbTerraSarBrightnessImageComplexFilterTest(int argc, char * argv[])
+int otbTerraSarBrightnessImageComplexFilterTest(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];

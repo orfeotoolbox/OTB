@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbWaterIndicesFunctor.h"
 
-int otbNDWIWaterIndexImageFilter(int argc, char * argv[])
+int otbNDWIWaterIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                           PixelType;

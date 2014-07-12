@@ -23,7 +23,7 @@
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperApplication.h"
 
-int otbWrapperApplicationHtmlDocGeneratorNew(int argc, char* argv[])
+int otbWrapperApplicationHtmlDocGeneratorNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::ApplicationHtmlDocGenerator DocGeneratorType;
   DocGeneratorType generator;
@@ -31,7 +31,7 @@ int otbWrapperApplicationHtmlDocGeneratorNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbWrapperApplicationHtmlDocGeneratorTest1(int argc, char* argv[])
+int otbWrapperApplicationHtmlDocGeneratorTest1(int argc, char * argv[])
 {
   if (argc != 5)
     {

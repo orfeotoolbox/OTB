@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include <iostream>
 
-int otbSarRadiometricCalibrationFunctionWithoutNoise(int argc, char* argv[])
+int otbSarRadiometricCalibrationFunctionWithoutNoise(int itkNotUsed(argc), char* argv[])
 {
 
   const char * infname  = argv[1];

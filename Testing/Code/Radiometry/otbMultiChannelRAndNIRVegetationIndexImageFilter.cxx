@@ -25,7 +25,7 @@
 #include "otbVegetationIndicesFunctor.h"
 
 template<class TInputImage, class TOutputImage, class TFunction>
-int generic_MultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
+int generic_MultiChannelRAndNIRVegetationIndexImageFilter(int itkNotUsed(argc), char * argv[])
 {
   typedef otb::ImageFileReader<TInputImage>  ReaderType;
   typedef otb::ImageFileWriter<TOutputImage> WriterType;

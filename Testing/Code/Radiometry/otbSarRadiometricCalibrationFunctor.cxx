@@ -19,7 +19,7 @@
 
 #include "otbSarRadiometricCalibrationFunctor.h"
 
-int otbSarRadiometricCalibrationFunctor(int argc, char * argv[])
+int otbSarRadiometricCalibrationFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef double                   ScalarType;
 

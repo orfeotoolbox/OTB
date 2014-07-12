@@ -21,7 +21,7 @@
 #include "itkLabelMap.h"
 #include "itkLabelObject.h"
 
-int otbHooverMatrixFilterNew(int argc, char* argv[])
+int otbHooverMatrixFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef itk::LabelObject<unsigned int, 2>          LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>            LabelMapType;

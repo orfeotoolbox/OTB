@@ -6,8 +6,7 @@
 #include "svm.h"
 #include "otbSVMKernels.h"
 
-
-int svmGenericKernelBasicOperationsTest( int argc, char *argv[] )
+int svmGenericKernelBasicOperationsTest( int itkNotUsed(argc), char *argv[] )
 {
   const char * outputFileName = argv[1];
 
@@ -84,5 +83,3 @@ int svmGenericKernelBasicOperationsTest( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

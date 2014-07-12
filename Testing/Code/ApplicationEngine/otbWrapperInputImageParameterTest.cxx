@@ -21,7 +21,7 @@
 
 #include "otbWrapperInputImageParameter.h"
 
-int otbWrapperInputImageParameterNew(int argc, char* argv[])
+int otbWrapperInputImageParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::InputImageParameter InputImageParameterType;
   InputImageParameterType::Pointer parameter = InputImageParameterType::New();
@@ -29,7 +29,7 @@ int otbWrapperInputImageParameterNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbWrapperInputImageParameterTest1(int argc, char* argv[])
+int otbWrapperInputImageParameterTest1(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::InputImageParameter InputImageParameterType;
   InputImageParameterType::Pointer param = InputImageParameterType::New();

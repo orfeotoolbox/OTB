@@ -24,6 +24,7 @@
 
 int otbImageToPointSetFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
+/*
   const unsigned int Dimension = 2;
 
   typedef unsigned char PixelType;
@@ -32,6 +33,6 @@ int otbImageToPointSetFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv) [
   typedef itk::PointSet<PixelType, Dimension>                 PointSetType;
 
   //FunctionType::Pointer function = FunctionType::New();
-
+*/
   return EXIT_SUCCESS;
 }
