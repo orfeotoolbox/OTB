@@ -46,7 +46,7 @@
 #include "otbSVMClassifier.h"
 //  Software Guide : EndCodeSnippet
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
 // Software Guide : BeginLatex
 //
@@ -76,8 +76,6 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef itk::PointSet<InputVectorType,  Dimension> MeasurePointSetType;
-
-  typedef itk::PointSet<LabelPixelType,  Dimension> LabelPointSetType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -91,10 +89,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef MeasurePointSetType::PointType MeasurePointType;
-  typedef LabelPointSetType::PointType   LabelPointType;
-
   typedef MeasurePointSetType::PointsContainer MeasurePointsContainer;
-  typedef LabelPointSetType::PointsContainer   LabelPointsContainer;
 
   MeasurePointSetType::Pointer    tPSet = MeasurePointSetType::New();
   MeasurePointsContainer::Pointer tCont = MeasurePointsContainer::New();

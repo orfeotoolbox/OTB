@@ -122,10 +122,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::Polygon<double>                     PolygonType;
-  typedef PolygonType::VertexListConstIteratorType PolygonIteratorType;
   typedef otb::ObjectList<PolygonType>             PolygonListType;
-
-  typedef PolygonListType::Iterator PolygonListIteratorType;
 
   PolygonListType::Pointer polygonList = PolygonListType::New();
 // Software Guide : EndCodeSnippet

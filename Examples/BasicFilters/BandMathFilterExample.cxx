@@ -88,7 +88,6 @@ int main( int argc, char* argv[])
   typedef otb::VectorImage<PixelType, 2>                                  InputImageType;
   typedef otb::Image<PixelType, 2>                                        OutputImageType;
   typedef otb::ImageList<OutputImageType>                                 ImageListType;
-  typedef OutputImageType::PixelType                                      VPixelType;
   typedef otb::VectorImageToImageListFilter<InputImageType, ImageListType>
   VectorImageToImageListType;
   typedef otb::ImageFileReader<InputImageType>                            ReaderType;

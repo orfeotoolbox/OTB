@@ -71,8 +71,6 @@ int main(int argc, char * argv[])
 
   typedef itk::StatisticsLabelMapFilter<LabelMapType,
       IType>    LabelObjectValuatorType;
-  typedef  LabelObjectType::AttributeType
-  AttributeType;
   typedef  itk::StatisticsKeepNObjectsLabelMapFilter<LabelMapType>
   KeepNObjectsType;
   typedef  itk::LabelMapToLabelImageFilter<LabelMapType,

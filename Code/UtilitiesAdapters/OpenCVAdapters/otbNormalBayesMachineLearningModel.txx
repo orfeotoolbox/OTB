@@ -133,7 +133,7 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 bool
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const std::string & file)
+::CanWriteFile(const std::string & itkNotUsed(file))
 {
   return false;
 }

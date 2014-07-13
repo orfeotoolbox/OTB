@@ -42,7 +42,7 @@ int otbImageClassificationFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv
   return EXIT_SUCCESS;
 }
 
-int otbImageClassificationFilter(int argc, char * argv[])
+int otbImageClassificationFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * infname = argv[1];
   const char * modelfname = argv[2];

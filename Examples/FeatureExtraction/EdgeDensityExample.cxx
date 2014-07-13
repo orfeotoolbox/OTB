@@ -59,7 +59,7 @@
 #include "otbBinaryImageDensityFunction.h"
 // Software Guide : EndCodeSnippet
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
 
   const char * infname       = argv[1];

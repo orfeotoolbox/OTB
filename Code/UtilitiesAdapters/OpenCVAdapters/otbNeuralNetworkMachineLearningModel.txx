@@ -278,7 +278,7 @@ bool NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(c
 }
 
 template<class TInputValue, class TOutputValue>
-bool NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CanWriteFile(const std::string & file)
+bool NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CanWriteFile(const std::string & itkNotUsed(file))
 {
   return false;
 }

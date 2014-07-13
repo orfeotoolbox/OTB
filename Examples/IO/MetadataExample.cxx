@@ -43,7 +43,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
 
   // Verify the number of parameters in the command line

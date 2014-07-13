@@ -64,7 +64,6 @@ int main(int argc, char* argv[])
   const char * outputFilename = argv[2];
 
   typedef double                 PixelType;
-  typedef std::vector<PixelType> VectorType;
   typedef int                    LabelPixelType;
 
   const unsigned int Dimension = 2;

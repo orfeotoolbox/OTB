@@ -77,7 +77,7 @@
 #include "otbImageFileWriter.h"
 #include "itkListSample.h"
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFileName = argv[1];
   const char * outputFileName = argv[2];

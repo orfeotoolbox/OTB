@@ -106,15 +106,7 @@ int main(int argc, char * argv[])
   typedef itk::LabelImageToLabelMapFilter<LabeledImageType,
       LabelMapType>
   LabelMapFilterType;
-  typedef otb::Polygon<double>
-  PolygonType;
-  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,
-      PolygonType> FunctorType;
-  // Software Guide : EndCodeSnippet
-  typedef VectorDataType::DataNodeType DataNodeType;
-
-  typedef otb::VectorDataProjectionFilter<VectorDataType,
-      VectorDataType> VectorDataFilterType;
+ // Software Guide : EndCodeSnippet
 
   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
   WriterType::Pointer        writer = WriterType::New();

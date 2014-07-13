@@ -114,9 +114,6 @@ int main(int argc, char * argv[])
   typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>
   ShapeLabelMapFilterType;
   typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType,
-      ImageType>
-  StatisticsLabelMapFilterType;
-  typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType,
       VectorImageType>
   RadiometricLabelMapFilterType;
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>

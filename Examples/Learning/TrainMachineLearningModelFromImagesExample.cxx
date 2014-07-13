@@ -52,7 +52,7 @@
 //#include "otbShiftScaleSampleListFilter.h"
 
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
   const char* inputImageFileName = argv[1];
   const char* trainingShpFileName = argv[2];
@@ -60,13 +60,8 @@ int main(int argc, char* argv[])
 
   typedef unsigned int InputPixelType;
   const unsigned int Dimension = 2;
-
-
   typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
-  typedef otb::Image<InputImageType::InternalPixelType, 2> ImageType;
-
   typedef otb::VectorData<double, 2>                   VectorDataType;
-
   typedef otb::ImageFileReader<InputImageType>         InputReaderType;
   typedef otb::VectorDataFileReader<VectorDataType>    VectorDataReaderType;
 
@@ -189,4 +184,3 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 }
-

@@ -76,12 +76,6 @@ int main(int argc, char* argv[])
   typedef otb::Image<float,2>                 FloatImageType;
   typedef otb::VectorImage<float,2>           FloatVectorImageType;
 
-  typedef otb::ImageList<FloatImageType>      ImageListType;
-
-  typedef otb::ImageListToVectorImageFilter
-    <ImageListType,
-     FloatVectorImageType>                    ImageListToVectorImageFilterType;
-
   typedef otb::ImageFileReader
     <FloatImageType>                          ImageReaderType;
 
@@ -274,7 +268,7 @@ int main(int argc, char* argv[])
   #else
   std::string leftExpr = "if(inleft != 0,255,0)";
   #endif
-  
+
   m_LBandMathFilter->SetExpression(leftExpr);
 
   BandMathFilterType::Pointer m_RBandMathFilter = BandMathFilterType::New();

@@ -63,7 +63,7 @@ void QtWidgetParameterBase::UpdateGUI()
     }
 }
 
-void QtWidgetParameterBase::ParameterChanged(const QString& key)
+void QtWidgetParameterBase::ParameterChanged(const QString& itkNotUsed(key))
 {
   m_Param->SetUserValue(true);
 }

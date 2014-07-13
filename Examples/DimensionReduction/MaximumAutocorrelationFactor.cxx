@@ -47,7 +47,7 @@
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 //  Software Guide : EndCodeSnippet
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
   char * infname   = argv[1];
   char * outfname  = argv[2];

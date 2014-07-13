@@ -88,8 +88,6 @@ int main(int argc, char * argv[])
   typedef otb::Image<OutputPixelType,  2>   OutputImageType;
   // Software Guide : EndCodeSnippet
 
-  typedef otb::LineSpatialObjectList LinesListType;
-
   //  Software Guide : BeginLatex
   //
   //  The filter can be instantiated using the image types defined above.

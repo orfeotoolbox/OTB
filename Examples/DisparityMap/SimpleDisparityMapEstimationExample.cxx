@@ -159,10 +159,6 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
 
   typedef PointSetType::PointType                    PointType;
-  typedef PointSetType::PointsContainer::Iterator    PointSetIteratorType;
-  typedef PointSetType::PointsContainer              PointsContainerType;
-  typedef PointSetType::PointDataContainer::Iterator PointDataIteratorType;
-  typedef PointSetType::PointDataContainer           PointDataContainerType;
 
   // Software Guide : BeginLatex
   //

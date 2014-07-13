@@ -53,7 +53,7 @@
 
 #include "otbImageFileReader.h"
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
 
   const char* inputImageFileName = argv[1];

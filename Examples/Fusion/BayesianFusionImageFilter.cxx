@@ -211,16 +211,11 @@ int main(int argc, char *argv[])
   typedef otb::VectorRescaleIntensityImageFilter<OutputImageType,
       OutputVectorImageType>
   VectorRescalerBayesianType;
-  typedef otb::Image<OutputPixelType2,
-      Dimension>
-  PanchroOutputImageType;
   typedef otb::ImageToVectorImageCastFilter<PanchroImageType,
       MultiSpecImageType> CasterType;
   typedef otb::MultiChannelExtractROI<OutputPixelType2,
       OutputPixelType2>
   ChannelExtractorType;
-  typedef otb::ImageFileWriter<PanchroOutputImageType>
-  WriterType2;
 
   multiSpectReader->GenerateOutputInformation();
   multiSpectInterpReader->GenerateOutputInformation();

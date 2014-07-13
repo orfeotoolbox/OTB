@@ -73,7 +73,7 @@
 //    228 316 207 282 0.00005 1.0
 //  Software Guide : EndCommandLineArgs
 
-int main(int argc, char * argv[])
+int main(int itkNotUsed(argc), char * argv[])
 {
 
   const unsigned int Dimension = 2;
@@ -82,7 +82,6 @@ int main(int argc, char * argv[])
   typedef itk::CovariantVector<PixelType, Dimension> VectorPixelType;
   typedef otb::Image<PixelType, Dimension>           InternalImageType;
   typedef otb::VectorImage<PixelType, Dimension>     MultiSpectralImageType;
-  typedef otb::Image<OutputPixelType, Dimension>     OutputImageType;
   typedef otb::Image<VectorPixelType, Dimension>     VectorImageType;
 
   typedef otb::PolyLineParametricPathWithValue<double, Dimension> PathType;

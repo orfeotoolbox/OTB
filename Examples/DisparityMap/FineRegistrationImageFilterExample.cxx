@@ -73,8 +73,6 @@ int main(int argc, char** argv)
   typedef double                              PixelType;
   typedef itk::Vector<double, ImageDimension> DisplacementPixelType;
 
-  typedef double CoordinateRepresentationType;
-
   typedef unsigned char                               OutputPixelType;
   typedef otb::Image<OutputPixelType, ImageDimension> OutputImageType;
 

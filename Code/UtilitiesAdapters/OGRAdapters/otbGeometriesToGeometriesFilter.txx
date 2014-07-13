@@ -98,7 +98,7 @@ inline
 void otb::TransformationFunctorDispatcher<TransformationFunctor,OGRGeometry,FieldTransformationPolicy>::operator()(
   otb::ogr::Layer & inout) const
 {
-  OGRFeatureDefn & defn = inout.GetLayerDefn();
+//  OGRFeatureDefn & defn = inout.GetLayerDefn();
   // NB: We can't iterate with begin()/end() as SetFeature may invalidate the
   // iterators depending of the underlying drivers
   // => we use start_at(), i.e. SetNextByIndex()

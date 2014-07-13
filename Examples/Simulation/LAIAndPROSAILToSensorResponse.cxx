@@ -109,8 +109,6 @@ public:
 
   ArrayType GetUniqueValues() const
   {
-    typedef typename ImageType::IndexType IndexType;
-
     if( !m_Image )
       {
        itkExceptionMacro(<<"GetUniqueValues(): Null input image pointer.");
@@ -345,7 +343,7 @@ public:
     ReduceResponseTypePointerType reduceResponse = ReduceResponseType::New();
     reduceResponse->SetInputSatRSR(m_SatRSR);
     reduceResponse->SetInputSpectralResponse(aResponse);
-    
+
     reduceResponse->SetReflectanceMode(true);
 
     reduceResponse->CalculateResponse();
@@ -923,5 +921,3 @@ int main(int argc, char *argv[])
   return EXIT_SUCCESS;
 
 }
-
-

@@ -43,7 +43,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int main(int argc, char * argv[])
+int main(int itkNotUsed(argc), char * argv[])
 {
 
   const char * inputFilename = argv[1];

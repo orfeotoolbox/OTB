@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
   int nbClasses = 4;
   // Software Guide : EndCodeSnippet
 
-  unsigned int inputSeed = 121212;
+//  unsigned int inputSeed = 121212;
   const char* outputModelFileName = argv[1]; //argv[5];
 
 
@@ -180,4 +180,3 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
 
 }
-

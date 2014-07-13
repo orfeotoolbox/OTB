@@ -56,8 +56,6 @@ int main(int argc, char * argv[])
   unsigned int P((unsigned char) ::atoi(argv[1]));
   unsigned int Q((unsigned char) ::atoi(argv[2]));
 
-  typedef unsigned char InputPixelType;
-
   //  Software Guide : BeginLatex
   //
   //  The \doxygen{otb}{ComplexMomentPathFunction} is templated over the

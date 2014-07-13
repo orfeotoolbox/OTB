@@ -49,7 +49,7 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkScalarToRGBPixelFunctor.h"
 
-int main(int argc, char * argv[])
+int main(int itkNotUsed(argc), char * argv[])
 {
 
   const char*        inputFilename = argv[1];

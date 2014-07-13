@@ -50,7 +50,7 @@
 #include "itkImageDuplicator.h"
 #include "otbObjectList.h"
 
-int main(int argc, char * argv[])
+int main(int itkNotUsed(argc), char * argv[])
 {
 
   typedef float         InputPixelType;

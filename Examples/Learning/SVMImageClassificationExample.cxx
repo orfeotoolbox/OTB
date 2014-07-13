@@ -82,7 +82,6 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef double                 PixelType;
-  typedef std::vector<PixelType> VectorType;
   typedef int                    LabelPixelType;
 // Software Guide : EndCodeSnippet
   const unsigned int Dimension = 2;

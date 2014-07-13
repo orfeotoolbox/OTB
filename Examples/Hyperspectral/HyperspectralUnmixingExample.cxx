@@ -60,8 +60,6 @@ int main(int argc, char * argv[])
   const unsigned int Dimension = 2;
 
   typedef double                                                      PixelType;
-  typedef otb::VectorImage<unsigned char, 2>                          OutputPrettyImageType;
-
   // Software Guide : BeginLatex
   //
   // We start by defining the types for the images and the reader and
@@ -78,11 +76,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   typedef otb::VectorRescaleIntensityImageFilter<ImageType, ImageType> RescalerType;
-  typedef otb::StreamingStatisticsVectorImageFilter<ImageType>        StreamingStatisticsVectorImageFilterType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType>              VectorImageToMatrixImageFilterType;
-
-  typedef vnl_vector<double> VectorType;
-  typedef vnl_matrix<double> MatrixType;
 
   // Software Guide : BeginLatex
   //

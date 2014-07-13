@@ -84,7 +84,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 template <class TInputValue, class TTargetValue>
 void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::Save(const std::string & filename, const std::string & name)
+::Save(const std::string & filename, const std::string & itkNotUsed(name))
 {
   //there is no m_KNearestModel->save(filename.c_str(), name.c_str()).
   //We need to save the K parameter and IsRegression flag used and the samples.
@@ -117,7 +117,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 template <class TInputValue, class TTargetValue>
 void
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::Load(const std::string & filename, const std::string & name)
+::Load(const std::string & filename, const std::string & itkNotUsed(name))
 {
   //there is no m_KNearestModel->load(filename.c_str(), name.c_str());
   std::ifstream ifs(filename.c_str());
@@ -203,7 +203,7 @@ KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
 template <class TInputValue, class TTargetValue>
 bool
 KNearestNeighborsMachineLearningModel<TInputValue,TTargetValue>
-::CanWriteFile(const std::string & file)
+::CanWriteFile(const std::string & itkNotUsed(file))
 {
   return false;
 }

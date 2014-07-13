@@ -46,7 +46,7 @@
 #include "itkTimeProbe.h"
 
 
-int main(int argc, char * argv[])
+int main(int itkNotUsed(argc), char * argv[])
 {
 // Software Guide : BeginLatex
 //

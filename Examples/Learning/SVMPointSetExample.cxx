@@ -27,7 +27,7 @@
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
   typedef float InputPixelType;

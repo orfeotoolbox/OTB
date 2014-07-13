@@ -45,7 +45,7 @@
 #include "otbSFSTexturesImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-int main(int argc, char * argv[])
+int main(int itkNotUsed(argc), char * argv[])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;

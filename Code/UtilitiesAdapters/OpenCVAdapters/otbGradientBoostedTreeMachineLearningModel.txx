@@ -150,7 +150,7 @@ GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 bool
 GradientBoostedTreeMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const std::string & file)
+::CanWriteFile(const std::string & itkNotUsed(file))
 {
   return false;
 }
