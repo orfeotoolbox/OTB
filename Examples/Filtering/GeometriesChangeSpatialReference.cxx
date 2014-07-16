@@ -77,7 +77,7 @@ ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
   if (out)
     {
     const OGRErr err = out->transform(m_reprojector.get());
-    if (!err != OGRERR_NONE)
+    if (err == OGRERR_NONE)
       {
       itkGenericExceptionMacro(<< "Cannot reproject a geometry: " << CPLGetLastErrorMsg());
       }
@@ -102,6 +102,7 @@ struct Options
 
     for (int a=1; a!=argc; ++a)
       {
+      std::cout << "argv[a] " <<  argv[a] << std::endl;
       if (!strcmp(argv[a], "-wkt"))
         wkt = argv[a];
       else if (!strcmp(argv[a], "-"))
