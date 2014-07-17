@@ -461,6 +461,13 @@ DisparityMapToDEMFilter<TDisparityImage,TInputImage,TOutputDEMImage,TEpipolarGri
   double epiIndexMax[2];
   int maxGridIndex[2];
   int minGridIndex[2];
+
+  epiIndexMin[0] = itk::NumericTraits<double>::Zero;
+  epiIndexMin[1] = itk::NumericTraits<double>::Zero;
+
+  epiIndexMax[0] = itk::NumericTraits<double>::Zero;
+  epiIndexMax[1] = itk::NumericTraits<double>::Zero;
+
   maxGridIndex[0] = static_cast<int>(gridRegion.GetIndex(0) + gridRegion.GetSize(0)) - 2;
   maxGridIndex[1] = static_cast<int>(gridRegion.GetIndex(1) + gridRegion.GetSize(1)) - 2;
   minGridIndex[0] = static_cast<int>(gridRegion.GetIndex(0));
