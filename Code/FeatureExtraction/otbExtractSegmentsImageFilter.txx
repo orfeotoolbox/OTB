@@ -55,7 +55,7 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 const typename ExtractSegmentsImageFilter<TInputImage, TOutputImage>::InputImageType *
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetInputImage(void)
+::GetInputImage()
 {
   return static_cast<const InputImageType *>
            (this->GetInput(0));
@@ -74,7 +74,7 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 const typename ExtractSegmentsImageFilter<TInputImage, TOutputImage>::InputImageType *
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetInputImageDirection(void)
+::GetInputImageDirection()
 {
   return static_cast<const InputImageType *>
            (this->GetInput(1));
@@ -93,7 +93,7 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 const typename ExtractSegmentsImageFilter<TInputImage, TOutputImage>::SizeType
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetPixelSuppressionRadius(void)
+::GetPixelSuppressionRadius()
 {
   return (m_PixelSuppression->GetRadius());
 }
@@ -106,9 +106,9 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-const float
+float
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetPixelSuppressionAngularBeam(void)
+::GetPixelSuppressionAngularBeam()
 {
   return (m_PixelSuppression->GetAngularBeam());
 }
@@ -126,7 +126,7 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 const typename ExtractSegmentsImageFilter<TInputImage, TOutputImage>::SizeType
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetLocalHoughRadius(void)
+::GetLocalHoughRadius()
 {
   return (m_LocalHough->GetRadius());
 }
@@ -139,9 +139,9 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-const unsigned int
+unsigned int
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetLocalHoughNumberOfLines(void)
+::GetLocalHoughNumberOfLines()
 {
   return (m_LocalHough->GetNumberOfLines());
 }
@@ -154,9 +154,9 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-const float
+float
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetLocalHoughDiscRadius(void)
+::GetLocalHoughDiscRadius()
 {
   return (m_LocalHough->GetDiscRadius());
 }
@@ -169,9 +169,9 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-const float
+float
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetLocalHoughVariance(void)
+::GetLocalHoughVariance()
 {
   return (m_LocalHough->GetVariance());
 }
@@ -187,9 +187,9 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-const float
+float
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetFillGapsRadius(void)
+::GetFillGapsRadius()
 {
   return (m_FillGaps->GetRadius());
 }
@@ -202,9 +202,9 @@ void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-const float
+float
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::GetFillGapsAngularBeam(void)
+::GetFillGapsAngularBeam()
 {
   return (m_FillGaps->GetAngularBeam());
 }

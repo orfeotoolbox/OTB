@@ -80,45 +80,45 @@ public:
 
   /** Set/Get the radius of the region of the pixel suppression by direction image filter. */
   void SetPixelSuppressionRadius(SizeType Radius);
-  const SizeType GetPixelSuppressionRadius(void);
+  const SizeType GetPixelSuppressionRadius();
 
   /** Set/Get Angular Accuracy on the direction of the central pixel for
       the pixel suppression by direction image filter. */
   void SetPixelSuppressionAngularBeam(float AngularBeam);
-  const float GetPixelSuppressionAngularBeam(void);
+  float GetPixelSuppressionAngularBeam();
 
   /** Set/Get the radius used to define the region of local hough filter. */
   void SetLocalHoughRadius(SizeType Radius);
-  const SizeType GetLocalHoughRadius(void);
+  const SizeType GetLocalHoughRadius();
 
   /** Set/Get the number of lines we are looking for in the local hough filter. */
   void SetLocalHoughNumberOfLines(unsigned int Radius);
-  const unsigned int GetLocalHoughNumberOfLines(void);
+  unsigned int GetLocalHoughNumberOfLines();
 
   /** Set/Get the radius of the disc to remove from the accumulator
    *  for each line found */
   void SetLocalHoughDiscRadius(float DiscRadius);
-  const float GetLocalHoughDiscRadius(void);
+  float GetLocalHoughDiscRadius();
 
   /** Set/Get the variance of the gaussian bluring for the accumulator */
   void SetLocalHoughVariance(float Variance);
-  const float GetLocalHoughVariance(void);
+  float GetLocalHoughVariance();
 
   /** Set/Get the radius between two segments in the fill gaps filter. */
   void SetFillGapsRadius(float Radius);
-  const float GetFillGapsRadius(void);
+  float GetFillGapsRadius();
 
   /** Set/Get Angular Beam between two segments in the fill gaps filter. */
   void SetFillGapsAngularBeam(float AngularBeam);
-  const float GetFillGapsAngularBeam(void);
+  float GetFillGapsAngularBeam();
 
   /** Set/Get the image input of this filter.  */
   void SetInputImage(const InputImageType *image);
-  const InputImageType * GetInputImage(void);
+  const InputImageType * GetInputImage();
 
   /** Set/Get the image direction of this filter.  */
   void SetInputImageDirection(const InputImageType *image);
-  const InputImageType * GetInputImageDirection(void);
+  const InputImageType * GetInputImageDirection();
 
   /** Set/Get the value of the drawed line*/
   itkGetMacro(LineValue, typename OutputImageType::PixelType);

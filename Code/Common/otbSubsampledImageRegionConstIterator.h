@@ -222,7 +222,7 @@ public:
    * No Bound checking is performed when setting the position.
    */
   void SetOffset(const OffsetType& offset);
-  const OffsetType GetOffset() const
+  OffsetType GetOffset() const
   {
     return this->m_Offset;
   }

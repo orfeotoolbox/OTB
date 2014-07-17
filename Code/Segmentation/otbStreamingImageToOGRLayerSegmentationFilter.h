@@ -331,7 +331,7 @@ public:
      this->GetFilter()->SetUse8Connected(flag);
   }
 
-  const bool GetUse8Connected()
+  bool GetUse8Connected()
   {
      return this->GetFilter()->GetUse8Connected();
   }
@@ -341,7 +341,7 @@ public:
      this->GetFilter()->SetFilterSmallObject(flag);
   }
 
-  const bool GetFilterSmallObject()
+  bool GetFilterSmallObject()
   {
      return this->GetFilter()->GetFilterSmallObject();
   }
@@ -351,7 +351,7 @@ public:
      this->GetFilter()->SetMinimumObjectSize(size);
   }
 
-  const unsigned int GetMinimumObjectSize()
+  unsigned int GetMinimumObjectSize()
   {
      return this->GetFilter()->GetMinimumObjectSize();
   }
@@ -361,7 +361,7 @@ public:
      this->GetFilter()->SetSimplify(flag);
   }
 
-  const bool GetSimplify()
+  bool GetSimplify()
   {
      return this->GetFilter()->GetSimplify();
   }
@@ -373,7 +373,7 @@ public:
      this->GetFilter()->SetSimplificationTolerance(tol);
   }
 
-  const double GetSimplificationTolerance()
+  double GetSimplificationTolerance()
   {
      return this->GetFilter()->GetSimplificationTolerance();
   }
