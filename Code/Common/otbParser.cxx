@@ -135,7 +135,7 @@ public:
     }
    catch(ExceptionType &e)
     {
-     ExceptionHandler(e);
+     ExceptionHandlerDebug(e);
      return false;
     }
 
@@ -170,10 +170,17 @@ public:
   }
 
   /** Convert parser specific exception into itk debug macro */
-  virtual void ExceptionHandlerDebug(ExceptionType &e)
+   virtual void ExceptionHandlerDebug(ExceptionType &e)
    {
-     ExceptionHandler(e);
+     otbGenericMsgDebugMacro(                                     << std::endl
+           << "Message:     "   << e.GetMsg()   << std::endl
+           << "Formula:     "   << e.GetExpr()  << std::endl
+           << "Token:       "   << e.GetToken() << std::endl
+           << "Position:    "   << e.GetPos()   << std::endl
+                  << std::endl);
+   //        << "Errc:        "   << e.GetCode()  << std::endl);
    }
+
 
 protected:
   ParserImpl()

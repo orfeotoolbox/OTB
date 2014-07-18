@@ -221,7 +221,7 @@ namespace otb
       throw e_; \
       } \
     }
-//unused macro
-#  define otbUnunsedMacro(x) do { (void)sizeof(x); } while(0)
+
+#  define otbUnusedMacro(x) (void)x;
 
 #endif //end of otbMacro.h
