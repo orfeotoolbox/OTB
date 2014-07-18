@@ -350,10 +350,8 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
 
 int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
                                   const std::vector<std::string>& listFilename,
-                                  int maxConnect) const
+                                  int itkNotUsed(maxConnect)) const
 {
-
-  otbUnusedMacro(maxConnect);
 #ifdef OTB_USE_CURL
 #if 0
 //#ifdef OTB_CURL_MULTI_AVAILABLE
@@ -533,10 +531,8 @@ size_t CurlHelper::CallbackWriteDataToStringStream(void *ptr, size_t size, size_
   return size * nmemb;
 }
 
-size_t CurlHelper::CallbackWriteDataDummy(void *ptr, size_t size, size_t nmemb, void *data)
+size_t CurlHelper::CallbackWriteDataDummy(void *itkNotUsed(ptr), size_t size, size_t nmemb, void *itkNotUsed(data))
 {
-  otbUnusedMacro(ptr);
-  otbUnusedMacro(data);
   return size * nmemb;
 }
 
