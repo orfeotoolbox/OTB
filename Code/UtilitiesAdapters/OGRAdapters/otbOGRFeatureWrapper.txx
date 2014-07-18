@@ -145,10 +145,8 @@ void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
   CheckInvariants();
   OGRGeometry * g = geometry.get();
   UncheckedSetGeometryDirectly(otb::move(geometry));
-  assert(m_Feature->GetGeometryRef() == g && "The new geometry hasn't been set as expected");
-  assert(! geometry && "UniqueGeometryPtr hasn't released its pointer");
-  // avoid unused variable warning
-  g=NULL;
+  itkAssertOrThrowMacro((m_Feature->GetGeometryRef() == g), "The new geometry hasn't been set as expected");
+  itkAssertOrThrowMacro(!geometry, "UniqueGeometryPtr hasn't released its pointer");
 }
 
 inline
@@ -156,7 +154,7 @@ otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
 {
   CheckInvariants();
   UniqueGeometryPtr res = UncheckedStealGeometry();
-  assert(! m_Feature->GetGeometryRef() && "Geometry hasn't been properly stolen");
+  itkAssertOrThrowMacro(!m_Feature->GetGeometryRef(), "Geometry hasn't been properly stolen");
   return otb::move(res);
 }
 

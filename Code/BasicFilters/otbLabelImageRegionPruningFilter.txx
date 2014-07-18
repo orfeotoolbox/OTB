@@ -402,12 +402,15 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
       LabelType l = outputIt.Get();
       LabelType canLabel;
-      assert(m_CanonicalLabels[l] <= oldRegionCount);
+      if (m_CanonicalLabels[l] <= oldRegionCount)
+        {
+        itkAssertInDebugAndIgnoreInReleaseMacro( 0 );
+        }
       canLabel = newLabels[m_CanonicalLabels[l]];
       outputIt.Set( canLabel );
-
       ++outputIt;
       }
+
 
     finishedPruning =  !minRegionCount ||  regionCount == 1 ||  pruneIterations>=10;
 
