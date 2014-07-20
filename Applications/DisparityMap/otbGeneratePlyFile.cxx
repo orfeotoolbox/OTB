@@ -109,6 +109,9 @@ private:
     it.GoToBegin();
 
     FloatImageType::IndexType lr, ul;
+    typedef typename FloatImageType::IndexType::IndexValueType IndexValueType;
+    lr.Fill(itk::NumericTraits<IndexValueType>::Zero);
+    ul.Fill(itk::NumericTraits<IndexValueType>::Zero);
 
     bool firstLoop = true;
 

@@ -486,6 +486,8 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
      }
 
   typename PolygonType::VertexType::VectorType offset;
+  typedef typename PolygonType::VertexType::VectorType::ValueType VectorValueType;
+  offset.Fill(itk::NumericTraits<VectorValueType>::Zero);
 
   switch (state)
     {
@@ -560,6 +562,8 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
      }
 
   typename PolygonType::VertexType::VectorType offset;
+  typedef typename PolygonType::VertexType::VectorType::ValueType VectorValueType;
+  offset.Fill(itk::NumericTraits<VectorValueType>::Zero);
 
   switch (state)
     {

@@ -242,7 +242,15 @@ DisparityTranslateFilter<TDisparityImage,TGridImage,TSensorImage,TMaskImage>
   GridRegionType gridLargest = leftGrid->GetLargestPossibleRegion();
 
   IndexType minIndex,maxIndex;
+  // -Wmaybe-uninitialized
+  typedef typename IndexType::IndexValueType IndexValueType;
+  minIndex.Fill(itk::NumericTraits<IndexValueType>::Zero);
+  maxIndex.Fill(itk::NumericTraits<IndexValueType>::Zero);
+
   IndexType corners[4];
+  for(int i = 0; i < 4; i++)
+    corners[i].Fill(itk::NumericTraits<IndexValueType>::Zero);
+
   corners[0] = requested.GetIndex();
   corners[1] = requested.GetIndex();
   corners[1][0] += static_cast<IndexValueType>(requested.GetSize()[0]) - 1;

@@ -44,6 +44,8 @@ public:
     if (itA.GetCenterPixel() != 0)
       {
       typename TInput1::OffsetType offset1, offset2;
+      offset1.Fill(0);
+      offset2.Fill(0);
       int neighborhoodNumber;
       if (itB.GetCenterPixel() > 0)
         {

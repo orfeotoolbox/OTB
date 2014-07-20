@@ -278,6 +278,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     while ((lIterDoG + 1) != m_DoGList->End())
       {
       otbGenericMsgDebugMacro(<< "ImageToSIFTKeyPointSetFilter:: octave: " << octave << " scale: " << lScale);
+      otbUnusedMacro(octave);
       // Compute max of DoG
       MinimumMaximumCalculatorPointerType lMaximumCalculator = MinimumMaximumCalculatorType::New();
       lMaximumCalculator->SetImage(lIterDoG.Get());
