@@ -76,7 +76,7 @@ private:
 /** \class
  * \brief
  */
-class QtWidgetModel : public QObject
+class ITK_ABI_EXPORT QtWidgetModel : public QObject
 {
   Q_OBJECT
 public:
