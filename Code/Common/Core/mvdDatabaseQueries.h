@@ -70,7 +70,7 @@ namespace mvd
 /**
  */
 inline
-SqlId
+Monteverdi2_EXPORT SqlId
 GetRootNodeFields( const QSqlQuery& query,
                    QString* label =NULL,
                    SqlId* parentId =NULL,
@@ -80,7 +80,8 @@ GetRootNodeFields( const QSqlQuery& query,
 
 /**
  */
-SqlId
+
+Monteverdi2_EXPORT SqlId
 GetNodeFields( const QSqlQuery& query,
                QString* label =NULL,
                SqlId* parentId =NULL,
@@ -90,7 +91,7 @@ GetNodeFields( const QSqlQuery& query,
 
 /**
  */
-SqlId
+Monteverdi2_EXPORT SqlId
 GetChildNodeFields( const QSqlQuery& query,
                     QString* label =NULL,
                     SqlId* parentId =NULL,
@@ -100,14 +101,13 @@ GetChildNodeFields( const QSqlQuery& query,
 
 /**
  */
-SqlId
+Monteverdi2_EXPORT SqlId
 GetDatasetFields( const QSqlQuery& query,
                   QString* hash =NULL,
                   QString* alias =NULL );
 
 //
 // Internal classes pre-declaration.
-
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */

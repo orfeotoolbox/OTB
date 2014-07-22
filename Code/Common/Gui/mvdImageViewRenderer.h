@@ -79,7 +79,7 @@ namespace mvd
 /**
  * \class ImageViewRenderer
  */
-class ImageViewRenderer :
+class Monteverdi2_EXPORT ImageViewRenderer :
     public AbstractImageViewRenderer
 {
 

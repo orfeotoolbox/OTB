@@ -39,8 +39,10 @@ set(Monteverdi2_FLOATING_TYPE "float" CACHE STRING "The type of data in which in
 #Prevents conflicts with visual min/max function
 #Add the OSSIMSTATIC flag to prevent from including dclspec(dllimport) from ossim
 if(WIN32)
-  add_definitions(-DNOMINMAX -DOSSIM_STATIC)
-endif(WIN32)
+  if(NOT BUILD_SHARED_LIBS)
+    add_definitions(-DNOMINMAX -DOSSIM_STATIC)
+  endif()
+endif()
 
 #----------------------------------------------------------------------------
 # Orfeo ToolBox
@@ -197,7 +199,9 @@ SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 add_subdirectory( Code )
 
 # i18n directory must be added after all source files (see add_qt1_i18n_sources).
-add_subdirectory( i18n )
+if(QT_LRELEASE_EXECUTABLE)
+ add_subdirectory( i18n )
+endif()
 
 # CPack related files
 add_subdirectory( Packaging )

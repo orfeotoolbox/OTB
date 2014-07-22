@@ -71,7 +71,7 @@ namespace Wrapper
  * \brief WIP.
  */
 
-class QtWidgetView :
+class Monteverdi2_EXPORT QtWidgetView :
     public QWidget
 {
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/

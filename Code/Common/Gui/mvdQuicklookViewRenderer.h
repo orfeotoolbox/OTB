@@ -73,7 +73,7 @@ namespace mvd
 /**
  * \class QuicklookViewRenderer
  */
-class QuicklookViewRenderer :
+class Monteverdi2_EXPORT QuicklookViewRenderer :
     public ImageViewRenderer
 {
 
