@@ -199,9 +199,7 @@ SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 add_subdirectory( Code )
 
 # i18n directory must be added after all source files (see add_qt1_i18n_sources).
-if(QT_LRELEASE_EXECUTABLE)
- add_subdirectory( i18n )
-endif()
+add_subdirectory( i18n )
 
 # CPack related files
 add_subdirectory( Packaging )
