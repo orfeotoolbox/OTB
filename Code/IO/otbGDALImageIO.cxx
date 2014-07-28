@@ -138,9 +138,9 @@ GDALImageIO::GDALImageIO()
   // Set default spacing to one
   m_Spacing[0] = 1.0;
   m_Spacing[1] = 1.0;
-  // Set default origin to (0,0) (centered pixel convention)
-  m_Origin[0] = 0;
-  m_Origin[1] = 0;
+  // Set default origin to half a pixel (centered pixel convention)
+  m_Origin[0] = 0.5;
+  m_Origin[1] = 0.5;
 
   m_IsIndexed   = false;
   m_DatasetNumber = 0;
@@ -1866,11 +1866,8 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
   std::istringstream ss1 (originValues[1]);
   ss0 >> origin[1];
   ss1 >> origin[0];
-
-  // We stick to OSSIM convention here (center of ul pixel is (0,0),
-  // so we need to remove 1 pixel
-  origin[0] -= 1.0;
-  origin[1] -= 1.0;
+  origin[0] += -1.0 + 0.5;
+  origin[1] += -1.0 + 0.5;
 
   otbMsgDevMacro( << "\t Origin from GML box: " <<  origin[0] << ", " << origin[1] );
 
