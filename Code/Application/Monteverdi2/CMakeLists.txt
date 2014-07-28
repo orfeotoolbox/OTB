@@ -64,6 +64,10 @@ if (WIN32)
       @ONLY
     )
 
+  if (MINGW)
+    set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
+  endif()
+ 
     # The RC file to be added to source list
     set( Monteverdi2_Catalogue_WIN32_RC_FILE ${CMAKE_CURRENT_BINARY_DIR}/mvdWin32.rc )
 endif()
