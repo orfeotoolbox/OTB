@@ -35,8 +35,8 @@ namespace otb
 namespace internal
 {
   /**
-   * Converts index coordinates from OTB into OSSIM. It is intended for sensor 
-   * images where the centre of the top-left pixel is expected to be : 
+   * Converts index coordinates from OTB into OSSIM. It is intended for sensor
+   * images where the centre of the top-left pixel is expected to be :
    *   [0.5,0.5] in OTB
    *   [ 0 , 0 ] in OSSIM
    */
@@ -47,8 +47,8 @@ namespace internal
   }
 
   /**
-   * Converts index coordinates from OSSIM into OTB. It is intended for sensor 
-   * images where the centre of the top-left pixel is expected to be : 
+   * Converts index coordinates from OSSIM into OTB. It is intended for sensor
+   * images where the centre of the top-left pixel is expected to be :
    *   [0.5,0.5] in OTB
    *   [ 0 , 0 ] in OSSIM
    */

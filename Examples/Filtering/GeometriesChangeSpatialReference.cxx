@@ -113,7 +113,6 @@ private:
 };
 
 
-
 void
 MyReprojectionFilter::SetOutputSpatialReference(std::string const& srs)
 {
