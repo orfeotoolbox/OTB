@@ -32,6 +32,35 @@
 namespace otb
 {
 
+namespace internal
+{
+  /**
+   * Converts index coordinates from OTB into OSSIM. It is intended for sensor 
+   * images where the centre of the top-left pixel is expected to be : 
+   *   [0.5,0.5] in OTB
+   *   [ 0 , 0 ] in OSSIM
+   */
+  void ConvertOTBToOSSIMCoordinates(ossimDpt &pt)
+  {
+    pt.x = pt.x - 0.5;
+    pt.y = pt.y - 0.5;
+  }
+
+  /**
+   * Converts index coordinates from OSSIM into OTB. It is intended for sensor 
+   * images where the centre of the top-left pixel is expected to be : 
+   *   [0.5,0.5] in OTB
+   *   [ 0 , 0 ] in OSSIM
+   */
+  void ConvertOSSIMToOTBCoordinates(ossimDpt &pt)
+  {
+    pt.x = pt.x + 0.5;
+    pt.y = pt.y + 0.5;
+  }
+
+} // namespace internal
+
+
 SensorModelAdapter::SensorModelAdapter():
   m_SensorModel(NULL), m_TiePoints(NULL) // FIXME keeping the original value but...
 {
@@ -91,6 +120,7 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
   ossimDpt ossimPoint(x, y);
   ossimGpt ossimGPoint;
 
+  internal::ConvertOTBToOSSIMCoordinates(ossimPoint);
   this->m_SensorModel->lineSampleHeightToWorld(ossimPoint,z, ossimGPoint);
 
   lon = ossimGPoint.lon;
@@ -109,6 +139,7 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y,
   ossimDpt ossimPoint(x, y);
   ossimGpt ossimGPoint;
 
+  internal::ConvertOTBToOSSIMCoordinates(ossimPoint);
   this->m_SensorModel->lineSampleToWorld(ossimPoint, ossimGPoint);
 
   lon = ossimGPoint.lon;
@@ -129,6 +160,7 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
   ossimDpt ossimDPoint;
 
   this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint);
+  internal::ConvertOSSIMToOTBCoordinates(ossimDPoint);
 
   x = ossimDPoint.x;
   y = ossimDPoint.y;
@@ -152,6 +184,7 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat,
   ossimDpt ossimDPoint;
 
   this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint);
+  internal::ConvertOSSIMToOTBCoordinates(ossimDPoint);
 
   x = ossimDPoint.x;
   y = ossimDPoint.y;
@@ -163,6 +196,7 @@ void SensorModelAdapter::AddTiePoint(double x, double y, double z, double lon, d
   // Create the tie point
   ossimDpt imagePoint(x,y);
   ossimGpt ossimGPoint(lat, lon, z);
+  internal::ConvertOTBToOSSIMCoordinates(imagePoint);
 
   // Add the tie point to the container
   m_TiePoints->addTiePoint(new ossimTieGpt(ossimGPoint,imagePoint,0));
@@ -172,6 +206,7 @@ void SensorModelAdapter::AddTiePoint(double x, double y, double lon, double lat)
 {
   // Create the tie point
   ossimDpt imagePoint(x,y);
+  internal::ConvertOTBToOSSIMCoordinates(imagePoint);
 
   // Get elevation from DEMHandler
   double z = m_DEMHandler->GetHeightAboveEllipsoid(lon,lat);
