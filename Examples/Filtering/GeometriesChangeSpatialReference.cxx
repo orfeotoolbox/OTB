@@ -51,24 +51,14 @@ struct ReprojectTransformationFunctor
   typedef OGRGeometry TransformedElementType;
 
   otb::ogr::UniqueGeometryPtr operator()(OGRGeometry const* in) const;
-  void SetSpatialReferenceFromWkt(std::string const& wkt)
-    {
-    m_osr .reset (static_cast<OGRSpatialReference*>(OSRNewSpatialReference(wkt.c_str())));
-    }
-  //TODO: find a way to call it from DoProcessLayer
-  void UpdateTransformation(OGRSpatialReference & in)
-    {
-    SetSpatialReferences(in, *m_osr);
-    }
-private:
-  void SetSpatialReferences(OGRSpatialReference & in, OGRSpatialReference & out)
+  void SetTransformation(OGRSpatialReference & in, OGRSpatialReference & out)
     {
     m_reprojector.reset(OGRCreateCoordinateTransformation(&in, &out));
     }
-  boost::interprocess::unique_ptr<OGRCoordinateTransformation, internal::Deleters> m_reprojector;
-  boost::interprocess::unique_ptr<OGRSpatialReference,         internal::Deleters> m_osr;
-};
 
+private:
+  boost::interprocess::unique_ptr<OGRCoordinateTransformation, internal::Deleters> m_reprojector;
+};
 
 otb::ogr::UniqueGeometryPtr
 ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
@@ -77,7 +67,7 @@ ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
   if (out)
     {
     const OGRErr err = out->transform(m_reprojector.get());
-    if (err == OGRERR_NONE)
+    if (err != OGRERR_NONE)
       {
       itkGenericExceptionMacro(<< "Cannot reproject a geometry: " << CPLGetLastErrorMsg());
       }
@@ -86,9 +76,73 @@ ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
 }
 
 /*===========================================================================*/
+/*==========================[ reprojection filter ]==========================*/
+/*===========================================================================*/
+class MyReprojectionFilter : public otb::DefaultGeometriesToGeometriesFilter<ReprojectTransformationFunctor>
+{
+public:
+  typedef MyReprojectionFilter            Self;
+  typedef otb::DefaultGeometriesToGeometriesFilter<ReprojectTransformationFunctor> Superclass;
+  typedef itk::SmartPointer<Self>                                Pointer;
+  typedef itk::SmartPointer<const Self>                          ConstPointer;
+
+  itkNewMacro(Self);
+  itkTypeMacro(MyReprojectionFilter, otb::DefaultGeometriesToGeometriesFilter);
+
+  void SetOutputSpatialReference(std::string const& srs);
+
+  void UpdateTransformation(OGRSpatialReference &in)
+    {
+    (*this)->SetTransformation(in, *m_osr);
+    }
+
+protected:
+  /** Default constructor. */
+  MyReprojectionFilter(){ }
+  /** Destructor. */
+  virtual ~MyReprojectionFilter(){ }
+
+private:
+
+  virtual OGRSpatialReference*     DoDefineNewLayerSpatialReference(otb::ogr::Layer const& source) const
+    {
+    return m_osr.get();
+    }
+
+  boost::interprocess::unique_ptr<OGRSpatialReference,         internal::Deleters> m_osr;
+};
+
+
+
+void
+MyReprojectionFilter::SetOutputSpatialReference(std::string const& srs)
+{
+  OGRSpatialReference outSrs;
+
+  char *name = const_cast<char *>(srs.c_str());
+
+  OGRErr ret = outSrs.importFromWkt(&name);
+  if (ret)
+    {
+    ret = outSrs.importFromProj4(name);
+    }
+  if (ret)
+    {
+    ret = outSrs.importFromEPSG(atoi(name));
+    }
+
+  if (ret)
+    {
+    std::cout << "Error : spatial reference system not recognized ("<<srs<<")" << std::endl;
+    }
+
+  m_osr .reset (outSrs.Clone());
+}
+
+/*===========================================================================*/
 /*=================================[ main ]==================================*/
 /*===========================================================================*/
-typedef otb::DefaultGeometriesToGeometriesFilter<ReprojectTransformationFunctor> FilterType;
+typedef MyReprojectionFilter FilterType;
 
 struct Options
 {
@@ -97,14 +151,16 @@ struct Options
     workingInplace = true;
     outputIsStdout = false;
 
-    std::string inputFile = argv[1];
-    std::string outputFile = workingInplace ? argv[1] : argv[2];
-
     for (int a=1; a!=argc; ++a)
       {
-      std::cout << "argv[a] " <<  argv[a] << std::endl;
-      if (!strcmp(argv[a], "-wkt"))
-        wkt = argv[a];
+      if (!strcmp(argv[a], "-srs"))
+        {
+        if (a+1 < argc)
+          {
+          ++a;
+          srs = argv[a];
+          }
+        }
       else if (!strcmp(argv[a], "-"))
         outputIsStdout = true;
       else if (inputFile.empty())
@@ -120,16 +176,16 @@ struct Options
 
     if (!outputFile.empty() && outputIsStdout)
       throw std::runtime_error(usage(argv[0])+"An output file ("+outputFile+") has already been set, cannot dump to stdout");
-    if (inputFile.empty())
+    if (inputFile.empty() || srs.empty())
       throw std::runtime_error(usage(argv[0])+"Not enough parameters");
     }
   static std::string usage(std::string const& progname)
     {
-    return progname + " <inputGeometriesFile> [<outputGeometriesFile>] -wkt <id>\n";
+    return progname + " <inputGeometriesFile> [<outputGeometriesFile>] -srs <id>\n";
     }
   std::string inputFile;
   std::string outputFile;
-  std::string wkt;
+  std::string srs;
   bool        workingInplace;
   bool        outputIsStdout;
 };
@@ -151,7 +207,7 @@ int main (int argc, char **argv)
     otb::ogr::DataSource::Pointer output
       = options.workingInplace ? input
       : options.outputIsStdout ? 0
-      :                  otb::ogr::DataSource::New( options.outputFile, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
+      : otb::ogr::DataSource::New( options.outputFile, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
     std::cout << "input: " << input -> ogr().GetName() << " should be: " << options.inputFile << "\n";
     if (output)
       {
@@ -161,7 +217,8 @@ int main (int argc, char **argv)
 
     FilterType::Pointer filter = FilterType::New();
     // TODO: this make no sense for in-place transformations
-    (*filter)->SetSpatialReferenceFromWkt(options.wkt);
+    filter->SetOutputSpatialReference(options.srs);
+    filter->UpdateTransformation( *(const_cast<OGRSpatialReference*>(input->GetLayer(0).GetSpatialRef())) );
 
     if (!options.workingInplace)
       {
