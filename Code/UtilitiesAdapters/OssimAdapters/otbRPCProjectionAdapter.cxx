@@ -52,7 +52,8 @@ RPCProjectionAdapter::TransformPoint(double x, double y, double z,
     h = 0.0;
     return;
     }
-  ossimDpt spoint(x, y);
+  ossimDpt spoint( internal::ConvertToOSSIMFrame(x),
+                   internal::ConvertToOSSIMFrame(y));
   ossimGpt gpoint;
   gpoint.hgt = z;
 
@@ -82,7 +83,8 @@ RPCProjectionAdapter::Solve(const GCPsContainerType& gcpContainer,
   for (gcpIt = gcpContainer.begin(); gcpIt != gcpContainer.end(); ++gcpIt)
     {
     // Fill sensor point
-    sensorPoint = ossimDpt(gcpIt->first[0], gcpIt->first[1]);
+    sensorPoint = ossimDpt( internal::ConvertToOSSIMFrame(gcpIt->first[0]),
+                            internal::ConvertToOSSIMFrame(gcpIt->first[1]));
 
     // Fill geo point (lat, lon, elev)
     geoPoint =  ossimGpt(gcpIt->second[1], gcpIt->second[0], gcpIt->second[2]);
@@ -131,17 +133,18 @@ RPCProjectionAdapter
 {
   ossimGpt ul, ll, ur, lr;
    // Upper left
-  ossimDpt imagePoint(orig[0], orig[1]);
+  ossimDpt imagePoint( internal::ConvertToOSSIMFrame(orig[0]),
+                       internal::ConvertToOSSIMFrame(orig[1]));
   m_RpcProjection->lineSampleToWorld(imagePoint, ul);
   // Upper right
-  imagePoint = ossimDpt(orig[0], orig[1]+size[0]-1);
+  imagePoint.x += static_cast<double>(size[0]) - 1.0;
   m_RpcProjection->lineSampleToWorld(imagePoint, ur);
-  // Lower left
-  imagePoint = ossimDpt(orig[0]+size[1]-1, orig[1]);
-  m_RpcProjection->lineSampleToWorld(imagePoint, ll);
   // Lower right
-  imagePoint = ossimDpt(orig[0]+size[1]-1, orig[1]+size[0]-1);
+  imagePoint.y += static_cast<double>(size[0]) - 1.0;
   m_RpcProjection->lineSampleToWorld(imagePoint, lr);
+  // Lower left
+  imagePoint.x += - static_cast<double>(size[0]) + 1.0;
+  m_RpcProjection->lineSampleToWorld(imagePoint, ll);
 
 
   ossimKeywordlist geom_kwl;

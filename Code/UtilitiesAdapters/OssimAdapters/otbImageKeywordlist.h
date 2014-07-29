@@ -32,6 +32,34 @@ class ossimKeywordlist;
 namespace otb
 {
 
+namespace internal
+{
+  /**
+   * Converts index coordinates from OTB into OSSIM. It is intended for sensor
+   * images where the centre of the top-left pixel is expected to be :
+   *   [0.5,0.5] in OTB physical space
+   *   [ 0 , 0 ] in OSSIM
+   * \param[in] val  coordinate value to modify (along X or Y)
+   */
+  inline double ConvertToOSSIMFrame(double val)
+    {
+    return (val - 0.5);
+    }
+
+  /**
+   * Converts index coordinates from OSSIM into OTB. It is intended for sensor
+   * images where the centre of the top-left pixel is expected to be :
+   *   [0.5,0.5] in OTB physical space
+   *   [ 0 , 0 ] in OSSIM
+    * \param[in] val  coordinate value to modify (along X or Y)
+   */
+  inline double ConvertFromOSSIMFrame(double val)
+    {
+    return (val + 0.5);
+    }
+
+} // namespace internal
+
 /** \class ImageKeywordlist
  * \brief Storage and conversion for OSSIM metadata
  *

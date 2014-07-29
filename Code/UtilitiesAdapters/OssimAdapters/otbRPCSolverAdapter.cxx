@@ -56,7 +56,8 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
     {
     // Check if point is inside bounds
     // Fill sensor point
-    sensorPoint = ossimDpt(gcpIt->first[0], gcpIt->first[1]);
+    sensorPoint = ossimDpt( internal::ConvertToOSSIMFrame(gcpIt->first[0]),
+                            internal::ConvertToOSSIMFrame(gcpIt->first[1]));
 
     // Fill geo point (lat, lon, elev)
     geoPoint =  ossimGpt(gcpIt->second[1], gcpIt->second[0], gcpIt->second[2]);
