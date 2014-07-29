@@ -32,10 +32,6 @@
 namespace otb
 {
 
-   * Converts index coordinates from OTB into OSSIM. It is intended for sensor
-   * images where the centre of the top-left pixel is expected to be :
-   * Converts index coordinates from OSSIM into OTB. It is intended for sensor
-   * images where the centre of the top-left pixel is expected to be :
 SensorModelAdapter::SensorModelAdapter():
   m_SensorModel(NULL), m_TiePoints(NULL) // FIXME keeping the original value but...
 {
