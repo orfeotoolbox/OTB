@@ -32,7 +32,29 @@ class GDALDataTypeWrapper;
 
 /** \class GDALImageIO
  *
- * \brief ImageIO object for reading (not writing) GDAL images
+ * \brief ImageIO object for reading and writing images with GDAL
+ *
+ * This ImageIO uses GDAL interface to read/write images. The
+ * origin and spacing are translated from/to GDAL geotransform
+ * matrix (even in the case of a sensor image). It means that
+ * extracts from sensor images are well supported. Typical
+ * sensor images in OTB have a spacing of [1,1] and an origin
+ * at [0.5,0.5] (when there is no GDAL geotransform, GDAL
+ * physical space is identical to GDAL index space).
+ *
+ * Note that the geotransform matrix supports any rotated physical
+ * space whereas OTB doesn't.
+ *
+ * \em Warning : the index coordinate system used in GDAL is attached
+ * to the corner of the top left pixel, whereas in OTB, the index
+ * coordinate system is attached to the centre of the top-left
+ * pixel. It means that the origin coefficents read from the
+ * GDAL geotransform are the location of the top-left pixel
+ * corner. This is why this location has to be shifted by
+ * half a pixel to be used as an OTB origin. In a nutshell,
+ * OTB images read/written by this ImageIO have the \em same
+ * physical space as GDAL physical space : a given point of
+ * image has the same physical location in OTB and in GDAL.
  *
  * The streaming read is implemented.
  *
@@ -142,7 +164,11 @@ public:
 
 
 protected:
-  /** Constructor.*/
+  /**
+   * Constructor.
+   * Spacing is set to [1,1] and origin to [0.5,0.5] as it would correspond
+   * to an image without geotransform
+   */
   GDALImageIO();
   /** Destructor.*/
   virtual ~GDALImageIO();
