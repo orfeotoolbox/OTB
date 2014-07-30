@@ -21,18 +21,16 @@
 #include "otbLabelImageToOGRDataSourceFilter.h"
 #include "otbGdalDataTypeBridge.h"
 
-
 //gdal libraries
 #include "gdal.h"
 #include "gdal_priv.h"
 #include "cpl_conv.h"
 #include "gdal_alg.h"
 
+#include "stdint.h" //needed for uintptr_t
 
 namespace otb
 {
-
-
 template <class TInputImage>
 LabelImageToOGRDataSourceFilter<TInputImage>
 ::LabelImageToOGRDataSourceFilter() : m_FieldName("DN"), m_Use8Connected(false)
@@ -163,7 +161,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
     // integer make us pointing to an non allowed memory block => Crash.
     std::ostringstream stream;
     stream << "MEM:::"
-           <<  "DATAPOINTER=" << (unsigned long)(this->GetInput()->GetBufferPointer()) << ","
+           <<  "DATAPOINTER=" << (uintptr_t)(this->GetInput()->GetBufferPointer()) << ","
            <<  "PIXELS=" << size[0] << ","
            <<  "LINES=" << size[1] << ","
            <<  "BANDS=" << nbBands << ","
@@ -235,7 +233,7 @@ LabelImageToOGRDataSourceFilter<TInputImage>
       // integer make us pointing to an non allowed memory block => Crash.
       std::ostringstream maskstream;
       maskstream << "MEM:::"
-            <<  "DATAPOINTER=" << (unsigned long)(this->GetInputMask()->GetBufferPointer()) << ","
+            <<  "DATAPOINTER=" << (uintptr_t)(this->GetInputMask()->GetBufferPointer()) << ","
             <<  "PIXELS=" << size[0] << ","
             <<  "LINES=" << size[1] << ","
             <<  "BANDS=" << nbBands << ","
