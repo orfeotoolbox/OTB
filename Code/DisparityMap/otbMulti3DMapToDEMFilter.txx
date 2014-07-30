@@ -253,10 +253,8 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
   typename TOutputDEMImage::RegionType outRegion;
   outRegion.SetIndex(0, 0);
   outRegion.SetIndex(1, 0);
-  outRegion.SetSize(0, static_cast<unsigned int> ((box_xmax - box_xmin) / vcl_abs(outSpacing[0]) + 1));
-  //TODO JGT check the size
-  //outRegion.SetSize(1, static_cast<unsigned int> ((box_ymax - box_ymin) / vcl_abs(outSpacing[1])+1));
-  outRegion.SetSize(1, static_cast<unsigned int> ((box_ymax - box_ymin) / vcl_abs(outSpacing[1])));
+  outRegion.SetSize(0, static_cast<unsigned int>(vcl_floor((box_xmax - box_xmin) / vcl_abs(outSpacing[0]) + 0.5)));
+  outRegion.SetSize(1, static_cast<unsigned int>(vcl_floor((box_ymax - box_ymin) / vcl_abs(outSpacing[1]) + 0.5)));
   outputPtr->SetLargestPossibleRegion(outRegion);
   outputPtr->SetNumberOfComponentsPerPixel(1);
 
