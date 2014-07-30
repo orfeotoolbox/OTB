@@ -402,10 +402,7 @@ LabelImageRegionPruningFilter<TInputLabelImage, TInputSpectralImage, TOutputLabe
 
       LabelType l = outputIt.Get();
       LabelType canLabel;
-      if (m_CanonicalLabels[l] <= oldRegionCount)
-        {
-        itkAssertInDebugAndIgnoreInReleaseMacro( 0 );
-        }
+      itkAssertOrThrowMacro(m_CanonicalLabels[l] <= oldRegionCount,"Found a label greater than region count")
       canLabel = newLabels[m_CanonicalLabels[l]];
       outputIt.Set( canLabel );
       ++outputIt;
