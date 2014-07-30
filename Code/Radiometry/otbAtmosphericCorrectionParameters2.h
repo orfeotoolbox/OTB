@@ -101,14 +101,14 @@ public:
   {
     this->UpdateAeronetData(file, year, month, day, hour, minute, 0.4);
   }
-  void UpdateAeronetData(const std::string& file, int year, int hour, int minute, double epsi)
+  /*void UpdateAeronetData(const std::string& file, int year, int hour, int minute, double epsi) CHRIS
   {
     this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, epsi);
   }
   void UpdateAeronetData(const std::string& file, int year, int hour, int minute)
   {
     this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, 0.4);
-  }
+  }*/ 
 
   /** Constructor */
   AtmosphericCorrectionParameters2();

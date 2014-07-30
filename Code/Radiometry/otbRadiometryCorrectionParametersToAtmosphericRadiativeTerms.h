@@ -19,8 +19,9 @@
 #define __otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms_h
 
 #include "otbAtmosphericRadiativeTerms2.h"
-#include "otbAtmosphericCorrectionParameters.h"
-#include "otbSIXSTraits.h"
+#include "otbAtmosphericCorrectionParameters2.h"
+#include "otbImageMetadataCorrectionParameters.h"
+#include "otbSIXSTraits2.h"
 
 namespace otb
 {
@@ -37,12 +38,12 @@ namespace otb
   public:
 
     /** Call the varSol function*/
-    static AtmosphericRadiativeTerms2::Pointer Compute(AtmosphericCorrectionParameters* paramIn)
+    static AtmosphericRadiativeTerms2::Pointer Compute(AtmosphericCorrectionParameters2* paramAtmo, ImageMetadataCorrectionParameters* paramAcqui)
     {
       AtmosphericRadiativeTerms2::Pointer radTermsOut = AtmosphericRadiativeTerms2::New();
 
-      typedef AtmosphericCorrectionParameters::WavelengthSpectralBandVectorType WavelengthSpectralBandVectorType;
-      WavelengthSpectralBandVectorType WavelengthSpectralBandVector = paramIn->GetWavelengthSpectralBand();
+      typedef AtmosphericCorrectionParameters2::WavelengthSpectralBandVectorType WavelengthSpectralBandVectorType;
+      WavelengthSpectralBandVectorType WavelengthSpectralBandVector = paramAcqui->GetWavelengthSpectralBand();
       unsigned int NbBand = WavelengthSpectralBandVector->Size();
 
       radTermsOut->ValuesInitialization(NbBand);
@@ -68,19 +69,19 @@ namespace otb
           upwardDirectTransmittance = 0.;
           upwardDiffuseTransmittanceForRayleigh = 0.;
           upwardDiffuseTransmittanceForAerosol = 0.;
-          SIXSTraits::ComputeAtmosphericParameters(
-            paramIn->GetSolarZenithalAngle(),                  /** The Solar zenithal angle */
-            paramIn->GetSolarAzimutalAngle(),                  /** The Solar azimutal angle */
-            paramIn->GetViewingZenithalAngle(),                /** The Viewing zenithal angle */
-            paramIn->GetViewingAzimutalAngle(),                /** The Viewing azimutal angle */
-            paramIn->GetMonth(),                               /** The Month */
-            paramIn->GetDay(),                                 /** The Day (in the month) */
-            paramIn->GetAtmosphericPressure(),                 /** The Atmospheric pressure */
-            paramIn->GetWaterVaporAmount(),                    /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
-            paramIn->GetOzoneAmount(),                         /** The Ozone amount (Stratospheric ozone layer content) */
-            paramIn->GetAerosolModel(),                        /** The Aerosol model */
-            paramIn->GetAerosolOptical(),                      /** The Aerosol optical (radiative impact of aerosol for the reference wavelength 550-nm) */
-            paramIn->GetWavelengthSpectralBand()->GetNthElement(i), /** Wavelength for the spectral band definition */
+          SIXSTraits2::ComputeAtmosphericParameters(
+            paramAcqui->GetSolarZenithalAngle(),                  /** The Solar zenithal angle */
+            paramAcqui->GetSolarAzimutalAngle(),                  /** The Solar azimutal angle */
+            paramAcqui->GetViewingZenithalAngle(),                /** The Viewing zenithal angle */
+            paramAcqui->GetViewingAzimutalAngle(),                /** The Viewing azimutal angle */
+            paramAcqui->GetMonth(),                               /** The Month */
+            paramAcqui->GetDay(),                                 /** The Day (in the month) */
+            paramAtmo->GetAtmosphericPressure(),                 /** The Atmospheric pressure */
+            paramAtmo->GetWaterVaporAmount(),                    /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
+            paramAtmo->GetOzoneAmount(),                         /** The Ozone amount (Stratospheric ozone layer content) */
+            paramAtmo->GetAerosolModel(),                        /** The Aerosol model */
+            paramAtmo->GetAerosolOptical(),                      /** The Aerosol optical (radiative impact of aerosol for the reference wavelength 550-nm) */
+            paramAcqui->GetWavelengthSpectralBand()->GetNthElement(i), /** Wavelength for the spectral band definition */
             /** Note : The Max wavelength spectral band value must be updated ! */
             atmosphericReflectance,                          /** Atmospheric reflectance */
             atmosphericSphericalAlbedo,                      /** atmospheric spherical albedo */
@@ -102,7 +103,7 @@ namespace otb
           radTermsOut->SetUpwardDirectTransmittance(i, upwardDirectTransmittance);
           radTermsOut->SetUpwardDiffuseTransmittanceForRayleigh(i, upwardDiffuseTransmittanceForRayleigh);
           radTermsOut->SetUpwardDiffuseTransmittanceForAerosol(i, upwardDiffuseTransmittanceForAerosol);
-          radTermsOut->SetWavelengthSpectralBand(i, paramIn->GetWavelengthSpectralBand()->GetNthElement(i)->GetCenterSpectralValue());
+          radTermsOut->SetWavelengthSpectralBand(i, paramAcqui->GetWavelengthSpectralBand()->GetNthElement(i)->GetCenterSpectralValue());
         }
 
       return radTermsOut;

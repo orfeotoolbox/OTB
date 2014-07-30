@@ -38,7 +38,7 @@ namespace otb
  *
  */
 
-class ITK_EXPORT ImageMetadataCorrectionParameters : public itk::Object
+class ITK_EXPORT ImageMetadataCorrectionParameters : public itk::DataObject
 {
 public:
   /** Standard typedefs */

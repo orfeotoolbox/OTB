@@ -17,7 +17,8 @@
 =========================================================================*/
 
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
-#include "otbAtmosphericCorrectionParameters.h"
+#include "otbAtmosphericCorrectionParameters2.h" 
+#include "otbImageMetadataCorrectionParameters.h"
 #include "otbAtmosphericRadiativeTerms2.h"
 #include <vector>
 #include <fstream>
@@ -31,15 +32,17 @@ int otbAtmosphericCorrectionParametersToAtmosphericRadiativeTerms(int argc, char
   const char * outputFile     = argv[2];
 
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms CorrectionParametersToRadiativeTermsType;
-  typedef otb::AtmosphericCorrectionParameters                              CorrectionParametersType;
+  typedef otb::AtmosphericCorrectionParameters2                              AtmoCorrectionParametersType;
+  typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
   typedef otb::AtmosphericRadiativeTerms2                                    RadiativeTermsType;
-  typedef CorrectionParametersType::AerosolModelType                        AerosolModelType;
+  typedef AtmoCorrectionParametersType::AerosolModelType                        AerosolModelType;
   typedef otb::FilterFunctionValues                                         FilterFunctionValuesType;
   typedef FilterFunctionValuesType::WavelengthSpectralBandType              ValueType;
   typedef FilterFunctionValuesType::ValuesVectorType                        ValuesVectorType;
 
   // Instantiating object
-  CorrectionParametersType::Pointer                   param          = CorrectionParametersType::New();
+  AtmoCorrectionParametersType::Pointer                   paramAtmo          = AtmoCorrectionParametersType::New();
+  AcquiCorrectionParametersType::Pointer                  paramAcqui         = AcquiCorrectionParametersType::New();
   AerosolModelType                                    aerosolModel;
   FilterFunctionValuesType::Pointer                   functionValues = FilterFunctionValuesType::New();
   ValuesVectorType                                    vect;
@@ -97,22 +100,22 @@ int otbAtmosphericCorrectionParametersToAtmosphericRadiativeTerms(int argc, char
   functionValues->SetMinSpectralValue(minSpectralValue);
   functionValues->SetMaxSpectralValue(maxSpectralValue);
   functionValues->SetUserStep(val);
-  param->SetWavelengthSpectralBandWithIndex(0, functionValues);
+  paramAcqui->SetWavelengthSpectralBandWithIndex(0, functionValues); //CHRIS
 
   // Set parameters
-  param->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle));
-  param->SetSolarAzimutalAngle(static_cast<double>(solarAzimutalAngle));
-  param->SetViewingZenithalAngle(static_cast<double>(viewingZenithalAngle));
-  param->SetViewingAzimutalAngle(static_cast<double>(viewingAzimutalAngle));
-  param->SetMonth(month);
-  param->SetDay(day);
-  param->SetAtmosphericPressure(static_cast<double>(atmosphericPressure));
-  param->SetWaterVaporAmount(static_cast<double>(waterVaporAmount));
-  param->SetOzoneAmount(static_cast<double>(ozoneAmount));
-  param->SetAerosolModel(aerosolModel);
-  param->SetAerosolOptical(static_cast<double>(aerosolOptical));
+  paramAcqui->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle)); //CHRIS
+  paramAcqui->SetSolarAzimutalAngle(static_cast<double>(solarAzimutalAngle));
+  paramAcqui->SetViewingZenithalAngle(static_cast<double>(viewingZenithalAngle));
+  paramAcqui->SetViewingAzimutalAngle(static_cast<double>(viewingAzimutalAngle));
+  paramAcqui->SetMonth(month);
+  paramAcqui->SetDay(day);
+  paramAtmo->SetAtmosphericPressure(static_cast<double>(atmosphericPressure));
+  paramAtmo->SetWaterVaporAmount(static_cast<double>(waterVaporAmount));
+  paramAtmo->SetOzoneAmount(static_cast<double>(ozoneAmount));
+  paramAtmo->SetAerosolModel(aerosolModel);
+  paramAtmo->SetAerosolOptical(static_cast<double>(aerosolOptical));
 
-  RadiativeTermsType::Pointer  radiative = CorrectionParametersToRadiativeTermsType::Compute(param);
+  RadiativeTermsType::Pointer  radiative = CorrectionParametersToRadiativeTermsType::Compute(paramAtmo,paramAcqui);
 
 
   fout.open(outputFile);
