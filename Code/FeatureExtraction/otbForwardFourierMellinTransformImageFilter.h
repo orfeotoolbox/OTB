@@ -79,6 +79,8 @@ public:
   typedef typename InputImageType::IndexType    IndexType;
   typedef typename InputImageType::Pointer      ImagePointer;
   typedef typename InputImageType::ConstPointer ImageConstPointer;
+  typedef typename InputImageType::SizeType     SizeType;
+  typedef typename InputImageType::SpacingType  SpacingType;
 
   /** InputImageType typedef support. */
   typedef typename OutputImageType::PixelType    OutputPixelType;
@@ -118,8 +120,6 @@ public:
   itkSetMacro(DefaultPixelValue, PixelType);
   itkGetMacro(DefaultPixelValue, PixelType);
 
-  virtual void GenerateOutputInformation(void);
-
   /** Set/Get the Interpolator pointer for the Log-polar resampler  */
   itkSetObjectMacro(Interpolator, InterpolatorType);
   itkGetObjectMacro(Interpolator, InterpolatorType);
@@ -128,6 +128,11 @@ protected:
   ForwardFourierMellinTransformImageFilter();
   virtual ~ForwardFourierMellinTransformImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  virtual void GenerateOutputInformation(void);
+
+  virtual void GenerateInputRequestedRegion(void);
+
   /** Main Computation Method */
   void GenerateData();
 
@@ -155,9 +160,6 @@ private:
 
   /** FFT Filter */
   FourierImageFilterPointer m_FFTFilter;
-
-  /** Iterator */
-  IteratorType m_Iterator;
 
 };
 

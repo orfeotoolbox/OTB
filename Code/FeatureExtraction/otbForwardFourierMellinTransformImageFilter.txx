@@ -63,27 +63,60 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension>
 template <class TPixel, class TInterpol, unsigned int Dimension>
 void
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension>
+::GenerateInputRequestedRegion(void)
+{
+  ImagePointer input = const_cast<InputImageType*>(this->GetInput());
+  input->SetRequestedRegion(input->GetLargestPossibleRegion());
+}
+
+template <class TPixel, class TInterpol, unsigned int Dimension>
+void
+ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension>
 ::GenerateData()
 {
   typename LogPolarTransformType::ParametersType params(4);
-  // Center the transform
-  params[0] = 0.5 * static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]);
-  params[1] = 0.5 * static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]);
+
+  // Compute centre of the transform
+  SizeType inputSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
+  SpacingType inputSpacing = this->GetInput()->GetSpacing();
+  itk::ContinuousIndex<double,2> centre;
+  centre[0] = -0.5 + 0.5 * static_cast<double>(inputSize[0]);
+  centre[1] = -0.5 + 0.5 * static_cast<double>(inputSize[1]);
+  PointType centrePt;
+  this->GetInput()->TransformContinuousIndexToPhysicalPoint(centre,centrePt);
+
+  // Compute physical radius in the input image
+  double radius = vcl_log(vcl_sqrt(
+    vcl_pow(static_cast<double>(inputSize[0])*inputSpacing[0],2.0) +
+    vcl_pow(static_cast<double>(inputSize[1])*inputSpacing[1],2.0)) / 2.0);
+
+  params[0] = centrePt[0];
+  params[1] = centrePt[1];
   params[2] = 360. / m_OutputSize[0];
-  params[3] =
-    vcl_log(vcl_sqrt(vcl_pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]), 2)
-                     + vcl_pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]),
-                               2.)) / 2) / m_OutputSize[1];
+  params[3] = radius  / m_OutputSize[1];
   m_Transform->SetParameters(params);
+
+  // Compute rho scaling parameter in index space
+  double rhoScaleIndex = vcl_log(vcl_sqrt(
+    vcl_pow(static_cast<double>(inputSize[0]),2.0) +
+    vcl_pow(static_cast<double>(inputSize[1]),2.0)) / 2.0) / m_OutputSize[1];
 
   // log polar resampling
   m_ResampleFilter->SetInput(this->GetInput());
   m_ResampleFilter->SetDefaultPixelValue(m_DefaultPixelValue);
   m_ResampleFilter->SetSize(m_OutputSize);
+
+  PointType outOrigin;
+  outOrigin.Fill(0.5);
+  m_ResampleFilter->SetOutputOrigin(outOrigin);
+  SpacingType outSpacing;
+  outSpacing.Fill(1.0);
+  m_ResampleFilter->SetOutputSpacing(outSpacing);
+
   m_ResampleFilter->Update();
 
   typename InputImageType::Pointer tempImage = m_ResampleFilter->GetOutput();
-  m_Iterator = IteratorType(tempImage, tempImage->GetRequestedRegion());
+  IteratorType iter(tempImage, tempImage->GetRequestedRegion());
 
   // Min/max values of the output pixel type AND these values
   // represented as the output type of the interpolator
@@ -92,13 +125,14 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension>
 
   // Normalization is specific to FourierMellin convergence conditions, and
   // thus should be implemented here instead of in the resample filter.
-  for (m_Iterator.GoToBegin(); !m_Iterator.IsAtEnd(); ++m_Iterator)
+  for (iter.GoToBegin(); !iter.IsAtEnd(); ++iter)
     {
-    double    Rho   = m_Iterator.GetIndex()[1] * params[3];
+    // 0.5 shift in order to follow output image physical space
+    double    Rho   = (0.5 + static_cast<double>(iter.GetIndex()[1])) * rhoScaleIndex;
     PixelType pixval;
-    double    valueTemp = static_cast<double>(m_Iterator.Get());
+    double    valueTemp = static_cast<double>(iter.Get());
     valueTemp *= vcl_exp(m_Sigma * Rho);
-    valueTemp *= params[3];
+    valueTemp *= rhoScaleIndex;
     PixelType value = static_cast<PixelType>(valueTemp);
 
     if (value < minOutputValue)
@@ -113,7 +147,7 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension>
       {
       pixval = static_cast<PixelType>(value);
       }
-    m_Iterator.Set(pixval);
+    iter.Set(pixval);
     }
   m_FFTFilter->SetInput(tempImage);
 
