@@ -19,6 +19,7 @@
 #define __otbAtmosphericRadiativeTerms_h
 
 #include "itkObject.h"
+#include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
 #include <vector>
@@ -160,7 +161,7 @@ private:
  * \ingroup Radiometry
  */
 
-class ITK_EXPORT AtmosphericRadiativeTerms2 : public itk::Object
+class ITK_EXPORT AtmosphericRadiativeTerms2 : public itk::DataObject
 {
 public:
   /** Standard typedefs */

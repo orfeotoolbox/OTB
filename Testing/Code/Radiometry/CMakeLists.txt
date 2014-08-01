@@ -887,6 +887,38 @@ add_test(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
         3 3 3 3 # upward transmittance
        )
 
+# -------            otb::ReflectanceToSurfaceReflectanceImageFilter2   ------------------------------
+add_test(raTuReflectanceToSurfaceReflectanceImageFilter2New ${RADIOMETRY_TESTS3}
+        otbReflectanceToSurfaceReflectanceImageFilter2New
+)
+add_test(raTvReflectanceToSurfaceReflectanceImageFilter2 ${RADIOMETRY_TESTS3}
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+                              ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+        otbReflectanceToSurfaceReflectanceImageFilter2Test
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+        # SAME VALUE FOR EACH CHANNEL
+        1 1 1 1 # intrinsic atmospheric reflectance
+        2 2 2 2 # spherical albedo of the atmosphere
+        3 3 3 3 # total transmission
+        2 2 2 2 # downward transmittance
+        3 3 3 3 # upward transmittance
+       )
+
+add_test(raTvReflectanceToSurfaceReflectanceImageFilter2 ${RADIOMETRY_TESTS3}
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter2.tif
+                              ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.tif
+        otbReflectanceToSurfaceReflectanceImageFilter2Test2
+        ${INPUTDATA}/ToulouseExtract_WithGeom.tif
+        ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.tif
+        1013
+        1.424
+        0.344
+        1
+        0.1
+       )
+
+
 if(OTB_DATA_USE_LARGEINPUT)
 #this test was comment after the refactoring of astmospheric correction classes
 #//TODO Need to rewrite tests with baselines generated directly with 6S.
@@ -2130,6 +2162,7 @@ otbSIXSTraitsTest.cxx
 otbSIXSTraitsComputeAtmosphericParameters.cxx
 otbAtmosphericRadiativeTermsTest.cxx
 otbReflectanceToSurfaceReflectanceImageFilterTest.cxx
+otbReflectanceToSurfaceReflectanceImageFilter2Test.cxx
 otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew.cxx
 otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.cxx
 otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.cxx
