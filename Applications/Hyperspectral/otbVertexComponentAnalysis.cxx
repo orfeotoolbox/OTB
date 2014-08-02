@@ -21,13 +21,11 @@
 #include "otbVcaImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 
-
 namespace otb
 {
 namespace Wrapper
 {
 
-const unsigned int Dimension = 2;
 
 typedef otb::VCAImageFilter<DoubleVectorImageType>                 VCAFilterType;
 typedef otb::VectorImageToMatrixImageFilter<DoubleVectorImageType> VectorImageToMatrixImageFilterType;

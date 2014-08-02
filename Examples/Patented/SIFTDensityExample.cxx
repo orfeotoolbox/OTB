@@ -48,7 +48,7 @@
 // Software Guide : EndCodeSnippet
 #include "otbImageToSIFTKeyPointSetFilter.h"
 
-int main(int argc, char* argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
   const char *       infname = argv[1];
   const char *       outfname = argv[2];

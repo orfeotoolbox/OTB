@@ -104,7 +104,7 @@ protected:
 
 private:
 
-  virtual OGRSpatialReference*     DoDefineNewLayerSpatialReference(otb::ogr::Layer const& source) const
+  virtual OGRSpatialReference*     DoDefineNewLayerSpatialReference(otb::ogr::Layer const& itkNotUsed(source)) const
     {
     return m_osr.get();
     }

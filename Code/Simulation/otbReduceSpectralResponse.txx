@@ -90,7 +90,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
       {
       PrecisionType lambda1 = (*(it-1)).first;
       PrecisionType lambda2 = (*it).first;
-      PrecisionType deltaLambda = lambda2-lambda1;
+//      PrecisionType deltaLambda = lambda2-lambda1;
       ValuePrecisionType rsr1 = (*(it-1)).second;
       ValuePrecisionType rsr2 = (*it).second;
       ValuePrecisionType spectrum1 = (*m_InputSpectralResponse)(lambda1);

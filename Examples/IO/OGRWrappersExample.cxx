@@ -265,7 +265,7 @@ AnyListFieldList_t prepareNewFields(
   OGRFeatureDefn /*const*/& defn, otb::ogr::Layer & destLayer)
 {
   AnyListFieldList_t fields;
-  for (size_t i=0, N=defn.GetFieldCount(); i!=N; ++i)
+  for (int i=0, N=defn.GetFieldCount(); i!=N; ++i)
     {
     const char* name = defn.GetFieldDefn(i)->GetNameRef();
     OGRFieldType type  = static_cast<OGRFieldType>(-1);

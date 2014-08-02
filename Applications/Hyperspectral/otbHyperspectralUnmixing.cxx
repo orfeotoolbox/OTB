@@ -27,13 +27,10 @@
 
 #include "otbVectorImageToMatrixImageFilter.h"
 
-
 namespace otb
 {
 namespace Wrapper
 {
-
-const unsigned int Dimension = 2;
 
 typedef otb::StreamingStatisticsVectorImageFilter<DoubleVectorImageType> StreamingStatisticsVectorImageFilterType;
 

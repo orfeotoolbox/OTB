@@ -199,16 +199,6 @@ HaralickTexturesImageFunction<TInputImage, TCoordRep>
     pixelVarianceSquared = 1.;
     }
 
-  //Initalize texture variables;
-  PixelValueType energy      = itk::NumericTraits< PixelValueType >::Zero;
-  PixelValueType entropy     = itk::NumericTraits< PixelValueType >::Zero;
-  PixelValueType correlation = itk::NumericTraits< PixelValueType >::Zero;
-  PixelValueType inverseDifferenceMoment      = itk::NumericTraits< PixelValueType >::Zero;
-  PixelValueType inertia             = itk::NumericTraits< PixelValueType >::Zero;
-  PixelValueType clusterShade        = itk::NumericTraits< PixelValueType >::Zero;
-  PixelValueType clusterProminence   = itk::NumericTraits< PixelValueType >::Zero;
-  PixelValueType haralickCorrelation = itk::NumericTraits< PixelValueType >::Zero;
-
   //Compute textures
   constVectorIt = glcVector.begin();
   while( constVectorIt != glcVector.end())

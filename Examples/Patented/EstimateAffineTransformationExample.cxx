@@ -137,14 +137,11 @@ int main(int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   typedef PointSetType::PointType         PointType;
   typedef std::pair<PointType, PointType> MatchType;
-  typedef std::vector<MatchType>          MatchVectorType;
   typedef EuclideanDistanceMetricMatchingFilterType::LandmarkListType
   LandmarkListType;
 
   typedef PointSetType::PointsContainer    PointsContainerType;
-  typedef PointsContainerType::Iterator    PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
-  typedef PointDataContainerType::Iterator PointDataIteratorType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
