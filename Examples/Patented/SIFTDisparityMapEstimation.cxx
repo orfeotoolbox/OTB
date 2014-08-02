@@ -127,7 +127,6 @@ int main(int argc, char* argv[])
   typedef std::vector<MatchType>          MatchVectorType;
   typedef EuclideanDistanceMetricMatchingFilterType::LandmarkListType
   LandmarkListType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
