@@ -883,6 +883,10 @@ void GDALImageIO::InternalReadImageInformation()
   m_Spacing[0] = 1;
   m_Spacing[1] = 1;
 
+  // Reset origin to GDAL convention default
+  m_Origin[0] = 0.0;
+  m_Origin[1] = 0.0;
+
   // flag to detect images in sensor geometry
   bool isSensor = false;
 
@@ -1037,10 +1041,18 @@ void GDALImageIO::InternalReadImageInformation()
       // Geotransforms with a non-null rotation are not supported
       // Beware : GDAL origin is at the corner of the top-left pixel
       // whereas OTB/ITK origin is at the centre of the top-left pixel
-      m_Origin[0] = VadfGeoTransform[0] + 0.5*m_Spacing[0];
-      m_Origin[1] = VadfGeoTransform[3] + 0.5*m_Spacing[1];
+      // The origin computed here is in GDAL convention for now
+      m_Origin[0] = VadfGeoTransform[0];
+      m_Origin[1] = VadfGeoTransform[3];
       }
     }
+
+  // Compute final spacing with the resolution factor
+  m_Spacing[0] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[1] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  // Now that the spacing is known, apply the half-pixel shift
+  m_Origin[0] += 0.5*m_Spacing[0];
+  m_Origin[1] += 0.5*m_Spacing[1];
 
   // Dataset info
   otbMsgDevMacro(<< "**** ReadImageInformation() DATASET INFO: ****" );
@@ -1212,9 +1224,6 @@ void GDALImageIO::InternalReadImageInformation()
     this->SetPixelType(VECTOR);
     }
 
-  // Adapt the spacing to the resolution read
-  m_Spacing[0] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
-  m_Spacing[1] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
 }
 
 bool GDALImageIO::CanWriteFile(const char* name)
@@ -1862,12 +1871,13 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
   std::vector<itksys::String> originValues;
   originValues = itksys::SystemTools::SplitString(originTag->GetText(),' ', false);
 
+  // Compute origin in GDAL convention (the half-pixel shift is applied later)
   std::istringstream ss0 (originValues[0]);
   std::istringstream ss1 (originValues[1]);
   ss0 >> origin[1];
   ss1 >> origin[0];
-  origin[0] += -1.0 + 0.5;
-  origin[1] += -1.0 + 0.5;
+  origin[0] += -1.0;
+  origin[1] += -1.0;
 
   otbMsgDevMacro( << "\t Origin from GML box: " <<  origin[0] << ", " << origin[1] );
 

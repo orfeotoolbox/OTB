@@ -238,12 +238,13 @@ bool JPEG2000MetadataReader::GetOriginFromGMLBox (std::vector<double> &origin)
   std::vector<itksys::String> originValues;
   originValues = itksys::SystemTools::SplitString(originTag->GetText(),' ', false);
 
+  // Compute origin in GDAL convention (half pixel shift is applied later)
   std::istringstream ss0 (originValues[0]);
   std::istringstream ss1 (originValues[1]);
   ss0 >> origin[1];
   ss1 >> origin[0];
-  origin[0] += -1.0 + 0.5;
-  origin[1] += -1.0 + 0.5;
+  origin[0] += -1.0;
+  origin[1] += -1.0;
 
   otbMsgDevMacro( << "\t Origin from GML box: " <<  origin[0] << ", " << origin[1] );
 
@@ -1239,6 +1240,10 @@ void JPEG2000ImageIO::ReadImageInformation()
     {
     otbMsgDevMacro(<<"JPEG2000 file has metadata available!");
 
+    // reset the origin to [0,0] as in GDAL convention
+    m_Origin[0] = 0.0;
+    m_Origin[1] = 0.0;
+
     /* GEOTRANSFORM */
     if (lJP2MetadataReader.HaveGeoTransform())
       {
@@ -1276,8 +1281,10 @@ void JPEG2000ImageIO::ReadImageInformation()
       // Geotransforms with a non-null rotation are not supported
       // Beware : GDAL origin is at the corner of the top-left pixel
       // whereas OTB/ITK origin is at the centre of the top-left pixel
-      m_Origin[0] = geoTransform[0] + 0.5*m_Spacing[0];
-      m_Origin[1] = geoTransform[3] + 0.5*m_Spacing[1];
+      // The origin is first stored in GDAL convention. The halft pixel
+      // shift is applied later (when the final spacing is known)
+      m_Origin[0] = geoTransform[0];
+      m_Origin[1] = geoTransform[3];
       }
 
     /* GCPs */
@@ -1368,7 +1375,7 @@ void JPEG2000ImageIO::ReadImageInformation()
     else
       {
       otbMsgDevMacro( << "NO PROJECTION IN GML BOX => SENSOR MODEL " );
-      m_Origin[0] = 0.5; m_Origin[1] = 0.5;
+      m_Origin[0] = 0.0; m_Origin[1] = 0.0;
       m_Spacing[0] = 1; m_Spacing[1] = 1;
 
       lJP2MetadataReader.GetOriginFromGMLBox(m_Origin);
@@ -1381,12 +1388,18 @@ void JPEG2000ImageIO::ReadImageInformation()
   else
     {
     otbMsgDevMacro( << "JPEG2000 file has NO metadata available!");
-    m_Origin[0] = 0.5;
-    m_Origin[1] = 0.5;
-    m_Spacing[0] = 1;
-    m_Spacing[1] = 1;
+    m_Origin[0] = 0.0;
+    m_Origin[1] = 0.0;
+    m_Spacing[0] = 1.0;
+    m_Spacing[1] = 1.0;
     }
 
+  // Compute final spacing using the resolution factor
+  m_Spacing[0] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[1] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  // Now that the spacing is known, apply the half-pixel shift
+  m_Origin[0] += 0.5*m_Spacing[0];
+  m_Origin[1] += 0.5*m_Spacing[1];
 
   // If the internal image was not open we open it.
   // This is usually done when the user sets the ImageIO manually
@@ -1452,9 +1465,6 @@ void JPEG2000ImageIO::ReadImageInformation()
 
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, tileHintX);
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, tileHintY);
-
-  m_Spacing[0] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
-  m_Spacing[1] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
 
   // If we have some spacing information we use it
   // could be needed for other j2k image but not for pleiades
