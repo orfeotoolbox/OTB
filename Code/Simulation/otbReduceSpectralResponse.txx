@@ -78,8 +78,15 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
     {
     ValuePrecisionType res = itk::NumericTraits<ValuePrecisionType>::ZeroValue();
     typename InputRSRType::SpectralResponseType* solarIrradiance;
+
     if(m_ReflectanceMode)
+      {
       solarIrradiance = this->m_InputSatRSR->GetSolarIrradiance();
+      if (solarIrradiance == 0)
+        {
+        itkExceptionMacro(<<"Error occurs getting solar irradiance. Solar irradiance is mandatory using the reflectance mode.");
+        }
+      }
     typename VectorPairType::const_iterator it;
     VectorPairType pairs = (m_InputSatRSR->GetRSR())[numBand]->GetResponse();
     it = pairs.begin();
