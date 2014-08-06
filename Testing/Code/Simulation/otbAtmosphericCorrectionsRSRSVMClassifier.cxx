@@ -45,9 +45,24 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
   typedef otb::AtmosphericEffects<SpectralResponseType, SatRSRType> AtmosphericEffectsType;
 
-  typedef AtmosphericEffectsType::AtmosphericCorrectionParametersType AtmosphericCorrectionParametersType;
+  /*typedef AtmosphericEffectsType::AtmosphericCorrectionParametersType AtmosphericCorrectionParametersType; chris
   typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
-  typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
+  typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;*/
+
+
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
+
+  typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
+  typedef typename AtmoCorrectionParametersType::Pointer                   AtmoCorrectionParametersPointerType;
+
+  typedef AtmoCorrectionParametersType::AerosolModelType                    AerosolModelType;
+
+  typedef otb::ImageMetadataCorrectionParameters                            AcquiCorrectionParametersType;
+  typedef typename AcquiCorrectionParametersType::Pointer                  AcquiCorrectionParametersPointerType;
+
+  typedef otb::AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
+  typedef typename AtmosphericRadiativeTermsType::Pointer                  AtmosphericRadiativeTermsPointerType;
+
 
   typedef itk::VariableLengthVector<double> SampleType;
   typedef itk::Statistics::ListSample<SampleType> SampleListType;
@@ -109,15 +124,19 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
   float percentage = atof(argv[19]);
 
   //Instantiation
-  AtmosphericCorrectionParametersType::Pointer
-    dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
+  /*AtmosphericCorrectionParametersType::Pointer chris
+    dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();*/
+
+  AcquiCorrectionParametersPointerType paramAcqui = AcquiCorrectionParametersType::New();
+  AtmoCorrectionParametersPointerType  paramAtmo = AtmoCorrectionParametersType::New();
+
   SatRSRPointerType satRSR = SatRSRType::New();
 
   satRSR->SetNbBands(nbBand);
   satRSR->Load(fileSatG);
 
   // Set parameters
-  dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(zenithSolarAngle);
+  /*dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(zenithSolarAngle); chris
   dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(azimutSolarAngle);
   dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(viewingZenitalAngle);
   dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(viewingAzimutalAngle);
@@ -129,7 +148,22 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
   AerosolModelType aerosolModel = static_cast<AerosolModelType> (aerosolModelValue);
   dataAtmosphericCorrectionParameters->SetAerosolModel(aerosolModel);
-  dataAtmosphericCorrectionParameters->SetAerosolOptical(aerosolOptical);
+  dataAtmosphericCorrectionParameters->SetAerosolOptical(aerosolOptical);*/
+
+  paramAcqui->SetSolarZenithalAngle(zenithSolarAngle);
+  paramAcqui->SetSolarAzimutalAngle(azimutSolarAngle);
+  paramAcqui->SetViewingZenithalAngle(viewingZenitalAngle);
+  paramAcqui->SetViewingAzimutalAngle(viewingAzimutalAngle);
+  paramAcqui->SetMonth(month);
+  paramAcqui->SetDay(day);
+  paramAtmo->SetAtmosphericPressure(atmoPressure);
+  paramAtmo->SetWaterVaporAmount(waterVaporAmount);
+  paramAtmo->SetOzoneAmount(ozoneAmount);
+  AerosolModelType aerosolModel = static_cast<AerosolModelType>(aerosolModelValue);
+  paramAtmo->SetAerosolModel(aerosolModel);
+  paramAtmo->SetAerosolOptical(aerosolOptical);
+
+  AtmosphericRadiativeTermsPointerType  radiative = CorrectionParametersToRadiativeTermsType::Compute(paramAtmo,paramAcqui);
 
   //divide into training and testing files
   //90% of files are used for training and 10% for testing
@@ -205,10 +239,10 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       reduceSpectralResponse->SetInputSpectralResponse(spectralResponse);
       reduceSpectralResponse->CalculateResponse();
 
-      atmosphericEffectsFilter->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
+      atmosphericEffectsFilter->SetAtmosphericRadiativeTerms(radiative);
       atmosphericEffectsFilter->SetInputSatRSR(satRSR);
       atmosphericEffectsFilter->SetInputSpectralResponse(reduceSpectralResponse->GetReduceResponse());
-      atmosphericEffectsFilter->Process6S();
+      atmosphericEffectsFilter->Process();
 
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMModelEstimator
       SampleType sample;
@@ -252,10 +286,10 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       reduceSpectralResponse->SetInputSpectralResponse(spectralResponse);
       reduceSpectralResponse->CalculateResponse();
 
-      atmosphericEffectsFilter->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
+      atmosphericEffectsFilter->SetAtmosphericRadiativeTerms(radiative);
       atmosphericEffectsFilter->SetInputSatRSR(satRSR);
       atmosphericEffectsFilter->SetInputSpectralResponse(reduceSpectralResponse->GetReduceResponse());
-      atmosphericEffectsFilter->Process6S();
+      atmosphericEffectsFilter->Process();
 
       //Get the response in an itk::VariableLengthVector and add it to the sample list for SVMClassifier
       SampleType sample;

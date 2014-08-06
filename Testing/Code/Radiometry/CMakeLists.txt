@@ -870,6 +870,24 @@ add_test(raTvAtmosphericRadiativeTermsTest ${RADIOMETRY_TESTS3}
 )
 
 # -------            otb::ReflectanceToSurfaceReflectanceImageFilter   ------------------------------
+#add_test(raTuReflectanceToSurfaceReflectanceImageFilterNew ${RADIOMETRY_TESTS3}
+#        otbReflectanceToSurfaceReflectanceImageFilterNew
+#)
+#add_test(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
+#  --compare-image ${EPSILON_12}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+#                              ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+#        otbReflectanceToSurfaceReflectanceImageFilterTest
+#        ${INPUTDATA}/verySmallFSATSW.tif
+#        ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+#        # SAME VALUE FOR EACH CHANNEL
+#        1 1 1 1 # intrinsic atmospheric reflectance
+#        2 2 2 2 # spherical albedo of the atmosphere
+#        3 3 3 3 # total transmission
+#        2 2 2 2 # downward transmittance
+#        3 3 3 3 # upward transmittance
+#       )
+
+# -------            otb::ReflectanceToSurfaceReflectanceImageFilter   ------------------------------
 add_test(raTuReflectanceToSurfaceReflectanceImageFilterNew ${RADIOMETRY_TESTS3}
         otbReflectanceToSurfaceReflectanceImageFilterNew
 )
@@ -887,28 +905,10 @@ add_test(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
         3 3 3 3 # upward transmittance
        )
 
-# -------            otb::ReflectanceToSurfaceReflectanceImageFilter2   ------------------------------
-add_test(raTuReflectanceToSurfaceReflectanceImageFilter2New ${RADIOMETRY_TESTS3}
-        otbReflectanceToSurfaceReflectanceImageFilter2New
-)
-add_test(raTvReflectanceToSurfaceReflectanceImageFilter2 ${RADIOMETRY_TESTS3}
-  --compare-image ${EPSILON_12}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
-                              ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
-        otbReflectanceToSurfaceReflectanceImageFilter2Test
-        ${INPUTDATA}/verySmallFSATSW.tif
-        ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
-        # SAME VALUE FOR EACH CHANNEL
-        1 1 1 1 # intrinsic atmospheric reflectance
-        2 2 2 2 # spherical albedo of the atmosphere
-        3 3 3 3 # total transmission
-        2 2 2 2 # downward transmittance
-        3 3 3 3 # upward transmittance
-       )
-
-add_test(raTvReflectanceToSurfaceReflectanceImageFilter2 ${RADIOMETRY_TESTS3}
+add_test(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter2.tif
                               ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.tif
-        otbReflectanceToSurfaceReflectanceImageFilter2Test2
+        otbReflectanceToSurfaceReflectanceImageFilterTest2
         ${INPUTDATA}/ToulouseExtract_WithGeom.tif
         ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.tif
         1013
@@ -945,17 +945,17 @@ add_test(raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter ${RADIOMET
                 ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelengths, channel 4
       )
 
-# -------            otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter   ------------------------------
-add_test(raTuSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew ${RADIOMETRY_TESTS3}
-        otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew
+# -------            otb::SurfaceAdjacencyEffectCorrectionSchemeFilter   ------------------------------
+add_test(raTuSurfaceAdjacencyEffectCorrectionSchemeFilterNew ${RADIOMETRY_TESTS3}
+        otbSurfaceAdjacencyEffectCorrectionSchemeFilterNew
 )
 
-add_test(raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS3}
+add_test(raTvSurfaceAdjacencyEffectCorrectionSchemeFilter ${RADIOMETRY_TESTS3}
  --compare-image ${EPSILON_12}  ${BASELINE}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilter.tif
                              ${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilter.tif
 # --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
 #                           ${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
-        otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter
+        otbSurfaceAdjacencyEffectCorrectionSchemeFilter
         ${BASELINE}/raTvRomania_Correction.tif
         ${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilter.tif
         2                                                            # Radius;
@@ -972,25 +972,25 @@ add_test(raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS3}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# -------            otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms   ------------------------------
-add_test(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS4}
-        otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew)
+# -------            otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms   ------------------------------
+add_test(raTuRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS4}
+        otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew)
 
-add_test(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADIOMETRY_TESTS4}
+add_test(raTvRadiometryCorrectionParametersToAtmosphericRadiativeTerms ${RADIOMETRY_TESTS4}
 --compare-ascii ${EPSILON_4}
                 ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
-        otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
+        otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms
                 ${INPUTDATA}/in6S_otb
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
 )
 
 # New test
-add_test(raTvAtmosphericCorrectionParametersToAtmosphericRadiativeTerms ${RADIOMETRY_TESTS4}
+add_test(raTvRadiometryCorrectionParametersToAtmosphericRadiativeTerms ${RADIOMETRY_TESTS4}
 --compare-ascii ${EPSILON_4}
                 ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
-        otbAtmosphericCorrectionParametersToAtmosphericRadiativeTerms
+        otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms
                 ${INPUTDATA}/in6S_otb
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
 )
@@ -2162,16 +2162,14 @@ otbSIXSTraitsTest.cxx
 otbSIXSTraitsComputeAtmosphericParameters.cxx
 otbAtmosphericRadiativeTermsTest.cxx
 otbReflectanceToSurfaceReflectanceImageFilterTest.cxx
-otbReflectanceToSurfaceReflectanceImageFilter2Test.cxx
-otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew.cxx
-otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.cxx
+otbSurfaceAdjacencyEffectCorrectionSchemeFilterNew.cxx
+otbSurfaceAdjacencyEffectCorrectionSchemeFilter.cxx
 otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.cxx
 )
 set(Radiometry_SRCS4
 otbRadiometryTests4.cxx
-otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew.cxx
-otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.cxx
-otbAtmosphericCorrectionParametersToAtmosphericRadiativeTerms.cxx
+otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew.cxx
+otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.cxx
 otbAtmosphericCorrectionSequencement.cxx
 otbEVIRAndBAndNIRVegetationIndexImageFilter.cxx
 otbEVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx

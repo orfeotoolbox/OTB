@@ -18,10 +18,10 @@
 #ifndef __otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms_h
 #define __otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms_h
 
-#include "otbAtmosphericRadiativeTerms2.h"
-#include "otbAtmosphericCorrectionParameters2.h"
+#include "otbAtmosphericRadiativeTerms.h"
+#include "otbAtmosphericCorrectionParameters.h"
 #include "otbImageMetadataCorrectionParameters.h"
-#include "otbSIXSTraits2.h"
+#include "otbSIXSTraits.h"
 
 namespace otb
 {
@@ -38,11 +38,11 @@ namespace otb
   public:
 
     /** Call the varSol function*/
-    static AtmosphericRadiativeTerms2::Pointer Compute(AtmosphericCorrectionParameters2* paramAtmo, ImageMetadataCorrectionParameters* paramAcqui)
+    static AtmosphericRadiativeTerms::Pointer Compute(AtmosphericCorrectionParameters* paramAtmo, ImageMetadataCorrectionParameters* paramAcqui)
     {
-      AtmosphericRadiativeTerms2::Pointer radTermsOut = AtmosphericRadiativeTerms2::New();
+      AtmosphericRadiativeTerms::Pointer radTermsOut = AtmosphericRadiativeTerms::New();
 
-      typedef AtmosphericCorrectionParameters2::WavelengthSpectralBandVectorType WavelengthSpectralBandVectorType;
+      typedef AtmosphericCorrectionParameters::WavelengthSpectralBandVectorType WavelengthSpectralBandVectorType;
       WavelengthSpectralBandVectorType WavelengthSpectralBandVector = paramAcqui->GetWavelengthSpectralBand();
       unsigned int NbBand = WavelengthSpectralBandVector->Size();
 
@@ -69,7 +69,7 @@ namespace otb
           upwardDirectTransmittance = 0.;
           upwardDiffuseTransmittanceForRayleigh = 0.;
           upwardDiffuseTransmittanceForAerosol = 0.;
-          SIXSTraits2::ComputeAtmosphericParameters(
+          SIXSTraits::ComputeAtmosphericParameters(
             paramAcqui->GetSolarZenithalAngle(),                  /** The Solar zenithal angle */
             paramAcqui->GetSolarAzimutalAngle(),                  /** The Solar azimutal angle */
             paramAcqui->GetViewingZenithalAngle(),                /** The Viewing zenithal angle */

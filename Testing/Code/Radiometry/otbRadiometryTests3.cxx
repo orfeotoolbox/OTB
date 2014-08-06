@@ -39,10 +39,7 @@ void RegisterTests()
   REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterNew);
   REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterTest);
   REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterTest2);
-  REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilter2New);
-  REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilter2Test);
-  REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilter2Test2);
-  REGISTER_TEST(otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew);
-  REGISTER_TEST(otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter);
+  REGISTER_TEST(otbSurfaceAdjacencyEffectCorrectionSchemeFilterNew);
+  REGISTER_TEST(otbSurfaceAdjacencyEffectCorrectionSchemeFilter);
   REGISTER_TEST(otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter);
 }

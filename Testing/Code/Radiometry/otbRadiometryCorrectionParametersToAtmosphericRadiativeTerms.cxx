@@ -17,24 +17,24 @@
 =========================================================================*/
 
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
-#include "otbAtmosphericCorrectionParameters2.h" 
+#include "otbAtmosphericCorrectionParameters.h" 
 #include "otbImageMetadataCorrectionParameters.h"
-#include "otbAtmosphericRadiativeTerms2.h"
+#include "otbAtmosphericRadiativeTerms.h"
 #include <vector>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
 
-int otbAtmosphericCorrectionParametersToAtmosphericRadiativeTerms(int argc, char * argv[])
+int otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms(int argc, char * argv[])
 {
   const char * wavelenghFile  = argv[1];
   const char * outputFile     = argv[2];
 
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms CorrectionParametersToRadiativeTermsType;
-  typedef otb::AtmosphericCorrectionParameters2                              AtmoCorrectionParametersType;
+  typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
   typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
-  typedef otb::AtmosphericRadiativeTerms2                                    RadiativeTermsType;
+  typedef otb::AtmosphericRadiativeTerms                                    RadiativeTermsType;
   typedef AtmoCorrectionParametersType::AerosolModelType                        AerosolModelType;
   typedef otb::FilterFunctionValues                                         FilterFunctionValuesType;
   typedef FilterFunctionValuesType::WavelengthSpectralBandType              ValueType;
@@ -100,10 +100,10 @@ int otbAtmosphericCorrectionParametersToAtmosphericRadiativeTerms(int argc, char
   functionValues->SetMinSpectralValue(minSpectralValue);
   functionValues->SetMaxSpectralValue(maxSpectralValue);
   functionValues->SetUserStep(val);
-  paramAcqui->SetWavelengthSpectralBandWithIndex(0, functionValues); //CHRIS
+  paramAcqui->SetWavelengthSpectralBandWithIndex(0, functionValues); 
 
   // Set parameters
-  paramAcqui->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle)); //CHRIS
+  paramAcqui->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle)); 
   paramAcqui->SetSolarAzimutalAngle(static_cast<double>(solarAzimutalAngle));
   paramAcqui->SetViewingZenithalAngle(static_cast<double>(viewingZenithalAngle));
   paramAcqui->SetViewingAzimutalAngle(static_cast<double>(viewingAzimutalAngle));

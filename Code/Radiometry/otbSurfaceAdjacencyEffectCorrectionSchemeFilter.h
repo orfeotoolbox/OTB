@@ -19,8 +19,8 @@
     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter_h
-#define __otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter_h
+#ifndef __otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
+#define __otbSurfaceAdjacencyEffectCorrectionSchemeFilter_h
 
 #include "itkNumericTraits.h"
 #include <vector>
@@ -28,7 +28,7 @@
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "itkVariableSizeMatrix.h"
 #include "otbAtmosphericRadiativeTerms.h"
-#include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+#include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 #include <iomanip>
 
 namespace otb
@@ -125,10 +125,10 @@ private:
 
 }
 
-/** \class SurfaceAdjacencyEffect6SCorrectionSchemeFilter
+/** \class SurfaceAdjacencyEffectCorrectionSchemeFilter
  *  \brief Correct the scheme taking care of the surrounding pixels.
  *
- *   The SurfaceAdjacencyEffect6SCorrectionSchemeFilter class allows to introduce a neighbor correction to the
+ *   The SurfaceAdjacencyEffectCorrectionSchemeFilter class allows to introduce a neighbor correction to the
  *   reflectance estimation. The satelite signal is considered as to be a combinaison of the signal coming from
  *   the target pixel and a weighting of the siganls coming from the neighbor pixels.
  *
@@ -136,7 +136,7 @@ private:
  *
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SurfaceAdjacencyEffect6SCorrectionSchemeFilter :
+class ITK_EXPORT SurfaceAdjacencyEffectCorrectionSchemeFilter :
   public UnaryFunctorNeighborhoodImageFilter<
       TInputImage,
       TOutputImage,
@@ -150,7 +150,7 @@ public:
       typename TOutputImage::PixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef SurfaceAdjacencyEffect6SCorrectionSchemeFilter                              Self;
+  typedef SurfaceAdjacencyEffectCorrectionSchemeFilter                              Self;
   typedef UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>                                                     Pointer;
   typedef itk::SmartPointer<const Self>                                               ConstPointer;
@@ -163,7 +163,7 @@ public:
   itkNewMacro(Self);
 
   /** return class name. */
-  itkTypeMacro(SurfaceAdjacencyEffect6SCorrectionSchemeFilter, UnaryFunctorNeighborhoodImageFilter);
+  itkTypeMacro(SurfaceAdjacencyEffectCorrectionSchemeFilter, UnaryFunctorNeighborhoodImageFilter);
 
   /**   Extract input and output images dimensions.*/
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
@@ -178,15 +178,24 @@ public:
   typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
   typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
-  typedef AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
-  typedef typename AtmosphericRadiativeTermsType::Pointer              AtmosphericRadiativeTermsPointerType;
-  typedef AtmosphericCorrectionParameters::Pointer                     CorrectionParametersPointerType;
-  typedef AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms Parameters2RadiativeTermsType;
-  typedef Parameters2RadiativeTermsType::Pointer                       Parameters2RadiativeTermsPointerType;
 
-  typedef FilterFunctionValues                       FilterFunctionValuesType;
-  typedef FilterFunctionValuesType::ValuesVectorType CoefVectorType;
-  typedef std::vector<CoefVectorType>                FilterFunctionCoefVectorType;
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
+
+  typedef otb::AtmosphericCorrectionParameters                               AtmoCorrectionParametersType;
+  typedef typename AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
+
+  typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
+  typedef typename AcquiCorrectionParametersType::Pointer                   AcquiCorrectionParametersPointerType;
+
+  typedef otb::AtmosphericRadiativeTerms                                     AtmosphericRadiativeTermsType;
+  typedef typename AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
+
+
+  typedef otb::FilterFunctionValues                                     FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
+  typedef FilterFunctionValuesType::ValuesVectorType                    ValuesVectorType;         //std::vector<float>
+
+  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
 
   typedef itk::MetaDataDictionary MetaDataDictionaryType;
 
@@ -210,88 +219,95 @@ public:
   itkSetMacro(PixelSpacingInKilometers, double);
   itkGetMacro(PixelSpacingInKilometers, double);
   /** Set/Get the viewing angle */
-  itkSetMacro(ZenithalViewingAngle, double);
+  itkSetMacro(ZenithalViewingAngle, double); 
   itkGetMacro(ZenithalViewingAngle, double);
 
+
   /** Get/Set Atmospheric Radiative Terms. */
-  void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmo)
+  void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmoRadTerms) 
   {
-    m_AtmosphericRadiativeTerms = atmo;
-    this->SetNthInput(1, m_AtmosphericRadiativeTerms);
+    m_AtmosphericRadiativeTerms = atmoRadTerms;
+    this->SetNthInput(1, m_AtmosphericRadiativeTerms); 
     m_IsSetAtmosphericRadiativeTerms = true;
     this->Modified();
   }
-  itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
+  itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTermsType);
 
   /** Get/Set Atmospheric Correction Parameters. */
-  itkSetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
-  itkGetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
-
-  /** Get/Set Aeronet file name. */
-  itkSetMacro(AeronetFileName, std::string);
-  itkGetMacro(AeronetFileName, std::string);
-
-  /** Get/Set Aeronet file name. */
-  itkSetMacro(FilterFunctionValuesFileName, std::string);
-  itkGetMacro(FilterFunctionValuesFileName, std::string);
-
-  /** Get/Set Filter function coef. */
-  void SetFilterFunctionCoef(FilterFunctionCoefVectorType vect)
+  void SetAtmoCorrectionParameters(AtmoCorrectionParametersPointerType atmoCorrTerms) 
   {
-    m_FilterFunctionCoef = vect;
+    m_AtmoCorrectionParameters = atmoCorrTerms;
+    this->SetNthInput(2, m_AtmoCorrectionParameters); 
+    m_IsSetAtmoCorrectionParameters = true; 
     this->Modified();
   }
-  FilterFunctionCoefVectorType GetFilterFunctionCoef()
-  {
-    return m_FilterFunctionCoef;
-  }
+  itkGetObjectMacro(AtmoCorrectionParameters, AtmoCorrectionParametersType);
 
-  /** Compute the functor parameters */
-  void ComputeParameters();
+  /** Get/Set Acquisition Correction Parameters. */
+  void SetAcquiCorrectionParameters(AcquiCorrectionParametersPointerType acquiCorrTerms) 
+  {
+    m_AcquiCorrectionParameters = acquiCorrTerms;
+    this->SetNthInput(3, m_AcquiCorrectionParameters); 
+    m_IsSetAcquiCorrectionParameters = true;
+    this->Modified();
+  }
+  itkGetObjectMacro(AcquiCorrectionParameters, AcquiCorrectionParametersType);
+
+
+
   /** Compute radiative terms if necessary and then update functors attibuts. */
   void GenerateParameters();
-  /** Fill AtmosphericRadiativeTerms using image metadata*/
-  void UpdateAtmosphericRadiativeTerms();
+
+
+  /** Set/Get IsSetAtmosphericRadiativeTerms */
+  itkSetMacro(IsSetAtmosphericRadiativeTerms, bool);
+  itkGetMacro(IsSetAtmosphericRadiativeTerms, bool);
+  itkBooleanMacro(IsSetAtmosphericRadiativeTerms);
 
 protected:
-  SurfaceAdjacencyEffect6SCorrectionSchemeFilter();
-  virtual ~SurfaceAdjacencyEffect6SCorrectionSchemeFilter() {}
+  SurfaceAdjacencyEffectCorrectionSchemeFilter();
+  virtual ~SurfaceAdjacencyEffectCorrectionSchemeFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Initialize the parameters of the functor before the threads run. */
   virtual void BeforeThreadedGenerateData();
 
-  /** If modified, we need to compute the parameters again */
+  /** Fill AtmosphericRadiativeTerms using image metadata*/
+  void UpdateAtmosphericRadiativeTerms();
+
+  /** Compute the functor parameters */
+  void UpdateFunctors();
+
+  /** If modified, we need to compute the functor parameters again */
   virtual void Modified();
 
 private:
+
+  bool m_IsSetAtmosphericRadiativeTerms;
+  bool m_IsSetAtmoCorrectionParameters;
+  bool m_IsSetAcquiCorrectionParameters;
+
+  /** Radiative terms object */
+  AtmosphericRadiativeTermsPointerType     m_AtmosphericRadiativeTerms;
+  AtmoCorrectionParametersPointerType      m_AtmoCorrectionParameters;
+  AcquiCorrectionParametersPointerType     m_AcquiCorrectionParameters;
+
   /** Size of the window. */
   unsigned int m_WindowRadius;
   /** Weighting values for the neighbor pixels.*/
   WeightingValuesContainerType m_WeightingValues;
-  /** True if the parameters have been generated */
-  bool m_ParametersHaveBeenComputed;
+  /** True if the functor parameters have been generated */
+  bool m_FunctorParametersHaveBeenComputed;
   /** Pixel spacing in kilometers */
   double m_PixelSpacingInKilometers;
   /** Viewing angle in degree */
   double m_ZenithalViewingAngle;
-  /** Radiative terms object */
-  AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
-  bool                                 m_IsSetAtmosphericRadiativeTerms;
-  /** Atmospheric Correction Parameters. */
-  CorrectionParametersPointerType m_CorrectionParameters;
-  /** Path to an Aeronet data file, allows to compute aerosol optical and water vapor amounts. */
-  std::string m_AeronetFileName;
-  /** Path to an filter function values file. */
-  std::string m_FilterFunctionValuesFileName;
-  /** Contains the filter function values (each element is a vector and reprsents the values for each channel) */
-  FilterFunctionCoefVectorType m_FilterFunctionCoef;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.txx"
+#include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.txx"
 #endif
 
 #endif

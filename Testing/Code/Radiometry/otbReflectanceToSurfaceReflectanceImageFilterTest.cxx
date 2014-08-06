@@ -18,12 +18,18 @@
 #include "itkMacro.h"
 
 #include <fstream>
+#include <iostream>
 
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbAtmosphericRadiativeTerms.h"
+#include "otbAtmosphericCorrectionParameters.h" 
+
+#include "itkMetaDataDictionary.h"
+#include "otbOpticalImageMetadataInterfaceFactory.h"
+#include "otbOpticalImageMetadataInterface.h"
 
 int otbReflectanceToSurfaceReflectanceImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 {
@@ -53,11 +59,14 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest(int itkNotUsed(argc), char
   typedef otb::VectorImage<PixelType, Dimension> OutputImageType;
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
+
   typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,
       OutputImageType>
   ReflectanceToSurfaceReflectanceImageFilterType;
+
   typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
-  otb::AtmosphericRadiativeTerms::Pointer atmo = otb::AtmosphericRadiativeTerms::New();
+  otb::AtmosphericRadiativeTerms::Pointer atmoRadTerms = otb::AtmosphericRadiativeTerms::New();
+
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -82,28 +91,28 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest(int itkNotUsed(argc), char
     upTrans.push_back(static_cast<double>(atof(argv[3 + j + 4 * nbChannel])));
     }
 
-  atmo->SetIntrinsicAtmosphericReflectances(intrinsic);
-  atmo->SetSphericalAlbedos(albedo);
-  atmo->SetTotalGaseousTransmissions(gaseous);
-  atmo->SetDownwardTransmittances(downTrans);
-  atmo->SetUpwardTransmittances(upTrans);
+  atmoRadTerms->SetIntrinsicAtmosphericReflectances(intrinsic);
+  atmoRadTerms->SetSphericalAlbedos(albedo);
+  atmoRadTerms->SetTotalGaseousTransmissions(gaseous);
+  atmoRadTerms->SetDownwardTransmittances(downTrans);
+  atmoRadTerms->SetUpwardTransmittances(upTrans);
 
   // Instantiating object
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter
       = ReflectanceToSurfaceReflectanceImageFilterType::New();
-  filter->SetAtmosphericRadiativeTerms(atmo);
+  filter->SetAtmosphericRadiativeTerms(atmoRadTerms);
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
 
   writer->Update();
 
   return EXIT_SUCCESS;
-}
+}  
 
 //Check the correct generation of the atmospheric parameters
 int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), char * argv[])
 {
-  const char * inputFileName  = argv[1];
+  const char * inputFileName  = argv[1]; 
   const char * outputFileName = argv[2];
 
   const unsigned int Dimension = 2;
@@ -116,6 +125,18 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), cha
       OutputImageType>
   ReflectanceToSurfaceReflectanceImageFilterType;
 
+  typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
+  typedef AtmoCorrectionParametersType::AerosolModelType                        AerosolModelType;
+  AtmoCorrectionParametersType::Pointer                   paramAtmo          = AtmoCorrectionParametersType::New();
+
+
+  paramAtmo->SetAtmosphericPressure(static_cast<double>(atof(argv[3])));
+  paramAtmo->SetWaterVaporAmount(static_cast<double>(atof(argv[4])));
+  paramAtmo->SetOzoneAmount(static_cast<double>(atof(argv[5])));
+  paramAtmo->SetAerosolModel(static_cast<AerosolModelType>(atoi(argv[6])));
+  paramAtmo->SetAerosolOptical(static_cast<double>(atof(argv[7])));
+
+
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
@@ -127,12 +148,17 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), cha
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter
       = ReflectanceToSurfaceReflectanceImageFilterType::New();
   filter->SetInput(reader->GetOutput());
-  filter->GenerateParameters();
+  filter->SetAtmoCorrectionParameters(paramAtmo);
+  writer->SetInput(filter->GetOutput());
+
+  writer->Update();
+
+  /*filter->GenerateParameters();
   otb::AtmosphericRadiativeTerms::Pointer terms = filter->GetAtmosphericRadiativeTerms();
 
   std::ofstream fout (outputFileName);
   fout << terms;
-  fout.close();
+  fout.close();*/
 
   return EXIT_SUCCESS;
 }

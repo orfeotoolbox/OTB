@@ -17,22 +17,22 @@
 =========================================================================*/
 #include "itkMacro.h"
 
-#include "otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.h"
+#include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
-int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbSurfaceAdjacencyEffectCorrectionSchemeFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double                                 PixelType;
   typedef otb::VectorImage<PixelType, Dimension> InputImageType;
-  typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<InputImageType,
+  typedef otb::SurfaceAdjacencyEffectCorrectionSchemeFilter<InputImageType,
       InputImageType>
-  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
+  SurfaceAdjacencyEffectCorrectionSchemeFilterType;
 
   // Instantiating object
-  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::Pointer filter =
-    SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
+  SurfaceAdjacencyEffectCorrectionSchemeFilterType::Pointer filter =
+    SurfaceAdjacencyEffectCorrectionSchemeFilterType::New();
 
   std::cout << filter << std::endl;
 

@@ -17,18 +17,18 @@
 =========================================================================*/
 #include "itkMacro.h"
 
-#include "otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.h"
+#include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+#include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParameters.h"
 #include "otbAtmosphericRadiativeTerms.h"
 #include <fstream>
 #include <iostream>
 
-int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int itkNotUsed(argc), char * argv[])
+int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -41,24 +41,50 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int itkNotUsed(argc), char
   typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
 
-  typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<InputImageType,
+  typedef otb::SurfaceAdjacencyEffectCorrectionSchemeFilter<InputImageType,
       OutputImageType>
-  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
-  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms CorrectionParametersTo6SRadiativeTermsType;
+  SurfaceAdjacencyEffectCorrectionSchemeFilterType;
+  typedef SurfaceAdjacencyEffectCorrectionSchemeFilterType::WeightingMatrixType WeightingMatrixType;
+  typedef SurfaceAdjacencyEffectCorrectionSchemeFilterType::WeightingValuesContainerType
+  /*typedef otb::AtmosphericRadiativeTerms::DataVectorType                    DataVectorType;
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms    CorrectionParametersToRadiativeTermsType;
   typedef otb::AtmosphericCorrectionParameters                              CorrectionParametersType;
   typedef otb::AtmosphericRadiativeTerms                                    RadiativeTermsType;
   typedef otb::FilterFunctionValues                                         FilterFunctionValuesType;
   typedef CorrectionParametersType::AerosolModelType                        AerosolModelType;
   typedef FilterFunctionValuesType::WavelengthSpectralBandType              ValueType;
-  typedef FilterFunctionValuesType::ValuesVectorType                        ValuesVectorType;
+  typedef FilterFunctionValuesType::ValuesVectorType                        ValuesVectorType;*/
 
-  RadiativeTermsType::Pointer                         radiative     = RadiativeTermsType::New();
-  CorrectionParametersType::Pointer                   param         = CorrectionParametersType::New();
-  CorrectionParametersTo6SRadiativeTermsType::Pointer corrToRadia   = CorrectionParametersTo6SRadiativeTermsType::New();
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
+
+  typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
+  typedef typename AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
+  typedef AtmoCorrectionParametersType::AerosolModelType                    AerosolModelType;
+
+  typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
+  typedef typename AcquiCorrectionParametersType::Pointer                   AcquiCorrectionParametersPointerType;
+
+  typedef otb::AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
+  typedef typename AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
+  typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
+
+  typedef otb::FilterFunctionValues                                     FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
+  typedef FilterFunctionValuesType::ValuesVectorType                    ValuesVectorType;         //std::vector<float>
+
+  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
+
+
+  //RadiativeTermsType::Pointer                         radiative     = RadiativeTermsType::New();
+  //CorrectionParametersType::Pointer                   param         = CorrectionParametersType::New();
+  //CorrectionParametersToRadiativeTermsType*           corrToRadia   = new CorrectionParametersToRadiativeTermsType; chris
+
+  AcquiCorrectionParametersPointerType paramAcqui = AcquiCorrectionParametersType::New();
+  AtmoCorrectionParametersPointerType  paramAtmo = AtmoCorrectionParametersType::New();
   FilterFunctionValuesType::Pointer                   functionValues;
+
   // Instantiating object
-  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::Pointer filter =
-    SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
+  SurfaceAdjacencyEffectCorrectionSchemeFilterType::Pointer filter = SurfaceAdjacencyEffectCorrectionSchemeFilterType::New();
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -104,7 +130,7 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int itkNotUsed(argc), char
   fin >> aerosolOptical; //taer55;
   fin.close();
   // Set atmospheric parameters
-  param->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle));
+  /*param->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle)); chris
   param->SetSolarAzimutalAngle(static_cast<double>(solarAzimutalAngle));
   param->SetViewingZenithalAngle(static_cast<double>(viewingZenithalAngle));
   param->SetViewingAzimutalAngle(static_cast<double>(viewingAzimutalAngle));
@@ -114,7 +140,19 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int itkNotUsed(argc), char
   param->SetWaterVaporAmount(static_cast<double>(waterVaporAmount));
   param->SetOzoneAmount(static_cast<double>(ozoneAmount));
   param->SetAerosolModel(aerosolModel);
-  param->SetAerosolOptical(static_cast<double>(aerosolOptical));
+  param->SetAerosolOptical(static_cast<double>(aerosolOptical));*/
+
+  paramAcqui->SetSolarZenithalAngle(solarZenithalAngle);
+  paramAcqui->SetSolarAzimutalAngle(solarAzimutalAngle);
+  paramAcqui->SetViewingZenithalAngle(viewingZenithalAngle);
+  paramAcqui->SetViewingAzimutalAngle(viewingAzimutalAngle);
+  paramAcqui->SetMonth(month);
+  paramAcqui->SetDay(day);
+  paramAtmo->SetAtmosphericPressure(atmosphericPressure);
+  paramAtmo->SetWaterVaporAmount(waterVaporAmount);
+  paramAtmo->SetOzoneAmount(ozoneAmount);
+  paramAtmo->SetAerosolModel(aerosolModel);
+  paramAtmo->SetAerosolOptical(aerosolOptical);
 
   ValuesVectorType vect;
   for (unsigned int j = 0; j < nbChannel; ++j)
@@ -148,16 +186,18 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int itkNotUsed(argc), char
     functionValues->SetMaxSpectralValue(maxSpectralValue);
     functionValues->SetUserStep(val);
 
-    param->SetWavelengthSpectralBandWithIndex(j, functionValues);
+    paramAcqui->SetWavelengthSpectralBandWithIndex(j, functionValues);
     }
 
-  corrToRadia->SetInput(param);
-  corrToRadia->Update();
+  /*corrToRadia->SetInput(param); chris
+  corrToRadia->Update();*/
 
-  filter->SetAtmosphericRadiativeTerms(corrToRadia->GetOutput());
+  AtmosphericRadiativeTermsPointerType  radiative = CorrectionParametersToRadiativeTermsType::Compute(paramAtmo,paramAcqui);
+
+  filter->SetAtmosphericRadiativeTerms(radiative);
   filter->SetWindowRadius(atoi(argv[3]));
   filter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[4])));
-  filter->SetZenithalViewingAngle(param->GetViewingZenithalAngle());
+  filter->SetZenithalViewingAngle(paramAcqui->GetViewingZenithalAngle());
 
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());

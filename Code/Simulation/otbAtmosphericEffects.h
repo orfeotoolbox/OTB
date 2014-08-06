@@ -18,7 +18,8 @@
 #ifndef __otbAtmosphericEffects_h
 #define __otbAtmosphericEffects_h
 
-#include "otbAtmosphericCorrectionParameters.h"
+#include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
+#include "otbAtmosphericRadiativeTerms.h"
 
 namespace otb
 {
@@ -56,9 +57,9 @@ class AtmosphericEffects
            typedef typename InputRSRType::ValuePrecisionType ValuePrecisionType;
            typedef typename InputSpectralResponseType::PairType PairType;
 
-           /** 6S typedefs*/
-           typedef otb::AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
-           typedef itk::SmartPointer<AtmosphericCorrectionParametersType> AtmosphericCorrectionParametersPointerType;
+
+          typedef otb::AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
+          typedef typename AtmosphericRadiativeTermsType::Pointer                  AtmosphericRadiativeTermsPointerType;
 
             /** Standard macros */
            itkNewMacro(Self);
@@ -70,14 +71,20 @@ class AtmosphericEffects
            itkGetConstObjectMacro(InputSpectralResponse, InputSpectralResponseType);
            itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType);
 
-           itkGetConstObjectMacro(DataAtmosphericCorrectionParameters, AtmosphericCorrectionParametersType);
-           itkSetObjectMacro(DataAtmosphericCorrectionParameters, AtmosphericCorrectionParametersType);
+            /** Get/Set Atmospheric Radiative Terms. */
+            void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmoRadTerms) 
+            {
+              m_AtmosphericRadiativeTerms = atmoRadTerms;
+              this->Modified();
+            }
+           itkGetConstObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTermsType);
+           //itkSetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTermsType);
 
            itkGetObjectMacro(CorrectedSpectralResponse, InputSpectralResponseType);
 
 
-//           void  LoadFilterFunctionAtmosphericCorrectionParameters( double step = 0.0025);
-           void  Process6S(/*const unsigned int numBand*/);
+//         void  LoadFilterFunctionAtmosphericCorrectionParameters( double step = 0.0025);
+           void  Process(/*const unsigned int numBand*/);
 
         protected:
            /** Constructor */
@@ -94,10 +101,12 @@ class AtmosphericEffects
            AtmosphericEffects(const Self&); //purposely not implemented
            void operator=(const Self&); //purposely not implemented
 
-           AtmosphericCorrectionParametersPointerType m_DataAtmosphericCorrectionParameters;
+           AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
            InputSpectralResponsePointerType m_InputSpectralResponse;
            InputSpectralResponsePointerType m_CorrectedSpectralResponse;
            InputRSRPointerType m_InputSatRSR;
+
+           bool m_IsSetAtmosphericRadiativeTerms;
 
       };
 }// end namespace otb

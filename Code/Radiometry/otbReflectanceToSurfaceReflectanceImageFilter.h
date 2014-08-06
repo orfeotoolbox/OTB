@@ -24,8 +24,11 @@
 
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 
+#include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
+#include "otbAtmosphericCorrectionParameters.h" 
+#include "otbImageMetadataCorrectionParameters.h"
 #include "otbAtmosphericRadiativeTerms.h"
-#include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+
 #include "itkMetaDataDictionary.h"
 
 #include <iomanip>
@@ -116,7 +119,9 @@ private:
  * \ingroup AtmosphericRadiativeTerms
  * \ingroup AtmosphericCorrectionParameters
  * \ingroup LuminanceToReflectanceImageFilter
- * \ingroup ImageToReflectanceImageFilter
+ * \ingroup ImageToReflectanceImageFilter 
+ * \ingroup ImageMetadataCorrectionParameters  
+ * \ingroup otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms
  * \ingroup Radiometry
  *
  * \example Radiometry/AtmosphericCorrectionSequencement.cxx
@@ -162,56 +167,58 @@ public:
   typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
   typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
-  typedef AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms Parameters2RadiativeTermsType;
-  typedef Parameters2RadiativeTermsType::Pointer                       Parameters2RadiativeTermsPointerType;
-  typedef AtmosphericCorrectionParameters::Pointer                     CorrectionParametersPointerType;
-  typedef AtmosphericRadiativeTerms::Pointer                           AtmosphericRadiativeTermsPointerType;
 
-  typedef FilterFunctionValues                       FilterFunctionValuesType;
-  typedef FilterFunctionValuesType::ValuesVectorType CoefVectorType;
-  typedef std::vector<CoefVectorType>                FilterFunctionCoefVectorType;
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
 
-  typedef ObjectList<FilterFunctionValues>                  InternalWavelengthSpectralBandVectorType;
-  typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
+  typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
+  typedef typename AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
+
+  typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
+  typedef typename AcquiCorrectionParametersType::Pointer                   AcquiCorrectionParametersPointerType;
+
+  typedef otb::AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
+  typedef typename AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
+
+
+  typedef otb::FilterFunctionValues                                     FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
+  typedef FilterFunctionValuesType::ValuesVectorType                    ValuesVectorType;         //std::vector<float>
+
+  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
 
 
   typedef itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** Get/Set Atmospheric Radiative Terms. */
-  void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmo)
+  void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmoRadTerms) 
   {
-    m_AtmosphericRadiativeTerms = atmo;
-    this->SetNthInput(1, m_AtmosphericRadiativeTerms);
+    m_AtmosphericRadiativeTerms = atmoRadTerms;
+    this->SetNthInput(1, m_AtmosphericRadiativeTerms); 
     m_IsSetAtmosphericRadiativeTerms = true;
     this->Modified();
   }
-  itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTerms);
+  itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTermsType);
 
   /** Get/Set Atmospheric Correction Parameters. */
-  itkSetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
-  itkGetObjectMacro(CorrectionParameters, AtmosphericCorrectionParameters);
-
-  /** Get/Set Aeronet file name. */
-  itkSetMacro(AeronetFileName, std::string);
-  itkGetMacro(AeronetFileName, std::string);
-
-  /** Get/Set Aeronet file name. */
-  itkSetMacro(FilterFunctionValuesFileName, std::string);
-  itkGetMacro(FilterFunctionValuesFileName, std::string);
-
-  /** Get/Set Filter function coef. */
-  void SetFilterFunctionCoef(WavelengthSpectralBandVectorType vect)
+  void SetAtmoCorrectionParameters(AtmoCorrectionParametersPointerType atmoCorrTerms) 
   {
-    m_FilterFunctionCoef = vect;
+    m_AtmoCorrectionParameters = atmoCorrTerms;
+    this->SetNthInput(2, m_AtmoCorrectionParameters); 
+    m_IsSetAtmoCorrectionParameters = true; 
     this->Modified();
   }
-  WavelengthSpectralBandVectorType GetFilterFunctionCoef() const
-  {
-    return m_FilterFunctionCoef;
-  }
+  itkGetObjectMacro(AtmoCorrectionParameters, AtmoCorrectionParametersType);
 
-  /** Generate radiative terms from the atmospheric parameters */
-  void GenerateAtmosphericRadiativeTerms();
+  /** Get/Set Acquisition Correction Parameters. */
+  void SetAcquiCorrectionParameters(AcquiCorrectionParametersPointerType acquiCorrTerms) 
+  {
+    m_AcquiCorrectionParameters = acquiCorrTerms;
+    this->SetNthInput(3, m_AcquiCorrectionParameters); 
+    m_IsSetAcquiCorrectionParameters = true;
+    this->Modified();
+  }
+  itkGetObjectMacro(AcquiCorrectionParameters, AcquiCorrectionParametersType);
+
 
   /** Compute radiative terms if necessary and then update functors attributs. */
   void GenerateParameters();
@@ -233,32 +240,35 @@ protected:
   virtual ~ReflectanceToSurfaceReflectanceImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Read the aeronet data and extract aerosol optical and water vapor amount. */
-  //void UpdateAeronetData( const MetaDataDictionaryType dict );
-
-  /** Initialize the functor vector */
-  void GenerateOutputInformation();
-  /** Fill AtmosphericRadiativeTerms using image metadata*/
+  /** Initialize the parameters of the functor before the threads run. */
+  virtual void BeforeThreadedGenerateData();
+  /** Fill AtmosphericRadiativeTerms using image metadata*/ 
   void UpdateAtmosphericRadiativeTerms();
   /** Update Functors parameters */
   void UpdateFunctors();
 
+  /** If modified, we need to compute the functor parameters again */
+  virtual void Modified();
+
 private:
 
   bool m_IsSetAtmosphericRadiativeTerms;
-  /** Path to an Aeronet data file, allows to compute aerosol optical and water vapor amounts. */
-  std::string m_AeronetFileName;
-  /** Path to an filter function values file. */
-  std::string m_FilterFunctionValuesFileName;
-  /** Contains the filter function values (each element is a vector and represents the values for each channel) */
-  WavelengthSpectralBandVectorType m_FilterFunctionCoef;
+  bool m_IsSetAtmoCorrectionParameters;
+  bool m_IsSetAcquiCorrectionParameters;
+
   /** Enable/Disable GenerateParameters in GenerateOutputInformation.
    *  Useful for image view that call GenerateOutputInformation each time you move the full area.
    */
   bool m_UseGenerateParameters;
 
-  AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
-  CorrectionParametersPointerType      m_CorrectionParameters;
+  /** True if the functor parameters have been generated */
+  bool m_FunctorParametersHaveBeenComputed;
+
+  AtmosphericRadiativeTermsPointerType     m_AtmosphericRadiativeTerms;
+  AtmoCorrectionParametersPointerType      m_AtmoCorrectionParameters;
+  AcquiCorrectionParametersPointerType     m_AcquiCorrectionParameters;
+
+
 };
 
 } // end namespace otb

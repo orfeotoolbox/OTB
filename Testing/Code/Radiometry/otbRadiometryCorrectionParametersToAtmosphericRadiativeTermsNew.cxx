@@ -16,16 +16,18 @@
 
 =========================================================================*/
 
-#include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+#include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 #include <cstdlib>
 
-int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbRadiometryCorrectionParametersToAtmosphericRadiativeTermsNew(int argc, char * argv[])
 {
-  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
-  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType;
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms
+  RadiometryCorrectionParametersToAtmosphericRadiativeTermsType;
   // Instantiating object
-  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::Pointer object =
-    AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::New();
+  //RadiometryCorrectionParametersToAtmosphericRadiativeTermsType::Pointer object =
+  //  RadiometryCorrectionParametersToAtmosphericRadiativeTermsType::New();
+
+  RadiometryCorrectionParametersToAtmosphericRadiativeTermsType* object = new RadiometryCorrectionParametersToAtmosphericRadiativeTermsType;
 
   std::cout << object << std::endl;
 

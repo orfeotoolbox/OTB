@@ -32,15 +32,55 @@ template <class TInputImage, class TOutputImage>
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::ReflectanceToSurfaceReflectanceImageFilter() :
  m_IsSetAtmosphericRadiativeTerms(false),
- m_AeronetFileName(""),
- m_FilterFunctionValuesFileName(""),
- m_UseGenerateParameters(true)
+ m_IsSetAtmoCorrectionParameters(false),
+ m_IsSetAcquiCorrectionParameters(false),
+ m_UseGenerateParameters(true),
+ m_AtmosphericRadiativeTerms(NULL),
+ m_AtmoCorrectionParameters(NULL), 
+ m_AcquiCorrectionParameters(NULL)
  {
-  m_AtmosphericRadiativeTerms = AtmosphericRadiativeTerms::New();
-  m_CorrectionParameters      = AtmosphericCorrectionParameters::New();
-  m_FilterFunctionCoef = InternalWavelengthSpectralBandVectorType::New();
-  m_FilterFunctionCoef->Clear();
+
  }
+
+template <class TInputImage, class TOutputImage>
+void
+ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
+::BeforeThreadedGenerateData()
+ {
+  Superclass::BeforeThreadedGenerateData();
+  if (m_UseGenerateParameters) this->GenerateParameters();
+ }
+
+
+template <class TInputImage, class TOutputImage>
+void
+ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
+::Modified()
+{
+  Superclass::Modified();
+  m_FunctorParametersHaveBeenComputed  = false;
+}
+
+
+template <class TInputImage, class TOutputImage>
+void
+ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
+::GenerateParameters()
+ {
+  if (!m_IsSetAtmosphericRadiativeTerms)
+    {
+    this->UpdateAtmosphericRadiativeTerms();
+    m_IsSetAtmosphericRadiativeTerms = true;
+    }
+
+  if (!m_FunctorParametersHaveBeenComputed)
+    {
+    this->UpdateFunctors();
+    m_FunctorParametersHaveBeenComputed = true;
+    }
+ }
+
+
 
 template <class TInputImage, class TOutputImage>
 void
@@ -49,97 +89,53 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
  {
   if (this->GetInput() == NULL)
     {
-    itkExceptionMacro(<< "Input must be set before updating the atmospheric radiative terms");
-    }
-  MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
-
-  OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
-
-  if ((m_CorrectionParameters->GetDay() == 0))
-    {
-    m_CorrectionParameters->SetDay(imageMetadataInterface->GetDay());
+      itkExceptionMacro(<< "Input must be set before updating the atmospheric radiative terms");
     }
 
-  if ((m_CorrectionParameters->GetMonth() == 0))
-    {
-    m_CorrectionParameters->SetMonth(imageMetadataInterface->GetMonth());
-    }
-
-  if ((m_CorrectionParameters->GetSolarZenithalAngle() == 361.))
-    {
-    m_CorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation());
-    }
-
-  if ((m_CorrectionParameters->GetSolarAzimutalAngle() == 361.))
-    {
-    m_CorrectionParameters->SetSolarAzimutalAngle(imageMetadataInterface->GetSunAzimuth());
-    }
-
-  if ((m_CorrectionParameters->GetViewingZenithalAngle() == 361.))
-    {
-    m_CorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation());
-    }
-
-  if ((m_CorrectionParameters->GetViewingAzimutalAngle() == 361.))
-    {
-    m_CorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth());
-    }
-
-  if (m_AeronetFileName != "")
-    m_CorrectionParameters->UpdateAeronetData(m_AeronetFileName,
-                                              imageMetadataInterface->GetYear(),
-                                              imageMetadataInterface->GetHour(),
-                                              imageMetadataInterface->GetMinute());
-
-  // load filter function values
-  if (m_FilterFunctionValuesFileName != "")
-    {
-    m_CorrectionParameters->LoadFilterFunctionValue(m_FilterFunctionValuesFileName);
-    }
-  //case where filter function values are not read from an ascii file
-  else
-    {
-    if (imageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
-      {
-      m_CorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());
-      otbMsgDevMacro(<< "use filter available in MetadataInterface " << imageMetadataInterface->GetSpectralSensitivity());
-      }
-    else
-      {
-      otbMsgDevMacro(<< "use dummy filter");
-      m_FilterFunctionCoef->Clear();
-      for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
+  // Atmospheric parameters
+  if (!m_IsSetAtmoCorrectionParameters)
         {
-        m_FilterFunctionCoef->PushBack(FilterFunctionValues::New());
+          itkExceptionMacro(<< "Atmospheric correction parameters must be provided before updating the atmospheric radiative terms");
         }
-      m_CorrectionParameters->SetWavelengthSpectralBand(m_FilterFunctionCoef);
+
+
+  // Acquisition parameters
+  if (!m_IsSetAcquiCorrectionParameters) // Get info from image metadata interface
+      {
+          MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
+          OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+
+          m_AcquiCorrectionParameters = AcquiCorrectionParametersType::New();
+
+          m_AcquiCorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation());
+          m_AcquiCorrectionParameters->SetSolarAzimutalAngle(imageMetadataInterface->GetSunAzimuth());
+          m_AcquiCorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation());
+          m_AcquiCorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth());
+
+          m_AcquiCorrectionParameters->SetDay(imageMetadataInterface->GetDay());
+          m_AcquiCorrectionParameters->SetMonth(imageMetadataInterface->GetMonth());
+
+          if (imageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
+                {
+                    m_AcquiCorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());
+                    
+                }
+          else
+                {
+                    otbMsgDevMacro(<< "use dummy filter");
+                    WavelengthSpectralBandVectorType spectralDummy;
+                    spectralDummy->Clear();
+                    for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
+                      {
+                        spectralDummy->PushBack(FilterFunctionValuesType::New());
+                      }
+                    m_AcquiCorrectionParameters->SetWavelengthSpectralBand(spectralDummy);
+                }
+
       }
-    }
 
-  Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
-  param2Terms->SetInput(m_CorrectionParameters);
-  param2Terms->Update();
-  m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
- }
+  m_AtmosphericRadiativeTerms = CorrectionParametersToRadiativeTermsType::Compute(m_AtmoCorrectionParameters,m_AcquiCorrectionParameters);
 
-template <class TInputImage, class TOutputImage>
-void
-ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
-::GenerateOutputInformation()
- {
-  Superclass::GenerateOutputInformation();
-  if (m_UseGenerateParameters) this->GenerateParameters();
- }
-
-template <class TInputImage, class TOutputImage>
-void
-ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
-::GenerateAtmosphericRadiativeTerms()
- {
-  Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
-  param2Terms->SetInput(m_CorrectionParameters);
-  param2Terms->Update();
-  m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
  }
 
 template <class TInputImage, class TOutputImage>
@@ -147,12 +143,13 @@ void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::UpdateFunctors()
  {
+
   if (this->GetInput() == NULL)
     {
     itkExceptionMacro(<< "Input must be set before updating the functors");
     }
+  
   MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
-
   OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
   this->GetFunctorVector().clear();
@@ -184,22 +181,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
     otbMsgDevMacro(<< "Coef (A):                        " << functor.GetCoefficient());
     otbMsgDevMacro(<< "Residu:                          " << functor.GetResidu());
     otbMsgDevMacro(<< "Spherical albedo:                " << functor.GetSphericalAlbedo());
-
     }
- }
-
-template <class TInputImage, class TOutputImage>
-void
-ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
-::GenerateParameters()
- {
-  if (!m_IsSetAtmosphericRadiativeTerms)
-    {
-    this->UpdateAtmosphericRadiativeTerms();
-    m_IsSetAtmosphericRadiativeTerms = true;
-    }
-
-  this->UpdateFunctors();
  }
 
 
@@ -209,7 +191,9 @@ void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  os << indent << "Correction parameters : " << m_CorrectionParameters << std::endl;
+  os << indent << "Atmospheric radiative terms : " << m_AtmosphericRadiativeTerms << std::endl;
+  os << indent << "Atmospheric correction terms : " << m_AtmoCorrectionParameters << std::endl;
+  os << indent << "Acquisition correction terms : " << m_AcquiCorrectionParameters << std::endl;
 }
 
 } //end namespace otb

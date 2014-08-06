@@ -23,7 +23,9 @@
 #include "otbAtmosphericEffects.h"
 #include "otbReduceSpectralResponse.h"
 
-
+#include "otbAtmosphericCorrectionParameters.h" 
+#include "otbImageMetadataCorrectionParameters.h"
+#include "otbAtmosphericRadiativeTerms.h"
 
 int otbAtmosphericEffects(int argc, char * argv[])
 {
@@ -36,10 +38,21 @@ int otbAtmosphericEffects(int argc, char * argv[])
 
    typedef otb::AtmosphericEffects< SpectralResponseType, SatRSRType>  AtmosphericEffectsType;
 
-   typedef AtmosphericEffectsType::AtmosphericCorrectionParametersType  AtmosphericCorrectionParametersType;
-   typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
 
+    typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
 
+    typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
+    typedef typename AtmoCorrectionParametersType::Pointer                   AtmoCorrectionParametersPointerType;
+
+    typedef AtmoCorrectionParametersType::AerosolModelType                    AerosolModelType;
+
+    typedef otb::ImageMetadataCorrectionParameters                            AcquiCorrectionParametersType;
+    typedef typename AcquiCorrectionParametersType::Pointer                  AcquiCorrectionParametersPointerType;
+
+    typedef otb::AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
+    typedef typename AtmosphericRadiativeTermsType::Pointer                  AtmosphericRadiativeTermsPointerType;
+
+    
 
 
 
@@ -69,7 +82,11 @@ int otbAtmosphericEffects(int argc, char * argv[])
    //Instantiation
    SpectralResponseType::Pointer spectrum = SpectralResponseType::New();
    SatRSRType::Pointer  satRSR=SatRSRType::New();
-   AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
+   //AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
+
+   AcquiCorrectionParametersPointerType paramAcqui = AcquiCorrectionParametersType::New();
+   AtmoCorrectionParametersPointerType  paramAtmo = AtmoCorrectionParametersType::New();
+
    ReduceSpectralResponseType::Pointer reduceSpectralResponse = ReduceSpectralResponseType::New();
    AtmosphericEffectsType::Pointer  atmosphericEffectsFilter = AtmosphericEffectsType::New();
 
@@ -80,18 +97,20 @@ int otbAtmosphericEffects(int argc, char * argv[])
    satRSR->Load(fileSatG);
 
    // Set parameters
-   dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(zenithSolarAngle);
-   dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(azimutSolarAngle);
-   dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(viewingZenitalAngle);
-   dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(viewingAzimutalAngle);
-   dataAtmosphericCorrectionParameters->SetMonth(month);
-   dataAtmosphericCorrectionParameters->SetDay(day);
-   dataAtmosphericCorrectionParameters->SetAtmosphericPressure(atmoPressure);
-   dataAtmosphericCorrectionParameters->SetWaterVaporAmount(waterVaporAmount);
-   dataAtmosphericCorrectionParameters->SetOzoneAmount(ozoneAmount);
+   paramAcqui->SetSolarZenithalAngle(zenithSolarAngle);
+   paramAcqui->SetSolarAzimutalAngle(azimutSolarAngle);
+   paramAcqui->SetViewingZenithalAngle(viewingZenitalAngle);
+   paramAcqui->SetViewingAzimutalAngle(viewingAzimutalAngle);
+   paramAcqui->SetMonth(month);
+   paramAcqui->SetDay(day);
+   paramAtmo->SetAtmosphericPressure(atmoPressure);
+   paramAtmo->SetWaterVaporAmount(waterVaporAmount);
+   paramAtmo->SetOzoneAmount(ozoneAmount);
    AerosolModelType aerosolModel = static_cast<AerosolModelType>(aerosolModelValue);
-   dataAtmosphericCorrectionParameters->SetAerosolModel(aerosolModel);
-   dataAtmosphericCorrectionParameters->SetAerosolOptical(aerosolOptical);
+   paramAtmo->SetAerosolModel(aerosolModel);
+   paramAtmo->SetAerosolOptical(aerosolOptical);
+
+   AtmosphericRadiativeTermsPointerType  radiative = CorrectionParametersToRadiativeTermsType::Compute(paramAtmo,paramAcqui);
 
 
    //Compute Reduce Spectral Response
@@ -99,10 +118,10 @@ int otbAtmosphericEffects(int argc, char * argv[])
    reduceSpectralResponse->SetInputSpectralResponse(spectrum);
    reduceSpectralResponse->CalculateResponse();
 
-   atmosphericEffectsFilter->SetDataAtmosphericCorrectionParameters(dataAtmosphericCorrectionParameters);
+   atmosphericEffectsFilter->SetAtmosphericRadiativeTerms(radiative);
    atmosphericEffectsFilter->SetInputSatRSR(satRSR);
    atmosphericEffectsFilter->SetInputSpectralResponse(reduceSpectralResponse->GetReduceResponse());
-   atmosphericEffectsFilter->Process6S();
+   atmosphericEffectsFilter->Process();
 
    atmosphericEffectsFilter->GetCorrectedSpectralResponse();
 

@@ -18,7 +18,7 @@
 #ifndef __otbAtmosphericCorrectionParameters_h
 #define __otbAtmosphericCorrectionParameters_h
 
-#include "itkDataObject.h"
+#include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
 #include "itkVariableSizeMatrix.h"
@@ -44,54 +44,20 @@ class ITK_EXPORT AtmosphericCorrectionParameters : public itk::DataObject
 public:
   /** Standard typedefs */
   typedef AtmosphericCorrectionParameters Self;
-  typedef itk::DataObject                 Superclass;
+  typedef itk::Object                 Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Type macro */
-  itkTypeMacro(AtmosphericCorrectionParameters, DataObject);
+  itkTypeMacro(AtmosphericCorrectionParameters, Object);
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-  typedef enum {NO_AEROSOL = 0, CONTINENTAL = 1, MARITIME = 2, URBAN = 3, DESERTIC = 5} AerosolModelType;
+  typedef enum {NO_AEROSOL = 0, CONTINENTAL = 1, MARITIME = 2, URBAN = 3, DESERTIC = 4} AerosolModelType;
 
   typedef ObjectList<FilterFunctionValues>                  InternalWavelengthSpectralBandVectorType;
   typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
-
-  /**
-   * Set/Get the solar zenithal angle.
-   */
-  itkSetMacro(SolarZenithalAngle, double);
-  itkGetMacro(SolarZenithalAngle, double);
-  /**
-   * Set/Get the solar azimutal angle.
-   */
-  itkSetMacro(SolarAzimutalAngle, double);
-  itkGetMacro(SolarAzimutalAngle, double);
-
-  /**
-   * Set/Get the viewing zenithal angle.
-   */
-  itkSetMacro(ViewingZenithalAngle, double);
-  itkGetMacro(ViewingZenithalAngle, double);
-  /**
-   * Set/Get the viewing azimutal angle.
-   */
-  itkSetMacro(ViewingAzimutalAngle, double);
-  itkGetMacro(ViewingAzimutalAngle, double);
-
-  /**
-   * Set/Get the month.
-   */
-  itkSetClampMacro(Month, unsigned int, 1, 12);
-  itkGetMacro(Month, unsigned int);
-
-  /**
-   * Set/Get the day.
-   */
-  itkSetClampMacro(Day, unsigned int, 1, 31);
-  itkGetMacro(Day, unsigned int);
 
   /**
    * Set/Get the atmospheric pressure.
@@ -123,53 +89,26 @@ public:
   itkSetMacro(AerosolOptical, double);
   itkGetMacro(AerosolOptical, double);
 
-  /**
-   * Set/Get the wavelength spectral band.
-   */
-  void SetWavelengthSpectralBand(const WavelengthSpectralBandVectorType& waveband)
-  {
-    m_WavelengthSpectralBand = waveband;
-  }
-  void SetWavelengthSpectralBandWithIndex(unsigned int id, const FilterFunctionValues::Pointer& function)
-  {
-    if (m_WavelengthSpectralBand->Size() <  id + 1)
-      {
-      for (unsigned int j = 0; j < (id + 1 - m_WavelengthSpectralBand->Size()); ++j)
-        {
-        FilterFunctionValues::Pointer temp;
-        m_WavelengthSpectralBand->PushBack(temp);
-        }
-      }
-    m_WavelengthSpectralBand->SetNthElement(id, function);
-  }
-  WavelengthSpectralBandVectorType GetWavelengthSpectralBand() const
-  {
-    return m_WavelengthSpectralBand;
-  }
-  const WavelengthSpectralBandVectorType * GetWavelengthSpectralBandRef() const
-  {
-    return &m_WavelengthSpectralBand;
-  }
+  
 
   /** Read the aeronet data and extract aerosol optical and water vapor amount. */
+  void ReadAeronetData(const std::string& file, int year, int month, int day, int hour, int minute, double epsi);
+
+
+
   void UpdateAeronetData(const std::string& file, int year, int month, int day, int hour, int minute, double epsi);
   void UpdateAeronetData(const std::string& file, int year, int month, int day, int hour, int minute)
   {
     this->UpdateAeronetData(file, year, month, day, hour, minute, 0.4);
   }
-  void UpdateAeronetData(const std::string& file, int year, int hour, int minute, double epsi)
+  /*void UpdateAeronetData(const std::string& file, int year, int hour, int minute, double epsi) CHRIS
   {
     this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, epsi);
   }
   void UpdateAeronetData(const std::string& file, int year, int hour, int minute)
   {
     this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, 0.4);
-  }
-
-  /**
-   * Read a file that contains filter function values on the 6S format.
-   */
-  void LoadFilterFunctionValue(const std::string& filename);
+  }*/ 
 
   /** Constructor */
   AtmosphericCorrectionParameters();
@@ -185,18 +124,6 @@ private:
   AtmosphericCorrectionParameters(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** The Solar zenithal angle */
-  double m_SolarZenithalAngle;
-  /** The Solar azimutal angle */
-  double m_SolarAzimutalAngle;
-  /** The Viewing zenithal angle */
-  double m_ViewingZenithalAngle;
-  /** The Viewing azimutal angle */
-  double m_ViewingAzimutalAngle;
-  /** The Month */
-  unsigned int m_Month;
-  /** The Day (in the month) */
-  unsigned int m_Day;
   /** The Atmospheric pressure */
   double m_AtmosphericPressure;
   /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
@@ -207,8 +134,6 @@ private:
   AerosolModelType m_AerosolModel;
   /** The Aerosol optical (radiative impact of aerosol for the reference wavelength 550-nm) */
   double m_AerosolOptical;
-  /** Wavelength for the each spectral band definition */
-  WavelengthSpectralBandVectorType m_WavelengthSpectralBand;
 };
 
 } // end namespace otb

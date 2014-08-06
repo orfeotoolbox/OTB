@@ -19,7 +19,6 @@
 #define __otbAtmosphericEffects_txx
 
 #include "otbAtmosphericEffects.h"
-#include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
 #include "otbSurfaceReflectanceToReflectanceFilter.h"
 
 namespace otb
@@ -27,7 +26,8 @@ namespace otb
 
 template <class TSpectralResponse , class TRSR>
 AtmosphericEffects<TSpectralResponse , TRSR>
-::AtmosphericEffects()
+::AtmosphericEffects() :
+m_IsSetAtmosphericRadiativeTerms(false)
   {
     m_InputSpectralResponse = InputSpectralResponseType::New();
     m_CorrectedSpectralResponse = InputSpectralResponseType::New();
@@ -49,9 +49,9 @@ AtmosphericEffects<TSpectralResponse , TRSR>
 template <class TSpectralResponse , class TRSR>
 void
 AtmosphericEffects<TSpectralResponse , TRSR>
-::Process6S(/*const unsigned int numBand*/)
+::Process(/*const unsigned int numBand*/)
 {
-  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
+  /*typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       AtmosphericCorrectionParametersTo6SRadiativeTermsType;
 
   AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer  filterAtmosphericCorrectionParametersTo6SRadiativeTerms = AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
@@ -108,7 +108,27 @@ AtmosphericEffects<TSpectralResponse , TRSR>
   filterSRToR->Update();
 
 
-  this->m_CorrectedSpectralResponse->SetFromImage( filterSRToR->GetOutput() );
+  this->m_CorrectedSpectralResponse->SetFromImage( filterSRToR->GetOutput() );*/
+
+  /*if (m_IsSetAtmosphericRadiativeTerms)
+  {*/
+    typedef typename InputSpectralResponseType::ImageType       ImageType;
+
+    typedef SurfaceReflectanceToReflectanceFilter<ImageType, ImageType>              SurfaceReflectanceToReflectanceFilterType;
+    typename SurfaceReflectanceToReflectanceFilterType::Pointer filterSRToR = SurfaceReflectanceToReflectanceFilterType::New();
+
+    filterSRToR->SetAtmosphericRadiativeTerms( m_AtmosphericRadiativeTerms );
+
+    typename ImageType::Pointer image = ImageType::New();
+    this->m_InputSpectralResponse->GetImage(image);
+    filterSRToR->SetInput( image );
+    filterSRToR->Update();
+
+    this->m_CorrectedSpectralResponse->SetFromImage( filterSRToR->GetOutput() );
+  /*}
+  else
+    itkExceptionMacro(<< "Atmospheric radiative terms must be provided before updating the CSR (Corrected Spectral Response)");*/
+
 }
 } // end namespace otb
 

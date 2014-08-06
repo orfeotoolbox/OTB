@@ -25,9 +25,13 @@
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbMultiplyByScalarImageFilter.h"
 #include "otbClampVectorImageFilter.h"
-#include "otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.h"
+#include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 #include "otbGroundSpacingImageFunction.h"
 #include "vnl/vnl_random.h"
+
+#include "itkMetaDataDictionary.h"
+#include "otbOpticalImageMetadataInterfaceFactory.h"
+#include "otbOpticalImageMetadataInterface.h"
 
 #include <fstream>
 #include <sstream>
@@ -91,14 +95,21 @@ public:
                                       DoubleVectorImageType>              ClampFilterType;
 
   typedef ReflectanceToSurfaceReflectanceImageFilter<DoubleVectorImageType,
-                                                     DoubleVectorImageType>         ReflectanceToSurfaceReflectanceImageFilterType;
+                                                     DoubleVectorImageType>          ReflectanceToSurfaceReflectanceImageFilterType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionValuesType  FilterFunctionValuesType;
   typedef FilterFunctionValuesType::ValuesVectorType                                ValuesVectorType;
-  typedef AtmosphericCorrectionParameters                                           AtmosphericCorrectionParametersType;
-  typedef AtmosphericCorrectionParametersType::AerosolModelType                     AerosolModelType;
+  //typedef AtmosphericCorrectionParameters                                           AtmosphericCorrectionParametersType; chris
+  //typedef AtmosphericCorrectionParametersType::AerosolModelType                     AerosolModelType; chris
 
-  typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<DoubleVectorImageType,DoubleVectorImageType>
-  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
+  typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
+  typedef otb::AtmosphericCorrectionParameters::Pointer                     AtmoCorrectionParametersPointerType;
+  typedef AtmoCorrectionParametersType::AerosolModelType                    AerosolModelType;
+
+  typedef otb::ImageMetadataCorrectionParameters                            AcquiCorrectionParametersType;
+  typedef otb::ImageMetadataCorrectionParameters::Pointer                   AcquiCorrectionParametersPointerType;
+
+  typedef otb::SurfaceAdjacencyEffectCorrectionSchemeFilter<DoubleVectorImageType,DoubleVectorImageType>
+  SurfaceAdjacencyEffectCorrectionSchemeFilterType;
 
   typedef otb::GroundSpacingImageFunction<FloatVectorImageType> GroundSpacingImageType;
 
@@ -622,7 +633,10 @@ private:
         m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
         m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
-        m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
+        //m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters(); chris
+        m_paramAcqui = m_ReflectanceToSurfaceReflectanceFilter->GetAcquiCorrectionParameters();
+        m_paramAtmo  = m_ReflectanceToSurfaceReflectanceFilter->GetAtmoCorrectionParameters();
+
         //AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
 
         switch ( GetParameterInt("atmo.aerosol") )
@@ -631,33 +645,39 @@ private:
           {
             // Aerosol_Desertic correspond to 4 in the enum but actually in
             // the class atmosphericParam it is known as parameter 5
-            m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(5));
+            m_paramAtmo->SetAerosolModel(static_cast<AerosolModelType>(5));
           }
           break;
           default:
           {
-            m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(GetParameterInt("atmo.aerosol")));
+            m_paramAtmo->SetAerosolModel(static_cast<AerosolModelType>(GetParameterInt("atmo.aerosol")));
           }
           break;
         }
         
         // Set the atmospheric param
-        m_AtmosphericParam->SetOzoneAmount(GetParameterFloat("atmo.oz"));
-        m_AtmosphericParam->SetWaterVaporAmount(GetParameterFloat("atmo.wa"));
-        m_AtmosphericParam->SetAtmosphericPressure(GetParameterFloat("atmo.pressure"));
-        m_AtmosphericParam->SetAerosolOptical(GetParameterFloat("atmo.opt"));
+        m_paramAtmo->SetOzoneAmount(GetParameterFloat("atmo.oz"));
+        m_paramAtmo->SetWaterVaporAmount(GetParameterFloat("atmo.wa"));
+        m_paramAtmo->SetAtmosphericPressure(GetParameterFloat("atmo.pressure"));
+        m_paramAtmo->SetAerosolOptical(GetParameterFloat("atmo.opt"));
 
         // Relative Spectral Response File
         if (IsParameterEnabled("atmo.rsr"))
         {
-          m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("atmo.rsr"));
+          m_paramAcqui->LoadFilterFunctionValue(GetParameterString("atmo.rsr"));
+          m_ReflectanceToSurfaceReflectanceFilter->SetAcquiCorrectionParameters(m_paramAcqui);
+          //m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("atmo.rsr")); chris
         }
 
         // Aeronet file
         if (IsParameterEnabled("atmo.aeronet"))
         {
           GetLogger()->Info("Use aeronet file to retrieve atmospheric parameters");
-          m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("atmo.aeronet"));
+          itk::MetaDataDictionary dict = inImage->GetMetaDataDictionary();
+          OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+
+          m_paramAtmo->UpdateAeronetData(GetParameterString("atmo.aeronet"), imageMetadataInterface->GetYear(), 0, 0, imageMetadataInterface->GetHour(), imageMetadataInterface->GetMinute(), 0.4);
+          //m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("atmo.aeronet")); chris
         }
 
         m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
@@ -673,7 +693,7 @@ private:
 
         std::ostringstream oss;
         oss.str("");
-        oss << std::endl << m_AtmosphericParam;
+        oss << std::endl << m_paramAtmo;
 
         AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
         oss << std::endl << std::endl << atmoTerms;
@@ -685,16 +705,16 @@ private:
         {
           adjComputation=true;
           //Compute adjacency effect
-          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter
-            = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
+          m_SurfaceAdjacencyEffectCorrectionSchemeFilter
+            = SurfaceAdjacencyEffectCorrectionSchemeFilterType::New();
 
-          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+          m_SurfaceAdjacencyEffectCorrectionSchemeFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
+          m_SurfaceAdjacencyEffectCorrectionSchemeFilter->
             SetAtmosphericRadiativeTerms(
               m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms());
-          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
-            m_AtmosphericParam->GetViewingZenithalAngle());
-          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("atmo.radius"));
+          m_SurfaceAdjacencyEffectCorrectionSchemeFilter->SetZenithalViewingAngle(
+            m_paramAcqui->GetViewingZenithalAngle());
+          m_SurfaceAdjacencyEffectCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("atmo.radius"));
 
           //Estimate ground spacing in kilometers
           GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
@@ -712,11 +732,11 @@ private:
             //  oss2.str("");
             //  oss2 << spacingInKilometers;
             //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
-          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+          m_SurfaceAdjacencyEffectCorrectionSchemeFilter->
             SetPixelSpacingInKilometers(spacingInKilometers);
 
         
-          m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->UpdateOutputInformation();
+          m_SurfaceAdjacencyEffectCorrectionSchemeFilter->UpdateOutputInformation();
         }
 
         //Rescale the surface reflectance in milli-reflectance
@@ -725,7 +745,7 @@ private:
           if (!adjComputation)
             m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
           else
-            m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
+            m_ScaleFilter->SetInput(m_SurfaceAdjacencyEffectCorrectionSchemeFilter->GetOutput());
         }
         else
         {
@@ -734,7 +754,7 @@ private:
           if (!adjComputation)
             m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
           else
-            m_ClampFilter->SetInput(m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
+            m_ClampFilter->SetInput(m_SurfaceAdjacencyEffectCorrectionSchemeFilter->GetOutput());
           
           m_ClampFilter->ClampOutside(0.0, 1.0);
           m_ScaleFilter->SetInput(m_ClampFilter->GetOutput());
@@ -765,10 +785,12 @@ private:
   LuminanceToImageImageFilterType::Pointer                m_LuminanceToImageFilter;
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer m_ReflectanceToSurfaceReflectanceFilter;
   ScaleFilterOutDoubleType::Pointer                       m_ScaleFilter;
-  AtmosphericCorrectionParametersType::Pointer            m_AtmosphericParam;
+  //AtmosphericCorrectionParametersType::Pointer            m_AtmosphericParam; chris
+  AtmoCorrectionParametersPointerType                            m_paramAtmo;
+  AcquiCorrectionParametersPointerType                           m_paramAcqui;
   ClampFilterType::Pointer                                m_ClampFilter;
 
-  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::Pointer m_SurfaceAdjacencyEffect6SCorrectionSchemeFilter;
+  SurfaceAdjacencyEffectCorrectionSchemeFilterType::Pointer m_SurfaceAdjacencyEffectCorrectionSchemeFilter;
 };
 
 }// namespace Wrapper
