@@ -105,6 +105,7 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "maur_rgb.png");
     SetDocExampleParameterValue("fout", "MeanShift_FilterOutput.tif");
+    SetDocExampleParameterValue("foutpos", "MeanShift_SpatialOutput.tif");
     SetDocExampleParameterValue("spatialr", "16");
     SetDocExampleParameterValue("ranger", "16");
     SetDocExampleParameterValue("thres", "0.1");
