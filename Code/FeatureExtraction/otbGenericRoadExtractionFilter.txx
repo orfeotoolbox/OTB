@@ -113,6 +113,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   m_GradientFilter->SetInput(m_SquareRootImageFilter->GetOutput());
   /** Sigma calculated with the alpha and image resolution parameters */
   m_GradientFilter->SetSigma(static_cast<SigmaType>(m_Alpha * (1.2 / m_Resolution + 1.)));
+  m_GradientFilter->SetUseImageDirection(false);
 
   m_NeighborhoodScalarProductFilter->SetInput(m_GradientFilter->GetOutput());
 

@@ -187,7 +187,9 @@ protected:
   /** Destructor */
   ~GenericRoadExtractionFilter() {}
 
-  /** Prepare main computation method */
+  /** Prepare main computation method
+   *  Note : this function isn't called
+   */
   void BeforeGenerateData(void);
 
   /** Main computation method */
