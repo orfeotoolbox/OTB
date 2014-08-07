@@ -80,7 +80,6 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
  }
 
 
-
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
@@ -135,7 +134,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
           {
             if (imageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
                   {
-                      m_AcquiCorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());  
+                      m_AcquiCorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());
                   }
             else
                   {
@@ -151,7 +150,6 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
           }
 
       }
-
 
 
   m_AtmosphericRadiativeTerms = CorrectionParametersToRadiativeTermsType::Compute(m_AtmoCorrectionParameters,m_AcquiCorrectionParameters);

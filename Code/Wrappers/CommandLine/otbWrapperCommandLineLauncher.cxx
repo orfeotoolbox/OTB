@@ -95,7 +95,7 @@ void CommandLineLauncher::DeleteWatcherList()
 bool CommandLineLauncher::Load(const std::string & exp)
 {
   /*m_Expression = exp;
-  return this->Load();*/
+  return this->Load(); */
   return false;
 }
 
@@ -884,7 +884,7 @@ bool CommandLineLauncher::CheckUnicity()
 bool CommandLineLauncher::CheckParametersPrefix()
 {
   // Check if the chain " --" appears in the args, could be a common mistake
-  for (std::vector<std::string>::iterator it = m_VExpression.begin() ; it != m_VExpression.end(); ++it)
+  for (std::vector<std::string>::iterator it = m_VExpression.begin(); it != m_VExpression.end(); ++it)
     {
     if (it->find("--") != std::string::npos )
       {

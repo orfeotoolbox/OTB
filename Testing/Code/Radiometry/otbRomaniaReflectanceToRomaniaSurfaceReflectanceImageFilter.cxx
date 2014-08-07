@@ -52,7 +52,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int itkNotUsed(a
   typedef otb::FilterFunctionValues                            FilterFunctionValuesType;
   typedef CorrectionParametersType::AerosolModelType           AerosolModelType;
   typedef FilterFunctionValuesType::WavelengthSpectralBandType ValueType;
-  typedef FilterFunctionValuesType::ValuesVectorType           ValuesVectorType;*/
+  typedef FilterFunctionValuesType::ValuesVectorType           ValuesVectorType; */
 
   typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
   typedef AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
@@ -134,7 +134,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int itkNotUsed(a
   param->SetWaterVaporAmount(static_cast<double>(waterVaporAmount));
   param->SetOzoneAmount(static_cast<double>(ozoneAmount));
   param->SetAerosolModel(aerosolModel);
-  param->SetAerosolOptical(static_cast<double>(aerosolOptical));*/
+  param->SetAerosolOptical(static_cast<double>(aerosolOptical)); */
 
   paramAcqui->SetSolarZenithalAngle(solarZenithalAngle);
   paramAcqui->SetSolarAzimutalAngle(solarAzimutalAngle);

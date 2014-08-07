@@ -17,7 +17,7 @@
 =========================================================================*/
 
 #include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
-#include "otbAtmosphericCorrectionParameters.h" 
+#include "otbAtmosphericCorrectionParameters.h"
 #include "otbImageMetadataCorrectionParameters.h"
 #include "otbAtmosphericRadiativeTerms.h"
 #include <vector>
@@ -100,10 +100,10 @@ int otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms(int argc, char 
   functionValues->SetMinSpectralValue(minSpectralValue);
   functionValues->SetMaxSpectralValue(maxSpectralValue);
   functionValues->SetUserStep(val);
-  paramAcqui->SetWavelengthSpectralBandWithIndex(0, functionValues); 
+  paramAcqui->SetWavelengthSpectralBandWithIndex(0, functionValues);
 
   // Set parameters
-  paramAcqui->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle)); 
+  paramAcqui->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle));
   paramAcqui->SetSolarAzimutalAngle(static_cast<double>(solarAzimutalAngle));
   paramAcqui->SetViewingZenithalAngle(static_cast<double>(viewingZenithalAngle));
   paramAcqui->SetViewingAzimutalAngle(static_cast<double>(viewingAzimutalAngle));

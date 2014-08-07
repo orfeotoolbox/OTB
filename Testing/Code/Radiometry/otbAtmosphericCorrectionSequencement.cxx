@@ -130,7 +130,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
 
   AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters =
     AtmosphericCorrectionParametersType::New();
-  AtmosphericRadiativeTermsType::Pointer dataAtmosphericRadiativeTerms = AtmosphericRadiativeTermsType::New();*/
+  AtmosphericRadiativeTermsType::Pointer dataAtmosphericRadiativeTerms = AtmosphericRadiativeTermsType::New(); */
 
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
 
@@ -210,7 +210,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
     filterAtmosphericCorrectionParametersTo6SRadiativeTerms =
     RadiometryCorrectionParametersToRadiativeTermsType::New();
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput(dataAtmosphericCorrectionParameters);
-  filterAtmosphericCorrectionParametersTo6SRadiativeTerms->Update();*/
+  filterAtmosphericCorrectionParametersTo6SRadiativeTerms->Update(); */
 
   paramAcqui->SetSolarZenithalAngle(filterLuminanceToReflectance->GetZenithalSolarAngle());
   paramAcqui->SetSolarAzimutalAngle(static_cast<double>(atof(argv[8])));

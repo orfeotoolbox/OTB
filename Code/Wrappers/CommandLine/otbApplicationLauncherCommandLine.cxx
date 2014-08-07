@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
         }*/
       std::string strarg (argv[i]);
       std::cout << strarg << std::endl;
-      vexp.push_back(strarg); 
+      vexp.push_back(strarg);
       }
     }
   //  std::cerr << exp << ":\n";

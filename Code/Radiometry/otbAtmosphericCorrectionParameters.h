@@ -128,7 +128,7 @@ public:
   void UpdateAeronetData(const std::string& file, int year, int hour, int minute)
   {
     this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, 0.4);
-  }*/ 
+  }*/
 
   /** Constructor */
   AtmosphericCorrectionParameters();

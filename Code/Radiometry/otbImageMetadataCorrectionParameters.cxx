@@ -45,7 +45,6 @@ ImageMetadataCorrectionParameters
 }
 
 
-
 /** Get data from filter function file*/
 void
 ImageMetadataCorrectionParameters

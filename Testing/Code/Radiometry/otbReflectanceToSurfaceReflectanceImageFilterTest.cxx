@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbAtmosphericRadiativeTerms.h"
-#include "otbAtmosphericCorrectionParameters.h" 
+#include "otbAtmosphericCorrectionParameters.h"
 
 #include "itkMetaDataDictionary.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
@@ -107,12 +107,12 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest(int itkNotUsed(argc), char
   writer->Update();
 
   return EXIT_SUCCESS;
-}  
+}
 
 //Check the correct generation of the atmospheric parameters
 int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), char * argv[])
 {
-  const char * inputFileName  = argv[1]; 
+  const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
 
   const unsigned int Dimension = 2;
@@ -158,7 +158,7 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), cha
 
   std::ofstream fout (outputFileName);
   fout << terms;
-  fout.close();*/
+  fout.close(); */
 
   return EXIT_SUCCESS;
 }

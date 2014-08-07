@@ -164,7 +164,7 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
   return OK;
 }
 
-CommandLineParser::ParseResultType 
+CommandLineParser::ParseResultType
 CommandLineParser::GetModuleName( std::string & modName, std::vector<std::string> & exp )
 {
   itksys::RegularExpression reg;
@@ -260,15 +260,15 @@ CommandLineParser::GetAttribut( const std::string & key, std::vector<std::string
    
    if (it->find(key) != std::string::npos)
      { foundKey=true;
-   std::cout << "foundkey true" << std::endl; 
+   std::cout << "foundkey true" << std::endl;
    }
    else
    {
-   std::cout << "foundkey false" << std::endl; 
+   std::cout << "foundkey false" << std::endl;
    }
    ++it;
    }
- return res;  
+ return res;
 }
 
 std::vector<std::string>
@@ -361,7 +361,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
   return res;
 }
 
-std::string 
+std::string
 CommandLineParser::GetAttributAsString( const std::string & key, std::vector<std::string> & exp )
 {
   std::string res("");
@@ -437,7 +437,7 @@ CommandLineParser::IsAttributExists( const std::string key, const std::string & 
 bool
 CommandLineParser::IsAttributExists( const std::string key, std::vector<std::string> & exp  )
 {
-  for (std::vector<std::string>::iterator it = exp.begin() ; it != exp.end(); ++it)
+  for (std::vector<std::string>::iterator it = exp.begin(); it != exp.end(); ++it)
   {
     if (it->find(key) != std::string::npos)
       return true;
@@ -449,7 +449,7 @@ std::vector<std::string>
 CommandLineParser::GetKeyList(  std::vector<std::string> & exp  )
 {
    std::vector<std::string> keyList;
-   for (std::vector<std::string>::iterator it = exp.begin() ; it != exp.end(); ++it)
+   for (std::vector<std::string>::iterator it = exp.begin(); it != exp.end(); ++it)
     {
       if (it->find("-") == 0 && this->IsAValidKey(*it))
       {

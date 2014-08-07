@@ -72,7 +72,7 @@ class AtmosphericEffects
            itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType);
 
             /** Get/Set Atmospheric Radiative Terms. */
-            void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmoRadTerms) 
+            void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmoRadTerms)
             {
               m_AtmosphericRadiativeTerms = atmoRadTerms;
               this->Modified();

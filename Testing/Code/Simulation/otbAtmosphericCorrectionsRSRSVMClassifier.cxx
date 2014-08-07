@@ -47,7 +47,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
   /*typedef AtmosphericEffectsType::AtmosphericCorrectionParametersType AtmosphericCorrectionParametersType; chris
   typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
-  typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;*/
+  typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType; */
 
 
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
@@ -125,7 +125,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
   //Instantiation
   /*AtmosphericCorrectionParametersType::Pointer chris
-    dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();*/
+    dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New(); */
 
   AcquiCorrectionParametersPointerType paramAcqui = AcquiCorrectionParametersType::New();
   AtmoCorrectionParametersPointerType  paramAtmo = AtmoCorrectionParametersType::New();
@@ -148,7 +148,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
   AerosolModelType aerosolModel = static_cast<AerosolModelType> (aerosolModelValue);
   dataAtmosphericCorrectionParameters->SetAerosolModel(aerosolModel);
-  dataAtmosphericCorrectionParameters->SetAerosolOptical(aerosolOptical);*/
+  dataAtmosphericCorrectionParameters->SetAerosolOptical(aerosolOptical); */
 
   paramAcqui->SetSolarZenithalAngle(zenithSolarAngle);
   paramAcqui->SetSolarAzimutalAngle(azimutSolarAngle);

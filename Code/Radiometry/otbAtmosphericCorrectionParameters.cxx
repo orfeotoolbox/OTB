@@ -66,7 +66,6 @@ AtmosphericCorrectionParameters
 }
 
 
-
 /**PrintSelf method */
 void
 AtmosphericCorrectionParameters

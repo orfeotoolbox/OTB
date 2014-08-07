@@ -23,7 +23,7 @@
 #include "otbAtmosphericEffects.h"
 #include "otbReduceSpectralResponse.h"
 
-#include "otbAtmosphericCorrectionParameters.h" 
+#include "otbAtmosphericCorrectionParameters.h"
 #include "otbImageMetadataCorrectionParameters.h"
 #include "otbAtmosphericRadiativeTerms.h"
 

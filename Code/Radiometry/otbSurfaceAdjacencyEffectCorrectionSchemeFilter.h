@@ -219,40 +219,39 @@ public:
   itkSetMacro(PixelSpacingInKilometers, double);
   itkGetMacro(PixelSpacingInKilometers, double);
   /** Set/Get the viewing angle */
-  itkSetMacro(ZenithalViewingAngle, double); 
+  itkSetMacro(ZenithalViewingAngle, double);
   itkGetMacro(ZenithalViewingAngle, double);
 
 
   /** Get/Set Atmospheric Radiative Terms. */
-  void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmoRadTerms) 
+  void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmoRadTerms)
   {
     m_AtmosphericRadiativeTerms = atmoRadTerms;
-    this->SetNthInput(1, m_AtmosphericRadiativeTerms); 
+    this->SetNthInput(1, m_AtmosphericRadiativeTerms);
     m_IsSetAtmosphericRadiativeTerms = true;
     this->Modified();
   }
   itkGetObjectMacro(AtmosphericRadiativeTerms, AtmosphericRadiativeTermsType);
 
   /** Get/Set Atmospheric Correction Parameters. */
-  void SetAtmoCorrectionParameters(AtmoCorrectionParametersPointerType atmoCorrTerms) 
+  void SetAtmoCorrectionParameters(AtmoCorrectionParametersPointerType atmoCorrTerms)
   {
     m_AtmoCorrectionParameters = atmoCorrTerms;
-    this->SetNthInput(2, m_AtmoCorrectionParameters); 
-    m_IsSetAtmoCorrectionParameters = true; 
+    this->SetNthInput(2, m_AtmoCorrectionParameters);
+    m_IsSetAtmoCorrectionParameters = true;
     this->Modified();
   }
   itkGetObjectMacro(AtmoCorrectionParameters, AtmoCorrectionParametersType);
 
   /** Get/Set Acquisition Correction Parameters. */
-  void SetAcquiCorrectionParameters(AcquiCorrectionParametersPointerType acquiCorrTerms) 
+  void SetAcquiCorrectionParameters(AcquiCorrectionParametersPointerType acquiCorrTerms)
   {
     m_AcquiCorrectionParameters = acquiCorrTerms;
-    this->SetNthInput(3, m_AcquiCorrectionParameters); 
+    this->SetNthInput(3, m_AcquiCorrectionParameters);
     m_IsSetAcquiCorrectionParameters = true;
     this->Modified();
   }
   itkGetObjectMacro(AcquiCorrectionParameters, AcquiCorrectionParametersType);
-
 
 
   /** Compute radiative terms if necessary and then update functors attibuts. */
