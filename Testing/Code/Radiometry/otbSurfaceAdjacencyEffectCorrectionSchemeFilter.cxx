@@ -44,16 +44,7 @@ int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int argc, char * argv[])
   typedef otb::SurfaceAdjacencyEffectCorrectionSchemeFilter<InputImageType,
       OutputImageType>
   SurfaceAdjacencyEffectCorrectionSchemeFilterType;
-  typedef SurfaceAdjacencyEffectCorrectionSchemeFilterType::WeightingMatrixType WeightingMatrixType;
-  typedef SurfaceAdjacencyEffectCorrectionSchemeFilterType::WeightingValuesContainerType
-  /*typedef otb::AtmosphericRadiativeTerms::DataVectorType                    DataVectorType;
-  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms    CorrectionParametersToRadiativeTermsType;
-  typedef otb::AtmosphericCorrectionParameters                              CorrectionParametersType;
-  typedef otb::AtmosphericRadiativeTerms                                    RadiativeTermsType;
-  typedef otb::FilterFunctionValues                                         FilterFunctionValuesType;
-  typedef CorrectionParametersType::AerosolModelType                        AerosolModelType;
-  typedef FilterFunctionValuesType::WavelengthSpectralBandType              ValueType;
-  typedef FilterFunctionValuesType::ValuesVectorType                        ValuesVectorType;*/
+
 
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
 
@@ -74,10 +65,6 @@ int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int argc, char * argv[])
 
   typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
 
-
-  //RadiativeTermsType::Pointer                         radiative     = RadiativeTermsType::New();
-  //CorrectionParametersType::Pointer                   param         = CorrectionParametersType::New();
-  //CorrectionParametersToRadiativeTermsType*           corrToRadia   = new CorrectionParametersToRadiativeTermsType; chris
 
   AcquiCorrectionParametersPointerType paramAcqui = AcquiCorrectionParametersType::New();
   AtmoCorrectionParametersPointerType  paramAtmo = AtmoCorrectionParametersType::New();
@@ -129,19 +116,8 @@ int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int argc, char * argv[])
   AerosolModelType aerosolModel = static_cast<AerosolModelType>(aer);
   fin >> aerosolOptical; //taer55;
   fin.close();
-  // Set atmospheric parameters
-  /*param->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle)); chris
-  param->SetSolarAzimutalAngle(static_cast<double>(solarAzimutalAngle));
-  param->SetViewingZenithalAngle(static_cast<double>(viewingZenithalAngle));
-  param->SetViewingAzimutalAngle(static_cast<double>(viewingAzimutalAngle));
-  param->SetMonth(month);
-  param->SetDay(day);
-  param->SetAtmosphericPressure(static_cast<double>(atmosphericPressure));
-  param->SetWaterVaporAmount(static_cast<double>(waterVaporAmount));
-  param->SetOzoneAmount(static_cast<double>(ozoneAmount));
-  param->SetAerosolModel(aerosolModel);
-  param->SetAerosolOptical(static_cast<double>(aerosolOptical));*/
 
+  // Set atmospheric parameters
   paramAcqui->SetSolarZenithalAngle(solarZenithalAngle);
   paramAcqui->SetSolarAzimutalAngle(solarAzimutalAngle);
   paramAcqui->SetViewingZenithalAngle(viewingZenithalAngle);
@@ -189,8 +165,6 @@ int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int argc, char * argv[])
     paramAcqui->SetWavelengthSpectralBandWithIndex(j, functionValues);
     }
 
-  /*corrToRadia->SetInput(param); chris
-  corrToRadia->Update();*/
 
   AtmosphericRadiativeTermsPointerType  radiative = CorrectionParametersToRadiativeTermsType::Compute(paramAtmo,paramAcqui);
 
