@@ -170,13 +170,13 @@ public:
 
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
 
-  typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
+  typedef otb::AtmosphericCorrectionParameters                               AtmoCorrectionParametersType;
   typedef typename AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
 
   typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
   typedef typename AcquiCorrectionParametersType::Pointer                   AcquiCorrectionParametersPointerType;
 
-  typedef otb::AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
+  typedef otb::AtmosphericRadiativeTerms                                     AtmosphericRadiativeTermsType;
   typedef typename AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
 
 

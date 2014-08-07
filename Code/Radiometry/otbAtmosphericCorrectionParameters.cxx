@@ -37,6 +37,9 @@ AtmosphericCorrectionParameters
   m_OzoneAmount          = 0.28;
   m_AerosolModel         = CONTINENTAL;
   m_AerosolOptical       = 0.2;
+  m_AeronetFileName      = "";
+  m_Day                  = 1;
+  m_Month                = 1;
  
 }
 
@@ -69,24 +72,12 @@ void
 AtmosphericCorrectionParameters
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  /*os << "Solar zenithal angle  : " << m_SolarZenithalAngle << std::endl; CHRIS
-  os << "Solar azimutal angle  : " << m_SolarAzimutalAngle << std::endl;
-  os << "Viewing zenithal angle: " << m_ViewingZenithalAngle << std::endl;
-  os << "Viewing azimutal angle: " << m_ViewingAzimutalAngle << std::endl;
-  os << "Month                 : " << m_Month << std::endl;
-  os << "Day                   : " << m_Day << std::endl;*/ 
+
   os << "Atmospheric pressure  : " << m_AtmosphericPressure << std::endl;
   os << "Water vapor amount    : " << m_WaterVaporAmount << std::endl;
   os << "Ozone amount          : " << m_OzoneAmount << std::endl;
   os << "Aerosol model         : " << m_AerosolModel << std::endl;
   os << "Aerosol optical       : " << m_AerosolOptical << std::endl;
 
-  // Function values print :
-  /*os << "Filter function values: " << std::endl;  CHRIS
-  for (unsigned int i = 0; i < m_WavelengthSpectralBand->Size(); ++i)
-    {
-    os << indent << "Channel " << i + 1 << " : " << std::endl;
-    os << indent << m_WavelengthSpectralBand->GetNthElement(i) << std::endl;
-    }*/
 }
 } // end namespace otb

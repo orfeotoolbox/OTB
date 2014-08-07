@@ -34,12 +34,11 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
  m_IsSetAtmosphericRadiativeTerms(false),
  m_IsSetAtmoCorrectionParameters(false),
  m_IsSetAcquiCorrectionParameters(false),
- m_UseGenerateParameters(true),
- m_AtmosphericRadiativeTerms(NULL),
- m_AtmoCorrectionParameters(NULL), 
- m_AcquiCorrectionParameters(NULL)
+ m_UseGenerateParameters(true)
  {
-
+    m_AtmosphericRadiativeTerms = AtmosphericRadiativeTermsType::New();
+    m_AtmoCorrectionParameters  = AtmoCorrectionParametersType::New();
+    m_AcquiCorrectionParameters = AcquiCorrectionParametersType::New();
  }
 
 template <class TInputImage, class TOutputImage>
@@ -97,14 +96,30 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
         {
           itkExceptionMacro(<< "Atmospheric correction parameters must be provided before updating the atmospheric radiative terms");
         }
+          
+
+  // load filter function values
+  bool SetFilterFunctionValuesFileName=false;
+  if (m_AcquiCorrectionParameters->GetFilterFunctionValuesFileName() != "")
+    {
+      m_AcquiCorrectionParameters->LoadFilterFunctionValue();
+      SetFilterFunctionValuesFileName=true;
+    }
+
+
+  MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
+  OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+
+
+  if (m_AtmoCorrectionParameters->GetAeronetFileName() != "")
+    m_AtmoCorrectionParameters->UpdateAeronetData(imageMetadataInterface->GetYear(),
+                                              imageMetadataInterface->GetHour(),
+                                              imageMetadataInterface->GetMinute());
 
 
   // Acquisition parameters
   if (!m_IsSetAcquiCorrectionParameters) // Get info from image metadata interface
       {
-          MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
-          OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
-
           m_AcquiCorrectionParameters = AcquiCorrectionParametersType::New();
 
           m_AcquiCorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation());
@@ -115,24 +130,29 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
           m_AcquiCorrectionParameters->SetDay(imageMetadataInterface->GetDay());
           m_AcquiCorrectionParameters->SetMonth(imageMetadataInterface->GetMonth());
 
-          if (imageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
-                {
-                    m_AcquiCorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());
-                    
-                }
-          else
-                {
-                    otbMsgDevMacro(<< "use dummy filter");
-                    WavelengthSpectralBandVectorType spectralDummy;
-                    spectralDummy->Clear();
-                    for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
-                      {
-                        spectralDummy->PushBack(FilterFunctionValuesType::New());
-                      }
-                    m_AcquiCorrectionParameters->SetWavelengthSpectralBand(spectralDummy);
-                }
+
+          if (!SetFilterFunctionValuesFileName)
+          {
+            if (imageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
+                  {
+                      m_AcquiCorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());  
+                  }
+            else
+                  {
+                      otbMsgDevMacro(<< "use dummy filter");
+                      WavelengthSpectralBandVectorType spectralDummy;
+                      spectralDummy->Clear();
+                      for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
+                        {
+                          spectralDummy->PushBack(FilterFunctionValuesType::New());
+                        }
+                      m_AcquiCorrectionParameters->SetWavelengthSpectralBand(spectralDummy);
+                  }
+          }
 
       }
+
+
 
   m_AtmosphericRadiativeTerms = CorrectionParametersToRadiativeTermsType::Compute(m_AtmoCorrectionParameters,m_AcquiCorrectionParameters);
 

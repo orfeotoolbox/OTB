@@ -38,6 +38,7 @@ ImageMetadataCorrectionParameters
   m_Month                = 0;
   m_Day                  = 0;
   m_Year                 = 0;
+  m_FilterFunctionValuesFileName = "";
   
   m_WavelengthSpectralBand = InternalWavelengthSpectralBandVectorType::New();
   m_WavelengthSpectralBand->Clear();

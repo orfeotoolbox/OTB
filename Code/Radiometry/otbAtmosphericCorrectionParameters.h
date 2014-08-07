@@ -90,10 +90,13 @@ public:
   itkGetMacro(AerosolOptical, double);
 
   
+  /** Get/Set Aeronet file name. */
+  itkSetMacro(AeronetFileName, std::string);
+  itkGetMacro(AeronetFileName, std::string);
+
 
   /** Read the aeronet data and extract aerosol optical and water vapor amount. */
   void ReadAeronetData(const std::string& file, int year, int month, int day, int hour, int minute, double epsi);
-
 
 
   void UpdateAeronetData(const std::string& file, int year, int month, int day, int hour, int minute, double epsi);
@@ -101,6 +104,23 @@ public:
   {
     this->UpdateAeronetData(file, year, month, day, hour, minute, 0.4);
   }
+  void UpdateAeronetData(int year, int month, int day, int hour, int minute, double epsi)
+  {
+    this->UpdateAeronetData(m_AeronetFileName, year, month, day, hour, minute, epsi);
+  }
+  void UpdateAeronetData(int year, int month, int day, int hour, int minute)
+  {
+    this->UpdateAeronetData(m_AeronetFileName, year, month, day, hour, minute, 0.4);
+  }
+  void UpdateAeronetData(const std::string& file, int year, int hour, int minute)
+  {
+    this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, 0.4);
+  }
+  void UpdateAeronetData(int year, int hour, int minute)
+  {
+    this->UpdateAeronetData(m_AeronetFileName, year, m_Month, m_Day, hour, minute, 0.4);
+  }
+
   /*void UpdateAeronetData(const std::string& file, int year, int hour, int minute, double epsi) CHRIS
   {
     this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, epsi);
@@ -123,7 +143,12 @@ protected:
 private:
   AtmosphericCorrectionParameters(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
+  /** Path to an Aeronet data file, allows to compute aerosol optical and water vapor amounts. */
+  std::string m_AeronetFileName;
+  /** Day */
+  int m_Day;
+  /** Month */
+  int m_Month;
   /** The Atmospheric pressure */
   double m_AtmosphericPressure;
   /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */

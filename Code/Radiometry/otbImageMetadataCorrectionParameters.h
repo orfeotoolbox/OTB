@@ -95,6 +95,10 @@ public:
   */
   itkSetMacro(Year, unsigned int);
   itkGetMacro(Year, unsigned int);
+
+  /** Get/Set FilterFunction file name. */
+  itkSetMacro(FilterFunctionValuesFileName, std::string);
+  itkGetMacro(FilterFunctionValuesFileName, std::string);
  
   /**
    * Set/Get the wavelength spectral band.
@@ -128,6 +132,10 @@ public:
    * Read a file that contains filter function values on the 6S format.
    */
   void LoadFilterFunctionValue(const std::string& filename);
+  void LoadFilterFunctionValue()
+  {
+    this->LoadFilterFunctionValue(m_FilterFunctionValuesFileName);
+  }
 
   /** Constructor */
   ImageMetadataCorrectionParameters();
@@ -157,6 +165,7 @@ private:
   unsigned int m_Day;
   /** The Year */
   unsigned int m_Year;
+  std::string m_FilterFunctionValuesFileName;
  
   /** Wavelength for the each spectral band definition */
   WavelengthSpectralBandVectorType m_WavelengthSpectralBand;
