@@ -47,8 +47,8 @@ SurfaceAdjacencyEffectCorrectionSchemeFilter<TInputImage, TOutputImage>
  m_IsSetAtmosphericRadiativeTerms(false),
  m_IsSetAtmoCorrectionParameters(false),
  m_IsSetAcquiCorrectionParameters(false),
- m_FunctorParametersHaveBeenComputed(false),
  m_WindowRadius(1),
+ m_FunctorParametersHaveBeenComputed(false),
  m_PixelSpacingInKilometers(1.),
  m_ZenithalViewingAngle(361.)
 {

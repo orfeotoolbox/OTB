@@ -58,7 +58,7 @@ namespace Wrapper
 {
 
 CommandLineLauncher::CommandLineLauncher() :
-  /*m_Expression(""),*/ m_WatcherList(), m_ReportProgress(true), m_MaxKeySize(0),m_VExpression()
+  /*m_Expression(""),*/m_VExpression(), m_WatcherList(), m_ReportProgress(true), m_MaxKeySize(0)
 {
   m_Application = NULL;
   m_Parser = CommandLineParser::New();

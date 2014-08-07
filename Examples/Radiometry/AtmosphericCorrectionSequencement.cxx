@@ -58,7 +58,7 @@
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
-#include "otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.h"
+#include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -71,7 +71,8 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbAtmosphericCorrectionParameters.h"
-#include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+#include "otbImageMetadataCorrectionParameters.h"
+#include "otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericRadiativeTerms.h"
 // Software Guide : EndCodeSnippet
 
@@ -265,17 +266,17 @@ int main(int argc, char *argv[])
 
 //-------------------------------
 // Software Guide : BeginLatex
-//
+// TODO : need an update
 // At this step of the chain, radiometric informations are nedeed. Those informations
 // will be computed from different parameters stored in a
 // \doxygen{otb}{AtmosphericCorrectionParameters} class intance.
 // This {\em container} will be given to an
-// \doxygen{otb}{AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}
+// \doxygen{otb}{RadiometryCorrectionParametersToAtmosphericRadiativeTerms}
 // class instance which will call a 6S routine that will compute the needed
 // radiometric informations and store them in a
 // \doxygen{otb}{AtmosphericRadiativeTerms} class instance.
 // For this,
-// \doxygen{otb}{AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}
+// \doxygen{otb}{RadiometryCorrectionParametersToAtmosphericRadiativeTerms}
 // \doxygen{otb}{AtmosphericCorrectionParameters} and
 // \doxygen{otb}{AtmosphericRadiativeTerms}
 // types are defined and instancied.
@@ -283,11 +284,14 @@ int main(int argc, char *argv[])
 // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
-  AtmosphericCorrectionParametersTo6SRadiativeTermsType;
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms
+  RadiometryCorrectionParametersToRadiativeTermsType;
 
   typedef otb::AtmosphericCorrectionParameters
   AtmosphericCorrectionParametersType;
+
+  typedef otb::ImageMetadataCorrectionParameters
+  AcquisitionCorrectionParametersType;
 
   typedef otb::AtmosphericRadiativeTerms
   AtmosphericRadiativeTermsType;
@@ -302,6 +306,9 @@ int main(int argc, char *argv[])
   AtmosphericCorrectionParametersType::Pointer
     dataAtmosphericCorrectionParameters =
     AtmosphericCorrectionParametersType::New();
+  AcquisitionCorrectionParametersType::Pointer
+    dataAcquisitionCorrectionParameters =
+    AcquisitionCorrectionParametersType::New();
   AtmosphericRadiativeTermsType::Pointer dataAtmosphericRadiativeTerms =
     AtmosphericRadiativeTermsType::New();
 
@@ -336,7 +343,7 @@ int main(int argc, char *argv[])
     functionValues->SetMinSpectralValue(minSpectralValue);
     functionValues->SetMaxSpectralValue(maxSpectralValue);
     functionValues->SetUserStep(userStep);
-    dataAtmosphericCorrectionParameters->SetWavelengthSpectralBandWithIndex(
+    dataAcquisitionCorrectionParameters->SetWavelengthSpectralBandWithIndex(
       i,
       functionValues);
     }
@@ -344,7 +351,7 @@ int main(int argc, char *argv[])
   fin.close();
 
   // Software Guide : BeginLatex
-  //
+  // TODO : need an update
   // The \doxygen{otb}{AtmosphericCorrectionParameters} class needs several parameters :
   //  \begin{itemize}
   // \item The zenithal and azimutal solar angles that describe the solar incidence
@@ -370,21 +377,21 @@ int main(int argc, char *argv[])
 
   // Set parameters
   // Software Guide : BeginCodeSnippet
-  dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(
+  dataAcquisitionCorrectionParameters->SetSolarZenithalAngle(
     static_cast<double>(atof(argv[6])));
 
-  dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(
+  dataAcquisitionCorrectionParameters->SetSolarAzimutalAngle(
     static_cast<double>(atof(argv[9])));
 
-  dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(
+  dataAcquisitionCorrectionParameters->SetViewingZenithalAngle(
     static_cast<double>(atof(argv[10])));
 
-  dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(
+  dataAcquisitionCorrectionParameters->SetViewingAzimutalAngle(
     static_cast<double>(atof(argv[11])));
 
-  dataAtmosphericCorrectionParameters->SetMonth(atoi(argv[8]));
+  dataAcquisitionCorrectionParameters->SetMonth(atoi(argv[8]));
 
-  dataAtmosphericCorrectionParameters->SetDay(atoi(argv[7]));
+  dataAcquisitionCorrectionParameters->SetDay(atoi(argv[7]));
 
   dataAtmosphericCorrectionParameters->SetAtmosphericPressure(
     static_cast<double>(atof(argv[12])));
@@ -408,20 +415,16 @@ int main(int argc, char *argv[])
   //
   // Once those parameters are loaded and stored in the AtmosphericCorrectionParameters
   // instance class, it is given in input of an instance of
-  // AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms that will compute
+  // RadiometryCorrectionParametersToAtmosphericRadiativeTerms that will compute
   // the needed radiometric informations.
   //
   // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer
-    filterAtmosphericCorrectionParametersTo6SRadiativeTerms =
-    AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
-
-  filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput(
-    dataAtmosphericCorrectionParameters);
-
-  filterAtmosphericCorrectionParametersTo6SRadiativeTerms->Update();
+  AtmosphericRadiativeTermsType::Pointer atmosphericRadiativeTerms =
+    RadiometryCorrectionParametersToRadiativeTermsType::Compute(
+      dataAtmosphericCorrectionParameters,
+      dataAcquisitionCorrectionParameters);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -481,20 +484,19 @@ int main(int argc, char *argv[])
   // \item $T(\mu_{S})$ is the downward transmittance;
   // \item $T(\mu_{V})$ is the upward transmittance.
   // \end{itemize}
-  // All those parameters are contained in the AtmosphericCorrectionParametersTo6SRadiativeTerms
+  // All those parameters are contained in the RadiometryCorrectionParametersToRadiativeTerms
   // output.
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   filterReflectanceToSurfaceReflectanceImageFilter->
-  SetAtmosphericRadiativeTerms(
-    filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
+    SetAtmosphericRadiativeTerms(atmosphericRadiativeTerms);
   // Software Guide : EndCodeSnippet
 
 //-------------------------------
 // Software Guide : BeginLatex
 // Next (and last step) is the neighborhood correction.
-// For this, the SurfaceAdjacencyEffect6SCorrectionSchemeFilter class is used.
+// For this, the SurfaceAdjacencyEffectCorrectionSchemeFilter class is used.
 // The previous surface reflectance inversion is performed under the assumption of a
 // homogeneous ground environment. The following step allows to correct the adjacency
 // effect on the radiometry of pixels. The method is based on the decomposition of
@@ -525,37 +527,36 @@ int main(int argc, char *argv[])
 // \end{itemize}
 // \end{itemize}
 // The neighborhood consideration window size is given by the window radius.
-// An instance of \doxygen{otb}{SurfaceAdjacencyEffect6SCorrectionSchemeFilter} is created.
+// An instance of \doxygen{otb}{SurfaceAdjacencyEffectCorrectionSchemeFilter} is created.
 // Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<ImageType,
+  typedef otb::SurfaceAdjacencyEffectCorrectionSchemeFilter<ImageType,
       ImageType>
-  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
-  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::Pointer
-    filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter
-    = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
+  SurfaceAdjacencyEffectCorrectionSchemeFilterType;
+  SurfaceAdjacencyEffectCorrectionSchemeFilterType::Pointer
+    filterSurfaceAdjacencyEffectCorrectionSchemeFilter
+    = SurfaceAdjacencyEffectCorrectionSchemeFilterType::New();
   //  Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
   // The needs four input informations:
   // \begin{itemize}
-  // \item Radiometric informations (the output of the AtmosphericCorrectionParametersTo6SRadiativeTerms filter);
+  // \item Radiometric informations (the output of the RadiometryCorrectionParametersToRadiativeTerms filter);
   // \item The zenithal viewing angle;
   // \item The neighborhood window radius;
   // \item The pixel spacing in kilometers.
   // \end{itemize}
   //
   // Software Guide : EndLatex
-  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->
-  SetAtmosphericRadiativeTerms(
-    filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
-  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
-    dataAtmosphericCorrectionParameters->GetViewingZenithalAngle());
-  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv
+  filterSurfaceAdjacencyEffectCorrectionSchemeFilter->
+    SetAtmosphericRadiativeTerms(atmosphericRadiativeTerms);
+  filterSurfaceAdjacencyEffectCorrectionSchemeFilter->SetZenithalViewingAngle(
+    dataAcquisitionCorrectionParameters->GetViewingZenithalAngle());
+  filterSurfaceAdjacencyEffectCorrectionSchemeFilter->SetWindowRadius(atoi(argv
                                                                              [17]));
-  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->
+  filterSurfaceAdjacencyEffectCorrectionSchemeFilter->
   SetPixelSpacingInKilometers(static_cast<double>(atof(argv[18])));
 
 //-------------------------------
@@ -575,11 +576,11 @@ int main(int argc, char *argv[])
   filterLuminanceToReflectance->SetInput(filterImageToLuminance->GetOutput());
   filterReflectanceToSurfaceReflectanceImageFilter->SetInput(
     filterLuminanceToReflectance->GetOutput());
-  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(
+  filterSurfaceAdjacencyEffectCorrectionSchemeFilter->SetInput(
     filterReflectanceToSurfaceReflectanceImageFilter->GetOutput());
 
   writer->SetInput(
-    filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
+    filterSurfaceAdjacencyEffectCorrectionSchemeFilter->GetOutput());
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

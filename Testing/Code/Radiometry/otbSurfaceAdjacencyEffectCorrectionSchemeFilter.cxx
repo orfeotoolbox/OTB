@@ -49,21 +49,21 @@ int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int argc, char * argv[])
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
 
   typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
-  typedef typename AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
+  typedef AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
   typedef AtmoCorrectionParametersType::AerosolModelType                    AerosolModelType;
 
   typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
-  typedef typename AcquiCorrectionParametersType::Pointer                   AcquiCorrectionParametersPointerType;
+  typedef AcquiCorrectionParametersType::Pointer                   AcquiCorrectionParametersPointerType;
 
   typedef otb::AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
-  typedef typename AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
+  typedef AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
   typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
 
   typedef otb::FilterFunctionValues                                     FilterFunctionValuesType;
   typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
   typedef FilterFunctionValuesType::ValuesVectorType                    ValuesVectorType;         //std::vector<float>
 
-  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
+  typedef AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
 
 
   AcquiCorrectionParametersPointerType paramAcqui = AcquiCorrectionParametersType::New();
