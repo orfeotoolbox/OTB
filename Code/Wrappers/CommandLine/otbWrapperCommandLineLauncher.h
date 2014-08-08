@@ -88,7 +88,7 @@ public:
   bool Load( const std::string & exp );
   
     /** same as Load method but set the expression before. */
-  bool Load( std::vector<std::string> vexp);
+  bool Load(const std::vector<std::string> &vexp);
 
   /** Launch the process, using the Execute application method
    * The method will check if the user asked for help (looking at

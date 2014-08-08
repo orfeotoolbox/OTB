@@ -99,7 +99,7 @@ bool CommandLineLauncher::Load(const std::string & exp)
   return false;
 }
 
-bool CommandLineLauncher::Load(std::vector<std::string> vexp)
+bool CommandLineLauncher::Load(const std::vector<std::string> &vexp)
 {
   m_VExpression = vexp;
   return this->Load();
@@ -907,18 +907,13 @@ bool CommandLineLauncher::CheckKeyValidity(std::string& refKey)
   appKeyList.push_back("testenv");
   appKeyList.push_back("version");
 
-  std::cout<< "toto" << std::endl;
-
   // Check if each key in the expression exists in the application
   for (unsigned int i = 0; i < expKeyList.size(); i++)
     {
-    //remove first character
-    std::cout<< "expKey= " <<  expKeyList[i] << std::endl;
-    refKey = expKeyList[i].substr(1,expKeyList[i].length()-1);
+    refKey = expKeyList[i];
     bool keyExist = false;
     for (unsigned int j = 0; j < appKeyList.size(); j++)
       {
-      std::cout<< "appKey= " <<  appKeyList[j] << std::endl;
       if (refKey == appKeyList[j])
         {
         keyExist = true;
