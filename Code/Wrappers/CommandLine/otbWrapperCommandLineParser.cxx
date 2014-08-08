@@ -48,7 +48,7 @@ CommandLineParser::GetPathsAsString(const std::vector<std::string> & vexp )
   if (this->GetPaths(pathList,vexp) == OK)
     {
     std::vector<std::string>::iterator it;
-    for (it=pathList.begin() ; it!=pathList.end() ; ++it)
+    for (it=pathList.begin(); it!=pathList.end(); ++it)
       {
       if (!res.empty())
         {
@@ -450,7 +450,7 @@ CommandLineParser::IsAttributExists( const std::string key, const std::string & 
 bool
 CommandLineParser::IsAttributExists( const std::string key, const std::vector<std::string> & exp  )
 {
-  for (std::vector<std::string>::const_iterator it = exp.begin() ; it != exp.end(); ++it)
+  for (std::vector<std::string>::const_iterator it = exp.begin(); it != exp.end(); ++it)
     {
     if (it->compare(key) == 0)
       return true;
@@ -462,7 +462,7 @@ std::vector<std::string>
 CommandLineParser::GetKeyList( const std::vector<std::string> & exp  )
 {
   std::vector<std::string> keyList;
-  for (std::vector<std::string>::const_iterator it = exp.begin() ; it != exp.end(); ++it)
+  for (std::vector<std::string>::const_iterator it = exp.begin(); it != exp.end(); ++it)
     {
     if (it->find("-") == 0)
       {
