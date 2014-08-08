@@ -905,7 +905,7 @@ add_test(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
         3 3 3 3 # upward transmittance
        )
 
-add_test(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
+add_test(raTvReflectanceToSurfaceReflectanceImageFilter2 ${RADIOMETRY_TESTS3}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter2.tif
                               ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.tif
         otbReflectanceToSurfaceReflectanceImageFilterTest2
@@ -922,7 +922,7 @@ add_test(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
 if(OTB_DATA_USE_LARGEINPUT)
 #this test was comment after the refactoring of astmospheric correction classes
 #//TODO Need to rewrite tests with baselines generated directly with 6S.
-#add_test(raTvReflectanceToSurfaceReflectanceImageFilter2 ${RADIOMETRY_TESTS3}
+#add_test(raTvReflectanceToSurfaceReflectanceImageFilter3 ${RADIOMETRY_TESTS3}
 #  --compare-ascii ${EPSILON_12}  ${BASELINE_FILES}/raTvReflectanceToSurfaceReflectanceImageFilter2.txt
 #                              ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.txt
 #        otbReflectanceToSurfaceReflectanceImageFilterTest2
