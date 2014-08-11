@@ -92,6 +92,11 @@ CommandLineParser::GetPathsAsString( const std::string & exp )
 CommandLineParser::ParseResultType
 CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::vector<std::string> & exp )
 {
+  if (exp.empty())
+    {
+    return NOMODULEPATH;
+    }
+
   // The first element must be the module name, non " -" allowed.
   // The module path list elements are the strings between the first
   // element and the first key (ie. string which begins with "-").
@@ -180,6 +185,11 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
 CommandLineParser::ParseResultType
 CommandLineParser::GetModuleName( std::string & modName, const std::vector<std::string> & exp )
 {
+  if (exp.empty())
+    {
+    return NOMODULENAME;
+    }
+
   itksys::RegularExpression reg;
   reg.compile("([^0-9a-zA-Z])");
   // The first element must be the module path, non " -" allowed.
@@ -521,19 +531,27 @@ CommandLineParser::IsAValidKey( const std::string & foundKey )
   tmp.append(".");
 
   // To be a key, the string must be a serie of groups separated by dots so that :
-  // - each group begins with an lower case letter
+  // - each group has at least one character
   // - each group contains only alphanumeric characters (and lowercase)
-  // This also implies that each group is not empty and that the key doesn't
-  // start with a dot. These conditions shouldn't match any number even in
-  // scientific notation.
+  // - there is at least one group
   // The following regular expression says just that
   itksys::RegularExpression reg;
-  reg.compile("^([a-z][a-z0-9]*\\.)+$");
+  reg.compile("^([a-z0-9]+\\.)+$");
   if( reg.find(tmp) )
     {
     res = true;
     }
 
+  // a second test is performed to detect negative numbers (even in 
+  // scientific notation). Any key that matches the search pattern for a 
+  // number is considered not valid.
+  itksys::RegularExpression regNum;
+  regNum.compile("^([0-9]+(\\.[0-9]*)?([eE][+-]?[0-9]+)?)$");
+  if( regNum.find(foundKey) )
+    {
+    res = false;
+    }
+  
   return res;
 }
 
