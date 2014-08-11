@@ -14,28 +14,28 @@ add_test(NAME clTuWrapperCommandLineParserNew
 add_test(NAME clTvWrapperCommandLineParserTest_GetAtt
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest1
                  "-key"
-                 "this is a line test to extract -key name1 name2" )
+                 "this" "is" "a" "line" "test" "to" "extract" "-key" "name1" "name2" )
 
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExists_Wrong
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest3
                     "-m"
-                    " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape " )
+                    "TrainImagesClassifier" "test" "-il" "QB_1_ortho.tif" "-vd" "vd" ".shape" )
 
 
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExists
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest4
                  "-m"
-                 " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape -m name")
+                 "TrainImagesClassifier" "test" "-il" "QB_1_ortho.tif" "-vd" "vd" ".shape" "-m" "name")
 
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExistsEnd
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest4
                  "-m"
-                 " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape -m name")
+                 "TrainImagesClassifier" "test" "-il" "QB_1_ortho.tif" "-vd" "vd" ".shape" "-m" "name")
 
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExistsEndNoParam
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest4
                  "-m"
-                 " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape test -m")
+                 "TrainImagesClassifier" "test" "-il" "QB_1_ortho.tif" "-vd" "vd" ".shape" "test" "-m")
 
 add_test(NAME clTvWrapperCommandLineParserTest_GetAttWithoutValue
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest1

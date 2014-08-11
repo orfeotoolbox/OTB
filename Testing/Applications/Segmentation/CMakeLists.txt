@@ -60,17 +60,17 @@ OTB_TEST_APPLICATION(NAME     apTvSeHooverCompareSegmentationTest
 #--- Segmentation ---#
 
 # Segmentation algorithms parameters
-set(cc_parameters "-filter.cc.expr distance<25")
-set(edison_parameters "-filter.edison.spatialr 5 -filter.edison.ranger 50 -filter.edison.minsize 10")
-set(meanshift_parameters "-filter.meanshift.spatialr 5 -filter.meanshift.ranger 50 -filter.meanshift.minsize 10")
-set(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ovw")
+set(cc_parameters "-filter.cc.expr" "distance<25")
+set(edison_parameters "-filter.edison.spatialr" "5" "-filter.edison.ranger" "50" "-filter.edison.minsize" "10")
+set(meanshift_parameters "-filter.meanshift.spatialr" "5" "-filter.meanshift.ranger" "50" "-filter.meanshift.minsize" "10")
+set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ovw")
 
 # validation option
 set(meanshift_option "--without-threads")
 
 # Output type dependning on mode
 set(raster_output_format ".tif")
-set(raster_output_option " uint16")
+set(raster_output_option "uint16")
 set(vector_output_format ".sqlite")
 
 # Validation depending on mode
@@ -98,7 +98,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
-                              -mode.${lmode}.out ${TEMP}/${OUTFILE}${${lmode}_output_option}
+                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
                               ${${lmode}_parameters}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
@@ -115,7 +115,7 @@ set(mode "Vector")
 string(TOLOWER ${filter} lfilter)
 
 # Add a test for ULOVW
-set(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulovw")
+set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulovw")
 
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
@@ -125,7 +125,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULOVW
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
-                              -mode.${lmode}.out ${TEMP}/${OUTFILE}${${lmode}_output_option}
+                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
                               ${${lmode}_parameters}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
@@ -138,7 +138,7 @@ set_tests_properties(apTvSeSegmentation${filter}${mode}_ULOVW
                                 RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULU
-set(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulu")
+set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulu")
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                      APP      Segmentation
@@ -146,7 +146,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
-                              -mode.${lmode}.out ${TEMP}/${OUTFILE}${${lmode}_output_option}
+                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
                               ${${lmode}_parameters}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
@@ -159,7 +159,7 @@ set_tests_properties(apTvSeSegmentation${filter}${mode}_ULU
                                 RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULCO
-set(vector_parameters "-mode.vector.tilesize 500 -mode.vector.minsize 50 -mode.vector.simplify 0.1 -mode.vector.outmode ulco")
+set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulco")
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                      APP      Segmentation
@@ -167,7 +167,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
-                              -mode.${lmode}.out ${TEMP}/${OUTFILE}${${lmode}_output_option}
+                              -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
                               ${${lmode}_parameters}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
