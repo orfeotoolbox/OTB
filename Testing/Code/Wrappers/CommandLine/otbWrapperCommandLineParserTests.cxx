@@ -73,7 +73,7 @@ int otbWrapperCommandLineParserTest1(int argc, char* argv[])
 {
   ParserType::Pointer parser = ParserType::New();
   std::vector<std::string> cmdVector;
-  for (int i=2 ; i<argc ; ++i)
+  for (int i=2; i<argc; ++i)
     {
     cmdVector.push_back(std::string(argv[i]));
     }
@@ -97,7 +97,7 @@ int otbWrapperCommandLineParserTest2(int argc, char* argv[])
   std::vector<std::string> cmdVector;
   if (argc > 2)
     {
-    for (int i=1 ; i<argc ; ++i)
+    for (int i=1; i<argc; ++i)
       {
       cmdVector.push_back(std::string(argv[i]));
       }
@@ -133,7 +133,7 @@ int otbWrapperCommandLineParserTest3(int argc, char* argv[])
   std::vector<std::string> cmdVector;
   if (argc > 2)
     {
-    for (int i=2 ; i<argc ; ++i)
+    for (int i=2; i<argc; ++i)
       {
       cmdVector.push_back(std::string(argv[i]));
       }
@@ -153,7 +153,7 @@ int otbWrapperCommandLineParserTest4(int argc, char* argv[])
   std::vector<std::string> cmdVector;
   if (argc > 2)
     {
-    for (int i=2 ; i<argc ; ++i)
+    for (int i=2; i<argc; ++i)
       {
       cmdVector.push_back(std::string(argv[i]));
       }

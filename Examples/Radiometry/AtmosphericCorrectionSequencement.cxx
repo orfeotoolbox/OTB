@@ -44,14 +44,14 @@
 //
 // The manipulation of each class used for the different steps and the
 // link with the 6S radiometry library will be explained. In particular,
-// the API modifications that have been made in version 4.2 will be 
+// the API modifications that have been made in version 4.2 will be
 // detailed. There was several reasons behind these modifications :
 // \begin{itemize}
 // \item fix design issues in the framework that were causing trouble
 // when setting the atmospheric parameters
 // \item allow the computation of the radiative terms by other libraries
 // than 6S (such as SMAC method).
-// \item allow the users of the OpticalCalibration application to set 
+// \item allow the users of the OpticalCalibration application to set
 // and override each correction parameter.
 // \end{itemize}
 //
@@ -75,27 +75,27 @@
 // In version 4.2, the class \code{SurfaceAdjacencyEffect6SCorrectionSchemeFilter}
 // has been renamed into \doxygen{otb}{SurfaceAdjacencyEffectCorrectionSchemeFilter},
 // but it still does the same thing.
-// 
+//
 // This chain uses the 6S radiative
 // transfer code to compute radiative terms (for instance upward and
-// downward transmittance). The inputs needed are separated into 
+// downward transmittance). The inputs needed are separated into
 // two categories :
 // \begin{itemize}
-// \item The atmospheric correction parameters : physical parameters of the 
+// \item The atmospheric correction parameters : physical parameters of the
 // atmosphere when the image was taken (for instance : atmospheric pressure,
 // water vapour amount, aerosol data, ...). They are stored in the class
-// \footnote{Before version 4.2, this class was storing all correction 
+// \footnote{Before version 4.2, this class was storing all correction
 // parameters} \doxygen{otb}{AtmosphericCorrectionParameters}.
 // \item The acquisition correction parameters : sensor related information
 // about the way the image was taken, usualy available with the image
 // metadata (for instance : solar angles, spectral
-// sensitivity, ...). They are stored in the class 
+// sensitivity, ...). They are stored in the class
 // \doxygen{otb}{ImageMetadataCorrectionParameters}.
 // \end{itemize}
 //
 // The class \doxygen{otb}{RadiometryCorrectionParametersToAtmisphericRadiativeTerms}
-// computes the radiative terms using these two types of parameters. It 
-// contains a single static method that calls the 6S library. The header 
+// computes the radiative terms using these two types of parameters. It
+// contains a single static method that calls the 6S library. The header
 // also includes the classes to manipulate correction parameters and radiative
 // terms.
 // Software Guide : EndLatex
@@ -425,7 +425,7 @@ int main(int argc, char *argv[])
   // Software Guide : BeginLatex
   //
   // The \doxygen{otb}{AtmosphericCorrectionParameters} class stores
-  // physical parameters of the atmosphere that are not impacted 
+  // physical parameters of the atmosphere that are not impacted
   // by the viewing angles of the image :
   // \begin{itemize}
   // \item The atmospheric pressure;
@@ -461,11 +461,11 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginLatex
   //
-  // Once those parameters are loaded, they are used by the 6S library 
-  // to compute the needed radiometric informations. The 
-  // RadiometryCorrectionParametersToAtmosphericRadiativeTerms class 
+  // Once those parameters are loaded, they are used by the 6S library
+  // to compute the needed radiometric informations. The
+  // RadiometryCorrectionParametersToAtmosphericRadiativeTerms class
   // provides a static function to perform this step\footnote{Before version
-  // 4.2, it was done with the filter 
+  // 4.2, it was done with the filter
   // AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}.
   //
   // Software Guide : EndLatex
@@ -578,15 +578,15 @@ int main(int argc, char *argv[])
 // \end{itemize}
 // \end{itemize}
 // The neighborhood consideration window size is given by the window radius.
-// 
-// An instance of \doxygen{otb}{SurfaceAdjacencyEffectCorrectionSchemeFilter} 
-// is created. This class has an interface quite similar to 
-// \doxygen{otb}{ReflectanceToSurfaceReflectance}. They both need radiative terms 
-// (\doxygen{otb}{AtmosphericRadiativeTerms}), so it is possible to compute 
-// them outside the filter and set them directly in the filter. The other 
+//
+// An instance of \doxygen{otb}{SurfaceAdjacencyEffectCorrectionSchemeFilter}
+// is created. This class has an interface quite similar to
+// \doxygen{otb}{ReflectanceToSurfaceReflectance}. They both need radiative terms
+// (\doxygen{otb}{AtmosphericRadiativeTerms}), so it is possible to compute
+// them outside the filter and set them directly in the filter. The other
 // solution is to give as input the two parameters containers ("atmospheric"
 // and "acquisition" parameters), then the filter will compute the radiative
-// terms internally. If the "acquisition" correction parameters are not 
+// terms internally. If the "acquisition" correction parameters are not
 // present, the filter will try to get them from the image metadata.
 //
 // Software Guide : EndLatex

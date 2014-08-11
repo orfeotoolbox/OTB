@@ -542,8 +542,8 @@ CommandLineParser::IsAValidKey( const std::string & foundKey )
     res = true;
     }
 
-  // a second test is performed to detect negative numbers (even in 
-  // scientific notation). Any key that matches the search pattern for a 
+  // a second test is performed to detect negative numbers (even in
+  // scientific notation). Any key that matches the search pattern for a
   // number is considered not valid.
   itksys::RegularExpression regNum;
   regNum.compile("^([0-9]+(\\.[0-9]*)?([eE][+-]?[0-9]+)?)$");
