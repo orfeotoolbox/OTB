@@ -135,7 +135,11 @@ void
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GenerateData()
 {
-
+  itkExceptionMacro("This class is not compatible with the new radiometry"
+    " framework. It is kept in the sources for documentation purpose. Check"
+    " Example/Radiometry/AtmosphericCorrectionSequencement.cxx for details"
+    " on the new framework");
+#if 0
   AtmosphericCorrectionParametersPointer input = this->GetInput();
   AtmosphericRadiativeTermsPointer       output = this->GetOutput();
 
@@ -201,6 +205,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
     output->SetUpwardDiffuseTransmittanceForAerosol(i, upwardDiffuseTransmittanceForAerosol);
     output->SetWavelengthSpectralBand(i, input->GetWavelengthSpectralBand()->GetNthElement(i)->GetCenterSpectralValue());
     }
+#endif
 }
 
 /**
