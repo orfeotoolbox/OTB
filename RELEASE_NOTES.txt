@@ -10,6 +10,10 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/03/12)
     * Support SPOT6 metadata
     * Integrate improvements from Monteverdi2
     * Support clang 3.5.1
+    * API change on the TOC calibration filters, previous classes were not
+      fully functional. Now supports any correction parameters set by user.
+      See Examples/Radiometry/AtmosphericCorrectionSequencement.cxx for
+      details on the migration.
 
 * Applications:
   * Updated applications :
