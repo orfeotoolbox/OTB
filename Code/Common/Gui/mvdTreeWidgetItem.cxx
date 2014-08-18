@@ -72,8 +72,15 @@ TreeWidgetItem
                   const QVariant& id,
                   const QStringList& columns,
                   TreeWidgetItem::ItemType type ) :
+#if 1
+  QTreeWidgetItem( QStringList( text ) << QString() << columns, type )
+#else
   QTreeWidgetItem( parent, QStringList( text ) << QString() << columns, type )
+#endif
 {
+  assert( parent!=NULL );
+  parent->addChild( this );
+
   SetId( id );
 
   switch( type )

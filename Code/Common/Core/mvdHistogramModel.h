@@ -275,13 +275,13 @@ private slots:
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbStreamingHistogramVectorImageFilter.h"
 #include "otbStreamingMinMaxVectorImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
 #include "Core/mvdAbstractImageModel.h"
-#include "Core/mvdStreamingHistogramVectorImageFilter.h"
 
 namespace mvd
 {
