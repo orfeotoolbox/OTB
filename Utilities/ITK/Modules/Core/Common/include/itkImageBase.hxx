@@ -53,6 +53,13 @@ ImageBase< VImageDimension >
   m_PhysicalPointToIndex.SetIdentity();
 }
 
+template< unsigned int VImageDimension >
+void
+ImageBase< VImageDimension >
+::Allocate(bool)
+{
+}
+
 /**
  *
  */
@@ -302,16 +309,7 @@ ImageBase< VImageDimension >
   if ( data )
     {
     // Attempt to cast data to an ImageBase
-    const ImageBase< VImageDimension > *imgData;
-
-    try
-      {
-      imgData = dynamic_cast< const ImageBase< VImageDimension > * >( data );
-      }
-    catch ( ... )
-      {
-      return;
-      }
+    const ImageBase< VImageDimension > * const imgData = dynamic_cast< const ImageBase< VImageDimension > * >( data );
 
     if ( imgData )
       {
@@ -341,16 +339,7 @@ ImageBase< VImageDimension >
 {
   typedef ImageBase< VImageDimension > ImageBaseType;
 
-  const ImageBaseType *image;
-
-  try
-    {
-    image = dynamic_cast< const ImageBaseType * >( data );
-    }
-  catch ( ... )
-    {
-    return;
-    }
+  const ImageBaseType *image = dynamic_cast< const ImageBaseType * >( data );
 
   if ( !image )
     {

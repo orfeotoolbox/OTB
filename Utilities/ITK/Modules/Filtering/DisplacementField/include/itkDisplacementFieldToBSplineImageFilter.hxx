@@ -43,7 +43,7 @@ DisplacementFieldToBSplineImageFilter<TInputImage, TOutputImage>
   this->m_NumberOfFittingLevels.Fill( 1 );
   this->m_NumberOfControlPoints.Fill( 4 );
 
-  this->m_DisplacementFieldControlPointLattice = NULL;
+  this->m_DisplacementFieldControlPointLattice = ITK_NULLPTR;
 }
 
 template<typename TInputImage, typename TOutputImage>
@@ -83,9 +83,6 @@ DisplacementFieldToBSplineImageFilter<TInputImage, TOutputImage>
 
   typename PointSetType::Pointer fieldPoints = PointSetType::New();
   fieldPoints->Initialize();
-
-  typedef typename ImporterType::OutputImageType        ImporterOutputImageType;
-  typedef typename ImporterOutputImageType::RegionType  ImporterRegionType;
 
   typedef typename InputFieldType::PointType InputFieldPointType;
   typedef ContinuousIndex<typename InputFieldPointType::CoordRepType, ImageDimension> ContinuousIndexType;

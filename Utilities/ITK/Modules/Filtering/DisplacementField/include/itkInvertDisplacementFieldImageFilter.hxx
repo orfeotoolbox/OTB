@@ -23,7 +23,7 @@
 #include "itkComposeDisplacementFieldsImageFilter.h"
 #include "itkImageDuplicator.h"
 #include "itkImageRegionIterator.h"
-#include "itkVectorLinearInterpolateImageFunction.h"
+#include "itkMutexLockHolder.h"
 
 namespace itk
 {
@@ -34,19 +34,20 @@ namespace itk
 template<typename TInputImage, typename TOutputImage>
 InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
 ::InvertDisplacementFieldImageFilter() :
- m_MaximumNumberOfIterations( 20 ),
- m_MaxErrorToleranceThreshold( 0.1 ),
- m_MeanErrorToleranceThreshold( 0.001 )
+  m_Interpolator(DefaultInterpolatorType::New()),
+  m_MaximumNumberOfIterations(20),
+  m_MaxErrorToleranceThreshold(0.1),
+  m_MeanErrorToleranceThreshold(0.001),
+
+  m_ComposedField(DisplacementFieldType::New()),
+  m_ScaledNormImage(RealImageType::New()),
+  m_MaxErrorNorm(0.0),
+  m_MeanErrorNorm(0.0),
+  m_Epsilon(0.0),
+  m_DoThreadedEstimateInverse(false),
+  m_EnforceBoundaryCondition(true)
 {
   this->SetNumberOfRequiredInputs( 1 );
-
-  typedef VectorLinearInterpolateImageFunction <InputFieldType, RealType> DefaultInterpolatorType;
-  typename DefaultInterpolatorType::Pointer interpolator = DefaultInterpolatorType::New();
-  this->m_Interpolator = interpolator;
-
-  this->m_ComposedField = DisplacementFieldType::New();
-  this->m_ScaledNormImage = RealImageType::New();
-  this->m_EnforceBoundaryCondition = true;
 }
 
 template<typename TInputImage, typename TOutputImage>
@@ -109,8 +110,9 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
 
   this->m_ScaledNormImage->CopyInformation( displacementField );
   this->m_ScaledNormImage->SetRegions( displacementField->GetRequestedRegion() );
-  this->m_ScaledNormImage->Allocate();
-  this->m_ScaledNormImage->FillBuffer( 0.0 );
+  this->m_ScaledNormImage->Allocate(true); // initialize
+                                                                  // buffer
+                                                                  // to zero
 
   SizeValueType numberOfPixelsInRegion = ( displacementField->GetRequestedRegion() ).GetNumberOfPixels();
   this->m_MaxErrorNorm = NumericTraits<RealType>::max();
@@ -211,6 +213,8 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
   else
     {
     VectorType inverseSpacing;
+    RealType localMean = NumericTraits<RealType>::Zero;
+    RealType localMax  = NumericTraits<RealType>::Zero;
     for( unsigned int d = 0; d < ImageDimension; ++d )
       {
       inverseSpacing[d]=1.0/this->m_DisplacementFieldSpacing[d];
@@ -223,16 +227,24 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
         {
         scaledNorm += vnl_math_sqr( displacement[d] * inverseSpacing[d] );
         }
-      scaledNorm = vcl_sqrt( scaledNorm );
+      scaledNorm = std::sqrt( scaledNorm );
 
-      this->m_MeanErrorNorm += scaledNorm;
-      if( this->m_MaxErrorNorm < scaledNorm )
+      localMean += scaledNorm;
+      if( localMax < scaledNorm )
         {
-        this->m_MaxErrorNorm = scaledNorm;
+        localMax = scaledNorm;
         }
 
       ItS.Set( scaledNorm );
       ItE.Set( -displacement );
+      }
+      {
+      MutexLockHolder<SimpleFastMutexLock> holder(m_Mutex);
+      this->m_MeanErrorNorm += localMean;
+      if( this->m_MaxErrorNorm < localMax )
+        {
+        this->m_MaxErrorNorm = localMax;
+        }
       }
     }
 }
@@ -244,8 +256,7 @@ InvertDisplacementFieldImageFilter<TInputImage, TOutputImage>
 {
   Superclass::PrintSelf( os, indent );
 
-  os << "Interpolator:" << std::endl;
-  this->m_Interpolator->Print( os, indent );
+  itkPrintSelfObjectMacro( Interpolator );
 
   os << "Maximum number of iterations: " << this->m_MaximumNumberOfIterations << std::endl;
   os << "Max error tolerance threshold: " << this->m_MaxErrorToleranceThreshold << std::endl;

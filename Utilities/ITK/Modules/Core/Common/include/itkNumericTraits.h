@@ -26,30 +26,30 @@
 #define itkNUMERIC_TRAITS_MIN_MAX_MACRO()          \
   static ValueType min()                           \
     {                                              \
-    return vcl_numeric_limits< ValueType >::min(); \
+    return std::numeric_limits< ValueType >::min(); \
     }                                              \
   static ValueType max()                           \
     {                                              \
-    return vcl_numeric_limits< ValueType >::max(); \
+    return std::numeric_limits< ValueType >::max(); \
     }                                              \
   static ValueType min(ValueType)                  \
     {                                              \
-    return vcl_numeric_limits< ValueType >::min(); \
+    return std::numeric_limits< ValueType >::min(); \
     }                                              \
   static ValueType max(ValueType)                  \
     {                                              \
-    return vcl_numeric_limits< ValueType >::max(); \
+    return std::numeric_limits< ValueType >::max(); \
     }                                              \
 
 
-#include "vcl_limits.h" // for vcl_numeric_limits
+#include "vcl_limits.h" // for std::numeric_limits
 #include <complex>
 
 namespace itk
 {
 
 // forward decare to avoid circular dependencies
-template< typename TValueType, unsigned int VLength>  class FixedArray;
+template< typename TValue, unsigned int VLength>  class FixedArray;
 
 /** \class NumericTraits
  * \brief Define additional traits for native types such as int or float.
@@ -67,11 +67,11 @@ template< typename TValueType, unsigned int VLength>  class FixedArray;
  * \endwiki
  */
 template< typename T >
-class NumericTraits:public vcl_numeric_limits< T >
+class NumericTraits:public std::numeric_limits< T >
 {
 public:
   /** The type of this limits trait object. */
-  typedef vcl_numeric_limits< T > TraitsType;
+  typedef std::numeric_limits< T > TraitsType;
 
   /** Return the type of this native type. */
   typedef T ValueType;
@@ -79,7 +79,7 @@ public:
   /** Return the type that can be printed. */
   typedef T PrintType;
 
-  /** Return value of vcl_abs(). */
+  /** Return value of std::abs(). */
   typedef T AbsType;
 
   /** Accumulation of addition and multiplication. */
@@ -142,12 +142,13 @@ public:
    * VariableLengthVector will provide a different implementation
    * where a vector of the correct size is built.
    */
-  static void SetLength(T &, const unsigned int s)
+  static void SetLength(T & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
   /** Return the length of the scalar. This API is needed for
    * VariableLengthVector because
@@ -209,7 +210,7 @@ public:
  */
 
 template< >
-class NumericTraits< bool > :public vcl_numeric_limits< bool >
+class NumericTraits< bool > :public std::numeric_limits< bool >
 {
 public:
   typedef bool                     ValueType;
@@ -246,12 +247,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 
 };
@@ -262,7 +264,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< char > :public vcl_numeric_limits< char >
+class NumericTraits< char > :public std::numeric_limits< char >
 {
 public:
   typedef char                     ValueType;
@@ -300,12 +302,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -315,7 +318,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< signed char > :public vcl_numeric_limits< signed char >
+class NumericTraits< signed char > :public std::numeric_limits< signed char >
 {
 public:
   typedef signed char              ValueType;
@@ -352,12 +355,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -367,7 +371,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< unsigned char > :public vcl_numeric_limits< unsigned char >
+class NumericTraits< unsigned char > :public std::numeric_limits< unsigned char >
 {
 public:
   typedef unsigned char            ValueType;
@@ -384,7 +388,7 @@ public:
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
 
-  static unsigned char NonpositiveMin() { return vcl_numeric_limits< ValueType >::min(); }
+  static unsigned char NonpositiveMin() { return std::numeric_limits< ValueType >::min(); }
   static bool IsPositive(unsigned char val) { return val != Zero; }
   static bool IsNonpositive(unsigned char val) { return val == Zero; }
   static bool IsNegative(unsigned char val) { return val ? false : false; }
@@ -402,12 +406,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -416,7 +421,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< short > :public vcl_numeric_limits< short >
+class NumericTraits< short > :public std::numeric_limits< short >
 {
 public:
   typedef short                    ValueType;
@@ -432,7 +437,7 @@ public:
   static const short ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static short NonpositiveMin() { return vcl_numeric_limits< ValueType >::min(); }
+  static short NonpositiveMin() { return std::numeric_limits< ValueType >::min(); }
   static bool IsPositive(short val) { return val > Zero; }
   static bool IsNonpositive(short val) { return val <= Zero; }
   static bool IsNegative(short val) { return val < Zero; }
@@ -450,12 +455,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -465,7 +471,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< unsigned short > :public vcl_numeric_limits< unsigned short >
+class NumericTraits< unsigned short > :public std::numeric_limits< unsigned short >
 {
 public:
   typedef unsigned short           ValueType;
@@ -481,7 +487,7 @@ public:
   static const unsigned short ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static unsigned short NonpositiveMin() { return vcl_numeric_limits< ValueType >::min(); }
+  static unsigned short NonpositiveMin() { return std::numeric_limits< ValueType >::min(); }
   static bool IsPositive(unsigned short val) { return val != Zero; }
   static bool IsNonpositive(unsigned short val) { return val == Zero; }
   static bool IsNegative(unsigned short val) { return val ? false : false; }
@@ -499,12 +505,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -513,7 +520,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< int > :public vcl_numeric_limits< int >
+class NumericTraits< int > :public std::numeric_limits< int >
 {
 public:
   typedef int                      ValueType;
@@ -529,7 +536,7 @@ public:
   static const int ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static int NonpositiveMin() { return vcl_numeric_limits< ValueType >::min(); }
+  static int NonpositiveMin() { return std::numeric_limits< ValueType >::min(); }
   static bool IsPositive(int val) { return val > Zero; }
   static bool IsNonpositive(int val) { return val <= Zero; }
   static bool IsNegative(int val) { return val < Zero; }
@@ -547,12 +554,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -562,7 +570,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< unsigned int > :public vcl_numeric_limits< unsigned int >
+class NumericTraits< unsigned int > :public std::numeric_limits< unsigned int >
 {
 public:
   typedef unsigned int             ValueType;
@@ -579,8 +587,8 @@ public:
 
   static unsigned int min(void) { return 0; }
   static unsigned int max(void) { return static_cast< unsigned int >( -1 ); }
-  static unsigned int min(unsigned int) { return vcl_numeric_limits< ValueType >::min(); }
-  static unsigned int max(unsigned int) { return vcl_numeric_limits< ValueType >::max(); }
+  static unsigned int min(unsigned int) { return std::numeric_limits< ValueType >::min(); }
+  static unsigned int max(unsigned int) { return std::numeric_limits< ValueType >::max(); }
   static unsigned int NonpositiveMin() { return 0; }
   static bool IsPositive(unsigned int val) { return val != Zero; }
   static bool IsNonpositive(unsigned int val) { return val == Zero; }
@@ -599,12 +607,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -614,7 +623,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< long > :public vcl_numeric_limits< long >
+class NumericTraits< long > :public std::numeric_limits< long >
 {
 public:
   typedef long                     ValueType;
@@ -630,7 +639,7 @@ public:
   static const long ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static long NonpositiveMin() { return vcl_numeric_limits< ValueType >::min(); }
+  static long NonpositiveMin() { return std::numeric_limits< ValueType >::min(); }
   static bool IsPositive(long val) { return val > Zero; }
   static bool IsNonpositive(long val) { return val <= Zero; }
   static bool IsNegative(long val) { return val < Zero; }
@@ -648,12 +657,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -663,7 +673,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< unsigned long > :public vcl_numeric_limits< unsigned long >
+class NumericTraits< unsigned long > :public std::numeric_limits< unsigned long >
 {
 public:
   typedef unsigned long            ValueType;
@@ -679,7 +689,7 @@ public:
   static const unsigned long ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static unsigned long NonpositiveMin() { return vcl_numeric_limits< ValueType >::min(); }
+  static unsigned long NonpositiveMin() { return std::numeric_limits< ValueType >::min(); }
   static bool IsPositive(unsigned long val) { return val != Zero; }
   static bool IsNonpositive(unsigned long val) { return val == Zero; }
   static bool IsNegative(unsigned long) { return false; }
@@ -697,12 +707,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -712,7 +723,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< float > :public vcl_numeric_limits< float >
+class NumericTraits< float > :public std::numeric_limits< float >
 {
 public:
   typedef float                    ValueType;
@@ -728,7 +739,7 @@ public:
   static const float ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static float NonpositiveMin() { return -vcl_numeric_limits< ValueType >::max(); }
+  static float NonpositiveMin() { return -std::numeric_limits< ValueType >::max(); }
   static bool IsPositive(float val) { return val > Zero; }
   static bool IsNonpositive(float val) { return val <= Zero; }
   static bool IsNegative(float val) { return val < Zero; }
@@ -746,12 +757,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -761,7 +773,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< double > :public vcl_numeric_limits< double >
+class NumericTraits< double > :public std::numeric_limits< double >
 {
 public:
   typedef double                   ValueType;
@@ -777,7 +789,7 @@ public:
   static const double ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static double NonpositiveMin() { return -vcl_numeric_limits< ValueType >::max(); }
+  static double NonpositiveMin() { return -std::numeric_limits< ValueType >::max(); }
   static bool IsPositive(double val) { return val > Zero; }
   static bool IsNonpositive(double val) { return val <= Zero; }
   static bool IsNegative(double val) { return val < Zero; }
@@ -795,12 +807,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -810,7 +823,7 @@ public:
  * \ingroup ITKCommon
  */
 template< >
-class NumericTraits< long double > :public vcl_numeric_limits< long double >
+class NumericTraits< long double > :public std::numeric_limits< long double >
 {
 public:
   typedef long double ValueType;
@@ -834,7 +847,7 @@ public:
   static const long double ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static long double NonpositiveMin() { return -vcl_numeric_limits< ValueType >::max(); }
+  static long double NonpositiveMin() { return -std::numeric_limits< ValueType >::max(); }
   static bool IsPositive(long double val) { return val > Zero; }
   static bool IsNonpositive(long double val) { return val <= Zero; }
   static bool IsNegative(long double val) { return val < Zero; }
@@ -852,12 +865,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -885,8 +899,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< Self >::min(); }
-  static Self max() { return vcl_numeric_limits< Self >::max(); }
+  static Self min() { return std::numeric_limits< Self >::min(); }
+  static Self max() { return std::numeric_limits< Self >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -911,12 +925,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -944,8 +959,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< Self >::min(); }
-  static Self max() { return vcl_numeric_limits< Self >::max(); }
+  static Self min() { return std::numeric_limits< Self >::min(); }
+  static Self max() { return std::numeric_limits< Self >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -970,12 +985,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1003,8 +1019,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< Self >::min(); }
-  static Self max() { return vcl_numeric_limits< Self >::max(); }
+  static Self min() { return std::numeric_limits< Self >::min(); }
+  static Self max() { return std::numeric_limits< Self >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -1029,12 +1045,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1062,8 +1079,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< Self >::min(); }
-  static Self max() { return vcl_numeric_limits< Self >::max(); }
+  static Self min() { return std::numeric_limits< Self >::min(); }
+  static Self max() { return std::numeric_limits< Self >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -1088,12 +1105,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1121,8 +1139,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< Self >::min(); }
-  static Self max() { return vcl_numeric_limits< Self >::max(); }
+  static Self min() { return std::numeric_limits< Self >::min(); }
+  static Self max() { return std::numeric_limits< Self >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -1147,12 +1165,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1180,8 +1199,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< Self >::min(); }
-  static Self max() { return vcl_numeric_limits< Self >::max(); }
+  static Self min() { return std::numeric_limits< Self >::min(); }
+  static Self max() { return std::numeric_limits< Self >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -1206,12 +1225,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1239,8 +1259,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< Self >::min(); }
-  static Self max() { return vcl_numeric_limits< Self >::max(); }
+  static Self min() { return std::numeric_limits< Self >::min(); }
+  static Self max() { return std::numeric_limits< Self >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -1265,12 +1285,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1298,8 +1319,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< Self >::min(); }
-  static Self max() { return vcl_numeric_limits< Self >::max(); }
+  static Self min() { return std::numeric_limits< Self >::min(); }
+  static Self max() { return std::numeric_limits< Self >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -1324,12 +1345,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1357,8 +1379,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< Self >::min(); }
-  static Self max() { return vcl_numeric_limits< Self >::max(); }
+  static Self min() { return std::numeric_limits< Self >::min(); }
+  static Self max() { return std::numeric_limits< Self >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -1383,12 +1405,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1416,8 +1439,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< ValueType >::min(); }
-  static Self max() { return vcl_numeric_limits< ValueType >::max(); }
+  static Self min() { return std::numeric_limits< ValueType >::min(); }
+  static Self max() { return std::numeric_limits< ValueType >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -1442,12 +1465,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1475,8 +1499,8 @@ public:
   static const Self ITKCommon_EXPORT Zero;
   static const Self ITKCommon_EXPORT One;
 
-  static Self min() { return vcl_numeric_limits< ValueType >::min(); }
-  static Self max() { return vcl_numeric_limits< ValueType >::max(); }
+  static Self min() { return std::numeric_limits< ValueType >::min(); }
+  static Self max() { return std::numeric_limits< ValueType >::max(); }
   static Self min(Self) { return min(); }
   static Self max(Self) { return max(); }
   static Self NonpositiveMin()
@@ -1501,12 +1525,13 @@ public:
     mv[0] = v.real();
     mv[1] = v.imag();
   }
-  static void SetLength(Self &, const unsigned int s)
+  static void SetLength(Self & m, const unsigned int s)
   {
     if ( s != 2 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a complex to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1517,7 +1542,7 @@ public:
  */
 template< >
 class NumericTraits< long long > :
-  public vcl_numeric_limits< long long >
+  public std::numeric_limits< long long >
 {
 public:
   typedef long long                ValueType;
@@ -1533,7 +1558,7 @@ public:
   static const ValueType ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static ValueType NonpositiveMin() { return vcl_numeric_limits< ValueType >::min(); }
+  static ValueType NonpositiveMin() { return std::numeric_limits< ValueType >::min(); }
   static bool IsPositive(ValueType val) { return val > Zero; }
   static bool IsNonpositive(ValueType val) { return val <= Zero; }
   static bool IsNegative(ValueType val) { return val < Zero; }
@@ -1551,12 +1576,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 
@@ -1567,7 +1593,7 @@ public:
  */
 template< >
 class NumericTraits< unsigned long long > :
-  public vcl_numeric_limits< unsigned long long >
+  public std::numeric_limits< unsigned long long >
 {
 public:
   typedef unsigned long long       ValueType;
@@ -1583,7 +1609,7 @@ public:
   static const ValueType ITKCommon_EXPORT One;
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
-  static ValueType NonpositiveMin() { return vcl_numeric_limits< ValueType >::min(); }
+  static ValueType NonpositiveMin() { return std::numeric_limits< ValueType >::min(); }
   static bool IsPositive(ValueType val) { return val != Zero; }
   static bool IsNonpositive(ValueType val) { return val == Zero; }
   static bool IsNegative(ValueType) { return false; }
@@ -1601,12 +1627,13 @@ public:
   {
     mv[0] = v;
   }
-  static void SetLength(ValueType &, const unsigned int s)
+  static void SetLength(ValueType & m, const unsigned int s)
   {
     if ( s != 1 )
       {
       itkGenericExceptionMacro(<< "Cannot set the size of a scalar to " << s);
       }
+    m = NumericTraits< ValueType >::Zero;
   }
 };
 

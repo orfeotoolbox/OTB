@@ -60,6 +60,7 @@ public:
   typedef typename Superclass::MeasureType             MeasureType;
   typedef typename Superclass::DerivativeType          DerivativeType;
   typedef typename Superclass::DerivativeValueType     DerivativeValueType;
+  typedef typename Superclass::JacobianType            JacobianType;
 
   typedef TJointHistogramMetric                                             JointHistogramMetricType;
   typedef typename JointHistogramMetricType::InternalComputationValueType   InternalComputationValueType;
@@ -67,7 +68,6 @@ public:
   typedef typename JointHistogramMetricType::MarginalPDFInterpolatorType    MarginalPDFInterpolatorType;
   typedef typename JointHistogramMetricType::JointPDFInterpolatorPointer    JointPDFInterpolatorPointer;
   typedef typename JointHistogramMetricType::MarginalPDFInterpolatorPointer MarginalPDFInterpolatorPointer;
-  typedef typename JointHistogramMetricType::FixedTransformJacobianType     FixedTransformJacobianType;
   typedef typename JointHistogramMetricType::NumberOfParametersType         NumberOfParametersType;
   typedef typename JointHistogramMetricType::JointPDFType                   JointPDFType;
   typedef typename JointHistogramMetricType::MarginalPDFType                MarginalPDFType;
@@ -96,19 +96,19 @@ protected:
         const MovingImageGradientType &   mappedMovingImageGradient,
         MeasureType &                     metricValueReturn,
         DerivativeType &                  localDerivativeReturn,
-        const ThreadIdType                threadID ) const;
+        const ThreadIdType                threadId ) const;
 
   inline InternalComputationValueType ComputeFixedImageMarginalPDFDerivative(
                                         const MarginalPDFPointType & margPDFpoint,
-                                        const ThreadIdType threadID ) const;
+                                        const ThreadIdType threadId ) const;
 
   inline InternalComputationValueType ComputeMovingImageMarginalPDFDerivative(
                                         const MarginalPDFPointType & margPDFpoint,
-                                        const ThreadIdType threadID ) const;
+                                        const ThreadIdType threadId ) const;
 
   inline InternalComputationValueType ComputeJointPDFDerivative(
                                           const JointPDFPointType & jointPDFpoint,
-                                          const ThreadIdType threadID,
+                                          const ThreadIdType threadId,
                                           const SizeValueType ind ) const;
   struct JointHistogramMIPerThreadStruct
     {

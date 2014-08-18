@@ -32,19 +32,19 @@ namespace itk
  */
 template< typename TLevelSet >
 LevelSetNeighborhoodExtractor< TLevelSet >
-::LevelSetNeighborhoodExtractor()
+::LevelSetNeighborhoodExtractor() :
+  m_LevelSetValue(0.0),
+  m_InsidePoints(ITK_NULLPTR),
+  m_OutsidePoints(ITK_NULLPTR),
+  m_InputLevelSet(ITK_NULLPTR),
+  m_NarrowBanding(false),
+  m_NarrowBandwidth(12.0),
+  m_InputNarrowBand(ITK_NULLPTR),
+  m_LargeValue(NumericTraits< PixelType >::max()),
+  m_LastPointIsInside(false)
 {
-  m_LevelSetValue = 0.0;
-  m_InsidePoints = 0;
-  m_OutsidePoints = 0;
-  m_InputLevelSet = 0;
-
-  m_LargeValue = NumericTraits< PixelType >::max();
   m_NodesUsed.resize(SetDimension);
 
-  m_NarrowBanding = false;
-  m_NarrowBandwidth = 12.0;
-  m_InputNarrowBand = 0;
   for ( unsigned int i = 0; i < SetDimension; ++i )
     {
     m_ImageSize[i] = 0;
@@ -320,7 +320,7 @@ LevelSetNeighborhoodExtractor< TLevelSet >
     return m_LargeValue;
     }
 
-  distance = vcl_sqrt(1.0 / distance);
+  distance = std::sqrt(1.0 / distance);
   centerNode.SetValue(distance);
 
   if ( inside )

@@ -99,7 +99,7 @@ ImageToListSampleFilter< TImage, TMaskImage >
 {
   const ImageType *input = this->GetInput();
 
-  if ( input == NULL )
+  if ( input == ITK_NULLPTR )
     {
     itkExceptionMacro("Input image has not been set yet");
     }
@@ -128,7 +128,7 @@ ImageToListSampleFilter< TImage, TMaskImage >
     static_cast< ListSampleType * >( this->ProcessObject::GetOutput(0) );
 
   const ImageType *    input = this->GetInput();
-  const MaskImageType *maskImage = NULL;
+  const MaskImageType *maskImage = ITK_NULLPTR;
 
   // Verify whether the image and the mask have the same LargestPossibleRegion.
   // Otherwise, throw an exception.
@@ -194,7 +194,6 @@ template< typename TImage, typename TMaskImage >
 void
 ImageToListSampleFilter< TImage, TMaskImage >
 ::GenerateInputRequestedRegion()
-throw( InvalidRequestedRegionError )
 {
   // call the superclass' implementation of this method. this should
   // copy the output requested region to the input requested region

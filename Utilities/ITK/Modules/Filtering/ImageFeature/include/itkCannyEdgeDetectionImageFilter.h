@@ -28,11 +28,11 @@
 
 namespace itk
 {
-template< typename TValueType >
+template< typename TValue >
 class ListNode
 {
 public:
-  TValueType m_Value;
+  TValue m_Value;
 
   ListNode *Next;
   ListNode *Previous;
@@ -40,7 +40,9 @@ public:
 
 /** \class CannyEdgeDetectionImageFilter
  * \brief This filter is an implementation of a Canny edge detector for
- * scalar-valued images.  Based on John Canny's paper "A Computational Approach
+ * scalar-valued images.
+ *
+ *  Based on John Canny's paper "A Computational Approach
  * to Edge Detection"(IEEE Transactions on Pattern Analysis and Machine
  * Intelligence, Vol. PAMI-8, No.6, November 1986),  there are four major steps
  * used in the edge-detection scheme:
@@ -174,7 +176,9 @@ public:
       }
   }
 
-  /** TODO:  Document in the ITKv4 migration guide that
+  /** \brief Set the Threshold value for detected edges.
+   *
+   * TODO:  Document in the ITKv4 migration guide that
    * the SetThreshold member function was removed from
    * the CannyEdgeDetectionImageFilter, and that both
    * UpperThreshold and LowerThreshold need to be set.
@@ -182,8 +186,6 @@ public:
    * change "myfilter->SetThrehsold" to "myfilter->SetUpperThreshold",
    * and add "myfilter->SetLowerThreshold(GetUpperThreshold()/2.0)"
    */
-
-  ///* Set the Threshold value for detected edges. */
   itkSetMacro(UpperThreshold, OutputImagePixelType);
   itkGetConstMacro(UpperThreshold, OutputImagePixelType);
 
@@ -202,8 +204,7 @@ public:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion()  */
-  virtual void GenerateInputRequestedRegion()
-  throw( InvalidRequestedRegionError );
+  virtual void GenerateInputRequestedRegion();
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   // Begin concept checking

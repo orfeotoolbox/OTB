@@ -44,16 +44,13 @@ MetaLandmarkConverter< NDimensions >
 {
   const LandmarkMetaObjectType *landmarkMO =
     dynamic_cast<const LandmarkMetaObjectType *>(mo);
-  if(landmarkMO == 0)
+  if(landmarkMO == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "Can't convert MetaObject to MetaLandmark");
     }
 
   LandmarkSpatialObjectPointer landmarkSO =
     LandmarkSpatialObjectType::New();
-
-  //typedef LandmarkSpatialObjectType::VectorType VectorType;
-  typedef vnl_vector< double > VectorType;
 
   unsigned int ndims = landmarkMO->NDims();
   double       spacing[NDimensions];

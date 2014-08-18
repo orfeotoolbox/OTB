@@ -27,7 +27,7 @@ template< unsigned int VDimension, typename TInput >
 EllipsoidInteriorExteriorSpatialFunction< VDimension, TInput >
 ::EllipsoidInteriorExteriorSpatialFunction()
 {
-  m_Orientations = NULL;
+  m_Orientations = ITK_NULLPTR;
   m_Axes.Fill(1.0f);   // Lengths of ellipsoid axes.
   m_Center.Fill(0.0f); // Origin of ellipsoid
 }
@@ -72,7 +72,7 @@ EllipsoidInteriorExteriorSpatialFunction< VDimension, TInput >
       {
       orientationVector[j] = m_Orientations[i][j];
       }
-    distanceSquared += vcl_pow( static_cast< double >( ( orientationVector * pointVector ) / ( .5 * m_Axes[i] ) ),
+    distanceSquared += std::pow( static_cast< double >( ( orientationVector * pointVector ) / ( .5 * m_Axes[i] ) ),
                                 static_cast< double >( 2 ) );
     }
 

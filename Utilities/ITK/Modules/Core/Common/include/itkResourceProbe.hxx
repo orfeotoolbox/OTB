@@ -39,10 +39,7 @@ ResourceProbe< ValueType, MeanType >
 ::ResourceProbe(const std::string & type, const std::string & unit):
   m_TypeString(type), m_UnitString(unit)
 {
-  this->m_TotalValue      = NumericTraits< ValueType >::ZeroValue();
-  this->m_StartValue      = NumericTraits< ValueType >::ZeroValue();
-  this->m_NumberOfStarts  = NumericTraits< CountType >::ZeroValue();
-  this->m_NumberOfStops   = NumericTraits< CountType >::ZeroValue();
+  this->Reset();
 }
 
 /** Destructor */
@@ -50,6 +47,18 @@ template< typename ValueType, typename MeanType >
 ResourceProbe< ValueType, MeanType >
 ::~ResourceProbe()
 {}
+
+/** Reset */
+template< typename ValueType, typename MeanType >
+void
+ResourceProbe< ValueType, MeanType >
+::Reset(void)
+{
+  this->m_TotalValue      = NumericTraits< ValueType >::ZeroValue();
+  this->m_StartValue      = NumericTraits< ValueType >::ZeroValue();
+  this->m_NumberOfStarts  = NumericTraits< CountType >::ZeroValue();
+  this->m_NumberOfStops   = NumericTraits< CountType >::ZeroValue();
+}
 
 /** Returns the type probed value */
 template< typename ValueType, typename MeanType >
@@ -87,7 +96,7 @@ ResourceProbe< ValueType, MeanType >
 {
   if ( this->m_NumberOfStops == this->m_NumberOfStarts )
     {
-    itkGenericExceptionMacro(<< "Can't stop a probe that has not been started.");
+    return;
     }
   this->m_TotalValue += this->GetInstantValue() - this->m_StartValue;
   this->m_NumberOfStops++;

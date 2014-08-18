@@ -35,7 +35,7 @@ SpatialObject< TDimension >
   m_Bounds = BoundingBoxType::New();
   m_BoundsMTime = 0;
   m_Property = PropertyType::New();
-  m_TreeNode = NULL;
+  m_TreeNode = ITK_NULLPTR;
 
   m_ObjectToWorldTransform = TransformType::New();
   m_ObjectToWorldTransform->SetIdentity();
@@ -593,7 +593,7 @@ SpatialObject< TDimension >
 {
   if ( !m_TreeNode )
     {
-    return 0;
+    return ITK_NULLPTR;
     }
 
   typename TreeNodeType::ChildrenListType * children =
@@ -668,7 +668,7 @@ SpatialObject< TDimension >
     {
     return m_TreeNode->GetParent()->Get();
     }
-  return NULL;
+  return ITK_NULLPTR;
 }
 
 /** Get the parent of the spatial object */
@@ -681,7 +681,7 @@ SpatialObject< TDimension >
     {
     return m_TreeNode->GetParent()->Get();
     }
-  return NULL;
+  return ITK_NULLPTR;
 }
 
 /** Set the parent of the spatial object */
@@ -845,17 +845,15 @@ SpatialObject< TDimension >
 {
   const SpatialObject *imgData = dynamic_cast< const SpatialObject * >( data );
 
-  if ( imgData )
-    {
-    m_RequestedRegion = imgData->GetRequestedRegion();
-    }
-  else
+  if ( imgData == ITK_NULLPTR)
     {
     // pointer could not be cast back down
     itkExceptionMacro(
       << "itk::ImageBase::SetRequestedRegion(const DataObject *) cannot cast "
       << typeid( data ).name() << " to " << typeid( SpatialObject * ).name() );
     }
+
+  m_RequestedRegion = imgData->GetRequestedRegion();
 }
 
 template< unsigned int TDimension >
@@ -979,18 +977,16 @@ void SpatialObject< TDimension >
 
   imgData = dynamic_cast< const SpatialObject * >( data );
 
-  if ( imgData )
-    {
-    // Copy the meta data for this data type
-    m_LargestPossibleRegion = imgData->GetLargestPossibleRegion();
-    }
-  else
+  if ( imgData == ITK_NULLPTR )
     {
     // pointer could not be cast back down
     itkExceptionMacro( << "itk::SpatialObject::CopyInformation() cannot cast "
                        << typeid( data ).name() << " to "
                        << typeid( SpatialObject * ).name() );
     }
+
+  // Copy the meta data for this data type
+  m_LargestPossibleRegion = imgData->GetLargestPossibleRegion();
 
   // check if we are the same type
   const Self *source = dynamic_cast< const Self * >( data );

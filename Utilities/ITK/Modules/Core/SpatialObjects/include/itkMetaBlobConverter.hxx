@@ -43,15 +43,12 @@ MetaBlobConverter< NDimensions >
 ::MetaObjectToSpatialObject(const MetaObjectType *mo)
 {
   const BlobMetaObjectType *Blob = dynamic_cast<const BlobMetaObjectType *>(mo);
-  if(Blob == 0)
+  if(Blob == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "Can't downcast MetaObject to BlobMetaObject");
     }
 
   typename BlobSpatialObjectType::Pointer blob = BlobSpatialObjectType::New();
-
-  //typedef BlobSpatialObjectType::VectorType VectorType;
-  typedef vnl_vector< double > VectorType;
 
   unsigned int ndims = Blob->NDims();
   double       spacing[NDimensions];
@@ -70,7 +67,6 @@ MetaBlobConverter< NDimensions >
   blob->GetProperty()->SetAlpha(Blob->Color()[3]);
 
   typedef itk::SpatialObjectPoint< NDimensions > BlobPointType;
-  typedef BlobPointType *                        BlobPointPointer;
 
   MetaBlob::PointListType::const_iterator it2 = Blob->GetPoints().begin();
 

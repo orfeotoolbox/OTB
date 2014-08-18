@@ -45,6 +45,13 @@ ImageAdaptor< TImage, TAccessor >
 ::~ImageAdaptor()
 {}
 
+template< typename TImage, typename TAccessor >
+void
+ImageAdaptor< TImage, TAccessor >
+::Allocate(bool initialize)
+{
+  m_Image->Allocate(initialize);
+}
 //----------------------------------------------------------------------------
 template< typename TImage, typename TAccessor >
 void
@@ -185,7 +192,6 @@ template< typename TImage, typename TAccessor >
 void
 ImageAdaptor< TImage, TAccessor >
 ::PropagateRequestedRegion()
-throw ( InvalidRequestedRegionError )
 {
   // call the superclass' method first, then delegate
   Superclass::PropagateRequestedRegion();

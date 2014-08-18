@@ -40,15 +40,17 @@ namespace itk
  *
  * \ingroup ITKMetricsv4
  */
-template<typename TFixedPointSet, typename TMovingPointSet = TFixedPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet = TFixedPointSet,
+  class TInternalComputationValueType = double>
 class ExpectationBasedPointSetToPointSetMetricv4:
-  public PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+  public PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 {
 public:
 
   /** Standard class typedefs. */
   typedef ExpectationBasedPointSetToPointSetMetricv4                   Self;
-  typedef PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>  Superclass;
+  typedef PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet,
+    TInternalComputationValueType>                                     Superclass;
   typedef SmartPointer<Self>                                           Pointer;
   typedef SmartPointer<const Self>                                     ConstPointer;
 
@@ -105,7 +107,7 @@ public:
 
   /** Clone method will clone the existing instance of this type,
    *  including its internal member variables. */
-  virtual ::itk::LightObject::Pointer Clone( void ) const;
+  virtual typename LightObject::Pointer InternalClone() const;
 
 protected:
   ExpectationBasedPointSetToPointSetMetricv4();

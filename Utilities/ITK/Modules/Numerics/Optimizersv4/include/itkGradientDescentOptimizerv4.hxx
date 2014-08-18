@@ -31,21 +31,9 @@ GradientDescentOptimizerv4Template<TInternalComputationValueType>
 ::GradientDescentOptimizerv4Template()
 {
   this->m_LearningRate = NumericTraits<TInternalComputationValueType>::One;
-
-    // m_MaximumStepSizeInPhysicalUnits is used for automatic learning
-    // rate estimation. it may be initialized either by calling
-    // SetMaximumStepSizeInPhysicalUnits manually or by using m_ScalesEstimator
-    // automatically. and the former has higher priority than the latter.
-  this->m_MaximumStepSizeInPhysicalUnits = NumericTraits<TInternalComputationValueType>::Zero;
-
-    // Initialize parameters for the convergence checker
-  this->m_MinimumConvergenceValue = 1e-8;//NumericTraits<TInternalComputationValueType>::epsilon();//1e-30;
-  this->m_ConvergenceWindowSize = 50;
-
-  this->m_DoEstimateScales = true;
-  this->m_DoEstimateLearningRateAtEachIteration = false;
-  this->m_DoEstimateLearningRateOnce = true;
+  this->m_MinimumConvergenceValue = 1e-8;
   this->m_ReturnBestParametersAndValue = false;
+  this->m_PreviousGradient.Fill( NumericTraits<TInternalComputationValueType>::Zero );
 }
 
 /**
@@ -69,16 +57,6 @@ GradientDescentOptimizerv4Template<TInternalComputationValueType>
   os << indent << "Learning rate:" << this->m_LearningRate << std::endl;
   os << indent << "MaximumStepSizeInPhysicalUnits: "
   << this->m_MaximumStepSizeInPhysicalUnits << std::endl;
-  if( this->m_ScalesEstimator.IsNull() )
-    {
-    os << indent << "No ScalesEstimator set." << std::endl;
-    }
-  else
-    {
-    os << indent << "ScalesEstimator: " << std::endl;
-    this->m_ScalesEstimator->Print( os, indent.GetNextIndent() );
-    }
-  os << indent << "DoEstimateScales: " << this->m_DoEstimateScales << std::endl;
   os << indent << "DoEstimateLearningRateAtEachIteration: "
   << this->m_DoEstimateLearningRateAtEachIteration << std::endl;
   os << indent << "DoEstimateLearningRateOnce: "
@@ -93,34 +71,6 @@ void
 GradientDescentOptimizerv4Template<TInternalComputationValueType>
 ::StartOptimization( bool doOnlyInitialization )
 {
-  itkDebugMacro("StartOptimization");
-
-  /* Validate some settings */
-  if ( this->m_ScalesEstimator.IsNotNull() &&
-      this->m_DoEstimateLearningRateOnce &&
-      this->m_DoEstimateLearningRateAtEachIteration )
-    {
-    itkExceptionMacro("Both m_DoEstimateLearningRateOnce and m_DoEstimateLearningRateAtEachIteration are enabled. Not allowed. ");
-    }
-
-  /* Estimate the parameter scales if requested. */
-  if ( this->m_DoEstimateScales && this->m_ScalesEstimator.IsNotNull() )
-    {
-    this->m_ScalesEstimator->EstimateScales(this->m_Scales);
-    itkDebugMacro( "Estimated scales = " << this->m_Scales );
-
-    /* If user hasn't set this, assign the default. */
-    if ( this->m_MaximumStepSizeInPhysicalUnits <=
-        NumericTraits<TInternalComputationValueType>::epsilon())
-      {
-      this->m_MaximumStepSizeInPhysicalUnits = this->m_ScalesEstimator->EstimateMaximumStepSize();
-      }
-    }
-
-    // Initialize the convergence checker
-  this->m_ConvergenceMonitoring = ConvergenceMonitoringType::New();
-  this->m_ConvergenceMonitoring->SetWindowSize( this->m_ConvergenceWindowSize );
-
   /* Must call the superclass version for basic validation and setup */
   Superclass::StartOptimization( doOnlyInitialization );
 
@@ -169,6 +119,18 @@ GradientDescentOptimizerv4Template<TInternalComputationValueType>
   this->m_Stop = false;
   while( ! this->m_Stop )
     {
+    // Do not run the loop if the maximum number of iterations is reached or its value is zero.
+    if ( this->m_CurrentIteration >= this->m_NumberOfIterations )
+      {
+      this->m_StopConditionDescription << "Maximum number of iterations (" << this->m_NumberOfIterations << ") exceeded.";
+      this->m_StopCondition = Superclass::MAXIMUM_NUMBER_OF_ITERATIONS;
+      this->StopOptimization();
+      break;
+      }
+
+    // Save previous value with shallow swap that will be used by child optimizer.
+    swap( this->m_PreviousGradient, this->m_Gradient );
+
     /* Compute metric value/derivative. */
     try
       {
@@ -196,21 +158,24 @@ GradientDescentOptimizerv4Template<TInternalComputationValueType>
 
     /* Check the convergence by WindowConvergenceMonitoringFunction.
      */
-    this->m_ConvergenceMonitoring->AddEnergyValue( this->m_CurrentMetricValue );
-    try
+    if ( this->m_UseConvergenceMonitoring )
       {
-      this->m_ConvergenceValue = this->m_ConvergenceMonitoring->GetConvergenceValue();
-      if (this->m_ConvergenceValue <= this->m_MinimumConvergenceValue)
+      this->m_ConvergenceMonitoring->AddEnergyValue( this->m_CurrentMetricValue );
+      try
         {
-        this->m_StopConditionDescription << "Convergence checker passed at iteration " << this->m_CurrentIteration << ".";
-        this->m_StopCondition = Superclass::CONVERGENCE_CHECKER_PASSED;
-        this->StopOptimization();
-        break;
+        this->m_ConvergenceValue = this->m_ConvergenceMonitoring->GetConvergenceValue();
+        if (this->m_ConvergenceValue <= this->m_MinimumConvergenceValue)
+          {
+          this->m_StopConditionDescription << "Convergence checker passed at iteration " << this->m_CurrentIteration << ".";
+          this->m_StopCondition = Superclass::CONVERGENCE_CHECKER_PASSED;
+          this->StopOptimization();
+          break;
+          }
         }
-      }
-    catch(std::exception & e)
-      {
-      std::cerr << "GetConvergenceValue() failed with exception: " << e.what() << std::endl;
+      catch(std::exception & e)
+        {
+        std::cerr << "GetConvergenceValue() failed with exception: " << e.what() << std::endl;
+        }
       }
 
     /* Advance one step along the gradient.
@@ -227,13 +192,6 @@ GradientDescentOptimizerv4Template<TInternalComputationValueType>
     /* Update and check iteration count */
     this->m_CurrentIteration++;
 
-    if ( this->m_CurrentIteration >= this->m_NumberOfIterations )
-      {
-      this->m_StopConditionDescription << "Maximum number of iterations (" << this->m_NumberOfIterations << ") exceeded.";
-      this->m_StopCondition = Superclass::MAXIMUM_NUMBER_OF_ITERATIONS;
-      this->StopOptimization();
-      break;
-      }
     } //while (!m_Stop)
 }
 

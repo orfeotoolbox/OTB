@@ -615,12 +615,12 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
   double       muloffset;
   double       rand_num;
 
-  addoffset = m_OffsetAdd / vcl_pow(2.0, (double)scale);
-  muloffset = m_OffsetMultiply / vcl_pow(2.0, (double)scale);
+  addoffset = m_OffsetAdd / std::pow(2.0, (double)scale);
+  muloffset = m_OffsetMultiply / std::pow(2.0, (double)scale);
 
   for ( i = 0; i < m_VectorDimension; i++ )
     {
-    srand( (unsigned)time(NULL) );
+    srand( (unsigned)time(ITK_NULLPTR) );
     rand_num = ( rand() ) / ( (double)RAND_MAX );
 
     if ( oldCodeword[i] == 0.0 )
@@ -628,7 +628,7 @@ ImageKmeansModelEstimator< TInputImage, TMembershipFunction >
       newCodeword[i] = addoffset * rand_num;
       }
 
-    else if ( vcl_fabs(oldCodeword[i]) < 0.9 * addoffset )
+    else if ( std::fabs(oldCodeword[i]) < 0.9 * addoffset )
       {
       newCodeword[i] = oldCodeword[i];
 

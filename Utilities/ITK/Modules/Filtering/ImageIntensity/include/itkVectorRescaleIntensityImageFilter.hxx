@@ -38,12 +38,12 @@ namespace itk
  */
 template< typename TInputImage, typename TOutputImage >
 VectorRescaleIntensityImageFilter< TInputImage, TOutputImage >
-::VectorRescaleIntensityImageFilter()
+::VectorRescaleIntensityImageFilter() :
+  m_Scale(1.0),
+  m_Shift(1.0),
+  m_InputMaximumMagnitude(NumericTraits< InputRealType  >::Zero),
+  m_OutputMaximumMagnitude(NumericTraits< OutputRealType >::Zero)
 {
-  m_OutputMaximumMagnitude   = NumericTraits< OutputRealType >::Zero;
-  m_InputMaximumMagnitude    = NumericTraits< InputRealType  >::Zero;
-
-  m_Scale = 1.0;
 }
 
 /**
@@ -101,7 +101,7 @@ VectorRescaleIntensityImageFilter< TInputImage, TOutputImage >
     ++it;
     }
 
-  m_InputMaximumMagnitude = vcl_sqrt(maximumSquaredMagnitude);
+  m_InputMaximumMagnitude = std::sqrt(maximumSquaredMagnitude);
 
   m_Scale = static_cast< InputRealType >( m_OutputMaximumMagnitude )
             / static_cast< InputRealType >( m_InputMaximumMagnitude  );

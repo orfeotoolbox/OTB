@@ -30,11 +30,11 @@ OnePlusOneEvolutionaryOptimizer
 
   m_Maximize = false;
   m_Epsilon = (double)1.5e-4;
-  m_RandomGenerator = 0;
+  m_RandomGenerator = ITK_NULLPTR;
 
   m_Initialized = false;
   m_GrowthFactor = 1.05;
-  m_ShrinkFactor = vcl_pow(m_GrowthFactor, -0.25);
+  m_ShrinkFactor = std::pow(m_GrowthFactor, -0.25);
   m_InitialRadius = 1.01;
   m_MaximumIteration = 100;
   m_Stop = false;
@@ -75,7 +75,7 @@ OnePlusOneEvolutionaryOptimizer
     }
   if ( shrink == -1 )
     {
-    m_ShrinkFactor = vcl_pow(m_GrowthFactor, -0.25);
+    m_ShrinkFactor = std::pow(m_GrowthFactor, -0.25);
     }
   else
     {

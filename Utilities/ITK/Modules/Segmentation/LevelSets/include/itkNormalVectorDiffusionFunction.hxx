@@ -38,8 +38,8 @@ NormalVectorDiffusionFunction< TSparseImageType >
   this->SetRadius(r);
   this->SetTimeStep( static_cast< TimeStepType >( 0.5 / ImageDimension ) );
   m_NormalProcessType = 0;
-  m_ConductanceParameter = NumericTraits< NodeValueType >::Zero;
-  m_FluxStopConstant = NumericTraits< NodeValueType >::Zero;
+  m_ConductanceParameter = NumericTraits< NodeValueType >::ZeroValue();
+  m_FluxStopConstant = NumericTraits< NodeValueType >::ZeroValue();
 }
 
 template< typename TSparseImageType >
@@ -84,11 +84,11 @@ NormalVectorDiffusionFunction< TSparseImageType >
   for ( i = 0; i < ImageDimension; i++ ) // flux offset axis
     {
     PreviousNode = it.GetPrevious (i);
-    if ( PreviousNode == 0 )
+    if ( PreviousNode == ITK_NULLPTR )
       {
       for ( j = 0; j < ImageDimension; j++ )
         {
-        CenterNode->m_Flux[i][j] = NumericTraits< NodeValueType >::Zero;
+        CenterNode->m_Flux[i][j] = NumericTraits< NodeValueType >::ZeroValue();
         }
       }
     else
@@ -100,7 +100,7 @@ NormalVectorDiffusionFunction< TSparseImageType >
           {
           // compute differences (j-axis) in line with center pixel
           OtherNode = it.GetPrevious (j);
-          if ( OtherNode == 0 )
+          if ( OtherNode == ITK_NULLPTR )
             {
             NegativeSidePixel[0] = CenterPixel;
             }
@@ -109,7 +109,7 @@ NormalVectorDiffusionFunction< TSparseImageType >
             NegativeSidePixel[0] = OtherNode->m_Data;
             }
           OtherNode = it.GetNext (j);
-          if ( OtherNode == 0 )
+          if ( OtherNode == ITK_NULLPTR )
             {
             PositiveSidePixel[0] = CenterPixel;
             }
@@ -120,7 +120,7 @@ NormalVectorDiffusionFunction< TSparseImageType >
 
           // compute derivative (j-axis) offset from center pixel on i-axis
           OtherNode = it.GetPixel (center - stride[i] - stride[j]);
-          if ( OtherNode == 0 )
+          if ( OtherNode == ITK_NULLPTR )
             {
             NegativeSidePixel[1] = PreviousPixel;
             }
@@ -129,7 +129,7 @@ NormalVectorDiffusionFunction< TSparseImageType >
             NegativeSidePixel[1] = OtherNode->m_Data;
             }
           OtherNode = it.GetPixel (center - stride[i] + stride[j]);
-          if ( OtherNode == 0 )
+          if ( OtherNode == ITK_NULLPTR )
             {
             PositiveSidePixel[1] = PreviousPixel;
             }
@@ -151,7 +151,7 @@ NormalVectorDiffusionFunction< TSparseImageType >
       // now compute the intrinsic derivative
       for ( j = 0; j < ImageDimension; j++ ) // component axis
         {
-        DotProduct = NumericTraits< NodeValueType >::Zero;
+        DotProduct = NumericTraits< NodeValueType >::ZeroValue();
         for ( k = 0; k < ImageDimension; k++ ) // derivative axis
           {
           DotProduct += ( gradient[k][j] * CenterNode->m_ManifoldNormal[i][k] );
@@ -190,11 +190,11 @@ NormalVectorDiffusionFunction< TSparseImageType >
 
   const NeighborhoodScalesType neighborhoodScales = this->ComputeNeighborhoodScales();
 
-  change = NumericTraits< NormalVectorType >::Zero;
+  change = NumericTraits< NormalVectorType >::ZeroValue();
   for ( i = 0; i < ImageDimension; i++ ) // flux offset axis
     {
     NextNode = it.GetNext (i);
-    if ( NextNode == 0 )
+    if ( NextNode == ITK_NULLPTR )
       {
       change -= CenterNode->m_Flux[i] * neighborhoodScales[i];
       }

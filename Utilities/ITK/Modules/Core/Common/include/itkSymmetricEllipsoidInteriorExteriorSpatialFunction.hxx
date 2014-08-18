@@ -25,12 +25,13 @@ namespace itk
 {
 template< unsigned int VDimension, typename TInput >
 SymmetricEllipsoidInteriorExteriorSpatialFunction< VDimension, TInput >
-::SymmetricEllipsoidInteriorExteriorSpatialFunction()
+::SymmetricEllipsoidInteriorExteriorSpatialFunction() :
+  m_UniqueAxis(10),       // Length of unique axis
+  m_SymmetricAxes(5),     // Length of symmetric axes
+  m_VectorRatio(0.0)      // Vector ratio
 {
   m_Center.Fill(0.0);      // Origin of ellipsoid
   m_Orientation.Fill(1.0); // Orientation of unique axis
-  m_UniqueAxis = 10;       // Length of unique axis
-  m_SymmetricAxes = 5;     // Length of symmetric axes
 }
 
 template< unsigned int VDimension, typename TInput >
@@ -56,10 +57,10 @@ SymmetricEllipsoidInteriorExteriorSpatialFunction< VDimension, TInput >
     pointVector[i] = position[i] - m_Center[i];
     }
 
-  uniqueTerm = vcl_pow( static_cast< double >( ( ( pointVector * m_Orientation ) / ( .5 * m_UniqueAxis ) ) ),
+  uniqueTerm = std::pow( static_cast< double >( ( ( pointVector * m_Orientation ) / ( .5 * m_UniqueAxis ) ) ),
                         static_cast< double >( 2 ) );
   symmetricVector = pointVector - ( m_Orientation * ( pointVector * m_Orientation ) );
-  symmetricTerm = vcl_pow(
+  symmetricTerm = std::pow(
     static_cast< double >( ( ( symmetricVector.GetNorm() ) / ( .5 * m_SymmetricAxes ) ) ), static_cast< double >( 2 ) );
 
   if ( ( uniqueTerm + symmetricTerm ) >= 0 && ( uniqueTerm + symmetricTerm ) <= 1 )

@@ -23,7 +23,9 @@ namespace itk
 
 
 ParticleSwarmOptimizerBase
-::ParticleSwarmOptimizerBase(void)
+::ParticleSwarmOptimizerBase(void):
+  m_FunctionBestValue(0),
+  m_IterationIndex(0)
 {
   this->m_PrintSwarm = false;
   this->m_InitializeNormalDistribution = false;
@@ -323,7 +325,7 @@ ParticleSwarmOptimizerBase
   unsigned int i,n;
 
                //we have to have a cost function
-  if( GetCostFunction() == NULL )
+  if( GetCostFunction() == ITK_NULLPTR )
     {
     itkExceptionMacro(<<"NULL cost function")
     }

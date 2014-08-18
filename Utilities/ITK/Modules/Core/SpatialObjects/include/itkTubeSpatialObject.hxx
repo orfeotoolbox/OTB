@@ -240,7 +240,7 @@ TubeSpatialObject< TDimension, TTubePointType >
       double lambda = A / B;
 
       if ( ( ( it != m_Points.begin() )
-             && ( lambda > -( ( *it ).GetRadius() / ( 2 * vcl_sqrt(B) ) ) )
+             && ( lambda > -( ( *it ).GetRadius() / ( 2 * std::sqrt(B) ) ) )
              && ( lambda < 0 ) )
            || ( ( lambda <= 1.0 ) && ( lambda >= 0.0 ) )
             )
@@ -297,7 +297,7 @@ TubeSpatialObject< TDimension, TTubePointType >
       it++;
       }
 
-    double dist = vcl_sqrt(minSquareDist);
+    double dist = std::sqrt(minSquareDist);
     if ( dist <= ( ( *min ).GetRadius() ) )
       {
       return true;
@@ -314,7 +314,7 @@ TubeSpatialObject< TDimension, TTubePointType >
 {
   itkDebugMacro("Checking the point [" << point << "] is inside the tube");
 
-  if ( name == NULL )
+  if ( name == ITK_NULLPTR )
     {
     if ( IsInside(point) )
       {
@@ -408,7 +408,7 @@ TubeSpatialObject< TDimension, TTubePointType >
       l = l + t[i] * t[i];
       }
 
-    l = vcl_sqrt(l);
+    l = std::sqrt(l);
     if ( l == 0 )
       {
       std::cerr << "TubeSpatialObject::ComputeTangentAndNormals() : ";
@@ -545,7 +545,7 @@ TubeSpatialObject< TDimension, TTubePointType >
   // check if we are the same type
   const Self *source = dynamic_cast< const Self * >( data );
 
-  if ( !source )
+  if ( source == ITK_NULLPTR )
     {
     std::cout << "CopyInformation: objects are not of the same type"
               << std::endl;

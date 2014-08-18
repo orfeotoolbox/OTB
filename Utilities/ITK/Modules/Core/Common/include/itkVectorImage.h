@@ -198,7 +198,7 @@ public:
 
   /** Allocate the image memory. The size of the image must
    * already be set, e.g. by calling SetRegions(). */
-  void Allocate();
+  virtual void Allocate(bool UseDefaultConstructor = false) ITK_OVERRIDE;
 
   /** Restore the data object to its initial state. This means releasing
    * memory. */
@@ -276,11 +276,11 @@ public:
    * the image iterator class. */
   InternalPixelType * GetBufferPointer()
   {
-    return m_Buffer ? m_Buffer->GetBufferPointer() : 0;
+    return m_Buffer ? m_Buffer->GetBufferPointer() : ITK_NULLPTR;
   }
   const InternalPixelType * GetBufferPointer() const
   {
-    return m_Buffer ? m_Buffer->GetBufferPointer() : 0;
+    return m_Buffer ? m_Buffer->GetBufferPointer() : ITK_NULLPTR;
   }
 
   /** Return a pointer to the container. */

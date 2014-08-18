@@ -40,24 +40,28 @@ SimplexMeshGeometry
   normal.Fill(0);
   externalForce.Fill(0);
   internalForce.Fill(0);
+  closestAttractor.Fill(0);
   circleRadius = 0;
   circleCenter.Fill(0);
   sphereRadius = 0;
   distance = 0;
   phi = 0;
+  multiplier = 0.0;
+  forceIndex = 0;
 
   neighborIndices.Fill( NumericTraits< IdentifierType >::max() );
   neighbors.Fill(p);
   meanCurvature = c;
 
-  neighborSet = NULL;
+  neighborSet = ITK_NULLPTR;
+  closestAttractorIndex = 0;
 }
 
 SimplexMeshGeometry
 ::~SimplexMeshGeometry()
 {
   delete this->neighborSet;
-  this->neighborSet = NULL;
+  this->neighborSet = ITK_NULLPTR;
 }
 
 void
@@ -157,7 +161,7 @@ SimplexMeshGeometry
     }
   else
     {
-    this->neighborSet = NULL;
+    this->neighborSet = ITK_NULLPTR;
     }
 }
 

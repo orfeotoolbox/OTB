@@ -25,9 +25,9 @@ namespace itk
 namespace Statistics
 {
 
-/** Constructor */
-template<typename ScalarType>
-SigmoidTransferFunction< ScalarType>
+
+template<typename TScalar>
+SigmoidTransferFunction<TScalar>
 ::SigmoidTransferFunction()
 {
   m_Alpha = 1.0;
@@ -36,40 +36,40 @@ SigmoidTransferFunction< ScalarType>
   m_OutputMaximum = NumericTraits<ScalarType>::max();
 }
 
-/** Destructor */
-template<typename ScalarType>
-SigmoidTransferFunction<ScalarType>
+
+template<typename TScalar>
+SigmoidTransferFunction<TScalar>
 ::~SigmoidTransferFunction()
 {
 }
 
-/** Evaluate */
-template<typename ScalarType>
-ScalarType
-SigmoidTransferFunction<ScalarType>
+
+template<typename TScalar>
+TScalar
+SigmoidTransferFunction<TScalar>
 ::Evaluate(const ScalarType& input)  const
 {
-  const ScalarType x = (static_cast<ScalarType>(input) - m_Beta) / m_Alpha;
-  const ScalarType e = 1.0 / (1.0 + vcl_exp(-x));
-  const ScalarType v = (m_OutputMaximum - m_OutputMinimum) * e
+  const RealType x = static_cast< RealType >( input - m_Beta ) / m_Alpha;
+  const RealType e = 1.0 / (1.0 + std::exp( static_cast< typename NumericTraits< ScalarType >::RealType >(-x)));
+  const ScalarType v = static_cast< ScalarType >( (m_OutputMaximum - m_OutputMinimum) * e )
                      + m_OutputMinimum;
   return v;
 }
 
-/** Evaluate Derivatives */
-template<typename ScalarType>
-ScalarType
-SigmoidTransferFunction< ScalarType>
+
+template<typename TScalar>
+TScalar
+SigmoidTransferFunction<TScalar>
 ::EvaluateDerivative(const ScalarType& input)  const
 {
   ScalarType f = Evaluate(input);
   return f * (1 - f);
 }
 
-/** Print the object */
-template<typename ScalarType>
+
+template<typename TScalar>
 void
-SigmoidTransferFunction<ScalarType>
+SigmoidTransferFunction<TScalar>
 ::PrintSelf( std::ostream& os, Indent indent ) const
 {
   os << indent << "SigmoidTransferFunction(" << this << ")" << std::endl;

@@ -41,7 +41,6 @@ template< typename TInputImage, typename TOutputImage >
 void
 GradientMagnitudeImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
-throw( InvalidRequestedRegionError )
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
@@ -185,7 +184,7 @@ GradientMagnitudeImageFilter< TInputImage, TOutputImage >
         const RealType g = SIP(x_slice[i], bit, op[i]);
         a += g * g;
         }
-      it.Value() = static_cast< OutputPixelType >( vcl_sqrt(a) );
+      it.Value() = static_cast< OutputPixelType >( std::sqrt(a) );
       ++bit;
       ++it;
       progress.CompletedPixel();

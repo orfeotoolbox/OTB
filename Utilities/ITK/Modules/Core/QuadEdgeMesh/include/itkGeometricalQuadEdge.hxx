@@ -30,7 +30,7 @@ template< typename TVRef, typename TFRef,
 const typename GeometricalQuadEdge< TVRef, TFRef,
                                     TPrimalData, TDualData, PrimalDual >::OriginRefType
 GeometricalQuadEdge< TVRef, TFRef, TPrimalData, TDualData, PrimalDual >::m_NoPoint =
-  vcl_numeric_limits< OriginRefType >::max();
+  std::numeric_limits< OriginRefType >::max();
 
 /**
  *   Constructor
@@ -38,10 +38,12 @@ GeometricalQuadEdge< TVRef, TFRef, TPrimalData, TDualData, PrimalDual >::m_NoPoi
 template< typename TVRef, typename TFRef,
           typename TPrimalData, typename TDualData, bool PrimalDual >
 GeometricalQuadEdge< TVRef, TFRef, TPrimalData, TDualData, PrimalDual >
-::GeometricalQuadEdge()
+::GeometricalQuadEdge() :
+  m_Origin(m_NoPoint),
+  m_Data(),
+  m_DataSet(false),
+  m_LineCellIdent(0)
 {
-  this->m_Origin     = m_NoPoint;
-  this->m_DataSet = false;
 }
 
 /**
@@ -304,7 +306,7 @@ GeometricalQuadEdge< TVRef, TFRef, TPrimalData, TDualData, PrimalDual >::GetNext
   if ( this->IsOriginInternal() )
     {
     itkQEDebugMacro("Internal point.");
-    return ( 0 );
+    return ( ITK_NULLPTR );
     }
 
   // Update reference
@@ -331,7 +333,7 @@ GeometricalQuadEdge< TVRef, TFRef, TPrimalData, TDualData, PrimalDual >::GetNext
 
   // No border edge found
   itkQEDebugMacro("Unfound border edge.");
-  return ( 0 );
+  return ( ITK_NULLPTR );
 }
 
 /**
@@ -665,7 +667,7 @@ GeometricalQuadEdge< TVRef, TFRef, TPrimalData, TDualData, PrimalDual >
 {
   const Self *p1 = this->GetSym();
 
-  if ( p1 == NULL )
+  if ( p1 == ITK_NULLPTR )
     {
     return false; // FIXME: Is this the right answer ?
     }
@@ -682,7 +684,7 @@ GeometricalQuadEdge< TVRef, TFRef, TPrimalData, TDualData, PrimalDual >
 {
   const DualType *p1 = this->GetRot();
 
-  if ( p1 == NULL )
+  if ( p1 == ITK_NULLPTR )
     {
     return false;  // FIXME: Is this the right answer ?
     }
@@ -699,7 +701,7 @@ GeometricalQuadEdge< TVRef, TFRef, TPrimalData, TDualData, PrimalDual >
 {
   const DualType *p1 = this->GetInvRot();
 
-  if ( p1 == NULL )
+  if ( p1 == ITK_NULLPTR )
     {
     return false;  // FIXME: Is this the right answer ?
     }

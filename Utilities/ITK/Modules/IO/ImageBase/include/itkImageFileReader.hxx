@@ -34,7 +34,7 @@ template< typename TOutputImage, typename ConvertPixelTraits >
 ImageFileReader< TOutputImage, ConvertPixelTraits >
 ::ImageFileReader()
 {
-  m_ImageIO = 0;
+  m_ImageIO = ITK_NULLPTR;
   this->SetFileName("");
   m_UserSpecifiedImageIO = false;
   m_UseStreaming = true;
@@ -51,15 +51,7 @@ void ImageFileReader< TOutputImage, ConvertPixelTraits >
 {
   Superclass::PrintSelf(os, indent);
 
-  if ( m_ImageIO )
-    {
-    os << indent << "ImageIO: \n";
-    m_ImageIO->Print( os, indent.GetNextIndent() );
-    }
-  else
-    {
-    os << indent << "ImageIO: (null)" << "\n";
-    }
+  itkPrintSelfObjectMacro( ImageIO );
 
   os << indent << "UserSpecifiedImageIO flag: " << m_UserSpecifiedImageIO << "\n";
   os << indent << "m_UseStreaming: " << m_UseStreaming << "\n";
@@ -120,7 +112,7 @@ ImageFileReader< TOutputImage, ConvertPixelTraits >
   if ( m_ImageIO.IsNull() )
     {
     std::ostringstream msg;
-    msg << " Could not create IO object for file "
+    msg << " Could not create IO object for reading file "
         << this->GetFileName().c_str() << std::endl;
     if ( m_ExceptionMessage.size() )
       {
@@ -128,17 +120,25 @@ ImageFileReader< TOutputImage, ConvertPixelTraits >
       }
     else
       {
-      msg << "  Tried to create one of the following:" << std::endl;
       std::list< LightObject::Pointer > allobjects =
         ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
-      for ( std::list< LightObject::Pointer >::iterator i = allobjects.begin();
-            i != allobjects.end(); ++i )
+      if (allobjects.size() > 0)
         {
-        ImageIOBase *io = dynamic_cast< ImageIOBase * >( i->GetPointer() );
-        msg << "    " << io->GetNameOfClass() << std::endl;
+        msg << "  Tried to create one of the following:" << std::endl;
+        for ( std::list< LightObject::Pointer >::iterator i = allobjects.begin();
+              i != allobjects.end(); ++i )
+          {
+          ImageIOBase *io = dynamic_cast< ImageIOBase * >( i->GetPointer() );
+          msg << "    " << io->GetNameOfClass() << std::endl;
+          }
+        msg << "  You probably failed to set a file suffix, or" << std::endl;
+        msg << "    set the suffix to an unsupported type." << std::endl;
         }
-      msg << "  You probably failed to set a file suffix, or" << std::endl;
-      msg << "    set the suffix to an unsupported type." << std::endl;
+      else
+        {
+        msg << "  There are no registered IO factories." << std::endl;
+        msg << "  Please visit http://www.itk.org/Wiki/ITK/FAQ#NoFactoryException to diagnose the problem." << std::endl;
+        }
       }
     ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
     throw e;
@@ -382,7 +382,7 @@ void ImageFileReader< TOutputImage, ConvertPixelTraits >
   itkDebugMacro (<< "Setting imageIO IORegion to: " << m_ActualIORegion);
   m_ImageIO->SetIORegion(m_ActualIORegion);
 
-  char *loadBuffer = 0;
+  char *loadBuffer = ITK_NULLPTR;
   // the size of the buffer is computed based on the actual number of
   // pixels to be read and the actual size of the pixels to be read
   // (as opposed to the sizes of the output)
@@ -452,7 +452,7 @@ void ImageFileReader< TOutputImage, ConvertPixelTraits >
 
     // clean up
     delete[] loadBuffer;
-    loadBuffer = 0;
+    loadBuffer = ITK_NULLPTR;
 
     // then rethrow
     throw;
@@ -460,7 +460,7 @@ void ImageFileReader< TOutputImage, ConvertPixelTraits >
 
   // clean up
   delete[] loadBuffer;
-  loadBuffer = 0;
+  loadBuffer = ITK_NULLPTR;
 }
 
 template< typename TOutputImage, typename ConvertPixelTraits >

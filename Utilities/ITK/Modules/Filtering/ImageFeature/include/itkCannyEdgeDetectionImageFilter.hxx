@@ -78,8 +78,8 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >::CannyEdgeDetectionIm
   m_NodeStore = ListNodeStorageType::New();
   m_NodeList = ListType::New();
 
-  m_InputImage = 0;
-  m_OutputImage = 0;
+  m_InputImage = ITK_NULLPTR;
+  m_OutputImage = ITK_NULLPTR;
 }
 
 template< typename TInputImage, typename TOutputImage >
@@ -101,7 +101,6 @@ template< typename TInputImage, typename TOutputImage >
 void
 CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
-throw( InvalidRequestedRegionError )
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
@@ -117,7 +116,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
 
   ImageRegionIterator< TOutputImage > it;
 
-  void *globalData = 0;
+  void *globalData = ITK_NULLPTR;
 
   // Here input is the result from the gaussian filter
   //      output is the update buffer.
@@ -505,7 +504,7 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
                     m_ComputeCannyEdge1stDerivativeOper);
         }
 
-      gradMag = vcl_sqrt( (double)gradMag );
+      gradMag = std::sqrt( (double)gradMag );
       derivPos = zero;
       for ( unsigned int i = 0; i < ImageDimension; i++ )
         {
@@ -593,12 +592,9 @@ CannyEdgeDetectionImageFilter< TInputImage, TOutputImage >
      << m_Center << std::endl;
   os << "Stride: "
      << m_Stride << std::endl;
-  os << "Gaussian Filter: " << std::endl;
-  m_GaussianFilter->Print( os, indent.GetNextIndent() );
-  os << "Multiply image Filter: " << std::endl;
-  m_MultiplyImageFilter->Print( os, indent.GetNextIndent() );
-  os << "UpdateBuffer1: " << std::endl;
-  m_UpdateBuffer1->Print( os, indent.GetNextIndent() );
+  itkPrintSelfObjectMacro( GaussianFilter );
+  itkPrintSelfObjectMacro( MultiplyImageFilter );
+  itkPrintSelfObjectMacro( UpdateBuffer1 );
 }
 } //end of itk namespace
 #endif

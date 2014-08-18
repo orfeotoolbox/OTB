@@ -25,6 +25,7 @@ itkRealTimeInterval.cxx
 itkOctreeNode.cxx
 itkNumericTraitsFixedArrayPixel.cxx
 itkMultiThreader.cxx
+itkMetaDataObject.cxx
 itkMetaDataDictionary.cxx
 itkDataObject.cxx
 itkThreadLogger.cxx
@@ -78,10 +79,11 @@ itkStoppingCriterionBase.cxx
 itkCompensatedSummation.cxx
 itkArrayOutputSpecialization.cxx
 itkNumberToString.cxx
+itkSmartPointerForwardReferenceProcessObject.cxx
 )
 
 if(WIN32)
-   set(ITKCommon_SRCS ${ITKCommon_SRCS};itkWin32OutputWindow.cxx;itkSmartPointerForwardReferenceProcessObject.cxx)
+   set(ITKCommon_SRCS ${ITKCommon_SRCS};itkWin32OutputWindow.cxx)
 endif()
 
 # Prevent optimization from affecting the floating point calculation.
@@ -102,6 +104,11 @@ elseif( CMAKE_COMPILER_IS_GNUCXX )
   endif()
 elseif( MSVC )
   set_source_files_properties( itkCompensatedSummation.cxx PROPERTIES COMPILE_FLAGS -fp:precise )
+endif()
+
+if( CMAKE_CXX_COMPILER_ID MATCHES Clang AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.0" )
+  # this file contains explicitly instantiated template classes which are not correcly exported with the hidden visibility flag
+  set_source_files_properties( itkSmartPointerForwardReferenceProcessObject.cxx PROPERTIES COMPILE_FLAGS -fvisibility=default )
 endif()
 
 

@@ -28,8 +28,13 @@ namespace itk
 
 template< typename TInput, unsigned int VDimension, typename TOutput, typename TDomain >
 LevelSetBase< TInput, VDimension, TOutput, TDomain >
-::LevelSetBase()
-  {}
+::LevelSetBase() :
+  m_MaximumNumberOfRegions(0),
+  m_NumberOfRegions(0),
+  m_RequestedNumberOfRegions(0),
+  m_BufferedRegion(0),
+  m_RequestedRegion(0)
+{}
 
 // ----------------------------------------------------------------------------
 template< typename TInput, unsigned int VDimension, typename TOutput, typename TDomain >
@@ -208,19 +213,7 @@ void
 LevelSetBase< TInput, VDimension, TOutput, TDomain >
 ::CopyInformation(const DataObject *data)
 {
-  const LevelSetBase *levelSet = NULL;
-
-  try
-    {
-    levelSet = dynamic_cast< const LevelSetBase * >( data );
-    }
-  catch ( ... )
-    {
-    // pointer could not be cast back down
-    itkExceptionMacro( << "itk::LevelSetBase::CopyInformation() cannot cast "
-                       << typeid( data ).name() << " to "
-                       << typeid( LevelSetBase * ).name() );
-    }
+  const LevelSetBase *levelSet = dynamic_cast< const LevelSetBase * >( data );
 
   if ( !levelSet )
     {
@@ -247,19 +240,7 @@ LevelSetBase< TInput, VDimension, TOutput, TDomain >
   // Copy Meta Data
   this->CopyInformation(data);
 
-  const Self * levelSet = NULL;
-
-  try
-    {
-    levelSet = dynamic_cast< const Self * >( data );
-    }
-  catch ( ... )
-    {
-    // pointer could not be cast back down
-    itkExceptionMacro( << "itk::LevelSetBase::CopyInformation() cannot cast "
-                       << typeid( data ).name() << " to "
-                       << typeid( Self * ).name() );
-    }
+  const Self * levelSet = dynamic_cast< const Self * >( data );
 
   if ( !levelSet )
     {

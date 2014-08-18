@@ -25,8 +25,8 @@ fi
 # EDIT THIS SCRIPT to change the hash tag at which to begin the
 # next update...
 #
-# This merge done April 30 2013
-git branch DoubleConversion-upstream 0447797f4afab5c5
+# This merge done April 28, 2014
+git branch DoubleConversion-upstream 1feae55e5af21e36
 
 #
 # Make a temp directory to handle the import of the upstream source
@@ -53,13 +53,16 @@ git clone https://code.google.com/p/double-conversion/
 # recover the upstream commit date.
 cd double-conversion
 upstream_date="$(git log -n 1 --format='%cd')"
+upstream_sha="$(git rev-parse HEAD)"
 cd ..
 
 #
 # Check to see if LICENSE file changed -- if changed, fix in a separate
 # commit.
-if [ ! diff double-conversion/LICENSE ../Modules/ThirdParty/DoubleConversion/LICENSE ]
+if  diff double-conversion/LICENSE ../Modules/ThirdParty/DoubleConversion/src/LICENSE
 then
+    echo LICENSE file unchanged
+else
     echo The double-conversion LICENSE file has changed.  Please
     echo add the change in a separate commit by hand and run this script again.
     exit 1
@@ -77,7 +80,12 @@ git add --all
 GIT_AUTHOR_NAME='Google double-conversion Maintainers' \
 GIT_AUTHOR_EMAIL='floitsch@google.com' \
 GIT_AUTHOR_DATE="${upstream_date}" \
-git commit -q -m "Google double-conversion (reduced)"
+git commit -q -m "Google double-conversion (reduced)
+
+This corresponds to commit hash
+  ${upstream_sha}
+from Google repository
+  http://code.google.com/p/double-conversion"
 
 #
 # push to the DoubleConversion-upstream branch in the

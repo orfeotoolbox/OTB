@@ -140,7 +140,7 @@ public:
         m_BoundingBox[i] = NumericTraits< IndexValueType >::max();
         m_BoundingBox[i + 1] = NumericTraits< IndexValueType >::NonpositiveMin();
         }
-      m_Histogram = 0;
+      m_Histogram = ITK_NULLPTR;
     }
 
     // constructor with histogram enabled
@@ -345,9 +345,6 @@ protected:
   void  ThreadedGenerateData(const RegionType &
                              outputRegionForThread,
                              ThreadIdType threadId);
-
-  // Override since the filter needs all the data for the algorithm
-  void GenerateInputRequestedRegion();
 
   // Override since the filter produces all of its output
   void EnlargeOutputRequestedRegion(DataObject *data);

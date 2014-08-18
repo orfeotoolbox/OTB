@@ -58,7 +58,7 @@ LightObject::New()
   Pointer      smartPtr;
   LightObject *rawPtr = ::itk::ObjectFactory< LightObject >::Create();
 
-  if ( rawPtr == NULL )
+  if ( rawPtr == ITK_NULLPTR )
     {
     rawPtr = new LightObject;
     }
@@ -286,7 +286,7 @@ LightObject
 #ifdef GCC_USEDEMANGLE
   char const *mangledName = typeid( *this ).name();
   int         status;
-  char *      unmangled = abi::__cxa_demangle(mangledName, 0, 0, &status);
+  char *      unmangled = abi::__cxa_demangle(mangledName, ITK_NULLPTR, ITK_NULLPTR, &status);
 
   os << indent << "RTTI typeinfo:   ";
 
@@ -325,12 +325,6 @@ LightObject
 ::PrintTrailer( std::ostream & itkNotUsed(os), Indent itkNotUsed(indent) ) const
 {}
 
-/**
- * This operator allows all subclasses of LightObject to be printed via <<.
- * It in turn invokes the Print method, which in turn will invoke the
- * PrintSelf method that all objects should define, if they have anything
- * interesting to print out.
- */
 std::ostream &
 operator<<(std::ostream & os, const LightObject & o)
 {

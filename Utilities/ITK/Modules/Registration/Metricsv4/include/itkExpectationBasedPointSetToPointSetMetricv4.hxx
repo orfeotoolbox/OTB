@@ -24,24 +24,26 @@
 namespace itk {
 
 /** Constructor */
-template<typename TFixedPointSet, typename TMovingPointSet>
-ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
+ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::ExpectationBasedPointSetToPointSetMetricv4() :
   m_PointSetSigma( 1.0 ),
+  m_PreFactor( 0.0 ),
+  m_Denominator( 0.0 ),
   m_EvaluationKNeighborhood( 50 )
 {
 }
 
 /** Destructor */
-template<typename TFixedPointSet, typename TMovingPointSet>
-ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
+ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::~ExpectationBasedPointSetToPointSetMetricv4()
 {
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::Initialize( void ) throw ( ExceptionObject )
 {
   Superclass::Initialize();
@@ -50,14 +52,14 @@ ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
     {
     itkExceptionMacro("m_PointSetSigma is too small. <= epsilon");
     }
-  this->m_PreFactor = 1.0 / ( vcl_sqrt( 2 * vnl_math::pi ) * this->m_PointSetSigma );
+  this->m_PreFactor = 1.0 / ( std::sqrt( 2 * vnl_math::pi ) * this->m_PointSetSigma );
   this->m_Denominator = 2.0 * vnl_math_sqr( this->m_PointSetSigma );
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
-typename ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
+typename ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::MeasureType
-ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::GetLocalNeighborhoodValue( const PointType & point, const PixelType & itkNotUsed( pixel ) ) const
 {
   MeasureType localValue = NumericTraits<MeasureType>::Zero;
@@ -69,15 +71,15 @@ ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
     {
     PointType neighbor = this->m_MovingTransformedPointSet->GetPoint( *it );
     const MeasureType distance = point.SquaredEuclideanDistanceTo( neighbor );
-    localValue -= this->m_PreFactor * vcl_exp( -distance / this->m_Denominator );
+    localValue -= this->m_PreFactor * std::exp( -distance / this->m_Denominator );
     }
 
   return localValue;
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::GetLocalNeighborhoodValueAndDerivative( const PointType & point,
   MeasureType &measure, LocalDerivativeType &localDerivative, const PixelType & itkNotUsed( pixel ) ) const
 {
@@ -100,11 +102,11 @@ ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
     {
     PointType neighbor = this->m_MovingTransformedPointSet->GetPoint( *it );
     const MeasureType distance = point.SquaredEuclideanDistanceTo( neighbor );
-    measureValues[it - neighborhood.begin()] = -this->m_PreFactor * vcl_exp( -distance / this->m_Denominator );
+    measureValues[it - neighborhood.begin()] = -this->m_PreFactor * std::exp( -distance / this->m_Denominator );
     measure += measureValues[it - neighborhood.begin()];
     }
 
-  if ( vcl_fabs(measure) <= NumericTraits<MeasureType>::epsilon() )
+  if ( std::fabs(measure) <= NumericTraits<MeasureType>::epsilon() )
     {
     return;
     }
@@ -118,7 +120,7 @@ ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
 
   const MeasureType distance = point.SquaredEuclideanDistanceTo( weightedPoint );
 
-  const MeasureType weight = this->m_PreFactor * vcl_exp( -distance / this->m_Denominator ) / -measure;
+  const MeasureType weight = this->m_PreFactor * std::exp( -distance / this->m_Denominator ) / -measure;
 
   VectorType force = ( weightedPoint - point ) * weight;
 
@@ -128,27 +130,23 @@ ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
     }
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
-::itk::LightObject::Pointer
-ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
-::Clone( void ) const
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
+typename LightObject::Pointer
+ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
+::InternalClone( void ) const
 {
-  ::itk::LightObject::Pointer smartPtr;
-  Pointer copyPtr = Self::New();
+  typename Self::Pointer rval = Self::New();
+  rval->SetMovingPointSet( this->m_MovingPointSet );
+  rval->SetFixedPointSet( this->m_FixedPointSet );
+  rval->SetPointSetSigma( this->m_PointSetSigma );
+  rval->SetEvaluationKNeighborhood( this->m_EvaluationKNeighborhood );
 
-  copyPtr->m_MovingPointSet = this->m_MovingPointSet;
-  copyPtr->m_FixedPointSet = this->m_FixedPointSet;
-  copyPtr->m_PointSetSigma = this->m_PointSetSigma;
-  copyPtr->m_EvaluationKNeighborhood = this->m_EvaluationKNeighborhood;
-
-  smartPtr = static_cast<Pointer>( copyPtr );
-
-  return smartPtr;
+  return rval.GetPointer();
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+ExpectationBasedPointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::PrintSelf( std::ostream& os, Indent indent ) const
 {
   Superclass::PrintSelf( os, indent );

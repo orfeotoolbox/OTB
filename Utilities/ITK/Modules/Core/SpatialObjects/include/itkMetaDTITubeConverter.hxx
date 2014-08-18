@@ -43,7 +43,7 @@ MetaDTITubeConverter< NDimensions >
 ::MetaObjectToSpatialObject(const MetaObjectType *mo)
 {
   const MetaDTITube *tube = dynamic_cast<const MetaDTITube *>(mo);
-  if(tube == 0)
+  if(tube == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "Can't downcast MetaObject to MetaDTITube");
     }
@@ -69,7 +69,6 @@ MetaDTITubeConverter< NDimensions >
   tubeSO->GetProperty()->SetAlpha(tube->Color()[3]);
 
   typedef itk::DTITubeSpatialObjectPoint< NDimensions > TubePointType;
-  typedef TubePointType *                               TubePointPointer;
 
   MetaDTITube::PointListType::const_iterator it2 = tube->GetPoints().begin();
 

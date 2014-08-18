@@ -117,7 +117,7 @@ public:
   }
 
   /**  Invoke the member function. */
-  virtual void Execute(Object *caller, const EventObject & event)
+  virtual void Execute(Object *caller, const EventObject & event) ITK_OVERRIDE
   {
     if ( m_MemberFunction )
       {
@@ -126,7 +126,7 @@ public:
   }
 
   /**  Invoke the member function with a const object. */
-  virtual void Execute(const Object *caller, const EventObject & event)
+  virtual void Execute(const Object *caller, const EventObject & event) ITK_OVERRIDE
   {
     if ( m_ConstMemberFunction )
       {
@@ -135,15 +135,16 @@ public:
   }
 
 protected:
-
   T *                         m_This;
   TMemberFunctionPointer      m_MemberFunction;
   TConstMemberFunctionPointer m_ConstMemberFunction;
-  MemberCommand():
-    m_This( NULL ),
-    m_MemberFunction( NULL ),
-    m_ConstMemberFunction( NULL )
+
+  MemberCommand() :
+    m_This( ITK_NULLPTR ),
+    m_MemberFunction( ITK_NULLPTR ),
+    m_ConstMemberFunction( ITK_NULLPTR )
   {}
+
   virtual ~MemberCommand(){}
 
 private:
@@ -187,7 +188,7 @@ public:
   }
 
   /**  Invoke the member function. */
-  virtual void Execute(Object *, const EventObject & event)
+  virtual void Execute(Object *, const EventObject & event) ITK_OVERRIDE
   {
     if ( m_MemberFunction )
       {
@@ -196,7 +197,7 @@ public:
   }
 
   /**  Invoke the member function with a const object */
-  virtual void Execute(const Object *, const EventObject & event)
+  virtual void Execute(const Object *, const EventObject & event) ITK_OVERRIDE
   {
     if ( m_MemberFunction )
       {
@@ -207,7 +208,12 @@ public:
 protected:
   T *                    m_This;
   TMemberFunctionPointer m_MemberFunction;
-  ReceptorMemberCommand():m_MemberFunction(0) {}
+
+  ReceptorMemberCommand() :
+    m_This( ITK_NULLPTR ),
+    m_MemberFunction( ITK_NULLPTR )
+  {}
+
   virtual ~ReceptorMemberCommand() {}
 
 private:
@@ -250,7 +256,7 @@ public:
   }
 
   /** Invoke the callback function. */
-  virtual void Execute(Object *, const EventObject &)
+  virtual void Execute(Object *, const EventObject &) ITK_OVERRIDE
   {
     if ( m_MemberFunction )
       {
@@ -258,7 +264,7 @@ public:
       }
   }
 
-  virtual void Execute(const Object *, const EventObject &)
+  virtual void Execute(const Object *, const EventObject &) ITK_OVERRIDE
   {
     if ( m_MemberFunction )
       {
@@ -269,10 +275,12 @@ public:
 protected:
   T *                    m_This;
   TMemberFunctionPointer m_MemberFunction;
-  SimpleMemberCommand():
-    m_This( NULL ),
-    m_MemberFunction( NULL )
+
+  SimpleMemberCommand() :
+    m_This( ITK_NULLPTR ),
+    m_MemberFunction( ITK_NULLPTR )
   {}
+
   virtual ~SimpleMemberCommand() {}
 
 private:
@@ -315,7 +323,7 @@ public:
   }
 
   /** Invoke the const member method callback. */
-  virtual void Execute(Object *, const EventObject &)
+  virtual void Execute(Object *, const EventObject &) ITK_OVERRIDE
   {
     if ( m_MemberFunction )
       {
@@ -323,7 +331,7 @@ public:
       }
   }
 
-  virtual void Execute(const Object *, const EventObject &)
+  virtual void Execute(const Object *, const EventObject &) ITK_OVERRIDE
   {
     if ( m_MemberFunction )
       {
@@ -334,10 +342,12 @@ public:
 protected:
   const T *              m_This;
   TMemberFunctionPointer m_MemberFunction;
-  SimpleConstMemberCommand():
+
+  SimpleConstMemberCommand() :
     m_This( NULL ),
     m_MemberFunction( NULL )
   {}
+
   virtual ~SimpleConstMemberCommand() {}
 
 private:
@@ -391,7 +401,7 @@ public:
   { m_ClientDataDeleteCallback = f; }
 
   /** Execute the callback function. */
-  void Execute(Object *caller, const EventObject & event)
+  virtual void Execute(Object *caller, const EventObject & event) ITK_OVERRIDE
   {
     if ( m_Callback )
       {
@@ -400,7 +410,7 @@ public:
   }
 
   /** Execute the callback function with a const Object */
-  void Execute(const Object *caller, const EventObject & event)
+  virtual void Execute(const Object *caller, const EventObject & event) ITK_OVERRIDE
   {
     if ( m_ConstCallback )
       {
@@ -409,11 +419,12 @@ public:
   }
 
 protected:
-  CStyleCommand():m_ClientData(0), m_Callback(0), m_ConstCallback(0),
-    m_ClientDataDeleteCallback(0)
-  {
-    // not implemented
-  }
+  CStyleCommand() :
+    m_ClientData( ITK_NULLPTR ),
+    m_Callback( ITK_NULLPTR ),
+    m_ConstCallback( ITK_NULLPTR ),
+    m_ClientDataDeleteCallback( ITK_NULLPTR )
+  {}
 
   ~CStyleCommand()
   {

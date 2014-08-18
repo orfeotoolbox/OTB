@@ -79,7 +79,6 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
 ::StartOptimization()
 {
   const DisplacementVectorType zeroVector( 0.0 );
-  typedef ImageDuplicator<DisplacementFieldType> DisplacementFieldDuplicatorType;
 
   typename VirtualImageType::ConstPointer virtualDomainImage;
   typename MovingImageMaskType::ConstPointer movingImageMask;
@@ -115,21 +114,22 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
       }
     }
 
+  InitialTransformType* fixedInitialTransform = const_cast<InitialTransformType*>(this->GetFixedInitialTransform());
+
   // Monitor the convergence
   typedef itk::Function::WindowConvergenceMonitoringFunction<RealType> ConvergenceMonitoringType;
   typename ConvergenceMonitoringType::Pointer convergenceMonitoring = ConvergenceMonitoringType::New();
   convergenceMonitoring->SetWindowSize( this->m_ConvergenceWindowSize );
-
-  typedef IdentityTransform<RealType, ImageDimension> IdentityTransformType;
-  typename IdentityTransformType::Pointer identityTransform;
-  identityTransform = IdentityTransformType::New();
 
   IterationReporter reporter( this, 0, 1 );
 
   while( this->m_CurrentIteration++ < this->m_NumberOfIterationsPerLevel[this->m_CurrentLevel] && !this->m_IsConverged )
     {
     typename CompositeTransformType::Pointer fixedComposite = CompositeTransformType::New();
-    fixedComposite->AddTransform( this->m_FixedInitialTransform );
+    if ( fixedInitialTransform != ITK_NULLPTR )
+      {
+      fixedComposite->AddTransform( fixedInitialTransform );
+      }
     fixedComposite->AddTransform( this->m_FixedToMiddleTransform->GetInverseTransform() );
     fixedComposite->FlattenTransformQueue();
     fixedComposite->SetOnlyMostRecentTransformToOptimizeOn();
@@ -170,7 +170,7 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
     fixedComposer->Update();
 
     DisplacementFieldPointer fixedToMiddleSmoothTotalFieldTmp = this->BSplineSmoothDisplacementField( fixedComposer->GetOutput(),
-      this->m_FixedToMiddleTransform->GetNumberOfControlPointsForTheTotalField(), NULL );
+      this->m_FixedToMiddleTransform->GetNumberOfControlPointsForTheTotalField(), ITK_NULLPTR );
 
     typename ComposerType::Pointer movingComposer = ComposerType::New();
     movingComposer->SetDisplacementField( movingToMiddleSmoothUpdateField );
@@ -178,7 +178,7 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
     movingComposer->Update();
 
     DisplacementFieldPointer movingToMiddleSmoothTotalFieldTmp = this->BSplineSmoothDisplacementField( movingComposer->GetOutput(),
-      this->m_MovingToMiddleTransform->GetNumberOfControlPointsForTheTotalField(), NULL );
+      this->m_MovingToMiddleTransform->GetNumberOfControlPointsForTheTotalField(), ITK_NULLPTR );
 
     // Iteratively estimate the inverse fields.
 
@@ -384,7 +384,7 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
   importer->SetDirection( virtualDomainImage->GetDirection() );
   importer->Update();
 
-  typename WeightedMaskImageType::Pointer weightedMask = NULL;
+  typename WeightedMaskImageType::Pointer weightedMask = ITK_NULLPTR;
 
   if( mask )
     {
@@ -424,7 +424,7 @@ BSplineSyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
       {
       localNorm += vnl_math_sqr( vector[d] / spacing[d] );
       }
-    localNorm = vcl_sqrt( localNorm );
+    localNorm = std::sqrt( localNorm );
 
     if( localNorm > maxNorm )
       {

@@ -23,9 +23,13 @@
 namespace itk
 {
 template< typename TInput, typename TOutput, typename TCriterion >
-EdgeDecimationQuadEdgeMeshFilter< TInput, TOutput,
-                                       TCriterion >::EdgeDecimationQuadEdgeMeshFilter():Superclass(),
-  m_Relocate(true), m_CheckOrientation(false)
+EdgeDecimationQuadEdgeMeshFilter< TInput, TOutput,TCriterion >::
+EdgeDecimationQuadEdgeMeshFilter() :
+  Superclass(),
+  m_Relocate(true),
+  m_CheckOrientation(false),
+  m_Element(ITK_NULLPTR)
+
 {
   m_JoinVertexFunction = OperatorType::New();
   m_PriorityQueue = PriorityQueueType::New();
@@ -103,7 +107,7 @@ IsEdgeOKToBeProcessed(OutputQEType *)
 #endif
   {
 #ifdef NDEBUG
-  if ( iEdge == 0 )
+  if ( iEdge == ITK_NULLPTR )
     {
     itkDebugMacro("iEdge == 0, at iteration: " << this->m_Iteration);
     return false;
@@ -118,13 +122,13 @@ IsEdgeOKToBeProcessed(OutputQEType *)
     }
 
   OutputMeshPointer output = this->GetOutput();
-  if ( output->FindEdge(id_org) == 0 )
+  if ( output->FindEdge(id_org) == ITK_NULLPTR )
     {
     itkDebugMacro("output->FindEdge( id_org ) == 0, at iteration: "
                   << this->m_Iteration);
     return false;
     }
-  if ( iEdge->GetSym() == 0 )
+  if ( iEdge->GetSym() == ITK_NULLPTR )
     {
     itkDebugMacro("iEdge->GetSym() == 0, at iteration: "
                   << this->m_Iteration);
@@ -138,13 +142,13 @@ IsEdgeOKToBeProcessed(OutputQEType *)
                   << this->m_Iteration);
     return false;
     }
-  if ( output->FindEdge(id_dest) == 0 )
+  if ( output->FindEdge(id_dest) == ITK_NULLPTR )
     {
     itkDebugMacro("output->FindEdge( id_dest ) == 0, at iteration: "
                   << this->m_Iteration);
     return false;
     }
-  if ( output->FindEdge(id_org, id_dest) == 0 )
+  if ( output->FindEdge(id_org, id_dest) == ITK_NULLPTR )
     {
     itkDebugMacro("output->FindEdge( id_org, id_dest ) == 0, at iteration: "
                   << this->m_Iteration);
@@ -372,7 +376,7 @@ EdgeDecimationQuadEdgeMeshFilter< TInput, TOutput, TCriterion >::ProcessWithoutA
     DeletePoint(old_id, new_id);
 
     OutputQEType *edge = this->m_OutputMesh->FindEdge(new_id);
-    if ( edge == 0 )
+    if ( edge == ITK_NULLPTR )
       {
       itkDebugMacro("edge == 0, at iteration " << this->m_Iteration);
       return false;

@@ -18,6 +18,8 @@
 #
 #==========================================================================*/
 
+from __future__ import print_function
+
 usage = """usage: BuildHeaderTest.py <module_name> <module_source_path> <module_binary_path> <maximum_number_of_headers>
 
 This script generates a a source file designed to check the headers in each

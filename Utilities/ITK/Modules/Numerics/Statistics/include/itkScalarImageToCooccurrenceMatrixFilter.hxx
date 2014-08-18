@@ -173,7 +173,7 @@ ScalarImageToCooccurrenceMatrixFilter< TImageType,
   RadiusType radius;
   radius.Fill(minRadius);
 
-  const ImageType *maskImage = NULL;
+  const ImageType *maskImage = ITK_NULLPTR;
 
   // Check if a mask image has been provided
   //
@@ -183,7 +183,7 @@ ScalarImageToCooccurrenceMatrixFilter< TImageType,
     }
 
   // Now fill in the histogram
-  if ( maskImage != NULL )
+  if ( maskImage != ITK_NULLPTR )
     {
     this->FillHistogramWithMask(radius, input->GetRequestedRegion(), maskImage);
     }
@@ -230,6 +230,7 @@ ScalarImageToCooccurrenceMatrixFilter< TImageType,
       }
 
     typename OffsetVector::ConstIterator offsets;
+    typename HistogramType::IndexType index;
     for ( offsets = m_Offsets->Begin(); offsets != m_Offsets->End(); offsets++ )
       {
       bool            pixelInBounds;
@@ -253,11 +254,13 @@ ScalarImageToCooccurrenceMatrixFilter< TImageType,
 
       cooccur[0] = centerPixelIntensity;
       cooccur[1] = pixelIntensity;
-      output->IncreaseFrequencyOfMeasurement(cooccur, 1);
+      output->GetIndex( cooccur, index );
+      output->IncreaseFrequencyOfIndex( index, 1 );
 
       cooccur[1] = centerPixelIntensity;
       cooccur[0] = pixelIntensity;
-      output->IncreaseFrequencyOfMeasurement(cooccur, 1);
+      output->GetIndex( cooccur, index );
+      output->IncreaseFrequencyOfIndex( index, 1 );
       }
     }
 }
@@ -285,7 +288,7 @@ ScalarImageToCooccurrenceMatrixFilter< TImageType,
   maskNeighborIt = NeighborhoodIteratorType(radius, maskImage, region);
 
   MeasurementVectorType cooccur( output->GetMeasurementVectorSize() );
-
+  typename HistogramType::IndexType index;
   for ( neighborIt.GoToBegin(), maskNeighborIt.GoToBegin();
         !neighborIt.IsAtEnd(); ++neighborIt, ++maskNeighborIt )
     {
@@ -332,11 +335,14 @@ ScalarImageToCooccurrenceMatrixFilter< TImageType,
 
       cooccur[0] = centerPixelIntensity;
       cooccur[1] = pixelIntensity;
-      output->IncreaseFrequencyOfMeasurement(cooccur, 1);
+      output->GetIndex( cooccur, index );
+      output->IncreaseFrequencyOfIndex(index, 1);
+
 
       cooccur[1] = centerPixelIntensity;
       cooccur[0] = pixelIntensity;
-      output->IncreaseFrequencyOfMeasurement(cooccur, 1);
+      output->GetIndex( cooccur, index );
+      output->IncreaseFrequencyOfIndex(index, 1);
       }
     }
 }

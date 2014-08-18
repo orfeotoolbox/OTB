@@ -47,9 +47,9 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::BSplineInterpolateImageFunction()
 {
   m_NumberOfThreads = 1;
-  m_ThreadedEvaluateIndex = NULL;
-  m_ThreadedWeights = NULL;
-  m_ThreadedWeightsDerivative = NULL;
+  m_ThreadedEvaluateIndex = ITK_NULLPTR;
+  m_ThreadedWeights = ITK_NULLPTR;
+  m_ThreadedWeightsDerivative = ITK_NULLPTR;
 
   m_CoefficientFilter = CoefficientFilter::New();
   m_Coefficients = CoefficientImageType::New();
@@ -65,13 +65,13 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::~BSplineInterpolateImageFunction()
 {
   delete[] m_ThreadedEvaluateIndex;
-  m_ThreadedEvaluateIndex = NULL;
+  m_ThreadedEvaluateIndex = ITK_NULLPTR;
 
   delete[] m_ThreadedWeights;
-  m_ThreadedWeights = NULL;
+  m_ThreadedWeights = ITK_NULLPTR;
 
   delete[] m_ThreadedWeightsDerivative;
-  m_ThreadedWeightsDerivative = NULL;
+  m_ThreadedWeightsDerivative = ITK_NULLPTR;
 }
 
 /**
@@ -111,7 +111,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
     }
   else
     {
-    m_Coefficients = NULL;
+    m_Coefficients = ITK_NULLPTR;
     }
 }
 
@@ -151,12 +151,12 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::OutputType
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::EvaluateAtContinuousIndex(const ContinuousIndexType & x,
-                            ThreadIdType threadID) const
+                            ThreadIdType threadId) const
 {
 // FIXME -- Review this "fix" and ensure it works.
 #if 1
-  vnl_matrix< long > *  evaluateIndex = &( m_ThreadedEvaluateIndex[threadID] );
-  vnl_matrix< double > *weights = &( m_ThreadedWeights[threadID] );
+  vnl_matrix< long > *  evaluateIndex = &( m_ThreadedEvaluateIndex[threadId] );
+  vnl_matrix< double > *weights = &( m_ThreadedWeights[threadId] );
   // Pass evaluateIndex, weights by reference. Different threadIDs get
   // different instances.
   return this->EvaluateAtContinuousIndexInternal(x, *evaluateIndex, *weights);
@@ -164,14 +164,14 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
   // FIXME - Should copy matrices to the stack for thread safety.
   // This method is being called by multiple threads through
   // EvaluateAtContinuousIndex( const ContinuousIndexType & x).
-  // When that method delegates here, it passes threadID = 0.
+  // When that method delegates here, it passes threadId = 0.
   // This causes problems because multiple threads end up writing
   // on the same matrices.
   // Other methods will probably be affected by the same issue. For
   // example EvaluateDerivativeAtContinuousIndex and
   // EvaluateValueAndDerivativeAtContinuousIndex.
-  vnl_matrix< long >   evaluateIndex = ( m_ThreadedEvaluateIndex[threadID] );
-  vnl_matrix< double > weights = ( m_ThreadedWeights[threadID] );
+  vnl_matrix< long >   evaluateIndex = ( m_ThreadedEvaluateIndex[threadId] );
+  vnl_matrix< double > weights = ( m_ThreadedWeights[threadId] );
 
   // compute the interpolation indexes
   this->DetermineRegionOfSupport( ( evaluateIndex ), x, m_SplineOrder );
@@ -208,14 +208,14 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::CovariantVectorType
 BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::EvaluateDerivativeAtContinuousIndex(const ContinuousIndexType & x,
-                                      ThreadIdType threadID) const
+                                      ThreadIdType threadId) const
 {
 // FIXME -- Review this "fix" and ensure it works.
 #if 1
-  vnl_matrix< long > *  evaluateIndex =   &( m_ThreadedEvaluateIndex[threadID] );
-  vnl_matrix< double > *weights =       &( m_ThreadedWeights[threadID] );
+  vnl_matrix< long > *  evaluateIndex =   &( m_ThreadedEvaluateIndex[threadId] );
+  vnl_matrix< double > *weights =       &( m_ThreadedWeights[threadId] );
   vnl_matrix< double > *weightsDerivative =
-    &( m_ThreadedWeightsDerivative[threadID] );
+    &( m_ThreadedWeightsDerivative[threadId] );
 
   return this->EvaluateDerivativeAtContinuousIndexInternal(x,
                                                            *evaluateIndex,
@@ -223,10 +223,10 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
                                                            *weightsDerivative);
 
 #else
-  vnl_matrix< long > *  evaluateIndex =   &( m_ThreadedEvaluateIndex[threadID] );
-  vnl_matrix< double > *weights =       &( m_ThreadedWeights[threadID] );
+  vnl_matrix< long > *  evaluateIndex =   &( m_ThreadedEvaluateIndex[threadId] );
+  vnl_matrix< double > *weights =       &( m_ThreadedWeights[threadId] );
   vnl_matrix< double > *weightsDerivative =
-    &( m_ThreadedWeightsDerivative[threadID] );
+    &( m_ThreadedWeightsDerivative[threadId] );
 
   this->DetermineRegionOfSupport( ( *evaluateIndex ), x, m_SplineOrder );
 
@@ -290,14 +290,14 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
 ::EvaluateValueAndDerivativeAtContinuousIndex(const ContinuousIndexType & x,
                                               OutputType & value,
                                               CovariantVectorType & derivativeValue,
-                                              ThreadIdType threadID) const
+                                              ThreadIdType threadId) const
 {
 // FIXME -- Review this "fix" and ensure it works.
 #if 1
-  vnl_matrix< long > *  evaluateIndex =   &( m_ThreadedEvaluateIndex[threadID] );
-  vnl_matrix< double > *weights =       &( m_ThreadedWeights[threadID] );
+  vnl_matrix< long > *  evaluateIndex =   &( m_ThreadedEvaluateIndex[threadId] );
+  vnl_matrix< double > *weights =       &( m_ThreadedWeights[threadId] );
   vnl_matrix< double > *weightsDerivative =
-    &( m_ThreadedWeightsDerivative[threadID] );
+    &( m_ThreadedWeightsDerivative[threadId] );
 
   this->EvaluateValueAndDerivativeAtContinuousIndexInternal(x,
                                                             value,
@@ -306,10 +306,10 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
                                                             *weights,
                                                             *weightsDerivative);
 #else
-  vnl_matrix< long > *  evaluateIndex =   &( m_ThreadedEvaluateIndex[threadID] );
-  vnl_matrix< double > *weights =       &( m_ThreadedWeights[threadID] );
+  vnl_matrix< long > *  evaluateIndex =   &( m_ThreadedEvaluateIndex[threadId] );
+  vnl_matrix< double > *weights =       &( m_ThreadedWeights[threadId] );
   vnl_matrix< double > *weightsDerivative =
-    &( m_ThreadedWeightsDerivative[threadID] );
+    &( m_ThreadedWeightsDerivative[threadId] );
 
   this->DetermineRegionOfSupport( ( *evaluateIndex ), x, m_SplineOrder );
 
@@ -667,7 +667,7 @@ BSplineInterpolateImageFunction< TImageType, TCoordRep, TCoefficientType >
   const float halfOffset = splineOrder & 1 ? 0.0 : 0.5;
   for ( unsigned int n = 0; n < ImageDimension; n++ )
     {
-    long indx = (long)vcl_floor( (float)x[n] + halfOffset ) - splineOrder / 2;
+    long indx = (long)std::floor( (float)x[n] + halfOffset ) - splineOrder / 2;
     for ( unsigned int k = 0; k <= splineOrder; k++ )
       {
       evaluateIndex[n][k] = indx++;

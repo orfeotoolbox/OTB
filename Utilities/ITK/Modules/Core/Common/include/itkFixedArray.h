@@ -31,7 +31,7 @@ namespace itk
  * assigned to one another, and size information is known for function
  * returns.
  *
- * \tparam TValueType Element type stored at each location in the array.
+ * \tparam TValue Element type stored at each location in the array.
  * \tparam VLength    = Length of the array.
  *
  * The length of the array is fixed at compile time. If you wish to
@@ -46,7 +46,7 @@ namespace itk
  * \wikiexample{Utilities/FixedArray,C-style array}
  * \endwiki
  */
-template< typename TValueType, unsigned int VLength = 3 >
+template< typename TValue, unsigned int VLength = 3 >
 class FixedArray
 {
 public:
@@ -57,7 +57,7 @@ public:
   itkStaticConstMacro(Dimension, unsigned int, VLength);
 
   /** The element type stored at each location in the FixedArray. */
-  typedef TValueType ValueType;
+  typedef TValue ValueType;
 
   /** A type representing the C-array version of this FixedArray. */
   typedef ValueType CArray[VLength];
@@ -142,7 +142,7 @@ public:
     Iterator i = this->Begin();
     while ( i != this->End() )
       {
-      *i++ = static_cast< TValueType >( *input++ );
+      *i++ = static_cast< TValue >( *input++ );
       }
   }
 
@@ -169,13 +169,13 @@ public:
   template< typename TFixedArrayValueType >
   FixedArray & operator=(const FixedArray< TFixedArrayValueType, VLength > & r)
   {
-    if ( (void *)r.Begin() != (void *)m_InternalArray )
+    if ( (const void *)r.Begin() != (const void *)m_InternalArray )
       {
       typename FixedArray< TFixedArrayValueType, VLength >::ConstIterator input = r.Begin();
       Iterator i = this->Begin();
       while ( i != this->End() )
         {
-        *i++ = static_cast< TValueType >( *input++ );
+        *i++ = static_cast< TValue >( *input++ );
         }
       }
     return *this;
@@ -200,8 +200,20 @@ public:
   const_reference operator[](unsigned short index) const { return m_InternalArray[index]; }
   reference operator[](int index)                  { return m_InternalArray[index]; }
   const_reference operator[](int index) const { return m_InternalArray[index]; }
+// false positive warnings with GCC 4.9
+#if defined( __GNUC__ )
+#if ( __GNUC__ == 4 ) && ( __GNUC_MINOR__ == 9 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
+#endif
   reference operator[](unsigned int index)         { return m_InternalArray[index]; }
   const_reference operator[](unsigned int index) const { return m_InternalArray[index]; }
+#if defined( __GNUC__ )
+#if ( __GNUC__ == 4 ) && ( __GNUC_MINOR__ == 9 )
+#pragma GCC diagnostic pop
+#endif
+#endif
   reference operator[](long index)                 { return m_InternalArray[index]; }
   const_reference operator[](long index) const { return m_InternalArray[index]; }
   reference operator[](unsigned long index)        { return m_InternalArray[index]; }
@@ -257,8 +269,8 @@ public:
   static FixedArray Filled(const ValueType &);
 };
 
-template< typename TValueType, unsigned int VLength >
-std::ostream & operator<<(std::ostream & os, const FixedArray< TValueType, VLength > & arr);
+template< typename TValue, unsigned int VLength >
+std::ostream & operator<<(std::ostream & os, const FixedArray< TValue, VLength > & arr);
 } // namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION

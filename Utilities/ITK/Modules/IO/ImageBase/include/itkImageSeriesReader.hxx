@@ -55,15 +55,7 @@ void ImageSeriesReader< TOutputImage >
   os << indent << "ReverseOrder: " << m_ReverseOrder << std::endl;
   os << indent << "UseStreaming: " << m_UseStreaming << std::endl;
 
-  if ( m_ImageIO )
-    {
-    os << indent << "ImageIO: \n";
-    m_ImageIO->Print( os, indent.GetNextIndent() );
-    }
-  else
-    {
-    os << indent << "ImageIO: (null)" << "\n";
-    }
+  itkPrintSelfObjectMacro( ImageIO );
 
   os << indent << "MetaDataDictionaryArrayMTime: " <<  m_MetaDataDictionaryArrayMTime  << std::endl;
   os << indent << "MetaDataDictionaryArrayUpdate: " << m_MetaDataDictionaryArrayUpdate << std::endl;
@@ -231,7 +223,7 @@ void ImageSeriesReader< TOutputImage >
         {
         interSliceSpacing += vnl_math_sqr(position2[j] - position1[j]);
         }
-      interSliceSpacing = static_cast< float >( vcl_sqrt(interSliceSpacing) );
+      interSliceSpacing = static_cast< float >( std::sqrt(interSliceSpacing) );
 
       if ( interSliceSpacing == 0.0f )
         {

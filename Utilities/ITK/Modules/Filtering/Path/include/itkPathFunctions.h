@@ -35,9 +35,7 @@ void MakeChainCodeTracePath(TChainCodePath & chainPath,
 {
   typedef typename TChainCodePath::OffsetType OffsetType;
   typedef typename TChainCodePath::InputType  ChainInputType;
-  typedef typename TChainCodePath::OutputType ChainOutputType;
   typedef typename TPathInput::InputType      InPathInputType;
-  typedef typename TPathInput::OutputType     InPathOutputType;
 
   OffsetType      offset, tempOffset, zeroOffset;
   InPathInputType inPathInput;
@@ -86,9 +84,7 @@ void MakeFourierSeriesPathTraceChainCode(TFourierSeriesPath & FSPath,
   typedef typename TFourierSeriesPath::VectorType VectorType;
 
   typedef typename TFourierSeriesPath::InputType  FSInputType;
-  typedef typename TFourierSeriesPath::OutputType FSOutputType;
   typedef typename TChainCodePath::InputType      ChainInputType;
-  typedef typename TChainCodePath::OutputType     ChainOutputType;
 
   IndexType   index;
   VectorType  indexVector;
@@ -98,7 +94,7 @@ void MakeFourierSeriesPathTraceChainCode(TFourierSeriesPath & FSPath,
   int         dimension =     OffsetType::GetOffsetDimension();
   unsigned    numSteps  =     chainPath.NumberOfSteps();
 
-  const double PI = 4.0 * vcl_atan(1.0);
+  const double PI = 4.0 * std::atan(1.0);
 
   FSPath.Clear();
 
@@ -128,8 +124,8 @@ void MakeFourierSeriesPathTraceChainCode(TFourierSeriesPath & FSPath,
         {
         indexVector[d] = index[d];
         }
-      cosCoefficient += indexVector * ( vcl_cos(theta) / numSteps );
-      sinCoefficient += indexVector * ( vcl_sin(theta) / numSteps );
+      cosCoefficient += indexVector * ( std::cos(theta) / numSteps );
+      sinCoefficient += indexVector * ( std::sin(theta) / numSteps );
       }
 
     FSPath.AddHarmonic(cosCoefficient, sinCoefficient);

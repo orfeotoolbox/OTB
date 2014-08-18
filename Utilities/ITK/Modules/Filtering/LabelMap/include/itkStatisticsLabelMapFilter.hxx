@@ -67,16 +67,15 @@ StatisticsLabelMapFilter< TImage, TFeatureImage >
 
   typedef typename LabelObjectType::HistogramType HistogramType;
 
-  typename HistogramType::SizeType histogramSize;
-  histogramSize.SetSize(1);
+  typename HistogramType::IndexType             histogramIndex(1);
+  typename HistogramType::MeasurementVectorType mv(1);
+  typename HistogramType::SizeType              histogramSize(1);
   histogramSize.Fill(m_NumberOfBins);
 
-  typename HistogramType::MeasurementVectorType featureImageMin;
-  featureImageMin.SetSize(1);
+  typename HistogramType::MeasurementVectorType featureImageMin(1);
   featureImageMin.Fill(m_Minimum);
 
-  typename HistogramType::MeasurementVectorType featureImageMax;
-  featureImageMax.SetSize(1);
+  typename HistogramType::MeasurementVectorType featureImageMax(1);
   featureImageMax.Fill(m_Maximum);
 
   typename HistogramType::Pointer histogram = HistogramType::New();
@@ -103,8 +102,7 @@ StatisticsLabelMapFilter< TImage, TFeatureImage >
   VectorType principalMoments;
   principalMoments.Fill(0);
 
-  typename HistogramType::MeasurementVectorType mv;
-  mv.SetSize(1);
+
   // iterate over all the indexes
   typename LabelObjectType::ConstIndexIterator it( labelObject );
   while( ! it.IsAtEnd() )
@@ -112,7 +110,8 @@ StatisticsLabelMapFilter< TImage, TFeatureImage >
     const IndexType & idx = it.GetIndex();
     const FeatureImagePixelType & v = featureImage->GetPixel(idx);
     mv[0] = v;
-    histogram->IncreaseFrequencyOfMeasurement(mv, 1);
+    histogram->GetIndex(mv, histogramIndex);
+    histogram->IncreaseFrequencyOfIndex(histogramIndex, 1);
 
     // update min and max
     if ( v <= min )
@@ -128,9 +127,9 @@ StatisticsLabelMapFilter< TImage, TFeatureImage >
 
     //increase the sums
     sum += v;
-    sum2 += vcl_pow( (double)v, 2 );
-    sum3 += vcl_pow( (double)v, 3 );
-    sum4 += vcl_pow( (double)v, 4 );
+    sum2 += std::pow( (double)v, 2 );
+    sum3 += std::pow( (double)v, 3 );
+    sum4 += std::pow( (double)v, 4 );
 
     // moments
     PointType physicalPosition;
@@ -152,11 +151,11 @@ StatisticsLabelMapFilter< TImage, TFeatureImage >
   // final computations
   const typename HistogramType::AbsoluteFrequencyType & totalFreq = histogram->GetTotalFrequency();
   const double mean = sum / totalFreq;
-  const double variance = ( sum2 - ( vcl_pow(sum, 2) / totalFreq ) ) / ( totalFreq - 1 );
-  const double sigma = vcl_sqrt(variance);
+  const double variance = ( sum2 - ( std::pow(sum, 2) / totalFreq ) ) / ( totalFreq - 1 );
+  const double sigma = std::sqrt(variance);
   const double mean2 = mean * mean;
   double skewness;
-  if(vcl_abs(variance * sigma) > itk::NumericTraits<double>::min())
+  if(std::abs(variance * sigma) > itk::NumericTraits<double>::min())
     {
     skewness = ( ( sum3 - 3.0 * mean * sum2 ) / totalFreq + 2.0 * mean * mean2 ) / ( variance * sigma );
     }
@@ -165,7 +164,7 @@ StatisticsLabelMapFilter< TImage, TFeatureImage >
     skewness = 0.0;
     }
   double kurtosis;
-  if(vcl_abs(variance) > itk::NumericTraits<double>::min())
+  if(std::abs(variance) > itk::NumericTraits<double>::min())
     {
     kurtosis = ( ( sum4 - 4.0 * mean * sum3 + 6.0 * mean2
                    * sum2 ) / totalFreq - 3.0 * mean2 * mean2 ) /
@@ -224,8 +223,8 @@ StatisticsLabelMapFilter< TImage, TFeatureImage >
     vnl_diag_matrix< double >           pm = eigen.D;
     for ( unsigned int i = 0; i < ImageDimension; i++ )
       {
-      //    principalMoments[i] = 4 * vcl_sqrt( pm(i,i) );
-      principalMoments[i] = pm(i, i);
+      //    principalMoments[i] = 4 * std::sqrt( pm(i,i) );
+      principalMoments[i] = pm(i);
       }
     principalAxes = eigen.V.transpose();
 
@@ -237,7 +236,7 @@ StatisticsLabelMapFilter< TImage, TFeatureImage >
 
     for ( unsigned int i = 0; i < ImageDimension; i++ )
       {
-      det *= eigenval(i, i);
+      det *= eigenval(i);
       }
 
     for ( unsigned int i = 0; i < ImageDimension; i++ )
@@ -254,8 +253,8 @@ StatisticsLabelMapFilter< TImage, TFeatureImage >
       {
       //    elongation = principalMoments[ImageDimension-1] /
       // principalMoments[0];
-      elongation = vcl_sqrt(principalMoments[ImageDimension - 1] / principalMoments[ImageDimension - 2]);
-      flatness = vcl_sqrt(principalMoments[1] / principalMoments[0]);
+      elongation = std::sqrt(principalMoments[ImageDimension - 1] / principalMoments[ImageDimension - 2]);
+      flatness = std::sqrt(principalMoments[1] / principalMoments[0]);
       }
     }
   else

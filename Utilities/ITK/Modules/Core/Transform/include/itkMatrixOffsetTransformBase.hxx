@@ -528,7 +528,7 @@ MatrixOffsetTransformBase<TScalar, NInputDimensions, NOutputDimensions>
 {
   Pointer inv = New();
 
-  return GetInverse(inv) ? inv.GetPointer() : NULL;
+  return GetInverse(inv) ? inv.GetPointer() : ITK_NULLPTR;
 }
 
 // Get fixed parameters
@@ -540,7 +540,6 @@ MatrixOffsetTransformBase<TScalar, NInputDimensions, NOutputDimensions>
 {
   this->m_FixedParameters = fp;
   InputPointType c;
-  typedef typename ParametersType::ValueType ParameterValueType;
   for( unsigned int i = 0; i < NInputDimensions; i++ )
     {
     c[i] = this->m_FixedParameters[i];

@@ -36,7 +36,7 @@ template< typename TElementIdentifier, typename TElement >
 ImportImageContainer< TElementIdentifier, TElement >
 ::ImportImageContainer()
 {
-  m_ImportPointer = 0;
+  m_ImportPointer = ITK_NULLPTR;
   m_ContainerManageMemory = true;
   m_Capacity = 0;
   m_Size = 0;
@@ -56,7 +56,7 @@ ImportImageContainer< TElementIdentifier, TElement >
 template< typename TElementIdentifier, typename TElement >
 void
 ImportImageContainer< TElementIdentifier, TElement >
-::Reserve(ElementIdentifier size)
+::Reserve(ElementIdentifier size, const bool UseDefaultConstructor )
 {
   // Reserve has a Resize semantics. We keep it that way for
   // backwards compatibility .
@@ -65,7 +65,7 @@ ImportImageContainer< TElementIdentifier, TElement >
     {
     if ( size > m_Capacity )
       {
-      TElement *temp = this->AllocateElements(size);
+      TElement *temp = this->AllocateElements(size, UseDefaultConstructor);
       // only copy the portion of the data used in the old buffer
       std::copy(m_ImportPointer,
                 m_ImportPointer+m_Size,
@@ -87,7 +87,7 @@ ImportImageContainer< TElementIdentifier, TElement >
     }
   else
     {
-    m_ImportPointer = this->AllocateElements(size);
+    m_ImportPointer = this->AllocateElements(size, UseDefaultConstructor);
     m_Capacity = size;
     m_Size = size;
     m_ContainerManageMemory = true;
@@ -109,7 +109,7 @@ ImportImageContainer< TElementIdentifier, TElement >
     if ( m_Size < m_Capacity )
       {
       const TElementIdentifier size = m_Size;
-      TElement *               temp = this->AllocateElements(size);
+      TElement *               temp = this->AllocateElements(size, false);
       std::copy(m_ImportPointer,
                 m_ImportPointer+m_Size,
                 temp);
@@ -170,7 +170,7 @@ ImportImageContainer< TElementIdentifier, TElement >
 
 template< typename TElementIdentifier, typename TElement >
 TElement *ImportImageContainer< TElementIdentifier, TElement >
-::AllocateElements(ElementIdentifier size) const
+::AllocateElements(ElementIdentifier size, bool UseDefaultConstructor ) const
 {
   // Encapsulate all image memory allocation here to throw an
   // exception when memory allocation fails even when the compiler
@@ -179,11 +179,18 @@ TElement *ImportImageContainer< TElementIdentifier, TElement >
 
   try
     {
-    data = new TElement[size];
+    if ( UseDefaultConstructor )
+      {
+      data = new TElement[size](); //POD types initialized to 0, others use default constructor.
+      }
+    else
+      {
+      data = new TElement[size]; //Faster but uninitialized
+      }
     }
   catch ( ... )
     {
-    data = 0;
+    data = ITK_NULLPTR;
     }
   if ( !data )
     {
@@ -205,7 +212,7 @@ void ImportImageContainer< TElementIdentifier, TElement >
     {
     delete[] m_ImportPointer;
     }
-  m_ImportPointer = 0;
+  m_ImportPointer = ITK_NULLPTR;
   m_Capacity = 0;
   m_Size = 0;
 }

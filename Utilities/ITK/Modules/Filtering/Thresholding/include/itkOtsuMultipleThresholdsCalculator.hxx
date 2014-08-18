@@ -18,6 +18,7 @@
 #ifndef __itkOtsuMultipleThresholdsCalculator_hxx
 #define __itkOtsuMultipleThresholdsCalculator_hxx
 
+#include "itkMath.h"
 #include "itkOtsuMultipleThresholdsCalculator.h"
 
 namespace itk
@@ -53,11 +54,8 @@ OtsuMultipleThresholdsCalculator< TInputHistogram >
 {
   typename TInputHistogram::ConstPointer histogram = this->GetInputHistogram();
 
-  SizeValueType numberOfHistogramBins = histogram->Size();
-  SizeValueType numberOfClasses = classMean.size();
-
-  MeanType      meanOld;
-  FrequencyType freqOld;
+  const SizeValueType numberOfHistogramBins = histogram->Size();
+  const SizeValueType numberOfClasses = classMean.size();
 
   unsigned int k;
   int          j;
@@ -73,8 +71,8 @@ OtsuMultipleThresholdsCalculator< TInputHistogram >
       // threshold
       ++thresholdIndexes[j];
 
-      meanOld = classMean[j];
-      freqOld = classFrequency[j];
+      const MeanType meanOld = classMean[j];
+      const FrequencyType freqOld = classFrequency[j];
 
       classFrequency[j] += histogram->GetFrequency(thresholdIndexes[j]);
 
@@ -165,7 +163,7 @@ OtsuMultipleThresholdsCalculator< TInputHistogram >
   typename TInputHistogram::ConstIterator end = histogram->End();
 
   MeanType      globalMean = NumericTraits< MeanType >::Zero;
-  FrequencyType globalFrequency = histogram->GetTotalFrequency();
+  const FrequencyType globalFrequency = histogram->GetTotalFrequency();
   while ( iter != end )
     {
     globalMean += static_cast< MeanType >( iter.GetMeasurementVector()[0] )
@@ -232,12 +230,29 @@ OtsuMultipleThresholdsCalculator< TInputHistogram >
     classMean[numberOfClasses - 1] = NumericTraits< MeanType >::Zero;
     }
 
+  //
+  // The "volatile" modifier is used here for preventing the variable from
+  // being kept in 80 bit FPU registers when using 32-bit x86 processors with
+  // SSE instructions disabled. A case that arised in the Debian 32-bits
+  // distribution.
+  //
+#ifndef ITK_COMPILER_SUPPORTS_SSE2_32
+  volatile VarianceType maxVarBetween = NumericTraits< VarianceType >::Zero;
+#else
   VarianceType maxVarBetween = NumericTraits< VarianceType >::Zero;
+#endif
+  //
+  // The introduction of the "volatile" modifier forces the compiler to keep
+  // the variable in memory and therefore store it in the IEEE float/double
+  // format. In this way making numerical results consistent across platforms.
+  //
+
   for ( j = 0; j < numberOfClasses; j++ )
     {
-    maxVarBetween += (static_cast< VarianceType >( classFrequency[j] ) / static_cast< VarianceType >( globalFrequency ))
+    maxVarBetween += (static_cast< VarianceType >( classFrequency[j] ))
       * static_cast< VarianceType >( ( classMean[j] ) * ( classMean[j] ) );
     }
+  maxVarBetween /= static_cast< VarianceType >( globalFrequency );
 
   // Sum the relevant weights for valley emphasis
   WeightType valleyEmphasisFactor = NumericTraits< WeightType >::Zero;
@@ -255,7 +270,24 @@ OtsuMultipleThresholdsCalculator< TInputHistogram >
   // yields maximum between-class variance
   while ( Self::IncrementThresholds(thresholdIndexes, globalMean, classMean, classFrequency) )
     {
+
+    //
+    // The "volatile" modifier is used here for preventing the variable from
+    // being kept in 80 bit FPU registers when using 32-bit x86 processors with
+    // SSE instructions disabled. A case that arised in the Debian 32-bits
+    // distribution.
+    //
+#ifndef ITK_COMPILER_SUPPORTS_SSE2_32
+    volatile VarianceType varBetween = NumericTraits< VarianceType >::Zero;
+#else
     VarianceType varBetween = NumericTraits< VarianceType >::Zero;
+#endif
+    //
+    // The introduction of the "volatile" modifier forces the compiler to keep
+    // the variable in memory and therefore store it in the IEEE float/double
+    // format. In this way making numerical results consistent across platforms.
+    //
+
     for ( j = 0; j < numberOfClasses; j++ )
       {
       // The true between-class variance \sigma_B^2 for any number of classes is defined as:
@@ -270,9 +302,10 @@ OtsuMultipleThresholdsCalculator< TInputHistogram >
       // Since we are looking for the argmax, the second term can be ignored because it is a constant, leading to the simpler
       // (\sum_{k=1}^{M} \omega_k \mu_k^2), which is what is implemented here.
       // Although this is no longer truly a "between class variance", we keep that name since it is only different by a constant.
-      varBetween += (static_cast< VarianceType >( classFrequency[j] ) / static_cast< VarianceType >( globalFrequency ))
+      varBetween += (static_cast< VarianceType >( classFrequency[j] ))
               * static_cast< VarianceType >( ( classMean[j] ) * ( classMean[j] ) );
       }
+    varBetween /= static_cast< VarianceType >( globalFrequency );
 
     if (m_ValleyEmphasis)
     {
@@ -286,7 +319,9 @@ OtsuMultipleThresholdsCalculator< TInputHistogram >
       varBetween = varBetween * valleyEmphasisFactor;
     }
 
-    if ( varBetween > maxVarBetween )
+    const unsigned int maxUlps = 1;
+    if ( varBetween > maxVarBetween &&
+         !Math::FloatAlmostEqual( maxVarBetween, varBetween, maxUlps) )
       {
       maxVarBetween = varBetween;
       maxVarThresholdIndexes = thresholdIndexes;

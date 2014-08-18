@@ -187,19 +187,19 @@ MultiThreader::MultiThreader()
   for ( ThreadIdType i = 0; i < ITK_MAX_THREADS; i++ )
     {
     m_ThreadInfoArray[i].ThreadID           = i;
-    m_ThreadInfoArray[i].ActiveFlag         = 0;
-    m_ThreadInfoArray[i].ActiveFlagLock     = 0;
+    m_ThreadInfoArray[i].ActiveFlag         = ITK_NULLPTR;
+    m_ThreadInfoArray[i].ActiveFlagLock     = ITK_NULLPTR;
 
-    m_MultipleMethod[i]                     = 0;
-    m_MultipleData[i]                       = 0;
+    m_MultipleMethod[i]                     = ITK_NULLPTR;
+    m_MultipleData[i]                       = ITK_NULLPTR;
 
     m_SpawnedThreadActiveFlag[i]            = 0;
-    m_SpawnedThreadActiveFlagLock[i]        = 0;
+    m_SpawnedThreadActiveFlagLock[i]        = ITK_NULLPTR;
     m_SpawnedThreadInfoArray[i].ThreadID    = i;
     }
 
-  m_SingleMethod = 0;
-  m_SingleData = 0;
+  m_SingleMethod = ITK_NULLPTR;
+  m_SingleData = ITK_NULLPTR;
   m_NumberOfThreads = this->GetGlobalDefaultNumberOfThreads();
 }
 
@@ -241,7 +241,6 @@ void MultiThreader::SingleMethodExecute()
   if ( !m_SingleMethod )
     {
     itkExceptionMacro(<< "No single method set!");
-    return;
     }
 
   // obey the global maximum number of threads limit
@@ -292,7 +291,7 @@ void MultiThreader::SingleMethodExecute()
     m_ThreadInfoArray[0].NumberOfThreads = m_NumberOfThreads;
     m_SingleMethod( (void *)( &m_ThreadInfoArray[0] ) );
     }
-  catch ( ProcessAborted & excp )
+  catch ( ProcessAborted & )
     {
     // Need cleanup and rethrow ProcessAborted
     // close down other threads
@@ -306,7 +305,7 @@ void MultiThreader::SingleMethodExecute()
               {}
       }
     // rethrow
-    throw &excp;
+    throw;
     }
   catch ( std::exception & e )
     {

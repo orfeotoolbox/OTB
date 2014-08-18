@@ -33,7 +33,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
 {
   /* Store the casted pointer to avoid dynamic casting in tight loops. */
   this->m_ANTSAssociate = dynamic_cast< TNeighborhoodCorrelationMetric * >( this->m_Associate );
-  if( this->m_ANTSAssociate == NULL )
+  if( this->m_ANTSAssociate == ITK_NULLPTR )
     {
     itkExceptionMacro("Dynamic casting of associate pointer failed.");
     }
@@ -112,7 +112,7 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
     /* call base method */
     /* Store the casted pointer to avoid dynamic casting in tight loops. */
     this->m_ANTSAssociate = dynamic_cast< TNeighborhoodCorrelationMetric * >( this->m_Associate );
-    if( this->m_ANTSAssociate == NULL )
+    if( this->m_ANTSAssociate == ITK_NULLPTR )
       {
       itkExceptionMacro("Dynamic casting of associate pointer failed.");
       }
@@ -503,10 +503,15 @@ ANTSNeighborhoodCorrelationImageToImageMetricv4GetValueAndDerivativeThreader< TD
       }
 
     /* Use a pre-allocated jacobian object for efficiency */
-    JacobianType & jacobian = this->m_GetValueAndDerivativePerThreadVariables[threadId].MovingTransformJacobian;
+    typedef JacobianType & JacobianReferenceType;
+    JacobianReferenceType jacobian = this->m_GetValueAndDerivativePerThreadVariables[threadId].MovingTransformJacobian;
+    JacobianReferenceType jacobianPositional = this->m_GetValueAndDerivativePerThreadVariables[threadId].MovingTransformJacobianPositional;
 
     /** For dense transforms, this returns identity */
-    this->m_Associate->GetMovingTransform()->ComputeJacobianWithRespectToParameters( scanMem.virtualPoint, jacobian );
+    this->m_Associate->GetMovingTransform()->
+      ComputeJacobianWithRespectToParametersCachedTemporaries(scanMem.virtualPoint,
+                                                              jacobian,
+                                                              jacobianPositional);
 
     NumberOfParametersType numberOfLocalParameters = this->m_Associate->GetMovingTransform()->GetNumberOfLocalParameters();
 

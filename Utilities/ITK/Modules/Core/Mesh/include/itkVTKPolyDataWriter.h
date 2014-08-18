@@ -30,7 +30,13 @@ namespace itk
  *
  * Caveat: The input to itkVTKPolyDataWriter must be a triangle mesh.
  *         Use vtkTriangleFilter to convert your mesh to a triangle mesh.
+ *
+ * This class may be deprecated in the future. The MeshFileWriter is
+ * preferred.
+ *
  * \ingroup ITKMesh
+ *
+ * \sa MeshFileWriter
  */
 template< typename TInputMesh >
 class VTKPolyDataWriter:public Object
@@ -95,7 +101,7 @@ protected:
 
   InputMeshPointer m_Input;
 
-  void PrintSelf(std::ostream & os, Indent indent) const;
+  virtual void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
 
 private:
   VTKPolyDataWriter(const Self &); //purposely not implemented

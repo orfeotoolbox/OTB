@@ -29,20 +29,21 @@ namespace itk
 /* Constructor: setting the default parameter values. */
 template< typename TInputImage, typename TOutputImage, typename TBinaryPriorImage >
 VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage >
-::VoronoiSegmentationImageFilterBase()
+::VoronoiSegmentationImageFilterBase() :
+  m_NumberOfSeeds(200),
+  m_MinRegion(20),
+  m_Steps(0),
+  m_LastStepSeeds(0),
+  m_NumberOfSeedsToAdded(0),
+  m_NumberOfBoundary(0),
+  m_MeanDeviation(0.8),
+  m_UseBackgroundInAPrior(false),
+  m_OutputBoundary(false),
+  m_InteractiveSegmentation(false),
+  m_WorkingVD(VoronoiDiagram::New()),
+  m_VDGenerator(VoronoiDiagramGenerator::New())
 {
   m_Size.Fill(0);
-  m_MinRegion = 20;
-  m_Steps = 0;
-  m_LastStepSeeds = 0;
-  m_NumberOfSeeds = 200;
-  m_NumberOfSeedsToAdded = 0;
-  m_MeanDeviation = 0.8;
-  m_UseBackgroundInAPrior = false;
-  m_OutputBoundary = false;
-  m_InteractiveSegmentation = false;
-  m_WorkingVD = VoronoiDiagram::New();
-  m_VDGenerator = VoronoiDiagramGenerator::New();
 }
 
 /* Destructor. */
@@ -125,7 +126,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
   rightP = vertlist.back();
 
   double beginy = currP[1];
-  int    intbeginy = (int)vcl_ceil(beginy);
+  int    intbeginy = (int)std::ceil(beginy);
   idx[1] = intbeginy;
   double leftendy = leftP[1];
   double rightendy = rightP[1];
@@ -169,7 +170,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
     rightDx = ( rightP[0] - endx ) / ( rightP[1] - beginy );
     }
 
-  int intendy = (int)vcl_floor(endy);
+  int intendy = (int)std::floor(endy);
   if ( intbeginy > intendy )
     { //no scanline
     if ( RorL )
@@ -191,7 +192,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
       {
       beginx = leftP[0];
       }
-    for ( i = static_cast< int >( vcl_ceil(beginx) ); i <= static_cast< int >( vcl_floor(endx) ); i++ )
+    for ( i = static_cast< int >( std::ceil(beginx) ); i <= static_cast< int >( std::floor(endx) ); i++ )
       {
       idx[0] = i;
       ( *PixelPool ).push_back(idx);
@@ -205,7 +206,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
     beginx += offset * leftDx;
     while ( idx[1] <= intendy )
       {
-      for ( i = static_cast< int >( vcl_ceil(beginx) ); i <= static_cast< int >( vcl_floor(endx) ); i++ )
+      for ( i = static_cast< int >( std::ceil(beginx) ); i <= static_cast< int >( std::floor(endx) ); i++ )
         {
         idx[0] = i;
         ( *PixelPool ).push_back(idx);
@@ -271,8 +272,8 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
       endy = leftendy;
       }
 
-    intendy = (int)vcl_floor(endy);
-    intbeginy = (int)vcl_ceil(beginy);
+    intendy = (int)std::floor(endy);
+    intbeginy = (int)std::ceil(beginy);
 
     if ( intbeginy > intendy )
       { //no scanline
@@ -292,7 +293,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
       beginx += offset * leftDx;
       while ( idx[1] <= intendy )
         {
-        for ( i = static_cast< int >( vcl_ceil(beginx) ); i <= static_cast< int >( vcl_floor(endx) ); i++ )
+        for ( i = static_cast< int >( std::ceil(beginx) ); i <= static_cast< int >( std::floor(endx) ); i++ )
           {
           idx[0] = i;
           ( *PixelPool ).push_back(idx);
@@ -315,8 +316,8 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
     beginy = leftP[1];
     endy = rightP[1];
     }
-  intbeginy = (int)vcl_ceil(beginy);
-  intendy = (int)vcl_floor(endy);
+  intbeginy = (int)std::ceil(beginy);
+  intendy = (int)std::floor(endy);
   if ( intbeginy <= intendy )
     {
     if ( RorL )
@@ -350,7 +351,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
     endx += offset * rightDx;
     while ( idx[1] <= intendy )
       {
-      for ( i = static_cast< int >( vcl_ceil(beginx) ); i <= static_cast< int >( vcl_floor(endx) ); i++ )
+      for ( i = static_cast< int >( std::ceil(beginx) ); i <= static_cast< int >( std::floor(endx) ); i++ )
         {
         idx[0] = i;
         ( *PixelPool ).push_back(idx);
@@ -689,7 +690,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
   rightP = vertlist.back();
 
   double beginy = currP[1];
-  int    intbeginy = (int)vcl_ceil(beginy);
+  int    intbeginy = (int)std::ceil(beginy);
   idx[1] = intbeginy;
   double leftendy = leftP[1];
   double rightendy = rightP[1];
@@ -731,7 +732,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
     {
     rightDx = ( rightP[0] - endx ) / ( rightP[1] - beginy );
     }
-  int intendy = (int)vcl_floor(endy);
+  int intendy = (int)std::floor(endy);
   if ( intbeginy > intendy )
     { //no scanline
     if ( RorL )
@@ -753,7 +754,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
       {
       beginx = leftP[0];
       }
-    for ( i = static_cast< int >( vcl_ceil(beginx) ); i <= static_cast< int >( vcl_floor(endx) ); i++ )
+    for ( i = static_cast< int >( std::ceil(beginx) ); i <= static_cast< int >( std::floor(endx) ); i++ )
       {
       idx[0] = i;
       output->SetPixel(idx, color);
@@ -767,7 +768,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
     beginx += offset * leftDx;
     while ( idx[1] <= intendy )
       {
-      for ( i = static_cast< int >( vcl_ceil(beginx) ); i <= static_cast< int >( vcl_floor(endx) ); i++ )
+      for ( i = static_cast< int >( std::ceil(beginx) ); i <= static_cast< int >( std::floor(endx) ); i++ )
         {
         idx[0] = i;
         output->SetPixel(idx, color);
@@ -833,8 +834,8 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
       endy = leftendy;
       }
 
-    intendy = (int)vcl_floor(endy);
-    intbeginy = (int)vcl_ceil(beginy);
+    intendy = (int)std::floor(endy);
+    intbeginy = (int)std::ceil(beginy);
 
     if ( intbeginy > intendy )
       { //no scanline
@@ -854,7 +855,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
       beginx += offset * leftDx;
       while ( idx[1] <= intendy )
         {
-        for ( i = static_cast< int >( vcl_ceil(beginx) ); i <= static_cast< int >( vcl_floor(endx) ); i++ )
+        for ( i = static_cast< int >( std::ceil(beginx) ); i <= static_cast< int >( std::floor(endx) ); i++ )
           {
           idx[0] = i;
           output->SetPixel(idx, color);
@@ -877,8 +878,8 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
     beginy = leftP[1];
     endy = rightP[1];
     }
-  intbeginy = (int)vcl_ceil(beginy);
-  intendy = (int)vcl_floor(endy);
+  intbeginy = (int)std::ceil(beginy);
+  intendy = (int)std::floor(endy);
   if ( intbeginy <= intendy )
     {
     if ( RorL )
@@ -912,7 +913,7 @@ VoronoiSegmentationImageFilterBase< TInputImage, TOutputImage, TBinaryPriorImage
     endx += offset * rightDx;
     while ( idx[1] <= intendy )
       {
-      for ( i = static_cast< int >( vcl_ceil(beginx) ); i <= static_cast< int >( vcl_floor(endx) ); i++ )
+      for ( i = static_cast< int >( std::ceil(beginx) ); i <= static_cast< int >( std::floor(endx) ); i++ )
         {
         idx[0] = i;
         output->SetPixel(idx, color);

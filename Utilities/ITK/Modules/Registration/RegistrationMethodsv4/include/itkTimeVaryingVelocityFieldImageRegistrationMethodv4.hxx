@@ -334,6 +334,15 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TOu
     if( this->m_CurrentConvergenceValue < this->m_ConvergenceThreshold )
       {
       this->m_IsConverged = true;
+      }
+
+    if( this->m_IsConverged || this->m_CurrentIteration >= this->m_NumberOfIterationsPerLevel[this->m_CurrentLevel] )
+      {
+
+      // Once we finish by convergence or exceeding number of iterations,
+      // we need to reset the transform by resetting the time bounds to the
+      // full range [0,1] and integrating the velocity field to get the
+      // forward and inverse displacement fields.
 
       this->m_OutputTransform->SetLowerTimeBound( 0 );
       this->m_OutputTransform->SetUpperTimeBound( 1.0 );
@@ -390,6 +399,9 @@ void
 TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TOutputTransform>
 ::GenerateData()
 {
+
+  this->AllocateOutputs();
+
   for( this->m_CurrentLevel = 0; this->m_CurrentLevel < this->m_NumberOfLevels; this->m_CurrentLevel++ )
     {
     this->InitializeRegistrationAtEachLevel( this->m_CurrentLevel );
@@ -405,9 +417,7 @@ TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TOu
     this->m_CompositeTransform->AddTransform( this->m_OutputTransform );
     }
 
-  DecoratedOutputTransformPointer transformDecorator = DecoratedOutputTransformType::New().GetPointer();
-  transformDecorator->Set( this->m_OutputTransform );
-  this->ProcessObject::SetNthOutput( 0, transformDecorator );
+  this->GetTransformOutput()->Set(this->m_OutputTransform);
 }
 
 /*

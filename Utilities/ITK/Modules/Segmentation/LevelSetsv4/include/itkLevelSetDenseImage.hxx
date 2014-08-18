@@ -77,7 +77,7 @@ LevelSetDenseImage< TImage >
 {
   Superclass::Initialize();
 
-  this->m_Image = NULL;
+  this->m_Image = ITK_NULLPTR;
 }
 
 // ----------------------------------------------------------------------------
@@ -88,19 +88,7 @@ LevelSetDenseImage< TImage >
 {
   Superclass::CopyInformation( data );
 
-  const Self *LevelSet = NULL;
-
-  try
-    {
-    LevelSet = dynamic_cast< const Self * >( data );
-    }
-  catch ( ... )
-    {
-    // LevelSet could not be cast back down
-    itkExceptionMacro( << "itk::LevelSetDenseImage::CopyInformation() cannot cast "
-                       << typeid( data ).name() << " to "
-                       << typeid( Self * ).name() );
-    }
+  const Self *LevelSet = dynamic_cast< const Self * >( data );
 
   if ( !LevelSet )
     {
@@ -118,19 +106,7 @@ LevelSetDenseImage< TImage >
 ::Graft( const DataObject* data )
 {
   Superclass::Graft( data );
-  const Self *LevelSet = NULL;
-
-  try
-    {
-    LevelSet = dynamic_cast< const Self* >( data );
-    }
-  catch( ... )
-    {
-    // image could not be cast back down
-    itkExceptionMacro( << "itk::LevelSetDenseImage::CopyInformation() cannot cast "
-                       << typeid( data ).name() << " to "
-                         << typeid( Self * ).name() );
-    }
+  const Self *LevelSet = dynamic_cast< const Self* >( data );
 
   if ( !LevelSet )
     {

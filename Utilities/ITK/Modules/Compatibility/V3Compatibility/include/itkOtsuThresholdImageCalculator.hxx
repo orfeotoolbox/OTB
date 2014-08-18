@@ -33,7 +33,7 @@ template< typename TInputImage >
 OtsuThresholdImageCalculator< TInputImage >
 ::OtsuThresholdImageCalculator()
 {
-  m_Image = NULL;
+  m_Image = ITK_NULLPTR;
   m_Threshold = NumericTraits< PixelType >::Zero;
   m_NumberOfHistogramBins = 128;
   m_RegionSetByUser = false;
@@ -98,7 +98,7 @@ OtsuThresholdImageCalculator< TInputImage >
       }
     else
       {
-      binNumber = (unsigned int)vcl_ceil( ( value - imageMin ) * binMultiplier ) - 1;
+      binNumber = (unsigned int)std::ceil( ( value - imageMin ) * binMultiplier ) - 1;
       if ( binNumber == m_NumberOfHistogramBins ) // in case of rounding errors
         {
         binNumber -= 1;

@@ -32,7 +32,7 @@ DeformableSimplexMesh3DGradientConstraintForceFilter< TInputMesh, TOutputMesh >
 ::DeformableSimplexMesh3DGradientConstraintForceFilter()
 {
   m_Range = 1;
-  m_StartVoxel = NULL;
+  m_StartVoxel = ITK_NULLPTR;
 }
 
 template< typename TInputMesh, typename TOutputMesh >
@@ -58,7 +58,7 @@ DeformableSimplexMesh3DGradientConstraintForceFilter< TInputMesh, TOutputMesh >
 ::Clear()
 {
   delete m_StartVoxel;
-  m_StartVoxel = 0;
+  m_StartVoxel = ITK_NULLPTR;
   std::vector< ImageVoxel * >::iterator it;
   for ( it = m_Positive.begin(); it != m_Positive.end(); it++ )
     {
@@ -363,7 +363,7 @@ DeformableSimplexMesh3DGradientConstraintForceFilter< TInputMesh, TOutputMesh >
     }
   else
     {
-    m_StartVoxel = 0;
+    m_StartVoxel = ITK_NULLPTR;
     }
 
   // now fun begins try to use all the above
@@ -384,7 +384,7 @@ DeformableSimplexMesh3DGradientConstraintForceFilter< TInputMesh, TOutputMesh >
     vec_for[2] = gradient3[2];
     // check magnitude
 
-    mag = vcl_sqrt( dot_product( vec_for.GetVnlVector(), vec_for.GetVnlVector() ) );
+    mag = std::sqrt( dot_product( vec_for.GetVnlVector(), vec_for.GetVnlVector() ) );
     if ( mag > max )
       {
       max =  mag;

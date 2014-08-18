@@ -44,7 +44,6 @@ void
 ScaleTransform<ScalarType, NDimensions>
 ::SetParameters(const ParametersType & parameters)
 {
-  typedef typename ParametersType::ValueType ParameterValueType;
   for( unsigned int i = 0; i < SpaceDimension; i++ )
     {
     m_Scale[i] = parameters[i];
@@ -199,7 +198,7 @@ ScaleTransform<ScalarType, NDimensions>
     {
     return inv.GetPointer();
     }
-  return NULL;
+  return ITK_NULLPTR;
 }
 
 // Compute the Jacobian of the transformation

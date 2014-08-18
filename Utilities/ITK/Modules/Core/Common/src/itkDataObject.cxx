@@ -26,24 +26,6 @@
  *
  *=========================================================================*/
 #include "itkProcessObject.h"
-/** The inclusion of itkSmartPointerForwardReference.hxx is needed here
- * because this is one of the very few cases where
- * itkSmartPointerForwardReference.h does not include
- * itkSmartPointerForwardReference.hxx
- *
- * Ensure that the implicitly instantiated methods and operators are
- * exported for the linker.
- */
-#if __GNUC__ >= 4
-#pragma GCC visibility push(default)
-#endif
-#include "itkSmartPointerForwardReference.hxx"
-#if __GNUC__ >= 4
-#pragma GCC visibility pop
-#endif
-
-// Manual instantiation is necessary to prevent link errors
-template class ITKCommon_EXPORT itk::SmartPointerForwardReference< itk::ProcessObject >;
 
 namespace itk
 {
@@ -52,17 +34,17 @@ bool DataObject:: m_GlobalReleaseDataFlag = false;
 
 DataObjectError
 ::DataObjectError():
-  ExceptionObject(), m_DataObject(0)
+  ExceptionObject(), m_DataObject(ITK_NULLPTR)
 {}
 
 DataObjectError
 ::DataObjectError(const char *file, unsigned int lineNumber):
-  ExceptionObject(file, lineNumber), m_DataObject(0)
+  ExceptionObject(file, lineNumber), m_DataObject(ITK_NULLPTR)
 {}
 
 DataObjectError
 ::DataObjectError(const std::string & file, unsigned int lineNumber):
-  ExceptionObject(file, lineNumber), m_DataObject(0)
+  ExceptionObject(file, lineNumber), m_DataObject(ITK_NULLPTR)
 {}
 
 DataObjectError
@@ -151,7 +133,7 @@ InvalidRequestedRegionError
 //----------------------------------------------------------------------------
 DataObject::DataObject():m_UpdateMTime()
 {
-  m_Source = 0;
+  m_Source = ITK_NULLPTR;
   m_SourceOutputName = "";
   m_ReleaseDataFlag = false;
 
@@ -226,7 +208,7 @@ DataObject
   // disconnect ourselves from the current process object
   if ( m_Source )
     {
-    m_Source->SetOutput(m_SourceOutputName, NULL);
+    m_Source->SetOutput(m_SourceOutputName, ITK_NULLPTR);
     }
 
   // set our release data flag to off by default (purposely done after
@@ -249,7 +231,7 @@ DataObject
     itkDebugMacro("disconnecting source  " << arg
                                            << ", source output name " << name);
 
-    m_Source = 0;
+    m_Source = ITK_NULLPTR;
     m_SourceOutputName = "";
     this->Modified();
     return true;

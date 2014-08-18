@@ -93,7 +93,7 @@ ScalarImageToRunLengthMatrixFilter<TImageType, THistogramFrequencyContainer>
 {
   if( this->GetNumberOfInputs() < 1 )
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const ImageType *>( this->ProcessObject::GetInput( 0 ) );
 }
@@ -105,7 +105,7 @@ ScalarImageToRunLengthMatrixFilter<TImageType, THistogramFrequencyContainer>
 {
   if( this->GetNumberOfInputs() < 2 )
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const ImageType *>( this->ProcessObject::GetInput( 1 ) );
 }
@@ -153,6 +153,7 @@ ScalarImageToRunLengthMatrixFilter<TImageType, THistogramFrequencyContainer>
   output->Initialize( size, this->m_LowerBound, this->m_UpperBound );
 
   MeasurementVectorType run( output->GetMeasurementVectorSize() );
+  typename HistogramType::IndexType hIndex;
 
   // Iterate over all of those pixels and offsets, adding each
   // distance/intensity pair to the histogram
@@ -270,7 +271,8 @@ ScalarImageToRunLengthMatrixFilter<TImageType, THistogramFrequencyContainer>
 
       if( run[1] >= this->m_MinDistance && run[1] <= this->m_MaxDistance )
         {
-        output->IncreaseFrequencyOfMeasurement( run, 1 );
+        output->GetIndex( run, hIndex );
+        output->IncreaseFrequencyOfIndex( hIndex, 1 );
 
         itkDebugStatement(typename HistogramType::IndexType tempMeasurementIndex;)
         itkDebugStatement(output->GetIndex(run,tempMeasurementIndex);)

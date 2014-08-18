@@ -130,8 +130,8 @@ void
 CenteredRigid2DTransform<TScalar>
 ::ComputeJacobianWithRespectToParameters(const InputPointType & p, JacobianType & jacobian) const
 {
-  const double ca = vcl_cos( this->GetAngle() );
-  const double sa = vcl_sin( this->GetAngle() );
+  const double ca = std::cos( this->GetAngle() );
+  const double sa = std::sin( this->GetAngle() );
 
   jacobian.SetSize( 2, this->GetNumberOfLocalParameters() );
   jacobian.Fill(0.0);
@@ -212,7 +212,7 @@ CenteredRigid2DTransform<TScalar>
 {
   Pointer inv = New();
 
-  return GetInverse(inv) ? inv.GetPointer() : NULL;
+  return GetInverse(inv) ? inv.GetPointer() : ITK_NULLPTR;
 }
 
 // Create and return an clone transformation

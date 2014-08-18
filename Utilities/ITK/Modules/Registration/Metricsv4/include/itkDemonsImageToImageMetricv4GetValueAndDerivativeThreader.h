@@ -64,7 +64,9 @@ public:
   typedef typename Superclass::ImageDimensionType           ImageDimensionType;
 
 protected:
-  DemonsImageToImageMetricv4GetValueAndDerivativeThreader() {}
+  DemonsImageToImageMetricv4GetValueAndDerivativeThreader() :
+    m_DemonsAssociate(ITK_NULLPTR)
+  {}
 
   /** Overload.
    *  Get pointer to metric object.
@@ -85,7 +87,7 @@ protected:
         const MovingImageGradientType &   mappedMovingImageGradient,
         MeasureType &                     metricValueReturn,
         DerivativeType &                  localDerivativeReturn,
-        const ThreadIdType                threadID ) const;
+        const ThreadIdType                threadId ) const;
 
 private:
   DemonsImageToImageMetricv4GetValueAndDerivativeThreader( const Self & ); // purposely not implemented

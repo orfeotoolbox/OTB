@@ -26,40 +26,45 @@ namespace itk
 {
 template< typename TInputImage, typename TOutputMesh >
 BinaryMask3DMeshSource< TInputImage, TOutputMesh >
-::BinaryMask3DMeshSource()
+::BinaryMask3DMeshSource() :
+  m_RegionOfInterestProvidedByUser(false),
+  m_LastRow(ITK_NULLPTR),
+  m_LastFrame(ITK_NULLPTR),
+  m_CurrentRow(ITK_NULLPTR),
+  m_CurrentFrame(ITK_NULLPTR),
+  m_CurrentRowIndex(0),
+  m_CurrentFrameIndex(0),
+  m_LastRowNum(0),
+  m_LastFrameNum(0),
+  m_CurrentRowNum(200),
+  m_CurrentFrameNum(2000),
+  m_NumberOfNodes(0),
+  m_NumberOfCells(0),
+  m_NodeLimit(2000),
+  m_CellLimit(4000),
+  m_ImageWidth(0),
+  m_ImageHeight(0),
+  m_ImageDepth(0),
+  m_ColFlag(0),
+  m_RowFlag(0),
+  m_FrameFlag(0),
+  m_LastRowIndex(0),
+  m_LastVoxelIndex(0),
+  m_LastFrameIndex(0),
+  m_PointFound(0),
+  m_ObjectValue(NumericTraits< InputPixelType >::One),
+  m_OutputMesh(ITK_NULLPTR),
+  m_InputImage(ITK_NULLPTR)
 {
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
-
-  m_RegionOfInterestProvidedByUser = false;
 
   SizeType size;
   size.Fill( 0 );
   m_RegionOfInterest.SetSize(size);
 
-  m_NumberOfCells = 0;
-  m_NumberOfNodes = 0;
-
-  m_NodeLimit = 2000;
-  m_CellLimit = 4000;
-  m_LastRowIndex = 0;
-  m_LastVoxelIndex = 0;
-  m_LastFrameIndex = 0;
-  m_CurrentRowIndex = 0;
-  m_CurrentFrameIndex = 0;
-  m_CurrentFrame = 0;
-  m_CurrentRow = 0;
-  m_LastRow = 0;
-  m_LastRowNum = 0;
-  m_LastFrameNum = 0;
-  m_LastFrame = 0;
-  m_CurrentRowNum = 200;
-  m_CurrentFrameNum = 2000;
   this->GetOutput()->GetPoints()->Reserve(m_NodeLimit);
   this->GetOutput()->GetCells()->Reserve(m_CellLimit);
-  m_OutputMesh = 0;
-  m_InputImage = 0;
-  m_ObjectValue = NumericTraits< InputPixelType >::One;
 }
 
 template< typename TInputImage, typename TOutputMesh >
@@ -1055,12 +1060,12 @@ BinaryMask3DMeshSource< TInputImage, TOutputMesh >
   m_LastFrameIndex = 0;
   m_CurrentRowIndex = 0;
   m_CurrentFrameIndex = 0;
-  m_CurrentFrame = 0;
-  m_CurrentRow = 0;
-  m_LastRow = 0;
+  m_CurrentFrame = ITK_NULLPTR;
+  m_CurrentRow = ITK_NULLPTR;
+  m_LastRow = ITK_NULLPTR;
   m_LastRowNum = 0;
   m_LastFrameNum = 0;
-  m_LastFrame = 0;
+  m_LastFrame = ITK_NULLPTR;
   m_CurrentRowNum = 200;
   m_CurrentFrameNum = 2000;
   m_OutputMesh = this->GetOutput();
@@ -1294,7 +1299,7 @@ BinaryMask3DMeshSource< TInputImage, TOutputMesh >
           free (m_LastRow[i]);
           }
         free (m_LastRow);
-        m_LastRow = NULL;
+        m_LastRow = ITK_NULLPTR;
         }
       m_LastRowNum = 0;
       }
@@ -1341,7 +1346,7 @@ BinaryMask3DMeshSource< TInputImage, TOutputMesh >
         free (m_LastFrame[i]);
         }
       free (m_LastFrame);
-      m_LastFrame = 0;
+      m_LastFrame = ITK_NULLPTR;
       }
     }
 
@@ -2578,7 +2583,7 @@ BinaryMask3DMeshSource< TInputImage, TOutputMesh >
 
   if ( ( end - start ) > 1 )
     {
-    mid = static_cast< int >( vcl_floor( static_cast< float >( ( start + end ) / 2 ) ) );
+    mid = static_cast< int >( std::floor( static_cast< float >( ( start + end ) / 2 ) ) );
     if ( lindex == m_LastRow[mid][0] )
       {
       m_PointFound = 1;
@@ -2623,7 +2628,7 @@ BinaryMask3DMeshSource< TInputImage, TOutputMesh >
 
   if ( ( end - start ) > 1 )
     {
-    mid = static_cast< int >( vcl_floor( static_cast< float >( ( start + end ) / 2 ) ) );
+    mid = static_cast< int >( std::floor( static_cast< float >( ( start + end ) / 2 ) ) );
     if ( lindex == m_LastFrame[mid][0] )
       {
       m_PointFound = 1;

@@ -43,7 +43,7 @@ MetaSurfaceConverter< NDimensions >
 ::MetaObjectToSpatialObject(const MetaObjectType *mo)
 {
   const SurfaceMetaObjectType *surfaceMO = dynamic_cast<const SurfaceMetaObjectType *>(mo);
-  if(surfaceMO == 0)
+  if(surfaceMO == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "Can't convert MetaObject to MetaSurface");
     }
@@ -66,7 +66,6 @@ MetaSurfaceConverter< NDimensions >
   surfaceSO->GetProperty()->SetAlpha(surfaceMO->Color()[3]);
 
   typedef typename SurfaceSpatialObjectType::SurfacePointType SurfacePointType;
-  typedef SurfacePointType *                                  SurfacePointPointer;
 
   typedef SurfaceMetaObjectType::PointListType ListType;
 

@@ -385,25 +385,25 @@ struct KdTreeTerminalNode:public KdTreeNode<TSample>
   /** Return the left tree pointer. Null for terminal nodes. */
   Superclass * Left()
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   /** Return the right tree pointer. Null for terminal nodes. */
   Superclass * Right()
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   /** Return the left tree const pointer. Null for terminal nodes. */
   const Superclass * Left() const
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   /** Return the right tree const pointer. Null for terminal nodes. */
   const Superclass * Right() const
   {
-    return 0;
+    return ITK_NULLPTR;
   }
 
   /** Return the size of the node. */
@@ -535,7 +535,7 @@ public:
   {
   public:
     /** Constructor */
-    NearestNeighbors() {}
+    NearestNeighbors() : m_FarthestNeighborIndex(0) {}
 
     /** Destructor */
     ~NearestNeighbors() {}
@@ -674,7 +674,13 @@ public:
 
   /** Searches the k-nearest neighbors */
   void Search( const MeasurementVectorType &, unsigned int,
-    InstanceIdentifierVectorType & ) const;
+              InstanceIdentifierVectorType & ) const;
+
+  /** Searches the k-nearest neighbors and returns
+   *  the distance vector along with the distance measures.
+   */
+  void Search( const MeasurementVectorType &, unsigned int,
+    InstanceIdentifierVectorType &, std::vector<double> & ) const;
 
   /** Searches the neighbors fallen into a hypersphere */
   void Search( const MeasurementVectorType &, double,
@@ -721,7 +727,7 @@ protected:
   /** Destructor: deletes the root node and the empty terminal node. */
   virtual ~KdTree();
 
-  void PrintSelf( std::ostream & os, Indent indent ) const;
+  virtual void PrintSelf( std::ostream & os, Indent indent ) const ITK_OVERRIDE;
 
   /** search loop */
   int NearestNeighborSearchLoop( const KdTreeNodeType *,

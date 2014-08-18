@@ -374,7 +374,7 @@ TriangleCell< TCellInterface >::ComputeArea(PointsContainer *iPoints)
   CoordRepType c = p[1].EuclideanDistanceTo(p[0]);
 
   CoordRepType s = 0.5 * ( a + b + c );
-  return vcl_sqrt( s * ( s - a ) * ( s - b ) * ( s - c ) );
+  return std::sqrt( s * ( s - a ) * ( s - b ) * ( s - c ) );
 }
 
 template< typename TCellInterface >
@@ -507,7 +507,6 @@ TriangleCell< TCellInterface >
   // u32 is orthogonal to v12
   //
   const double dotproduct =  v12 * v32;
-  typedef typename VectorType::ValueType VectorValueType;
   VectorType u12 = v12 - v32 * ( dotproduct / v32.GetSquaredNorm() );
   VectorType u32 = v32 - v12 * ( dotproduct / v12.GetSquaredNorm() );
 

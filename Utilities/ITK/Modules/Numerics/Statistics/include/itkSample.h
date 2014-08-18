@@ -88,7 +88,7 @@ public:
    * sequential id for each measurement vector in a Sample subclass. */
   typedef typename MeasurementVectorTraits::InstanceIdentifier InstanceIdentifier;
 
-  /** Typedef for the length of each measurement vector */
+  /** Type of the length of each measurement vector */
   typedef unsigned int MeasurementVectorSizeType;
 
   /** Get the size of the sample (number of measurements) */
@@ -158,7 +158,7 @@ public:
   itkGetConstMacro(MeasurementVectorSize, MeasurementVectorSizeType);
 
   /** Method to graft another sample */
-  virtual void Graft(const DataObject *thatObject)
+  virtual void Graft(const DataObject *thatObject) ITK_OVERRIDE
   {
     this->Superclass::Graft(thatObject);
 
@@ -178,7 +178,7 @@ protected:
 
   virtual ~Sample() {}
 
-  void PrintSelf(std::ostream & os, Indent indent) const
+  virtual void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Length of measurement vectors in the sample: "

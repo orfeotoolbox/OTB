@@ -38,10 +38,12 @@ HistogramThresholdImageFilter<TInputImage, TOutputImage, TMaskImage>
   m_InsideValue    = NumericTraits<OutputPixelType>::max();
   m_Threshold      = NumericTraits<InputPixelType>::Zero;
   m_MaskValue      = NumericTraits<MaskPixelType>::max();
-  m_Calculator     = NULL;
+  m_Calculator     = ITK_NULLPTR;
   m_MaskOutput     = true;
 
-  if( typeid(ValueType) == typeid(signed char) || typeid(ValueType) == typeid(unsigned char) )
+  if( typeid(ValueType) == typeid(signed char)
+      || typeid(ValueType) == typeid(unsigned char)
+      || typeid(ValueType) == typeid(char))
     {
     m_AutoMinimumMaximum = false;
     }
@@ -132,7 +134,7 @@ HistogramThresholdImageFilter<TInputImage, TOutputImage, TMaskImage>
     this->GraftOutput( thresholder->GetOutput() );
     }
   m_Threshold = m_Calculator->GetThreshold();
-  m_Calculator->SetInput( NULL );
+  m_Calculator->SetInput( ITK_NULLPTR );
 }
 
 template<typename TInputImage, typename TOutputImage, typename TMaskImage>
@@ -158,12 +160,15 @@ HistogramThresholdImageFilter<TInputImage,TOutputImage,TMaskImage>
      << static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_OutsideValue) << std::endl;
   os << indent << "InsideValue: "
      << static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_InsideValue) << std::endl;
-  os << indent << "Calculator: ";
-  m_Calculator->Print( os, indent.GetNextIndent() );
+  itkPrintSelfObjectMacro( Calculator );
+  os << indent << "AutoMinimumMaximim: " << m_AutoMinimumMaximum  << std::endl;
   os << indent << "Threshold (computed): "
      << static_cast<typename NumericTraits<InputPixelType>::PrintType>(m_Threshold) << std::endl;
   os << indent << "Mask image in use: " << (bool)(this->GetMaskImage() ) << std::endl;
   os << indent << "Masking of output: " << this->GetMaskOutput() << std::endl;
+  os << indent << "MaskValue: " <<  static_cast<typename NumericTraits<OutputPixelType>::PrintType>(m_MaskValue) << std::endl;
+
+  itkPrintSelfObjectMacro(Calculator);
 
 }
 

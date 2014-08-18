@@ -50,6 +50,8 @@ WarpImageFilter< TInputImage, TOutputImage, TDisplacementField >
 
   m_Interpolator =
     static_cast< InterpolatorType * >( interp.GetPointer() );
+
+  m_DefFieldSizeSame = false;
 }
 
 /**
@@ -203,7 +205,7 @@ WarpImageFilter< TInputImage, TOutputImage, TDisplacementField >
 ::AfterThreadedGenerateData()
 {
   // Disconnect input image from interpolator
-  m_Interpolator->SetInputImage(NULL);
+  m_Interpolator->SetInputImage(ITK_NULLPTR);
 }
 
 template< typename TInputImage, typename TOutputImage, typename TDisplacementField >

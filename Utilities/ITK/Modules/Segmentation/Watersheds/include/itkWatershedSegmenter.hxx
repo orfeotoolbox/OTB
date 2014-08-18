@@ -325,7 +325,6 @@ void Segmenter< TInputImage >
   ImageRegionIterator< OutputImageType >                   labelIt;
 
   typename BoundaryType::face_t::Pointer face;
-  typedef typename BoundaryType::flat_hash_t flats_t;
   typename BoundaryType::flat_hash_t           * flats;
   typename BoundaryType::flat_hash_t::iterator flats_it;
   typename BoundaryType::flat_region_t flr;
@@ -953,7 +952,7 @@ void Segmenter< TInputImage >
     // and update its minimum value if necessary.
     segment_ptr = segments->Lookup(segment_label);
     edge_table_entry_ptr = edgeHash.find(segment_label);
-    if ( segment_ptr == 0 ) // This segment not yet identified.
+    if ( segment_ptr == ITK_NULLPTR ) // This segment not yet identified.
       {                     // So add it to the table.
       temp_segment.min = searchIt.GetPixel(hoodCenter);
       segments->Add(segment_label, temp_segment);
@@ -1016,7 +1015,7 @@ void Segmenter< TInputImage >
     {
     // Lookup the corresponding segment entry
     segment_ptr = segments->Lookup( ( *edge_table_entry_ptr ).first );
-    if ( segment_ptr == 0 )
+    if ( segment_ptr == ITK_NULLPTR )
       {
       itkGenericExceptionMacro (<< "UpdateSegmentTable:: An unexpected and fatal error has occurred.");
       }
@@ -1252,7 +1251,7 @@ Segmenter< TInputImage >
     {
     return BoundaryType::New().GetPointer();
     }
-  else { return 0; }
+  else { return ITK_NULLPTR; }
 }
 
 template< typename TInputImage >
@@ -1354,8 +1353,8 @@ Segmenter< TInputImage >
   m_CurrentLabel = 1;
   m_DoBoundaryAnalysis = false;
   m_SortEdgeLists = true;
-  m_Connectivity.direction = 0;
-  m_Connectivity.index = 0;
+  m_Connectivity.direction = ITK_NULLPTR;
+  m_Connectivity.index = ITK_NULLPTR;
   typename OutputImageType::Pointer img =
     static_cast< OutputImageType * >( this->MakeOutput(0).GetPointer() );
   typename SegmentTableType::Pointer st =
