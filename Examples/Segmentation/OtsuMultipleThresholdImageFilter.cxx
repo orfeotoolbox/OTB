@@ -47,7 +47,7 @@ int main(int argc, char * argv[])
     {
     std::cerr << "Usage: " << argv[0];
     std::cerr <<
-    " inputImageFile outputImageFileName1 [OutputImageFilename2 ...] ";
+    " inputImageFile outputImageFileName1 [OutputImageFilename2 ...] " << std::endl;
     return EXIT_FAILURE;
     }
 
