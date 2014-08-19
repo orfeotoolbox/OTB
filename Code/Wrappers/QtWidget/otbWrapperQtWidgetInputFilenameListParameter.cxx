@@ -304,6 +304,8 @@ QtWidgetInputFilenameListParameter::AddFile()
   m_Scroll->setWidget(mainGroup);
 
   this->update();
+
+  emit FileSelectionWidgetAdded( fileSelection );
 }
 
 void

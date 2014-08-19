@@ -313,13 +313,20 @@ QtWidgetInputImageListParameter::AddFile()
   m_FileSelectionList.push_back(fileSelection);
   /* No need of AddNullElement() here. Moved adding NullElement when updating the list  */
   //m_InputImageListParam->AddNullElement();
-  connect(fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()));
+  connect(
+    fileSelection->GetInput(),
+    SIGNAL( textChanged( const QString & ) ),
+    this,
+    SLOT( UpdateImageList() )
+  );
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_FileLayout);
   m_Scroll->setWidget(mainGroup);
 
   this->update();
+
+  emit FileSelectionWidgetAdded( fileSelection );
 }
 
 void

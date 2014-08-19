@@ -41,6 +41,7 @@ public:
 
 signals:
   void Change();
+  void FileSelectionWidgetAdded( QWidget * );
 
 protected slots:
   //void SetFileName( const QString& value );
