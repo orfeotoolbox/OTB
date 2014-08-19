@@ -43,8 +43,11 @@
 // OTB includes (sorted by alphabetic order)
 #include "otbQtFileSelectionWidget.h"
 #include "otbWrapperQtWidgetInputFilenameParameter.h"
+#include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
+#include "otbWrapperQtWidgetInputImageListParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
+#include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 
@@ -96,6 +99,11 @@ SetupOutputFilename( W* widget,
                      const QString& prefix,
                      const QString& extension );
 
+/**
+ */
+template< typename F >
+inline void SetupWidget( QWidget * widget, const F& functor );
+
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -111,11 +119,11 @@ class FileSelectionInitializer : public std::unary_function<
   >
 {
 public:
-  FileSelectionInitializer() {}
-
-  virtual ~FileSelectionInitializer() {}
-
+  inline FileSelectionInitializer( bool supportsDataset );
   inline result_type operator () ( argument_type widget ) const;
+
+private:
+  bool m_SupportsDataset;
 };
 
 /**
@@ -129,11 +137,26 @@ class InputImageInitializer : public std::unary_function<
   >
 {
 public:
-  InputImageInitializer() {}
+  inline result_type operator () ( argument_type widget ) const;
+};
 
-  virtual ~InputImageInitializer() {}
+/**
+ * \class InputImageListInitializer
+ *
+ * \brief WIP.
+ */
+class InputImageListInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetInputImageListParameter*,
+  void
+  >
+{
+public:
+  inline InputImageListInitializer( QWidget * view );
 
   inline result_type operator () ( argument_type widget ) const;
+
+private:
+  QWidget * m_View;
 };
 
 /**
@@ -146,11 +169,25 @@ class InputVectorDataInitializer : public std::unary_function<
   void >
 {
 public:
-  InputVectorDataInitializer() {}
+  inline result_type operator () ( argument_type widget ) const;
+};
 
-  virtual ~InputVectorDataInitializer() {}
+/**
+ * \class InputVectorDataListInitializer
+ *
+ * \brief WIP.
+ */
+class InputVectorDataListInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetInputVectorDataListParameter*,
+  void >
+{
+public:
+  inline InputVectorDataListInitializer( QWidget * view );
 
   inline result_type operator () ( argument_type widget ) const;
+
+private:
+  QWidget * m_View;
 };
 
 /**
@@ -163,11 +200,25 @@ class InputFilenameInitializer : public std::unary_function<
   void >
 {
 public:
-  InputFilenameInitializer() {}
+  inline result_type operator () ( argument_type widget ) const;
+};
 
-  virtual ~InputFilenameInitializer() {}
+/**
+ * \class InputFilenameListInitializer
+ *
+ * \brief WIP.
+ */
+class InputFilenameListInitializer : public std::unary_function<
+  otb::Wrapper::QtWidgetInputFilenameListParameter*,
+  void >
+{
+public:
+  inline InputFilenameListInitializer( QWidget * view );
 
   inline result_type operator () ( argument_type widget ) const;
+
+private:
+  QWidget * m_View;
 };
 
 /**
@@ -183,8 +234,6 @@ class OutputImageInitializer : public std::unary_function<
 public:
   inline OutputImageInitializer( const QString& prefix );
 
-  virtual ~OutputImageInitializer() {}
-
   inline result_type operator () ( argument_type widget ) const;
 
 private:
@@ -199,10 +248,6 @@ private:
 class ToolTipInitializer : public std::unary_function< QWidget*, void >
 {
 public:
-  ToolTipInitializer() {}
-
-  virtual ~ToolTipInitializer() {}
-
   inline result_type operator () ( argument_type widget ) const;
 };
 
@@ -241,6 +286,14 @@ namespace Wrapper
 
 /*****************************************************************************/
 inline
+FileSelectionInitializer
+::FileSelectionInitializer( bool supportsDataset ) :
+  m_SupportsDataset( supportsDataset )
+{
+}
+
+/*****************************************************************************/
+inline
 FileSelectionInitializer::result_type
 FileSelectionInitializer
 ::operator () ( argument_type widget ) const
@@ -248,7 +301,9 @@ FileSelectionInitializer
   assert( widget!=NULL );
 
   SetupForFilenameDrop( widget, "You can drop dataset or filename here." );
-  SetupForDatasetDrop( widget );
+
+  if( m_SupportsDataset )
+    SetupForDatasetDrop( widget );
 }
 
 /*****************************************************************************/
@@ -265,6 +320,30 @@ InputImageInitializer
 
 /*****************************************************************************/
 inline
+InputImageListInitializer
+::InputImageListInitializer( QWidget * view ) :
+  m_View( view )
+{
+}
+
+/*****************************************************************************/
+inline
+InputImageListInitializer::result_type
+InputImageListInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  QObject::connect(
+    widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
+    m_View, SLOT( OnFileSelectionWidgetAdded( QWidget * ) )
+  );
+
+  SetupWidget( widget, FileSelectionInitializer( true  ) );            
+}
+
+/*****************************************************************************/
+inline
 InputFilenameInitializer::result_type
 InputFilenameInitializer
 ::operator () ( argument_type widget ) const
@@ -276,6 +355,30 @@ InputFilenameInitializer
 
 /*****************************************************************************/
 inline
+InputFilenameListInitializer
+::InputFilenameListInitializer( QWidget * view ) :
+  m_View( view )
+{
+}
+
+/*****************************************************************************/
+inline
+InputFilenameListInitializer::result_type
+InputFilenameListInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  QObject::connect(
+    widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
+    m_View, SLOT( OnFileSelectionWidgetAdded( QWidget * ) )
+  );
+
+  SetupWidget( widget, FileSelectionInitializer( false ) );
+}
+
+/*****************************************************************************/
+inline
 InputVectorDataInitializer::result_type
 InputVectorDataInitializer
 ::operator () ( argument_type widget ) const
@@ -283,6 +386,30 @@ InputVectorDataInitializer
   assert( widget!=NULL );
 
   SetupForFilenameDrop( widget );
+}
+
+/*****************************************************************************/
+inline
+InputVectorDataListInitializer
+::InputVectorDataListInitializer( QWidget * view ) :
+  m_View( view )
+{
+}
+
+/*****************************************************************************/
+inline
+InputVectorDataListInitializer::result_type
+InputVectorDataListInitializer
+::operator () ( argument_type widget ) const
+{
+  assert( widget!=NULL );
+
+  QObject::connect(
+    widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
+    m_View, SLOT( OnFileSelectionWidgetAdded( QWidget * ) )
+  );
+
+  SetupWidget( widget, FileSelectionInitializer( false ) );
 }
 
 /*****************************************************************************/
@@ -464,6 +591,25 @@ SetupOutputFilename( W* widget,
   );
 
   widget->UpdateGUI();
+}
+
+/*******************************************************************************/
+template< typename F >
+inline
+void
+SetupWidget( QWidget* widget, const F& functor )
+{
+  typedef typename F::argument_type Widget;
+  typedef QList< Widget > WidgetList;
+
+  WidgetList list( widget->findChildren< Widget >() );
+  
+  for( typename WidgetList::iterator it( list.begin() );
+       it!=list.end();
+       ++it )
+    {
+    functor( *it );
+    }
 }
 
 } // end namespace 'Wrapper'.

@@ -157,8 +157,7 @@ private:
 
   /**
    */
-  template< typename F >
-  inline void SetupWidget( QWidget* widget, const F& functor ) const;
+  void SetupFileSelectionWidget( QWidget *, bool supportsDataset );
 
 //
 // Private attributes.
@@ -201,6 +200,14 @@ private slots:
   /**
    */
   inline void SetClosable( bool );
+
+  /**
+   */
+  inline void OnFileSelectionWidgetAdded0( QWidget * );
+
+  /**
+   */
+  inline void OnFileSelectionWidgetAdded1( QWidget * );
 };
 
 } // end namespace 'Wrapper'
@@ -258,23 +265,21 @@ QtWidgetView
 }
 
 /*******************************************************************************/
-template< typename F >
 inline
 void
 QtWidgetView
-::SetupWidget( QWidget* widget, const F& functor ) const
+::OnFileSelectionWidgetAdded0( QWidget * widget )
 {
-  typedef typename F::argument_type Widget;
-  typedef QList< Widget > WidgetList;
+  SetupFileSelectionWidget( widget, false );
+}
 
-  WidgetList list( widget->findChildren< Widget >() );
-  
-  for( typename WidgetList::iterator it( list.begin() );
-       it!=list.end();
-       ++it )
-    {
-    functor( *it );
-    }
+/*******************************************************************************/
+inline
+void
+QtWidgetView
+::OnFileSelectionWidgetAdded1( QWidget * widget )
+{
+  SetupFileSelectionWidget( widget, true );
 }
 
 } // end namespace 'Wrapper'

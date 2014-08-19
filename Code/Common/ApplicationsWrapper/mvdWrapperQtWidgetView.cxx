@@ -275,15 +275,32 @@ QtWidgetView
 {
   assert( widget!=NULL );
 
-  SetupWidget( widget, FileSelectionInitializer() );
   SetupWidget( widget, InputFilenameInitializer() );
+  SetupWidget( widget, InputFilenameListInitializer( this ) );
   SetupWidget( widget, InputImageInitializer() );
+  SetupWidget( widget, InputImageListInitializer( this ) );
   SetupWidget( widget, InputVectorDataInitializer() );
+  SetupWidget( widget, InputVectorDataListInitializer( this ) );
 #if defined( _DEBUG )
   SetupWidget( widget, ToolTipInitializer() );
 #endif
 
   SetupWidget( widget, OutputImageInitializer( m_Application->GetName() ) );
+}
+
+/*******************************************************************************/
+void
+QtWidgetView
+::SetupFileSelectionWidget( QWidget * widget, bool supportsDataset )
+{
+  assert( widget!=NULL );
+  assert(
+    qobject_cast< FileSelectionInitializer::argument_type >( widget )!=NULL
+  );
+
+  FileSelectionInitializer initialize( supportsDataset );
+
+  initialize( qobject_cast< FileSelectionInitializer::argument_type >( widget ) );
 }
 
 /*******************************************************************************/
