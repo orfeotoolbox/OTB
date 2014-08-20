@@ -299,11 +299,13 @@ FileSelectionInitializer
 ::operator () ( argument_type widget ) const
 {
   assert( widget!=NULL );
-
-  SetupForFilenameDrop( widget, "You can drop dataset or filename here." );
-
   if( m_SupportsDataset )
+    {
+    SetupForFilenameDrop( widget, "You can drop dataset or filename here." );
     SetupForDatasetDrop( widget );
+    }
+  else
+    SetupForFilenameDrop( widget, "You can drop filename here." );   
 }
 
 /*****************************************************************************/
@@ -350,7 +352,7 @@ InputFilenameInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget );
+  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
