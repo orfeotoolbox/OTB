@@ -66,17 +66,29 @@ int count = 0;
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
+
+// MANTIS-947: Workaroung for QTreeWidget::itemAt() returning NULL for
+// last item of view after DatabaseBrowserController::UpdateTree() has
+// been called subsequent to insert new group.
+//
+// This workaround reverts the order of insertion of NODE items so
+// that the last item is always at first index instead of lsat one.
+//
+// Side effect: This inverts the order for all QTreeWidget using
+// mvd::TreeWidgetItem, not only those in DatabaseBrowser view.
+#define BUG_WORKAROUND_MANTIS_947 1
+
 TreeWidgetItem
 ::TreeWidgetItem( QTreeWidgetItem* parent,
                   const QString& text,
                   const QVariant& id,
                   const QStringList& columns,
                   TreeWidgetItem::ItemType type ) :
-// #if 0
-//   QTreeWidgetItem( QStringList( text ) << QString() << columns, type )
-// #else
+#if BUG_WORKAROUND_MANTIS_947
+  QTreeWidgetItem( QStringList( text ) << QString() << columns, type )
+#else // BUG_WORKAROUND_MANTIS_947
   QTreeWidgetItem( parent, QStringList( text ) << QString() << columns, type )
-// #endif
+#endif // BUG_WORKAROUND_MANTIS_947
 {
   assert( parent!=NULL );
   // parent->addChild( this );
@@ -95,6 +107,9 @@ TreeWidgetItem
         Qt::ItemIsEditable |
         Qt::ItemIsEnabled
       );
+#if BUG_WORKAROUND_MANTIS_947
+      parent->insertChild( 0, this );
+#endif // BUG_WORKAROUND_MANTIS_947
     break;
 
     case TreeWidgetItem::ITEM_TYPE_LEAF:
@@ -107,6 +122,9 @@ TreeWidgetItem
         Qt::ItemIsEnabled |
         Qt::ItemIsSelectable
       );
+#if BUG_WORKAROUND_MANTIS_947
+      parent->addChild( this );
+#endif // BUG_WORKAROUND_MANTIS_947
       break;
 
     default:
