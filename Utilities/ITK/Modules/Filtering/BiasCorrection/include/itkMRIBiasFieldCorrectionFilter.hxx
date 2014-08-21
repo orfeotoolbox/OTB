@@ -28,13 +28,13 @@ template< typename TImage, typename TImageMask, typename TBiasField >
 MRIBiasEnergyFunction< TImage, TImageMask, TBiasField >
 ::MRIBiasEnergyFunction()
 {
-  m_BiasField = 0;
+  m_BiasField = ITK_NULLPTR;
   for ( unsigned int i = 0; i < SpaceDimension; i++ )
     {
     m_SamplingFactor[i] = 1;
     }
-  m_Mask = NULL;
-  m_Image = NULL;
+  m_Mask = ITK_NULLPTR;
+  m_Image = ITK_NULLPTR;
 }
 
 template< typename TImage, typename TImageMask, typename TBiasField >
@@ -52,7 +52,7 @@ MRIBiasEnergyFunction< TImage, TImageMask, TBiasField >
 ::~MRIBiasEnergyFunction()
 {
   delete m_InternalEnergyFunction;
-  m_InternalEnergyFunction = 0;
+  m_InternalEnergyFunction = ITK_NULLPTR;
 }
 
 template< typename TImage, typename TImageMask, typename TBiasField >
@@ -60,7 +60,7 @@ unsigned int
 MRIBiasEnergyFunction< TImage, TImageMask, TBiasField >
 ::GetNumberOfParameters(void) const
 {
-  if ( m_BiasField == 0 )
+  if ( m_BiasField == ITK_NULLPTR )
     {
     return 0;
     }
@@ -82,7 +82,7 @@ MRIBiasEnergyFunction< TImage, TImageMask, TBiasField >
     itkExceptionMacro(<< "EnergyFunction is null");
     }
 
-  if ( m_BiasField == 0 )
+  if ( m_BiasField == ITK_NULLPTR )
     {
     itkExceptionMacro(<< "BiasField is null");
     }
@@ -211,8 +211,8 @@ template< typename TInputImage, typename TOutputImage, typename TMaskImage >
 MRIBiasFieldCorrectionFilter< TInputImage, TOutputImage, TMaskImage >
 ::MRIBiasFieldCorrectionFilter()
 {
-  m_InputMask = 0;
-  m_OutputMask = 0;
+  m_InputMask = ITK_NULLPTR;
+  m_OutputMask = ITK_NULLPTR;
 
   m_BiasMultiplicative = true;
   m_BiasFieldDegree = 3;
@@ -220,12 +220,12 @@ MRIBiasFieldCorrectionFilter< TInputImage, TOutputImage, TMaskImage >
   m_VolumeCorrectionMaximumIteration = 2000;
   m_InterSliceCorrectionMaximumIteration = 4000;
   m_OptimizerGrowthFactor = 1.05;
-  m_OptimizerShrinkFactor = vcl_pow(m_OptimizerGrowthFactor, -0.25);
+  m_OptimizerShrinkFactor = std::pow(m_OptimizerGrowthFactor, -0.25);
 
-  m_EnergyFunction = 0;
+  m_EnergyFunction = ITK_NULLPTR;
   m_NormalVariateGenerator = NormalVariateGeneratorType::New();
   //m_NormalVariateGenerator->Initialize(3024);
-  m_NormalVariateGenerator->Initialize( time(NULL) );
+  m_NormalVariateGenerator->Initialize( time(ITK_NULLPTR) );
 
   if ( ImageDimension == 3 )
     {
@@ -578,12 +578,12 @@ throw ( ExceptionObject )
     const unsigned int size = m_TissueClassMeans.Size();
     for ( unsigned int i = 0; i < size; i++ )
       {
-      m_TissueClassSigmas[i] = vcl_log( 1.0 + m_TissueClassSigmas[i]
+      m_TissueClassSigmas[i] = std::log( 1.0 + m_TissueClassSigmas[i]
                                         / ( m_TissueClassMeans[i] + 1.0 ) );
-      m_TissueClassMeans[i] = vcl_log(m_TissueClassMeans[i] + 1.0);
+      m_TissueClassMeans[i] = std::log(m_TissueClassMeans[i] + 1.0);
       }
 
-    m_OptimizerInitialRadius = vcl_log(1.0 + m_OptimizerInitialRadius);
+    m_OptimizerInitialRadius = std::log(1.0 + m_OptimizerInitialRadius);
 
     this->Log1PImage( m_InternalInput.GetPointer(),
                       m_InternalInput.GetPointer() );
@@ -932,12 +932,12 @@ MRIBiasFieldCorrectionFilter< TInputImage, TOutputImage, TMaskImage >
     const unsigned int size = m_TissueClassMeans.Size();
     for ( unsigned int i = 0; i < size; i++ )
       {
-      m_TissueClassMeans[i] = vcl_exp(m_TissueClassMeans[i]) - 1.0;
-      m_TissueClassSigmas[i] = vcl_exp(m_TissueClassSigmas[i])
+      m_TissueClassMeans[i] = std::exp(m_TissueClassMeans[i]) - 1.0;
+      m_TissueClassSigmas[i] = std::exp(m_TissueClassSigmas[i])
                                * ( 1.0 + m_TissueClassMeans[i] )
                                - m_TissueClassMeans[i];
       }
-    m_OptimizerInitialRadius = vcl_exp(m_OptimizerInitialRadius) - 1.0;
+    m_OptimizerInitialRadius = std::exp(m_OptimizerInitialRadius) - 1.0;
     }
 
   if ( m_GeneratingOutput )
@@ -1034,7 +1034,7 @@ MRIBiasFieldCorrectionFilter< TInputImage, TOutputImage, TMaskImage >
       }
     else
       {
-      t_iter.Set( vcl_log(pixel + 1) );
+      t_iter.Set( std::log(pixel + 1) );
       }
 
     ++s_iter;
@@ -1063,7 +1063,7 @@ MRIBiasFieldCorrectionFilter< TInputImage, TOutputImage, TMaskImage >
     {
     temp = s_iter.Get();
     //t_iter.Set( m_EnergyFunction->GetEnergy0(temp));
-    temp = vcl_exp(temp) - 1;
+    temp = std::exp(temp) - 1;
     t_iter.Set( (InternalImagePixelType)temp );
 
     ++s_iter;

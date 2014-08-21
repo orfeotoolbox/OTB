@@ -59,7 +59,6 @@ TranslationTransform<TScalar, NDimensions>
     this->m_Parameters = parameters;
     }
 
-  typedef typename ParametersType::ValueType ParameterValueType;
   bool modified = false;
   for( unsigned int i = 0; i < SpaceDimension; i++ )
     {
@@ -174,7 +173,7 @@ TranslationTransform<TScalar, NDimensions>
 {
   Pointer inv = New();
 
-  return GetInverse(inv) ? inv.GetPointer() : NULL;
+  return GetInverse(inv) ? inv.GetPointer() : ITK_NULLPTR;
 }
 
 // Compute the Jacobian in one position

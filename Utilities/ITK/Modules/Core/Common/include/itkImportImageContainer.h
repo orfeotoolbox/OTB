@@ -105,8 +105,11 @@ public:
    * container. However, in this particular case, Reserve as a Resize
    * semantics that is kept for backward compatibility reasons.
    *
+   * If UseDefaultConstructor is true, then * the default constructor is used
+   * to initialize each element.  POD date types initialize to zero.
+   *
    * \sa SetImportPointer() */
-  void Reserve(ElementIdentifier num);
+  void Reserve(ElementIdentifier num, const bool UseDefaultConstructor = false);
 
   /** Tell the container to try to minimize its memory usage for
    * storage of the current number of elements.  If new memory is
@@ -139,9 +142,14 @@ protected:
   /** PrintSelf routine. Normally this is a protected internal method. It is
    * made public here so that Image can call this method.  Users should not
    * call this method but should call Print() instead. */
-  void PrintSelf(std::ostream & os, Indent indent) const;
+  virtual void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
 
-  virtual TElement * AllocateElements(ElementIdentifier size) const;
+  /**
+   * Allocates elements of the array.  If UseDefaultConstructor is true, then
+   * the default constructor is used to initialize each element.  POD date types
+   * initialize to zero.
+   */
+  virtual TElement * AllocateElements(ElementIdentifier size, bool UseDefaultConstructor = false) const;
 
   virtual void DeallocateManagedMemory();
 

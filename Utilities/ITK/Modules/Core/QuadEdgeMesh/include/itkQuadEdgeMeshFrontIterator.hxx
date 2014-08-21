@@ -24,10 +24,13 @@ namespace itk
 {
 // ---------------------------------------------------------------------
 template< typename TMesh, typename TQE >
-QuadEdgeMeshFrontBaseIterator< TMesh, TQE >::QuadEdgeMeshFrontBaseIterator(MeshType *mesh,
-                                                                           bool start,
-                                                                           QEType *seed):
-  m_Mesh(mesh), m_Seed(seed), m_Start(start)
+QuadEdgeMeshFrontBaseIterator< TMesh, TQE >::
+QuadEdgeMeshFrontBaseIterator(MeshType *mesh, bool start, QEType *seed) :
+  m_Mesh(mesh),
+  m_Seed(seed),
+  m_Start(start),
+  m_Front(ITK_NULLPTR),
+  m_CurrentEdge(ITK_NULLPTR)
 {
   if ( !mesh )
     {
@@ -122,7 +125,7 @@ QuadEdgeMeshFrontBaseIterator< TMesh, TQE >::operator++()
   // All the edge->Origin() neighbours were already visited. Remove
   // the edge from the front, and move to next edge...
   m_Front->pop_front();
-  m_CurrentEdge = (QEType *)0;
+  m_CurrentEdge = (QEType *)ITK_NULLPTR;
   return ( this->operator++() );
 }
 
@@ -143,7 +146,7 @@ QuadEdgeMeshFrontBaseIterator< TMesh, TQE >::FindDefaultSeed()
     {
     return edge->GetRot();
     }
-  return (QEType *)0;
+  return (QEType *)ITK_NULLPTR;
 }
 }
 #endif

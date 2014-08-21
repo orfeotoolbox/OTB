@@ -25,19 +25,19 @@ namespace itk
 {
 
 /** Constructor */
-template<typename TFixedPointSet, typename TMovingPointSet>
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::PointSetToPointSetMetricv4()
 {
-  this->m_FixedPointSet = NULL;    // has to be provided by the user.
-  this->m_MovingPointSet = NULL;    // has to be provided by the user.
+  this->m_FixedPointSet = ITK_NULLPTR;    // has to be provided by the user.
+  this->m_MovingPointSet = ITK_NULLPTR;    // has to be provided by the user.
 
-  this->m_FixedTransformedPointSet = NULL;
-  this->m_MovingTransformedPointSet = NULL;
-  this->m_VirtualTransformedPointSet = NULL;
+  this->m_FixedTransformedPointSet = ITK_NULLPTR;
+  this->m_MovingTransformedPointSet = ITK_NULLPTR;
+  this->m_VirtualTransformedPointSet = ITK_NULLPTR;
 
-  this->m_FixedTransformedPointsLocator = NULL;
-  this->m_MovingTransformedPointsLocator = NULL;
+  this->m_FixedTransformedPointsLocator = ITK_NULLPTR;
+  this->m_MovingTransformedPointsLocator = ITK_NULLPTR;
 
   this->m_MovingTransformPointLocatorsNeedInitialization = false;
   this->m_FixedTransformPointLocatorsNeedInitialization = false;
@@ -54,16 +54,16 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
 }
 
 /** Destructor */
-template<typename TFixedPointSet, typename TMovingPointSet>
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::~PointSetToPointSetMetricv4()
 {
 }
 
 /** Initialize the metric */
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::Initialize( void ) throw ( ExceptionObject )
 {
   if ( !this->m_FixedPointSet )
@@ -124,9 +124,9 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
   this->InitializePointSets();
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::InitializePointSets() const
 {
   this->TransformMovingPointSet();
@@ -134,9 +134,9 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
   this->InitializePointsLocators();
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::InitializeForIteration() const
 {
   this->InitializePointSets();
@@ -148,17 +148,17 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
     }
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 SizeValueType
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::GetNumberOfComponents() const
 {
   return this->m_FixedTransformedPointSet->GetNumberOfPoints();
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
-typename PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>::MeasureType
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
+typename PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>::MeasureType
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::GetValue() const
 {
   this->InitializeForIteration();
@@ -207,26 +207,26 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
   return value;
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::GetDerivative( DerivativeType & derivative ) const
 {
   MeasureType value = NumericTraits<MeasureType>::Zero;
   this->CalculateValueAndDerivative( value, derivative, false );
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::GetValueAndDerivative( MeasureType & value, DerivativeType & derivative ) const
 {
   this->CalculateValueAndDerivative( value, derivative, true );
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::CalculateValueAndDerivative( MeasureType & value, DerivativeType & derivative, bool calculateValue ) const
 {
   this->InitializeForIteration();
@@ -235,6 +235,7 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
 
   value = NumericTraits<MeasureType>::Zero;
   MovingTransformJacobianType  jacobian( MovingPointDimension, this->GetNumberOfLocalParameters() );
+  MovingTransformJacobianType  jacobianPositional( MovingPointDimension, MovingPointDimension );
 
   DerivativeType localTransformDerivative( this->GetNumberOfLocalParameters() );
   localTransformDerivative.Fill( NumericTraits<DerivativeValueType>::Zero );
@@ -286,7 +287,10 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
       // Reset to zero since we're not accumulating in the local-support case.
       localTransformDerivative.Fill( NumericTraits<DerivativeValueType>::Zero );
       }
-    this->GetMovingTransform()->ComputeJacobianWithRespectToParameters( virtualIt.Value(), jacobian );
+    this->GetMovingTransform()->
+      ComputeJacobianWithRespectToParametersCachedTemporaries(virtualIt.Value(),
+                                                              jacobian,
+                                                              jacobianPositional);
     for ( NumberOfParametersType par = 0; par < this->GetNumberOfLocalParameters(); par++ )
       {
       for( DimensionType d = 0; d < PointDimension; ++d )
@@ -317,9 +321,9 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
   this->m_Value = value;
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 SizeValueType
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::CalculateNumberOfValidFixedPoints() const
 {
   // Determine the number of valid fixed points, using
@@ -337,9 +341,9 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
   return numberOfValidPoints;
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::StorePointDerivative( const VirtualPointType & virtualPoint, const DerivativeType & pointDerivative, DerivativeType & field ) const
 {
   // Update derivative field at some index.
@@ -365,10 +369,10 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
     }
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
-typename PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
+typename PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::LocalDerivativeType
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::GetLocalNeighborhoodDerivative( const PointType & point, const PixelType & pixel ) const
 {
   MeasureType measure;
@@ -377,9 +381,9 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
   return localDerivative;
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::TransformMovingPointSet() const
 {
   // Transform the moving point set with the moving transform.
@@ -404,9 +408,9 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
     }
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::TransformFixedAndCreateVirtualPointSet() const
 {
   // Transform the fixed point set through the virtual domain, and into the moving domain
@@ -439,9 +443,9 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
     }
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
-const typename PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>::VirtualPointSetType *
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
+const typename PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>::VirtualPointSetType *
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::GetVirtualTransformedPointSet( void ) const
 {
   // First make sure the virtual point set is current.
@@ -449,9 +453,9 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
   return this->m_VirtualTransformedPointSet.GetPointer();
 }
 
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::InitializePointsLocators() const
 {
   if( this->m_FixedTransformPointLocatorsNeedInitialization )
@@ -484,9 +488,9 @@ PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
 }
 
 /** PrintSelf */
-template<typename TFixedPointSet, typename TMovingPointSet>
+template<typename TFixedPointSet, typename TMovingPointSet, class TInternalComputationValueType>
 void
-PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet>
+PointSetToPointSetMetricv4<TFixedPointSet, TMovingPointSet, TInternalComputationValueType>
 ::PrintSelf( std::ostream & os, Indent indent ) const
 {
   Superclass::PrintSelf( os, indent );

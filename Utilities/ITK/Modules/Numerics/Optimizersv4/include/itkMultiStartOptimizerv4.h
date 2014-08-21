@@ -73,10 +73,11 @@ public:
   } StopConditionType;
 
   /** Stop condition return string type */
-  typedef std::string                            StopConditionReturnStringType;
+  typedef typename Superclass::StopConditionReturnStringType StopConditionReturnStringType;
 
   /** Stop condition internal string type */
-  typedef std::ostringstream                     StopConditionDescriptionType;
+  typedef typename Superclass::StopConditionDescriptionType  StopConditionDescriptionType;
+  /** Stop condition return string type */
 
   /** It should be possible to derive the internal computation type from the class object. */
   typedef TInternalComputationValueType             InternalComputationValueType;
@@ -95,15 +96,6 @@ public:
   /** Get stop condition enum */
   itkGetConstReferenceMacro(StopCondition, StopConditionType);
 
-  /** Set the number of iterations. */
-  itkSetMacro(NumberOfIterations, SizeValueType);
-
-  /** Get the number of iterations. */
-  itkGetConstReferenceMacro(NumberOfIterations, SizeValueType);
-
-  /** Get the current iteration number. */
-  itkGetConstMacro(CurrentIteration, SizeValueType);
-
   /** Create an instance of the local optimizer */
   void InstantiateLocalOptimizer(void);
 
@@ -119,7 +111,7 @@ public:
   virtual void ResumeOptimization();
 
   /** Get the reason for termination */
-  virtual const StopConditionReturnStringType GetStopConditionDescription() const;
+  virtual const StopConditionReturnStringType GetStopConditionDescription() const ITK_OVERRIDE;
 
   /** Get the list of parameters over which to search.  */
   ParametersListType & GetParametersList();
@@ -150,8 +142,6 @@ protected:
   bool                          m_Stop;
   StopConditionType             m_StopCondition;
   StopConditionDescriptionType  m_StopConditionDescription;
-  SizeValueType                 m_NumberOfIterations;
-  SizeValueType                 m_CurrentIteration;
   ParametersListType            m_ParametersList;
   MetricValuesListType          m_MetricValuesList;
   MeasureType                   m_MinimumMetricValue;

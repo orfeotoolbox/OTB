@@ -103,7 +103,7 @@ ImageSource< TOutputImage >
   TOutputImage *out = dynamic_cast< TOutputImage * >
                       ( this->ProcessObject::GetOutput(idx) );
 
-  if ( out == NULL && this->ProcessObject::GetOutput(idx) != NULL )
+  if ( out == ITK_NULLPTR && this->ProcessObject::GetOutput(idx) != ITK_NULLPTR )
     {
     itkWarningMacro (<< "Unable to convert output number " << idx << " to type " <<  typeid( OutputImageType ).name () );
     }
@@ -172,7 +172,7 @@ ImageSource< TOutputImage >
 template< typename TOutputImage >
 unsigned int
 ImageSource< TOutputImage >
-::SplitRequestedRegion(unsigned int i, unsigned int num, OutputImageRegionType & splitRegion)
+::SplitRequestedRegion(unsigned int i, unsigned int pieces, OutputImageRegionType & splitRegion)
 {
   const ImageRegionSplitterBase * splitter = this->GetImageRegionSplitter();
 
@@ -180,7 +180,7 @@ ImageSource< TOutputImage >
   OutputImageType *outputPtr = this->GetOutput();
 
   splitRegion = outputPtr->GetRequestedRegion();
-  return splitter->GetSplit( i, num, splitRegion );
+  return splitter->GetSplit( i, pieces, splitRegion );
 
 }
 

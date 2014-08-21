@@ -26,7 +26,8 @@ namespace itk
  * Constructor
  */
 RegularStepGradientDescentBaseOptimizer
-::RegularStepGradientDescentBaseOptimizer()
+::RegularStepGradientDescentBaseOptimizer():
+  m_Stop(false)
 {
   itkDebugMacro("Constructor");
 
@@ -37,7 +38,7 @@ RegularStepGradientDescentBaseOptimizer
   m_CurrentIteration   =   0;
   m_Value = 0;
   m_Maximize = false;
-  m_CostFunction = 0;
+  m_CostFunction = ITK_NULLPTR;
   m_CurrentStepLength   =   0;
   m_StopCondition = Unknown;
   m_Gradient.Fill(0.0f);
@@ -165,13 +166,11 @@ RegularStepGradientDescentBaseOptimizer
   if ( m_RelaxationFactor < 0.0 )
     {
     itkExceptionMacro(<< "Relaxation factor must be positive. Current value is " << m_RelaxationFactor);
-    return;
     }
 
   if ( m_RelaxationFactor >= 1.0 )
     {
     itkExceptionMacro(<< "Relaxation factor must less than 1.0. Current value is " << m_RelaxationFactor);
-    return;
     }
 
   // Make sure the scales have been set properly
@@ -198,7 +197,7 @@ RegularStepGradientDescentBaseOptimizer
     magnitudeSquare += weighted * weighted;
     }
 
-  const double gradientMagnitude = vcl_sqrt(magnitudeSquare);
+  const double gradientMagnitude = std::sqrt(magnitudeSquare);
 
   if ( gradientMagnitude < m_GradientMagnitudeTolerance )
     {

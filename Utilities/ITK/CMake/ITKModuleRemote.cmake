@@ -67,7 +67,7 @@ function(_git_update git_executable git_repository git_tag module_dir)
   # Is the hash checkout out that we want?
   if(NOT ("${tag_hash}" STREQUAL "${head_hash}"))
     execute_process(
-      COMMAND "${git_executable}" fetch
+      COMMAND "${git_executable}" fetch "${git_repository}"
       WORKING_DIRECTORY "${module_dir}"
       RESULT_VARIABLE error_code
       )
@@ -133,6 +133,7 @@ function(itk_fetch_module _name _description)
   endif()
 
   if(Module_${_name})
+    itk_download_attempt_check(Module_${_name})
     include(CMakeParseArguments)
     cmake_parse_arguments(_fetch_options "" "GIT_REPOSITORY;GIT_TAG" "" ${ARGN})
     find_package(Git)

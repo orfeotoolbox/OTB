@@ -38,8 +38,6 @@
 # only used by the macros defined in a given cmake file.
 ###############################################################################
 
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-
 
 ###############################################################################
 # Find Required Packages
@@ -50,16 +48,6 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 #-----------------------------------------------------------------------------
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
-# we must be sure we have the right ITK version; WrapITK can't build with
-# an old version of ITK because some classes will not be there.
-# newer version should only cause some warnings
-set(ITK_REQUIRED_VERSION "4.0.0")
-set(ITK_VERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}")
-if("${ITK_VERSION}" VERSION_LESS "${ITK_REQUIRED_VERSION}")
-  message(FATAL_ERROR "ITK ${ITK_REQUIRED_VERSION} is required to build this version of WrapITK, and you are trying to use version ${ITK_VERSION}. Set ITK_DIR to point to the directory of ITK ${ITK_REQUIRED_VERSION}.")
-endif()
-
-cmake_policy(SET CMP0003 NEW)
 
 ###############################################################################
 # Set various variables in order
@@ -113,10 +101,6 @@ if(UNIX)
 else()
   set(WRAP_ITK_LIBNAME_PREFIX "")
 endif()
-
-# 467 is for warnings caused by typemap on overloaded methods
-set(CSWIG_IGNORE_WARNINGS -w362 -w389 -w467 -w503 -w508 -w509 -w516)
-add_definitions(-DSWIG_GLOBAL)
 
 # generators dir
 set(GENERATORS_SRC_DIR "${WRAP_ITK_CMAKE_DIR}/Generators" CACHE INTERNAL "generators source directory")

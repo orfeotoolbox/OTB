@@ -65,6 +65,7 @@ FloodFilledFunctionConditionalConstIterator< TImage, TFunction >
 
   // Set up the temporary image
   this->InitializeIterator();
+
 }
 
 template< typename TImage, typename TFunction >
@@ -72,6 +73,9 @@ void
 FloodFilledFunctionConditionalConstIterator< TImage, TFunction >
 ::InitializeIterator()
 {
+  m_FoundUncheckedNeighbor = false;
+  m_IsValidIndex = false;
+
   // Get the origin and spacing from the image in simple arrays
   m_ImageOrigin  = this->m_Image->GetOrigin();
   m_ImageSpacing = this->m_Image->GetSpacing();
@@ -84,8 +88,7 @@ FloodFilledFunctionConditionalConstIterator< TImage, TFunction >
   m_TemporaryPointer->SetLargestPossibleRegion(tempRegion);
   m_TemporaryPointer->SetBufferedRegion(tempRegion);
   m_TemporaryPointer->SetRequestedRegion(tempRegion);
-  m_TemporaryPointer->Allocate();
-  m_TemporaryPointer->FillBuffer(NumericTraits< typename TTempImage::PixelType >::Zero);
+  m_TemporaryPointer->Allocate(true); // initialize buffer to zero
 
   // Initialize the queue by adding the start index assuming one of
   // the m_Seeds is "inside" This might not be true, in which

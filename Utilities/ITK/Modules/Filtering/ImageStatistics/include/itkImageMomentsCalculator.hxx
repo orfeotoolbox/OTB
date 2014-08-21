@@ -53,8 +53,8 @@ template< typename TImage >
 ImageMomentsCalculator< TImage >::ImageMomentsCalculator(void)
 {
   m_Valid = false;
-  m_Image = NULL;
-  m_SpatialObjectMask = NULL;
+  m_Image = ITK_NULLPTR;
+  m_SpatialObjectMask = ITK_NULLPTR;
   m_M0 = NumericTraits< ScalarType >::Zero;
   m_M1.Fill(NumericTraits< typename VectorType::ValueType >::Zero);
   m_M2.Fill(NumericTraits< typename MatrixType::ValueType >::Zero);
@@ -183,7 +183,7 @@ ImageMomentsCalculator< TImage >::Compute()
   vnl_diag_matrix< double >           pm = eigen.D;
   for ( unsigned int i = 0; i < ImageDimension; i++ )
     {
-    m_Pm[i] = pm(i, i) * m_M0;
+    m_Pm[i] = pm(i) * m_M0;
     }
   m_Pa = eigen.V.transpose();
 
@@ -195,7 +195,7 @@ ImageMomentsCalculator< TImage >::Compute()
 
   for ( unsigned int i = 0; i < ImageDimension; i++ )
     {
-    det *= eigenval(i, i);
+    det *= eigenval(i);
     }
 
   for ( unsigned int i = 0; i < ImageDimension; i++ )

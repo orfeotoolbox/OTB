@@ -81,6 +81,8 @@ RealTimeClock::RealTimeClock():m_Frequency(1)
   this->m_Origin -= this->m_Difference;
 #else
   this->m_Frequency = 1e6;
+  this->m_Difference = 0.0;
+  this->m_Origin = 0.0;
 #endif  // defined(WIN32) || defined(_WIN32)
 }
 
@@ -100,7 +102,7 @@ RealTimeClock::GetTimeInSeconds() const
   return value;
 #else
   struct timeval tval;
-  ::gettimeofday(&tval, 0);
+  ::gettimeofday(&tval, ITK_NULLPTR);
 
   TimeStampType value = static_cast< TimeStampType >( tval.tv_sec ) + static_cast< TimeStampType >( tval.tv_usec )
                         / this->m_Frequency;
@@ -129,14 +131,14 @@ RealTimeClock::GetRealTimeStamp() const
   typedef RealTimeStamp::SecondsCounterType       SecondsCounterType;
   typedef RealTimeStamp::MicroSecondsCounterType  MicroSecondsCounterType;
 
-  SecondsCounterType iseconds = vcl_floor( seconds );
-  MicroSecondsCounterType useconds = vcl_floor( ( seconds - iseconds ) * 1e6 );
+  SecondsCounterType iseconds = std::floor( seconds );
+  MicroSecondsCounterType useconds = std::floor( ( seconds - iseconds ) * 1e6 );
 
   RealTimeStamp value( iseconds, useconds );
   return value;
 #else
   struct timeval tval;
-  ::gettimeofday(&tval, 0);
+  ::gettimeofday(&tval, ITK_NULLPTR);
 
   RealTimeStamp value( static_cast<RealTimeStamp::SecondsCounterType>(tval.tv_sec), static_cast<RealTimeStamp::MicroSecondsCounterType>(tval.tv_usec) );
   return value;

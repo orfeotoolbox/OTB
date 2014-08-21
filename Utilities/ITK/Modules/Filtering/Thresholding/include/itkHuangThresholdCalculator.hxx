@@ -87,7 +87,7 @@ HuangThresholdCalculator<THistogram, TOutput>
   for( size_t i = 1; i < Smu.size(); i++)
     {
     double mu = 1. / ( 1. + static_cast< double >( i ) / C );
-    Smu[i] = -mu * vcl_log( mu ) - (1. - mu) * vcl_log( 1. - mu );
+    Smu[i] = -mu * std::log( mu ) - (1. - mu) * std::log( 1. - mu );
     }
 
   // calculate the threshold

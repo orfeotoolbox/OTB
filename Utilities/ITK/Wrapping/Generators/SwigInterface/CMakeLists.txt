@@ -1,16 +1,22 @@
 ###############################################################################
-# find swig
-#find_package(SWIG REQUIRED)
-#include(${SWIG_USE_FILE})
+# Find python
+find_package(PythonInterp REQUIRED)
 
 ###############################################################################
 # Build swig
 
 option(ITK_USE_SYSTEM_SWIG "Use system swig. If OFF, swig is built as an external project." OFF)
 
-set(swig_version 2.0.4)
-set(swig_md5     4319c503ee3a13d2a53be9d828c3adc0)
-set(swigwin_md5  4ab8064b1a8894c8577ef9d0fb2523c8)
+# Require at least SWIG 3.0.0
+if(ITK_USE_SYSTEM_SWIG)
+  if(${SWIG_VERSION} VERSION_LESS 3.0.0)
+    message(WARNING "Swig version less than 3.0.0: \"${SWIG_VERSION}\".")
+  endif()
+endif()
+
+set(swig_version 3.0.2)
+set(swig_md5     62f9b0d010cef36a13a010dc530d0d41)
+set(swigwin_md5  3f18de4fc09ab9abb0d3be37c11fbc8f)
 
 if(WIN32)
   set(swig_ep "${CMAKE_CURRENT_BINARY_DIR}/swigwin-${swig_version}/swig.exe")
@@ -35,6 +41,7 @@ if(ITK_USE_SYSTEM_SWIG)
 else()
   include(ExternalProject)
   if(WIN32)
+    itk_download_attempt_check(SWIG)
     ExternalProject_Add(swig
       URL http://prdownloads.sourceforge.net/swig/swigwin-${swig_version}.zip
       URL_MD5 ${swigwin_md5}
@@ -61,9 +68,10 @@ else()
     #  CXXCPP      C++ preprocessor
 
     # build swig as an external project
-    ExternalProject_add(PCRE
-    URL http://downloads.sourceforge.net/project/pcre/pcre/8.12/pcre-8.12.tar.gz
-    URL_MD5 fa69e4c5d8971544acd71d1f10d59193
+    itk_download_attempt_check(PCRE)
+    ExternalProject_Add(PCRE
+    URL http://downloads.sourceforge.net/project/pcre/pcre/8.35/pcre-8.35.tar.gz
+    URL_MD5 ed58bcbe54d3b1d59e9f5415ef45ce1c
     CONFIGURE_COMMAND
       env
         "CC=${CMAKE_C_COMPILER} ${CMAKE_C_COMPILER_ARG1}"
@@ -107,7 +115,8 @@ else()
     #              This script will default YFLAGS to the empty string to avoid a
     #              default value of `-d' given by some make applications.
 
-    ExternalProject_add(swig
+    itk_download_attempt_check(SWIG)
+    ExternalProject_Add(swig
     URL http://prdownloads.sourceforge.net/swig/swig-${swig_version}.tar.gz
     URL_MD5 ${swig_md5}
     CONFIGURE_COMMAND
@@ -133,12 +142,10 @@ else()
   set(SWIG_EXECUTABLE ${swig_ep} CACHE FILEPATH "swig executable." FORCE)
 endif()
 
-
 ###############################################################################
-# find python
-find_package(PythonInterp REQUIRED)
 
-set(CABLE_INDEX ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py CACHE INTERNAL "cableidx path")
+set(IDX_GENERATOR ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/idx.py CACHE INTERNAL "idx generator path")
+set(PYGCCXML_DIR ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/pygccxml/src CACHE INTERNAL "pygccxml path")
 
 ###############################################################################
 # install the files requires for swiginterface
@@ -149,12 +156,9 @@ if(NOT EXTERNAL_WRAP_ITK_PROJECT)
   WRAP_ITK_INSTALL(/Configuration/Generators/SwigInterface module.i.in)
   WRAP_ITK_INSTALL(/Configuration/Generators/SwigInterface module.includes.in)
 
-  install(DIRECTORY pygccxml-1.0.0
+  install(DIRECTORY ${PYGCCXML_DIR}
     DESTINATION "${WRAP_ITK_INSTALL_PREFIX}/Configuration/Generators/SwigInterface"
-    PATTERN ".svn" EXCLUDE
-    PATTERN "CVS" EXCLUDE
-    PATTERN "docs" EXCLUDE
-    PATTERN "unittests" EXCLUDE
+    PATTERN ".git" EXCLUDE
   )
 
   install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/idx.py"
@@ -244,15 +248,6 @@ macro(itk_end_wrap_module_swig_interface)
 #      set(opts ${opts} --import "${bi}")
 #    endforeach()
 
-  # message("${opts}")
-
-    # configure the test driver, to set the python path to the pygccxml dir
-  #   find_program(ITK_TEST_DRIVER itkTestDriver)
-  #   set(PYTHON_PYGCCXML_DRIVER "${ITK_TEST_DRIVER}"
-  #     --add-before-env PYTHONPATH "${WRAP_ITK_CMAKE_DIR}/pygccxml-1.0.0/"
-  #     "${PYTHON_EXECUTABLE}"
-  #   )
-
     if(ITK_WRAP_EXPLICIT)
       set(opts ${opts} --include "${WRAPPER_LIBRARY_NAME}Explicit.h")
     endif()
@@ -267,12 +262,13 @@ macro(itk_end_wrap_module_swig_interface)
 #        --include ${WRAPPER_LIBRARY_NAME}.includes
 #        --import ${module_interface_file}
         --swig-include ${module}_ext.i
-        -w1 -w3 -w51 -w52 -w53 -w54 #--warning-error
+        -w1 -w3 -w51 -w52 -w53 -w54
         -A protected -A private
+        -p ${PYGCCXML_DIR}
+        -g ${GCCXML}
         --typedef-input ${typedef_in_file}
         --typedef-output ${typedef_file}
         --include ${module}SwigInterface.h
-        # --verbose
         ${xml_file}
         ${interface_file}
       DEPENDS ${DEPS} ${idx_files} ${IGENERATOR} # ${SWIG_INTERFACE_IDX_FILES} ${SWIG_INTERFACE_FILES} ${typedef_in_file} # ${includes_file}
@@ -350,7 +346,6 @@ macro(itk_end_wrap_submodule_swig_interface module)
   # variables used:
   # WRAPPER_LIBRARY_NAME
   # WRAPPER_LIBRARY_OUTPUT_DIR
-  # WRAPPER_LIBRARY_CABLESWIG_INPUTS
   # WRAPPER_LIBRARY_DEPENDS
   # WRAPPER_MASTER_INDEX_OUTPUT_DIR
   # MODULE_INCLUDES
@@ -384,9 +379,9 @@ macro(itk_end_wrap_submodule_swig_interface module)
   set(idx_file "${WRAPPER_MASTER_INDEX_OUTPUT_DIR}/${module}.idx")
   add_custom_command(
     OUTPUT ${idx_file}
-    COMMAND ${CABLE_INDEX}
-          ${xml_file} ${idx_file}
-    DEPENDS ${CABLE_INDEX} ${xml_file}
+    COMMAND ${IDX_GENERATOR}
+      ${PYGCCXML_DIR} ${GCCXML} ${xml_file} ${idx_file}
+    DEPENDS ${IDX_GENERATOR} ${xml_file}
   )
   WRAP_ITK_INSTALL("/Configuration/Typedefs/" "${idx_file}")
 #   add_custom_target(${module}Idx DEPENDS ${idx_file})

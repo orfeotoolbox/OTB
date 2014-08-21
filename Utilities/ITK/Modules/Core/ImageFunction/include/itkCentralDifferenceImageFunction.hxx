@@ -54,7 +54,7 @@ CentralDifferenceImageFunction< TInputImage, TCoordRep, TOutputType >
     // Verify the output vector is the right size.
     // OutputType of VariablelengthVector will have size 0 until allocated, so this
     // case can't be tested.
-    if( inputData != NULL )
+    if( inputData != ITK_NULLPTR )
     {
       SizeValueType nComponents = OutputConvertType::GetNumberOfComponents();
       if( nComponents > 0 )
@@ -81,7 +81,7 @@ CentralDifferenceImageFunction< TInputImage, TCoordRep, TOutputType >
   if ( interpolator != this->m_Interpolator )
     {
     this->m_Interpolator = interpolator;
-    if( this->GetInputImage() != NULL )
+    if( this->GetInputImage() != ITK_NULLPTR )
       {
       this->m_Interpolator->SetInputImage( this->GetInputImage() );
       }
@@ -286,7 +286,6 @@ CentralDifferenceImageFunction< TInputImage, TCoordRep, TOutputType >
 {
   typedef typename PointType::ValueType           PointValueType;
   typedef typename OutputType::ValueType          DerivativeValueType;
-  typedef typename ContinuousIndexType::ValueType ContinuousIndexValueType;
 
   PointType neighPoint1 = point;
   PointType neighPoint2 = point;
@@ -354,8 +353,6 @@ CentralDifferenceImageFunction< TInputImage, TCoordRep, TOutputType >
 ::EvaluateSpecialized(const PointType & point, OutputType & derivative, OutputTypeSpecializationStructType<Type>) const
 {
   typedef typename PointType::ValueType           PointValueType;
-  typedef typename OutputType::ValueType          DerivativeValueType;
-  typedef typename ContinuousIndexType::ValueType ContinuousIndexValueType;
 
   const InputImageType *inputImage = this->GetInputImage();
   const unsigned int numberComponents = inputImage->GetNumberOfComponentsPerPixel();

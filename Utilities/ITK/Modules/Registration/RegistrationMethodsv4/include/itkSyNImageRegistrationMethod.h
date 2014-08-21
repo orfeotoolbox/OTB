@@ -24,13 +24,6 @@
 
 namespace itk
 {
-//Forward-declare these because of module dependency conflict.
-//They will soon be moved to a different module, at which
-// time this can be removed.
-template <unsigned int VDimension, typename TDataHolder>
-class ImageToData;
-template <typename TDataHolder>
-class Array1DToData;
 
 /** \class SyNImageRegistrationMethod
  * \brief Interface method for the performing greedy SyN image registration.
@@ -107,6 +100,7 @@ public:
   typedef typename ImageMetricType::FixedImageMaskType                FixedImageMaskType;
   typedef typename ImageMetricType::MovingImageMaskType               MovingImageMaskType;
 
+  typedef typename Superclass::InitialTransformType                   InitialTransformType;
   typedef TOutputTransform                                            OutputTransformType;
   typedef typename OutputTransformType::Pointer                       OutputTransformPointer;
   typedef typename OutputTransformType::ScalarType                    RealType;

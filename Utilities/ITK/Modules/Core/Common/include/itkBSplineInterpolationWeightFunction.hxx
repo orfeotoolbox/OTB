@@ -34,7 +34,7 @@ BSplineInterpolationWeightFunction< TCoordRep, VSpaceDimension, VSplineOrder >
 {
   // Initialize the number of weights;
   m_NumberOfWeights =
-    static_cast< unsigned int >( vcl_pow( static_cast< double >( SplineOrder + 1 ),
+    static_cast< unsigned int >( std::pow( static_cast< double >( SplineOrder + 1 ),
                                           static_cast< double >( SpaceDimension ) ) );
 
   // Initialize support region is a hypercube of length SplineOrder + 1
@@ -46,8 +46,7 @@ BSplineInterpolationWeightFunction< TCoordRep, VSpaceDimension, VSplineOrder >
   typedef Image< char, SpaceDimension > CharImageType;
   typename CharImageType::Pointer tempImage = CharImageType::New();
   tempImage->SetRegions(m_SupportSize);
-  tempImage->Allocate();
-  tempImage->FillBuffer(0);
+  tempImage->Allocate(true); // initialize buffer to zero
 
   typedef ImageRegionConstIteratorWithIndex< CharImageType > IteratorType;
   IteratorType iterator( tempImage, tempImage->GetBufferedRegion() );

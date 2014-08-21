@@ -31,7 +31,8 @@ namespace itk
  */
 template<unsigned int TFixedDimension, unsigned int TMovingDimension, typename TVirtualImage, typename TInternalComputationValueType>
 ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TInternalComputationValueType>
-::ObjectToObjectMetric()
+::ObjectToObjectMetric():
+  m_NumberOfValidPoints(0)
 {
   /* Both transforms default to an identity transform */
   typedef IdentityTransform<TInternalComputationValueType, itkGetStaticConstMacro( MovingDimension ) > MovingIdentityTransformType;
@@ -238,7 +239,7 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TInternal
     {
     this->m_VirtualImage = virtualImage;
     this->Modified();
-    this->m_UserHasSetVirtualDomain = virtualImage != NULL;
+    this->m_UserHasSetVirtualDomain = virtualImage != ITK_NULLPTR;
     }
 }
 
@@ -415,7 +416,7 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TInternal
   const MovingTransformType* transform = this->m_MovingTransform.GetPointer();
   // If it's a CompositeTransform, get the last transform (1st applied).
   const MovingCompositeTransformType* comptx = dynamic_cast< const MovingCompositeTransformType * > ( transform );
-  if( comptx != NULL )
+  if( comptx != ITK_NULLPTR )
     {
     transform = comptx->GetBackTransform();
     }
@@ -441,7 +442,7 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TInternal
    * Eventually we'll want a method in Transform something like a
    * GetInputDomainSize to check this cleanly. */
   const MovingDisplacementFieldTransformType * displacementTransform = this->GetMovingDisplacementFieldTransform();
-  if( displacementTransform == NULL )
+  if( displacementTransform == ITK_NULLPTR )
     {
     itkExceptionMacro("Expected the moving transform to be of type DisplacementFieldTransform or derived, "
                       "or a CompositeTransform with DisplacementFieldTransform as the last to have been added." );
@@ -514,20 +515,12 @@ ObjectToObjectMetric<TFixedDimension, TMovingDimension, TVirtualImage, TInternal
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "ObjectToObjectMetric: " << std::endl
-     << indent << "Fixed Transform: " << std::endl
-     << indent << this->m_FixedTransform << std::endl
-     << indent << "Moving Transform: " << std::endl
-     << indent << this->m_MovingTransform << std::endl;
-  if( this->m_VirtualImage.IsNull() )
-    {
-    os << indent << "Virtual Image: NULL " << std::endl;
-    }
-  else
-    {
-    os << indent << "Virtual Image: " << std::endl
-       << indent << this->m_VirtualImage << std::endl;
-    }
+  os << indent << "ObjectToObjectMetric: " << std::endl;
+
+  itkPrintSelfObjectMacro( FixedTransform );
+  itkPrintSelfObjectMacro( MovingTransform );
+  itkPrintSelfObjectMacro( VirtualImage );
+
   os << indent << "m_UserHasSetVirtualDomain: " << this->m_UserHasSetVirtualDomain << std::endl
      << indent << "m_NumberOfValidPoints: " << this->m_NumberOfValidPoints << std::endl;
 }

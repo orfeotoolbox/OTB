@@ -91,8 +91,6 @@ namespace itk
  *
  * Notes:
  * 1. This class returns the negative mutual information value.
- * 2. This class in not thread safe due the private data structures
- *     used to the store the sampled points and the marginal and joint pdfs.
  *
  * References:
  * [1] "Nonrigid multimodality image registration"
@@ -227,9 +225,9 @@ public:
    */
   const typename JointPDFType::Pointer GetJointPDF () const
     {
-    if( this->m_MMIMetricPerThreadVariables == NULL )
+    if( this->m_MMIMetricPerThreadVariables == ITK_NULLPTR )
       {
-      return JointPDFType::Pointer(NULL);
+      return JointPDFType::Pointer(ITK_NULLPTR);
       }
     return this->m_MMIMetricPerThreadVariables[0].JointPDF;
     }
@@ -242,9 +240,9 @@ public:
    */
   const typename JointPDFDerivativesType::Pointer GetJointPDFDerivatives () const
     {
-    if( this->m_MMIMetricPerThreadVariables == NULL )
+    if( this->m_MMIMetricPerThreadVariables == ITK_NULLPTR )
       {
-      return JointPDFDerivativesType::Pointer(NULL);
+      return JointPDFDerivativesType::Pointer(ITK_NULLPTR);
       }
     return this->m_MMIMetricPerThreadVariables[0].JointPDFDerivatives;
     }
@@ -279,22 +277,22 @@ private:
   void ComputeFixedImageParzenWindowIndices( FixedImageSampleContainer & samples);
 
   /** Compute PDF derivative contribution for each parameter. */
-  void ComputePDFDerivatives(ThreadIdType threadID, unsigned int sampleNumber, int movingImageParzenWindowIndex,
+  void ComputePDFDerivatives(ThreadIdType threadId, unsigned int sampleNumber, int movingImageParzenWindowIndex,
                                      const ImageDerivativesType
                                      &  movingImageGradientValue,
                                      PDFValueType cubicBSplineDerivativeValue) const;
 
-  virtual void GetValueThreadPreProcess(ThreadIdType threadID, bool withinSampleThread) const;
-  virtual void GetValueThreadPostProcess(ThreadIdType threadID, bool withinSampleThread) const;
+  virtual void GetValueThreadPreProcess(ThreadIdType threadId, bool withinSampleThread) const;
+  virtual void GetValueThreadPostProcess(ThreadIdType threadId, bool withinSampleThread) const;
   //NOTE:  The signature in base class requires that movingImageValue is of type double
-  virtual bool GetValueThreadProcessSample(ThreadIdType threadID, SizeValueType fixedImageSample,
+  virtual bool GetValueThreadProcessSample(ThreadIdType threadId, SizeValueType fixedImageSample,
                                                   const MovingImagePointType & mappedPoint,
                                                   double movingImageValue) const;
 
-  virtual void GetValueAndDerivativeThreadPreProcess( ThreadIdType threadID, bool withinSampleThread) const;
-  virtual void GetValueAndDerivativeThreadPostProcess( ThreadIdType threadID, bool withinSampleThread) const;
+  virtual void GetValueAndDerivativeThreadPreProcess( ThreadIdType threadId, bool withinSampleThread) const;
+  virtual void GetValueAndDerivativeThreadPostProcess( ThreadIdType threadId, bool withinSampleThread) const;
   //NOTE:  The signature in base class requires that movingImageValue is of type double
-  virtual bool GetValueAndDerivativeThreadProcessSample(ThreadIdType threadID, SizeValueType fixedImageSample,
+  virtual bool GetValueAndDerivativeThreadProcessSample(ThreadIdType threadId, SizeValueType fixedImageSample,
                                                                const MovingImagePointType & mappedPoint,
                                                                double movingImageValue, const ImageDerivativesType &
                                                                movingImageGradientValue) const;

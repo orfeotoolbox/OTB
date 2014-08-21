@@ -85,6 +85,9 @@
 # written.
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.3 FATAL_ERROR)
+IF(POLICY CMP0025)
+  CMAKE_POLICY(SET CMP0025 NEW)
+ENDIF()
 
 #-----------------------------------------------------------------------------
 # If a namespace is not specified, use "kwsys" and enable testing.
@@ -296,6 +299,13 @@ IF(NOT CMAKE_COMPILER_IS_GNUCXX)
   ENDIF(CMAKE_SYSTEM MATCHES "OSF1-V.*")
   IF(CMAKE_SYSTEM MATCHES "HP-UX")
     SET(KWSYS_PLATFORM_CXX_TEST_EXTRA_FLAGS "+p")
+    IF(CMAKE_CXX_COMPILER_ID MATCHES "HP")
+      # it is known that version 3.85 fails and 6.25 works without these flags
+      IF(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4)
+        # use new C++ library and improved template support
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -AA +hpxstd98")
+      ENDIF()
+    ENDIF()
   ENDIF(CMAKE_SYSTEM MATCHES "HP-UX")
 ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
 
@@ -682,6 +692,7 @@ IF(KWSYS_USE_SystemInformation)
     # usually it's in libc but on FreeBSD
     # it's in libexecinfo
     FIND_LIBRARY(EXECINFO_LIB "execinfo")
+    MARK_AS_ADVANCED(EXECINFO_LIB)
     IF (NOT EXECINFO_LIB)
       SET(EXECINFO_LIB "")
     ENDIF()
@@ -1073,6 +1084,11 @@ IF(MSVC OR (WIN32 AND "${CMAKE_C_COMPILER_ID}" MATCHES "^(Intel)$"))
     )
 ENDIF()
 
+IF(WIN32)
+  # Help enforce the use of wide Windows apis.
+  ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
+ENDIF()
+
 IF(KWSYS_USE_String)
   # Activate code in "String.c".  See the comment in the source.
   SET_SOURCE_FILES_PROPERTIES(String.c PROPERTIES
@@ -1133,6 +1149,11 @@ IF(KWSYS_STANDALONE OR CMake_SOURCE_DIR)
         testEncoding
         )
     ENDIF(KWSYS_STL_HAS_WSTRING)
+    IF(KWSYS_USE_FStream)
+      SET(KWSYS_CXX_TESTS ${KWSYS_CXX_TESTS}
+        testFStream
+        )
+    ENDIF(KWSYS_USE_FStream)
     IF(KWSYS_USE_SystemInformation)
       SET(KWSYS_CXX_TESTS ${KWSYS_CXX_TESTS} testSystemInformation)
     ENDIF(KWSYS_USE_SystemInformation)
@@ -1214,6 +1235,9 @@ IF(KWSYS_STANDALONE OR CMake_SOURCE_DIR)
     # Some Apple compilers produce bad optimizations in this source.
     IF(APPLE AND "${CMAKE_C_COMPILER_ID}" MATCHES "^(GNU|LLVM)$")
       SET_SOURCE_FILES_PROPERTIES(testProcess.c PROPERTIES COMPILE_FLAGS -O0)
+    ELSEIF(CMAKE_C_COMPILER_ID STREQUAL "XL")
+      # Tell IBM XL not to warn about our test infinite loop
+      SET_PROPERTY(SOURCE testProcess.c PROPERTY COMPILE_FLAGS -qsuppress=1500-010)
     ENDIF()
 
     # Test SharedForward

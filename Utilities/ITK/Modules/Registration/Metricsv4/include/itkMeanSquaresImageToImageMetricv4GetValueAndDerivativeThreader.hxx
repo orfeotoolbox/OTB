@@ -37,7 +37,7 @@ MeanSquaresImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner
                 const MovingImageGradientType &    movingImageGradient,
                 MeasureType &                      metricValueReturn,
                 DerivativeType &                   localDerivativeReturn,
-                const ThreadIdType                 threadID) const
+                const ThreadIdType                 threadId) const
 {
   /** Only the voxelwise contribution given the point pairs. */
   FixedImagePixelType diff = fixedImageValue - movingImageValue;
@@ -57,10 +57,14 @@ MeanSquaresImageToImageMetricv4GetValueAndDerivativeThreader< TDomainPartitioner
 
   /* Use a pre-allocated jacobian object for efficiency */
   typedef typename TImageToImageMetric::JacobianType & JacobianReferenceType;
-  JacobianReferenceType jacobian = this->m_GetValueAndDerivativePerThreadVariables[threadID].MovingTransformJacobian;
+  JacobianReferenceType jacobian = this->m_GetValueAndDerivativePerThreadVariables[threadId].MovingTransformJacobian;
+  JacobianReferenceType jacobianPositional = this->m_GetValueAndDerivativePerThreadVariables[threadId].MovingTransformJacobianPositional;
 
   /** For dense transforms, this returns identity */
-  this->m_Associate->GetMovingTransform()->ComputeJacobianWithRespectToParameters( virtualPoint, jacobian );
+  this->m_Associate->GetMovingTransform()->
+    ComputeJacobianWithRespectToParametersCachedTemporaries(virtualPoint,
+                                                            jacobian,
+                                                            jacobianPositional);
 
   for ( unsigned int par = 0; par < this->GetCachedNumberOfLocalParameters(); par++ )
     {

@@ -153,7 +153,7 @@ TimeVaryingBSplineVelocityFieldImageRegistrationMethod<TFixedImage, TMovingImage
   this->m_OutputTransform->SetVelocityFieldSize( sampledVelocityFieldSize );
   this->m_OutputTransform->IntegrateVelocityField();
 
-  typename TimeVaryingWeightedMaskImageType::Pointer timeVaryingFixedWeightedMaskImage = NULL;
+  typename TimeVaryingWeightedMaskImageType::Pointer timeVaryingFixedWeightedMaskImage = ITK_NULLPTR;
   if( fixedImageMask )
     {
     timeVaryingFixedWeightedMaskImage = TimeVaryingWeightedMaskImageType::New();
@@ -444,7 +444,7 @@ TimeVaryingBSplineVelocityFieldImageRegistrationMethod<TFixedImage, TMovingImage
     const typename VirtualImageType::IndexType virtualDomainIndex = virtualDomainImage->GetLargestPossibleRegion().GetIndex();
     const typename VirtualImageType::SizeType virtualDomainSize = virtualDomainImage->GetLargestPossibleRegion().GetSize();
 
-    typename MaskImageType::ConstPointer maskImage = NULL;
+    typename MaskImageType::ConstPointer maskImage = ITK_NULLPTR;
     if( fixedImageMask )
       {
       typename ImageMaskSpatialObjectType::Pointer imageMask = dynamic_cast<ImageMaskSpatialObjectType *>( const_cast<FixedImageMaskType *>( fixedImageMask.GetPointer() ) );
@@ -559,7 +559,7 @@ TimeVaryingBSplineVelocityFieldImageRegistrationMethod<TFixedImage, TMovingImage
 
     TimeVaryingVelocityFieldControlPointLatticePointer updateControlPointLattice = bspliner->GetPhiLattice();
 
-    TimeVaryingVelocityFieldPointer velocityField = NULL;
+    TimeVaryingVelocityFieldPointer velocityField = ITK_NULLPTR;
     if( this->GetDebug() )
       {
       velocityField = bspliner->GetOutput();
@@ -581,6 +581,15 @@ TimeVaryingBSplineVelocityFieldImageRegistrationMethod<TFixedImage, TMovingImage
     if( this->m_CurrentConvergenceValue < this->m_ConvergenceThreshold )
       {
       this->m_IsConverged = true;
+      }
+
+    if( this->m_IsConverged || this->m_CurrentIteration >= this->m_NumberOfIterationsPerLevel[this->m_CurrentLevel] )
+      {
+
+      // Once we finish by convergence or exceeding number of iterations,
+      // we need to reset the transform by resetting the time bounds to the
+      // full range [0,1] and integrating the velocity field to get the
+      // forward and inverse displacement fields.
 
       this->m_OutputTransform->SetLowerTimeBound( 0 );
       this->m_OutputTransform->SetUpperTimeBound( 1.0 );
@@ -637,6 +646,9 @@ void
 TimeVaryingBSplineVelocityFieldImageRegistrationMethod<TFixedImage, TMovingImage, TTransform>
 ::GenerateData()
 {
+
+  this->AllocateOutputs();
+
   for( this->m_CurrentLevel = 0; this->m_CurrentLevel < this->m_NumberOfLevels; this->m_CurrentLevel++ )
     {
     this->InitializeRegistrationAtEachLevel( this->m_CurrentLevel );
@@ -652,9 +664,7 @@ TimeVaryingBSplineVelocityFieldImageRegistrationMethod<TFixedImage, TMovingImage
     this->m_CompositeTransform->AddTransform( this->m_OutputTransform );
     }
 
-  DecoratedOutputTransformPointer transformDecorator = DecoratedOutputTransformType::New().GetPointer();
-  transformDecorator->Set( this->m_OutputTransform );
-  this->ProcessObject::SetNthOutput( 0, transformDecorator );
+  this->GetTransformOutput()->Set(this->m_OutputTransform);
 }
 
 /*

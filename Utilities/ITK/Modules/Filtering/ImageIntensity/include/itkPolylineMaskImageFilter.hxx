@@ -188,14 +188,11 @@ void PolylineMaskImageFilter< TInputImage, TPolyline, TVector, TOutputImage >
   typedef typename TInputImage::SpacingType       InputImageSpacingType;
   typedef ImageRegionConstIterator< TInputImage > InputImageConstIteratorType;
 
-  typedef typename TOutputImage::IndexType    ImageIndexType;
   typedef typename TOutputImage::PixelType    PixelType;
   typedef ImageRegionIterator< TOutputImage > OutputImageIteratorType;
 
-  typedef typename TPolyline::Pointer        PolylinePointer;
   typedef typename TPolyline::VertexType     VertexType;
   typedef typename TPolyline::VertexListType VertexListType;
-  typedef typename TPolyline::IndexType      PolylineIndexType;
 
   typedef Point< double, 3 > OriginType;
 
@@ -219,14 +216,13 @@ void PolylineMaskImageFilter< TInputImage, TPolyline, TVector, TOutputImage >
   outputImagePtr->SetRequestedRegion( inputImagePtr->GetRequestedRegion() );
   outputImagePtr->SetBufferedRegion( inputImagePtr->GetBufferedRegion() );
   outputImagePtr->SetLargestPossibleRegion( inputImagePtr->GetLargestPossibleRegion() );
-  outputImagePtr->Allocate();
-  outputImagePtr->FillBuffer(0);
+  outputImagePtr->Allocate(true); // initialize
+                                                         // buffer to zero
 
   InputImageConstIteratorType inputIt( inputImagePtr, inputImagePtr->GetLargestPossibleRegion() );
   OutputImageIteratorType     outputIt( outputImagePtr, outputImagePtr->GetLargestPossibleRegion() );
 
   typedef NearestNeighborInterpolateImageFunction< TInputImage, double > InterpolatorType;
-  typedef typename InterpolatorType::OutputType                          OutputType;
   typedef typename InterpolatorType::PointType InterpolatorPointType;
 
   /* Generate the transformation matrix */
@@ -394,15 +390,14 @@ void PolylineMaskImageFilter< TInputImage, TPolyline, TVector, TOutputImage >
   projectionImagePtr->SetRequestedRegion(projectionRegion);
   projectionImagePtr->SetBufferedRegion(projectionRegion);
   projectionImagePtr->SetLargestPossibleRegion(projectionRegion);
-  projectionImagePtr->Allocate();
-  projectionImagePtr->FillBuffer(0);
+  projectionImagePtr->Allocate(true); // initialize
+                                                             // buffer
+                                                             // to zero
 
   typedef ImageRegionIterator< ProjectionImageType > ProjectionImageIteratorType;
   ProjectionImageIteratorType projectionIt( projectionImagePtr, projectionImagePtr->GetLargestPossibleRegion() );
 
   itkDebugMacro(<< "Rotation matrix"  << m_RotationMatrix);
-
-  typedef typename VertexListType::Pointer VertexListPointer;
 
   const VertexListType *container      = polylinePtr->GetVertexList();
 

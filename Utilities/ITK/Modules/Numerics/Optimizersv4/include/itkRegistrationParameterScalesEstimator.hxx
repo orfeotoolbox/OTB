@@ -82,11 +82,11 @@ if (m_Metric.IsNull())
     itkExceptionMacro("RegistrationParameterScalesEstimator: the metric is NULL");
     }
 
-  if (this->m_Metric->GetMovingTransform() == NULL)
+  if (this->m_Metric->GetMovingTransform() == ITK_NULLPTR)
     {
     itkExceptionMacro("RegistrationParameterScalesEstimator: this->m_MovingTransform in the metric is NULL.");
     }
-  if (this->m_Metric->GetFixedTransform() == NULL)
+  if (this->m_Metric->GetFixedTransform() == ITK_NULLPTR)
     {
     itkExceptionMacro("RegistrationParameterScalesEstimator: this->m_FixedTransform in the metric is NULL.");
     }
@@ -290,9 +290,9 @@ void
 RegistrationParameterScalesEstimator< TMetric >
 ::ComputeSquaredJacobianNorms( const VirtualPointType  & point, ParametersType & squareNorms )
 {
-  JacobianType jacobian;
   const SizeValueType numPara = this->GetNumberOfLocalParameters();
   const SizeValueType dim = this->GetDimension();
+  JacobianType jacobian(dim,numPara);
 
   if (this->GetTransformForward())
     {
@@ -475,10 +475,10 @@ RegistrationParameterScalesEstimator< TMetric >
 
   const TransformBaseTemplate<typename TMetric::MeasureType> *transform = this->GetTransform();
 
-  if ( dynamic_cast< const MatrixOffsetTransformBaseType * >( transform ) != NULL
-    || dynamic_cast< const TranslationTransformType * >( transform ) != NULL
-    || dynamic_cast< const IdentityTransformType * >( transform ) != NULL
-    || dynamic_cast< const Rigid3DPerspectiveTransformType * >( transform ) != NULL
+  if ( dynamic_cast< const MatrixOffsetTransformBaseType * >( transform ) != ITK_NULLPTR
+    || dynamic_cast< const TranslationTransformType * >( transform ) != ITK_NULLPTR
+    || dynamic_cast< const IdentityTransformType * >( transform ) != ITK_NULLPTR
+    || dynamic_cast< const Rigid3DPerspectiveTransformType * >( transform ) != ITK_NULLPTR
     )
     {
     return true;
@@ -642,7 +642,7 @@ RegistrationParameterScalesEstimator< TMetric >
       }
     else
       {
-      FloatType ratio = 1 + vcl_log((FloatType)total/SizeOfSmallDomain);
+      FloatType ratio = 1 + std::log((FloatType)total/SizeOfSmallDomain);
       //ratio >= 1 since total/SizeOfSmallDomain > 1
 
       this->m_NumberOfRandomSamples = static_cast<int>(SizeOfSmallDomain * ratio);

@@ -129,10 +129,9 @@ LabelMapContourOverlayImageFilter<TLabelMap, TFeatureImage, TOutputImage>
   typedef typename SliceKernelType::RadiusType RadiusType;
   RadiusType srad;
   srad.Fill(NumericTraits<typename RadiusType::SizeValueType>::Zero);
-  int j=0;
-  for( int i=0; i<ImageDimension; i++ )
+  for( unsigned int i=0, j=0; i<ImageDimension; i++ )
     {
-    if( j != m_SliceDimension )
+    if( j != static_cast< unsigned int >( m_SliceDimension ) )
       {
       srad[j] = m_ContourThickness[i];
       j++;
@@ -215,7 +214,7 @@ LabelMapContourOverlayImageFilter<TLabelMap, TFeatureImage, TOutputImage>
   LabelMapType * input = const_cast<LabelMapType *>(this->GetInput());
   const FeatureImageType * input2 = this->GetFeatureImage();
 
-  FunctorType function;
+  FunctorType function( m_Functor );
   function.SetBackgroundValue( input->GetBackgroundValue() );
   function.SetOpacity( m_Opacity );
 
@@ -252,7 +251,7 @@ LabelMapContourOverlayImageFilter<TLabelMap, TFeatureImage, TOutputImage>
   LabelMapType * input = const_cast<LabelMapType *>(this->GetInput());
   const FeatureImageType * input2 = this->GetFeatureImage();
 
-  FunctorType function;
+  FunctorType function( m_Functor );
   function.SetBackgroundValue( input->GetBackgroundValue() );
   function.SetOpacity( m_Opacity );
 

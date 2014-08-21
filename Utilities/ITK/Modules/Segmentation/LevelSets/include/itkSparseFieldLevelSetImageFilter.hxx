@@ -128,16 +128,18 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 
 template< typename TInputImage, typename TOutputImage >
 SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
-::SparseFieldLevelSetImageFilter()
+::SparseFieldLevelSetImageFilter() :
+  m_ConstantGradientValue(1.0),
+  m_NumberOfLayers(2),
+  m_IsoSurfaceValue(m_ValueZero),
+  m_InterpolateSurfaceLocation(true),
+  m_InputImage(ITK_NULLPTR),
+  m_OutputImage(ITK_NULLPTR),
+  m_BoundsCheckingActive(false)
 {
-  m_IsoSurfaceValue = m_ValueZero;
-  m_NumberOfLayers = 2;
   m_LayerNodeStore = LayerNodeStorageType::New();
   m_LayerNodeStore->SetGrowthStrategyToExponential();
   this->SetRMSChange( static_cast< double >( m_ValueZero ) );
-  m_InterpolateSurfaceLocation = true;
-  m_BoundsCheckingActive = false;
-  m_ConstantGradientValue = 1.0;
 }
 
 template< typename TInputImage, typename TOutputImage >
@@ -482,7 +484,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
     }
   else
     {
-    this->SetRMSChange( static_cast< double >( vcl_sqrt( (double)( rms_change_accumulator
+    this->SetRMSChange( static_cast< double >( std::sqrt( (double)( rms_change_accumulator
                                                                    / static_cast< ValueType >( counter ) ) ) ) );
     }
 }
@@ -871,7 +873,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
         length += dx_backward * dx_backward;
         }
       }
-    length = vcl_sqrt( (double)length ) + MIN_NORM;
+    length = std::sqrt( (double)length ) + MIN_NORM;
     distance = shiftedIt.GetCenterPixel() / length;
 
     output->SetPixel( activeIt->m_Value,
@@ -1192,8 +1194,7 @@ SparseFieldLevelSetImageFilter< TInputImage, TOutputImage >
 
   unsigned int i;
   os << indent << "m_IsoSurfaceValue: " << m_IsoSurfaceValue << std::endl;
-  os << indent << "m_LayerNodeStore: " << std::endl;
-  m_LayerNodeStore->Print( os, indent.GetNextIndent() );
+  itkPrintSelfObjectMacro( LayerNodeStore );
   os << indent << "m_BoundsCheckingActive: " << m_BoundsCheckingActive;
   for ( i = 0; i < m_Layers.size(); i++ )
     {

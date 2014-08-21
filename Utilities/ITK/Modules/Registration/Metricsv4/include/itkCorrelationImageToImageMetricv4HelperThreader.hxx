@@ -25,10 +25,10 @@ namespace itk
 
 template<typename TDomainPartitioner, typename TImageToImageMetric, typename TCorrelationMetric>
 CorrelationImageToImageMetricv4HelperThreader< TDomainPartitioner, TImageToImageMetric, TCorrelationMetric>
-::CorrelationImageToImageMetricv4HelperThreader():
-  m_CorrelationMetricPerThreadVariables( NULL )
-{
-}
+::CorrelationImageToImageMetricv4HelperThreader() :
+  m_CorrelationMetricPerThreadVariables( ITK_NULLPTR ),
+  m_CorrelationAssociate( ITK_NULLPTR )
+{}
 
 
 template<typename TDomainPartitioner, typename TImageToImageMetric, typename TCorrelationMetric>
@@ -49,12 +49,13 @@ CorrelationImageToImageMetricv4HelperThreader< TDomainPartitioner, TImageToImage
   /* Store the casted pointer to avoid dynamic casting in tight loops. */
   this->m_CorrelationAssociate = dynamic_cast<TCorrelationMetric *>(this->m_Associate);
 
+  const ThreadIdType numThreadsUsed = this->GetNumberOfThreadsUsed();
   delete[] this->m_CorrelationMetricPerThreadVariables;
-  this->m_CorrelationMetricPerThreadVariables = new AlignedCorrelationMetricPerThreadStruct[ this->GetNumberOfThreadsUsed() ];
+  this->m_CorrelationMetricPerThreadVariables = new AlignedCorrelationMetricPerThreadStruct[ numThreadsUsed ];
 
     //---------------------------------------------------------------
     // Set initial values.
-  for (ThreadIdType i = 0; i < this->GetNumberOfThreadsUsed(); i++)
+  for (ThreadIdType i = 0; i < numThreadsUsed; ++i)
     {
     this->m_CorrelationMetricPerThreadVariables[i].FixSum = NumericTraits<InternalComputationValueType>::Zero;
     this->m_CorrelationMetricPerThreadVariables[i].MovSum = NumericTraits<InternalComputationValueType>::Zero;
@@ -72,7 +73,9 @@ CorrelationImageToImageMetricv4HelperThreader<TDomainPartitioner,
    * m_NumberOfValidPoints by collecting the valid points per thread. */
   this->m_CorrelationAssociate->m_NumberOfValidPoints = NumericTraits<SizeValueType>::Zero;
 
-  for (ThreadIdType i = 0; i < this->GetNumberOfThreadsUsed(); i++)
+  const ThreadIdType numThreadsUsed = this->GetNumberOfThreadsUsed();
+
+  for (ThreadIdType i = 0; i < numThreadsUsed; ++i)
     {
     this->m_CorrelationAssociate->m_NumberOfValidPoints += this->m_GetValueAndDerivativePerThreadVariables[i].NumberOfValidPoints;
     }
@@ -86,7 +89,7 @@ CorrelationImageToImageMetricv4HelperThreader<TDomainPartitioner,
   InternalComputationValueType sumF = NumericTraits<InternalComputationValueType>::Zero;
   InternalComputationValueType sumM = NumericTraits<InternalComputationValueType>::Zero;
 
-  for (ThreadIdType threadId = 0; threadId < this->GetNumberOfThreadsUsed(); ++threadId)
+  for (ThreadIdType threadId = 0; threadId < numThreadsUsed; ++threadId)
     {
     sumF += this->m_CorrelationMetricPerThreadVariables[threadId].FixSum;
     sumM += this->m_CorrelationMetricPerThreadVariables[threadId].MovSum;
@@ -100,7 +103,7 @@ template<typename TDomainPartitioner, typename TImageToImageMetric, typename TCo
 bool
 CorrelationImageToImageMetricv4HelperThreader<TDomainPartitioner,
 TImageToImageMetric, TCorrelationMetric>
-::ProcessVirtualPoint( const VirtualIndexType & itkNotUsed(virtualIndex), const VirtualPointType & virtualPoint, const ThreadIdType threadID )
+::ProcessVirtualPoint( const VirtualIndexType & itkNotUsed(virtualIndex), const VirtualPointType & virtualPoint, const ThreadIdType threadId )
 {
   FixedImagePointType         mappedFixedPoint;
   FixedImagePixelType         mappedFixedPixelValue;
@@ -148,8 +151,8 @@ TImageToImageMetric, TCorrelationMetric>
   /* Do the specific calculations for values */
   try
     {
-    this->m_CorrelationMetricPerThreadVariables[threadID].FixSum += mappedFixedPixelValue;
-    this->m_CorrelationMetricPerThreadVariables[threadID].MovSum += mappedMovingPixelValue;
+    this->m_CorrelationMetricPerThreadVariables[threadId].FixSum += mappedFixedPixelValue;
+    this->m_CorrelationMetricPerThreadVariables[threadId].MovSum += mappedMovingPixelValue;
     }
   catch( ExceptionObject & exc )
     {
@@ -160,7 +163,7 @@ TImageToImageMetric, TCorrelationMetric>
     }
   if( pointIsValid )
     {
-    this->m_GetValueAndDerivativePerThreadVariables[threadID].NumberOfValidPoints++;
+    this->m_GetValueAndDerivativePerThreadVariables[threadId].NumberOfValidPoints++;
     }
 
   return pointIsValid;

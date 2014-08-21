@@ -73,7 +73,7 @@ NormalQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
     {
     poly = dynamic_cast< OutputPolygonType * >( cell_it.Value() );
 
-    if ( poly != 0 )
+    if ( poly != ITK_NULLPTR )
       {
       if ( poly->GetNumberOfPoints() == 3 )
         {
@@ -146,7 +146,7 @@ NormalQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
 
     OutputPolygonType *poly = dynamic_cast< OutputPolygonType * >(
       outputMesh->GetCells()->GetElement(iCId) );
-    if ( poly != 0 ) // this test should be removed...
+    if ( poly != ITK_NULLPTR ) // this test should be removed...
       {
       // this test should be removed...
       if ( poly->GetNumberOfPoints() == 3 )
@@ -209,7 +209,7 @@ NormalQuadEdgeMeshFilter< TInputMesh, TOutputMesh >
               v *= norm_v;
               }
             return static_cast< OutputVertexNormalComponentType >(
-                     vcl_acos(u * v) );
+                     std::acos(u * v) );
             }
           case AREA:
             {

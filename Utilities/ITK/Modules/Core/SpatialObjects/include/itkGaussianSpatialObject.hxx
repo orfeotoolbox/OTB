@@ -117,7 +117,7 @@ GaussianSpatialObject< TDimension >
   itkDebugMacro("Checking the point [" << point
                                        << "] is inside the GaussianSpatialObject");
 
-  if ( name == NULL )
+  if ( name == ITK_NULLPTR )
     {
     if ( IsInside(point) )
       {
@@ -207,7 +207,7 @@ GaussianSpatialObject< TDimension >
   if ( IsInside(point, 0, name) )
     {
     const double zsq = this->SquaredZScore(point);
-    value = m_Maximum * (ScalarType)vcl_exp(-zsq / 2.0);
+    value = m_Maximum * (ScalarType)std::exp(-zsq / 2.0);
     return true;
     }
   else if ( Superclass::IsEvaluableAt(point, depth, name) )

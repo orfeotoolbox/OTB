@@ -44,7 +44,7 @@ MetaTubeConverter< NDimensions >
 {
   const TubeMetaObjectType *tubeMO =
     dynamic_cast<const TubeMetaObjectType *>(mo);
-  if(tubeMO == 0)
+  if(tubeMO == ITK_NULLPTR)
     {
     itkExceptionMacro(<< "Can't convert MetaObject to MetaTube" );
     }
@@ -69,7 +69,6 @@ MetaTubeConverter< NDimensions >
   tubeSO->GetProperty()->SetAlpha(tubeMO->Color()[3]);
 
   typedef itk::TubeSpatialObjectPoint< NDimensions > TubePointType;
-  typedef TubePointType *                            TubePointPointer;
 
   typedef MetaTube::PointListType ListType;
   ListType::const_iterator it2 = tubeMO->GetPoints().begin();

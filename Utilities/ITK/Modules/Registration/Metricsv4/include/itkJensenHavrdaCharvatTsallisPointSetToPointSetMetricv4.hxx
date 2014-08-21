@@ -23,29 +23,32 @@
 namespace itk {
 
 /** Constructor */
-template<typename TPointSet>
-JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
+template<typename TPointSet, class TInternalComputationValueType>
+JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>
 ::JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4() :
   m_UseAnisotropicCovariances( false ),
   m_PointSetSigma( static_cast<RealType>( 1.0 ) ),
   m_KernelSigma( static_cast<RealType>( 10.0 ) ),
   m_CovarianceKNeighborhood( static_cast<unsigned int>( 5 ) ),
   m_EvaluationKNeighborhood( static_cast<unsigned int>( 50 ) ),
-  m_Alpha( static_cast<RealType>(1.0) )
+  m_Alpha( static_cast<RealType>(1.0) ),
+  m_TotalNumberOfPoints(0),
+  m_Prefactor0(0.0),
+  m_Prefactor1(0.0)
 {
 }
 
 /** Destructor */
-template<typename TPointSet>
-JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
+template<typename TPointSet, class TInternalComputationValueType>
+JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>
 ::~JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4()
 {
 }
 
 /** Initialize the metric */
-template<typename TPointSet>
+template<typename TPointSet, class TInternalComputationValueType>
 void
-JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
+JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>
 ::Initialize( void ) throw ( ExceptionObject )
 {
   Superclass::Initialize();
@@ -55,41 +58,20 @@ JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
   this->m_FixedDensityFunction->SetKernelSigma( this->m_KernelSigma );
   this->m_FixedDensityFunction->SetRegularizationSigma( this->m_PointSetSigma );
   this->m_FixedDensityFunction->SetNormalize( true );
-
   this->m_FixedDensityFunction->SetUseAnisotropicCovariances( this->m_UseAnisotropicCovariances );
-
   this->m_FixedDensityFunction->SetCovarianceKNeighborhood( this->m_CovarianceKNeighborhood );
-
   this->m_FixedDensityFunction->SetEvaluationKNeighborhood( this->m_EvaluationKNeighborhood );
-
   this->m_FixedDensityFunction->SetInputPointSet( this->m_FixedTransformedPointSet );
 
   // Initialize the moving density function
   this->m_MovingDensityFunction = DensityFunctionType::New();
   this->m_MovingDensityFunction->SetKernelSigma( this->m_KernelSigma );
   this->m_MovingDensityFunction->SetRegularizationSigma( this->m_PointSetSigma );
-
   this->m_MovingDensityFunction->SetNormalize( true );
-
   this->m_MovingDensityFunction->SetUseAnisotropicCovariances( this->m_UseAnisotropicCovariances );
-
   this->m_MovingDensityFunction->SetCovarianceKNeighborhood( this->m_CovarianceKNeighborhood );
-
   this->m_MovingDensityFunction->SetEvaluationKNeighborhood( this->m_EvaluationKNeighborhood );
-
   this->m_MovingDensityFunction->SetInputPointSet( this->m_MovingTransformedPointSet );
-}
-
-template<typename TPointSet>
-void
-JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
-::InitializeForIteration() const
-{
-  Superclass::InitializeForIteration();
-  if( this->m_NumberOfValidPoints == 0 )
-    {
-    itkExceptionMacro("There are no fixed points within the virtual domain.");
-    }
 
   // Pre-calc some values for efficiency
   this->m_TotalNumberOfPoints = static_cast<RealType>( this->m_NumberOfValidPoints + this->m_MovingDensityFunction->GetInputPointSet()->GetNumberOfPoints() );
@@ -101,10 +83,10 @@ JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
   this->m_Prefactor1 = 1.0 / ( this->m_TotalNumberOfPoints * this->m_TotalNumberOfPoints );
 }
 
-template<typename TPointSet>
-typename JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
+template<typename TPointSet, class TInternalComputationValueType>
+typename JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>
 ::MeasureType
-JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
+JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>
 ::GetLocalNeighborhoodValue( const PointType & point, const PixelType & itkNotUsed( pixel ) ) const
 {
   MeasureType value;
@@ -114,19 +96,21 @@ JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
 }
 
 /** Get both the match Measure and the Derivative Measure  */
-template<typename TPointSet>
+template<typename TPointSet, class TInternalComputationValueType>
 void
-JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
+JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>
 ::GetLocalNeighborhoodValueAndDerivative( const PointType & point, MeasureType & value, LocalDerivativeType & derivative, const PixelType & itkNotUsed( pixel ) ) const
 {
   this->ComputeValueAndDerivative( point, value, derivative, true, true );
 }
 
-template<typename TPointSet>
+template<typename TPointSet, class TInternalComputationValueType>
 void
-JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
+JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>
 ::ComputeValueAndDerivative( const PointType & samplePoint, MeasureType & value, LocalDerivativeType & derivativeReturn, bool calcValue, bool calcDerivative ) const
 {
+
+
   if( calcDerivative )
     {
     derivativeReturn.Fill( NumericTraits<DerivativeValueType>::Zero );
@@ -151,18 +135,18 @@ JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
     RealType realOne = NumericTraits<RealType>::One;
     if( this->m_Alpha == realOne )
       {
-      value = ( vcl_log( probabilityStar ) );
+      value = ( std::log( probabilityStar ) );
       }
     else
       {
-      value = -realOne * ( vcl_pow( probabilityStar, static_cast<RealType>( this->m_Alpha - realOne ) ) );
+      value = -realOne * ( std::pow( probabilityStar, static_cast<RealType>( this->m_Alpha - realOne ) ) );
       }
     value *= this->m_Prefactor0;
     }
 
   if( calcDerivative )
     {
-    RealType probabilityStarFactor = vcl_pow( probabilityStar, static_cast<RealType>( 2.0 - this->m_Alpha ) );
+    RealType probabilityStarFactor = std::pow( probabilityStar, static_cast<RealType>( 2.0 - this->m_Alpha ) );
 
     typename DensityFunctionType::NeighborsIdentifierType neighbors;
     this->m_MovingDensityFunction->GetPointsLocator()->FindClosestNPoints( samplePoint, this->m_EvaluationKNeighborhood, neighbors );
@@ -197,37 +181,33 @@ JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
       DerivativeValueType factor = this->m_Prefactor1 * gaussian / probabilityStarFactor;
       for( unsigned int i = 0; i < PointDimension; i++ )
         {
-        derivativeReturn[i] -= diffMean[i] * factor;
+        derivativeReturn[i] += diffMean[i] * factor;
         }
       }
     }
 }
 
-template<typename TPointSet>
-::itk::LightObject::Pointer
-JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
-::Clone() const
+template<typename TPointSet, class TInternalComputationValueType>
+typename LightObject::Pointer
+JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>
+::InternalClone( void ) const
 {
-  ::itk::LightObject::Pointer smartPtr;
-  Pointer copyPtr = Self::New();
+  typename Self::Pointer rval = Self::New();
+  rval->SetMovingPointSet( this->m_MovingPointSet );
+  rval->SetFixedPointSet( this->m_FixedPointSet );
+  rval->SetPointSetSigma( this->m_PointSetSigma );
+  rval->SetEvaluationKNeighborhood( this->m_EvaluationKNeighborhood );
+  rval->SetAlpha( this->m_Alpha );
+  rval->SetKernelSigma( this->m_KernelSigma );
+  rval->SetCovarianceKNeighborhood( this->m_CovarianceKNeighborhood );
+  rval->SetUseAnisotropicCovariances( this->m_UseAnisotropicCovariances );
 
-  copyPtr->m_MovingPointSet = this->m_MovingPointSet;
-  copyPtr->m_FixedPointSet = this->m_FixedPointSet;
-  copyPtr->m_Alpha = this->m_Alpha;
-  copyPtr->m_PointSetSigma = this->m_PointSetSigma;
-  copyPtr->m_KernelSigma = this->m_KernelSigma;
-  copyPtr->m_CovarianceKNeighborhood = this->m_CovarianceKNeighborhood;
-  copyPtr->m_EvaluationKNeighborhood = this->m_EvaluationKNeighborhood;
-  copyPtr->m_UseAnisotropicCovariances = this->m_UseAnisotropicCovariances;
-
-  smartPtr = static_cast<Pointer>( copyPtr );
-
-  return smartPtr;
+  return rval.GetPointer();
 }
 
-template<typename TPointSet>
+template<typename TPointSet, class TInternalComputationValueType>
 void
-JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet>
+JensenHavrdaCharvatTsallisPointSetToPointSetMetricv4<TPointSet, TInternalComputationValueType>
 ::PrintSelf( std::ostream& os, Indent indent ) const
 {
   Superclass::PrintSelf( os, indent );

@@ -104,7 +104,7 @@ ArrowSpatialObject< TDimension >
 {
   itkDebugMacro("Checking the point [" << point << "] is on the Line");
 
-  if ( name == NULL )
+  if ( name == ITK_NULLPTR )
     {
     if ( IsInside(point) )
       {
@@ -184,7 +184,7 @@ ArrowSpatialObject< TDimension >
   m_Length = m_Direction.GetSquaredNorm();
   if ( m_Length != 0.0 )
     {
-    m_Length = vcl_sqrt(m_Length);
+    m_Length = std::sqrt(m_Length);
     }
   else
     {

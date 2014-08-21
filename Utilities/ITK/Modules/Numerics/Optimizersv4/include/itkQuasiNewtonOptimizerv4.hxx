@@ -26,9 +26,13 @@ namespace itk
 
 template<typename TInternalComputationValueType>
 QuasiNewtonOptimizerv4Template<TInternalComputationValueType>
-::QuasiNewtonOptimizerv4Template()
+::QuasiNewtonOptimizerv4Template():
+  m_MaximumIterationsWithoutProgress(30),
+  m_PreviousValue(0.0),
+  m_BestValue(0.0),
+  m_BestPosition(0),
+  m_BestIteration(0)
 {
-  this->m_MaximumIterationsWithoutProgress = 30;
   this->m_LearningRate = NumericTraits<TInternalComputationValueType>::One;
 
   // m_MaximumNewtonStepSizeInPhysicalUnits is used for automatic learning
@@ -38,9 +42,10 @@ QuasiNewtonOptimizerv4Template<TInternalComputationValueType>
   this->m_MaximumNewtonStepSizeInPhysicalUnits = NumericTraits<TInternalComputationValueType>::Zero;
 
   /** Threader for Quasi-Newton method */
-  typedef QuasiNewtonOptimizerv4EstimateNewtonStepThreaderTemplate<TInternalComputationValueType>  OptimizerType;
-  typedef typename OptimizerType::Pointer                                                          OptimizerPointer;
-
+  typedef QuasiNewtonOptimizerv4EstimateNewtonStepThreaderTemplate<TInternalComputationValueType>
+    OptimizerType;
+  typedef typename OptimizerType::Pointer
+    OptimizerPointer;
   OptimizerPointer estimateNewtonStepThreader = OptimizerType::New();
 
   this->m_EstimateNewtonStepThreader = estimateNewtonStepThreader;
@@ -111,20 +116,20 @@ QuasiNewtonOptimizerv4Template<TInternalComputationValueType>
   if (this->GetCurrentIteration() == 0)
     {
       // initialize some information
-    m_PreviousValue = this->GetCurrentMetricValue();
-    m_PreviousPosition = this->GetCurrentPosition();
-    m_PreviousGradient = this->GetGradient();
+    this->m_PreviousValue = this->GetCurrentMetricValue();
+    this->m_PreviousPosition = this->GetCurrentPosition();
+    this->m_PreviousGradient = this->GetGradient();
 
-    m_BestValue = this->m_CurrentMetricValue;
-    m_BestPosition = this->m_CurrentPosition;
-    m_BestIteration = this->GetCurrentIteration();
+    this->m_BestValue = this->m_CurrentMetricValue;
+    this->m_BestPosition = this->m_CurrentPosition;
+    this->m_BestIteration = this->GetCurrentIteration();
     }
   else if (m_BestValue > this->m_CurrentMetricValue)
     {
       // store the best value and related information
-    m_BestValue = this->m_CurrentMetricValue;
-    m_BestPosition = this->m_CurrentPosition;
-    m_BestIteration = this->GetCurrentIteration();
+    this->m_BestValue = this->m_CurrentMetricValue;
+    this->m_BestPosition = this->m_CurrentPosition;
+    this->m_BestIteration = this->GetCurrentIteration();
     }
 
   if ( this->GetCurrentIteration() - m_BestIteration
@@ -170,9 +175,9 @@ QuasiNewtonOptimizerv4Template<TInternalComputationValueType>
   this->EstimateNewtonStep();
 
   /** Save for the next iteration */
-  m_PreviousValue = this->GetCurrentMetricValue();
-  m_PreviousPosition = this->GetCurrentPosition();
-  m_PreviousGradient = this->GetGradient();
+  this->m_PreviousValue = this->GetCurrentMetricValue();
+  this->m_PreviousPosition = this->GetCurrentPosition();
+  this->m_PreviousGradient = this->GetGradient();
 
   this->CombineGradientNewtonStep();
   this->ModifyCombinedNewtonStep();
@@ -268,7 +273,7 @@ QuasiNewtonOptimizerv4Template<TInternalComputationValueType>
       }
     }
 
-  if (vcl_abs(this->m_LearningRate - NumericTraits<TInternalComputationValueType>::One)
+  if (std::abs(this->m_LearningRate - NumericTraits<TInternalComputationValueType>::One)
       > 0.01)
     {
     this->m_NewtonStep *= this->m_LearningRate;
@@ -389,8 +394,8 @@ QuasiNewtonOptimizerv4Template<TInternalComputationValueType>
   TInternalComputationValueType dot_dg_dx = inner_product(dg, dx);
   TInternalComputationValueType dot_edg_dx = inner_product(edg, dx);
 
-  if (vcl_abs(dot_dg_dx) <= NumericTraits<TInternalComputationValueType>::epsilon()
-      || vcl_abs(dot_edg_dx) <= NumericTraits<TInternalComputationValueType>::epsilon())
+  if (std::abs(dot_dg_dx) <= NumericTraits<TInternalComputationValueType>::epsilon()
+      || std::abs(dot_edg_dx) <= NumericTraits<TInternalComputationValueType>::epsilon())
     {
     return false;
     }
@@ -412,7 +417,7 @@ QuasiNewtonOptimizerv4Template<TInternalComputationValueType>
   TInternalComputationValueType threshold
   = NumericTraits<TInternalComputationValueType>::epsilon();
 
-  if ( vcl_abs(vnl_determinant(newHessian)) <= threshold )
+  if ( std::abs(vnl_determinant(newHessian)) <= threshold )
     {
     return false;
     }

@@ -44,8 +44,8 @@ MeanSquareRegistrationFunction< TFixedImage, TMovingImage, TDisplacementField >
   m_TimeStep = 1.0;
   m_DenominatorThreshold = 1e-9;
   m_IntensityDifferenceThreshold = 0.001;
-  this->SetMovingImage(NULL);
-  this->SetFixedImage(NULL);
+  this->SetMovingImage(ITK_NULLPTR);
+  this->SetFixedImage(ITK_NULLPTR);
   m_FixedImageGradientCalculator = GradientCalculatorType::New();
 
   typename DefaultInterpolatorType::Pointer interp =
@@ -146,7 +146,7 @@ MeanSquareRegistrationFunction< TFixedImage, TMovingImage, TDisplacementField >
   if ( normalizemetric )
     {
     denominator = speedValue * speedValue * fixedGradientSquaredMagnitude;
-    denominator = vcl_sqrt(denominator);
+    denominator = std::sqrt(denominator);
     }
   if ( denominator == 0 )
     {

@@ -66,7 +66,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
   this->m_NumberOfLevels.Fill( 1 );
   this->m_MaximumNumberOfLevels = 1;
 
-  this->m_PhiLattice = NULL;
+  this->m_PhiLattice = ITK_NULLPTR;
   this->m_PsiLattice = PointDataImageType::New();
   this->m_InputPointData = PointDataContainerType::New();
   this->m_OutputPointData = PointDataContainerType::New();
@@ -74,9 +74,10 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
   this->m_PointWeights = WeightsContainerType::New();
   this->m_UsePointWeights = false;
 
-  this->m_BSplineEpsilon = vcl_numeric_limits<RealType>::epsilon();
+  this->m_BSplineEpsilon = std::numeric_limits<RealType>::epsilon();
 
   this->m_IsFittingComplete = false;
+  this->m_CurrentLevel = 0;
 }
 
 template<typename TInputPointSet, typename TOutputImage>
@@ -130,7 +131,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         }
       for( unsigned int j = 0; j < C.cols(); j++ )
         {
-        RealType c = vcl_pow( static_cast<RealType>( 2.0 ),
+        RealType c = std::pow( static_cast<RealType>( 2.0 ),
           static_cast<RealType>( C.cols() ) - j - 1 );
 
         for( unsigned int k = 0; k < C.rows(); k++ )
@@ -268,7 +269,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       maximumNumberOfSpans = numberOfSpans;
       }
     }
-  this->m_BSplineEpsilon = 100 * vcl_numeric_limits<RealType>::epsilon();
+  this->m_BSplineEpsilon = 100 * std::numeric_limits<RealType>::epsilon();
   while( static_cast<RealType>( maximumNumberOfSpans ) ==
     static_cast<RealType>( maximumNumberOfSpans ) - this->m_BSplineEpsilon )
     {
@@ -511,9 +512,9 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
 
     // determine the actual number of pieces that will be generated
     typename SizeType::SizeValueType range = requestedRegionSize[splitAxis];
-    unsigned int valuesPerThread = static_cast<unsigned int>( vcl_ceil(
+    unsigned int valuesPerThread = static_cast<unsigned int>( std::ceil(
       range / static_cast<double>( num ) ) );
-    unsigned int maxThreadIdUsed = static_cast<unsigned int>( vcl_ceil(
+    unsigned int maxThreadIdUsed = static_cast<unsigned int>( std::ceil(
       range / static_cast<double>( valuesPerThread ) ) - 1 );
 
     // Split the region

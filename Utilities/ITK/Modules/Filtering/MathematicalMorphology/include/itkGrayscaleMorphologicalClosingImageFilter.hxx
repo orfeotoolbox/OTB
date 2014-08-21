@@ -47,16 +47,9 @@ void
 GrayscaleMorphologicalClosingImageFilter< TInputImage, TOutputImage, TKernel >
 ::SetKernel(const KernelType & kernel)
 {
-  const FlatKernelType *flatKernel = NULL;
+  const FlatKernelType *flatKernel = dynamic_cast< const FlatKernelType * >( &kernel );
 
-  try
-    {
-    flatKernel = dynamic_cast< const FlatKernelType * >( &kernel );
-    }
-  catch ( ... )
-                  {}
-
-  if ( flatKernel != NULL && flatKernel->GetDecomposable() )
+  if ( flatKernel != ITK_NULLPTR && flatKernel->GetDecomposable() )
     {
     m_AnchorFilter->SetKernel(*flatKernel);
     m_Algorithm = ANCHOR;
@@ -100,14 +93,7 @@ void
 GrayscaleMorphologicalClosingImageFilter< TInputImage, TOutputImage, TKernel >
 ::SetAlgorithm(int algo)
 {
-  const FlatKernelType *flatKernel = NULL;
-
-  try
-    {
-    flatKernel = dynamic_cast< const FlatKernelType * >( &this->GetKernel() );
-    }
-  catch ( ... )
-                  {}
+  const FlatKernelType *flatKernel = dynamic_cast< const FlatKernelType * >( &this->GetKernel() );
 
   if ( m_Algorithm != algo )
     {
@@ -121,11 +107,11 @@ GrayscaleMorphologicalClosingImageFilter< TInputImage, TOutputImage, TKernel >
       m_HistogramErodeFilter->SetKernel( this->GetKernel() );
       m_HistogramDilateFilter->SetKernel( this->GetKernel() );
       }
-    else if ( flatKernel != NULL && flatKernel->GetDecomposable() && algo == ANCHOR )
+    else if ( flatKernel != ITK_NULLPTR && flatKernel->GetDecomposable() && algo == ANCHOR )
       {
       m_AnchorFilter->SetKernel(*flatKernel);
       }
-    else if ( flatKernel != NULL && flatKernel->GetDecomposable() && algo == VHGW )
+    else if ( flatKernel != ITK_NULLPTR && flatKernel->GetDecomposable() && algo == VHGW )
       {
       m_VanHerkGilWermanDilateFilter->SetKernel(*flatKernel);
       m_VanHerkGilWermanErodeFilter->SetKernel(*flatKernel);

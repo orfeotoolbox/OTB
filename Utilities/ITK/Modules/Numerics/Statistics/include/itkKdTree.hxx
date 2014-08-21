@@ -27,12 +27,13 @@ namespace Statistics
 template<typename TSample>
 KdTreeNonterminalNode<TSample>
 ::KdTreeNonterminalNode( unsigned int partitionDimension,
-  MeasurementType partitionValue, Superclass *left, Superclass *right )
+                         MeasurementType partitionValue, Superclass *left, Superclass *right ) :
+  m_PartitionDimension(partitionDimension),
+  m_PartitionValue(partitionValue),
+  m_InstanceIdentifier(0),
+  m_Left(left),
+  m_Right(right)
 {
-  this->m_PartitionDimension = partitionDimension;
-  this->m_PartitionValue = partitionValue;
-  this->m_Left = left;
-  this->m_Right = right;
 }
 
 template<typename TSample>
@@ -81,8 +82,8 @@ KdTree<TSample>
   this->m_EmptyTerminalNode = new KdTreeTerminalNode<TSample>();
 
   this->m_DistanceMetric = DistanceMetricType::New();
-  this->m_Sample = 0;
-  this->m_Root = 0;
+  this->m_Sample = ITK_NULLPTR;
+  this->m_Root = ITK_NULLPTR;
   this->m_BucketSize = 16;
   this->m_MeasurementVectorSize = 0;
 }
@@ -91,7 +92,7 @@ template<typename TSample>
 KdTree<TSample>
 ::~KdTree()
 {
-  if( this->m_Root != 0 )
+  if( this->m_Root != ITK_NULLPTR )
     {
     this->DeleteNode( this->m_Root );
     }
@@ -106,7 +107,7 @@ KdTree<TSample>
   Superclass::PrintSelf( os, indent );
 
   os << indent << "Input Sample: ";
-  if( this->m_Sample != 0 )
+  if( this->m_Sample != ITK_NULLPTR )
     {
     os << this->m_Sample << std::endl;
     }
@@ -116,7 +117,7 @@ KdTree<TSample>
     }
   os << indent << "Bucket Size: " << this->m_BucketSize << std::endl;
   os << indent << "Root Node: ";
-  if( this->m_Root != 0 )
+  if( this->m_Root != ITK_NULLPTR )
     {
     os << this->m_Root << std::endl;
     }
@@ -146,12 +147,12 @@ KdTree<TSample>
     }
 
   // non-terminal node
-  if( node->Left() != 0 )
+  if( node->Left() != ITK_NULLPTR )
     {
     this->DeleteNode( node->Left() );
     }
 
-  if( node->Right() != 0 )
+  if( node->Right() != ITK_NULLPTR )
     {
     this->DeleteNode( node->Right() );
     }
@@ -183,7 +184,19 @@ template<typename TSample>
 void
 KdTree<TSample>
 ::Search( const MeasurementVectorType & query,
-  unsigned int numberOfNeighborsRequested, InstanceIdentifierVectorType &result ) const
+         unsigned int numberOfNeighborsRequested, InstanceIdentifierVectorType &result ) const
+{
+  // This function has two different signatures. The other signature, that returns the distances vector too,
+  // is called here; however, its distances vector is discarded.
+  std::vector<double> not_used_distances;
+  this->Search(query, numberOfNeighborsRequested, result, not_used_distances);
+}
+
+template<typename TSample>
+void
+KdTree<TSample>
+::Search( const MeasurementVectorType & query,
+  unsigned int numberOfNeighborsRequested, InstanceIdentifierVectorType &result, std::vector<double> &distances ) const
 {
   if( numberOfNeighborsRequested > this->Size() )
     {
@@ -204,16 +217,17 @@ KdTree<TSample>
 
   for(  unsigned int d = 0; d < this->m_MeasurementVectorSize; ++d )
     {
-    lowerBound[d] = static_cast< MeasurementType >( -vcl_sqrt(
+    lowerBound[d] = static_cast< MeasurementType >( -std::sqrt(
       -static_cast< double >( NumericTraits< MeasurementType >::
       NonpositiveMin() ) ) / 2.0 );
-    upperBound[d] = static_cast< MeasurementType >( vcl_sqrt(
+    upperBound[d] = static_cast< MeasurementType >( std::sqrt(
       static_cast<double >( NumericTraits< MeasurementType >::max() ) / 2.0 ) );
     }
   this->NearestNeighborSearchLoop( this->m_Root, query, lowerBound, upperBound,
     nearestNeighbors );
 
   result = nearestNeighbors.GetNeighbors();
+  distances = nearestNeighbors.GetDistances();
 }
 
 template<typename TSample>
@@ -349,10 +363,10 @@ KdTree<TSample>
 
   for(  unsigned int d = 0; d < this->m_MeasurementVectorSize; ++d )
     {
-    lowerBound[d] = static_cast<MeasurementType>( -vcl_sqrt(
+    lowerBound[d] = static_cast<MeasurementType>( -std::sqrt(
       -static_cast<double>( NumericTraits<MeasurementType>::
       NonpositiveMin() ) ) / 2.0 );
-    upperBound[d] = static_cast< MeasurementType >( vcl_sqrt(
+    upperBound[d] = static_cast< MeasurementType >( std::sqrt(
       static_cast<double>( NumericTraits< MeasurementType >::max() ) / 2.0 ) );
     }
 

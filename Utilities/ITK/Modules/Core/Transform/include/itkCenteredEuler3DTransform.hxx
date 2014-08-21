@@ -80,7 +80,6 @@ CenteredEuler3DTransform<TScalar>
   this->SetVarRotation(angleX, angleY, angleZ);
 
   CenterType newCenter;
-  typedef typename CenterType::ValueType CenterValueType;
   newCenter[0] = parameters[3];
   newCenter[1] = parameters[4];
   newCenter[2] = parameters[5];
@@ -139,12 +138,12 @@ CenteredEuler3DTransform<TScalar>
 ::ComputeJacobianWithRespectToParameters(const InputPointType & p, JacobianType & jacobian) const
 {
   // need to check if angles are in the right order
-  const double cx = vcl_cos( this->GetAngleX() );
-  const double sx = vcl_sin( this->GetAngleX() );
-  const double cy = vcl_cos( this->GetAngleY() );
-  const double sy = vcl_sin( this->GetAngleY() );
-  const double cz = vcl_cos( this->GetAngleZ() );
-  const double sz = vcl_sin( this->GetAngleZ() );
+  const double cx = std::cos( this->GetAngleX() );
+  const double sx = std::sin( this->GetAngleX() );
+  const double cy = std::cos( this->GetAngleY() );
+  const double sy = std::sin( this->GetAngleY() );
+  const double cz = std::cos( this->GetAngleZ() );
+  const double sz = std::sin( this->GetAngleZ() );
 
   jacobian.SetSize( 3, this->GetNumberOfLocalParameters() );
   jacobian.Fill(0.0);
@@ -217,7 +216,7 @@ CenteredEuler3DTransform<TScalar>
 {
   Pointer inv = New();
 
-  return this->GetInverse(inv) ? inv.GetPointer() : NULL;
+  return this->GetInverse(inv) ? inv.GetPointer() : ITK_NULLPTR;
 }
 
 // Print self

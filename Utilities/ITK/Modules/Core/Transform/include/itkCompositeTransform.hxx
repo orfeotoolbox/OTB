@@ -653,7 +653,7 @@ CompositeTransform<TScalar, NDimensions>
     }
   else
     {
-    return NULL;
+    return ITK_NULLPTR;
     }
 }
 
@@ -661,14 +661,27 @@ template
 <typename TScalar, unsigned int NDimensions>
 void
 CompositeTransform<TScalar, NDimensions>
-::ComputeJacobianWithRespectToParameters( const InputPointType & p, JacobianType & j ) const
+::ComputeJacobianWithRespectToParameters( const InputPointType & p, JacobianType & outJacobian ) const
 {
   /* Returns a concatenated MxN array, holding the Jacobian of each sub
    * transform that is selected for optimization. The order is the same
    * as that in which they're applied, i.e. reverse order.
    * M rows = dimensionality of the transforms
    * N cols = total number of parameters in the selected sub transforms. */
-  j.SetSize( NDimensions, this->GetNumberOfLocalParameters() );
+  outJacobian.SetSize( NDimensions, this->GetNumberOfLocalParameters() );
+  JacobianType jacobianWithRespectToPosition(NDimensions, NDimensions);
+  this->ComputeJacobianWithRespectToParametersCachedTemporaries( p, outJacobian, jacobianWithRespectToPosition );
+}
+
+template
+<typename TScalar, unsigned int NDimensions>
+void
+CompositeTransform<TScalar, NDimensions>
+::ComputeJacobianWithRespectToParametersCachedTemporaries( const InputPointType & p, JacobianType & outJacobian, JacobianType & jacobianWithRespectToPosition ) const
+{
+  //NOTE: This must have been done outside of outJacobian.SetSize( NDimensions, this->GetNumberOfLocalParameters() );
+  //NOTE: assert( outJacobian.GetSize == ( NDimensions, this->GetNumberOfLocalParameters() ) )
+  //NOTE: assert( jacobianWithRespectToPosition.GetSize == (NDimensions, NDimensions) )
 
   NumberOfParametersType offset = NumericTraits< NumberOfParametersType >::Zero;
 
@@ -715,12 +728,12 @@ CompositeTransform<TScalar, NDimensions>
    *
    */
   for( signed long tind = (signed long) this->GetNumberOfTransforms() - 1;
-       tind >= 0; tind-- )
+       tind >= 0; --tind )
     {
     /* Get a raw pointer for efficiency, avoiding SmartPointer register/unregister */
-    const TransformType * transform = this->GetNthTransformConstPointer( tind );
+    const TransformType * const transform = this->GetNthTransformConstPointer( tind );
 
-    NumberOfParametersType offsetLast = offset;
+    const NumberOfParametersType offsetLast = offset;
 
     if( this->GetNthTransformToOptimize( tind ) )
       {
@@ -729,12 +742,11 @@ CompositeTransform<TScalar, NDimensions>
        * better */
 
       // to do: why parameters are listed from N-1 to 1???
-      typename TransformType::JacobianType current_jacobian;
-      NumberOfParametersType numberOfLocalParameters = transform->GetNumberOfLocalParameters();
+      const NumberOfParametersType numberOfLocalParameters = transform->GetNumberOfLocalParameters();
 
-      current_jacobian.SetSize( NDimensions, numberOfLocalParameters );
+      typename TransformType::JacobianType current_jacobian( NDimensions, numberOfLocalParameters );
       transform->ComputeJacobianWithRespectToParameters( transformedPoint, current_jacobian );
-      j.update( current_jacobian, 0, offset );
+      outJacobian.update( current_jacobian, 0, offset );
       offset += numberOfLocalParameters;
       }
 
@@ -744,28 +756,24 @@ CompositeTransform<TScalar, NDimensions>
      *  jacobian by multiplying the current matrix jumping over the
      *  first transform. The matrix here refers to  dT/dx at the point.
      *  For example, in the affine transform, this is the affine matrix.
-     *  TODO1: for general transform, there should be something like
+     *
+     *  TODO: for general transform, there should be something like
      *  GetPartialDerivativeOfPointCoordinates
      *
      *  Also, noted the multiplication contains all the affine matrix from
      *  all transforms no matter they are going to be optimized or not
-     *
      */
 
     // update every old term by left multiplying dTk / dT{k-1}
     // do this before computing the transformedPoint for the next iteration
     if( offsetLast > 0 )
       {
+      transform->ComputeJacobianWithRespectToPosition(transformedPoint, jacobianWithRespectToPosition);
 
-      JacobianType old_j = j.extract(NDimensions, offsetLast, 0, 0);
+      const JacobianType & old_j = outJacobian.extract(NDimensions, offsetLast, 0, 0);
+      const JacobianType & update_j = jacobianWithRespectToPosition * old_j;
 
-      JacobianType j1;
-
-      j1.SetSize(NDimensions, NDimensions);
-
-      transform->ComputeJacobianWithRespectToPosition(transformedPoint, j1);
-
-      j.update(j1 * old_j, 0, 0);
+      outJacobian.update(update_j, 0, 0);
 
       // itkExceptionMacro(" To sort out with new ComputeJacobianWithRespectToPosition prototype ");
       }
@@ -1074,8 +1082,13 @@ CompositeTransform<TScalar, NDimensions>
       /* The input values are in a monolithic block, so we have to point
        * to the subregion corresponding to the individual subtransform.
        * This simply creates an Array object with data pointer, no
-       * memory is allocated or copied. */
-      DerivativeType subUpdate( &( (update.data_block() )[offset]),
+       * memory is allocated or copied.
+       * NOTE: the use of const_cast is used to avoid a deep copy in the underlying vnl_vector
+       * by using LetArrayManageMemory=false, and being very careful here we can
+       * ensure that casting away consteness does not result in memory corruption. */
+      typename DerivativeType::ValueType * nonConstDataRefForPerformance =
+        const_cast< typename DerivativeType::ValueType * >( &( (update.data_block() )[offset]) );
+      const DerivativeType subUpdate( nonConstDataRefForPerformance,
                                 subtransform->GetNumberOfParameters(), false );
       /* This call will also call SetParameters, so don't need to call it
        * expliclity here. */

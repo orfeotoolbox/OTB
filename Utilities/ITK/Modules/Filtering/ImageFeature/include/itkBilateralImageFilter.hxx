@@ -57,7 +57,6 @@ template< typename TInputImage, typename TOutputImage >
 void
 BilateralImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
-throw( InvalidRequestedRegionError )
 {
   // call the superclass' implementation of this method. this should
   // copy the output requested region to the input requested region
@@ -82,7 +81,7 @@ throw( InvalidRequestedRegionError )
       {
       radius[i] =
         ( typename TInputImage::SizeType::SizeValueType )
-        vcl_ceil(m_DomainMu * m_DomainSigma[i] / this->GetInput()->GetSpacing()[i]);
+        std::ceil(m_DomainMu * m_DomainSigma[i] / this->GetInput()->GetSpacing()[i]);
       }
     }
   else
@@ -131,8 +130,8 @@ BilateralImageFilter< TInputImage, TOutputImage >
 {
   // Build a small image of the N-dimensional Gaussian used for domain filter
   //
-  // Gaussian image size will be (2*vcl_ceil(2.5*sigma)+1) x
-  // (2*vcl_ceil(2.5*sigma)+1)
+  // Gaussian image size will be (2*std::ceil(2.5*sigma)+1) x
+  // (2*std::ceil(2.5*sigma)+1)
   unsigned int i;
 
   typename InputImageType::SizeType radius;
@@ -149,7 +148,7 @@ BilateralImageFilter< TInputImage, TOutputImage >
       {
       radius[i] =
         ( typename TInputImage::SizeType::SizeValueType )
-        vcl_ceil(m_DomainMu * m_DomainSigma[i] / inputSpacing[i]);
+        std::ceil(m_DomainMu * m_DomainSigma[i] / inputSpacing[i]);
       domainKernelSize[i] = 2 * radius[i] + 1;
       }
     }
@@ -223,7 +222,7 @@ BilateralImageFilter< TInputImage, TOutputImage >
 
   // denominator (normalization factor) for Gaussian used for range
   double rangeGaussianDenom;
-  rangeGaussianDenom = m_RangeSigma * vcl_sqrt(2.0 * vnl_math::pi);
+  rangeGaussianDenom = m_RangeSigma * std::sqrt(2.0 * vnl_math::pi);
 
   // Maximum delta for the dynamic range
   double tableDelta;
@@ -242,7 +241,7 @@ BilateralImageFilter< TInputImage, TOutputImage >
   for ( i = 0, v = 0.0; i < m_NumberOfRangeGaussianSamples;
         ++i, v += tableDelta )
     {
-    m_RangeGaussianTable[i] = vcl_exp(-0.5 * v * v / rangeVariance) / rangeGaussianDenom;
+    m_RangeGaussianTable[i] = std::exp(-0.5 * v * v / rangeVariance) / rangeGaussianDenom;
     }
 }
 

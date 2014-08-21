@@ -104,8 +104,7 @@ public:
   virtual unsigned int GetLine() const;
 
   /** Provide std::exception::what() implementation. */
-  virtual const char * what() const
-  throw( );
+  virtual const char * what() const throw( ) ITK_OVERRIDE;
 
 private:
   /** \class ReferenceCounterInterface
@@ -165,7 +164,7 @@ inline std::ostream & operator<<(std::ostream & os, ExceptionObject & e)
  * \ingroup ITKSystemObjects
  * \ingroup ITKCommon
  */
-class MemoryAllocationError:public ExceptionObject
+class ITKCommon_EXPORT MemoryAllocationError:public ExceptionObject
 {
 public:
   /** Default constructor.  Needed to ensure the exception object can be
@@ -185,10 +184,9 @@ public:
                         const std::string & loc):ExceptionObject(file, lineNumber, desc, loc) {}
 
   /** Virtual destructor needed for subclasses. Has to have empty throw(). */
-  virtual ~MemoryAllocationError()
-  throw( ) {}
+  virtual ~MemoryAllocationError() throw( );
 
-  virtual const char * GetNameOfClass() const
+  virtual const char * GetNameOfClass() const ITK_OVERRIDE
   { return "MemoryAllocationError"; }
 };
 
@@ -197,7 +195,7 @@ public:
  * \ingroup ITKSystemObjects
  * \ingroup ITKCommon
  */
-class RangeError:public ExceptionObject
+class ITKCommon_EXPORT RangeError:public ExceptionObject
 {
 public:
   /** Default constructor.  Needed to ensure the exception object can be
@@ -211,10 +209,9 @@ public:
   RangeError(const std::string & file, unsigned int lineNumber):ExceptionObject(file, lineNumber) {}
 
   /** Virtual destructor needed for subclasses. Has to have empty throw(). */
-  virtual ~RangeError()
-  throw( ) {}
+  virtual ~RangeError() throw( );
 
-  virtual const char * GetNameOfClass() const
+  virtual const char * GetNameOfClass() const ITK_OVERRIDE
   { return "RangeError"; }
 };
 
@@ -224,7 +221,7 @@ public:
  * \ingroup ITKSystemObjects
  * \ingroup ITKCommon
  */
-class InvalidArgumentError:public ExceptionObject
+class ITKCommon_EXPORT InvalidArgumentError:public ExceptionObject
 {
 public:
   /**
@@ -244,10 +241,9 @@ public:
   InvalidArgumentError(const std::string & file, unsigned int lineNumber):ExceptionObject(file, lineNumber) {}
 
   /** Virtual destructor needed for subclasses. Has to have empty throw(). */
-  virtual ~InvalidArgumentError()
-  throw( ) {}
+  virtual ~InvalidArgumentError() throw( );
 
-  virtual const char * GetNameOfClass() const
+  virtual const char * GetNameOfClass() const ITK_OVERRIDE
   { return "InvalidArgumentError"; }
 };
 
@@ -256,7 +252,7 @@ public:
  * \ingroup ITKSystemObjects
  * \ingroup ITKCommon
  */
-class IncompatibleOperandsError:public ExceptionObject
+class ITKCommon_EXPORT IncompatibleOperandsError:public ExceptionObject
 {
 public:
   /** Default constructor.  Needed to ensure the exception object can be
@@ -270,10 +266,9 @@ public:
   IncompatibleOperandsError(const std::string & file, unsigned int lineNumber):ExceptionObject(file, lineNumber) {}
 
   /** Virtual destructor needed for subclasses. Has to have empty throw(). */
-  virtual ~IncompatibleOperandsError()
-  throw( ) {}
+  virtual ~IncompatibleOperandsError() throw( );
 
-  virtual const char * GetNameOfClass() const
+  virtual const char * GetNameOfClass() const ITK_OVERRIDE
   { return "IncompatibleOperandsError"; }
 };
 
@@ -282,7 +277,7 @@ public:
  * \ingroup ITKSystemObjects
  * \ingroup ITKCommon
  */
-class ProcessAborted:public ExceptionObject
+class ITKCommon_EXPORT ProcessAborted:public ExceptionObject
 {
 public:
   /** Default constructor.  Needed to ensure the exception object can be
@@ -305,10 +300,9 @@ public:
   }
 
   /** Virtual destructor needed for subclasses. Has to have empty throw(). */
-  virtual ~ProcessAborted()
-  throw( ) {}
+  virtual ~ProcessAborted()  throw( );
 
-  virtual const char * GetNameOfClass() const
+  virtual const char * GetNameOfClass() const ITK_OVERRIDE
   { return "ProcessAborted"; }
 };
 } // end namespace itk

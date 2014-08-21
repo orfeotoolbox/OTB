@@ -168,7 +168,7 @@ ScalarImageToRunLengthFeaturesFilter<TImage, THistogramFrequencyContainer>
     M(1) = x(1), M(k) = M(k-1) + (x(k) - M(k-1) ) / k
     S(1) = 0, S(k) = S(k-1) + (x(k) - M(k-1)) * (x(k) - M(k))
     for 2 <= k <= n, then
-    sigma = vcl_sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
+    sigma = std::sqrt(S(n) / n) (or divide by n-1 for sample SD instead of
     population SD).
   */
 
@@ -197,7 +197,7 @@ ScalarImageToRunLengthFeaturesFilter<TImage, THistogramFrequencyContainer>
     }
   for( featureNum = 0; featureNum < numFeatures; featureNum++ )
     {
-    tempFeatureDevs[featureNum] = vcl_sqrt( tempFeatureDevs[featureNum] /
+    tempFeatureDevs[featureNum] = std::sqrt( tempFeatureDevs[featureNum] /
       numOffsets );
 
     this->m_FeatureMeans->push_back( tempFeatureMeans[featureNum] );
@@ -320,7 +320,7 @@ ScalarImageToRunLengthFeaturesFilter<TImage, THistogramFrequencyContainer>
 {
   if ( this->GetNumberOfInputs() < 1 )
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast<const ImageType *>( this->ProcessObject::GetInput( 0 ) );
 }
@@ -354,7 +354,7 @@ ScalarImageToRunLengthFeaturesFilter<TImage, THistogramFrequencyContainer>
 {
   if ( this->GetNumberOfInputs() < 2 )
     {
-    return 0;
+    return ITK_NULLPTR;
     }
   return static_cast< const ImageType *>( this->ProcessObject::GetInput( 1 ) );
 }

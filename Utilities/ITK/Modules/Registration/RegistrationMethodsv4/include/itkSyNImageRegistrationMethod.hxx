@@ -130,7 +130,6 @@ SyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
 ::StartOptimization()
 {
   const DisplacementVectorType zeroVector( 0.0 );
-  typedef ImageDuplicator<DisplacementFieldType> DisplacementFieldDuplicatorType;
   typename VirtualImageType::ConstPointer virtualDomainImage;
   typename MultiMetricType::Pointer multiMetric = dynamic_cast<MultiMetricType *>( this->m_Metric.GetPointer() );
   if( multiMetric )
@@ -142,21 +141,22 @@ SyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
     virtualDomainImage = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() )->GetVirtualImage();
     }
 
+  InitialTransformType* fixedInitialTransform = const_cast<InitialTransformType*>(this->GetFixedInitialTransform());
+
   // Monitor the convergence
   typedef itk::Function::WindowConvergenceMonitoringFunction<RealType> ConvergenceMonitoringType;
   typename ConvergenceMonitoringType::Pointer convergenceMonitoring = ConvergenceMonitoringType::New();
   convergenceMonitoring->SetWindowSize( this->m_ConvergenceWindowSize );
-
-  typedef IdentityTransform<RealType, ImageDimension> IdentityTransformType;
-  typename IdentityTransformType::Pointer identityTransform;
-  identityTransform = IdentityTransformType::New();
 
   IterationReporter reporter( this, 0, 1 );
 
   while( this->m_CurrentIteration++ < this->m_NumberOfIterationsPerLevel[this->m_CurrentLevel] && !this->m_IsConverged )
     {
     typename CompositeTransformType::Pointer fixedComposite = CompositeTransformType::New();
-    fixedComposite->AddTransform( this->m_FixedInitialTransform );
+    if ( fixedInitialTransform != ITK_NULLPTR )
+      {
+      fixedComposite->AddTransform( fixedInitialTransform );
+      }
     fixedComposite->AddTransform( this->m_FixedToMiddleTransform->GetInverseTransform() );
     fixedComposite->FlattenTransformQueue();
     fixedComposite->SetOnlyMostRecentTransformToOptimizeOn();
@@ -173,9 +173,9 @@ SyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
     MeasureType movingMetricValue = 0.0;
 
     DisplacementFieldPointer fixedToMiddleSmoothUpdateField = this->ComputeUpdateField(
-      this->m_FixedSmoothImages, fixedComposite, this->m_MovingSmoothImages, movingComposite, NULL, movingMetricValue );
+      this->m_FixedSmoothImages, fixedComposite, this->m_MovingSmoothImages, movingComposite, ITK_NULLPTR, movingMetricValue );
     DisplacementFieldPointer movingToMiddleSmoothUpdateField = this->ComputeUpdateField(
-      this->m_MovingSmoothImages, movingComposite, this->m_FixedSmoothImages, fixedComposite, NULL, fixedMetricValue );
+      this->m_MovingSmoothImages, movingComposite, this->m_FixedSmoothImages, fixedComposite, ITK_NULLPTR, fixedMetricValue );
 
     if ( this->m_AverageMidPointGradients )
       {
@@ -406,7 +406,7 @@ SyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
       {
       localNorm += vnl_math_sqr( vector[d] / spacing[d] );
       }
-    localNorm = vcl_sqrt( localNorm );
+    localNorm = std::sqrt( localNorm );
 
     if( localNorm > maxNorm )
       {
@@ -550,6 +550,8 @@ void
 SyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
 ::GenerateData()
 {
+  this->AllocateOutputs();
+
   for( this->m_CurrentLevel = 0; this->m_CurrentLevel < this->m_NumberOfLevels; this->m_CurrentLevel++ )
     {
     this->InitializeRegistrationAtEachLevel( this->m_CurrentLevel );
@@ -580,9 +582,7 @@ SyNImageRegistrationMethod<TFixedImage, TMovingImage, TOutputTransform>
   this->m_OutputTransform->SetDisplacementField( composer->GetOutput() );
   this->m_OutputTransform->SetInverseDisplacementField( inverseComposer->GetOutput() );
 
-  DecoratedOutputTransformPointer transformDecorator = DecoratedOutputTransformType::New().GetPointer();
-  transformDecorator->Set( this->m_OutputTransform );
-  this->ProcessObject::SetNthOutput( 0, transformDecorator );
+  this->GetTransformOutput()->Set(this->m_OutputTransform);
 }
 
 /*

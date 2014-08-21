@@ -76,7 +76,7 @@ LabelMap< TLabelObject >
 template< typename TLabelObject >
 void
 LabelMap< TLabelObject >
-::Allocate()
+::Allocate(bool)
 {
   this->Initialize();
 }
@@ -86,37 +86,27 @@ void
 LabelMap< TLabelObject >
 ::Graft(const DataObject *data)
 {
+  if(data == ITK_NULLPTR)
+    {
+    return; // nothing to do
+    }
   // call the superclass' implementation
   Superclass::Graft(data);
 
-  if ( data )
+  // Attempt to cast data to an Image
+  const Self *imgData = dynamic_cast< const Self * >( data );
+
+  if ( imgData == ITK_NULLPTR )
     {
-    // Attempt to cast data to an Image
-    const Self *imgData;
-
-    try
-      {
-      imgData = dynamic_cast< const Self * >( data );
-      }
-    catch ( ... )
-      {
-      return;
-      }
-
-    if ( imgData )
-      {
-      // Now copy anything remaining that is needed
-      m_LabelObjectContainer = imgData->m_LabelObjectContainer;
-      m_BackgroundValue = imgData->m_BackgroundValue;
-      }
-    else
-      {
-      // pointer could not be cast back down
-      itkExceptionMacro( << "itk::Image::Graft() cannot cast "
-                         << typeid( data ).name() << " to "
-                         << typeid( const Self * ).name() );
-      }
+    // pointer could not be cast back down
+    itkExceptionMacro( << "itk::Image::Graft() cannot cast "
+                       << typeid( data ).name() << " to "
+                       << typeid( const Self * ).name() );
     }
+
+  // Now copy anything remaining that is needed
+  m_LabelObjectContainer = imgData->m_LabelObjectContainer;
+  m_BackgroundValue = imgData->m_BackgroundValue;
 }
 
 template< typename TLabelObject >
@@ -412,7 +402,7 @@ void
 LabelMap< TLabelObject >
 ::AddLabelObject(LabelObjectType *labelObject)
 {
-  itkAssertOrThrowMacro( ( labelObject != NULL ), "Input LabelObject can't be Null" );
+  itkAssertOrThrowMacro( ( labelObject != ITK_NULLPTR ), "Input LabelObject can't be Null" );
 
   m_LabelObjectContainer[labelObject->GetLabel()] = labelObject;
   this->Modified();
@@ -423,7 +413,7 @@ void
 LabelMap< TLabelObject >
 ::PushLabelObject(LabelObjectType *labelObject)
 {
-  itkAssertOrThrowMacro( ( labelObject != NULL ), "Input LabelObject can't be Null" );
+  itkAssertOrThrowMacro( ( labelObject != ITK_NULLPTR ), "Input LabelObject can't be Null" );
 
   if ( m_LabelObjectContainer.empty() )
     {
@@ -488,7 +478,7 @@ void
 LabelMap< TLabelObject >
 ::RemoveLabelObject(LabelObjectType *labelObject)
 {
-  itkAssertOrThrowMacro( ( labelObject != NULL ), "Input LabelObject can't be Null" );
+  itkAssertOrThrowMacro( ( labelObject != ITK_NULLPTR ), "Input LabelObject can't be Null" );
   // modified is called in RemoveLabel()
   this->RemoveLabel( labelObject->GetLabel() );
 }

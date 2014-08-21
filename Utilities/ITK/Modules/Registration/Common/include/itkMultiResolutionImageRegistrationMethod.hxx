@@ -32,12 +32,12 @@ MultiResolutionImageRegistrationMethod< TFixedImage, TMovingImage >
 {
   this->SetNumberOfRequiredOutputs(1);    // for the Transform
 
-  m_FixedImage   = 0; // has to be provided by the user.
-  m_MovingImage  = 0; // has to be provided by the user.
-  m_Transform    = 0; // has to be provided by the user.
-  m_Interpolator = 0; // has to be provided by the user.
-  m_Metric       = 0; // has to be provided by the user.
-  m_Optimizer    = 0; // has to be provided by the user.
+  m_FixedImage   = ITK_NULLPTR; // has to be provided by the user.
+  m_MovingImage  = ITK_NULLPTR; // has to be provided by the user.
+  m_Transform    = ITK_NULLPTR; // has to be provided by the user.
+  m_Interpolator = ITK_NULLPTR; // has to be provided by the user.
+  m_Metric       = ITK_NULLPTR; // has to be provided by the user.
+  m_Optimizer    = ITK_NULLPTR; // has to be provided by the user.
 
   // Use MultiResolutionPyramidImageFilter as the default
   // image pyramids.
@@ -274,14 +274,14 @@ MultiResolutionImageRegistrationMethod< TFixedImage, TMovingImage >
       const float scaleFactor = static_cast< float >( schedule[level][dim] );
 
       size[dim] = static_cast< typename SizeType::SizeValueType >(
-        vcl_floor(static_cast< float >( inputSize[dim] ) / scaleFactor) );
+        std::floor(static_cast< float >( inputSize[dim] ) / scaleFactor) );
       if ( size[dim] < 1 )
         {
         size[dim] = 1;
         }
 
       start[dim] = static_cast< typename IndexType::IndexValueType >(
-        vcl_ceil(static_cast< float >( inputStart[dim] ) / scaleFactor) );
+        std::ceil(static_cast< float >( inputStart[dim] ) / scaleFactor) );
       }
     m_FixedImageRegionPyramid[level].SetSize(size);
     m_FixedImageRegionPyramid[level].SetIndex(start);
@@ -351,7 +351,7 @@ MultiResolutionImageRegistrationMethod< TFixedImage, TMovingImage >
     // Invoke an iteration event.
     // This allows a UI to reset any of the components between
     // resolution level.
-    this->InvokeEvent( IterationEvent() );
+    this->InvokeEvent( MultiResolutionIterationEvent() );
 
     // Check if there has been a stop request
     if ( m_Stop )
@@ -474,7 +474,7 @@ MultiResolutionImageRegistrationMethod< TFixedImage, TMovingImage >
       break;
     default:
       itkExceptionMacro("MakeOutput request for an output number larger than the expected number of outputs");
-      return 0;
+      return ITK_NULLPTR;
     }
 }
 } // end namespace itk

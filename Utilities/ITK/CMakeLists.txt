@@ -1,14 +1,24 @@
-cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
+if(WIN32)
+  cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
+else()
+  cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
+endif()
+
+foreach(p
+    CMP0025 # CMake 3.0
+    CMP0042 # CMake 3.0
+    )
+  if(POLICY ${p})
+    cmake_policy(SET ${p} NEW)
+  endif()
+endforeach()
+
+project(ITK)
+
 include(CMakeDependentOption)
 #
 # use ExternalProject
 include(ExternalProject)
-
-if(WIN32)
-  cmake_minimum_required(VERSION 2.8.8)
-endif()
-
-project(ITK)
 
 if( CMAKE_HOST_WIN32 )
 
@@ -44,7 +54,7 @@ set(main_project_name ${_ITKModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # ITK version number.
 set(ITK_VERSION_MAJOR "4")
-set(ITK_VERSION_MINOR "5")
+set(ITK_VERSION_MINOR "6")
 set(ITK_VERSION_PATCH "0")
 
 if(NOT ITK_INSTALL_RUNTIME_DIR)
@@ -89,16 +99,33 @@ endif()
 
 
 #-----------------------------------------------------------------------------
-# Enable runinng cppcheck for each module on its source and test directories.
+# Enable running cppcheck for each module on its source and test directories.
 option(ITK_CPPCHECK_TEST "Run cppcheck for static code analysis" OFF)
 mark_as_advanced(ITK_CPPCHECK_TEST)
 
+#-----------------------------------------------------------------------------
+# Forbid downloading resources from the network during a build. This helps
+# when building on systems without network connectivity to determine which
+# resources much be obtained manually and made available to the build.
+option(ITK_FORBID_DOWNLOADS "Do not download source code or data from the network" OFF)
+mark_as_advanced(ITK_FORBID_DOWNLOADS)
+macro(itk_download_attempt_check _name)
+  if(ITK_FORBID_DOWNLOADS)
+    message(SEND_ERROR "Attempted to download ${_name} when ITK_FORBID_DOWNLOADS is ON")
+  endif()
+endmacro()
 
 #-----------------------------------------------------------------------------
 # Enable the download and use of BrainWeb datasets.
 # When this data is available, additional 3D tests are enabled.
 option(ITK_USE_BRAINWEB_DATA "Download and use BrainWeb data for advanced testing" OFF)
 mark_as_advanced(ITK_USE_BRAINWEB_DATA)
+if(ITK_BRAINWEB_DATA_ROOT)
+  message(WARNING
+    "ITK_BRAINWEB_DATA_ROOT is not longer supported!"
+    "Please update to ITK_USE_BRAINWEB_DATA."
+    )
+endif()
 
 #-----------------------------------------------------------------------------
 # ITK wrapper for add_test that automatically sets the test's LABELS property
@@ -134,8 +161,16 @@ macro(itk_memcheck_ignore)
 endmacro()
 
 #-----------------------------------------------------------------------------
+# Python Wrapping
+option(ITK_WRAP_PYTHON "Build python support" OFF)
+
+#-----------------------------------------------------------------------------
 # ITK build configuration options.
-option(BUILD_SHARED_LIBS "Build ITK with shared libraries." OFF)
+if(ITK_WRAP_PYTHON)
+  option(BUILD_SHARED_LIBS "Build ITK with shared libraries." ON)
+else()
+  option(BUILD_SHARED_LIBS "Build ITK with shared libraries." OFF)
+endif()
 set(ITK_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
 include(ITKSetStandardCompilerFlags)
@@ -170,7 +205,11 @@ set(ITK_MODULES_DIR "${ITK_BINARY_DIR}/${ITK_INSTALL_PACKAGE_DIR}/Modules")
 # Provide compatibility options.
 option(ITKV3_COMPATIBILITY "Enable compatibility with ITK3.x when possible." OFF)
 option(ITK_LEGACY_REMOVE "Remove all legacy code completely." OFF)
-option(ITK_LEGACY_SILENT "Silence all legacy code messages." OFF)
+if(ITK_WRAP_PYTHON)
+  option(ITK_LEGACY_SILENT "Silence all legacy code messages." ON)
+else()
+  option(ITK_LEGACY_SILENT "Silence all legacy code messages." OFF)
+endif()
 # The ITK_FUTURE_LEGACY_REMOVE is a very advanced feature only
 # available to developers at configuration time by manually
 # adding this to the CMakeCache.txt -DITK_FUTURE_LEGACY_REMOVE:BOOL=ON
@@ -178,7 +217,7 @@ set( ITK_FUTURE_LEGACY_REMOVE 0 CACHE INTERNAL "Remove code that will become leg
 mark_as_advanced(ITK_LEGACY_SILENT ITK_LEGACY_REMOVE ITK_V3_COMPATIBILITY)
 
 # The disabling of legacy code, and the ITKv3 compatibility option can not both be
-# requested.  If removal of legacy code is requested, then ITKV3_COMPATIBILITY must
+# requested. If removal of legacy code is requested, then ITKV3_COMPATIBILITY must
 # be off.
 if(ITKV3_COMPATIBILITY AND ITK_LEGACY_REMOVE)
   message(FATAL_ERROR "Invlaid configuration: ITKV3_COMPATIBILITY AND ITK_LEGACY_REMOVE can not both be ON")
@@ -354,15 +393,11 @@ endif()
 
 #-----------------------------------------------------------------------------
 # The subdirectories added below this line should use only the public
-# interface with find_package(ITK).  Set ITK_DIR to use this ITK build.
+# interface with find_package(ITK). Set ITK_DIR to use this ITK build.
 set(ITK_DIR "${ITK_BINARY_DIR}")
 
 include(Wrapping/itkWrapSetup.cmake)
 if(ITK_WRAPPING)
-  if(ITK_USE_64BITS_IDS AND WIN32)
-    message(FATAL_ERROR "WRAPPING with ITK_USE_64BITS_IDS is not supported on Windows.
-Please turn of ITK_USE_64BITS_IDS.")
-  endif()
   add_subdirectory(Wrapping)
 endif()
 
@@ -374,6 +409,6 @@ endif()
 # Provide an option for generating documentation.
 add_subdirectory(Utilities/Doxygen)
 
-# Create target to download data from the ITKData group.  This must come after
+# Create target to download data from the ITKData group. This must come after
 # all tests have been added that reference the group, so we put it last.
 ExternalData_Add_Target(ITKData)

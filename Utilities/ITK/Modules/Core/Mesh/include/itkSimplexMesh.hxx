@@ -80,17 +80,15 @@ SimplexMesh< TPixelType, VDimension, TMeshTraits >
 
   mesh = dynamic_cast< const Superclass * >( data );
 
-  if ( mesh )
-    {
-    this->m_MaximumNumberOfRegions = mesh->GetMaximumNumberOfRegions();
-    }
-  else
+  if ( mesh == ITK_NULLPTR )
     {
     // pointer could not be cast back down
     itkExceptionMacro( << "itk::Mesh::CopyInformation() cannot cast "
                        << typeid( data ).name() << " to "
                        << typeid( Superclass * ).name() );
     }
+
+  this->m_MaximumNumberOfRegions = mesh->GetMaximumNumberOfRegions();
 }
 
 template< typename TPixelType, unsigned int VDimension, typename TMeshTraits >
@@ -288,7 +286,7 @@ typename SimplexMesh< TPixelType, VDimension, TMeshTraits >::NeighborListType *
 SimplexMesh< TPixelType, VDimension, TMeshTraits >
 ::GetNeighbors(PointIdentifier idx, unsigned int radius, NeighborListType *list) const
 {
-  if ( list == NULL )
+  if ( list == ITK_NULLPTR )
     {
     list = new NeighborListType();
     IndexArray neighborArray = GetNeighbors(idx);

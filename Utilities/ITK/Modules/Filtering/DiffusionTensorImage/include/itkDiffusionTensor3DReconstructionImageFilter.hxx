@@ -24,6 +24,7 @@
 #include "itkArray.h"
 #include "itkImageMaskSpatialObject.h"
 #include "vnl/vnl_vector.h"
+#include "itkProgressReporter.h"
 
 namespace itk
 {
@@ -43,7 +44,7 @@ DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
   m_NumberOfBaselineImages = 1;
   m_Threshold = NumericTraits< ReferencePixelType >::min();
   m_GradientImageTypeEnumeration = Else;
-  m_GradientDirectionContainer = NULL;
+  m_GradientDirectionContainer = ITK_NULLPTR;
   m_TensorBasis.set_identity();
   m_BValue = 1.0;
   m_MaskImagePresent = false;
@@ -181,7 +182,7 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
                                                  TTensorPixelType,
                                                  TMaskImageType >
 ::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                       ThreadIdType)
+                       ThreadIdType threadId)
 {
   typename OutputImageType::Pointer outputImage =
     static_cast< OutputImageType * >( this->ProcessObject::GetOutput(0) );
@@ -242,6 +243,8 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
     // "A Dual Tensor Basis Solution to the Stejskal-Tanner Equations for
     // DT-MRI"
 
+    ProgressReporter progress( this, threadId, outputRegionForThread.GetNumberOfPixels() );
+
     while ( !it.IsAtEnd() )
       {
 
@@ -275,7 +278,7 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
             }
           else
             {
-            B[i] = -vcl_log( static_cast< double >( b ) / static_cast< double >( b0 ) ) / this->m_BValue;
+            B[i] = -std::log( static_cast< double >( b ) / static_cast< double >( b0 ) ) / this->m_BValue;
             }
 
           ++( *gradientItContainer[i] );
@@ -309,6 +312,7 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
       oit.Set(tensor);
       ++oit;
       ++it;
+      progress.CompletedPixel();
       }
 
     for ( unsigned int i = 0; i < gradientItContainer.size(); i++ )
@@ -323,7 +327,7 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
       GradientIteratorType;
     typedef typename GradientImagesType::PixelType
       GradientVectorType;
-    typename GradientImagesType::Pointer gradientImagePointer = NULL;
+    typename GradientImagesType::Pointer gradientImagePointer = ITK_NULLPTR;
 
     // Would have liked a dynamic_cast here, but seems SGI doesn't like it
     // The enum will ensure that an inappropriate cast is not done
@@ -352,6 +356,8 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
         gradientind.push_back( gdcit.Index() );
         }
       }
+
+    ProgressReporter progress( this, threadId, outputRegionForThread.GetNumberOfPixels() );
 
     while ( !git.IsAtEnd() )
       {
@@ -395,7 +401,7 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
           else
             {
             B[i] =
-              -vcl_log( static_cast< double >( b[gradientind[i]] ) / static_cast< double >( b0 ) ) / this->m_BValue;
+              -std::log( static_cast< double >( b[gradientind[i]] ) / static_cast< double >( b0 ) ) / this->m_BValue;
             }
           }
 
@@ -420,6 +426,7 @@ void DiffusionTensor3DReconstructionImageFilter< TReferenceImagePixelType,
       oit.Set(tensor);
       ++oit; // Output (reconstructed tensor image) iterator
       ++git; // Gradient  image iterator
+      progress.CompletedPixel();
       }
     }
 }

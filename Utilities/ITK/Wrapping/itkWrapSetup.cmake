@@ -1,23 +1,21 @@
-
-# Make it easier to enable the main supported languages, by providing the option even when
-# the Wrapping directory has not yet been included
-option(ITK_WRAP_PYTHON "Build python support" OFF)
-
-option(ITK_WRAPPING "Build external languages support" OFF)
-mark_as_advanced(ITK_WRAPPING)
-
 # check whether we should go in the wrapping folder, even with ITK_WRAPPING is OFF
+# ITK_WRAPPING is an internal variable that indicates wrapping for any
+# language will be attempted.
 if(NOT ITK_WRAPPING_REACHED)
   if(ITK_WRAP_PYTHON OR ITK_WRAP_JAVA)
     # force ITK_WRAPPING to ON
-    unset(ITK_WRAPPING CACHE)
-    option(ITK_WRAPPING "Build external languages support" ON)
-    mark_as_advanced(ITK_WRAPPING)
+    set(ITK_WRAPPING ON CACHE INTERNAL "Build external languages support" FORCE)
   endif()
 endif()
 
 if(ITK_WRAPPING)
   if(NOT ITK_BUILD_SHARED_LIBS)
-    message(FATAL_ERROR "Wrapping requires a shared build, change BUILD_SHARED_LIBS to ON")
+    message(WARNING "Wrapping requires a shared build, changing BUILD_SHARED_LIBS to ON")
+    set(BUILD_SHARED_LIBS ON CACHE BOOL "Build ITK with shared libraries." FORCE )
+  endif()
+
+  if(ITK_USE_64BITS_IDS AND WIN32)
+    message(FATAL_ERROR "Wrapping with ITK_USE_64BITS_IDS is not supported on Windows.
+    Please turn OFF ITK_USE_64BITS_IDS.")
   endif()
 endif()

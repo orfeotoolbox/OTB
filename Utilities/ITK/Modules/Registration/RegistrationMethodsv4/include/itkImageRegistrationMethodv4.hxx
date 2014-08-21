@@ -39,7 +39,21 @@ template<typename TFixedImage, typename TMovingImage, typename TTransform, typen
 ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::ImageRegistrationMethodv4()
 {
-  this->SetNumberOfRequiredOutputs( 1 );
+  ProcessObject::SetNumberOfRequiredOutputs(1);
+  Self::SetPrimaryOutputName("Transform");
+
+  // indexed input are alternating fixed and moving images
+  Self::SetPrimaryInputName("Fixed");
+  Self::AddRequiredInputName("Moving",1);
+  ProcessObject::SetNumberOfRequiredInputs(2);
+
+  // optional named inputs
+  Self::SetInput("InitialTransform", ITK_NULLPTR);
+  Self::SetInput("FixedInitialTransform", ITK_NULLPTR);
+  Self::SetInput("MovingInitialTransform", ITK_NULLPTR);
+
+
+  Self::ReleaseDataBeforeUpdateFlagOff();
 
   this->m_CurrentLevel = 0;
   this->m_CurrentIteration = 0;
@@ -49,15 +63,11 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
   this->m_NumberOfFixedImages = 0;
   this->m_NumberOfMovingImages = 0;
 
+  Self::ReleaseDataBeforeUpdateFlagOff();
+
+  this->m_InPlace = true;
+
   this->m_CompositeTransform = CompositeTransformType::New();
-
-  typedef IdentityTransform<RealType, ImageDimension> IdentityTransformType;
-
-  typename IdentityTransformType::Pointer defaultFixedInitialTransform = IdentityTransformType::New();
-  this->m_FixedInitialTransform = defaultFixedInitialTransform;
-
-  typename IdentityTransformType::Pointer defaultMovingInitialTransform = IdentityTransformType::New();
-  this->m_MovingInitialTransform = defaultMovingInitialTransform;
 
   typedef MattesMutualInformationImageToImageMetricv4<FixedImageType, MovingImageType, VirtualImageType, RealType> DefaultMetricType;
   typename DefaultMetricType::Pointer mutualInformationMetric = DefaultMetricType::New();
@@ -82,11 +92,11 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
   this->m_OptimizerWeights.SetSize( 0 );
   this->m_OptimizerWeightsAreIdentity = true;
 
-  this->m_OutputTransform = OutputTransformType::New();
 
-  DecoratedOutputTransformPointer transformDecorator = DecoratedOutputTransformType::New().GetPointer();
-  transformDecorator->Set( this->m_OutputTransform );
+  DecoratedOutputTransformPointer transformDecorator =
+        itkDynamicCastInDebugMode< DecoratedOutputTransformType * >( this->MakeOutput(0).GetPointer() );
   this->ProcessObject::SetNthOutput( 0, transformDecorator );
+  this->m_OutputTransform = transformDecorator->GetModifiable();
 
   // By default we set up a 3-level image registration.
 
@@ -200,7 +210,7 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
       for( unsigned int i = 0; i < this->m_OptimizerWeights.Size(); i++ )
         {
         OptimizerWeightsValueType difference =
-          vcl_fabs( NumericTraits<OptimizerWeightsValueType>::OneValue() - this->m_OptimizerWeights[i] );
+          std::fabs( NumericTraits<OptimizerWeightsValueType>::OneValue() - this->m_OptimizerWeights[i] );
         if( difference > tolerance  )
           {
           this->m_OptimizerWeightsAreIdentity = false;
@@ -227,7 +237,7 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
     itkExceptionMacro( "The number of fixed and moving images is not equal." );
     }
 
-  SizeValueType numberOfImagePairs = static_cast<unsigned int>( 0.5 * this->GetNumberOfInputs() );
+  SizeValueType numberOfImagePairs = static_cast<unsigned int>( 0.5 * this->GetNumberOfIndexedInputs() );
 
   if( numberOfImagePairs == 0 )
     {
@@ -264,12 +274,15 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
     itkExceptionMacro( "The image metric is not present." );
     }
 
+  InitialTransformType* movingInitialTransform = const_cast<InitialTransformType*>(this->GetMovingInitialTransform());
+  InitialTransformType* fixedInitialTransform = const_cast<InitialTransformType*>(this->GetFixedInitialTransform());
+
   this->m_CurrentIteration = 0;
   this->m_CurrentMetricValue = 0.0;
   this->m_CurrentConvergenceValue = 0.0;
   this->m_IsConverged = false;
 
-  this->InvokeEvent( InitializeEvent() );
+  this->InvokeEvent( MultiResolutionIterationEvent() );
 
   // For each level, we adapt the current transform.  For many transforms, e.g.
   // affine, the base transform adaptor does not do anything.  However, in the
@@ -289,13 +302,22 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
     {
     this->m_CompositeTransform->ClearTransformQueue();
 
-    // If the moving initial transform is a composite transform, unroll
-    // it into m_CompositeTransform.  This is a temporary fix to accommodate
-    // the lack of support for calculating the jacobian in the composite
-    // transform.
+    // Since we cannot instantiate a null object from an abstract class, we need to initialize the moving
+    // initial transform as an identity transform.
+    // Nevertheless, we do not need add this transform to the composite transform when it is only an
+    // identity transform. Simply by not setting that, we can save lots of time in jacobian computations
+    // of the composite transform since we can avoid some matrix multiplications.
 
-    this->m_CompositeTransform->AddTransform( this->m_MovingInitialTransform );
+    // Skip adding an IdentityTransform to the m_CompositeTransform
+    if( movingInitialTransform != ITK_NULLPTR &&
+      std::string(movingInitialTransform->GetNameOfClass() ) != std::string("IdentityTransform") )
+      {
+      this->m_CompositeTransform->AddTransform( movingInitialTransform );
+      }
+
     this->m_CompositeTransform->AddTransform( this->m_OutputTransform );
+    // If the moving initial transform is a composite transform, unroll
+    // it into m_CompositeTransform.
     this->m_CompositeTransform->FlattenTransformQueue();
 
     if( this->m_OptimizerWeights.Size() > 0 )
@@ -317,7 +339,16 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
   typename MultiMetricType::Pointer multiMetric2 = dynamic_cast<MultiMetricType *>( this->m_Metric.GetPointer() );
   if( multiMetric2 )
     {
-    multiMetric2->SetFixedTransform( this->m_FixedInitialTransform );
+    if ( fixedInitialTransform )
+      {
+      multiMetric2->SetFixedTransform( fixedInitialTransform );
+      }
+    else
+      {
+      typedef IdentityTransform<RealType, ImageDimension> IdentityTransformType;
+      typename IdentityTransformType::Pointer defaultFixedInitialTransform = IdentityTransformType::New();
+      multiMetric2->SetFixedTransform( defaultFixedInitialTransform );
+      }
     multiMetric2->SetMovingTransform( this->m_CompositeTransform );
     multiMetric2->SetVirtualDomainFromImage( shrinkFilter->GetOutput() );
     for( unsigned int n = 0; n < multiMetric2->GetNumberOfMetrics(); n++ )
@@ -338,7 +369,16 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
     typename ImageMetricType::Pointer imageMetric = dynamic_cast<ImageMetricType *>( this->m_Metric.GetPointer() );
     if( imageMetric.IsNotNull() )
       {
-      imageMetric->SetFixedTransform( this->m_FixedInitialTransform );
+      if ( fixedInitialTransform )
+        {
+         imageMetric->SetFixedTransform( fixedInitialTransform );
+        }
+      else
+        {
+        typedef IdentityTransform<RealType, ImageDimension> IdentityTransformType;
+        typename IdentityTransformType::Pointer defaultFixedInitialTransform = IdentityTransformType::New();
+        imageMetric->SetFixedTransform( defaultFixedInitialTransform );
+        }
       imageMetric->SetMovingTransform( this->m_CompositeTransform );
       imageMetric->SetVirtualDomainFromImage( shrinkFilter->GetOutput() );
       }
@@ -439,6 +479,80 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
     }
 }
 
+
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+void
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
+::AllocateOutputs()
+{
+  const DecoratedInitialTransformType * decoratedInitialTransform = this->GetInitialTransformInput();
+  DecoratedOutputTransformType *decoratedOutputTransform = this->GetOutput();
+
+  if ( decoratedInitialTransform )
+    {
+    const InitialTransformType * initialTransform = decoratedInitialTransform->Get();
+
+    if ( initialTransform )
+      {
+      if ( this->GetInPlace() )
+        {
+        // graft the input to the output which may fail if the types
+        // aren't compatible.
+        decoratedOutputTransform->Graft( decoratedInitialTransform );
+
+        if ( decoratedOutputTransform->Get() )
+          {
+          this->m_OutputTransform = decoratedOutputTransform->GetModifiable();
+
+          // This is generally done in the ReleaseInputs methods,
+          // however we do not need it again
+          const_cast<DecoratedInitialTransformType *>(decoratedInitialTransform)->ReleaseData();
+
+          // successful in-place grafting
+          itkDebugMacro("inplace allocation of output transform");
+          return;
+          }
+        }
+
+      const OutputTransformType * initialAsOutputTransform = dynamic_cast<const OutputTransformType*>( initialTransform );
+
+      if ( initialAsOutputTransform )
+        {
+        // Clone performs a deep copy of the parameters and composition
+        this->m_OutputTransform = initialAsOutputTransform->Clone();
+        decoratedOutputTransform->Set(this->m_OutputTransform);
+
+        // successful deep copy from initial to output
+        itkDebugMacro("clone copy allocation of output transform");
+        return;
+        }
+      else
+        {
+        itkExceptionMacro("Unable to convert InitialTransform input to the OutputTransform type");
+        }
+
+      }
+    }
+
+  // fallback allocation and initialization
+
+
+  // initialize to identity? what happens if we re-run with optimized values?
+  itkDebugMacro("fallback allocation of output transform");
+
+  if ( !decoratedOutputTransform->Get() )
+    {
+    // the output decorated component is null, allocate
+    OutputTransformPointer ptr;
+    Self::MakeOutputTransform(ptr);
+    decoratedOutputTransform->Set(ptr);
+    }
+
+  this->m_OutputTransform = this->GetModifiableTransform();
+
+}
+
+
 /*
  * Start the registration
  */
@@ -447,6 +561,7 @@ void
 ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::GenerateData()
 {
+  this->AllocateOutputs();
   for( this->m_CurrentLevel = 0; this->m_CurrentLevel < this->m_NumberOfLevels; this->m_CurrentLevel++ )
     {
     this->InitializeRegistrationAtEachLevel( this->m_CurrentLevel );
@@ -507,8 +622,7 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
     this->m_TransformParametersAdaptorsPerLevel.clear();
     for( SizeValueType level = 0; level < this->m_NumberOfLevels; level++ )
       {
-      typename TransformParametersAdaptorType::Pointer transformParametersAdaptor = TransformParametersAdaptorType::New();
-      this->m_TransformParametersAdaptorsPerLevel.push_back( transformParametersAdaptor.GetPointer() );
+      this->m_TransformParametersAdaptorsPerLevel.push_back( ITK_NULLPTR );
       }
 
     for( unsigned int level = 0; level < this->m_NumberOfLevels; ++level )
@@ -591,7 +705,7 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
       {
       case REGULAR:
         {
-        const unsigned long sampleCount = static_cast<unsigned long>( vcl_ceil( 1.0 / this->m_MetricSamplingPercentagePerLevel[this->m_CurrentLevel] ) );
+        const unsigned long sampleCount = static_cast<unsigned long>( std::ceil( 1.0 / this->m_MetricSamplingPercentagePerLevel[this->m_CurrentLevel] ) );
         unsigned long count = sampleCount; //Start at sampleCount to keep behavior backwards identical, using first element.
         ImageRegionConstIteratorWithIndex<VirtualDomainImageType> It( virtualImage, virtualDomainRegion );
         for( It.GoToBegin(); !It.IsAtEnd(); ++It )
@@ -663,8 +777,9 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::PrintSelf( std::ostream & os, Indent indent ) const
 {
   Superclass::PrintSelf( os, indent );
+  Indent indent2 = indent.GetNextIndent();
 
-  os << "Number of levels = " << this->m_NumberOfLevels << std::endl;
+  os << indent << "Number of levels = " << this->m_NumberOfLevels << std::endl;
 
   for( unsigned int level = 0; level < this->m_NumberOfLevels; ++level )
     {
@@ -675,11 +790,11 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 
   if( this->m_SmoothingSigmasAreSpecifiedInPhysicalUnits == true )
     {
-    os << indent << indent << "Smoothing sigmas are specified in physical units." << std::endl;
+    os << indent2 << "Smoothing sigmas are specified in physical units." << std::endl;
     }
   else
     {
-    os << indent << indent << "Smoothing sigmas are specified in voxel units." << std::endl;
+    os << indent2 << "Smoothing sigmas are specified in voxel units." << std::endl;
     }
 
   if( this->m_OptimizerWeights.Size() > 0 )
@@ -695,17 +810,49 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
     os << this->m_MetricSamplingPercentagePerLevel[i] << " ";
     }
   os << std::endl;
+
+  os << indent << "InPlace: " << ( m_InPlace ? "On" : "Off" ) << std::endl;
 }
 
 /*
  *  Get output transform
  */
 template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>::DecoratedOutputTransformType *
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
+::GetOutput()
+{
+  return static_cast<DecoratedOutputTransformType *>( this->ProcessObject::GetOutput( 0 ) );
+}
+
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
 const typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>::DecoratedOutputTransformType *
 ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
 ::GetOutput() const
 {
   return static_cast<const DecoratedOutputTransformType *>( this->ProcessObject::GetOutput( 0 ) );
+}
+
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>::OutputTransformType *
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
+::GetModifiableTransform()
+{
+  DecoratedOutputTransformType * temp = this->GetOutput();
+  // required outputs of process object should always exits
+  itkAssertInDebugAndIgnoreInReleaseMacro( temp != ITK_NULLPTR );
+  return temp->GetModifiable();
+}
+
+template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
+const typename ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>::OutputTransformType *
+ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
+::GetTransform() const
+{
+  const  DecoratedOutputTransformType * temp = this->GetOutput();
+  // required outputs of process object should always exits
+  itkAssertInDebugAndIgnoreInReleaseMacro( temp != ITK_NULLPTR );
+  return temp->Get();
 }
 
 template<typename TFixedImage, typename TMovingImage, typename TTransform, typename TVirtualImage>
@@ -716,11 +863,16 @@ ImageRegistrationMethodv4<TFixedImage, TMovingImage, TTransform, TVirtualImage>
   switch ( output )
     {
     case 0:
-      return DecoratedOutputTransformType::New().GetPointer();
-      break;
+      {
+      OutputTransformPointer ptr;
+      Self::MakeOutputTransform(ptr);
+      DecoratedOutputTransformPointer transformDecorator =  DecoratedOutputTransformType::New();
+      transformDecorator->Set( ptr );
+      return transformDecorator.GetPointer();
+      }
     default:
       itkExceptionMacro("MakeOutput request for an output number larger than the expected number of outputs");
-      return 0;
+      return ITK_NULLPTR;
     }
 }
 

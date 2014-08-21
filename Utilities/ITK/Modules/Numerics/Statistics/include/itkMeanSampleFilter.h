@@ -45,7 +45,7 @@ namespace Statistics
  */
 
 template< typename TSample >
-class MeanSampleFilter:public ProcessObject
+class MeanSampleFilter : public ProcessObject
 {
 public:
   /**Standard class typedefs. */
@@ -59,45 +59,55 @@ public:
   itkTypeMacro(MeanSampleFilter, ProcessObject);
   itkNewMacro(Self);
 
-  /** Length of a measurement vector */
-  typedef unsigned int                                                MeasurementVectorSizeType;
-  typedef typename TSample::MeasurementVectorType                     MeasurementVectorType;
-  typedef typename TSample::MeasurementType                           MeasurementType;
-  typedef typename NumericTraits< MeasurementType >::RealType         MeasurementRealType;
+  /** Type of each measurement vector in sample */
+  typedef typename SampleType::MeasurementVectorType                  MeasurementVectorType;
+
+  /** Type of the length of each measurement vector */
+  typedef typename SampleType::MeasurementVectorSizeType              MeasurementVectorSizeType;
+
+  /** Type of measurement vector component value */
+  typedef typename SampleType::MeasurementType                        MeasurementType;
+
+  /** Type of a measurement vector, holding floating point values */
   typedef typename NumericTraits< MeasurementVectorType >::RealType   MeasurementVectorRealType;
 
-  /** Method to set/get the sample */
+  /** Type of a floating point measurement component value */
+  typedef typename NumericTraits< MeasurementType >::RealType         MeasurementRealType;
+
+
+  /** Method to set the sample */
   using Superclass::SetInput;
   void SetInput(const SampleType *sample);
 
-  const SampleType *  GetInput() const;
+  /** Method to get the sample */
+  const SampleType * GetInput() const;
+
+
+  /** Get the mean measurement vector */
+  const MeasurementVectorRealType GetMean() const;
 
   /** MeasurementVector is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */
-  typedef  SimpleDataObjectDecorator< MeasurementVectorRealType > MeasurementVectorDecoratedType;
-
-  typedef MeasurementVectorDecoratedType OutputType;
-
-  /** Get the mean measurement vector */
+  typedef SimpleDataObjectDecorator< MeasurementVectorRealType > MeasurementVectorDecoratedType;
   const MeasurementVectorDecoratedType * GetOutput() const;
+  typedef MeasurementVectorDecoratedType                         OutputType;
 
-  const MeasurementVectorRealType GetMean() const;
 
   MeasurementVectorSizeType GetMeasurementVectorSize() const;
 
 protected:
   MeanSampleFilter();
   virtual ~MeanSampleFilter();
-  void PrintSelf(std::ostream & os, Indent indent) const;
+  virtual void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
 
   /** DataObject pointer */
   typedef DataObject::Pointer DataObjectPointer;
 
   typedef ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   using Superclass::MakeOutput;
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
 
-  void GenerateData();
+  virtual void GenerateData() ITK_OVERRIDE;
 
 private:
   MeanSampleFilter(const Self &); //purposely not implemented

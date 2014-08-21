@@ -35,44 +35,31 @@ namespace itk
 
 template <typename TInputImage, typename TOutputImage>
 PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
-::PatchBasedDenoisingImageFilter()
+::PatchBasedDenoisingImageFilter() :
+  m_UpdateBuffer(OutputImageType::New()),
+  m_NumPixelComponents(0),       // not valid until Initialize()
+  m_NumIndependentComponents(0), // not valid until Initialize()
+  m_TotalNumberPixels(0),        // not valid until an image is provided
+  m_UseSmoothDiscPatchWeights(true),
+  m_UseFastTensorComputations(true),
+  m_KernelBandwidthSigmaIsSet(false),
+  m_ZeroPixel(),                 // not valid until Initialize()
+  m_KernelBandwidthFractionPixelsForEstimation(0.20),
+  m_ComputeConditionalDerivatives(false),
+  m_MinSigma(NumericTraits<RealValueType>::min() * 100), // to avoid divide by zero
+  m_MinProbability(NumericTraits<RealValueType>::min() * 100), // to avoid divide by zero
+  m_SigmaUpdateDecimationFactor(static_cast<unsigned int>
+                                (Math::Round<double>(1.0 / m_KernelBandwidthFractionPixelsForEstimation))),
+  m_SigmaUpdateConvergenceTolerance(0.01),   // desired accuracy of Newton-Raphson sigma estimation
+  m_KernelBandwidthMultiplicationFactor(1.0),
+  m_NoiseSigma(0.0),
+  m_NoiseSigmaSquared(0.0),
+  m_NoiseSigmaIsSet(false),
+  m_Sampler(ITK_NULLPTR), // not valid until a sampler is provided
+  m_SearchSpaceList(ListAdaptorType::New())
 {
-  m_SearchSpaceList = ListAdaptorType::New();
-  m_UpdateBuffer    = OutputImageType::New();
-
-  // patch weights
-  m_UseSmoothDiscPatchWeights = true;
-
-  //
-  m_UseFastTensorComputations = true;
-
   // by default, turn off automatic kernel bandwidth sigma estimation
   this->KernelBandwidthEstimationOff();
-  // minimum probability, used to avoid divide by zero
-  m_MinProbability = NumericTraits<RealValueType>::min() * 100;
-  // minimum sigma allowed, used to avoid divide by zero
-  m_MinSigma       = NumericTraits<RealValueType>::min() * 100;
-
-  m_ComputeConditionalDerivatives   = false;
-  m_KernelBandwidthFractionPixelsForEstimation    = 0.20;
-  m_SigmaUpdateDecimationFactor     = static_cast<unsigned int>
-    (Math::Round<double>(1.0 / m_KernelBandwidthFractionPixelsForEstimation) );
-  // desired accuracy of Newton-Raphson sigma estimation
-  m_SigmaUpdateConvergenceTolerance     = 0.01;
-  m_KernelBandwidthMultiplicationFactor = 1.0;
-
-  m_NoiseSigmaIsSet           = false;
-  m_KernelBandwidthSigmaIsSet = false;
-
-  m_TotalNumberPixels  = 0;       // won't be valid until an image is provided
-  m_Sampler            = 0;       // won't be valid until a sampler is provided
-  m_NumPixelComponents = 0;       // won't be valid until Initialize() gets
-                                  // called
-  m_NumIndependentComponents = 0; // won't be valid until Initialize() gets
-                                  // called
-  // m_IntensityRescaleInvFactor won't be allocated until Initialize() gets
-  // called
-  // because we need the input image first.
 }
 
 template <typename TInputImage, typename TOutputImage>
@@ -354,7 +341,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
       newStruct.minNorm[ic] = 0;
       newStruct.maxNorm[ic] = 0;
       }
-    newStruct.sampler = NULL;
+    newStruct.sampler = ITK_NULLPTR;
 
     m_ThreadData.push_back(newStruct);
     }
@@ -845,8 +832,8 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
   if (foundMinMax)
     {
     threadData.validNorms[0] = 1;
-    threadData.minNorm[0] = vcl_sqrt(minNorm[0]);
-    threadData.maxNorm[0] = vcl_sqrt(maxNorm[0]);
+    threadData.minNorm[0] = std::sqrt(minNorm[0]);
+    threadData.maxNorm[0] = std::sqrt(maxNorm[0]);
 
     itkDebugMacro( <<"threadData minNorm: " << minNorm[0]
                    << ", maxNorm: " << maxNorm[0] );
@@ -972,7 +959,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
   RealTensorValueT n, sqrtn, s;
   n = I1div3 * I1div3 - I2/3;
   s = I1div3 * I1div3 * I1div3 - I1*I2/6 + I3/2;
-  sqrtn = vcl_sqrt(n);
+  sqrtn = std::sqrt(n);
 
   // now check for some degenerate cases
   // if these occur, default to the standard eigen analysis
@@ -993,7 +980,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
 
   // Compute phi = (acos((s/n) * sqrt(1/n)) / 3)
   RealTensorValueT phi;
-  phi = vcl_acos( (s/n) * 1/sqrtn) / 3;
+  phi = std::acos( (s/n) * 1/sqrtn) / 3;
 
   // Now compute the eigenvalues
   // lambda1 = I1/3 + 2*sqrt(n)*cos(phi)
@@ -1003,8 +990,8 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
   // lambda3 also = I1 - lambda1 - lambda2
 
   RealTensorValueT               lambda1, lambda2, lambda3;
-  lambda1 = I1div3 + 2 * sqrtn * vcl_cos(phi);
-  lambda2 = I1div3 - 2*sqrtn *   vcl_cos(vnl_math::pi/3 + phi);
+  lambda1 = I1div3 + 2 * sqrtn * std::cos(phi);
+  lambda2 = I1div3 - 2*sqrtn *   std::cos(vnl_math::pi/3 + phi);
   lambda3 = I1 - lambda1 - lambda2;
 
   eigenVals[0] = lambda1;
@@ -1052,7 +1039,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
     // eigenVec = e / sqrt(e'e)
     RealTensorValueT norm, sqrtnorm;
     norm = ex * ex + ey * ey + ez * ez;
-    sqrtnorm = vcl_sqrt(norm);
+    sqrtnorm = std::sqrt(norm);
     eigenVecs(i,0) = ex / sqrtnorm;
     eigenVecs(i,1) = ey / sqrtnorm;
     eigenVecs(i,2) = ez / sqrtnorm;
@@ -1077,10 +1064,8 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
                                                     EigenVectorsCacheType& eigenVecsCache,
                                                     RealType& symMatrixLogMap, RealArrayType& geodesicDist)
 {
-  typedef typename PixelType::MatrixType            MatrixType;
   typedef typename RealType::EigenValuesArrayType   RealEigenValuesArrayType;
   typedef typename RealType::EigenVectorsMatrixType RealEigenVectorsMatrixType;
-  typedef typename RealType::MatrixType             RealMatrixType;
   EigenValuesArrayType       eigenVals;
   EigenVectorsMatrixType     eigenVecs;
   RealEigenValuesArrayType   YEigenVals;
@@ -1109,8 +1094,8 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
 
     if (cacheIndex >= eigenValsCache.size() )
       {
-      eigenValsCache.resize(cacheIndex+1, 0);
-      eigenVecsCache.resize(cacheIndex+1, 0);
+      eigenValsCache.resize(cacheIndex+1, ITK_NULLPTR);
+      eigenVecsCache.resize(cacheIndex+1, ITK_NULLPTR);
       }
 
     delete eigenValsCache[cacheIndex];
@@ -1143,9 +1128,9 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
   factor2 = spdMatrixB[2] * eigenVecs(0,0) + spdMatrixB[4] * eigenVecs(0,1) + spdMatrixB[5] * eigenVecs(0,2);
 
   Y[0] = ( eigenVecs(0,0) * factor0 + eigenVecs(0,1) * factor1 + eigenVecs(0,2) * factor2 ) / eigenVals[0];
-  Y[1] = ( eigenVecs(1,0) * factor0 + eigenVecs(1,1) * factor1 + eigenVecs(1,2) * factor2 ) / vcl_sqrt(
+  Y[1] = ( eigenVecs(1,0) * factor0 + eigenVecs(1,1) * factor1 + eigenVecs(1,2) * factor2 ) / std::sqrt(
       eigenVals[0] * eigenVals[1]);
-  Y[2] = ( eigenVecs(2,0) * factor0 + eigenVecs(2,1) * factor1 + eigenVecs(2,2) * factor2 ) / vcl_sqrt(
+  Y[2] = ( eigenVecs(2,0) * factor0 + eigenVecs(2,1) * factor1 + eigenVecs(2,2) * factor2 ) / std::sqrt(
       eigenVals[0] * eigenVals[2]);
 
   factor0 = spdMatrixB[0] * eigenVecs(1,0) + spdMatrixB[1] * eigenVecs(1,1) + spdMatrixB[2] * eigenVecs(1,2);
@@ -1153,7 +1138,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
   factor2 = spdMatrixB[2] * eigenVecs(1,0) + spdMatrixB[4] * eigenVecs(1,1) + spdMatrixB[5] * eigenVecs(1,2);
 
   Y[3] = ( eigenVecs(1,0) * factor0 + eigenVecs(1,1) * factor1 + eigenVecs(1,2) * factor2 ) / eigenVals[1];
-  Y[4] = ( eigenVecs(2,0) * factor0 + eigenVecs(2,1) * factor1 + eigenVecs(2,2) * factor2 ) / vcl_sqrt(
+  Y[4] = ( eigenVecs(2,0) * factor0 + eigenVecs(2,1) * factor1 + eigenVecs(2,2) * factor2 ) / std::sqrt(
       eigenVals[1] * eigenVals[2]);
 
   factor0 = spdMatrixB[0] * eigenVecs(2,0) + spdMatrixB[1] * eigenVecs(2,1) + spdMatrixB[2] * eigenVecs(2,2);
@@ -1187,11 +1172,11 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
   //  these calculations can be optimized as follows.
   for (unsigned int ii = 0; ii < 3; ++ii)
     {
-    YEigenVals[ii] = vcl_log(vnl_math_max(RealValueType(1e-15),YEigenVals[ii]) );
+    YEigenVals[ii] = std::log(vnl_math_max(RealValueType(1e-15),YEigenVals[ii]) );
     }
-  const RealValueType eigVal0 = vcl_sqrt(eigenVals[0]);
-  const RealValueType eigVal1 = vcl_sqrt(eigenVals[1]);
-  const RealValueType eigVal2 = vcl_sqrt(eigenVals[2]);
+  const RealValueType eigVal0 = std::sqrt(eigenVals[0]);
+  const RealValueType eigVal1 = std::sqrt(eigenVals[1]);
+  const RealValueType eigVal2 = std::sqrt(eigenVals[2]);
   const RealValueType YEigVal0 = YEigenVals[0];
   const RealValueType YEigVal1 = YEigenVals[1];
   const RealValueType YEigVal2 = YEigenVals[2];
@@ -1263,7 +1248,6 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
 {
   typedef typename RealType::EigenValuesArrayType   RealEigenValuesArrayType;
   typedef typename RealType::EigenVectorsMatrixType RealEigenVectorsMatrixType;
-  typedef typename RealType::MatrixType             RealMatrixType;
   RealEigenValuesArrayType   eigenVals;
   RealEigenVectorsMatrixType eigenVecs;
   RealEigenValuesArrayType   YEigenVals;
@@ -1308,9 +1292,9 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
   factor2 = symMatrix[2] * eigenVecs(0,0) + symMatrix[4] * eigenVecs(0,1) + symMatrix[5] * eigenVecs(0,2);
 
   Y[0] = ( eigenVecs(0,0) * factor0 + eigenVecs(0,1) * factor1 + eigenVecs(0,2) * factor2 ) / eigenVals[0];
-  Y[1] = ( eigenVecs(1,0) * factor0 + eigenVecs(1,1) * factor1 + eigenVecs(1,2) * factor2 ) / vcl_sqrt(
+  Y[1] = ( eigenVecs(1,0) * factor0 + eigenVecs(1,1) * factor1 + eigenVecs(1,2) * factor2 ) / std::sqrt(
       eigenVals[0] * eigenVals[1]);
-  Y[2] = ( eigenVecs(2,0) * factor0 + eigenVecs(2,1) * factor1 + eigenVecs(2,2) * factor2 ) / vcl_sqrt(
+  Y[2] = ( eigenVecs(2,0) * factor0 + eigenVecs(2,1) * factor1 + eigenVecs(2,2) * factor2 ) / std::sqrt(
       eigenVals[0] * eigenVals[2]);
 
   factor0 = symMatrix[0] * eigenVecs(1,0) + symMatrix[1] * eigenVecs(1,1) + symMatrix[2] * eigenVecs(1,2);
@@ -1318,7 +1302,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
   factor2 = symMatrix[2] * eigenVecs(1,0) + symMatrix[4] * eigenVecs(1,1) + symMatrix[5] * eigenVecs(1,2);
 
   Y[3] = ( eigenVecs(1,0) * factor0 + eigenVecs(1,1) * factor1 + eigenVecs(1,2) * factor2 ) / eigenVals[1];
-  Y[4] = ( eigenVecs(2,0) * factor0 + eigenVecs(2,1) * factor1 + eigenVecs(2,2) * factor2 ) / vcl_sqrt(
+  Y[4] = ( eigenVecs(2,0) * factor0 + eigenVecs(2,1) * factor1 + eigenVecs(2,2) * factor2 ) / std::sqrt(
       eigenVals[1] * eigenVals[2]);
 
   factor0 = symMatrix[0] * eigenVecs(2,0) + symMatrix[1] * eigenVecs(2,1) + symMatrix[2] * eigenVecs(2,2);
@@ -1350,11 +1334,11 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
 
   for (unsigned int ii = 0; ii < 3; ++ii)
     {
-    YEigenVals[ii] = vcl_exp(YEigenVals[ii]);
+    YEigenVals[ii] = std::exp(YEigenVals[ii]);
     }
-  const RealValueType eigVal0 = vcl_sqrt(eigenVals[0]);
-  const RealValueType eigVal1 = vcl_sqrt(eigenVals[1]);
-  const RealValueType eigVal2 = vcl_sqrt(eigenVals[2]);
+  const RealValueType eigVal0 = std::sqrt(eigenVals[0]);
+  const RealValueType eigVal1 = std::sqrt(eigenVals[1]);
+  const RealValueType eigVal2 = std::sqrt(eigenVals[2]);
   const RealValueType YEigVal0 = YEigenVals[0];
   const RealValueType YEigVal1 = YEigenVals[1];
   const RealValueType YEigVal2 = YEigenVals[2];
@@ -1858,7 +1842,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
         squaredNorm[ic] += centerPatchSquaredNorm[ic];
 
         const RealValueType sigmaKernel = m_KernelBandwidthSigma[ic];
-        const RealValueType distanceJointEntropy = vcl_sqrt(squaredNorm[ic]);
+        const RealValueType distanceJointEntropy = std::sqrt(squaredNorm[ic]);
 
         const RealValueType gaussianJointEntropy
           = exp(-vnl_math_sqr(distanceJointEntropy / sigmaKernel) / 2.0);
@@ -1875,7 +1859,7 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
         if (m_ComputeConditionalDerivatives)
           {
           const RealValueType distancePatchEntropySquared = squaredNorm[ic] - centerPatchSquaredNorm[ic];
-          const RealValueType distancePatchEntropy = vcl_sqrt(distancePatchEntropySquared);
+          const RealValueType distancePatchEntropy = std::sqrt(distancePatchEntropySquared);
           const RealValueType gaussianPatchEntropy
             = exp(-vnl_math_sqr(distancePatchEntropy / sigmaKernel) / 2.0);
           probPatchEntropy[ic] += gaussianPatchEntropy;
@@ -2573,26 +2557,9 @@ PatchBasedDenoisingImageFilter<TInputImage, TOutputImage>
   os << indent << "KernelBandwidthMultiplicationFactor: "
      << m_KernelBandwidthMultiplicationFactor << std::endl;
 
-  if (m_Sampler)
-    {
-    os << indent << "Sampler: " << std::endl;
-    m_Sampler->Print(os,indent.GetNextIndent() );
-    }
-  else
-    {
-    os << indent << "Sampler: " << "(None)" << std::endl;
-    }
+  itkPrintSelfObjectMacro( Sampler );
+  itkPrintSelfObjectMacro( UpdateBuffer );
 
-  if (m_UpdateBuffer)
-    {
-    os << indent << "Update buffer:\n";
-    m_UpdateBuffer->Print(os, indent.GetNextIndent() );
-    os << std::endl;
-    }
-  else
-    {
-    os << indent << "Update buffer is NULL" << std::endl;
-    }
   os << std::endl;
 }
 

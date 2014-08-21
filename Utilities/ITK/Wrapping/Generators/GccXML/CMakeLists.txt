@@ -2,6 +2,9 @@
 option(ITK_USE_SYSTEM_GCCXML "Use system gccxml. If OFF, gccxml is built as an external project." OFF)
 mark_as_advanced(ITK_USE_SYSTEM_GCCXML)
 
+set(gccxml_url http://itk.org/files/gccxml/gccxml-2014-06-10.tar.gz)
+set(gccxml_md5 3ca85731d1d95a9d433eed865d2079c0)
+
 set(gccxml_ep ${CMAKE_CURRENT_BINARY_DIR}/gccxml/bin/gccxml)
 if(WIN32)
   set(gccxml_ep "${gccxml_ep}.exe")
@@ -25,9 +28,10 @@ else()
   else()
     set(test )
   endif()
-  ExternalProject_add(GCC_XML
-  URL http://itk.org/files/gccxml/gccxml-2013-11-18.tar.bz2
-  URL_MD5 3b8f72ae76c6946a954bddf3222c201b
+  itk_download_attempt_check(GCC_XML)
+  ExternalProject_Add(GCC_XML
+  URL ${gccxml_url}
+  URL_MD5 ${gccxml_md5}
   PREFIX gccxml
   CMAKE_ARGS
     -DCMAKE_CXX_COMPILER:STRING=${CMAKE_CXX_COMPILER}
@@ -129,7 +133,6 @@ macro(itk_end_wrap_submodule_gccxml module)
             -fxml-start=_cable_
             -o ${xml_file}
             ${CONFIG_GCCXML_INC_CONTENTS}
-            -DCSWIG
             -DCABLE_CONFIGURATION
             -DITK_MANUAL_INSTANTIATION
             ${cxx_file}
@@ -142,7 +145,6 @@ macro(itk_end_wrap_submodule_gccxml module)
             -fxml-start=_cable_
             -fxml=${xml_file}
             --gccxml-gcc-options ${gccxml_inc_file}
-            -DCSWIG
             -DCABLE_CONFIGURATION
             -DITK_MANUAL_INSTANTIATION
             ${ADDITIONAL_GCC_XML_FLAGS}

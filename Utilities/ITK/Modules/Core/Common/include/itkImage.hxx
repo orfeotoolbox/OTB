@@ -44,18 +44,17 @@ Image< TPixel, VImageDimension >
   m_Buffer = PixelContainer::New();
 }
 
-//----------------------------------------------------------------------------
 template< typename TPixel, unsigned int VImageDimension >
 void
 Image< TPixel, VImageDimension >
-::Allocate()
+::Allocate(bool initializePixels)
 {
   SizeValueType num;
 
   this->ComputeOffsetTable();
   num = static_cast<SizeValueType>(this->GetOffsetTable()[VImageDimension]);
 
-  m_Buffer->Reserve(num);
+  m_Buffer->Reserve(num, initializePixels);
 }
 
 template< typename TPixel, unsigned int VImageDimension >
@@ -113,16 +112,7 @@ Image< TPixel, VImageDimension >
   if ( data )
     {
     // Attempt to cast data to an Image
-    const Self *imgData;
-
-    try
-      {
-      imgData = dynamic_cast< const Self * >( data );
-      }
-    catch ( ... )
-      {
-      return;
-      }
+    const Self * const imgData = dynamic_cast< const Self * >( data );
 
     if ( imgData )
       {

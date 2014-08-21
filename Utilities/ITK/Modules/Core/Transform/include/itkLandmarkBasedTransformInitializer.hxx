@@ -59,7 +59,7 @@ LandmarkBasedTransformInitializer< TTransform, TFixedImage, TMovingImage >
 {
   AffineTransformType *transform =
     dynamic_cast<AffineTransformType *>(this->m_Transform.GetPointer());
-  if ( transform == 0 )
+  if ( transform == ITK_NULLPTR )
     {
     itkExceptionMacro( << "AffineTransform Expected but transform is "
                        << this->m_Transform->GetNameOfClass() );
@@ -211,7 +211,7 @@ LandmarkBasedTransformInitializer< TTransform, TFixedImage, TMovingImage >
   itkDebugMacro("Internal Initialize VersorRigid3DTransformType");
   VersorRigid3DTransformType *transform = dynamic_cast< VersorRigid3DTransformType * >(
     this->m_Transform.GetPointer() );
-  if ( transform == 0 )
+  if ( transform == ITK_NULLPTR )
     {
     itkExceptionMacro( << "VersorRigid3DTransformType Expected but transform is "
                        << this->m_Transform->GetNameOfClass() );
@@ -249,7 +249,6 @@ LandmarkBasedTransformInitializer< TTransform, TFixedImage, TMovingImage >
 
   typedef typename VersorRigid3DTransformType::OutputVectorType VectorType;
   typedef typename VersorRigid3DTransformType::OutputPointType  PointType;
-  typedef typename VersorRigid3DTransformType::CenterType       RotationCenterType;
 
   // Compute the centroids
   PointType fixedCentroid;
@@ -406,7 +405,7 @@ LandmarkBasedTransformInitializer< TTransform, TFixedImage, TMovingImage >
   Rigid2DTransformType *transform =
     dynamic_cast< Rigid2DTransformType * >(this->m_Transform.GetPointer() );
 
-  if ( transform == 0 )
+  if ( transform == ITK_NULLPTR )
     {
     itkExceptionMacro( << "VersorRigid3DTransformType Expected but transform is "
                        << this->m_Transform->GetNameOfClass() );
@@ -425,7 +424,7 @@ LandmarkBasedTransformInitializer< TTransform, TFixedImage, TMovingImage >
     return;
     }
 
-  const double PI = 4.0 * vcl_atan(1.0);
+  const double PI = 4.0 * std::atan(1.0);
   typedef typename Rigid2DTransformType::OutputVectorType VectorType;
   typedef typename Rigid2DTransformType::OutputPointType  PointType;
 
@@ -510,9 +509,9 @@ LandmarkBasedTransformInitializer< TTransform, TFixedImage, TMovingImage >
       }
 
     itkDebugMacro(<< "Dot Product of landmarks: " << s_dot << " Cross Product: " << s_cross);
-    if ( vcl_fabs(s_dot) > 0.00005 )
+    if ( std::fabs(s_dot) > 0.00005 )
       {
-      rotationAngle = vcl_atan2(s_cross, s_dot);
+      rotationAngle = std::atan2(s_cross, s_dot);
       }
     else
       {
@@ -554,7 +553,7 @@ LandmarkBasedTransformInitializer< TTransform, TFixedImage, TMovingImage >
     itkExceptionMacro("Different number of fixed and moving landmarks");
     return;
     }
-  this->InternalInitializeTransform(static_cast<TTransform *>(0));
+  this->InternalInitializeTransform(static_cast<TTransform *>(ITK_NULLPTR));
 }
 
 template< typename TTransform, typename TFixedImage, typename TMovingImage >

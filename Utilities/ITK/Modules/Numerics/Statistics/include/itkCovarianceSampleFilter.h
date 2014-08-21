@@ -64,63 +64,67 @@ public:
   itkTypeMacro(CovarianceSampleFilter, ProcessObject);
   itkNewMacro(Self);
 
-  /** Length of a measurement vector */
-  typedef typename TSample::MeasurementVectorSizeType MeasurementVectorSizeType;
+  /** Type of each measurement vector in sample */
+  typedef typename SampleType::MeasurementVectorType                  MeasurementVectorType;
 
-  /** Measurement vector type */
-  typedef typename TSample::MeasurementVectorType MeasurementVectorType;
+  /** Type of the length of each measurement vector */
+  typedef typename SampleType::MeasurementVectorSizeType              MeasurementVectorSizeType;
 
-  /** Type of vector elements */
-  typedef typename TSample::MeasurementType                           MeasurementType;
-  typedef typename NumericTraits< MeasurementType >::RealType         MeasurementRealType;
+  /** Type of measurement vector component value */
+  typedef typename SampleType::MeasurementType                        MeasurementType;
 
-  /** Type of the measurement vector type */
+  /** Type of a measurement vector, holding floating point values */
   typedef typename NumericTraits< MeasurementVectorType >::RealType   MeasurementVectorRealType;
 
-  /** Typedef for Covariance output */
-  typedef VariableSizeMatrix< double > MatrixType;
+  /** Type of a floating point measurement component value */
+  typedef typename NumericTraits< MeasurementType >::RealType         MeasurementRealType;
 
-  /** Method to set/get the sample */
+
+  /** Method to set the sample */
   using Superclass::SetInput;
   void SetInput(const SampleType *sample);
 
+  /** Method to get the sample */
   const SampleType *  GetInput() const;
 
-  /** VariableSizeMatrix is not a DataObject, we need to decorate it to push it down
-   * a ProcessObject's pipeline */
-  typedef  SimpleDataObjectDecorator< MatrixType > MatrixDecoratedType;
 
-  /** MeasurementVector is not a DataObject, we need to decorate it to push it down
-   * a ProcessObject's pipeline */
-  typedef  SimpleDataObjectDecorator< MeasurementVectorRealType > MeasurementVectorDecoratedType;
-
-  typedef MeasurementVectorDecoratedType OutputType;
+  /** Type of covariance matrix output */
+  typedef VariableSizeMatrix< MeasurementRealType > MatrixType;
 
   /** Return the covariance matrix */
   const MatrixType GetCovarianceMatrix() const;
 
+  /** VariableSizeMatrix is not a DataObject, we need to decorate it to push it down
+   * a ProcessObject's pipeline */
+  typedef SimpleDataObjectDecorator< MatrixType > MatrixDecoratedType;
   const MatrixDecoratedType * GetCovarianceMatrixOutput() const;
+
 
   /** Return the mean vector */
   const MeasurementVectorRealType GetMean() const;
 
+  /** MeasurementVector is not a DataObject, we need to decorate it to push it down
+   * a ProcessObject's pipeline */
+  typedef SimpleDataObjectDecorator< MeasurementVectorRealType > MeasurementVectorDecoratedType;
   const MeasurementVectorDecoratedType * GetMeanOutput() const;
+  typedef MeasurementVectorDecoratedType                         OutputType;
+
 
   MeasurementVectorSizeType GetMeasurementVectorSize() const;
 
 protected:
   CovarianceSampleFilter();
   virtual ~CovarianceSampleFilter();
-  void PrintSelf(std::ostream & os, Indent indent) const;
+  virtual void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
 
   /** DataObject pointer */
   typedef DataObject::Pointer DataObjectPointer;
 
   typedef ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   using Superclass::MakeOutput;
-  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
 
-  void GenerateData();
+  virtual void GenerateData() ITK_OVERRIDE;
 
 private:
   CovarianceSampleFilter(const Self &); //purposely not implemented
