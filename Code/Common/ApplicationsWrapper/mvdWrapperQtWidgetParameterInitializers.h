@@ -338,7 +338,7 @@ InputImageListInitializer
 
   QObject::connect(
     widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
-    m_View, SLOT( OnFileSelectionWidgetAdded( QWidget * ) )
+    m_View, SLOT( OnFileSelectionWidgetAdded1( QWidget * ) )
   );
 
   SetupWidget( widget, FileSelectionInitializer( true  ) );            
@@ -373,7 +373,7 @@ InputFilenameListInitializer
 
   QObject::connect(
     widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
-    m_View, SLOT( OnFileSelectionWidgetAdded( QWidget * ) )
+    m_View, SLOT( OnFileSelectionWidgetAdded0( QWidget * ) )
   );
 
   SetupWidget( widget, FileSelectionInitializer( false ) );
@@ -408,7 +408,7 @@ InputVectorDataListInitializer
 
   QObject::connect(
     widget, SIGNAL( FileSelectionWidgetAdded( QWidget * ) ),
-    m_View, SLOT( OnFileSelectionWidgetAdded( QWidget * ) )
+    m_View, SLOT( OnFileSelectionWidgetAdded0( QWidget * ) )
   );
 
   SetupWidget( widget, FileSelectionInitializer( false ) );
