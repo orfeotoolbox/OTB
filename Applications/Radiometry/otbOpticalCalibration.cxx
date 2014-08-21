@@ -211,44 +211,84 @@ private:
     EnableParameter("clamp");
     MandatoryOff("clamp");
 
-    //Acquisition parameters (TOA)
-    AddParameter(ParameterType_Group,"acquisition","Acquisition parameters (TOA)");
-    SetParameterDescription("acquisition","This group allows to set the parameters related to the acquisition conditions.");
+    //Acquisition parameters
+    AddParameter(ParameterType_Group,"acqui","Acquisition parameters");
+    SetParameterDescription("acqui","This group allows to set the parameters related to the acquisition conditions.");
+    //Minute
+    AddParameter(ParameterType_Int, "acqui.minute",   "Minute");
+    SetParameterDescription("acqui.minute", "Minute (0-59)");
+    SetMinimumParameterIntValue("acqui.minute", 0);
+    SetMaximumParameterIntValue("acqui.minute", 59);
+    SetDefaultParameterInt("acqui.minute", 0);
+    //Hour
+    AddParameter(ParameterType_Int, "acqui.hour",   "Hour");
+    SetParameterDescription("acqui.hour", "Hour (0-23)");
+    SetMinimumParameterIntValue("acqui.hour", 0);
+    SetMaximumParameterIntValue("acqui.hour", 23);
+    SetDefaultParameterInt("acqui.hour", 12);
     //Day
-    AddParameter(ParameterType_Int, "acquisition.day",   "Day");
-    SetParameterDescription("acquisition.day", "Day (1-31)");
-    SetMinimumParameterIntValue("acquisition.day", 1);
-    SetMaximumParameterIntValue("acquisition.day", 31);
-    EnableParameter("acquisition.day");
-    MandatoryOn("acquisition.day");
+    AddParameter(ParameterType_Int, "acqui.day",   "Day");
+    SetParameterDescription("acqui.day", "Day (1-31)");
+    SetMinimumParameterIntValue("acqui.day", 1);
+    SetMaximumParameterIntValue("acqui.day", 31);
+    SetDefaultParameterInt("acqui.day", 1);
     //Month
-    AddParameter(ParameterType_Int, "acquisition.month",   "Month");
-    SetParameterDescription("acquisition.month", "Month (1-12)");
-    SetMinimumParameterIntValue("acquisition.month", 1);
-    SetMaximumParameterIntValue("acquisition.month", 12);
-    MandatoryOn("acquisition.month");
+    AddParameter(ParameterType_Int, "acqui.month",   "Month");
+    SetParameterDescription("acqui.month", "Month (1-12)");
+    SetMinimumParameterIntValue("acqui.month", 1);
+    SetMaximumParameterIntValue("acqui.month", 12);
+    SetDefaultParameterInt("acqui.month", 1);
+    //Year
+    AddParameter(ParameterType_Int, "acqui.year",   "Year");
+    SetParameterDescription("acqui.year", "Year");
+    SetDefaultParameterInt("acqui.year", 2000);
     //Flux normalization coefficient
-    AddParameter(ParameterType_Float, "acquisition.fluxnormalizationcoefficient",   "Flux Normalization");
-    SetParameterDescription("acquisition.fluxnormalizationcoefficient", "Flux Normalization Coefficient");
-    SetMinimumParameterFloatValue("acquisition.fluxnormalizationcoefficient", 0.);
-    MandatoryOff("acquisition.fluxnormalizationcoefficient");
+    AddParameter(ParameterType_Float, "acqui.fluxnormcoeff",   "Flux Normalization");
+    SetParameterDescription("acqui.fluxnormcoeff", "Flux Normalization Coefficient");
+    SetMinimumParameterFloatValue("acqui.fluxnormcoeff", 0.);
+    MandatoryOff("acqui.fluxnormcoeff");
+
+    AddParameter(ParameterType_Group,"acqui.sun","Sun angles");
+    SetParameterDescription("acqui.sun","This group contains the sun angles");
     //Sun elevation angle
-    AddParameter(ParameterType_Float, "acquisition.sunelevationangle",   "Sun elevation angle (°)");
-    SetParameterDescription("acquisition.sunelevationangle", "Sun elevation angle");
-    SetMinimumParameterFloatValue("acquisition.sunelevationangle", 0.);
-    SetMaximumParameterFloatValue("acquisition.sunelevationangle", 120.);
-    MandatoryOn("acquisition.sunelevationangle");
+    AddParameter(ParameterType_Float, "acqui.sun.elev",   "Sun elevation angle (°)");
+    SetParameterDescription("acqui.sun.elev", "Sun elevation angle (in degrees)");
+    SetMinimumParameterFloatValue("acqui.sun.elev", 0.);
+    SetMaximumParameterFloatValue("acqui.sun.elev", 120.);
+    SetDefaultParameterFloat("acqui.sun.elev",90.0);
+    //Sun azimuth angle
+    AddParameter(ParameterType_Float, "acqui.sun.azim",   "Sun azimuth angle (°)");
+    SetParameterDescription("acqui.sun.azim", "Sun azimuth angle (in degrees)");
+    SetMinimumParameterFloatValue("acqui.sun.azim", 0.);
+    SetMaximumParameterFloatValue("acqui.sun.azim", 360.);
+    SetDefaultParameterFloat("acqui.sun.azim",0.0);
+
+    AddParameter(ParameterType_Group,"acqui.view","Viewing angles");
+    SetParameterDescription("acqui.view","This group contains the sensor viewing angles");
+    //Viewing elevation angle
+    AddParameter(ParameterType_Float, "acqui.view.elev",   "Viewing elevation angle (°)");
+    SetParameterDescription("acqui.view.elev", "Viewing elevation angle (in degrees)");
+    SetMinimumParameterFloatValue("acqui.view.elev", 0.);
+    SetMaximumParameterFloatValue("acqui.view.elev", 120.);
+    SetDefaultParameterFloat("acqui.view.elev",90.0);
+    //Viewing azimuth angle
+    AddParameter(ParameterType_Float, "acqui.view.azim",   "Viewing azimuth angle (°)");
+    SetParameterDescription("acqui.view.azim", "Viewing azimuth angle (in degrees)");
+    SetMinimumParameterFloatValue("acqui.view.azim", 0.);
+    SetMaximumParameterFloatValue("acqui.view.azim", 360.);
+    SetDefaultParameterFloat("acqui.view.azim",0.0);
+
     //Gain & bias
-    AddParameter(ParameterType_InputFilename, "acquisition.gainbias",   "Gains | biases");
-    SetParameterDescription("acquisition.gainbias", "Gains | biases");
-    MandatoryOn("acquisition.gainbias");
+    AddParameter(ParameterType_InputFilename, "acqui.gainbias",   "Gains | biases");
+    SetParameterDescription("acqui.gainbias", "Gains | biases");
+    MandatoryOff("acqui.gainbias");
     //Solar illuminations
-    AddParameter(ParameterType_InputFilename, "acquisition.solarilluminations",   "Solar illuminations");
-    SetParameterDescription("acquisition.solarilluminations", "Solar illuminations (one value per band)");
-    MandatoryOn("acquisition.solarilluminations");
+    AddParameter(ParameterType_InputFilename, "acqui.solarilluminations",   "Solar illuminations");
+    SetParameterDescription("acqui.solarilluminations", "Solar illuminations (one value per band)");
+    MandatoryOff("acqui.solarilluminations");
 
     //Atmospheric parameters (TOC)
-    AddParameter(ParameterType_Group,"atmo","Atmospheric parameters (TOC)");
+    AddParameter(ParameterType_Group,"atmo","Atmospheric parameters (for TOC)");
     SetParameterDescription("atmo","This group allows to set the atmospheric parameters.");
     AddParameter(ParameterType_Choice,   "atmo.aerosol", "Aerosol Model");
     AddChoice("atmo.aerosol.noaersol",    "No Aerosol Model");
@@ -344,6 +384,7 @@ private:
            ossOutput << "Parameters extract from input image: "<< std::endl
                      << "\tAcquisition Day: " << lImageMetadataInterface->GetDay() << std::endl
                      << "\tAcquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl
+                     << "\tAcquisition Year: " << lImageMetadataInterface->GetYear() << std::endl
                      << "\tAcquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;
          
            vlvector = lImageMetadataInterface->GetPhysicalGain();
@@ -357,40 +398,97 @@ private:
            for(unsigned int k=0; k<vlvector.Size(); k++)
              ossOutput << vlvector[k] << " ";
            ossOutput << std::endl;
-           MandatoryOff("acquisition.gainbias");
+           DisableParameter("acqui.gainbias");
+           MandatoryOff("acqui.gainbias");
 
            vlvector = lImageMetadataInterface->GetSolarIrradiance();
            ossOutput << "\tSolar Irradiance (per band): ";
            for(unsigned int k=0; k<vlvector.Size(); k++)
              ossOutput << vlvector[k] << " ";
            ossOutput << std::endl;
-           MandatoryOff("acquisition.solarilluminations");
+           DisableParameter("acqui.solarilluminations");
+           MandatoryOff("acqui.solarilluminations");
 
-           if (HasUserValue("acquisition.day"))
+           if (HasUserValue("acqui.minute"))
+             ossOutput << "Acquisition Minute already set by user: no overload" <<std::endl;
+           else
+           {
+             SetParameterInt("acqui.minute", lImageMetadataInterface->GetMinute());
+           }
+
+           if (HasUserValue("acqui.hour"))
+             ossOutput << "Acquisition Hour already set by user: no overload" <<std::endl;
+           else
+           {
+             SetParameterInt("acqui.hour", lImageMetadataInterface->GetHour());
+           }
+
+           if (HasUserValue("acqui.day"))
              ossOutput << "Acquisition Day already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acquisition.day", lImageMetadataInterface->GetDay());
-             if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
-               DisableParameter("acquisition.day");
+             SetParameterInt("acqui.day", lImageMetadataInterface->GetDay());
+             if (IsParameterEnabled("acqui.fluxnormcoeff"))
+               DisableParameter("acqui.day");
            }
-         
-           if (HasUserValue("acquisition.month"))
+
+           if (HasUserValue("acqui.month"))
              ossOutput << "Acquisition Month already set by user: no overload" <<std::endl;
            else
            {
-             SetParameterInt("acquisition.month", lImageMetadataInterface->GetMonth());
-             if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
-               DisableParameter("acquisition.month");
+             SetParameterInt("acqui.month", lImageMetadataInterface->GetMonth());
+             if (IsParameterEnabled("acqui.fluxnormcoeff"))
+               DisableParameter("acqui.month");
            }
 
-           if (HasUserValue("acquisition.sunelevationangle"))
+           if (HasUserValue("acqui.year"))
+             ossOutput << "Acquisition Year already set by user: no overload" <<std::endl;
+           else
+           {
+             SetParameterInt("acqui.year", lImageMetadataInterface->GetYear());
+           }
+
+           if (HasUserValue("acqui.sun.elev"))
              ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" <<std::endl;
            else
-             SetParameterFloat("acquisition.sunelevationangle", lImageMetadataInterface->GetSunElevation());
+             SetParameterFloat("acqui.sun.elev", lImageMetadataInterface->GetSunElevation());
+
+           if (HasUserValue("acqui.sun.azim"))
+             ossOutput << "Acquisition Sun Azimuth Angle already set by user: no overload" <<std::endl;
+           else
+             SetParameterFloat("acqui.sun.azim", lImageMetadataInterface->GetSunAzimuth());
+
+           if (HasUserValue("acqui.view.elev"))
+             ossOutput << "Acquisition Viewing Elevation Angle already set by user: no overload" <<std::endl;
+           else
+             SetParameterFloat("acqui.view.elev", lImageMetadataInterface->GetSatElevation());
+
+           if (HasUserValue("acqui.view.azim"))
+             ossOutput << "Acquisition Viewing Azimuth Angle already set by user: no overload" <<std::endl;
+           else
+             SetParameterFloat("acqui.view.azim", lImageMetadataInterface->GetSatAzimuth());
+
+           // Set default value so that they are stored somewhere even if
+           // they are overloaded by user values
+           SetDefaultParameterInt("acqui.minute", lImageMetadataInterface->GetMinute());
+           SetDefaultParameterInt("acqui.hour", lImageMetadataInterface->GetHour());
+           SetDefaultParameterInt("acqui.day", lImageMetadataInterface->GetDay());
+           SetDefaultParameterInt("acqui.month", lImageMetadataInterface->GetMonth());
+           SetDefaultParameterInt("acqui.year", lImageMetadataInterface->GetYear());
+           SetDefaultParameterFloat("acqui.sun.elev", lImageMetadataInterface->GetSunElevation());
+           SetDefaultParameterFloat("acqui.sun.azim", lImageMetadataInterface->GetSunAzimuth());
+           SetDefaultParameterFloat("acqui.view.elev", lImageMetadataInterface->GetSatElevation());
+           SetDefaultParameterFloat("acqui.view.azim", lImageMetadataInterface->GetSatAzimuth());
         }
         else
         {
+          // Switch gain , bias and solar illumination to mandatory since
+          // they are not given in the image loaded
+          EnableParameter("acqui.gainbias");
+          EnableParameter("acqui.solarilluminations");
+          MandatoryOn("acqui.gainbias");
+          MandatoryOn("acqui.solarilluminations");
+
           ossOutput << "Sensor unknown!"<< std::endl;
           ossOutput << "Additional parameters are necessary, please provide them (cf. documentation)!"<< std::endl;
 
@@ -407,27 +505,27 @@ private:
       }
     }
 
-    // Manage the case where fluxnormalizationcoefficient is modified by user
-    if (m_currentEnabledStateOfFluxParam != IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
+    // Manage the case where fluxnormcoeff is modified by user
+    if (m_currentEnabledStateOfFluxParam != IsParameterEnabled("acqui.fluxnormcoeff"))
     {
-      if (IsParameterEnabled("acquisition.fluxnormalizationcoefficient"))
+      if (IsParameterEnabled("acqui.fluxnormcoeff"))
       {
         ossOutput << std::endl << "Flux Normalization Coefficient will be used" << std::endl;
-        DisableParameter("acquisition.day");
-        DisableParameter("acquisition.month");
-        MandatoryOff("acquisition.day");
-        MandatoryOff("acquisition.month");
-        MandatoryOn("acquisition.fluxnormalizationcoefficient");
+        DisableParameter("acqui.day");
+        DisableParameter("acqui.month");
+        MandatoryOff("acqui.day");
+        MandatoryOff("acqui.month");
+        MandatoryOn("acqui.fluxnormcoeff");
         m_currentEnabledStateOfFluxParam = true;
       }
       else
       {
         ossOutput << std::endl << "Day and Month will be used" << std::endl;
-        EnableParameter("acquisition.day");
-        EnableParameter("acquisition.month");
-        MandatoryOn("acquisition.day");
-        MandatoryOn("acquisition.month");
-        MandatoryOff("acquisition.fluxnormalizationcoefficient");
+        EnableParameter("acqui.day");
+        EnableParameter("acqui.month");
+        MandatoryOn("acqui.day");
+        MandatoryOn("acqui.month");
+        MandatoryOff("acqui.fluxnormcoeff");
         m_currentEnabledStateOfFluxParam = false;
       }
     }
@@ -450,34 +548,42 @@ private:
     m_ScaleFilter = ScaleFilterOutDoubleType::New();
     m_ScaleFilter->InPlaceOn();
     m_ClampFilter = ClampFilterType::New();
+    m_paramAcqui = AcquiCorrectionParametersType::New();
+    m_paramAtmo = AtmoCorrectionParametersType::New();
 
     FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
 
-    // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters
-    if ( !IsParameterEnabled("acquisition.fluxnormalizationcoefficient") )
-    {
-      m_LuminanceToReflectanceFilter->SetDay(GetParameterInt("acquisition.day"));
-      m_LuminanceToReflectanceFilter->SetMonth(GetParameterInt("acquisition.month"));
+    // Prepare a metadata interface on the input image.
+    itk::MetaDataDictionary           dict = inImage->GetMetaDataDictionary();
+    OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+    std::string IMIName( lImageMetadataInterface->GetNameOfClass() );
+    std::string IMIOptDfltName("OpticalDefaultImageMetadataInterface");
 
-      m_ReflectanceToLuminanceFilter->SetDay(GetParameterInt("acquisition.day"));
-      m_ReflectanceToLuminanceFilter->SetMonth(GetParameterInt("acquisition.month"));
+    // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters
+    if ( !IsParameterEnabled("acqui.fluxnormcoeff") )
+    {
+      m_LuminanceToReflectanceFilter->SetDay(GetParameterInt("acqui.day"));
+      m_LuminanceToReflectanceFilter->SetMonth(GetParameterInt("acqui.month"));
+
+      m_ReflectanceToLuminanceFilter->SetDay(GetParameterInt("acqui.day"));
+      m_ReflectanceToLuminanceFilter->SetMonth(GetParameterInt("acqui.month"));
     }
     else
     {
-      m_LuminanceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
+      m_LuminanceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
 
-      m_ReflectanceToLuminanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acquisition.fluxnormalizationcoefficient"));
+      m_ReflectanceToLuminanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
     }
 
     // Set Sun Elevation Angle to corresponding filters
-    m_LuminanceToReflectanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
-    m_ReflectanceToLuminanceFilter->SetElevationSolarAngle(GetParameterFloat("acquisition.sunelevationangle"));
+    m_LuminanceToReflectanceFilter->SetElevationSolarAngle(GetParameterFloat("acqui.sun.elev"));
+    m_ReflectanceToLuminanceFilter->SetElevationSolarAngle(GetParameterFloat("acqui.sun.elev"));
 
     // Set Gain and Bias to corresponding filters
-    if (HasValue("acquisition.gainbias"))
+    if (IsParameterEnabled("acqui.gainbias") && HasValue("acqui.gainbias"))
     {
       // Try to retrieve information from file provided by user
-      string filename(GetParameterString("acquisition.gainbias"));
+      string filename(GetParameterString("acqui.gainbias"));
       
       std::ifstream file(filename.c_str(), std::ios::in);
       if(file)
@@ -528,9 +634,6 @@ private:
     else
     {
       //Try to retrieve information from image metadata
-      itk::MetaDataDictionary           dict = inImage->GetMetaDataDictionary();
-      OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
-      string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
       if (IMIName != IMIOptDfltName)
       {
         m_ImageToLuminanceFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
@@ -544,17 +647,22 @@ private:
     }
 
     // Set Solar Illumination to corresponding filters
-    if (HasValue("acquisition.solarilluminations"))
+    if (IsParameterEnabled("acqui.solarilluminations") && HasValue("acqui.solarilluminations"))
     {
       // Try to retrieve information from file provided by user
-      string filename(GetParameterString("acquisition.solarilluminations"));
+      string filename(GetParameterString("acqui.solarilluminations"));
       
       std::ifstream file(filename.c_str(), std::ios::in);
       if(file)
       {
-        string line;
+        std::string line;
         while (getline(file, line))
         {
+          // clean line
+          std::string::size_type startPos = line.find_first_not_of(std::string(" \t\n\r"));
+          if (startPos == std::string::npos) continue;
+
+          line = line.substr(startPos);
           if (line[0]!='#')
           {
             std::vector<double> values;
@@ -582,9 +690,6 @@ private:
     else
     {
       //Try to retrieve information from image metadata
-      itk::MetaDataDictionary           dict = inImage->GetMetaDataDictionary();
-      OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
-      string IMIName( lImageMetadataInterface->GetNameOfClass() ) , IMIOptDfltName("OpticalDefaultImageMetadataInterface");
       if (IMIName != IMIOptDfltName)
       {
         m_LuminanceToReflectanceFilter->SetSolarIllumination(lImageMetadataInterface->GetSolarIrradiance());
@@ -593,6 +698,15 @@ private:
       else
         itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! ");
     }
+
+    // Set acquisition parameters
+    m_paramAcqui->SetYear(GetParameterInt("acqui.year"));
+    m_paramAcqui->SetMonth(GetParameterInt("acqui.month"));
+    m_paramAcqui->SetDay(GetParameterInt("acqui.day"));
+    m_paramAcqui->SetSolarZenithalAngle(90.0 - GetParameterFloat("acqui.sun.elev"));
+    m_paramAcqui->SetSolarAzimutalAngle(GetParameterFloat("acqui.sun.azim"));
+    m_paramAcqui->SetViewingZenithalAngle(90.0 - GetParameterFloat("acqui.view.elev"));
+    m_paramAcqui->SetViewingAzimutalAngle(GetParameterFloat("acqui.view.azim"));
 
     switch ( GetParameterInt("level") )
     {
@@ -627,15 +741,8 @@ private:
         m_ImageToLuminanceFilter->SetInput(inImage);
         m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
         m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
-         
-        m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
-        m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
-        m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
-        m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
-
-        //m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters(); chris
-        m_paramAcqui = m_ReflectanceToSurfaceReflectanceFilter->GetAcquiCorrectionParameters();
-        m_paramAtmo  = m_ReflectanceToSurfaceReflectanceFilter->GetAtmoCorrectionParameters();
+        m_ReflectanceToSurfaceReflectanceFilter->SetAcquiCorrectionParameters(m_paramAcqui);
+        m_ReflectanceToSurfaceReflectanceFilter->SetAtmoCorrectionParameters(m_paramAtmo);
 
         //AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
 
@@ -665,19 +772,36 @@ private:
         if (IsParameterEnabled("atmo.rsr"))
         {
           m_paramAcqui->LoadFilterFunctionValue(GetParameterString("atmo.rsr"));
-          m_ReflectanceToSurfaceReflectanceFilter->SetAcquiCorrectionParameters(m_paramAcqui);
-          //m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("atmo.rsr")); chris
         }
+        else if (IMIName != IMIOptDfltName)
+        {
+          if (lImageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
+            m_paramAcqui->SetWavelengthSpectralBand(lImageMetadataInterface->GetSpectralSensitivity());
+        }
+        // Check that m_paramAcqui contains a real spectral profile.
+        if (m_paramAcqui->GetWavelengthSpectralBand()->Capacity() == 0)
+          {
+          otbAppLogWARNING("No relative spectral response found, using "
+                           "default response (constant between 0.3 and 1.0µm)");
+          AcquiCorrectionParametersType::WavelengthSpectralBandVectorType spectralDummy;
+          spectralDummy->Clear();
+          for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
+            {
+              spectralDummy->PushBack(FilterFunctionValues::New());
+            }
+          }
 
         // Aeronet file
         if (IsParameterEnabled("atmo.aeronet"))
         {
-          GetLogger()->Info("Use aeronet file to retrieve atmospheric parameters");
-          itk::MetaDataDictionary dict = inImage->GetMetaDataDictionary();
-          OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
-
-          m_paramAtmo->UpdateAeronetData(GetParameterString("atmo.aeronet"), imageMetadataInterface->GetYear(), 0, 0, imageMetadataInterface->GetHour(), imageMetadataInterface->GetMinute(), 0.4);
-          //m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("atmo.aeronet")); chris
+          GetLogger()->Info("Use Aeronet file to retrieve atmospheric parameters");
+          m_paramAtmo->SetAeronetFileName(GetParameterString("atmo.aeronet"));
+          m_paramAtmo->UpdateAeronetData(GetParameterInt("acqui.year"),
+                                         GetParameterInt("acqui.month"),
+                                         GetParameterInt("acqui.day"),
+                                         GetParameterInt("acqui.hour"),
+                                         GetParameterInt("acqui.minute"),
+                                         0.4);
         }
 
         m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
@@ -785,9 +909,8 @@ private:
   LuminanceToImageImageFilterType::Pointer                m_LuminanceToImageFilter;
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer m_ReflectanceToSurfaceReflectanceFilter;
   ScaleFilterOutDoubleType::Pointer                       m_ScaleFilter;
-  //AtmosphericCorrectionParametersType::Pointer            m_AtmosphericParam; chris
-  AtmoCorrectionParametersPointerType                            m_paramAtmo;
-  AcquiCorrectionParametersPointerType                           m_paramAcqui;
+  AtmoCorrectionParametersPointerType                     m_paramAtmo;
+  AcquiCorrectionParametersPointerType                    m_paramAcqui;
   ClampFilterType::Pointer                                m_ClampFilter;
 
   SurfaceAdjacencyEffectCorrectionSchemeFilterType::Pointer m_SurfaceAdjacencyEffectCorrectionSchemeFilter;
