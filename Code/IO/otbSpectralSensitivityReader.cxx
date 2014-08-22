@@ -136,6 +136,14 @@ SpectralSensitivityReader
 
   while (std::getline(file, line))
     {
+    // Replace any tabulation by a space
+    std::string::size_type tabpos = line.find('\t');
+    while (tabpos != std::string::npos)
+      {
+      line.at(tabpos) = ' ';
+      tabpos = line.find('\t');
+      }
+
     // Replace multiple spaces by a unique space
     std::unique(line.begin(), line.end(), SpectralSensitivityReader::BothAre(' '));
 
