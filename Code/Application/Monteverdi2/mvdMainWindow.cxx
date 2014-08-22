@@ -781,7 +781,7 @@ MainWindow
   m_QuicklookViewDock = AddWidgetToDock(
     CreateQuicklookViewWidget( m_ImageView ),
     "QUICKLOOK_VIEW",
-    tr( "Quicklook view (Ice)" ),
+    tr( "Quicklook view" ),
     Qt::RightDockWidgetArea
   );
 
@@ -858,7 +858,7 @@ MainWindow
   // Add first tab: image-view.
   int index = m_CentralTabWidget->addTab(
     m_ImageView,
-    tr( "Image view (Ice)" )
+    tr( "Image view" )
   );
 
   tabBar->setTabButton( index, QTabBar::RightSide, 0);
