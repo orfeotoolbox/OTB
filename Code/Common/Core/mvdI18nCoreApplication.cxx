@@ -45,10 +45,10 @@
 #include "mvdVectorImageModel.h"
 
 
-#define FORCE_QDEBUG 1
-#define FORCE_QWARNING 1
-#define FORCE_QCRITICAL 1
-#define FORCE_QFATAL 1
+#define FORCE_QDEBUG 0
+#define FORCE_QWARNING 0
+#define FORCE_QCRITICAL 0
+#define FORCE_QFATAL 0
 
 
 namespace mvd
