@@ -507,6 +507,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
         <source>Gamma:</source>
         <translation>Gamma :</translation>
     </message>
+    <message>
+        <source>Gamma: </source>
+        <translation>Gamma : </translation>
+    </message>
 </context>
 <context>
     <name>mvd::ColorSetupController</name>
@@ -693,6 +697,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
         <source>Failed to remove &apos;%1&apos;.</source>
         <translation>Impossible de supprimer &apos;%1&apos;.</translation>
     </message>
+    <message>
+        <source>New group</source>
+        <translation>Nouveau groupe</translation>
+    </message>
 </context>
 <context>
     <name>mvd::DatabaseBrowserWidget</name>
@@ -716,6 +724,26 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
     <message>
         <source>Search Dataset ...</source>
         <translation type="obsolete">Rechercher un jeu de données...</translation>
+    </message>
+    <message>
+        <source>Search Dataset...</source>
+        <translation>Rechercher jeu de données...</translation>
+    </message>
+</context>
+<context>
+    <name>mvd::DatabaseBrowserWidgetTest</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulaire</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source></source>
+        <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
+        <translation></translation>
     </message>
     <message>
         <source>Search Dataset...</source>
@@ -986,7 +1014,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
     <name>mvd::DatasetPropertiesWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source>Property</source>
@@ -1138,7 +1166,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
     <name>mvd::HistogramWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source>Zoom to full intensity range.</source>
@@ -1692,7 +1720,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Quicklook view</source>
-        <translation type="obsolete">Aperçu</translation>
+        <translation>Aperçu</translation>
     </message>
     <message>
         <source>Color setup</source>
@@ -1704,7 +1732,7 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Image view</source>
-        <translation type="obsolete">Vue image</translation>
+        <translation>Vue image</translation>
     </message>
     <message>
         <source>Tab cannot be closed while OTB application is running.</source>
@@ -1744,11 +1772,15 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Quicklook view (Ice)</source>
-        <translation>Apperçu (Ice)</translation>
+        <translation type="obsolete">Apperçu (Ice)</translation>
     </message>
     <message>
         <source>Image view (Ice)</source>
-        <translation>Vue image (Ice)</translation>
+        <translation type="obsolete">Vue image (Ice)</translation>
+    </message>
+    <message>
+        <source>Database browser (test)</source>
+        <translation>Navigateur de base de données</translation>
     </message>
 </context>
 <context>
@@ -1976,7 +2008,7 @@ Merci d&apos;en sélectionner un autre.</translation>
     <name>mvd::SearchableTreeWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source></source>

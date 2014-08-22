@@ -1199,7 +1199,7 @@ DatabaseBrowserController
 
   // Add group.
   db->InsertNode(
-    "New group",
+    tr( "New group" ),
     parentItem->GetId().toLongLong()
   );
 

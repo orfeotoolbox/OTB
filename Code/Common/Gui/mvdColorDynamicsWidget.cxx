@@ -16,8 +16,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "Gui/mvdColorDynamicsWidget.h"
-#include "Gui/ui_mvdColorDynamicsWidget.h"
+#include "mvdColorDynamicsWidget.h"
+#include "ui_mvdColorDynamicsWidget.h"
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -442,7 +442,7 @@ ColorDynamicsWidget
   emit GammaValueChanged( GetGamma() );
 
   //Display Gamma value as a tooltip when value changed 
-  QToolTip::showText(mapToGlobal(m_UI->gammaSlider->pos()),tr("Gamma : ") % QString::number(GetGamma()) );
+  QToolTip::showText(mapToGlobal(m_UI->gammaSlider->pos()),tr("Gamma: ") % QString::number(GetGamma()) );
 }
 
 } // end namespace 'mvd'
