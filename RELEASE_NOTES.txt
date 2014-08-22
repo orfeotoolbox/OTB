@@ -4,12 +4,19 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/03/12)
 * Library:
 
   * Core:
+    * Major performance improvment of Haralick Texture computation (6 to 10 times
+      faster)
+    * Add new texture feature (dissimilarity) in ScalarImageToAdvancedTexturesFilter
+    * Improvments of Simulation code in order to be able to use the solar
+      irradiance information when working with spectral responses for simulations.
     * Support Jpeg2000 images through GDAL drivers (can use OpenJpeg, Kakadu, ECW)
     * Reading/Writing RPC coefficients in GeoTIFF tags
     * Cleaning of ITK pending patches
+    * Update internal ITK to 4.6.0
     * Support SPOT6 metadata
     * Integrate improvements from Monteverdi2
     * Support clang 3.5.1
+    * Support MinGW compiler
     * API change on the TOC calibration filters, previous classes were not
       fully functional. Now supports any correction parameters set by user.
       See Examples/Radiometry/AtmosphericCorrectionSequencement.cxx for
