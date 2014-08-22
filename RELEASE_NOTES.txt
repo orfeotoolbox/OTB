@@ -4,6 +4,10 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/03/12)
 * Library:
 
   * Core:
+    * Major compliance upgrade with index coordinates convention between OTB,
+      GDAL and OSSIM. OTB uses pixel centered convention, whereas GDAL and
+      OSSIM use corner pixel convention. More details on JIRA #647 and Mantis
+      #942
     * Major performance improvment of Haralick Texture computation (6 to 10 times
       faster)
     * Add new texture feature (dissimilarity) in ScalarImageToAdvancedTexturesFilter
