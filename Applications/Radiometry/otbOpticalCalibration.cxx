@@ -332,10 +332,20 @@ private:
 
     // Window radius for adjacency effects correction
     AddParameter(ParameterType_Int, "atmo.radius", "Window radius (adjacency effects)");
-    SetParameterDescription("atmo.radius","Window radius for adjacency effects corrections");
+    SetParameterDescription("atmo.radius","Window radius for adjacency effects corrections"
+                            "Setting this parameters will enable the correction of"
+                            "adjacency effects");
     MandatoryOff("atmo.radius");
     SetDefaultParameterInt("atmo.radius", 2);
     DisableParameter("atmo.radius");
+
+    // Pixel spacing
+    AddParameter(ParameterType_Float, "atmo.pixsize", "Pixel size (in km)");
+    SetParameterDescription("atmo.pixsize", "Pixel size (in km )used to"
+                            "compute adjacency effects, it doesn't have to"
+                            "match the image spacing");
+    SetMinimumParameterFloatValue("atmo.pixsize",0.0);
+    MandatoryOff("atmo.pixsize");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
@@ -502,6 +512,18 @@ private:
           "- solar illuminationss for each band (passed by a file, see documentation).\n"
           "-------------------------------------------------------------\n"); */
         }
+      //Estimate ground spacing in kilometers
+      GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
+      groundSpacing->SetInputImage(inImage);
+      IndexType  index;
+      vnl_random rand;
+      index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
+      index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
+      FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
+      const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
+      SetDefaultParameterFloat("atmo.pixsize",spacingInKilometers);
+      if (!HasUserValue("atmo.pixsize"))
+        SetParameterFloat("atmo.pixsize",spacingInKilometers);
       }
     }
 
@@ -592,6 +614,11 @@ private:
         unsigned int numLine = 0;
         while (getline(file, line))
         {
+          // clean line
+          std::string::size_type startPos = line.find_first_not_of(std::string(" \t\n\r"));
+          if (startPos == std::string::npos) continue;
+
+          line = line.substr(startPos);
           if (line[0]!='#')
           {
             numLine++;
@@ -775,11 +802,11 @@ private:
         }
         else if (IMIName != IMIOptDfltName)
         {
-          if (lImageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
+          if (lImageMetadataInterface->GetSpectralSensitivity()->Size() > 0)
             m_paramAcqui->SetWavelengthSpectralBand(lImageMetadataInterface->GetSpectralSensitivity());
         }
         // Check that m_paramAcqui contains a real spectral profile.
-        if (m_paramAcqui->GetWavelengthSpectralBand()->Capacity() == 0)
+        if (m_paramAcqui->GetWavelengthSpectralBand()->Size() == 0)
           {
           otbAppLogWARNING("No relative spectral response found, using "
                            "default response (constant between 0.3 and 1.0µm)");
@@ -804,10 +831,10 @@ private:
                                          0.4);
         }
 
+        m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
         m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(false);
         m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(true);
         m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
-        m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
         m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
         // std::ostringstream oss_atmo;
@@ -827,6 +854,7 @@ private:
         bool adjComputation=false;
         if (IsParameterEnabled("atmo.radius"))
         {
+          otbAppLogINFO("Compute adjacency effects");
           adjComputation=true;
           //Compute adjacency effect
           m_SurfaceAdjacencyEffectCorrectionSchemeFilter
@@ -839,27 +867,9 @@ private:
           m_SurfaceAdjacencyEffectCorrectionSchemeFilter->SetZenithalViewingAngle(
             m_paramAcqui->GetViewingZenithalAngle());
           m_SurfaceAdjacencyEffectCorrectionSchemeFilter->SetWindowRadius(GetParameterInt("atmo.radius"));
-
-          //Estimate ground spacing in kilometers
-          GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
-
-          groundSpacing->SetInputImage(inImage);
-          IndexType  index;
-          vnl_random rand;
-
-          index[0] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
-          index[1] = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
-          FloatType tmpSpacing = groundSpacing->EvaluateAtIndex(index);
-
-          const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
-            // std::ostringstream oss2;
-            //  oss2.str("");
-            //  oss2 << spacingInKilometers;
-            //  GetLogger()->Info("Spacing in kilometers " + oss2.str());
           m_SurfaceAdjacencyEffectCorrectionSchemeFilter->
-            SetPixelSpacingInKilometers(spacingInKilometers);
+            SetPixelSpacingInKilometers(GetParameterFloat("atmo.pixsize"));
 
-        
           m_SurfaceAdjacencyEffectCorrectionSchemeFilter->UpdateOutputInformation();
         }
 
