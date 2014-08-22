@@ -80,7 +80,7 @@ public:
   void SetNumberOfDirections(unsigned int D)
   {
     m_NumberOfDirections = D;
-    m_DirectionStep = CONST_2PI / static_cast<double>(D);
+    m_DirectionStep = CONST_PI / static_cast<double>(D);
   }
   void SetDirectionStep(double step){ m_DirectionStep = step; }
   void SetSelectedTextures(std::vector<bool> vect)
@@ -123,15 +123,21 @@ public:
     for (unsigned int d = 0; d < m_NumberOfDirections; d++)
       {
       // Current angle direction
-      angle = m_Alpha * static_cast<double>(d);
+      angle = m_DirectionStep * static_cast<double>(d);
 
-      // last offset in the diraction respecting spatial threshold
+      // last offset in the direction respecting spatial threshold
       off[0] = static_cast<int>(vcl_floor(SpatialThresholdDouble * vcl_cos(angle) + 0.5));
       off[1] = static_cast<int>(vcl_floor(SpatialThresholdDouble * vcl_sin(angle) + 0.5));
-      // last indices in the diration respecting spectral threshold
+      // last indices in the direction respecting spectral threshold
       OffsetType offEnd = this->FindLastOffset(it, off);
-      // computes distance = dist between the 2 segment point. One of them is the center pixel -> (0, 0)
-      dist = vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]), 2));
+
+      // Check the opposite side
+      off[0] *= -1.0;
+      off[1] *= -1.0;
+      OffsetType offStart = this->FindLastOffset(it, off);
+
+      // computes distance = dist between the 2 segment point.
+      dist = vcl_sqrt(vcl_pow(static_cast<double>(offEnd[0]-offStart[0]), 2) + vcl_pow(static_cast<double>(offEnd[1]-offStart[1]), 2));
 
       // for length computation
       if (m_SelectedTextures[0] == true) if (dist > length) length = dist;

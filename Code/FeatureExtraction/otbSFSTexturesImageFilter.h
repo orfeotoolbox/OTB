@@ -145,7 +145,7 @@ public:
   void SetNumberOfDirections(unsigned int D)
   {
     this->GetFunctor().SetNumberOfDirections(D);
-    double step = CONST_2PI / static_cast<double>(D);
+    double step = CONST_PI / static_cast<double>(D);
     this->GetFunctor().SetDirectionStep(step);
   }
   unsigned int GetNumberOfDirections()
