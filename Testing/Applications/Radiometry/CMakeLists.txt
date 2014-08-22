@@ -1,35 +1,46 @@
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_UnknownSensor
                      APP  OpticalCalibration
                      OPTIONS 
-			     -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif?&skipgeom=true 
-			     -out ${TEMP}/apTvRaOpticalCalibration_QB-XS_UnknownSensor_test.tif 
-			     -level toa 
-			     -acquisition.gainbias ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt 
-			     -acquisition.day 1
-			     -acquisition.month 4 
-			     -acquisition.sunelevationangle 48.6
-			     -acquisition.solarilluminations ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorSolarIllumations.txt
-			     -milli true 
-			     -clamp false
+           -in ${EXAMPLEDATA}/Romania_Extract.tif
+           -out ${TEMP}/apTvRaOpticalCalibration_Spot4_UnknownSensor_test.tif
+           -level toc
+           -acqui.gainbias ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorGainsBiases2.txt
+           -acqui.day 4
+           -acqui.month 12
+           -acqui.sun.elev 62.7
+           -acqui.sun.azim 152.7
+           -acqui.view.elev 87.5
+           -acqui.view.azim -77.0
+           -acqui.solarilluminations ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorSolarIllumations2.txt
+           -atmo.rsr ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorRSR.txt
+           -atmo.pressure 1013.0
+           -atmo.wa 2.48134
+           -atmo.oz 0.34400
+           -atmo.aerosol continental
+           -atmo.opt 0.199854
+           -atmo.radius 2
+           -atmo.pixsize 0.02
+           -milli false
+           -clamp false
                      VALID   --compare-image ${EPSILON_6}
-                             ${BASELINE}/apTvRaOpticalCalibration_QB-XS_UnknownSensor.tif
-                             ${TEMP}/apTvRaOpticalCalibration_QB-XS_UnknownSensor_test.tif )
+                             ${OTB_DATA_ROOT}/Baseline/Examples/Radiometry/Example_RomaniaAtmosphericCorrectionSequencement.tif
+                             ${TEMP}/apTvRaOpticalCalibration_Spot4_UnknownSensor_test.tif )
 
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Reverse_UnknownSensor
                      APP  OpticalCalibration
                      OPTIONS 
-			     -in ${BASELINE}/apTvRaOpticalCalibration_QB-XS_UnknownSensor.tif 
+			     -in ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
 			     -out ${TEMP}/apTvRaOpticalCalibration_Rev_QB-XS_UnknownSensor_test.tif
 			     -level toatoim 
-			     -acquisition.gainbias ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt
-			     -acquisition.day 1
-			     -acquisition.month 4 
-			     -acquisition.sunelevationangle 48.6 
-			     -acquisition.solarilluminations ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorSolarIllumations.txt
-		             -milli true
+			     -acqui.gainbias ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorGainsBiases.txt
+			     -acqui.day 1
+			     -acqui.month 4
+			     -acqui.sun.elev 48.6
+			     -acqui.solarilluminations ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorSolarIllumations.txt
+		       -milli false
 			     -clamp false
                      VALID   --compare-image ${EPSILON_6}
-                             ${BASELINE}/apTvRaOpticalCalibration_Rev_QB-XS_UnknownSensor.tif 
+                             ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
                              ${TEMP}/apTvRaOpticalCalibration_Rev_QB-XS_UnknownSensor_test.tif )
 
 
