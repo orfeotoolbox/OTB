@@ -36,7 +36,9 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   if (argc != 12)
     {
     std::cout << argv[0] <<
-    " <input filename> <output filename> <origin easting> <origin northing> <x size> <y size> <x spacing> <y spacing> <UTM zone> <UTM hemisphere>"
+    " <input filename> <output filename> <origin easting> <origin northing>"
+    " <x size> <y size> <x spacing> <y spacing> <UTM zone> <UTM hemisphere>"
+    " <grid_spacing>"
               << std::endl;
 
     return EXIT_FAILURE;
