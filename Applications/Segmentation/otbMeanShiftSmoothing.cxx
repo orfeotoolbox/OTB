@@ -132,6 +132,18 @@ private:
     m_Filter->SetMaxIterationNumber(GetParameterInt("maxiter"));
     m_Filter->SetRangeBandwidthRamp(GetParameterFloat("rangeramp"));
 
+    //Compute the margin used to ensure exact results (tile wise smoothing)
+    //This margin is valid for the default uniform kernel used by the
+    //MeanShiftSmoothing filter (bandwidth equal to radius in this case)
+    const unsigned int margin = (m_Filter->GetMaxIterationNumber()+1) * m_Filter->GetSpatialBandwidth();
+    
+    otbAppLogINFO(<<"Margin of " << margin << " pixels applied to each tile to stabilized mean shift filtering." << std::endl);
+
+    if ( margin > std::min(input->GetLargestPossibleRegion().GetSize()[0],input->GetLargestPossibleRegion().GetSize()[1]) )
+      {
+      otbAppLogWARNING(<<"Margin value exceed the input image size." << std::endl);
+      }
+
     SetParameterOutputImage("fout", m_Filter->GetOutput());
     SetParameterOutputImage("foutpos", m_Filter->GetSpatialOutput());
     if(!IsParameterEnabled("modesearch"))
