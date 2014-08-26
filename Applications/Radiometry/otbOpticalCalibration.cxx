@@ -141,7 +141,7 @@ private:
 "- solar illuminations, one value for each band (passed by a file).\n\n"
 "For the conversion from DN (for Digital Numbers) to spectral radiance (or 'TOA radiance') L, the following formula is used :\n\n"
 
-"(1)\tL(b) = DN(b)/gain(b)+bias(b)\t(in W/m²/steradians/micrometers)\twith b being a band ID.\n\n"
+"(1)\tL(b) = DN(b)/gain(b)+bias(b)\t(in W/m2/steradians/micrometers)\twith b being a band ID.\n\n"
 
 "These values are provided by the user thanks to a simple txt file with two lines, one for the gains and one for the biases.\n"
 "Each value must be separated with colons (:), with eventual spaces. Blank lines are not allowed. If a line begins with the '#' symbol, then it is considered as comments.\n"
@@ -150,7 +150,7 @@ private:
 
 "In order to convert TOA radiance to TOA reflectance, the following formula is used :\n\n"
 
-"(2)\tR(b) = (pi*L(b)*d²) / (ESUN(b)*cos(θ))\t(no dimension)\twhere : \n\n"
+"(2)\tR(b) = (pi*L(b)*d*d) / (ESUN(b)*cos(θ))\t(no dimension)\twhere : \n\n"
 
 "- L(b) is the spectral radiance for band b \n"
 "- pi is the famous mathematical constant (3.14159...) \n"
@@ -163,9 +163,9 @@ private:
 "These values are provided by the user thanks to a txt file following the same convention as before.\n"
 "Instead of providing the date of acquisition, the user can also provide a flux normalization coefficient 'fn'. "
 "The formula used instead will be the following : \n\n"
-"(3) \tR(b) = (pi*L(b)) / (ESUN(b)*fn²*cos(θ)) \n\n"
+"(3) \tR(b) = (pi*L(b)) / (ESUN(b)*fn*fn*cos(θ)) \n\n"
 "Whatever the formula used (2 or 3), the user should pay attention to the interpretation of the parameters he will provide to the application, "
-"by taking into account the original formula that the metadata files assum.\n\n"
+"by taking into account the original formula that the metadata files assumes.\n\n"
 
 "Below, we give two examples of txt files containing information about gains/biases and solar illuminations :\n\n"
 "- gainbias.txt :\n"
