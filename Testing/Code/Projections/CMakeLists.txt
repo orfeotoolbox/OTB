@@ -386,7 +386,7 @@ add_test(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         -5
         39
         N
-        5
+        50
         )
 
  add_test(prTvOrthoRectificationMonoThreadSPOT5 ${PROJECTIONS_TESTS2}
@@ -403,7 +403,7 @@ add_test(prTvOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         -5
         39
         N
-        5
+        50
         )
 endif()
 
