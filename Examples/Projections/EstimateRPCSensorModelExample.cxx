@@ -134,9 +134,9 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   // Note that the \doxygen{otb}{GCPsToRPCSensorModelImageFilter} needs
-  // at least 16 GCPs to estimate a proper RPC sensor model,
+  // at least 20 GCPs to estimate a proper RPC sensor model,
   // although no warning will be reported to the user if
-  // the number of GCPs is lower than 16.
+  // the number of GCPs is lower than 20.
   // Actual estimation of the sensor model takes place in the
   // \code{GenerateOutputInformation()} method.
   // Software Guide : EndLatex
