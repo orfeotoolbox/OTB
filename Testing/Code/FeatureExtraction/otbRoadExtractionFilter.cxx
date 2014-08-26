@@ -80,7 +80,8 @@ int otbRoadExtractionFilter(int itkNotUsed(argc), char * argv[])
 
   reader->GenerateOutputInformation();
   OutputImageType::Pointer image = OutputImageType::New();
-  image->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
+  image->CopyInformation(reader->GetOutput());
+  image->SetRegions(image->GetLargestPossibleRegion());
   image->Allocate();
   image->FillBuffer(0);
 

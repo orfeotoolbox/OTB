@@ -286,7 +286,8 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   reader->GenerateOutputInformation();
   InputImageType::Pointer blackBackground = InputImageType::New();
-  blackBackground->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
+  blackBackground->CopyInformation(reader->GetOutput());
+  blackBackground->SetRegions(blackBackground->GetLargestPossibleRegion());
   blackBackground->Allocate();
   blackBackground->FillBuffer(0);
   // Software Guide : EndCodeSnippet

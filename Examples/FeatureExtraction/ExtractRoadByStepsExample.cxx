@@ -383,12 +383,10 @@ int main(int itkNotUsed(argc), char * argv[])
 
   // Software Guide : BeginCodeSnippet
   InternalImageType::Pointer output = InternalImageType::New();
-  output->SetRegions(multispectralReader->GetOutput()
-                     ->GetLargestPossibleRegion());
+  output->CopyInformation(multispectralReader->GetOutput());
+  output->SetRegions(output->GetLargestPossibleRegion());
   output->Allocate();
   output->FillBuffer(0.0);
-  output->SetOrigin(multispectralReader->GetOutput()->GetOrigin());
-  output->SetSpacing(multispectralReader->GetOutput()->GetSpacing());
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
