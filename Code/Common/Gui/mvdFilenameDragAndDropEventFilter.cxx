@@ -85,7 +85,7 @@ FilenameDragAndDropEventFilter
 
   //
   // Bypass event its MIME data does not contain not URL(s).
-  if( !event->mimeData()->hasUrls() /*&& !event->mimeData()->hasText()*/ )
+  if( !event->mimeData()->hasUrls() )
     return false;
 
   //
@@ -98,17 +98,17 @@ FilenameDragAndDropEventFilter
        it!=urls.end();
        ++it )
     {
-      qDebug() << *it;
-      qDebug() << it->scheme() << it->scheme().compare( "file", Qt::CaseInsensitive );
+    qDebug() << *it;
+    qDebug() << it->scheme() << it->scheme().compare( "file", Qt::CaseInsensitive );
 
 #if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
     if( it->scheme().compare( "file", Qt::CaseInsensitive )!=0 )
 #else // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    if( !it->isLocalFile() )
+      if( !it->isLocalFile() )
 #endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-      {
-      return false;
-      }
+        {
+        return false;
+        }
     }
 
   //
@@ -150,8 +150,8 @@ FilenameDragAndDropEventFilter
   // Otherwise, eatup event.
   return true;
 #else
-    // Nothing to do: bypass event & let default behaviour occur.
-    return false;
+  // Nothing to do: bypass event & let default behaviour occur.
+  return false;
 #endif
 }
 
