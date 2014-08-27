@@ -67,7 +67,8 @@ namespace
 /* STATIC IMPLEMENTATION SECTION                                             */
 
 QMessageBox &
-CustomizeMessageBox( QMessageBox & messageBox, QWidget * widget )
+CustomizeMessageBox( QMessageBox & messageBox,
+                     QWidget * widget )
 {
   assert( widget!=NULL );
 

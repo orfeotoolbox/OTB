@@ -823,11 +823,11 @@ DatabaseBrowserController
   VectorImageModel* imageModel =
     datasetModel->GetSelectedImageModel< VectorImageModel >();
 
+  QCheckBox * checkBox = NULL;
+
   QFileInfo imgFInfo;
   QFileInfo ovrFInfo;
   QFileInfo geoFInfo;
-
-  QCheckBox * checkBox = NULL;
 
   // Customize message-box if there are alternate files.
   if( imageModel!=NULL )
@@ -844,24 +844,53 @@ DatabaseBrowserController
 
     if( imgFInfo.exists() || ovrFInfo.exists() || geoFInfo.exists() )
       {
-      QString files;
+      //
+      // 1. Create a pannel widget.
+      QWidget * widget = new QWidget( &messageBox );
+
+      //
+      // 2. Create it's layout.
+      QVBoxLayout * layout = new QVBoxLayout();
+
+      //
+      // 3. Create and add check-box widget.
+      assert( checkBox==NULL );
+      checkBox = new QCheckBox( tr( "Also delete:" ), &messageBox );
+
+      layout->addWidget( checkBox );
+
+      //
+      // 4. Create and add list widget.
+      QListWidget * listWidget = new QListWidget( &messageBox );
+
+      listWidget->setSelectionMode( QAbstractItemView::NoSelection );
+
+      // listWidget->setEnabled( false );
 
       if( imgFInfo.exists() )
-        files.append( tr( "\n- '%1'" ).arg( imgFInfo.filePath() ) );
+        listWidget->addItem( imgFInfo.filePath() );
 
       if( ovrFInfo.exists() )
-        files.append( tr( "\n- '%1'" ).arg( ovrFInfo.filePath() ) );
+        listWidget->addItem( ovrFInfo.filePath() );
 
       if( geoFInfo.exists() )
-        files.append( tr( "\n- '%1'" ).arg( geoFInfo.filePath() ) );
+        listWidget->addItem( geoFInfo.filePath() );
 
-      // Filenames could have been appended directly to message but it's
-      // better for translation like this.
-      QString message( tr( "Delete:%1" ).arg( files ) );
+      layout->addWidget( listWidget );
 
-      checkBox = new QCheckBox( message, &messageBox );
+      //
+      // 5. Add pannel to message-box.
+      widget->setLayout( layout );
 
-      CustomizeMessageBox( messageBox, checkBox );
+      CustomizeMessageBox( messageBox, widget );
+
+
+      /*
+      QObject::connect(
+        checkBox, SIGNAL( toggled( bool ) ),
+        listWidget, SLOT( setEnagled( bool ) )
+      );
+      */
       }
     }
 

@@ -71,7 +71,8 @@ namespace mvd
 
 /**
  */
-QMessageBox & CustomizeMessageBox( QMessageBox & messageBox, QWidget * widget );
+QMessageBox & CustomizeMessageBox( QMessageBox & messageBox,
+                                   QWidget * widget );
 
 } // end namespace 'mvd'.
 
