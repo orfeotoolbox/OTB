@@ -199,7 +199,7 @@ ColorDynamicsWidget
 {
   int gamma =
     itk::Math::Round< int, double >(
-      GAMMA_FACTOR * vcl_log( value ) / vcl_log( GAMMA_POWER )
+      vcl_log( value ) / (GAMMA_FACTOR * vcl_log( GAMMA_POWER ) )
     );
 
   int min = GetMinGamma();
@@ -212,6 +212,8 @@ ColorDynamicsWidget
   if( gamma>max )
     gamma = max;
 
+  qDebug() << "::SetGamma(" << value << "): " << gamma;
+
   SetGammaCursorPosition( gamma );
 }
 
@@ -220,6 +222,13 @@ double
 ColorDynamicsWidget
 ::GetGamma() const
 {
+  qDebug() <<
+    "::GetGamma(" << GetGammaCursorPosition() << "): " <<
+    vcl_pow(
+      GAMMA_POWER,
+      GAMMA_FACTOR * static_cast< double >( GetGammaCursorPosition() )
+    );
+
   return
     vcl_pow(
       GAMMA_POWER,

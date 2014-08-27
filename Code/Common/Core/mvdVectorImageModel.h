@@ -1171,6 +1171,8 @@ VectorImageModel::Settings
 ::SetGamma( double value )
 {
   m_Gamma = value;
+
+  SetModified();
 }
 
 /*****************************************************************************/
