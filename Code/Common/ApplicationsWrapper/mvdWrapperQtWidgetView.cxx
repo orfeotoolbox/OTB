@@ -504,6 +504,8 @@ QtWidgetView
     return;
     }
 
+  /*
+  // Removed as per MVDX-259.
   QMessageBox::information(
     this,
     PROJECT_NAME,
@@ -512,6 +514,7 @@ QtWidgetView
     .arg( otbApp->GetName() ),
     QMessageBox::Ok
   );
+  */
 
   CountType count = 0;
 
