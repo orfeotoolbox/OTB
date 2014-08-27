@@ -675,7 +675,7 @@ add_test(feTvVectorizationPathListFilterAsciiOutput ${FEATUREEXTRACTION_TESTS7}
        ${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
        ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
        ${TEMP}/feTvVectorizationPathListOutput.txt
-       ${TEMP}/feTvVectorizationPathListOutput.png
+       ${TEMP}/feTvVectorizationPathListOutputIgnored.png
        0.0005
         )
 
@@ -686,7 +686,7 @@ add_test(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS7}
         otbVectorizationPathListFilter
        ${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
        ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
-       ${TEMP}/feTvVectorizationPathListOutput.txt
+       ${TEMP}/feTvVectorizationPathListOutputIgnored.txt
        ${TEMP}/feTvVectorizationPathListOutput.png
        0.0001
         )
