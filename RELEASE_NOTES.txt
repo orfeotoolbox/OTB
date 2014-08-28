@@ -1,0 +1,92 @@
+==========================
+ Monteverdi2 Release Note
+==========================
+
+Monteverdi2-0.8.0 - Changes since version 0.6.0 (November 12th, 2013)
+=====================================================================
+
+* Repository data
+  - Updated Monteverdi2_DATA_VERSION to 1.0.0.
+  - Data version is now independant from program version.
+  - Previous repository data is not supported (user needs to delete its $(HOME)/mvd2 cache directory before starting Monteverdi2).
+
+* OTB-application features:
+  - Removed duplicate Qt OTB-application wrappers to re-use OTB ones.
+  - Removed message-box informing user that the OTB-application has succeeded.
+  - Displayed different drop messages for file and image parameters.
+
+* GUI features:
+
+  - Internationalization:
+    + Updated French translation.
+
+  - Color-dynamics:
+    + Support of gamma-corection.
+    + Changed quantile spinner step to 0.1.
+
+  - Database-browser:
+    + Add/Rename/Delete/Move user groups where to store datasets.
+    + Move dataset between groups.
+    + Imported datasets are stored in Database/Temporary group.
+    + Import dataset by drag-n-dropping file from system's file-explorer into database-browser.
+    + Added option to also delete source image, .ovr and .geom files when deleting dataset.
+    + Disabled 'Renamed dataset' item from contextual menu when dataset is also disabled.
+    + Fixed crash when deleting inconsistent dataset.
+
+  - Rendering/Image navigation:
+    + Switched to OTB-Ice rendering engine based on OpenGL shaders.
+    + Right-click to use dynamic local-contrast tool.
+    + Fast image navigation mode.
+    + Checked against OpenGL and OpenGL Shading-Language version and rendering capabilities at startup.
+
+* Core features:
+  - Fixed support of No-data value of otb::StreamingHistogramVectorImageFilter.
+  - Added SQLite database into cache directory to manage repository.
+  - Support of user groups where to store datasets in.
+  - Cleaned OTB duplicate classes.
+  - SQLite database, XML descriptor files and histogram files version checking.
+
+* Bugfixes:
+  - MANTIS-964: Wrong update of Gamme cursor position
+    (http://bugs.orfeo-toolbox.org/view.php?id=964)
+  - MANTIS-960: Drop from file explorer doest not work.
+    (http://bugs.orfeo-toolbox.org/view.php?id=960)
+  - [WORKAROUND] MANTIS-947: Droping dataset to the last subgroup of the data tree crash the application
+    (http://bugs.orfeo-toolbox.org/view.php?id=947)
+  - [WORKAROUND] MANTIS-934: Crash when importing second image into repository.
+    (http://bugs.orfeo-toolbox.org/view.php?id=934)
+  - MANTIS-933: Drag a dataset from temporary in the dataset manager outside the tree leads to a crash
+    (http://bugs.orfeo-toolbox.org/view.php?id=933)
+  - MANTIS-929: Drag and Drop in otb application a dataset leads to the disappearance of the dataset into the widget
+    (http://bugs.orfeo-toolbox.org/view.php?id=929)
+  - MANTIS-928: Output results of applications are not selected in the dataset manager
+    (http://bugs.orfeo-toolbox.org/view.php?id=928)
+  - MANTIS-921: Application freezes at the end of image import.
+    (http://bugs.orfeo-toolbox.org/view.php?id=921)
+  - MANTIS-920: Wide unzoom aborts application
+    (http://bugs.orfeo-toolbox.org/view.php?id=920)
+  - MANTIS-918: Image-view shift on click
+    (http://bugs.orfeo-toolbox.org/view.php?id=918)
+  - MANTIS-909: Color-setup on PANCHRO images.
+    (http://bugs.orfeo-toolbox.org/view.php?id=909)
+  - MANTIS-908: Vector-image model settings serialization persistence (gamma)
+    (http://bugs.orfeo-toolbox.org/view.php?id=908)
+  - MANTIS-907: Serialization/persistence of viewport settings
+    (http://bugs.orfeo-toolbox.org/view.php?id=907)
+  - MANTIS-876: Monteveri2 crashes on startup
+    (http://bugs.orfeo-toolbox.org/view.php?id=876)
+  - MANTIS-854: Exception aborts Monteverdi2 when running with an old-version '.../mvd2' repository
+    (http://bugs.orfeo-toolbox.org/view.php?id=854)
+  - MANTIS-822: Parameter values in scientific notation are not always parsed
+    (http://bugs.orfeo-toolbox.org/view.php?id=822)
+
+* Qt4:
+  - Added QtSql to link stage.
+  - Using qsqlite4 driver plugin at runtime.
+
+* OTB:
+  - Upgraded source code to compile using OTB-ITKv4 API.
+
+* Build:
+  - MinGW compilation support.
+  - Enabled use of shared libraries when compiling with MinGW.
