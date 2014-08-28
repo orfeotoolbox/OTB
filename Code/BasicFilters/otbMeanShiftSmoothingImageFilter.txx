@@ -181,7 +181,7 @@ void MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TKernel, TOutputIt
 
   for(unsigned int comp = 0; comp < ImageDimension; ++comp)
     {
-      margin[comp] = (m_MaxIterationNumber+1) * m_SpatialRadius[comp];
+    margin[comp] = (m_MaxIterationNumber * m_SpatialRadius[comp]) + 1;
     }
 
   inputRequestedRegion.PadByRadius(margin);
