@@ -28,9 +28,17 @@ set(Monteverdi2_VERSION_MINOR "8")
 set(Monteverdi2_VERSION_PATCH "0")
 
 #----------------------------------------------------------------------------
+# Monteverdi2 data version number.  An even minor number corresponds to releases.
+set(Monteverdi2_DATA_VERSION_MAJOR "0")
+set(Monteverdi2_DATA_VERSION_MINOR "7")
+set(Monteverdi2_DATA_VERSION_PATCH "1")
+
+#----------------------------------------------------------------------------
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
 set(Monteverdi2_VERSION_STRING "${Monteverdi2_VERSION_MAJOR}.${Monteverdi2_VERSION_MINOR}.${Monteverdi2_VERSION_PATCH}")
+#----------------------------------------------------------------------------
+set(Monteverdi2_DATA_VERSION_STRING "${Monteverdi2_DATA_VERSION_MAJOR}.${Monteverdi2_DATA_VERSION_MINOR}.${Monteverdi2_DATA_VERSION_PATCH}")
 
 #----------------------------------------------------------------------------
 set(Monteverdi2_FLOATING_TYPE "float" CACHE STRING "The type of data in which input images are read (double/float)." )
