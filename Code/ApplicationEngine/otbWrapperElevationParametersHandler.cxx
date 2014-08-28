@@ -91,7 +91,7 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(GetDefaultElevation(app,key));
 
   std::ostringstream oss;
-  oss<<"Elevation management: setting default height above ellipsoid to  " << GetDefaultElevation(app,key) << " meters"<<std::endl;
+  oss<<"Elevation management: setting default height above ellipsoid to " << GetDefaultElevation(app,key) << " meters"<<std::endl;
 
   app->GetLogger()->Info(oss.str());
 
