@@ -172,6 +172,17 @@ inline bool IsVersionLess( const QString& v0, const QString& v1 );
  */
 inline bool IsVersionGreaterEqual( const QString& v0, const QString& v1 );
 
+/**
+ * \brief Provide a lexicographical version-string 'M.m.p' equal
+ * operator.
+ *
+ * \param v0 Left-operand version string.
+ * \param v1 Right-operand version string.
+ *
+ * \return true if left-operand is equal than right-operand.
+ */
+inline bool IsVersionEqual( const QString& v0, const QString& v1 );
+
 } // end namespace 'mvd'.
 
 
