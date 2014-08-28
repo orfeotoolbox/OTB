@@ -1,0 +1,10 @@
+2014-08-28  Stéphane ALBERT <stephane.albert@c-s.fr>
+
+	version: Bump Monteverdi2_DATA_VERSION to 1.0.0.
+	* CMakeList.txt: Updated Monteverdi2_DATA_VERSION_MAJOR/_MINOR/_PATH variables.
+	* Code/Common/Core/mvdDatasetDescriptor.cxx: Replaced Monteverdi2_VERSION_STRING by Monteverdi2_DATA_VERSION_STRING when storing version number into XML descriptor file.
+	* Code/Common/Core/mvdHistogramModel.cxx: Replaced Monteverdi2_VERSION_STRING by Monteverdi2_DATA_VERSION_STRING when storing version numbber into histogram file.
+	* CMakeList.txt: Added Monteverdi2_DATA_VERSION_MAJOR/_MINOR/_PATH/_STRING variables.
+	* Configure.h.in: Removed Monteverdi2_DATA_VERSION_MAJOR/_MINOR/_PATH/_STRING variables.
+
+	data: unchanged.
