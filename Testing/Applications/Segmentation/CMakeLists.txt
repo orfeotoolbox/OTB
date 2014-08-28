@@ -11,7 +11,7 @@ OTB_TEST_APPLICATION(NAME apTuSeMeanShiftSmoothing
                              -foutpos ${TEMP}/apTvSeMeanShiftSmoothingFilter_SpatialOutput.tif
                  			 -spatialr 4
                  			 -ranger 25
-                 			 -maxiter 100
+                 			 -maxiter 10
                  			 -thres 0.1
                  			 -modesearch 0)
 #                     VALID   --compare-image ${EPSILON_7}
