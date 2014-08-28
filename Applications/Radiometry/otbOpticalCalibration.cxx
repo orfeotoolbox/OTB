@@ -744,6 +744,12 @@ private:
         //Pipeline
         m_ImageToLuminanceFilter->SetInput(inImage);
         m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
+
+        if (IsParameterEnabled("clamp"))
+          {
+          GetLogger()->Info("Clamp values between [0, 100]\n");
+          }
+
         m_LuminanceToReflectanceFilter->SetUseClamp(IsParameterEnabled("clamp"));
         m_LuminanceToReflectanceFilter->UpdateOutputInformation();
         m_ScaleFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
@@ -762,7 +768,7 @@ private:
       break;
       case Level_TOC:
       {
-        GetLogger()->Info("Convert Top of Canopy reflectance\n");
+        GetLogger()->Info("Compute Top of Canopy reflectance\n");
 
         //Pipeline
         m_ImageToLuminanceFilter->SetInput(inImage);
@@ -821,7 +827,7 @@ private:
         // Aeronet file
         if (IsParameterEnabled("atmo.aeronet"))
         {
-          GetLogger()->Info("Use Aeronet file to retrieve atmospheric parameters");
+          GetLogger()->Info("Use Aeronet file to retrieve atmospheric parameters\n");
           m_paramAtmo->SetAeronetFileName(GetParameterString("atmo.aeronet"));
           m_paramAtmo->UpdateAeronetData(GetParameterInt("acqui.year"),
                                          GetParameterInt("acqui.month"),
@@ -847,14 +853,14 @@ private:
         oss << std::endl << m_paramAtmo;
 
         AtmosphericRadiativeTerms::Pointer atmoTerms =  m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
-        oss << std::endl << std::endl << atmoTerms;
+        oss << std::endl << std::endl << atmoTerms << std::endl;
 
         GetLogger()->Info("Atmospheric correction parameters compute by 6S : " + oss.str());
 
         bool adjComputation=false;
         if (IsParameterEnabled("atmo.radius"))
         {
-          otbAppLogINFO("Compute adjacency effects");
+          GetLogger()->Info("Compute adjacency effects\n");
           adjComputation=true;
           //Compute adjacency effect
           m_SurfaceAdjacencyEffectCorrectionSchemeFilter
@@ -883,7 +889,7 @@ private:
         }
         else
         {
-          GetLogger()->Info("Clamp values between [0, 100]");
+          GetLogger()->Info("Clamp values between [0, 100]\n");
           
           if (!adjComputation)
             m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
@@ -901,7 +907,7 @@ private:
     double scale = 1.0;
     if (IsParameterEnabled("milli"))
     {
-      GetLogger()->Info("Use milli-reflectance");
+    GetLogger()->Info("Use milli-reflectance\n");
       if ( (GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC) )
         scale = 1000.;
       if (GetParameterInt("level") == Level_TOA_IM)
