@@ -82,8 +82,8 @@ OTB_TEST_APPLICATION(NAME apTvDmBlockMatchingTest
                              -bm.medianfilter.radius 2
                              -bm.medianfilter.incoherence 2.0
                      VALID   --compare-image ${EPSILON_10}
-                     		 ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
-                     		 ${TEMP}/apTvDmBlockMatchingTest.tif
+                         ${BASELINE}/apTvDmBlockMatchingTest.tif
+                         ${TEMP}/apTvDmBlockMatchingTest.tif
                      )
 
 
