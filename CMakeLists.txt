@@ -29,9 +29,9 @@ set(Monteverdi2_VERSION_PATCH "0")
 
 #----------------------------------------------------------------------------
 # Monteverdi2 data version number.  An even minor number corresponds to releases.
-set(Monteverdi2_DATA_VERSION_MAJOR "0")
-set(Monteverdi2_DATA_VERSION_MINOR "7")
-set(Monteverdi2_DATA_VERSION_PATCH "1")
+set(Monteverdi2_DATA_VERSION_MAJOR "1")
+set(Monteverdi2_DATA_VERSION_MINOR "0")
+set(Monteverdi2_DATA_VERSION_PATCH "0")
 
 #----------------------------------------------------------------------------
 # Version string should not include patch level.  The major.minor is
