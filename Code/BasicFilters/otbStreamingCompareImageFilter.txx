@@ -31,7 +31,7 @@ namespace otb
 template<class TInputImage>
 PersistentCompareImageFilter<TInputImage>
 ::PersistentCompareImageFilter() : m_SquareOfDifferences(1), m_AbsoluteValueOfDifferences(1),
- m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1)
+ m_ThreadMinRef(1), m_ThreadMaxRef(1), m_Count(1), m_PhysicalSpaceCheck(true)
 {
   this->SetNumberOfRequiredInputs( 2 );
   // first output is a copy of the image, DataObject created by
@@ -273,6 +273,15 @@ PersistentCompareImageFilter<TInputImage>
   m_AbsoluteValueOfDifferences.Fill(itk::NumericTraits<RealType>::Zero);
   m_ThreadMinRef.Fill(itk::NumericTraits<PixelType>::max());
   m_ThreadMaxRef.Fill(itk::NumericTraits<PixelType>::NonpositiveMin());
+}
+
+template<class TInputImage>
+void
+PersistentCompareImageFilter<TInputImage>
+::VerifyInputInformation()
+{
+  if (m_PhysicalSpaceCheck)
+    Superclass::VerifyInputInformation();
 }
 
 template<class TInputImage>

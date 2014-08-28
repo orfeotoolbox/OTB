@@ -121,6 +121,9 @@ public:
   RealObjectType* GetMAEOutput();
   const RealObjectType* GetMAEOutput() const;
 
+  itkGetMacro(PhysicalSpaceCheck,bool);
+  itkSetMacro(PhysicalSpaceCheck,bool);
+
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
   virtual DataObjectPointer MakeOutput(unsigned int idx);
@@ -143,6 +146,11 @@ protected:
                              outputRegionForThread,
                              itk::ThreadIdType threadId);
 
+  /** Allows to skip the verification of physical space between
+   *  the two input images (see flag m_PhysicalSpaceCheck)
+   */
+  virtual void VerifyInputInformation();
+
 private:
   PersistentCompareImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
@@ -152,6 +160,7 @@ private:
   itk::Array<PixelType> m_ThreadMinRef;
   itk::Array<PixelType> m_ThreadMaxRef;
   itk::Array<long>      m_Count;
+  bool                  m_PhysicalSpaceCheck;
 }; // end of class PersistentCompareImageFilter
 
 /*===========================================================================*/
@@ -262,6 +271,18 @@ public:
   const RealObjectType* GetMAEOutput() const
   {
     return this->GetFilter()->GetMAEOutput();
+  }
+
+  /** Set the PhysicalSpaceCheck flag */
+  void SetPhysicalSpaceCheck(bool flag)
+  {
+    this->GetFilter()->SetPhysicalSpaceCheck(flag);
+  }
+
+  /** Get the PhysicalSpaceCheck flag */
+  bool GetPhysicalSpaceCheck()
+  {
+    return this->GetFilter()->GetPhysicalSpaceCheck();
   }
 
 protected:
