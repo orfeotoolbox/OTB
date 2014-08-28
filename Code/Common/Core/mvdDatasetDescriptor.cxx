@@ -873,7 +873,7 @@ DatasetDescriptor
   QDomElement rootElt(
     m_DomDocument.createElement( TAG_NAMES[ ELEMENT_DOCUMENT_ROOT ] )
   );
-  rootElt.setAttribute( "version", Monteverdi2_VERSION_STRING );
+  rootElt.setAttribute( "version", Monteverdi2_DATA_VERSION_STRING );
   m_DomDocument.appendChild( rootElt );
 
   // Dataset element.

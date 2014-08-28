@@ -379,7 +379,7 @@ HistogramModel
 #endif
 
   stream << PROJECT_NAME << endl;
-  stream << Monteverdi2_VERSION_STRING << endl;
+  stream << Monteverdi2_DATA_VERSION_STRING << endl;
   stream << "HISTOGRAM-MODEL" << endl;
 
   WriteStreamTag( stream, "MIN-PIXEL" );
