@@ -201,6 +201,7 @@ private:
     // Compute comparaison
     m_CompareFilter->SetInput1(m_ExtractRefFilter->GetOutput());
     m_CompareFilter->SetInput2(m_ExtractMeasFilter->GetOutput());
+    m_CompareFilter->SetPhysicalSpaceCheck(false);
     m_CompareFilter->Update();
 
     // Show result
