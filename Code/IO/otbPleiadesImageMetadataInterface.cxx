@@ -682,6 +682,13 @@ PleiadesImageMetadataInterface::GetSatElevation() const
   // MSD: for the moment take only topCenter value
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.incident_angle");
   double value = atof(valueString.c_str());
+
+  //Convention use in input of atmospheric correction parameters computation is
+  //"90 - satOrientation". Pleiades does not seem to follow this convention so
+  //inverse the formula here to be able to take the angle read in the metadata
+  //as input for 6S
+  value = 90. - value;
+
   return value;
 }
 
