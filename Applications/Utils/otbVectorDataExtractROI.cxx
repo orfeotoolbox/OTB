@@ -116,9 +116,11 @@ private:
 
     // Find the geographic region of interest
     // Get the index of the corner of the image
-    IndexType ul, ur, ll, lr;
+    itk::ContinuousIndex<double,2> ul(inImage->GetLargestPossibleRegion().GetIndex());
     PointType pul, pur, pll, plr;
-    ul = inImage->GetLargestPossibleRegion().GetIndex();
+    ul[0] += -0.5;
+    ul[1] += -0.5;
+    itk::ContinuousIndex<double,2> ur, ll, lr;
     ur = ul;
     ll = ul;
     lr = ul;
@@ -128,10 +130,10 @@ private:
     ll[1] += inImage->GetLargestPossibleRegion().GetSize()[1];
 
     // Transform to physical point
-    inImage->TransformIndexToPhysicalPoint(ul, pul);
-    inImage->TransformIndexToPhysicalPoint(ur, pur);
-    inImage->TransformIndexToPhysicalPoint(ll, pll);
-    inImage->TransformIndexToPhysicalPoint(lr, plr);
+    inImage->TransformContinuousIndexToPhysicalPoint(ul, pul);
+    inImage->TransformContinuousIndexToPhysicalPoint(ur, pur);
+    inImage->TransformContinuousIndexToPhysicalPoint(ll, pll);
+    inImage->TransformContinuousIndexToPhysicalPoint(lr, plr);
 
     // Build the cartographic region
     RemoteSensingRegionType            rsRegion;
