@@ -19,7 +19,6 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbVectorDataExtractROI.h"
-#include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataProperties.h"
 
 //Misc
@@ -57,8 +56,6 @@ public:
   typedef FloatVectorImageType::SizeType                  SizeType;
   typedef FloatVectorImageType::SpacingType               SpacingType;
 
-  typedef VectorDataProjectionFilter<
-    VectorDataType, VectorDataType>                       VectorDataProjectionFilterType;
   typedef otb::VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
 
   // Misc
@@ -152,24 +149,14 @@ private:
     // Set the cartographic region to the extract roi filter
     m_VdExtract->SetRegion(rsRegion);
 
-    // Reprojecting the VectorData
-    m_VdProj = VectorDataProjectionFilterType::New();
-    m_VdProj->SetInput(m_VdExtract->GetOutput());
-    m_VdProj->SetInputProjectionRef(inImage->GetProjectionRef());
-    m_VdProj->SetOutputKeywordList(inImage->GetImageKeywordlist());
-    m_VdProj->SetOutputProjectionRef(inImage->GetProjectionRef());
-    m_VdProj->SetOutputOrigin(inImage->GetOrigin());
-    m_VdProj->SetOutputSpacing(inImage->GetSpacing());
-
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
     // Set the output vectorData
-    SetParameterOutputVectorData("io.out", m_VdProj->GetOutput());
+    SetParameterOutputVectorData("io.out", m_VdExtract->GetOutput());
   }
 
   VectorDataExtractROIType::Pointer       m_VdExtract;
-  VectorDataProjectionFilterType::Pointer m_VdProj;
 };
 
 }
