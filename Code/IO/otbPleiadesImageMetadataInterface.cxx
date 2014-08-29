@@ -24,6 +24,8 @@
 #include "otbImageKeywordlist.h"
 #include <boost/lexical_cast.hpp>
 
+//uyseful constants
+#include <otbMath.h>
 
 namespace otb
 {
@@ -78,7 +80,6 @@ PleiadesImageMetadataInterface::GetInstrumentIndex() const
     {
     itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
     }
-
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -700,14 +701,27 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.scene_orientation"))
+  if (!imageKeywordlist.HasKey("support_data.scene_orientation") || !imageKeywordlist.HasKey("support_data.along_track_incidence_angle") || !imageKeywordlist.HasKey("support_data.across_track_incidence_angle"))
     {
     return 0;
     }
 
   // MSD: for the moment take only topCenter value
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
-  double satAz = atof(valueString.c_str());
+  double cap = atof(valueString.c_str());
+
+  valueString = imageKeywordlist.GetMetadataByKey("support_data.along_track_incidence_angle");
+  double along = atof(valueString.c_str());
+
+  valueString = imageKeywordlist.GetMetadataByKey("support_data.across_track_incidence_angle");
+  double ortho = atof(valueString.c_str());
+
+  //Compute Satellite azimuthal angle using the azimuthal angle and the along
+  //and across track incidence angle
+
+  double satAz = (cap - vcl_atan2(vcl_tan(ortho * CONST_PI_180),vcl_tan(along * CONST_PI_180)) * CONST_180_PI);
+
+  satAz = fmod(satAz,360);
 
   return satAz;
 }
