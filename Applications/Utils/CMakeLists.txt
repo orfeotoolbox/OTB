@@ -59,8 +59,8 @@ OTB_CREATE_APPLICATION(NAME           VectorDataTransform
                        SOURCES        otbVectorDataTransform.cxx
                        LINK_LIBRARIES OTBBasicFilters)
 
-OTB_CREATE_APPLICATION(NAME           VectorDataExtractROIApplication
-                       SOURCES        otbVectorDataExtractROIApplication.cxx
+OTB_CREATE_APPLICATION(NAME           VectorDataExtractROI
+                       SOURCES        otbVectorDataExtractROI.cxx
                        LINK_LIBRARIES OTBBasicFilters)
 
 #OTB_CREATE_APPLICATION(NAME           DEMConvert

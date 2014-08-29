@@ -35,11 +35,11 @@ namespace otb
 namespace Wrapper
 {
 
-class VectorDataExtractROIApplication : public Application
+class VectorDataExtractROI : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorDataExtractROIApplication  Self;
+  typedef VectorDataExtractROI  Self;
   typedef Application                      Superclass;
   typedef itk::SmartPointer<Self>          Pointer;
   typedef itk::SmartPointer<const Self>    ConstPointer;
@@ -47,7 +47,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(VectorDataExtractROIApplication, otb::Application);
+  itkTypeMacro(VectorDataExtractROI, otb::Application);
 
   /** Filters typedef */
   // Images
@@ -59,7 +59,7 @@ public:
 
   typedef VectorDataProjectionFilter<
     VectorDataType, VectorDataType>                       VectorDataProjectionFilterType;
-  typedef VectorDataExtractROI<VectorDataType>            VectorDataExtractROIType;
+  typedef otb::VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
 
   // Misc
   typedef otb::RemoteSensingRegion<double>                RemoteSensingRegionType;
@@ -67,7 +67,7 @@ public:
 private:
   void DoInit()
   {
-    SetName("VectorDataExtractROIApplication");
+    SetName("VectorDataExtractROI");
     SetDescription("Perform an extract ROI on the input vector data according to the input image extent");
 
     SetDocName("VectorData Extract ROI");
@@ -173,4 +173,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::VectorDataExtractROIApplication)
+OTB_APPLICATION_EXPORT(otb::Wrapper::VectorDataExtractROI)
