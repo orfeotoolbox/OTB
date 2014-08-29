@@ -683,11 +683,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
     <message>
         <source>
 - &apos;%1&apos;</source>
-        <translation>- &apos;%1&apos;</translation>
+        <translation type="obsolete">- &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Delete:%1</source>
-        <translation>Supprimer : %1</translation>
+        <translation type="obsolete">Supprimer : %1</translation>
     </message>
     <message>
         <source>Error!</source>
@@ -700,6 +700,10 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi2
     <message>
         <source>New group</source>
         <translation>Nouveau groupe</translation>
+    </message>
+    <message>
+        <source>Also delete:</source>
+        <translation>Supprimer aussi :</translation>
     </message>
 </context>
 <context>
@@ -2278,7 +2282,7 @@ Veuillez, s&apos;il vous plait, vérifier l&apos;onglet du journal de &apos;%1&a
         <source>&apos;%1&apos; has succeeded.
 Result(s) will be imported as dataset(s).
 </source>
-        <translation>&apos;%1&apos; exécuté avec succès.
+        <translation type="obsolete">&apos;%1&apos; exécuté avec succès.
 Le(s) résultat(s) vont être importés en tant que jeu de données.</translation>
     </message>
 </context>
