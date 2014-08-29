@@ -86,6 +86,7 @@ Monteverdi2-0.8.0 - Changes since version 0.6.0 (November 12th, 2013)
 
 * OTB:
   - Upgraded source code to compile using OTB-ITKv4 API.
+  - Monteverdi2-0.8.0 is built on OTB-4.2.
 
 * Build:
   - MinGW compilation support.
