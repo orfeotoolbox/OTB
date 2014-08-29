@@ -114,6 +114,10 @@ namespace ossimplugins
          void          getIncidenceAngle(std::vector<ossim_float64>& ia)     const;
          void          getViewingAngle(std::vector<ossim_float64>& va)       const;
 
+         //Along and across track incidence angle
+         void getAcrossTrackIncidenceAngle(std::vector<ossim_float64>& act) const;
+         void getAlongTrackIncidenceAngle(std::vector<ossim_float64>& alt) const;
+
          //---
          // Corner points:
          //---
@@ -182,6 +186,9 @@ namespace ossimplugins
          std::vector<ossim_float64>  theIncidenceAngle;
          std::vector<ossim_float64>  theViewingAngle;
          std::vector<ossim_float64>  theAzimuthAngle;
+
+         std::vector<ossim_float64> theAlongTrackIncidenceAngle;
+         std::vector<ossim_float64> theAcrossTrackIncidenceAngle;
    
          ossimIpt                    theImageSize;
          ossimIpt                    theTileSize;

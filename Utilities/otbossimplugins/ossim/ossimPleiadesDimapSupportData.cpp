@@ -146,6 +146,8 @@ namespace ossimplugins
        theIncidenceAngle(),
        theViewingAngle(),
        theAzimuthAngle(),
+       theAlongTrackIncidenceAngle(),
+       theAcrossTrackIncidenceAngle(),                                          
 
        theImageSize(0, 0),
        theTileSize(0, 0),
@@ -224,6 +226,9 @@ namespace ossimplugins
       theIncidenceAngle.clear();
       theViewingAngle.clear();
       theAzimuthAngle.clear();
+
+      theAlongTrackIncidenceAngle.clear();
+      theAcrossTrackIncidenceAngle.clear();
 
       theImageSize.makeNan();
       theTileSize.makeNan();
@@ -306,6 +311,8 @@ namespace ossimplugins
          << "\n  Incidence Angle (TopCenter, Center, BottomCenter):   " << getVectorFloat64AsString(theIncidenceAngle)
          << "\n  Viewing Angle (TopCenter, Center, BottomCenter):     " << getVectorFloat64AsString(theViewingAngle)
          << "\n  Azimuth Angle (TopCenter, Center, BottomCenter):     " << getVectorFloat64AsString(theAzimuthAngle)
+         << "\n  Along track incidence angle (TopCenter, Center, BottomCenter):     " << getVectorFloat64AsString(theAlongTrackIncidenceAngle)
+         << "\n  Across track incidence angle (TopCenter, Center, BottomCenter):     " << getVectorFloat64AsString(theAcrossTrackIncidenceAngle)
          << "\n  Sun Azimuth (TopCenter, Center, BottomCenter):       " << getVectorFloat64AsString(theSunAzimuth)
          << "\n  Sun Elevation (TopCenter, Center, BottomCenter):     " << getVectorFloat64AsString(theSunElevation)
 
@@ -655,6 +662,17 @@ namespace ossimplugins
       va = theViewingAngle;
    }
 
+  void ossimPleiadesDimapSupportData::getAcrossTrackIncidenceAngle(std::vector<ossim_float64>& act) const
+   {
+      act = theAcrossTrackIncidenceAngle;
+   }
+
+  void ossimPleiadesDimapSupportData::getAlongTrackIncidenceAngle(std::vector<ossim_float64>& alt) const
+   {
+      alt = theAlongTrackIncidenceAngle;
+   }
+
+
    void ossimPleiadesDimapSupportData::getRefGroundPoint(ossimGpt& gp) const
    {
       gp = theRefGroundPoint;
@@ -851,6 +869,38 @@ namespace ossimplugins
       kwl.add(prefix,
               "number_of_scene_orientation",
               static_cast<ossim_uint32>(theAzimuthAngle.size()),
+              true);
+
+
+      tempString = "";
+      for(idx = 0; idx <  theAlongTrackIncidenceAngle.size(); ++idx)
+      {
+         tempString += (ossimString::toString(theAlongTrackIncidenceAngle[idx]) + " ");
+      }
+      kwl.add(prefix,
+              "along_track_incidence_angle",
+              tempString,
+              true);
+
+       kwl.add(prefix,
+              "number_of_along_track_incidence_angle",
+              static_cast<ossim_uint32>(theAlongTrackIncidenceAngle.size()),
+              true);
+
+
+      tempString = "";
+      for(idx = 0; idx <  theAcrossTrackIncidenceAngle.size(); ++idx)
+      {
+         tempString += (ossimString::toString(theAcrossTrackIncidenceAngle[idx]) + " ");
+      }
+      kwl.add(prefix,
+              "across_track_incidence_angle",
+              tempString,
+              true);
+
+       kwl.add(prefix,
+              "number_of_across_track_incidence_angle",
+              static_cast<ossim_uint32>(theAcrossTrackIncidenceAngle.size()),
               true);
 
       kwl.add(prefix,
@@ -1067,6 +1117,33 @@ namespace ossimplugins
          }
       }
 
+      total =  ossimString(kwl.find(prefix,"number_of_along_track_incidence_angle")).toUInt32();
+      theAlongTrackIncidenceAngle.resize(total);
+      tempString = kwl.find(prefix,"along_track_incidence_angle");
+      if(tempString != "")
+      {
+         std::istringstream in(tempString.string());
+         ossimString tempValue;
+         for(idx = 0; idx < theAlongTrackIncidenceAngle.size();++idx)
+         {
+            in >> tempValue.string();
+            theAlongTrackIncidenceAngle[idx] = tempValue.toDouble();
+         }
+      }
+
+      total =  ossimString(kwl.find(prefix,"number_of_across_track_incidence_angle")).toUInt32();
+      theAcrossTrackIncidenceAngle.resize(total);
+      tempString = kwl.find(prefix,"across_track_incidence_angle");
+      if(tempString != "")
+      {
+         std::istringstream in(tempString.string());
+         ossimString tempValue;
+         for(idx = 0; idx < theAcrossTrackIncidenceAngle.size();++idx)
+         {
+            in >> tempValue.string();
+            theAcrossTrackIncidenceAngle[idx] = tempValue.toDouble();
+         }
+      }
 
       theUlCorner =createGround( kwl.find(prefix, "ul_ground_point"));
       theUrCorner =createGround( kwl.find(prefix, "ur_ground_point"));
@@ -2526,6 +2603,54 @@ namespace ossimplugins
             return false;
          }
          theAzimuthAngle.push_back(sub_nodes[0]->getText().toDouble());
+
+         //---
+         // Fetch the along track incidence angle :
+         //---
+         sub_nodes.clear();
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+         {
+            xpath = "Incidences/ALONG_TRACK_INCIDENCE";
+         }
+         else
+         {
+            xpath = "Acquisition_Angles/INCIDENCE_ANGLE_ALONG_TRACK";
+         }
+         (*node)->findChildNodes(xpath, sub_nodes);
+         if (sub_nodes.size() == 0)
+         {
+            setErrorStatus();
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << std::endl;
+            }
+            return false;
+         }
+         theAlongTrackIncidenceAngle.push_back(sub_nodes[0]->getText().toDouble());
+
+         //---
+         // Fetch the across track incidence angle :
+         //---
+         sub_nodes.clear();
+         if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
+         {
+            xpath = "Incidences/ORTHO_TRACK_INCIDENCE";
+         }
+         else
+         {
+            xpath = "Acquisition_Angles/INCIDENCE_ANGLE_ACROSS_TRACK";
+         }
+         (*node)->findChildNodes(xpath, sub_nodes);
+         if (sub_nodes.size() == 0)
+         {
+            setErrorStatus();
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << std::endl;
+            }
+            return false;
+         }
+         theAcrossTrackIncidenceAngle.push_back(sub_nodes[0]->getText().toDouble());
 
          ++node;
       }
