@@ -395,7 +395,10 @@ private:
                      << "\tAcquisition Day: " << lImageMetadataInterface->GetDay() << std::endl
                      << "\tAcquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl
                      << "\tAcquisition Year: " << lImageMetadataInterface->GetYear() << std::endl
-                     << "\tAcquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl;
+                     << "\tAcquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl
+                     << "\tAcquisition Sun Azimuth Angle: " << lImageMetadataInterface->GetSunAzimuth() << std::endl
+                     << "\tAcquisition Viewing Elevation Angle: " << lImageMetadataInterface->GetSatElevation() << std::endl
+                     << "\tAcquisition Viewing Azimuth Angle: " << lImageMetadataInterface->GetSatAzimuth() << std::endl;
          
            vlvector = lImageMetadataInterface->GetPhysicalGain();
            ossOutput << "\tAcquisition gain (per band): ";
