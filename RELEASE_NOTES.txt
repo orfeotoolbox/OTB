@@ -25,6 +25,7 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/03/12)
       fully functional. Now supports any correction parameters set by user.
       See Examples/Radiometry/AtmosphericCorrectionSequencement.cxx for
       details on the migration.
+    * Better support of atmospheric corrections for Pleiades images 
 
 * Applications:
   * Updated applications :
