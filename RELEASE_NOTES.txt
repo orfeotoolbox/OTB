@@ -31,14 +31,52 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/03/12)
     * Superimpose and BundleToPerfectSensor : Add a specific reprojection mode for PHR bundle
     * OpticalCalibration : parameters more flexible, allow users to overwrite metadata values
 
-* Monteverdi:
-
 * Bugs fixed:
-  * OTB-lib:
-    * 0000936: Sub-pixel disparity filter is not compatible with disparity maps over subsampled grids
 
-  * Orfeo Toolbox (OTB)
+* Monteverdi2
+    * 0000915: In mvd2 applications wrappers InputImageList parameters, only the first item of the list is dropable
+    * 0000960: Drop from file explorer doest not work.
+    * 0000928: Output results of applications are not selected in the dataset manager
+    * 0000908: Vector-image model settings serialization persistence (gamma)
+    * 0000919: Inconsistent no-data checks in StreamingVectorImageFilter<> and StreamingHistogramVectorImageFilter<>.
+    * 0000918: Image-view shift on click
+    * 0000907: Serialization/persistence of viewport settings
+    * 0000906: Quantiles editing on mono-bands images.
+    * 0000909: Color-setup on PANCHRO images.
+    * 0000905: Calculation of zoom-extent in Quicklook-view.
+    * 0000964: Wrong update of Gamme cursor position
+    * 0000929: Drag and Drop in otb application a dataset leads to the disappearance of the dataset into the widget
+    * 0000921: Application freezes at the end of image import.
+    * 0000947: Droping dataset to the last subgroup of the data tree crash the application
+    * 0000933: Drag a dataset from temporary in the dataset manager outside the tree leads to a crash
+    * 0000903: Removing mvd2 directory content leads to a core dumped as startup
+    * 0000920: Wide unzoom aborts application
+    * 0000917: Applying same quantiles to all channels crash the application
+    * 0000962: Monteverdi2 cannot be run on OSX (image file not found).
+    * 0000924: Monteverdi2 does not start after the check of OpenGL was added
+    * 0000923: Monteverdi2 does not start after the check of OpenGL was added
+
+  * Documentation
+    * 0000948: Softwareguide OTB 4-0 : section 14.2.2 SIFT Detector (from chapter 14 Feature Extraction) is empty.
+
+  * OTB-lib
+    * 0000955: Wrong computation of SFS Textures
+    * 0000940: Some output states are not correctly manage into Qt Application
+    * 0000939: crash with a GIF/BMP image with ColorInterp=Palette when we request overviews via GDAL
+    * 0000966: VectorDataExtractROIApplication does a strange reprojection
+    * 0000932: Error in LSMS
+    * 0000936: Sub-pixel disparity filter is not compatible with disparity maps over subsampled grids
+    * 0000914: MeanShiftSmoothing application foutpos parameters is always mandatory
+    * 0000943: TrainImagesClassifier and ListSampleGenerator problem
+    * 0000954: GeometriesChangeSpatialReference does not work
+    * 0000949: BundleToPerfectSensor application: in PHR mode, the ourpur geom file is the XS one, not the PAN one
     * 0000926: OTB does not compile with clang 5.1
+    * 0000968: CommandLineLauncher needs 2 passes to load parameters
+    * 0000951: BundleToPerfectSensor application does not work in default mode with external ITK (internal ITK is fine)
+    * 0000944: OTB does not compile with ITK4.6 git version
+
+  * Monteverdi
+    * 0000957: Unable to display input and output of ExtractRoadExample in transparency mode in Monteverdi
 
 
 OTB-v.4.0.0 - Changes since version 3.20 (2013/03/13)
