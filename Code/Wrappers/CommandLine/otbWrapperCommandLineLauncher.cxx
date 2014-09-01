@@ -386,6 +386,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   // Loop over each parameter key declared in the application
+  // FIRST PASS : set parameter values
   for (unsigned int i = 0; i < appKeyList.size(); i++)
     {
     const std::string paramKey(appKeyList[i]);
@@ -540,6 +541,16 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         m_Application->UpdateParameters();
         }
       }
+    }
+
+  // SECOND PASS : check mandatory parameters
+  for (unsigned int i = 0; i < appKeyList.size(); i++)
+    {
+    const std::string paramKey(appKeyList[i]);
+    Parameter::Pointer param = m_Application->GetParameterByKey(paramKey);
+    ParameterType type = m_Application->GetParameterType(paramKey);
+    const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_VExpression));
+    std::vector<std::string> values;
 
     // When a parameter is mandatory :
     // it must be set if :
