@@ -67,6 +67,8 @@ Monteverdi2-0.8.0 - Changes since version 0.6.0 (November 12th, 2013)
     (http://bugs.orfeo-toolbox.org/view.php?id=920)
   - MANTIS-918: Image-view shift on click
     (http://bugs.orfeo-toolbox.org/view.php?id=918)
+  - MANTIS-915:  In mvd2 applications wrappers InputImageList parameters, only the first item of the list is dropable
+    (http://bugs.orfeo-toolbox.org/view.php?id=915)
   - MANTIS-909: Color-setup on PANCHRO images.
     (http://bugs.orfeo-toolbox.org/view.php?id=909)
   - MANTIS-908: Vector-image model settings serialization persistence (gamma)
