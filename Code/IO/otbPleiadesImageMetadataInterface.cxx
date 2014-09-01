@@ -708,29 +708,43 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.scene_orientation") || !imageKeywordlist.HasKey("support_data.along_track_incidence_angle") || !imageKeywordlist.HasKey("support_data.across_track_incidence_angle"))
+  if (!imageKeywordlist.HasKey("support_data.scene_orientation"))
     {
     return 0;
     }
+  else if (!imageKeywordlist.HasKey("support_data.along_track_incidence_angle") || !imageKeywordlist.HasKey("support_data.across_track_incidence_angle"))
+    {
+    // MSD: for the moment take only topCenter value
+    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
+    double cap = atof(valueString.c_str());
 
-  // MSD: for the moment take only topCenter value
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
-  double cap = atof(valueString.c_str());
+    //return only orientation if across/along track incidence are not available
+    return cap;
+    }
+  else
+    {
+    //Got orientation and incidences angle which allow to compute satellite
+    // azimuthal angle
 
-  valueString = imageKeywordlist.GetMetadataByKey("support_data.along_track_incidence_angle");
-  double along = atof(valueString.c_str());
+    // MSD: for the moment take only topCenter value
+    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
+    double cap = atof(valueString.c_str());
 
-  valueString = imageKeywordlist.GetMetadataByKey("support_data.across_track_incidence_angle");
-  double ortho = atof(valueString.c_str());
+    valueString = imageKeywordlist.GetMetadataByKey("support_data.along_track_incidence_angle");
+    double along = atof(valueString.c_str());
 
-  //Compute Satellite azimuthal angle using the azimuthal angle and the along
-  //and across track incidence angle
+    valueString = imageKeywordlist.GetMetadataByKey("support_data.across_track_incidence_angle");
+    double ortho = atof(valueString.c_str());
 
-  double satAz = (cap - vcl_atan2(vcl_tan(ortho * CONST_PI_180),vcl_tan(along * CONST_PI_180)) * CONST_180_PI);
+    //Compute Satellite azimuthal angle using the azimuthal angle and the along
+    //and across track incidence angle
 
-  satAz = fmod(satAz,360);
+    double satAz = (cap - vcl_atan2(vcl_tan(ortho * CONST_PI_180),vcl_tan(along * CONST_PI_180)) * CONST_180_PI);
 
-  return satAz;
+    satAz = fmod(satAz,360);
+
+    return satAz;
+    }
 }
 
 PleiadesImageMetadataInterface::VariableLengthVectorType
