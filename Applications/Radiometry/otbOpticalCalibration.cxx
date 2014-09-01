@@ -23,7 +23,7 @@
 #include "otbLuminanceToImageImageFilter.h"
 #include "otbReflectanceToLuminanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
-#include "otbMultiplyByScalarImageFilter.h"
+#include "itkMultiplyImageFilter.h"
 #include "otbClampVectorImageFilter.h"
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 #include "otbGroundSpacingImageFunction.h"
@@ -88,8 +88,7 @@ public:
   typedef ReflectanceToLuminanceImageFilter<FloatVectorImageType,
                                             DoubleVectorImageType>        ReflectanceToLuminanceImageFilterType;
 
-  typedef otb::MultiplyByScalarImageFilter<DoubleVectorImageType,
-                                           DoubleVectorImageType>         ScaleFilterOutDoubleType;
+  typedef itk::MultiplyImageFilter<DoubleVectorImageType,DoubleImageType,DoubleVectorImageType>         ScaleFilterOutDoubleType;
 
   typedef otb::ClampVectorImageFilter<DoubleVectorImageType,
                                       DoubleVectorImageType>              ClampFilterType;
@@ -571,7 +570,7 @@ private:
 
     //Other instanciations
     m_ScaleFilter = ScaleFilterOutDoubleType::New();
-    m_ScaleFilter->InPlaceOn();
+    //m_ScaleFilter->InPlaceOn();
     m_ClampFilter = ClampFilterType::New();
     m_paramAcqui = AcquiCorrectionParametersType::New();
     m_paramAtmo = AtmoCorrectionParametersType::New();
@@ -907,17 +906,18 @@ private:
     }
 
     // Output Image
-    double scale = 1.0;
+    double scale = 1.;
+
     if (IsParameterEnabled("milli"))
     {
     GetLogger()->Info("Use milli-reflectance\n");
       if ( (GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC) )
-        scale = 1000.;
+        scale =1000.;
       if (GetParameterInt("level") == Level_TOA_IM)
-        scale = 1. / 1000.;
+        scale=1. / 1000.;
     }
-    m_ScaleFilter->SetCoef(scale);
-
+    m_ScaleFilter->SetConstant(scale);
+    
     SetParameterOutputImage("out", m_ScaleFilter->GetOutput());
   }
 
