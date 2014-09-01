@@ -64,9 +64,9 @@ int main(int argc, char * argv[])
     std::cerr <<
     " inputFileName outputFileName firstPixelComponent secondPixelComponent ";
     std::cerr <<
-    "thirdPixelComponent fourthPixelComponent amplitudeThrehsold tolerance ";
+    "thirdPixelComponent fourthPixelComponent alpha amplitudeThrehsold tolerance ";
     std::cerr <<
-    "angularThreshold firstMeanDistanceThreshold secondMeanDistanceThreshold ";
+    "angularThreshold-maxAngle firstMeanDistanceThreshold secondMeanDistanceThreshold ";
     std::cerr << "distanceThreshold" << std::endl;
     return EXIT_FAILURE;
     }
