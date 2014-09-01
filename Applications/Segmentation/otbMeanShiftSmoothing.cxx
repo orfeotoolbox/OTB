@@ -66,6 +66,7 @@ private:
 
     AddParameter(ParameterType_OutputImage,  "foutpos",    "Spatial image");
     SetParameterDescription( "foutpos", " The spatial image output. Spatial image output is a displacement map (pixel position after convergence).");
+    MandatoryOff("foutpos");
 
     AddParameter(ParameterType_Int, "spatialr", "Spatial radius");
     SetParameterDescription("spatialr", "Spatial radius of the neighborhood.");
@@ -99,7 +100,6 @@ private:
     AddParameter(ParameterType_Empty, "modesearch", "Mode search.");
     SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path . Be careful, with this option, the result will slightly depend on thread number");
     EnableParameter("modesearch");
-    MandatoryOff("modesearch");
 
 
     // Doc example parameter settings
@@ -115,7 +115,16 @@ private:
 
   void DoUpdateParameters()
   {
-    // Nothing to do here : all parameters are independent
+    if(IsParameterEnabled("modesearch"))
+      {
+      MandatoryOn("foutpos");
+      EnableParameter("foutpos");
+      }
+    else
+      {
+      MandatoryOff("foutpos");
+      DisableParameter("foutpos");
+      }
   }
 
   void DoExecute()
