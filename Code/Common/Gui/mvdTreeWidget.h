@@ -144,8 +144,8 @@ signals:
 // Protected methods.
 protected:
 
-    //
-    // QTreeWidget overloads.
+  //
+  // QTreeWidget overloads.
 
   virtual QStringList mimeTypes() const;
 
