@@ -230,12 +230,18 @@ private:
       // Evaluate spacing
       FloatVectorImageType::SpacingType spacing = inputImage->GetSpacing();
       FloatVectorImageType::SpacingType OutputSpacing;
-      OutputSpacing=spacing;
-
       OutputSpacing[0] = spacing[0] * scale[0];
       OutputSpacing[1] = spacing[1] * scale[1];
 
       m_Resampler->SetOutputSpacing(OutputSpacing);
+
+      FloatVectorImageType::PointType origin = inputImage->GetOrigin();
+      FloatVectorImageType::PointType outputOrigin;
+      outputOrigin[0] = origin[0] + 0.5 * spacing[0] * (scale[0] - 1.0);
+      outputOrigin[1] = origin[1] + 0.5 * spacing[1] * (scale[1] - 1.0);
+
+      m_Resampler->SetOutputOrigin(outputOrigin);
+
       m_Resampler->SetTransform(transform);
 
       // Evaluate size
@@ -267,12 +273,17 @@ private:
       // Evaluate spacing
       FloatVectorImageType::SpacingType spacing = inputImage->GetSpacing();
       FloatVectorImageType::SpacingType OutputSpacing;
-      OutputSpacing=spacing;
-
       OutputSpacing[0] = spacing[0] * scale[0];
       OutputSpacing[1] = spacing[1] * scale[1];
 
       m_Resampler->SetOutputSpacing(OutputSpacing);
+
+      FloatVectorImageType::PointType origin = inputImage->GetOrigin();
+      FloatVectorImageType::PointType outputOrigin;
+      outputOrigin[0] = origin[0] + 0.5 * spacing[0] * (scale[0] - 1.0);
+      outputOrigin[1] = origin[1] + 0.5 * spacing[1] * (scale[1] - 1.0);
+
+      m_Resampler->SetOutputOrigin(outputOrigin);
 
       ResampleFilterType::SizeType recomputedSize;
       recomputedSize[0] = inputImage->GetLargestPossibleRegion().GetSize()[0] / scale[0];
@@ -290,34 +301,33 @@ private:
       {
       ScalableTransformType::Pointer transform = ScalableTransformType::New();
 
-      FloatVectorImageType::IndexType origin = inputImage->GetLargestPossibleRegion().GetIndex();
+      FloatVectorImageType::SizeType inSize = inputImage->GetLargestPossibleRegion().GetSize();
       FloatVectorImageType::SpacingType spacing = inputImage->GetSpacing();
 
-      FloatVectorImageType::IndexType center;
-      center[0] = origin[0] + inputImage->GetLargestPossibleRegion().GetSize()[0] / 2.0;
-      center[1] = origin[1] + inputImage->GetLargestPossibleRegion().GetSize()[1] / 2.0;
+      itk::ContinuousIndex<double,2> ULindex(inputImage->GetLargestPossibleRegion().GetIndex());
+      ULindex[0] += -0.5;
+      ULindex[1] += -0.5;
+      itk::ContinuousIndex<double,2> center, URindex, LRindex, LLindex;
+      center[0] = ULindex[0] + static_cast<double>(inSize[0]) / 2.0;
+      center[1] = ULindex[1] + static_cast<double>(inSize[1]) / 2.0;
 
+      URindex = ULindex;
+      LRindex = ULindex;
+      LLindex = ULindex;
+      URindex[0] += inSize[0];
+      LRindex[0] += inSize[0];
+      LRindex[1] += inSize[1];
+      LLindex[1] += inSize[1];
 
       FloatVectorImageType::PointType centerPoint;
-      inputImage->TransformIndexToPhysicalPoint(center, centerPoint);
+      inputImage->TransformContinuousIndexToPhysicalPoint(center, centerPoint);
 
       //image boundary
-      FloatVectorImageType::IndexType ULindex, URindex, LRindex, LLindex;
-
-      ULindex[0]=origin[0];
-      ULindex[1]=origin[1];
-      URindex[0]=origin[0]+ inputImage->GetLargestPossibleRegion().GetSize()[0];
-      URindex[1]=origin[1];
-      LRindex[0]=origin[0]+ inputImage->GetLargestPossibleRegion().GetSize()[0];
-      LRindex[1]=origin[1]+ inputImage->GetLargestPossibleRegion().GetSize()[1];
-      LLindex[0]=origin[0];
-      LLindex[1]=origin[1]+ inputImage->GetLargestPossibleRegion().GetSize()[1];
-
-      FloatVectorImageType::PointType orig, ULpoint, URpoint, LRpoint, LLpoint;
-      inputImage->TransformIndexToPhysicalPoint(ULindex, ULpoint);
-      inputImage->TransformIndexToPhysicalPoint(URindex, URpoint);
-      inputImage->TransformIndexToPhysicalPoint(LRindex, LRpoint);
-      inputImage->TransformIndexToPhysicalPoint(LLindex, LLpoint);
+      FloatVectorImageType::PointType ULpoint, URpoint, LRpoint, LLpoint;
+      inputImage->TransformContinuousIndexToPhysicalPoint(ULindex, ULpoint);
+      inputImage->TransformContinuousIndexToPhysicalPoint(URindex, URpoint);
+      inputImage->TransformContinuousIndexToPhysicalPoint(LRindex, LRpoint);
+      inputImage->TransformContinuousIndexToPhysicalPoint(LLindex, LLpoint);
 
       // Scale Transform
       OutputVectorType scale;
@@ -344,13 +354,11 @@ private:
       m_Resampler->SetTransform(transform);
 
 
-      FloatVectorImageType::PointType ULpointTrans, URpointTrans, LRpointTrans, LLpointTrans, CenterPointTrans;
-
+      FloatVectorImageType::PointType ULpointTrans, URpointTrans, LRpointTrans, LLpointTrans;
       ULpointTrans=inverseTransform->TransformPoint(ULpoint);
       URpointTrans=inverseTransform->TransformPoint(URpoint);
       LRpointTrans=inverseTransform->TransformPoint(LRpoint);
       LLpointTrans=inverseTransform->TransformPoint(LLpoint);
-      CenterPointTrans=inverseTransform->TransformPoint(centerPoint);
 
       //compute min and max
       std::vector<FloatVectorImageType::PointType>   voutput;
@@ -364,7 +372,7 @@ private:
       double minY = voutput[0][1];
       double maxY = voutput[0][1];
 
-      for(unsigned int i = 0; i<voutput.size(); i++)
+      for(unsigned int i = 1; i<voutput.size(); i++)
         {
         // Origins
         if ( minX > voutput[i][0] )
@@ -387,16 +395,15 @@ private:
           }
         }
 
-      if( spacing[0] > 0 ) orig[0] = minX;
-      else orig[0] = maxX;
+      FloatVectorImageType::PointType outputOrig;
+      if( spacing[0] > 0 ) outputOrig[0] = minX;
+      else outputOrig[0] = maxX;
 
-      if( spacing[1] > 0 ) orig[1] = minY;
-      else orig[1] = maxY;
-
-      m_Resampler->SetOutputOrigin(orig);
+      if( spacing[1] > 0 ) outputOrig[1] = minY;
+      else outputOrig[1] = maxY;
 
       //size of output image
-      ResampleFilterType::SizeType size;
+      FloatVectorImageType::PointType size;
       size[0]=vcl_abs(maxX-minX);
       size[1]=vcl_abs(maxY-minY);
 
@@ -406,6 +413,10 @@ private:
       OutputSpacing[1] = scale[1] * spacing[1];
 
       m_Resampler->SetOutputSpacing(OutputSpacing);
+
+      outputOrig[0] += 0.5 * OutputSpacing[0];
+      outputOrig[1] += 0.5 * OutputSpacing[1];
+      m_Resampler->SetOutputOrigin(outputOrig);
 
       // Evaluate size
       ResampleFilterType::SizeType recomputedSize;
