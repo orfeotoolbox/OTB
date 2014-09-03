@@ -1,4 +1,4 @@
-OTB-v.4.2.0 - Changes since version 4.0 (2014/03/12)
+OTB-v.4.2.0 - Changes since version 4.0 (2014/09/04)
 --------------------------------------------------------
 
 * Library:
@@ -82,7 +82,7 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/03/12)
     * 0000957: Unable to display input and output of ExtractRoadExample in transparency mode in Monteverdi
 
 
-OTB-v.4.0.0 - Changes since version 3.20 (2013/03/13)
+OTB-v.4.0.0 - Changes since version 3.20 (2014/03/13)
 --------------------------------------------------------
 
 * Library:
