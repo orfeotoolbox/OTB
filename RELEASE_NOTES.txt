@@ -2,7 +2,7 @@
  Monteverdi2 Release Note
 ==========================
 
-Monteverdi2-0.8.0 - Changes since version 0.6.0 (November 12th, 2013)
+Monteverdi2-0.8.0 - Changes since version 0.6.0 (September 4th, 2014)
 =====================================================================
 
 * Repository data
