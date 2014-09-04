@@ -515,11 +515,12 @@ void IceViewer::DrawHelp()
   oss<<std::endl;
 
   oss<<"Shaders of selected image:"<<std::endl;
-  oss<<"- Switch to standard shader with S key. In this mode, use Left SHIFT + mouse wheel and Left ALT + mouse wheel to adjust contrast"<<std::endl;
+  oss<<"- Switch to standard shader with X key. In this mode, use Left SHIFT + mouse wheel and Left ALT + mouse wheel to adjust contrast"<<std::endl;
   oss<<"- Switch to local contrast enhancement with L key. In this mode, use left SHIFT + mouse wheel to adjust gain and left ALT + mouse wheel to adjust circle radius"<<std::endl;
   oss<<"- Switch to local transparency with U key. In this mode, use right SHIFT + mouse wheel to adjust gain and left ALT + mouse wheel to adjust circle radius."<<std::endl;
   oss<<"- Switch to chessboard transparency with C key. In this mode, use left ALT + mouse wheel to change chessboard grid size."<<std::endl;
   oss<<"- Switch to vertical swipe transparency with S key. Press S again to change to horizontal swipe transparency. In this mode, hoover with mouse to swipe."<<std::endl;
+  oss<<"- Press E to apply same shader configuration (color range, local constrast or standard shader configuration) to all other image shaders."<<std::endl;
   oss<<std::endl;
   
   oss<<"Vector controls:"<<std::endl;
@@ -1197,6 +1198,44 @@ bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, in
     shader->SetMaxRed(maxRed);
     shader->SetMaxGreen(maxGreen);
     shader->SetMaxBlue(maxBlue);
+    }
+
+  if(key == GLFW_KEY_E && action == GLFW_PRESS)
+    {
+    otb::GlImageActor::Pointer actor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(actor->GetShader());
+
+    std::vector<std::string> actorsKeys = m_View->GetActorsKeys();
+
+    for(std::vector<std::string>::const_iterator it = actorsKeys.begin();
+        it!=actorsKeys.end();++it)
+      { 
+      otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(*it).GetPointer());
+
+      if(currentActor.IsNotNull())
+        {
+        otb::StandardShader::Pointer currentShader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+
+        // Apply same parameters to all image actors
+        currentShader->SetMinRed(shader->GetMinRed());
+        currentShader->SetMinGreen(shader->GetMinGreen());
+        currentShader->SetMinBlue(shader->GetMinBlue());
+        currentShader->SetMaxRed(shader->GetMaxRed());
+        currentShader->SetMaxGreen(shader->GetMaxGreen());
+        currentShader->SetMaxBlue(shader->GetMaxBlue());
+        currentShader->SetGamma(shader->GetGamma());
+        if(shader->GetShaderType() == SHADER_STANDARD || shader->GetShaderType() == SHADER_LOCAL_CONTRAST)
+          {
+          currentShader->SetShaderType(shader->GetShaderType());
+
+          if(shader->GetShaderType() == SHADER_LOCAL_CONTRAST)
+            {
+            currentShader->SetRadius(shader->GetRadius());
+            currentShader->SetLocalContrastRange(shader->GetLocalContrastRange());
+            }
+          }
+        }
+      }
     }
 
   if(key == GLFW_KEY_V && action == GLFW_PRESS)
