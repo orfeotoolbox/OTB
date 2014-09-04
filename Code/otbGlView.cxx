@@ -351,6 +351,20 @@ GlView::ActorType::Pointer GlView::GetActor(const std::string & key)
   return m_Actors[key];
 }
 
+std::vector<std::string> GlView::GetActorsKeys() const
+{
+  std::vector<std::string> resp;
+
+  for(ActorMapType::const_iterator it = m_Actors.begin();
+      it!=m_Actors.end();++it)
+    {
+    resp.push_back(it->first);
+    }
+
+  return resp;
+}
+
+
 void GlView::LightRender()
 {
   for(StringVectorType::reverse_iterator it = m_RenderingOrder.rbegin();

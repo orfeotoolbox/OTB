@@ -103,6 +103,9 @@ public:
   // Retrieve a given actor
   ActorType::Pointer GetActor(const std::string & key);
 
+  // Retrieve all actors keys
+  std::vector<std::string> GetActorsKeys() const;
+
   // Things to do before rendering
   void BeforeRendering();
 
