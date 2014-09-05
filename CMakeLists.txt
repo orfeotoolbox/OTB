@@ -30,7 +30,7 @@ include(SourceStatus)
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
 set(OTB_VERSION_MAJOR "4")
-set(OTB_VERSION_MINOR "2")
+set(OTB_VERSION_MINOR "3")
 set(OTB_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
