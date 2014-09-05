@@ -679,9 +679,13 @@ PleiadesImageMetadataInterface::GetSatElevation() const
     return 0;
     }
 
-  // MSD: for the moment take only topCenter value
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.incident_angle");
-  double value = atof(valueString.c_str());
+
+  std::istringstream is(valueString);
+  std::vector<double> vecValues = std::vector<double>(std::istream_iterator<double>(is), std::istream_iterator<double>());
+
+  //Take the second value (Center value)
+  double value = vecValues[1];
 
   //Convention use in input of atmospheric correction parameters computation is
   //"90 - satOrientation". Pleiades does not seem to follow this convention so
@@ -714,9 +718,13 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
     }
   else if (!imageKeywordlist.HasKey("support_data.along_track_incidence_angle") || !imageKeywordlist.HasKey("support_data.across_track_incidence_angle"))
     {
-    // MSD: for the moment take only topCenter value
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
-    double cap = atof(valueString.c_str());
+
+    std::istringstream is(valueString);
+    std::vector<double> vecCap = std::vector<double>(std::istream_iterator<double>(is), std::istream_iterator<double>());
+
+    //Take the second value (Center value)
+    double cap = vecCap[1];
 
     //return only orientation if across/along track incidence are not available
     return cap;
@@ -728,13 +736,26 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
 
     // MSD: for the moment take only topCenter value
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
-    double cap = atof(valueString.c_str());
+
+    std::istringstream is(valueString);
+    std::vector<double> vecCap = std::vector<double>(std::istream_iterator<double>(is), std::istream_iterator<double>());
+
+    //Take the second value (Center value)
+    double cap = vecCap[1];
 
     valueString = imageKeywordlist.GetMetadataByKey("support_data.along_track_incidence_angle");
-    double along = atof(valueString.c_str());
+    std::istringstream isAlong(valueString);
+    std::vector<double> vecAlong = std::vector<double>(std::istream_iterator<double>(isAlong), std::istream_iterator<double>());
+
+    //Take the second value (Center value)
+    double along = vecAlong[1];
 
     valueString = imageKeywordlist.GetMetadataByKey("support_data.across_track_incidence_angle");
-    double ortho = atof(valueString.c_str());
+    std::istringstream isAcross(valueString);
+    std::vector<double> vecAcross = std::vector<double>(std::istream_iterator<double>(isAcross), std::istream_iterator<double>());
+
+    //Take the second value (Center value)
+    double ortho = vecAcross[1];
 
     //Compute Satellite azimuthal angle using the azimuthal angle and the along
     //and across track incidence angle
