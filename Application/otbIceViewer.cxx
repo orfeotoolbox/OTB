@@ -282,6 +282,8 @@ void IceViewer::Start()
   center[0] = 0.5*(ulx+lrx);
   center[1] = 0.5*(uly+lry);
 
+  m_View->GetSettings()->SetRotationCenter(center);
+
   double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
   double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
    
@@ -639,6 +641,15 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
     
     m_View->GetSettings()->Zoom(zoomCenter,factor);
     }
+
+ // Handle rotation
+  if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
+    {
+    double angle_offset = (yoffset>0) ? M_PI*10/180 : -M_PI*10/180;
+    m_View->GetSettings()->SetRotationAngle(m_View->GetSettings()->GetRotationAngle()+angle_offset);
+    std::cout<<"Rotating "<<angle_offset<<std::endl;
+    }
+
   else if(currentImageActor.IsNotNull() && this->scroll_callback_image(window, xoffset, yoffset))
     {}
   else if(currentVectorActor.IsNotNull() && this->scroll_callback_vector(window, xoffset, yoffset))

@@ -53,6 +53,21 @@ public:
   itkSetMacro(ViewportSize,SizeType);
   itkGetConstReferenceMacro(ViewportSize,SizeType);
 
+  void SetRotationCenter(const PointType & center)
+  {
+    m_RotationCenter = center;
+    m_GeometryChanged = true;
+  }
+  itkGetConstReferenceMacro(RotationCenter,PointType);
+
+  void SetRotationAngle(const double & angle)
+  {
+    m_RotationAngle = angle;
+    m_GeometryChanged = true;
+  }
+
+  itkGetConstReferenceMacro(RotationAngle,double);
+
   // Order of priority is Wkt, then keywordlist, then unknown
   void SetWkt(const std::string & wkt)
   {
@@ -112,6 +127,8 @@ private:
   KeywordListType m_KeywordList;
   bool m_UseProjection;
   bool m_GeometryChanged;
+  PointType   m_RotationCenter;
+  double      m_RotationAngle;
 
 }; // End class ViewSettings
 

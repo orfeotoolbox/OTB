@@ -24,6 +24,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
+#include "itkCenteredRigid2DTransform.h"
 #include "otbFragmentShader.h"
 
 namespace otb
@@ -106,6 +107,7 @@ protected:
   typedef ImageFileReader<VectorImageType>                                        ReaderType;
   typedef MultiChannelExtractROI<float,float>                                     ExtractROIFilterType;
   typedef otb::GenericRSTransform<>                                               RSTransformType;
+  typedef itk::CenteredRigid2DTransform<>                                         RigidTransformType;
   typedef std::vector<unsigned int>                                               ResolutionVectorType;
 
   // Internal class to hold tiles
@@ -204,6 +206,9 @@ private:
 
   RSTransformType::Pointer m_ViewportToImageTransform;
   RSTransformType::Pointer m_ImageToViewportTransform;
+
+  RigidTransformType::Pointer m_ViewportForwardRotationTransform;
+  RigidTransformType::Pointer m_ViewportBackwardRotationTransform;
 
 }; // End class GlImageActor
 

@@ -27,6 +27,8 @@ ViewSettings::ViewSettings()
   m_Wkt="";
   m_UseProjection = false;
   m_GeometryChanged = false;
+  m_RotationCenter.Fill(0);
+  m_RotationAngle = 0;
 }
 
 ViewSettings::~ViewSettings()

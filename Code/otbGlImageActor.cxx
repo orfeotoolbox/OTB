@@ -46,7 +46,9 @@ GlImageActor::GlImageActor()
     m_NumberOfComponents(0),
     m_Shader(StandardShader::New()),
     m_ViewportToImageTransform(RSTransformType::New()),
-    m_ImageToViewportTransform(RSTransformType::New())
+    m_ImageToViewportTransform(RSTransformType::New()),
+    m_ViewportForwardRotationTransform(RigidTransformType::New()),
+    m_ViewportBackwardRotationTransform(RigidTransformType::New())
 {}
 
 GlImageActor::~GlImageActor()
@@ -439,10 +441,10 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(cll,ill);
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(clr,ilr);
   
-  PointType pul = m_ImageToViewportTransform->TransformPoint(iul);
-  PointType pur = m_ImageToViewportTransform->TransformPoint(iur);
-  PointType pll = m_ImageToViewportTransform->TransformPoint(ill);
-  PointType plr = m_ImageToViewportTransform->TransformPoint(ilr);
+  PointType pul = m_ViewportBackwardRotationTransform->TransformPoint(m_ImageToViewportTransform->TransformPoint(iul));
+  PointType pur = m_ViewportBackwardRotationTransform->TransformPoint(m_ImageToViewportTransform->TransformPoint(iur));
+  PointType pll = m_ViewportBackwardRotationTransform->TransformPoint(m_ImageToViewportTransform->TransformPoint(ill));
+  PointType plr = m_ViewportBackwardRotationTransform->TransformPoint(m_ImageToViewportTransform->TransformPoint(ilr));
 
   ul[0] = pul[0];
   ul[1] = pul[1];
@@ -472,10 +474,10 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   lr[0]=lrx;
   lr[1]=lry;
   
-  tul = m_ViewportToImageTransform->TransformPoint(ul);
-  tur = m_ViewportToImageTransform->TransformPoint(ur);
-  tll = m_ViewportToImageTransform->TransformPoint(ll);
-  tlr = m_ViewportToImageTransform->TransformPoint(lr);
+  tul = m_ViewportToImageTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(ul));
+  tur = m_ViewportToImageTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(ur));
+  tll = m_ViewportToImageTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(ll));
+  tlr = m_ViewportToImageTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(lr));
 
   itk::ContinuousIndex<double,2> cul,cur,cll,clr;
 
@@ -513,7 +515,9 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
 
 GlImageActor::PointType GlImageActor::ViewportToImageTransform(const PointType & in, bool physical) const
 {
-  PointType imgPoint = m_ViewportToImageTransform->TransformPoint(in);
+  PointType inRotated = m_ViewportForwardRotationTransform->TransformPoint(in);
+
+  PointType imgPoint = m_ViewportToImageTransform->TransformPoint(inRotated);
 
   if(!physical)
     {
@@ -534,7 +538,10 @@ GlImageActor::PointType GlImageActor::ImageToViewportTransform(const PointType &
     imgPoint[1]=imgPoint[1]*m_Spacing[1]+m_Origin[1];
     }
 
-  return m_ImageToViewportTransform->TransformPoint(imgPoint);
+  PointType out =  m_ImageToViewportTransform->TransformPoint(imgPoint);
+  
+  return m_ViewportBackwardRotationTransform->TransformPoint(out);
+
 }
 
 bool GlImageActor::GetPixelFromViewport(const PointType & in, PixelType& pixel) const
@@ -587,7 +594,9 @@ void GlImageActor::UpdateResolution()
   // TODO: This part needs a review
 
   // Transform the spacing vector
+  pointA = m_ViewportForwardRotationTransform->TransformPoint(pointA);
   pointA = m_ViewportToImageTransform->TransformPoint(pointA);
+  pointB = m_ViewportForwardRotationTransform->TransformPoint(pointB);
   pointB = m_ViewportToImageTransform->TransformPoint(pointB);
 
   SpacingType outSpacing;
@@ -645,7 +654,7 @@ void GlImageActor::UpdateTransforms()
   ViewSettings::ConstPointer settings = this->GetSettings();
 
   m_ViewportToImageTransform = RSTransformType::New();
-  m_ImageToViewportTransform = RSTransformType::New(); 
+  m_ImageToViewportTransform = RSTransformType::New();
 
   if(settings->GetUseProjection())
     {
@@ -661,6 +670,19 @@ void GlImageActor::UpdateTransforms()
     }
   m_ViewportToImageTransform->InstanciateTransform();
   m_ImageToViewportTransform->InstanciateTransform();
+
+  m_ViewportForwardRotationTransform = RigidTransformType::New();
+  m_ViewportBackwardRotationTransform = RigidTransformType::New();
+
+  RigidTransformType::ParametersType rigidParameters(5);
+  rigidParameters.Fill(0);
+  rigidParameters[0]=settings->GetRotationAngle();
+  rigidParameters[1]=settings->GetRotationCenter()[0];
+  rigidParameters[2]=settings->GetRotationCenter()[1];
+
+  m_ViewportForwardRotationTransform->SetParameters(rigidParameters);
+
+  m_ViewportForwardRotationTransform->GetInverse(m_ViewportBackwardRotationTransform);
 }
 
 void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double & minGreen, double & maxGreen, double & minBlue, double & maxBlue, bool full, double lcp, double hcp)
