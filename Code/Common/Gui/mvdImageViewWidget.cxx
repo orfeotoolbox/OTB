@@ -762,9 +762,16 @@ ImageViewWidget
   emit CenterChanged( center );
 
   AbstractImageModel* imageModel = m_Renderer->GetReferenceImageModel();
-  assert( imageModel!=NULL );
 
-  SpacingType nativeSpacing( imageModel->GetNativeSpacing() );
+  SpacingType nativeSpacing;
+  // MANTIS-970: Fixed crash when no dataset is selected.
+  if( imageModel==NULL )
+    {
+    nativeSpacing[ 0 ] = 1.0;
+    nativeSpacing[ 1 ] = 1.0;
+    }
+  else
+    nativeSpacing = imageModel->GetNativeSpacing();
 
 
   double rsx = nativeSpacing[ 0 ] / spacing[ 0 ];
