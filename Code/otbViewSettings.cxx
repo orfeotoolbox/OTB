@@ -138,12 +138,12 @@ void ViewSettings::SetNorthUpAngle()
   
   RSTransformType::OutputPointType groundPoint3d1 = forwardTransform->TransformPoint(centerPoint3d);
   
-  groundPoint3d1[0] = 1000;
+  groundPoint3d1[1] += 0.01;
   
   RSTransformType::InputPointType centerPoint3d2 = inverseTransform->TransformPoint(groundPoint3d1);
   
   double angle = -vcl_atan2(centerPoint3d2[1]-centerPoint3d[1],centerPoint3d2[0]-centerPoint3d[0]);
   
-  m_RotationAngle = angle - M_PI/2;
+  m_RotationAngle = M_PI/2 - angle;
 }
 }
