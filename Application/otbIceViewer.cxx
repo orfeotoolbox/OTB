@@ -981,10 +981,16 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
       if(currentVectorActor.IsNotNull())
         {
         currentVectorActor->GetExtent(ulx,uly,lrx,lry);
+        roiActor->SetWkt(currentVectorActor->GetWkt());
         }
       else if(currentImageActor.IsNotNull())
         {
-        currentImageActor->GetExtent(ulx,uly,lrx,lry);
+        ulx = currentImageActor->GetOrigin()[0];
+        uly = currentImageActor->GetOrigin()[1];
+        lrx = ulx + currentImageActor->GetLargestRegion().GetSize()[0] * currentImageActor->GetSpacing()[0];
+        lry = uly + currentImageActor->GetLargestRegion().GetSize()[1] * currentImageActor->GetSpacing()[1];
+        roiActor->SetWkt(currentImageActor->GetWkt());
+        roiActor->SetKwl(currentImageActor->GetKwl());
         }
    
        otb::GlROIActor::PointType ul,lr;
@@ -995,8 +1001,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
       roiActor->SetUL(ul);
       roiActor->SetLR(lr);
-      roiActor->SetWkt(m_View->GetSettings()->GetWkt());
-      roiActor->SetKwl(m_View->GetSettings()->GetKeywordList());
+
       roiActor->SetFill(true);
       roiActor->SetAlpha(0.2);
        

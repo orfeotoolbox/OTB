@@ -67,7 +67,7 @@ void GlROIActor::ProcessViewSettings()
   ViewSettings::ConstPointer settings = this->GetSettings();
 
   
-  if((m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull()) || (settings->GetUseProjection()))
+  if((m_ViewportToImageTransform.IsNull() || m_ImageToViewportTransform.IsNull()) || (settings->GetUseProjection() || settings->GetGeometryChanged()))
     {
     UpdateTransforms();
 
@@ -83,6 +83,9 @@ void GlROIActor::ProcessViewSettings()
     m_VpUR = m_ImageToViewportTransform->TransformPoint(ur);
     m_VpLL = m_ImageToViewportTransform->TransformPoint(ll);
     m_VpLR = m_ImageToViewportTransform->TransformPoint(m_LR);
+
+    std::cout<<m_VpUL<<" "<<m_VpUR<<" "<<m_VpLL<<" "<<m_VpLR<<std::endl;
+
     }
 }
 
