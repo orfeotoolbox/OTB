@@ -116,6 +116,8 @@ private:
   ViewSettings::PointType m_DeltaDrag;
   ViewSettings::PointType m_OriginDrag;
 
+  double m_StartAngle;
+
   bool m_DisplayHud;
   bool m_DisplayHelp;
 

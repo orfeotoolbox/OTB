@@ -126,7 +126,18 @@ void GlImageActor::ProcessViewSettings()
   // Is there anything to do ?
   ViewSettings::ConstPointer settings = this->GetSettings();
 
-  
+  RigidTransformType::ParametersType rigidParameters(5);
+  rigidParameters.Fill(0);
+  rigidParameters[0]=settings->GetRotationAngle();
+  rigidParameters[1]=settings->GetRotationCenter()[0];
+  rigidParameters[2]=settings->GetRotationCenter()[1];
+
+  m_ViewportForwardRotationTransform->SetParameters(rigidParameters);
+
+   rigidParameters[0]=-settings->GetRotationAngle();
+
+   m_ViewportBackwardRotationTransform->SetParameters(rigidParameters);
+
   if(settings->GetUseProjection() && settings->GetGeometryChanged())
     {
     UpdateTransforms();
@@ -135,7 +146,8 @@ void GlImageActor::ProcessViewSettings()
          it!=m_LoadedTiles.end();
          ++it)
       {
-      this->ImageRegionToViewportQuad(it->m_ImageRegion,it->m_UL,it->m_UR,it->m_LL,it->m_LR);
+      // Do not rotate here, handled by opengl
+      this->ImageRegionToViewportQuad(it->m_ImageRegion,it->m_UL,it->m_UR,it->m_LL,it->m_LR,false);
       }
     } 
 }
@@ -201,7 +213,7 @@ void GlImageActor::UpdateData()
       
       newTile.m_ImageRegion.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion());
 
-      ImageRegionToViewportQuad(newTile.m_ImageRegion,newTile.m_UL,newTile.m_UR,newTile.m_LL,newTile.m_LR);
+      ImageRegionToViewportQuad(newTile.m_ImageRegion,newTile.m_UL,newTile.m_UR,newTile.m_LL,newTile.m_LR,false);
 
        // std::cout<<"Loading tile "<<newTile.m_ImageRegion<<std::endl;
        // std::cout<<"Mapped to "<<newTile.m_UL<<", "<<newTile.m_UR<<", "<<newTile.m_LL<<", "<<newTile.m_LR<<std::endl;
@@ -418,7 +430,7 @@ void GlImageActor::ImageRegionToViewportExtent(const RegionType& region, double 
   lry = std::max(std::max(tul[1],tur[1]),std::max(tll[1],tlr[1]));
 }
 
-void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointType & ul, PointType & ur, PointType & ll, PointType & lr) const
+void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointType & ul, PointType & ur, PointType & ll, PointType & lr, bool rotate) const
 {
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
@@ -441,11 +453,19 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(cll,ill);
   m_FileReader->GetOutput()->TransformContinuousIndexToPhysicalPoint(clr,ilr);
   
-  PointType pul = m_ViewportBackwardRotationTransform->TransformPoint(m_ImageToViewportTransform->TransformPoint(iul));
-  PointType pur = m_ViewportBackwardRotationTransform->TransformPoint(m_ImageToViewportTransform->TransformPoint(iur));
-  PointType pll = m_ViewportBackwardRotationTransform->TransformPoint(m_ImageToViewportTransform->TransformPoint(ill));
-  PointType plr = m_ViewportBackwardRotationTransform->TransformPoint(m_ImageToViewportTransform->TransformPoint(ilr));
+  PointType pul = m_ImageToViewportTransform->TransformPoint(iul);
+  PointType pur = m_ImageToViewportTransform->TransformPoint(iur);
+  PointType pll = m_ImageToViewportTransform->TransformPoint(ill);
+  PointType plr = m_ImageToViewportTransform->TransformPoint(ilr);
 
+  if(rotate)
+    {
+    pul = m_ViewportBackwardRotationTransform->TransformPoint(pul);
+    pur = m_ViewportBackwardRotationTransform->TransformPoint(pur);
+    pll = m_ViewportBackwardRotationTransform->TransformPoint(pll);
+    plr = m_ViewportBackwardRotationTransform->TransformPoint(plr);
+    }
+  
   ul[0] = pul[0];
   ul[1] = pul[1];
   ur[0] = pur[0];
@@ -494,8 +514,7 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   iulx = std::max(std::min(std::min(cul[0],cur[0]),std::min(cll[0],clr[0])),0.);
   iuly = std::max(std::min(std::min(cul[1],cur[1]),std::min(cll[1],clr[1])),0.);
   ilrx = std::min(std::max(std::max(cul[0],cur[0]),std::max(cll[0],clr[0])),static_cast<double>(largest.GetSize()[0]));
-  ilry = std::min(std::max(std::max(cul[1],cur[1]),std::max(cll[1],clr[1])),static_cast<double>(largest.GetSize()[1]));
- 
+  ilry = std::min(std::max(std::max(cul[1],cur[1]),std::max(cll[1],clr[1])),static_cast<double>(largest.GetSize()[1])); 
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
 
@@ -670,19 +689,6 @@ void GlImageActor::UpdateTransforms()
     }
   m_ViewportToImageTransform->InstanciateTransform();
   m_ImageToViewportTransform->InstanciateTransform();
-
-  m_ViewportForwardRotationTransform = RigidTransformType::New();
-  m_ViewportBackwardRotationTransform = RigidTransformType::New();
-
-  RigidTransformType::ParametersType rigidParameters(5);
-  rigidParameters.Fill(0);
-  rigidParameters[0]=settings->GetRotationAngle();
-  rigidParameters[1]=settings->GetRotationCenter()[0];
-  rigidParameters[2]=settings->GetRotationCenter()[1];
-
-  m_ViewportForwardRotationTransform->SetParameters(rigidParameters);
-
-  m_ViewportForwardRotationTransform->GetInverse(m_ViewportBackwardRotationTransform);
 }
 
 void GlImageActor::AutoColorAdjustment(double & minRed, double & maxRed, double & minGreen, double & maxGreen, double & minBlue, double & maxBlue, bool full, double lcp, double hcp)

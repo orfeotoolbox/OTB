@@ -56,14 +56,12 @@ public:
   void SetRotationCenter(const PointType & center)
   {
     m_RotationCenter = center;
-    m_GeometryChanged = true;
   }
   itkGetConstReferenceMacro(RotationCenter,PointType);
 
   void SetRotationAngle(const double & angle)
   {
     m_RotationAngle = angle;
-    m_GeometryChanged = true;
   }
 
   itkGetConstReferenceMacro(RotationAngle,double);

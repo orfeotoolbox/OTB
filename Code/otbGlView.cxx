@@ -284,6 +284,10 @@ void GlView::BeforeRendering()
   glLoadIdentity();
 
   glPushMatrix();
+  
+  glTranslatef(m_Settings->GetRotationCenter()[0],m_Settings->GetRotationCenter()[1],0);
+  glRotatef(-m_Settings->GetRotationAngle()*180/M_PI,0,0,1);
+  glTranslatef(-m_Settings->GetRotationCenter()[0],-m_Settings->GetRotationCenter()[1],0);
 
   // glScalef(m_Settings->GetSpacing()[0],m_Settings->GetSpacing()[1],1);
 }

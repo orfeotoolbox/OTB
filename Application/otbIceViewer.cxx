@@ -45,6 +45,7 @@ IceViewer::IceViewer()
     m_StartDrag(),
     m_DeltaDrag(),
     m_OriginDrag(),
+    m_StartAngle(0),
     m_DisplayHud(true),
     m_DisplayHelp(false),
     m_ColorMap(),
@@ -323,7 +324,7 @@ void IceViewer::DrawHud()
   double ulx, uly, lrx, lry;
   m_View->GetSettings()->GetViewportExtent(ulx,uly,lrx,lry);
   
-  oss<<"Viewport: x:["<<ulx<<", "<<lrx<<"], y:["<<uly<<", "<<lry<<"], spacing:("<< m_View->GetSettings()->GetSpacing()[0]<<", "<<m_View->GetSettings()->GetSpacing()[1]<<")"<<std::endl;
+  oss<<"Viewport: x:["<<ulx<<", "<<lrx<<"], y:["<<uly<<", "<<lry<<"], spacing:("<< m_View->GetSettings()->GetSpacing()[0]<<", "<<m_View->GetSettings()->GetSpacing()[1]<<")"<<", orientation: "<<static_cast<int>((m_View->GetSettings()->GetRotationAngle()*180/M_PI))%180<<" deg"<<std::endl;
   oss<<std::endl;
 
   for(std::vector<std::string>::iterator it = renderingOrder.begin();
@@ -641,15 +642,6 @@ void IceViewer::scroll_callback(GLFWwindow * window, double xoffset, double yoff
     
     m_View->GetSettings()->Zoom(zoomCenter,factor);
     }
-
- // Handle rotation
-  if(glfwGetKey(window,GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
-    {
-    double angle_offset = (yoffset>0) ? M_PI*10/180 : -M_PI*10/180;
-    m_View->GetSettings()->SetRotationAngle(m_View->GetSettings()->GetRotationAngle()+angle_offset);
-    std::cout<<"Rotating "<<angle_offset<<std::endl;
-    }
-
   else if(currentImageActor.IsNotNull() && this->scroll_callback_image(window, xoffset, yoffset))
     {}
   else if(currentVectorActor.IsNotNull() && this->scroll_callback_vector(window, xoffset, yoffset))
@@ -788,20 +780,32 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
 {
   double posx, posy,vpx,vpy;
   glfwGetCursorPos(m_Window,&posx,&posy);
-  
+  m_View->GetSettings()->ScreenToViewPortTransform(posx,posy,vpx,vpy);
+ 
   if(m_Dragging)
     {
-    m_DeltaDrag[0] = posx - m_StartDrag[0];
-    m_DeltaDrag[1] = m_StartDrag[1]-posy;
+    if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+      {
+      double startx, starty;
+      m_View->GetSettings()->ScreenToViewPortTransform(m_StartDrag[0],m_StartDrag[1],startx,starty);
+
+      double angle1 = vcl_atan2(vpy - m_View->GetSettings()->GetRotationCenter()[1],vpx - m_View->GetSettings()->GetRotationCenter()[0]);
+      double angle2 = vcl_atan2(starty - m_View->GetSettings()->GetRotationCenter()[1], startx - m_View->GetSettings()->GetRotationCenter()[0]);
+
+      m_View->GetSettings()->SetRotationAngle(m_StartAngle+angle2-angle1);
+      }
+    else
+      {
+      m_DeltaDrag[0] = posx - m_StartDrag[0];
+      m_DeltaDrag[1] = m_StartDrag[1]-posy;
     
-    otb::ViewSettings::PointType origin;
-    origin[0]=m_OriginDrag[0]-m_DeltaDrag[0]*m_View->GetSettings()->GetSpacing()[0];
-    origin[1]=m_OriginDrag[1]+m_DeltaDrag[1]*m_View->GetSettings()->GetSpacing()[1];
-    
-    m_View->GetSettings()->SetOrigin(origin);
+      otb::ViewSettings::PointType origin;
+      origin[0]=m_OriginDrag[0]-m_DeltaDrag[0]*m_View->GetSettings()->GetSpacing()[0];
+      origin[1]=m_OriginDrag[1]+m_DeltaDrag[1]*m_View->GetSettings()->GetSpacing()[1];
+      
+      m_View->GetSettings()->SetOrigin(origin);
+      }
     }
-  
-  m_View->GetSettings()->ScreenToViewPortTransform(posx,posy,vpx,vpy);
 
   std::vector<std::string> renderingOrder = m_View->GetRenderingOrder();
 
@@ -886,18 +890,6 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
   double deltay = (lry-uly)/4;
   otb::ViewSettings::PointType origin = m_View->GetSettings()->GetOrigin();
   
-  if(key == GLFW_KEY_LEFT && action == GLFW_PRESS)
-    {
-    origin[0]-=deltax; 
-    m_View->GetSettings()->SetOrigin(origin);
-    }
-  
-  if(key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-    {
-    origin[0]+=deltax; 
-    m_View->GetSettings()->SetOrigin(origin);
-    }
-  
   if(key == GLFW_KEY_UP && action == GLFW_PRESS)
     {
     origin[1]-=deltay; 
@@ -909,7 +901,19 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     origin[1]+=deltay; 
     m_View->GetSettings()->SetOrigin(origin);
     }
-  
+
+  else if(key == GLFW_KEY_LEFT && action == GLFW_REPEAT)
+    {
+    origin[0]-=deltax; 
+    m_View->GetSettings()->SetOrigin(origin);
+    }
+    
+  if(key == GLFW_KEY_RIGHT && action == GLFW_REPEAT)
+    {
+      origin[0]+=deltax; 
+      m_View->GetSettings()->SetOrigin(origin);
+    }
+
   // Change selected actor
   if(key == GLFW_KEY_PAGE_UP && action == GLFW_PRESS)
     {
@@ -1079,7 +1083,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
      
     otb::ViewSettings::SpacingType spacing;
-    spacing.Fill(std::min(spacingx,spacingy));
+    spacing.Fill(std::max(spacingx,spacingy));
      
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->Center(center);
@@ -1270,21 +1274,29 @@ bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, in
     {
     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
 
-    // First, transform the center
+    // Estimate the correct spacing
     GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
-    GlImageActor::PointType imCenter = currentActor->ViewportToImageTransform(vpCenter);
+    GlImageActor::PointType imCenter = currentActor->ViewportToImageTransform(vpCenter,false);
+    vpCenter[0]+=1000*m_View->GetSettings()->GetSpacing()[0];
+    GlImageActor::PointType imCenter2 = currentActor->ViewportToImageTransform(vpCenter,false);
+    
+    double length = vcl_sqrt((imCenter[0]-imCenter2[0])*(imCenter[0]-imCenter2[0])+(imCenter[1]-imCenter2[1])*(imCenter[1]-imCenter2[1]));
 
-    // Next, transform the spacing
-    imCenter[0]+=1000 * currentActor->GetSpacing()[0];
-    imCenter[1]+=1000 * currentActor->GetSpacing()[1];
+    GlImageActor::SpacingType spacing = m_View->GetSettings()->GetSpacing();
 
-    GlImageActor::PointType tmpVpPt = currentActor->ImageToViewportTransform(imCenter);
+    spacing[0]=spacing[0]/(length/1000);
 
-    GlImageActor::SpacingType spacing;
+    
+    vpCenter = m_View->GetSettings()->GetViewportCenter();
+    imCenter = currentActor->ViewportToImageTransform(vpCenter,false);
+    vpCenter[1]+=1000*m_View->GetSettings()->GetSpacing()[1];
+    imCenter2 = currentActor->ViewportToImageTransform(vpCenter,false);
+    
+    length = vcl_sqrt((imCenter[0]-imCenter2[0])*(imCenter[0]-imCenter2[0])+(imCenter[1]-imCenter2[1])*(imCenter[1]-imCenter2[1]));
 
-    spacing[0]=(tmpVpPt[0]-vpCenter[0])/1000;
-    spacing[1]=(tmpVpPt[1]-vpCenter[1])/1000;
-
+    spacing[1]=spacing[1]/(length/1000);
+    
+    vpCenter = m_View->GetSettings()->GetViewportCenter();
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->Center(vpCenter);
     }
@@ -1330,6 +1342,7 @@ void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int actio
 
       // TODO: Move drag to dedicated method in ViewSettings
       m_OriginDrag = m_View->GetSettings()->GetOrigin();
+      m_StartAngle = m_View->GetSettings()->GetRotationAngle();
       }
     else if(action == GLFW_RELEASE)
       {
@@ -1344,6 +1357,7 @@ void IceViewer::mouse_button_callback(GLFWwindow * window, int button, int actio
       m_StartDrag.Fill(0);
       m_DeltaDrag.Fill(0);
       m_OriginDrag.Fill(0);
+      m_StartAngle = 0;
       }
     }
   else if(button == GLFW_MOUSE_BUTTON_2)
