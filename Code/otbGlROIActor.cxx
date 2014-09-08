@@ -54,6 +54,7 @@ void GlROIActor::SetKwl(const ImageKeywordlistType & kwl)
 
 void GlROIActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
+  //TODO: Fixme (should handle rotation as well)
   lrx = std::max(std::max(m_VpUL[0],m_VpUR[0]),std::max(m_VpLL[0],m_VpLR[0]));
   lry = std::max(std::max(m_VpUL[1],m_VpUR[1]),std::max(m_VpLL[1],m_VpLR[1]));
   ulx = std::min(std::min(m_VpUL[0],m_VpUR[0]),std::min(m_VpLL[0],m_VpLR[0]));
@@ -83,9 +84,6 @@ void GlROIActor::ProcessViewSettings()
     m_VpUR = m_ImageToViewportTransform->TransformPoint(ur);
     m_VpLL = m_ImageToViewportTransform->TransformPoint(ll);
     m_VpLR = m_ImageToViewportTransform->TransformPoint(m_LR);
-
-    std::cout<<m_VpUL<<" "<<m_VpUR<<" "<<m_VpLL<<" "<<m_VpLR<<std::endl;
-
     }
 }
 

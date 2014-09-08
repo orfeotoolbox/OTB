@@ -980,7 +980,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
       if(currentVectorActor.IsNotNull())
         {
-        currentVectorActor->GetExtent(ulx,uly,lrx,lry);
+        currentVectorActor->GetBoundingBox(ulx,uly,lrx,lry);
         roiActor->SetWkt(currentVectorActor->GetWkt());
         }
       else if(currentImageActor.IsNotNull())

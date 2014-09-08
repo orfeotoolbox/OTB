@@ -101,7 +101,9 @@ GlVectorActor::GlVectorActor()
     m_ExtentLRY(0),
     m_OptimizedRendering(true),
     m_OptimizedRenderingActive(false),
-    m_PointMarkerSize(5)
+    m_PointMarkerSize(5),
+    m_ViewportForwardRotationTransform(RigidTransformType::New()),
+    m_ViewportBackwardRotationTransform(RigidTransformType::New())
     
 {
   m_Color.Fill(0);
@@ -215,6 +217,10 @@ void GlVectorActor::SetCurrentLayer(const std::string & layername)
   m_DisplayListNeedsRebuild = true;
 }
 
+void GlVectorActor::GetBoundingBox(double & ulx, double & uly, double & lrx, double & lry) const
+{
+  m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetExtent(ulx,uly,lrx,lry,true);
+}
 
 void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double & lry) const
 {
@@ -225,10 +231,10 @@ void GlVectorActor::GetExtent(double & ulx, double & uly, double & lrx, double &
   ll=lr;
   ll[0]=ul[0];
   
-  vpul = m_VectorToViewportTransform->TransformPoint(ul);
-  vpur = m_VectorToViewportTransform->TransformPoint(ur);
-  vplr = m_VectorToViewportTransform->TransformPoint(lr);
-  vpll = m_VectorToViewportTransform->TransformPoint(ll);
+  vpul = m_ViewportBackwardRotationTransform->TransformPoint(m_VectorToViewportTransform->TransformPoint(ul));
+  vpur = m_ViewportBackwardRotationTransform->TransformPoint(m_VectorToViewportTransform->TransformPoint(ur));
+  vplr = m_ViewportBackwardRotationTransform->TransformPoint(m_VectorToViewportTransform->TransformPoint(lr));
+  vpll = m_ViewportBackwardRotationTransform->TransformPoint(m_VectorToViewportTransform->TransformPoint(ll));
 
   ulx = std::min(std::min(vpul[0],vplr[0]),std::min(vpur[0],vpll[0]));
   uly = std::min(std::min(vpul[1],vplr[1]),std::min(vpur[1],vpll[1]));
@@ -243,7 +249,7 @@ GlVectorActor::PointType GlVectorActor::ViewportToVectorTransform(const PointTyp
     UpdateTransforms();
     }
   
-  return m_ViewportToVectorTransform->TransformPoint(vpPoint);
+  return m_ViewportToVectorTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(vpPoint));
 
 }
 
@@ -262,6 +268,18 @@ void GlVectorActor::ProcessViewSettings()
   // Is there anything to do ?
   ViewSettings::ConstPointer settings = this->GetSettings();
 
+  RigidTransformType::ParametersType rigidParameters(5);
+  rigidParameters.Fill(0);
+  rigidParameters[0]=settings->GetRotationAngle();
+  rigidParameters[1]=settings->GetRotationCenter()[0];
+  rigidParameters[2]=settings->GetRotationCenter()[1];
+  
+  m_ViewportForwardRotationTransform->SetParameters(rigidParameters);
+  
+   rigidParameters[0]=-settings->GetRotationAngle();
+   
+   m_ViewportBackwardRotationTransform->SetParameters(rigidParameters);
+   
   
   if((m_ViewportToVectorTransform.IsNull() || m_VectorToViewportTransform.IsNull()) || (settings->GetUseProjection() && settings->GetGeometryChanged()))
     {
@@ -286,10 +304,10 @@ void GlVectorActor::UpdateData()
   vpll[0] = vpul[0];
 
   // Convert to layer extent  
-  ul = m_ViewportToVectorTransform->TransformPoint(vpul);
-  ur = m_ViewportToVectorTransform->TransformPoint(vpur);
-  ll = m_ViewportToVectorTransform->TransformPoint(vpll);
-  lr = m_ViewportToVectorTransform->TransformPoint(vplr);
+  ul = m_ViewportToVectorTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(vpul));
+  ur = m_ViewportToVectorTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(vpur));
+  ll = m_ViewportToVectorTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(vpll));
+  lr = m_ViewportToVectorTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(vplr));
 
   ulx = std::min(std::min(ul[0],lr[0]),std::min(ur[0],ll[0]));
   uly = std::min(std::min(ul[1],lr[1]),std::min(ur[1],ll[1]));

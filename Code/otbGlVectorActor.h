@@ -25,6 +25,7 @@
 #include "otbOGRDataSourceWrapper.h"
 #include "otbOGRLayerWrapper.h"
 #include "otbOGRFeatureWrapper.h"
+#include "itkCenteredRigid2DTransform.h"
 
 // Forward declaration of GLUtesselator
 class GLUtesselator;
@@ -43,6 +44,7 @@ public:
   typedef otb::GenericRSTransform<>                       RSTransformType;
   typedef RSTransformType::InputPointType                 PointType;
   typedef itk::Vector<double,3>                           ColorType;
+  typedef itk::CenteredRigid2DTransform<>                 RigidTransformType;
 
   itkNewMacro(Self);
   
@@ -60,6 +62,9 @@ public:
 
   // Retrieve the full extent of the actor
   virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const;
+
+  // Return actor extent in its own geometry
+  void GetBoundingBox(double & ulx, double & uly, double & lrx, double & lry) const;
 
   // Update internal actor state with respect to ViewSettings
   virtual void ProcessViewSettings();
@@ -155,6 +160,9 @@ private:
   bool m_OptimizedRenderingActive;
 
   unsigned int m_PointMarkerSize;
+
+  RigidTransformType::Pointer m_ViewportForwardRotationTransform;
+  RigidTransformType::Pointer m_ViewportBackwardRotationTransform;
 
 }; // End class GlVectorActor
 
