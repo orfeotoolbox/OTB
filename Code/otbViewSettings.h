@@ -108,6 +108,10 @@ public:
 
   void Center(const PointType & center);
 
+  void SetPersepectiveAngle();
+
+  void SetNorthUpAngle();
+
 protected:
   ViewSettings();
 

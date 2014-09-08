@@ -497,6 +497,7 @@ void IceViewer::DrawHelp()
   oss<<"Navigation:"<<std::endl;
   oss<<"- Move with mouse left button drag & drop or keyboard arrows"<<std::endl;
   oss<<"- Zoom in/out with CTRL + mouse wheel"<<std::endl;
+  oss<<"- Rotate with CTRL + mouse drag"<<std::endl;
   oss<<std::endl;
 
   oss<<"Multiple images and vectors handling:"<<std::endl;
@@ -506,6 +507,9 @@ void IceViewer::DrawHelp()
   oss<<"- Highlight selected image by holding backspace"<<std::endl;
   oss<<"- Zoom to full extent of selected dataset with W"<<std::endl;
   oss<<"- Zoom to full resolution fo selected images with Q (images only, as full resolution has no meaning for vectors)"<<std::endl;
+  oss<<"- Set rotation angle to perspective view with Y to accomodate heavy off-nadir viewing angle images"<<std::endl;
+  oss<<"- Set rotation angle to north up view with J"<<std::endl;
+  oss<<"- Reset rotation angle with I"<<std::endl;
   oss<<"- Note that all images are reprojected in the first loaded dataset geometry (highligthed with * *). To change reference geometry to selected dataset, press P key."<<std::endl;
   oss<<std::endl;
 
@@ -532,7 +536,7 @@ void IceViewer::DrawHelp()
   oss<<"- Tune alpha (transparancy) value with LEFT CTRL + mouse wheel"<<std::endl;
   oss<<"- Tune line width with RIGHT SHIFT + mouse wheel"<<std::endl;
   oss<<"- Rotate vector color with LEFT ALT + mouse wheel"<<std::endl;
-  oss<<"- Enable/disable optimized rendering for large vector (simplification of geometries, geometries smaller than 100 * viewport pixel sizes are not rendered). Optimized rendering is only active if there are more feature to render than pixels in in the viewport."<<std::endl;
+  oss<<"- Enable/disable optimized rendering for large vector (simplification of geometries, geometries smaller than 100 * viewport pixel sizes are not rendered)."<<std::endl<<"  Optimized rendering is only active if there are more feature to render than pixels in in the viewport."<<std::endl;
   
   // Find the size of the help
   std::string help_string = oss.str();
@@ -1098,6 +1102,22 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     {
     m_DisplayHelp = true;
     }
+
+  if(key == GLFW_KEY_Y && action == GLFW_PRESS)
+    {
+    m_View->GetSettings()->SetPersepectiveAngle();
+    }
+
+  if(key == GLFW_KEY_J && action == GLFW_PRESS)
+    {
+    m_View->GetSettings()->SetNorthUpAngle();
+    }
+
+  if(key == GLFW_KEY_I && action == GLFW_PRESS)
+    {
+    m_View->GetSettings()->SetRotationAngle(0);
+    }
+
 
   if(currentImageActor.IsNotNull())
     {

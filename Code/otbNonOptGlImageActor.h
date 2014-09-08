@@ -80,8 +80,6 @@ public:
   itkSetMacro(BlueIdx,unsigned int);
   itkGetMacro(BlueIdx,unsigned int);
 
-
-
   itkGetMacro(NumberOfComponents,unsigned int);
 
 protected:

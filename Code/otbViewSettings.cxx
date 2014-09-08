@@ -16,6 +16,9 @@
 
 =========================================================================*/
 #include "otbViewSettings.h"
+#include "otbGenericRSTransform.h"
+#include "otbImageToGenericRSOutputParameters.h"
+#include "otbMapProjections.h"
 
 namespace otb
 {
@@ -77,4 +80,70 @@ ViewSettings::PointType ViewSettings::GetViewportCenter() const
   return center;
 }
 
+void ViewSettings::SetPersepectiveAngle()
+{
+  typedef otb::GenericRSTransform<double,3,3> RSTransformType;
+  // Build the RS transform
+  RSTransformType::Pointer forwardTransform = RSTransformType::New();
+  forwardTransform->SetInputKeywordList(m_KeywordList);
+  forwardTransform->SetOutputProjectionRef(m_Wkt);
+  forwardTransform->InstanciateTransform();
+
+  RSTransformType::Pointer inverseTransform = RSTransformType::New();
+  inverseTransform->SetInputProjectionRef(m_Wkt);
+  inverseTransform->SetOutputKeywordList(m_KeywordList);
+  inverseTransform->InstanciateTransform();
+
+  PointType centerPoint = GetViewportCenter();
+
+  // Find the rotation to apply
+  RSTransformType::InputPointType centerPoint3d;
+  centerPoint3d[0] = centerPoint[0];
+  centerPoint3d[1] = centerPoint[1];
+  centerPoint3d[2] = 0;
+
+  RSTransformType::OutputPointType groundPoint3d1 = forwardTransform->TransformPoint(centerPoint3d);
+
+  groundPoint3d1[2] = 1000;
+
+  RSTransformType::InputPointType centerPoint3d2 = inverseTransform->TransformPoint(groundPoint3d1);
+
+  double angle = -vcl_atan2(centerPoint3d2[1]-centerPoint3d[1],centerPoint3d2[0]-centerPoint3d[0]);
+  
+  m_RotationAngle = M_PI/2 - angle;
+}
+
+
+void ViewSettings::SetNorthUpAngle()
+{
+  typedef otb::GenericRSTransform<double,3,3> RSTransformType;
+  // Build the RS transform
+  RSTransformType::Pointer forwardTransform = RSTransformType::New();
+  forwardTransform->SetInputKeywordList(m_KeywordList);
+  forwardTransform->SetOutputProjectionRef(m_Wkt);
+  forwardTransform->InstanciateTransform();
+
+  RSTransformType::Pointer inverseTransform = RSTransformType::New();
+  inverseTransform->SetInputProjectionRef(m_Wkt);
+  inverseTransform->SetOutputKeywordList(m_KeywordList);
+  inverseTransform->InstanciateTransform();
+  
+  PointType centerPoint = GetViewportCenter();
+  
+  // Find the rotation to apply
+  RSTransformType::InputPointType centerPoint3d;
+  centerPoint3d[0] = centerPoint[0];
+  centerPoint3d[1] = centerPoint[1];
+  centerPoint3d[2] = 0;
+  
+  RSTransformType::OutputPointType groundPoint3d1 = forwardTransform->TransformPoint(centerPoint3d);
+  
+  groundPoint3d1[0] = 1000;
+  
+  RSTransformType::InputPointType centerPoint3d2 = inverseTransform->TransformPoint(groundPoint3d1);
+  
+  double angle = -vcl_atan2(centerPoint3d2[1]-centerPoint3d[1],centerPoint3d2[0]-centerPoint3d[0]);
+  
+  m_RotationAngle = angle - M_PI/2;
+}
 }
