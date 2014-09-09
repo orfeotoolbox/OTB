@@ -34,7 +34,10 @@ Every application derive from the class \doxygen{otb}{Wrapper::Application}. An
 application can't be templated. It must contain the standard class typedefs and
 a call to the \code{OTB\_APPLICATION\_EXPORT} macro.
 
-There are also three methods to implement in a new application:
+You need also to define standard macros \doxygen{itk}{NewMacro} and
+\doxygen{itk}{TypeMacro}.
+ 
+It is also mandatory to implement three methods in a new application:
 \begin{itemize}
   \item \code{DoInit()}
   \item \code{DoUpdateParameters()}
