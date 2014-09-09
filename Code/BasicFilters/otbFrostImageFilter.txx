@@ -40,6 +40,7 @@ template <class TInputImage, class TOutputImage>
 FrostImageFilter<TInputImage, TOutputImage>::FrostImageFilter()
 {
   m_Radius.Fill(1);
+  m_Deramp = 0.1; 
 }
 
 template <class TInputImage, class TOutputImage>
