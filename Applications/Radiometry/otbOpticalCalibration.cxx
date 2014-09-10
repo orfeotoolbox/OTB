@@ -344,6 +344,8 @@ private:
                             "compute adjacency effects, it doesn't have to"
                             "match the image spacing");
     SetMinimumParameterFloatValue("atmo.pixsize",0.0);
+    SetDefaultParameterFloat("atmo.pixsize", 1.);
+
     MandatoryOff("atmo.pixsize");
 
     // Doc example parameter settings
