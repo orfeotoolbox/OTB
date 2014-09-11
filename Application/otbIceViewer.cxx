@@ -322,7 +322,7 @@ void IceViewer::DrawHud()
   double ulx, uly, lrx, lry;
   m_View->GetSettings()->GetViewportExtent(ulx,uly,lrx,lry);
   
-  oss<<"Viewport: x:["<<ulx<<", "<<lrx<<"], y:["<<uly<<", "<<lry<<"], spacing:("<< m_View->GetSettings()->GetSpacing()[0]<<", "<<m_View->GetSettings()->GetSpacing()[1]<<")"<<", orientation: "<<(static_cast<float>(static_cast<int>((10*m_View->GetSettings()->GetRotationAngle()*1800/M_PI))%1800))/10<<" deg"<<std::endl;
+  oss<<"Viewport: x:["<<ulx<<", "<<lrx<<"], y:["<<uly<<", "<<lry<<"], spacing:("<< m_View->GetSettings()->GetSpacing()[0]<<", "<<m_View->GetSettings()->GetSpacing()[1]<<")"<<", orientation: "<<(static_cast<float>(static_cast<int>((m_View->GetSettings()->GetRotationAngle()*1800/M_PI))%3600))/10<<" deg"<<std::endl;
   oss<<std::endl;
 
   for(std::vector<std::string>::iterator it = renderingOrder.begin();
