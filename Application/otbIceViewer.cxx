@@ -1064,6 +1064,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->UseProjectionOn();
     m_View->GetSettings()->Center(imCenter);
+    m_View->GetSettings()->UpdateRotation(m_View->GetSettings()->GetViewportCenter(),0);
     m_ReferenceActor = m_SelectedActor;
     }
 
