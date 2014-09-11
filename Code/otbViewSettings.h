@@ -112,6 +112,8 @@ public:
 
   void SetNorthUpAngle();
 
+  void UpdateRotation(const PointType & newCenter, double newAngle);
+
 protected:
   ViewSettings();
 

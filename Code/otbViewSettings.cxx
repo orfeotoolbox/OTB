@@ -80,6 +80,28 @@ ViewSettings::PointType ViewSettings::GetViewportCenter() const
   return center;
 }
 
+void ViewSettings::UpdateRotation(const PointType & newCenter, double newAngle)
+{
+    std::complex<double> theta1 = std::polar(1.0,-m_RotationAngle);
+    std::complex<double> theta2 = std::polar(1.0,-newAngle+m_RotationAngle);
+
+    m_RotationAngle = -std::arg(theta1*theta2);
+
+    if(vcl_abs(m_RotationAngle) > 1e-9)
+      {
+      // Compute new center
+      std::complex<double> c1(m_RotationCenter[0],m_RotationCenter[1]);
+      std::complex<double> c2(newCenter[0],newCenter[1]);
+      std::complex<double> one(1.0,0.0);
+    
+      std::complex<double> finalCenter = (theta2*(c1-c2)+c2-theta1*theta2*c1)/(one-theta1*theta2);
+    
+      m_RotationCenter[0] = finalCenter.real();
+      m_RotationCenter[1] = finalCenter.imag();
+      }
+}
+
+
 void ViewSettings::SetPersepectiveAngle()
 {
   typedef otb::GenericRSTransform<double,3,3> RSTransformType;
@@ -110,7 +132,7 @@ void ViewSettings::SetPersepectiveAngle()
 
   double angle = -vcl_atan2(centerPoint3d2[1]-centerPoint3d[1],centerPoint3d2[0]-centerPoint3d[0]);
   
-  m_RotationAngle = M_PI/2 - angle;
+  this->UpdateRotation(centerPoint,M_PI/2 - angle);
 }
 
 
@@ -143,7 +165,8 @@ void ViewSettings::SetNorthUpAngle()
   RSTransformType::InputPointType centerPoint3d2 = inverseTransform->TransformPoint(groundPoint3d1);
   
   double angle = -vcl_atan2(centerPoint3d2[1]-centerPoint3d[1],centerPoint3d2[0]-centerPoint3d[0]);
-  
-  m_RotationAngle = M_PI/2 - angle;
+
+  this->UpdateRotation(centerPoint, M_PI/2 - angle);
+
 }
 }

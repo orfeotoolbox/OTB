@@ -283,8 +283,6 @@ void IceViewer::Start()
   center[0] = 0.5*(ulx+lrx);
   center[1] = 0.5*(uly+lry);
 
-  m_View->GetSettings()->SetRotationCenter(center);
-
   double spacingx = (lrx-ulx)/m_View->GetSettings()->GetViewportSize()[0];
   double spacingy = (lry-uly)/m_View->GetSettings()->GetViewportSize()[1];
    
@@ -324,7 +322,7 @@ void IceViewer::DrawHud()
   double ulx, uly, lrx, lry;
   m_View->GetSettings()->GetViewportExtent(ulx,uly,lrx,lry);
   
-  oss<<"Viewport: x:["<<ulx<<", "<<lrx<<"], y:["<<uly<<", "<<lry<<"], spacing:("<< m_View->GetSettings()->GetSpacing()[0]<<", "<<m_View->GetSettings()->GetSpacing()[1]<<")"<<", orientation: "<<static_cast<int>((m_View->GetSettings()->GetRotationAngle()*180/M_PI))%180<<" deg"<<std::endl;
+  oss<<"Viewport: x:["<<ulx<<", "<<lrx<<"], y:["<<uly<<", "<<lry<<"], spacing:("<< m_View->GetSettings()->GetSpacing()[0]<<", "<<m_View->GetSettings()->GetSpacing()[1]<<")"<<", orientation: "<<(static_cast<float>(static_cast<int>((10*m_View->GetSettings()->GetRotationAngle()*1800/M_PI))%1800))/10<<" deg"<<std::endl;
   oss<<std::endl;
 
   for(std::vector<std::string>::iterator it = renderingOrder.begin();
@@ -793,10 +791,10 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
       double startx, starty;
       m_View->GetSettings()->ScreenToViewPortTransform(m_StartDrag[0],m_StartDrag[1],startx,starty);
 
-      double angle1 = vcl_atan2(vpy - m_View->GetSettings()->GetRotationCenter()[1],vpx - m_View->GetSettings()->GetRotationCenter()[0]);
-      double angle2 = vcl_atan2(starty - m_View->GetSettings()->GetRotationCenter()[1], startx - m_View->GetSettings()->GetRotationCenter()[0]);
+      double angle1 = vcl_atan2(vpy - m_View->GetSettings()->GetViewportCenter()[1],vpx - m_View->GetSettings()->GetViewportCenter()[0]);
+      double angle2 = vcl_atan2(starty - m_View->GetSettings()->GetViewportCenter()[1], startx - m_View->GetSettings()->GetViewportCenter()[0]);
 
-      m_View->GetSettings()->SetRotationAngle(m_StartAngle+angle2-angle1);
+      m_View->GetSettings()->UpdateRotation(m_View->GetSettings()->GetViewportCenter(),m_StartAngle+angle2-angle1);
       }
     else
       {
@@ -1115,7 +1113,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
   if(key == GLFW_KEY_I && action == GLFW_PRESS)
     {
-    m_View->GetSettings()->SetRotationAngle(0);
+    m_View->GetSettings()->UpdateRotation(m_View->GetSettings()->GetViewportCenter(),0);
     }
 
 

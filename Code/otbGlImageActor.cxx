@@ -602,13 +602,15 @@ void GlImageActor::UpdateResolution()
   // Retrieve viewport spacing
   ViewSettings::SpacingType spacing = settings->GetSpacing();
   
-  PointType pointA, pointB;
+  // 100 screen pixels
+  PointType pointA, pointB, pointC;
 
   pointA  = settings->GetOrigin();
   pointB = pointA;
+  pointC = pointA;
   
   pointB[0]+=100*spacing[0];
-  pointB[1]+=100*spacing[1];
+  pointC[1]+=100*spacing[1];
 
   // TODO: This part needs a review
 
@@ -617,17 +619,22 @@ void GlImageActor::UpdateResolution()
   pointA = m_ViewportToImageTransform->TransformPoint(pointA);
   pointB = m_ViewportForwardRotationTransform->TransformPoint(pointB);
   pointB = m_ViewportToImageTransform->TransformPoint(pointB);
+  pointC = m_ViewportForwardRotationTransform->TransformPoint(pointC);
+  pointC = m_ViewportToImageTransform->TransformPoint(pointC);
 
-  SpacingType outSpacing;
-  outSpacing[0] = (pointB[0]-pointA[0])/100;
-  outSpacing[1] = (pointB[1]-pointA[1])/100;
+  // Equivalence in image pixels
+  pointA[0] = (pointA[0] - m_Origin[0])/m_Spacing[0];
+  pointA[1] = (pointA[1] - m_Origin[1])/m_Spacing[1];
+  pointB[0] = (pointB[0] - m_Origin[0])/m_Spacing[0];
+  pointB[1] = (pointB[1] - m_Origin[1])/m_Spacing[1];
+  pointC[0] = (pointC[0] - m_Origin[0])/m_Spacing[0];
+  pointC[1] = (pointC[1] - m_Origin[1])/m_Spacing[1];
 
-  // std::cout<<"Estimated spacing: "<<outSpacing<<std::endl;
-
-  // Last, divide by image spacing to get the resolution
-  double resolution = std::min(vcl_abs(m_Spacing[0]/outSpacing[0]), 
-                               vcl_abs(m_Spacing[1]/outSpacing[1]));
-
+  double distAB = vcl_sqrt((pointA[0]-pointB[0])*(pointA[0]-pointB[0])+(pointA[1]-pointB[1])*(pointA[1]-pointB[1]));
+  double distAC = vcl_sqrt((pointA[0]-pointC[0])*(pointA[0]-pointC[0])+(pointA[1]-pointC[1])*(pointA[1]-pointC[1]));
+  
+  double resolution = std::min(100/distAB,100/distAC);
+  
   // std::cout<<"Resolution: "<<resolution<<std::endl;
   
   // Arbitrary higher than any distance we will compute here
