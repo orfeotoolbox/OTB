@@ -525,6 +525,7 @@ void IceViewer::DrawHelp()
   oss<<"- Switch to local transparency with U key. In this mode, use right SHIFT + mouse wheel to adjust gain and left ALT + mouse wheel to adjust circle radius."<<std::endl;
   oss<<"- Switch to chessboard transparency with C key. In this mode, use left ALT + mouse wheel to change chessboard grid size."<<std::endl;
   oss<<"- Switch to vertical swipe transparency with S key. Press S again to change to horizontal swipe transparency. In this mode, hoover with mouse to swipe."<<std::endl;
+  oss<<"- Switch to local spectral angle with T. In this mode, the greylevel value is 1 - the spectral angle with the current pixel (note that if same band is used in all color channels, the value will be uniform)"<<std::endl;
   oss<<"- Press E to apply same shader configuration (color range, local constrast or standard shader configuration) to all other image shaders."<<std::endl;
   oss<<std::endl;
   
@@ -691,6 +692,9 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
         shader->SetMaxBlue(shader->GetMaxBlue()*factor);
         break;
       case SHADER_LOCAL_CONTRAST:
+        shader->SetRadius(shader->GetRadius()/factor);
+        break;
+      case SHADER_SPECTRAL_ANGLE:
         shader->SetRadius(shader->GetRadius()/factor);
         break;
       case SHADER_LOCAL_ALPHA:
@@ -1163,6 +1167,37 @@ bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, in
     shader->SetCenter(pin);
 
     shader->SetShaderType(SHADER_LOCAL_CONTRAST);
+    }
+if(key == GLFW_KEY_T && action == GLFW_PRESS)
+    {
+    double posx,posy,vpx,vpy;
+    glfwGetCursorPos(m_Window,&posx,&posy);
+
+    m_View->GetSettings()->ScreenToViewPortTransform(posx,posy,vpx,vpy);
+
+    otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(m_SelectedActor).GetPointer());
+    otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+   
+    ViewSettings::PointType pin;
+    pin[0]=vpx;
+    pin[1]=vpy;
+
+    otb::GlImageActor::PixelType pixel;
+    bool pixelAvail = currentActor->GetPixelFromViewport(pin,pixel);
+
+    if(pixelAvail)
+      {
+      shader->SetCurrentRed(pixel[currentActor->GetRedIdx()-1]);
+      shader->SetCurrentGreen(pixel[currentActor->GetGreenIdx()-1]);
+      shader->SetCurrentBlue(pixel[currentActor->GetBlueIdx()-1]);
+      }
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    pin[0]=posx;
+    pin[1]=height-posy;
+    shader->SetCenter(pin);
+
+    shader->SetShaderType(SHADER_SPECTRAL_ANGLE);
     }
   if(key == GLFW_KEY_U && action == GLFW_PRESS)
     {

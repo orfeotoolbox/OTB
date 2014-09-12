@@ -100,7 +100,19 @@ std::string StandardShader::GetSource() const
     "float alpha = (shader_vertical_slider_flag == 0 && gl_FragCoord.x > shader_slider_pos) || (shader_vertical_slider_flag == 1 && gl_FragCoord.y > shader_slider_pos) ? 1.0 : 0.0;\n" \
     "gl_FragColor[3] = clamp(alpha,0.0,1.0);\n"                         \
     "}\n"                                                               \
-    "}";}
+    "else if(shader_type == 5)\n"                                       \
+    "{\n"                                                               \
+    "float distance = sqrt((gl_FragCoord.x-shader_center[0])*(gl_FragCoord.x-shader_center[0])+(gl_FragCoord.y-shader_center[1])*(gl_FragCoord.y-shader_center[1]));\n" \
+    "if(distance < shader_radius)\n"                                    \
+    "{\n"                                                               \
+    "float angle = acos((shader_current[0]*p[0]+shader_current[1]*p[1]+shader_current[2]*p[2])/(sqrt((p[0]*p[0]+p[1]*p[1]+p[2]*p[2])*(shader_current[0]*shader_current[0]+shader_current[1]*shader_current[1]+shader_current[2]*shader_current[2]))));\n" \
+    "gl_FragColor[0]=float(clamp((1.-10.*abs(angle)/3.142),0.0,1.0));\n"             \
+    "gl_FragColor[1]=float(clamp((1.-10.*abs(angle)/3.142),0.0,1.0));\n"             \
+    "gl_FragColor[2]=float(clamp((1.-10.*abs(angle)/3.142),0.0,1.0));\n"             \
+    "}\n"                                                               \
+    "}\n"                                                               \
+    "}"
+;}
     // "gl_FragColor[3] = clamp(exp(-sqrt(distance)),0.0,1.0);\n"          \
     // "if(distance < shader_radius)\n"                                    \
     // "{\n"                                                               \
