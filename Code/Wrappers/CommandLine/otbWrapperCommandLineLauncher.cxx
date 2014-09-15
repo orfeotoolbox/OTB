@@ -628,6 +628,21 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           }
         }
       }
+
+    // Check output paths validity
+    if (hasValue)
+      {
+      if (type == ParameterType_OutputFilename)
+        {
+        std::string filename = m_Application->GetParameterString(paramKey);
+        itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
+        if (!itksys::SystemTools::FileIsDirectory(path.c_str()))
+          {
+          std::cerr <<"ERROR: Directory doesn't exist : "<< path.c_str() << std::endl;
+          return WRONGPARAMETERVALUE;
+          }
+        }
+      }
     }
 
   return OKPARAM;
