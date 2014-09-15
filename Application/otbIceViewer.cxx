@@ -678,6 +678,10 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
       shader->SetLocalContrastRange(shader->GetLocalContrastRange()*factor);
       return true;
       }
+    else if(shader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
+      {
+      shader->SetSpectralAngleRange(shader->GetSpectralAngleRange()*factor);
+      }
     }
   else if(glfwGetKey(window,GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
     {
@@ -835,9 +839,9 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
       
       if(pixelAvail)
         {
-        shader->SetCurrentRed(pixel[currentActor->GetRedIdx()-1]);
-        shader->SetCurrentGreen(pixel[currentActor->GetGreenIdx()-1]);
-        shader->SetCurrentBlue(pixel[currentActor->GetBlueIdx()-1]);
+        shader->SetCurrentRed(pixel[0]);
+        shader->SetCurrentGreen(pixel[1]);
+        shader->SetCurrentBlue(pixel[2]);
         }
       
       int width, height;
@@ -1156,9 +1160,9 @@ bool IceViewer::key_callback_image(GLFWwindow* window, int key, int scancode, in
 
     if(pixelAvail)
       {
-      shader->SetCurrentRed(pixel[currentActor->GetRedIdx()-1]);
-      shader->SetCurrentGreen(pixel[currentActor->GetGreenIdx()-1]);
-      shader->SetCurrentBlue(pixel[currentActor->GetBlueIdx()-1]);
+      shader->SetCurrentRed(pixel[0]);
+      shader->SetCurrentGreen(pixel[1]);
+      shader->SetCurrentBlue(pixel[2]);
       }
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -1187,9 +1191,9 @@ if(key == GLFW_KEY_T && action == GLFW_PRESS)
 
     if(pixelAvail)
       {
-      shader->SetCurrentRed(pixel[currentActor->GetRedIdx()-1]);
-      shader->SetCurrentGreen(pixel[currentActor->GetGreenIdx()-1]);
-      shader->SetCurrentBlue(pixel[currentActor->GetBlueIdx()-1]);
+      shader->SetCurrentRed(pixel[0]);
+      shader->SetCurrentGreen(pixel[1]);
+      shader->SetCurrentBlue(pixel[2]);
       }
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);

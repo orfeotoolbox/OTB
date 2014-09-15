@@ -77,6 +77,9 @@ public:
   itkSetMacro(LocalContrastRange,double);
   itkGetMacro(LocalContrastRange,double);
 
+  itkSetMacro(SpectralAngleRange,double);
+  itkGetMacro(SpectralAngleRange,double);
+
   itkSetMacro(Gamma,double);
   itkGetMacro(Gamma,double);
 
@@ -133,6 +136,7 @@ private:
   double m_CurrentGreen;
   double m_CurrentBlue;
   double m_LocalContrastRange;
+  double m_SpectralAngleRange;
 
   PointType m_Center;
 

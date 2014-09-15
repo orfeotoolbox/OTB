@@ -37,6 +37,7 @@ StandardShader::StandardShader()
     m_CurrentGreen(0),
     m_CurrentBlue(0),
     m_LocalContrastRange(50),
+    m_SpectralAngleRange(10),
     m_Center(),
     m_Radius(200),
     m_ChessboardSize(256),
@@ -65,12 +66,13 @@ std::string StandardShader::GetSource() const
     "uniform int shader_type;\n"                                        \
     "uniform float shader_radius;\n"                                    \
     "uniform float shader_localc_range;\n"                              \
+    "uniform float shader_spectral_angle_range;\n"                      \
     "uniform float shader_chessboard_size;\n"                           \
     "uniform float shader_slider_pos;\n"                                \
     "uniform int shader_vertical_slider_flag;\n"                        \
     "void main (void) {\n"                                              \
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
-    "gl_FragColor = clamp(pow((p + shader_b)*shader_a,shader_gamma), 0.0, 1.0);\n" \
+    "gl_FragColor = clamp(pow((p+shader_b)*shader_a,shader_gamma), 0.0, 1.0);\n"            \
     "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
     "if(shader_use_no_data > 0 && p[0] == shader_no_data && p[1] == shader_no_data && p[2] == shader_no_data){\n" \
     "gl_FragColor[3] = 0.;\n"                                            \
@@ -106,9 +108,9 @@ std::string StandardShader::GetSource() const
     "if(distance < shader_radius)\n"                                    \
     "{\n"                                                               \
     "float angle = acos((shader_current[0]*p[0]+shader_current[1]*p[1]+shader_current[2]*p[2])/(sqrt((p[0]*p[0]+p[1]*p[1]+p[2]*p[2])*(shader_current[0]*shader_current[0]+shader_current[1]*shader_current[1]+shader_current[2]*shader_current[2]))));\n" \
-    "gl_FragColor[0]=float(clamp((1.-10.*abs(angle)/3.142),0.0,1.0));\n"             \
-    "gl_FragColor[1]=float(clamp((1.-10.*abs(angle)/3.142),0.0,1.0));\n"             \
-    "gl_FragColor[2]=float(clamp((1.-10.*abs(angle)/3.142),0.0,1.0));\n"             \
+    "gl_FragColor[0]=float(clamp((1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0));\n"             \
+    "gl_FragColor[1]=float(clamp((1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0));\n"             \
+    "gl_FragColor[2]=float(clamp((1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0));\n"             \
     "}\n"                                                               \
     "}\n"                                                               \
     "}"
@@ -172,6 +174,9 @@ void StandardShader::SetupShader()
 
   GLint shader_localc_range = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_localc_range");
   glUniform1f(shader_localc_range,m_LocalContrastRange);
+
+  GLint shader_spectral_angle_range = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_spectral_angle_range");
+  glUniform1f(shader_spectral_angle_range,m_SpectralAngleRange);
 
   GLint shader_chessboard_size = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_chessboard_size");
   glUniform1f(shader_chessboard_size,m_ChessboardSize);
