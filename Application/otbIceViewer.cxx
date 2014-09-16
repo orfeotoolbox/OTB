@@ -375,6 +375,10 @@ void IceViewer::DrawHud()
         case SHADER_SPECTRAL_ANGLE:
           oss<<" spectral angle: - gain="<<shader->GetSpectralAngleRange();
           // Do nothing
+          break;
+        case SHADER_GRADIENT:
+          oss<<" gradient";
+          break;
         }
       oss<<"\n";
       
@@ -528,6 +532,7 @@ void IceViewer::DrawHelp()
   oss<<"- Switch to chessboard transparency with C key. In this mode, use left ALT + mouse wheel to change chessboard grid size."<<std::endl;
   oss<<"- Switch to vertical swipe transparency with S key. Press S again to change to horizontal swipe transparency. In this mode, hoover with mouse to swipe."<<std::endl;
   oss<<"- Switch to local spectral angle with T. In this mode, the greylevel value is 1 - the spectral angle with the current pixel (note that if same band is used in all color channels, the value will be uniform)"<<std::endl;
+  oss<<"- Switch to local gradient mode with M (or ',')."<<std::endl;
   oss<<"- Press E to apply same shader configuration (color range, local constrast or standard shader configuration) to all other image shaders."<<std::endl;
   oss<<std::endl;
   
