@@ -77,6 +77,7 @@ std::string StandardShader::GetSource() const
     "if(shader_use_no_data > 0 && vec3(p) == vec3(shader_no_data)){\n"  \
     "gl_FragColor[3] = 0.;\n"                                           \
     "}\n"                                                               \
+    "float alpha = gl_FragColor[3];\n"                                  \
     "float dist = distance(gl_FragCoord.xy,shader_center);\n" \
     "if(shader_type == 1)\n"                                            \
     "{\n"                                                               \
@@ -86,6 +87,7 @@ std::string StandardShader::GetSource() const
     "gl_FragColor[0] = tmp[0];\n"                                       \
     "gl_FragColor[1] = tmp[1];\n"                                       \
     "gl_FragColor[2] = tmp[2];\n"                                       \
+    "gl_FragColor[3] = alpha;\n"                                        \
     "}\n"                                                               \
     "}\n"                                                               \
     "else if(shader_type == 2)"                                         \
@@ -111,6 +113,21 @@ std::string StandardShader::GetSource() const
     "gl_FragColor[0] = tmp[0];\n"                                       \
     "gl_FragColor[1] = tmp[1];\n"                                       \
     "gl_FragColor[2] = tmp[2];\n"                                       \
+    "gl_FragColor[3] = alpha;\n"                                        \
+    "}\n"                                                               \
+    "}\n"                                                               \
+    "else if(shader_type == 6)\n"                                       \
+    "{\n"                                                               \
+    "if(dist < shader_radius)\n"                                        \
+    "{\n"                                                               \
+    "vec2 dx = vec2(gl_TexCoord[0].xy);\n"                              \
+    "dx[0]+=1.0/255.;\n"                                                \
+    "vec2 dy = vec2(gl_TexCoord[0].xy);\n"                              \
+    "dy[0]+=1.0/255.;\n"                                                \
+    "vec4 pdx = texture2D(src, dx);\n"                                  \
+    "vec4 pdy = texture2D(src, dy);\n"                                  \
+    "gl_FragColor = clamp(pow(0.01*shader_a*(0.5*abs((pdx-p)/distance(gl_TexCoord[0].xy,dx))+ 0.5*abs((pdy-p)/distance(gl_TexCoord[0].xy,dy))),shader_gamma),0.0,1.0);\n" \
+    "gl_FragColor[3] = alpha;\n"                                        \
     "}\n"                                                               \
     "}\n"                                                               \
     "}"

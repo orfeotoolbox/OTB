@@ -692,7 +692,7 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
   
   if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     {
-    if(shader->GetShaderType() == SHADER_STANDARD)
+    if(shader->GetShaderType() == SHADER_STANDARD || shader->GetShaderType() == SHADER_GRADIENT)
       {
       shader->SetMinRed(shader->GetMinRed()*factor);
       shader->SetMinGreen(shader->GetMinGreen()*factor);
@@ -731,6 +731,9 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
         shader->SetRadius(shader->GetRadius()/factor);
         break;
       case SHADER_LOCAL_ALPHA:
+        shader->SetRadius(shader->GetRadius()/factor);
+        break;
+      case SHADER_GRADIENT:
         shader->SetRadius(shader->GetRadius()/factor);
         break;
       case SHADER_ALPHA_GRID:
@@ -1164,6 +1167,10 @@ if(key == GLFW_KEY_T && action == GLFW_PRESS)
     {
     UpdateShaderColorAndPosition(vpx,vpy,actor);
     shader->SetShaderType(SHADER_SPECTRAL_ANGLE);
+    }
+if(key == GLFW_KEY_M && action == GLFW_PRESS)
+    {
+    shader->SetShaderType(SHADER_GRADIENT);
     }
   if(key == GLFW_KEY_U && action == GLFW_PRESS)
     {
