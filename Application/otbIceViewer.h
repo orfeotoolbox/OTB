@@ -94,6 +94,9 @@ private:
   // Render help
   void DrawHelp();
 
+  // Update all shaders with current color and position
+  void UpdateShaderColorAndPosition(double vpx, double vpy,otb::GlImageActor * currentActor);
+
   // prevent implementation
   IceViewer(const Self&);
   void operator=(const Self&);
