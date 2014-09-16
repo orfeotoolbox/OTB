@@ -106,7 +106,7 @@ std::string StandardShader::GetSource() const
     "{\n"                                                               \
     "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
-    "float angle = acos(dot(vec3(p),shader_current)/(length(vec3(p))*length(shader_current)));\n" \
+    "float angle = acos(clamp(dot(vec3(p),shader_current)/(length(vec3(p))*length(shader_current)),-1.0,1.0));\n" \
     "vec3 tmp = clamp(vec3(1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0);\n" \
     "gl_FragColor[0] = tmp[0];\n"                                       \
     "gl_FragColor[1] = tmp[1];\n"                                       \
