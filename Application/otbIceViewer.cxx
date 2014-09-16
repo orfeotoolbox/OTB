@@ -1304,7 +1304,7 @@ if(key == GLFW_KEY_T && action == GLFW_PRESS)
         currentShader->SetMaxGreen(shader->GetMaxGreen());
         currentShader->SetMaxBlue(shader->GetMaxBlue());
         currentShader->SetGamma(shader->GetGamma());
-        if(shader->GetShaderType() == SHADER_STANDARD || shader->GetShaderType() == SHADER_LOCAL_CONTRAST)
+        if(shader->GetShaderType() == SHADER_STANDARD || shader->GetShaderType() == SHADER_LOCAL_CONTRAST || shader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
           {
           currentShader->SetShaderType(shader->GetShaderType());
 
@@ -1312,6 +1312,11 @@ if(key == GLFW_KEY_T && action == GLFW_PRESS)
             {
             currentShader->SetRadius(shader->GetRadius());
             currentShader->SetLocalContrastRange(shader->GetLocalContrastRange());
+            }
+          if(shader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
+            {
+            currentShader->SetRadius(shader->GetRadius());
+            currentShader->SetSpectralAngleRange(shader->GetSpectralAngleRange());
             }
           }
         }
