@@ -372,6 +372,8 @@ void IceViewer::DrawHud()
         case SHADER_ALPHA_SLIDER:
           oss<<" swipe transparency - "<<(shader->GetVerticalSlider()?"vertical":"horizontal")<<", position="<<shader->GetSliderPosition();
           break;
+        case SHADER_SPECTRAL_ANGLE:
+          oss<<" spectral angle: - gain="<<shader->GetSpectralAngleRange();
           // Do nothing
         }
       oss<<"\n";
