@@ -53,7 +53,7 @@ StandardShader::~StandardShader()
 
 std::string StandardShader::GetSource() const
 {
-  return "#version 110 \n"                                              \
+  return "#version 130 \n"                                              \
     "uniform sampler2D src;\n"                                          \
     "uniform vec4 shader_a;\n"                                          \
     "uniform vec4 shader_b;\n"                                          \
@@ -120,13 +120,14 @@ std::string StandardShader::GetSource() const
     "{\n"                                                               \
     "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
+    "vec2 size = vec2(textureSize(src,0));\n"                           \
     "vec2 dx = vec2(gl_TexCoord[0].xy);\n"                              \
-    "dx[0]+=1.0/255.;\n"                                                \
+    "dx[0]+=1.0/size[0];\n"                                             \
     "vec2 dy = vec2(gl_TexCoord[0].xy);\n"                              \
-    "dy[0]+=1.0/255.;\n"                                                \
+    "dy[1]+=1.0/size[1];\n"                                             \
     "vec4 pdx = texture2D(src, dx);\n"                                  \
     "vec4 pdy = texture2D(src, dy);\n"                                  \
-    "gl_FragColor = clamp(pow(0.01*shader_a*(0.5*abs((pdx-p)/distance(gl_TexCoord[0].xy,dx))+ 0.5*abs((pdy-p)/distance(gl_TexCoord[0].xy,dy))),shader_gamma),0.0,1.0);\n" \
+    "gl_FragColor = clamp(pow(shader_a*(0.5*abs((pdx-p))+ 0.5*abs((pdy-p))),shader_gamma),0.0,1.0);\n" \
     "gl_FragColor[3] = alpha;\n"                                        \
     "}\n"                                                               \
     "}\n"                                                               \
