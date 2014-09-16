@@ -72,25 +72,25 @@ std::string StandardShader::GetSource() const
     "uniform int shader_vertical_slider_flag;\n"                        \
     "void main (void) {\n"                                              \
     "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
-    "gl_FragColor = clamp(pow((p+shader_b)*shader_a,shader_gamma), 0.0, 1.0);\n"            \
+    "gl_FragColor = clamp(pow((p+shader_b)*shader_a,shader_gamma), 0.0, 1.0);\n" \
     "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
-    "if(shader_use_no_data > 0 && p[0] == shader_no_data && p[1] == shader_no_data && p[2] == shader_no_data){\n" \
-    "gl_FragColor[3] = 0.;\n"                                            \
+    "if(shader_use_no_data > 0 && vec3(p) == vec3(shader_no_data)){\n"  \
+    "gl_FragColor[3] = 0.;\n"                                           \
     "}\n"                                                               \
+    "float dist = distance(gl_FragCoord.xy,shader_center);\n" \
     "if(shader_type == 1)\n"                                            \
     "{\n"                                                               \
-    "float distance = sqrt((gl_FragCoord.x-shader_center[0])*(gl_FragCoord.x-shader_center[0])+(gl_FragCoord.y-shader_center[1])*(gl_FragCoord.y-shader_center[1]));\n" \
-    "if(distance < shader_radius)\n"                                    \
+    "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
-    "gl_FragColor[0] = float(clamp((p[0]-(shader_current[0]-shader_localc_range))/(2.*shader_localc_range),0.0,1.0));\n" \
-    "gl_FragColor[1] = float(clamp((p[1]-(shader_current[1]-shader_localc_range))/(2.*shader_localc_range),0.0,1.0));\n" \
-    "gl_FragColor[2] = float(clamp((p[2]-(shader_current[2]-shader_localc_range))/(2.*shader_localc_range),0.0,1.0));\n" \
+    "vec3 tmp = clamp((vec3(p)-vec3(shader_current)+vec3(shader_localc_range))/(2.*vec3(shader_localc_range)),0.0,1.0);\n" \
+    "gl_FragColor[0] = tmp[0];\n"                                       \
+    "gl_FragColor[1] = tmp[1];\n"                                       \
+    "gl_FragColor[2] = tmp[2];\n"                                       \
     "}\n"                                                               \
     "}\n"                                                               \
-    "else if(shader_type == 2)"                                          \
+    "else if(shader_type == 2)"                                         \
     "{\n"                                                               \
-    "float distance = sqrt((gl_FragCoord.x-shader_center[0])*(gl_FragCoord.x-shader_center[0])+(gl_FragCoord.y-shader_center[1])*(gl_FragCoord.y-shader_center[1]));\n" \
-    "gl_FragColor[3] = distance > shader_radius ? 1.0 : 0.0; \n"        \
+    "gl_FragColor[3] = dist > shader_radius ? 1.0 : 0.0; \n"            \
     "}\n"                                                               \
     "else if(shader_type == 3)\n"                                       \
     "{\n"                                                               \
@@ -104,27 +104,17 @@ std::string StandardShader::GetSource() const
     "}\n"                                                               \
     "else if(shader_type == 5)\n"                                       \
     "{\n"                                                               \
-    "float distance = sqrt((gl_FragCoord.x-shader_center[0])*(gl_FragCoord.x-shader_center[0])+(gl_FragCoord.y-shader_center[1])*(gl_FragCoord.y-shader_center[1]));\n" \
-    "if(distance < shader_radius)\n"                                    \
+    "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
-    "float angle = acos((shader_current[0]*p[0]+shader_current[1]*p[1]+shader_current[2]*p[2])/(sqrt((p[0]*p[0]+p[1]*p[1]+p[2]*p[2])*(shader_current[0]*shader_current[0]+shader_current[1]*shader_current[1]+shader_current[2]*shader_current[2]))));\n" \
-    "gl_FragColor[0]=float(clamp((1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0));\n"             \
-    "gl_FragColor[1]=float(clamp((1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0));\n"             \
-    "gl_FragColor[2]=float(clamp((1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0));\n"             \
+    "float angle = acos(dot(vec3(p),shader_current)/(length(vec3(p))*length(shader_current)));\n" \
+    "vec3 tmp = clamp(vec3(1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0);\n" \
+    "gl_FragColor[0] = tmp[0];\n"                                       \
+    "gl_FragColor[1] = tmp[1];\n"                                       \
+    "gl_FragColor[2] = tmp[2];\n"                                       \
     "}\n"                                                               \
     "}\n"                                                               \
     "}"
 ;}
-    // "gl_FragColor[3] = clamp(exp(-sqrt(distance)),0.0,1.0);\n"          \
-    // "if(distance < shader_radius)\n"                                    \
-    // "{\n"                                                               \
-    // "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
-    // "}\n"                                                               \
-    // "else {\n"                                                          \
-    // "gl_FragColor[3] =0.0;}\n"                                          \
-
-    // "gl_FragColor[3] = clamp(exp(-sqrt(distance)),0.0,1.0);\n"  \
-    // }
 
 std::string StandardShader::GetName() const
 {
