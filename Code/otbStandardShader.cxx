@@ -127,7 +127,7 @@ std::string StandardShader::GetSource() const
     "dy[1]+=1.0/size[1];\n"                                             \
     "vec4 pdx = texture2D(src, dx);\n"                                  \
     "vec4 pdy = texture2D(src, dy);\n"                                  \
-    "gl_FragColor = clamp(pow(shader_a*(0.5*abs((pdx-p))+ 0.5*abs((pdy-p))),shader_gamma),0.0,1.0);\n" \
+    "gl_FragColor = clamp(pow(5*shader_a*(0.5*abs((pdx-p))+ 0.5*abs((pdy-p))),shader_gamma),0.0,1.0);\n" \
     "gl_FragColor[3] = alpha;\n"                                        \
     "}\n"                                                               \
     "}\n"                                                               \
