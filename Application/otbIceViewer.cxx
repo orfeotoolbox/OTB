@@ -352,7 +352,9 @@ void IceViewer::DrawHud()
       
       otb::StandardShader::Pointer shader = static_cast<otb::StandardShader *>(currentActor->GetShader());
       
-      oss<<"    Rendering: "<<"R="<<currentActor->GetRedIdx()<<":["<<shader->GetMinRed()<<", "<<shader->GetMaxRed()<<"] G="<<currentActor->GetGreenIdx()<<":["<<shader->GetMinGreen()<<", "<<shader->GetMaxGreen()<<"] B="<<currentActor->GetBlueIdx()<<":["<<shader->GetMinBlue()<<", "<<shader->GetMaxBlue()<<"]"<<", gam="<<shader->GetGamma()<<", al="<<shader->GetAlpha()<<"\n";
+      oss<<"    Rendering: "<<"R="<<currentActor->GetRedIdx()<<":["<<shader->GetMinRed()<<", "<<shader->GetMaxRed()<<"] G="<<currentActor->GetGreenIdx()<<":["<<shader->GetMinGreen()<<", "<<shader->GetMaxGreen()<<"] B="<<currentActor->GetBlueIdx()<<":["<<shader->GetMinBlue()<<", "<<shader->GetMaxBlue()<<"]"<<", gam="<<shader->GetGamma()<<", al="<<shader->GetAlpha()<<", nodata=";
+      shader->GetUseNoData()? oss<< "y": oss << "n";
+      oss<<"\n";
       oss<<"    Shader: ";
       
       switch(shader->GetShaderType())
@@ -534,6 +536,7 @@ void IceViewer::DrawHelp()
   oss<<"- Switch to local spectral angle with T. In this mode, the greylevel value is 1 - the spectral angle with the current pixel (note that if same band is used in all color channels, the value will be uniform)"<<std::endl;
   oss<<"- Switch to local gradient mode with M (or ',')."<<std::endl;
   oss<<"- Press E to apply same shader configuration (color range, local constrast or standard shader configuration) to all other image shaders."<<std::endl;
+  oss<<"- Press N to activate/deactivate the use of no-data value (no-data value is set to 0)"<<std::endl;
   oss<<std::endl;
   
   oss<<"Vector controls:"<<std::endl;
@@ -1326,6 +1329,13 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->Center(vpCenter);
     }
+
+  //Activate/Deactivate the use no-data
+  if(key == GLFW_KEY_N && action == GLFW_PRESS)
+    {
+    shader->SetUseNoData(!shader->GetUseNoData());
+    }
+
   return true;
 }
 
