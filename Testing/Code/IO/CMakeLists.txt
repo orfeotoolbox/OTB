@@ -2589,7 +2589,7 @@ add_test(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
         )
 
 add_test(ioTvKMLVectorDataFileGeoReaderWriter ${IO_TESTS15}
-        --compare-ascii  ${EPSILON_9}
+        --compare-ogr  ${EPSILON_9}
             ${BASELINE_FILES}/ioTvKMLVectorDataFileGeoReaderWriterOutput.kml
             ${TEMP}/ioTvKMLVectorDataFileGeoReaderWriterOutput.kml
         otbVectorDataFileGeoReaderWriter
