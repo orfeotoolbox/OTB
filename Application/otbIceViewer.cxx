@@ -1255,6 +1255,9 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
         otb::StandardShader::Pointer currentShader = static_cast<otb::StandardShader *>(currentActor->GetShader());
 
         // Apply same parameters to all image actors
+        currentActor->SetRedIdx(actor->GetRedIdx());
+        currentActor->SetGreenIdx(actor->GetGreenIdx());
+        currentActor->SetBlueIdx(actor->GetBlueIdx());
         currentShader->SetMinRed(shader->GetMinRed());
         currentShader->SetMinGreen(shader->GetMinGreen());
         currentShader->SetMinBlue(shader->GetMinBlue());
@@ -1262,7 +1265,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
         currentShader->SetMaxGreen(shader->GetMaxGreen());
         currentShader->SetMaxBlue(shader->GetMaxBlue());
         currentShader->SetGamma(shader->GetGamma());
-        if(shader->GetShaderType() == SHADER_STANDARD || shader->GetShaderType() == SHADER_LOCAL_CONTRAST || shader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
+        if(shader->GetShaderType() == SHADER_STANDARD || shader->GetShaderType() == SHADER_LOCAL_CONTRAST || shader->GetShaderType() == SHADER_SPECTRAL_ANGLE || shader->GetShaderType() == SHADER_GRADIENT)
           {
           currentShader->SetShaderType(shader->GetShaderType());
 
