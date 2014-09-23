@@ -718,6 +718,7 @@ bool IceViewer::scroll_callback_image(GLFWwindow * window, double xoffset, doubl
     else if(shader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
       {
       shader->SetSpectralAngleRange(shader->GetSpectralAngleRange()*factor);
+      return true;
       }
     }
   else if(glfwGetKey(window,GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
@@ -1262,7 +1263,7 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
       { 
       otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(*it).GetPointer());
 
-      if(currentActor.IsNotNull())
+      if(currentActor.IsNotNull() && currentActor->GetVisible())
         {
         otb::StandardShader::Pointer currentShader = static_cast<otb::StandardShader *>(currentActor->GetShader());
 
