@@ -1055,7 +1055,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
     // First, transform the center
     GlImageActor::PointType vpCenter = m_View->GetSettings()->GetViewportCenter();
     GlImageActor::PointType imCenter;
-    GlImageActor::PointType tmpImPt;
+    GlImageActor::PointType tmpImPtX, tmpImPtY;
 
     if(currentImageActor.IsNotNull())
       {
@@ -1063,9 +1063,13 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
       
       // Next, transform the spacing
       vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
+      tmpImPtX = currentImageActor->ViewportToImageTransform(vpCenter);
+
+      vpCenter = m_View->GetSettings()->GetViewportCenter();
       vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
 
-      tmpImPt = currentImageActor->ViewportToImageTransform(vpCenter);
+      tmpImPtY = currentImageActor->ViewportToImageTransform(vpCenter);
+
       m_View->GetSettings()->SetWkt(currentImageActor->GetWkt());
       m_View->GetSettings()->SetKeywordList(currentImageActor->GetKwl());
       }
@@ -1075,9 +1079,12 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
       // Next, transform the spacing
       vpCenter[0]+=1000 * m_View->GetSettings()->GetSpacing()[0];
+      tmpImPtX = currentVectorActor->ViewportToVectorTransform(vpCenter);
+
+      vpCenter = m_View->GetSettings()->GetViewportCenter();
       vpCenter[1]+=1000 * m_View->GetSettings()->GetSpacing()[1];
       
-      tmpImPt = currentVectorActor->ViewportToVectorTransform(vpCenter);
+      tmpImPtY = currentVectorActor->ViewportToVectorTransform(vpCenter);
       m_View->GetSettings()->SetWkt(currentVectorActor->GetWkt());
       }
     else
@@ -1087,8 +1094,8 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
     GlImageActor::SpacingType spacing;
 
-    spacing[0]=(tmpImPt[0]-imCenter[0])/1000;
-    spacing[1]=(tmpImPt[1]-imCenter[1])/1000;
+    spacing[0]=vcl_sqrt((tmpImPtX[0]-imCenter[0])*(tmpImPtX[0]-imCenter[0])+(tmpImPtX[1]-imCenter[1])*(tmpImPtX[1]-imCenter[1]))/1000;
+    spacing[1]=vcl_sqrt((tmpImPtY[0]-imCenter[0])*(tmpImPtY[0]-imCenter[0])+(tmpImPtY[1]-imCenter[1])*(tmpImPtY[1]-imCenter[1]))/1000;
 
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->UseProjectionOn();
