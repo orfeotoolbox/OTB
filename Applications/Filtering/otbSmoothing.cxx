@@ -96,8 +96,12 @@ private:
     AddParameter(ParameterType_Int,  "type.anidif.nbiter", "Nb Iterations");
     SetParameterDescription("type.anidif.nbiter", "Number of iterations");
 
+    AddParameter(ParameterType_Float,  "type.anidif.conductance", "Conductance");
+    SetParameterDescription("type.anidif.nbiter", "Controls the sensitivity of the conductance term");
+
     SetDefaultParameterFloat("type.anidif.timestep",   0.125);
     SetDefaultParameterInt("type.anidif.nbiter",     10);
+    SetDefaultParameterInt("type.anidif.conductance",     1.);
 
     SetParameterString("type", "anidif");
 
@@ -113,6 +117,7 @@ private:
     SetDocExampleParameterValue("type", "anidif", exId);
     SetDocExampleParameterValue("type.anidif.timestep", "0.1", exId);
     SetDocExampleParameterValue("type.anidif.nbiter", "5", exId);
+    SetDocExampleParameterValue("type.anidif.conductance", "1.5", exId);
   }
 
   void DoUpdateParameters()
@@ -182,13 +187,15 @@ private:
           = PerBandGradientAnisotropicDiffusionFilterType::New();
         perBand->SetInput(inImage);
 
-        int aniDifNbIter = GetParameterInt("type.anidif.nbiter");
+        const int aniDifNbIter = GetParameterInt("type.anidif.nbiter");
         perBand->GetFilter()->SetNumberOfIterations(static_cast<unsigned int>(aniDifNbIter));
 
-        float aniDifTimeStep = GetParameterFloat("type.anidif.timestep");
+        const float aniDifTimeStep = GetParameterFloat("type.anidif.timestep");
         perBand->GetFilter()->SetTimeStep(static_cast<double>(aniDifTimeStep));
-        // perBand->GetFilter()->SetConductanceParameter()
+
+        perBand->GetFilter()->SetConductanceParameter(GetParameterFloat("type.anidif.conductance"));
         perBand->UpdateOutputInformation();
+        
         m_FilterRef = perBand;
         SetParameterOutputImage("out", perBand->GetOutput());
         }
