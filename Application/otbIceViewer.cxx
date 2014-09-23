@@ -1271,15 +1271,13 @@ if(key == GLFW_KEY_M && action == GLFW_PRESS)
         if(shader->GetShaderType() == SHADER_STANDARD || shader->GetShaderType() == SHADER_LOCAL_CONTRAST || shader->GetShaderType() == SHADER_SPECTRAL_ANGLE || shader->GetShaderType() == SHADER_GRADIENT)
           {
           currentShader->SetShaderType(shader->GetShaderType());
-
+            currentShader->SetRadius(shader->GetRadius());
           if(shader->GetShaderType() == SHADER_LOCAL_CONTRAST)
             {
-            currentShader->SetRadius(shader->GetRadius());
             currentShader->SetLocalContrastRange(shader->GetLocalContrastRange());
             }
           if(shader->GetShaderType() == SHADER_SPECTRAL_ANGLE)
             {
-            currentShader->SetRadius(shader->GetRadius());
             currentShader->SetSpectralAngleRange(shader->GetSpectralAngleRange());
             }
           }
