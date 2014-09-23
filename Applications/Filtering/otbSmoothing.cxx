@@ -194,6 +194,7 @@ private:
         perBand->GetFilter()->SetTimeStep(static_cast<double>(aniDifTimeStep));
 
         perBand->GetFilter()->SetConductanceParameter(GetParameterFloat("type.anidif.conductance"));
+        perBand->GetFilter()->SetUseImageSpacing(false);
         perBand->UpdateOutputInformation();
         
         m_FilterRef = perBand;
