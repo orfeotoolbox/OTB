@@ -1119,6 +1119,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
      
     otb::ViewSettings::SpacingType spacing;
     spacing.Fill(std::max(spacingx,spacingy));
+    spacing[1] *= (m_View->GetSettings()->GetSpacing()[1]>0?1:-1);
      
     m_View->GetSettings()->SetSpacing(spacing);
     m_View->GetSettings()->Center(center);
