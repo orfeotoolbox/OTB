@@ -868,10 +868,11 @@ void IceViewer::cursor_pos_callback(GLFWwindow * window, double xpos, double ypo
     {
     // Retrieve actor information
     otb::GlImageActor::Pointer currentActor = dynamic_cast<otb::GlImageActor*>(m_View->GetActor(*it).GetPointer());
-    otb::StandardShader::Pointer currentShader = static_cast<otb::StandardShader *>(currentActor->GetShader());
-
+   
     if(currentActor.IsNotNull())
       {
+      otb::StandardShader::Pointer currentShader = static_cast<otb::StandardShader *>(currentActor->GetShader());
+
       this->UpdateShaderColorAndPosition(vpx,vpy,currentActor);
       
       if(currentShader->GetShaderType() == SHADER_ALPHA_SLIDER)
