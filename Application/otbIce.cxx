@@ -62,14 +62,16 @@ int main(int argc, char * argv[])
       {
       viewer->AddImage(argv[i],argv[i]);
       }
-    catch(...)
+    catch(itk::ExceptionObject & err)
       {
+      std::cerr<<"Failed to open object as image: "<<err<<std::endl;
       try
         {
         viewer->AddVector(argv[i],argv[i]);
         }
-      catch(...)
+      catch(itk::ExceptionObject & err)
         {
+        std::cerr<<"Failed to open object as vector: "<<err<<std::endl;
         std::cerr<<"Could not open file "<<argv[i]<<" as an image or a vector, skipping."<<std::endl;
         }
       }
