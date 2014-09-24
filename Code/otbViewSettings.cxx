@@ -108,11 +108,11 @@ void ViewSettings::SetPersepectiveAngle()
   // Build the RS transform
   RSTransformType::Pointer forwardTransform = RSTransformType::New();
   forwardTransform->SetInputKeywordList(m_KeywordList);
-  forwardTransform->SetOutputProjectionRef(m_Wkt);
+  forwardTransform->SetInputProjectionRef(m_Wkt);
   forwardTransform->InstanciateTransform();
 
   RSTransformType::Pointer inverseTransform = RSTransformType::New();
-  inverseTransform->SetInputProjectionRef(m_Wkt);
+  inverseTransform->SetOutputProjectionRef(m_Wkt);
   inverseTransform->SetOutputKeywordList(m_KeywordList);
   inverseTransform->InstanciateTransform();
 
@@ -142,11 +142,11 @@ void ViewSettings::SetNorthUpAngle()
   // Build the RS transform
   RSTransformType::Pointer forwardTransform = RSTransformType::New();
   forwardTransform->SetInputKeywordList(m_KeywordList);
-  forwardTransform->SetOutputProjectionRef(m_Wkt);
+  forwardTransform->SetInputProjectionRef(m_Wkt);
   forwardTransform->InstanciateTransform();
 
   RSTransformType::Pointer inverseTransform = RSTransformType::New();
-  inverseTransform->SetInputProjectionRef(m_Wkt);
+  inverseTransform->SetOutputProjectionRef(m_Wkt);
   inverseTransform->SetOutputKeywordList(m_KeywordList);
   inverseTransform->InstanciateTransform();
   
