@@ -397,9 +397,7 @@ private:
       unsigned int nb_bins_x = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[0]-2*image_border_margin)/(bin_size_x + bin_step_x)));
       unsigned int nb_bins_y = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[1]-2*image_border_margin)/(bin_size_y + bin_step_y)));
 
-      FloatImageType::SpacingType spacing1 = this->GetParameterImage("in1")->GetSpacing();
-      FloatImageType::PointType origin1 = this->GetParameterImage("in1")->GetOrigin();
-
+      FloatVectorImageType::Pointer image1 = this->GetParameterImage("in1");
       FloatVectorImageType::Pointer image2 = this->GetParameterImage("in2");
 
       for(unsigned int i = 0; i<nb_bins_x; ++i)
@@ -434,20 +432,24 @@ private:
 
 
           // We need to find the corresponding region in image 2
+          itk::ContinuousIndex<double,2> ul_i, ur_i, lr_i, ll_i;
           FloatImageType::PointType ul1, ur1, ll1, lr1, p1, p2, p3, p4;
           itk::ContinuousIndex<double,2> i1, i2, i3, i4, i_min, i_max;
 
-          ul1[0] = origin1[0] + startx * spacing1[0];
-          ul1[1] = origin1[1] + starty * spacing1[1];
+          ul_i[0] = static_cast<double>(startx) - 0.5;
+          ul_i[1] = static_cast<double>(starty) - 0.5;
+          ur_i = ul_i;
+          lr_i = ul_i;
+          ll_i = ul_i;
+          ur_i[0] += static_cast<double>(bin_size_x);
+          lr_i[0] += static_cast<double>(bin_size_x);
+          lr_i[1] += static_cast<double>(bin_size_y);
+          ll_i[1] += static_cast<double>(bin_size_y);
 
-          ur1[0] = origin1[0] + (startx+bin_size_x) * spacing1[0];
-          ur1[1] = origin1[1] + starty * spacing1[1];
-
-          lr1[0] = origin1[0] + (startx+bin_size_x) * spacing1[0];
-          lr1[1] = origin1[1] + (starty+bin_size_y) * spacing1[1];
-
-          ll1[0] = origin1[0] + (startx) * spacing1[0];
-          ll1[1] = origin1[1] + (starty+bin_size_y) * spacing1[1];
+          image1->TransformContinuousIndexToPhysicalPoint(ul_i,ul1);
+          image1->TransformContinuousIndexToPhysicalPoint(ur_i,ur1);
+          image1->TransformContinuousIndexToPhysicalPoint(lr_i,lr1);
+          image1->TransformContinuousIndexToPhysicalPoint(ll_i,ll1);
 
           p1 = rsTransform->TransformPoint(ul1);
           p2 = rsTransform->TransformPoint(ur1);
