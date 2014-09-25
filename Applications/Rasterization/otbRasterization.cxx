@@ -96,11 +96,11 @@ private:
     MandatoryOff("epsg");
 
     AddParameter(ParameterType_Float,  "orx",   "Output Upper-left x");
-    SetParameterDescription( "orx", "Output upper-left x coordinate (useless if support image is given)" );
+    SetParameterDescription( "orx", "Output upper-left corner x coordinate (useless if support image is given)" );
     MandatoryOff("orx");
 
     AddParameter(ParameterType_Float,  "ory",   "Output Upper-left y");
-    SetParameterDescription( "ory", "Output upper-left y coordinate (useless if support image is given)" );
+    SetParameterDescription( "ory", "Output upper-left corner y coordinate (useless if support image is given)" );
     MandatoryOff("ory");
 
     AddParameter(ParameterType_Float,  "spx",   "Spacing (GSD) x");
@@ -243,18 +243,19 @@ private:
         outputProjectionRef = inputProjectionRef;
         }
 
+      PointType corner;
       spacing[0] = GetParameterFloat("spx");
       spacing[1] = GetParameterFloat("spy");
 
       if ( HasValue("orx") && HasValue("ory"))
         {
-        origin[0] = GetParameterFloat("orx");
-        origin[1] = GetParameterFloat("ory");
+        corner[0] = GetParameterFloat("orx");
+        corner[1] = GetParameterFloat("ory");
         }
       else if(extentAvailable)
         {
-        origin[0] = (spacing[0] > 0 ? ulx : lrx);
-        origin[1] = (spacing[1] > 0 ? uly : lry);
+        corner[0] = (spacing[0] > 0 ? ulx : lrx);
+        corner[1] = (spacing[1] > 0 ? uly : lry);
 
         // Transform to output EPSG
 
@@ -265,13 +266,16 @@ private:
           rsTransform->SetOutputProjectionRef(outputProjectionRef);
           rsTransform->InstanciateTransform();
 
-          origin = rsTransform->TransformPoint(origin);
+          corner = rsTransform->TransformPoint(corner);
           }
         }
       else
         {
         otbAppLogFATAL(<<"The orx and ory parameters are not set and the dataset extent could not be retrieved. The application can not determine the origin of the output raster");
         }
+
+      origin[0] = corner[0] + 0.5*spacing[0];
+      origin[1] = corner[1] + 0.5*spacing[1];
 
       if (HasValue("szx") && HasValue("szy"))
         {
@@ -294,8 +298,8 @@ private:
 
           lrout = rsTransform->TransformPoint(lrout);
           }
-        size[0]=static_cast<unsigned int>((lrout[0] - origin[0])/spacing[0]);
-        size[1]=static_cast<unsigned int>((lrout[1] - origin[1])/spacing[1]);
+        size[0]=static_cast<unsigned int>((lrout[0] - corner[0])/spacing[0]);
+        size[1]=static_cast<unsigned int>((lrout[1] - corner[1])/spacing[1]);
         }
       else
         {
