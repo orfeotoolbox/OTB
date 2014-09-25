@@ -115,9 +115,12 @@ private:
       }
 
     // Convert the desired point
+    itk::ContinuousIndex<double,2> inIndex;
     PointType point;
-    point[0] = GetParameterFloat("input.idx") + inImage->GetOrigin()[0];
-    point[1] = GetParameterFloat("input.idy") + inImage->GetOrigin()[1];
+
+    inIndex[0] = GetParameterFloat("input.idx");
+    inIndex[1] = GetParameterFloat("input.idy");
+    inImage->TransformContinuousIndexToPhysicalPoint(inIndex,point);
 
     ModelType::OutputPointType outputPoint;
     outputPoint = model->TransformPoint(point);
