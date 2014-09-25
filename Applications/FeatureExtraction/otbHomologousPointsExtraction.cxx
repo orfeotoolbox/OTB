@@ -328,20 +328,23 @@ private:
   {
     OGRMultiLineString mls;
 
+    FloatVectorImageType::Pointer image1 = this->GetParameterImage("in1");
+    FloatVectorImageType::Pointer image2 = this->GetParameterImage("in2");
+
     // Setting up RS Transform
     RSTransformType::Pointer rsTransform = RSTransformType::New();
-    rsTransform->SetInputKeywordList(this->GetParameterImage("in1")->GetImageKeywordlist());
-    rsTransform->SetInputProjectionRef(this->GetParameterImage("in1")->GetProjectionRef());
-    rsTransform->SetOutputKeywordList(this->GetParameterImage("in2")->GetImageKeywordlist());
-    rsTransform->SetOutputProjectionRef(this->GetParameterImage("in2")->GetProjectionRef());
+    rsTransform->SetInputKeywordList(image1->GetImageKeywordlist());
+    rsTransform->SetInputProjectionRef(image1->GetProjectionRef());
+    rsTransform->SetOutputKeywordList(image2->GetImageKeywordlist());
+    rsTransform->SetOutputProjectionRef(image2->GetProjectionRef());
 
     RSTransformType::Pointer rsTransform1ToWGS84 = RSTransformType::New();
-    rsTransform1ToWGS84->SetInputKeywordList(this->GetParameterImage("in1")->GetImageKeywordlist());
-    rsTransform1ToWGS84->SetInputProjectionRef(this->GetParameterImage("in1")->GetProjectionRef());
+    rsTransform1ToWGS84->SetInputKeywordList(image1->GetImageKeywordlist());
+    rsTransform1ToWGS84->SetInputProjectionRef(image1->GetProjectionRef());
 
     RSTransformType::Pointer rsTransform2ToWGS84 = RSTransformType::New();
-    rsTransform2ToWGS84->SetInputKeywordList(this->GetParameterImage("in2")->GetImageKeywordlist());
-    rsTransform2ToWGS84->SetInputProjectionRef(this->GetParameterImage("in2")->GetProjectionRef());
+    rsTransform2ToWGS84->SetInputKeywordList(image2->GetImageKeywordlist());
+    rsTransform2ToWGS84->SetInputProjectionRef(image2->GetProjectionRef());
 
     // Setting up output file
     std::ofstream file;
@@ -351,11 +354,11 @@ private:
 
     // Setting up channel extractors
     ExtractChannelFilterType::Pointer extractChannel1 = ExtractChannelFilterType::New();
-    extractChannel1->SetInput(this->GetParameterImage("in1"));
+    extractChannel1->SetInput(image1);
     extractChannel1->SetChannel(GetParameterInt("band1"));
 
     ExtractChannelFilterType::Pointer extractChannel2 = ExtractChannelFilterType::New();
-    extractChannel2->SetInput(this->GetParameterImage("in2"));
+    extractChannel2->SetInput(image2);
     extractChannel2->SetChannel(GetParameterInt("band2"));
 
     // Setup the DEM Handler
@@ -375,7 +378,7 @@ private:
     else if(GetParameterString("mode")=="geobins")
       {
       // Compute binning on first image
-      FloatImageType::SizeType size = this->GetParameterImage("in1")->GetLargestPossibleRegion().GetSize();
+      FloatImageType::SizeType size = image1->GetLargestPossibleRegion().GetSize();
       unsigned int bin_size_x = GetParameterInt("mode.geobins.binsize");
       unsigned int bin_size_y = bin_size_x;
 
@@ -397,9 +400,6 @@ private:
       unsigned int nb_bins_x = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[0]-2*image_border_margin)/(bin_size_x + bin_step_x)));
       unsigned int nb_bins_y = static_cast<unsigned int>(vcl_ceil(static_cast<float>(size[1]-2*image_border_margin)/(bin_size_y + bin_step_y)));
 
-      FloatVectorImageType::Pointer image1 = this->GetParameterImage("in1");
-      FloatVectorImageType::Pointer image2 = this->GetParameterImage("in2");
-
       for(unsigned int i = 0; i<nb_bins_x; ++i)
         {
         for(unsigned int j = 0; j<nb_bins_y; ++j)
@@ -420,7 +420,7 @@ private:
           region1.SetIndex(index1);
           region1.SetSize(size1);
 
-          FloatImageType::RegionType largestRegion = this->GetParameterImage("in1")->GetLargestPossibleRegion();
+          FloatImageType::RegionType largestRegion = image1->GetLargestPossibleRegion();
 
           largestRegion.ShrinkByRadius(image_border_margin);
           region1.Crop(largestRegion);
@@ -481,7 +481,7 @@ private:
           region2.SetSize(size2);
           region2.PadByRadius(static_cast<unsigned int>(GetParameterInt("precision")));
 
-          FloatImageType::RegionType largestRegion2 = this->GetParameterImage("in2")->GetLargestPossibleRegion();
+          FloatImageType::RegionType largestRegion2 = image2->GetLargestPossibleRegion();
           largestRegion2.ShrinkByRadius(image_border_margin);
 
           if(region2.Crop(largestRegion2))
