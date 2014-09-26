@@ -27,6 +27,8 @@
 #include "itkCenteredRigid2DTransform.h"
 #include "otbFragmentShader.h"
 
+#include <vcl_algorithm.h>
+
 namespace otb
 {
 
@@ -79,16 +81,40 @@ public:
 
   MetaDataDictionaryType & GetMetaDataDictionary() const;
 
-  itkSetMacro(RedIdx,unsigned int);
   itkGetMacro(RedIdx,unsigned int);
-  itkSetMacro(GreenIdx,unsigned int);
   itkGetMacro(GreenIdx,unsigned int);
-  itkSetMacro(BlueIdx,unsigned int);
   itkGetMacro(BlueIdx,unsigned int);
 
   itkGetMacro(NumberOfComponents,unsigned int);
   itkGetMacro(CurrentResolution,unsigned int);
   itkGetMacro(LargestRegion,RegionType);
+
+  virtual void SetRedIdx(const unsigned int idx)
+  {
+  if ( this->m_RedIdx != idx )
+   { 
+   this->m_RedIdx = vcl_min(this->GetNumberOfComponents(),idx);
+   this->Modified();
+   }
+  }
+
+  virtual void SetGreenIdx(const unsigned int idx)
+  {
+  if ( this->m_GreenIdx != idx )
+    { 
+    this->m_GreenIdx = vcl_min(this->GetNumberOfComponents(),idx);
+    this->Modified();
+    }
+  }  
+
+  virtual void SetBlueIdx(const unsigned int idx)
+  {
+  if ( this->m_BlueIdx != idx )
+    { 
+    this->m_BlueIdx = vcl_min(this->GetNumberOfComponents(),idx);
+    this->Modified(); 
+    }
+  }
 
   PointType ViewportToImageTransform(const PointType & in, bool physical = true) const;
 
