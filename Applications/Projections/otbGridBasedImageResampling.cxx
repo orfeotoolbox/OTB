@@ -211,7 +211,7 @@ void DoExecute()
         m_BandMathX->SetNthInput(0,m_ExtractX->GetOutput(),"locX");
         m_BandMathX->SetExpression("locX-idxPhyX");
         m_ExtractY->SetInput(inGrid);
-        m_ExtractY->SetChannel(1);
+        m_ExtractY->SetChannel(2);
         m_BandMathY->SetNthInput(0,m_ExtractY->GetOutput(),"locY");
         m_BandMathY->SetExpression("locY-idxPhyY");
         m_VectorCastX->SetInput(m_BandMathX->GetOutput());
