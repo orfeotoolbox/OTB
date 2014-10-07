@@ -765,15 +765,6 @@ ImageViewWidget
 
   SpacingType nativeSpacing;
   // MANTIS-970: Fixed crash when no dataset is selected.
-  if( imageModel==NULL )
-    {
-    nativeSpacing[ 0 ] = 1.0;
-    nativeSpacing[ 1 ] = 1.0;
-    }
-  else
-    nativeSpacing = imageModel->GetNativeSpacing();
-
-  // MANTIS-970: Fixed crash when no dataset is selected.
   // {
   if( imageModel==NULL )
     {
